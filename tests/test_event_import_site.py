@@ -122,3 +122,16 @@ class EventImportLegal(unittest.TestCase):   # 317-10
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class OhneSeiteNichtSichtbar(unittest.TestCase):
+    """Wunsch Mirko (11.11.2026): was noch keine eigene Seite hat, taucht im Frontend nicht auf. Die Event-Liste laedt keine Events aus der
+    Datenbank nach (vorher: Link auf die fehlende Seite = 404, z. B. ein frisch importiertes Community-Days-Event)."""
+    def test_event_liste_ohne_nachladen(self):
+        tmp, docs = build([MEMBER])
+        try:
+            for lang in ("en", "de"):
+                h = (docs / ("" if lang == "en" else lang) / "community" / "events" / "index.html").read_text("utf-8")
+                self.assertNotIn("/api/events/export", h); self.assertIn("hamburg-copilot-day", h)
+        finally:
+            tmp.cleanup()

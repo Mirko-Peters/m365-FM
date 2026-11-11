@@ -109,7 +109,8 @@ def experts_index(people, orgs):
     return ix
 
 
-LIVEMERGE = r'''(function(){var ul=document.querySelector(".mb-list");if(!ul||!window.M365P)return;fetch(M365P.api+"/api/profiles/export").then(function(r){return r.json()}).then(function(j){var arr=j.%KEY%||[],have={};[].forEach.call(ul.querySelectorAll("a[href]"),function(a){have[a.getAttribute("href")]=1});var base="%BASE%";arr.forEach(function(it){var u=base+it.handle+"/";if(have[u])return;var none=ul.querySelector(".mb-card.mut");if(none)none.remove();var li=document.createElement("li");li.className="mb-card";var a=document.createElement("a");a.href=u;var b=document.createElement("b");b.textContent=it.name;a.appendChild(b);li.appendChild(a);var sp=document.createElement("span");sp.className="mut";sp.textContent=" "+(it.headline||it.tagline||"");li.appendChild(sp);ul.insertBefore(li,ul.firstChild)})}).catch(function(){})})()'''
+# Mitglieder- und Firmenlisten zeigen nur Eintraege mit eigener Seite (kein Nachladen aus /api/profiles/export): ein neues oder gerade oeffentlich
+# geschaltetes Profil erscheint mit dem naechsten Seitenbau, vorher fuehrte der Link auf die noch fehlende Seite ins 404 (Wunsch Mirko, 11.11.2026).
 
 
 def purl(BASE, lang, kind, h):
@@ -467,12 +468,11 @@ def build(g, people, orgs, extra=None):
             cards = "".join(f'<li class="mb-card" data-p="{" ".join(x["p"] for x in it.get("programs", []))}"><a href="{purl(BASE, lang, pk, it["handle"])}"><b>{esc(it["name"])}</b></a>{ROLE.chip(BASE, lang, ROLE.role_of(it), it.get("scope")) if pk == "u" else ""} <span class="mut">{esc(it.get("headline") or it.get("tagline") or "")}</span><br>{tags_of_p(it, li, s)}'
                             + "".join(f'<span class="mb-tag">{esc(ENTS[e["e"]]["name"])}</span>' for e in it.get("expertise", [])[:5] if e["e"] in ENTS) + "</li>" for it in lst) or f'<li class="mb-card mut">{esc(s["none"])}</li>'
             fjs = '<script>(function(){var b=[].slice.call(document.querySelectorAll(".mb-f")),l=[].slice.call(document.querySelectorAll(".mb-card[data-p]"));b.forEach(function(x){x.addEventListener("click",function(){b.forEach(function(y){y.setAttribute("aria-pressed",y===x?"true":"false")});l.forEach(function(i){i.hidden=!!x.dataset.f&&(" "+i.dataset.p+" ").indexOf(" "+x.dataset.f+" ")<0})})})})()</script>'
-            lm = '<script>' + LIVEMERGE.replace("%KEY%", "people" if kind == "members" else "orgs").replace("%BASE%", purl(BASE, lang, pk, "")) + '</script>'
             feed = f'<h2>{esc(s["feed"])}</h2><div id="pf-feed" data-top="{esc(s["feedtop"])}" data-new="{esc(s["feed"])}"></div>' if kind == "members" else ""
             if kind == "companies": partners = partner_block(lang, lst)
             else: partners = ""
             _prec = [o["rec"] for o in __import__("site_sponsorships").active_sponsor_orgs(__import__("site_sponsorships")._state()["today"], ENTS)] if partners else []
-            b = shell(lang, f'<h1>{esc(title)}</h1><p class="mut">{esc(intro)}</p>{partners}<p><a class="btn main" href="{croot}">{esc(s["join"])}</a>{(" <a class=\"btn\" href=\"" + croot + "blog/\">Blog</a>") if lang in BLOGLANGS else ""}</p><div role="group" aria-label="{esc(s["filter"])}">{fb}</div><ul class="mb-list">{cards}</ul>{feed}{fjs}{lm}{live_js}{css}')
+            b = shell(lang, f'<h1>{esc(title)}</h1><p class="mut">{esc(intro)}</p>{partners}<p><a class="btn main" href="{croot}">{esc(s["join"])}</a>{(" <a class=\"btn\" href=\"" + croot + "blog/\">Blog</a>") if lang in BLOGLANGS else ""}</p><div role="group" aria-label="{esc(s["filter"])}">{fb}</div><ul class="mb-list">{cards}</ul>{feed}{fjs}{live_js}{css}')
             ld = [{"@context": "https://schema.org", "@type": "CollectionPage", "name": title, "url": ru, "description": intro, "mainEntity": {"@type": "ItemList", "numberOfItems": len(lst), "itemListElement":
                    [{"@type": "ListItem", "position": i + 1, "item": {"@id": f"{purl(BASE, 'en', pk, it['handle'])}#{'person' if pk == 'u' else 'org'}"}} for i, it in enumerate(lst)]}}]
             if _prec:   # Partner-Block ist als Anzeige gekennzeichnet: Sponsor auch im JSON-LD der Seite (check_schema: Kennzeichnung <-> sponsor)

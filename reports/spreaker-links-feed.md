@@ -1,6 +1,6 @@
-# Spreaker-Website-Feld im RSS (2026-11-10 04:52 UTC)
+# Spreaker-Website-Feld im RSS (2026-11-11 04:52 UTC)
 
-Gesetzt laut Protokoll: 3233 · im Feed gleich: 3163 · im Feed anders: 0 · nicht im Feed: 70 · ausstehend (frisch gesetzt, Feed noch nicht erneuert): 0
+Gesetzt laut Protokoll: 3230 · im Feed gleich: 3153 · im Feed anders: 0 · nicht im Feed: 77 · ausstehend (frisch gesetzt, Feed noch nicht erneuert): 0
 
 - 67311542: nicht_im_feed · soll https://www.m365.fm/show/episodes/building-reusable-components-with-power-platform-cli-pac-cli/ · Feed None
 - 67312816: nicht_im_feed · soll https://www.m365.fm/show/episodes/using-microsoft-graph-for-custom-app-integrations/ · Feed None
@@ -72,3 +72,10 @@ Gesetzt laut Protokoll: 3233 · im Feed gleich: 3163 · im Feed anders: 0 · nic
 - 67582550: nicht_im_feed · soll https://www.m365.fm/show/episodes/the-ideal-teams-team-is-a-lie-or-is-it/ · Feed None
 - 67589747: nicht_im_feed · soll https://www.m365.fm/show/episodes/why-task-lists-are-failing-you/ · Feed None
 - 67597954: nicht_im_feed · soll https://www.m365.fm/show/episodes/the-ai-chatbot-that-knows-all-your-data/ · Feed None
+- 67609481: nicht_im_feed · soll https://www.m365.fm/show/episodes/copilot-vs-developer-who-wins-power-bi/ · Feed None
+- 67621055: nicht_im_feed · soll https://www.m365.fm/show/episodes/most-copilot-rollouts-fail-heres-why/ · Feed None
+- 67627755: nicht_im_feed · soll https://www.m365.fm/show/episodes/old-sharepoint-vs-new-sharepoint-you-wont-believe-the-difference/ · Feed None
+- 67635116: nicht_im_feed · soll https://www.m365.fm/show/episodes/my-top-copilot-prompts-exposed/ · Feed None
+- 67640587: nicht_im_feed · soll https://www.m365.fm/show/episodes/m365-is-not-ready-for-kritis-or-is-it/ · Feed None
+- 67646241: nicht_im_feed · soll https://www.m365.fm/show/episodes/defender-alone-vs-sentinel-whos-failing-you/ · Feed None
+- 67652145: nicht_im_feed · soll https://www.m365.fm/show/episodes/copilot-settings-microsoft-wont-explain/ · Feed None

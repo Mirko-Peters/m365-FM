@@ -389,6 +389,13 @@ def episode(slug=None, vid=None):
     return out
 
 
+def running(today=None):
+    """Alle laufenden Sponsorings (Zeitraum eingeschlossen, unbefristete immer), egal ob ein Inhalt namentlich zugeordnet ist. Grundlage dafuer, dass Links auf die
+    Website eines laufenden Sponsors in JEDEM Blogbeitrag rel="sponsored" tragen, auch wenn der Beitrag nicht in "posts" steht (z. B. die Cognillo-Reihe)."""
+    st = _state(); t = str(today or st["today"])[:10]
+    return [r for r in sorted(st["recs"], key=lambda r: (r["start"], r["id"])) if _active(r, t)]
+
+
 def post(handle, slug):
     """Sponsorings eines Blogbeitrags (alle Sprachfassungen, dauerhaft)."""
     return list(_state()["post"].get((handle, slug), []))
