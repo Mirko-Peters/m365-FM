@@ -189,15 +189,28 @@ def _inject_lead(base, body, lang, canonical, noindex=False):
     if noindex or "data-sponsor-lead=" in body:
         return body
     pt = page_type(base, canonical)
-    if pt not in ("blog", "episode", "lang"):
+    if pt not in ("blog", "episode", "lang") or (pt == "lang" and not _lead_lang_ok(canonical.replace(base, "") or "/")):
         return body
     import site_sponsorships as SPM
     lead = SPM.lead_for_page(page_topics(base, canonical, body, limit=60))
     a, z = _region(body)
     if not lead or a < 0:
         return body
+    if body.startswith('class="shmain"', a):   # Seite mit Sidebar: in die Textspalte (vor das </div> von .shmain), sonst wird der Kasten eigenes Grid-Element von .shw und schiebt die Sidebar nach unten
+        k = body.rfind("</div>", a, z); z = k if k > a else z
     block = sponsor_lead(base, lang, lead["org"], lead["name"], pt=pt, script="window.M365AD=" not in body)
     return body[:z] + block + body[z:]
+
+
+_LEAD_IDX = {"entity", "topics", "podcast", "glossary", "learn", "trainer", "path", "top", "about", "show", "shows", "c", "tag", "rollen", "community", "directory", "search",
+             "sponsors", "sponsor", "press", "live", "blog", "events", "library", "video", "videos", "updates", "m365con", "services", "for", "i-want-to", "media-kit"}   # Verzeichnis-, Uebersichts- und feste Seiten unter /<sprache>/
+
+
+def _lead_lang_ok(path):
+    """Sprachseiten bekommen das Lead-Formular wie auf Englisch nur als Folge (/<sprache>/<slug>/ oder /<sprache>/show/episodes/<slug>/):
+    nie Startseite, Verzeichnisse, Uebersichten oder Rechtsseiten (z. B. /de/entity/, /de/podcast/, /de/datenschutz/)."""
+    m = re.match(r"^/[a-z]{2}/(?:show/episodes/([^/]+)|([^/]+))/$", path)
+    return bool(m) and (m.group(1) or m.group(2) not in _LEAD_IDX) and not any(x in path for x in slot_cfg().get("skip_paths", DEFAULT_SKIP))
 
 
 def _inject(base, body, lang, canonical, noindex=False, today=None):

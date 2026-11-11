@@ -314,9 +314,9 @@ def lead_index(recs, today, ents):
     Themen = lead_topics (nur bekannte ids) plus Firma und ihre Produkte. -> (Liste, unbekannte ids)"""
     out, unknown = [], set()
     for o in active_sponsor_orgs(today, ents, recs):
-        r = o["rec"]
-        if not r.get("lead_topics") or any(x["org"] == o["id"] for x in out): continue
-        known = [t for t in r["lead_topics"] if t in ents]; unknown.update(t for t in r["lead_topics"] if t not in ents)
+        lt = list(dict.fromkeys(t for r in sorted(recs, key=lambda r: (r["start"], r["id"])) if _active(r, today) and o["id"] in (r.get("entities") or []) for t in (r.get("lead_topics") or [])))   # alle aktiven Sponsorings der Firma: bei Verlaengerung steht der alte Vertrag in der Karenzzeit noch vorn
+        if not lt or any(x["org"] == o["id"] for x in out): continue
+        known = [t for t in lt if t in ents]; unknown.update(t for t in lt if t not in ents)
         out.append({"org": o["id"], "name": o["name"], "topics": set(known) | set(sponsor_extra_entities(o["id"], today, ents, recs))})
     return out, unknown
 
