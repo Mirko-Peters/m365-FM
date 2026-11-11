@@ -340,6 +340,18 @@ class Taeglich(Base):
         self.assertEqual(refs, [{"handle": "other-handle", "slug": "toolkit-or-scripts-when-each-one-wins"}])
         self.assertEqual([SPM.post_ref(x) for x in posts], [(r["handle"], r["slug"]) for r in refs])
 
+    def test_failed_write_after_posts_entry_rolls_everything_back(self):
+        """Scheitert nach dem Eintrag unter "posts" ein Schreibschritt (z.B. OSError beim Plan), bleibt kein verwaister Eintrag stehen: sponsorships.json, Paketdatei
+        und Plan sind wie vorher, der Lauf endet mit Fehler statt mit Traceback."""
+        self.make_draft(2, release=True)
+        f = SP.OUT_DIR / f"{self.plan()[2]['slug']}.md"
+        before = (SP.SPONSORSHIPS_FILE.read_text("utf-8"), f.read_text("utf-8"), SP.PLAN_FILE.read_text("utf-8"))
+        with mock.patch.object(SP, "update_plan", side_effect=OSError("Platte voll")):
+            code, out = self.run_quiet(SP.main, ["taeglich", "--date", "2026-11-16"])
+        self.assertEqual(code, 1); self.assertIn("NICHT live", out); self.assertIn("Platte voll", out); self.assertIn("unveraendert", out)
+        self.assertEqual((SP.SPONSORSHIPS_FILE.read_text("utf-8"), f.read_text("utf-8"), SP.PLAN_FILE.read_text("utf-8")), before)
+        self.assertFalse((self.tmp / "msg.txt").exists())
+
     def test_not_released_draft_untouched(self):
         self.make_draft(5)
         before = (SP.OUT_DIR / f"{self.plan()[5]['slug']}.md").read_text("utf-8")

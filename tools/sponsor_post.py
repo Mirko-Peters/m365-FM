@@ -896,13 +896,26 @@ def go_live(entry, ents, dry_run, log=print):
     errs = check_package(entry["slug"], new, ents)
     if errs:   # die Datei wurde nach dem Schreiben von Hand geaendert und besteht die Pruefung nicht mehr: nichts live schalten
         raise Stop(f"Beitrag {entry['nr']} ({entry['slug']}) besteht die Pruefung nicht und geht NICHT live:\n - " + "\n - ".join(errs), 1)
-    spo = ""
-    if entry["sponsored"]:   # erst die dauerhafte Kennzeichnung, dann live: ohne Eintrag kein Freischalten
-        rid, added = sponsorship_post(entry, post_handle(new), dry_run)
-        spo = f" Gesponsert: {'Eintrag unter' if added else 'steht schon unter'} \"posts\" von {rid} (data/sponsorships.json)."
-    if not dry_run:
-        if new != text: f.write_text(new, "utf-8")
-        update_plan({entry["nr"]: {"status": "live"}})
+    spo, undo = "", {}   # undo: Datei -> Inhalt vor diesem Beitrag; scheitert ein spaeterer Schreibschritt, werden alle drei Dateien zurueckgesetzt
+    try:
+        if entry["sponsored"]:   # erst die dauerhafte Kennzeichnung, dann live: ohne Eintrag kein Freischalten
+            sp = Path(SPONSORSHIPS_FILE)
+            if not dry_run and sp.exists(): undo[sp] = sp.read_text("utf-8")
+            rid, added = sponsorship_post(entry, post_handle(new), dry_run)
+            spo = f" Gesponsert: {'Eintrag unter' if added else 'steht schon unter'} \"posts\" von {rid} (data/sponsorships.json)."
+        if not dry_run:
+            pl = Path(PLAN_FILE); undo[pl] = pl.read_text("utf-8"); undo[f] = text
+            if new != text: f.write_text(new, "utf-8")
+            update_plan({entry["nr"]: {"status": "live"}})
+    except Exception as ex:   # sonst bliebe z.B. ein Eintrag unter "posts" ohne freigeschalteten Beitrag stehen, und check_posts stoppt den naechsten Seitenbau
+        bad = []
+        for p, t in undo.items():
+            try:
+                if not p.exists() or p.read_text("utf-8") != t: p.write_text(t, "utf-8")
+            except OSError: bad.append(p.name)
+        if isinstance(ex, Stop) and not bad: raise
+        raise Stop(f"Beitrag {entry['nr']} ({entry['slug']}) geht NICHT live: {ex}" + (f" - ZURUECKSETZEN FEHLGESCHLAGEN, von Hand pruefen: {', '.join(bad)}" if bad
+                   else " - data/sponsorships.json, Paketdatei und Plan sind unveraendert."), 1) from ex
     return f"Beitrag {entry['nr']} \"{entry['title']}\" (Plan-Datum {entry['date']}).{spo}"
 
 
