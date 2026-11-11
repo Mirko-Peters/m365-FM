@@ -343,6 +343,18 @@ test("Go-Link nach dem Ende (Mirko 11.11.2026): beendete Buchung leitet weiter u
   assert.equal(raw.prepare("SELECT COUNT(*) n FROM ad_stats_daily WHERE booking_id=?").get(paused).n, 0, "pausiert/erstattet zaehlt nicht");
 });
 
+test("Go-Link: nach dem Ende erstattete Buchung bleibt 'ended', leitet weiter, zaehlt aber keine neuen Klicks; alte Klicks bleiben sichtbar", async () => {
+  const go = async (code, ua) => { const url = new URL(`https://api-dub.m365.fm/go/${code}?s=mid&pt=episode`);
+    return handleSponsorLink(env, new Request(url, { headers: { "user-agent": ua } }), url, `/go/${code}`, undefined); };
+  const id = activeBooking({ code: "ad-endrefund1", product: "company_card", quantity: 2, delivered: 2, status: "ended", start: "2025-01-01", end: "2025-02-01" });
+  assert.equal((await go("ad-endrefund1", "Mozilla/5.0 Chrome/140")).status, 302);
+  raw.prepare("UPDATE ad_bookings SET pay_status='refunded' WHERE id=?").run(id);   // wie der Erstattungszweig des PayPal-Webhooks: 'ended' bleibt 'ended'
+  assert.equal((await go("ad-endrefund1", "Mozilla/5.0 Chrome/141")).status, 302);
+  assert.equal(row(id).status, "ended");
+  assert.equal(raw.prepare("SELECT SUM(clicks) c FROM ad_stats_daily WHERE booking_id=?").get(id).c, 1, "nur der Klick vor der Erstattung zaehlt");
+  assert.equal((await adStatsForOrg(env.DB, 1, "2000-01-01", "2099-12-31")).find((s) => s.id === id).clicks, 1, "Verlauf bleibt im Dashboard");
+});
+
 // ---------------------------------------------------------------- Leads
 
 test("Lead: Einwilligung Pflicht, Turnstile (ohne Secret geschlossen), E-Mail-Prüfung, Doppelte und beanstandete Leads werden gutgeschrieben", async () => {

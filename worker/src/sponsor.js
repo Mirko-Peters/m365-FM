@@ -134,7 +134,7 @@ export async function handleSponsorLink(env, request, url, path, ctx) {
     return new Response(null, { status: code ? 404 : 404, headers });
   }
   // Bewusst ohne Laufzeitpruefung (Mirko 11.11.2026): Links in Folgen und Beitraegen leiten nach dem Ende weiter und zaehlen weiter; nur active=0
-  // (von Hand oder bei einer Erstattung gesetzt) stoppt einen Code.
+  // (von Hand im Admin gesetzt) stoppt einen Code. Eine Erstattung (sponsor_orders.js) setzt nur das Ende der Platzierung, nicht active.
   const link = await env.DB.prepare("SELECT code,target_url,utm FROM sponsor_links WHERE code=? AND active=1").bind(code).first();
   if (!link && code.startsWith("ad-")) return handleAdGo(env, request, url, code, ctx);   // #281: gebuchte Werbeplaetze
   if (!link && code.startsWith("h-")) return handleHouseGo(env, request, url, code, ctx);   // #281: Hausanzeigen (M365Con, Services ...)
