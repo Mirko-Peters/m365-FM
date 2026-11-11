@@ -28,6 +28,16 @@ SIZE_N = {"1": (1, 1), "2-10": (2, 10), "11-50": (11, 50), "51-200": (51, 200), 
 
 
 CACHE = Path(__file__).parent / "data" / "members_export.json"   # letzte erfolgreiche Fassung: faellt der Abruf aus, bleiben die Profilseiten erhalten
+# Merker fuer tools/r2_og_upload.py im Bilder-Ordner (OG_OUT, wird nicht hochgeladen): Stand des Profil-Exports dieses Baus. Nur bei "frisch" und
+# 0 Personen darf der Upload die letzten persoenlichen Karten loeschen; bei "cache"/"fehlt" (Export ausgefallen) greift seine Sicherung.
+MARK = Path(__file__).parent / __import__("os").environ.get("OG_OUT", "r2img") / "profiles-export.json"
+
+
+def _mark(state, people):
+    try:
+        MARK.parent.mkdir(parents=True, exist_ok=True); MARK.write_text(json.dumps({"state": state, "people": people}), encoding="utf-8")
+    except Exception:
+        pass
 
 
 def _fetch_export(url):
@@ -60,25 +70,30 @@ def public_orgs(orgs):
 
 
 def fetch_members(api):
-    import sys, time
-    j = None
+    import sys, time, site_fetch as SF
+    j, url = None, f"{api}/api/profiles/export"
     for n in range(3):   # der Export liest alle Profile nacheinander aus D1: kann dauern
-        j = _fetch_export(f"{api}/api/profiles/export")
+        j = _fetch_export(url)
         if j and j.get("people") is not None:
             break
         print(f"WARNUNG: Profil-Export Versuch {n + 1}/3 fehlgeschlagen", file=sys.stderr); time.sleep(5 * (n + 1))
-    if j and j.get("people"):
-        j = strip_private_items(j)
+    live = SF.states().get(url) == "frisch"
+    # Frisch abgerufen, ohne Fehler und wirklich leer (kein oeffentliches Profil mehr): kein Rueckgriff auf die alte Fassung - sonst blieben Seiten und
+    # Teilen-Karten (Foto, Name) entfernter Profile stehen. Ein leerer Export mit Fehlern (failed) oder aus einem Zwischenspeicher gilt als ausgefallen.
+    empty = live and bool(j) and j.get("people") == [] and not j.get("failed")
+    if (j and j.get("people")) or empty:
+        j = strip_private_items(j); state = "frisch" if live else "cache"
         try:
             CACHE.write_text(json.dumps(j, ensure_ascii=False), encoding="utf-8")
         except Exception:
             pass
     elif CACHE.exists():
         print("WARNUNG: Profil-Export nicht erreichbar, nutze die gespeicherte Fassung", file=sys.stderr)
-        j = strip_private_items(json.loads(CACHE.read_text("utf-8")))
+        j = strip_private_items(json.loads(CACHE.read_text("utf-8"))); state = "cache"
     else:
         print("FEHLER: Profil-Export nicht erreichbar und keine gespeicherte Fassung: es entstehen keine Profilseiten", file=sys.stderr)
-        j = j or {}
+        j = j or {}; state = "fehlt"
+    _mark(state, len(j.get("people") or []))
     print(f"Profile: {len(j.get('people', []))} Personen, {len(j.get('orgs', []))} Firmen", file=sys.stderr)
     return j.get("people", []), public_orgs(j.get("orgs", []))
 
@@ -94,7 +109,8 @@ def experts_index(people, orgs):
     return ix
 
 
-LIVEMERGE = r'''(function(){var ul=document.querySelector(".mb-list");if(!ul||!window.M365P)return;fetch(M365P.api+"/api/profiles/export").then(function(r){return r.json()}).then(function(j){var arr=j.%KEY%||[],have={};[].forEach.call(ul.querySelectorAll("a[href]"),function(a){have[a.getAttribute("href")]=1});var base="%BASE%";arr.forEach(function(it){var u=base+it.handle+"/";if(have[u])return;var none=ul.querySelector(".mb-card.mut");if(none)none.remove();var li=document.createElement("li");li.className="mb-card";var a=document.createElement("a");a.href=u;var b=document.createElement("b");b.textContent=it.name;a.appendChild(b);li.appendChild(a);var sp=document.createElement("span");sp.className="mut";sp.textContent=" "+(it.headline||it.tagline||"");li.appendChild(sp);ul.insertBefore(li,ul.firstChild)})}).catch(function(){})})()'''
+# Mitglieder- und Firmenlisten zeigen nur Eintraege mit eigener Seite (kein Nachladen aus /api/profiles/export): ein neues oder gerade oeffentlich
+# geschaltetes Profil erscheint mit dem naechsten Seitenbau, vorher fuehrte der Link auf die noch fehlende Seite ins 404 (Wunsch Mirko, 11.11.2026).
 
 
 def purl(BASE, lang, kind, h):
@@ -302,7 +318,7 @@ def build(g, people, orgs, extra=None):
     topic_js = f'<script>window.M365TopicConfig={{api:{json.dumps(api)},lang:document.documentElement.lang.slice(0,2)}}</script><script defer src="{BASE}/assets/topic-follow.js"></script>'
 
     def partner_block(lang, lst):
-        """Partner/Sponsoren (data/sponsorships.json, laufend) oben im Firmenverzeichnis, als Anzeige gekennzeichnet; Link zur Firmen-Entitaet (mit Lead-Formular)
+        """Partner/Sponsoren (data/sponsorships.json, laufend inkl. 182 Tage Karenzzeit) oben im Firmenverzeichnis, als Anzeige gekennzeichnet; Link zur Firmen-Entitaet (mit Lead-Formular)
         und, wenn es eine passende Community-Firma gibt (gleiche Website), zu deren Profil."""
         import site_sponsorships as SPM
         sp = SPM.active_sponsor_orgs(SPM._state()["today"], ENTS)
@@ -452,12 +468,11 @@ def build(g, people, orgs, extra=None):
             cards = "".join(f'<li class="mb-card" data-p="{" ".join(x["p"] for x in it.get("programs", []))}"><a href="{purl(BASE, lang, pk, it["handle"])}"><b>{esc(it["name"])}</b></a>{ROLE.chip(BASE, lang, ROLE.role_of(it), it.get("scope")) if pk == "u" else ""} <span class="mut">{esc(it.get("headline") or it.get("tagline") or "")}</span><br>{tags_of_p(it, li, s)}'
                             + "".join(f'<span class="mb-tag">{esc(ENTS[e["e"]]["name"])}</span>' for e in it.get("expertise", [])[:5] if e["e"] in ENTS) + "</li>" for it in lst) or f'<li class="mb-card mut">{esc(s["none"])}</li>'
             fjs = '<script>(function(){var b=[].slice.call(document.querySelectorAll(".mb-f")),l=[].slice.call(document.querySelectorAll(".mb-card[data-p]"));b.forEach(function(x){x.addEventListener("click",function(){b.forEach(function(y){y.setAttribute("aria-pressed",y===x?"true":"false")});l.forEach(function(i){i.hidden=!!x.dataset.f&&(" "+i.dataset.p+" ").indexOf(" "+x.dataset.f+" ")<0})})})})()</script>'
-            lm = '<script>' + LIVEMERGE.replace("%KEY%", "people" if kind == "members" else "orgs").replace("%BASE%", purl(BASE, lang, pk, "")) + '</script>'
             feed = f'<h2>{esc(s["feed"])}</h2><div id="pf-feed" data-top="{esc(s["feedtop"])}" data-new="{esc(s["feed"])}"></div>' if kind == "members" else ""
             if kind == "companies": partners = partner_block(lang, lst)
             else: partners = ""
             _prec = [o["rec"] for o in __import__("site_sponsorships").active_sponsor_orgs(__import__("site_sponsorships")._state()["today"], ENTS)] if partners else []
-            b = shell(lang, f'<h1>{esc(title)}</h1><p class="mut">{esc(intro)}</p>{partners}<p><a class="btn main" href="{croot}">{esc(s["join"])}</a>{(" <a class=\"btn\" href=\"" + croot + "blog/\">Blog</a>") if lang in BLOGLANGS else ""}</p><div role="group" aria-label="{esc(s["filter"])}">{fb}</div><ul class="mb-list">{cards}</ul>{feed}{fjs}{lm}{live_js}{css}')
+            b = shell(lang, f'<h1>{esc(title)}</h1><p class="mut">{esc(intro)}</p>{partners}<p><a class="btn main" href="{croot}">{esc(s["join"])}</a>{(" <a class=\"btn\" href=\"" + croot + "blog/\">Blog</a>") if lang in BLOGLANGS else ""}</p><div role="group" aria-label="{esc(s["filter"])}">{fb}</div><ul class="mb-list">{cards}</ul>{feed}{fjs}{live_js}{css}')
             ld = [{"@context": "https://schema.org", "@type": "CollectionPage", "name": title, "url": ru, "description": intro, "mainEntity": {"@type": "ItemList", "numberOfItems": len(lst), "itemListElement":
                    [{"@type": "ListItem", "position": i + 1, "item": {"@id": f"{purl(BASE, 'en', pk, it['handle'])}#{'person' if pk == 'u' else 'org'}"}} for i, it in enumerate(lst)]}}]
             if _prec:   # Partner-Block ist als Anzeige gekennzeichnet: Sponsor auch im JSON-LD der Seite (check_schema: Kennzeichnung <-> sponsor)

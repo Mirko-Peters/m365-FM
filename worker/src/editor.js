@@ -428,6 +428,7 @@ export async function deleteUserEditorial(db, id) {
     db.prepare(`UPDATE edit_log SET before='',after='' WHERE kind='blog' AND item_id IN ${mine}`).bind(id),
     db.prepare("UPDATE edit_log SET item_id='0:'||substr(item_id,instr(item_id,':')+1) WHERE kind='cert' AND item_id LIKE ?").bind(cert),
     db.prepare("UPDATE edit_log SET item_id='0' WHERE kind='user' AND item_id=?").bind(String(id)),
+    db.prepare("UPDATE edit_log SET item_id=substr(item_id,1,instr(item_id,':'))||'0' WHERE kind='event_claim' AND item_id LIKE ?").bind(`%:${id}`),   // Beanspruchung eines Events (#317, <event>:<nutzer>)
     db.prepare("UPDATE edit_log SET item_id='u:0:'||substr(item_id,?) WHERE kind='verify' AND substr(item_id,1,?)=?").bind(`u:${id}:`.length + 1, `u:${id}:`.length, `u:${id}:`),   // bestaetigte Angaben eines Profils (u:<id>:<art>:<schluessel>)
     db.prepare("UPDATE edit_log SET user_id=0 WHERE user_id=?").bind(id),
     db.prepare("UPDATE i18n_override SET \"by\"=0 WHERE \"by\"=?").bind(id), db.prepare("UPDATE i18n_override_rev SET user_id=0 WHERE user_id=?").bind(id), db.prepare("UPDATE i18n_retranslate_req SET \"by\"=0 WHERE \"by\"=?").bind(id),

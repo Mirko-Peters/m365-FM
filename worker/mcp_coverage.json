@@ -170,10 +170,16 @@
   "/api/admin/mediakit": {
    "skip": "Admin-Funktionen: bewusst nicht per KI-Token; Admin-Listen laufen über list_*_todo, list_event_transfers"
   },
-  "/api/admin/panel/flag": {
-   "skip": "Admin-Funktionen: bewusst nicht per KI-Token; Verwaltung ueber /admin/"
+  "/api/admin/panel/episode-urls": {
+   "skip": "Admin-Funktionen: Spreaker-Adressen (Zuordnung Folge <-> m365.fm-Adresse) nur im Admin-Reiter; Daten kommen aus dem GitHub-Workflow spreaker-urls.yml"
   },
-  "/api/admin/panel/import-entities": {
+  "/api/admin/panel/episode-urls/list": {
+   "skip": "Admin-Funktionen: Liste der Spreaker-Adressen je Status (klickbare Kacheln im Admin-Reiter), bewusst nicht per KI-Token"
+  },
+  "/api/admin/panel/episode-urls/import": {
+   "skip": "Admin-Funktionen: Import der Spreaker-Adressen laeuft per Cron (importEpisodeUrls); der Knopf im Admin-Reiter stoesst ihn nur an, bewusst nicht per KI-Token"
+  },
+  "/api/admin/panel/flag": {
    "skip": "Admin-Funktionen: bewusst nicht per KI-Token; Verwaltung ueber /admin/"
   },
   "/api/admin/panel/ops": {
@@ -653,6 +659,9 @@
   },
   "/api/health": {
    "skip": "Seiten-Infrastruktur (kein Nutzerfunktion)"
+  },
+  "/api/internal/entity-fill": {
+   "skip": "Ausschließlich durch den Actions-Workflow entity-fill mit CRON_KEY aufrufbar (KI-Entwurf für Entitäten)"
   },
   "/api/internal/sponsor-metrics": {
    "skip": "Ausschließlich durch den täglichen Cron-Workflow mit CRON_KEY aufrufbar"
@@ -1297,6 +1306,25 @@
    "tools": [
     "unpublish_contribution"
    ]
+  },
+  "/api/search/report": {
+   "tools": [
+    "search_report"
+   ]
+  },
+  "/api/search/gaps": {
+   "tools": [
+    "search_content_gaps"
+   ]
+  },
+  "/api/search/demand-export": {
+   "skip": "Schnittstelle für den Seitenbau (translate_show.py, translate_notes.py, translate_blog.py lesen sie nur als Reihenfolge); dieselben Übersetzungslücken liefert search_report"
+  },
+  "/api/entity/claim/evidence": {
+   "skip": "Adress-Nachweis zur Übernahme (Geschäftsadresse, privat): nur angemeldet im Browser, bewusst nicht per KI-Token; die Redaktion entscheidet"
+  },
+  "/api/profile/business": {
+   "skip": "Private Geschäftsadresse je Firma (nie öffentlich): nur angemeldet im Browser, bewusst nicht per KI-Token"
   }
  }
 }

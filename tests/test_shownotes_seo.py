@@ -76,6 +76,15 @@ class Validation(unittest.TestCase):
                         faq=[{"q": "Why?", "a": "Because."}, {"q": "How?", "a": "Monitor."}])
         self.assertTrue(any("Name fehlt" in e for e in err))   # Titel nennt Power BI, der Text nicht
 
+    def test_meta_slightly_too_long_is_shortened_at_a_word(self):
+        long = "Power BI gateways keep scheduled refreshes reliable: how to monitor them, fix common errors and plan capacity for every report user in your org."
+        long = (long + " Learn more today")[:163]
+        self.assertGreater(len(long), 160)
+        n, err = self.v(meta=long)
+        self.assertEqual(err, []); self.assertLessEqual(len(n["meta"]), 160); self.assertTrue(n["meta"].endswith("\u2026"))
+        self.assertTrue(long.startswith(n["meta"][:-1]), "nur gekuerzt, nichts umgeschrieben")
+        self.assertIsNone(self.v(meta="Power BI " + "y" * 200)[0], "ueber 200 Zeichen bleibt ein Fehler")
+
     def test_limits(self):
         self.assertIsNone(self.v(meta="x" * 161)[0]); self.assertIsNone(self.v(key_points=["one", "two"])[0]); self.assertIsNone(self.v(faq=[])[0])
 

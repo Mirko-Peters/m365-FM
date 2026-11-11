@@ -1,0 +1,84 @@
+name: Entitaeten fuellen (Sonnet en + Haiku 14 Sprachen)
+# Nur von Hand (kein Cron). Die Datenbank (D1) ist die Quelle der Wahrheit: nach collect geht jeder Text per push an /api/internal/entity-fill (data/entity_fill bleibt Audit-Kopie). plan = Anzahl und Kosten, run = collect -> schreiben -> uebersetzen (Batch), collect = fertige Batches abholen.
+# Budget: ENTITY_BUDGET_USD gilt kumulativ fuer data/entity_fill/spend.json (eigenes Kostenbuch, nie data/spend.json) inkl. Obergrenze offener Batches;
+# Schreiben (Sonnet) zusaetzlich hoechstens 30 USD je Kalendermonat, Uebersetzen (Haiku) hoechstens 4 EUR je Lauf im Haiku-Tagesbudget. Details: fill_entities.py
+# Bezahlte Ergebnisse gehen nie verloren: commit, dann pull --rebase und push in einer Schleife; scheitert der Push endgueltig, schlaegt der Lauf sichtbar fehl
+# und data/entity_fill liegt als Artefakt am Lauf (wie shownotes-seo.yml).
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "plan = nur Zaehlung/Kosten, run = Batches senden und abholen, collect = fertige Batches abholen, push = nur die Texte in die Datenbank schreiben"
+        type: choice
+        options: [plan, run, collect, push]
+        default: plan
+      limit: { description: "Hoechstens N Auftraege je Stufe (leer = alle im Budget)", required: false, default: "" }
+      budget: { description: "Gesamtbudget in USD (kumulativ)", required: false, default: "100" }
+      model: { description: "Schreibmodell (leer = claude-sonnet-5-5)", required: false, default: "" }
+      stale: { description: "Veraltete Uebersetzungen (data/entity_fill/stale.json) neu uebersetzen", type: boolean, default: false }
+permissions:
+  contents: write
+concurrency: { group: entity-fill, cancel-in-progress: false }
+jobs:
+  fill:
+    runs-on: ubuntu-latest
+    timeout-minutes: 350
+    env:
+      CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+      AI_GATEWAY_ID: ${{ vars.AI_GATEWAY_ID || 'm365fm' }}
+      CF_AIG_TOKEN: ${{ secrets.CF_AIG_TOKEN }}
+      COMMUNITY_API: https://api-dub.m365.fm
+      CRON_KEY: ${{ secrets.CRON_KEY }}
+      HAIKU_USD_PER_MTOK_IN: ${{ vars.HAIKU_USD_PER_MTOK_IN || '0.10' }}
+      HAIKU_USD_PER_MTOK_OUT: ${{ vars.HAIKU_USD_PER_MTOK_OUT || '0.50' }}
+      USD_PER_EUR: ${{ vars.USD_PER_EUR || '1.08' }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - name: Entitaeten fuellen
+        if: inputs.mode != 'push'
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY_SHOW }}
+          ENTITY_BUDGET_USD: ${{ inputs.budget || '100' }}
+          MODE_IN: ${{ inputs.mode }}
+          LIMIT_IN: ${{ inputs.limit }}
+          MODEL_IN: ${{ inputs.model }}
+          STALE_IN: ${{ inputs.stale }}
+        run: |
+          ARGS=""
+          [ "$STALE_IN" = "true" ] && ARGS="$ARGS --stale"
+          [ -n "$LIMIT_IN" ] && ARGS="$ARGS --limit $LIMIT_IN"
+          [ -n "$MODEL_IN" ] && ARGS="$ARGS --model $MODEL_IN"
+          python fill_entities.py "$MODE_IN" $ARGS | tee -a "$GITHUB_STEP_SUMMARY"
+      - name: In die Datenbank schreiben (KI-Entwurf, nur wo kein Mensch bearbeitet hat)
+        if: always() && inputs.mode != 'plan'
+        run: python fill_entities.py push | tee -a "$GITHUB_STEP_SUMMARY"
+      - name: Ergebnis committen
+        if: always() && inputs.mode != 'plan'
+        run: |
+          git config user.name "m365-site-bot"; git config user.email "actions@users.noreply.github.com"
+          [ -e data/entity_fill ] && git add -A data/entity_fill
+          if ! git diff --cached --quiet; then git commit -q -m "Entitaeten-Texte (Sonnet en, Haiku 14 Sprachen)"; fi
+          git fetch -q origin main
+          N=$(git rev-list --count FETCH_HEAD..HEAD)
+          if [ "$N" = "0" ]; then echo "Nichts Neues zu speichern" | tee -a "$GITHUB_STEP_SUMMARY"; exit 0; fi
+          # nur data/entity_fill (schreibt kein anderer Job): keine theirs-Strategie, die fremde Aenderungen verwerfen koennte; ein Konflikt bricht den Rebase ab und faellt auf
+          for i in 1 2 3 4 5; do
+            if git pull --rebase --autostash -q origin main; then
+              if git push -q origin HEAD:main; then echo "Gespeichert: $N Commit(s) auf main" | tee -a "$GITHUB_STEP_SUMMARY"; exit 0; fi
+            else
+              git rebase --abort 2>/dev/null || true
+            fi
+            sleep $((i*7))
+          done
+          echo "Push fehlgeschlagen: bezahlte Ergebnisse liegen NICHT auf main (Artefakt entity-fill-daten am Lauf)" | tee -a "$GITHUB_STEP_SUMMARY"
+          echo "::error::Entitaeten fuellen: Ergebnisse, offene Batches und Kostenbuch konnten nicht gespeichert werden (Push abgelehnt)"; exit 1
+      - name: Daten als Artefakt sichern (nur wenn ein Schritt gescheitert ist - bezahlte Ergebnisse und offene Batch-IDs gehen nicht mit dem Runner verloren)
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: entity-fill-daten
+          path: data/entity_fill
+          if-no-files-found: ignore
+          retention-days: 30

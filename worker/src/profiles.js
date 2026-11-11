@@ -13,12 +13,15 @@ import { checkKindIds } from "./kinds.js";
 import { recordInvite } from "./inviter.js";
 import { publicKindSql, publicItemSql, FEED_DAYS, HIDDEN_MOD } from "./feedpolicy.js";
 import { createOrgEntity, findOrgEntity, setOrgEntity, unclaimedOrgOf, adoptOrg } from "./orgpair.js";
+import { cleanAddress, BIZ_MAX } from "./claimverify.js";
 
 export const PROGRAMS = ["mvp", "mct", "rd", "msa", "ms_employee", "partner", "gde"];   // gde: Google Developer Experts (MVP-Tracker, format=gde)
 export const RELATIONS = ["colleague", "manager", "report", "client", "trainer", "student", "cospeaker", "podcast", "community", "mentor", "other"];
 export const KINDS = ["linkedin", "github", "youtube", "x", "mastodon", "bluesky", "twitch", "spotify", "apple", "amazon", "deezer", "instagram", "tiktok", "facebook", "blog", "podcast", "newsletter", "website", "other"];
 const KIND_HOST = { linkedin: /(^|\.)linkedin\.com$/, github: /(^|\.)github\.com$/, youtube: /(^|\.)(youtube\.com|youtu\.be)$/, x: /(^|\.)(x\.com|twitter\.com)$/, twitch: /(^|\.)twitch\.tv$/, bluesky: /(^|\.)bsky\.app$/, spotify: /(^|\.)spotify\.com$/, apple: /(^|\.)(podcasts|music)\.apple\.com$/, amazon: /(^|\.)(music\.amazon\.[a-z.]+|audible\.[a-z.]+)$/, deezer: /(^|\.)deezer\.com$/, instagram: /(^|\.)instagram\.com$/, tiktok: /(^|\.)tiktok\.com$/, facebook: /(^|\.)(facebook\.com|fb\.com)$/ };
 const HANDLE = /^[a-z0-9][a-z0-9-]{2,29}$/, ID = /^[a-z0-9-]{2,48}$/;
+// Feste Unterpfade von /api/profile/ (me, business, company) stehen vor der Handle-Route /api/profile/<handle> und wuerden ein gleichnamiges Profil verdecken
+export const RESERVED_HANDLES = new Set(["me", "business", "company"]);
 const SIZES = ["1", "2-10", "11-50", "51-200", "201-1000", "1000+"];
 const now = () => Math.floor(Date.now() / 1000);
 const txt = (s, n) => cleanText(s, n).replace(/[<>]/g, "").replace(/https?:\/\/\S+/gi, "").replace(/\s+/g, " ").trim();
@@ -238,7 +241,8 @@ async function replaceLists(db, t, id, { exp, prog, chan, certs }) {
   for (const x of exp || []) ops.push(db.prepare("INSERT INTO expertise(owner_type,owner_id,eid,level) VALUES(?,?,?,?) ON CONFLICT(owner_type,owner_id,eid) DO UPDATE SET level=excluded.level").bind(t, id, x.e, x.level));
   ops.push(db.prepare("DELETE FROM programs WHERE owner_type=? AND owner_id=? AND program NOT IN (SELECT value FROM json_each(?))").bind(t, id, JSON.stringify(prog.map((x) => x.p))));
   for (const x of prog) ops.push(db.prepare("INSERT INTO programs(owner_type,owner_id,program,year,url) VALUES(?,?,?,?,?) ON CONFLICT(owner_type,owner_id,program) DO UPDATE SET year=excluded.year, url=excluded.url, verified=CASE WHEN programs.url=excluded.url THEN programs.verified ELSE 0 END").bind(t, id, x.p, x.year, x.url));
-  ops.push(db.prepare("DELETE FROM channels WHERE owner_type=? AND owner_id=? AND url NOT IN (SELECT value FROM json_each(?))").bind(t, id, JSON.stringify(chan.map((x) => x.url))));
+  // Ein Kanal, in dem Kurzposts stehen (der automatisch angelegte Blog-Kanal), bleibt: sonst fielen die Kurzposts aus dem Feed-Export (JOIN channels)
+  ops.push(db.prepare("DELETE FROM channels WHERE owner_type=?1 AND owner_id=?2 AND url NOT IN (SELECT value FROM json_each(?3)) AND id NOT IN (SELECT channel_id FROM feed_items WHERE owner_type=?1 AND owner_id=?2 AND origin='kurzpost')").bind(t, id, JSON.stringify(chan.map((x) => x.url))));
   for (const x of chan) ops.push(db.prepare("INSERT INTO channels(owner_type,owner_id,kind,url,feed,followers,followers_at) VALUES(?,?,?,?,?,?,?) ON CONFLICT(owner_type,owner_id,url) DO UPDATE SET followers=excluded.followers, followers_at=CASE WHEN excluded.followers<>channels.followers THEN excluded.followers_at ELSE channels.followers_at END, kind=excluded.kind, feed=CASE WHEN excluded.feed<>'' THEN excluded.feed ELSE channels.feed END, fails=0").bind(t, id, x.kind, x.url, x.feed, x.followers || 0, now()));
   if (certs) {
     ops.push(db.prepare("DELETE FROM certs WHERE user_id=?").bind(id));
@@ -290,6 +294,23 @@ export async function handleProfiles(env, request, url, path, user, J) {
       await db.prepare("INSERT INTO org_sponsor(org_id,open,criteria,updated) VALUES(?,?,?,?) ON CONFLICT(org_id) DO UPDATE SET open=excluded.open,criteria=excluded.criteria,updated=excluded.updated").bind(o.id, b.open ? 1 : 0, JSON.stringify(crit), Math.floor(Date.now() / 1000)).run();
       return J({ ok: true });
     }
+  }
+
+  // ---- Geschaeftsadresse je Firma (privat, 0046): nur das eigene Konto liest und aendert sie, nie oeffentlich; Vorbefuellung fuer den Adress-Nachweis ----
+  if (path === "/api/profile/business") {
+    if (need()) return need();
+    if (method === "GET") return J({ items: (await db.prepare("SELECT eid,company,street,zip,city,country,updated FROM profile_business WHERE user_id=? ORDER BY company,eid").bind(user.id).all()).results || [], max: BIZ_MAX });
+    if (method !== "POST" && method !== "DELETE") return J({ error: "not_found" }, 404);
+    const b = method === "POST" ? await body() : {}, eid = String(b.eid ?? url.searchParams.get("eid") ?? "").toLowerCase().trim();
+    if (!/^[a-z0-9][a-z0-9-]{1,78}$/.test(eid)) return J({ error: "bad_id" }, 400);
+    if (!(await rateLimit(db, `biz:${user.id}`, 30, 3600))) return J({ error: "rate_limit" }, 429);
+    if (method === "DELETE") { const r = await db.prepare("DELETE FROM profile_business WHERE user_id=? AND eid=?").bind(user.id, eid).run(); return Number(r.meta?.changes || 0) ? J({ ok: true }) : J({ error: "not_found" }, 404); }
+    const ent = (await entityMap(env)).get(eid); if (!ent || ent.type !== "org") return J({ error: "bad_entity" }, 400);   // nur Firmen-Entitaeten
+    const a = cleanAddress(b); if (a.error) return J({ error: a.error }, 400);
+    if ((await db.prepare("SELECT COUNT(*) n FROM profile_business WHERE user_id=? AND eid<>?").bind(user.id, eid).first()).n >= BIZ_MAX) return J({ error: "limit" }, 400);
+    await db.prepare("INSERT INTO profile_business(user_id,eid,company,street,zip,city,country,updated) VALUES(?,?,?,?,?,?,?,?) ON CONFLICT(user_id,eid) DO UPDATE SET company=excluded.company,street=excluded.street,zip=excluded.zip,city=excluded.city,country=excluded.country,updated=excluded.updated")
+      .bind(user.id, eid, txt(ent.name, 120), a.street, a.zip, a.city, a.country, now()).run();
+    return J({ ok: true });
   }
 
   // ---- Firma als Entitaet anlegen/wiederverwenden ----
@@ -379,6 +400,7 @@ export async function handleProfiles(env, request, url, path, user, J) {
     const previousLocation = await db.prepare("SELECT p.country,pp.* FROM profiles p LEFT JOIN profile_private pp ON pp.user_id=p.user_id WHERE p.user_id=?").bind(user.id).first();
     let handle = String(b.handle || "").toLowerCase().trim(); const isPublic = b.public ? 1 : 0;
     if (handle && !HANDLE.test(handle)) return J({ error: "bad_handle" }, 400);
+    if (RESERVED_HANDLES.has(handle) && (await db.prepare("SELECT handle FROM profiles WHERE user_id=?").bind(user.id).first())?.handle !== handle) return J({ error: "handle_taken" }, 409);   // nur neu vergeben gesperrt: wer das Kuerzel schon hat, speichert weiter
     if (isPublic && !handle) return J({ error: "bad_handle" }, 400);
     const taken = handle ? await db.prepare("SELECT user_id FROM profiles WHERE handle=? AND user_id<>?").bind(handle, user.id).first() : null;
     if (taken || (handle && (await db.prepare("SELECT 1 x FROM orgs WHERE handle=?").bind(handle).first()))) return J({ error: "handle_taken" }, 409);
@@ -578,7 +600,7 @@ export async function handleProfiles(env, request, url, path, user, J) {
       // nur freigegebene Firmen-Entitaeten: ein ungeprueftes Mitglied darf mit einem wartenden Vorschlag keine echte Firma blockieren (claim_required ohne Domain)
       try { if (!eid) eid = findOrgEntity(name, website, [...(await entityMap(env)).values()].filter((e) => e.type === "org")); } catch { /* ohne Treffer weiter */ }
       const un = eid ? await unclaimedOrgOf(db, eid) : null;   // zur Entitaet gibt es schon eine unbeanspruchte Firma: nicht verdoppeln
-      if (un && !link) return J({ ok: true, handle: un.handle, claim_required: true });   // Inhaber wird, wer die Entitaet per Firmen-E-Mail uebernimmt
+      if (un && !link) return J({ ok: true, handle: un.handle, eid, claim_required: true });   // Inhaber wird, wer die Entitaet per Firmen-E-Mail uebernimmt
       if (un) { o = { id: un.id }; await adoptOrg(db, un.id, user.id); await db.prepare("UPDATE orgs SET name=?,tagline=?,about=?,website=?,country=?,size=?,public=? WHERE id=?").bind(name, txt(b.tagline, 120), long(b.about, 1500), website, txt(b.country, 60), size, b.public ? 1 : 0, o.id).run(); }
       else {
         const r = await db.prepare("INSERT INTO orgs(handle,name,tagline,about,website,country,size,public,created) VALUES(?,?,?,?,?,?,?,?,?)").bind(handle, name, txt(b.tagline, 120), long(b.about, 1500), website, txt(b.country, 60), size, b.public ? 1 : 0, now()).run();
@@ -696,6 +718,7 @@ export async function deleteUserData(db, id) {
   const mailAddress = await db.prepare("SELECT email FROM mail_addr WHERE user_id=?").bind(id).first().catch(() => null);
   await db.prepare("DELETE FROM recommendations WHERE author_id=? OR subject_id=?").bind(id, id).run();
   await db.prepare("DELETE FROM profile_company WHERE user_id=?").bind(id).run();
+  await db.prepare("DELETE FROM profile_business WHERE user_id=?").bind(id).run();   // Geschaeftsadressen (0046)
   await db.prepare("DELETE FROM profile_industry WHERE user_id=?").bind(id).run(); await db.prepare("DELETE FROM profile_job WHERE user_id=?").bind(id).run();
   await db.prepare("DELETE FROM images WHERE kind='u' AND owner_id=?").bind(id).run();
   const own = (await db.prepare("SELECT org_id FROM org_members WHERE user_id=? AND role='owner'").bind(id).all()).results || [];

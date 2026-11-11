@@ -17,8 +17,8 @@ Neu uebersetzen nur auf Anforderung: --slugs/--redo (ganzer Beitrag; der alte Te
 (nur die geaenderten Einheiten veralteter Fassungen, --langs/--slugs/--limit; --wishes = nur die Wunschliste der Redaktion).
 Von Hand bearbeitete Einheiten (Redaktion, i18n_overrides.py: kind lblog) sind eine reine Leseschicht ueber dem Maschinentext: assemble legt sie beim Seitenbau darueber, hier
 sperren sie die Einheit nur fuer die Uebersetzung (auch bei --redo; Ausnahme --force-manual). In data/blog_i18n steht ausschliesslich Maschinentext.
-Ist der Export der Redaktion eingestellt, aber nicht abrufbar (kein 404), ist die Sperre unbekannt: dann ersetzt kein Lauf vorhandenen Text (locked, collect haelt
-Batches mit Neuuebersetzungen zurueck) und stale/--redo enden mit Fehler; nie uebersetzte Einheiten laufen weiter (i18n_overrides Vertrag 5).
+Ist der Export der Redaktion nicht abrufbar (auch 404), ist die Sperre unbekannt: dann ersetzt kein Lauf vorhandenen Text (locked; collect und apply halten
+Batches und Auftraege mit Neuuebersetzungen zurueck) und stale/--redo enden mit Fehler; nie uebersetzte Einheiten laufen weiter (i18n_overrides Vertrag 5).
 Quell-Hashes: je Einheit merkt der Datensatz den Hash des Quelltexts, aus dem sie uebersetzt wurde (rec.sh, 8 Hex). Aendert sich das Original, ordnet realign die alten Texte
 den neuen Einheiten zu (auch im Seitenbau, dort nur im Speicher); settle() speichert das vor jedem Lauf fuer ALLE Beitraege. Der Altbestand hat kein rec.sh: fuer ihn liegt einmalig
 ein sprachunabhaengiger Schnappschuss der Quell-Hashes in data/blog_i18n/srch/ (rund 1,4 MB), die Schalen selbst werden dafuer nicht neu geschrieben.
@@ -32,6 +32,7 @@ import gzip, hashlib, json, os, random, re, sys, time, urllib.request, urllib.er
 from site_text import bad as bad_text
 from difflib import SequenceMatcher
 import i18n_overrides as OV
+import search_demand as DM
 from tm_hash import unit_hash, kind_of
 from datetime import datetime, timezone, timedelta
 from pathlib import Path
@@ -565,9 +566,11 @@ def apply(a=None):
             tpl, units, h = source_of(p)
             if h != meta["h"]: fin.unlink(); fout.unlink(); continue   # Original geaendert -> neu vorbereiten
             src = dict(units); rec, _ = resolve(lang, p, units, h, have); man = locked({"force_manual": meta.get("fm")}, lang, p, units, h, rec)
-            if not meta.get("fm") and OV.failed("lblog", lang):   # Sperre unbekannt: Auftrag und Antwort bleiben liegen, bis der Export wieder antwortet (nichts verwerfen)
-                held += 1; continue
             asked = set(parse(fin.read_text("utf-8").split("\n", 1)[1])); redo = bool(meta.get("redo")); stored = set()
+            # Sperre unbekannt: ein Auftrag, der vorhandenen Text ersetzen wuerde, bleibt samt Antwort liegen, bis der Export wieder antwortet (nichts verwerfen) -
+            # wie repl in collect. Auftraege nur fuer nie uebersetzte Einheiten laufen weiter (locked sperrt dabei ohnehin jede vorhandene Einheit).
+            if not meta.get("fm") and OV.failed("lblog", lang) and any(i in rec["seg"] for i in asked):
+                held += 1; continue
             for i, t in parse(fout.read_text("utf-8")).items():
                 if i not in src: continue
                 good, reason, warn = qa(lang, src[i], t)
@@ -686,10 +689,12 @@ def submit(a):
     busy = {(b2["lang"], b2["slug"]) for b in jload("batches.json", []) for b2 in b.get("items", [])}
     reqs, items, money = [], [], 0.0
     room = BUDGET - spent_month() - pending_cost()
+    demand = DM.load()   # Suchnachfrage (#156): nur Reihenfolge je Sprache; was gesendet wird, entscheiden resolve/wanted_units und das Budget
     for lang in langs:
         have = load_lang(lang); tm = TM(lang, have, allps); sysp = system_prompt(lang); n_posts = 0; touched = set()
         # auto sieht nur die letzten NEW_DAYS Tage - plus aeltere, schon uebersetzte Beitraege, deren Original neue Absaetze bekommen hat (gap): nur diese fehlen
         cand = ps + [p for p in allps if p["slug"] not in sel and (have.get(p["slug"]) or {}).get("gap")] if a["mode"] == "auto" else ps
+        cand = DM.order(cand, demand, "lblog", lambda p: lang, lambda p: p["slug"])
         for p in cand:
             if a["limit"] and n_posts >= a["limit"]: break
             if (lang, p["slug"]) in busy: continue

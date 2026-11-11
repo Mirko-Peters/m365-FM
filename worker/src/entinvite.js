@@ -79,21 +79,26 @@ function lines(env, inv, byName, reminder, variant) {
   const intro = variant === "neutral" ? `${who} added you to M365.FM, the community platform around Microsoft 365, and asked us to send you this invitation. There is a page about you:`
     : variant === "speaker" ? "thanks again for speaking at M365Con. Your session now has its own page on M365.FM, and there is a profile page for you:"
     : "thanks again for being a guest on the M365 Show. Your episode now has its own page on M365.FM, and there is a profile page for you:";
-  return { accept, decline, page_, pre, benefit, intro, sign: variant === "neutral" ? ["The M365.FM team"] : ["Best,", "Mirko"], foot: footer(variant, who) };
+  // Neutrale Fassung (Mitglieder, Redaktion, Firmen-Entitaeten): der eingegebene Name ist freier Text eines Dritten. Er steht nie in der Anrede (dort liest er sich
+  // wie eine Aussage von M365.FM), sondern als gekennzeichnete Angabe des einladenden Mitglieds; eine reine Zeichenregel kann Saetze aus Buchstaben nicht abfangen.
+  const neutral = variant === "neutral";
+  return { accept, decline, page_, pre, benefit, intro, hello: neutral ? "Hi," : `Hi ${inv.name},`, named: neutral ? `Name entered by ${who}: “${inv.name}”` : "",
+    sign: neutral ? ["The M365.FM team"] : ["Best,", "Mirko"], foot: footer(variant, who) };
 }
 export function mailBody(env, inv, byName, reminder, variant = "default") {
-  const { accept, decline, page_, pre, benefit, intro, sign, foot } = lines(env, inv, byName, reminder, variant);
+  const { accept, decline, page_, pre, benefit, intro, hello, named, sign, foot } = lines(env, inv, byName, reminder, variant);
   return `<div style="font-family:system-ui,Segoe UI,Arial,sans-serif;max-width:560px;margin:auto;color:#1b2430;line-height:1.55">
-<p>Hi ${esc(inv.name)},</p>
-<p>${esc(pre + intro)} <a href="${esc(page_)}">${esc(page_)}</a></p>
+<p>${esc(hello)}</p>
+<p>${esc(pre + intro)} <a href="${esc(page_)}">${esc(page_)}</a></p>${named ? `
+<p style="font-size:13px;color:#6b7785">${esc(named)}</p>` : ""}
 <p>${benefit}</p>
 <p><a href="${esc(accept)}" style="background:#3E8BC0;color:#fff;padding:10px 18px;border-radius:8px;text-decoration:none;display:inline-block">Claim my page</a> &nbsp;·&nbsp; <a href="${esc(decline)}">${esc(REMOVE)}</a></p>
 <p>${sign.join("<br>")}</p>
 <p style="font-size:12px;color:#6b7785">${esc(foot)}</p></div>`;
 }
 export function mailText(env, inv, byName, reminder, variant = "default") {
-  const { accept, decline, page_, pre, benefit, intro, sign, foot } = lines(env, inv, byName, reminder, variant);
-  return `Hi ${inv.name},\n\n${pre}${intro} ${page_}\n\n${benefit}\n\nClaim my page: ${accept}\n${REMOVE}: ${decline}\n\n${sign.join("\n")}\n\n${foot}`;
+  const { accept, decline, page_, pre, benefit, intro, hello, named, sign, foot } = lines(env, inv, byName, reminder, variant);
+  return `${hello}\n\n${pre}${intro} ${page_}\n\n${named ? named + "\n\n" : ""}${benefit}\n\nClaim my page: ${accept}\n${REMOVE}: ${decline}\n\n${sign.join("\n")}\n\n${foot}`;
 }
 // banner: false -> kein M365Con-Hinweis unter Einladungen (Empfaenger haben kein Konto und nichts abonniert)
 function mailMsg(env, inv, byName, reminder, variant) {
@@ -123,6 +128,11 @@ export async function resolveVariant(db, eid, ent, source, personal = true) {
 // Ersteller einer Entitaet: die erste Revision stammt von ihm und ist freigegeben (live oder abgeloest), und die Entitaet steht nicht in der Repo-Fassung
 // (/entities-src.json, von Mitgliedern nicht aenderbar). Eine Bearbeitung oder ein abgelehnter Vorschlag macht niemanden zum Ersteller; ist die Repo-Fassung
 // nicht erreichbar, gilt niemand als Ersteller (die Uebernahme wartet dann wie jede Anfrage auf claim.decide).
+// Bekannte Grenze, bewusst so entschieden (Mirko, 10.11.2026, Folge-PR zu #319): Die Regel prueft nur, dass die erste Revision vom Einladenden stammt
+// und freigegeben ist - nicht, wem die Seite gehoert. Ein Mitglied kann so eine selbst angelegte Personen-Entitaet (auch eine, deren Inhalt ein Editor
+// freigegeben hat: das bestaetigt den Inhalt, nicht die Person) ueber ein zweites eigenes Konto sofort bestaetigt uebernehmen; accept sperrt nur das
+// einladende Konto selbst (own_content). Die Uebernahme steht danach mit via='invite' in entity_claims und laesst sich ueber claim.decide widerrufen.
+// Soll das geschlossen werden: direct fuer Personen-Entitaeten nur bei Einladungen des Admins (sonst claim.decide), Firmen behalten die Ersteller-Regel.
 async function createdBy(env, eid, uid) {
   const f = await env.DB.prepare("SELECT user_id,status FROM entity_rev WHERE eid=? ORDER BY id LIMIT 1").bind(eid).first();
   if (!f || Number(f.user_id) !== Number(uid) || (f.status !== "live" && f.status !== "old")) return false;
@@ -131,6 +141,11 @@ async function createdBy(env, eid, uid) {
 }
 const adminRow = (env, u) => !!u && (u.role === "admin" || (!!u.provider && (env.ADMIN_SUBS || "").split(",").map((s) => s.trim()).includes(`${u.provider}:${u.sub}`)));   // wie isAdmin in index.js
 const MAIL_RE = /^[^\s@<>]{1,64}@[^\s@<>]{1,190}\.[a-z]{2,}$/;
+// Je Adresse hoechstens eine Einladung, egal fuer welche Entitaet. Fuer den Admin zaehlt dabei eine Einladung, die ein Mitglied (kein Editor/Admin) fuer eine
+// ANDERE Entitaet verschickt hat, nicht: sonst sperrte ein Mitglied, das die Adresse eines Gasts kennt, Mirkos persoenliche Einladung fuer immer (Sperrliste
+// und Uebernahme gelten weiter). staffBy: die Einladung der Zeile i stammt von Admin (Rolle oder ADMIN_SUBS, wie adminRow) oder Editor; p = Platzhalter fuer ADMIN_SUBS.
+const staffBy = (p) => `EXISTS (SELECT 1 FROM users u WHERE u.id=i.by_user AND (u.role IN ('admin','editor') OR (u.provider||':'||u.sub) IN (SELECT value FROM json_each(${p}))))`;
+const adminSubs = (env) => JSON.stringify((env.ADMIN_SUBS || "").split(",").map((x) => x.trim()).filter(Boolean));
 // Eine Einladung pruefen und (ausser bei dry) anlegen + senden. Gemeinsame Logik fuer /send und /send-batch.
 async function inviteOne(env, db, user, staff, x, emap, dry, seen) {
   const eid = String(x.eid || "").toLowerCase(), admin = !!user.admin;
@@ -146,13 +161,14 @@ async function inviteOne(env, db, user, staff, x, emap, dry, seen) {
   }
   if (await db.prepare("SELECT 1 x FROM invite_block WHERE email=?").bind(email).first()) return { eid, error: "blocked" };
   if (await db.prepare("SELECT 1 x FROM entity_claims WHERE eid=? AND status='verified'").bind(eid).first()) return { eid, error: "claimed" };
-  if (await db.prepare("SELECT 1 x FROM entity_invites WHERE email=?").bind(email).first()) return { eid, error: "already" };   // je Adresse hoechstens eine Einladung, egal fuer welche Entitaet
+  const taken = admin ? `i.email=?1 AND (i.eid=?2 OR ${staffBy("?3")})` : "i.email=?1";   // je Adresse hoechstens eine Einladung (siehe staffBy)
+  if (await db.prepare(`SELECT 1 x FROM entity_invites i WHERE ${taken}`).bind(email, ...(admin ? [eid, adminSubs(env)] : [])).first()) return { eid, error: "already" };
   if (seen) { if (seen.has(email)) return { eid, error: "duplicate_email" }; seen.add(email); }
   const variant = await resolveVariant(db, eid, emap.get(eid), x.contact_source, admin);
   if (dry) return { eid, email: maskAddr(email), variant };
   const inv = { token: randomToken(20), eid, name, email };
   // Pruefen und Anlegen in einer Anweisung: ein gleichzeitiger zweiter Aufruf (Doppelklick, /send neben dem Sammelversand) verliert sauber statt mit einem UNIQUE-Fehler (500)
-  const ins = await db.prepare("INSERT OR IGNORE INTO entity_invites(token,eid,name,email,by_user,created) SELECT ?,?,?,?,?,? WHERE NOT EXISTS (SELECT 1 FROM entity_invites WHERE email=?)").bind(inv.token, eid, name, email, user.id, now(), email).run();
+  const ins = await db.prepare(`INSERT OR IGNORE INTO entity_invites(token,eid,name,email,by_user,created) SELECT ?4,?2,?5,?1,?6,?7 WHERE NOT EXISTS (SELECT 1 FROM entity_invites i WHERE ${taken})`).bind(email, eid, admin ? adminSubs(env) : "", inv.token, name, user.id, now()).run();
   if (!Number(ins.meta?.changes || 0)) return { eid, error: "already" };
   const r = await send(env, inv, user.name, false, variant);
   if (!r.ok) await db.prepare("DELETE FROM entity_invites WHERE token=?").bind(inv.token).run();
@@ -281,11 +297,12 @@ export async function handleEntityInvite(env, request, url, path, user, J) {
   }
   if (path === "/api/entityinvite/send-batch" && (method === "POST" || method === "GET")) {   // Nur Admin: Sammelversand an Kontakte, die noch nicht eingeladen sind
     if (!user.admin) return J({ error: "forbidden" }, 403);
-    const waiting = "FROM entity_contacts c WHERE NOT EXISTS (SELECT 1 FROM entity_invites i WHERE i.eid=c.eid OR i.email=c.email) AND NOT EXISTS (SELECT 1 FROM invite_block k WHERE k.email=c.email) AND NOT EXISTS (SELECT 1 FROM entity_claims e WHERE e.eid=c.eid AND e.status='verified')";
+    // wie in inviteOne fuer den Admin: Mitglieder-Einladungen fuer andere Entitaeten halten keinen Kontakt zurueck (erste Bindung jeder Abfrage: ADMIN_SUBS)
+    const waiting = `FROM entity_contacts c WHERE NOT EXISTS (SELECT 1 FROM entity_invites i WHERE i.eid=c.eid OR (i.email=c.email AND ${staffBy("?")})) AND NOT EXISTS (SELECT 1 FROM invite_block k WHERE k.email=c.email) AND NOT EXISTS (SELECT 1 FROM entity_claims e WHERE e.eid=c.eid AND e.status='verified')`;
     if (method === "GET") {
       const out = { contacts: 0, eligible: 0, sources: {} };
       for (const src of ["guest", "speaker"]) {
-        const c = await db.prepare("SELECT COUNT(*) n FROM entity_contacts WHERE source=?").bind(src).first(), w = await db.prepare(`SELECT COUNT(*) n ${waiting} AND c.source=?`).bind(src).first();
+        const c = await db.prepare("SELECT COUNT(*) n FROM entity_contacts WHERE source=?").bind(src).first(), w = await db.prepare(`SELECT COUNT(*) n ${waiting} AND c.source=?`).bind(adminSubs(env), src).first();
         out.sources[src] = { contacts: c?.n || 0, eligible: w?.n || 0 }; out.contacts += c?.n || 0; out.eligible += w?.n || 0;
       }
       return J(out);
@@ -298,7 +315,7 @@ export async function handleEntityInvite(env, request, url, path, user, J) {
     if (lock && !Number((await db.prepare("INSERT INTO meta(k,v) VALUES('einvite_batch',?) ON CONFLICT(k) DO UPDATE SET v=excluded.v WHERE CAST(meta.v AS INTEGER)<?").bind(lock, now()).run()).meta?.changes || 0)) return J({ error: "busy" }, 409);
     try {
       // Gaeste zuerst, dann Speaker; mehr Zeilen holen, damit uebersprungene Dubletten (gleiche Adresse) das Limit nicht aufbrauchen
-      const rows = (await db.prepare(`SELECT c.eid,c.email,c.name,c.source contact_source ${waiting}${src ? " AND c.source=?" : ""} ORDER BY (c.source='speaker'), c.created, c.eid LIMIT ?`).bind(...(src ? [src] : []), limit * 4).all()).results || [];
+      const rows = (await db.prepare(`SELECT c.eid,c.email,c.name,c.source contact_source ${waiting}${src ? " AND c.source=?" : ""} ORDER BY (c.source='speaker'), c.created, c.eid LIMIT ?`).bind(adminSubs(env), ...(src ? [src] : []), limit * 4).all()).results || [];
       const emap = await entMap(env), seen = new Set(), results = []; let sent = 0, want = 0;
       for (const x of rows) {
         if (want >= limit) break;

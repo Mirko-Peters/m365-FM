@@ -12,20 +12,23 @@ import { handleEditor, decide, deleteUserEditorial } from "./editor.js";
 import { syncAutoRoles, closeObsolete } from "./roles.js";
 import { handleI18nPublic } from "./i18n_edit.js";
 import { can, roleOf, isStaff, inScope, publicRoles, loadActor, logEdit } from "./perm.js";
-import { handleLinkedinEvents, oauthStartLE, oauthCallbackLE, deleteUserLinkedin } from "./linkedin_events.js";
+import { handleLinkedinEvents, oauthStartLE, oauthCallbackLE, deleteUserLinkedin, purgeLinkedinOrphans } from "./linkedin_events.js";
 import { handleSponsor, handleSponsorLink } from "./sponsor.js";
 import { handleAds, handlePaypalWebhook } from "./ads.js";
 import { handleSponsorOrders } from "./sponsor_orders.js";
-import { autoTranslateItems, autoTranslateEntities, runTrQueue } from "./autotr.js";
+import { autoTranslateItems, autoTranslateEntities, runTrQueue, runTrDemand } from "./autotr.js";
 import { syncLiveEvents } from "./liveevents.js";
 import { syncContentTopics, handleTopics } from "./topics.js";
 import { importQuotesFromSite, handleQuotes } from "./quotes.js";
+import { importEpisodeUrls } from "./episode_urls.js";
 import { importEpisodes, importTranslations, handleRegister } from "./register.js";
 import { importSearchIndex, syncSearchVectors, handleSearch } from "./search.js";
+import { handleSearchDemand, classifySearches, aggregateDemand, purgeSearchStats, deleteUserSearchDemand } from "./search_demand.js";
 import { entityMap } from "./entities.js";
 import { handleProfiles, deleteUserData, refreshProfilesExport } from "./profiles.js";
 import { handleClaimVerify } from "./claimverify.js";
 import { handleOrgPair } from "./orgpair.js";
+import { handleEntFill } from "./entfill.js";
 import { handleEventImport, IMPORT_ROUTE, runEventImport } from "./eventimport.js";
 import { handleEvents, deleteUserEvents, ensureM365Con, claimLinkedinEntity, purgeEntityClaimReview } from "./events.js";
 import { handleVotes } from "./votes.js";
@@ -226,6 +229,7 @@ async function deleteAccount(env, id) {
   await db.batch([
     db.prepare("DELETE FROM entity_claim_review WHERE eid IN (SELECT eid FROM entity_claims WHERE user_id=?)").bind(id),
     db.prepare("DELETE FROM entity_claim_mail WHERE claim_user=?").bind(id),
+    db.prepare("DELETE FROM entity_claim_evidence WHERE user_id=?").bind(id),   // Adress-Nachweis (0046): Geschaeftsadresse, Notiz, Beleg-Link
     db.prepare("DELETE FROM entity_claims WHERE user_id=? AND status<>'verified'").bind(id),
     db.prepare("DELETE FROM likes WHERE user_id=? OR comment_id IN (SELECT id FROM comments WHERE user_id=?)").bind(id, id),
     db.prepare("DELETE FROM reports WHERE user_id=? OR comment_id IN (SELECT id FROM comments WHERE user_id=?)").bind(id, id),
@@ -239,6 +243,7 @@ async function deleteAccount(env, id) {
   await deleteUserEvents(db, id);
   await deleteUserEditorial(db, id);   // Redaktion (Migration 0037): vor deleteUserBlog, weil der Verlauf an den Beitraegen des Kontos haengt
   await deleteUserEntityInvites(db, id);   // braucht mail_addr und die bestaetigten Claims: vor deleteUserData
+  await deleteUserSearchDemand(db, id);   // Nachfrage zu eigenen Inhalten und zum Profil (#156): braucht Handle und Inhalte, also vor deleteUserBlog/deleteUserData
   await deleteUserMessages(db, id); await deleteUserTokens(db, id); await deleteUserQa(db, id); await deleteUserBlog(db, id); await deleteUserLibrary(db, id); await deleteUserPodcast(db, id); await deleteUserVideos(db, id); await deleteUserGuests(db, id); await deleteUserGuestCredits(db, id);
   await deleteUserData(db, id); await deleteUserExpertRequests(env, id);
   await deleteUserLinkedin(db, id);   // LinkedIn-Zugang dieses Admins (verschluesselte Tokens) und "veroeffentlicht von"
@@ -261,6 +266,7 @@ async function api(env, request, url, path, asUser, ctx) {
   const need = () => (user ? null : J({ error: "login" }, 401));
   const db = env.DB;
 
+  if (path === "/api/internal/entity-fill") return handleEntFill(env, request, path, J);   // KI-Entwurf fuer Entitaeten (CRON_KEY), Details in entfill.js
   if (path === "/api/internal/ai-spend") {
     if (method !== "POST") return J({ error: "method_not_allowed" }, 405);
     if (!env.CRON_KEY || request.headers.get("x-cron-key") !== env.CRON_KEY) return J({ error: "forbidden" }, 403);
@@ -305,7 +311,8 @@ async function api(env, request, url, path, asUser, ctx) {
     await ensureDirectoryCols(db);
     return (await handleDirectory(env, request, url, J)) || J({ error: "not_found" }, 404);
   }
-  if (path === "/api/search") return handleSearch(env, request, url, J);
+  if (path === "/api/search") return handleSearch(env, request, url, J, asUser === undefined ? ctx : undefined);   // nur Suchen der Website zaehlen (#156), keine MCP-Aufrufe
+  if (path === "/api/search/report" || path === "/api/search/gaps" || path === "/api/search/demand-export") return await handleSearchDemand(env, request, url, path, user, J);   // #156
   if (path === "/api/providers") return J({ providers: Object.keys(PROVIDERS).filter((k) => PROVIDERS[k].id(env) && PROVIDERS[k].secret(env)) }, 200, { "cache-control": "public, max-age=300" });
   if (path === "/api/me/li-follow" && method === "POST") {
     if (need()) return need();
@@ -411,7 +418,7 @@ async function api(env, request, url, path, asUser, ctx) {
   if (/^\/api\/points(\/|$)/.test(path) || path.startsWith("/api/admin/points/")) { const p = await handlePoints(env, request, url, path, user, J); if (p) return p; }
   if (/^\/api\/msg(\/|$)/.test(path)) { const p = await handleMessages(env, request, url, path, user, J); if (p) { if (user && method !== "GET") await evalBadges(env, user.id).catch(() => 0); return p; } }
   if (path === "/api/admin/org-pair") { const q = await handleOrgPair(env, request, url, path, user, J); if (q) return q; }
-  if (/^\/api\/entity\/claim\/(domains|domain|forward|confirm)$/.test(path)) return handleClaimVerify(env, request, url, path, user, J);
+  if (/^\/api\/entity\/claim\/(domains|domain|forward|confirm|evidence)$/.test(path)) return handleClaimVerify(env, request, url, path, user, J);
   if (IMPORT_ROUTE.test(path)) { const p = await handleEventImport(env, request, url, path, user, J); if (p) return p; }
   if (/^\/api\/(events?|speaker)(\/|$)/.test(path) || /^\/api\/entity\/claims?(\/|$)/.test(path) || /^\/api\/admin\/entity\/claims?$/.test(path)) { const p = await handleEvents(env, request, url, path, user, J); if (p) { if (user && method !== "GET") await evalBadges(env, user.id).catch(() => 0); return p; } }
   if (path === "/api/ui-i18n" && request.method === "GET") return J(await uiI18nExport(env), 200, { "cache-control": "public, max-age=300" });
@@ -624,6 +631,8 @@ export default {
       T("syncAutoRoles", () => syncAutoRoles(env.DB));   // taeglich: MVP/MCT -> Editor, entzogene Verifizierung -> Rolle zurueck (idempotent)
       T("runDigest", () => runDigest(env, { at: scheduledAt }));
       T("syncInviterBadges", () => syncInviterBadges(env));   // einmal taeglich (Sicherheitsnetz: Zurechnung, Entwertung und Kontoloeschung bewerten sofort)
+      T("purgeLinkedinOrphans", () => purgeLinkedinOrphans(env.DB));   // verwaiste LinkedIn-Zeilen nach dem Ende des Events (#323)
+      T("purgeSearchStats", () => purgeSearchStats(env.DB));   // Suchbegriffe und Nachfrage: 12 Monate (#156)
     }
     if (event.cron === "*/30 * * * *") T("runDigest", () => runDigest(env, { at: scheduledAt }));
     T("refreshFeeds", () => refreshFeeds(env));
@@ -650,10 +659,16 @@ export default {
     T("backfillDirectoryGeocodes", () => backfillDirectoryGeocodes(env));
     T("remindInvites", () => remindInvites(env));
     T("runTrQueue", () => runTrQueue(env, entityMap));
+    T("searchDemand", async () => {   // #156: Begriffe einordnen (Workers AI/Vectorize, nie im Suchpfad), Nachfrage fortschreiben, im Haiku-Budget uebersetzen
+      // Fortschreiben liest die ganze Tabelle (12 Monate): nur nach neuen Uebersetzungsluecken und einmal taeglich um 06:00 (D1-Lesekontingent)
+      const classified = await classifySearches(env), demand = classified.translation_gap || event.cron === "0 6 * * *" ? await aggregateDemand(env) : { skipped: true };
+      return { classified, demand, translated: await runTrDemand(env, entityMap) };
+    });
     T("syncLiveEvents", () => syncLiveEvents(env, entityMap));
     T("syncContentTopics", () => syncContentTopics(env));
     T("importEntitiesFromSite", () => importEntitiesFromSite(env));
     T("importQuotesFromSite", () => importQuotesFromSite(env));
+    T("importEpisodeUrls", () => importEpisodeUrls(env));   // Spreaker-Folge <-> Adresse (Admin-Reiter Spreaker-Adressen); Korrektur bei Spreaker: GitHub-Workflow spreaker-urls.yml
     T("importEpisodes", () => importEpisodes(env));
     T("importTranslations", () => importTranslations(env));
     T("importSearchIndex", () => importSearchIndex(env));

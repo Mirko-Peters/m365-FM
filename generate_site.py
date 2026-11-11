@@ -159,14 +159,7 @@ CSS = FONT_CSS + CSS + INDUSTRY + PL.CSS
 def esc(s): return html.escape(s or "", quote=True)
 
 
-def ascii_slug(t, vid):
-    s = unicodedata.normalize("NFKD", t)
-    s = "".join(c for c in s if not unicodedata.combining(c))
-    s = re.sub(r"\(.*?\)|（.*?）", "", s)
-    s = re.sub(r"[^A-Za-z0-9]+", "-", s).strip("-").lower()
-    if len(s) > 70:
-        s = s[:70].rsplit("-", 1)[0]
-    return s.rstrip("-") if len(s) >= 15 else ""
+from site_episode_urls import ascii_slug, episode_url, dub_slug   # eine Quelle fuer die Folgen-Adresse (auch tools/spreaker_urls.py, Uploader)
 
 
 def parse_desc(desc):
@@ -1007,7 +1000,7 @@ def build():
             p = pub.get(f"{vid}:{l}") or pub.get(f"{vid}:{l}-pub")
             if not p:
                 continue
-            slug = ascii_slug(e["title"], vid) or vid.lower().replace("_", "-")
+            slug = dub_slug(e["title"], vid)
             items[(vid, l)] = dict(vid=vid, lang=l, e=e, eid=p["episode_id"], slug=slug, date=(p.get("at") or TODAY)[:10])
     # Slug-Kollisionen je Sprache auflösen
     seen = {}
@@ -1029,7 +1022,7 @@ def build():
 
     sitemap = []  # (url, lastmod, alternates)
 
-    def url_of(it): return f'{BASE}/{it["lang"]}/{it["slug"]}/'
+    def url_of(it): return episode_url(BASE, it["lang"], it["slug"])
     SBX = SBR.Index()
     _SHP = json.loads((ROOT / "data" / "platforms.json").read_text("utf-8")) if (ROOT / "data" / "platforms.json").exists() else {}
     def sidebar(l, text="", ids=None, exclude=(), home=False):
@@ -1554,7 +1547,7 @@ def build():
     import site_updates as _SU
     _SU.load(COMMUNITY_API)
     # (Blogbeitraege samt Sprachfassungen: _posts entsteht seit 6.11. vor den Sprach-Startseiten, die sie zeigen)
-    SPM.check_posts(_posts)   # T37 Sponsor: Beitraege in data/sponsorships.json muessen existieren
+    SPM.check_posts(_posts + CBL.live_refs(LRN.ENTS))   # T37 Sponsor: Beitraege in data/sponsorships.json muessen existieren (auch Content-Pakete, die der Worker erst nach diesem Bau anlegt)
     LBL.publish(write, BASE); MEM.BLOGLANGS = {p["lang"] for p in _posts}   # stand seit T6 versehentlich im Kommentar: blog-import/ fuer den Worker und die Blog-Sprachen der Profile
     import site_content_blog as CBL; CBL.publish(write, LRN.ENTS)   # T15: freigegebene Content-Pakete imports/blog/<sprache>/*.md -> blog-content/index.json (Worker-Cron importContentBlog)
     for _p in _posts:
@@ -1750,10 +1743,13 @@ def build():
         for _it in _its:
             if _it.get("eid"): _spk.setdefault(str(_it["eid"]), url_of(_it))
     write("spreaker-pages.json", json.dumps({"generated": TODAY, "count": len(_spk), "pages": _spk}, ensure_ascii=False))
+    import site_episode_urls as _SEU   # Spreaker-Folge <-> Adresse (Slug, Sprache, Show): Quelle fuer tools/spreaker_urls.py und den Worker (episode_urls)
+    _spm = _SEU.build_mapping(BASE, _showix["items"], [(_l, _it) for _l, _its in by_lang.items() for _it in _its], {_l: LANGS[_l][3] for _l in LANGS}, TODAY)
+    write("spreaker-urls.json", json.dumps(_spm, ensure_ascii=False))
     print(f"Spreaker-Seitenzuordnung: {len(_spk)} Folgen")
     phase("Sitemaps")
     import site_quotes as _SQ
-    write("sponsors.json", json.dumps({"version": 1, "generated": TODAY, **SPM.sponsors_json(TODAY, LRN.ENTS)}, ensure_ascii=False))   # aktive Sponsor-Firmen (ids, Namen): der Worker nimmt Leads fuer sie ohne Werbebuchung an (ads.js sponsor-lead)
+    write("sponsors.json", json.dumps({"version": 1, "generated": TODAY, **SPM.sponsors_json(TODAY, LRN.ENTS)}, ensure_ascii=False))   # aktive Sponsor-Firmen inkl. 182 Tage Karenzzeit (ids, Namen): der Worker nimmt Leads fuer sie ohne Werbebuchung an (ads.js sponsor-lead)
     write("quotes.json", json.dumps({"version": 1, "generated": TODAY, "quotes": _SQ.ALL}, ensure_ascii=False))   # Quotes an Personen-Entitaeten; der Worker uebernimmt sie in D1 (importQuotesFromSite)
     write("robots.txt", f"User-agent: *\nContent-Signal: search=yes, ai-input=yes, ai-train=yes\nAllow: /\n\n# KI-Suchen und Assistenten ausdrücklich erlaubt\n" + "".join(f"User-agent: {b}\nAllow: /\n\n" for b in ("GPTBot", "OAI-SearchBot", "ChatGPT-User", "ClaudeBot", "Claude-User", "Claude-SearchBot", "PerplexityBot", "Google-Extended", "Applebot-Extended", "Bingbot")) + f"Sitemap: {BASE}/sitemap.xml\n")
     # llms.txt (Überblick), llms-full.txt (alle Folgen), agent.json (Maschinen-Beschreibung), episodes.json (Datenfeed)

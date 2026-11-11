@@ -1,0 +1,57 @@
+name: Spreaker-Adressen der Folgen abgleichen
+# Setzt bei allen Folgen aller Sprach-Shows das Feld "Website" und m365.fm-Links der Beschreibung auf die kanonische Adresse der Seite
+# (tools/spreaker_urls.py). Taeglich nach dem Seitenbau: hoechstens "limit" Aenderungen je Lauf. Entscheidung: Die Korrektur laeuft hier und nicht
+# im Worker, weil der Worker den Spreaker-Token nur als Deploy-Momentaufnahme hat (worker.yml); der Worker speichert/zeigt die Zuordnung
+# (Tabelle episode_urls, Admin-Reiter "Spreaker-Adressen"). shownotes/PAUSED haelt auch diesen Lauf an.
+# Sicherheit (Entscheidung Mirko, #325): Der Zeitplan laeuft als mode=auto - ohne Freigabedatei data/SPREAKER_URLS_APPROVED nur Probelauf
+# (schreibt nichts), mit Freigabe nur das Feld Website (episode_link). Die Datei legt Mirko an, nachdem er die Ausgabe eines Probelaufs geprueft hat.
+# Beschreibungen (description_html) aendert nur ein von Hand gestarteter Lauf mit mode=apply. Vor jedem Schreiben sichert das Werkzeug die alten
+# Werte in shownotes/spreaker_backup/urls-<id>.json und schreibt nur, wenn die Zielseite mit 200 antwortet.
+# Jeder Lauf haelt data/spreaker_index.json aktuell (ID, Titel, Veroeffentlichungszeit aller Folgen der Hauptshow, nur oeffentliche Metadaten):
+# damit ordnet der Seitenbau auch alte Podpage-Seiten ausserhalb des RSS-Fensters ihrer Spreaker-ID zu (site_podpage.spreaker_match).
+on:
+  schedule:
+    - cron: "17 5 * * *"
+  workflow_dispatch:
+    inputs:
+      mode: { description: "plan = Probelauf, apply = bei Spreaker aendern (Website-Feld und Beschreibung), auto = wie der Zeitplan, export = Zuordnung als JSON", type: choice, options: [plan, apply, auto, export], default: plan }
+      limit: { description: "apply: hoechstens so viele Folgen aendern", required: false, default: "300" }
+      ids: { description: "Nur diese Folgen-IDs (Komma)", required: false, default: "" }
+permissions:
+  contents: write
+concurrency: { group: apply-shownotes, cancel-in-progress: false }
+jobs:
+  urls:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - run: pip install -q requests cryptography
+      - name: Abgleich
+        env:
+          SPREAKER_TOKEN: ${{ secrets.SPREAKER_TOKEN }}
+          SPREAKER_CLIENT_ID: ${{ secrets.SPREAKER_CLIENT_ID }}
+          SPREAKER_CLIENT_SECRET: ${{ secrets.SPREAKER_CLIENT_SECRET }}
+        run: |
+          if [ -e shownotes/PAUSED ]; then echo "shownotes/PAUSED vorhanden - Lauf uebersprungen"; exit 0; fi
+          MODE="${{ inputs.mode || 'auto' }}"   # Zeitplan: auto (Probelauf ohne data/SPREAKER_URLS_APPROVED, sonst nur Feld Website)
+          # Exit-Code des Werkzeugs durch tee hindurch behalten (Standard-Shell ohne pipefail); Fehler (Folgen oder ganze Folgenliste einer Show
+          # nicht lesbar) machen einen apply-Lauf rot - erst nach der Zusammenfassung.
+          set -o pipefail; rc=0
+          python tools/spreaker_urls.py "$MODE" --limit "${{ inputs.limit || '300' }}" --ids "${{ inputs.ids }}" | tee spreaker-urls-run.txt || rc=$?
+          if [ "$MODE" != "export" ]; then { echo "### Spreaker-Adressen ($MODE)"; echo '```'; head -c 60000 spreaker-urls-run.txt; echo '```'; } >> "$GITHUB_STEP_SUMMARY"; fi
+          exit "$rc"
+      - name: Protokoll und Zustand sichern
+        if: always()
+        run: |
+          git config user.name "m365-site-bot"; git config user.email "actions@users.noreply.github.com"
+          for f in data/spreaker_urls.tsv data/spreaker_urls_state.json data/spreaker_index.json data/episode_urls.json data/spreaker_auth.enc shownotes/spreaker_backup; do [ -e "$f" ] && git add -A "$f"; done
+          if git diff --cached --quiet; then echo "nichts zu sichern"; exit 0; fi
+          git commit -q -m "Spreaker-Adressen: Protokoll $(date -u +%Y-%m-%dT%H:%MZ) [skip ci]"
+          for i in 1 2 3 4 5; do
+            if git pull --rebase --autostash -q origin main; then git push -q origin HEAD:main && exit 0
+            else git rebase --abort 2>/dev/null || true; fi
+            sleep $((i*5))
+          done
+          echo "::error::Protokoll konnte nicht gesichert werden"; exit 1

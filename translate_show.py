@@ -5,13 +5,14 @@ data/podpage_i18n/src/<lang>.json. Politik (Mirko, 7.11.2026): nur EINMAL uebers
 geaendertes Original markiert sie nur als stale (data/podpage_i18n/stale.json {lang: {slug: [title|summary|notes_html]}}, i18n_overrides Vertrag 7). Neu uebersetzt wird nur auf
 Anforderung: --stale (nur veraltete Fassungen; --langs/--slugs, ohne --slugs hoechstens STALE_MAX Anfragen je Lauf) oder --wishes (nur die Wunschliste der Redaktion).
 Von Hand bearbeitete Felder (Redaktion, i18n_overrides.py: kind episode bzw. notes) sind eine reine Leseschicht ueber dem Maschinentext; eine Folge, bei der nur solche Felder
-veraltet sind, sendet kein Lauf, ausser mit --force-manual. Ist der Export der Redaktion eingestellt, aber nicht abrufbar (kein 404), sendet --stale/--wishes in dieser
+veraltet sind, sendet kein Lauf, ausser mit --force-manual. Ist der Export der Redaktion nicht abrufbar (auch 404), sendet --stale/--wishes in dieser
 Sprache nichts und der Lauf endet mit Fehler (Sperre unbekannt, i18n_overrides Vertrag 5); Neues laeuft weiter. Erster Lauf: Hashes fuer vorhandene Uebersetzungen werden
 ohne API aus dem aktuellen Original eingetragen."""
 import json, os, sys, time, urllib.request, urllib.error
 from site_text import bad as bad_text
 from tm_hash import fields_hash
 import i18n_overrides as OV
+import search_demand as DM
 from pathlib import Path
 import site_podpage as P
 import site_shownotes_seo as SSEO
@@ -219,6 +220,7 @@ def main():
         if wish is not None: OV.wishes_done("episode", [(l, s) for l in langs if l not in held for s in wish.get(l, {}) if (l, s) not in open_])
 
     send, stale = scan()
+    send = DM.order(send, DM.load(), "episode", lambda x: x[0], lambda x: x[1]["slug"])   # Suchnachfrage (#156): nur die Reihenfolge; was gesendet wird, entscheidet plan()
     if stale_mode and not slugs and wish is None and len(send) > STALE_MAX:
         print(f"--stale ohne --slugs: {len(send)} veraltete Fassungen, dieser Lauf sendet die ersten {STALE_MAX} (STALE_MAX)"); send = send[:STALE_MAX]
     shash = {}; reqs = []
