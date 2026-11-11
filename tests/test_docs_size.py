@@ -68,3 +68,24 @@ class R2PagesTest(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class R2outChecksTest(unittest.TestCase):
+    """check_schema.py und check_encoding.py pruefen r2out/ neben docs/ mit (Seiten nur im R2-Bucket): Fehler dort nur als Hinweis, in docs/ weiter blockierend."""
+    def run_check(self, root, name):
+        import subprocess, sys
+        repo = str(Path(__file__).resolve().parent.parent)
+        code = (f"import pathlib, sys; sys.path.insert(0, {repo!r}); import check_encoding as c; c.DOCS = pathlib.Path(sys.argv[1]); sys.exit(c.main())" if name == "check_encoding"
+                else f"import runpy; runpy.run_path({repo + '/check_schema.py'!r}, run_name='__main__')")
+        return subprocess.run([sys.executable, "-c", code, str(root / "docs")], capture_output=True, text=True)
+
+    def test_r2out_hints_docs_errors(self):
+        bad_ld, moj = '<script type="application/ld+json">{"@type": "Event", "name": "x"}</script>', "<p>KÃ¤se â€“ x</p>"
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            for rel, body in (("docs/en/a/index.html", "<p>ok</p>"), ("r2out/ru/tag/облако/index.html", bad_ld + moj)):
+                p = root / rel; p.parent.mkdir(parents=True, exist_ok=True); p.write_text(f"<html><body>{body}</body></html>", "utf-8")
+            r = self.run_check(root, "check_schema"); self.assertEqual(r.returncode, 0, r.stdout + r.stderr); self.assertIn("HINWEIS 1 x r2out: Event: Pflichtfeld 'startDate' fehlt", r.stdout)
+            r = self.run_check(root, "check_encoding"); self.assertEqual(r.returncode, 0, r.stdout + r.stderr); self.assertIn("HINWEIS Mojibake 1 x r2out/ru/tag/облако/index.html", r.stdout)
+            (root / "docs/en/a/index.html").write_text("<html><body>" + bad_ld + moj + "</body></html>", "utf-8")
+            self.assertEqual(self.run_check(root, "check_schema").returncode, 1); self.assertEqual(self.run_check(root, "check_encoding").returncode, 1)

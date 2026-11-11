@@ -30,6 +30,7 @@ def main():
     man = {k: v for k, v in man.items() if k in keys}   # nur aktuelle Schluessel: kommt ein Schluessel spaeter zurueck (z. B. aus docs/), wird er neu geladen
     try: gone = read_gone(s3, bucket)
     except Exception as e: print("Entfernt-Liste nicht lesbar:", type(e).__name__); gone = set()
+    served = {k for k in man if k not in gone}   # liegt schon (nicht als entfernt markiert) im Bucket: scheitert der Upload, bleibt die alte Fassung erreichbar
     todo = []
     for key, f in keys.items():
         h = hashlib.md5(f.read_bytes()).hexdigest()
@@ -52,6 +53,11 @@ def main():
     print(f"fuer den Purge vorgemerkt: {len(changed)} Adressen")
     print(f"hochgeladen: {len(ok)}, Fehler: {len(failed)}, im Manifest: {len(man)}")
     if failed: print(f"::warning::R2-Upload r2out: {len(failed)} Fehler - diese Dateien werden beim naechsten Lauf erneut geladen")
+    # Seiten in r2out/ gibt es nur im Bucket (seit 11.11.2026 alle Sprachseiten ausser en/de). Fehlt eine davon dort noch ganz, antwortete sie nach dem
+    # Deploy mit 404 (z. B. die aus docs/ umgezogenen Seiten beim ersten Lauf) -> Ende 1, der Seitenbau veroeffentlicht nicht; der naechste Lauf laedt nur den Rest.
+    lost = sorted(k for k, _f, _h in failed if k.endswith(".html") and k not in served)
+    if lost:
+        print(f"::error::R2-Upload r2out: {len(lost)} Seiten fehlen im Bucket (z. B. {', '.join(lost[:3])}) - kein Deploy, sonst antworten sie mit 404"); return 1
     return 0
 
 
