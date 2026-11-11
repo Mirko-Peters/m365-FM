@@ -78,6 +78,12 @@ Direct access usually comes from unique permissions. By default, files and folde
 
 The report also says nothing about why access exists. A group may have been set up for a project that ended. A direct share may follow a request that was approved long ago. Only the site owner or the person who shared the item can say. Ask first, then act. A short note in a shared sheet, with the site, the item count and the owner's answer, is enough to keep the review traceable.
 
+## How do you see who can open one file or folder?
+
+The per-user report starts from a person. For one item, start from the item. Microsoft's page on [seeing who a file is shared with](https://support.microsoft.com/en-us/sharepoint/sharepoint-sharing-and-permissions/see-who-a-file-is-shared-with-in-onedrive-or-sharepoint) says to select the file or folder in the document library and then select **Share**. The circular icons in the Share window show the people or groups with access. Open them to reach the **Manage access** panel, which lists people, groups and the links that grant access. Select a name to see that person's access summary, including the groups with access to the site. External users appear by email address, labeled External User.
+
+To learn who changed access, search the audit log. Microsoft's list of [audit log activities](https://learn.microsoft.com/en-us/purview/audit-log-activities) includes Broke sharing inheritance and Added user or group to SharePoint group, which show when an item or library got its own permissions and who joined a group.
+
 ## Example: an access review before a role change
 
 The numbers below are made up to show the method.

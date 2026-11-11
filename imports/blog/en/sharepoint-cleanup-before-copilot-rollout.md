@@ -83,6 +83,12 @@ The fix depends on why the site scored high.
 
 Treat the owner as your partner, because [SharePoint governance](https://www.m365.fm/entity/sharepoint-governance/) only works when owners take part. The admin sets the rule and provides the list, and the owner decides what stays.
 
+## Can you keep Microsoft 365 Copilot away from specific sites while you clean up?
+
+Partly, and only for a while. Microsoft's page on [restricted content discovery](https://learn.microsoft.com/en-us/sharepoint/restricted-content-discovery) describes a site-level setting that limits the discovery of a site's content, including recently used files, in organization-wide search and in Microsoft 365 Copilot responses. It also removes some AI entry points on the site, such as the Copilot button. You turn it on per SharePoint site, not for the whole tenant. Microsoft intends it as a temporary governance control, for example during reviews or phased Copilot rollouts.
+
+It does not change who can open the files. A person with permission or a link can still reach the content, so it belongs in the plan as a way to buy time for tier 1 sites, and not as a fix. The fix stays the same: remove broad groups, replace links with named access and close sites that must be closed with restricted access control. Use the setting for sites on your list that you cannot repair before the rollout date, and write down when it will be removed again.
+
 ## Example: ranking 300 sites for a pilot of 80 users
 
 The numbers are invented to show the method. A company has 300 SharePoint sites and plans a Copilot pilot in six weeks. The data access governance reports show 45 sites open to Everyone except external users, 30 with org-wide links, 12 with Anyone links, and 70 sites with no active owner. Some sites appear in more than one list.
@@ -108,7 +114,7 @@ Count the result before the pilot: 18 Tier 1 sites fixed, 40 inactive sites in t
 
 ## How software can help
 
-Start with the data access governance reports, inactive site policies, site ownership policies, site access reviews and restricted access control. For repeat work across many sites, a reporting tool can bring the lists together. Cognillo's [SharePoint Essentials Toolkit](https://www.m365.fm/entity/sharepoint-essentials-toolkit/) is one example. According to its product page, it offers an oversharing and Copilot readiness report on sharing links, sites and content open to everyone, heavily shared files that are not labelled, and outdated content with open access. These are the vendor's statements and M365.FM did not test them. Other tools and scripts can do similar work, so compare them with the built-in reports first.
+Start with the data access governance reports, inactive site policies, site ownership policies, site access reviews and restricted access control. For repeat work across many sites, a reporting tool can bring the lists together. Cognillo's [SharePoint Essentials Toolkit](https://www.m365.fm/entity/sharepoint-essentials-toolkit/) is one example. According to its product page, it offers an oversharing and Copilot readiness report on sharing links, sites and content open to everyone, heavily shared files that are not labeled, and outdated content with open access. These are the vendor's statements and M365.FM did not test them. Other tools and scripts can do similar work, so compare them with the built-in reports first.
 
 ## Next step
 

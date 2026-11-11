@@ -83,6 +83,19 @@ The lifecycle settings give you three choices: remove the external user, block s
 
 This is why legacy guests need a separate cleanup. The process covers new guests, and the old ones need a one-time review.
 
+## Can you run the approval as a Power Automate workflow?
+
+Yes, for requests that Microsoft Entra access packages do not cover, such as a request to share a single folder. Microsoft's page on [getting started with approvals](https://learn.microsoft.com/en-us/power-automate/get-started-approvals) describes an approval workflow in Power Automate with these approval types:
+
+- **Everyone must approve:** each approver must respond before the flow completes.
+- **First to respond:** one approval or rejection completes the request.
+- **Custom responses:** you define the options, and the flow waits for all approvers or for one.
+- **Sequential approval:** approvals are requested one at a time, in a set order. This fits a manager first and the data owner second.
+
+Approvers respond from an Outlook email, a Microsoft Teams adaptive card or the Power Automate action center, if they hold a suitable license. You can assign approvals to guest users and Microsoft 365 groups. Guests who did not accept the B2B invitation are removed from the approver list and do not take part. Approval flows are saved in Dataverse.
+
+Does an approval workflow secure the shared material? No. It records who decided, but the sharing settings, link type and expiry still come from your SharePoint and Entra configuration. Build the workflow so that the approved request leads to a named-people share, not an Anyone link.
+
 ## Example: a request flow for 40 requests a quarter
 
 The numbers are invented to show the method. A company with 900 employees gets about 40 external collaboration requests per quarter. Before the process, 40 percent of the guests had no clear sponsor, and the guest list grew by about 60 accounts per quarter.

@@ -87,6 +87,14 @@ These explain the typical support case: "I am an owner, but I cannot approve." C
 
 A second common case is the request that nobody answers. People wait, then ask a colleague to share the file by a link, which creates exactly the kind of untracked access that audits find later. A working request process is a security control, not only a convenience.
 
+## Can groups handle access requests instead of one email address?
+
+Partly. The request route depends on the site type, as shown above. On a group-connected site, including a Teams site, the request goes to the group administrators. Microsoft's page on [sharing and permissions in the modern experience](https://learn.microsoft.com/en-us/sharepoint/modern-experience-sharing-permissions) explains why: team owners become site owners and team members become site members, so membership is managed in the Microsoft 365 group or team. Users added directly to the site do not get the group's other services, and Microsoft 365 groups have no view-only access. Readers who should only view must be added to the Visitors group.
+
+For a site with its own Owners group, send requests to a distribution list, as suggested above, and keep the list in step with the owner team. Do not use a mail-enabled security group as the recipient without a test, because Microsoft warns that such sites may not receive the request email.
+
+The rule for a team: decide who approves, then make that group the owners of the site or team, and test the route once with a real request.
+
 ## Should you turn access requests on or off?
 
 Think about what you want people to do when they hit a closed door. If requests are on and answered within a day, people ask the owner and get a decision. That keeps access visible. If requests are off or ignored, people look for other ways: they ask a member to share the file, or they ask for a copy. Both routes weaken your control.
