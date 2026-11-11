@@ -18,20 +18,26 @@ faq:
   - q: "Which role do I need to create an alert policy?"
     a: "Microsoft states that you must be assigned the Manage Alerts role or the Organization Configuration role to create alert policies. The View-Only Manage Alerts role is enough to view them in the Microsoft Defender portal. After you create or update a policy, it can take up to 24 hours before alerts are triggered."
   - q: "Does Power Automate have a trigger for permission changes?"
-    a: "The SharePoint connector lists triggers for items, files, forms and hub site requests, but none for permission, sharing or access changes. It offers actions such as granting access or stopping sharing, which do not detect changes. A common pattern uses an alert policy email as the trigger for a flow."
+    a: "The SharePoint connector lists triggers for items, files, forms and hub site requests, but none for permission, sharing or access changes. It offers actions such as granting access or stopping sharing, which do not detect changes. One design uses an alert policy email as the trigger for a flow, but Microsoft does not document it as a feature."
 ---
 
-To alert on SharePoint permission changes, create an alert policy in the Microsoft Defender portal that watches the audit events for site permissions and sharing, send the alert to a shared mailbox, and tune it on a few high-risk sites first. Classic SharePoint alerts are retired, and I found no list rule or SharePoint trigger in Power Automate that covers permission changes. This guide is for the security admin who needs a notice when someone becomes a site collection admin or opens a site to everyone, and it shows what each option can and cannot do.
+To alert on SharePoint permission changes, create an alert policy in the Microsoft Defender portal that watches the audit events for site permissions and sharing, send the alert to a shared mailbox, and tune it on a few high-risk sites first. Classic SharePoint alerts are retired, and the Microsoft pages I read list no rule condition and no Power Automate trigger for permission changes. This guide is for the security admin who needs a notice when someone becomes a site collection admin or opens a site to everyone, and it shows what each option can and cannot do.
 
 ## Alert on SharePoint permission changes: what Microsoft offers
 
 Three families of options exist, and only one of them watches permissions.
 
 - **Alert policies.** Microsoft's article on [alert policies](https://learn.microsoft.com/purview/alert-policies) says you can create policies and view the alerts that are generated when users perform activities that match the policy conditions. The activities include sharing a file externally, assigning access permissions and creating an anonymous link.
-- **SharePoint alerts and rules.** The classic SharePoint alerts feature, known as Alert me, is on its way out in SharePoint Online. Microsoft's page on the [SharePoint Alerts retirement](https://support.microsoft.com/sharepoint/admin/sharepoint-alerts-retirement) states that in July 2026 Microsoft removes the ability to use them, and that existing alerts won't work anymore. It points to Power Automate and SharePoint Rules as replacements, and its template examples cover list item and file updates. Rules react to item changes and approaching dates, as far as Microsoft's support page on rules describes, and I found no rule condition for permission changes.
+- **SharePoint alerts and rules.** The classic SharePoint alerts feature, known as Alert me, is being retired in SharePoint Online. Microsoft's page on the [SharePoint Alerts retirement](https://support.microsoft.com/sharepoint/admin/sharepoint-alerts-retirement) states that from July 2026 existing alerts can't be extended anymore and won't work anymore. It points to Power Automate and SharePoint Rules as replacements, and its template examples cover list item and file updates. Rules react to an item being modified, a column value or an approaching date, as the Microsoft support page on rules describes. That page does not say whether permission changes can trigger a rule.
 - **Power Automate.** The [SharePoint connector](https://learn.microsoft.com/sharepoint/dev/business-apps/power-automate/sharepoint-connector-actions-triggers) lists triggers for items, files, forms and hub site join requests. It lists no trigger for permission, sharing or access changes. Actions such as granting access or stopping sharing exist, but they change permissions instead of detecting changes.
 
 The result: the audit trail is the source of truth for permission changes, and alert policies are the native way to be notified about it. [Audit logs](https://www.m365.fm/entity/audit-logs/) record the event, and the alert policy turns the event into an email.
+
+## SharePoint Rules and Power Automate after the retirement
+
+Many admins first look for a notification feature on the list or library. Microsoft's retirement page gives this timeline: new alerts were turned off for newly onboarding tenants from July 2025, alerts started expiring 30 days after their first run in October 2025, creating new alerts was turned off for all tenants from January 2026, and in July 2026 existing alerts stopped working. The page does not say that alerts are migrated automatically. It recommends Power Automate first and SharePoint Rules second.
+
+Rules have clear limits for this use case. Microsoft's article on rules says that a rule starts with a condition such as an item being modified or a column value changing, and that a date-approaches condition is limited to two per list or library. Notifications are emails to a person, several people or a people column, but not to a group email address, and you need Contribute permission on the list to manage rules. Rules watch list items, not the permission settings of a site, which is why the audit-based alert policy below is the better fit.
 
 ## Which audit events to watch
 
@@ -45,7 +51,7 @@ Microsoft's list of [audit log activities](https://learn.microsoft.com/purview/a
 
 For sharing, Microsoft's page on sharing auditing names SharingSet, SharingInvitationCreated, AnonymousLinkCreated, SecureLinkCreated and AddedToSecureLink. Microsoft also marks the older SitePermissionsModified operation as deprecated, so do not build a new policy around it.
 
-One caveat: the pages do not confirm that every audit operation appears as a selectable activity in the policy form, and Microsoft states that the activities you can track depend on your plan. Open the form and check the activity list before you plan the whole design.
+One caveat: Microsoft's alert policy page does not list the selectable activities. It says only that the activities you can track depend on your plan. The default policy that the page lists in the Permissions category covers Exchange admin privilege, not SharePoint. So SharePoint permission events need a custom policy, and you should open the form and check the activity list before you plan the whole design.
 
 ## Build the alert policy
 
@@ -72,9 +78,13 @@ An alert says that an event happened, not that it was wrong. Plan for these limi
 
 Before you switch alerts on, review the [SharePoint permissions](https://www.m365.fm/entity/sharepoint-permissions/) of the watched sites, so the alerts start from a clean baseline. Keep a record of each alert and its outcome. After a month, the record shows which events deserve a High severity and which can be dropped.
 
+## Search the audit log when an alert fires
+
+An alert is only a pointer. To see the detail, search the audit log in the Microsoft Purview portal. According to Microsoft's page on [searching the audit log](https://learn.microsoft.com/purview/audit-search), you need the Audit Logs or View-Only Audit Logs role. You can search by activity, by user and by file, folder or site, with a wildcard at the end of a site URL. The last seven days are selected by default and the maximum range is 180 days. Records for core services such as SharePoint are typically available 60 to 90 minutes after an event, and a broad search in a large tenant can take up to 48 hours. You can export the results to CSV. For retention, Microsoft states 180 days for non-E5 licenses and one year for SharePoint activity with E5 by default, so keep your own record of alerts that matter.
+
 ## Connect alerts to a flow
 
-If email is not enough, a flow can route the alert. Cloud flows in [Power Automate](https://www.m365.fm/entity/power-automate/) react to triggers such as a new email, so a flow can start when the alert policy email arrives in a shared mailbox and then post a message to a Teams channel or create a task for the site owner. This is a design pattern, not a documented Microsoft feature for permission alerts, so test it. Keep the flow simple: parse the subject, add the site URL to the message, and name the person who handles the case. Note also that SharePoint triggers check for changes periodically, so a run can occur minutes after a change.
+If email is not enough, a flow can route the alert. Cloud flows in [Power Automate](https://www.m365.fm/entity/power-automate/) react to triggers such as a new email, so a flow can start when the alert policy email arrives in a shared mailbox and then post a message to a Teams channel or create a task for the site owner. This is a design pattern, not a documented Microsoft feature for permission alerts, so test it. Keep the flow simple: parse the subject, add the site URL to the message, and name the person who handles the case.
 
 ## Example: 84 alerts in two weeks
 

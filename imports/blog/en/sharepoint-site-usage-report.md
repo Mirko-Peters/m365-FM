@@ -21,7 +21,7 @@ faq:
     a: "Microsoft states that reports typically become available within 24 to 72 hours, but sometimes need several days. The site usage trends cover the last 7, 30, 90 or 180 days. The site owner view excludes activity from the last 60 minutes, so neither source is a live view."
 ---
 
-The SharePoint site usage report in the Microsoft 365 admin center lists each site with its files, active files, page views, storage, owner and last activity date, and it shows trends for 7, 30, 90 or 180 days. It is a good start for an inventory, but it is not a full analytics system. This guide is for the SharePoint admin who wants to know what Microsoft's usage views answer, where their numbers differ, and which gaps you must fill yourself.
+The SharePoint site usage report in the Microsoft 365 admin center lists each site with its files, active files, page views, storage, owner and last activity date, and it shows trends for 7, 30, 90 or 180 days. It is a good start for an inventory, but it is not a full analytics system and it does not show user activities one by one. This guide is for the SharePoint admin who wants to know what Microsoft's usage views answer, where their numbers differ, and which gaps you must fill yourself.
 
 ## SharePoint site usage report: what the admin center shows
 
@@ -55,7 +55,7 @@ Page and news analytics go further down. The article on [page and news analytics
 
 ## What is missing
 
-Taken together, Microsoft's views leave gaps that matter to admins. These come from the documented behavior, so check each one in your tenant.
+Taken together, Microsoft's built-in SharePoint usage reports leave gaps that matter to admins in SharePoint Online. These come from the documented behavior, so check each one in your tenant.
 
 - **No difference between reading and editing in the last activity date.** Microsoft defines the date from five groups: active files, anonymous link shared, company link shared, files synced and pages viewed. A viewed page counts. A site that people only read can look active.
 - **A short history.** The trends run for up to 180 days. For a longer view, you must keep your own dated exports.
@@ -65,6 +65,14 @@ Taken together, Microsoft's views leave gaps that matter to admins. These come f
 - **No verdict.** The reports give numbers, not a decision about what to do with an idle site.
 
 The first point is the one that surprises admins most often. If your governance rule says that a site without activity for 90 days is a candidate for review, define whether page views count. Otherwise the rule contradicts the data.
+
+## Get site usage data with the Microsoft Graph reports API
+
+When the admin center is too manual, the Graph reports API returns the same site usage data as a file. According to Microsoft's reference for [getSharePointSiteUsageDetail](https://learn.microsoft.com/en-us/graph/api/reportroot-getsharepointsiteusagedetail?view=graph-rest-1.0), you call `GET /reports/getSharePointSiteUsageDetail(period='D7')` with a period of D7, D30, D90 or D180, or with a date from the past 30 days. The permission is Reports.Read.All for delegated and application access. For delegated access, the user also needs an appropriate Microsoft Entra limited administrator role.
+
+The call returns a 302 redirect to a download URL that stays valid for only a few minutes. The file is a CSV with one row per site: Site Id, Site URL, owner, Is Deleted, Last Activity Date, File Count, Active File Count, Page View Count, Visited Page Count, storage used and allocated, Root Web Template and Report Period.
+
+Two practical points follow. The page documents the plain REST call, so a script, a Power BI query or an app can use it, whichever tool you prefer. And because the file holds every site, you narrow it to one specific site by filtering on Site URL, since the documented call has no site parameter. The storage columns are in bytes, while the admin center report shows MB, so convert before you compare.
 
 ## Fill the gaps without a project
 
@@ -98,7 +106,7 @@ The check: 90 + 60 = 150. The 90 sites without any activity go to a review with 
 
 ## How software can help
 
-Microsoft's reports cover the basics, and the Graph reports API and Power BI cover larger tenants. For a long-term history, a scheduled export into a library or a spreadsheet is often enough. A reporting tool becomes interesting when you need ownership, storage and activity in one view. Judge any tool by whether it uses the same definitions, documents its time zone and exclusions, and keeps your history.
+Microsoft's built-in reports cover the basics, and the Graph reports API and Power BI cover larger tenants. For a long-term history, a scheduled export into a library or a spreadsheet is often enough. A reporting tool becomes interesting when you need ownership, storage and activity in one view. Judge any tool by whether it uses the same definitions, documents its time zone and exclusions, and keeps your history.
 
 ## Next step
 

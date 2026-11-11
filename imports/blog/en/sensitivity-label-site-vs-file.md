@@ -31,7 +31,7 @@ The settings a container label can enforce include:
 
 - **Privacy:** public or private, locked when the label is applied.
 - **External user access:** whether the owner may add guests, the setting behind [guest access](https://www.m365.fm/entity/guest-access/).
-- **External sharing from SharePoint sites:** how far the site may be shared.
+- **External sharing from SharePoint sites:** how far the site may be shared, so the label lets you control external sharing per site.
 - **Access from unmanaged devices:** this setting uses Microsoft Entra Conditional Access. Microsoft notes that without the dependent policy for SharePoint, the option has no effect.
 - **Authentication context:** users who do not meet the condition are denied access.
 
@@ -39,7 +39,7 @@ Two more settings, the default sharing link type and some site sharing options, 
 
 ## What a file label controls
 
-A file label is the classic [sensitivity label](https://www.m365.fm/entity/sensitivity-labels/) on a document or email. It classifies the item and can add encryption, headers, footers or watermarks. Sensitivity labels protect documents in SharePoint Online and Office files in OneDrive. Labels can be applied to documents in SharePoint through Office apps, Office for the web or defaults. Because the label sits on the file, it stays with the file after download or email. A labeled file keeps its watermark and its encryption wherever it goes.
+A file label is the classic [sensitivity label](https://www.m365.fm/entity/sensitivity-labels/) on a document or email. It classifies the item by its level of sensitivity and can add encryption, headers, footers or watermarks. Sensitivity labels protect documents in SharePoint Online and Office files in OneDrive. Labels can be applied to documents in SharePoint through Office apps, Office for the web or defaults. Because the label sits on the file, it stays with the file after download or email. A labeled file keeps its watermark and its encryption wherever it goes.
 
 People apply file labels in Office apps. If you turn on built-in labeling for files in SharePoint and OneDrive, they can also apply labels in Office for the web and in the details pane without opening the file. Microsoft explains the details in [enabling sensitivity labels for files in SharePoint and OneDrive](https://learn.microsoft.com/en-us/purview/sensitivity-labels-sharepoint-onedrive-files). That page also says that until you enable the feature, SharePoint and OneDrive cannot process encrypted files, so co-authoring, eDiscovery, data loss prevention and search do not work for them.
 
@@ -65,6 +65,12 @@ Some labels fit both. A label named "Highly confidential" can lock a site to pri
 
 Mismatches are possible, because the permission to upload does not depend on the label. If a user uploads a file with a higher-priority label to a site with a lower-priority label, the upload is not blocked. Microsoft says an audit event and an email about an incompatible label are generated instead. That is a signal to review, not a control.
 
+## Applying file labels automatically, and removing them
+
+Microsoft's overview of [sensitivity labels](https://learn.microsoft.com/en-gb/purview/sensitivity-labels) describes how a file label can be applied without a person choosing it. An auto-labeling policy identifies sensitive information and then applies the label, or it prompts users to apply the label that you recommend with a policy tip. A default label can be set for unlabeled documents and for new containers. Microsoft adds a caution: without user training and other controls, a default label can also lead to inaccurate labeling.
+
+Two more points answer what site owners ask next. First, the label persists. Microsoft says the label is stored in clear text in the metadata of files and emails, so it stays with the content no matter where it is saved, and third-party apps can read it. Second, lowering a label is controlled. If a user tries to remove a label or replace it with one of lower priority, the user must by default give a justification, and in Office apps the prompt appears once per app session. This does not apply to labels that protect containers. Deleting a label in the Microsoft Purview portal does not remove it from content, and its protection settings stay enforced.
+
 ## Example: a project site with guests
 
 This example uses invented numbers. A company with one Microsoft 365 tenant has 400 sites and defines three site labels: General, Internal only and Restricted. After an inventory, the compliance team finds:
@@ -86,7 +92,7 @@ Microsoft Purview Information Protection holds the labels, and the path from lab
 1. **Create and publish sensitivity labels** in Microsoft Purview. Configure sensitivity labels for sites and select the Groups and sites scope, with or without Files and emails.
 2. **Synchronize it to Microsoft Entra ID.** Microsoft's guide names a PowerShell command, `Execute-AzureAdLabelSync`, for this step.
 3. **Add it** to one of your label policies. Users who get the policy can select the label for sites and groups, and you decide who gets which labels.
-4. **Apply it.** People choose it from the Sensitivity dropdown when they create a team. To add a sensitivity label to an existing team or group, an owner or admin edits it afterwards. For a SharePoint site, people choose it under Advanced settings. Admins can edit an existing site under Active sites and the Policies tab in the SharePoint admin center, or label many sites with `Set-SPOTenant`. Teams applies the same label to the Microsoft 365 group and its connected team site.
+4. **Apply a sensitivity label.** People choose it from the Sensitivity dropdown when they create a team. To add a sensitivity label to an existing team or group, an owner or admin edits it afterwards. For a SharePoint site, people choose it under Advanced settings. Admins can edit an existing site under Active sites and the Policies tab in the SharePoint admin center, or label many sites with `Set-SPOTenant`. Teams applies the same label to the Microsoft 365 group and its connected team site.
 
 After that, the site label is hard to change by accident. For a group-connected site, only the owners of the Microsoft 365 group can change it. For a site without a group, a SharePoint site admin can. Shared channels in Microsoft Teams use the label of the parent team, and it cannot be removed or replaced for the channel.
 

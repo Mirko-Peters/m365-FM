@@ -23,13 +23,21 @@ faq:
 
 A SharePoint DLP policy is a Microsoft Purview rule that finds sensitive data in [SharePoint](https://www.m365.fm/entity/sharepoint/) sites and OneDrive accounts and, once you enforce it, acts on it. It is one of the data loss prevention policies you can create to protect sensitive data. For a first policy, start in [simulation mode](https://www.m365.fm/entity/dlp-simulation-mode/), which shows what the policy would match without blocking anyone. This guide is for security admins who need a safe first procedure. It covers how to scope the policy, which options Microsoft offers for simulation and the steps from first test to enforcement.
 
-## What a SharePoint DLP policy does
+## What a SharePoint DLP policy does for sensitive data
 
 [Data loss prevention](https://www.m365.fm/entity/dlp/) (DLP) policies watch for sensitive items and apply actions when a rule matches. In Microsoft's planning guidance, [Plan for data loss prevention](https://learn.microsoft.com/en-us/purview/dlp-overview-plan-for-dlp), the locations include Exchange email, SharePoint sites, OneDrive accounts, Teams chat and channel messages and devices. This article covers the SharePoint Online and OneDrive locations. Other locations, such as Exchange Online and Microsoft Teams, can be part of a policy too, but a first policy is easier to read when it covers one workload.
 
 A rule has conditions and actions. A typical condition looks for a [sensitive information type](https://www.m365.fm/entity/sensitive-information-types/), such as credit card numbers or social security numbers, or for a sensitivity label such as Confidential. A typical action is to audit the event, notify the user, send an alert to admins, or block access for people outside the organization.
 
 Microsoft's page on [creating a policy to stop sharing with external users](https://learn.microsoft.com/en-us/purview/dlp-create-policy-spo-odb-external) uses exactly this pattern as an example. Its rule combines "content is shared from Microsoft 365 with people outside my organization" with a condition that content contains the Confidential label, and its action blocks only people outside the organization.
+
+## Where Microsoft Purview data loss prevention can look
+
+Microsoft's article [Learn about data loss prevention](https://learn.microsoft.com/purview/dlp-learn-about-dlp) describes a DLP policy as a set of parts: what to monitor, administrative scoping, locations, conditions and actions. The conditions and the actions are defined in an object called a rule, so a DLP rule is the unit that you tune. The locations go well beyond SharePoint. They include Microsoft 365 services such as Exchange, SharePoint, OneDrive and Teams, Office apps, Windows and macOS endpoint devices, non-Microsoft cloud apps, on-premises file shares, Fabric and Power BI workspaces, and Microsoft 365 Copilot, which the page marks as a preview.
+
+Two details matter for SharePoint. You can scope a policy to sites for SharePoint and to accounts or distribution groups for OneDrive. And in SharePoint and OneDrive, DLP scans existing items as well as new ones, while for Exchange it does not scan email that existed before the policy.
+
+Microsoft describes the detection as deep content analysis, not a simple text scan. It combines keyword matches, regular expressions, internal function validation, secondary matches close to the primary match, and machine learning. Sensitive information types are the building block for custom policies, and sensitivity labels and retention labels can also be conditions. For licensing, the page gives no specifics and points to Microsoft's licensing guidance, so check your plan before you design the policy.
 
 ## Why start in simulation mode
 
@@ -56,11 +64,13 @@ Use this order for a first SharePoint DLP policy. Substitute your own labels and
 7. **Pick the state.** Select Run the policy in simulation mode. Choose Keep it off if you want a final review first, or Turn it on right away to start the simulation.
 8. **Review the results.** Open the policy, choose View simulation, and read the Simulation overview, Items for review and Alerts tabs.
 
-## How to read and tune simulation results
+## How to read and tune simulation results, alerts and policy tips
 
 Matches are only useful if you judge them. For SharePoint and OneDrive, Microsoft says the policy scans content on upload and also scans existing content. The status shows In progress while the scan runs.
 
 Keep the limits in mind. Simulation results are saved for 30 days, and only the most recent 30 days are shown. For SharePoint and OneDrive, Items for review shows up to 100 matched items per site for each policy rule, so it may not list every match. Simulation events also show up in activity explorer, where you can filter by policy mode.
+
+Alerts and policy tips are the other signals. According to the same Microsoft article, DLP can generate alerts when a rule matches and incident reports are configured. They appear in the DLP alerts dashboard in Microsoft Purview, where they are kept for 30 days, and in the Microsoft Defender portal, where they are available for six months. Activity explorer shows the last 30 days of DLP information, including the events DLP rule matched and DLP rule undo, which marks a user override. A policy tip can show a pop-up message, or block the sharing and let the user override the block with a justification. All monitored activities are also logged to the Microsoft 365 audit log by default.
 
 Tuning is the main work. Ask these questions for each batch of matches:
 
