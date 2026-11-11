@@ -26,6 +26,15 @@ def one_h1(html, title=""):
     return _H1.sub(lambda x: f"<h2{x.group(1) or ''}>{x.group(2)}</h2>", html)
 
 
+def disclosures(p, body_html, lang, skip=()):
+    """Transparenzhinweise (Feld disclosure, wie auf den Entitaetsseiten: site_entities.disclosure_of) zu Themen und verlinkten Entitaeten des Beitrags,
+    z. B. iFAKT bei Links auf /entity/ifakt/ oder ein Polaris-Modul (developed_by/part_of ifakt). In allen Sprachfassungen (ohne Text der Sprache: Englisch).
+    skip: Entitaeten des Sponsorings dieses Beitrags, die SPM.note schon kennzeichnet. Jeder Hinweis nur einmal."""
+    import site_entities as SENT
+    ids = dict.fromkeys([t for t in (p.get("topics") or []) if isinstance(t, str)] + re.findall(r'/entity/([a-z0-9][a-z0-9-]{1,79})/', body_html or ""))
+    return list(dict.fromkeys(d for i in ids if i in ENTS and i not in skip for d in [SENT.disclosure_of(ENTS[i], lang)] if d))
+
+
 def fetch_posts(api):
     items = (_fetch_json(f"{api}/api/blog/export", timeout=120) or {}).get("items", [])
     if any(p.get("has_html") for p in items):   # uebernommene Beitraege: HTML seitenweise nachladen
@@ -109,6 +118,7 @@ def build(g, posts, people, api):
         for q in sorted(mine, key=lambda q: (q.get("published") or 0, q["slug"]), reverse=True): _seq.setdefault(_sk(q), []).append(q)
         _pos = {(q["handle"], q["slug"]): i for h, s_ in _seq.items() for i, q in enumerate(s_)}
         _content = [q for q in mine if not MST.is_milestone(q)]
+        _running = SPM.running()   # laufende Sponsorings inkl. Karenzzeit (einmal je Sprache)
         for p in mine:
             a = pb[p["handle"]]; au = f"{BASE}/community/u/{a['handle']}/"
             u = f"{croot}u/{p['handle']}/blog/{p['slug']}/"
@@ -134,7 +144,8 @@ def build(g, posts, people, api):
             cos = [c for c in (p.get("coauthors") or []) if c.get("handle") in pb and c["handle"] != p["handle"]]
             co_html = "".join(f' {esc(T(lang, "and", "und"))} <a href="{croot}u/{c["handle"]}/" rel="author">{esc(pb[c["handle"]]["name"])}</a>' for c in cos) if len(cos) == 1 else "".join(f', <a href="{croot}u/{c["handle"]}/" rel="author">{esc(pb[c["handle"]]["name"])}</a>' for c in cos)
             upd_html = f' · {esc(T(lang, "Updated", "Aktualisiert"))} <time datetime="{iso(p["updated"])}">{iso(p["updated"])}</time>' if p.get("updated") and iso(p["updated"]) != iso(p["published"]) else ""
-            b = shell(lang, f'{WCSS}{CSS}<p class="mut"><a href="{croot}blog/">{esc(title_blog)}</a> · <a href="{croot}u/{p["handle"]}/blog/">{esc(a["name"])}</a></p><article class="wk-body"><h1>{esc(p["title"])}</h1>{SPM.note(lang, _spr, "post")}'
+            _disc = "".join(f'<p class="en-disc" role="note" style="{SPM.NOTE_STYLE}">{esc(d)}</p>' for d in disclosures(p, body_html, lang, skip=_spr_ex))
+            b = shell(lang, f'{WCSS}{CSS}<p class="mut"><a href="{croot}blog/">{esc(title_blog)}</a> · <a href="{croot}u/{p["handle"]}/blog/">{esc(a["name"])}</a></p><article class="wk-body"><h1>{esc(p["title"])}</h1>{SPM.note(lang, _spr, "post")}{_disc}'
                             f'<p class="mut">{esc(T(lang, "By", "Von"))} <a href="{croot}u/{p["handle"]}/" rel="author">{esc(a["name"])}</a>{co_html}{esc(" · ")}<time datetime="{iso(p["published"])}">{iso(p["published"])}</time>{upd_html}</p>'
                             f'{("<p>" + esc(p["summary"]) + "</p>") if p.get("summary") else ""}{_aitr(p, lang, BASE)}{_kp}{body_html}{IMG.CSS if IMG.needs_responsive_css(body_html) else ""}{_fq}{SNT.CSS if (_kp or _fq) else ""}</article>{tl}{relbox}{vote}'
                             f'<p>{("" if p.get("legacy") else "<button type=" + chr(34) + "button" + chr(34) + " class=" + chr(34) + "bl-vote bl-follow" + chr(34) + " data-h=" + chr(34) + esc(p["handle"]) + chr(34) + " aria-pressed=" + chr(34) + "false" + chr(34) + "><span class=" + chr(34) + "t" + chr(34) + ">" + esc(T(lang, "Follow this blog", "Blog abonnieren")) + "</span></button> ")}<a href="{croot}u/{p["handle"]}/blog/feed.xml">RSS</a></p>'
@@ -151,7 +162,8 @@ def build(g, posts, people, api):
                        {"@type": "ListItem", "position": 1, "name": "M365.FM", "item": f"{BASE}/"}, {"@type": "ListItem", "position": 2, "name": a["name"], "item": au},
                        {"@type": "ListItem", "position": 3, "name": "Blog", "item": au + "blog/"}, {"@type": "ListItem", "position": 4, "name": p["title"], "item": u}]}]
             if _spr:
-                ld[0]["sponsor"] = SPM.ld(_spr); b = SPM.mark(b, _spr, "post")   # T37 Sponsor: BlogPosting.sponsor, Links zum Sponsor mit rel="sponsored"
+                ld[0]["sponsor"] = SPM.ld(_spr)   # T37 Sponsor: BlogPosting.sponsor
+            b = SPM.mark(b, _spr + [r for r in _running if r not in _spr], "post")   # Links zur Website eines laufenden Sponsors tragen rel="sponsored", auch ohne Eintrag unter "posts" (Cognillo-Reihe); ohne Sponsoring unveraendert
             noidx = False if p.get("html") else p.get("votes", 0) < INDEX_VOTES   # fruehere Blogbeitraege bleiben fuer Google sichtbar
             if p.get("tr_of"):
                 noidx = not p.get("tr_index")   # Sprachfassungen: nur nach Freigabe je Sprache (data/blog_tr.json "index") indexierbar - an genau einer Stelle entschieden
