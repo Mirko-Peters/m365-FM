@@ -124,19 +124,14 @@ if __name__ == "__main__":
     unittest.main()
 
 
-class LiveListe(unittest.TestCase):
-    """Neu angelegte oder importierte Events stehen sofort in der Live-Liste, ihre Seite entsteht erst beim naechsten Seitenbau:
-    bis dahin verlinkt die Liste auf die Website des Events (nur https) statt auf die fehlende Seite (404)."""
-    def test_live_liste_verlinkt_ohne_seite_extern_und_ist_gueltiges_js(self):
-        import shutil, subprocess
+class OhneSeiteNichtSichtbar(unittest.TestCase):
+    """Wunsch Mirko (11.11.2026): was noch keine eigene Seite hat, taucht im Frontend nicht auf. Die Event-Liste laedt keine Events aus der
+    Datenbank nach (vorher: Link auf die fehlende Seite = 404, z. B. ein frisch importiertes Community-Days-Event)."""
+    def test_event_liste_ohne_nachladen(self):
         tmp, docs = build([MEMBER])
         try:
-            for lang, soon in (("en", "page coming soon"), ("de", "Seite folgt")):
+            for lang in ("en", "de"):
                 h = (docs / ("" if lang == "en" else lang) / "community" / "events" / "index.html").read_text("utf-8")
-                js = [x for x in re.findall(r"<script>(.*?)</script>", h, re.S) if "/api/events/export" in x][0]
-                self.assertNotIn("%SOON%", js); self.assertIn(soon, js); self.assertIn('rel="noopener nofollow"', js); self.assertIn("https:", js); self.assertNotIn("https?:", js)
-                if shutil.which("node"):
-                    f = Path(tmp.name) / f"live-{lang}.js"; f.write_text(js, "utf-8")
-                    self.assertEqual(subprocess.run(["node", "--check", str(f)], capture_output=True).returncode, 0)
+                self.assertNotIn("/api/events/export", h); self.assertIn("hamburg-copilot-day", h)
         finally:
             tmp.cleanup()

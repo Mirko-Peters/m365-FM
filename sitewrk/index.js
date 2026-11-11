@@ -227,10 +227,11 @@ function redirect(request, origin, path, search, status = 301) {
 }
 const GONE_LANG = /^\/(pa|hi|ml|ta|te)(\/|$)/, MIRKO = /^(\/[a-z]{2})?\/community\/u\/mirko-peters(\/.*)?$/, EN_PREFIX = /^\/en(\/.*)?$/;
 const LANG_EP = /^\/(de|es|fr|it|pt|nl|pl|id|ru|uk|ar|he|ja|ko)\/show\/episodes\/([a-z0-9-]+)\/?$/;
-const INVITE = /^\/einladung\/([a-z0-9][a-z0-9-]{1,38})\/?$/;
-// Event-Seite (site_events.py): entsteht erst mit dem naechsten Seitenbau, ein neues oder importiertes Event (Community Days) steht aber sofort in der
-// Live-Liste und in der Datenbank. Fehlt die Seite noch, fuehrt die Adresse zur Event-Liste der Sprache (?e=<handle> markiert das Event dort) statt auf ein 404.
-export const EVENT_PAGE = /^(\/[a-z]{2})?\/community\/events\/([a-z0-9][a-z0-9-]{2,39})\/?$/;   // Profilkuerzel wie im Community-Worker (worker/src/inviter.js)
+const INVITE = /^\/einladung\/([a-z0-9][a-z0-9-]{1,38})\/?$/;   // Profilkuerzel wie im Community-Worker (worker/src/inviter.js)
+// Eigene Seite eines Events, Profils oder einer Firma (site_events.py, site_members.py): entsteht erst mit dem naechsten Seitenbau. Listen zeigen nur
+// Eintraege mit Seite; ein Link von anderswo (Mail, Admin, Profil-Bereich) auf eine noch fehlende Seite fuehrt zur Liste der Sprache statt auf ein 404.
+export const EVENT_PAGE = /^(\/[a-z]{2})?\/community\/events\/([a-z0-9][a-z0-9-]{2,39})\/?$/;
+export const PROFILE_PAGE = /^(\/[a-z]{2})?\/community\/(u|c)\/([a-z0-9][a-z0-9-]{1,38})\/?$/;   // nur die Profilseite selbst (Unterseiten wie /blog/ nicht)
 // Reine Adressregeln (ohne Ursprung) - ein Schritt: Ziel oder "". site_links.py rule_target() ist der Nachbau.
 async function ruleStep(p, migrated) {
   const p0 = p.replace(/\/+$/, "") || "/";
@@ -338,7 +339,9 @@ export default {
     }
     if (res.status === 404 && (request.method === "GET" || request.method === "HEAD")) {   // nach dem R2-Rueckfall: eine Sprachfassung im Bucket gilt
       const ev = EVENT_PAGE.exec(p);   // 302 und ohne Cache, weil die Seite spaeter entsteht
-      if (ev) return new Response(null, { status: 302, headers: { ...SEC, location: url.origin + (ev[1] || "") + "/community/events/?e=" + ev[2], "cache-control": "no-store", "x-robots-tag": "noindex" } });
+      const pf = ev ? null : PROFILE_PAGE.exec(p);
+      const to = ev ? (ev[1] || "") + "/community/events/" : pf ? (pf[1] || "") + "/community/" + (pf[2] === "u" ? "members" : "companies") + "/" : "";
+      if (to) return new Response(null, { status: 302, headers: { ...SEC, location: url.origin + to, "cache-control": "no-store", "x-robots-tag": "noindex" } });
     }
     if (res.status === 404 && FEED_ITEM.test(p) && (request.method === "GET" || request.method === "HEAD")) return feedGone(request, p);
     const h = new Headers(res.headers);

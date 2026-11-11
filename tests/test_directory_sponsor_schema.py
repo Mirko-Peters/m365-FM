@@ -40,6 +40,7 @@ class DirectorySponsorSchema(unittest.TestCase):
             for p in pages:
                 h = p.read_text("utf-8")
                 self.assertIn('data-spm="partners"', h, p)
+                self.assertNotIn("/api/profiles/export", h, p)   # nur Eintraege mit eigener Seite, kein Nachladen (sonst Link auf eine noch fehlende Seite, 404)
                 ld = [json.loads(x) for x in re.findall(r'<script type="application/ld\+json">(.*?)</script>', h, re.S)]
                 self.assertTrue(any(x.get("@type") == "CollectionPage" and x.get("sponsor") for x in ld), p)
             r = subprocess.run([sys.executable, str(ROOT / "check_schema.py"), str(docs)], capture_output=True, text=True)

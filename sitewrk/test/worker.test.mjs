@@ -232,14 +232,14 @@ test("Einladungslink (#320): gebaute Seite bleibt 200; fehlt sie (noch nicht geb
     assert.equal((await run(req(path, "DE"))).status, 404, path);   // nur gueltige Kuerzel, nur genau diese Adresse
   assert.equal((await run(req("/einladung/neu-dabei/", "DE", {}, "POST"))).status, 404);
 });
-test("Event-Seite noch nicht gebaut (neu oder importiert, z. B. Community Days): 302 zur Event-Liste mit ?e=<handle> statt 404; gebaute bleibt 200", async () => {
+test("Event-, Profil- oder Firmenseite noch nicht gebaut (neu, importiert): 302 zur Liste statt 404; gebaute bleibt 200", async () => {
   const ok = await run(req("/community/events/gebautes-event/", "DE")); assert.equal(ok.status, 200); assert.equal(await ok.text(), "<html>event</html>");
-  for (const [path, to] of [["/community/events/community-days-2026-guadalajara/", "/community/events/?e=community-days-2026-guadalajara"], ["/community/events/abc", "/community/events/?e=abc"], ["/de/community/events/azure-day-bonn/?utm_source=x", "/de/community/events/?e=azure-day-bonn"]]) {
+  for (const [path, to] of [["/community/events/community-days-2026-guadalajara/", "/community/events/"], ["/community/events/abc", "/community/events/"], ["/de/community/events/azure-day-bonn/?utm_source=x", "/de/community/events/"], ["/community/u/neu-dabei/", "/community/members/"], ["/de/community/c/contoso/", "/de/community/companies/"]]) {
     const r = await run(req(path, "DE")); assert.equal(r.status, 302, path); assert.equal(r.headers.get("location"), "https://www.m365.fm" + to, path);
     assert.equal(r.headers.get("cache-control"), "no-store"); assert.equal(r.headers.get("x-robots-tag"), "noindex");
   }
   assert.equal((await run(req("/community/events/neu-event/", "DE", {}, "HEAD"))).status, 302);
-  for (const path of ["/community/events/", "/community/events/ab/", "/community/events/Gross/", "/community/events/x/y/", "/community/events/" + "a".repeat(41) + "/", "/community/events/%3Cscript%3E/", "/community/events/feed.xml"])
+  for (const path of ["/community/events/", "/community/events/ab/", "/community/events/Gross/", "/community/events/x/y/", "/community/events/" + "a".repeat(41) + "/", "/community/events/%3Cscript%3E/", "/community/events/feed.xml", "/community/u/max-m/blog/x/", "/community/u/a/", "/community/x/max-m/"])
     assert.equal((await run(req(path, "DE"))).status, 404, path);   // nur gueltige Event-Kuerzel, nur genau diese Adresse
   assert.equal((await run(req("/community/events/neu-event/", "DE", {}, "POST"))).status, 404);
 });
