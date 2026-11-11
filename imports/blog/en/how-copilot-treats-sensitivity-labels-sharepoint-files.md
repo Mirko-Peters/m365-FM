@@ -81,6 +81,14 @@ The considerations page was last updated in 2026 and says nothing about when the
 
 DLP is the second tool. A [Microsoft Purview](https://www.m365.fm/entity/purview/) DLP policy for the Microsoft 365 Copilot and Copilot Chat location can restrict processing of prompts with sensitive information types and of files and emails with specific labels. Copilot can still reference the item with a link. This is the same logic as the VIEW without EXTRACT case.
 
+## Can labels be applied automatically, including to existing files?
+
+Copilot does not label old files for you, but an auto-labeling policy can. Microsoft's page on [applying sensitivity labels automatically](https://learn.microsoft.com/en-us/purview/apply-sensitivity-label-automatically) separates two kinds. Client-side labeling happens in Office apps, where the user decides whether to accept or reject the label. Service-side auto-labeling policies run in the service for documents already saved in SharePoint and OneDrive, so they do not depend on the app version. Supported files are PDFs and Office files, and PDF labeling must be enabled for the tenant first, or PDFs are skipped.
+
+Files at rest can be auto-labeled before or after the policy is created, and a policy keeps running for new and modified files. Files that are open or locked at run time are not labeled. A policy must run at least one simulation before it can label anything, and a simulation can take 12 hours.
+
+On licensing, Microsoft says E3 and Business Premium include sensitivity labels and manual labeling, but not auto-labeling. That needs an E5 or P2-tier add-on. Plan manual labeling for your most sensitive libraries until then.
+
 ## Example: four labels and a test with six users
 
 The numbers are invented to show the method. A company uses four labels: Public, Internal, Confidential and Highly Confidential. Confidential encrypts and grants Editor rights to the finance team, which includes EXTRACT. Highly Confidential encrypts with VIEW for a named group and no EXTRACT.

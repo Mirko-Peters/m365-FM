@@ -91,6 +91,14 @@ A few limits keep it safe and credible.
 - **Do not widen the pilot silently.** Every new user needs the same access check.
 - **Do not skip the exit rule.** Decide in advance what result moves the group to the Deploy phase, and what result pauses it.
 
+## How do you assign licenses and measure the pilot?
+
+Once the access check is done, the license step is short. Microsoft's [setup page](https://learn.microsoft.com/en-us/microsoft-365/copilot/microsoft-365-copilot-setup) says to sign in to the Microsoft 365 admin center, go to Billing and then Licenses, select Microsoft Copilot and assign licenses to users or to groups of users. Users must already have a Microsoft 365 license in your tenant. Microsoft says Microsoft Copilot is included in the Microsoft 365 E7 plan and is an add-on for other plans, and that for some apps users may wait up to 24 hours before Copilot appears.
+
+Check the app side before the first day. Microsoft says Copilot is available in all Microsoft 365 apps update channels except Semi-Annual Enterprise Channel. Users must sign in with a work or school account, and a file must be editable, not read-only, for Copilot to work in Word, Excel or PowerPoint. The Copilot License Details diagnostic verifies that a specific user meets the requirements.
+
+To measure the pilot, Microsoft names the Copilot Dashboard in Viva Insights and the Microsoft 365 usage reports in the admin center. They show readiness, adoption, impact and user sentiment. Microsoft gives no target numbers, so set your own before the rollout decision.
+
 ## Example: a 60-user pilot across six teams
 
 The numbers are invented to show the method. A company with 1,200 employees picks 60 pilot users across six departments: sales, finance, HR, operations, legal and marketing. Each department supplies 10 people, including one champion.

@@ -78,6 +78,12 @@ The page lists conditions that shape your plan:
 
 In daily work, this feature is the other half of the plan: the library default sets a floor for new files, and [auto-labeling](https://www.m365.fm/entity/auto-labeling/) catches content that matches your sensitive information rules, including old files. [Microsoft Purview](https://www.m365.fm/entity/purview/) offers both, and they work best together.
 
+## Why does the default label option not show up?
+
+Check three things before opening a ticket. Only a site admin can configure the default, and a tenant SharePoint admin who is not a site member does not see the library, as [Office 365 for IT Pros noted in 2023](https://office365itpros.com/2023/09/14/document-libraries-admin/). Next, check the tenant switch described in the next section. Last, check licensing: the Learn page names no licenses.
+
+That last point is unclear. In a [Microsoft Q&A thread from November 2026](https://learn.microsoft.com/en-gb/answers/questions/6057780/default-sensitivity-label-for-sharepoint-library-f), a Business Premium tenant with the Purview Suite got "You do not have required licenses" when setting a library default. The only answer came from a fellow user, not Microsoft. Treat it as an open report and check the service description for your plan.
+
 ## How do you monitor and switch off the feature?
 
 The Learn page offers two ways to see what happened. The Sensitivity column in the SharePoint library shows label names, but its tooltip for automatic labeling also appears for auto-labeling policies and policy defaults, so it does not tell you which feature applied the label. The audit log helps more: in the Applied sensitivity label file event, a value of 6 in the action source details means the library default label was applied. Map label GUIDs to names with Security and Compliance PowerShell.

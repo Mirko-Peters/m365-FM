@@ -68,6 +68,18 @@ What E3 does not list is automatic labeling, which Microsoft places under E5. If
 
 For your wider rules on who may build and run Copilot features, see [Copilot governance](https://www.m365.fm/entity/copilot-governance/).
 
+## What are the technical prerequisites besides the license?
+
+Microsoft 365 Copilot readiness is more than licenses and permissions. Microsoft's [setup page for Copilot](https://learn.microsoft.com/en-us/microsoft-365/copilot/microsoft-365-copilot-setup) lists what must be in place before you assign Copilot licenses.
+
+- **A base license first.** Users must be provisioned and hold a Microsoft 365 license in your tenant. Microsoft says Microsoft Copilot is included in the Microsoft 365 E7 plan and is available as an add-on to other plans, which covers E3.
+- **No guests.** It is not supported to assign Copilot licenses to cross-tenant users, including guests.
+- **The right app channel.** Copilot is available in all Microsoft 365 apps update channels except Semi-Annual Enterprise Channel.
+- **A work or school account and an editable file.** Users sign in to the app with their work or school account, and the file must not be read-only.
+- **A short wait.** For some apps, users may wait up to 24 hours before Copilot appears.
+
+For rollout, Microsoft describes three phases: Pilot with a small group, Deploy to a larger group and Operate, where you monitor usage with the Copilot Dashboard in Viva Insights and the Microsoft 365 usage reports. Write these checks into your readiness list next to the permission work.
+
 ## Example: 2,000 users, 40 pilot users and 120 sites to check
 
 The numbers are invented to show the method. A company has 2,000 users on E3, 400 SharePoint sites and a plan for 40 pilot users. Before it buys any licenses, the IT manager checks the licensing pages and decides to start with the readiness work.

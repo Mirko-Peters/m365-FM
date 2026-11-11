@@ -23,6 +23,12 @@ faq:
 
 SharePoint agents follow file permissions: anyone who can create files on a site can create an agent there, and what an agent answers depends on what each user can already open. That is the core of SharePoint agents access, and it is simpler than it first sounds. This article is for SharePoint admins who must say who can build agents, who can use them and what they can reach. You will learn the rules, the controls Microsoft names, the gaps to watch, and see a worked example with invented numbers.
 
+## What is a SharePoint agent, and what can it do?
+
+A SharePoint agent is an AI helper that works inside a SharePoint site. Microsoft's page on [managing access to agents in SharePoint](https://learn.microsoft.com/en-us/sharepoint/manage-access-agents-in-sharepoint) says that agents in SharePoint help users quickly find information and insights on SharePoint sites, pages and document libraries. They do not require activation. A SharePoint agent reaches your organization's data the same way Copilot in other Microsoft 365 apps does, and it responds based on each user's access permissions.
+
+Two practical points follow. A new agent does not appear automatically in any list or published location, so authors must share it on purpose. And a site owner can choose one main agent for the site, which opens when users select the Agent icon in the global header. Treat that main agent like a front door: decide which site content it uses, and review it with the site's permissions.
+
 ## Who can create SharePoint agents?
 
 Microsoft's page on [managing access to agents in SharePoint](https://learn.microsoft.com/en-us/sharepoint/manage-access-agents-in-sharepoint) states that agents are .agent files. Only users who can create or access files on a SharePoint site can create or access agents there.
