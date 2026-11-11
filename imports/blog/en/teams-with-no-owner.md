@@ -21,7 +21,7 @@ faq:
     a: "Use the Add-TeamUser cmdlet from the Microsoft Teams module with the GroupId of the team, the user principal name and the Role parameter set to Owner. Microsoft states that the user is then also added as a member. The change can take between 24 and 48 hours to show in the Teams client."
 ---
 
-A team with no owner still has members and content, but nobody can manage it, so you find these teams through the ownerless filter in the Microsoft 365 admin center and assign new owners there or with PowerShell. This guide is for the Teams admin who has just learned that an owner left the company. It explains why ownerless teams matter, how to find them, how to assign owners, how to set up Microsoft's ownerless group policy so that members are asked automatically, and how to stop the problem from coming back.
+A team with no owner still has members and content, but nobody can manage it, so you find these teams through the ownerless filter in the Microsoft 365 admin center and assign a new owner there or with PowerShell. This guide is for the Teams admin who has just learned that an owner left the company. It explains why ownerless teams matter, how to find them, how to assign owners, how to set up Microsoft's ownerless group policy so that members are asked automatically, and how to stop the problem from coming back.
 
 ## Teams with no owner: what happens and why it matters
 
@@ -33,7 +33,7 @@ Every team in [Microsoft Teams](https://www.m365.fm/entity/teams/) is backed by 
 
 Members can usually keep working in the channels, which is why the problem stays invisible. But if the group has an expiration policy and nobody renews it, Microsoft deletes the group one day after it expires, and the team goes with it.
 
-Admins often call these orphaned teams. A team becomes ownerless when an owner leaves and nobody has taken ownership. The cause is almost always the same: the only owner leaves the company or the team, or a second owner who was meant to take over removes themselves. The team may become ownerless without any warning, and it looks fine for months until a problem appears, for example a member asks for access and nobody can approve it.
+Admins often call these orphaned teams. A team becomes ownerless when an owner leaves and nobody has taken ownership. Microsoft's article names one technical cause: a team or group can become ownerless if you delete an owner's account in Microsoft 365. The page does not say what happens when an account is only disabled, so check your offboarding process for that case. The cause is almost always the same: the only owner leaves the company or the team, or a second owner who was meant to take over removes themselves. The team may become ownerless without any warning, and it looks fine for months until a problem appears, for example a member asks for access and nobody can approve it.
 
 Ownerless teams also affect SharePoint. A team site connected to a group has [site owners](https://www.m365.fm/entity/sharepoint-site-owner/) who manage permissions and settings, and an ownerless team leaves that site without a responsible person. Microsoft's site ownership policy in SharePoint Advanced Management addresses the same problem on the site side, by setting minimum owner or admin counts.
 
@@ -59,7 +59,7 @@ You have three ways to assign an owner:
 
 According to Microsoft's page on [managing teams with PowerShell](https://learn.microsoft.com/en-us/microsoftteams/teams-powershell-managing-teams), end users can run the team cmdlets only on teams that they own or belong to, while a Global Administrator or Teams Administrator can act on all teams in the organization. Microsoft recommends roles with the fewest permissions, and limits Global Administrator to emergency scenarios.
 
-After you assign an owner, ask the new owner to add a second one. A team with one owner is only one resignation away from the next ownerless team.
+After you assign an owner, ask the new owner to add a second one. A team with one owner is only one resignation away from the next ownerless team, while a team with two owners survives when one owner leaves.
 
 ## Set up the ownerless group policy
 
@@ -88,12 +88,27 @@ Notifications go out weekly, starting within 24 hours of creating the policy. Up
 
 Because of the 50-group limit, the policy is a safety net for selected, important teams and a regular clean-up routine for the rest.
 
+## Common issues with the ownerless group policy
+
+Microsoft's article lists problems that admins meet after the policy is on. These fixes come from that page:
+
+- **Members do not see the Yes and No buttons.** Ask them to open the notification email in a separate window, not in a preview pane, and make sure that the user principal name and the primary email address of the sender are the same.
+- **Nobody receives notifications.** This happens if the sender in the policy has no user or group mailbox in Exchange Online. Members without a user mailbox in Exchange Online do not receive the notifications either. Check the Microsoft Purview audit log to see whether notifications were sent.
+- **A forwarded email cannot be answered.** The person who gets a forwarded notification cannot accept or decline.
+- **Throttling.** The policy sends all notifications from one mailbox, so many ownerless groups can hit the Exchange Online limit of 10,000 sent emails per day. The page names no fix, so start with fewer groups.
+
+To track the policy itself, search the audit log for the activity Updated the ownerless group policy. Accepting ownership is also logged there.
+
+## Reassign, archive or delete?
+
+Microsoft's article stops where the policy stops: when nobody accepts, the policy takes no further action, and a tenant admin has to find and assign an owner. It does not cover archiving or deleting ownerless groups, so the decision is yours. A practical order is to ask the former owner's manager first. If the team is still in use, assign an owner. If nobody can name a use, follow your own retention and archive rules before you remove anything.
+
 ## Prevent ownerless teams
 
 A few habits cost little and prevent most cases:
 
 - **At least two owners per team.** Make this a rule in your team creation process, and review it every quarter, so that no team becomes ownerless when one owner leaves.
-- **An offboarding step.** When someone leaves, list the teams they own and name a successor before the account is disabled.
+- **An offboarding step.** When an owner leaves, list the teams they own and name a successor before the account is disabled, so that the team does not become ownerless.
 - **An alternate address for expiring groups.** If you use an expiration policy, set the address for groups without an owner to a mailbox that somebody reads.
 - **Training for owners.** Tell owners what the role means and who should take over.
 - **A governance rule.** Write the two-owner rule and the offboarding step into your governance policy, so that nobody has to remember them, and delete or archive teams that nobody wants to own.

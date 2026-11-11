@@ -25,7 +25,7 @@ To migrate home drives to OneDrive without a revolt, treat it as a user project 
 
 ## How to migrate home drives to OneDrive: the target model
 
-A home drive holds personal content: documents, desktop files, scans, and sometimes things that were never meant to be shared. Microsoft's [file share migration guide](https://learn.microsoft.com/en-us/sharepointmigration/fileshare-to-odsp-migration-guide) recommends that personal content goes to [OneDrive](https://www.m365.fm/entity/onedrive/), the product many admins still call OneDrive for Business, which is private by default, and that team content goes to shared libraries. A home drive is therefore the simplest part of a file server migration, as long as you resist the urge to sort every file.
+A home drive holds personal content: documents, desktop files, scans, and sometimes things that were never meant to be shared. Microsoft's [file share migration guide](https://learn.microsoft.com/en-us/sharepointmigration/fileshare-to-odsp-migration-guide) recommends that personal content goes to [OneDrive](https://www.m365.fm/entity/onedrive/), the product many admins still call OneDrive for Business, which is private by default, so you do not need to design permissions for it, and that team content goes to shared libraries. A home drive is therefore the simplest part of a file server migration, as long as you resist the urge to sort every file.
 
 Set the rules before you start:
 
@@ -39,13 +39,13 @@ Three things must be in place before the first wave:
 
 1. **Users exist in your Microsoft 365 tenant and are licensed.** Microsoft's guide advises pre-provisioning users before the migration, so that every OneDrive can be provisioned in time.
 2. **The sync app, the OneDrive client, is current.** Microsoft advises upgrading to the latest build before you deploy Known Folder Move. Known Folder Move does not work for users who sync OneDrive files in SharePoint Server.
-3. **The source is readable.** Microsoft's migration tool options are the SharePoint Migration Tool (SPMT) and Migration Manager. Migration Manager works with agents and migration tasks, stages data in Azure Blob Storage on its way into OneDrive, and can take a CSV file with many users in one migration task. The migration agent needs a service account with read access to the shares, and the agent machine must reach the source over SMB. Microsoft's Migration Manager overview lists global admin or OneDrive and SharePoint admin roles for the person who sets up the tasks in the [Microsoft 365 admin center](https://www.m365.fm/entity/microsoft-365-admin-center/) and SharePoint admin center.
+3. **The source is readable.** Microsoft's migration tool options are the SharePoint Migration Tool (SPMT) and Migration Manager. Migration Manager works with agents and migration tasks, stages data in Azure Blob Storage on its way into OneDrive, and can take a CSV file with many users in one migration task. Microsoft's [Migration Manager overview](https://learn.microsoft.com/sharepointmigration/mm-get-started) asks for Windows credentials with read access to the shares you plan to migrate and a source server that supports SMB 2.0 or higher. Files up to 250 GB are supported. The overview also lists global admin or OneDrive and SharePoint admin roles for the person who sets up the tasks in the [Microsoft 365 admin center](https://www.m365.fm/entity/microsoft-365-admin-center/) and SharePoint admin center.
 
 Also clean up what you can. Remove temporary files, old installers and duplicate backups from the H drives, because every gigabyte you do not copy shortens the waves.
 
 ## Known Folder Move, Folder Redirection and GPO settings
 
-The [OneDrive sync app](https://www.m365.fm/entity/onedrive-sync-engine/) can take over the well-known Windows folders. Microsoft's page on [redirecting known folders to OneDrive](https://learn.microsoft.com/sharepoint/redirect-known-folders) says Known Folder Move (KFM) covers Desktop, Documents, Pictures, Screenshots and Camera Roll. The Documents folder is the one most people care about. Music and Videos are not affected and can stay on Folder Redirection. There are two main OneDrive policy settings:
+The [OneDrive sync app](https://www.m365.fm/entity/onedrive-sync-engine/) can redirect the well-known Windows folders. Microsoft's page on [redirecting known folders to OneDrive](https://learn.microsoft.com/sharepoint/redirect-known-folders) says Known Folder Move (KFM) covers Desktop, Documents, Pictures, Screenshots and Camera Roll. The Documents folder is the one most people care about. Music and Videos are not affected and can stay on Folder Redirection. There are two main OneDrive policy settings:
 
 - **Prompt users to move Windows known folders to OneDrive.** Users see a prompt, and a reminder stays in the activity center until all folders are moved. Microsoft recommends it for existing devices, with at most 5,000 devices a day and 20,000 a week across macOS and Windows.
 - **Silently move Windows known folders to OneDrive.** The folders move without user interaction. Microsoft recommends it for existing and new devices, with at most 1,000 existing devices a day and 4,000 a week.
@@ -61,6 +61,20 @@ For a folder redirected to a network file share, Microsoft describes three steps
 3. Enable Known Folder Move. The folders move to OneDrive and merge with the migrated content.
 
 The data migration itself and the client policy are two separate jobs. Microsoft says the policies can be set with Group Policy, Intune administrative templates or registry settings, so you can manage the GPO settings in the same way as other user policy settings. The same page recommends a slow rollout and, for users with many files, temporarily limiting the upload rate of the sync app to a percentage of throughput, then removing the limit after the uploads finish.
+
+## Migration Manager CSV file: migrate user home drives in bulk
+
+For hundreds of users, a task per person is too slow. Microsoft's page on the [bulk upload format](https://learn.microsoft.com/en-us/sharepointmigration/mm-bulk-upload-format-csv-json) describes a CSV file with six columns in a fixed order:
+
+1. **File share path:** required.
+2. **Two blank columns:** they do not apply to file share migration.
+3. **SharePoint site or OneDrive:** required, the site URL or the OneDrive URL of the user.
+4. **Document library:** required, and for a OneDrive target it must be Documents, not MyFiles.
+5. **Subfolder:** optional. If it is empty, files go to the root level.
+
+All six columns must be present even when a field stays empty. A header row is optional, and the file must be UTF-8. A row in this shape, with invented names, looks like `\\fileserver\home$\anna,,,https://contoso-my.sharepoint.com/personal/anna_contoso_com,Documents,`.
+
+Three more points from the same page save time. Do not add `_layouts/15/onedrive.aspx` to the OneDrive address. Pre-provision the OneDrive accounts before you migrate. And only the first 20 rows are validated for valid destination links, so check the remaining rows yourself. Microsoft also describes a JSON format for tasks, with SourcePath, TargetPath and TargetList as the minimum values.
 
 ## Plan the waves
 
@@ -95,7 +109,7 @@ Tell users who offer to migrate data themselves to wait for their wave, because 
 
 ## After the cut-over
 
-Watch the first days closely. Check the migration reports for failed items and send each affected user a short list of what could not be copied and why, because names, characters and paths that break the rules are the usual cause. Check that Known Folder Move reports a healthy state on the devices of the wave, and that the old mapping and the Folder Redirection policy are gone, not just hidden. Then close the wave in your tracker, record the lessons, and adjust the next wave. Small corrections between waves, such as a better message or one more FAQ entry, cost little and save many calls.
+Watch the first days closely. Microsoft's overview says you can monitor progress across all agents and download summaries and detailed data for each migration. Check these reports for failed items and send each affected user a short list of what could not be copied and why, because names, characters and paths that break the rules are the usual cause. Check that Known Folder Move reports a healthy state on the devices of the wave, and that the old mapping and the Folder Redirection policy are gone, not just hidden. Then close the wave in your tracker, record the lessons, and adjust the next wave. Small corrections between waves, such as a better message or one more FAQ entry, cost little and save many calls.
 
 ## Common mistakes
 

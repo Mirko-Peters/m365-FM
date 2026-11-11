@@ -58,9 +58,21 @@ Four Microsoft sources feed these metrics, and each has limits.
 
 **Site lifecycle policies.** The article on [site lifecycle management](https://learn.microsoft.com/sharepoint/site-lifecycle-management) names the ownership, inactive site and attestation policies. In simulation mode, a policy runs once and creates a report without enforcement. In active mode, it runs on a schedule, generates reports and sends notifications. The reports can include ownership status, activity status, notification history and enforcement actions. The page does not describe a CSV export, so check what the admin center offers in your tenant.
 
-**Usage reports and usage analytics.** The Microsoft 365 admin center has the site usage report with storage, files and last activity per site, as part of your [SharePoint reporting](https://www.m365.fm/entity/sharepoint-reporting/). Microsoft's [usage analytics](https://learn.microsoft.com/bg-bg/microsoft-365/admin/usage-analytics/usage-analytics?view=o365-worldwide) is a template app for Power BI with a prebuilt dashboard that covers the last 12 months and has a separate report for each service, including SharePoint.
+**Usage reports and usage analytics.** The Microsoft 365 admin center has the site usage report with storage, files and last activity per site, as part of your [SharePoint reporting](https://www.m365.fm/entity/sharepoint-reporting/). Microsoft's usage analytics is a template app for Power BI with a prebuilt dashboard that covers the last 12 months and has a separate report for each service, including SharePoint.
 
 **Microsoft Graph Data Connect.** Microsoft's [dataset list](https://learn.microsoft.com/en-us/graph/data-connect-datasets) includes SharePointSites_v1, SharePointPermissions_v1, SharePointGroups_v1 and SharePointFiles_v1. The datasets are copied with Azure Synapse or Azure Data Factory, and Microsoft states that service principal authentication is the only supported mechanism for the copy activity. This is the choice for large tenants and custom reports, and it needs more setup than the other sources.
+
+## Governance plan: who decides what the dashboard measures
+
+A dashboard works only if someone owns the decisions behind it. Microsoft's guidance on [planning intranet governance](https://learn.microsoft.com/sharepoint/intranet-governance) recommends a governance team with core members from the key business stakeholder groups as well as IT, and it says the team should not be disbanded at launch. The page lists 11 elements that a governance plan should consider at minimum, among them policies and guidelines, site provisioning and decommissioning, roles and responsibilities, security and measurement. It also separates the two terms: users are expected to meet policies without deviation, while guidelines are more like recommendations. One example policy on the page says that all SharePoint sites have a primary and a secondary contact, which is the same rule as the ownership coverage metric above.
+
+The page also names a decision that changes your numbers: who can create a new site. A request process keeps the environment tidy but can frustrate users if the approval takes too long. Self-service creation with site designs needs follow-up, and Microsoft says to track new sites in the admin center so that you can contact their owners. For measurement, the page suggests looking beyond page views, and it asks you to review the plan and the policies regularly.
+
+## External sharing and guest access: what to track
+
+Broad access is the metric where policy and data meet. Microsoft's article on [sharing and collaboration options](https://learn.microsoft.com/sharepoint/collaboration-options) describes four organization-level levels: Anyone, New and existing guests, Existing guests and Only people in your organization. The tenant setting is the default for sites. Individual sites can be locked down further but cannot be more permissive, and the OneDrive setting cannot be more permissive than the SharePoint setting. Microsoft does not recommend the Existing guests level, because guests can be added to the directory in other ways. The page recommends leaving external sharing enabled, since it can be more secure and governable than email attachments, and it names no level beyond that.
+
+Decide the tenant level first. Then let the dashboard show which sites use Anyone links or guest access, so that oversharing becomes a number that an owner can act on.
 
 ## SharePoint admin dashboard in Power BI: how to build it
 
