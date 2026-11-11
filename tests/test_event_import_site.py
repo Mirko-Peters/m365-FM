@@ -122,3 +122,21 @@ class EventImportLegal(unittest.TestCase):   # 317-10
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class LiveListe(unittest.TestCase):
+    """Neu angelegte oder importierte Events stehen sofort in der Live-Liste, ihre Seite entsteht erst beim naechsten Seitenbau:
+    bis dahin verlinkt die Liste auf die Website des Events (nur https) statt auf die fehlende Seite (404)."""
+    def test_live_liste_verlinkt_ohne_seite_extern_und_ist_gueltiges_js(self):
+        import shutil, subprocess
+        tmp, docs = build([MEMBER])
+        try:
+            for lang, soon in (("en", "page coming soon"), ("de", "Seite folgt")):
+                h = (docs / ("" if lang == "en" else lang) / "community" / "events" / "index.html").read_text("utf-8")
+                js = [x for x in re.findall(r"<script>(.*?)</script>", h, re.S) if "/api/events/export" in x][0]
+                self.assertNotIn("%SOON%", js); self.assertIn(soon, js); self.assertIn('rel="noopener nofollow"', js); self.assertIn("https:", js); self.assertNotIn("https?:", js)
+                if shutil.which("node"):
+                    f = Path(tmp.name) / f"live-{lang}.js"; f.write_text(js, "utf-8")
+                    self.assertEqual(subprocess.run(["node", "--check", str(f)], capture_output=True).returncode, 0)
+        finally:
+            tmp.cleanup()
