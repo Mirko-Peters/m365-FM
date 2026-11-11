@@ -38,8 +38,8 @@ Treat the plan as part of [SharePoint migration](https://www.m365.fm/entity/shar
 Not everyone needs the same message. Four groups cover most projects.
 
 - **Sponsors and managers.** They need the schedule, the risks, the decisions you need from them and the points where they will be asked questions. They also carry the message to their teams, so give them two or three sentences they can repeat.
-- **Site owners.** They know their content and their people. They need to know their role, what to review or clean up before the move, such as old customizations, and what happens to their site. Microsoft's [communication plan page for the older SharePoint 2010 upgrade](https://learn.microsoft.com/en-us/previous-versions/office/sharepoint-server-2010/cc263345%28v=office.14%29), which is dated but still a useful outline, separates messages for site owners, who need to know their role and any issues found before the upgrade, from messages for site users.
-- **The helpdesk.** Microsoft's guide says to train the helpdesk on key features and common questions before cutover. The RSM article says to include the helpdesk in communications so staff understand the plan before people call. Give them a short sheet with the dates, the likely questions and the escalation path.
+- **Site owners.** They know their content and their people. They need to know their role, what to review or clean up before the move, such as pages or lists they chose to customize, and what happens to their site. Microsoft's [communication plan page for the older SharePoint 2010 upgrade](https://learn.microsoft.com/en-us/previous-versions/office/sharepoint-server-2010/cc263345%28v=office.14%29), which is dated but still a useful outline, separates messages for site owners, who need to know their role and any issues found before the upgrade, from messages for site users.
+- **The helpdesk.** Microsoft's guide says to train the helpdesk on key features and common questions before cutover. The RSM article says to include the helpdesk in communications so staff understand the plan before people call.
 - **End users.** They need the dates, what is different for them, where their content will be, what to do in the meantime and how to get help.
 
 Assign one person to send the migration emails, so every team that has to migrate hears one voice about the migration. RSM suggests this, and it prevents conflicting messages.
@@ -50,7 +50,7 @@ The RSM article lists four things worth deciding: audiences, channels, timing an
 
 **Audiences.** The four groups above, plus anyone who depends on a specific site or a file share that is moving, such as a team that runs a monthly report from a library. For each content set, identify the stakeholders who need notice.
 
-**Channels.** Email is the main channel in the article, with a company-wide migration plan and a daily migration report during the move. It also suggests a section on the intranet homepage that shows where to find migrated content. Add the channels your organization already reads, such as a team chat channel or a short note from a manager in a meeting. Keep one page as the source of truth, and link to it from every message.
+**Channels.** Email is the main channel in the article, with a company-wide migration plan and a daily migration report during the move. It also suggests a section on the intranet homepage that shows where to find migrated content. Keep one page as the source of truth, and link to it from every message.
 
 **Timing.** Tell stakeholders when the migration will start, when it is likely to finish and when their old content will no longer be available in its original location. RSM advises running a test migration first to estimate how long the move takes on your network. If plans shift, tell people. The Microsoft 2010 page adds one more point worth keeping: choose dates far enough ahead that the team can finish its preliminary steps, and schedule time to validate the sites afterward.
 
@@ -67,6 +67,10 @@ Large estates migrate in groups. A [migration wave](https://www.m365.fm/entity/m
 5. **Follow-up.** When the move is done, say where the content is, what to check, how to ask for help and when the old location goes away. Microsoft's guide lists regular emails, training and documentation for making the switch as part of the follow-up.
 
 Use the first wave as a pilot for the messages as well as the technology. Microsoft's guide says the pilot should validate the process, including performance and user communication, and gather a sample of user feedback. It adds that you may update your user communication template to address the questions pilot users asked. Keep a list of those questions, and answer them in the next wave's notice before anyone asks.
+
+## Base the notices on the migration assessment
+
+Your messages are only as accurate as your inventory. Microsoft's guide says to assess the source environment before you migrate, because what you find influences the strategy, the timing and the amount of content you move. It suggests working with users to find older content that is obsolete or redundant and can be deleted. For a SharePoint Server 2013 farm, it names the SharePoint Migration Assessment Tool (SMAT), which produces reports on issues that could affect the migration, and the SharePoint Migration Tool (SPMT), a free SharePoint migration tool that Microsoft describes as available at no cost. The guide also advises deciding how sites map to a modern hub architecture. Describe that new information architecture to users in plain words, so they know where migrating to SharePoint Online puts their site collection, and what the new SharePoint will look like.
 
 ## Announcing a cleanup
 
@@ -100,7 +104,7 @@ Three days before, a reminder goes out. On Friday, the cutover notice says the o
 
 ## How software can help
 
-Start with the tools you have in Microsoft 365: your email system, a team chat channel, the intranet homepage and a shared page that holds the schedule and the questions. A simple tracking list can record each wave, audience, message, send date and owner. A SharePoint migration tool, including a third-party one, often produces progress reports that you can reuse in a status update, but check what they show before you send them on to staff. A simple workflow, such as a shared list with one row per message, keeps the migration calendar honest.
+Start with the tools you have in Microsoft 365: your email system, a team chat channel, the intranet homepage and a shared page that holds the schedule and the questions. A simple tracking list can serve as the workflow and record each wave, audience, message, send date and owner. Migration tools, including third-party ones, often produce progress reports that you can reuse in a status update, but check what they show before you send them on to staff.
 
 ## Next step
 
