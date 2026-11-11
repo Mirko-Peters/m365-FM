@@ -109,6 +109,8 @@ The lead presents the second number, not the first, to the product owner. The te
 
 A spreadsheet is a fair start. A test management tool can link tests to features and update results automatically, which saves the manual upkeep. [Genta by Cognillo](https://www.m365.fm/entity/genta-automation/) is one example. According to the vendor, it includes test case and suite management with feature coverage tracking, scheduled runs, and dashboards that export to Excel, CSV or PDF. These are the vendor's statements and were not tested by M365.FM. Compare it with other options, and check how each tool links results to requirements before you commit.
 
+Disclosure: Cognillo sponsors M365.FM.
+
 ## Next step
 
 Take your most important business flow, list its ten features, and map each to its tests in a simple matrix with the last result and date. Then bring the three biggest gaps to your next release meeting, and agree who owns feature test coverage tracking from then on.

@@ -129,6 +129,8 @@ Start with tools you already have. The site sharing report and the admin center 
 
 Some third-party tools combine reporting and fixing in one screen. One example is Cognillo's [SharePoint Essentials Toolkit](https://www.m365.fm/entity/sharepoint-essentials-toolkit/). According to the vendor's product page, it offers permission reports for sites, folders and items, shows everything one person can access, replaces one user with another, and fixes permissions and sharing links from reports. The vendor also says reports and tasks can be scheduled and exported. These are the vendor's statements and were not tested by M365.FM. The manual route above works without any of these tools.
 
+Disclosure: Cognillo sponsors M365.FM.
+
 ## Next step
 
 Pick one site with a known permission problem, run the sharing report, and add a decision column to the CSV. Then use that list to fix SharePoint permissions in bulk on a test library first, and keep the log.

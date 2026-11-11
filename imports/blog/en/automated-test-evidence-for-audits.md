@@ -113,6 +113,8 @@ At the next review, the reviewer again asks about five requirements. The team ex
 
 Start with your test management tool and CI system. They can store results, attach artifacts and keep history. Some testing tools and testing platforms add evidence features. [Genta by Cognillo](https://www.m365.fm/entity/genta-automation/) is one example. According to the vendor, it reports pass or fail with screenshots, logs and failure artifacts, and offers role-based access control, an audit log and dashboard exports to Excel, CSV or PDF. These are the vendor's statements and were not tested by M365.FM. Compare tools in a pilot, and check whether the records meet your own [compliance](https://www.m365.fm/entity/compliance/) rules.
 
+Disclosure: Cognillo sponsors M365.FM.
+
 ## Next step
 
 Pick one regulated feature and write down which five facts an auditor would need to see for its tests. Then check a recent test execution against that list, and use the gaps to set your rule for automated test evidence for audits.

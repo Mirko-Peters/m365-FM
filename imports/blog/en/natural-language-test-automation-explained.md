@@ -112,6 +112,8 @@ Several kinds of AI testing tools exist. Some add plain-English commands to a co
 
 [Genta by Cognillo](https://www.m365.fm/entity/genta-automation/) is one example of a separate platform. According to the vendor, testers describe in plain language what an application should do, and Genta runs the test in a browser on a cloud virtual machine and reports pass or fail, with screenshots and logs. The vendor says it is aimed at QA leads, SDETs and automation engineers. These are the vendor's statements. Compare it with other options in a pilot before you decide.
 
+Disclosure: Cognillo sponsors M365.FM.
+
 ## Next step
 
 Pick one stable user path, such as login and search, and write it as five plain-English steps. Run it in a natural language test automation tool and in your current test framework, then compare effort, failures and the quality of the logs.

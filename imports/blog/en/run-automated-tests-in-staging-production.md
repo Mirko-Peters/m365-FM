@@ -108,6 +108,8 @@ Two weeks later, the smoke group fails at 2 a.m. because the test account passwo
 
 Start with what your CI system and test framework offer: per-environment projects, a secret store, scheduled runs and tags. Add a monitoring tool that alerts on failed production checks. Some test platforms bring these parts together. [Genta by Cognillo](https://www.m365.fm/entity/genta-automation/) is one example: according to the vendor, it supports environments such as development, staging and production with encrypted variables, scheduled runs and an audit log. These are the vendor's statements and were not tested by M365.FM. Compare it with other options in a pilot, and check how each tool stores secrets and who can read them.
 
+Disclosure: Cognillo sponsors M365.FM.
+
 ## Next step
 
 List your environments and write down, for each one, which tests may run there, which account they use and where the secrets live. Then move one destructive test out of production, and use that list to run automated tests in staging and production with clear rules.
