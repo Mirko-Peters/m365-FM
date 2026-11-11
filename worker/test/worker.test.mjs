@@ -616,6 +616,30 @@ test("contentblog: importContentBlog legt Pakete pending/live an, erneuert nur u
   } finally { globalThis.fetch = old; }
 });
 
+test("contentblog: viele unveraenderte Pakete kosten nur eine Abfrage, neue Pakete kommen in Schueben von 40 (SQLite)", async () => {
+  const { DatabaseSync } = await import("node:sqlite");
+  const raw = new DatabaseSync(":memory:");
+  const dir = new URL("../migrations/", import.meta.url);
+  for (const f of readdirSync(dir).filter((f) => f.endsWith(".sql")).sort()) raw.exec(readFileSync(new URL(f, dir), "utf-8"));
+  let calls = 0;
+  const db = { prepare(sql) { calls++; const st = raw.prepare(sql); let args = []; const o = { bind(...a) { args = a; return o; }, all: async () => ({ results: st.all(...args) }), first: async () => st.get(...args) ?? null, run: async () => st.run(...args) }; return o; } };
+  raw.exec(`INSERT INTO users(id,provider,sub,name,role,banned,created) VALUES(1,'g','1','Mirko','user',0,1);
+    INSERT INTO profiles(user_id,public,handle,headline,about,company,job,country,show_org,updated) VALUES(1,1,'mirko-p','','','','','',1,1)`);
+  const P = (n, o) => ({ slug: "post-" + n, lang: "en", title: "Beitrag " + n, summary: "Kurz", html: "<p>Text</p>", author: "mirko-p", topics: [], faq: [], publish: true, published: 100, hash: "h" + n, ...o });
+  const items = Array.from({ length: 110 }, (_, i) => P(i));
+  const old = globalThis.fetch; globalThis.fetch = async () => ({ ok: true, json: async () => ({ items }) });
+  try {
+    const { importContentBlog } = await import("../src/contentblog.js");
+    let r = await importContentBlog({ DB: db, SITE: "https://x" }, () => 1000);
+    assert.equal(r.created, 40, "ein Schub: hoechstens 40"); assert.equal(r.seen, 110);
+    await importContentBlog({ DB: db, SITE: "https://x" }, () => 1100); r = await importContentBlog({ DB: db, SITE: "https://x" }, () => 1200);
+    assert.equal(raw.prepare("SELECT COUNT(*) n FROM blog_posts WHERE status='live'").get().n, 110, "nach drei Laeufen sind alle 110 live");
+    calls = 0; r = await importContentBlog({ DB: db, SITE: "https://x" }, () => 1300);
+    assert.deepEqual([r.created, r.updated, r.published], [0, 0, 0]);
+    assert.ok(calls <= 3, "unveraenderte Pakete: keine Abfrage je Paket, war " + calls);
+  } finally { globalThis.fetch = old; }
+});
+
 test("register: applyRenames gibt der vorhandenen Folge den neuen Slug, nimmt Uebersetzungen mit und legt keine zweite Zeile an (SQLite)", async () => {
   const { DatabaseSync } = await import("node:sqlite");
   const raw = new DatabaseSync(":memory:");

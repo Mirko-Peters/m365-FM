@@ -179,6 +179,41 @@ def _con_block(lang, base="", today=None):
 
 
 def inject(base, body, lang, canonical, noindex=False, today=None):
+    """Werbeplaetze (_inject) und danach, wo es passt, das Lead-Formular eines Sponsors mit lead_topics (_inject_lead)."""
+    return _inject_lead(base, _inject(base, body, lang, canonical, noindex, today), lang, canonical, noindex)
+
+
+def _inject_lead(base, body, lang, canonical, noindex=False):
+    """Lead-Formular eines laufenden Sponsors (data/sponsorships.json, lead_topics) am Ende des Textbereichs von Blogbeitraegen, Folgen und Sprachseiten,
+    die ein passendes Thema (verlinkte Entitaet) haben. Nie auf Entitaetsseiten (dort steht der Kasten schon), nie doppelt, nie auf noindex-Seiten."""
+    if noindex or "data-sponsor-lead=" in body:
+        return body
+    pt = page_type(base, canonical)
+    if pt not in ("blog", "episode", "lang") or (pt == "lang" and not _lead_lang_ok(canonical.replace(base, "") or "/")):
+        return body
+    import site_sponsorships as SPM
+    lead = SPM.lead_for_page(page_topics(base, canonical, body, limit=60))
+    a, z = _region(body)
+    if not lead or a < 0:
+        return body
+    if body.startswith('class="shmain"', a):   # Seite mit Sidebar: in die Textspalte (vor das </div> von .shmain), sonst wird der Kasten eigenes Grid-Element von .shw und schiebt die Sidebar nach unten
+        k = body.rfind("</div>", a, z); z = k if k > a else z
+    block = sponsor_lead(base, lang, lead["org"], lead["name"], pt=pt, script="window.M365AD=" not in body)
+    return body[:z] + block + body[z:]
+
+
+_LEAD_IDX = {"entity", "topics", "podcast", "glossary", "learn", "trainer", "path", "top", "about", "show", "shows", "c", "tag", "rollen", "community", "directory", "search",
+             "sponsors", "sponsor", "press", "live", "blog", "events", "library", "video", "videos", "updates", "m365con", "services", "for", "i-want-to", "media-kit"}   # Verzeichnis-, Uebersichts- und feste Seiten unter /<sprache>/
+
+
+def _lead_lang_ok(path):
+    """Sprachseiten bekommen das Lead-Formular wie auf Englisch nur als Folge (/<sprache>/<slug>/ oder /<sprache>/show/episodes/<slug>/):
+    nie Startseite, Verzeichnisse, Uebersichten oder Rechtsseiten (z. B. /de/entity/, /de/podcast/, /de/datenschutz/)."""
+    m = re.match(r"^/[a-z]{2}/(?:show/episodes/([^/]+)|([^/]+))/$", path)
+    return bool(m) and (m.group(1) or m.group(2) not in _LEAD_IDX) and not any(x in path for x in slot_cfg().get("skip_paths", DEFAULT_SKIP))
+
+
+def _inject(base, body, lang, canonical, noindex=False, today=None):
     """Fuegt hoechstens zwei Bloecke ein: einen nach dem 2. Abschnitt (<h2>), einen vor dem Footer.
     AdSense aus (Mirko, 5.11.2026): nur eigene Banner - in der Mitte bis CON_UNTIL die M365Con, vor dem Footer die Services."""
     if noindex:
@@ -387,14 +422,14 @@ def slot_script(base, lang):
     return f'<script>window.M365AD={cfg}</script><script defer src="{base}/assets/ads.js?v={v}"></script>'
 
 
-def sponsor_lead(base, lang, eid, name):
+def sponsor_lead(base, lang, eid, name, pt="entity", script=True):
     """Lead-Formular eines laufenden Sponsors (data/sponsorships.json, inkl. 182 Tage Karenzzeit nach "end") auf der Firmen-Entitaetsseite: gekennzeichneter Kasten mit Button.
     Das Formular ist das bestehende Lead-Formular (assets/ads.js, POST /api/ads/lead); ads.js und Konfiguration kommen nur auf Seiten mit diesem Kasten."""
     t = texts(lang, "slot")
     btn = escape(t["contact"].replace("{org}", name))
-    return (f'<section class="ad ad-own en-lead" role="note" data-pt="entity" style="border:1px solid var(--bd);border-inline-start:4px solid var(--ac,#0a5);background:var(--card);'
+    return (f'<section class="ad ad-own en-lead" role="note" data-pt="{escape(pt)}" style="border:1px solid var(--bd);border-inline-start:4px solid var(--ac,#0a5);background:var(--card);'
             f'padding:.6em .9em;border-radius:.4em;margin:.5em 0 .8em"><small><strong>{escape(T(lang, "Sponsored", "Anzeige"))}</strong></small><p style="margin:.3em 0 .5em">{escape(name)}</p>'
-            f'<button type="button" class="btn main" data-sponsor-lead="{escape(eid)}" data-pt="entity">{btn}</button></section>') + slot_script(base, lang)
+            f'<button type="button" class="btn main" data-sponsor-lead="{escape(eid)}" data-pt="{escape(pt)}">{btn}</button></section>') + (slot_script(base, lang) if script else "")
 
 
 def inject_slots(base, body, lang, canonical, today=None):

@@ -5,7 +5,7 @@ Pakete mit status: review bleiben liegen. Geprueft wird: Titel, Kurzfassung, Lae
 Bilder nur von img.m365.fm (CLAUDE.md), keine Skripte. Fehler stehen im Bericht blog-content/report.json und im Build-Log; nichts wird geloescht.
 
 Kopf: title, summary, status (review|approved), publish (true|false), author (Profil-Handle, Standard mirko-p), date (JJJJ-MM-TT),
-topics (Entitaets-IDs), faq ([{q, a}]). Text: Markdown mit ##-Ueberschriften, Absaetzen, Listen, **fett**, *kursiv*, `code`,
+topics (Entitaets-IDs), faq ([{q, a}]), keypoints (optional, 3-8 Zeilen je 10-200 Zeichen, Abschnitt Key points nach dem ersten Absatz). Text: Markdown mit ##-Ueberschriften, Absaetzen, Listen, **fett**, *kursiv*, `code`,
 [Link](https://...) und Bildern ![Alt](https://img.m365.fm/...).
 Englische Pakete uebersetzt das Uebersetzer-Team (translate_blog.py, Schluessel content/<slug>) in die 14 Sprachen; translations() baut daraus
 die Sprachfassungen unter /<sprache>/community/u/<autor>/blog/<slug>/ wie bei den frueheren Beitraegen."""
@@ -15,6 +15,7 @@ from pathlib import Path
 
 import site_shownotes as SNS
 import site_milestones as MST
+from site_i18n import T
 from site_learn import esc
 
 ROOT = Path(__file__).resolve().parent
@@ -66,8 +67,14 @@ def check(rec, lang, slug, ents):
     unknown = [t for t in topics if t not in ents]
     if unknown: err.append("unbekannte Themen: " + ", ".join(unknown[:5]))
     faq = [{"q": str(x.get("q") or "")[:200], "a": str(x.get("a") or "")[:600]} for x in (m.get("faq") or []) if isinstance(x, dict) and x.get("q") and x.get("a")]
+    kp = [str(x).strip() for x in (m.get("keypoints") or []) if str(x).strip()]   # Kernpunkte (3-8, je 10-200 Zeichen): Liste nach dem ersten Absatz, wird mit dem Text uebersetzt
+    if kp and (not 3 <= len(kp) <= 8 or any(not 10 <= len(x) <= 200 for x in kp)): err.append("Kernpunkte: 3-8 Punkte mit je 10-200 Zeichen")
     if err: return None, err
     html = render(body)
+    if kp:
+        box = f"<h2>{esc(T(lang, 'Key points', 'Kernpunkte'))}</h2>\n<ul>" + "".join(f"<li>{SNS._inline(x)}</li>" for x in kp) + "</ul>"   # Ueberschrift in der Paketsprache (data/py_i18n.json); englische Pakete uebersetzt translate_blog samt h2
+        cut = html.find("</p>")
+        html = box + "\n" + html if cut < 0 else html[:cut + 4] + "\n" + box + html[cut + 4:]
     item = {"slug": slug, "lang": lang, "title": title, "summary": summary, "author": author, "html": html, "topics": topics[:10], "faq": faq[:10],
             "publish": m.get("publish") in (True, "true", "yes", 1), "published": _ts(m.get("date")) or int(time.time())}
     item["hash"] = hashlib.sha1(json.dumps(item, ensure_ascii=False, sort_keys=True).encode("utf-8")).hexdigest()[:16]
