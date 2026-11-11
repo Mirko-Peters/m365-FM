@@ -53,6 +53,17 @@ The steps in the admin center are short. Expand **Policies**, then select **Shar
 
 Two cautions from the same page help you avoid surprises. If you turn external sharing off and later turn it on again, guests regain access, so turn it off for specific sites first if that is not what you want. And when you restrict or turn off external sharing, guests typically lose access within one hour.
 
+## Can you also set an expiration date for People in your organization links?
+
+Yes, since 2026. Microsoft's Message Center post [MC1242772](https://mc.merill.net/message/MC1242772) describes expiration policies for People in your organization links in SharePoint Online and OneDrive. The post says admins configure them with the SharePoint Online Management Shell, and that by default no behavior changes, so such links have no expiration until you set a policy.
+
+- **Maximum expiration:** `Set-SPOTenant -CoreOrganizationSharingLinkMaxExpirationInDays` for SharePoint and `-OneDriveOrganizationSharingLinkMaxExpirationInDays` for OneDrive. This is how you set different values for SharePoint and OneDrive.
+- **Recommended expiration:** the matching `RecommendedExpirationInDays` settings become the default suggestion when users create a link. Users can choose a date only within your limit.
+- **Site level:** for a single site you enable `Set-SPOSite -OverrideTenantOrganizationSharingLinkExpirationPolicy $true` and then set that site's values.
+- **Existing links:** they are not changed in advance. Expiration applies to links created after the policy, and to an existing link when someone uses it after the rollout.
+
+The post gives rollout dates from mid-March 2026 and does not mention a license requirement. Check the current Microsoft documentation before you plan, because Message Center items expire.
+
 ## How do you choose sensible defaults?
 
 Microsoft does not name one correct number of days. So decide from purpose. Ask four questions.

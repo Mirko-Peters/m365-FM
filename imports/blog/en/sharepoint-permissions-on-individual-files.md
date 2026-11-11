@@ -83,6 +83,14 @@ To restore inheritance, select **Delete unique permissions** on the Permissions 
 
 Both warnings argue for the same habit: write down who had access before you change anything. A small sheet with the item, the people, the reason and the review date takes a minute and saves an incident. Only owners or administrators of the library can do these steps.
 
+## Should you grant access to groups or to individual users?
+
+Prefer groups. Microsoft's page on [sharing and permissions in the modern experience](https://learn.microsoft.com/en-us/sharepoint/modern-experience-sharing-permissions) says that on a communication site you can add users, security groups or Microsoft 365 groups to the Owners, Members or Visitors group. It calls Visitors a good place for security groups and advises against nested security groups, which can cause performance issues. On a team site, access flows from the Microsoft 365 group.
+
+For one item, a group named after the reason, such as a project or a case, can be removed in a single step when the reason ends. That is easier than tracking named people.
+
+The same page lists three link types: Anyone, People in your organization and Specific people. It says Anyone links cannot be audited, and it recommends keeping sensitive data in a site with external sharing turned off. Keep such files out of document libraries where people routinely share by link.
+
 ## Example: twelve salary letters in a library of 900 files
 
 The numbers are invented to show the method. An HR library holds 900 files. Twelve of them are salary letters that only two HR managers and the payroll lead may read. Everything else is open to the HR team.

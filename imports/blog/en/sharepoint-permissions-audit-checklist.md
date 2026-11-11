@@ -61,6 +61,19 @@ Treat these two steps as the most useful for the effort. Old links and old accou
 
 Audits turn into [access reviews](https://www.m365.fm/entity/access-reviews/) when you repeat them on a schedule with named owners. That repeat is what separates a routine from a one-time cleanup.
 
+## How do you track permission changes with the audit log?
+
+An audit of a SharePoint Online environment shows who has access today. The audit log shows how access changed. Microsoft's list of [audit log activities](https://learn.microsoft.com/en-us/purview/audit-log-activities) names the events that matter for this checklist.
+
+- **Broke sharing inheritance** (SharingInheritanceBroken): an item no longer inherits sharing permissions from its parent. Use it to find new unique permissions.
+- **Restored sharing inheritance** (SharingInheritanceReset): an item inherits from its parent again.
+- **Added user or group to SharePoint group** (AddedToGroup): a member or guest joined a SharePoint group. Microsoft notes this might be intentional or the result of another activity, such as a sharing event.
+- **Shared file, folder, or site** (SharingSet): the Detail column names the user and whether this user is a member or a guest.
+- **Created an anonymous link** (AnonymousLinkCreated): anyone with the link can open the resource without signing in.
+- **Added site collection admin** (SiteCollectionAdminAdded): site collection administrators have full control over the site collection and all subsites.
+
+Search these operations for the audit period, filter by site, and add every unexpected change to your report. Treat the log as a source of leads, because it records events and does not explain intent.
+
 ## Example: auditing 220 sites in six weeks
 
 The numbers are invented to show the method. A company has 220 SharePoint sites. The admin team runs the organization-wide report and finds 14 sites open to "Everyone except external users", 9 sites with guests, and 31 sites with no active owner. Some sites appear in more than one list, so the unique total is 48 sites.

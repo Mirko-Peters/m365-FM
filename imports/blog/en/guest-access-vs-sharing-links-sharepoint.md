@@ -76,6 +76,12 @@ Teams and Microsoft 365 groups add one more route. Microsoft notes that the gues
 
 The [Microsoft Entra External ID](https://www.m365.fm/entity/entra-external-id/) settings also matter, because they decide who may invite guests. Check them together with your SharePoint settings.
 
+## Can a site be more permissive than the organization setting?
+
+No. Microsoft's [external sharing overview](https://learn.microsoft.com/en-us/sharepoint/external-sharing-overview) says you must allow external sharing at the organization level before any site can use it. If a site's option and the organization-level option do not match, the most restrictive value always applies. OneDrive settings can be the same as or stricter than SharePoint settings. Not all new sites allow external sharing by default, even when the organization does.
+
+Does sharing change permissions? The page describes access as permission levels on the shared item, and a guest added as a site member gets Edit permissions. Whether a guest account is created depends on the model. With Microsoft Entra B2B enabled for files and folders, a guest account is always created and Entra settings apply. With external authentication, no new guest account is created. To end access, remove the person's permissions from the item or remove them as a guest in your directory. Guests who need OneDrive storage or Power Automate flows need an appropriate license.
+
 ## What happens when the work with outsiders ends?
 
 Access should end when the reason ends. The method decides how you do that.
