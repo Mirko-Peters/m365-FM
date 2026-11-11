@@ -42,6 +42,12 @@ PAYPAL_ENV = "sandbox"
 ADS_BOOKING = "0"
 # Cloudflare Turnstile fuer das Lead-Formular: TURNSTILE_SITE_KEY und TURNSTILE_SECRET als Worker-Secrets (Dashboard, Typ "Secret",
 # damit ein Deploy sie nicht loescht). Ohne TURNSTILE_SECRET nimmt der Worker keine Leads an (fail closed).
+# Blog auf der eigenen Domain (BLOG_OWN_DOMAIN.md): "1" schaltet Domain-Verwaltung und Auslieferung ein, Standard "0" = aus.
+BYOD = "0"
+# BYOD_CNAME_TARGET = "blogs.example.net"   # CNAME-Ziel, auf das Mitglieder zeigen (Zone der Blog-Domains, Cloudflare for SaaS); Mirko setzt es nach dem Anlegen der Zone
+# BYOD_CANONICAL = "platform"               # "platform" (Standard: Canonical auf m365.fm) oder "own" (Canonical auf die eigene Domain), Entscheidung Mirko
+# BYOD_INDEX_VOTES = "10"                   # Upvotes, ab denen ein Beitrag der eigenen Domain indexierbar ist (wie INDEX_VOTES der Plattform)
+# Worker-Secrets (nie hier): CF_API_TOKEN, CF_ZONE_ID (Cloudflare for SaaS, Custom Hostnames). Ohne sie ruft der Code Cloudflare nie auf.
 SPREAKER_SHOW_IDS = "6704921,7393187,7393248,7393223,7393231,7393243,7393222,7393242,7393230,7393247,7393254,7393221,7393227,7393228,7393232,7393236,7393238,7393244,7393250,7393253"
 
 [[send_email]]

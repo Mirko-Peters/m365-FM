@@ -34,6 +34,7 @@ import { handleEvents, deleteUserEvents, ensureM365Con, claimLinkedinEntity, pur
 import { handleVotes } from "./votes.js";
 import { handleQa, deleteUserQa } from "./qa.js";
 import { handleBlog, deleteUserBlog } from "./blog.js";
+import { handleByodServe } from "./byod.js";
 import { handleUpdates, pollUpdates } from "./updates.js";
 import { ensurePastEvents, linkSpeakers, linkSpeakerEntities } from "./pastevents.js";
 import { handleLibrary, deleteUserLibrary } from "./library.js";
@@ -598,6 +599,7 @@ export default {
       if (path.startsWith("/auth/")) return (await auth(env, request, url, path)) || new Response("not found", { status: 404 });
       if (path === "/mcp") return await handleMcp(env, request, (uid) => me(env, uid), (req, user) => api(env, req, new URL(req.url), new URL(req.url).pathname, user, ctx));
       if (path === "/a2a") return await handleA2a(env, request);
+      if (path === "/api/byod/serve") return await handleByodServe(env, request, url);   // Blog auf der eigenen Domain (nur mit BYOD=1), ohne Sitzung
       if (path.startsWith("/api/")) return await api(env, request, url, path, undefined, ctx);
       return new Response("M365.FM community API", { status: 200, headers: { "content-type": "text/plain" } });
     } catch (e) {
