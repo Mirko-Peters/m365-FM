@@ -1,6 +1,7 @@
 import { cleanText, esc, rateLimit, sha256hex } from "./util.js";
 import { notify } from "./mail.js";
 import { handleAdGo, handleHouseGo, adStatsForOrg } from "./ads.js";
+import { sponsorPhase } from "./sponsor_extra.js";
 
 const now = () => Math.floor(Date.now() / 1000);
 const STATUSES = new Set(["new", "contacted", "won", "lost", "spam"]);
@@ -132,6 +133,8 @@ export async function handleSponsorLink(env, request, url, path, ctx) {
   if (!/^[a-z0-9-]{3,40}$/.test(code) || !["GET", "HEAD"].includes(request.method)) {
     return new Response(null, { status: code ? 404 : 404, headers });
   }
+  // Bewusst ohne Laufzeitpruefung (Mirko 11.11.2026): Links in Folgen und Beitraegen leiten nach dem Ende weiter und zaehlen weiter; nur active=0
+  // (von Hand im Admin gesetzt) stoppt einen Code. Eine Erstattung (sponsor_orders.js) setzt nur das Ende der Platzierung, nicht active.
   const link = await env.DB.prepare("SELECT code,target_url,utm FROM sponsor_links WHERE code=? AND active=1").bind(code).first();
   if (!link && code.startsWith("ad-")) return handleAdGo(env, request, url, code, ctx);   // #281: gebuchte Werbeplaetze
   if (!link && code.startsWith("h-")) return handleHouseGo(env, request, url, code, ctx);   // #281: Hausanzeigen (M365Con, Services ...)
@@ -205,15 +208,18 @@ export async function handleSponsor(env, request, url, path, J, user) {
     weekEnd.setUTCDate(weekEnd.getUTCDate() - ((weekEnd.getUTCDay() + 6) % 7));
     const weekStart = new Date(weekEnd);
     weekStart.setUTCDate(weekStart.getUTCDate() - 49);
+    // Mirko 11.11.2026: einmal gekauft = fuer immer einsehbar. Platzierungen und Event-Partnerschaften bleiben nach ihrem Ende in JEDEM
+    // spaeteren Zeitraum gelistet (kein Filter auf "end"), samt allen danach eingehenden Zahlen; nur was erst nach dem Zeitraum beginnt, fehlt.
+    // status: Stand heute (sponsorPhase: active/grace/ended/upcoming, grace_end = end + GRACE_DAYS); start/end bleiben die gebuchte Laufzeit.
+    const today = new Date().toISOString().slice(0, 10);
     for (const org of orgs) {
-      const placements = (await db.prepare(`SELECT id,title,channel,langs,start,end,refs,created,
-        CASE WHEN start>? THEN 'upcoming' WHEN end IS NOT NULL AND end<? THEN 'ended' ELSE 'active' END status
-        FROM sponsor_placements WHERE org_id=? AND (start IS NULL OR start<=?) AND (end IS NULL OR end>=?)
-        ORDER BY start DESC,id`).bind(period.to, period.from, org.id, period.to, period.from).all()).results || [];
+      const placements = ((await db.prepare(`SELECT id,title,channel,langs,start,end,refs,created
+        FROM sponsor_placements WHERE org_id=? AND (start IS NULL OR start<=?)
+        ORDER BY start DESC,id`).bind(org.id, period.to).all()).results || []).map((p) => ({ ...p, ...sponsorPhase(p.start, p.end, today) }));
       const eventPartners = (await db.prepare(`SELECT e.handle id,e.title,e.start,e.end,p.kind,p.level,p.status
         FROM event_partners p JOIN events e ON e.id=p.event_id WHERE p.org_id=?
-        AND (e.start IS NULL OR substr(e.start,1,10)<=?) AND (e.end IS NULL OR substr(e.end,1,10)>=?)
-        ORDER BY e.start DESC,e.id DESC`).bind(org.id, period.to, period.from).all()).results || [];
+        AND (e.start IS NULL OR substr(e.start,1,10)<=?)
+        ORDER BY e.start DESC,e.id DESC`).bind(org.id, period.to).all()).results || [];
       const aggregate = (await db.prepare(`SELECT metric,SUM(value) value,MAX(fetched_at) fetched_at,
         MAX(source='cloudflare') unfiltered FROM sponsor_metrics_daily m WHERE placement_id IN (SELECT id FROM sponsor_placements WHERE org_id=?)
         AND day>=? AND day<=? AND ${RUM_PREFERRED} GROUP BY metric`).bind(org.id, period.from, period.to).all()).results || [];
@@ -291,7 +297,8 @@ export async function handleSponsor(env, request, url, path, J, user) {
       FROM sponsor_clicks_daily c JOIN sponsor_links l ON l.code=c.code
       WHERE l.placement_id=? AND c.day>=? AND c.day<=? GROUP BY c.surface,c.country`)
       .bind(id, period.from, period.to).all()).results || [];
-    return J({ placement, metrics, manual, clicks, period }, 200, { "cache-control": "no-store" });
+    const phase = sponsorPhase(placement.start, placement.end, new Date().toISOString().slice(0, 10));   // kein Zeitfilter: auch lange nach dem Ende abrufbar
+    return J({ placement: { ...placement, ...phase }, metrics, manual, clicks, period }, 200, { "cache-control": "no-store" });
   }
   if (path === "/api/sponsor/sources" && request.method === "GET") {
     if (!user) return J({ error: "login" }, 401);

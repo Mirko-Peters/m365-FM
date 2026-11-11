@@ -137,3 +137,32 @@ test("sponsor dashboard: gebuchte Werbeplätze mit Einblendungen, Klicks, Klickr
   assert.match(root.textContent, /1\.5 %/);
   assert.match(root.textContent, /1200 \/ 10000/);
 });
+
+test("sponsor dashboard: Status laeuft / Karenzzeit bis TT.MM.JJJJ / beendet mit Zahlen, beendete Platzierung bleibt im Zeitraum (Mirko 11.11.2026)", async () => {
+  const render = async (lang, copy) => {
+    const root = new Element("main");
+    const document = { getElementById: () => root, createElement: (tag) => new Element(tag),
+      createTextNode: (text) => ({ textContent: String(text), children: [], querySelectorAll: () => [] }) };
+    const config = { api: "https://api.example", base: "https://www.m365.fm", lang, today: "2026-11-11", view: "overview",
+      urls: { dashboard: "/d/", placement: "/d/p/", report: "/d/r/", sources: "/d/s/" }, campaigns: [], copy: new Proxy(copy, { get: (t, k) => t[k] ?? String(k) }) };
+    const placements = [
+      { id: "run", type: "podcast_video", channel: "podcast_video", title: "Running one", status: "active", grace_end: "2027-07-17", start: "2026-11-01", end: "2027-01-16", metrics: [], clicks: [] },
+      { id: "grace", type: "website", channel: "website", title: "Grace one", status: "grace", grace_end: "2027-07-17", start: "2026-10-01", end: "2027-01-16", metrics: [], clicks: [] },
+      { id: "old", type: "website", channel: "website", title: "Old one", status: "ended", grace_end: "2024-07-01", start: "2023-10-01", end: "2023-12-31", metrics: [], clicks: [{ surface: "episode", country: "DE", clicks: 4, as_of: "2026-11-10" }] },
+    ];
+    const context = { window: { M365SP: config }, document, URL, URLSearchParams, Blob, Intl, Date, console, location: { origin: "https://www.m365.fm", search: "" },
+      fetch: async () => ({ status: 200, json: async () => ({ orgs: [{ handle: "acme", name: "Acme", metrics: [], placements }], period: { from: "2026-10-13", to: "2026-11-11" } }) }) };
+    vm.runInNewContext(readFileSync(new URL("../../assets/sponsor-dashboard.js", import.meta.url), "utf8"), context);
+    await new Promise((resolve) => setImmediate(resolve));
+    return root.textContent;
+  };
+  const de = await render("de", { running: "Läuft", grace_until: "Karenzzeit bis", ended_visible: "Beendet – Zahlen weiter sichtbar" });
+  assert.match(de, /Läuft/);
+  assert.match(de, /Karenzzeit bis 17\.07\.2027/);
+  assert.match(de, /Old one/, "2023 beendete Platzierung bleibt im aktuellen Zeitraum gelistet");
+  assert.match(de, /Beendet – Zahlen weiter sichtbar/);
+  const en = await render("en", { running: "Running", grace_until: "Grace period until", ended_visible: "Ended – figures stay visible" });
+  assert.match(en, /Running/);
+  assert.match(en, /Grace period until 07\/17\/2027/);
+  assert.match(en, /Ended – figures stay visible/);
+});
