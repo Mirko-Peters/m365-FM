@@ -60,7 +60,7 @@ Microsoft's page names four site-level controls:
 
 The page adds a gap: you cannot yet apply a sensitivity label directly to an .agent file, so the label route protects the content that agents read, not the agent files themselves.
 
-Use these in combination. Restricted access control closes a site. Restricted content discovery hides it from agents. DLP keeps labeled files out of answers. Each solves a different problem, and none replaces a clean permission model.
+Use these in combination. Restricted access control closes a site. Restricted content discovery hides it from agents. DLP keeps labeled files out of answers. Each solves a different problem, and none replaces a clean permission model. Keeping these choices written down is part of [Copilot governance](https://www.m365.fm/entity/copilot-governance/).
 
 ## How do admins see and block agents?
 
