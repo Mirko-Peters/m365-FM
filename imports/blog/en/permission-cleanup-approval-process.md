@@ -29,7 +29,7 @@ The technical part of a cleanup is often easy. You can list stale entries with a
 
 A decision process fixes this by removing guesswork. It states which removals are routine, which need a look, and who decides each one. It is a small piece of [SharePoint governance](https://www.m365.fm/entity/sharepoint-governance/), and it connects directly to [decision rights](https://www.m365.fm/entity/decision-rights/): who may decide, who may approve and who may override.
 
-The goal is not to add bureaucracy. The goal is speed with control, so that low-risk work moves quickly and higher-risk work gets the attention it needs. A scheduled review, with a clear path from findings to decision, keeps the backlog from growing again.
+The goal is speed with control: low-risk work moves quickly, and higher-risk work gets the attention it needs.
 
 ## A permission cleanup approval process in three lanes
 
@@ -43,7 +43,7 @@ The itsm.tools guide to [change enablement](https://itsm.tools/change-enablement
 
 Translate that to access cleanup:
 
-1. **Routine lane (pre-approved).** Removing the access of a person who has left, removing an expired guest, or removing an individual user from a site where the same person already has access through a group. Write the procedure once, approve it once, and let administrators run it.
+1. **Routine lane (pre-approved).** Removing the access of a person who has left (deprovisioning), removing an expired guest, or removing an individual user from a site where the same person already has access through a group. Write the procedure once, approve it once, and let administrators run it.
 2. **Reviewed lane (named approver).** Removing a department's access, breaking up a large group, or removing company-wide access from a site that people use. A site owner or the administrator reviews each case and approves or declines.
 3. **Urgent lane (fast, then review).** Removing access to a site that holds sensitive data that is open to everyone. A named person can act at once, and the owner and the security contact are told afterward and review the result.
 
@@ -84,6 +84,14 @@ The page also gives limits: up to 100 sites per batch from the report view, and 
 
 Use the owner's answer as the sign-off for the reviewed lane. The owner decided, the record shows it, and the administrator did the work.
 
+## After approval: confirm the removal and plan the next review
+
+Approval is not the end. In our view, the review process closes only when someone confirms that the revocation worked. Re-run the report that found the candidate, or open the permissions of the SharePoint site, and check that the entry is gone and that no group membership still grants the same user access. Record the date and the name of the person who checked.
+
+Then set a rhythm for recertification. Our suggestion is a quarterly review for sites with sensitive data and a yearly review for the rest, adjusted to your own risk. At each review, record a review decision for every flagged entry, so that stale entitlements do not build up again.
+
+Exceptions need a decision rule too. If a person cannot lose access without interrupting active work, grant an explicit, time-limited exception, name who gave the approval, and set an end date. Then the remediation is delayed, not forgotten.
+
 ## Tell users before you remove access
 
 Communication is part of the process, not an extra. A short notice before the change avoids angry calls afterward:
@@ -93,7 +101,7 @@ Communication is part of the process, not an extra. A short notice before the ch
 - **When** it takes effect.
 - **How** to ask for access back, and whom to contact.
 
-Send it to the site owner and to the affected users, and keep the tone calm. Give a short window for objections on reviewed items. For routine items, such as a departed employee, no notice to the person is needed, but the owner should still see the change.
+Send it to the site owner and to the affected users. Give a short window for objections on reviewed items. For routine items, such as a departed employee, no notice to the person is needed, but the owner should still see the change.
 
 ## Example: a one-week setup
 
