@@ -34,6 +34,9 @@ unbekannte Felder sind deshalb ein Fehler):
         "posts": ["/community/u/mirko-p/blog/<slug>/"], optional: Blogbeitraege (Pfad, mit oder ohne Sprachpraefix);
                                                    gilt fuer alle Sprachfassungen, dauerhaft
         "go": "acme-2026-12"                        optionaler aktiver Linkcode aus dem Sponsor-Dashboard
+        "lead_topics": ["lean-management"],         optional: Themen-Entitaeten (ids), zu denen das Lead-Formular des Sponsors (Firma aus "entities") auch auf
+                                                   Blogbeitraegen, Folgen und Sprachseiten erscheint, die eines davon verlinken (Kasten "Anzeige" vor dem Seitenende).
+                                                   Nur waehrend der Laufzeit; unbekannte ids werden ignoriert (Warnung). Ohne das Feld: Formular nur auf der Firmenseite
       }
     ]
   }
@@ -54,7 +57,7 @@ I18N = Path(__file__).parent / "data" / "py_i18n.json"
 ENV = "M365_SPONSORSHIPS"
 LABELS = ("sponsored", "advertisement")
 TOPIC_TYPES = ("product", "platform", "concept", "category", "cert")
-REC_KEYS = ("id", "sponsor", "label", "start", "end", "entities", "topics", "episodes", "posts", "go", "note", "manager")
+REC_KEYS = ("id", "sponsor", "label", "start", "end", "entities", "topics", "episodes", "posts", "go", "note", "manager", "lead_topics")
 # Mirko 6.11.2026: Entitaeten des Sponsors (Firma + Produkte) sind bei gesponserten Inhalten EXTRA zur Obergrenze von 10 Themen, solange das Sponsoring
 # laeuft und GRACE_MONTHS danach. Umgesetzt als 182 Tage (6 x ~30,4 Tage) nach "end", nicht als Kalendermonate: Tag 182 zaehlt noch, Tag 183 nicht mehr.
 GRACE_MONTHS = 6   # Mirko 6.11.2026
@@ -78,7 +81,7 @@ class SponsorshipError(ValueError):
 
 
 def _empty():
-    return {"recs": [], "ent": {}, "own": set(), "ep": {}, "vid": {}, "post": {}, "post_refs": {}, "today": ""}
+    return {"recs": [], "ent": {}, "own": set(), "ep": {}, "vid": {}, "post": {}, "post_refs": {}, "today": "", "lead": [], "lead_ent": {}}
 
 
 _S = None   # Zustand nach init(); ohne init() wird die Datei beim ersten Zugriff nur mit Aufbau-Pruefung geladen
@@ -151,6 +154,10 @@ def check_structure(d):
             errs.append(f'{w}: "go" muss ein aktiver Linkcode aus a-z, 0-9 und Bindestrich sein')
         s, e = _day(r.get("start")), _day(r.get("end"))
         if "note" in r and (not isinstance(r["note"], str) or len(r["note"]) > 400): errs.append(f'{w}: "note" muss ein Text bis 400 Zeichen sein (interne Notiz, wird nicht angezeigt)')
+        if "lead_topics" in r:
+            lt = r["lead_topics"]
+            if not isinstance(lt, list) or not all(isinstance(x, str) and _ID.match(x) for x in lt) or len(set(lt)) != len(lt) or len(lt) > 60:
+                errs.append(f'{w}: "lead_topics" muss eine Liste von Entitaets-ids ohne Doppelte sein (hoechstens 60)')
         mg = r.get("manager")
         if mg is not None and (not isinstance(mg, dict) or set(mg) - {"handle", "entity"} or not re.fullmatch(r"[a-z0-9][a-z0-9-]{1,63}", str(mg.get("handle", "")))
                                or ("entity" in mg and not re.fullmatch(r"[a-z0-9][a-z0-9-]{1,63}", str(mg.get("entity"))))):
@@ -239,6 +246,9 @@ def init(today, ents, episodes=(), dubs=None, orig=None, path=None):
         print("WARNUNG (SITE_OFFLINE=1) Sponsorings:\n - " + "\n - ".join(ref)); ref = []
     _fail(errs + ref)
     st = _index(recs, today, dubs or {}, orig or {})
+    st["lead"], unknown = lead_index(recs, st["today"], ents)
+    st["lead_ent"] = lead_entities(recs, st["today"], ents)
+    if unknown: print("WARNUNG Sponsorings: lead_topics ohne Entitaet (ignoriert): " + ", ".join(sorted(unknown)))
     print(f"Sponsorings: {len(recs)} Eintraege, {sum(1 for r in recs if _active(r, st['today']))} laufend; gekennzeichnet: {len(st['ent'])} Entitaetsseiten, "
           f"{len(st['ep'])} Folgen der Show, {len(st['vid'])} Videos (Dub-Folgen), {len(st['post'])} Beitraege")
     return st
@@ -275,6 +285,40 @@ def _index(recs, today, dubs, orig):
             st["post_refs"].setdefault(k, []).append((r["id"], x)); add(st["post"], k, r)
     _S = st
     return st
+
+
+def lead_index(recs, today, ents):
+    """Lead-Formular auf Beitraegen und Folgen: [{"org": id der Sponsor-Firma, "name", "topics": {ids}}] fuer laufende Sponsorings mit "lead_topics".
+    Themen = lead_topics (nur bekannte ids) plus Firma und ihre Produkte. -> (Liste, unbekannte ids)"""
+    out, unknown = [], set()
+    for o in active_sponsor_orgs(today, ents, recs):
+        r = o["rec"]
+        if not r.get("lead_topics") or any(x["org"] == o["id"] for x in out): continue
+        known = [t for t in r["lead_topics"] if t in ents]; unknown.update(t for t in r["lead_topics"] if t not in ents)
+        out.append({"org": o["id"], "name": o["name"], "topics": set(known) | set(sponsor_extra_entities(o["id"], today, ents, recs))})
+    return out, unknown
+
+
+def lead_entities(recs, today, ents):
+    """Entitaetsseiten mit Lead-Formular: {entity-id: {"org", "name"}} = Sponsor-Firma und ihre Produkte (Polaris und die Module bei iFAKT)."""
+    out = {}
+    for o in active_sponsor_orgs(today, ents, recs):
+        for x in sponsor_extra_entities(o["id"], today, ents, recs):
+            out.setdefault(x, {"org": o["id"], "name": o["name"]})
+    return out
+
+
+def lead_org_of(eid):
+    """Sponsor-Firma, deren Lead-Formular auf der Entitaetsseite eid steht (die Firma selbst oder eines ihrer Produkte), sonst None."""
+    return (_state().get("lead_ent") or {}).get(eid)
+
+
+def lead_for_page(topics):
+    """Sponsor-Firma, deren Lead-Formular zu den Themen (verlinkte Entitaeten) einer Seite passt, sonst None. Reihenfolge der Sponsorings."""
+    ts = set(topics or [])
+    for x in (_state().get("lead") or []):
+        if x["topics"] & ts: return x
+    return None
 
 
 def _in_grace(r, today):

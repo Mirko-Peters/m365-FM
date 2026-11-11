@@ -864,7 +864,8 @@ def build(g, wiki_links, experts_by_ent, ep_find):
                       + (f'<li>{esc(T(lang, "M365.FM episodes on this topic", "M365.FM-Folgen zum Thema"))}: {len(eps)}</li>' if eps else "") + (f'<li>{esc(T(lang, "Articles on this topic", "Artikel zum Thema"))}: {len(_arts)}</li>' if _arts else "") + MEN.src_li(lang, e["id"]) + "</ul></section>") if (_src or eps or _arts or MEN.for_entity(e["id"])) else ""
             _dt = disclosure_of(e, lang)   # Transparenzhinweis (z. B. Arbeitgeber des Hosts), kein Sponsoring: keine rel=sponsored-Links
             _disc = f'<p class="en-disc" role="note" style="{SPM.NOTE_STYLE}">{esc(_dt)}</p>' if _dt else ""
-            _lead = ADS.sponsor_lead(BASE, lang, e["id"], e["name"]) if any(o["id"] == e["id"] for o in SPM.active_sponsor_orgs(SPM._state()["today"], ENTS)) else ""   # Lead-Formular nur bei laufendem Sponsoring der Firma
+            _lo = SPM.lead_org_of(e["id"]) or (dict(org=e["id"], name=e["name"]) if any(o["id"] == e["id"] for o in SPM.active_sponsor_orgs(SPM._state()["today"], ENTS)) else None)
+            _lead = ADS.sponsor_lead(BASE, lang, _lo["org"], _lo["name"]) if _lo else ""   # Lead-Formular bei laufendem Sponsoring: auf der Firmenseite und auf den Seiten ihrer Produkte (z. B. Polaris und Module)
             _au = ENTS.get(AUTHOR_EID)
             updline = (f'<p class="mut en-upd">' + (f'{esc(T(lang, "Maintained by", "Gepflegt von"))} <a href="{root}{AUTHOR_EID}/">{esc(_au["name"])}</a> (Microsoft MVP) · ' if _au and e["id"] != AUTHOR_EID else "")
                        + f'{esc(T(lang, "Last updated", "Zuletzt aktualisiert"))}: <time datetime="{_mod}">{_mod}</time></p>')

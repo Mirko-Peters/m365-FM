@@ -179,6 +179,28 @@ def _con_block(lang, base="", today=None):
 
 
 def inject(base, body, lang, canonical, noindex=False, today=None):
+    """Werbeplaetze (_inject) und danach, wo es passt, das Lead-Formular eines Sponsors mit lead_topics (_inject_lead)."""
+    return _inject_lead(base, _inject(base, body, lang, canonical, noindex, today), lang, canonical, noindex)
+
+
+def _inject_lead(base, body, lang, canonical, noindex=False):
+    """Lead-Formular eines laufenden Sponsors (data/sponsorships.json, lead_topics) am Ende des Textbereichs von Blogbeitraegen, Folgen und Sprachseiten,
+    die ein passendes Thema (verlinkte Entitaet) haben. Nie auf Entitaetsseiten (dort steht der Kasten schon), nie doppelt, nie auf noindex-Seiten."""
+    if noindex or "data-sponsor-lead=" in body:
+        return body
+    pt = page_type(base, canonical)
+    if pt not in ("blog", "episode", "lang"):
+        return body
+    import site_sponsorships as SPM
+    lead = SPM.lead_for_page(page_topics(base, canonical, body, limit=60))
+    a, z = _region(body)
+    if not lead or a < 0:
+        return body
+    block = sponsor_lead(base, lang, lead["org"], lead["name"], pt=pt, script="window.M365AD=" not in body)
+    return body[:z] + block + body[z:]
+
+
+def _inject(base, body, lang, canonical, noindex=False, today=None):
     """Fuegt hoechstens zwei Bloecke ein: einen nach dem 2. Abschnitt (<h2>), einen vor dem Footer.
     AdSense aus (Mirko, 5.11.2026): nur eigene Banner - in der Mitte bis CON_UNTIL die M365Con, vor dem Footer die Services."""
     if noindex:
@@ -387,14 +409,14 @@ def slot_script(base, lang):
     return f'<script>window.M365AD={cfg}</script><script defer src="{base}/assets/ads.js?v={v}"></script>'
 
 
-def sponsor_lead(base, lang, eid, name):
+def sponsor_lead(base, lang, eid, name, pt="entity", script=True):
     """Lead-Formular eines laufenden Sponsors (data/sponsorships.json) auf der Firmen-Entitaetsseite: gekennzeichneter Kasten mit Button.
     Das Formular ist das bestehende Lead-Formular (assets/ads.js, POST /api/ads/lead); ads.js und Konfiguration kommen nur auf Seiten mit diesem Kasten."""
     t = texts(lang, "slot")
     btn = escape(t["contact"].replace("{org}", name))
-    return (f'<section class="ad ad-own en-lead" role="note" data-pt="entity" style="border:1px solid var(--bd);border-inline-start:4px solid var(--ac,#0a5);background:var(--card);'
+    return (f'<section class="ad ad-own en-lead" role="note" data-pt="{escape(pt)}" style="border:1px solid var(--bd);border-inline-start:4px solid var(--ac,#0a5);background:var(--card);'
             f'padding:.6em .9em;border-radius:.4em;margin:.5em 0 .8em"><small><strong>{escape(T(lang, "Sponsored", "Anzeige"))}</strong></small><p style="margin:.3em 0 .5em">{escape(name)}</p>'
-            f'<button type="button" class="btn main" data-sponsor-lead="{escape(eid)}" data-pt="entity">{btn}</button></section>') + slot_script(base, lang)
+            f'<button type="button" class="btn main" data-sponsor-lead="{escape(eid)}" data-pt="{escape(pt)}">{btn}</button></section>') + (slot_script(base, lang) if script else "")
 
 
 def inject_slots(base, body, lang, canonical, today=None):
