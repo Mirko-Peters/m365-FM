@@ -25,11 +25,11 @@ SharePoint audit questions for compliance teams are best asked early, in writing
 
 ## Before you ask: what an administrator can answer
 
-A SharePoint administrator can tell you how the tenant is configured and can pull reports. The administrator cannot decide what the organization must keep for [compliance](https://www.m365.fm/entity/compliance/), who should have access to payroll files or what your auditor will accept. Those are decisions for the business, and they belong in [SharePoint governance](https://www.m365.fm/entity/sharepoint-governance/), not in the administrator's inbox.
+A SharePoint administrator can tell you how the tenant is configured and can pull reports. The administrator cannot decide what the organization must keep for [compliance](https://www.m365.fm/entity/compliance/), who should have access to payroll files or what your auditor will accept. Those are decisions for the business, and they belong in [SharePoint governance](https://www.m365.fm/entity/sharepoint-governance/), not in the administrator's inbox, and they sit within wider data governance.
 
-So begin by agreeing on scope, because good preparation saves rework later. Which sites hold regulated or sensitive data, for which period and under which rules? Name the audit period, such as the last twelve months. Then ask the questions below for those sites first. This is the practical side of [audit readiness](https://www.m365.fm/entity/audit-readiness/): being able to produce dated, retained evidence without rebuilding it by hand.
+So begin by agreeing on scope, because good preparation saves rework later. Which sites hold regulated or sensitive data, for which period and under which rules, such as GDPR or HIPAA compliance? Name the audit period, such as the last twelve months. Then ask the questions below for those sites first. This is the practical side of [audit readiness](https://www.m365.fm/entity/audit-readiness/): being able to produce dated, retained evidence without rebuilding it by hand.
 
-Auditors look at the whole SharePoint environment, not one site. A compliance audit usually touches SharePoint security, data security and the compliance standards your organization has signed up to. Preparation should cover the compliance risks that matter most: security risks around sensitive data, data access by many people, and the best practices your own policy sets. Include OneDrive and other workloads if they hold the same data, and treat the work as risk management, not as a one-off security audit of every setting.
+Auditors look at the whole SharePoint environment, not one site. A compliance audit usually touches SharePoint security, data security and the compliance standards your organization has signed up to. Preparation should cover the compliance risks that matter most: security risks around sensitive data, data access by many people, and the best practices your own policy sets. Include OneDrive and other workloads if they hold the same data, and treat the work as risk management, not as a one-off security audit.
 
 Ask for written answers, and ask for dates. A reply such as "yes, we review access" is weak. A reply such as "owners confirmed access on 14 March, and the export is stored here" is evidence.
 
@@ -47,7 +47,7 @@ Start with who answers for each site. Without an owner, every other control has 
 
 Reviewers often start with access, because it is the easiest control to test.
 
-1. **How is access given?** The good answer is groups with an owner, not a long list of individual entries.
+1. **How is access given?** The good answer is groups with an owner, not a long list of individual entries, and few items that break permission inheritance.
 2. **How often is access reviewed, and who does it?** Ask for the last completed review and its result. Microsoft's site access review feature lets administrators send a review to the owners of flagged sites, and records who completed it and when, if you use it. Ask whether it is in use.
 3. **Is external sharing allowed, for which sites, and with which type of link?** Ask for the tenant setting and any site-level exceptions, and ask which sensitivity labels or access control settings apply to sensitive information on those sites.
 4. **Can you list every guest and every "anyone" link on the regulated sites?** Ask for an export with dates.
@@ -68,6 +68,19 @@ Questions to ask:
 5. **How long does a change take to apply?** The page says to allow up to seven days for policies and auto-apply labels to take effect, so a policy created the week before an audit may not be in force yet.
 
 If you use records or regulatory records, ask how disposal is documented. Microsoft states that deletions of regulatory records produce proof of disposition for up to seven years.
+
+## Ask about classification and data loss prevention
+
+Retention says how long to keep data. Classification and data loss prevention (DLP) say how to protect it. Microsoft's [DLP overview](https://learn.microsoft.com/en-us/purview/dlp-learn-about-dlp) describes DLP policies that identify, monitor and automatically protect sensitive information such as financial data, credit card numbers, health records or Social Security numbers. The page lists SharePoint and OneDrive among the covered locations.
+
+Questions to ask:
+
+1. **Which DLP policies cover the regulated sites, and are they enforcing or still in simulation mode?** Microsoft states that the actions in a policy are not applied in simulation mode.
+2. **What happens when a policy matches?** Microsoft lists policy tips, blocking with or without an override, and email notifications as options.
+3. **Where can we see the matches?** The page says DLP-monitored activities are recorded to the Microsoft 365 audit log by default and shown in Activity explorer, which covers the last 30 days. DLP alerts stay in the Microsoft Defender portal for six months.
+4. **Which sensitivity labels classify the data, and who may change them?**
+
+The Activity explorer window is short next to a twelve-month audit period, so export your evidence on a regular schedule.
 
 ## Ask about audit logs and evidence
 
@@ -91,7 +104,7 @@ A compliance officer prepares for an audit that covers the last twelve months. S
 
 The administrator answers 12 of them well. Two answers worry her. The tenant has Audit (Standard) only, so logs reach back 180 days, about six months, and the audit period is twelve months. Also, 9 of the 40 regulated sites have only one owner.
 
-She does not panic. She asks the administrator to price the longer retention and meanwhile exports the sharing and access reports each month, stored with dates. The administrator assigns second owners to the 9 sites within a week and records the date. At the audit, she explains the gap, shows the monthly exports and the ownership fix, and the auditor notes it as an improvement already in progress.
+She asks the administrator to price the longer retention and meanwhile exports the sharing and access reports each month, stored with dates. The administrator assigns second owners to the 9 sites within a week and records the date. At the audit, she explains the gap, shows the monthly exports and the ownership fix, and the auditor notes it as an improvement already in progress.
 
 ## Common mistakes
 
