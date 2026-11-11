@@ -466,18 +466,49 @@ def _plain(s):
     return re.sub(r"<[^>]+>|&\w+;|[\W\d_]", "", s)
 
 
+# Technische Einheiten: Code, Links, Pfade und reine Namen-Zeilen (Zertifikate, Regionen, Werkzeuglisten) bleiben nach der Regel im System-Prompt
+# unveraendert. Ohne diese Ausnahme fielen sie bei jedem Versuch durch die Pruefung, blieben fuer immer offen und wurden jedes Mal neu angefragt.
+CODEY = re.compile(r"[/\\=(){}\[\]_@#$%|<>]|https?:|\w\.\w{2,}")
+STOP = frozenset("a an the and or but of to in on at for with from by as is are was were be been it its this that these those you your we our they their he she his her "
+                 "not no can will would should could may might do does did have has had how what why when where which who whom if then than so about into over under up out more most "
+                 "all any each every some such only also just very".split())
+
+
+PATHY = re.compile(r"[/\\=_@#$%|]|https?:|\w\.\w{2,}")   # wie CODEY, aber ohne Klammern: "(영국)" ist Text, kein Code
+
+
+def _technical(src):
+    """True, wenn die Quelle nach Abzug von <code>, Tags, Links und Code-Woertern kein englisches Funktionswort enthaelt: Code oder reine Namen-Zeile, nie Fliesstext.
+    "for", "of" und "and" gelten innerhalb gross geschriebener Namen nicht als Funktionswort ("Microsoft Defender for Endpoint", "Security and Compliance")."""
+    s = re.sub(r"<code\b[^>]*>.*?</code>|<pre\b[^>]*>.*?</pre>", " ", src, flags=re.S | re.I)
+    s = re.sub(r"<[^>]+>|&\w+;", " ", s)
+    words = [w for t in s.split() if not CODEY.search(t) for w in re.findall(r"[A-Za-z]+", t)]
+    glue = {"for", "of", "and"}
+    if any(w.lower() in STOP and w.lower() not in glue for w in words): return False
+    return all(w[0].isupper() or w.lower() in glue for w in words) if any(w.lower() in glue for w in words) else True
+
+
+def _without_names(out, src):
+    """Entfernt aus der Ausgabe Woerter, die in der Quelle als Name stehen (Grossbuchstabe darin: Google, eDiscovery, ESG) sowie Code-Woerter und Links."""
+    names = {w for w in re.findall(r"[A-Za-z][A-Za-z0-9]*", re.sub(r"<[^>]+>", " ", src)) if re.search(r"[A-Z]", w)}
+    out = " ".join(t for t in re.sub(r"<[^>]+>", " ", out).split() if not PATHY.search(t))
+    return re.sub(r"[A-Za-z][A-Za-z0-9]*", lambda m: " " if m.group(0) in names else m.group(0), out)
+
+
 def qa(lang, src, out):
     """Gibt (ok, grund, warnung) zurueck. Harte Fehler -> Segment wird nicht gespeichert und spaeter neu uebersetzt."""
     if not out.strip(): return False, "leer", None
     if sorted(TAG.findall(src)) != sorted(TAG.findall(out)): return False, "html-tags", None
     if sorted(HREF.findall(src)) != sorted(HREF.findall(out)): return False, "links", None
-    if lang in SCRIPT and len(_plain(src)) >= 20:
+    same = out.strip() == src.strip()
+    if lang in SCRIPT and len(_plain(src)) >= 20 and not (same and _technical(src)):
         # Code und Produktnamen bleiben lateinisch (Regel im System-Prompt) und zaehlen hier nicht mit, sonst fiele z. B. ein
-        # reiner <code>-Absatz oder "Azure Center for SAP solutionsとは何ですか？" bei jedem Versuch durch
-        alpha = _plain(out); raw = len(re.findall(f"[{SCRIPT[lang]}]", alpha)); own = raw * DENSE.get(lang, 1)
-        if own < 0.25 * max(1, own + len(alpha) - raw): return False, "falsche-schrift", None
+        # reiner <code>-Absatz oder "Azure Center for SAP solutionsとは何ですか？" bei jedem Versuch durch.
+        # Dasselbe gilt fuer Namen, die schon in der Quelle gross geschrieben stehen ("Google Cloud Identity と Google Workspace の違い").
+        alpha = _plain(_without_names(out, src)); raw = len(re.findall(f"[{SCRIPT[lang]}]", alpha)); own = raw * DENSE.get(lang, 1)
+        if alpha and (own < 0.25 * max(1, own + len(alpha) - raw) or (raw == 0 and not _technical(src))): return False, "falsche-schrift", None
     words = re.findall(r"[a-zA-Z]+", re.sub(r"<[^>]+>", " ", src))
-    if lang not in SCRIPT and out.strip() == src.strip() and len(words) >= 8: return False, "unuebersetzt", None
+    if lang not in SCRIPT and same and len(words) >= 8 and not _technical(src): return False, "unuebersetzt", None
     if len(src) >= 80 and not (0.3 <= len(out) / len(src) <= 5): return False, "laenge", None
     miss = [k for k in KEEP if re.search(rf"(?<!\w){re.escape(k)}(?!\w)", src) and k not in out]
     return True, None, (("name-fehlt:" + ",".join(miss[:4])) if miss else None)
