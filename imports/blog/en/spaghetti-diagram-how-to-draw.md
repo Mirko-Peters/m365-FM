@@ -23,7 +23,7 @@ faq:
 
 A [spaghetti diagram](https://www.m365.fm/entity/spaghetti-diagram/) is a drawing of the actual path that a person, a part or a vehicle takes across a floor plan. Tangled, crossing and long lines show unnecessary walking and transport. This guide is for continuous improvement managers who need a quick way to show walking waste and agree on what to change. You will learn how to draw one, how to read it, a worked example with distances, and how to follow up so the picture leads to a changed layout.
 
-## What a spaghetti diagram shows
+## What the diagram shows
 
 The American Society for Quality (ASQ) defines a [spaghetti diagram](https://asq.org/quality-resources/spaghetti-diagram) as a visual representation using a continuous flow line that traces the path of an item or activity through a process. It helps teams spot redundant steps and ways to speed up the work. ASQ's example is a health department office that studied the walking between frequent tasks and then rearranged work areas.
 

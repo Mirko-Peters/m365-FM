@@ -5,7 +5,7 @@ status: approved
 publish: true
 author: mirko-p
 date: 2026-11-11
-topics: [digital-twin, polaris-designer, industry-4-0]
+topics: [digital-twin, polaris-designer, industry-4-0, manufacturing-execution-system]
 keypoints:
   - "Digital twin projects rarely fail because of the software; they fail because no decision depends on the twin, the data is not trusted, or nobody owns the model."
   - "Before you start, name the decision the twin will change, who takes it and by when. If you cannot, the project is not ready."

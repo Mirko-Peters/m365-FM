@@ -89,4 +89,4 @@ An [enterprise resource planning](https://www.m365.fm/entity/enterprise-resource
 
 ## Next step
 
-Pick ten items with the highest stock value, check their safety stock parameters against the last year of demand and delivery data, and recalculate with one of the formulas above. Then ask for each item what a stockout would really cost, which is the question that decides how much safety stock is enough.
+Pick ten items with the highest stock value, check their parameters against the last year of demand and delivery data, and recalculate with one of the formulas above. Then ask for each item what a stockout would really cost, which is the question that decides how much safety stock is enough.

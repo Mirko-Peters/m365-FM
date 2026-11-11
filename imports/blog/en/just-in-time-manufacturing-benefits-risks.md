@@ -5,7 +5,7 @@ status: approved
 publish: true
 author: mirko-p
 date: 2026-11-11
-topics: [just-in-time, pull-system, kanban]
+topics: [just-in-time, pull-system, kanban, oee]
 keypoints:
   - "Just-in-time (JIT) means making only what the next step needs, when it needs it and in the amount it needs, and it is one of the two pillars of the Toyota Production System."
   - "JIT does not mean zero inventory: Toyota describes small minimum stocks, with each process replenishing what the next one takes."
