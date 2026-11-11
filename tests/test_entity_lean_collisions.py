@@ -44,5 +44,11 @@ class Kollisionen(unittest.TestCase):
         self.assertIn("Pufferbestand", RAW["safety-stock"]["aliases"])
 
 
+class Dateiformat(unittest.TestCase):
+    def test_wie_json_dumps(self):   # ohne Zeilenumbruch am Ende; ein Cherry-Pick aus einer Basis mit Umbruch haengt ihn sonst still an
+        raw = (ROOT / "data" / "entities.json").read_text("utf-8")
+        self.assertTrue(raw == json.dumps(json.loads(raw), ensure_ascii=False, indent=1), "data/entities.json nicht im Format json.dumps(..., ensure_ascii=False, indent=1) ohne Umbruch am Ende")
+
+
 if __name__ == "__main__":
     unittest.main()
