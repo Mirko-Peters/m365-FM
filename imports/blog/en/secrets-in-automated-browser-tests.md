@@ -78,6 +78,14 @@ Multi-factor authentication makes automation harder, and that is the point of it
 
 A test-only bypass route is a real risk. TestDino says it should be gated behind an environment variable check and never deployed to production. Treat any shortcut that skips sign-in as a security feature that needs its own review.
 
+## Choose test scenarios that need a real sign-in
+
+Not every test case needs a live login. As part of your testing strategy, we suggest keeping one or two end-to-end test scenarios that drive the real sign-in page in a real browser, and letting the other functional tests start from saved state or from a sign-in through APIs, as in API testing. That limits how often secrets are typed, speeds up test execution and still covers the sign-in flow.
+
+Put the sign-in steps in one place, such as a page object model class or a shared fixture, so that a change to the login page or to the way secrets are read touches a single automation script. If you automate login steps by copying them into every test, that is a common source of leaks, and it makes a flaky test more likely when the page changes.
+
+Keep manual testing and exploratory testing of the sign-in screens on accounts that the automation does not use, because shared logins cause lockouts and unclear audit trails. Add a small security testing check to the same parallel execution run, for example a search of the reports for tokens. Whichever automation tool you choose, the rules for secrets do not change.
+
 ## Example: a 30-minute audit
 
 The numbers are made up.
