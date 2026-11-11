@@ -471,6 +471,8 @@ def load_entities(api):
             for k in REPO_KEYS:   # Felder ohne Formularfeld: fehlen sie in der D1-Fassung (Formular-Bearbeitung, selbst verwaltete Entitaet), gilt die Repo-Fassung
                 if k not in rec and (base.get(it["id"]) or {}).get(k):
                     rec[k] = base[it["id"]][k]
+            if not rec.get("wikidata") and (base.get(it["id"]) or {}).get("wikidata"):   # Wikidata-Nummer der Redaktion gilt, solange sie im Formular leer ist
+                rec["wikidata"] = base[it["id"]]["wikidata"]
             base[it["id"]] = rec
     return base
 

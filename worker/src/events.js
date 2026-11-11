@@ -626,11 +626,12 @@ export async function handleEvents(env, request, url, path, user, J) {
   }
   if (path === "/api/entity/claim/mine" && method === "GET") {
     if (need()) return need();
-    return J({ claims: (await db.prepare("SELECT eid,status,fwd_mask,verified_via,verified_domain FROM entity_claims WHERE user_id=?").bind(user.id).all()).results || [] });
+    // evidence: Adress-Nachweis eingereicht (0046) - die Oberflaeche zeigt offene Beanspruchungen im Reiter "Firmen" auch ohne eigene Firma
+    return J({ claims: (await db.prepare("SELECT c.eid,c.status,c.fwd_mask,c.verified_via,c.verified_domain,(ev.eid IS NOT NULL) evidence FROM entity_claims c LEFT JOIN entity_claim_evidence ev ON ev.eid=c.eid AND ev.user_id=c.user_id WHERE c.user_id=?").bind(user.id).all()).results || [] });
   }
   if (path === "/api/admin/entity/claims" && method === "GET") {
     const g = await gate(db, user, "queue.review"); if (!g.ok) return J({ error: "forbidden" }, 403);   // Editoren und Admin (perm.js can())
-    const rows = (await db.prepare("SELECT c.eid,c.user_id,c.via,c.status,c.fwd_mask,c.verified_domain,u.name,u.provider,p.handle,up.real_name,cr.picture FROM entity_claims c JOIN users u ON u.id=c.user_id LEFT JOIN profiles p ON p.user_id=c.user_id LEFT JOIN user_prefs up ON up.user_id=c.user_id LEFT JOIN entity_claim_review cr ON cr.eid=c.eid WHERE c.status IN ('pending','email_sent','forwarded')").all()).results || [];
+    const rows = (await db.prepare("SELECT c.eid,c.user_id,c.via,c.status,c.fwd_mask,c.verified_domain,u.name,u.provider,p.handle,up.real_name,cr.picture,ev.street ev_street,ev.zip ev_zip,ev.city ev_city,ev.country ev_country,ev.note ev_note,ev.link ev_link,ev.addr_match ev_match FROM entity_claims c JOIN users u ON u.id=c.user_id LEFT JOIN profiles p ON p.user_id=c.user_id LEFT JOIN user_prefs up ON up.user_id=c.user_id LEFT JOIN entity_claim_review cr ON cr.eid=c.eid LEFT JOIN entity_claim_evidence ev ON ev.eid=c.eid AND ev.user_id=c.user_id WHERE c.status IN ('pending','email_sent','forwarded')").all()).results || [];
     const entities = await entityMap(env);
     const dv = (await db.prepare("SELECT c.eid,c.verified_domain domain,u.name FROM entity_claims c JOIN users u ON u.id=c.user_id WHERE c.status='verified' AND c.verified_via='domain_email' ORDER BY c.created DESC LIMIT 20").all()).results || [];
     return J({ domain_verified: dv.filter((r) => inScope(g.actor, { topics: [r.eid] })), claims: rows.filter((r) => inScope(g.actor, { topics: [r.eid] })).map((r) => {
@@ -638,7 +639,9 @@ export async function handleEvents(env, request, url, path, user, J) {
       const linkedin = r.via === "linkedin" && r.provider === "linkedin";
       const link = linkedin ? (Array.isArray(entity.same_as) ? entity.same_as : []).find(linkedinProfile) || "" : "";
       const name_match = norm(name).join(" ") === norm(entityName).join(" ") ? "equal" : similarName(name, entityName) ? "similar" : "different";
-      return { eid: r.eid, user_id: r.user_id, name, handle: r.handle, via: r.via, status: r.status, fwd_mask: r.fwd_mask, proof_domain: r.via === "domain_email" ? r.verified_domain : "", entity_name: entityName, linkedin_url: link, name_match: linkedin ? name_match : "", picture: linkedin ? r.picture : "" };
+      return { eid: r.eid, user_id: r.user_id, name, handle: r.handle, via: r.via, status: r.status, fwd_mask: r.fwd_mask, proof_domain: r.via === "domain_email" ? r.verified_domain : "", entity_name: entityName, linkedin_url: link, name_match: linkedin ? name_match : "", picture: linkedin ? r.picture : "",
+        // Adress-Nachweis (0046): nur hier fuer die Redaktion sichtbar; address_match yes | no | unknown (keine Firmenadresse hinterlegt)
+        address: r.ev_street ? { street: r.ev_street, zip: r.ev_zip, city: r.ev_city, country: r.ev_country, note: r.ev_note, link: r.ev_link } : null, address_match: r.ev_street ? r.ev_match : "" };
     }) });
   }
   if (path === "/api/admin/entity/claim" && method === "POST") {
@@ -657,6 +660,7 @@ export async function handleEvents(env, request, url, path, user, J) {
         db.prepare("UPDATE entity_claims SET status='rejected',verified_via='revoked',fwd_mask='' WHERE eid=? AND status='verified' AND verified_via='domain_email'").bind(eid),
         db.prepare("UPDATE org_entity SET confirmed=0 WHERE eid=? AND org_id IN (SELECT org_id FROM org_members WHERE user_id=? AND status='active' AND role IN ('owner','admin'))").bind(eid, c.user_id),
         db.prepare("UPDATE entity_claim_mail SET used=1 WHERE eid=?").bind(eid),
+        db.prepare("DELETE FROM entity_claim_evidence WHERE eid=?").bind(eid),
       ]);
       // per Uebernahme erhaltene Paar-Firma (#311, adoptOrg) wieder unbeansprucht machen, wenn der Widerrufene ihr einziges Mitglied ist
       const o = await db.prepare("SELECT o.id FROM org_entity e JOIN orgs o ON o.id=e.org_id WHERE e.eid=? AND EXISTS (SELECT 1 FROM org_members m WHERE m.org_id=o.id AND m.user_id=? AND m.role='owner' AND m.status='active') AND (SELECT COUNT(*) FROM org_members m WHERE m.org_id=o.id AND m.status='active')=1").bind(eid, c.user_id).first();
@@ -685,6 +689,7 @@ export async function handleEvents(env, request, url, path, user, J) {
     if (!Number(updated.meta?.changes || 0)) return J({ error: "not_found" }, 404);
     await logEdit(db, g.actor, "claim.decide", "claim", eid, { reason: b.ok ? "Übernahme bestätigt" : "Übernahme abgelehnt", before: { status: claim.status }, after: { status } });
     await db.prepare("UPDATE entity_claim_mail SET used=1 WHERE eid=?").bind(eid).run();
+    await db.prepare("DELETE FROM entity_claim_evidence WHERE eid=?").bind(eid).run();   // Adress-Nachweis nur bis zur Entscheidung (wie entity_claim_review); die Geschaeftsadresse im Profil bleibt
     if (b.ok) { await db.prepare("UPDATE org_entity SET confirmed=1 WHERE eid=? AND org_id IN (SELECT org_id FROM org_members WHERE user_id=? AND status='active' AND role IN ('owner','admin'))").bind(eid, claim.user_id).run(); await adoptUnclaimedForEntity(db, claim.user_id, eid); }
     if (linkedIn) {
       const entity = (await entityMap(env)).get(eid), page = `${env.SITE}/entity/${eid}/`;
@@ -750,6 +755,8 @@ export async function purgeEntityClaimReview(db) {
   const cutoff = now() - 30 * 86400;
   const result = await db.prepare("UPDATE entity_claim_review SET email='',picture='' WHERE created<? AND (email<>'' OR picture<>'')").bind(cutoff).run();
   await db.prepare("DELETE FROM entity_claim_mail WHERE expires<?").bind(now() - 7 * 86400).run().catch(() => 0);
+  // Adress-Nachweise ohne offene Beanspruchung derselben Person (anders entschieden, zurueckgezogen) entfallen
+  await db.prepare("DELETE FROM entity_claim_evidence WHERE NOT EXISTS (SELECT 1 FROM entity_claims c WHERE c.eid=entity_claim_evidence.eid AND c.user_id=entity_claim_evidence.user_id AND c.status IN ('pending','email_sent','forwarded'))").run().catch(() => 0);
   return { cleared: Number(result.meta?.changes || 0) };
 }
 
