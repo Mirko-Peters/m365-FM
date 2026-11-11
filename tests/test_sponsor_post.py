@@ -3,6 +3,7 @@ site_content_blog.check, Zweiter Durchgang. Ohne Netz und ohne echte API: die Au
 import json
 import os
 import shutil
+import subprocess
 import sys
 import tempfile
 import unittest
@@ -235,6 +236,59 @@ class Taeglich(Base):
         n = SP.set_head_flags(t, "approved", True)
         self.assertTrue(n.startswith("---\ntitle: \"x\"\nstatus: approved\npublish: true\n---")); self.assertTrue(n.endswith("status: review\npublish: false\n"))
         with self.assertRaises(ValueError): SP.set_head_flags("kein Kopf", "approved", True)
+
+
+class WorkflowSave(unittest.TestCase):
+    """save() aus .github/workflows/sponsor-posts.yml in einem echten Git-Repo (lokales origin, kein Netz): das Kostenbuch wird auch ohne LinkedIn-Datei
+    gespeichert, data/sponsorships.json gehoert dazu, pull --rebase bei bewegtem main bleibt."""
+    def setUp(self):
+        if not shutil.which("git") or not shutil.which("bash"): self.skipTest("git/bash fehlt")
+        lines = (ROOT / ".github" / "workflows" / "sponsor-posts.yml").read_text("utf-8").splitlines()
+        a = lines.index("          save() {"); b = lines.index("          }", a)
+        self.save = "\n".join(x[10:] for x in lines[a:b + 1])
+        self.tmp = Path(tempfile.mkdtemp())
+        self.git = lambda cwd, *a: subprocess.run(["git", "-c", "user.name=t", "-c", "user.email=t@example.test", "-c", "init.defaultBranch=main", *a], cwd=cwd, check=True, capture_output=True, text=True).stdout
+        self.git(self.tmp, "init", "-q", "--bare", "origin.git")
+        seed = self.tmp / "seed"; seed.mkdir(); self.git(seed, "init", "-q")
+        (seed / "data").mkdir(); (seed / "imports" / "blog" / "en").mkdir(parents=True)
+        for n in ("spend.json", "sponsor_posts_cognillo.json", "sponsorships.json"): (seed / "data" / n).write_text("{}\n", "utf-8")
+        (seed / "imports" / "blog" / "en" / "alt.md").write_text("x\n", "utf-8"); (seed / "anderes.txt").write_text("a\n", "utf-8")
+        self.git(seed, "add", "-A"); self.git(seed, "commit", "-q", "-m", "start"); self.git(seed, "push", "-q", str(self.tmp / "origin.git"), "HEAD:main")
+        self.git(self.tmp, "clone", "-q", "-b", "main", "origin.git", "work"); self.work = self.tmp / "work"
+        self.git(self.work, "config", "user.name", "bot"); self.git(self.work, "config", "user.email", "bot@example.test")
+
+    def tearDown(self):
+        shutil.rmtree(self.tmp, ignore_errors=True)
+
+    def run_save(self, msg=""):
+        env = dict(os.environ, SPONSOR_COMMIT_MSG_FILE=str(self.tmp / "msg.txt"), GITHUB_STEP_SUMMARY=str(self.tmp / "summary.md"))
+        (self.tmp / "msg.txt").write_text(msg, "utf-8")
+        return subprocess.run(["bash", "-c", self.save + "\nsave"], cwd=self.work, env=env, capture_output=True, text=True)
+
+    def origin_file(self, path):
+        return self.git(self.tmp / "origin.git", "show", f"main:{path}")
+
+    def test_spend_is_saved_without_linkedin_file(self):
+        self.assertFalse((self.work / "data" / "sponsor_posts_linkedin_cognillo.json").exists())
+        (self.work / "data" / "spend.json").write_text('{"sponsor-cognillo": {"usd": 0.4}}\n', "utf-8")
+        r = self.run_save("Cognillo-Beitraege: Kostenbuch aktualisiert (kein Beitrag gespeichert)\n")
+        self.assertEqual(r.returncode, 0, r.stdout + r.stderr); self.assertNotIn("nichts zu speichern", r.stdout)
+        self.assertIn("0.4", self.origin_file("data/spend.json"))
+
+    def test_sponsorships_and_post_saved_with_rebase_on_moved_main(self):
+        other = self.tmp / "other"; self.git(self.tmp, "clone", "-q", "-b", "main", "origin.git", "other")
+        (other / "anderes.txt").write_text("b\n", "utf-8"); self.git(other, "commit", "-q", "-am", "anderer Bot"); self.git(other, "push", "-q", "origin", "HEAD:main")
+        (self.work / "data" / "sponsorships.json").write_text('{"posts": ["/community/u/mirko-p/blog/x/"]}\n', "utf-8")
+        (self.work / "imports" / "blog" / "en" / "x.md").write_text("neu\n", "utf-8")
+        r = self.run_save("Cognillo-Beitrag 2: Titel\n")
+        self.assertEqual(r.returncode, 0, r.stdout + r.stderr)
+        self.assertIn("mirko-p/blog/x", self.origin_file("data/sponsorships.json")); self.assertEqual(self.origin_file("imports/blog/en/x.md"), "neu\n")
+        self.assertEqual(self.origin_file("anderes.txt"), "b\n")   # Commit des anderen Bots bleibt
+        self.assertIn("Cognillo-Beitrag 2: Titel", self.git(self.tmp / "origin.git", "log", "-1", "--format=%s", "main"))
+
+    def test_nothing_to_save(self):
+        r = self.run_save()
+        self.assertEqual(r.returncode, 0); self.assertIn("nichts zu speichern", r.stdout)
 
 
 class Budget(Base):
