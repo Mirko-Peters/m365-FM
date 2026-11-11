@@ -2,7 +2,8 @@ name: Sponsor-Reihe Cognillo (schreiben, freigeben, taeglich live)
 # Drei Modi (Beschreibung: SPONSOR_POSTS.md im Hauptordner):
 #  schreiben  - von Hand: Sonnet schreibt die Beitraege (status: review, publish: false) und je 3 LinkedIn-Texte; es geht NICHTS live. Standard dry_run = nur Prompt und Kostenschaetzung.
 #  freigeben  - von Hand: setzt im Plan freigegeben=true fuer die Nummern (nur fuer Entwuerfe). Kein API-Aufruf.
-#  taeglich   - Cron 04:20 UTC: schaltet den fruehesten freigegebenen Entwurf (date <= heute) auf approved/publish true. Hoechstens EIN Beitrag je Lauf. Kein API-Aufruf.
+#  taeglich   - Cron 04:20 UTC: schaltet den fruehesten freigegebenen Entwurf (date <= heute) auf approved/publish true. Normal EIN Beitrag je Lauf, nach einem verpassten Lauf
+#               hoechstens 2 (aelteste zuerst, ::warning:: mit dem Rest). Gesponserte Beitraege kommen zugleich unter "posts" in data/sponsorships.json (dauerhafte Kennzeichnung). Kein API-Aufruf.
 # Kosten: Kostenbuch data/spend.json, Schluessel "sponsor-cognillo"; eigene Gesamtgrenze SPONSOR_POSTS_BUDGET_USD (Repo-Variable, Standard 50), unabhaengig von ARTICLE_BUDGET_USD.
 # Speichern wie articles.yml (Commit, dann pull --rebase und push in einer Schleife; spend.json je Schluessel zusammenfuehren).
 # TODO Staging-Umbau (claude/staging-schritt1/2): der Speichern-Schritt pusht heute auf main und muss spaeter auf den Zweig "staging" umgestellt werden.

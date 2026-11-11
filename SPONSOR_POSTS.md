@@ -10,7 +10,7 @@ Sonnet schreibt, Mirko sieht alles an und gibt frei. **Nichts geht live, bevor M
 1. **Schreiben** (von Hand, einmal): Actions → „Sponsor-Reihe Cognillo“ → Run workflow → Modus `schreiben`. Sonnet schreibt alle 62 Beiträge nacheinander.
 2. **Ansehen**: Mirko liest die Dateien in `imports/blog/en/` und die LinkedIn-Texte in `data/sponsor_posts_linkedin_cognillo.json`. Er kann Dateien von Hand ändern.
 3. **Freigeben** (von Hand): Modus `freigeben`, Eingabe `nummern`, z. B. `1-62` oder `1-10,15`.
-4. **Täglich live** (automatisch, 04:20 UTC): Der Lauf schaltet jeden Tag **einen** freigegebenen Beitrag frei. Danach holt der Seitenbau ihn auf die Seite.
+4. **Täglich live** (automatisch, 04:20 UTC): Der Lauf schaltet jeden Tag **einen** freigegebenen Beitrag frei (nach einem verpassten Lauf höchstens zwei). Danach holt der Seitenbau ihn auf die Seite.
 
 Link zur Seite der Workflows: <https://github.com/Mirko-Peters/m365-FM/actions/workflows/sponsor-posts.yml>
 
@@ -20,7 +20,7 @@ Link zur Seite der Workflows: <https://github.com/Mirko-Peters/m365-FM/actions/w
 |---|---|---|---|
 | `schreiben` | von Hand | Schreibt die Beiträge von `von` bis `bis` (leer = alle, die noch fehlen). Datei mit `status: review` und `publish: false`, Plan-Status `entwurf`, LinkedIn-Texte. | ja (Sonnet) |
 | `freigeben` | von Hand | Setzt im Plan `freigegeben: true` für die Nummern. Nur für Beiträge mit Status `entwurf`, die eine Datei haben. | nein |
-| `taeglich` | Cron, auch von Hand möglich | Nimmt den frühesten Beitrag mit `freigegeben: true`, Status `entwurf` und `date` bis heute. Setzt die Datei auf `status: approved` und `publish: true`, Plan-Status `live`. | nein |
+| `taeglich` | Cron, auch von Hand möglich | Nimmt den frühesten Beitrag mit `freigegeben: true`, Status `entwurf` und `date` bis heute (bei Rückstand die zwei frühesten). Setzt die Datei auf `status: approved` und `publish: true`, Plan-Status `live`. Gesponserte Beiträge trägt er unter `posts` in `data/sponsorships.json` ein. | nein |
 
 **Dry-Run:** Bei jedem Handstart ist `dry_run` zuerst auf `true`. Dann wird nichts geändert und nichts bezahlt. Bei `schreiben` zeigt der Lauf den Prompt, die Nummern und die Kostenschätzung.
 Erst mit `dry_run = false` wird wirklich geschrieben. Der tägliche Cron-Lauf ist nie ein Dry-Run, er ruft aber auch nie die KI auf.
@@ -34,10 +34,13 @@ Erst mit `dry_run = false` wird wirklich geschrieben. Der tägliche Cron-Lauf is
 
 ### Wie der tägliche Lauf arbeitet
 
-- Pro Lauf höchstens **ein** Beitrag. Hat ein Tag gefehlt, holt der nächste Lauf den früheren Beitrag nach, am nächsten Tag den nächsten. So wird jeden Tag aufgeholt, ohne dass mehrere auf einmal erscheinen.
+- Normal **ein** Beitrag pro Lauf. Ist mehr als einer fällig (ein Lauf ist ausgefallen, z. B. weil GitHub einen geplanten Lauf verworfen hat oder der Push scheiterte), schaltet der Lauf die **zwei** ältesten frei. So schrumpft ein Rückstand um einen Beitrag pro Tag, und die Reihe ist bald wieder im Plan; ohne das bliebe jeder spätere Beitrag für immer einen Tag zu spät.
+- Bleibt danach noch etwas fällig, steht im Log und in der Zusammenfassung eine Warnung („Rückstand – noch N freigegebene Beiträge fällig“). Schneller aufholen: Modus `taeglich` von Hand starten (je Start wieder bis zu zwei).
+- Die Reihenfolge bleibt: Besteht der älteste fällige Beitrag die Prüfung nicht, wartet auch der nächste, bis der Fehler behoben ist.
 - Nicht freigegebene Beiträge bleiben unberührt.
 - Vor dem Freischalten prüft der Lauf die Datei noch einmal mit `site_content_blog.check`. Hat Mirko die Datei so geändert, dass sie nicht mehr passt (z. B. Kurzfassung zu kurz), geht der Beitrag **nicht** live und der Lauf meldet den Fehler.
-- Die Commit-Nachricht lautet „Cognillo-Beitrag 12: Titel“.
+- Die Commit-Nachricht lautet „Cognillo-Beitrag 12: Titel“, bei zwei Beiträgen „Cognillo-Beiträge 12, 13 (Rückstand)“ (ohne Umlaut).
+- **Gesponserte Beiträge** (`sponsored: true`): Der Lauf trägt den Beitrag im selben Commit unter `posts` des Cognillo-Sponsorings in `data/sponsorships.json` ein (`/community/u/mirko-p/blog/<slug>/`). Gibt es kein Sponsoring mit `cognillo` unter `entities`, geht der Beitrag **nicht** live (sonst fehlte die Kennzeichnung). Die Laufzeit (`start`, `end`) ändert der Lauf nie.
 - Auf die Webseite kommt der Beitrag mit dem nächsten nächtlichen Seitenbau (`site.yml`, 01:07 UTC). Bot-Commits lösen keinen Bau aus. Es kann also bis zu etwa einem Tag dauern.
 
 ## Wie ein Beitrag entsteht (Qualität)
@@ -95,8 +98,11 @@ Ein Beitrag, dessen Plan-Datum mehr als 14 Tage zurückliegt, wird vom Zeitplan 
 
 ## rel="sponsored"
 
-Links auf die Website eines **laufenden** Sponsors (z. B. `www.cognillo.com`) bekommen in jedem Blogbeitrag und in allen Sprachfassungen `rel="sponsored noopener"`. Voraussetzung: In `data/sponsorships.json` steht ein laufendes Sponsoring mit `sponsor.url` = `https://www.cognillo.com/`. Der Beitrag muss dort nicht einzeln unter `posts` stehen. Wer die Kennzeichnung unter der Überschrift („Sponsored · Paid partnership with Cognillo“) für einzelne Beiträge will, trägt sie unter `posts` ein.
-Nach dem Ende des Sponsorings verlieren Beiträge, die nicht unter `posts` stehen, die Link-Kennzeichnung beim nächsten Seitenbau.
+Links auf die Website eines **laufenden** Sponsors (z. B. `www.cognillo.com`) bekommen in jedem Blogbeitrag und in allen Sprachfassungen `rel="sponsored noopener"`. Voraussetzung: In `data/sponsorships.json` steht ein laufendes Sponsoring mit `sponsor.url` = `https://www.cognillo.com/`. Ein Beitrag muss dafür nicht einzeln unter `posts` stehen.
+Nach dem Ende des Sponsorings verlieren Beiträge, die **nicht** unter `posts` stehen, die Link-Kennzeichnung beim nächsten Seitenbau.
+
+**Gesponserte Beiträge der Reihe** stehen dagegen immer unter `posts`, weil der tägliche Lauf sie beim Freischalten dort einträgt. Damit behalten sie dauerhaft – auch wenn sie erst nach dem Ende der Laufzeit live gehen – die Kennzeichnung unter der Überschrift („Sponsored · Paid partnership with Cognillo“, deutsch „Anzeige · …“), `BlogPosting.sponsor` und `rel="sponsored"` auf den Links zu Cognillo.
+Der Seitenbau prüft, dass jeder Eintrag unter `posts` einen Beitrag trifft. Ein eben freigeschaltetes Content-Paket (`status: approved`, `publish: true`) zählt dabei schon mit, obwohl der Worker es erst nach diesem Bau anlegt.
 
 ## Hinweis zum Staging-Umbau
 

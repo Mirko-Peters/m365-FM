@@ -5,8 +5,11 @@
              status: review, publish: false (liegen nur im Repo, der Seitenbau und der Worker uebernehmen sie NICHT), Plan-Status "entwurf", LinkedIn-Texte in
              data/sponsor_posts_linkedin_cognillo.json. Vorhandene Dateien werden uebersprungen (Wiederaufnahme nach Abbruch).
   freigeben  (von Hand): setzt im Plan freigegeben=true fuer die genannten Nummern (nur Status "entwurf"). Kein API-Aufruf.
-  taeglich   (Cron): der fruehere Eintrag mit freigegeben=true, Status "entwurf" und date <= heute wird auf status: approved, publish: true gesetzt
-             (Plan-Status "live"). Hoechstens EIN Beitrag je Lauf, verpasste Tage holen je einen pro Tag nach. Kein API-Aufruf.
+  taeglich   (Cron): der frueheste Eintrag mit freigegeben=true, Status "entwurf" und date <= heute wird auf status: approved, publish: true gesetzt
+             (Plan-Status "live"). Normal EIN Beitrag je Lauf; sind mehrere faellig (verpasster Lauf), hoechstens CATCHUP_MAX = 2, die aeltesten zuerst, und
+             ein ::warning:: nennt den restlichen Rueckstand. So schrumpft ein Rueckstand um einen Beitrag pro Tag. Gesponserte Beitraege (sponsored=true) traegt
+             der Lauf zugleich unter "posts" des Cognillo-Sponsorings in data/sponsorships.json ein: Kennzeichnung, BlogPosting.sponsor und rel="sponsored"
+             bleiben dann dauerhaft, auch wenn der Beitrag nach dem Ende der Laufzeit live geht. Kein API-Aufruf.
 
 Plan: data/sponsor_posts_cognillo.json = Liste von {nr, reihe, title, main, others, sponsored, status ("geplant" | "entwurf" | "live"), slug, date, freigegeben?}.
 Je Beitrag: Entwurf (Sonnet, inkl. LinkedIn-Texte) -> zweiter Durchgang (Sonnet prueft auf unbelegte Aussagen/Regelverstoesse, nur beanstandete Stellen
@@ -29,6 +32,9 @@ PLAN_FILE = ROOT / "data" / "sponsor_posts_cognillo.json"
 LINKEDIN_FILE = ROOT / "data" / "sponsor_posts_linkedin_cognillo.json"
 ENTITIES_FILE = ROOT / "data" / "entities.json"
 SPEND_FILE = ROOT / "data" / "spend.json"
+SPONSORSHIPS_FILE = ROOT / "data" / "sponsorships.json"
+SPONSOR_ENTITY = "cognillo"   # Sponsoring der Reihe: Eintrag in data/sponsorships.json mit dieser Entitaet unter "entities"
+CATCHUP_MAX = 2   # taeglich: hoechstens so viele Beitraege je Lauf, wenn mehrere faellig sind (Rueckstand nach verpasstem Lauf)
 BLOG_DIR = ROOT / "imports" / "blog"
 OUT_DIR = BLOG_DIR / "en"
 MODEL = os.environ.get("SPONSOR_POSTS_MODEL") or "claude-sonnet-5-5"
@@ -154,17 +160,22 @@ def select_write(plan, von=None, bis=None, blog_dir=None):
     return todo, have
 
 
-def select_publish(plan, target, blog_dir=None):
-    """Beitrag fuer den taeglichen Lauf: frueheste (date, nr) mit freigegeben=true, Status "entwurf", date <= Zieldatum und vorhandener Datei.
-    -> (Eintrag oder None, Liste der Eintraege ohne Datei). Nicht freigegebene Beitraege bleiben unberuehrt."""
+def due_released(plan, target, blog_dir=None):
+    """Alle faelligen Beitraege fuer den taeglichen Lauf, aelteste (date, nr) zuerst: freigegeben=true, Status "entwurf", date <= Zieldatum, Datei vorhanden.
+    -> (Liste, Liste der freigegebenen Eintraege ohne Datei). Nicht freigegebene Beitraege bleiben unberuehrt."""
     t = target if isinstance(target, date) else _iso(target)
     if not t: raise Stop(f"Zieldatum ungueltig: {target!r} (JJJJ-MM-TT)", 1)
-    broken = []
+    due, broken = [], []
     for e in sorted(plan, key=lambda e: (e["date"], e["nr"])):
         if e.get("freigegeben") is not True or e["status"] != "entwurf" or _iso(e["date"]) > t: continue
-        if not package_exists(e["slug"], blog_dir): broken.append(e); continue
-        return e, broken
-    return None, broken
+        (due if package_exists(e["slug"], blog_dir) else broken).append(e)
+    return due, broken
+
+
+def select_publish(plan, target, blog_dir=None):
+    """Fruehester faelliger Beitrag (siehe due_released). -> (Eintrag oder None, Liste der Eintraege ohne Datei)."""
+    due, broken = due_released(plan, target, blog_dir)
+    return (due[0] if due else None), broken
 
 
 def update_plan(changes, path=None):
@@ -193,6 +204,46 @@ def save_linkedin(nr, texts, path=None):
         raise Stop(f"{path.name} ist kein gueltiges JSON - nichts ueberschrieben.", 1)
     d[str(nr)] = {k: texts.get(k, "") for k in LI_KEYS}
     path.write_text(json.dumps(dict(sorted(d.items(), key=lambda kv: int(kv[0]))), ensure_ascii=False, indent=1) + "\n", "utf-8")
+
+
+def sponsor_record(recs, day):
+    """Sponsoring der Reihe fuer einen Beitrag mit Plan-Datum day: Eintraege mit SPONSOR_ENTITY unter "entities"; bevorzugt der am Tag laufende, sonst der zuletzt
+    begonnene (start <= day), sonst der zuletzt angelegte. -> Eintrag oder None."""
+    cands = [r for r in recs if isinstance(r, dict) and SPONSOR_ENTITY in (r.get("entities") or []) and isinstance(r.get("start"), str)]
+    act = [r for r in cands if r["start"] <= day and (r.get("end") is None or day <= str(r["end"]))]
+    past = [r for r in cands if r["start"] <= day]
+    return max(act or past or cands, key=lambda r: (r["start"], str(r.get("id")))) if cands else None
+
+
+def post_handle(text):
+    """Autor-Handle aus dem YAML-Kopf (Standard mirko-p wie site_content_blog)."""
+    m = re.search(r"(?m)^author:\s*\"?([a-z0-9-]+)\"?\s*$", text.split("\n---", 1)[0])
+    return m.group(1) if m else "mirko-p"
+
+
+def sponsorship_post(entry, handle, dry_run=False, path=None):
+    """Traegt einen gesponserten Beitrag unter "posts" des Cognillo-Sponsorings in data/sponsorships.json ein ("/community/u/<handle>/blog/<slug>/", Format
+    site_sponsorships.post_ref): Kennzeichnung, BlogPosting.sponsor und rel="sponsored" bleiben dann dauerhaft, egal ob die Laufzeit noch laeuft. Idempotent: steht
+    der Beitrag schon unter irgendeinem Sponsoring, bleibt die Datei unveraendert. Laufzeit (start/end) wird nie geaendert. -> (Sponsoring-ID, neu eingetragen?)."""
+    import site_sponsorships as SPM
+    path = Path(path or SPONSORSHIPS_FILE)
+    try:
+        text = path.read_text("utf-8"); d = json.loads(text)
+    except (OSError, ValueError) as ex:
+        raise Stop(f"{path.name} nicht lesbar ({ex}) - gesponserter Beitrag {entry['nr']} geht NICHT live (Kennzeichnung fehlt sonst).", 1)
+    recs = d.get("sponsorships") if isinstance(d, dict) else None
+    key = (handle, entry["slug"])
+    for r in recs if isinstance(recs, list) else []:
+        if isinstance(r, dict) and any(SPM.post_ref(x) == key for x in r.get("posts") or [] if isinstance(x, str)): return r.get("id"), False
+    r = sponsor_record(recs if isinstance(recs, list) else [], entry["date"])
+    if not r: raise Stop(f"{path.name}: kein Sponsoring mit \"{SPONSOR_ENTITY}\" unter \"entities\" - gesponserter Beitrag {entry['nr']} geht NICHT live (Kennzeichnung fehlt sonst).", 1)
+    if dry_run: return r["id"], True
+    r["posts"] = list(r.get("posts") or []) + [f"/community/u/{handle}/blog/{entry['slug']}/"]
+    _, errs = SPM.check_structure(d)
+    if errs: raise Stop(f"{path.name} waere nach dem Eintrag ungueltig - nichts geaendert, Beitrag {entry['nr']} geht NICHT live:\n - " + "\n - ".join(errs), 1)
+    m = re.match(r"\s*\{\s*\n([ \t]+)", text)
+    path.write_text(json.dumps(d, ensure_ascii=False, indent=(m.group(1) if m else 1)) + "\n", "utf-8")
+    return r["id"], True
 
 
 # ------------------------------------------------------------------ Entitaeten und Prompt
@@ -828,33 +879,59 @@ def mode_freigeben(nummern, dry_run, log=print):
     return 0
 
 
-def mode_taeglich(target, dry_run, ents=None, log=print):
-    plan = load_plan()
-    entry, broken = select_publish(plan, target)
-    for b in broken: log(f"::warning::Eintrag {b['nr']} ist freigegeben, aber die Datei {b['slug']}.md fehlt - uebersprungen")
-    if not entry:
-        free = sum(1 for e in plan if e["status"] == "entwurf" and e.get("freigegeben") is True)
-        wait = sum(1 for e in plan if e["status"] == "entwurf" and e.get("freigegeben") is not True)
-        summary_line(f"Sponsor-Reihe taeglich ({target}): nichts faellig. Freigegeben und noch nicht live: {free}; Entwuerfe ohne Freigabe: {wait}.")
-        return 0
+def go_live(entry, ents, dry_run, log=print):
+    """Ein faelliger Beitrag: Kopf auf approved/publish true, Pruefung wie im Seitenbau, bei sponsored=true Eintrag unter "posts" (vor dem Freischalten),
+    Plan-Status "live". Stop bei Fehlern, dann bleibt dieser Beitrag unveraendert. -> Text fuer die Zusammenfassung."""
     f = package_path(entry["slug"])
     text = f.read_text("utf-8")
     try:
         new = set_head_flags(text, "approved", True)
     except ValueError as ex:
         raise Stop(f"Beitrag {entry['nr']} ({entry['slug']}): Kopf der Datei nicht lesbar ({ex}) - geht NICHT live.", 1)
-    ents = ents if ents is not None else load_entities()
     errs = check_package(entry["slug"], new, ents)
     if errs:   # die Datei wurde nach dem Schreiben von Hand geaendert und besteht die Pruefung nicht mehr: nichts live schalten
         raise Stop(f"Beitrag {entry['nr']} ({entry['slug']}) besteht die Pruefung nicht und geht NICHT live:\n - " + "\n - ".join(errs), 1)
-    if dry_run:
-        summary_line(f"Dry-Run taeglich ({target}): Beitrag {entry['nr']} \"{entry['title']}\" (Plan-Datum {entry['date']}) wuerde auf approved/publish true gesetzt. Nichts geaendert.")
+    spo = ""
+    if entry["sponsored"]:   # erst die dauerhafte Kennzeichnung, dann live: ohne Eintrag kein Freischalten
+        rid, added = sponsorship_post(entry, post_handle(new), dry_run)
+        spo = f" Gesponsert: {'Eintrag unter' if added else 'steht schon unter'} \"posts\" von {rid} (data/sponsorships.json)."
+    if not dry_run:
+        if new != text: f.write_text(new, "utf-8")
+        update_plan({entry["nr"]: {"status": "live"}})
+    return f"Beitrag {entry['nr']} \"{entry['title']}\" (Plan-Datum {entry['date']}).{spo}"
+
+
+def mode_taeglich(target, dry_run, ents=None, log=print):
+    plan = load_plan()
+    due, broken = due_released(plan, target)
+    for b in broken: log(f"::warning::Eintrag {b['nr']} ist freigegeben, aber die Datei {b['slug']}.md fehlt - uebersprungen")
+    if not due:
+        free = sum(1 for e in plan if e["status"] == "entwurf" and e.get("freigegeben") is True)
+        wait = sum(1 for e in plan if e["status"] == "entwurf" and e.get("freigegeben") is not True)
+        summary_line(f"Sponsor-Reihe taeglich ({target}): nichts faellig. Freigegeben und noch nicht live: {free}; Entwuerfe ohne Freigabe: {wait}.")
         return 0
-    if new != text: f.write_text(new, "utf-8")
-    update_plan({entry["nr"]: {"status": "live"}})
-    out_file("SPONSOR_COMMIT_MSG_FILE", f"Cognillo-Beitrag {entry['nr']}: {entry['title']}\n")
-    summary_line(f"Sponsor-Reihe taeglich: Beitrag {entry['nr']} \"{entry['title']}\" freigeschaltet (approved, publish true). Er kommt mit dem naechsten Seitenbau (01:07 UTC) auf die Seite; "
-                 "die Uebersetzung holt translate-blog.yml danach ab.")
+    ents = ents if ents is not None else load_entities()
+    done, lines, err = [], [], None
+    for e in due[:CATCHUP_MAX]:   # normal einer; nach einem verpassten Lauf hoechstens CATCHUP_MAX, aelteste zuerst (Reihenfolge bleibt: ein Fehler haelt die spaeteren an)
+        try:
+            lines.append(go_live(e, ents, dry_run, log)); done.append(e)
+        except Stop as ex:
+            err = ex; break
+    rest = len(due) - len(done)
+    if dry_run:
+        summary_line(f"Dry-Run taeglich ({target}): " + (" ".join("wuerde auf approved/publish true gesetzt: " + x for x in lines) or "nichts freigeschaltet.") + " Nichts geaendert.")
+    elif done:
+        out_file("SPONSOR_COMMIT_MSG_FILE", (f"Cognillo-Beitrag {done[0]['nr']}: {done[0]['title']}\n" if len(done) == 1
+                                            else f"Cognillo-Beitraege {', '.join(str(e['nr']) for e in done)} (Rueckstand)\n\n" + "".join(f"Nr {e['nr']}: {e['title']}\n" for e in done)))
+        summary_line("Sponsor-Reihe taeglich: freigeschaltet (approved, publish true): " + " ".join(lines) + " Kommt mit dem naechsten Seitenbau (01:07 UTC) auf die Seite; "
+                     "die Uebersetzung holt translate-blog.yml danach ab.")
+    if rest and not err:
+        log(f"::warning::Sponsor-Reihe: Rueckstand - noch {rest} freigegebene Beitraege faellig (Nr {compact([e['nr'] for e in due[len(done):]])}); der taegliche Lauf holt "
+            f"hoechstens {CATCHUP_MAX} je Lauf nach. Schneller: Modus taeglich von Hand starten.")
+    if err:
+        log(str(err))
+        if rest > 1: log(f"::warning::Sponsor-Reihe: {rest} faellige Beitraege warten (Nr {compact([e['nr'] for e in due[len(done):]])}), der erste davon besteht die Pruefung nicht.")
+        return err.code
     return 0
 
 

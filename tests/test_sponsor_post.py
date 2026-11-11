@@ -36,6 +36,8 @@ def draft(main="sharepoint-permissions", others=("sharepoint", "oversharing"), e
 
 
 REVIEW_OK = json.dumps({"verdict": "ok", "edits": []})
+COG = {"id": "cognillo-2026-11", "sponsor": {"name": "Cognillo", "url": "https://www.cognillo.com/"}, "label": "sponsored", "start": "2026-11-10", "end": "2026-12-10",
+       "entities": ["cognillo", "sharepoint-essentials-toolkit"], "note": "Test"}
 
 
 class Base(unittest.TestCase):
@@ -44,12 +46,15 @@ class Base(unittest.TestCase):
         (self.tmp / "data").mkdir()
         shutil.copy(FIX / "sponsor_posts_plan.json", self.tmp / "data" / "sponsor_posts_cognillo.json")
         (self.tmp / "imports" / "blog" / "en").mkdir(parents=True)
+        (self.tmp / "data" / "sponsorships.json").write_text(json.dumps({"version": 1, "sponsorships": [{"id": "anderes", "sponsor": {"name": "Acme", "url": "https://acme.example/"},
+                                                                    "label": "sponsored", "start": "2026-01-01", "end": None, "entities": ["acme"]}, COG]}, indent=1) + "\n", "utf-8")
         self.env = mock.patch.dict(os.environ, {"SPONSOR_COMMIT_MSG_FILE": str(self.tmp / "msg.txt"), "SPONSOR_WRITTEN_FILE": str(self.tmp / "written.txt")}, clear=False)
         os.environ.pop("SPONSOR_POSTS_BUDGET_USD", None)
         self.patches = [self.env,
                         mock.patch.object(SP, "PLAN_FILE", self.tmp / "data" / "sponsor_posts_cognillo.json"),
                         mock.patch.object(SP, "LINKEDIN_FILE", self.tmp / "data" / "sponsor_posts_linkedin_cognillo.json"),
                         mock.patch.object(SP, "SPEND_FILE", self.tmp / "data" / "spend.json"),
+                        mock.patch.object(SP, "SPONSORSHIPS_FILE", self.tmp / "data" / "sponsorships.json"),
                         mock.patch.object(SP, "ENTITIES_FILE", FIX / "sponsor_entities.json"),
                         mock.patch.object(SP, "BLOG_DIR", self.tmp / "imports" / "blog"),
                         mock.patch.object(SP, "OUT_DIR", self.tmp / "imports" / "blog" / "en"),
@@ -159,10 +164,12 @@ class Freigeben(Base):
 
 
 class Taeglich(Base):
-    def make_draft(self, nr, **kw):
+    def make_draft(self, nr, release=False):
         e = self.plan()[nr]
+        if release: SP.update_plan({nr: {"status": "entwurf", "freigegeben": True}})
         text = SP.package_text(e, "A test summary that is long enough for the content package check, about SharePoint in plain words.",
-                               [{"q": "A question?", "a": "A short answer."}], FILLER + "\n\n## Heading\n\n" + FILLER + "\n\n## Another\n\n" + FILLER + "\n\n## Third\n\n" + FILLER, [e["main"]] + e["others"][:1])
+                               [{"q": "A question?", "a": "A short answer."}], FILLER + "\n\n## Heading\n\n" + FILLER + "\n\n## Another\n\n" + FILLER + "\n\n## Third\n\n" + FILLER,
+                               [e["main"]] + [x for x in e["others"] if x in ENTS][:1])
         text = text.replace("topics: [sharepoint, ", "topics: [sharepoint, ")
         (SP.OUT_DIR / f"{e['slug']}.md").write_text(text, "utf-8")
         return text
@@ -198,16 +205,123 @@ class Taeglich(Base):
             items, rep = CBL.collect(ENTS)
         self.assertEqual((len(items), rep["review"]), (0, 1))   # status: review = liegt, wird nicht importiert
 
-    def test_one_per_run_catches_up_and_unreleased_stay_untouched(self):
+    def sponsorships(self):
+        return json.loads(SP.SPONSORSHIPS_FILE.read_text("utf-8"))["sponsorships"]
+
+    def live(self):
+        return sorted(n for n, e in self.plan().items() if e["status"] == "live" and n != 6)   # Nr 6 ist im Fixture schon live
+
+    def test_one_per_day_and_unreleased_stay_untouched(self):
         for nr in (4, 5): self.make_draft(nr)
-        update = {5: {"freigegeben": True}}
-        SP.update_plan(update)
-        self.run_quiet(SP.main, ["taeglich", "--date", "2026-11-25"])
-        self.assertEqual((self.plan()[4]["status"], self.plan()[5]["status"]), ("live", "entwurf"))   # genau einer
-        self.run_quiet(SP.main, ["taeglich", "--date", "2026-11-25"])
-        self.assertEqual(self.plan()[5]["status"], "live")
-        code, out = self.run_quiet(SP.main, ["taeglich", "--date", "2026-11-25"])
+        SP.update_plan({5: {"freigegeben": True}})
+        self.run_quiet(SP.main, ["taeglich", "--date", "2026-11-18"])
+        self.assertEqual((self.plan()[4]["status"], self.plan()[5]["status"]), ("live", "entwurf"))   # Nr 5 erst am 19.
+        code, out = self.run_quiet(SP.main, ["taeglich", "--date", "2026-11-18"])
         self.assertEqual(code, 0); self.assertIn("nichts faellig", out)
+        code, out = self.run_quiet(SP.main, ["taeglich", "--date", "2026-11-19"])
+        self.assertEqual(self.plan()[5]["status"], "live"); self.assertNotIn("Rueckstand", out)
+
+    def test_skipped_day_catches_up_two_per_run_oldest_first(self):
+        """Lauf am 16.11. faellt aus: am 17. sind Nr 2 und 3 faellig -> beide (aelteste zuerst), danach wieder einer pro Tag, kein dauerhafter Versatz."""
+        for nr in range(1, 6): self.make_draft(nr, release=True)
+        self.run_quiet(SP.main, ["taeglich", "--date", "2026-11-15"])
+        self.assertEqual(self.live(), [1])
+        code, out = self.run_quiet(SP.main, ["taeglich", "--date", "2026-11-17"])   # 16.11. verpasst
+        self.assertEqual(code, 0, out); self.assertEqual(self.live(), [1, 2, 3]); self.assertNotIn("::warning::", out)
+        self.assertTrue((self.tmp / "msg.txt").read_text("utf-8").startswith("Cognillo-Beitraege 2, 3 (Rueckstand)"))
+        self.run_quiet(SP.main, ["taeglich", "--date", "2026-11-18"])
+        self.assertEqual(self.live(), [1, 2, 3, 4])   # wieder im Plan: am 18. genau Nr 4
+        self.run_quiet(SP.main, ["taeglich", "--date", "2026-11-19"])
+        self.assertEqual(self.live(), [1, 2, 3, 4, 5])
+
+    def test_longer_backlog_warns_and_shrinks(self):
+        for nr in range(1, 6): self.make_draft(nr, release=True)
+        code, out = self.run_quiet(SP.main, ["taeglich", "--date", "2026-11-19"])   # alle 5 faellig (4 Tage verpasst)
+        self.assertEqual((code, self.live()), (0, [1, 2]))
+        self.assertIn("::warning::Sponsor-Reihe: Rueckstand - noch 3 freigegebene Beitraege faellig (Nr 3-5)", out)
+        code, out = self.run_quiet(SP.main, ["taeglich", "--date", "2026-11-19"])
+        self.assertEqual(self.live(), [1, 2, 3, 4]); self.assertIn("noch 1 freigegebene", out)
+        code, out = self.run_quiet(SP.main, ["taeglich", "--date", "2026-11-19"])
+        self.assertEqual(self.live(), [1, 2, 3, 4, 5]); self.assertNotIn("::warning::", out)
+
+    def test_dry_run_with_backlog_changes_nothing(self):
+        for nr in range(1, 4): self.make_draft(nr, release=True)
+        before = (SP.PLAN_FILE.read_text("utf-8"), SP.SPONSORSHIPS_FILE.read_text("utf-8"))
+        code, out = self.run_quiet(SP.main, ["taeglich", "--date", "2026-11-19", "--dry-run"])
+        self.assertEqual(code, 0); self.assertIn("Beitrag 1 ", out); self.assertIn("Beitrag 2 ", out); self.assertIn("noch 1 freigegebene", out)
+        self.assertEqual((SP.PLAN_FILE.read_text("utf-8"), SP.SPONSORSHIPS_FILE.read_text("utf-8")), before)
+        self.assertFalse((self.tmp / "msg.txt").exists())
+
+    def test_broken_first_blocks_the_later_ones(self):
+        for nr in (4, 5): self.make_draft(nr, release=True)
+        f = SP.OUT_DIR / f"{self.plan()[4]['slug']}.md"
+        f.write_text(f.read_text("utf-8").replace("status: review", "status: kaputt").replace("\nsummary:", "\nsumary:"), "utf-8")
+        code, out = self.run_quiet(SP.main, ["taeglich", "--date", "2026-11-19"])
+        self.assertEqual(code, 1); self.assertIn("NICHT live", out); self.assertEqual(self.live(), [])   # Reihenfolge bleibt: Nr 5 wartet
+        self.assertIn("2 faellige Beitraege warten", out)
+
+    def test_sponsored_post_is_added_to_posts_of_the_sponsorship_once(self):
+        self.make_draft(2, release=True)
+        before = [r for r in self.sponsorships() if r["id"] == "cognillo-2026-11"][0]
+        code, out = self.run_quiet(SP.main, ["taeglich", "--date", "2026-11-16"])
+        self.assertEqual(code, 0, out)
+        recs = {r["id"]: r for r in self.sponsorships()}
+        self.assertEqual(recs["cognillo-2026-11"]["posts"], ["/community/u/mirko-p/blog/toolkit-or-scripts-when-each-one-wins/"])
+        self.assertEqual((recs["cognillo-2026-11"]["start"], recs["cognillo-2026-11"]["end"]), (before["start"], before["end"]))   # Laufzeit bleibt (Entscheidung Mirko)
+        self.assertNotIn("posts", recs["anderes"])
+        import site_sponsorships as SPM
+        self.assertEqual(SPM.check_structure(json.loads(SP.SPONSORSHIPS_FILE.read_text("utf-8")))[1], [])
+        self.assertEqual(SPM.post_ref(recs["cognillo-2026-11"]["posts"][0]), ("mirko-p", "toolkit-or-scripts-when-each-one-wins"))
+        text = SP.SPONSORSHIPS_FILE.read_text("utf-8")
+        self.assertEqual(SP.sponsorship_post(self.plan()[2], "mirko-p"), ("cognillo-2026-11", False))   # idempotent
+        self.assertEqual(SP.SPONSORSHIPS_FILE.read_text("utf-8"), text)
+        self.assertEqual(self.live(), [2])
+
+    def test_sponsored_post_after_term_end_still_gets_posts_entry(self):
+        SP.update_plan({2: {"date": "2027-01-05"}})   # wie Nr 52 im echten Plan: Laufzeit endet am 10.12.2026
+        self.make_draft(2, release=True)
+        code, out = self.run_quiet(SP.main, ["taeglich", "--date", "2027-01-05"])
+        self.assertEqual(code, 0, out)
+        self.assertEqual([r.get("posts") for r in self.sponsorships() if r["id"] == "cognillo-2026-11"], [["/community/u/mirko-p/blog/toolkit-or-scripts-when-each-one-wins/"]])
+        self.assertIn("cognillo-2026-11", out)
+
+    def test_build_accepts_posts_entry_before_the_worker_imports_the_package(self):
+        """Gleicher Commit: publish true + Eintrag unter "posts". Der naechste Seitenbau kennt den Beitrag noch nicht aus der Datenbank (der Worker legt ihn erst
+        danach an); SPM.check_posts bekommt deshalb auch CBL.live_refs und bricht den Bau nicht ab."""
+        import site_sponsorships as SPM
+        self.make_draft(2, release=True)
+        self.run_quiet(SP.main, ["taeglich", "--date", "2026-11-16"])
+        recs, errs = SPM.check_structure(json.loads(SP.SPONSORSHIPS_FILE.read_text("utf-8"))); self.assertEqual(errs, [])
+        with mock.patch.object(CBL, "DIR", SP.BLOG_DIR), mock.patch.dict(os.environ, {"SITE_OFFLINE": "0"}):
+            refs = CBL.live_refs(ENTS)
+            self.assertEqual(refs, [{"handle": "mirko-p", "slug": "toolkit-or-scripts-when-each-one-wins"}])
+            try:
+                SPM.reset(); SPM._index(recs, "2026-11-17", {}, {})
+                with self.assertRaises(SPM.SponsorshipError): SPM.check_posts([])
+                SPM.check_posts([] + refs)   # kein Fehler
+            finally:
+                SPM.reset()
+
+    def test_sponsor_record_prefers_running_then_latest_started(self):
+        a = dict(COG); b = dict(COG, id="cognillo-2027-01", start="2027-01-01", end="2027-01-31"); c = dict(COG, id="cognillo-2027-06", start="2027-06-01", end=None)
+        recs = [a, b, c, {"id": "x", "start": "2026-01-01", "entities": ["acme"]}]
+        self.assertEqual(SP.sponsor_record(recs, "2026-11-20")["id"], "cognillo-2026-11")
+        self.assertEqual(SP.sponsor_record(recs, "2027-01-05")["id"], "cognillo-2027-01")
+        self.assertEqual(SP.sponsor_record(recs, "2027-03-01")["id"], "cognillo-2027-01")   # Luecke: zuletzt begonnenes
+        self.assertEqual(SP.sponsor_record(recs, "2026-01-05")["id"], "cognillo-2027-06")   # noch keines begonnen: zuletzt angelegtes
+        self.assertIsNone(SP.sponsor_record(recs[3:], "2026-11-20"))
+
+    def test_sponsored_post_without_sponsorship_record_does_not_go_live(self):
+        SP.SPONSORSHIPS_FILE.write_text(json.dumps({"version": 1, "sponsorships": []}), "utf-8")
+        self.make_draft(2, release=True)
+        code, out = self.run_quiet(SP.main, ["taeglich", "--date", "2026-11-16"])
+        self.assertEqual(code, 1); self.assertIn("NICHT live", out)
+        self.assertEqual(self.plan()[2]["status"], "entwurf")
+        self.assertIn("status: review", (SP.OUT_DIR / f"{self.plan()[2]['slug']}.md").read_text("utf-8"))
+
+    def test_post_handle_from_head(self):
+        self.assertEqual(SP.post_handle("---\ntitle: x\nauthor: other-handle\n---\nauthor: nein\n"), "other-handle")
+        self.assertEqual(SP.post_handle("---\ntitle: x\n---\n"), "mirko-p")
 
     def test_not_released_draft_untouched(self):
         self.make_draft(5)
