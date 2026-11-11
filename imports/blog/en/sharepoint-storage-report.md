@@ -21,7 +21,7 @@ faq:
     a: "Microsoft states that when the quota is exceeded, classic site creation and site creation through PowerShell are blocked. Site admins can request more quota from Site Settings, Storage Metrics, which sends an email to the Global Administrators. Free space with version trimming, recycle bin cleanup, retention and archive, or buy additional storage."
 ---
 
-To find what is using your SharePoint quota, start at the tenant level, rank all sites by storage used, then look inside the biggest sites for version history, recycle bins and large libraries, and only then decide what to trim, archive or buy. This guide is for the SharePoint admin who got the warning that SharePoint Online storage is almost full. It shows how to build a simple report from Microsoft's own pages, what the numbers include, which options Microsoft lists for recovering space, and how to avoid deleting the wrong thing.
+To find what is using your SharePoint quota, start at the tenant level, rank all sites by storage used, then look inside the biggest sites for version history, recycle bins and large libraries, and only then decide what to trim, archive or buy. This guide is for the SharePoint admin who got the warning that SharePoint Online storage is almost full. It shows how to check SharePoint storage usage with a simple report built from Microsoft's own pages, what the numbers include, which options Microsoft lists for recovering space, and how to avoid deleting the wrong thing.
 
 ## SharePoint storage report: three places to look
 
@@ -41,11 +41,11 @@ Two caveats from Microsoft's pages. Storage usage does not include changes made 
 
 ## What the SharePoint storage quota is made of
 
-Microsoft's [storage planning page](https://learn.microsoft.com/en-us/sharepoint/sharepoint-storage-planning) states the basics for SharePoint Online: the tenant quota starts at 1 TB, and each additional SharePoint license adds 10 GB. Storage is calculated in binary gigabytes, so 1 GB is 2 to the power of 30 bytes. A single site can hold much more than most sites need, so the quota is shared in a pool by default: all [SharePoint](https://www.m365.fm/entity/sharepoint/) sites use what they need when they need it. If you switch from manual to pooled management, SharePoint resets all limits to 25 TB.
+Microsoft's [storage planning page](https://learn.microsoft.com/en-us/sharepoint/sharepoint-storage-planning) states the basics for SharePoint Online: the tenant quota starts at 1 TB, and each additional SharePoint license adds 10 GB, which is 10 GB per licensed user. Storage is calculated in binary gigabytes, so 1 GB is 2 to the power of 30 bytes. A single site can hold much more than most sites need, so the quota is shared in a pool by default: all [SharePoint](https://www.m365.fm/entity/sharepoint/) sites use what they need when they need it. If you switch from manual to pooled management, SharePoint resets all limits to 25 TB.
 
 The same page makes a point that explains most surprises: storage consumption can include version history and other storage-related data associated with a file. As a result, the storage reported for a site, library or folder might be larger than the combined size of the current files shown in a [document library](https://www.m365.fm/entity/sharepoint-document-libraries/). If a library looks too big for its content, look at versions before you blame the users.
 
-## Site usage report: drill down from the site to the library
+## Site usage report and storage metrics: drill down from the site to the library
 
 Once you know the biggest sites, go inside them. Site admins can open Site Settings and then Storage Metrics under Site Collection Administration. Microsoft mentions this page for requesting more quota, and it is the site-level place to start your drill-down. Compare these storage metrics with what users see in the library, and keep the site storage report you create from them with the date.
 
@@ -58,6 +58,12 @@ For most admins, a manual routine is enough. For each of the top 10 sites, ask f
 - **Do versions explain the gap?** A big difference suggests many versions.
 - **Is there old content that retention or archive could handle?**
 
+## Check SharePoint storage with PowerShell
+
+Admins who prefer scripts can read the same numbers with the SharePoint Online Management Shell. A Microsoft Q&A thread answered by Microsoft support runs `Get-SPOSite -Limit All` and exports three properties for every site collection to a CSV file: `StorageQuota` for the allocated storage, `StorageUsageCurrent` for the used storage and `StorageQuotaWarningLevel`. A community reply on the same thread names `Get-SPOTenant` for the tenant-wide `StorageQuota`.
+
+Microsoft's reference for [Get-SPOSite](https://learn.microsoft.com/en-us/powershell/module/microsoft.online.sharepoint.powershell/Get-SPOSite) adds three details. The default for `-Limit` is 200, and `ALL` returns every site collection. Some properties may not be populated when you use `-Limit`, so compare a few values with the admin center before you trust the file. And you need to be a SharePoint Online administrator and a site collection administrator to run the cmdlet. These pages do not state the unit of the storage values, so check your own output before you report totals to managers.
+
 ## Ways to recover storage space in the SharePoint admin center
 
 Microsoft's planning page lists the options for SharePoint Online, and one metric decides which ones you need: how many GB you must free. Use them in this order, from least risky to most:
@@ -67,9 +73,9 @@ Microsoft's planning page lists the options for SharePoint Online, and one metri
 3. **Use retention settings** to delete files automatically after a set period, where your policy allows it.
 4. **Archive inactive content** with Microsoft 365 Archive.
 5. **Apply an inactive site policy.** Microsoft notes that this requires SharePoint Advanced Management and that additional licensing may apply.
-6. **Set a site storage limit.** Under Settings, Site storage limits, you choose the storage management mode. Automatic is the default pooled mode. Manual mode lets you set a storage limit per site, up to 25,600 GB, with an email notice to site owners when a site approaches its limit.
+6. **Set a site storage limit.** Under Settings, Site storage limits, you choose the storage management mode. Automatic is the default pooled mode. Manual mode lets you set a SharePoint storage limit per site, with 25,600 GB as the maximum storage, and site owners get an email notice when a site approaches its limit.
 
-If none of that is enough, you can buy storage. Each license adds 10 GB, additional storage can be bought in one-gigabyte increments at a cost per GB and month, and a pay-as-you-go option covers usage above the quota. Check the storage costs against the effort of a cleanup before you decide, and set a reminder to repeat the storage usage check every month.
+If none of that is enough, you can buy more storage capacity. Each license adds 10 GB, additional storage can be bought in one-gigabyte increments at a cost per GB and month, and a pay-as-you-go option covers usage above the quota. Check the storage costs against the effort of a cleanup before you decide, and set a reminder to repeat the storage usage check every month.
 
 ## Protect the content before you trim
 
@@ -98,8 +104,8 @@ The check: 440 + 120 + 600 = 1,160 GB. The used storage falls from 5,700 GB to 4
 
 ## How software can help
 
-Microsoft's own tools show storage per site and the tenant total. For a view down to files and folders, some teams add a reporting tool. One example is Cognillo's [SharePoint Essentials Toolkit](https://www.m365.fm/entity/sharepoint-essentials-toolkit/). According to the vendor's product page, it provides metadata reports that list items, files, folders and pages with their sizes and version counts, a monitor for storage growth, and scheduled reports that can be exported to SharePoint, by email, or to Excel or CSV. These are the vendor's statements, and M365.FM has not tested them. Compare any tool's totals with the admin center before you rely on it.
+Microsoft's own tools show storage per site and the tenant total. For a view of file storage down to files and folders, some teams add a reporting tool. One example is Cognillo's [SharePoint Essentials Toolkit](https://www.m365.fm/entity/sharepoint-essentials-toolkit/). According to the vendor's product page, it provides metadata reports that list items, files, folders and pages with their sizes and version counts, a monitor for storage growth, and scheduled reports that can be exported to SharePoint, by email, or to Excel or CSV. These are the vendor's statements, and M365.FM has not tested them. Compare any tool's totals with the admin center before you rely on it.
 
 ## Next step
 
-Export the Active sites list today, sort it by storage used and note the share of the top 10 sites. That list is the start of your SharePoint storage report, and it tells you where to look first.
+Export the Active sites list today, sort it by storage used and note the share of the top 10 sites. That list is the start of your SharePoint storage report, and it tells you where to look first to manage SharePoint storage.

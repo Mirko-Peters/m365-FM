@@ -21,30 +21,40 @@ faq:
     a: "No, not from the recycle bin. Microsoft states that versions deleted by trim jobs are permanently deleted and bypass the normal recycle bin. They can be recovered only if a backup exists, for example from Microsoft 365 Backup. That is why Microsoft recommends a what-if analysis before every trim."
 ---
 
-To trim SharePoint version history safely, first measure how much storage versions use, then run a what-if analysis, and only then queue a trim job, because trimmed versions are permanently deleted and cannot be restored from the recycle bin. This guide is for the SharePoint admin who sees libraries growing faster than their content explains. It covers the limits Microsoft documents, the Automatic and Manual modes, the order of the steps, and the checks that keep protected content safe.
+To trim SharePoint version history safely, first measure how much storage versions use, then run a what-if analysis, and only then queue a trim job, because trimmed versions are permanently deleted and cannot be restored from the recycle bin. This guide is for the SharePoint admin who sees libraries growing faster than their content explains. It covers the default limits, the Automatic and Manual modes, the order of the steps for a safe version history cleanup, and the checks that keep protected content safe.
 
 ## SharePoint version history storage: why versions take so much space
 
-Every time a file is saved and a new version is created, SharePoint Online keeps the earlier state so people can go back. Microsoft describes this recovery benefit in its guidance on [planning version storage](https://learn.microsoft.com/en-us/sharepoint/plan-version-storage), and the same page treats the storage cost as the reason to set limits. Each file version counts toward the storage of the SharePoint site, so the number of versions per file matters as much as the file size. The version count grows quickly when many people edit a file, when it is large, or when an app saves it often, and older versions stay until a limit removes them. In practice, a library that holds a few hundred active files can use more space for old versions than for the files you see.
+Every time a file is saved and a new version is created, SharePoint Online keeps the earlier state so people can go back. Microsoft's [overview of version history](https://learn.microsoft.com/en-us/sharepoint/version-overview) describes the benefit: a user can view a previous version without overwriting the current one, restore it, and see when and by whom a file was changed. It also supports audit and legal requirements. The cost is storage. Each file version counts toward the storage of the SharePoint site, so the number of versions per file drives storage consumption as much as the file size.
 
-This explains a common support case. The admin center reports a full tenant, the library looks small, and nobody can say where the space went. The visible files are only the latest version of each item, and the older versions sit behind them in the version history of every file. Before you buy storage space or ask users to delete files, check whether versions are the cause. A short export of version storage per library (see the measuring section below) shows the answer within a day.
+Microsoft's [Mission Critical blog](https://techcommunity.microsoft.com/t5/microsoft-mission-critical-blog/sharepoint-automatic-version-history-cleanup-intelligent/ba-p/4514011) names the usual cause: every edit saved by AutoSave or co-authoring creates a new version, so a single editing session can generate dozens of versions. By default, SharePoint Online allows up to 500 versions per item in a document library, with no expiration. The blog gives one analysis as an example: a library of 250 files with about 150 versions each used roughly 37.5 GB.
+
+This explains a common support case. The SharePoint admin center reports a full tenant, the library looks small, and nobody can say where the space went. The visible files are only the latest version of each item, and the older versions sit behind them in the version history of every file. Before you buy storage space or ask users to delete files, check whether versions are the cause.
+
+## SharePoint version limit: how many versions are kept by default?
+
+Up to 500 per item, with no expiration, according to the blog. The blog adds that SharePoint will not keep more than 500 versions of a file: when a file reaches the cap under heavy editing, the oldest versions are trimmed to honor it. Microsoft also describes what happens when you lower a limit. The trimming is gradual: for a file at 500 versions and a new limit of 300, the system purges up to 20 of the oldest versions on each save until the file complies.
+
+Two consequences follow. First, a high count limit alone does not protect your storage, because 500 versions of a large file can be a lot of space. Second, lowering a limit does not free space at once. It works through the files over time, as they are saved, which is why a separate trim job exists for existing content.
 
 ## SharePoint version history limits: Automatic and Manual modes
 
-Microsoft's page on [version history limits](https://learn.microsoft.com/en-us/sharepoint/document-library-version-history-limits) describes where limits can be set. Global and SharePoint admins can set them for the whole organization. Site owners can override the organization setting for their site, and library owners can override site or organization settings for a library. One detail matters for planning: the organization-level settings apply to new libraries, both on existing and on new sites. They do not shrink the versions that already exist, and the library settings of a single library can differ from the default for new document libraries.
-
-The count limit works per file. If a file reaches 500 versions under a count limit of 500, the next save removes the oldest version, so the number of versions per file stays at the limit.
+Microsoft's page on [version history limits](https://learn.microsoft.com/en-us/sharepoint/document-library-version-history-limits) describes where limits can be set. Global and SharePoint admins can set them for the whole organization. A site owner can override the organization setting for their site, and a library owner can override site or organization settings in the library settings. One detail matters for planning: the organization version history limits apply to new libraries, both on existing and on new sites. They do not shrink the versions that already exist, and the settings of a single library can differ from the default for new document libraries.
 
 There are two modes:
 
-- **Automatic.** Microsoft recommends it for most cases. This setting is also known as [intelligent versioning](https://www.m365.fm/entity/intelligent-versioning/). It keeps all versions created in the first 30 days, up to a count limit of 500. It then keeps hourly versions for days 30 to 60, daily versions for days 60 to 180, and weekly versions beyond 180 days, until the maximum of 500 is reached. Users keep access to more versions from the recent past and fewer older versions from far back.
-- **Manual.** The admin sets a major version limit with an expiration period, which deletes versions that exceed either the count or the age, or a major version limit without an expiration period. The interface does not accept fewer than 100 major versions or fewer than 30 days. Microsoft advises against lower values, because user activity could cause inadvertent data loss.
+- **Automatic.** Microsoft recommends it for most cases. The blog calls it Automatic Version History Cleanup, also known as [intelligent versioning](https://www.m365.fm/entity/intelligent-versioning/), and says it was introduced in SharePoint Online in late 2024. It keeps all versions from the first 30 days, up to the cap of 500. It then keeps about one version per hour for days 31 to 60, about one per day for days 61 to 180, and about one per week beyond 180 days. Current versions are never deleted by the system, and version expiration dates for older versions appear in the version history view.
+- **Manual.** The admin sets a major version limit with an expiration period, which deletes versions that exceed either the count or the age, or a major version limit without an expiration period. The interface does not accept fewer than 100 major versions or fewer than 30 days. Microsoft advises against lower values in the version settings, because user activity could cause inadvertent data loss.
 
-Microsoft's page on version storage gives two scenarios in which Automatic mode reduced version storage by about 94 percent and 96 percent compared with count limits only. Treat them as examples of the algorithm, not as a promise for your tenant. The result depends on how often your files change.
+The blog advises using Automatic for most scenarios and manual limits only for a specific reason.
 
-## Measure before you trim
+## Measure before you trim: the version storage usage report
 
 The first step is a report, not a deletion. Microsoft's article on [trimming existing versions](https://learn.microsoft.com/sharepoint/trim-versions) lays out the order: generate a version storage usage report for the site or library, run a what-if analysis on that report, queue the trim job, and track the job until it completes. The what-if analysis shows the impact of the trim mode you selected before anything is deleted.
+
+Microsoft's [tutorial for the version usage report](https://learn.microsoft.com/en-us/sharepoint/tutorial-generate-version-usage-report) explains the mechanics. You queue the report job with the SharePoint Online Management Shell, for example `New-SPOSiteFileVersionExpirationReportJob` for a site, and check progress with `Get-SPOSiteFileVersionExpirationReportJobProgress`. For a library, the equivalent cmdlets carry List in the name. The report is written as a CSV file to a location inside a SharePoint document library, and each row is one file version, with columns such as the file URL, major and minor version, size, modified by, last modified date and expiration dates. The page lists no version count column, so you get counts by counting the rows per file.
+
+To analyze the file, Microsoft provides an Excel template, with views such as Summary, Version Count and File Level Analysis, and a PowerShell script that outputs tables such as the files with fewer than 10 versions and the users impacted. Set the target expiration date column to the dates you want to test. Microsoft warns that a date in the past marks a version as already expired, so it is deleted right away after you start the trim.
 
 A good measuring routine has five steps:
 
@@ -54,32 +64,31 @@ A good measuring routine has five steps:
 4. Run the what-if analysis for Automatic mode on those libraries, and write down the predicted space.
 5. Mark the libraries that contain legal, finance or contract content, and ask their owners about retention.
 
-Treat the output as a [SharePoint reporting](https://www.m365.fm/entity/sharepoint-reporting/) baseline and keep the exports. After the trim you can compare the before and after numbers and show what the change achieved. The comparison also helps when a site owner asks why versions disappeared.
+Treat the output as a [SharePoint reporting](https://www.m365.fm/entity/sharepoint-reporting/) baseline and keep the exports. After the trim you can compare the before and after numbers and show what the change achieved.
 
 ## Trim existing versions step by step
 
-Microsoft documents trimming through PowerShell, not through a site settings page. For a single site, the Automatic mode uses `New-SPOSiteFileVersionBatchDeleteJob` with the `-Automatic` parameter and the site URL. For a single library, the equivalent cmdlet is `New-SPOListFileVersionBatchDeleteJob`. You track a running job with `Get-SPOSiteFileVersionBatchDeleteJobProgress`, and you can stop it with the matching remove cmdlet. Check the article for the current syntax before you run anything, because the cmdlets change over time.
+Microsoft documents trimming through PowerShell, not through a site settings page, and the article covers sites, document libraries and OneDrive accounts. For a single site, the Automatic mode uses `New-SPOSiteFileVersionBatchDeleteJob` with the `-Automatic` parameter and the site URL. For a single library, the equivalent cmdlet is `New-SPOListFileVersionBatchDeleteJob`. You track a running job with `Get-SPOSiteFileVersionBatchDeleteJobProgress`.
 
 Four points from the article deserve attention:
 
 - **Start small.** Trim one library, wait for the result, and review the effect before you extend the change to the site.
 - **Expect delays.** Depending on the size of the site or library, a job can take a few days. It is a background job, and Microsoft notes it is subject to off-peak processing.
 - **Be careful with the manual expiration mode.** It does not delete versions created in the last 30 days, and it always deletes all versions created before January 1, 2023. Read this before you choose a number of days.
-- **Know the tenant option.** A tenant-level trim exists as a public preview. It requires the SharePoint Administrator role and a SharePoint Advanced Management or Copilot license. Only one job is allowed per tenant at a time, and it skips read-only, locked and archived sites and sites with a broken version policy inheritance. Multi-Geo tenants must run it for each geo location.
+- **Know the tenant option.** A tenant-level trim exists as a public preview. It requires a SharePoint Advanced Management or Copilot license. Only one job is allowed per tenant at a time, and it skips read-only, locked and archived sites and sites with a broken version policy inheritance. Multi-Geo tenants must run it for each geo location.
 
-The same article notes that a changed tenant policy is not applied again to sites that the job has already processed. If you change your mind in the middle of a job, plan a second run.
+The same article notes that a changed tenant policy is not applied again to sites that the job has already processed.
 
 ## What happens to deleted file versions
 
-The safety rules are the part you must explain to site owners. Microsoft's [FAQ on version history limits](https://learn.microsoft.com/en-us/sharepoint/faqs-for-versions) makes three statements:
+The safety rules are the part you must explain to site owners. Microsoft's page on version history limits makes these statements:
 
-- When a user deletes a version, it moves to the recycle bin, where it can be restored.
-- When Automatic mode or a manual expiration removes a version, it is permanently deleted and cannot be restored from the recycle bin.
-- When a retention policy or an eDiscovery hold applies, retention wins. The trim job does not delete the version and stamps an expiration date instead.
+- When a user deletes a version, it moves to the site's recycle bin and can be recovered for a period.
+- A version removed by a limit or by a trim job bypasses the normal recycle bin and cannot be recovered from it. The trim article adds that such versions can be recovered only if the data was backed up before, for example with Microsoft 365 Backup.
+- For items under a retention policy or an eDiscovery hold, the versioning limits of the library are ignored. According to the blog, a trim job that reaches such a version does not delete it and extends the expiration until the hold is released.
+- Deleting versions on documents marked as records is blocked.
 
-The FAQ also says that purging expired versions can take a couple of days, so the storage figure does not drop at once. The limits page adds that deletion of versions on items that are marked as records is blocked, and that audit events for changes to limits and for trim jobs are available in the Microsoft Purview portal. If you run trims regularly, check that audit trail after each job.
-
-One caveat: community reports and Microsoft pages are not fully consistent on how retention labels interact with trimming. Test a trim on a library that holds a label before you rely on it, and keep a backup for content you cannot afford to lose.
+Audit events for changes to limits and for trim jobs are available in the Microsoft Purview portal, so check that trail after each job. Because trimmed versions are gone for good, the blog's advice is plain: use the usage report, run the what-if analysis before large trims, and coordinate with your compliance team.
 
 ## Example: three sites, one trim plan
 
@@ -100,7 +109,7 @@ The total is 126 + 0 + 12 = 138 GB. The three sites hold 300 + 150 + 80 = 530 GB
 ## Common mistakes
 
 - **Trimming without a what-if analysis.** Microsoft recommends it, because trimmed versions cannot be recovered from the recycle bin.
-- **Expecting the organization limit to clean up old libraries.** It applies to new libraries, so existing ones need a trim job.
+- **Expecting the organization limit to clean up existing document libraries.** It applies to new libraries, so existing ones need a trim job.
 - **Choosing a manual limit that is too low.** The interface blocks values below 100 versions and 30 days for a reason.
 - **Forgetting retention.** Versions under a policy or a hold stay, so the space you free can be smaller than you expected.
 - **Not telling site owners.** People who rely on old versions should hear about the change before the job runs.
@@ -111,4 +120,4 @@ Microsoft's own tools show storage per site and the what-if results for trim job
 
 ## Next step
 
-Generate the version storage usage report for your largest site this week and run the what-if analysis for Automatic mode. That one report shows how much of your SharePoint version history storage you could recover and which libraries need an owner conversation first.
+To reduce SharePoint storage safely, start managing version history with one report: generate the version storage usage report for your largest site this week and run the what-if analysis for Automatic mode. That one report shows how much of your SharePoint version history storage you could recover and which libraries need an owner conversation first.
