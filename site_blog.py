@@ -109,7 +109,7 @@ def build(g, posts, people, api):
         for q in sorted(mine, key=lambda q: (q.get("published") or 0, q["slug"]), reverse=True): _seq.setdefault(_sk(q), []).append(q)
         _pos = {(q["handle"], q["slug"]): i for h, s_ in _seq.items() for i, q in enumerate(s_)}
         _content = [q for q in mine if not MST.is_milestone(q)]
-        _running = SPM.running()   # laufende Sponsorings (einmal je Sprache)
+        _running = SPM.running()   # laufende Sponsorings inkl. Karenzzeit (einmal je Sprache)
         for p in mine:
             a = pb[p["handle"]]; au = f"{BASE}/community/u/{a['handle']}/"
             u = f"{croot}u/{p['handle']}/blog/{p['slug']}/"

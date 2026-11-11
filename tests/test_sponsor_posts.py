@@ -14,17 +14,20 @@ PLAN = json.loads((ROOT / "data" / "sponsor_posts_cognillo.json").read_text("utf
 ENTS = {e["id"]: e for e in json.loads((ROOT / "data" / "entities.json").read_text("utf-8"))}
 SPONSORED = [48, 52, 53, 54, 55, 56, 62]
 FIELDS = {"nr", "reihe", "title", "main", "others", "sponsored", "status", "slug", "date"}
+OPTIONAL = {"freigegeben"}   # setzt tools/sponsor_post.py freigeben
+STATUS = ("geplant", "entwurf", "live")   # schreibt tools/sponsor_post.py (schreiben -> entwurf, taeglich -> live)
 
 
 class Plan(unittest.TestCase):
     def test_aufbau(self):
         self.assertEqual(len(PLAN), 62)
         for p in PLAN:
-            self.assertEqual(set(p), FIELDS, p.get("nr"))
+            self.assertTrue(FIELDS <= set(p) <= FIELDS | OPTIONAL, p.get("nr"))
             self.assertIn(p["reihe"], "ABCDEFGH")
             self.assertTrue(p["title"].strip() and p["title"] == p["title"].strip(), p["nr"])
             self.assertNotIn("(gesponsert)", p["title"])   # Kennzeichnung steht im Feld sponsored, nicht im Titel
-            self.assertEqual(p["status"], "geplant")
+            self.assertIn(p["status"], STATUS, p["nr"])
+            if "freigegeben" in p: self.assertIsInstance(p["freigegeben"], bool, p["nr"])
             self.assertIsInstance(p["others"], list)
             self.assertIsInstance(p["sponsored"], bool)
 

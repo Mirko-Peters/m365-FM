@@ -16,13 +16,16 @@ unbekannte Felder sind deshalb ein Fehler):
                                                    "advertisement": vom Sponsor beauftragter Inhalt (PR-Artikel) - EN "Advertisement · Paid content on behalf of Acme",
                                                    DE "Anzeige · Bezahlter Inhalt im Auftrag von Acme"
         "start": "2026-12-01", "end": "2027-05-31",
-                                                   Laufzeit, ISO-Datum, beide Tage eingeschlossen. "end": null (oder fehlt) = unbefristet: immer aktiv, keine Nachfrist
+                                                   Laufzeit, ISO-Datum, beide Tage eingeschlossen. "end": null (oder fehlt) = unbefristet: immer aktiv, keine Nachfrist.
+                                                   Karenzzeit (Mirko 11.11.2026, fuer ALLE Sponsorings): alles, was waehrend der Laufzeit gilt, bleibt GRACE_DAYS = 182 Tage
+                                                   (6 Monate) nach "end" unveraendert stehen (wirksames Ende = end + 182, eingeschlossen), damit ein Kunde nahtlos verlaengern kann
         "manager": {"handle": "mirko-p", "entity": "mirko-peters"},
                                                    optional: Betreuer des Sponsorings (Community-Handle, Personen-Entitaet); Leads des Lead-Formulars werden ihm zugewiesen
         "note": "...",                             optional: interne Notiz (max. 400 Zeichen, wird nicht angezeigt)
         "entities": ["acme-backup"],               optional: Entitaeten des Sponsors (ids aus data/entities.json bzw. der Entitaetsdatenbank).
-                                                   Nur waehrend der Laufzeit: Kennzeichnung auf der Entitaetsseite, Badge in der Entitaetsliste,
-                                                   WebPage.sponsor, Link "Offizielle Website" mit rel="sponsored noopener"
+                                                   Waehrend der Laufzeit und 182 Tage (6 Monate Karenzzeit) danach: Kennzeichnung auf der Entitaetsseite, Badge in der
+                                                   Entitaetsliste, WebPage.sponsor, Link "Offizielle Website" mit rel="sponsored noopener"; bei Firmen (Typ org) zusaetzlich
+                                                   Lead-Formular auf der Firmenseite, Partner-Block im Firmenverzeichnis und Eintrag in sponsors.json (Worker nimmt Leads an)
         "topics": ["entra-id"],                    optional: Themen-Sponsoring (Entitaets-ids vom Typ product, platform, concept, category, cert).
                                                    Wie "entities", aber rel="sponsored" nur fuer Links auf die Website des Sponsors (die offizielle Website
                                                    eines Microsoft-Produkts ist kein bezahlter Link). Ohne Obergrenze je Thema: das eigene Produkt
@@ -59,7 +62,9 @@ LABELS = ("sponsored", "advertisement")
 TOPIC_TYPES = ("product", "platform", "concept", "category", "cert")
 REC_KEYS = ("id", "sponsor", "label", "start", "end", "entities", "topics", "episodes", "posts", "go", "note", "manager", "lead_topics")
 # Mirko 6.11.2026: Entitaeten des Sponsors (Firma + Produkte) sind bei gesponserten Inhalten EXTRA zur Obergrenze von 10 Themen, solange das Sponsoring
-# laeuft und GRACE_MONTHS danach. Umgesetzt als 182 Tage (6 x ~30,4 Tage) nach "end", nicht als Kalendermonate: Tag 182 zaehlt noch, Tag 183 nicht mehr.
+# laeuft und GRACE_MONTHS danach. Mirko 11.11.2026: diese Karenzzeit gilt fuer ALLES, was ein laufendes Sponsoring zeigt (Kennzeichnung, Badge, rel="sponsored",
+# Lead-Formular, Partner-Block, sponsors.json), damit ein Kunde weitermachen und verlaengern kann. Eine Definition: _active() (wirksames Ende grace_end()).
+# Umgesetzt als 182 Tage (6 x ~30,4 Tage) nach "end", nicht als Kalendermonate: Tag 182 zaehlt noch, Tag 183 nicht mehr. Pendant: worker/src/sponsor_extra.js.
 GRACE_MONTHS = 6   # Mirko 6.11.2026
 GRACE_DAYS = 182
 TOPIC_CAP = 10
@@ -249,15 +254,32 @@ def init(today, ents, episodes=(), dubs=None, orig=None, path=None):
     st["lead"], unknown = lead_index(recs, st["today"], ents)
     st["lead_ent"] = lead_entities(recs, st["today"], ents)
     if unknown: print("WARNUNG Sponsorings: lead_topics ohne Entitaet (ignoriert): " + ", ".join(sorted(unknown)))
-    print(f"Sponsorings: {len(recs)} Eintraege, {sum(1 for r in recs if _active(r, st['today']))} laufend; gekennzeichnet: {len(st['ent'])} Entitaetsseiten, "
-          f"{len(st['ep'])} Folgen der Show, {len(st['vid'])} Videos (Dub-Folgen), {len(st['post'])} Beitraege")
+    grace = [f'{r["id"]} bis {grace_end(r):%d.%m.%Y}' for r in recs if status(r, st["today"]).startswith("Karenzzeit")]
+    print(f"Sponsorings: {len(recs)} Eintraege, {sum(1 for r in recs if _active(r, st['today']))} laufend" + (f" (davon in Karenzzeit: {', '.join(grace)})" if grace else "")
+          + f"; gekennzeichnet: {len(st['ent'])} Entitaetsseiten, {len(st['ep'])} Folgen der Show, {len(st['vid'])} Videos (Dub-Folgen), {len(st['post'])} Beitraege")
     return st
 
 
+def grace_end(r):
+    """Wirksames Ende eines befristeten Sponsorings: "end" + GRACE_DAYS (6 Monate Karenzzeit, Mirko 11.11.2026, fuer alle Kunden); None bei "end" null/fehlt oder ungueltig."""
+    e = _day(r.get("end"))
+    return e + timedelta(days=GRACE_DAYS) if e else None
+
+
 def _active(r, today):
-    t = _day(today)
-    if not t: return False
-    return _day(r["start"]) <= t and (r.get("end") is None or t <= _day(r["end"]))   # end null/fehlt: unbefristet
+    """DIE Laufzeit-Pruefung fuer alles, was ein laufendes Sponsoring zeigt: start <= today <= end + GRACE_DAYS (beide eingeschlossen); end null/fehlt: unbefristet."""
+    t, s = _day(today), _day(r.get("start"))
+    if not (t and s and s <= t): return False
+    return r.get("end") is None or bool(grace_end(r) and t <= grace_end(r))
+
+
+def status(r, today):
+    """Interne Anzeige (Baulog, Werkzeuge): "geplant", "laeuft", "laeuft (unbefristet)", "Karenzzeit bis TT.MM.JJJJ" oder "beendet". Oeffentliche Seiten zeigen nur die Kennzeichnung."""
+    t, s, e = _day(today), _day(r.get("start")), _day(r.get("end"))
+    if not (t and s) or t < s: return "geplant"
+    if r.get("end") is None: return "laeuft (unbefristet)"
+    if e and t <= e: return "laeuft"
+    return f"Karenzzeit bis {grace_end(r):%d.%m.%Y}" if _active(r, today) else "beendet"
 
 
 def _index(recs, today, dubs, orig):
@@ -268,7 +290,7 @@ def _index(recs, today, dubs, orig):
     def add(d, k, r):
         if r not in d.setdefault(k, []): d[k].append(r)
     for r in sorted(recs, key=lambda r: (r["start"], r["id"])):
-        if _active(r, st["today"]):   # Banner auf Entitaetsseiten nur waehrend der Laufzeit
+        if _active(r, st["today"]):   # Banner auf Entitaetsseiten waehrend der Laufzeit und der Karenzzeit (182 Tage nach "end")
             for x in list(r.get("entities") or []) + list(r.get("topics") or []): add(st["ent"], x, r)
             st["own"].update(r.get("entities") or [])
         for x in r.get("episodes") or []:   # Folgen und Beitraege behalten die Kennzeichnung dauerhaft
@@ -322,11 +344,8 @@ def lead_for_page(topics):
 
 
 def _in_grace(r, today):
-    """Laeuft oder ist vor hoechstens GRACE_DAYS Tagen zu Ende gegangen (end + 182 Tage eingeschlossen)."""
-    t, s = _day(today), _day(r["start"])
-    if r.get("end") is None: return bool(t and s and s <= t)   # unbefristet: immer aktiv, keine Nachfrist
-    e = _day(r["end"])
-    return bool(t and s and e and s <= t <= e + timedelta(days=GRACE_DAYS))
+    """Laeuft oder ist vor hoechstens GRACE_DAYS Tagen zu Ende gegangen (end + 182 Tage eingeschlossen); seit 11.11.2026 gleichbedeutend mit _active()."""
+    return _active(r, today)
 
 
 def sponsor_extra_entities(org_id, today, ents, recs=None):
@@ -344,7 +363,7 @@ def sponsor_extra_entities(org_id, today, ents, recs=None):
 
 
 def active_sponsor_orgs(today, ents, recs=None):
-    """Aktive Sponsor-Firmen (Entitaetstyp org in "entities" eines laufenden Sponsorings, unbefristet eingeschlossen): [{"id", "name", "rec"}].
+    """Aktive Sponsor-Firmen (Entitaetstyp org in "entities" eines laufenden Sponsorings inkl. 182 Tage Karenzzeit, unbefristet eingeschlossen): [{"id", "name", "rec"}].
     Grundlage fuer Firmenverzeichnis, Lead-Formular und sponsors.json (der Worker nimmt Leads nur fuer diese Firmen ohne Buchung an)."""
     recs = _state()["recs"] if recs is None else recs
     out, seen = [], set()
@@ -416,12 +435,12 @@ def set_go_codes(codes, offline=False):
 # --- Abfragen fuer die Seiten (leere Liste = keine Kennzeichnung, die Seite bleibt Byte fuer Byte wie ohne Sponsorings) ---
 
 def entity(eid):
-    """Laufende Sponsorings (Entitaet des Sponsors oder Themen-Sponsoring) dieser Entitaet."""
+    """Laufende Sponsorings (inkl. Karenzzeit; Entitaet des Sponsors oder Themen-Sponsoring) dieser Entitaet."""
     return list(_state()["ent"].get(eid, []))
 
 
 def entity_own(eid):
-    """True, wenn die Entitaet einem laufenden Sponsor selbst gehoert ("entities"): ihr Link "Offizielle Website" ist ein bezahlter Link."""
+    """True, wenn die Entitaet einem laufenden Sponsor (inkl. Karenzzeit) selbst gehoert ("entities"): ihr Link "Offizielle Website" ist ein bezahlter Link."""
     return eid in _state()["own"]
 
 
@@ -434,7 +453,7 @@ def episode(slug=None, vid=None):
 
 
 def running(today=None):
-    """Alle laufenden Sponsorings (Zeitraum eingeschlossen, unbefristete immer), egal ob ein Inhalt namentlich zugeordnet ist. Grundlage dafuer, dass Links auf die
+    """Alle laufenden Sponsorings (Zeitraum eingeschlossen plus 182 Tage Karenzzeit nach "end", unbefristete immer), egal ob ein Inhalt namentlich zugeordnet ist. Grundlage dafuer, dass Links auf die
     Website eines laufenden Sponsors in JEDEM Blogbeitrag rel="sponsored" tragen, auch wenn der Beitrag nicht in "posts" steht (z. B. die Cognillo-Reihe)."""
     st = _state(); t = str(today or st["today"])[:10]
     return [r for r in sorted(st["recs"], key=lambda r: (r["start"], r["id"])) if _active(r, t)]

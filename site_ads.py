@@ -410,7 +410,7 @@ def slot_script(base, lang):
 
 
 def sponsor_lead(base, lang, eid, name, pt="entity", script=True):
-    """Lead-Formular eines laufenden Sponsors (data/sponsorships.json) auf der Firmen-Entitaetsseite: gekennzeichneter Kasten mit Button.
+    """Lead-Formular eines laufenden Sponsors (data/sponsorships.json, inkl. 182 Tage Karenzzeit nach "end") auf der Firmen-Entitaetsseite: gekennzeichneter Kasten mit Button.
     Das Formular ist das bestehende Lead-Formular (assets/ads.js, POST /api/ads/lead); ads.js und Konfiguration kommen nur auf Seiten mit diesem Kasten."""
     t = texts(lang, "slot")
     btn = escape(t["contact"].replace("{org}", name))

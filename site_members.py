@@ -318,7 +318,7 @@ def build(g, people, orgs, extra=None):
     topic_js = f'<script>window.M365TopicConfig={{api:{json.dumps(api)},lang:document.documentElement.lang.slice(0,2)}}</script><script defer src="{BASE}/assets/topic-follow.js"></script>'
 
     def partner_block(lang, lst):
-        """Partner/Sponsoren (data/sponsorships.json, laufend) oben im Firmenverzeichnis, als Anzeige gekennzeichnet; Link zur Firmen-Entitaet (mit Lead-Formular)
+        """Partner/Sponsoren (data/sponsorships.json, laufend inkl. 182 Tage Karenzzeit) oben im Firmenverzeichnis, als Anzeige gekennzeichnet; Link zur Firmen-Entitaet (mit Lead-Formular)
         und, wenn es eine passende Community-Firma gibt (gleiche Website), zu deren Profil."""
         import site_sponsorships as SPM
         sp = SPM.active_sponsor_orgs(SPM._state()["today"], ENTS)
