@@ -25,11 +25,11 @@ Flaky end-to-end tests are automated browser tests that pass on one run and fail
 
 ## Why flaky tests do so much damage
 
-A test is flaky when its result is not repeatable. Martin Fowler's article on [non-determinism in tests](https://www.martinfowler.com/articles/nonDeterminism.html) defines it as a test that "passes sometimes and fails sometimes, without any noticeable change in the code, tests, or environment."
+A test is flaky when its result is not repeatable. Martin Fowler's article on [non-determinism in tests](https://www.martinfowler.com/articles/nonDeterminism.html) defines a non-deterministic test as one that "passes sometimes and fails sometimes," "without any noticeable change in the code, tests, or environment."
 
 The harm comes from lost trust. If a red build might be a real bug or might be noise, people learn to ignore red builds. Then a real defect slips through. Teams also waste time: every failure needs a re-run before anyone can say whether it matters. An unstable test suite slows the CI pipeline too, because each failed test run waits for a retry and blocks the merge queue behind it.
 
-The numbers from large systems show that this is normal, not rare. A post on the Google Testing Blog, [Flaky Tests at Google and How We Mitigate Them](https://testing.googleblog.com/2016/05/flaky-tests-at-google-and-how-we.html), reports that about 1.5 percent of all test runs gave a flaky result, and almost 16 percent of tests had some level of flakiness. It also says about 84 percent of observed pass-to-fail transitions in post-submit testing involved a flaky test. With an average project of about 1,000 tests, a 1.5 percent flake rate means roughly 15 tests will likely fail on a given run. Your numbers will differ, but the lesson holds: at scale, flakiness is a certainty, so you need a process.
+The numbers from large systems show that this is normal, not rare. A post on the Google Testing Blog, [Flaky Tests at Google and How We Mitigate Them](https://testing.googleblog.com/2016/05/flaky-tests-at-google-and-how-we.html), reports that about 1.5 percent of all test runs gave a flaky result, and almost 16 percent of tests had some level of flakiness. It also says about 84 percent of the pass-to-fail transitions it observes involve a flaky test, and that the average project contains about 1,000 individual tests. Your numbers will differ, but the lesson holds: at scale, flakiness is a certainty, so you need a process.
 
 Browser-based [end-to-end testing](https://www.m365.fm/entity/end-to-end-testing/) is especially exposed. Each test depends on a browser, a network, a deployed application, test accounts and often third-party services. More moving parts mean more chances to vary. That is why e2e tests tend to be less stable than unit tests, which have far fewer moving parts.
 
@@ -38,7 +38,7 @@ Browser-based [end-to-end testing](https://www.m365.fm/entity/end-to-end-testing
 Fowler's article names five common causes. Each one applies to browser tests.
 
 1. **Lack of isolation.** Tests share state, such as database records or a logged-in session, so one test changes what another sees. Fix: build the starting state again for each test, or clean up after it.
-2. **Asynchronous behavior.** The page needs time to respond, and the test acts too early or too late. Fowler's advice: "Never use bare sleeps to wait for asynchronous responses."
+2. **Asynchronous behavior.** The page needs time to respond, and the test acts too early or too late. Fowler's advice is to never use bare sleeps to wait for asynchronous responses, and to use a callback or polling instead.
 3. **Remote services.** A live payment sandbox, mail service or identity provider is slow or down. Fix: replace the remote system with a test double where the test does not need the real one.
 4. **Time.** Tests that read the system clock behave differently at midnight, at month end or across time zones. Fix: control the clock in the test.
 5. **Resource leaks.** A test leaves a connection or session open, and a later, unrelated test fails when the resource runs out.
@@ -49,7 +49,7 @@ The Google post adds concurrency, reliance on non-deterministic or undefined beh
 
 In browser tests, timing is usually the first suspect. A test that clicks a button before it is ready, or checks a message before it appears, will pass on a fast machine and fail on a busy one.
 
-A fixed pause such as "wait 5 seconds" is the worst answer. It wastes time when the page is quick, and it still fails when the page is slow. Fowler suggests polling at a short interval with a generous overall timeout.
+A fixed pause such as "wait 5 seconds" is the worst answer. It wastes time when the page is quick, and it still fails when the page is slow. Fowler describes polling as looking regularly, not just once, and says the time limits should never be literal values in the test.
 
 Modern tools build this in. Playwright's documentation on [actionability](https://playwright.dev/docs/actionability) lists the checks it performs before an action: the element must be visible, stable (its position does not change between animation frames), enabled, able to receive events at the click point, and, for typing, editable. Playwright waits until the checks pass, or fails with a timeout error. Its best-practices page adds that web-first assertions retry until the condition is met.
 
@@ -75,7 +75,7 @@ Finally, make every failure easy to diagnose. Keep the log, a screenshot and a t
 Some flaky tests need more time than you have, and some depend on code you do not own. Then manage them openly, and keep the stable test results trustworthy.
 
 - **Quarantine.** Fowler describes moving non-deterministic tests into a separate suite, so healthy tests keep giving reliable feedback. He adds that quarantined tests must still be fixed quickly, and that you should limit how many can accumulate or how long they can stay.
-- **Retry with a record.** Google describes re-running failing tests and marking a test as flaky, so that it reports failure only after three failures in a row. The post calls this hardly a perfect solution, and warns that auto-quarantine could mask a real race condition.
+- **Retry with a record.** Google describes re-running failing tests and marking a test as flaky, so that it reports failure only after three failures in a row. The post calls this hardly a perfect solution and warns that it could easily mask a real race condition or another bug in the code under test.
 - **Track flakiness over time.** Google also describes tools that detect changes in a test's flakiness level. Even a simple list of tests with their pass rate shows where to look first.
 
 Whatever you choose, make the flaky list visible, give each test an owner and set a date.

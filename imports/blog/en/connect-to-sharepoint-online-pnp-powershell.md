@@ -104,6 +104,8 @@ An admin team at a fictional company runs four jobs. They want one app per risk 
 
 The result: only job 1 and job 2 depend on a person. Jobs 3 and 4 run without anyone present, and neither stores a password. If job 3's server is stolen, the team revokes one certificate. They do not have to reset an admin password.
 
+Whichever option you choose, keep the site URL in a variable such as `$siteUrl`, so one PowerShell script can iterate through each site in a list of sites, retrieve what it needs from each SharePoint site and upload a report. Test running the script against one site collection before you run it across your Microsoft 365 tenant.
+
 ## Common mistakes
 
 - **Forgetting `-ClientId`.** The connection fails or prompts for it. Save the ID in the `ENTRAID_APP_ID` environment variable on machines where you run scripts often.

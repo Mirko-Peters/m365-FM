@@ -33,16 +33,16 @@ The Ranorex guide on [knowing what to automate](https://www.ranorex.com/blog/kno
 
 The TestDevLab article on [prioritizing test cases for regression testing](https://www.testdevlab.com/blog/how-to-prioritize-test-cases-for-regression-testing) describes the same idea as risk-based prioritization: ranking test cases by factors such as the probability of failure and the severity of the impact. It advises starting with high-risk, highly critical functions and then moving to lower-risk ones. It also says frequently updated features and complex, multi-component features deserve earlier testing.
 
-The practical message: do not automate by feature list or by what is easiest. Automate by risk and by how often the test will run.
+The practical message: automate by risk and by how often the test will run, not by feature list or ease.
 
-A short automation strategy keeps the work focused. It names the candidates for automation, the automation tools, the owner and the review date. Most test automation best practices begin with the same step: decide what to automate, and only then choose the tool. Automation testing pays off when the plan comes first.
+A short automation strategy names the candidates, the tools, the owner and the review date. Most test automation best practices begin the same way: decide what to automate, and only then choose the tool.
 
 ## Which tests to automate first: five criteria
 
 Katalon's guide on [selecting regression test cases](https://katalon.com/resources-center/blog/how-to-select-regression-test-cases) says strong automation candidates meet most of a set of conditions. These five are the ones that matter most for a small team.
 
 1. **Business-critical.** The test covers a revenue-critical, security-sensitive or core flow, such as login, checkout or payments. If this breaks, customers notice first.
-2. **Runs often.** The test runs on every pull request, every nightly build or every release. Ranorex also names smoke tests here: a small subset of regression tests that run with each new build.
+2. **Runs often.** The test runs on every pull request, every nightly build or every release.
 3. **Stable.** The feature rarely changes, so the test will not need constant repair.
 4. **Costly by hand.** The test is repetitive, slow and prone to human error. Repeated and data-driven checks fit well, because the same steps run with many inputs, and automation testing saves the most time here.
 5. **Clear result.** The test has an objective pass or fail result that is easy to check, for example through the screen, an API response or the system state. Cover the edge cases that matter in the test data, not every possible input.
@@ -50,6 +50,14 @@ Katalon's guide on [selecting regression test cases](https://katalon.com/resourc
 A test that meets four or five of these goes to the top of the queue. A test that meets one or two waits.
 
 Katalon adds a point about layers: prefer the lowest layer that works, and automate unstable UI flows only when end-to-end validation is essential. If a rule can be checked by a [unit test](https://www.m365.fm/entity/unit-testing/) or an API call, that check is usually faster and steadier than a browser test. Slow UI tests belong to the few flows that need them. Keep browser-level [end-to-end testing](https://www.m365.fm/entity/end-to-end-testing/) for the journeys where the whole path through the screens must be proven.
+
+## Fit the order to the test pyramid and your pipeline
+
+Selection says what to automate. Layers say where. Martin Fowler's [Practical Test Pyramid](https://martinfowler.com/articles/practical-test-pyramid.html) advises many small, fast unit tests, some coarser tests and very few high-level tests. His rule for choosing the level is useful for a ranked list: if a higher-level test spots an error and no lower-level test fails, write a lower-level test. Push tests as far down as possible, and remove high-level tests that duplicate what lower levels already cover.
+
+So before you write a browser test for a ranked item, ask two questions. Could a unit test or an integration test prove the same rule faster? Are any automated test cases now redundant? These are our questions, built on Fowler's rule, not a checklist from the sources.
+
+Then place each test in the pipeline. Ranorex describes smoke tests as a small subset of regression tests that run with each new build, and Katalon names every pull request, nightly build and release as the points where strong candidates run. A practical split, which is our own suggestion, is a small smoke set on every build and the fuller automation suite each night or release. Keep exploratory testing in the QA team's hands, and review the plan every quarter.
 
 ## What to leave manual for now
 
@@ -84,7 +92,7 @@ A QA lead has five manual checks to rank. Each factor is scored from 1 to 5.
 4. **New dashboard layout.** Criticality 3, frequency 3, stability 1, effort 3, flakiness score 2. Score: 0.9 + 0.6 + 0.2 + 0.45 + 0.3 = 2.45. Keep manual until the design settles.
 5. **Profile photo upload.** Criticality 2, frequency 2, stability 3, effort 2, flakiness score 2. Score: 0.6 + 0.4 + 0.6 + 0.3 + 0.3 = 2.2. Keep manual.
 
-The result is a ranked list: invoice export, then password reset, with the report filter in reserve. When the team starts to automate tests, it begins with a small automation framework, shared test data and these first test cases, and it grows the automated test suite from there. The lead can show the list to the product owner, and the reasons are clear. When the dashboard stops changing, its stability score rises and it can move up.
+The result is a ranked list: invoice export, then password reset, with the report filter in reserve. The lead starts with a small automation framework, shared test data and these first test cases, then grows the automated suite. The product owner can see the reasons, and when the dashboard stops changing, its stability score rises and it can move up.
 
 ## Common mistakes
 

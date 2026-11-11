@@ -31,25 +31,33 @@ Martin Fowler's article [The Practical Test Pyramid](https://martinfowler.com/ar
 - **Integration tests** check the integration of your application with the parts that live outside it, such as a database, a filesystem or a separate service. Fowler prefers narrow ones that test one external integration point at a time. This is the job of [integration testing](https://www.m365.fm/entity/integration-testing/).
 - **End-to-end tests** test the deployed application through its user interface and cover the entire integrated system. Fowler calls them broad stack tests. This is [end-to-end testing](https://www.m365.fm/entity/end-to-end-testing/).
 
-The main difference between unit testing and integration testing is scope: one part of the code against the link between parts. Other terms overlap with these levels. Functional testing and system testing also check the software from the outside, and many teams say e2e testing or e2e tests for the browser-driven form. Teams in software development use the words loosely, so agree on yours.
+The main difference between unit testing and integration testing is scope: one part of the code against the link between parts. Functional testing and system testing also check the software from the outside, and e2e testing is the browser-driven form, so agree on your words.
 
-The same article points out that UI tests and end-to-end tests are related but not identical. A UI test checks that the interface behaves correctly, and much frontend code can be checked at the unit level. An end-to-end test goes through the whole stack.
-
-A simple way to remember the difference is the question each level answers. Developers write unit tests and run unit tests on every commit, while integration and end-to-end tests need a test environment with a database, services or a deployed build. A unit test asks whether this function is correct. An integration test asks whether we talk to this other system correctly. An end-to-end test asks whether a user can complete this journey.
+Developers usually write unit tests and run unit tests on every commit. Remember the difference by the question each level answers: a unit test asks whether this function is correct. An integration test asks whether we talk to this other system correctly. An end-to-end test asks whether a user can complete this journey.
 
 ## How many of each: the test pyramid
 
 The test pyramid is the usual way to describe the balance. Fowler's advice is to write lots of small and fast unit tests, some more coarse-grained tests, and very few high-level tests. He states it as a rule: the higher the level, the fewer tests you should have.
 
-The article gives no fixed ratio. The pyramid is a direction, not a quota, so set your own balance from your run times and your defect history.
-
 The reason is cost. According to the article, unit testing runs very fast, integration testing tends to be much slower because real external parts are involved, and end-to-end testing runs pretty slowly. End-to-end testing also requires a lot of maintenance and is notoriously flaky.
 
 That flakiness is measurable at scale. A post on the Google Testing Blog, [Flaky Tests at Google and How We Mitigate Them](https://testing.googleblog.com/2016/05/flaky-tests-at-google-and-how-we.html), reports that about 1.5 percent of its test runs gave a flaky result and almost 16 percent of its tests had some flakiness.
 
-All three levels feed regression testing, because they run again after every change. Testing strategies differ in how they split the effort between unit testing, integration testing and end-to-end testing, but they share the pyramid idea.
+All three levels feed regression testing, because they run again after every change.
 
 Fowler also warns against the opposite shape, which he calls the test ice-cream cone: many manual and browser-level tests on top, few unit tests below. He describes it as a nightmare to maintain that takes way too long to run. If your suite looks like that, adding AI will not fix the shape. It may only produce more of the slow tests faster.
+
+## Unit testing vs integration testing: when to use each level
+
+The TestRail comparison of [unit and integration testing](https://www.testrail.com/blog/unit-testing-vs-integration-testing/) lists practical differences. Unit tests are quick to implement and fast to execute, and they are typically handled by developers. Integration testing often involves QA engineers and testers. Unit tests use mocks and stubs to avoid external systems, while integration testing focuses on real interactions but may still use mocks when an external service is unavailable, unreliable or costly.
+
+The advantages of unit testing are fast feedback, early bug detection and more modular code. Its weakness is that a suite of unit tests does not show whether the parts work together, which is what integration testing adds. TestRail suggests unit tests for isolated logic early in development, and integration tests for workflows that span modules, databases or third-party services. It describes two ways to run the latter: Big Bang, which tests everything together after development and is harder to debug, and incremental, which tests small groups step by step and makes problems easier to locate.
+
+Fowler gives a rule for deciding the level: if a higher-level test spots an error and no lower-level test fails, write a lower-level test. Push tests as far down the pyramid as you can, and remove high-level tests that duplicate what lower levels already cover. A comprehensive testing strategy uses all three levels, with each higher level focused on what the lower ones cannot cover.
+
+Two related questions come up often. Fowler notes that some call the middle layer integration tests and some call them component tests, and that agreeing on terms matters more than the name. He also says acceptance tests, which check the software from a user's perspective, can sit at any level, so they are orthogonal to the pyramid. Unit testing and end-to-end testing are therefore the two ends of one scale, not rival schools.
+
+These tests are easy to automate in a pipeline. TestRail says unit tests usually run early, often right after a push or pull request, and integration tests run later, once the app is deployed to a staging or test environment. Together they form a quality gate.
 
 ## Where AI helps most
 
@@ -62,9 +70,9 @@ This fits the pyramid. The reasons are our own inference, not a measurement:
 - **Clear inputs and outputs.** Functions and API calls have defined inputs and outputs, so a tool has a precise target.
 - **Many repetitive cases.** Boundary values and error paths are repetitive in unit testing, and a draft saves typing.
 
-Each generated test case needs an owner. A practical rule is to let AI draft and let a person own. The person who accepts a generated test is responsible for what it checks, exactly as for a test written by hand.
+Let AI draft and let a person own: whoever accepts a generated test is responsible for what it checks, exactly as for a test written by hand.
 
-For integration testing, AI can help to draft test data and simulate dependencies, but a person must still decide what the contract with the other system really is.
+For integration testing, AI can draft a test case or test data and simulate dependencies, but a person must decide what the contract with the other system is, and integration testing verifies that contract.
 
 At the end-to-end testing level, AI helps in a different way. Tools that run plain-language steps in a browser can lower the cost of writing a journey test. They do not change the cost of running one, and they do not remove the need for a clear pass or fail rule.
 
@@ -72,7 +80,7 @@ At the end-to-end testing level, AI helps in a different way. Tools that run pla
 
 The Parasoft article is direct about limits. It says to keep human review on every AI-generated change and to treat AI output as a draft. It says used poorly, AI can inflate coverage without validating behavior, and it warns about empty tests that run code paths but have weak or missing assertions. It lists outputs that drift across runs with the same inputs as a warning sign. It adds that AI can not sign off on safety-critical changes or replace human judgment in ambiguous flows, visual checks and accessibility reviews. For data, it warns against prompts that contain secrets or regulated data.
 
-In practice, watch for four things:
+Testing strategies that use AI need four checks:
 
 1. **Coverage that rises but catches nothing.** Check assertions, not only coverage numbers.
 2. **Tests that mirror the code.** A test that repeats the implementation will pass even when the logic is wrong.
@@ -85,23 +93,23 @@ The numbers are made up.
 
 A team has 600 automated tests: 450 unit tests, 110 integration tests and 40 end-to-end tests. The browser tests take 50 minutes of a 60-minute pipeline, and six of them fail at random each week.
 
-The QA lead decides on three moves. First, use an AI assistant to draft unit tests for new code, with a rule that every draft is reviewed by a developer. In the first month the assistant drafts 120 tests. Reviewers reject 30 of them because the assertions are weak, so 90 join the suite.
+The QA lead makes three moves. First, an AI assistant drafts unit tests for new code, and a developer reviews every draft. In the first month the assistant drafts 120 tests. Reviewers reject 30 of them because the assertions are weak, so 90 join the suite.
 
-Second, use AI to draft test data for the integration tests, but keep the contracts written by hand.
+Second, AI drafts test data for the integration tests, and the contracts stay hand-written.
 
-Third, leave the 40 end-to-end tests alone. Instead, the lead removes six duplicates that a faster lower-level test already covers. The pipeline drops from 60 minutes to 48. The AI investment went where review is cheapest, and the slow layer got smaller, not bigger.
+Third, the 40 end-to-end tests get no AI help. The lead removes six duplicates that a faster lower-level test already covers, and the pipeline drops from 60 minutes to 48. The AI effort went where review is cheapest, and the slow layer got smaller.
 
 ## Common mistakes
 
 - **Using AI to add more browser tests.** The slow, flaky layer grows, and the pipeline gets slower.
 - **Accepting generated tests unread.** Weak assertions give you coverage without safety.
 - **Measuring success by test count.** Count the defects caught and the minutes saved instead.
-- **Skipping integration testing.** A suite of unit testing and a few journeys can miss broken contracts between systems.
+- **Skipping integration testing.** Unit tests plus a few journeys can miss broken contracts between systems.
 - **Pasting sensitive data into prompts.** Set a policy before the first prompt.
 
 ## How software can help
 
-Your existing test framework and CI system already report run times and failure rates for each level of testing. Start there, and group the numbers by unit testing, integration testing and end-to-end testing. Code review tools help with the AI drafts, because reviewers can see the generated test next to the code. Coverage tools add information, but read them next to a mutation or assertion check, so that coverage is not mistaken for quality. Add an AI assistant to one level of software testing first and compare review time, rejected drafts and escaped defects before you widen the pilot.
+Your existing test framework and CI system already report run times and failure rates. Start there, and group the numbers by level. Code review tools help with the AI drafts, because reviewers can see the generated test next to the code. Read coverage tools next to an assertion check, so coverage is not mistaken for quality. Add an AI assistant to one level of software testing first and compare review time, rejected drafts and escaped defects before you widen the pilot.
 
 ## Next step
 

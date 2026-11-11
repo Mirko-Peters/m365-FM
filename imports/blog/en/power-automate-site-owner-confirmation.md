@@ -25,7 +25,7 @@ A Power Automate site owner confirmation flow works like this. A scheduled flow 
 
 ## Why ask site owners at all?
 
-Admins can see when a site was last changed. They cannot see whether the project behind it is over. Only the people who run the site know that. The [site owner](https://www.m365.fm/entity/sharepoint-site-owner/) is the right person to ask, and a short yes-or-no question gets answered faster than a long survey.
+Admins can see when a site was last changed. They cannot see whether the project behind it is over. Only the users who run the site know that. The [site owner](https://www.m365.fm/entity/sharepoint-site-owner/) is the right person to ask, and a short yes-or-no question gets answered faster than a long survey.
 
 Microsoft describes the same idea in its page on [SharePoint site lifecycle management](https://learn.microsoft.com/en-us/sharepoint/site-lifecycle-management). Its site attestation policy "requests periodic confirmation that a site is still needed and meets organizational requirements." The inactive site policy works on detected activity, while attestation asks for an explicit review. A home-made flow follows the attestation pattern, with one difference: you choose the questions, the schedule and the escalation rules.
 
@@ -57,17 +57,17 @@ A flow is only as good as its data. Create a SharePoint list called "Site review
 
 Fill it from a report. The site attestation page notes that you can export a list of sites from the active sites page of the SharePoint admin center. Start with that CSV and add the owner emails. Where a site has no owner, mark it for the admin team to fix first, because a flow cannot ask a person who does not exist.
 
-Who counts as the owner? On a SharePoint team site, the Owners group has the Full Control permission level and can manage site permissions, settings and appearance. On a team site connected to a Microsoft 365 group, the group owners are the site owners. A site administrator is a separate role, so decide whether you ask owners, admins or both. To read owners inside a flow, the SharePoint connector has the action **Send an HTTP request to SharePoint**. Microsoft's connector reference says it can run any SharePoint REST API you have access to, and asks you to proceed with caution. For a first version, an exported list with owner emails is safer than live lookups.
+Who counts as the owner? On a SharePoint team site, the Owners group has the Full Control permission level and can manage site permissions, settings and appearance. On a team site connected to a Microsoft 365 group, the group owners are the site owners. A site collection administrator is a separate role, so decide whether you ask owners, admins or both. To read owners inside a flow, the SharePoint connector has the action **Send an HTTP request to SharePoint**. Microsoft's connector reference says it can run any SharePoint REST API you have access to, and asks you to proceed with caution. For a first version, an exported list with owner emails is safer than live lookups.
 
-One row per site keeps the logic simple. If a site has two owners, put both addresses in the field and send one request to both, or pick one primary owner.
+One row per site keeps the logic simple. If a site has two owners, put both addresses in the field and send one request to both, or assign one primary owner.
 
 ## Step 2: build the flow
 
-Open Power Automate and build the Power Automate flow as a scheduled cloud flow. Microsoft's guide to [scheduled cloud flows](https://learn.microsoft.com/en-us/power-automate/run-scheduled-tasks) says you can set the frequency by day, week or month, and that a month runs on the same date each month. Pick monthly, and a start time during working hours.
+Using Power Automate, build the flow as a scheduled cloud flow. Microsoft's guide to [scheduled cloud flows](https://learn.microsoft.com/en-us/power-automate/run-scheduled-tasks) says you can set the frequency by day, week or month, and that a month runs on the same date each month. Pick monthly, and a start time during working hours.
 
 Then add these actions:
 
-1. **Get items** from the "Site review" list. Use a filter query such as `Status eq 'Not asked'`. The connector lets you set a filter query and a top count, so you can limit each run to a batch.
+1. **Get items** from the "Site review" list, to retrieve the sites that still need a review. Use a filter query such as `Status eq 'Not asked'`. The connector lets you set a filter query and a top count, so you can limit each run to a batch.
 2. **Apply to each** item returned.
 3. **Update item**, to set Status to "Asked" and fill "Asked on". Do this before the approval, because the approval step pauses the flow.
 4. **Start and wait for an approval**. The [approval tutorial](https://learn.microsoft.com/en-us/power-automate/modern-approvals) describes this action as the one that sends a request and pauses the flow until a response arrives. Put the owner email in **Assigned to**. In **Details**, write the site name, the URL and one clear question: "Is this site still needed?"
