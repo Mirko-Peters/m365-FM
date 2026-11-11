@@ -216,9 +216,9 @@ def sponsor_record(recs, day):
 
 
 def post_handle(text):
-    """Autor-Handle aus dem YAML-Kopf (Standard mirko-p wie site_content_blog)."""
-    m = re.search(r"(?m)^author:\s*\"?([a-z0-9-]+)\"?\s*$", text.split("\n---", 1)[0])
-    return m.group(1) if m else "mirko-p"
+    """Autor-Handle aus dem YAML-Kopf, gelesen wie im Seitenbau (site_shownotes.parse_file, dann wie site_content_blog: Standard mirko-p, ohne Leerraum, klein).
+    So nennt der Eintrag unter "posts" denselben Handle wie CBL.live_refs, auch bei einfachen Anfuehrungszeichen, Kommentar oder Grossbuchstaben."""
+    return str(parse_package("post", text)["meta"].get("author") or "mirko-p").strip().lower()
 
 
 def sponsorship_post(entry, handle, dry_run=False, path=None):
@@ -690,13 +690,18 @@ def package_text(entry, summary, faq, body, topics, status="review", publish=Fal
 def check_package(slug, text, ents):
     """Schreibt den Text in einen Temp-Ordner, liest ihn wie der Seitenbau (site_shownotes.parse_file) und ruft site_content_blog.check (unabhaengig vom status).
     -> Fehlerliste."""
-    import site_content_blog as CBL, site_shownotes as SNS
+    import site_content_blog as CBL
+    _, errs = CBL.check(parse_package(slug, text), "en", slug, ents)
+    return errs
+
+
+def parse_package(slug, text):
+    """Liest den Text wie der Seitenbau (site_shownotes.parse_file ueber einen Temp-Ordner). -> {"meta", "body", "path"}."""
+    import site_shownotes as SNS
     with tempfile.TemporaryDirectory() as tmp:
         f = Path(tmp) / f"{slug}.md"
         f.write_text(text, "utf-8")
-        rec = SNS.parse_file(f)
-    _, errs = CBL.check(rec, "en", slug, ents)
-    return errs
+        return SNS.parse_file(f)
 
 
 def set_head_flags(text, status, publish):

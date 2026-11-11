@@ -322,6 +322,23 @@ class Taeglich(Base):
     def test_post_handle_from_head(self):
         self.assertEqual(SP.post_handle("---\ntitle: x\nauthor: other-handle\n---\nauthor: nein\n"), "other-handle")
         self.assertEqual(SP.post_handle("---\ntitle: x\n---\n"), "mirko-p")
+        for head in ("author: 'Other-Handle'", "author: \"OTHER-HANDLE \"", "author:   Other-Handle  "):   # wie site_content_blog: YAML lesen, ohne Leerraum, klein
+            self.assertEqual(SP.post_handle(f"---\ntitle: x\n{head}\n---\n"), "other-handle", head)
+
+    def test_posts_entry_names_the_same_handle_as_the_site_build(self):
+        """Autor im Kopf von Hand geaendert (einfache Anfuehrungszeichen, Grossbuchstaben): der Eintrag unter "posts" nennt denselben Handle wie CBL.live_refs,
+        sonst stoppt SPM.check_posts den naechsten Seitenbau."""
+        import site_sponsorships as SPM
+        self.make_draft(2, release=True)
+        f = SP.OUT_DIR / f"{self.plan()[2]['slug']}.md"
+        f.write_text(f.read_text("utf-8").replace("author: mirko-p", "author: 'Other-Handle'"), "utf-8")
+        code, out = self.run_quiet(SP.main, ["taeglich", "--date", "2026-11-16"])
+        self.assertEqual(code, 0, out)
+        posts = [r.get("posts") for r in self.sponsorships() if r["id"] == "cognillo-2026-11"][0]
+        with mock.patch.object(CBL, "DIR", SP.BLOG_DIR), mock.patch.dict(os.environ, {"SITE_OFFLINE": "0"}):
+            refs = CBL.live_refs(ENTS)
+        self.assertEqual(refs, [{"handle": "other-handle", "slug": "toolkit-or-scripts-when-each-one-wins"}])
+        self.assertEqual([SPM.post_ref(x) for x in posts], [(r["handle"], r["slug"]) for r in refs])
 
     def test_not_released_draft_untouched(self):
         self.make_draft(5)
