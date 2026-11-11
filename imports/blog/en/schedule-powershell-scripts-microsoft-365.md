@@ -23,9 +23,9 @@ faq:
 
 To schedule PowerShell scripts in Microsoft 365, you can use Windows Task Scheduler on a server you manage, an Azure Automation runbook in the cloud, or a scheduled Power Automate flow. This guide is for Microsoft 365 admins who have working scripts and now need them to run every night or every week without a person. It compares the three tools on the points that matter: sign-in, run-time limits, logs and who looks after them. It ends with a decision path and a worked example.
 
-## What are you actually choosing?
+## How to schedule PowerShell scripts in Microsoft 365: what are you choosing?
 
-The schedule is the easy part. All three tools can start something at 2 a.m. The harder questions are what identity runs the job, where it runs, and who notices when it fails.
+The schedule is the easy part. A scheduled task, a runbook and a scheduled flow can all start a PowerShell script or a flow at 2 a.m. The harder questions are what identity runs the job, where it runs, and who notices when it fails.
 
 Think of it as four questions:
 
@@ -36,27 +36,37 @@ Think of it as four questions:
 
 Your answers decide the tool. The sign-in question is the same one you face when you connect scripts to SharePoint with the [PnP module](https://www.m365.fm/entity/pnp-powershell/), so decide it first.
 
-## Windows Task Scheduler: simple, but you own the machine
+## Windows Task Scheduler: run a PowerShell script on a server you own
 
-Task Scheduler is built into Windows. The Microsoft reference for `Register-ScheduledTask` shows how to create a task in PowerShell. You build an action with `New-ScheduledTaskAction -Execute "PowerShell.exe" -Argument "-NoProfile -File C:\Scripts\Scan.ps1"`, a trigger such as `New-ScheduledTaskTrigger -Daily -At 02:00`, and register both under an account with the `-User` parameter.
+Task Scheduler is built into Windows and can run a PowerShell script as a scheduled task. The Microsoft reference for `Register-ScheduledTask` shows how to create a task in PowerShell. You build an action with `New-ScheduledTaskAction -Execute "PowerShell.exe" -Argument "-NoProfile -File C:\Scripts\Scan.ps1"`, a trigger such as `New-ScheduledTaskTrigger -Daily -At 02:00`, and register both under an account with the `-User` parameter.
 
 Strengths:
 
 - It is free and available on any Windows server.
 - It can reach local resources, such as a file share or an on-premises system.
-- It has no minimum interval that matters for most admin jobs.
+- It does not need a cloud subscription.
 
 Weaknesses:
 
 - **The machine is part of the job.** If the server is off, patched at the wrong time or decommissioned, the job stops. Someone has to own that server.
 - **Credentials.** The task runs as an account, and the example on the Microsoft page passes a password. Where possible, use certificate-based sign-in for the script itself and keep passwords out of the task definition.
-- **Logging is up to you.** The task history shows that it ran, not what the script did. Write your own log file or send a mail at the end.
+- **Logging is up to you.** The task history shows that it ran, not what the script did. Write your own log file or send an e-mail at the end, so the user who owns the job sees the result.
 
 Use it when a job needs something that only exists on that server, and when you have a named person who patches and monitors it.
 
-## Azure Automation: cloud runbooks with a managed identity
+### Make a scheduled PowerShell task run reliably
 
-[Azure Automation](https://www.m365.fm/entity/azure-automation/) runs PowerShell runbooks in the cloud. Microsoft's [authentication overview](https://learn.microsoft.com/en-us/azure/automation/automation-security-overview) calls managed identities "the recommended way to authenticate in your runbooks" and the default method for an Automation account. They are managed by Azure, so you do not provision or rotate secrets, and the page lists no additional cost.
+Most failed scheduled tasks have simple causes. Work through this list before you blame the tool:
+
+1. **Run the script by hand first,** under the same account the task will use.
+2. **Check the execution policy.** The Microsoft Graph PowerShell installation guide says Windows PowerShell needs an execution policy of `RemoteSigned` or less restrictive. Check it with `Get-ExecutionPolicy`.
+3. **Call PowerShell with the file.** Use `-NoProfile -File C:\Scripts\Scan.ps1` with a full path, as in Microsoft's example, and do not rely on the working folder.
+4. **Write a log or transcript.** Send the output to a text file, so the next person can see what the run did.
+5. **Test the trigger.** Start the task from Task Scheduler once, then check the last run result.
+
+## Azure Automation: run PowerShell scripts in the cloud with a managed identity
+
+[Azure Automation](https://www.m365.fm/entity/azure-automation/) runs a PowerShell script as a runbook in the cloud, so you can run PowerShell scripts without a server of your own. Microsoft's [authentication overview](https://learn.microsoft.com/en-us/azure/automation/automation-security-overview) calls managed identities "the recommended way to authenticate in your runbooks" and the default method for an Automation account. They are managed by Azure, so you do not provision or rotate secrets, and the page lists no additional cost.
 
 The [schedule page](https://learn.microsoft.com/en-us/azure/automation/shared-resources/schedules) lists the options: one-time or recurring by hour, day, week or month, with an optional expiry time. The minimum recurrence interval is one hour. A runbook can link to several schedules, and you can set different parameter values for each link, so one runbook can serve several jobs.
 
@@ -116,7 +126,7 @@ The pattern: no tool wins everywhere. Each job goes where its identity, location
 - **Putting a personal account in the task.** When that person leaves, the job fails. Use a service account, a certificate or a managed identity.
 - **Ignoring run-time limits.** A long job in a cloud runbook is stopped after three hours, and PowerShell runbooks are not restarted.
 - **Expecting minute-level schedules in Azure Automation.** The minimum is one hour.
-- **No failure alert.** All three tools can fail silently. Send a mail or a Teams message when a job ends in error.
+- **No failure alert.** All three tools can fail silently. Send an e-mail or a Teams message to the user who owns the job when it ends in error.
 - **No owner for the schedule.** Write down who maintains each job and where the script lives.
 
 ## How software can help
