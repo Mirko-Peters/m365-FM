@@ -156,6 +156,40 @@ async function legacyTarget(p0) {
   return /^\/(blog|videos|p)\//.test(p0) ? "/show/" : "";
 }
 
+// ---------- Blog auf der eigenen Domain (BYOD, BLOG_OWN_DOMAIN.md) ----------
+// Nur mit BYOD="1" (Standard "0": diese Weiche ist dann nie aktiv). Eigene Hosts (m365.fm, *.m365.fm, m365con.net) gehen unveraendert den alten Weg.
+// Jeder andere Host muss streng wie ein Hostname aussehen UND mit dem Host-Header uebereinstimmen (kein Host-Header-Trick); ob er einer aktiven
+// Mitglieds-Domain gehoert, entscheidet allein der Community-Worker (D1, Status 'active', oeffentliches Profil). Sonst neutrales 404, nie eine Weiterleitung.
+const OWN_HOST = /(^|\.)(m365\.fm|m365con\.net)$/;
+const HOSTNAME = /^(?=.{4,253}$)(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+(?:[a-z]{2,24}|xn--[a-z0-9-]{2,59})$/;
+// -> "" (Weiche nicht aktiv oder eigener Host), "bad" (Host verdaechtig) oder der geprüfte Host
+export function foreignHost(env, request, url) {
+  if (env.BYOD !== "1") return "";
+  const u = url.hostname.toLowerCase();
+  if (OWN_HOST.test(u)) return "";
+  const hh = (request.headers.get("host") || "").trim().toLowerCase().replace(/:\d+$/, "");
+  if (!HOSTNAME.test(u) || (hh && hh !== u)) return "bad";
+  return u;
+}
+const FSEC = { "strict-transport-security": "max-age=31536000", "x-content-type-options": "nosniff", "referrer-policy": "strict-origin-when-cross-origin", "permissions-policy": "camera=(), microphone=(), geolocation=(), payment=(), interest-cohort=()", "x-frame-options": "DENY" };   // HSTS ohne includeSubDomains: die Domain gehoert dem Mitglied
+const PASS = ["content-type", "cache-control", "content-language", "x-robots-tag", "content-security-policy"];
+const plain = (status, msg, extra = {}) => new Response(msg, { status, headers: { "content-type": "text/plain; charset=utf-8", "x-robots-tag": "noindex", "cache-control": "public, max-age=60", ...FSEC, ...extra } });
+async function byodServe(request, env, url, host) {
+  if (request.method !== "GET" && request.method !== "HEAD") return plain(405, "Method not allowed", { allow: "GET, HEAD" });
+  if (url.protocol === "http:") return new Response(null, { status: 301, headers: { location: "https://" + host + url.pathname + url.search, "cache-control": "public, max-age=3600", ...FSEC } });   // gleicher, geprüfter Host
+  const q = "/api/byod/serve?host=" + encodeURIComponent(host) + "&path=" + encodeURIComponent(url.pathname);
+  let res;
+  try {
+    res = env.COMMUNITY ? await env.COMMUNITY.fetch(new Request("https://community.internal" + q)) : await fetch((env.API || "https://api-dub.m365.fm") + q, { cf: { cacheEverything: true, cacheTtl: 300 } });
+  } catch { return plain(503, "Temporarily unavailable", { "cache-control": "no-store" }); }
+  if (res.status >= 500) return plain(503, "Temporarily unavailable", { "cache-control": "no-store" });
+  const h = new Headers(FSEC);
+  for (const k of PASS) { const v = res.headers.get(k); if (v) h.set(k, v); }
+  const loc = res.headers.get("location");
+  if (loc) { if (!/^\/(?![\\/])/.test(loc)) return plain(404, "Not found"); h.set("location", "https://" + host + loc); }   // nur Pfad auf derselben Domain
+  return new Response(request.method === "HEAD" || res.status === 301 ? null : res.body, { status: res.status, headers: h });
+}
+
 // Header fuer Antworten von GitHub Pages und aus R2 (gleiche Regeln, egal woher die Datei kommt)
 function finishHeaders(h, p) {
   const isImg = IMG.test(p), isStatic = STATIC.test(p) || FONT.test(p);
@@ -255,6 +289,9 @@ export async function finalTarget(p, migrated) {
 export default {
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
+    const fh = foreignHost(env, request, url);   // BYOD: Fremd-Domain eines Mitglieds (nur mit Schalter)
+    if (fh === "bad") return plain(421, "Misdirected request");
+    if (fh) return byodServe(request, env, url, fh);
     // img.m365.fm ist die oeffentliche Adresse des R2-Buckets: Spiegel- und Sprachseiten (pages/) und Verwaltungsdateien (meta/) sind dort nicht
     // gedacht (doppelte Inhalte, als entfernt markierte Seiten). Nur diese Pfade sind hierher geroutet; Bilder (i/, og/) kommen weiter direkt aus R2.
     if (url.hostname === "img.m365.fm") return new Response("Not found", { status: 404, headers: { "content-type": "text/plain; charset=utf-8", "x-robots-tag": "noindex", "cache-control": "public, max-age=3600" } });

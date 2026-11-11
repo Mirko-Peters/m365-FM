@@ -17,6 +17,14 @@ MIGRATED = "1"
 # aber nur solange pages/r2-build.txt mit /r2-build.txt auf GitHub Pages uebereinstimmt - sonst automatisch GitHub Pages.
 # "0" = wie bisher (GitHub Pages zuerst, R2 nur fuer Seiten, die es nur dort gibt). Notschalter: hier auf "0" setzen und mergen.
 R2_PRIMARY = "0"
+# Blog auf der eigenen Domain (BLOG_OWN_DOMAIN.md): "1" = Anfragen fremder Hosts (CNAME-Domains der Mitglieder) fragen den Community-Worker; Standard "0" = aus.
+# Eigene Hosts (m365.fm, *.m365.fm) sind nie betroffen. Zusaetzlich noetig (Mirko): Zone fuer die Blog-Domains mit Worker-Route, siehe Dokument.
+BYOD = "0"
+API = "https://api-dub.m365.fm"
+# Optional statt des oeffentlichen Abrufs: Service-Binding auf den Community-Worker (Name "COMMUNITY"), dann ohne Umweg ueber das Netz:
+# [[services]]
+# binding = "COMMUNITY"
+# service = "m365-dub-community"
 
 [[r2_buckets]]
 binding = "PAGES"   # Seiten, die der Seitenbau nach R2 laedt (pages/<pfad>/index.html), statt in GitHub Pages
