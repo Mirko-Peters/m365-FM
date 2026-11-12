@@ -1,4 +1,5 @@
 // Community-API (Cloudflare Worker + D1): Login (Google/Microsoft), Kommentare, Abzeichen, Kurator, Push, E-Mail
+import { isStaging, stagingEnv, installFetchGuard, stagingResponse, robotsResponse } from "./staging.js";
 import { json, cors, cookie, makeSession, readSession, readSessionInfo, sha256hex, cleanText, cleanName, randomToken, rateLimit, isLang, esc, b64u, sign, verify, audit, aiBudgetStatus, reportExternalAiUsage, memberOf } from "./util.js";
 import { evalBadges, stats, topUsers, badgesFor, award } from "./badges.js";
 import { runDigest, runPushDigest } from "./digest.js";
@@ -587,7 +588,7 @@ async function api(env, request, url, path, asUser, ctx) {
   return J({ error: "not_found" }, 404);
 }
 
-export default {
+const handlers = {
   async fetch(request, env, ctx) {
     const url = new URL(request.url), path = url.pathname.replace(/\/+$/, "") || "/";
     try {
@@ -677,6 +678,20 @@ export default {
     T("closeExpiredExpertRequests", () => closeExpiredExpertRequests(env));
     T("syncExpertise", () => syncExpertise(env, entityMap));   // */30 kehrt um 06:00 oben zurueck, daher nicht doppelt
     ctx.waitUntil(env.DB.prepare("DELETE FROM cron_runs WHERE started<?").bind(Math.floor(Date.now() / 1000) - 7 * 86400).run().catch(() => 0));
+  },
+};
+
+// Live: unveraendert. Testumgebung (ENVIRONMENT=staging, staging.js): Schutz zuerst, robots.txt sperrt alles, jede Antwort noindex/nofollow, keine Crons.
+export default {
+  async fetch(request, env, ctx) {
+    if (!isStaging(env)) return handlers.fetch(request, env, ctx);
+    if (!installFetchGuard()) return new Response(JSON.stringify({ error: "staging_guard_failed" }), { status: 503, headers: { "content-type": "application/json", "x-robots-tag": "noindex, nofollow" } });   // lieber nichts liefern als ungeschuetzt
+    if (new URL(request.url).pathname === "/robots.txt") return robotsResponse();
+    return stagingResponse(await handlers.fetch(request, stagingEnv(env), ctx));
+  },
+  async scheduled(event, env, ctx) {
+    if (isStaging(env)) { console.log("staging: Cron ausgelassen", event?.cron || ""); return; }
+    return handlers.scheduled(event, env, ctx);
   },
 };
 

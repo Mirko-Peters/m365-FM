@@ -1,0 +1,201 @@
+name: staging-checks
+# Alle Prüfungen, die eine Änderung bestehen muss, bevor sie live gehen darf (Staging Schritt 1, siehe STAGING.md).
+# Läuft bei Push auf den Zweig `staging`, bei Pull Requests gegen `main` oder `staging` und von Hand.
+# Veröffentlicht nichts, ändert nichts, schreibt kein Geheimnis: nur lesen, bauen, testen.
+# Das Gesamtergebnis ist der Statuscheck `staging-geprueft` (letzter Job). Er ist der einzige Name, den die Schutzregel für `main`
+# verlangen muss; `live-schalten.yml` prüft ihn für den aktuellen Stand von `staging`, bevor etwas nach `main` übernommen wird.
+on:
+  push:
+    branches: [staging]
+  pull_request:
+    branches: [main, staging]
+  workflow_dispatch:
+    inputs:
+      voll:
+        description: "Seitenbau mit allen Sprachen (sonst verkleinert: Deutsch und Englisch)"
+        type: boolean
+        default: false
+permissions:
+  contents: read
+concurrency:
+  group: staging-checks-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+jobs:
+  worker-und-seitenworker:
+    name: Worker-Tests (Community-API und Site-Worker)
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      - name: Community-API - Syntax und Tests (node --test)
+        working-directory: worker
+        run: |
+          npm ci --no-audit --no-fund
+          for f in src/*.js setup.mjs setup-staging.mjs; do node --check "$f"; done
+          node --test
+      - name: Site-Worker - Syntax und Tests
+        working-directory: sitewrk
+        run: node --check index.js && node --test
+      - name: Tests der Seiten-Skripte (Sponsor-Rechner, Player, Entitäts-Abgleich, Suchzähler)
+        run: node --test tests/*.test.mjs
+
+  python-tests:
+    name: Python-Tests (unittest)
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - run: pip install -q requests cryptography pillow pyyaml
+      - name: python3 -m unittest discover -s tests
+        run: python3 -m unittest discover -s tests
+      - name: Plattform-Sync-Regressionen (offline)
+        run: python3 tools/test_sync_platforms.py
+
+  mcp-abdeckung:
+    name: MCP-Abdeckung
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      # Ohne MCP_URL: nur der Quelltext wird abgeglichen (jede API-Route hat ein Tool oder eine Begründung), kein Aufruf des Live-Servers
+      - run: node tools/check_mcp_coverage.mjs
+
+  migrationen:
+    name: Migrationen (Nummern, Reihenfolge, leere Datenbank)
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - name: main als Vergleich holen
+        run: git fetch --no-tags origin main:refs/remotes/origin/main
+      - name: Nummernkollision, Reihenfolge, unveränderte Altdateien, Einspielen in leere SQLite
+        run: python3 tools/check_migrations.py --base origin/main
+
+  seitenbau-probe:
+    name: Seitenbau-Probelauf (ohne Veröffentlichung)
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    env:
+      # Verkleinerter Bau: nur Deutsch und Englisch (Stellschraube SITE_LANGS in site_i18n.py / generate_site.py); von Hand mit "voll" alle Sprachen
+      SITE_LANGS: ${{ (github.event_name == 'workflow_dispatch' && inputs.voll) && 'alle' || 'de,en' }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - name: Cache der Community-Exporte (nur lesen)
+        uses: actions/cache/restore@v4
+        with:
+          path: data/cache
+          key: exports-${{ github.run_id }}
+          restore-keys: exports-
+      - run: pip install -q requests cryptography pillow
+      # Liest nur die öffentlichen Exporte von api-dub.m365.fm (GET). Lädt nichts hoch, schreibt nichts nach Cloudflare, GitHub Pages oder R2.
+      - name: Seite bauen (generate_site.py)
+        run: python generate_site.py
+      - name: Schema.org (JSON-LD) prüfen
+        run: python check_schema.py
+      - name: Titel und Beschreibungen prüfen
+        run: python check_titles.py
+      - name: Encoding prüfen (Mojibake)
+        run: python check_encoding.py
+      - name: Größe des Baus ins Protokoll
+        if: always()
+        run: |
+          if [ -d docs ]; then
+            { echo "### Seitenbau-Probelauf"; echo; echo "Sprachen: \`${SITE_LANGS}\`"; echo; echo "Größe docs/: $(du -sh docs | cut -f1), Seiten (index.html): $(find docs -name index.html | wc -l)"; } >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+  staging-trennung:
+    name: Trennung von Live (Staging-Konfiguration)
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - run: pip install -q pyyaml
+      # Rot, sobald [env.staging] oder ein Staging-Workflow eine Live-Ressource (Datenbank, Bucket, Worker, Domain, Secret) nennt
+      - name: Staging-Konfiguration darf nichts Live-Eigenes anfassen
+        run: python3 tools/check_staging_isolation.py
+
+  staging-smoke:
+    # Läuft nur auf dem Zweig `staging` (Push oder Handstart dort; bei PRs übersprungen): wartet, bis die beiden Staging-Deploys für genau diesen Stand fertig sind,
+    # und ruft dann die wichtigsten Seiten und API-Routen von staging.m365.fm / api-staging.m365.fm ab.
+    name: Rauchtest Testumgebung
+    if: github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/staging')
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    environment: staging
+    permissions:
+      contents: read
+      actions: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      - name: Auf die Staging-Deploys für diesen Stand warten
+        env:
+          GH_TOKEN: ${{ github.token }}
+          SHA: ${{ github.sha }}
+          REPO: ${{ github.repository }}
+        run: |
+          set -u
+          bis=$(( $(date +%s) + 6600 ))
+          for wf in worker-staging.yml site-staging.yml; do
+            echo "Warte auf $wf für $SHA"
+            gesehen=0
+            while :; do
+              erg=$(gh api "repos/$REPO/actions/workflows/$wf/runs?head_sha=$SHA&per_page=5" --jq '[.workflow_runs[] | select(.event=="push" or .event=="workflow_dispatch")][0] | "\(.status // "keiner") \(.conclusion // "-")"') || erg="keiner -"
+              status=${erg%% *}; ergebnis=${erg#* }
+              if [ "$status" = "completed" ]; then
+                if [ "$ergebnis" = "success" ]; then echo "$wf: erfolgreich"; break; fi
+                echo "::error::$wf ist nicht erfolgreich ($ergebnis) - Testumgebung nicht bereit. Meist fehlt ein Geheimnis oder eine Einrichtung, siehe STAGING.md."; exit 1
+              fi
+              [ "$status" != "keiner" ] && gesehen=1
+              if [ "$gesehen" = 0 ] && [ "$(date +%s)" -gt $(( bis - 6000 )) ]; then echo "::error::$wf wurde für diesen Stand nicht gestartet."; exit 1; fi
+              if [ "$(date +%s)" -gt "$bis" ]; then echo "::error::$wf ist nach 110 Minuten nicht fertig."; exit 1; fi
+              sleep 30
+            done
+          done
+      - name: Rauchtest (Seiten und API der Testumgebung)
+        env:
+          STAGING_ACCESS_ID: ${{ secrets.STAGING_ACCESS_ID }}
+          STAGING_ACCESS_SECRET: ${{ secrets.STAGING_ACCESS_SECRET }}
+        run: node tools/staging_smoke.mjs --wait 300
+
+  staging-geprueft:
+    # FESTER NAME - nicht umbenennen: die Schutzregel für `main` und live-schalten.yml verlassen sich darauf.
+    name: staging-geprueft
+    needs: [worker-und-seitenworker, python-tests, mcp-abdeckung, migrationen, seitenbau-probe, staging-trennung, staging-smoke]
+    if: always()
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Gesamtergebnis
+        env:
+          ERGEBNISSE: ${{ toJSON(needs) }}
+          AUF_STAGING: ${{ (github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/staging')) && 'ja' || 'nein' }}
+        run: |
+          python3 - <<'PY'
+          import json, os, sys
+          needs = json.loads(os.environ["ERGEBNISSE"])
+          # Der Rauchtest läuft nur auf dem Zweig staging (Push oder Handstart dort); sonst (Pull Requests, andere Zweige) ist "skipped" für ihn in Ordnung, für alle anderen nie.
+          def ok(k, r):
+              return r == "success" or (k == "staging-smoke" and r == "skipped" and os.environ["AUF_STAGING"] != "ja")
+          rot = {k: v["result"] for k, v in needs.items() if not ok(k, v["result"])}
+          zeilen = ["### staging-geprueft", ""] + [f"- {'OK  ' if ok(k, v['result']) else 'ROT '} `{k}`: {v['result']}" for k, v in sorted(needs.items())]
+          open(os.environ["GITHUB_STEP_SUMMARY"], "a", encoding="utf-8").write("\n".join(zeilen) + "\n")
+          if rot:
+              print("::error::Nicht bestanden: " + ", ".join(f"{k} ({v})" for k, v in rot.items()))
+              sys.exit(1)
+          print("Alle Prüfungen bestanden.")
+          PY

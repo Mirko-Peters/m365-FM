@@ -1,3 +1,5 @@
+import { isStaging } from "./staging.js";
+
 function senderAddress(from) {
   const value = String(from || "");
   const open = value.lastIndexOf("<"), close = value.lastIndexOf(">");
@@ -20,6 +22,7 @@ function resendFrom(from, name) {
 }
 
 export function mailReady(env) {
+  if (isStaging(env)) return false;   // Testumgebung: nie Mail (staging.js)
   return !!(env?.EMAIL || env?.RESEND_API_KEY);
 }
 
@@ -49,6 +52,7 @@ export function b64(content) {
 }
 
 export async function sendMail(env, { to, subject, html, text, headers = {}, replyTo = "", fromName = "", attachments = [], lang = "en", bannerAt = Date.now(), banner: withBanner = true }) {
+  if (isStaging(env)) { console.log("mail_send", JSON.stringify({ provider: "none", suppressed: "staging" })); return { ok: false, status: 0, suppressed: "staging" }; }   // Testumgebung: nichts wird gesendet, auch nicht bei gesetztem Schluessel
   // attachments: [{ filename, content (Uint8Array/ArrayBuffer oder Base64-String), type, disposition }] - Cloudflare Email Service und Resend.
   // Cloudflare bekommt Binaerdaten unveraendert (5.11.2026: per Base64-String verschickte Mediadaten kamen als ungueltiges PDF an).
   // banner: false laesst den M365Con-Hinweis weg (Einladungen an Personen ohne Konto: Hinweis auf gespeicherte Daten, keine Eigenwerbung anhaengen).

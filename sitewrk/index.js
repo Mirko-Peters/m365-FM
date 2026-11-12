@@ -256,9 +256,41 @@ export async function finalTarget(p, migrated) {
   return n ? cur : "";
 }
 
+// Testumgebung (ENVIRONMENT=staging, [env.staging] in wrangler.toml, Host staging.m365.fm): liefert NUR, was der Staging-Bau im eigenen Bucket
+// (m365-fm-staging, Schluessel pages/<pfad>) abgelegt hat. Kein Zugriff auf GitHub Pages, auf den Live-Bucket oder auf Live-Weiterleitungen.
+// Jede Antwort: X-Robots-Tag noindex, nofollow, nie im Cache; /robots.txt sperrt alles. Aufgebaut wie die Live-Auslieferung aus R2 (r2First), nur ohne Ursprung.
+export const isStaging = (env) => String(env?.ENVIRONMENT || "").toLowerCase() === "staging";
+export const STAGING_ROBOTS = "User-agent: *\nDisallow: /\n";
+function stagingHeaders(extra = {}) {
+  const h = new Headers({ "x-robots-tag": "noindex, nofollow", "x-m365-environment": "staging", "cache-control": "no-store", ...extra });
+  for (const [k, v] of Object.entries(SEC)) h.set(k, v);
+  return h;
+}
+export async function stagingFetch(request, env) {
+  const url = new URL(request.url), p = url.pathname, head = request.method === "HEAD";
+  if (request.method !== "GET" && !head) return new Response("Method not allowed", { status: 405, headers: stagingHeaders({ allow: "GET, HEAD", "content-type": "text/plain; charset=utf-8" }) });
+  if (p === "/robots.txt") return new Response(head ? null : STAGING_ROBOTS, { headers: stagingHeaders({ "content-type": "text/plain; charset=utf-8" }) });
+  if (!env.PAGES) return new Response("Staging-Bucket nicht verbunden", { status: 503, headers: stagingHeaders({ "content-type": "text/plain; charset=utf-8" }) });
+  let dp = p; try { dp = decodeURIComponent(p); } catch { /* ungueltige Kodierung: wie angefragt */ }
+  if (dp.split("/").includes("..") || dp.includes("\0")) return new Response("Bad request", { status: 400, headers: stagingHeaders({ "content-type": "text/plain; charset=utf-8" }) });
+  if (!dp.endsWith("/") && !extOf(dp)) return new Response(null, { status: 301, headers: stagingHeaders({ location: url.origin + p + "/" + url.search }) });   // wie GitHub Pages: Verzeichnis ohne "/" -> mit "/"
+  const key = r2Key(dp);
+  const obj = key ? await env.PAGES.get(key).catch(() => null) : null;
+  if (!obj || (obj.customMetadata && obj.customMetadata.gone === "1")) {
+    const nf = await env.PAGES.get("pages/404.html").catch(() => null);
+    const body = nf && !head ? await nf.text().catch(() => "") : "";
+    return new Response(head ? null : body || "Not found", { status: 404, headers: stagingHeaders({ "content-type": nf ? CT.html : "text/plain; charset=utf-8" }) });
+  }
+  const ext = key.endsWith("/index.html") ? "html" : extOf(key), meta = obj.httpMetadata && obj.httpMetadata.contentType;
+  const h = stagingHeaders({ "content-type": ext === "html" ? CT.html : (meta && !/octet-stream/i.test(meta) ? meta : CT[ext] || "application/octet-stream") });
+  if (obj.httpEtag) h.set("etag", obj.httpEtag);
+  return new Response(head ? null : obj.body, { status: 200, headers: h });
+}
+
 export default {
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
+    if (isStaging(env)) return stagingFetch(request, env);   // Testumgebung: eigener, abgeschlossener Pfad (oben); Live-Verhalten unveraendert
     // img.m365.fm ist die oeffentliche Adresse des R2-Buckets: Spiegel- und Sprachseiten (pages/) und Verwaltungsdateien (meta/) sind dort nicht
     // gedacht (doppelte Inhalte, als entfernt markierte Seiten). Nur diese Pfade sind hierher geroutet; Bilder (i/, og/) kommen weiter direkt aus R2.
     if (url.hostname === "img.m365.fm") return new Response("Not found", { status: 404, headers: { "content-type": "text/plain; charset=utf-8", "x-robots-tag": "noindex", "cache-control": "public, max-age=3600" } });

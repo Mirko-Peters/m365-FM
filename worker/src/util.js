@@ -1,4 +1,5 @@
 // Hilfsfunktionen: Base64url, HMAC-Sessions, CORS/JSON, Text-Bereinigung, Ratelimit
+import { isStaging } from "./staging.js";
 const enc = new TextEncoder();
 
 export const b64u = {
@@ -250,6 +251,7 @@ export async function reportExternalAiUsage(env, { id, job, lang = "", model, in
 }
 
 export async function anthropicFetch(env, body, { job, lang = "", cacheTtl, skipCache = false } = {}) {
+  if (isStaging(env)) { const error = new Error("KI ist in der Testumgebung aus"); error.code = "staging_ai_off"; throw error; }   // vor Budget und Netz (staging.js)
   const model = String(body?.model || "");
   let reservation = null;
   if (isHaiku(model)) {
