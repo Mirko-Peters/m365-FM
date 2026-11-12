@@ -1347,8 +1347,8 @@ def build():
 {section(5, HT(l, "sec_topics"), f'<h2 style="margin-top:0">{esc(HT(l, "topics_h"))}</h2><div class="chips">{cats}</div>')}</main>
 {m365con_band()}
 <main class="wrap"><section id="c-curator"></section><section id="c-sub"></section>{faq_html(l, "FAQ")}{cta_box(HT(l, "cta_h"), HT(l, "cta_p"), HT(l, "cta_btn"), f"{BASE}/show/")}{author_box(l)}</main>{footer(l)}{community_tags(l)}"""
-        _ht, _hd = MP.home_meta(l, n_langs)   # <title>/meta description der Sprach-Startseite; title/d bleiben fuer JSON-LD
-        write(f"{l}/index.html", page(l, _ht, _hd, home, body, alts_home, ld, xdefault=f"{BASE}/", og_type="website"))
+        write(f"{l}/index.html", page(l, title, d, home,   # Titel/Description der Sprach-Startseiten kommen aus data/home_i18n.json (PR Teil C), nicht aus site_meta_podcast.home_meta
+               body, alts_home, ld, xdefault=f"{BASE}/", og_type="website"))
         sitemap.append((home, TODAY, alts_home))
 
     # Wurzel
