@@ -36,7 +36,7 @@
   "slug": "how-to-factory-reset-windows-11",
   "kwhero_score": 85,
   "status": "validate OK, humanlint OK (2020 Woerter)",
-  "changes": "Entwurf 3491 Woerter, aufgeblaehter Einleitungs-/Fuellertext (je H2 mehrere Absaetze 'dieser Abschnitt erklaert...'), Fremdlinks/Fremdthemen (DLP, M365-Breach-Analyse, Power Platform) gestrichen. Falsches/Unbelegtes gestrichen oder ersetzt: 'Reset ueber BIOS/UEFI-Bootmenue > Recovery Partition' (stattdessen WinRE: Shift+Neustart oder dreimal Start unterbrechen), 'Cloud-Download > 4 GB / 4-5 GB', 'Lokal 20-45 Min, Cloud 1-2 Std' (Microsoft: typisch 30 Min bis 2 Std), 'Reset entfernt fast alle Malware / Firmware-Malware' (nicht belegt, jetzt vorsichtig formuliert), 'Eine Anleitung: Kontrolle ueber Windows-Start-Bildschirm'. Neu: Reihenfolge der Recovery-Optionen laut Microsoft, Cloud rebuild (Win 11), Point-in-time restore, Clean-data-Hinweis (nicht nach Behoerden-Standard), Windows Backup (Ordner, Apps, WLAN, Edge nicht), BitLocker-Key-Fundorte, Startup Repair, Autopilot Reset (lokal/remote, WinRE, Fehler 0x80070032).",
+  "changes": "Entwurf 3491 Woerter, aufgeblaehter Einleitungs-/Fuellertext (je H2 mehrere Absaetze 'dieser Abschnitt erklaert...'), Fremdlinks/Fremdthemen (DLP, M365-Breach-Analyse, Power Platform) gestrichen. Falsches/Unbelegtes gestrichen oder ersetzt: 'Reset ueber BIOS/UEFI-Bootmenue > Recovery Partition' (stattdessen WinRE: Shift+Neustart oder dreimal Start unterbrechen), 'Cloud-Download > 4 GB / 4-5 GB', 'Lokal 20-45 Min, Cloud 1-2 Std' (Microsoft: typisch 30 Min bis 2 Std), 'Reset entfernt fast alle Malware / Firmware-Malware' (nicht belegt, jetzt vorsichtig formuliert). Neu: Reihenfolge der Recovery-Optionen laut Microsoft, Cloud rebuild (Win 11), Point-in-time restore, Clean-data-Hinweis (nicht nach Behoerden-Standard), Windows Backup (Ordner, Apps, WLAN, Edge nicht), BitLocker-Key-Fundorte, Startup Repair, Autopilot Reset (lokal/remote, WinRE, Fehler 0x80070032).",
   "uncertain": "Wo im Dialog 'Cloud download/Local reinstall' erscheint, sagt die Microsoft-Seite nicht; im Text offen. Entwurfs-Backupteil (File History) nicht uebernommen, da die File-History-Seite nicht geoeffnet wurde. Kuerzung gegenueber Entwurf (3491 -> 2020) betrifft fast nur Fuelltext; Abschnitt 'Backup/Restore' und 'FAQ' neu und belegt.",
   "urls": [
    "https://support.microsoft.com/en-us/windows/experience/backup-recovery/reset-your-pc",
@@ -90,7 +90,7 @@
   "n": 36,
   "slug": "map-network-drive-windows-11",
   "kwhero_score": 66,
-  "status": "validate OK, humanlint OK (2150 Woerter)",
+  "status": "validate OK, humanlint OK (2143 Woerter)",
   "changes": "Entwurf 3620 Woerter. Behalten/ausgebaut: File Explorer, net use, Trennen, Fehlerbehebung, Unterordner, Skripte/Task Scheduler, Mehrbenutzer (jetzt mit Group Policy Preferences Drive Maps laut Learn). Gestrichen als falsch/unbelegt/Fremdthema: Passwort im Klartext im net-use-Befehl (jetzt Sternchen), 'Administrator noetig fuer alle Benutzer', Registry-Tweaks fuer Mapping, Home-vs-Pro-Behauptungen (Microsoft-Vergleich nennt nur Pro mit Windows Server fuer Domain Join/GPO), 'Add a network location' (Seite nicht geoeffnet), OneDrive/Dropbox-Sync-Konflikte, VM-Mapping (Hyper-V/VMware), Verweise auf M365-Governance/DLP/Podcast, 'It's 2024'. Neu: Reconnect/persistent laut net-use-Referenz, New-PSDrive -Persist -Scope Global und New-SmbMapping, Fehler 1219/net use * /delete, Update vs. Replace bei GPP.",
   "uncertain": "Das Dialogfeld 'Connect using different credentials' ist auf der Microsoft-Seite nicht beschrieben; im Text offen gelassen. Fehler 1219 (eine Anmeldung pro Server und Sitzung) und 'Rotes X nach Anmeldung' stammen aus allgemeinem Windows-Wissen, im Text als solches markiert bzw. vorsichtig formuliert. net-use-Referenz ist eine archivierte Learn-Seite (Server 2012 R2). 'Add a network location' wurde bewusst weggelassen statt ungeprueft behalten. Kuerzung 3620 -> 2150 betrifft v.a. die unbelegten Home/Pro-, Cloud-Sync-, VM- und Registry-Teile.",
   "urls": [
@@ -104,7 +104,7 @@
    "https://learn.microsoft.com/en-us/troubleshoot/windows-server/networking/delete-active-connections-from-local-computer",
    "https://www.microsoft.com/en-us/windows/business/compare-windows-11"
   ],
-  "woerter_entwurf_vs_final": "3620 -> 2150"
+  "woerter_entwurf_vs_final": "3620 -> 2143"
  },
  {
   "n": 37,
@@ -128,7 +128,7 @@
   "n": 38,
   "slug": "audio-renderer-error-windows-11",
   "kwhero_score": 23,
-  "status": "validate OK, humanlint OK (1504 Woerter)",
+  "status": "validate OK, humanlint OK (1483 Woerter)",
   "changes": "kwhero-Entwurf bestand nur aus einer Gliederung (51 Woerter, 0 Absaetze; letzte Ueberschrift 'Top Rated Answers from User Forums'); komplett neu. Microsoft hat keine eigene Seite zur Meldung; deshalb im Text offen als Mix aus Microsoft-Audioguides (Windows-Audio-Dienste, Lautstaerkemixer, Standardgeraet, Audio enhancements, Treiber update/zurueck/neu installieren, Get-Help-Troubleshooter) und Berichten aus Microsoft-Q&A-Threads (Kopfhoerer neu einstecken, Audiosrv neu starten) gekennzeichnet. Admin-Teil: Update pausieren/zurueckstellen (WUfB). Topic-Discovery-Themen (Realtek/Dolby, Event Viewer, Reliability Monitor, Skript-Neustart des Audiodienstes, Power-Settings) nicht aufgenommen: nicht belegt.",
   "uncertain": "Ursache der Meldung bleibt laut Threads unklar (Treiber, Adblocker, nichts); als solche genannt. Exklusivmodus: Microsoft-Seite nennt ihn nicht, im Text so gesagt. Die Warnung 'RPC nicht ohne Not neu starten' ist eigene Empfehlung. Q&A-Antworten sind Community, nicht Microsoft-Support.",
   "urls": [
@@ -138,6 +138,34 @@
    "https://support.microsoft.com/en-US/Windows/Hardware/Audio/fix-app-audio-not-working-while-system-sounds-work-in-windows",
    "https://learn.microsoft.com/en-us/windows/deployment/update/waas-manage-updates-wufb"
   ],
-  "woerter_entwurf_vs_final": "51 (nur Gliederung) -> 1504"
+  "woerter_entwurf_vs_final": "51 (nur Gliederung) -> 1483"
+ },
+ {
+  "n": 39,
+  "slug": "enable-remote-desktop-windows-11",
+  "kwhero_score": 0,
+  "status": "validate OK, humanlint OK (1649 Woerter)",
+  "changes": "kwhero-Editor war leer (0 Woerter); nur Topic Discovery vorhanden. Artikel komplett neu nach Microsoft: Edition (Host nur Pro/Enterprise/Education, Home nur Client), Einschalten (Settings > System > Remote Desktop > Confirm, PC-Name), Pflicht-Voraussetzungen, Benutzerliste, NLA, Verbindung von Windows/Mac/iOS/Android (Windows App bzw. Remote Desktop), Zugriff von aussen (VPN bevorzugt, Portweiterleitung mit Warnung), Checkliste bei Verbindungsfehlern. Entwurfsthemen 'Home-Workarounds' (Registry/Drittwerkzeuge), 'Ports aendern', 'Dynamic DNS Schritt-fuer-Schritt' nicht aufgenommen (nicht von Microsoft belegt bzw. sicherheitskritisch); DDNS/statische IP nur wie in der Learn-Seite erwaehnt.",
+  "uncertain": "PowerShell-Befehle (fDenyTSConnections, UserAuthentication, Enable-NetFirewallRule) und SystemPropertiesRemote.exe stammen nicht von der Learn-Seite, sondern aus allgemeinem Windows-Wissen; im Text so gekennzeichnet. Beschriftung des Menuepunkts fuer Benutzerauswahl variiert je Build (im Text so gesagt). 'net localgroup' ebenfalls Allgemeinwissen. Standardport 3389 laut Outside-Access-Seite 'typically'.",
+  "urls": [
+   "https://learn.microsoft.com/en-us/windows-server/remote/remote-desktop-services/remotepc/remote-desktop-allow-access",
+   "https://support.microsoft.com/en-us/windows/how-to-use-remote-desktop-5fe128d5-8fb1-7a23-3b8a-41e636865e8c",
+   "https://learn.microsoft.com/en-us/windows-server/remote/remote-desktop-services/remotepc/remote-desktop-allow-outside-access",
+   "https://learn.microsoft.com/en-us/windows-app/overview"
+  ],
+  "woerter_entwurf_vs_final": "0 (leer) -> 1649"
+ },
+ {
+  "n": 40,
+  "slug": "clear-teams-cache",
+  "kwhero_score": 0,
+  "status": "validate OK, humanlint OK (1587 Woerter)",
+  "changes": "kwhero-Editor war leer (0 Woerter); nur Topic Discovery vorhanden. Artikel komplett neu nach Microsoft: Learn-Artikel 'Clear the Teams client cache' (neues Teams: Reset unter Einstellungen oder LocalCache-Ordner; klassisches Teams: %appdata%\\Microsoft\\Teams; macOS-Befehle), Hinweis dass Microsoft Cache-Loeschen NICHT bei fehlenden Nachrichten, Chat-Verlauf, fehlenden Teams/Kanaelen oder falschen Benachrichtigungen empfiehlt (loescht Diagnoseprotokolle), Reihenfolge der Reconnect-Seite. Topic-Discovery-Punkte 'Drittanbieter-Tools', 'Skripte fuer Massenloeschung', 'Backup lokaler Daten' nicht aufgenommen (unbelegt, teils gegen Microsoft-Hinweis).",
+  "uncertain": "Ob nach dem Loeschen eine neue Anmeldung noetig ist, sagt die Learn-Seite nicht; im Text offen gelassen. Support-Seite nennt 'local message history' unter den entfernten Elementen; Serverseite wird nicht erklaert, im Text ohne Behauptung. Bei Mac-Befehl fuer neues Teams steht im Pfad 'Group Containers' ein Leerzeichen ohne Anfuehrungszeichen (so auf der Seite); im Text Hinweis auf Anfuehrungszeichen. Linux/VDI von Microsoft nicht beschrieben.",
+  "urls": [
+   "https://learn.microsoft.com/en-us/troubleshoot/microsoftteams/teams-administration/clear-teams-cache",
+   "https://support.microsoft.com/en-us/teams/troubleshooting/i-can-t-reconnect-to-microsoft-teams"
+  ],
+  "woerter_entwurf_vs_final": "0 (leer) -> 1587"
  }
 ]
