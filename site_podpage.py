@@ -10,6 +10,7 @@ import site_sponsorships as SPM   # T37 Sponsor: Kennzeichnung gesponserter Folg
 import site_shownotes_seo as SSEO   # neu geschriebene englische Show Notes (rewrite_shownotes.py)
 import site_listen as LST   # "Show folgen"-Knopf (Apple Podcasts/Spotify nach Geraet) unter dem Player der Folgenseiten
 import site_transcripts as TRS   # #266: Transkripte als Dateien neben der Folgenseite (R2)
+import site_meta_podcast as MP   # suchintent-freundliche <title>/meta description (reine Funktionen)
 from site_episode_urls import episode_url, sid_owners   # kanonische Folgen-Adresse (eine Quelle); eine Spreaker-ID je Seite
 import gzip, json, re, unicodedata, html as _h
 from functools import lru_cache
@@ -499,10 +500,11 @@ def build(g):
 
     sidebar = g["side"]   # die eine Sidebar aller Inhaltsseiten (generate_site.sidebar, site_sidebar.render)
 
-    def pub(rel, title, desc, body, ld=None, og="website", noindex=False, last=TODAY, alts=None, canon=None):
+    def pub(rel, title, desc, body, ld=None, og="website", noindex=False, last=TODAY, alts=None, canon=None, seo=None):
         u = f"{root}{rel}"
         side = sidebar("en", (title + " " + plain(body)[:8000]) if not noindex else "")
-        h = page("en", (title if title == NAME else f"{title} – {NAME}"), desc[:300], u, shell(body, side), alts, ld, xdefault=u, og_type=og, noindex=noindex)
+        _st, _sd = seo if seo else ((title if title == NAME else f"{title} – {NAME}"), desc[:300])   # seo = (Titel mit Marke, Description) aus site_meta_podcast
+        h = page("en", _st, _sd, u, shell(body, side), alts, ld, xdefault=u, og_type=og, noindex=noindex)
         if canon:   # T12: Seite bleibt erreichbar, die kanonische Adresse ist eine andere (z. B. Personen-Entitaet); nicht in die Sitemap
             h = h.replace(f'<link rel="canonical" href="{u}">', f'<link rel="canonical" href="{canon}">', 1)
         write(f"show/{rel}index.html", h)
@@ -595,6 +597,7 @@ def build(g):
         it = lambda k2: (loc_url(l, f"episodes/{eps[k2]['slug']}/"), TRL[l][eps[k2]["slug"]][0]) if k2 is not None else None
         return PG(l, it(older), it(newer))
     _RWC = {}   # neu geschriebene Show Notes (site_shownotes_seo): Folgen je Regel, fuers Protokoll
+    _MPU = MP.Uniq(); _MPL = MP.Uniq()   # einmalige SEO-Titel: englische Folgen, Sprachfassungen
     for k, e in enumerate(eps):
         r, tr = tr_for(e)
         nrec = SNT.get("en", title=e["name"])   # Spreaker-Show-Notes (oder im Editor bearbeitete Fassung) statt Podpage-Sicherung
@@ -653,7 +656,8 @@ def build(g):
         # Alternates nur fuer Sprachfassungen mit uebersetzten Show Notes (150 je Sprache); die uebrigen ~14.000 Fassungen (nur Titel + Teaser) bleiben noindex und ausserhalb der Sitemap
         alts = {"en": ep_url(e), **{l: loc_url(l, f"episodes/{e['slug']}/") for l in TRL if e["slug"] in TRL[l] and TRL[l][e["slug"]][0]}}   # alle Sprachfassungen (uebersetzte Titel/Teaser, teils Show Notes) sind indexierbar und verknuepft
         for _dl, (_du, _) in oa.items(): alts[_dl] = _du   # T3: die Dub-Fassung (eigene Folge in der Sprache) ist die Sprachalternative, nicht die duenne Show-Kopie
-        pub(f"episodes/{e['slug']}/", e.get("meta_title") or e["name"], _rwm or short_desc(e, nrec, 155), body, ([ld] + nld) if nld else ld, "article", last=day(e.get("update_time")) or TODAY, alts=alts if len(alts) > 1 else None,
+        _seo = MP.en_episode_meta(e["name"], e.get("meta_title"), _rwm, e.get("summary"), short_desc(e, nrec, 600), uniq=_MPU, has_transcript=len(tr) > 200 or bool(_trf))   # Thema zuerst, Format und Marke hinten; Schablonen-Felder (X Explained | M365 FM) fallen weg
+        pub(f"episodes/{e['slug']}/", e.get("meta_title") or e["name"], _rwm or short_desc(e, nrec, 155), body, ([ld] + nld) if nld else ld, "article", last=day(e.get("update_time")) or TODAY, alts=alts if len(alts) > 1 else None, seo=_seo,
             noindex=e.get("source") == "spreaker" and not snx and not _rw and not plain(e.get("show_notes")) and not (nrec or {}).get("markup"))   # T28: neue Folge ohne Show Notes erst nach dem Show-Notes-Abgleich in den Index
         # lokalisierte Fassungen dieser Folge
         for l in TRL:
@@ -679,7 +683,7 @@ def build(g):
             _lalts = None if l in oa else alts   # T3: Sprache mit Dub-Fassung: diese Kopie bleibt ohne hreflang (ein Vertreter je Sprache im Cluster)
             _lcan = oa[l][0] if l in oa else lu   # T42: Kopie in einer Sprache mit Dub-Folge -> kanonisch (auch og:url, Teilen, JSON-LD) die Dub-Folge, nicht in die Sitemap
             if l in oa: lald["url"] = _lcan
-            _lh = g["page"](l, f"{lt} – {NAME}", ls[:300], _lcan, f'{g["header"](l, "")}<main class="wrap">{lbody}{loc_pager(l, k)}</main>{g["footer"](l)}', _lalts, [lald], xdefault=ep_url(e), og_type="article", og_of=ep_url(e), switch=alts, self_url=lu)
+            _lh = g["page"](l, MP.episode_title(l, e["name"] if MP.junk(lt) else lt, uniq=_MPL), MP.episode_desc(l, ls) or MP.episode_desc("en", short_desc(e, nrec, 600)) or short_desc(e, nrec, 155), _lcan, f'{g["header"](l, "")}<main class="wrap">{lbody}{loc_pager(l, k)}</main>{g["footer"](l)}', _lalts, [lald], xdefault=ep_url(e), og_type="article", og_of=ep_url(e), switch=alts, self_url=lu)
             (g.get("write_r2") or write)(f"{l}/show/episodes/{e['slug']}/index.html", _lh)
             if l not in oa: sitemap.append((lu, day(e.get("update_time")) or TODAY, _lalts))
     if _RWC.get("thin") or _RWC.get("unknown"):
@@ -693,7 +697,7 @@ def build(g):
     for p in range(pages_n):
         part = eps[p * PER:(p + 1) * PER]
         pg = "".join(f'<a href="{root}episodes/{"" if q == 0 else f"page/{q + 1}/"}"{" style=font-weight:700 aria-current=page" if q == p else " rel=prev" if q == p - 1 else " rel=next" if q == p + 1 else ""}>{q + 1}</a> ' for q in range(pages_n))
-        pub("episodes/" if p == 0 else f"episodes/page/{p + 1}/", "All episodes" + (f" – page {p + 1}" if p else ""), f"All {len(eps)} episodes of the {NAME}.", f'<h1>All episodes</h1><ul style="list-style:none;padding:0">{"".join(card(e) for e in part)}</ul><p>{pg}</p>', noindex=bool(p), alts=(_list_alts if not p and len(_list_alts) > 1 else None))
+        pub("episodes/" if p == 0 else f"episodes/page/{p + 1}/", "All episodes" + (f" – page {p + 1}" if p else ""), f"All {len(eps)} episodes of the {NAME}.", f'<h1>All episodes</h1><ul style="list-style:none;padding:0">{"".join(card(e) for e in part)}</ul><p>{pg}</p>', noindex=bool(p), alts=(_list_alts if not p and len(_list_alts) > 1 else None), seo=MP.episodes_list_meta(len(eps)) if not p else None)
 
     # Lokalisierte Folgenlisten (paginiert) je Sprache mit uebersetzten Titeln/Zusammenfassungen
     for l in TRL:
@@ -709,7 +713,8 @@ def build(g):
             lu = loc_url(l, lrel)
             ttl = f"{NAME} – {LG[l][0]}" + (f" ({p + 1})" if p else "")
             lal = _list_alts if p == 0 else None   # T3/T42: Folgenliste der Sprache im Cluster mit der englischen Liste und allen anderen Sprachlisten
-            write(f"{l}/show/{lrel}index.html", g["page"](l, ttl, f"{NAME}: {len(les)} · {LG[l][0]}", lu, f'{g["header"](l, "")}<main class="wrap"><h1>{esc(ttl)}</h1><ul style="list-style:none;padding:0">{lis}</ul><p>{pg}</p></main>{g["footer"](l)}',
+            _lt, _ld = MP.episode_list_meta(l, len(les), LG[l][0]) if not p else (ttl, f"{NAME}: {len(les)} · {LG[l][0]}")   # Seite 2 ff. ist noindex und bleibt unveraendert
+            write(f"{l}/show/{lrel}index.html", g["page"](l, _lt, _ld, lu, f'{g["header"](l, "")}<main class="wrap"><h1>{esc(ttl)}</h1><ul style="list-style:none;padding:0">{lis}</ul><p>{pg}</p></main>{g["footer"](l)}',
                                                          lal, None, xdefault=lu if p else f"{root}episodes/", og_type="website", noindex=bool(p)))
             if not p: sitemap.append((lu, TODAY, lal))   # T42: Alternates wie im HTML
 
@@ -728,9 +733,9 @@ def build(g):
         ld = {"@context": "https://schema.org", "@type": "ProfilePage", "mainEntity": {"@type": "Person", "@id": f"{BASE}/entity/{eid}/#entity" if known else f"{root}guests/{gg['slug']}/#p", "name": gg["name"], "jobTitle": gg.get("title") or "",
               "sameAs": [gg[k] for k in ("linkedin_link", "twitter_link", "youtube_link", "website") if gg.get(k)]}}
         _canon = f"{BASE}/entity/{eid}/" if eid == "mirko-peters" else None   # T12: eine kanonische Mirko-Peters-Adresse (Personen-Entitaet)
-        pub(f"guests/{gg['slug']}/", f"{gg['name']} – guest", plain(gg.get("bio")) or f"{gg['name']} on the {NAME}", body, ld, "profile", canon=_canon)
+        pub(f"guests/{gg['slug']}/", f"{gg['name']} – guest", plain(gg.get("bio")) or f"{gg['name']} on the {NAME}", body, ld, "profile", canon=_canon, seo=MP.guest_meta(gg["name"], gg.get("title") or "", gg.get("bio") or "", len(mine)))
         gl += f'<li style="margin:.4em 0"><a href="{root}guests/{gg["slug"]}/">{esc(gg["name"])}</a> <span class="mut">{esc(gg.get("title") or "")[:90]}</span></li>'
-    if guests: pub("guests/", "Guests", f"{len(guests)} guests of the {NAME}.", f'<h1>Guests</h1><ul style="list-style:none;padding:0">{gl}</ul>')
+    if guests: pub("guests/", "Guests", f"{len(guests)} guests of the {NAME}.", f'<h1>Guests</h1><ul style="list-style:none;padding:0">{gl}</ul>', seo=MP.guests_list_meta(len(guests)))
 
     # Blog: die Beitraege sind jetzt Community-Beitraege von mirko-p (site_legacy_blog.py + site_blog.py); hier nur Weiterleitungsseiten fuer die kurz genutzten Adressen /show/blog/...
     def _stub(to, label):
@@ -742,9 +747,9 @@ def build(g):
 
     # Hosts, Sponsoren, Reviews, Downloads, Links
     hb = "".join(f'<section><h2>{esc(h["name"])}</h2><p class="mut">{esc(h.get("title") or "")}</p>{san(h.get("bio"))}</section>' for h in hosts)
-    pub("hosts/", "Hosts", f"Hosts of the {NAME}.", f"<h1>Hosts</h1>{hb}")
+    pub("hosts/", "Hosts", f"Hosts of the {NAME}.", f"<h1>Hosts</h1>{hb}", seo=MP.hosts_meta([h["name"] for h in hosts if h.get("name")]))
     sb = "".join(f'<section><h2><a href="{esc(s["website"])}" rel="noopener sponsored">{esc(s["name"])}</a></h2>{san(s.get("description"))}</section>' for s in spons if s.get("hidden") not in (True, "True"))
-    pub("sponsors/", "Sponsors", f"Sponsors of the {NAME}.", f"<h1>Sponsors</h1>{sb}")
+    pub("sponsors/", "Sponsors", f"Sponsors of the {NAME}.", f"<h1>Sponsors</h1>{sb}", seo=MP.sponsors_meta())
     xr = json.loads((D / "reviews_ext.json").read_text("utf-8")) if (D / "reviews_ext.json").exists() else [
         {"source": "Apple Podcasts" if r.get("source") == "A" else "Website", "country": r.get("country") or "", "author": r.get("author_name") or "Listener", "rating": int(r.get("rating") or 0), "title": r.get("title") or "", "body": r.get("review") or "", "date": (r.get("published") or "")[:10]}
         for r in revs if r.get("hidden") not in (True, "True")]
@@ -753,9 +758,9 @@ def build(g):
     rv = "".join(f'<blockquote class="rv-ext"><strong>{"★" * r["rating"]}{"☆" * (5 - r["rating"])} {esc(r["title"])}</strong><br>{esc(r["body"])}<br><span class="mut">– {esc(r["author"])} · {esc(r["source"])}{" · " + esc(r["country"].upper()) if r.get("country") else ""} · {r["date"]}</span></blockquote>' for r in xr[:60])
     mount = (f'<div id="sh-reviews" data-show="en" data-ext-n="{len(xr)}" data-ext-sum="{sum(r["rating"] for r in xr)}" data-ext-dist="{",".join(map(str, dist))}" data-login="{BASE}/community/"><noscript><p>Enable JavaScript to rate and review.</p></noscript></div>'
              f'<link rel="stylesheet" href="{BASE}/assets/reviews.css"><script defer src="{BASE}/assets/reviews.js"></script>')
-    pub("reviews/", "Listener reviews", f"What listeners say about the {NAME}: ratings and reviews from Apple Podcasts and the M365.FM community.", f'<h1>Listener reviews</h1>{mount}<h2>From Apple Podcasts and the web</h2>{rv}')
+    pub("reviews/", "Listener reviews", f"What listeners say about the {NAME}: ratings and reviews from Apple Podcasts and the M365.FM community.", f'<h1>Listener reviews</h1>{mount}<h2>From Apple Podcasts and the web</h2>{rv}', seo=MP.reviews_meta())
     lk = "".join(f'<li><a href="{esc(l["url"])}" rel="noopener">{esc(l["name"])}</a></li>' for l in links if l.get("hidden") not in (True, "True") and str(l.get("url") or "").startswith("http"))
-    if lk: pub("listen/", "Listen on every platform", f"Where to listen to the {NAME}.", f"<h1>Listen</h1><ul>{lk}</ul>")
+    if lk: pub("listen/", "Listen on every platform", f"Where to listen to the {NAME}.", f"<h1>Listen</h1><ul>{lk}</ul>", seo=MP.listen_meta())
 
     # Seiten (about, work-with-me, Themenhubs ...)
     SKIPP = {"episodes", "blog", "reviews", "podroll", "courses", "store", "videos", "guests", "people", "sponsors", "contact", "join", "leave_review", "rate", "guest_intake", "newsletter", "follow", "voicemail", "community-events", "legal", "hosts"}
@@ -778,7 +783,7 @@ def build(g):
            + '<h2>More from the show</h2><ul>' + "".join(f'<li><a href="{p_ if p_.startswith("https://") else root + p_}">{t_}</a></li>' for p_, t_ in showlinks) + "</ul>")
     ld = {"@context": "https://schema.org", "@type": "PodcastSeries", "@id": root + "#series", "name": NAME, "url": root, "description": plain(pod.get("description"))[:500], "inLanguage": "en", "webFeed": "https://www.spreaker.com/show/6704921/episodes/feed",
           "author": {"@id": f"{BASE}/entity/mirko-peters/#entity"}, "publisher": {"@id": f"{BASE}/#org"}, **({"image": pod["image"]} if str(pod.get("image", "")).startswith("http") else {}), **({"sameAs": [shp[k] for k in ("apple_show", "spotify_show", "amazon_show", "deezer_show", "iheart_show", "youtube_show", "youtube_music_show", "castbox_show", "podcastaddict_show", "podchaser_show") if shp.get(k)]} if shp else {})}
-    pub("", NAME, plain(pod.get("description")) or NAME, hub, ld)
+    pub("", NAME, plain(pod.get("description")) or NAME, hub, ld, seo=MP.show_home_meta(NAME, pod.get("description")))
     rd, clash, _chains, _dropped = redirect_table(eps, [sl for sl, _ in plist], guests, bposts, gmerge, baseids, LG)
     if _chains or _dropped: print(f"Weiterleitungen: {len(_chains)} Ketten auf einen Schritt gekuerzt, {len(_dropped)} Eintraege im Kreis/auf sich selbst entfernt")
     write("show/redirects.json", json.dumps(rd))

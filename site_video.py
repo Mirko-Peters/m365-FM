@@ -4,6 +4,7 @@ from site_i18n import COMM_LANGS, pfx, pfx2, T
 from site_learn import ENTS, esc, _fetch_json, LCSS
 from site_design import pager as PG, neighbours as NB   # Vor/Zurueck am Seitenende (rel=prev/next)
 import site_player as PL   # YouTube-Player erst nach Klick
+import site_meta_podcast as MP   # suchintent-freundliche <title>/meta description
 
 
 def fetch_videos(api):
@@ -55,7 +56,7 @@ def build(g, vids, people, api):
                    "uploadDate": iso(v["published"]), "thumbnailUrl": f"https://i.ytimg.com/vi/{v['video_id']}/hqdefault.jpg", "embedUrl": f"https://www.youtube.com/embed/{v['video_id']}",
                    "contentUrl": f"https://youtu.be/{v['video_id']}", "author": {"@type": "Person", "@id": au + "#person", "name": v["name"], "url": au}, **({"actor": [{"@type": "Person", "@id": f"{BASE}/community/u/{g['handle']}/#person", "name": g["name"], "url": f"{BASE}/community/u/{g['handle']}/"} for g in gs]} if gs else {}),
                    "publisher": {"@id": f"{BASE}/#org"}, "about": [{"@id": f"{BASE}/entity/{t}/#entity"} for t in topics]}]
-            write(f"{pfx2(lang)}community/video/{v['slug']}/index.html", page(lang, f'{v["title"]} – {ttl} | M365.FM', (v.get("description") or "")[:155], u, b, None, ld, og_type="video.other", extra_head=LCSS, noindex=v["title"].startswith("[Test]"), side=(g["side"](lang, v["title"] + " " + (v.get("description") or "")[:1500], ids=topics) if g.get("side") else "")))
+            write(f"{pfx2(lang)}community/video/{v['slug']}/index.html", page(lang, *MP.community_item_meta(lang, "video", v["title"], v["name"], v.get("description")), u, b, None, ld, og_type="video.other", extra_head=LCSS, noindex=v["title"].startswith("[Test]"), side=(g["side"](lang, v["title"] + " " + (v.get("description") or "")[:1500], ids=topics) if g.get("side") else "")))
             if not v["title"].startswith("[Test]"): sitemap.append((u, iso(v["published"]), None))
         it = sorted(mine, key=lambda x: -x["published"]); ru = f"{croot}video/"
         lst = '<ul class="bl-list" style="padding:0;list-style:none">' + "".join(f'<li style="padding:.7em 0;border-bottom:1px solid var(--bd)"><a href="{croot}video/{v["slug"]}/"><b>{esc(v["title"])}</b></a> <span class="mut">· {esc(v["name"])} · {iso(v["published"])}</span></li>' for v in it) + "</ul>"

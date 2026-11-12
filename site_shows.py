@@ -5,6 +5,7 @@ import json
 from datetime import datetime, timezone
 from site_learn import esc
 from site_podpage import san, plain
+import site_meta_podcast as MP   # suchintent-freundliche <title>/meta description
 
 
 def d(ts):
@@ -18,12 +19,13 @@ def build(g, shows):
     shell = lambda b: f'{header("en", "")}<main class="wrap" style="max-width:52em">{b}</main>{footer_en()}'
     root = f"{BASE}/shows/"
 
-    def pub(rel, title, desc, body, ld=None, og="website", last=None):
+    def pub(rel, title, desc, body, ld=None, og="website", last=None, seo=None):
         u = f"{root}{rel}"
         scripts = f'<script>window.M365TopicConfig={{api:{json.dumps(g.get("api", "https://api-dub.m365.fm"))},lang:"en"}}</script><script defer src="{BASE}/assets/topic-follow.js"></script>'
-        write(f"shows/{rel}index.html", page("en", f"{title} – M365.FM", desc[:300], u, shell(body) + scripts, None, ld, og_type=og))
+        write(f"shows/{rel}index.html", page("en", seo[0] if seo else f"{title} – M365.FM", seo[1] if seo else desc[:300], u, shell(body) + scripts, None, ld, og_type=og))
         sitemap.append((u, last or datetime.now(timezone.utc).strftime("%Y-%m-%d"), None))
 
+    _mpu = MP.Uniq()
     for s in shows:
         su = f"{root}{s['slug']}/"; who = f'<a href="{BASE}/community/u/{s["handle"]}/">{esc(s["name"])}</a>'
         eps = s["eps"]
@@ -39,13 +41,15 @@ def build(g, shows):
                   "partOfSeries": {"@type": "PodcastSeries", "name": s["title"], "url": su}, "inLanguage": s.get("lang") or "en", "author": {"@type": "Person", "name": s["name"], "url": f"{BASE}/community/u/{s['handle']}/"}}
             if e.get("audio"): ld["associatedMedia"] = {"@type": "AudioObject", "contentUrl": e["audio"]}
             if len(tr) > 200: ld["transcript"] = tr[:5000]
-            pub(f"{s['slug']}/{e['slug']}/", e["title"], plain(e.get("descr")) or e["title"], body, ld, "article", d(e["pub"]))
+            pub(f"{s['slug']}/{e['slug']}/", e["title"], plain(e.get("descr")) or e["title"], body, ld, "article", d(e["pub"]),
+                seo=MP.network_episode_meta("en", e["title"], s["title"], e.get("descr"), uniq=_mpu))
         lst = "".join(f'<li style="margin:.8em 0"><a href="{su}{e["slug"]}/"><strong>{esc(e["title"])}</strong></a><br><span class="mut">{d(e["pub"])}</span></li>' for e in eps[:300])
         img = f'<img src="{esc(s["image"])}" alt="" width="160" height="160" style="float:right;margin:0 0 1em 1em;border-radius:8px" loading="lazy">' if s.get("image") else ""
         body = f'{img}<h1>{esc(s["title"])}</h1><button type="button" class="btn" data-topic-follow data-topic-kind="show" data-topic-id="{esc(s["slug"])}" data-topic-label="Follow this show">🔔 Follow this show</button><button type="button" class="btn" data-topic-follow data-topic-kind="creator" data-topic-id="{esc(s["handle"])}" data-topic-label="Follow host">🔔 Follow host</button><p class="mut">Host: {who} · {len(eps)} episodes</p><p>{esc(plain(s.get("descr")))}</p><ul style="list-style:none;padding:0">{lst}</ul>'
         ld = {"@context": "https://schema.org", "@type": "PodcastSeries", "name": s["title"], "url": su, "description": plain(s.get("descr"))[:500], "inLanguage": s.get("lang") or "en", "author": {"@type": "Person", "name": s["name"], "url": f"{BASE}/community/u/{s['handle']}/"}}
-        pub(f"{s['slug']}/", s["title"], plain(s.get("descr")) or s["title"], body, ld)
+        pub(f"{s['slug']}/", s["title"], plain(s.get("descr")) or s["title"], body, ld, seo=MP.network_show_meta("en", s["title"], s["name"], s.get("descr"), len(eps)))
     LN = {"en": "English", "de": "Deutsch", "es": "Español", "fr": "Français", "it": "Italiano", "pt": "Português", "nl": "Nederlands", "pl": "Polski", "id": "Bahasa Indonesia", "ru": "Русский", "uk": "Українська", "ar": "العربية", "he": "עברית", "ja": "日本語", "ko": "한국어", }
     item = lambda s: f'<li style="margin:.8em 0"><a href="{root}{s["slug"]}/"><strong>{esc(s["title"])}</strong></a> <span class="mut">· {esc(s["name"])} · {len(s["eps"])} episodes</span><br>{esc(plain(s.get("descr"))[:160])}</li>'
     li = "".join(f'<h2 lang="{k}">{LN.get(k, k)}</h2><ul style="list-style:none;padding:0">{"".join(item(s) for s in shows if (s.get("lang") or "en") == k)}</ul>' for k in LN if any((s.get("lang") or "en") == k for s in shows))
-    pub("", "Podcasts from the M365.FM network", "Podcasts of the M365.FM network: shows that moved to M365.FM with all episodes and transcripts.", f'<h1>Podcasts in the network</h1>{li}')
+    pub("", "Podcasts from the M365.FM network", "Podcasts of the M365.FM network: shows that moved to M365.FM with all episodes and transcripts.", f'<h1>Podcasts in the network</h1>{li}',
+        seo=MP.network_hub_meta(len(shows), sum(len(s["eps"]) for s in shows)))
