@@ -1,0 +1,62 @@
+[
+  {
+    "n": 51,
+    "slug": "connect-to-exchange-online-powershell",
+    "kwhero_score": "kein Score (kwhero-Analyse fehlgeschlagen)",
+    "woerter_entwurf": 0,
+    "woerter_ende": 1753,
+    "aenderungen": "Kein kwhero-Entwurf vorhanden: Content Analysis der Zeile steht in kwhero auf 'Content analysis failed - Click to try again' (Retry kostet Credits, daher nicht angestossen). Artikel deshalb komplett neu nach Microsoft-Seiten geschrieben (Entwurfslaenge 0). Inhalt nur aus der geoeffneten Connect-Seite und der Modulseite: interaktive Anmeldung mit/ohne MFA, -Device/-InlineCredential (nur PS7), -DelegatedOrganization, -ExchangeEnvironmentName-Werte, Managed Identity, App-only nur verlinkt, Test mit Get-AcceptedDomain, Get-ConnectionInformation statt Get-PSSession, Disconnect-Warnung, Fehlerliste. Keine Anleitung fuer Basic Auth/UseRPSSession (laut MS nicht mehr unterstuetzt).",
+    "unsichere_punkte": "Berechtigungen/Rollen nur allgemein genannt (MS-Seite nennt keine konkrete Rolle); Behauptung, dass PowerShell das Modul beim Connect automatisch laedt, stammt sinngemaess aus MS ('kann Schritt meist ueberspringen'); Abschnitt 'Keep scripts lean' stuetzt sich nur auf den MS-Tipp zu -CommandName und dem Speicherleck-Hinweis.",
+    "pruef_urls": [
+      "https://learn.microsoft.com/en-us/powershell/exchange/connect-to-exchange-online-powershell?view=exchange-ps",
+      "https://learn.microsoft.com/en-us/powershell/exchange/exchange-online-powershell-v2?view=exchange-ps",
+      "https://learn.microsoft.com/en-us/powershell/exchange/app-only-auth-powershell-v2?view=exchange-ps (nur Suchtreffer, nicht geoeffnet; als Verweis ohne Inhaltsaussage)"
+    ]
+  },
+  {
+    "n": 52,
+    "slug": "install-exchange-online-powershell-module",
+    "kwhero_score": "kein Score (kwhero-Analyse fehlgeschlagen)",
+    "woerter_entwurf": 0,
+    "woerter_ende": 1686,
+    "aenderungen": "Kein kwhero-Entwurf vorhanden: Content Analysis der Zeile steht in kwhero auf 'Content analysis failed - Click to try again' (Retry kostet Credits, daher nicht angestossen). Artikel deshalb komplett neu nach Microsoft-Seiten geschrieben (Entwurfslaenge 0). Inhalt aus der Modulseite (Version 3.10.1 als aktuell, PS7-Mapping, .NET 4.7.2, Ausfuehrungsrichtlinie, PowerShellGet/PackageManagement, TLS 1.2, Linux/macOS-Grenzen, REST statt Basic Auth, Fehlermeldungen mit Loesung). Gleiche Scope-Regel fuer Update wie bei MS.",
+    "unsichere_punkte": "Versionsnummer 3.10.1 ist Stand der geoeffneten Seite (im Text als 'at the time of writing' markiert); Aussage zu zwei Installationen bei Scope-Mismatch ist vorsichtig formuliert (MS sagt nur 'gleichen Scope nutzen'); Uninstall-Hinweis zu geladenem Modul im Speicher ist allgemeines PowerShell-Wissen.",
+    "pruef_urls": [
+      "https://learn.microsoft.com/en-us/powershell/exchange/exchange-online-powershell-v2?view=exchange-ps",
+      "https://learn.microsoft.com/en-us/powershell/exchange/connect-to-exchange-online-powershell?view=exchange-ps"
+    ]
+  },
+  {
+    "n": 53,
+    "slug": "bitlocker-recovery-key-where-to-find-it",
+    "kwhero_score": "kein Score (kwhero-Analyse fehlgeschlagen)",
+    "woerter_entwurf": 0,
+    "woerter_ende": 1635,
+    "aenderungen": "Kein kwhero-Entwurf vorhanden: Content Analysis der Zeile steht in kwhero auf 'Content analysis failed - Click to try again' (Retry kostet Credits, daher nicht angestossen). Artikel deshalb komplett neu nach Microsoft-Seiten geschrieben (Entwurfslaenge 0). Inhalt aus MS-Supportseite 'Find your BitLocker recovery key' (aka.ms/myrecoverykey, aka.ms/aadrecoverykey, Key-ID, 24H2-Hinweis, Reset als letzter Weg, Support kann Key nicht wiederherstellen), BitLocker recovery process (Entra/AD/Intune-Abrufe, Rollen, Ausloeser, Rotation) und Intune-BitLocker-Seite (Recovery keys, Audit-Log KeyManagement). Keine Anleitung zum Umgehen.",
+    "unsichere_punkte": "Aussage 'Device Encryption schaltet BitLocker bei Anmeldung mit Microsoft-Konto ein und haengt Key an Konto' stammt aus der Device-Encryption-Seite (nicht als eigener Link im Text verlinkt, aber Link in Related topics); Rotation nach Nutzung gilt laut MS nur fuer Geraete mit automatischer Rotation.",
+    "pruef_urls": [
+      "https://support.microsoft.com/en-us/windows/find-your-bitlocker-recovery-key-6b71ad27-0b89-ea08-f143-056f5ab347d6",
+      "https://learn.microsoft.com/en-us/windows/security/operating-system-security/data-protection/bitlocker/recovery-process",
+      "https://learn.microsoft.com/en-us/intune/device-configuration/endpoint-security/encrypt-bitlocker-windows",
+      "https://support.microsoft.com/en-us/windows/security/encryption/device-encryption-in-windows"
+    ]
+  },
+  {
+    "n": 54,
+    "slug": "how-to-disable-bitlocker",
+    "kwhero_score": "kein Score (kwhero-Analyse fehlgeschlagen)",
+    "woerter_entwurf": 0,
+    "woerter_ende": 1670,
+    "aenderungen": "Kein kwhero-Entwurf vorhanden: Content Analysis der Zeile steht in kwhero auf 'Content analysis failed - Click to try again' (Retry kostet Credits, daher nicht angestossen). Artikel deshalb komplett neu nach Microsoft-Seiten geschrieben (Entwurfslaenge 0). Inhalt aus Disable-BitLocker-Referenz, manage-bde -off, BitLocker-Betriebsleitfaden (Suspend/Resume/Disable, Get-BitLockerVolume), Suspend-Seite (Control Panel, -RebootCount 0 bis 15), Intune-Seite (Loeschen des Geraeteobjekts -> Suspended). Bewusst keine Aussage dazu, ob Entfernen der Intune-Richtlinie entschluesselt (MS sagt dazu nichts).",
+    "unsichere_punkte": "Kein MS-Beleg fuer Control-Panel-Schritte 'Turn off BitLocker' und fuer das Ausschalten von Device Encryption in Einstellungen (im Text offen gesagt, nur Befehle beschrieben); keine Dauerangabe der Entschluesselung (MS-Seiten nennen keine); Hinweis auf BitLocker To Go/USB nutzt die Control-Panel-Gruppennamen aus der Supportseite; humanlint-Warnung 'unlock' kommt vom Cmdlet-Namen Clear-BitLockerAutoUnlock (begruendet).",
+    "pruef_urls": [
+      "https://learn.microsoft.com/en-us/powershell/module/bitlocker/disable-bitlocker?view=windowsserver2025-ps",
+      "https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/manage-bde-off",
+      "https://learn.microsoft.com/en-us/windows/security/operating-system-security/data-protection/bitlocker/operations-guide",
+      "https://learn.microsoft.com/en-us/troubleshoot/windows-client/windows-security/suspend-bitlocker-protection-non-microsoft-updates",
+      "https://support.microsoft.com/en-us/windows/bitlocker-drive-encryption-76b92ac9-1040-48d6-9f5f-d14b3c5fa178",
+      "https://support.microsoft.com/en-us/windows/security/encryption/device-encryption-in-windows",
+      "https://learn.microsoft.com/en-us/intune/device-configuration/endpoint-security/encrypt-bitlocker-windows"
+    ]
+  }
+]
