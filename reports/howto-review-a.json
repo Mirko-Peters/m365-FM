@@ -1,0 +1,65 @@
+[
+ {
+  "n": 1,
+  "slug": "how-to-recall-an-email-in-outlook",
+  "kwhero_score": 75,
+  "status": "validate OK, humanlint OK (2147 Woerter)",
+  "changes": "Falsche Behauptung des Entwurfs gestrichen (Recall angeblich nicht per Web/Mobil; laut Microsoft werden Web, Mac, Android/iOS unterstuetzt). Mac-Mindestversion 16.94 statt 'New Outlook ab 2023'. Entwurf-Aussage 'Empfaenger muss Outlook nutzen' ersetzt (Loeschung erfolgt serverseitig). Neu: Exchange-Online-Admin-Einstellungen, Weiterleitung, Alter, Cross-Tenant, Message Trace, eDiscovery/Audit, Undo Send. Floskeln entfernt.",
+  "uncertain": "Schritte fuer klassisches Outlook (Message > Actions > Recall This Message, zwei Optionen) konnte ich auf keiner geoeffneten Microsoft-Seite sehen (Tabs nicht abrufbar); aus Fachwissen, vorsichtig formuliert. Standardwert RecallReadMessagesEnabled steht nicht in der Doku.",
+  "urls": [
+   "https://support.microsoft.com/en-us/outlook/mail/how-to-recall-an-email-in-outlook-requirements-limitations-steps",
+   "https://support.microsoft.com/en-us/outlook/recall-an-email-message-in-outlook-for-mac",
+   "https://support.microsoft.com/en-us/outlook/can-i-undo-recall-a-sent-email",
+   "https://learn.microsoft.com/en-us/exchange/mail-flow-best-practices/work-with-cloud-based-message-recall",
+   "https://support.microsoft.com/en-us/outlook/undo-send-in-outlook-for-mac"
+  ]
+ },
+ {
+  "n": 2,
+  "slug": "how-to-change-signature-in-outlook",
+  "kwhero_score": 79,
+  "status": "validate OK, humanlint OK",
+  "changes": "Falsche Aussage des Entwurfs korrigiert (Signaturen syncen nie): seit Build 2303 roaming fuer M365/Outlook.com-Postfaecher. Mac-Pfad auf Outlook > Settings > Mail > Signatures. Erfundene Statistik (zwei Signaturen, 2-4 Updates pro Jahr, Help-Desks) gestrichen. Unbelegte Mac-Dateipfade, 'Bullets nur Windows', 'Konversationsansicht versteckt Signaturen', 'Mobile nur Text' gestrichen/abgeschwaecht. Neu: new Outlook Schritte, Standard-Einstellungen pro Konto, DisableRoamingSignatures, Hinweis Legacy-Mac-Ende Oktober 2026.",
+  "uncertain": "Windows-Ordnerpfad AppData\\Roaming\\Microsoft\\Signatures nicht auf Microsoft-Seite gesehen (im Text als ungeprueft markiert). Beschriftungen im klassischen Signaturen-Dialog (Select signature to edit, Choose default signature) aus Fachwissen; Struktur durch Screenreader-Seite bestaetigt. Web-Pfad Settings > Accounts > Signatures laut Microsoft-Seite, aeltere Variante Mail > Compose and reply erwaehnt.",
+  "urls": [
+   "https://support.microsoft.com/en-us/outlook/mail/how-to-add-and-change-an-email-signature-in-outlook",
+   "https://support.microsoft.com/en-us/outlook/create-insert-or-change-a-signature-in-outlook-for-mac",
+   "https://support.microsoft.com/en-us/outlook/outlook-roaming-signatures",
+   "https://support.microsoft.com/en-us/outlook/can-i-change-my-email-signature",
+   "https://support.microsoft.com/en-us/outlook/officeweb/create-a-signature-and-automatic-reply",
+   "https://support.microsoft.com/en-gb/office/use-a-screen-reader-to-add-a-signature-in-outlook-a11f4989-e598-4288-ad55-8a3de4994b13"
+  ]
+ },
+ {
+  "n": 3,
+  "slug": "how-to-schedule-an-email-in-outlook",
+  "kwhero_score": 81,
+  "status": "validate OK, humanlint OK",
+  "changes": "Falsch im Entwurf: 'Scheduled-Ordner' (laut Microsoft liegen geplante Mails in Drafts); 'Rules koennen Wiederholung/Forward-Drafts' gestrichen; Regel-Verzoegerung nur 1-120 Min; Mac-Anforderungen (Exchange-Konto, kein IMAP/POP); Mobile-Schritte 'Schedule Send' im Entwurf nicht belegt, ersetzt durch Hinweis plus Abgrenzung zum Snooze-Swipe; Audit/Purview-Abschnitt (unbelegte Behauptungen), Zapier/Teams/VBA, 8-10-Uhr-Behauptung gestrichen. Neu: Power-Automate-Recurrence-Flow laut Learn-Tutorial, Fehlersuche, Common mistakes.",
+  "uncertain": "Ob Outlook fuer ein einzelnes Delay-Delivery-Mail laufen muss: Microsoft sagt es nur fuer die Regel; im Text vorsichtig als Test empfohlen. Outlook-Mobile Schedule send nicht belegt (nur Hinweis, selbst pruefen). Abbrechen/Aendern im Web nur Send now dokumentiert.",
+  "urls": [
+   "https://support.microsoft.com/en-us/outlook/mail/delay-or-schedule-sending-email-messages-in-outlook",
+   "https://support.microsoft.com/en-us/outlook/schedule-send-for-outlook-on-the-web",
+   "https://support.microsoft.com/en-us/outlook/customize-your-email-message",
+   "https://support.microsoft.com/en-us/outlook/use-schedule-send-in-outlook-for-mac",
+   "https://support.microsoft.com/en-gb/outlook/what-does-it-mean-to-schedule-an-email",
+   "https://learn.microsoft.com/en-us/power-automate/get-started-with-cloud-flows"
+  ]
+ },
+ {
+  "n": 4,
+  "slug": "how-to-set-out-of-office-in-outlook",
+  "kwhero_score": 88,
+  "status": "validate OK, humanlint OK",
+  "changes": "Menuepfade korrigiert (neu Outlook: View > View settings > Accounts > Automatic Replies; Web: Settings > Accounts > Automatic replies; Mac: Tools > Automatic Replies). 'Mail > Automatic replies', 'View all Outlook settings', Mobile 'Profilsymbol' und Sync-Behauptungen gestrichen/ersetzt. Zapier-Absatz, lila Anzeige, 'Delegates verwalten OOO' (unbelegt) entfernt. Neu: Kontotyp-Voraussetzung, nur einmal pro Absender, Fehlerursachen aus Learn (Junk, Weiterleitung, Remote Domain, Transport Rules), Admin-Wege fuer Benutzer/Shared Mailbox.",
+  "uncertain": "Rules-Button im klassischen Fenster nur knapp beschrieben. Shared-Mailbox-Dauerantwort-Hinweis ist Empfehlung, nicht belegt.",
+  "urls": [
+   "https://support.microsoft.com/en-us/office/send-automatic-out-of-office-replies-from-outlook-9742f476-5348-4f9f-997f-5e208513bd67",
+   "https://support.microsoft.com/en-us/outlook/send-automatic-out-of-office-replies-from-outlook-com-or-outlook-on-the-web",
+   "https://support.microsoft.com/en-us/outlook/send-automatic-out-of-office-replies-from-outlook-for-mac",
+   "https://support.microsoft.com/en-us/outlook/how-do-i-enable-out-of-the-office-messages-for-each-of-my-accounts",
+   "https://learn.microsoft.com/en-us/troubleshoot/exchange/email-delivery/understand-troubleshoot-oof-replies",
+   "https://learn.microsoft.com/en-us/troubleshoot/exchange/user-and-shared-mailboxes/set-automatic-replies"
+  ]
+ }
+]
