@@ -161,7 +161,7 @@ class Cards(unittest.TestCase):
     def test_banner_from_r2_when_uploaded(self):
         R2.MAP[L.BANNER] = "https://img.m365.fm/listen/listen-banner.webp"
         h = L.card_html("en", self.ITEM, "1")
-        self.assertRegex(h, r'<img class="ls-bg" src="https://img\.m365\.fm/listen/listen-banner\.webp" alt="" width="\d+" height="\d+"')
+        self.assertRegex(h, r'<img class="ls-bg" style="max-width:none" src="https://img\.m365\.fm/listen/listen-banner\.webp" alt="" width="\d+" height="\d+"')
         self.assertNotIn("ls-nobg", h)
 
     def test_one_main_link_and_separate_text_link(self):
@@ -290,9 +290,25 @@ class Site(unittest.TestCase):
         b = dict(self.post, slug="b", title="Purview DLP policies in practice")
         c = dict(self.post, slug="c", title="Forklift routing", summary="routes", topics=["forklift"])
         out = self.site.entity_cards([a, b, c], "en")
-        self.assertEqual(list(out), [("a", "en")])   # b: dieselbe Folge, nur beim ersten Beitrag; c: keine gute Folge
-        self.assertIn("ls-mini", out[("a", "en")])
-        self.assertIn('data-card="entity"', out[("a", "en")])
+        self.assertEqual(list(out), [(self.post.get("handle"), "a", "en")])   # b: dieselbe Folge, nur beim ersten Beitrag; c: keine gute Folge
+        self.assertIn("ls-mini", out[(self.post.get("handle"), "a", "en")])
+        self.assertIn('data-card="entity"', out[(self.post.get("handle"), "a", "en")])
+
+    def test_same_slug_other_author_does_not_lend_its_match(self):
+        other = dict(self.post, handle="someone-else", title="Forklift routing", summary="routes", topics=["forklift"])
+        orig = dict(self.post, handle="mirko-p")
+        tr = dict(orig, lang="de", tr_of="en", title="Völlig anderer Titel", summary="")
+        self.site.index_posts([other, orig, tr])
+        self.assertEqual(self.site.post_matches(tr), self.site.post_matches(orig))
+        self.assertNotEqual(self.site.post_matches(tr), self.site.post_matches(other))
+
+    def test_banner_does_not_pull_in_responsive_img_css(self):
+        import site_img_dims as IMG
+        from unittest import mock
+        with mock.patch.object(L, "banner_url", lambda: "https://img.m365.fm/listen/banner.webp"):
+            h = L._bg_img()
+        self.assertIn('class="ls-bg"', h)
+        self.assertFalse(IMG.needs_responsive_css(h))   # sonst ueberschreibt .wk-body img[width][height]{height:auto} die Banner-Hoehe
 
     def test_entity_page_without_matches_has_no_cards(self):
         c = dict(self.post, slug="c", title="Forklift routing", summary="routes", topics=["forklift"])

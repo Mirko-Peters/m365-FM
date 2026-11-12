@@ -278,7 +278,7 @@ def _bg_img():
     if not u:
         return ""
     w, h = (_dims().get(u) or [1200, 360])[:2]
-    return f'<img class="ls-bg" src="{_esc(u)}" alt="" width="{int(w)}" height="{int(h)}" loading="lazy" decoding="async">'
+    return f'<img class="ls-bg" style="max-width:none" src="{_esc(u)}" alt="" width="{int(w)}" height="{int(h)}" loading="lazy" decoding="async">'
 
 
 def _data(apple, spotify):
@@ -421,11 +421,11 @@ class Site:
         waeren gegen englische Folgen sinnlos), auch wenn ihre Seite vor dem Original gebaut wird (Entitaetsseiten)."""
         for p in posts:
             if not p.get("tr_of") and (p.get("lang") or "en") == "en":
-                self._orig.setdefault(p["slug"], p)
+                self._orig.setdefault((p.get("handle"), p["slug"]), p)   # je Autor: Slugs sind nur je Autor eindeutig
 
     def post_matches(self, p, ents=None):
         """Zuordnung fuer einen Beitrag: [{"episode", "score", "via"}], mit Zwischenspeicher (data/listen_matches.json) und je Bau nur einmal je Slug."""
-        src = (self._orig.get(p["slug"]) if p.get("tr_of") else None) or p
+        src = (self._orig.get((p.get("handle"), p["slug"])) if p.get("tr_of") else None) or p
         title, summary, topics = src.get("title") or "", src.get("summary") or "", list(src.get("topics") or [])
         h = post_hash(src["slug"], title, summary, topics)
         k = (src["slug"], h)
@@ -457,7 +457,7 @@ class Site:
 
     def entity_cards(self, posts, lang, ents=None):
         """Entitaetsseite: kompakte Karte je aufgelistetem Beitrag mit guter Folge; dieselbe Folge nur beim ersten Beitrag, danach nichts.
-        -> {(slug, sprache): html}"""
+        -> {(handle, slug, sprache): html}"""
         seen, out = set(), {}
         for p in posts:
             ms = self.post_matches(p, ents)[:1]
@@ -465,7 +465,7 @@ class Site:
                 continue
             seen.add(ms[0]["episode"])
             pl = p.get("lang") or lang
-            out[(p["slug"], p.get("lang"))] = card_html(pl, self.item(ms[0]["episode"], pl), "entity", compact=True)
+            out[(p.get("handle"), p["slug"], p.get("lang"))] = card_html(pl, self.item(ms[0]["episode"], pl), "entity", compact=True)
         return out
 
 
@@ -575,7 +575,7 @@ def apply(base, body_html, p, lang, ents=None):
 
 
 def apply_entities(base, posts, lang, ents=None):
-    """Karten fuer die Beitragsliste einer Entitaetsseite: {(slug, sprache): html} (leer ohne Konfiguration oder bei Fehler)."""
+    """Karten fuer die Beitragsliste einer Entitaetsseite: {(handle, slug, sprache): html} (leer ohne Konfiguration oder bei Fehler)."""
     s = get(base)
     if not s:
         return {}
