@@ -1,15 +1,15 @@
-# Entitäten: JSON gegen D1 (2026-11-11T06:52Z)
+# Entitäten: JSON gegen D1 (2026-11-12T06:52Z)
 
-JSON-Basis 2197 · D1 live 2210 · in beiden 2197 · nur JSON 0 · nur D1 13
+JSON-Basis 2254 · D1 live 2269 · in beiden 2254 · nur JSON 0 · nur D1 15
 
-**4 Entitäten** weichen ab (letzte live-Fassung: import/auto 1, person 3).
+**13 Entitäten** weichen ab (letzte live-Fassung: import/auto 10, person 3).
 
 | Feld | JSON anders als D1 | davon in D1 leer | Beispiele |
 |---|---|---|---|
 | name | 1 | 0 | marcel-lehmann |
 | type | 0 | 0 |  |
 | docs | 0 | 0 |  |
-| wikidata | 1 | 1 | m365fm |
+| wikidata | 11 | 11 | m365fm, ifakt, jorg-drees, polaris, polaris-vsm, polaris-bsm |
 | wikipedia | 0 | 0 |  |
 | web | 1 | 0 | ifakt |
 | same_as | 1 | 1 | ifakt |
