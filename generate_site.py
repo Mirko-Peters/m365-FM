@@ -32,6 +32,7 @@ import site_media as MED
 import site_sidebar as SBR
 import site_topweek as TOPW   # Top 10 der Vorwoche (data/top.json): Wochenbezeichnung, ItemList, englische Seite /top/
 import site_r2 as R2
+import site_listen as LST   # "Show folgen"-Knopf auf den Folgenseiten und Anhoeren-Karten
 from site_size import sizes, writers
 import site_sponsorships as SPM   # T37 Sponsor: Kennzeichnung bezahlter Inhalte (data/sponsorships.json)
 import site_transcripts as TRF   # #266: Transkripte als Dateien je Folge (R2, /…/transcript.txt|.vtt)
@@ -1265,7 +1266,7 @@ def build():
 {chips_html(l, it)}<p class="lede">{intro}</p>
 <figure class="cover" style="margin-inline:0">{art_svg(vid, LANGS[l][0], "M365.FM · " + ui[0], l)}</figure>
 <div class="panel">{PL.player("spreaker", it["eid"], e["title"], ui[0], link=spk)}
-<div class="btns">{btns}</div>{"<p class=showrow>M365.FM ▸ " + showrow + "</p>" if showrow else ""}</div>
+<div class="btns">{btns}</div>{"<p class=showrow>M365.FM ▸ " + showrow + "</p>" if showrow else ""}</div>{LST.follow_for(BASE, l)}
 <div style="margin:22px 0">{PL.player("youtube", vid, e["title"], ui[1], link=yt)}</div>
 <p class="mut">▶ {esc(e["title"])}</p>
 <h2>{esc(hdr)}</h2><ol class="points">{lis}</ol>
@@ -1549,6 +1550,9 @@ def build():
         for _t in _p.get("topics", []):
             _pbt.setdefault(_t, []).append(_p)
     _ctx["posts_by_topic"] = _pbt; _ctx["author_box"] = author_box
+    import site_listen as _LSTm   # Anhoeren-Karten (Stoerer): Katalog der Folgen einmal, Beitraege und Entitaetsseiten nutzen dieselbe Zuordnung (site_listen.py)
+    _lst = _LSTm.configure(_ctx)
+    if _lst: _lst.index_posts(_posts)
     import site_milestones as MST
     print("Updates-Seite (Wochenzusammenfassungen):", MST.build(_ctx, _posts))   # Mirko 6.11.2026: nur die woechentlichen Meilensteine, keine Tagesliste mit Inhalten oder GitHub-Meldungen
     phase("Blog geladen, Folgen der Hauptshow zugeordnet")

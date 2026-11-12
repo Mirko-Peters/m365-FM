@@ -41,7 +41,8 @@ def load(se=SE, qa=QA):
                 sc = _num(x.get("score"))
                 if sc >= MIN_SCORE: ents[str(x["slug"])] = max(sc, ents.get(str(x["slug"]), 0))
             yt = str(d.get("youtube_video_id") or "").strip()
-            by_ep[f.stem] = {"entities": sorted(ents.items(), key=lambda kv: -kv[1]), "yt": yt if 8 <= len(yt) <= 16 else "", "lang": str(d.get("lang") or "")}
+            by_ep[f.stem] = {"entities": sorted(ents.items(), key=lambda kv: -kv[1]), "yt": yt if 8 <= len(yt) <= 16 else "", "lang": str(d.get("lang") or ""),
+                             "dur": int(_num(d.get("duration_s")))}   # Sekunden (0 = unbekannt): Dauer auf den Anhoeren-Karten
             for slug, sc in ents.items(): by_ent.setdefault(slug, []).append((f.stem, sc))
     for v in by_ent.values(): v.sort(key=lambda t: -t[1])
     return {"by_episode": by_ep, "by_entity": by_ent}
@@ -58,3 +59,8 @@ def episodes_for(eid):
 
 def yt_of(sid):
     return (BY_EPISODE.get(str(sid or "")) or {}).get("yt") or ""
+
+
+def duration_of(sid):
+    """Dauer der Folge in Sekunden laut Extraktion (0 = unbekannt)."""
+    return int((BY_EPISODE.get(str(sid or "")) or {}).get("dur") or 0)

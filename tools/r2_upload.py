@@ -14,6 +14,8 @@ from PIL import Image
 ROOT = Path(__file__).resolve().parent.parent
 MAP = ROOT / "data" / "r2_map.json"
 DIMS = ROOT / "data" / "r2_dims.json"
+LOCAL = ROOT / "data" / "r2_local.json"   # {"<Repo-Pfad>": "<Schluessel im Bucket>"}: eigene Bilder aus dem Repo (z. B. design/listen/listen-banner.webp)
+LOCAL_TYPES = {".webp": "image/webp", ".png": "image/png", ".jpg": "image/jpeg", ".jpeg": "image/jpeg", ".gif": "image/gif", ".svg": "image/svg+xml", ".avif": "image/avif"}
 PUBLIC = "https://img.m365.fm"
 EXT = {"image/jpeg": ".jpg", "image/png": ".png", "image/gif": ".gif", "image/webp": ".webp", "image/svg+xml": ".svg", "image/avif": ".avif",
        "application/pdf": ".pdf"}   # PDFs: Podpage-Downloads (Archiv vor der Kuendigung)
@@ -47,6 +49,34 @@ def entity_logos():
     f = ROOT / "data" / "entities.json"
     ents = json.loads(f.read_text("utf-8")) if f.exists() else []
     return {str(e["logo_src"]).strip() for e in ents if isinstance(e, dict) and str(e.get("logo_src") or "").startswith("https://")}
+
+
+def local_files():
+    """Lokale Dateien aus data/r2_local.json -> [(Repo-Pfad, Schluessel)]; nur Bildtypen, nur Dateien im Repo, Schluessel ohne '..' oder fuehrenden Schraegstrich."""
+    cfg = json.loads(LOCAL.read_text("utf-8")) if LOCAL.exists() else {}
+    out = []
+    for rel, key in sorted(cfg.items()):
+        f = (ROOT / rel).resolve()
+        ok = (str(f).startswith(str(ROOT)) and f.is_file() and f.suffix.lower() in LOCAL_TYPES and key and not key.startswith("/") and ".." not in key.split("/"))
+        if ok:
+            out.append((rel, key))
+        else:
+            print(f"  UEBERSPRUNGEN (lokal): {rel} -> {key}")
+    return out
+
+
+def upload_local(s3, bucket, done, dims):
+    """Lokale Dateien hochladen (Typ bleibt, WebP bleibt WebP), Zuordnung done[Repo-Pfad] = R2-URL und Masse eintragen. Cache ein Jahr: ein geaendertes Bild bekommt einen neuen Schluessel."""
+    n = 0
+    for rel, key in local_files():
+        data = (ROOT / rel).read_bytes()
+        s3.put_object(Bucket=bucket, Key=key, Body=data, ContentType=LOCAL_TYPES[Path(rel).suffix.lower()], CacheControl="public, max-age=31536000")
+        done[rel] = f"{PUBLIC}/{key}"
+        size = image_dimensions(data)
+        if size:
+            dims[done[rel]] = size
+        n += 1
+    return n
 
 
 def image_dimensions(data):
@@ -97,7 +127,7 @@ def main():
     done = json.load(open(MAP, encoding="utf-8")) if MAP.exists() else {}
     dims = json.load(open(DIMS, encoding="utf-8")) if DIMS.exists() else {}
     todo = [u for u in todo if u not in done]
-    print(f"{len(todo)} Bilder offen, {len(done)} schon in R2")
+    print(f"{len(todo)} Bilder offen, {len(done)} schon in R2, {len(local_files())} lokale Dateien (data/r2_local.json)")
     if not apply:
         for u in todo[:10]:
             print("  ", u[:110])
@@ -108,6 +138,7 @@ def main():
                       aws_access_key_id=os.environ["R2_ACCESS_KEY_ID"], aws_secret_access_key=os.environ["R2_SECRET_ACCESS_KEY"], region_name="auto")
     bucket = os.environ["R2_BUCKET"]
     failed = []
+    print(f"{upload_local(s3, bucket, done, dims)} lokale Dateien hochgeladen")
 
     def one(u):
         try:
