@@ -21,7 +21,7 @@ faq:
     a: "Long enough to cover typical conditions on the machine: several shifts, a few product changeovers and at least one planned stop. For many plants that means a few weeks. The goal is not a better number but proof that the counts, states and downtime reasons match what really happened at the machine."
 ---
 
-OEE software records what a machine does during planned production time, meaning when it runs, when it stops, how fast it goes and how many parts come out good. It then turns that into availability, performance and quality, and a combined OEE figure. This article is for operations managers who have to pick a tool, test it and get it accepted on the shop floor. It deals with selection and roll-out, not with the formula itself. If you want the formula and the six big losses first, read up on [OEE](https://www.m365.fm/entity/oee/) first and come back.
+OEE software records what a machine does during planned production time, meaning when it runs, when it stops, how fast it goes and how many parts come out good. It then turns that into availability, performance and quality, and a combined OEE figure. This article is for operations managers in [manufacturing](https://www.m365.fm/entity/manufacturing/) who have to pick a tool, test it and get it accepted on the shop floor. It deals with selection and roll-out, not with the formula itself. If you want the formula and the six big losses first, read up on [OEE](https://www.m365.fm/entity/oee/) first and come back.
 
 ## What should the tool actually do?
 
