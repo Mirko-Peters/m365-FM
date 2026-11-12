@@ -57,7 +57,7 @@ Use criteria you can test, and write them down before the first demo. Here is a 
 - Where is the ideal speed set, and who is allowed to change it?
 - How does it treat planned stops, breaks and changeovers? Can you see them as separate categories?
 - Can you view the raw events behind a figure, not only the percentage?
-- Does the formula follow the Lean definition, or does it follow ISO 22400-2? [ISO describes](https://www.iso.org/standard/54497.html) that standard as specifying key performance indicators for manufacturing operations management, each with its formula, elements, time behaviour and unit. Names and time bases can differ between sources, so ask the vendor for the exact formula and compare it with your own.
+- Does the formula follow the Lean definition, or does it follow ISO 22400-2? [ISO describes](https://www.iso.org/standard/54497.html) that standard as specifying key performance indicators for manufacturing operations management, each with its formula, elements, time behavior and unit. Names and time bases can differ between sources, so ask the vendor for the exact formula and compare it with your own.
 
 ### Use on the shop floor
 
