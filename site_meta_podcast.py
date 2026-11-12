@@ -250,6 +250,7 @@ def episode_title(lang, raw, series="", kind="episode", uniq=None):
 # ---------------------------------------------------------------- Descriptions
 _SENT = re.compile(r"(?<=[.!?。！？])\s+|(?<=[。！？])(?=\S)")
 _LEAD = re.compile(r"^(?:in|on) this (?:episode|show|session)(?: of the m365[ .]?fm podcast)?,\s*", re.I)
+_MARK = re.compile(r"folge|episode|épisode|episodio|episódio|aflevering|odcinek|выпуск|випуск|حلقة|פרק|エピソード|에피소드|podcast|diese|this ", re.I)   # Satz, der die Folge selbst benennt ('Diese Folge zeigt ...')
 _CLAUSE = re.compile(r"; |: | – | — |；|：")   # nur starke Grenzen: Schnitte an Kommas (und vor 'und'/'and') liefern oft grammatisch kaputte Saetze ('... und zeigt.')
 
 
@@ -285,9 +286,9 @@ def episode_desc(lang, text, *, prefer_answer=False, has_video=False, has_transc
             L = wlen(s)
             if L > hi: break
             if L < 25: continue   # Wortreste ('.', 'Von') sind keine Aussage
-            key = (L >= lo, (j == n - 1) if prefer_answer else (i == 0), L)
+            key = (L >= lo, (bool(_MARK.search(ss[j])), j == n - 1) if prefer_answer else (i == 0, False), L)
             if best is None or key > best[0]: best = (key, s)
-    if prefer_answer and (best is None or not best[0][1]) and wlen(ss[-1]) > hi:   # die Antwort ist zu lang: bis zum letzten ganzen Teilsatz, nicht nur der Aufhaenger
+    if prefer_answer and (best is None or not best[0][1][1]) and wlen(ss[-1]) > hi:   # die Antwort ist zu lang: bis zum letzten ganzen Teilsatz, nicht nur der Aufhaenger
         cs = _clause_cut(ss[-1], lang, hi=hi)
         if not cs.endswith("…") or best is None: best = ((True, True, wlen(cs)), cs)
     if best is None:
