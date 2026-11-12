@@ -1,0 +1,859 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:04.120
+Hallo allemaal en welkom bij een nieuwe aflevering van Microsoft Knowledge Nuggets hier op M365.
+
+00:00:04.260 --> 00:00:06.140
+FM, ik ben jullie host Mirko Peters.
+
+00:00:06.400 --> 00:00:09.140
+Vandaag behandelen we iets waar iedereen die met AI bouwt van heeft gehoord,
+
+00:00:09.300 --> 00:00:11.340
+maar wat bijna niemand in gewone taal kan uitleggen.
+
+00:00:11.480 --> 00:00:13.720
+Het is het model contextprotocol of MCP.
+
+00:00:13.980 --> 00:00:17.860
+Stel je dit voor, je bent in Teams en je stelt je AI-assistent een simpele vraag zoals
+
+00:00:17.860 --> 00:00:19.580
+wat is de status van het Johnson Project?
+
+00:00:19.880 --> 00:00:22.780
+En het antwoord, het spijt me, ik heb geen toegang tot die informatie.
+
+00:00:23.000 --> 00:00:23.820
+Klinkt dit bekend?
+
+00:00:24.020 --> 00:00:27.360
+De AI is slim, het model is krachtig, maar het kan je data niet zien.
+
+00:00:27.360 --> 00:00:30.640
+Het is losgekoppeld van de systemen waar je werkelijke werk zich bevindt.
+
+00:00:30.760 --> 00:00:32.840
+Dat is het kernprobleem dat MCP oplost.
+
+00:00:33.020 --> 00:00:35.840
+Aan het einde van deze aflevering begrijp je wat MCP precies is,
+
+00:00:36.020 --> 00:00:40.640
+waarom het belangrijk is voor iedereen die Microsoft 365 gebruikt en hoe het verandert wat AI voor je kan doen.
+
+00:00:40.840 --> 00:00:42.260
+We verdelen dit in bouwstenen.
+
+00:00:42.420 --> 00:00:45.960
+Het probleem, de oplossing, hoe het werkt en wat het betekent binnen Microsoft.
+
+00:00:46.360 --> 00:00:50.120
+Laten we dus beginnen met het probleem, want je hebt het waarschijnlijk zelf ook wel eens ervaren.
+
+00:00:50.720 --> 00:00:53.900
+Het probleem, elke AI-tool moest op maat worden gebouwd.
+
+00:00:53.900 --> 00:00:59.360
+Voordat MCP bestond, moest je voor elke nuttige actie van een AI-assistent zoals je agenda checken,
+
+00:00:59.540 --> 00:01:04.400
+een bestand uit SharePoint halen of een klantrecord in Dynamics opzoeken aangepaste code schrijven.
+
+00:01:04.580 --> 00:01:07.760
+Elke verbinding, elke gegevensbron, afzonderlijke code.
+
+00:01:08.020 --> 00:01:08.740
+Dit is het punt.
+
+00:01:08.960 --> 00:01:11.280
+Elk systeem spreekt zijn eigen API-taal.
+
+00:01:11.440 --> 00:01:15.720
+Je agenda gebruikt het ene formaat, SharePoint een ander en Dynamics weer een heel andere.
+
+00:01:15.940 --> 00:01:20.340
+Verschillende authenticatie, verschillende regels, verschillende manieren om data op te vragen en terug te krijgen.
+
+00:01:20.340 --> 00:01:24.180
+Als je wilde dat je AI met drie systemen communiceerde, bouwde je drie aangepaste connectoren.
+
+00:01:24.380 --> 00:01:25.160
+Denk er zo over.
+
+00:01:25.400 --> 00:01:28.840
+Stel je voor dat je in je woonkamer bent met een tv, een stereo en slimme verlichting.
+
+00:01:29.020 --> 00:01:33.100
+Elk apparaat heeft zijn eigen afstandsbediening en geen van die afstandsbedieningen werkt met een ander apparaat.
+
+00:01:33.220 --> 00:01:38.280
+Je hebt de tv-afstandsbediening nodig voor de tv, de stereo-afstandsbediening voor de stereo en een aparte app voor de verlichting.
+
+00:01:38.460 --> 00:01:40.780
+Zo zag AI-ontwikkeling eruit voor MCP.
+
+00:01:40.980 --> 00:01:43.500
+Elke tool had zijn eigen aangepaste integratie nodig.
+
+00:01:43.720 --> 00:01:45.900
+Voor Microsoft-gebruikers komt dit dicht bij huis.
+
+00:01:46.160 --> 00:01:48.660
+Denk eens aan wat Copilot wil doen als je het een vraag stelt.
+
+00:01:48.660 --> 00:01:54.820
+Het moet misschien je exchange-agenda controleren op afspraken, recente e-mails van een specifieke klant lezen of een klantrecord in Dynamics opzoeken.
+
+00:01:55.000 --> 00:01:59.380
+Dat zijn drie verschillende API-verbindingen, drie afzonderlijke integraties, die elk op maat ontwikkeld moeten worden.
+
+00:01:59.560 --> 00:02:00.420
+Het resultaat?
+
+00:02:00.600 --> 00:02:03.180
+De meeste AI-tools kozen voor de makkelijke weg en bleven generie.
+
+00:02:03.260 --> 00:02:06.640
+Je stelde een vraag over je eigen werk en de AI zei, ik heb geen toegang tot die gegevens.
+
+00:02:06.840 --> 00:02:08.920
+Of, je moet eerst een verbinding configureren.
+
+00:02:09.120 --> 00:02:13.040
+Echte integratie betekende duur maatwerk en de meeste organisaties bereikten dat nooit.
+
+00:02:13.240 --> 00:02:14.740
+Nu, dit is het belangrijkste punt.
+
+00:02:14.920 --> 00:02:17.480
+Het grote taalmodel zelf is ongelooflijk krachtig.
+
+00:02:17.480 --> 00:02:22.940
+Het kan redeneren, samenvatten, genereren en analyseren, maar zonder toegang tot je daadwerkelijke gegevens is het blind.
+
+00:02:23.120 --> 00:02:26.760
+Het is alsof je de slimste assistent ter wereld opsluit in een kamer zonder ramen.
+
+00:02:26.940 --> 00:02:29.740
+Ze kunnen briljant denken, maar ze kunnen je nergens echt meehelpen.
+
+00:02:29.940 --> 00:02:30.540
+De oplossing?
+
+00:02:30.780 --> 00:02:32.560
+MCP als de universele stekker.
+
+00:02:32.780 --> 00:02:34.900
+Dus, wat als er één universele stekker bestond?
+
+00:02:35.080 --> 00:02:40.060
+Eén standaard manier om elke AI te verbinden met elke gegevensbron zonder voor elke verbinding maatwerk te schrijven.
+
+00:02:40.220 --> 00:02:43.060
+Het punt is, dat is precies wat het model context protocol doet.
+
+00:02:43.060 --> 00:02:48.960
+Kortweg MCP, Anthropik, het bedrijf achter Kloot, introduceerde het eind 2024 en het werd snel populair.
+
+00:02:49.180 --> 00:02:54.920
+MCP is een open standaard die één consistente manier definieert voor AI-applicaties om te communiceren met tools en gegevensbronnen.
+
+00:02:55.180 --> 00:02:56.620
+Denk erover als USB-C.
+
+00:02:56.860 --> 00:02:59.960
+Voor USB-C had elk apparaat zijn eigen speciale kabel nodig.
+
+00:03:00.160 --> 00:03:03.520
+Je telefoon gebruikte de ene soort, je laptop een andere en je koptelefoon een derde.
+
+00:03:03.660 --> 00:03:05.840
+Je had een la vol kabels en kon nooit de juiste vinden.
+
+00:03:06.020 --> 00:03:09.280
+Toen kwam USB-C één kabel, één standaard en alles werkt gewoon.
+
+00:03:09.280 --> 00:03:11.620
+MCP doet hetzelfde voor AI-verbindingen.
+
+00:03:11.760 --> 00:03:16.720
+Eén protocol werkt voor databases, bestandsystemen, web APIs en ja, zelfs Microsoft services.
+
+00:03:16.960 --> 00:03:24.000
+In plaats van aangepaste connectors te bouwen voor elke gegevensbron, bouw je één MCP-server en elke compatibele AI-applicatie kan deze gebruiken.
+
+00:03:24.180 --> 00:03:25.340
+De adoptie ging snel.
+
+00:03:25.620 --> 00:03:32.680
+Binnen enkele maanden verschenen er duizenden kantenklare MCP-servers voor Google Drive, GitHub, Slack en databases zoals PostgreSQL en SQLite.
+
+00:03:32.820 --> 00:03:35.600
+En voor Microsoft-gebruikers wordt het hier pas echt interessant.
+
+00:03:35.600 --> 00:03:41.820
+Je AI-tools kunnen nu verbinding maken met SharePoint, Exchange, Dynamics en het Power Platform, allemaal via dezelfde standaard interface.
+
+00:03:41.980 --> 00:03:44.580
+De essentie is, je hoeft geen aangepaste verbindingen meer te bouwen.
+
+00:03:44.740 --> 00:03:48.320
+Je plugt in op MCP één protocol, elke gegevensbron, elke AI-applicatie.
+
+00:03:48.560 --> 00:03:49.600
+Dat is de magie ervan.
+
+00:03:49.800 --> 00:03:51.820
+De architectuur, host, client en server.
+
+00:03:52.120 --> 00:03:54.020
+Dus, hoe werkt dit eigenlijk achter de schermen?
+
+00:03:54.160 --> 00:03:55.140
+Laat me het uitleggen.
+
+00:03:55.340 --> 00:03:59.020
+MCP gebruikt een eenvoudige opzet uit drie delen, host, client en server.
+
+00:03:59.300 --> 00:04:02.140
+Zodra je die drie onderdelen begrijpt, valt alles op zijn plek.
+
+00:04:02.260 --> 00:04:04.860
+De host is de AI-applicatie die je daadwerkelijk gebruikt.
+
+00:04:04.860 --> 00:04:09.920
+Dat kan Copilot in Microsoft 365 zijn, Cloud Desktop of een eigen agent die je zelf hebt gebouwd.
+
+00:04:10.080 --> 00:04:11.520
+De host is waar je je vraag stelt.
+
+00:04:11.740 --> 00:04:13.520
+Het is het gedeelte dat de gebruiker ziet.
+
+00:04:13.740 --> 00:04:16.280
+Binnen die host bevindt zich de zogeheten MCP-client.
+
+00:04:16.540 --> 00:04:18.900
+Dit is het onderdeel dat het MCP-protocol spreekt.
+
+00:04:19.040 --> 00:04:23.800
+Je ziet het niet en werkt er niet direct mee, maar het is de vertaler, het onderdeel dat weet hoe het met MCP-survers moet communiceren.
+
+00:04:24.020 --> 00:04:24.940
+Dan heb je de server.
+
+00:04:25.200 --> 00:04:30.420
+De MCP-surfer is een lichtgewicht programma dat tussen je AI-toepassing en je werkelijke gegevensbron in staat.
+
+00:04:30.640 --> 00:04:33.200
+Het stelt tools en bronnen beschikbaar die de AI kan gebruiken.
+
+00:04:33.200 --> 00:04:37.180
+De server weet hoe hij je SharePoint-site, je Exchange-mailbooks en je Dynamics-database moet bereiken.
+
+00:04:37.360 --> 00:04:39.180
+De AI hoeft die details helemaal niet te kennen.
+
+00:04:39.380 --> 00:04:40.900
+Hij praat simpelweg met de server.
+
+00:04:41.180 --> 00:04:42.480
+Dit is hoe de gegevens stromen.
+
+00:04:42.720 --> 00:04:46.340
+Wanneer je je AI een vraag stelt, gaat het verzoek van de host naar de MCP-client.
+
+00:04:46.540 --> 00:04:49.560
+De client stuurt een bericht via het MCP-protocol naar de server.
+
+00:04:49.780 --> 00:04:53.100
+De server haalt de gegevens uit je bron, krijgt wat je nodig hebt en stuurt het terug.
+
+00:04:53.300 --> 00:04:55.860
+Host naar client naar protocol naar server naar je gegevens.
+
+00:04:55.860 --> 00:04:57.900
+Schoon, eenvoudig en gestandardiseerd.
+
+00:04:58.120 --> 00:04:59.040
+Zie het als een restaurant.
+
+00:04:59.400 --> 00:05:00.920
+De host ben jij die aan tafel zit.
+
+00:05:01.120 --> 00:05:04.260
+De MCP-client is de ober die je bestelling opneemt en naar de keuken brengt.
+
+00:05:04.360 --> 00:05:06.500
+En de MCP-surfer is de keuken zelf.
+
+00:05:06.680 --> 00:05:08.380
+Je hoeft niet te weten hoe de keuken werkt.
+
+00:05:08.560 --> 00:05:11.260
+Je vertelt de ober gewoon wat je wilt en het eten verschijnt.
+
+00:05:11.440 --> 00:05:14.200
+Eén host kan tegelijkertijd met meerdere servers verbinden.
+
+00:05:14.200 --> 00:05:20.520
+Zo kan je AI in Teams je SharePoint-documenten, je Exchange Agenda en je Dynamics Records in één gesprek bereiken.
+
+00:05:20.680 --> 00:05:24.720
+De communicatie tussen client en server gebruikt iets dat JSON-RPC heet.
+
+00:05:24.900 --> 00:05:28.420
+Gewoon een lichtgewicht, gestandardiseerde manier om berichten heen en weer te sturen.
+
+00:05:28.640 --> 00:05:30.980
+Geen zware overhead, geen aangepaste bedrading.
+
+00:05:31.200 --> 00:05:32.960
+Wat MCP-survers bevatten?
+
+00:05:33.200 --> 00:05:34.600
+Tools, bronnen en prompts.
+
+00:05:34.860 --> 00:05:38.400
+Dus, wat geeft een MCP-server de AI eigenlijk als ze verbinding maken?
+
+00:05:38.680 --> 00:05:41.220
+Drie dingen, tools, bronnen en prompts, schablonen.
+
+00:05:41.220 --> 00:05:45.220
+Beschouw ze als de gereedschapskist waar de AI uitput wanneer er werk moet worden verzet.
+
+00:05:45.420 --> 00:05:47.300
+Laten we dat in duidelijke taal opsplitsen.
+
+00:05:47.460 --> 00:05:48.180
+Eerste, tools.
+
+00:05:48.400 --> 00:05:52.140
+Tools zijn acties die de AI kan uitvoeren en die daadwerkelijk dingen veranderen in de echte wereld.
+
+00:05:52.300 --> 00:05:55.740
+Een tool kan een database doorzoeken, een e-mail versturen of een document aanmaken.
+
+00:05:55.900 --> 00:05:58.400
+Elke keer dat de AI een tool aanroept, gebeurt er iets.
+
+00:05:58.560 --> 00:06:01.900
+Een bestand wordt opgeslagen, een bericht wordt verzonden, een record wordt bijgewerkt.
+
+00:06:02.060 --> 00:06:03.600
+Tools zijn de werkwoorden van het systeem.
+
+00:06:03.800 --> 00:06:05.220
+Zij zorgen ervoor dat dingen gebeuren.
+
+00:06:05.440 --> 00:06:06.160
+Dan nu de bronnen.
+
+00:06:06.380 --> 00:06:08.920
+Bronnen zijn alleen lezen informatie waar de AI naar kan kijken.
+
+00:06:08.920 --> 00:06:14.140
+Een bron kan een klantenlijst uit Dynamics zijn, een beleidsdocument in SharePoint of notulen uit Teams.
+
+00:06:14.380 --> 00:06:18.900
+De AI kan deze lezen, analyseren en ernaar verwijzen, maar niet direct via een bron aanpassen.
+
+00:06:19.140 --> 00:06:22.140
+Ze geven de AI simpelweg de context die nodig is om slimmer te werken.
+
+00:06:22.320 --> 00:06:23.740
+Dan heb je nog prompt schablonen.
+
+00:06:23.920 --> 00:06:26.440
+Dit zijn kantenklare instructies die je tijd besparen.
+
+00:06:26.640 --> 00:06:31.340
+In plaats van telkens de perfecte prompt te formuleren, geeft de server je er een die al is geoptimaliseerd.
+
+00:06:31.500 --> 00:06:35.820
+Een SharePoint MCP-server kan bijvoorbeeld een schabloon bevatten voor het samenvatten van mapinhoud.
+
+00:06:35.820 --> 00:06:39.640
+Je zegt dan simpelweg, vat deze map samen en het schabloon regelt de rest.
+
+00:06:39.840 --> 00:06:43.320
+Het is als een gespecialiseerde snelkoppeling voor taken die je steeds opnieuw uitvoert.
+
+00:06:43.480 --> 00:06:45.500
+Hier is een concreet voorbeeld om het samen te vatten.
+
+00:06:45.740 --> 00:06:47.780
+Stel je een SharePoint MCP-server voor.
+
+00:06:48.040 --> 00:06:51.580
+Deze biedt een tool genaamd, zoek documenten waarmee je bestanden vindt op trefwoord.
+
+00:06:51.740 --> 00:06:56.700
+Het biedt een bron genaamd, lijst sites die alleen lezen toegang geeft tot alle beschikbare SharePoint sites.
+
+00:06:56.920 --> 00:07:02.920
+En het bevat een prompt schabloon genaamd, vat mapinhoud samen, dat de AI vertelt hoe een heldere samenvatting moet worden gepresenteerd.
+
+00:07:02.920 --> 00:07:06.680
+Alles wat de AI nodig heeft om je met SharePoint te helpen, staat op één plek.
+
+00:07:06.860 --> 00:07:08.100
+Nu komt het mooie gedeelte.
+
+00:07:08.320 --> 00:07:11.440
+De AI ontdekt dit allemaal automatisch wanneer hij verbinding maakt met de server.
+
+00:07:11.720 --> 00:07:13.640
+Geen voorafgaande programmering vereist.
+
+00:07:13.860 --> 00:07:15.780
+De server stelt zichzelf in feite voor.
+
+00:07:16.000 --> 00:07:18.740
+Dit zijn mijn tools, mijn bronnen en mijn prompt schablonen.
+
+00:07:18.860 --> 00:07:21.000
+En de AI begrijpt zelf hoe hij ze moet gebruiken.
+
+00:07:21.240 --> 00:07:23.020
+Dat is wat MCP zo krachtig maakt.
+
+00:07:23.180 --> 00:07:26.000
+De server vertelt de AI wat mogelijk is en de AI doet de rest.
+
+00:07:26.200 --> 00:07:27.780
+Het is een zelfbeschrijvend systeem.
+
+00:07:28.020 --> 00:07:31.740
+Deze drie categorieën werken samen zodat de AI een compleet beeld heeft van wat hij kan doen.
+
+00:07:31.740 --> 00:07:34.320
+MCP ontmoet wat Microsoft al in huis heeft.
+
+00:07:34.540 --> 00:07:36.480
+Laten we dit eens naar de Microsoft wereld brengen.
+
+00:07:36.620 --> 00:07:39.860
+Hier wordt het echt voor iedereen die Microsoft 365 of Azure gebruikt.
+
+00:07:40.060 --> 00:07:42.040
+Laten we direct een hardnekkige mythe uit de wereld helpen.
+
+00:07:42.220 --> 00:07:44.620
+Sommigen denken dat MCP slechts een zijproject van Microsoft is.
+
+00:07:44.820 --> 00:07:45.420
+Dat is het niet.
+
+00:07:45.580 --> 00:07:46.980
+Het is een strategische koers.
+
+00:07:47.220 --> 00:07:49.680
+Dit zie je duidelijk terug in de Azure AI agent service.
+
+00:07:49.960 --> 00:07:55.520
+Als je eigen AI agents op Azure bouwt, kun je nu direct vanuit Azure AI Foundry externe MCP servers toevoegen.
+
+00:07:55.520 --> 00:08:01.780
+Je configureert een serverlabel, een URL en optionele authenticatie headers en je agent kan tools van die server aanroepen.
+
+00:08:01.900 --> 00:08:04.980
+De eigen documentatie van Microsoft noemt het een eerste klas integratie.
+
+00:08:05.200 --> 00:08:06.600
+Dat is geen taal voor een zijproject.
+
+00:08:06.800 --> 00:08:08.160
+Maar het gaat dieper dan alleen Azure.
+
+00:08:08.400 --> 00:08:14.300
+Microsoft heeft officiële MCP serverreferenties uitgebracht voor het Power Platform, waaronder Power Automate, Power Apps en zelfs Process Mining.
+
+00:08:14.520 --> 00:08:16.020
+Dit zijn geen community projecten.
+
+00:08:16.180 --> 00:08:17.580
+Ze komen rechtstreeks van Microsoft.
+
+00:08:17.920 --> 00:08:19.700
+Neem bijvoorbeeld de Power Apps MCP server.
+
+00:08:19.900 --> 00:08:21.860
+Het bevat een tool genaamd een folk data entry.
+
+00:08:22.140 --> 00:08:23.820
+Dit is wat dat in de praktijk betekent.
+
+00:08:23.820 --> 00:08:30.360
+Een AI kan ongestructureerde invoer, zoals een e-mail, een chatbericht of een gescand document, omzetten in een gestructureerd record in dataverse.
+
+00:08:30.560 --> 00:08:32.680
+De AI stelt het record voor en jij keurt het goed.
+
+00:08:32.900 --> 00:08:34.660
+Menselijke controle is direct ingebouwd.
+
+00:08:34.800 --> 00:08:37.240
+De Power Automate MCP server gaat nog een stap verder.
+
+00:08:37.440 --> 00:08:39.280
+Je beschrijft een workflow in gewone taal.
+
+00:08:39.460 --> 00:08:45.100
+Iets als, wanneer er een e-mail binnenkomt met urgent, in het onderwerp, maak dan een taak in Planner en stel mijn manager op de hoogte.
+
+00:08:45.240 --> 00:08:46.680
+De AI bouwt die flow voor je.
+
+00:08:46.920 --> 00:08:48.440
+Geen gesleept met connectoren.
+
+00:08:48.680 --> 00:08:49.640
+Niet zoeken naar triggers.
+
+00:08:49.640 --> 00:08:53.920
+Beschrijf gewoon wat je wilt en de MCP server vertaalt het naar een echte automatisering.
+
+00:08:54.180 --> 00:08:57.800
+Microsoft heeft ook MCP servers getoond voor Microsoft Learn-inhoud.
+
+00:08:58.060 --> 00:09:02.580
+Stel je een AI-agent voor die de volledige Microsoft documentatiebibliotheek als bron gebruikt.
+
+00:09:02.800 --> 00:09:08.660
+Niet door webpagina's te scrapen, maar via een gestructureerde MCP server die documentatie als gestructureerde data aanbiedt.
+
+00:09:08.800 --> 00:09:10.080
+Dat werkt vandaag de dag al.
+
+00:09:10.280 --> 00:09:12.640
+Dit is de richting waarin jouw Microsoft tools zich bewegen.
+
+00:09:12.880 --> 00:09:15.020
+Ze worden standaard MCP toegankelijk gemaakt.
+
+00:09:15.020 --> 00:09:20.200
+Het platform stelt zich open en daarmee wordt jouw Microsoft 365 ervaring alleen maar slimmer.
+
+00:09:20.380 --> 00:09:23.040
+De integratie vindt nu plaats en zit in de basis verankerd.
+
+00:09:23.300 --> 00:09:25.140
+MCP is niet alleen voor ontwikkelaars.
+
+00:09:25.320 --> 00:09:30.480
+Het is voor iedereen die Microsoft 365 gebruikt en wil dat hun AI naadloos samenwerkt met hun data.
+
+00:09:30.920 --> 00:09:31.800
+Een echt scenario.
+
+00:09:32.200 --> 00:09:33.880
+De AI die eindelijk echt werkt.
+
+00:09:34.200 --> 00:09:36.040
+Dus, hoe ziet dit er in de praktijk uit?
+
+00:09:36.280 --> 00:09:38.020
+Laat me een concreet voorbeeld geven.
+
+00:09:38.240 --> 00:09:40.980
+Je zit in Microsoft Teams en typt dit in Copilot.
+
+00:09:41.260 --> 00:09:44.540
+Wat is de status van het ACMI-project en wie loopt erachter met de taken?
+
+00:09:44.540 --> 00:09:45.800
+Je drukt op Enter.
+
+00:09:47.180 --> 00:09:50.220
+Nu gebeurt er achter de schermen iets anders dan een jaar geleden.
+
+00:09:50.460 --> 00:09:55.120
+Je AI-assistent maakt verbinding met een MCP-server die gekoppeld is aan Project Online of Planner.
+
+00:09:55.340 --> 00:10:00.140
+Die server geeft aan welke tools hij kan gebruiken, zoals taken vermelden, taakstatus ophalen,
+
+00:10:00.340 --> 00:10:02.940
+toewijzingen controleren en projecttijdlijn opvragen.
+
+00:10:03.620 --> 00:10:05.500
+De AI heeft hier geen hulp bij nodig.
+
+00:10:05.740 --> 00:10:09.780
+Hij ontdekt die tools automatisch omdat de server letterlijk zegt, dit is wat ik kan doen.
+
+00:10:09.940 --> 00:10:12.420
+En de AI antwoordt, geweldig, dat ga ik gebruiken.
+
+00:10:12.420 --> 00:10:15.500
+Niemand hoeft te zeggen, hé, kijk eerst naar dit API-eindpunt.
+
+00:10:15.680 --> 00:10:16.920
+En uuh, het werkt gewoon.
+
+00:10:17.080 --> 00:10:21.240
+Dus de AI roept de tool, taken vermelden, aan, daarna, taakstatus ophalen, voor elke taak,
+
+00:10:21.340 --> 00:10:22.820
+en daarna, toewijzingen controleren.
+
+00:10:22.920 --> 00:10:26.640
+De MCP-server regelt achter de schermen alle authenticatie en het ophalen van data.
+
+00:10:26.860 --> 00:10:29.560
+Een paar seconden later komt de AI terug met een helder antwoord.
+
+00:10:29.680 --> 00:10:31.220
+Het ACMI-project ligt op schema.
+
+00:10:31.480 --> 00:10:34.080
+Er zijn drie taken te laat, allemaal toegewezen aan Sarah.
+
+00:10:34.360 --> 00:10:35.920
+Wil je dat ik haar een herinnering stuur?
+
+00:10:36.120 --> 00:10:37.420
+Dit is wat belangrijk is.
+
+00:10:37.420 --> 00:10:39.980
+Er is geen aangepaste code geschreven voor deze query.
+
+00:10:40.200 --> 00:10:44.160
+Geen enkele ontwikkelaar heeft twee weken besteed aan het bouwen van een connector tussen Copilot en Project Online.
+
+00:10:44.360 --> 00:10:46.840
+De MCP-server verzorgde de volledige integratie.
+
+00:10:47.040 --> 00:10:50.640
+Eén server, één standaard protocol, en de AI wist precies hoe deze te gebruiken.
+
+00:10:50.860 --> 00:10:52.180
+Laten we nu een stap verder gaan.
+
+00:10:52.400 --> 00:10:59.200
+Nadat je de projectstatus hebt gekregen, vraag je, controleer mijn agenda voor een afspraak met Sarah Morgan en stel een status update op op basis van wat er speelt.
+
+00:10:59.200 --> 00:11:07.940
+De AI gebruikt een Exchange MCP-server om je agenda te controleren, doorzoekt gerelateerde e-mails via dezelfde server en roept vervolgens een Word MCP-server aan om de update op te stellen.
+
+00:11:08.120 --> 00:11:11.460
+Eén gesprek, meerdere gegevensbronnen, nul aangepaste ontwikkeling.
+
+00:11:11.700 --> 00:11:13.420
+Dat is het aha-moment met MCP.
+
+00:11:13.620 --> 00:11:16.380
+Het maakt de AI nuttig binnen je werkelijke werkomgeving.
+
+00:11:16.640 --> 00:11:25.800
+Niet slechts een generieke chatbot die alleen algemene vragen kan beantwoorden, maar een assistent die je gegevens ziet, je context begrijpt en actie onderneemt via één eenvoudige standaard.
+
+00:11:25.800 --> 00:11:28.340
+Beveiliging, het veilig houden van je gegevens.
+
+00:11:28.540 --> 00:11:30.840
+Al die flexibiliteit roept een grote vraag op.
+
+00:11:30.960 --> 00:11:36.880
+Als je AI via MCP plotseling toegang heeft tot SharePoint, Exchange en Dynamics, hoe hou je die gegevens dan veilig?
+
+00:11:37.040 --> 00:11:38.220
+Dit is het korte antwoord.
+
+00:11:38.440 --> 00:11:40.320
+MCP is zo veilig als je het zelf maakt.
+
+00:11:40.500 --> 00:11:43.100
+Het protocol omzelt je bestaande beveiligingsmaatregelen niet.
+
+00:11:43.100 --> 00:11:44.420
+Het werkt ermee samen.
+
+00:11:44.640 --> 00:11:49.980
+MCP ondersteunt OAuth 2.1, dezelfde industriestandaard voor authenticatie die je Microsoft Login beschermt.
+
+00:11:50.120 --> 00:11:55.780
+Wanneer een MCP-server authenticatie vereist, moet je AI-client bewijzen dat deze geautoriseerd is voordat toegang tot gegevens mogelijk is.
+
+00:11:55.980 --> 00:11:59.740
+Services kunnen authenticatie-headers, API-sleutels of token-gebaseerde toegang gebruiken.
+
+00:11:59.920 --> 00:12:02.360
+Dezelfde patronen die je al gebruikt voor het beveiligen van APIs.
+
+00:12:02.620 --> 00:12:05.280
+Maar er is een extra laag die echt van belang is voor zakelijk gebruik.
+
+00:12:05.440 --> 00:12:10.780
+De AI moet eerst toestemming vragen voordat deze daadwerkelijk een zoekopdracht kan uitvoeren, een bericht kan sturen of een record kan wijzigen.
+
+00:12:10.780 --> 00:12:11.960
+Het vraagt het aan jou.
+
+00:12:12.160 --> 00:12:14.120
+Je ziet het verzoek direct in je chatinterface.
+
+00:12:14.300 --> 00:12:16.940
+Je bekijkt wat de tool zal doen en je keurt het goed of wijst het af.
+
+00:12:17.100 --> 00:12:20.200
+Dat betekent dat er geen tool wordt aangeroepen zonder jouw expliciete toestemming.
+
+00:12:20.380 --> 00:12:23.840
+Je AI kan acties voorstellen, maar kan ze niet uitvoeren zonder dat jij ja zegt.
+
+00:12:23.840 --> 00:12:26.380
+Dat is een goed vangnet. Eén ding om op te letten.
+
+00:12:26.560 --> 00:12:30.300
+Er zijn duizenden openbare MCP-survers beschikbaar en niet allemaal zijn ze betrouwbaar.
+
+00:12:30.460 --> 00:12:33.020
+Er zijn openbare registers waar iedereen een server kan publiceren.
+
+00:12:33.280 --> 00:12:34.920
+Sommige zijn uitstekend, andere niet.
+
+00:12:35.100 --> 00:12:37.880
+Het is jouw verantwoordelijkheid om servers te gebruiken die je vertrouwt.
+
+00:12:37.980 --> 00:12:40.000
+In Microsoft-omgevingen heb je een voordeel.
+
+00:12:40.140 --> 00:12:44.760
+Je MCP-survers kunnen dezelfde identiteits- en toegangscontroles gebruiken als je bestaande Microsoft-services.
+
+00:12:45.020 --> 00:12:48.140
+Als een gebruiker geen toestemming heeft om een SharePoint documentbibliotheek te lezen,
+
+00:12:48.140 --> 00:12:49.900
+kan een MCP-surver dat niet omzeilen.
+
+00:12:50.040 --> 00:12:54.820
+De server neemt dezelfde grenzen, dezelfde authenticatie, hetzelfde beleid en hetzelfde beheer over.
+
+00:12:55.020 --> 00:12:57.180
+Aan de slag, je eerste MCP-ervaring.
+
+00:12:57.380 --> 00:12:59.540
+Dus je bent overtuigd en wilt dit zelf proberen.
+
+00:12:59.760 --> 00:13:00.400
+Waar begin je?
+
+00:13:00.560 --> 00:13:03.240
+De makkelijkste manier is om een MCP-compatibele host te kiezen.
+
+00:13:03.380 --> 00:13:06.880
+Cloud Desktop heeft ingebouwde MCP-ondersteuning en GitHub Copilot werkt ook.
+
+00:13:07.060 --> 00:13:09.460
+Beiden laten je servers koppelen met vrijwel geen installatie.
+
+00:13:09.680 --> 00:13:11.960
+Bekijk vervolgens de openbare MCP-registers.
+
+00:13:11.960 --> 00:13:18.300
+Er zijn duizenden kant en klare servers voor diensten zoals Google Drive, Slack, databases, bestandsystemen en ja, ook Microsoft-diensten.
+
+00:13:18.460 --> 00:13:23.040
+Als je een Microsoft-gebruiker bent, begin dan met de MCP-serverreferenties van Microsoft for Power Platform.
+
+00:13:23.240 --> 00:13:24.600
+De installatie is eenvoudig.
+
+00:13:24.800 --> 00:13:27.680
+De meeste hosts gebruiken een JSON-bestand waarin je je servers vermeldt.
+
+00:13:27.760 --> 00:13:32.880
+Je geeft elke naam, voert het commando of de URL in om deze te bereiken en configureert eventuele authenticatiegegevens.
+
+00:13:33.140 --> 00:13:34.980
+Dat is alles en de hostregel de rest.
+
+00:13:35.200 --> 00:13:39.520
+Voor basisgebruik is geen code vereist, dus je hoeft geen ontwikkelaar te zijn of integratiecode te schrijven.
+
+00:13:39.520 --> 00:13:43.860
+Configureer gewoon een JSON-bestand en plotseling heeft je AI toegang tot gegevens die voorheen onbereikbaar waren.
+
+00:13:44.020 --> 00:13:48.180
+Het JSON-bestand is als een configuratiebestand dat je host vertelt met welke servers verbinding moet worden gemaakt.
+
+00:13:48.420 --> 00:13:51.020
+Zie MCP als een universele vertaler voor je AI.
+
+00:13:51.220 --> 00:13:54.980
+In plaats van een andere taal te leren voor elke service, spreekt het één protocool.
+
+00:13:55.200 --> 00:13:59.680
+Begin klein door één gegevensbron te koppelen, zoals je agenda via een Exchange MCP-server.
+
+00:13:59.920 --> 00:14:03.280
+Stel dan je AI een vraag over je planning en zie hoe deze de beschikbare tools ontdekt.
+
+00:14:03.480 --> 00:14:08.780
+Testen, Human-in-P-loop, goedkeuring, wat betekent dat je elke actie moet goedkeuren voordat de AI deze uitvoert.
+
+00:14:08.780 --> 00:14:10.180
+Dat houdt jou in controle.
+
+00:14:10.480 --> 00:14:13.320
+Zorg ervoor dat je het beveiligingsmodel begrijpt voordat je uitbreidt.
+
+00:14:13.400 --> 00:14:18.700
+Als je je op je gemak voelt, breed dan uit door een andere server toe te voegen voor je documentbibliotheek en daarna je taakbeheersysteem.
+
+00:14:18.860 --> 00:14:22.420
+Elke server voegt nieuwe mogelijkheden toe en elke server volgt hetzelfde protocol.
+
+00:14:22.660 --> 00:14:27.680
+Als je je eigen MCP-server wilt bouwen, bijvoorbeeld om een aangepaste bedrijfsapplicatie of een interne database beschikbaar te maken,
+
+00:14:27.860 --> 00:14:30.040
+werken Azure Functions van Microsoft uitstekend als bekend.
+
+00:14:30.220 --> 00:14:34.620
+Je verpakt je bestaande API of gegevensbron in een MCP-server met slechts een paar regelscode.
+
+00:14:34.620 --> 00:14:41.040
+Het patroon is simpel. Stel tools beschikbaar als functies, stel gegevens beschikbaar als bronnen en laat het protocol de rest afhandelen.
+
+00:14:41.200 --> 00:14:44.740
+Het is een eenvoudige manier om je AI toegang te geven tot je eigen gegevensbronnen.
+
+00:14:44.960 --> 00:14:46.780
+Dus, dat is het model contextprotocol.
+
+00:14:46.980 --> 00:14:50.060
+Een standaard waarmee AI tools eindelijk je echte gegevens kunnen bereiken.
+
+00:14:50.240 --> 00:14:53.280
+Je SharePoint bestanden, je Exchange Agenda, je Dynamics Records.
+
+00:14:53.500 --> 00:14:56.520
+Voor MCP moest je voor elk systeem aangepaste verbindingen bouwen.
+
+00:14:56.720 --> 00:14:59.720
+Nu koppel je aan één protocol en je AI kan met ze allemaal praten.
+
+00:14:59.720 --> 00:15:02.540
+De AI wordt nuttig binnen je daadwerkelijke werkomgeving.
+
+00:15:02.780 --> 00:15:05.520
+Dit is niet alleen handig, het verandert hoe je met AI werkt.
+
+00:15:05.720 --> 00:15:10.420
+Begin met één MCP-server, verbind één gegevensbron en zie zelf het verschil.
+
+00:15:10.620 --> 00:15:14.580
+Als je dit nuttig vond, deel het dan met een collega die worstelt met AI die niet bij hun data kan.
+
+00:15:14.840 --> 00:15:16.840
+Abonneer je voor meer kennisfragmenten zoals deze.
+
+00:15:17.060 --> 00:15:19.460
+Ik ben Mirko Peters en ik zie je in de volgende aflevering.

@@ -1,0 +1,865 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:02.180
+Imagina un escritorio de seguridad al frente de un edificio de oficina.
+
+00:00:02.520 --> 00:00:05.600
+Alguien entra, muestra su identificación y el guardia los verifica contra una lista,
+
+00:00:05.960 --> 00:00:07.580
+firman su entrada y quizás obtienen un pase visitante.
+
+00:00:07.880 --> 00:00:09.960
+Ahora imagina que ese mismo edificio no tuviera puertas ni paredes.
+
+00:00:10.500 --> 00:00:12.480
+La gente podría entrar desde cualquier parte del mundo a cualquier hora.
+
+00:00:13.180 --> 00:00:15.600
+Esa es la diferencia entre una red tradicional y una red en la nube.
+
+00:00:16.460 --> 00:00:19.340
+Al final de este episodio, entenderá qué es realmente Azure Firewall,
+
+00:00:19.480 --> 00:00:22.620
+por qué los firewalls en la nube funcionan de forma completamente distinta
+
+00:00:22.620 --> 00:00:24.240
+a las cajas físicas que la mayoría imagina,
+
+00:00:24.420 --> 00:00:28.220
+y cómo un servicio inspecciona y controla el tráfico en todo su entorno de Azure.
+
+00:00:28.680 --> 00:00:29.680
+Vamos a analizarlo.
+
+00:00:30.180 --> 00:00:32.120
+Primero, ¿qué es un firewall sin tecnicismos?
+
+00:00:32.560 --> 00:00:35.400
+Luego, ¿por qué la nube cambia todo sobre cómo deben funcionar los firewalls?
+
+00:00:35.820 --> 00:00:39.560
+Y finalmente, ¿cómo Azure Firewall integra todo en un sistema que puede utilizar?
+
+00:00:40.240 --> 00:00:41.880
+Tome su café. Comencemos.
+
+00:00:42.320 --> 00:00:42.900
+¿Qué es un firewall?
+
+00:00:43.520 --> 00:00:46.260
+La mayoría de la gente ha escuchado la palabra firewall mil veces,
+
+00:00:46.400 --> 00:00:49.780
+pero si les pide que expliquen que se realmente probablemente duden un poco,
+
+00:00:50.700 --> 00:00:51.540
+así que mantengamos lo simple.
+
+00:00:51.540 --> 00:00:53.460
+Un firewall es un guardia en la puerta de la red.
+
+00:00:54.360 --> 00:00:57.000
+Cada dato que intenta entrar o salir de su red debe pasar por él,
+
+00:00:57.000 --> 00:01:00.460
+y el firewall inspecciona cada paquete para decidir si dejarlo pasar o bloquearlo.
+
+00:01:01.320 --> 00:01:03.640
+Durante mucho tiempo, los firewalls eran cajas físicas.
+
+00:01:04.220 --> 00:01:07.500
+Compraban, la conectaban en su sala de servidores, la configuraban y la mantenían por años.
+
+00:01:08.260 --> 00:01:11.020
+Esas cajas funcionaban bien cuando su red tenía un límite claro.
+
+00:01:11.680 --> 00:01:14.640
+Una oficina, una conexión a internet, una sola puerta principal.
+
+00:01:14.640 --> 00:01:16.040
+Pero la nube no funciona de esa manera.
+
+00:01:16.480 --> 00:01:19.300
+Sus aplicaciones podrían ejecutarse en una región, su base de datos en otra,
+
+00:01:19.540 --> 00:01:21.080
+y sus usuarios están dispersos por todo el mundo.
+
+00:01:21.460 --> 00:01:23.580
+Algunos de sus servicios viven en Azure, otros en otro lugar.
+
+00:01:23.860 --> 00:01:24.520
+En la puerta principal.
+
+00:01:25.100 --> 00:01:25.580
+Aquí está el detalle.
+
+00:01:26.120 --> 00:01:29.420
+No puede instalar una caja física de firewall en un centro de datos que no es suyo.
+
+00:01:30.240 --> 00:01:33.580
+Incluso si pudiera, no ayudaría porque ya no hay una única puerta que vigilar.
+
+00:01:34.400 --> 00:01:35.920
+Porque los firewalls en la nube son diferentes.
+
+00:01:36.380 --> 00:01:37.980
+En Azure usted crea redes virtuales.
+
+00:01:38.320 --> 00:01:41.280
+Piense en ellas como vecindarios privados en la nube donde viven sus aplicaciones.
+
+00:01:41.880 --> 00:01:43.280
+No están vinculadas a un edificio físico.
+
+00:01:43.760 --> 00:01:44.780
+Son simplemente espaciológicos.
+
+00:01:45.300 --> 00:01:46.240
+Analicemos el propio tráfico.
+
+00:01:46.480 --> 00:01:48.540
+El tráfico en estas redes virtuales se mueve en dos direcciones.
+
+00:01:49.040 --> 00:01:51.760
+El tráfico norte-sur son datos que vienen de internet a su red
+
+00:01:51.760 --> 00:01:54.240
+o que van de su red hacia internet, hacia internet.
+
+00:01:54.480 --> 00:01:57.480
+Piensa en ello como visitantes que llegan a su edificio o paquetes que se envían hacia afuera.
+
+00:01:58.120 --> 00:01:59.240
+Luego está el tráfico oeste-oeste,
+
+00:01:59.360 --> 00:02:02.120
+que son los datos que se mueven entre sus propias cargas de trabajo dentro de Azure,
+
+00:02:02.480 --> 00:02:04.700
+entre aplicaciones, bases de datos y cuentas de almacenamiento.
+
+00:02:05.120 --> 00:02:07.680
+Es como si la gente caminara entre departamentos dentro de una empresa.
+
+00:02:08.260 --> 00:02:09.240
+Ambas direcciones inspección.
+
+00:02:09.240 --> 00:02:11.640
+Si un hacker entra en una carga de trabajo,
+
+00:02:11.760 --> 00:02:13.400
+usted no quiere que deambule libremente por las demás.
+
+00:02:13.880 --> 00:02:15.380
+Así es como se propagan las brechas de su vida.
+
+00:02:15.460 --> 00:02:17.720
+Sus aplicaciones también se conectan a otros servicios.
+
+00:02:18.100 --> 00:02:20.680
+Cuentas de almacenamiento, servicios de correo y API de terceros.
+
+00:02:21.140 --> 00:02:23.400
+Y el firewall también controla esas conexiones salientes.
+
+00:02:23.920 --> 00:02:26.000
+Él decide con qué pueden hablar sus aplicaciones y con qué no.
+
+00:02:26.460 --> 00:02:27.020
+Aquí la cuestión.
+
+00:02:27.420 --> 00:02:28.960
+Este firewall no es una caja que usted debe mantener.
+
+00:02:29.460 --> 00:02:31.860
+Usted no lo parchea, no lo actualiza ni se preocupa de que se quede sin capacidad.
+
+00:02:32.160 --> 00:02:32.600
+Es un servidor.
+
+00:02:33.120 --> 00:02:34.440
+Microsoft se encarga de toda la infraestructura.
+
+00:02:34.920 --> 00:02:36.380
+Usted simplemente define las reglas
+
+00:02:36.380 --> 00:02:38.700
+y el servicio las aplica automáticamente a escala.
+
+00:02:39.160 --> 00:02:42.360
+Por lo tanto, si su tráfico aumenta a las 3 pm de un martes, el firewall crece con él.
+
+00:02:42.920 --> 00:02:45.920
+Si Microsoft lanza un parche de seguridad y aplica sin que usted siquiera lo note,
+
+00:02:46.500 --> 00:02:47.340
+esa es la diferencia de la nube.
+
+00:02:47.860 --> 00:02:49.700
+El firewall se convierte en infraestructura invisible.
+
+00:02:49.700 --> 00:02:51.800
+Presentamos Azure Firewall.
+
+00:02:52.120 --> 00:02:53.620
+Entonces, ¿qué es exactamente Azure Firewall?
+
+00:02:53.920 --> 00:02:56.500
+Es un firewall nativo de la nube totalmente administrado como servicio.
+
+00:02:56.860 --> 00:02:58.620
+Es un término largo, pero esto es lo que significa en la práctica.
+
+00:02:59.160 --> 00:03:01.220
+Lo despliega a través del portal de Azure en minutos.
+
+00:03:02.140 --> 00:03:04.760
+Sin hardware que pedir, sin máquinas virtuales que configurar,
+
+00:03:04.860 --> 00:03:06.300
+sin sistema operativo que parchear.
+
+00:03:06.860 --> 00:03:08.140
+Solo haga clic en algunos botones.
+
+00:03:08.260 --> 00:03:10.020
+Defina su red y el firewall estará funcionando.
+
+00:03:10.420 --> 00:03:12.000
+Viene con alta disponibilidad integrada.
+
+00:03:12.400 --> 00:03:14.680
+Si una instancia falla, otra toma el control de instante.
+
+00:03:15.380 --> 00:03:16.460
+Y se escala automáticamente.
+
+00:03:17.080 --> 00:03:19.500
+Si su tráfico se duplica, el firewall crece con él.
+
+00:03:19.840 --> 00:03:21.840
+Nunca tiene que adivinar cuánta capacidad necesitará.
+
+00:03:22.160 --> 00:03:24.980
+La forma más sencilla de pensarlo es como contratar un equipo de seguridad
+
+00:03:24.980 --> 00:03:26.240
+para su edificio de oficinas en Anu.
+
+00:03:26.680 --> 00:03:28.140
+Usted no gestiona cada guardia individualmente,
+
+00:03:28.220 --> 00:03:29.840
+ni los entrena ni programa sus turnos.
+
+00:03:30.540 --> 00:03:32.860
+Usted establece las políticas, quién tiene permitido entrar,
+
+00:03:33.020 --> 00:03:34.160
+qué paquetes están autorizados.
+
+00:03:34.580 --> 00:03:36.440
+Y ellos aplican esas políticas las 24 horas.
+
+00:03:36.920 --> 00:03:39.240
+Azure Firewall se sitúa en un punto central de su red
+
+00:03:39.240 --> 00:03:40.920
+e inspecciona todo lo que pasa por allá.
+
+00:03:41.640 --> 00:03:43.840
+Verifica el tráfico comparándolo con tres tipos de reglas.
+
+00:03:43.840 --> 00:03:46.040
+Reglas NAT, reglas de red y reglas de aplicación.
+
+00:03:46.940 --> 00:03:48.140
+Analizaremos cada uno en un momento.
+
+00:03:48.560 --> 00:03:50.120
+Ahora, esto es algo que la mayoría de la gente no sabe.
+
+00:03:50.900 --> 00:03:53.220
+Azure Firewall viene con inteligencia contra amenazas integrada.
+
+00:03:53.820 --> 00:03:56.580
+Microsoft monitorea constantemente los patrones de ataque globales
+
+00:03:56.580 --> 00:03:58.340
+y las direcciones IP maliciosas conocidas,
+
+00:03:58.460 --> 00:04:00.260
+los dominios peligrosos y las amenazas emergentes
+
+00:04:00.260 --> 00:04:01.660
+se cargan automáticamente en su firewall.
+
+00:04:02.400 --> 00:04:04.580
+Por lo tanto, si un grupo de hackers en otro país
+
+00:04:04.580 --> 00:04:06.020
+comienza a atacar a los clientes de Azure,
+
+00:04:06.100 --> 00:04:08.980
+su firewall ya sabe bloquearlos antes de que lleguen a su red.
+
+00:04:09.580 --> 00:04:12.020
+La protección mejora continuamente sin que usted haga nada.
+
+00:04:12.020 --> 00:04:15.220
+Sin actualizaciones manuales ni descargas de firma, simplemente ocurren.
+
+00:04:15.440 --> 00:04:16.840
+No todos necesitan ningún nivel de protección.
+
+00:04:17.320 --> 00:04:19.080
+Una pequeña empresa que ejecuta una sola aplicación
+
+00:04:19.080 --> 00:04:21.700
+tiene necesidades distintas a un banco que procesa transacciones financieras.
+
+00:04:22.160 --> 00:04:24.260
+Por eso Azure Firewall viene en tres versiones.
+
+00:04:25.420 --> 00:04:26.120
+Las tres SKU.
+
+00:04:26.520 --> 00:04:27.860
+Basic, Standard y Premium.
+
+00:04:27.860 --> 00:04:29.980
+Comencemos con Azure Firewall Basic,
+
+00:04:30.240 --> 00:04:33.420
+la opción de nivel inicial diseñada para pequeñas empresas y entornos más sencillos.
+
+00:04:34.080 --> 00:04:39.820
+Maneja hasta unos 250 Mbps de tráfico, suficiente para una aplicación modesta o un entorno de desarrollo.
+
+00:04:40.360 --> 00:04:42.980
+Basic incluye filtrado de red esencial que inspecciona el tráfico
+
+00:04:42.980 --> 00:04:45.160
+y aplica reglas basadas en direcciones IP y puertos,
+
+00:04:45.300 --> 00:04:48.220
+además de inteligencia contra amenazas solo en modo de alerta.
+
+00:04:48.760 --> 00:04:50.600
+Decirle advierte cuando aparece algo sospechoso,
+
+00:04:50.820 --> 00:04:52.040
+pero no lo bloqueará automáticamente.
+
+00:04:52.600 --> 00:04:55.740
+Piensa en Basic como un guardia de seguridad que vigila la entrada atentamente.
+
+00:04:56.000 --> 00:04:58.800
+Detecta el problema y lo reporta, pero necesita permiso antes de detener a alguien.
+
+00:04:59.460 --> 00:05:00.620
+Luego está Azure Firewall Standard,
+
+00:05:00.740 --> 00:05:03.300
+la opción más común para cargas de trabajo empresariales por una buena razón.
+
+00:05:04.300 --> 00:05:06.020
+Escala hasta unos 30 Gbps por segundo,
+
+00:05:06.240 --> 00:05:09.300
+manejando el tráfico de producción de la mayoría de las organizaciones con comodidad.
+
+00:05:10.260 --> 00:05:14.020
+Con Standard, la inteligencia contra amenazas funciona tanto en modo de alerta como de denegación,
+
+00:05:14.020 --> 00:05:17.280
+por lo que el Firewall puede bloquear automáticamente actores maliciosos conocidos sin esperar plus.
+
+00:05:17.680 --> 00:05:19.220
+También añade filtrado por categorías web.
+
+00:05:19.220 --> 00:05:22.760
+Puede bloquear categorías enteras como redes sociales o apuestas en toda su red
+
+00:05:22.760 --> 00:05:24.900
+y admite configuración de DNS personalizada.
+
+00:05:25.760 --> 00:05:28.440
+Estándale es su equipo de seguridad totalmente equipado y con autoridad para actuar.
+
+00:05:28.740 --> 00:05:31.120
+Detectan un problema y lo resuelven sin esperar aprobaciones.
+
+00:05:32.020 --> 00:05:33.640
+Finalmente, está Azure Firewall Premium,
+
+00:05:33.980 --> 00:05:38.740
+diseñado para entornos altamente sensibles como finanzas, salud, gobierno o cualquier sector que maneje datos regulados.
+
+00:05:39.680 --> 00:05:40.960
+Escala hasta 100 Gbps,
+
+00:05:40.960 --> 00:05:43.060
+pero la verdadera diferencia es lo que puede inspeccionar.
+
+00:05:43.500 --> 00:05:44.860
+Premium en la inspección TLS,
+
+00:05:45.040 --> 00:05:49.100
+que descifra el tráfico cifrado, inspecciona el contenido y lo vuelve a cifrar antes de enviarlo.
+
+00:05:49.700 --> 00:05:53.320
+Eso importa porque gran parte del tráfico malicioso actual se oculta dentro de conexiones cifradas.
+
+00:05:53.780 --> 00:05:55.400
+Sin inspección TLS, usted está volando a ciega.
+
+00:05:55.720 --> 00:05:59.180
+Premium también añade IDPS, un sistema de detección y prevención de intrusiones,
+
+00:05:59.340 --> 00:06:03.460
+con más de 67.000 firmas en más de 50 categorías actualizadas en tiempo real.
+
+00:06:04.140 --> 00:06:07.200
+Revisa cada paquete en busca de patrones de ataque conocidos como inyecciones SQL,
+
+00:06:07.320 --> 00:06:10.440
+retrollamadas de malware y escaneo de puertos y escape de tráfico inmediatamente la encontraron.
+
+00:06:10.940 --> 00:06:12.580
+Premium también añade filtrado de URL,
+
+00:06:13.040 --> 00:06:16.660
+permitiéndole permitir o bloquear direcciones web específicas en lugar de categorías completas,
+
+00:06:16.800 --> 00:06:18.200
+con control anular a nivel de página.
+
+00:06:18.720 --> 00:06:19.780
+Esto es protección de grado mínimo.
+
+00:06:20.220 --> 00:06:21.200
+Pero aquí está el enfoque inteligente.
+
+00:06:21.600 --> 00:06:23.120
+Igual el SCAU a lo que realmente necesito.
+
+00:06:23.780 --> 00:06:25.860
+Standard cubre la mayoría de los casos de uso empresarial.
+
+00:06:26.340 --> 00:06:28.880
+Use Premium solo donde los datos sensibles requieren inspección profunda.
+
+00:06:29.320 --> 00:06:31.060
+Basic para entornos pequeños o desarrollo y pruebas.
+
+00:06:31.280 --> 00:06:33.340
+Y no pague por capacidades que no usará.
+
+00:06:34.340 --> 00:06:35.220
+Arquitectura de tráfico.
+
+00:06:35.220 --> 00:06:40.880
+Una vez elegido tu SCAU, la siguiente pregunta es cómo configurar tu red para que el firewall pueda inspeccionar el tráfico.
+
+00:06:41.240 --> 00:06:42.020
+Porque aquí está el detalle.
+
+00:06:42.520 --> 00:06:45.400
+Un firewall solo funciona si el tráfico realmente pasa a través de él.
+
+00:06:45.860 --> 00:06:48.240
+Si lo colocas en el lugar equivocado es como si no existiera.
+
+00:06:48.960 --> 00:06:51.480
+El enfoque más común se llama arquitectura de Hub and Spoke.
+
+00:06:52.120 --> 00:06:53.220
+Imagina la arena bicicleta.
+
+00:06:53.800 --> 00:06:56.160
+El Hub es el centro con radios que irradian hacia afuera.
+
+00:06:57.080 --> 00:06:58.880
+En Azure creas una red virtual central.
+
+00:06:59.680 --> 00:07:01.620
+Ese es el Hub donde reside tu Azure Firewall.
+
+00:07:01.620 --> 00:07:05.560
+Luego creas múltiples redes Spoke, cada una para una carrera de trabajo en torno separado.
+
+00:07:05.760 --> 00:07:09.820
+Quizás un Spoke para tu aplicación web, otro para tu base de datos, un tercero para tu entorno de desarrollo.
+
+00:07:10.580 --> 00:07:14.640
+Todo el tráfico entre Spokes y entre estos e internet pasa por el Hub para su inspección.
+
+00:07:15.440 --> 00:07:17.960
+Obtienes un punto de control de seguridad para toda tu red.
+
+00:07:18.200 --> 00:07:22.140
+Eficiente, consistente y más fácil de gestionar que poner un firewall en cada Spoke.
+
+00:07:22.800 --> 00:07:29.380
+Para organizaciones más grandes existe Virtual One, un servicio de red gestionado con Azure Firewall integrado directamente en el Hub en el Hub.
+
+00:07:29.380 --> 00:07:31.680
+La gran ventaja es la automatización.
+
+00:07:32.180 --> 00:07:40.340
+Virtual One gestiona el enrutamiento por ti, así que el tráfico de sucursales, usuarios remotos y redes Spoke fluye a través del firewall sin configuración manual, sin configuración manual.
+
+00:07:40.680 --> 00:07:42.900
+Es más autónomo, pero es que a la mejor para implementaciones globales.
+
+00:07:43.340 --> 00:07:44.920
+Ahora, ¿qué inspecciona realmente el firewall?
+
+00:07:45.320 --> 00:07:51.380
+Tres cosas, tráfico entrante desde internet, tráfico saliente desde internet y tráfico este o este entre tus propias cargas dentro de Azure.
+
+00:07:51.780 --> 00:07:52.680
+Ese tercero es fundamental.
+
+00:07:52.680 --> 00:07:57.260
+Si ocurre una brecha en una carga de trabajo, la inspección este o este evita que se propague a otras.
+
+00:07:57.640 --> 00:08:00.960
+Sin ella, un hacker que entre en tu servidor web puede moverse libremente a tu base de datos.
+
+00:08:01.520 --> 00:08:02.820
+Con ella, ese movimiento queda bloqueado.
+
+00:08:03.280 --> 00:08:04.060
+Aquí está el punto clave.
+
+00:08:04.180 --> 00:08:06.240
+El tráfico solo se inspecciona si pasa por el firewall.
+
+00:08:06.700 --> 00:08:09.480
+Por tanto, la arquitectura debe forzar el tráfico a través de ese punto central.
+
+00:08:09.900 --> 00:08:11.840
+Diseñas de modo que no haya un camino alternativo.
+
+00:08:12.300 --> 00:08:15.040
+Por eso el diseño de implementación importa tanto como las reglas en sí.
+
+00:08:15.640 --> 00:08:19.240
+Un conjunto de reglas perfecto no significa nada si el tráfico puede evitar el firewall por completo.
+
+00:08:19.240 --> 00:08:24.940
+Ahora, hablemos de las reglas mismas, porque así es como controlas lo que pasa.
+
+00:08:25.980 --> 00:08:29.280
+Azure Firewall usa tres tipos de reglas y cada una realiza una tarea distinta.
+
+00:08:30.140 --> 00:08:31.900
+Primero, reglas NAT, traducción de direcciones.
+
+00:08:32.640 --> 00:08:36.860
+Piensa en ello como una recepción que oculta tus servidores internos detrás de la IP pública del firewall.
+
+00:08:37.740 --> 00:08:43.520
+Alguien en internet conecta con la IP de tu firewall y este traduce esa dirección pública a la privada de tu servidor backend.
+
+00:08:44.460 --> 00:08:46.200
+El mundo exterior nunca ve tu red interna.
+
+00:08:46.620 --> 00:08:47.760
+Tus servidores permanecen visible.
+
+00:08:47.760 --> 00:08:49.160
+Luego tienes las reglas de red.
+
+00:08:49.600 --> 00:08:51.740
+Esto se basa en direcciones IP, puertos y protocolos.
+
+00:08:52.260 --> 00:08:55.020
+Filtrado de capa 3 y capa 4 si le interesan los términos técnicos.
+
+00:08:55.540 --> 00:09:00.940
+Puede decir permitir tráfico de esta dirección IP en el puerto 4.43 a esta otra dirección IP y bloquear todo lo demás.
+
+00:09:01.400 --> 00:09:02.220
+Directo y potente.
+
+00:09:03.160 --> 00:09:04.000
+Pero aquí está el límite.
+
+00:09:04.100 --> 00:09:06.060
+Las reglas de red no entienden qué tipo de tráfico es.
+
+00:09:06.720 --> 00:09:08.520
+Solo saben a dónde va y qué puerto está usando.
+
+00:09:08.880 --> 00:09:10.280
+En tercer lugar, reglas de aplicación.
+
+00:09:10.740 --> 00:09:11.420
+Estas son más inteligentes.
+
+00:09:11.640 --> 00:09:14.240
+Filtran según nombres de dominio completos y patrones de URL.
+
+00:09:14.240 --> 00:09:20.720
+Así que, en lugar de permitir tráfico a una IP específica, dice permitir tráfico a Microsoft.com o permitir tráfico de Windows Update.
+
+00:09:21.360 --> 00:09:23.100
+Ahora, el firewall entiende la capa de aplicación.
+
+00:09:23.720 --> 00:09:26.720
+Puede bloquear o permitir según lo que sea el tráfico realmente, no solo a dónde se dirige.
+
+00:09:27.220 --> 00:09:28.960
+Ahora bien, las reglas no se lanzan solo en una lista.
+
+00:09:29.220 --> 00:09:32.080
+Se organizan en grupos de colecciones de reglas y colecciones de reglas.
+
+00:09:32.480 --> 00:09:34.120
+Piensa en ellos como carpetas y un carpet.
+
+00:09:34.120 --> 00:09:36.140
+¿Podría tener un grupo para sistemas de RR?
+
+00:09:36.600 --> 00:09:38.760
+Otro para finanzas, cada uno con su propia prioridad.
+
+00:09:39.180 --> 00:09:41.820
+Eso mantiene las cosas organizadas cuando tiene docenas o cientos de reglas.
+
+00:09:42.320 --> 00:09:43.240
+El orden importa mucho.
+
+00:09:43.740 --> 00:09:46.220
+El firewall procesa las reglas en una secuencia específica.
+
+00:09:46.640 --> 00:09:49.200
+Reglas NAT primero, luego reglas de red y finalmente reglas de aplicación.
+
+00:09:49.840 --> 00:09:52.020
+Dentro de cada tipo, las reglas se procesan por prioridad.
+
+00:09:52.520 --> 00:09:53.940
+Los números más bajos se evalúan primero.
+
+00:09:54.320 --> 00:09:57.980
+Esto es importante porque las reglas de red generales que permiten todo el tráfico se aplicarán primero.
+
+00:09:57.980 --> 00:10:03.120
+Si una regla de red permite todo, las reglas de aplicación más abajo podrían nunca evaluarse.
+
+00:10:03.520 --> 00:10:06.120
+Todas sus reglas de aplicación cuidadosamente diseñadas se vuelven inútiles.
+
+00:10:06.700 --> 00:10:08.580
+Los grupos de IP son otra herramienta que vale la pena conocer.
+
+00:10:08.960 --> 00:10:12.780
+Usted crea un grupo de direcciones IP, le da un nombre y lo referencia en varias reglas.
+
+00:10:13.460 --> 00:10:16.260
+Cambia un grupo de IP y cada regla que lo usa se actualiza automáticamente.
+
+00:10:16.840 --> 00:10:18.320
+Eso ahorra tiempo y reduce errores.
+
+00:10:18.440 --> 00:10:22.520
+Es especialmente útil cuando tiene el mismo conjunto de IP en múltiples reglas.
+
+00:10:23.780 --> 00:10:24.800
+Funcional de protección avanzada.
+
+00:10:24.800 --> 00:10:28.360
+Las reglas manejan lo básico, pero Azure Firewall Premium va mucho más allá.
+
+00:10:28.860 --> 00:10:30.420
+Comencemos con la inteligencia contra amenazas.
+
+00:10:30.840 --> 00:10:35.600
+Este es un feed constantemente actualizado por Microsoft, de IP, dominios y URL maliciosos conocidos.
+
+00:10:36.220 --> 00:10:39.160
+Cada conexión que su firewall procesa se verifica contra este feed.
+
+00:10:39.740 --> 00:10:42.060
+Cuando encuentra una coincidencia puede alertarle y bloquearlo automáticamente.
+
+00:10:42.440 --> 00:10:44.520
+Sin reglas manuales que escribir, sin listas que mantener.
+
+00:10:45.020 --> 00:10:47.380
+El equipo de seguridad global de Microsoft hace ese trabajo por usted.
+
+00:10:47.700 --> 00:10:50.480
+Luego está IDPS, Sistema de Detección y Prevención de Intrusiones.
+
+00:10:50.480 --> 00:10:54.840
+Son más de 67.000 firmas revisando cada paquete en busca de patrones de ataque conocidos.
+
+00:10:55.260 --> 00:11:00.120
+Cosas como intentos de inyección SQL, donde alguien intenta inyectar comandos de base de datos maliciosos a través de un formulario web.
+
+00:11:00.380 --> 00:11:03.100
+Escaneo de puertos donde los atacantes ondan su red en busca de puertas abiertas.
+
+00:11:03.320 --> 00:11:06.780
+Devoluciones de llamada de malware, donde los sistemas infectados intentan comunicarse con un servidor de comando.
+
+00:11:07.260 --> 00:11:10.800
+El firewall reconoce el patrón y descarta el tráfico antes de que llegue a su objetivo.
+
+00:11:11.560 --> 00:11:13.140
+Estas firmas se actualizan en tiempo real.
+
+00:11:13.560 --> 00:11:17.280
+Cuando los equipos de seguridad de Microsoft identifican un nuevo patrón de ataque señal de la fuente,
+
+00:11:17.800 --> 00:11:21.100
+su firewall comienza a bloquearlo inmediatamente, sin esperar a martes de parche.
+
+00:11:21.440 --> 00:11:22.160
+Ahora, inspección TLS.
+
+00:11:22.660 --> 00:11:24.340
+Este es un punto clave para entornos regulados.
+
+00:11:24.700 --> 00:11:28.240
+El tráfico cifrado es excelente para la privacidad, pero también para ocultar datos maliciosos.
+
+00:11:28.680 --> 00:11:29.460
+Los atacantes lo saben.
+
+00:11:29.840 --> 00:11:34.200
+Envuelven sus cargas útiles dentro de conexiones HTTPS porque la mayoría de los firewalls no pueden ver dentro de ellas.
+
+00:11:34.560 --> 00:11:35.160
+Premium si puede.
+
+00:11:35.480 --> 00:11:38.820
+Descifra el tráfico, inspecciona la carga útil, vuelve a cifrarla y la envía a su destino.
+
+00:11:39.120 --> 00:11:40.300
+Todo el proceso toma milisegundos.
+
+00:11:40.300 --> 00:11:43.300
+Sin esto, los ataques cifrados pasan desapercibidos.
+
+00:11:43.940 --> 00:11:45.720
+El filtrado URL va más allá de los nombres de dominio.
+
+00:11:46.000 --> 00:11:48.320
+Puede permitir o bloquear rutas específicas en un sitio web.
+
+00:11:48.600 --> 00:11:53.240
+Quizás quiera permitir el acceso a Microsoft, pero bloquear la página de descargas o permitir un endpoint de pie específico
+
+00:11:53.240 --> 00:11:55.180
+mientras bloquea todo lo demás en ese dominio.
+
+00:11:55.700 --> 00:11:56.700
+Todo esto funciona en conjunto.
+
+00:11:57.080 --> 00:11:59.240
+La inteligencia de amenazas detecta actores maliciosos conocidos.
+
+00:11:59.360 --> 00:12:00.660
+El IDP se detecta patrones de ataque.
+
+00:12:00.780 --> 00:12:05.120
+La inspección, teles ocultas, múltiples cargas útiles ocultas, múltiples capas de defensa trabajando como un solo sistema.
+
+00:12:05.760 --> 00:12:07.700
+Cómo se conecta todo, además de consejos prácticos.
+
+00:12:08.020 --> 00:12:09.480
+Así que así es como encaja todo.
+
+00:12:10.300 --> 00:12:12.460
+Azure Firewall no es solo un servicio único.
+
+00:12:12.940 --> 00:12:14.540
+Es un sistema de componentes trabajando como un equipo.
+
+00:12:15.340 --> 00:12:17.740
+La arquitectura canaliza todo el tráfico a través de un punto central.
+
+00:12:18.080 --> 00:12:23.240
+Luego las reglas deciden qué se permite, mientras que la inteligencia de amenazas y el IDP se detectan cualquier actividad sospechosa
+
+00:12:23.240 --> 00:12:26.020
+y la inspección TLS descubre lo que se esconde en las conexiones cifradas.
+
+00:12:26.720 --> 00:12:29.880
+Cada capa añade otra verificación y eso es defensa en profundidad en acción.
+
+00:12:29.880 --> 00:12:34.820
+Si administra varios firewalls en diferentes regiones, Azure Firewall Manager es su herramienta.
+
+00:12:34.820 --> 00:12:38.180
+Es gratuita y usted crea políticas una vez y las aplica en todas partes.
+
+00:12:38.900 --> 00:12:43.660
+Puede establecer políticas globales que se apliquen a todos los firewalls y luego personalizar políticas locales por equipo o región.
+
+00:12:44.260 --> 00:12:46.160
+Una sola herramienta para abornar todo su patrimonio de firewall.
+
+00:12:46.500 --> 00:12:50.280
+Ahora hablemos de costos, porque los firewalls funcionan 24-7 y procesan muchos datos.
+
+00:12:50.820 --> 00:12:55.080
+Una forma sencilla de reducir costos es usar el plan de tabla básica de Log Analytics para los registros de su firewall.
+
+00:12:55.780 --> 00:12:57.700
+Puede ahorrar hasta un 80% en costos de ingesta.
+
+00:12:57.700 --> 00:13:00.800
+Esa es la diferencia entre una factura razonable y una sorpresa desagradable.
+
+00:13:01.040 --> 00:13:06.820
+Para entornos que no son de producción, usa Azure Automation para detener el firewall fuera del horario laboral e iniciarlo de nuevo por la mañana.
+
+00:13:07.260 --> 00:13:11.420
+Los entornos de desarrollo y prueba no necesitan protección a las dos AM, así que eso representa un gran ahorro con el tiempo.
+
+00:13:11.860 --> 00:13:16.760
+Para reducir los cargos por procesamiento de datos, revise su enrutamiento y asegúrese de que solo pase por el firewall el tráfico necesario.
+
+00:13:17.500 --> 00:13:20.300
+Use puntos de conexión privados para servicios de Azure siempre que sea posible,
+
+00:13:20.460 --> 00:13:23.940
+permitiendo que los servicios de confianza se comuniquen directamente en lugar de enrutar todo a Transinspect.
+
+00:13:23.940 --> 00:13:30.120
+El paso más impactante que puedes dar hoy es comenzar con un SKU estándar en una arquitectura de Hub & Spoke.
+
+00:13:30.920 --> 00:13:35.420
+Habilita registros estructurados con el plan de tabla básica y configura la inteligencia contra amenazas en modo de alerta primero.
+
+00:13:35.980 --> 00:13:38.760
+Observa que está llegando a tu red antes de aplicar la prevención total.
+
+00:13:39.260 --> 00:13:41.020
+Eso te brinda visibilidad sin sorpresas.
+
+00:13:41.860 --> 00:13:47.040
+Así que eso es Azure Firewall, un servicio de seguridad nativo de la nube que inspecciona el tráfico, bloquea amenazas y escala con tu red.
+
+00:13:47.380 --> 00:13:48.920
+Todo sin que administres un solo servidor.
+
+00:13:49.380 --> 00:13:51.260
+Comienza con el estándar en una configuración de Hub & Spoke.
+
+00:13:51.600 --> 00:13:52.800
+Ese es tu paso más impactante hoy.
+
+00:13:52.800 --> 00:13:57.480
+Suscríbete en tu plataforma de podcast favorita y comparte esto con alguien que esté comenzando su viaje en Azure.

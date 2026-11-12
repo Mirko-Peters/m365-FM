@@ -1,0 +1,2563 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:02.420
+Votre équipe de direction pense qu'il s'agit d'une question de déploiement.
+
+00:00:02.740 --> 00:00:03.160
+Ce n'est pas le cas.
+
+00:00:03.420 --> 00:00:05.680
+Il s'agit d'une décision de gouvernance avec un horizon très court,
+
+00:00:05.840 --> 00:00:08.820
+et la pression est forte car copilote n'attend pas que votre politique soit nettoyée
+
+00:00:08.820 --> 00:00:10.560
+ou que votre alignement interne rattrape son otard.
+
+00:00:11.000 --> 00:00:12.660
+Une fois qu'il commence à fonctionner dans votre environnement,
+
+00:00:12.760 --> 00:00:15.480
+il utilise le système exactement tel qu'il l'a trouvé, et c'est là que cela se bloque.
+
+00:00:16.360 --> 00:00:19.420
+La plupart des organisations disposant de plusieurs locataires Microsoft 365
+
+00:00:19.420 --> 00:00:21.760
+partent du principe qu'elles ont un seul scénario de contrôle de l'IA,
+
+00:00:21.940 --> 00:00:23.620
+principalement parce qu'elles achètent auprès d'un seul fournisseur
+
+00:00:23.620 --> 00:00:25.340
+et gèrent un seul fournisseur et gèrent un seul parc d'identité.
+
+00:00:25.340 --> 00:00:27.320
+Elles entendent un seul discours stratégique de la part de Microsoft
+
+00:00:27.320 --> 00:00:28.920
+et supposent que la réalité correspond à ce discours.
+
+00:00:29.660 --> 00:00:31.200
+Mais les conditions de fonctionnement sont très différentes.
+
+00:00:31.740 --> 00:00:34.320
+L'IA fonctionne aux limites des locataires, tandis que le risque les traverse.
+
+00:00:34.720 --> 00:00:37.400
+La question n'est donc pas de savoir si nous pouvons activer copilote par...
+
+00:00:37.400 --> 00:00:39.360
+La vraie question est de savoir quel modèle de gouvernance
+
+00:00:39.360 --> 00:00:42.060
+nous permet de nous adapter en toute sécurité à des locataires qui se comportent indépendamment.
+
+00:00:43.140 --> 00:00:45.080
+Avant d'en arriver à ce modèle, nous devons définir le piège.
+
+00:00:45.940 --> 00:00:48.440
+Le piège, des îlots d'IA souverains au sein d'une même entreprise.
+
+00:00:49.200 --> 00:00:51.940
+Dans la plupart des organisations, l'illusion commence par la familiarité.
+
+00:00:52.360 --> 00:00:54.800
+Vous ouvrez Microsoft 365, vous ouvrez Purview, vous ouvrez Entra,
+
+00:00:54.800 --> 00:00:56.840
+vous ouvrez Power Platform, Power Platform.
+
+00:00:57.160 --> 00:00:57.900
+La marque est la même.
+
+00:00:58.320 --> 00:00:59.900
+Le langage administratif semble connecté.
+
+00:01:00.280 --> 00:01:02.320
+Et le mouvement commercial raconte une histoire très claire.
+
+00:01:02.860 --> 00:01:04.920
+Un écosystème, une stratégie, une direction.
+
+00:01:05.600 --> 00:01:08.740
+Mais le modèle de contrôle sous-jacent n'est pas unique, et cela compte plus que la marque.
+
+00:01:09.240 --> 00:01:12.860
+D'après les recherches menées ici, il n'existe pas de centre d'administration mondial unique d'IA
+
+00:01:12.860 --> 00:01:15.080
+avec une parité totale des fonctionnalités qui vous offre un endroit unique
+
+00:01:15.080 --> 00:01:16.800
+pour gouverner copilote proprement sur tous les locataires.
+
+00:01:17.780 --> 00:01:19.660
+Ce que vous avez en réalité, c'est une pile de contrôle fragmentée.
+
+00:01:20.180 --> 00:01:21.840
+Certaines parties de la gouvernance résident dans Purview,
+
+00:01:21.840 --> 00:01:23.140
+d'autres dans les centres d'administration,
+
+00:01:23.140 --> 00:01:25.260
+et le reste est dispersé entre Entra et Power Platform.
+
+00:01:26.180 --> 00:01:28.600
+Certaines fonctionnalités émergent dans les nouvelles couches de contrôle Microsoft,
+
+00:01:29.260 --> 00:01:33.060
+mais elles ne font pas encore un plan mondial complet et mature sur chaque limite de locataire.
+
+00:01:33.800 --> 00:01:34.960
+Cet écart crée une fausse confiance.
+
+00:01:35.460 --> 00:01:37.860
+Les dirigeants examinent l'écosystème et supposent une centralisation,
+
+00:01:38.300 --> 00:01:40.980
+tandis que les équipes considèrent l'identité partagée et supposent la cohérence.
+
+00:01:41.540 --> 00:01:43.760
+Les achats voient un accord et supposent un modèle d'exploitation,
+
+00:01:44.060 --> 00:01:47.420
+mais chaque locataire a toujours sa propre limite de politique et sa propre limite de données,
+
+00:01:47.420 --> 00:01:50.460
+ce qui signifie qu'en pratique, chacun a sa propre version de la vérité.
+
+00:01:50.460 --> 00:01:52.500
+Donc ce qui se passe réellement est simple.
+
+00:01:52.980 --> 00:01:54.700
+Vous n'avez pas un environnement d'IA d'entreprise unique.
+
+00:01:55.080 --> 00:01:57.700
+Vous avez plusieurs environnements d'IA qui appartiennent à la même entreprise.
+
+00:01:58.180 --> 00:01:59.480
+Cela donne une image de risque très différente.
+
+00:01:59.800 --> 00:02:01.860
+Un locataire peut avoir une couverture de compétences plus forte,
+
+00:02:02.300 --> 00:02:04.080
+tandis qu'un autre a une adoption d'étiquette plus faible,
+
+00:02:04.360 --> 00:02:05.500
+ou une ingestion d'audit incomplète.
+
+00:02:05.840 --> 00:02:08.360
+Du point de vue du conseil d'administration, cela peut toujours ressembler à un seul programme,
+
+00:02:08.460 --> 00:02:09.700
+mais du point de vue d'un audit ou d'un incident,
+
+00:02:09.800 --> 00:02:11.860
+il ne s'agit pas du tout d'un incident, il ne s'agit pas du tout d'un seul programme.
+
+00:02:11.980 --> 00:02:14.280
+Il s'agit d'un ensemble de conditions d'exploitation distinctes.
+
+00:02:14.280 --> 00:02:16.840
+Et une fois que ces conditions dérivent, les rapports commencent à mentir.
+
+00:02:17.240 --> 00:02:18.380
+Pas intentionnellement, mais structurellement.
+
+00:02:19.100 --> 00:02:21.580
+L'équipe essentielle demande, sommes-nous gouvernés ?
+
+00:02:21.580 --> 00:02:23.240
+Un locataire dit oui parce que l'audit est activé,
+
+00:02:23.440 --> 00:02:26.220
+un autre dit oui parce que les étiquettes existent, même si la couverture est faible.
+
+00:02:26.780 --> 00:02:28.480
+Un troisième dit oui parce que l'identité est connectée.
+
+00:02:29.160 --> 00:02:31.420
+Un quatrième dit oui parce que Copilot est techniquement déployé.
+
+00:02:32.400 --> 00:02:35.320
+Chaque réponse semble raisonnable en soi, mais aucune d'entre elles ne signifie la même chose.
+
+00:02:35.700 --> 00:02:36.140
+C'est le piège.
+
+00:02:36.660 --> 00:02:38.300
+Vous pensez que vous regardez un plan de contrôle mondial,
+
+00:02:38.800 --> 00:02:42.240
+alors qu'en réalité vous regardez un ensemble d'îlots d'IA souverains au sein d'une même entreprise.
+
+00:02:42.960 --> 00:02:44.800
+Ils sont connectés par la marque et parfois par l'identité,
+
+00:02:45.080 --> 00:02:47.000
+mais ils ne sont pas gouvernés comme un seul système.
+
+00:02:47.620 --> 00:02:50.140
+Et si vous ne retenez rien d'autre de cette section, retenez cette ligne.
+
+00:02:51.040 --> 00:02:54.200
+Il n'existe pas de centre d'administration mondiale de l'IA, seulement l'illusion d'un seul.
+
+00:02:54.660 --> 00:02:57.380
+Une fois que cette illusion disparaît, le problème suivant apparaît rapidement.
+
+00:02:57.800 --> 00:03:01.580
+La plupart des organisations réagissent en procédant une gouvernance locataire par locataire manuellement
+
+00:03:01.580 --> 00:03:02.640
+et elles appellent cela du contrôle.
+
+00:03:03.440 --> 00:03:06.060
+Pourquoi la gouvernance manuelle par locataire s'effondre à grande échelle ?
+
+00:03:06.060 --> 00:03:09.120
+Une fois que les dirigeants voient le problème des limites, la réponse habituelle semble sensée.
+
+00:03:09.480 --> 00:03:11.360
+Ils disent très bien, nous allons gérer chaque locataire correctement.
+
+00:03:11.820 --> 00:03:14.540
+Une équipe d'administration vérifie les paramètres ici, une autre équipe les répète là.
+
+00:03:15.020 --> 00:03:17.340
+Quelqu'un tient une feuille de calcul, quelqu'un d'autre établit une liste de contrôle.
+
+00:03:17.920 --> 00:03:21.380
+Un groupe de pilotage se réunit une fois par mois et demande si le déploiement est sur la bonne voie.
+
+00:03:21.960 --> 00:03:23.220
+Sur le papier, cela semble discipliné.
+
+00:03:23.600 --> 00:03:26.540
+En pratique, il s'agit d'une répétition manuelle déguisée en gouvernance.
+
+00:03:27.060 --> 00:03:28.840
+Et la raison pour laquelle cela est souhait simple ?
+
+00:03:28.840 --> 00:03:32.020
+La répétition ne produit pas de contrôle, elle produit des variations au fil du temps.
+
+00:03:32.900 --> 00:03:35.540
+Cela se produit parce que chaque locataire évolue à une vitesse différente,
+
+00:03:35.540 --> 00:03:37.500
+chaque administrateur lit les normes un peu différemment
+
+00:03:37.500 --> 00:03:39.680
+et les exceptions locales commencent à sembler justifiées
+
+00:03:39.680 --> 00:03:42.800
+parce que l'entreprise veut progresser maintenant et non après un autre examen central.
+
+00:03:43.640 --> 00:03:45.600
+Cet ancien modèle survit parce qu'il semble visible.
+
+00:03:46.200 --> 00:03:49.400
+Les gens peuvent signaler les tickets fermés, les politiques créées et les paramètres modifiés.
+
+00:03:49.880 --> 00:03:50.800
+Ils peuvent montrer une activité.
+
+00:03:51.240 --> 00:03:53.680
+Mais un effort visible n'est pas la même chose qu'un modèle d'exploitation stable.
+
+00:03:54.180 --> 00:03:56.900
+Et avec Copilot dans le tableau, cet écart devient très vite coûteux.
+
+00:03:57.540 --> 00:03:59.680
+Le système commence à utiliser les autorisations existantes,
+
+00:03:59.760 --> 00:04:02.260
+l'exposition du contenu existant et les écarts d'étiquetage existants
+
+00:04:02.260 --> 00:04:03.500
+dès que les utilisateurs commencent à demander.
+
+00:04:03.500 --> 00:04:05.120
+C'est ce que la plupart des gens oublient.
+
+00:04:05.540 --> 00:04:06.980
+Copilot n'attend pas la maturité de la gouvernance.
+
+00:04:07.440 --> 00:04:09.540
+Il s'exécute sur les autorisations dont vous disposez déjà,
+
+00:04:09.720 --> 00:04:11.080
+l'hygiène du contenu que vous tolérez déjà
+
+00:04:11.080 --> 00:04:13.360
+et la posture d'audit que vous n'avez pas encore réussi à standardiser.
+
+00:04:13.860 --> 00:04:16.100
+Si un locataire a nettoyé l'accès et qu'un autre l'a supprimé,
+
+00:04:16.220 --> 00:04:17.880
+ou si un locataire diffuse des données d'audit utile
+
+00:04:17.880 --> 00:04:19.920
+tandis qu'un autre en capture à peine suffisamment pour une enquête,
+
+00:04:20.000 --> 00:04:21.760
+Copilot exposera ces différences immédiatement.
+
+00:04:22.140 --> 00:04:23.840
+Copilot exposera ces différences immédiatement.
+
+00:04:24.000 --> 00:04:25.720
+Cela n'arrive pas en théorie, cela arrive à l'usage.
+
+00:04:26.460 --> 00:04:28.420
+Si un locataire examine un accès SharePoint général
+
+00:04:28.420 --> 00:04:30.080
+et qu'un autre suppose qu'il est suffisamment bon,
+
+00:04:30.400 --> 00:04:31.300
+l'IA trouvera les écarts.
+
+00:04:32.140 --> 00:04:34.400
+Et à un niveau plus bas, chaque nouveau locataire multiplie le problème.
+
+00:04:34.620 --> 00:04:35.880
+Non pas parce que les locataires sont mauvais,
+
+00:04:36.160 --> 00:04:37.800
+mais parce que les différences non gérées s'accumulent.
+
+00:04:38.840 --> 00:04:40.560
+Une nouvelle équipe pilote ajoute une exception locale.
+
+00:04:40.880 --> 00:04:43.140
+Une fusion amène un autre locataire avec des étiquettes différentes
+
+00:04:43.140 --> 00:04:45.440
+et un administrateur régional copie une ancienne référence.
+
+00:04:46.080 --> 00:04:47.980
+Une unité commerciale demande un accès plus rapide
+
+00:04:47.980 --> 00:04:50.120
+et aucun de ces choix ne semble dramatique pris isolément.
+
+00:04:50.900 --> 00:04:52.140
+Si l'on les additionne sur plusieurs mois,
+
+00:04:52.300 --> 00:04:54.580
+on obtient une dérive des politiques, des accès et du déploiement.
+
+00:04:54.580 --> 00:04:56.260
+Le résultat est une équipe de gouvernance
+
+00:04:56.260 --> 00:04:58.660
+qui passe plus de temps à concilier les différences qu'à prévenir les risques.
+
+00:04:59.300 --> 00:05:00.460
+C'est là que le contrôle manuel échoue.
+
+00:05:00.880 --> 00:05:02.840
+Cela semble plus sûr car les humains modifient les paramètres,
+
+00:05:02.920 --> 00:05:04.260
+mais cela augmente en réalité les incohérences
+
+00:05:04.260 --> 00:05:07.020
+car chaque point de contact est une nouvelle occasion pour les locataires de diverger.
+
+00:05:07.580 --> 00:05:08.920
+Le résultat est un déploiement plus lent,
+
+00:05:09.040 --> 00:05:09.940
+là où vous voulez de la rapidité,
+
+00:05:10.040 --> 00:05:11.340
+plus d'efforts d'audit là où vous voulez des preuves
+
+00:05:11.340 --> 00:05:12.760
+et plus de retouches là où vous voulez des preuves
+
+00:05:12.760 --> 00:05:13.940
+et plus de retouches là où vous voulez des normes.
+
+00:05:14.060 --> 00:05:15.620
+Pire encore, cela crée une exposition cachée
+
+00:05:15.620 --> 00:05:16.820
+là où la direction attend une assurance.
+
+00:05:17.760 --> 00:05:20.020
+Cela fait-il pour moi lorsque j'ai arrêté de traiter la gouvernance
+
+00:05:20.020 --> 00:05:20.840
+comme une tâche de configuration.
+
+00:05:21.720 --> 00:05:22.840
+Cela se comporte davantage comme une égale.
+
+00:05:23.060 --> 00:05:24.420
+Si vous nettoyez les autorisations une fois
+
+00:05:24.420 --> 00:05:26.320
+mais qu'aucun contrôle ne les empêche de dériver à nouveau,
+
+00:05:26.560 --> 00:05:27.260
+l'exposition revient.
+
+00:05:27.600 --> 00:05:29.280
+Si vous définissez une taxonomie d'étiquette une fois
+
+00:05:29.280 --> 00:05:31.000
+mais que les locataires l'appliquent de manière inégale,
+
+00:05:31.300 --> 00:05:32.180
+la base de référence s'érode.
+
+00:05:32.620 --> 00:05:34.320
+Si vous approuvez copilote par vague sans vérifier
+
+00:05:34.320 --> 00:05:35.740
+si le contrôle sous-jacent est toujours valable,
+
+00:05:35.860 --> 00:05:36.580
+vous ne vous adaptez pas.
+
+00:05:36.780 --> 00:05:39.240
+En toute sécurité, vous développez simplement plus vite
+
+00:05:39.240 --> 00:05:40.460
+que votre gouvernance ne peut suivre.
+
+00:05:40.820 --> 00:05:42.700
+La mesure qui compte ici est donc la dérive des accès,
+
+00:05:43.320 --> 00:05:44.700
+pas seulement si vous avez corrigé quelque chose
+
+00:05:44.700 --> 00:05:47.240
+mais la vitesse à laquelle les autorisations se propagent à nouveau
+
+00:05:47.240 --> 00:05:48.040
+après la correction.
+
+00:05:50.020 --> 00:05:52.820
+car la gouvernance n'est pas un projet que vous termine.
+
+00:05:53.240 --> 00:05:54.900
+C'est un problème de dégradation que vous gérez en permanence.
+
+00:05:55.400 --> 00:05:56.960
+Et lorsque l'évolutivité brise l'ancien modèle,
+
+00:05:57.060 --> 00:05:59.000
+la plupart des dirigeants se tournent vers la réponse la plus familière,
+
+00:05:59.140 --> 00:05:59.540
+l'identité.
+
+00:06:00.220 --> 00:06:01.940
+Il suppose que si les utilisateurs peuvent se déplacer
+
+00:06:01.940 --> 00:06:03.020
+proprement d'un locataire à l'autre,
+
+00:06:03.100 --> 00:06:04.760
+la gouvernance évoluera d'une manière ou d'une autre avec...
+
+00:06:04.760 --> 00:06:07.780
+Pourquoi l'identité ne résout-elle pas la gouvernance ?
+
+00:06:07.780 --> 00:06:09.260
+C'est là que le nombre de programmes font fausse route
+
+00:06:09.260 --> 00:06:11.320
+car l'identité semble être la réponse claire.
+
+00:06:12.520 --> 00:06:14.800
+Si les utilisateurs peuvent s'authentifier d'un locataire à l'autre,
+
+00:06:14.800 --> 00:06:17.360
+si on travaille connecté et si des paramètres interlocataires sont en place,
+
+00:06:17.360 --> 00:06:19.120
+les dirigeants supposent que le plus dur est résolu.
+
+00:06:20.220 --> 00:06:22.400
+L'accès semble unifié, la connexion semble unifiée,
+
+00:06:22.520 --> 00:06:24.500
+le diagramme d'architecture semble ordonné,
+
+00:06:24.580 --> 00:06:26.220
+mais la gouvernance copilote ne devient pas unifiée
+
+00:06:26.220 --> 00:06:27.940
+simplement parce que l'identité peut se déplacer.
+
+00:06:28.880 --> 00:06:31.160
+Cette hypothèse échoue au moment où l'IA fonctionne réellement.
+
+00:06:31.580 --> 00:06:33.540
+Copilote ancre les réponses dans le contexte du locataire
+
+00:06:33.540 --> 00:06:34.440
+où la requête s'exécute
+
+00:06:34.440 --> 00:06:36.760
+et les propres directives de Microsoft sont claires sur ce point.
+
+00:06:37.200 --> 00:06:39.960
+Microsoft 365 Copilote fonctionne dans les limites de sécurité
+
+00:06:39.960 --> 00:06:41.120
+et de conformité du locataire
+
+00:06:41.120 --> 00:06:42.820
+et il respecte les autorisations de l'utilisateur
+
+00:06:42.820 --> 00:06:44.420
+dans ce contexte de locataire spécifique.
+
+00:06:44.940 --> 00:06:47.220
+Un utilisateur peut changer de contexte en tant qu'invité ?
+
+00:06:47.220 --> 00:06:49.320
+Oui, mais Copilote est toujours limité à un locataire à la fois.
+
+00:06:49.660 --> 00:06:51.680
+Il ne fusille un locataire en un seul espace de travail intelligent
+
+00:06:51.680 --> 00:06:52.580
+pour une seule réponse.
+
+00:06:53.460 --> 00:06:55.200
+Ainsi, l'identité peut traverser, mais pas la gouvernance.
+
+00:06:55.700 --> 00:06:57.040
+Et une fois que vous séparez ces deux éléments,
+
+00:06:57.420 --> 00:06:58.760
+une grande partie du langage de la direction
+
+00:06:58.760 --> 00:06:59.880
+commence à paraître dangereusement vague.
+
+00:07:00.660 --> 00:07:04.420
+Locataire connecté, identité partagée, expérience unifiée.
+
+00:07:05.940 --> 00:07:08.100
+Ces expressions peuvent être vraies dans le sens de la collaboration,
+
+00:07:08.520 --> 00:07:09.640
+mais elles ne sont pas identiques au fait de dire
+
+00:07:09.640 --> 00:07:11.480
+que l'application des politiques, la mise à la terre des données,
+
+00:07:11.620 --> 00:07:13.180
+la journalisation et la validation des contrôles
+
+00:07:13.180 --> 00:07:14.360
+fonctionnent désormais comme un seul système.
+
+00:07:14.360 --> 00:07:17.200
+Cet écart devient encore plus évident lorsque vous examinez
+
+00:07:17.200 --> 00:07:18.820
+le mode multilocataire de Copilote Studio
+
+00:07:18.820 --> 00:07:20.600
+car l'aperçu raconte une histoire très spécifique.
+
+00:07:21.280 --> 00:07:23.020
+Oui, l'utilisation multilocataire existe
+
+00:07:23.020 --> 00:07:24.940
+et un agent hébergé dans un locataire
+
+00:07:24.940 --> 00:07:26.460
+peut être utilisé à partir d'un autre locataire.
+
+00:07:26.580 --> 00:07:28.660
+Mais l'authentification de l'utilisateur final en mode multilocataire
+
+00:07:28.660 --> 00:07:30.180
+n'est pas encore prise en charge dans la version préliminaire.
+
+00:07:30.320 --> 00:07:31.420
+Les utilisateurs invités ne sont pas pris en charge.
+
+00:07:32.280 --> 00:07:33.060
+Les connecteurs perdent son charge.
+
+00:07:33.540 --> 00:07:35.460
+Les connecteurs standard graph et Microsoft 365
+
+00:07:35.460 --> 00:07:36.560
+ne sont pas pris en charge.
+
+00:07:37.120 --> 00:07:38.240
+Le multigeo n'est pas pris en charge.
+
+00:07:38.740 --> 00:07:40.680
+Plusieurs fonctionnalités d'analyse ne sont pas disponibles.
+
+00:07:40.680 --> 00:07:43.640
+Les transcriptions de conversations sont également désactivées dans ce mode.
+
+00:07:44.100 --> 00:07:46.080
+Il ne s'agit pas d'une structure de gouvernance interlocataire mature.
+
+00:07:46.420 --> 00:07:48.340
+Il s'agit d'une version préliminaire limitée avec des limites claires.
+
+00:07:48.720 --> 00:07:50.400
+Ces limites sont importantes car elles brisent l'histoire
+
+00:07:50.400 --> 00:07:51.980
+que se racontent de nombreuses équipes de direction.
+
+00:07:52.480 --> 00:07:54.800
+Elles entendent multilocataires et supposent une maturité opérationnelle.
+
+00:07:55.160 --> 00:07:56.700
+Leurs architectes entendent interlocataires
+
+00:07:56.700 --> 00:07:58.060
+et supposent une symétrie des politiques.
+
+00:07:58.720 --> 00:08:00.500
+Leurs équipes de contrôle entendent le même fournisseur
+
+00:08:00.500 --> 00:08:01.660
+et supposent une cohérence d'audit.
+
+00:08:02.040 --> 00:08:03.060
+Puis le déploiement commence
+
+00:08:03.060 --> 00:08:04.840
+et les gens découvrent des comportements différents,
+
+00:08:05.020 --> 00:08:06.440
+des signaux manquants et des lacunes gênantes
+
+00:08:06.440 --> 00:08:08.080
+en matière d'authentification et d'analyse.
+
+00:08:08.080 --> 00:08:09.460
+Imaginez le deuxième cas.
+
+00:08:10.000 --> 00:08:12.400
+Une entreprise mondiale met en place des relations intralocataires
+
+00:08:12.400 --> 00:08:14.800
+et suppose que l'expérience utilisateur s'étendra naturellement
+
+00:08:14.800 --> 00:08:15.780
+à l'utilisation de copilotes.
+
+00:08:16.620 --> 00:08:18.340
+L'attente semble raisonnable impliquant une confiance
+
+00:08:18.340 --> 00:08:19.980
+dans les annuaires partagés, un accès plus fluide
+
+00:08:19.980 --> 00:08:21.800
+et des modèles d'identité communs.
+
+00:08:21.800 --> 00:08:23.400
+Mais lorsque les équipes testent des scénarios réels
+
+00:08:23.400 --> 00:08:25.540
+de copilotes et d'agents, le comportement est inégal.
+
+00:08:25.980 --> 00:08:27.680
+Certaines données n'apparaissent que dans des contextes inversés.
+
+00:08:28.280 --> 00:08:29.760
+Certains connecteurs attendus ne sont pas disponibles.
+
+00:08:30.220 --> 00:08:31.740
+Certaines attentes d'audit ne correspondent pas
+
+00:08:31.740 --> 00:08:33.640
+à ce que les fonctionnalités d'aperçu exposent réellement.
+
+00:08:34.600 --> 00:08:35.860
+La direction entend toujours connecter
+
+00:08:35.860 --> 00:08:37.960
+tandis que l'équipe de contrôle commence à trouver des exceptions.
+
+00:08:38.320 --> 00:08:39.240
+Ce n'est pas un cas technique limite.
+
+00:08:39.600 --> 00:08:40.800
+C'est une mauvaise interprétation de la gouvernance.
+
+00:08:41.020 --> 00:08:42.900
+Car les auditeurs ne vérifient pas votre histoire d'architecture,
+
+00:08:42.980 --> 00:08:43.660
+ils vérifient les preuves.
+
+00:08:44.020 --> 00:08:45.500
+Ils demandent où les invités ont été exécutées,
+
+00:08:45.620 --> 00:08:46.780
+quels locataires a appliqué la politique,
+
+00:08:46.920 --> 00:08:47.580
+quels journaux existent
+
+00:08:47.580 --> 00:08:49.360
+et si vos contrôles étaient réellement comparables
+
+00:08:49.360 --> 00:08:51.300
+dans les environnements que vous avez décrits comme étant liés.
+
+00:08:52.100 --> 00:08:53.980
+Si votre modèle d'exploitation considérait l'identité
+
+00:08:53.980 --> 00:08:55.940
+comme une gouvernance, vous n'aurez pas de réponse claire.
+
+00:08:56.500 --> 00:08:58.140
+Donc si vous ne retenez qu'une seule ligne ici, disons celle-ci.
+
+00:08:58.140 --> 00:09:01.300
+L'identité interlocataire n'est pas une intelligence interlocataire.
+
+00:09:01.760 --> 00:09:02.940
+L'identité des utilisateurs entrez.
+
+00:09:03.240 --> 00:09:05.120
+Elle ne vous indique pas si le comportement de copilote est rigide
+
+00:09:05.120 --> 00:09:06.500
+de manière cohérente, surveillé correctement
+
+00:09:06.500 --> 00:09:07.920
+ou si peut être mis à l'échelle en toute sécurité,
+
+00:09:08.000 --> 00:09:09.120
+dans toute sécurité, dans toute sécurité,
+
+00:09:09.220 --> 00:09:10.500
+dans tous les endroits que votre emprise a bien environ.
+
+00:09:10.640 --> 00:09:11.520
+Et une fois que cela devient clair,
+
+00:09:11.600 --> 00:09:13.240
+la réponse ne peut pas être davantage de connexion de locataire.
+
+00:09:13.620 --> 00:09:14.520
+Cela doit être l'architecture.
+
+00:09:15.320 --> 00:09:16.800
+Le modèle de gouvernance qui fonctionne réellement.
+
+00:09:17.080 --> 00:09:17.560
+En étoile.
+
+00:09:18.300 --> 00:09:20.180
+Alors à quoi ressemble un véritable modèle de gouvernance
+
+00:09:20.180 --> 00:09:21.340
+lorsque votre plateforme est fragmentée,
+
+00:09:21.620 --> 00:09:22.640
+que l'identité n'est que partielle
+
+00:09:22.640 --> 00:09:24.560
+et que les limites des locataires ont toujours de l'importance,
+
+00:09:25.220 --> 00:09:26.500
+cela ressemble à un système en étoile.
+
+00:09:27.100 --> 00:09:28.500
+Je ne suggère pas cela parce que le diagramme
+
+00:09:28.500 --> 00:09:29.680
+semble propre sur une diapositive,
+
+00:09:29.860 --> 00:09:30.900
+mais parce qu'il correspond réellement
+
+00:09:30.900 --> 00:09:32.220
+aux conditions de fonctionnement des ordonnées
+
+00:09:32.220 --> 00:09:33.380
+auxquelles vous êtes confronté en ce moment.
+
+00:09:33.820 --> 00:09:35.080
+Vous avez besoin d'un endroit central
+
+00:09:35.080 --> 00:09:36.640
+où les décisions de gouvernance sont conçues,
+
+00:09:37.020 --> 00:09:38.860
+mesurées et appliquées en tant que système unique,
+
+00:09:38.980 --> 00:09:40.840
+puis vous avez besoin d'équipes de locataires locales
+
+00:09:40.840 --> 00:09:41.800
+pour exécuter ces décisions.
+
+00:09:42.500 --> 00:09:44.100
+Ces équipes locales doivent travailler dans le cadre
+
+00:09:44.100 --> 00:09:44.980
+de leurs propres limites
+
+00:09:44.980 --> 00:09:46.420
+sans inventer leur propre version des règles
+
+00:09:46.420 --> 00:09:48.080
+à chaque fois qu'elles ressentent un peu de pression.
+
+00:09:49.100 --> 00:09:50.080
+Nous devons commencer par le hub.
+
+00:09:50.080 --> 00:09:52.040
+Le hub n'est pas un portail d'administration,
+
+00:09:52.160 --> 00:09:53.240
+ce n'est pas un tableau de bord brillant,
+
+00:09:53.500 --> 00:09:55.180
+et ce n'est certainement pas une équipe centrale héroïque
+
+00:09:55.180 --> 00:09:56.280
+qui se lance dans chaque locataire
+
+00:09:56.280 --> 00:09:57.940
+pour nettoyer manuellement les fichiers.
+
+00:09:58.780 --> 00:09:59.240
+Au lieu de cela,
+
+00:09:59.300 --> 00:10:01.060
+le hub agit comme l'autorité de gouvernance ultime.
+
+00:10:01.740 --> 00:10:03.500
+Ce groupe est responsable de la conception des politiques,
+
+00:10:03.700 --> 00:10:04.480
+des références d'audit,
+
+00:10:04.900 --> 00:10:05.720
+des normes d'étiquetage
+
+00:10:05.720 --> 00:10:06.840
+et des critères de déploiement.
+
+00:10:07.220 --> 00:10:08.040
+Ce sont eux qui décident
+
+00:10:08.040 --> 00:10:09.980
+de ce que signifie réellement prêt pour copiloting A,
+
+00:10:10.400 --> 00:10:11.400
+des preuves qui comptent comme telles
+
+00:10:11.400 --> 00:10:12.100
+et de la rapidité
+
+00:10:12.100 --> 00:10:14.040
+avec laquelle une faille de sécurité doit être comblée.
+
+00:10:14.680 --> 00:10:16.140
+Ce changement change toute la conversation.
+
+00:10:17.060 --> 00:10:17.900
+Grâce à cette structure,
+
+00:10:18.300 --> 00:10:19.060
+le terme qui est global,
+
+00:10:19.140 --> 00:10:20.420
+global n'est cesse d'être un mot désignant,
+
+00:10:20.720 --> 00:10:21.600
+un écran magique
+
+00:10:21.600 --> 00:10:23.440
+et commence à désigner un système de gouvernance unifié.
+
+00:10:24.000 --> 00:10:25.660
+Vous obtenez une norme pour les contrôles de portée,
+
+00:10:25.780 --> 00:10:27.420
+une norme pour la manière dont vous ingérez les audits
+
+00:10:27.420 --> 00:10:29.260
+et une norme pour vos étiquettes de sensibilité.
+
+00:10:30.020 --> 00:10:30.820
+Il existe une barre claire
+
+00:10:30.820 --> 00:10:31.760
+indiquant ce qui doit être vrai
+
+00:10:31.760 --> 00:10:32.800
+avant qu'un locataire spécifique
+
+00:10:32.800 --> 00:10:34.180
+ne soit autorisé à étendre l'accès à copilote
+
+00:10:34.180 --> 00:10:35.020
+à davantage d'utilisateurs.
+
+00:10:35.500 --> 00:10:36.560
+Ensuite, vous avez besoin des spocs.
+
+00:10:36.560 --> 00:10:37.860
+Les spocs sont vos équipes d'exécution
+
+00:10:37.860 --> 00:10:38.760
+de locataires locales
+
+00:10:38.760 --> 00:10:39.780
+qui prennent cette base de référence
+
+00:10:39.780 --> 00:10:41.200
+et l'appliquent à leur environnement spécifique.
+
+00:10:41.900 --> 00:10:43.220
+Ce sont elles qui exécutent la correction,
+
+00:10:43.380 --> 00:10:44.000
+valident les journaux
+
+00:10:44.000 --> 00:10:46.220
+et examinent les autorisations d'accès étendu.
+
+00:10:46.840 --> 00:10:48.240
+Cependant, elles effectuent tout ce travail
+
+00:10:48.240 --> 00:10:50.180
+dans un espace de conception très étroit
+
+00:10:50.180 --> 00:10:51.480
+plutôt que dans un cadre libre.
+
+00:10:52.160 --> 00:10:53.680
+Si une équipe locale doit s'écarter du plan,
+
+00:10:53.840 --> 00:10:55.580
+il existe un chemin formel pour les exceptions.
+
+00:10:56.320 --> 00:10:57.220
+Si elle souhaite aller plus vite,
+
+00:10:57.300 --> 00:10:58.580
+elle doit toujours d'abord respecter
+
+00:10:58.580 --> 00:10:59.360
+les contrôles partagés.
+
+00:11:00.360 --> 00:11:01.480
+Lorsque des différences régionales
+
+00:11:01.480 --> 00:11:02.220
+ou juridiques surviennent,
+
+00:11:02.420 --> 00:11:03.780
+ces problèmes sont documentés et approuvés
+
+00:11:03.780 --> 00:11:04.840
+au lieu d'être discrètement absorbés
+
+00:11:04.840 --> 00:11:06.080
+par une solution de contournement locale
+
+00:11:06.080 --> 00:11:07.520
+dont personne d'autre n'a connaissance.
+
+00:11:07.520 --> 00:11:09.360
+Cette structure est essentielle,
+
+00:11:09.520 --> 00:11:10.760
+car les modèles entièrement centralisés
+
+00:11:10.760 --> 00:11:12.300
+s'étouffent généralement dans les détails locaux,
+
+00:11:12.400 --> 00:11:13.600
+tandis que les modèles entièrement locaux
+
+00:11:13.600 --> 00:11:14.580
+sombrent presque immédiatement
+
+00:11:14.580 --> 00:11:15.580
+dans une incohérence totale.
+
+00:11:16.300 --> 00:11:17.400
+Le modèle en étoile et en étoile
+
+00:11:17.400 --> 00:11:18.420
+évite ces deux schémas d'échecs.
+
+00:11:19.060 --> 00:11:19.920
+Le modèle en étoile vous offre
+
+00:11:19.920 --> 00:11:20.840
+la cohérence dont vous avez besoin,
+
+00:11:21.000 --> 00:11:21.820
+tandis que les modèles en étoile
+
+00:11:21.820 --> 00:11:22.880
+vous donnent la vitesse d'exécution
+
+00:11:22.880 --> 00:11:24.040
+là où le travail se déroule réellement.
+
+00:11:24.860 --> 00:11:25.420
+Concrétisons cela.
+
+00:11:25.820 --> 00:11:26.700
+Au niveau du modèle en étoile,
+
+00:11:26.760 --> 00:11:27.900
+vous définissez l'ensemble de contrôles
+
+00:11:27.900 --> 00:11:28.600
+de portée minimales
+
+00:11:28.600 --> 00:11:29.760
+que chaque locataire doit exécuter
+
+00:11:29.760 --> 00:11:31.300
+avant que Copelot ne soit autorisé à se développer.
+
+00:11:31.720 --> 00:11:32.620
+Vous définissez exactement
+
+00:11:32.620 --> 00:11:33.320
+les événements d'audit
+
+00:11:33.320 --> 00:11:34.140
+que vous attendez à voir
+
+00:11:34.140 --> 00:11:34.940
+et la fréquence à laquelle
+
+00:11:34.940 --> 00:11:35.580
+vous les examinerez.
+
+00:11:36.280 --> 00:11:36.840
+Vous créez également
+
+00:11:36.840 --> 00:11:38.240
+une taxonomie d'étiquette partagée
+
+00:11:38.240 --> 00:11:39.140
+pour le contenu sensible
+
+00:11:39.140 --> 00:11:40.660
+afin qu'une étiquette confidentielle
+
+00:11:40.660 --> 00:11:42.040
+ne signifie pas 5 choses différentes
+
+00:11:42.040 --> 00:11:42.880
+pour 5 choses différentes
+
+00:11:42.880 --> 00:11:43.820
+pour 5 locataires différents.
+
+00:11:44.360 --> 00:11:45.800
+Vous définissez le rythme des examens,
+
+00:11:46.280 --> 00:11:47.440
+peut-être mensuel pour votre posture
+
+00:11:47.440 --> 00:11:48.320
+de sécurité globale,
+
+00:11:48.560 --> 00:11:49.580
+et plus fréquemment dans les zones
+
+00:11:49.580 --> 00:11:50.980
+où le déploiement est actuellement actif.
+
+00:11:51.980 --> 00:11:53.020
+Au niveau du modèle en étoile,
+
+00:11:53.120 --> 00:11:54.560
+votre équipe adapte ses normes de haut niveau
+
+00:11:54.560 --> 00:11:56.260
+à la réalité de ce locataire spécifique.
+
+00:11:56.780 --> 00:11:57.480
+Elle identifie les sites
+
+00:11:57.480 --> 00:11:58.840
+dont l'accès généralisé est encore exposé
+
+00:11:58.840 --> 00:11:59.820
+et les unités commerciales
+
+00:11:59.820 --> 00:12:01.200
+qui sont en retard en matière d'étiquetage.
+
+00:12:01.700 --> 00:12:03.240
+Il vérifie si l'audit est réellement activé
+
+00:12:03.240 --> 00:12:04.200
+et si les bons enregistrements
+
+00:12:04.200 --> 00:12:05.460
+sont visibles par l'équipe de sécurité.
+
+00:12:05.960 --> 00:12:07.240
+Il recherche les administrateurs locaux
+
+00:12:07.240 --> 00:12:08.020
+qui pourraient avoir introduit
+
+00:12:08.020 --> 00:12:09.080
+des exceptions qui n'ont jamais été
+
+00:12:09.080 --> 00:12:09.840
+officiellement examinées
+
+00:12:09.840 --> 00:12:11.100
+et il décide si un groupe pilote
+
+00:12:11.100 --> 00:12:12.060
+peut s'étendre en toute sécurité
+
+00:12:12.060 --> 00:12:13.320
+ou s'il doit d'abord s'arrêter
+
+00:12:13.320 --> 00:12:14.000
+et corriger les choses.
+
+00:12:15.020 --> 00:12:16.080
+Et voici la règle absolue,
+
+00:12:16.180 --> 00:12:16.740
+car sans règle,
+
+00:12:17.160 --> 00:12:18.180
+ce modèle n'est qu'une suggestion
+
+00:12:18.180 --> 00:12:19.740
+au lieu d'une véritable gouvernance.
+
+00:12:20.580 --> 00:12:21.500
+Aucun déploiement copilote
+
+00:12:21.500 --> 00:12:22.400
+n'a lieu dans un locataire
+
+00:12:22.400 --> 00:12:23.780
+sans une journalisation d'audit validée,
+
+00:12:23.880 --> 00:12:25.320
+une analyse de partage excessif terminée
+
+00:12:25.320 --> 00:12:26.440
+et une base de référence minimale
+
+00:12:26.440 --> 00:12:27.520
+pour la couverture des étiquettes.
+
+00:12:28.160 --> 00:12:29.040
+Je ne parle pas de ces choses
+
+00:12:29.040 --> 00:12:29.680
+qui sont planifiées
+
+00:12:29.680 --> 00:12:30.600
+ou partiellement discutées.
+
+00:12:31.200 --> 00:12:31.860
+Ils doivent être validées.
+
+00:12:32.200 --> 00:12:33.240
+Si un locataire ne peut pas prouver
+
+00:12:33.240 --> 00:12:34.340
+que ces trois conditions sont remplies,
+
+00:12:34.580 --> 00:12:35.460
+le déploiement est suspendu.
+
+00:12:36.180 --> 00:12:37.000
+Cela peut sembler strict
+
+00:12:37.000 --> 00:12:37.900
+jusqu'à ce que vous le compariez
+
+00:12:37.900 --> 00:12:39.240
+au coût énorme du nettoyage d'un désordre
+
+00:12:39.240 --> 00:12:40.140
+après que les utilisateurs
+
+00:12:40.140 --> 00:12:41.400
+commencent à trouver du contenu sensible
+
+00:12:41.400 --> 00:12:42.880
+que vous n'aviez jamais voulu exposer via l'IA.
+
+00:12:43.960 --> 00:12:44.640
+Vu sous cet angle,
+
+00:12:44.800 --> 00:12:46.360
+ces règles relèvent simplement du bon sens.
+
+00:12:46.980 --> 00:12:47.900
+Une autre raison pour laquelle
+
+00:12:47.900 --> 00:12:49.200
+ce modèle fonctionne si bien au timing.
+
+00:12:49.200 --> 00:12:50.980
+Plus vous attendez pour le mettre en place,
+
+00:12:51.100 --> 00:12:52.200
+plus vous créez une dette de nettoyage
+
+00:12:52.200 --> 00:12:53.100
+plus importante par la suite.
+
+00:12:53.920 --> 00:12:55.060
+Chaque locataire qui se déploie
+
+00:12:55.060 --> 00:12:55.860
+avant la ligne de base
+
+00:12:55.860 --> 00:12:57.060
+devient un autre énorme arriéré
+
+00:12:57.060 --> 00:12:58.280
+d'exceptions et de preuves manquantes
+
+00:12:58.280 --> 00:13:00.400
+que votre équipe devra éventuellement éliminer.
+
+00:13:01.220 --> 00:13:02.220
+Les dirigeants considèrent souvent
+
+00:13:02.220 --> 00:13:03.200
+la gouvernance comme quelque chose
+
+00:13:03.200 --> 00:13:04.600
+qui peut mûrir une fois l'adoption terminée.
+
+00:13:04.960 --> 00:13:06.180
+Mais dans un monde copilote multitenant,
+
+00:13:06.360 --> 00:13:07.480
+cette séquence est complètement inversée,
+
+00:13:07.880 --> 00:13:08.860
+cette séquence est complètement inversée.
+
+00:13:08.940 --> 00:13:10.260
+La gouvernance doit diriger le déploiement,
+
+00:13:10.480 --> 00:13:11.660
+sinon celui-ci créera plus de dettes
+
+00:13:11.660 --> 00:13:13.260
+que vos équipes ne pourront jamais espérer absorber.
+
+00:13:13.800 --> 00:13:15.220
+Si vous dirigez cela au niveau de l'entreprise,
+
+00:13:15.220 --> 00:13:16.460
+votre prochaine étape est très claire.
+
+00:13:16.980 --> 00:13:18.180
+Mettez en place le hub dès maintenant
+
+00:13:18.180 --> 00:13:19.420
+et définissez cette ligne de base aujourd'hui.
+
+00:13:20.040 --> 00:13:20.720
+Attribuez vos rayons
+
+00:13:20.720 --> 00:13:22.040
+et mettez immédiatement par écrit
+
+00:13:22.040 --> 00:13:23.580
+votre processus de gestion des exceptions.
+
+00:13:24.320 --> 00:13:25.400
+Vous devez faire en sorte que global
+
+00:13:25.400 --> 00:13:26.480
+signifie que vos décisions
+
+00:13:26.480 --> 00:13:27.340
+et vos portes de déploiement
+
+00:13:27.340 --> 00:13:28.540
+fonctionnent comme un système unique,
+
+00:13:28.720 --> 00:13:29.860
+même lorsque les locataires eux-mêmes
+
+00:13:29.860 --> 00:13:30.640
+ne le font pas.
+
+00:13:31.660 --> 00:13:32.560
+Un modèle n'a d'importance
+
+00:13:32.560 --> 00:13:33.420
+que s'il change réellement
+
+00:13:33.420 --> 00:13:34.460
+ce qui sera appliqué demain matin,
+
+00:13:35.500 --> 00:13:36.520
+ce que les dirigeants doivent mesurer
+
+00:13:36.520 --> 00:13:37.260
+avant de passer à l'échelle.
+
+00:13:37.700 --> 00:13:39.040
+Un modèle de gouvernance ne tient la route
+
+00:13:39.040 --> 00:13:39.960
+que s'il produit des mesures
+
+00:13:39.960 --> 00:13:40.920
+que tout le monde partage.
+
+00:13:41.740 --> 00:13:42.760
+Sinon, chaque locataire
+
+00:13:42.760 --> 00:13:43.700
+prétendra faire des progrès
+
+00:13:43.700 --> 00:13:44.500
+dans sa propre langue
+
+00:13:44.500 --> 00:13:45.760
+et la direction recevra
+
+00:13:45.760 --> 00:13:46.620
+des mises à jour de statut
+
+00:13:46.620 --> 00:13:48.000
+sans avoir aucun contrôle réel.
+
+00:13:48.720 --> 00:13:50.000
+Avant de faire évoluer copilote,
+
+00:13:50.100 --> 00:13:50.580
+vous avez besoin
+
+00:13:50.580 --> 00:13:51.580
+d'un petit ensemble de mesures
+
+00:13:51.580 --> 00:13:52.180
+qui vous indiquent
+
+00:13:52.180 --> 00:13:53.340
+si l'architecture se comporte
+
+00:13:53.340 --> 00:13:54.160
+comme vous le pensez.
+
+00:13:55.200 --> 00:13:55.820
+Les niveaux d'activité
+
+00:13:55.820 --> 00:13:56.720
+ne vous diront pas la vérité
+
+00:13:56.720 --> 00:13:57.740
+et les chiffres d'adoption
+
+00:13:57.740 --> 00:13:58.620
+ne vous montreront certainement
+
+00:13:58.620 --> 00:13:59.080
+pas les risques.
+
+00:13:59.420 --> 00:13:59.980
+Vous devriez commencer
+
+00:13:59.980 --> 00:14:01.020
+par réduire le partage excessif.
+
+00:14:01.600 --> 00:14:02.420
+Cela reste l'un des signes
+
+00:14:02.420 --> 00:14:02.980
+les plus évidents
+
+00:14:02.980 --> 00:14:03.720
+que votre environnement
+
+00:14:03.720 --> 00:14:04.940
+devient réellement plus sûr
+
+00:14:04.940 --> 00:14:05.400
+pour l'IA.
+
+00:14:06.240 --> 00:14:06.860
+Vous devez examiner
+
+00:14:06.860 --> 00:14:07.680
+les groupes d'accès étendus,
+
+00:14:07.940 --> 00:14:08.780
+les sites SharePoint ouverts
+
+00:14:12.760 --> 00:14:13.960
+l'objectif ici
+
+00:14:13.960 --> 00:14:14.460
+n'est pas d'atteindre
+
+00:14:14.460 --> 00:14:15.120
+un chiffre parfait
+
+00:14:15.120 --> 00:14:15.660
+mais de prouver
+
+00:14:15.660 --> 00:14:16.800
+que votre exposition diminue
+
+00:14:16.800 --> 00:14:17.820
+avant que votre portée copilote
+
+00:14:17.820 --> 00:14:18.320
+n'augmente.
+
+00:14:19.120 --> 00:14:20.040
+Si ces deux lignes évoluent
+
+00:14:20.040 --> 00:14:21.100
+dans des directions opposées,
+
+00:14:21.400 --> 00:14:21.840
+vous vous développez
+
+00:14:21.840 --> 00:14:22.380
+beaucoup plus vite
+
+00:14:22.380 --> 00:14:22.940
+que vous ne résolvez
+
+00:14:22.940 --> 00:14:23.920
+les problèmes sous-jacents.
+
+00:14:24.700 --> 00:14:25.220
+La deuxième mesure
+
+00:14:25.220 --> 00:14:25.780
+dont vous avez besoin
+
+00:14:25.780 --> 00:14:26.740
+est la couverture d'Observable.
+
+00:14:27.420 --> 00:14:28.320
+Pouvez-vous réellement voir
+
+00:14:28.320 --> 00:14:28.940
+ce que fait copilot
+
+00:14:28.940 --> 00:14:29.800
+sur tous vos locataires
+
+00:14:29.800 --> 00:14:30.160
+d'une manière
+
+00:14:30.160 --> 00:14:32.160
+qui permette une véritable enquête ?
+
+00:14:32.160 --> 00:14:32.920
+La plupart des recherches
+
+00:14:32.920 --> 00:14:33.960
+indiquent que Microsoft Purview
+
+00:14:33.960 --> 00:14:34.780
+est le principal endroit
+
+00:14:34.780 --> 00:14:35.420
+où sont stockés
+
+00:14:35.420 --> 00:14:36.620
+les enregistrements principaux
+
+00:14:36.620 --> 00:14:37.720
+tels que les interactions copilot.
+
+00:14:37.940 --> 00:14:38.580
+Mais cela suppose
+
+00:14:38.580 --> 00:14:39.820
+que l'audit soit activé partout.
+
+00:14:40.360 --> 00:14:41.280
+La couverture n'est pas quelque chose
+
+00:14:41.280 --> 00:14:41.880
+que vous pouvez simplement
+
+00:14:41.880 --> 00:14:42.560
+supposer qu'elle fonctionne.
+
+00:14:42.880 --> 00:14:43.960
+Vous devez savoir exactement
+
+00:14:43.960 --> 00:14:44.640
+quels locataires
+
+00:14:44.640 --> 00:14:45.940
+ont une ingestion d'audit active
+
+00:14:45.940 --> 00:14:46.840
+et lesquels vous laissent
+
+00:14:46.840 --> 00:14:48.480
+encore une visibilité partielle.
+
+00:14:49.240 --> 00:14:50.040
+Si vous n'avez pas de journaux,
+
+00:14:50.100 --> 00:14:50.960
+vous n'avez aucune gouvernance
+
+00:14:50.960 --> 00:14:51.960
+ni aucune responsabilité.
+
+00:14:52.860 --> 00:14:53.600
+Cela semble brutal
+
+00:14:53.600 --> 00:14:54.260
+car cela doit l'être.
+
+00:14:54.600 --> 00:14:55.140
+Si un locataire
+
+00:14:55.140 --> 00:14:55.740
+ne peut pas fournir
+
+00:14:55.740 --> 00:14:56.460
+de preuves exploitables
+
+00:14:56.460 --> 00:14:56.980
+de ce qui se passe,
+
+00:14:57.060 --> 00:14:57.820
+ce locataire n'est pas prêt
+
+00:14:57.820 --> 00:14:58.820
+à évoluer en toute sécurité.
+
+00:14:59.440 --> 00:15:00.220
+Vous ne pouvez pas gouverner
+
+00:15:00.220 --> 00:15:01.040
+ce que vous n'êtes pas autorisé
+
+00:15:01.040 --> 00:15:01.480
+à inspecter
+
+00:15:01.480 --> 00:15:02.380
+et vous ne serez certainement pas
+
+00:15:02.380 --> 00:15:03.360
+en mesure de défendre vos actions
+
+00:15:03.360 --> 00:15:04.460
+si quelque chose tourne mal plus tard.
+
+00:15:04.920 --> 00:15:05.480
+La troisième mesure
+
+00:15:05.480 --> 00:15:06.360
+est votre délai de mise en œuvre
+
+00:15:06.360 --> 00:15:06.800
+de la politique
+
+00:15:06.800 --> 00:15:07.440
+pour tous les locataires.
+
+00:15:08.200 --> 00:15:09.240
+C'est là que la direction découvre
+
+00:15:09.240 --> 00:15:10.000
+si le modèle en étoile
+
+00:15:10.000 --> 00:15:10.800
+est réellement réel
+
+00:15:10.800 --> 00:15:12.040
+ou simplement décoratif.
+
+00:15:13.100 --> 00:15:13.960
+Une décision centrale
+
+00:15:13.960 --> 00:15:14.840
+ne signifie absolument rien
+
+00:15:14.840 --> 00:15:16.020
+si un locataire l'applique cette semaine
+
+00:15:16.020 --> 00:15:16.580
+tandis qu'un autre
+
+00:15:16.580 --> 00:15:17.920
+attend un mois pour y réfléchir.
+
+00:15:18.740 --> 00:15:19.380
+Vous devez mesurer
+
+00:15:19.380 --> 00:15:20.000
+le temps qu'il faut
+
+00:15:20.000 --> 00:15:21.180
+entre l'approbation d'une politique
+
+00:15:21.180 --> 00:15:22.280
+et son application effective
+
+00:15:22.280 --> 00:15:23.380
+dans chaque locataire.
+
+00:15:24.000 --> 00:15:25.040
+Je ne parle pas du temps nécessaire
+
+00:15:25.040 --> 00:15:25.540
+pour l'annoncer
+
+00:15:25.540 --> 00:15:26.140
+ou la documenter
+
+00:15:26.140 --> 00:15:26.880
+mais du temps nécessaire
+
+00:15:26.880 --> 00:15:27.560
+pour qu'elle soit réellement
+
+00:15:27.560 --> 00:15:28.020
+mise en œuvre.
+
+00:15:28.020 --> 00:15:29.220
+Pour un programme d'IA
+
+00:15:29.220 --> 00:15:30.060
+qui évolue aussi rapidement
+
+00:15:30.060 --> 00:15:31.060
+ce type de retard
+
+00:15:31.060 --> 00:15:31.660
+n'est qu'un autre mot
+
+00:15:31.660 --> 00:15:32.460
+pour désigner le risque.
+
+00:15:32.800 --> 00:15:33.420
+Un objectif pratique
+
+00:15:33.420 --> 00:15:34.380
+pour la plupart des organisations
+
+00:15:34.380 --> 00:15:35.400
+est de moins de 72 heures
+
+00:15:35.400 --> 00:15:36.360
+pour les modifications standards.
+
+00:15:37.040 --> 00:15:37.760
+Si votre temps de cycle
+
+00:15:37.760 --> 00:15:38.500
+est beaucoup plus long que cela
+
+00:15:38.500 --> 00:15:39.660
+vous n'avez pas encore
+
+00:15:39.660 --> 00:15:40.400
+de modèle évolutif
+
+00:15:40.400 --> 00:15:41.480
+vous avez juste un problème
+
+00:15:41.480 --> 00:15:42.660
+de coordination à résoudre.
+
+00:15:43.400 --> 00:15:44.220
+Ensuite vous devez examiner
+
+00:15:44.220 --> 00:15:45.400
+votre couverture des étiquettes.
+
+00:15:45.880 --> 00:15:46.460
+Ne laissez pas cela
+
+00:15:46.460 --> 00:15:47.360
+se transformer en une mesure
+
+00:15:47.360 --> 00:15:47.760
+de vanité
+
+00:15:47.760 --> 00:15:48.340
+ou un locataire
+
+00:15:48.340 --> 00:15:49.040
+atteint des chiffres élevés
+
+00:15:49.040 --> 00:15:49.940
+tandis que les autres sont à la traîne.
+
+00:15:50.280 --> 00:15:50.820
+Ce qui compte vraiment
+
+00:15:50.820 --> 00:15:51.260
+c'est de savoir
+
+00:15:51.260 --> 00:15:52.080
+si votre compte du sensible
+
+00:15:52.080 --> 00:15:52.780
+est étiqueté de manière
+
+00:15:52.780 --> 00:15:53.460
+suffisamment cohérente
+
+00:15:53.460 --> 00:15:54.460
+pour que le comportement de cohérente
+
+00:15:54.460 --> 00:15:55.420
+pour que le comportement de copilote
+
+00:15:55.420 --> 00:15:56.220
+ne soit uniquement basé
+
+00:15:56.220 --> 00:15:56.800
+sur les utilisateurs.
+
+00:15:56.960 --> 00:15:57.500
+Vous ne recherchez pas
+
+00:15:57.500 --> 00:15:58.220
+la perfection ici
+
+00:15:58.220 --> 00:15:59.120
+mais vous recherchez
+
+00:15:59.120 --> 00:16:00.180
+un niveau de contrôle comparable
+
+00:16:00.180 --> 00:16:01.020
+pour chaque locataire
+
+00:16:01.020 --> 00:16:01.920
+de l'organisation.
+
+00:16:02.740 --> 00:16:03.640
+Enfin vous devez suivre
+
+00:16:03.640 --> 00:16:04.860
+votre taux de dérive d'accès.
+
+00:16:05.500 --> 00:16:06.280
+Cette mesure vous indique
+
+00:16:06.280 --> 00:16:07.280
+si vos efforts de nettoyage
+
+00:16:07.280 --> 00:16:08.040
+sont réellement efficaces
+
+00:16:08.040 --> 00:16:08.540
+au fil du temps.
+
+00:16:09.100 --> 00:16:09.800
+Une fois que vous avez terminé
+
+00:16:09.800 --> 00:16:10.440
+un projet de correction
+
+00:16:10.440 --> 00:16:11.120
+à quelle vitesse
+
+00:16:11.120 --> 00:16:11.760
+ces autorisations
+
+00:16:11.760 --> 00:16:13.320
+recommencent-elles à se propager ?
+
+00:16:13.320 --> 00:16:13.880
+A quelle fréquence
+
+00:16:13.880 --> 00:16:14.420
+ces grands groupes
+
+00:16:14.420 --> 00:16:16.000
+reviennent-ils dans le système ?
+
+00:16:16.000 --> 00:16:16.620
+De nombreuses équipes
+
+00:16:16.620 --> 00:16:17.360
+s'en rendent compte trop tard
+
+00:16:17.360 --> 00:16:18.360
+car elles ont mesuré la correction
+
+00:16:18.360 --> 00:16:19.100
+une fois et ont supposé
+
+00:16:19.100 --> 00:16:19.820
+que le problème avait disparu
+
+00:16:19.820 --> 00:16:20.080
+à jamais.
+
+00:16:20.320 --> 00:16:20.800
+Ce n'était pas le cas.
+
+00:16:21.120 --> 00:16:21.940
+La seule mesure qui compte
+
+00:16:21.940 --> 00:16:22.620
+est la vitesse à laquelle
+
+00:16:22.620 --> 00:16:23.640
+le système commence à déraper
+
+00:16:23.640 --> 00:16:24.300
+une fois que vous cessez
+
+00:16:24.300 --> 00:16:24.840
+de le surveiller.
+
+00:16:25.480 --> 00:16:26.160
+Il s'agit de votre tableau
+
+00:16:26.160 --> 00:16:26.760
+de bord opérationnel.
+
+00:16:27.100 --> 00:16:27.640
+Vous devez suivre
+
+00:16:27.640 --> 00:16:29.020
+la réduction du partage excessif,
+
+00:16:29.100 --> 00:16:30.260
+la couverture de l'observabilité,
+
+00:16:30.560 --> 00:16:31.220
+le délai de mise en place
+
+00:16:31.220 --> 00:16:31.660
+de la politique,
+
+00:16:31.760 --> 00:16:32.620
+la couverture des étiquettes
+
+00:16:32.620 --> 00:16:33.300
+et la dérive des accès.
+
+00:16:33.420 --> 00:16:34.320
+Le rythme de vos rapports
+
+00:16:34.320 --> 00:16:35.100
+est tout aussi important
+
+00:16:35.100 --> 00:16:36.040
+que les chiffres eux-mêmes.
+
+00:16:36.680 --> 00:16:37.780
+Le hub doit être propriétaire
+
+00:16:37.780 --> 00:16:38.860
+du tableau de bord exécutif
+
+00:16:38.860 --> 00:16:39.740
+car la direction a besoin
+
+00:16:39.740 --> 00:16:40.220
+d'une vue unique
+
+00:16:40.220 --> 00:16:41.100
+de l'ensemble de la posture.
+
+00:16:41.940 --> 00:16:42.440
+Pendant ce temps,
+
+00:16:42.580 --> 00:16:43.220
+les spokes doivent être
+
+00:16:43.220 --> 00:16:44.120
+responsables de la correction
+
+00:16:44.120 --> 00:16:45.060
+car le travail réel
+
+00:16:45.060 --> 00:16:45.760
+doit être effectué
+
+00:16:45.760 --> 00:16:46.240
+là où se trouve
+
+00:16:46.240 --> 00:16:47.080
+la limite du locataire.
+
+00:16:47.800 --> 00:16:48.740
+Une équipe lie le système
+
+00:16:48.740 --> 00:16:49.740
+et l'autre équipe le corrige.
+
+00:16:50.460 --> 00:16:51.260
+Vous devez suivre ces chiffres
+
+00:16:51.260 --> 00:16:51.960
+avant de vous développer,
+
+00:16:52.180 --> 00:16:52.660
+pas après coup.
+
+00:16:53.320 --> 00:16:53.920
+Le risque n'attend pas
+
+00:16:53.920 --> 00:16:54.560
+votre prochaine réunion
+
+00:16:54.560 --> 00:16:55.380
+ou votre prochain atelier
+
+00:16:55.380 --> 00:16:55.860
+de gouvernance.
+
+00:16:56.360 --> 00:16:57.000
+Il est déjà actif
+
+00:16:57.000 --> 00:16:57.800
+dans chaque locataire
+
+00:16:57.800 --> 00:16:58.860
+où Copilot peut trouver
+
+00:16:58.860 --> 00:16:59.920
+exactement ce que vos contrôles
+
+00:16:59.920 --> 00:17:00.640
+actuels lui permettent
+
+00:17:00.640 --> 00:17:01.200
+encore de voir.
+
+00:17:01.800 --> 00:17:02.260
+Les deux modèles
+
+00:17:02.260 --> 00:17:02.740
+que les dirigeants
+
+00:17:02.740 --> 00:17:03.300
+continuent d'oublier.
+
+00:17:03.680 --> 00:17:04.300
+Je continue de voir
+
+00:17:04.300 --> 00:17:05.200
+deux modèles spécifiques
+
+00:17:05.200 --> 00:17:05.640
+sur le terrain
+
+00:17:05.640 --> 00:17:06.620
+et ils se produisent
+
+00:17:06.620 --> 00:17:06.920
+tous les deux
+
+00:17:06.920 --> 00:17:07.520
+parce que les dirigeants
+
+00:17:07.520 --> 00:17:08.040
+traitent Copilot
+
+00:17:08.040 --> 00:17:09.060
+comme un lancement de logiciel
+
+00:17:09.060 --> 00:17:09.840
+plutôt que comme un lancement
+
+00:17:09.840 --> 00:17:10.260
+de logiciel
+
+00:17:10.260 --> 00:17:11.020
+plutôt que comme un manager.
+
+00:17:11.400 --> 00:17:11.980
+Le premier modèle
+
+00:17:11.980 --> 00:17:12.980
+commence lorsqu'une organisation
+
+00:17:12.980 --> 00:17:13.720
+déploie Copilot
+
+00:17:13.720 --> 00:17:14.440
+avant de définir
+
+00:17:14.440 --> 00:17:15.120
+une véritable base
+
+00:17:15.120 --> 00:17:15.920
+de référence de portée
+
+00:17:15.920 --> 00:17:17.100
+ou de revoir son accès SharePoint.
+
+00:17:17.980 --> 00:17:18.480
+Le premier jour,
+
+00:17:18.560 --> 00:17:19.560
+le déploiement semble parfait.
+
+00:17:20.000 --> 00:17:21.000
+Les licences sont attribuées,
+
+00:17:21.120 --> 00:17:22.280
+les utilisateurs sont enthousiastes
+
+00:17:22.280 --> 00:17:23.220
+et la messagerie interne
+
+00:17:23.220 --> 00:17:24.360
+est axée sur la productivité.
+
+00:17:24.860 --> 00:17:25.200
+Mais ensuite,
+
+00:17:25.280 --> 00:17:25.900
+les invites normales
+
+00:17:25.900 --> 00:17:26.380
+commencent à afficher
+
+00:17:26.380 --> 00:17:26.860
+des informations
+
+00:17:26.860 --> 00:17:27.920
+qui étaient techniquement accessibles
+
+00:17:27.920 --> 00:17:28.420
+depuis le début
+
+00:17:28.420 --> 00:17:29.700
+mais pratiquement invisibles
+
+00:17:29.700 --> 00:17:30.620
+pour l'employé moyen.
+
+00:17:31.040 --> 00:17:31.280
+Moyen.
+
+00:17:31.280 --> 00:17:32.840
+Avant l'IA,
+
+00:17:32.980 --> 00:17:33.860
+personne ne passait sa journée
+
+00:17:33.860 --> 00:17:34.900
+à cliquer sur d'anciens sites,
+
+00:17:35.000 --> 00:17:35.760
+des dossiers obsolètes
+
+00:17:35.760 --> 00:17:36.880
+ou des autorisations héritées
+
+00:17:36.880 --> 00:17:37.480
+pour trouver des choses
+
+00:17:37.480 --> 00:17:38.260
+qu'il ne devrait pas voir.
+
+00:17:38.980 --> 00:17:39.280
+Mais maintenant,
+
+00:17:39.360 --> 00:17:39.900
+ce n'est plus nécessaire.
+
+00:17:40.720 --> 00:17:42.140
+Un utilisateur pose une question simple,
+
+00:17:42.220 --> 00:17:42.800
+un résumé revient
+
+00:17:42.800 --> 00:17:43.640
+et un fichier apparaît.
+
+00:17:44.420 --> 00:17:45.740
+Il peut s'agir de contenu RH sensible,
+
+00:17:45.840 --> 00:17:46.560
+de documents financiers
+
+00:17:46.560 --> 00:17:47.720
+ou d'informations sur une transaction
+
+00:17:47.720 --> 00:17:48.600
+qui était censée rester
+
+00:17:48.600 --> 00:17:49.820
+dans un cercle très restreint.
+
+00:17:50.260 --> 00:17:51.060
+Il n'y a eu aucune violation,
+
+00:17:51.200 --> 00:17:51.980
+aucun logiciel malveillant
+
+00:17:51.980 --> 00:17:53.140
+et aucune limite de sécurité brisée
+
+00:17:53.140 --> 00:17:53.960
+au sens traditionnel du terme.
+
+00:17:54.460 --> 00:17:55.460
+Le système a simplement utilisé
+
+00:17:55.460 --> 00:17:56.100
+les autorisations
+
+00:17:56.100 --> 00:17:56.880
+et l'état du contenu
+
+00:17:56.880 --> 00:17:58.160
+que le locataire avait déjà autorisé.
+
+00:17:58.720 --> 00:17:59.300
+C'est à ce moment-là
+
+00:17:59.300 --> 00:18:00.080
+que de nombreuses équipes
+
+00:18:00.080 --> 00:18:01.040
+comprennent enfin le problème.
+
+00:18:01.440 --> 00:18:02.680
+L'IA n'a pas créé l'exposition.
+
+00:18:03.240 --> 00:18:04.020
+Elle a simplement supprimé
+
+00:18:04.020 --> 00:18:05.000
+la friction qui l'a masquée au parrain.
+
+00:18:05.480 --> 00:18:06.200
+Une fois que cela se produit
+
+00:18:06.200 --> 00:18:06.880
+dans un locataire,
+
+00:18:07.180 --> 00:18:08.020
+la confiance des dirigeants
+
+00:18:08.020 --> 00:18:08.740
+diminue généralement
+
+00:18:08.740 --> 00:18:09.500
+dans toute l'organisation
+
+00:18:09.500 --> 00:18:10.880
+car personne ne peut dire
+
+00:18:10.880 --> 00:18:11.480
+avec certitude
+
+00:18:11.480 --> 00:18:12.100
+où ce même schéma
+
+00:18:12.100 --> 00:18:13.000
+pourrait se reproduire.
+
+00:18:13.740 --> 00:18:14.700
+L'incident peut sembler local
+
+00:18:14.700 --> 00:18:15.380
+mais les dommages causés
+
+00:18:15.380 --> 00:18:15.820
+à la confiance
+
+00:18:15.820 --> 00:18:16.780
+sont à l'échelle de l'entreprise.
+
+00:18:17.160 --> 00:18:17.740
+Le deuxième modèle
+
+00:18:17.740 --> 00:18:18.320
+est plus discret
+
+00:18:18.320 --> 00:18:19.560
+mais il est tout aussi dangereux.
+
+00:18:19.900 --> 00:18:21.100
+Une entreprise met en place
+
+00:18:21.100 --> 00:18:22.020
+des relations d'identité
+
+00:18:22.020 --> 00:18:22.660
+entre locataires.
+
+00:18:22.980 --> 00:18:23.720
+En tant que des scénarios
+
+00:18:23.720 --> 00:18:24.840
+multilocataires sont possibles
+
+00:18:24.840 --> 00:18:25.800
+et suppose que son modèle
+
+00:18:25.800 --> 00:18:27.060
+d'exploitation est suffisamment mature
+
+00:18:27.060 --> 00:18:27.580
+pour un déploiement
+
+00:18:27.580 --> 00:18:28.040
+à grande échelle.
+
+00:18:28.500 --> 00:18:29.140
+Sur un diaporama,
+
+00:18:29.240 --> 00:18:30.160
+cela ressemble à un plan solide.
+
+00:18:30.600 --> 00:18:30.900
+En réalité,
+
+00:18:31.000 --> 00:18:32.160
+les opérations deviennent désordonnées.
+
+00:18:32.680 --> 00:18:33.360
+Une équipe s'attend
+
+00:18:33.360 --> 00:18:34.720
+à une expérience copilote fluide
+
+00:18:34.720 --> 00:18:35.920
+dans tous les environnements connectés
+
+00:18:35.920 --> 00:18:36.520
+tandis qu'une autre
+
+00:18:36.520 --> 00:18:38.000
+s'attend à une visibilité comparable
+
+00:18:38.000 --> 00:18:38.960
+et une troisième suppose
+
+00:18:38.960 --> 00:18:39.760
+que les mêmes contrôles
+
+00:18:39.760 --> 00:18:40.980
+suivront l'utilisateur partout.
+
+00:18:41.840 --> 00:18:42.080
+Ensuite,
+
+00:18:42.160 --> 00:18:42.740
+l'utilisation réelle
+
+00:18:42.740 --> 00:18:43.300
+commence à exposer
+
+00:18:43.300 --> 00:18:44.220
+un comportement inégal,
+
+00:18:44.500 --> 00:18:45.460
+des lacunes dans l'authentification
+
+00:18:45.460 --> 00:18:46.000
+et des points faibles
+
+00:18:46.000 --> 00:18:47.120
+dans ce qui peut être réellement mesuré.
+
+00:18:47.600 --> 00:18:48.140
+Le problème n'est pas
+
+00:18:48.140 --> 00:18:49.320
+que ces équipes ont été négligentes.
+
+00:18:49.900 --> 00:18:50.400
+Le vrai problème
+
+00:18:50.400 --> 00:18:51.040
+est qu'elles ont traduit
+
+00:18:51.040 --> 00:18:52.340
+la connectivité en assurance.
+
+00:18:53.320 --> 00:18:53.900
+Cette hypothèse crée
+
+00:18:53.900 --> 00:18:54.400
+une fausse histoire
+
+00:18:54.400 --> 00:18:55.120
+sur la conformité.
+
+00:18:55.940 --> 00:18:56.560
+La direction entend
+
+00:18:56.560 --> 00:18:57.260
+le mot connecté
+
+00:18:57.260 --> 00:18:58.480
+et suppose que l'organisation
+
+00:18:58.480 --> 00:18:58.960
+est prête.
+
+00:19:00.120 --> 00:19:00.700
+Des mois plus tard,
+
+00:19:00.900 --> 00:19:01.680
+les examens de contrôle
+
+00:19:01.680 --> 00:19:02.660
+révèlent que le comportement,
+
+00:19:02.880 --> 00:19:03.900
+les preuves et l'application
+
+00:19:03.900 --> 00:19:04.940
+varient bien plus que quiconque
+
+00:19:04.940 --> 00:19:06.040
+ne voulait l'admettre au début.
+
+00:19:06.600 --> 00:19:06.860
+Maintenant,
+
+00:19:06.960 --> 00:19:07.420
+comparons cela
+
+00:19:07.420 --> 00:19:07.880
+à un meilleur modèle.
+
+00:19:08.320 --> 00:19:08.980
+Une autre organisation
+
+00:19:08.980 --> 00:19:09.760
+choisit de ralentir
+
+00:19:09.760 --> 00:19:10.640
+avant de passer à l'échelle.
+
+00:19:11.260 --> 00:19:11.800
+Ils définissent d'abord
+
+00:19:11.800 --> 00:19:12.720
+une ligne de base d'étiquette,
+
+00:19:12.980 --> 00:19:13.440
+examinent d'abord
+
+00:19:13.440 --> 00:19:14.000
+l'accès général
+
+00:19:14.000 --> 00:19:15.400
+et valident leur visibilité d'audit
+
+00:19:15.400 --> 00:19:16.000
+avant de faire
+
+00:19:16.000 --> 00:19:16.780
+quoi que ce soit d'autre.
+
+00:19:17.500 --> 00:19:18.660
+Ils étendent copilote par vague,
+
+00:19:19.100 --> 00:19:19.820
+non pas parce qu'ils ont peur
+
+00:19:19.820 --> 00:19:20.300
+de l'adoption,
+
+00:19:20.460 --> 00:19:20.960
+mais parce qu'ils veulent
+
+00:19:20.960 --> 00:19:21.480
+que chaque vague
+
+00:19:21.480 --> 00:19:22.780
+produise des preuves exploitables
+
+00:19:22.780 --> 00:19:23.780
+avant le début de la suivante.
+
+00:19:24.880 --> 00:19:25.860
+Cette organisation évolue
+
+00:19:25.860 --> 00:19:26.780
+généralement plus rapidement
+
+00:19:26.780 --> 00:19:27.340
+à long terme,
+
+00:19:27.540 --> 00:19:28.200
+car elle ne s'arrête pas
+
+00:19:28.200 --> 00:19:29.060
+constamment pour expliquer
+
+00:19:29.060 --> 00:19:29.600
+les surprises,
+
+00:19:29.820 --> 00:19:30.800
+nettoyer le contenu exposé
+
+00:19:30.800 --> 00:19:32.200
+ou discuter de ce que la gouvernance
+
+00:19:32.200 --> 00:19:33.260
+s'était censée signifier.
+
+00:19:33.680 --> 00:19:33.780
+Oui.
+
+00:19:34.560 --> 00:19:35.060
+C'est l'avantage
+
+00:19:35.060 --> 00:19:36.220
+que la plupart des dirigeants négligent.
+
+00:19:36.220 --> 00:19:37.160
+Une bonne gouvernance
+
+00:19:37.160 --> 00:19:38.140
+ne bloque pas votre déploiement.
+
+00:19:38.860 --> 00:19:39.840
+Elle supprime le ralentissement
+
+00:19:39.840 --> 00:19:40.420
+du déploiement
+
+00:19:40.420 --> 00:19:41.800
+une fois la première vague terminée.
+
+00:19:42.260 --> 00:19:43.380
+Piège n'est pas l'adoption en elle-même.
+
+00:19:43.820 --> 00:19:44.580
+Le piège est une adoption
+
+00:19:44.580 --> 00:19:45.720
+non gérée entre des locataires
+
+00:19:45.720 --> 00:19:46.720
+qui semblent connectés de loin
+
+00:19:46.720 --> 00:19:47.580
+mais qui se comportent
+
+00:19:47.580 --> 00:19:48.160
+très différemment
+
+00:19:48.160 --> 00:19:49.160
+lorsque vous vous en approchez,
+
+00:19:49.360 --> 00:19:50.560
+mais...
+
+00:19:50.560 --> 00:19:51.620
+La décision que vous devez prendre
+
+00:19:51.620 --> 00:19:52.400
+est en fait très simple.
+
+00:19:53.260 --> 00:19:54.060
+Vous devez passer à un modèle
+
+00:19:54.060 --> 00:19:54.760
+de gouvernance de l'IA
+
+00:19:54.760 --> 00:19:55.840
+en étoile fédérée dès maintenant
+
+00:19:55.840 --> 00:19:56.980
+et vous devez cesser de confondre
+
+00:19:56.980 --> 00:19:57.840
+le basculement locataire
+
+00:19:57.840 --> 00:19:58.400
+par locataire
+
+00:19:58.400 --> 00:19:58.980
+par locataire
+
+00:19:58.980 --> 00:19:59.740
+avec le contrôle réel.
+
+00:20:00.420 --> 00:20:01.040
+Vous devez suspendre
+
+00:20:01.040 --> 00:20:02.060
+votre expansion copilote
+
+00:20:06.220 --> 00:20:08.340
+l'IA va suivre le système
+
+00:20:08.340 --> 00:20:09.300
+que vous construisez réellement
+
+00:20:09.300 --> 00:20:10.040
+et non l'organigramme
+
+00:20:10.040 --> 00:20:10.720
+auquel vous faites rapport.
+
+00:20:11.400 --> 00:20:11.960
+Si cela a changé
+
+00:20:11.960 --> 00:20:12.680
+votre façon de penser
+
+00:20:12.680 --> 00:20:14.180
+la gouvernance multitenante copilote,
+
+00:20:14.400 --> 00:20:15.300
+suivez-moi, Mirko Peter,
+
+00:20:15.420 --> 00:20:15.780
+sur LinkedIn
+
+00:20:15.780 --> 00:20:16.500
+et partagez cela
+
+00:20:16.500 --> 00:20:17.160
+avec votre équipe
+
+00:20:17.160 --> 00:20:17.820
+si vous êtes confronté
+
+00:20:17.820 --> 00:20:18.960
+à ces problèmes en ce moment.

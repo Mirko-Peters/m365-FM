@@ -1,0 +1,1132 @@
+WEBVTT
+
+00:00:00.300 --> 00:00:07.880
+Listo para 10 días de Microsoft 365 Copilot, IA, Azure y las personas que dan forma al futuro del trabajo y...
+
+00:00:07.880 --> 00:00:12.040
+Este enero, M365 con regresa y venimos con todo.
+
+00:00:12.860 --> 00:00:18.140
+Únete a nosotros para sesiones en vivo, demostraciones reales y conocimientos prácticos de MEPs y expertos de la industria de todo el mundo.
+
+00:00:18.780 --> 00:00:20.940
+Nada de diapositivas genéricas, nada de palabras demenables.
+
+00:00:22.000 --> 00:00:28.560
+Abordaremos desafíos reales, Copilot Studio, agentes de IA, Fabric, seguridad, gobernanza y automatización.
+
+00:00:28.560 --> 00:00:34.400
+Ya seas un profesional de TI, desarrollador o líder empresarial, hay sesiones diseñadas para ti.
+
+00:00:35.500 --> 00:00:39.980
+Con 10 días completos, podrás explorar diversas tecnologías y conectar con una comunidad global.
+
+00:00:40.920 --> 00:00:44.220
+Míralo en vivo y lleva ideas prácticas a tu organización.
+
+00:00:45.140 --> 00:00:48.980
+Enero de 2027. 10 días. Una sola comunidad de Microsoft.
+
+00:00:49.440 --> 00:00:50.460
+El registro ya está abierto.
+
+00:00:51.840 --> 00:00:55.720
+Ve a M365.com.net y asegura tu lugar hoy mismo.
+
+00:00:55.720 --> 00:00:58.560
+Eso es M365.com.net
+
+00:00:58.560 --> 00:01:04.440
+Únete ahora en M365.com.net y nos vemos en vivo en enero.
+
+00:01:05.160 --> 00:01:10.480
+El tema de hoy es uno del que casi todos han oído hablar, pero que la mayoría no entiende del todo el almacenamiento en disco de Athurer.
+
+00:01:11.060 --> 00:01:16.040
+Es el disco duro virtual para tus máquinas virtuales en la nube y esto es lo importante y cada OVM que creas necesita almacenamiento.
+
+00:01:16.040 --> 00:01:20.600
+Si eliges el tipo incorrecto, terminarás pagando demasiado o teniendo un rendimiento terrible.
+
+00:01:20.860 --> 00:01:25.020
+Al final de este episodio, conocerás los cuatro tipos principales de disco y exactamente cuándo usar cada uno.
+
+00:01:25.840 --> 00:01:27.020
+Toma tu café y comencemos.
+
+00:01:27.860 --> 00:01:30.560
+¿Por qué importa el tipo de disco? Velocidad, capacidad y costo.
+
+00:01:30.860 --> 00:01:32.300
+Entonces, ¿por qué es importante el tipo de disco?
+
+00:01:32.820 --> 00:01:36.480
+Tres factores determinan el rendimiento. Hay OVS, rendimiento, throughput y latencia.
+
+00:01:37.360 --> 00:01:39.940
+Y OVS significa operaciones de entrada y salida por segundo.
+
+00:01:40.620 --> 00:01:43.460
+Básicamente, ¿cuántas operaciones de lectura o escritura puede manejar el disco a la vez?
+
+00:01:44.080 --> 00:01:46.960
+throughput es la velocidad de transferencia de datos medida en megabytes por segundo.
+
+00:01:47.420 --> 00:01:51.260
+La latencia es el retraso. ¿Cuánto tarda ese primer byte en llegar después de solicitarlo?
+
+00:01:51.620 --> 00:01:52.580
+Piénsalo como si fueran vehículos.
+
+00:01:52.900 --> 00:01:54.640
+Un sedán maneja los mandados diarios perfectamente.
+
+00:01:55.100 --> 00:01:56.240
+Una camioneta suerte es más pesada.
+
+00:01:56.680 --> 00:01:58.160
+Y un auto de carreras está construido por upload.
+
+00:01:58.440 --> 00:02:00.460
+Los diferentes tipos de discos siguen el mismo patrón.
+
+00:02:00.860 --> 00:02:02.200
+El SSD estándar es tu sedán.
+
+00:02:02.440 --> 00:02:03.820
+El SSD Premium es la camioneta de trabajo.
+
+00:02:04.280 --> 00:02:06.880
+El SSD Premium V2 es un auto deportivo que puedes ajustar tú mismo.
+
+00:02:06.880 --> 00:02:08.620
+Y el ultradisc es un auto de carreras de fórmula.
+
+00:02:08.620 --> 00:02:09.520
+Quítale click.
+
+00:02:09.880 --> 00:02:11.260
+Un mayor rendimiento cuesta más dinero.
+
+00:02:11.700 --> 00:02:14.540
+El truco es ajustar el disco a lo que tu carga de trabajo realmente necesita
+
+00:02:14.540 --> 00:02:16.780
+para no sobreaprovisionar y desperdiciar dinero.
+
+00:02:17.220 --> 00:02:18.920
+Ni suba a provisionar y tener un rendimiento lento.
+
+00:02:19.800 --> 00:02:23.100
+Así que, comencemos con las dos categorías amplias de discos que conectarás a una VM.
+
+00:02:23.780 --> 00:02:25.780
+Disco de SEO frente a disco de datos, los dos sabores.
+
+00:02:26.460 --> 00:02:29.480
+Cuando creas una VM en Azure, esta incluye automáticamente un disco de SEO
+
+00:02:29.480 --> 00:02:32.000
+si el disco contiene el sistema operativo, Windows o Linux,
+
+00:02:32.380 --> 00:02:33.640
+y este es donde arranca la máquina virtual.
+
+00:02:34.000 --> 00:02:36.660
+El disco del sistema operativo tiene un límite de 4 terabytes,
+
+00:02:36.660 --> 00:02:39.460
+lo cual es más que suficiente para el SEO y algunas aplicaciones básicas.
+
+00:02:39.980 --> 00:02:40.640
+Pero aquí está el detalle.
+
+00:02:41.040 --> 00:02:42.400
+También puedes agregar discos de datos.
+
+00:02:43.020 --> 00:02:45.980
+Estos son opcionales y los conectas por separado para cosas como aplicaciones,
+
+00:02:46.140 --> 00:02:47.740
+bases de datos o almacenamiento de archivos.
+
+00:02:48.260 --> 00:02:50.680
+Cada disco de datos puede llegar a los 64 terabytes
+
+00:02:50.680 --> 00:02:53.180
+y puedes conectar varios discos a una sola máquina virtual.
+
+00:02:53.720 --> 00:02:54.380
+Necesitas almacenamiento.
+
+00:02:54.720 --> 00:02:55.660
+Simplemente agrega otro disco.
+
+00:02:56.020 --> 00:02:58.020
+Hará tanto los discos del SEO como los de datos.
+
+00:02:58.180 --> 00:02:59.760
+Usan los mismos cuatro niveles de rendimiento.
+
+00:02:59.760 --> 00:03:04.420
+Estándar SSD, Premium SSD, Premium SSD V2 y Ultra Disk.
+
+00:03:05.140 --> 00:03:07.100
+La diferencia no está en la velocidad, sino en el propósito.
+
+00:03:07.460 --> 00:03:09.040
+Un disco de SEO ejecuta el sistema operativo.
+
+00:03:09.460 --> 00:03:10.560
+Un disco de datos o aplicaciones,
+
+00:03:11.120 --> 00:03:13.100
+pero ambos dependen de los mismos tipos de discos subyacentos.
+
+00:03:13.540 --> 00:03:13.980
+Una cosa más.
+
+00:03:14.400 --> 00:03:15.860
+El almacenamiento en discos de Azure y Persistent.
+
+00:03:16.240 --> 00:03:17.580
+Eso significa que tus datos permanecen ahí,
+
+00:03:17.660 --> 00:03:19.360
+incluso cuando la máquina virtual se detiene o se reinice.
+
+00:03:19.600 --> 00:03:21.200
+Nada se pierde cuando pagas el equipo por uno.
+
+00:03:21.880 --> 00:03:24.360
+Analicemos los cuatro niveles, comenzando con el más económico.
+
+00:03:24.360 --> 00:03:29.380
+Comencemos con la opción de nivel de entrada,
+
+00:03:29.600 --> 00:03:30.480
+Standard SSD.
+
+00:03:31.200 --> 00:03:33.720
+Este es el costo por gigabyte más bajo entre los niveles SSD
+
+00:03:33.720 --> 00:03:35.960
+que ofrece un rendimiento decente para cargas de trabajo básicas.
+
+00:03:36.300 --> 00:03:38.300
+Estamos hablando de un máximo de alrededor de 6.000 Ops
+
+00:03:38.300 --> 00:03:40.440
+y un rendimiento de hasta 600 megas por segundo
+
+00:03:40.440 --> 00:03:42.640
+según el tamaño del disco que elijas.
+
+00:03:43.200 --> 00:03:44.140
+¿Cuándo lo usarías?
+
+00:03:44.460 --> 00:03:46.000
+Piensa en entornos de desarrollo y prueba
+
+00:03:46.000 --> 00:03:47.820
+donde inicias máquinas virtuales para experimentar.
+
+00:03:48.180 --> 00:03:49.780
+Servidores web que no reciben mucho tráfico.
+
+00:03:50.100 --> 00:03:52.240
+Aplicaciones de bajo tráfico donde no segundos de retraso
+
+00:03:52.240 --> 00:03:52.940
+no son gran problema.
+
+00:03:52.940 --> 00:03:54.760
+Recuerda la analogía del vehículo de hace un momento.
+
+00:03:55.080 --> 00:03:56.660
+El Standard SSD es tu sedan confiado.
+
+00:03:57.140 --> 00:03:58.240
+Te lleva al supermercado y de regreso.
+
+00:03:58.700 --> 00:04:00.120
+Maneja el viaje diario de trabajo sin problema.
+
+00:04:00.600 --> 00:04:02.520
+Pero no lo usarías para remolcar un trailer lleno de madera
+
+00:04:02.520 --> 00:04:03.440
+ni para correr a una pista.
+
+00:04:03.960 --> 00:04:06.160
+Está diseñado para tareas cotidianas, no para cargas pesadas.
+
+00:04:06.680 --> 00:04:08.280
+Aquí es donde debes ser honesto contigo muy.
+
+00:04:08.700 --> 00:04:11.000
+Si estás ejecutando cualquier tipo de base de datos de producción
+
+00:04:11.000 --> 00:04:13.760
+SQL Server, Oracle, MySQL, evita el Standard SSD.
+
+00:04:14.600 --> 00:04:16.540
+Lo mismo ocurre con cualquier cosa sensible a la latencia,
+
+00:04:16.540 --> 00:04:17.740
+como aplicaciones en tiempo real
+
+00:04:17.740 --> 00:04:20.420
+o cualquier cosa que requiera muchísimas operaciones de SSD por segundo.
+
+00:04:20.820 --> 00:04:22.380
+El Standard SSD simplemente no está hecho para esto.
+
+00:04:22.380 --> 00:04:24.060
+Para esos escenarios necesitas subir un nivel.
+
+00:04:24.280 --> 00:04:24.920
+Premium SSD.
+
+00:04:26.140 --> 00:04:28.160
+Premium SSD, el profesional confiable.
+
+00:04:28.660 --> 00:04:31.440
+Premium SSD maneja las cargas de trabajo de producción sin despeinarse.
+
+00:04:31.900 --> 00:04:34.040
+Obtienes una baja latencia constante y muchos más IOPS
+
+00:04:34.040 --> 00:04:35.100
+que con el estándar SSD.
+
+00:04:35.620 --> 00:04:37.580
+Aquí es donde el rendimiento real comienza a aparecer.
+
+00:04:38.020 --> 00:04:39.000
+Y tienes el resumen sencillo.
+
+00:04:39.340 --> 00:04:42.280
+Con Premium SSD, el rendimiento está vinculado directamente al tamaño del D.
+
+00:04:42.660 --> 00:04:45.040
+Elige un tamaño de disco y eso determina cuántas IOPS desbloquea.
+
+00:04:45.040 --> 00:04:47.460
+Un P30 de 1TB te da 5.000 IOPS.
+
+00:04:48.160 --> 00:04:50.620
+Un P60 de 4TB te ofrece 20.000 IOPS.
+
+00:04:51.200 --> 00:04:52.440
+A mayor disco, mayor rendimiento.
+
+00:04:52.860 --> 00:04:53.800
+No sé cuándo deberías recurrir.
+
+00:04:54.220 --> 00:04:56.700
+Aplicaciones empresariales que requieran un rendimiento confiable.
+
+00:04:57.560 --> 00:04:59.580
+Bases de datos SQL Server que no son masivas,
+
+00:04:59.800 --> 00:05:01.540
+pero exigen tiempos de respuesta consistentes.
+
+00:05:02.000 --> 00:05:04.260
+Escritorios virtuales donde los usuarios esperan la respuesta en el Instagram.
+
+00:05:04.520 --> 00:05:05.720
+Premium SSD maneja todo eso.
+
+00:05:06.100 --> 00:05:06.940
+Pero aquí está la limitación.
+
+00:05:07.320 --> 00:05:08.880
+Como el rendimiento está bloqueado al tamaño del disco,
+
+00:05:08.960 --> 00:05:10.380
+estás limitado a niveles fijos.
+
+00:05:11.100 --> 00:05:11.700
+¿Quieres más IOPS?
+
+00:05:11.700 --> 00:05:12.980
+Tienes que comprar un disco más grande.
+
+00:05:13.260 --> 00:05:15.020
+Incluso si no necesitas el espacio de almacenamiento extra.
+
+00:05:15.660 --> 00:05:17.040
+Eso lleva al aprovisionamiento excesivo,
+
+00:05:17.380 --> 00:05:18.660
+pagando por capacidad que nunca usas
+
+00:05:18.660 --> 00:05:20.780
+solo para obtener el rendimiento que realmente necesitas.
+
+00:05:21.260 --> 00:05:22.580
+Piénsalo como una camioneta de trabajo con fiar.
+
+00:05:23.020 --> 00:05:24.800
+Es fiable, está aprobada y hace el trabajo.
+
+00:05:25.500 --> 00:05:26.540
+Pero pagas por toda la camioneta
+
+00:05:26.540 --> 00:05:29.140
+aunque solo necesites la capacidad de carga extra una vez al mes.
+
+00:05:29.460 --> 00:05:31.520
+No puedes simplemente alquilar la caja de la camioneta por un día
+
+00:05:31.520 --> 00:05:32.300
+y dejar la camioneta sin.
+
+00:05:32.800 --> 00:05:36.220
+Ese problema exacto es el que Premium SSD V2 fue creado para resolver.
+
+00:05:37.240 --> 00:05:39.340
+Premium SSD V2, el ejecutor flexible.
+
+00:05:39.560 --> 00:05:41.220
+Ahora, aquí es donde las cosas se ponen interesantes.
+
+00:05:41.860 --> 00:05:44.820
+Premium SSD V2 soluciona el gran problema del Premium SSD regular
+
+00:05:44.820 --> 00:05:46.540
+ser obligado a comprar más capacidad
+
+00:05:46.540 --> 00:05:47.940
+solo para obtener más rendimiento.
+
+00:05:48.720 --> 00:05:51.120
+Con Premium SSD V2 puedes ajustar independientemente
+
+00:05:51.120 --> 00:05:52.840
+la capacidad, las IOPS y el rendimiento.
+
+00:05:53.380 --> 00:05:54.820
+Sin tiempo de inactividad, sin cambio de disco.
+
+00:05:55.060 --> 00:05:56.600
+Solo cambia la configuración y sucede.
+
+00:05:57.040 --> 00:05:57.780
+La base es generosa.
+
+00:05:58.480 --> 00:05:59.560
+Obtienes 3.000 IOPS
+
+00:05:59.560 --> 00:06:02.100
+y 125 MB por segundo de rendimiento
+
+00:06:02.100 --> 00:06:03.340
+incluido sin costo adicional.
+
+00:06:04.520 --> 00:06:06.120
+Eso ya es más de lo que algunos discos SD estándar
+
+00:06:06.120 --> 00:06:07.120
+pueden alcanzar como máximo.
+
+00:06:07.120 --> 00:06:10.900
+Desde ahí puedes escalar hasta 80.000 IOPS y 1.200 MB por segundo.
+
+00:06:11.680 --> 00:06:13.960
+Suficiente para la mayoría de las cargas de trabajo empresariales de propósito.
+
+00:06:14.120 --> 00:06:16.760
+La capacidad varía desde un chibi byte hasta 64 TB.
+
+00:06:17.580 --> 00:06:19.560
+Ya sea que necesites un disco pequeño para una app ligera
+
+00:06:19.560 --> 00:06:21.120
+o uno masivo para una almacén de datos,
+
+00:06:21.280 --> 00:06:23.380
+Premium SSD V2 lo cubre, lo cubre.
+
+00:06:23.720 --> 00:06:24.300
+Y la latencia?
+
+00:06:24.820 --> 00:06:24.960
+Su milisegundo.
+
+00:06:24.960 --> 00:06:29.060
+Para muchas cargas de trabajo es comparable a UltraDisk sin el precio Ultra.
+
+00:06:29.540 --> 00:06:30.360
+Aquí está el valor real.
+
+00:06:30.680 --> 00:06:33.660
+Premium SSD V2 es significativamente más barato que UltraDisk
+
+00:06:33.660 --> 00:06:35.000
+para un nivel de rendimiento similar.
+
+00:06:35.420 --> 00:06:36.680
+No estás pagando un extra por el nombre.
+
+00:06:37.080 --> 00:06:38.540
+Estás pagando exactamente por lo que necesitas.
+
+00:06:38.740 --> 00:06:40.180
+Necesitas altas IOPS pero no un rendimiento.
+
+00:06:40.620 --> 00:06:41.360
+Ajustalo de esa manera.
+
+00:06:41.600 --> 00:06:43.280
+Necesitas mucho rendimiento pero hay IOPS modestas?
+
+00:06:43.720 --> 00:06:44.560
+Ajustalo del otro modo.
+
+00:06:44.860 --> 00:06:46.540
+Ningún paquete de talla única se te impone.
+
+00:06:46.960 --> 00:06:47.700
+Entonces, ¿para qué es mejor?
+
+00:06:48.000 --> 00:06:49.560
+Base de datos de producción convencionales.
+
+00:06:49.660 --> 00:06:50.680
+Aplicaciones empresariales.
+
+00:06:51.080 --> 00:06:52.840
+Cualquier carga de trabajo que requiera alto rendimiento
+
+00:06:52.840 --> 00:06:53.920
+pero no el límite de UltraDisk.
+
+00:06:53.920 --> 00:06:56.020
+SQL Server o Racco MongoDB Cassandra.
+
+00:06:56.420 --> 00:06:58.080
+Las bases de datos que impulsa el negocio real.
+
+00:06:58.320 --> 00:06:59.840
+Premium SSD V2 puede con toda silla.
+
+00:07:00.300 --> 00:07:01.360
+Una limitación que vale la pena no.
+
+00:07:01.700 --> 00:07:03.840
+Premium SSD V2 actualmente solo está disponible
+
+00:07:03.840 --> 00:07:05.920
+con almacenamiento localmente redundante o LRS.
+
+00:07:06.300 --> 00:07:08.040
+Eso significa que sus datos se replican tres veces
+
+00:07:08.040 --> 00:07:09.260
+dentro de un mismo centro de datos.
+
+00:07:09.740 --> 00:07:11.600
+Aún no admite almacenamiento redundante en zona.
+
+00:07:12.300 --> 00:07:14.360
+Así que, si necesita que sus datos se distribuyan
+
+00:07:14.360 --> 00:07:16.640
+en múltiples zonas de disponibilidad para mayor resiliencia
+
+00:07:16.640 --> 00:07:17.780
+necesitará otras opciones
+
+00:07:17.780 --> 00:07:19.540
+o añadir redundancia a nivel de aplicación.
+
+00:07:20.580 --> 00:07:22.040
+Aún así, para la mayoría de los escenarios
+
+00:07:22.040 --> 00:07:23.620
+Premium SSD V2 es el punto ideal.
+
+00:07:23.920 --> 00:07:26.440
+Obtiene la flexibilidad para ajustar el tamaño del almacenamiento,
+
+00:07:26.700 --> 00:07:28.640
+el rendimiento para manejar cargas de trabajo serias
+
+00:07:28.640 --> 00:07:30.180
+y una estructura de costos que no le castiga
+
+00:07:30.180 --> 00:07:31.200
+por querer mejores IOPS.
+
+00:07:31.980 --> 00:07:33.980
+Pero si su carga de trabajo exige el rendimiento más alto,
+
+00:07:34.140 --> 00:07:36.340
+piensa en SAP HANA, registros médicos electrónicos
+
+00:07:36.340 --> 00:07:37.480
+o comercio en tiempo real.
+
+00:07:38.480 --> 00:07:39.520
+Hay un nivel más que cubrir.
+
+00:07:40.320 --> 00:07:41.480
+UltraDisk el superdeportivo.
+
+00:07:41.900 --> 00:07:42.820
+Ahora, hablemos de UltraDisk.
+
+00:07:43.200 --> 00:07:44.040
+Este es el nivel superior.
+
+00:07:44.580 --> 00:07:46.920
+Hablamos de hasta 400.000 IOPS por disco,
+
+00:07:47.180 --> 00:07:48.640
+10.000 MB por segundo de rendimiento
+
+00:07:48.640 --> 00:07:50.600
+y una latencia medida en microsegundos,
+
+00:07:50.600 --> 00:07:51.380
+no en milisegundos.
+
+00:07:52.380 --> 00:07:52.780
+Microsegundos.
+
+00:07:53.380 --> 00:07:55.400
+UltraDisk está diseñado para cargas de trabajo críticas
+
+00:07:55.400 --> 00:07:56.480
+donde no puede permitirse tiempo.
+
+00:07:56.720 --> 00:07:57.700
+Aplicaciones que necesitan cerrar.
+
+00:07:58.060 --> 00:07:59.900
+Bases de datos masivas en memoria como SAP HANA,
+
+00:08:00.020 --> 00:08:01.060
+sistemas de registros médicos
+
+00:08:01.060 --> 00:08:02.920
+donde los médicos necesitan información al instante.
+
+00:08:03.500 --> 00:08:04.840
+Plataformas de trading de alta frecuencia
+
+00:08:04.840 --> 00:08:06.100
+donde los microsegundos cuestan millones.
+
+00:08:06.560 --> 00:08:07.840
+Trabajos de aprendizaje automático
+
+00:08:07.840 --> 00:08:09.380
+que procesan conjuntos de datos enormes.
+
+00:08:09.780 --> 00:08:10.540
+Precio también es diferente.
+
+00:08:10.980 --> 00:08:12.520
+El rendimiento y la capacidad son independientes.
+
+00:08:12.900 --> 00:08:14.160
+Entonces elige su SIOP si es su rendimiento
+
+00:08:14.160 --> 00:08:16.040
+y paga por ellos, por separado del almacenamiento.
+
+00:08:16.480 --> 00:08:17.700
+Por lo tanto, puede tener un disco pequeño
+
+00:08:17.700 --> 00:08:19.020
+con gran velocidad o un disco grande
+
+00:08:19.020 --> 00:08:19.820
+con velocidad moderada.
+
+00:08:20.160 --> 00:08:21.420
+No tiene que comprar capacidad de estar
+
+00:08:21.420 --> 00:08:22.260
+solo para obtener los SIOPs.
+
+00:08:22.540 --> 00:08:24.180
+También existe el almacenamiento redundante en zona.
+
+00:08:24.440 --> 00:08:25.480
+Detalle se copia sus datos
+
+00:08:25.480 --> 00:08:26.980
+a través de tres zonas en la misma región.
+
+00:08:27.460 --> 00:08:28.520
+Entonces, si un centro de datos falla,
+
+00:08:28.560 --> 00:08:29.460
+su disco sigue funcionando.
+
+00:08:29.800 --> 00:08:31.220
+Eso es importante para las cargas de trabajo
+
+00:08:31.220 --> 00:08:32.000
+que maneja UltraDisk.
+
+00:08:32.480 --> 00:08:33.660
+Ahora, aquí hay una característica más nueva.
+
+00:08:33.660 --> 00:08:35.040
+Instantáneas de acceso instantáneo.
+
+00:08:35.740 --> 00:08:37.260
+Está en versión preliminar para UltraDisk
+
+00:08:37.260 --> 00:08:38.200
+y Premium SD-W2.
+
+00:08:38.900 --> 00:08:40.720
+Normalmente, crear un disco a partir de una instantánea
+
+00:08:40.720 --> 00:08:42.320
+lleva tiempo mientras los datos se rehidratan.
+
+00:08:42.840 --> 00:08:43.800
+Con el acceso instantáneo,
+
+00:08:43.960 --> 00:08:45.660
+puede crear un disco en segundos en lugar de horas.
+
+00:08:46.260 --> 00:08:47.440
+Y el nuevo disco tiene un rendimiento
+
+00:08:47.440 --> 00:08:48.440
+casi completo de inmediato.
+
+00:08:49.140 --> 00:08:50.240
+Para la recuperación ante desastres,
+
+00:08:50.300 --> 00:08:50.820
+es un gran honor.
+
+00:08:51.060 --> 00:08:52.300
+Puede poner en marcha una copia completa
+
+00:08:52.300 --> 00:08:53.180
+de su base de datos en minutos.
+
+00:08:53.740 --> 00:08:55.700
+Piensa en UltraDisk como un auto de carrera de Fórmula 1.
+
+00:08:55.800 --> 00:08:56.420
+Velocidad increíble.
+
+00:08:56.800 --> 00:08:57.740
+Cada milisegundo cuenta.
+
+00:08:58.440 --> 00:08:59.780
+Pero no conduce un auto de Fórmula 1
+
+00:08:59.780 --> 00:09:00.840
+para ir a comprar al supermercado.
+
+00:09:01.280 --> 00:09:02.480
+Está construido para una sola cosa.
+
+00:09:02.480 --> 00:09:04.020
+Salir tan rápido como sea físicamente posible.
+
+00:09:04.460 --> 00:09:05.200
+Pagas por esa velocidad.
+
+00:09:05.560 --> 00:09:06.340
+Entonces, ¿cuándo deberías usar?
+
+00:09:06.600 --> 00:09:07.800
+Para la mayoría de las cargas de trabajo,
+
+00:09:07.920 --> 00:09:08.800
+UltraDisk es...
+
+00:09:08.800 --> 00:09:11.600
+Premium SD-W2 cubre el 95% de los casos
+
+00:09:11.600 --> 00:09:12.300
+por mucho menos nivel.
+
+00:09:12.800 --> 00:09:13.980
+Si no ejecutas SAP HANA,
+
+00:09:14.140 --> 00:09:15.780
+una plataforma de trading o algo extremo,
+
+00:09:16.000 --> 00:09:17.520
+no necesitas UltraDisk.
+
+00:09:17.940 --> 00:09:19.180
+Empieza con Premium SD-W2.
+
+00:09:19.620 --> 00:09:21.660
+Solo pasa Ultra si tu monitor indica que lo necesitas.
+
+00:09:21.900 --> 00:09:22.980
+Entonces, hemos cubierto los cuatro niveles.
+
+00:09:23.280 --> 00:09:23.960
+¿Cómo eliges RealMil?
+
+00:09:24.340 --> 00:09:25.200
+¿Cómo elegir el disco?
+
+00:09:25.640 --> 00:09:26.900
+Entonces, tienes los cuatro niveles.
+
+00:09:27.200 --> 00:09:27.860
+Ahora, ¿cómo eliges?
+
+00:09:28.100 --> 00:09:28.880
+Empieza con tres preguntas.
+
+00:09:29.320 --> 00:09:30.860
+Primero, es producción o desarrollo o pruebas.
+
+00:09:30.860 --> 00:09:32.180
+Si es desarrollo o pruebas,
+
+00:09:32.280 --> 00:09:33.500
+un servidor web de bajo tráfico,
+
+00:09:33.640 --> 00:09:35.120
+estándar SSD es todo lo que necesitas.
+
+00:09:35.320 --> 00:09:36.140
+No le des demasiadas vueltas.
+
+00:09:36.320 --> 00:09:37.680
+Ahorra dinero y ofrece un buen rendimiento.
+
+00:09:38.300 --> 00:09:40.020
+Segundo, ¿qué IOPS y latencia necesitan?
+
+00:09:40.340 --> 00:09:41.540
+Si necesitas baja latencia
+
+00:09:41.540 --> 00:09:43.280
+y miles de IOPS, necesitas Premium.
+
+00:09:43.680 --> 00:09:44.660
+La pregunta es, ¿quién lleva en Premium?
+
+00:09:45.080 --> 00:09:46.380
+Si tu carga de trabajo es constante,
+
+00:09:46.520 --> 00:09:47.520
+Premium SD normal funciona.
+
+00:09:47.840 --> 00:09:49.400
+Si quieres flexibilidad para ajustar el rendimiento
+
+00:09:49.400 --> 00:09:50.140
+sin cambiar de disco,
+
+00:09:50.280 --> 00:09:52.080
+usa Premium SD-W2.
+
+00:09:52.580 --> 00:09:53.600
+Tercero, ¿cuál es su presupuesto?
+
+00:09:53.800 --> 00:09:54.620
+Aquí es donde la cosa es buena.
+
+00:09:54.860 --> 00:09:56.760
+Premium SD-W2 es más barato que Ultra
+
+00:09:56.760 --> 00:09:58.340
+para un rendimiento similar en mayoría de los casos.
+
+00:09:58.340 --> 00:10:00.100
+Pero si ejecutas SAP HANA
+
+00:10:00.100 --> 00:10:00.900
+o un sistema de trading,
+
+00:10:01.000 --> 00:10:02.560
+la velocidad importa más que el costo.
+
+00:10:03.040 --> 00:10:03.760
+Déjame darte una guerra.
+
+00:10:04.460 --> 00:10:05.800
+Desarrollo pruebas y servidores web.
+
+00:10:06.060 --> 00:10:06.600
+Estándar SSD.
+
+00:10:07.400 --> 00:10:08.700
+Producción con IOPS moderados.
+
+00:10:09.000 --> 00:10:09.520
+Premium SSD.
+
+00:10:10.080 --> 00:10:11.240
+Producción con IOPS altos
+
+00:10:11.240 --> 00:10:12.200
+donde buscas flexibilidad.
+
+00:10:12.560 --> 00:10:13.620
+Premium SD-W2.
+
+00:10:14.460 --> 00:10:15.100
+IOPS extremos,
+
+00:10:15.200 --> 00:10:16.560
+donde la latencia de sub-milisegundos
+
+00:10:16.560 --> 00:10:17.120
+es crítica.
+
+00:10:17.260 --> 00:10:17.700
+Ultra disc.
+
+00:10:18.220 --> 00:10:18.980
+Aquí hay algunos consejos
+
+00:10:18.980 --> 00:10:19.880
+de optimización de costos
+
+00:10:19.880 --> 00:10:20.760
+que realmente ahorran dinero.
+
+00:10:21.240 --> 00:10:22.620
+Ajusta el tamaño de tu disco desde el principio.
+
+00:10:22.860 --> 00:10:24.440
+No compres un Premium SSD 4TB
+
+00:10:24.440 --> 00:10:25.340
+si solo necesitas 500.
+
+00:10:25.760 --> 00:10:27.200
+Usa Premium SSD-W2
+
+00:10:27.200 --> 00:10:28.220
+en lugar de Ultra siempre que pueda.
+
+00:10:28.740 --> 00:10:29.560
+Cubre la mayoría de los casos
+
+00:10:29.560 --> 00:10:30.100
+por menos dinero.
+
+00:10:30.760 --> 00:10:31.460
+Eliminos antiguos.
+
+00:10:31.920 --> 00:10:32.840
+Te acumulan y te cuesta dinero.
+
+00:10:33.420 --> 00:10:34.900
+Y elige LRS en lugar de CTRS
+
+00:10:34.900 --> 00:10:36.140
+si no necesitas redundancia de sol.
+
+00:10:36.780 --> 00:10:37.740
+LRS es más barato
+
+00:10:37.740 --> 00:10:39.180
+y aún ofrece 3 copias
+
+00:10:39.180 --> 00:10:40.220
+dentro de un centro de datos.
+
+00:10:40.900 --> 00:10:42.220
+Algo de lo que no tienes que preocuparte
+
+00:10:42.220 --> 00:10:42.780
+es el cifrado.
+
+00:10:43.160 --> 00:10:44.060
+El cifrado del lado del servidor
+
+00:10:44.060 --> 00:10:45.500
+con AS de 256 bits
+
+00:10:45.500 --> 00:10:46.120
+siempre está activado.
+
+00:10:46.340 --> 00:10:47.440
+Comple con FIP 142.
+
+00:10:48.100 --> 00:10:48.740
+Nada que habilitar,
+
+00:10:48.840 --> 00:10:49.480
+nada que configurar.
+
+00:10:49.780 --> 00:10:50.660
+Tus datos están cifrados
+
+00:10:50.660 --> 00:10:51.720
+en reposo en el predeterminado.
+
+00:10:51.720 --> 00:10:52.800
+Si necesitas más control
+
+00:10:52.800 --> 00:10:53.840
+puedes usar claves administradas
+
+00:10:53.840 --> 00:10:54.280
+por el cliente.
+
+00:10:54.420 --> 00:10:54.900
+Pero para la mayoría
+
+00:10:54.900 --> 00:10:55.500
+de los escenarios
+
+00:10:55.500 --> 00:10:56.300
+el cifrado predeterminado
+
+00:10:56.300 --> 00:10:56.660
+es suficiente.
+
+00:10:57.120 --> 00:10:57.800
+Antes de terminar,
+
+00:10:57.980 --> 00:10:59.260
+mencionemos un par de características
+
+00:10:59.260 --> 00:11:00.040
+más que importan
+
+00:11:00.040 --> 00:11:00.680
+para la durabilidad
+
+00:11:00.680 --> 00:11:01.140
+y la seguridad.
+
+00:11:02.480 --> 00:11:02.880
+Seguridad,
+
+00:11:03.140 --> 00:11:04.220
+durabilidad e instantánea.
+
+00:11:04.760 --> 00:11:05.440
+Azure Disk Storage
+
+00:11:05.440 --> 00:11:06.360
+apunta a una disponibilidad
+
+00:11:06.360 --> 00:11:07.780
+del 99.99%.
+
+00:11:07.780 --> 00:11:08.900
+Danos esos son 5.9.
+
+00:11:09.300 --> 00:11:09.980
+¿Cómo logran eso?
+
+00:11:11.060 --> 00:11:11.580
+Tres copias
+
+00:11:11.580 --> 00:11:12.400
+de cada fragmento de datos.
+
+00:11:13.200 --> 00:11:13.800
+Con almacenamiento
+
+00:11:13.800 --> 00:11:14.760
+localmente redundante,
+
+00:11:14.880 --> 00:11:15.420
+esas tres copias
+
+00:11:15.420 --> 00:11:16.640
+permanecen en un solo centro de datos.
+
+00:11:17.020 --> 00:11:17.700
+Si falla un disco,
+
+00:11:17.920 --> 00:11:18.860
+otra copia toma el control
+
+00:11:18.860 --> 00:11:19.400
+al instante.
+
+00:11:20.020 --> 00:11:21.100
+Con almacenamiento redundante
+
+00:11:21.100 --> 00:11:21.380
+en zona,
+
+00:11:21.460 --> 00:11:22.300
+las copias se distribuyen
+
+00:11:22.300 --> 00:11:23.200
+en tres zonas disponibles
+
+00:11:23.200 --> 00:11:23.780
+de la misma región.
+
+00:11:24.320 --> 00:11:25.240
+Si todo un centro de datos
+
+00:11:25.240 --> 00:11:25.780
+se desconecta,
+
+00:11:25.820 --> 00:11:26.840
+sus datos permanecen seguros.
+
+00:11:27.140 --> 00:11:27.880
+Cifrado siempre activado
+
+00:11:27.880 --> 00:11:28.540
+de forma predeterminada.
+
+00:11:28.900 --> 00:11:30.000
+El cifrado del lado del servidor
+
+00:11:30.000 --> 00:11:31.920
+usa AES de 256 bits
+
+00:11:31.920 --> 00:11:32.800
+y cumple con los estándares
+
+00:11:32.800 --> 00:11:33.580
+FIP 142.
+
+00:11:34.160 --> 00:11:35.240
+Eso cubre datos en reposo.
+
+00:11:35.640 --> 00:11:36.780
+Pero quizás necesite más control.
+
+00:11:37.180 --> 00:11:37.960
+Las claves administradas
+
+00:11:37.960 --> 00:11:38.420
+por el cliente
+
+00:11:38.420 --> 00:11:39.180
+le permiten conservar
+
+00:11:39.180 --> 00:11:40.040
+a usted mismo las claves en sí.
+
+00:11:40.480 --> 00:11:41.140
+El cifrado en host
+
+00:11:41.140 --> 00:11:41.540
+va más área.
+
+00:11:42.280 --> 00:11:43.060
+Cubre discos temporales
+
+00:11:43.060 --> 00:11:43.640
+y caché de disco
+
+00:11:43.640 --> 00:11:44.640
+lo que el predeterminado no hace.

@@ -1,0 +1,982 @@
+WEBVTT
+
+00:00:01.780 --> 00:00:03.780
+Die Rechnung eines Lieferanten landet auf ihrem Schreibtisch.
+
+00:00:04.140 --> 00:00:06.840
+Die Waren sind vielleicht schon im Lager oder die Dienstleistung bereits erbracht,
+
+00:00:07.000 --> 00:00:08.780
+aber die Zahlungsfrist beginnt sofort zu laufen.
+
+00:00:09.360 --> 00:00:11.440
+Was passiert also eigentlich, bevor das Geld das Unternehmen verlässt?
+
+00:00:11.860 --> 00:00:14.100
+Willkommen zu einem weiteren Wissensappen von MDR565.
+
+00:00:14.460 --> 00:00:18.960
+Ich bin mir Peters und heute betrachten wir die Kreditorenbuchhaltung in Dynamics 365 in einfachem Deutsch.
+
+00:00:19.400 --> 00:00:22.120
+Das ist nicht nur ein Ort, an dem wir Rechnungen in einen Bildschirm tippen.
+
+00:00:22.480 --> 00:00:25.180
+Es ist die Finanzabteilung des Unternehmens, die jede Rechnung prüft,
+
+00:00:25.240 --> 00:00:27.880
+wer hat sie gesendet, was wurde vereinbart und sollte sie bezahlt werden.
+
+00:00:28.640 --> 00:00:29.800
+Hier ist die einfachste Definition.
+
+00:00:29.800 --> 00:00:34.540
+Die Kreditorenbuchhaltung umfasst das Geld, das ihr Unternehmen Lieferanten für bereits gekaufte Waren oder Dienstleistungen schulden.
+
+00:00:34.700 --> 00:00:37.100
+Stellen Sie es sich wie eine Zahlungsstelle in einem großen Gebäude vor.
+
+00:00:37.460 --> 00:00:40.140
+Rechnungen kommen am Empfang an, werden mit den Unterlagen abgeglichen,
+
+00:00:40.280 --> 00:00:43.340
+durchlaufen eine Genehmigung und erreichen erst dann die zahlungsanweisende Stelle.
+
+00:00:43.900 --> 00:00:47.080
+Wir folgen diesem Weg vom Lieferantendatensatz bis zum abschließenden Bezahlstempel.
+
+00:00:47.660 --> 00:00:49.820
+Dynamics 365 nennt das einen Ausgleich.
+
+00:00:50.640 --> 00:00:51.980
+Warum gibt es die Kreditorenbuchhaltung?
+
+00:00:53.300 --> 00:00:55.640
+Stellen Sie sich vor, Sie führen eine kleine Firma, die Büromöbel verkauft.
+
+00:00:55.980 --> 00:00:57.680
+Sie brauchen Schreibtische, bevor Sie sie verkaufen können.
+
+00:00:57.680 --> 00:01:03.040
+Außerdem benötigen Sie Versandkartons, Reinigungsdienste, Internetzugang, Ersatzteile und vielleicht ein Lieferunternehmen.
+
+00:01:04.160 --> 00:01:08.500
+Wenn Sie jeden Lieferanten sofort bei der Bestellung bezahlen müssten, wäre das Einkaufen sehr schnell sehr schwierig.
+
+00:01:09.240 --> 00:01:12.100
+Die meisten Unternehmen kaufen zuerst und bezahlen später zu vereinbarten Konditionen.
+
+00:01:12.460 --> 00:01:15.420
+Ein Lieferant liefert die Ware oder beendet die Arbeit und schickt dann eine Rechnung.
+
+00:01:16.420 --> 00:01:20.200
+Ihr Unternehmen schuldet nun diesen Betrag, überweist das Geld aber nicht, ohne vorher die Details zu prüfen.
+
+00:01:20.660 --> 00:01:23.140
+Dieser unbezahlte Betrag steht in den Büchern des Unternehmens als Verbindlichkeit.
+
+00:01:23.140 --> 00:01:27.140
+Verbindlichkeit klingt nach einem komplizierten Finanzbegriff, aber die Bedeutung ist einfach.
+
+00:01:27.320 --> 00:01:29.440
+Es ist ein Betrag, den die Firma jemand anderem schuldet.
+
+00:01:30.180 --> 00:01:35.860
+Wenn Ihr Unternehmen eine Rechnung für Bürobedarf erhält und diese noch nicht bezahlt hat, gehört sie in die Kreditorenbuchhaltung, bis die Zahlung erfolgt.
+
+00:01:36.740 --> 00:01:39.360
+Das Unternehmen hat das Geld vorerst noch, muss aber auch ein Versprechen einlösen.
+
+00:01:39.880 --> 00:01:45.080
+Das ist wichtig, denn ein Unternehmen kann auf dem Bankkonto gesund aussehen, während es gleichzeitig einen Stapel unbezahlter Rechnungen vor sich her schiebt.
+
+00:01:45.080 --> 00:01:47.520
+Finanzteams müssen beide Seiten sehen.
+
+00:01:48.120 --> 00:01:51.580
+Wie viel Bargeld liegt auf der Bank und wie viel davon wird das Unternehmen bald wieder verlassen?
+
+00:01:52.120 --> 00:01:55.320
+Vor vernetzten Finanzsystemen wurde diese Arbeit oft zur Zettelwirtschaft.
+
+00:01:56.000 --> 00:02:01.800
+Eine Rechnung kam per Post, lag auf einem Schreibtisch, ging per Hauspost zur Genehmigung, während eine andere im E-Mail-Posteingang versauerte.
+
+00:02:01.800 --> 00:02:07.380
+Jemand tippte vielleicht die gleiche Rechnung in eine Tabelle, während eine andere Person sie in das Buchhaltungssystem eingab.
+
+00:02:08.000 --> 00:02:09.140
+Das führt zu bekannten Problemen.
+
+00:02:09.560 --> 00:02:16.820
+Ein Manager übersieht eine Genehmigungs-E-Mail, eine Rechnung wird verspätet bezahlt oder ein Lieferant schickt dieselbe Rechnung erneut, ohne dass jemand bemerkt, dass sie das Finanzteam bereits erreicht hat.
+
+00:02:17.340 --> 00:02:21.100
+Schlimmer noch, sie könnte doppelt bezahlt werden, weil die Papierkopie und die E-Mail-Kopie wie separate Rechnungen aussehen.
+
+00:02:21.440 --> 00:02:24.940
+Dynamic Styrnum 65 bietet dem Unternehmer einen zentralen Ort, um diese Aufgaben zu verfolgen.
+
+00:02:24.940 --> 00:02:30.760
+Es erfasst, was das Unternehmen schuldet, hilft bei der Rechnungsprüfung und sorgt für einen klaren Prozess vom Rechnungseingang bis zur Bezahlung, bis zur Bezahlung.
+
+00:02:31.040 --> 00:02:33.360
+Das bedeutet nicht, dass jede Rechnung ohne menschliche Prüfung abgewickelt wird.
+
+00:02:33.600 --> 00:02:40.400
+Das Finanzteam entscheidet weiterhin, wenn etwas falsch erscheint, aber das System liefert die Daten und Regeln für diese Entscheidung, ohne dass Papier im Haus herumgetragen werden muss.
+
+00:02:40.800 --> 00:02:43.600
+Vielleicht hören Sie im gleichen Zusammenhang auch von Forderungen aus Lieferungen und Leistungen.
+
+00:02:43.840 --> 00:02:47.160
+Die Namen klingen fast identisch, zielen aber in entgegengesetzte Richtungen.
+
+00:02:47.480 --> 00:02:50.780
+Die Verbindlichkeiten erfassen Geld, das ihr Unternehmen verlässt, weil sie Lieferanten etwas schulden.
+
+00:02:50.780 --> 00:02:54.700
+Die Forderungen erfassen Geld, das bei ihrem Unternehmen eingeht, weil Kunden ihnen etwas schulden.
+
+00:02:55.460 --> 00:02:58.580
+Wenn ihr Unternehmendrucker von einem Lieferanten kauft, fließt diese Rechnung in die Verbindlichkeiten ein.
+
+00:02:58.980 --> 00:03:03.700
+Wenn ihr Unternehmen Schreibtische an einen Kunden verkauft und eine Rechnung stellt, fließt diese Kundenrechnung in die Forderungen ein.
+
+00:03:04.300 --> 00:03:08.080
+Verbindlichkeiten erfassen also, was sie zahlen müssen, während Forderungen erfassen, was andere ihnen zahlen müssen.
+
+00:03:08.520 --> 00:03:10.880
+Die Verbindlichkeiten zielen auf ein sehr praktisches Ergebnis ab.
+
+00:03:11.200 --> 00:03:14.020
+Bezahlen Sie den richtigen Lieferanten den korrekten Betrag zum vereinbarten Termin.
+
+00:03:14.400 --> 00:03:17.180
+Zahlen Sie zu früh, verliert das Unternehmen Liquidität früher als nötig.
+
+00:03:17.180 --> 00:03:21.840
+Zahlen Sie zu spät, fordert der Lieferant die Zahlung möglicherweise ein oder gewährt keine günstigen Konditionen mehr.
+
+00:03:22.580 --> 00:03:25.480
+Zahlen Sie den falschen Betrag, muss später jemand den Fehler korrigieren.
+
+00:03:25.640 --> 00:03:28.160
+Oft mit E-Mails, Gutschriften und viel Frust.
+
+00:03:28.860 --> 00:03:35.800
+Bevor eine Rechnung diesen Prozess durchlaufen kann, muss Dynamics 365 genau wissen, wer der Lieferant ist und welche Regeln für diese Beziehung gelten.
+
+00:03:37.140 --> 00:03:38.460
+Die Grundlage für Lieferanten schaffen.
+
+00:03:38.840 --> 00:03:43.440
+Bevor Dynamics 365 eine einzige Rechnung verarbeiten kann, muss es zuerst wissen, von wem sie stammt.
+
+00:03:43.780 --> 00:03:45.100
+Hier kommt der Lieferantendatensatz ins Spiel.
+
+00:03:45.100 --> 00:03:48.700
+Ohne diesen weiß das System nicht, wer bezahlt werden soll oder welche Regeln zu befolgen sind.
+
+00:03:49.000 --> 00:03:52.440
+Ein Lieferant könnte physische Güter wie Papier, Laptops oder Ersatzteile liefern.
+
+00:03:52.980 --> 00:03:55.960
+Er könnte auch Dienstleistungen wie Buchhaltung oder Software-Support anbieten.
+
+00:03:56.480 --> 00:03:58.440
+Das Produkt ändert sich, aber die Rolle bleibt dieselbe.
+
+00:03:59.280 --> 00:04:01.180
+Dies ist die Partei, die Ihr Unternehmen möglicherweise bezahlen muss.
+
+00:04:01.560 --> 00:04:04.820
+Betrachten Sie den Lieferantendatensatz als erakte des Lieferanten Dynamics 365.
+
+00:04:05.680 --> 00:04:10.060
+Er speichert die grundlegenden Details für das Finanzteam, legt aber auch Regeln fest, die spätere Abläufe steuern.
+
+00:04:10.060 --> 00:04:15.140
+Sie geben den Namen, die Adresse und die Kontaktdaten des Lieferanten ein, damit das Unternehmen genau weiß, mit wem es zu tun hat.
+
+00:04:15.780 --> 00:04:21.040
+Sie können auch die Währung für Rechnungen und Zahlungen erfassen, was einen großen Unterschied macht, wenn Sie bei Lieferanten in verschiedenen Ländern einkaufen.
+
+00:04:21.540 --> 00:04:22.640
+Kommen wir zu den Zahlungsdetails.
+
+00:04:22.780 --> 00:04:25.640
+Ein Kreditordatensatz kann Zahlungsbedingungen und eine Zahlungsmethode enthalten.
+
+00:04:25.980 --> 00:04:29.220
+Das mögen nur kleine Felder auf einem Bildschirm sein, aber Sie beantworten sehr praktische Fragen.
+
+00:04:29.780 --> 00:04:31.060
+Wann soll dieser Lieferant bezahlt werden?
+
+00:04:31.540 --> 00:04:32.920
+Und wie soll das Unternehmen das Geld überweisen?
+
+00:04:33.540 --> 00:04:35.100
+Zahlungsbedingungen legen die Regel für das Fälligkeitsdatum.
+
+00:04:35.380 --> 00:04:38.040
+Manche Lieferanten erlauben die Zahlung 30 Tage nach Rechnungsdatum.
+
+00:04:38.260 --> 00:04:39.820
+Andere verlangen die Zahlung innerhalb von 14 Tagen.
+
+00:04:39.980 --> 00:04:42.040
+Einige bieten sogar einen Rabatt bei vorzeitiger Zahlung an.
+
+00:04:42.340 --> 00:04:47.060
+Dynamics 365 verwendet die erfassten Bedingungen, um automatisch das Fälligkeitsdatum jeder Rechnung zu berechnen.
+
+00:04:47.580 --> 00:04:48.960
+Niemand muss sich die Vereinbarung merken.
+
+00:04:49.300 --> 00:04:50.340
+Dies sorgt für Konsistenz.
+
+00:04:50.680 --> 00:04:55.020
+Wenn fünf verschiedene Personen Rechnungen für denselben Kreditor bearbeiten, befolgen alle die gleiche Zahlungsregel.
+
+00:04:55.560 --> 00:04:59.580
+Niemand muss alte E-Mails durchsuchen oder das Einkaufsteam anrufen, nur um zu fragen, wann eine Rechnung bezahlt werden muss.
+
+00:04:59.880 --> 00:05:02.060
+Die Zahlungsmethode beschreibt, wie das Geld den Empfänger erreicht.
+
+00:05:02.920 --> 00:05:05.440
+Ein Kreditor bezahlt einen Kreditor vielleicht per Überweisung, einen anderen per Schecke.
+
+00:05:06.020 --> 00:05:08.380
+In manchen Fällen kann ein Unternehmen auch Wechsel nutzen.
+
+00:05:09.620 --> 00:05:14.700
+Dynamics 365 ermöglicht es Ihnen, eigene Zahlungsmethoden zu definieren und diese bei Bedarf mit Systemtypen zu verknüpfen.
+
+00:05:15.100 --> 00:05:17.240
+Nun, Unternehmen haben es normalerweise mit mehr als einem Kreditor zu tun.
+
+00:05:17.700 --> 00:05:20.800
+Ein wachsendes Unternehmen könnte Dutzende, Hunderte oder sogar Tausende haben.
+
+00:05:21.120 --> 00:05:25.080
+Jede Einstellung für jeden Einzelnen von Grund auf neu zu erstellen, wäre zeitaufwendig und fehleranfällig.
+
+00:05:25.340 --> 00:05:27.840
+Deshalb verwendet Dynamics 365 Kreditorengruppe.
+
+00:05:27.840 --> 00:05:31.480
+Eine Kreditorengruppe fasst Kreditoren zusammen, die dieselben allgemeinen Finanzregeln teilen.
+
+00:05:31.480 --> 00:05:36.020
+Sie könnten zum Beispiel lokale Bürobedarfsanbieter in einer Gruppe zusammenfassen und ausländische Lieferanten in einer anderen.
+
+00:05:36.280 --> 00:05:40.280
+Die Gruppe enthält gemeinsame Einstellungen für die Buchung von Transaktionen, die Abwicklung von Zahlungen und Ausgleichen,
+
+00:05:40.440 --> 00:05:42.160
+sowie die Berichterstattung über diese Kreditorenseiten.
+
+00:05:42.900 --> 00:05:45.420
+Sie führen weiterhin einen separaten Kreditoren-Datensatz für jeden Fall.
+
+00:05:45.820 --> 00:05:50.360
+Das ist wichtig, da jeder Lieferant seinen eigenen Namen, seine Adresse, Zahlungsdetails und Historie benötigt.
+
+00:05:50.680 --> 00:05:53.180
+Die Kreditorengruppe bietet lediglich einen gemeinsamen Ausgangspunkt,
+
+00:05:53.320 --> 00:05:55.780
+damit die Finanzabteilung nicht immer wieder dieselben Regeln neu erstellen muss.
+
+00:05:55.780 --> 00:05:59.180
+Im Hintergrund gibt es eine weitere Komponente, das Kreditorenbuchungsprofil.
+
+00:05:59.380 --> 00:06:01.800
+Der Name klingt technisch, also lassen Sie es uns einfach ausdrücken.
+
+00:06:02.280 --> 00:06:07.240
+Ein Buchungsprofil ist ein Plan, der Dynamics 365 mitteilt, wo Kreditorentransaktionen im Hauptbuch hingehören.
+
+00:06:07.820 --> 00:06:10.200
+Das Hauptbuch ist das zentrale Buchungswerk der Finanzkontenunternehmens.
+
+00:06:10.560 --> 00:06:14.840
+Wenn eine Rechnung gebucht wird, muss Dynamics 365 sowohl erfassen, was das Unternehmen schuldet,
+
+00:06:14.900 --> 00:06:16.960
+als auch, wohin die zugehörigen Kosten gehören.
+
+00:06:17.640 --> 00:06:20.580
+Das Buchungsprofil steuert die Kreditorenseite dieses Buchungssatzes anhand der Regeln,
+
+00:06:20.700 --> 00:06:22.860
+die Sie für den Kreditor oder die Kreditorengruppe festgelegt haben.
+
+00:06:22.860 --> 00:06:26.800
+Das Finanzpersonal muss diese Hauptbuchkonten nicht jedes Mal aus dem Gedächtnis auswählen.
+
+00:06:27.220 --> 00:06:30.040
+Stattdessen folgt das System einem Plan, der inkonsistente Buchungen reduziert
+
+00:06:30.040 --> 00:06:32.540
+und dem Finanzteam eine viel klare Übersicht der Verbindlichkeiten bietet.
+
+00:06:32.940 --> 00:06:35.460
+Das Unternehmen bereitet auch die Zahlungsseite vor, bevor Rechnungen eintreffen.
+
+00:06:35.780 --> 00:06:37.820
+In der Finanz- und Bankverwaltung richten Sie die Bankkonten ein,
+
+00:06:37.860 --> 00:06:39.320
+von denen die Zahlungen der Kreditoren geleistet werden.
+
+00:06:40.020 --> 00:06:42.120
+Zahlungserfassungsjournale bieten dem Finanzpersonal einen Arbeitsbereich,
+
+00:06:42.200 --> 00:06:44.480
+um Zahlungen mittels genehmigter Methoden vorzubereiten und zu verbieten.
+
+00:06:44.760 --> 00:06:47.660
+Zusammenfassend lässt sich sagen, der Krediterdatensatz bestimmt, wer Geld erhält.
+
+00:06:48.160 --> 00:06:50.260
+Die Zahlungsbedingungen legen fest, wann die Zahlung fällig ist
+
+00:06:50.260 --> 00:06:53.340
+und die Zahlungsmethode sowie das Bankkonto bestimmen, wie das Geld das Unternehmen verlässt.
+
+00:06:53.860 --> 00:06:56.780
+Sind diese Regeln festgelegt, kann eine Rechnung in die Finanzabteilung gelangen
+
+00:06:56.780 --> 00:06:59.180
+und ihren Weg vom Eingang bis zur Genehmigung beginnen.
+
+00:07:01.040 --> 00:07:04.240
+Mit dem vorhandenen Kreditordatensatz weiß Dynamics 365 nun,
+
+00:07:04.320 --> 00:07:05.840
+wer zu bezahlen ist und nach welchen Regeln.
+
+00:07:06.400 --> 00:07:08.080
+Was passiert also, wenn eine tatsächliche Rechnung eintrifft?
+
+00:07:08.500 --> 00:07:10.220
+Manchmal gibt der Sachbearbeiter sie manuell ein.
+
+00:07:10.300 --> 00:07:13.900
+Dies ist der Fall, wenn eine Rechnung per E-Mail auf Papier oder über ein Kreditorportal eingeht
+
+00:07:13.900 --> 00:07:15.980
+und die Details von jemandem ins System eingetippt werden müssen.
+
+00:07:15.980 --> 00:07:19.360
+Der Sachbearbeiter wählt den Kreditor aus, gibt Rechnungsnummer und Datum ein
+
+00:07:19.360 --> 00:07:23.920
+und fügt dann die Zeilen, Beträge, Steuern und die zugehörige Bestellreferenz hinzu.
+
+00:07:24.700 --> 00:07:26.320
+Die Rechnungsnummer verdient besondere Aufmerksamkeit.
+
+00:07:26.660 --> 00:07:30.160
+Sie stammt vom Kreditor, nicht von Ihrem Unternehmen und hilft dabei genau diese Rechnung zu identifizieren.
+
+00:07:30.560 --> 00:07:35.520
+Wenn eine Rechnung über 1200 Dollar von Northwind Office Supplies mit der Nummer N148 eintrifft,
+
+00:07:35.620 --> 00:07:39.880
+kann Dynamics 365 diese Nummer zusammen mit dem Kreditor Datensatz nutzen, um doppelte Buchungen zu erkennen.
+
+00:07:39.880 --> 00:07:41.540
+Auch Anhänge gehören zum Datensatz.
+
+00:07:42.080 --> 00:07:47.240
+Eine PDF-Rechnung, ein gescanntes Dokument oder begleitende Unterlagen können in Dynamics 365 direkt bei der Rechnung abgelegt werden.
+
+00:07:47.680 --> 00:07:51.740
+Das bedeutet, dass die Person, die den Datensatz prüft, das Dokument hinter den Zahlen sehen kann,
+
+00:07:51.820 --> 00:07:53.980
+ohne in einem Postfach oder Aktenschrank suchen zu müssen.
+
+00:07:55.040 --> 00:07:57.480
+Bei größeren Mengen können Rechnungen elektronisch übertragen werden.
+
+00:07:58.100 --> 00:08:01.540
+Dynamics 365 unterstützt den Import von Rechnungsdaten über Datenentitäten.
+
+00:08:01.880 --> 00:08:05.520
+Stellen Sie sich eine Datenentität wie ein Standardformular vor, das ein anderes System ausfüllen kann,
+
+00:08:05.600 --> 00:08:07.720
+bevor es die Informationen an Dynamics 365 sendet.
+
+00:08:07.720 --> 00:08:11.460
+Ein externer Rechnungserfassungsdienst kann beispielsweise den Rechnungskopf,
+
+00:08:11.560 --> 00:08:14.380
+die Zeilen und Dokumentenanhänger in einem einzigen Datenpaket senden.
+
+00:08:15.060 --> 00:08:20.620
+Der Kopf enthält die wichtigsten Rechnungsdetails, Kreditor, Rechnungsnummer, Daten, Währung, Gesamtbetrag und Bestellreferenz.
+
+00:08:21.040 --> 00:08:22.760
+Die Zeilen erläutern, wo vielen Kosten berechnet werden.
+
+00:08:23.140 --> 00:08:26.760
+Eine Zeile könnte Druckerpapier abdecken, eine andere Toner und eine weitere die Lieferung.
+
+00:08:26.760 --> 00:08:30.700
+Die getrennte Auflistung dieser Details hilft dem Finanzpersonal genau zu sehen, was es genehmigt.
+
+00:08:31.100 --> 00:08:33.000
+Steuerinformationen werden ebenfalls mit der Rechnung übermittelt.
+
+00:08:33.360 --> 00:08:36.860
+Dynamics 365 benötigt den Steuerbetrag und die dazugehörigen Details,
+
+00:08:36.860 --> 00:08:38.280
+damit das Unternehmen die Rechnung korrekt verbucht.
+
+00:08:38.400 --> 00:08:40.940
+Einige Dinge können verhindern, dass eine Rechnung ohne Prüfung weitergeleitet wird.
+
+00:08:41.240 --> 00:08:45.540
+Ein fehlender Kreditor, ein ungültiges Datum, eine doppelte Rechnungsnummer oder eine nicht übereinstimmende Summe.
+
+00:08:45.600 --> 00:08:46.800
+Diese Unterbrechung schützt das Unternehmen.
+
+00:08:47.160 --> 00:08:51.520
+Eine Kreditorenrechnungsrichtlinie prüft, ob die Rechnung den von ihrem Unternehmen festgelegten Regeln entspricht.
+
+00:08:51.760 --> 00:08:54.100
+So glätten Prüfungen, suchen nach Rechnungen, die bekannt vorkommen,
+
+00:08:54.160 --> 00:08:56.600
+wie etwa derselbe Kreditor und dieselbe Rechnungsnummer, die bereits erfasst wird.
+
+00:08:56.700 --> 00:08:58.560
+Das Ziel ist es nicht, dem Kreditor etwas zu unterstellen.
+
+00:08:59.040 --> 00:09:01.520
+Kreditoren senden Rechnungen erneut, weil sie sich nicht sicher sind, ob diese angekommen.
+
+00:09:01.520 --> 00:09:04.280
+Ein Sachbearbeiter könnte versehentlich das selbe PDF zweimal eingeben.
+
+00:09:04.640 --> 00:09:07.520
+So oder so, eine Rechnung doppelt zu bezahlen, erzeugt Arbeit, die niemand haben möchte.
+
+00:09:07.820 --> 00:09:10.980
+Sobald Dynamics 365 die Rechnung akzeptiert, ist die nächste Frage einfach.
+
+00:09:11.280 --> 00:09:12.020
+Wer darf sie genehmigen?
+
+00:09:12.580 --> 00:09:13.520
+Hier kommt der Workflow ins Spiel.
+
+00:09:13.920 --> 00:09:15.820
+Workflow ist der Genehmigungsweg innerhalb des Systems.
+
+00:09:16.300 --> 00:09:19.160
+Anstatt einem PDF an einen Manager zu mailen und auf Rückmeldung zu hoffen,
+
+00:09:19.440 --> 00:09:24.280
+sendet Dynamics 365 die Rechnung an die Person oder Rolle, die ihre Unternehmensregeln festlegen.
+
+00:09:25.280 --> 00:09:29.200
+Jede Organisation entscheidet diese Regeln basierend darauf, wie sie Finanzentscheidungen handhaben möchte.
+
+00:09:29.200 --> 00:09:31.640
+Eine kleine Routine-Rechnung folgt vielleicht im kurzen Weg.
+
+00:09:32.000 --> 00:09:34.580
+Eine Rechnung über einen bestimmten Betrag erfordert möglicherweise einen Senior-Manager.
+
+00:09:34.960 --> 00:09:38.280
+Eine Rechnung, die an eine bestimmte Abteilung gebunden ist, kann an deren Manager gehen.
+
+00:09:38.960 --> 00:09:41.780
+Sie können sogar verschiedene Genehmigungspfade für unterschiedliche Kreditorentypen erstellen,
+
+00:09:41.860 --> 00:09:43.480
+wie Warenlieferanten, Dienstleister oder Auftragnehmer.
+
+00:09:43.720 --> 00:09:45.900
+Der Weg folgt der Regel, nicht dem Gedächtnis einer Person.
+
+00:09:46.280 --> 00:09:47.860
+Dies macht Genehmigungen wesentlich einfach folgbar.
+
+00:09:48.320 --> 00:09:52.980
+Die Finanzabteilung kann sehen, ob eine Rechnung auf Prüfung wartet, genehmigt wurde oder weitere Informationen benötigt.
+
+00:09:53.360 --> 00:09:55.360
+Die genehmigende Person kann die Rechnung prüfen und entscheiden,
+
+00:09:55.360 --> 00:09:57.700
+ob sie zu ihrer Abteilung gehört und ob der Betrag korrekt erscheint.
+
+00:09:57.700 --> 00:10:00.900
+Einige Rechnungen erfüllen alle Regeln und werden automatisch weitergeleitet.
+
+00:10:01.260 --> 00:10:05.260
+Der Kreditor ist bekannt, die importierten Details sind vollständig und die Rechnung besteht die Richtlinienprüfungen.
+
+00:10:05.740 --> 00:10:08.900
+Diese Rechnungen erfordern niemanden, der jedes Mal dieselben grundlegenden Prüfungen wiederholt.
+
+00:10:09.360 --> 00:10:10.660
+Andere Rechnungen werden zur Ausnahme fällt.
+
+00:10:11.020 --> 00:10:12.160
+Vielleicht fehlt das Kreditor- und Konto.
+
+00:10:12.640 --> 00:10:13.920
+Vielleicht existiert die Rechnungsnummer bereit.
+
+00:10:14.420 --> 00:10:16.000
+Vielleicht enthält eine importierte Zeile einen Fehler.
+
+00:10:16.540 --> 00:10:20.100
+Dynamics 365 speichert diese Rechnungen in einer Liste der Importfehler,
+
+00:10:20.200 --> 00:10:22.800
+wo Finanzmitarbeiter die Fehlermeldung sehen und das Problem beheben können,
+
+00:10:22.800 --> 00:10:24.200
+bevor eine ausstehende Rechnung erstellt wird.
+
+00:10:24.200 --> 00:10:26.140
+Das Dokument bleibt bei der Prüfung wichtig.
+
+00:10:26.680 --> 00:10:29.840
+Dynamics 365 enthält einen Anhang-Viewer auf Rechnungsseiten,
+
+00:10:30.140 --> 00:10:34.040
+sodass die Finanzkraft direkt neben dem zu korrigierenden Datensatz das Rechnungsbild betrachten kann.
+
+00:10:34.520 --> 00:10:36.920
+Kein Wechsel zwischen Bildschirmen erforderlich, nur um zu bestätigen,
+
+00:10:37.020 --> 00:10:39.960
+ob ein Kreditor 6.000 oder 8.000 auf der ursprünglichen Rechnung getippt hat.
+
+00:10:40.280 --> 00:10:41.820
+Automatisierung erledigt den Routinevorgang.
+
+00:10:42.060 --> 00:10:42.900
+Menschen klären die Fragen.
+
+00:10:43.340 --> 00:10:46.480
+Die Genehmigung bestätigt, dass die richtige Person der Weiterleitung der Rechnung zugestimmt hat,
+
+00:10:46.480 --> 00:10:49.800
+aber sie beweist noch nicht, dass der Kreditor genau das berechnet hat, was berechnet hat, was bestellt oder erhalten.
+
+00:10:49.960 --> 00:10:52.240
+Dafür vergleicht Dynamics 365 den Papier.
+
+00:10:52.240 --> 00:10:53.200
+Rechnungsabgleich
+
+00:10:53.200 --> 00:10:57.160
+Die Überprüfung der Bestellung bestätigt, dass die richtige Person die Rechnung geprüft hat,
+
+00:10:57.660 --> 00:10:59.160
+aber der Abgleich beantwortet eine andere Frage.
+
+00:10:59.660 --> 00:11:02.200
+Timmt die Rechnung mit dem überein, was das Unternehmen tatsächlich kaufen wollte?
+
+00:11:02.660 --> 00:11:07.060
+Wenn ein Einkauf mit einer Bestellung beginnt, hat Dynamics 365 einen Datensatz zum Abgleich.
+
+00:11:07.440 --> 00:11:09.940
+Vertrachten Sie eine Bestellung als den Bestellbeleg des Unternehmens.
+
+00:11:10.380 --> 00:11:14.060
+Er fasst den Lieferanten, das Angeforderte, die Menge, den Preis und die Bedingungen.
+
+00:11:14.300 --> 00:11:16.880
+Jemand im Einkauf erstellt diesen Auftrag, bevor eine Rechnung eintrifft.
+
+00:11:17.240 --> 00:11:17.880
+Warum ist das wichtig?
+
+00:11:18.500 --> 00:11:21.060
+Die Bestellung hält die Vereinbarung fest, bevor die Rechnung auftaucht.
+
+00:11:21.060 --> 00:11:24.060
+Ohne sie sieht ein Finanzmitarbeiter nur eine Rechnung unter einem Lieferanten an.
+
+00:11:24.400 --> 00:11:27.620
+Mit ihr kann er die Forderung des Lieferanten mit der ursprünglichen Anfrage vergleichen.
+
+00:11:27.880 --> 00:11:30.120
+Bei physischen Gütern gibt es einen weiteren wichtigen Datensatz.
+
+00:11:30.440 --> 00:11:33.480
+Wenn eine Lieferung eintrifft, erfasst das Lagerteam einen Wareneingang,
+
+00:11:33.980 --> 00:11:38.240
+der in Dynamics 365 als Nachweis dient, dass die Waren das Unternehmen erreicht haben, einschließlich der Menge.
+
+00:11:38.240 --> 00:11:42.460
+Das bedeutet nicht, dass jeder Artikel einwandfrei war, aber es dokumentiert, was auf diese Bestellung hineingegangen ist.
+
+00:11:42.700 --> 00:11:44.240
+Stellen Sie sich vor, ein Unternehmen bestellt zehn Bürostüten.
+
+00:11:44.580 --> 00:11:47.020
+Die Bestellung führt zehn Stühle zu einem vereinbarten Preis auf.
+
+00:11:47.480 --> 00:11:51.000
+Aber bei Ankunft des LKWs zählt das Lager nur acht, da zwei nachgeliefert werden müssen.
+
+00:11:51.900 --> 00:11:54.300
+Das Wareneingangsteam verbucht einen Wareneingang für acht Stühle.
+
+00:11:54.580 --> 00:11:57.900
+Dann sendet der Lieferant eine Rechnung über zehn Stühle, was aus seiner Sicht korrekt sein mag,
+
+00:11:57.960 --> 00:12:00.560
+wenn er den gesamten Auftrag abrechnet, bevor die letzten zwei versandt werden.
+
+00:12:00.560 --> 00:12:02.460
+Aber jetzt hat Ihr Unternehmen eine Differenz.
+
+00:12:02.900 --> 00:12:04.900
+Themen bestellt, acht erhalten, für zehn in Rechnung gestellt.
+
+00:12:05.800 --> 00:12:08.800
+Dynamics 365 kann diese Differenz durch den Rechnungsabgleich erkennen.
+
+00:12:09.500 --> 00:12:12.020
+Der Zweiwegeabgleich vergleicht die Bestellung mit der Lieferantenrechnung
+
+00:12:12.020 --> 00:12:14.700
+und prüft, ob die Rechnung bei Preis und Menge mit der Bestellung übereinstimmt.
+
+00:12:15.380 --> 00:12:18.640
+Dies funktioniert bei Einkäufen, bei denen die Überprüfung der ursprünglichen Bestellung ausreicht.
+
+00:12:19.000 --> 00:12:22.580
+Es erkennt, wenn ein Lieferant einen höheren Preis oder mehr Einheiten als bestellt berechnet,
+
+00:12:22.580 --> 00:12:26.240
+prüft jedoch nicht, ob die Waren tatsächlich angekommen sind, da nur zwei Datensätze verglichen werden.
+
+00:12:26.420 --> 00:12:27.640
+Bestellung und Rechnung.
+
+00:12:28.480 --> 00:12:30.320
+Der Dreiwegeabgleich fügt den Wareneingang hinzu.
+
+00:12:30.560 --> 00:12:34.800
+Dynamics 365 vergleicht nun also Bestellung, Wareneingang und Rechnung gemeinsam.
+
+00:12:35.580 --> 00:12:40.140
+In unserem Stuhlbeispiel sieht das System die Bestellung über zehn, den Eingang über acht und die Rechnung über zehn.
+
+00:12:40.900 --> 00:12:44.360
+Und diese Differenz wird zum Grund, die Rechnung anzuhalten, anstatt sie weiterlaufen zu lassen.
+
+00:12:44.980 --> 00:12:48.760
+Für Unternehmen, die Lagerbestände, Ausrüstung oder große Mengen physischer Güter kaufen,
+
+00:12:48.760 --> 00:12:51.480
+bietet diese Prüfung der Finanzabteilung eine stärkere Kontrolle,
+
+00:12:51.600 --> 00:12:55.180
+indem Zahlungen für nicht erhaltene Artikel oder für mehr als gelieferte Mengen vermieden werden.
+
+00:12:55.920 --> 00:12:57.640
+Der Einkauf bestätigt die Vereinbarung.
+
+00:12:57.640 --> 00:13:01.240
+Der Wareneingang bestätigt den Erhalt und die Lieferantenrechnung fordert zur Zahlung auf.
+
+00:13:01.560 --> 00:13:01.820
+Autsch.
+
+00:13:02.180 --> 00:13:04.140
+Alle drei Datensätze müssen die gleiche Geschichte erzählen.
+
+00:13:04.620 --> 00:13:06.480
+Kleine Unterschiede kommen im Geschäftsalltag vor.
+
+00:13:06.900 --> 00:13:11.340
+Ein Preis kann aufgrund von Rundungen abweichen oder ein Lieferant könnte eine zulässige Mengenänderung vornehmen.
+
+00:13:12.200 --> 00:13:16.880
+Wenn jede kleine Differenz eine Rechnung stoppen würde, verlören Finanzteams zu viel Zeit mit harmlosen Problemen.
+
+00:13:16.880 --> 00:13:21.520
+Dynamics 365 ermöglicht es einem Unternehmen daher, Abgleichrichtlinien und Toleranzgrenzen festzulegen.
+
+00:13:21.520 --> 00:13:29.240
+Eine Toleranz ist eine zulässige Differenz, bei der das Unternehmen festlegt, welchen Betrag oder Prozentsatz es bei Preis, Menge, Summe oder Gebühren akzeptiert.
+
+00:13:30.080 --> 00:13:34.720
+Alles innerhalb dieser Grenze läuft nach Unternehmensregeln weiter, während alles darüber zur Prüfung markiert wird.
+
+00:13:35.120 --> 00:13:36.440
+Das Unternehmen legt diese Grenzen fest.
+
+00:13:36.860 --> 00:13:41.760
+Ein Unternehmen erlaubt vielleicht kleine Differenzen bei günstigen Büromaterialien, setzt aber engere Grenzen für teure Maschinen.
+
+00:13:41.760 --> 00:13:44.000
+Das System entscheidet nicht, was angemessen ist.
+
+00:13:44.480 --> 00:13:49.100
+Finanz- und Einkaufsteams legen die Regeln fest und Dynamics 365 wendet diese konsistent an.
+
+00:13:49.440 --> 00:13:51.200
+Dies ändert die Arbeitsweise des Finanzteams.
+
+00:13:51.740 --> 00:13:54.760
+Anstatt jede saubere Rechnung, Zeile für Zeile zu prüfen, können Sie sich auf Ausnahmen konzentrieren.
+
+00:13:55.720 --> 00:13:59.940
+Etwa die Untersuchung von Rechnungen mit Preisänderungen, fehlenden Belegen oder Mengenabweichungen.
+
+00:14:00.820 --> 00:14:04.840
+Saubere Rechnungen folgen den Regeln, aber Mitarbeiter investieren ihre Aufmerksamkeit dort, wo Entscheidungen nötig sind.
+
+00:14:05.140 --> 00:14:06.460
+Das ist der wahre Wert des Abgleichs.
+
+00:14:06.460 --> 00:14:11.040
+Das System erledigt Routineprüfungen, während Menschen sich um Fragen kümmern, die Urteilsvermögen erfordern.
+
+00:14:11.040 --> 00:14:13.040
+Das System ersetzt hierbei nicht das menschliche Urteilsvermögen.
+
+00:14:13.280 --> 00:14:15.480
+Es sortiert Routineprüfungen von echten Problemfällen aus.
+
+00:14:15.860 --> 00:14:17.140
+Ein Punkt kann für Verwirrung sorgen.
+
+00:14:17.580 --> 00:14:21.560
+Der Standardabgleich in Dynamics 365 unterstützt den Zwei-Wege- und Drei-Wege-Abgleich.
+
+00:14:21.980 --> 00:14:27.960
+Benötigt ein Unternehmen einen Vier-Wege-Abgleich, etwa mit einer zusätzlichen Prüfung wie einem Abnahmeprotokoll, ist dies durch Anpassungen oder Lösungen möglich.
+
+00:14:28.500 --> 00:14:29.640
+Der Abgleich hat also einen klarer Aufgaben.
+
+00:14:29.640 --> 00:14:30.060
+Genau.
+
+00:14:30.620 --> 00:14:35.540
+Er vergleicht die Lieferantenrechnung mit den eigenen Einkaufs- und Wareneingangsdaten und zeigt Lücken vor der Zahlung auf.
+
+00:14:35.540 --> 00:14:43.500
+Sobald eine Rechnung die Prüfung und den Abgleich besteht, wird sie zu einer Verbindlichkeit, die für die Zahlung und dem Buchabschluss geplant wird.
+
+00:14:44.860 --> 00:14:48.600
+Nachdem eine Rechnung die erforderlichen Prüfungen durchlaufen hat, kann Dynamics 365 sie buchen.
+
+00:14:49.620 --> 00:14:56.360
+Buchen bedeutet, dass die Rechnung ein offizieller Finanzdatensatz wird und das Unternehmen die Verbindlichkeit erfasst, bis die Zahlung erfolgt.
+
+00:14:56.360 --> 00:14:59.820
+Die Rechnung ist bereit, aber das Geld fließt nicht sofort ab.
+
+00:15:00.300 --> 00:15:02.920
+Finanzteams entscheiden, welche Rechnungen in einem Zahlauf beglichen werden.
+
+00:15:03.360 --> 00:15:10.540
+Dynamics 365 unterstützt dies mit einem Zahlungsvorschlag, der fällige Rechnungen prüft und basierend auf den Unternehmensregeln Vorschläge für den Zahlauf macht.
+
+00:15:11.060 --> 00:15:11.280
+Macht.
+
+00:15:11.840 --> 00:15:14.420
+Ein Zahlungsvorschlag ist eine erste Liste, die noch von jemandem geprüft wird.
+
+00:15:14.880 --> 00:15:19.680
+Vielleicht ist eine Lieferantenrechnung diese Woche fällig, während eine andere laut Vereinbarung noch Zeit bis Ende des Monats hat.
+
+00:15:20.300 --> 00:15:25.580
+Das Finanzteam prüft die vorgeschlagenen Rechnungen, fügt bei Bedarf Position hinzu oder entfernt sie und erstellt dann das Zahlungstagebuch.
+
+00:15:25.580 --> 00:15:29.520
+Auf diese Weise werden Zahlungen gruppiert und kontrolliert, anstatt sie unkoordiniert zu versenden.
+
+00:15:30.200 --> 00:15:33.060
+Betrachten Sie das Zahlungstagebuch als das Arbeitsblatt für die Zahlung gesungen.
+
+00:15:33.420 --> 00:15:37.060
+Es führt die geplanten Lieferantenzahlungen, die Beträge und die Zahlungsdetails auf.
+
+00:15:37.680 --> 00:15:43.300
+Das Finanzpersonal nutzt es, um einen kontrollierten Stapel von Zahlungen vorzubereiten, anstatt Rechnungen einzeln ohne gemeinsamen Beleg zu begleichen.
+
+00:15:43.760 --> 00:15:44.520
+Wie verlässt das Unternehmen?
+
+00:15:45.000 --> 00:15:47.880
+Das hängt von der für den Lieferanten und das Unternehmen eingerichteten Zahlungsmethode an.
+
+00:15:47.880 --> 00:15:55.320
+Der Dynamics 365 ermöglicht es einem Unternehmen, eigene Zahlungsmethoden zu erstellen und diese mit Zahlungsarten wie Schecks, elektronischen Zahlungen oder Wechseln zu verknüpfen.
+
+00:15:55.500 --> 00:15:56.540
+Ein Check ist ein bekanntes Zahlung.
+
+00:15:56.980 --> 00:15:59.620
+Eine elektronische Zahlung erfolgt über den Bankprozess des Unternehmens.
+
+00:16:00.000 --> 00:16:03.500
+Ein Wechsel dokumentiert ein formelles Zahlungsversprechen unter vereinbarten Bedingungen.
+
+00:16:03.680 --> 00:16:08.800
+Nicht jedes Unternehmen nutzt jede Methode, aber Dynamics 365 bietet die Möglichkeit, die genutzten Wege zu erfassen.
+
+00:16:09.200 --> 00:16:12.140
+Jede Zahlungsmethode muss zudem auf das richtige Bankkonto des Unternehmens verweisen.
+
+00:16:12.140 --> 00:16:18.020
+Diese Verbindung ist wichtig, da ein Unternehmen separate Konten für verschiedene juristische Einheiten, wer um nur Zahlungszwecke, führen kann, kann.
+
+00:16:18.440 --> 00:16:22.240
+Wenn die Finanzabteilung eine Zahlung vorbereitet, muss das System wissen, welches Bankkonto diese finanziert.
+
+00:16:22.720 --> 00:16:25.980
+Andernfalls könnten Mitarbeiter eine korrekte Zahlung vom falschen Konto aus veranlassen.
+
+00:16:26.460 --> 00:16:27.820
+Auch der Zeitpunkt der Zahlung erfordert Sorgfalt.
+
+00:16:28.240 --> 00:16:32.640
+Zahlungen nach dem Fälligkeitsdatum können zu Mahnungen, Streitigkeiten oder einer geschädigten Lieferantenbeziehung führen.
+
+00:16:33.120 --> 00:16:36.080
+Zu frühe Zahlungen lassen Geld abfließen, bevor es das Unternehmen freigeben muss.
+
+00:16:36.080 --> 00:16:45.780
+Dynamics 365 hält das Fälligkeitsdatum sichtbar, sodass die Finanzabteilung Zahlungen gemäß den vereinbarten Konditionen planen kann, für mehr Kontrolle über den Geldabfluss.
+
+00:16:46.980 --> 00:16:49.580
+Dynamics 365 muss eine einfache Frage beantworten.
+
+00:16:50.020 --> 00:16:51.560
+Welche Rechnung wurde mit dieser Zahlung beglichen?
+
+00:16:51.960 --> 00:16:53.060
+Die Antwort lautet Ausgleich.
+
+00:16:53.580 --> 00:16:57.120
+Der Ausgleich verknüpft die Zahlung mit der spezifischen Lieferantenrechnung oder den Rechnungen, die sie abdeckt.
+
+00:16:57.440 --> 00:16:59.940
+Stellen Sie es sich wie das Abgleichen eines Belegs mit der zugehörigen Rechnung vor.
+
+00:17:00.260 --> 00:17:04.160
+Ohne Ausgleich könnte ein Unternehmen zwar eine Rechnung und eine Zahlung auf dem Lieferantenkonto sehen,
+
+00:17:04.160 --> 00:17:06.420
+hätte aber keinen klaren Nachweis, dass sie zusammengehören.
+
+00:17:06.980 --> 00:17:10.260
+Eine vollständige Zahlung gleicht die gesamte Rechnung aus, doch das Geschäft läuft nicht immer so lang.
+
+00:17:10.540 --> 00:17:13.120
+Ein Unternehmen zahlt vielleicht nur einen Teil einer Rechnung sofort und den Rest später.
+
+00:17:13.580 --> 00:17:16.040
+Der Ausgleich erfasst die Teilzahlung und lässt den Restbetrag offen,
+
+00:17:16.120 --> 00:17:18.820
+sodass die Finanzabteilung genau sieht, was der Lieferant noch zu fordern hat.
+
+00:17:19.360 --> 00:17:21.860
+Diese Transparenz ist entscheidend für korrekte Lieferantensalden.
+
+00:17:22.320 --> 00:17:24.240
+Eine einzelne Zahlung kann auch mehrere Rechnungen abdecken.
+
+00:17:24.700 --> 00:17:28.820
+Vielleicht bezahlt ein Unternehmen fünffällige Rechnungen desselben Anbieters mit einer einzigen elektronischen Zahlung.
+
+00:17:29.440 --> 00:17:32.320
+Der Ausgleich verbindet diesen einen ausgehenden Betrag mit jeder Rechnung, die er begleicht.
+
+00:17:32.320 --> 00:17:36.560
+Wenn die Zahlung nicht alle Rechnungen vollständig deckt, bleibt der offene Saldo übersichtlich,
+
+00:17:36.680 --> 00:17:38.660
+anstatt in einer unklaren Summe zu verschwinden.
+
+00:17:39.560 --> 00:17:44.020
+Dies schafft einen nachvollziehbaren Datensatz und Sie können die Rechnung über Ihre Genehmigung und den Abgleich verfolgen.
+
+00:17:44.560 --> 00:17:48.700
+Sehen Sie die im Journal vorbereitete Zahlung und wie diese Zahlung den Saldo des Anbieters ausgeglichen hat.
+
+00:17:49.480 --> 00:17:51.340
+Wenn jemand fragt, warum das Unternehmen Geld verlassen hat,
+
+00:17:51.460 --> 00:17:54.460
+muss die Finanzabteilung die Vorgänge nicht aus E-Mails und Kontoauszügen rekonstruieren.
+
+00:17:55.080 --> 00:17:58.740
+Der Prozess mag auf verschiedenen Seiten in Dynamics 365 verteilt erscheinen,
+
+00:17:58.740 --> 00:18:01.820
+aber jeder Datensatz ist mit dem nächsten als ein kontrollierter Ablauf verbunden.
+
+00:18:02.380 --> 00:18:04.060
+Das vernetzte Bild der Kreditorenbuchhaltung.
+
+00:18:05.340 --> 00:18:07.320
+Stellen Sie sich vor, Sie erhalten eine Rechnung für Büromaterial.
+
+00:18:07.700 --> 00:18:09.800
+Der Anbieterdatensatz enthält die Zahlungsregeln
+
+00:18:09.800 --> 00:18:12.700
+und die importierte Rechnung liefert die Rechnungsdetails sowie das Dokument selbst.
+
+00:18:13.460 --> 00:18:15.000
+Der Einkauf stellt die Bestellung bereit.
+
+00:18:15.500 --> 00:18:16.720
+Der Wareneingang liefert den Beleg,
+
+00:18:16.900 --> 00:18:19.340
+sodass der Abgleichprozess über echte Datensätze zum Vergleich verfügt.
+
+00:18:19.640 --> 00:18:21.960
+Im Hintergrund verbucht das Buchungsprofil nun die Verbindlichkeit
+
+00:18:21.960 --> 00:18:23.740
+und den Aufwand auf den korrekten Hauptbuchkonten.
+
+00:18:24.040 --> 00:18:25.620
+Das Bargeld- und Bankmanagement steuert,
+
+00:18:25.620 --> 00:18:28.460
+welche Zahlungsmethode Sie verwenden und welches Bankkonto das Geld sind.
+
+00:18:28.860 --> 00:18:30.300
+Der Anhang verbleibt bei der Transaktion,
+
+00:18:30.620 --> 00:18:33.600
+sodass Sie die Originalrechnung zur Überprüfung jederzeit später aufrufen können.
+
+00:18:34.100 --> 00:18:36.340
+Automatisierung ersetzt nicht das Urteilsvermögen des Finanzteams.

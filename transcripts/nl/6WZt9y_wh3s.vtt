@@ -1,0 +1,862 @@
+WEBVTT
+
+00:00:01.200 --> 00:00:03.840
+Een factuur van een leverancier belandt op je bureau.
+
+00:00:03.840 --> 00:00:09.020
+De goederen liggen misschien al in het magazijn of de dienst is al voltooid, maar de betalingstermijn begint direct te lopen.
+
+00:00:09.240 --> 00:00:11.780
+Dus, wat gebeurt er eigenlijk voordat het geld het bedrijf verlaat?
+
+00:00:11.920 --> 00:00:14.760
+Welkom bij een nieuw kennisfragment van M365FM.
+
+00:00:14.920 --> 00:00:19.520
+Ik ben Mir Peters en vandaag kijken we naar de crediteurenadministratie in Dynamics 365 in begrijpelijke taal.
+
+00:00:19.660 --> 00:00:22.280
+Dit is niet zomaar een plek waar iemand rekeningen in een scherm typt.
+
+00:00:22.460 --> 00:00:28.480
+Het is de financiële afdeling die elke rekening controleert, wie heeft hem gestuurd, wat heeft het bedrijf afgesproken te kopen en moet deze betaald worden?
+
+00:00:28.680 --> 00:00:30.200
+Hier is de simpelste definitie.
+
+00:00:30.200 --> 00:00:34.680
+Crediteuren is het geld dat jouw bedrijf verschuldigt is aan leveranciers voor goederen of diensten die je al hebt afgenomen.
+
+00:00:34.920 --> 00:00:37.300
+Zie het als het betalingskantoor binnen een groot gebouw.
+
+00:00:37.360 --> 00:00:43.880
+Facturen komen aan bij de receptie, worden gecontroleerd tegen de bedrijfsadministratie, doorlopen een goedkeuringsproces en bereiken pas dan de persoon die de betaling vrijgeeft.
+
+00:00:44.040 --> 00:00:47.460
+We volgen dat pad van het leveranciersbestand tot aan de uiteindelijke betalingstempel.
+
+00:00:47.780 --> 00:00:50.320
+Dynamics 365 noemt dat vereffening.
+
+00:00:50.580 --> 00:00:52.600
+Waarom bestaat de crediteurenadministratie?
+
+00:00:52.820 --> 00:00:55.880
+Stel je voor dat je een klein bedrijf runt dat kantoormobilair verkoopt.
+
+00:00:56.020 --> 00:00:58.080
+Je hebt bureaus nodig voordat je ze kunt verkopen.
+
+00:00:58.080 --> 00:01:03.860
+En je hebt ook verpakkingsdozen, schoonmaakdiensten, internettoegang, vervangende onderdelen en misschien een bezorgdienst nodig.
+
+00:01:04.040 --> 00:01:08.920
+Als je elke leverancier direct bij bestelling zou moeten betalen, wordt inkopen al snel erg lastig.
+
+00:01:09.060 --> 00:01:12.340
+De meeste bedrijven kopen eerst en betalen later onder overeengekomen voorwaarden.
+
+00:01:12.520 --> 00:01:16.320
+Een leverancier levert de goederen of voltooit het werk en stuurt dan een factuur, hun rekening.
+
+00:01:16.320 --> 00:01:20.600
+Jouw bedrijf is dat bedrag nu verschuldigd, maar stuurt het geld niet zonder eerste details te controleren.
+
+00:01:20.740 --> 00:01:23.560
+Dat onbetaalde bedrag staat in de boeken van het bedrijf als een schuld.
+
+00:01:23.760 --> 00:01:26.960
+Schuld kan klinken als een eng financieel woord, maar de betekenis is simpel.
+
+00:01:27.180 --> 00:01:29.780
+Het is een bedrag dat het bedrijf aan iemand anders verschuldigd is.
+
+00:01:29.960 --> 00:01:36.560
+Als je bedrijf een rekening ontvangt voor kantoorbenodigdheden en deze nog niet heeft betaald, valt die rekening onder crediteuren totdat de betaling is verwerkt.
+
+00:01:36.720 --> 00:01:39.840
+Het bedrijf heeft het geld voor nu nog, maar heeft ook een belofte in te lossen.
+
+00:01:40.020 --> 00:01:45.480
+Dit is belangrijk omdat een bedrijver gezond uit kan zien op de bankrekening, terwijl er nog een stapel onbetaalde facturen ligt.
+
+00:01:45.480 --> 00:01:47.700
+Financiële teams moeten beide kanten zien.
+
+00:01:47.900 --> 00:01:51.900
+Hoeveel contant geld staat er op de bank en hoeveel van dat geld zal het bedrijf binnenkort moeten verlaten.
+
+00:01:52.140 --> 00:01:55.820
+Voor verbonden financiële systemen veranderde dit werk vaak in een papieren rompslom.
+
+00:01:55.960 --> 00:02:02.860
+Een factuur kon per post binnenkomen, op iemands bureau belanden, dan via de interne post voor goedkeuring rondgaan, terwijl een andere factuur in een e-mailinbox bleef staan.
+
+00:02:03.060 --> 00:02:07.700
+Iemand kon dezelfde rekening in een spreadsheet typen terwijl een ander hem in een boekhoudsysteem invoerde.
+
+00:02:07.700 --> 00:02:09.480
+Dat creëert bekende problemen.
+
+00:02:09.640 --> 00:02:14.660
+Een manager mist een goedkeuringsmail, een rekening wordt te laat betaald of een leverancier stuurt dezelfde factuur opnieuw
+
+00:02:14.660 --> 00:02:16.960
+en niemand merkt dat deze het financiële team al had bereikt.
+
+00:02:17.160 --> 00:02:21.420
+Erger nog, hij kan dubbel worden betaald omdat de papierenversie en de e-mailversie op afzonderlijke rekeningen lijken.
+
+00:02:21.660 --> 00:02:24.940
+Dynamics 365 biedt het bedrijf één plek om dit werk bij te houden.
+
+00:02:25.120 --> 00:02:30.760
+Het registreert wat het bedrijf verschuldigd is, helpt mensen facturen te controleren en houdt het proces van factuurontvangst tot betaling overzichtelijk.
+
+00:02:30.900 --> 00:02:33.880
+Dat betekent niet dat elke factuur zonder menselijke controle wordt verwerkt.
+
+00:02:33.880 --> 00:02:40.680
+Een financieel team bepaalt nog steeds wanneer iets niet klopt, maar het systeem biedt de gegevens en regels om dat te beoordelen zonder dat men door het hele gebouw achter papier aan hoeft te rennen.
+
+00:02:40.880 --> 00:02:43.760
+Wellicht hoort u in hetzelfde gesprek ook de term debiteurenbeheer.
+
+00:02:43.940 --> 00:02:47.260
+De namen lijken bijna identiek, maar ze zijn elkaars tegenovergestelde.
+
+00:02:47.820 --> 00:02:51.120
+Crediteurenbeheer volgt geld dat uw bedrijf verlaat omdat u leveranciers moet betalen.
+
+00:02:51.780 --> 00:02:55.040
+Debiteurenbeheer volgt geld dat uw bedrijf binnenkomt omdat klanten u moeten betalen.
+
+00:02:55.240 --> 00:02:59.020
+Als uw bedrijf printers koopt van een leverancier, komt die rekening bij de crediteuren terecht.
+
+00:02:59.020 --> 00:03:03.960
+Als uw bedrijfbureaus verkoopt aan een klant en een factuur stuurt, komt die klantenrekening bij de debiteuren terecht.
+
+00:03:04.200 --> 00:03:08.340
+Dus, crediteuren volgt wat u moet betalen, terwijl debiteuren volgt wat anderen aan u moeten betalen.
+
+00:03:08.960 --> 00:03:11.100
+Crediteurenbeheer streeft naar een heel praktisch resultaat.
+
+00:03:11.320 --> 00:03:14.500
+Betaal de juiste leverancier het juiste bedrag op de afgesproken datum.
+
+00:03:14.700 --> 00:03:17.560
+Betaal te vroeg en het bedrijf verliest geld eerder dan nodig is.
+
+00:03:17.800 --> 00:03:22.200
+Betaal te laat en een leverancier kan achter de betaling aangaan of gunstige voorwaarden stopzetten.
+
+00:03:22.440 --> 00:03:28.020
+Betaal het verkeerde bedrag en iemand moet de fout later herstellen, vaak met e-mails, creditnota's en veel frustratie.
+
+00:03:28.020 --> 00:03:36.480
+Dus voordat een factuur dit proces kan doorlopen, moet Dynamics 365 precies weten wie de leverancier is en welke regels voor die relatie gelden.
+
+00:03:36.640 --> 00:03:38.020
+Het opbouwen van het leveranciersfundament.
+
+00:03:38.860 --> 00:03:43.420
+Dus voordat Dynamics 365 één enkele rekening kan verwerken, moet het eerst precies weten wie deze heeft gestuurd.
+
+00:03:43.600 --> 00:03:45.580
+Dat is waar het leveranciersdossier om de hoek komt kijken.
+
+00:03:45.860 --> 00:03:48.880
+Zonder dit dossier weet het systeem niet wie het moet betalen of welke regels het moet volgen.
+
+00:03:49.060 --> 00:03:52.920
+Een leverancier kan fysieke goederen leveren, zoals papier, laptops of reserveonderdelen.
+
+00:03:53.120 --> 00:03:56.360
+Ze kunnen ook een dienst verlenen, zoals boekhouding of softwareondersteuning.
+
+00:03:56.360 --> 00:03:58.920
+Het product verandert, maar de rol blijft hetzelfde.
+
+00:03:59.140 --> 00:04:01.320
+Dit is de partij die uw bedrijf mogelijk moet betalen.
+
+00:04:01.560 --> 00:04:05.020
+Zie het leveranciersdossier als het bestand van de leverancier binnen Dynamics 365.
+
+00:04:05.600 --> 00:04:10.520
+Het slaat de basisgegevens op die uw financiële team nodig heeft, maar stelt ook regels in die het latere proces beheersen.
+
+00:04:10.660 --> 00:04:15.520
+U vult de naam, het adres en de contactgegevens van de leverancier in, zodat het bedrijf precies weet met wie het zaken doet.
+
+00:04:15.660 --> 00:04:21.480
+U kunt ook de valuta vastleggen die wordt gebruikt voor facturen en betalingen, wat een groot verschil maakt wanneer u inkoopt bij leveranciers in verschillende landen.
+
+00:04:21.480 --> 00:04:25.880
+Wat betreft de betalingsgegevens, een leveranciersrecord kan betalingsvoorwaarden en een betalingsmethode bevatten.
+
+00:04:26.040 --> 00:04:29.500
+Dit lijken misschien kleine velden op een scherm, maar ze beantwoorden zeer praktische vragen.
+
+00:04:29.720 --> 00:04:33.160
+Wanneer moet deze leverancier worden betaald? En hoe moet het bedrijf het geld overmaken?
+
+00:04:33.580 --> 00:04:35.320
+Betalingsvoorwaarden bepalen de regel voor de vervaldatum.
+
+00:04:35.520 --> 00:04:38.040
+Sommige leveranciers laten u 30 dagen na de factuurdatum betalen.
+
+00:04:38.240 --> 00:04:40.120
+Anderen willen betaling binnen 14 dagen ontvangen.
+
+00:04:40.380 --> 00:04:42.260
+Sommigen bieden zelfs korting als u vroeg betaalt.
+
+00:04:42.480 --> 00:04:47.340
+Dynamics 365 gebruikt de voorwaarde die u heeft vastgelegd om automatisch te berekenen wanneer elke factuur vervalt.
+
+00:04:47.340 --> 00:04:50.640
+Niemand hoeft de afspraak te onthouden. Dit zorgt voor consistentie.
+
+00:04:50.800 --> 00:04:55.480
+Als vijf verschillende mensen facturen voor dezelfde leverancier verwerken, volgen ze allemaal dezelfde betalingsregel.
+
+00:04:55.620 --> 00:04:59.720
+Niemand hoeft oude e-mails door te spitten of het inkoopteam te bellen om te vragen wanneer een rekening moet worden betaald.
+
+00:04:59.860 --> 00:05:02.300
+De betalingsmethode beschrijft hoe het geld wordt overgemaakt.
+
+00:05:02.460 --> 00:05:06.120
+Uw bedrijf betaalt de ene leverancier misschien via elektronische overboeking, de andere per check.
+
+00:05:06.240 --> 00:05:09.340
+In sommige gevallen kan een bedrijf ook gebruik maken van schuldbekentenissen.
+
+00:05:09.540 --> 00:05:14.800
+Met Dynamics 365 kunt u uw eigen betalingsmethode definiëren en deze indien nodig koppelen aan systeemtype.
+
+00:05:14.800 --> 00:05:17.600
+Bedrijven hebben doorgaans met meer dan één leverancier te maken.
+
+00:05:17.800 --> 00:05:20.920
+Een groeiend bedrijf kan er tientallen, honderden of zelfs duizenden hebben.
+
+00:05:21.120 --> 00:05:25.020
+Elke instelling vanaf nul creëren voor elk van hen zou tijd verspillen en fouten in de hand werken.
+
+00:05:25.260 --> 00:05:28.080
+Daarom gebruikt Dynamics 365 leveranciersgroepen.
+
+00:05:28.200 --> 00:05:31.740
+Een leveranciersgroep verzamelt leveranciers die dezelfde algemene financiële regels delen.
+
+00:05:31.860 --> 00:05:36.280
+U kunt bijvoorbeeld lokale kantoorleveranciers in de ene groep plaatsen en buitenlandse voorraadleveranciers in een andere.
+
+00:05:36.480 --> 00:05:39.100
+De groep bevat gedeelde instellingen voor hoe transacties worden geboekt,
+
+00:05:39.100 --> 00:05:42.640
+hoe betalingen en vereffeningen werken en hoe het bedrijf rapporteert over die leveranciersal die.
+
+00:05:42.640 --> 00:05:45.780
+U houdt nog steeds een apart leveranciersrecord bij voor elke leverancier.
+
+00:05:46.000 --> 00:05:50.620
+Dat is belangrijk omdat elke leverancier zijn eigen naam, adres, betalingsgegevens en geschiedenis nodig heeft.
+
+00:05:50.800 --> 00:05:53.200
+De leveranciersgroep biedt gewoon een gemeenschappelijk startpunt,
+
+00:05:53.340 --> 00:05:55.920
+zodat financiën niet steeds opnieuw dezelfde regels hoeft op te bouwen.
+
+00:05:56.100 --> 00:05:59.160
+Achter de schermen is er nog een onderdeel genaamd, het leveranciersboekingsprofiel.
+
+00:05:59.340 --> 00:06:02.380
+De naam klinkt technisch, dus laten we het in eenvoudige bewoordingen uitleggen.
+
+00:06:02.520 --> 00:06:07.580
+Een boekingsprofiel is een kaart die Dynamics 365 vertelt waar leverancierstransacties thuishoren in het grootboek.
+
+00:06:07.740 --> 00:06:10.740
+Het grootboek is het belangrijkste financiële overzicht van het bedrijf.
+
+00:06:10.740 --> 00:06:17.260
+Wanneer een factuur wordt geboekt, moet Dynamics 365 zowel registreren wat het bedrijf schuldig is als waar de bijbehorende kosten thuishoren.
+
+00:06:17.440 --> 00:06:23.460
+Het boekingsprofiel stuurt de leverancierszijde van die boekhoudkundige boeking aan met behulp van de regels die u heeft ingesteld voor de leverancier of leveranciersgroep.
+
+00:06:23.660 --> 00:06:27.060
+Financieel medewerkers hoeven die grootboekrekeningen niet elke keer uit hun hoofd te kiezen.
+
+00:06:27.260 --> 00:06:32.700
+In plaats daarvan volgt het systeem een schema dat inconsistente boekingen vermindert en het financiële team een veel duidelijker beeld geeft van de schuld aan leveranciers.
+
+00:06:32.880 --> 00:06:35.760
+Het bedrijf bereidt ook de betalingskant voor voordat er facturen binnenkomen.
+
+00:06:35.760 --> 00:06:39.520
+In kas- en bankbeheer stelt u de bankrekeningen in waaruit de betalingen aan leveranciers worden voldaan.
+
+00:06:40.020 --> 00:06:44.660
+Betalingsjournalen bieden financieel personeel een werkomgeving om die betalingen voor te bereiden en vast te leggen volgens goedgekeurde methoden.
+
+00:06:44.780 --> 00:06:48.000
+Kortom, het leveranciersdossier identificeert wie geld ontvangt.
+
+00:06:48.120 --> 00:06:54.020
+De betalingsvoorwaarden bepalen wanneer het verschuldigd is en de betaalmethode en bankrekening bepalen hoe het geld het bedrijf verlaat.
+
+00:06:54.180 --> 00:07:00.140
+Met die regels gereed kan een factuur het financiële kantoor binnenkomen en haar reis van ontvangst tot goedkeuring beginnen.
+
+00:07:00.140 --> 00:07:05.860
+Met het leveranciersdossier op orde weet Dynamics 365 nu wie er betaald moet worden en onder welke regels.
+
+00:07:06.100 --> 00:07:08.460
+Dus, wat gebeurt er als er daadwerkelijk een factuur binnenkomt?
+
+00:07:08.620 --> 00:07:10.880
+Soms voert de financieel medewerker deze handmatig in.
+
+00:07:11.080 --> 00:07:16.340
+Dit werkt wanneer een factuur per e-mail, papier of via een leveranciersportaal binnenkomt en iemand de gegevens in het systeem moet typen.
+
+00:07:16.540 --> 00:07:24.360
+De medewerker selecteert de leverancier, voert het factuurnummer en de datum in en voegt daarna de regels, bedragen, BTW en eventuele inkooporderreferenties toe die bij de rekening horen.
+
+00:07:24.360 --> 00:07:30.820
+Het factuurnummer verdient extra aandacht. Het is afkomstig van de leverancier, niet van uw bedrijf, en het helpt om die specifieke rekening te identificeren.
+
+00:07:31.000 --> 00:07:40.080
+Als er een factuur van 1200 dollar binnenkomt van Nordwind of een supplies met nummer N148, kan Dynamics 365 dat nummer in het leveranciersdossier gebruiken om dubbele invoer te voorkomen.
+
+00:07:40.320 --> 00:07:41.800
+Bijlagen horen ook bij het dossier.
+
+00:07:42.000 --> 00:07:47.620
+Een PDF-factuur, een gescand document of ondersteunende papieren kunnen naast de factuur in Dynamics 365 worden opgeslagen.
+
+00:07:47.620 --> 00:07:54.500
+Dit betekent dat de persoon die het dossier beoordeelt, het document achter de cijfers kan zien zonder in een gedeelde mailbox of archiefkast te hoeven zoeken.
+
+00:07:54.700 --> 00:07:57.800
+Voor grotere volumes kunnen facturen elektronisch worden ingevoerd.
+
+00:07:58.020 --> 00:08:02.000
+Dynamics 365 ondersteunt het importeren van factuurgegevens via dataentiteiten.
+
+00:08:02.200 --> 00:08:08.180
+Beschouw een dataentiteit als een standaardformulier dat een ander systeem kan invullen voordat de informatie naar Dynamics 365 wordt verzonden.
+
+00:08:08.380 --> 00:08:14.540
+Een externe factuurverwerkingsdienst kan bijvoorbeeld de factuurkop, regels en documentbijlagen allemaal in één datapakket versturen.
+
+00:08:14.540 --> 00:08:20.960
+De kop bevat de belangrijkste rekeningdetails, onze leverancier, het factuurnummer, data, valuta, het totaalbedrag en de inkooporderreferentie.
+
+00:08:21.140 --> 00:08:22.980
+De regels verklaren waarvoor u wordt belast.
+
+00:08:23.180 --> 00:08:26.540
+Eén regel kan gaan over printerpapier, een andere over toner en weer een andere over bezorgkosten.
+
+00:08:27.240 --> 00:08:30.920
+Het gescheiden houden van die details helpt financieel personeel precies te zien wat ze goedkeuren.
+
+00:08:31.160 --> 00:08:33.260
+BTW-informatie reist ook met de factuur mee.
+
+00:08:33.480 --> 00:08:38.180
+Dynamics 365 heeft het BTW-bedrag en gerelateerde details nodig zodat het bedrijf de rekening correct kan vastleggen.
+
+00:08:38.320 --> 00:08:41.200
+Een aantal zaken kan voorkomen dat een factuur zonder controle wordt verwerkt.
+
+00:08:41.200 --> 00:08:45.580
+Een ontbrekende leverancier, een ongeldige datum, een dubbel factuurnummer of een totaalbedrag dat niet klopt.
+
+00:08:45.740 --> 00:08:47.220
+Die pauze beschermt het bedrijf.
+
+00:08:47.340 --> 00:08:51.580
+Een inkoopfactuurbeleid controleert of de factuur voldoet aan de regels die uw bedrijf heeft vastgesteld.
+
+00:08:51.960 --> 00:08:56.420
+Dubbelcontroles zoeken naar facturen die bekend voorkomen, zoals hetzelfde factuurnummer van dezelfde leverancier die al is vastgelegd.
+
+00:08:56.540 --> 00:08:58.760
+Het doel is niet om de leverancier ergens van te beschuldigen.
+
+00:08:59.040 --> 00:09:01.680
+Leveranciers sturen facturen soms opnieuw omdat ze niet zeker weten of ze zijn aangekomen.
+
+00:09:01.860 --> 00:09:04.620
+Een medewerker kan per ongeluk dezelfde PDF twee keer invoeren.
+
+00:09:04.780 --> 00:09:07.540
+Hoe dan ook, dezelfde rekening twee keer betalen zorgt voor onnodig werk.
+
+00:09:07.540 --> 00:09:11.180
+Zodra Dynamics 365 de factuur accepteert, is de volgende vraag simpel.
+
+00:09:11.380 --> 00:09:14.060
+Wie mag deze goedkeuren? Dat is waar Workflow van pas komt.
+
+00:09:14.260 --> 00:09:16.480
+Workflow is de goedkeuringsroute binnen het systeem.
+
+00:09:16.640 --> 00:09:19.860
+In plaats van een PDF naar een manager te mailen en hopen op antwoord,
+
+00:09:20.040 --> 00:09:24.860
+stuurt Dynamics 365 de factuur naar de persoon of rol die uw bedrijfsregels voorschrijven.
+
+00:09:25.040 --> 00:09:29.160
+Elke organisatie bepaalt die regels op basis van hoe zij financiële beslissingen wil afhandelen.
+
+00:09:29.320 --> 00:09:31.960
+Een kleine, routinematige factuur volgt mogelijk een korte route.
+
+00:09:32.180 --> 00:09:35.120
+Een factuur boven een bepaald bedrag vereist mogelijk een senior manager.
+
+00:09:35.120 --> 00:09:38.620
+Een factuur voor een specifieke afdeling kan naar de manager van die afdeling gaan.
+
+00:09:38.760 --> 00:09:41.500
+U kunt zelfs verschillende goedkeuringspaden maken voor verschillende leveranciers types,
+
+00:09:41.720 --> 00:09:43.760
+zoals voorraadleveranciers, dienstverleners of aannemers.
+
+00:09:43.920 --> 00:09:46.060
+De route volgt de regels, niet iemands geheugen.
+
+00:09:46.260 --> 00:09:48.440
+Dit maakt goedkeuringen veel eenvoudiger te volgen.
+
+00:09:48.700 --> 00:09:53.200
+Financiën kan zien of een factuur wacht op beoordeling, is goedgekeurd of meer informatie behoeft.
+
+00:09:53.380 --> 00:09:57.940
+De goedkeurder kan de factuur controleren en beslissen of deze bij hun afdeling hoort en of de kosten kloppen.
+
+00:09:58.140 --> 00:10:01.040
+Sommige facturen voldoen aan alle regels en gaan automatisch door.
+
+00:10:01.040 --> 00:10:05.580
+De leverancier is bekend, de geïmporteerde gegevens zijn volledig en de factuur doorstaat de beleidscontroles.
+
+00:10:05.760 --> 00:10:09.000
+Voor die facturen hoeft niemand telkens opnieuw dezelfde basiscontroles uit te voeren.
+
+00:10:09.160 --> 00:10:10.860
+Andere facturen worden uitzonderingen.
+
+00:10:11.020 --> 00:10:12.720
+Misschien ontbreekt het leveranciersaccount.
+
+00:10:12.920 --> 00:10:14.400
+Misschien bestaat het factuurnummer al.
+
+00:10:14.600 --> 00:10:16.540
+Misschien bevat een geïmporteerde regel een fout.
+
+00:10:16.780 --> 00:10:19.780
+Dynamics 365 houdt die facturen in een lijst met importfouten,
+
+00:10:19.900 --> 00:10:24.300
+waar financieel medewerkers de foutmelding kunnen zien en het probleem kunnen oplossen voordat er een wachtende factuur wordt aangemaakt.
+
+00:10:24.460 --> 00:10:26.700
+Het document blijft belangrijk tijdens de beoordeling.
+
+00:10:26.700 --> 00:10:30.360
+Dynamics 365 bevat een bijlageviewer op factuurpagina's,
+
+00:10:30.500 --> 00:10:34.300
+zodat de financiële medewerker de factuurafbeelding direct naast het record ziet dat wordt gecorrigeerd.
+
+00:10:34.460 --> 00:10:39.680
+U hoeft niet tussen schermen te schakelen om te bevestigen of een leverancier 6.000 of 8.000 op de originele rekening heeft getypt.
+
+00:10:40.080 --> 00:10:41.980
+Automatisering regelt de routinematige verwerking.
+
+00:10:42.180 --> 00:10:43.600
+Mensen regelen de uitzonderingen.
+
+00:10:43.760 --> 00:10:46.040
+Goedkeuring bevestigt dat de juiste persoon akkoord ging met de factuur,
+
+00:10:46.160 --> 00:10:49.480
+maar het bewijst nog niet dat de leverancier precies factuur erde voor wat is besteld of ontvangen.
+
+00:10:49.700 --> 00:10:52.540
+Daarvoor vergelijkt Dynamics 365 de documentatie.
+
+00:10:53.040 --> 00:10:53.480
+Factuurmatch
+
+00:10:53.480 --> 00:10:57.620
+Controleren wat het bedrijf heeft besteld, bevestigt dat de juiste persoon naar de factuur heeft gekeken.
+
+00:10:57.800 --> 00:10:59.500
+Maar Matchen beantwoordt een andere vraag.
+
+00:10:59.700 --> 00:11:02.720
+Komt de factuur overeen met wat het bedrijf daadwerkelijk heeft afgesproken te kopen?
+
+00:11:02.920 --> 00:11:07.460
+Wanneer een aankoop start met een inkooporder, heeft Dynamics 365 een dossier om dit te controleren.
+
+00:11:07.660 --> 00:11:10.060
+Zie een inkooporder als het bestelbriefje van het bedrijf.
+
+00:11:10.200 --> 00:11:14.380
+Het legt de leverancier vast, wat er is aangevraagd, het aantal, de prijs en de voorwaarden.
+
+00:11:14.560 --> 00:11:17.260
+Iemand van inkoop maakt die order aan voordat er een rekening binnenkomt.
+
+00:11:17.400 --> 00:11:18.220
+Waarom is dit belangrijk?
+
+00:11:18.220 --> 00:11:21.260
+De inkooporder legt de afspraak vast voordat de factuur verschijnt.
+
+00:11:21.460 --> 00:11:24.460
+Zonder die order ziet een financieel medewerker slechts een rekeningopnaam van een leverancier.
+
+00:11:24.640 --> 00:11:28.000
+Met die order kunnen ze de kosten van de leverancier vergelijken met de oorspronkelijke aanvraag.
+
+00:11:28.140 --> 00:11:30.360
+Voor fysieke goederen is er nog een ander belangrijk dossier.
+
+00:11:30.640 --> 00:11:33.960
+Wanneer een levering aankomt, registreert het MAGA zijn team een productontvangst,
+
+00:11:34.100 --> 00:11:38.260
+wat in Dynamics 365 het bewijs is dat de goederen het bedrijf hebben bereikt, inclusief het aantal.
+
+00:11:38.260 --> 00:11:42.340
+Dat betekent niet dat elk item perfect was, maar het legt vast wat er is ontvangen voor die order.
+
+00:11:42.600 --> 00:11:44.700
+Stel je voor dat een bedrijf 10 bureaustoelen bestelt.
+
+00:11:44.900 --> 00:11:47.540
+De inkooporder vermeld 10 stoelen tegen een afgesproken prijs,
+
+00:11:47.760 --> 00:11:51.620
+maar bij aankomst van de vrachtwagen telt het magazijn er slechts 8 omdat er 2 in backorder staan.
+
+00:11:51.820 --> 00:11:54.420
+Het ontvangsteam boekt een productontvangst voor 8 stuks.
+
+00:11:54.660 --> 00:11:56.720
+Vervolgens stuurt de leverancier een factuur voor 10 stoelen,
+
+00:11:56.940 --> 00:12:00.920
+wat vanuit hun perspectief correct kan zijn als ze de volledige order factureren voordat de laatste 2 worden verzonden.
+
+00:12:01.080 --> 00:12:02.660
+Maar nu heeft jouw bedrijf een verschil.
+
+00:12:02.660 --> 00:12:05.480
+Team bestelt 8 ontvangen, gefactureerd voor 10.
+
+00:12:05.660 --> 00:12:09.160
+Dynamics 365 kan dat verschil opvangen via factuurmatching.
+
+00:12:09.160 --> 00:12:15.100
+2-weg matching vergelijkt de inkooporder met de leveranciersfactuur en controleert of de rekening qua prijs en aantal overeenkomt met de order.
+
+00:12:15.340 --> 00:12:19.180
+Dit werkt voor aankopen waarbij het controleren van de originele order voldoende controle biedt.
+
+00:12:19.260 --> 00:12:22.680
+Het signaleert als een leverancier een hogere prijs of meer eenheden berekent dan besteld,
+
+00:12:22.840 --> 00:12:25.220
+maar het controleert niet of de goederen daadwerkelijk zijn aangekomen,
+
+00:12:25.340 --> 00:12:28.200
+omdat het slechts 2 documenten vergelijkt, de inkooporder en de factuur.
+
+00:12:28.200 --> 00:12:30.480
+3-weg matching voegt de productontvangst toe.
+
+00:12:30.680 --> 00:12:35.620
+Dynamics 365 vergelijkt nu de inkooporder, de productontvangst en de factuur samen.
+
+00:12:35.620 --> 00:12:40.580
+In ons stoelenvoorbeeld ziet het systeem de order voor 10, de ontvangst voor 8 en de factuur voor 10.
+
+00:12:40.760 --> 00:12:44.800
+En dat verschil wordt een reden om de factuur te pauseren in plaats van deze door te laten gaan.
+
+00:12:45.040 --> 00:12:48.960
+Voor bedrijven die voorraad, apparatuur of grote hoeveelheden fysieke goederen kopen,
+
+00:12:49.240 --> 00:12:51.720
+geeft deze controle de financiële afdeling meer grip,
+
+00:12:51.860 --> 00:12:55.980
+omdat wordt voorkomen dat er wordt betaald voor items die nooit zijn aangekomen of voor meer dan is ontvangen.
+
+00:12:56.180 --> 00:12:57.680
+Inkoop bevestigt de afspraak.
+
+00:12:57.880 --> 00:13:01.580
+De goederenontvangst bevestigt wat er is binnengekomen en de leveranciersfactuur vraagt om betaling.
+
+00:13:01.580 --> 00:13:04.480
+Oh, alle drie de documenten moeten hetzelfde verhaal vertellen.
+
+00:13:04.660 --> 00:13:06.880
+Kleine verschillen komen in de praktijk vaak voor.
+
+00:13:07.060 --> 00:13:12.000
+Een prijs kan afwijken door afronding of een leverancier kan een kleine toegestaan wijziging in het aantal doorvoeren.
+
+00:13:12.180 --> 00:13:17.140
+Als elk klein verschil een factuur zou tegenhouden, zou de financiële teams te veel tijd kwijt zijn aan onschuldige kwesties.
+
+00:13:17.380 --> 00:13:21.880
+Daarom laat Dynamics 365 een bedrijf toe om koppelingsbeleid en tolerantiegrenzen in te stellen.
+
+00:13:22.080 --> 00:13:29.740
+Een tolerantie is een toegestaan verschil en het bedrijf beslist welk bedrag of percentage het accepteert voor prijs, aantal, totaal of bijbehorende kosten.
+
+00:13:29.740 --> 00:13:34.840
+Alles binnen die limiet gaat door volgens de regels van het bedrijf, terwijl alles daarboven wordt gemarkeerd voor controle.
+
+00:13:35.040 --> 00:13:36.760
+Het bedrijf bepaalt zelf die limieten.
+
+00:13:36.940 --> 00:13:42.120
+Een bedrijf kan een klein verschil toestaan bij goedkope kantoorbenodigdheden, maar veel strengere limieten hanteren voor dure machines.
+
+00:13:42.380 --> 00:13:44.260
+Het systeem bepaalt niet wat redelijk is.
+
+00:13:44.460 --> 00:13:49.180
+De financiële en inkoopafdelingen stellen de regel in en Dynamics 365 past deze consistent toe.
+
+00:13:49.380 --> 00:13:51.620
+Dit verandert hoe het financiële team zijn tijd besteedt.
+
+00:13:51.720 --> 00:13:55.800
+In plaats van elke foutloze factuurregel voor regel te controleren, kunnen ze zich richten op uitzonderingen.
+
+00:13:55.800 --> 00:14:00.600
+Ook het onderzoeken van facturen waarbij de prijs is gewijzigd, de ontvangstbon ontbreekt of het aantal niet klopt.
+
+00:14:00.760 --> 00:14:05.080
+Correcte facturen volgen nog steeds de regels, maar mensen besteden hun aandacht daar waar een beslissing nodig is.
+
+00:14:05.280 --> 00:14:06.560
+Dat is de echte waarde van matching.
+
+00:14:06.800 --> 00:14:10.900
+Het laat het systeem routinematige controles uitvoeren, terwijl mensen de vragen behandelen die beoordeling vereisen.
+
+00:14:11.100 --> 00:14:13.180
+Dat is niet het systeem dat beoordelingsvermogen vervangt.
+
+00:14:13.260 --> 00:14:15.940
+Het is het scheiden van routinematige controles van echte vraagstukken.
+
+00:14:16.080 --> 00:14:17.580
+Eén punt kan voor verwarring zorgen.
+
+00:14:17.580 --> 00:14:21.780
+Standaard Dynamics 365 Matching ondersteunt tweeweg- en driewegmatching.
+
+00:14:21.980 --> 00:14:28.360
+Als een bedrijf vierwegmatching nodig heeft, bijvoorbeeld door een extra controle toe te voegen zoals een inspectierapport, vereist dit extra werk via maatwerk of een andere oplossing.
+
+00:14:28.580 --> 00:14:30.080
+Matching heeft dus een duidelijke taak.
+
+00:14:30.240 --> 00:14:36.240
+O, het vergelijkt de rekening van de leverancier met de eigen inkoop- en ontvangstgegevens van het bedrijf en wijst dan op lacunes voor betaling.
+
+00:14:36.480 --> 00:14:44.180
+Zodra een factuur de beoordeling en koppelingscontroles heeft doorstaan, wordt het een bedrag dat het bedrijf verschuldigd is en kan plannen om te betalen, leveranciers te betalen en de boeken te sluiten.
+
+00:14:44.400 --> 00:14:49.060
+Nadat een factuur de controles heeft doorstaan die uw bedrijf vereist, kan Dynamics 365 deze boeken.
+
+00:14:49.280 --> 00:14:56.980
+Boeken betekent dat de factuur een officieel financieel record wordt en het bedrijf een bedrag registreert dat het aan die leverancier verschuldigd is, waarbij de rekening als onbetaald verschijnt totdat een betaling deze vereffend.
+
+00:14:57.120 --> 00:15:00.140
+De factuur is klaar, maar dat betekent niet dat het geld direct wordt overgemaakt.
+
+00:15:00.480 --> 00:15:03.540
+Financiële teams moeten beslissen welke facturen worden betaald in een betalingsronde.
+
+00:15:03.540 --> 00:15:11.520
+Dynamics 365 helpt met een betalingsvoorstel dat kijkt naar facturen die vervallen zijn en suggereert welke in de ronde thuishoren op basis van de door het bedrijf gekozen regels.
+
+00:15:11.700 --> 00:15:14.780
+Een betalingsvoorstel is een beginlijst die nog door iemand wordt gecontroleerd.
+
+00:15:15.000 --> 00:15:20.100
+Misschien vervalt er deze week een inkoopfactuur, terwijl een andere volgens de afgesproken voorwaarden nog tot later in de maand kan wachten.
+
+00:15:20.300 --> 00:15:26.080
+Het financiële team controleert de voorgestelde facturen, verwijdert of voegt posten toe waar nodig en bereid dan het betalingsdagboek voor.
+
+00:15:26.080 --> 00:15:30.140
+Op deze manier worden betalingen gegroepeerd en gecontroleerd in plaats van versnipperd verzonden.
+
+00:15:30.340 --> 00:15:33.260
+Zie het betalingsdagboek als het werkblad voor betalingen van het bedrijf.
+
+00:15:33.260 --> 00:15:37.520
+Het bevat de leveranciersbetalingen die het bedrijf wil versturen, de bedragen en de betalingsgegevens.
+
+00:15:37.780 --> 00:15:43.420
+Financiële medewerkers gebruiken het om een gecontroleerde badge betalingen voor te bereiden in plaats van factuur voor factuur geld over te maken zonder gedeeld overzicht.
+
+00:15:43.560 --> 00:15:45.040
+Hoe verlaat het geld de organisatie?
+
+00:15:45.240 --> 00:15:48.380
+Dat hangt af van de betaalmethode die voor de leverancier en het bedrijf is ingesteld.
+
+00:15:48.380 --> 00:15:55.400
+Met Dynamics 365 kan een bedrijf zijn eigen betaalmethoden aanmaken en deze koppelen aan betalingstypes zoals check, elektronische betalingen of promessen.
+
+00:15:55.580 --> 00:15:56.560
+Een check is bekend.
+
+00:15:56.760 --> 00:15:59.980
+Een elektronische betaling verstuurt geld via het bankproces van het bedrijf.
+
+00:15:59.980 --> 00:16:03.560
+Een promesse legt een formele belofte om te betalen onder afgesproken voorwaarden vast.
+
+00:16:03.760 --> 00:16:08.960
+Niet elk bedrijf gebruikt elke methode, maar Dynamics 365 biedt de mogelijkheid om de gebruikte route vast te leggen.
+
+00:16:09.140 --> 00:16:12.460
+Elke betaalmethode moet ook verwijzen naar de juiste bankrekening van het bedrijf.
+
+00:16:12.460 --> 00:16:18.320
+Die koppeling is belangrijk omdat een bedrijf afzonderlijke rekeningen kan aanhouden voor verschillende juridische entiteiten, valuta's of betalingsdoeleinden.
+
+00:16:18.320 --> 00:16:22.560
+Wanneer finance een betaling voorbereidt, moet het systeem weten welke bankrekening deze financieert.
+
+00:16:22.720 --> 00:16:26.180
+Anders zou de medewerkers een correcte betaling kunnen koppelen aan de verkeerde rekening.
+
+00:16:26.340 --> 00:16:28.320
+Ook het tijdstip van betaling vereist aandacht.
+
+00:16:28.540 --> 00:16:32.900
+Betalen na de vervaldatum kan leiden tot herinneringen, geschillen of een beschadigde relatie met een leverancier.
+
+00:16:33.080 --> 00:16:36.620
+Te vroeg betalen zorgt ervoor dat er geld uitgaat voordat het bedrijf dit hoeft vrij te geven.
+
+00:16:36.860 --> 00:16:46.680
+Dynamics 365 houdt de vervaldatum van de factuur zichtbaar, zodat finance betalingen kan plannen rond de overeengekomen voorwaarden met elke leverancier wat meer controle geeft over de kastroom zodra een betaling wordt verricht.
+
+00:16:46.680 --> 00:16:49.880
+Dynamics 365 moet een simpele vraag beantwoorden.
+
+00:16:50.120 --> 00:16:51.880
+Welke factuur werd met die betaling voldaan?
+
+00:16:52.060 --> 00:16:53.260
+Het antwoord is vereffening.
+
+00:16:53.520 --> 00:16:57.340
+Vereffening koppelt de betaling aan de specifieke inkoopfactuur of facturen die ermee worden voldaan.
+
+00:16:57.560 --> 00:17:00.420
+Zie het als het matchen van een ontvangstbewijs met de factuur die het vereffend.
+
+00:17:00.640 --> 00:17:06.680
+Zonder vereffening ziet een bedrijf misschien een factuur en een betaling op dezelfde leveranciersrekening, maar is er geen duidelijk overzicht dat ze bij elkaar horen.
+
+00:17:06.680 --> 00:17:10.560
+Een volledige betaling vereffend de volledige factuur, maar de praktijk is niet altijd zo netjes.
+
+00:17:10.720 --> 00:17:13.380
+Een bedrijf kan nu een deel van een factuur betalen en de rest later.
+
+00:17:13.380 --> 00:17:19.340
+Vereffening registreert de gedeeltelijke betaling en laat het resterende saldo open, zodat finance precies kan zien wat de leverancier nog te goed heeft.
+
+00:17:19.540 --> 00:17:22.200
+Dit inzicht is cruciaal voor nauwkeurige leveranciersaldi.
+
+00:17:22.360 --> 00:17:24.420
+Eén betaling kan ook meerdere facturen dekken.
+
+00:17:24.640 --> 00:17:29.340
+Misschien betaalt een bedrijf vijf openstaande facturen van dezelfde leverancier met één enkele elektronische betaling.
+
+00:17:29.560 --> 00:17:32.940
+Vereffening koppelt dat ene uitgaande bedrag aan elke factuur die het voldoet.
+
+00:17:32.940 --> 00:17:39.220
+Als de betaling niet elke factuur volledig dekt, blijft het openstaande saldo duidelijk in plaats van te verdwijnen in een verwarrend totaal.
+
+00:17:39.420 --> 00:17:44.620
+Dit creëert een traceerbaar overzicht waarmee u de factuur kunt volgen tot en met de goedkeuring en het resultaat van de aflettering.
+
+00:17:44.840 --> 00:17:49.040
+Bekijk de betaling in het dagboek en zie hoe die betaling het saldo van de leverancier heeft vereffend.
+
+00:17:49.260 --> 00:17:54.960
+Wanneer iemand vraagt waarom er geld het bedrijf heeft verlaten, hoeft finance het verhaal niet te reconstrueren uit e-mails en bankafschriften.
+
+00:17:54.960 --> 00:18:04.580
+Het proces lijkt misschien verspreid over aparte pagina's in Dynamics 365, maar elk record is verbonden met het volgende als één gecontroleerde stroom, het verbonden beeld van de crediteurenadministratie.
+
+00:18:04.800 --> 00:18:07.660
+Stel je voor dat je één factuur ontvangt voor kantoorbenodigdheden.
+
+00:18:07.860 --> 00:18:13.480
+Het leveranciersrecord bevat de betalingsregels en de geïmporteerde factuur levert de factuurdetails plus het document zelf.
+
+00:18:13.720 --> 00:18:15.220
+Inkoop levert de inkooporder.
+
+00:18:15.460 --> 00:18:19.640
+Ontvangst levert de ontvangstbon, zodat het afletteringsproces echte records heeft om te vergelijken.
+
+00:18:19.820 --> 00:18:23.840
+Achter de schermen plaatst het boekingsprofiel de schuld en de kosten in de juiste grootboekrekeningen.
+
+00:18:23.840 --> 00:18:28.720
+Kas- en bankbeheer regelt welke betaalmethode u gebruikt en vanaf welke bankrekening het geld wordt overgemaakt.
+
+00:18:28.880 --> 00:18:34.020
+De bijlage blijft bij de transactie, zodat u de originele factuur altijd later kunt opvragen voor verificatie.
+
+00:18:34.460 --> 00:18:37.100
+Automatisering vervangt niet het oordeel van het financiële team.
+
+00:18:50.380 --> 00:18:50.640
+Hitte.
+
+00:19:09.580 --> 00:19:10.020
+Hitte.

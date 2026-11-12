@@ -1,0 +1,1027 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:04.260
+Hallo und herzlich willkommen zu einer weiteren Episode der Microsoft Knowledge Nuggets hier bei M335 von 60FM.
+
+00:00:04.480 --> 00:00:05.600
+Ich bin Ihr Gastgeber mit Kopita.
+
+00:00:06.000 --> 00:00:10.940
+Das heutige Thema ist etwas, von dem fast jeder, der mit Lieferketten arbeitet, schon einmal gehört hat, das aber nur wenige wirklich verstehen.
+
+00:00:11.380 --> 00:00:14.140
+Dynamics 365 Transport Management. Ist das Problem.
+
+00:00:14.580 --> 00:00:18.440
+Ein Kunde gibt eine Bestellung auf, die Ware liegt im Lager, ein Spediteur benötigt einen Abholtermin,
+
+00:00:18.720 --> 00:00:22.220
+der Kunde erwartet die Lieferung und später landet eine Frachtrechnung auf jemandem an das Schreibtisch.
+
+00:00:22.620 --> 00:00:26.880
+Jahrelang existierten diese Schritte in separaten Tabellen, Telefonaten, Preislisten und Übergaben zwischen den Teams.
+
+00:00:27.080 --> 00:00:28.120
+Oh, und das schafft Lücken.
+
+00:00:28.120 --> 00:00:31.180
+Das Lager bereitet vielleicht Waren vor, bevor der Transport einen Plan hat.
+
+00:00:31.680 --> 00:00:34.080
+Die Finanzabteilung sieht vielleicht eine Rechnung, ohne zu wissen, was vereinbart wurde.
+
+00:00:34.660 --> 00:00:36.100
+Was genau ist also Transport Management?
+
+00:00:36.720 --> 00:00:41.240
+Einfach ausgedrückt, es ist die Transportzentrale innerhalb von Dynamics 365 Supply Chain Management.
+
+00:00:41.820 --> 00:00:44.120
+Sie verbindet Lagertoure, Lieferanten, Kunden und Spediteure.
+
+00:00:44.680 --> 00:00:47.920
+Wir planen Ladungen, wählen Routen und Tarife, versenden Waren und prüfen Frachtkosten.
+
+00:00:48.420 --> 00:00:52.700
+Am Ende dieser Episode werden Sie sehen, wie all diese Teile zusammenpassen, um Ihren Arbeitsalltag zu erleichtern.
+
+00:00:55.820 --> 00:00:57.160
+Warum es Transport Management gibt
+
+00:00:58.420 --> 00:00:59.860
+Beginnen wir mit einer grundlegenden Wahrheit.
+
+00:01:00.420 --> 00:01:03.820
+Physische Waren bewegen sich nicht nur, weil ein Verkaufsauftrag auf einem Bildschirm existiert.
+
+00:01:04.200 --> 00:01:07.280
+Sie benötigen einen LKW, einen Anhänger, einen Container oder einen anderen Transportmöglichkeiten.
+
+00:01:07.900 --> 00:01:13.780
+Jemand muss wissen, wo die Waren starten, wo sie ankommen müssen, wie viel Platz sie beanspruchen, wann sie los müssen und was der Transport kosten darf.
+
+00:01:14.580 --> 00:01:17.240
+Wenn man sich nun ein Paket vorstellt, das an einen Kunden geht, klingt das einfach.
+
+00:01:17.240 --> 00:01:21.700
+Aber ein echtes Unternehmen versendet vielleicht viele Bestellungen vom selben Lager am selben Tag,
+
+00:01:21.760 --> 00:01:25.760
+empfängt Waren von mehreren Lieferanten und bewegt gleichzeitig Bestände zwischen eigenen Standorten.
+
+00:01:26.760 --> 00:01:29.740
+Jede Bewegung ist mit Personen, Terminen, Platzbedarf und Kosten verbunden.
+
+00:01:30.400 --> 00:01:32.900
+Ohne ein gemeinsames System sieht jedes Team nur seinen eigenen Teilbereich.
+
+00:01:33.480 --> 00:01:34.860
+Der Vertrieb sieht den Kundenauftrag.
+
+00:01:34.860 --> 00:01:36.720
+Der Einkauf sieht die Lieferantenbestellung.
+
+00:01:37.300 --> 00:01:40.680
+Das Lagerpersonal sieht die Artikel, die kommissioniert, verpackt, vereinnahmt oder eingelagert werden müssen.
+
+00:01:41.060 --> 00:01:45.420
+Das Transportteam sieht eine Liste von Waren, die bewegt werden müssen, oft erst, nachdem alle anderen bereits ihren Teil getan haben.
+
+00:01:45.820 --> 00:01:47.460
+Und genau da beginnen Verzögerungen und Verwirrung.
+
+00:01:47.680 --> 00:01:48.580
+Hier ist ein konkretes Beispiel.
+
+00:01:49.140 --> 00:01:52.040
+Stellen Sie sich vor, ein Lager hat zehn Kundenaufträge für dieselbe Stadt bereit.
+
+00:01:52.580 --> 00:01:57.420
+Wenn niemand diese Aufträge vor der Transportbuchung verknüpft, arrangiert das Unternehmen möglicherweise mehrere teilweise gefüllte Fahrten.
+
+00:01:57.420 --> 00:02:00.440
+Oder der Spediteur trifft ein, bevor das Lager weiß, welche Waren auf das Fahrzeug gehören.
+
+00:02:00.900 --> 00:02:02.700
+Die Waren sind bereit, aber die Bewegung ist nicht geplant.
+
+00:02:03.200 --> 00:02:08.160
+Das Transportmanagement gibt dieser Bewegung also einen Platz innerhalb von Dynamics 365 Supply Chain Management.
+
+00:02:08.700 --> 00:02:13.560
+Es ist keine separate Endkundenversand-App, bei der man eine Sendungsnummer eingibt und ein Paket auf einer Karte verfolgt.
+
+00:02:14.340 --> 00:02:17.500
+Stattdessen arbeitet es mit den Geschäftsdaten, die bereits in der verbundenen Plattform vorhanden sind.
+
+00:02:17.860 --> 00:02:19.600
+Ein Auftrag erzeugt den Bedarf, Waren zu bewegen.
+
+00:02:20.020 --> 00:02:21.300
+Die Lagerarbeit bereitet die Waren vor.
+
+00:02:21.720 --> 00:02:25.100
+Das Transportmanagement plant, wie diese Waren zwischen Standorten befördert werden.
+
+00:02:25.440 --> 00:02:27.780
+Stellen Sie es sich wie eine Transportzentrale im Bürogebäude vor.
+
+00:02:28.140 --> 00:02:30.220
+Das Vertriebsteam bringt eine Kundenanfrage an den Schalter.
+
+00:02:30.900 --> 00:02:32.900
+Der Einkauf meldet, dass ein Lieferant Waren schicken wird.
+
+00:02:33.620 --> 00:02:35.680
+Das Lager liefert den tatsächlichen Bestand und die Laderang.
+
+00:02:36.120 --> 00:02:39.220
+Die Transportzentrale verknüpft diese Anfragen mit dem Transportplan des Unternehmens.
+
+00:02:39.900 --> 00:02:40.820
+Es gibt zwei Hauptrichtungen.
+
+00:02:41.420 --> 00:02:43.780
+Eingehende Transporte bedeuten, dass Waren in Ihr Unternehmen gelangen.
+
+00:02:44.360 --> 00:02:47.200
+Sie haben Artikel bei einem Lieferanten bestellt und diese müssen Ihr Lager erreichen.
+
+00:02:47.780 --> 00:02:50.440
+Manchmal steuert der Lieferant diesen Transport, manchmal organisiert ihn Ihr Unternehmen.
+
+00:02:50.680 --> 00:02:55.220
+So oder so benötigen Sie einen klaren Plan, um die Waren an den richtigen Ort zu bringen und sie bei Ankunft anzunehmen.
+
+00:02:55.740 --> 00:02:58.100
+Ausgehende Transporte bedeuten, dass Waren Ihr Unternehmen verlassen.
+
+00:02:58.100 --> 00:02:59.920
+Ein Kunde hat Produkte bestellt.
+
+00:03:00.520 --> 00:03:04.100
+Das Lager stellt Sie bereit und ein Spediteur oder Firmenfahrzeug bringt Sie zum Kunden.
+
+00:03:04.640 --> 00:03:07.200
+Beide Abläufe beinhalten Bewegungen, aber der Ausgangspunkt ist ein anderer.
+
+00:03:07.500 --> 00:03:09.400
+Der Eingang beginnt mit einer Bestellung und einem Lieferanten.
+
+00:03:09.800 --> 00:03:11.640
+Der Ausgang beginnt mit einem Verkaufsauftrag und einem Kunden.
+
+00:03:11.640 --> 00:03:15.060
+Es gibt noch eine dritte Art, die Anfänger oft übersehen, Umlagerungsaufträge.
+
+00:03:15.840 --> 00:03:19.000
+Ein Umlagerungsauftrag bewegt Bestände zwischen Ihren eigenen Unternehmensstandorten.
+
+00:03:19.320 --> 00:03:21.660
+Vielleicht ein Lager hat zu viel Bestand und ein anderes benötigt ihn.
+
+00:03:22.320 --> 00:03:25.920
+Es ist kein Kundenkauf involviert, aber die physischen Waren benötigen dennoch einen Transport.
+
+00:03:26.300 --> 00:03:32.460
+In 365 Transportation Management gehören Umlagerungsaufträge zum Ausgangsszenario und können zusammen mit Verkaufsaufträgen geplant werden.
+
+00:03:33.120 --> 00:03:34.720
+Das ergibt Sinn, wenn man sich die Laderampe vorstellt.
+
+00:03:34.720 --> 00:03:43.960
+Ob eine Palette zu einem zahlenden Kunden oder in ein anderes Firmenlager geht, jemand muss das Fahrzeug organisieren, Platz reservieren und sie durch dasselbe Tor versenden.
+
+00:03:44.800 --> 00:03:49.280
+Dieser vernetzte Ansatz ersetzt also die alte Kette aus separaten Listen und Telefonanrufen durch geteilte Information.
+
+00:03:50.200 --> 00:03:51.960
+Der Auftrag teilt dem System mit, was bewegt werden muss.
+
+00:03:52.420 --> 00:03:53.740
+Das Lager bereitet die Artikel vor.
+
+00:03:54.060 --> 00:03:56.680
+Das Transportmanagement wandelt diesen Bedarf in eine Transportplanung.
+
+00:03:57.080 --> 00:04:00.160
+Sobald Waren bewegt werden müssen, benötigt das System zuerst einen umsetzbaren Versankt.
+
+00:04:01.000 --> 00:04:01.820
+Die Ladungsplanung
+
+00:04:01.820 --> 00:04:06.260
+Der heutige Wissenshappen dreht sich um etwas, das jedes Logistikteam braucht, aber oft unterschiedlich erklärt.
+
+00:04:06.520 --> 00:04:07.600
+Aber oft unterschiedlich erklärt.
+
+00:04:08.100 --> 00:04:09.000
+Eine Ladung planen.
+
+00:04:09.700 --> 00:04:12.660
+Sie können die Transportplanung entweder von Aufträgen oder von Lieferungen ausstarten.
+
+00:04:14.880 --> 00:04:16.180
+Und lassen Sie mich sofort mit dem Mythos aufregen.
+
+00:04:16.600 --> 00:04:17.860
+Ein Versandplan beginnt nicht bei Null.
+
+00:04:18.220 --> 00:04:19.800
+Er basiert auf Datensätzen, die Sie bereits haben.
+
+00:04:20.080 --> 00:04:21.840
+Ein Verkaufsauftrag enthält, was ein Kunde gekauft hat.
+
+00:04:22.180 --> 00:04:24.240
+Eine Bestellung listet auf, was ein Lieferant senden muss.
+
+00:04:24.580 --> 00:04:28.820
+Eine Sendung fasst diese Artikel zu einem gezielteren Versanddatensatz zusammen, der bereit ist, mit anderen kombiniert zu werden.
+
+00:04:29.480 --> 00:04:31.200
+Welchen Ausgangspunkt sollten Sie also wählen?
+
+00:04:31.200 --> 00:04:32.480
+Das hängt davon ab, wie Ihr Unternehmen arbeitet.
+
+00:04:32.480 --> 00:04:35.420
+Manche Teams planen früher und betrachten direkt die Auftragspositionen.
+
+00:04:36.000 --> 00:04:39.160
+Andere Teams erstellen zuerst Sendungen und entscheiden dann, was zusammen transportiert wird.
+
+00:04:39.460 --> 00:04:40.660
+Beide Wege führen zu gleichen Fragen.
+
+00:04:41.140 --> 00:04:42.300
+Was sollte auf derselbe Fahrzeuge landen?
+
+00:04:42.620 --> 00:04:43.720
+Hier ist die einfachste Definition.
+
+00:04:44.200 --> 00:04:46.940
+Eine Ladung ist der digitale Datensatz für eine geplante Warenbewegung.
+
+00:04:47.580 --> 00:04:52.040
+Sie können sich das als ein LKW, ein Anhänger, einen Container oder eine Zusammenstellung von Sendungen vorstellen, die zusammen reisen.
+
+00:04:52.840 --> 00:04:56.300
+Es bietet Ihnen einen zentralen Ort, um vor Beginn der physischen Arbeit zu sehen, welche Waren zusammengehören.
+
+00:04:56.920 --> 00:04:58.340
+Hier ist etwas, das viele Leute falsch verstehen.
+
+00:04:58.600 --> 00:05:01.400
+Eine Ladung bedeutet nicht, dass jeder Artikel in einen physischen Karton passt.
+
+00:05:01.400 --> 00:05:04.120
+Es bedeutet, dass das System Waren um einen Transportplan herumruppt.
+
+00:05:04.500 --> 00:05:06.180
+Mehrere Kundensendungen können sich eine LKW teilen.
+
+00:05:06.640 --> 00:05:08.580
+Ein großer Auftrag könnte einen ganzen Anhänger allein füllen.
+
+00:05:09.220 --> 00:05:13.380
+Ein von einem Lieferanten eintreffender Container kann auch schon vor dem Wareneingang in Ihrem Lager zu einer Ladung werden.
+
+00:05:13.940 --> 00:05:16.420
+Der Punkt ist, aufzuhören, jeden Auftrag als eigene Fahrt zu bahnen.
+
+00:05:16.940 --> 00:05:20.060
+Stellen Sie sich einen Händler vor, der sechs Kundenaufträge für die Freitagszustellung bereit hat.
+
+00:05:20.500 --> 00:05:23.600
+Alle sechs liegen im selben Bereich und jeder Auftrag füllt nur einen Teil eines LKWs.
+
+00:05:23.960 --> 00:05:28.060
+Sechs halbleere Fahrzeuge zu versenden, verschwendet Platz und erzeugt sechs separate Transportaufträge.
+
+00:05:28.060 --> 00:05:30.760
+Das Team kann stattdessen kompatible Sendungen zu einer Ladung zusammenführen.
+
+00:05:31.220 --> 00:05:33.480
+Kompatibel bedeutet, dass Sie vernünftigerweise zusammenreisen können.
+
+00:05:33.960 --> 00:05:39.380
+Sie verlassen dasselbe Lager, müssen zur gleichen Zeit versendet werden, passen in die Fahrzeugbegrenzungen und folgen Ihren Versandregeln.
+
+00:05:39.760 --> 00:05:43.840
+Das System hilft dabei, diese Datensätze zusammenzuführen, anstatt darauf zu vertrauen, dass jemand das Muster einer Tabelle erkennt.
+
+00:05:44.300 --> 00:05:45.680
+Diese Gruppe hat nun einen gemeinsamen Plan.
+
+00:05:46.040 --> 00:05:47.500
+Ihr Lager sieht, was zur Ladung gehört.
+
+00:05:48.080 --> 00:05:50.120
+Der Transportplaner sieht das Gesamtvolumen und Gewicht.
+
+00:05:50.700 --> 00:05:53.740
+Niemand muss dieselbe Liste in E-Mails, Notizen oder einer separaten Datei neu erstellen.
+
+00:05:53.740 --> 00:05:54.800
+Aber hier ist der Punkt.
+
+00:05:55.380 --> 00:05:57.680
+Waren zu gruppieren bedeutet, nicht nur mehr Artikel zusammenzulegen.
+
+00:05:58.220 --> 00:06:00.360
+Ein LKW hat Grenzen, Gewicht, Bodenfläche, Höhe.
+
+00:06:00.780 --> 00:06:01.960
+Ein Container hat seine eigenen Regeln.
+
+00:06:02.460 --> 00:06:07.520
+Wenn das System Waren gruppiert, ohne diese Grenzen zu prüfen, sieht die Ladung auf dem Bildschirm gut aus, scheitert aber an der Laderampe.
+
+00:06:07.960 --> 00:06:10.800
+Dynamics 365 verwendet Ladungsvorlagen, um dies zu vermeiden.
+
+00:06:11.160 --> 00:06:15.200
+Betrachten Sie eine Ladungsvorlage als eine wiederverwendbare Gruppe von Grenzwerten für ein Fahrzeug oder Containertür.
+
+00:06:15.740 --> 00:06:19.760
+Er liegt für einen kleinen Lieferwagen, eine weitere für einen größeren Anhänger und eine weitere für einen Versandcontainer.
+
+00:06:19.760 --> 00:06:24.320
+Jede Vorlage enthält Grenzwerte für Gewicht, Volumen, Höhe und andere Regeln, die Ihr Unternehmen benötigt.
+
+00:06:24.660 --> 00:06:27.220
+Die Vorlage gibt der Ladung eine Form, bevor Sie beginnen, sie zu füllen.
+
+00:06:27.640 --> 00:06:32.060
+Wenn eine Lieferung also zu schwer ist oder zu viel Platz beansprucht, erkennt der Planer, dass sie nicht in diese Ladung gehört.
+
+00:06:32.440 --> 00:06:36.420
+Die Lösung könnte ein zweites Fahrzeug, eine andere Vorlage oder eine andere Gruppierung der Sendung sein.
+
+00:06:36.920 --> 00:06:41.220
+Die Software hebt zwar keine Paletten, aber sie bietet ihrem Team einen klareren Plan, bevor die eigentliche Arbeit beginnt.
+
+00:06:41.780 --> 00:06:44.900
+Ein integrierter Ansatz wird als volumenbasierte Ladungszusammenstellung bezeichnet.
+
+00:06:44.900 --> 00:06:47.160
+Das klingt technischer, als es sein müsste.
+
+00:06:47.720 --> 00:06:53.500
+Das bedeutet, dass das System beim Erstellen oder Vorschlagen einer Ladung die maximale Höhe und das maximale Gewicht aus Ihrer Ladungsvorlage verwendet.
+
+00:06:53.720 --> 00:06:56.600
+Einfach ausgedrückt, es prüft, ob die Waren innerhalb der von Ihnen festgelegten Grenzen.
+
+00:06:56.920 --> 00:06:58.180
+Diese Werte sind nicht für immer festgelegt.
+
+00:06:58.560 --> 00:07:00.840
+Ein Planer kann sie überschreiben, wenn sich die realen Anforderungen ändern.
+
+00:07:01.300 --> 00:07:02.540
+Vielleicht schickt ein Frachtführer einen Auflieger.
+
+00:07:03.000 --> 00:07:04.180
+Vielleicht erlaubt eine Fahrt eine neue Höhe.
+
+00:07:04.600 --> 00:07:09.340
+Die Vorlage liefert die Standardregel und die manuelle Änderung regelt die Ausnahme, ohne alles neu erstellen zu müssen.
+
+00:07:09.540 --> 00:07:11.360
+Kehren wir zu den sechs Kundenaufträgen zurück.
+
+00:07:11.800 --> 00:07:13.780
+Jeder Einzelne könnte 15 Prozent des LKWs beanspruchen.
+
+00:07:13.780 --> 00:07:17.420
+Wenn sie separat geplant werden, könnten Sie sechs größtenteils leere Fahrzeuge losschicken.
+
+00:07:18.200 --> 00:07:21.680
+Zusammengefasst zu einer Ladung füllen dieselben Aufträge fast einen ganzen LKW aus mit Platz für mehr.
+
+00:07:22.080 --> 00:07:23.040
+Das ist eine bessere Raumausnutzung.
+
+00:07:23.440 --> 00:07:25.060
+Nun funktioniert dasselbe Prinzip in beide Richtungen.
+
+00:07:25.420 --> 00:07:28.440
+Erstellen Sie für die Eingangsplanung eine Ladung um Artikel herum, die von einem Lieferanten kommt.
+
+00:07:28.720 --> 00:07:33.580
+Der Transportplan ist mit dem erwarteten Wareneingang verknüpft, sodass das Lager weiß, was ansteht und sich auf die Ankunft vorbereiten kann.
+
+00:07:33.800 --> 00:07:38.020
+Anstatt erst von einer Lieferung zu erfahren, wenn sie am Tor steht, hat das Empfangsteam einen geplanten Datensatz.
+
+00:07:38.420 --> 00:07:43.260
+Wählen Sie für die Ausgangsplanung Lagerartikel aus, die an Kunden versendet werden müssen und fassen Sie diese zu einer Ladung zusammen.
+
+00:07:43.260 --> 00:07:47.320
+Das Lager bereitet diese Waren basierend auf den Ladungsdetails vor, nicht anhand einer isolierten Liste.
+
+00:07:47.580 --> 00:07:51.560
+Eine volle Ladung benötigt immer noch einen Transportweg, eine Firma für den Transport und eine erwartete Gebühr.
+
+00:07:52.820 --> 00:07:54.240
+Routen, Frachtführer und Tarife
+
+00:07:54.240 --> 00:07:57.860
+Die Ladung gibt nun an, was zusammen transportiert werden muss.
+
+00:07:58.540 --> 00:08:02.660
+Als nächstes müssen Sie entscheiden, wer den Transport durchführt, welchen Service er nutzt und was die Fahrt kosten sollte.
+
+00:08:03.040 --> 00:08:05.020
+Das Unternehmen, das Ihre Waren befördert, nennt man Frachtführung.
+
+00:08:05.360 --> 00:08:08.280
+Es kann ein externes Transportunternehmen sein, das Ihre Fracht abholt und ausliefert.
+
+00:08:08.780 --> 00:08:11.360
+Es kann auch Ihre eigene Flotte sein, wenn Sie eigene LKWs und Fahrer einsetzen.
+
+00:08:11.360 --> 00:08:14.820
+In jedem Fall ist der Frachtführer für die tatsächliche Fahrt verantwortlich.
+
+00:08:15.520 --> 00:08:18.720
+Dieser Unterschied ist wichtig, weil Sie auch dann einen Plan benötigen, wenn der LKW Ihnen gehört.
+
+00:08:19.420 --> 00:08:22.140
+Bei einem externen Frachtführer vereinbaren Sie Preise und Leistungen im Voraus.
+
+00:08:22.620 --> 00:08:25.720
+Bei Ihrer eigenen Flotte möchten Sie die Transportkosten eventuell dennoch berechnen,
+
+00:08:25.820 --> 00:08:27.760
+besonders wenn Lieferkosten auf Kundenaufträgen erscheinen.
+
+00:08:28.440 --> 00:08:31.360
+Dynamics 3.5 Mosex Transportation Management unterstützt beide Situationen.
+
+00:08:31.820 --> 00:08:32.580
+Und dann gibt es noch die Route.
+
+00:08:32.980 --> 00:08:36.640
+Eine Route ist der geplante Weg von der Abholung bis zum Ziel, einschließlich der Dienstleistungswahl.
+
+00:08:36.640 --> 00:08:38.160
+Sie beantwortet praktische Fragen.
+
+00:08:38.580 --> 00:08:40.380
+In welchem Lager holt der Frachtführer die Ware ab?
+
+00:08:40.740 --> 00:08:42.540
+Welcher Kunde oder Standort empfängt die Waren?
+
+00:08:43.060 --> 00:08:44.740
+Welcher Frachtdienstleister übernimmt die Fahrt?
+
+00:08:45.180 --> 00:08:48.080
+Stellen Sie sich eine Lieferung von Ihrem Hauptlager zu einem Kunden am anderen Ende des Landes.
+
+00:08:48.660 --> 00:08:51.540
+Eine Route nutzt vielleicht Standardstraßengüterverkehr, der günstiger ist, aber länger dauert.
+
+00:08:52.200 --> 00:08:54.160
+Eine andere nutzt vielleicht einen schnelleren, teureren Dienst.
+
+00:08:55.220 --> 00:08:57.220
+Gleicher Start- und Endpunkt, aber die Transportwahl ändert sich.
+
+00:08:57.820 --> 00:08:59.560
+Ein Tarif ist die erwartete Gebühr für diese Wahl.
+
+00:08:59.900 --> 00:09:02.000
+Es ist keine willkürliche Zahl, die in letzter Minute eingegeben wird.
+
+00:09:02.000 --> 00:09:06.080
+Tarife basieren auf Preisvereinbarungen mit Frachtführern, kombiniert mit Versand- oder Routendetails.
+
+00:09:06.580 --> 00:09:07.260
+Wo starten die Waren?
+
+00:09:07.520 --> 00:09:08.060
+Wohin gehen sie?
+
+00:09:08.240 --> 00:09:09.100
+Welcher Dienst wird genutzt?
+
+00:09:09.460 --> 00:09:10.360
+Welche Menge wird transportiert?
+
+00:09:10.620 --> 00:09:12.420
+Eine Route sagt Ihnen also, wie Waren bewegt werden.
+
+00:09:12.500 --> 00:09:14.020
+Ein Tarif sagt Ihnen, was Sie voraussichtlich zahlen.
+
+00:09:14.460 --> 00:09:17.940
+Diese beiden Konzepte gehören zusammen, denn eine günstige Route kann Ihr Lieferversprechen gefährden,
+
+00:09:18.080 --> 00:09:19.900
+während Schnelligkeit mehr kosten kann, als der Auftrag hergibt.
+
+00:09:20.780 --> 00:09:23.500
+Transportplanung ist nicht nur die Suche nach einem LKW, sondern die Wahl eines Dienstes,
+
+00:09:23.600 --> 00:09:25.960
+der zu Ihrer Kundenverpflichtung und den Kostenregeln des Unternehmens passt.
+
+00:09:27.760 --> 00:09:30.060
+Dynamics Style 65, die Workbench für Routen und Tarifen.
+
+00:09:30.060 --> 00:09:32.280
+Der Name klingt formell, aber der Zweck ist einfach.
+
+00:09:32.900 --> 00:09:36.700
+Sie bietet Planern einen Ort, um Routen und Tarifoptionen für eine Sendung direkt zu vergleichen.
+
+00:09:37.460 --> 00:09:41.280
+Anstatt eine Frachtführertabelle nach der anderen zu prüfen und in einer separaten Datei zu vergleichen,
+
+00:09:41.360 --> 00:09:43.200
+prüfen Sie die Optionen für diesen speziellen Versandbedarf.
+
+00:09:43.640 --> 00:09:46.500
+Vielleicht erreicht eine Option den Kunden schneller, vielleicht kostet eine andere weniger.
+
+00:09:47.340 --> 00:09:51.780
+Das System weiß nicht, ob jeder Kunde Schnelligkeit mehr schätzt als Kosten, da unterschiedlich arbeiten.
+
+00:09:52.780 --> 00:09:55.940
+Ein Kunde hat vielleicht für eine Eilieferung bezahlt, daher ist die schnellere Route sinnvoll.
+
+00:09:56.540 --> 00:09:59.700
+Ein anderer akzeptiert eine längere Lieferzeit und die niedrige Gebühr passt besser.
+
+00:10:00.060 --> 00:10:01.460
+Die Menschen treffen weiterhin die Entscheide.
+
+00:10:01.880 --> 00:10:04.940
+Das Transportmanagement bietet Ihnen vereinbarte Optionen und erwartete Kosten,
+
+00:10:05.260 --> 00:10:07.140
+während Ihr Unternehmen entscheidet, welcher Kompromiss funktioniert.
+
+00:10:07.840 --> 00:10:09.580
+Hier ist, was das integrierte Modul tatsächlich leistet.
+
+00:10:10.560 --> 00:10:14.460
+Tarifinformationen stammen aus Tariftabellen, die Ihr Unternehmen in Dynamics 365 eingibt und pflegt.
+
+00:10:14.860 --> 00:10:18.600
+Betrachten Sie diese Tabellen als gespeicherte Datensätze vereinbarter Frachtführerpreise und Routenregeln.
+
+00:10:18.600 --> 00:10:23.980
+Wenn Sie einen Preis für einen bestimmten Dienst und eine Strecke ausgehandelt haben, ist diese Information im System hinterlegt und unterstützt die Planung.
+
+00:10:24.060 --> 00:10:26.080
+Das funktioniert gut, wenn Ihre Tarife bekannten Vereinbarungen warten.
+
+00:10:26.400 --> 00:10:31.580
+Arbeiten Sie zum Beispiel mit wenigen festen Frachtführern, bedienen Sie bekannte Routen und aktualisieren Sie Preise bei Vertragsänderungen.
+
+00:10:31.940 --> 00:10:35.240
+Der Transportplaner nutzt bereits erfasste Tarife, anstatt alte E-Mails zu durchsuchen.
+
+00:10:35.820 --> 00:10:37.440
+Aber hier gibt es ein Missverständnis bei vielen.
+
+00:10:38.140 --> 00:10:41.400
+Das integrierte Modul fungiert nicht wie eine Live-Shopping-Seite, die mit Ihrem Frachtführer verbunden ist.
+
+00:10:41.400 --> 00:10:46.260
+Es ruft nicht automatisch aktuelle Preise aus Live-Feeds ab und vergleicht sie in Echtzeit über ein breites Netzwerk.
+
+00:10:46.760 --> 00:10:52.700
+Wenn Ihr Unternehmen Frachtratenvergleiche zwischen mehreren Spediteuren, Live-Buchungslinks oder detailliertere Sendungsstatus benötigt, schließen Sie normalerweise ein Drittsystem an.
+
+00:10:52.960 --> 00:10:56.200
+Das ist kein Versagen des Transportmanagements. Es definiert seine Aufgabe klar.
+
+00:10:56.780 --> 00:11:03.880
+Diese Tools übernehmen die strukturierte Transportplanung innerhalb des Supply-Chain-Managements unter Verwendung der Frachtführer, Routen und Tarifinformationen Ihres Unternehmens.
+
+00:11:04.380 --> 00:11:06.580
+Und es ist auch keine Website zur Paketverfolgung für Endverbraucher.
+
+00:11:06.580 --> 00:11:12.320
+Sie werden es nicht wie eine Karte verwenden, auf der Sie eine Sendungsnummer eingeben und ein Fahrzeugsymbol auf einer Straße verfolgen.
+
+00:11:12.960 --> 00:11:16.260
+Dieses Modul konzentriert sich auf geschäftliche Transportentscheidungen vor und während des Versands.
+
+00:11:16.880 --> 00:11:21.080
+Welche Waren werden zusammen transportiert, welcher Frachtführer ist zuständig, welche Route gilt, was soll die Fahrt kosten?
+
+00:11:21.780 --> 00:11:25.460
+Sobald Ihr Unternehmen diesen Plan gewählt hat, müssen die Lager- und Transportteams ihn umsetzen.
+
+00:11:26.760 --> 00:11:31.440
+Vom Lagertor bis zur Kundentür hilft ein Transportplan nur, wenn er tatsächlich in eine echte Sendung umgewandelt werden kann.
+
+00:11:32.020 --> 00:11:34.960
+Bei einem Ausgangsauftrag beginnt der Prozess meist, wenn ein Kunde etwas kauft.
+
+00:11:34.960 --> 00:11:39.460
+Der Verkaufsauftrag sagt dem Unternehmen, was der Kunde möchte, wohin es gehen soll und wann es ankommen muss.
+
+00:11:39.820 --> 00:11:44.240
+Dieser Auftrag wird zu einer Sendung und die Sendung wird einer geplanten Ladung mit anderen Waren auf derselben Fahrt hinzugefügt.
+
+00:11:44.600 --> 00:11:45.540
+Dann übernimmt das Lager.
+
+00:11:46.060 --> 00:11:49.560
+Mitarbeiter entnehmen die Artikel aus dem Lager, verpacken sie und bringen sie zum richtigen Verladebereich.
+
+00:11:49.940 --> 00:11:54.660
+Da die Sendung zu einer Ladung gehört, sieht das Team, welche Waren zusammen das Lager verlassen müssen und welcher Frachtführer sie abholt.
+
+00:11:55.020 --> 00:11:59.940
+Wenn das Fahrzeug eintrifft, bewegen sich die Waren vom Lager zum Frachtführer und dieser bringt sie zum Kunden.
+
+00:12:00.440 --> 00:12:02.340
+Jeder Schritt ist mit demselben Bewegungsdatensatz verknüpft.
+
+00:12:02.660 --> 00:12:04.680
+Das klingt gewöhnlich, aber stellen Sie sich die alte Vorgehensweise vor.
+
+00:12:04.900 --> 00:12:06.540
+Ein Kommissionierer arbeitet vielleicht mit Druckenauftrag.
+
+00:12:06.780 --> 00:12:13.000
+Ein Transportplaner hat vielleicht eine separate Liste und jemand am Verladetor durchsucht E-Mails, um zu prüfen, welcher Frachtführer welche Paletten mitnehmen soll.
+
+00:12:13.760 --> 00:12:16.260
+Wenn sich ein Detail änderte, benötigte jeder die aktualisierte Version.
+
+00:12:16.780 --> 00:12:19.300
+Mit dem Transportmanagement bietet die Ladung den Teams einen gemeinsamen Datensatz.
+
+00:12:19.940 --> 00:12:23.560
+Das Lager sieht die mit der Ladung verbundenen Artikel, der Transportplaner sieht die Versanddetails
+
+00:12:23.560 --> 00:12:27.100
+und die Person, die die Abholung organisiert, sieht den geplanten Frachtführer und Service.
+
+00:12:27.100 --> 00:12:33.780
+Anstatt mehrere Papierlisten herumzureichen, arbeiten alle mit Informationen, die mit derselben Bestellung und Sendung verknüpft sind.
+
+00:12:34.280 --> 00:12:35.180
+Hier ist ein einfaches Beispiel.
+
+00:12:35.740 --> 00:12:38.560
+Ein Lager hat Aufträge für mehrere Kunden im selben Liefergebiet.
+
+00:12:39.260 --> 00:12:44.900
+Ein Kunde bestellte Kartons mit Reinigungsmitteln, ein anderer Papierprodukte und ein dritter eine kleine Menge Ausrüstung.
+
+00:12:44.900 --> 00:12:49.480
+Jeder Auftrag muss kommissioniert und verpackt werden, aber das Transportteam muss sie nicht als völlig separate Fahrten behandeln.
+
+00:12:49.840 --> 00:12:51.560
+Sie weisen die Sendung einer geplanten Ladung zu.
+
+00:12:51.900 --> 00:12:55.740
+Das Lagerpersonal kommissioniert jeden Auftrag, verpackt ihn korrekt und bereitet ihn für den Ladebereich vor.
+
+00:12:56.360 --> 00:12:59.040
+Der Ladedatensatz gibt an, dass alle diese Sendungen gemeinsam transportiert werden.
+
+00:12:59.500 --> 00:13:02.940
+Wenn der Spediteur eintrifft, übergibt das Team die Waren für eine geplante Bewegung,
+
+00:13:03.000 --> 00:13:05.940
+anstatt in letzter Minute einzelne Paletten einem Fahrer zuzuordnen.
+
+00:13:06.540 --> 00:13:08.140
+Der Kunde erhält weiterhin seine eigene Bestellung.
+
+00:13:08.460 --> 00:13:12.220
+Hinter den Kulissen hat das Unternehmen diese Lieferung jedoch als Teil eines größeren Vorgangs geplant.
+
+00:13:12.220 --> 00:13:15.700
+Diese Verknüpfung hilft dem Lager mit dem Transportteam zusammenzuarbeiten,
+
+00:13:15.780 --> 00:13:18.760
+anstatt ihm zuvor zu kommen oder auf zu spät eintreffende Anweisungen zu warten.
+
+00:13:19.340 --> 00:13:23.100
+Der eingehende Transport folgt demselben vernetzten Prinzip, nur in der entgegengesetzten Richtung.
+
+00:13:23.600 --> 00:13:26.400
+Eine Bestellung signalisiert ihn, dass ihr Unternehmen Waren von einem Lieferanten erwartet.
+
+00:13:27.040 --> 00:13:31.580
+Wenn ihr Unternehmen den Transport organisiert, verknüpft eine geplante Eingangsfracht die eingehenden Artikel mit der Fahrt,
+
+00:13:31.680 --> 00:13:32.940
+bevor die Waren das Lager erreichen.
+
+00:13:33.400 --> 00:13:37.460
+Der Lieferant versendet die Ware, der Spediteur bringt sie an ihren Standort und das Lager nimmt sie entgegen.
+
+00:13:37.780 --> 00:13:40.500
+Das Personal im Wareneingang kann sich vorbereiten, dass es weiß, was ankommen soll.
+
+00:13:40.500 --> 00:13:43.260
+Sie können die geplante Ladung mit den am Dock eintreffenden Waren abgleichen,
+
+00:13:43.300 --> 00:13:46.660
+viel übersichtlicher, als wenn ein LKW ohne Vorwarnung erscheint und jemand mühsam herausfinden muss,
+
+00:13:46.700 --> 00:13:49.160
+zu welcher Bestellung die Paletten gehören, zu welcher Bestellung die Paletten gehören.
+
+00:13:49.660 --> 00:13:51.140
+Umlagerungsaufträge passen ebenfalls in diesem Prozess.
+
+00:13:51.440 --> 00:13:54.360
+Ein Unternehmensstandort sendet Waren aus, während ein anderer Standort sie empfängt.
+
+00:13:54.800 --> 00:13:57.140
+Das erste Lager bereitet die Artikel vor und versendet sie,
+
+00:13:57.280 --> 00:14:00.180
+und das zweite Lager erwartet dieselben Artikel und nimmt sie in den Bestand auf.
+
+00:14:00.980 --> 00:14:02.860
+Am Ende dieser Reise steht zwar kein externer Kunde,
+
+00:14:03.100 --> 00:14:06.120
+aber das Unternehmen benötigt dennoch eine klare Übergabe zwischen den beiden Standorten.
+
+00:14:06.120 --> 00:14:09.920
+Die Ladung verknüpft die Sende- und Empfangsarbeit rund um eine geplante Bewegung.
+
+00:14:10.340 --> 00:14:13.140
+Auch die Lieferoptionen der Kunden bleiben mit der Versandentscheidung verbunden.
+
+00:14:13.860 --> 00:14:17.240
+Wählt ein Planer einen schnelleren Speditionsdienst, weil ein Kunde Waren dringend benötigt,
+
+00:14:17.320 --> 00:14:18.700
+ist diese Wahl mit der Sendung verknüpft.
+
+00:14:19.540 --> 00:14:21.500
+Wenn das Unternehmen einen kostennünstigeren Dienst nutzt,
+
+00:14:21.560 --> 00:14:23.740
+weil das Lieferdatum dies zulässt, ist auch diese Wahl verknüpft.
+
+00:14:24.120 --> 00:14:27.120
+Mitarbeiter können die Lieferkosten bis zu der Route und der Spediteurwahl zurückverfolgen,
+
+00:14:27.160 --> 00:14:27.820
+die sie verursacht haben.
+
+00:14:28.220 --> 00:14:30.900
+Das Fahrzeug mag das Dock verlassen haben und die Waren sicher angekommen sein,
+
+00:14:30.960 --> 00:14:32.200
+aber die Arbeit ist noch nicht abgeschlossen.
+
+00:14:32.200 --> 00:14:34.480
+Der Spediteur sendet nachträglich eine Frachtrechnung.
+
+00:14:34.560 --> 00:14:35.320
+Jemand muss diese prüfen.
+
+00:14:36.780 --> 00:14:37.960
+Frachtkosten und Abstimmung
+
+00:14:37.960 --> 00:14:42.100
+Die Waren haben das Lager verlassen und die Lieferung ist möglicherweise sogar bereits abgeschlossen.
+
+00:14:42.460 --> 00:14:43.660
+Dann trifft die Rechnung des Spediteurs an.
+
+00:14:43.920 --> 00:14:45.060
+Diese Rechnung muss geprüft werden,
+
+00:14:45.160 --> 00:14:49.180
+da der Betrag auf der Rechnung mit der zuvor geplanten Transportentscheidung des Unternehmens übereinstimmen sollte,
+
+00:14:49.360 --> 00:14:54.280
+einschließlich Spediteur, Route, Service, Ladedetails, Ladedetails und erwarteter Frachtkosten.
+
+00:14:55.000 --> 00:14:59.620
+Während der Planung kann Dynamics-Drive-Informationen des Unternehmens erwartete Transportkosten berechnen, berechnen.
+
+00:14:59.620 --> 00:15:04.240
+Dieser erwartete Betrag bietet dem Unternehmen einen Ausgangspunkt, bevor der Frachtführer die Zahlung verlangt.
+
+00:15:04.680 --> 00:15:06.340
+Später sendet der Frachtführer seine Frachtrechnung.
+
+00:15:07.100 --> 00:15:11.840
+Frachtabstimmung bedeutet, diese Rechnung mit den bereits im System erfassten Tarif- und Versanddaten zu vergleichen.
+
+00:15:12.320 --> 00:15:15.180
+Einfach ausgedrückt, dass Unternehmen prüft, ob der Frachtführer das berechnet hat,
+
+00:15:15.240 --> 00:15:17.080
+was für den tatsächlich erbrachten Transport erwartet wurde.
+
+00:15:17.500 --> 00:15:19.660
+Stellen Sie sich vor, der Plan sagt Kosten in Höhe von 500 Dollar.
+
+00:15:20.220 --> 00:15:23.700
+Die Rechnung des Frachtführers weist ebenfalls 500 Dollar aus und die Versanddetails stimmen überhalten.
+
+00:15:23.700 --> 00:15:28.240
+Diese Rechnung durchläuft den Prüfungsprozess problemlos, da der geplante Datensatz und die Rechnung übereinstimmen.
+
+00:15:28.780 --> 00:15:30.280
+Doch Rechnungen entsprechen nicht immer dem Plan.
+
+00:15:30.900 --> 00:15:33.800
+Vielleicht war die Tariftabelle falsch, der Frachtführer hat eine andere Leistung berechnet
+
+00:15:33.800 --> 00:15:37.340
+oder die Ladung hat sich nach der Planung geändert und erfordert eine Erklärung.
+
+00:15:38.420 --> 00:15:41.820
+Ohne verknüpften Datensatz sieht die Finanzabteilung nur eine Rechnungsnummer und einen Betrag
+
+00:15:41.820 --> 00:15:43.940
+und muss erst bei Lager- und Transportteam nachfragen.
+
+00:15:44.880 --> 00:15:47.820
+Das Transportmanagement hält die Transportentscheidung mit dieser Prüfung verbunden.
+
+00:15:48.540 --> 00:15:52.260
+Regeln können die Frachtführerrechnung mit dem erwarteten Betrag und den geplanten Versandinformationen vergleichen.
+
+00:15:52.260 --> 00:15:56.580
+Wenn die Details den akzeptierten Regeln des Unternehmens entsprechen, kann die Rechnung weiter bearbeitet werden.
+
+00:15:56.940 --> 00:16:00.160
+Wenn die Details nicht übereinstimmen, leitet das System die Differenz zur Überprüfung weiter.
+
+00:16:00.880 --> 00:16:03.400
+Das bedeutet, dass nicht jede Frachtkostenrechnung blind genehmigt wird.
+
+00:16:04.060 --> 00:16:07.620
+Ein Transportplaner muss möglicherweise bestätigen, dass ein anderer Dienst genutzt wurde
+
+00:16:07.620 --> 00:16:10.860
+oder jemand aus der Finanzabteilung muss nach einer zusätzlichen Gebühr fragen.
+
+00:16:11.560 --> 00:16:13.820
+Es geht nicht darum, bei jeder Abweichung sofort von einem Fehler auszugehen.
+
+00:16:14.460 --> 00:16:16.440
+Es geht darum, die Abweichung vor der Zahlung zu bemerken.
+
+00:16:16.900 --> 00:16:19.020
+Dies verbindet Betrieb und Finanzwesen bei derselben Sendung.
+
+00:16:19.020 --> 00:16:21.360
+Das Transportteam wählt Frachtführer und Service aus.
+
+00:16:21.360 --> 00:16:23.520
+Diese Entscheidung erzeugt einen erwarteten Kostenwert.
+
+00:16:24.040 --> 00:16:28.580
+Das Lager versendet die Ware und die Finanzabteilung prüft die spätere Rechnung gegen die geplanten Daten.
+
+00:16:29.640 --> 00:16:32.400
+Jedes Team sieht einen anderen Teil, aber sie betrachten dieselben verknüpften Informationen.
+
+00:16:32.820 --> 00:16:34.460
+Der integrierte Prozess hat jedoch einen kleinen Rahmen.
+
+00:16:35.320 --> 00:16:38.200
+Unternehmen, die eine groß angelegte, hochautomatisierte Frachtprüfung benötigen,
+
+00:16:38.300 --> 00:16:40.860
+ergänzen diese oft durch ein Transportmanagementsystem von Drittanbietern.
+
+00:16:41.500 --> 00:16:45.200
+Diese Tools können tiefere Anbindungen an Frachtführer und automatisiertere Prüfregeln ermöglichen.
+
+00:16:45.200 --> 00:16:49.920
+Das integrierte Modul übernimmt die Plankosten- und Abstimmungsarbeit innerhalb des Supply Chain Managements,
+
+00:16:50.620 --> 00:16:53.260
+während ein weiteres System diese bei Bedarf erweitern kann.
+
+00:16:54.180 --> 00:16:58.760
+Fügt man diese Bausteine zusammen, ergibt sich ein vollständiges Bild, wo es passt und was es nicht leistet.
+
+00:16:59.160 --> 00:17:02.200
+Äh, wo ist das Transportmanagement also eigentlich zu Hause?
+
+00:17:02.200 --> 00:17:06.940
+Es gehört zu Dynamic Style 65 Supply Chain Management innerhalb der Finance & Operations Apps.
+
+00:17:07.660 --> 00:17:09.600
+Es ist Sensor House. Hier erfahren Sie für wen es geeignet ist.
+
+00:17:09.900 --> 00:17:12.840
+Unternehmen, die eine strukturierte Methode zur Planung von eingehenden Lieferungen,
+
+00:17:12.960 --> 00:17:15.640
+ausgehenden Kundensendungen und Umlagerungen zwischen Standorten benötigen,
+
+00:17:15.980 --> 00:17:19.700
+unter Verwendung ihrer eigenen Frachtführer Tariftabellen und Ladevorgaben Tariftabellen.
+
+00:17:19.860 --> 00:17:21.620
+Lassen Sie uns nun einen häufigen Punkt der Verwirrung klären.
+
+00:17:22.160 --> 00:17:23.120
+Business Central ist anders.
+
+00:17:23.580 --> 00:17:26.500
+Business Central enthält dieses integrierte Transportmanagement-Modul nicht.
+
+00:17:26.840 --> 00:17:29.280
+Wenn Sie Business Central nutzen und eine Transportplanung benötigen,
+
+00:17:29.280 --> 00:17:31.880
+sollten Sie sich nach einem Transportmanagementsystem eines Drittanbieters umsetzen.
+
+00:17:31.880 --> 00:17:32.540
+Das ist die Grenze.
+
+00:17:32.860 --> 00:17:34.760
+Lassen Sie uns die Grenze auch auf der anderen Seite klar definieren.
+
+00:17:35.140 --> 00:17:37.440
+Das integrierte Modul ersetzt nicht jedes Frachtführerportal,
+
+00:17:37.520 --> 00:17:39.620
+jeden Live-Verkehrsdienst oder jedes erweiterte Tracking-Tool.
+
+00:17:40.020 --> 00:17:43.560
+Wenn ein Unternehmen in Live-Raten von vielen Spediteuren eine größere Auswahl an Frachtführern
+
+00:17:43.560 --> 00:17:46.040
+oder eine tiefere Sendungsverfolgung nach Verlassen der Rampe benötigt,
+
+00:17:46.160 --> 00:17:47.420
+wird ein externes TMS angebunden.
+
+00:17:47.740 --> 00:17:49.200
+Diese Tools übernehmen die externen Aktivitäten.
+
+00:17:49.660 --> 00:17:50.840
+Denken Sie zurück an das Bürogebäude.
+
+00:17:51.180 --> 00:17:53.600
+Das Transportmanagement ist das Transportbüro innerhalb dieses Gebäudes.
+
+00:17:54.140 --> 00:17:56.260
+Es ist mit Aufträgen der Lagerarbeit und dem Finanzwesen vor.
+
+00:17:56.640 --> 00:17:58.880
+Es hält den unternehmenseigenen Transportplan zusammen.
+
+00:17:58.880 --> 00:18:02.420
+Externe Frachtführer-Tools können Aktivitäten außerhalb dieses Schreibtisches übernehmen.
+
+00:18:02.800 --> 00:18:04.260
+Zwei verschiedene Ebenen, die zusammenarbeiten.
+
+00:18:05.980 --> 00:18:06.300
+Fazit.
+
+00:18:07.060 --> 00:18:07.880
+Nächster Wissenshaben.
+
+00:18:08.620 --> 00:18:10.020
+Hier ist die einfachste Art, darüber nachzudenken.
+
+00:18:10.420 --> 00:18:12.880
+Das Transportmanagement verwandelt Geschäftsaufträge in geplante Warenbewegungen.
+
+00:18:13.860 --> 00:18:16.000
+Anschließend verknüpft es diese Bewegung mit den Frachtkosten,
+
+00:18:16.060 --> 00:18:17.300
+die das Unternehmen im Nachhinein prüft.
+
+00:18:17.600 --> 00:18:18.560
+Das ist der vollständige Kreislauf.
+
+00:18:19.020 --> 00:18:20.880
+Abonnieren Sie uns auf Ihrer bevorzugten Podcast-Plattform.
+
+00:18:20.880 --> 00:18:25.780
+Teilen Sie diesen Wissenshappen mit jemandem, der Dynamics 365 Supply Chain Management lernt.
+
+00:18:26.320 --> 00:18:28.700
+Entdecken Sie danach unsere Episoden zu Lagerhaltung und Inventar.
+
+00:18:29.280 --> 00:18:31.700
+Jede Ladung hängt immer noch von dem Bestand hinter der Lagertür ab.
+
+00:18:31.700 --> 00:19:01.680
+Das ist das, was Sie sehen, wie Sie sehen, wie Sie sehen, wie Sie sehen.

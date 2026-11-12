@@ -1,0 +1,1285 @@
+WEBVTT
+
+00:00:00.080 --> 00:00:04.360
+Excel, el castigo autoinfligido favorito de la humanidad disfrazado de software de productividad.
+
+00:00:04.520 --> 00:00:08.140
+En todas las oficinas hay una, la persona que todavía cree que la mejor manera de completar
+
+00:00:08.140 --> 00:00:12.000
+una hoja de cálculo de solicitud de información es copiar y pegar manualmente 50 respuestas
+
+00:00:12.000 --> 00:00:14.280
+de un documento de Word en celdas con bordes prolijos.
+
+00:00:14.480 --> 00:00:17.640
+Verlos es como ver a alguien sin celar un correo electrónico en tablas de piedra.
+
+00:00:17.780 --> 00:00:19.660
+Es conmovedor en un sentido antropológico.
+
+00:00:19.820 --> 00:00:24.080
+La verdad, muchos profesionales siguen usando Excel para sus RFIs como en 1999.
+
+00:00:25.000 --> 00:00:27.300
+Procesos repetitivos, propensos a errores y manuales.
+
+00:00:27.300 --> 00:00:29.940
+Cada hoja de cálculo entrante es otro ritual de monotonía.
+
+00:00:30.120 --> 00:00:34.420
+Abre el correo, descarga el archivo, escanea las filas, murmura obscenidades, empieza a
+
+00:00:34.420 --> 00:00:35.700
+copiar las respuestas celda a celda.
+
+00:00:35.840 --> 00:00:39.740
+Un error tipográfico, una falta de pegado, un punto y coma que falta y todo un departamento
+
+00:00:39.740 --> 00:00:41.200
+pasa medio día culpando a la fórmula.
+
+00:00:41.380 --> 00:00:43.240
+Ahora, imagina rechazar ese destino.
+
+00:00:43.440 --> 00:00:48.080
+Imagina delegar toda la miseria a una máquina que no se aburre, no comete errores tipográficos
+
+00:00:48.080 --> 00:00:50.060
+y, desde luego, no necesita café.
+
+00:00:50.280 --> 00:00:54.040
+Se trata de un agente autónomo, un software que realiza el ciclo por sí solo.
+
+00:00:54.040 --> 00:00:59.020
+Lee el archivo de Excel, interpreta las preguntas, encuentra las respuestas mediante guía generativa,
+
+00:00:59.020 --> 00:01:03.240
+vuelve a escribir esas respuestas en el mismo archivo y envía por correo electrónico la
+
+00:01:03.240 --> 00:01:05.600
+obra maestra completa directamente al solicitante.
+
+00:01:05.840 --> 00:01:10.020
+No solo ahorras tiempo, sino que eliminas por completo el concepto de trabajo innecesario.
+
+00:01:10.260 --> 00:01:14.740
+Vamos a crear ese agente dentro de Microsoft Copilot Studio y Power Automate, una rebelión
+
+00:01:14.740 --> 00:01:17.140
+práctica contra el status quo de las hojas de cálculo.
+
+00:01:17.340 --> 00:01:20.700
+Lo llamo un truco porque lleva Excel mucho más allá de su propósito original.
+
+00:01:20.700 --> 00:01:25.100
+Dentro de 20 minutos, tendrás un proceso que se actualiza solo mientras tomas un café
+
+00:01:25.100 --> 00:01:27.060
+y contemplas lo obsoleto que te has vuelto.
+
+00:01:27.240 --> 00:01:29.080
+Empecemos por diseccionar el organismo.
+
+00:01:29.540 --> 00:01:31.760
+La anatomía de un modelo de agente autónomo.
+
+00:01:32.220 --> 00:01:35.060
+Primero, definamos lo que realmente estamos creando.
+
+00:01:35.340 --> 00:01:40.060
+En Copilot Studio, un agente autónomo no es un chatbot educado que espera instrucciones.
+
+00:01:40.300 --> 00:01:43.060
+Es una construcción autónoma con tres componentes principales.
+
+00:01:43.440 --> 00:01:45.420
+Un disparador, lógica y orquestación.
+
+00:01:45.420 --> 00:01:49.480
+El desencadenador inicia el proceso, un evento como la llegada de un nuevo correo electrónico
+
+00:01:49.480 --> 00:01:51.080
+o la carga de un archivo en SharePoint.
+
+00:01:51.260 --> 00:01:53.260
+La lógica define qué hacer cuando eso sucede.
+
+00:01:53.460 --> 00:01:57.060
+La orquestación gestiona qué herramientas o flujos externos llamar para que todo suceda
+
+00:01:57.060 --> 00:01:58.020
+en la secuencia correcta.
+
+00:01:58.160 --> 00:02:01.300
+Piense en ello como una línea de montaje, pero en lugar de trabajadores de una fábrica,
+
+00:02:01.660 --> 00:02:04.520
+tiene componentes de Power Platform que se pasan piezas digitales entre sí.
+
+00:02:04.680 --> 00:02:08.340
+Power Automate recibe el correo electrónico, almacena el archivo y notifica a la gente.
+
+00:02:08.520 --> 00:02:12.040
+Copilot Studio lee la hoja de cálculo, realiza una lluvia de ideas para las respuestas
+
+00:02:12.040 --> 00:02:13.920
+mediante guía generativa y las vuelve a escribir.
+
+00:02:13.920 --> 00:02:17.380
+Por último, Power Automate adjunta el resultado de nuevo y envía la respuesta.
+
+00:02:17.560 --> 00:02:19.960
+Tres sistemas, un proceso de pensamiento continuo.
+
+00:02:20.080 --> 00:02:21.960
+Aquí es donde la mayoría de la gente se confunde.
+
+00:02:22.160 --> 00:02:25.820
+Microsoft habla de Copilot como si fuera una sola cosa, pero hay una diferencia crucial
+
+00:02:25.820 --> 00:02:27.580
+con el agente estándar de Copilot Studio.
+
+00:02:27.780 --> 00:02:29.780
+El Copilot normal espera a que usted le hable.
+
+00:02:29.920 --> 00:02:32.260
+Un agente de Studio no necesita su supervisión.
+
+00:02:32.440 --> 00:02:35.160
+Puede activarse solo en función de las condiciones que defina.
+
+00:02:35.320 --> 00:02:39.480
+Es la diferencia entre un becario servicial y un empleado que dirige el departamento mientras
+
+00:02:39.480 --> 00:02:40.180
+usted duerme.
+
+00:02:40.320 --> 00:02:42.720
+¿Por qué usar un flujo de RFI como Sandbox?
+
+00:02:42.720 --> 00:02:45.600
+Porque las RFI son un caos bellamente estructurado.
+
+00:02:45.720 --> 00:02:48.300
+Cada fila contiene una pregunta y espera una respuesta.
+
+00:02:48.500 --> 00:02:50.520
+El patrón nunca cambia, solo el contenido.
+
+00:02:50.760 --> 00:02:54.860
+Eso lo hace un laboratorio perfecto para la IA, lo bastante estructurado para automatizar
+
+00:02:54.860 --> 00:02:57.460
+y lo bastante variado para justificar usar IA generativa.
+
+00:02:57.680 --> 00:02:59.440
+¿Sabes exactamente cómo se ve algo bueno?
+
+00:02:59.560 --> 00:03:03.080
+Cada pregunta respondida, devuelta de forma ordenada, cero trauma emocional.
+
+00:03:03.280 --> 00:03:05.620
+Antes de profundizar, dibujemos un diagrama mental.
+
+00:03:05.900 --> 00:03:08.260
+Empieza con un correo que contenga el archivo adjunto de Excel.
+
+00:03:08.260 --> 00:03:10.500
+Ese correo electrónico llega a un buzón compartido.
+
+00:03:10.640 --> 00:03:14.440
+Power Automate detecta el archivo, verifica que tenga el formato correcto y luego lo copia
+
+00:03:14.440 --> 00:03:17.560
+en una ubicación de SharePoint como un área de almacenamiento temporal digital.
+
+00:03:17.780 --> 00:03:21.620
+El agente en Copilot Studio recibe un mensaje que le indica qué archivo procesar.
+
+00:03:21.740 --> 00:03:26.360
+El agente abre ese archivo, itera a través de las preguntas, genera respuestas utilizando
+
+00:03:26.360 --> 00:03:30.740
+su base de conocimientos configurada o la base de datos y vuelve a escribir las respuestas
+
+00:03:30.740 --> 00:03:31.640
+en la tabla original.
+
+00:03:31.880 --> 00:03:35.780
+Cuando termina, Power Automate vuelve a tomar el archivo y se lo envía por correo electrónico
+
+00:03:35.780 --> 00:03:36.960
+a quien realizó la solicitud.
+
+00:03:37.080 --> 00:03:38.480
+Entonces, los datos fluyen así.
+
+00:03:38.860 --> 00:03:43.440
+Correo electrónico, SharePoint, Copilot Studio, Power Automate, respuesta de correo electrónico.
+
+00:03:43.620 --> 00:03:45.100
+Esa es la anatomía de la autonomía.
+
+00:03:45.260 --> 00:03:48.640
+Los desencadenantes inician, la lógica decide y la orquestación se ejecuta.
+
+00:03:48.720 --> 00:03:50.680
+Pero la autonomía no significa omnisciencia.
+
+00:03:50.840 --> 00:03:53.060
+Un agente no puede improvisar fuera de sus límites.
+
+00:03:53.280 --> 00:03:56.040
+Tienes que definir sus permisos y darle el contexto que necesita.
+
+00:03:56.300 --> 00:03:57.380
+¿Dónde reside el archivo?
+
+00:03:57.660 --> 00:03:58.040
+¿Qué leer?
+
+00:03:58.360 --> 00:03:59.060
+¿Dónde escribir?
+
+00:03:59.160 --> 00:04:00.120
+¿Y cuándo pedir ayuda?
+
+00:04:00.340 --> 00:04:04.080
+Deja algo de eso en blanco y el agente se detendrá educadamente a esperar a un humano
+
+00:04:04.080 --> 00:04:07.480
+que nunca llega. Ese es el plan, comprensión antes de configuración.
+
+00:04:07.660 --> 00:04:10.820
+Ahora que sabes lo que necesita la máquina, podemos empezar a alimentarla.
+
+00:04:10.940 --> 00:04:14.180
+Porque el siguiente paso es enseñarle a Power Automate a actuar como guardián,
+
+00:04:14.540 --> 00:04:18.400
+filtrando las entradas y entregándolas a tu nuevo empleado digital con precisión mecánica.
+
+00:04:18.560 --> 00:04:22.500
+Y una vez que eso esté en su lugar, es cuando comienza la diversión de verdad, viendo pensar
+
+00:04:22.500 --> 00:04:22.960
+a la máquina.
+
+00:04:23.220 --> 00:04:25.640
+Alimentar a la máquina, diseño del flujo de entrada.
+
+00:04:25.840 --> 00:04:28.760
+Toda gran automatización comienza con un acto de burocracia.
+
+00:04:28.980 --> 00:04:33.120
+Aquí es un correo, concretamente uno que llega a un buzón de correo compartido.
+
+00:04:33.120 --> 00:04:36.980
+El equivalente digital de un casillero donde todo el mundo deja sus solicitudes urgentes
+
+00:04:36.980 --> 00:04:38.080
+y las olvida rápidamente.
+
+00:04:38.280 --> 00:04:39.540
+Ese es nuestro punto de entrada.
+
+00:04:39.720 --> 00:04:43.300
+El mensaje entrante completa el primer eslabón de la cadena y Power Automate está preparado
+
+00:04:43.300 --> 00:04:43.840
+como guardián.
+
+00:04:44.000 --> 00:04:47.500
+Ahora bien, Power Automate no se limita a esperar como un becario que comprueba la bandeja
+
+00:04:47.500 --> 00:04:48.700
+de entrada cada cinco minutos.
+
+00:04:48.920 --> 00:04:52.800
+Está configurado con un disparador preciso cuando llega un nuevo correo electrónico al buzón
+
+00:04:52.800 --> 00:04:53.340
+compartido.
+
+00:04:53.520 --> 00:04:55.660
+Este es nuestro primer principio de automatización.
+
+00:04:55.920 --> 00:04:58.860
+No confíes en la observación humana, confía en las condiciones.
+
+00:04:58.860 --> 00:05:03.100
+El flujo cobra vida en el momento en que llega un archivo adjunto, lo que elimina el viejo
+
+00:05:03.100 --> 00:05:05.480
+problema de, no vi ese correo electrónico.
+
+00:05:05.660 --> 00:05:07.040
+La primera acción es el filtrado.
+
+00:05:07.220 --> 00:05:11.040
+Le indicas a Power Automate que ignore todos los archivos adjuntos que no sean xlsx.
+
+00:05:11.220 --> 00:05:15.200
+Los archivos PDF, las capturas de pantalla y la ocasional foto del gato del equipo celebrando
+
+00:05:15.200 --> 00:05:16.860
+el fin de año fiscal se descartan sin más.
+
+00:05:17.060 --> 00:05:21.520
+Sin esta regla, tu agente intentaría interpretar un JPEG de un gráfico y fracasaría educadamente.
+
+00:05:21.780 --> 00:05:24.560
+El filtrado ahorra ciclos de CPU y su dignidad profesional.
+
+00:05:24.560 --> 00:05:27.720
+Dentro del flujo, la condición dice casi poéticamente.
+
+00:05:28.320 --> 00:05:31.860
+Si el nombre del archivo adjunto termina en xlsx, continuar.
+
+00:05:32.080 --> 00:05:33.840
+Esa línea separa el orden del caos.
+
+00:05:34.000 --> 00:05:38.340
+Porque el caos en el mundo de la automatización siempre comienza con tipos de archivo inesperados.
+
+00:05:38.540 --> 00:05:41.840
+Una vez que el archivo pasa la inspección, el siguiente desafío es la validación de
+
+00:05:41.840 --> 00:05:42.320
+la estructura.
+
+00:05:42.460 --> 00:05:45.580
+Un archivo de Excel válido debe contener una tabla de nombres y el nombre importa.
+
+00:05:45.740 --> 00:05:48.460
+En nuestro universo, está obstinadamente fijado como la tabla 1.
+
+00:05:48.660 --> 00:05:50.040
+Si eso suena rígido, bien.
+
+00:05:50.280 --> 00:05:51.700
+Mantiene a Power Automate en orden.
+
+00:05:51.700 --> 00:05:55.740
+Sin una tabla, Excel es solo una pizarra digital llena de celdas combinadas, columnas
+
+00:05:55.740 --> 00:05:56.820
+ocultas y desesperación.
+
+00:05:56.980 --> 00:06:01.820
+Una tabla definida, por otro lado, proporciona a la gente un esquema predecible, columnas
+
+00:06:01.820 --> 00:06:05.360
+para preguntas, respuestas y cualquier dato contextual que defina.
+
+00:06:05.580 --> 00:06:06.840
+La tabla es el esqueleto.
+
+00:06:07.000 --> 00:06:08.660
+Sin ella, no hay nada que animar.
+
+00:06:08.820 --> 00:06:12.700
+Cuando Power Automate encuentra un archivo, no lo edita directamente desde el buzón.
+
+00:06:12.900 --> 00:06:14.040
+Eso sería una barbaridad.
+
+00:06:14.240 --> 00:06:16.760
+En su lugar, crea una copia controlada en SharePoint.
+
+00:06:16.960 --> 00:06:20.640
+Piense en esto como si estuviera moviendo el archivo de una calle pública ruidosa a una mesa
+
+00:06:20.640 --> 00:06:21.640
+de laboratorio.
+
+00:06:21.840 --> 00:06:25.360
+SharePoint proporciona control de versiones, URL coherentes y tokens de acceso seguro,
+
+00:06:25.660 --> 00:06:28.520
+lo que permite a Copilot Studio interactuar con los datos de forma segura.
+
+00:06:28.680 --> 00:06:31.540
+Cada automatización debe registrar su entrada en algún lugar estable.
+
+00:06:31.760 --> 00:06:34.740
+SharePoint es esa estabilidad envuelta en el cumplimiento corporativo.
+
+00:06:34.960 --> 00:06:39.580
+Ahora que el archivo reside en SharePoint, el flujo extrae su ID de archivo, un identificador
+
+00:06:39.580 --> 00:06:42.580
+único que permite a la gente encontrar la muestra exacta más adelante.
+
+00:06:42.860 --> 00:06:46.700
+Junto con esto, extrae el ID del mensaje, la dirección del correo electrónico original
+
+00:06:46.700 --> 00:06:48.400
+que nos trajo este problema en primer lugar.
+
+00:06:48.400 --> 00:06:52.220
+Ambos ID se convierten en puntos de referencia en la próxima conversación con el agente.
+
+00:06:52.360 --> 00:06:53.920
+Esto es higiene de Metadato 101.
+
+00:06:54.340 --> 00:06:57.700
+Rastre todo lo que ingresa a su sistema para que pueda cerrar el ciclo correctamente al
+
+00:06:57.700 --> 00:06:57.940
+salir.
+
+00:06:58.080 --> 00:07:01.400
+En este punto, es posible que se pregunte por qué nos importan tanto las convenciones
+
+00:07:01.400 --> 00:07:02.480
+de nomenclatura impecables.
+
+00:07:02.680 --> 00:07:03.360
+Es sencillo.
+
+00:07:03.480 --> 00:07:08.340
+Si los nombres de sus archivos se leen como Final Final RFI V23 en clase, en realidad
+
+00:07:08.340 --> 00:07:09.860
+está hablando en lenguas con un robot.
+
+00:07:10.060 --> 00:07:11.780
+Las máquinas prosperan con la uniformidad.
+
+00:07:11.920 --> 00:07:13.740
+A los humanos, aparentemente, no.
+
+00:07:13.940 --> 00:07:16.900
+Asigne un nombre predecible a sus archivos y su agente se lo agradecerá sin bloquearse.
+
+00:07:16.900 --> 00:07:20.740
+Una vez validado y almacenado de forma segura el archivo, el flujo envía un aviso preciso
+
+00:07:20.740 --> 00:07:21.960
+al agente de Copilot Studio.
+
+00:07:22.180 --> 00:07:27.200
+Este mensaje está redactado a propósito como, realice un RFI del archivo IDX y responda
+
+00:07:27.200 --> 00:07:28.220
+al mensaje con el IDE.
+
+00:07:28.480 --> 00:07:32.460
+Sin prosa florida ni contexto pasivo-agresivo, solo una intención clara y legible por máquina.
+
+00:07:32.640 --> 00:07:34.880
+La ambigüedad es el enemigo mortal de la automatización.
+
+00:07:35.140 --> 00:07:37.780
+Aquí también es donde aparece el concepto de aviso estructurado.
+
+00:07:37.980 --> 00:07:40.600
+No basta con decirle al agente, procese el archivo.
+
+00:07:40.900 --> 00:07:45.700
+Debe incluir el contexto, el alcance del archivo, la acción esperada y el destino de la respuesta.
+
+00:07:45.700 --> 00:07:49.160
+Esa tríada forma el andamiaje lingüístico para el comportamiento de la IA.
+
+00:07:49.380 --> 00:07:53.120
+Sin ella, el agente podría intentar algo admirable pero irrelevante, como redactar
+
+00:07:53.120 --> 00:07:56.160
+respuestas de correo electrónico educadas en lugar de rellenar celdas.
+
+00:07:56.300 --> 00:07:57.980
+La integridad de los datos lo es todo aquí.
+
+00:07:58.160 --> 00:08:01.260
+Todo entusiasta de la automatización acaba aprendiendo que las hojas de cálculo no
+
+00:08:01.260 --> 00:08:03.080
+estructuradas son minas terrestres digitales.
+
+00:08:03.220 --> 00:08:06.820
+La diferencia entre una tabla limpia y una desordenada puede decidir si su proceso parece
+
+00:08:06.820 --> 00:08:07.720
+brillante o maldito.
+
+00:08:07.860 --> 00:08:09.380
+A Power Automate le encanta el orden.
+
+00:08:09.600 --> 00:08:13.660
+Las filas son registros, las columnas son variables y las celdas combinadas son delitos contra la lógica.
+
+00:08:13.660 --> 00:08:17.000
+Cuando le entregas a la gente una tabla con el formato adecuado, no solo le estás dando
+
+00:08:17.000 --> 00:08:18.800
+datos, sino que le estás dando comprensión.
+
+00:08:18.980 --> 00:08:23.840
+En esta etapa, nuestro flujo de Power Automate ha logrado tres hitos, detección, validación
+
+00:08:23.840 --> 00:08:24.500
+y preparación.
+
+00:08:24.720 --> 00:08:28.180
+El desencadenador de correo electrónico detectó el mensaje entrante, el filtro se aseguró
+
+00:08:28.180 --> 00:08:31.840
+de que solo sobrevivieran los archivos legítimos de Excel y la copia de SharePoint proporcionó
+
+00:08:31.840 --> 00:08:32.820
+un hábitat de datos estable.
+
+00:08:33.060 --> 00:08:35.720
+Ahora, la máquina tiene lo que necesita para comenzar la digestión.
+
+00:08:35.880 --> 00:08:37.680
+En otras palabras, es hora de alimentarse.
+
+00:08:37.680 --> 00:08:41.100
+El flujo completado le pasa el testigo a Copilot Studio, que empaqueta toda la información
+
+00:08:41.100 --> 00:08:44.740
+necesaria, la ubicación del archivo, los ID y las instrucciones, y envía el mensaje
+
+00:08:44.740 --> 00:08:45.500
+para su procesamiento.
+
+00:08:45.680 --> 00:08:48.800
+A la gente no le importa cuántas personas ignoraron la bandeja de entrada esta mañana
+
+00:08:48.800 --> 00:08:50.780
+o cuántas versiones de la hoja de cálculo existen.
+
+00:08:51.120 --> 00:08:54.880
+Simplemente toma la más reciente, abre la tabla y comienza a razonar sobre las preguntas
+
+00:08:54.880 --> 00:08:55.440
+que contiene.
+
+00:08:55.600 --> 00:08:57.260
+Y eso nos lleva a un punto de inflexión.
+
+00:08:57.440 --> 00:09:00.700
+La máquina ahora tiene material para el pensamiento, una lista literal de preguntas
+
+00:09:00.700 --> 00:09:01.580
+que esperan respuestas.
+
+00:09:01.780 --> 00:09:03.180
+La etapa de entrada ha terminado.
+
+00:09:03.320 --> 00:09:07.260
+Las puertas están abiertas, los parámetros son fijos y el caos se ha domesticado en un esquema.
+
+00:09:07.260 --> 00:09:08.920
+La siguiente fase es la cognición.
+
+00:09:09.100 --> 00:09:13.820
+Cómo el agente lee esas filas, las interpreta y genera respuestas creíbles una por una sin
+
+00:09:13.820 --> 00:09:14.920
+indicaciones humanas.
+
+00:09:15.080 --> 00:09:18.260
+Ahora que hemos alimentado a la máquina, es hora de verla masticar.
+
+00:09:18.420 --> 00:09:20.320
+El bucle de respuesta de la IA cerebral.
+
+00:09:20.580 --> 00:09:24.420
+En este punto, el archivo está en silencio en SharePoint como un paciente en triaje.
+
+00:09:24.640 --> 00:09:28.580
+Ahora es el turno del agente de Copilot Studio de hacer de médico, diagnosticar cada pregunta
+
+00:09:28.580 --> 00:09:29.560
+y recetar una respuesta.
+
+00:09:29.820 --> 00:09:33.360
+Aquí es donde la inteligencia reemplaza la automatización, donde el sistema no solo mueve
+
+00:09:33.360 --> 00:09:34.580
+datos, sino que los entiende.
+
+00:09:34.580 --> 00:09:37.660
+Ingrese al tema de RFI, el centro cognitivo de nuestro agente.
+
+00:09:37.800 --> 00:09:41.720
+Un tema en Copilot Studio es esencialmente un modelo de conversación, una serie de pasos
+
+00:09:41.720 --> 00:09:43.220
+que el agente ejecuta cuando se activa.
+
+00:09:43.300 --> 00:09:46.520
+Pero en este contexto, no hay ninguna burbuja de chat ni ningún humano que apaciguar.
+
+00:09:46.640 --> 00:09:50.900
+El tema de RFI funciona en silencio, ejecutando una pregunta a la vez en un orden determinista
+
+00:09:50.900 --> 00:09:51.320
+necesario.
+
+00:09:51.560 --> 00:09:53.200
+Cada pregunta es un examen corto.
+
+00:09:53.240 --> 00:09:56.240
+Cada respuesta es un ensayo redactado por el cerebro generativo de la IA.
+
+00:09:56.380 --> 00:10:00.160
+Primero, el tema recibe parámetros de entrada, concretamente el ID del archivo que apunta
+
+00:10:00.160 --> 00:10:01.280
+nuestra copia de SharePoint.
+
+00:10:01.280 --> 00:10:04.020
+Luego ejecuta la acción de listar filas presentes en una tabla.
+
+00:10:04.140 --> 00:10:08.640
+Este comando obtiene la tabla completa, no como filas y columnas, sino como datos estructurados.
+
+00:10:08.820 --> 00:10:13.140
+El agente pasa esto a una variable de registro, su instantánea interna de nuestro mundo de
+
+00:10:13.140 --> 00:10:13.400
+Excel.
+
+00:10:13.660 --> 00:10:17.480
+Dentro de ese registro hay una matriz de todas las filas almacenadas convenientemente bajo
+
+00:10:17.480 --> 00:10:18.980
+algo así como valor de registro.
+
+00:10:19.140 --> 00:10:21.740
+Ese es el bufé de datos que el agente está a punto de consumir.
+
+00:10:21.880 --> 00:10:23.440
+Aquí la estructura se une a la lógica.
+
+00:10:23.620 --> 00:10:26.700
+Le indicas a la gente que establezca esa matriz como elementos, la colección de trabajo
+
+00:10:26.700 --> 00:10:27.480
+que recorrerá en bucle.
+
+00:10:27.480 --> 00:10:31.300
+A continuación, mediante un bucle for each, el agente examina cada fila en secuencia.
+
+00:10:31.520 --> 00:10:33.500
+Sin saltos, sin sesgos, sin quejas.
+
+00:10:33.680 --> 00:10:38.260
+Para cada fila, extrae el campo de la pregunta y lo selecciona para la siguiente fase, la generación.
+
+00:10:38.460 --> 00:10:41.840
+Esta elección de diseño, que aisla una pregunta a la vez, no es arbitraria.
+
+00:10:42.000 --> 00:10:44.200
+Se trata de evitar lo que yo llamo sangrado de contexto.
+
+00:10:44.400 --> 00:10:48.240
+En modelos de lenguaje grandes, eliminar varias indicaciones a la vez invita a la contaminación.
+
+00:10:48.420 --> 00:10:51.020
+El contexto de una pregunta puede contaminar la siguiente respuesta.
+
+00:10:51.220 --> 00:10:53.640
+Al aislar cada indicación, reforzamos la higiene mental.
+
+00:10:53.640 --> 00:10:57.220
+El agente olvida después de cada fila, lo que garantiza que cada respuesta nazca inocente,
+
+00:10:57.500 --> 00:10:59.160
+sin contaminarse por la confusión de su hermano.
+
+00:10:59.220 --> 00:11:02.160
+Ahora llega la pieza clave, el nodo de creación de respuestas generativas.
+
+00:11:02.400 --> 00:11:05.500
+Este es el equivalente de Copilot Studio o a una neurona turboalimentada.
+
+00:11:05.820 --> 00:11:09.300
+Proporcionaste el texto de la pregunta, se le indicó que encontrara o sintetizara la
+
+00:11:09.300 --> 00:11:13.040
+mejor respuesta posible en función de las fuentes de conocimiento del agente, y él hace
+
+00:11:13.040 --> 00:11:13.400
+el resto.
+
+00:11:13.740 --> 00:11:15.500
+El agente no chatea, calcula.
+
+00:11:15.660 --> 00:11:17.060
+Esta distinción es fundamental.
+
+00:11:17.320 --> 00:11:20.360
+Autonomy no anhela la conversación, solo quiere completar la tarea.
+
+00:11:20.360 --> 00:11:24.000
+Para mantener la disciplina, deshabilita la propiedad de enviar mensaje en este nodo.
+
+00:11:24.040 --> 00:11:28.020
+Ese interruptor está oculto en la configuración avanzada y, al desactivarlo, se silencia la
+
+00:11:28.020 --> 00:11:29.240
+salida de chat predeterminada.
+
+00:11:29.380 --> 00:11:29.720
+¿Por qué?
+
+00:11:29.860 --> 00:11:33.040
+Porque no quieres que este agente intente mantener un diálogo educado consigo mismo.
+
+00:11:33.220 --> 00:11:35.400
+No está registrando sus pensamientos, está trabajando.
+
+00:11:35.580 --> 00:11:38.080
+En cambio, todas las respuestas se almacenarán en una variable.
+
+00:11:38.240 --> 00:11:41.120
+Por lo general, algo elegantemente llamado respuesta de IA.
+
+00:11:41.300 --> 00:11:44.760
+Este es el cuaderno del agente que contiene las respuestas generadas en un formato ordenado
+
+00:11:44.760 --> 00:11:45.360
+y consultable.
+
+00:11:45.520 --> 00:11:49.800
+Una vez completada la variable de respuesta de la IA, el agente ejecuta un comando de actualizar
+
+00:11:49.800 --> 00:11:50.120
+fila.
+
+00:11:50.280 --> 00:11:52.420
+Piense en ellos como los brazos mecánicos del robot.
+
+00:11:52.620 --> 00:11:56.500
+Uno inserta las respuestas precisamente donde pertenecen, haciendo coincidir cada respuesta
+
+00:11:56.500 --> 00:11:57.420
+con su pregunta original.
+
+00:11:57.660 --> 00:12:01.320
+Utiliza el mismo ID de archivo, el mismo nombre de tabla y la fila de destino en función
+
+00:12:01.320 --> 00:12:02.900
+del identificador de la pregunta actual.
+
+00:12:03.100 --> 00:12:07.200
+En segundos, la columna de respuestas, antes vacía, se llena como un informe que se escribe
+
+00:12:07.200 --> 00:12:07.480
+solo.
+
+00:12:07.660 --> 00:12:10.180
+En este punto, ha logrado el ciclo cognitivo de la IA.
+
+00:12:10.400 --> 00:12:12.980
+Leer, razonar, responder, registrar.
+
+00:12:12.980 --> 00:12:17.280
+No es emocionante verlo a menos que, por supuesto, aprecia el poder silencioso de la automatización
+
+00:12:17.280 --> 00:12:17.740
+que piensa.
+
+00:12:17.960 --> 00:12:21.020
+Lo que solía requerir horas ahora sucede más rápido de lo que Excel puede actualizar
+
+00:12:21.020 --> 00:12:21.780
+sus propias celdas.
+
+00:12:21.960 --> 00:12:25.680
+Ahora hablemos de la base de conocimiento, la brújula invisible que guía estas respuestas.
+
+00:12:25.920 --> 00:12:27.940
+En Copilot Studio tiene dos opciones principales.
+
+00:12:28.380 --> 00:12:31.220
+Utilizar información de la web o una base de conocimiento personalizada.
+
+00:12:31.440 --> 00:12:34.540
+La opción web se conecta a través de la base de búsqueda de BIN, lo que permite a
+
+00:12:34.540 --> 00:12:37.180
+la gente extraer datos en vivo, un enfoque amplio pero volátil.
+
+00:12:37.360 --> 00:12:40.460
+Ideal para la investigación general, inaceptable para dominios propietarios.
+
+00:12:40.460 --> 00:12:44.560
+Cuando la confidencialidad importa, desactivas la conexión a tierra web y alimentas tus propias
+
+00:12:44.560 --> 00:12:48.040
+fuentes de SharePoint o Dataverse. Así es como mantienes a la gente inteligente
+
+00:12:48.040 --> 00:12:50.340
+y leal. Esta decisión define el alma de tu compilación.
+
+00:12:50.520 --> 00:12:53.520
+El uso de la conexión a tierra web le da a tu agente un conocimiento enciclopédico,
+
+00:12:53.780 --> 00:12:57.400
+pero poca moderación. Podría resumir un blog desactualizado como la verdad absoluta.
+
+00:12:57.540 --> 00:13:01.580
+Una base de conocimiento personalizada reduce su alcance, pero aumenta la precisión y el
+
+00:13:01.580 --> 00:13:05.680
+cumplimiento. En entornos regulados, la confiabilidad siempre supera a la creatividad.
+
+00:13:05.940 --> 00:13:09.100
+Deja que tu abogado duerma por la noche, elige la conexión a tierra interna.
+
+00:13:09.100 --> 00:13:12.880
+Para verificar que el bucle funciona, revisa la transcripción de ejecución de Copilot Studio.
+
+00:13:12.880 --> 00:13:17.160
+Verás cómo se desarrolla cada iteración, se envía el mensaje, responde el nodo generativo
+
+00:13:17.160 --> 00:13:20.860
+y se escribe la fila actualizada. Es extrañamente satisfactorio como observar
+
+00:13:20.860 --> 00:13:25.180
+una cinta transportadora que fabrica comprensión. Cada registro pasa de la ignorancia a la iluminación,
+
+00:13:25.500 --> 00:13:29.740
+una pregunta, una respuesta, un suspiro de alivio de tu yo futuro que no tuvo que hacerlo
+
+00:13:29.740 --> 00:13:34.460
+manualmente. Técnicamente, esto es diseño de código bajo, pero conceptualmente, es filosofía
+
+00:13:34.460 --> 00:13:39.080
+digital. La mente de la gente, tal como es, existe solo mientras dura el bucle. En el momento
+
+00:13:39.080 --> 00:13:42.820
+en que termina la última fila, su memoria se reinicia. No le preocupa el correo de
+
+00:13:42.820 --> 00:13:47.020
+mañana ni los errores de la semana pasada. Actúa, olvida y espera la siguiente tarea.
+
+00:13:47.220 --> 00:13:51.740
+En cierto sentido, es el empleado perfecto, incansable, obediente e incapaz de cotillar
+
+00:13:51.740 --> 00:13:55.540
+en la oficina. Los desarrolladores a veces preguntan, ¿no puedo enviar todas las preguntas
+
+00:13:55.540 --> 00:14:00.160
+a la vez y obtener una única respuesta gigante? Se puede, pero eso no es autonomía, es caos.
+
+00:14:00.160 --> 00:14:04.060
+Un aviso inflado lleva a un formato incoherente y a una vinculación de contexto sin sentido.
+
+00:14:04.220 --> 00:14:08.520
+El bucle garantiza el determinismo. Cada pregunta se convierte en una unidad de trabajo autónoma,
+
+00:14:08.520 --> 00:14:12.680
+un microcontrato que la IA debe cumplir. A la autonomía le encanta la repetición.
+
+00:14:12.840 --> 00:14:17.080
+Es predecible por diseño. Ya a estas alturas, el archivo de Excel se transforma despacio.
+
+00:14:17.280 --> 00:14:21.160
+Las celdas vacías se rellenan con frases creadas por máquinas extraídas de la sabiduría
+
+00:14:21.160 --> 00:14:25.220
+efímera de Bing o de tu documentación interna. Cada comando de actualización de fila fija
+
+00:14:25.220 --> 00:14:28.560
+esos resultados permanentemente, un acto de automatización con fecha.
+
+00:14:28.800 --> 00:14:32.360
+Desde la perspectiva del usuario, el archivo que enviaron en blanco pronto regresará con todas
+
+00:14:32.360 --> 00:14:36.420
+las preguntas respondidas de forma ordenada. Sin escritura humana, sin borradores intermedios,
+
+00:14:36.420 --> 00:14:41.260
+sin respuestas accidentales. Este es el momento en que el sistema pasa del análisis a la ejecución.
+
+00:14:41.460 --> 00:14:46.140
+Las respuestas ya existen. Simplemente hay que entregarlas. Y eso requiere volver a conectar con
+
+00:14:46.140 --> 00:14:50.080
+Power Automate, que debe recopilar el archivo actualizado y redactar el correo electrónico
+
+00:14:50.080 --> 00:14:53.760
+de respuesta. Pero antes de devolver el control, haga una pausa para apreciar lo que acaba de
+
+00:14:53.760 --> 00:14:57.520
+ocurrir. Un disparador activó un proceso, los datos fueron indicaciones, estas se hicieron prosa,
+
+00:14:57.740 --> 00:15:01.680
+y la prosa volvió a ser datos. El círculo se completa y todo sucedió en silencio, sin ti.
+
+00:15:01.680 --> 00:15:06.440
+La autonomía no es magia, es solo una lógica muy bien definida que finge pensar. A continuación,
+
+00:15:06.660 --> 00:15:10.640
+la máquina deja de racionalizar y comienza a comunicarse. Es hora de darle voz a nuestra
+
+00:15:10.640 --> 00:15:14.720
+hoja de cálculo recién iluminada y dejar que responda en tu nombre. El mecanismo de
+
+00:15:14.720 --> 00:15:18.060
+escritura y respuesta. Ahora que el agente ha terminado su silenciosa investigación,
+
+00:15:18.520 --> 00:15:22.120
+devolvemos el bolígrafo a Power Automate, la parte del proceso que convierte el trabajo
+
+00:15:22.120 --> 00:15:26.180
+cerebral en burocracia una vez más. La tarea consiste en recopilar el archivo de Excel actualizado,
+
+00:15:26.520 --> 00:15:30.380
+adjuntarlo a un correo electrónico y enviarlo a casa como si un humano meticuloso hubiera hecho todo
+
+00:15:30.380 --> 00:15:35.240
+el trabajo. Solo que más rápido, más limpio y sin temor existencial. El primer desafío es el tiempo.
+
+00:15:35.400 --> 00:15:40.200
+En la automatización, el tiempo no es arbitrario, es tolerancia mecánica. Copilot Studio espera que
+
+00:15:40.200 --> 00:15:44.640
+Power Automate responda en un plazo de unos 100 segundos tras la llamada o asume que el proceso
+
+00:15:44.640 --> 00:15:49.280
+ha fallado. Esta es la forma educada que tiene Microsoft de decir, no te entretengas. Por lo tanto,
+
+00:15:49.480 --> 00:15:53.740
+el flujo de respuesta debe actuar con precisión, siguiendo una plantilla sencilla. Recibir la entrada,
+
+00:15:54.040 --> 00:15:58.480
+esperar solo lo necesario, responder y cerrar. Ahí es donde entra en juego un pequeño pero vital truco,
+
+00:15:58.480 --> 00:16:02.520
+el retraso deliberado. Excel, a pesar de sus décadas de servicio, actualiza los archivos en la nube
+
+00:16:02.520 --> 00:16:05.700
+casi tan rápido como se carga una presentación de PowerPoint durante una conferencia telefónica,
+
+00:16:05.920 --> 00:16:09.480
+lo que significa que debes esperar un momento. La mayoría de los creadores añaden un retraso de
+
+00:16:09.480 --> 00:16:13.580
+dos minutos para asegurar que las filas de la IA se registren en SharePoint antes de recuperar el
+
+00:16:13.580 --> 00:16:17.900
+archivo. No es pereza, es sincronización. Las computadoras ejecutan más rápido de lo que el
+
+00:16:17.900 --> 00:16:22.300
+disco confirma. Una vez que expira la pausa, el flujo realiza su recuperación quirúrgica. Utiliza el
+
+00:16:22.300 --> 00:16:26.480
+contenido del archivo GET para extraer la hoja de cálculo terminada de SharePoint. Este paso lee el paquete
+
+00:16:26.480 --> 00:16:30.980
+binario completo, no solo la tabla, lo que garantiza que lo que se adjunta al correo electrónico saliente
+
+00:16:30.980 --> 00:16:35.800
+es precisamente lo que escribió el agente por última vez. Sin buffer fantasma ni celdas a medio rellenar.
+
+00:16:36.580 --> 00:16:43.080
+Junto con esto, GETEmailV3 obtiene metadatos de la solicitud original, remitente, asunto e ID del
+
+00:16:43.080 --> 00:16:48.600
+mensaje. Sin ellos, su respuesta llega como un dron perdido, rápido, pero a ninguna parte. El envío real se
+
+00:16:48.600 --> 00:16:52.200
+gestiona mediante el correo electrónico enviado con archivo adjunto, que hace referencia al ID del
+
+00:16:52.200 --> 00:16:56.280
+mensaje archivado para que el hilo permanezca intacto. Power Automate vuelve a adjuntar diligentemente
+
+00:16:56.280 --> 00:17:00.740
+el archivo de Excel recién respondido, creando la ilusión de correspondencia manual. Ver cómo se
+
+00:17:00.740 --> 00:17:04.560
+completa este paso es extrañamente catártico. La hoja que antes estaba en blanco se devuelve
+
+00:17:04.560 --> 00:17:08.100
+transformada, con las respuestas intactas, con marca de tiempo y perfectamente alineadas,
+
+00:17:08.380 --> 00:17:11.580
+como si se corrigiera un examen en el que el alumno fuera un algoritmo. Hablemos de tolerancia
+
+00:17:11.580 --> 00:17:15.700
+a fallos porque no todos los archivos de Excel se comportan bien. Quizás el nombre de la tabla no sea
+
+00:17:15.700 --> 00:17:20.420
+la tabla 1. Quizás alguien fusionó las celdas del encabezado en un mural decorativo. Cuando esto sucede,
+
+00:17:20.660 --> 00:17:24.840
+el flujo de actualización debería mostrar un error controlado en lugar de implosionar. Agregue una
+
+00:17:24.840 --> 00:17:29.200
+verificación condicional. Si no se encuentra la tabla, envíe una notificación cortés que diga
+
+00:17:29.200 --> 00:17:34.240
+error en el procesamiento de RFI, estructura no válida. Suena humano y evita 20 mensajes de Teams
+
+00:17:34.240 --> 00:17:38.220
+en pánico preguntándose por qué el fantasma de la guía ya no responde los correos electrónicos.
+
+00:17:38.400 --> 00:17:42.820
+El rendimiento también exige previsión. Actualizar cientos de filas individualmente puede atascar un
+
+00:17:42.820 --> 00:17:47.440
+flujo. El truco está en procesar por lotes, recopilar filas, actualizarlas en grupos o aprovechar
+
+00:17:47.440 --> 00:17:51.300
+las ramas paralelas con cuidado. Las propias notas de optimización de Microsoft advierten que los bucles
+
+00:17:51.300 --> 00:17:55.100
+ilimitados invitan a la latencia. Traducción. Automatización no significa imprudencia,
+
+00:17:55.340 --> 00:17:59.220
+significa eficiencia medida. A estas alturas, se desarrolla la coreografía completa. Copilot
+
+00:17:59.220 --> 00:18:03.820
+Studio finaliza la cognición. Power Automate retrasa la sincronización, recupera el contenido,
+
+00:18:04.180 --> 00:18:08.580
+lo empaqueta con metadatos y envía la respuesta. El solicitante recibe un correo electrónico con su
+
+00:18:08.580 --> 00:18:13.280
+archivo adjunto original, solo que ahora con las respuestas generadas, validadas y con marca de tiempo
+
+00:18:13.280 --> 00:18:18.060
+automáticamente. Nadie escribió, nadie esperó y nadie abrió Excel, excepto el fantasma de la máquina.
+
+00:18:18.060 --> 00:18:22.180
+La autonomía ha logrado oficialmente su objetivo, pero como cualquier adulto responsable en la
+
+00:18:22.180 --> 00:18:26.680
+gobernanza de ti te recordará, autonomía y anarquía no son sinónimos. Antes de que te alejes de tu
+
+00:18:26.680 --> 00:18:31.240
+creación, quizá para presumir en LinkedIn, debes enfrentarte a la poco glamurosa frontera de la
+
+00:18:31.240 --> 00:18:35.320
+supervisión. Eso nos lleva a la parte que a todo tecnólogo le encanta ignorar, la escalabilidad,
+
+00:18:35.620 --> 00:18:39.620
+la gobernanza y la realidad misma. Escalabilidad, gobernanza y comprobaciones de la realidad.
+
+00:18:39.840 --> 00:18:44.320
+Vamos a acabar con la ilusión desde el principio. Tu agente autónomo es brillante, pero no es omnipotente.
+
+00:18:44.320 --> 00:18:48.040
+Opera dentro de unos muros, específicamente en el entorno aislado que creó Microsoft.
+
+00:18:48.240 --> 00:18:51.900
+Los agentes de Copilot Studio siguen cuotas de consumo, limitaciones de API y lo que la
+
+00:18:51.900 --> 00:18:55.700
+documentación llama encantadoramente límites de comportamiento responsable. Traducción. Tu
+
+00:18:55.700 --> 00:18:59.600
+agente no se volverá rebelde porque los servidores de Microsoft no se lo permitan. Primero, los
+
+00:18:59.600 --> 00:19:03.400
+límites de la autonomía. El agente solo puede actuar siguiendo instrucciones explícitas. No
+
+00:19:03.400 --> 00:19:07.280
+improvisará nuevos procesos, corregirá errores de los usuarios ni se autorreplicará. Eso no es un
+
+00:19:07.280 --> 00:19:12.160
+defecto, es civilización. Define su entorno, rutas de SharePoint, esquemas de tablas, derechos de
+
+00:19:12.160 --> 00:19:15.960
+conexión y se atiene. Piensa en él como un becario digital encerrado en una oficina bien
+
+00:19:15.960 --> 00:19:21.240
+etiquetada. Deja la puerta abierta y no explorará. Seguirá esperando permiso. Esa limitación evita
+
+00:19:21.240 --> 00:19:26.000
+el caos y mantiene la auditabilidad. Luego viene la escala. Excel, aunque icónico, es
+
+00:19:26.000 --> 00:19:30.200
+un hábitat frágil para la autonomía. Una vez que tus volúmenes de RFI superan los pocos
+
+00:19:30.200 --> 00:19:34.740
+cientos de filas o involucran a usuarios simultáneos, migra el modelo de datos. Las listas de Dataverse
+
+00:19:34.740 --> 00:19:38.280
+o SharePoint transforman el manejo aleatorio de archivos en operaciones de datos correctamente
+
+00:19:38.280 --> 00:19:42.080
+gobernadas. Se aplica la misma lógica de Power Automate, pero el backend de almacenamiento
+
+00:19:42.080 --> 00:19:46.180
+ya no se queja bajo ediciones simultáneas. En esencia, Excel fue la rueda de entrenamiento.
+
+00:19:46.360 --> 00:19:50.480
+Los flujos de trabajo empresariales usan Dataverse. Luego está la gobernanza, Microsoft
+
+00:19:50.480 --> 00:19:53.940
+Purview para la clasificación de datos y el ID de agente de entra para el control de
+
+00:19:53.940 --> 00:19:57.940
+identidades. Cada agente autónomo debe llevar una insignia digital que declara quién pertenece,
+
+00:19:58.240 --> 00:20:02.540
+qué puede tocar y cuándo se comportó por última vez. Esto no es teatralidad, es responsabilidad.
+
+00:20:02.700 --> 00:20:06.700
+En un mundo con IA cada vez más autónoma, los registros de auditoría son fibra moral.
+
+00:20:06.920 --> 00:20:10.700
+Manténgalos intactos o arriesgue que su automatización sea etiquetada como TIE en la sombra.
+
+00:20:10.700 --> 00:20:15.640
+Ahora, precisión y cumplimiento. La RFI puede generar respuestas, pero ¿quién garantiza
+
+00:20:15.640 --> 00:20:20.260
+la verdad? El mayor don de la IA generativa es la elocuencia. Su mayor defecto es la confianza.
+
+00:20:20.400 --> 00:20:23.320
+Por eso la participación humana en el proceso sigue siendo innegociable.
+
+00:20:23.520 --> 00:20:27.000
+Muestrear periódicamente los resultados y validarlos con la documentación de origen.
+
+00:20:27.120 --> 00:20:30.720
+En los sectores regulados, registrar estas comprobaciones como evidencia de cumplimiento.
+
+00:20:30.980 --> 00:20:35.200
+Según las mejores prácticas de precisión, combinar pruebas automatizadas con revisión
+
+00:20:35.200 --> 00:20:37.920
+manual reduce drásticamente el riesgo de alucinaciones.
+
+00:20:37.920 --> 00:20:41.740
+Traducción. Deje que la IA redacte, pero que los humanos juzguen.
+
+00:20:41.960 --> 00:20:44.920
+Adopte operativamente las mejores prácticas de Power Automate.
+
+00:20:45.240 --> 00:20:50.180
+Vigile el historial de ejecución. Controle las limitaciones. Archive logs e itere el esquema.
+
+00:20:50.360 --> 00:20:53.280
+Un flujo de trabajo no es un mueble. Requiere mantenimiento.
+
+00:20:53.500 --> 00:20:56.600
+Microsoft incluso publicó una guía que hace hincapié en las tablas con nombre,
+
+00:20:56.920 --> 00:20:59.340
+los bucles mínimos y la supervisión activa del rendimiento.
+
+00:20:59.580 --> 00:21:03.480
+Ignóralo y tu agente autónomo pasará la eternidad reintentando ejecuciones fallidas
+
+00:21:03.480 --> 00:21:07.500
+como Sisypho enviando datos cuesta arriba. Y, por último, piensa en el futuro.
+
+00:21:07.680 --> 00:21:12.360
+Copilot Studio ya da pistas sobre la orquestación multiagente en la que los agentes delegan subtareas
+
+00:21:12.360 --> 00:21:16.960
+a otros agentes. Imagina que un bot obtiene datos del proyecto, mientras que otro los resume
+
+00:21:16.960 --> 00:21:19.420
+y un tercero envía el informe. Eso es lo que viene.
+
+00:21:19.580 --> 00:21:22.180
+Tu agente de RFI es simplemente el aprendiz de ese conjunto.
+
+00:21:22.380 --> 00:21:25.480
+Pero, sin las disciplinas de gobernanza que estableces ahora, los sistemas multiagentes
+
+00:21:25.480 --> 00:21:28.500
+se convertirán en desastres multiagente. Así que, para que la realidad sea clara,
+
+00:21:28.500 --> 00:21:32.460
+la autonomía no te exime de responsabilidad. La transfiere. Has automatizado el trabajo,
+
+00:21:32.720 --> 00:21:35.780
+no la rendición de cuentas. La hoja de cálculo ahora se responde sola. Sí,
+
+00:21:36.120 --> 00:21:39.660
+pero sigues siendo dueño de su verdad, su trazabilidad y su tono. Y esa es la paradoja
+
+00:21:39.660 --> 00:21:43.200
+del progreso. Cuanto más inteligentes sean tus herramientas, más deliberado deberás ser al
+
+00:21:43.200 --> 00:21:46.920
+usarlas. Mantén barandillas, documenta los límites y trata tu hack autónomo de Excel no como
+
+00:21:46.920 --> 00:21:51.700
+una rebelión, sino como un refinamiento. Civilización por delegación. Ahora, la máquina funciona sola.
+
+00:21:51.840 --> 00:21:55.400
+La única pregunta sin resolver es obvia. Si tu hoja de cálculo puede funcionar de forma
+
+00:21:55.400 --> 00:21:58.980
+independiente, ¿qué planeas hacer exactamente con el tiempo extra? La elegancia de la
+
+00:21:58.980 --> 00:22:03.660
+automatización perezosa. Hacer menos es todo un arte. No es ignorancia, es eficiencia disfrazada
+
+00:22:03.660 --> 00:22:07.460
+de desapego. Lo que acabas de crear no es una herramienta, es una afirmación. Tomaste una tarea
+
+00:22:07.460 --> 00:22:11.020
+que antes requería cafeína, desesperación y horas extras, y la convertiste en un trabajo que se
+
+00:22:11.020 --> 00:22:15.880
+completa solo. Eso no es pereza, es civilización haciendo alarde. El agente autónomo no solo automatiza
+
+00:22:15.880 --> 00:22:20.040
+clics. Convierte la atención en arquitectura. Los correos electrónicos se convierten en activadores,
+
+00:22:20.040 --> 00:22:23.720
+las hojas de cálculo en conversaciones y Power Automate se convierten en el mensajero que nunca
+
+00:22:23.720 --> 00:22:28.040
+duerme. El resultado es elegante precisamente porque desaparece. No ves la máquina funcionando.
+
+00:22:28.240 --> 00:22:32.600
+Solo presencias la ausencia de problemas. Entonces, esta es la verdadera lección. La automatización no
+
+00:22:32.600 --> 00:22:36.700
+se trata de velocidad, se trata de reducción. Cada regla que definiste, cada flujo que conectaste,
+
+00:22:36.980 --> 00:22:41.760
+es una decisión humana menos necesaria mañana. El agente responde preguntas, envía respuestas y se
+
+00:22:41.760 --> 00:22:46.540
+retira en silencio, dejándote libre para perseguir problemas de orden superior o tomar una siesta muy
+
+00:22:46.540 --> 00:22:51.700
+digna. Excel, ese antiguo símbolo de persistencia, finalmente aprende a autoconservarse. El mismo programa
+
+00:22:51.700 --> 00:22:56.700
+que una vez castigó la ineficiencia ahora premia la previsión. Lee, responde, redime. La hoja de
+
+00:22:56.700 --> 00:23:01.340
+cálculo ha entrado en la iluminación. Por supuesto, este truco rompe las expectativas. Excel nunca fue
+
+00:23:01.340 --> 00:23:05.720
+pensado para mantener la conciencia, y sin embargo aquí estamos, viendo cómo las celdas se completan
+
+00:23:05.720 --> 00:23:10.060
+solas por obligación más que por instrucción. Si eso no te parece un progreso, es posible que aún
+
+00:23:10.060 --> 00:23:14.120
+estés fusionando celdas manualmente. Que la era autónoma inicie con humildad y una casilla de
+
+00:23:14.120 --> 00:23:18.900
+verificación etiquetada a ejecutar automáticamente. Bloquea tu ruta de actualización, suscríbete,
+
+00:23:18.900 --> 00:23:23.460
+habilita las alertas y deja que el conocimiento se entregue solo. La próxima generación de flujos
+
+00:23:23.460 --> 00:23:27.660
+de trabajo no te pedirá tu aprobación, te pedirán tu dirección de correo electrónico. Envíala y la
+
+00:23:27.660 --> 00:23:28.900
+máquina se encargará del resto.

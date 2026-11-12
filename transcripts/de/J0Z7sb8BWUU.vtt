@@ -1,0 +1,1384 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:03.720
+Willkommen zu einer weiteren Episode der Microsoft Knowledge Nuggets auf M365FM.
+
+00:00:04.100 --> 00:00:05.240
+Ich bin der Gastgeber Milko Peters.
+
+00:00:05.680 --> 00:00:07.720
+Das heutige Thema ist etwas, von dem fast jeder schon gehört hat,
+
+00:00:08.000 --> 00:00:09.260
+das aber nur wenige wirklich verstehen.
+
+00:00:09.440 --> 00:00:10.120
+Plattform Engineering.
+
+00:00:10.600 --> 00:00:11.740
+Sie haben wahrscheinlich von DevOps gehört,
+
+00:00:11.920 --> 00:00:14.460
+der Idee, dass Entwickler und Betriebsteams nahtlos zusammenarbeiten.
+
+00:00:14.980 --> 00:00:17.040
+Doch irgendwo auf dem Weg wurde dieses Versprechen kompliziert.
+
+00:00:17.620 --> 00:00:19.800
+Entwickler landeten bei der Arbeit für den Betrieb und das System scheitert.
+
+00:00:20.200 --> 00:00:22.940
+Am Ende dieser Folge werden Sie verstehen, was bei DevOps schiefgelaufen ist,
+
+00:00:23.420 --> 00:00:25.200
+was eine interne Entwicklerplattform eigentlich ist,
+
+00:00:25.560 --> 00:00:27.760
+wie Golden Paths Teams einen klaren Weg ebnen
+
+00:00:27.760 --> 00:00:30.400
+und warum die klügsten Ingenieur-Teams bereits eine solche aufbauen.
+
+00:00:31.400 --> 00:00:32.600
+Das Chaos ist DevOps hinterlassen.
+
+00:00:33.100 --> 00:00:34.020
+Gehen wir zurück zum Anfängen.
+
+00:00:34.460 --> 00:00:36.660
+DevOps war eine großartige Idee mit einem einfachen Ziel,
+
+00:00:36.760 --> 00:00:38.500
+die Mauern zwischen Entwicklung und Betrieb einzureißen.
+
+00:00:38.940 --> 00:00:40.400
+Kein Code mehr, der einfach über den Zaun geworfen wird,
+
+00:00:40.440 --> 00:00:41.260
+in der Hoffnung, dass alles gut geht.
+
+00:00:41.740 --> 00:00:44.580
+Shift-Left, Testsicherheit und Betrieb früher in den Prozess integrieren.
+
+00:00:45.280 --> 00:00:47.640
+Schnellere Bereitstellung, weniger Übergaben, mehr Eigenverantwortung.
+
+00:00:48.060 --> 00:00:49.280
+Auf dem Papier sah es perfekt aus.
+
+00:00:49.700 --> 00:00:50.840
+In der Praxis lief etwas schief.
+
+00:00:51.520 --> 00:00:53.780
+Shift-Left hat Verantwortlichkeiten nicht nur verlagert,
+
+00:00:53.960 --> 00:00:54.640
+sondern sie angehäuft.
+
+00:00:54.640 --> 00:00:58.040
+Der Entwickler, der früher Code schrieb und ein Ticket eröffnete,
+
+00:00:58.120 --> 00:01:00.640
+ist nun für Infrastruktur, Sicherheit, Monitoring,
+
+00:01:00.820 --> 00:01:02.920
+Kubernetes, CICCD-Pipeline, Secret Management
+
+00:01:02.920 --> 00:01:04.640
+und etwa 15 Cloud-Dienste zuständig,
+
+00:01:04.720 --> 00:01:06.360
+von denen er noch nie zuvor gehört hat, hat
+
+00:01:06.360 --> 00:01:10.040
+eine Person erledigt das alles und bald gleichzeitig das eigentliche Produkt.
+
+00:01:10.500 --> 00:01:11.720
+So sieht das im wirklichen Leben aus.
+
+00:01:12.280 --> 00:01:15.080
+Ein Team möchte eine neue Umgebung hochfahren, um eine Funktion zu testen.
+
+00:01:15.080 --> 00:01:16.880
+Vor DevOps hätten sie ein Ticket eingereicht und gewartet.
+
+00:01:17.440 --> 00:01:19.160
+Nach DevOps sind sie selbst dafür verantwortlich,
+
+00:01:19.220 --> 00:01:20.120
+was theoretisch toll klingt.
+
+00:01:20.360 --> 00:01:21.960
+Aber jetzt müssen sie Terraform-Module schreiben,
+
+00:01:21.960 --> 00:01:24.800
+ein Kubernetes-Cluster konfigurieren, Netzwerkregeln festlegen,
+
+00:01:24.900 --> 00:01:26.720
+das Monitoring einbinden, das Secret Management regeln
+
+00:01:26.720 --> 00:01:28.800
+und sicherstellen, dass Sicherheitsrichtlinien angewendet werden.
+
+00:01:29.600 --> 00:01:31.980
+Was früher ein Ticket war, das jemand anderes in einer Stunde erledigte,
+
+00:01:32.060 --> 00:01:33.860
+kostet einen Entwickler nun drei Tage Zeigezeit.
+
+00:01:34.460 --> 00:01:36.060
+Drei Tage, in denen sie kein Produktcode schreiben.
+
+00:01:36.560 --> 00:01:38.040
+Sie kämpfen mit YAML-Dateien und debuggen,
+
+00:01:38.120 --> 00:01:40.540
+warum der Load-Balancer den Datenverkehr nicht richtig weiterleitet.
+
+00:01:41.040 --> 00:01:42.260
+Die mentale Belastung dabei ist enorm.
+
+00:01:42.560 --> 00:01:44.500
+Jedes Team baut am Ende seine eigenen Pipelines,
+
+00:01:44.620 --> 00:01:46.320
+Bereitstellungsskripte und Monitoring-Dashbots.
+
+00:01:46.920 --> 00:01:48.880
+Und weil alle überlastet sind, wird an Ecken und Enden gespart.
+
+00:01:49.400 --> 00:01:50.300
+Die Sicherheit wird übergangen,
+
+00:01:50.300 --> 00:01:51.420
+weil die Deadline am Freitag ist.
+
+00:01:52.000 --> 00:01:53.680
+Cloud-Rechnungen verdoppeln sich, ohne dass es jemand merkt,
+
+00:01:53.740 --> 00:01:55.300
+weil niemand daran gedacht hat, die Testumgebung herunterzufahren.
+
+00:01:56.420 --> 00:01:57.780
+Und wenn um zwei Uhr morgens etwas kaputt geht,
+
+00:01:57.840 --> 00:02:00.200
+ist der Entwickler, der es gebaut hat, der Einzige, der es reparieren kann.
+
+00:02:00.720 --> 00:02:01.620
+Das ist nicht nachhaltig.
+
+00:02:01.660 --> 00:02:03.260
+Und hier ist der Grund, warum es wichtiger denn je ist.
+
+00:02:03.760 --> 00:02:05.140
+Die Komplexität der Cloud wächst ständig weiter.
+
+00:02:05.740 --> 00:02:08.360
+Jedes Jahr gibt es mehr Dienste, mehr Tools und mehr Entscheidungen zu treffen.
+
+00:02:08.860 --> 00:02:10.580
+KI-Programmiertools ermöglichen Entwicklern jetzt,
+
+00:02:10.660 --> 00:02:12.000
+Code schneller als hier zuvor bereitzustellen.
+
+00:02:12.340 --> 00:02:14.740
+10, 20 oder sogar 30 Mal mehr Code pro Tag.
+
+00:02:15.160 --> 00:02:18.460
+Doch all dieser Code benötigt weiterhin Infrastruktursicherheit und Monitoring.
+
+00:02:18.460 --> 00:02:21.340
+Mehr Code ohne besseres System bedeutet lediglich schnelleres Chaos.
+
+00:02:21.900 --> 00:02:23.940
+Wenn Sie das Gefühl haben, in YAML und Terraform zu ertrinken,
+
+00:02:24.080 --> 00:02:24.800
+sind Sie damit nicht allein.
+
+00:02:25.320 --> 00:02:26.340
+Das ist kein persönliches Versagen.
+
+00:02:26.780 --> 00:02:27.320
+Das ist systembedingt.
+
+00:02:27.920 --> 00:02:30.400
+Das Modell hat das eigentliche Wesen von Platform Engineering verzerrt.
+
+00:02:31.000 --> 00:02:31.560
+Was ist da die Lösung?
+
+00:02:31.940 --> 00:02:34.880
+Sie nennt sich Platform Engineering und so kann man es sich am einfachsten vorstellen.
+
+00:02:35.760 --> 00:02:37.380
+Diese Disziplin schafft eine interne Ebene,
+
+00:02:37.460 --> 00:02:39.060
+die Komplexität von Entwicklern fernhält.
+
+00:02:39.620 --> 00:02:41.280
+Stellen Sie sich vor, Sie betreten ein großes Bürogebäude.
+
+00:02:41.680 --> 00:02:43.120
+Sie müssen sich keine Gedanken darüber machen,
+
+00:02:43.200 --> 00:02:44.400
+wer Zugang zu welcher Etage hat,
+
+00:02:44.480 --> 00:02:46.600
+welche Sicherheitskarte funktioniert oder wo die Notausgänge sind.
+
+00:02:46.600 --> 00:02:48.320
+Der Empfang erledigt all das für Sie
+
+00:02:48.320 --> 00:02:50.000
+und Sie können einfach hineingehen und mit der Arbeit beginnen.
+
+00:02:50.400 --> 00:02:52.420
+Genau das leistet Platform Engineering für Ihre Entwickler.
+
+00:02:53.220 --> 00:02:55.620
+Anstatt dass jeder einzelne Entwickler zum Experten für Kubernetes,
+
+00:02:55.780 --> 00:02:57.460
+Terraform, Netzwerke und Sicherheit werden muss,
+
+00:02:57.560 --> 00:02:59.420
+schafft ein zentrales Platform Team eine Ebene,
+
+00:02:59.580 --> 00:03:01.160
+die all diese Komplexität verwaltet.
+
+00:03:02.260 --> 00:03:04.200
+Der Entwickler erhält eine einfache Schnittstelle,
+
+00:03:04.280 --> 00:03:05.700
+ein Klick, ein Befehl, ein Formular
+
+00:03:05.700 --> 00:03:07.840
+und die Plattform kümmert sich um den Rest.
+
+00:03:08.440 --> 00:03:10.160
+Aber eines vorweg, das ist nicht dasselbe wie DevOps.
+
+00:03:10.800 --> 00:03:12.000
+DevOps forderte von jedem Team,
+
+00:03:12.080 --> 00:03:13.340
+seine eigene Infrastruktur zu verwalten,
+
+00:03:13.420 --> 00:03:15.380
+aber Platform Engineering sieht darin ein Rezept für Burnout.
+
+00:03:15.380 --> 00:03:17.720
+Stattdessen bietet das Platform Team Paved Roads
+
+00:03:17.720 --> 00:03:20.900
+standardisierte, geprüfte und sichere Wege für gängige Aufgaben.
+
+00:03:21.640 --> 00:03:22.760
+Sie bauen und pflegen die Straße,
+
+00:03:22.880 --> 00:03:24.280
+während die Produktteams einfach darauf fahren.
+
+00:03:24.880 --> 00:03:26.560
+Das zentrale Ergebnis von Platform Engineering
+
+00:03:26.560 --> 00:03:29.380
+ist das sogenannte Internal Developer Platform, kurz IDP.
+
+00:03:30.240 --> 00:03:31.700
+Betrachten Sie es als Self-Service-System,
+
+00:03:31.900 --> 00:03:33.720
+das all diese repetitiven Aufgaben automatisiert.
+
+00:03:35.020 --> 00:03:36.900
+Infrastrukturbereitstellung, CICCD-Pipelines,
+
+00:03:37.360 --> 00:03:38.720
+Sicherheitsprüfungen und Monitoring
+
+00:03:38.720 --> 00:03:40.240
+sind fest integriert und standardisiert.
+
+00:03:40.880 --> 00:03:41.640
+Ein konkretes Beispiel.
+
+00:03:41.820 --> 00:03:44.660
+Wenn ein Entwickler ohne Plattform einen neuen Dienst bereitstellen möchte,
+
+00:03:44.660 --> 00:03:46.400
+verbringt er Tage damit, Infrastruktur aufzusetzen,
+
+00:03:46.500 --> 00:03:48.220
+Pipelines zu schreiben und Monitoring zu konfigurieren.
+
+00:03:49.000 --> 00:03:51.140
+Mit einer IDP klickt er einfach auf Deploy
+
+00:03:51.140 --> 00:03:54.860
+oder führt einen Befehl aus und die Plattform erledigt alles Bereitstellung.
+
+00:03:55.000 --> 00:03:57.460
+Tests, Monitoring, Deployment in Minuten statt in Tagen.
+
+00:03:58.020 --> 00:03:58.200
+Ein.
+
+00:03:58.780 --> 00:03:59.760
+Was bedeutet das also für Sie?
+
+00:04:00.000 --> 00:04:02.280
+Sie hören auf, ein Allround-Infrastruktur-Experte zu sein
+
+00:04:02.280 --> 00:04:04.180
+und werden wieder zum Spezialisten für Ihr eigentliches Produkt.
+
+00:04:04.500 --> 00:04:06.220
+Ihre Arbeit konzentriert sich wieder auf Funktionen,
+
+00:04:06.260 --> 00:04:07.320
+die für Ihre Kunden wichtig sind.
+
+00:04:07.620 --> 00:04:09.820
+Statt darauf defekte Terraform-State-Files zu debuggen.
+
+00:04:10.220 --> 00:04:10.940
+Genau darum geht es.
+
+00:04:10.940 --> 00:04:13.100
+Die interne Entwicklerplattform ganz einfach erklärt.
+
+00:04:13.700 --> 00:04:16.060
+Schlüsseln wir also auf, was eine interne Entwicklerplattform eigentlich ist.
+
+00:04:16.400 --> 00:04:18.260
+Es ist die Maschine, die alles in einem System vereint.
+
+00:04:19.000 --> 00:04:21.280
+Ihre CIS-DD-Pipelines, Infrastrukturvorlagen,
+
+00:04:21.460 --> 00:04:23.140
+Sicherheitsrichtlinien, Monitoring und Logging.
+
+00:04:23.980 --> 00:04:26.080
+Anstatt sechs separate Tools, die Sie miteinander verbinden müssen.
+
+00:04:26.780 --> 00:04:27.120
+Ein Vergleich.
+
+00:04:27.640 --> 00:04:30.200
+Denken Sie an Kochen von Grund auf im Vergleich zu einem Verkaufsautomaten.
+
+00:04:30.720 --> 00:04:32.460
+Kochen von Grund auf bedeutet Zutaten kaufen,
+
+00:04:32.560 --> 00:04:33.760
+Gemüse schneiden, Gewürze abmessen,
+
+00:04:33.840 --> 00:04:34.700
+den Herd im Blick behalten,
+
+00:04:34.880 --> 00:04:35.620
+den Herd im Blick behalten.
+
+00:04:35.620 --> 00:04:38.160
+Viele Entscheidungen, viele Schritte, viele Möglichkeiten, Fehler zu machen.
+
+00:04:38.160 --> 00:04:40.860
+Ein Verkaufsautomat liefert das Ergebnis auf Knopfdruck.
+
+00:04:41.400 --> 00:04:43.900
+Weniger Entscheidungen, schnelleres Ergebnis, gleichbleibende Qualität.
+
+00:04:44.400 --> 00:04:45.600
+Ein EDP ist dieser Verkaufsautomat.
+
+00:04:46.140 --> 00:04:48.420
+Der Entwickler muss nicht wissen, wie Infrastruktur bereitgestellt
+
+00:04:48.420 --> 00:04:49.980
+oder wo Geheimnisse gespeichert werden.
+
+00:04:50.500 --> 00:04:51.500
+Er drückt einfach nur den Knopf.
+
+00:04:51.900 --> 00:04:53.020
+Was steckt in diesem Verkaufsautomat?
+
+00:04:53.600 --> 00:04:55.040
+Die Kernkomponenten sind ziemlich standardisiert.
+
+00:04:55.500 --> 00:04:57.580
+CICD-Vorlagen für konsistente Builds,
+
+00:04:57.680 --> 00:04:59.900
+Infrastrukturprovisionierung für automatische Umgebungen,
+
+00:05:00.280 --> 00:05:01.900
+Secret Management, damit Anmeldedaten
+
+00:05:01.900 --> 00:05:03.680
+nicht in Konfigurationsdateien herumliegen
+
+00:05:03.680 --> 00:05:05.800
+und Logging mit integrierter Observability,
+
+00:05:05.940 --> 00:05:07.440
+damit sie ohne Stress Fehler beheben können.
+
+00:05:08.420 --> 00:05:10.840
+Alles vorkonfiguriert, getestet und gewartet vom Plattformteam.
+
+00:05:11.280 --> 00:05:12.060
+Hier ein konkretes Beispiel.
+
+00:05:12.780 --> 00:05:15.300
+Ein Entwickler gibt Create New Service in die Befehlszeile ein
+
+00:05:15.300 --> 00:05:16.720
+oder klickt auf eine Schaltfläche in ein Portal.
+
+00:05:17.400 --> 00:05:19.600
+Im Hintergrund erstellt der IDP ein neues Repository
+
+00:05:19.600 --> 00:05:20.480
+mit der richtigen Struktur,
+
+00:05:20.980 --> 00:05:22.100
+richtet eine Build-Pipeline ein,
+
+00:05:22.200 --> 00:05:23.240
+die automatisch Tests ausführt,
+
+00:05:23.340 --> 00:05:25.620
+stellt den Dienst in einer Entwicklungsumgebung bereit
+
+00:05:25.620 --> 00:05:27.500
+und fügt HealthCheck Endpunkte mit Logging hinzu,
+
+00:05:27.720 --> 00:05:28.380
+mit Logging hinzu.
+
+00:05:28.660 --> 00:05:29.700
+All das geschieht innerhalb von Minuten.
+
+00:05:29.700 --> 00:05:32.180
+Der Entwickler hat keine einzige Terraform-Datei angefasst
+
+00:05:32.180 --> 00:05:33.700
+oder ein Kubernetes-Manifest konfiguriert.
+
+00:05:34.000 --> 00:05:35.880
+Einfach ein Befehl getippt und einen laufenden Dienst erhalten.
+
+00:05:36.240 --> 00:05:36.860
+Warum ist das wichtig?
+
+00:05:37.340 --> 00:05:38.400
+Konsistenz ist der Hauptgrund.
+
+00:05:39.520 --> 00:05:41.260
+Wenn jedes Team seine eigenen Pipelines baut
+
+00:05:41.260 --> 00:05:42.620
+und eigene Deployment-Skripte schreibt,
+
+00:05:42.740 --> 00:05:44.260
+erhalten sie Snowflake-Konfigurationen.
+
+00:05:45.040 --> 00:05:47.260
+50 verschiedene Dienste, 50 verschiedene Vorgehensweisen.
+
+00:05:48.040 --> 00:05:48.920
+Wenn etwas kaputt geht,
+
+00:05:49.000 --> 00:05:50.760
+kann es niemand außer dem Ersteller debuggen.
+
+00:05:51.700 --> 00:05:53.360
+Und wenn diese Person das Unternehmen verlassen hat, viel Glück.
+
+00:05:53.860 --> 00:05:55.180
+Ein IDP beseitigt dies,
+
+00:05:55.260 --> 00:05:56.900
+indem jeder Dienst denselben Mustern folgt,
+
+00:05:56.900 --> 00:05:58.740
+jedes Deployment dieselbe Pipeline nutzt
+
+00:05:58.740 --> 00:06:00.560
+und jedes Team dieselben Standardeinstellungen erhält.
+
+00:06:01.220 --> 00:06:02.120
+Wenn etwas kaputt geht,
+
+00:06:02.300 --> 00:06:04.060
+sind dem Muster vertraut und die Lösung dokumentiert.
+
+00:06:04.460 --> 00:06:05.500
+Was bedeutet das also für Sie?
+
+00:06:05.860 --> 00:06:07.520
+Wenn Ihre Organisation 50 Teams hat,
+
+00:06:07.540 --> 00:06:08.980
+die auf 50 verschiedene Arten deployen,
+
+00:06:09.040 --> 00:06:09.960
+ist ein IDP die Lösung.
+
+00:06:10.380 --> 00:06:11.800
+Das bedeutet nicht, dass Teams ihre Autonomie verlieren.
+
+00:06:12.060 --> 00:06:13.180
+Es bedeutet, dass die langweiligen,
+
+00:06:13.340 --> 00:06:15.440
+repetitiven und fehleranfälligen Teile standardisiert werden,
+
+00:06:15.540 --> 00:06:17.480
+damit die interessante, kreative Arbeit variieren kann.
+
+00:06:17.800 --> 00:06:18.760
+Das ist ein Lohn der Kompromiss.
+
+00:06:19.800 --> 00:06:21.260
+Golden Paths, der Weg, kein Käfig.
+
+00:06:21.820 --> 00:06:22.940
+Lassen Sie uns über Golden Paths sprechen.
+
+00:06:23.360 --> 00:06:24.320
+Sie haben den Namen wahrscheinlich schon gehört,
+
+00:06:24.320 --> 00:06:25.040
+aber die Idee ist einfach.
+
+00:06:25.040 --> 00:06:28.140
+Ein Golden Path ist ein empfohlener, vorbefertigter Workflow,
+
+00:06:28.360 --> 00:06:30.080
+der den richtigen Weg zum einfachsten Weg macht.
+
+00:06:30.880 --> 00:06:31.760
+Ihr Plattformteam sagt,
+
+00:06:32.160 --> 00:06:33.440
+so empfehlen wir euch das Vorgehen.
+
+00:06:34.160 --> 00:06:35.340
+Wir haben es getestet, es funktioniert
+
+00:06:35.340 --> 00:06:36.980
+und wir unterstützen euch, falls etwas schief geht.
+
+00:06:38.080 --> 00:06:39.180
+Achtet auf das Wort empfehlen.
+
+00:06:39.760 --> 00:06:41.180
+Golden Paths sind nicht verpflichtend.
+
+00:06:41.780 --> 00:06:43.540
+Entwickler können vom Pfad abweichen, wenn nötig,
+
+00:06:43.640 --> 00:06:45.060
+aber der Pfad ist der schnelle, sichere Standard.
+
+00:06:45.620 --> 00:06:47.380
+Er läuft bereits, ist unterstützt und dokumentiert.
+
+00:06:47.820 --> 00:06:49.380
+Ihr müsst nicht alles von Grund auf neu herausfinden.
+
+00:06:49.780 --> 00:06:52.160
+Stellt es euch wie Bahngleise statt wie Leitplanken vor.
+
+00:06:52.820 --> 00:06:54.200
+Leitplanken fangen einen auf, wenn man vor Unglück.
+
+00:06:54.600 --> 00:06:56.520
+Sie reagieren, sie halten einen davon ab, abzustürzen,
+
+00:06:56.600 --> 00:06:57.480
+aber sie helfen nicht beim Steuer.
+
+00:06:58.300 --> 00:06:59.940
+Bahngleise führen einen sanft entlang der Route,
+
+00:07:00.040 --> 00:07:01.680
+sodass man nicht entscheiden muss, wo man abbiegt.
+
+00:07:02.580 --> 00:07:03.620
+Golden Paths sind die Gleise.
+
+00:07:04.100 --> 00:07:06.060
+Sie bringen einen voran, anstatt einen nur beim Scheitern aufzufangen.
+
+00:07:06.800 --> 00:07:08.080
+Hier machen viele Teams einen Fehler.
+
+00:07:08.580 --> 00:07:10.300
+Sie bauen Golden Paths für das Plattformteam,
+
+00:07:10.440 --> 00:07:11.080
+nicht für die Entwickler.
+
+00:07:11.560 --> 00:07:13.300
+Sie optimieren auf architektonische Reinheit,
+
+00:07:13.420 --> 00:07:14.760
+Compliance oder interne Regeln,
+
+00:07:14.840 --> 00:07:16.860
+die außerhalb des Plattformteams niemand versteht.
+
+00:07:17.540 --> 00:07:19.400
+Das Ergebnis sieht auf dem Whiteboard großartig aus,
+
+00:07:19.480 --> 00:07:20.260
+ist aber in der Anwendung schreck.
+
+00:07:20.260 --> 00:07:22.460
+Entwickler suchen still, schweigen nach Umwegen.
+
+00:07:22.540 --> 00:07:24.600
+Die Akzeptanz sinkt und das Plattformteam wundert sich,
+
+00:07:24.680 --> 00:07:25.840
+warum niemand die Mühe zu schätzen weiß.
+
+00:07:26.320 --> 00:07:27.780
+Die Lösung ist einfach, aber schwer umzusetzen.
+
+00:07:28.160 --> 00:07:28.920
+Ihr braucht Notausgänge.
+
+00:07:29.380 --> 00:07:31.340
+Wenn der Pfad nicht zum Anwendungsfall eines Entwicklers passt,
+
+00:07:31.420 --> 00:07:32.160
+brauchen sie einen Ausweg.
+
+00:07:32.780 --> 00:07:34.500
+Eine Möglichkeit, einen Standard zu überschreiben,
+
+00:07:34.580 --> 00:07:35.640
+eine eigene Pipeline zu nutzen
+
+00:07:35.640 --> 00:07:36.940
+oder die Plattform ganz zu verlassen.
+
+00:07:37.640 --> 00:07:38.560
+Und hier kommt der wichtige Teil.
+
+00:07:38.940 --> 00:07:39.840
+Wenn sie vom Pfad abweichen,
+
+00:07:39.900 --> 00:07:41.000
+ist das kein Scheitern, sondern Feedback.
+
+00:07:41.340 --> 00:07:43.160
+Jedes Mal, wenn ein Entwickler den Golden Path verlässt,
+
+00:07:43.160 --> 00:07:44.020
+erfahrt ihr etwas Reales.
+
+00:07:44.500 --> 00:07:46.500
+Entweder fehlt dem Pfad eine Funktion, die er haben sollte,
+
+00:07:46.500 --> 00:07:48.760
+oder der Anwendungsfall gehört tatsächlich nicht dorthin.
+
+00:07:49.260 --> 00:07:50.300
+Beide Signale sind wertvoll.
+
+00:07:50.680 --> 00:07:52.400
+Ein guter Golden Path sieht in der Praxis so aus.
+
+00:07:53.080 --> 00:07:54.700
+Ein Team möchte einen neuen Backend-Dienst bereitstellen.
+
+00:07:55.140 --> 00:07:55.780
+Sie nutzen den Pfad.
+
+00:07:56.220 --> 00:07:57.940
+Er bietet ihnen ein Repository-Template
+
+00:07:57.940 --> 00:07:58.960
+mit der richtigen Struktur,
+
+00:07:59.380 --> 00:08:01.120
+eine bereits getestetes CICT-Pipeline,
+
+00:08:01.680 --> 00:08:02.980
+integriertes Logging und Monitoring
+
+00:08:02.980 --> 00:08:04.220
+sowie ein Ein-Klick-Rollback.
+
+00:08:04.620 --> 00:08:06.820
+Das Ganze dauert Minuten statt Tage
+
+00:08:06.820 --> 00:08:08.640
+und da das Plattform-Team dem Pfad wartet,
+
+00:08:08.640 --> 00:08:09.920
+beheben sie Fehler selbst.
+
+00:08:10.440 --> 00:08:10.700
+Selbst.
+
+00:08:11.280 --> 00:08:13.680
+Der Entwickler muss kein Experte für Pipeline-Debugging werden.
+
+00:08:13.680 --> 00:08:15.900
+Was das für euch bedeutet, weniger Überraschungen.
+
+00:08:16.360 --> 00:08:17.920
+Ihr liefert schneller, weil der Pfad getestet ist.
+
+00:08:18.280 --> 00:08:20.660
+Ihr liefert sicherer, weil Sicherheit und Monitoring eingebaut sind.
+
+00:08:21.240 --> 00:08:23.320
+Ihr liefert mit Zuversicht, weil Rollbacks nur einen Klick entfernt sind.
+
+00:08:23.980 --> 00:08:26.220
+Der Pfad existiert, um euch zu helfen, nicht um euch aufzuhalten.
+
+00:08:27.020 --> 00:08:27.360
+Nutzt ihn.
+
+00:08:27.800 --> 00:08:28.860
+Die kognitive Belastung reduziert.
+
+00:08:29.300 --> 00:08:30.620
+Hier zeigt sich der eigentliche Nutzen.
+
+00:08:31.140 --> 00:08:32.700
+Wenn eine Plattform die Schwerstarbeit übernimmt,
+
+00:08:32.800 --> 00:08:34.600
+können sich Entwickler endlich auf den Code konzentrieren.
+
+00:08:34.600 --> 00:08:37.000
+Sie müssen nicht wissen, welche Kubernetes-Version gerade läuft.
+
+00:08:37.540 --> 00:08:39.380
+Sie müssen keine Terraform-Module aktualisieren,
+
+00:08:39.440 --> 00:08:41.080
+nur weil ein Cloud-Anbieter die API ändert.
+
+00:08:41.640 --> 00:08:42.300
+Ich schreibe einfach Funktion.
+
+00:08:42.300 --> 00:08:44.240
+Plattform-Ingenieurs fangen diese Komplexität an.
+
+00:08:44.580 --> 00:08:46.780
+Sie entscheiden, was Entwickler sehen müssen und was besser verborgen bleibt.
+
+00:08:47.100 --> 00:08:49.000
+Das ist eine echte Designentscheidung, nicht nur eine technische.
+
+00:08:49.340 --> 00:08:52.780
+Es geht darum, herauszufinden, welche Details für den Nutzer der Plattform wichtig sind
+
+00:08:52.780 --> 00:08:53.820
+und welche nur stören.
+
+00:08:54.380 --> 00:08:55.180
+Hier ein konkretes Beispiel.
+
+00:08:55.780 --> 00:08:57.500
+Ein Entwickler, der einen neuen Service bereitstellt,
+
+00:08:57.600 --> 00:08:59.660
+interessiert sich nicht für Cluster-Notgrößen, Instanztypen
+
+00:08:59.660 --> 00:09:00.860
+oder Autoscaling-Schwellenwerte.
+
+00:09:01.980 --> 00:09:04.940
+Sie interessieren sich dafür, ob ihr Service läuft und wie schnell er reagiert.
+
+00:09:05.780 --> 00:09:08.080
+Daher konfiguriert die Plattform dies alles basieren auf der Anwendungsebene.
+
+00:09:08.440 --> 00:09:09.820
+Kleiner Service, hier ist das passende Setup.
+
+00:09:10.400 --> 00:09:12.240
+Service mit Home-Traffic, hier ist eine andere Konfiguration.
+
+00:09:12.660 --> 00:09:14.840
+Der Entwickler trifft diese Entscheidung nicht, weil er es nicht muss.
+
+00:09:15.520 --> 00:09:16.220
+Warum ist das wichtig?
+
+00:09:16.580 --> 00:09:19.920
+Weil das Burnout-Risiko sinkt, wenn Entwickler nicht 15 verschiedene Baustellen gleichzeitig
+
+00:09:19.920 --> 00:09:20.500
+jonglieren müssen.
+
+00:09:21.060 --> 00:09:24.080
+Einige ausgereifte Plattform-Teams konnten die kognitive Belastung fast halbieren.
+
+00:09:24.480 --> 00:09:26.400
+40 bis 50 Prozent weniger mentaler Overhead.
+
+00:09:26.800 --> 00:09:27.700
+Das ist eine enorme Veränderung.
+
+00:09:28.060 --> 00:09:30.140
+Es ist der Unterschied zwischen Feierabend mit noch vorhandener Energie
+
+00:09:30.140 --> 00:09:32.860
+und dem Starren auf ein Terminal um 22 Uhr, während man sich fragt, warum die Pipeline
+
+00:09:32.860 --> 00:09:33.400
+fehlgeschlagen ist.
+
+00:09:33.660 --> 00:09:34.400
+Aber hier ist eine Warnung.
+
+00:09:34.760 --> 00:09:35.620
+Schafft keine Illusionen.
+
+00:09:36.260 --> 00:09:37.620
+Manche Plattform-Teams tappen in eine Falle.
+
+00:09:37.620 --> 00:09:41.340
+Sie verstecken Einstellungen, ohne den Entwicklern eine Möglichkeit zu geben, die Vorgänge
+
+00:09:41.340 --> 00:09:42.080
+im Hintergrund zu verstehen.
+
+00:09:42.720 --> 00:09:44.540
+Das ist keine Abstraktion, das ist Täuschung.
+
+00:09:44.880 --> 00:09:46.440
+Und es rächt sich, sobald etwas schief geht.
+
+00:09:46.920 --> 00:09:49.380
+Entwickler stoßen gegen eine Mauer, durch die sie nicht blicken können und plötzlich
+
+00:09:49.380 --> 00:09:51.220
+wirkt die Plattform wie eine Blackbox, die gegen sie arbeitet.
+
+00:09:51.220 --> 00:09:53.220
+Der Fachbegriff dafür ist eine undichte Abstraktion.
+
+00:09:53.580 --> 00:09:55.960
+Man verbirgt Komplexität, aber irgendwann sickert diese Komplexität durch.
+
+00:09:56.280 --> 00:09:59.560
+Eine Datenbank wird langsam, ein Deployment schlägt fehl, eine Sicherheitsrichtlinie
+
+00:09:59.560 --> 00:10:00.600
+blockiert etwas Unerwartetes.
+
+00:10:01.140 --> 00:10:03.860
+Und der Entwickler hat kein mentales Modell der Vorgänge, weil die Plattform ihm keines
+
+00:10:03.860 --> 00:10:04.380
+vermittelt hat?
+
+00:10:05.180 --> 00:10:05.920
+Transparenz ist wichtig.
+
+00:10:06.400 --> 00:10:08.640
+Zeigt den Entwicklern, was sie wissen müssen, genau dann, wenn sie es wissen.
+
+00:10:09.020 --> 00:10:10.800
+Versteckt nicht einfach alles in der Hoffnung, dass schon alles gut gehen.
+
+00:10:11.320 --> 00:10:13.980
+Was das für euch bedeutet, weniger Kontextwechsel und mehr Flow.
+
+00:10:14.560 --> 00:10:17.800
+Man beginnt den Morgen nicht mit der Sorge, ob der Kubernetes-Cluster ein Upgrade braucht, sondern
+
+00:10:17.800 --> 00:10:20.060
+arbeitet direkt an der Funktion, die nächste Woche fertig sein muss.
+
+00:10:20.060 --> 00:10:21.700
+Der Job wird wieder zur eigentlichen Arbeit.
+
+00:10:22.760 --> 00:10:24.380
+Die Plattform, die ein Produkt behandeln.
+
+00:10:24.980 --> 00:10:28.160
+Heute sprechen wir über etwas, das die Funktionsweise interner Tools grundlegend verändert.
+
+00:10:28.820 --> 00:10:31.220
+Die meisten Leute halten ein Plattform-Team nur für ein Infrastruktur-Team.
+
+00:10:31.620 --> 00:10:32.060
+Das ist nicht.
+
+00:10:32.320 --> 00:10:33.660
+Ein Plattform-Team ist ein Produkt-Team.
+
+00:10:33.820 --> 00:10:37.020
+Und die Entwickler, die die Plattform nutzen, sind ihre Kunden, nicht Leute, die Tickets einreichen.
+
+00:10:37.540 --> 00:10:38.200
+Das ändert alles.
+
+00:10:38.620 --> 00:10:41.860
+Ein Produkt-Team spricht mit seinen Kunden, findet heraus, wo der Schuh wirklich drückt,
+
+00:10:42.140 --> 00:10:45.780
+priorisiert Funktionen nur nach tatsächlichen Bedarf, misst die Nutzung und baut nicht einfach
+
+00:10:45.780 --> 00:10:47.600
+etwas, um es dann zu vergessen, sie iterieren kontinuierlich.
+
+00:10:47.920 --> 00:10:49.760
+Wie sieht also ein Produkt-Team in der Praxis aus?
+
+00:10:50.060 --> 00:10:51.740
+Sie arbeiten nicht wie ein Helpdesk.
+
+00:10:52.160 --> 00:10:55.260
+Ein Entwickler reicht ein Ticket ein und das Plattform-Team erledigt es manuell.
+
+00:10:55.800 --> 00:10:58.900
+Das ist kein Plattform-Engineering, das ist nur zentralisierter Betrieb mit neuem Namen.
+
+00:10:59.360 --> 00:11:02.020
+Es ist nicht skalierbar, es reduziert nicht die kognitive Belastung, es verschiebt den
+
+00:11:02.020 --> 00:11:03.160
+Engpass nur von einem Team zum anderen.
+
+00:11:03.600 --> 00:11:04.560
+Ihr ist, was Sie stattdessen tun.
+
+00:11:04.960 --> 00:11:05.780
+Sie messen die richtigen Dinge.
+
+00:11:06.360 --> 00:11:07.520
+Zeit bis zum ersten Deployment.
+
+00:11:07.640 --> 00:11:09.360
+Onboarding-Geschwindigkeit für neue Teammitglieder.
+
+00:11:09.720 --> 00:11:10.540
+Zufriedenheitswerte der Entwickler.
+
+00:11:11.000 --> 00:11:14.060
+Das sind die Kennzahlen, die zeigen, ob die Plattform den Leuten wirklich hilft oder nur eine
+
+00:11:14.060 --> 00:11:15.640
+weitere Komplexitätsebene hinzufügt.
+
+00:11:16.020 --> 00:11:16.880
+Spotify ist ein gutes Beispiel.
+
+00:11:16.880 --> 00:11:19.360
+Ihr Plattform-Team arbeitet wie eine echte Produktorganisation.
+
+00:11:19.840 --> 00:11:23.240
+Sie haben Roadmaps, Sie haben OKRs, Sie sprechen mit Entwicklern darüber, was funktioniert und
+
+00:11:23.240 --> 00:11:24.280
+was nicht und was nicht.
+
+00:11:24.580 --> 00:11:27.620
+Sie betrachten die Plattform als etwas, dass sich seine Akzeptanz jeden Tag aufs Neue
+
+00:11:27.620 --> 00:11:29.280
+verdienen muss und genau das ist der Kernpunkt.
+
+00:11:30.040 --> 00:11:33.120
+Eine Plattform, die niemand nutzt, ist nur ein Projekt, das in der Ecke verstaubt.
+
+00:11:34.240 --> 00:11:35.600
+Akzeptanz ist die ultimative Bestätigung.
+
+00:11:36.260 --> 00:11:39.500
+Wenn Entwickler ihre Plattformen den eigenen Werkzeugen vorziehen, haben sie es geschafft.
+
+00:11:39.500 --> 00:11:42.900
+Wenn Sie sie meiden, kann auch technische Exzellenz daran nichts ändern.
+
+00:11:43.420 --> 00:11:44.200
+Was bedeutet das für Sie?
+
+00:11:44.500 --> 00:11:47.600
+Es bedeutet, wenn Sie eine Plattform aufbauen, beginnen Sie nicht mit Architekturdiagrammen,
+
+00:11:47.660 --> 00:11:50.520
+nicht mit Kubernetes-Clustern oder Terraform-Modulen, sondern mit Nutzerinterviews.
+
+00:11:50.600 --> 00:11:51.500
+Sondern mit Nutzerinterviews.
+
+00:11:51.600 --> 00:11:53.800
+Sprechen Sie mit den Entwicklern, die Ihre Plattform nutzen werden.
+
+00:11:54.140 --> 00:11:55.360
+Finden Sie heraus, wo es wirklich schmerzt.
+
+00:11:55.900 --> 00:11:58.360
+Bauen Sie eine Sache, die ein echtes Problem löst und iterieren Sie dann.
+
+00:11:58.800 --> 00:12:00.800
+So baut man etwas, das die Leute auch wirklich nutzen wollen.
+
+00:12:01.640 --> 00:12:02.320
+Warum gerade jetzt?
+
+00:12:02.580 --> 00:12:03.120
+Die KI-Welle.
+
+00:12:03.560 --> 00:12:04.960
+Warum sprechen wir also genau jetzt darüber?
+
+00:12:05.380 --> 00:12:06.160
+Warum nicht schon vor fünf Jahren?
+
+00:12:06.160 --> 00:12:07.080
+Die Antwort ist KI.
+
+00:12:07.560 --> 00:12:11.380
+KI-Programmiertools wie GitHub-Copilot ermöglichen es, Entwicklern Code in einem Tempo zu liefern,
+
+00:12:11.460 --> 00:12:12.800
+das wir noch nie zuvor gesehen haben.
+
+00:12:13.380 --> 00:12:16.380
+Zehn oder zwanzigmal mehr Code pro Tag, als vor ein paar Jahren noch möglich war.
+
+00:12:16.980 --> 00:12:17.660
+Das klingt fantastisch.
+
+00:12:17.700 --> 00:12:18.120
+Und das ist es auch.
+
+00:12:18.680 --> 00:12:19.380
+Aber hier ist der Haken.
+
+00:12:19.720 --> 00:12:21.260
+All dieser Code benötigt immer noch eine Infrastruktur.
+
+00:12:21.620 --> 00:12:22.460
+Er benötigt immer noch Sicherheit.
+
+00:12:22.860 --> 00:12:25.020
+Er muss immer noch bereitgestellt, getestet und betrieben werden.
+
+00:12:25.400 --> 00:12:27.200
+Mehr Code ohne ein besseres System macht sie nicht schneller.
+
+00:12:28.000 --> 00:12:29.700
+Es sorgt nur dafür, dass das Chaos schneller entsteht.
+
+00:12:29.980 --> 00:12:33.560
+Wenn Ihre Entwickler bereits in YAML und Terraform ertrinken, löst KI das nicht.
+
+00:12:33.560 --> 00:12:37.180
+Es bedeutet nur, dass Sie schneller ertrinken, während Sie mehr Code produzieren, der unterstützt
+
+00:12:37.180 --> 00:12:37.540
+werden muss.
+
+00:12:38.020 --> 00:12:41.960
+Aktuell haben bereits etwa 55 Prozent aller Unternehmen Plattform-Engineering in irgendeiner
+
+00:12:41.960 --> 00:12:42.640
+Form eingeführt.
+
+00:12:43.260 --> 00:12:46.840
+Gartner prognostiziert, dass diese Zahl bis Ende 2026 auf 80 Prozent steigt.
+
+00:12:47.120 --> 00:12:48.020
+Das ist kein langsamer Trend.
+
+00:12:48.420 --> 00:12:49.780
+Das ist ein Wandel, der genau jetzt stattfindet.
+
+00:12:50.120 --> 00:12:53.220
+Unternehmen erkennen, dass sie ihre Engineering-Teams ohne eine Plattform-Ebene nicht skalieren
+
+00:12:53.220 --> 00:12:53.480
+können.
+
+00:12:54.000 --> 00:12:56.720
+Der alte Ansatz, bei dem jedes Team alles selbst macht, funktioniert einfach nicht, wenn
+
+00:12:56.720 --> 00:12:58.260
+man Code in KI-Geschwindigkeit ausliefert.
+
+00:12:58.740 --> 00:12:59.640
+Hier ist etwas, was viel übersehen.
+
+00:13:00.260 --> 00:13:02.140
+KI schafft nicht nur den Bedarf an Plattformen.
+
+00:13:02.140 --> 00:13:03.360
+Sie hilft auch dabei, sie aufzubauen.
+
+00:13:04.000 --> 00:13:07.440
+Plattform-Teams nutzen KI, um Terraform-Module zu generieren, Dokumentation zu schreiben
+
+00:13:07.440 --> 00:13:08.640
+und Pipelines zu debuggen.
+
+00:13:09.280 --> 00:13:12.340
+Dieselbe Technologie, die den Handlungsdruck erzeugt, liefert auch die Werkzeuge, um ihn
+
+00:13:12.340 --> 00:13:12.720
+zu lösen.
+
+00:13:13.320 --> 00:13:14.180
+Doch ein Wort der Vorsicht.
+
+00:13:14.700 --> 00:13:16.500
+KI verstärkt das, was bereits vorhanden ist.
+
+00:13:17.180 --> 00:13:20.960
+Wenn die Grundlagen solide sind, etwa durch eine gute Architektur und eine durchdachte Plattform,
+
+00:13:21.060 --> 00:13:22.680
+macht KI sie zwei- bis dreimal produktiver.
+
+00:13:23.460 --> 00:13:26.280
+Sind die Fundamente jedoch schwach, hilft Ihnen die KI nur dabei, größere Fehler schneller
+
+00:13:26.280 --> 00:13:26.680
+zu machen.
+
+00:13:27.880 --> 00:13:30.680
+Fehlkonfigurationen, Sicherheitslücken, defekte Infrastruktur, alles landet in der Produktion,
+
+00:13:30.680 --> 00:13:31.360
+bevor es jemand bemerkt.
+
+00:13:31.680 --> 00:13:33.120
+KI behebt keine schlechten Fundamente.
+
+00:13:33.540 --> 00:13:34.100
+Sie legt sie offen.
+
+00:13:34.560 --> 00:13:35.100
+Ein echtes Beispiel.
+
+00:13:35.940 --> 00:13:38.980
+Ein Unternehmen mit einer guten internen Entwickler-Plattform kann nicht Technikern erlauben,
+
+00:13:39.040 --> 00:13:40.260
+KI-Tools sicher bereitzustellen.
+
+00:13:40.740 --> 00:13:41.800
+Die Plattform bietet Leitklang.
+
+00:13:42.300 --> 00:13:43.440
+Sie setzt Sicherheitsrichtlinien durch.
+
+00:13:43.880 --> 00:13:44.900
+Sie kümmert sich um die Infrastruktur.
+
+00:13:45.380 --> 00:13:49.780
+So kann ein Produktmanager einen KI-gestützten Prototypen starten, ohne Kubernetes- oder Cloud-Netzwerke
+
+00:13:49.780 --> 00:13:50.520
+verstehen zu müssen.
+
+00:13:51.100 --> 00:13:51.700
+Das ist beeindruckend.
+
+00:13:52.040 --> 00:13:55.640
+Das ist genau das, was Teams, die für das KI-Zeitalter bereit sind, von den Teams unterscheidet,
+
+00:13:55.700 --> 00:13:56.940
+die den Anschluss verlieren werden.
+
+00:13:57.560 --> 00:13:58.740
+Was bedeutet das für Sie?
+
+00:13:59.140 --> 00:14:00.740
+Das Zeitfenster für den Aufbau einer Plattform schließen.
+
+00:14:01.300 --> 00:14:05.160
+Nicht, weil die Technologie verschwindet, sondern weil die Lücke zwischen Teams mit und ohne
+
+00:14:05.160 --> 00:14:06.860
+Plattformen schnell größer wird.
+
+00:14:07.620 --> 00:14:11.080
+Mit jedem Monat des Wartens ziehen die Teams mit Plattformen weiter davon.
+
+00:14:11.660 --> 00:14:15.120
+Sie liefern schneller aus, sind weniger ausgebrannt und passen sich schneller an neue Werkzeuge an.
+
+00:14:15.120 --> 00:14:17.520
+Die Teams ohne Plattformen fallen immer weiter zurück.
+
+00:14:17.980 --> 00:14:18.560
+Sie haben die Wahl.
+
+00:14:19.560 --> 00:14:20.660
+Beginnen Sie mit einem Golden Path.
+
+00:14:21.100 --> 00:14:22.180
+Wo fängt man also tatsächlich an?
+
+00:14:22.540 --> 00:14:26.400
+Wenn Sie glauben, eine komplette interne Entwicklerplattform von Grund auf neu bauen zu müssen, hören Sie auf.
+
+00:14:27.100 --> 00:14:29.400
+Das ist der schnellste Weg, Ihr Projekt zu zerstören, noch bevor es beginnt.
+
+00:14:29.920 --> 00:14:32.400
+Der größte Fehler von Teams ist der Versuch, alles auf einmal zu bauen.
+
+00:14:33.020 --> 00:14:36.740
+Sie verbringen Monate damit, die perfekte Plattform zu entwerfen und mit jedem erdenklichen Feature vollzustoffen.
+
+00:14:37.140 --> 00:14:38.620
+Dann veröffentlichen Sie diese und hören nichts.
+
+00:14:39.080 --> 00:14:39.860
+Niemand benutzt sie.
+
+00:14:40.280 --> 00:14:40.460
+Warum?
+
+00:14:40.460 --> 00:14:44.860
+Weil Sie Probleme löst, nach denen niemand gefragt hat und schon der Einstieg ein ganzes Handbuch erfordert.
+
+00:14:45.360 --> 00:14:46.480
+Kurz gesagt, tun Sie das nicht.
+
+00:14:46.940 --> 00:14:47.700
+Waren Sie sich stattdessen klein an.
+
+00:14:48.220 --> 00:14:51.740
+Sprechen Sie tatsächlich mit Entwicklern, nicht mit Architekten, nicht mit Managern, nicht mit Ihren eigenen Annahmen.
+
+00:14:52.180 --> 00:14:53.780
+Finden Sie die Leute, die täglich Features schreiben.
+
+00:14:54.340 --> 00:14:55.220
+Fragen Sie sie, wo es weh tut.
+
+00:14:55.740 --> 00:15:00.380
+Finden Sie den einen Arbeitsablauf, der am längsten dauert, die meisten Leute frustriert oder öfter übersprungen wird, als er sollte.
+
+00:15:00.900 --> 00:15:02.880
+Bauen Sie dann genau einen goldenen Pfad durch den gesamten Prozess.
+
+00:15:03.540 --> 00:15:05.860
+Vielleicht ist es das Erstellen und Bereitstellen eines neuen Microservices.
+
+00:15:06.300 --> 00:15:08.620
+Vielleicht ist es das Einrichten einer Entwicklungsumgebung von Grund auf.
+
+00:15:08.800 --> 00:15:11.920
+Vielleicht ist es das Ausliefern eines Hotfixes in die Produktion, ohne etwas zu beschädigen.
+
+00:15:11.920 --> 00:15:15.700
+Wählen Sie das, was am meisten schmerzt und bauen Sie einen Pfad, der diesen Schmerz beseitigt.
+
+00:15:16.280 --> 00:15:19.100
+Bauen Sie es, testen Sie es mit echten Nutzern, sammeln Sie Feedback, iterieren Sie.
+
+00:15:19.680 --> 00:15:21.680
+Fügen Sie dann einen weiteren Pfad hinzu und danach noch einen.
+
+00:15:21.940 --> 00:15:23.460
+Versuchen Sie nicht, jedes Problem auf einmal zu lösen.
+
+00:15:23.820 --> 00:15:26.620
+Lösen Sie ein Problem wirklich gut und lassen Sie sich vom Schwung vorwärts tragen.
+
+00:15:26.920 --> 00:15:27.900
+Woher wissen Sie, dass es funktioniert?
+
+00:15:28.320 --> 00:15:29.120
+Messen Sie die richtigen Dinge.
+
+00:15:29.680 --> 00:15:31.400
+Zeit von der Idee bis zum ersten Deployment.
+
+00:15:31.540 --> 00:15:34.180
+Anzahl der eliminierten manuellen Schritte und freiwillige Adoptionsraten.
+
+00:15:34.900 --> 00:15:37.560
+Wenn Entwickler Ihren Pfad dem eigenen Bauen vorziehen, gewinnen Sie.
+
+00:15:38.280 --> 00:15:41.680
+Wenn Sie ihn meiden, hören Sie zu und ändern Sie die Richtung, wie es die vermeiden soll.
+
+00:15:42.220 --> 00:15:43.460
+Machen Sie die Plattform nicht verpflichtend.
+
+00:15:44.020 --> 00:15:46.220
+Zwingen Sie Entwickler auf Ihren Pfad und Sie werden sich dagegen wehren.
+
+00:15:46.540 --> 00:15:47.580
+Sie werden Wege finden, ihn zu umgehen.
+
+00:15:47.900 --> 00:15:49.780
+Sie werden Ihre eigenen Skripte bauen, unter die Sie vor Ihnen verstecken.
+
+00:15:50.100 --> 00:15:51.360
+Machen Sie den Pfad stattdessen einfach.
+
+00:15:51.760 --> 00:15:52.980
+Machen Sie ihn schneller als die Alternative.
+
+00:15:53.620 --> 00:15:55.860
+Machen Sie ihn zur offensichtlichen Wahl, aber niemals zur einzigen.
+
+00:15:56.100 --> 00:15:57.700
+Der erste Pfad ist immer der schwerste.
+
+00:15:58.200 --> 00:15:59.500
+Er lehrt Sie alles über Produktdenkweise.
+
+00:16:00.120 --> 00:16:02.240
+Sie lernen, wie man mit Nutzern spricht, wie man priorisiert.
+
+00:16:02.240 --> 00:16:05.840
+Und dass etwas zu bauen, das Leute wirklich wollen, viel schwerer ist, als etwas zu bauen, das nur funktioniert.
+
+00:16:06.820 --> 00:16:10.080
+Aber sobald Sie es einmal geschafft haben, wird der zweite Pfad einfacher und der dritte noch einfacher.
+
+00:16:10.580 --> 00:16:12.000
+Sie bauen eine Plattform nicht auf einen Schlag.
+
+00:16:12.380 --> 00:16:13.640
+Sie bauen sie Pfad für Pfad auf.
+
+00:16:14.400 --> 00:16:15.140
+Das ist also das System.
+
+00:16:15.420 --> 00:16:17.820
+Plattform Engineering bedeutet, die befestigte Straße zu bauen,
+
+00:16:17.920 --> 00:16:20.260
+damit Entwickler sich aufs Fahren konzentrieren können, statt Schlaglöcher zu flicken.
+
+00:16:20.860 --> 00:16:23.440
+Wenn Sie es leid sind, gegen die Infrastruktur zu kämpfen, fangen Sie damit an,
+
+00:16:23.460 --> 00:16:25.100
+einen goldenen Pfad in Ihrem Team zu finden nur ein.
+
+00:16:25.740 --> 00:16:29.180
+Teilen Sie dies mit jemandem, der es hören muss und abonnieren Sie für weitere Analysen wie diese.

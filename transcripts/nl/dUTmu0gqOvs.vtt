@@ -1,0 +1,1075 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:03.900
+Je bouwt aangepaste AI-agents voor Microsoft 365 op de moeilijke manier.
+
+00:00:04.140 --> 00:00:08.900
+Daarom breken ze, lopen ze vast en falen ze bij beveiligingscontroles zodra een echte gebruiker verschijnt.
+
+00:00:09.040 --> 00:00:14.860
+De waarheid? De Microsoft 365 Agent SDK is geen optie als je schaalbaarheid, veiligheid en echtbereik via meerdere kanalen wilt.
+
+00:00:15.040 --> 00:00:19.800
+Je leert waarom eigen oplossingen falen, wat de SDK standaard biedt en hoe je deze vandaag nog implementeert.
+
+00:00:19.960 --> 00:00:23.240
+Er is één functie die de meeste zelfgebouwde agents stilletjes de das om doet.
+
+00:00:23.400 --> 00:00:24.500
+Ik onthul het voor het einde.
+
+00:00:24.820 --> 00:00:25.860
+Onmiddellijk resultaat.
+
+00:00:25.860 --> 00:00:30.860
+Je gaat weg met een inzetbaar blauwdruk die je kunt verdedigen bij beveiliging, kunt uitrollen naar teams en koppelen aan co-pilot.
+
+00:00:31.080 --> 00:00:33.960
+Laten we nu de gebruikelijke doe-het-zelf aanpak snel afbreken.
+
+00:00:34.220 --> 00:00:38.200
+Waarom zelfgebouwde agents falen in M365 ecosystemen?
+
+00:00:38.340 --> 00:00:44.980
+Je behandelt identiteit als een vinkje, handelen als een app terwijl je als de gebruiker moet handelen, vernietigt toestemmingsgetrouwheid,
+
+00:00:45.260 --> 00:00:48.000
+wist audit trails en garandeert een mislukte beoordeling.
+
+00:00:48.240 --> 00:00:53.380
+In M365 is toegang gekoppeld aan identiteit, bestanden, chats, agenda's, e-mail.
+
+00:00:53.380 --> 00:00:57.900
+Als je agent een algemene service-principle gebruikt, heeft deze of te veel rechten, of wordt hij geblokkeerd.
+
+00:00:58.060 --> 00:01:02.580
+En wanneer auditors vragen wie had toegang tot dit SharePoint-bestand en waarom, geven je laks niet thuis.
+
+00:01:02.820 --> 00:01:04.560
+Dat is geen governance, dat is giswerk.
+
+00:01:04.780 --> 00:01:06.600
+Nu, dit is waar de meeste mensen de fout in gaan.
+
+00:01:06.860 --> 00:01:07.220
+Status.
+
+00:01:07.560 --> 00:01:13.040
+Je maakt een prototype op een laptop, het werkt één keer, dan schaal je naar meerdere knooppunten en je logica voor meerdere stappen stort in.
+
+00:01:13.240 --> 00:01:16.380
+Zonder gedeelde gespreks- en stapstatus tussen instanties verdwijnen verduidelijkingen,
+
+00:01:17.300 --> 00:01:20.380
+wijken tool-outputs af en herhaalt de agent zichzelf als een goudvis met geheugenverlies.
+
+00:01:20.380 --> 00:01:31.120
+Onder belasting worden statelesheks voor gebruikers zichtbare baks, ontbrekende context, tegenstrijdige antwoorden en, sorry, waar hadden we het over, chaos in kanalen is de volgende uitdaging.
+
+00:01:31.320 --> 00:01:35.240
+Teams, webchat, Slack, Outlook, ze spreken allemaal een ander dialect.
+
+00:01:35.440 --> 00:01:39.620
+Typ-indicatoren, bijlagen, kaarten, streaming, niets daarvan is consistent.
+
+00:01:39.940 --> 00:01:45.920
+Je knutselt zelf adapters, het werkt meestal totdat Teams om activity protocol semantiek vraagt die jouw adapter niet kent.
+
+00:01:45.920 --> 00:01:51.800
+Het resultaat? Foutieve berichten, geen streaming waar gebruikers dat verwachten en inconsistent gedrag dat goedkoop aanvoelt.
+
+00:01:52.060 --> 00:01:56.800
+Gebruikers geven niet om jouw adapter. Ze willen dat de agent zich overal gedraagt als een native onderdeel.
+
+00:01:57.020 --> 00:02:03.360
+Governance-kloof aangepaste bots negeren per view-signalen, slaan DLP-handhaving over en produceren antwoorden die niemand kan ediscoveren.
+
+00:02:03.640 --> 00:02:05.160
+Beveiliging zegt nee omdat ze dat moeten.
+
+00:02:05.380 --> 00:02:10.340
+Als je agent geen rekening houdt met vertrouwelijkheidslabels, retentie en wettelijke bewaarplicht, is hij bij aankomst al dood.
+
+00:02:10.340 --> 00:02:17.620
+Wat de meeste mensen missen is dat governance geen functie is die je achteraf toevoegt. Het is de grond waarop je staat. Bouw je zonder, dan zakt de vloer onder je weg.
+
+00:02:17.880 --> 00:02:24.680
+Orchestrator verspreiding zorgt voor entropie een beetje longchain hier, wat cementen kerneldar, plus op maat gemaakte tools met duct tape aan HTTP aanroepen vastgemaakt.
+
+00:02:24.860 --> 00:02:31.120
+Geen standaard uitvoeringsplan, geen uniforme retreats. Observability verandert in een moordmysterie met teveel verdachten en geen tijdlijn.
+
+00:02:31.320 --> 00:02:34.860
+Wissel een model of planner en je herschrijft de agent in plaats van een onderdeel te vervangen.
+
+00:02:34.860 --> 00:02:42.720
+Dat is fragiliteit vermomd als flexibiliteit. Compliance-kloven, data-residentie, retentiebeleid en RBAC stemmen niet zomaar op elkaar af.
+
+00:02:42.860 --> 00:02:48.980
+Externe chats kunnen intern lekken als je routeringtenantgrenzen negeert. Cross-tenantscenario's, veel succes in dat mijneveld.
+
+00:02:49.140 --> 00:02:54.260
+Als je agentencompliance-standaarden van de organisatie niet overneemt, creëer je een parallel universum met incompatibele wetten.
+
+00:02:54.460 --> 00:02:57.140
+Spoiler, dat universum krijgt nooit productiegoedkeuring.
+
+00:02:57.420 --> 00:02:59.540
+Debug-wanhoop is de beloning voor dat alles.
+
+00:02:59.840 --> 00:03:03.920
+Zonder consistente dev-tunnel jong leer je met groklings en half kapotte proxies.
+
+00:03:03.920 --> 00:03:07.140
+Zonder end-to-end traces lijkt elke fout op een spook.
+
+00:03:07.300 --> 00:03:14.120
+En kanaalbewuste streaming, als je mogelijkheden niet detecteert, simuleer je streaming waar het niet kan of ontzeg je het gebruikers waar het wel kan.
+
+00:03:14.360 --> 00:03:16.940
+Beide voelen verkeerd. Beide schaden het vertrouwen.
+
+00:03:17.140 --> 00:03:21.700
+De doe-het-zelf-aanpak in M365 betekent meestal dat je leidingwerk vervangt door tuinslangen.
+
+00:03:21.860 --> 00:03:24.860
+Je bent druk met waterdruk bestrijden terwijl je aan het brein zou moeten werken.
+
+00:03:25.100 --> 00:03:32.300
+Maak kennis met de Microsoft 365 agent SDK, de saaie gestandardiseerde aderen die het systeem draaiende houden, zodat jij je op cognitie kunt richten.
+
+00:03:32.300 --> 00:03:39.500
+Het regelt identiteit correct, behoudt status overnoods, spreekt het activiteit protocol met echte adapters en respecteert governance standaard.
+
+00:03:39.660 --> 00:03:44.000
+En ja, het is model agnostisch, dus jouw orchestrator drama is niet langer ieders probleem.
+
+00:03:44.220 --> 00:03:46.600
+Zodra de basis staat, valt alles op zijn plek.
+
+00:03:46.760 --> 00:03:51.780
+Wat de Microsoft 365 agent SDK werkelijk biedt, een model agnostische kern.
+
+00:03:51.780 --> 00:03:53.920
+Authenticatie direct goed geregeld.
+
+00:03:54.100 --> 00:04:00.760
+De SDK integreert identiteit in de activiteitsflow, zodat je agent kan handelen als gebruiker wanneer dat moet en terugvalt op service credentials indien nodig.
+
+00:04:00.980 --> 00:04:10.900
+Je krijgt sign-in handlers voor duidelijke toestemmingsmomenten, wisselt codes in voor tokens en verrijkt de beurt met gebruikerspecifieke toegang tot Graph, SharePoint en Outlook, gekoppeld aan de echte persoon.
+
+00:04:11.080 --> 00:04:15.780
+Het voordeel is duidelijk, permissie, getrouwheid, echte audit trails en standaard het least privilege principe.
+
+00:04:15.780 --> 00:04:22.340
+Wat de meeste mensen missen is hoe dit goedkeuringen en acties mogelijk maakt die een naamloze app niet kan uitvoeren zonder overmatige rechten.
+
+00:04:22.560 --> 00:04:25.220
+Het is niet alleen out, het is autorisatie met een geweten.
+
+00:04:25.760 --> 00:04:27.180
+Gespreksbeheer, de volgende stap.
+
+00:04:27.360 --> 00:04:31.660
+De SDK biedt duurzame sessie en threadstatus die overleeft over geclusterde nodes heen.
+
+00:04:31.800 --> 00:04:39.160
+Turnstatus, gedeelde opslagpatronen en consistente correlatie-idees zorgen dat multiturngesprekken niet falen als een loadbalancer je naar een andere instantie verplaatst.
+
+00:04:39.580 --> 00:04:45.100
+Verduidelijkingen, tool outputs en korte termijngeheugen blijven behouden zonder dat je eigen, sticky session, voede hoeft te bedenken.
+
+00:04:45.100 --> 00:04:49.400
+De reden dat dit werkt is dat het framework een gesprek behandelt als een eerste-class resource.
+
+00:04:49.620 --> 00:04:55.460
+Je agent stopt met zichzelf te herhalen en begint zich te gedragen alsof hij je kent, want dat doet hij over beurten, kanalen en machines heen.
+
+00:04:55.660 --> 00:04:57.420
+Maak kennis met het activiteitsprotocol.
+
+00:04:57.680 --> 00:04:59.780
+Zie het als de gemeenschappelijke taal voor agents.
+
+00:05:00.000 --> 00:05:07.000
+Types voor berichten, events, typing, bijlagen, adaptieve kaarten, zodat je logica niet vastzit aan de eigenaardigheden van één kanaal.
+
+00:05:07.180 --> 00:05:14.180
+De SDK levert adapters voor Teams, webchat, Slack en Copilot Studio die hun dialecten vertalen naar het activiteitsmodel en weer terug.
+
+00:05:14.180 --> 00:05:17.540
+Vergelijk dat met maatwerkadapters die altijd wel een randgeval missen.
+
+00:05:17.740 --> 00:05:20.920
+Denk aan entiteiten, workflows voor bestandstoestemming en livekaarten.
+
+00:05:21.100 --> 00:05:25.320
+Hier zijn die semantiek gestandardiseerd, zodat je agent in elke omgeving natuurlijk aanvoelt.
+
+00:05:25.560 --> 00:05:28.680
+Orchestrator neutraliteit is waar je jezelf in de toekomst dankbaar voor zult zijn.
+
+00:05:28.860 --> 00:05:34.160
+Koppel cementen kernel als je AI Foundry Planners, OpenAI of je eigen stack achter een overzichtelijke interface.
+
+00:05:34.380 --> 00:05:38.060
+Prompt zijn tools bevinden zich in modulaire eenheden, niet verspreid over handelers.
+
+00:05:38.060 --> 00:05:42.260
+Wissel een model, verander een planner, voer app testen uit zonder dat je agent instoort.
+
+00:05:42.420 --> 00:05:45.860
+De SDK kiest geen winnaars, hij dwingt scheidingen af zodat jij dat kunt.
+
+00:05:46.060 --> 00:05:50.620
+Als je maar één ding onthoudt, scheidt cognitie van communicatie en upgrades zijn geen herschrijvingen meer.
+
+00:05:50.840 --> 00:05:54.060
+Streaming bewustzijn is belangrijk, want gebruikerservaring is vertrouwen.
+
+00:05:54.240 --> 00:05:57.260
+De SDK detecteert automatisch de mogelijkheden van een kanaal.
+
+00:05:57.460 --> 00:06:03.740
+Ondersteunt de client token streaming, dan stream je snelle eerste feedback, gedeeltelijke redenering en afronding van adaptieve kaarten.
+
+00:06:04.000 --> 00:06:07.540
+Zo niet, dan val je soepel terug op type indicatoren en berichten in delen.
+
+00:06:07.540 --> 00:06:10.160
+Geen nep streaming hacks, geen angst voor stiltes.
+
+00:06:10.320 --> 00:06:17.120
+En ja, dezelfde logica dekt bijlagen, kaarten en voorgestelde acties per kanaalkapaciteit zonder knip- en plakvoorwaarden in je code.
+
+00:06:17.300 --> 00:06:20.660
+Toolkit integratie is de saaie productiviteit die je echt nodig hebt.
+
+00:06:20.880 --> 00:06:25.060
+Visual Studio en VS Code Scaffolding starten een agent op met een werkende echotoon.
+
+00:06:25.320 --> 00:06:34.260
+Dev tunnels stellen het veilig bloot voor echte kanaaltesten en diagnostiek geeft je end-to-end traces, request headers, aanwezige of afwezige tokens, in- en uitgaande activiteiten.
+
+00:06:34.260 --> 00:06:39.380
+De playground simuleert meerdere kanalen, zodat je capaciteitsverschillen ziet zonder zes apps te hoeven draaien.
+
+00:06:39.720 --> 00:06:45.980
+Telemetriehoeks versturen correlatie-ID's en timing, zodat je latentie in tools, model, aanroepen of kanaal-IO kunt opsporen.
+
+00:06:46.200 --> 00:06:48.280
+Dit is hoe je debat in uren, niet in mythes.
+
+00:06:48.460 --> 00:06:51.220
+En omdat je het toch gaat vragen, het is open source en gratis.
+
+00:06:51.400 --> 00:06:55.880
+De SDK-kosten betaal je voor downstream services, de modellen, zoekfuncties, opslag, jij kiest.
+
+00:06:56.080 --> 00:06:59.920
+Dat betekent dat je enterprise-infrastructuur krijgt zonder de controle over je stack op te geven.
+
+00:06:59.920 --> 00:07:03.520
+Liever Python deze maand en C++ voor productie? Geen probleem.
+
+00:07:03.700 --> 00:07:09.000
+Wil je experimenteren met OpenAI en daarna standaardiseren op Azure AI Foundry met taaknaleving en beveiligingsevaluaties?
+
+00:07:09.180 --> 00:07:11.220
+Wissel de orchestrator, behoud de agent.
+
+00:07:11.440 --> 00:07:17.440
+De waarheid, de SDK standaardiseert identiteit, status, protocol en aflevering, zodat je code zich kan focussen op redenering en tools.
+
+00:07:17.640 --> 00:07:21.780
+Het is model-agnostisch door ontwerp, kanaalbewust standaard en direct governance vriendelijk.
+
+00:07:22.000 --> 00:07:24.740
+Geweldige functies zijn leuk, dit zijn overlevingseigenschappen.
+
+00:07:24.740 --> 00:07:30.520
+Nu je weet wat je krijgt, laten we bespreken hoe je het aansluit zodat het werkt en het eerste contact met echte gebruikers overleeft.
+
+00:07:31.080 --> 00:07:33.860
+Implementatie blauwdruk, van nul naar een multichannel agent.
+
+00:07:34.080 --> 00:07:35.440
+Begin met de basisstructuur.
+
+00:07:35.700 --> 00:07:39.320
+Maak een nieuw Microsoft 365 agentproject met de Echo Template.
+
+00:07:39.540 --> 00:07:43.720
+Dat is je keystone, een gegarandeerd teken dat de kanaalverbinding en de activiteitsstroom werken.
+
+00:07:43.940 --> 00:07:45.520
+Draai het lokaal en open de playground.
+
+00:07:45.920 --> 00:07:48.280
+Stuur een bericht, als je hier geen reactie krijgt, stop dan.
+
+00:07:48.500 --> 00:07:51.920
+Los omgevingsvariabelen, poorten en inloggegevens op voordat je intelligentie toevoegt.
+
+00:07:52.160 --> 00:07:54.680
+Gemiddelde gebruikers slaan dit over en geven daarna het model de schuld.
+
+00:07:54.740 --> 00:07:55.720
+Wees niet gemiddeld.
+
+00:07:55.940 --> 00:07:56.900
+Nu, de root handlers.
+
+00:07:57.120 --> 00:08:00.540
+Voeg een join handler toe om gebruikers te begroeten en een message handler om input te verwerken.
+
+00:08:00.760 --> 00:08:05.460
+Filter eerst op activiteitstype, bericht, conversatie en update een folk en pas daarna op inhoud.
+
+00:08:05.680 --> 00:08:07.580
+Hou filters declaratief en specifiek.
+
+00:08:07.780 --> 00:08:09.180
+Je koppelt ook een inlog handler.
+
+00:08:09.440 --> 00:08:15.300
+Daar toont de SDK toestemming, wisselt codes in voor tokens en geeft je een toegangstoken op gebruikersniveau voor de beurt.
+
+00:08:15.480 --> 00:08:16.140
+Het voordeel?
+
+00:08:16.340 --> 00:08:21.100
+Je kunt Microsoft Graph aanroepen als de gebruiker zonder je bot een overbevoorrechte service principle te maken.
+
+00:08:21.360 --> 00:08:22.800
+Ja, dat is de volwassen manier.
+
+00:08:22.800 --> 00:08:24.580
+Daarna de orchestrator plugin.
+
+00:08:24.900 --> 00:08:30.440
+Registreer je orchestrator, cementen kernel, Azure AI Foundry, open AI via de service collectie van de SDK.
+
+00:08:30.780 --> 00:08:32.460
+Scheid prompts en tools van handlers.
+
+00:08:32.720 --> 00:08:33.840
+Prompts staan in bestanden.
+
+00:08:34.100 --> 00:08:36.400
+Tools zijn functies met expliciete in- en output.
+
+00:08:36.660 --> 00:08:38.420
+En beide zijn testbaar zonder kanalen.
+
+00:08:38.640 --> 00:08:41.920
+De kortere weg die niemand leert, verpak model aanroepen achter een interface.
+
+00:08:42.180 --> 00:08:43.600
+Vandaag is het een chat aanvulling.
+
+00:08:43.820 --> 00:08:44.680
+Morgen is het een planner.
+
+00:08:44.920 --> 00:08:46.380
+De agent zou dat niet moeten uitmaken.
+
+00:08:46.540 --> 00:08:48.420
+Je toekomstige migraties zullen je dankbaar zijn.
+
+00:08:48.420 --> 00:08:50.860
+Statusbeheer is waar het speelgoedensysteem wordt.
+
+00:08:51.060 --> 00:08:57.100
+Gebruik turnstaten om chathistorie, tool outputs en elk korte termijn geheugen voor meer stapslogica te behouden.
+
+00:08:57.340 --> 00:09:01.360
+Sla correlatie-idees op zodat je een gebruikerstraject over knooppunten kunt volgen.
+
+00:09:01.600 --> 00:09:04.320
+Wat de meeste mensen missen is veerkracht tussen knooppunten.
+
+00:09:04.520 --> 00:09:07.340
+Je loadbalancer verplaatst een conversatie tijdens het proces.
+
+00:09:07.620 --> 00:09:11.040
+Zonder gedeelde status verdwijnen verduidelijkingen en gaat je agent stotteren.
+
+00:09:11.200 --> 00:09:13.560
+Met de SDK-statuspatronen gebeurt dat niet.
+
+00:09:13.560 --> 00:09:16.460
+Kanaalregistratie is waar je stopt met een labproject zijn.
+
+00:09:16.780 --> 00:09:19.980
+Registreer je agent bij Azure Bot Service als de persistente broker.
+
+00:09:20.220 --> 00:09:24.300
+ABS beëindigt kanaalprotocollen en stuurt activiteiten door naar je centrale eindpunt.
+
+00:09:24.540 --> 00:09:27.960
+Verwijs Teams, Webchat en Copilot Studio naar dat ABS-eindpunt.
+
+00:09:28.140 --> 00:09:30.900
+Eén eindpunt, vele kanalen, consistente semantiek.
+
+00:09:31.120 --> 00:09:36.420
+Vergelijk dat met aangepaste sockets per kanaal, broos, onobserveerbaar en gegarandeerd valend bij schaaltesten.
+
+00:09:36.700 --> 00:09:39.860
+Zet de streaming-schakelaar om en activeer streaming-reacties in de SDK.
+
+00:09:39.860 --> 00:09:42.600
+De agent zal automatisch kanaalmogelijkheden detecteren.
+
+00:09:42.600 --> 00:09:47.000
+Als streaming wordt ondersteund in de Teams Playground, stream je tokens en geef je direct feedback.
+
+00:09:47.220 --> 00:09:50.920
+Zo niet, dan zie je bij sommige web-clients-type indicatoren en verzendingen in delen.
+
+00:09:51.060 --> 00:09:53.980
+Je splitst je code niet per kanaal, de adapter doet het beschaafde werk.
+
+00:09:54.220 --> 00:09:56.620
+Snelle eerste feedback vermindert het afhaken van gebruikers.
+
+00:09:56.780 --> 00:09:59.680
+En ja, je kunt afsluiten met een adaptieve kaart zonder iets te feinzen.
+
+00:10:00.080 --> 00:10:01.260
+Diagnostiek is niet optioneel.
+
+00:10:01.480 --> 00:10:04.420
+Gebruik de Playground om meerdere kanalen te simuleren, headers te inspecteren,
+
+00:10:04.560 --> 00:10:08.740
+te bevestigen dat tokens aanwezig zijn wanneer je als gebruiker handelt en activiteiten end-to-end te traceren.
+
+00:10:08.740 --> 00:10:13.500
+Schakel telemetrie in en verstuur correlatie-idees van berichtontvangst naar modelaanroep, toolaanroeping en respons.
+
+00:10:13.680 --> 00:10:15.860
+De waarheid is, zonder correlatie ben je aan het gissen.
+
+00:10:16.040 --> 00:10:19.240
+Hiermee kun je bewijzen of vertraging in het model, je tool of het netwerk zit.
+
+00:10:19.400 --> 00:10:21.940
+Tijd om een eenvoudige functionaliteit end-to-end te koppelen.
+
+00:10:22.160 --> 00:10:24.260
+Geef in je berichtafhandelaar intentie lichtjes door.
+
+00:10:24.500 --> 00:10:26.400
+Geen heldendaden, net genoeg om door te sturen.
+
+00:10:26.640 --> 00:10:31.420
+Roep je orchestrator aan met een systeemprompt die beperkingen stelt en een gebruikersbericht dat de status van de vorige bevat.
+
+00:10:31.420 --> 00:10:39.240
+Als het model een tool wil aanroepen, voer de tool dan uit met gebruikerscoop tokens voor graph-gebonden acties of service credentials voor externe en veilige acties.
+
+00:10:39.460 --> 00:10:41.480
+Schrijf het toolresultaat naar de beurtstatus.
+
+00:10:41.720 --> 00:10:43.680
+Stream gedeeltelijke tekst indien ondersteunt.
+
+00:10:43.920 --> 00:10:47.520
+Wanneer voltooit, render dan een definitieve adaptieve kaart met de gestructureerde output.
+
+00:10:47.760 --> 00:10:48.620
+Voeg van rails toe.
+
+00:10:48.860 --> 00:10:51.480
+Beperk tools op basis van rol- en datagevoeligheid.
+
+00:10:51.660 --> 00:10:54.880
+Een planner kan aanroepen voorstellen, jouw agent autoriseert ze.
+
+00:10:55.080 --> 00:10:58.680
+Dat betekent het verifiëren van doelgroep, labels en actielimieten voor uitvoering.
+
+00:10:58.680 --> 00:11:02.400
+Als een tool e-mail wil versturen, verrijst dan expliciet de bevestiging van de gebruiker.
+
+00:11:02.560 --> 00:11:06.320
+Als een tool SharePoint gegevens wil, controleer dan gevoeligheidslabels en respecteer DLP.
+
+00:11:06.620 --> 00:11:09.120
+Je bent geen geest uit een fles, je bent een agent met grenzen.
+
+00:11:09.420 --> 00:11:10.740
+Implementeer een minimaal onderdeel.
+
+00:11:10.940 --> 00:11:11.600
+Werk de echo?
+
+00:11:11.860 --> 00:11:12.140
+Goed.
+
+00:11:12.380 --> 00:11:13.780
+Voeg één tool en één prompt toe.
+
+00:11:13.980 --> 00:11:16.540
+Test in de playground, webchat en teams via ABS.
+
+00:11:16.900 --> 00:11:18.620
+Verifieer streaming waar dit wordt ondersteund.
+
+00:11:19.000 --> 00:11:21.280
+Verifieer act as user, flows en audit items.
+
+00:11:21.540 --> 00:11:23.920
+Verwerk deze controles in je definitie van gereedheid.
+
+00:11:24.140 --> 00:11:27.120
+Voeg pas daarna meer tools, meer prompts en rijke redeneervermogen toe.
+
+00:11:27.120 --> 00:11:28.980
+Verpak ten slotte de herhaalbaarheid.
+
+00:11:29.180 --> 00:11:32.160
+Maak scripts die de ABS resource inrichten, kanalen registreren,
+
+00:11:32.340 --> 00:11:34.880
+app-idees configureren en omgevingsvariabelen instellen.
+
+00:11:35.060 --> 00:11:37.960
+Commit je prompt bestanden, status schema en tool interfaces.
+
+00:11:38.320 --> 00:11:42.360
+Het resultaat is simpel, een multichannel, stateful, identiteitscorrecte agent
+
+00:11:42.360 --> 00:11:44.000
+die netjes debat en belasting overleeft.
+
+00:11:44.180 --> 00:11:47.820
+Nu kunnen we praten over beveiligingspoorten, want dat is de deur die je echt moet openen.
+
+00:11:48.080 --> 00:11:51.700
+Beveiliging, compliance and governance, waarom de SDK niet optioneel is.
+
+00:11:51.920 --> 00:11:54.240
+Enterprise-poorten passeer je niet op basis van gevoel.
+
+00:11:54.240 --> 00:11:57.280
+Je passeert ze met identiteit, auditbaarheid en afdwingbaar beleid.
+
+00:11:57.400 --> 00:12:00.920
+De SDK verankert deze in je agent, zodat je stopt met onderhandelen met beveiligingen
+
+00:12:00.920 --> 00:12:02.280
+en hun controles begint over te nemen.
+
+00:12:02.500 --> 00:12:04.360
+Begin met Entra Identiteit for Agents.
+
+00:12:04.560 --> 00:12:06.320
+Het is niet zomaar een app-registratie.
+
+00:12:06.500 --> 00:12:09.680
+Het is een uniform identiteitsmodel waarbij de agent een eigen persona heeft,
+
+00:12:09.880 --> 00:12:12.360
+namens de gebruiker kan optreden met expliciete toestemming
+
+00:12:12.360 --> 00:12:15.220
+en een additspoor achterlaat dat elke actie aan een principle koppelt.
+
+00:12:15.400 --> 00:12:18.260
+Optreden als gebruiker betekent getrouwheid aan machtigingen.
+
+00:12:18.500 --> 00:12:22.980
+Mail, agenda, SharePoint, Teams, precies wat die persoon kan doen, niets meer.
+
+00:12:22.980 --> 00:12:25.320
+Least privilege is hier geen loze kreet.
+
+00:12:25.500 --> 00:12:28.860
+Het is de manier waarop tokens bij elke stap worden aangemaakt en begrensd.
+
+00:12:28.980 --> 00:12:33.120
+Wanneer compliance vraagt, wie heeft dit bestand geopend, onder wiens bevoegdheid en wanneer,
+
+00:12:33.280 --> 00:12:37.740
+heb je een sluitend antwoord omdat de SDK die identiteit door de activiteiten stroomweeft.
+
+00:12:37.920 --> 00:12:41.440
+Nu Purview integratie, hier gaan de meeste zelfbouwprojecten de mist in.
+
+00:12:41.640 --> 00:12:43.180
+Prompt zijn antwoorden zijn content.
+
+00:12:43.420 --> 00:12:46.320
+Content heeft labels, bewaartermijnen en wettelijke verplichtingen.
+
+00:12:46.320 --> 00:12:51.520
+Door Purview afgedwongen klassificatie en DLP kunnen AI invoer en uitvoer in realtime evalueren,
+
+00:12:51.720 --> 00:12:57.540
+gevoelige lekken blokkeren, sensitiviteitslabels respecteren en garanderen dat gegenereerde tekst niet in strijd is met het beleid.
+
+00:12:57.660 --> 00:13:01.640
+E-discovery afstemming betekent dat de gesprekken en artefacten van je agent kunnen worden teruggevonden,
+
+00:13:01.840 --> 00:13:06.160
+op Legal Hold, geplaatst en geëxporteerd onder precies dezelfde controles als e-mails en documenten.
+
+00:13:06.320 --> 00:13:09.200
+Wat de meeste mensen missen, is dat Purview geen extra toevoeging is.
+
+00:13:09.380 --> 00:13:11.720
+In het Microsoft ecosysteem is het het zenuwstelsel.
+
+00:13:11.720 --> 00:13:16.140
+De SDK routeert signalen, waardoor labels, retentie en toegangsbeslissingen van toepassing zijn
+
+00:13:16.140 --> 00:13:19.500
+zonder dat je op maat gemaakte regex filters hoeft te schrijven die na twee dagen stuk gaan.
+
+00:13:19.720 --> 00:13:22.460
+Maak kennis met Defender voor cloud met AI-bewuste detecties.
+
+00:13:22.680 --> 00:13:26.620
+Ja, jailbreaks, prompt injections en data-exfiltratie zijn geen hypothetische scenario's.
+
+00:13:26.760 --> 00:13:27.980
+Het zijn alledaagse zaken.
+
+00:13:28.200 --> 00:13:32.560
+Defender biedt houdingsaanbevelingen en runtime waarschuwingen die specifiek zijn voor agentsystemen.
+
+00:13:32.740 --> 00:13:35.900
+Dat betekent dat je telemetrie krijgt die verdachte patronen in tool aanroepen,
+
+00:13:36.120 --> 00:13:38.600
+afwijkende output pieken en misbruik van tokens herkent,
+
+00:13:38.600 --> 00:13:41.800
+ondersteund door threat intelligence die je zelf nooit intern kunt opbouwen.
+
+00:13:42.500 --> 00:13:45.100
+Zelfbouwsecurity engineering doet alsof het alles kan overzien.
+
+00:13:45.280 --> 00:13:48.900
+De SDK maakt gebruik van de bestaande uitkijkposten die je tenant al bewaken.
+
+00:13:49.160 --> 00:13:51.520
+Zero trust voor agents is geen presentatieslide.
+
+00:13:51.680 --> 00:13:53.420
+Het is de operationele modus.
+
+00:13:53.640 --> 00:13:57.500
+Aan identiteit gebonden acties die gekoppeld zijn aan de tools en controles op taaknaleving
+
+00:13:57.500 --> 00:13:59.920
+in Azure AI Foundry beperken het gedrag van de agent.
+
+00:14:00.100 --> 00:14:01.760
+Een planner kan een actie voorstellen.
+
+00:14:02.060 --> 00:14:06.380
+Jouw beleid bepaalt of de agent deze mag uitvoeren, voor wie en met welk token.
+
+00:14:06.380 --> 00:14:09.420
+Tools werken binnen permissie en verloppen, alleen lezen waar nodig,
+
+00:14:09.620 --> 00:14:15.060
+expliciete bevestigingsporten voor risicovolle operaties en harde blokkades tegen het overschrijden van tenants of labels.
+
+00:14:15.320 --> 00:14:16.800
+De reden dat dit werkt is simpel.
+
+00:14:17.000 --> 00:14:21.500
+Tokens zijn de autoriteit en de SDK bepaalt wanneer en hoe ze worden uitgegeven en gebruikt.
+
+00:14:21.680 --> 00:14:24.600
+Compliance automatisering is waar je kwartalen aan tijd bespaart.
+
+00:14:24.920 --> 00:14:26.820
+Bewaarbeleid is van toepassing op gesprekken.
+
+00:14:26.980 --> 00:14:29.980
+Auditlogs leggen vast wie wat deed, wanneer en via welk kanaal.
+
+00:14:30.180 --> 00:14:34.180
+Legal Hold kan relevante interacties bevriezen zonder dat je een parallel archief hoeft te bedenken.
+
+00:14:34.180 --> 00:14:36.500
+Je bouwt geen controles opnieuw op, je erft ze.
+
+00:14:36.680 --> 00:14:40.560
+Vergelijk dat eens met aangepaste agents die logs in een tabel dumpen en het compliant noemen.
+
+00:14:40.740 --> 00:14:42.740
+Je auditors zullen niet gecharmeerd zijn van JSON.
+
+00:14:43.040 --> 00:14:45.680
+Het risicoverschil ten opzichte van maatwerk is niet gering.
+
+00:14:45.920 --> 00:14:48.500
+Zelf bouwen betekent maandenlang identiteitsstromen ontwerpen,
+
+00:14:48.760 --> 00:14:51.080
+tokenwisselaars schrijven, content scanning toevoegen,
+
+00:14:51.380 --> 00:14:54.320
+redactieregels bedenken en outputs proberen te mappen aan e-discovery.
+
+00:14:54.560 --> 00:14:58.120
+Daarna besteed je nog meer maanden aan het bewijzen aan security dat het werkt onder belasting,
+
+00:14:58.320 --> 00:15:00.220
+over kanalen heen en in vijandige scenario's.
+
+00:15:00.220 --> 00:15:05.460
+Met de SDK begin je met standaardinstellingen die de Microsoft 365 beveiliging weerspiegelen die je al gebruikt.
+
+00:15:05.600 --> 00:15:10.900
+Vanaf dag 1 heb je traceerbaarheid, beleidshandhaving en kanaalbewuste activiteitssemantiek die de eerste toets doorstaan.
+
+00:15:11.020 --> 00:15:12.840
+Het verschil zit in het overervingsmodel.
+
+00:15:13.040 --> 00:15:17.300
+Je agent bevindt zich binnen de beveiligingskaders van de onderneming in plaats van er net buiten te zweven.
+
+00:15:17.500 --> 00:15:20.540
+Governance op schaal is waar projecten, platforms worden of sterven.
+
+00:15:21.080 --> 00:15:24.800
+Gecentraliseerd beheer geeft die T1 plek om agents te zien, identiteiten te beheren,
+
+00:15:24.980 --> 00:15:26.880
+secrets te roteren en beleid toe te passen.
+
+00:15:26.880 --> 00:15:30.220
+Goed keuringstromen kunnen nieuwe tools, kanalen en scopes reguleren.
+
+00:15:30.600 --> 00:15:34.400
+Beleidsvererving betekent dat als je organisatie DLP aan share, PT of retentie herziet,
+
+00:15:34.620 --> 00:15:36.120
+je agent zich aanpast zonder refactoring.
+
+00:15:36.440 --> 00:15:41.840
+Organisatie Brede Zichtbaarheid via Teams, Web en Copilot laat je de enige vraag beantwoorden waar directie om geeft.
+
+00:15:42.000 --> 00:15:43.500
+Wat doen deze agents in onze tenant?
+
+00:15:43.760 --> 00:15:48.660
+Met SDK Telemetrie kun je kanaal events, agentstappen en modelaanroepen onder één dak correleren
+
+00:15:48.660 --> 00:15:51.720
+en gevoelige segmenten redigeren voordat LAX de enclave verlaten.
+
+00:15:51.920 --> 00:15:54.820
+Voordat we verder gaan, moet je de politieke realiteit begrijpen.
+
+00:15:54.820 --> 00:15:59.440
+Security zegt nooit ja tegen maatwerk AI-systemen die vanaf dag één geen identiteitsbetrouwbaarheid,
+
+00:15:59.580 --> 00:16:02.520
+content governance en operationele observability kunnen aantonen.
+
+00:16:02.740 --> 00:16:04.760
+Ze zullen je afremmen en ze zullen gelijk hebben.
+
+00:16:04.960 --> 00:16:08.640
+De SDK is niet optioneel omdat het die discussies omzet in configuratie.
+
+00:16:08.820 --> 00:16:11.560
+Je koppelt inlog handlers en erft leased privilege.
+
+00:16:11.820 --> 00:16:15.260
+Je registreert via Azure bot service en erft kanaalcontroles.
+
+00:16:15.460 --> 00:16:20.740
+Je toont content via het activiteitsprotocol, waardoor Purview en DLP het kunnen zien en erop kunnen acteren.
+
+00:16:20.960 --> 00:16:23.220
+Je pleit niet voor je zaak, je demonstreert het.
+
+00:16:23.220 --> 00:16:28.940
+Als je niets anders onthoudt, identiteit, contentbeveiliging en threat monitoring moet de prioriteit zijn in je agent.
+
+00:16:29.140 --> 00:16:31.400
+De SDK maakt ze saai en automatisch.
+
+00:16:31.600 --> 00:16:36.000
+Je eigen code moet zich richten op redeneren en tools, niet op het opnieuw uitvinden van compliance.
+
+00:16:36.440 --> 00:16:41.560
+Laten we het nu hebben over hoe teams zichzelf saboteren en hoe je die ramp in slow motion kunt vermijden.
+
+00:16:41.780 --> 00:16:44.220
+Veel voorkomende valkuilen en hoe ze te vermijden.
+
+00:16:44.420 --> 00:16:48.780
+Je eigen kanaal adapters bouwen is de snelste manier om het wiel als een driehoek opnieuw uit te vinden.
+
+00:16:48.780 --> 00:16:53.580
+Het activiteitsprotocol definieert al berichten, events, typen, bijlagen en kaarten.
+
+00:16:53.800 --> 00:16:57.280
+Gebruik de SDK adapters voor Teams, Webchat, Slack en Copilot Studio.
+
+00:16:57.600 --> 00:17:03.640
+Je krijgt consistente semantiek, stromen voor bestandstoestemming en detectie van mogelijkheden, zonder een eindeloze achterstand aan uitzonderingen.
+
+00:17:03.780 --> 00:17:06.400
+Agents als stateles behandelen is sabotage van het hoogste niveau.
+
+00:17:06.400 --> 00:17:08.740
+Conversaties met meerdere stappen vereisen geheugen.
+
+00:17:08.920 --> 00:17:16.000
+Sla gespreksreeksen en de status van beurten op via SDK patronen, zodat verduidelijkingen, tolresultaten en correlatie-idees veel over en loadbalancing overleven.
+
+00:17:16.160 --> 00:17:16.780
+De waarheid?
+
+00:17:17.020 --> 00:17:21.620
+Zonder gedeelde status krijgt je slimme agent Retrograde Amnesie telkens wanneer het verkeer piekt.
+
+00:17:21.840 --> 00:17:25.500
+Modellogica hardcoderen in handlers verbindt cognitie onlosmakelijk met transport.
+
+00:17:25.740 --> 00:17:29.020
+Isoleer prompts en tools achter interfaces die de SDK kan registreren.
+
+00:17:29.020 --> 00:17:37.040
+Zo kun je cementen kernel inwisselen voor Azure AI Foundry Planners, Open AI testen tegenover een andere aanbieder of systeem prompts A, B testen zonder je routering en statuscode te verwijderen.
+
+00:17:37.100 --> 00:17:41.260
+Upgrades moeten voelen als het verwisselen van een mesje, niet als het demonteren van een vliegtuig tijdens de vlucht.
+
+00:17:42.280 --> 00:17:47.640
+Gebruikersauthenticatie overslaan en alles uitvoeren als service principle vlak machtigingen af en dood de controleerbaarheid.
+
+00:17:47.920 --> 00:17:54.740
+Implementeer aanmeld handlers zodat je agent als gebruiker kan optreden bij grafiek gebonden assets en val alleen terug op apptokens voor niet gebruikersacties.
+
+00:17:54.740 --> 00:17:59.780
+Je doorstaat least privilege, controles en kunt eindelijk beantwoorden wie wat deed, wanneer en onder wiens autoriteit.
+
+00:18:00.000 --> 00:18:04.180
+Streaming semantiek negeren resulteert in een gebruikersinterface die traag en amateuristisch aanvoelt.
+
+00:18:04.380 --> 00:18:11.600
+Schakel streaming in de SDK in zodat ondersteunde kanalen real-time voortgang tonen en niet ondersteunde kanalen soepel type indicatoren en gefragmenteerde verzendingen weergeven.
+
+00:18:11.800 --> 00:18:15.120
+Fake streaming niet. Gebruikers merken het en het vertrouwen vervliegt.
+
+00:18:15.280 --> 00:18:19.840
+Azure Bot Service omzeilen om directe sockets per kanaal te koppelen vermenigvuldigt het aantal storingspunten.
+
+00:18:19.840 --> 00:18:26.340
+ABS is de persistente broker die protocollen beëindigt, activiteiten normaliseert en vele kanalen naar één eindpunt leidt.
+
+00:18:26.480 --> 00:18:30.900
+Gebruik het. Je operatieteam zal je dankbaar zijn wanneer berichten betrouwbaar worden gerouteerd tijdens schaaltests.
+
+00:18:31.100 --> 00:18:33.160
+In plaats van te verdwijnen in een maatwerk zak het vage vuur.
+
+00:18:33.360 --> 00:18:35.560
+Geen governancebeleid betekent schaduw agents.
+
+00:18:35.860 --> 00:18:40.260
+Registreer identiteiten, pas purview en DLP beleid toe en activeer audit logs vanaf dag 1.
+
+00:18:40.440 --> 00:18:46.300
+Als je compliance team geen e-discovery op gesprekken kan uitvoeren of labelhandhaving op uitvoer niet kan zien, is je uitrol al mislukt.
+
+00:18:46.300 --> 00:18:49.920
+De game changer waar niemand over praat, is dat governance geen latere zorg is.
+
+00:18:50.080 --> 00:18:53.740
+Het is de deur naar productie. Dit is de checklist die je daadwerkelijk uitvoert.
+
+00:18:53.960 --> 00:19:02.820
+Gebruik SDK adapters, behoud status, abstraheer cognitie, implementeer aanmelding, schakel streaming in, registreer via ABS en koppel purview DLP.
+
+00:19:03.260 --> 00:19:06.280
+Doe dat en de veel voorkomende valkuilen zijn niet langer jouw valkuilen.
+
+00:19:06.580 --> 00:19:10.340
+Geavanceerde patronen, schaalbaarheid, uitbreidbaarheid en echt zakelijk gebruik.
+
+00:19:10.640 --> 00:19:13.440
+Toolcatalogie zijn de manier om controle te behouden zonder chaos.
+
+00:19:13.440 --> 00:19:16.920
+Tools defineert tools met scopes, rollen en niveaus van datagevoeligheid.
+
+00:19:17.040 --> 00:19:20.860
+Een planner stelt voor, jouw beleid keurt goed op basis van doelgroeplabel en actie.
+
+00:19:21.000 --> 00:19:27.260
+Koppel agenda lezen aan de meeste gebruikers, e-mail verzenden aan eigenaren met expliciete bevestiging en records exporteren aan beheerders alleen.
+
+00:19:27.400 --> 00:19:30.660
+Tools bevinden zich in een register. De agent handelt nooit ongecontroleerd.
+
+00:19:31.260 --> 00:19:33.620
+Vaardigheidscompositie tilt je voorbij simpele kunstjes van één enkele beurt.
+
+00:19:33.820 --> 00:19:37.780
+Gebruik door planners aangestuurde sequenties met retreats en circuitbreakers aan de rand van de orchestrator.
+
+00:19:38.100 --> 00:19:40.160
+Externe tools falen. Dat is hun hobby.
+
+00:19:40.160 --> 00:19:43.060
+Verpak ze in idempotente ontwerpen met exponentiële bek af.
+
+00:19:43.200 --> 00:19:45.040
+Hou de gedachtegang, chain of fat, privé.
+
+00:19:45.240 --> 00:19:47.900
+Geef een samengevatte rationale terug, geen rauwe redenering.
+
+00:19:48.100 --> 00:19:50.500
+Je wilt transparantie, geen therapie voor promplekken.
+
+00:19:50.720 --> 00:19:53.920
+Blootstelling tussen tenants vereist paranoia met instrumentatie.
+
+00:19:54.180 --> 00:20:01.960
+Draai voor niet geauthenticeerde of B2B scenario's bewaakte sessies met limieten, inhouds, klassificatie en purview toezicht op invoer en uitvoer.
+
+00:20:01.960 --> 00:20:03.700
+Identiteit reguleert acties.
+
+00:20:03.920 --> 00:20:06.900
+Anonieme sessies lezen publieke documenten, geen privépagina's.
+
+00:20:06.900 --> 00:20:10.340
+Elke externe beurt genereert controleerbare gebeurtenissen, anders wordt het niet verzonden.
+
+00:20:10.760 --> 00:20:12.200
+Observability is niet onderhandelbaar.
+
+00:20:12.560 --> 00:20:17.460
+Correlateer kanaalgebeurtenissen, agentstappen, modelaanroepen en tool-invocaties met een enkele trace-idee.
+
+00:20:17.700 --> 00:20:21.180
+Redigeer gevoelige fragmenten aan de rand voordat laks de enclave verlaten.
+
+00:20:21.480 --> 00:20:27.400
+Dashboards moeten direct drie vragen beantwoorden, waar tijd bleef, waar fouten ontstonden en wie gemachtigd was om wat te doen.
+
+00:20:27.560 --> 00:20:29.580
+Als je het niet kunt zien, kun je het niet schalen.
+
+00:20:29.900 --> 00:20:32.180
+Migratie vanuit Teams FX, er is een pad.
+
+00:20:32.400 --> 00:20:35.620
+Begin door je bestaande bot voor ABS te plaatsen als dat nog niet zo is.
+
+00:20:36.140 --> 00:20:42.540
+Vervangstapsgewijs aangepaste adapters door SDK-adapters, verplaats de status naar SDK-turns, statenpatronen en isoleer ze achter interfaces.
+
+00:20:42.880 --> 00:20:46.980
+Gebruik SDK-schablonen om parallelle routes op te zetten en schakel verkeer geleidelijk om.
+
+00:20:47.160 --> 00:20:48.900
+De uitfaseringstimer wacht niet.
+
+00:20:49.140 --> 00:20:50.800
+Jouw refactorplan moet dat ook niet doen.
+
+00:20:51.140 --> 00:20:54.660
+Kostenbeheer is belangrijk wanneer je CFRO ontdekt wat contextvensters kosten.
+
+00:20:54.660 --> 00:20:59.140
+Cash embeddings, ondubbel ophalen en hergebruik korte termijn context tussen beurten.
+
+00:20:59.280 --> 00:21:04.220
+Beperk tolaanroepen met back-off en begrens generaties met redelijke tokenbudgetten per intentie.
+
+00:21:04.400 --> 00:21:05.960
+De snelkoppeling die niemand leert.
+
+00:21:06.200 --> 00:21:11.520
+Klassificeer verzoeken vroegtijdig en route RFAQ prompts naar goedkopere modellen zonder premium planners te gebruiken.
+
+00:21:11.760 --> 00:21:14.240
+Veerkracht onder belasting is ontwerp, geen geluk.
+
+00:21:14.340 --> 00:21:18.800
+Gebruik sessiestikken is waar beschikbaar, maar ga ervan uit dat je halverwege een beurt van nood wisselt.
+
+00:21:18.980 --> 00:21:21.160
+Daarom bevindt de status zich buiten het proces.
+
+00:21:21.160 --> 00:21:26.120
+Maak tools idempotent met request-idees zodat retreats niet double creditcards belasten of e-mails opnieuw verzenden.
+
+00:21:26.280 --> 00:21:29.980
+Concurrency bewaking voorkomt dat twee beurten dezelfde resource tegelijkertijd wijzigen.
+
+00:21:30.140 --> 00:21:35.300
+Tests moeten burstieverkeer, gedeeltelijke uitval en trage afhankelijkheden simuleren, want productie doet dat ook.
+
+00:21:35.500 --> 00:21:45.060
+Zodra je catalogie, compositie, controles tussen tenants, observability, migratiehygiëne, kostenknoppen en veerkracht beheerst, wordt je agent geen demo meer, maar infrastructuur.
+
+00:21:45.060 --> 00:21:48.400
+En ja, dit is precies waar de SDK zijn waarde bewijst.
+
+00:21:48.880 --> 00:21:54.880
+Gestandardiseerde identiteit, status, protocol en kanaalsemantiek zodat je geavanceerde patronen op een fundament staan, niet op vibes.
+
+00:21:55.060 --> 00:21:58.260
+De stille moordenaar, status, identiteit en kanaalsemantiek.
+
+00:21:58.380 --> 00:21:59.340
+Je kunt prompts faken.
+
+00:21:59.560 --> 00:22:02.980
+Je kunt identiteitsgebonden acties onder belasting over kanalen heen niet faken.
+
+00:22:03.220 --> 00:22:08.560
+Zonder tokens op gebruikersniveau overschrijd je agent zijn bevoegdheden of wordt hij geblokkeerd en raak je audit-trail het overzicht kwijt.
+
+00:22:08.760 --> 00:22:13.580
+Zonder gedeelde gesprekstatus fragmenteert multiturn logica zodra een load balancer zijn werk doet.
+
+00:22:13.580 --> 00:22:18.760
+Zonder kanaalbewuste aflevering vervallen streaming, kaarten en types semantiek tot willekeurig gedrag.
+
+00:22:18.920 --> 00:22:27.080
+De SDK lost deze drie beperkingen op door ontwerp, treedt op als gebruiker met auditeerbaarheid, behoudt multiturns sessies over noods en past zich automatisch aan kanaalmogelijkheden aan.
+
+00:22:27.260 --> 00:22:30.600
+Dat is het onderdeel dat iedereen mist bij het handmatig koppelen van LLM aanroepen.
+
+00:22:30.800 --> 00:22:35.380
+Bouw cognitie op een fundament, niet op onderbuikgevoel of de productieomgeving zal je een dure leleren.
+
+00:22:35.740 --> 00:22:41.520
+Kernboodschap in M365 zijn beveiliging, identiteitsgetrouwheid en multichannel gedrag geen extra functies.
+
+00:22:41.520 --> 00:22:44.820
+Het zijn de basisverrijsten die de agent SDK standaard levert.
+
+00:22:45.020 --> 00:22:53.420
+De volgende stap, bouw een agent, koppel aanmeldingshandlers voor optreden als gebruiker, registreer bij Azure Bot Service en activeer teams en copilot met streaming en persistente status.
+
+00:22:53.700 --> 00:22:56.120
+Als dit je sneller en veiliger heeft gemaakt, abonneer je dan.
+
+00:22:56.360 --> 00:23:02.740
+Luister naar de volgende podcast over door Purview afgedwongen AI-richtlijnen, zodat je output vanaf dag 1 labels, DLP en e-discovery respecteert.
+
+00:23:02.740 --> 00:23:04.060
+Je compliance team zal niet.

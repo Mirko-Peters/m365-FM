@@ -1,0 +1,976 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:03.920
+Bem-vindos a mais um episódio das Pílulas de Conhecimento Microsoft aqui na M335FM.
+
+00:00:04.140 --> 00:00:05.260
+Eu sou seu anfitrião, Mirko Peter.
+
+00:00:05.600 --> 00:00:09.220
+Nesta série, pegamos uma tecnologia Microsoft e a explicamos de forma simples e direta.
+
+00:00:09.540 --> 00:00:12.960
+O tópico de hoje é algo que quase todos já ouviram falar, mas a maioria não sabe explicar de verdade.
+
+00:00:13.280 --> 00:00:15.040
+Dona de destino do IZUR, mas a gente sabe nada.
+
+00:00:15.420 --> 00:00:18.500
+Imagine que você herdou um tenante do IZUR, onde cada equipe fez o que quis.
+
+00:00:19.120 --> 00:00:22.600
+Sem convenção de nomenclatura, sem política, sem plano de rede, assinaturas por toda parte,
+
+00:00:23.060 --> 00:00:25.240
+algumas em produção, outras em teste, e você não consegue te ver com algo.
+
+00:00:25.680 --> 00:00:27.980
+Ninguém sabe quem é dono do que, a fatura é um mistério,
+
+00:00:27.980 --> 00:00:30.440
+e quando algo quebra, levar horas para encontrar o problema.
+
+00:00:30.840 --> 00:00:33.380
+Esse é o problema do caos na nuvem, e ele é surpreendentemente comum.
+
+00:00:34.080 --> 00:00:34.980
+Mais comum do que você imagina.
+
+00:00:35.920 --> 00:00:38.320
+As zonas de destino do IZUR são o que evitam essa bagunça antes mesmo de começar.
+
+00:00:38.780 --> 00:00:41.700
+Ao final deste episódio, você entenderá o que é uma zona de destino,
+
+00:00:41.800 --> 00:00:45.520
+porque oito áreas de design importam e como evitar os erros mais comuns.
+
+00:00:46.360 --> 00:00:47.520
+Pegue seu café e vamos começar.
+
+00:00:48.540 --> 00:00:50.220
+O que é de fato uma zona de destino do IZUR?
+
+00:00:50.740 --> 00:00:54.460
+A maioria das pessoas acha que uma zona de destino do IZUR é um produto que você clica para implantar, mas não é.
+
+00:00:54.980 --> 00:00:57.320
+Não existe um botão no portal que diz criar zona de destino.
+
+00:00:57.320 --> 00:00:58.540
+Não é assim que funciona.
+
+00:00:59.160 --> 00:01:02.260
+Uma zona de destino é um ambiente pré-configurado com barreiras de proteção já estabelecidas.
+
+00:01:02.780 --> 00:01:06.780
+Rede de identidade, monitoramento, políticas, tudo conectado antes mesmo de qualquer carga de trabalho chegar.
+
+00:01:07.360 --> 00:01:11.180
+Pense nisso como comprar uma casa que já vem com eletricidade, encanamento e sistema de segurança,
+
+00:01:12.060 --> 00:01:14.820
+se apenas se muda e começa a trabalhar sem precisar fazer toda a instalação elétrica sozinha.
+
+00:01:15.360 --> 00:01:19.060
+A ideia principal é que a assinatura é a unidade de isolamento, não o grupo de recursos.
+
+00:01:20.020 --> 00:01:21.600
+Uma assinatura é o limite do seu raio de explosão.
+
+00:01:21.600 --> 00:01:26.920
+Você dá uma assinatura para uma equipe porque as assinaturas possuem seus próprios limites de cota, atribuições de política e cobrança.
+
+00:01:27.860 --> 00:01:30.580
+A zona de destino envolve essa assinatura com tudo o que foi decidido centralmente.
+
+00:01:31.320 --> 00:01:36.180
+Quais regiões são permitidas, a qual rede se conectam, quais tags são obrigatórias e o que são proibidos de fazer.
+
+00:01:37.020 --> 00:01:38.220
+Então, o que realmente impõe as regras?
+
+00:01:38.580 --> 00:01:41.180
+O IZUR policy, não a documentação, nem boas intenções.
+
+00:01:41.660 --> 00:01:44.100
+Ele é atribuído no escopo do grupo de gerenciamento e executa três funções.
+
+00:01:44.780 --> 00:01:47.300
+Negar bloqueia coisas como regiões não permitidas ao endereço IP público.
+
+00:01:47.920 --> 00:01:50.360
+Auditar sinaliza recursos em não conformidade sem bloqueá-lo.
+
+00:01:50.940 --> 00:01:56.820
+Implantar, se não existir, corrige automaticamente, implantando configurações de diagnóstico para log analytics ou planos do Microsoft Defender.
+
+00:01:57.480 --> 00:02:00.460
+Essa é a diferença entre governança que é uma página de wiki e governança que é código.
+
+00:02:01.140 --> 00:02:05.460
+As equipes se movem rápido dentro de sua caixa, mas a equipe de plataforma controla a caixa, não o conteúdo.
+
+00:02:05.940 --> 00:02:09.800
+A grande mudança é permitir que as equipes tenham suas próprias assinaturas, enquanto a equipe central defina as regras.
+
+00:02:10.380 --> 00:02:12.920
+Identidade e governança. A porta de entrada e o manual de regras.
+
+00:02:12.920 --> 00:02:17.520
+O ponto é, uma landing zone é uma coisa só, ela é construída a partir de oito áreas de design.
+
+00:02:18.340 --> 00:02:19.520
+Vamos mergulhar nas três primeiras.
+
+00:02:20.160 --> 00:02:22.120
+A primeira é a cobrança do Azure e o tenante do ENTRA.
+
+00:02:22.540 --> 00:02:25.700
+Trata-se de configurar seu tenante e sua assinatura corretamente desde o início.
+
+00:02:26.300 --> 00:02:29.080
+Parece simples, mas eu se surpreenderia com quantas organizações há uma.
+
+00:02:29.420 --> 00:02:35.600
+Você precisa pensar na sua estrutura de cobrança, no seu registro e em como tudo se conecta ao seu tenante do ENTRA antes de implantar qualquer coisa.
+
+00:02:36.380 --> 00:02:38.880
+Sua fronteira de segurança primária é o gerenciamento de identidade e acesso.
+
+00:02:38.880 --> 00:02:44.340
+Pense no ENTRAID como a recepção de um prédio comercial. Ele decide quem entra e o que as pessoas têm permissão para fazer.
+
+00:02:44.800 --> 00:02:49.540
+Deve usar o gerenciamento de identidade privilegiada, ou PIN, e aplicar funções RBAC de privilégio mínimo.
+
+00:02:50.720 --> 00:02:52.860
+Dê acesso de proprietário a todos, isso é uma receita para o desastre.
+
+00:02:53.440 --> 00:03:00.560
+Em vez disso, use o PIN para conceder acesso temporário just-in-time quando alguém realmente precisar e configure revisões de acesso recorrentes para limpar permissões que não são mais necessárias.
+
+00:03:00.560 --> 00:03:02.960
+A terceira área é design e organização de recursos.
+
+00:03:03.700 --> 00:03:06.280
+Grupos de gerenciamento, assinaturas e grupos de recursos.
+
+00:03:06.960 --> 00:03:11.900
+Os grupos de gerenciamento ficam acima das assinaturas, e as políticas e atribuições de função são herdadas pela árvore.
+
+00:03:12.720 --> 00:03:17.640
+A hierarquia de referência do Cloud Adoption Framework começa na raiz do tenante, depois um grupo intermediário para sua organização.
+
+00:03:18.580 --> 00:03:21.520
+Abaixo disso, você tem plataforma, landing zones desativados e sandbox.
+
+00:03:22.400 --> 00:03:26.260
+A plataforma contém suas assinaturas compartilhadas, gerenciamento de identidade e conectividade.
+
+00:03:26.260 --> 00:03:33.100
+As landing zones se dividem em corporativas para cargas de trabalho que precisam de conectividade local e online para aplicativos voltados pela internet.
+
+00:03:33.420 --> 00:03:34.400
+Por que essa estrutura é importante?
+
+00:03:34.880 --> 00:03:38.020
+Ela atribui a política uma vez no topo da árvore e tudo abaixo dela entra em conformidade automaticamente.
+
+00:03:38.560 --> 00:03:43.460
+Exemplo real, uma política de negação no topo bloqueia regiões não permitidas para todas as assinaturas abaixo.
+
+00:03:44.220 --> 00:03:45.540
+Você não precisa configurar isso 50 vezes.
+
+00:03:46.160 --> 00:03:47.400
+Defina uma vez e ela será herdada.
+
+00:03:47.580 --> 00:03:49.680
+Esse é o verdadeiro poder da hierarquia de grupos de gerenciamento.
+
+00:03:50.580 --> 00:03:52.360
+Redes e seguranças, paredes e fechaduras.
+
+00:03:53.180 --> 00:03:54.900
+Identidade e governança definem as regras.
+
+00:03:54.900 --> 00:03:57.240
+Mas nada disso funciona se a rede estiver em bagunça.
+
+00:03:57.820 --> 00:04:02.020
+Topologia de rede e conectividade é a quarta área de design, como suas redes virtuais são estruturadas.
+
+00:04:02.580 --> 00:04:08.880
+Existem dois padrões principais, hub e spoke, onde você tem uma rede virtual central como hub e várias redes spoke conectadas a ela.
+
+00:04:09.260 --> 00:04:13.200
+Ou Azure Virtual One, a versão gerenciada da Microsoft dessa ideia em maior escala.
+
+00:04:14.100 --> 00:04:15.620
+O hub contém todos os seus serviços compartilhados.
+
+00:04:16.240 --> 00:04:17.900
+Azure Firewall para inspeção de tráfego,
+
+00:04:18.080 --> 00:04:22.660
+Gateways Express Route ou VPN para conectividade local, resolução DNS, coisas que toda carga de trabalho precisa,
+
+00:04:22.820 --> 00:04:23.880
+coisas que o trabalho precisa.
+
+00:04:23.880 --> 00:04:26.000
+Os spokes são onde suas cargas de trabalho realmente rotam.
+
+00:04:26.300 --> 00:04:29.100
+Eles fazem peering com o hub, então o tráfego flui pelos serviços centrais.
+
+00:04:29.340 --> 00:04:31.260
+Mas cada spoke permanece isolado dos outros.
+
+00:04:31.940 --> 00:04:32.680
+E que está um erro comum.
+
+00:04:33.080 --> 00:04:36.140
+As equipes criam uma enorme malha de peering em vez de usar um hub,
+
+00:04:36.420 --> 00:04:38.980
+conectando cada rede virtual a todas as outras diretamente.
+
+00:04:39.560 --> 00:04:41.460
+Isso funciona por um tempo, mas logo vira uma bagunça.
+
+00:04:42.000 --> 00:04:44.260
+Você acaba com uma teia de aranha de conexões que ninguém consegue rastrear.
+
+00:04:45.000 --> 00:04:46.020
+Um hub simplifica tudo.
+
+00:04:46.780 --> 00:04:48.380
+Um lugar para gerenciar, um lugar para proteger.
+
+00:04:49.220 --> 00:04:50.740
+Planeja seus intervalos de endereços e pedindo.
+
+00:04:50.740 --> 00:04:52.240
+Isso importa mais do que você imagina.
+
+00:04:52.860 --> 00:04:55.960
+Uma vez que os spokes fazem peering com o hub e espaço de endereçamento sobrepostos
+
+00:04:55.960 --> 00:04:58.080
+são difíceis de correr, você não pode se meter a alterá-lo.
+
+00:04:58.400 --> 00:05:01.520
+Você precisa desfazer o peering, atualizar o intervalo e reconectar.
+
+00:05:02.200 --> 00:05:04.680
+Se você tem carga de trabalho de produção rodando e isso causa downtime,
+
+00:05:04.820 --> 00:05:07.280
+então escolha seus intervalos CDR cedo e garanta que não se sobreponham.
+
+00:05:07.820 --> 00:05:10.000
+A quinta área de design são as recomendações de segurança,
+
+00:05:10.140 --> 00:05:13.860
+cobrindo criptografia, proteção de identidade, detecção de ameaças e gerenciamento de vulnerabilidades.
+
+00:05:13.860 --> 00:05:17.340
+Habilite o Microsoft Defender for Cloud em todas as assinaturas como sua base.
+
+00:05:18.240 --> 00:05:22.280
+Ele oferece recomendações de gerenciamento de postura, alertas e orientações de remediação
+
+00:05:22.280 --> 00:05:23.480
+para tudo em seu ambiente.
+
+00:05:24.300 --> 00:05:26.920
+E os endpoints privados para manter serviços fora da internet pública.
+
+00:05:27.900 --> 00:05:30.020
+Em vez de acessar uma conta de armazenamento via IP público,
+
+00:05:30.100 --> 00:05:32.120
+você fornece um IP privado dentro da sua rede virtual.
+
+00:05:32.120 --> 00:05:34.500
+O tráfego nunca deixa o backbone da Microsoft.
+
+00:05:34.940 --> 00:05:36.400
+É mais seguro e mais simples de gerenciar.
+
+00:05:37.160 --> 00:05:41.160
+Coloque grupos de segurança de rede em cada subrede e bloqueie o RDP de entrada da internet por padrão.
+
+00:05:41.160 --> 00:05:42.320
+Esse é o padrão.
+
+00:05:43.120 --> 00:05:46.340
+Se alguém precisar de acesso remoto, use o Azure Bashion ou um Jumpbox,
+
+00:05:46.500 --> 00:05:47.740
+não uma regra de RDP direta.
+
+00:05:48.200 --> 00:05:51.920
+Um exemplo do mundo real é uma política de negação que bloqueia endereços IP públicos em contas de armazenamento.
+
+00:05:52.560 --> 00:05:54.600
+Você atribui a política no nível do grupo de gerenciamento,
+
+00:05:54.740 --> 00:05:57.620
+e no momento em que alguém tem que implantar uma conta de armazenamento com endpoint público,
+
+00:05:57.680 --> 00:05:58.380
+a implantação falha.
+
+00:05:58.800 --> 00:06:02.080
+A mensagem de erro explica o motivo e eles são obrigados a usar um endpoint privado.
+
+00:06:02.540 --> 00:06:02.900
+Sem exceção.
+
+00:06:03.520 --> 00:06:06.900
+Isso é a governança que realmente funciona, não apenas uma sugestão em um documento qualquer.
+
+00:06:07.920 --> 00:06:10.120
+Gerenciamento, governança e automação para manter tudo funcionando.
+
+00:06:10.120 --> 00:06:13.580
+Então, você tem seu prédio com muros e trancas, mas o que está acontecendo lá dentro?
+
+00:06:13.960 --> 00:06:14.720
+Você observar tudo.
+
+00:06:15.180 --> 00:06:16.540
+A sexta área de design é o gerenciamento.
+
+00:06:17.020 --> 00:06:19.900
+Isso inclui monitoramento, backup, logs e o lado operacional das coisas.
+
+00:06:20.400 --> 00:06:23.860
+Você quer um workspace central do Log Analytics, para onde todas as assinaturas enviem seus logs.
+
+00:06:24.360 --> 00:06:27.100
+Um único lugar para consultar tudo, configurar alertas e solucionar problemas.
+
+00:06:27.460 --> 00:06:27.900
+Esse é o objetivo.
+
+00:06:28.540 --> 00:06:31.380
+Agora, como garantir que cada recurso envie seus logs de diagnóstico para lá?
+
+00:06:31.840 --> 00:06:32.620
+Você não faz esse manualmente.
+
+00:06:33.000 --> 00:06:33.980
+Você cria uma política que diz
+
+00:06:33.980 --> 00:06:37.320
+todo recurso deve enviar seus logs de diagnóstico para este workspace do Log Analytics.
+
+00:06:37.320 --> 00:06:41.020
+Você define essa política para rodar no modo deploy que não existe sem implantar sensação.
+
+00:06:41.280 --> 00:06:43.520
+O resultado é que qualquer novo recurso é configurado automaticamente.
+
+00:06:43.940 --> 00:06:44.780
+Ninguém precisa se lembrar aí.
+
+00:06:45.160 --> 00:06:45.680
+Assim que eu te contei.
+
+00:06:46.040 --> 00:06:49.320
+A sétima área de design é a governança usando o Azure Policy para conformidade.
+
+00:06:49.840 --> 00:06:53.240
+Você agrupa regras relacionadas no que é chamado de iniciativa de política ou conjunto de políticas.
+
+00:06:53.780 --> 00:06:56.900
+Uma iniciativa para segurança, outra para gerenciamento de custos.
+
+00:06:57.660 --> 00:06:59.920
+Cada uma contém múltiplas políticas que trabalham juntas.
+
+00:06:59.920 --> 00:07:01.340
+Aqui está um exemplo.
+
+00:07:01.500 --> 00:07:05.400
+Um conjunto de políticas que impõem criptografia, marcação e tamanhos de máquina virtual permitidos.
+
+00:07:06.120 --> 00:07:07.640
+Você o aplica no nível do grupo de gerenciamento.
+
+00:07:08.120 --> 00:07:09.960
+Cada assinatura abaixo-erda essas regras.
+
+00:07:10.780 --> 00:07:14.960
+Quando um desenvolvedor tenta implantar uma VM, a política verifica se ela usa um tamanho aprovado,
+
+00:07:15.160 --> 00:07:17.460
+tem as tags necessárias e usa discos criptografados.
+
+00:07:18.080 --> 00:07:21.060
+Se qualquer verificação falhar, a implantação é bloqueada ou sinalizada imediatamente.
+
+00:07:21.800 --> 00:07:25.940
+Vamos deixar clara a diferença entre a governança que vive uma página wiki e a governança que é código real.
+
+00:07:26.600 --> 00:07:28.640
+Uma página wiki diz, por favor, marque seus recursos.
+
+00:07:28.640 --> 00:07:32.380
+A política disso não pode implantar um recurso sem as tags necessárias.
+
+00:07:33.280 --> 00:07:35.800
+Uma é uma sugestão, a outra é aplicada automaticamente.
+
+00:07:36.360 --> 00:07:39.000
+A oitava área de design é a automação de plataforma em DevOps.
+
+00:07:39.800 --> 00:07:42.020
+Infraestrutura como código e pipelines de C e CD.
+
+00:07:42.500 --> 00:07:44.020
+Trate a própria zona de destino como código.
+
+00:07:44.440 --> 00:07:47.900
+Isso significa BCEP, modelos ARM ou terraforma armazenados em controle de origem.
+
+00:07:48.260 --> 00:07:49.580
+Toda alteração passa por um podcast.
+
+00:07:50.140 --> 00:07:51.620
+Toda implantação é executada através de um pipeline.
+
+00:07:51.980 --> 00:07:53.320
+Nada de clicar pelo portal do ASAP.
+
+00:07:53.760 --> 00:07:55.220
+É aqui que entra a distribuição de assinaturas.
+
+00:07:55.220 --> 00:07:58.300
+Um pipeline repetível que cria novas assinaturas sob demanda.
+
+00:07:58.740 --> 00:08:02.660
+Uma equipe envia uma solicitação com parâmetros como centro de custo, tamanho da rede e tipo de ambiente.
+
+00:08:03.200 --> 00:08:10.740
+O pipeline cria assinatura, coloca sob o grupo de gerenciamento correto, atribui orçamentos, configura a rede spoke e a conecta ao hub e a conecta ao hub.
+
+00:08:11.340 --> 00:08:12.040
+Tudo automatizado.
+
+00:08:12.840 --> 00:08:13.380
+O que é isso é importante?
+
+00:08:13.740 --> 00:08:16.340
+Porque a nova assinatura está em conformidade no momento em que existe.
+
+00:08:16.340 --> 00:08:20.860
+As políticas já estão no grupo de gerenciamento e a assinatura herda tudo automaticamente.
+
+00:08:21.500 --> 00:08:23.100
+Não há janela de tempo de ela fixa em governança.
+
+00:08:23.420 --> 00:08:25.040
+Ninguém precisa se lembrar de aplicar as regras.
+
+00:08:25.500 --> 00:08:26.120
+Elas já estão lá.
+
+00:08:26.860 --> 00:08:30.540
+É isso que permite uma equipe de plataforma suportar centenas de assinaturas sem se tornar um gargalo.
+
+00:08:31.380 --> 00:08:37.140
+A automação faz o trabalho pesado e a equipe foca em melhorar a plataforma em vez de clicar no portal para cada solicitação.
+
+00:08:38.120 --> 00:08:39.740
+A divisão entre plataforma e aplicação.
+
+00:08:39.980 --> 00:08:40.900
+A confusão mais comum.
+
+00:08:41.900 --> 00:08:44.720
+Então essas são as oito áreas de design, mas aqui é onde a maioria das pessoas erra.
+
+00:08:45.320 --> 00:08:46.960
+Existem dois tipos de zonas de destino.
+
+00:08:47.060 --> 00:08:48.820
+E confundi-las é o erro mais comum que vejo.
+
+00:08:49.340 --> 00:08:51.280
+Zonas de destino de plataforma e zonas de destino de aplicação.
+
+00:08:51.800 --> 00:08:53.140
+Elas servem a propósito completamente diferente.
+
+00:08:53.520 --> 00:08:56.600
+Zonas de destino de plataforma são a base compartilhada e propriedade da equipe de plataforma.
+
+00:08:56.960 --> 00:08:59.720
+Você tem uma assinatura de identidade que mantém seus serviços de domínio.
+
+00:08:59.960 --> 00:09:03.240
+Uma assinatura de gerenciamento com log analytics e contas de automação.
+
+00:09:03.560 --> 00:09:06.080
+E uma assinatura de conectividade que mantém a rede virtual hub,
+
+00:09:06.080 --> 00:09:08.640
+o Azure Firewall e Gateway Express Route ou VPN.
+
+00:09:09.140 --> 00:09:11.340
+Esses são os serviços compartilhados dos quais toda a carga depende.
+
+00:09:11.720 --> 00:09:14.480
+As zonas de aterrissagem e aplicação são onde as cargas de trabalho realmente rodam.
+
+00:09:14.880 --> 00:09:17.000
+Essas são as assinaturas que as equipes de aplicação recebem.
+
+00:09:17.440 --> 00:09:18.920
+Elas são muitas. Elas são descartáveis.
+
+00:09:19.280 --> 00:09:20.680
+E seguem o mesmo padrão todas as vezes.
+
+00:09:21.180 --> 00:09:22.480
+Uma equipe recebe uma assinatura.
+
+00:09:22.700 --> 00:09:24.420
+Ela é colocada no grupo de gerenciamento correto,
+
+00:09:24.540 --> 00:09:27.900
+herda as políticas, faz o peering com a rede hub e começa a implantar.
+
+00:09:28.500 --> 00:09:29.600
+A diferença é uma propriedade importante.
+
+00:09:30.260 --> 00:09:33.080
+As zonas de plataforma são poucas, talvez de três a cinco assinaturas no total.
+
+00:09:33.300 --> 00:09:35.860
+Elas têm longa duração e são gerenciadas centralmente pela equipe de plataforma.
+
+00:09:36.200 --> 00:09:37.120
+As zonas de aplicação são muitas.
+
+00:09:37.680 --> 00:09:38.680
+Você pode ter dezenas se você tem.
+
+00:09:39.040 --> 00:09:39.680
+Pode ser um temporário.
+
+00:09:40.000 --> 00:09:42.800
+Uma carga de trabalho implantada roda por um tempo e depois é desativada.
+
+00:09:43.340 --> 00:09:45.280
+A assinatura é limpa e o padrão se repete.
+
+00:09:45.980 --> 00:09:47.120
+Aqui está o clássico antipadrão.
+
+00:09:47.620 --> 00:09:50.200
+Alguém coloca um firewall compartilhado dentro de uma assinatura de aplicação.
+
+00:09:50.360 --> 00:09:54.600
+Ou implanta o Gateway Express Route em uma assinatura de carga de trabalho em vez de conectividade.
+
+00:09:55.380 --> 00:09:57.420
+Os serviços compartilhados estão espalhados pelo ambiente.
+
+00:09:58.080 --> 00:09:59.000
+Ninguém sabe onde nada está.
+
+00:09:59.000 --> 00:10:02.760
+A equipe de plataforma não consegue gerenciar o firewall porque ele está na assinatura de outra pessoa
+
+00:10:02.760 --> 00:10:04.560
+e a equipe de aplicação não quer mantê-lo.
+
+00:10:05.440 --> 00:10:05.980
+É bagunça.
+
+00:10:06.420 --> 00:10:08.020
+Mantenha os serviços compartilhados na camada de plataforma.
+
+00:10:08.520 --> 00:10:13.240
+A assinatura de conectividade mantém a rede Virtual Hub, o Azure Firewall e o Gateway Express Route.
+
+00:10:13.820 --> 00:10:15.420
+As assinaturas de aplicação fazem piringua.
+
+00:10:15.820 --> 00:10:16.800
+Elas não são donas de nada disso.
+
+00:10:17.140 --> 00:10:17.820
+Elas apenas usam.
+
+00:10:18.100 --> 00:10:19.060
+O que isso significa para você?
+
+00:10:19.120 --> 00:10:20.760
+É uma clara separação de responsabilidades.
+
+00:10:21.320 --> 00:10:25.220
+A equipe de plataforma controla a caixa, as proteções, os serviços compartilhados e as políticas.
+
+00:10:25.220 --> 00:10:27.540
+As equipes de aplicação se movem rapidamente dentro.
+
+00:10:27.980 --> 00:10:31.020
+Elas recebem uma assinatura que já está em conformidade, já conectada e já monitorada.
+
+00:10:31.400 --> 00:10:32.600
+Elas não precisam pensar na fundação.
+
+00:10:33.060 --> 00:10:33.920
+Elas apenas com a sobrinha.
+
+00:10:35.060 --> 00:10:35.900
+Uma espécie de conecto.
+
+00:10:36.240 --> 00:10:37.080
+Um momento da revelação.
+
+00:10:37.520 --> 00:10:40.420
+Então você conhece os blocos de construção individuais agora, mas aqui está o que realmente importa.
+
+00:10:40.920 --> 00:10:41.820
+Eles não funcionam isoladamente.
+
+00:10:42.360 --> 00:10:44.160
+Eles trabalham juntos como um sistema conectado.
+
+00:10:44.260 --> 00:10:45.400
+E é aí que tudo faz sentido.
+
+00:10:45.920 --> 00:10:46.520
+Pense dessa maneira.
+
+00:10:47.020 --> 00:10:49.280
+A identidade decide quem pode entrar pela porta da frente.
+
+00:10:49.840 --> 00:10:52.980
+A governança então diz a eles em quais salas tem permissão para entrar depois que passam.
+
+00:10:52.980 --> 00:10:55.600
+A rede controla como eles se movem entre essas salas.
+
+00:10:56.140 --> 00:10:58.060
+A segurança monitora ameaças em cada esquina.
+
+00:10:58.700 --> 00:11:00.800
+O gerenciamento mantém todo o edifício funcionando sem problema.
+
+00:11:01.320 --> 00:11:04.260
+E a automação torna cada etapa repetível, para que nada seja esquecido.
+
+00:11:04.980 --> 00:11:06.220
+Cada peça depende das outras.
+
+00:11:06.600 --> 00:11:09.000
+E juntas criam algo muito maior do que qualquer parte isolada.
+
+00:11:09.460 --> 00:11:11.980
+Deixe-me dar um exemplo concreto de como essa interação funciona na prática.
+
+00:11:12.520 --> 00:11:14.480
+Imagine que uma nova equipe precise implantar uma carta de trabalho.
+
+00:11:14.860 --> 00:11:17.700
+Eles enviam uma solicitação pelo pipeline de fornecimento de assinaturas.
+
+00:11:17.840 --> 00:11:20.180
+E esse pipeline cria automaticamente uma nova assinatura.
+
+00:11:20.180 --> 00:11:23.360
+Ele coloca essa assinatura no grupo de gerenciamento correto.
+
+00:11:23.520 --> 00:11:26.680
+O que significa que ela herda imediatamente todas as políticas desse grupo.
+
+00:11:27.940 --> 00:11:32.520
+Requisitos de criptografia, regiões permitidas, tags obrigatórias, configurações de log e tudo o que é necessário.
+
+00:11:34.060 --> 00:11:36.740
+O pipeline também configura a rede spoke e a conecta ao hub.
+
+00:11:37.640 --> 00:11:42.040
+As configurações de diagnóstico começam a enviar logs direto para o workspace centralizado do Log Analytics.
+
+00:11:42.220 --> 00:11:43.920
+Enquanto o Defender for Cloud ativa a proteção.
+
+00:11:44.680 --> 00:11:49.340
+Toda assinatura acaba ficando em conformidade, conectada e monitorada em minutos, sem intervenção humana.
+
+00:11:49.340 --> 00:11:52.720
+Essa é a verdadeira diferença entre o caos na nuvem e o controle na nuvem.
+
+00:11:53.520 --> 00:11:59.320
+No ambiente desorganizado que descrevi no início, cada uma dessas etapas depende de alguém se lembrar de fazê-la e as pessoas esquecem.
+
+00:12:00.080 --> 00:12:02.440
+Ou fazem de um jeito diferente a cada vez, ou simplesmente não fazem.
+
+00:12:02.980 --> 00:12:04.920
+Mas com uma landing zone adequada, tudo é automático.
+
+00:12:05.640 --> 00:12:08.720
+O sistema se autogoverna e a equipe pode avançar rapidamente sem quebrar nada.
+
+00:12:09.340 --> 00:12:10.820
+É aqui que a maioria das organizações tropeça.
+
+00:12:11.260 --> 00:12:13.160
+Elas tratam a landing zone como um projeto único.
+
+00:12:13.160 --> 00:12:15.260
+Implantam, dão o check e seguem em frente.
+
+00:12:16.260 --> 00:12:17.540
+Mas uma landing zone é uma plataforma viva.
+
+00:12:17.960 --> 00:12:19.440
+O Azure lança novos recursos constantemente.
+
+00:12:19.860 --> 00:12:21.500
+Seus requisitos de conformidade mudam com o tempo.
+
+00:12:21.840 --> 00:12:25.580
+Se o negócio cresce, a landing zone precisa crescer junto ou começará a trabalhar contra você.
+
+00:12:25.980 --> 00:12:28.300
+O modelo operacional importa mais do que os modelos técnicos.
+
+00:12:28.640 --> 00:12:29.360
+Quem é o dono da landing zone?
+
+00:12:29.680 --> 00:12:30.200
+Como ela evolui?
+
+00:12:30.720 --> 00:12:31.620
+Como as exceções são tratadas?
+
+00:12:31.960 --> 00:12:35.140
+Se sua única resposta for a equipe de plataforma gerencia, isso não é o suficiente.
+
+00:12:35.500 --> 00:12:36.380
+Você precisa de processos reais.
+
+00:12:36.720 --> 00:12:37.720
+Você precisa de um backlog adequado.
+
+00:12:38.020 --> 00:12:40.240
+Você precisa tratar a landing zone como um produto, não como um prer.
+
+00:12:40.580 --> 00:12:41.560
+Este é um exemplo do mundo real.
+
+00:12:41.560 --> 00:12:45.140
+Uma equipe de plataforma suporta 200 assinaturas sem se tornar um gargala.
+
+00:12:45.880 --> 00:12:48.540
+E o segredo é o fornecimento de assinaturas combinado com a herança de política.
+
+00:12:49.180 --> 00:12:51.720
+A equipe não clica no portal para criar cada assinatura manualmente.
+
+00:12:52.160 --> 00:12:53.640
+O pipeline cuida disso automaticamente.
+
+00:12:54.240 --> 00:12:56.320
+Eles não configuram registros de logs manualmente para cada cara de trabalho.
+
+00:12:56.720 --> 00:12:58.160
+A política impõe isso de forma consistente.
+
+00:12:58.700 --> 00:13:00.340
+Eles não revisam cada implantação quando a conferir.
+
+00:13:00.600 --> 00:13:02.520
+O painel de conformidade mostra apenas as exceções.
+
+00:13:02.920 --> 00:13:05.180
+Eles focam nos casos excepcionais em vez do trabalho rotineiro.
+
+00:13:05.620 --> 00:13:09.160
+E essa é a diferença entre uma plataforma que escala e uma que sufoca o negócio.
+
+00:13:10.360 --> 00:13:11.080
+Conclusões práticas.
+
+00:13:11.560 --> 00:13:13.000
+Comece pequeno, cresça de forma inteligente.
+
+00:13:13.500 --> 00:13:14.980
+Então o que você faz na segunda-feira de manhã?
+
+00:13:15.520 --> 00:13:16.480
+Aqui está a resposta nesta.
+
+00:13:16.980 --> 00:13:20.020
+Não tente construir a hierarquia completa de escala empresarial no primeiro dia.
+
+00:13:20.560 --> 00:13:21.540
+Essa é uma armadilha que você deve evitar.
+
+00:13:22.060 --> 00:13:26.160
+Você passará meses projetando cenários que talvez nunca ocorram e nunca entregará nada de fato.
+
+00:13:26.740 --> 00:13:30.460
+Em vez disso, comece com uma zona de destino mínima viável, ou MVLZ.
+
+00:13:30.460 --> 00:13:32.400
+Os componentes principais são simples.
+
+00:13:32.400 --> 00:13:34.620
+Uma hierarquia de grupo de gerenciamento.
+
+00:13:34.880 --> 00:13:38.700
+Algumas políticas essenciais, como restrições de região, criptografia e tags obrigatórias.
+
+00:13:38.800 --> 00:13:44.220
+Rede básica com uma única rede virtual hub e um spoke, log centralizado em um workspace do log analytics.
+
+00:13:44.880 --> 00:13:45.160
+É só isso.
+
+00:13:45.160 --> 00:13:50.540
+Você não precisa do Azure Virtual One no primeiro dia, nem de uma iniciativa complexa de políticas com 200 regras.
+
+00:13:51.100 --> 00:13:53.380
+Você só precisa de controles suficientes para estar seguro, nada mais.
+
+00:13:53.380 --> 00:13:57.020
+Em seguida, integre sua primeira carga de trabalho real nessa MVLZ.
+
+00:13:57.360 --> 00:14:00.160
+Não uma VM de teste, mas uma carga de trabalho importante para a sua equipe.
+
+00:14:00.780 --> 00:14:04.980
+Observe o comportamento das políticas, veja o que falha, aprenda com as dificuldades e tere a partir daí.
+
+00:14:05.740 --> 00:14:11.380
+Adicione mais políticas conforme necessário, expanda a rede quando preciso e deixe a zona de destino crescer naturalmente com sua organização.
+
+00:14:12.100 --> 00:14:14.440
+Deixe-me dar três pontos práticos que você pode usar agora mesmo.
+
+00:14:15.720 --> 00:14:16.360
+Primeiro ponto.
+
+00:14:16.700 --> 00:14:20.120
+Implante o acelerador de zonas de destino do Azure a partir do portal e antena de teste.
+
+00:14:20.120 --> 00:14:28.280
+Não custa nada, leva cerca de uma hora e ensina mais sobre como grupos de gerenciamento, políticas e herança funcionam do que qualquer diagrama ou documentação.
+
+00:14:29.300 --> 00:14:35.360
+Você pode ver a hierarquia, observar as políticas sendo aplicadas em tempo real e experimentar sem quebrar nada importante.
+
+00:14:36.320 --> 00:14:36.760
+Segundo ponto.
+
+00:14:36.860 --> 00:14:39.640
+Ative as políticas primeiro no modo de auditoria, não no modo de negação.
+
+00:14:40.140 --> 00:14:44.380
+O modo de auditoria permite ver exatamente o que está fora de conformidade em seu ambiente sem bloquear ninguém.
+
+00:14:45.040 --> 00:14:49.660
+Acompanhe o painel de conformidade e garanto que você se surpreenderá com quantos recursos estão violando silenciosamente
+
+00:14:49.660 --> 00:14:50.600
+e regras que pareciam óbvios.
+
+00:14:50.900 --> 00:14:54.320
+Assim que entender seu cenário, você pode alterar as políticas importantes para o modo de negação.
+
+00:14:55.160 --> 00:14:59.100
+Mas comece com a auditoria, para não paralisar suas equipes antes de saber com o que está lidando.
+
+00:15:00.140 --> 00:15:00.780
+Terceiro ponto.
+
+00:15:01.120 --> 00:15:05.080
+Planeje seus intervalos de endereços IP e a hierarquia de grupos de gerenciamento antes de implantar qualquer coisa.
+
+00:15:05.800 --> 00:15:08.440
+Sei que parece entediante, mas alterar isso depois é realmente doloroso.
+
+00:15:09.280 --> 00:15:13.820
+Intervalos de IP sobrepostos significam desfazer o emparelhamento de rede e reestruturar grupos de gerenciamento
+
+00:15:13.820 --> 00:15:16.180
+significa mover assinaturas e reavaliar atribuições de políticas.
+
+00:15:16.180 --> 00:15:20.120
+Faça essas duas coisas corretamente de início e você economizará semanas de retrabalho no futuro.
+
+00:15:20.540 --> 00:15:21.940
+As armadilhas comuns são bem diretas.
+
+00:15:22.540 --> 00:15:26.400
+O excesso de engenharia leva a uma paralisia por análise que o impede de realizar qualquer implantação.
+
+00:15:26.880 --> 00:15:30.760
+A falta de engenharia deixa você sem controles, o que é apenas caos na nuvem com outro nome.
+
+00:15:31.320 --> 00:15:35.340
+E tratar a zona de destino como um projeto único em vez de uma plataforma viva garante que você ficará para trás.
+
+00:15:35.700 --> 00:15:38.740
+Evite essas três armadilhas e você já estará à frente da maioria das organizações.
+
+00:15:39.240 --> 00:15:40.880
+Lembre-se, o objetivo não é uma zona de destino perfeito.
+
+00:15:40.880 --> 00:15:44.620
+O objetivo é uma base governada que permite as equipes avançar rápido sem criar caos.
+
+00:15:44.620 --> 00:15:46.300
+Comece pequeno e tere.
+
+00:15:46.700 --> 00:15:48.340
+Deixe que as políticas façam um trabalho pesado para você.
+
+00:15:49.220 --> 00:15:50.900
+Então, essas são as zonas de destino do azul em linguagem 5.
+
+00:15:51.300 --> 00:15:53.260
+Elas não são um conceito empresarial complicado.
+
+00:15:53.800 --> 00:15:56.300
+Pense nelas como uma assinatura governada com diretrizes integradas.
+
+00:15:56.960 --> 00:16:00.700
+As oito áreas de design são apenas as perguntas que você precisa responder antes de começar a implantar.
+
+00:16:01.540 --> 00:16:04.240
+Identidade, rede, segurança, gerenciamento, governança, automação.
+
+00:16:04.760 --> 00:16:05.600
+Responda elas uma vez.
+
+00:16:05.720 --> 00:16:08.780
+Incorpore-as à base e cada carga de trabalho depois disso escolherá os benefícios.
+
+00:16:08.960 --> 00:16:10.700
+Aqui está a melhor coisa que você pode fazer agora.
+
+00:16:11.260 --> 00:16:14.360
+Implante o acelerador em um tenante teste e observe como as políticas são herdadas.
+
+00:16:14.620 --> 00:16:17.100
+Essa uma hora vai te ensinar mais do que qualquer diagrama jamais poderia.
+
+00:16:17.560 --> 00:16:21.080
+Inscreva-se para mais explicações simples como esta e deixe um comentário se algo fez sentido.
+
+00:16:21.580 --> 00:16:22.180
+Eu leio cada um.

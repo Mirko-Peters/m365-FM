@@ -1,0 +1,961 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:02.680
+Twój zespół zarządzający uważa, że to kwestia wdrożenia.
+
+00:00:02.880 --> 00:00:03.540
+Tak nie jest.
+
+00:00:03.680 --> 00:00:06.480
+To decyzja dotycząca ładu korporacyjnego z bardzo krótkim czasem na reakcję,
+
+00:00:06.600 --> 00:00:08.300
+a presja jest ogromna, bo Kopilot nie poczeka,
+
+00:00:08.400 --> 00:00:10.800
+aż uporządkujesz polityki lub dopasujesz strukturę wewnętrzną.
+
+00:00:11.020 --> 00:00:12.460
+Gdy zacznie działać w Twoim środowisku,
+
+00:00:12.560 --> 00:00:15.000
+wykorzysta system dokładnie w takim stanie, w jakim go zastanie
+
+00:00:15.000 --> 00:00:16.220
+i właśnie tu pojawia się problem.
+
+00:00:16.440 --> 00:00:19.020
+Większość organizacji z wieloma dzierżawami Microsoft 365
+
+00:00:19.020 --> 00:00:21.160
+zakłada, że mają jedną strategię kontroli,
+
+00:00:21.240 --> 00:00:23.400
+a i głównie dlatego, że kupują od jednego dostawcy
+
+00:00:23.400 --> 00:00:24.900
+i zarządzają jedną bazą tożsamości.
+
+00:00:24.900 --> 00:00:27.140
+Słyszą jedną strategiczną narrację od Microsoftu
+
+00:00:27.140 --> 00:00:29.340
+i zakładają, że rzeczywistość pokrywa się z prezentacją.
+
+00:00:29.540 --> 00:00:31.580
+Jednak warunki operacyjne są zupełnie inne,
+
+00:00:31.780 --> 00:00:33.020
+a i działa w granicach dzierżaw,
+
+00:00:33.140 --> 00:00:34.720
+podczas gdy ryzyko przenika między nimi.
+
+00:00:34.940 --> 00:00:37.500
+Zatem pytanie nie brzmi, czy możemy włączyć Kopilota wszędzie?
+
+00:00:37.660 --> 00:00:39.860
+Prawdziwe pytanie brzmi, jaki model ładu pozwoli nam
+
+00:00:39.860 --> 00:00:42.700
+bezpiecznie skalować działania w niezależnie funkcjonujących dzierżawach?
+
+00:00:42.860 --> 00:00:45.600
+Zanim przejdziemy do tego modelu, musimy zdefiniować pułapkę.
+
+00:00:45.740 --> 00:00:48.920
+Pułapka, suwerenne wyspy, a i wewnątrz jednego przedsiębiorstwa.
+
+00:00:49.120 --> 00:00:52.520
+W większości organizacji iluzja zaczyna się od złudnego poczucia znajomości.
+
+00:00:52.520 --> 00:00:56.600
+Otwierasz Microsoft 365, Perview, Entra, Power Platform.
+
+00:00:56.880 --> 00:00:58.080
+Branding jest ten sam.
+
+00:00:58.280 --> 00:01:00.240
+Język administratorów wydaje się spójny,
+
+00:01:00.380 --> 00:01:02.860
+a przekaz handlowy tworzy bardzo przejrzystą historię.
+
+00:01:03.080 --> 00:01:05.400
+Jeden ekosystem, jedna strategia, jeden kierunek.
+
+00:01:05.520 --> 00:01:08.000
+Ale model kontroli leżący u podstaw to nie jest jedna całość,
+
+00:01:08.140 --> 00:01:09.660
+a to ma większe znaczenie niż sam branding.
+
+00:01:09.880 --> 00:01:11.180
+Z przeprowadzonego tu badania wynika,
+
+00:01:11.340 --> 00:01:13.300
+że nie istnieje jedno globalne centrum administracji,
+
+00:01:13.400 --> 00:01:14.680
+a i z pełną parzystością funkcji,
+
+00:01:14.800 --> 00:01:17.480
+które pozwoliłoby przejrzyście zarządzać Kopilotem we wszystkich dzierżawach.
+
+00:01:17.600 --> 00:01:20.000
+W rzeczywistości masz pofragmentowany stos kontrolny.
+
+00:01:20.000 --> 00:01:23.360
+Część zasad ładu znajduje się w Perview, inne w centrach administracyjnych,
+
+00:01:23.440 --> 00:01:25.860
+a reszta jest rozproszona między Entra a Power Platform.
+
+00:01:26.080 --> 00:01:28.800
+Pojawiają się pewne funkcje w nowszych warstwach kontroli Microsoftu,
+
+00:01:28.900 --> 00:01:33.360
+ale nie tworzą one jeszcze jednej, pełnej i dojrzałej płaszczyzny globalnej przekraczającej granice dzierżaw.
+
+00:01:33.540 --> 00:01:35.500
+Ta luka tworzy fałszywe poczucie pewności.
+
+00:01:35.740 --> 00:01:38.380
+Liderzy patrzą na ekosystem i zakładają centralizację,
+
+00:01:38.480 --> 00:01:41.400
+a zespoły patrzą na wspólną tożsamość i zakładają spójność.
+
+00:01:41.640 --> 00:01:44.680
+Dział zakupów widzi jedną umowę i zakłada jeden model operacyjny,
+
+00:01:44.680 --> 00:01:47.480
+ale każda dzierżawa nadal ma własne granice polityk i danych,
+
+00:01:47.620 --> 00:01:50.780
+co w praktyce oznacza, że każda z nich posiada własną wersję prawdy.
+
+00:01:50.960 --> 00:01:52.580
+Więc to, co się dzieje, jest proste.
+
+00:01:52.720 --> 00:01:55.060
+Nie masz jednego środowiska, a i dla całego przedsiębiorstwa.
+
+00:01:55.260 --> 00:01:58.260
+Masz wiele środowisk, a i które przypadkiem należą do tego samego przedsiębiorstwa.
+
+00:01:58.400 --> 00:01:59.840
+To zupełnie inny obraz ryzyka.
+
+00:02:00.140 --> 00:02:02.480
+Jedna dzierżawa może mieć silniejsze zabezpieczenia Perview,
+
+00:02:02.620 --> 00:02:05.900
+podczas gdy inna ma słabsze wdrożenie etykiet lub niepełne zbieranie audytów.
+
+00:02:06.060 --> 00:02:08.660
+Z poziomu zarządu może to nadal wyglądać jak jeden program,
+
+00:02:08.840 --> 00:02:11.660
+ale z punktu widzenia audytu lub incydentów wcale tak nie jest.
+
+00:02:11.660 --> 00:02:15.160
+To zbiór odrębnych warunków operacyjnych, a gdy te warunki się zmieniają,
+
+00:02:15.280 --> 00:02:16.960
+raporty zaczynają mijać się z prawdą.
+
+00:02:17.160 --> 00:02:18.600
+Nie celowo, lecz strukturalnie.
+
+00:02:18.840 --> 00:02:19.640
+Zespół do spraw.
+
+00:02:19.860 --> 00:02:21.620
+Podstawowych pyta, czy jesteśmy zarządzań.
+
+00:02:21.800 --> 00:02:23.400
+Jeden dzierżawca mówi tak, bo audyt działa,
+
+00:02:23.540 --> 00:02:26.580
+inny twierdzi to samo, bo istnieją etykiety, nawet jeśli pokrycie jest słabe.
+
+00:02:26.780 --> 00:02:29.060
+Trzeci odpowiada tak, bo tożsamość jest połączona.
+
+00:02:29.280 --> 00:02:32.100
+Czwarty twierdzi, że tak, bo kopilot jest technicznie wdrożony.
+
+00:02:32.340 --> 00:02:35.440
+Każda odpowiedź brzmi rozsądnie, ale żadna nie oznacza tego samego.
+
+00:02:35.440 --> 00:02:36.800
+To właśnie jest pułapka.
+
+00:02:36.800 --> 00:02:39.360
+Myślisz, że patrzysz na globalny panel kontrolny,
+
+00:02:39.440 --> 00:02:42.880
+a w rzeczywistości widzisz zbiór suwerennych wysp AI wewnątrz jednej firmy.
+
+00:02:43.100 --> 00:02:47.040
+Łączy je marka, a czasem tożsamość, ale nie są zarządzane jako jeden system.
+
+00:02:47.260 --> 00:02:50.820
+I jeśli masz zapamiętać tylko jedną rzecz z tej sekcji, zapamiętaj to zdanie.
+
+00:02:51.040 --> 00:02:54.660
+Nie ma globalnego centrum administracyjnego, a i istnieje tylko jego iluzja.
+
+00:02:54.900 --> 00:02:57.600
+Gdy ta iluzja pryska, szybko pojawia się kolejny problem.
+
+00:02:57.880 --> 00:03:00.460
+Większość organizacji reaguje, wprowadzając zarządzanie ręcznie
+
+00:03:00.460 --> 00:03:02.900
+dla każdego dzierżawcy z osobna, nazywając to kontrolą.
+
+00:03:03.100 --> 00:03:05.920
+Dlaczego ręczne zarządzanie każdym dzierżawcą zawodzi na dużą skalę?
+
+00:03:05.920 --> 00:03:09.120
+Gdy liderzy zauważają problem granic, typowa reakcja wydaje się sensowna.
+
+00:03:09.320 --> 00:03:11.600
+Mówią, dobrze, będziemy zarządzać każdym dzierżawcą właściwie.
+
+00:03:11.880 --> 00:03:14.920
+Jeden zespół administratorów sprawdza ustawienia tu, inny zespół powtarza je tam.
+
+00:03:15.100 --> 00:03:17.860
+Ktoś prowadzi arkusz kalkulacyjny, ktoś inny tworzy listę kontrolną.
+
+00:03:18.060 --> 00:03:21.560
+Grupa sterująca spotyka się raz w miesiącu i pyta, czy wdrożenie przebiega zgodnie z planem.
+
+00:03:21.700 --> 00:03:23.780
+Na papierze wygląda to na zdyscyplinowane działanie.
+
+00:03:23.980 --> 00:03:26.840
+W praktyce to ręczna powtarzalność przebrana za ład korporacyjny.
+
+00:03:27.040 --> 00:03:29.080
+Powód, dla którego to zawodzi, jest prosty.
+
+00:03:29.500 --> 00:03:32.520
+Powtarzalność nie daje kontroli, prowadzi z czasem do rozbieżności.
+
+00:03:32.520 --> 00:03:37.820
+Dzieje się tak, ponieważ każdy dzierżawca działa w innym tempie, każdy administrator interpretuje standardy nieco inaczej,
+
+00:03:37.920 --> 00:03:43.360
+a lokalne wyjątki zaczynają wydawać się uzasadnione, bo biznes chce postępów teraz, a nie po kolejnym centralnym przeglądzie.
+
+00:03:43.520 --> 00:03:45.780
+Ten stary model trwa, bo wydaje się widoczny.
+
+00:03:45.980 --> 00:03:49.720
+Ludzie mogą wskazać zamknięte zgłoszenia, utworzone zasady i zmienione ustawienia.
+
+00:03:49.980 --> 00:03:54.180
+Mogą wykazać aktywność, ale widoczny wysiłek to nie to samo, co stabilny model operacyjny.
+
+00:03:54.340 --> 00:03:57.220
+A z kopilotem w grze ta luka staje się bardzo szybko kosztowna.
+
+00:03:57.220 --> 00:04:03.440
+System zaczyna korzystać z istniejących uprawnień, ekspozycji treści i luk w etykietowaniu w momencie, gdy użytkownicy zaczynają wysyłać zapytania.
+
+00:04:03.580 --> 00:04:05.340
+To jest to, co większość ludzi pomija.
+
+00:04:05.540 --> 00:04:07.220
+Kopilot nie czeka na dojrzałość ładu korporacyjnego.
+
+00:04:08.000 --> 00:04:13.940
+Działa w oparciu o uprawnienia, które już masz, higienę treści, którą już tolerujesz i stan audytu, którego nie udało ci się ujednolicić.
+
+00:04:14.140 --> 00:04:19.120
+Jeśli jeden dzierżawca uporządkował dostęp, a drugi go usunął, lub jeśli jeden strumieniuje przydatne dane audytowe,
+
+00:04:19.220 --> 00:04:23.460
+podczas gdy drugi ledwo rejestruje wystarczająco dużo do analizy, kopilot natychmiast obnaży te różnice.
+
+00:04:23.460 --> 00:04:26.200
+To nie dzieje się w teorii, to dzieje się poprzez użytkowanie.
+
+00:04:26.420 --> 00:04:31.980
+Jeśli jeden dzierżawca sprawdził szeroki dostęp do SharePoint, a drugi uznał, że to wystarczy, sztuczna inteligencja odnajdzie luki.
+
+00:04:32.180 --> 00:04:38.440
+A głębiej każdy nowy dzierżawca mnoży ten problem nie dlatego, że dzierżawcy są źli, ale dlatego, że niezarządzane różnice się kumulują.
+
+00:04:38.680 --> 00:04:45.780
+Nowy zespół pilotażowy dodaje lokalny wyjątek, fuzja wprowadza kolejnego dzierżawcę z innymi etykietami, a regionalny administrator kopiuje starą bazę.
+
+00:04:45.980 --> 00:04:50.340
+Jednostka biznesowa prosi o szybszy dostęp i żadna z tych decyzji nie wygląda dramatycznie w izolacji.
+
+00:04:50.340 --> 00:04:54.360
+Zestaw je razem na przestrzeni miesięcy, a otrzymasz dryw polityk, dryw dostępu i dryw wdrożenia.
+
+00:04:54.680 --> 00:04:56.080
+Rezultatem jest zespół do spraw.
+
+00:04:56.280 --> 00:04:59.180
+Ładu, który spędza więcej czasu na godzeniu różnic niż na zapobieganiu ryzyku.
+
+00:04:59.380 --> 00:05:01.160
+Właśnie w tym momencie kontrola ręczna zawodzi.
+
+00:05:01.400 --> 00:05:07.560
+Wydaje się bezpieczniejsza, bo ludzie dotykają ustawień, ale w rzeczywistości potęguje niespójność, bo każdy punkt styku to szansa na rozbieżność między dzierżawcami.
+
+00:05:07.760 --> 00:05:13.740
+Efektem jest wolniejsze wdrażanie tam, gdzie chcesz szybkości, większy wysiłek audytowy tam, gdzie potrzebujesz dowodów i więcej poprawek tam, gdzie chcesz standardów.
+
+00:05:13.740 --> 00:05:17.320
+Co najgorsze, tworzy to ukryte zagrożenie tam, gdzie kierownictwo oczekuje pewności.
+
+00:05:17.480 --> 00:05:20.800
+Dotarło to do mnie, gdy przestałem traktować ład korporacyjny jako zadanie konfiguracyjne.
+
+00:05:20.920 --> 00:05:21.560
+Tak nie jest.
+
+00:05:21.780 --> 00:05:23.500
+Zachowuje się to bardziej jak proces rozpadu.
+
+00:05:23.660 --> 00:05:27.600
+Jeśli raz wyczyścisz uprawnienia, ale żadna kontrola nie zapobiegnie ich ponownemu dryfowi, zagrożenie powraca.
+
+00:05:27.780 --> 00:05:32.440
+Jeśli raz zdefiniujesz taksonomię etykiet, ale dzierżawcy stosują ją nierówno, baza wyjściowa ulega erozji.
+
+00:05:32.640 --> 00:05:37.800
+Jeśli zatwierdzasz kopilota falami, nie sprawdzając, czy podstawowe mechanizmy kontroli nadal działają, nie skalujesz bezpiecznie.
+
+00:05:37.800 --> 00:05:40.960
+Po prostu rozszerzasz się szybciej, niż twój ład jest w stanie nadążyć.
+
+00:05:41.200 --> 00:05:48.200
+Zatem miarą, która się tu liczy, jest dryf dostępu nie tylko to, czy coś naprawiłeś, ale jak szybko uprawnienia ponownie się rozprzestrzeniają po naprawie.
+
+00:05:48.340 --> 00:05:50.680
+To mówi ci, czy twój model się sprawdza, czy zawodzi.
+
+00:05:50.860 --> 00:05:53.180
+Ponieważ ład to nie jest projekt, który można ukończyć.
+
+00:05:53.320 --> 00:05:55.600
+To problem rozpadu, którym zarządzasz w sposób ciągły.
+
+00:05:55.720 --> 00:05:59.920
+A kiedy skala rozbija stary model, większość liderów sięga po najbardziej znane rozwiązanie – tożsamość.
+
+00:06:00.140 --> 00:06:04.460
+Zakładają, że jeśli użytkownicy mogą płynnie poruszać się między dzierżawcami, ład jakoś przeniesie się wraz z nimi.
+
+00:06:04.460 --> 00:06:05.440
+Nie przeniesie się.
+
+00:06:05.440 --> 00:06:07.780
+Dlaczego tożsamość nie rozwiązuje kwestii ładu?
+
+00:06:07.920 --> 00:06:12.260
+To punkt, w którym wiele programów obiera zły kierunek, ponieważ tożsamość wydaje się czystym rozwiązaniem.
+
+00:06:12.460 --> 00:06:17.580
+Jeśli użytkownicy mogą uwierzytelniać się między dzierżawcami, jeśli entra jest połączona i jeśli ustawienia między dzierżawcami są wdrożone,
+
+00:06:17.680 --> 00:06:19.860
+liderzy zakładają, że najtrudniejsza część jest rozwiązana.
+
+00:06:20.060 --> 00:06:24.580
+Dostęp wygląda na ujednolicony, logowanie na ujednolicone, schemat architektury wygląda schludnie,
+
+00:06:24.700 --> 00:06:28.420
+ale ład kopilota nie staje się jednolity tylko dlatego, że tożsamość może się przemieszczać.
+
+00:06:28.420 --> 00:06:31.420
+To założenie zawodzi w punkcie, w którym AI faktycznie pracuje.
+
+00:06:31.420 --> 00:06:37.240
+Kopilot opiera odpowiedzi na kontekście dzierżawcy, w którym uruchomiono zapytanie, a wytyczne firmy Microsoft są w tej kwestii jasne.
+
+00:06:37.460 --> 00:06:44.760
+Microsoft 365 Kopilot działa w granicach bezpieczeństwa i zgodności dzierżawy oraz respektuje uprawnienia użytkownika w kontekście tej konkretnej dzierżawy.
+
+00:06:44.940 --> 00:06:49.360
+Użytkownik może zmienić kontekst jako gość, owszem, ale kopilot jest nadal ograniczony do jednej dzierżawy w danym czasie.
+
+00:06:49.580 --> 00:06:53.180
+Nie łączy on wielu dzierżaw w jeden inteligentny obszar roboczy w celu uzyskania jednej odpowiedzi.
+
+00:06:53.340 --> 00:06:55.880
+A więc tożsamość może być przenoszona, ale zarządzanie nie.
+
+00:06:55.880 --> 00:07:00.660
+A gdy oddzieli się te dwie kwestie, wiele wypowiedzi kierownictwa zaczyna brzmieć niebezpiecznie mgliście.
+
+00:07:00.820 --> 00:07:04.640
+Połączone dzierżawy, współdzielona tożsamość, ujednolicone doświadczenie.
+
+00:07:05.660 --> 00:07:14.520
+Te zwroty mogą być prawdziwe w odniesieniu do współpracy, ale nie oznaczają, że egzekwowanie zasad, ugruntowanie danych, logowanie i walidacja kontroli działają teraz jako jeden system.
+
+00:07:14.740 --> 00:07:21.180
+Ta luka staje się jeszcze bardziej oczywista, gdy spojrzymy na tryb wielodzierżawowy w Kopilot Studio, ponieważ wersja zapoznawcza opowiada bardzo specyficzną historię.
+
+00:07:21.180 --> 00:07:29.680
+Tak, korzystanie z wielu dzierżaw istnieje, a agent hostowany w jednej dzierżawie może być używany z innej, ale uwierzytelnianie użytkownika końcowego w trybie wielodzierżawowym nie jest jeszcze obsługiwane w wersji zapoznawczej.
+
+00:07:29.840 --> 00:07:31.600
+Użytkownicy typu gość nie są obsługiwani.
+
+00:07:31.880 --> 00:07:33.600
+Niestandardowe łączniki nie są obsługiwane.
+
+00:07:33.800 --> 00:07:36.940
+Standardowe łączniki Graph i Microsoft 365 nie są obsługiwane.
+
+00:07:37.140 --> 00:07:38.840
+Funkcja MultiGeo nie jest obsługiwana.
+
+00:07:39.080 --> 00:07:41.280
+Wiele możliwości analitycznych jest niedostępnych.
+
+00:07:41.500 --> 00:07:43.740
+Transkrypcje rozmów są również wyłączone w tym trybie.
+
+00:07:43.920 --> 00:07:46.280
+To nie jest dojrzała struktura zarządzania między dzierżawami.
+
+00:07:46.280 --> 00:07:48.660
+To ograniczona wersja zapoznawcza z wyraźnymi limitami.
+
+00:07:48.780 --> 00:07:52.340
+Te limity mają znaczenie, ponieważ burzą historię, którą opowiadają sobie zespoły kierownicze.
+
+00:07:52.560 --> 00:07:55.180
+Słyszą wielodzierżawowość i zakładają dojrzałość operacyjną.
+
+00:07:55.340 --> 00:07:58.400
+Ich architekci słyszą między dzierżawami i zakładają symetrię zasad.
+
+00:07:58.600 --> 00:08:02.120
+Ich zespoły kontrolne słyszą ten sam dostawca i zakładają spójność audytu.
+
+00:08:02.300 --> 00:08:08.300
+Następnie rozpoczyna się wdrażanie i ludzie odkrywają odmienne zachowania, brakujące sygnały oraz niezręczne luki w uwierzytelnianiu i analityce.
+
+00:08:08.540 --> 00:08:10.100
+Wyobraźmy sobie drugi przypadek.
+
+00:08:10.100 --> 00:08:16.120
+Firma globalna tworzy relacje między dzierżawami i zakłada, że doświadczenie użytkownika naturalnie rozszerzy się na korzystanie z kopilota.
+
+00:08:16.280 --> 00:08:21.520
+To oczekiwanie brzmi rozsądnie, obejmując zaufanie do współdzielonego katalogu, płynniejszy dostęp i wspólne wzorce tożsamości.
+
+00:08:21.740 --> 00:08:25.620
+Jednak gdy zespoły testują rzeczywiste scenariusze kopilota i agentów, zachowanie jest nierówne.
+
+00:08:25.820 --> 00:08:28.100
+Niektóre dane pojawiają się tylko w zmienionych kontekstach.
+
+00:08:28.280 --> 00:08:30.240
+Niektóre oczekiwane łączniki są niedostępne.
+
+00:08:30.420 --> 00:08:34.180
+Niektóre oczekiwania audytowe nie pokrywają się z tym, co faktycznie oferują funkcję wersji zapoznawczej.
+
+00:08:34.180 --> 00:08:37.820
+Kierownictwo nadal słyszy połączone, podczas gdy zespół kontrolny zaczyna znajdować wyjątki.
+
+00:08:37.940 --> 00:08:39.520
+To nie jest techniczny przypadek brzegowy.
+
+00:08:39.680 --> 00:08:41.180
+To błędna interpretacja zarządzania.
+
+00:08:41.320 --> 00:08:44.300
+Ponieważ audytorzy nie sprawdzają Twojej historii architektury, sprawdzają dowody,
+
+00:08:44.440 --> 00:08:47.980
+pytają, gdzie uruchomiono monity, która dzierżawa egzekwowała zasady, jakie istnieją logi
+
+00:08:47.980 --> 00:08:51.720
+i czy Twoje kontrole były faktycznie porównywalne w środowiskach, które opisałeś jako połączone.
+
+00:08:51.880 --> 00:08:56.020
+Jeśli Twój model operacyjny traktował tożsamość jako zarządzanie, nie będziesz mieć jasnej odpowiedzi.
+
+00:08:56.180 --> 00:08:58.540
+Więc jeśli masz zapamiętać jedno zdanie, niech to będzie to.
+
+00:08:58.540 --> 00:09:01.660
+Tożsamość między dzierżawami to nie to samo, co inteligencja między dzierżawami.
+
+00:09:01.800 --> 00:09:03.640
+Tożsamość ułatwia użytkownikom logowanie.
+
+00:09:03.880 --> 00:09:06.680
+Nie mówi Ci ona jednak, czy działanie kopilota jest spójnie zarządzane,
+
+00:09:06.800 --> 00:09:10.160
+właściwie monitorowane i bezpieczne do skalowania w całym środowisku Twojej firmy.
+
+00:09:10.380 --> 00:09:13.500
+Gdy stanie się to jasne, odpowiedzią nie mogą być kolejne połączenia między tenantami.
+
+00:09:13.660 --> 00:09:18.120
+Odpowiedzią musi być architektura, model zarządzania, który rzeczywiście działa, hoop and spoke.
+
+00:09:18.340 --> 00:09:21.620
+Jak zatem wygląda prawdziwy model zarządzania, gdy platforma jest rozproszona,
+
+00:09:21.740 --> 00:09:24.980
+tożsamość tylko częściowa, a granice tenantów wciąż mają znaczenie?
+
+00:09:25.220 --> 00:09:26.920
+Wygląda jak system hoop and spoke.
+
+00:09:26.920 --> 00:09:29.740
+Nie sugeruję tego dlatego, że diagram ładnie wygląda na slajdzie,
+
+00:09:29.880 --> 00:09:33.860
+ale dlatego, że faktycznie pasuje do chaotycznych warunków operacyjnych, z którymi się teraz mierzysz.
+
+00:09:34.020 --> 00:09:37.720
+Potrzebujesz centralnego miejsca, gdzie decyzje dotyczące zarządzania są projektowane,
+
+00:09:37.860 --> 00:09:42.140
+mierzone i egzekwowane jako jeden system oraz lokalnych zespołów tenantów do ich wdrażania.
+
+00:09:42.320 --> 00:09:45.020
+Te lokalne zespoły muszą działać w ramach swoich granic,
+
+00:09:45.140 --> 00:09:48.800
+zamiast tworzyć własne wersje zasad za każdym razem, gdy czują presję.
+
+00:09:49.040 --> 00:09:50.320
+Musimy zacząć od hubu.
+
+00:09:50.500 --> 00:09:53.940
+Hub to nie portal administracyjny, nie błyszczący pulpit nawigacyjny
+
+00:09:53.940 --> 00:09:58.260
+i z pewnością niebohaterski centralny zespół, który ręcznie czyści pliki w każdym tenancie.
+
+00:09:58.500 --> 00:10:01.800
+Zamiast tego hub pełni funkcję nadrzędnego organu zarządzającego.
+
+00:10:01.940 --> 00:10:07.080
+Ta grupa odpowiada za projektowanie polityk, podstawy audytu, standardy etykiet i kryteria wdrażania.
+
+00:10:07.260 --> 00:10:10.560
+To oni decydują, co faktycznie oznacza gotowość na kopilota,
+
+00:10:10.720 --> 00:10:14.340
+co stanowi dowód i jak szybko należy załatać lukę w zabezpieczeniach.
+
+00:10:14.460 --> 00:10:16.680
+Ta zmiana przekształca całą dyskusję.
+
+00:10:16.680 --> 00:10:20.920
+Dzięki tej strukturze pojęcie globalny przestaje być tylko nazwą magicznego ekranu,
+
+00:10:21.000 --> 00:10:23.720
+a zaczyna oznaczać jeden ujednolicony system zarządzania.
+
+00:10:23.960 --> 00:10:25.820
+Zyskujesz jeden standard kontroli per view,
+
+00:10:25.980 --> 00:10:29.460
+jeden standard przesyłania audytów i jeden standard etykiet wrażliwości.
+
+00:10:29.740 --> 00:10:32.300
+Istnieje jeden jasny próg wymagań, który musi zostać spełniony,
+
+00:10:32.420 --> 00:10:35.040
+zanim dany tenant otrzyma zgodę na rozszerzenie dostępu do kopilota.
+
+00:10:35.220 --> 00:10:36.980
+Potem potrzebujesz SPOX, czyli szprych.
+
+00:10:37.100 --> 00:10:39.220
+Szprychy to lokalne zespoły wykonawcze tenantów,
+
+00:10:39.320 --> 00:10:41.880
+które przejmują wytyczne i stosują je w swoim środowisku.
+
+00:10:41.880 --> 00:10:46.780
+To oni zajmują się naprawą, weryfikacją logów i przeglądem szerokich uprawnień dostępu.
+
+00:10:47.240 --> 00:10:51.360
+Wykonują jednak te prace w ramach ściśle określonego obszaru, a nie dowolnie.
+
+00:10:51.600 --> 00:10:56.100
+Jeśli lokalny zespół musi odstąpić od planu, istnieje formalna ścieżka dla wyjątków.
+
+00:10:56.240 --> 00:11:00.060
+A jeśli chcą działać szybciej, najpierw muszą spełnić wspólne wymogi kontrolne.
+
+00:11:00.280 --> 00:11:04.280
+Gdy pojawiają się różnice regionalne lub prawne, kwestie te są dokumentowane i zatwierdzane,
+
+00:11:04.400 --> 00:11:07.880
+zamiast być cicho włączanymi do lokalnych rozwiązań, o których nikt inny nie wie.
+
+00:11:07.880 --> 00:11:12.320
+Ta struktura jest kluczowa, ponieważ w pełni scentralizowane modele zazwyczaj gubią się w lokalnych szczegółach,
+
+00:11:12.420 --> 00:11:15.820
+podczas gdy w pełni lokalne modele niemal natychmiast popadają w całkowity brak spójności.
+
+00:11:16.080 --> 00:11:19.000
+Model Hub & Spoke pozwala uniknąć obu tych schematów porażki.
+
+00:11:19.200 --> 00:11:24.400
+Centrum zapewnia niezbędną spójność, podczas gdy oddziały dają szybkość działania tam, gdzie faktycznie odbywa się praca.
+
+00:11:24.580 --> 00:11:25.780
+Przejdźmy do konkretów.
+
+00:11:25.960 --> 00:11:29.840
+W centrum definiujesz minimalny zestaw kontroli per view, które każdy tenant musi wdrożyć,
+
+00:11:29.980 --> 00:11:31.680
+zanim kopilot będzie mógł się rozwijać.
+
+00:11:31.680 --> 00:11:36.380
+Określasz dokładnie, jakie zdarzenia audytowe chcesz widzieć i jak często będziesz je przeglądać.
+
+00:11:36.480 --> 00:11:44.040
+Tworzysz również wspólną taksonomię etykiet dla treści poufnych, aby tak poufne nie oznaczał pięciu różnych rzeczy w pięciu różnych tenantach.
+
+00:11:44.240 --> 00:11:51.560
+Ustalasz rytm przeglądów, być może co miesiąc dla ogólnego stanu bezpieczeństwa, a częściej w obszarach, gdzie wdrożenie jest aktualnie aktywne.
+
+00:11:51.760 --> 00:11:56.260
+W oddziale Twój zespół dopasowuje te standardy wysokiego poziomu do realiów konkretnego tenanta.
+
+00:11:56.540 --> 00:12:01.300
+Sprawdzają, które witryny wciąż mają zbyt szeroki dostęp i które jednostki biznesowe mają zaległości w etykietowaniu.
+
+00:12:01.300 --> 00:12:06.180
+Weryfikują, czy audyt jest faktycznie włączony i czy odpowiednie rekordy są widoczne dla zespołu do spraw bezpieczeństwa.
+
+00:12:06.400 --> 00:12:14.940
+Szukają lokalnych administratorów, którzy mogli wprowadzić wyjątki bez oficjalnej weryfikacji i decydują, czy grupa pilotażowa może bezpiecznie się rozszerzyć, czy najpierw trzeba się zatrzymać i naprawić błędy.
+
+00:12:15.080 --> 00:12:20.040
+A oto twarda zasada, ponieważ bez niej ten model jest tylko sugestią, a nie rzeczywistym zarządzaniem.
+
+00:12:20.260 --> 00:12:27.860
+Żadne wdrożenie kopilota nie może odbyć się w żadnym tenancie bez zweryfikowanego logowania audytowego, zakończonego skanowania nadmiernego udostępniania i minimalnego poziomu pokrycia etykietami.
+
+00:12:27.860 --> 00:12:32.300
+Nie mówię tu o rzeczach planowanych, czy częściowo omówionych. One muszą zostać zweryfikowane.
+
+00:12:32.500 --> 00:12:36.140
+Jeśli tenant nie może udowodnić spełnienia tych trzech warunków, wdrożenie zostaje wstrzymane.
+
+00:12:36.320 --> 00:12:43.160
+Może to brzmieć surowo, dopóki nie porównasz tego z ogromnymi kosztami sprzątania bałaganu, gdy użytkownicy zaczną znajdować poufne treści, których nigdy nie chciałeś udostępniać przez AI.
+
+00:12:43.340 --> 00:12:46.760
+Kiedy spojrzysz na to w ten sposób, te zasady są po prostu podstawowym zdrowym rozsądkiem.
+
+00:12:47.000 --> 00:12:49.700
+Innym powodem, dla którego ten model działa tak dobrze, jest czas.
+
+00:12:49.700 --> 00:12:53.700
+Im dłużej zwlekasz z jego konfiguracją, tym więcej długu technicznego tworzysz sobie na przyszłość.
+
+00:12:53.860 --> 00:13:01.240
+Każdy tenant, który wdroży rozwiązanie przed osiągnięciem punktu odniesienia, staje się ogromnym backlogiem wyjątków i brakujących dowodów, które twój zespół będzie musiał ostatecznie wyjaśnić.
+
+00:13:01.380 --> 00:13:08.460
+Liderzy często traktują zarządzanie jako coś, co może dojrzeć po zakończeniu adopcji, ale w świecie kopilota z wieloma tenantami ta kolejność jest całkowicie błędna.
+
+00:13:08.680 --> 00:13:13.540
+Zarządzanie musi wyprzedzać wdrożenie, w przeciwnym razie wdrożenie wygeneruje więcej długu, niż twoje zespoły będą w stanie udźwignąć.
+
+00:13:13.540 --> 00:13:20.020
+Jeśli kierujesz tym na poziomie przedsiębiorstwa, twój kolejny ruch jest bardzo jasny. Uruchom centrum już teraz i zdefiniuj te bazy dzisiaj.
+
+00:13:20.300 --> 00:13:23.640
+Wyznacz oddziały i natychmiast spisz proces obsługi wyjątków.
+
+00:13:23.900 --> 00:13:31.040
+Musisz sprawić, by globalne podejście oznaczało, że twoje decyzje i etapy wdrażania działają jako jeden system, nawet jeśli same dzierżawy tak nie działają.
+
+00:13:31.300 --> 00:13:37.560
+Model ma znaczenie tylko wtedy, gdy faktycznie zmienia to, co będzie egzekwowane od jutra rana, co liderzy powinni mierzyć, zanim przejdą do skali.
+
+00:13:37.560 --> 00:13:41.780
+Model zarządzania jest spójny tylko wtedy, gdy dostarcza pomiary, z którymi wszyscy się zgadzają.
+
+00:13:41.780 --> 00:13:48.460
+W przeciwnym razie każdy najemca będzie twierdził, że robi postępy we własnym zakresie, a kierownictwo otrzyma raporty bez realnej kontroli.
+
+00:13:48.680 --> 00:13:54.760
+Zanim bardziej przeskalujesz kopilota, potrzebujesz zestawu wskaźników sprawdzających, czy architektura działa tak, jak zakładasz.
+
+00:13:54.860 --> 00:13:59.000
+Poziomy aktywności nie powiedzą ci prawdy, a liczby adopcji z pewnością nie pokażą ryzyk.
+
+00:13:59.120 --> 00:14:01.640
+Powinieneś zacząć od ograniczenia nadmiernego udostępniania.
+
+00:14:01.760 --> 00:14:06.100
+To wciąż jeden z najbardziej oczywistych sygnałów, że twoje środowisko staje się bezpieczniejsze dla AI.
+
+00:14:06.100 --> 00:14:13.080
+Musisz przyjrzeć się szerokim grupom dostępu, otwartym witrynom SharePoint i starym uprawnieniom, które dają znacznie więcej dostępu niż biznes potrzebuje.
+
+00:14:13.260 --> 00:14:18.760
+Celem nie jest osiągnięcie idealnej liczby, ale udowodnienie, że narażenie maleje, zanim zasięg kopilota wzrośnie.
+
+00:14:18.980 --> 00:14:24.200
+Jeśli te dwie linie poruszają się w przeciwnych kierunkach, rozwijasz się znacznie szybciej niż naprawiasz podstawowe problemy.
+
+00:14:24.400 --> 00:14:27.560
+Drugim wskaźnikiem, którego potrzebujesz, jest pokrycie obserwowalnością.
+
+00:14:27.680 --> 00:14:32.200
+Czy faktycznie widzisz, co robi kopilot we wszystkich dzierżawach w sposób umożliwiający prawdziwe dochodzenie?
+
+00:14:32.200 --> 00:14:39.900
+Większość badań wskazuje Microsoft Perview jako główne miejsce przechowywania rekordów interakcji kopilota, ale to zakłada włączony wszędzie audyt.
+
+00:14:40.020 --> 00:14:42.920
+Pokrycie nie jest czymś, co możesz po prostu założyć, że działa.
+
+00:14:43.180 --> 00:14:48.940
+Musisz dokładnie wiedzieć, które dzierżawy mają aktywną ingestię audytu, a które zapewniają tylko częściową widoczność.
+
+00:14:49.160 --> 00:14:52.280
+Jeśli nie masz logów, nie masz zarządzania ani odpowiedzialności.
+
+00:14:52.580 --> 00:14:54.600
+Brzmi to brutalnie, bo musi tak brzmieć.
+
+00:14:54.760 --> 00:14:59.240
+Jeśli dzierżawa nie może dostarczyć użytecznych dowodów działań, nie jest gotowa na bezpieczne skalowanie.
+
+00:14:59.240 --> 00:15:04.660
+Nie możesz zarządzać tym, czego nie możesz kontrolować i z pewnością nie obronisz swoich działań, jeśli później coś pójdzie nie tak.
+
+00:15:04.820 --> 00:15:08.000
+Trzecim wskaźnikiem jest czas wdrożenia polityki we wszystkich dzierżawach.
+
+00:15:08.120 --> 00:15:12.600
+To tutaj kierownictwo dowiaduje się, czy model hoop and spoke jest realny, czy tylko dekoracyjny.
+
+00:15:12.800 --> 00:15:18.240
+Centralna decyzja nic nie znaczy, jeśli jeden najemca wdroży ją w tym tygodniu, a inny czeka miesiąc, by się nad tym zastanowić.
+
+00:15:18.920 --> 00:15:23.500
+Powinieneś mierzyć czas od zatwierdzenia polityki do jej skutecznego wyegzekwowania w każdej dzierżawie.
+
+00:15:23.680 --> 00:15:28.460
+Nie mówię o czasie potrzebnym na ogłoszenie czy udokumentowanie, ale o czasie do momentu, gdy rozwiązanie faktycznie zacznie działać.
+
+00:15:28.460 --> 00:15:32.660
+W przypadku programu AI, który rozwija się tak szybko, takie opóźnienie to po prostu inne określenie na ryzyko.
+
+00:15:32.820 --> 00:15:36.920
+Praktycznym celem dla większości organizacji jest czas poniżej 72 godzin dla standardowych zmian.
+
+00:15:37.120 --> 00:15:40.480
+Jeśli twój czas cyklu jest znacznie dłuższy, nie masz jeszcze skalowalnego modelu.
+
+00:15:40.660 --> 00:15:43.200
+Masz po prostu problem z koordynacją, który wymaga rozwiązania.
+
+00:15:43.420 --> 00:15:45.840
+Następnie musisz przyjrzeć się wskaźnikowi pokrycia etykietami.
+
+00:15:46.020 --> 00:15:50.560
+Nie pozwól, aby stało się to tylko wskaźnikiem dla poprawy samopoczucia, gdzie jeden najemca osiąga świetne wyniki, a reszta zostaje w tyle.
+
+00:15:50.560 --> 00:15:57.060
+Liczy się to, czy twoje wrażliwe treści są etykietowe i na tyle spójnie, by działanie kopilota nie opierało się na domysłach użytkowników.
+
+00:15:57.240 --> 00:16:01.560
+Nie szukasz tu perfekcji, ale porównywalnego poziomu kontroli w każdym najemcy w organizacji.
+
+00:16:02.400 --> 00:16:04.560
+Na koniec musisz śledzić współczynnik dryftu uprawnień.
+
+00:16:05.220 --> 00:16:09.040
+Ten wskaźnik pokazuje, czy twoje wysiłki związane z porządkowaniem przynoszą trwałe efekty w czasie.
+
+00:16:09.280 --> 00:16:12.900
+Jak szybko po zakończeniu projektu naprawczego uprawnienia zaczynają się ponownie rozszerzać?
+
+00:16:13.100 --> 00:16:15.980
+Jak często szerokie grupy dostępowe przenikają z powrotem do systemu?
+
+00:16:15.980 --> 00:16:20.200
+Wiele zespołów orientuje się zbyt późno, bo zmierzyły poprawkę raz i założyły, że problem zniknął na zawsze.
+
+00:16:20.440 --> 00:16:21.180
+Nie zniknął.
+
+00:16:21.240 --> 00:16:25.600
+Jedynym liczącym się wskaźnikiem jest to, jak szybko system zaczyna tracić kontrolę, gdy przestajesz go obserwować.
+
+00:16:25.760 --> 00:16:27.120
+Oto twój panel operacyjny.
+
+00:16:27.340 --> 00:16:33.400
+Musisz śledzić redukcję nadmiernego udostępniania, zasięg obserwowalności, czas wdrożenia polityk, pokrycie etykietami i dryft uprawnień.
+
+00:16:33.600 --> 00:16:36.220
+Rytm raportowania jest równie ważny, co same liczby.
+
+00:16:36.440 --> 00:16:41.720
+Centrum powinno zarządzać panelem wykonawczym, ponieważ kierownictwo potrzebuje jednego, spójnego widoku na całość działań.
+
+00:16:41.720 --> 00:16:47.320
+Tymczasem oddziały powinny odpowiadać za działania naprawcze, ponieważ rzeczywista praca musi odbywać się tam, gdzie znajdują się granice najemcy.
+
+00:16:47.540 --> 00:16:50.180
+Jeden zespół odczytuje system, a drugi zespół go poprawia.
+
+00:16:50.400 --> 00:16:53.100
+Musisz śledzić te liczby przed rozszerzeniem skali, a nie po fakcie.
+
+00:16:53.340 --> 00:16:56.300
+Ryzyko nie czeka na kolejne spotkanie czy warsztaty z ładu informacyjnego.
+
+00:16:56.540 --> 00:17:01.500
+Jest już aktywne w każdym najemcy, gdzie kopilot znajduje dokładnie to, na co pozwalają mu twoje obecne zabezpieczenia.
+
+00:17:01.760 --> 00:17:03.880
+Dwa wzorce, które liderzy wciąż pomijają.
+
+00:17:03.880 --> 00:17:11.100
+Dostrzegam w terenie dwa konkretne wzorce i oba wynikają z tego, że liderzy traktują kopilota jak premierę oprogramowania, a nieważne wydarzenie kontrolne.
+
+00:17:11.260 --> 00:17:17.620
+Pierwszy wzorzec pojawia się, gdy organizacja wdraża kopilota przed ustaleniem realnej linii bazowej w perwiu lub przeglądem dostępu do SharePointa.
+
+00:17:17.760 --> 00:17:19.880
+Pierwszego dnia wdrożenie wygląda perfekcyjnie.
+
+00:17:20.080 --> 00:17:24.880
+Licencje są przypisane, użytkownicy podekscytowani, a wewnętrzna komunikacja skupia się tylko na produktywności.
+
+00:17:24.880 --> 00:17:31.820
+Jednak w pewnym momencie zwykłe zapytania zaczynają wyciągać materiały, które technicznie były dostępne od zawsze, ale praktycznie niewidoczne dla przeciętnego pracownika.
+
+00:17:31.820 --> 00:17:38.700
+Przed erą sztucznej inteligencji nikt nie spędzał dnia na przeszukiwaniu starych witryn, nieaktualnych folderów czy odziedziczonych uprawnień, by znaleźć coś, czego nie powinien widzieć.
+
+00:17:38.860 --> 00:17:44.140
+Teraz jednak nie muszą tego robić. Użytkownik zadaje proste pytanie, otrzymuje podsumowanie i pojawia się plik.
+
+00:17:44.340 --> 00:17:49.940
+Może to być poufna treść z HR, materiały finansowe lub informacje o transakcji, które miały pozostać w bardzo wąskim kręgu osób.
+
+00:17:50.140 --> 00:17:54.260
+Nie doszło do włamania, nie było złośliwego oprogramowania ani naruszenia granic bezpieczeństwa w tradycyjnym sensie.
+
+00:17:54.480 --> 00:17:58.360
+System po prostu wykorzystał uprawnienia i stan zawartości, na które dzierżawca już wcześniej zezwolił.
+
+00:17:58.360 --> 00:18:03.280
+To moment, w którym wiele zespołów wreszcie rozumie, na czym polega problem. Sztuczna inteligencja nie stworzyła tego zagrożenia.
+
+00:18:03.500 --> 00:18:05.780
+Po prostu usunęła barierę, która wcześniej je maskowała.
+
+00:18:05.980 --> 00:18:13.200
+Gdy wydarzy się to w jednym środowisku, zaufanie kierownictwa w całej organizacji zazwyczaj spada, ponieważ nikt nie jest w stanie przewidzieć, gdzie podobny schemat pojawi się ponownie.
+
+00:18:13.380 --> 00:18:17.260
+Incydent może wydawać się lokalny, ale szkoda wyrządzona zaufaniu obejmuje całe przedsiębiorstwo.
+
+00:18:17.480 --> 00:18:19.920
+Drugi schemat jest cichszy, ale równie niebezpieczny.
+
+00:18:19.920 --> 00:18:28.060
+Firma konfiguruje relacje tożsamości między dzierżawcami, dowiaduje się, że scenariusze wielodzierżawowe są możliwe i zakłada, że jej model operacyjny jest gotowy na szerokie wdrożenie.
+
+00:18:28.280 --> 00:18:30.280
+Na prezentacji brzmi to jak solidny plan.
+
+00:18:30.480 --> 00:18:32.600
+W rzeczywistości operacje stają się chaotyczne.
+
+00:18:32.880 --> 00:18:41.480
+Jeden zespół oczekuje płynnego działania kopilota w każdym połączonym środowisku, inny oczekuje porównywalnej widoczności, a trzeci zakłada, że te same kontrole będą podążać za użytkownikiem wszędzie.
+
+00:18:41.680 --> 00:18:47.260
+Wtedy rzeczywiste użytkowanie zaczyna ujawniać nierówne zachowanie luki w uwierzytelnianiu oraz słabe punkty w tym, co faktycznie można zmierzyć.
+
+00:18:47.260 --> 00:18:49.640
+Problem nie polega na tym, że te zespoły były niedbałe.
+
+00:18:49.840 --> 00:18:52.980
+Rzeczywistym problemem jest to, że zrównały łączność z zapewnieniem bezpieczeństwa.
+
+00:18:53.120 --> 00:18:55.980
+To założenie tworzy fałszywą historię na temat zgodności z przepisami.
+
+00:18:56.180 --> 00:18:59.640
+Kierownictwo słyszy słowo połączone i zakłada, że organizacja jest gotowa.
+
+00:18:59.860 --> 00:19:05.980
+Miesiące później przeglądy kontrolne wykazują, że zachowanie dowody i egzekwowanie przepisów różniły się znacznie bardziej niż ktokolwiek chciał przyznać na początku.
+
+00:19:06.200 --> 00:19:08.320
+A teraz porównajmy to z lepszym modelem postępowania.
+
+00:19:08.540 --> 00:19:11.440
+Inna organizacja decyduje się zwolnić, zanim zacznie skalować działania.
+
+00:19:11.440 --> 00:19:17.240
+Najpierw ustalają podstawowe etykiety, przeglądają szeroki dostęp i sprawdzają widoczność audytową, zanim zrobią cokolwiek innego.
+
+00:19:17.460 --> 00:19:24.660
+Rozszerzają korzystanie z kopilota falami nie dlatego, że boją się adaptacji, ale dlatego, że chcą, aby każda fala dostarczała użytecznych dowodów przed rozpoczęciem kolejnej.
+
+00:19:24.800 --> 00:19:34.100
+Taka organizacja zazwyczaj rozwija się szybciej w dłuższej perspektywie, ponieważ nie musi ciągle się zatrzymywać, by wyjaśniać niespodzianki, czyścić ujawnione treści, czy spierać się o to, co właściwie miało oznaczać zarządzanie.
+
+00:19:34.100 --> 00:19:36.420
+To korzyść, którą większość liderów pomija.
+
+00:19:36.660 --> 00:19:38.440
+Dobre zarządzanie nie blokuje wdrożenia.
+
+00:19:38.740 --> 00:19:42.060
+Eliminuje to opór podczas wdrażania, gdy pierwsza fala dobiega końca.
+
+00:19:42.240 --> 00:19:43.820
+Pułapką nie jest sama adopcja.
+
+00:19:44.020 --> 00:19:49.980
+Pułapką jest niezarządzana adopcja w dzierżawach, które z dystansu wyglądają na połączone, ale z bliska zachowują się zupełnie inaczej.
+
+00:19:50.240 --> 00:19:53.220
+Decyzja, którą musisz podjąć, jest w rzeczywistości bardzo prosta.
+
+00:19:53.500 --> 00:20:00.020
+Musisz przejść na sfederowany model zarządzania AI typu Hub & Spoke i przestać mylić włączanie poszczególnych dzierżaw z realną kontrolą.
+
+00:20:00.020 --> 00:20:06.940
+Powinieneś wstrzymać rozszerzanie kopilota w każdej dzierżawie, która nie jest w stanie wykazać logowania, przeglądów nadmiernego udostępniania i pokrycia etykietami.
+
+00:20:07.100 --> 00:20:11.380
+A i będzie podążać za systemem, który faktycznie zbudujesz, a nie za schematem organizacyjnym, któremu podlegasz.
+
+00:20:11.380 --> 00:20:19.560
+Jeśli zmieniło to twój sposób myślenia o zarządzaniu kopilotem w środowisku wielodzierżawowym, obserwuj mnie, Mirko Petersa, na LinkedIn i udostępnij to swojemu zespołowi, jeśli obecnie mierzysz się z takimi wyzwaniami.

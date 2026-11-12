@@ -1,0 +1,967 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:04.360
+Wat als je softwareontwikkelingsteam een extra teamgenoot had, iemand die nooit moe wordt,
+
+00:00:04.600 --> 00:00:07.700
+sneller leert dan wie dan ook en het saaie werk zonder klagen opknapt?
+
+00:00:07.900 --> 00:00:10.700
+Dat is in essentie wat Agentic AI aan het worden is.
+
+00:00:10.940 --> 00:00:14.580
+In deze video definiëren we eerst wat Agentic AI echt betekent,
+
+00:00:14.820 --> 00:00:17.900
+laten we zien hoe dit werkt in echte .NET en Azure Workflows
+
+00:00:17.900 --> 00:00:20.500
+en verkennen we de impact op de productiviteit van je team.
+
+00:00:20.660 --> 00:00:25.300
+Aan het einde ken je één klein experiment dat je deze week in je eigen .NET Pipeline kunt proberen.
+
+00:00:25.440 --> 00:00:27.960
+Maar voordat we naar de toepassingen en resultaten kijken,
+
+00:00:27.960 --> 00:00:32.280
+moeten we zien wat Agentic AI echt anders maakt dan de AdoComplete tools die je al kent.
+
+00:00:33.120 --> 00:00:34.780
+Wat maakt Agentic AI anders?
+
+00:00:35.060 --> 00:00:38.580
+Wat Agentic AI onderscheidt is niet alleen dat het code kan genereren,
+
+00:00:38.800 --> 00:00:41.960
+maar dat het werkt als een systeem van teamgenoten met specifieke vaardigheden.
+
+00:00:42.140 --> 00:00:45.180
+Om dit te begrijpen kunnen we het onderverdellen in drie kernkenmerken,
+
+00:00:45.360 --> 00:00:47.640
+hoe elke agent context en geheugen vasthoudt,
+
+00:00:47.820 --> 00:00:53.220
+hoe meerdere agents samenwerken als een team en het verschil tussen eenvoudige automatisering en echte adaptieve autonomie.
+
+00:00:53.220 --> 00:00:58.400
+Laten we eerst kijken naar wat een individuele agent onderscheidt, context, geheugen en doelgerichtheid.
+
+00:00:58.780 --> 00:01:01.840
+Traditionele AdoComplete voorspelt het volgende woord of de volgende regel,
+
+00:01:02.040 --> 00:01:04.420
+maar vergeet al het andere zodra de voorspelling is gedaan.
+
+00:01:04.640 --> 00:01:08.320
+Een AI-agent beschikt daarentegen over een begrip van het bredere project.
+
+00:01:08.540 --> 00:01:13.580
+Hij onthoudt wat er al is geprobeerd, weet waar code staat en past zijn output aan als er iets verandert.
+
+00:01:13.760 --> 00:01:16.860
+Die persistentie maakt het vergelijkbaar met werken met een junior developer,
+
+00:01:17.100 --> 00:01:20.560
+iemand die na verloop van tijd leert in plaats van alleen te raden wat je op dat moment wilt.
+
+00:01:20.560 --> 00:01:23.220
+Het belangrijkste verschil hier is dat tussen voorspellen en plannen.
+
+00:01:23.380 --> 00:01:25.780
+In plaats van op elke toetsaanslag afzonderlijk te reageren,
+
+00:01:26.020 --> 00:01:28.780
+houdt een agent doelen bij en past hij zich aan naarmate situaties zich ontwikkelen.
+
+00:01:28.900 --> 00:01:31.460
+Het volgende punt is hoe meerdere agents met elkaar samenwerken.
+
+00:01:31.640 --> 00:01:36.820
+Een groot misverstand is om agentenkei te zien als een ontwikkelingsscript of macro die alleen repetitieve taken automatiseert.
+
+00:01:37.000 --> 00:01:40.300
+Maar in echte software projecten wordt het werk verdeeld over verschillende rollen.
+
+00:01:40.600 --> 00:01:44.620
+Architecten, reviewers, testers, operators, agents kunnen deze verdeling spiegelen,
+
+00:01:44.780 --> 00:01:48.440
+waarbij ze elk een deel van de levenscyclus afhandelen met perfecte herinnering en consistentie.
+
+00:01:48.440 --> 00:01:54.620
+Stel je één agent voor die zich richt op systeemontwerp en architectuurpatronen en frameworks voorstelt die passen bij bedrijfsdoelen.
+
+00:01:54.800 --> 00:01:59.960
+Een ander beoordeelt codewijzigingen, signaleert problemen en blijft op de hoogte van de volledige projectgeschiedenis.
+
+00:02:00.120 --> 00:02:06.080
+Een derde zou de testtacking kunnen uitbreiden op basis van gebruikersgegevens en testgevallen kunnen genereren zonder dat jij erom hoeft te vragen.
+
+00:02:06.240 --> 00:02:12.700
+Elke agent is gespecialiseerd, maar ze coördineren als een team altijd beschikbaar, altijd consistent en gemakkelijk schaalbaar afhankelijk van de werkdruk.
+
+00:02:12.700 --> 00:02:18.220
+Waar mensen energie, context of focus verliezen, blijven agents standvastig en onthouden ze details met precisie.
+
+00:02:18.220 --> 00:02:21.660
+Het laatste stukje is het onderscheid tussen automatisering en autonomie.
+
+00:02:22.040 --> 00:02:24.140
+Automatisering bestaat al lang in softwareontwikkeling.
+
+00:02:24.420 --> 00:02:27.180
+Denk aan scripts, CI, CD pipelines en schablonen.
+
+00:02:27.360 --> 00:02:28.800
+Deze zijn van nature rigide.
+
+00:02:29.040 --> 00:02:33.740
+Ze volgen stap voor stap exacte instructies, maar ze lopen vast als de omstandigheden onverwacht veranderen.
+
+00:02:33.920 --> 00:02:35.640
+Autonomie hanteert een andere aanpak.
+
+00:02:35.840 --> 00:02:43.600
+AI-agents kunnen direct op veranderingen reageren, zich aanpassen als een afhankelijkheidsversie wijzigt of een servicekeuze heroverwegen wanneer kostenbeperkingen een rol gaan spelen.
+
+00:02:43.600 --> 00:02:48.240
+In plaats van vooraf gedefinieerde paden te volgen, nemen ze beslissingen onder dynamische omstandigheden.
+
+00:02:48.400 --> 00:02:51.740
+Het is een verschuiving van statische uitvoering naar adaptieve probleemoplossing.
+
+00:02:51.980 --> 00:02:55.460
+Het gevolg daarvan is dat deze agents niet langer alleen op commando's wachten.
+
+00:02:55.740 --> 00:03:02.980
+Ze kunnen oplossingen voorstellen zodra er problemen ontstaan, risico's signaleren voordat ze in productie komen en plannen opstellen die uren aan installatiewerk besparen.
+
+00:03:02.980 --> 00:03:14.280
+Als de GitHub-copilot van vandaag codefragmenten kan invullen, fungeert de versie van morgen meer als een projectbijdrager die roadmaps opstelt, release-strategies suggereert en zelfs architecturale beslissingen markeert die later problemen kunnen veroorzaken.
+
+00:03:14.480 --> 00:03:24.920
+Dat betekent niet dat elke implementatie zonder menselijke inbreng zal verlopen, maar het kan repetitief ingrijpen, aanzienlijk verminderen en ontwikkelaars meer tijd geven om zich te concentreren op de creatieve, waardevolle onderdelen van een project.
+
+00:03:24.920 --> 00:03:33.120
+Om een eerdere formulering op dit gebied te verduidelijken, in plaats van te zeggen, wat gebeurt er als het inrichten van Azure Resources helemaal geen menselijke tussenkomst meer vereist.
+
+00:03:33.360 --> 00:03:40.760
+Zou een nauwkeurigere stelling zijn, deze tools kunnen de hoeveelheid handmatig instelwerk verminderen terwijl de belangrijkste van Rails onder menselijke controle blijven.
+
+00:03:41.240 --> 00:03:46.080
+Het resultaat is nog steeds transformatief zonder te suggereren dat menselijk toezicht volledig verdwijnt.
+
+00:03:46.260 --> 00:03:51.540
+Het grotere inzicht is dat agentgebaseerde AI niet zomaar een andere plak in is die hier of daar een taak versnelt.
+
+00:03:51.540 --> 00:04:00.000
+Het begint te functioneren als een echt teamlid dat achtergrondwerk afhandelt, zodat ontwikkelaars niet vastlopen in het najagen van details die door een altijd actieve tegenhanger bijgehouden hadden kunnen worden.
+
+00:04:00.180 --> 00:04:05.540
+De capaciteit van het hele team wordt vergroot omdat digitale agents in belangrijke domeinen zij aan zij werken met menselijke specialisten.
+
+00:04:06.300 --> 00:04:10.900
+De theorie begrijpen is belangrijk, maar wat er echt toe doet, is hoe dit uitpakt in vertrouwde omgevingen.
+
+00:04:11.040 --> 00:04:12.760
+Dus hier is de nieuwsgierigheidskloof.
+
+00:04:12.940 --> 00:04:16.980
+Wat verandert er echt op de eerste dag van een nieuw project als agents vanaf het begin actief zijn?
+
+00:04:16.980 --> 00:04:24.560
+Vervolgens kijken we naar een concreet scenario binnen het .NET-ecosysteem waar die verschuivingen al zichtbaar worden voordat je je eerste regelcode hebt geschreven.
+
+00:04:24.780 --> 00:04:27.820
+Het heroverwegen van de workflow voor ontwikkelaars in .NET.
+
+00:04:28.000 --> 00:04:32.180
+In .NET-ontwikkeling begint de meest zichtbare verandering bij hoe projecten van start gaan.
+
+00:04:32.400 --> 00:04:36.500
+Het heroverwegen van de workflow voor ontwikkelaars komt hier neer op drie tactische voordelen.
+
+00:04:36.760 --> 00:04:42.520
+Snellere architectuur scaffolding, kritiek op projectniveau terwijl je bezig bent en een merkbare afname van vermoeidheid door configuratiewerk.
+
+00:04:42.520 --> 00:04:51.860
+Het eerste is versnelde scaffolding. In plaats van Visual Studio te openen en naar een lege oplossing te staren, kan een AI-agent architectuuropties voorstellen die bij jouw specifieke gebruikscenario passen.
+
+00:04:52.040 --> 00:04:58.700
+Bij het plannen van een web-API met real-time updates, suggereert de agent een helder gelaagd ontwerp en geeft aan hoe SignalR natuurlijk in de flow past.
+
+00:04:58.900 --> 00:05:05.820
+Voor een financiële app zet het Entity Framework klaar met sterke type veiligheid en Azure Active Directory integratie nog voordat je één map hebt aangemaakt.
+
+00:05:06.020 --> 00:05:10.860
+Wat normaal gesproken rondes aan discussies of uren aan onderzoek kost, wordt samengevat in een paar op maat gemaakte startpunten.
+
+00:05:10.860 --> 00:05:17.200
+Dit zijn echter geen definitieve blauwdrukken. Het zijn concepten. Teams moeten elke suggestie valideren door een snelle checklist door te lopen.
+
+00:05:17.440 --> 00:05:22.820
+Voldoet de authenticatie aan de vereisten? Is de lagging correct geconfigureerd? Zijn de basistestcases aanwezig?
+
+00:05:23.020 --> 00:05:26.440
+Dat lichte toezicht zorgt ervoor dat snelheid niet ten koste gaat van stabiliteit.
+
+00:05:26.660 --> 00:05:34.000
+Het tweede voordeel is voortdurende kritiek. Zie je het minder als codeaanvulling en meer als een adviseur die toeziet op de afstemming van het ontwerp.
+
+00:05:34.060 --> 00:05:39.940
+Als je een repository-patroon opzet voor datatoegang, geeft de agent aan of je afwijkt van de scheiding der verantwoordelijkheden.
+
+00:05:39.940 --> 00:05:45.820
+Voeg een nieuwe controller toe en hij stelt bijpassende unit-tests voor of wijst op inconsistenties met de rest van het project.
+
+00:05:46.040 --> 00:05:52.020
+In plaats van je met boilerplate achter te laten, stuurt hij de vorm van je systeem bij elke commit naar onderhoudbare patronen.
+
+00:05:52.180 --> 00:05:58.260
+Probeer voor een praktisch experiment co-pilot in Visual Studio in te schakelen voor een klein ASP.NET Core prototype.
+
+00:05:58.560 --> 00:06:01.780
+Vergelijk vervolgens hoe lang het duurt om het eerste zinvolle verzoek te bedienen,
+
+00:06:02.020 --> 00:06:05.840
+één het point met authenticatie en datapersistentie versus alles handmatig doen.
+
+00:06:05.840 --> 00:06:10.880
+Het is geen garantie voor tijdsbesparing, maar het uitvoeren van een zij-aan-zij-oefening in je eigen omgeving
+
+00:06:10.880 --> 00:06:14.280
+is vaak de snelste manier om te zien of deze agents een wezenlijke impact hebben.
+
+00:06:14.440 --> 00:06:17.500
+Het derde voordeel is minder installatiewerk en cognitieve belasting.
+
+00:06:17.800 --> 00:06:19.600
+Veel van het vroege projectwerk is repetitief.
+
+00:06:19.920 --> 00:06:24.300
+Authenticatie-middelwerk koppelen, nu het pakketten ophalen, logging met application insights instellen,
+
+00:06:24.500 --> 00:06:26.460
+Griekse YAML pipelines schrijven.
+
+00:06:26.620 --> 00:06:32.160
+Een agent kan die onderdelen onmiddellijk opzetten, inclusief stap-integratietests die weten welke afhankelijkheden aanwezig zijn.
+
+00:06:32.160 --> 00:06:35.240
+Dat neemt je controle niet weg, het verlegt de focus van je energie.
+
+00:06:35.400 --> 00:06:41.100
+In plaats van een dag te worstelen met configuratiebestanden, besteed je die tijd aan het implementeren van de bedrijfslogica die er echt toe doet.
+
+00:06:41.280 --> 00:06:46.900
+De vermoeidheid van installatiewerk verdwijnt, waardoor er bandbreed overblijft voor creatieve ontwerpbeslissingen in plaats van mechanische taken.
+
+00:06:47.140 --> 00:06:50.480
+Waar dit anders aanvoelt dan traditionele automatisering is de flexibiliteit.
+
+00:06:50.640 --> 00:06:53.240
+Een project jabloon geeft je statische standaardinstellingen.
+
+00:06:53.380 --> 00:06:56.820
+Een agent past zijn scaffolding aan op basis van je opgegeven zakelijke doel.
+
+00:06:56.820 --> 00:07:03.760
+Als je een samenwerkingsapp bouwt, verschijnen caching-strategieën zoals Redis en Event Driven ontwerpt met Azure Service Bus in het opgezet plan.
+
+00:07:03.960 --> 00:07:08.880
+Als je overschakelt naar geplande workloads, verschijnen in plaats daarvan achtergrond services en wachtrijverwerking.
+
+00:07:09.120 --> 00:07:16.300
+Die responsiviteit onderscheidt agent AI van eenvoudige scripting, door aanbevelingen te bieden die lijken op een senior teamlid dat helpt bij vroege beslissingen.
+
+00:07:16.500 --> 00:07:19.240
+Het contrast met het huidige gebruik van Copilot is duidelijk.
+
+00:07:19.440 --> 00:07:24.240
+Op dit moment zien de meeste ontwikkelaars het als een manier om snel door algemene syntax of boilerplate heen te werken.
+
+00:07:24.240 --> 00:07:26.980
+Zij stellen een vraag, de tool vult de regel in.
+
+00:07:27.180 --> 00:07:34.880
+Met agentmogelijkheden begint de tool te adviseren op systeemniveau, biedt contextbewuste alternatieven en toont afwegingen vroeg in de cyclus.
+
+00:07:35.280 --> 00:07:39.340
+De sprong is van het genereren van snippets naar het cureren van werkbare ontwerpen.
+
+00:07:39.520 --> 00:07:45.580
+En dat verandert niet alleen hoe code wordt geschreven, maar hoe teams de hele oplossing vormgeven voordat ze voor één richting kiezen.
+
+00:07:45.820 --> 00:07:48.720
+Niets hiervan neemt de noodzaak voor menselijk beoordelingsvermogen weg.
+
+00:07:48.900 --> 00:07:53.740
+Agents kunnen frameworks, dependencies en werkwijzen voorstellen, maar het verifiëren blijft de taak van het team.
+
+00:07:53.740 --> 00:07:56.340
+Behandel elke aanbeveling als een conceptvoorstel.
+
+00:07:56.600 --> 00:07:59.100
+Accepteer de onderdelen die aansluiten bij uw standaarden.
+
+00:07:59.420 --> 00:08:02.360
+Reviseer de rest- en leglessen vast voor de volgende projectiteratie.
+
+00:08:02.560 --> 00:08:08.260
+De AI neemt het repetitieve zware werk uit handen, terwijl teamleden zich concentreren op het afstemmen van technologiekeuzes op de strategie.
+
+00:08:08.400 --> 00:08:12.720
+Tot nu toe hebben we gekeken hoe agents de programmeerervaring binnen .NET zelf hervormen,
+
+00:08:12.920 --> 00:08:16.420
+maar de betrokkenheid van agents stopt niet bij het ontwerp of de projectstructuur.
+
+00:08:16.420 --> 00:08:20.780
+Zodra de basis staat, begint dezelfde intelligentie zich uit te breiden naar het provisioneren,
+
+00:08:20.980 --> 00:08:24.000
+uitrollen en beheren van de infrastructuur waar applicaties op vertrouwen.
+
+00:08:24.220 --> 00:08:29.180
+Dat is waar een andere grote transformatievorm krijgt en het is niet beperkt tot de lokale workflow van de ontwikkelaar.
+
+00:08:29.340 --> 00:08:31.600
+Het gaat om de cloud-omgeving die er omheen ligt.
+
+00:08:31.780 --> 00:08:34.340
+Cloud agents die Azure op automatische piloot draaien.
+
+00:08:34.340 --> 00:08:39.500
+Laten we dus onze focus verleggen naar wat er gebeurt wanneer Azure beheer zelf op de automatische piloot draait met behulp van agents.
+
+00:08:39.700 --> 00:08:43.020
+De manier waarop deze discussie oorspronkelijk wordt gevoerd, klinkt vaak als science fiction.
+
+00:08:43.280 --> 00:08:47.380
+Wat gebeurt er als bij het provisioneren van Azure resources helemaal geen menselijke tussenkomst meer nodig is?
+
+00:08:47.540 --> 00:08:50.240
+Een betere manier om hierover na te denken is als volgt.
+
+00:08:50.440 --> 00:08:55.240
+Wat gebeurt er als routinematige provisioning en driftdetectie minder handmatige interventie vereisen,
+
+00:08:55.460 --> 00:08:58.620
+omdat agents herhaalbaar taken beheren binnen gedefinieerde kaders?
+
+00:08:58.980 --> 00:09:02.060
+Die verschuiving is belangrijk omdat het niet gaat om het verwijderen van mensen,
+
+00:09:02.060 --> 00:09:04.880
+maar om het ontlasten van herhalend werk met behoud van toezicht.
+
+00:09:05.020 --> 00:09:09.320
+Als u ooit een serieuze Azure-omgeving heeft gebouwd, weet u al hoe rommelig het kan worden.
+
+00:09:09.500 --> 00:09:12.880
+U jongleert met templates, scripts en pipeline Griekse YAML,
+
+00:09:13.040 --> 00:09:16.700
+terwijl u schakelt tussen CLI-commando's voor snelheid en de portal voor uitzonderingen.
+
+00:09:16.860 --> 00:09:19.860
+Elke sluip weg wordt technische schuld die wacht om aan de oppervlakte te komen.
+
+00:09:20.040 --> 00:09:23.360
+Een VM die buiten kantooruren blijft draaien, stijgende kosten zonder waarschuwing,
+
+00:09:23.520 --> 00:09:25.680
+of een storage-account dat blootgesteld is terwijl dat niet zou moeten.
+
+00:09:25.860 --> 00:09:29.360
+En bij cloud-operaties zorgen zelfs kleine missers voor enorme hoofdpijn.
+
+00:09:29.360 --> 00:09:32.620
+Rekeningen die plotseling stijgen, regio's die de veerkracht ondermijnen,
+
+00:09:32.780 --> 00:09:35.360
+of compliance-lacunes die u op het slechtst mogelijke moment ontdekt.
+
+00:09:35.520 --> 00:09:37.480
+Dit is de sleur waar de meeste teams vanaf willen,
+
+00:09:37.760 --> 00:09:40.740
+en het is waar een agent aanvoelt als een autonome deployment engineer.
+
+00:09:40.960 --> 00:09:42.040
+Het idee is simpel.
+
+00:09:42.280 --> 00:09:45.960
+Je geeft zakelijke doelstellingen, prestatie-eisen, herstelbehoeften,
+
+00:09:46.140 --> 00:09:48.180
+nalevingsregels en budget-marsjes op,
+
+00:09:48.300 --> 00:09:51.580
+en de agent vertaalt die intentie naar infrastructuurconfiguraties.
+
+00:09:51.740 --> 00:09:55.420
+In plaats van te schakelen tussen meerdere consoles of handmatig idee's te koppelen,
+
+00:09:55.420 --> 00:09:58.220
+zie je IAC-schablonen die al zijn afgestemd op jouw doelen.
+
+00:09:58.220 --> 00:10:00.380
+Vanaf dat punt houdt dezelfde agent toezicht.
+
+00:10:00.540 --> 00:10:04.080
+Hij voert compliance-checks uit, simuleert mogelijke foutieve configuraties
+
+00:10:04.080 --> 00:10:07.640
+en past voorgestelde correcties toe voordat problemen escaleren in productie.
+
+00:10:07.800 --> 00:10:10.940
+Het verschil met bestaande automatisering zit in het aanpassingsvermogen.
+
+00:10:11.140 --> 00:10:15.940
+Een normale CI-CD-pipeline behandelt je Griekse YAML-definities als onomstotelijke waarheid.
+
+00:10:16.160 --> 00:10:19.220
+Ze werken totdat de realiteit verandert door een update van dependencies,
+
+00:10:19.520 --> 00:10:22.160
+een plotselinge piek in de vraag of een nieuw nalevingsvoorschrift,
+
+00:10:22.160 --> 00:10:26.800
+en dan breken die statische instructies of ze pushen iets dat geldig lijkt maar niet aan de bedrijfsbehoefte voldoet.
+
+00:10:26.800 --> 00:10:29.580
+Een door agents gestuurde pipeline gedraagt zich anders.
+
+00:10:29.840 --> 00:10:33.920
+Die behandelt die definities als basis, maar werkt ze bij wanneer de omstandigheden veranderen.
+
+00:10:34.060 --> 00:10:38.540
+In plaats van te wachten tot iemand een service opschalt of de regionale distributie aanpast,
+
+00:10:38.780 --> 00:10:43.400
+ziet hij belastingpatronen, voorspelt drempelwaarden en voorziet hij tijdig in extra capaciteit.
+
+00:10:43.640 --> 00:10:47.200
+Dat aanpassingsvermogen maakt scenario's in de praktijk minder foutgevoelig.
+
+00:10:47.420 --> 00:10:50.080
+Stel je een .NET-app voor die vooral verkeer in de VS bedient.
+
+00:10:50.080 --> 00:10:52.520
+Een week later verschijnen er nieuwe gebruikers in Europa.
+
+00:10:52.760 --> 00:10:56.700
+De latentie neemt toe, maar niemand had in de oorspronkelijke Griekse YAML rekening gehouden met een andere regio.
+
+00:10:57.080 --> 00:10:58.700
+Traditionele automatisering negeert dit.
+
+00:10:58.820 --> 00:11:01.380
+Je merkt het pas als de klachten binnenkomen en de lags zijn bijgewerkt.
+
+00:11:01.500 --> 00:11:03.080
+Een agent daarentegen signaleert het patroon,
+
+00:11:03.320 --> 00:11:06.880
+implementeert direct een Europese replica en configureert de routering via Azure Front door.
+
+00:11:07.020 --> 00:11:09.220
+Hij implementeert niet zomaar iets om daarna te vertrekken.
+
+00:11:09.360 --> 00:11:11.480
+Hij stemt middelen constant af op de intentie.
+
+00:11:11.720 --> 00:11:14.500
+Bijna als een 24-7 de operator die nooit moe wordt.
+
+00:11:14.660 --> 00:11:16.580
+Het echte voordeel gaat verder dan schalen.
+
+00:11:16.580 --> 00:11:19.400
+Beveiliging en compliance worden in de lus ingebouwd.
+
+00:11:19.580 --> 00:11:23.520
+Dit kan betekenen dat de agent een onbedoeld blootgestolde opslagcontainer opmerkt
+
+00:11:23.520 --> 00:11:28.800
+en deze automatisch vergrendelt of afwijkingen in de patch baseline van een VM detecteert en deze herstelt.
+
+00:11:29.060 --> 00:11:31.600
+Dit zijn taken die vaak voorkomen en weinig opvallen,
+
+00:11:31.800 --> 00:11:34.420
+die mensen meestal pas later en na veel moeite opmerken.
+
+00:11:34.660 --> 00:11:38.920
+Door ze in de continu cyclus te plaatsen, verwijder je geen operators, maar bevrijd je ze.
+
+00:11:38.920 --> 00:11:41.000
+In plaats van energie te verspillen aan brandjes blussen,
+
+00:11:41.200 --> 00:11:43.500
+kunnen ze zich concentreren op planning en strategie op een hoger niveau.
+
+00:11:43.700 --> 00:11:45.320
+En dat is een belangrijk nuanceverschil.
+
+00:11:45.320 --> 00:11:47.020
+Menselijk toezicht verdwijnt niet.
+
+00:11:47.220 --> 00:11:51.560
+Je rol verandert van het regel voor regel controleren van vakjes naar het vooraf definiëren van richtlijnen.
+
+00:11:51.780 --> 00:11:53.300
+Welke regio's zijn toegestaan?
+
+00:11:53.460 --> 00:11:54.820
+Welke kosten zijn acceptabel?
+
+00:11:55.080 --> 00:11:56.980
+Welke nalevingsnormen mogen niet worden geschonden?
+
+00:11:57.200 --> 00:11:59.480
+Een praktische stap voor elk team dat dit wil testen,
+
+00:11:59.740 --> 00:12:01.700
+is om vroegtijdig beleidskaders op te stellen.
+
+00:12:01.960 --> 00:12:06.000
+Stel kostenplafonds in, wijs goedgekeurde regio's aan en voeg compliancegrenzen toe.
+
+00:12:06.000 --> 00:12:09.580
+De agent fungeert dan als handhaver, niet als een ongecontroleerde operator.
+
+00:12:09.840 --> 00:12:11.100
+Dat is het leidende principe.
+
+00:12:11.100 --> 00:12:16.000
+Jij behoudt de controle over de strategische richting, terwijl de agent op grote schaal beveiligingstaken uitvoert.
+
+00:12:16.160 --> 00:12:19.500
+Het betekent ook niet dat je de productie vanaf dag 1 in de handen van de agent legt.
+
+00:12:19.600 --> 00:12:22.700
+Als je risicoavers bent, begin dan in een gecontroleerde testomgeving.
+
+00:12:22.960 --> 00:12:26.140
+Stel de agent bloot aan een niet-kritieke werklast of selecteer één enkele dienst,
+
+00:12:26.300 --> 00:12:30.260
+zoals opslag- of logboekinfrastructuur, en laat deze daar de drift- en provisioning beheren.
+
+00:12:30.400 --> 00:12:34.880
+Op deze manier bouw je vertrouwen op in hoe de agenten richtlijnen interpreteert voordat je het bereik uitbreidt.
+
+00:12:34.880 --> 00:12:39.040
+Zie het als het draaien van een pilotproject met een duidelijk gedefinieerde rijkwijte en lage inzet,
+
+00:12:39.200 --> 00:12:42.260
+precies hoe de meeste betrouwbare DevOps-praktijken sowieso volwassen worden.
+
+00:12:42.400 --> 00:12:47.340
+In de kern lijkt een agentische aanpak voor Azure IRC minder op het schrijven van tientallen statische scripts
+
+00:12:47.340 --> 00:12:49.300
+en meer op het beheren van een dynamische checklist.
+
+00:12:49.580 --> 00:12:54.040
+Genereer schablonen, voorbereid deploymentcontroles uit, monitor op afwijkingen en stel oplossingen
+
+00:12:54.040 --> 00:12:56.240
+voor allemaal binnen de kaders die jij configureert.
+
+00:12:56.380 --> 00:13:01.020
+Het is gestructureerd genoeg voor vertrouwen, maar flexibel genoeg om mee te evolueren als de omstandigheden veranderen.
+
+00:13:01.020 --> 00:13:05.140
+Natuurlijk is het provisioneren en schalen van infrastructuur slechts één kant van betrouwbaarheid.
+
+00:13:05.280 --> 00:13:09.640
+Het lastigere probleem komt vaak later garanderen dat de code die je in die omgeving implementeert
+
+00:13:09.640 --> 00:13:11.980
+daadwerkelijk standhoudt onder reële omstandigheden.
+
+00:13:12.160 --> 00:13:14.620
+En daar begint de volgende uitdaging zich te tonen,
+
+00:13:14.760 --> 00:13:18.540
+het opsporen van baks die mensen simpelweg niet zien totdat ze al in productie zijn.
+
+00:13:19.000 --> 00:13:21.100
+Autonoom testen, baks die mensen missen.
+
+00:13:21.280 --> 00:13:25.080
+Tests dekken alleen wat mensen kunnen bedenken en dat is de kernbeperking.
+
+00:13:25.080 --> 00:13:30.460
+De meeste productiefouten komen niet voort uit wat voorzien is, maar uit wat buiten de menselijke verbeelding valt.
+
+00:13:30.460 --> 00:13:35.400
+Autonome test agents vullen dit gat op door zich te richten op edge cases en dynamische omstandigheden
+
+00:13:35.400 --> 00:13:37.500
+die nooit in een typische testsuite zouden belanden.
+
+00:13:37.760 --> 00:13:39.720
+Denk aan de skill time race conditie.
+
+00:13:39.900 --> 00:13:44.200
+Een punt net applicatie in Azure kan perfect presteren onder zware belasting tijdens een geplande stresstest,
+
+00:13:44.320 --> 00:13:47.820
+maar introduceer schaalmomenten waarbij nieuwe instanties tijdens piekverkeer worden opgestart
+
+00:13:47.820 --> 00:13:50.200
+en plotseling verschijnen er fouten in de sessieafhandeling.
+
+00:13:50.420 --> 00:13:54.380
+Tenzij iemand specifiek een test voor die overlap heeft ontworpen, blijft dit onopgemerkt.
+
+00:13:54.380 --> 00:13:59.380
+Een autonome agent spotte afwijking, isoleert deze en genereert een nieuwe regressietest rond die conditie.
+
+00:13:59.380 --> 00:14:05.020
+De volgende keer dat schalen optreedt, is die beveiliging al aanwezig, waardoor wat een verborgen risico was, veranderd in een gemonitord scenario.
+
+00:14:05.260 --> 00:14:06.380
+Een ander voorbeeld is inputmutatie.
+
+00:14:07.160 --> 00:14:10.720
+Menselijke testers ontwerpen meestal met veilige of voorspelbare data in gedachten.
+
+00:14:10.940 --> 00:14:15.580
+Geldige gebruikersnamen, correcte API payloads of voor de hand liggende edge cases zoals lege strings.
+
+00:14:15.800 --> 00:14:20.500
+Een agent daarentegen begint te experimenteren met variaties waar ontwikkelaars niet aan zouden denken om te dekken.
+
+00:14:20.640 --> 00:14:24.380
+Te grote verzoeken, vreemde coderingen, kleine vertragingen tussen multistep aanroepen.
+
+00:14:24.380 --> 00:14:29.020
+Door dit te doen, kan de agent fouten uitlokken die handmatige testsuites volledig zouden missen.
+
+00:14:29.160 --> 00:14:31.780
+De waarde zit niet alleen in snelheid, maar in diversiteit.
+
+00:14:32.000 --> 00:14:36.600
+Agents verkennen vreemde hoeken van inputruimtes sneller dan door mensen geschreven scripts ooit zouden kunnen.
+
+00:14:36.840 --> 00:14:41.140
+Wat deze verschuiving anders maakt dan traditionele automatisering, is hoe de testsuite evolueert.
+
+00:14:41.320 --> 00:14:44.460
+Een door mensen ontworpen regressiepakket blijft relatief statisch.
+
+00:14:44.660 --> 00:14:47.940
+Het weerspiegelt de kennis en aannames van het team op een bepaald moment.
+
+00:14:48.200 --> 00:14:50.240
+Agents maken daar een continu proces van.
+
+00:14:50.240 --> 00:14:55.060
+Ze breiden de suite uit naarmate het systeem verandert en zoeken constant naar onvoorziene scenario's.
+
+00:14:55.160 --> 00:14:58.980
+In plaats van dat ontwikkelaars moeizaam breekbare scripts bijwerken na elke iteratie,
+
+00:14:59.140 --> 00:15:03.240
+worden nieuwe cases dynamisch gegenereerd op basis van feitelijke observaties van systeemgedrag.
+
+00:15:03.400 --> 00:15:05.060
+Toch is er een belangrijke kanttekening.
+
+00:15:05.300 --> 00:15:08.540
+Niet elke door een agent gegenereerde test verdient een plek in je permanente suite.
+
+00:15:08.880 --> 00:15:13.700
+Onbetrouwbare of irrelevante tests kunnen zich snel opstapelen, wat tijd verspilt en het vertrouwen in automatisering ondermijnt.
+
+00:15:13.920 --> 00:15:15.380
+Daarom is governance essentieel.
+
+00:15:15.520 --> 00:15:17.320
+Teams hebben een beoordelingsproces nodig.
+
+00:15:17.320 --> 00:15:24.800
+Ontwikkelaars of QA-engineers moeten elke voorgestelde test valideren op stabiliteit en zakelijke relevantie voordat deze in het stabiele regressiepakket wordt opgenomen.
+
+00:15:25.040 --> 00:15:31.200
+Net als bij elke automatisering zorgt toezicht ervoor dat deze tools de betrouwbaarheid vergroten in plaats van teams te overspoelen met ruis.
+
+00:15:31.400 --> 00:15:35.200
+Een ander misverstand dat de wereld uit moet is het idee dat agents bugs repareren.
+
+00:15:35.440 --> 00:15:38.420
+Ze herschrijven geen productiecode en patchen niet zelfstandig fouten.
+
+00:15:38.620 --> 00:15:43.180
+Wat ze uitzonderlijk goed doen is reproduceerbare scenario's naar boven halen met heldere diagnostische details.
+
+00:15:43.180 --> 00:15:48.600
+Voor een ontwikkelaar maakt een door een agent vastgelegde reeks stappen het verschil tussen urenlang gissen en een snelle oplossing.
+
+00:15:48.820 --> 00:15:55.880
+In sommige gevallen kunnen agents een mogelijke oplossing suggereren op basis van bekende patronen, maar de uiteindelijke beslissing en wijziging blijven in menselijke handen.
+
+00:15:56.060 --> 00:15:58.040
+Zo bezien wordt de taakverdeling duidelijker.
+
+00:15:58.260 --> 00:16:01.260
+Machines doen het ontdekken, mensen doen het oordelen en repareren.
+
+00:16:01.480 --> 00:16:03.940
+De zakelijke impact is minder, brandjes blussen.
+
+00:16:04.160 --> 00:16:11.620
+Teams zien minder tickets laat op de avond, minder regressies na releases en een merkbare afname in tijdverlies bij het reproduceren van stappen.
+
+00:16:11.620 --> 00:16:17.240
+Prestatieproblemen worden opgevangen in gecontroleerde omgevingen in plaats van dat ze pas bij eindgebruikers aan het licht komen.
+
+00:16:18.000 --> 00:16:20.200
+Beveiligingsfouten komen aan het licht tijdens interne tests.
+
+00:16:20.480 --> 00:16:22.900
+Niet pas na een compliance scan of penetratietest.
+
+00:16:23.120 --> 00:16:29.300
+Die verschuiving creëert ruimte voor QA om zich te richten op vraagstukken op hoger niveau, zoals bruikbaarheid, workflowsoepelheid en toegankelijkheid.
+
+00:16:29.500 --> 00:16:32.460
+Gebieden die geen enkele autonome engine zinvol kan beoordelen.
+
+00:16:32.680 --> 00:16:35.620
+Voor beoefenaars die de mogelijkheden willen verkennen, begin klein.
+
+00:16:35.620 --> 00:16:41.040
+Draai een autonome testagent op een staging- of preproductieomgeving gedurende een afgebakende periode.
+
+00:16:41.260 --> 00:16:44.200
+Vergelijk de lijst met problemen die het ontdekt met je huidige backlog.
+
+00:16:44.480 --> 00:16:46.360
+Beschouw de oefening als gegevensverzameling.
+
+00:16:46.620 --> 00:16:48.180
+Zijn de nieuwe bevindingen echt nuttig?
+
+00:16:48.320 --> 00:16:49.680
+Overlappen ze bestaande tests?
+
+00:16:49.940 --> 00:16:52.500
+Laten ze blinde vlekken zien die belangrijk zijn voor je bedrijf?
+
+00:16:52.600 --> 00:16:58.060
+Op deze manier meet je het rendement op je investering en gok je niet met je release kwaliteit op een onbewezen techniek.
+
+00:16:58.200 --> 00:17:01.780
+En wanneer teams dergelijke pilots uitvoeren, ontstaat er een patroon.
+
+00:17:01.780 --> 00:17:08.880
+Het werkelijke lange termijn voordeel zit niet alleen in het vinden van extra bugs, maar in hoe snel die lessen terugvloeien in de bredere ontwikkelingscyclus.
+
+00:17:09.060 --> 00:17:14.620
+Elke vastgelegde anomalie en elk geregistreerd inzicht vertegenwoordigt kennis die niet mag verdwijnen aan het einde van een sprint.
+
+00:17:14.820 --> 00:17:22.060
+De vraag is hoe die intelligentie wordt opgeslagen, gedeeld en meegenomen, zodat dezelfde fouten niet onder andere projectnamen worden herhaald.
+
+00:17:22.420 --> 00:17:24.440
+De intelligentie loopt in DevOps sluiten.
+
+00:17:24.660 --> 00:17:29.160
+In DevOps is een van de moeilijkste problemen om op te lossen hoe snel kennis vervaagt tussen sprints.
+
+00:17:29.160 --> 00:17:35.680
+Problemen worden gelogd, postmortems geschreven, maar bij de start van het volgende project bereiken veel van die lessen de workflow niet.
+
+00:17:35.860 --> 00:17:42.680
+Het sluiten van de intelligentie loop in DevOps betekent die verliescyclus doorbreken en zorgen dat wat teams leren ook echt verbeterd wat daarna komt.
+
+00:17:42.900 --> 00:17:46.820
+Agentec AI ondersteunt dit door in te pluggen op de plekken waar kennis al stroomt.
+
+00:17:46.940 --> 00:17:50.200
+Het eerste integratiepunt is het opnemen van logs en telemetrie.
+
+00:17:50.200 --> 00:17:59.980
+In plaats van dat engineers dashboards of gearchiveerde incidenten moeten doorspitten, scannen agents continu statistieken, fout percentages en prestatiegegevens, waarbij ze anomalieën over releases heen verbinden.
+
+00:18:00.180 --> 00:18:03.680
+Het tweede is het analyseren van pull request geschiedenis en code reviews.
+
+00:18:03.980 --> 00:18:09.340
+Beslissingen in opmerkingen bevatten vaak context over afwegingen of risico's die nooit de documentatie halen.
+
+00:18:09.540 --> 00:18:14.380
+Door die gesprekken te verwerken, bewaren agents waarom iets gebeurde en niet alleen wat er werd samengevoegd.
+
+00:18:14.500 --> 00:18:17.200
+Het derde is het koppelen van geobserveerde fouten aan architectuuradviezen.
+
+00:18:17.200 --> 00:18:23.340
+Als bepaalde cachingstrategieën herhaaldelijk geheugenproblemen veroorzaken of als schaalpatronen timeouts triggeren,
+
+00:18:23.480 --> 00:18:27.620
+worden die inzichten getoond tijdens de planning voordat dezelfde fouten terugkeren in een nieuw systeem.
+
+00:18:27.840 --> 00:18:32.420
+Samen verbeteren deze integratiepunten het institutionele geheugen zonder perfectie te beloven.
+
+00:18:32.620 --> 00:18:39.140
+De waarde is niet dat agents elk detail feilloos onthouden, maar dat ze de kans vergroten dat lessen uit het verleden op het juiste moment weer opduiken.
+
+00:18:39.380 --> 00:18:41.000
+Menselijk toezicht blijft van belang.
+
+00:18:41.000 --> 00:18:50.440
+Ontwikkelaars moeten de relevantie van getoonde inzichten valideren en organisaties moeten regelmatig altijd plannen van wat agents vastleggen om ruis in het systeem te voorkomen.
+
+00:18:50.680 --> 00:18:54.000
+Met een zorgvuldige beoordeling wordt de intelligentie bruikbaar in plaats van overweldigend.
+
+00:18:54.740 --> 00:18:57.000
+Governance is een ander essentieel onderdeel dat niet mag worden overgeslagen.
+
+00:18:57.780 --> 00:19:04.140
+Het voeden van logs, pull requests en deployment resultaten aan een agentsysteem roept vragen op rondom privacy, retentie en compliance.
+
+00:19:04.140 --> 00:19:09.020
+Niet elk artefact hoeft voor eeuwig te bestaan en niet alle data hoort toegankelijk te zijn voor elke rol.
+
+00:19:09.240 --> 00:19:18.500
+Voordat deze geheugenlaag wordt uitgerold, moeten teams duidelijke retentielimieten definiëren, toegangsbeleid instellen en zorgen dat gevoelige data wordt opgeschoond of gemaskeerd.
+
+00:19:18.800 --> 00:19:25.360
+Zonder die kaders riskeer je een ongereguleerde schaduwopslag van de bedrijfsgeschiedenis die adits bemoeilijkt in plaats van ondersteunt.
+
+00:19:25.580 --> 00:19:29.140
+Voor ontwikkelaars is de meest merkbare impact zichtbaar tijdens de projectstart.
+
+00:19:29.140 --> 00:19:34.220
+In plaats van vage herinneringen aan wat er de vorige keer misging, verschijnen inzichten direct in de juiste context.
+
+00:19:34.440 --> 00:19:37.540
+Begin een nieuwe.netweb API en het systeem geeft wellicht de waarschuwing.
+
+00:19:37.700 --> 00:19:40.920
+Vorig jaar veroorzaakte deze caching bibliotheek geheugenlekken onder belasting.
+
+00:19:41.160 --> 00:19:47.880
+Overwege een alternatief, aanhalingsteken of tijdens de planning kan het aangeven dat specifieke dependency injection patronen voor instabiliteit zorgden.
+
+00:19:48.040 --> 00:19:53.140
+De herinneringen zijn tijdig, niet achteraf, waardoor de focus verschuift van reageren op problemen naar het voorkomen ervan.
+
+00:19:53.380 --> 00:19:57.660
+Zo versterkt projectintelligentie zich in plaats van elke keer te resetten bij het begin van een nieuwe sprint.
+
+00:19:57.660 --> 00:19:59.980
+Het verandert ook de aard van retrospectives.
+
+00:20:00.420 --> 00:20:03.800
+Traditionele retro's verzamelen feedback op één moment en gaan dan verder.
+
+00:20:04.060 --> 00:20:07.080
+Met agents in de loop wordt die kennis niet terzijde geschoven.
+
+00:20:07.280 --> 00:20:10.160
+Het wordt continu teruggekoppeld in de ontwikkelcyclus.
+
+00:20:10.420 --> 00:20:17.820
+Laks van deze maand, schaalfwijkingen van het laatste kwartaal of prestatieverminderingen van twee jaar geleden informeren de aanbevelingen van vandaag.
+
+00:20:18.040 --> 00:20:23.940
+Door elke release onderdeel te maken van een continu trainingscyclus, verkleinen teams de kans dat oude fouten zich herhalen.
+
+00:20:24.060 --> 00:20:26.520
+Toch moeten resultaten worden gemeten, niet aangenomen.
+
+00:20:26.520 --> 00:20:32.980
+Een simpele eerste stap is de agent te integreren met één bron, zoals applicatielogs of een APM-feed, en deze twee sprints te draaien.
+
+00:20:33.160 --> 00:20:36.400
+Vergelijk daarna heeft de agent patronen blootgelegd die je zelf niet had opgemerkt.
+
+00:20:36.620 --> 00:20:39.600
+Leiden die patronen tot echte wijzigingen in code of infrastructuur?
+
+00:20:39.760 --> 00:20:42.180
+En is de kwaliteit van de release meetbaar verbeterd?
+
+00:20:42.280 --> 00:20:46.860
+Als het antwoord ja is, dan is uitbreiding naar PR-geschiedenis of architectuur mapping logisch.
+
+00:20:47.120 --> 00:20:53.460
+Zo niet, dan onthult het experiment zelf wat aanpassing behoeft of het nu gaat om databronnen, governance of beoordelingsprocessen.
+
+00:20:53.460 --> 00:20:55.920
+Na verloop van tijd is de opbrengst cumulatief.
+
+00:20:56.120 --> 00:20:59.860
+Door het collectief geheugen te verbeteren, stabiliseert de release-snelheid,
+
+00:21:00.120 --> 00:21:04.840
+wordt de architectuur robuuster en gaat minder energie verloren aan het herontdekken van oude valkuilen.
+
+00:21:05.120 --> 00:21:10.000
+Kennis verdwijnt niet langer in de plooien, maar verzamelt zich als een bruikbare bron waar teams op kunnen vertrouwen.
+
+00:21:10.180 --> 00:21:12.820
+En op dat punt ziet de rol van agenten AI er anders uit.
+
+00:21:12.820 --> 00:21:15.560
+Het is niet langer slechts een helper in één ontwikkelingsfase.
+
+00:21:15.740 --> 00:21:20.320
+Het begint het hele proces te verbinden en lessen door te geven in plaats van ze te laten verwateren.
+
+00:21:20.480 --> 00:21:25.120
+Die continuïteit verandert DevOps van een reeks geïsoleerde taken in een verbonden levenscyclus,
+
+00:21:25.340 --> 00:21:29.200
+wat de weg vrijmaakt voor de bredere verschuiving die nu plaatsvindt bij software teams.
+
+00:21:29.940 --> 00:21:33.120
+Agenten AI signaleert een praktische verschuiving in ontwikkeling.
+
+00:21:33.320 --> 00:21:39.100
+Concept, het is geen code-assistent, maar een systeem dat geheugen, context en doelen door de gehele levenscyclus draagt.
+
+00:21:39.100 --> 00:21:43.960
+Toepassing, de duidelijkste instappunten voor .NET en Azure Teams zijn het opzetten van nieuwe projecten,
+
+00:21:44.220 --> 00:21:48.440
+agents routinetaken laten afhandelen en experimenteren met geautomatiseerde testgeneratie.
+
+00:21:48.640 --> 00:21:51.740
+Impact, midzorgvuldig uitgevoerd, stroomlijnt dit workflows,
+
+00:21:52.020 --> 00:21:56.300
+vermindert het op start-overhead en verkleint het de kans dat oude fouten zich herhalen in projecten.
+
+00:21:56.420 --> 00:21:59.160
+De beste volgende stap is om het te testen in je eigen omgeving.
+
+00:21:59.400 --> 00:22:03.020
+Probeer Copilot in te schakelen voor een klein prototype of laat een agent draaien op staging
+
+00:22:03.020 --> 00:22:06.720
+en hou vervolgens één metriek bij, bespaar de tijd, ontdek de box of voorkomen drift.
+
+00:22:06.720 --> 00:22:09.760
+Heb je een terugkerende DevOps-uitdaging die je team vertraagt?
+
+00:22:09.960 --> 00:22:12.360
+Deel het in de reacties zodat anderen kunnen vergelijken.
+
+00:22:12.540 --> 00:22:18.120
+En als je meer gefundeerd advies wilt over .NET, Azure en AI-adoptie, abonneer je dan voor toekomstige analyses.
+
+00:22:18.460 --> 00:22:22.960
+De winst lijkt in het begin klein, maar stapelt zich op door governance, toezicht en gestage iteratie.

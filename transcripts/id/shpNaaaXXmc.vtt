@@ -1,0 +1,1312 @@
+WEBVTT
+
+00:00:01.550 --> 00:00:06.610
+Anda berada di tempat-tempat. Ini janjinya di awal.
+
+00:00:07.450 --> 00:00:12.310
+Copilot akan gagal tanpa grounding, tetapi alat seperti Retrieval Augmented Generation atau RAG
+
+00:00:12.310 --> 00:00:17.670
+dengan Azure AI Search Hybrid dan evaluator semantik plus untuk keakuratan, relevansi, dan koherensi
+
+00:00:17.670 --> 00:00:21.750
+adalah perbaikan nyata agar Anda tidak merilis halusinasi yang disamarkan sebagai jawaban.
+
+00:00:22.850 --> 00:00:26.630
+Kami akan melewati dek pemasaran dan menunjukkan panduan bertahan hidup dengan contoh nyata dari lapangan.
+
+00:00:27.430 --> 00:00:31.290
+Berlanggananlah ke bulletin M365 Show dan ikuti siaran langsung bersama para MVP.
+
+00:00:31.290 --> 00:00:34.250
+Tapi, disitulah letak pengalaman kegagalan dan solusinya.
+
+00:00:34.910 --> 00:00:38.050
+Dan karena keretakan pertama biasa yang muncul di aplikasi multimodal, mari kita mulai dari sana.
+
+00:00:38.990 --> 00:00:40.910
+Kenapa aplikasi multimodal gagal di dunia nyata?
+
+00:00:41.450 --> 00:00:43.890
+Saat Anda melihat demo multimodal di panggung, semuanya tampak sempur.
+
+00:00:44.670 --> 00:00:48.150
+Presenter memasukkan perintah teks, gambar bersih, mungkin input suara cepat,
+
+00:00:48.470 --> 00:00:51.050
+dan model memberikan grafik yang sempurna atau ringkasan kontrak yang tajam.
+
+00:00:51.750 --> 00:00:56.210
+Semuanya terasa seperti sihir, tetapi saat Anda mencoba hal yang sama di perusahaan nyata, keajaibannya cepat memulai.
+
+00:00:56.970 --> 00:01:00.590
+Demo berjalan pada input demo, tempat kerja yang berhentikan adalah perbedaan yang sebenarnya.
+
+00:01:01.030 --> 00:01:06.930
+Dalam produksi, tidak ada yang memberi model Anda tangkapan layar yang diatur dengan hati-hati atau CSV yang diformat oleh komite standar.
+
+00:01:07.970 --> 00:01:09.550
+HR memberinya ID pemerintah yang buram.
+
+00:01:10.210 --> 00:01:12.990
+Bagian pengadaan menyerat PDF yang sudah melewati 5 generasi fax.
+
+00:01:13.790 --> 00:01:16.990
+Seseorang di bagian keuangan memotret faktur dengan kamera Android yang retak.
+
+00:01:17.710 --> 00:01:20.610
+Model multimodal dapat menangani teks, gambar suara, dan video.
+
+00:01:20.790 --> 00:01:24.870
+Tetapi mereka membutuhkan data yang terindeks dengan baik dan pengambilan yang tepat untuk berkinerja dan kondisi yang berantak.
+
+00:01:24.870 --> 00:01:27.430
+Jika tidak, Anda hanya meminta model untuk berimprovisasi dengan sama.
+
+00:01:28.010 --> 00:01:30.790
+Dan berapapun biaya GPU yang dikeluarkan tidak akan memperbaiki masalah sampah keluar.
+
+00:01:31.390 --> 00:01:34.950
+Di sinilah Retrieval Augmented Generation atau RAG seharusnya menyelamatkan Anda.
+
+00:01:35.610 --> 00:01:38.830
+Bahasa mudahnya, model tidak tahu bisnis Anda, jadi Anda menghubungkannya ke sumber pengetahuan.
+
+00:01:39.370 --> 00:01:41.790
+Ia mengambil potongan data dan membentuk jawaban di sekitarnya.
+
+00:01:42.330 --> 00:01:44.670
+Tika pencocokannya tajam, Anda mendapatkan jawaban yang bermanfaat.
+
+00:01:44.670 --> 00:01:48.090
+Ketika hasil yang ceroboh, model akan berimprovisasi dan melontarkan omong kosong yang mereka inginkan.
+
+00:01:48.370 --> 00:01:49.870
+Begitulah cara Anda mendapatkan chatbot.
+
+00:01:50.030 --> 00:01:54.050
+Yang bersumpah bahwa perusahaan Anda memiliki kebijakan diskon ketiga baru yang sebenarnya tidak ada.
+
+00:01:54.410 --> 00:01:56.830
+Itu tidak menjadi sadar, ia hanya menarik data yang salah.
+
+00:01:57.970 --> 00:02:01.150
+Azure A Studio dan Azure A Foundry sama-sama mengandalkan pola ini dan keduanya.
+
+00:02:01.570 --> 00:02:05.050
+Mendukung semua jenis modalitas, bahasa, visi, ucapan, bahkan pengambilan video.
+
+00:02:05.650 --> 00:02:07.650
+Namun masalahnya RAG hanya akan sebaik datanya.
+
+00:02:08.290 --> 00:02:09.770
+Ini poin penting yang dilewatkan kebanyakan tim.
+
+00:02:10.130 --> 00:02:12.770
+Anda tidak bisa hanya memasang satu metode pengambilan dan mengangkatnya selesai.
+
+00:02:12.770 --> 00:02:16.510
+Jika Anda ingin hasil yang konsisten, Anda memerlukan pencarian hibrida kata kunci plus vector
+
+00:02:16.510 --> 00:02:19.550
+yang dilengkapi dengan sistem pemeringkatan ulang semantik yang terintegrasi di Azure A Heiser.
+
+00:02:19.830 --> 00:02:22.490
+Hal ini memungkinkan sistem menyeimbangkan kecocokan kata kunci literal
+
+00:02:22.490 --> 00:02:25.810
+dengan makna semantik lalu menyusun ulang hasil agar konteks yang tepat berada di urutan terang.
+
+00:02:25.970 --> 00:02:27.810
+Masukkan itu ke dalam pengaturan multimodal Anda,
+
+00:02:27.970 --> 00:02:31.250
+tiba-tiba model dapat menangani pindahan yang miring dan gambar yang buram alih-alih
+
+00:02:31.250 --> 00:02:34.010
+mengarang kebijakan kepatuhan Anda di ketiadaan dari ketiadaan.
+
+00:02:34.250 --> 00:02:36.550
+Sekarang, mari kita bicara tentang mengapa begitu banyak peruncuran.
+
+00:02:36.550 --> 00:02:39.510
+Perusahaan mengharapkan hasil yang sempurna sejak hari pertama,
+
+00:02:39.630 --> 00:02:41.790
+tetapi mereka tidak mengandarkan untuk situs evaluasi.
+
+00:02:42.830 --> 00:02:45.310
+Tanpa pemeriksaan landasan relevansi yang berjalan di latar belakang,
+
+00:02:45.450 --> 00:02:47.630
+Anda tidak akan menyadari penyimpangan hingga pengguna sudah kecewa.
+
+00:02:48.750 --> 00:02:51.470
+Banyak penerapan awal gagal dengan cepat karena alasan yang persis seperti itu.
+
+00:02:51.690 --> 00:02:54.610
+Outputnya terdengar benar, tetapi tidak ada yang memverifikasinya terhadap sumber kebenaran.
+
+00:02:54.970 --> 00:02:57.770
+Pikirkanlah Anda tidak akan pernah menerapkan basis data baru tanpa pengetahuan.
+
+00:02:58.330 --> 00:03:01.030
+Namun, dengan AI multimodal, para eksekutif langsung menerapkannya
+
+00:03:01.030 --> 00:03:02.810
+seolah-olah itu adalah kotak ajib yang siap pakai.
+
+00:03:03.490 --> 00:03:04.690
+Hal ini tidak harus berakhir dengan kegagalan.
+
+00:03:04.690 --> 00:03:07.910
+Garvana adalah salah satu kisah pelanggan Fondry yang buktikan hal ini.
+
+00:03:08.370 --> 00:03:11.350
+Mereka membuat AI swalayan benar-benar berguna dengan menyatol pengambilan,
+
+00:03:11.490 --> 00:03:14.670
+mendasari agen mereka dengan tepat dan berinvestasi pada kemampuan observasi.
+
+00:03:15.170 --> 00:03:17.510
+Itu mengubah apa yang seharusnya hanya menjadi bot mainan biasa
+
+00:03:17.510 --> 00:03:19.130
+menjadi sesuatu yang bisa dipercaya pelanggan.
+
+00:03:20.050 --> 00:03:22.850
+Sekarang, bandingkan dengan perusahaan yang menempelkan chatbot umum
+
+00:03:22.850 --> 00:03:25.350
+ke halaman dukungan mereka tanpa dasar atau evaluasi.
+
+00:03:26.010 --> 00:03:26.890
+Anda sudah melihat hasilnya.
+
+00:03:27.290 --> 00:03:29.470
+Klaim garansi salah diarsipkan sebagai prospek penjualan,
+
+00:03:29.470 --> 00:03:31.350
+antrean dukungan membengkak, dan kredibilitas hancur.
+
+00:03:33.560 --> 00:03:34.900
+Jadi, inilah kesimpulan yang lugas.
+
+00:03:34.900 --> 00:03:38.140
+Multimodal tidak runtuh karena AI-nya kurang cerdas.
+
+00:03:38.840 --> 00:03:41.780
+Sistem itu runtuh karena datanya tidak disiapkan, diindek, atau dipantaukan, dan lain-lain.
+
+00:03:42.240 --> 00:03:43.720
+Masukkan data sampah ke sistem pengambilan,
+
+00:03:43.840 --> 00:03:45.920
+lewatkan evaluasi, dan saksikan kepercayaan hilang.
+
+00:03:46.180 --> 00:03:47.400
+Namun, dengan pencarian hibrida,
+
+00:03:47.500 --> 00:03:49.740
+pemerikatan ulang semantik, dan evaluasi yang konstan,
+
+00:03:50.120 --> 00:03:52.020
+Anda dapat memproses faktur, kontrak, gambar,
+
+00:03:52.100 --> 00:03:54.820
+bahkan catatan audio kasar dengan jawaban yang tetap berpijak pada realitas,
+
+00:03:55.000 --> 00:03:55.560
+bukan fantasi.
+
+00:03:56.680 --> 00:03:58.940
+Dan setelah landasan sudah beres, risiko lain muncul.
+
+00:03:59.640 --> 00:04:01.400
+Karena meskipun saluran data bersih,
+
+00:04:01.500 --> 00:04:03.580
+sistem yang menggerakkannya tetap bisa tidak terkendali.
+
+00:04:03.580 --> 00:04:05.460
+Di situlah pertanyaan yang berikutnya.
+
+00:04:06.100 --> 00:04:07.960
+Apakah agen yang mengordinasikan semua ini,
+
+00:04:08.120 --> 00:04:09.340
+benar-benar membantu bisnis Anda,
+
+00:04:09.480 --> 00:04:11.300
+atau hanya diam-diam membakar anggaran TI Anda?
+
+00:04:12.380 --> 00:04:14.040
+Agen yang membantu atau beban biaya yang tidak berguna?
+
+00:04:15.000 --> 00:04:17.580
+Sebuah agen mengordinasikan model, data pemicu, dan tindakan.
+
+00:04:18.160 --> 00:04:20.380
+Anggap saja sebagai polisi lalu lintas untuk alur kerja otomatis.
+
+00:04:20.880 --> 00:04:22.800
+Terkadang ia mengarahkan semuanya dengan lancar,
+
+00:04:22.900 --> 00:04:24.660
+terkadang ia membiarkan kekacauan terjadi,
+
+00:04:24.860 --> 00:04:26.380
+lalu pergi begitu saja untuk makan siang.
+
+00:04:26.780 --> 00:04:28.920
+Kesenjangan antara definisi yang rapi dan realitas yang berantakan
+
+00:04:28.920 --> 00:04:30.580
+adalah tempat di mana sebagian besar tim Bandeswilid.
+
+00:04:30.580 --> 00:04:32.480
+Di atas kertas, sebuah agen tampak sempurna.
+
+00:04:33.000 --> 00:04:35.320
+Berikan instruksi, arahkan ke data dan aplikasi Anda,
+
+00:04:35.600 --> 00:04:37.700
+dan ia akan menjalankan proses, mengambil jawaban,
+
+00:04:37.820 --> 00:04:38.740
+bahkan memulai alur kerja.
+
+00:04:39.460 --> 00:04:40.740
+Namun, ini bukan arahkan kerja yang sempurna.
+
+00:04:41.360 --> 00:04:43.900
+Ia sama mungkin kah memperbaiki masalah berulang pada jam 2 pagi,
+
+00:04:44.000 --> 00:04:46.360
+seperti halnya memanjiri antrean Anda dengan 100 tiket palsu
+
+00:04:46.360 --> 00:04:47.300
+karena salah pesalahan.
+
+00:04:48.180 --> 00:04:49.100
+Bayangkan di dalam service now.
+
+00:04:49.960 --> 00:04:51.080
+Jika dibatasi dengan ketat,
+
+00:04:51.200 --> 00:04:53.080
+AI hanya akan membuat tiket nyata untuk masalah asli
+
+00:04:53.080 --> 00:04:54.660
+dan menghemat waktu manusia selama berjam-jam.
+
+00:04:55.300 --> 00:04:56.160
+Jika dibayarkan bebas,
+
+00:04:56.240 --> 00:04:58.500
+ia bisa mengumpul meja bantuan dengan rentetan peringatan palsu
+
+00:04:58.500 --> 00:05:00.620
+tentang kerusakan printer kritis pada perangkat kelas yang baik-baik saja.
+
+00:05:00.880 --> 00:05:03.340
+Coba jelaskan peningkatan produktivitas itu kepada CEO Anda.
+
+00:05:03.620 --> 00:05:04.600
+Inilah perbedaan yang banyak orang lain.
+
+00:05:05.120 --> 00:05:06.340
+Copilot dan agen tidak alas sama.
+
+00:05:06.940 --> 00:05:08.740
+Copilot pada dasarnya adalah teman untuk memberi peri-peri.
+
+00:05:08.980 --> 00:05:11.420
+Anda bertanya, ia menjawab, dan Anda tetap menggunggung kendak.
+
+00:05:11.940 --> 00:05:14.280
+Agen di sisi lain memutuskan berbagai hal tanpa menunggu Anda.
+
+00:05:14.880 --> 00:05:17.160
+Mereka mengikuti instruksi samar Anda sampai ke detail terkecil,
+
+00:05:17.260 --> 00:05:18.500
+bahkan saat hasilnya tidak masuk akal.
+
+00:05:19.240 --> 00:05:21.140
+Saat itulah otomatisasi entah menghemat waktu
+
+00:05:21.140 --> 00:05:24.200
+atau justru terjerumus ke dalam kekacauan yang butuh 2 kali lebih lama untuk diperbaiki.
+
+00:05:24.200 --> 00:05:26.340
+Kenyataannya, banyak tim memberikan deskripsi pekerjaan
+
+00:05:26.340 --> 00:05:28.260
+untuk agen mereka yang terdengar seperti janji kampanye.
+
+00:05:28.940 --> 00:05:31.520
+Optimalkan proses, berikan wawasan, bantu orang-orang.
+
+00:05:31.920 --> 00:05:34.340
+Selamat Anda pada dasarnya telah menyuruh bot tersebut untuk bertindak live.
+
+00:05:34.740 --> 00:05:37.080
+Akan tanpa batasan tidak akan tetap berada di jalurnya dengan sultan.
+
+00:05:37.300 --> 00:05:38.020
+Mereka berindah kacau.
+
+00:05:38.260 --> 00:05:39.480
+Mereka menciptakan masalah untuk diperbaiki.
+
+00:05:39.740 --> 00:05:40.700
+Mereka menduplikasi catat.
+
+00:05:41.120 --> 00:05:41.940
+Mereka berputar tanpa henti.
+
+00:05:42.360 --> 00:05:45.460
+Lalu para pimpinan bertanya-tanya mengapa demo yang muka berubah menjadi masalah produksi.
+
+00:05:45.800 --> 00:05:46.940
+Sekarang mari kita luluskan masalahnya.
+
+00:05:47.200 --> 00:05:49.780
+Konberarti sebagian besar organisasi gagal dalam 2 bulan pertama.
+
+00:05:49.780 --> 00:05:51.200
+Hal itu tidak adalah penelitian.
+
+00:05:51.840 --> 00:05:53.320
+Yang benar-benar terjadi dengan cepat adalah
+
+00:05:53.320 --> 00:05:55.240
+banyak organisasi menghadapi hambatan sejak awal
+
+00:05:55.240 --> 00:05:57.220
+karena mereka tidak pernah membatasi ruang lingkup.
+
+00:05:57.320 --> 00:06:00.060
+Agen mereka tidak menambahkan langkah validasi dan tidak memasang telemetri.
+
+00:06:00.760 --> 00:06:02.640
+Tanpa pengaman tersebut, alat baru Anda yang canggih
+
+00:06:02.640 --> 00:06:04.580
+hanyalah seorang karyawan yang ceroboh dengan hak aksesat.
+
+00:06:05.080 --> 00:06:07.640
+Dan disinilah tumbukan teknologi Microsoft yang benar-benar memberikan kemungkinan yang agar betul.
+
+00:06:08.160 --> 00:06:10.060
+Copilot Studio adalah tempat tendah kode low-code
+
+00:06:10.060 --> 00:06:11.700
+bagi pembuat untuk merancang perilaku agen.
+
+00:06:12.200 --> 00:06:13.940
+Pikirkan tentang alur, perintah, dan pemicu acara.
+
+00:06:14.280 --> 00:06:17.260
+Kemudian Azure AI Foundation Service adalah kerangka kerja perusahaan
+
+00:06:17.260 --> 00:06:20.020
+yang menempatkan agen-agen tersebut ke dalam produksi dengan kemampuan observasi.
+
+00:06:20.540 --> 00:06:23.300
+Agen Service adalah tempat Anda menambahkan pemantauan log dan metrik.
+
+00:06:24.060 --> 00:06:26.120
+Layanan ini sengaja dibatasi untuk otomatisasi
+
+00:06:26.120 --> 00:06:27.840
+dengan pengawasan manusia yang terintegrasi
+
+00:06:27.840 --> 00:06:29.480
+karena Microsoft tahu apa yang terjadi
+
+00:06:29.480 --> 00:06:31.660
+jika Anda mempercayai agen yang belum teruji di dunia nyata.
+
+00:06:32.200 --> 00:06:34.080
+Jadi bagaimana Anda tahu apakah agen Anda belum-benar berhubung?
+
+00:06:34.600 --> 00:06:36.240
+Jalankan melalui daftar periksa yang terges.
+
+00:06:36.660 --> 00:06:38.520
+Satu, apakah ini mengurangi jam kerja manusia
+
+00:06:38.520 --> 00:06:40.300
+atau justru menarik staff Anda ke dalam tugas-tugas dibagi?
+
+00:06:40.860 --> 00:06:44.580
+Dua, apakah Anda mencatat metrik seperti landasan, kevasihan, dan koherensi
+
+00:06:44.580 --> 00:06:46.740
+atau Anda hanya terpaku pada dashboard pemasaran yang menarik?
+
+00:06:47.680 --> 00:06:49.220
+Tiga, apakah Anda memiliki telemetri
+
+00:06:49.220 --> 00:06:50.560
+agar bisa mendeteksi penyimpangan
+
+00:06:50.560 --> 00:06:52.020
+sebelum pengguna mulai mengajukan keluhan?
+
+00:06:52.600 --> 00:06:54.140
+Jika jawaban Anda salah pada poin-poin tersebut,
+
+00:06:54.220 --> 00:06:55.180
+Anda tidak memiliki agen cerita.
+
+00:06:55.540 --> 00:06:56.900
+Anda hanya memiliki penyimpan layar yang lahat.
+
+00:06:57.640 --> 00:06:59.760
+Jalan keluarnya adalah menggunakan fitur observabilitas
+
+00:06:59.760 --> 00:07:01.860
+dan evaluator bawaan dari Azure AI Foundry.
+
+00:07:02.500 --> 00:07:03.580
+Ini bukan fitur tambahan opsional.
+
+00:07:04.000 --> 00:07:05.100
+Ini adalah metode terdokumentasi
+
+00:07:05.100 --> 00:07:07.560
+untuk mengukur landasan relevansi koreensi dan kesesuaian dengan sumber.
+
+00:07:08.080 --> 00:07:10.540
+Tanpanya, Anda hanya menebak apakah agen Anda cerdas
+
+00:07:10.540 --> 00:07:12.800
+atau hanya mengarang dengan nada bicara yang sopan.
+
+00:07:12.800 --> 00:07:15.320
+Dengan fitur ini, Anda bisa turun tangan dengan pecah diri
+
+00:07:15.320 --> 00:07:16.660
+dan melakukan penyelarasan saat topo.
+
+00:07:17.040 --> 00:07:18.420
+Jadi ya, agen bisa menjadi pengubah permainan.
+
+00:07:19.100 --> 00:07:21.120
+Jika cakupannya salah, mereka menjadi pemicu kekacauan
+
+00:07:21.120 --> 00:07:22.760
+yang menghabiskan lebih banyak waktu daripada menghemat.
+
+00:07:23.000 --> 00:07:24.900
+Jika cakupannya tepat, dengan batasan tugas yang jelas,
+
+00:07:25.000 --> 00:07:26.560
+telemetri nyata, dan jawaban berlantaskan data,
+
+00:07:26.660 --> 00:07:28.000
+mereka bisa menangani tugas-menangani tugas
+
+00:07:28.000 --> 00:07:30.000
+sementara manusia fokus pada pekerjaan penilai lebih tinggi.
+
+00:07:30.280 --> 00:07:31.340
+Dan tepat saat Anda merasa keseimbang,
+
+00:07:31.400 --> 00:07:32.740
+itu sudah tepat situasinya berubah lagi.
+
+00:07:33.540 --> 00:07:35.060
+Microsoft sudah mendorong agen otonom,
+
+00:07:35.180 --> 00:07:37.160
+yaitu bot yang tidak menunggu Anda untuk bertindak.
+
+00:07:37.160 --> 00:07:40.400
+Hal ini membawa risiko dari sekadar membantu
+
+00:07:40.400 --> 00:07:42.600
+atau tidak berguna menjadi kategori yang sama sekali berbeda
+
+00:07:42.600 --> 00:07:44.100
+karena kita bicara tentang sistem yang berjalan
+
+00:07:44.100 --> 00:07:45.280
+bahkan saat tidak ada yang mengawasi.
+
+00:07:46.460 --> 00:07:47.440
+Jebakan agen otonom
+
+00:07:47.440 --> 00:07:50.620
+Agen otonom adalah saat hype berubah menjadi berbahaya.
+
+00:07:51.460 --> 00:07:52.740
+Di atas kertas, mereka adalah impian.
+
+00:07:53.180 --> 00:07:54.580
+Biarkan AI bertindak untuk Anda,
+
+00:07:54.840 --> 00:07:56.040
+mengotomatiskan tugas rutin,
+
+00:07:56.320 --> 00:07:58.120
+dan berhenti memaksa diri bangun pukul 2 pagi
+
+00:07:58.120 --> 00:08:00.440
+hanya untuk mengurus antren tiket terdengar hebat di ruang rapat.
+
+00:08:00.900 --> 00:08:01.580
+Jebakannya sederhana.
+
+00:08:02.000 --> 00:08:02.680
+Mereka tidak mengguih.
+
+00:08:03.240 --> 00:08:04.000
+Copilot akan menungguan.
+
+00:08:04.660 --> 00:08:05.320
+Agen otonom tidak.
+
+00:08:05.320 --> 00:08:07.260
+Dan ketika mereka membuat keputusan buruk,
+
+00:08:07.360 --> 00:08:09.320
+kerusakan terjadi secara instan dan meluas keseluruh penyewaan.
+
+00:08:09.680 --> 00:08:10.520
+Lansipnya cukup mudah.
+
+00:08:10.940 --> 00:08:11.860
+Papilot bersifat reaktif.
+
+00:08:12.200 --> 00:08:12.860
+Agen bersifat pras.
+
+00:08:13.380 --> 00:08:15.180
+Alih-alih, dia menunggu seseorang mengetik perintah.
+
+00:08:15.320 --> 00:08:17.220
+Anda mengatur agen untuk memantau kesehatan layanan,
+
+00:08:17.320 --> 00:08:18.220
+menangani sinyal keamanan,
+
+00:08:18.320 --> 00:08:20.160
+atau menjalankan alur kerja secara otomatis.
+
+00:08:20.720 --> 00:08:22.620
+Microsoft mempromosikannya sebagai efisiensi,
+
+00:08:22.700 --> 00:08:23.960
+mengurangi pemberosan tenaga manusia,
+
+00:08:24.060 --> 00:08:25.680
+deteksi lebih cepat, dan operasional yang lebih lanjut.
+
+00:08:26.000 --> 00:08:28.000
+Janjinya nyata, tetapi inilah konteks pentingnya.
+
+00:08:28.000 --> 00:08:32.220
+Agen otonom di Copilot Studio saat ini masih dalam tahap perhatian jauh.
+
+00:08:32.620 --> 00:08:33.780
+Perhatian jauh bukan berarti rusak,
+
+00:08:33.880 --> 00:08:35.880
+tetapi artinya belum teruji dunia nyata yang kompleks.
+
+00:08:36.540 --> 00:08:39.520
+Bahkan Microsoft mengatakan Anda memerlukan panduan tata kelola siklus hidup
+
+00:08:39.520 --> 00:08:42.300
+dan sistem konsol Copilot sebelum berpikir untuk menerapkannya secara luas.
+
+00:08:42.660 --> 00:08:43.720
+Pertimbangkan risiko yang realistis.
+
+00:08:44.120 --> 00:08:46.020
+Katakanlah Anda membangun agen helpdesk otonom
+
+00:08:46.020 --> 00:08:48.540
+dan memberinya wawenang untuk merespons anomali login.
+
+00:08:48.960 --> 00:08:51.060
+Dalam demo dengan lima pengguna, semuanya berjalan sempur.
+
+00:08:51.460 --> 00:08:52.760
+Peringatan terangkat, akun dikelola.
+
+00:08:53.420 --> 00:08:54.860
+Lalu input yang kaca masuk dalam produksi.
+
+00:08:54.860 --> 00:08:58.420
+Alih-alih menunggu, sistem justru mereset masal ratusan akun
+
+00:08:58.420 --> 00:08:59.960
+berdasarkan hasil positif palsu.
+
+00:09:02.900 --> 00:09:05.040
+Hal ini bisa saja melumpuhkan operasional akhir bulan.
+
+00:09:05.580 --> 00:09:06.400
+Ini bukan sekedar fix ini.
+
+00:09:06.980 --> 00:09:09.400
+Itulah risiko kegalaan yang Anda ambil jika melewatkan tahap penentuan.
+
+00:09:09.820 --> 00:09:11.100
+Solusinya bukanlah membuang teknologi,
+
+00:09:11.480 --> 00:09:12.900
+melainkan membangun jaring pengamanya terdiri depan.
+
+00:09:13.200 --> 00:09:14.520
+Apasih daftar periksa untuk berhentian hidup?
+
+00:09:14.900 --> 00:09:17.020
+Tiga hal wajib harus dilakukan sebelum otomatisasi yang canggih.
+
+00:09:17.420 --> 00:09:19.120
+Satu, penentuan lingkup identitas dan akses.
+
+00:09:20.220 --> 00:09:22.620
+Berikan agen Anda hak akses minimal, bukan peran admin secara menyaut.
+
+00:09:22.620 --> 00:09:24.220
+Dua, pencatatan log dan muliaan merobot.
+
+00:09:24.220 --> 00:09:26.660
+Setiap tindakan harus meninggalkan jejak yang bisa anda out.
+
+00:09:27.120 --> 00:09:30.320
+Dan setiap tindakan serius memerlukan jalur pembalikan saat agen melakukan kesalahan.
+
+00:09:30.840 --> 00:09:32.040
+Tiga, filter konten dan perilaku.
+
+00:09:32.520 --> 00:09:36.340
+Microsoft menekankan hal ini dengan keamanan konten dan konfigurasi pengetahuan Azure AI.
+
+00:09:36.880 --> 00:09:40.780
+Filter yang mencegah bot yang terlalu antusias memberikan jawaban tidak pantas atau keluar deskripsi.
+
+00:09:41.620 --> 00:09:44.940
+Lakukan ini dulu atau kecerdasan agen Anda justru akan menghampati mempukannya membalik.
+
+00:09:45.300 --> 00:09:47.080
+Lapisan indika membuat hal ini menjadi jauh lebih kursihan.
+
+00:09:47.440 --> 00:09:50.260
+Bayangkan agen HR yang otomatis melambil karyawan sebagai risiko
+
+00:09:50.260 --> 00:09:54.400
+atau agen keuangan yang menahan pembayaran pemasok karena salah mengklasifikasikannya sebagai penipuan.
+
+00:09:54.900 --> 00:09:56.200
+Ini bukan kean yang tidak berbahaya,
+
+00:09:56.360 --> 00:09:59.080
+melainkan kegagalan yang berdampak pada manusia dengan konsekuensi hukum dan kepatut.
+
+00:09:59.400 --> 00:10:03.920
+Bias dalam data pelatihan atau pengambilan tidak akan hilang hanya karena Anda kini menjalankan perhatian jauh perusahaan.
+
+00:10:04.920 --> 00:10:06.780
+Tanpa filter, pengecekan, dan cadangan manusia,
+
+00:10:06.920 --> 00:10:10.660
+Anda menyerahkan pengambilan keputusan yang pasti tidak ingin dilakukan oleh algoritma tanpa mengawasan kepada pengajaran.
+
+00:10:11.340 --> 00:10:13.760
+Pesan Microsoft sendiri di acara Ignate sangat lugas mengenai hal ini.
+
+00:10:13.760 --> 00:10:19.260
+Pagar pembatas, manajemen siklus hidup, kemantauan, dan sistem kontrol kokilot bukanlah pelengkap melainkan kewajiban.
+
+00:10:19.800 --> 00:10:21.560
+Perhatiin jauh saat ini bukan sekadar demo yang menarik,
+
+00:10:21.660 --> 00:10:24.220
+melainkan tempat bagi pemuji untuk membuktikan di mana celah-celahnya muncul.
+
+00:10:24.580 --> 00:10:28.200
+Jika Anda langsung menerapkannya tanpa pengujian bertahap, alur kerja persetujuan, dan audit,
+
+00:10:28.480 --> 00:10:31.460
+Anda tidak sedang menjalankan agen, tetapi menguji stres menyewa Anda di lingkungan produksi.
+
+00:10:31.760 --> 00:10:33.260
+Itulah sebabnya observabilitas bukan lapilih.
+
+00:10:33.260 --> 00:10:36.000
+Anda memerlukan dashboard yang menunjukkan setiap langkah agen
+
+00:10:36.000 --> 00:10:40.060
+dan memeriksa apakah keluarannya berdasar, relevan, dan sesuai dengan kebijakan Anda.
+
+00:10:40.060 --> 00:10:42.200
+Dan Anda memenuhi secara prosesnya.
+
+00:10:42.540 --> 00:10:43.540
+Microsoft tidak menutupi hal ini.
+
+00:10:44.300 --> 00:10:46.820
+Mereka merujuk pada pola di mana manusia tetap menjadi pengaman otak.
+
+00:10:47.720 --> 00:10:52.420
+Anggaplah seperti autopilot penerbangan, sangat berguna, tetapi selalu dirancang dengan kendali manual.
+
+00:10:53.120 --> 00:10:57.060
+Jika bot menganggap pendaratan optimal ada di danau, Anda ingin mengambil kendali sebelum jatuh ke air.
+
+00:10:57.660 --> 00:10:59.940
+Analogi yang tepat di sini adalah membiarkan demaja belajar mengumudi.
+
+00:11:00.460 --> 00:11:03.980
+Potensinya nyata, kecepatan yang mengesankan, tetapi Anda tidak begitu saja menyerahkan kunci,
+
+00:11:04.080 --> 00:11:05.500
+meninggalkan jalan masuk, dan berharap yang tepat.
+
+00:11:05.840 --> 00:11:09.400
+Anda duduk di kursi penumpang, memberi mereka batasan dan memasang rem yang bisa Anda injak sendiri.
+
+00:11:10.060 --> 00:11:14.580
+Itulah tata kelola siklus hidup dalam prakteknya, seperti roda latihan sampai Anda yakin sistem tidak akan keluar jalur.
+
+00:11:15.320 --> 00:11:20.080
+Hal ini membawa kita ke lantai pabrik yang lebih besar, tempat agen, copilot, dan setiap alur kerja yang Anda uji bersatu.
+
+00:11:20.720 --> 00:11:25.060
+Microsoft menyebutnya Azure AI Foundry, sebuah ruang pengembangan AI terpadu dengan semua alat yang diperlukan.
+
+00:11:26.020 --> 00:11:30.720
+Apakah ini akan menjadi pusat produksi atau tempat proyek Anda hancur, sepenuhnya bergantung pada bagaimana Anda mengelolanya?
+
+00:11:31.720 --> 00:11:34.840
+Azure AI Foundry, pabrik Anda atau ladang ranjau Anda?
+
+00:11:34.840 --> 00:11:41.080
+Azure AI Foundry adalah penawaran uang baru Microsoft yang disebut sebagai pabrik untuk segala hal tentang AI.
+
+00:11:41.760 --> 00:11:44.360
+Maksudnya, terlalu banyak dimasuk demo perakubannya seperti ikan.
+
+00:11:44.920 --> 00:11:48.740
+Mereka berkeling terpesona oleh katalog, mengambil beberapa model bahasa besar yang menarik,
+
+00:11:48.860 --> 00:11:51.300
+menambahkan konektor, lalu menyatukannya tanpa panduan.
+
+00:11:51.300 --> 00:11:54.600
+Hasil akhirnya bukanlah sistem AI perusahaan,
+
+00:11:54.800 --> 00:11:58.720
+melainkan mainan kelas demo yang langsung rusak saat pengguna asli memasukkan PDF yang berantakan.
+
+00:11:59.540 --> 00:12:02.340
+Inilah yang sebenarnya ditawarkan Foundry, langsung dari buku panduan resminya.
+
+00:12:03.140 --> 00:12:06.520
+Tatalog model yang mencakup Microsoft OpenAI, Metamistra, Leipzig, dan lainnya.
+
+00:12:07.300 --> 00:12:11.920
+Pilihan kustomisasi seperti Retrieval Augmented Generation, Fine Tuning, dan Distillation, dan Distillation.
+
+00:12:11.920 --> 00:12:17.780
+Layanan agen untuk orkestrasi, alat seperti Promflow untuk evaluasi dan debugging, fitur dasar keamanan,
+
+00:12:17.880 --> 00:12:21.860
+kontrol identitas dan akses, filter keamanan konten, dan dashboard observabilitas, filters.
+
+00:12:22.560 --> 00:12:27.380
+Singkatnya, semua bagian yang Anda perlukan untuk membangun copy-laut agen alur otonom dan menjaga Anda tetap patuh aturan.
+
+00:12:27.840 --> 00:12:28.540
+Telah inventarisnya.
+
+00:12:29.320 --> 00:12:31.100
+Masalahnya bukan karena kotak peralatan yang kosong,
+
+00:12:31.100 --> 00:12:35.320
+tapi terlalu banyak admin menganggapnya seperti menyalakan saklar GPT-4 Turbo dan menyebutnya siap produksi.
+
+00:12:36.320 --> 00:12:39.500
+Kenyataannya, Foundry adalah lantai pabrik, bukan kotak mainan hackathon Anda.
+
+00:12:39.760 --> 00:12:41.440
+Itu berarti menetapkan batasan identitas,
+
+00:12:41.440 --> 00:12:43.640
+sehingga hanya orang yang tepat yang bisa mengakses model yang tepat.
+
+00:12:44.400 --> 00:12:46.660
+Itu berarti menerapkan keamanan konten pada setiap alur kerja.
+
+00:12:47.320 --> 00:12:48.920
+Itu berarti menggunakan observabilitas,
+
+00:12:49.040 --> 00:12:50.900
+agar Anda tahu kapan jawaban berdasarkan fakta,
+
+00:12:51.000 --> 00:12:53.100
+dan kapan model hanya mengarang kebijakan perusahaan.
+
+00:12:54.040 --> 00:12:56.360
+Dan itu berarti mencocokkan tugas dengan model yang tepat,
+
+00:12:56.480 --> 00:12:58.720
+alih-alih hanya memilih yang terbesar karena terdengar cerdas.
+
+00:12:59.360 --> 00:13:01.680
+Lewatkan langkah-langkah itu, maka kekacauan akan masuk melalui pintu.
+
+00:13:02.040 --> 00:13:04.340
+Saya pernah melihat ini menghubungkan copy-laut Foundry di SharePoint,
+
+00:13:04.540 --> 00:13:07.280
+yang dengan mudah mengungkap data SDM terbatas kepada 20 anak magang.
+
+00:13:07.280 --> 00:13:11.860
+Itu tidak cerdas, itu adalah bencana kepatuhan yang seharusnya bisa dihindari dengan aturan akses bawah.
+
+00:13:12.400 --> 00:13:13.580
+Mari bicara soal mode kegagakan.
+
+00:13:13.940 --> 00:13:17.120
+Sebuah organisasi pernah menjalankan JPT 4 Turbo untuk penandaan foto produk.
+
+00:13:17.980 --> 00:13:19.660
+Di laboratorium, demonya berjalan luar biasa.
+
+00:13:20.260 --> 00:13:22.900
+Foto studio bersih, teks sempurna, semua orang bertepuk tangan.
+
+00:13:23.940 --> 00:13:26.120
+Dalam produksi, inputnya bukanlah jepek berkualitas,
+
+00:13:26.240 --> 00:13:27.620
+melainkan foto buram dari ponsel di gudang.
+
+00:13:27.620 --> 00:13:33.620
+Tiba-tiba, AI salah melabeli kereta bayi sebagai kursi kantor dan mengacak label UPC menjadi nomor seri palsu.
+
+00:13:35.000 --> 00:13:37.040
+Selain hilangnya kepercayaan, biaya pun mulai memutuk.
+
+00:13:37.420 --> 00:13:39.360
+Dan ini bukan dongeng tentang biaya yang selalu nol.
+
+00:13:39.880 --> 00:13:43.160
+Harga Foundry berbasis konsumsi dan terikat pada layanan spesifik yang Anda gunakan.
+
+00:13:43.620 --> 00:13:47.080
+Setiap konektor, setiap panggilan pengambilan, setiap meter pesan ditagihkan ke tenan Anda.
+
+00:13:47.840 --> 00:13:49.080
+Satu bagi memiliki model penegian sendiri.
+
+00:13:49.960 --> 00:13:51.140
+Fleksibilitas itu memang bagus,
+
+00:13:51.140 --> 00:13:54.680
+tapi jika Anda tidak memperkirakannya dengan kalkulator harga aju dan melacak penggunaan,
+
+00:13:54.740 --> 00:13:57.300
+tim keuangan Anda akan sangat terkejut dengan tagihan tak terduga.
+
+00:13:58.080 --> 00:13:58.820
+Telah jebakan penegian.
+
+00:13:59.180 --> 00:14:02.440
+Harga berbasis konsumsi efektif jika Anda melancanakan, memantau, dan mengoptimalkan.
+
+00:14:02.760 --> 00:14:05.380
+Jika tidak, hasilnya seperti mengandari mobil sport untuk mengantar pizza.
+
+00:14:05.780 --> 00:14:06.940
+Mahal, berisik, dan sia-sia.
+
+00:14:07.480 --> 00:14:10.980
+Kita semua pernah mengalami hal serupa dengan power BI, demo yang hebat, namun tagihan melonjak.
+
+00:14:11.540 --> 00:14:13.280
+Jangan biarkan Foundry muskan Anda ke situasi yang sama.
+
+00:14:13.780 --> 00:14:16.820
+Pengembang suka membuat prototipe di Foundry karena lingkungan sandbox yang terasa canggih.
+
+00:14:17.360 --> 00:14:18.440
+Dan dalam sandbox memang terasa canggih.
+
+00:14:18.440 --> 00:14:20.700
+Data demo yang bersih tanpa kacauan, hasil yang instan memukau.
+
+00:14:21.080 --> 00:14:21.800
+Tapi inilah masalah utama.
+
+00:14:22.060 --> 00:14:24.840
+Tim langsung mendorong prototipe itu ke produksi tanpa jalur evaluasi.
+
+00:14:24.840 --> 00:14:30.400
+Jika Anda melewatkan evaluator untuk keakuratan, kevasihan, ravansi, dan koherensi, Anda menerapkan sistem sederhana.
+
+00:14:30.820 --> 00:14:31.360
+Lalu apa yang terjadi?
+
+00:14:35.270 --> 00:14:37.550
+Ini bukan kegagalan Foundry, tapi tim yang gagal dalam data cloud.
+
+00:14:38.030 --> 00:14:40.990
+Banyak prototipe Foundry terhenti sebelum produksi karena alasan yang tepat ini.
+
+00:14:41.590 --> 00:14:44.170
+Tidak ada observabilitas, tidak ada pemeriksaan kualitas, tidak ada telemetri.
+
+00:14:44.630 --> 00:14:45.730
+Jawabannya sudah ada di dalam waktu sebelum.
+
+00:14:46.270 --> 00:14:48.590
+Gunakan observabilitas Azure AI Foundry sejak hari pertama.
+
+00:14:49.090 --> 00:14:49.870
+Hubungkan ke Promflow.
+
+00:14:50.310 --> 00:14:51.850
+Jalankan evaluator bawaan pada setiap penguji.
+
+00:14:51.850 --> 00:14:57.190
+Dasar di sistem Anda dengan Azure AI Search menggunakan hybrid dan semantic re-ranking sebelum Anda berpikir untuk meluncurkannya.
+
+00:14:57.610 --> 00:14:59.530
+Microsoft tidak menyembunyikan alat ini di lampiran.
+
+00:14:59.690 --> 00:15:01.210
+Semuanya terdokumentasi untuk keamanan produksi.
+
+00:15:01.770 --> 00:15:04.190
+Namun terlalu sering pengembang mengabaikannya seolah hanya catatan kaki.
+
+00:15:04.950 --> 00:15:07.630
+Mentalitas titik pemeriksaan itulah yang menjauhkan Anda dari ladang lanjut.
+
+00:15:08.290 --> 00:15:11.150
+Perlakukan Foundry sebagai pabrik, tata kelola sebagai langkah pertama,
+
+00:15:11.330 --> 00:15:13.670
+kebijakan kepatuhan yang terintegrasi seperti akses bersyarat,
+
+00:15:13.670 --> 00:15:15.870
+dan jalur observabilitas yang berjalan sejak awal.
+
+00:15:16.270 --> 00:15:20.710
+Dan ya, cakupan identitas dan keamanan konten tidak boleh ditambahkan nanti semuanya adalah bagian dari daftar kebutuhan.
+
+00:15:20.710 --> 00:15:23.390
+Lewati tata kelola dan Anda berisiko lebih dari sekalian jawaban yang buruk.
+
+00:15:24.150 --> 00:15:28.330
+Tanpanya, buat multimodal Anda mungkin secara tidak sengaja mengungkap gaji HR ke pengguna eksternal
+
+00:15:28.330 --> 00:15:30.130
+atau melabeli faktur dengan nomor kebijakan fiktif.
+
+00:15:30.570 --> 00:15:34.190
+Itu bukan sekadar air yang rusak, itu adalah bahan berita utama yang tidak ingin dijelaskan oleh kantor kepatuhan.
+
+00:15:34.790 --> 00:15:38.290
+Dan disitulah surutan beralih karena patuh sandungan berikutnya sama sekali bukan masalah teknis.
+
+00:15:39.050 --> 00:15:40.830
+Masalahnya adalah apakah ia Anda bertanggung jawab.
+
+00:15:41.350 --> 00:15:43.870
+Semua orang suka kata-kata itu ke dalam slide presentasi.
+
+00:15:44.110 --> 00:15:48.370
+Namun dalam prakteknya, ini tentang audit, filter, kepatuhan, dan segunung pilihan yang harus Anda buat sebelum peluncuran.
+
+00:15:48.370 --> 00:15:49.990
+Dan disitulah sakit kepala yang sebenarnya.
+
+00:15:50.690 --> 00:15:55.110
+Berlangganan dan ikuti kami di buletin m365.show untuk solusi lugas dan ikuti kami di m365.
+
+00:15:55.750 --> 00:15:59.670
+Lihat halaman LinkedIn untuk siaran langsung bersama para MVP yang telah menguji fondi dalam produksi
+
+00:15:59.670 --> 00:16:00.910
+dan melihat apa saja yang bisa salah.
+
+00:16:01.550 --> 00:16:03.250
+AI yang bertanggung jawab atau sakit kepala yang bertemu.
+
+00:16:04.090 --> 00:16:06.670
+Semua orang suka menyisipkan AI yang bertanggung jawab ke dalam presentasi utama.
+
+00:16:06.970 --> 00:16:09.370
+Terdengar keren bersanding dengan istilah populer seperti keadilan dan transparansi.
+
+00:16:10.030 --> 00:16:11.910
+Tetapi di lapangan, ini bukanlah filosofi yang menginspirasi.
+
+00:16:11.910 --> 00:16:17.190
+Ini tentang konfigurasi audit, filter, dan langkah tata kelola yang lebih terasa seperti pemeliharaan server daripada inovasi.
+
+00:16:18.090 --> 00:16:20.470
+AI yang bertanggung jawab adalah sebuah pengaman, bukan mobil sempat.
+
+00:16:20.770 --> 00:16:22.590
+Lewatkan sekali saja dan kecelakaan akan terjadi dengan sempat.
+
+00:16:22.970 --> 00:16:25.390
+Microsoft berbicara tentang etika dan keamanan di awal.
+
+00:16:25.530 --> 00:16:28.690
+Tetapi bagi admin yang menerapkannya secara langsung, ini berarti batasan praktis.
+
+00:16:29.550 --> 00:16:31.810
+Anda memerlukan kebijakan akses yang tidak mudah jepul,
+
+00:16:32.050 --> 00:16:33.870
+filter yang benar-benar memblokir perintah berbahaya,
+
+00:16:34.390 --> 00:16:37.330
+dan log yang cukup mendetel untuk memuaskan regulator yang sedang mengawasi.
+
+00:16:37.330 --> 00:16:39.250
+Ini bukan pekerjaan.
+
+00:16:39.490 --> 00:16:42.290
+Yang glamour ini tentang mengisolasi co-pilot HR dari data keuangan,
+
+00:16:42.490 --> 00:16:45.350
+menetapkan aturan cakupan agar bot tim tidak merembles ke rahasia SharePoint,
+
+00:16:45.630 --> 00:16:48.430
+dan menandai log agar Anda bisa membuktikan bagaimana sebuah respons dibentuk.
+
+00:16:49.330 --> 00:16:51.990
+Lakukan dengan benar dan bertanggung jawab bukan sekadar slogan perusahaan,
+
+00:16:52.070 --> 00:16:52.830
+melainkan kunci bertahan.
+
+00:16:53.090 --> 00:16:57.890
+Skenario terburuk jika mengabaikan ini adalah menghubungkan bot langsung ke repository SDM Anda tanpa cakupan tenang.
+
+00:16:59.350 --> 00:17:01.450
+Seorang pengguna bertanya tentang tunjangan asuransi,
+
+00:17:01.450 --> 00:17:04.770
+bot dengan sigap mempublikasikan kisaran keci karyawan ke dalam obrolan.
+
+00:17:04.770 --> 00:17:10.090
+Sekarang Anda pelanggaran privasi, mimpi buruk moral, dan mungkin regulator yang mulai mengincar Anda
+
+00:17:10.090 --> 00:17:12.870
+cara tercepat untuk menghentikan adopsi bukanlah UX yang buruk,
+
+00:17:13.030 --> 00:17:14.190
+melainkan satu kebocoran data sensi.
+
+00:17:14.430 --> 00:17:15.250
+Jadi apa yang mencegah kekacauan?
+
+00:17:15.650 --> 00:17:16.990
+Mulailah dengan keamanan konten asuransi.
+
+00:17:17.670 --> 00:17:22.230
+Ini dibuat untuk menyaring perintah dan respons yang kasar, cabul, dan ofensif sebelum bocor ke pengguna.
+
+00:17:23.110 --> 00:17:24.170
+Namun itu hanyalah standar dasar.
+
+00:17:24.910 --> 00:17:28.610
+Foundry dan Copilot Studio menambahkan alur evaluasi yang menangani lapisan berikutnya.
+
+00:17:29.350 --> 00:17:34.030
+Pemeriksaan landasan, penilaian relevansi, dashboard transparansi, dan kemampuan penjelasan.
+
+00:17:34.030 --> 00:17:37.130
+Dalam bahasa yang sederhana, Anda bisa menyesuaikan ambang batas,
+
+00:17:37.210 --> 00:17:40.230
+memfilter input maupun output maupun output, dan meminta bot menunjukkan jeraka.
+
+00:17:40.490 --> 00:17:43.170
+Tanpa itu semua, Anda seperti berjudi dengan apapun yang dihasilkan AI.
+
+00:17:43.570 --> 00:17:44.730
+Dan inilah realitas sumber dayanya.
+
+00:17:45.190 --> 00:17:46.430
+Microsoft memberikan dukungan penuntuin.
+
+00:17:47.090 --> 00:17:50.150
+34 ribu insinyur pernawaktu yang didikasikan untuk keamanan
+
+00:17:50.150 --> 00:17:52.890
+ditambah 15 ribu mitra dengan keahlian keamanan mendalam.
+
+00:17:53.750 --> 00:17:54.510
+Itu adalah sebuah bentuk.
+
+00:17:54.750 --> 00:17:55.670
+Tapi jangan merasa mendulur.
+
+00:17:55.670 --> 00:17:59.210
+Tidak satupun dari insinyur tersebut berada di dalam tenang Anda untuk membuat aturan aksesan.
+
+00:17:59.210 --> 00:18:01.110
+Microsoft memberi Anda batasan pengaman,
+
+00:18:01.350 --> 00:18:03.310
+tetapi tetap tugas Anda untuk mengunci identitas,
+
+00:18:03.470 --> 00:18:06.450
+menetapkan isolasi data, menerapkan engkripsi, dan mengonfigurasi kebijakan.
+
+00:18:07.070 --> 00:18:09.530
+Jika cakupan Anda asal-asalan, Anda tetap akan menanggung akibat kebucut.
+
+00:18:09.890 --> 00:18:11.330
+Solusi sebenarnya adalah tetap keluar siku.
+
+00:18:11.710 --> 00:18:14.210
+Anggap ini sebagai resep yang direkomendasikan langsung oleh Microsoft.
+
+00:18:14.770 --> 00:18:17.870
+Uji, setujui, rilis, audit, ulangi.
+
+00:18:17.870 --> 00:18:20.690
+Dengan titik pemeriksaan di setiap siklus,
+
+00:18:20.830 --> 00:18:23.250
+Anda akan terus mendeteksi penyimpangan sebelum menjadi berita utama.
+
+00:18:23.690 --> 00:18:25.890
+Tim yang meluncurkan sesuatu sekali saja lalu meninggalkannya pasti kanan.
+
+00:18:26.350 --> 00:18:29.150
+Model berevolusi, perintah berubah, dan output melenceng.
+
+00:18:29.910 --> 00:18:31.210
+Tata kelola bukanlah birokrasi yang mengambat.
+
+00:18:31.550 --> 00:18:35.070
+Ini adalah cara Anda mencegah bot magang mengarang kebijakan di tim saat semua orang tidur.
+
+00:18:35.750 --> 00:18:38.010
+Beberapa admin mengeluh bahwa bertanggung jawab berarti lambat.
+
+00:18:38.830 --> 00:18:39.530
+Perspektif yang clear.
+
+00:18:40.010 --> 00:18:42.870
+Bertanggung jawab tidak membunuh kecepatan, justru mencegah kecepatan membunuh Anda.
+
+00:18:43.370 --> 00:18:47.230
+Tata kelola yang baik berarti Anda bisa lolos audit dan tetap menjaga proyek terus berjalan.
+
+00:18:47.230 --> 00:18:48.950
+Dapatkan itu dan Anda sedang terjun bebas dari tepik.
+
+00:18:49.270 --> 00:18:51.510
+Kecepatan tanpa kendali hanya akan memberi Anda satu jenis rek.
+
+00:18:51.770 --> 00:18:53.130
+Waktu tersingkat menuju investi gagat.
+
+00:18:53.910 --> 00:18:55.310
+Bayangkan mengemudi di jalan pekelok.
+
+00:18:55.870 --> 00:18:58.990
+Anda tidak akan memakai pembatas jalan, justru berterima kasih saja jalan curam ke bawah.
+
+00:18:59.550 --> 00:19:00.450
+Ayam bertanggung jawab juga sama.
+
+00:19:00.790 --> 00:19:03.650
+Cakupan, kebijakan, filter, log tidak menghentikan kecepatan Anda,
+
+00:19:03.730 --> 00:19:05.250
+tetapi menjaga mobil Anda tidak masuk belitama.
+
+00:19:05.690 --> 00:19:08.170
+Intinya, Microsoft telah memberi Anda kekuatan besar.
+
+00:19:09.290 --> 00:19:13.430
+Keamanan konten, saluran evaluasi, kerangka kerja keamanan, pembatas SDK,
+
+00:19:13.430 --> 00:19:18.630
+tetapi tetap tugas Anda untuk mengatur penyewa, akses, dan menghubungkan siklus produksi tersebut.
+
+00:19:19.410 --> 00:19:22.750
+Lakukan itu dan Anda memiliki AI yang bertahan melewati kepatuhan alih-alih runtuh karenanya.
+
+00:19:23.690 --> 00:19:26.590
+Abaikan dan itu bukan sekadar risiko gangguan, tapi taruhan karier Anda.
+
+00:19:27.230 --> 00:19:28.270
+AI yang bertanggung jawab itu tidak lambat.
+
+00:19:28.830 --> 00:19:30.450
+AI yang bertanggung jawab itu mampu bertahan.
+
+00:19:30.630 --> 00:19:32.290
+Dan daya tahan adalah ujian sebenarnya,
+
+00:19:32.490 --> 00:19:33.890
+karena hal berikutnya bukan soal fitur,
+
+00:19:34.010 --> 00:19:36.130
+tapi apakah Anda memperlakukan platform ini sebagai alat instan
+
+00:19:36.130 --> 00:19:38.350
+atau menghormatinya sebagai infrastruktur yang mengutamakan tetap kelompok?
+
+00:19:38.350 --> 00:19:40.950
+Perbedaan itulah yang menentukan siapa yang bertahan dan siapa yang tumbuh.
+
+00:19:41.610 --> 00:19:42.110
+Inilah intinya.
+
+00:19:42.650 --> 00:19:44.430
+Jebakannya bukan foundry atau copilot studio,
+
+00:19:44.690 --> 00:19:46.250
+melainkan anggapan bahwa semuanya serba instan.
+
+00:19:46.890 --> 00:19:50.310
+Kuncinya sederhana, tata kelola diutamakan eksperimen kedua, produksi terakhir.
+
+00:19:50.670 --> 00:19:52.750
+Abaikan identitas dan observabilitas dengan risiko Anda sendiri.
+
+00:19:53.190 --> 00:19:54.050
+Alatnya sudah tersedia,
+
+00:19:54.310 --> 00:19:56.810
+tetapi hanya tata kelola yang mengubah prototipe menjadi produksi nyata.
+
+00:19:57.170 --> 00:19:59.990
+Jadi, jika Anda ingin solusi praktis yang menjaga penyewa Anda tetap aman,
+
+00:20:00.110 --> 00:20:01.090
+berlanggananlah sehingga hari ini,
+
+00:20:01.210 --> 00:20:02.410
+dan tinggalkan ulasan untuk saya.
+
+00:20:03.190 --> 00:20:04.830
+Saya mencurahkan waktu setiap hari untuk ini,
+
+00:20:04.950 --> 00:20:06.090
+dan dukungan Anda sangat membantu.
+
+00:20:06.090 --> 00:20:08.250
+Alat akan terus berubah tektik pertahanan hidup Anda.

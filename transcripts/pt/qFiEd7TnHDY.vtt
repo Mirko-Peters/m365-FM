@@ -1,0 +1,1204 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:03.260
+Você fez a venda, enviou a fatura, mas quando o dinheiro realmente cai na sua conta,
+
+00:00:03.760 --> 00:00:04.620
+e o que acontece, não cai.
+
+00:00:05.120 --> 00:00:08.780
+Bem-vindo a mais um episódio do Microsoft Knowledge Nuggets na M365FM.
+
+00:00:09.460 --> 00:00:10.200
+Eu sou o Merco Pitas.
+
+00:00:10.640 --> 00:00:13.980
+Hoje vamos explicar as contas a receber do Dynamics 365 de forma simples.
+
+00:00:14.600 --> 00:00:18.060
+Ao final deste episódio, você acompanhará o saldo de um cliente da venda até o pagamento
+
+00:00:18.060 --> 00:00:21.000
+e verá o que a empresa faz quando esse pagamento atrasa, a Yen.
+
+00:00:21.640 --> 00:00:22.860
+Aqui está a definição mais simples.
+
+00:00:23.700 --> 00:00:27.760
+Contas a receber monitor o dinheiro que os clientes lhe devem juntamente com os pagamentos que retornam.
+
+00:00:27.760 --> 00:00:30.960
+Pense nisso como um arquivo para o dinheiro dentro da sua empresa.
+
+00:00:31.600 --> 00:00:32.660
+Cada cliente recebe uma pasta.
+
+00:00:33.140 --> 00:00:37.120
+Essa pasta contém suas faturas, pagamentos, datas de vencimento e qualquer acompanhamento necessário.
+
+00:00:37.520 --> 00:00:41.680
+Uma planilha pode listar essas coisas, mas não consegue conectar de forma confiável uma nova venda.
+
+00:00:41.900 --> 00:00:44.960
+Um prazo acordado, um pagamento bancário e uma decisão de crédito em toda a empresa.
+
+00:00:45.540 --> 00:00:47.060
+Dynamics 365 Finance você consegue.
+
+00:00:47.400 --> 00:00:49.760
+Então vamos começar do início, com a conta do cliente.
+
+00:00:50.620 --> 00:00:53.700
+1. A conta do cliente e o ponto de partida para cada fatura.
+
+00:00:53.700 --> 00:00:58.060
+Imagine que você está trabalhando com um cliente chamado Northwind Equipment.
+
+00:00:58.540 --> 00:01:02.960
+Antes de fazerem um pedido, o Dynamics 365 precisa de mais do que apenas um nome no telefone.
+
+00:01:03.460 --> 00:01:05.560
+Ele precisa das regras financeiras para fazer negócio com a Northwind.
+
+00:01:06.160 --> 00:01:09.080
+A conta do cliente é aquela pasta etiquetada em nosso arquivo.
+
+00:01:09.780 --> 00:01:13.480
+Ela guarda todos os detalhes que dizem ao Dynamics 365 quem é o cliente,
+
+00:01:13.540 --> 00:01:15.840
+para onde as faturas devem ir, como eles pagam normalmente,
+
+00:01:16.040 --> 00:01:18.080
+quanto de crédito a empresa está disposta a conceder.
+
+00:01:19.080 --> 00:01:22.100
+Isso pode parecer uma configuração básica, mas evita muita confusão mais tarde.
+
+00:01:22.100 --> 00:01:24.760
+Por exemplo, a conta armazena o endereço de fatura do cliente.
+
+00:01:25.240 --> 00:01:26.840
+Geralmente ele é diferente do endereço de entrega.
+
+00:01:27.200 --> 00:01:30.300
+O equipamento pode ser enviado para uma fábrica, enquanto as faturas vão para o departamento financeiro.
+
+00:01:30.560 --> 00:01:31.640
+Ela também mantém os pagamentos.
+
+00:01:32.100 --> 00:01:33.860
+Os prazos de pagamento respondem a uma pergunta simples.
+
+00:01:33.960 --> 00:01:35.200
+Quanto tempo este cliente tem para pagar?
+
+00:01:35.980 --> 00:01:37.300
+A Northwind pode pagar em 30 dias.
+
+00:01:37.640 --> 00:01:38.680
+Outro cliente pode pagar à vista.
+
+00:01:39.100 --> 00:01:40.700
+O cliente maior pode negociar 60 dias.
+
+00:01:41.340 --> 00:01:45.380
+Uma vez que esses termos estão na conta, o Dynamics 365 calcula a data de vencimento automaticamente.
+
+00:01:46.160 --> 00:01:47.900
+Ninguém precisa procurar em uma sequência de e-mails,
+
+00:01:47.960 --> 00:01:51.400
+ou adivinhar se o prazo de 30 dias conta a partir da data do pedido da entrega ou da fatura.
+
+00:01:51.400 --> 00:01:52.640
+O sistema simplesmente sabe.
+
+00:01:53.000 --> 00:01:53.400
+Tem mais.
+
+00:01:53.900 --> 00:01:56.040
+A conta do cliente também mantém a forma de pagamento habitual.
+
+00:01:56.460 --> 00:01:59.620
+Se a Northwind paga por transferência bancária e outro cliente paga um cartão de crédito,
+
+00:01:59.940 --> 00:02:02.060
+a equipe financeira segue o processo correto na hora do pagamento.
+
+00:02:02.500 --> 00:02:04.500
+Eles não precisam tratar cada cliente como um caso isolado.
+
+00:02:04.880 --> 00:02:06.160
+Depois é o limite de crédito.
+
+00:02:06.220 --> 00:02:09.880
+O limite de crédito é o valor máximo que uma empresa está disposta a deixar um cliente dever de uma só vez.
+
+00:02:10.540 --> 00:02:12.380
+Pense nisso com uma recepção em um prédio de escritórios.
+
+00:02:13.020 --> 00:02:15.460
+O recepcionista verifica se alguém tem permissão para subir,
+
+00:02:15.720 --> 00:02:18.480
+não se o visitante é legal, apenas se as regras permitem a entrada.
+
+00:02:18.480 --> 00:02:19.720
+A ideia é a mesma, hein?
+
+00:02:20.040 --> 00:02:22.460
+O limite de crédito define uma fronteira clara entre vendas e finanças.
+
+00:02:22.940 --> 00:02:24.540
+A Northwind pode ser uma ótima cliente,
+
+00:02:24.600 --> 00:02:28.300
+mas se já deve um valor alto, a empresa deve pausar antes de aceitar outro grande pedido.
+
+00:02:28.980 --> 00:02:32.900
+Nos bastidores, o Dynamics 365 também pode usar grupos de clientes e perfis de lançamento.
+
+00:02:33.320 --> 00:02:34.440
+Não deixe esses nomes de intimidade.
+
+00:02:34.840 --> 00:02:37.180
+Um grupo de clientes é apenas uma forma de reunir clientes semelhantes.
+
+00:02:37.720 --> 00:02:39.440
+Varejo em um grupo, atacado em outro.
+
+00:02:40.020 --> 00:02:42.800
+Dessa forma, a empresa pode aplicar regras compartilhadas onde fizer sentido.
+
+00:02:42.800 --> 00:02:47.480
+Um perfil de lançamento é uma regra contábil que diz ao Dynamics 365 quais contas financeiras
+
+00:02:47.480 --> 00:02:49.240
+devem registrar a dívida ou lançar uma fatura.
+
+00:02:49.940 --> 00:02:52.240
+Você normalmente não verá esse processo como vendedor ou cliente.
+
+00:02:53.160 --> 00:02:56.500
+Mas o financeiro depende disso, pois os livros precisam que cada valor esteja no lugar.
+
+00:02:56.700 --> 00:02:57.900
+E aqui está o verdadeiro poder.
+
+00:02:58.460 --> 00:03:01.140
+A conta do cliente conecta ao lado de vendas, ao lado financeiro.
+
+00:03:01.760 --> 00:03:03.660
+Um vendedor pode criar um pedido para a Northwind,
+
+00:03:03.860 --> 00:03:06.220
+e o financeiro não precisa reconstruir essas informações depois.
+
+00:03:06.620 --> 00:03:09.140
+Eles veem o cliente, condições de pagamento, posição de crédito e valor dele.
+
+00:03:09.620 --> 00:03:10.700
+Tudo se conecta automaticamente.
+
+00:03:10.700 --> 00:03:13.580
+Essa é a diferença entre uma lista de contatos e uma conta de cliente.
+
+00:03:13.880 --> 00:03:15.380
+Uma lista de contatos ajuda você a ligar para alguém.
+
+00:03:15.780 --> 00:03:17.880
+Uma conta de cliente registra o relacionamento financeiro,
+
+00:03:18.280 --> 00:03:20.940
+incluindo as regras que controlam o que acontece quando a empresa vende para eles.
+
+00:03:21.400 --> 00:03:22.600
+Então, quando a Northwind compra algo,
+
+00:03:22.780 --> 00:03:26.120
+o Dynamics 365 precisa transformar essa venda em uma solicitação de pagamento adequada.
+
+00:03:28.800 --> 00:03:31.080
+Criar a fatura, transformando uma venda em dinheiro a receber.
+
+00:03:32.540 --> 00:03:34.220
+Qual é a diferença entre um pedido e uma fatura?
+
+00:03:34.820 --> 00:03:36.280
+Um pedido diz o que o cliente quer.
+
+00:03:36.500 --> 00:03:37.600
+Uma fatura diz o que ele precisa pagar.
+
+00:03:38.140 --> 00:03:41.380
+Ou até o seguinte, uma fatura cria um saldo em aberto na conta do cliente.
+
+00:03:41.380 --> 00:03:46.060
+Assim que é lançada, você cobra formalmente e as contas a receber podem rastrear o que está vencido.
+
+00:03:46.720 --> 00:03:47.880
+Vamos voltar à Northwind Equipment?
+
+00:03:48.480 --> 00:03:49.580
+Eles pediram 10 equipamentos.
+
+00:03:49.700 --> 00:03:50.960
+O equipe de vendas registra o pedido.
+
+00:03:51.040 --> 00:03:52.940
+O armazém prepara os itens e você os envia.
+
+00:03:53.660 --> 00:03:54.740
+A North agora está com os equipamentos.
+
+00:03:55.100 --> 00:03:57.460
+Nesse ponto, você precisa de um registro claro do que compraram,
+
+00:03:57.540 --> 00:03:59.040
+quanto custa e quando o pagamento vence.
+
+00:03:59.560 --> 00:04:00.860
+Esse registro é a fatura do cliente.
+
+00:04:00.860 --> 00:04:04.720
+A maioria das faturas no Dynamics 365 Finance vem diretamente de um pedido de venda.
+
+00:04:05.320 --> 00:04:07.240
+Isso mantém a fatura vinculada à venda original.
+
+00:04:07.860 --> 00:04:11.580
+Os itens do cliente, preços, quantidades e todas as regras acordadas já estão arquivados.
+
+00:04:12.260 --> 00:04:15.120
+Você não precisa que alguém redigite esses detalhes em um sistema de faturamento separado.
+
+00:04:15.760 --> 00:04:19.260
+Assim que as mercadorias são enviadas ou um serviço atinge um marco em que deve ser cobrado,
+
+00:04:19.340 --> 00:04:20.960
+você cria a fatura a partir desse pedido de venda.
+
+00:04:21.380 --> 00:04:23.360
+O momento exato depende de como sua empresa trabalha.
+
+00:04:23.880 --> 00:04:26.760
+Algumas empresas faturam quando enviam, outras após a conclusão de uma etapa do trabalho.
+
+00:04:26.760 --> 00:04:29.760
+Uma empresa de consultoria pode faturar após a conclusão de um marco.
+
+00:04:30.540 --> 00:04:33.520
+O Dynamics 365 segue o processo que você já configurou.
+
+00:04:34.220 --> 00:04:36.040
+Você pode ouvir o termo fatura de romaneio de entrega.
+
+00:04:36.820 --> 00:04:40.220
+Um romaneio de entrega confirma o que saiu fisicamente do armazém e chegou à fase de entrega.
+
+00:04:40.760 --> 00:04:43.320
+Quando sua empresa fatura com base no que foi realmente enviado,
+
+00:04:43.420 --> 00:04:45.920
+a fatura pode usar esses detalhes de entrega confirmados.
+
+00:04:46.380 --> 00:04:47.440
+Isso evita um problema comum.
+
+00:04:47.940 --> 00:04:50.460
+Digamos que um pedido de 10 unidades, mas apenas 8 foram enviadas hoje,
+
+00:04:50.520 --> 00:04:51.560
+porque duas ainda aguardam o estoque.
+
+00:04:51.820 --> 00:04:53.300
+Se você faturar a partir do romaneio de entrega,
+
+00:04:53.360 --> 00:04:54.900
+você fatura apenas as 8 unidades que foram enviadas.
+
+00:04:54.900 --> 00:04:57.960
+Você não está cobrando a Northwind todas as 10 antes que elas as recebam.
+
+00:04:58.280 --> 00:05:02.360
+O pedido é importante, mas a entrega confirmada informa o faturamento que deve constar nesta fatura.
+
+00:05:02.800 --> 00:05:04.560
+Mas nem toda fatura começa com um pedido de venda.
+
+00:05:05.000 --> 00:05:07.580
+Às vezes você precisa cobrar por uma despesa única que não envolve envio.
+
+00:05:08.260 --> 00:05:10.160
+Talvez a Northwind solicite uma sessão de treinamento especial.
+
+00:05:10.600 --> 00:05:12.620
+Talvez haja uma taxa de serviço, uma cobrança de projeto,
+
+00:05:12.720 --> 00:05:14.220
+uma correção que precise de sua própria fatura.
+
+00:05:14.680 --> 00:05:18.360
+Para esses casos, Dynamics 365 Finance oferece suporte a uma fatura de texto livre.
+
+00:05:18.880 --> 00:05:20.660
+Texto livre não significa aleatório ou informado.
+
+00:05:21.000 --> 00:05:22.880
+Significa que a fatura não está vinculada a um pedido de venda.
+
+00:05:22.880 --> 00:05:26.660
+Você insere o cliente, a cobrança, o valor, detalhes fiscais quando necessário
+
+00:05:26.660 --> 00:05:27.760
+e as informações de pagamento.
+
+00:05:28.080 --> 00:05:30.860
+Uma vez lançada, torna-se um valor normal devido na conta do cliente.
+
+00:05:31.080 --> 00:05:32.460
+O cliente ainda recebe uma fatura adequada.
+
+00:05:32.940 --> 00:05:34.240
+O financeiro ainda vê um saldo em aberto.
+
+00:05:34.600 --> 00:05:35.540
+Quanto ao trabalho recorrente,
+
+00:05:35.980 --> 00:05:38.460
+suponha que a Northwind pague uma taxa mensal pela manutenção de equipamento.
+
+00:05:38.940 --> 00:05:42.580
+Criar a mesma fatura manualmente todo mês desperdice a tempo e abre espaço para pequenos erros.
+
+00:05:43.220 --> 00:05:46.400
+Faturamento de assinaturas usa cronogramas de faturamento para lidar com cobranças repetidas.
+
+00:05:46.400 --> 00:05:48.920
+Você configura o contrato e o período de faturamento.
+
+00:05:49.020 --> 00:05:52.520
+Então, o Dynamics 365 pode criar faturas conforme cada período chega.
+
+00:05:53.420 --> 00:05:56.020
+Isso lhe dá uma forma repetível de cobrar serviços recorrentes.
+
+00:05:56.060 --> 00:05:58.460
+E o cliente recebe faturas com base no cronograma acordado.
+
+00:05:59.100 --> 00:06:01.360
+O lançamento é o momento que altera o status da venda.
+
+00:06:02.060 --> 00:06:04.800
+Ele registra o valor na conta do cliente da Northwind como dinheiro devido.
+
+00:06:05.380 --> 00:06:07.640
+Também envia o valor para os registros financeiros da empresa,
+
+00:06:07.880 --> 00:06:11.020
+onde você pode ver que uma venda foi faturada e o pagamento aí está pendente.
+
+00:06:11.020 --> 00:06:14.120
+A fatura não é mais um rascunho que alguém poderia alterar casualmente.
+
+00:06:14.500 --> 00:06:15.820
+Agora ela faz parte do registro financeiro.
+
+00:06:16.160 --> 00:06:17.000
+Vamos tornar isso concreto.
+
+00:06:17.460 --> 00:06:19.540
+Northwind solicita equipamentos no valor de US$ 10 mil.
+
+00:06:19.760 --> 00:06:22.760
+Oito unidades são enviadas primeiro, então você registra uma fatura para essas oito unidades.
+
+00:06:23.220 --> 00:06:26.300
+A fatura mostra o valor, a data de vencimento e as instruções de pagamento.
+
+00:06:26.640 --> 00:06:31.460
+A Northwind recebe a cobrança e o Dynamics 365 registra o mesmo valor como pendente na conta deles.
+
+00:06:32.060 --> 00:06:35.880
+Esse registro compartilhado mantém as equipes de vendas, depósito e finanças focadas na mesma transação.
+
+00:06:36.400 --> 00:06:38.760
+Chega de discussões sobre versões diferentes em arquivos distintos,
+
+00:06:38.760 --> 00:06:40.360
+mas uma fatura apenas solicita o pagamento.
+
+00:06:40.360 --> 00:06:44.360
+A próxima tarefa é reconhecer o pagamento quando ele chega e vinculá-lo ao saldo devedor correto.
+
+00:06:44.920 --> 00:06:46.580
+2. 3. Recebendo e conciliando o pagamento.
+
+00:06:46.940 --> 00:06:47.820
+Fechando a fatura correta.
+
+00:06:48.240 --> 00:06:49.420
+Pagamento chegando parece algo assim.
+
+00:06:49.860 --> 00:06:51.980
+O saldo bancário aumenta, então o trabalho está feito, certo?
+
+00:06:52.460 --> 00:06:55.240
+Então, o departamento financeiro ainda precisa responder a duas perguntas.
+
+00:06:55.640 --> 00:06:58.940
+Quem enviou o dinheiro e qual fatura ou faturas em aberto esse dinheiro deve liquidar?
+
+00:06:59.680 --> 00:07:01.400
+Pense na Northwind pagando a fatura do equipamento.
+
+00:07:01.920 --> 00:07:05.020
+O banco pode mostrar um pagamento com uma referência curta, um valor e uma data.
+
+00:07:05.480 --> 00:07:07.860
+Sem conciliar esse pagamento ao saldo aberto da Northwind,
+
+00:07:07.860 --> 00:07:11.520
+o sistema pode mostrar dinheiro no banco enquanto também mostra que a Northwind ainda deve valor.
+
+00:07:12.020 --> 00:07:13.080
+Esses registros se unificaram.
+
+00:07:13.540 --> 00:07:17.880
+O Dynamics 365 Finance lida com várias formas pelas quais os clientes podem pagar.
+
+00:07:18.380 --> 00:07:20.880
+Você pode receber dinheiro, cheques, pagamentos com cartão de crédito,
+
+00:07:20.980 --> 00:07:24.860
+transferências bancárias ou letras de câmbio que são documentos de pagamento formais usados em alguns processos de negócio.
+
+00:07:25.580 --> 00:07:27.940
+Cada método segue seu próprio caminho para os registros financeiros.
+
+00:07:28.540 --> 00:07:30.300
+Uma transferência bancária pode aparecer em um extrato banco.
+
+00:07:30.580 --> 00:07:32.720
+Um cheque pode precisar ser registrado antes que o banco o compense.
+
+00:07:33.240 --> 00:07:35.200
+Pagamento com cartão pode vir por meio de um serviço de pagamento.
+
+00:07:35.200 --> 00:07:40.220
+O Dynamics 365 oferece ao financeiro um local para registrar detalhes de pagamento na conta do cliente correto.
+
+00:07:40.460 --> 00:07:42.320
+Esse local é geralmente o diário de pagamento de clientes.
+
+00:07:42.740 --> 00:07:47.320
+Um diário parece um livro contábil de papel, mas dentro do Dynamics 365 é apenas um local controlado
+
+00:07:47.320 --> 00:07:49.260
+para inserir e revisar pagamentos antes que sejam lançados.
+
+00:07:49.740 --> 00:07:54.580
+O financeiro registra o cliente, o valor, a forma de pagamento, a conta bancária e qualquer referência que acompanha o pagamento.
+
+00:07:55.540 --> 00:07:58.360
+Depois, há uma palavra que geralmente parece mais difícil do que é liquidação.
+
+00:07:59.000 --> 00:08:01.460
+Liquidação significa conciliar um pagamento à fatura que ele paga.
+
+00:08:02.120 --> 00:08:04.440
+A Northwind paga o valor exato da sua fatura de equipamento.
+
+00:08:04.440 --> 00:08:07.720
+O financeiro seleciona o pagamento e a fatura em aberto, então liquida ambos.
+
+00:08:08.420 --> 00:08:10.660
+Uma vez lançada, a fatura não aparece mais como não paga.
+
+00:08:11.220 --> 00:08:12.040
+O pagamento é em seu.
+
+00:08:12.500 --> 00:08:14.180
+O saldo do cliente cai pelo mesmo valor.
+
+00:08:14.840 --> 00:08:18.280
+Isso é importante porque um pagamento sem liquidação pode deixar uma fatura aberta na conta,
+
+00:08:18.380 --> 00:08:20.280
+mesmo que você já tenha recebido o dinheiro.
+
+00:08:20.880 --> 00:08:25.220
+Isso cria relatórios incorretos, cobranças desnecessárias e ligações constrangedoras para clientes que já pagaram.
+
+00:08:25.560 --> 00:08:27.340
+Às vezes o pagamento não cobre a fatura inteira.
+
+00:08:27.340 --> 00:08:31.080
+Talvez a Northwind pague parte do valor agora e concorde em pagar o restante depois.
+
+00:08:31.720 --> 00:08:35.960
+O Dynamics 365 pode liquidar o valor recebido na fatura, mantendo a parte não paga em aberto.
+
+00:08:36.620 --> 00:08:38.820
+A fatura não desaparece só porque algum dinheiro entrou.
+
+00:08:39.320 --> 00:08:40.780
+O departamento financeiro consegue ver exatamente o que é.
+
+00:08:41.120 --> 00:08:43.980
+Isso é muito melhor do que marcar uma fatura como totalmente paga por engano,
+
+00:08:44.120 --> 00:08:47.000
+e depois tentar lembrar o valor pendente em uma nota ou planilha separada.
+
+00:08:47.660 --> 00:08:49.680
+Para muitas empresas, os pagamentos bancários chegam em grande valor.
+
+00:08:49.680 --> 00:08:53.560
+Analisar manualmente cada transferência e cada fatura aberta consome tempo,
+
+00:08:53.820 --> 00:08:55.920
+especialmente quando os clientes pagam várias faturas juntas
+
+00:08:55.920 --> 00:08:58.000
+ou digitam uma referência que não está totalmente clara.
+
+00:08:59.460 --> 00:09:02.680
+O Dynamics 365 possui um diário de reconciliação de pagamentos para extra...
+
+00:09:02.680 --> 00:09:05.480
+Uma equipe pode importar informações do extrato bancário
+
+00:09:05.480 --> 00:09:08.640
+e usá-las para conciliar os pagamentos recebidos com as faturas de clientes em aberto.
+
+00:09:09.400 --> 00:09:12.540
+Referências de pagamento, valores, detalhes do cliente e regras de correspondência
+
+00:09:12.540 --> 00:09:14.740
+ajudam o sistema a sugerir, onde o pagamento se encaixa.
+
+00:09:15.460 --> 00:09:17.420
+Se ainda revisa o resultado, essa parte é importante.
+
+00:09:17.420 --> 00:09:20.880
+A automação reduz a busca, mas o financeiro continua responsável
+
+00:09:20.880 --> 00:09:23.680
+por garantir que um pagamento liquide a fatura correta.
+
+00:09:24.300 --> 00:09:26.100
+Se um cliente envia um pagamento para várias faturas,
+
+00:09:26.180 --> 00:09:29.260
+a pessoa responsável pelo processamento pode conciliar esse pagamento entre essas faturas.
+
+00:09:29.720 --> 00:09:31.320
+Se uma referência apontar para o documento errado,
+
+00:09:31.400 --> 00:09:32.660
+a gente pode corrigir antes da contabilização.
+
+00:09:33.300 --> 00:09:35.020
+O objetivo não é remover o julgamento humano.
+
+00:09:35.380 --> 00:09:38.880
+É evitar que as pessoas passem o dia caçando arquivos bancários e listas de faturas.
+
+00:09:39.660 --> 00:09:42.780
+Agora, imagine que a Northwind opera em várias empresas do mesmo grupo empresarial.
+
+00:09:43.860 --> 00:09:45.540
+Uma entidade legal pode vender o equipamento
+
+00:09:45.540 --> 00:09:48.340
+enquanto uma empresa financeira central recebe os pagamentos de todo o grupo.
+
+00:09:48.920 --> 00:09:51.820
+O Dynamics 365 suporta pagamentos centralizados para essa situação.
+
+00:09:52.380 --> 00:09:55.320
+Um pagamento pode ser registrado em uma entidade legal em nome de outra.
+
+00:09:56.060 --> 00:09:58.700
+A empresa não precisa fingir que o dinheiro chegou primeiro na empresa vendedora
+
+00:09:58.700 --> 00:10:00.820
+ou gerenciar o processo fora do sistema.
+
+00:10:01.640 --> 00:10:04.920
+Os registros podem mostrar onde o pagamento entrou e qual dívida do cliente ele liquida.
+
+00:10:05.640 --> 00:10:08.040
+Isso mantém o trabalho financeiro compartilhado, mas organizado,
+
+00:10:08.100 --> 00:10:10.300
+especialmente quando várias empresas usam uma única equipe central de caixa.
+
+00:10:10.300 --> 00:10:13.280
+Portanto, o processo completo de pagamento é mais do que registrar dinheiro.
+
+00:10:14.200 --> 00:10:18.740
+O Dynamics 365 vincula o cliente, o pagamento e a fatura até que o saldo em aberto seja fechado
+
+00:10:18.740 --> 00:10:21.800
+ou até que o valor restante indique ao financeiro que mais pagamentos são devidos.
+
+00:10:22.440 --> 00:10:23.540
+Isso liquida o pagamento de hoje.
+
+00:10:23.980 --> 00:10:25.600
+A próxima pergunta vem antes da próxima venda.
+
+00:10:26.160 --> 00:10:28.260
+A empresa deve permitir que um cliente fique ainda mais endividado?
+
+00:10:28.260 --> 00:10:35.880
+Então, você recebe um pagamento e ele quita um saldo antigo.
+
+00:10:36.340 --> 00:10:36.800
+Bem direto.
+
+00:10:37.560 --> 00:10:40.520
+Mas aqui está o que a gestão de crédito pergunta antes que o próximo pedido avance.
+
+00:10:41.000 --> 00:10:42.680
+Quanto mais de risco sua empresa está disposta a correr?
+
+00:10:43.400 --> 00:10:44.380
+Pense na recepção de um hotel.
+
+00:10:44.820 --> 00:10:47.380
+Um hóspede quer ficar mais uma noite, então a equipe verifica a reserva,
+
+00:10:47.440 --> 00:10:50.180
+o status do pagamento e as regras antes de entregar um novo cartão do quarto.
+
+00:10:50.780 --> 00:10:53.340
+É exatamente isso que a gestão de crédito faz para um pedido de vendas.
+
+00:10:53.760 --> 00:10:56.620
+Ela não julga se a Northwind Equipment é um bom cliente no geral.
+
+00:10:56.620 --> 00:11:01.080
+Ela simplesmente verifica sua posição financeira atual em relação às regras definidas pela sua empresa.
+
+00:11:01.420 --> 00:11:02.960
+Uma dessas regras é o limite de crédito.
+
+00:11:03.160 --> 00:11:06.220
+Um limite de crédito é o valor máximo que um cliente pode dever a qualquer momento.
+
+00:11:06.540 --> 00:11:10.280
+Portanto, se a Northwind tem um limite de US$ 50 mil e já deve US$ 45 mil,
+
+00:11:10.520 --> 00:11:12.700
+um novo pedido de US$ 20 mil, requer atenção.
+
+00:11:13.180 --> 00:11:16.620
+O cliente ainda pode fazer o pedido, mas sua empresa não deve deixar essa decisão passar despercebida.
+
+00:11:17.400 --> 00:11:19.480
+O Dynamics 305 pode verificar mais do que um.
+
+00:11:19.780 --> 00:11:22.620
+Ele analisa as faturas em aberto, há quanto tempo estão vencidas,
+
+00:11:22.760 --> 00:11:25.680
+o valor do novo pedido de vendas e o crédito ainda disponível para esse cliente.
+
+00:11:25.680 --> 00:11:28.660
+Um cliente que paga em dia pode ter espaço para mais crédito,
+
+00:11:29.000 --> 00:11:32.600
+enquanto outro cliente pode estar abaixo do seu limite, mas ter uma fatura seriamente atrasada.
+
+00:11:33.240 --> 00:11:34.060
+Esses são riscos diferentes.
+
+00:11:34.500 --> 00:11:38.560
+Quando uma regra é acionada, o Dynamics 365 pode colocar o pedido de vendas em retenção de crédito,
+
+00:11:38.680 --> 00:11:41.900
+pausando o pedido antes que você envie mais mercadorias ou assuma mais trabalho e não pago.
+
+00:11:42.580 --> 00:11:45.320
+O setor de vendas pode ver a retenção, o financeiro pode ver o motivo
+
+00:11:45.320 --> 00:11:48.240
+e ninguém descobre o problema depois que o armazém já enviou outra entrega.
+
+00:11:48.920 --> 00:11:51.620
+Uma retenção de crédito não significa que o pedido foi ajeitado para sempre.
+
+00:11:51.940 --> 00:11:53.000
+Significa que alguém precisa analisá-lo.
+
+00:11:53.000 --> 00:11:56.020
+Talvez a Northwind tenha enviado o comprovante de que o pagamento está a caminho,
+
+00:11:56.180 --> 00:11:59.480
+ou um gerente financeiro saiba que a fatura vencida está ligada a um erro de faturamento,
+
+00:11:59.560 --> 00:12:02.580
+ou o cliente tenha solicitado um aumento temporário devido a um grande projeto aprovado.
+
+00:12:02.780 --> 00:12:03.960
+Devido a um grande projeto aprovado.
+
+00:12:04.080 --> 00:12:06.700
+Funcionários autorizados podem liberar um pedido quando houver um motivo válido.
+
+00:12:06.920 --> 00:12:09.700
+Essa parte é importante porque as regras de negócio precisam de espaço para a vida real.
+
+00:12:10.060 --> 00:12:11.900
+O sistema pode interromper uma decisão automática,
+
+00:12:12.120 --> 00:12:15.620
+mas os responsáveis ainda decidem o que acontece a seguir e deixam um registro claro dessa decisão.
+
+00:12:15.620 --> 00:12:18.240
+É aqui que as equipes de vendas e finanças precisam trabalhar com a mesma.
+
+00:12:18.900 --> 00:12:21.620
+Vendas quer manter o cliente ativo, especialmente quando o pedido é importante,
+
+00:12:21.940 --> 00:12:25.140
+enquanto o financeiro precisa proteger a empresa de acumular um saldo que talvez nunca retorne.
+
+00:12:25.920 --> 00:12:27.280
+Nenhum dos lados precisa vencer uma discussão.
+
+00:12:27.740 --> 00:12:31.520
+Eles apenas precisam do pedido, do valor não pago e das regras de crédito em um só lugar.
+
+00:12:32.340 --> 00:12:35.680
+Muitas pessoas ouvem gestão de crédito e presumem que significa afastar clientes.
+
+00:12:36.120 --> 00:12:36.420
+Não significa.
+
+00:12:36.900 --> 00:12:40.280
+Significa concordar com limites seguros antes que um pagamento atrasado se torne um problema muito maior.
+
+00:12:40.280 --> 00:12:44.280
+Você ainda pode apoiar bons clientes, aprovar exceções e vender com confiança.
+
+00:12:44.900 --> 00:12:47.320
+Você apenas para de aumentar a dívida sem verificar os fatos primeiro.
+
+00:12:47.900 --> 00:12:50.940
+Assim que uma fatura passa da data de vencimento, a prevenção do alugar ao acompanhamento.
+
+00:12:52.280 --> 00:12:53.740
+5. Cobranças e disputas
+
+00:12:53.740 --> 00:12:55.760
+Buscar o pagamento sem perder o cliente
+
+00:12:55.760 --> 00:12:58.660
+Assim que uma data de vencimento passa, o trabalho é bom.
+
+00:12:58.960 --> 00:13:01.100
+A empresa não decide mais se deve estender o crédito.
+
+00:13:01.400 --> 00:13:04.040
+Ela precisa de uma forma clara e respeitosa de pedir por um dinheiro que já venceu.
+
+00:13:05.040 --> 00:13:07.860
+O Dynamics 3C5 Finance traz esse trabalho para a página de cobranças.
+
+00:13:07.860 --> 00:13:10.740
+Pense nisso como uma mesa de trabalho compartilhada para quantos de clientes entram.
+
+00:13:11.200 --> 00:13:15.240
+Em vez de uma pessoa mantendo notas por e-mail, outra rastreando chamadas em uma planilha
+
+00:13:15.240 --> 00:13:17.040
+e alguém verificando faturas no financeiro,
+
+00:13:17.140 --> 00:13:21.100
+a equipe de cobrança vê o saldo do cliente e toda a atividade de acompanhamento em um só lugar.
+
+00:13:21.920 --> 00:13:23.100
+Isso muda a conversa.
+
+00:13:23.780 --> 00:13:27.760
+Um agente de cobrança trabalha a partir de listas de clientes criadas por critérios de cobrança
+
+00:13:27.760 --> 00:13:31.000
+que podem encontrar clientes com faturas atrasadas a certo número de dias,
+
+00:13:31.420 --> 00:13:32.900
+acima de um valor de atraso escolhido,
+
+00:13:33.240 --> 00:13:35.700
+ou que precisam de atenção pelas regras de cobrança da sua empresa.
+
+00:13:35.700 --> 00:13:38.680
+Assim, a equipe não precisa adivinhar quem contatar primeiro.
+
+00:13:39.760 --> 00:13:42.400
+Para cada cliente, a gente pode tomar uma atitude, enviar um lembrete,
+
+00:13:42.480 --> 00:13:46.020
+criar uma carta de cobrança, enviar um e-mail ou adicionar uma tarefa para um telefonema.
+
+00:13:47.080 --> 00:13:48.860
+O objetivo não é enviar mensagens agressivas.
+
+00:13:49.360 --> 00:13:51.360
+A maioria dos pagamentos atrasados começa com algo comum.
+
+00:13:51.840 --> 00:13:52.520
+Ahn...
+
+00:13:52.520 --> 00:13:53.760
+Uma fatura chegando na entrada errada,
+
+00:13:53.820 --> 00:13:57.700
+um cliente precisando de uma cópia ou a equipe de pagamento perdendo prazo, ou...
+
+00:13:57.700 --> 00:13:59.160
+Lembrete calmo, pode resolver muita coisa.
+
+00:13:59.580 --> 00:14:02.100
+Às vezes um cliente responde com a promessa de pagar na próxima sexta-feira.
+
+00:14:02.100 --> 00:14:05.480
+O Dynamics 365 pode registrar isso com uma promessa de pagamento,
+
+00:14:05.700 --> 00:14:07.260
+para que a equipe saiba que existe um compromisso
+
+00:14:07.260 --> 00:14:09.220
+e possa verificar se o pagamento chega conforme prometido.
+
+00:14:09.940 --> 00:14:13.320
+Sem esse registro, o próximo agente pode ligar para o mesmo cliente na manhã seguinte,
+
+00:14:13.720 --> 00:14:15.140
+sem saber que alguém já combinou uma data.
+
+00:14:15.720 --> 00:14:17.160
+Disputas precisam do mesmo tipo de cuidado.
+
+00:14:17.700 --> 00:14:20.280
+Uma disputa significa que o cliente contesta toda ou parte de uma fatura.
+
+00:14:21.680 --> 00:14:22.780
+Talvez porque o preço esteja errado,
+
+00:14:23.020 --> 00:14:24.300
+alguns produtos nunca chegaram,
+
+00:14:24.800 --> 00:14:26.820
+ou a fatura se refere a um trabalho que eles não aprovaram.
+
+00:14:26.820 --> 00:14:30.460
+A pior resposta é deixar esses problemas aparecerem dentro de uma caixa de entrada.
+
+00:14:31.100 --> 00:14:33.740
+O Dynamics 365 pode marcar a fatura como contestada
+
+00:14:33.740 --> 00:14:35.380
+e mantê-la visível durante o trabalho de cobrança.
+
+00:14:35.840 --> 00:14:38.680
+A equipe pode rastrear o status e o trabalho necessário para resolver,
+
+00:14:38.880 --> 00:14:41.700
+em vez de tratar o silêncio como um motivo para continuar enviando o mesmo lembrete.
+
+00:14:42.400 --> 00:14:44.240
+Isso também ajuda a empresa a identificar problemas de recorrência.
+
+00:14:45.300 --> 00:14:47.600
+Se vários clientes contestam o mesmo tipo de cobrança,
+
+00:14:47.820 --> 00:14:50.140
+o financeiro aprendeu algo além de um atraso de pagamento.
+
+00:14:50.140 --> 00:14:53.140
+O faturamento, as vendas, a entrega ou atendimento ao cliente
+
+00:14:53.140 --> 00:14:55.420
+podem precisar corrigir o processo que está gerando essas disputas.
+
+00:14:55.420 --> 00:14:57.540
+A cobrança também usa relatórios de idade
+
+00:14:57.540 --> 00:15:00.380
+que classificam valores não pagos pelo tempo em que permaneceram em aberto.
+
+00:15:01.020 --> 00:15:02.320
+Você pode ver valores devidos agora,
+
+00:15:02.400 --> 00:15:04.240
+depois vencidos a 30, 60, 90 dias.
+
+00:15:04.820 --> 00:15:07.680
+Essas faixas de tempo ajudam a equipe a ver quais dívidas precisam de atenção
+
+00:15:07.680 --> 00:15:09.280
+antes que se torne em conversas muito mais difíceis.
+
+00:15:09.820 --> 00:15:12.720
+Uma fatura com dois dias de atraso nem sempre exige a mesma resposta
+
+00:15:12.720 --> 00:15:14.480
+que uma que está sem pagamento há três meses.
+
+00:15:15.400 --> 00:15:17.980
+O departamento financeiro também pode usar previsões de pagamento
+
+00:15:17.980 --> 00:15:20.820
+quando disponíveis para estimar se as faturas em aberto chegaram no prazo,
+
+00:15:20.900 --> 00:15:22.460
+com atraso ou com muito atraso,
+
+00:15:22.500 --> 00:15:24.900
+com base em dados de pagamentos anteriores e do cliente.
+
+00:15:25.420 --> 00:15:28.520
+Um relatório de vencimentos mostra o que já aconteceu,
+
+00:15:28.820 --> 00:15:30.920
+mas uma previsão ajuda a equipe a decidir onde focar
+
+00:15:30.920 --> 00:15:32.740
+antes que o próximo atraso vire um problema.
+
+00:15:33.280 --> 00:15:34.460
+Isso não substitui julgamento humano.
+
+00:15:36.080 --> 00:15:37.620
+Isso dá à equipe de cobrança outro sinal
+
+00:15:37.620 --> 00:15:39.760
+quando precisam escolher entre uma longa lista de contas.
+
+00:15:40.500 --> 00:15:41.420
+O objetivo é simples,
+
+00:15:41.540 --> 00:15:43.840
+receber pagamentos de forma constante e visível,
+
+00:15:43.980 --> 00:15:45.320
+tratando o cliente como um cliente
+
+00:15:45.320 --> 00:15:46.640
+e não como um número de caso.
+
+00:15:46.640 --> 00:15:49.820
+Agora, vamos colocar toda essa jornada em um exemplo simples.
+
+00:15:51.140 --> 00:15:52.080
+Seis, uma fatura,
+
+00:15:52.140 --> 00:15:53.720
+um processo conectado à visão geral.
+
+00:15:55.440 --> 00:15:56.760
+Então, vamos acompanhar o que acontece
+
+00:15:56.760 --> 00:15:58.220
+quando a Northwind faz um pedido,
+
+00:15:58.320 --> 00:15:59.580
+o seu sistema processa e,
+
+00:15:59.740 --> 00:16:01.580
+ao atingir o ponto de faturamento acordado,
+
+00:16:01.640 --> 00:16:02.480
+a fatura é enviada.
+
+00:16:03.040 --> 00:16:05.600
+A conta do cliente já contém seus termos de pagamento.
+
+00:16:05.760 --> 00:16:08.580
+Então, o Dynamics 305 calcula a data de vencimento automaticamente
+
+00:16:08.580 --> 00:16:10.280
+conforme as regras acordadas com a Northwind.
+
+00:16:10.280 --> 00:16:12.660
+E o cliente recebeu o valor em aberto
+
+00:16:12.660 --> 00:16:14.540
+e o cliente recebe uma solicitação clara de pagamento.
+
+00:16:15.060 --> 00:16:15.820
+Esse é o início do processo.
+
+00:16:16.500 --> 00:16:17.380
+Algumas semanas depois,
+
+00:16:17.460 --> 00:16:18.800
+a Northwind envia um pagamento bancário
+
+00:16:18.800 --> 00:16:19.540
+com a referência da fatura.
+
+00:16:19.980 --> 00:16:21.420
+O financeiro concilia o pagamento com a fatura
+
+00:16:21.420 --> 00:16:22.200
+e, em seguida, faz a regras.
+
+00:16:22.580 --> 00:16:23.740
+O saldo em aberto é encerrado
+
+00:16:23.740 --> 00:16:24.920
+e a conta do cliente agora mostra
+
+00:16:24.920 --> 00:16:26.860
+que essa parte do relacionamento está concluída.
+
+00:16:27.360 --> 00:16:28.620
+Nenhuma verificação manual necessária.
+
+00:16:29.020 --> 00:16:30.580
+Mas o que acontece quando as coisas seguem um caminho diferente?
+
+00:16:30.920 --> 00:16:32.520
+Se a Northwind perde a data de vencimento,
+
+00:16:32.600 --> 00:16:33.540
+a fatura vai para a cobrança.
+
+00:16:34.000 --> 00:16:35.260
+Um agente envia um lembrete,
+
+00:16:35.460 --> 00:16:37.620
+a Northwind responde que parte da cobrança está errada
+
+00:16:37.620 --> 00:16:39.240
+e a equipe registra uma disputa
+
+00:16:39.240 --> 00:16:41.340
+em vez de tratar como um atraso injustificado.
+
+00:16:41.960 --> 00:16:42.980
+Todos veem o mesmo status
+
+00:16:42.980 --> 00:16:44.300
+e sabem qual é a próxima ação,
+
+00:16:44.360 --> 00:16:45.500
+porque tudo está em um só lugar.
+
+00:16:46.480 --> 00:16:48.780
+Tal o diferencial do Dynamics 3 e EC5 Finance
+
+00:16:48.780 --> 00:16:49.840
+nada fica separado?
+
+00:16:50.840 --> 00:16:52.520
+Pedidos de venda, faturas, pagamentos,
+
+00:16:52.620 --> 00:16:54.040
+verificações de crédito e trabalho de cobrança
+
+00:16:54.040 --> 00:16:56.080
+estão todos vinculados ao mesmo relacionamento com o cliente,
+
+00:16:56.140 --> 00:16:57.420
+então você não precisa buscar informações
+
+00:16:57.420 --> 00:16:58.540
+em vários sistemas.
+
+00:16:59.540 --> 00:17:01.440
+Isso significa decisões mais rápidas e menos erro.
+
+00:17:02.160 --> 00:17:04.180
+O modo antigo espalhava a história por planilhas,
+
+00:17:04.340 --> 00:17:06.520
+pastas de e-mail, notas de papel e arquivos bancários,
+
+00:17:06.520 --> 00:17:07.760
+fazendo as pessoas perderem tempo,
+
+00:17:07.860 --> 00:17:09.480
+tentando descobrir qual versão é a correta.
+
+00:17:10.680 --> 00:17:12.880
+O Dynamics 3 e EC5 mantém a história conectada
+
+00:17:12.880 --> 00:17:14.720
+com uma visão completa do cliente de ponta a ponta.
+
+00:17:15.320 --> 00:17:17.420
+Contas a receber significa saber quem lhe deve dinheiro
+
+00:17:17.420 --> 00:17:18.920
+quando vence o que aconteceu até agora
+
+00:17:18.920 --> 00:17:20.180
+e o que você precisa fazer em seguida.
+
+00:17:20.760 --> 00:17:21.640
+Se voltar a qualquer peça,
+
+00:17:21.700 --> 00:17:22.600
+uma empresa pode vender muito
+
+00:17:22.600 --> 00:17:24.340
+e ainda ter dificuldade para saber onde está seu dinheiro.
+
+00:17:24.820 --> 00:17:26.280
+É por isso que este processo conectado é importante.
+
+00:17:27.480 --> 00:17:27.840
+Conclusão.
+
+00:17:28.660 --> 00:17:29.960
+Mantenha o dinheiro interno sob controle.
+
+00:17:30.960 --> 00:17:32.500
+Uma fatura apenas inicia o processo.
+
+00:17:33.080 --> 00:17:34.780
+Suas contas a receber acompanham o dinheiro
+
+00:17:34.780 --> 00:17:36.760
+até que o saldo feche ou alguém tome uma atitude
+
+00:17:36.760 --> 00:17:37.860
+sobre o que não foi pago.
+
+00:17:39.500 --> 00:17:40.980
+Manter esse dinheiro interno sob controle
+
+00:17:40.980 --> 00:17:42.260
+é fundamental para a saúde do negócio.
+
+00:17:42.760 --> 00:17:43.400
+Eu sou o Mirko Piz.
+
+00:17:43.780 --> 00:17:45.660
+Inscreva-se no Microsoft Knowledge Magnets,
+
+00:17:45.720 --> 00:17:46.740
+no M365FM,
+
+00:17:46.800 --> 00:17:47.960
+e assista o episódio relacionado
+
+00:17:47.960 --> 00:17:49.520
+Dynamics 365 Finance na sua tela
+
+00:17:49.520 --> 00:17:50.480
+para continuar a entender tudo
+
+00:17:50.480 --> 00:17:51.420
+de forma clara e simples.
+
+00:17:51.420 --> 00:18:21.400
+Transcrição e Legendas por Quintena Coelho

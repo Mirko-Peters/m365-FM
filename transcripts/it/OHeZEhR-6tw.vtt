@@ -1,0 +1,991 @@
+WEBVTT
+
+00:00:00.080 --> 00:00:03.940
+Benvenuti ad un altro episodio delle Microsoft Knowledge Nuggets qui su M365FM.
+
+00:00:04.200 --> 00:00:05.320
+Sono il vostro host Mirko Peter.
+
+00:00:05.580 --> 00:00:09.020
+In questa serie prendiamo la tecnologia Microsoft e la spieghiamo in parole semplici.
+
+00:00:09.480 --> 00:00:13.000
+L'argomento di oggi è qualcosa di cui quasi tutti hanno sentito parlare ma che pochi sanno spiegare davvero.
+
+00:00:13.300 --> 00:00:14.100
+Le azzure landing zone.
+
+00:00:14.440 --> 00:00:15.000
+Ecco la situazione.
+
+00:00:15.400 --> 00:00:18.460
+Immaginate di ereditare un tenante giorno in cui ogni team ha fatto di testa propria.
+
+00:00:19.100 --> 00:00:22.620
+Nessuna convenzione di nomenclatura, nessuna policy, nessun piano di rete, sottoscrizioni ovunque.
+
+00:00:23.000 --> 00:00:25.120
+Alcune per produzione e altre per i test e non si capisce cosa c'è qua.
+
+00:00:25.600 --> 00:00:29.200
+Nessuno sa chi possiede cosa, la fattura è un mistero e quando qualcosa si rompe,
+
+00:00:29.200 --> 00:00:30.480
+trovare il problema richiede ora.
+
+00:00:30.800 --> 00:00:33.500
+Questo è il problema del caos nel cloud ed è sorprendentemente comune.
+
+00:00:34.020 --> 00:00:35.140
+Più comune di quanto si pensi.
+
+00:00:35.940 --> 00:00:38.320
+Le azzure landing zone servono a prevenire questo disastro prima che noi.
+
+00:00:38.800 --> 00:00:41.620
+Alla fine di questo episodio capirete cos'è davvero una landing zone,
+
+00:00:41.740 --> 00:00:45.460
+perché le otto aree di progettazione contano e come evitare gli errori più comuni.
+
+00:00:46.320 --> 00:00:47.580
+Prendete il vostro caffè e iniziamo.
+
+00:00:48.760 --> 00:00:50.100
+Cos'è in realtà una azzure landing zone?
+
+00:00:50.940 --> 00:00:54.440
+Molti pensano che un azzure landing zone sia un prodotto da cliccare per distribuire ma non è così.
+
+00:00:55.000 --> 00:00:57.220
+Non c'è un pulsante nel portale con scritto Crea landing zone.
+
+00:00:57.380 --> 00:00:58.440
+Non funziona così.
+
+00:00:59.200 --> 00:01:02.200
+Una landing zone è un ambiente preconfigurato con dei binari di sicurezza già pronti.
+
+00:01:02.880 --> 00:01:06.820
+Networking, identità, monitoraggio, policy, tutto collegato prima ancora dell'arrivo di qualsiasi carico di lavoro.
+
+00:01:07.420 --> 00:01:11.160
+Pensatela come l'acquisto di una casa che ha già elettricità, idraulica e sistema di sicurezza.
+
+00:01:12.040 --> 00:01:14.760
+Vi trasferite e iniziate a lavorare senza dover installare gli impianti da solo.
+
+00:01:15.280 --> 00:01:19.240
+L'idea principale è che la sottoscrizione sia l'unità di isolamento, non il resource group.
+
+00:01:19.840 --> 00:01:21.600
+Una sottoscrizione è il confine del vostro ragionamento.
+
+00:01:21.600 --> 00:01:26.760
+Date una sottoscrizione a un team perché le sottoscrizioni hanno i propri limiti di quota, assegnazione di policy e fatturazione.
+
+00:01:27.600 --> 00:01:30.720
+Landing zone avvolge quella sottoscrizione con tutto ciò che viene deciso centralmente.
+
+00:01:31.280 --> 00:01:36.020
+Quali regioni sono consentite, a quale rete connettersi, quali tag sono obbligatori e cosa è vietato fare.
+
+00:01:36.740 --> 00:01:38.200
+Quindi cosa applica effettivamente le regole?
+
+00:01:38.600 --> 00:01:41.200
+Azure policy, non la documentazione, non le buone intenzioni.
+
+00:01:41.200 --> 00:01:43.900
+Viene assegnata a livello di management group e svolge tre compiti.
+
+00:01:44.640 --> 00:01:47.380
+Deny blocca elementi come regioni non consentite o indirizzi più pubblici.
+
+00:01:47.920 --> 00:01:50.220
+Audit segnala le risorse non conformi senza bloccarle.
+
+00:01:50.820 --> 00:01:56.860
+Deploy if not exists e correggia automaticamente distribuendo elementi come le impostazioni di diagnostica per log analytics o i piani di Microsoft Defender.
+
+00:01:57.440 --> 00:02:00.400
+Questa è la differenza tra una governance che è una pagina wiki e una governance che è codice.
+
+00:02:01.180 --> 00:02:05.740
+I team si muovono velocemente dentro all'auro scatola ma il team di piattaforma controlla la scatola, non il contenuto.
+
+00:02:05.740 --> 00:02:09.760
+Grande cambiamento è permettere ai team di avere le proprie sottoscrizioni mentre il team centrale stabilisce le regole.
+
+00:02:09.760 --> 00:02:12.880
+Identità e governance, la porta d'ingresso e il regolamento.
+
+00:02:13.380 --> 00:02:17.820
+Il punto è questo, una landing zone non è un elemento singolo, è composta da otto aree di progettazione.
+
+00:02:18.400 --> 00:02:19.280
+Analizziamo le prime tre.
+
+00:02:20.040 --> 00:02:22.100
+La prima riguarda la fatturazione azzura e il tenant entra.
+
+00:02:22.620 --> 00:02:25.960
+Si tratta di configurare correttamente il tenant e la sottoscrizione fin dall'inizio.
+
+00:02:26.340 --> 00:02:29.020
+Sembra semplice ma ti stupiresti di quanto le organizzazioni sbagliano.
+
+00:02:29.540 --> 00:02:33.720
+Devi pensare alla struttura di fatturazione, all'enrollment e a come tutto si collega al tuo tenant.
+
+00:02:33.720 --> 00:02:35.540
+Entra prima di distribuire qualsiasi cosa.
+
+00:02:36.300 --> 00:02:38.960
+Il tuo principale confine di sicurezza è la gestione dell'identità e degli accessi.
+
+00:02:38.960 --> 00:02:41.780
+Pensa e entra i di come la reception di un edificio per uffici.
+
+00:02:42.500 --> 00:02:44.260
+Decide chi può entrare e cosa è autorizzato a fare.
+
+00:02:44.760 --> 00:02:49.640
+Dovresti usare il Privileged Identity Management o PIM e imporre ruoli airbag con privilegi minimi.
+
+00:02:50.600 --> 00:02:52.980
+Non dare a tutti l'accesso proprietario è la ricetta per un disastro.
+
+00:02:53.540 --> 00:02:56.780
+Usa invece il PIM per concedere un accesso temporaneo just in time quando serve
+
+00:02:56.780 --> 00:03:00.280
+e imposta revisioni periodiche per rimuovere i permessi non più necessari.
+
+00:03:00.520 --> 00:03:03.200
+La terza area di progettazione è l'organizzazione delle risorse.
+
+00:03:03.580 --> 00:03:06.320
+Gruppi di gestione, sottoscrizioni e gruppi di risorse.
+
+00:03:06.320 --> 00:03:10.280
+I gruppi di gestione stanno sopra le sottoscrizioni e le policy e le assegnazioni dei ruoli
+
+00:03:10.280 --> 00:03:12.140
+vengono ereditate verso il basso nell'anno.
+
+00:03:12.580 --> 00:03:15.920
+La gerarchia di riferimento del Cloud Adoption Framework parte dalla radice del tenant,
+
+00:03:16.080 --> 00:03:17.880
+poi un gruppo intermedio per la tua organizzazione.
+
+00:03:18.620 --> 00:03:21.640
+Sotto di esso hai piattaforma, landing zone, dismesse e sandbox.
+
+00:03:22.320 --> 00:03:26.380
+La piattaforma contiene le tue sottoscrizioni condivise, la gestione dell'identità e la connettività.
+
+00:03:27.320 --> 00:03:31.100
+Le landing zone si dividono in corp per i carichi che necessitano di connettività on-premise
+
+00:03:31.100 --> 00:03:34.320
+e online per le app esposte su internet perché la struttura è importante.
+
+00:03:34.940 --> 00:03:37.960
+Se hai una volta in alto nell'albero e tu ciò che sta sotto diventa conforme automaticamente.
+
+00:03:38.440 --> 00:03:42.140
+Un esempio reale, una policy di negazione al vertice, blocca le regioni non consentite
+
+00:03:42.140 --> 00:03:43.660
+per ogni sottoscrizione sottostante.
+
+00:03:44.160 --> 00:03:45.600
+Non devi configurarla 50 volte.
+
+00:03:46.160 --> 00:03:47.520
+Impostala una volta e viene ereditata.
+
+00:03:47.640 --> 00:03:49.940
+Questo è il vero potere della gerarchia dei gruppi di gestione.
+
+00:03:50.660 --> 00:03:51.600
+Networking e sicurezza.
+
+00:03:51.800 --> 00:03:52.540
+Le mure e le serrature.
+
+00:03:52.540 --> 00:03:55.080
+Identità e governance stabiliscono le regole.
+
+00:03:55.420 --> 00:03:57.080
+Ma nulla funziona se la rete è un disastro.
+
+00:03:57.760 --> 00:04:00.540
+La topologia di rete e la connettività sono la quarta area di progettazione.
+
+00:04:00.660 --> 00:04:02.180
+Come sono strutturate le tue reti virtuali?
+
+00:04:02.560 --> 00:04:04.040
+Esistono due pattern principali.
+
+00:04:04.120 --> 00:04:08.580
+Hub and spoke, dove hai una rete virtuale centrale come hub e più reti spoke che si collegano ad essa.
+
+00:04:09.240 --> 00:04:13.240
+Oppure Azure Virtual One, la versione gestita da Microsoft su scala maggiore.
+
+00:04:14.120 --> 00:04:15.600
+L'hub contiene tutti i tuoi servizi condivisi.
+
+00:04:16.360 --> 00:04:18.060
+Azure Firewall per l'ispezione del traffico.
+
+00:04:18.060 --> 00:04:20.620
+Express Route o Gateway VPN per la connettività on-premise.
+
+00:04:20.620 --> 00:04:23.180
+Resoluzione DNS, cose di cui ogni carico di lavoro ha bisogno.
+
+00:04:23.840 --> 00:04:25.940
+Gli spoke sono dove vengono effettivamente eseguiti i tuoi carichi di raw.
+
+00:04:26.340 --> 00:04:29.460
+Si collegano all'hub, così il traffico passa attraverso i servizi centrali,
+
+00:04:29.520 --> 00:04:31.240
+ma ogni spoke rimane isolato dagli altri.
+
+00:04:31.900 --> 00:04:32.640
+Ecco un errore comune.
+
+00:04:33.020 --> 00:04:36.160
+I team creano una gigantesca mesh di peering invece di usare un hub,
+
+00:04:36.500 --> 00:04:38.940
+collegando ogni rete virtuale direttamente alle altre.
+
+00:04:39.640 --> 00:04:41.280
+Funziona per un po', ma diventa presto un caos.
+
+00:04:42.020 --> 00:04:44.460
+Si finisce con una ragnatela di connessioni che nessuno riesce a tracciare.
+
+00:04:44.640 --> 00:04:46.140
+Un hub semplifica tutto.
+
+00:04:46.700 --> 00:04:48.660
+Un unico punto da gestire, un unico punto da proteggere.
+
+00:04:48.660 --> 00:04:50.880
+Pianificate gli intervalli di indirizzi in anticipo.
+
+00:04:51.220 --> 00:04:52.320
+È più importante di quanto pensate.
+
+00:04:52.820 --> 00:04:54.440
+Una volta che gli spoke sono in peering con un hub,
+
+00:04:54.540 --> 00:04:56.560
+correggere gli spazi di indirizzi sovrapposti è complicato.
+
+00:04:57.020 --> 00:04:57.980
+Non si possono sempre cambiare.
+
+00:04:58.360 --> 00:05:01.720
+Bisogna eliminare il peering, aggiornare l'intervallo e riconnettere tutto.
+
+00:05:02.120 --> 00:05:04.220
+Se avete carichi di lavoro in produzione significa downtime,
+
+00:05:04.480 --> 00:05:07.300
+quindi scedete presso gli intervalli CDR e assicuratevi che non si sovrappongano.
+
+00:05:07.300 --> 00:05:10.040
+L'area di progettazione 5 riguarda i consigli sulla sicurezza,
+
+00:05:10.140 --> 00:05:12.760
+inclusi criptografia, protezione dell'identità, rilevamento delle minacce,
+
+00:05:12.840 --> 00:05:14.240
+gestione delle minacce, gestione del vero bit.
+
+00:05:14.240 --> 00:05:17.520
+Abilitate Microsoft Defender for Cloud su tutte le sottoscrizioni come base di riferimento.
+
+00:05:18.220 --> 00:05:21.720
+Fornisce consigli sulla gestione della postura, avvisi e indicazioni di risoluzione
+
+00:05:21.720 --> 00:05:23.540
+per tutto ciò che è nel vostro ambiente.
+
+00:05:24.340 --> 00:05:26.840
+Usate endpoint VATI per tenere i servizi fuori da internet pubblico.
+
+00:05:27.740 --> 00:05:30.560
+Invece di accedere a un account di archiviazione tramite un IP pubblico,
+
+00:05:30.620 --> 00:05:32.900
+gli assegnate un IP privato all'interno della vostra rete virtuale.
+
+00:05:32.900 --> 00:05:34.460
+Il traffico non lascia mai la dorsa di Microsoft.
+
+00:05:34.920 --> 00:05:36.320
+È più sicuro e più semplice da gestire.
+
+00:05:36.320 --> 00:05:40.320
+Inserite gruppi di sicurezza di rete su ogni subnet e bloccate l'RDP in ingresso da internet
+
+00:05:40.320 --> 00:05:41.360
+per impostazione predefinita.
+
+00:05:41.820 --> 00:05:42.520
+Dovrebbe essere lo stesso.
+
+00:05:43.060 --> 00:05:46.300
+Se qualcuno necessita di accesso remoto usa Azure Bastion o un Jump Box,
+
+00:05:46.580 --> 00:05:47.840
+non una regola RDP diretta.
+
+00:05:48.180 --> 00:05:51.920
+Un esempio reale è una policy di negazione che blocca gli indirizzi più pubblici sugli account di archiviazione.
+
+00:05:52.460 --> 00:05:54.580
+Assegnate la policy a livello di management group e,
+
+00:05:54.580 --> 00:05:57.840
+nel momento in cui qualcuno prova a distribuire un account di archiviazione con endpoint pubblico,
+
+00:05:57.900 --> 00:05:58.620
+il deployment fallisce.
+
+00:05:59.100 --> 00:06:02.040
+Il messaggio di errore spiega il motivo e l'utente è costretto a usare un endpoint privato.
+
+00:06:02.480 --> 00:06:04.940
+Questa è una governance che funziona davvero,
+
+00:06:04.940 --> 00:06:07.100
+non un semplice suggerimento scritto in un documento.
+
+00:06:07.820 --> 00:06:10.140
+Gestione, governance e automazione per mantenere tutto operativo.
+
+00:06:10.480 --> 00:06:13.480
+Dunque, avete il vostro edificio con muri e serrature, ma cosa sta succedendo all'interno?
+
+00:06:13.840 --> 00:06:14.720
+Avete delle d'occhio tutto.
+
+00:06:15.100 --> 00:06:16.660
+L'area di progettazione si riguarda la gestione.
+
+00:06:17.120 --> 00:06:19.840
+Include monitoraggio, backup, log e l'aspetto operativo.
+
+00:06:20.500 --> 00:06:22.220
+Volete un'area di lavoro log analytics centrale,
+
+00:06:22.220 --> 00:06:23.920
+in cui ogni sottoscrizione invii i propri log.
+
+00:06:24.240 --> 00:06:27.220
+Un unico posto per interrogare tutto, impostare avvisi e risolvere problemi.
+
+00:06:27.440 --> 00:06:28.020
+Questo è l'obiettivo.
+
+00:06:28.440 --> 00:06:31.480
+Ora, come assicuratevi che ogni singola risorsa invii i propri log di diagnostica?
+
+00:06:31.860 --> 00:06:32.540
+Non si fa a mano.
+
+00:06:32.540 --> 00:06:37.280
+Create una policy che dice, ogni risorsa deve inviare i log di diagnostica a quest'area di lavoro log analytics.
+
+00:06:38.240 --> 00:06:40.700
+E impostate quella policy per l'esecuzione in modalità deploy if not exist.
+
+00:06:41.160 --> 00:06:43.480
+Il risultato è che ogni nuova risorsa viene configurata automaticamente.
+
+00:06:43.900 --> 00:06:44.800
+Nessuno deve ricordarsene.
+
+00:06:45.160 --> 00:06:45.680
+Succede, basta.
+
+00:06:46.000 --> 00:06:49.760
+L'area di progettazione 7 è la governance che usa Azure Policy per imporre la conformità.
+
+00:06:49.760 --> 00:06:53.540
+Si raggruppano le regole correlate in quella che viene chiamata iniziativa di policy o set di policy.
+
+00:06:53.940 --> 00:06:56.760
+Un'iniziativa per la sicurezza, un'altra per la gestione dei costi.
+
+00:06:57.660 --> 00:06:59.860
+Ognuna contiene molteplici policy che lavorano insieme.
+
+00:07:00.600 --> 00:07:01.240
+Ecco un esempio.
+
+00:07:01.240 --> 00:07:05.660
+Un set di policy che impone crittografia, tagging e dimensioni consentite per le macchine virtuali.
+
+00:07:06.120 --> 00:07:07.620
+Si applica a livello di gruppo di gestione.
+
+00:07:08.040 --> 00:07:10.140
+Ogni sottoscrizione sottostante eredita tali regole.
+
+00:07:10.780 --> 00:07:14.860
+Quando uno sviluppatore prova a distribuire una VM, la policy verifica che usi una dimensione approvata,
+
+00:07:15.080 --> 00:07:17.460
+abbia i tag richiesti e usi i dischi crittografati.
+
+00:07:17.720 --> 00:07:21.080
+Se un controllo fallisce, la distribuzione viene bloccata o segnalata all'istante.
+
+00:07:21.780 --> 00:07:26.160
+Facciamo chiarezza sulla differenza tra una governance che vive su una pagina wiki e una che è codice vero e proprio.
+
+00:07:26.620 --> 00:07:28.680
+Una pagina wiki dice per favore aggiungi tag alle tue risorse.
+
+00:07:28.680 --> 00:07:32.400
+La policy dice che non puoi distribuire una risorsa senza i tag richiesti.
+
+00:07:33.100 --> 00:07:35.100
+Una è un suggerimento, l'altra è applicata automaticamente.
+
+00:07:36.360 --> 00:07:39.100
+L'area di progettazione 8 è l'automazione della piattaforma e DevOps.
+
+00:07:39.860 --> 00:07:41.940
+Infrastruttura come codice e pipeline CIS-CD.
+
+00:07:42.460 --> 00:07:43.980
+Tratta la landing zone stessa come codice.
+
+00:07:44.380 --> 00:07:47.900
+Ciò significa b-chap, modelli ARM o terraforma archiviati nel controllo del codice sorgente.
+
+00:07:47.900 --> 00:07:49.840
+Ogni modifica passa attraverso una pure requerente.
+
+00:07:50.120 --> 00:07:51.660
+Ogni distribuzione viene eseguita tramite una pipeline.
+
+00:07:51.980 --> 00:07:53.200
+Niente clic nel portale di Azure.
+
+00:07:53.720 --> 00:07:55.160
+Qui entra in gioco il subscription vending.
+
+00:07:55.700 --> 00:07:58.200
+Una pipeline ripetibile che crea nuove sottoscrizioni su richiesta.
+
+00:07:58.740 --> 00:08:02.720
+Un team invia una richiesta con parametri come centro di costo, dimensioni della rete e tipo di ambiente.
+
+00:08:03.480 --> 00:08:10.220
+La pipeline crea la sottoscrizione, la inserisce nel gruppo di gestione corretto, assegne budget, configura la rete Spoke e la connette all'hub.
+
+00:08:10.220 --> 00:08:12.120
+Tutto amatizzato.
+
+00:08:12.820 --> 00:08:13.460
+Perché è importante?
+
+00:08:13.700 --> 00:08:16.280
+Perché la nuova sottoscrizione è conforme dal momento in cui esiste.
+
+00:08:17.020 --> 00:08:20.920
+Le policy sono già sul gruppo di gestione e la sottoscrizione è reddita tutto automaticamente.
+
+00:08:21.480 --> 00:08:23.020
+Non c'è un intervallo in cui non si è regolamentato.
+
+00:08:23.360 --> 00:08:25.200
+Nessun essere umano deve ricordarsi di applicare le regole.
+
+00:08:25.560 --> 00:08:26.060
+Sono già lì.
+
+00:08:26.480 --> 00:08:30.760
+Questo permette a un team di piattaforma di supportare centinaia di sottoscrizioni senza diventare un collo di bottiglia.
+
+00:08:31.280 --> 00:08:37.160
+L'automazione fa lavoro pesante e il team si concentra sul miglioramento della piattaforma invece di cliccare nel portale per ogni singola richiesta.
+
+00:08:37.160 --> 00:08:40.940
+La distinzione tra piattaforma e applicazione è la confusione più comune.
+
+00:08:41.880 --> 00:08:44.760
+Quindi queste sono le otto ari progettazione, ma ecco dove molti sbagliano.
+
+00:08:45.400 --> 00:08:48.960
+Ci sono due tipi di landing zone e confonderle è l'errore più comune che vedo.
+
+00:08:49.300 --> 00:08:51.320
+Landing zone di piattaforma e landing zone di applicazione.
+
+00:08:51.920 --> 00:08:53.200
+Servono a scopi completamente diversi.
+
+00:08:53.460 --> 00:08:56.160
+Le landing zone di piattaforma sono le fondamenta condivise, gestite dal team di piattaforma.
+
+00:08:56.960 --> 00:09:02.640
+Hai una sottoscrizione di identità che contiene i servizi di dominio, una sottoscrizione di gestione con log analytics e account di automazione.
+
+00:09:02.640 --> 00:09:08.420
+È una sottoscrizione di connettività che ospita la rete virtuale Hub, Azure o Firewall e Gateway Express Route o VPN.
+
+00:09:09.060 --> 00:09:11.320
+Questi sono i servizi condivisi da cui dipende ogni carico di lavoro.
+
+00:09:11.660 --> 00:09:14.440
+Le zone di destinazione dell'applicazione sono dove vengono effettivamente eseguiti i carichi di log.
+
+00:09:14.760 --> 00:09:17.160
+Queste sono le sottoscrizioni che vengono assegnate ai team applicativi.
+
+00:09:17.440 --> 00:09:17.860
+Sono numerose.
+
+00:09:18.260 --> 00:09:18.960
+Sono usa e getta.
+
+00:09:19.340 --> 00:09:20.560
+E seguono sempre lo stesso schema.
+
+00:09:21.060 --> 00:09:24.420
+Un team attiene una sottoscrizione, viene inserita nel gruppo di gestione corretto,
+
+00:09:24.480 --> 00:09:27.800
+eredita le policy, si collega alla rete Hub e inizia il deployment.
+
+00:09:27.800 --> 00:09:29.740
+La differenza di proprietà è importante.
+
+00:09:30.240 --> 00:09:33.220
+Le zone di piattaforma sono poche, forse da 3 a 5 sottoscrizioni in totale.
+
+00:09:33.540 --> 00:09:35.900
+Sono a lungo termine gestite centralmente dal team di piattaforma.
+
+00:09:36.160 --> 00:09:37.240
+Le zone applicative sono molte.
+
+00:09:37.640 --> 00:09:38.760
+Potreste averne decine o centinaia.
+
+00:09:39.100 --> 00:09:39.640
+Sono temporane.
+
+00:09:39.920 --> 00:09:42.700
+Un carico di lavoro viene distribuito e eseguito per un pop e dismesso.
+
+00:09:43.240 --> 00:09:45.380
+La sottoscrizione viene ripulita e il modello si ripete.
+
+00:09:45.980 --> 00:09:46.800
+Ecco il classico antipattern.
+
+00:09:47.580 --> 00:09:50.480
+Qualcuno inserisce un firewall condiviso in una sottoscrizione applicativa
+
+00:09:50.480 --> 00:09:54.740
+o distribuisce ai Gateway Express Route in una sottoscrizione di carico di lavoro, anziché in quella di connettività.
+
+00:09:54.740 --> 00:09:57.500
+Ora, i servizi condivisi sono sparsi in tutto l'ambiente.
+
+00:09:58.020 --> 00:09:59.080
+Nessuno sa dove si trovi cose.
+
+00:09:59.460 --> 00:10:02.720
+Il team di piattaforma non può gestire il firewall perché è nella sottoscrizione di qualcun altro.
+
+00:10:03.260 --> 00:10:04.800
+E il team applicativo non vuole occuparsene.
+
+00:10:05.420 --> 00:10:05.980
+È un disastro.
+
+00:10:06.400 --> 00:10:08.060
+Mantieni i servizi condivisi nel livello di piattaforma.
+
+00:10:08.520 --> 00:10:13.240
+La sottoscrizione di connettività contiene la rete virtuale Hub, Azure Firewall e il Gateway Express Route.
+
+00:10:13.760 --> 00:10:15.360
+Le sottoscrizioni applicative si collegano a essa.
+
+00:10:15.820 --> 00:10:16.860
+Non possiedono nulla di tutto ciò.
+
+00:10:17.160 --> 00:10:17.760
+Lo usano semplicemente.
+
+00:10:18.080 --> 00:10:20.640
+Ciò che questo significa per te è una chiara separazione delle responsabilità.
+
+00:10:20.640 --> 00:10:25.440
+Il team di piattaforma controlla il sistema, le protezioni, i servizi condivisi e le policy.
+
+00:10:25.860 --> 00:10:27.760
+I team applicativi si muovono rapidamente al suo interno.
+
+00:10:28.120 --> 00:10:31.060
+Ottengono una sottoscrizione già conforme, già connesse, già monitorata.
+
+00:10:31.380 --> 00:10:32.600
+Non devono pensare alle fondamenta.
+
+00:10:33.040 --> 00:10:33.880
+Devono solo costruirsi.
+
+00:10:34.900 --> 00:10:35.840
+Come si collegano i ragazzi.
+
+00:10:36.220 --> 00:10:37.100
+Il momento della rivelazione.
+
+00:10:37.480 --> 00:10:39.240
+Quindi ora conosci i singoli blocchi costitutivi.
+
+00:10:39.480 --> 00:10:40.420
+Ma ecco cosa conta davvero.
+
+00:10:40.880 --> 00:10:41.920
+Non funziona in isolamento.
+
+00:10:42.400 --> 00:10:45.160
+Lavorano insieme come un sistema connesso ed è qui che tutto prende forma.
+
+00:10:45.840 --> 00:10:46.600
+Pensalo in questo modo.
+
+00:10:47.000 --> 00:10:49.220
+L'identità decide chi può varcare la porta principale.
+
+00:10:49.220 --> 00:10:52.980
+La governance indica poi in quali stanze possono entrare una volta varcata la soglia.
+
+00:10:53.540 --> 00:10:55.640
+Il networking controlla come si spostano tra quelle stanze.
+
+00:10:56.100 --> 00:10:58.100
+La sicurezza sorveglia le minacce dietro ogni angolo.
+
+00:10:58.680 --> 00:11:00.800
+La gestione mantiene l'edificio in funzione senza intoppi.
+
+00:11:01.240 --> 00:11:04.400
+E l'automazione rende ogni singolo passaggio ripetibile così nulla viene dimenticato.
+
+00:11:05.040 --> 00:11:06.480
+Ogni pezzo dipende dagli altri.
+
+00:11:06.760 --> 00:11:09.180
+Insieme creano qualcosa di molto più grande di ogni singola parte.
+
+00:11:09.440 --> 00:11:12.060
+Lasciatemi fare un esempio concreto di come funziona realmente questa interazione.
+
+00:11:12.460 --> 00:11:14.320
+Immaginate che un nuovo team debba distribuire un carico di lavoro.
+
+00:11:14.320 --> 00:11:20.300
+Inoltre ha una richiesta tramite la pipeline di fornitura degli abbonamenti che ne crea automaticamente uno nuovo di zecca.
+
+00:11:21.140 --> 00:11:26.620
+Inserisce quell'abbonamento nel gruppo di gestione corretto così eredita immediatamente tutte le policy presenti in quel gruppo.
+
+00:11:27.660 --> 00:11:32.780
+Requisiti di crittografia, regioni consentite, tag obbligatori, configurazioni di log, tutto ciò di cui ha bisogno.
+
+00:11:32.780 --> 00:11:36.640
+La pipeline configura anche la rete SPOC e la collega alla.
+
+00:11:37.400 --> 00:11:41.920
+Le impostazioni di diagnostica inviano i log direttamente all'area di lavoro Log Analytics centralizzata,
+
+00:11:42.320 --> 00:11:44.080
+mentre Defender for Cloud attiva la protezione.
+
+00:11:44.660 --> 00:11:49.180
+L'intero abbonamento risulta conforme, connesso e monitorato in pochi minuti senza alcun intervento umano.
+
+00:11:50.080 --> 00:11:52.760
+Questa è la vera differenza tra caos nel cloud e controllo del cloud.
+
+00:11:52.760 --> 00:11:59.460
+Nell'ambiente disordinato che ho descritto all'inizio, ogni singolo passaggio dipende dal fatto che qualcuno se ne ricordi e le persone dimenticano,
+
+00:12:00.100 --> 00:12:05.260
+oppure lo fanno ogni modo diverso, o non lo fanno affatto, ma con una landing zone adeguata, tutto è automatico.
+
+00:12:05.600 --> 00:12:08.800
+Il sistema si autoimpone e il team può muoversi velocemente senza rompere i modi.
+
+00:12:09.280 --> 00:12:10.880
+Ecco dove inciampano la maggior parte delle organizzazioni.
+
+00:12:11.180 --> 00:12:15.440
+Trattano la landing zone come un progetto, una tantum, la distribuiscono, spuntano a casella e passano oltre.
+
+00:12:15.880 --> 00:12:19.380
+Una landing zone è una piattaforma viva, rilascia costantemente nuove funzionalità.
+
+00:12:19.720 --> 00:12:22.620
+I vostri requisiti di conformità cambiano, la vostra attività cresce.
+
+00:12:22.840 --> 00:12:25.660
+La landing zone deve crescere insieme ad essa, altrimenti inizierà a lavorare contro di voi.
+
+00:12:25.840 --> 00:12:28.220
+Il modello operativo conta in realtà più dei template tecnici.
+
+00:12:28.560 --> 00:12:31.840
+Chi è il proprietario della landing zone? Come si evolve? Come vengono gestite le cessioni?
+
+00:12:32.120 --> 00:12:35.280
+Se la vostra unica risposta è la gestisce il team della piattaforma, non è abbastanza.
+
+00:12:35.500 --> 00:12:37.440
+Avete bisogno di processi reali. Avete bisogno di un backlog.
+
+00:12:37.800 --> 00:12:40.240
+Dovete trattare la landing zone come un prodotto, non come un progetto.
+
+00:12:40.620 --> 00:12:45.180
+Ecco un esempio reale. Un team di piattaforma supporta 200 abbonamenti senza diventare un collo di bottiglia.
+
+00:12:45.420 --> 00:12:48.620
+Il segreto è la fornitura automatizzata degli abbonamenti combinata con le reddita reddere.
+
+00:12:48.620 --> 00:12:51.640
+Il team non deve cliccare nel portale per creare ogni abbonamento.
+
+00:12:52.160 --> 00:12:53.740
+La pipeline lo gestisce automaticamente.
+
+00:12:54.240 --> 00:12:56.340
+Non devono configurare manualmente i log per ogni carico di lavoro.
+
+00:12:56.720 --> 00:12:58.040
+Le policy lo impongono in modo coerente.
+
+00:12:58.660 --> 00:13:00.180
+Non devono rivedere ogni distribuzione per il vostro metodo.
+
+00:13:00.560 --> 00:13:02.480
+La dashboard di conformità mostra a loro solo le eccezioni.
+
+00:13:02.900 --> 00:13:05.100
+Si concentrano sui casi anomali anziché sul lavoro di routine.
+
+00:13:05.700 --> 00:13:09.020
+Questa è la differenza tra una piattaforma che scala e una che soffoca l'azienda.
+
+00:13:09.020 --> 00:13:11.180
+Consigli pratici
+
+00:13:11.180 --> 00:13:13.060
+Iniziate in piccolo, crescete in modo intelligente.
+
+00:13:13.420 --> 00:13:15.020
+Quindi, cosa farete concretamente lunedì mattino?
+
+00:13:15.460 --> 00:13:16.360
+Ecco la risposta onesta.
+
+00:13:17.000 --> 00:13:19.920
+Non cercate di costruire l'intera gerarchia enterprise scale fin dal primo giorno.
+
+00:13:20.540 --> 00:13:21.520
+È una trappola che volete evitare.
+
+00:13:21.960 --> 00:13:24.560
+Passerai mesi a progettare scenari che potrebbero non verificarsi mai
+
+00:13:24.560 --> 00:13:26.460
+e non riuscirai mai a distribuire nulla di concreto.
+
+00:13:26.800 --> 00:13:30.100
+Inizia invece con una landing zone minima vitale o MBLZ.
+
+00:13:30.960 --> 00:13:32.560
+I componenti principali sono semplici.
+
+00:13:33.180 --> 00:13:34.540
+Una gerarchia di gruppi di gestione.
+
+00:13:34.880 --> 00:13:38.020
+Alcune policy fondamentali come restrizioni di area, criptografie e tag obbligatori.
+
+00:13:38.020 --> 00:13:41.060
+Una rete di base con un singolo hub virtuale e uno spock.
+
+00:13:41.340 --> 00:13:44.040
+E la centralizzazione dei log in un'area di lavoro log analytics.
+
+00:13:44.860 --> 00:13:45.500
+Questo è sufficiente.
+
+00:13:45.840 --> 00:13:47.780
+Non serve Azure Virtual One dal primo giorno.
+
+00:13:48.040 --> 00:13:50.360
+Né una complessa iniziativa di policy con 200 regole.
+
+00:13:50.960 --> 00:13:53.520
+Ti servono solo le protezioni necessarie per essere sicuro niente di più.
+
+00:13:54.200 --> 00:13:57.120
+Quindi implementa il tuo primo carico di lavoro reale nella MBLZ.
+
+00:13:57.400 --> 00:14:00.260
+Non una VM di test o un carico di lavoro a cui il tuo team tiene davvero.
+
+00:14:00.660 --> 00:14:02.960
+Osserva il comportamento delle policy e vedi cosa non funziona.
+
+00:14:03.140 --> 00:14:05.160
+Impara dalle difficoltà e poi procedi per iterazioni.
+
+00:14:05.660 --> 00:14:06.960
+Aggiungi policy quando servono.
+
+00:14:06.960 --> 00:14:11.340
+Espandi la rete quando necessario e lascia che la landing zone cresca naturalmente con la tua organizzazione.
+
+00:14:12.020 --> 00:14:14.400
+Ti darò tre consigli concreti che puoi mettere in pratica subito.
+
+00:14:15.720 --> 00:14:16.560
+Primo consiglio.
+
+00:14:16.800 --> 00:14:20.140
+Distribuisci l'acceleratore per Azure Landing Zones dal portale in un tenant di test.
+
+00:14:20.780 --> 00:14:21.420
+Non costa nulla.
+
+00:14:21.520 --> 00:14:24.900
+Richiede circa un'ora e ti insegna più su come funzionano realmente gruppi di gestione,
+
+00:14:25.240 --> 00:14:28.380
+policy ed ereditarietà di qualsiasi diagramma o documentazione.
+
+00:14:28.920 --> 00:14:32.800
+Puoi vedere la gerarchia, guardare le policy, applicarsi in tempo reale
+
+00:14:32.800 --> 00:14:35.320
+e fare esperimenti senza rompere nulla di importante.
+
+00:14:35.320 --> 00:14:37.000
+Secondo consiglio.
+
+00:14:37.080 --> 00:14:39.660
+Attiva le policy prime in modalità Audit, non in modalità Deny.
+
+00:14:40.080 --> 00:14:44.320
+La modalità Audit ti permette di vedere esattamente cosa non è conforme nel tuo ambiente senza bloccare nessuno.
+
+00:14:45.000 --> 00:14:47.660
+Controlla la dashboard di conformità e ti prometto che rimarrai sorpreso
+
+00:14:47.660 --> 00:14:50.340
+da quante risorse stanno violando silenziosamente regole che sembravano.
+
+00:14:50.800 --> 00:14:54.340
+Una volta compreso il panorama, potrai impostare le policy importanti in modalità Deny.
+
+00:14:54.700 --> 00:14:58.860
+Ma inizia con l'Audit, così non bloccherai i tuoi team prima di sapere con cosa hai a che fare.
+
+00:14:58.860 --> 00:15:00.820
+Terzo consiglio.
+
+00:15:01.040 --> 00:15:05.160
+Pianifica gli intervalli di indirizzi IP e la gerarchia dei gruppi di gestione prima di distribuire qualsiasi cosa.
+
+00:15:05.740 --> 00:15:08.520
+So che sembra noioso, ma modificarli in seguito è davvero doloroso.
+
+00:15:09.220 --> 00:15:11.940
+Intervalli IP sovrapposti significano smantellare il P-ring in rete,
+
+00:15:12.020 --> 00:15:16.120
+mentre ristrutturare i gruppi di gestione comporta spostare sottoscrizioni e rivalutare le assegnazioni delle policy.
+
+00:15:16.540 --> 00:15:19.860
+Fai queste due cose correttamente fin dall'inizio e risparmierai settimane di lavoro in futuro.
+
+00:15:19.860 --> 00:15:22.000
+Le insidie comuni sono piuttosto semplici.
+
+00:15:22.540 --> 00:15:26.340
+L'eccesso di progettazione porta a una paralisi d'analisi che ti impedisce di distribuire qualsiasi cosa.
+
+00:15:26.780 --> 00:15:30.860
+Una progettazione insufficiente ti lascia senza alcuna protezione, il che è solo Chaos Cloud con un nome diverso.
+
+00:15:31.240 --> 00:15:35.340
+E trattare la landing zone con un progetto Natantum invece che con una piattaforma viva ti farà inevitabilmente restare indietro.
+
+00:15:35.720 --> 00:15:38.900
+Evita queste tre trappole e sarai già davanti alla maggior parte delle organizzazioni.
+
+00:15:39.260 --> 00:15:40.820
+Ricorda, l'obiettivo non è una landing zone perfetto.
+
+00:15:41.120 --> 00:15:44.680
+L'obiettivo è una base governata che consenta ai team di muoversi velocemente senza creare caos.
+
+00:15:44.680 --> 00:15:48.300
+Inizia in piccolo, itera, e lascia che sia la policy a fare il lavoro pesante per te.
+
+00:15:49.120 --> 00:15:50.680
+Quindi queste sono le Azure landing zone parole semplici.
+
+00:15:51.340 --> 00:15:53.180
+Non sono un concetto aziendale complicato.
+
+00:15:53.720 --> 00:15:56.300
+Pensate come una sottoscrizione governata con protezioni integrate.
+
+00:15:56.960 --> 00:16:00.400
+Le otto aree di progettazione sono solo le domande a cui rispondere prima di iniziare il deployment.
+
+00:16:01.420 --> 00:16:04.220
+Identità, networking, sicurezza, gestione, governance, automazione.
+
+00:16:04.740 --> 00:16:08.800
+Rispondi una volta, costruiscile nella base e ogni carico di lavoro successivo ne trarrà beneficio.
+
+00:16:09.200 --> 00:16:10.660
+Ecco la cosa migliore che vuoi fare in questo momento.
+
+00:16:11.160 --> 00:16:14.320
+Distribuisci l'acceleratore in un terreno di test e osserva come vengono ereditate le policy.
+
+00:16:14.840 --> 00:16:17.140
+Quell'ora ti insegnerà più di quanto qualsiasi diagramma potrebbe mai fare.
+
+00:16:17.560 --> 00:16:21.000
+Iscriviti per altre spiegazioni semplici come questa e lascia un commento se qualcosa ti è chiaro.
+
+00:16:21.540 --> 00:16:22.120
+Li leggo tutti.

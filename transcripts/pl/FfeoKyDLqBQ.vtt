@@ -1,0 +1,853 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:08.040
+System ticketingowy wygląda na papierze przejrzyście. Widzisz liczby, kolejki, pulpity nawigacyjne, ale w rzeczywistości ten model mierzy problemy dopiero wtedy, gdy system już zawiódł.
+
+00:00:08.140 --> 00:00:14.320
+Kosztowna część problemu zazwyczaj zaczyna się znacznie wcześniej. Zaczyna się, gdy pracownik traci 10 minut, potem 20, a w końcu po prostu się poddaje.
+
+00:00:14.500 --> 00:00:19.980
+Próbuje ponownie, prosi współpracownika, nie pojawia się na spotkaniu lub udostępnia niewłaściwy plik, ponieważ prawidłowa ścieżka przestała działać.
+
+00:00:20.040 --> 00:00:22.860
+I to jest ta część, której większość zespołów wsparcia wciąż nie dostrzega.
+
+00:00:22.860 --> 00:00:28.520
+Najlepszy wewnętrzny model wsparcia nie polega na szybszej triażu. Chodzi o całkowite wyeliminowanie potrzeby triażu.
+
+00:00:28.720 --> 00:00:37.200
+Wyobraź sobie autonomicznego agenta w Microsoft 365, który monitoruje kontekst, wcześniej wykrywa tarcia i działa, zanim ktoś pomyśli o otwarciu portalu.
+
+00:00:37.420 --> 00:00:44.000
+W tym odcinku chcę pokazać, dlaczego model helpdesku się psuje, co go faktycznie zastępuje i jak można nim zarządzać bez tworzenia chaosu.
+
+00:00:44.000 --> 00:00:51.680
+Jeśli ta zmiana ma znaczenie dla Twojej pracy, zasubskrybuj M365FM, ponieważ o poziom głębi prawdziwym problemem nie jest kolejka, ale model, który za nią stoi.
+
+00:00:51.680 --> 00:00:55.360
+Śmierć zgłoszenia, stary przepływ pomocy technicznej wciąż jest wszechobecny.
+
+00:00:55.480 --> 00:00:59.300
+Coś się psuje, użytkownik to zauważa. Użytkownik próbuje to wyjaśnić.
+
+00:00:59.480 --> 00:01:03.700
+Następnie dział IT tłumaczy to wyjaśnienie na kategorię priorytet i ewentualnie grupę zadań.
+
+00:01:03.880 --> 00:01:08.240
+Zgłoszenie trafia do kolejki. Ktoś je triażuje. Ktoś inny prosi o więcej szczegółów.
+
+00:01:08.400 --> 00:01:11.940
+Inny zespół się angażuje. Czas płynie, podczas gdy praca stoi w miejscu.
+
+00:01:11.940 --> 00:01:16.160
+Ten proces wydaje się normalny, ponieważ jest znajomy, ale znajomy i skuteczny to nie to samo.
+
+00:01:16.160 --> 00:01:20.600
+Zgłoszenie to nie pomoc techniczna. Zgłoszenie to dowód na to, że pomoc techniczna dotarła z opóźnieniem.
+
+00:01:20.820 --> 00:01:24.560
+Zanim zgłoszenie w ogóle powstanie, pracownik już napotkał tarcie i stracił kontekst.
+
+00:01:24.720 --> 00:01:27.680
+Odwrócił już swoją uwagę od pracy, którą próbował wykonać.
+
+00:01:27.820 --> 00:01:30.620
+Kolejka to nie usługa. Kolejka to rejestr awarii.
+
+00:01:30.760 --> 00:01:34.660
+W dużych środowiskach Microsoft 365 ręczna triaż staje się prawdziwym punktem zapalnym.
+
+00:01:34.660 --> 00:01:37.300
+Nie dzieje się tak dlatego, że zespoły pomocy technicznej są leniwe.
+
+00:01:37.500 --> 00:01:41.120
+Dzieje się tak, ponieważ ludzie są proszeni o wykonanie czegoś, co już nie pasuje do skali środowiska.
+
+00:01:41.360 --> 00:01:44.360
+Masz więcej użytkowników, więcej urządzeń, więcej aplikacji, więcej zasad.
+
+00:01:44.600 --> 00:01:49.560
+Masz więcej przypadków brzegowych, które przecinają zespoły SharePoint, Exchange, Intune i Entra w tym samym czasie.
+
+00:01:49.820 --> 00:01:51.180
+Nie tylko rośnie liczba zgłoszeń.
+
+00:01:51.400 --> 00:01:52.600
+Rosną również kombinacje.
+
+00:01:52.780 --> 00:01:54.320
+To właśnie tutaj stary model zawodzi.
+
+00:01:54.540 --> 00:01:56.800
+Większość zespołów reaguje, dodając więcej struktury.
+
+00:01:57.020 --> 00:01:59.840
+Budują kolejny portal, kolejnego bota lub kolejną regułę routingu.
+
+00:01:59.840 --> 00:02:03.920
+Ale w rzeczywistości dodaje to tylko kolejną warstwę między pracownikiem a rozwiązaniem.
+
+00:02:03.920 --> 00:02:09.160
+System wciąż czeka, aż użytkownik zauważy problem, opisze go i poprosi o pomoc we właściwy sposób.
+
+00:02:09.360 --> 00:02:17.440
+Praca nie zaczyna się w portalu pomocy technicznej, zaczyna się w Teams, zaczyna się w Outlooku, zaczyna się w dokumencie, którego ktoś potrzebuje natychmiast lub na spotkaniu, które rozpoczyna się za 30 sekund.
+
+00:02:17.540 --> 00:02:22.080
+To właśnie tam zaczyna się zapotrzebowanie na wsparcie, a model zgłoszeń jest całkowicie oderwany od tego momentu.
+
+00:02:22.220 --> 00:02:24.920
+Ukryty koszt jest znacznie wyższy niż pokazuje raport z kolejki.
+
+00:02:25.060 --> 00:02:26.620
+Kontakty między osobami się zmieniają.
+
+00:02:26.840 --> 00:02:28.920
+Duplikaty zgłoszeń gromadzą się pod różnymi etykietami.
+
+00:02:29.000 --> 00:02:31.000
+Artykuły z bazy wiedzy stają się nieaktualne.
+
+00:02:31.000 --> 00:02:35.400
+Analitycy spędzają cały dzień na sortowaniu routingu i wyjaśnianiu, zamiast faktycznie naprawiać problemy.
+
+00:02:35.520 --> 00:02:41.120
+Czas rozwiązania problemu wydłuża się, ponieważ każde przekazanie powoduje opóźnienie, a każde opóźnienie usuwa pierwotny kontekst.
+
+00:02:41.300 --> 00:02:45.120
+Badania nad agentową sztuczną inteligencją i operacjami IT wskazują na ten sam problem strukturalny.
+
+00:02:45.300 --> 00:02:49.020
+Co najmniej 80% wysiłku jest nadal uwięzione w reaktywnej pracy w stylu ITIL.
+
+00:02:49.180 --> 00:02:52.040
+Ta liczba ma znaczenie, ponieważ wskazuje dokładnie, dokąd zmierza praca.
+
+00:02:52.260 --> 00:02:55.300
+Nie jest ona przeznaczona na odporność ani zapobieganie, lecz na reakcję.
+
+00:02:55.300 --> 00:02:59.360
+Kiedy to zauważysz, zgłoszenie zaczyna wyglądać mniej jak model operacyjny, a bardziej jak symptom.
+
+00:02:59.580 --> 00:03:02.560
+To symptom systemu, który reaguje dopiero po zauważeniu uszkodzenia.
+
+00:03:02.780 --> 00:03:07.960
+Zatem kolejne pytanie nie brzmi, jak szybciej przetwarzać zgłoszenia, ale co system powinien zrobić, zanim zgłoszenie będzie w ogóle potrzebne.
+
+00:03:08.120 --> 00:03:09.500
+Model niewidzialnego pracownika.
+
+00:03:09.700 --> 00:03:11.540
+Co więc tak naprawdę zastępuje zgłoszenie?
+
+00:03:11.700 --> 00:03:17.220
+To nie jest kolejny hotbot siedzący na tym samym bałaganie, ani z pewnością nie jest to ładniejsza brama do tej samej starej kolejki.
+
+00:03:17.460 --> 00:03:23.060
+Zmiana sięga znacznie głębiej, ponieważ niewidzialny pracownik to pracownik operacyjny działający w środowisku Microsoft 365.
+
+00:03:23.060 --> 00:03:31.020
+Ten agent ma swoją własną tożsamość, zdefiniowany zakres pracy, pamięta, co robił wczoraj i ścisłe zasady dotyczące tego, co może, a czego nie może robić.
+
+00:03:31.180 --> 00:03:32.520
+To rozróżnienie ma znaczenie.
+
+00:03:32.760 --> 00:03:37.240
+Hotbot czeka, aż wpiszesz monit, ale niewidzialny pracownik obserwuje zmiany warunków.
+
+00:03:37.480 --> 00:03:39.520
+Zaczyna od kontekstu, a nie od rozmowy.
+
+00:03:39.860 --> 00:03:46.740
+Ponieważ widzi stany logowania, stan urządzenia, status licencji i sposób udostępniania plików, nie musi czekać na pojawienie się problemów.
+
+00:03:46.740 --> 00:03:51.340
+Zamiast pytać, jak może pomóc, gdy coś się zepsuje, ciągle zadaje inne pytanie w tle.
+
+00:03:51.540 --> 00:03:55.620
+Co odbiega od stanu, którego pracownik potrzebuje do wykonywania swojej pracy w danej chwili?
+
+00:03:55.820 --> 00:03:57.420
+To właśnie tutaj wszystko się zmienia.
+
+00:03:57.700 --> 00:04:00.100
+Model jest osadzony bezpośrednio w samej pracy.
+
+00:04:00.400 --> 00:04:06.080
+Gdy ktoś dołącza do spotkania i przekierowywanie audio zawodzi lub gość, nie może otworzyć pliku, który właśnie otrzymał.
+
+00:04:06.200 --> 00:04:08.380
+Stary model tworzy raport i przekazuje zadanie.
+
+00:04:08.600 --> 00:04:15.500
+W nowym modelu agent natychmiast widzi wzorzec, sprawdza, czy warunek pasuje do znanego problemu i podejmuje następne bezpieczne działanie, aby go rozwiązać.
+
+00:04:15.500 --> 00:04:22.580
+Być może resetuje ścieżkę, uruchamia sprawdzanie zasad, a może przekierowuje żądanie i uruchamia uwierzytelnianie wieloskładnikowe MFA przed udokumentowaniem poprawki.
+
+00:04:22.760 --> 00:04:27.680
+Chodzi o to, że pierwsza odpowiedź nie wymaga już od człowieka przeczytania niejasnego opisu i zgadywania, co się stało.
+
+00:04:27.820 --> 00:04:32.900
+To wydaje się niewidoczne, gdy działa dobrze, ponieważ nie ma poczekalni ani formularza, proszę wybrać kategorię do wypełnienia.
+
+00:04:33.120 --> 00:04:35.340
+Wsparcie pojawia się jako przywrócony przepływ.
+
+00:04:35.460 --> 00:04:40.280
+Pracownik po prostu wraca do pracy i w wielu przypadkach nawet nie widzi mechanizmów działających za kulisami.
+
+00:04:40.480 --> 00:04:43.020
+Już teraz widać, jak zmienia to logikę zatrudnienia.
+
+00:04:43.020 --> 00:04:49.000
+Stary model zatrudniał osoby do obsługi dużej liczby zgłoszeń, sortowania żądań i usuwania uszkodzonych kontekstów między różnymi zespołami.
+
+00:04:49.220 --> 00:04:53.760
+Nowy model wymaga mniejszej liczby osób zajmujących się triażem, a większej liczby osób projektujących zabezpieczenia,
+
+00:04:53.900 --> 00:04:56.700
+definiujących pożądane stany i nadzorujących zachowanie agentów w czasie.
+
+00:04:56.960 --> 00:05:00.640
+Ludzie pozostają w systemie, ale cały przebieg ich codziennej pracy ulega zmianie.
+
+00:05:00.860 --> 00:05:04.480
+Badania nad agentową sztuczną inteligencją w wsparciu wciąż wskazują na ten kierunek.
+
+00:05:04.480 --> 00:05:11.720
+Rutynowe wsparcie może ewoluować w kierunku obsługi opartej na wyjątkach, co generuje ogromny wzrost wydajności, gdy środowisko i zasady są dobrze ograniczone.
+
+00:05:11.920 --> 00:05:14.420
+Ta ostatnia część jest kluczowa, ponieważ to nie magia.
+
+00:05:14.640 --> 00:05:20.300
+Jeśli twoje dane są słabe lub proces chaotyczny, agent nie stanie się inteligentny tylko dlatego, że zdecydujesz się nazwać go autonomicznym.
+
+00:05:20.480 --> 00:05:26.760
+Wszystko to stało się dla mnie jasne, gdy przestałem myśleć o agencie jako o funkcji oprogramowania i zacząłem postrzegać go jako pracownika z identyfikatorem, który nie jest człowiekiem.
+
+00:05:26.760 --> 00:05:31.300
+Prawdziwy pracownik potrzebuje tożsamości opisu stanowiska uprawnień i przełożonego, któremu podlega.
+
+00:05:31.460 --> 00:05:37.540
+Agent potrzebuje dokładnie tych samych rzeczy, ponieważ wartość płynie z niezawodnego działania w systemie, a nie z inteligentnego języka w oknie czatu.
+
+00:05:37.720 --> 00:05:40.400
+Niewidzialny pracownik to nie sztuczka interfejsu użytkownika.
+
+00:05:40.580 --> 00:05:49.360
+To nowa warstwa wsparcia, która monitoruje tarcia w całym środowisku Microsoft 365, działa zgodnie z zasadami i kieruje uwagę człowieka na wyjątki, które faktycznie wymagają oceny.
+
+00:05:49.600 --> 00:05:52.680
+Gdy ten model jest jasny, kolejne pytanie staje się bardzo praktyczne.
+
+00:05:52.680 --> 00:05:54.400
+Jak właściwie działa wywłaszczanie?
+
+00:05:54.700 --> 00:05:55.940
+Architektura wywłaszczania.
+
+00:05:55.940 --> 00:05:58.880
+Jak więc właściwie działa wywłaszczanie w Microsoft 365?
+
+00:05:59.540 --> 00:06:02.940
+Przejście od żądania i odpowiedzi do wnioskowania o zdarzeniach i ich orkiestracji.
+
+00:06:03.160 --> 00:06:06.420
+Brzmi to technicznie, ale model jest prosty, gdy się go rozłoży na czynniki pierwsze.
+
+00:06:06.680 --> 00:06:14.880
+Najpierw coś w środowisku ulega zmianie, następnie system interpretuje, czy ta zmiana oznacza ryzyko, czy dryf, a na końcu podejmuje zatwierdzoną akcję, korzystając z narzędzi już dostępnych w stosie.
+
+00:06:15.080 --> 00:06:16.400
+Zacznij od warstwy zdarzeń.
+
+00:06:16.600 --> 00:06:24.060
+Microsoft 365 generuje już sygnały wszędzie, co oznacza, że Entra monitoruje zachowania logowania, podczas gdy Intune śledzi stan i zgodność urządzenia.
+
+00:06:24.060 --> 00:06:29.560
+Defender monitoruje podejrzaną aktywność, a Teams pokazuje dokładnie, kiedy spotkanie się nie powiedzie lub jakość połączeń spadnie.
+
+00:06:29.780 --> 00:06:36.440
+SharePoint i Exchange ujawniają wzorce dostępu i aktywność treści, a sygnały dotyczące kondycji usług informują, kiedy problem leży po stronie samej platformy.
+
+00:06:36.620 --> 00:06:39.980
+Dodając do tego działania użytkowników, otrzymujesz stały strumień kontekstu.
+
+00:06:40.160 --> 00:06:44.700
+Większość organizacji gromadzi te sygnały, ale bardzo niewiele z nich faktycznie wykorzystuje je jako system wsparcia.
+
+00:06:44.940 --> 00:06:49.040
+Same surowe zdarzenia nie pomagają, ponieważ potrzebują warstwy wnioskowania, aby zrozumieć szum.
+
+00:06:49.040 --> 00:06:53.620
+To tutaj niewidzialny pracownik przestaje być teatrem automatyzacji i zaczyna działać jak prawdziwy operator.
+
+00:06:53.880 --> 00:06:59.260
+Agent analizuje sygnał, porównuje stan bieżący ze stanem docelowym i decyduje, jaką klasę działań można bezpiecznie podjąć.
+
+00:06:59.400 --> 00:07:05.060
+Problem z dźwiękiem podczas spotkania to nie to samo, co ryzykowne logowanie, a uszkodzony link udostępniania to co innego niż niezgodność licencji.
+
+00:07:05.200 --> 00:07:10.120
+Agent musi najpierw sklasyfikować problem, ponieważ podejmowanie działań bez klasyfikacji tylko przyspiesza powstawanie błędów.
+
+00:07:10.120 --> 00:07:11.880
+Następnie następuje orkiestracja.
+
+00:07:12.120 --> 00:07:15.580
+Gdy agent zrozumie problem, może użyć odpowiedniego mechanizmu, aby zareagować.
+
+00:07:15.820 --> 00:07:20.940
+Może to być power automaty dla przepływów pracy, kopilot studio dla logiki lub Microsoft Graph dla działań systemowych i kontekstu.
+
+00:07:21.120 --> 00:07:24.400
+Narzędzia mają znaczenie, ale ważniejsze jest to, jak są one ze sobą powiązane.
+
+00:07:24.400 --> 00:07:29.580
+Nie tworzysz jednego inteligentnego monitoru, ale raczej łańcuch, który może wykrywać, podejmować decyzje, działać i weryfikować.
+
+00:07:29.740 --> 00:07:31.720
+Ta ostatnia część jest ciągle pomijana.
+
+00:07:32.000 --> 00:07:34.900
+System samokorygujący nie zatrzymuje się po podjęciu działania.
+
+00:07:34.900 --> 00:07:41.460
+Uruchamia pętlę, w której wykrywa problem, testuje stan, stosuje poprawkę i weryfikuje wynik, zanim zarejestruje to, co się stało.
+
+00:07:41.680 --> 00:07:49.360
+Badania nad samokorygującymi się logikami jasno pokazują, że systemy te działają poprzez sprzężenie zwrotne i wzorce korekcji, a nie jedną odizolowaną odpowiedź z modelu językowego.
+
+00:07:49.360 --> 00:07:56.260
+Jeśli pierwsza czynność się nie powiedzie, system musi mieć możliwość oceny przyczyny, aby móc zmodyfikować kolejny krok, nie przekraczając zdefiniowanych limitów.
+
+00:07:56.440 --> 00:08:03.660
+Można to sobie wyraźnie wyobrazić na przykładzie kilku przypadków z Microsoft 365, gdy użytkownik zostaje zablokowany z powodu niezgodności licencji i zakresu zasad.
+
+00:08:03.660 --> 00:08:06.280
+Agent wykrywa niezgodność i sprawdza odpowiedni profil roli.
+
+00:08:06.520 --> 00:08:11.560
+Stosuje dozwoloną korektę, potwierdza, że użytkownik ma dostęp i rejestruje zmianę bez pytania.
+
+00:08:11.560 --> 00:08:17.520
+Jeśli w Entra pojawi się ryzykowne logowanie, agent widzi to zdarzenie i natychmiast sprawdza reguły dostępu warunkowego.
+
+00:08:17.780 --> 00:08:23.960
+Monituje o silniejszą weryfikację lub blokuje dostęp na podstawie zasad, a następnie rejestruje wynik do późniejszego przeglądu przez użytkownika.
+
+00:08:24.200 --> 00:08:30.580
+Gdy nieaktualny link udostępniania ciągle nie działa w programie SharePoint, agent porównuje bieżącą ścieżkę uprawnień z oczekiwanymi regułami udostępniania.
+
+00:08:30.580 --> 00:08:35.400
+Zastępuje uszkodzony link główny zatwierdzonym i wysyła poprawiony link w kontekście, co zamyka pętlę,
+
+00:08:35.400 --> 00:08:40.160
+zanim analityk techniczny będzie musiał zapoznać się z biletem zatytułowanym Pilny problem z dostępem.
+
+00:08:40.320 --> 00:08:42.580
+Wsparcie podczas spotkań to kolejny świetny przykład.
+
+00:08:42.840 --> 00:08:47.040
+Jeśli urządzenie w pokoju ulegnie awarii lub ścieżka do łączania zostanie przerwana na kilka sekund przed rozpoczęciem połączenia,
+
+00:08:47.160 --> 00:08:48.900
+agent może wykryć problem i zweryfikować usterkę.
+
+00:08:49.040 --> 00:08:54.420
+Próbuje wykonać krok odzyskiwania o niskim ryzyku i powiadamia organizatora w Teams o aktualnym stanie pracy w miejscu, w którym jest ona wykonywana.
+
+00:08:54.420 --> 00:08:57.220
+Ta warstwa komunikacji stanowi istotną część projektu.
+
+00:08:57.400 --> 00:08:59.600
+Wsparcie musi działać tam, gdzie występuje przerwa.
+
+00:08:59.820 --> 00:09:05.540
+Jeśli praca jest wykonywana w Teams Outlooku i obszarze roboczym M365, wsparcie powinno również tam udzielić odpowiedzi.
+
+00:09:05.740 --> 00:09:09.700
+Nie musisz przeciągać użytkownika w inne miejsce, gdy możesz spotkać się z wydarzeniem w kontekście.
+
+00:09:09.920 --> 00:09:14.000
+Nie oznacza to jednak pełnego zakresu zadań dla każdego zadania, ponieważ byłoby to lekko myślne.
+
+00:09:14.200 --> 00:09:19.100
+Działania o niskim ryzyku mogą być uruchamiane automatycznie, ale zmiany o dużym wpływie nadal wymagają zatwierdzenia przez osobę.
+
+00:09:19.100 --> 00:09:24.000
+Ta ścieżka zatwierdzania musi być częścią architektury od samego początku, a nie być dodawana później.
+
+00:09:24.220 --> 00:09:27.760
+Agent powinien wiedzieć, kiedy działać, kiedy pytać i kiedy dokładnie przerwać.
+
+00:09:27.940 --> 00:09:32.180
+A gdy już to wbudujesz w przepływ, rozmowa przestaje dotyczyć funkcji automatyzacji.
+
+00:09:32.480 --> 00:09:36.120
+Staje się kwestią kontroli, zarządzania, zaufania i tożsamości agenta.
+
+00:09:36.320 --> 00:09:40.340
+Kiedy wsparcie techniczne zaczyna działać samodzielnie, natychmiast pojawia się trudne pytanie.
+
+00:09:40.580 --> 00:09:42.020
+Kto właściwie wykonuje pracę?
+
+00:09:42.200 --> 00:09:45.000
+Jeśli ta odpowiedź jest niejasna, cały model się rozpada.
+
+00:09:45.000 --> 00:09:49.660
+Agent nie może istnieć w Twoim środowisku jako rozmyty pomocnik z szerokim dostępem i bezwyraźnego właściciela.
+
+00:09:49.780 --> 00:09:51.580
+Potrzebuje prawdziwej tożsamości w Entra.
+
+00:09:51.760 --> 00:09:56.640
+Potrzebuje nazwanego właściciela zdefiniowanego zakresu i cyklu życia, który zaczyna się i kończy z konkretnego powodu.
+
+00:09:56.880 --> 00:10:00.840
+Jeśli agent może odczytywać dane, uruchamiać przepływy pracy lub wysyłać wiadomości do użytkowników,
+
+00:10:00.940 --> 00:10:03.020
+musisz nim zarządzać jak aktywnym uczestnikiem dzierżawy.
+
+00:10:03.240 --> 00:10:06.620
+Nie możesz traktować go jak funkcji, którą ktoś włączył, a potem o niej zapomniał.
+
+00:10:06.840 --> 00:10:09.440
+Dlatego tożsamość agenta jest tak kluczowa dla systemu.
+
+00:10:09.440 --> 00:10:14.700
+Musisz dokładnie wiedzieć, czym jest agent, z których systemów może korzystać i kto odbiera połączenie, gdy sytuacja zaczyna się komplikować.
+
+00:10:14.920 --> 00:10:17.020
+Najniższe uprawnienia muszą być tutaj podstawą.
+
+00:10:17.240 --> 00:10:21.300
+Nie możesz poprzestać na szerokiej wygodzie ani wmawiać sobie, że później zaostrzysz uprawnienia.
+
+00:10:21.480 --> 00:10:24.760
+Ponieważ zasięg agenta wsparcia zależy wyłącznie od jego uprawnień,
+
+00:10:24.860 --> 00:10:27.940
+ich zaprojektowanie jest kluczowym elementem projektowania wsparcia.
+
+00:10:28.180 --> 00:10:32.340
+Agent 365 pełni w tym rozwiązaniu funkcję niezbędnej warstwy kontrolnej,
+
+00:10:32.400 --> 00:10:34.920
+ponieważ zapewnia przejrzysty wgląd w cały zasób agentów.
+
+00:10:34.920 --> 00:10:39.980
+Zapewnia rejestr przepływy pracy związane z zatwierdzaniem i szablony zasad, które zapewniają bezpieczne działanie.
+
+00:10:40.180 --> 00:10:44.640
+Choć te elementy mogą wydawać się zadaniami administracyjnymi, rozwiązują one poważny problem strukturalny.
+
+00:10:44.840 --> 00:10:47.720
+Większość organizacji boryka się z problemami nie z powodu braku funkcji sztucznej inteligencji,
+
+00:10:47.800 --> 00:10:51.300
+ale z powodu braku wglądów w to, co już działa w ich środowisku, ani możliwości kontrolowania tego, co już działa.
+
+00:10:51.500 --> 00:10:53.260
+Badania w tym zakresie są jednoznaczne.
+
+00:10:53.420 --> 00:10:58.860
+Tylko niewielka część dużych przedsiębiorstw jest w stanie w pełni zinwentaryzować wszystkich agentów aktualnie działających w ich systemie.
+
+00:10:58.860 --> 00:11:03.700
+Zanim liderzy zaczną mówić o skalowaniu autonomicznego wsparcia, muszą odpowiedzieć na znacznie prostsze pytanie.
+
+00:11:03.920 --> 00:11:07.020
+Czy w ogóle wiemy, którzy agenci istnieją i co robią w danej chwili?
+
+00:11:07.260 --> 00:11:09.780
+Nadzór musi być również dostosowany do poziomu ryzyka.
+
+00:11:10.000 --> 00:11:12.660
+Agent produktywności osobistej pracujący w wąskim zakresie to jedno,
+
+00:11:12.760 --> 00:11:16.300
+ale agent współpracujący, który zajmuje się współdzielonymi treściami, to zupełnie inna sprawa.
+
+00:11:16.520 --> 00:11:19.820
+Następnie mamy agentów korporacyjnych podejmujących działania w ramach wrażliwych przepływów pracy,
+
+00:11:19.920 --> 00:11:21.280
+co plasuje się w innej kategorii ryzyka.
+
+00:11:21.540 --> 00:11:25.440
+Właśnie dlatego model stref ryzyka osobisty, współpracujący i korporacyjny ma tak duże znaczenie.
+
+00:11:25.440 --> 00:11:28.440
+Twój model kontroli powinien rosnąć wraz z potencjalnym wpływem.
+
+00:11:28.580 --> 00:11:32.760
+Jeśli traktujesz każdego agenta, tak samo zadania o niskim ryzyku zostają pogrzebane w powolnych zatwierdzeniach,
+
+00:11:32.840 --> 00:11:35.540
+podczas gdy zadania o wysokim ryzyku prześlizgują się przez słabą kontrolę.
+
+00:11:35.680 --> 00:11:39.720
+Twój stos kontroli w Microsoft 365 powinien wyglądać znajomo dla Twojego zespołu.
+
+00:11:39.900 --> 00:11:44.320
+Używasz tożsamości w Entra, granic danych za pośrednictwem Perview i monitorowania za pośrednictwem Defender.
+
+00:11:44.560 --> 00:11:49.540
+Stosujesz warunki dostępu poprzez dostęp warunkowy i zapewniasz wbudowaną audytowalność od samego początku.
+
+00:11:49.540 --> 00:11:54.580
+Musisz być w stanie dokładnie odtworzyć, co się stało, bez konieczności zgadywania po wystąpieniu incydentu.
+
+00:11:54.780 --> 00:11:58.620
+Nadzór ludzki musi być wkomponowany w logikę, a nie improwizowany w czasie kryzysu.
+
+00:11:58.820 --> 00:12:02.240
+Działania o dużym wpływie powinny być zawsze wstrzymywane do momentu uzyskania podpisu.
+
+00:12:02.460 --> 00:12:06.160
+Rozumowanie powinno być rejestrowane w formie, którą ludzie mogą faktycznie sprawdzić i zrozumieć.
+
+00:12:06.280 --> 00:12:10.140
+Potrzebujesz ścieżek wycofania, zanim pierwsza autonomiczna akcja zostanie uruchomiona.
+
+00:12:10.380 --> 00:12:12.780
+Jeśli agent zaktualizuje dostęp lub zmieni zasady routingu,
+
+00:12:12.940 --> 00:12:16.060
+ktoś musi mieć sposób na prześledzenie tej decyzji i jej jednoznaczne cofnięcie.
+
+00:12:16.060 --> 00:12:20.300
+Jest jeszcze jeden czynnik, który liderzy często pomijają, ponieważ wczesne wersje demonstracyjne wyglądają tak dobrze.
+
+00:12:20.480 --> 00:12:21.300
+Koszt przeróbek.
+
+00:12:21.480 --> 00:12:25.900
+Jeśli agent tworzy pętle czyszczące dla Twojego zespołu, przewidywane oszczędności znikają natychmiast.
+
+00:12:26.060 --> 00:12:27.420
+To jest podatek od przeróbek.
+
+00:12:27.580 --> 00:12:32.780
+To czas poświęcony na korygowanie błędnych wyników, cofanie błędnych działań lub ściganie niezamierzonych skutków ubocznych.
+
+00:12:32.980 --> 00:12:37.140
+Jeśli Twój zespół oszczędza 10 minut na realizacji, ale marnuje 8 minut na sprzątanie bałaganu,
+
+00:12:37.200 --> 00:12:38.780
+tak naprawdę nie zautomatyzowałeś wsparcia.
+
+00:12:38.940 --> 00:12:41.420
+Po prostu przeniosłeś tarcie na inną część procesu.
+
+00:12:41.420 --> 00:12:44.880
+Zaufanie nie pochodzi z dopracowanej prezentacji zasad ani wielkiego ogłoszenia o uruchomieniu.
+
+00:12:44.980 --> 00:12:46.480
+Pochodzi z dowodów w czasie wykonywania.
+
+00:12:46.700 --> 00:12:50.060
+Ludzie muszą zobaczyć, co zobaczył agent, jakie podjął decyzję i co faktycznie zmieniło się w systemie.
+
+00:12:50.220 --> 00:12:52.720
+W ten sposób buduje się zaufanie do autonomicznego wsparcia.
+
+00:12:52.960 --> 00:12:56.200
+Dowód musi znajdować się w zachowaniu narzędzia, a nie w marce projektu.
+
+00:12:56.380 --> 00:13:02.180
+Gdy ten fundament zarządzania jest solidny, rozmowa może wreszcie odejść od żargonu bezpieczeństwa i przejść do języka zarządczego.
+
+00:13:02.360 --> 00:13:04.460
+Co to tak naprawdę zmienia dla wyniku finansowego?
+
+00:13:04.720 --> 00:13:07.220
+Nowy zwrot z inwestycji ROI w niewidzialne wsparcie.
+
+00:13:07.220 --> 00:13:10.720
+Gdy liderzy zaakceptują model kontroli, pytania finansowe zaczną się zmieniać.
+
+00:13:10.840 --> 00:13:16.260
+W starym modelu wartość wsparcia jest mierzona widoczną pracą, taką jak zamknięte zgłoszenia, obsłużone połączenia i realizacja SLA.
+
+00:13:16.440 --> 00:13:19.640
+Te liczby nadal mają znaczenie, ale opisują jedynie reakcję na problem.
+
+00:13:19.900 --> 00:13:25.480
+Nie mówią, ile przerw nie dotarło do kolejki ani ile czasu pracowników pozostało nienaruszone dzięki wczesnemu rozwiązaniu problemu.
+
+00:13:25.600 --> 00:13:27.220
+To jest sedno problemu księgowego.
+
+00:13:27.480 --> 00:13:30.100
+Niewidoczne wsparcie tworzy wartość poprzez nieobecność.
+
+00:13:30.100 --> 00:13:37.400
+Wartość widać, gdy nie ma zgłoszenia, eskalacji i analityka poświęcającego 20 minut na rekonstrukcję problemu na podstawie niedokończonych notatek.
+
+00:13:37.520 --> 00:13:42.240
+Jeśli mierzysz tylko widoczny wysiłek zespołu wsparcia, tracisz wynik, na którym tak naprawdę Ci zależało.
+
+00:13:42.420 --> 00:13:44.760
+Chciałeś stabilnej pracy z mniejszą liczbą przerw.
+
+00:13:44.900 --> 00:13:47.100
+Liczba zgłoszeń jest słabym sygnałem, gdy działa samodzielnie.
+
+00:13:47.860 --> 00:13:53.200
+Spadek liczby zgłoszeń może oznaczać spadek popytu, ale może również oznaczać, że środowisko stało się zdrowsze, a warstwa wsparcia stała się mądrzejsza.
+
+00:13:53.300 --> 00:13:54.760
+To dwie zupełnie różne historie.
+
+00:13:54.760 --> 00:13:58.240
+Kadra kierownicza potrzebuje zestawu KPI, który pozwoli odróżnić je od siebie.
+
+00:13:58.440 --> 00:14:01.660
+Powinieneś zacząć od analizy autonomicznego wskaźnika rozwiązywania problemów.
+
+00:14:01.800 --> 00:14:07.360
+Nie chodzi o liczbę rozmów, które odbył bot, ale o liczbę zdarzeń wsparcia, które zostały rozwiązane kompleksowo, bez ingerencji człowieka.
+
+00:14:07.560 --> 00:14:10.580
+Należy również śledzić skrócenie średniego czasu potrzebnego na rozwiązanie problemu.
+
+00:14:10.700 --> 00:14:15.700
+W środowiskach opartych na sztucznej inteligencji przepływy wymagające dużej liczby diagnoz często odnotowują poprawę w zakresie od 40 do 60%.
+
+00:14:15.700 --> 00:14:19.680
+Następnie można przeanalizować koszt rozwiązania problemu i odzyskaną produktywność użytkowników.
+
+00:14:19.680 --> 00:14:24.280
+Tę ostatnią metrykę łatwo pominąć, ponieważ nie jest ona wyraźnie widoczna w standardowym raporcie pomocy technicznej.
+
+00:14:24.480 --> 00:14:26.880
+Jednak to właśnie tam często kryje się prawdziwa wartość.
+
+00:14:27.060 --> 00:14:31.940
+Osoba, która jest zablokowana na 15 minut, zanim jeszcze otworzy zgłoszenie, już generuje koszty dla firmy.
+
+00:14:32.120 --> 00:14:38.400
+Po pomnożeniu tego przez liczbę przerw i trudności z dostępem w dużej firmie ukryta strata jest znacznie większa niż sugeruje kolejka.
+
+00:14:38.640 --> 00:14:41.980
+Dlatego model kosztów bezczynności jest tak ważny w uzasadnieniu biznesowym.
+
+00:14:42.160 --> 00:14:45.760
+Oblicza się godziny spędzone na pracy ręcznej jeszcze przed rozpoczęciem formalnego wsparcia.
+
+00:14:46.000 --> 00:14:48.520
+Następnie dodaje się koszt błędów i powtarzanych czynności.
+
+00:14:48.520 --> 00:14:51.620
+Nagle argument za wywłaszczaniem przestaje brzmieć jak teoria.
+
+00:14:51.840 --> 00:14:54.300
+Nie finansujesz tylko futurystycznej warstwy wsparcia.
+
+00:14:54.480 --> 00:14:57.480
+Usuwasz podatek, który od lat ciążył na twojej codziennej pracy.
+
+00:14:57.720 --> 00:15:00.180
+Ekonomia wąskiego przypadku jeszcze bardziej to uwypukla.
+
+00:15:00.400 --> 00:15:05.540
+Badania nad agentowym wsparciem IT szacują, że obsługa przez człowieka kosztuje około 8,75 dolara za zgłoszenie.
+
+00:15:05.740 --> 00:15:10.660
+Natomiast wąska obsługa agentowa może spaść poniżej 50 centów za zgłoszenie po opracowaniu systemu.
+
+00:15:10.840 --> 00:15:15.840
+Nie oznacza to, że każde działanie wsparcia będzie tak tanie, a liderzy powinni ostrożnie podchodzić do szerokich średnich.
+
+00:15:15.840 --> 00:15:20.840
+Jakość i zarządzanie telemetrią zawsze będą wpływać na ostateczny koszt, ale kierunek trendu jest niepodważalny.
+
+00:15:21.540 --> 00:15:24.960
+To moment, w którym IT odchodzi od starej narracji o centrach kosztów.
+
+00:15:25.120 --> 00:15:31.600
+Nie dlatego, że wsparcie znika, ale dlatego, że wsparcie zmienia się w warstwę niezawodności, która chroni przepustowość pracowników w tle.
+
+00:15:31.820 --> 00:15:35.340
+Firma odbiera to jako płynniejszą pracę, a nie dramatyczne zdarzenie.
+
+00:15:35.340 --> 00:15:40.080
+Otrzymujesz mniej przerw, szybsze przywracanie i mniej pracy marnowanej na routing i wyjaśnienia.
+
+00:15:40.300 --> 00:15:43.140
+Mimo to, błędne pomiary mogą łatwo zafałszować postęp.
+
+00:15:43.360 --> 00:15:48.020
+Jeśli twoja telemetria jest słaba, agent może po prostu szybciej podsumować awarię, zamiast jej faktycznie zapobiec.
+
+00:15:48.180 --> 00:15:52.280
+Jeśli przeróbki nie będą widoczne na pulpicie, zwrot z inwestycji ROI będzie wyglądał znacznie lepiej niż jest w rzeczywistości.
+
+00:15:52.460 --> 00:15:56.860
+Jeśli odzyskany czas po prostu powróci do działań o niskiej wartości, liderzy będą przeceniać korzyści.
+
+00:15:57.060 --> 00:16:01.860
+Uzasadnienie finansowe musi opierać się na twardych dowodach, takich jak zapobiegnięte incydenty i mniejsza liczba ręcznych czynności.
+
+00:16:02.100 --> 00:16:04.760
+Trzeba mierzyć czas rzeczywiście poświęcony na użyteczną pracę.
+
+00:16:04.980 --> 00:16:09.360
+Gdy to się odpowiednio zmierzy, funkcja wsparcia przestaje być postrzegana jako obciążenie, które należy ograniczyć.
+
+00:16:09.600 --> 00:16:12.980
+Zaczyna przypominać zdolność operacyjną, którą firma w końcu odzyskuje.
+
+00:16:12.980 --> 00:16:14.800
+Jak to wpływa na zespół wsparcia?
+
+00:16:14.980 --> 00:16:19.680
+Pomyśl o tym, jak to faktycznie wpływa na zespół w terenie, ponieważ ta zmiana nie polega tak naprawdę na redukcji etatów,
+
+00:16:19.780 --> 00:16:22.440
+ale na zmianie sposobu, w jaki pracownicy faktycznie spędzają dzień.
+
+00:16:22.440 --> 00:16:28.480
+W starym modelu większość zasobów wsparcia jest pochłaniana przez resetowanie haseł, kierowanie zgłoszeń i niekończące się pętle wyjaśnień.
+
+00:16:28.640 --> 00:16:33.300
+Ludzie ścigają aktualizacje i przesyłają dane między systemami, które nigdy nie zostały zaprojektowane do komunikacji ze sobą.
+
+00:16:33.500 --> 00:16:37.460
+Żadna z tych prac nie zwiększa stabilności środowiska, a jedynie zapobiega przepełnieniu kolejki.
+
+00:16:37.460 --> 00:16:42.320
+Kiedy agenci przejmują tę przewidywalną, rutynową pracę, ludzki wysiłek w końcu wkracza na wyższy poziom.
+
+00:16:42.480 --> 00:16:47.980
+Inżynierowie wsparcia zaczynają poświęcać czas na definiowanie prawidłowego stanu i dostrajanie logiki stojącej za zatwierdzeniami.
+
+00:16:48.200 --> 00:16:53.880
+Koncentrują się na ulepszaniu źródeł wiedzy, testowaniu działania polityk i upewnianiu się, że agent pozostaje w wyznaczonych granicach.
+
+00:16:54.020 --> 00:16:59.480
+To zupełnie inna praca niż całodniowe wpatrywanie się w tematy wiadomości i próba odgadnięcia, czego tak naprawdę chce użytkownik.
+
+00:16:59.720 --> 00:17:02.160
+Właśnie w tym momencie większość wdrożeń się zatrzymuje.
+
+00:17:02.420 --> 00:17:07.940
+Organizacje starają się utrzymać stare, niedziałające procesy i po prostu powierzyć je agentowi, oczekując lepszych rezultatów.
+
+00:17:08.100 --> 00:17:12.440
+Jednak proces nadal jest reaktywny, przekazywanie zadań jest chaotyczne, a wiedza bazowa słaba.
+
+00:17:12.660 --> 00:17:15.800
+Agent staje się po prostu kolejną warstwą farby na rozpadającej się ścianie.
+
+00:17:15.800 --> 00:17:19.760
+Może szybciej odpowiedzieć na pytanie, ale nie naprawi modelu wsparcia zbudowanego wokół opóźnień.
+
+00:17:19.940 --> 00:17:22.200
+Lepszym rozwiązaniem jest najpierw przeprojektowanie pracy.
+
+00:17:22.460 --> 00:17:26.640
+Trzeba zdecydować, które zadania pozostają ludzkie, ponieważ wymagają osądu lub wrażliwej komunikacji.
+
+00:17:26.880 --> 00:17:31.540
+Następnie należy zdecydować, które zadania przechodzą do autonomicznych przepływów, ponieważ wynik jest przewidywalny, a działania bezpieczne.
+
+00:17:31.680 --> 00:17:34.260
+Ten podział jest niezbędny, ponieważ zespoły wsparcia nie znikną.
+
+00:17:34.420 --> 00:17:37.640
+To one po prostu stają się osobami projektującymi mechanizmy kontroli i obsługującymi wyjątki.
+
+00:17:37.800 --> 00:17:40.540
+Oznacza to, że sposób, w jaki szkolimy ludzi również musi się zmienić.
+
+00:17:40.540 --> 00:17:44.640
+Zespoły muszą nauczyć się nadzorować system, a nie tylko wykonywać zadania manualne.
+
+00:17:44.820 --> 00:17:49.160
+Muszą rozumieć logikę wycofywania zmian, audyty i testować agenta przed jego uruchomieniem.
+
+00:17:49.380 --> 00:17:54.820
+Muszą również umieć rozpoznawać awarię modelu, ponieważ zautomatyzowany, błędny przepływ pracy nadal jest błędnym przepływem pracy.
+
+00:17:54.980 --> 00:17:56.160
+To tylko przyspiesza proces.
+
+00:17:56.420 --> 00:18:00.420
+Jeśli rekrutujesz z myślą o przyszłości, prawdopodobnie nie potrzebujesz kolejnego specjalisty do selekcji zgłoszeń.
+
+00:18:00.580 --> 00:18:06.520
+Potrzebujesz kogoś, kto potrafi organizować przepływy w całym stosie Microsoft 365 i definiować mechanizmy kontroli, które kontrolują agentów.
+
+00:18:06.520 --> 00:18:12.040
+Potrzebujesz osób, które potrafią ulepszyć środowisko, aby zapotrzebowanie na wsparcie faktycznie spadło, a nie tylko rosło.
+
+00:18:12.260 --> 00:18:16.100
+Jak więc to zrobić, aby nie przerodziło się w ogromny, wieloletni projekt transformacji?
+
+00:18:16.320 --> 00:18:21.280
+Najlepszym rozwiązaniem jest wybór jednego przepływu pracy, który powoduje ciągłe tarcia w środowisku Microsoft 365.
+
+00:18:21.700 --> 00:18:27.180
+Naprawa dostępu jest zazwyczaj dobrym rozwiązaniem, ale można również rozważyć spotkania dotyczące wsparcia lub przekazywania zgodności urządzeń.
+
+00:18:27.360 --> 00:18:33.280
+Nie ma znaczenia, którą opcję wybierzesz, o ile schemat powtarza się często i dokładnie wiesz, jak powinien wyglądać pomyślny wynik.
+
+00:18:33.280 --> 00:18:36.280
+Po ustaleniu celu musisz zdefiniować podstawy z prawdziwą dyscypliną.
+
+00:18:37.020 --> 00:18:42.080
+Musisz wiedzieć, jak wygląda sytuacja prawidłowa, a które konkretne zdarzenia wskazują, że sprawy zbaczają z kursu.
+
+00:18:42.260 --> 00:18:46.760
+Zdecyduj, które działania można bezpiecznie zautomatyzować i gdzie dokładnie należy rozpocząć eskalację ludzką.
+
+00:18:47.040 --> 00:18:53.240
+Zanim cokolwiek wdrożysz, upewnij się, że masz punkt odniesienia dla liczby zgłoszeń, ręcznych zmian i tego, jak długo użytkownicy czekają na rozwiązanie.
+
+00:18:53.440 --> 00:18:55.600
+Musisz również wdrożyć zarządzanie od pierwszego dnia.
+
+00:18:55.880 --> 00:19:00.400
+Nadaj agentowi konkretną tożsamość, przypisz jej ludzkiego właściciela i ustal jasne reguły zatwierdzania.
+
+00:19:00.400 --> 00:19:03.280
+Każda czynność podejmowana przez agenta musi być rejestrowana.
+
+00:19:03.440 --> 00:19:09.240
+Powinieneś również mieć plan na wypadek, gdyby agent został wycofany z pracy lub ponownie przypisany, aby nie stał się po prostu zautomatyzowanym widmem.
+
+00:19:09.460 --> 00:19:12.980
+Gdy ten pierwszy przepływ zacznie działać, cały model operacyjny zacznie się zmieniać.
+
+00:19:13.160 --> 00:19:16.440
+Wsparcie przestaje działać jak recepcja, która reaguje tylko na problemy.
+
+00:19:16.640 --> 00:19:20.840
+Zamiast tego zaczyna zachowywać się jak silnik niezawodności wbudowany bezpośrednio w system.
+
+00:19:21.120 --> 00:19:24.200
+Wsparcie przechodzi od widocznej reakcji do wbudowanego zapobiegania.
+
+00:19:24.400 --> 00:19:25.940
+Zgłoszenie nigdy nie było usługą.
+
+00:19:26.160 --> 00:19:28.280
+Było dowodem na to, że usługa pojawiła się za późno.
+
+00:19:28.280 --> 00:19:32.500
+Wybierz jeden przepływ wsparcia w tym kwartale i przeprojektuj go tak, aby przewidywał wyprzedzanie, a nie reagowanie.
+
+00:19:32.720 --> 00:19:40.020
+Jeśli chcesz dowiedzieć się więcej o M365 Copilot Azure, bezpieczeństwie i modelach operacyjnych AI, zasubskrybuj M365FM i zostaw recenzję.
+
+00:19:40.200 --> 00:19:43.980
+Dołącz do mnie, Mirko Pitera, na LinkedIn, aby omówić kolejny temat, który chcesz omówić.

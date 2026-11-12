@@ -1,0 +1,844 @@
+WEBVTT
+
+00:00:00.180 --> 00:00:12.220
+Gotowy na 10 dni z Microsoft 365, Copilot, AI, Azure i ludźmi kształtującymi przyszłość pracy, w styczniu M365 Con powraca, a my stawiamy na większą skalę.
+
+00:00:12.220 --> 00:00:18.780
+Dołącz do nas i skorzystaj z sesji na żywo, demonstracji w warunkach rzeczywistych i praktycznej wiedzy od MVP i ekspertów branżowych z całego świata.
+
+00:00:19.020 --> 00:00:21.900
+Bez generycznych slajdów, bez niekończących się sloganów.
+
+00:00:22.280 --> 00:00:28.960
+Stawiamy czoła prawdziwym wyzwaniom Copilot Studio, agenci, AI, fabrik, bezpieczeństwo, zarządzanie i automatyzacja.
+
+00:00:28.960 --> 00:00:35.120
+Niezależnie od tego, czy jesteś specjalistą i programistą, czy liderem biznesowym, mamy sesje zaprojektowane dla Ciebie.
+
+00:00:35.120 --> 00:00:40.600
+Przez 10 pełnych dni możesz zapoznać się z wieloma technologiami i nawiązać kontakt z globalną społecznością.
+
+00:00:40.760 --> 00:00:44.720
+Oglądaj na żywo i wykorzystaj praktyczne spostrzeżenia w swojej organizacji.
+
+00:00:45.000 --> 00:00:51.160
+Styczeń 2027 roku, 10 dni, jedna społeczność Microsoft. Rejestracja jest już otwarta.
+
+00:00:51.740 --> 00:00:56.120
+Wejdź na m365con.net i zarezerwuj sobie miejsce już dziś.
+
+00:00:56.120 --> 00:00:58.980
+To jest m365con.net
+
+00:00:58.980 --> 00:01:04.800
+Dołącz teraz na m365con.net, a do zobaczenia na żywo w styczniu.
+
+00:01:04.940 --> 00:01:09.240
+Witamy w kolejnym odcinku Microsoft Knowledge Nugget na kanale M365FM.
+
+00:01:09.420 --> 00:01:11.060
+Jestem Mikko Peters, gospodarzem.
+
+00:01:11.300 --> 00:01:16.700
+Dzisiejszym tematem jest coś, o czym prawie każdy słyszał, ale niewielu potrafi to wyjaśnić prostym językiem księga główna.
+
+00:01:16.700 --> 00:01:28.700
+Pieniądze krążą w firmie przez cały dzień, ponieważ klienci płacą faktury, ktoś zatwierdza rachunki dostawców, naliczane są wynagrodzenia, zapasy docierają, a pieniądze wpływają na konto bankowe lub z niego wypływają, a każde z tych zdarzeń zmienia sytuację finansową firmy.
+
+00:01:28.700 --> 00:01:36.420
+Czym więc właściwie jest księga główna? Czy to po prostu kolejny ekran w Dynamics 365 Finance pełen terminów księgowych, zrozumiałych tylko dla pracowników działu finansowego?
+
+00:01:36.660 --> 00:01:39.660
+Nie. Wyobraź sobie to jak księgę główną w budynku biurowym.
+
+00:01:39.900 --> 00:01:47.040
+Każde zdarzenie finansowe musi znaleźć się w tej księdze pod odpowiednim nagłówkiem, aby firma mogła później zobaczyć, skąd pochodzą jej pieniądze, dokąd trafiły i co z nich pozostało.
+
+00:01:47.200 --> 00:01:51.920
+Pod koniec tego odcinka zrozumiesz, czym ona właściwie jest i jak poszczególne elementy układanki się ze sobą łączą.
+
+00:01:51.920 --> 00:01:54.780
+Zaczniemy od problemu, który rozwiązuje księga główna.
+
+00:01:55.820 --> 00:02:00.020
+Księga główna, główny rejestr finansowy firmy, 560 słów.
+
+00:02:00.100 --> 00:02:08.420
+Wyobraź sobie prowadzenie firmy z arkuszem kalkulacyjnym do sprzedaży, innym do rachunków dostawców, oddzielnym narzędziem do obsługi płac i czyimś prywatnym plikiem do płatności bankowych.
+
+00:02:08.600 --> 00:02:14.180
+I to może działać przez jakiś czas, ale wkrótce dział finansowy zadaje proste pytanie, ile mamy teraz gotówki?
+
+00:02:14.180 --> 00:02:20.440
+Jeden arkusz kalkulacyjny pokazuje jedną liczbę, plik bankowy, inną, a dział sprzedaży ma trzecią liczbę, ponieważ płatność nie została jeszcze skopiowana.
+
+00:02:20.440 --> 00:02:23.160
+Nikt więc nie wie, która liczba powinna znaleźć się w raporcie.
+
+00:02:23.380 --> 00:02:25.900
+Rzecz w tym, że to właśnie problem rozwiązuje księga główna.
+
+00:02:26.140 --> 00:02:35.000
+Zapewnia ona firmie jeden rejestr finansowy, w którym wszystkie zapisy księgowe są spójne, zamiast pozostawiać działowi finansowemu składanie liczb z oddzielnych plików.
+
+00:02:35.360 --> 00:02:39.160
+Mówiąc prościej, księga główna to rejestr debetów i kredytów firmy.
+
+00:02:39.320 --> 00:02:44.740
+Te wpisy znajdują się na kontach takich jak kasa, przychody ze sprzedaży, koszty wynajmu, zapasy lub należności.
+
+00:02:44.740 --> 00:02:50.700
+Nie musisz jeszcze panikować z powodu debetów i kredytów. Zamiast tego pomyśl o nich jako o dwóch stronach każdego zdarzenia finansowego.
+
+00:02:50.980 --> 00:02:57.100
+Gdy wartość wpływa do jednego miejsca, system rejestruje, skąd pochodzi ta wartość lub ile firma jest obecnie winna, a obie strony zawsze się zgadzają.
+
+00:02:57.280 --> 00:02:59.700
+Ta zasada zgodności utrzymuje równowagę ksiąg rachunkowych.
+
+00:02:59.880 --> 00:03:03.400
+Porozmawiajmy teraz o tym, jak Dynamics 365 Finance to organizuje.
+
+00:03:03.580 --> 00:03:11.900
+Prowadzi księgę rachunkową dla każdego podmiotu prawnego, czyli firmy, która prowadzi własną dokumentację finansową, składa własne raporty i może mieć własne obowiązki podatkowe i bankowe.
+
+00:03:11.900 --> 00:03:15.800
+Na przykład grupa może obejmować firmy z Wielkiej Brytanii i inną z Niemiec.
+
+00:03:15.940 --> 00:03:22.120
+I chociaż mogą one ze sobą współpracować, każda firma potrzebuje własnej dokumentacji finansowej, ponieważ każda ma własne pieniądze, zobowiązania i potrzeby sprawozdawcze.
+
+00:03:22.280 --> 00:03:24.520
+Dlatego każda jednostka prawna ma jedną księgę rachunkową.
+
+00:03:24.720 --> 00:03:28.340
+Księga rachunkowa wymaga kilku elementów składowych, zanim ludzie będą mogli księgować zapisy finansowe.
+
+00:03:28.500 --> 00:03:33.180
+Pierwszym elementem składowym jest plan kont, czyli lista nazw i numerów kont, które porządkują finanse firmy.
+
+00:03:33.360 --> 00:03:39.320
+Potrzebny jest również kalendarz finansowy, który informuje Dynamics 365 Finance, jak rok finansowy dzieli się na okresy, takie jak miesiące.
+
+00:03:39.320 --> 00:03:45.360
+Bez niej system nie może umieścić transakcji we właściwym okresie księgowym, ani pomóc działowi finansowemu w przygotowaniu raportu na koniec miesiąca.
+
+00:03:45.540 --> 00:03:54.640
+Istnieje również waluta księgowa, czasami nazywana walutą krajową, która zapewnia księgowości wspólny język pieniężny dla zapisów finansowych, nawet gdy firma kupuje lub sprzedaje w innych walutach.
+
+00:03:54.820 --> 00:03:59.320
+Wyobraź sobie firmę, która kupuje akcje w euro, ale sporządza sprawozdania finansowe w funtach brytyjskich.
+
+00:03:59.480 --> 00:04:05.220
+Zakup nadal musi trafić do jednego centralnego rejestru finansowego, w którym waluta księgowa firmy będzie wykorzystywana do jej własnych raportów.
+
+00:04:05.220 --> 00:04:09.220
+Te ustawienia mogą brzmieć jak szczegóły konfiguracji, ale kształtują one każdy kolejny zapis.
+
+00:04:09.400 --> 00:04:12.420
+Dlaczego więc dział finansowy tak bardzo zależy na jednym wspólnym rejestrze?
+
+00:04:12.580 --> 00:04:18.740
+Ponieważ raporty potrzebują wielu zaufanych osób, a kiedy kierownik otwiera raport bilansowy, musi wiedzieć, że pochodzi on z tego samego rejestru finansowego,
+
+00:04:18.920 --> 00:04:25.260
+który obsługuje rachunek zysków i strat firmy i bilans bez konieczności pytania, czy ktoś zapomniał zaktualizować arkusz kalkulacyjny po wprowadzeniu faktury.
+
+00:04:25.460 --> 00:04:28.260
+Księga główna zapewnia działowi finansowemu to wspólne źródło.
+
+00:04:28.260 --> 00:04:30.760
+Nie zastępuje ona pracy wykonywanej w całej firmie.
+
+00:04:30.940 --> 00:04:35.500
+Ludzie nadal kupują produkty, wysyłają faktury, płacą dostawcom, przyjmują zapasy i prowadzą listy płac,
+
+00:04:35.620 --> 00:04:42.320
+ale finansowy wpływ tych zdarzeń trafia do księgi głównej w kontrolowanej formie, co daje działowi finansowemu jasną odpowiedź, gdy ktoś pyta, dlaczego to saldo występuje.
+
+00:04:42.460 --> 00:04:47.680
+Podwójna księgowość zapewnia uczciwość tej odpowiedzi, ponieważ każda zaksięgowana kwota ma równy wpis po drugiej stronie.
+
+00:04:47.940 --> 00:04:51.720
+Zatem jeśli firma rejestruje debet w wysokości 100, rejestruje również kredyt w wysokości 100.
+
+00:04:52.260 --> 00:04:53.480
+To żadna matematyczna zagadka.
+
+00:04:53.480 --> 00:04:57.880
+Konta zmieniają się w zależności od tego, co się wydarzyło, ale łączny debet i kredyt muszą się bilansować,
+
+00:04:58.000 --> 00:05:02.520
+a Dynamics 365 Finance stosuje się do tej zasady, gdy wpisy trafiają do księgi głównej,
+
+00:05:02.620 --> 00:05:05.740
+pomagając zapobiec przedostawaniu się jednostronnych zapisów finansowych do ksiąg.
+
+00:05:05.860 --> 00:05:08.820
+Księga główna nie jest zatem miejscem, gdzie liczby znikają.
+
+00:05:09.020 --> 00:05:12.940
+To główny rejestr finansowy firmy, oparty na wspólnych regułach i zbilansowanych wpisach,
+
+00:05:13.060 --> 00:05:17.340
+ale tak obszerny rejestr wymaga przejrzystego systemu archiwizacji, a zaczyna się on od planu kont.
+
+00:05:17.820 --> 00:05:21.120
+Plan kont i wymiary finansowe, szafka na dokumenty.
+
+00:05:21.820 --> 00:05:23.500
+Witamy ponownie w Knowledge Nugget.
+
+00:05:23.680 --> 00:05:26.880
+Nazywam się Mirko Peters i dzisiaj otwieramy szafkę z dokumentami finansowymi,
+
+00:05:26.980 --> 00:05:29.040
+wykraczając poza plan kont i wymiary finansowe.
+
+00:05:29.280 --> 00:05:31.960
+Gdzie zatem trafia transakcja po umieszczeniu jej w księdze głównej?
+
+00:05:32.120 --> 00:05:32.940
+Trafia na konto.
+
+00:05:33.120 --> 00:05:37.400
+Plan kont to uporządkowana lista, której podmiot prawny używa do sortowania swoich finansów.
+
+00:05:37.600 --> 00:05:39.940
+Wyobraź sobie to jak szafkę z opisanymi szufladami.
+
+00:05:40.160 --> 00:05:43.620
+Każda szuflada ma swoje przeznaczenie, a każda transakcja musi znaleźć swoje miejsce.
+
+00:05:43.920 --> 00:05:46.680
+Bez tych etykiet osoba z grupy, a mogłaby wiedzieć, że pieniądze zostały przelane,
+
+00:05:46.680 --> 00:05:48.840
+ale nie byłaby w stanie wyjaśnić, co te pieniądze oznaczają.
+
+00:05:48.980 --> 00:05:52.700
+Plan kont zawiera konta główne, czyli ogólne etykiety finansowe dla transakcji.
+
+00:05:52.920 --> 00:05:57.640
+Gotówka jest kontem głównym, podobnie jak przychody ze sprzedaży, koszty wynajmu, należności do zapłaty i zapasy.
+
+00:05:57.820 --> 00:06:01.980
+Kiedy firma płaci czynsz za biuro, pieniądze pozostają w gotówce, a koszty trafiają do kosztów wynajmu.
+
+00:06:02.200 --> 00:06:04.920
+Zakup produktów do późniejszej sprzedaży zwiększa wartość zapasów.
+
+00:06:05.060 --> 00:06:08.900
+Otrzymanie niezapłaconego rachunku od dostawcy powoduje, że zobowiązanie trafia do należności do dostawców.
+
+00:06:08.900 --> 00:06:11.540
+Każde konto główne nadaje każdemu wpisowi jasne miejsce.
+
+00:06:11.740 --> 00:06:14.360
+To prosty pomysł, ale kształtuje każdy raport finansowy.
+
+00:06:14.520 --> 00:06:19.100
+Konta dzielą się na większe grupy, z których korzysta dział finansowy do sporządzania bilansu i rachunku zysków i strat.
+
+00:06:19.280 --> 00:06:25.020
+Aktywa, zobowiązania i kapitał własny należą do bilansu, opisując, co firma posiada, co jest winna i jakie są pozostałe udziały.
+
+00:06:25.180 --> 00:06:28.920
+Przychody i wydatki są uwzględniane w rachunku zysków i strat, co odpowiada na inne pytanie.
+
+00:06:29.140 --> 00:06:31.360
+Czy firma zarobiła więcej niż wydała w tym okresie?
+
+00:06:31.560 --> 00:06:32.940
+Gotówka i zapasy to aktywa.
+
+00:06:33.180 --> 00:06:36.300
+Rachunki do zapłaty to zobowiązania, czyli nasze zobowiązania wobec dostawców.
+
+00:06:36.300 --> 00:06:39.260
+Przychody ze sprzedaży rejestrują przychody ze sprzedaży towarów lub usług.
+
+00:06:39.400 --> 00:06:41.480
+Koszty wynajmu rejestrują koszty operacyjne.
+
+00:06:41.680 --> 00:06:47.140
+Gdy konta mają odpowiednie kategorie, Dynamics 365 Finance może umieszczać kwoty w odpowiedniej części raportu finansowego.
+
+00:06:47.360 --> 00:06:49.720
+Jednak sama nazwa konta często nie mówi wystarczająco dużo.
+
+00:06:49.940 --> 00:06:52.140
+Załóżmy, że masz jedno konto o nazwie wydatki na podróże.
+
+00:06:52.300 --> 00:06:55.760
+Informuje ono o wydatkach na podróże, ale nie mówi, kto je wydał, a niektóra część firmy je zapłaciła.
+
+00:06:55.900 --> 00:06:57.620
+Tu właśnie pojawiają się wymiary finansowe.
+
+00:06:57.620 --> 00:07:02.340
+Są to dodatkowe etykiety dołączone do każdego wpisu dotyczącego takich elementów jak dział, centrum kosztów, jednostka biznesowa lub lokalizacja.
+
+00:07:02.540 --> 00:07:05.060
+Wyobraź sobie konto główne jako wiersz tematów formularzu.
+
+00:07:05.260 --> 00:07:07.240
+Wymiary uzupełniają poniższe szczegóły.
+
+00:07:07.420 --> 00:07:09.240
+Koszty podróży wskazują, co to jest.
+
+00:07:09.460 --> 00:07:11.900
+Dział może wskazać, że koszt należy do działu sprzedaży.
+
+00:07:12.120 --> 00:07:14.480
+Centrum kosztów może identyfikować budżet zespołu.
+
+00:07:14.700 --> 00:07:16.680
+Jednostka biznesowa oddziela sekcję firmy.
+
+00:07:16.920 --> 00:07:20.340
+Lokalizacja wskazuje, czy koszt należy do Londynu, Berlina czy innego biura.
+
+00:07:20.620 --> 00:07:23.900
+Wyobraź sobie trzech pracowników rezerwujących loty na spotkania z klientami.
+
+00:07:27.620 --> 00:07:31.600
+Jeden wpis dotyczy działu sprzedaży, inny działu wsparcia, a jeszcze inny działu finansów.
+
+00:07:31.800 --> 00:07:34.980
+Dział finansów może wtedy przeanalizować całkowite wydatki firmy na podróże służbowe.
+
+00:07:35.180 --> 00:07:38.700
+Może też zadać bardziej precyzyjne pytanie, ile dział sprzedaży wydał na podróże służbowe w tym miesiącu.
+
+00:07:38.700 --> 00:07:41.800
+Ile działu wsparcia? Czy dział finansów zmieścił się w budżecie?
+
+00:07:41.980 --> 00:07:44.760
+Wydatki nie wymagały oddzielnych kont głównych dla każdego zespołu.
+
+00:07:44.940 --> 00:07:46.960
+Cóż, wymiary zapewniają te oddzielne widoki.
+
+00:07:47.220 --> 00:07:50.760
+Firma nie chce, aby pracownicy wybierali losowe etykiety i tworzyli nieuporządkowane rekordy.
+
+00:07:50.760 --> 00:07:55.420
+Koszt podróży może wymagać działu i centrum kosztów, podczas gdy wpis bankowy wymaga mniejszej liczby szczegółów.
+
+00:07:55.600 --> 00:07:59.360
+Dynamics 365 Finance kontroluje to za pomocą struktur i reguł kont.
+
+00:07:59.540 --> 00:08:03.180
+Struktura konta określa dozwoloną kombinację konta głównego i wymiarów.
+
+00:08:03.380 --> 00:08:08.680
+Mówiąc wprost informuje system, które etykiety pasują do którego konta i jakie wartości mogą wybrać pracownicy.
+
+00:08:08.940 --> 00:08:12.520
+Na przykład wpis wydatków na podróże może wymagać podania działu i centrum kosztów.
+
+00:08:12.700 --> 00:08:15.160
+Wpis kasowy może zezwalać tylko na jednostkę biznesową.
+
+00:08:15.160 --> 00:08:22.540
+Jeśli ktoś spróbuje zaksięgować wydatek na wynajem w lokalizacji, która do niego nie pasuje lub pominie wymagany dział, system zatrzyma wpis, zanim dotrze on do rekordów.
+
+00:08:22.720 --> 00:08:27.460
+Dzięki temu raporty pozostają przejrzyste, ponieważ reguły prowadzą użytkowników już w momencie wprowadzania transakcji.
+
+00:08:27.680 --> 00:08:31.860
+Większe organizacje mogą również współdzielić jeden plan kont dla kilku podmiotów prawnych.
+
+00:08:32.040 --> 00:08:37.360
+Wszystkie korzystają z tej samej listy kont dla gotówki, przychodów ze sprzedaży i zapasów, co ułatwia porównywanie raportów grupowych.
+
+00:08:37.560 --> 00:08:40.260
+Jednak wspólne nazwy kont nie łączą firm w jeden rekord.
+
+00:08:40.260 --> 00:08:42.860
+Każdy podmiot prawny prowadzi własną księgę rachunkową.
+
+00:08:42.860 --> 00:08:46.800
+Wyobraź sobie dwie firmy korzystające z tej samej konstrukcji szafy na dokumenty w oddzielnych biurach.
+
+00:08:46.980 --> 00:08:50.120
+Etykiety szuflad są takie same, ale dokumenty w środku należą do różnych firm.
+
+00:08:50.360 --> 00:08:52.880
+Saldo gotówkowe jednej firmy nie miesza się z saldem pozostałych.
+
+00:08:53.080 --> 00:08:55.200
+Zatem plan kont wskazuje znaczenie każdego wpisu.
+
+00:08:55.420 --> 00:08:57.380
+Wymiary finansowe dodają szczegóły biznesowe.
+
+00:08:57.620 --> 00:09:02.280
+Struktury kont zapewniają właściwe kombinacje, ale te etykiety wyjaśniają tylko, gdzie dany wpis należy do niego.
+
+00:09:02.500 --> 00:09:05.900
+Kolejnym pytaniem jest, gdzie ten wpis się rozpoczął, a to prowadzi nas do ksiąg pomocniczych.
+
+00:09:05.900 --> 00:09:09.360
+Księga główna i księgi pomocnicze tam, gdzie rozpoczynają się transakcje.
+
+00:09:09.540 --> 00:09:13.200
+Porozmawiajmy teraz o tym, gdzie tak naprawdę rozpoczynają się wszystkie te transakcje.
+
+00:09:13.440 --> 00:09:18.840
+Księga główna przechowuje dane finansowe całej jednostki prawnej, ale nie zawiera wszystkich codziennych szczegółów.
+
+00:09:18.960 --> 00:09:21.000
+To rozróżnienie oszczędza wiele zamieszania.
+
+00:09:21.260 --> 00:09:30.980
+Kiedy nabywca otrzymuje fakturę od dostawcy, firma musi znać nazwę dostawcy, numer faktury, termin płatności, zamówienie zakupu, status płatności, szczegóły podatkowe, a czasem pozycję wiersza.
+
+00:09:30.980 --> 00:09:36.400
+Dział finansowy potrzebuje wyników księgowych, ale raport finansowy nie musi zawierać każdej pozycji z każdego dokumentu dostawcy.
+
+00:09:36.540 --> 00:09:38.860
+Ta szczegółowa praca znajduje się w księgach pomocniczych.
+
+00:09:38.860 --> 00:09:43.860
+Księga pomocnicza to część Dynamics 365 Finance, która śledzi szczegóły dla określonego rodzaju działalności.
+
+00:09:44.120 --> 00:09:47.700
+Dział rozliczeń z dostawcami śledzi faktury od dostawców, kwoty należne i płatności.
+
+00:09:48.000 --> 00:09:52.920
+Dział należności śledzi faktury od klientów, płatności przychodzące i kwoty należności od klientów.
+
+00:09:53.120 --> 00:09:55.480
+Dział zapasów śledzi ruchy i wartość zapasów.
+
+00:09:55.640 --> 00:09:59.680
+Dział środków trwałych śledzi sprzęt, pojazdy lub budynki, które firma posiada długoterminowo.
+
+00:09:59.680 --> 00:10:02.220
+Moduł podatkowy śledzi kody i kwoty podatków.
+
+00:10:02.220 --> 00:10:08.460
+Produkcja śledzi finansową stronę materiałów produkcyjnych, robocizny i innych kosztów, które wpływają na końcowy koszt produktu.
+
+00:10:08.640 --> 00:10:13.160
+Każdy moduł przechowuje szczegółowe informacje potrzebne użytkownikom, ale nie oznacza to, że moduły te działają w izolacji.
+
+00:10:13.380 --> 00:10:18.020
+Wprowadzają one wpisy księgowe do księgi głównej, zapewniając powiązanie działań operacyjnych z dokumentacją finansową.
+
+00:10:18.260 --> 00:10:19.540
+Weźmy fakturę od dostawcy.
+
+00:10:19.540 --> 00:10:22.460
+Osoba z działu rozliczeń z dostawcami wprowadza fakturę od dostawcy.
+
+00:10:22.700 --> 00:10:26.900
+Widzi, kto ją wysłał, co obejmuje, kiedy jest termin płatności i czy jest zgodna z informacjami o zakupie.
+
+00:10:27.020 --> 00:10:28.420
+To widok na poziomie dokumentu.
+
+00:10:28.600 --> 00:10:31.840
+Za tą fakturą Dynamics 365 Finance tworzy efekt księgowy.
+
+00:10:32.040 --> 00:10:34.120
+Być może dostawca naliczył opłatę za wynajem biura.
+
+00:10:34.380 --> 00:10:38.620
+System rejestruje wydatek na odpowiednim koncie i rejestruje należną kwotę w dziale rozliczeń z dostawcami.
+
+00:10:38.840 --> 00:10:43.800
+Faktura pozostaje widoczna w dziale rozliczeń z dostawcami, podczas gdy jej debet i kredyt są przenoszone do księgi głównej.
+
+00:10:43.800 --> 00:10:46.500
+Jedno zdarzenie biznesowe tworzy dwa przydatne widoki.
+
+00:10:46.740 --> 00:10:49.800
+Widok operacyjny pyta, któremu dostawcy musimy zapłacić i kiedy.
+
+00:10:50.040 --> 00:10:53.340
+Widok księgowy pyta, które konta uległy zmianie z powodu tej faktury.
+
+00:10:53.600 --> 00:10:56.380
+Możesz się zastanawiać, skąd system wie, których kont użyć.
+
+00:10:56.500 --> 00:11:00.480
+Nikt nie chce, aby pracownicy zgadywali każde konto debetowe i kredytowe podczas wprowadzania zwykłej faktury.
+
+00:11:00.720 --> 00:11:03.980
+Dynamics 365 Finance wykorzystuje w tym celu profile księgowania.
+
+00:11:04.180 --> 00:11:09.080
+Profil księgowania zawiera reguły, które wskazują systemowi właściwe konta główne dla danego typu transakcji.
+
+00:11:09.080 --> 00:11:14.220
+W przypadku rozliczeń z dostawcami profil księgowania dostawcy może skierować należną kwotę na konto rozliczeń z dostawcami.
+
+00:11:14.440 --> 00:11:17.780
+Inne reguły, oparte na szczegółach faktury, kierują drugą stroną wpisu.
+
+00:11:17.980 --> 00:11:21.580
+Profile księgowania można porównać do instrukcji księgowych wbudowanych w proces.
+
+00:11:21.860 --> 00:11:24.360
+Ludzie nadal wprowadzają rzeczywisty dokument biznesowy.
+
+00:11:24.620 --> 00:11:29.080
+System stosuje reguły finansowe firmy, korzystając z kont i wymiarów dozwolonych dla danej czynności.
+
+00:11:29.300 --> 00:11:33.440
+To zapewnia bardziej spójny wynik niż proszenie każdego użytkownika o ustalenie księgowości od podstaw.
+
+00:11:33.660 --> 00:11:36.340
+Istnieje również wspólne odniesienie, które ułatwia śledzenie.
+
+00:11:36.340 --> 00:11:43.400
+Och, to się nazywa voucher. Woucher łączy dokument źródłowy, wpisy księgowe ksiąg pomocniczych i wpisy, które trafiają do księgi głównej.
+
+00:11:43.600 --> 00:11:49.040
+Jeśli użytkownik finansowy widzi kwotę w księdze i chce wiedzieć, skąd pochodzi, voucher pomaga prześledzić ją do źródła.
+
+00:11:49.240 --> 00:11:53.000
+Ma to znaczenie, gdy ktoś zadaje bardzo typowe pytanie, jaka jest ta kwota?
+
+00:11:53.000 --> 00:12:03.700
+Zamiast przeszukiwać raporty, wiadomości, e-mail i foldery, zespół może śledzić paragon od wpisów księdze głównej do faktury dostawcy, paragonu, faktury klienta lub innego dokumentu źródłowego.
+
+00:12:03.940 --> 00:12:06.360
+Paragon nie zastępuje oryginalnego dokumentu.
+
+00:12:06.540 --> 00:12:08.000
+Łączy on zapis finansowy z tym dokumentem.
+
+00:12:08.840 --> 00:12:13.460
+Zatem otwierając fakturę dostawcy w dziale rozliczeń z dostawcami, przeglądasz dokument biznesowy i szczegóły płatności.
+
+00:12:13.680 --> 00:12:18.000
+Otwierając paragon lub transakcję w księdze głównej, przeglądasz księgowanie finansowe stojące za tym dokumentem.
+
+00:12:18.000 --> 00:12:20.060
+To samo zdarzenie, inny cel.
+
+00:12:20.240 --> 00:12:30.880
+Ten podział pozwala zespołom operacyjnym pracować z potrzebnymi szczegółami, podczas gdy dział finansowy może przeglądać, porządkować salda, kont i przygotowywać raporty bez przekształcania każdego raportu w długą listę pozycji faktur.
+
+00:12:31.240 --> 00:12:33.680
+Księga główna koncentruje się na zapisie księgowym.
+
+00:12:33.920 --> 00:12:37.360
+Księgi pomocnicze przechowują dane biznesowe blisko osób, które ich potrzebują.
+
+00:12:37.540 --> 00:12:42.820
+Paragony i profile księgowania łączą obie strony, więc liczba w raporcie nadal może prowadzić do zdarzenia, które ją utworzyło.
+
+00:12:42.820 --> 00:12:47.620
+Teraz prześledźmy prosty zakup od zamówienia towarów do generowanych przez niego wpisów księgowych.
+
+00:12:48.000 --> 00:12:49.140
+Przykład zakupu.
+
+00:12:49.340 --> 00:12:55.420
+Jak pieniądze przepływają przez Dynamics 365, Twoja firma zamawia 100 krzeseł biurowych od dostawcy.
+
+00:12:55.640 --> 00:12:57.840
+Proces rozpoczyna się od zamówienia zakupu.
+
+00:12:57.980 --> 00:13:02.240
+Ten dokument określa, co firma planuje kupić, od kogo, za jaką cenę i ile krzeseł.
+
+00:13:02.420 --> 00:13:04.620
+Na tym etapie jest to po prostu zobowiązanie.
+
+00:13:04.800 --> 00:13:06.320
+Od plan, a nie transakcja.
+
+00:13:06.540 --> 00:13:09.160
+Krzesła jeszcze nie dotarły i nie wysłano żadnej faktury.
+
+00:13:09.160 --> 00:13:12.900
+Kiedy dostawa się pojawi, ktoś rejestruje przyjęcie produktów w Dynamics 365.
+
+00:13:14.020 --> 00:13:16.440
+Ten krok potwierdza, że firma faktycznie otrzymała krzesła.
+
+00:13:16.440 --> 00:13:19.980
+Zapasy rosną, ponieważ teraz fizycznie kontrolujesz 100 dodatkowych krzeseł.
+
+00:13:20.100 --> 00:13:24.520
+I właśnie w tym momencie Dynamics 365 może utworzyć wpis księgowy dla paragonu.
+
+00:13:24.680 --> 00:13:25.340
+Uprośćmy to.
+
+00:13:25.560 --> 00:13:28.800
+Załóżmy, że krzesła kosztują 10 tysięcy dolarów w walucie księgowej firmy.
+
+00:13:29.020 --> 00:13:30.640
+Zapasy otrzymują debet w wysokości 10 tysięcy.
+
+00:13:30.900 --> 00:13:33.320
+Rozliczenia międzyokresowe zakupu otrzymują kredyt w wysokości 10 tysięcy.
+
+00:13:33.580 --> 00:13:34.380
+Niech te terminy Cię nie zmylą.
+
+00:13:34.560 --> 00:13:37.000
+Debet po prostu rejestruje wartość wprowadzoną do zapasów AU.
+
+00:13:37.220 --> 00:13:39.180
+Firma posiada obecnie towary o wartości 10 tysięcy.
+
+00:13:39.180 --> 00:13:43.240
+W rejestrze kredytowym znajduje się druga strona, kwota powiązana z towarami otrzymanymi, ale jeszcze nie zafakturowanymi.
+
+00:13:43.380 --> 00:13:44.920
+Obie strony są równe 10 tysięcy.
+
+00:13:45.280 --> 00:13:47.140
+Firma ma więc krzesła, ale jeszcze nie ma faktury.
+
+00:13:47.380 --> 00:13:50.580
+Rozliczenia międzyokresowe zakupów działają jako tymczasowe miejsce przechowywania AU.
+
+00:13:50.720 --> 00:13:52.920
+Miejsce między otrzymaniem towarów a otrzymaniem faktury.
+
+00:13:53.180 --> 00:13:56.680
+Mówią, że otrzymaliśmy wartość i oczekujemy, że opłata od dostawcy będzie zgodna z nią.
+
+00:13:56.900 --> 00:13:59.720
+Obie strony są równe, co jest dokładnie tym, czego potrzebuje system.
+
+00:13:59.720 --> 00:14:06.340
+To saldo ma znaczenie, ponieważ Dynamics 365 sprawdza, czy suma debetów i suma kredytów jest zgodna podczas tworzenia wpisu księgowego.
+
+00:14:06.580 --> 00:14:11.240
+Gdyby istniała tylko strona zapasów, rekordy pokazywałyby dodatkową wartość bez pokazywania, skąd pochodzi.
+
+00:14:11.520 --> 00:14:12.920
+Księgowość nie działa w ten sposób.
+
+00:14:13.200 --> 00:14:15.980
+Każda kwota potrzebuje dwóch stron lub źródła i miejsca docelowego.
+
+00:14:16.220 --> 00:14:17.740
+Kilka dni później przychodzi faktura.
+
+00:14:18.000 --> 00:14:18.800
+Zespół do spraw.
+
+00:14:19.020 --> 00:14:21.000
+Rozliczeń z dostawcami wprowadza ją i księguje.
+
+00:14:21.240 --> 00:14:28.240
+System może powiązać fakturę z zamówieniem zakupu i przyjęciem produktu, dzięki czemu firma może porównać, co zamówiła, co otrzymała i ile zapłaciła dostawca.
+
+00:14:28.240 --> 00:14:31.760
+Po zaksięgowaniu faktury tymczasowa kwota naliczenia zakupu zostaje rozliczona.
+
+00:14:32.000 --> 00:14:36.660
+System obciąża naliczenie zakupu kwotą 10 tysięcy jednostek astronomicznych, zmniejszając kwotę tam przechowywaną.
+
+00:14:36.820 --> 00:14:41.940
+Aha, i uznaje należności od dostawców kwotą 10 tysięcy, rejestrując kwotę, którą firma jest teraz winna dostawcy.
+
+00:14:42.140 --> 00:14:43.860
+Zwróć uwagę na to, co się tutaj zmieniło.
+
+00:14:44.040 --> 00:14:46.500
+Księgowanie zapasów już odnotowało, że krzesła dotarły.
+
+00:14:46.700 --> 00:14:48.920
+Faktura dostawcy nie dodaje krzeseł po raz drugi.
+
+00:14:49.080 --> 00:14:54.000
+Po prostu zmienia zobowiązanie firmy z tymczasowego symbolu zastępczego na konkretną kwotę należną konkretnemu dostawcy.
+
+00:14:54.000 --> 00:14:56.920
+To daje różnym zespołom dokładnie takie informacje, jakich potrzebują.
+
+00:14:57.100 --> 00:14:59.280
+Zespół magazynowy potwierdza, że krzesła dotarły.
+
+00:14:59.440 --> 00:15:01.140
+Kupujący sprawdza zamówienie zakupu.
+
+00:15:01.320 --> 00:15:03.820
+Dział rozliczeń z dostawcami widzi fakturę i termin płatności.
+
+00:15:04.060 --> 00:15:08.400
+Dział finansów widzi wpisy księgowe, które przeszły przez naliczenie zakupu zapasów i należności od dostawców.
+
+00:15:08.560 --> 00:15:12.920
+To jeden zakup, ale każda część Dynamics 365 rejestruje tylko część, która do niego należy.
+
+00:15:13.160 --> 00:15:15.420
+Każde księgowanie otrzymuje również odniesienie do vouchera.
+
+00:15:15.420 --> 00:15:20.780
+Załóżmy, że kierownik do spraw finansów widzi ruch o 10 tysięcy dolarów na koncie zapasów w raporcie i chce wiedzieć, dlaczego.
+
+00:15:21.080 --> 00:15:26.020
+Mogą użyć vouchera, aby prześledzić tę kwotę wstecz, począwszy od paragonu, zamówienia zakupu, a na fakturze od dostawcy skończywszy.
+
+00:15:26.200 --> 00:15:29.400
+To zamienia pytanie, skąd wzięła się ta kwota, w łatwe do śledzenia.
+
+00:15:29.640 --> 00:15:30.780
+Ślad działa w obie strony.
+
+00:15:31.060 --> 00:15:34.020
+Osoba sprawdzająca fakturę może otworzyć powiązane księgowanie finansowe.
+
+00:15:34.020 --> 00:15:37.380
+Osoba sprawdzająca księgę rachunkową może prześledzić dokument, od którego rozpoczął się wpis.
+
+00:15:37.540 --> 00:15:39.700
+Ręczne arkusze kalkulacyjne często przerywają to połączenie.
+
+00:15:39.700 --> 00:15:41.680
+Jedna osoba aktualizuje plik zapasów.
+
+00:15:41.840 --> 00:15:44.200
+Ktoś inny wprowadza fakturę od dostawcy do pliku kont.
+
+00:15:44.400 --> 00:15:47.120
+Dział finansowy kopiuje sumy do innego skoro szytu na koniec miesiąca.
+
+00:15:47.320 --> 00:15:51.380
+Brakujący wiersz, zmieniona kwota lub spóźniona aktualizacja powodują rozbieżność między rekordami.
+
+00:15:51.600 --> 00:15:56.500
+Dynamics 365 utrzymuje powiązanie między działaniami zakupowymi, a wpisami księgowymi w trakcie pracy.
+
+00:15:56.700 --> 00:16:00.700
+Pracownicy nadal muszą wprowadzać dokładne informacje i postępować zgodnie z procesem zatwierdzania firmy,
+
+00:16:00.820 --> 00:16:03.060
+w przeciwnym razie system nie przekształci złej faktury w dobrą.
+
+00:16:03.060 --> 00:16:08.260
+Zmniejsza to jednak liczbę wielokrotnych wpisów i utrzymuje oryginalne dokumenty blisko tworzonych przez nich księgowań finansowych.
+
+00:16:08.400 --> 00:16:10.700
+Pojedynczy zakup generuje tylko kilka wpisów.
+
+00:16:10.860 --> 00:16:13.460
+W ciągu normalnego dnia firma księguje ich znacznie więcej.
+
+00:16:13.700 --> 00:16:19.560
+Te wpisy tworzą dokumentację finansową, a dział finansowy wykorzystuje je do powtarzających się prac w całym okresie sprawozdawczym.
+
+00:16:19.700 --> 00:16:24.220
+Co dział finansowy robi z księgą rachunkową, dzienna praca, zamknięcie okresu i podatek?
+
+00:16:24.360 --> 00:16:28.380
+Nie każde zdarzenie księgowe rozpoczyna się od zamówienia zakupu faktury lub ruchu magazynowego.
+
+00:16:28.380 --> 00:16:31.480
+Czasami dział finansowy musi zaksięgować wpis księgowy bezpośrednio.
+
+00:16:31.660 --> 00:16:35.580
+Wpis księgowy rejestruje korektę lub zdarzenie finansowe pochodzące bezpośrednio od zespołu finansowego,
+
+00:16:35.700 --> 00:16:40.900
+np. korektę księgowania, zarejestrowanie rozliczenia międzyokresowego lub przesunięcie kwoty między kontami na koniec okresu.
+
+00:16:41.080 --> 00:16:46.060
+Daje to działowi finansowemu kontrolowany sposób rejestrowania pracy, która nie rozpoczyna się w innej części Dynamics 365.
+
+00:16:46.620 --> 00:16:50.880
+Wyobraź sobie, że rachunek za prąd obejmuje ostatnie kilka dni marca, ale faktura pojawi się dopiero w kwietniu.
+
+00:16:50.880 --> 00:16:55.280
+Dział finansowy może zaksięgować rozliczenie międzyokresowe w marcu, aby konta marcowe uwzględniały koszt, który tam należy.
+
+00:16:55.520 --> 00:16:58.440
+Gdy faktura pojawi się później, zespół zajmuje się samym dokumentem.
+
+00:16:58.640 --> 00:17:03.600
+Dzięki temu okres sprawozdawczy koncentruje się na tym, co wydarzyło się w tym okresie, a nie tylko na tym, kiedy wpłynęła dokumentacja.
+
+00:17:03.840 --> 00:17:05.820
+Dział finansowy również korzysta z alokacji.
+
+00:17:06.060 --> 00:17:11.180
+Alokacja rozdziela kwotę między inne konta, działy lub centra kosztów zgodnie z regułami zdefiniowanymi przez firmę.
+
+00:17:11.180 --> 00:17:13.860
+Stała alokacja opiera się na ustalonych procentach.
+
+00:17:14.000 --> 00:17:21.600
+Jeśli czynsz za siedzibę główną powinien być podzielony w 50% na sprzedaż, 30% na wsparcie i 20% na finanse, system stosuje te procenty.
+
+00:17:21.780 --> 00:17:24.080
+Zmienna alokacja zmienia się w zależności od miary.
+
+00:17:24.320 --> 00:17:30.100
+Na przykład koszty wspólnego magazynu mogą być rozłożone na jednostki biznesowe w zależności od liczby towarów obsługiwanych przez każdą z nich.
+
+00:17:30.320 --> 00:17:33.700
+Jeden zespół wykorzystuje więcej magazynu, więc otrzymuje większą część kosztów.
+
+00:17:33.840 --> 00:17:38.200
+Pierwotny koszt pozostaje identyfikowalny, a raporty pokazują, gdzie firma zdecydowała się go ponieść.
+
+00:17:38.200 --> 00:17:40.180
+Podatki wymagają podobnej kontroli.
+
+00:17:40.180 --> 00:17:46.320
+Dynamics 365 Finance używa kodów podatku od sprzedaży do przechowywania informacji potrzebnych do księgowania podatku.
+
+00:17:46.520 --> 00:17:52.000
+Kod podatku może definiować stawkę lub kwotę do pobrania lub zapłaty, a także metodę jego zastosowania do transakcji.
+
+00:17:52.240 --> 00:17:55.940
+Wymagania podatkowe różnią się w zależności od kraju, regionu, stanu, hrabstwa i miasta.
+
+00:17:56.180 --> 00:18:03.040
+Kod podaje zatem systemowi reguły dotyczące części podatkowej transakcji sprzedaży lub zakupu, zamiast zmuszać użytkowników do wpisywania za każdym razem innego obliczenia.
+
+00:18:03.300 --> 00:18:06.100
+Gdy reguły się zmieniają, firma aktualizuje ustawienia podatkowe.
+
+00:18:06.100 --> 00:18:11.080
+Nie ma potrzeby odręcznych notatek ani zapamiętywania wyjątków. Potem nadchodzi rytm roku finansowego.
+
+00:18:11.340 --> 00:18:14.220
+Kalendarz fiskalny dzieli rok na okresy, często miesiące.
+
+00:18:14.380 --> 00:18:20.520
+Po zakończeniu każdego okresu dział finansowy dokonuje przeglądu wpisów, księguje niezbędne korekty i przygotowuje raporty za ten okres.
+
+00:18:20.680 --> 00:18:25.080
+Pod koniec roku transakcje zamykające przygotowują rachunki zysków i strat na kolejny rok fiskalny.
+
+00:18:25.080 --> 00:18:28.080
+Rachunki przychodów i kosztów śledzą aktywność w ciągu jednego roku.
+
+00:18:28.260 --> 00:18:32.640
+Po zamknięciu roku konta te rozpoczynają nowy rok, gotowe do rejestrowania nowych przychodów i kosztów.
+
+00:18:32.820 --> 00:18:36.300
+Ukończony wynik jest przenoszony do kapitału własnego firmy w procesie zamknięcia.
+
+00:18:36.480 --> 00:18:38.220
+Konta bilansowe działają inaczej.
+
+00:18:38.460 --> 00:18:48.300
+Gotówka, zapasy, zobowiązania i inne konta bilansowe przenoszą swoje salda do przodu, ponieważ firma nadal jest właścicielem gotówki lub akcji i nadal ma wszelkie niezapłacone rachunki na początku nowego roku.
+
+00:18:48.600 --> 00:18:50.720
+Duże grupy stoją przed jeszcze jednym zadaniem.
+
+00:18:50.720 --> 00:18:55.440
+Organizacja nadrzędna może potrzebować jednego widoku wyników z kilku zależnych podmiotów prawnych.
+
+00:18:55.620 --> 00:19:03.380
+Konsolidacja łączy wyniki finansowe tych spółek w jeden widok organizacji, nawet jeśli spółki zależne znajdują się w tej samej lub oddzielnych bazach danych.
+
+00:19:03.580 --> 00:19:05.980
+Poszczególne spółki nadal prowadzą własne rejestry.

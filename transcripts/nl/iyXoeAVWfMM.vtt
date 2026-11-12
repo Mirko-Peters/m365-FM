@@ -1,0 +1,997 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:05.260
+Het onderwerp van vandaag is iets waar bijna iedereen van gehoord heeft, maar weinigen echt kunnen uitleggen, het AI-agent Harnas.
+
+00:00:05.440 --> 00:00:09.400
+Je hebt het waarschijnlijk wel eens voorbij zien komen in blogs of op conferenties, maar wat betekent het eigenlijk?
+
+00:00:09.600 --> 00:00:14.440
+Het zit zo, de meeste mensen denken dat het bouwen van een AI-agent rijdt om het schrijven van de perfecte prompt,
+
+00:00:14.680 --> 00:00:17.600
+die ene magische instructie die het model precies laat doen wat jij wilt.
+
+00:00:17.760 --> 00:00:20.640
+Maar dat is hetzelfde als denken dat een auto alleen uit de motor bestaat.
+
+00:00:20.940 --> 00:00:25.740
+Natuurlijk is de motor belangrijk, maar zonder wielen, een stuur, remmen en een chassis kom je nergens.
+
+00:00:25.740 --> 00:00:30.260
+Aan het einde van deze aflevering zul je begrijpen wat een agent Harnas werkelijk is,
+
+00:00:30.480 --> 00:00:36.880
+waarom dit de volgende stap is na prompt engineering en hoe Microsoft AI Foundry dit voor echte bedrijven tot leven brengt.
+
+00:00:36.960 --> 00:00:38.840
+Pak je koffie erbij en laten we beginnen.
+
+00:00:39.100 --> 00:00:40.740
+Waarom prompten niet meer voldoende is
+
+00:00:40.740 --> 00:00:42.440
+Laten we teruggaan naar de beginperiode.
+
+00:00:42.660 --> 00:00:45.700
+Rond 2022 tot 2024 was werken met AI eenvoudig.
+
+00:00:45.820 --> 00:00:47.300
+Je schreef een prompt en kreeg een antwoord.
+
+00:00:47.440 --> 00:00:49.560
+Een emailconcept nodig? Schrijf een prompt.
+
+00:00:49.740 --> 00:00:52.260
+Een samenvatting van een artikel nodig? Schrijf een prompt.
+
+00:00:52.480 --> 00:00:54.680
+Voor simpele, eenmalige taken werkte dat heel goed.
+
+00:00:54.680 --> 00:00:57.440
+Je kon om iets vragen en het model gaf een redelijk antwoord.
+
+00:00:57.620 --> 00:00:59.240
+Maar toen werden mensen ambitieuzer.
+
+00:00:59.440 --> 00:01:01.700
+Ze begonnen deze modellen echt werk te laten doen.
+
+00:01:01.880 --> 00:01:04.120
+Een onderwerp onderzoeken en een rapport schrijven,
+
+00:01:04.360 --> 00:01:06.620
+een codebasis analyseren en een bak oplossen,
+
+00:01:06.900 --> 00:01:09.500
+of een klantenservicegesprek van begin tot eind afhandelen.
+
+00:01:09.660 --> 00:01:11.680
+En plotseling kon één prompt het niet meer aan.
+
+00:01:11.880 --> 00:01:12.860
+Dit is wat er gebeurde.
+
+00:01:13.020 --> 00:01:14.940
+Het contextvenster van het model raakte vol,
+
+00:01:15.100 --> 00:01:19.100
+het vergat de eerdere instructies en begon feiten te verzinnen of onvolledige resultaten te geven.
+
+00:01:19.320 --> 00:01:22.300
+Hoe langer de taak duurde, hoe onbetrouwbaarder de output werd.
+
+00:01:22.300 --> 00:01:24.660
+Je hebt dit waarschijnlijk zelf ook wel eens ervaren.
+
+00:01:24.820 --> 00:01:26.820
+Je vraagt een AI om iets complex te doen,
+
+00:01:27.060 --> 00:01:30.160
+en aan het einde is het vergeten wat je in de eerste plaats had gevraagd.
+
+00:01:30.300 --> 00:01:33.860
+Stel je voor dat je iemand vraagt om in zijn eentje een heel huis vanaf nul te bouwen,
+
+00:01:34.000 --> 00:01:36.260
+in één keer, zonder ooit hun werk te controleren.
+
+00:01:36.440 --> 00:01:38.120
+Dat is wat we deze modellen vroegen te doen.
+
+00:01:38.300 --> 00:01:40.140
+De resultaten waren precies wat je zou verwachten,
+
+00:01:40.280 --> 00:01:42.960
+een half afgebouwd huis met ontbrekende muren en deuren die niet opengaan.
+
+00:01:43.100 --> 00:01:44.760
+De oplossing was niet een betere prompt.
+
+00:01:44.980 --> 00:01:47.180
+Je kon uren besteden aan het fine-tunen van de bewoordingen,
+
+00:01:47.340 --> 00:01:49.340
+meer voorbeelden toevoegen en instructies aanscherpen,
+
+00:01:49.340 --> 00:01:53.520
+maar het zou nog steeds falen bij lange, complexe taken omdat het fundamentele probleem niet te prompt was.
+
+00:01:53.700 --> 00:01:55.580
+Het was het gebrek aan een systeem eromheen.
+
+00:01:55.820 --> 00:01:59.220
+Wat het model nodig had, waren geen betere woorden, maar betere ondersteuning.
+
+00:01:59.480 --> 00:02:02.720
+Daar begon de evolutie van prompt engineering naar context engineering.
+
+00:02:03.000 --> 00:02:04.340
+De drie fases van AI-evolutie.
+
+00:02:05.140 --> 00:02:06.820
+Dit is hoe ik de evolutie van AI zie.
+
+00:02:07.060 --> 00:02:10.020
+Drie fases waarbij de focus voor engineers telkens verschuift.
+
+00:02:10.260 --> 00:02:11.740
+Fase 1 was prompt engineering.
+
+00:02:12.040 --> 00:02:14.380
+Dat liep van ongeveer 2022 tot 2024.
+
+00:02:14.960 --> 00:02:17.440
+De grote vraag was simpel, wat moet ik tegen het model zeggen?
+
+00:02:17.440 --> 00:02:20.580
+Je schreef één instructie, kreeg één antwoord en dat was het.
+
+00:02:20.700 --> 00:02:22.820
+Het hele vak draaide om formulering en toon.
+
+00:02:23.000 --> 00:02:24.540
+Voor basis taken was dat voldoende.
+
+00:02:24.800 --> 00:02:28.840
+Fase 2 volgde daarna context engineering van 2024 tot 2025.
+
+00:02:29.380 --> 00:02:32.580
+De vraag veranderde van wat moet ik zeggen naar wat moet het model zien.
+
+00:02:32.840 --> 00:02:36.340
+Engineers ontdekten dat wat je het model voert belangrijker is dan hoe je het vraagt.
+
+00:02:36.540 --> 00:02:42.180
+Dus bouwden ze systemen zoals tool calling, retrieval augmented generation en het model context protocol MCP.
+
+00:02:42.380 --> 00:02:45.120
+Hiermee kon het model de juiste informatie direct ophalen.
+
+00:02:45.120 --> 00:02:50.100
+In plaats van alles in één prompt te proppen, kon het model ophalen wat het nodig had, wanneer het nodig was.
+
+00:02:50.300 --> 00:02:52.740
+Fase 3 is waar we nu zijn, harness engineering.
+
+00:02:53.060 --> 00:02:57.560
+Vanaf ongeveer 2026 is de vraag, welk systeem moet ik om het model heen bouwen?
+
+00:02:57.740 --> 00:03:04.580
+Hier wordt het interessant, want betrouwbaarheid, geheugen, orchestratie en guardrails komen niet uit het model zelf, maar uit het systeem dat je eromheen bouwt.
+
+00:03:04.740 --> 00:03:06.860
+Dit is de eenvoudigste manier om erover na te denken.
+
+00:03:07.040 --> 00:03:08.960
+Een agent is gelijk aan een model plus een harness.
+
+00:03:09.200 --> 00:03:10.400
+De harness is al het overige.
+
+00:03:10.600 --> 00:03:12.760
+Het model doet het denkwerk, de harness doet de rest.
+
+00:03:12.760 --> 00:03:15.680
+En die harness is het geheime ingrediënt dat het geheel laat werken.
+
+00:03:15.880 --> 00:03:16.560
+Denk er zo over.
+
+00:03:16.680 --> 00:03:19.260
+Het model is een vakman, erg getalenteerd maar beperkt.
+
+00:03:19.420 --> 00:03:23.480
+De harness is de werkplaats, de gereedschappen, de checklist, de supervisor en de remmen.
+
+00:03:23.680 --> 00:03:25.920
+Zonder de werkplaats heeft de vakman nergens om te werken.
+
+00:03:26.160 --> 00:03:27.820
+Zonder gereedschap kan hij niets bouwen.
+
+00:03:28.060 --> 00:03:29.620
+Zonder de checklist vergeet hij stappen.
+
+00:03:29.860 --> 00:03:31.480
+Zonder de supervisor maakt hij fouten.
+
+00:03:31.640 --> 00:03:33.060
+En zonder remmen brandt hij op.
+
+00:03:33.140 --> 00:03:34.420
+De harness biedt al die structuur.
+
+00:03:34.620 --> 00:03:36.180
+Dus, wat zit er precies in deze harness?
+
+00:03:36.440 --> 00:03:37.400
+Laten we hem openen.
+
+00:03:37.560 --> 00:03:39.060
+Wat een harness daadwerkelijk bevat.
+
+00:03:39.260 --> 00:03:40.440
+Dus, wat zit er in een harness?
+
+00:03:40.440 --> 00:03:42.540
+Laten we de onderdelen één voor één langslopen.
+
+00:03:42.680 --> 00:03:43.940
+Ten eerste, de agent lus.
+
+00:03:44.140 --> 00:03:46.020
+Dit is de cyclus die de agent in beweging houdt.
+
+00:03:46.100 --> 00:03:48.280
+Het model denkt na en besluit vervolgens een tool aan te roepen.
+
+00:03:48.400 --> 00:03:50.200
+De tool draait en stuurt een resultaat terug.
+
+00:03:50.360 --> 00:03:53.360
+Het model bekijkt dat, denkt opnieuw na en roept misschien een andere tool aan.
+
+00:03:53.520 --> 00:03:56.160
+De lus blijft doorgaan totdat de agent zijn doel bereikt.
+
+00:03:56.420 --> 00:03:59.920
+Zonder deze lus krijg je alleen één enkele vraag en één enkel antwoord.
+
+00:04:00.120 --> 00:04:03.340
+Met deze lus heb je een systeem dat problemen stap voor stap oplost.
+
+00:04:03.760 --> 00:04:05.160
+Vervolgens, contextbeheer.
+
+00:04:05.360 --> 00:04:08.080
+Dit is cruciaal omdat modellen een beperkte aandachtspannen hebben.
+
+00:04:08.080 --> 00:04:11.200
+Een contextvenster kan maar zoveel bevatten voordat het overstroomt.
+
+00:04:11.280 --> 00:04:12.700
+Het harness grijpt hierin.
+
+00:04:12.860 --> 00:04:17.260
+Het comprimeert het gesprek, vat alle berichten samen en prioriteert wat belangrijk is.
+
+00:04:17.480 --> 00:04:19.400
+Zie het als een archiefsysteem voor het gesprek.
+
+00:04:19.520 --> 00:04:22.180
+Het harness ordent het zodat het model alleen ziet wat relevant is.
+
+00:04:22.400 --> 00:04:25.360
+Zonder dit vallen lange sessies uit elkaar omdat het model de draad kwijtraakt.
+
+00:04:25.560 --> 00:04:27.060
+Dan zijn er nog tools en vaardigheden.
+
+00:04:27.300 --> 00:04:28.500
+Dit zijn de handen van de agent.
+
+00:04:28.680 --> 00:04:30.560
+Een model op zichzelf kan alleen tekst genereren.
+
+00:04:30.740 --> 00:04:34.080
+Het kan geen bestand lezen, op internet surfen, code uitvoeren of een database raadplegen.
+
+00:04:34.080 --> 00:04:39.400
+Het harness geeft het die mogelijkheden, bestandstoegang, surfen op het web, code uitvoering, database
+
+00:04:39.400 --> 00:04:41.520
+queries, allemaal tools die het harness biedt.
+
+00:04:41.600 --> 00:04:44.480
+Het model beslist wanneer ze worden gebruikt en het harness laat ze werken.
+
+00:04:44.680 --> 00:04:47.280
+Geheugen en sessiepersistentie is een ander belangrijk onderdeel.
+
+00:04:47.440 --> 00:04:49.040
+Het harness onthoudt eerdere sessies.
+
+00:04:49.280 --> 00:04:52.080
+Dus als je morgen terugkeert naar een agent, begint deze niet vanaf nul.
+
+00:04:52.240 --> 00:04:55.440
+Het onthoudt je voorkeuren, je projectcontext en de beslissingen die je hebt genomen.
+
+00:04:55.660 --> 00:04:58.580
+De agent leert na verloop van tijd omdat het harness die geschiedenis bewaart.
+
+00:04:58.780 --> 00:05:02.080
+Bar trails vormen de veiligheidslaag, limieten die je stelt aan het gedrag van de agent.
+
+00:05:02.080 --> 00:05:03.840
+Zie het als het regelboek van de agent.
+
+00:05:04.140 --> 00:05:07.240
+Maximaal aantal stappen voordat het stopt, acties die niet zijn toegestaan,
+
+00:05:07.420 --> 00:05:11.220
+menselijke goedkeuring voor risicovolle taken zoals bestanden schrijven of e-mails versturen.
+
+00:05:11.460 --> 00:05:15.240
+Zonder bar trails zou een agent eeuwig door kunnen gaan of iets kunnen doen wat je niet bedoelde.
+
+00:05:15.400 --> 00:05:16.720
+Het harness houdt dit in de hand.
+
+00:05:16.920 --> 00:05:18.300
+Tot slot, orkestratie.
+
+00:05:18.480 --> 00:05:22.020
+Het harness kan gespecialiseerde sub-agents opstarten voor verschillende taken.
+
+00:05:22.260 --> 00:05:25.460
+Eén doet onderzoek, een ander schrijft, een derde verifieert.
+
+00:05:25.680 --> 00:05:28.780
+Ze werken samen als een team van specialisten op een bouwplaats.
+
+00:05:28.780 --> 00:05:32.520
+Ieder doet waar hij goed in is en het harness zorgt dat ze elkaar niet in de weg lopen.
+
+00:05:32.780 --> 00:05:34.960
+Deze componenten zijn nu niet langer slechts theorie.
+
+00:05:35.200 --> 00:05:38.720
+Microsoft heeft een volledig platform gebouwd dat dit alles in de praktijk brengt.
+
+00:05:38.880 --> 00:05:42.040
+Maak kennis met Microsoft AI Foundry, het Enterprise Harness.
+
+00:05:42.320 --> 00:05:44.560
+Dat platform is Microsoft AI Foundry.
+
+00:05:44.780 --> 00:05:48.860
+Zie het als een complete werkplaats voor het bouwen en draaien van AI agents op grote schaal.
+
+00:05:49.040 --> 00:05:52.240
+En als ik schaal zeg, bedoel ik echte schaal, geen lab-experiment.
+
+00:05:52.500 --> 00:05:58.380
+Foundry bedient vandaag meer dan 70.000 klanten en verwerkte alleen al afgelopen kwartaal 100 biljoen tokens.
+
+00:05:58.380 --> 00:06:00.800
+Dat is 100 biljoen, geen typfout.
+
+00:06:00.980 --> 00:06:03.800
+Elke dag ondersteunt het 2 miljard zakelijke zoekopdrachten.
+
+00:06:04.040 --> 00:06:07.480
+Dit is een productieplatform dat enkele van de grootste workloads ter wereld aan kan.
+
+00:06:07.720 --> 00:06:10.820
+Wat Foundry in feite doet, is het harness aanbieden als een beheerdedienst.
+
+00:06:11.000 --> 00:06:15.980
+Je hoeft contextbeheer, geheugen, guardrails en coördinatie niet vanaf nul te bouwen, want het zit er allemaal al in.
+
+00:06:16.200 --> 00:06:18.860
+Jij brengt je agent in en Foundry levert de werkplaats eromheen.
+
+00:06:19.080 --> 00:06:20.560
+Laten we het nu over identiteit hebben.
+
+00:06:20.760 --> 00:06:21.660
+Dit is erg belangrijk.
+
+00:06:22.000 --> 00:06:24.760
+Elke agent in Foundry krijgt zijn eigen entra-agent-idee.
+
+00:06:24.920 --> 00:06:26.640
+Kortom, een digitale identiteit.
+
+00:06:26.640 --> 00:06:29.360
+Zie het als een werknemersbatch die de receptie uitgeeft.
+
+00:06:29.540 --> 00:06:34.840
+De agent kan inloggen op services, toegang krijgen tot gegevens en namens de organisatie handelen, net als een menselijke medewerker.
+
+00:06:35.020 --> 00:06:38.440
+En omdat elke actie aan die identiteit is gekoppeld, is het volledig controleerbaar.
+
+00:06:38.660 --> 00:06:39.560
+Waarom is dat van belang?
+
+00:06:39.720 --> 00:06:41.640
+In een onderneming moet je weten wie wat heeft gedaan.
+
+00:06:41.860 --> 00:06:43.740
+Elke actie wordt gelogd en is traceerbaar.
+
+00:06:43.960 --> 00:06:50.240
+Foundry maakt verbinding met meer dan 1400 zakelijke gegevensbronnen, van SharePoint en Dynamics 365 tot Salesforce en aangepaste databases.
+
+00:06:50.500 --> 00:06:53.200
+Als jouw bedrijf het gebruikt, heeft Foundry waarschijnlijk een connector.
+
+00:06:53.420 --> 00:06:55.520
+De agent is dus niet aan het gissen of dingen aan het verzinnen.
+
+00:06:55.520 --> 00:07:00.120
+Hij haalt echte gegevens uit echte systemen, wat betekent dat de antwoorden gebaseerd zijn op je feitelijke bedrijfsgegevens.
+
+00:07:00.300 --> 00:07:01.340
+Dan is er nog het geheugen.
+
+00:07:01.560 --> 00:07:03.340
+Foundry bevat ingebouwde geheugentypes.
+
+00:07:03.640 --> 00:07:05.940
+Procedureel geheugen helpt de agent om te leren van eerdere taken.
+
+00:07:06.140 --> 00:07:08.760
+Hij wordt na verloop van tijd beter, zoals een training op de werkvloer.
+
+00:07:09.260 --> 00:07:13.400
+Sessiepersistentie betekent dat hij eerdere gesprekken onthoudt, zodat hij niet telkens vanaf nul begint als je ermee praat.
+
+00:07:13.540 --> 00:07:15.480
+Dat maakt interacties vloeiend en intelligent.
+
+00:07:15.860 --> 00:07:17.100
+Hoe werkt dit dan in de praktijk?
+
+00:07:17.300 --> 00:07:20.840
+Laten we de componenten bekijken die Microsoft biedt voor het bouwen van aangepaste frameworks.
+
+00:07:20.840 --> 00:07:23.980
+Het agent-framework voor het bouwen van aangepaste frameworks.
+
+00:07:24.180 --> 00:07:25.920
+Dus, hoe bouw je nu eigenlijk een framework?
+
+00:07:26.320 --> 00:07:32.320
+Microsoft biedt een speciale SDK genaamd het Microsoft Agent Framework, die je wellicht kent onder de eerdere naam, Cementic Kernel.
+
+00:07:32.500 --> 00:07:34.740
+Het is opnieuw opgebouwd, maar het idee blijft hetzelfde.
+
+00:07:34.900 --> 00:07:38.280
+Hiermee kunnen ontwikkelaars aangepaste agent-frameworks bouwen in Python en C Sharp.
+
+00:07:38.460 --> 00:07:39.860
+Het framework heeft drie lagen.
+
+00:07:40.100 --> 00:07:45.560
+Onderaan staat de agent-loop, de kerncyclus waarin het model nadenkt, tools aanroept, resultaten krijgt en opnieuw nadenkt.
+
+00:07:45.560 --> 00:07:49.600
+Daar bovenop bevinden zich workflows, coördinatiepatronen die meerdere agents beheren.
+
+00:07:49.680 --> 00:07:53.660
+En als overkoepelende laag is er het framework zelf, de schil die alles bij elkaar houdt.
+
+00:07:53.740 --> 00:07:56.520
+Microsoft levert vijf ingebouwde coördinatiepatronen.
+
+00:07:56.740 --> 00:07:59.920
+Sequential voert agents één voor één uit in een gedefinieerde volgorde.
+
+00:08:00.180 --> 00:08:02.040
+Concurrent voert ze allemaal parallel uit.
+
+00:08:02.200 --> 00:08:05.640
+Hantoff geeft de controle door van de ene agent naar de andere op basis van wat nodig is.
+
+00:08:05.820 --> 00:08:08.760
+GroupChat laat meerdere agents met elkaar praten in een gedeeld gesprek.
+
+00:08:08.900 --> 00:08:11.960
+En dan is er nog Magentic, een manager van Microsoft Ressearch.
+
+00:08:11.960 --> 00:08:16.940
+Hierbij genereert een supervisor-agent een plan en delegeert vervolgens werk aan gespecialiseerde sub-agents,
+
+00:08:17.200 --> 00:08:19.540
+zoals een projectmanager die taken toewijst aan teamleden.
+
+00:08:19.660 --> 00:08:22.120
+Elk patroon pakt een ander coördinatieprobleem aan.
+
+00:08:22.320 --> 00:08:23.280
+Dit is het beste deel.
+
+00:08:23.460 --> 00:08:24.960
+Het framework is uitbreidbaar.
+
+00:08:25.180 --> 00:08:31.900
+Je kunt elk gewenst model koppelen, van OpenAI, Anthropic en Google Gemini tot Amazon Bedrock en zelfs lokale modellen op Ollama.
+
+00:08:32.120 --> 00:08:33.380
+Hetzelfde geldt voor tools.
+
+00:08:33.600 --> 00:08:37.040
+Je verbindt via OpenAI het model context protocol of directe code.
+
+00:08:37.300 --> 00:08:41.020
+Sommige mensen maken zich zorgen dat het gebruik van Microsoft's framework je vastbindt aan hun ecosysteem.
+
+00:08:41.020 --> 00:08:41.920
+Dat is niet waar.
+
+00:08:42.100 --> 00:08:44.620
+Het framework werkt met elke stack die je al gebruikt.
+
+00:08:44.780 --> 00:08:49.620
+De harness laag voegt mogelijkheden toe zoals bestandstoegang, codeuitvoering, planning middelware en telemetrie.
+
+00:08:49.800 --> 00:08:54.040
+Dus een agent bouwen met dit framework betekent een compleet systeem bouwen dat bestanden leest, code schrijft,
+
+00:08:54.260 --> 00:08:56.220
+taken in meerdere stappen plant en alles logt voor debugging.
+
+00:08:56.440 --> 00:08:58.180
+Het is meer dan alleen een chatinterface.
+
+00:08:58.420 --> 00:08:59.460
+Dit is hoe dat eruit ziet.
+
+00:08:59.720 --> 00:09:02.020
+Stel je een codeeragent voor die op dit framework is gebouwd.
+
+00:09:02.160 --> 00:09:05.500
+Je geeft hem een taak, bijvoorbeeld voeg een nieuwe functie toe aan een bestaande codebase.
+
+00:09:05.680 --> 00:09:08.560
+De agent begint met het doorzoeken van documentatie om de API te begrijpen.
+
+00:09:08.820 --> 00:09:09.920
+Vervolgens schrijft hij de code.
+
+00:09:10.160 --> 00:09:12.500
+Daarna draait hij tests om er zeker van te zijn dat er niets kapot is gegaan.
+
+00:09:12.620 --> 00:09:15.780
+Als een test faalt, leest hij de foutmelding, repareert de bak en draait de tests opnieuw,
+
+00:09:15.940 --> 00:09:19.740
+allemaal binnen dezelfde harness, terwijl hij de denkhandelcontroleercyclus doorloopt totdat het werk klaar is.
+
+00:09:19.940 --> 00:09:22.420
+Zonder de harness zou je elke stap handmatig moeten invoeren.
+
+00:09:22.620 --> 00:09:25.440
+Met de harness handelt de agent de volledige workflow zelfstandig af.
+
+00:09:25.560 --> 00:09:28.220
+Een populair voorbeeld van een harness in actie is het clowpatroon.
+
+00:09:28.440 --> 00:09:33.040
+Microsoft heeft het beschikbaar gesteld op Foundry en het is een geweldige demonstratie van hoe deze onderdelen samenkomen.
+
+00:09:33.040 --> 00:09:34.700
+Cloud Style Agents en Hermes
+
+00:09:34.700 --> 00:09:36.860
+Laten we het hebben over Cloud Style Agents.
+
+00:09:37.080 --> 00:09:39.560
+De naam komt van open source projecten zoals OpenClaw.
+
+00:09:39.820 --> 00:09:44.160
+Deze agents wonen op je machine, wachten op instructies en voeren daarna zelfstandig langdurige taken uit.
+
+00:09:44.340 --> 00:09:46.880
+Ze staan altijd klaar om in te springen wanneer je ze nodig hebt.
+
+00:09:47.120 --> 00:09:49.980
+Zie ze als een persoonlijke assistent die nooit een dag vrijneemt.
+
+00:09:50.420 --> 00:09:51.880
+Microsoft's versie heet Hermes.
+
+00:09:52.080 --> 00:09:56.240
+Het draait binnen Foundry's gehoste agent Sandbox en beschikt over indrukwekkende vermogens.
+
+00:09:56.560 --> 00:09:59.980
+Hermes heeft zijn eigen bestandssysteem, zijn eigen geheugen en zijn eigen set tools.
+
+00:09:59.980 --> 00:10:04.300
+Het kan eigen onderhoudsroutines opzetten, oude bestanden opruimen en zijn werkruimte organiseren.
+
+00:10:04.420 --> 00:10:08.040
+En als het beseft dat het een nieuwe vaardigheid nodig heeft die het nog niet bezit, kan het er ter plekke een bouwen.
+
+00:10:08.220 --> 00:10:09.800
+Nu, dit is het punt met Cloud Agents.
+
+00:10:09.980 --> 00:10:12.280
+Cloud Architecten noemen ze huisdieren, geen vee.
+
+00:10:12.520 --> 00:10:13.440
+Huisdieren zijn uniek.
+
+00:10:13.600 --> 00:10:16.120
+Je geeft ze een naam, je zorgt voor ze, je kunt ze niet zomaar vervangen.
+
+00:10:16.300 --> 00:10:17.240
+Vee is uitwisselbaar.
+
+00:10:17.440 --> 00:10:19.680
+Dus, als er één uitvalt, start je gewoon een andere op.
+
+00:10:19.760 --> 00:10:21.340
+Cloud Agents zijn absoluut huisdieren.
+
+00:10:21.540 --> 00:10:24.560
+Elk exemplaar heeft zijn eigen status, geschiedenis en aangeleerd gedrag.
+
+00:10:24.560 --> 00:10:28.260
+Dat unieke karakter maakt ze krachtig, maar het bemoeilijkt ook herstel en schalen.
+
+00:10:28.420 --> 00:10:33.740
+Als er iets misgaat, kun je het exemplaar niet zomaar weggooien en opnieuw beginnen, want dan verlies je alle opgebouwde kennis.
+
+00:10:34.280 --> 00:10:36.020
+Microsoft's oplossing hiervoor heet routines.
+
+00:10:36.420 --> 00:10:40.940
+Dit zijn geplande taken waarmee de agent wakker kan worden, onderhoud kan plegen en weer kan gaan slapen.
+
+00:10:41.100 --> 00:10:47.260
+In plaats van de sandbox 24 zevende aan te laten staan, wat geld kost, schakelt de agent uit na een periode van inactiviteit.
+
+00:10:47.440 --> 00:10:53.680
+Het routinesysteem wekt de agent wanneer er iets moet gebeuren, zoals oude vaardigheden opschonen, een backup maken of controleren op nieuwe taken.
+
+00:10:53.680 --> 00:10:55.220
+Daarna gaat hij weer slapen.
+
+00:10:55.420 --> 00:10:58.640
+Dit bespaart kosten en houdt de agent beschikbaar wanneer je hem nodig hebt.
+
+00:10:58.800 --> 00:11:00.620
+De sandbox isoleert elke sessie.
+
+00:11:00.800 --> 00:11:05.400
+De bestanden, het geheugen en de configuratie van je agent blijven allemaal in zijn eigen omgeving.
+
+00:11:05.600 --> 00:11:11.160
+En de harness beheert die status over sessies heen, zodat je niet bang hoeft te zijn dat gegevens van de ene agent in die van de andere lekken.
+
+00:11:11.300 --> 00:11:15.280
+Je eigen harness vanaf nul opbouwen is mogelijk, maar de meeste bedrijven hoeven dat niet.
+
+00:11:15.460 --> 00:11:19.020
+Foundry biedt je een kant-en-klaar platform met al deze mogelijkheden ingebouwd.
+
+00:11:19.180 --> 00:11:21.480
+De echte vraag is, wat wil je dat je agent doet?
+
+00:11:21.940 --> 00:11:24.800
+Publiceren en samenwerken, waar harnesses en mensen samenkomen.
+
+00:11:25.000 --> 00:11:28.600
+Dus, je hebt je agent gebouwd en hem voorzien van tools, geheugen, orchestratie en een sandbox.
+
+00:11:28.800 --> 00:11:30.400
+Hoe gebruiken mensen hem nu in de praktijk?
+
+00:11:30.520 --> 00:11:32.160
+Dit is waar Foundry het eenvoudig maakt.
+
+00:11:32.360 --> 00:11:38.000
+Zodra je agent is gebouwd en geïmplementeerd, kun je hem met één klik publiceren naar Microsoft 365 Copilot in Microsoft Teams.
+
+00:11:38.220 --> 00:11:41.520
+Geen tien klikken, geen driedaagse implementatiepijplijn, gewoon één klik.
+
+00:11:41.640 --> 00:11:45.640
+En je agent verschijnt precies waar mensen al werken, in hun e-mail, hun chat en hun documenten.
+
+00:11:45.820 --> 00:11:47.780
+Foundry ondersteunt twee implementatie-modi.
+
+00:11:47.780 --> 00:11:53.480
+Ten eerste, assisterende agents. Deze werken namens jou, zoals e-mails opstellen, vergaderingen, plannen of documenten opzoeken.
+
+00:11:53.680 --> 00:11:57.860
+Ze fungeren als een verlengstuk van jou, alsof je een supersnelle assistent hebt die doet wat je vraagt.
+
+00:11:58.040 --> 00:12:01.400
+Ten tweede, Autopilot agents. Deze zijn nieuwer en interessanter.
+
+00:12:01.640 --> 00:12:04.500
+Ze handelen namens zichzelf met hun eigen e-mailadres en hun eigen identiteit.
+
+00:12:04.700 --> 00:12:06.280
+Je hoeft ze niet elke keer een prompt te geven.
+
+00:12:06.520 --> 00:12:09.940
+Ze nemen zelf initiatief. Autopilot agents hebben een volledig gebruikersaccount.
+
+00:12:10.100 --> 00:12:13.280
+Je kunt ze toevoegen aan een teamsgroepsgat, net zoals je een menselijke collega zou toevoegen.
+
+00:12:13.280 --> 00:12:19.280
+Ze volgen het gesprek en springen bij wanneer ze kunnen helpen, houden openstaande punten bij, beantwoorden vragen over waar het team aan werkt...
+
+00:12:19.280 --> 00:12:23.620
+...en anboorden zelfs nieuwe teamleden door ze de juiste documenten te sturen en ze voor te stellen aan de juiste personen.
+
+00:12:23.740 --> 00:12:25.100
+Hier is een concreet voorbeeld.
+
+00:12:25.380 --> 00:12:27.320
+Stel dat je een werkstroommanager-agent hebt.
+
+00:12:27.500 --> 00:12:29.100
+Je voegt het toe aan je teamsgroepsgat.
+
+00:12:29.240 --> 00:12:31.840
+Iemand zegt, hé, ik moet het Q3-rapport vrijdag afhebben.
+
+00:12:32.000 --> 00:12:33.800
+De agent merkt op dat dit een actiepunt is.
+
+00:12:33.980 --> 00:12:38.580
+Hij maakt een taak aan, wijst deze toe aan de juiste persoon en voegt een herinnering toe voor donderdag om de voortgang te controleren.
+
+00:12:38.740 --> 00:12:40.160
+Niemand heeft hem gevraagd om dat te doen.
+
+00:12:40.160 --> 00:12:42.540
+Hij zag gewoon dat er iets moest gebeuren en deed het.
+
+00:12:42.700 --> 00:12:44.860
+De harness regelt alle rechten op de achtergrond.
+
+00:12:45.040 --> 00:12:48.040
+Alleen geautoriseerde gebruikers kunnen in een groepsgat met de agent communiceren.
+
+00:12:48.220 --> 00:12:50.680
+De agent ziet alleen de berichten die hij mag zien en negeert de rest.
+
+00:12:50.860 --> 00:12:53.720
+Hij respecteert dezelfde toegangscontroles als je menselijke teamleden.
+
+00:12:53.880 --> 00:12:55.780
+Dit is waarom harness engineering echt loont.
+
+00:12:55.980 --> 00:12:58.700
+De agent is niet langer een chatbot die je in een browser-tabblad opent.
+
+00:12:58.860 --> 00:13:00.320
+Hij wordt een productief teamlid.
+
+00:13:00.480 --> 00:13:04.660
+Hij is aanwezig waar jij bent, werkt zoals jouw team werkt en dat doet hij allemaal omdat de harness...
+
+00:13:04.660 --> 00:13:08.800
+...het systeem rondom het model, identiteit, rechten, implementatie en integratie beheert.
+
+00:13:08.800 --> 00:13:12.120
+Zonder de harness zou je simpelweg weer een extra chatvenster hebben om in de gaten te houden.
+
+00:13:12.240 --> 00:13:14.220
+Maar elk krachtig hulpmiddel heeft waarborgen nodig.
+
+00:13:14.460 --> 00:13:16.660
+Laten we het hebben over de vangrails die dit alles veilig maken.
+
+00:13:17.000 --> 00:13:18.860
+Verantwoorden AI en governance in de harness.
+
+00:13:19.160 --> 00:13:19.820
+Dit is het punt.
+
+00:13:20.060 --> 00:13:22.900
+Harness engineering gaat niet alleen over het capabeler maken van agents.
+
+00:13:23.100 --> 00:13:25.080
+Het gaat erom ze veilig en betrouwbaar te maken.
+
+00:13:25.300 --> 00:13:29.100
+Een agent die e-mails kan sturen, bestanden kan aanpassen en kan handelen in groepsgats is krachtig...
+
+00:13:29.100 --> 00:13:30.380
+...maar die kracht heeft controle nodig.
+
+00:13:30.600 --> 00:13:33.120
+Zie het als het geven van de sleutels van het gebouw aan een werknemer.
+
+00:13:33.120 --> 00:13:37.120
+Je wilt dat ze hun werk doen, maar je stelt ook regels op over wat ze wanneer kunnen inzien.
+
+00:13:37.120 --> 00:13:40.900
+De aanpak van Microsoft is gebouwd op de Responsible AI-standaard.
+
+00:13:41.120 --> 00:13:49.160
+Zes principes leiden alles eerlijkheid, betrouwbaarheid en veiligheid, privacy en beveiliging, inclusiviteit, transparantie en verantwoordelijkheid.
+
+00:13:49.360 --> 00:13:51.520
+Dit zijn niet zomaar mooie ideeën op een poster.
+
+00:13:51.760 --> 00:13:55.780
+Het zijn de werkelijke fundamenten voor hoe het hele platform vanaf de basis is ontworpen.
+
+00:13:55.960 --> 00:13:58.400
+De harness is waar deze principes echte code worden.
+
+00:13:58.640 --> 00:14:00.340
+Vangrails beperken wat de agent kan doen.
+
+00:14:00.860 --> 00:14:04.400
+Lifecyclehooks stellen je in staat om beleid af te dwingen bij elke stap van de uitvoering van de agent.
+
+00:14:04.400 --> 00:14:10.740
+Voor de agent draait, na afloop, voor hij een tool aanroept, nadat hij een resultaat krijgt en je kunt op elk punt je eigen controles toevoegen.
+
+00:14:10.960 --> 00:14:14.280
+Wil je voorkomen dat de agent toegang heeft tot bepaalde databases? Dat kan.
+
+00:14:14.480 --> 00:14:18.280
+Wil je menselijke goedkeuring vereisen voordat de agent een e-mail verstuurt? Dat kan ook.
+
+00:14:18.480 --> 00:14:19.920
+Beiden zijn eenvoudig in te stellen.
+
+00:14:20.160 --> 00:14:23.780
+Het Well-Architected Framework van Azure bevat specifieke richtlijnen voor AI workloads.
+
+00:14:24.020 --> 00:14:26.800
+Het dekt alles, van gegevensversleuteling tot incident response.
+
+00:14:27.040 --> 00:14:31.460
+Het idee is dat het bouwen van een AI-systeem fundamenteel niet verschilt van het bouwen van elk ander bedrijfssysteem.
+
+00:14:31.460 --> 00:14:34.760
+Je hebt nog steeds beveiliging, betrouwbaarheid en operationele uitmuntendheid nodig.
+
+00:14:34.920 --> 00:14:39.060
+Het Well-Architected Framework biedt een gestructureerde manier om hierover na te denken zonder de weg kwijt te raken.
+
+00:14:39.320 --> 00:14:41.120
+Daarnaast is er het Cloud Adoption Framework.
+
+00:14:41.320 --> 00:14:43.460
+Dit biedt een vierfaseproces voor AI governance.
+
+00:14:43.680 --> 00:14:45.360
+Ten eerste, identificeer risico's.
+
+00:14:45.540 --> 00:14:46.340
+Wat kan er misgaan?
+
+00:14:46.460 --> 00:14:47.620
+Ten tweede, meet de impact.
+
+00:14:47.820 --> 00:14:48.620
+Hoe erg zou het zijn?
+
+00:14:48.800 --> 00:14:50.420
+Ten derde, beperk risico's met controles.
+
+00:14:50.640 --> 00:14:52.020
+Wat kun je inzetten om het te voorkomen?
+
+00:14:52.180 --> 00:14:53.620
+Ten vierde, beheer met monitoring.
+
+00:14:53.860 --> 00:14:55.700
+Hoe signaleer je problemen wanneer ze zich voordoen?
+
+00:14:55.700 --> 00:14:59.860
+Het is een praktische, stapsgewijze aanpak die abstracte zorgen omzet in concrete acties.
+
+00:15:00.020 --> 00:15:03.160
+Voor agent-harnesses betekent dit specifiek een paar belangrijke zaken.
+
+00:15:03.400 --> 00:15:06.200
+Maximale staplimieten, zodat de agent niet eeuwig blijft doorgaan.
+
+00:15:06.500 --> 00:15:08.900
+Toolbeperkingen, zodat hij alleen toegang heeft tot wat is toegestaan.
+
+00:15:09.060 --> 00:15:11.300
+Menselijke goedkeuringsmomenten voor acties met een hoog risico.
+
+00:15:11.480 --> 00:15:14.300
+Added trails, zodat elke beslissing wordt gelogd en controleerbaar is.
+
+00:15:14.640 --> 00:15:17.720
+Inhoudsfilters die problematische uitvoer opvangen voordat iemand ze ziet.
+
+00:15:17.900 --> 00:15:20.220
+Alles werkt samen om je agent kort aan te lijnen.
+
+00:15:20.420 --> 00:15:24.040
+Microsoft biedt ingebouwde inhoudsbeveiliging en evaluatietools in Foundry.
+
+00:15:24.040 --> 00:15:27.080
+Je kunt je agent testen op basis van criteria voordat je hem inzet.
+
+00:15:27.260 --> 00:15:30.280
+Blijft hij bij het onderwerp? Gaat hij correct om met gevoelige gegevens?
+
+00:15:30.520 --> 00:15:32.500
+Weigert hij verzoeken die hij niet hoort uit te voeren?
+
+00:15:32.620 --> 00:15:37.460
+Je kunt deze evaluaties automatisch uitvoeren en een score krijgen voordat je de agent publiceert voor je team.
+
+00:15:37.680 --> 00:15:40.700
+Zo ontdek je problemen vroegtijdig en niet pas nadat het misgaat.
+
+00:15:40.880 --> 00:15:45.200
+Dit is het complete beeld van een simpele prompt naar een veilige, professionele autonome agent.
+
+00:15:45.380 --> 00:15:51.620
+Het model doet het denkwerk, het harness doet de rest, de coördinatie, de vangrails, de governance, alles wat het betrouwbaar maakt.
+
+00:15:51.620 --> 00:15:55.500
+Laten we de transformatie kort samenvatten. We begonnen met one-shot prompting.
+
+00:15:55.700 --> 00:15:58.880
+Schrijf een prompt, krijg een antwoord. Dat werkte voor eenvoudige taken.
+
+00:15:59.140 --> 00:16:00.840
+Daarna gingen we over op context engineering.
+
+00:16:01.080 --> 00:16:03.920
+Beheer wat het model ziet, laat de juiste informatie op het juiste moment.
+
+00:16:04.180 --> 00:16:05.640
+Dat werkte voor complexere taken.
+
+00:16:05.880 --> 00:16:08.200
+En nu zijn we aangekomen bij volledige harness engineering.
+
+00:16:08.500 --> 00:16:12.440
+Bouw een compleet systeem rond het model met geheugen, tools, coördinatie, van rails en governance.
+
+00:16:12.680 --> 00:16:16.580
+Dit is de belangrijkste lay. Een agent is slechts zo betrouwbaar als het systeem eromheen.
+
+00:16:16.760 --> 00:16:20.300
+Het model is essentieel, absoluut, maar het harness bepaalt het succes in productie.
+
+00:16:20.300 --> 00:16:24.820
+Je kunt het beste model ter wereld hebben, maar zonder een goed harness zal het falen bij echte taken.
+
+00:16:25.020 --> 00:16:30.020
+En je kunt een redelijk model hebben met een uitstekend harness, dat telkens de verwachtingen overtreft.
+
+00:16:30.200 --> 00:16:34.200
+Hier is je uitdaging. Denk bij je volgende AI-project verder dan alleen de prompt.
+
+00:16:34.480 --> 00:16:38.240
+Vraag niet wat ik tegen het model moet zeggen, vraag welk systeem ik eromheen moet bouwen.
+
+00:16:38.460 --> 00:16:41.740
+Die verandering in denkwijze is wat demo's onderscheidt van productiesystemen.
+
+00:16:41.880 --> 00:16:45.380
+In de volgende aflevering duiken we dieper in één onderdeel van het systeem, geheugen.
+
+00:16:45.380 --> 00:16:50.320
+Hoe agents na verloop van tijd leren, hoe ze onthouden wat ze hebben gedaan en hoe dat verandert wat ze kunnen bereiken.
+
+00:16:50.580 --> 00:16:52.020
+Abonneer je zodat je het niet mist.

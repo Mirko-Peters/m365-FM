@@ -1,0 +1,1504 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:06.480
+Saat pelanggan mengklik beli di situs web Anda, barang yang diinginkan bisa jadi berada di gudang, toko di seberang kota, atau bersama mitra pengiriman.
+
+00:00:06.940 --> 00:00:11.000
+Namun, pelanggan sebenarnya hanya mengharapkan dua hal, janji yang jelas dan paket sampai di depan pintu mereka.
+
+00:00:11.560 --> 00:00:14.620
+Selamat datang di episode lain Microsoft Knowledge Nuggets di M365FM.
+
+00:00:15.320 --> 00:00:19.740
+Saya Moe Peters, dan hari ini kita akan membahas Dynamics 365 Intelligent Order Management dalam bahasa yang sederhana.
+
+00:00:20.220 --> 00:00:23.640
+Kita akan mengikuti pesanan tersebut dari klik pembayaran hingga pekerjaan yang benar-benar mengirimkannya.
+
+00:00:24.140 --> 00:00:26.960
+Anggap saja ini sebagai meja pengiriman pusat di gedung perkantoran yang sibuk.
+
+00:00:26.960 --> 00:00:29.540
+Ini bukan toko daring lain dan tidak mengemas barangnya.
+
+00:00:29.940 --> 00:00:33.400
+Sistem ini hanya mengarahkan orang yang tepat dalam sistem agar pekerjaan terjadi di tempat yang tolong.
+
+00:00:35.120 --> 00:00:36.260
+Mengapa pesanan menjadi berantakan?
+
+00:00:37.980 --> 00:00:42.860
+Bayangkan Anda menjual headphone yang sama melalui situs web, toko fisik, pasar daring, dan pusat panggilan Anda.
+
+00:00:43.640 --> 00:00:45.960
+Bagi pelanggan, semua itu hanyalah cara untuk membeli headphone.
+
+00:00:46.460 --> 00:00:50.060
+Namun, di balik layar, setiap saluran mengirimkan detail pesanan ke sistem yang benar-benar berbeda.
+
+00:00:50.520 --> 00:00:55.660
+Situs web Anda menyimpan satu catatan, titik penjualan toko menyimpan, catatan lain, pasar daring mengirim formatnya sendiri,
+
+00:00:55.660 --> 00:00:58.320
+dan agen pusat panggilan membuat pesanan di tempat lain sama sekali.
+
+00:00:58.320 --> 00:01:03.280
+Satu janji pelanggan yang sederhana terpecah menjadi beberapa bagian yang tidak saling berkomunikasi.
+
+00:01:03.640 --> 00:01:05.300
+Dan stok menambah lapisan kompleksitas lainnya.
+
+00:01:05.780 --> 00:01:10.700
+Gudang utama mungkin memiliki 20 pasang, toko di seberang kota memiliki 5, dan gudang lain juga memiliki stok.
+
+00:01:11.220 --> 00:01:13.320
+Namun lokasinya lebih jauh dengan biaya pengiriman yang lebih tinggi.
+
+00:01:13.640 --> 00:01:16.820
+Beberapa stok sudah dipesan untuk pesanan lain, barang retur, atau pelanggan di toko.
+
+00:01:16.820 --> 00:01:20.280
+Jadi melihat angka di samping produk sebenarnya tidak menyelesaikan masalah.
+
+00:01:20.900 --> 00:01:22.420
+Kemudian Anda harus memutuskan cara mengirimkan.
+
+00:01:22.840 --> 00:01:25.080
+Apakah gudang harus mengirimkan? Apakah toko harus mengirimkan?
+
+00:01:25.400 --> 00:01:26.660
+Atau bisa ke pelanggan mengambilnya secara log?
+
+00:01:27.000 --> 00:01:30.140
+Dan jika seseorang membeli 2 barang dan tidak ada 1 lokasi pun yang memiliki keduanya,
+
+00:01:30.240 --> 00:01:33.040
+apakah Anda memiliki pesanan menjadi 2 paket atau menunggu sampai semuanya bisa dikirim bersama?
+
+00:01:33.100 --> 00:01:36.820
+Tiap pilihan memengaruhi biaya, waktu pengiriman, dan janji yang Anda berikan kepada pelanggan.
+
+00:01:37.000 --> 00:01:40.460
+Dua dekade lalu, perusahaan menjalankan tugas ini dalam sistem terpisah dengan tim terpisah.
+
+00:01:40.460 --> 00:01:45.540
+Penjualan menerima pesanan, seseorang memiksa stok, gudang menerima permintaan, mitra pengiriman menerima permintaan lain.
+
+00:01:45.980 --> 00:01:47.220
+Bagian-bagian menangani bagiannya sendiri.
+
+00:01:47.420 --> 00:01:50.580
+Itu berfungsi dengan baik saat pesanan sederhana dan volume tetap rendah.
+
+00:01:50.740 --> 00:01:51.480
+Tapi inilah masalahnya.
+
+00:01:51.820 --> 00:01:54.820
+Saat pembaruan bergerak lambat antar sistem, orang mulai mengisi kekosongan tersebut.
+
+00:01:55.240 --> 00:01:59.300
+Agen layanan pelanggan memiksa satu layar, mengirim email ke tim gudang, lalu menelpon kurir.
+
+00:01:59.580 --> 00:02:03.740
+Sementara itu, produk bisa terjual melalui saluran lain sebelum pembaruan stok sampai ke situs web.
+
+00:02:04.220 --> 00:02:06.120
+Anda menerima pesan untuk sesuatu yang tidak bisa Anda kirimkan.
+
+00:02:06.120 --> 00:02:07.580
+Begitulah terjadinya kelebihan penjualan.
+
+00:02:07.760 --> 00:02:09.580
+Dan begitulah mengapa pilihan penyiriman makan waktu terlalu.
+
+00:02:09.860 --> 00:02:12.080
+Tim terus menyaling detail dari satu tempat ke tempat lain,
+
+00:02:12.300 --> 00:02:14.720
+dan pelanggan menerima pembaruan yang tidak jelas alih-alih jawaban pasti.
+
+00:02:14.920 --> 00:02:18.460
+Dari sisi pelanggan, kerumitan itu tidak penting karena mereka hanya menanyakan satu hal.
+
+00:02:19.180 --> 00:02:19.860
+Gimana pesanan saya?
+
+00:02:20.440 --> 00:02:25.000
+Yang benar-benar dibutuhkan perusahaan adalah satu tempat untuk melihat perjalanan pesanan di semua aplikasi bisnis yang terhubung,
+
+00:02:25.100 --> 00:02:27.340
+sementara setiap aplikasi tetap menjalankan fungsi terbaiknya.
+
+00:02:27.740 --> 00:02:28.680
+Penjalan mencatat transaksi.
+
+00:02:29.240 --> 00:02:30.840
+Mudah mengelola pengambilan dan pengemasan.
+
+00:02:30.840 --> 00:02:32.240
+Pengiriman menangani pengantar.
+
+00:02:32.480 --> 00:02:33.460
+Penagihan menangani pembayar.
+
+00:02:33.740 --> 00:02:35.160
+Tidak ada yang perlu membuang semua sistem yang ada.
+
+00:02:35.600 --> 00:02:37.040
+Yang hilang adalah koordinator di antara mereka.
+
+00:02:38.180 --> 00:02:39.700
+Sebuah tempat yang dapat menerima pesanan,
+
+00:02:39.900 --> 00:02:41.260
+melihat apa yang harus dilakukan selanjutnya,
+
+00:02:41.380 --> 00:02:44.020
+dan mengarahkan pekerjaan tanpa bergantung pada rangkaian surat rimanual.
+
+00:02:44.560 --> 00:02:45.180
+Itulah masalahnya.
+
+00:02:45.680 --> 00:02:49.080
+Dynamics 365 Intelligent Order Management menjawab definisi sederhana.
+
+00:02:49.220 --> 00:02:50.240
+Sederhana tersebut.
+
+00:02:51.020 --> 00:02:53.900
+Jadi apa sebenarnya Dynamics 365 Intelligent Order Management itu?
+
+00:02:54.780 --> 00:02:55.860
+Anda pasti bertanya-tanya,
+
+00:02:56.140 --> 00:02:58.220
+dan hari ini kita akan membedahnya dengan bahasa yang sederhana.
+
+00:02:58.840 --> 00:03:00.180
+Berikut adalah definisi paling sederhana.
+
+00:03:00.180 --> 00:03:03.440
+Ini adalah aplikasi cloud yang menerima pesanan dan memandunya
+
+00:03:03.440 --> 00:03:05.780
+melalui semua sistem yang sudah digunakan perusahaan
+
+00:03:05.780 --> 00:03:08.840
+dari saat pesanan tiba hingga pemenuhan dan penagihan selesai.
+
+00:03:09.980 --> 00:03:11.200
+Bayangkan stasiun kereta yang sibuk.
+
+00:03:11.720 --> 00:03:13.140
+Kereta tiba dari berbagai arah.
+
+00:03:13.620 --> 00:03:15.100
+Penumpang membutuhkan peron yang berbeda-beda.
+
+00:03:15.280 --> 00:03:16.960
+Beberapa koneksi cepat yang lain harus menunggu.
+
+00:03:17.420 --> 00:03:19.860
+Intelligent Order Management bekerja seperti ruang kontrol stasiun.
+
+00:03:20.420 --> 00:03:22.120
+Ia tidak menjalankan kereta atau menjual tiket,
+
+00:03:22.280 --> 00:03:24.300
+tetapi ia melihat seluruh rute dan memberitahu setiap sistem
+
+00:03:24.300 --> 00:03:25.400
+apa yang harus dilakukan selanjutnya.
+
+00:03:25.680 --> 00:03:28.200
+Microsoft membangun Intelligent Order Management di atas Dataverse.
+
+00:03:28.200 --> 00:03:31.400
+Dataverse adalah fondasi data bersama di balik banyak aplikasi
+
+00:03:31.400 --> 00:03:33.180
+Dynamics 365 dan Power Platform.
+
+00:03:33.820 --> 00:03:36.900
+Dalam bahasa sederhana, ini memberikan aplikasi bisnis satu tempat umum
+
+00:03:36.900 --> 00:03:38.920
+dan satu format umum untuk menyimpan informasi.
+
+00:03:39.340 --> 00:03:41.360
+Itu berarti pesanan tidak memiliki arti yang sangat berbeda
+
+00:03:41.360 --> 00:03:42.480
+di setiap layar dan sistem.
+
+00:03:42.920 --> 00:03:44.800
+Padahal, fondasi bersama itu memang membantu,
+
+00:03:45.060 --> 00:03:47.840
+tetapi Anda tidak perlu membeli setiap aplikasi Dynamics 365 lainnya
+
+00:03:47.840 --> 00:03:49.100
+untuk menggunakan Intelligent Order Management.
+
+00:03:49.100 --> 00:03:52.580
+Sebuah perusahaan mungkin menjalankan Dynamics 365 Finance atau Supply Chain Management.
+
+00:03:53.080 --> 00:03:55.340
+Perusahaan lain mungkin menggunakan sistem gudang yang berbeda,
+
+00:03:55.480 --> 00:03:58.120
+toko online yang berbeda, atau layanan pengiriman dari vendor lain.
+
+00:03:58.840 --> 00:04:01.800
+Aplikasi ini dapat bekerja dengan aplikasi bisnis Microsoft maupun non-Microsoft.
+
+00:04:02.140 --> 00:04:03.420
+Titik koneksi ini disebut penyedia provided.
+
+00:04:03.980 --> 00:04:06.340
+Penyedia memindahkan informasi pesanan dan pemenuhan
+
+00:04:06.340 --> 00:04:08.680
+antara Intelligent Order Management dan sistem lain.
+
+00:04:08.680 --> 00:04:10.820
+Bayangkan penyedia sebagai penerjemahan di pembina.
+
+00:04:11.180 --> 00:04:12.920
+Satu sistem mengirimkan pesanan dalam formatnya sendiri.
+
+00:04:13.240 --> 00:04:14.540
+Penyedia memahami format tersebut,
+
+00:04:15.000 --> 00:04:16.960
+meneruskan informasi ke Intelligent Order Management,
+
+00:04:17.500 --> 00:04:20.760
+dan dapat mengirim permintaan berikutnya kembali dalam format yang dipahami sistem lain.
+
+00:04:21.240 --> 00:04:23.180
+Jadi, aplikasi ini memumpulkan informasi pesanan
+
+00:04:23.180 --> 00:04:24.600
+meski pesanan dimulai dari tempat lain.
+
+00:04:25.120 --> 00:04:27.100
+Seorang pelanggan mungkin membeli melalui situs perdagangan AIK.
+
+00:04:27.580 --> 00:04:29.840
+Pelanggan lain mungkin memesan melalui sistem titik penjualan.
+
+00:04:30.060 --> 00:04:33.600
+Pelanggan bisnis bisa mengirim pesanan elektronik lewat proses B2B.
+
+00:04:34.200 --> 00:04:36.820
+Manajemen pesanan cerdas memberi perusahaan satu tempat
+
+00:04:36.820 --> 00:04:39.180
+untuk melihat pesanan tersebut dan status pemenuhannya.
+
+00:04:39.900 --> 00:04:41.520
+Tidak semua pesanan mengikuti jalur yang sama.
+
+00:04:41.900 --> 00:04:42.960
+Satu mungkin harus menggustok terus di.
+
+00:04:43.200 --> 00:04:44.520
+Yang lain mungkin sudah ada di gudang.
+
+00:04:44.960 --> 00:04:46.940
+Yang ketiga mungkin memerlukan langkah penagian setelah pengiriman.
+
+00:04:47.360 --> 00:04:50.640
+Aplikasi melacak status itu agar tim melihat lebih dari sekadar pesanan diterima.
+
+00:04:51.600 --> 00:04:53.820
+Mereka bisa melihat tepat di mana posisi pesanan dalam perjalanan.
+
+00:04:54.200 --> 00:04:55.520
+Inilah bagian yang terkadang terlewat kena orang-orang.
+
+00:04:56.220 --> 00:04:58.700
+Manajemen pesanan cerdas tidak mengambil alih semua pekerjaan.
+
+00:04:59.360 --> 00:05:01.880
+Ini tidak tiba-tiba menjadi layar pengambilan pekerja gudang,
+
+00:05:01.880 --> 00:05:04.820
+jaringan pengiriman kurir, atau sistem penagian tim keuangan.
+
+00:05:04.820 --> 00:05:07.940
+Aplikasi-aplikasi yang terhubung tersebut tetap menjalankan pekerjaan spesial.
+
+00:05:08.120 --> 00:05:10.620
+Manajemen pesanan cerdas mengarahkan serah terima di antara mereka.
+
+00:05:11.200 --> 00:05:14.200
+Sistem menerima permintaan, memeriksa rute, meneruskan pekerjaan,
+
+00:05:14.320 --> 00:05:15.720
+lalu memantau pembaruan berikutnya.
+
+00:05:16.280 --> 00:05:17.680
+Sekarang mari ikuti satu pesanan.
+
+00:05:18.160 --> 00:05:21.020
+Melalui jalan itu karena perjalanan pesanan membuat konsepnya lebih mudah dilihat.
+
+00:05:21.980 --> 00:05:24.500
+Perjalanan pesanan adalah aturan yang mengarahkan pekerjaan tersebut.
+
+00:05:25.080 --> 00:05:28.260
+Bayangkan pelanggan memesan dua barang dari situs Anda sore hari,
+
+00:05:28.260 --> 00:05:30.540
+dan mereka ingin keduanya dikirim besok.
+
+00:05:31.500 --> 00:05:34.260
+Toko daring menangkap pesanan, nama pelanggan, alamat pengiriman,
+
+00:05:34.260 --> 00:05:36.380
+dua lini pesanan, dan pilihan pengiriman.
+
+00:05:37.200 --> 00:05:39.440
+Penyedia membawa pesanan itu ke manajemen pesanan cerdas
+
+00:05:39.440 --> 00:05:40.920
+dan perjalanan pesanan pun dimulai.
+
+00:05:41.480 --> 00:05:42.600
+Sebelum ada yang mencoba menuhinya,
+
+00:05:43.160 --> 00:05:45.740
+sistem memvalidasi pesanan untuk memastikan semua informasi
+
+00:05:45.740 --> 00:05:48.080
+yang diperlukan sudah ada dan sesuai aturan perusahaan.
+
+00:05:49.120 --> 00:05:51.360
+Sistem memeriksa header pesanan untuk detail pelanggan dan pengiriman.
+
+00:05:51.720 --> 00:05:53.540
+Sistem memeriksa setiap ini untuk produk dan jumlahnya.
+
+00:05:53.980 --> 00:05:56.020
+Sistem memastikan alamat cukup lengkap untuk pengiriman,
+
+00:05:56.020 --> 00:05:58.760
+dan pesanan memenuhi aturan saluran penjualan tersebut.
+
+00:05:59.420 --> 00:06:01.680
+Pemeriksaan awal itu menghentikan informasi yang salah
+
+00:06:01.680 --> 00:06:03.680
+agar tidak terus berlanjut dan menimbulkan masalah.
+
+00:06:04.220 --> 00:06:05.800
+Bayangkan pesanan tanpa nomor apartemen.
+
+00:06:06.600 --> 00:06:08.000
+Jika langsung ke gudang lalu ke kurir,
+
+00:06:08.100 --> 00:06:11.080
+seseorang mungkin baru menyadari masalahnya setelah paket gagal dikirim.
+
+00:06:11.940 --> 00:06:13.880
+Langkah validasi menangkap masalah lebih awal
+
+00:06:13.880 --> 00:06:16.820
+saat masih ada waktu untuk menghubungi pelanggan atau menahan pesanan.
+
+00:06:17.400 --> 00:06:19.620
+Akar dari pekerjaan ini adalah alur orkestrasi.
+
+00:06:20.240 --> 00:06:21.780
+Istilah itu terdengar teknis pada sederhana.
+
+00:06:22.340 --> 00:06:24.120
+Alur orkestrasi adalah peta visual yang
+
+00:06:24.120 --> 00:06:25.640
+memberitahu manajemen pesanan cerdas
+
+00:06:25.640 --> 00:06:27.900
+apa yang harus dilakukan saat informasi pesanan tiba
+
+00:06:27.900 --> 00:06:29.680
+dan acara kembali dari sistem terkait.
+
+00:06:30.540 --> 00:06:32.800
+Anda membuat peta tersebut berdasarkan proses bisnis Anda sendiri.
+
+00:06:32.800 --> 00:06:35.160
+Alur pesanan dasar mungkin dimulai saat ada pesanan baru masuk.
+
+00:06:35.620 --> 00:06:36.820
+Ini memvalidasi tajuk dan baris.
+
+00:06:37.260 --> 00:06:39.060
+Ini mengirimkan pesanan untuk keputusan pemenuhan.
+
+00:06:39.460 --> 00:06:40.000
+Setelah itu,
+
+00:06:40.260 --> 00:06:42.460
+ia mengirimkan pesanan pemenuhan ke sistem terhubung yang tepat.
+
+00:06:42.740 --> 00:06:44.300
+Setelah pekerjaan mencapai tahap yang tepat,
+
+00:06:44.420 --> 00:06:46.480
+ia dapat mengirim informasi pesanan ke penyedia penagihan.
+
+00:06:46.840 --> 00:06:48.000
+Setiap tindakan memiliki tugas yang jatuh.
+
+00:06:48.300 --> 00:06:49.400
+Validasi tajuk pesanan,
+
+00:06:49.400 --> 00:06:50.660
+memeriksa data utama pesan.
+
+00:06:51.020 --> 00:06:52.120
+Validasi baris pesanan,
+
+00:06:52.340 --> 00:06:53.900
+memeriksa produk dan jumlah individu.
+
+00:06:54.420 --> 00:06:55.220
+Kirim ke pemenuhan,
+
+00:06:55.500 --> 00:06:58.280
+meneruskan pesanan pemenuhan ke penyedia menangani pekerjaan tersebut.
+
+00:06:58.940 --> 00:06:59.480
+Kirim ke faktur,
+
+00:06:59.560 --> 00:07:01.440
+meneruskan informasi pesanan ke penyedia penagihan.
+
+00:07:01.880 --> 00:07:04.200
+Nama-namanya terdengar seperti label pada panel kontrol pabrik.
+
+00:07:04.380 --> 00:07:06.220
+Dan itu berguna karena setiap label memberitahu Anda
+
+00:07:06.220 --> 00:07:08.040
+apa yang terjadi pada titik tersebut dalam alur.
+
+00:07:08.760 --> 00:07:09.060
+Namun,
+
+00:07:09.140 --> 00:07:11.400
+bisnis nyata seringkali membutuhkan lebih dari satu garis lurus.
+
+00:07:11.840 --> 00:07:14.040
+Mungkin pesanan dari situs web mengikuti satu jalur,
+
+00:07:14.040 --> 00:07:16.080
+sementara pelanggan bisnis mengikuti jalur lainnya.
+
+00:07:16.420 --> 00:07:18.400
+Mungkin satu jenis produk memerlukan persetujuan yang khusus.
+
+00:07:18.580 --> 00:07:21.220
+Mungkin pesanan hanya dapat berlanjut jika langkah pertama berhasil.
+
+00:07:21.480 --> 00:07:24.220
+Manajemen pesanan cerdas menyertakan kondisi untuk pilihan semacam itu.
+
+00:07:24.620 --> 00:07:26.640
+Sebuah kondisi menciptakan jalur ya dan jalur tidak.
+
+00:07:27.080 --> 00:07:28.440
+Jika tindakan sebelumnya berhasil,
+
+00:07:28.520 --> 00:07:30.180
+pesanan dapat dilanjutkan melalui jalur ya.
+
+00:07:30.840 --> 00:07:31.480
+Jika gagal,
+
+00:07:31.600 --> 00:07:33.560
+alur dapat mengarahkan pesanan ke jalur yang berbeda.
+
+00:07:34.000 --> 00:07:35.840
+Itu tidak memperbaiki setiap masalah dengan sendirinya,
+
+00:07:36.020 --> 00:07:37.860
+tetapi memberikan respons terencana pada proses
+
+00:07:37.860 --> 00:07:40.220
+alih-alih membiarkan tim menemukan kesalahan secara kebetulan.
+
+00:07:40.220 --> 00:07:41.840
+Ada juga pemisah splitters.
+
+00:07:42.280 --> 00:07:44.340
+Pemisah mengirimkan alur kelebih dari satu jalur
+
+00:07:44.340 --> 00:07:45.520
+berdasarkan aturan yang Anda tahu.
+
+00:07:45.860 --> 00:07:48.180
+Anda mungkin menggunakannya saat pesanan dari sumber terpisah
+
+00:07:48.180 --> 00:07:49.320
+memerlukan pemeriksaan berbeda
+
+00:07:49.320 --> 00:07:50.740
+atau saat bagian pekerjaan yang berbeda
+
+00:07:50.740 --> 00:07:51.620
+memerlukan rute berbeda.
+
+00:07:51.840 --> 00:07:53.880
+Beberapa jalur yang terpisah dapat kembali bersatu nantinya,
+
+00:07:54.000 --> 00:07:55.120
+sementara yang lain berlanjut sendiri.
+
+00:07:55.520 --> 00:07:57.640
+Tindakan khusus mencakup tugas yang unik bagi sebuah bisnis.
+
+00:07:58.220 --> 00:08:00.180
+Mungkin perusahaan memiliki sistem manufaktur sendiri
+
+00:08:00.180 --> 00:08:02.880
+atau sistem mitra yang tidak tercakup oleh tindakan standar.
+
+00:08:03.280 --> 00:08:04.980
+Tindakan khusus dapat menghubungkan langkah tersebut
+
+00:08:04.980 --> 00:08:05.800
+ke dalam alur pesanan
+
+00:08:05.800 --> 00:08:07.480
+sehingga rute tetap menunjukkan proses lengkap
+
+00:08:07.480 --> 00:08:10.040
+alih-alih menyembunyikan satu bagian dalam email atau pekerjaan manufaktur.
+
+00:08:10.120 --> 00:08:11.420
+Mari kembali ke pesanan dua barang kita.
+
+00:08:11.880 --> 00:08:13.140
+Sistem menerimanya dari situs web
+
+00:08:13.140 --> 00:08:15.420
+dan memeriksa detail pelanggan, alamat, dan nilai produk.
+
+00:08:16.100 --> 00:08:18.040
+Pesanan kemudian mencapai langkah keputusan pemenuhan.
+
+00:08:18.860 --> 00:08:20.860
+Jika kedua barang dapat mengikuti rute yang sama,
+
+00:08:21.020 --> 00:08:23.740
+alur dapat mengirimkan permintaan pemenuhan sebagai satu kesatuan.
+
+00:08:24.280 --> 00:08:26.180
+Jika aturan perusahaan mengharuskan hasil yang berbeda,
+
+00:08:26.300 --> 00:08:27.500
+pesanan dapat mengambil jalur lain.
+
+00:08:27.980 --> 00:08:28.980
+Mungkin kedua barang tersebut
+
+00:08:28.980 --> 00:08:30.600
+memerlukan permintaan pemenuhan terpisah.
+
+00:08:30.600 --> 00:08:32.560
+Mungkin pesanan memerlukan pilihan pengiriman yang berbeda.
+
+00:08:32.740 --> 00:08:33.480
+Alur tersebut tidak menopak.
+
+00:08:33.840 --> 00:08:35.760
+Ia mengikuti aturan yang dibuat bisnis dan peristiwa
+
+00:08:35.760 --> 00:08:37.240
+yang dikembalikan oleh sistem yang terhubung.
+
+00:08:38.020 --> 00:08:38.800
+Bagian terakhir itu penting.
+
+00:08:39.420 --> 00:08:41.400
+Manajer mempercanaan cerdas dapat mengarahkan pekerjaan,
+
+00:08:41.520 --> 00:08:44.100
+tetapi sistem yang terhubung melaporkan kembali saat pekerjaan berjalan.
+
+00:08:44.480 --> 00:08:46.600
+Penyedia layanan pemenuhan dapat menerima permintaan tersebut.
+
+00:08:46.960 --> 00:08:49.040
+Penyedia layanan penagihan dapat menerima detail pesanan.
+
+00:08:49.600 --> 00:08:52.160
+Peristiwa tersebut menjaga perjalanan pesanan terus bergerak melalui alur.
+
+00:08:52.160 --> 00:08:54.500
+Jadi aplikasi ini bukanlah satu sistem bergantian raksasa.
+
+00:08:54.960 --> 00:08:56.040
+Ini adalah serangkaian aturan
+
+00:09:00.600 --> 00:09:01.240
+Pesanan tersebut.
+
+00:09:01.600 --> 00:09:03.260
+Sistem pemenuhan menangani pemenuhan.
+
+00:09:03.480 --> 00:09:04.880
+Sistem penagihan menangani penagihan.
+
+00:09:05.320 --> 00:09:07.800
+Manajemen pesanan cerdas mengatur rutin di antara tugas-tugas tersebut.
+
+00:09:08.340 --> 00:09:09.900
+Orang yang bertanggung jawab atas proses pesanan
+
+00:09:09.900 --> 00:09:12.180
+dapat merancang alur ini langsung di dalam aplikasi.
+
+00:09:12.600 --> 00:09:15.080
+Mereka tidak perlu menulis setiap jalur sebagai kode tradisional
+
+00:09:15.080 --> 00:09:16.940
+dan tidak perlu meminta administrator TI
+
+00:09:16.940 --> 00:09:18.380
+untuk mengubah setiap aturan bisnis.
+
+00:09:19.080 --> 00:09:20.920
+Hal itu memberikan cara bagi tim rantai pasokan
+
+00:09:20.920 --> 00:09:22.180
+untuk menerahkan proses yang benar-benar.
+
+00:09:22.180 --> 00:09:24.000
+Namun perubahan tersebut tetap memerlukan kan.
+
+00:09:24.260 --> 00:09:27.380
+Alur orkestrasi tetap tidak dipublikasikan saat Anda membangun dan mengucinya.
+
+00:09:27.380 --> 00:09:30.520
+Selama tahap itu, data yang masuk tidak berjalan melalui alur tersebut.
+
+00:09:30.900 --> 00:09:32.220
+Setelah Anda mempublikasikannya,
+
+00:09:32.460 --> 00:09:34.600
+alur dan tindakannya berjalan saat datang masuk ke sistem.
+
+00:09:34.900 --> 00:09:37.600
+Setelah dipublikasikan, Anda tidak dapat mengedit alur yang sudah terbit tersebut.
+
+00:09:37.800 --> 00:09:39.180
+Jika bisnis merupakan perubahan,
+
+00:09:39.760 --> 00:09:41.500
+tim dapat menghentikan alur yang dipublikasikan
+
+00:09:41.500 --> 00:09:43.100
+yang mengembalikannya ke status belum dikasihkan.
+
+00:09:43.240 --> 00:09:45.920
+Mereka dapat mengedit alur tersebut lalu mempublikasikan versi baru saat sudah.
+
+00:09:46.260 --> 00:09:48.140
+Pengaturan itu mendorong tim untuk menguji rute
+
+00:09:48.140 --> 00:09:49.660
+sebelum pesanan langsung melewatinya.
+
+00:09:50.100 --> 00:09:52.820
+Sebuah rute hanya berfungsi jika ia mengetahui stok apa yang benar-benar tersedia.
+
+00:09:52.820 --> 00:09:56.620
+Itu membawa kita pada informasi inventaris langsung dibalik setiap keputusan pemenuhan.
+
+00:09:57.900 --> 00:09:58.880
+Visibilitas inventaris.
+
+00:09:59.400 --> 00:10:00.820
+Melihat apa yang sebenarnya bisa Anda jual.
+
+00:10:01.540 --> 00:10:02.700
+Berikut adalah kebenaran yang sederhana.
+
+00:10:03.180 --> 00:10:05.760
+Anda tidak dapat memenuhi pesanan jika Anda tidak tahu bahwa Anda memiliki stok.
+
+00:10:06.020 --> 00:10:09.420
+Terdengar jelas, namun stok bisa tersembunyi di gudang, toko, lokasi mitra,
+
+00:10:09.720 --> 00:10:11.920
+atau di berbagai entitas hukum dalam satu perusahaan.
+
+00:10:12.240 --> 00:10:14.180
+Ketika setiap lokasi menyimpan hitungannya sendiri,
+
+00:10:14.320 --> 00:10:15.580
+Anda tidak bisa menjawab pertanyaan dasar.
+
+00:10:15.680 --> 00:10:17.380
+Apa yang bisa saya janjikan kepada pelanggan ini sekarang?
+
+00:10:17.720 --> 00:10:20.060
+Visibilitas inventaris memberikan manajemen pesanan cerdas pandangan
+
+00:10:20.060 --> 00:10:22.280
+langsung atas semua stok tersebut di seluruh jaringan pasokan Anda.
+
+00:10:22.620 --> 00:10:24.520
+Anggaplah itu seperti papan stok di pusat distribusi.
+
+00:10:25.060 --> 00:10:27.160
+Alih-alih menghubungi setiap rak dan meminta seseorang
+
+00:10:27.160 --> 00:10:30.800
+untuk memeriksa proses pesanan melihat satu tampilan bersama yang diisi oleh semua sistem Anda.
+
+00:10:31.220 --> 00:10:33.660
+Sekarang, hanya karena suatu barang muncul sebagai stok di suatu tempat,
+
+00:10:33.800 --> 00:10:35.320
+bukan berarti barang itu dapat memenuhi setiap pesan.
+
+00:10:35.740 --> 00:10:37.780
+Produk mungkin berada di gudang tetapi sudah dipesan,
+
+00:10:38.020 --> 00:10:40.900
+atau berada di toko yang bisa menjual secara lokal tetapi tidak bisa mengirim,
+
+00:10:41.240 --> 00:10:43.900
+atau terlalu jauh untuk memenuhi janji pengiriman yang dipilih pelanggan.
+
+00:10:44.180 --> 00:10:46.860
+Ada perbedaan besar antara stok yang ada di suatu tempat
+
+00:10:46.860 --> 00:10:49.240
+dan stok yang dapat memenuhi pesanan ini sekarang.
+
+00:10:49.780 --> 00:10:52.640
+Bayangkan seorang pelanggan membeli jaket secara daring dan mengingkannya besok.
+
+00:10:53.020 --> 00:10:54.340
+Gudang utama Anda sudah kehabisan stok.
+
+00:10:54.820 --> 00:10:56.060
+Tanpa data inventaris terkini,
+
+00:10:56.220 --> 00:10:58.920
+situs web Anda mungkin tetap menerima pesanan berdasarkan angka lama
+
+00:10:58.920 --> 00:11:01.820
+dan gudang kemudian menerima permintaan untuk barang yang tidak bisa dikirim
+
+00:11:01.820 --> 00:11:04.080
+sehingga pelanggan baru mengetahuinya setelah pembayaran.
+
+00:11:04.680 --> 00:11:06.000
+Hal itu menambah pekerjaan bagi semua orang.
+
+00:11:06.340 --> 00:11:07.880
+Dengan informasi inventaris yang terhubung,
+
+00:11:08.260 --> 00:11:11.700
+manajemen pesanan cerdas melihat bahwa gudang utama tidak memiliki jaket untuk pesanan ini,
+
+00:11:11.860 --> 00:11:13.080
+tetapi toko terdekat memilikinya.
+
+00:11:13.080 --> 00:11:15.800
+Jika toko tersebut mendukung pengiriman, mereka dapat memenuhi pesanan.
+
+00:11:16.120 --> 00:11:19.140
+Jika pelanggan memilih pengambilan, toko yang sama menjadi lokasi pengambilan.
+
+00:11:19.640 --> 00:11:21.620
+Keputusan dimulai dengan pandangan yang lebih baik mengenai stok.
+
+00:11:21.980 --> 00:11:23.700
+Bagi perusahaan dengan beberapa badan hukum,
+
+00:11:23.860 --> 00:11:26.040
+pandangan ini mencakup inventaris di seluruh badan tersebut.
+
+00:11:26.500 --> 00:11:29.360
+Hal itu penting ketika Anda beroperasi di lebih dari satu negara, wilayah,
+
+00:11:29.460 --> 00:11:31.760
+atau unit bisnis, dan stok tidak berada dalam satu kumpulan catatan saja.
+
+00:11:32.180 --> 00:11:34.320
+Proses pesanan menggunakan data inventaris waktu nyata
+
+00:11:34.320 --> 00:11:35.920
+saat memutuskan jarum mana yang akan diambil.
+
+00:11:36.420 --> 00:11:40.300
+Gudang, toko, atau sumber inventaris lainnya tetap mengelola catatan stok mereka sendiri.
+
+00:11:40.300 --> 00:11:44.320
+Visibilitas inventaris membawa angka terkini ke dalam proses pesanan yang lebih luas
+
+00:11:44.320 --> 00:11:46.300
+di mana aturan pemenuhan dapat menggunakannya.
+
+00:11:46.860 --> 00:11:49.440
+Itu membantu Anda menghindari janji berdasarkan data kemarin
+
+00:11:49.440 --> 00:11:52.040
+dan memberi layanan pelanggan jawaban yang jelas saat seseorang bertanya
+
+00:11:52.040 --> 00:11:53.660
+apakah barang masih bisa tiba tepat waktu.
+
+00:11:54.400 --> 00:11:57.280
+Alih-alih mencari di beberapa sistem dan berharap informasinya cocok.
+
+00:11:57.540 --> 00:12:00.140
+Tim pesanan melihat posisi stok yang mendorong pilihan pemenuhan.
+
+00:12:00.600 --> 00:12:03.560
+Tentu saja, melihat semua lokasi yang memungkinkan tidak menjawab setiap pertanyaan.
+
+00:12:04.040 --> 00:12:06.080
+Anda mungkin menemukan barang tersebut di lima lokasi.
+
+00:12:06.380 --> 00:12:08.840
+Satu yang terdekat dengan pelanggan, yang lain dengan stok lebih banyak.
+
+00:12:08.840 --> 00:12:11.460
+Yang ketiga, yang memungkinkan Anda mengirim kedua produk secara bersama.
+
+00:12:11.660 --> 00:12:13.580
+Seseorang atau sesuatu tetap harus memilih.
+
+00:12:13.660 --> 00:12:15.920
+Tugas itu adalah milik pengoptimalan pemenuhan.
+
+00:12:18.350 --> 00:12:18.790
+Pemenuhan
+
+00:12:18.790 --> 00:12:20.890
+Pengoptimalan
+
+00:12:20.890 --> 00:12:23.550
+Memilih tempat terbaik untuk mengirim dari pemenuhan.
+
+00:12:25.010 --> 00:12:27.490
+Pengoptimalan membandingkan lokasi yang memungkinkan untuk sebuah pesanan
+
+00:12:27.490 --> 00:12:29.750
+dan memilih satu berdasarkan aturan yang ditetapkan perusahaan.
+
+00:12:30.370 --> 00:12:31.810
+Dalam bahasa sederhana, ini menjawab.
+
+00:12:31.930 --> 00:12:33.150
+Dari mana pesanan ini harus berasal?
+
+00:12:33.710 --> 00:12:35.090
+Terbaik tidak selalu berarti terdekat.
+
+00:12:35.610 --> 00:12:37.090
+Toko terdekat mungkin memiliki barang tersebut,
+
+00:12:37.090 --> 00:12:38.910
+tetapi pengiriman dari sana bisa memakan biaya besar.
+
+00:12:38.910 --> 00:12:42.130
+Budang yang lebih jauh mungkin sudah memiliki kedua barang yang siap dikemas bersama,
+
+00:12:42.310 --> 00:12:43.770
+dan lokasi lain mungkin memiliki stok,
+
+00:12:43.890 --> 00:12:46.150
+tetapi tidak dapat memenuhi tanggal pengiriman yang dipilih pelanggan.
+
+00:12:46.390 --> 00:12:49.170
+Setiap perusahaan harus memutuskan apa yang ingin didahulukan oleh aturan tersebut.
+
+00:12:49.390 --> 00:12:50.810
+Beberapa bisnis mengutamakan kecepatan.
+
+00:12:51.030 --> 00:12:53.010
+Yang lain ingin menjaga biaya pengiriman tetap rendah.
+
+00:12:53.390 --> 00:12:54.390
+Perusahaan mungkin juga ingin
+
+00:12:54.390 --> 00:12:56.650
+melindungi stok toko bagi pelanggan yang datang langsung
+
+00:12:56.650 --> 00:12:58.870
+atau menghindari pemecahan pesanan menjadi beberapa paket
+
+00:12:58.870 --> 00:13:00.050
+kecuali tidak ada pilihan lain.
+
+00:13:00.710 --> 00:13:02.990
+Manajemen pesanan cerdas menggunakan strategi pemenuhan
+
+00:13:02.990 --> 00:13:04.350
+yang mencerminkan pilihan tersebut.
+
+00:13:04.350 --> 00:13:06.830
+Anggaplah itu seperti memilih rute untuk mobil pengiriman.
+
+00:13:07.190 --> 00:13:08.850
+Jalan terpendek mungkin bukan yang tercepat
+
+00:13:08.850 --> 00:13:10.570
+karena bisa ada kemacetan perbaikan jalan
+
+00:13:10.570 --> 00:13:12.190
+atau perhentian yang memakan waktu lebih langsung.
+
+00:13:12.290 --> 00:13:15.550
+Begitu pula, gedung terdekat mungkin tidak memberikan hasil pemenuhan terbaik
+
+00:13:15.550 --> 00:13:19.450
+jika biaya stok, janji layanan, dan opsi pengiriman dipertimbangkan.
+
+00:13:20.110 --> 00:13:22.250
+Meri kembali ke pelanggan yang membeli dua barang secara daring.
+
+00:13:22.810 --> 00:13:24.990
+Sebuah toko yang berjarak 10 menit memiliki barang tertentu.
+
+00:13:24.990 --> 00:13:27.630
+Budang memiliki kedua barang tersebut, tetapi lokasinya lebih jauh.
+
+00:13:28.850 --> 00:13:31.450
+Jika toko mengirim barang pertama dan gudang mengirim barang kedua,
+
+00:13:31.650 --> 00:13:33.790
+pelanggan mungkin menerima dua paket yang tepat waktu,
+
+00:13:33.790 --> 00:13:35.570
+namun biaya pengiriman jadi lebih mahal.
+
+00:13:36.250 --> 00:13:38.390
+Gudang mungkin bisa mengirim kedua barang tersebut sekaligus.
+
+00:13:38.850 --> 00:13:40.930
+Jika tanggal pengiriman yang dijanjikan tetap terpenuhi,
+
+00:13:41.010 --> 00:13:43.330
+satu paket dari lokasi tersebut bisa menjadi pilihan yang lebih baik.
+
+00:13:43.670 --> 00:13:46.110
+Aturan dapat memprioritaskan jumlah pengiriman yang lebih sedikit dan biar.
+
+00:13:46.470 --> 00:13:49.650
+Namun jika pengiriman besok lebih penting daripada mengirim kedua barang bersamaan,
+
+00:13:49.950 --> 00:13:52.610
+sistem mungkin memilih toko untuk satu barang dan gudang untuk barang lainnya.
+
+00:13:52.610 --> 00:13:53.790
+Itulah pesanan terpisah.
+
+00:13:54.250 --> 00:13:56.110
+Pesanan terpisah bukan berarti sistem mengalami kegagalan.
+
+00:13:56.530 --> 00:13:58.970
+Itu bisa menjadi pilihan terencana ketika tidak ada satu lokasi pun
+
+00:13:58.970 --> 00:14:00.490
+yang dapat memenuhi seluruh pesanan dengan tepat.
+
+00:14:00.490 --> 00:14:03.110
+Bisnis menentukan kapan pemisahan pesanan masuk akal
+
+00:14:03.110 --> 00:14:04.910
+melalui strategi pemenuhan yang ditetapkan.
+
+00:14:05.190 --> 00:14:07.610
+Pemikiran yang sama mendukung metode beli daring kirim dari toko.
+
+00:14:07.950 --> 00:14:09.190
+Pelanggan memesan lewat situs web,
+
+00:14:09.330 --> 00:14:11.190
+tetapi toko di dekat mereka memiliki stok yang tepat
+
+00:14:11.190 --> 00:14:12.350
+dan bisa mengirimnya dengan cepat.
+
+00:14:12.830 --> 00:14:14.430
+Jadi toko tersebut menjadi sumber pemenuhan
+
+00:14:14.430 --> 00:14:16.050
+meskipun pelanggan tidak pernah mengunjunginya.
+
+00:14:16.190 --> 00:14:18.970
+Ini juga mendukung metode beli daring ambil di toko.
+
+00:14:19.710 --> 00:14:21.750
+Sistem menggunakan informasi stok dan lokasi
+
+00:14:21.750 --> 00:14:24.770
+untuk menemukan toko yang bisa memenuhi pesanan untuk pengambilan
+
+00:14:24.770 --> 00:14:26.630
+sehingga pelanggan mendapat opsi ambil lokal
+
+00:14:26.630 --> 00:14:29.330
+sementara perusahaan mengarahkan pesanan ke tempat yang tepat.
+
+00:14:30.490 --> 00:14:32.650
+Pilihan-pilihan ini tidak harus berdiri sendiri
+
+00:14:32.650 --> 00:14:34.170
+di dalam setiap saluran penjualan.
+
+00:14:34.670 --> 00:14:36.390
+Tanpa proses keputusan pemenuhan terpusat,
+
+00:14:36.510 --> 00:14:38.910
+situs web, marketplace, dan pusat panggilan mungkin masing-masing
+
+00:14:38.910 --> 00:14:40.470
+membutuhkan aturan perutahannya sendiri.
+
+00:14:41.190 --> 00:14:42.990
+Saat bisnis mengubah kebijakan pengiriman
+
+00:14:42.990 --> 00:14:44.630
+atau mulai menggunakan toko untuk pemenuhan,
+
+00:14:44.770 --> 00:14:47.170
+tim mungkin perlu memperbarui beberapa sistem sekaligus.
+
+00:14:47.570 --> 00:14:49.990
+Optimalisasi pemenuhan menempatkan proses keputusan tersebut
+
+00:14:49.990 --> 00:14:51.210
+di satu tempat dalam perjalanan pesanan.
+
+00:14:51.630 --> 00:14:52.990
+Situs web tetap menerima pesanan,
+
+00:14:53.230 --> 00:14:54.530
+marketplace tetap menerima pesanan,
+
+00:14:54.730 --> 00:14:55.970
+dan toko tetap menjual produk.
+
+00:14:56.250 --> 00:14:58.890
+Namun perusahaan bisa mengubah cara memilih lokasi pemenuhan
+
+00:14:58.890 --> 00:15:01.190
+tanpa membangun ulang aturan di setiap saluran,
+
+00:15:01.630 --> 00:15:03.450
+memberikan Anda kontrol lebih saat stok berpindah,
+
+00:15:03.570 --> 00:15:04.570
+janji pengiriman berubah,
+
+00:15:04.690 --> 00:15:06.470
+atau opsi pemenuhan baru tersedia.
+
+00:15:07.570 --> 00:15:10.230
+Tetap saja, strategi pemenuhan hanya bisa membandingkan lokasi
+
+00:15:10.230 --> 00:15:12.910
+jika informasi yang diperlukan tiba dari sistem yang memilikinya.
+
+00:15:13.570 --> 00:15:14.390
+Pesanan harus masuk,
+
+00:15:14.870 --> 00:15:15.910
+pembaruan stok harus tiba,
+
+00:15:16.430 --> 00:15:18.170
+dan mitra pemenuhan harus menerima tugas mereka
+
+00:15:18.170 --> 00:15:19.550
+serta melaporkan perkembangannya kembali.
+
+00:15:19.910 --> 00:15:21.690
+Pekerjaan koneksi itu bergantung pada penyedia.
+
+00:15:23.110 --> 00:15:24.330
+Penyedia dan koneksi,
+
+00:15:24.330 --> 00:15:25.930
+pintu masuk ke dalam gedung
+
+00:15:25.930 --> 00:15:28.430
+agar manajemen pesanan cerdas dapat menjalankan tugasnya.
+
+00:15:28.430 --> 00:15:30.330
+Ia memerlukan cara yang andal untuk berkomunikasi
+
+00:15:30.330 --> 00:15:31.190
+dengan segala sesuatu di sekit.
+
+00:15:31.450 --> 00:15:32.550
+Penyedia adalah hal yang mewujudkannya.
+
+00:15:32.950 --> 00:15:34.450
+Penyedia pada dasarnya adalah koneksi
+
+00:15:34.450 --> 00:15:36.610
+yang memindahkan detail pesanan dan pembaruan pemenuhan
+
+00:15:36.610 --> 00:15:38.730
+antara manajemen pesanan cerdas dan sistem lain.
+
+00:15:39.650 --> 00:15:40.810
+Informasi mengalir dua arah
+
+00:15:40.810 --> 00:15:41.950
+sehingga tidak ada yang perlu menyalin,
+
+00:15:42.050 --> 00:15:42.790
+apapun secara manual.
+
+00:15:43.350 --> 00:15:44.830
+Bayangkan sebuah gedung dengan banyak pintu pengirim.
+
+00:15:45.430 --> 00:15:47.350
+Satu pintu menerima pesanan dari toko daring Anda,
+
+00:15:47.890 --> 00:15:49.590
+pintu lain terhubung ke sistem inventaris Anda.
+
+00:15:49.970 --> 00:15:51.710
+Pintu ketiga mengirimkan pekerjaan ke gudang
+
+00:15:51.710 --> 00:15:52.510
+atau mitra pengiriman.
+
+00:15:53.050 --> 00:15:54.590
+Setiap pintu memiliki tujuan yang jelas
+
+00:15:54.590 --> 00:15:55.890
+dan penyedia mengelola informasi
+
+00:15:55.890 --> 00:15:56.930
+yang melewati setiap pintu.
+
+00:15:57.650 --> 00:15:59.710
+Microsoft membangun sendiri beberapa konektor ini.
+
+00:16:00.350 --> 00:16:01.730
+Mereka menyebutnya penyedia pihak pertama.
+
+00:16:02.090 --> 00:16:03.770
+Mereka menghubungkan manajemen pesanan cerdas
+
+00:16:03.770 --> 00:16:06.050
+dengan aplikasi seperti Dynamics 365 Supply
+
+00:16:06.050 --> 00:16:07.790
+Jet Management, Dynamics 365 Commerce
+
+00:16:07.790 --> 00:16:08.990
+atau Dynamics 365 Commerce
+
+00:16:08.990 --> 00:16:09.850
+atau Dynamics 365 Commerce.
+
+00:16:10.330 --> 00:16:11.690
+Layanan inventaris dan pemenuhan
+
+00:16:11.690 --> 00:16:12.990
+di dalam manajemen pesanan cerdas
+
+00:16:12.990 --> 00:16:14.210
+juga menggunakan penyedia ini
+
+00:16:14.210 --> 00:16:15.130
+untuk bertukar data.
+
+00:16:16.170 --> 00:16:17.730
+Sekarang Anda mungkin sudah memiliki sistem lain.
+
+00:16:18.170 --> 00:16:19.550
+Disitulah penyedia pihak ketiga berperan.
+
+00:16:19.970 --> 00:16:20.670
+Mereka menghubungkan layanan
+
+00:16:20.670 --> 00:16:21.570
+yang tidak dibangun oleh Microsoft.
+
+00:16:21.570 --> 00:16:23.970
+Mungkin itu platform Eniaga Anda yang sudah ada
+
+00:16:23.970 --> 00:16:25.530
+marketplace, perusahaan logistik
+
+00:16:25.530 --> 00:16:26.450
+atau sistem gudang.
+
+00:16:26.710 --> 00:16:27.490
+Intinya bukan memaksa Anda
+
+00:16:27.490 --> 00:16:28.530
+menggunakan satu rangkaian aplikasi.
+
+00:16:28.930 --> 00:16:30.050
+Aw, tujuannya adalah
+
+00:16:30.050 --> 00:16:31.070
+agar Anda dapat menghubungkan
+
+00:16:31.070 --> 00:16:32.070
+sistem yang sudah sesuai dengan Anda.
+
+00:16:32.370 --> 00:16:32.990
+Di balik layar,
+
+00:16:33.070 --> 00:16:33.950
+penyedia ini menggunakan
+
+00:16:33.950 --> 00:16:35.270
+konektor power automate.
+
+00:16:35.970 --> 00:16:37.070
+Power platform memiliki
+
+00:16:37.070 --> 00:16:38.630
+lebih dari 200 konektor siap pakai
+
+00:16:38.630 --> 00:16:40.170
+jadi Anda memiliki banyak titik awal.
+
+00:16:40.890 --> 00:16:41.870
+Dan jika tidak ada yang cocok,
+
+00:16:41.970 --> 00:16:43.430
+Anda dapat membangun penyedia sendiri.
+
+00:16:44.250 --> 00:16:45.010
+Setiap aplikasi yang terhubung
+
+00:16:45.010 --> 00:16:46.050
+tetap menjalankan tugasnya masing-masing.
+
+00:16:46.370 --> 00:16:47.810
+Toko daring Anda mencatat pembelian.
+
+00:16:48.350 --> 00:16:49.850
+Sistem inventaris melacak stok.
+
+00:16:49.850 --> 00:16:51.290
+Mitra pemenuhan mengemas
+
+00:16:51.290 --> 00:16:52.230
+dan mengirimkan pesanan.
+
+00:16:52.590 --> 00:16:53.970
+Sistem penagihan menangani keuangan.
+
+00:16:54.530 --> 00:16:55.370
+Manajemen pesanan cerdas
+
+00:16:55.370 --> 00:16:57.050
+mengordinasikan pesan dan langkah selanjutnya
+
+00:16:57.050 --> 00:16:58.010
+di antara semuanya.
+
+00:16:58.530 --> 00:16:59.230
+Setelah sistem tersebut
+
+00:16:59.230 --> 00:17:00.190
+membagikan pembaruan,
+
+00:17:00.330 --> 00:17:01.130
+bisnis Anda dapat melihat
+
+00:17:01.130 --> 00:17:02.710
+apa yang terjadi di seluruh proses pesanan.
+
+00:17:03.070 --> 00:17:04.150
+Tidak perlu lagi mencari informasi
+
+00:17:04.150 --> 00:17:05.050
+melalui layar yang terpisah.
+
+00:17:06.950 --> 00:17:08.450
+Wawasan dan gambaran yang lebih besar.
+
+00:17:09.410 --> 00:17:10.530
+Informasi yang dibagikan tersebut
+
+00:17:10.530 --> 00:17:11.310
+memberi Anda gambaran
+
+00:17:11.310 --> 00:17:11.930
+yang jauh lebih jelas
+
+00:17:11.930 --> 00:17:12.710
+tentang pekerjaan pesanan.
+
+00:17:13.070 --> 00:17:14.050
+Manajemen pesanan cerdas
+
+00:17:14.050 --> 00:17:15.290
+menyertakan dashboard Power BI
+
+00:17:15.290 --> 00:17:16.450
+yang menyatukan metrik pesanan
+
+00:17:16.450 --> 00:17:17.710
+dan pemenuhan di satu tempat.
+
+00:17:17.710 --> 00:17:19.610
+Layanan pelanggan dapat menemukan
+
+00:17:19.610 --> 00:17:20.650
+pesanan yang berhenti bergerak.
+
+00:17:21.090 --> 00:17:22.190
+Operasional dapat menemukan
+
+00:17:22.190 --> 00:17:22.930
+rute yang terblokir
+
+00:17:22.930 --> 00:17:23.550
+atau keterlambatan.
+
+00:17:24.130 --> 00:17:25.070
+Dan pemimpin bisnis dapat
+
+00:17:25.070 --> 00:17:26.470
+mencari pora di seluruh proses.
+
+00:17:27.090 --> 00:17:28.010
+Tanpa tampilan tersebut,
+
+00:17:28.110 --> 00:17:29.110
+keterlambatan mungkin tampak
+
+00:17:29.110 --> 00:17:30.110
+sebagai masalah yang terisolasi.
+
+00:17:30.470 --> 00:17:31.610
+Namun seada tak digabungkan,
+
+00:17:31.890 --> 00:17:32.810
+tim Anda mungkin menyadari
+
+00:17:32.810 --> 00:17:34.090
+bahwa banyak pesanan melambat
+
+00:17:34.090 --> 00:17:35.150
+di mitra pemenuhan tertentu
+
+00:17:35.150 --> 00:17:35.730
+atau opsi.
+
+00:17:36.090 --> 00:17:36.750
+Pengiriman tertentu
+
+00:17:36.750 --> 00:17:37.590
+menimbulkan lebih banyak
+
+00:17:37.590 --> 00:17:39.030
+pengecualian daripada yang diharapkan.
+
+00:17:39.490 --> 00:17:40.230
+dashboard tidak memperbaiki
+
+00:17:40.230 --> 00:17:41.350
+masalah dengan sendirinya,
+
+00:17:41.570 --> 00:17:42.290
+tetapi membantu orang
+
+00:17:42.290 --> 00:17:43.430
+mengetepat kemana harus mencari.
+
+00:17:43.430 --> 00:17:44.750
+Ingat kembali gedung perkantor.
+
+00:17:45.290 --> 00:17:46.590
+Manajemen pesanan cerdas
+
+00:17:46.590 --> 00:17:47.670
+menyatukan meja depan
+
+00:17:47.670 --> 00:17:48.830
+yang menerima permintaan,
+
+00:17:49.010 --> 00:17:50.070
+papan stok yang menunjukkan
+
+00:17:50.070 --> 00:17:50.770
+ketersediaan,
+
+00:17:51.070 --> 00:17:52.330
+perencana rute yang memilih
+
+00:17:52.330 --> 00:17:53.170
+lokasi pemenuhan,
+
+00:17:53.530 --> 00:17:54.670
+dan ruang pelaporan tempat tim
+
+00:17:54.670 --> 00:17:56.150
+dapat memantau pergerakan semuanya.
+
+00:17:56.730 --> 00:17:58.130
+Setiap bagian memiliki tugas berbeda,
+
+00:17:58.230 --> 00:17:59.410
+tetapi pesanan menghubungkan semuanya.
+
+00:18:01.520 --> 00:18:02.240
+Kesimpulan satu pesanan
+
+00:18:02.240 --> 00:18:03.600
+satu perjalanan yang terkoordinasi.
+
+00:18:04.880 --> 00:18:06.020
+Terima kasih telah bergabung dengan saya
+
+00:18:06.020 --> 00:18:06.660
+untuk awasan singkat.
+
+00:18:07.000 --> 00:18:08.140
+Manajemen pesanan cerdas
+
+00:18:08.140 --> 00:18:09.480
+mengetahkan rute langsung tunggal
+
+00:18:09.480 --> 00:18:10.500
+melalui seluruh proses Anda,
+
+00:18:10.880 --> 00:18:11.860
+mulai dari pencatatan awal
+
+00:18:11.860 --> 00:18:12.580
+hingga penagihan akhir.
+
+00:18:12.880 --> 00:18:14.460
+Perlangganan di platform podcast favorit Anda
+
+00:18:14.460 --> 00:18:15.560
+dan tonton episode berikut.
+
+00:18:15.840 --> 00:18:16.620
+Anda akan melihat persis
+
+00:18:16.620 --> 00:18:17.740
+bagaimana Dynamics 365
+
+00:18:17.740 --> 00:18:18.460
+dan Power Platform
+
+00:18:18.460 --> 00:18:19.600
+menangani pekerjaan di balik layar.

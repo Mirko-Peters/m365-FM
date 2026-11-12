@@ -1,0 +1,1120 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:03.460
+Sie haben den Verkauf getätigt und die Rechnung versendet, aber wann landet das Geld tatsächlich auf dem Konto?
+
+00:00:03.780 --> 00:00:04.780
+Und was passiert, wenn es nicht ankommt?
+
+00:00:05.040 --> 00:00:08.980
+Willkommen zu einer neuen Folge von Microsoft Knowledge Nuggets auf M365FM.
+
+00:00:09.440 --> 00:00:09.940
+Bin Marco Peters.
+
+00:00:10.580 --> 00:00:13.940
+Heute erklären wir die Debitorenbuchhaltung in Dynamics 365 ganz einfach.
+
+00:00:14.600 --> 00:00:18.280
+Am Ende dieser Folge werden Sie einen Kundenkontostand vom Verkauf bis zur Zahlung verfolgen und sehen,
+
+00:00:18.600 --> 00:00:20.720
+was das Unternehmen bei verspäteten Zahlungen unternimmt.
+
+00:00:21.600 --> 00:00:22.780
+Ist die einfachste Definition.
+
+00:00:23.640 --> 00:00:27.520
+Die Debitorenbuchhaltung erfasst die Außenstände Ihrer Kunden sowie die eingehenden Zahlungen.
+
+00:00:27.520 --> 00:00:31.080
+Stellen Sie es sich wie einen Aktenschrank für das Geld in Ihrem Unternehmen vor.
+
+00:00:31.580 --> 00:00:32.720
+Jeder Kunde erhält einen eigenen Ordner.
+
+00:00:33.160 --> 00:00:36.900
+Dieser Ordner enthält die Rechnungen, Zahlungen, Fälligkeitstermine und alle Nachbereitungen.
+
+00:00:37.480 --> 00:00:40.820
+Eine Tabellenkalkulation kann diese Dinge zwar auflisten, aber sie kann einen neuen Verkauf,
+
+00:00:40.900 --> 00:00:44.840
+ein Fälligkeitsdatum, eine Bankzahlung und eine Kreditentscheidung nicht unternehmensweit zuverlässig verknüpfen.
+
+00:00:45.500 --> 00:00:47.120
+Dynamics 365 Finance kann das.
+
+00:00:47.360 --> 00:00:49.600
+Beginnen wir also am Anfang mit dem Debitorenkonto.
+
+00:00:50.680 --> 00:00:53.760
+Erstens das Debitorenkonto, der Ausgangspunkt für jede Rechnung.
+
+00:00:53.760 --> 00:00:58.120
+Stellen Sie sich vor, Sie arbeiten mit einem Kunden namens Northwind Equipment zusammen.
+
+00:00:58.520 --> 00:01:02.880
+Bevor diese eine Bestellung aufgeben kann, benötigt Dynamics 365 mehr als nur einen Namen an der Telefonung.
+
+00:01:03.340 --> 00:01:05.600
+Es benötigt die finanziellen Regeln für die Geschäftsbeziehung mit Northwind.
+
+00:01:06.080 --> 00:01:09.060
+Das Debitorenkonto ist dieser beschriftete Ordner in unserem Aktenschrank.
+
+00:01:09.760 --> 00:01:15.180
+Es enthält alle Details, die Dynamics 365 mitteilen, wer der Kunde ist, wohin Rechnungen gehen sollen,
+
+00:01:15.280 --> 00:01:18.440
+wie er üblicherweise zahlt und welchen Kredit das Unternehmen gewähren will.
+
+00:01:18.440 --> 00:01:22.100
+Das klingt vielleicht nach einer grundlegenden Einrichtung, vermeidet aber später viele Unklarheiten.
+
+00:01:22.580 --> 00:01:24.620
+Zum Beispiel speichert das Konto die Rechnungsadresse des Kunden.
+
+00:01:25.180 --> 00:01:26.680
+Diese unterscheidet sich oft von der Lieferadresse.
+
+00:01:27.200 --> 00:01:30.040
+Ausrüstung wird vielleicht an ein Werk geliefert, während Rechnungen an die Finanzabteilung gehen.
+
+00:01:30.500 --> 00:01:31.660
+Es enthält auch die Zahlungsbedingungen.
+
+00:01:32.200 --> 00:01:33.680
+Zahlungsbedingungen beantworten eine einfache Frage.
+
+00:01:33.940 --> 00:01:35.320
+Wie lange hat dieser Kunde Zeit zu bezahlen?
+
+00:01:35.920 --> 00:01:37.320
+Northwind zahlt vielleicht innerhalb von 30 Tagen.
+
+00:01:37.620 --> 00:01:38.800
+Ein anderer Kunde zahlt im Voraus.
+
+00:01:39.080 --> 00:01:40.820
+Ein größerer Kunde könnte 60 Tage aushangeln.
+
+00:01:41.300 --> 00:01:45.460
+Sobald diese Bedingungen im Konto hinterlegt sind, berechnet Dynamics 365 das Fälligkeitsdatum automatisch.
+
+00:01:45.460 --> 00:01:51.340
+Niemand muss E-Mail-Verläufe durchsuchen oder raten, ob netto 30 IO-Bestelldatum, Lieferdatum oder Rechnungsdatum gilt.
+
+00:01:51.880 --> 00:01:53.380
+Das System weiß es einfach. Darum geht das?
+
+00:01:53.780 --> 00:01:56.060
+Das Debitorenkonto enthält auch die übliche Zahlungsmethode.
+
+00:01:56.420 --> 00:01:59.540
+Wenn Northwind per Banküberweisung zahlt und ein anderer Kunde per Kreditkarte,
+
+00:01:59.920 --> 00:02:01.860
+folgt das Finanzteam bei der Zahlung dem richtigen Prozess.
+
+00:02:02.440 --> 00:02:04.320
+Sie müssen nicht jeden Kunden wie ein Einzelfall behandeln.
+
+00:02:04.740 --> 00:02:05.740
+Dann gibt es noch das Kreditlimit.
+
+00:02:06.200 --> 00:02:09.880
+Ein Kreditlimit ist der Höchstbetrag, den ein Unternehmen einem Kunden gleichzeitig offen lassen möchte.
+
+00:02:10.420 --> 00:02:12.380
+Stellen Sie es sich wie ein Empfang in einem Bürogebäude vor.
+
+00:02:12.380 --> 00:02:15.720
+Die Empfangsperson prüft, ob jemand auf eine andere Etage darf nicht,
+
+00:02:15.820 --> 00:02:18.440
+ob der Besucher nett ist, sondern nur, ob die Regeln ihn durchlassen.
+
+00:02:19.020 --> 00:02:19.720
+Ganz ähnlich ist es hier.
+
+00:02:20.040 --> 00:02:22.180
+Das Kreditlimit setzt Vertrieb und Finanzwesen eine klare Ganze.
+
+00:02:22.900 --> 00:02:24.260
+Northwind mag ein stärker Kunde sein.
+
+00:02:24.580 --> 00:02:25.960
+Aber wenn Sie bereits eine hohe Summe schulden,
+
+00:02:26.020 --> 00:02:28.480
+sollte das Unternehmen vor der Annahme eines weiteren Großauftrags inhalten.
+
+00:02:29.040 --> 00:02:32.540
+Im Hintergrund kann Dynamics 365 dem Kundengruppen und Buchungsprofile nutzen.
+
+00:02:33.200 --> 00:02:34.500
+Lassen Sie sich von diesem Begriff nicht abschrecken.
+
+00:02:34.800 --> 00:02:37.280
+Eine Kundengruppe dient lediglich dazu, ähnliche Kunden zusammenzufassen.
+
+00:02:37.740 --> 00:02:39.540
+Einzelhandel in eine Gruppe, Großhandel in eine andere.
+
+00:02:39.540 --> 00:02:42.660
+So kann das Unternehmen gemeinsame Regeln anwenden, wo es sinnvoll ist.
+
+00:02:43.200 --> 00:02:46.900
+Ein Buchungsprofil ist eine Buchhaltungsregel, die Dynamics 365 vorgibt,
+
+00:02:46.980 --> 00:02:49.160
+welche Finanzkonten die Schuld bei Rechnungseingang erfassen sollen.
+
+00:02:49.740 --> 00:02:52.400
+Als Vertriebsmitarbeiter oder Kunde bekommen Sie diesen Prozess normalerweise nicht zu sehen.
+
+00:02:53.160 --> 00:02:54.700
+Aber die Finanzabteilung ist darauf angewiesen,
+
+00:02:54.760 --> 00:02:56.540
+da die Bücher jeden Betrag an der richtigen Stelle benötigen.
+
+00:02:56.940 --> 00:02:57.820
+Und hier liegt die wahre Stärke.
+
+00:02:58.460 --> 00:03:01.120
+Das Debitorenkonto verbindet die Vertriebsseite mit der Finanzseite.
+
+00:03:01.680 --> 00:03:03.940
+Ein Vertriebsmitarbeiter kann einen Auftrag für Northwind anlegen
+
+00:03:03.940 --> 00:03:06.300
+und die Finanzabteilung muss diese Informationen später nicht neu erfassen.
+
+00:03:06.300 --> 00:03:09.400
+Sie sehen den Kunden, die Zahlungsbedingungen, den Kreditstatus und den fälligen Betrag.
+
+00:03:09.580 --> 00:03:10.780
+Alles ist automatisch miteinander verknüpft.
+
+00:03:11.160 --> 00:03:13.480
+Das ist der Unterschied zwischen einer Kontaktliste und einem Debitorenkonto.
+
+00:03:13.880 --> 00:03:15.420
+Eine Kontaktliste hilft Ihnen niemandem anzurufen.
+
+00:03:15.740 --> 00:03:18.040
+Ein Debitorenkonto erfasst die finanzielle Beziehung.
+
+00:03:18.320 --> 00:03:20.800
+Einschließlich der Regeln, die bei Verkäufen an den Kunden greifen.
+
+00:03:21.340 --> 00:03:22.660
+Sobald Northwind also etwas kauft,
+
+00:03:22.760 --> 00:03:26.260
+muss Dynamics 365 diesen Verkauf in eine ordnungsgemäße Zahlungsaufforderung umwandeln.
+
+00:03:28.700 --> 00:03:31.180
+Das Erstellen der Rechnung, um aus einem Verkauf eine Forderung zu machen.
+
+00:03:31.180 --> 00:03:34.280
+Was ist also der Unterschied zwischen einem Auftrag und einer Rechnung?
+
+00:03:34.840 --> 00:03:36.340
+Ein Auftrag besagt, was der Kunde möchte.
+
+00:03:36.460 --> 00:03:37.760
+Eine Rechnung besagt, was er bezahlen muss.
+
+00:03:38.120 --> 00:03:38.640
+Darum geht es.
+
+00:03:38.980 --> 00:03:41.360
+Eine Rechnung erzeugt einen offenen Salo auf dem Debitorenkonto.
+
+00:03:42.100 --> 00:03:44.140
+Sobald sie gebucht ist, stellen Sie den Betrag vor meine Rechnung
+
+00:03:44.140 --> 00:03:46.180
+und die Debitorenbuchhaltung kann die Forderung nachverfolgen.
+
+00:03:46.740 --> 00:03:48.020
+Kommen wir zurück zu Northwind Equipment.
+
+00:03:48.480 --> 00:03:49.180
+Sie bestellten zehn Ausrüstungsgegenstände.
+
+00:03:49.920 --> 00:03:52.940
+Ihr Vertriebsteam erfasst den Auftrag, das Lager bereitet die Artikel vor und Sie versenden diese.
+
+00:03:53.500 --> 00:03:54.720
+Northwind hat nun die Ausrüstung.
+
+00:03:55.060 --> 00:03:56.900
+An diesem Punkt benötigen Sie einen klaren Nachweis darüber,
+
+00:03:57.000 --> 00:03:59.200
+was gekauft wurde, was es kostet und wann die Zahlung fällig ist.
+
+00:03:59.200 --> 00:04:00.920
+Dieser Nachweis ist die Debitorenrechnung.
+
+00:04:01.400 --> 00:04:04.720
+Die meisten Rechnungen in Dynamics 365 Finance stammen direkt aus einem Verkaufsauftrag.
+
+00:04:05.220 --> 00:04:07.260
+Dadurch bleibt die Rechnung an den ursprünglichen Verkauf gebunden.
+
+00:04:07.800 --> 00:04:11.460
+Die Artikel des Kunden, Preise, Mengen und alle vereinbarten Regeln sind bereits hinterlegt.
+
+00:04:12.100 --> 00:04:15.260
+Sie müssen diese Details nicht von jemandem in ein separates Abrechnungssystem übertragen lassen.
+
+00:04:15.700 --> 00:04:18.680
+Sobald die Ware versandt wurde oder eine Dienstleistung ein Meilenstein erreicht hat,
+
+00:04:18.740 --> 00:04:21.060
+der abgerechnet werden soll, erstellen Sie die Rechnung aus diesem Verkaufsauftrag.
+
+00:04:21.320 --> 00:04:23.380
+Der genaue Zeitpunkt hängt davon ab, wie Ihr Unternehmen arbeitet.
+
+00:04:23.800 --> 00:04:26.620
+Manche Unternehmen stellen bei Versand in Rechnung, andere nach Abschluss einer Arbeitsphase.
+
+00:04:26.620 --> 00:04:29.840
+Ein Beratungsunternehmen stellt möglicherweise nach Erreichen eines Meilensteins in Rechnung.
+
+00:04:30.480 --> 00:04:33.440
+Dynamics 365 folgt dem Prozess, den Sie bereits eingerichtet haben.
+
+00:04:34.160 --> 00:04:35.920
+Vielleicht haben Sie schon einmal den Begriff Lieferscheinrechnung gehört.
+
+00:04:36.760 --> 00:04:40.260
+Ein Lieferschein bestätigt, was das Lager physisch verlassen hat und in die Zustellphase übergegangen ist.
+
+00:04:40.900 --> 00:04:43.320
+Wenn Ihr Unternehmen auf Basis des tatsächlichen Versands abrechnet,
+
+00:04:43.460 --> 00:04:45.740
+kann die Rechnung diese bestätigten Lieferdetails nutzen.
+
+00:04:46.320 --> 00:04:47.500
+Dies vermeidet ein häufiges Problem.
+
+00:04:47.900 --> 00:04:50.200
+Nehmen wir einen Auftrag über zehn Einheiten, von denen heute versandt wurden,
+
+00:04:50.260 --> 00:04:51.460
+weil zwei noch auf Lagerbestand warten.
+
+00:04:51.460 --> 00:04:54.780
+Wenn Sie über den Lieferschein abrechnen, stellen Sie nur die acht versandten Einheiten in Rechnung.
+
+00:04:55.160 --> 00:04:58.020
+Sie berechnen Northwind nicht alle zehn Einheiten, bevor diese Sie erhalten haben.
+
+00:04:58.280 --> 00:05:02.220
+Der Auftrag bleibt wichtig, aber die bestätigte Lieferung gibt der Buchhaltung vor, was auf diese Rechnung gehört.
+
+00:05:02.660 --> 00:05:04.480
+Aber nicht jede Rechnung beginnt mit einem Verkaufsauftrag.
+
+00:05:04.980 --> 00:05:07.720
+Manchmal müssen Sie eine einmalige Gebühr abrechnen, die keinen Versand beinhaltet.
+
+00:05:08.340 --> 00:05:10.100
+Vielleicht bittet Northwind um eine spezielle Schulung.
+
+00:05:10.600 --> 00:05:14.100
+Vielleicht gibt es eine Servicegebühr, eine Projektbelastung oder eine Korrektur, die eine eigene Rechnung erfordert.
+
+00:05:14.780 --> 00:05:18.140
+Für diese Fälle unterstützt Dynamics 365 Finance eine Freitextrechnung.
+
+00:05:18.760 --> 00:05:20.540
+Freitext bedeutet nicht willkürlich oder informell.
+
+00:05:20.540 --> 00:05:22.940
+Das bedeutet, dass die Rechnung nicht mit einem Verkaufsauftrag verknüpft wird.
+
+00:05:23.200 --> 00:05:27.400
+Sie geben den Kunden die Gebühr, den Betrag, KGF, Steuerdetails und die Zahlungsinformationen ein.
+
+00:05:27.960 --> 00:05:30.520
+Nach der Buchung wird dies zu einem regulären fälligen Betrag auf dem Kunden.
+
+00:05:30.680 --> 00:05:32.640
+Der Kunde erhält weiterhin eine ordnungsgemäße Rechnung.
+
+00:05:32.900 --> 00:05:34.420
+Die Finanzabteilung sieht weiterhin auf den Saal.
+
+00:05:34.580 --> 00:05:35.660
+Was ist mit wiederkehrenden Arbeit?
+
+00:05:36.000 --> 00:05:38.460
+Angenommen, Northwind zahlt eine monatliche Gebühr für die Wartung von Geräten.
+
+00:05:38.860 --> 00:05:42.460
+Die manuelle Erstellung der gleichen Rechnung jeden Monat kostet Zeit und birgt die Gefahr kleiner Fehler.
+
+00:05:43.160 --> 00:05:46.140
+Die Abonnementabrechnung nutzt Abrechnungszeitpläne, um wiederkehrende Gebühren abzuwicken.
+
+00:05:46.140 --> 00:05:48.900
+Sie richten die Vereinbarung und den Abrechnungszeitpunkt ein.
+
+00:05:49.040 --> 00:05:52.740
+Dann kann Dynamics 365 Rechnungen erstellen, sobald die Abrechnungsperiode beginnt.
+
+00:05:53.340 --> 00:05:56.180
+Das bietet Ihnen eine wiederholbare Methode zur Abrechnung wiederkehrender Leistungen
+
+00:05:56.180 --> 00:05:58.460
+und der Kunde erhält Rechnungen gemäß dem vereinbarten Zeitplan.
+
+00:05:59.020 --> 00:06:01.380
+Die Buchung ist der Moment, der den Verkaufsstatus ändert.
+
+00:06:02.000 --> 00:06:04.820
+Sie verbucht den Betrag auf dem Kundenkonto von Northwind als offene Forderung.
+
+00:06:05.340 --> 00:06:07.840
+Sie sendet den Betrag auch an die Finanzunterlagen des Unternehmens,
+
+00:06:08.140 --> 00:06:11.080
+wo Sie sehen können, dass ein Verkauf abgerechnet wurde und die Zahlung noch aussteht.
+
+00:06:11.540 --> 00:06:14.100
+Die Rechnung ist kein Entwurf mehr, den jemand einfach so ändern könnte.
+
+00:06:14.520 --> 00:06:15.720
+Sie ist jetzt Teil der Finanzbuchhaltung.
+
+00:06:16.140 --> 00:06:16.700
+Machen wir es konkret.
+
+00:06:17.360 --> 00:06:19.500
+Northwind bestellt Ausrüstung im Wert von 10.000 Dollar.
+
+00:06:19.920 --> 00:06:22.760
+Zuerst werden acht Einheiten versandt, also buchen Sie eine Rechnung für diese acht ein.
+
+00:06:23.200 --> 00:06:26.140
+Die Rechnung enthält den Betrag, das Fälligkeitsdatum und die Zahlungsbedingungen.
+
+00:06:26.680 --> 00:06:31.320
+Northwind erhält die Rechnung und Dynamics 365 verbucht denselben Betrag als offen auf deren Konto.
+
+00:06:31.960 --> 00:06:35.920
+Dieser gemeinsame Datensatz sorgt dafür, dass Vertrieb, Lagerpersonal und Buchhaltung dieselbe Transaktion im Blick haben.
+
+00:06:36.320 --> 00:06:38.800
+Kein Streit mehr über verschiedene Versionen in unterschiedlichen Dateien.
+
+00:06:38.940 --> 00:06:40.300
+Doch eine Rechnung fordert nur Geld an.
+
+00:06:40.660 --> 00:06:44.400
+Die nächste Aufgabe besteht darin, die Zahlung bei Eingang zu erkennen und sie dem richtigen offenen Saldo zuzuordnen.
+
+00:06:44.400 --> 00:06:46.460
+2.3. Zahlungseingang und Zuordnung
+
+00:06:46.460 --> 00:06:47.840
+Die richtige Rechnung abschließen
+
+00:06:47.840 --> 00:06:49.340
+Ein Zahlungseingang klingt einfach.
+
+00:06:49.920 --> 00:06:51.800
+Der Banksaldo steigt, als ist die Arbeit erledigt, oder?
+
+00:06:52.420 --> 00:06:52.820
+Nicht ganz.
+
+00:06:53.300 --> 00:06:55.060
+Die Buchhaltung muss noch zwei Fragen beantworten.
+
+00:06:55.580 --> 00:06:59.040
+Wer hat das Geld gesendet und welche offene Rechnung oder Rechnung soll dieser Betrag ausgleichen?
+
+00:06:59.620 --> 00:07:01.420
+Denken Sie daran, wie Northwind die Geräte-Rechnung bezahlt.
+
+00:07:01.760 --> 00:07:05.220
+Die Bank zeigt möglicherweise eine Zahlung mit einer kurzen Referenz, einem Betrag und einem Datum.
+
+00:07:05.220 --> 00:07:09.680
+Ohne die Zuordnung dieser Zahlung zum offenen Silo von Northwind könnte das System Bargeld auf der Bank anzeigen,
+
+00:07:09.760 --> 00:07:11.720
+während gleichzeitig ausgewiesen wird, dass Northwind das Geld noch schuldet.
+
+00:07:12.000 --> 00:07:13.020
+Diese Datensätze müssen zum Nutzen.
+
+00:07:13.580 --> 00:07:17.760
+Dynamics 365 Finance unterstützt verschiedene Zahlungswege für Kunden.
+
+00:07:18.340 --> 00:07:22.400
+Sie erhalten möglicherweise Bargeld, Schecks, Kreditkartenzahlungen, Banküberweisungen oder Wechsel,
+
+00:07:22.700 --> 00:07:25.000
+die in manchen Geschäftsprozessen als formelle Zahlungsdokumente dienen.
+
+00:07:25.560 --> 00:07:27.860
+Jede Methode folgt ihrem eigenen Weg in die Finanzunterlagen.
+
+00:07:28.520 --> 00:07:30.080
+Eine Banküberweisung erscheint möglicherweise aus.
+
+00:07:30.080 --> 00:07:32.700
+Ein Check muss eventuell erfasst werden, bevor die Bank ihn einlöst.
+
+00:07:33.180 --> 00:07:35.160
+Eine Kartenzahlung kann über einen Zahlungsdienstleister folgen.
+
+00:07:35.660 --> 00:07:40.240
+Dynamics 365 bietet der Buchhaltung einen Ort, um Zahlungsdetails auf dem richtigen Kundenkonto zu erfassen.
+
+00:07:40.500 --> 00:07:42.240
+Dieser Ort ist häufig das Debitorenzahlungsjournal.
+
+00:07:42.640 --> 00:07:47.040
+Ein Journal klingt wie ein Papierbuch, aber in Dynamics 365 ist es einfach ein kontrollierter Bereich,
+
+00:07:47.160 --> 00:07:48.840
+um Zahlungen vor der Buchung einzugeben und zu prüfen.
+
+00:07:49.240 --> 00:07:53.420
+Die Buchhaltung erfasst den Kunden, den Betrag, die Zahlungsmethode, das Bankkonto und jegliche mit der Zahlung.
+
+00:07:53.480 --> 00:07:55.260
+Übermittelte Referenz, übermittelte Referenz.
+
+00:07:55.260 --> 00:07:58.360
+Dann gibt es noch ein Wort, das oft komplizierter klingt, als es ist. Ausgleich.
+
+00:07:58.360 --> 00:08:01.480
+Ausgleich bedeutet, eine Zahlung der Rechnung zuzuordnen, die sie begleicht.
+
+00:08:02.000 --> 00:08:04.460
+Northwind bezahlt den exakten Betrag auf seiner Geräte-Rechnung.
+
+00:08:04.900 --> 00:08:07.960
+Die Buchhaltung wählt die Zahlung und die offene Rechnung aus und gleicht sie dann miteinander aus.
+
+00:08:08.380 --> 00:08:10.560
+Nach der Buchung erscheint die Rechnung nicht mehr als unbezahlt.
+
+00:08:11.160 --> 00:08:12.160
+Die Zahlung hat sie abgeschlossen.
+
+00:08:12.540 --> 00:08:14.220
+Der Kundensaldo sinkt um denselben Betrag.
+
+00:08:14.760 --> 00:08:17.320
+Dies ist wichtig, da eine Zahlung ohne Ausgleich dazu führen kann,
+
+00:08:17.400 --> 00:08:20.440
+dass eine offene Rechnung auf dem Konto verbleibt, obwohl sie das Geld bereits erhalten haben.
+
+00:08:20.900 --> 00:08:25.180
+Das führt zu fehlerhaften Berichten, unnötigen Nachfassaktionen und unangenehmen Anrufen bei Kunden, die bereits bezahlt haben.
+
+00:08:25.460 --> 00:08:27.460
+Manchmal deckt die Zahlung nicht die gesamte Rechnung ab.
+
+00:08:27.460 --> 00:08:31.140
+Vielleicht zahlt Northwind jetzt einen Teilbetrag und vereinbart, den Rest später zu begleichen.
+
+00:08:31.660 --> 00:08:35.900
+Dynamics 365 kann den eingegangenen Betrag mit der Rechnung verrechnen und den offenen Teil bestehen lassen.
+
+00:08:36.620 --> 00:08:38.880
+Die Rechnung verschwindet nicht einfach nur, weil eine Zahlung eingegangen ist.
+
+00:08:39.360 --> 00:08:40.760
+Die Finanzabteilung sieht genau, was nach Ausstehen.
+
+00:08:41.100 --> 00:08:44.240
+Das ist weit besser als eine Rechnung versehentlich als vollständig bezahlt zu markieren
+
+00:08:44.240 --> 00:08:46.980
+und dann zu versuchen, sich den Restbetrag in einer Notiz oder Tabelle zu merken.
+
+00:08:47.620 --> 00:08:49.680
+Bei vielen Unternehmen gehen Bankzahlungen in großer Zahl ein.
+
+00:08:50.440 --> 00:08:53.260
+Jede Überweisung und offene Rechnung manuell zu prüfen, kostet Zeit.
+
+00:08:53.260 --> 00:08:57.960
+Besonders, wenn Kunden mehrere Rechnungen zusammenbezahlen oder eine unklare Referenz angeben.
+
+00:08:59.540 --> 00:09:02.280
+Dynamics 365 bietet hierfür ein Zahlungsausgleichsjournal.
+
+00:09:02.980 --> 00:09:08.740
+Ein Team kann Bankkontoauszüge importieren und diese nutzen, um eingehende Zahlungen mit offenen Debitorenrechnungen abzugleichen.
+
+00:09:09.400 --> 00:09:14.660
+Zahlungsreferenzen, Beträge, Kundendetails und Abgleichregeln helfen dem System, den korrekten Zahlungsort vorzuschlagen.
+
+00:09:14.660 --> 00:09:17.420
+Sie überprüfen das Ergebnis weiterhin. Dieser Schritt ist wichtig.
+
+00:09:18.300 --> 00:09:19.800
+Automatisierung reduziert den Suchaufwand.
+
+00:09:20.020 --> 00:09:23.300
+Aber die Finanzabteilung stellt sicher, dass die Zahlung die richtige Rechnung ausgleicht.
+
+00:09:23.520 --> 00:09:29.080
+Daher, wenn ein Kunde eine Zahlung für mehrere Rechnungen sendet, kann der Sachbearbeiter diese Zahlung auf die Rechnungen verteilen.
+
+00:09:29.800 --> 00:09:32.640
+Falls eine Referenz auf das falsche Dokument verweist, kann dies vor der Buchung korrigiert werden.
+
+00:09:33.280 --> 00:09:35.400
+Das Ziel ist nicht, menschliches Urteilsvermögen zu ersetzen,
+
+00:09:35.500 --> 00:09:38.920
+sondern die Mitarbeiter von der mühsamen Suche in Bankdateien und Rechnungslisten zu entlasten.
+
+00:09:39.420 --> 00:09:42.940
+Stellen Sie sich nun vor, Northwind ist in mehreren Firmen einer Unternehmensgruppe tätig.
+
+00:09:42.940 --> 00:09:48.280
+Eine Rechtseinheit verkauft das Equipment, während eine zentrale Finanzgesellschaft die Zahlung für die gesamte Gruppe empfängt.
+
+00:09:48.840 --> 00:09:51.880
+Dynamics Diro 65 unterstützt zentralisierte Zahlungen für diese Situation.
+
+00:09:52.560 --> 00:09:55.400
+Eine Zahlung kann in einer Rechtseinheit im Namen einer anderen erfasst werden.
+
+00:09:56.100 --> 00:09:59.140
+Das Unternehmen muss nicht so tun, als sei das Geld erst bei der verkaufenden Einheit eingegangen
+
+00:09:59.140 --> 00:10:00.900
+oder den Prozess außerhalb des Systems verwalten.
+
+00:10:01.560 --> 00:10:04.960
+Die Aufzeichnungen zeigen, wo die Zahlungen eingingen und welche Kundenschuld sie ausgleicht.
+
+00:10:05.640 --> 00:10:07.440
+Das hält die gemeinsame Finanzarbeit sauberer,
+
+00:10:07.740 --> 00:10:10.060
+besonders wenn mehrere Firmen ein zentrales Kassenteam nutzen.
+
+00:10:10.060 --> 00:10:13.520
+Der vollständige Zahlungsprozess ist also mehr als nur die Erfassung von Geldeingängen bei der Bank.
+
+00:10:14.240 --> 00:10:18.400
+Dynamics 365 verknüpft Kunde, Zahlung und Rechnung, bis der offene Saldo ausgeglichen ist
+
+00:10:18.400 --> 00:10:21.700
+oder der Restbetrag die Finanzabteilung an die noch ausstehende Zahlung erinnert.
+
+00:10:22.280 --> 00:10:23.540
+Damit ist die heutige Zahlung verbucht.
+
+00:10:23.980 --> 00:10:25.640
+Die nächste Frage stellt sich vor dem nächsten Verkauf.
+
+00:10:26.140 --> 00:10:28.220
+Sollte das Unternehmen einem Kunden erlauben, noch mehr Schulden zu machen?
+
+00:10:29.780 --> 00:10:30.840
+Viertens, Kreditmanagement.
+
+00:10:31.120 --> 00:10:32.520
+Die Entscheidung über die Fortführung von Verkäufen.
+
+00:10:33.440 --> 00:10:35.940
+Sie erhalten also eine Zahlung, die einen alten Saldo ausgleicht.
+
+00:10:36.300 --> 00:10:37.020
+Ziemlich einfach, oder?
+
+00:10:37.020 --> 00:10:40.500
+Doch das Kreditmanagement stellt sich folgende Frage, bevor der nächste Auftrag bearbeitet wird.
+
+00:10:40.900 --> 00:10:42.840
+Wie viel weiteres Risiko ist Ihr Unternehmen bereit einzugehen?
+
+00:10:43.300 --> 00:10:44.360
+Denken Sie an die Hotelrezeption.
+
+00:10:44.820 --> 00:10:47.460
+Ein Gast möchte eine weitere Nacht bleiben, also prüft das Personal die Buchung,
+
+00:10:47.540 --> 00:10:50.200
+den Zahlungsstatus und die Regeln, bevor es eine neue Zimmerkarte aushändigt.
+
+00:10:50.720 --> 00:10:53.160
+Genau das leistet das Kreditmanagement für einen Verkaufsauftrag.
+
+00:10:53.940 --> 00:10:56.740
+Es bewertet nicht, ob Northwind Equipment generell ein guter Kunde ist.
+
+00:10:57.420 --> 00:11:00.820
+Es prüft lediglich die aktuelle Finanzlage anhand der von Ihrem Unternehmen festgelegten Regeln.
+
+00:11:01.360 --> 00:11:02.700
+Eine dieser Regeln ist das Kreditlimit.
+
+00:11:02.860 --> 00:11:06.140
+Ein Kreditlimit ist der Höchstbetrag, den ein Kunde zu einem bestimmten Zeitpunkt schulden darf.
+
+00:11:06.140 --> 00:11:10.280
+Wenn Northwind also ein Limit von 50.000 Dollar hat und bereits 45.000 Dollar schuldet,
+
+00:11:10.480 --> 00:11:12.620
+erfordert ein Neuauftrag über 20.000 Dollar Aufmerksamkeit.
+
+00:11:13.180 --> 00:11:14.640
+Der Kunde kann die Bestellung zwar aufgeben,
+
+00:11:14.760 --> 00:11:17.000
+aber Ihr Unternehmen sollte diese Entscheidung nicht unbemerkt durchgehen lassen.
+
+00:11:17.400 --> 00:11:19.500
+Dynamics 365 kann mehr als eine Zahl prüfen.
+
+00:11:20.060 --> 00:11:22.220
+Es betrachtet offene Rechnungen, deren Fälligkeitsdauer,
+
+00:11:22.360 --> 00:11:25.620
+den Wert des neuen Verkaufsauftrags und den Kunden noch verfügbaren Kreditrahmen.
+
+00:11:26.480 --> 00:11:28.840
+Ein Kunde, der pünktlich zahlt, hat möglicherweise noch Spielraum,
+
+00:11:29.260 --> 00:11:32.320
+während ein anderer unter seinem Limit liegen kann, aber eine längst überfällige Rechnung hat.
+
+00:11:33.080 --> 00:11:34.000
+Das sind unterschiedliche Risiken.
+
+00:11:34.000 --> 00:11:38.440
+Wenn eine Regel ausgelöst wird, kann Dynamics 365 den Verkaufsauftrag auf Kreditsperre setzen
+
+00:11:38.440 --> 00:11:41.800
+und den Auftrag anhalten, bevor Sie weitere Waren versenden oder unbezahlte Arbeit leisten.
+
+00:11:42.460 --> 00:11:44.720
+Der Vertrieb sieht die Sperre, die Finanzabteilung den Grund
+
+00:11:44.720 --> 00:11:48.500
+und niemand bemerkt das Problem erst, nachdem das Lager bereits eine weitere Lieferung versandt hat.
+
+00:11:49.060 --> 00:11:51.560
+Eine Kreditsperre bedeutet nicht, dass der Auftrag endgültig abgelehnt wird.
+
+00:11:51.880 --> 00:11:53.120
+Die bedeutet, dass jemand ihn überprüfen muss.
+
+00:11:53.440 --> 00:11:55.540
+Vielleicht hat Northwind einen Zahlungsnachweis gesendet
+
+00:11:55.540 --> 00:11:59.120
+oder ein Finanzmanager weiß, dass die überfällige Rechnung auf einem Abrechnungsfehler beruht
+
+00:11:59.120 --> 00:12:03.260
+oder der Kunde hat wegen eines großen genehmigten Projekts um eine vorübergehende Erhöhung gebeten.
+
+00:12:04.020 --> 00:12:06.640
+Autorisiertes Personal kann einen Auftrag freigeben, wenn es einen triftigen Grund gibt.
+
+00:12:06.960 --> 00:12:09.560
+Dieser Teil ist wichtig, denn Geschäftsregeln brauchen Raum für die Realität.
+
+00:12:09.960 --> 00:12:11.920
+Das System kann eine automatische Entscheidung stoppen,
+
+00:12:12.020 --> 00:12:13.920
+aber die Verantwortlichen entscheiden, was als nächstes geschieht
+
+00:12:13.920 --> 00:12:15.660
+und hinterlassen eine klare Dokumentation dieser Entscheidung.
+
+00:12:15.920 --> 00:12:18.440
+Hier müssen Vertrieb und Finanzabteilung auf der Grundlage selben Informationen haben.
+
+00:12:18.820 --> 00:12:21.700
+Der Vertrieb möchte den Kunden bedienen, besonders bei wichtigen Aufträgen,
+
+00:12:21.820 --> 00:12:24.580
+während die Finanzabteilung das Unternehmen vor Forderungsausfällen schützen muss.
+
+00:12:24.920 --> 00:12:25.120
+Muss.
+
+00:12:25.840 --> 00:12:27.220
+Keine Seite muss eine Diskussion gewinnen.
+
+00:12:27.260 --> 00:12:31.360
+Sie brauchen lediglich den Auftrag, den unbezahlten Betrag und die Kreditregeln an einem Ort.
+
+00:12:31.360 --> 00:12:35.520
+Viele hören Kreditmanagement und vermuten, es bedeutet, Kunden abzuweisen.
+
+00:12:36.000 --> 00:12:36.560
+Das tut es nicht.
+
+00:12:36.900 --> 00:12:38.420
+Es bedeutet, sichere Grenzen zu vereinbaren,
+
+00:12:38.500 --> 00:12:40.400
+bevor eine verspätete Zahlung zu einem wesentlich größeren Blumen.
+
+00:12:40.640 --> 00:12:42.200
+Sie können weiterhin gute Kunden unterstützen,
+
+00:12:42.520 --> 00:12:44.340
+Ausnahmen genehmigen und mit Zuversicht verkaufen.
+
+00:12:44.820 --> 00:12:47.420
+Sie verhindern lediglich das Schulden ohne vorherige Prüfung der Fakten weiter an.
+
+00:12:47.800 --> 00:12:49.780
+Sobald eine Rechnung ihr Fälligkeitsdatum überschreitet,
+
+00:12:49.860 --> 00:12:50.860
+wird aus Prävention nachverfolgt.
+
+00:12:52.200 --> 00:12:52.660
+Fünftens.
+
+00:12:52.720 --> 00:12:53.720
+Inkasse und Streitfälle.
+
+00:12:54.060 --> 00:12:55.900
+Zahlungen einfordern, ohne Kunden zu verlieren.
+
+00:12:56.540 --> 00:12:58.620
+Sobald ein Fälligkeitsdatum verstrichen ist, ändert sich die Aufgabe.
+
+00:12:58.980 --> 00:13:01.000
+Das Unternehmen entscheidet nicht mehr, ob Kredit gewährt wird.
+
+00:13:01.360 --> 00:13:04.080
+Es benötigt eine klare, respektvolle, artfälliges Geld anzufordern.
+
+00:13:04.980 --> 00:13:07.780
+Dynamic Stardom 65 Finance bringt diese Arbeit auf die Inkassoseite.
+
+00:13:08.140 --> 00:13:10.800
+Betrachten Sie es als gemeinsamen Arbeitstisch für überfällige Kundenkonten.
+
+00:13:11.380 --> 00:13:13.120
+Anstatt dass eine Person Notizen per E-Mail macht,
+
+00:13:13.240 --> 00:13:14.860
+eine andere Anrufe in einer Tabelle verfolgt
+
+00:13:14.860 --> 00:13:17.020
+und jemand Drittes Rechnung in der Finanzbuchhaltung prüft,
+
+00:13:17.360 --> 00:13:20.860
+sieht das Inkassoteam den Kontostand und alle Aktivitäten zentral an einem Ort.
+
+00:13:21.720 --> 00:13:23.180
+Das verändert die Kommunikation.
+
+00:13:23.180 --> 00:13:26.780
+Ein Inkassomitarbeiter arbeitet mit Kundenlisten,
+
+00:13:26.900 --> 00:13:30.220
+die auf Inkassokriterien, basieren etwa Kunden mit überfälligen Rechnungen,
+
+00:13:30.360 --> 00:13:35.200
+einem bestimmten Überfälligkeitsbetrag oder die gemäß Unternehmensregeln Aufmerksamkeit erfordern.
+
+00:13:36.720 --> 00:13:38.700
+So muss das Team nicht raten, wen es zuerst kontaktieren soll.
+
+00:13:39.700 --> 00:13:41.620
+Für jeden Kunden kann der Mitarbeiter aktiv werden,
+
+00:13:41.740 --> 00:13:43.620
+eine Mahnung senden, ein Inkassoschreiben erstellen,
+
+00:13:43.700 --> 00:13:46.040
+eine E-Mail schreiben oder eine Aufgabe für einen Anruf anlegen.
+
+00:13:47.000 --> 00:13:48.840
+Das Ziel ist nicht der Versand verärgerter Nachrichten.
+
+00:13:49.280 --> 00:13:51.340
+Die meisten verspäteten Zahlungen haben banale Ursachen.
+
+00:13:51.780 --> 00:13:54.060
+Vielleicht landete eine Rechnung im falschen Posteingang,
+
+00:13:54.220 --> 00:13:57.140
+ein Kunde benötigt eine Kopie oder das Zahlungsteam hat die Frist verpasst.
+
+00:13:57.680 --> 00:13:59.100
+Eine ruhige Erinnerung kann viel bewirken.
+
+00:13:59.640 --> 00:14:02.040
+Manchmal antwortet ein Kunde mit einem Zahlungsversprechen für nächsten Freitag.
+
+00:14:02.840 --> 00:14:05.680
+Dynamics 365 kann dies als Zahlungsversprechen erfassen,
+
+00:14:05.880 --> 00:14:07.500
+sodass das Team die Zusage kennt und prüfen kann,
+
+00:14:07.560 --> 00:14:08.980
+ob die Zahlung wie vereinbart eintrifft.
+
+00:14:10.020 --> 00:14:13.080
+Ohne diesen Eintrag ruft der nächste Mitarbeiter den Kunden vielleicht am nächsten Morgen an,
+
+00:14:13.080 --> 00:14:14.960
+ohne zu wissen, dass bereits ein Datum vereinbart wurde.
+
+00:14:14.960 --> 00:14:17.020
+Streitfälle erfordern die gleiche Sorgfalt?
+
+00:14:17.620 --> 00:14:20.320
+Ein Streitfall bedeutet, dass der Kunde eine Rechnung ganz oder teilweise bestreitet.
+
+00:14:21.580 --> 00:14:23.960
+Vielleicht stimmt der Preis nicht, einige Waren kamen nie an
+
+00:14:23.960 --> 00:14:26.400
+oder die Rechnung bezieht sich auf nicht genehmigte Arbeiten.
+
+00:14:28.060 --> 00:14:30.680
+Die schlechteste Reaktion ist, das Problem in einem Posteingang untergehen zu lassen.
+
+00:14:31.180 --> 00:14:33.980
+Dynamics 365 kann die Rechnung als strittig kennzeichnen
+
+00:14:33.980 --> 00:14:35.240
+und während der Inkassowerbeit sichtbar halten.
+
+00:14:35.820 --> 00:14:38.480
+Das Team kann den Status und die Lösungsschritte nachverfolgen,
+
+00:14:38.560 --> 00:14:41.060
+statt Schweigen als Grund für erneute Mahnungen zu sehen.
+
+00:14:41.060 --> 00:14:44.300
+Ah, dies hilft dem Unternehmen auch, wiederkehrende Probleme zu erkennen.
+
+00:14:44.960 --> 00:14:47.280
+Wenn mehrere Kunden die gleiche Art von Gebühr bestreiten,
+
+00:14:47.640 --> 00:14:50.160
+lernt die Finanzabteilung mehr als nur etwas über eine verspätete Zahlung.
+
+00:14:50.820 --> 00:14:54.400
+Abrechnung, Vertrieb, Lieferung oder Kundenservice müssen möglicherweise die Prozesse korrigieren,
+
+00:14:54.460 --> 00:14:55.500
+die diese Streitfälle verursachen.
+
+00:14:55.980 --> 00:14:57.680
+Das Inkasso nutzt zudem Fälligkeitsberichte,
+
+00:14:57.880 --> 00:15:00.100
+die offene Beträge nach Dauer der Überfälligkeit sortieren.
+
+00:15:00.300 --> 00:15:00.420
+Tiff.
+
+00:15:00.420 --> 00:15:04.320
+So können Sie Beträge sehen, die jetzt fällig sind oder seit 30, 60 und 90 Tagen überfällig sind.
+
+00:15:04.780 --> 00:15:07.880
+Diese Zeitspannen helfen dem Team zu erkennen, welche Forderungen Aufmerksamkeit erfordern,
+
+00:15:07.940 --> 00:15:09.280
+bevor Sie zu einem schwierigeren Gespräch führen.
+
+00:15:09.800 --> 00:15:13.040
+Eine Rechnung, die zwei Tage überfällig ist, erfordert nicht immer die gleiche Reaktion wie eine,
+
+00:15:13.140 --> 00:15:14.560
+die seit drei Monaten unbezahlt ist.
+
+00:15:15.320 --> 00:15:17.640
+Die Finanzabteilung kann zudem Zahlungsprediktionen nutzen,
+
+00:15:17.940 --> 00:15:20.980
+sofern verfügbar, um abzuschätzen, ob offene Rechnungen voraussichtlich pünktlich,
+
+00:15:21.240 --> 00:15:24.560
+spät oder sehr spät eingehen, basierend auf bisherigen Zahlungsdaten und Kundenhistorien.
+
+00:15:24.560 --> 00:15:28.300
+Ein Fälligkeitsbericht zeigt, was bereits geschehen ist,
+
+00:15:28.680 --> 00:15:31.300
+aber eine Vorhersage hilft dem Team zu entscheiden, wo der Fokus liegen sollte,
+
+00:15:31.420 --> 00:15:32.960
+bevor eine verspätete Zahlung zum Problem wird.
+
+00:15:33.280 --> 00:15:34.500
+Das ersetzt jedoch nicht das Allzermögel.
+
+00:15:36.020 --> 00:15:39.820
+Es gibt dem Inkasso-Team ein zusätzliches Signal, wenn es aus einer langen Liste von Konten wählen muss.
+
+00:15:40.480 --> 00:15:43.780
+Das Ziel ist einfach, Geld auf stetige, transparente Weise eintreiben
+
+00:15:43.780 --> 00:15:46.560
+und den Kunden dabei wie einen Kunden behandeln, nicht wie eine Fallnummer.
+
+00:15:47.360 --> 00:15:50.000
+Lassen Sie uns jetzt den gesamten Ablauf nun an einem einfachen Beispiel verdeutlichen.
+
+00:15:51.140 --> 00:15:51.520
+Sechs.
+
+00:15:51.600 --> 00:15:53.760
+Eine Rechnung, ein verbundener Prozess, das große Ganze.
+
+00:15:55.420 --> 00:15:58.180
+Gehen wir also durch, was passiert, wenn Northwind eine Bestellung aufgibt,
+
+00:15:58.240 --> 00:16:01.820
+ihr System diese verarbeitet und nach Erreichen des vereinbarten Abrechnungszeitpunkts
+
+00:16:01.820 --> 00:16:02.720
+eine Rechnung versendet wird.
+
+00:16:03.160 --> 00:16:05.260
+Das Kundenkonto enthält bereits die Zahlungsbedingungen,
+
+00:16:05.580 --> 00:16:10.160
+sodass Dynamics 365 das Fälligkeitsdatum automatisch anhand der mit Northwind vereinbarten Regeln berechnet.
+
+00:16:11.120 --> 00:16:14.620
+Die Finanzabteilung sieht den offenen Betrag und der Kunde erhält eine klare Zahlungserforderung.
+
+00:16:14.980 --> 00:16:15.980
+Das ist der Beginn des Prozesses.
+
+00:16:16.500 --> 00:16:19.460
+Einige Wochen später sendet Northwind eine Banküberweisung mit dem Rechnungsbezug.
+
+00:16:19.920 --> 00:16:22.260
+Die Finanzabteilung ordnet die Zahlung der Rechnung zu und gleicht sie aus.
+
+00:16:22.260 --> 00:16:24.820
+Der offene Saldo wird geschlossen und das Kundenkonto zeigt nun,
+
+00:16:24.940 --> 00:16:26.900
+dass dieser Teil der Geschäftsbeziehung abgeschlossen ist.
+
+00:16:27.380 --> 00:16:28.720
+Kein manueller Abgleich erforderlich.
+
+00:16:29.080 --> 00:16:30.380
+Aber was passiert, wenn die Dinge anders laufen?
+
+00:16:30.740 --> 00:16:33.440
+Wenn Northwind das Fälligkeitsdatum verpasst, landet die Rechnung im Mahnwes.
+
+00:16:33.680 --> 00:16:35.340
+Ein Mitarbeiter sendet eine Mahnung.
+
+00:16:35.580 --> 00:16:37.660
+Northwind antwortet, dass ein Teil der Rechnung falsch ist.
+
+00:16:38.040 --> 00:16:41.560
+Und das Team erfasst einen Streitfall, anstatt es als unerklärte, verspätete Zahlung zu behandeln.
+
+00:16:41.940 --> 00:16:43.720
+Jeder sieht denselben Status und kennt den nächsten Schritt,
+
+00:16:43.800 --> 00:16:45.540
+weil alles an einem zentralen Ort gespeichert ist.
+
+00:16:45.540 --> 00:16:49.020
+Hier liegt der Unterschied bei Dynamics 365 Finance.
+
+00:16:49.180 --> 00:16:50.000
+Nichts bleibt isoliert.
+
+00:16:51.080 --> 00:16:54.340
+Verkaufsaufträge, Rechnungen, Zahlungen, Kreditprüfungen und Inkassotätigkeiten
+
+00:16:54.340 --> 00:16:56.060
+sind alle mit derselben Kundenbeziehung verknüpft,
+
+00:16:56.100 --> 00:16:58.660
+sodass sie nicht in verschiedenen Systemen nach Informationen suchen müssen.
+
+00:16:59.500 --> 00:17:01.400
+Das bedeutet schnellere Entscheidungen und weniger Fehler.
+
+00:17:02.260 --> 00:17:06.100
+Früher war die Historie über Tabellen, E-Mail-Ordner, Notizen und Bankdateien verstreut
+
+00:17:06.100 --> 00:17:09.260
+und Mitarbeiter verschwendeten Zeit damit, die richtige Version zu suchen.
+
+00:17:10.540 --> 00:17:14.440
+Dynamics 365 hält den Vorgang zusammen an eine durchgängige Sicht auf den Kunden.
+
+00:17:14.440 --> 00:17:17.500
+Debitorenbuchhaltung bedeutet zu wissen, wer ihnen Geld schuldet,
+
+00:17:17.540 --> 00:17:20.140
+wann es fällig ist, was bisher geschehen ist und was als nächstes zu tun ist.
+
+00:17:20.540 --> 00:17:22.400
+Wenn ein Teil fehlt, kann ein Unternehmen viel verkaufen
+
+00:17:22.400 --> 00:17:24.620
+und hat dennoch Schwierigkeiten, den Verbleib seines Bargelds nachzuvollziehen.
+
+00:17:24.880 --> 00:17:26.400
+Deshalb ist dieser vernetzte Prozess so wichtig.
+
+00:17:27.380 --> 00:17:27.780
+Fazit
+
+00:17:27.780 --> 00:17:30.080
+Behalten Sie den internen Geldfluss unter Kontrolle.
+
+00:17:30.940 --> 00:17:32.600
+Eine Rechnung ist nur der Beginn des Prozesses.
+
+00:17:33.020 --> 00:17:35.960
+So folgt Ihre Debitorenbuchhaltung das Geld, bis der Saldo ausgeglichen ist
+
+00:17:35.960 --> 00:17:37.980
+oder Maßnahmen für offene Posten ergriffen werden.
+
+00:17:39.140 --> 00:17:42.320
+Die Kontrolle über diesen internen Geldfluss ist entscheidend für die Gesundheit des Unternehmens.
+
+00:17:42.320 --> 00:17:43.280
+In Mirko Peters
+
+00:17:43.280 --> 00:17:46.540
+Abonnieren Sie Microsoft Knowledge Magnets auf M365 FM
+
+00:17:46.540 --> 00:17:50.220
+und schauen Sie sich dann die zugehörige Dynamics 365 Finance Episode auf Ihrem Bildschirm an,
+
+00:17:50.280 --> 00:17:51.920
+um das Gesamtbild einfach und verständlich zu vervollständigen.

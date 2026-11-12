@@ -1,0 +1,2182 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:04.060
+E se o seu Contact Center pudesse reconhecer um cliente frustrado antes mesmo de ele dizer uma palavra?
+
+00:00:04.540 --> 00:00:09.340
+Isso não é ficção científica, é análise de sentimento em ação dentro do Dynamics 365 Contact Center.
+
+00:00:10.220 --> 00:00:15.620
+Antes de darmos início ao nosso patch de hoje, inscreva-se para que estes briefings sejam enviados automaticamente para a sua fila sem que precise ficar na espera.
+
+00:00:16.000 --> 00:00:16.580
+Veja como funciona.
+
+00:00:16.960 --> 00:00:23.000
+Seu agente de IA analisa o tom, a escolha das palavras e o ritmo, direcionando o caso ao atendente certo antes que os ânimos se exaltem.
+
+00:00:23.580 --> 00:00:29.980
+Nesta demonstração, vamos detalhar o roteamento por sentimento e mostrar como os agentes do Copilot lidam com tarefas repetitivas enquanto sua equipe foca nos problemas réticos.
+
+00:00:30.000 --> 00:00:35.940
+E para entender por que essa mudança é importante, você precisa saber como é a vida em um centro tradicional, onde se vive apagando incêndios sem parar.
+
+00:00:37.160 --> 00:00:39.940
+Por que os Contact Centers tradicionais parecem um combate a incêndios permanente?
+
+00:00:40.420 --> 00:00:43.120
+Em um Contact Center antigo, o modo padrão não é suporte à sobrevivência.
+
+00:00:43.760 --> 00:00:48.160
+Você inicia o turno sabendo que o dia será uma maratona de tickets que já parecem atrasados antes mesmo de você logar.
+
+00:00:48.940 --> 00:00:52.040
+As ferramentas não é ajudando a antecipar, elas apenas jogam o próximo caso na pilha.
+
+00:00:52.780 --> 00:00:56.620
+É por isso que toda operação parece menos um serviço constante e mais uma resposta de emergência em loop.
+
+00:00:56.960 --> 00:00:59.980
+Você começa seu turno, headset pronto e as filas já estão acumuladas.
+
+00:01:00.640 --> 00:01:03.440
+Telefones tocando, janelas de chat apitando, e-mails piscando em vermelho.
+
+00:01:03.880 --> 00:01:06.700
+O problema real não é o excesso de canais, é o silêncio entre eles.
+
+00:01:07.380 --> 00:01:11.960
+Claro, você pode ver o nome do cliente e um ID de caso, mas o contexto, o e-mail que enviaram,
+
+00:01:12.020 --> 00:01:16.000
+o chat de 10 minutos atrás, a frustração acumulada, tudo isso fica oculto.
+
+00:01:16.540 --> 00:01:20.940
+É como entrar em uma campanha de jogo sem mapa ou ficha de personagem enquanto os monstros já estão atacando você.
+
+00:01:21.900 --> 00:01:23.600
+Essa falta de contexto gera repetição.
+
+00:01:23.600 --> 00:01:29.860
+Você pede detalhes que o cliente já forneceu, verifica o pedido novamente, digita notas que ficam em um sistema e nunca chegam ao próximo.
+
+00:01:30.780 --> 00:01:31.760
+O cliente fica exasperado.
+
+00:01:32.220 --> 00:01:34.840
+Eles contaram a mesma história ontem, agora estão presos contando tudo de novo.
+
+00:01:35.620 --> 00:01:39.540
+Sem uma integração minicanal, essas conversas geralmente não aparecem instantaneamente em outros canais.
+
+00:01:40.260 --> 00:01:42.480
+Assim, cada interação parece recomeçar do nível 1.
+
+00:01:43.040 --> 00:01:43.740
+O ciclo é óbvio.
+
+00:01:43.740 --> 00:01:47.120
+O cliente fica impaciente, perguntando-se por que a empresa parece tão esquecida.
+
+00:01:47.820 --> 00:01:50.700
+Você se cansa de tentar contornar a mesma irritação, ligação após ligação.
+
+00:01:51.140 --> 00:01:53.440
+A frustração aumenta e nenhum dos lados fica satisfeito.
+
+00:01:54.080 --> 00:01:57.200
+Todos os setores de fornecedores associam a esse padrão repetição, esperas longas,
+
+00:01:57.300 --> 00:01:59.740
+falta de contexto ao maior churn tanto de clientes quanto de agentes.
+
+00:02:01.120 --> 00:02:04.260
+Cada momento extra de deixe-me verificar isso custa lealdade e moral.
+
+00:02:05.220 --> 00:02:07.120
+E o moral já está baixo no ambiente de um contact center.
+
+00:02:07.560 --> 00:02:11.400
+Em vez de resolver problemas, grande parte do que você faz é equilibrar scripts e rituais de copiar e colar.
+
+00:02:11.400 --> 00:02:15.240
+Pare de parecer um jogo baseado em habilidade e comece a parecer um tutorial sem fim.
+
+00:02:16.240 --> 00:02:19.060
+Os agentes se esgotam rapidamente porque há pouca sensação de progresso,
+
+00:02:19.180 --> 00:02:22.240
+sem espaço para soluções criativas, apenas uma fila de novos incêndios para apagar.
+
+00:02:22.980 --> 00:02:25.020
+Os supervisores, enquanto isso, não estão lidando com estratégia.
+
+00:02:25.320 --> 00:02:26.160
+Estão tapando buracos.
+
+00:02:26.720 --> 00:02:30.140
+Reduzir segundos no tempo de atendimento ou ajustar roteiros de saudação vira solução,
+
+00:02:30.220 --> 00:02:32.320
+quando o verdadeiro gargalo é o próprio sistema fragmentado.
+
+00:02:32.680 --> 00:02:35.760
+Você pode otimizar as bordas o dia todo, mas um balde furado nunca retém água.
+
+00:02:36.560 --> 00:02:40.160
+Sem uma visão unificada, todos estão correndo, mas a operação não parece eficiente.
+
+00:02:40.160 --> 00:02:41.260
+Consequência.
+
+00:02:41.680 --> 00:02:44.460
+Clientes perdem a paciência por serem forçados a repetir informações,
+
+00:02:44.620 --> 00:02:46.540
+agentes perdem a motivação com reinícios intermináveis
+
+00:02:46.540 --> 00:02:48.780
+e gestores perdem estabilidade com a rotatividade que se segue.
+
+00:02:49.800 --> 00:02:52.320
+Os custos aumentam à medida que você fica preso recrutando,
+
+00:02:52.680 --> 00:02:55.620
+treinando e retreinando funcionários apenas para manter o nível básico de serviço.
+
+00:02:56.260 --> 00:02:59.900
+É um ciclo que pune todos os envolvidos enquanto deixa a causa raiz intocada.
+
+00:03:00.580 --> 00:03:03.300
+Portanto, quando as pessoas descrevem a vida no contact center como apagar incêndios,
+
+00:03:03.360 --> 00:03:04.040
+elas não estão exagerando.
+
+00:03:04.380 --> 00:03:06.160
+Você não está planejando, você mal consegue acompanhar o ritmo.
+
+00:03:06.160 --> 00:03:10.760
+Os sistemas não se comunicam, o histórico não acompanha o cliente e os mesmos focos de incêndio surgem repetidamente.
+
+00:03:11.420 --> 00:03:15.140
+Tanto clientes quanto agentes sabem disso, e ambos os lados se sentem presos em uma masmorra,
+
+00:03:15.220 --> 00:03:16.780
+onde o chefe não é a própria frustração.
+
+00:03:17.300 --> 00:03:18.420
+E levanta a verdadeira questão.
+
+00:03:18.680 --> 00:03:21.220
+E se pudéssemos detectar a brasa antes que o alarme de incêndio dispare?
+
+00:03:22.660 --> 00:03:24.900
+Uma IA aprende a detectar a frustração antes que você consiga.
+
+00:03:25.580 --> 00:03:29.400
+Já notou como alguns sistemas conseguem identificar o humor de alguém mais rápido do que você consegue processar as palavras?
+
+00:03:29.900 --> 00:03:33.080
+Essa é a proposta da IA de sentimento dentro do Dynamics 305 Copilot.
+
+00:03:33.080 --> 00:03:35.380
+Ela não adivinha pela linguagem corporal.
+
+00:03:35.640 --> 00:03:38.980
+Ela analisa o tom, o fraseado, o ritmo e o peso emocional por trás de cada linha.
+
+00:03:39.960 --> 00:03:43.900
+Onde você pode se desgastar após um dia inteiro no telefone ou chat, o algoritmo não sofre fadiga.
+
+00:03:44.360 --> 00:03:46.020
+Ele continua coletando sinais durante todo o tempo.
+
+00:03:46.680 --> 00:03:52.040
+Na superfície, a mecânica parece simples, mas por trás trata-se de processamento de linguagem natural combinado com análise de sentimento.
+
+00:03:52.840 --> 00:03:58.740
+As conversas, faladas ou digitadas, são decompostas e avaliadas não apenas pelo significado, mas pelo contexto emocional.
+
+00:03:58.740 --> 00:04:03.000
+Eu preciso de ajuda, é registrado de forma diferente de por que eu sempre tenho que ligar pra vocês por causa disso.
+
+00:04:03.740 --> 00:04:06.380
+A primeira é neutra, a segunda carrega uma frustração implícita.
+
+00:04:07.160 --> 00:04:09.160
+Essas camadas são exatamente o que o sistema aprende a ler.
+
+00:04:09.920 --> 00:04:11.780
+Agora imagine estar 8 horas dentro de um turno.
+
+00:04:12.260 --> 00:04:15.500
+Você lidou com faturamento, uma troca de hardware, uma redefinição de sim que deu errado,
+
+00:04:15.920 --> 00:04:18.140
+e um cliente que se recusa a seguir os passos que você já enviou por e-mail.
+
+00:04:18.740 --> 00:04:19.840
+Nesse momento, seu foco diminui.
+
+00:04:20.200 --> 00:04:22.860
+Se ele é rápido demais, você pede que ele leve aumento na tensão durante uma chamada.
+
+00:04:22.860 --> 00:04:25.060
+Enquanto isso, a IA não tem pontos cegos como esse.
+
+00:04:25.400 --> 00:04:29.500
+Ele detecta o chat em letras maiúsculas como inaceitável três vezes e reconhece o risco de cancelamento.
+
+00:04:30.240 --> 00:04:34.220
+Em vez de esperar que você o encontre por acaso, a plataforma coloca esse caso no topo da fila.
+
+00:04:34.880 --> 00:04:36.040
+É aí que o roteamento muda o jogo.
+
+00:04:36.820 --> 00:04:38.100
+Tradicionalmente, funciona por ordem de chegada.
+
+00:04:38.760 --> 00:04:41.020
+Quem estiver na fila é atendido independentemente da urgência.
+
+00:04:41.700 --> 00:04:43.520
+Com modelos de sentimento ativos, a ordem muda.
+
+00:04:44.380 --> 00:04:48.520
+Casos urgentes ou emocionais aparecem antes e vão para os agentes mais capacitados a resolvê-los.
+
+00:04:49.220 --> 00:04:52.420
+Para visualizar, imagine o sistema colocando um marcador luminoso no painel,
+
+00:04:52.860 --> 00:04:56.320
+A mensagem é que este confronto é de nível chefão, não inimigo comum.
+
+00:04:56.880 --> 00:04:59.020
+O princípio não é místico, é reconhecimento de padrões aplicado.
+
+00:04:59.740 --> 00:05:03.760
+O 365 processa texto e voz via PNL e análise de sentimento,
+
+00:05:03.920 --> 00:05:07.340
+transformando palavras, frases e até pausas em sinais úteis e até pausas.
+
+00:05:07.520 --> 00:05:08.900
+Esses sinais orientam o roteamento.
+
+00:05:09.400 --> 00:05:10.640
+Cliente irritado menciona cancelamento?
+
+00:05:11.140 --> 00:05:11.500
+Escalhe.
+
+00:05:11.980 --> 00:05:13.300
+Conta de alto valor e está impaciente?
+
+00:05:13.820 --> 00:05:14.200
+Priorize.
+
+00:05:14.640 --> 00:05:16.240
+E os supervisores não ficam de fora do processo.
+
+00:05:16.720 --> 00:05:17.720
+Eles podem ajustar essas regras.
+
+00:05:18.220 --> 00:05:20.060
+Algumas equipes priorizam cliente de alto valor,
+
+00:05:20.060 --> 00:05:22.440
+outras dão prioridade máxima a riscos de cancelamento.
+
+00:05:22.860 --> 00:05:25.500
+É apenas configuração, não uma caixa preta que decide sozinho.
+
+00:05:26.220 --> 00:05:28.780
+E embora os recursos chamativos foquem em palavras-chave,
+
+00:05:28.900 --> 00:05:30.220
+voz e análise de transcrições,
+
+00:05:30.360 --> 00:05:33.640
+ele também detecta pausas longas ou grupos repetidos de termos exaltados.
+
+00:05:34.660 --> 00:05:35.940
+Nem sempre são alertas fixos,
+
+00:05:36.000 --> 00:05:37.940
+mas são sinais adicionais que o modelo considera.
+
+00:05:39.020 --> 00:05:41.280
+Onde você poderia atribuir uma pausa, ruído de fundo,
+
+00:05:41.400 --> 00:05:43.780
+o sistema marca como algo a ser notado no contexto geral.
+
+00:05:44.600 --> 00:05:46.520
+Ao acessar a caixa de entrada ou a fila de chamadas,
+
+00:05:46.600 --> 00:05:47.300
+você não começa no escuro.
+
+00:05:47.300 --> 00:05:49.300
+Já existe um indicador de sentimento,
+
+00:05:49.400 --> 00:05:51.240
+uma leitura rápida de se a pessoa está calma,
+
+00:05:51.300 --> 00:05:52.520
+irritada ou pronta para escalar.
+
+00:05:53.260 --> 00:05:55.880
+Ele não fala por você, mas avisa que a situação está esquentando.
+
+00:05:56.440 --> 00:05:59.120
+Talvez pular o roteiro padrão e ir direto para a resolução do problema.
+
+00:05:59.780 --> 00:06:02.280
+Esse sinal antecipado evita repetições desnecessárias,
+
+00:06:02.380 --> 00:06:04.460
+poupando ambos os lados de um novo ciclo de frustração.
+
+00:06:05.160 --> 00:06:06.640
+Pode parecer uma otimização pequena,
+
+00:06:06.720 --> 00:06:07.640
+mas a escala muda tudo.
+
+00:06:08.380 --> 00:06:09.500
+Em milhares de contatos,
+
+00:06:09.820 --> 00:06:11.660
+a triagem por IA reduz tempos de espera,
+
+00:06:11.900 --> 00:06:13.660
+encaminha casos de alto risco a gente sínores,
+
+00:06:13.660 --> 00:06:16.860
+e diminui o estresse por não ter que adivinhar onde focar
+
+00:06:16.860 --> 00:06:18.960
+a filas ineficientes e desaparados.
+
+00:06:19.160 --> 00:06:21.660
+Em vez disso, são substituídas por filas baseadas em intenção,
+
+00:06:21.820 --> 00:06:24.020
+onde as situações mais críticas vão exatamente para onde deveria.
+
+00:06:24.260 --> 00:06:26.300
+E quando você tem esse mapa de calor emocional rodando,
+
+00:06:26.400 --> 00:06:27.120
+sua perspectiva muda.
+
+00:06:27.580 --> 00:06:29.680
+Detecção de sentimento não serve apenas para identificar problema.
+
+00:06:30.140 --> 00:06:32.360
+Serve para libertar você para agir estrategicamente.
+
+00:06:33.220 --> 00:06:35.120
+Porque quando a IA vigia picos de frustração,
+
+00:06:35.240 --> 00:06:36.340
+o próximo passo óbvio é
+
+00:06:36.340 --> 00:06:38.080
+o que mais ela pode tirar do seu prato.
+
+00:06:38.640 --> 00:06:39.940
+Será que ele daria conta de copiar dados,
+
+00:06:40.020 --> 00:06:42.320
+registrar detalhes e lidar com a carga interminável de formulários de chamada?
+
+00:06:42.320 --> 00:06:44.120
+Essa é a próxima parte da história,
+
+00:06:44.220 --> 00:06:46.320
+onde esses sistemas deixam de apenas ler sentimentos
+
+00:06:46.320 --> 00:06:48.040
+e passam a agir como estagiários incansáveis,
+
+00:06:48.160 --> 00:06:50.000
+cuidando da papelada para que sua equipe não precise.
+
+00:06:51.080 --> 00:06:53.600
+Agentes autônomos, seus novos estagiários de suporte que não esquecem não.
+
+00:06:54.040 --> 00:06:54.720
+Pense dessa forma.
+
+00:06:55.100 --> 00:06:57.740
+A detecção de sentimento indica quais casos estão ficando críticos.
+
+00:06:58.440 --> 00:07:00.440
+Mas o que acontece quando esses casos chegam à sua fila?
+
+00:07:01.080 --> 00:07:02.320
+É aí que entram os agentes autônomos.
+
+00:07:03.040 --> 00:07:04.900
+Estagiários digitais dentro da Dynamics 365,
+
+00:07:05.580 --> 00:07:06.760
+que cuidam do trabalho repetitivo
+
+00:07:06.760 --> 00:07:08.620
+para você não precisar microgerenciar a parte burocrática.
+
+00:07:08.620 --> 00:07:10.420
+Eles não lideram a equipe,
+
+00:07:10.520 --> 00:07:12.160
+mas mantêm tudo organizado e consistente,
+
+00:07:12.280 --> 00:07:13.940
+poupando seu time do trabalho braçal.
+
+00:07:14.440 --> 00:07:16.560
+A Microsoft os divide em três tipos principais,
+
+00:07:16.640 --> 00:07:17.700
+o agente de gestão de casos,
+
+00:07:17.860 --> 00:07:19.020
+o agente de intenção do cliente
+
+00:07:19.020 --> 00:07:20.700
+e o agente de gestão de conhecimento do cliente.
+
+00:07:21.120 --> 00:07:23.420
+A gestão de casos foca na criação e atualização de chamada.
+
+00:07:24.300 --> 00:07:26.540
+A intenção do cliente cria uma biblioteca de intenções
+
+00:07:26.540 --> 00:07:27.820
+a partir de conversas históricas,
+
+00:07:27.960 --> 00:07:30.240
+para que o sistema preveja melhor o que o cliente realmente precisa.
+
+00:07:30.620 --> 00:07:32.760
+A gestão de conhecimento, por sua vez,
+
+00:07:32.920 --> 00:07:36.000
+gera e mantém os artigos nos quais sua equipe se apoia todos os dias.
+
+00:07:36.000 --> 00:07:39.020
+Cada um automatiza uma parte específica do ciclo de atendimento.
+
+00:07:39.500 --> 00:07:40.720
+Vamos começar pela gestão de casos.
+
+00:07:41.160 --> 00:07:43.840
+Normalmente, cada chamado exige que você digite os detalhes do cliente,
+
+00:07:43.940 --> 00:07:45.380
+defina categorias e ajuste horários.
+
+00:07:46.320 --> 00:07:48.180
+A IA processa o texto, preenche campos
+
+00:07:48.180 --> 00:07:50.100
+e organiza as entradas com as tags corretas.
+
+00:07:51.140 --> 00:07:52.120
+Ao configurar a Redis,
+
+00:07:52.300 --> 00:07:53.840
+ela pode disparar ações de acompanhamento
+
+00:07:53.840 --> 00:07:55.720
+ou até resolver automaticamente cenários simples,
+
+00:07:56.020 --> 00:07:58.540
+como fechar um caso assim que o cliente confirma a entrega.
+
+00:07:59.240 --> 00:08:00.020
+Mas aqui vai um aviso.
+
+00:08:00.920 --> 00:08:01.720
+Durante a implementação,
+
+00:08:01.800 --> 00:08:03.760
+a maioria das equipes mantém essas etapas em modo de assistência.
+
+00:08:03.760 --> 00:08:06.480
+Isso significa que o agente redige as atualizações
+
+00:08:06.480 --> 00:08:07.460
+e o humano as confirma.
+
+00:08:07.880 --> 00:08:09.260
+A autonomia total não precisa ser tudo ou nada.
+
+00:08:09.720 --> 00:08:11.940
+Se aumenta a confiança à medida que vê o sistema operando corretamente.
+
+00:08:12.700 --> 00:08:14.260
+A seguir, o agente de gestão de conhecimento.
+
+00:08:14.780 --> 00:08:16.520
+Bases de conhecimento frequentemente viram caos.
+
+00:08:17.200 --> 00:08:18.580
+Duplicatas, rascunhos inacabados
+
+00:08:18.580 --> 00:08:20.780
+e conteúdo desatualizado espalhado por toda parte.
+
+00:08:21.660 --> 00:08:22.860
+A IA verifica o contexto,
+
+00:08:23.020 --> 00:08:24.200
+sinaliza entradas duplicadas
+
+00:08:24.200 --> 00:08:25.900
+e roteia automaticamente o conteúdo
+
+00:08:25.900 --> 00:08:27.860
+como orientação interna ou FAQ público.
+
+00:08:29.380 --> 00:08:30.540
+Administradores podem definir essa vaga.
+
+00:08:30.540 --> 00:08:32.920
+Um rascunho da IA não pode ser publicado externamente
+
+00:08:32.920 --> 00:08:34.160
+sem a aprovação de um revisor, por exemplo.
+
+00:08:34.520 --> 00:08:35.420
+Comece de forma conservadora.
+
+00:08:35.800 --> 00:08:37.640
+Deixe o agente criar rascunhos e limpar a bagunça
+
+00:08:37.640 --> 00:08:39.980
+enquanto sua equipe decide se um novo artigo está pronto para o público.
+
+00:08:40.720 --> 00:08:41.800
+Assim que se sentir confortável,
+
+00:08:41.880 --> 00:08:43.140
+você pode relaxar essas restrições
+
+00:08:43.140 --> 00:08:45.080
+sem que a limpeza vire uma revisão de comitê de duas semanas.
+
+00:08:45.500 --> 00:08:46.680
+Depois temos a intenção do cliente.
+
+00:08:46.960 --> 00:08:49.920
+Este serve para catalogar o que os clientes estão realmente pedindo ao longo do tempo.
+
+00:08:50.940 --> 00:08:52.320
+Em vez de analisar transcrições
+
+00:08:52.320 --> 00:08:53.860
+tentando adivinhar a intenção cobrança
+
+00:08:53.860 --> 00:08:56.040
+versus garantia versus redefinição de 100 IA,
+
+00:08:56.160 --> 00:08:58.300
+constrói uma biblioteca de intenções entre todos os canais.
+
+00:08:58.300 --> 00:09:00.840
+Quando um novo caso corresponde a um padrão conhecido,
+
+00:09:00.920 --> 00:09:02.380
+ele pode recomendar os próximos passos
+
+00:09:02.380 --> 00:09:03.640
+ou pré-preencher resoluções prováveis.
+
+00:09:03.840 --> 00:09:05.220
+Novamente, a confiança vem da verificação.
+
+00:09:05.680 --> 00:09:06.640
+Mantenha-o no modo de rascunho
+
+00:09:06.640 --> 00:09:08.020
+para que você possa confirmar suas decisões.
+
+00:09:08.620 --> 00:09:10.380
+Com o tempo, à medida que a precisão melhora,
+
+00:09:10.560 --> 00:09:12.060
+você começa a acelerar as respostas
+
+00:09:12.060 --> 00:09:13.200
+sem perder o controle da qualidade.
+
+00:09:13.900 --> 00:09:15.600
+O resultado entre todos os três agentes é semelhante.
+
+00:09:16.020 --> 00:09:17.140
+Menos tempo alternando janelas,
+
+00:09:17.240 --> 00:09:18.260
+mais tempo realmente interagindo.
+
+00:09:18.300 --> 00:09:20.140
+A IA cuida das entradas de log,
+
+00:09:20.220 --> 00:09:22.580
+correspondência de intenções e organização do conhecimento em segundo plano.
+
+00:09:23.020 --> 00:09:24.080
+Você cuida do lado humano,
+
+00:09:24.460 --> 00:09:26.140
+ouvindo, sendo empático e decidindo
+
+00:09:26.140 --> 00:09:27.680
+como resolver o problema real.
+
+00:09:28.420 --> 00:09:29.300
+Essa transição é importante
+
+00:09:29.300 --> 00:09:30.840
+porque economiza minutos de cada interação.
+
+00:09:31.800 --> 00:09:33.400
+Multiplique isso por centenas de casos
+
+00:09:33.400 --> 00:09:35.040
+e, de repente, a carga de trabalho
+
+00:09:35.040 --> 00:09:36.600
+parece menos com um esforço frenético
+
+00:09:36.600 --> 00:09:37.920
+e mais com uma estratégia direcionada.
+
+00:09:38.400 --> 00:09:39.480
+Claro que a governança não é opcional.
+
+00:09:40.200 --> 00:09:41.360
+Trate a implementação do agente
+
+00:09:41.360 --> 00:09:42.740
+como trataria um funcionário júnior.
+
+00:09:43.500 --> 00:09:45.080
+Você não daria direito de administrador global
+
+00:09:45.080 --> 00:09:46.500
+a um colega recém-chegado no primeiro dia.
+
+00:09:46.920 --> 00:09:47.540
+Começa e aplique aqui.
+
+00:09:48.200 --> 00:09:49.440
+Ative requisitos de auditoria.
+
+00:09:49.700 --> 00:09:50.840
+Mantenha fechamentos automáticos
+
+00:09:50.840 --> 00:09:52.420
+sobre aprovação até confiar no sistema
+
+00:09:52.420 --> 00:09:54.500
+e monitora o desempenho durante as primeiras semanas.
+
+00:09:55.700 --> 00:09:56.660
+Ao incluir supervisão,
+
+00:09:56.740 --> 00:09:58.140
+você garante que a IA apoie a equipe
+
+00:09:58.140 --> 00:09:59.120
+em vez de surpreendê-la.
+
+00:10:00.160 --> 00:10:00.780
+Bem utilizados,
+
+00:10:00.860 --> 00:10:01.720
+esses assistentes digitais
+
+00:10:01.720 --> 00:10:03.420
+não suportem as partes complicadas do serviço,
+
+00:10:03.500 --> 00:10:04.060
+retornos não feitos,
+
+00:10:04.160 --> 00:10:05.020
+categorias não marcadas,
+
+00:10:05.140 --> 00:10:06.240
+tickets que desaparecem no limbo.
+
+00:10:06.660 --> 00:10:07.740
+Eles mantêm o registro preciso
+
+00:10:07.740 --> 00:10:08.860
+e a base de conhecimento organizada.
+
+00:10:09.260 --> 00:10:10.060
+Mas eles não estão aqui
+
+00:10:10.060 --> 00:10:11.340
+para substituir o julgamento ou a empatia.
+
+00:10:12.000 --> 00:10:13.080
+Eles apenas limpam o caminho
+
+00:10:13.080 --> 00:10:14.840
+para que os humanos possam gastar a sua energia
+
+00:10:14.840 --> 00:10:16.220
+onde ela realmente muda os resultados.
+
+00:10:17.100 --> 00:10:17.740
+Tudo isso é útil,
+
+00:10:17.880 --> 00:10:19.340
+mas apenas se você puder entrar
+
+00:10:19.340 --> 00:10:20.360
+em uma interação com o cliente
+
+00:10:20.360 --> 00:10:21.620
+com o histórico certo em mãos.
+
+00:10:22.420 --> 00:10:23.880
+A criação do caso é uma coisa,
+
+00:10:23.980 --> 00:10:24.660
+mas você ainda precisa
+
+00:10:24.660 --> 00:10:26.080
+de um contexto rápido e relevante
+
+00:10:26.080 --> 00:10:26.960
+no momento em que a chamada
+
+00:10:26.960 --> 00:10:27.880
+ou chat começa.
+
+00:10:28.560 --> 00:10:29.080
+Caso contrário,
+
+00:10:29.140 --> 00:10:30.060
+você está pedindo ao seu cliente
+
+00:10:30.060 --> 00:10:30.780
+para começar do zero.
+
+00:10:31.540 --> 00:10:32.860
+E poucas coisas esgotam a paciência
+
+00:10:32.860 --> 00:10:33.360
+mais rápido
+
+00:10:33.360 --> 00:10:34.340
+do que repetir a mesma história
+
+00:10:34.340 --> 00:10:34.860
+cinco vezes
+
+00:10:34.860 --> 00:10:35.960
+para cinco pessoas diferentes.
+
+00:10:37.080 --> 00:10:37.860
+Superpoderes de conversação
+
+00:10:37.860 --> 00:10:38.320
+nunca perguntam
+
+00:10:38.320 --> 00:10:39.000
+pode repetir isso?
+
+00:10:39.480 --> 00:10:39.840
+Novamente,
+
+00:10:39.960 --> 00:10:40.820
+quando os agentes recebem
+
+00:10:40.820 --> 00:10:41.800
+metade de um quebra-cabeça,
+
+00:10:41.880 --> 00:10:42.500
+o progresso diminui.
+
+00:10:42.940 --> 00:10:43.780
+É por isso que o Copilot
+
+00:10:43.780 --> 00:10:44.820
+arma você com o que gosta
+
+00:10:44.820 --> 00:10:46.280
+de chamar de superpoderes de conversação,
+
+00:10:46.400 --> 00:10:47.300
+ferramentas projetadas
+
+00:10:47.300 --> 00:10:48.440
+para manter o contexto intacto
+
+00:10:48.440 --> 00:10:49.500
+e impedir que você se atrapalhe
+
+00:10:49.500 --> 00:10:50.200
+durante a chamada.
+
+00:10:51.040 --> 00:10:51.860
+Em vez de fazer você rolar
+
+00:10:51.860 --> 00:10:52.840
+por logs amaranhados,
+
+00:10:52.920 --> 00:10:53.660
+o Copilot compila
+
+00:10:53.660 --> 00:10:54.880
+resumos de conversa estruturados.
+
+00:10:55.460 --> 00:10:56.420
+Cada formulário de caso
+
+00:10:56.420 --> 00:10:57.160
+inclui o essencial.
+
+00:10:57.660 --> 00:10:58.480
+Detalhes do cliente,
+
+00:10:58.820 --> 00:10:59.520
+produto em questão,
+
+00:10:59.640 --> 00:11:00.440
+histórico relevante
+
+00:11:00.440 --> 00:11:02.020
+e se o sentimento está calmo,
+
+00:11:02.140 --> 00:11:02.960
+tenso ou explosivo.
+
+00:11:03.820 --> 00:11:04.720
+Para chats e chamadas
+
+00:11:04.720 --> 00:11:05.600
+de voz transcritas,
+
+00:11:05.680 --> 00:11:06.620
+esses resumos estruturados
+
+00:11:06.620 --> 00:11:07.760
+economizam minutos de revisão.
+
+00:11:09.020 --> 00:11:09.420
+Operacionalmente,
+
+00:11:09.480 --> 00:11:09.940
+isso faz diferença.
+
+00:11:10.660 --> 00:11:11.180
+Menos busca,
+
+00:11:11.280 --> 00:11:12.540
+menos perguntas de verificação
+
+00:11:12.540 --> 00:11:13.560
+e movimento mais rápido
+
+00:11:13.560 --> 00:11:14.520
+para soluções reais.
+
+00:11:15.440 --> 00:11:15.860
+Pense nisso
+
+00:11:15.860 --> 00:11:16.920
+como entrar em uma nova sessão
+
+00:11:16.920 --> 00:11:17.720
+com um diário de campanha
+
+00:11:17.720 --> 00:11:18.640
+já esperando por você.
+
+00:11:19.140 --> 00:11:20.080
+Você não precisa folhear
+
+00:11:20.080 --> 00:11:20.880
+notas espalhadas
+
+00:11:20.880 --> 00:11:21.360
+para descobrir
+
+00:11:21.360 --> 00:11:21.900
+o que deu errado
+
+00:11:21.900 --> 00:11:22.580
+duas missões atrás.
+
+00:11:23.160 --> 00:11:24.420
+Você tem os principais eventos,
+
+00:11:24.540 --> 00:11:25.620
+resultados e humor expostos
+
+00:11:25.620 --> 00:11:26.180
+em um único olhar.
+
+00:11:27.180 --> 00:11:28.040
+Quando um cliente frustrado
+
+00:11:28.040 --> 00:11:29.120
+entra em contato por você,
+
+00:11:29.220 --> 00:11:30.080
+pode pular a que o elogido
+
+00:11:30.080 --> 00:11:31.520
+cada dia já nos falamos antes
+
+00:11:31.520 --> 00:11:32.380
+e em vez disso
+
+00:11:32.380 --> 00:11:33.340
+ir direto para a resolução.
+
+00:11:34.040 --> 00:11:34.640
+Mas os resumos
+
+00:11:34.640 --> 00:11:35.680
+são apenas metade da história.
+
+00:11:36.520 --> 00:11:37.440
+O Copilot também traz
+
+00:11:37.440 --> 00:11:38.220
+o fazer uma pergunta
+
+00:11:38.220 --> 00:11:39.160
+que é exatamente o que parece.
+
+00:11:40.000 --> 00:11:41.400
+Sem buscas booleanas rígidas,
+
+00:11:41.500 --> 00:11:42.620
+sem adivinhar frases exatas
+
+00:11:42.620 --> 00:11:43.600
+de alguma base de conhecimento
+
+00:11:43.600 --> 00:11:44.040
+empoeirada.
+
+00:11:44.860 --> 00:11:45.900
+Você pergunta naturalmente
+
+00:11:45.900 --> 00:11:46.660
+como se estivesse chamando
+
+00:11:46.660 --> 00:11:47.520
+um colega na mesa ou lá.
+
+00:11:48.920 --> 00:11:50.020
+Qual é a política de garantia
+
+00:11:50.020 --> 00:11:50.620
+para este modelo
+
+00:11:50.620 --> 00:11:51.240
+ou como escala
+
+00:11:51.240 --> 00:11:52.300
+uma reclamação de envio?
+
+00:11:53.500 --> 00:11:54.360
+A ferramenta responde
+
+00:11:54.360 --> 00:11:54.980
+buscando em base
+
+00:11:54.980 --> 00:11:55.940
+de conhecimento internos
+
+00:11:55.940 --> 00:11:56.640
+e se configurado
+
+00:11:56.640 --> 00:11:57.840
+em até cinco domínios externos
+
+00:11:57.840 --> 00:11:58.380
+confiáveis.
+
+00:11:59.440 --> 00:11:59.960
+Isso significa
+
+00:11:59.960 --> 00:12:01.020
+que você obtém respostas
+
+00:12:01.020 --> 00:12:01.640
+instantaneamente
+
+00:12:01.640 --> 00:12:02.300
+mesmo enquanto o cliente
+
+00:12:02.300 --> 00:12:02.800
+ainda está falando.
+
+00:12:03.600 --> 00:12:04.400
+O silêncio diminui
+
+00:12:04.400 --> 00:12:05.520
+e o suporte não trava
+
+00:12:05.520 --> 00:12:06.240
+enquanto você busca
+
+00:12:06.240 --> 00:12:07.380
+em manuais desatualizados.
+
+00:12:08.480 --> 00:12:09.380
+Com o resultado perfeito,
+
+00:12:09.480 --> 00:12:10.260
+o sistema até te entrega
+
+00:12:10.260 --> 00:12:10.900
+um artigo polido
+
+00:12:10.900 --> 00:12:11.800
+pronto para compartilhar
+
+00:12:11.800 --> 00:12:12.860
+direto com o cliente.
+
+00:12:13.480 --> 00:12:14.240
+Marca preservada,
+
+00:12:14.300 --> 00:12:14.960
+a política precisa,
+
+00:12:14.960 --> 00:12:16.040
+sem necessidade de reescrever.
+
+00:12:16.560 --> 00:12:17.140
+E não para por aí.
+
+00:12:17.720 --> 00:12:18.400
+Para manter o ritmo
+
+00:12:18.400 --> 00:12:18.900
+da conversa,
+
+00:12:18.960 --> 00:12:19.440
+o Copilot também
+
+00:12:19.440 --> 00:12:20.300
+redige respostas.
+
+00:12:21.200 --> 00:12:22.000
+Você pode digitar,
+
+00:12:22.120 --> 00:12:22.660
+fazer uma pergunta
+
+00:12:22.660 --> 00:12:23.300
+em linguagem livre,
+
+00:12:23.400 --> 00:12:24.540
+dar continuidade naturalmente
+
+00:12:24.540 --> 00:12:25.380
+e refinar a resposta.
+
+00:12:26.340 --> 00:12:26.980
+Peça ao Copilot
+
+00:12:26.980 --> 00:12:27.820
+para redigir chats
+
+00:12:27.820 --> 00:12:28.260
+ou e-mails
+
+00:12:28.260 --> 00:12:29.180
+com contexto embutido,
+
+00:12:29.260 --> 00:12:30.380
+depois edite antes de enviar.
+
+00:12:31.580 --> 00:12:32.320
+Visualize as fontes
+
+00:12:32.320 --> 00:12:32.780
+e conhecimento
+
+00:12:32.780 --> 00:12:33.500
+ao lado da resposta
+
+00:12:33.500 --> 00:12:34.340
+para que você e o cliente
+
+00:12:34.340 --> 00:12:35.080
+saibam de onde veio.
+
+00:12:35.940 --> 00:12:36.940
+Essas frases curtas
+
+00:12:36.940 --> 00:12:38.100
+podem não parecer chamativas,
+
+00:12:38.220 --> 00:12:38.880
+mas são a diferença
+
+00:12:38.880 --> 00:12:40.000
+entre o silêncio desajeitado
+
+00:12:40.000 --> 00:12:40.720
+e uma entrega fluida.
+
+00:12:40.720 --> 00:12:42.360
+A transparência cresce
+
+00:12:42.360 --> 00:12:43.160
+porque os clientes veem
+
+00:12:43.160 --> 00:12:43.920
+que você utiliza
+
+00:12:43.920 --> 00:12:44.740
+regras validadas
+
+00:12:44.740 --> 00:12:45.900
+em vez de respostas vagas.
+
+00:12:46.140 --> 00:12:47.080
+E você não fica preso
+
+00:12:47.080 --> 00:12:48.280
+dando Ctrl-C em 6 weeks
+
+00:12:48.280 --> 00:12:49.540
+apenas para aparecer preparado.
+
+00:12:50.000 --> 00:12:50.260
+Claro,
+
+00:12:50.340 --> 00:12:51.440
+a governança não desaparece.
+
+00:12:52.080 --> 00:12:53.240
+A IA redige respostas
+
+00:12:53.240 --> 00:12:54.060
+com base no que sabe,
+
+00:12:54.140 --> 00:12:55.280
+mas você ainda deve revisar
+
+00:12:55.280 --> 00:12:56.280
+antes de enviar.
+
+00:12:56.860 --> 00:12:57.520
+Isso é bom senso
+
+00:12:57.520 --> 00:12:58.600
+e uma prática recomendada.
+
+00:12:58.700 --> 00:12:59.500
+Como todo administrador
+
+00:12:59.500 --> 00:13:00.340
+de sistemas aprende,
+
+00:13:00.780 --> 00:13:01.200
+confie,
+
+00:13:01.360 --> 00:13:01.920
+mas verifique.
+
+00:13:03.360 --> 00:13:03.980
+Deixe a máquina
+
+00:13:03.980 --> 00:13:04.660
+preparar o terreno,
+
+00:13:04.760 --> 00:13:05.640
+mas tome a decisão final
+
+00:13:05.640 --> 00:13:06.280
+antes que a mensagem
+
+00:13:06.280 --> 00:13:07.220
+chegue à caixa de entrada
+
+00:13:07.220 --> 00:13:07.700
+do cliente.
+
+00:13:07.700 --> 00:13:08.560
+O resultado
+
+00:13:08.560 --> 00:13:09.980
+Os agentes permanecem
+
+00:13:09.980 --> 00:13:11.000
+concentrados no fluxo
+
+00:13:11.000 --> 00:13:11.500
+da conversa.
+
+00:13:11.580 --> 00:13:12.120
+Os clientes se sentem
+
+00:13:12.120 --> 00:13:12.940
+a ouvidos sem atrasos
+
+00:13:12.940 --> 00:13:13.340
+e os casos
+
+00:13:13.340 --> 00:13:14.000
+param de se estenderem
+
+00:13:14.000 --> 00:13:14.780
+em ciclos intermináveis
+
+00:13:14.780 --> 00:13:15.420
+e de espere um pouco
+
+00:13:15.420 --> 00:13:16.280
+enquanto verifico.
+
+00:13:16.980 --> 00:13:18.040
+Você não fica alternando
+
+00:13:18.040 --> 00:13:18.540
+entre janelas
+
+00:13:18.540 --> 00:13:19.160
+ou pedindo desculpas
+
+00:13:19.160 --> 00:13:19.880
+por falta de contexto.
+
+00:13:20.220 --> 00:13:20.920
+Você está ouvindo,
+
+00:13:21.020 --> 00:13:21.880
+respondendo e movendo
+
+00:13:21.880 --> 00:13:22.820
+o ticket para o fechamento
+
+00:13:22.820 --> 00:13:23.760
+com as informações certas
+
+00:13:23.760 --> 00:13:24.140
+em mãos.
+
+00:13:24.840 --> 00:13:25.300
+Para o cliente,
+
+00:13:25.380 --> 00:13:25.980
+parece perfeito
+
+00:13:25.980 --> 00:13:26.880
+como se você já tivesse
+
+00:13:26.880 --> 00:13:27.740
+as regras decoradas.
+
+00:13:28.500 --> 00:13:29.000
+Essa mudança
+
+00:13:29.000 --> 00:13:29.700
+transforma atendimento
+
+00:13:29.700 --> 00:13:30.080
+em escala.
+
+00:13:30.580 --> 00:13:31.180
+Cada encontro
+
+00:13:31.180 --> 00:13:32.200
+flui em vez de tropeçar.
+
+00:13:32.920 --> 00:13:33.300
+Sua equipe
+
+00:13:33.300 --> 00:13:34.080
+preserva o foco
+
+00:13:34.080 --> 00:13:35.000
+porque o trabalho braçal
+
+00:13:35.000 --> 00:13:36.100
+de lembrar e coletar dados
+
+00:13:36.100 --> 00:13:36.700
+é resolvido.
+
+00:13:37.320 --> 00:13:38.040
+Os clientes apreciam
+
+00:13:38.040 --> 00:13:38.640
+a continuidade
+
+00:13:38.640 --> 00:13:39.580
+porque você não interrompe
+
+00:13:39.580 --> 00:13:40.200
+com repetições
+
+00:13:40.200 --> 00:13:41.340
+nem rola com longos silêncios
+
+00:13:41.340 --> 00:13:42.000
+e coletivamente
+
+00:13:42.000 --> 00:13:43.100
+a temida pergunta
+
+00:13:43.100 --> 00:13:44.360
+pode repetir seu problema?
+
+00:13:44.820 --> 00:13:45.740
+Pode repetir seu problema.
+
+00:13:46.080 --> 00:13:46.760
+Cai no esquecimento
+
+00:13:46.760 --> 00:13:47.760
+junto com fitas de backup
+
+00:13:47.760 --> 00:13:48.640
+e tons de discagem.
+
+00:13:49.520 --> 00:13:50.600
+Esse é o verdadeiro poder
+
+00:13:50.600 --> 00:13:51.260
+dos superpoderes
+
+00:13:51.260 --> 00:13:51.880
+de conversação.
+
+00:13:52.000 --> 00:13:53.160
+Não apenas cortar repetições
+
+00:13:53.160 --> 00:13:54.240
+mas manter todos
+
+00:13:54.240 --> 00:13:55.360
+alinhados em tempo real.
+
+00:13:56.220 --> 00:13:56.940
+E uma vez que o diálogo
+
+00:13:56.940 --> 00:13:57.480
+flui tão bem
+
+00:13:57.480 --> 00:13:58.420
+você pode começar a pensar
+
+00:13:58.420 --> 00:13:59.340
+na transição maior.
+
+00:14:00.420 --> 00:14:01.220
+Como seria se todo
+
+00:14:01.220 --> 00:14:01.900
+contact center
+
+00:14:01.900 --> 00:14:02.660
+deixasse de esperar
+
+00:14:02.660 --> 00:14:03.100
+em filas
+
+00:14:03.100 --> 00:14:03.820
+para realmente prever
+
+00:14:03.820 --> 00:14:04.660
+quem precisa de ajuda
+
+00:14:04.660 --> 00:14:05.060
+primeiro.
+
+00:14:06.000 --> 00:14:07.020
+De filas de chamadas
+
+00:14:07.020 --> 00:14:07.520
+para mecanismos
+
+00:14:07.520 --> 00:14:07.900
+de engajamento.
+
+00:14:08.340 --> 00:14:09.320
+Imagine o modelo antigo.
+
+00:14:09.860 --> 00:14:10.560
+As filas funcionam
+
+00:14:10.560 --> 00:14:11.200
+como uma fila de bar.
+
+00:14:11.260 --> 00:14:11.700
+Quem chega primeiro
+
+00:14:11.700 --> 00:14:12.200
+é atendido primeiro.
+
+00:14:12.560 --> 00:14:13.400
+Não importava se era
+
+00:14:13.400 --> 00:14:14.400
+uma dúvida ou uma crise
+
+00:14:14.400 --> 00:14:14.760
+iminente
+
+00:14:14.760 --> 00:14:16.000
+todos esperavam da mesma forma.
+
+00:14:16.540 --> 00:14:17.220
+Os agentes pegavam
+
+00:14:17.220 --> 00:14:17.800
+o próximo número
+
+00:14:17.800 --> 00:14:18.840
+e se preparavam para o impacto.
+
+00:14:19.260 --> 00:14:19.920
+Isso era atendimento
+
+00:14:19.920 --> 00:14:20.480
+sem contexto
+
+00:14:20.480 --> 00:14:21.520
+e todos pagavam o preço.
+
+00:14:22.300 --> 00:14:23.180
+A abordagem moderna
+
+00:14:23.180 --> 00:14:23.660
+vira o jogo
+
+00:14:23.660 --> 00:14:24.620
+com roteamento baseado
+
+00:14:24.620 --> 00:14:25.220
+em sentimento
+
+00:14:25.220 --> 00:14:26.160
+análise preditiva
+
+00:14:26.160 --> 00:14:27.560
+orquestração omniscienial
+
+00:14:27.560 --> 00:14:28.340
+e painéis de previsão
+
+00:14:28.340 --> 00:14:29.160
+para supervisores.
+
+00:14:29.720 --> 00:14:30.120
+Se não apenas
+
+00:14:30.120 --> 00:14:30.840
+organiza chamados
+
+00:14:30.840 --> 00:14:31.560
+você constrói um plano
+
+00:14:31.560 --> 00:14:32.260
+de ação em tempo real.
+
+00:14:32.960 --> 00:14:33.700
+Em vez de receber
+
+00:14:33.700 --> 00:14:34.480
+pedidos a cegas
+
+00:14:34.480 --> 00:14:35.260
+a plataforma atua
+
+00:14:35.260 --> 00:14:36.200
+como motor de triagem
+
+00:14:36.200 --> 00:14:36.980
+marcando urgência
+
+00:14:36.980 --> 00:14:37.660
+emoção e valor
+
+00:14:37.660 --> 00:14:38.560
+para que os casos certos
+
+00:14:38.560 --> 00:14:39.200
+cheguem aos agentes
+
+00:14:39.200 --> 00:14:40.200
+certos no momento certo.
+
+00:14:40.700 --> 00:14:41.220
+Veja o roteamento
+
+00:14:41.220 --> 00:14:41.840
+baseado nesse vídeo.
+
+00:14:42.220 --> 00:14:42.680
+Se o sistema
+
+00:14:42.680 --> 00:14:43.720
+sinaliza frustração
+
+00:14:43.720 --> 00:14:44.780
+esse caso pula a fila
+
+00:14:44.780 --> 00:14:45.160
+para um agente
+
+00:14:45.160 --> 00:14:46.080
+treinado em escalonamento.
+
+00:14:46.560 --> 00:14:47.240
+Um agente de alto valor
+
+00:14:47.240 --> 00:14:48.520
+usando linguagem de alerta
+
+00:14:48.520 --> 00:14:49.100
+ele é colocado
+
+00:14:49.100 --> 00:14:50.040
+à frente de solicitações
+
+00:14:50.040 --> 00:14:50.640
+de baixo impacto
+
+00:14:50.640 --> 00:14:51.320
+para que sua paciência
+
+00:14:51.320 --> 00:14:51.900
+não se esgote.
+
+00:14:52.680 --> 00:14:52.980
+Os agentes
+
+00:14:52.980 --> 00:14:53.560
+não ficam adivinhando.
+
+00:14:53.980 --> 00:14:54.920
+Eles são posicionados
+
+00:14:54.920 --> 00:14:56.120
+onde podem difundir situações
+
+00:14:56.120 --> 00:14:56.620
+antes que alguém
+
+00:14:56.620 --> 00:14:57.380
+desista com raiva.
+
+00:14:58.060 --> 00:14:58.760
+A análise preditiva
+
+00:14:58.760 --> 00:14:59.620
+então adiciona a previsão.
+
+00:15:00.100 --> 00:15:01.080
+Ao processar o tráfego
+
+00:15:01.080 --> 00:15:02.240
+ao vivo e padrões históricos
+
+00:15:02.240 --> 00:15:03.440
+a plataforma detecta riscos
+
+00:15:03.440 --> 00:15:04.440
+antes que vire uma bola de neve.
+
+00:15:04.620 --> 00:15:05.420
+Se um defeito no produto
+
+00:15:05.420 --> 00:15:06.600
+causa chamadas em uma região
+
+00:15:06.600 --> 00:15:07.460
+alertas de risco
+
+00:15:07.460 --> 00:15:08.180
+de cancelamento
+
+00:15:08.180 --> 00:15:09.160
+aparecem sem esperar
+
+00:15:09.160 --> 00:15:10.260
+por um relatório semanal.
+
+00:15:10.920 --> 00:15:11.680
+E a mesma matemática
+
+00:15:11.680 --> 00:15:12.740
+pode identificar oportunidades
+
+00:15:12.740 --> 00:15:13.400
+não apenas ameaça.
+
+00:15:14.120 --> 00:15:15.120
+Alguém ligando com interesse
+
+00:15:15.120 --> 00:15:16.340
+em um acessório ou serviço
+
+00:15:16.340 --> 00:15:18.420
+o sistema pode direcionar
+
+00:15:18.420 --> 00:15:18.840
+a conversa
+
+00:15:18.840 --> 00:15:19.600
+para uma venda adicional
+
+00:15:19.600 --> 00:15:20.560
+no momento exato.
+
+00:15:21.640 --> 00:15:22.340
+Supervisores ganham
+
+00:15:22.340 --> 00:15:23.400
+algo ainda mais valioso
+
+00:15:23.400 --> 00:15:24.120
+tempo.
+
+00:15:25.180 --> 00:15:25.900
+Painéis de previsão
+
+00:15:25.900 --> 00:15:26.760
+mostram quando é provável
+
+00:15:26.760 --> 00:15:27.520
+que o acúmulo de trabalhão.
+
+00:15:28.020 --> 00:15:28.980
+Em vez de descobrir o caos
+
+00:15:28.980 --> 00:15:29.840
+horas tarde e demais
+
+00:15:29.840 --> 00:15:31.040
+os líderes veem a curva
+
+00:15:31.040 --> 00:15:31.900
+de entrada de trabalho
+
+00:15:31.900 --> 00:15:32.640
+antes do previsto.
+
+00:15:33.700 --> 00:15:34.680
+Se a equipe estiver reduzida
+
+00:15:34.680 --> 00:15:35.320
+daqui a três horas
+
+00:15:35.320 --> 00:15:36.100
+os túneis podem mudar
+
+00:15:36.100 --> 00:15:37.240
+antes que a fila sobrecarregue.
+
+00:15:37.780 --> 00:15:38.620
+Isso é mais do que um benefício
+
+00:15:38.620 --> 00:15:39.240
+de qualidade de vida.
+
+00:15:39.720 --> 00:15:40.520
+É um seguro operacional
+
+00:15:40.520 --> 00:15:41.360
+que impede que o moral
+
+00:15:41.360 --> 00:15:42.220
+e os níveis de serviço
+
+00:15:42.220 --> 00:15:42.880
+entrem em colapso
+
+00:15:42.880 --> 00:15:43.840
+sob picos repentinos.
+
+00:15:44.520 --> 00:15:45.040
+A orquestração
+
+00:15:45.040 --> 00:15:46.120
+mini-channel une tudo isso.
+
+00:15:46.560 --> 00:15:47.600
+Os clientes não pensam em silos.
+
+00:15:48.180 --> 00:15:49.120
+Eles pulam do SMS
+
+00:15:49.120 --> 00:15:50.020
+para o chat e para a voz
+
+00:15:50.020 --> 00:15:50.700
+sem se importar
+
+00:15:50.700 --> 00:15:51.760
+com qual sistema de back-end
+
+00:15:51.760 --> 00:15:52.300
+você usa.
+
+00:15:53.260 --> 00:15:54.900
+O Dynamics 365 Contact Center
+
+00:15:54.900 --> 00:15:55.820
+integra esses caminhos
+
+00:15:55.820 --> 00:15:56.700
+para que os agentes recebam
+
+00:15:56.700 --> 00:15:57.640
+um registro consistente
+
+00:15:57.640 --> 00:15:58.820
+e não fragmentos isolados.
+
+00:16:00.040 --> 00:16:00.900
+Uma conversa por chat
+
+00:16:00.900 --> 00:16:02.180
+continua perfeitamente por voz.
+
+00:16:03.000 --> 00:16:03.760
+Um chamado via e-mail
+
+00:16:03.760 --> 00:16:04.540
+transfere o histórico
+
+00:16:04.540 --> 00:16:05.340
+para o agente ao vivo.
+
+00:16:06.300 --> 00:16:07.020
+É a diferença entre
+
+00:16:07.020 --> 00:16:07.940
+começar no nível 1
+
+00:16:07.940 --> 00:16:08.600
+a cada encontro
+
+00:16:08.600 --> 00:16:09.500
+e chegar com todo o mapa
+
+00:16:09.500 --> 00:16:10.340
+da masmorra em mãos.
+
+00:16:10.940 --> 00:16:11.920
+Agora junte essas peças.
+
+00:16:12.400 --> 00:16:12.820
+O cliente VIP
+
+00:16:12.820 --> 00:16:14.080
+registra reclamações repetidas
+
+00:16:14.080 --> 00:16:14.360
+no chat.
+
+00:16:14.900 --> 00:16:16.220
+O roteamento por sentimento
+
+00:16:16.220 --> 00:16:17.300
+marca o tom como urgente.
+
+00:16:17.760 --> 00:16:18.560
+A análise preditiva
+
+00:16:18.560 --> 00:16:19.520
+identifica que este cliente
+
+00:16:19.520 --> 00:16:20.820
+tem um histórico de alto gasto
+
+00:16:20.820 --> 00:16:21.580
+e a orquestração
+
+00:16:21.580 --> 00:16:22.400
+omni-channel garante
+
+00:16:22.400 --> 00:16:23.100
+que o próximo agente
+
+00:16:23.100 --> 00:16:23.780
+de voz disponível
+
+00:16:23.780 --> 00:16:24.720
+veja todas as tentativas
+
+00:16:24.720 --> 00:16:25.720
+de contato anteriores.
+
+00:16:26.780 --> 00:16:27.520
+O painel do supervisor
+
+00:16:27.520 --> 00:16:28.060
+por sua vez
+
+00:16:28.060 --> 00:16:29.020
+alerta sobre o aumento
+
+00:16:29.020 --> 00:16:29.840
+de volume naquele nível
+
+00:16:29.840 --> 00:16:30.180
+de conta
+
+00:16:30.180 --> 00:16:31.260
+permitindo o redirecionamento
+
+00:16:31.260 --> 00:16:31.960
+proativo de pessoal.
+
+00:16:32.660 --> 00:16:33.220
+Em vez de perder
+
+00:16:33.220 --> 00:16:33.840
+mais uma conta
+
+00:16:33.840 --> 00:16:34.500
+você tem uma situação
+
+00:16:34.500 --> 00:16:35.520
+reversível sendo tratada
+
+00:16:35.520 --> 00:16:36.360
+pelo agente mais
+
+00:16:36.360 --> 00:16:37.520
+qualificado
+
+00:16:37.520 --> 00:16:38.800
+e essa mudança
+
+00:16:38.800 --> 00:16:39.620
+não é apenas teórica.
+
+00:16:40.120 --> 00:16:40.740
+Empresas que usam
+
+00:16:40.740 --> 00:16:41.740
+o Dynamics 365
+
+00:16:41.740 --> 00:16:42.440
+Customer Service
+
+00:16:42.440 --> 00:16:43.500
+relataram quedas enormes
+
+00:16:43.500 --> 00:16:44.220
+no acúmulo de tarefas
+
+00:16:44.220 --> 00:16:44.900
+e tempos de atendimento
+
+00:16:44.900 --> 00:16:45.400
+mais rápidos.
+
+00:16:45.800 --> 00:16:46.220
+Um exemplo
+
+00:16:46.220 --> 00:16:47.400
+que a Microsoft destaca
+
+00:16:47.400 --> 00:16:48.480
+é a Lexmark
+
+00:16:48.480 --> 00:16:49.420
+que transformou o engajamento
+
+00:16:49.420 --> 00:16:49.860
+do cliente
+
+00:16:49.860 --> 00:16:50.700
+de uma tarefa reativa
+
+00:16:50.700 --> 00:16:51.820
+em uma vantagem proativa
+
+00:16:51.820 --> 00:16:52.960
+usando essas mesmas ferramentas.
+
+00:16:53.680 --> 00:16:54.460
+Integrar agentes
+
+00:16:54.460 --> 00:16:54.820
+de IA
+
+00:16:54.820 --> 00:16:55.820
+e painéis preditivos
+
+00:16:55.820 --> 00:16:56.360
+trouxe a eles
+
+00:16:56.360 --> 00:16:57.200
+economia de eficiência
+
+00:16:57.200 --> 00:16:58.440
+em sites mais precisos.
+
+00:16:59.040 --> 00:16:59.800
+A prova de que este
+
+00:16:59.800 --> 00:17:00.860
+não é um roteiro abstrato
+
+00:17:00.860 --> 00:17:01.640
+mas uma abordagem
+
+00:17:01.640 --> 00:17:02.420
+que já gera ganhos
+
+00:17:02.420 --> 00:17:02.940
+na prática.
+
+00:17:03.640 --> 00:17:04.720
+A cultura muda
+
+00:17:04.720 --> 00:17:05.240
+quando os sistemas
+
+00:17:05.240 --> 00:17:06.260
+param de decepcionar você.
+
+00:17:06.580 --> 00:17:07.580
+Os agentes sentem-se menos
+
+00:17:07.580 --> 00:17:08.560
+como atendentes de tickets
+
+00:17:08.560 --> 00:17:09.540
+e mais como solucionadores
+
+00:17:09.540 --> 00:17:09.940
+de problemas
+
+00:17:09.940 --> 00:17:10.700
+pois recebem trabalhos
+
+00:17:10.700 --> 00:17:11.860
+prioritários que realmente importam.
+
+00:17:11.980 --> 00:17:12.880
+Supervisores param de apagar
+
+00:17:12.880 --> 00:17:13.600
+incêndios e começam
+
+00:17:13.600 --> 00:17:14.300
+a ajustar a estratégia.
+
+00:17:14.740 --> 00:17:15.960
+Os clientes se sentem reconhecidos
+
+00:17:15.960 --> 00:17:16.980
+porque sua urgência é refletida
+
+00:17:16.980 --> 00:17:18.200
+na rapidez com que são atendidos.
+
+00:17:19.240 --> 00:17:20.040
+Um sistema de filas
+
+00:17:20.040 --> 00:17:20.780
+que antes esgotava
+
+00:17:20.780 --> 00:17:21.600
+a paciência de todos
+
+00:17:21.600 --> 00:17:22.660
+evolui para um mecanismo
+
+00:17:22.660 --> 00:17:24.020
+alinhado ao valor e fidelidade.
+
+00:17:24.880 --> 00:17:25.880
+Tanto quando pensar em filas
+
+00:17:25.880 --> 00:17:26.500
+agora não imagine
+
+00:17:26.500 --> 00:17:27.280
+uma fila de taverna.
+
+00:17:27.980 --> 00:17:29.240
+Imagine um fluxo ramificado
+
+00:17:29.240 --> 00:17:30.180
+que se adapta em tempo real
+
+00:17:30.180 --> 00:17:31.040
+guiado por sentimento,
+
+00:17:31.180 --> 00:17:32.360
+urgência e insights preditivos.
+
+00:17:33.120 --> 00:17:34.160
+A plataforma não apenas
+
+00:17:34.160 --> 00:17:35.240
+atende tickets mais rápido
+
+00:17:35.240 --> 00:17:36.440
+ela recalibra interações inteiras
+
+00:17:36.440 --> 00:17:37.420
+para que cada jogador na mesa
+
+00:17:37.420 --> 00:17:38.160
+saiba seu papel
+
+00:17:38.160 --> 00:17:38.760
+antes que os dados
+
+00:17:38.760 --> 00:17:39.600
+sejam lançados.
+
+00:17:40.700 --> 00:17:41.400
+E essa fila prepara
+
+00:17:41.400 --> 00:17:42.020
+a conclusão final.
+
+00:17:42.660 --> 00:17:43.760
+A IA no Dynamics 365
+
+00:17:43.760 --> 00:17:44.780
+não veio para substituir
+
+00:17:44.780 --> 00:17:45.420
+ninguém na mesa.
+
+00:17:46.200 --> 00:17:46.900
+Ela está lá para mudar
+
+00:17:46.900 --> 00:17:47.620
+da forma como sua equipe
+
+00:17:47.620 --> 00:17:48.060
+joga o jogo.
+
+00:17:49.100 --> 00:17:50.500
+A IA no Dynamics 365
+
+00:17:50.500 --> 00:17:51.360
+Customer Service
+
+00:17:51.360 --> 00:17:52.300
+não veio para rolar os dados
+
+00:17:52.300 --> 00:17:52.760
+para os seus agentes
+
+00:17:52.760 --> 00:17:53.640
+e ela veio para fortalecê-lo.
+
+00:17:54.440 --> 00:17:55.620
+Automatizar o trabalho repetitivo
+
+00:17:55.620 --> 00:17:56.360
+muda o foco deles
+
+00:17:56.360 --> 00:17:57.620
+saindo de rituais burocráticos
+
+00:17:57.620 --> 00:17:58.320
+para a estratégia real.
+
+00:17:58.900 --> 00:17:59.940
+A detecção de sentimentos
+
+00:17:59.940 --> 00:18:00.820
+sinaliza problemas cedo
+
+00:18:00.820 --> 00:18:01.700
+rotiando os casos certos
+
+00:18:01.700 --> 00:18:02.320
+para as mãos certas.
+
+00:18:02.780 --> 00:18:03.420
+Os agentes tornam-se
+
+00:18:03.420 --> 00:18:03.940
+estrategistas,
+
+00:18:04.040 --> 00:18:04.660
+não atendentes de time.
+
+00:18:07.840 --> 00:18:08.580
+A produção você precisa
+
+00:18:08.580 --> 00:18:08.960
+de políticas,
+
+00:18:09.080 --> 00:18:09.760
+governança e supervisão.
+
+00:18:10.440 --> 00:18:11.100
+Se você é um líder
+
+00:18:11.100 --> 00:18:12.400
+planejando os próximos passos
+
+00:18:12.400 --> 00:18:13.240
+o caminho é simples.
+
+00:18:13.760 --> 00:18:14.520
+Avalie as necessidades
+
+00:18:14.520 --> 00:18:15.420
+de negócio e os pontos clínicos.
+
+00:18:15.840 --> 00:18:16.540
+Prepare seus dados
+
+00:18:19.520 --> 00:18:20.520
+supervisionado com governança
+
+00:18:20.520 --> 00:18:21.320
+meça e repita.
+
+00:18:22.340 --> 00:18:23.120
+Chefão derrotado,
+
+00:18:23.220 --> 00:18:23.920
+tela azul eliminada.
+
+00:18:24.360 --> 00:18:25.020
+Se a rodada de hoje
+
+00:18:25.020 --> 00:18:25.940
+te deu ideias para um piloto,
+
+00:18:26.200 --> 00:18:26.760
+inscreva-se.
+
+00:18:27.480 --> 00:18:28.220
+Compartilhe com o seu grupo
+
+00:18:28.220 --> 00:18:29.220
+antes que o CFO agra novamente.
+
+00:18:29.680 --> 00:18:30.520
+Você vai querer essa vantagem
+
+00:18:30.520 --> 00:18:31.120
+no próximo encontro.

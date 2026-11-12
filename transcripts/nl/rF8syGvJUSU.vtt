@@ -1,0 +1,868 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:04.080
+Je gaat achter je computer zitten, voert je e-mailadres in, typt je wachtwoord en drukt op enter.
+
+00:00:04.240 --> 00:00:07.020
+Er is die korte pauze terwijl het systeem beslist of jij het echt bent.
+
+00:00:07.220 --> 00:00:09.980
+De meeste mensen denken dat die pauze slechts een wachtwoordcontrole is.
+
+00:00:10.140 --> 00:00:12.100
+Als het wachtwoord klopt, ben je binnen, toch?
+
+00:00:12.280 --> 00:00:12.920
+Eigenlijk niet.
+
+00:00:13.080 --> 00:00:15.420
+Er gebeurt achter de schermen veel meer dan je waarschijnlijk denkt.
+
+00:00:15.620 --> 00:00:19.340
+Terwijl je wacht, voert Microsoft 365 op de achtergrond een reeks controles uit.
+
+00:00:19.500 --> 00:00:23.300
+Het kijkt waar je bent, welk apparaat je gebruikt en of de aanmelding normaal of verdacht lijkt.
+
+00:00:23.440 --> 00:00:25.460
+En dat doet het allemaal voordat je toegang krijgt.
+
+00:00:25.460 --> 00:00:34.800
+Aan het eind van deze aflevering begrijp je wat voorwaardelijke toegang is, hoe het bij elke aanmelding werkt en waarom het een van de belangrijkste beveiligingsmaatregelen in je Microsoft 365 tenant is.
+
+00:00:35.020 --> 00:00:37.240
+Laten we dus beginnen met de eenvoudigste definitie.
+
+00:00:37.440 --> 00:00:39.020
+Wat is voorwaardelijke toegang eigenlijk?
+
+00:00:39.300 --> 00:00:41.280
+Hier is de definitie een begrijpelijke taal.
+
+00:00:41.660 --> 00:00:45.400
+Voorwaardelijke toegang is een beleidsengine die de context controleert voordat iemand wordt binnengelaten.
+
+00:00:45.580 --> 00:00:48.200
+Het kijkt niet alleen naar je wachtwoord en zegt dat het goed genoeg is.
+
+00:00:48.360 --> 00:00:52.360
+In plaats daarvan stelt het extra vragen over wie je bent en wat er rondom je aanmelding gebeurt.
+
+00:00:52.580 --> 00:00:54.260
+Zie het als een uitsmijter bij een nachtclub.
+
+00:00:54.260 --> 00:00:57.560
+Je toont je legitimatiebewijs bij de deur, dat is je gebruikersnaam en wachtwoord.
+
+00:00:57.700 --> 00:01:00.200
+Maar een goede uitsmijter kijkt er niet zomaar naar om je door te laten.
+
+00:01:00.420 --> 00:01:05.080
+Ze controleren je naam op de gastenlijst, kijken naar je kleding en herinneren zich misschien zelfs of je eerder problemen hebt veroorzaakt.
+
+00:01:05.500 --> 00:01:07.160
+Voorwaardelijke toegang doet precies hetzelfde.
+
+00:01:07.320 --> 00:01:13.000
+Het toetst je identiteit aan regels, kijkt waar je vandaan komt, controleert je apparaat en beslist of alles in orde is voordat je wordt binnengelaten.
+
+00:01:13.200 --> 00:01:14.320
+Dit is een belangrijk punt.
+
+00:01:14.740 --> 00:01:17.280
+Voorwaardelijke toegang wordt uitgevoerd nadat je je wachtwoord al hebt ingevoerd.
+
+00:01:17.440 --> 00:01:19.480
+Het is geen vervanging voor meervoudige verificatie.
+
+00:01:19.480 --> 00:01:21.140
+Het is een extra lager bovenop.
+
+00:01:21.300 --> 00:01:24.340
+Zie het als het tweede controlepunt nadat je je legitimatie bij de voordeur hebt laten zien.
+
+00:01:24.540 --> 00:01:25.960
+De logica is simpel als dan.
+
+00:01:26.160 --> 00:01:30.640
+Als een gebruiker toegang probeert te krijgen tot een cloud-app en aan bepaalde voorwaarden voldoet, pas dan deze regel toe.
+
+00:01:30.840 --> 00:01:36.220
+Bijvoorbeeld als iemand van buiten het kantoor toegang probeert te krijgen tot Outlook, verrijs dan meervoudige verificatie.
+
+00:01:36.480 --> 00:01:39.540
+Dat is de basisstructuur achter elk beleid voor voorwaardelijke toegang.
+
+00:01:39.780 --> 00:01:41.480
+Waarom wachtwoorden niet langer volstaan?
+
+00:01:41.680 --> 00:01:43.440
+Waarom hebben we dan deze extra stap nodig?
+
+00:01:43.640 --> 00:01:45.420
+Omdat er elke dag wachtwoorden worden gestolen.
+
+00:01:45.420 --> 00:01:49.360
+Phishing aanvallen, data lekken, mensen die hetzelfde wachtwoord op meerdere sites hergebruiken.
+
+00:01:49.520 --> 00:01:52.180
+Je wachtwoord zou nu gecompromitteerd kunnen zijn zonder dat je het weet.
+
+00:01:52.360 --> 00:01:53.900
+Je denkt misschien, nou, dat is prima.
+
+00:01:54.100 --> 00:01:55.520
+We hebben meervoudige verificatie.
+
+00:01:55.740 --> 00:01:56.400
+Dat beschermt ons.
+
+00:01:56.920 --> 00:01:57.240
+Aanhalingsteken.
+
+00:01:57.420 --> 00:01:58.060
+En je hebt gelijk.
+
+00:01:58.220 --> 00:02:00.220
+MFA helpt enorm, maar het is geen wondermiddel.
+
+00:02:00.420 --> 00:02:03.440
+Stel je voor dat een hacker het wachtwoord van een van je medewerkers in handen krijgt.
+
+00:02:03.640 --> 00:02:08.180
+Ze proberen in te loggen vanuit een land waar je nooit zaken mee doet, met een apparaat dat je nog nooit hebt gezien.
+
+00:02:08.520 --> 00:02:10.900
+MFA kan ze stoppen als er een melding wordt geactiveerd.
+
+00:02:10.900 --> 00:02:13.840
+Maar wat als de hacker ook toegang heeft tot de telefoon van die medewerker?
+
+00:02:13.980 --> 00:02:17.180
+Of wat als ze een phishingaanval gebruiken die ook de MFA-code onderschept?
+
+00:02:17.380 --> 00:02:19.740
+Ineens ziet MFA alleen er niet meer zo waterdicht uit.
+
+00:02:19.920 --> 00:02:21.180
+Hier is een praktijkvoorbeeld.
+
+00:02:21.440 --> 00:02:24.020
+De inloggegevens van een verkoper lekken uit op het dark web.
+
+00:02:24.260 --> 00:02:27.520
+Zonder voorwaardelijke toegang kan een aanvaller overal ter wereld inloggen.
+
+00:02:27.700 --> 00:02:30.740
+Ze krijgen toegang tot e-mail, bestanden, klantgegevens, alles.
+
+00:02:30.940 --> 00:02:32.700
+En je zou het nooit weten totdat het te laat is.
+
+00:02:32.900 --> 00:02:34.400
+De oude manier was alles of niets.
+
+00:02:34.560 --> 00:02:38.660
+Je gaf een gebruiker een licentie en die kon inloggen vanaf elk apparaat, elke locatie, elk netwerk.
+
+00:02:38.660 --> 00:02:42.340
+Geen context, geen intelligentie, alleen een wachtwoordcontrole en daarna volledige toegang.
+
+00:02:42.700 --> 00:02:44.440
+Voorwaardelijke toegang verandert dat volledig.
+
+00:02:44.600 --> 00:02:46.520
+Het voegt context toe aan elke aanmelding.
+
+00:02:46.740 --> 00:02:50.240
+Het kijkt naar waar je bent, welk apparaat je gebruikt, welke app je probeert te openen
+
+00:02:50.240 --> 00:02:52.940
+en hoe riskant de aanmelding lijkt op basis van Microsoft's analyse.
+
+00:02:53.200 --> 00:02:56.860
+Het verandert een simpele ja of nee beslissing in een slim, gelaagd oordeel.
+
+00:02:56.880 --> 00:02:59.280
+De signalen, waar voorwaardelijke toegang naar kijkt.
+
+00:02:59.500 --> 00:03:01.620
+Dus, wat controleert voorwaardelijke toegang precies?
+
+00:03:01.840 --> 00:03:04.800
+Laten we het opsplitsen in de signalen die het gebruikt om zijn beslissing te nemen.
+
+00:03:05.140 --> 00:03:06.620
+Identiteit is het eerste signaal.
+
+00:03:06.620 --> 00:03:12.080
+Wie ben jij? Ben je een gewone medewerker, een beheerder met verhoogde rechten of een gast van buiten het bedrijf?
+
+00:03:12.380 --> 00:03:15.680
+Voorwaardelijke toegang kijkt naar je gebruikersaccount en tot welke groepen je behoort.
+
+00:03:15.840 --> 00:03:19.760
+Een beheerder die probeert in te loggen, krijgt mogelijk te maken met strengere regels dan een standaardgebruiker.
+
+00:03:19.940 --> 00:03:22.260
+Een gast kan voor bepaalde apps volledig worden geblokkeerd.
+
+00:03:22.440 --> 00:03:24.820
+Je identiteit bepaalt de basis van wat is toegestaan.
+
+00:03:25.060 --> 00:03:26.120
+Locatie is de volgende.
+
+00:03:26.380 --> 00:03:27.640
+Waar komt de aanmelding vandaan?
+
+00:03:27.780 --> 00:03:30.980
+Als je verbinding maakt vanuit het kantoornetwerk, is dat een vertrouwde locatie.
+
+00:03:31.400 --> 00:03:33.620
+Voorwaardelijke toegang kent het IP-bereik van je bedrijfshoofdkantoor.
+
+00:03:36.620 --> 00:03:40.860
+Als het systeem niet is kan achterhalen waar je bent, is dat nog een alarmsignaal.
+
+00:03:41.100 --> 00:03:43.780
+Locatie is een krachtig signaal omdat het moeilijk te vervalsen is.
+
+00:03:44.020 --> 00:03:45.000
+Apparaat doet er ook toe.
+
+00:03:45.220 --> 00:03:46.400
+Wat gebruik je om in te loggen?
+
+00:03:46.520 --> 00:03:49.940
+Een bedrijfslaptop die beheerd wordt door Intune en voldoet aan je beveiligingsbeleid.
+
+00:03:50.100 --> 00:03:52.740
+Of een persoonlijke telefoon zonder enige beveiligingscontrole.
+
+00:03:53.000 --> 00:03:55.920
+Voorwaardelijke toegang kan controleren of het apparaat is aangemeld bij beheer.
+
+00:03:56.120 --> 00:03:58.800
+Versleuteling heeft ingeschakeld en up-to-date is met beveiligingspatches.
+
+00:03:58.960 --> 00:04:01.300
+Een onbeheerd apparaat kan worden geblokkeerd of beperkt.
+
+00:04:01.480 --> 00:04:03.000
+De applicatie is ook van belang.
+
+00:04:03.000 --> 00:04:04.580
+Welke app probeer je te bereiken?
+
+00:04:04.720 --> 00:04:08.020
+Outlook, SharePoint, Teams, een aangepaste zakelijke applicatie.
+
+00:04:08.240 --> 00:04:10.480
+Niet alle apps hebben dezelfde beveiligingseisen.
+
+00:04:10.700 --> 00:04:15.740
+Een financieel systeem met gevoelige gegevens kan strengere controles vereisen dan een samenwerkingsruimte.
+
+00:04:15.940 --> 00:04:19.320
+Met voorwaardelijke toegang kun je verschillende regels instellen voor verschillende apps.
+
+00:04:19.520 --> 00:04:22.540
+Als je de juiste licentie hebt, is er nog een laag aanmeldingsrisico.
+
+00:04:22.760 --> 00:04:26.100
+Microsoft gebruikt Machine Learning om elke aanmelding in realtime te beoordelen.
+
+00:04:26.100 --> 00:04:35.220
+Het zoekt naar verdachte patronen, onmogelijke reizen waarbij een gebruiker inlogt vanuit New York en vijf minuten later vanuit Londen, anonieme IP-adressen en gelekte inloggegevens uit bekende datalekken.
+
+00:04:35.360 --> 00:04:39.820
+Het systeem wijst een risiconiveau toe, laag, gemiddeld of hoog, en voorwaardelijke toegang kan daarop reageren.
+
+00:04:39.940 --> 00:04:41.220
+Er is ook gebruikersrisico.
+
+00:04:41.440 --> 00:04:42.900
+Dit is anders dan het aanmeldingsrisico.
+
+00:04:43.460 --> 00:04:44.800
+Gebruikersrisico kijkt naar het account zelf.
+
+00:04:44.960 --> 00:04:47.000
+Is het wachtwoord van deze gebruiker opgedoken in een datalek?
+
+00:04:47.120 --> 00:04:49.280
+Is er in de loop van de tijd ongebruikelijke activiteit geweest?
+
+00:04:49.280 --> 00:04:54.480
+Als het systeem detecteert dat een account mogelijk is gecompromitteerd, kan het de toegang blokkeren totdat de gebruiker het wachtwoord opnieuw instelt.
+
+00:04:54.640 --> 00:04:56.540
+Ten slotte is er de verificatiecontext.
+
+00:04:56.720 --> 00:05:00.260
+Hiermee kun je extra beveiligingseisen koppelen aan specifieke gevoelige inhoud.
+
+00:05:00.460 --> 00:05:06.780
+Iedereen die bijvoorbeeld toegang probeert te krijgen tot de financiële SharePoint-site, moet een compatibel apparaat en een phishingbestendige MFA-methode gebruiken.
+
+00:05:06.940 --> 00:05:10.060
+Het beschermt je meest waardevolle gegevens zonder de rest te vertragen.
+
+00:05:10.340 --> 00:05:14.060
+Zodra deze signalen zijn verzameld, beslist de beleidsengine wat er moet gebeuren.
+
+00:05:14.280 --> 00:05:15.620
+Laten we kijken hoe dat werkt.
+
+00:05:15.620 --> 00:05:17.900
+De beslissingsengine, hoe beleid werkt.
+
+00:05:17.900 --> 00:05:20.820
+Elk beleid voor voorwaardelijke toegang werkt als een als-dan-regel.
+
+00:05:20.980 --> 00:05:24.320
+Je kiest de signalen als voorwaarden en beslist vervolgens welke actie moet worden ondernomen.
+
+00:05:24.540 --> 00:05:25.560
+Dat is eigenlijk alles.
+
+00:05:25.760 --> 00:05:27.740
+Er zijn dus drie hoofdonderdelen van een beleid.
+
+00:05:27.900 --> 00:05:33.360
+Het eerste deel zijn de toewijzingen op wie het beleid van toepassing is, welke app ze proberen te bereiken en welke voorwaarden de regel activeren.
+
+00:05:33.480 --> 00:05:37.060
+Het tweede deel is toegangsbeheer, wat er gebeurt wanneer aan die voorwaarden is voldaan.
+
+00:05:37.300 --> 00:05:41.900
+Verleen je toegang, blokkeer je deze of vereis je iets zoals MFA of een compatibel apparaat.
+
+00:05:41.900 --> 00:05:46.080
+Het derde deel is sessiebeheer en dat beheert wat er gebeurt nadat iemand is aangemeld.
+
+00:05:46.080 --> 00:05:48.540
+Bijvoorbeeld hoe vaak ze zich opnieuw moeten verifiëren.
+
+00:05:48.760 --> 00:05:50.300
+Laat ik je een concreet voorbeeld geven.
+
+00:05:50.540 --> 00:05:55.500
+Als een gebruiker in de verkoopgroep zit en probeert toegang te krijgen tot SharePoint vanaf een onbeheerd apparaat, blokkeer dan de toegang.
+
+00:05:55.640 --> 00:05:57.040
+Dat is meteen een compleet beleid.
+
+00:05:57.220 --> 00:05:59.340
+Wie, welke app, welke voorwaarden, welke actie.
+
+00:05:59.740 --> 00:06:00.780
+Toegangsregels zijn flexibel.
+
+00:06:01.000 --> 00:06:02.680
+Je kunt meerdere zaken tegelijk vereisen.
+
+00:06:02.940 --> 00:06:06.040
+Stel dat je wilt dat een gebruiker MFA voltooit en ook een compatibel apparaat gebruikt.
+
+00:06:06.180 --> 00:06:07.640
+Aan beide voorwaarden moet worden voldaan.
+
+00:06:07.640 --> 00:06:09.600
+Of je kunt zeggen dat ze de een of de ander nodig hebben.
+
+00:06:09.760 --> 00:06:10.860
+Het systeem laat je kiezen.
+
+00:06:11.060 --> 00:06:12.580
+Nu, blokkeren is de krachtigste controle.
+
+00:06:12.580 --> 00:06:14.640
+Als een beleid blokkeren zegt, wind blokkeren.
+
+00:06:14.780 --> 00:06:17.640
+Er zijn geen uitzonderingen, behalve uitsluitingen die je expliciet instelt.
+
+00:06:17.880 --> 00:06:19.160
+Daarom moet je voorzichtig zijn.
+
+00:06:19.400 --> 00:06:21.980
+Eenvoud en je zou je hele organisatie kunnen buitensluiten.
+
+00:06:22.220 --> 00:06:25.660
+Voordat je een beleid inschakelt, is er een cruciale functie die je moet kennen.
+
+00:06:25.880 --> 00:06:27.320
+Alleenrapportage modus.
+
+00:06:27.500 --> 00:06:30.560
+Hiermee kun je zien wat een beleid zou doen voordat het echt iets afdwingt.
+
+00:06:30.620 --> 00:06:32.500
+Je kunt een beleid een week in alleenrapportage draaien.
+
+00:06:32.640 --> 00:06:36.940
+De aanmatlogboeken controleren en zien hoeveel gebruikers geblokkeerd zouden zijn of een MFA-verzoek zouden hebben gekregen.
+
+00:06:37.080 --> 00:06:39.560
+Het is een veilige manier om te testen zonder iets kapot te maken.
+
+00:06:39.560 --> 00:06:44.220
+Nu je de motor begrijpt, laten we het hebben over de meest gebruikelijke beleidsregels die elk bedrijf zou moeten hebben.
+
+00:06:44.380 --> 00:06:46.880
+De grote drie basisbeleidsregels voor dag één.
+
+00:06:47.120 --> 00:06:49.020
+Dus, wat moet je eigenlijk als eerste instellen?
+
+00:06:49.240 --> 00:06:53.120
+Laat me de drie basisbeleidsregels geven die elk bedrijf vanaf dag één zou moeten hebben.
+
+00:06:53.360 --> 00:06:55.300
+Niet op dag dertig en niet na een audit.
+
+00:06:55.800 --> 00:06:57.480
+Beleid nummer één is het fundament.
+
+00:06:57.740 --> 00:06:59.840
+Verrijs MFA voor alle gebruikers.
+
+00:07:00.080 --> 00:07:01.520
+Niet alleen beheerders, iedereen.
+
+00:07:01.800 --> 00:07:05.160
+Elke persoon die inlogt op je tenant moet bewijzen wie ze zijn met een tweede factor.
+
+00:07:05.460 --> 00:07:08.380
+Maar hier is het belangrijke deel, niet alle MFA is gelijkgemaakt.
+
+00:07:08.380 --> 00:07:11.160
+Je wilt niet dat mensen SMS-codes of telefoongesprekken gebruiken.
+
+00:07:11.360 --> 00:07:12.460
+Die methoden zijn zwak.
+
+00:07:12.640 --> 00:07:13.840
+Ze kunnen worden onderschept.
+
+00:07:14.040 --> 00:07:15.400
+Wat je wilt is iets sterkers.
+
+00:07:15.620 --> 00:07:20.820
+Microsoft heeft iets genaamd verificatiesterktes waarmee je precies kunt kiezen welke methoden acceptabel zijn.
+
+00:07:21.020 --> 00:07:26.780
+De Microsoft Authenticator app, Vido 2 beveiligingssleutels, Windows Hello for Business, dat zijn de goede.
+
+00:07:27.020 --> 00:07:31.520
+Dus, wanneer je je MFA-beleid aanmaakt, vink niet alleen het vakje aan met verrijs MFA.
+
+00:07:31.800 --> 00:07:32.660
+Wees specifiek.
+
+00:07:32.820 --> 00:07:34.300
+Kies alleen de sterke methode.
+
+00:07:34.520 --> 00:07:37.120
+Beleid nummer twee, blokkeer verouderde authenticatie.
+
+00:07:37.120 --> 00:07:39.040
+Dit klinkt technisch, maar het is simpel.
+
+00:07:39.220 --> 00:07:42.720
+Er zijn oude protocollen die Microsoft 365 nog steeds ondersteunt.
+
+00:07:42.920 --> 00:07:46.020
+Pop, IMAP, SMTP, oudere versies van Exchange ActiveSync.
+
+00:07:46.260 --> 00:07:50.780
+Deze protocollen werden gebouwd voordat iemand aan meervoudige verificatie dacht, en ze ondersteunen het niet.
+
+00:07:50.960 --> 00:07:56.140
+Dus, als een aanvaller een wacht wordt bemachtigd, kunnen ze een van deze oude protocollen gebruiken om in te loggen en je MFA volledig te omzeilen.
+
+00:07:56.360 --> 00:07:57.400
+Dat is een enorm gat.
+
+00:07:57.620 --> 00:07:58.980
+De oplossing is eenvoudig.
+
+00:07:59.200 --> 00:08:03.240
+Maak een beleid voor voorwaardelijke toegang dat alle verouderde authenticatie voor alle gebruikers blokkeert.
+
+00:08:03.240 --> 00:08:08.560
+Tenzij je een heel specifieke zakelijke behoefte hebt voor een oude scanner of printer die SMTP gebruikt, schakel het uit.
+
+00:08:08.740 --> 00:08:11.900
+Het is een van de beveiligingscontroles met de grootste impact die je kunt inschakelen.
+
+00:08:12.080 --> 00:08:14.920
+Beleid nummer drie, vereis conforme apparaten voor beheerders.
+
+00:08:15.420 --> 00:08:17.260
+Beheerdersaccounts zijn de kroonjuwelen van je tenant.
+
+00:08:17.500 --> 00:08:20.900
+Als iemand een globaal beheerdersaccount in handen krijgt, is alles gecompromitteerd.
+
+00:08:21.120 --> 00:08:23.740
+Daarom moet je die accounts strenger beveiligen dan alle anderen.
+
+00:08:23.740 --> 00:08:29.200
+Dit beleid vereist dat iedereen met een beheerdersrol een bedrijfsapparaat gebruikt dat voldoet aan je beveiligingseisen,
+
+00:08:29.380 --> 00:08:34.800
+ingeschreven in beheer, versleuteling zoals BitLocker actief, Defender ingeschakeld en volledig bijgewerkt.
+
+00:08:34.980 --> 00:08:39.620
+Als een beheerder probeert in te loggen vanaf een privé-laptop of een oude machine die niet aan die standaarden voldoet,
+
+00:08:39.780 --> 00:08:40.860
+wordt de toegang geblokkeerd.
+
+00:08:41.060 --> 00:08:45.240
+Het is een eenvoudige manier om ervoor te zorgen dat je krachtigste accounts ook het best beschermd zijn.
+
+00:08:45.480 --> 00:08:48.740
+Voordat ik verder ga, moet ik iets essentials bespreken, break-bloss-accounts.
+
+00:08:48.740 --> 00:08:53.300
+Dit zijn noodbeheerdersaccounts die je buiten je beleid voor voorwaardelijke toegang houdt.
+
+00:08:53.360 --> 00:08:57.380
+Je maakt er minimaal twee aan die lange, complexe wachtwoorden gebruiken een phishingbestendige MFA,
+
+00:08:57.620 --> 00:08:59.400
+zoals een FIDO2-beveiligingssleutel.
+
+00:08:59.520 --> 00:09:03.240
+Je slaat de inloggegevens veilig op, bijvoorbeeld in een kluis of een afgesloten kast.
+
+00:09:03.420 --> 00:09:04.340
+Het doel is simpel.
+
+00:09:04.560 --> 00:09:07.180
+Als je jezelf per ongeluk buitensluit van je tenant door een foutief beleid,
+
+00:09:07.300 --> 00:09:09.620
+kun je een break-bloss-account gebruiken om weer toegang te krijgen.
+
+00:09:09.820 --> 00:09:12.160
+Ze zijn uitgesloten van elk beleid voor voorwaardelijke toegang.
+
+00:09:12.160 --> 00:09:13.420
+Dat is met opzet zo gedaan.
+
+00:09:13.660 --> 00:09:16.460
+Zonder deze accounts riskeer je jezelf buiten je eigen systeem te sluiten zonder weg terug.
+
+00:09:16.660 --> 00:09:18.240
+Waarom slechts drie regels voor de eerste dag?
+
+00:09:18.380 --> 00:09:20.760
+Omdat je je eerst wilt richten op de controles met de grootste impact.
+
+00:09:21.000 --> 00:09:22.860
+Deze drie dichten de grootste beveiligingslekken.
+
+00:09:23.020 --> 00:09:24.820
+MFA stopt de meeste diefstal van inloggegevens.
+
+00:09:25.020 --> 00:09:26.820
+Het blokkeren van verouderde authenticatie sluit de achterdeur.
+
+00:09:27.000 --> 00:09:29.920
+Conforme apparaten voor beheerders beschermen je meest gevoelige accounts.
+
+00:09:30.120 --> 00:09:33.140
+Je kunt later verfijnen met meer gedetailleerd beleid, maar begin hier.
+
+00:09:33.560 --> 00:09:35.740
+Geavanceerd beleid, risico en persona's.
+
+00:09:35.840 --> 00:09:38.720
+Zodra de basis staat, kun je geavanceerdere controles toevoegen.
+
+00:09:38.720 --> 00:09:41.960
+Dat is waar risico gebaseerd beleid en op persona's gebaseerde regels om de hoek komen kijken.
+
+00:09:42.140 --> 00:09:46.740
+Beleid voor aanmeldingsrisico's gebruikt Microsoft's machine learning om elke inlogpoging in realtime te monitoren.
+
+00:09:46.940 --> 00:09:51.440
+Als iemand probeert in te loggen vanaf een anoniem IP-adres of het systeem detecteert onmogelijke reistijden,
+
+00:09:51.680 --> 00:09:56.440
+zoals inloggen vanuit New York en tien minuten later vanuit Tokio, krijgt die aanmelding een hoog risico score.
+
+00:09:56.800 --> 00:10:00.720
+Vervolgens stel je beleid in dat bij een hoog risico de toegang blokkeert of direct MFA afdwingt.
+
+00:10:01.360 --> 00:10:04.000
+De voorwaarde is dat je een Entra IDP2 licentie nodig hebt,
+
+00:10:04.000 --> 00:10:07.840
+maar dit is een van de krachtigste controles omdat het aanvallen detecteert die statische regels missen.
+
+00:10:07.960 --> 00:10:10.900
+Beleid voor gebruikersrisico's kijkt naar het account zelf over een langere periode,
+
+00:10:11.100 --> 00:10:12.340
+niet slechts naar één inloggebeurtenis.
+
+00:10:12.500 --> 00:10:15.700
+Als Microsoft detecteert dat de inloggegevens van een gebruiker zijn opgedoken bij een bekend datalek,
+
+00:10:15.820 --> 00:10:17.200
+wordt die gebruiker als hoog risico gemarkeerd.
+
+00:10:17.340 --> 00:10:20.640
+Je kunt dan beleid instellen dat de toegang blokkeert totdat ze hun wachtwoord opnieuw hebben ingesteld.
+
+00:10:20.800 --> 00:10:22.500
+En ja, ook daarvoor is P2 nodig.
+
+00:10:22.740 --> 00:10:26.060
+Samen vormen aanmeldrisico en gebruikersrisicobeleidsregels een dynamische beveiligingslaag
+
+00:10:26.060 --> 00:10:28.100
+die zich aanpast aan bedreigingen zodra deze zich voordoen.
+
+00:10:28.100 --> 00:10:30.520
+Het persoonsgebonden beleid richt zich op een ander probleem.
+
+00:10:30.720 --> 00:10:33.560
+Niet iedereen in uw organisatie heeft dezelfde beveiligingsbehoefte.
+
+00:10:33.700 --> 00:10:35.240
+Uw beheerders hebben de strengste regels nodig,
+
+00:10:35.400 --> 00:10:38.040
+terwijl aannemers en tijdelijk personeel wellicht beperkte toegang nodig hebben.
+
+00:10:38.200 --> 00:10:41.460
+En gasten van buiten uw bedrijf hebben totaal andere besturingselementen nodig.
+
+00:10:41.680 --> 00:10:45.840
+Met persoonsgebonden beleid kunt u gebruikers groeperen op rol en het juiste beschermingsniveau toepassen.
+
+00:10:46.020 --> 00:10:47.360
+Hier is een concreet voorbeeld.
+
+00:10:47.580 --> 00:10:50.160
+Aannemers gebruiken vaak hun eigen apparaten die u niet beheert,
+
+00:10:50.160 --> 00:10:53.300
+dus u weet niet of ze antivirussoftware gebruiken of bijblijven met updates.
+
+00:10:53.480 --> 00:10:55.280
+In plaats van volledige toegang te geven,
+
+00:10:55.280 --> 00:10:59.220
+maakt u een beleid dat hen beperkt tot alleen browser toegang, geen desktop of mobiele apps.
+
+00:10:59.420 --> 00:11:01.520
+En zelfs binnen de browser beperkt u hun acties.
+
+00:11:01.740 --> 00:11:03.300
+Ze kunnen bestanden bekijken en bewerken,
+
+00:11:03.460 --> 00:11:05.920
+maar deze niet downloaden of synchroniseren naar hun eigen apparaat.
+
+00:11:06.040 --> 00:11:10.760
+Op die manier blijven aannemers productief zonder uw gegevens bloot te stellen aan onnodige risico's.
+
+00:11:11.740 --> 00:11:16.660
+Verificatiecontexten gaan nog een stap verder door specifieke inhoud binnen een app te beveiligen in plaats van de hele app.
+
+00:11:16.780 --> 00:11:20.840
+Bijvoorbeeld uw financiële team heeft een SharePoint site met gevoelige financiële gegevens.
+
+00:11:21.060 --> 00:11:23.140
+U kunt een verificatiecontext koppelen aan die site,
+
+00:11:23.140 --> 00:11:27.560
+zodat iedereen die er toegang toe wil een conform apparaat en phishingbestendige MFA moet gebruiken,
+
+00:11:27.680 --> 00:11:30.080
+zelfs als ze al zijn aangemeld bij Microsoft 365.
+
+00:11:30.620 --> 00:11:33.440
+Het is precisietargeting voor uw meest gevoelige informatie.
+
+00:11:33.680 --> 00:11:37.640
+Continu toegangsevaluatie trekt toegang bijna in realtime in wanneer er iets verandert.
+
+00:11:37.820 --> 00:11:40.900
+Als een beheerder een account uitschakelt of een apparaat als verloren wordt gemeld,
+
+00:11:41.120 --> 00:11:43.900
+wordt de sessie onmiddellijk beëindigd zonder te wachten tot het token verloopt.
+
+00:11:44.120 --> 00:11:46.800
+Dat is cruciaal om snel op incidenten te kunnen reageren.
+
+00:11:46.980 --> 00:11:50.700
+Dit klinkt allemaal krachtig, maar hoe begint u hier eigenlijk mee zonder dingen te verbreken?
+
+00:11:50.700 --> 00:11:54.080
+Aan de slag gaan van standaard beveiliging naar aangepast beleid.
+
+00:11:54.200 --> 00:12:00.980
+Als u een gloednieuwe tenant heeft, begint u niet bij nul omdat Microsoft standaard de zogenaamde beveiligingsinstellingen inschakelt.
+
+00:12:01.220 --> 00:12:06.380
+Het is een basiszet aan beveiligingen die MFA vereist voor beheerders en verouderde authenticatie blokkeert.
+
+00:12:06.580 --> 00:12:09.000
+Het is een degelijk startpunt, maar het is beperkt.
+
+00:12:09.160 --> 00:12:12.300
+U kunt het niet aanpassen of richten op specifieke apps of gebruikers.
+
+00:12:12.500 --> 00:12:14.420
+Het is een one-size-fits-all oplossing.
+
+00:12:14.420 --> 00:12:21.400
+Zodra u uw eerste aangepaste beleid voor voorwaardelijke toegang maakt, worden de standaard beveiligingsinstellingen automatisch uitgeschakeld, waardoor u de controle heeft.
+
+00:12:21.620 --> 00:12:26.240
+Dat is een goede zaak, maar het betekent ook dat u moet weten wat u doet, omdat u niet langer op de zijwieltjes kunt vertrouwen.
+
+00:12:26.400 --> 00:12:27.980
+Dus, dit is hoe u het veilig aanpakt.
+
+00:12:28.200 --> 00:12:32.340
+Begin eerst met de alleenrapportage, modus voor elk nieuw beleid en laat dit minimaal een week draaien.
+
+00:12:32.540 --> 00:12:38.100
+Ga daarna naar de aanmeldlog boeken en kijk wat er zou zijn gebeurd, zoals hoeveel gebruikers geblokkeerd zouden zijn of om MFA gevraagd zouden zijn.
+
+00:12:38.100 --> 00:12:41.960
+Die gegevens vertellen je of je beleid te streng of te ruim is voordat je het handhaaft.
+
+00:12:42.100 --> 00:12:49.160
+Ten tweede, gebruik de WhatEF-tool in het Entrabeheercentrum om beleid te testen voor een specifieke gebruiker, app en locatie voordat je het activeert.
+
+00:12:49.300 --> 00:12:54.680
+Je kunt precies simuleren wat er zou gebeuren als iemand probeert in te loggen vanuit een koffiebar in een ander land met een persoonlijk apparaat.
+
+00:12:54.820 --> 00:12:58.020
+Het is een veilige manier om problemen te ontdekken voordat ze werkelijkheid worden.
+
+00:12:58.200 --> 00:13:02.540
+Ten derde, en dit is cruciaal, maak Breakbloss-accounts aan voordat je enig beleid implementeert.
+
+00:13:02.700 --> 00:13:04.360
+Ik kan dit niet vaak genoeg benadrukken.
+
+00:13:04.360 --> 00:13:11.880
+Als je per ongeluk een beleid aanmaakt dat alle beheerders blokkeert en je hebt geen note-account ingesteld dat overal van is uitgesloten, dan sluit je jezelf buiten je eigen tenant.
+
+00:13:12.060 --> 00:13:17.280
+De enige manier om weer toegang te krijgen is door Microsoft support te bellen en te bewijzen dat je de eigenaar bent van het domein, wat dagen kan duren.
+
+00:13:17.520 --> 00:13:21.920
+Stel daarom twee Breakbloss-accounts in die veilig zijn opgeslagen met phishing-bestendige MFA.
+
+00:13:22.160 --> 00:13:23.220
+Doe dit voordat je begint.
+
+00:13:23.420 --> 00:13:25.420
+Ten vierde, implementeer in fase.
+
+00:13:25.820 --> 00:13:27.940
+Zet beleid niet voor iedereen op dag één aan.
+
+00:13:28.180 --> 00:13:32.080
+Begin met een kleine testgroep, misschien het IT-team, en laat het een paar dagen draaien.
+
+00:13:32.080 --> 00:13:35.080
+Controleer de logboeken om te zien of iemand onverwachts is geblokkeerd.
+
+00:13:35.300 --> 00:13:38.140
+Breed daarna uit naar een grotere groep en uiteindelijk naar alle gebruikers.
+
+00:13:38.320 --> 00:13:41.780
+Elke fase geeft je de kans om problemen op te sporen voordat ze het hele bedrijf beïnvloeden.
+
+00:13:41.980 --> 00:13:47.380
+Hou de aanmeldingslogboeken constant in de gaten en als je onverwachte blokkades ziet, pas het beleid dan aan voordat je naar de volgende fase gaat.
+
+00:13:47.920 --> 00:13:48.280
+Samenvatting
+
+00:13:48.280 --> 00:13:50.160
+Waarom dit belangrijk is voor je bedrijf?
+
+00:13:50.300 --> 00:13:51.740
+Dus, waarom is dit alles zo belangrijk?
+
+00:13:52.300 --> 00:13:55.320
+Conditionele toegang is de uitsmijter bij de deur die niet alleen je idee controleert.
+
+00:13:55.500 --> 00:13:56.500
+Hij kijkt naar alles.
+
+00:13:56.500 --> 00:14:01.840
+Wie je bent, van waaruit je verbinding maakt, welk apparaat je gebruikt en of je account gecompromitteerd lijkt te zijn.
+
+00:14:02.020 --> 00:14:06.780
+Het verandert een simpele ja-nee-wachtwoordcontrole in een slimme beslissing op basis van het totaalplaatje.
+
+00:14:06.980 --> 00:14:11.140
+Zonder dit kan iedereen met een gestolen wachtwoord vanaf elke plek ter wereld zomaar je tenant binnenwandelen.
+
+00:14:11.340 --> 00:14:12.360
+Zonder vragen te stellen.
+
+00:14:12.580 --> 00:14:16.380
+En als je bedenkt hoeveel wachtwoorden er elke dag worden gestolen, is dat een angstaanjagende gedachte.
+
+00:14:16.600 --> 00:14:19.140
+De drie basisbeleidsregels dichten alleen al de grootste gaten.
+
+00:14:19.380 --> 00:14:21.880
+MFA stopt het merendeel van diefstal van inloggegevens direct.
+
+00:14:21.880 --> 00:14:25.300
+Het blokkeren van verouderde authenticatie sluit een achterdeur waar aanvallers dol op zijn.
+
+00:14:25.480 --> 00:14:29.020
+Het vereisen van conforme apparaten voor beheerders beschermt je meest gevoelige accounts.
+
+00:14:29.280 --> 00:14:32.300
+Alleen al die drie beleidsregels verhogen je beveiligingsniveau aanzienlijk.
+
+00:14:32.460 --> 00:14:37.380
+En wanneer je klaar bent om verder te gaan, bieden geavanceerde beleidsregels nauwkeurige bescherming zonder de productiviteit te schaden.
+
+00:14:37.540 --> 00:14:40.260
+Op risico gebaseerde controles vangen aanvallen in realtime op.
+
+00:14:40.380 --> 00:14:43.420
+Op persoonskenmerken gebaseerde regels behandelen verschillende gebruikers verschillend.
+
+00:14:44.260 --> 00:14:47.200
+Authenticatiecontexten beschermen je meest gevoelige gegevens met chirurgisch precisie.
+
+00:14:47.200 --> 00:14:52.480
+Je kunt zowel veilig als flexibel zijn. Dus, hier is je huiswerk. Meld u aan bij uw entra-beheercentrum.
+
+00:14:52.680 --> 00:14:56.820
+Ga naar voorwaardelijke toegang. Controleer of u tenminste die drie basisbeleidsregels hebt ingesteld.
+
+00:14:57.040 --> 00:14:59.860
+Zo niet, begin dan met de modus, alleen rapporteren en bouw vanaf daar verder.
+
+00:15:00.080 --> 00:15:02.340
+Wacht niet op een audit of een inbreuk om actie te ondernemen.
+
+00:15:02.560 --> 00:15:09.300
+Als deze aflevering u heeft geholpen het grote plaatje te zien, abonneer u dan op Microsoft Knowledge Nuggets voor meer begrijpelijke uitleg over beveiliging en identiteit.
+
+00:15:09.480 --> 00:15:14.160
+En deel het met iemand die net begint aan zijn of haar Microsoft 365 reis. Ze zullen u dankbaar zijn.

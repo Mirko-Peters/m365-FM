@@ -1,0 +1,1006 @@
+WEBVTT
+
+00:00:00.220 --> 00:00:01.720
+Welkom bij weer een kennis snippet.
+
+00:00:01.920 --> 00:00:04.840
+Stel je voor dat je een bedrijf runt en een team van briljante specialisten inhuurt,
+
+00:00:04.960 --> 00:00:09.080
+een reisplanner van wereldklasse, een expert in onboarding van werknemers en een IT-supportmedewerker.
+
+00:00:09.220 --> 00:00:10.480
+Maar ze praten niet met elkaar.
+
+00:00:10.700 --> 00:00:15.240
+Telkens wanneer een taak er twee nodig heeft, moet je zelf tussen de bureaus heen en weer lopen en de informatie overdragen.
+
+00:00:15.460 --> 00:00:17.900
+Dat is precies hoe de meeste AI-agents op dit moment werken.
+
+00:00:18.100 --> 00:00:21.240
+Ze opereren in isolatie, zelfs wanneer het probleem duidelijk teamwork vereist.
+
+00:00:21.440 --> 00:00:25.880
+Dus, vandaag praten we over hoe agents kunnen communiceren, werk kunnen overdragen en als echte teams kunnen fungeren.
+
+00:00:26.000 --> 00:00:27.100
+Ik ben Mirko Peters.
+
+00:00:27.100 --> 00:00:28.660
+Dit is geen toekomstmuziek.
+
+00:00:28.660 --> 00:00:33.680
+Multi-agent-orchestratie gebeurt nu al en het wordt aangedreven door een protocol genaamd A2A.
+
+00:00:33.840 --> 00:00:39.500
+We beginnen met het probleem, ontleden dat protocol stap voor stap en kijken hoe Microsoft het gebruikt in Copilot Studio en Azure AI.
+
+00:00:39.680 --> 00:00:41.320
+Pak je koffie en laten we erin duiken.
+
+00:00:41.540 --> 00:00:43.040
+Dus, wat is het werkelijke probleem?
+
+00:00:43.180 --> 00:00:46.300
+AI-agents zijn vandaag de dag precies als die geïsoleerde specialisten.
+
+00:00:46.540 --> 00:00:48.580
+Ieder heeft zijn eigen kennis, tools en doelen.
+
+00:00:48.760 --> 00:00:50.160
+Een weer-agent kent de voorspelling.
+
+00:00:50.380 --> 00:00:53.480
+Een hotel-agent kent de beschikbaarheid van kamers, maar ze delen niets met elkaar.
+
+00:00:53.480 --> 00:00:57.720
+Stel je nu eens voor dat een gebruiker vraagt om een reis naar Seattle volgende week met een hotel in de buurt van het kantoor.
+
+00:00:57.720 --> 00:01:02.280
+Een enkele agent zou tegelijkertijd een weer-expert, reisexpert en lokale zakelijke expert moeten zijn.
+
+00:01:02.500 --> 00:01:08.300
+Dat betekent enorme, loggen prompts die alle mogelijke capaciteiten in één systeem proppen en die prompts lopen constant vast.
+
+00:01:08.500 --> 00:01:10.300
+De oude oplossing was maatwerkcode.
+
+00:01:10.520 --> 00:01:17.140
+Je schreef een brug tussen de weer-agent en de hotel-agent, dan nog een tussen de hotel-agent en de vlucht-agent en nog een voor de agenda-agent.
+
+00:01:17.340 --> 00:01:21.280
+Dat werkt in het begin, maar elke keer als je een nieuwe agent toevoegt, bouw je weer een nieuwe integratie.
+
+00:01:21.480 --> 00:01:25.500
+Al snel heb je een spaghetti-nachtmerrie van punt tot punt verbindingen waarbij één wijziging alles kapot maakt.
+
+00:01:25.500 --> 00:01:29.400
+De productiviteitswinst die je AI moest opleveren, wordt volledig opgeslokt door onderhoudswerk.
+
+00:01:29.620 --> 00:01:31.500
+Laten we eens kijken naar de echte zakelijke pijn.
+
+00:01:31.740 --> 00:01:33.920
+Jouw organisatie heeft al processen met overdrachten.
+
+00:01:34.140 --> 00:01:39.040
+Er wordt een ticket aangemaakt, iemand sorteert het, iemand lost het op, iemand registreert het, en elke stap is een overdracht.
+
+00:01:39.220 --> 00:01:43.940
+In de oude wereld automatiseer je elke stap met een aparte agent en besteed je daarna weken aan het aan elkaar knopen ervan.
+
+00:01:44.120 --> 00:01:48.860
+Maar wat als er een protocol was waarmee agents elkaar kunnen ontdekken en samenwerken zonder enige aangepaste bruggen?
+
+00:01:48.860 --> 00:01:50.720
+Dat is precies wat A2A doet.
+
+00:01:50.900 --> 00:01:56.500
+In gewone taal, A2A is een standaardmanier voor agents om met elkaar te praten, werk door te geven en als tien dingen voor elkaar te krijgen.
+
+00:01:56.740 --> 00:01:57.560
+Wat is A2A?
+
+00:01:57.720 --> 00:01:59.040
+De eenvoudige definitie.
+
+00:01:59.380 --> 00:02:00.960
+A2A staat voor agent to agent.
+
+00:02:01.180 --> 00:02:05.400
+Het is een open protocol waarmee AI agents direct met elkaar kunnen praten, ongeacht wie ze heeft gebouwd.
+
+00:02:05.540 --> 00:02:07.560
+Je kunt het zien als HTTP voor agents.
+
+00:02:07.800 --> 00:02:12.960
+HTTP is de taal die webbrowsers en servers gebruiken om te communiceren, en A2A doet hetzelfde voor agents.
+
+00:02:12.960 --> 00:02:20.760
+Een agent gebouwd door je IT-team op Microsoft Copilot Studio kan praten met een agent van een ander bedrijf op Google Cloud, zolang ze bij de A2A spreken.
+
+00:02:20.980 --> 00:02:22.700
+Dit is bovendien geen klein project.
+
+00:02:22.980 --> 00:02:31.160
+A2A wordt gesponsord door acht grote bedrijven, waaronder Google, Microsoft, Cisco, Salesforce, SAP en andere, en wordt gehost door de Linux Foundation.
+
+00:02:31.460 --> 00:02:37.080
+Versie 1.0 is stabiel en klaar voor echt gebruik, wat betekent dat geen enkele leverancier het protocol controleert.
+
+00:02:37.240 --> 00:02:39.040
+Het is geen Google of Microsoft ding.
+
+00:02:39.220 --> 00:02:40.380
+Het is een industrieding.
+
+00:02:40.560 --> 00:02:42.360
+Het ontwerp is opzettelijk eenvoudig.
+
+00:02:42.360 --> 00:02:47.920
+A2A bouwt voort op bestaande webstandaarden zoals HTTP en JSON-RPC, dingen die elke ontwikkelaar al kent.
+
+00:02:48.140 --> 00:02:49.960
+Niets exotisch of proprietair aan.
+
+00:02:50.160 --> 00:02:54.460
+Dat maakt het voor bedrijven eenvoudig om te adopteren zonder hun bestaande infrastructuur te slopen.
+
+00:02:54.680 --> 00:02:58.880
+Nu heb je misschien wel gehoord van een ander protocol genaamd MCP, of modelcontextprotocol.
+
+00:02:59.080 --> 00:02:59.900
+Dit is het verschil.
+
+00:03:00.160 --> 00:03:04.560
+MCP is agent naar tool, wat betekent dat het een agent verbindt met externe databronnen en APIs.
+
+00:03:04.960 --> 00:03:08.040
+A2A is agent naar agent en verbindt agents direct met elkaar.
+
+00:03:08.220 --> 00:03:10.640
+Het zijn geen concurrenten, ze zijn complementair.
+
+00:03:10.640 --> 00:03:18.260
+Zie MCP als de verticale verbinding van een agent naar zijn tools en A2A als de horizontale verbinding tussen agents onderling.
+
+00:03:18.500 --> 00:03:22.080
+Nog één ontwerpkeuze, A2A behandelt agents als ondoorzichtig.
+
+00:03:22.320 --> 00:03:27.320
+Dus, wanneer de ene agent met de andere praat, ziet deze niet de interne redenering, tools of privégegevens van de andere agent.
+
+00:03:27.480 --> 00:03:30.260
+Hij ziet alleen de taak die hij stuurde en het resultaat dat hij terugkrijgt.
+
+00:03:30.260 --> 00:03:32.760
+Dat beschermt privacy en intellectueel eigendom.
+
+00:03:32.900 --> 00:03:37.480
+Een weeragent hoeft niet te weten hoe de hotel agentkamers boekt, hij hoeft alleen de voorspelling door te geven.
+
+00:03:37.720 --> 00:03:40.900
+Laten we nu naar het eerste puzzelstuk kijken, de agentkaart.
+
+00:03:41.340 --> 00:03:42.840
+De agentkaart, het CV.
+
+00:03:43.180 --> 00:03:47.260
+Elke A2A-compatibele agent publiceert iets dat een agentkaart wordt genoemd.
+
+00:03:47.420 --> 00:03:55.440
+Die kaart is een machineleesbaar document dat op een standaard URL op het domein van de agent staat, specifiek op het pad well-known agentkaart JSON.
+
+00:03:55.440 --> 00:04:00.360
+Als je weet waar een agent zich bevindt, kun je de kaart ophalen en alles leren wat je nodig hebt om ermee te werken.
+
+00:04:00.560 --> 00:04:03.100
+Zie de agentkaart als een CV of een visitekaartje.
+
+00:04:03.280 --> 00:04:05.880
+Het vertelt andere agents wie je bent en wat je kunt doen.
+
+00:04:06.140 --> 00:04:12.900
+De kaart bevat de naam van de agent, een platte tekstbeschrijving van zijn mogelijkheden en vaardigheidstekst die helpen bij de vindbaarheid.
+
+00:04:13.080 --> 00:04:19.840
+Het vermeldt ook de endpoint URL waar het verzoeken accepteert, de authenticatieverrijsten en de invoer- en uitvoervormaten die het ondersteunt.
+
+00:04:20.000 --> 00:04:21.360
+Hier is een concreet voorbeeld.
+
+00:04:21.640 --> 00:04:23.460
+Stel, je hebt een weerspecialist agent.
+
+00:04:23.460 --> 00:04:27.700
+De agentkaart zegt, ik kan het actuele weer en een vijfdaagse voorspelling voor elke stad geven.
+
+00:04:27.860 --> 00:04:33.860
+Het vermeldt zijn API endpoints, aangezien het een stadsnaam accepteert en temperatuur en omstandigheden in JSON-formaat teruggeeft.
+
+00:04:34.060 --> 00:04:34.760
+Dat is alles.
+
+00:04:34.980 --> 00:04:39.560
+Het is gewoon een duidelijke verklaring van wat het kan doen, zonder geheimen of blootgelegde interne logica.
+
+00:04:39.820 --> 00:04:41.060
+Ontdekking werkt als volgt.
+
+00:04:41.220 --> 00:04:45.840
+Een orchestrator-agent heeft een lijst met bekende agent URL's, of je kunt deze zelf configureren.
+
+00:04:46.080 --> 00:04:52.000
+Wanneer er een taak binnenkomt, haalt de orchestrator de agentkaarten op, leest de beschrijvingen en beslist welke agent de beste match is.
+
+00:04:52.000 --> 00:04:54.600
+De weerkaart zegt weer, dus weer taken gaan daarheen.
+
+00:04:54.760 --> 00:04:57.640
+De hotelkaart zegt hotels, dus hotel taken gaan daarheen.
+
+00:04:57.860 --> 00:04:59.900
+Merk op dat er geen centraal register nodig is.
+
+00:05:00.100 --> 00:05:02.560
+Agents hoeven zich niet in te schrijven bij een wereldwijde directory.
+
+00:05:02.860 --> 00:05:07.500
+Ze publiceren hun kaart gewoon op een bekende locatie en elke andere agent die de URL kent, kan ze vinden.
+
+00:05:07.720 --> 00:05:11.220
+Dat is een bewuste ontwerpkeuze die het systeem gedecentraliseerd en flexibel houdt.
+
+00:05:11.300 --> 00:05:16.120
+Je kunt een nieuwe specialist aan je netwerk toevoegen door de orchestrator de URL te geven en de ontdekking gebeurt automatisch.
+
+00:05:16.300 --> 00:05:18.280
+Dus de orchestrator weet wie er beschikbaar is.
+
+00:05:18.460 --> 00:05:20.200
+Maar hoe dragen ze het werk feitelijk over?
+
+00:05:20.200 --> 00:05:22.280
+Hoe A2A communicatie werkt.
+
+00:05:22.440 --> 00:05:26.000
+De orchestrator weet dus welke agents beschikbaar zijn via de agentkaart.
+
+00:05:26.120 --> 00:05:28.760
+Maar hoe dragen deze agents het werk nu echt aan elkaar over?
+
+00:05:28.960 --> 00:05:30.080
+Het antwoord is simpel.
+
+00:05:30.300 --> 00:05:33.640
+Alle communicatie verloopt via HTTP met JSON-RPC berichten.
+
+00:05:33.820 --> 00:05:36.600
+Hetzelfde protocol dat de meeste webservices vandaag de dag aandrijft.
+
+00:05:36.820 --> 00:05:38.160
+Niets aangepast of ingewikkeld.
+
+00:05:38.340 --> 00:05:40.660
+Gewoon standaard webverkeer dat tussen twee agents vloeit.
+
+00:05:40.860 --> 00:05:41.500
+Dit is het punt.
+
+00:05:41.780 --> 00:05:43.120
+Niet alle taken zijn hetzelfde.
+
+00:05:43.300 --> 00:05:46.820
+A2A ondersteunt drie verschillende interactiepatronen, afhankelijk van wat je nodig hebt.
+
+00:05:46.820 --> 00:05:50.860
+Directe response verwerkt snelle zoekopdrachten waarbij de externe agent onmiddellijk kan antwoorden.
+
+00:05:51.020 --> 00:05:53.880
+Je verstuurt een verzoek, het antwoord direct en je bent klaar.
+
+00:05:54.020 --> 00:05:58.860
+Een weerspecialist om de voorspelling van vandaag vragen werkt precies zo asynchroon antwoord, klaar.
+
+00:05:59.040 --> 00:06:00.640
+Streaming verwerkt de langere taken.
+
+00:06:00.920 --> 00:06:05.400
+Misschien moet de specialist agent meerdere databases doorzoeken of een complexe analyse uitvoeren.
+
+00:06:05.560 --> 00:06:10.480
+In plaats van je te laten wachten op één enkel antwoord, verstuurt de agent status updates terwijl hij werkt via servers en events.
+
+00:06:10.680 --> 00:06:13.940
+Je ontvangt voortgangsrapporten tijdens het proces en het eindresultaat volgt aan het einde.
+
+00:06:13.940 --> 00:06:18.340
+Het volgen van een pakketbezorging werkt op dezelfde manier. Je ziet elke stap terwijl deze plaatsvindt.
+
+00:06:18.420 --> 00:06:23.380
+Asynchrone notificatie verwerkt de langlopende taken waarbij de externe agent minuten, uren of zelfs dagen nodig kan hebben.
+
+00:06:23.560 --> 00:06:25.620
+Het onboarden van werknemers is een goed voorbeeld.
+
+00:06:25.840 --> 00:06:30.700
+De ene specialist regelt IT-accounts, terwijl de andere de secundaire arbeidsvoorwaarden over meerdere dagen afhandelt.
+
+00:06:30.840 --> 00:06:34.560
+De client-agent dient een verzoek in, ontvangt een taak-idee en gaat door met zijn werk.
+
+00:06:34.780 --> 00:06:37.500
+Later stuurt de externe agent het resultaat via een webhoek.
+
+00:06:37.640 --> 00:06:40.960
+De client kan ook op elk moment de voortgang controleren door dat taak-idee te pollen.
+
+00:06:40.960 --> 00:06:44.300
+Elke interactie volgt dezelfde structuur, alles georganiseerd als een taak.
+
+00:06:44.420 --> 00:06:48.760
+Wanneer de client een verzoek stuurt, maakt de externe agent een taak aan en geeft een taak-idee terug.
+
+00:06:48.960 --> 00:06:51.640
+Dat idee wordt de tracking code voor alles wat volgt.
+
+00:06:51.840 --> 00:06:57.580
+Berichten in die taak hebben een rol die aangeeft wie het verstuurde en onderdelen, zoals platte tekst,
+
+00:06:57.820 --> 00:07:03.480
+binaire data zoals afbeeldingen of documenten, JSON-payloads of URL's naar bestanden elders.
+
+00:07:03.480 --> 00:07:09.400
+Authenticatie volgt de standaard webconventies, OAuth, API-sleutels en bearer-tokens.
+
+00:07:09.600 --> 00:07:11.820
+De gebruikelijke verdachte, niets nieuws om te leren.
+
+00:07:12.040 --> 00:07:15.160
+De agentkaart vertelt de client welke authenticatie-methode moet worden gebruikt
+
+00:07:15.160 --> 00:07:17.780
+en de client handelt dit af zoals bij elke andere API-aanroep.
+
+00:07:17.920 --> 00:07:19.300
+Zo ziet dit er in de praktijk uit.
+
+00:07:19.560 --> 00:07:22.060
+Stel dat de orchestrator weergegevens nodig heeft voor een reis.
+
+00:07:22.220 --> 00:07:23.960
+Hij stuurt een taak naar de weerspecialist.
+
+00:07:24.140 --> 00:07:28.380
+De weerspecialist bevestigt het verzoek, start de verwerking en streamt voortgangsupdates terug.
+
+00:07:28.380 --> 00:07:33.920
+Gegevens ophalen, resultaten parseren, klaar, dan verstuurt hij de definitieve voorspelling.
+
+00:07:34.120 --> 00:07:39.040
+De orchestrator ziet nooit de interne tools, API-sleutels of het redeneerproces van de weeragent.
+
+00:07:39.180 --> 00:07:40.300
+Hij ziet alleen de output.
+
+00:07:40.680 --> 00:07:45.140
+Dat is het belangrijkste ontwerpprincipe, duidelijke grenzen tussen agents en geen lekkende interne status.
+
+00:07:45.400 --> 00:07:46.940
+Maar A2A alleen is niet genoeg.
+
+00:07:47.080 --> 00:07:49.780
+Je hebt een slimme baas nodig om al deze specialisten te coördineren.
+
+00:07:49.780 --> 00:07:52.280
+Dat brengt ons bij het orchestrator-specialist-patroon.
+
+00:07:52.440 --> 00:07:54.440
+Het orchestrator-specialist-patroon.
+
+00:07:54.600 --> 00:07:55.700
+Hier komt alles samen.
+
+00:07:55.700 --> 00:08:00.640
+Het orchestrator-specialist-patroon is tegenwoordig de meest gebruikelijke architectuur in multi-agentsystemen.
+
+00:08:00.840 --> 00:08:03.980
+Zie het als een bedrijf met afdelingen, IT, Hour, Finance.
+
+00:08:04.160 --> 00:08:05.540
+Elk handelt zijn eigen gebied af.
+
+00:08:05.680 --> 00:08:09.080
+Je hebt een centrale beslisser die werk doorstuurt naar gespecialiseerde teams.
+
+00:08:09.360 --> 00:08:11.300
+En elk team focust zich op waar het goed in is.
+
+00:08:11.500 --> 00:08:13.620
+De orchestrator houdt het grote geheel in beeld.
+
+00:08:13.800 --> 00:08:18.860
+Hij ontvangt het verzoek van de gebruiker, bepaalt wat er moet gebeuren en beslist welke specialist elk onderdeel kan afhandelen.
+
+00:08:19.020 --> 00:08:21.920
+Als een gebruiker vraagt, plan een reis naar Seattle volgende week.
+
+00:08:22.100 --> 00:08:24.760
+Dan boekt de orchestrator zelf geen vluchten of hotels.
+
+00:08:24.760 --> 00:08:28.800
+Hij weet dat er een vluchtspecialist, een hotelspecialist en een weerspecialist is.
+
+00:08:28.940 --> 00:08:31.780
+Hij verdeelt het verzoek in die stukken en delegeert elk onderdeel.
+
+00:08:31.940 --> 00:08:33.740
+Elke specialist heeft een smalle focus.
+
+00:08:34.020 --> 00:08:38.000
+De ene agent handelt vluchtboekingen af, de andere zoekt hotels en een derde doet de incidenttriage.
+
+00:08:38.360 --> 00:08:40.200
+Ze hoeven niets van elkaars domeinen te weten.
+
+00:08:40.420 --> 00:08:43.360
+De vluchtspecialist kent vliegmaatschappijen, routes en prijzen.
+
+00:08:43.580 --> 00:08:46.880
+Deze hoeft niets te weten over hotelkamertypes of annuleringsvoorwaarden.
+
+00:08:47.100 --> 00:08:50.940
+Die nauwe focus houdt elk agent simpel, onderhoudsvriendelijk en makkelijk te testen.
+
+00:08:51.080 --> 00:08:52.500
+Dit is het belangrijkste onderdeel.
+
+00:08:52.500 --> 00:08:54.620
+De orchestrator voert de taken niet zelf uit.
+
+00:08:54.840 --> 00:08:56.840
+Deze routeert het werk en voegt resultaten samen.
+
+00:08:57.040 --> 00:08:58.140
+Dat is de enige taak.
+
+00:08:58.320 --> 00:09:02.260
+De rol van de orchestrator is een slimme planner zijn, geen superagent die alles probeert te doen.
+
+00:09:02.480 --> 00:09:06.360
+Wanneer je de orchestrator specialistisch werk laat doen, verlies je het voordeel van dit patroon.
+
+00:09:06.500 --> 00:09:08.220
+Het wordt dan weer een monolithische puinhoop.
+
+00:09:08.400 --> 00:09:09.760
+Pas op voor een veelgemaakte fout.
+
+00:09:10.040 --> 00:09:12.700
+Sommige teams creëren overlappende specialistische domeinen.
+
+00:09:12.900 --> 00:09:17.580
+Twee agenten beweren beide klantenservice of dataopzoeking te kunnen doen, wat zorgt voor routeringsverwarring.
+
+00:09:17.580 --> 00:09:21.740
+De orchestrator weet niet welke hij moet kiezen en gebruikers krijgen inconsistente resultaten.
+
+00:09:21.920 --> 00:09:23.400
+De oplossing is eenvoudig.
+
+00:09:23.540 --> 00:09:26.500
+Elke specialist beheert een duidelijk begrensd domein zonder overlap.
+
+00:09:26.660 --> 00:09:30.220
+Als twee agenten hetzelfde kunnen, voegt ze dan samen of splits het domein duidelijker.
+
+00:09:30.580 --> 00:09:33.240
+Microsoft's Copilot Studio gebruikt dit patroon standaard.
+
+00:09:33.400 --> 00:09:38.040
+Je hoofdcopilot fungeert als orchestrator, terwijl onderliggende en verbonden agenten als specialisten werken.
+
+00:09:38.040 --> 00:09:44.020
+Wanneer een gebruiker iets vraagt dat meerdere domeinen beslaat, delegeert de hoofdcopilot dit via A2A naar de juiste specialisten.
+
+00:09:44.220 --> 00:09:48.400
+Het is ingebouwd in het platform, dus je hoeft de orchestratielogica niet vanaf nul te programmeren.
+
+00:09:48.540 --> 00:09:50.420
+Het grote voordeel hier is modulariteit.
+
+00:09:50.660 --> 00:09:52.500
+Moet je je hotelbookingsprovider vervangen?
+
+00:09:52.680 --> 00:09:56.000
+Vervang de hotelspecialist zonder de orchestrator of andere agenten aan te raken.
+
+00:09:56.180 --> 00:09:57.660
+Een nieuwe functionaliteit toevoegen?
+
+00:09:57.880 --> 00:10:01.180
+Bouw een nieuwe specialist, registreer deze bij de orchestrator en je bent klaar.
+
+00:10:01.320 --> 00:10:04.300
+Elke agent blijft klein, beheersbaar en onafhankelijk inzetbaar.
+
+00:10:04.300 --> 00:10:08.180
+Dat is precies het doel van de overstap van monolithische agenten naar een multi-agentsysteem.
+
+00:10:08.320 --> 00:10:10.840
+We hebben dus het protocol, de agentkaarten en het patroon.
+
+00:10:10.920 --> 00:10:13.100
+Laten we dit in actie zien met echte scenario's.
+
+00:10:13.240 --> 00:10:15.160
+Echte voorbeelden van A2A in actie.
+
+00:10:15.320 --> 00:10:17.720
+Hoe ziet A2A er nu eigenlijk uit in de echte wereld?
+
+00:10:17.920 --> 00:10:19.740
+Laten we beginnen met een simpel voorbeeld.
+
+00:10:19.940 --> 00:10:23.300
+Je vertelt je AI-assistent, plan volgende week een reis naar Seattle.
+
+00:10:23.580 --> 00:10:29.900
+Op de oude manier zou die ene assistent alles moeten weten, weer vluchten, hotels, restaurants, alles tegelijk.
+
+00:10:30.100 --> 00:10:31.840
+Dat is veel gevraagd van één prompt.
+
+00:10:31.840 --> 00:10:34.200
+Met A2A breekt de orchestrator het op.
+
+00:10:34.360 --> 00:10:38.220
+Deze stuurt een taak naar een weerspecialist met de vraag naar de voorspelling voor die specifieke dagen.
+
+00:10:38.580 --> 00:10:43.380
+Tegelijkertijd vraagt het een vluchtspecialist om vluchten te zoeken die dinsdagochtend aankomen en donderdagavond terugkeren.
+
+00:10:43.580 --> 00:10:47.540
+En een hotelspecialist om te zoeken naar accommodaties nabij het centrum van Seattle voor drie nachten.
+
+00:10:47.780 --> 00:10:51.720
+Elke specialist werkt onafhankelijk en ze hoeven niet met de andere agents te communiceren,
+
+00:10:51.940 --> 00:10:54.880
+omdat ze elk hun eigen databronnen, tools en expertise hebben.
+
+00:10:55.060 --> 00:10:58.880
+De orchestrator verzamelt alle resultaten en voegt ze samen tot één antwoord.
+
+00:10:58.880 --> 00:11:00.920
+De gebruiker ziet één enkel antwoord.
+
+00:11:01.120 --> 00:11:02.240
+Dit is de weersverwachting.
+
+00:11:02.420 --> 00:11:05.420
+Dit zijn uw vluchtopties en hier zijn drie hotels in de buurt van het kantoor.
+
+00:11:05.600 --> 00:11:10.080
+Achter de schermen werkt de drie afzonderlijke agents samen zonder enige aangepaste integratiecode.
+
+00:11:10.300 --> 00:11:11.300
+Nu een bedrijfscenario.
+
+00:11:11.720 --> 00:11:12.820
+Stel, er komt een ticket binnen.
+
+00:11:12.960 --> 00:11:14.820
+Mijn laptop maakt geen verbinding met de VPN.
+
+00:11:15.140 --> 00:11:17.660
+De orchestrator begrijpt dat dit een netwerkprobleem is.
+
+00:11:17.860 --> 00:11:21.420
+Het geeft het ticket door aan een runboek specialist die de standaardstappen kent.
+
+00:11:21.720 --> 00:11:26.400
+Controleer de status van de VPN-client, verifieer netwerkreferenties, start de service opnieuw.
+
+00:11:26.560 --> 00:11:28.260
+Die specialist geeft de stappen terug.
+
+00:11:28.480 --> 00:11:33.360
+Vervolgens geeft de orchestrator het resultaat door aan een ticketschrijverspecialist die de oplossing in het systeem logt.
+
+00:11:33.520 --> 00:11:36.060
+Dit alles gebeurt in seconden zonder menselijke tussenkomst,
+
+00:11:36.240 --> 00:11:39.920
+en het IT-team komt alleen in actie als de geautomatiseerde stappen het probleem niet oplossen.
+
+00:11:40.120 --> 00:11:44.060
+Anboarding van werknemers is een ander voorbeeld, maar dit duurt dagen in plaats van seconden.
+
+00:11:44.180 --> 00:11:46.000
+Een nieuwe werknemer komt bij het bedrijf.
+
+00:11:46.000 --> 00:11:51.520
+De orchestrator activeert een IT-specialist om accounts aan te maken en hardware toe te wijzen, wat een paar uur kan duren.
+
+00:11:51.960 --> 00:11:55.180
+Tegelijkertijd activeert het een hour-benefit-specialist voor inschrijformulieren,
+
+00:11:55.420 --> 00:11:58.160
+en later een facilitair-specialist voor bureau- en toegangspasjes.
+
+00:11:58.340 --> 00:12:01.320
+Elke specialist voert onafhankelijk zijn eigen langlopende taak uit,
+
+00:12:01.400 --> 00:12:04.980
+en de orchestrator volgt de voortgang met behulp van die taakidees waar we het eerder over hadden.
+
+00:12:05.120 --> 00:12:07.660
+Dus als de IT-specialist klaar is, weet de orchestrator dat,
+
+00:12:07.780 --> 00:12:10.580
+en als de facilitair-specialist vertraging heeft, kan het actie ondernemen.
+
+00:12:10.580 --> 00:12:16.200
+De gebruiker ziet één soepel onboarding-proces, maar achter de schermen is het een gecoördineerd team dat over meerdere dagen werkt.
+
+00:12:16.240 --> 00:12:17.460
+En dit is niet alleen theorie.
+
+00:12:17.680 --> 00:12:24.020
+Coca-Cola Beverages Africa gebruikt al co-pilot studio agents met Dynamics 365 om plannings Cicli te automatiseren.
+
+00:12:24.200 --> 00:12:27.740
+Hun planners besteden voorheen tot wel anderhalf uur per dag aan repetitieve taken.
+
+00:12:28.000 --> 00:12:30.820
+Met multi-agent-orchestratie draaien die Cicli vanzelf.
+
+00:12:31.040 --> 00:12:35.920
+De orchestrator delegeert aan specialisten die verschillende onderdelen van het supply chain-planningsproces afhandelen.
+
+00:12:35.920 --> 00:12:43.320
+Het resultaat is meer dan een uur besparing per persoon per dag door agents met elkaar te laten communiceren in plaats van mensen informatie tussen systemen te laten overbrengen.
+
+00:12:43.460 --> 00:12:45.880
+Het patroon is dus hetzelfde in al deze voorbeelden.
+
+00:12:46.100 --> 00:12:52.380
+Elke agent is een zelfstandige expert die zijn eigen domein kent, over eigen tools beschikt en niets hoeft te weten over de andere agents.
+
+00:12:52.760 --> 00:12:57.080
+A2A biedt een eenvoudige communicatielaag zodat ze kunnen samenwerken zonder aangepaste code.
+
+00:12:57.320 --> 00:13:03.300
+Je krijgt een standaard protocol en een slimme orchestrator zonder bruggen, punt tot punt integraties of onderhoudzorgen.
+
+00:13:03.580 --> 00:13:05.200
+Microsoft zet hier volledig op in.
+
+00:13:05.200 --> 00:13:08.380
+Laten we kijken waar Copilot Studio en Azure AI in het plaatje passen.
+
+00:13:08.520 --> 00:13:11.820
+Het ecosysteem van Microsoft, Copilot Studio en Azure AI.
+
+00:13:12.020 --> 00:13:13.780
+Dus, waar staat Microsoft in dit geheel?
+
+00:13:13.940 --> 00:13:15.000
+Precies in het centrum.
+
+00:13:15.200 --> 00:13:20.180
+Copilot Studio ondersteunt A2A nu standaard en is algemeen beschikbaar sinds april 2026.
+
+00:13:20.500 --> 00:13:21.820
+Dit is geen preview of beta.
+
+00:13:22.080 --> 00:13:25.340
+Het is klaar voor productie en elke in aanmerking komende klant kan het vandaag gebruiken.
+
+00:13:25.520 --> 00:13:26.200
+Dit is het punt.
+
+00:13:26.400 --> 00:13:29.560
+Je kunt externe agents verbinden met je Copilot Studio orchestrator.
+
+00:13:29.820 --> 00:13:32.020
+Als ik zeg extern, bedoel ik ook echt extern.
+
+00:13:32.020 --> 00:13:37.300
+Agents gebouwd op Google Cloud, AWS of elk ander platform dat het A2A protocol ondersteunt.
+
+00:13:37.480 --> 00:13:41.060
+De orchestrator geeft niet om waar de agent zich bevindt of met welk framework deze is gebouwd.
+
+00:13:41.260 --> 00:13:43.520
+Zolang het A2A spreekt, kan het zich bij het team voegen.
+
+00:13:43.700 --> 00:13:45.080
+De installatie is eenvoudig.
+
+00:13:45.240 --> 00:13:48.440
+In Copilot Studio maak je iets aan dat een connected agent wordt genoemd.
+
+00:13:48.540 --> 00:13:50.700
+Je plakt het point URL van de agent erin.
+
+00:13:50.880 --> 00:13:56.920
+Copilot Studio haalt automatisch de agentkaart op van de URL, het bekende agentkaart JSON bestand waar we het over hadden.
+
+00:13:56.920 --> 00:14:01.800
+Het leest de mogelijkheden, authenticatieverrijsten en de input- en outputformaten van de agent.
+
+00:14:02.160 --> 00:14:06.880
+Vervolgens bouwt het op de achtergrond een aangepaste connector en kan je orchestrator direct taken delegeren.
+
+00:14:07.020 --> 00:14:09.800
+Je hebt geen handmatig integratiewerk of aangepaste code nodig.
+
+00:14:09.980 --> 00:14:11.960
+Plak simpelweg de URL en je bent klaar.
+
+00:14:12.100 --> 00:14:15.740
+Aan de kant van Azure ondersteunt de Azure AI Foundry Agent Service ook A2A.
+
+00:14:15.900 --> 00:14:20.240
+Het heeft een toegewezen A2A API het point waarmee open source orchestrators zoals Autogen,
+
+00:14:20.380 --> 00:14:22.980
+Longchain en cementen kernel Foundry agents kunnen aanroepen.
+
+00:14:22.980 --> 00:14:28.560
+Dus als je agents hebt gebouwd met die frameworks kun je ze aansluiten op het Microsoft ecosysteem zonder iets te herschrijven.
+
+00:14:28.700 --> 00:14:29.920
+Het werkt in twee richtingen.
+
+00:14:30.200 --> 00:14:33.680
+Microsoft volgt hetzelfde orchestrator-specialist patroon dat we hebben beschreven.
+
+00:14:33.840 --> 00:14:36.420
+De hoofdagent in Copilot Studio fungeert als de orchestrator,
+
+00:14:36.580 --> 00:14:39.160
+terwijl onderliggende agents en verbonden agents de specialisten zijn.
+
+00:14:39.340 --> 00:14:42.560
+Ieder beheert zijn eigen domein en de orchestrator routeert en voegt samen.
+
+00:14:42.760 --> 00:14:45.740
+Het is dezelfde architectuur, maar dan draaiend op het platform van Microsoft.
+
+00:14:46.020 --> 00:14:48.780
+Maar dit is het punt, er zijn enkele beperkingen waar je vanaf moet weten.
+
+00:14:48.980 --> 00:14:51.900
+Ten eerste voegt elke extra orchestratie stap latentie toe.
+
+00:14:51.900 --> 00:14:55.980
+Als je hoofdagent een verbonden agent aanroept en die agent roept weer een specialist aan,
+
+00:14:56.180 --> 00:14:57.620
+voegt elke stap netwerktijd toe.
+
+00:14:57.800 --> 00:15:01.300
+Bij real-time gesprekken kunnen te veel stappen de ervaring traag laten aanvoelen.
+
+00:15:01.500 --> 00:15:04.380
+Ten tweede zorgt overmatige delegatie voor routeringschaos.
+
+00:15:04.580 --> 00:15:07.000
+Als je te veel specialisten hebt met overlappende domeinen,
+
+00:15:07.300 --> 00:15:09.660
+gaat de orchestrator slechte routeringsbeslissingen nemen.
+
+00:15:09.880 --> 00:15:13.500
+Hou dus het aantal specialisten beheersbaar en hou je domeinen duidelijk gescheiden.
+
+00:15:13.680 --> 00:15:16.720
+Ten derde is er een specifieke beperking bij Fabric Data Agents.
+
+00:15:16.940 --> 00:15:20.720
+Ze werken niet wanneer de hoofdagent wordt ingezet in Microsoft 365 Copilot.
+
+00:15:20.720 --> 00:15:24.060
+Als je implementatie op M365 is gericht, plan hier dan naar.
+
+00:15:24.240 --> 00:15:26.540
+Deze beperkingen zijn reëel, maar ze zijn beheersbaar.
+
+00:15:26.720 --> 00:15:31.440
+Het platform is volwassen genoeg voor productiegebruik en Microsoft werkt actief aan het dichten van deze gaten.
+
+00:15:31.680 --> 00:15:34.200
+Laten we nu de punten verbinden en het grote geheel bekijken.
+
+00:15:34.880 --> 00:15:36.460
+Verbindingssectie, hoe alles in elkaar past.
+
+00:15:36.680 --> 00:15:39.260
+Laten we een stap terug doen en zien hoe deze onderdelen verbinding maken.
+
+00:15:39.580 --> 00:15:42.340
+A2A is het telefoonsysteem dat agents gebruiken om elkaar te bellen.
+
+00:15:42.460 --> 00:15:44.240
+De agentkaarten, dat is je telefoonboek.
+
+00:15:44.420 --> 00:15:46.520
+Ze laten zien wie je moet bellen en wat elk agent afhandelt.
+
+00:15:46.680 --> 00:15:49.540
+De orchestrator is de receptionist die elk gesprek doorverbindt naar de juiste afdeling.
+
+00:15:49.540 --> 00:15:51.200
+Geen van deze onderdelen werkt alleen.
+
+00:15:51.380 --> 00:15:52.480
+Je hebt ze alle drie nodig.
+
+00:15:52.780 --> 00:15:54.500
+Zonder telefoonboek weet je niet wie je moet bellen.
+
+00:15:54.720 --> 00:15:57.040
+Zonder receptionist is er niemand die het verkeer regelt.
+
+00:15:57.220 --> 00:16:00.120
+En zonder telefoonsysteem kan een receptionist niemand doorverbinden.
+
+00:16:00.360 --> 00:16:01.520
+Ze werken alleen als een team.
+
+00:16:01.740 --> 00:16:03.480
+Dat is waar modulariteit om de hoek komt kijken.
+
+00:16:03.760 --> 00:16:07.620
+Wanneer je specialisten modulair zijn, kun je nieuwe mogelijkheden toevoegen zonder te breken wat al werkt.
+
+00:16:07.840 --> 00:16:10.580
+Stel dat je een autoverhuurspecialist wilt toevoegen aan je reisassistent.
+
+00:16:10.760 --> 00:16:13.620
+Je bouwt hem, publiceert de agentkaart en geeft de orchestrator de URL.
+
+00:16:13.960 --> 00:16:17.500
+Klaar, de vluchtspecialist en hotelspecialist blijven exact hetzelfde.
+
+00:16:17.660 --> 00:16:19.280
+De orchestrator verandert ook niet.
+
+00:16:19.460 --> 00:16:22.080
+Je plugt gewoon een nieuw onderdeel in en het systeem past zich aan.
+
+00:16:22.220 --> 00:16:25.280
+Omdat het protocol open is, zit je nooit vast aan één leverancier.
+
+00:16:25.460 --> 00:16:27.640
+Je orchestrator kan draaien op Copilot Studio.
+
+00:16:27.960 --> 00:16:29.600
+Je weeragent kan op Google Cloud staan.
+
+00:16:29.780 --> 00:16:33.080
+Je hotelagent op AWS en je interne systemen kunnen op Azure blijven.
+
+00:16:33.280 --> 00:16:34.960
+Ze spreken allemaal dezelfde taal.
+
+00:16:35.180 --> 00:16:36.840
+Dat is het mooie van een open standaard.
+
+00:16:36.840 --> 00:16:40.160
+Het voorkomt vendor lock-in en laat je de beste tool voor elke taak kiezen.
+
+00:16:40.380 --> 00:16:43.320
+A2A gaat niet over het bouwen van één super slimme agent die alles weet.
+
+00:16:43.460 --> 00:16:47.580
+Het gaat over het bouwen van een flexibel personeelsbestand van specialisten die je kunt herschikken naarmate je behoefte veranderen.
+
+00:16:47.680 --> 00:16:48.760
+Je vervangt je agents niet.
+
+00:16:48.920 --> 00:16:49.540
+Je herschikt ze.
+
+00:16:49.700 --> 00:16:50.560
+Je voegt nieuwe toe.
+
+00:16:50.760 --> 00:16:51.680
+Je ruilt oude in.
+
+00:16:51.860 --> 00:16:54.520
+Het systeem groeit met je mee in plaats van een knelpunt te worden.
+
+00:16:54.780 --> 00:16:56.680
+Dus, wat kun je vandaag met deze kennis doen?
+
+00:16:56.980 --> 00:16:57.900
+Praktische inzichten.
+
+00:16:58.200 --> 00:16:58.840
+Begin klein.
+
+00:16:59.080 --> 00:17:03.000
+Kies één repetitief proces in je organisatie waarbij meerdere systemen betrokken zijn.
+
+00:17:03.000 --> 00:17:06.980
+Bijvoorbeeld ticketoplossing, onboarding van medewerkers of onkostendeclaraties.
+
+00:17:07.160 --> 00:17:09.100
+Iets met duidelijke overdrachten tussen stappen.
+
+00:17:09.280 --> 00:17:12.140
+Bouw vervolgens een prototype met één orchestrator en twee specialisten.
+
+00:17:12.340 --> 00:17:13.900
+Je hebt geen grootse architectuur nodig.
+
+00:17:14.120 --> 00:17:16.360
+Je hebt alleen een werkend voorbeeld nodig waarvan je kunt leren.
+
+00:17:16.580 --> 00:17:18.180
+Gebruik de tools die dit al ondersteunen.
+
+00:17:18.320 --> 00:17:20.620
+Copilot Studio heeft ingebouwde A2A-ondersteuning.
+
+00:17:20.840 --> 00:17:22.060
+Azure AI Foundry heeft het ook.
+
+00:17:22.060 --> 00:17:25.640
+Je hoeft het protocol niet vanaf nul op te bouwen of aangepaste integratiecode te schrijven.
+
+00:17:25.780 --> 00:17:28.760
+Plak een URL, configureer je agents en begin met delegeren.
+
+00:17:28.900 --> 00:17:30.460
+Pas op voor veel voorkomende valkuilen.
+
+00:17:30.700 --> 00:17:32.840
+Zorg dat de domeinen van je specialisten elkaar niet overlappen.
+
+00:17:33.000 --> 00:17:36.200
+Als twee agents hetzelfde kunnen, voeg ze dan samen of splits het domein beter op.
+
+00:17:36.320 --> 00:17:38.800
+Laat de orchestrator de routing afhandelen, niet de uitvoering.
+
+00:17:38.980 --> 00:17:40.780
+En let op latentie door orchestration hops.
+
+00:17:41.000 --> 00:17:44.220
+Als je respons tijd begint op te lopen, heb je misschien te veel delegatielagen.
+
+00:17:44.400 --> 00:17:45.780
+De beste eerste stap is simpel.
+
+00:17:46.040 --> 00:17:48.560
+Breng de overdrachtsmomenten in je bestaande workflow in kaart.
+
+00:17:48.740 --> 00:17:51.200
+Waar wordt informatie doorgegeven tussen mensen of systemen?
+
+00:17:51.200 --> 00:17:53.400
+Dat zijn de plekken waar agents het kunnen overnemen.
+
+00:17:53.580 --> 00:17:55.120
+Elke overdracht is een kans.
+
+00:17:55.380 --> 00:17:57.680
+Dat is dus het A2A-systeem in een notendop.
+
+00:17:57.820 --> 00:17:59.840
+Drie eenvoudige onderdelen die samenwerken.
+
+00:18:00.040 --> 00:18:02.680
+Agents zijn niet langer geïsoleerd en gaan als een echt team werken.
+
+00:18:02.680 --> 00:18:05.760
+Kies één workflow met duidelijke overdrachten en bouw daarop voort.
+
+00:18:05.940 --> 00:18:09.400
+Abonneer je voor meer begrijpelijke uitleg en laat een reactie achter als het duidelijk was.

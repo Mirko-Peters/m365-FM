@@ -1,0 +1,910 @@
+WEBVTT
+
+00:00:00.430 --> 00:00:06.830
+Prêt pour 10 jours consacrés à Microsoft 365, Copilot, l'IA, Azure et aux acteurs qui façonnent l'avenir du travail.
+
+00:00:07.950 --> 00:00:12.010
+En janvier prochain, la M3065N est de retour et nous voyons plus grand.
+
+00:00:12.950 --> 00:00:18.050
+Rejoignez-nous pour des sessions en direct, des démonstrations concrètes et des conseils pratiques d'experts et de MVPs du monde entier.
+
+00:00:18.710 --> 00:00:21.210
+Pas de diapositives génériques, pas de jargon à n'en plus finir.
+
+00:00:21.950 --> 00:00:23.150
+Nous abordons les vrais défis.
+
+00:00:23.790 --> 00:00:28.690
+Copilot Studio, agent, IA, fabrique, sécurité, gouvernance et automatisation.
+
+00:00:28.690 --> 00:00:34.310
+Que vous soyez professionnel de l'IT, développeur ou dirigeant, des sessions sont conçues pour vous.
+
+00:00:35.510 --> 00:00:39.970
+Avec 10 jours complets, vous pourrez explorer diverses technologies et échanger avec une communauté mondiale.
+
+00:00:40.990 --> 00:00:44.290
+Suivez le direct et rapportez des idées concrètes au sein de votre entreprise.
+
+00:00:45.150 --> 00:00:48.930
+Janvier 2027, 10 jours, une seule communauté Microsoft.
+
+00:00:49.410 --> 00:00:50.690
+Les inscriptions sont désormais ouvertes.
+
+00:00:51.850 --> 00:00:55.650
+Rendez-vous sur m365con.net pour réserver votre place dès aujourd'hui.
+
+00:00:55.650 --> 00:00:58.550
+C'est m365con.net.
+
+00:01:00.310 --> 00:01:04.650
+Scrivez-vous sur m365con.net et nous vous attendons en direct en janvier.
+
+00:01:04.650 --> 00:01:07.330
+Bienvenue dans un nouvel épisode de Microsoft Knowledge Nuggets.
+
+00:01:07.610 --> 00:01:08.710
+Je suis votre hôte, Milko Peters.
+
+00:01:08.970 --> 00:01:13.150
+Si vous pouviez casser vos propres applications cloud volontairement et de manière contrôlée, on les rende plus robustes.
+
+00:01:13.470 --> 00:01:16.950
+Cela semble contre-intuitif, mais c'est la même logique que celle utilisée par les pompiers lors de brûlages dirigés.
+
+00:01:17.470 --> 00:01:21.830
+Ils allument des feux maîtrisés pour éliminer les broussailles sèches afin qu'en cas d'incendie réel, il n'y ait plus rien à brûler.
+
+00:01:22.410 --> 00:01:24.530
+C'est exactement ce qu'Azure Chaos Studio fait pour vos applications cloud.
+
+00:01:24.910 --> 00:01:31.610
+A la fin de cet épisode, vous comprendrez ce qu'est ce service, pourquoi l'utiliser, comment il vous aide à créer des systèmes qui ne s'effondrent pas en cas de problème.
+
+00:01:31.610 --> 00:01:34.490
+Alors prenez votre café et commençons par le problème.
+
+00:01:35.570 --> 00:01:36.770
+Le problème ?
+
+00:01:36.770 --> 00:01:39.050
+Pourquoi les tests traditionnels ne suffisent pas ?
+
+00:01:39.050 --> 00:01:40.490
+Voici ce qu'il en est des tests traditionnels.
+
+00:01:40.990 --> 00:01:43.610
+Ils vérifient si votre logiciel fonctionne comme prévu dans des conditions normales.
+
+00:01:44.670 --> 00:01:47.230
+Vous écrivez un test, vous l'exécutez, et si le résultat correspond, c'est réussi.
+
+00:01:47.890 --> 00:01:51.870
+C'est parfait pour détecter les bugs, mais cela ne révèle pas comment votre système réagit face à une panne imprévue,
+
+00:01:52.110 --> 00:01:56.310
+comme une interruption réseau, une machine virtuelle qui s'éteint, une zone de disponibilité entière qui tombe.
+
+00:01:57.570 --> 00:01:59.010
+Les applications cloud modernes ne sont plus sains.
+
+00:01:59.010 --> 00:02:05.010
+Ce sont des systèmes distribués qui communiquent avec des bases de données, des caches, des services d'identité, des API tierces et d'autres microservices et d'autres microservices,
+
+00:02:05.110 --> 00:02:06.410
+et tous ces éléments ont des dépendances cachées.
+
+00:02:07.090 --> 00:02:09.150
+Une petite défaillance peut provoquer une réaction en chaîne dans tout le système.
+
+00:02:09.650 --> 00:02:13.750
+Une base de données ralentit, l'application expire, l'équilibreur de charge la marque comme l'enseigne, le trafic est redirigé,
+
+00:02:13.970 --> 00:02:16.470
+d'autres instances sont surchargées, et soudain toute votre application est hors service.
+
+00:02:17.070 --> 00:02:21.330
+Les tests traditionnels ne détectent pas cela, car ils testent dans des conditions idéales, avec tout disponible,
+
+00:02:21.450 --> 00:02:24.250
+une latence résonue, les personnes pour éteindre des machines virtuelles pendant le test.
+
+00:02:24.250 --> 00:02:28.090
+Ainsi, vous déployez en production avec confiance jusqu'à ce que la réalité vous rattrape.
+
+00:02:28.690 --> 00:02:33.690
+Et cette fausse confiance est dangereuse, car c'est la différence entre savoir que votre système fonctionne et savoir qu'il survit.
+
+00:02:34.430 --> 00:02:35.790
+Et c'est là qu'intervient le chaos engineering.
+
+00:02:36.370 --> 00:02:38.150
+Qu'est-ce que le chaos engineering en fait ?
+
+00:02:38.150 --> 00:02:39.750
+Le chaos engineering est une méthode pratique.
+
+00:02:40.210 --> 00:02:43.330
+Vous injectez des défaillances réelles et contrôlées dans votre système et observez sa réaction.
+
+00:02:44.070 --> 00:02:45.810
+Cela ne se passe pas dans un laboratoire ou une simulation.
+
+00:02:46.130 --> 00:02:47.450
+Cela se passe sur vos ressources réelles.
+
+00:02:47.930 --> 00:02:48.450
+L'idée est simple.
+
+00:02:48.450 --> 00:02:55.110
+Vous partez d'une hypothèse du type « casse, si nous perdons une machine virtuelle, l'équilibreur de charge doit continuer à diriger le trafic vers les instances restantes ».
+
+00:02:55.110 --> 00:02:56.230
+Ensuite, vous lancez une expérience.
+
+00:02:56.850 --> 00:02:58.390
+Vous éteignez cette machine virtuelle et regardez ce qui se passe.
+
+00:02:58.690 --> 00:03:00.210
+L'équilibreur de charge fait-il son travail ?
+
+00:03:00.210 --> 00:03:01.090
+L'application restait en ligne.
+
+00:03:01.290 --> 00:03:02.770
+Vos alertes se déclenchent-elles correctement ?
+
+00:03:02.770 --> 00:03:04.730
+Vous mesurez tout, puis vous réparez ce qui casse.
+
+00:03:06.350 --> 00:03:06.990
+Voici le point important.
+
+00:03:07.250 --> 00:03:08.910
+Le chaos engineering n'est pas une destruction aléatoire.
+
+00:03:09.210 --> 00:03:12.110
+Ce n'est pas un développeur qui entre dans la salle des serveurs pour débrancher des câbles par amusement.
+
+00:03:12.630 --> 00:03:14.790
+C'est scientifique, reproductible et contraint par la sécurité.
+
+00:03:14.790 --> 00:03:19.070
+Vous définissez le rayon d'impact et contrôlez exactement ce qui échoue quand et pour combien de temps.
+
+00:03:19.470 --> 00:03:20.710
+Et surtout, vous en tirez des enseignements.
+
+00:03:21.250 --> 00:03:22.610
+Chaque expérience vous apporte des preuves.
+
+00:03:22.950 --> 00:03:27.710
+Soit votre hypothèse était bonne et votre système est résilient, soit elle était fausse et vous avez découvert une faiblesse à corriger.
+
+00:03:28.190 --> 00:03:28.990
+Dans les deux cas, vous avez gagné.
+
+00:03:29.430 --> 00:03:32.150
+Le défi est que créer vos propres outils de chaos engineering est difficile.
+
+00:03:32.830 --> 00:03:38.930
+Vous devriez écrire des scripts pour arrêter des machines virtuelles, saturer le processeur, bloquer le trafic réseau et orchestrer tout cela de manière sûre et répétable.
+
+00:03:39.530 --> 00:03:40.110
+C'est beaucoup de travail.
+
+00:03:40.410 --> 00:03:42.630
+C'est exactement pourquoi Azure a créé un service géré pour s'en charger.
+
+00:03:43.230 --> 00:03:44.450
+Voici Azure Chaos Studio.
+
+00:03:45.130 --> 00:03:49.710
+Azure Chaos Studio est un service entièrement géré pour exécuter des expériences de chaos directement sur vos ressources Azure.
+
+00:03:50.370 --> 00:03:54.610
+Pas de script personnalisé, pas d'outil tiers, pas besoin de construire votre propre plateforme d'injection de pannes.
+
+00:03:55.090 --> 00:03:56.810
+Tout est dans le portail Azure, prêt à l'emploi.
+
+00:03:57.310 --> 00:03:57.930
+Ainsi comment ça fonctionne.
+
+00:03:58.330 --> 00:04:00.270
+Chaos Studio vous offre deux façons d'injecter des pannes.
+
+00:04:00.870 --> 00:04:03.330
+Les pannes directes de service passent par le plan de contrôle Azure lui-même.
+
+00:04:03.850 --> 00:04:07.310
+Vous demandez à Chaos Studio d'arrêter une machine virtuelle et il le fait via les propres APIs d'Azure.
+
+00:04:07.850 --> 00:04:08.630
+Aucun agent nécessaire.
+
+00:04:08.990 --> 00:04:11.950
+Les pannes basées sur un agent installent un petit agent à l'intérieur de votre machine virtuelle.
+
+00:04:11.950 --> 00:04:16.850
+Il peut ensuite faire monter le processeur à 100%, saturer la mémoire ou tuer un processus spécifique.
+
+00:04:17.670 --> 00:04:21.770
+Cela vous permet de simuler des problèmes survenant à l'intérieur du système d'exploitation, pas seulement au niveau des ressources.
+
+00:04:22.210 --> 00:04:22.910
+Voici une analogie.
+
+00:04:22.910 --> 00:04:24.850
+Imaginez que vous possédez un grand immeuble de bureau.
+
+00:04:25.290 --> 00:04:27.510
+Vous voulez savoir si vos issues de secours fonctionnent vraiment ?
+
+00:04:27.510 --> 00:04:29.190
+Attendre un véritable incendie est une très mauvaise idée.
+
+00:04:29.510 --> 00:04:31.090
+Vous engagez une équipe spécialisée en gestion de casas.
+
+00:04:31.190 --> 00:04:35.350
+Ils arrivent, bloquent une cage d'escalier, simulent de la fumée au troisième étage et observent les réactions.
+
+00:04:35.750 --> 00:04:37.810
+C'est ça Chaos Studio et votre équipe d'intervention d'urgence.
+
+00:04:38.250 --> 00:04:42.870
+Vous les appelez, ils mènent l'exercice et vous apprenez si votre bâtiment est sûr avant qu'une vraie urgence ne survienne.
+
+00:04:43.830 --> 00:04:46.410
+Chaos Studio prend en charge un large éventail de ressources Azure.
+
+00:04:46.410 --> 00:05:02.750
+Ainsi que vous exécutiez une application simple à deux niveaux ou une architecture complexe de microservices sur AKS, vous pouvez la tester.
+
+00:05:03.470 --> 00:05:04.090
+Voici la bonne nouvelle.
+
+00:05:04.410 --> 00:05:05.990
+Vous n'avez pas besoin de créer d'outils personnalisés.
+
+00:05:06.450 --> 00:05:10.650
+Tout est disponible via le portail Azure, l'interface CLI, les API REST, les modèles ARM ou BICEP.
+
+00:05:11.010 --> 00:05:14.370
+Vous pouvez définir vos expériences sous forme de code et les intégrer dans vos pipelines de déploiement.
+
+00:05:14.910 --> 00:05:15.810
+Mais ne brûlons pas les étapes.
+
+00:05:16.410 --> 00:05:18.590
+Analysons d'abord la structure réelle de ces expériences.
+
+00:05:19.430 --> 00:05:20.250
+Les blocs de construction.
+
+00:05:20.430 --> 00:05:21.890
+Cible, étape, branche, action.
+
+00:05:22.510 --> 00:05:24.210
+Chaque expérience de chaos commence par des cibles.
+
+00:05:24.550 --> 00:05:25.550
+Qu'est-ce qu'une cible ?
+
+00:05:25.550 --> 00:05:27.830
+C'est simplement une ressource Azure sur laquelle vous voulez provoquer des erreurs.
+
+00:05:28.410 --> 00:05:33.490
+Vous ouvrez Chaos Studio, trouvez votre ressource, une VM, un groupe identique, un cluster AKS et vous l'intégrez.
+
+00:05:34.050 --> 00:05:37.570
+Cela signifie que vous dites à Chaos Studio, cette ressource est disponible pour des expériences.
+
+00:05:37.910 --> 00:05:38.430
+Voici le point clé.
+
+00:05:39.350 --> 00:05:43.210
+Lorsque vous intégrez une cible, vous choisissez également les erreurs que vous autorisez sur cette ressource.
+
+00:05:43.210 --> 00:05:45.030
+N'activez pas tout, vous choisissez.
+
+00:05:45.330 --> 00:05:45.990
+Pression sur le process.
+
+00:05:46.650 --> 00:05:48.410
+Arrêt complet d'une VM ? Peut-être pas pour la production.
+
+00:05:48.790 --> 00:05:49.390
+C'est vous qui décidez.
+
+00:05:49.710 --> 00:05:51.570
+Une fois vos cibles intégrées, vous créez une expérience.
+
+00:05:52.170 --> 00:05:53.370
+Considérez une expérience comme un plan d'été.
+
+00:05:53.850 --> 00:05:58.590
+Elle décrit exactement quelle panne injectée, dans quel ordre, contre quelle cible et pour quelle durée.
+
+00:05:58.930 --> 00:06:00.250
+Il ne s'agit pas juste de dire casser quelque chose.
+
+00:06:00.870 --> 00:06:02.110
+Définissez tout le scénario à l'avance.
+
+00:06:02.830 --> 00:06:04.130
+Les expériences ont une structure simple.
+
+00:06:04.510 --> 00:06:05.450
+Étape, branche et action.
+
+00:06:05.890 --> 00:06:07.150
+Les étapes s'exécutent les unes après les autres.
+
+00:06:07.490 --> 00:06:09.730
+L'étape 1 se termine, puis l'étape 2 commence, puis l'étape 3.
+
+00:06:10.150 --> 00:06:11.390
+C'est ainsi que vous modélisez une chronologie.
+
+00:06:11.390 --> 00:06:14.670
+D'abord, dégradez le réseau, puis saturez le processeur, puis arrêtez une VM.
+
+00:06:15.130 --> 00:06:16.510
+Chaque étape est une phase de votre scénario.
+
+00:06:17.150 --> 00:06:19.370
+A l'intérieur de chaque étape, vous pouvez avoir une ou plusieurs branches.
+
+00:06:19.770 --> 00:06:20.830
+C'est là que les choses deviennent intéressantes.
+
+00:06:21.210 --> 00:06:22.330
+Les branches s'exécutent en parallèle.
+
+00:06:22.710 --> 00:06:26.370
+Ainsi, au sein de l'étape 1, vous pourriez avoir la branche A, ajoutant de la latence à votre base de données,
+
+00:06:26.490 --> 00:06:29.170
+et la branche B, sollicitant fortement le processeur de vos serveurs web simultanément.
+
+00:06:29.170 --> 00:06:33.490
+Cela vous permet de simuler des scénarios complexes à multiples pannes qui reflètent des incidents réels.
+
+00:06:34.010 --> 00:06:34.630
+Ensuite, il y a les actions.
+
+00:06:35.130 --> 00:06:36.210
+Les actions sont les pannes réelles.
+
+00:06:36.830 --> 00:06:41.430
+Pression CPU, saturation mémoire, arrêt de machine virtuelle, latence réseau, blocage DNS, arrêt de processus.
+
+00:06:42.170 --> 00:06:44.750
+Chaque action cible, une ressource spécifique ou un groupe de ressources.
+
+00:06:45.330 --> 00:06:48.110
+Et encore une fois, vous ne pouvez utiliser que les actions que vous avez activées sur cette cible.
+
+00:06:48.550 --> 00:06:49.310
+C'est votre filet de sécurité.
+
+00:06:49.670 --> 00:06:53.170
+Si vous n'avez pas activé l'arrêt de VM sur une cible, l'expérience n'exécutera tout simplement pas cette action.
+
+00:06:53.630 --> 00:06:54.850
+Le flux de travail ressemble donc à ceci.
+
+00:06:55.150 --> 00:06:55.810
+Intégrez vos cibles.
+
+00:06:56.330 --> 00:06:57.850
+Activez les pannes avec lesquelles vous êtes à l'aise.
+
+00:06:57.850 --> 00:07:01.190
+Créez une expérience avec des étapes, des branches et des actions, puis exécutez-la.
+
+00:07:01.490 --> 00:07:04.050
+Mais avant de passer à l'exécution, il y a un point important à comprendre.
+
+00:07:04.510 --> 00:07:06.970
+Lorsque Chaos Studio exécute une expérience, il ne simule rien.
+
+00:07:07.350 --> 00:07:08.890
+Il applique réellement ses actions sur vos ressources.
+
+00:07:09.390 --> 00:07:10.990
+La pression CPU est une réelle pression CPU.
+
+00:07:11.490 --> 00:07:12.710
+Un arrêt de VM est un véritable arrêt.
+
+00:07:13.090 --> 00:07:13.610
+C'est tout l'intérêt.
+
+00:07:14.010 --> 00:07:16.530
+Vous testez le comportement de votre système dans des conditions de panne réelles.
+
+00:07:16.990 --> 00:07:18.010
+Cela signifie que vous devez être prudent.
+
+00:07:18.270 --> 00:07:20.910
+Passons donc en revue à une expérience réelle pour voir comment tout cela s'articule.
+
+00:07:21.530 --> 00:07:23.010
+Exécutez votre première expérience de cas.
+
+00:07:23.470 --> 00:07:24.170
+Rendons cela concret.
+
+00:07:24.170 --> 00:07:27.330
+Imaginez que vous ayez une application web s'exécutant sur trois machines virtuelles
+
+00:07:27.330 --> 00:07:28.710
+dans un groupe de machines virtuelles.
+
+00:07:29.630 --> 00:07:31.630
+Chaque VM se trouve dans une zone de disponibilité différente.
+
+00:07:32.070 --> 00:07:34.790
+Vous avez un équilibreur de charge en frontal qui distribue le trafic sur les trois.
+
+00:07:35.370 --> 00:07:36.110
+Hypothèse est simple.
+
+00:07:37.030 --> 00:07:38.830
+Si nous perdons une zone de disponibilité entière,
+
+00:07:39.190 --> 00:07:42.030
+l'équilibreur de charge devrait rediriger le trafic vers les deux VM restantes
+
+00:07:42.030 --> 00:07:43.570
+et l'application doit rester disponible.
+
+00:07:44.510 --> 00:07:45.970
+Construisez donc une expérience en deux étapes.
+
+00:07:46.810 --> 00:07:50.550
+Première étape, stresser deux des trois VM avec 95% de CPU pendant cinq minutes.
+
+00:07:50.550 --> 00:07:54.330
+Cela simule un scénario de voisin bruyant ou un processus incontrôlé.
+
+00:07:55.070 --> 00:07:57.750
+Deuxième étape, arrêtez brutalement toutes les VM de la zone 2.
+
+00:07:58.390 --> 00:07:59.730
+Cela simule une réelle panne de zone.
+
+00:08:00.410 --> 00:08:02.350
+Vous exécutez l'expérience puis vous observez ce qui se passe.
+
+00:08:02.810 --> 00:08:03.450
+Voici ce que vous verriez.
+
+00:08:03.970 --> 00:08:06.910
+Au cours des cinq premières minutes, deux VM atteignent 100% de CPU.
+
+00:08:07.670 --> 00:08:09.530
+La troisième reste normale car vous ne l'avez pas ciblée.
+
+00:08:10.010 --> 00:08:12.490
+Vos tableaux de bord de surveillance s'allument, des alertes se déclenchent,
+
+00:08:12.570 --> 00:08:14.310
+l'équilibreur de charge remarque que ces deux VM peinent,
+
+00:08:14.310 --> 00:08:15.690
+mais comme elles fonctionnent toujours techniquement,
+
+00:08:16.090 --> 00:08:19.670
+ils continuent de leur envoyer du trafic à votre application ralentit, mais ne passent pas hors ligne.
+
+00:08:19.670 --> 00:08:20.510
+C'est intéressant.
+
+00:08:20.890 --> 00:08:21.830
+Vous avez déjà appris quelque chose.
+
+00:08:22.270 --> 00:08:23.110
+Ensuite, l'étape 2 des mains.
+
+00:08:23.570 --> 00:08:26.530
+Les VM de la zone 2 sont brutalement arrêtées, sans préparation, sans avertissement.
+
+00:08:26.970 --> 00:08:27.630
+Elles disparaissent simplement.
+
+00:08:28.070 --> 00:08:30.530
+L'une de ces deux VM stressées se trouvait dans cette zone, elle a donc disparu.
+
+00:08:31.070 --> 00:08:33.030
+L'équilibreur de charge constate l'échec du test de santé,
+
+00:08:33.270 --> 00:08:36.370
+la retire du pull back-end et achemine tout le trafic vers les VM saines restantes.
+
+00:08:36.790 --> 00:08:37.710
+Votre application reste en ligne.
+
+00:08:37.890 --> 00:08:38.750
+L'hypothèse est confirmée.
+
+00:08:39.390 --> 00:08:40.750
+Mais voici ce à quoi vous nous attendiez peut-être.
+
+00:08:41.010 --> 00:08:43.650
+Les machines virtuelles restantes doivent désormais gérer 100% du trafic.
+
+00:08:44.050 --> 00:08:47.250
+Si vous n'aviez pas assez de capacité pour absorber cette charge, vous verriez la latence grimper.
+
+00:08:49.670 --> 00:08:50.610
+Les utilisateurs en subissent les conséquences.
+
+00:08:50.850 --> 00:08:51.550
+C'est un résultat important.
+
+00:08:51.850 --> 00:08:54.670
+Vous savez maintenant qu'il vous faut plus de marge de manœuvre, un autoscaling plus rapide.
+
+00:08:55.130 --> 00:08:56.330
+Et n'oubliez pas, ce n'est pas une simulation.
+
+00:08:57.130 --> 00:08:58.610
+Lorsque Chaos Studio exécute cette expérience,
+
+00:08:58.710 --> 00:09:00.930
+ces machines virtuelles atteignent réellement 95% de CPU.
+
+00:09:01.710 --> 00:09:03.270
+Cet arrêt de la zone 2 est un véritable arrêt.
+
+00:09:03.510 --> 00:09:05.990
+La machine virtuelle s'arrête, elle équilibreur de charge, se rééquilibre,
+
+00:09:06.070 --> 00:09:07.470
+et votre application survit ou non.
+
+00:09:07.810 --> 00:09:08.410
+C'est là tout l'intérêt.
+
+00:09:08.670 --> 00:09:09.310
+Vous ne devinez pas.
+
+00:09:09.690 --> 00:09:12.490
+Vous observez un comportement réel, dans des conditions de défaillance réelles.
+
+00:09:12.910 --> 00:09:15.010
+Vous apprenez si votre application reste opérationnelle ou si elle tombe.
+
+00:09:15.010 --> 00:09:17.490
+Et si elle tombe, vous la corrigez avant que vos clients ne s'en aperçoivent.
+
+00:09:18.330 --> 00:09:19.970
+Mais ce pouvoir s'accompagne de responsabilités.
+
+00:09:20.650 --> 00:09:21.310
+Vous devez être prudent.
+
+00:09:22.270 --> 00:09:24.290
+La sécurité avant tout, pour éviter les pannes imprévues.
+
+00:09:24.950 --> 00:09:27.170
+Chaos Studio intègre de multiples mécanismes de sécurité.
+
+00:09:27.850 --> 00:09:30.750
+Et avant de lancer votre première expérience, vous devez tous les comprendre.
+
+00:09:31.410 --> 00:09:33.490
+La première couche de sécurité concerne l'identité et les autorisations.
+
+00:09:34.010 --> 00:09:36.910
+Chaque expérience que vous créez reçoit sa propre identité gérée, attribuée par le système.
+
+00:09:37.710 --> 00:09:39.910
+Et cette identité commence par défaut avec zéro autorisation.
+
+00:09:39.910 --> 00:09:44.710
+Vous devez lui accorder explicitement l'accès aux ressources nécessaires et vous n'accordez que le minimum d'autorisation requis.
+
+00:09:45.510 --> 00:09:48.810
+Si une expérience n'a besoin que de solliciter le CPU de deux machines virtuelles,
+
+00:09:48.890 --> 00:09:52.110
+vous restreignez les autorisations au lieu de lui permettre d'arrêter tout le groupe de ressources.
+
+00:09:53.350 --> 00:09:55.310
+Ensuite, il y a l'activation des défaillances que j'ai mentionnées plus tôt.
+
+00:09:55.930 --> 00:09:58.950
+Lorsque vous intégrez une cible, vous choisissez exactement quelle défaillance vous êtes préautorisé.
+
+00:09:59.510 --> 00:10:02.510
+Si vous n'activez jamais l'arrêt des machines virtuelles sur un groupe de mise à l'échelle de production,
+
+00:10:02.710 --> 00:10:05.930
+aucune expérience ne pourra les arrêter, même si quelqu'un le tente.
+
+00:10:05.930 --> 00:10:09.850
+C'est un blocage strict qui nécessite que vous optiez délibérément pour chaque type de défaillance.
+
+00:10:10.590 --> 00:10:11.770
+Maintenant, par où commencer ?
+
+00:10:11.770 --> 00:10:12.450
+La réponse est simple.
+
+00:10:12.970 --> 00:10:14.990
+Commencez petit et commencez dans un environnement hors production.
+
+00:10:15.530 --> 00:10:17.510
+Exécutez vos premières expériences en développement en pré-production.
+
+00:10:17.950 --> 00:10:20.570
+Testez avec une seule machine virtuelle et une seule défaillance
+
+00:10:20.570 --> 00:10:23.210
+et validez que votre surveillance fonctionne, que vos alertes se déclenchent
+
+00:10:23.210 --> 00:10:24.910
+et que vous pouvez annuler l'expérience en cas de problème.
+
+00:10:25.630 --> 00:10:27.990
+Ce n'est qu'après avoir acquis cette confiance dans un environnement sûr
+
+00:10:27.990 --> 00:10:29.750
+que vous devriez envisager de toucher à la production.
+
+00:10:30.710 --> 00:10:33.170
+Microsoft a un avertissement à ce sujet que je souhaite partager directement.
+
+00:10:33.350 --> 00:10:35.790
+Ils appellent cela un événement qui génère une mise à jour de votre CV.
+
+00:10:36.210 --> 00:10:39.330
+Si vous exécutez une expérience de K.O. en production sans mesure de protection appropriée
+
+00:10:39.330 --> 00:10:42.230
+et qu'elle fait tomber toute votre application, c'est le genre d'erreur qui pourrait vous coûter votre emploi.
+
+00:10:42.690 --> 00:10:43.490
+Ce n'est pas une exagération.
+
+00:10:44.030 --> 00:10:46.610
+K.O. Studio est puissant car il agit réellement sur vos ressources,
+
+00:10:46.710 --> 00:10:48.490
+alors utilisez ce pouvoir avec sagesse.
+
+00:10:49.050 --> 00:10:51.070
+Le dernier filet de sécurité est la surveillance et l'annulation.
+
+00:10:52.090 --> 00:10:54.950
+Pendant qu'une expérience se déroule, vous pouvez suivre sa progression en temps réel.
+
+00:10:55.430 --> 00:10:59.050
+Voyez quelles étapes sont terminées, quelles branches sont actives et quelles actions s'exécutent.
+
+00:10:59.770 --> 00:11:03.390
+Si quelque chose semble anormal, vous cliquez sur annuler et l'expérience s'arrête immédiatement.
+
+00:11:03.390 --> 00:11:07.970
+Les ressources affectées restent dans leur état actuel, mais aucune nouvelle panne n'est injectée.
+
+00:11:08.410 --> 00:11:10.570
+Gardez donc vos tableaux de bord ouverts et le doigt sur le bouton d'annulation.
+
+00:11:11.170 --> 00:11:13.470
+Commencez petit, soyez prudent et respectez la puissance de l'outil.
+
+00:11:13.910 --> 00:11:16.150
+Maintenant que vous savez comment rester en sécurité, la question est
+
+00:11:16.150 --> 00:11:19.070
+où mener ces expériences ?
+
+00:11:19.070 --> 00:11:21.150
+Décalage vers la gauche ou décalage vers la droite ?
+
+00:11:21.150 --> 00:11:23.470
+Alors où effectuez-vous réellement ces expériences ?
+
+00:11:23.470 --> 00:11:25.850
+Il existe deux approches principales et la plupart des équipes utilisent les deux.
+
+00:11:26.470 --> 00:11:28.110
+La première est le décalage vers la gauche, shifting left.
+
+00:11:28.650 --> 00:11:31.370
+Vous exécutez des expériences de cas auto dans votre cycle de développement.
+
+00:11:32.130 --> 00:11:37.550
+Dès que le code est déployé dans un environnement de test, vous y injectez des pannes et l'intégrer à votre pipeline CI-SECD.
+
+00:11:38.110 --> 00:11:41.290
+Le pipeline déploie l'application, exécute une expérience de cas auto pour la stresser,
+
+00:11:41.590 --> 00:11:43.990
+vérifie sa résilience puis promoue la version à l'étape suivante.
+
+00:11:44.950 --> 00:11:48.010
+Considérez cela comme une porte de qualité, tout comme les tests unitaires ou les scans de sécurité.
+
+00:11:49.290 --> 00:11:52.490
+Si l'application ne supporte pas l'arrêt d'une machine virtuelle en staging, elle ne va pas en production.
+
+00:11:53.190 --> 00:11:56.530
+La deuxième approche est le décalage vers la droite, shifting right, ce qui signifie tester en production.
+
+00:11:57.170 --> 00:12:00.330
+Oui, cela semble terrifiant, mais écoutez-moi bien, vous ne commencez pas par là.
+
+00:12:00.630 --> 00:12:03.470
+Vous ne passez à droite qu'après avoir acquis de la confiance dans les environnements hors production.
+
+00:12:04.370 --> 00:12:06.070
+Commencez par de petites expériences limitées.
+
+00:12:06.830 --> 00:12:09.690
+Peut-être en stressant le CPU d'une instance lors d'une période de faible trafic.
+
+00:12:10.250 --> 00:12:12.070
+Vous surveillez attentivement, vous apprenez puis vous étendez.
+
+00:12:12.070 --> 00:12:15.050
+Peut-être arrêtez une seule VM en production durant les heures de travail
+
+00:12:15.050 --> 00:12:17.530
+et vérifiez que votre équilibreur de charge redirige bien le trafic,
+
+00:12:17.630 --> 00:12:21.250
+que les utilisateurs ne remarquent rien et que votre supervision détecte tout.
+
+00:12:22.390 --> 00:12:24.610
+Avec le temps, vous montez en puissance vers des expériences plus agressives.
+
+00:12:25.390 --> 00:12:27.390
+Il existe une troisième approche intermédiaire, le game day.
+
+00:12:27.810 --> 00:12:30.070
+Un game day est un exercice de chaos planifié,
+
+00:12:30.230 --> 00:12:32.910
+où vous réunissez vos équipes de développement, d'exploitation et de sécurité,
+
+00:12:33.170 --> 00:12:34.810
+tous ceux impliqués dans un incident réel.
+
+00:12:35.650 --> 00:12:37.930
+Vous menez une expérience de chaos et pratiquez votre réponse aux incidents.
+
+00:12:38.310 --> 00:12:39.190
+Qui reçoit l'alerte ?
+
+00:12:39.190 --> 00:12:40.530
+Qui décide de l'escalade ?
+
+00:12:40.530 --> 00:12:41.730
+Quelle est la chaîne de communication ?
+
+00:12:41.730 --> 00:12:43.670
+A quelle vitesse pouvez-vous diagnostiquer le problème ?
+
+00:12:43.670 --> 00:12:44.930
+Les game days testent la technologie,
+
+00:12:45.010 --> 00:12:47.290
+mais surtout ils testent les personnes et les processus qui l'entourent.
+
+00:12:48.110 --> 00:12:50.950
+L'idée clé à travers ces trois approches est que le chaos engineering n'est pas un test unique.
+
+00:12:52.190 --> 00:12:55.230
+On ne lance pas une seule expérience pour déclarer son système résilient avant de passer à autre chose.
+
+00:12:55.690 --> 00:12:57.790
+Les systèmes changent, le code change, les configurations changent,
+
+00:12:57.870 --> 00:12:59.190
+les dépendances changent, les dépendances changent.
+
+00:12:59.470 --> 00:13:01.350
+Ce qui était résilient le mois dernier pourrait être fragile aujourd'hui.
+
+00:13:01.990 --> 00:13:04.130
+L'objectif est la validation continue de la résilience.
+
+00:13:05.130 --> 00:13:06.370
+Vous menez des expériences régulièrement,
+
+00:13:06.370 --> 00:13:10.350
+vous les intégrez à votre processus de publication et vous en faites partie de votre rythme opérationnel.
+
+00:13:11.030 --> 00:13:13.390
+Alors quelle est la vraie valeur de tous ces efforts ?
+
+00:13:13.390 --> 00:13:14.890
+La vraie valeur c'est de renforcer la confiance.
+
+00:13:15.390 --> 00:13:17.050
+L'ingénierie du chaos ne se limite pas à trouver des bugs.
+
+00:13:17.430 --> 00:13:19.390
+Elle renforce la confiance et c'est une chose totalement différente.
+
+00:13:19.910 --> 00:13:20.950
+Un bug est un défaut spécifique.
+
+00:13:21.430 --> 00:13:22.410
+Vous le corrigez et vous passez à autre chose.
+
+00:13:22.690 --> 00:13:23.510
+La confiance c'est un sentiment.
+
+00:13:23.510 --> 00:13:26.110
+C'est savoir que votre système peut survivre à l'imprévu,
+
+00:13:26.310 --> 00:13:29.390
+ce que les tests unitaires ou d'intégration ne peuvent offrir seuls.
+
+00:13:30.210 --> 00:13:33.270
+Vous l'obtenez en observant votre système gérer une vraie panne et s'en sortir indemne.
+
+00:13:33.910 --> 00:13:36.450
+Ce processus vous force à améliorer des points que vous ignoriez peut-être autrement.
+
+00:13:37.170 --> 00:13:38.050
+Votre monitoring par exemple.
+
+00:13:38.550 --> 00:13:39.850
+Lorsque vous lancez une expérience de chaos,
+
+00:13:40.070 --> 00:13:42.670
+vous découvrez rapidement si vos tableaux de bord affichent les bonnes métriques,
+
+00:13:43.090 --> 00:13:44.730
+si vos alertes se déclenchent au bon seuil
+
+00:13:44.730 --> 00:13:48.470
+et si votre équipe d'astreinte est avertie à temps et avertie à...
+
+00:13:48.470 --> 00:13:50.710
+Si vous ne voyez pas la panne arriver, vous ne pouvez pas y répondre.
+
+00:13:51.130 --> 00:13:52.350
+Les expériences de chaos exposent ces lacunes.
+
+00:13:52.350 --> 00:13:54.190
+Elles révèlent aussi des hypothèses cachées.
+
+00:13:54.830 --> 00:13:56.310
+Chaque architecte a déjà dit quelque chose comme
+
+00:13:56.310 --> 00:13:58.470
+« Si la base de données tombe, l'appli doit juste mettre en cache
+
+00:13:58.470 --> 00:14:01.070
+les dernières données connues et continuer à tourner. »
+
+00:14:01.070 --> 00:14:03.430
+Cela semble bien sur un tableau blanc, mais est-ce que ça fonctionne vraiment ?
+
+00:14:03.430 --> 00:14:04.450
+Avez-vous déjà testé ?
+
+00:14:04.450 --> 00:14:06.790
+Les expériences de chaos répondent à cette question avec des preuves concrètes.
+
+00:14:07.230 --> 00:14:08.910
+Vous éteignez la base de données et vous observez ce qui se passe.
+
+00:14:09.210 --> 00:14:10.430
+Peut-être que l'appli le gère correctement.
+
+00:14:10.930 --> 00:14:11.450
+Peut-être qu'elle plante.

@@ -1,0 +1,967 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:03.200
+Witajcie w kolejnym odcinku Microsoft Knowledge Nugget w M365FM.
+
+00:00:03.360 --> 00:00:05.100
+Nazywam się Merko Peters i jestem prowadzącym.
+
+00:00:05.220 --> 00:00:08.240
+Tematem dzisiejszego odcinka są agenci, a i o których słyszycie zapewne wszędzie.
+
+00:00:08.420 --> 00:00:09.540
+Ale czym tak naprawdę są?
+
+00:00:09.740 --> 00:00:14.160
+Większość ludzi powie Wam, że to inteligentniejszy hotbot, co jest obecnie największym nieporozumieniem.
+
+00:00:14.360 --> 00:00:21.820
+Pod koniec tego odcinka zrozumiecie, czym naprawdę jest agent, czym różni się od hotbota oraz jakie są trzy sposoby jego budowy w ekosystemie Microsoft.
+
+00:00:22.120 --> 00:00:24.340
+Oto najprostszy sposób, by o tym myśleć.
+
+00:00:24.440 --> 00:00:26.740
+Hotbot jest jak recepcjonista przy biurku.
+
+00:00:27.000 --> 00:00:29.480
+Zadajesz pytanie, otrzymujesz odpowiedź i to wszystko.
+
+00:00:29.480 --> 00:00:33.060
+Agent jest bardziej jak osobisty asystent, który wykazuje inicjatywę.
+
+00:00:33.240 --> 00:00:37.300
+Dajesz mu cel, np. umówienie spotkania z dostawcą, a on samodzielnie ustala kroki.
+
+00:00:37.520 --> 00:00:41.800
+Sprawdza kalendarz, wysyła e-maile, aktualizuje pliki i wraca do Ciebie, gdy wszystko jest gotowe.
+
+00:00:42.020 --> 00:00:48.020
+Jeden odpowiada na pytania, drugi wykonuje pracę i to rozróżnienie jest ważne, bo stanowi fundament wszystkiego, o czym będziemy mówić.
+
+00:00:48.320 --> 00:00:50.440
+Hotboty kontra agenci główna różnica.
+
+00:00:50.900 --> 00:00:53.580
+Przeanalizujmy, co tak naprawdę dzieli hotbota od agenta.
+
+00:00:53.820 --> 00:00:54.480
+Hotbot jest reaktywny.
+
+00:00:55.280 --> 00:00:57.420
+Ktoś wpisuje pytanie, a hotbot odpowiada.
+
+00:00:57.420 --> 00:01:01.820
+Wykorzystuje pamięć krótkotrwałą, co oznacza, że wie tylko to, co powiedziano w tej rozmowie.
+
+00:01:02.040 --> 00:01:06.120
+Gdy czat się kończy, kontekst znika, a działanie hotbota ogranicza się do rozmów.
+
+00:01:06.280 --> 00:01:08.120
+Nie może zrobić nic poza oknem czatu.
+
+00:01:08.300 --> 00:01:10.420
+Agent jest inny, ponieważ jest proaktywny.
+
+00:01:10.660 --> 00:01:15.800
+Zamiast czekać na pytanie, może podejmować działania samodzielnie, jak wysłanie przypomnienia czy aktualizacja statusu.
+
+00:01:16.000 --> 00:01:20.360
+Może uzyskiwać dostęp do innych systemów, takich jak poczta, kalendarz czy firmowy SharePoint.
+
+00:01:20.360 --> 00:01:26.320
+Ma nawet własną tożsamość w Microsoft Entra ID, co oznacza, że może mieć własną skrzynkę, własny ondrive i konto Teams.
+
+00:01:26.560 --> 00:01:27.840
+Działa również autonomicznie.
+
+00:01:28.060 --> 00:01:30.860
+Dajesz mu zadanie, a on je wykonuje bez potrzeby ciągłego sprawdzania.
+
+00:01:31.060 --> 00:01:32.320
+Pomyślcie o tym w ten sposób.
+
+00:01:32.560 --> 00:01:35.400
+Hotbot jest jak pracownik helpdesku z wydrukowanym FAQ.
+
+00:01:35.640 --> 00:01:38.820
+Zadajesz pytanie, on otwiera odpowiednią stronę i odczytuje odpowiedź.
+
+00:01:38.960 --> 00:01:46.140
+Agent jest jak kierownik projektu, który ma dostęp do plików, wysyła maile, planuje spotkania, monitoruje zadania i raportuje bez konieczności prowadzenia go za rękę.
+
+00:01:46.140 --> 00:01:51.840
+Oto kluczowa różnica. Hotbot żyje wewnątrz rozmowy, podczas gdy agent może uruchamiać przepływy pracy w tle.
+
+00:01:52.080 --> 00:01:57.960
+Może modyfikować dane w bazie, tworzyć zamówienia w SharePoint, kiedy jesteś na spotkaniu, bez potrzeby nadzorowania jego pracy.
+
+00:01:58.200 --> 00:02:01.400
+Po prostu wykonuje zadanie w tle i informuje Cię, gdy jest gotowe.
+
+00:02:01.660 --> 00:02:09.700
+Skoro wiesz już, czym jest agent, jak właściwie go zbudować, Microsoft oferuje trzy ścieżki, a wybór zależy od Twoich umiejętności i tego, co agent ma robić.
+
+00:02:09.880 --> 00:02:11.100
+Omówimy je za chwilę.
+
+00:02:11.640 --> 00:02:13.300
+Trzy ścieżki tworzenia przegląd.
+
+00:02:13.300 --> 00:02:17.860
+Microsoft udostępnia trzy sposoby budowania agentów, dopasowane do różnych poziomów zaawansowania.
+
+00:02:18.060 --> 00:02:21.100
+Pierwszym jest Agent Builder, czyli opcja bez pisania kodu, no code.
+
+00:02:21.280 --> 00:02:27.280
+Jest wbudowany w Microsoft 365 Copilot, więc każdy może stworzyć agenta, opisując swoje potrzeby prostym językiem.
+
+00:02:27.500 --> 00:02:29.440
+Nie musisz pisać ani jednej linijki kodu.
+
+00:02:29.700 --> 00:02:31.260
+Drugą opcją jest Copilot Studio.
+
+00:02:31.480 --> 00:02:35.380
+To oddzielna aplikacja internetowa dostępna pod adresem copilotstudio.microsoft.com.
+
+00:02:35.380 --> 00:02:43.920
+To rozwiązanie typu low-code, co oznacza, że nadal opisujesz agenta naturalnym językiem, ale możesz też dodać konektory do innych usług, zdefiniować własne przepływy rozmowy i ustawić automatyczne wyzwalacze.
+
+00:02:44.140 --> 00:02:46.820
+Daje większe możliwości, ale wymaga nieco więcej konfiguracji.
+
+00:02:47.080 --> 00:02:51.680
+Jest też Foundry, czyli Azure AI Foundry, profesjonalna platforma Microsoft dla programistów.
+
+00:02:51.820 --> 00:02:55.500
+Tutaj masz pełną kontrolę nad modelem, AI orkiestracją i infrastrukturą.
+
+00:02:55.760 --> 00:02:58.960
+Możesz wybierać spośród setek modeli, takich jak OpenAI, Cloud czy Lama.
+
+00:02:59.220 --> 00:03:00.880
+Możesz budować systemy wieloagentowe.
+
+00:03:00.880 --> 00:03:04.440
+To rozwiązanie dla profesjonalnych zespołów, które potrzebują agentów produkcyjnych na skalę przedsiębiorstwa.
+
+00:03:04.580 --> 00:03:06.540
+A teraz coś, czego wiele osób nie bierze pod uwagę.
+
+00:03:06.780 --> 00:03:08.760
+Granice między tymi trzema ścieżkami są płynne.
+
+00:03:08.940 --> 00:03:13.160
+Możesz zacząć budować agenta w Agent Builder, a następnie wyeksportować go do Copilot Studio, jeśli potrzebujesz większej mocy.
+
+00:03:13.380 --> 00:03:15.900
+Możesz zacząć w Copilot Studio, a później przenieść się do Foundry.
+
+00:03:16.060 --> 00:03:17.300
+To nie są odizolowane wyspy.
+
+00:03:17.480 --> 00:03:20.820
+To raczej Spectrum, a Microsoft zaprojektował je tak, by współpracowały ze sobą.
+
+00:03:21.040 --> 00:03:23.520
+Zacznijmy od najłatwiejszej ścieżki, czyli Agent Buildera.
+
+00:03:23.700 --> 00:03:27.760
+Jeśli masz już licencję Microsoft 365 Copilot, masz dostęp do tego narzędzia.
+
+00:03:27.760 --> 00:03:30.020
+Agent Builder, agenty no code dla każdego.
+
+00:03:30.200 --> 00:03:31.920
+Jak więc właściwie wygląda Agent Builder?
+
+00:03:32.040 --> 00:03:34.500
+To prosty formularz wewnątrz Microsoft 365 Copilot.
+
+00:03:34.660 --> 00:03:37.380
+Otwierasz Copilota, klikasz sekcję agentów po lewej stronie i wybierasz utwórz.
+
+00:03:37.540 --> 00:03:39.800
+Żadnych dodatkowych stron, żadnej złożonej konfiguracji.
+
+00:03:40.060 --> 00:03:41.980
+Zaczynasz od opisania tego, czego potrzebujesz.
+
+00:03:42.180 --> 00:03:46.740
+Wpisz coś w rodzaju stwórz agenta, który odpowiada na pytania dotyczące polityki HR w naszej firmie.
+
+00:03:46.920 --> 00:03:52.800
+Copilot bierze ten opis i automatycznie generuje nazwę, zestaw instrukcji, a nawet sugestie pytań dla użytkowników.
+
+00:03:52.960 --> 00:03:55.040
+Jeśli chcesz, możesz dopracować te instrukcje.
+
+00:03:55.040 --> 00:04:01.400
+Dodaj zasady, na przykład, korzystaj tylko z dostarczonych przeze mnie źródeł lub, jeśli nie znasz odpowiedzi, skieruj użytkownika do działu hrabia.
+
+00:04:01.620 --> 00:04:04.720
+Następnie wskazujesz mu źródła wiedzy i właśnie w tym tkwi prawdziwa moc.
+
+00:04:04.960 --> 00:04:11.340
+Możesz wskazać pliki w usłudze OnDrive, witryny SharePoint, czaty i kanały w Teams, konkretne strony internetowe, a nawet schemat organizacyjny firmy.
+
+00:04:11.560 --> 00:04:13.240
+Jest tu również bardzo ważne ustawienie.
+
+00:04:13.460 --> 00:04:16.160
+Przełącznik, który wymusza korzystanie wyłącznie ze wskazanych źródeł.
+
+00:04:16.340 --> 00:04:19.200
+Włącz go, a agent nie będzie mógł czerpać z ogólnej wiedzy modelu AI.
+
+00:04:19.200 --> 00:04:22.500
+Będzie mógł odpowiadać wyłącznie na podstawie dokumentów i witryn, które mu udostępniłeś.
+
+00:04:22.620 --> 00:04:24.320
+W ten sposób zapobiegasz halucynacjom.
+
+00:04:24.500 --> 00:04:27.380
+Agent dosłownie nie może niczego zmyślić, ponieważ jest ograniczony do Twoich danych.
+
+00:04:27.600 --> 00:04:29.540
+Możesz również wyposażyć agenta w określone możliwości.
+
+00:04:29.800 --> 00:04:31.080
+Chcesz, żeby tworzył dokumenty Word?
+
+00:04:31.260 --> 00:04:32.220
+Przestaw przełącznik.
+
+00:04:32.400 --> 00:04:33.460
+Chcesz, żeby generował obrazy?
+
+00:04:33.580 --> 00:04:34.720
+To również kwestia przełącznika.
+
+00:04:34.960 --> 00:04:36.120
+Chcesz, żeby pisał fragmenty kodu?
+
+00:04:36.260 --> 00:04:36.700
+To samo.
+
+00:04:36.900 --> 00:04:39.300
+Są to opcje dodatkowe, ale sprawiają, że agent staje się znacznie bardziej użyteczny.
+
+00:04:39.480 --> 00:04:41.520
+Gdy skończysz, możesz udostępnić agenta współpracownikom.
+
+00:04:41.520 --> 00:04:43.160
+Ty decydujesz, kto otrzyma dostęp.
+
+00:04:43.340 --> 00:04:45.500
+Konkretne osoby lub wszyscy w Twojej organizacji.
+
+00:04:45.760 --> 00:04:48.480
+Znajdą go na swoim pasku bocznym kopilot gotowego do użycia.
+
+00:04:48.700 --> 00:04:49.680
+Oto konkretny przykład.
+
+00:04:49.960 --> 00:04:53.200
+Załóżmy, że pracujesz w HR i masz 50-stronicowy podręcznik pracownika.
+
+00:04:53.420 --> 00:04:55.420
+Tworzysz agenta o nazwie pomocnik HR.
+
+00:04:55.620 --> 00:04:57.460
+Przesyłasz podręcznik jako źródło wiedzy.
+
+00:04:57.700 --> 00:05:00.280
+Włączasz opcję korzystania wyłącznie ze wskazanych źródeł.
+
+00:05:00.480 --> 00:05:05.500
+Piszesz instrukcję, aby odpowiadał uprzejmie i zawsze cytował sekcję podręcznika, do której się odnosi.
+
+00:05:05.500 --> 00:05:11.120
+Teraz każdy w Twojej firmie może zapytać pomocnika HR o zasady urlopów, zwolnienia lekarskie lub dress code
+
+00:05:11.120 --> 00:05:14.280
+i uzyskać dokładne odpowiedzi bez każdorazowego dzwonienia do hrabia.
+
+00:05:14.480 --> 00:05:16.380
+Jednak agent Builder ma swoje ograniczenia.
+
+00:05:16.640 --> 00:05:18.440
+Nie potrafi automatycznie wyzwalać działań.
+
+00:05:18.600 --> 00:05:21.840
+Nie może łączyć się z zewnętrznymi systemami, takimi jak Salesforce czy oprogramowanie księgowe.
+
+00:05:22.020 --> 00:05:24.140
+Nie może publikować treści na publicznej stronie internetowej.
+
+00:05:24.360 --> 00:05:27.780
+Jest zaprojektowany do prostych agentów typu Q&A, którzy działają wewnątrz firmowego kopilota.
+
+00:05:28.000 --> 00:05:31.760
+Działa to świetnie w podstawowych przypadkach, ale co jeśli potrzebujesz, aby agent podejmował działania automatycznie?
+
+00:05:31.760 --> 00:05:33.960
+Na przykład, gdy przychodzi wiadomość e-mail od klienta.
+
+00:05:34.140 --> 00:05:35.640
+Właśnie tutaj wkracza Kopilot Studio.
+
+00:05:35.820 --> 00:05:38.440
+Kopilot Studio – moc low-code dla procesów biznesowych.
+
+00:05:38.440 --> 00:05:42.940
+Gdzie więc znaleźć Kopilot Studio? Znajduje się pod adresem kopilotstudio.microsoft.com.
+
+00:05:43.060 --> 00:05:45.960
+To pełna platforma do tworzenia agentów, a nie tylko prosty formularz.
+
+00:05:46.140 --> 00:05:50.240
+Jeśli masz już licencję Microsoft 365 Kopilot, prawdopodobnie masz już do niego dostęp.
+
+00:05:50.480 --> 00:05:53.000
+Jeśli nie, dostępna jest opcja płatności za faktyczne użycie.
+
+00:05:53.220 --> 00:05:55.680
+Nadal zaczynasz od opisania swojego agenta w języku naturalnym.
+
+00:05:55.840 --> 00:05:59.400
+Ta część pozostaje bez zmian, ale teraz możesz dodawać automatyczne wyzwalacze.
+
+00:05:59.400 --> 00:06:03.360
+Możesz na przykład ustawić aktywację agenta w momencie utworzenia nowego elementu w SharePoint
+
+00:06:03.360 --> 00:06:06.320
+lub gdy wiadomość e-mail trafi do konkretnej skrzynki odbiorczej.
+
+00:06:06.320 --> 00:06:08.480
+Agent nie czeka, aż ktoś go o coś zapyta.
+
+00:06:08.700 --> 00:06:11.400
+Zaczyna działać samodzielnie, gdy wydarzy się określone zdarzenie.
+
+00:06:11.560 --> 00:06:13.520
+Konektory to kolejna duża aktualizacja.
+
+00:06:13.720 --> 00:06:20.460
+Kopilot Studio ma ponad tysiąc gotowych konektorów do usług takich jak Salesforce, Dynamics 365, Excel, Outlook, Teams i innych.
+
+00:06:20.680 --> 00:06:24.600
+Twój agent może odczytywać dane z Salesforce, tworzyć rekordy w Dynamics, wysyłać e-maile przez Outlooka
+
+00:06:24.600 --> 00:06:27.460
+i publikować aktualizacje w Teams, a wszystko to w ramach jednej konwersacji.
+
+00:06:27.600 --> 00:06:28.900
+To naprawdę potężne narzędzie.
+
+00:06:29.120 --> 00:06:30.560
+Źródła wiedzy są również bogatsze.
+
+00:06:30.560 --> 00:06:32.100
+Możesz połączyć się z Dataverse.
+
+00:06:32.260 --> 00:06:33.720
+To platforma danych firmy Microsoft.
+
+00:06:34.020 --> 00:06:36.700
+Do tego dochodzi SharePoint, publiczne strony internetowe i przesłane pliki.
+
+00:06:36.900 --> 00:06:40.320
+Agent ma więcej kontekstu do pracy, więc jego odpowiedzi są dokładniejsze i bardziej przydatne.
+
+00:06:40.480 --> 00:06:41.540
+Tutaj robi się ciekawie.
+
+00:06:41.780 --> 00:06:42.880
+Możesz definiować tematy.
+
+00:06:43.060 --> 00:06:45.660
+To niestandardowe przepływy konwersacji dla określonych scenariuszy.
+
+00:06:45.880 --> 00:06:48.180
+Załóżmy, że użytkownik zgłasza konflikt w miejscu pracy.
+
+00:06:48.440 --> 00:06:52.380
+Możesz utworzyć temat, który mówi, jeśli użytkownik wspomni o konflikcie, nie próbuj go rozwiązywać.
+
+00:06:52.580 --> 00:06:57.140
+Zamiast tego zbierz jego imię, nazwisko i dział, a następnie przekaż sprawę dyrektorowi HR wraz z podsumowaniem.
+
+00:06:57.140 --> 00:06:59.780
+Agent za każdym razem postępuje zgodnie z tym przepływem.
+
+00:06:59.920 --> 00:07:02.720
+To tak, jakby dać agentowi scenariusz działania dla każdej sytuacji.
+
+00:07:02.960 --> 00:07:05.760
+Zanim opublikujesz agenta, możesz go przetestować w panelu podglądu.
+
+00:07:05.960 --> 00:07:09.080
+Zadawaj mu pytania, sprawdzaj, jak reaguje i weryfikuj cytowane źródła.
+
+00:07:09.280 --> 00:07:15.380
+Gdy będziesz zadowolony, możesz opublikować go w Teams Microsoft 365, Copilot lub nawet na stronie demonstracyjnej dla użytkowników zewnętrznych.
+
+00:07:15.560 --> 00:07:16.820
+Jedna rzecz dotycząca cen.
+
+00:07:16.980 --> 00:07:23.020
+Copilot Studio wymaga kredytów z użycia, jeśli użytkownicy zewnętrzni wchodzą w interakcję z Twoim agentem lub jeśli agent podejmuje autonomiczne działania.
+
+00:07:23.020 --> 00:07:28.560
+Jeśli tylko Ty z niego korzystasz lub udostępniasz go współpracownikom, którzy również mają licencję, Copilot kredyty nie są potrzebne.
+
+00:07:28.680 --> 00:07:33.020
+Ale jeśli tworzysz agenta dla klientów lub partnerów, Twoja organizacja płaci za każdą interakcję.
+
+00:07:33.200 --> 00:07:35.920
+Copilot Studio obsługuje większość scenariuszy biznesowych.
+
+00:07:36.140 --> 00:07:41.140
+Jednak dla programistów, którzy potrzebują pełnej kontroli nad modelem, a i orkiestracją i infrastrukturą, istnieje Foundry.
+
+00:07:41.320 --> 00:07:44.020
+Foundry umożliwia tworzenie niestandardowych agentów za pomocą kodu.
+
+00:07:44.260 --> 00:07:47.820
+Jeśli jesteś programistą i chcesz mieć pełną kontrolę, wybierz Azure AI Foundry.
+
+00:07:47.820 --> 00:07:52.080
+To profesjonalna platforma Microsoftu do budowania i obsługi agentów AI na dużą skalę.
+
+00:07:52.260 --> 00:07:57.660
+Jest przeznaczona dla programistów, analityków, danych i inżynierów AI, którzy chcą pracować z frameworkiem agentów Microsoft.
+
+00:07:57.940 --> 00:08:00.040
+Oto coś, co wydarzyło się niedawno i ma znaczenie.
+
+00:08:00.280 --> 00:08:04.440
+Microsoft połączył dwa główne frameworki w jeden, Semantic Kernel, który był opcją przyjazną dla przedsiębiorstw,
+
+00:08:04.500 --> 00:08:07.440
+oraz Autogen, który skupiał się bardziej na badaniach i eksperymentach z wieloma agentami.
+
+00:08:07.620 --> 00:08:10.340
+Teraz stanowią one jeden framework, więc nie musisz wybierać.
+
+00:08:10.500 --> 00:08:14.720
+W Foundry otrzymujesz dostęp do katalogu modeli z setkami opcji, oczywiście modeli OpenAI,
+
+00:08:14.720 --> 00:08:17.620
+ale także Cloud od Anthropic, Lama od Meta i wielu innych.
+
+00:08:17.820 --> 00:08:20.980
+Wybierasz model, który pasuje do Twojego przypadku użycia, a nie odwrotnie.
+
+00:08:21.200 --> 00:08:23.420
+Zyskujesz również pełną kontrolę nad orkiestracją.
+
+00:08:23.640 --> 00:08:27.840
+Oznacza to, że decydujesz, jak agent rozumuje, jakich narzędzi używa i w jakiej kolejności.
+
+00:08:28.100 --> 00:08:31.020
+Foundry oferuje prompt flow do projektowania tych kroków rozumowania,
+
+00:08:31.180 --> 00:08:33.580
+usługę agenta do uruchamiania wszystkiego na dużą skalę
+
+00:08:33.580 --> 00:08:37.580
+oraz wbudowane narzędzia ewaluacyjne do testowania jakości agenta przed jego uruchomieniem.
+
+00:08:37.800 --> 00:08:40.280
+Oto szczegół techniczny, który ma znaczenie w produkcji.
+
+00:08:40.280 --> 00:08:47.280
+Agenci zbudowani na Foundry działają na infrastrukturze o niemal natychmiastowym starcie poniżej 100 milisekund bez kosztów w stanie bezczynności.
+
+00:08:47.280 --> 00:08:50.280
+Jeśli agent aktywnie niczego nie przetwarza, nie płacisz za moc obliczeniową.
+
+00:08:51.020 --> 00:08:53.180
+To duża zaleta dla zespołów dbających o koszty.
+
+00:08:53.400 --> 00:08:58.680
+Gdy wszystko jest gotowe do publikacji, możesz wdrożyć agenta w Microsoft 365, Copilot i Teams za pomocą jednego potoku.
+
+00:08:58.900 --> 00:09:00.760
+Bez konieczności przebudowy dla każdej usługi.
+
+00:09:00.980 --> 00:09:02.800
+Jedna kompilacja, dwa miejsca docelowe.
+
+00:09:03.000 --> 00:09:06.160
+Foundry najlepiej sprawdza się w złożonych scenariuszach w systemach wieloagentowych,
+
+00:09:06.160 --> 00:09:09.940
+gdzie agenci komunikują się ze sobą z pamięcią niestandardową działającą między sesjami,
+
+00:09:10.060 --> 00:09:13.140
+zaawansowanymi wymogami bezpieczeństwa i dużym obciążeniem produkcyjnym.
+
+00:09:13.140 --> 00:09:18.660
+Jeśli twój agent musi obsługiwać tysiące zapytań na minutę w wielu systemach z rygorystycznymi zasadami zgodności,
+
+00:09:18.800 --> 00:09:20.020
+Foundry to właściwy wybór.
+
+00:09:20.240 --> 00:09:23.620
+Znasz już trzy ścieżki budowania Agent Builder do szybkiego tworzenia low-code,
+
+00:09:23.760 --> 00:09:27.840
+Copilot Studio do przepływów pracy biznesowej oraz Foundry dla pełnej kontroli programisty.
+
+00:09:28.060 --> 00:09:31.020
+Cofnijmy się jednak o krok i spójrzmy, co dzieje się za kulisami,
+
+00:09:31.020 --> 00:09:35.120
+gdy agent wykonuje swoją pracę, ponieważ to coś więcej niż tylko sztuczna inteligencja.
+
+00:09:35.320 --> 00:09:38.460
+Jak naprawdę działają agenci tożsamość, dane i zarządzanie.
+
+00:09:38.660 --> 00:09:41.540
+Każdy agent posiada tożsamość cyfrową w Microsoft Entra ID.
+
+00:09:41.740 --> 00:09:44.020
+To ten sam system, który zarządza twoim logowaniem.
+
+00:09:44.220 --> 00:09:47.720
+Agent otrzymuje własny identyfikator Entra, tak samo jak ty masz konto użytkownika.
+
+00:09:47.920 --> 00:09:50.280
+Ten identyfikator zapewnia agentowi własną skrzynkę pocztową,
+
+00:09:50.420 --> 00:09:52.940
+własną usługę onDrive, własne konto Teams i zestaw uprawnień.
+
+00:09:53.120 --> 00:09:55.480
+Dzięki temu agenci mogą korzystać z tych samych systemów, co ludzie.
+
+00:09:55.480 --> 00:09:58.620
+Mogą czytać dokumenty SharePoint, mogą wysyłać wiadomości e-mail,
+
+00:09:58.840 --> 00:10:01.280
+mogą dołączać do kanałów Teams, ale tylko w ramach swoich uprawnień.
+
+00:10:01.420 --> 00:10:03.680
+Jeśli agent nie ma uprawnień do pliku, nie może go odczytać.
+
+00:10:03.680 --> 00:10:05.820
+Zasada jest taka sama, jak w przypadku pracownika.
+
+00:10:06.040 --> 00:10:07.980
+Skąd jednak agent wie, jakich danych użyć?
+
+00:10:08.060 --> 00:10:09.260
+Tutaj wkracza WorkEQ.
+
+00:10:09.460 --> 00:10:12.120
+WorkEQ osadza odpowiedzi agenta w danych twojej firmy.
+
+00:10:12.360 --> 00:10:16.840
+Gdy agent musi odpowiedzieć na pytanie, przeszukuje twoje wiadomości, e-mail, dokumenty, spotkania i czaty,
+
+00:10:17.020 --> 00:10:18.500
+ale przestrzega przy tym uprawnień.
+
+00:10:18.500 --> 00:10:20.780
+Jeśli ty nie widzisz dokumentu, agent go nie użyje.
+
+00:10:20.960 --> 00:10:22.660
+Granice dostępu pozostają nienaruszone.
+
+00:10:22.860 --> 00:10:26.420
+Całe to zarządzanie tożsamością i uprawnieniami odbywa się za pośrednictwem płaszczyzny kontrolnej Agent 365.
+
+00:10:26.840 --> 00:10:29.920
+To pulpit nawigacyjny w Centrum Administracyjnym Microsoft 365.
+
+00:10:30.620 --> 00:10:34.840
+Administratorzy id widzą każdego agenta w organizacji, kto go stworzył, do czego ma dostęp i co robi.
+
+00:10:35.000 --> 00:10:37.780
+Pomyśl o tym, jak o katalogu pracowników, ale dla pracowników cyfrowych.
+
+00:10:37.960 --> 00:10:40.600
+Ład korporacyjny sprawia, że agenci są gotowi do pracy w twojej firmie.
+
+00:10:40.780 --> 00:10:42.720
+Przestrzegają tych samych zasad zgodności, co ludzie.
+
+00:10:43.000 --> 00:10:44.720
+Stosowane są reguły dostępu warunkowego.
+
+00:10:44.980 --> 00:10:48.180
+Jeśli ktoś próbuje uzyskać dostęp do agenta z niezaufanego urządzenia, zostaje zablokowany.
+
+00:10:48.400 --> 00:10:51.420
+Zapobieganie utracie danych uniemożliwia im wysyłanie wrażliwych informacji na zewnątrz.
+
+00:10:51.420 --> 00:10:54.640
+Ten nadzór jest ważny, ponieważ agenci mogą podejmować rzeczywiste działania.
+
+00:10:54.860 --> 00:10:58.540
+Mogą tworzyć zamówienia zakupu, wysyłać e-maile do klientów, aktualizować rekordy w bazach danych.
+
+00:10:58.760 --> 00:11:00.700
+Bez odpowiednich zabezpieczeń jest to ryzykowne.
+
+00:11:00.900 --> 00:11:04.080
+Dzięki agent 365 dział IT ma pełną widoczność i kontrolę.
+
+00:11:04.240 --> 00:11:06.080
+Przykład z życia wzięty agent do spraw.
+
+00:11:06.440 --> 00:11:06.920
+Zaopatrzenia.
+
+00:11:07.120 --> 00:11:09.020
+Pozwól, że pokażę ci, jak to działa w praktyce.
+
+00:11:09.220 --> 00:11:11.640
+Microsoft Mechanics udostępnił świetny przykład agenta do spraw.
+
+00:11:12.020 --> 00:11:12.460
+Zaopatrzenia.
+
+00:11:12.700 --> 00:11:14.060
+Pokazuje on pełny cykl życia.
+
+00:11:14.320 --> 00:11:15.100
+Oto scenariusz.
+
+00:11:15.460 --> 00:11:16.980
+Współpracownik tworzy agenta do spraw.
+
+00:11:16.980 --> 00:11:19.300
+Zaopatrzenia i przesyła go do działu IT do zatwierdzenia.
+
+00:11:19.520 --> 00:11:22.280
+Gdy IT wyda zgodę, agent zostaje opublikowany w firmowym sklepie z agentami.
+
+00:11:22.460 --> 00:11:25.400
+Pomyśl o tym, jak o sklepie z aplikacjami, ale dla agentów wewnątrz organizacji.
+
+00:11:25.620 --> 00:11:26.380
+Menedżer do spraw.
+
+00:11:26.680 --> 00:11:28.400
+Zaopatrzenia odkrywa agenta w tym sklepie.
+
+00:11:28.580 --> 00:11:30.660
+Konfiguruje go za pomocą zaledwie kilku kliknięć.
+
+00:11:30.820 --> 00:11:33.700
+Agent przedstawia się w aplikacji Teams i prosi o potrzebne dane.
+
+00:11:33.940 --> 00:11:34.760
+Zasady dostawców.
+
+00:11:34.900 --> 00:11:36.220
+Listy zatwierdzonych dostawców.
+
+00:11:36.360 --> 00:11:37.380
+Podręcznik zaopatrzenia.
+
+00:11:37.640 --> 00:11:39.480
+Menedżer dostarcza te dokumenty, wpisując
+
+00:11:39.480 --> 00:11:41.600
+Użyj tego przewodnika zasad do swoich działań.
+
+00:11:41.600 --> 00:11:43.600
+I wskazując plik ze swojego on-drive.
+
+00:11:43.760 --> 00:11:44.300
+To wszystko.
+
+00:11:44.560 --> 00:11:46.240
+Agent ma teraz wszystko, czego potrzebuje.
+
+00:11:46.400 --> 00:11:47.980
+Teraz pomyśl o tożsamości agenta.
+
+00:11:48.180 --> 00:11:49.720
+Pamiętasz identyfikatory intra-agent?
+
+00:11:49.860 --> 00:11:53.120
+Ten agent ma własną skrzynkę pocztową, własny on-drive i własne konto Teams.
+
+00:11:53.360 --> 00:11:56.640
+Gdy wpływa zamówienie klienta na nowe laptopy, agent analizuje to żądanie.
+
+00:11:56.840 --> 00:12:00.440
+Przeszukuje dostawców, sprawdza umowy SLA, przegląda ceny z ostatnich zamówień.
+
+00:12:00.600 --> 00:12:04.000
+Korzystając z Work IQ, pobiera kontakty z całego pakietu Microsoft 365.
+
+00:12:04.560 --> 00:12:08.600
+Na podstawie czasu realizacji rekomenduje dostawcę i pyta menedżera, czy kontynuować.
+
+00:12:08.600 --> 00:12:12.240
+Manager potwierdza, agent tworzy zamówienie zakupu na laptopy.
+
+00:12:12.440 --> 00:12:16.380
+Następnie rejestruje to zamówienie w arkuszu śledzenia zakupów, który znajduje się w SharePoint.
+
+00:12:16.620 --> 00:12:18.060
+Wszystko dzieje się autonomicznie.
+
+00:12:18.240 --> 00:12:21.460
+Oto część, która jest prawdziwa dzisiaj, mimo że brzmi futurystycznie.
+
+00:12:21.660 --> 00:12:26.360
+Manager może wspomnieć o agencie przez mention w Teams, jak o każdym współpracowniku, i zapytać o status.
+
+00:12:26.620 --> 00:12:30.320
+Agent odpowiada, nad czym pracuje, co zostało zakończone i jakie zadania są w toku.
+
+00:12:30.500 --> 00:12:32.320
+Ten przykład pokazuje pełny cykl życia.
+
+00:12:32.600 --> 00:12:36.340
+Odkrywasz agenta w sklepie, konfigurujesz go kilkoma kliknięciami i za pomocą dokumentów.
+
+00:12:36.340 --> 00:12:39.940
+Pozwalasz mu pracować autonomicznie nad realnymi zadaniami i otrzymujesz raporty po zakończeniu.
+
+00:12:40.180 --> 00:12:43.800
+Oto siła nadawania agentowi własnej tożsamości w narzędziach, których już używasz.
+
+00:12:43.940 --> 00:12:46.320
+Jednak potężne agenty wymagają potężnych zabezpieczeń.
+
+00:12:46.500 --> 00:12:48.880
+Zobaczmy, jak Microsoft utrzymuje kontrolę nad agentami.
+
+00:12:49.140 --> 00:12:51.040
+Bezpieczeństwo, zgodność i zabezpieczenia.
+
+00:12:51.280 --> 00:12:54.240
+Każdy agent działa w centrum sterowania o nazwie Agent 365.
+
+00:12:54.900 --> 00:12:57.780
+Znajduje się ono w centrum administracyjnym Microsoft 365
+
+00:12:57.780 --> 00:13:01.540
+i daje działom IT1 Pulpit do zarządzania wszystkimi agentami w organizacji.
+
+00:13:01.780 --> 00:13:05.500
+W jednym miejscu zobaczysz agentów stworzonych w Copilot Studio, Foundry,
+
+00:13:05.620 --> 00:13:08.000
+a nawet na platformach innych firm niż Microsoft.
+
+00:13:08.280 --> 00:13:11.580
+Koniec z przeszukiwaniem różnych narzędzi, aby dowiedzieć się, co jest uruchomione.
+
+00:13:11.780 --> 00:13:14.260
+Z tego pulpitu administratorzy mogą przeglądać uprawnienia,
+
+00:13:14.400 --> 00:13:16.380
+zatwierdzać nowych agentów przed ich uruchomieniem,
+
+00:13:16.460 --> 00:13:18.900
+blokować niepożądane procesy i stosować szablony zasad.
+
+00:13:19.120 --> 00:13:22.040
+Te szablony to gotowe zestawy reguł, które wymuszają na przykład
+
+00:13:22.040 --> 00:13:25.740
+zakaz udostępniania treści na zewnątrz lub wymagają zatwierdzenia
+
+00:13:25.740 --> 00:13:27.540
+każdej akcji modyfikującej dane.
+
+00:13:27.760 --> 00:13:30.440
+W tle wszystko monitorują trzy usługi bezpieczeństwa.
+
+00:13:30.680 --> 00:13:33.360
+Microsoft Perview odpowiada za zapobieganie utracie danych.
+
+00:13:33.620 --> 00:13:36.260
+Jeśli agent próbuje wysłać wrażliwe informacje poza firmę,
+
+00:13:36.340 --> 00:13:37.720
+Perview natychmiast go powstrzymuje.
+
+00:13:37.960 --> 00:13:41.140
+Microsoft Entra zarządza kontrolą dostępu poprzez dostęp warunkowy.
+
+00:13:41.360 --> 00:13:44.040
+Jeśli ktoś próbuje uzyskać dostęp do agenta z niezaufanego urządzenia,
+
+00:13:44.160 --> 00:13:45.260
+dostęp zostaje zablokowany.
+
+00:13:45.440 --> 00:13:48.560
+A Microsoft Defender monitoruje agentów pod kątem podejrzanej aktywności.
+
+00:13:48.560 --> 00:13:51.040
+Jeśli agent nagle loguje się dziesiątki razy na godzinę,
+
+00:13:51.040 --> 00:13:53.500
+zamiast jak zwykle dwa razy dziennie, Defender go oznacza.
+
+00:13:53.660 --> 00:13:54.980
+Oto jak to działa w praktyce.
+
+00:13:55.180 --> 00:13:57.800
+Załóżmy, że agent wykazuje nienormalną częstotliwość logowań.
+
+00:13:57.980 --> 00:14:00.960
+Dostęp warunkowy Entra automatycznie blokuje mu dostęp do zasobów.
+
+00:14:01.120 --> 00:14:03.500
+Administrator otrzymuje alert na pulpicie Agent 365,
+
+00:14:03.860 --> 00:14:06.320
+widzi ryzyko i może jednym kliknięciem całkowicie zablokować agenta.
+
+00:14:06.520 --> 00:14:09.080
+Agent ten jest natychmiast wyłączany dla bieżących użytkowników
+
+00:14:09.080 --> 00:14:10.020
+i nie pojawi się dla nowych.
+
+00:14:10.240 --> 00:14:11.920
+Dostępna jest również mapa agentów.
+
+00:14:12.060 --> 00:14:14.580
+To wizualny diagram pokazujący wszystkich twoich agentów,
+
+00:14:14.580 --> 00:14:18.080
+ich połączenia między sobą oraz powiązania z przepływami pracy i źródłami danych.
+
+00:14:18.080 --> 00:14:21.680
+Jeśli jeden agent w łańcuchu zaczyna zgłaszać błędy, zobaczysz to na mapie.
+
+00:14:21.860 --> 00:14:24.020
+Przejdź do szczegółów i podejmij odpowiednie działania.
+
+00:14:24.260 --> 00:14:26.360
+Zmienia to zarządzanie agentami z zgadywania w coś,
+
+00:14:26.460 --> 00:14:28.160
+co można realnie zobaczyć i zrozumieć.
+
+00:14:28.280 --> 00:14:29.680
+Oto pełny obraz sytuacji.
+
+00:14:29.900 --> 00:14:33.240
+Od prostych agentów typu no-code po autonomiczne systemy klasy korporacyjnej,
+
+00:14:33.360 --> 00:14:35.240
+wszystko z odpowiednim bezpieczeństwem i nadzorem.
+
+00:14:35.480 --> 00:14:36.460
+Twoje kolejne kroki.
+
+00:14:36.680 --> 00:14:37.720
+Podsumujmy to wszystko.
+
+00:14:38.000 --> 00:14:40.060
+Agenty to nie tylko inteligentniejsze chatboty.
+
+00:14:40.060 --> 00:14:42.860
+To autonomiczni pracownicy z własną tożsamością cyfrową.
+
+00:14:43.060 --> 00:14:44.660
+Mogą uzyskiwać dostęp do systemów,
+
+00:14:44.660 --> 00:14:47.900
+podejmować działania i raportować wyniki bez Twojego udziału na każdym kroku.
+
+00:14:48.080 --> 00:14:50.220
+Microsoft oferuje trzy sposoby ich budowania.
+
+00:14:50.480 --> 00:14:52.480
+Użyj agent Builder w Microsoft 365,
+
+00:14:52.800 --> 00:14:54.620
+kopilot dla szybkich agentów bez pisania kodu.
+
+00:14:54.840 --> 00:14:56.900
+Użyj kopilot Studio do tworzenia przepływów biznesowych
+
+00:14:56.900 --> 00:14:58.680
+z konektorami i automatycznymi wyzwalaczami.
+
+00:14:58.900 --> 00:15:00.800
+Użyj Foundry, jeśli jako programista potrzebujesz
+
+00:15:00.800 --> 00:15:03.380
+pełnej kontroli nad modelami, orkiestracją i infrastrukturą.
+
+00:15:03.540 --> 00:15:04.880
+Całość spina warstwa zarządzania
+
+00:15:04.880 --> 00:15:06.780
+agent 365, Entra, ID,
+
+00:15:06.940 --> 00:15:08.540
+Perview i Defender, dzięki którym agenci
+
+00:15:08.540 --> 00:15:10.080
+są gotowi do pracy w przedsiębiorstwie.
+
+00:15:10.080 --> 00:15:12.340
+Przestrzegają tych samych zasad, co Twoi pracownicy.
+
+00:15:12.500 --> 00:15:13.580
+Oto Twoje zadanie domowe.
+
+00:15:13.760 --> 00:15:15.440
+Otwórz Microsoft 365 Kopilot.
+
+00:15:15.620 --> 00:15:16.800
+Przejdź do sekcji agentów.
+
+00:15:16.940 --> 00:15:17.860
+Kliknij Utwórz.
+
+00:15:17.980 --> 00:15:19.000
+Opisz prostego agenta.
+
+00:15:19.240 --> 00:15:21.280
+Może takiego, który odpowiada na pytania dotyczące projektu,
+
+00:15:21.320 --> 00:15:22.000
+nad którym pracujesz.
+
+00:15:22.200 --> 00:15:22.900
+Wskaż źródło wiedzy.
+
+00:15:23.020 --> 00:15:24.760
+Włącz opcję używania tylko określonych źródeł
+
+00:15:24.760 --> 00:15:25.720
+i zobacz, co potrafi.
+
+00:15:25.940 --> 00:15:27.700
+Większość ludzi nie podejmie tego kroku.
+
+00:15:27.940 --> 00:15:28.640
+Wyróżnij się.
+
+00:15:28.640 --> 00:15:30.660
+W następnym odcinku, krok po kroku,
+
+00:15:30.720 --> 00:15:32.960
+zbudujemy prawdziwego agenta w Kopilot Studio.
+
+00:15:33.220 --> 00:15:34.380
+Nie możesz tego przegapić.
+
+00:15:34.540 --> 00:15:37.520
+To były Microsoft Knowledge Nugget w M365 FM.
+
+00:15:40.080 --> 00:15:41.860
+Następnij to komuś, kto dopiero zaczyna swoją podróż.
+
+00:15:42.000 --> 00:15:44.480
+Nazywam się Mirko Widowicz i do zobaczenia w kolejnym odcinku.

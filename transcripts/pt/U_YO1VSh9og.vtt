@@ -1,0 +1,1204 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:04.000
+Imagine uma única injeção de Prompt Multi-Turn, ignorando todo o seu conjunto de segurança,
+
+00:00:04.360 --> 00:00:07.240
+para autorizar uma transferência eletrônica fraudulenta que é fraudulenta de um milhão de dólares.
+
+00:00:07.320 --> 00:00:12.260
+No mundo financeiro de alto risco, os firewalls tradicionais não são mais suficientes para impedir ataques sofisticados de adversários.
+
+00:00:12.960 --> 00:00:16.680
+A maioria das instituições financeiras apenas cumprem metas enquanto seus agentes de ação sequestrados.
+
+00:00:17.420 --> 00:00:21.200
+O antigo modelo de teste manual pressupõe que você pode prever todas as interações humanas,
+
+00:00:21.300 --> 00:00:26.860
+mas, na realidade, o ano de 2026 será definido por transferências fraudulentas de US$ 250 mil acionadas
+
+00:00:26.860 --> 00:00:28.820
+por uma única injeção de Prompt Multi-Turn.
+
+00:00:28.820 --> 00:00:32.080
+Seus firewalls legados foram criados para dados estáticos,
+
+00:00:32.080 --> 00:00:36.440
+o que significa que eles são inúteis contra ataques de fatiamento de salame que drenam contas um pequeno pedaço de cada vez.
+
+00:00:37.000 --> 00:00:41.660
+Ao final desta sessão, você terá o projeto para uma luva multimodelo que protege fluxos de trabalho autônomos.
+
+00:00:42.160 --> 00:00:48.420
+Inscreva-se no podcast M365FM para ficar à frente dos riscos da Era dos Agentes antes dos prazos de agosto de 2026.
+
+00:00:48.640 --> 00:00:52.200
+Estamos indo além da conformidade básica e construindo uma estrutura de equipe vermelha resiliente
+
+00:00:52.200 --> 00:00:55.700
+que protege transações confidenciais contra a próxima geração de ataques adversários.
+
+00:00:55.700 --> 00:00:58.960
+A crise de identidade dos agentes autônomos
+
+00:00:58.960 --> 00:01:03.000
+Estamos implantando agentes para detecção de fraudes e monitoramento de ACH agora,
+
+00:01:03.120 --> 00:01:05.460
+mas a propriedade é fragmentada e toda a situação é uma bagunça.
+
+00:01:06.040 --> 00:01:09.840
+Você tem equipes de segurança observando o perímetro, equipes de TI observando a infraestrutura
+
+00:01:09.840 --> 00:01:12.800
+e equipes de A observando os modelos, mas ninguém está observando a agência.
+
+00:01:12.800 --> 00:01:18.340
+Apenas 28% das organizações conseguem rastrear a ação de um agente até um patrocinador humano específico,
+
+00:01:18.400 --> 00:01:21.280
+o que é uma estatística assustadora quando você pensa a respeito por um segundo.
+
+00:01:21.940 --> 00:01:25.280
+Se um agente autoriza um pagamento, 3 em cada 4 empresas não conseguem dizer
+
+00:01:25.280 --> 00:01:27.660
+quem foi o responsável pela lógica daquela máquina naquele momento.
+
+00:01:28.100 --> 00:01:30.780
+A suposição é que um monitoramento comercialmente razoável é suficiente,
+
+00:01:30.940 --> 00:01:33.800
+mas não é mais porque as mudanças nas regras na ACH de 2026 e agora
+
+00:01:33.800 --> 00:01:37.340
+exigem uma justificativa documentada para cada decisão de pagamento orientada por IA.
+
+00:01:37.980 --> 00:01:41.780
+Você não pode simplesmente dizer que o algoritmo fez isso e precisa provar exatamente o porquê todas as vezes.
+
+00:01:41.780 --> 00:01:46.300
+Você publica o agente, dá ele acesso à API e o conecta aos seus principais sistemas bancários,
+
+00:01:46.380 --> 00:01:47.940
+mas então perde o fio da responsabilidade.
+
+00:01:48.480 --> 00:01:50.440
+Isso não é um bug técnico, é uma lacuna de governança.
+
+00:01:50.860 --> 00:01:53.040
+A identidade do agente está se tornando um fantasma na máquina.
+
+00:01:53.820 --> 00:01:56.960
+Fornecemos a esses sistemas as chaves para o cofre e permitimos que eles movam dinheiro
+
+00:01:56.960 --> 00:01:59.460
+ou aprovem empréstimos, mas os tratamos como scripts isolados.
+
+00:02:00.200 --> 00:02:03.040
+Na realidade, eles são atores autônomos e, quando um agente falha,
+
+00:02:03.100 --> 00:02:06.140
+você não tem apenas um erro de sistema, mas um evento de responsabilidade massivo.
+
+00:02:06.640 --> 00:02:10.940
+O cenário de 2026 é implacável porque os reguladores não estão mais perguntando se você tem uma pólice,
+
+00:02:10.940 --> 00:02:13.340
+e eles estão perguntando se sua pólice realmente funciona em tempo de dedução.
+
+00:02:13.840 --> 00:02:17.080
+Se você não puder vincular uma transação a um patrocinador, você está fora de conformidade.
+
+00:02:17.140 --> 00:02:17.760
+É simples assim.
+
+00:02:18.440 --> 00:02:21.220
+A maioria das empresas ainda usa chaves de API estáticas para esses agentes,
+
+00:02:21.420 --> 00:02:24.260
+o que é como dar uma chave, mestre um estranho e torcer para que ele não abra a porta errada.
+
+00:02:25.320 --> 00:02:29.660
+Você precisa conhecer seu protocolo de agente e vincular cada chamada de ferramenta a uma credencial específica.
+
+00:02:30.160 --> 00:02:30.780
+Mas aqui é o problema.
+
+00:02:30.780 --> 00:02:33.540
+A maioria das organizações nem sabe quantos agentes têm,
+
+00:02:33.900 --> 00:02:36.500
+e estamos vendo um aumento massivo na IA paralela com o resultado.
+
+00:02:37.280 --> 00:02:40.360
+Os funcionários estão criando seus próprios agentes para automatizar seus fluxos de trabalho
+
+00:02:40.360 --> 00:02:44.360
+e os conectando a bancos de dados internos ao mesmo tempo em que dão a eles acesso a dados confidenciais dos clientes.
+
+00:02:45.220 --> 00:02:47.200
+Eles estão fazendo tudo isso sem nenhuma supervisão,
+
+00:02:47.500 --> 00:02:51.040
+o que cria uma superfície de ataque massiva que está pronta para exploração.
+
+00:02:51.600 --> 00:02:56.160
+Um invasor não precisa violar seu firewall se puder simplesmente sequestrar um agente mal protegido
+
+00:02:56.160 --> 00:02:59.520
+e usar esse agente para extrair dados ou acionar transações não autorizadas.
+
+00:03:00.340 --> 00:03:02.460
+Ele pode usá-lo para contornar seus controles internos,
+
+00:03:02.720 --> 00:03:06.340
+e como apenas 28% de vocês têm rastreabilidade, eles podem fazer isso sem deixar rastros.
+
+00:03:06.760 --> 00:03:10.320
+Temos que parar de pensar nos agentes como ferramentas e começar a pensar neles como identidades.
+
+00:03:11.080 --> 00:03:14.040
+Se você não pode auditar o raciocínio, não pode confiar no resultado,
+
+00:03:14.200 --> 00:03:15.700
+e esse é o novo padrão para 2026.
+
+00:03:16.000 --> 00:03:20.300
+As regras de Nasha são apenas o começo de uma mudança global em direção a padrões baseados em eficácia,
+
+00:03:20.440 --> 00:03:22.360
+e não se trata mais do processo, mas do resultado.
+
+00:03:23.200 --> 00:03:25.740
+Se um agente aprova uma transferência CH fraudulenta,
+
+00:03:25.740 --> 00:03:29.320
+a instituição está em apuros, e você não pode se esconder atrás da caixa preta de um fornecedor.
+
+00:03:29.380 --> 00:03:31.940
+Você precisa ser capaz de reconstruir o caminho da decisão em 60 minutos,
+
+00:03:32.040 --> 00:03:34.340
+mas é verdade que a maioria de vocês ainda não consegue fazer isso.
+
+00:03:34.920 --> 00:03:37.480
+Vocês estão voando às cegas em um ambiente de alta velocidade,
+
+00:03:37.800 --> 00:03:41.200
+e a crise de identidade dos agentes autônomos é o maior risco para a estabilidade financeira
+
+00:03:41.200 --> 00:03:42.640
+nos próximos 18 meses.
+
+00:03:43.740 --> 00:03:46.280
+É a lacuna entre o que estamos implantando e o que podemos realmente controlar,
+
+00:03:46.480 --> 00:03:49.120
+mas o problema vai além de apenas quem é o dono do agente.
+
+00:03:49.120 --> 00:03:52.620
+É sobre como os próprios modelos são infectados,
+
+00:03:53.320 --> 00:03:55.020
+ou padrão de infecção entre modelos.
+
+00:03:55.020 --> 00:03:58.320
+Costumávamos pensar que usar vários modelos fornecia uma rede de segurança natural.
+
+00:03:58.720 --> 00:03:59.420
+A lógica era simples.
+
+00:04:00.000 --> 00:04:02.360
+Se o modelo tivesse um viés ou uma falha, os outros o detectariam.
+
+00:04:02.740 --> 00:04:03.700
+Nós chamávamos isso de modelos.
+
+00:04:04.080 --> 00:04:07.520
+Mas no cenário de 2026, essa suposição foi completamente desmantelada.
+
+00:04:08.220 --> 00:04:10.400
+Novas pesquisas estão nos mostrando algo muito mais perturbador.
+
+00:04:10.900 --> 00:04:14.360
+O ajuste fino de um único modelo em tarefas inseguras não fica apenas dentro desse modelo.
+
+00:04:14.880 --> 00:04:17.100
+Na verdade, ele infecta modelos não relacionados em sua cadeia.
+
+00:04:17.240 --> 00:04:18.140
+Isso não é uma teoria.
+
+00:04:18.680 --> 00:04:22.180
+Estamos vendo desalinhamentos dos GPT-4 se expandindo para derivados do Qen e do Lhama,
+
+00:04:22.480 --> 00:04:24.300
+a uma taxa de replicação de 50%.
+
+00:04:24.300 --> 00:04:27.560
+É uma disseminação viral de vulnerabilidade por todo o ecossistema.
+
+00:04:28.180 --> 00:04:31.120
+Se acha que há construindo um sistema redundante usando provedores diferentes.
+
+00:04:32.000 --> 00:04:35.000
+Na realidade, você está apenas criando mais nós para a mesma infecção passar.
+
+00:04:35.760 --> 00:04:38.200
+Este é um backdoor na cadeia de suprimentos que nenhum teste humano achará.
+
+00:04:39.040 --> 00:04:41.900
+A maior parte das equipes de segurança ainda busca vulnerabilidades tradicionais.
+
+00:04:42.660 --> 00:04:44.660
+Elas estão procurando estouros de buffer ou injeções de SQL.
+
+00:04:45.220 --> 00:04:46.520
+Mas a nova ameaça é semântica.
+
+00:04:47.040 --> 00:04:49.060
+Ela está incorporada aos pesos dos próprios modelos.
+
+00:04:49.640 --> 00:04:52.200
+Os invasores agora estão usando uma técnica chamada adversarial hubness.
+
+00:04:52.200 --> 00:04:53.860
+Eles não precisam violar seus servidores.
+
+00:04:54.340 --> 00:04:56.620
+Eles só precisam plantar um documento malicioso em sua base de conhecimento.
+
+00:04:57.300 --> 00:04:59.060
+Devido a como os embeddings de vetores funcionam,
+
+00:04:59.180 --> 00:05:00.960
+esse documento pode agir como um poço gravitacional.
+
+00:05:01.360 --> 00:05:03.400
+Ele atrai 84% de suas consultas de trapos.
+
+00:05:03.820 --> 00:05:05.300
+Você acha que seu banco de vetores é uma biblioteca?
+
+00:05:05.760 --> 00:05:07.400
+Você acha que é um repositório estruturado de verdade?
+
+00:05:08.080 --> 00:05:10.780
+Na verdade, ele vira uma armadilha para seus fluxos autônomos.
+
+00:05:11.440 --> 00:05:13.860
+Quando seu agente busca o contexto para processar uma transferência,
+
+00:05:13.940 --> 00:05:15.180
+ele não está apenas obtendo dados.
+
+00:05:15.580 --> 00:05:15.880
+Dados.
+
+00:05:16.220 --> 00:05:17.440
+Ele está recebendo instruções em melhor.
+
+00:05:17.440 --> 00:05:21.440
+O modelo não vê a diferença entre uma fatura legítima e uma injeção de prompt oculta.
+
+00:05:22.420 --> 00:05:24.260
+É aqui que a estratégia de vários modelos sai pelo acolado.
+
+00:05:24.720 --> 00:05:26.740
+Se seu modelo primário recupera dados envenenados,
+
+00:05:26.840 --> 00:05:28.440
+ele passa esse raciocínio para o modelo secundário.
+
+00:05:29.640 --> 00:05:31.980
+Como esses modelos compartilham dados de treinamento fundamentais
+
+00:05:31.980 --> 00:05:34.540
+e arquiteturas semelhantes se eles possuem os mesmos pontos cegos?
+
+00:05:35.340 --> 00:05:36.180
+A infecção se replica.
+
+00:05:36.700 --> 00:05:38.520
+O segundo modelo valida o erro do primeiro modelo
+
+00:05:38.520 --> 00:05:40.380
+porque é suscetível à mesma armadilha lógica.
+
+00:05:41.080 --> 00:05:43.980
+Estamos vendo taxas de sucesso para essas injeções baseadas em simulação,
+
+00:05:44.060 --> 00:05:45.880
+atingindo quase 90% em ambientes financeiros.
+
+00:05:45.880 --> 00:05:49.180
+Os modelos estão efetivamente convencendo uns aos outros a autorizar fraude.
+
+00:05:49.860 --> 00:05:52.860
+Essa propagação entre modelos é o assassino silencioso da segurança de IA.
+
+00:05:53.520 --> 00:05:54.780
+Você pode ter o melhor firewall do mundo.
+
+00:05:55.180 --> 00:05:57.700
+Você pode ter criptografado seu banco de dados com os mais altos padrões.
+
+00:05:58.240 --> 00:06:01.060
+Nada disso importa se a lógica de raciocínio em si estiver comprometida.
+
+00:06:01.520 --> 00:06:03.120
+Os invasores não estão tentando quebrar sua criptografia.
+
+00:06:03.480 --> 00:06:05.560
+Eles estão tentando quebrar a compreensão da realidade do seu modelo.
+
+00:06:06.060 --> 00:06:09.220
+Usam truques de codificação e armadilhas lógicas que contornam os filtros de texto comum.
+
+00:06:09.880 --> 00:06:14.080
+Se uma imagem de um recibo contiver texto de baixo contraste com o comando de substituição de administrador,
+
+00:06:14.080 --> 00:06:17.460
+seu sistema multimodal o lerá, ele o processará e o executará.
+
+00:06:18.140 --> 00:06:20.460
+Foi assim que ocorreu aquela transferência de US$ 250 mil.
+
+00:06:20.880 --> 00:06:22.120
+Não foi um hack da rede.
+
+00:06:22.640 --> 00:06:23.680
+Foi um hack do contexto.
+
+00:06:24.240 --> 00:06:26.900
+Temos que aceitar que esses modelos são estocásticos e imprevisíveis.
+
+00:06:27.440 --> 00:06:28.600
+Eles não são só determinísticos.
+
+00:06:28.960 --> 00:06:30.540
+Você não pode protegê-los com regras estáticas.
+
+00:06:30.860 --> 00:06:32.100
+A vulnerabilidade não está no core.
+
+00:06:32.440 --> 00:06:33.520
+Está no mecanismo de atenção.
+
+00:06:34.020 --> 00:06:36.620
+Está na maneira como o modelo confunde a linha entre dados e instruções.
+
+00:06:36.620 --> 00:06:40.220
+Quando você empilha vários modelos uns sobre os outros sem uma estrutura adversária,
+
+00:06:40.300 --> 00:06:42.060
+você está apenas empilhando camadas de vidro.
+
+00:06:42.480 --> 00:06:43.600
+Você não está construindo um cofre.
+
+00:06:44.080 --> 00:06:47.260
+Você está construindo uma corrente frágil onde uma rachadura destrói toda a estrutura.
+
+00:06:47.940 --> 00:06:50.080
+Para impedir isso, temos que nos afastar da ideia de testes.
+
+00:06:50.560 --> 00:06:52.620
+Temos que nos mover em direção ao modelo de guerra contínua.
+
+00:06:53.360 --> 00:06:55.740
+Precisamos parar de perguntar se o modelo é seguro e começar a tentar quebrar.
+
+00:06:56.300 --> 00:06:58.260
+Para deter a infecção, precisamos construir o desafio.
+
+00:06:59.420 --> 00:07:00.700
+Arquitetura do desafio multimodal.
+
+00:07:01.120 --> 00:07:02.240
+Testes manuais são uma relíquia.
+
+00:07:02.240 --> 00:07:05.880
+Se você ainda depende de humanos para ficar sentado em uma sala e tentar enganar sua E.A.,
+
+00:07:05.880 --> 00:07:06.500
+você já perdeu.
+
+00:07:07.020 --> 00:07:07.780
+Os humanos são lentos.
+
+00:07:08.200 --> 00:07:09.280
+Os modelos são estocásticos.
+
+00:07:09.760 --> 00:07:13.200
+Você não pode prever todas as permutações de um ataque de múltiplas etapas com uma planilha
+
+00:07:13.200 --> 00:07:13.960
+e uma equipe de consultor.
+
+00:07:14.520 --> 00:07:16.900
+No momento em que sua equipe vermelha encontra uma vulnerabilidade,
+
+00:07:17.020 --> 00:07:18.400
+o modelo subjacente foi atualizado,
+
+00:07:18.760 --> 00:07:19.900
+ou a superfície de ataque mudou.
+
+00:07:20.340 --> 00:07:21.520
+É por isso que o modelo antigo falha.
+
+00:07:21.960 --> 00:07:22.460
+Ele é estático.
+
+00:07:22.860 --> 00:07:23.340
+É reativo.
+
+00:07:23.840 --> 00:07:25.900
+No mundo de alto risco das finanças de 2026,
+
+00:07:26.220 --> 00:07:28.260
+precisamos de algo que se mova na velocidade da ameaça.
+
+00:07:28.800 --> 00:07:29.660
+Precisamos do desafio.
+
+00:07:29.660 --> 00:07:33.440
+A arquitetura do desafio multimodal é construída sobre um princípio simples e brutal,
+
+00:07:34.220 --> 00:07:37.320
+colocando diversos LLMs uns contra os outros em um jogo de soma zero.
+
+00:07:37.920 --> 00:07:39.100
+Você não está apenas testando o sistema.
+
+00:07:39.580 --> 00:07:41.220
+Você está criando uma panela de pressão evolucionária.
+
+00:07:41.900 --> 00:07:43.100
+Você pega um modelo de invasor,
+
+00:07:43.220 --> 00:07:45.900
+algo altamente capaz com uma variante especializada do GPT,
+
+00:07:46.180 --> 00:07:48.460
+e atribui a ele um objetivo, contornar o defensor.
+
+00:07:49.180 --> 00:07:50.660
+O defensor é seu agente de produção,
+
+00:07:50.820 --> 00:07:53.580
+aquele que lida com essas transferências a CH aprovações de empréstimos.
+
+00:07:54.320 --> 00:07:55.920
+Eles entram em um loop automatizado contínuo.
+
+00:07:55.920 --> 00:07:59.420
+O invasor gera injeções sofisticadas de prompts em várias etapas,
+
+00:07:59.800 --> 00:08:01.460
+e o defensor tenta manter seu alinhamento.
+
+00:08:01.860 --> 00:08:03.900
+Isso não é apenas uma simulação, um regime de treinamento.
+
+00:08:04.320 --> 00:08:05.820
+Usamos o que chamamos de combinação 50.
+
+00:08:06.360 --> 00:08:08.200
+Quando você está ajustando seus agentes financeiros,
+
+00:08:08.320 --> 00:08:11.760
+não pode simplesmente usar dados limpos e perfeitos de seus principais sistemas bancários.
+
+00:08:12.340 --> 00:08:13.340
+Isso torna o modelo frágil.
+
+00:08:13.720 --> 00:08:15.200
+Em vez disso, você satura o conjunto de treme.
+
+00:08:15.560 --> 00:08:16.780
+Metade dos dados é limpa,
+
+00:08:16.980 --> 00:08:20.680
+mas a outra metade consiste em exemplos adversários gerados durante as sessões de desafio.
+
+00:08:21.040 --> 00:08:21.760
+Isso inclui tudo,
+
+00:08:21.760 --> 00:08:23.660
+desde armadilhas lógicas de fatiamento de salame
+
+00:08:23.660 --> 00:08:25.900
+até aquelas substituições multimodais ocultas que discutimos.
+
+00:08:26.260 --> 00:08:28.380
+O resultado é um aumento de 70% na resiliência.
+
+00:08:29.080 --> 00:08:30.740
+Você está efetivamente vacinando sua IA
+
+00:08:30.740 --> 00:08:33.700
+contra as mesmas explorações que estão atualmente contornando seus firewalls.
+
+00:08:34.100 --> 00:08:35.300
+Mas aqui está a mudança estrutural.
+
+00:08:35.640 --> 00:08:37.200
+Você não está apenas procurando por bugs,
+
+00:08:37.280 --> 00:08:39.640
+não está tentando encontrar uma sequência específica de texto que quebre o mundo.
+
+00:08:39.920 --> 00:08:41.540
+Você está fortalecendo a lógica do raciocínio em si.
+
+00:08:41.960 --> 00:08:44.220
+No desafio, usamos o treinamento reforçado da cadeia de pensão.
+
+00:08:44.680 --> 00:08:46.260
+Forçamos o defensor a mostrar seu trabalho.
+
+00:08:46.480 --> 00:08:49.360
+Se o invasor tentar usar uma injeção baseada em simulação
+
+00:08:49.360 --> 00:08:50.620
+para autorizar uma transferência,
+
+00:08:50.620 --> 00:08:52.840
+o defensor tem que explicar sua lógica em cada etapa.
+
+00:08:53.540 --> 00:08:55.920
+Se o raciocínio começar a se desviar para uma ação não autorizada,
+
+00:08:56.200 --> 00:08:57.560
+o desafio sinaliza isso imediatamente.
+
+00:08:58.180 --> 00:09:01.160
+Você está ensinando o modelo a reconhecer a sensação de uma tentativa de coerção.
+
+00:09:01.600 --> 00:09:03.320
+Essa arquitetura resolve o problema da diversidade.
+
+00:09:04.000 --> 00:09:05.560
+Ao usar diferentes famílias de modelos,
+
+00:09:05.620 --> 00:09:07.180
+talvez um modelo antrópico para o defensor
+
+00:09:07.180 --> 00:09:08.820
+e um modelo baseado em meta para o invasor,
+
+00:09:09.100 --> 00:09:10.940
+você garante que os pontos cegos não se sobreponham.
+
+00:09:11.740 --> 00:09:13.620
+Você está usando os pontos fortes de uma arquitetura
+
+00:09:13.620 --> 00:09:15.080
+para expor os pontos fracos de outra.
+
+00:09:15.580 --> 00:09:16.700
+Este é um ciclo contínuo.
+
+00:09:16.920 --> 00:09:18.600
+À medida que o invasor fica mais inteligente,
+
+00:09:18.640 --> 00:09:19.540
+o defensor fica mais forte.
+
+00:09:19.540 --> 00:09:22.000
+É uma camada de segurança de alto aperfeiçoamento
+
+00:09:22.000 --> 00:09:23.240
+que não dorme, não se cansa
+
+00:09:23.240 --> 00:09:25.560
+e não deixa passar as mudanças semânticas sutis
+
+00:09:25.560 --> 00:09:26.860
+que um testador humano ignoraria.
+
+00:09:27.840 --> 00:09:28.960
+Para uma instituição financeira,
+
+00:09:29.300 --> 00:09:31.380
+esta é a única maneira de satisfazer as próximas auditorias
+
+00:09:31.380 --> 00:09:32.320
+baseadas em eficácia.
+
+00:09:32.920 --> 00:09:34.140
+Você pode mostrar aos reguladores
+
+00:09:34.140 --> 00:09:36.420
+um histórico documentado de milhões de ataques simulados
+
+00:09:36.420 --> 00:09:38.140
+e como seu sistema resistiu a eles.
+
+00:09:38.880 --> 00:09:40.940
+Você está mudando de um mundo em que espera estar seguro
+
+00:09:40.940 --> 00:09:42.140
+para um mundo em que sabe exatamente
+
+00:09:42.140 --> 00:09:44.580
+quanta pressão sua lógica pode suportar antes de quebrar.
+
+00:09:45.480 --> 00:09:47.960
+Esta é a mudança de uma defesa passiva para uma guerra ativa.
+
+00:09:47.960 --> 00:09:50.420
+Você não está mais apenas construindo um muro,
+
+00:09:50.500 --> 00:09:51.480
+está treinando um soldado.
+
+00:09:52.480 --> 00:09:54.760
+Esta luva se torna seu principal mecanismo de defesa
+
+00:09:54.760 --> 00:09:56.680
+contra a próxima geração de ameaças adversárias.
+
+00:09:57.420 --> 00:09:58.980
+Ela transforma sua postura de segurança
+
+00:09:58.980 --> 00:10:01.220
+de uma lista de regras em um sistema dinâmico em evolução.
+
+00:10:01.920 --> 00:10:03.920
+Você está finalmente combinando a velocidade dos modelos
+
+00:10:03.920 --> 00:10:04.840
+com a velocidade da defesa.
+
+00:10:05.260 --> 00:10:08.020
+Esta é a única maneira de garantir que seus fluxos de trabalho autônomos
+
+00:10:08.020 --> 00:10:09.880
+permaneçam resilientes em um mundo em que as ameaças
+
+00:10:09.880 --> 00:10:12.600
+são tão inteligentes quanto os sistemas que estão tentando subverter agora.
+
+00:10:12.600 --> 00:10:15.180
+Estrutura de Auditoria da Caixa de Vida
+
+00:10:15.180 --> 00:10:18.420
+Agosto de 2026 não é mais apenas uma data aleatória
+
+00:10:18.420 --> 00:10:19.480
+e um calendário de conformidade,
+
+00:10:19.600 --> 00:10:20.860
+porque na realidade é uma barreira rígida.
+
+00:10:21.400 --> 00:10:23.860
+Este é o momento exato em que os requisitos de alto risco
+
+00:10:23.860 --> 00:10:26.880
+da lei de Adawé passam da teoria para aplicação ativa.
+
+00:10:27.620 --> 00:10:30.220
+Se você opera agentes autônomos no setor financeiro,
+
+00:10:30.340 --> 00:10:32.040
+agora está sob o microscópio,
+
+00:10:32.180 --> 00:10:34.540
+mas a natureza do exame mudou.
+
+00:10:34.980 --> 00:10:37.780
+Os reguladores estão se afastando dos padrões baseados em processos,
+
+00:10:37.780 --> 00:10:39.900
+o que significa que eles não se importam mais com sua documentação
+
+00:10:39.900 --> 00:10:40.440
+ou sua intenção.
+
+00:10:40.780 --> 00:10:42.920
+Eles estão se movendo em direção a padrões baseados em eficácia.
+
+00:10:43.460 --> 00:10:45.860
+Eles querem ver se sua segurança realmente funciona no momento do impacto.
+
+00:10:46.880 --> 00:10:49.340
+Essa mudança requer uma mudança da caixa preta da era tradicional
+
+00:10:49.340 --> 00:10:51.500
+para o que chamamos de estrutura de auditoria de caixa de vidro.
+
+00:10:52.360 --> 00:10:54.200
+Você precisa ser capaz de ver através da lógica interno.
+
+00:10:54.740 --> 00:10:58.180
+A métrica mais crítica nesta nova era é o tempo de reconstrução da decisão.
+
+00:10:58.760 --> 00:10:59.860
+Se um agente movimentar dinheiro,
+
+00:11:00.040 --> 00:11:02.600
+você deve conseguir provar exatamente porque isso ocorreu em 60 minutos.
+
+00:11:03.340 --> 00:11:06.000
+Para a maioria das instituições, a resposta atualmente é um não categórico,
+
+00:11:06.000 --> 00:11:08.200
+porque elas têm registro, mas não têm períodos de raciocínio.
+
+00:11:08.200 --> 00:11:10.460
+Elas têm resultados, mas não têm o porquê.
+
+00:11:12.610 --> 00:11:13.950
+Em uma estrutura de caixa de vidro,
+
+00:11:14.130 --> 00:11:17.050
+cada chamada de ferramenta exige uma credencial de agente.
+
+00:11:18.790 --> 00:11:20.510
+Não se trata apenas de uma chave de API,
+
+00:11:20.630 --> 00:11:23.590
+mas de uma identidade verificável que carrega a autoridade de um patrocinador humano.
+
+00:11:24.090 --> 00:11:26.890
+Você está essencialmente criando uma cadeia de custódia digital para cada decisão.
+
+00:11:27.390 --> 00:11:29.050
+Se o agente decidir abrir mão de uma taxa
+
+00:11:29.050 --> 00:11:30.590
+ou aprovar uma transferência de alto risco,
+
+00:11:30.710 --> 00:11:33.190
+essa decisão deve ser ancorada em um conjunto específico de parâmetros
+
+00:11:33.190 --> 00:11:34.390
+autorizados por um humano.
+
+00:11:35.330 --> 00:11:37.470
+Implementamos isso por meio de um conceito chamado autonomia limitada.
+
+00:11:37.470 --> 00:11:40.210
+Os agentes lidam com um trabalho pesado de análise e execução
+
+00:11:40.210 --> 00:11:42.570
+enquanto os humanos controlam o interruptor físico de desligamento.
+
+00:11:43.190 --> 00:11:45.230
+Não é apenas um botão para quando algo dá errado,
+
+00:11:45.310 --> 00:11:47.350
+mas um limite estrutural sobre o que o agente pode fazer
+
+00:11:47.350 --> 00:11:48.830
+sem uma nova verificação explícita.
+
+00:11:49.550 --> 00:11:51.230
+Você define os limites da caixa de vidro,
+
+00:11:51.410 --> 00:11:53.570
+definindo limites para risco, valor e desvio.
+
+00:11:54.430 --> 00:11:56.070
+Se o agente tentar ultrapassar esses limites,
+
+00:11:56.150 --> 00:11:59.470
+o sistema congela a transação e exige uma justificativa humana.
+
+00:12:00.130 --> 00:12:02.890
+Isso atende à demanda regulatória por supervisão humana no circuito
+
+00:12:02.890 --> 00:12:05.370
+sem sacrificar a velocidade dos fluxos de trabalho autônomos.
+
+00:12:05.370 --> 00:12:08.410
+Você está dando espaço para a gente correr, mas está mantendo a coleira visível.
+
+00:12:09.050 --> 00:12:10.830
+Os riscos de falhar nessa auditoria são catastróficos.
+
+00:12:11.610 --> 00:12:14.090
+Estamos falando de uma multa de 7% sobre o faturamento global.
+
+00:12:14.450 --> 00:12:17.610
+E, para um grande banco, esse é um número que pode ameaçar a própria existência da instituição.
+
+00:12:18.650 --> 00:12:21.090
+Não pode se dar o luxo de ter um, talvez, quando os auditores chegarem.
+
+00:12:21.650 --> 00:12:23.410
+Você precisa de uma trilha de auditoria inviolável
+
+00:12:23.410 --> 00:12:25.590
+que mostre o caminho de raciocínio de cada ação do agente.
+
+00:12:26.290 --> 00:12:28.630
+Isso significa registrar a meta, o contexto recuperado,
+
+00:12:28.930 --> 00:12:29.970
+as chamadas de ferramentas,
+
+00:12:29.970 --> 00:12:32.130
+o resultado final de uma forma que não possa ser alterada.
+
+00:12:32.130 --> 00:12:34.890
+Você está construindo um cofre para a lógica em si.
+
+00:12:35.030 --> 00:12:37.850
+E essa é a única maneira de sobreviver ao cenário regulatório de 2026.
+
+00:12:38.090 --> 00:12:40.870
+Você precisa ser capaz de abrir a caixa e mostrar o mecanismo interno.
+
+00:12:41.450 --> 00:12:44.470
+Essa estrutura também protege você dos ataques de fatiamento de salame que discutimos.
+
+00:12:45.250 --> 00:12:47.010
+Monitorando os intervalos de raciocínio com o tempo,
+
+00:12:47.090 --> 00:12:50.090
+a caixa de vidro detecta quando a lógica de um agente é lentamente corroída.
+
+00:12:50.650 --> 00:12:52.730
+Ela procurou por contradições na política ou mudanças de tom
+
+00:12:52.730 --> 00:12:55.170
+que sugiram que uma ejeção em várias etapas está em andamento.
+
+00:12:55.470 --> 00:12:57.910
+Ele fornece a visibilidade necessária para detectar o desvio
+
+00:12:57.910 --> 00:12:59.130
+antes que ele se transforme em uma violação.
+
+00:12:59.130 --> 00:13:03.550
+Você não está mais apenas reagindo a um alerta, mas está observando a integridade do raciocínio em si.
+
+00:13:04.290 --> 00:13:05.990
+Configurar isso para esse caro e complexo
+
+00:13:05.990 --> 00:13:09.770
+requer uma reformulação completa da sua arquitetura de dados e do seu modelo de governança.
+
+00:13:10.250 --> 00:13:11.730
+Mas quando você olha para a alternativa,
+
+00:13:12.010 --> 00:13:14.970
+o custo da caixa de vidro se torna o melhor investimento que você fará.
+
+00:13:15.690 --> 00:13:16.930
+A transição para esse modelo
+
+00:13:16.930 --> 00:13:20.530
+é a ponte entre a automação imprudente e as finanças resilientes e auditáveis.
+
+00:13:20.530 --> 00:13:22.510
+É a mudança da esperança que aprova.
+
+00:13:23.550 --> 00:13:25.830
+Roy, guerra proativa versus limpeza reativa.
+
+00:13:25.830 --> 00:13:29.090
+Vamos analisar a matemática fria e dura de 2026.
+
+00:13:29.210 --> 00:13:33.870
+No setor financeiro, o custo médio de violação de dados agora está se aproximando de US$ 5,8 milhões de resi.
+
+00:13:34.790 --> 00:13:37.050
+Esse número não é apenas uma manchete para assustar você,
+
+00:13:37.130 --> 00:13:40.970
+mas representa o sangramento real de perícia digital, taxas legais e penalidades regulatórias.
+
+00:13:41.850 --> 00:13:45.110
+Você também precisa considerar a rotatividade massiva de clientes de alto patrimônio líquido
+
+00:13:45.110 --> 00:13:47.570
+que perdem a fé em sua infraestrutura no momento em que seus dados chegam no arquivo.
+
+00:13:47.570 --> 00:13:52.170
+Quando você olha para o balanço, a limpeza reativa é a maneira mais cara de administrar um banco.
+
+00:13:52.430 --> 00:13:53.910
+Você está pagando um prêmio pelo fracasso.
+
+00:13:54.470 --> 00:13:58.010
+A guerra proativa, por outro lado, oferece uma taxa de prevenção de custos de 6 e 1.
+
+00:13:58.190 --> 00:14:02.210
+Para cada dólar gasto no desafio multimodal, você economiza US$ 6 em custos de limpeza e multas.
+
+00:14:02.590 --> 00:14:04.230
+Esta não é apenas uma métrica de segurança,
+
+00:14:04.350 --> 00:14:06.830
+mas uma jogada de eficiência fundamental para a empresa financeira moderna.
+
+00:14:06.830 --> 00:14:09.050
+O teste manual é um custo irrecuperável.
+
+00:14:09.430 --> 00:14:10.730
+Você paga pelo tempo de uma pessoa.
+
+00:14:10.990 --> 00:14:13.790
+Ela encontra alguns bugs superficiais, então segue para o próximo projeto.
+
+00:14:13.790 --> 00:14:18.290
+Esse conhecimento é estático e não melhora a lógica central do modelo ou sua resiliência ao longo do tempo.
+
+00:14:18.870 --> 00:14:20.630
+O Red Team em multimodal é um ativo estratégico.
+
+00:14:21.190 --> 00:14:23.830
+Você está construindo uma biblioteca de inteligência adversária que se acumula.
+
+00:14:24.190 --> 00:14:25.770
+Ela está fortalecendo sua propriedade intelectual.
+
+00:14:26.310 --> 00:14:30.450
+Você cria um fosso em torno dos seus fluxos de trabalho autônomos que concorrentes não conseguem igualar.
+
+00:14:31.130 --> 00:14:34.070
+Esta é a diferença entre um centro de custo e uma vantagem estratégica.
+
+00:14:34.550 --> 00:14:38.210
+Quando eles estão marcando caixas, você está construindo uma fortaleza que aprende com cada ataque.
+
+00:14:38.690 --> 00:14:42.390
+Você está transformando seu orçamento de segurança de uma despesa em uma melhora de capital de longo prazo.
+
+00:14:42.390 --> 00:14:44.090
+O mercado já está precificando isso.
+
+00:14:44.590 --> 00:14:47.450
+As seguradoras cibernéticas não estão mais oferecendo taxas fixas e únicas,
+
+00:14:47.570 --> 00:14:49.870
+porque estão analisando seus registros de testes adversários.
+
+00:14:50.530 --> 00:14:53.990
+Se você puder fornecer prova documentada de Red Team em multimodal contínuo,
+
+00:14:54.230 --> 00:14:56.230
+estamos vendo reduções de prêmios de até 20%.
+
+00:14:56.230 --> 00:14:59.470
+As seguradoras sabem que o modelo reforçado é uma responsabilidade menor.
+
+00:15:00.070 --> 00:15:02.470
+Elas estão essencialmente subsidiando suas atualizações de segurança,
+
+00:15:02.590 --> 00:15:04.230
+porque isso reduz o risco de um pagamento massivo.
+
+00:15:04.690 --> 00:15:09.390
+Se você não estiver fazendo isso, estará efetivamente pagando um imposto de vulnerabilidade em seu seguro todo mês.
+
+00:15:09.390 --> 00:15:12.290
+Você está deixando dinheiro na mesa e aumentando sua exposição.
+
+00:15:12.890 --> 00:15:14.910
+Além dos prêmios, temos que falar sobre o raio de explosão.
+
+00:15:15.730 --> 00:15:19.290
+Uma postura reativa pressupõe que você pode conter a violação depois que ela acontece,
+
+00:15:19.390 --> 00:15:21.710
+mas em um ambiente de agente, essa é uma fantasia perigosa.
+
+00:15:22.550 --> 00:15:26.050
+Uma infecção em um único corpo direito pode se espalhar para todos os sistemas conectados em sua cadeia.
+
+00:15:26.530 --> 00:15:29.650
+Ao implementar a manopla, você força um isolamento estrutural de seus dados.
+
+00:15:30.350 --> 00:15:33.390
+Você aprende a criptografar suas incorporações e limitar a recuperação
+
+00:15:33.390 --> 00:15:36.370
+para que, se um agente for sequestrado, o resto do cofre continue lacrado.
+
+00:15:36.370 --> 00:15:41.290
+Você está criando uma estratégia de defesa em profundidade que protege seus ativos mais confidenciais do zero
+
+00:15:41.290 --> 00:15:42.870
+e você está cumprando a resiliência.
+
+00:15:43.490 --> 00:15:48.250
+Você está garantindo que uma única armadilha lógica não se transforme em um colapso sistêmico de toda a sua operação financeira.
+
+00:15:49.090 --> 00:15:51.650
+Você está construindo um sistema que pode ser atingido e continuar avançando.
+
+00:15:52.470 --> 00:15:54.070
+O roteiro de implementação de auto-recuperação.
+
+00:15:54.590 --> 00:15:56.610
+Como você realmente começa a construir isso em seu ambiente?
+
+00:15:57.170 --> 00:15:59.110
+O roteiro não consiste em comprar um novo pacote de software.
+
+00:15:59.610 --> 00:16:01.150
+Trata-se de reprojetar sua visibilidade.
+
+00:16:01.690 --> 00:16:02.710
+A primeira etapa é o inventário.
+
+00:16:03.150 --> 00:16:04.150
+Você precisa encontrar sua IA para lá.
+
+00:16:04.150 --> 00:16:08.910
+No momento, existem agentes em seu ambiente com chaves de API que sua equipe de segurança nunca viu.
+
+00:16:09.850 --> 00:16:13.330
+Elas foram criadas por desenvolvedores ou analistas para resolver um problema específico
+
+00:16:13.330 --> 00:16:16.430
+e estão lá, conectadas aos seus dados de produção, sem nenhuma supervisão.
+
+00:16:17.050 --> 00:16:17.790
+O problema é simples.
+
+00:16:18.350 --> 00:16:19.630
+Você não pode proteger o que não pode ver.
+
+00:16:20.090 --> 00:16:22.770
+Você precisa de uma auditoria total de cada fluxo de trabalho autônomo,
+
+00:16:22.890 --> 00:16:25.930
+o que significa identificar cada patrocinador humano, cada nível de permissão em todos os níveis.
+
+00:16:26.450 --> 00:16:30.070
+Este inventário é o primeiro passo para recuperar o controle sobre seu perímetro digital.
+
+00:16:30.070 --> 00:16:33.070
+Se não há patrocinador ou não há agente, você o encerra.
+
+00:16:34.830 --> 00:16:37.590
+O segundo passo é mudar de registro simples para rastreamento causal.
+
+00:16:38.030 --> 00:16:41.710
+Os registros de eventos legados informam que uma transação ocorreu, mas não informam o porquê.
+
+00:16:42.450 --> 00:16:44.630
+Use intervalos de raciocínio de várias etapas em vez disso.
+
+00:16:45.210 --> 00:16:48.690
+Isso permite que você acompanhe o processo de pensamento do agente em toda a cadeia de execução.
+
+00:16:48.690 --> 00:16:51.810
+Quando um agente falha, você não deve olhar para um rastreamento de pilha.
+
+00:16:52.370 --> 00:16:56.890
+Você deve olhar para um mapa causal, que mostra exatamente onde o raciocínio foi subvertido por uma entrada adversária.
+
+00:16:57.290 --> 00:17:00.370
+Você precisa ver a lógica, não apenas o resultado, para realmente entender o risco.
+
+00:17:00.990 --> 00:17:02.030
+Esta é a base do desafio.
+
+00:17:02.850 --> 00:17:06.130
+Sem rastreamento causal, você está apenas supondo a causa raiz de suas falhas
+
+00:17:06.130 --> 00:17:08.770
+e acaba tratando o sintoma em vez da doença.
+
+00:17:09.590 --> 00:17:12.090
+O terceiro passo é a implementação da otimização de negociações.
+
+00:17:12.890 --> 00:17:14.930
+É aqui que você equilibra sua precisão com sua robustez.
+
+00:17:14.930 --> 00:17:19.550
+Em um contexto financeiro de alto risco, você não pode ter um modelo que seja 99% preciso,
+
+00:17:19.650 --> 00:17:22.090
+mas 0% robusto contra uma injeção imediata.
+
+00:17:23.210 --> 00:17:26.870
+Você usa os dados do seu desafio para ajustar seus modelos usando a minimização de perda substituta.
+
+00:17:27.390 --> 00:17:30.850
+Ao fazer isso, você está dizendo explicitamente ao modelo que permanecer alinhado sobre a ação
+
+00:17:30.850 --> 00:17:32.710
+é tão importante quanto dar a resposta correta.
+
+00:17:33.950 --> 00:17:36.930
+Você está incorporando a consciência adversarial aos pesos da rede neural.
+
+00:17:37.690 --> 00:17:41.990
+Você torna o modelo inteligente o bastante para saber quando é manipulado por um agente mal intencionado
+
+00:17:41.990 --> 00:17:43.830
+que tenta explorar seus sistemas autônomos.
+
+00:17:43.830 --> 00:17:46.890
+Este roteiro transforma seu centro de operações de segurança.
+
+00:17:47.410 --> 00:17:51.330
+Você se afasta da fadiga de alerta onde os humanos estão se afogando em milhares de avisos de baixo contexto
+
+00:17:51.330 --> 00:17:52.610
+e se aproximam da triagem autônoma.
+
+00:17:53.630 --> 00:17:58.250
+Sua arquitetura começa a antecipar ataques porque já os viu um milhão de vezes nas simulações do desafio.
+
+00:17:59.030 --> 00:18:00.850
+Você não está apenas reagindo à ameaça de hoje.
+
+00:18:01.590 --> 00:18:03.590
+Você está protegendo os fluxos de trabalho autônomo de amanhã.
+
+00:18:04.270 --> 00:18:07.710
+Você está mudando de um mundo em que navega pelos riscos para um mundo em que controla o contexto.
+
+00:18:08.190 --> 00:18:09.050
+Esta é a mudança final.
+
+00:18:09.050 --> 00:18:12.570
+É assim que você constrói um cofre financeiro que realmente se sustenta na era dos agentes.
+
+00:18:13.110 --> 00:18:16.670
+Você está finalmente construindo para o mundo como ele é, não como você gostaria que fosse.
+
+00:18:17.670 --> 00:18:22.950
+Agora você possui estrutura para fazer a transição de caixa de seleção para a construção de cofres digitais.
+
+00:18:23.690 --> 00:18:24.690
+Sua tarefa de casa está clara.
+
+00:18:24.690 --> 00:18:27.930
+Audite um fluxo de trabalho autônomo esta semana para rastreadibilidade.
+
+00:18:28.770 --> 00:18:31.210
+Se você não conseguir encontrar o proprietário humano, esse agente é um risco.
+
+00:18:32.070 --> 00:18:35.950
+Se essa mudança de pensamento ajudou você, deixe um comentário no podcast M305FM.
+
+00:18:36.730 --> 00:18:38.790
+Isso ajuda mais líderes a encontrar esse sinal em meio ao ruído.
+
+00:18:39.290 --> 00:18:40.850
+Entre em contato comigo, Mirko Peters, no LinkedIn.
+
+00:18:41.410 --> 00:18:43.370
+Diga-me quais riscos de A estão tirando seus...
+
+00:18:43.370 --> 00:18:44.870
+A era dos testes manuais acabou.
+
+00:18:45.570 --> 00:18:47.550
+É hora de se preparar para a realidade adversa que está por vir.
+
+00:18:47.550 --> 00:19:17.530
+M305FM.

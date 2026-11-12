@@ -1,0 +1,1240 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:03.860
+Selamat datang di episode lain dari Microsoft Knowledge Nuggets di M365FM.
+
+00:00:04.240 --> 00:00:05.220
+Saya pemandu Anda, Mirko Peters.
+
+00:00:05.640 --> 00:00:08.220
+Anda selama ini mendeploy sumber daya Azure dengan mengeklik di dump port.
+
+00:00:08.660 --> 00:00:09.820
+Cara itu berhasil-hasil tidak berfungsi.
+
+00:00:10.280 --> 00:00:12.980
+Lalu Anda perlu melakukannya lagi tetapi Anda tidak ingat apa yang Anda pilih.
+
+00:00:13.380 --> 00:00:15.980
+Anda perlu menyerahkannya kepada rekantin dan mereka tidak bisa mengikuti langkah.
+
+00:00:16.440 --> 00:00:17.960
+Kontroversi. Tidak ada yang bisa dikomit.
+
+00:00:18.320 --> 00:00:19.660
+Itulah masalah yang akan kita selesaikan hari ini.
+
+00:00:20.180 --> 00:00:22.980
+Di akhir episode ini, Anda akan mengerti apa itu infrastructure escort,
+
+00:00:23.100 --> 00:00:27.280
+mengapa BICIP ada, dan bagaimana hal itu membuat deployment Azure lebih mudah dan andal.
+
+00:00:27.280 --> 00:00:31.500
+Kita akan mulai dengan masalahnya, lalu solusinya, kemudian contoh praktis yang bisa Anda ikuti.
+
+00:00:31.860 --> 00:00:33.340
+Ambil kopi Anda, dan mari kita mulai.
+
+00:00:34.280 --> 00:00:36.860
+Masalah portal. Jebakan klik untuk deploy terasa cepat.
+
+00:00:37.460 --> 00:00:39.700
+Anda masuk, isi formulir, tekan buat, dan selesai.
+
+00:00:40.140 --> 00:00:43.840
+Namun apa yang terjadi saat Anda perlu melakukannya lagi dengan pengaturan wilayah dan konvensi penambahan yang sama?
+
+00:00:44.180 --> 00:00:47.500
+Anda harus mengingat setiap hal yang Anda pilih, dan disitulah segalanya berantakan.
+
+00:00:48.020 --> 00:00:52.420
+Deployment manual berarti hasil yang tidak konsisten, kesalahan manusia, dan tanpa jejak audit.
+
+00:00:52.980 --> 00:00:53.780
+Ini contoh dunia nyata.
+
+00:00:54.320 --> 00:00:57.240
+Seseorang di tim Anda membuat sumber daya dengan pengaturan yang sedikit berbeda.
+
+00:00:57.720 --> 00:00:59.180
+Sekarang Anda punya dua lingkungan yang tidak cocok.
+
+00:00:59.560 --> 00:01:02.220
+Satu berfungsi, yang lain tidak, dan semoga berhasil mencari tahu alasan.
+
+00:01:02.920 --> 00:01:04.100
+Lalu ada masalah dokumentasi.
+
+00:01:04.880 --> 00:01:10.360
+Infrastruktur dalam dokumen Word, atau lebih buruk lagi, video YouTube yang direkam 6 bulan lalu saat portal terlihat sangat berbeda.
+
+00:01:11.080 --> 00:01:12.880
+Fitur pindah menu berubah, opsi baru muncul.
+
+00:01:13.180 --> 00:01:17.960
+Saya berbincang dengan manajer produk dari tim portal Azure, dan dia bilang mereka merilis fitur baru 2 kali sehari.
+
+00:01:18.360 --> 00:01:18.840
+2 kali sehari.
+
+00:01:19.240 --> 00:01:21.540
+Dokumen Word Anda suak dalam luar sabahkan sebelum Anda selesai menulis.
+
+00:01:21.740 --> 00:01:22.280
+Begini masalah.
+
+00:01:22.600 --> 00:01:25.100
+Mengklik itu efektif untuk belajar, tapi gagal untuk produksi.
+
+00:01:25.460 --> 00:01:26.220
+Jadi apa alternatifnya?
+
+00:01:26.220 --> 00:01:28.560
+Anda menulis file yang menjelaskan apa yang Anda inginkan.
+
+00:01:28.720 --> 00:01:29.840
+Lalu Anda minta Azure untuk membangun.
+
+00:01:30.580 --> 00:01:31.680
+Apa itu Infrastructure as Code?
+
+00:01:32.640 --> 00:01:36.620
+Infrastructure as Code berarti mengelola pengaturan kode Anda dengan kode alih-alih mengeklik di portal.
+
+00:01:36.920 --> 00:01:37.720
+Ini ide utamanya.
+
+00:01:38.400 --> 00:01:40.660
+Anda menulis file yang mendeskripsikan infrastruktur Anda.
+
+00:01:41.060 --> 00:01:42.340
+File itu ada di repository Anda.
+
+00:01:42.340 --> 00:01:47.660
+Dan Anda bisa melakukan kontroversi, meninjaunya dalam pull request, dan menjalankannya lagi besok untuk hasil yang sama.
+
+00:01:48.260 --> 00:01:49.720
+Ada istilah kunci di sini, deklaratif.
+
+00:01:50.140 --> 00:01:52.600
+Itu berarti Anda menjelaskan apa yang Anda inginkan, bukan cara membangunnya.
+
+00:01:53.340 --> 00:01:58.160
+Anda tidak memberitahu Azure untuk membuat grup sumber daya dulu, lalu menambah akun penyimpanan, lalu mengonfigurasi jaring.
+
+00:01:58.740 --> 00:02:02.760
+Sebaliknya, Anda katakan saya ingin grup sumber daya dengan akun penyimpanan dan jaringan yang dikonfigurasi seperti ini.
+
+00:02:03.040 --> 00:02:04.000
+Dan Azure menentukan urutan.
+
+00:02:04.360 --> 00:02:05.920
+Hasilnya adalah sebuah yang disebutkan di potensi.
+
+00:02:06.360 --> 00:02:08.880
+Jalangkan sekali, jalangkan 100 kali, dan Anda mendapatkan hasil yang sama.
+
+00:02:09.080 --> 00:02:09.620
+Belak kekuatan.
+
+00:02:09.620 --> 00:02:12.180
+Anggap saja seperti cetak biru dibandingkan membangun dengan tangan.
+
+00:02:12.360 --> 00:02:14.940
+Cetak biru dapat diulang, dibagikan, dan ditinjau.
+
+00:02:15.240 --> 00:02:17.520
+Berikan kepada orang lain, dan mereka akan membangun hal yang persis.
+
+00:02:18.060 --> 00:02:19.040
+Sekarang beberapa alat nih.
+
+00:02:19.460 --> 00:02:21.700
+Templat IRM, Bicep, Terraform, Bulmi.
+
+00:02:22.120 --> 00:02:24.100
+Semuanya menerapkan konsep yang sama dengan cara yang berbeda.
+
+00:02:24.480 --> 00:02:25.340
+Itu adalah perbedaan yang penting.
+
+00:02:25.900 --> 00:02:27.240
+Infrastruktur sebagai kodera konsepnya.
+
+00:02:27.620 --> 00:02:29.380
+Bicep hanyalah salah satu alat yang menerapkannya.
+
+00:02:29.920 --> 00:02:30.660
+Dan inilah masalahnya.
+
+00:02:30.840 --> 00:02:33.380
+Azure telah memiliki bahasa IAC selama bertahun-tahun yang disebut templatan.
+
+00:02:33.980 --> 00:02:35.740
+Dan ada alasan mengapa Microsoft membuat yang baru.
+
+00:02:36.400 --> 00:02:37.160
+Masalah templat IRM.
+
+00:02:37.160 --> 00:02:39.600
+Templat IRM adalah format IAC Azure yang asli.
+
+00:02:40.040 --> 00:02:40.820
+Itu adalah file JSON.
+
+00:02:41.200 --> 00:02:42.180
+Dan punya banyak keunggulan.
+
+00:02:42.740 --> 00:02:44.240
+Cakupan penuh setiap sumber daya Azure.
+
+00:02:44.740 --> 00:02:47.560
+Dan mesin penyebaran yang sama seperti yang Anda gunakan secara internal.
+
+00:02:48.140 --> 00:02:51.220
+Jika Anda bisa membuatnya di portal, Anda bisa mendefinisikannya di templat IRM.
+
+00:02:51.640 --> 00:02:52.160
+Apa masalahnya?
+
+00:02:52.560 --> 00:02:54.900
+JSON bagus untuk mesin, tetapi buruk bagi manusia.
+
+00:02:55.380 --> 00:02:56.220
+Biar saya tunjukkan maksud saya.
+
+00:02:56.700 --> 00:02:59.460
+Akun penyimpanan dalam templat IRM membutuhkan sekitar 20 baris kod.
+
+00:02:59.820 --> 00:03:01.800
+Akun penyimpanan yang sama di Bicep sekitar 10 baris.
+
+00:03:02.220 --> 00:03:03.700
+Versi JSON kira-kira dua kali ukurannya.
+
+00:03:03.700 --> 00:03:05.320
+Dan itu hanya sumber daya yang sederhana.
+
+00:03:05.780 --> 00:03:09.800
+Bayangkan penyebaran penuh dengan jaringan, komputasi, basis data, dan aturan keamanan.
+
+00:03:10.440 --> 00:03:12.020
+Templat IRM menjadi dinding teks.
+
+00:03:12.860 --> 00:03:14.180
+Titik masalah yang umum dapat diprediksi.
+
+00:03:14.940 --> 00:03:20.160
+Koma yang hilang, kurung yang tidak cocok, penumpukan kata yang membuat sulit untuk mengetahui di mana satu sumber daya berakhir dan yang lain dimulai.
+
+00:03:20.600 --> 00:03:24.340
+Anda menghabiskan lebih banyak waktu bergulat dengan sintaks JSON daripada benar mendefinisikan infrastrukturan.
+
+00:03:24.780 --> 00:03:25.860
+Lalu ada dependensi.
+
+00:03:26.320 --> 00:03:28.540
+Di ARM, Anda harus secara manual menyatakan depends on.
+
+00:03:28.540 --> 00:03:33.160
+Jika sumber daya A membutuhkan sumber daya B untuk Anda terlebih dahulu, Anda harus menuliskannya secara eksplisit.
+
+00:03:33.800 --> 00:03:35.380
+Lewatkan satu dan penyebaran Anda gagal.
+
+00:03:35.800 --> 00:03:37.300
+Semoga berhasil mencari tahu mana yang Anda lapatkan.
+
+00:03:37.760 --> 00:03:41.100
+Jika Anda pernah mencoba menulis file JSON 200 baris dengan tangan, itu tidak menyenangkan.
+
+00:03:41.500 --> 00:03:42.220
+Bahkan sedikit pun tidak.
+
+00:03:42.560 --> 00:03:43.520
+Kurva pembelajarannya curah.
+
+00:03:43.920 --> 00:03:45.980
+Anggota tim baru berjuang untuk memahami templat IRM.
+
+00:03:46.680 --> 00:03:47.700
+Hambatan masuknya tinggi.
+
+00:03:48.160 --> 00:03:49.140
+Dan apa yang terjadi dalam praktek?
+
+00:03:49.480 --> 00:03:52.020
+Banyak tim berakhir dengan satu orang yang mengetahui templat IRM.
+
+00:03:52.540 --> 00:03:53.960
+Orang itu menjadi titik kegagalan tunggal.
+
+00:03:53.960 --> 00:03:58.300
+Mereka satu-satunya yang bisa memodifikasi penyebaran dan satu-satunya yang bisa mendebaknya saat ada yang rusak.
+
+00:03:58.620 --> 00:03:59.420
+Itu tidak berkelanjutan.
+
+00:04:00.240 --> 00:04:01.600
+Microsoft mendengar masukan tersebut.
+
+00:04:01.740 --> 00:04:03.660
+Jadi mereka membangun B-CEP untuk mengatasi masalah lain.
+
+00:04:04.280 --> 00:04:04.880
+Apa itu B-CEP?
+
+00:04:05.560 --> 00:04:06.560
+Jadi apa sebenarnya B-CEP itu?
+
+00:04:06.940 --> 00:04:10.680
+Ini adalah bahasa yang dirancang untuk mendeploy sumber daya Azure dan intinya adalah sebuah transpiler.
+
+00:04:11.520 --> 00:04:13.980
+Anda menulis B-CEP dan ia akan dikompilasi menjadi JSON-ARM.
+
+00:04:14.700 --> 00:04:16.660
+Mesinnya sama tetapi cara penulisannya jauh lebih rapi.
+
+00:04:17.080 --> 00:04:19.440
+Dan nama B-CEP sebenarnya adalah ARM yang dieja terbalik.
+
+00:04:19.520 --> 00:04:20.460
+B-CEP, ARM.
+
+00:04:20.460 --> 00:04:22.160
+Sebuah lucu yang ternak kecil dari Microsoft.
+
+00:04:22.160 --> 00:04:24.240
+Namun begitu Anda melihatnya beraksi itu masalah.
+
+00:04:24.600 --> 00:04:26.220
+B-CEP berada di atas ARM alih menggantikannya.
+
+00:04:26.840 --> 00:04:28.700
+Anda mendapatkan kekuatan yang sama dengan sintaks yang lebih sederhana.
+
+00:04:29.060 --> 00:04:31.040
+B-CEP tidak menggantikan ARM-nya dibangun di atasnya.
+
+00:04:31.520 --> 00:04:33.460
+Semua yang bisa Anda lakukan dengan ARM misalnya dengan B-CEP.
+
+00:04:33.760 --> 00:04:36.940
+Setiap jenis sumber daya, setiap versi API, setiap opsi konfigurasi semuanya ada di sana.
+
+00:04:37.420 --> 00:04:38.940
+Satu-satunya berbeda adalah cara Anda meluisi.
+
+00:04:39.160 --> 00:04:40.120
+Sintaksnya jauh lebih bersih.
+
+00:04:40.580 --> 00:04:43.920
+Tanpa tanda kutip di nama properti, tanpa koma di antara properti, tanpa kurung yang bingungkan.
+
+00:04:44.160 --> 00:04:44.860
+Itu jauh lebih sederhana.
+
+00:04:45.200 --> 00:04:46.580
+Bandingkan kedua versi tersebut secara berdamping.
+
+00:04:47.280 --> 00:04:49.760
+Versi JSON ARM dari akun penyimpanan penuh dengan gangguan.
+
+00:04:50.080 --> 00:04:51.900
+Tanda kutip koma kurung dan pelapisan.
+
+00:04:52.740 --> 00:04:55.380
+Versi B-CEP memiliki informasi yang sama, tetapi lebih mudah dibaca.
+
+00:04:55.960 --> 00:05:00.580
+Anda bisa melihatnya dan langsung memahami apa fungsinya tanpa harus menelusuri lapisan sintaks JSON.
+
+00:05:01.440 --> 00:05:03.860
+Satu peningkatan besar adalah inferensi dependensi otomatis.
+
+00:05:04.180 --> 00:05:06.100
+Di ARM Anda harus meneklarasikan dependensi secara mana?
+
+00:05:06.100 --> 00:05:12.060
+Namun di B-CEP, jika sumber daya A merujuk ke sumber daya B, sistem menentukan dependensinya secara otomatis.
+
+00:05:12.480 --> 00:05:13.440
+Anda tidak perlu menulisnya secara.
+
+00:05:13.820 --> 00:05:14.620
+Semuanya berjalan otomatis.
+
+00:05:14.900 --> 00:05:16.680
+Dan itu saja menghemat waktu berjam-jam untuk proses bug.
+
+00:05:17.000 --> 00:05:18.160
+Modul adalah bagian besar lainnya.
+
+00:05:18.520 --> 00:05:22.800
+Anda dapat memecah infrastruktur menjadi bagian-bagian kecil yang dapat digunakan kembali dan dibagikan ke seluruh proyek.
+
+00:05:23.320 --> 00:05:25.680
+Satu tim membuat modul jaringan dan tim lain bisa menggunakannya.
+
+00:05:26.340 --> 00:05:28.120
+Tidak perlu terus-menerus menciptakan kembali roda yang sama.
+
+00:05:28.380 --> 00:05:32.220
+Parameter dan variable memungkinkan Anda mendefinisikan input sekali dan menggunakannya kembali dimana saja.
+
+00:05:32.220 --> 00:05:35.060
+Tidak perlu lagi mencari dan mengganti nilai yang dikodekan secara statis.
+
+00:05:35.580 --> 00:05:39.960
+Dan interpolasi string berarti Anda bisa menulis prefix storage, alih-alih fungsi penggabungan yang rumit.
+
+00:05:40.720 --> 00:05:43.020
+Peralatan pendukung adalah halasan lain mengapa B-CEP sangat nyaman digunakan.
+
+00:05:43.420 --> 00:05:47.840
+Eksensi VS Code memberikan Anda intelligence, pewarnaan sintaks, dan pemeriksaan kesalahan secara real-time.
+
+00:05:48.360 --> 00:05:50.780
+Sejujurnya, ini adalah salah satu eksensi bahasa terbaik di VS Code.
+
+00:05:51.100 --> 00:05:53.760
+Anda mulai mengetik dan ia akan menyarankan apa yang harus ditulis selanjutnya.
+
+00:05:53.760 --> 00:05:55.500
+Jika melakukan kesalahan, ia akan langsung memberi tahuan.
+
+00:05:55.500 --> 00:05:58.800
+Tidak perlu lagi menunggu deployment gagal sebelum mengetahui bahwa Anda melewatkan sebuah koma.
+
+00:05:59.540 --> 00:06:00.980
+Jadi, seperti apa ini sebenarnya dan praktiknya?
+
+00:06:01.420 --> 00:06:03.040
+Mari kita lihat bagaimana perbedaan B-CEP dengan ARM.
+
+00:06:03.460 --> 00:06:05.540
+B-CEP VS ARM, apa sebenarnya perbedaannya?
+
+00:06:05.980 --> 00:06:09.520
+Mari kita bahas apa perbedaan sebenarnya saat Anda menulis B-CEP dibandingkan dengan RMJSON.
+
+00:06:09.840 --> 00:06:11.380
+Ukuran file adalah salah satu perbedaan yang jelas.
+
+00:06:11.840 --> 00:06:14.700
+File B-CEP kira-kira setengah ukuran dari template ARM yang setara.
+
+00:06:15.200 --> 00:06:16.360
+Itu bukan berlebihan.
+
+00:06:16.900 --> 00:06:21.300
+Anda menghapus semua tanda kutip koma, kurung, dan boilerplate, dan yang tersisa hanya ada definisi infrastrukturnya.
+
+00:06:21.720 --> 00:06:22.820
+Setengah dari kode hasil yang sama.
+
+00:06:22.820 --> 00:06:24.480
+Keterbaca mengikutinya secara alam.
+
+00:06:24.840 --> 00:06:27.760
+Lebih sedikit baris, struktur yang lebih bersih, dan lebih mudah dipahami dalam sekalian lihat.
+
+00:06:28.200 --> 00:06:31.080
+Saat Anda membuka file B-CEP, Anda dapat memindahinya dan memahami apa yang sedang hidup.
+
+00:06:31.660 --> 00:06:36.080
+Dengan RMJSON, Anda harus melewati lapisan-lapisan penumpukan sebelum menemukan konfigurasi resource yang sebenarnya.
+
+00:06:36.380 --> 00:06:37.660
+Dependensi sangat menghemat waktu.
+
+00:06:38.460 --> 00:06:40.260
+Di ARM, Anda secara manum mendeklarasikan Depend-Song.
+
+00:06:40.620 --> 00:06:41.980
+Relot satu saja dan deployment Anda akan gagal.
+
+00:06:42.620 --> 00:06:46.440
+Di B-CEP, jika resource A merujuk ke resource B, sistem menangannya secara otomatis.
+
+00:06:47.340 --> 00:06:49.700
+Sistem menambahkan dependensi tersebut saat mempulasi ke RMJSON.
+
+00:06:49.700 --> 00:06:51.460
+Anda tidak perlu memikirkannya, sistem langsung bekerja.
+
+00:06:51.860 --> 00:06:53.700
+Dan itu saja sudah menghemat waktu berjam-jam untuk debugging.
+
+00:06:54.040 --> 00:06:55.360
+Modul perbedaan utama lainnya.
+
+00:06:55.680 --> 00:06:57.900
+RM memiliki template tertingkat, tetapi sulit untuk dikerjakan.
+
+00:06:58.720 --> 00:07:00.700
+File terpisah, penauta yang kompak, sulit untuk diberi versi.
+
+00:07:01.120 --> 00:07:04.280
+B-CEP memiliki modul yang lebih bersih, dapat diberi versi, dan dapat digunakan kembali.
+
+00:07:05.100 --> 00:07:08.760
+Anda menentukan modul sekali, memublikasikannya ke registri dan mereferensikannya dari mana saja.
+
+00:07:09.360 --> 00:07:11.260
+Modul yang sama, konfigurasi yang sama setiap saat.
+
+00:07:11.820 --> 00:07:13.140
+Proses deployment-nya sendiri identik.
+
+00:07:13.740 --> 00:07:16.680
+B-CEP dikompilasi ke ARMJSON, kemudian Azure Resource Manager mendeploy-nya.
+
+00:07:17.000 --> 00:07:18.400
+Mesin yang sama, pipeline yang sama.
+
+00:07:18.400 --> 00:07:21.960
+Anda tidak perlu mengubah proses deployment Anda, Anda hanya perlu mengubah cara menulis template.
+
+00:07:22.540 --> 00:07:26.500
+What if adalah fitur yang secara teknis dimiliki ARM, tetapi B-CEP membuatnya jauh lebih mudah diakses.
+
+00:07:27.020 --> 00:07:31.660
+Anda dapat melihat pertinjau perubahan sebelum mendeploy dan melihat dengan tepat apa yang akan dibuat di modifikasi itu diakui.
+
+00:07:31.920 --> 00:07:33.520
+Tanpa kejutan, tanpa menghapusan yang tidak disengaja.
+
+00:07:33.920 --> 00:07:36.820
+Anda menjalankan what if tinjau hasilnya, dan jika terlihat benar, Anda melakukan itu.
+
+00:07:37.160 --> 00:07:39.220
+Merfaat pembelajaran adalah satu area di mana B-CEP menonjol.
+
+00:07:39.580 --> 00:07:41.240
+ARMJSON berasumsi bahwa Anda tahu apa yang akan dilakukan.
+
+00:07:41.580 --> 00:07:43.060
+Template ini dilancang untuk mesin, bukan untuk manusia.
+
+00:07:43.420 --> 00:07:44.520
+B-CEP dirancang untuk pemula.
+
+00:07:48.400 --> 00:07:52.580
+Microsoft telah menjadikan B-CEP sebagai pengalaman penulisan yang direkomendasikan.
+
+00:07:52.840 --> 00:07:55.000
+Semua fitur dan peningkatan baru menargetkan B-CEP terlebih dahulu.
+
+00:07:55.520 --> 00:07:59.320
+Template ARM masih berfungsi dan tidak akan hilang, tetapi Anda mungkin tidak perlu lagi menulis yang baru.
+
+00:07:59.820 --> 00:08:02.120
+Jika Anda memulai proyek baru hari ini, B-CEP adalah pilihan apa?
+
+00:08:02.720 --> 00:08:04.840
+Tiga baris B-CEP untuk mendeploy group resource.
+
+00:08:05.400 --> 00:08:06.060
+Hanya tiga baris.
+
+00:08:06.300 --> 00:08:08.360
+ARMJSON yang setelah membutuhkan sekitar 15 baris.
+
+00:08:08.600 --> 00:08:12.100
+Hasil sama, penerapan sama, tapi yang satu mudah dibaca dan yang lain membingungkan.
+
+00:08:12.740 --> 00:08:14.360
+Sekarang Anda mungkin bertanya bagaimana dengan Terraform?
+
+00:08:14.820 --> 00:08:16.300
+Haruskah saya mempelajari B-CEP atau Terraform?
+
+00:08:16.300 --> 00:08:19.000
+B-CEP versus Terraform, mana yang harus Anda gunakan?
+
+00:08:19.740 --> 00:08:21.400
+Selamat datang kembali di Microsoft Knowledge Network.
+
+00:08:21.900 --> 00:08:24.640
+Saya Mirko Peters, dan hari ini kita akan membahas pertanyaan yang terus muncul.
+
+00:08:24.980 --> 00:08:25.740
+B-CEP atau Terraform?
+
+00:08:26.120 --> 00:08:26.680
+Mari kita bedah.
+
+00:08:27.020 --> 00:08:28.200
+Terraform bekerja di berbagai cloud.
+
+00:08:28.640 --> 00:08:31.740
+Anda dapat menggunakannya untuk Azure, AWS, GCP, atau ketiganya sekaligus.
+
+00:08:32.380 --> 00:08:34.720
+Di sisi lain, B-CEP dibuat khusus untuk Azure dan tidak engkau.
+
+00:08:35.040 --> 00:08:36.320
+Perbedaan mendasar itu mengaruhi segitanya.
+
+00:08:36.660 --> 00:08:39.500
+Jika Anda bekerja di berbagai cloud, Terraform adalah pilihan yang tepat.
+
+00:08:40.700 --> 00:08:44.740
+Anda mempelajari satu bahasa, satu alat, satu alur kerja, dan berfungsi mana saja.
+
+00:08:44.740 --> 00:08:48.480
+Namun, jika Anda fokus pada Azure, B-CEP punya keunggulan nyata.
+
+00:08:49.220 --> 00:08:49.680
+Inilah yang pertama.
+
+00:08:50.320 --> 00:08:51.320
+Tidak ada file state yang perlu di cloud.
+
+00:08:51.940 --> 00:08:55.580
+Terraform menyimpan file state untuk melacak penyebarannya, dan file itu sangat krusial.
+
+00:08:56.220 --> 00:08:58.820
+Jika rusak atau tidak sinkron, Anda akan menghadapi masalah serius.
+
+00:08:59.260 --> 00:09:02.040
+Anda harus menyimpannya dengan aman, mencadangkannya, dan mengelola akses.
+
+00:09:02.540 --> 00:09:04.680
+B-CEP berbicara langsung ke Azure Resource Manager,
+
+00:09:05.160 --> 00:09:07.080
+memperiksa apa yang ada, dan menghitung perbedaannya.
+
+00:09:07.820 --> 00:09:10.800
+Tidak ada file state berarti tidak ada masalah sinkronisasi dan risiko kerusakan.
+
+00:09:11.440 --> 00:09:12.740
+Keunggulan kedua, dukungan D-Zero.
+
+00:09:12.740 --> 00:09:17.480
+Saat Microsoft merilis fitur Azure baru, B-CEP mendukungnya segera pada hari yang sama.
+
+00:09:18.260 --> 00:09:22.460
+Terraform harus menunggu pembaruan provider, yang terkadang cepat, terkadang butuh berminggu-minggu.
+
+00:09:23.020 --> 00:09:26.060
+Jika Anda perlu menggunakan fitur baru segera, B-CEP adalah satu-satunya pilihan.
+
+00:09:26.720 --> 00:09:27.980
+Ketiga, ini dibuat oleh tim Azure.
+
+00:09:28.520 --> 00:09:32.840
+Perkakasnya, IntelliSense, pesan error, semua dirancang sesuai cara kerja Azure sebenarnya.
+
+00:09:33.680 --> 00:09:37.760
+Saat Anda menulis B-CEP, Anda menggunakan bahasa yang memahami sumber daya Azure secara natif.
+
+00:09:38.400 --> 00:09:41.740
+Ia tahu properti apa yang diperlukan, nilai apa yang valid, dan dependensi apa yang ada.
+
+00:09:41.740 --> 00:09:44.800
+Integrasi mendalam itu sulit direplikasi oleh alat pihak ketika.
+
+00:09:45.240 --> 00:09:46.220
+Anda juga bisa menggunakan kedua.
+
+00:09:46.620 --> 00:09:49.200
+Banyak organisasi menggunakan B-CEP untuk platform dan landing zone,
+
+00:09:49.320 --> 00:09:51.020
+serta terraform untuk beban kerja multi-cloud.
+
+00:09:51.540 --> 00:09:52.640
+Keduanya tidak saling menedakan.
+
+00:09:53.020 --> 00:09:54.680
+Anda bisa memilih alat yang tepat untuk setiap pekerja.
+
+00:09:55.240 --> 00:09:56.300
+Jawaban jujurnya adalah ini.
+
+00:09:56.660 --> 00:09:59.680
+Untuk mempelajari Azure secara spesifik, B-CEP memiliki komponen yang lebih sederhana.
+
+00:09:59.740 --> 00:10:01.160
+Ini adalah jelas lebih sederhana saat Anda bermula.
+
+00:10:01.640 --> 00:10:04.480
+Anda tidak perlu mempelajari tentang file slide provider atau konfigurasi backend.
+
+00:10:04.880 --> 00:10:07.760
+Anda cukup install Azure CLI, buka VS Code, dan mulai menulis.
+
+00:10:08.240 --> 00:10:08.720
+Cukup teorinya.
+
+00:10:08.720 --> 00:10:12.520
+Mari bicara tentang apa yang benar-benar Anda butuhkan untuk memulai.
+
+00:10:12.920 --> 00:10:13.860
+Apa yang sebenarnya Anda butuhkan?
+
+00:10:14.220 --> 00:10:15.500
+Anda butuh dua hal untuk memulai.
+
+00:10:16.160 --> 00:10:18.300
+Azure CLI dan ekstensi B-CEP untuk VS Code.
+
+00:10:19.240 --> 00:10:22.380
+Tidak perlu install B-CEP CLI terpisah, tidak ada alat tambahan untuk dikonfigurasi.
+
+00:10:22.780 --> 00:10:24.440
+Azure CLI sudah dilengkapi dengan B-CEP bawah.
+
+00:10:24.760 --> 00:10:26.140
+Menginstall Azure CLI cukup mudah.
+
+00:10:26.700 --> 00:10:27.620
+Buka Microsoft Docs.
+
+00:10:27.940 --> 00:10:29.540
+Cari halaman installasi untuk sistem operasi Anda.
+
+00:10:30.500 --> 00:10:32.100
+Jika Anda menggunakan Mac, cukup satu print.
+
+00:10:32.520 --> 00:10:33.640
+Beri install Azure CLI.
+
+00:10:33.640 --> 00:10:35.700
+Di Windows ada penginstall MSI.
+
+00:10:36.180 --> 00:10:37.180
+Undul jalankan selesai.
+
+00:10:37.560 --> 00:10:39.240
+Ini juga berfungsi di Linux melalui manajer paketan.
+
+00:10:39.700 --> 00:10:42.960
+Setelah terinstall, jalankan Azure version untuk memastikan semuanya berfungsi.
+
+00:10:43.680 --> 00:10:46.360
+Anda akan melihat versi Azure CLI dan versi B-CEP tercantum.
+
+00:10:47.260 --> 00:10:50.740
+Sekarang, buka VS Code, pergi ke pandai ekstensi di sebelah kiri, dan cari B-CEP.
+
+00:10:51.680 --> 00:10:54.480
+Install yang dari Microsoft, bukan pihak ketiga yang resmi.
+
+00:10:55.020 --> 00:10:56.240
+Anda sangat membutuhkan ekstensi ini.
+
+00:10:56.240 --> 00:11:00.320
+Ekstensi ini memberi Anda IntelliSense yang menyarankan properti sumber daya saat mengetik,
+
+00:11:00.440 --> 00:11:02.240
+menyoroti sintaks agar mudah melihat kesalahan,
+
+00:11:02.400 --> 00:11:03.780
+dan meliksa kekliruan secara real-time.
+
+00:11:04.060 --> 00:11:06.220
+Anda akan melihat garis bergelombang merah di bawah bagian yang salah
+
+00:11:06.220 --> 00:11:07.440
+bahkan sebelum Anda mencoba mendeploy.
+
+00:11:07.920 --> 00:11:10.640
+Sejujurnya, ini adalah salah satu ekstensi bahasa terbaik di VS Code
+
+00:11:10.640 --> 00:11:12.620
+dan alasan utama mengapa B-CEP sangat nyaman digunakan.
+
+00:11:13.140 --> 00:11:15.240
+Sekarang, buat file baru dan beri nama main.b-CEP.
+
+00:11:15.680 --> 00:11:18.180
+Ekstensi B-CEP itu memberitahu VS Code untuk mengaktifkan ekstensinya.
+
+00:11:18.660 --> 00:11:20.040
+Tanpa itu, Anda hanya menulis teks biasa.
+
+00:11:20.660 --> 00:11:22.620
+Dengan itu, Anda mendapatkan pengalaman lengkap.
+
+00:11:22.620 --> 00:11:25.860
+Berikut contoh singkatnya, deployment group sumber daya dalam tiga baris kode.
+
+00:11:26.360 --> 00:11:28.560
+Pertama, Anda mengatur target scope ke subscription,
+
+00:11:28.900 --> 00:11:31.600
+lalu mendefinisikan sumber daya, group sumber daya dengan nama dan lokasi.
+
+00:11:32.400 --> 00:11:33.240
+Selesai tiga baris saja.
+
+00:11:33.760 --> 00:11:35.300
+Pendingan dengan ARM JSON yang setara,
+
+00:11:35.700 --> 00:11:37.640
+yang merupakan sekitar 15 baris kurung dan tanda kutip.
+
+00:11:38.200 --> 00:11:40.060
+Untuk mendeploynya, Anda menggunakan Azure Challenge.
+
+00:11:40.780 --> 00:11:42.680
+Karena Anda mendeploy pada lingkup subscription,
+
+00:11:42.880 --> 00:11:44.500
+perintahnya adalah AZ Deployment Subcrete.
+
+00:11:45.280 --> 00:11:48.420
+Anda memasukkan lokasi untuk metadata deployment dan mengarahkannya ke file bcap Anda.
+
+00:11:48.420 --> 00:11:51.520
+Itu cara melalui baris perintah, tetapi ada juga pengalaman yang dipandung.
+
+00:11:51.520 --> 00:11:54.580
+DVS Code, klik kanan file bcap, dan pilih Deploy bcap file.
+
+00:11:55.540 --> 00:11:56.720
+Berhasilnya kena moda Anda melalui seluatu.
+
+00:11:56.960 --> 00:11:58.100
+Ini meminta nama deployment.
+
+00:11:58.580 --> 00:11:59.780
+Meminta Anda memilih langganan,
+
+00:12:00.180 --> 00:12:01.940
+meminta membuat atau memilih grup sumber daya,
+
+00:12:02.040 --> 00:12:03.980
+dan menanyakan apakah Anda punya file parameter.
+
+00:12:04.840 --> 00:12:05.900
+Anda jawab tidak, Anda boleh menjalankan.
+
+00:12:06.460 --> 00:12:07.740
+Hasilnya akan muncul di portal Azure Anda.
+
+00:12:08.140 --> 00:12:09.320
+Sama seperti klik sana-sini di portal,
+
+00:12:09.460 --> 00:12:10.680
+tapi sekarang Anda bisa digunakan kembali.
+
+00:12:11.160 --> 00:12:12.720
+Anda bisa melakukan commit ke repository,
+
+00:12:12.840 --> 00:12:14.440
+membagikannya ke tim, dan menjalankannya lagi besok.
+
+00:12:14.960 --> 00:12:15.820
+Dan inilah bagian ajaibnya.
+
+00:12:16.320 --> 00:12:18.560
+Jalankan penyebaran yang sama lagi, dan lihat apa yang terjadi.
+
+00:12:18.560 --> 00:12:20.880
+Kekuatan idempotensi
+
+00:12:20.880 --> 00:12:22.900
+Inilah hal penting tentang menjalankan penyebaran.
+
+00:12:23.080 --> 00:12:25.500
+Anda ingin bisa menjalankannya berulang kali tanpa merusak apapun.
+
+00:12:25.760 --> 00:12:27.340
+Itulah tepatnya yang diberikan oleh idempotensi kepada Anda.
+
+00:12:27.580 --> 00:12:28.940
+Pertama kali Anda menjalankan file bcap,
+
+00:12:29.040 --> 00:12:30.020
+ia membuat grup sumber daya.
+
+00:12:30.300 --> 00:12:31.520
+Namun kali kedua Anda menjalankannya,
+
+00:12:31.720 --> 00:12:32.420
+tidak ada yang terjadi.
+
+00:12:32.840 --> 00:12:34.460
+Tanpa error, tanpa duplikat, tidak ada apapun.
+
+00:12:35.140 --> 00:12:36.860
+Bcap memeriksa apa yang sudah ada di Azure,
+
+00:12:36.980 --> 00:12:38.180
+membandingkannya dengan yang Anda minta,
+
+00:12:38.260 --> 00:12:39.560
+dan menyatakan tidak ada yang perlu diukur.
+
+00:12:39.560 --> 00:12:41.640
+Ia tidak mencoba membuat grup sumber daya baru,
+
+00:12:41.820 --> 00:12:43.740
+dan tidak memberikan error yang menyatakan grup sudah ada.
+
+00:12:43.740 --> 00:12:46.860
+Ia hanya mengonfirmasi bahwa status saat ini sesuai dengan status yang diinginkan.
+
+00:12:47.300 --> 00:12:49.560
+Anggap saja seperti menjalankan git status pada repositoran bersih.
+
+00:12:49.900 --> 00:12:50.680
+Tidak ada yang perlu dilakukan.
+
+00:12:51.180 --> 00:12:52.600
+Semuanya sudah tepat seperti yang seharusnya.
+
+00:12:53.120 --> 00:12:54.540
+Inilah kekuatan infrastruktur sebagai kode.
+
+00:12:55.120 --> 00:12:57.200
+Anda dapat menjalankan penyebaran Anda berulang kali
+
+00:12:57.200 --> 00:12:58.740
+dan mendapatkan hasil yang sama setiap saat.
+
+00:12:59.220 --> 00:13:00.440
+Tanpa kejutan, tanpa penyimpangan.
+
+00:13:00.880 --> 00:13:03.000
+Anda tahu persis apa yang disebarkan karena file tersebut mengatakan.
+
+00:13:03.480 --> 00:13:05.000
+File tersebut menjadi satu-satunya sumber kebenaran.
+
+00:13:05.560 --> 00:13:08.140
+Anda tidak perlu bertanya-tanya apakah Anda ingat suatu pengaturan,
+
+00:13:08.260 --> 00:13:10.040
+atau menghadapi masalah berjalan di mesin saya,
+
+00:13:10.040 --> 00:13:12.540
+atau mencari di portal Azure untuk memeriksa apakah ada yang berubah.
+
+00:13:13.400 --> 00:13:14.640
+File tersebut memberitahu Anda apa yang ada di.
+
+00:13:14.800 --> 00:13:17.640
+Jika Anda ingin mengubah sesuatu, Anda ubah file-nya dan sembarkan ulang.
+
+00:13:17.980 --> 00:13:20.380
+Jika Anda ingin meverifikasi, Anda jalankan penyebaran lagi
+
+00:13:20.380 --> 00:13:21.980
+dan ia akan mengonfirmasi bahwa semuanya cocok.
+
+00:13:22.360 --> 00:13:24.000
+Begitulah cara Anda membangun kepercayaan peraturan Anda.
+
+00:13:24.640 --> 00:13:25.780
+File tersebut adalah sumber kebenaran.
+
+00:13:26.540 --> 00:13:28.120
+Bukan ingatan Anda, bukan dokumen Word,
+
+00:13:28.220 --> 00:13:29.380
+bukan video YouTube 6 bulan lalu,
+
+00:13:29.480 --> 00:13:30.380
+melainkan file tersebut.
+
+00:13:31.460 --> 00:13:33.520
+Jadi mana posisi Bichap dalam gambaran besar Azure?
+
+00:13:34.340 --> 00:13:36.140
+Gambaran besar, di mana Bichap berada.
+
+00:13:36.760 --> 00:13:38.960
+Bichap berada dalam ekosistem Azure Resource Manager.
+
+00:13:38.960 --> 00:13:40.640
+Itu bukan alat yang terpisah.
+
+00:13:41.060 --> 00:13:42.140
+Banyak orang mengira demikian,
+
+00:13:42.260 --> 00:13:44.620
+padahal sebenarnya itu hanya cara yang lebih baik untuk menulis template ARM.
+
+00:13:45.040 --> 00:13:46.400
+Di baliknya, itu tetap ARM,
+
+00:13:46.560 --> 00:13:47.420
+mesin penyebarannya sama,
+
+00:13:47.500 --> 00:13:48.580
+api yang sama, segalanya sama.
+
+00:13:49.040 --> 00:13:50.240
+Satu-satunya perbedaan adalah jalan dan minusnya.
+
+00:13:50.640 --> 00:13:52.100
+Dan karena Bichap dikompilasi ke ARM,
+
+00:13:52.360 --> 00:13:54.600
+semua yang berfungsi dengan ARM juga berfungsi dengan Bichap.
+
+00:13:55.200 --> 00:13:57.360
+Azure Policy menegakkan kepatuhan pada penyebaran Anda.
+
+00:13:57.840 --> 00:13:59.500
+RPSC mengontrol siapa yang dapat menyebarkan apa.
+
+00:14:00.060 --> 00:14:01.740
+Cost Management melacak pengelolaan untuk sumber daya Anda.
+
+00:14:02.360 --> 00:14:03.700
+Azure DevOps dan GitHub Actions
+
+00:14:03.700 --> 00:14:05.800
+menyebarkan file Bichap Anda melalui pipeline.
+
+00:14:06.080 --> 00:14:07.440
+Semuanya bekerja dengan sempurna,
+
+00:14:07.440 --> 00:14:09.060
+karena Bichap menghasilkan JSON ARM standar.
+
+00:14:09.540 --> 00:14:10.900
+Anda tidak kehilangan apapun dengan berat.
+
+00:14:11.220 --> 00:14:12.280
+Bahkan Anda mendapatkan kejelasan.
+
+00:14:12.820 --> 00:14:15.160
+Microsoft telah membangun seluruh ekosistem di sekitar Bichap.
+
+00:14:15.760 --> 00:14:17.360
+Azure Verified Modules atau AVM
+
+00:14:17.360 --> 00:14:19.440
+adalah pustaka kurasi modul Bichap dan Terraform
+
+00:14:19.440 --> 00:14:20.820
+yang mengikuti praktek terbaik.
+
+00:14:21.280 --> 00:14:22.640
+Anda tidak perlu menulis semuanya dari awal.
+
+00:14:23.260 --> 00:14:24.660
+Anda bisa menggunakan modul yang sudah jadi
+
+00:14:24.660 --> 00:14:26.300
+untuk pola umum seperti jaringan virtual,
+
+00:14:26.480 --> 00:14:27.920
+akun penyimpanan, dan layanan aplikasi.
+
+00:14:28.800 --> 00:14:30.220
+Semuanya telah diuji, dipelihara,
+
+00:14:30.300 --> 00:14:31.720
+dan diselaraskan dengan WeArchitected Framework.
+
+00:14:32.180 --> 00:14:35.040
+Cloud Adoption Framework menyertakan implementasi referensi Bichap
+
+00:14:35.040 --> 00:14:36.920
+untuk arsitektur perusahaan yang terstandarisasi.
+
+00:14:37.340 --> 00:14:39.080
+Jika Anda membangun zona pendaratan landing zone,
+
+00:14:39.180 --> 00:14:39.960
+ada temprat Bichap untuk
+
+00:14:39.960 --> 00:14:42.400
+deployment stack memberi Anda pengelolaan siklus hidup
+
+00:14:42.400 --> 00:14:43.380
+untuk kelompok sumber daya.
+
+00:14:44.000 --> 00:14:44.860
+Anda bisa mendeploy stack,
+
+00:14:45.360 --> 00:14:47.220
+dan jika Anda menghapus sumber daya dari file Bichap Anda,
+
+00:14:47.320 --> 00:14:48.500
+stack dapat bersihkannya untuk Anda.
+
+00:14:49.260 --> 00:14:50.840
+Atau melindunginya dari penghapusan yang tidak disengat.
+
+00:14:51.280 --> 00:14:51.920
+Anda yang memutuskan.
+
+00:14:52.240 --> 00:14:54.140
+Ekosistem terus berkembang dengan lebih banyak modul,
+
+00:14:54.280 --> 00:14:55.020
+perangkat yang lebih baik,
+
+00:14:55.180 --> 00:14:57.300
+dan integrasi lebih dalam dengan AI dan GitHub Copilot.
+
+00:14:57.680 --> 00:14:59.120
+Anda bisa mendeskripsikan keinginan Anda
+
+00:14:59.120 --> 00:15:00.000
+dengan bahasa sederhana,
+
+00:15:00.140 --> 00:15:01.900
+dan Copilot akan membuatkan kode Bichap untuk Anda.
+
+00:15:01.900 --> 00:15:04.300
+Microsoft terus berinvestasi pada Bichap
+
+00:15:04.300 --> 00:15:06.460
+sebagai pengalaman penulisan utama untuk Azure.
+
+00:15:07.020 --> 00:15:08.780
+Jadi fitur baru akan menargetkan Bichap terlebih dahulu.
+
+00:15:09.220 --> 00:15:10.480
+Templat ARM masih berfungsi,
+
+00:15:10.600 --> 00:15:11.900
+tetapi inovasi terjadi di Bichap.
+
+00:15:12.340 --> 00:15:12.820
+Inilah kesimpulan.
+
+00:15:13.260 --> 00:15:14.340
+Jika Anda bekerja di Azure,
+
+00:15:14.700 --> 00:15:16.160
+Bichap adalah langkah selanjutnya yang alami
+
+00:15:16.160 --> 00:15:17.420
+setelah sekadar mengeklik di portal.
+
+00:15:17.720 --> 00:15:19.960
+Anda tidak perlu mempelajari terraform atau menguasai jasennya.
+
+00:15:20.220 --> 00:15:21.400
+Anda cukup menginstall dua hal,
+
+00:15:21.540 --> 00:15:22.540
+menulis beberapa baris kode,
+
+00:15:22.780 --> 00:15:24.960
+dan Anda sudah mendeploy infrastruktur yang dapat diulang,
+
+00:15:25.060 --> 00:15:26.180
+dikontrol versinya, dan Anda.
+
+00:15:26.580 --> 00:15:28.060
+Izinkan saya meninggalkan selutan praktis
+
+00:15:28.060 --> 00:15:28.960
+yang bisa Anda lakukan hari ini.
+
+00:15:28.960 --> 00:15:31.740
+Jadi sekarang Anda tahu apa itu infrastruktur sebagai kode IAC,
+
+00:15:31.960 --> 00:15:32.600
+mengapa Bichap ada,
+
+00:15:32.760 --> 00:15:34.500
+dan bagaimana Bichap membuat deployment Azure lebih sederhana.
+
+00:15:34.660 --> 00:15:35.300
+Inilah poin utamanya.
+
+00:15:35.700 --> 00:15:37.160
+Bichap bukanlah sistem deployment yang berbeda.
+
+00:15:37.900 --> 00:15:38.960
+Ini adalah cara yang lebih baik
+
+00:15:38.960 --> 00:15:41.080
+untuk menulis template ARM yang sama menggunakan mesin,
+
+00:15:41.340 --> 00:15:43.140
+dan Azure Resource Manager yang sama di balik layar,
+
+00:15:43.260 --> 00:15:44.140
+hanya saja dalam bahasai,
+
+00:15:44.440 --> 00:15:45.860
+yang bisa dibaca dan ditulis manusia.
+
+00:15:46.660 --> 00:15:47.560
+Ini adalah tantangan untuk Anda.
+
+00:15:48.080 --> 00:15:48.940
+Buat FileMind.Bichap,
+
+00:15:49.020 --> 00:15:49.880
+deploy grup sumber daya,
+
+00:15:49.960 --> 00:15:51.140
+dan jalankan deployment dua kali.
+
+00:15:51.640 --> 00:15:52.900
+Perhatikan cara kerjanya di kedua kesempatan.
+
+00:15:53.200 --> 00:15:54.580
+Pertama kali ia membuat sumber daya,
+
+00:15:54.740 --> 00:15:56.080
+dan kedua kalinya ia mengonfirmasi
+
+00:15:56.080 --> 00:15:57.020
+bahwa tidak ada yang berubah.
+
+00:15:58.960 --> 00:16:00.200
+Anda tidak akan pernah kembali,
+
+00:16:00.340 --> 00:16:01.240
+hanya mengeklik di portal.
+
+00:16:01.580 --> 00:16:02.240
+Ini adalah fondasinya.
+
+00:16:03.260 --> 00:16:04.400
+Dari sini Anda bisa menambahkan
+
+00:16:04.400 --> 00:16:05.820
+akun penyimpanan jaringan virtual
+
+00:16:05.820 --> 00:16:07.820
+dan layanan aplikasi menggunakan pola yang sama.
+
+00:16:08.460 --> 00:16:09.920
+Tulis FileDeploy, lalu jalankan lagi.
+
+00:16:10.620 --> 00:16:12.200
+File tersebut menjadi sumber kebenaran Anda,
+
+00:16:12.360 --> 00:16:13.540
+dan hal lainnya mengikuti dari sana.
+
+00:16:14.060 --> 00:16:15.480
+Jika menurut Anda ini bermanfaat,
+
+00:16:15.600 --> 00:16:17.560
+bagikan kepada seseorang yang masih sering mengeklik di portal.
+
+00:16:17.880 --> 00:16:18.480
+Mereka berterima kasih.
+
+00:16:19.100 --> 00:16:20.880
+Berlanggananlah di platform podcast favorit Anda,
+
+00:16:21.080 --> 00:16:22.080
+dan pada episode berikutnya,
+
+00:16:22.180 --> 00:16:23.400
+kita akan mendalami Bichap lebih jauh
+
+00:16:23.400 --> 00:16:25.260
+dengan mendeploy sumber daya nyata dengan properti yang nyata.

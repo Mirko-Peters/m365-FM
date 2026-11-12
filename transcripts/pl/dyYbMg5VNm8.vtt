@@ -1,0 +1,970 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:07.040
+Kiedy klient klika kup na Twojej stronie internetowej, przedmiot, którego szuka, może znajdować się w magazynie, sklepie po drugiej stronie miasta lub u partnera dostawczego.
+
+00:00:07.200 --> 00:00:11.120
+Klient oczekuje jednak dwóch rzeczy, jasnej obietnicy i paczki pod drzwiami.
+
+00:00:11.340 --> 00:00:15.100
+Witamy w kolejnym odcinku Microsoft Knowledge Nugget w M365FM.
+
+00:00:15.280 --> 00:00:20.060
+Nazywam się Mopeters i dziś przyjrzymy się inteligentnemu zarządzaniu zamówieniami w Dynamics 365 w prosty sposób.
+
+00:00:20.320 --> 00:00:23.820
+Będziemy śledzić to zamówienie od kliknięcia w kasę do pracy, która faktycznie je dostarcza.
+
+00:00:24.040 --> 00:00:27.200
+Wyobraź sobie to jako centralne stanowisko wysyłkowe w ruchliwym budynku biurowym.
+
+00:00:27.200 --> 00:00:29.920
+To nie jest kolejny sklep internetowy i nie pakuje paczki.
+
+00:00:30.100 --> 00:00:34.180
+Po prostu kieruje odpowiednie osoby do systemów, aby praca odbywała się we właściwym miejscu.
+
+00:00:34.840 --> 00:00:36.700
+Dlaczego zamówienia stają się chaotyczne?
+
+00:00:36.940 --> 00:00:43.600
+Wyobraź sobie, że sprzedajesz te same słuchawki za pośrednictwem swojej strony internetowej, sklepów stacjonarnych, internetowego marketplace'u i centrum telefonicznej obsługi klienta.
+
+00:00:43.780 --> 00:00:50.300
+Dla klienta to wszystko są po prostu sposoby zakupu słuchawek, ale w tle każdy kanał wysyła szczegóły zamówienia do zupełnie innego systemu.
+
+00:00:50.300 --> 00:00:55.940
+Twoja strona internetowa przechowuje jeden rekord, punkt sprzedaży w sklepie przechowuje inny, platforma sprzedażowa wysyła własny format,
+
+00:00:55.940 --> 00:00:58.560
+a konsultant call center tworzy zamówienie zupełnie gdzie indziej.
+
+00:00:58.780 --> 00:01:05.620
+Jedna prosta obietnica złożona klientowi zostaje rozbita na kilka ruchomych części, które nie komunikują się ze sobą, a stan magazynowy dodaje kolejny poziom złożoności.
+
+00:01:05.840 --> 00:01:07.840
+Główny magazyn może mieć 20 paragrafów.
+
+00:01:08.040 --> 00:01:13.340
+Sklep po drugiej stronie miasta ma 5, a inny magazyn również ma zapas, ale jest dalej i ma wyższe koszty wysyłki.
+
+00:01:13.540 --> 00:01:17.620
+Część zapasów jest już zarezerwowana na inne zamówienia, zwrócone produkty lub klientów stacjonarnych.
+
+00:01:17.620 --> 00:01:20.560
+Tak więc liczba obok produktu tak naprawdę nie rozwiązuje problemu.
+
+00:01:20.720 --> 00:01:22.600
+Następnie musisz zdecydować, jak dostarczyć.
+
+00:01:22.760 --> 00:01:25.440
+Czy magazyn powinien go wysłać? Czy sklep powinien go wysłać?
+
+00:01:25.560 --> 00:01:27.100
+Czy klient może odebrać go lokalnie?
+
+00:01:27.240 --> 00:01:29.640
+A jeśli ktoś kupi dwa produkty, a żadna lokalizacja nie ma obu,
+
+00:01:29.700 --> 00:01:33.000
+czy podzielić zamówienie na dwie paczki, czy poczekać, aż wszystkie będą mogły zostać wysłane razem?
+
+00:01:33.160 --> 00:01:36.400
+Każdy wybór wpływa na koszt, czas dostawy i obietnicę złożoną klientowi.
+
+00:01:36.640 --> 00:01:39.840
+Dwie dekady temu firmy realizowały te zadania w oddzielnych systemach z oddzielnymi zespołami.
+
+00:01:40.060 --> 00:01:41.340
+Dział sprzedaży przyjmował zamówienia.
+
+00:01:41.340 --> 00:01:42.700
+Ktoś sprawdzał stan magazynowy.
+
+00:01:42.860 --> 00:01:43.920
+Magazyn otrzymał zlecenie.
+
+00:01:44.060 --> 00:01:44.800
+Partner do spraw.
+
+00:01:45.020 --> 00:01:46.280
+Wysyłki otrzymał kolejne zlecenie.
+
+00:01:46.460 --> 00:01:47.900
+Dział rozliczeń zajął się swoją częścią później.
+
+00:01:48.140 --> 00:01:50.700
+Działało to dobrze, gdy zamówienia były proste, a wolumeny utrzymywały się na niskim poziomie.
+
+00:01:50.840 --> 00:01:51.920
+Ale jest pewien haczyk.
+
+00:01:52.060 --> 00:01:55.320
+Gdy aktualizacje przemieszczają się powoli między systemami, ludzie zaczynają wypełniać luki.
+
+00:01:55.520 --> 00:01:58.360
+Pracownik obsługi klienta sprawdza jeden ekran, wysyła e-mail do zespołu magazynowego,
+
+00:01:58.440 --> 00:01:59.500
+a następnie dzwoni do przewoźnika.
+
+00:01:59.580 --> 00:02:01.480
+A tymczasem produkt może zostać sprzedany innym kanałem,
+
+00:02:01.480 --> 00:02:03.820
+zanim aktualizacja stanu magazynowego dotrze na stronę internetową.
+
+00:02:03.960 --> 00:02:06.100
+Teraz masz zamówienie na coś, czego nie możesz wysłać.
+
+00:02:06.220 --> 00:02:07.720
+Tak właśnie dochodzi do przesprzedaży.
+
+00:02:07.900 --> 00:02:09.820
+I tak też wybór dostawy zajmuje zbyt dużo czasu.
+
+00:02:10.060 --> 00:02:12.000
+Zespoły ciągle kopiują dane z jednego miejsca do drugiego,
+
+00:02:12.100 --> 00:02:14.740
+a klienci otrzymują niejasne aktualizacje zamiast konkretnych odpowiedzi.
+
+00:02:14.940 --> 00:02:17.400
+Z punktu widzenia klienta cała ta złożoność nie ma znaczenia,
+
+00:02:17.540 --> 00:02:18.960
+ponieważ zadają tylko jedno pytanie.
+
+00:02:19.260 --> 00:02:20.340
+Gdzie jest moje zamówienie?
+
+00:02:20.540 --> 00:02:22.080
+Firma naprawdę potrzebuje jednego miejsca,
+
+00:02:22.180 --> 00:02:25.280
+z którego można śledzić drogę zamówienia przez wszystkie połączone aplikacje biznesowe,
+
+00:02:25.360 --> 00:02:27.300
+podczas gdy każda aplikacja robi to, co robi najlepiej.
+
+00:02:27.300 --> 00:02:28.960
+Sprzedaż rejestruje sprzedaż.
+
+00:02:29.080 --> 00:02:30.860
+Magazyn zarządza kompletacją i pakowaniem.
+
+00:02:31.060 --> 00:02:32.340
+Wysyłka obsługuje dostawę.
+
+00:02:32.500 --> 00:02:33.920
+Dział rozliczeń obsługuje płatności.
+
+00:02:34.120 --> 00:02:35.840
+Nikt nie musi wyrzucać wszystkich systemów.
+
+00:02:36.020 --> 00:02:37.520
+Brakuje koordynatora między nimi.
+
+00:02:37.740 --> 00:02:38.100
+Auć.
+
+00:02:38.320 --> 00:02:39.980
+Miejsce, które może przyjąć zamówienie,
+
+00:02:40.100 --> 00:02:42.440
+zobaczyć, co należy zrobić dalej i kierować pracą
+
+00:02:42.440 --> 00:02:44.460
+bez polegania na łańcuchu ręcznych przekazań.
+
+00:02:44.600 --> 00:02:45.500
+W tym tkwi problem.
+
+00:02:45.800 --> 00:02:50.600
+Inteligentne zarządzanie zamówieniami w Dynamics 365 spełnia tę definicję.
+
+00:02:50.820 --> 00:02:54.880
+Czym właściwie jest inteligentne zarządzanie zamówieniami w Dynamics 365?
+
+00:02:54.880 --> 00:02:58.000
+PETAS dziś wyjaśnimy to w prosty sposób.
+
+00:02:58.620 --> 00:03:00.140
+Oto najprostsza definicja.
+
+00:03:00.320 --> 00:03:02.520
+To aplikacja w chmurze, która przyjmuje zamówienie
+
+00:03:02.520 --> 00:03:04.560
+i prowadzi je przez wszystkie systemy i o,
+
+00:03:04.660 --> 00:03:07.080
+z których korzysta firma od momentu jego otrzymania
+
+00:03:07.080 --> 00:03:09.140
+aż do realizacji i wystawienia faktury.
+
+00:03:09.380 --> 00:03:11.260
+Wyobraź sobie ruchliwy dworzec kolejowy.
+
+00:03:11.460 --> 00:03:13.320
+Pociągi przyjeżdżają z różnych kierunków.
+
+00:03:13.480 --> 00:03:15.220
+Pasażerowie potrzebują różnych peronów.
+
+00:03:15.420 --> 00:03:17.600
+Niektóre połączenia są szybkie, inne muszą czekać.
+
+00:03:17.740 --> 00:03:20.520
+Inteligentne zarządzanie zamówieniami działa jak dyspozytornia na dworcu.
+
+00:03:20.720 --> 00:03:22.400
+Nie prowadzi pociągu ani nie sprzedaje biletu,
+
+00:03:22.400 --> 00:03:25.320
+ale widzi całą trasę i informuje każdy system, co ma zrobić dalej.
+
+00:03:25.500 --> 00:03:28.640
+Microsoft zbudował inteligentne zarządzanie zamówieniami w oparciu o Dataverse.
+
+00:03:28.820 --> 00:03:30.320
+Dataverse to współdzielona baza danych,
+
+00:03:30.440 --> 00:03:33.700
+na której opiera się wiele aplikacji Dynamics 365 i Power Platform.
+
+00:03:33.980 --> 00:03:36.980
+Mówiąc wprost, zapewnia aplikacjom biznesowym jedno wspólne miejsce
+
+00:03:36.980 --> 00:03:39.120
+i jeden wspólny format przechowywania informacji.
+
+00:03:39.340 --> 00:03:41.660
+Oznacza to, że zamówienie nie oznacza czegoś zupełnie innego
+
+00:03:41.660 --> 00:03:43.300
+na każdym ekranie i w każdym systemie.
+
+00:03:43.440 --> 00:03:44.400
+Ta wspólna podstawa pomaga,
+
+00:03:44.540 --> 00:03:46.400
+ale nie trzeba kupować każdej innej aplikacji Dynamics 365,
+
+00:03:47.360 --> 00:03:49.160
+aby korzystać z inteligentnego zarządzania zamówieniami.
+
+00:03:49.160 --> 00:03:53.000
+Firma może korzystać z Dynamics 365 Finance lub Supply Chain Management.
+
+00:03:53.200 --> 00:03:55.240
+Inna może korzystać z innego systemu magazynowego,
+
+00:03:55.360 --> 00:03:58.260
+innego sklepu internetowego lub usługi wysyłkowej od innego dostawcy.
+
+00:03:58.420 --> 00:04:01.220
+Ta aplikacja może współpracować zarówno z aplikacjami biznesowymi Microsoft,
+
+00:04:01.380 --> 00:04:02.040
+jak i innych firm.
+
+00:04:02.200 --> 00:04:04.060
+Punkty połączenia nazywane są dostawcami.
+
+00:04:04.280 --> 00:04:06.420
+Dostawca przesyła informacje o zamówieniu i jego realizacji
+
+00:04:06.420 --> 00:04:08.860
+między inteligentnym zarządzaniem zamówieniami a innym systemem.
+
+00:04:09.080 --> 00:04:11.040
+Wyobraź sobie dostawcę jako tłumacza u drzwi.
+
+00:04:11.260 --> 00:04:13.540
+Jeden system wysyła zamówienie we własnym formacie.
+
+00:04:13.760 --> 00:04:14.880
+Dostawca rozumie ten format,
+
+00:04:14.880 --> 00:04:17.540
+przekazuje informacje do inteligentnego zarządzania zamówieniami
+
+00:04:17.540 --> 00:04:20.720
+i może wysłać kolejne żądanie w formacie zrozumiałym dla drugiego systemu.
+
+00:04:20.860 --> 00:04:22.840
+W ten sposób aplikacja łączy informacje o zamówieniu,
+
+00:04:22.940 --> 00:04:24.820
+nawet jeśli zamówienie zostało rozpoczęte gdzie indziej.
+
+00:04:24.980 --> 00:04:27.480
+Klient może dokonać zakupu za pośrednictwem witryny handlowej AIO.
+
+00:04:27.720 --> 00:04:30.540
+Inny może złożyć zamówienie za pośrednictwem systemu sprzedaży detalicznej.
+
+00:04:30.700 --> 00:04:32.740
+Klient biznesowy może wysłać elektroniczne zamówienie
+
+00:04:32.740 --> 00:04:34.140
+za pośrednictwem procesu B2B.
+
+00:04:34.360 --> 00:04:36.420
+Inteligentne zarządzanie zamówieniami zapewnia firmie jedno miejsce
+
+00:04:36.420 --> 00:04:37.760
+do przeglądania tych zamówień i sprawdzania,
+
+00:04:37.840 --> 00:04:39.560
+na jakim etapie realizacji znajduje się każdy z nich.
+
+00:04:39.560 --> 00:04:41.620
+Nie każde zamówienie podąża tą samą ścieżką.
+
+00:04:41.860 --> 00:04:44.960
+Jedno może czekać na zapas, inne może już znajdować się w magazynie.
+
+00:04:45.120 --> 00:04:47.320
+Trzecie może wymagać etapu fakturowania po dostarczeniu.
+
+00:04:47.540 --> 00:04:51.060
+Aplikacja śledzi ten stan, dzięki czemu zespół widzi więcej niż tylko otrzymane zamówienie.
+
+00:04:51.300 --> 00:04:54.060
+Może dokładnie zobaczyć, na jakim etapie realizacji znajduje się zamówienie.
+
+00:04:54.220 --> 00:04:56.280
+To jest część, którą ludzie czasami pomijają.
+
+00:04:56.560 --> 00:04:59.260
+Inteligentne zarządzanie zamówieniami nie przejmuje każdego zadania.
+
+00:04:59.480 --> 00:05:02.220
+Nie staje się nagle ekranem kompletacji zamówień dla pracowników magazynu,
+
+00:05:02.320 --> 00:05:05.060
+siecią dostaw przewoźnika ani systemem rozliczeniowym działu finansowego.
+
+00:05:05.060 --> 00:05:08.140
+Te połączone aplikacje nadal wykonują swoją specjalistyczną pracę.
+
+00:05:08.140 --> 00:05:11.140
+Inteligentne zarządzanie zamówieniami kieruje przekazywaniem między nimi.
+
+00:05:11.360 --> 00:05:16.080
+Otrzymuje żądanie, sprawdza trasę, przekazuje pracę dalej, a następnie czeka na kolejną aktualizację.
+
+00:05:16.280 --> 00:05:21.720
+Teraz prześledźmy jedno zamówienie tą drogą, ponieważ ścieżka zamówienia znacznie ułatwia zrozumienie całej idei.
+
+00:05:22.280 --> 00:05:24.500
+Reguły ścieżki zamówienia kierują pracą.
+
+00:05:24.740 --> 00:05:29.120
+Wyobraź sobie, że klient zamawia dwa produkty na Twojej stronie internetowej późnym popołudniem
+
+00:05:29.120 --> 00:05:31.120
+i chce, aby oba zostały dostarczone jutro.
+
+00:05:31.120 --> 00:05:37.000
+Sklep internetowy rejestruje zamówienie, imię i nazwisko klienta, adres dostawy, dwie pozycje zamówienia oraz wybraną opcję dostawy.
+
+00:05:37.000 --> 00:05:41.480
+Dostawca wprowadza to zamówienie do inteligentnego systemu zarządzania zamówieniami i rozpoczyna się jego realizacja.
+
+00:05:41.720 --> 00:05:48.560
+Zanim ktokolwiek spróbuje je zrealizować, system weryfikuje zamówienie, aby upewnić się, że zawiera wszystkie niezbędne informacje i jest zgodny z zasadami firmy.
+
+00:05:48.800 --> 00:05:51.440
+Sprawdza nagłówek zamówienia pod kątem danych klienta i dostawy.
+
+00:05:51.700 --> 00:05:53.920
+Sprawdza każdą pozycję pod kątem produktu i ilości.
+
+00:05:54.120 --> 00:05:59.160
+Potwierdza, czy adres zawiera wystarczającą ilość informacji do dostawy i upewnia się, że zamówienie spełnia zasady danego kanału sprzedaży.
+
+00:05:59.160 --> 00:06:03.920
+Ta pierwsza kontrola zapobiega przedostawaniu się błędnych informacji do dalszych etapów łańcucha dostaw, zanim spowodują one problemy.
+
+00:06:04.100 --> 00:06:06.340
+Wyobraź sobie zamówienie z brakującym numerem mieszkania.
+
+00:06:06.540 --> 00:06:12.020
+Jeśli trafi ono bezpośrednio do magazynu, a następnie do przewoźnika, ktoś może zauważyć problem dopiero po tym, jak paczka nie będzie mogła zostać dostarczona.
+
+00:06:12.240 --> 00:06:17.260
+Etap walidacji pozwala wykryć problem wcześniej, zanim będzie można skontaktować się z klientem lub wstrzymać zamówienie.
+
+00:06:17.460 --> 00:06:20.000
+Podstawą tego procesu jest organizacja przepływu.
+
+00:06:20.260 --> 00:06:22.140
+Brzmi to technicznie, ale jest proste.
+
+00:06:22.140 --> 00:06:30.200
+Przepływ orkiestracji to wizualna mapa, która informuje inteligentne zarządzanie zamówieniami, co powinno się wydarzyć po nadejściu informacji o zamówieniu i otrzymaniu informacji zwrotnych z połączonych systemów.
+
+00:06:30.360 --> 00:06:32.600
+Mapę T tworzysz wokół własnego procesu biznesowego.
+
+00:06:32.780 --> 00:06:35.440
+Podstawowy przepływ zamówienia może rozpocząć się wraz z nadejściem nowego zamówienia.
+
+00:06:35.680 --> 00:06:37.320
+Sprawdza on poprawność nagłówka i wierszy.
+
+00:06:37.560 --> 00:06:39.640
+Wysyła zamówienie w celu podjęcia decyzji o realizacji.
+
+00:06:39.860 --> 00:06:42.520
+Następnie wysyła zamówienie do odpowiedniego połączonego systemu.
+
+00:06:42.680 --> 00:06:46.420
+Gdy prace osiągną odpowiedni etap, system może wysłać informacje o zamówieniu do dostawcy usług rozliczeniowych.
+
+00:06:46.420 --> 00:06:48.260
+Każda akcja ma jasno określone zadanie.
+
+00:06:48.440 --> 00:06:51.060
+Weryfikacja nagłówka zamówienia sprawdza główne szczegóły zamówienia.
+
+00:06:51.260 --> 00:06:54.420
+Weryfikacja wiersza zamówienia sprawdza poszczególne produkty i ich ilości.
+
+00:06:54.700 --> 00:06:58.320
+Wyślij do realizacji przekazuje zamówienie do dostawcy, który zajmuje się tą pracą.
+
+00:06:58.560 --> 00:07:01.900
+Wyślij do faktury przekazuje informacje o zamówieniu do dostawcy usług rozliczeniowych.
+
+00:07:02.120 --> 00:07:08.440
+Nazwy te brzmią jak etykiety na panelu sterowania fabryki i jest to przydatne, ponieważ każda etykieta dokładnie informuje, co dzieje się w danym momencie przepływu.
+
+00:07:08.600 --> 00:07:11.740
+Jednak w prawdziwej firmie często potrzeba więcej niż jednej prostej ścieżki.
+
+00:07:11.740 --> 00:07:15.900
+Zamówienia ze strony internetowej mogą podążać jedną ścieżką, a klienci biznesowi inną.
+
+00:07:16.080 --> 00:07:18.300
+Może jakiś rodzaj produktu wymaga specjalnego zatwierdzenia.
+
+00:07:18.520 --> 00:07:21.600
+Być może zamówienie może zostać zrealizowane tylko wtedy, gdy pierwszy krok zakończy się sukcesem.
+
+00:07:21.740 --> 00:07:24.680
+Inteligentne zarządzanie zamówieniami uwzględnia warunki dla takiego wyboru.
+
+00:07:24.860 --> 00:07:26.620
+Warunek tworzy ścieżkę tak i nie.
+
+00:07:26.840 --> 00:07:30.720
+Jeśli wcześniejsza akcja zakończy się sukcesem, zamówienie może być kontynuowane ścieżką tak.
+
+00:07:30.880 --> 00:07:33.900
+Jeśli się nie powiedzie, przepływ może skierować zamówienie na inną ścieżkę.
+
+00:07:34.080 --> 00:07:37.740
+Nie rozwiązuje to samo w sobie wszystkich problemów, ale zapewnia procesowi zaplanowaną odpowiedź,
+
+00:07:37.740 --> 00:07:40.600
+zamiast pozostawiać zespołowi możliwość przypadkowego odkrycia błędu.
+
+00:07:40.720 --> 00:07:42.140
+Istnieją również rozdzielacze.
+
+00:07:42.340 --> 00:07:46.000
+Rozdzielacz kieruje przepływ do więcej niż jednej ścieżki w oparciu o zdefiniowane przez Ciebie reguły.
+
+00:07:46.220 --> 00:07:49.160
+Możesz go użyć, gdy zamówienia z różnych źródeł wymagają różnych kontroli
+
+00:07:49.160 --> 00:07:51.280
+lub gdy różne części pracy wymagają różnych tras.
+
+00:07:51.460 --> 00:07:55.420
+Niektóre rozdzielone ścieżki mogą później zostać połączone, podczas gdy inne kontynuują pracę samodzielnie.
+
+00:07:55.600 --> 00:07:58.200
+Akcje niestandardowe obejmują zadania unikalne dla firmy.
+
+00:07:58.420 --> 00:08:03.100
+Być może firma ma własny system produkcyjny lub system partnerski, który nie jest objęty standardową akcją.
+
+00:08:03.100 --> 00:08:07.160
+Akcja niestandardowa może połączyć ten krok z przepływem zamówienia, dzięki czemu ścieżka nadal pokazuje cały proces,
+
+00:08:07.300 --> 00:08:09.720
+zamiast ukrywać jedną jego część w wiadomościach e-mail lub pracy ręcznej.
+
+00:08:09.880 --> 00:08:11.740
+Wróćmy do naszego zamówienia dwuelementowego.
+
+00:08:12.000 --> 00:08:15.940
+System odbiera je ze strony internetowej i sprawdza dane klienta, adres oraz linię produktów.
+
+00:08:16.100 --> 00:08:18.740
+Zamówienie dociera następnie do etapu decyzji o realizacji.
+
+00:08:18.960 --> 00:08:23.980
+Jeśli oba elementy mogą podążać tą samą trasą, przepływ może przesłać żądanie realizacji jako jedną jednostkę.
+
+00:08:24.180 --> 00:08:27.800
+Jeśli zasady firmy wymagają innego wyniku, zamówienie może obrać inną ścieżkę.
+
+00:08:27.800 --> 00:08:32.480
+Być może oba elementy wymagają oddzielnych żądań realizacji, być może zamówienie wymaga innej opcji dostawy.
+
+00:08:32.660 --> 00:08:33.620
+Przepływ nie zgaduje.
+
+00:08:33.860 --> 00:08:37.760
+Działa zgodnie z regułami stworzonymi przez firmę i zdarzeniami zwracanymi przez połączone systemy.
+
+00:08:37.880 --> 00:08:39.340
+Ta ostatnia część ma znaczenie.
+
+00:08:39.600 --> 00:08:44.140
+Inteligentne zarządzanie zamówieniami może kierować pracą, ale połączone systemy raportują w miarę postępu prac.
+
+00:08:44.320 --> 00:08:46.780
+Dostawca usług realizacji zamówień może odebrać żądanie.
+
+00:08:47.000 --> 00:08:49.500
+Dostawca usług rozliczeniowych może otrzymać szczegóły zamówienia.
+
+00:08:49.680 --> 00:08:52.320
+Te zdarzenia utrzymują proces realizacji zamówienia w przepływie.
+
+00:08:52.520 --> 00:08:55.040
+Aplikacja nie jest zatem jednym wielkim systemem zastępczym.
+
+00:08:55.040 --> 00:08:59.380
+To zestaw reguł, które łączą specjalistów, zapewniając każdemu systemowi potrzebną pracę we właściwym czasie.
+
+00:08:59.640 --> 00:09:01.260
+Sklep internetowy rejestruje zamówienie.
+
+00:09:01.500 --> 00:09:03.440
+System realizacji zamówień obsługuje realizację.
+
+00:09:03.660 --> 00:09:05.380
+System rozliczeniowy obsługuje fakturowanie.
+
+00:09:05.620 --> 00:09:08.460
+Inteligentne zarządzanie zamówieniami zarządza ścieżką między tymi zadaniami.
+
+00:09:08.680 --> 00:09:12.680
+Osoby odpowiedzialne za proces zamawiania mogą projektować te przepływy bezpośrednio w aplikacji.
+
+00:09:12.920 --> 00:09:18.420
+Nie muszą pisać każdej ścieżki w tradycyjnym kodzie, ani prosić administratora IT o zmiany każdej reguły biznesowej.
+
+00:09:18.640 --> 00:09:22.340
+Daje to zespołowi łańcucha dostaw możliwość modelowania procesu, którego faktycznie potrzebują.
+
+00:09:22.340 --> 00:09:24.200
+Mimo to te zmiany wymagają uwagi.
+
+00:09:24.380 --> 00:09:27.760
+Przepływ orkiestracji pozostaje nieopublikowany podczas jego tworzenia i testowania.
+
+00:09:28.000 --> 00:09:30.760
+Na tym etapie dane przychodzące nie przechodzą przez przepływ.
+
+00:09:30.780 --> 00:09:34.660
+Po opublikowaniu przepływ i jego akcje są uruchamiane, gdy dane trafiają do systemu.
+
+00:09:34.780 --> 00:09:37.920
+Po opublikowaniu nie można edytować opublikowanego przepływu bezpośrednio.
+
+00:09:38.140 --> 00:09:42.840
+Jeśli firma potrzebuje zmiany, zespół może zatrzymać opublikowany przepływ, co przywraca go do stanu nieopublikowanego.
+
+00:09:43.080 --> 00:09:46.160
+Mogą edytować przepływ, a następnie opublikować nową wersję, gdy będzie gotowa.
+
+00:09:46.160 --> 00:09:49.860
+Taka konfiguracja zmusza zespoły do testowania ścieżki przed przejściem przez nią zamówień.
+
+00:09:49.980 --> 00:09:53.040
+Ścieżka działa tylko wtedy, gdy wie, jakie zapasy są faktycznie dostępne.
+
+00:09:53.180 --> 00:09:57.740
+To prowadzi nas do informacji o aktualnym stanie magazynowym, które stoją za każdą decyzją o realizacji zamówienia.
+
+00:09:58.020 --> 00:10:01.420
+Widoczność zapasów, czyli sprawdzenie, co faktycznie można sprzedać.
+
+00:10:01.580 --> 00:10:02.480
+Oto prosta prawda.
+
+00:10:02.760 --> 00:10:06.000
+Nie możesz zrealizować zamówienia, jeśli nie wiesz, czy masz odpowiedni zapas.
+
+00:10:06.200 --> 00:10:12.060
+Brzmi to oczywisto, ale zapasy mogą być ukryte w magazynie, sklepie, placówce partnerskiej lub w różnych podmiotach prawnych w obrębie tej samej firmy.
+
+00:10:12.060 --> 00:10:17.460
+Gdy każda placówka prowadzi własny stan magazynowy, nie da się odpowiedzieć na podstawowe pytanie, co mogę obiecać temu klientowi już teraz?
+
+00:10:17.660 --> 00:10:22.340
+Widoczność zapasów zapewnia inteligentnemu zarządzaniu zamówieniami podgląd na żywo wszystkich zapasów w całej sieci dostaw.
+
+00:10:22.520 --> 00:10:25.080
+Wyobraź sobie to jak tablicę magazynową w centrum dystrybucji.
+
+00:10:25.320 --> 00:10:31.360
+Zamiast dzwonić do każdej półki i prosić kogoś o sprawdzenie, proces zamawiania korzysta z jednego wspólnego widoku, do którego przesyłane są dane ze wszystkich systemów.
+
+00:10:31.460 --> 00:10:35.600
+To, że produkt pojawia się gdzieś jako zapas, nie oznacza, że może zrealizować każde zamówienie.
+
+00:10:35.600 --> 00:10:44.340
+Produkt może znajdować się w magazynie, ale być już zarezerwowany może znajdować się w sklepie, który może sprzedawać lokalnie, ale nie może go wysłać lub może być po prostu zbyt daleko, aby spełnić obietnicę dostawy wybraną przez klienta.
+
+00:10:44.480 --> 00:10:49.440
+Istnieje ogromna różnica między zapasami, które istnieją gdzieś, a zapasami, które mogą zrealizować to zamówienie już teraz.
+
+00:10:49.660 --> 00:10:52.640
+Wyobraź sobie, że klient kupił kurtkę online i chce ją dostać jutro.
+
+00:10:52.800 --> 00:10:55.060
+W Twoim głównym magazynie nie ma już żadnych zapasów.
+
+00:10:55.060 --> 00:11:04.520
+Bez aktualnych danych o stanie magazynowym Twoja strona internetowa może nadal akceptować zamówienie na podstawie starego numeru, a magazyn otrzymuje żądanie czegoś, czego nie może wysłać, pozostawiając klienta z pytaniem po finalizacji zamówienia.
+
+00:11:04.680 --> 00:11:06.040
+To stwarza pracę dla wszystkich.
+
+00:11:06.340 --> 00:11:13.140
+Dzięki połączonym informacjom o stanie magazynowym inteligentny system zarządzania zamówieniami widzi, że główny magazyn nie ma kurtki dla tego zamówienia, ale pobliski sklep ma.
+
+00:11:13.320 --> 00:11:15.980
+Jeśli ten sklep obsługuje wysyłkę, może zrealizować zamówienie.
+
+00:11:16.180 --> 00:11:19.520
+Jeśli klient wybierze odbiór osobisty, ten sam sklep staje się miejscem odbioru.
+
+00:11:19.700 --> 00:11:22.060
+Decyzja zaczyna się od lepszego wglądu w stan magazynowy.
+
+00:11:22.060 --> 00:11:26.320
+W przypadku firmy z kilkoma podmiotami prawnymi ten widok obejmuje stan magazynowy we wszystkich z nich.
+
+00:11:26.500 --> 00:11:32.180
+Ma to znaczenie, gdy działasz w więcej niż jednym kraju, regionie lub jednostce biznesowej, a stan magazynowy nie jest przechowywany w jednym zestawie rekordów.
+
+00:11:32.300 --> 00:11:36.500
+Proces zamawiania wykorzystuje dane o stanie magazynowym w czasie rzeczywistym, decydując o wyborze ścieżki.
+
+00:11:36.720 --> 00:11:40.800
+Magazyn, sklep lub inne źródło zapasów nadal zarządza własnymi rekordami zapasów.
+
+00:11:41.000 --> 00:11:46.840
+Przejrzystość stanu magazynowego wprowadza aktualne dane do szerszego procesu zamawiania, gdzie reguły realizacji zamówień mogą z nich korzystać.
+
+00:11:46.840 --> 00:11:53.700
+Pomaga to uniknąć obietnic opartych na wczorajszych danych i daje obsłudze klienta jasną odpowiedź, gdy ktoś pyta, czy produkt nadal może dotrzeć na czas.
+
+00:11:53.920 --> 00:11:57.420
+Zamiast przeszukiwać kilka systemów i liczyć na zgodność informacji, zespół do spraw.
+
+00:11:57.640 --> 00:12:00.600
+Zamówień widzi stan magazynowy, który wpłynął na wybór sposobu realizacji zamówienia.
+
+00:12:00.800 --> 00:12:04.080
+Oczywiście zobaczenie wszystkich możliwych lokalizacji nie daje odpowiedzi na wszystkie pytania.
+
+00:12:04.300 --> 00:12:05.840
+Produkt może znajdować się w pięciu lokalizacjach.
+
+00:12:06.640 --> 00:12:11.540
+Jedna najbliżej klienta, druga z większym zapasem, a trzecia, która umożliwia jednoczesną wysyłkę obu produktów.
+
+00:12:11.540 --> 00:12:16.840
+Ktoś lub coś nadal musi dokonać wyboru. To zadanie należy do optymalizacji realizacji zamówienia.
+
+00:12:18.600 --> 00:12:19.240
+Realizacja
+
+00:12:19.240 --> 00:12:24.260
+Optymalizacja – wybór najlepszego miejsca wysyłki z realizacji zamówienia.
+
+00:12:24.720 --> 00:12:29.840
+Optymalizacja porównuje możliwe lokalizacje zamówienia i wybiera jedną na podstawie reguł ustalonych przez firmę.
+
+00:12:30.040 --> 00:12:33.480
+Mówiąc wprost odpowiada na pytanie, skąd powinno pochodzić to zamówienie.
+
+00:12:33.720 --> 00:12:35.580
+Najlepsza nie zawsze oznacza najbliższa.
+
+00:12:35.800 --> 00:12:39.140
+Najbliższy sklep może mieć produkt, ale wysyłka stamtąd może kosztować więcej.
+
+00:12:39.140 --> 00:12:46.020
+Magazyn położony dalej może już mieć oba produkty gotowe do spakowania, a inna lokalizacja może mieć zapas, ale nie może dotrzymać terminu dostawy wybranego przez klienta.
+
+00:12:46.180 --> 00:12:48.820
+Każda firma musi zdecydować, jakie zasady będą preferować.
+
+00:12:49.020 --> 00:12:51.400
+Niektóre firmy stawiają na pierwszym miejscu szybkość dostawy.
+
+00:12:51.620 --> 00:12:53.820
+Inne chcą utrzymać koszty wysyłki na niskim poziomie.
+
+00:12:54.040 --> 00:13:00.240
+Firma może również chcieć chronić zapasy w sklepie dla klientów przychodzących lub unikać dzielenia zamówienia na kilka paczek, chyba że nie ma innego wyjścia.
+
+00:13:00.480 --> 00:13:04.620
+Inteligentne zarządzanie zamówieniami wykorzystuje strategię realizacji zamówień, które odzwierciedlają te wybory.
+
+00:13:04.620 --> 00:13:07.220
+Wyobraź to sobie jako wybór trasy dla samochodu dostawczego.
+
+00:13:07.440 --> 00:13:12.260
+Najkrótsza droga może nie być najszybsza, ponieważ mogą występować korki, roboty drogowe lub postój, który zajmuje więcej czasu.
+
+00:13:12.500 --> 00:13:19.740
+Podobnie najbliższy budynek może nie dać najlepszego rezultatu realizacji, gdy w grę wchodzą koszty magazynowe, obietnice serwisowe i opcje dostawy.
+
+00:13:19.980 --> 00:13:22.520
+Wróćmy do klienta, który kupił dwa produkty online.
+
+00:13:22.800 --> 00:13:25.220
+Sklep oddalony o 10 minut ma pierwszy produkt.
+
+00:13:25.460 --> 00:13:27.840
+Magazyn ma oba produkty, ale znajduje się dalej.
+
+00:13:27.840 --> 00:13:36.060
+Jeśli sklep wyśle pierwszy produkt, a magazyn wyśle drugi, klient może otrzymać dwie paczki, które mogłyby dotrzymać terminu dostawy, ale jednocześnie podniesie to koszty wysyłki.
+
+00:13:36.260 --> 00:13:38.660
+Magazyn może być w stanie wysłać oba produkty razem.
+
+00:13:38.920 --> 00:13:43.280
+Jeśli nadal uda się dotrzymać obiecanej daty dostawy, lepszym wyborem może być jedna paczka z tej lokalizacji.
+
+00:13:43.520 --> 00:13:46.600
+Reguła ta może sprzyjać mniejszej liczbie przesyłek i niższym kosztom wysyłki.
+
+00:13:46.820 --> 00:13:54.080
+Jeśli jednak jutrzejsza dostawa jest ważniejsza niż wysyłka obu produktów jednocześnie, system może wybrać sklep dla jednego produktu, a magazyn dla drugiego wówczas mamy do czynienia z rozdzielonym zamówieniem.
+
+00:13:54.080 --> 00:14:00.860
+Rozdzielenie zamówienia nie oznacza awarii systemu. Może to być wybór planowy, gdy żadna pojedyncza lokalizacja nie jest w stanie zrealizować całego zamówienia w odpowiedni sposób.
+
+00:14:01.100 --> 00:14:04.900
+Firma decyduje, kiedy rozdzielenie zamówienia ma sens poprzez ustaloną strategię realizacji.
+
+00:14:05.100 --> 00:14:07.860
+To samo podejście wspiera opcję KUB ONLINE – wyślij ze sklepu.
+
+00:14:08.020 --> 00:14:12.780
+Klient składa zamówienie na stronie internetowej, ale sklep w pobliżu ma odpowiedni stan magazynowy i może je szybko wysłać.
+
+00:14:12.900 --> 00:14:16.540
+W ten sposób sklep staje się źródłem realizacji, mimo że klient nigdy go nie odwiedził.
+
+00:14:16.740 --> 00:14:19.620
+System obsługuje również opcję KUB ONLINE – odbierz w sklepie.
+
+00:14:19.620 --> 00:14:25.840
+System wykorzystuje informacje o stanie magazynowym i lokalizacji, aby znaleźć sklep, który może zrealizować zamówienie do odbioru osobistego,
+
+00:14:25.920 --> 00:14:30.320
+a klient otrzymuje możliwość odbioru lokalnego, podczas gdy firma kieruje zamówienie do właściwego miejsca.
+
+00:14:30.700 --> 00:14:34.040
+Te wybory nie muszą być podejmowane oddzielnie w każdym kanale sprzedaży.
+
+00:14:34.260 --> 00:14:41.060
+Bez wspólnego procesu decyzyjnego dotyczącego realizacji zamówienia, strona internetowa, platforma sprzedażowa i centrum telefonicznej obsługi klienta mogą wymagać własnych reguł routingu.
+
+00:14:41.220 --> 00:14:47.280
+Kiedy firma zmienia swoją politykę wysyłkową lub zaczyna korzystać ze sklepów do realizacji zamówień, zespoły mogą być zmuszone do aktualizacji kilku systemów.
+
+00:14:47.280 --> 00:14:51.540
+Optymalizacja realizacji zamówień skupia ten proces decyzyjny w jednym miejscu w procesie realizacji zamówienia.
+
+00:14:51.760 --> 00:14:56.680
+Strona internetowa nadal przyjmuje zamówienia, platforma sprzedażowa nadal przyjmuje zamówienia, a sklep nadal sprzedaje produkty.
+
+00:14:56.880 --> 00:15:02.140
+Firma może jednak zmienić sposób wyboru lokalizacji realizacji zamówień bez konieczności ponownego tworzenia reguł w każdym kanale,
+
+00:15:02.280 --> 00:15:07.060
+co daje większą kontrolę nad zmianami zapasów, zmianami obietnic dostaw lub pojawieniem się nowej opcji realizacji.
+
+00:15:07.240 --> 00:15:13.140
+Mimo to strategia realizacji zamówień może porównywać lokalizację tylko wtedy, gdy potrzebne informacje napływają z systemów, które ją obsługują.
+
+00:15:13.140 --> 00:15:17.200
+Zamówienia muszą napłynąć, aktualizacje zapasów muszą zostać dostarczone, a partnerzy do spraw.
+
+00:15:17.420 --> 00:15:20.440
+Realizacji zamówień muszą otrzymać swoją pracę i raportować o postępach.
+
+00:15:20.560 --> 00:15:22.420
+To połączenie zależy od dostawców.
+
+00:15:23.540 --> 00:15:25.800
+Dostawcy i połączenia to drzwi do budynku.
+
+00:15:26.020 --> 00:15:31.100
+Aby inteligentne zarządzanie zamówieniami działało, potrzebuje niezawodnego sposobu komunikacji ze wszystkim, co je otacza.
+
+00:15:31.300 --> 00:15:32.920
+Dostawcy są tym, co to umożliwia.
+
+00:15:33.140 --> 00:15:39.300
+Dostawca to w zasadzie połączenie, które przesyła szczegóły zamówienia i aktualizację realizacji między inteligentnym zarządzaniem zamówieniami a innym systemem.
+
+00:15:39.300 --> 00:15:42.920
+Informacje przepływają w obie strony, więc nikt nie musi niczego ręcznie kopiować.
+
+00:15:43.140 --> 00:15:45.240
+Wyobraź sobie budynek z wieloma bramami dostaw.
+
+00:15:45.440 --> 00:15:49.980
+Jedne drzwi otrzymują zamówienia ze sklepu internetowego, inne łączą się z systemem magazynowym.
+
+00:15:50.200 --> 00:15:52.800
+Trzecie wysyłają pracę do magazynu lub partnera dostawczego.
+
+00:15:53.020 --> 00:15:57.620
+Każde drzwi mają jasno określone przeznaczenie, a dostawcy zarządzają informacjami przechodzącymi przez każde z nich.
+
+00:15:57.820 --> 00:16:00.060
+Microsoft sam tworzy niektóre z tych łączników.
+
+00:16:00.340 --> 00:16:01.940
+Nazywają je dostawcami własnymi.
+
+00:16:01.940 --> 00:16:10.020
+Łączą inteligentne zarządzanie zamówieniami z aplikacjami takimi jak Dynamics 365 Supply Chain Management, Dynamics 365 Commerce czy Dynamics 365 Finance.
+
+00:16:10.180 --> 00:16:15.860
+Usługi zarządzania zapasami i realizacji zamówień w ramach inteligentnego zarządzania zamówieniami również korzystają z tych dostawców do wymiany danych.
+
+00:16:16.080 --> 00:16:17.780
+Prawdopodobnie masz już inne systemy.
+
+00:16:17.920 --> 00:16:19.840
+Tu właśnie pojawiają się dostawcy zewnętrzni.
+
+00:16:20.020 --> 00:16:22.220
+Łączą oni usługi, których Microsoft nie tworzy.
+
+00:16:22.420 --> 00:16:26.380
+Może to być Twoja istniejąca platforma e-commerce, marketplace, firma logistyczna lub system magazynowy.
+
+00:16:26.580 --> 00:16:29.120
+Celem nie jest zmuszanie Cię do korzystania z jednego zestawu aplikacji.
+
+00:16:29.120 --> 00:16:32.560
+Chodzi o to, abyś mógł połączyć systemy, które już odpowiadają potrzebom Twojej firmy.
+
+00:16:32.720 --> 00:16:35.900
+W rzeczywistości Ci dostawcy korzystają z łączników Power Automate.
+
+00:16:36.060 --> 00:16:40.040
+Power Platform ma ponad 200 gotowych łączników, więc masz mnóstwo punktów wyjścia.
+
+00:16:40.220 --> 00:16:44.000
+A jeśli żadna z tych opcji nie spełnia Twoich oczekiwań, Ty lub Twój partner możecie stworzyć własnego dostawcę.
+
+00:16:44.160 --> 00:16:46.280
+Każda połączona aplikacja nadal wykonuje swoją pracę.
+
+00:16:46.440 --> 00:16:48.140
+Twój sklep internetowy rejestruje zakup.
+
+00:16:48.380 --> 00:16:50.340
+System inwentaryzacyjny śledzi stany magazynowe.
+
+00:16:50.500 --> 00:16:52.560
+Partner logistyczny pakuje i dostarcza zamówienie.
+
+00:16:52.800 --> 00:16:54.560
+System rozliczeniowy zajmuje się finansami.
+
+00:16:54.560 --> 00:16:58.400
+Inteligentne zarządzanie zamówieniami koordynuje wiadomości i kolejne kroki między nimi wszystkimi.
+
+00:16:58.600 --> 00:17:03.060
+Gdy systemy te udostępniają aktualizację, Twoja firma widzi, co dzieje się w całym procesie realizacji zamówienia.
+
+00:17:03.220 --> 00:17:05.980
+Koniec z podążaniem za informacjami przez oddzielne ekrany.
+
+00:17:06.980 --> 00:17:08.680
+Analizami i szerszym obrazem.
+
+00:17:08.920 --> 00:17:12.500
+Te wspólne informacje dają Ci znacznie jaśniejszy obraz pracy nad zamówieniem.
+
+00:17:12.720 --> 00:17:18.060
+Inteligentne zarządzanie zamówieniami obejmuje pulpity nawigacyjne Power BI, które gromadzą dane dotyczące zamówień i realizacji w jednym miejscu.
+
+00:17:18.220 --> 00:17:21.020
+Obsługa klienta może znaleźć zamówienia, które przestały być realizowane.
+
+00:17:21.020 --> 00:17:24.280
+Dział operacyjny może wykryć zablokowane trasy lub opóźnienia w realizacji.
+
+00:17:24.460 --> 00:17:27.080
+Liderzy biznesowi mogą szukać wzorców w całym procesie.
+
+00:17:27.280 --> 00:17:30.480
+Bez tego widoku opóźnienie mogłoby wydawać się odosobnionym problemem.
+
+00:17:30.640 --> 00:17:36.220
+Ale gdy dane są zebrane, Twój zespół może zauważyć, że wiele zamówień jest realizowanych wolniej u konkretnego partnera logistycznego
+
+00:17:36.220 --> 00:17:39.280
+lub że określona opcja dostawy generuje więcej wyjątków niż oczekiwano.
+
+00:17:39.520 --> 00:17:43.680
+Sam pulpit nawigacyjny nie rozwiązuje problemu, ale pomaga ludziom dokładnie wiedzieć, gdzie szukać.
+
+00:17:43.820 --> 00:17:45.400
+Przypomnij sobie budynek biurowy.
+
+00:17:45.400 --> 00:17:49.720
+Inteligentne zarządzanie zamówieniami łączy recepcję, która przyjmuje zgłoszenia, tablicę magazynową,
+
+00:17:49.860 --> 00:17:54.660
+która pokazuje dostępne produkty głównego planistę, który wybiera lokalizację realizacji oraz pokój raportowania,
+
+00:17:54.800 --> 00:17:56.560
+w którym zespoły mogą śledzić postępy prac.
+
+00:17:56.700 --> 00:17:59.940
+Każdy element ma inne zadanie, ale zamówienie łączy je wszystkie.
+
+00:18:01.400 --> 00:18:04.600
+Wniosek. Jedno zamówienie. Jedna skoordynowana podróż.
+
+00:18:04.780 --> 00:18:06.600
+Dziękuję za udział w tym zbiorze wiedzy.
+
+00:18:06.820 --> 00:18:10.280
+Inteligentne zarządzanie zamówieniami wyznacza jedną, bezpośrednią ścieżkę przez cały proces
+
+00:18:10.280 --> 00:18:12.460
+od początkowego przechwycenia do ostatecznego rozliczenia.
+
+00:18:12.460 --> 00:18:15.820
+Subskrybuj na swojej ulubionej platformie podcastowej i obejrzyj kolejny odcinek.
+
+00:18:16.040 --> 00:18:19.940
+Zobaczysz dokładnie, jak Dynamics 365 i Power Platform radzą sobie z pracą za ekranem.

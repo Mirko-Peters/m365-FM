@@ -1,0 +1,2932 @@
+WEBVTT
+
+00:00:00.340 --> 00:00:07.860
+Pronto per dieci giorni di Microsoft 365, Copilot, EA, Azure e le persone che stanno plasmando il futuro del lavoro è...
+
+00:00:07.860 --> 00:00:11.780
+Questo gennaio, M365 contorna e sarà ancora più grande.
+
+00:00:12.940 --> 00:00:17.900
+Unisciti a noi per sessioni dal vivo, demo concrete e conoscenze pratiche da MVP ed esperti del settore in tutto il mondo.
+
+00:00:18.840 --> 00:00:21.200
+Niente slide generiche, niente parole d'ordine infinite.
+
+00:00:22.140 --> 00:00:23.480
+Affronteremo le sfide reali.
+
+00:00:23.780 --> 00:00:28.560
+Copilot Studio, agenti EA, Fabric, sicurezza, governance e automazione.
+
+00:00:28.560 --> 00:00:34.360
+Che tu sia un professionista IT, uno sviluppatore o un leader aziendale, ci sono sessioni pensate per te.
+
+00:00:35.520 --> 00:00:40.140
+Con dieci giorni interi potrai esplorare diverse tecnologie e connetterti con una community globale.
+
+00:00:40.920 --> 00:00:44.220
+Guarda al vivo e porta intuizioni pratiche nella tua organizzazione.
+
+00:00:45.080 --> 00:00:49.020
+Gennaio 2027, dieci giorni, un'unica community Microsoft, Microsoft.
+
+00:00:49.480 --> 00:00:50.600
+Le iscrizioni sono aperte.
+
+00:00:51.760 --> 00:00:52.940
+Prenota il tuo posto oggi stesso.
+
+00:00:52.940 --> 00:00:57.960
+Il sito è m365con.net
+
+00:00:57.960 --> 00:01:04.540
+Iscriviti ora su m365con.net e ci vedremo dal vivo a gennaio.
+
+00:01:05.340 --> 00:01:09.660
+Hai mai provato a chiedere a Copilot informazioni sui dati legacy sepolti della tua azienda per ricevere solo una risposta generica?
+
+00:01:10.100 --> 00:01:10.540
+Non si so.
+
+00:01:10.540 --> 00:01:13.860
+La conoscenza predefinita di Copilot si ferma a ciò che Microsoft gli fornisce.
+
+00:01:14.420 --> 00:01:15.560
+Ma se potessi cambiare le cose?
+
+00:01:16.100 --> 00:01:22.840
+Oggi ti mostrerò come collegare le tue fonti di dati, come wiki interne o vecchi CRM, direttamente a Copilot usando i connettori di Microsoft's Graph.
+
+00:01:23.780 --> 00:01:27.920
+Alla fine saprai esattamente come rendere Copilot esperto della tua attività quanto il tuo migliore analista.
+
+00:01:29.400 --> 00:01:31.540
+Perché Copilot sbaglia il tiro con i tuoi dati?
+
+00:01:31.540 --> 00:01:36.360
+Quindi, se hai mai chiesto a Copilot informazioni sulla tua azienda e l'hai visto inciampare, non sei solo?
+
+00:01:37.360 --> 00:01:40.260
+Molti di noi vogliono credere che Copilot veda tutto ciò che è importante.
+
+00:01:40.460 --> 00:01:44.880
+Conversazioni con i clienti, documenti, legacy, persino quei vecchi fogli Excel, nascosti in una cartella condivisa.
+
+00:01:45.660 --> 00:01:47.240
+Ma la realtà si manifesta molto rapidamente.
+
+00:01:48.060 --> 00:01:52.660
+Copilot conosce solo ciò che si trova all'interno di un perimetro ristretto e la tua attività probabilmente vive ben oltre quei confini.
+
+00:01:53.120 --> 00:01:55.920
+Per chi usa Microsoft 365 ogni giorno, è un vero shock.
+
+00:01:55.920 --> 00:02:05.380
+Apri Copilot aspettandoti che funzioni come un cervello virtuale per la tua azienda, ma invece inizia a comportarsi come quel nuovo assunto, che non ha ancora capito, dove sia la macchina del caffè.
+
+00:02:06.520 --> 00:02:08.660
+Ecco un esempio rapido che colpisce quasi ogni manager.
+
+00:02:09.320 --> 00:02:14.680
+Immagina di sederti per preparare una revisione trimestrale e chiedi a Copilot qual è stato il nostro processo di vendita l'anno scorso.
+
+00:02:15.720 --> 00:02:21.540
+Invece di tirare fuori i passaggi reali o suggerire dove guardare, Copilot alza le mani.
+
+00:02:22.100 --> 00:02:22.340
+Niente.
+
+00:02:22.340 --> 00:02:27.680
+Potresti ricevere un riassunto di alcune chat del team della scorsa settimana, magari un link a una presentazione marketing di gennaio,
+
+00:02:28.040 --> 00:02:32.220
+o una vaga dichiarazione sulle best practice, ma nulla sul processo che il tuo team di vendita ha realmente usato.
+
+00:02:33.100 --> 00:02:36.140
+Dettagli di cui hai bisogno sono bloccati in sistemi che Copilot non può nemmeno vedere.
+
+00:02:37.400 --> 00:02:41.720
+Magari un vecchio CRM o un sito di documentazione privato creato da qualcuno che se n'è andato tre anni fa.
+
+00:02:42.720 --> 00:02:43.960
+Il problema principale si riduce a questo.
+
+00:02:43.960 --> 00:02:49.180
+Le autorizzazioni predefinite di Copilot coprono solo ciò che si trova già nell'ecosistema Microsoft 365.
+
+00:02:49.940 --> 00:02:51.860
+Pensa a Outlook Teams OneDrive SharePoint.
+
+00:02:52.700 --> 00:02:54.300
+Se risiede lì, Copilot è piuttosto utile.
+
+00:02:55.800 --> 00:02:58.020
+Al di fuori di questo è come se Copilot avesse una benda sugli occhi.
+
+00:02:58.380 --> 00:03:02.020
+La piattaforma di ticketing personalizzata della tua azienda, il week interno del reparto finanziario,
+
+00:03:02.300 --> 00:03:05.700
+o quel CRM del 2012 tenuto insieme più con lo scotch che con la documentazione.
+
+00:03:06.260 --> 00:03:07.260
+Niente di tutto ciò viene in blu.
+
+00:03:07.940 --> 00:03:09.240
+E non si tratta solo di sistemi oscuri.
+
+00:03:10.240 --> 00:03:15.780
+Documenti riservati, record che risiedono in linee di business separate o qualsiasi cosa archiviata in un'app non creata per Microsoft 365,
+
+00:03:16.120 --> 00:03:18.540
+resta invisibile a Copilot per impostazione predefinita.
+
+00:03:18.540 --> 00:03:21.300
+Questa limitazione non è solo teorica.
+
+00:03:21.820 --> 00:03:22.640
+I numeri lo conferman.
+
+00:03:23.040 --> 00:03:25.400
+Secondo diversi studi di settore ai rapporti di Microsoft stessa,
+
+00:03:25.480 --> 00:03:30.720
+fino all'80% i dati di una tipica organizzazione risiede al di fuori delle fonti standard di Microsoft 365.
+
+00:03:30.720 --> 00:03:35.440
+Ciò significa che Copilot se è lasciato a se stesso perde gran parte della vera conoscenza dell'azienda.
+
+00:03:36.080 --> 00:03:39.760
+Quindi, pensando a tutti i processi chiave, ai documenti strategici storici,
+
+00:03:40.040 --> 00:03:43.260
+o alle note sui clienti presenti in altri strumenti o condivisioni di file,
+
+00:03:43.440 --> 00:03:47.480
+ha senso perché Copilot a volte sembra meno un assistente geniale,
+
+00:03:47.480 --> 00:03:51.840
+e più uno stagista volenteroso appena arrivato il lunedì mattina.
+
+00:03:53.180 --> 00:03:58.300
+Il divario tra ciò che Copilot vede e ciò di cui hai effettivamente bisogno porta a una gran perdita di tempo.
+
+00:03:58.300 --> 00:04:02.280
+Invece di ricevere risposte pronte, i team finiscono per scriversi su Teams,
+
+00:04:02.620 --> 00:04:04.120
+setacciare vecchi siti SharePoint,
+
+00:04:04.340 --> 00:04:08.100
+o, se sono fortunati, trovare qualcuno che ricorda dove si trova la vecchia guida,
+
+00:04:08.580 --> 00:04:09.100
+o...
+
+00:04:09.100 --> 00:04:12.200
+Questo tipo di ricerca non è solo fastidioso, è un dreneggio della produttività.
+
+00:04:12.680 --> 00:04:16.660
+Le persone possono passare mezz'ora a cercare una risposta che Copilot avrebbe dovuto trovare in 10 secondi.
+
+00:04:17.320 --> 00:04:20.640
+Moltiplica questo per dozzine di ricerche a settimana per tutti i dipendenti di un'azienda,
+
+00:04:20.740 --> 00:04:25.020
+e ti ritrovi improvvisamente a guardare intere giornate lavorative perse a giocare a nascondino digitale.
+
+00:04:26.140 --> 00:04:28.280
+C'è un altro aspetto della faccenda che brucia un po'.
+
+00:04:28.280 --> 00:04:31.360
+Uh, quando Copilot non riesce a rispondere al tipo di domande che ti poni davvero,
+
+00:04:31.440 --> 00:04:33.000
+le persone iniziano a perdere fiducia in lui.
+
+00:04:33.980 --> 00:04:36.420
+L'azienda distribuisce Copilot in tutta l'organizzazione,
+
+00:04:36.500 --> 00:04:39.860
+lo pubblicizza come rivoluzionario e poi la prima query nel mondo reale cade nel vuoto.
+
+00:04:40.840 --> 00:04:41.540
+Sentirai cose come
+
+00:04:41.540 --> 00:04:45.220
+«Non hai riuscito nemmeno a dirmi dove fosse la checklist di onboarding dell'anno scorso».
+
+00:04:45.220 --> 00:04:48.280
+Oppure «Ho chiesto del nostro vecchio modello di prezzo, non ho ottenuto nullo».
+
+00:04:49.120 --> 00:04:52.560
+Alla fine, l'entusiasmo svanisce lo strumento, diventa solo un'altra hub,
+
+00:04:52.920 --> 00:04:54.680
+che occupa spazio nel tuo flusso di lavoro.
+
+00:04:55.440 --> 00:04:56.520
+Ma è qui che la storia cambia.
+
+00:04:57.400 --> 00:04:59.280
+Riconoscere questa limitazione è in realtà utile.
+
+00:05:00.000 --> 00:05:02.180
+La maggior parte delle organizzazioni non si rende nemmeno conto che Copilot,
+
+00:05:02.420 --> 00:05:03.880
+danno per scontato che ciò che ottieni.
+
+00:05:05.240 --> 00:05:08.020
+Ma sapere che lo sguardo di Copilot si ferma a Microsoft 365
+
+00:05:08.020 --> 00:05:10.480
+ti aiuta a fare un passo indietro e a porti domande migliori.
+
+00:05:11.900 --> 00:05:15.100
+Vuoi che Copilot aiuti davvero le persone con processi aziendali reali,
+
+00:05:15.200 --> 00:05:17.260
+non solo a riscrivere email o riassumere chat?
+
+00:05:17.260 --> 00:05:22.160
+Allora ti serve un modo per aprirgli più dati senza dovergli consegnare le chiavi dell'intero regno.
+
+00:05:23.380 --> 00:05:24.420
+Anche se sei scettico,
+
+00:05:25.080 --> 00:05:27.380
+considera cosa significherebbe se tutti quei wiki interni,
+
+00:05:27.460 --> 00:05:32.080
+vecchi CRM o sistemi di supporto obsoleti diventassero improvvisamente ricercabili da Copilot.
+
+00:05:32.080 --> 00:05:34.960
+Niente più salti da un sistema all'altro,
+
+00:05:35.140 --> 00:05:38.960
+richieste in giro speranze che chi ha creato quel documento sia ancora in azienda.
+
+00:05:39.860 --> 00:05:42.680
+Solo risposte rapide e affidabili da uno strumento che conosce la tua attività,
+
+00:05:42.840 --> 00:05:44.420
+non solo le funzioni generiche di Microsoft.
+
+00:05:45.080 --> 00:05:47.660
+E per amministratori e architetti questo apre una discussione più ampia.
+
+00:05:48.640 --> 00:05:50.320
+Se gran parte della tua conoscenza è bloccata,
+
+00:05:50.400 --> 00:05:52.440
+renderla accessibile non sarebbe il primo passo concreto
+
+00:05:52.440 --> 00:05:54.460
+per far sì che Copilot mantenga le sue promesse.
+
+00:05:55.220 --> 00:05:56.460
+Quindi, ora la domanda ovvia,
+
+00:05:56.600 --> 00:05:59.620
+cosa serve davvero per colmare il divario tra ciò che sa Copilot
+
+00:05:59.620 --> 00:06:03.620
+e ciò di cui la tua azienda ha realmente bisogno è...
+
+00:06:04.500 --> 00:06:06.440
+Tre modi per rendere Copilot più intelligente
+
+00:06:06.440 --> 00:06:08.200
+perché i Graph Connector fanno la differenza.
+
+00:06:08.800 --> 00:06:09.700
+Siamo onesti per un secondo.
+
+00:06:10.460 --> 00:06:11.700
+Molti sentono parlare di Copilot,
+
+00:06:11.840 --> 00:06:13.100
+vedono le demo, lo provano,
+
+00:06:13.200 --> 00:06:14.200
+pensano che sia tutto qui,
+
+00:06:15.240 --> 00:06:17.200
+ma il punto è che stanno solo scalfendo la superficie.
+
+00:06:17.760 --> 00:06:19.480
+Microsoft offre silenziosamente dei modi
+
+00:06:19.480 --> 00:06:20.980
+per spingere le competenze di Copilot
+
+00:06:20.980 --> 00:06:22.100
+ben oltre le funzioni standard,
+
+00:06:22.240 --> 00:06:23.260
+ma solo se sai dove guardare.
+
+00:06:24.120 --> 00:06:25.240
+Sotto i titoli accattivanti
+
+00:06:25.240 --> 00:06:28.240
+ci sono tre modi principali per sbloccare il potenziale di Copilot.
+
+00:06:28.240 --> 00:06:31.580
+Graph Connector, plugin e origini dati personalizzate.
+
+00:06:32.620 --> 00:06:34.280
+Ognuno sembra promettente sulla carta,
+
+00:06:34.380 --> 00:06:36.520
+ma come funziona nel mondo reale è un'altra storia.
+
+00:06:37.440 --> 00:06:39.300
+Analizziamo quindi dove si colloca ogni opzione
+
+00:06:39.300 --> 00:06:41.080
+e dove decisamente non funziona.
+
+00:06:41.820 --> 00:06:43.580
+I plugin stanno ricevendo molta attenzione in questo momento.
+
+00:06:44.400 --> 00:06:46.100
+Pensali come componenti aggiuntivi per Copilot.
+
+00:06:46.520 --> 00:06:47.300
+Colleghi uno strumento
+
+00:06:47.300 --> 00:06:49.240
+e improvvisamente Copilot impara un nuovo trucco.
+
+00:06:49.600 --> 00:06:51.580
+Potrebbe trattarsi della connessione a una piattaforma SAS
+
+00:06:51.580 --> 00:06:53.300
+o dell'esecuzione di un flusso di lavoro specifico.
+
+00:06:53.720 --> 00:06:55.720
+È come mettere un profumatore elegante nella tua auto.
+
+00:06:55.720 --> 00:06:57.520
+Rende il viaggio un po' più piacevole?
+
+00:06:58.000 --> 00:06:58.380
+Certamente.
+
+00:06:58.720 --> 00:07:00.180
+Ma se ha a che fare con database legacy
+
+00:07:00.180 --> 00:07:01.300
+o file scritti in un linguaggio
+
+00:07:01.300 --> 00:07:03.080
+che solo il tuo ex amministratore poteva leggere,
+
+00:07:03.160 --> 00:07:05.120
+i plugin iniziano subito a sembrare limitati.
+
+00:07:06.100 --> 00:07:08.000
+Lo stesso vale per i dati personalizzati tramite API.
+
+00:07:08.800 --> 00:07:10.580
+In teoria non c'è limite a ciò che puoi collegare.
+
+00:07:11.600 --> 00:07:12.120
+In pratica,
+
+00:07:12.180 --> 00:07:13.120
+gli sviluppatori sbattono
+
+00:07:13.120 --> 00:07:14.700
+contro muri di dati non strutturati,
+
+00:07:14.880 --> 00:07:15.760
+schemi imprevedibili
+
+00:07:15.760 --> 00:07:17.920
+o sistemi progettati nell'era dei floppy disk.
+
+00:07:19.220 --> 00:07:20.620
+Qui che entrano in gioco i Graph Connector
+
+00:07:20.620 --> 00:07:22.200
+che superano silenziosamente tutto il resto.
+
+00:07:22.200 --> 00:07:24.560
+Non immaginarli come un altro componente aggiuntivo,
+
+00:07:24.640 --> 00:07:26.360
+ma come solidi ponti integrati direttamente
+
+00:07:26.360 --> 00:07:28.200
+nell'infrastruttura di Microsoft 365.
+
+00:07:29.220 --> 00:07:30.560
+Invece di insegnare a Copilot
+
+00:07:30.560 --> 00:07:31.940
+solo una nuova competenza,
+
+00:07:32.100 --> 00:07:32.940
+i Graph Connector
+
+00:07:32.940 --> 00:07:34.520
+ampia nel suo campo visivo
+
+00:07:34.520 --> 00:07:37.320
+dove i plugin sono come aggiungere gadget,
+
+00:07:37.900 --> 00:07:38.680
+i Graph Connector
+
+00:07:38.680 --> 00:07:39.820
+sono come abbattere le pareti
+
+00:07:39.820 --> 00:07:40.600
+affinché Copilot
+
+00:07:40.600 --> 00:07:41.600
+possa finalmente vedere
+
+00:07:41.600 --> 00:07:43.120
+l'intera stanza.
+
+00:07:44.080 --> 00:07:45.180
+E nella maggior parte delle aziende
+
+00:07:45.180 --> 00:07:46.260
+quella stanza è ingombra
+
+00:07:46.260 --> 00:07:47.460
+di file condivisi dimenticati,
+
+00:07:47.540 --> 00:07:48.320
+wiki di terze parti,
+
+00:07:48.420 --> 00:07:49.180
+CRM obsoleti,
+
+00:07:49.260 --> 00:07:50.060
+CRM obsoleti
+
+00:07:50.060 --> 00:07:51.220
+e sistemi di ticketing interni
+
+00:07:51.220 --> 00:07:52.420
+che non ne vogliono sapere di andare in pensione.
+
+00:07:52.900 --> 00:07:53.920
+Mettiamo tutto in prospettiva
+
+00:07:53.920 --> 00:07:54.900
+con qualche rapida analogia.
+
+00:07:55.680 --> 00:07:57.460
+Plug-in sono piccoli componenti aggiuntivi
+
+00:07:57.460 --> 00:07:58.240
+che prendi alla cassa,
+
+00:07:58.420 --> 00:07:58.660
+utili,
+
+00:07:59.420 --> 00:08:00.480
+ma molto specifici.
+
+00:08:01.260 --> 00:08:02.840
+Per le origini dati personalizzate
+
+00:08:02.840 --> 00:08:04.460
+immagina di preparare il tuo pasto su misura
+
+00:08:04.460 --> 00:08:05.240
+partendo da zero.
+
+00:08:05.880 --> 00:08:07.600
+È fatto esattamente secondo i tuoi gusti,
+
+00:08:07.800 --> 00:08:09.220
+ma richiede più lavoro di manutenzione
+
+00:08:09.220 --> 00:08:10.300
+e non è sempre compatibile
+
+00:08:10.300 --> 00:08:11.860
+con gli elettrodomestici della tua cucina.
+
+00:08:12.500 --> 00:08:13.560
+I Graph Connector invece
+
+00:08:13.560 --> 00:08:15.120
+sono più simili a ponti su un fiume.
+
+00:08:15.840 --> 00:08:16.900
+Collegano ciò che ti serve
+
+00:08:16.900 --> 00:08:18.240
+in modo sicuro e massivo
+
+00:08:18.240 --> 00:08:19.500
+così il traffico scorre
+
+00:08:19.500 --> 00:08:21.720
+e Copilot ottiene un accesso reale
+
+00:08:21.720 --> 00:08:22.540
+a ciò che ha valore.
+
+00:08:23.300 --> 00:08:24.420
+Qui la questione si fa interessante
+
+00:08:24.420 --> 00:08:25.060
+per i grattacapi
+
+00:08:25.060 --> 00:08:26.080
+che la maggior parte dei team IT
+
+00:08:26.080 --> 00:08:26.980
+si trova ad affrontare.
+
+00:08:28.760 --> 00:08:29.560
+Tra tutte le opzioni,
+
+00:08:29.800 --> 00:08:30.640
+solo i Graph Connector
+
+00:08:30.640 --> 00:08:31.880
+rendono facile per Copilot
+
+00:08:31.880 --> 00:08:32.580
+indicizzare,
+
+00:08:32.740 --> 00:08:33.220
+comprendere
+
+00:08:33.220 --> 00:08:33.960
+e far emergere
+
+00:08:33.960 --> 00:08:34.760
+dati da luoghi
+
+00:08:34.760 --> 00:08:36.140
+in cui non era previsto che guardasse.
+
+00:08:37.440 --> 00:08:38.000
+Quel wiki interno
+
+00:08:38.000 --> 00:08:38.900
+che tutti hanno dimenticato
+
+00:08:38.900 --> 00:08:40.060
+il CRM di due fusioni fa
+
+00:08:40.060 --> 00:08:40.860
+una condivisione file
+
+00:08:40.860 --> 00:08:41.820
+accessibile solo a metà
+
+00:08:41.820 --> 00:08:42.660
+perché nessuno ricorda
+
+00:08:42.660 --> 00:08:43.260
+chi appartiene,
+
+00:08:43.260 --> 00:08:44.500
+all'improvviso
+
+00:08:44.500 --> 00:08:45.280
+Copilot può essere
+
+00:08:45.280 --> 00:08:45.880
+a riconoscenza
+
+00:08:45.880 --> 00:08:46.920
+strutturata da tutti loro
+
+00:08:46.920 --> 00:08:47.800
+e presentarla
+
+00:08:47.800 --> 00:08:48.820
+all'interno della sua familiare
+
+00:08:48.820 --> 00:08:49.560
+chat o ricerca.
+
+00:08:50.240 --> 00:08:51.200
+E non si tratta solo di teoria.
+
+00:08:52.240 --> 00:08:52.800
+Abbiamo lavorato
+
+00:08:52.800 --> 00:08:53.500
+con un amministratore
+
+00:08:53.500 --> 00:08:54.120
+che ha configurato
+
+00:08:54.120 --> 00:08:54.960
+un Graph Connector
+
+00:08:54.960 --> 00:08:55.700
+per il loro portale
+
+00:08:55.700 --> 00:08:56.880
+di documentazione interno
+
+00:08:56.880 --> 00:08:58.080
+attivo su un CMS
+
+00:08:58.080 --> 00:08:58.860
+non più supportato
+
+00:08:58.860 --> 00:08:59.580
+dal 2015.
+
+00:09:01.500 --> 00:09:02.320
+Nel giro di un giorno
+
+00:09:02.320 --> 00:09:03.300
+Copilot era in grado
+
+00:09:03.300 --> 00:09:03.760
+di rispondere
+
+00:09:03.760 --> 00:09:05.080
+a domande tecniche dettagliate,
+
+00:09:05.400 --> 00:09:06.480
+citare polisi archiviate
+
+00:09:06.480 --> 00:09:07.340
+e aiutare utenti
+
+00:09:07.340 --> 00:09:08.440
+che non avevano mai visto
+
+00:09:08.440 --> 00:09:09.320
+il wiki originale.
+
+00:09:10.520 --> 00:09:11.360
+Prima del connettore
+
+00:09:11.360 --> 00:09:12.380
+solo l'autore originale
+
+00:09:12.380 --> 00:09:13.040
+aveva una possibilità
+
+00:09:13.040 --> 00:09:14.300
+di trovare qualcosa di utile.
+
+00:09:15.360 --> 00:09:16.280
+Dopo è stato come se
+
+00:09:16.280 --> 00:09:17.240
+quella base di conoscenza
+
+00:09:17.240 --> 00:09:18.220
+fosse diventata parte
+
+00:09:18.220 --> 00:09:19.440
+del set di competenze native
+
+00:09:19.440 --> 00:09:20.100
+di Copilot.
+
+00:09:21.980 --> 00:09:23.020
+I Graph Connector
+
+00:09:23.020 --> 00:09:23.980
+c'entrano anche un punto
+
+00:09:23.980 --> 00:09:24.860
+che le altre due opzioni
+
+00:09:24.860 --> 00:09:25.800
+tendono a trascurare.
+
+00:09:26.060 --> 00:09:26.460
+Sicurezza
+
+00:09:26.460 --> 00:09:27.900
+e scalabilità
+
+00:09:27.900 --> 00:09:29.300
+rispettano le stesse
+
+00:09:29.300 --> 00:09:30.400
+autorizzazioni già integrate
+
+00:09:30.400 --> 00:09:30.960
+nel tuo ambiente
+
+00:09:30.960 --> 00:09:32.060
+Microsoft 365
+
+00:09:32.060 --> 00:09:33.660
+quindi non devi reinventare
+
+00:09:33.660 --> 00:09:34.500
+il tuo modello di accesso.
+
+00:09:35.140 --> 00:09:35.580
+Se un utente
+
+00:09:35.580 --> 00:09:36.520
+non può vedere un documento
+
+00:09:36.520 --> 00:09:37.100
+nel vecchio sistema
+
+00:09:37.100 --> 00:09:37.740
+non lo vedrà nemmeno
+
+00:09:37.740 --> 00:09:38.400
+tramite Copilot.
+
+00:09:39.000 --> 00:09:39.400
+Inoltre
+
+00:09:39.400 --> 00:09:40.260
+non sei bloccato
+
+00:09:40.260 --> 00:09:40.840
+a riprogettare
+
+00:09:40.840 --> 00:09:41.520
+i flussi di dati
+
+00:09:41.520 --> 00:09:42.040
+tra le app
+
+00:09:42.040 --> 00:09:43.560
+o a scrivere codice personalizzato
+
+00:09:43.560 --> 00:09:44.360
+per rendere leggibili
+
+00:09:44.360 --> 00:09:45.240
+i formati strani.
+
+00:09:46.520 --> 00:09:47.340
+Il connettore
+
+00:09:47.340 --> 00:09:48.320
+porta i dati esterni
+
+00:09:48.320 --> 00:09:49.740
+nell'indice di Microsoft Graph
+
+00:09:49.740 --> 00:09:50.900
+rendendoli ricercabili
+
+00:09:50.900 --> 00:09:51.460
+e azionabili
+
+00:09:51.460 --> 00:09:52.320
+senza compromettere
+
+00:09:52.320 --> 00:09:53.600
+la tua postura di sicurezza.
+
+00:09:54.900 --> 00:09:55.160
+Quindi
+
+00:09:55.160 --> 00:09:55.700
+quando ha senso
+
+00:09:55.700 --> 00:09:56.460
+scegliere uno strumento
+
+00:09:56.460 --> 00:09:57.160
+rispetto a un altro?
+
+00:09:57.920 --> 00:09:58.320
+I plugin
+
+00:09:58.320 --> 00:09:58.840
+sono ideali
+
+00:09:58.840 --> 00:09:59.300
+quando serve
+
+00:09:59.300 --> 00:10:00.440
+un'integrazione specifica
+
+00:10:00.440 --> 00:10:01.180
+come collegarsi
+
+00:10:01.180 --> 00:10:01.960
+a un servizio critico
+
+00:10:01.960 --> 00:10:02.860
+con un'IP definita
+
+00:10:02.860 --> 00:10:03.920
+ma poco altro.
+
+00:10:05.500 --> 00:10:05.800
+Le regole
+
+00:10:05.800 --> 00:10:06.860
+per i dati personalizzati
+
+00:10:06.860 --> 00:10:07.260
+funzionano
+
+00:10:07.260 --> 00:10:07.820
+se hai esigenze
+
+00:10:07.820 --> 00:10:08.720
+altamente specializzate
+
+00:10:08.720 --> 00:10:09.040
+e il tempo
+
+00:10:09.040 --> 00:10:09.400
+per creare
+
+00:10:09.400 --> 00:10:11.180
+la tua logica di connessione.
+
+00:10:11.920 --> 00:10:12.400
+Ma quando vuoi
+
+00:10:12.400 --> 00:10:13.180
+un accesso ampio
+
+00:10:13.180 --> 00:10:13.780
+affidabile
+
+00:10:13.780 --> 00:10:14.440
+e continuo
+
+00:10:14.440 --> 00:10:15.080
+a grandi porzioni
+
+00:10:15.080 --> 00:10:15.900
+di dati aziendali
+
+00:10:15.900 --> 00:10:16.520
+specialmente
+
+00:10:16.520 --> 00:10:17.240
+da piattaforme
+
+00:10:17.240 --> 00:10:18.280
+che non hanno mai adottato
+
+00:10:18.280 --> 00:10:19.420
+le moderne API cloud
+
+00:10:19.420 --> 00:10:20.320
+i connettori Graph
+
+00:10:20.320 --> 00:10:21.240
+sono quasi sempre
+
+00:10:21.240 --> 00:10:22.520
+la soluzione.
+
+00:10:23.880 --> 00:10:24.380
+Ti permettono
+
+00:10:24.380 --> 00:10:24.880
+di collegare
+
+00:10:24.880 --> 00:10:25.620
+interi silos
+
+00:10:25.620 --> 00:10:26.680
+mantenere la sicurezza
+
+00:10:26.680 --> 00:10:27.460
+di livello enterprise
+
+00:10:27.460 --> 00:10:28.540
+e crescere con la tua azienda
+
+00:10:28.540 --> 00:10:29.320
+senza sommergere
+
+00:10:29.320 --> 00:10:30.000
+gli amministratori
+
+00:10:30.000 --> 00:10:30.420
+di script
+
+00:10:30.420 --> 00:10:31.280
+usa e getta.
+
+00:10:32.100 --> 00:10:32.420
+Tutto questo
+
+00:10:32.420 --> 00:10:33.200
+porta a una conclusione
+
+00:10:33.200 --> 00:10:33.720
+più importante.
+
+00:10:34.100 --> 00:10:34.740
+I connettori Graph
+
+00:10:34.740 --> 00:10:35.260
+non sono solo
+
+00:10:35.260 --> 00:10:36.040
+un'altra opzione di meno
+
+00:10:36.040 --> 00:10:36.540
+per Copilot.
+
+00:10:37.060 --> 00:10:37.540
+Sono un elemento
+
+00:10:37.540 --> 00:10:38.420
+che permette a Copilot
+
+00:10:38.420 --> 00:10:38.980
+di superare
+
+00:10:38.980 --> 00:10:39.960
+l'automazione generica
+
+00:10:39.960 --> 00:10:40.720
+e diventare parte
+
+00:10:40.720 --> 00:10:41.200
+integrante
+
+00:10:41.200 --> 00:10:41.700
+del tuo flusso
+
+00:10:41.700 --> 00:10:42.560
+di lavoro aziendale.
+
+00:10:43.640 --> 00:10:44.140
+Ma la prossima
+
+00:10:44.140 --> 00:10:44.620
+grande domanda
+
+00:10:44.620 --> 00:10:45.340
+che tutti si pongono
+
+00:10:45.340 --> 00:10:45.760
+è questa.
+
+00:10:46.520 --> 00:10:47.240
+Una volta configurato
+
+00:10:47.240 --> 00:10:47.740
+un connettore
+
+00:10:47.740 --> 00:10:48.460
+come viene costruito
+
+00:10:48.460 --> 00:10:49.420
+esattamente quel ponte
+
+00:10:49.420 --> 00:10:51.280
+e quali tipi di sistemi
+
+00:10:51.280 --> 00:10:51.820
+puoi portare
+
+00:10:51.820 --> 00:10:52.280
+nell'universo
+
+00:10:52.280 --> 00:10:52.860
+di Copilot?
+
+00:10:54.300 --> 00:10:55.280
+Come i connettori
+
+00:10:55.280 --> 00:10:55.600
+Graph
+
+00:10:55.600 --> 00:10:56.440
+colmano il divario
+
+00:10:56.440 --> 00:10:56.940
+dai wiki
+
+00:10:56.940 --> 00:10:57.800
+interni
+
+00:10:57.800 --> 00:10:58.380
+ai CRM
+
+00:10:58.380 --> 00:10:59.100
+obsoleti?
+
+00:10:59.100 --> 00:11:01.900
+Se ti sei mai ritrovato
+
+00:11:01.900 --> 00:11:02.760
+a fissare la schermata
+
+00:11:02.760 --> 00:11:03.180
+di login
+
+00:11:03.180 --> 00:11:04.220
+di un vecchio CRM
+
+00:11:04.220 --> 00:11:05.540
+chiedendoti se Copilot
+
+00:11:05.540 --> 00:11:06.300
+potesse aiutarti
+
+00:11:06.300 --> 00:11:06.780
+a recuperare
+
+00:11:06.780 --> 00:11:07.400
+una cronologia
+
+00:11:07.400 --> 00:11:08.340
+sepolta lì dentro
+
+00:11:08.340 --> 00:11:09.260
+non sei affatto solo.
+
+00:11:11.580 --> 00:11:12.380
+Ogni organizzazione
+
+00:11:12.380 --> 00:11:13.240
+ha sacche di informazioni
+
+00:11:13.240 --> 00:11:13.840
+che si rifiutano
+
+00:11:13.840 --> 00:11:14.300
+di sparire.
+
+00:11:14.940 --> 00:11:15.780
+Strumenti che vengono usati
+
+00:11:15.780 --> 00:11:16.500
+giusto quanto basta
+
+00:11:16.500 --> 00:11:17.340
+per giustificare il budget
+
+00:11:17.340 --> 00:11:17.940
+anche se nessuno
+
+00:11:17.940 --> 00:11:18.500
+nel reparto IT
+
+00:11:18.500 --> 00:11:19.200
+vuole occuparsene.
+
+00:11:20.200 --> 00:11:20.720
+Ed è solitamente
+
+00:11:20.720 --> 00:11:21.200
+proprio il dato
+
+00:11:21.200 --> 00:11:21.760
+in quegli angoli
+
+00:11:21.760 --> 00:11:22.280
+dimenticati
+
+00:11:22.280 --> 00:11:23.340
+a rivelarsi più importante.
+
+00:11:24.440 --> 00:11:25.440
+C'è sempre un wiki interno
+
+00:11:25.440 --> 00:11:26.320
+che nessuno vuole migrare
+
+00:11:26.320 --> 00:11:27.120
+un'unità condivisa
+
+00:11:27.120 --> 00:11:27.560
+chiamata
+
+00:11:27.560 --> 00:11:28.020
+archivio
+
+00:11:28.020 --> 00:11:28.620
+andrexofinale
+
+00:11:28.620 --> 00:11:29.360
+andrexofinale
+
+00:11:29.360 --> 00:11:30.020
+o un database
+
+00:11:30.020 --> 00:11:30.600
+di ticketing
+
+00:11:30.600 --> 00:11:31.400
+che è sopravvissuto
+
+00:11:31.400 --> 00:11:32.340
+a più riorganizzazioni
+
+00:11:32.340 --> 00:11:33.020
+del tuo CEO.
+
+00:11:34.120 --> 00:11:34.680
+Per chi ha visto
+
+00:11:34.680 --> 00:11:36.020
+ondate di annunci
+
+00:11:36.020 --> 00:11:36.400
+sull'IA
+
+00:11:36.400 --> 00:11:37.660
+facile diventare cinici?
+
+00:11:38.620 --> 00:11:39.200
+L'entusiasmo
+
+00:11:39.200 --> 00:11:39.880
+svanisce in fretta
+
+00:11:39.880 --> 00:11:40.640
+quando ti rendi conto
+
+00:11:40.640 --> 00:11:41.220
+che la maggior parte
+
+00:11:41.220 --> 00:11:42.020
+dei moderni strumenti
+
+00:11:42.020 --> 00:11:42.360
+di EA
+
+00:11:42.360 --> 00:11:43.220
+Copilot incluso
+
+00:11:43.220 --> 00:11:44.300
+non riesce a vedere nulla
+
+00:11:44.300 --> 00:11:44.780
+di tutto ciò
+
+00:11:44.780 --> 00:11:45.580
+out of the box.
+
+00:11:46.180 --> 00:11:46.500
+Il problema
+
+00:11:46.500 --> 00:11:47.060
+in cui si imbattono
+
+00:11:47.060 --> 00:11:47.540
+la maggior parte
+
+00:11:47.540 --> 00:11:47.900
+delle aziende
+
+00:11:47.900 --> 00:11:48.720
+somiglia molto a questo.
+
+00:11:49.140 --> 00:11:49.760
+La tua conoscenza
+
+00:11:49.760 --> 00:11:50.440
+aziendale critica
+
+00:11:50.440 --> 00:11:50.960
+è frammentata
+
+00:11:50.960 --> 00:11:51.760
+bloccata in sistemi
+
+00:11:51.760 --> 00:11:52.300
+legacy
+
+00:11:52.300 --> 00:11:52.960
+o piattaforme
+
+00:11:52.960 --> 00:11:53.640
+abbandonate.
+
+00:11:54.620 --> 00:11:55.000
+Non si tratta
+
+00:11:55.000 --> 00:11:55.680
+di agili app SaaS
+
+00:11:55.680 --> 00:11:55.980
+con API
+
+00:11:55.980 --> 00:11:57.000
+compatibili con Zapier.
+
+00:11:57.840 --> 00:11:58.760
+Spesso sono costruite
+
+00:11:58.760 --> 00:11:59.280
+su misura
+
+00:11:59.280 --> 00:12:00.140
+personalizzate
+
+00:12:00.140 --> 00:12:01.420
+per stranezze specifiche
+
+00:12:01.420 --> 00:12:02.080
+o semplicemente
+
+00:12:02.080 --> 00:12:02.920
+troppo complesse
+
+00:12:02.920 --> 00:12:03.820
+da aggiornare.
+
+00:12:04.780 --> 00:12:05.440
+Far passare tutti
+
+00:12:05.440 --> 00:12:06.260
+su una nuova piattaforma?
+
+00:12:06.640 --> 00:12:06.940
+Più facile
+
+00:12:06.940 --> 00:12:07.540
+ad essicca farsi.
+
+00:12:07.900 --> 00:12:08.500
+La conversazione
+
+00:12:08.500 --> 00:12:09.100
+sulla migrazione
+
+00:12:09.100 --> 00:12:10.060
+salta fuori ogni anno
+
+00:12:10.060 --> 00:12:11.180
+riceve un preventivo
+
+00:12:11.180 --> 00:12:11.860
+da un fornitore
+
+00:12:11.860 --> 00:12:12.840
+e poi viene abbandonata
+
+00:12:12.840 --> 00:12:13.640
+perché i costi
+
+00:12:13.640 --> 00:12:13.960
+i rischi
+
+00:12:13.960 --> 00:12:15.020
+e il mal di testa generale
+
+00:12:15.020 --> 00:12:16.000
+sembrano sempre peggiori
+
+00:12:16.000 --> 00:12:16.620
+del conviverci.
+
+00:12:17.640 --> 00:12:18.280
+Nel frattempo
+
+00:12:18.280 --> 00:12:18.560
+i team
+
+00:12:18.560 --> 00:12:19.460
+devono ancora rispondere
+
+00:12:19.460 --> 00:12:19.840
+a domande
+
+00:12:19.840 --> 00:12:20.420
+che risalgono
+
+00:12:20.420 --> 00:12:21.340
+a quei vecchi sistemi.
+
+00:12:22.180 --> 00:12:22.700
+Il male standard
+
+00:12:22.700 --> 00:12:23.140
+di Copilot
+
+00:12:23.140 --> 00:12:23.800
+non offre molto
+
+00:12:23.800 --> 00:12:24.220
+in quest'anno.
+
+00:12:25.020 --> 00:12:25.680
+Per progettazione
+
+00:12:25.680 --> 00:12:26.440
+rimane confinato
+
+00:12:26.440 --> 00:12:27.440
+nel giardino recintato
+
+00:12:27.440 --> 00:12:28.280
+di Microsoft 365.
+
+00:12:29.260 --> 00:12:30.100
+Chiedigli qualsiasi cosa
+
+00:12:30.100 --> 00:12:30.980
+all'interno di quel perimetro
+
+00:12:30.980 --> 00:12:31.720
+o alla tua posta in arrivo
+
+00:12:31.720 --> 00:12:32.320
+le chat di team
+
+00:12:32.320 --> 00:12:33.060
+si fa il one drive
+
+00:12:33.060 --> 00:12:33.540
+e si muoverà
+
+00:12:33.540 --> 00:12:34.980
+su un terreno solido.
+
+00:12:35.820 --> 00:12:36.320
+Ma non appena
+
+00:12:36.320 --> 00:12:36.760
+le tue domande
+
+00:12:36.760 --> 00:12:37.880
+si scontrano con contenuti
+
+00:12:37.880 --> 00:12:38.780
+in una wiki indipendente
+
+00:12:38.780 --> 00:12:39.340
+o in un database
+
+00:12:39.340 --> 00:12:40.220
+precedente o data
+
+00:12:40.220 --> 00:12:41.820
+Copilot alza le spalle.
+
+00:12:42.600 --> 00:12:43.640
+Questo lascia i reparti
+
+00:12:43.640 --> 00:12:44.780
+nella classica situazione
+
+00:12:44.780 --> 00:12:45.480
+di dover copiare
+
+00:12:45.480 --> 00:12:46.260
+i contenuti a mano
+
+00:12:46.260 --> 00:12:47.120
+sperando che qualcuno
+
+00:12:47.120 --> 00:12:48.360
+ricordi dove si trovano
+
+00:12:48.360 --> 00:12:48.800
+le cose
+
+00:12:48.800 --> 00:12:49.680
+o rassegnarsi
+
+00:12:49.680 --> 00:12:50.320
+a non sbloccare
+
+00:12:50.320 --> 00:12:50.880
+mai veramente
+
+00:12:50.880 --> 00:12:51.960
+le intuizioni sepolte
+
+00:12:51.960 --> 00:12:52.880
+in anni di conoscenza
+
+00:12:52.880 --> 00:12:54.020
+non strutturata.
+
+00:12:55.240 --> 00:12:56.060
+È qui che i Graph Connector
+
+00:12:56.060 --> 00:12:56.840
+mostrano il loro valore.
+
+00:12:57.300 --> 00:12:58.280
+L'idea non è affascinante
+
+00:12:58.280 --> 00:12:58.840
+ma è pratica.
+
+00:12:59.420 --> 00:13:00.360
+Indicizia i dati esterni
+
+00:13:00.360 --> 00:13:01.000
+lascia che Copilot
+
+00:13:01.000 --> 00:13:01.740
+li faccia emergere
+
+00:13:01.740 --> 00:13:02.340
+negli strumenti
+
+00:13:02.340 --> 00:13:03.220
+che le persone usano già.
+
+00:13:03.740 --> 00:13:04.340
+È meno simile
+
+00:13:04.340 --> 00:13:05.380
+a un aggiornamento radicale
+
+00:13:05.380 --> 00:13:06.140
+più come dare alla tua
+
+00:13:06.140 --> 00:13:06.640
+IA un pass
+
+00:13:06.640 --> 00:13:07.160
+per il backstage
+
+00:13:07.160 --> 00:13:08.420
+di tutti i segreti aziendali.
+
+00:13:09.580 --> 00:13:10.020
+Copilot
+
+00:13:10.020 --> 00:13:11.280
+con i Graph Connector attivi
+
+00:13:11.280 --> 00:13:12.260
+non si limita a osservare
+
+00:13:12.260 --> 00:13:13.060
+il contenuto pubblico
+
+00:13:13.060 --> 00:13:14.280
+di Microsoft 365.
+
+00:13:15.680 --> 00:13:16.320
+Può entrare
+
+00:13:16.320 --> 00:13:17.120
+la porta secondaria
+
+00:13:17.120 --> 00:13:17.580
+in Salesforce
+
+00:13:17.580 --> 00:13:18.260
+ServiceNow
+
+00:13:18.260 --> 00:13:19.340
+wiki di terze parti
+
+00:13:19.340 --> 00:13:20.340
+unita di rete condivise
+
+00:13:20.340 --> 00:13:21.060
+database e SQL
+
+00:13:21.060 --> 00:13:21.720
+personalizzati
+
+00:13:21.720 --> 00:13:22.680
+praticamente tutti i luoghi
+
+00:13:22.680 --> 00:13:23.300
+in cui si svolge
+
+00:13:23.300 --> 00:13:24.260
+il lavoro reale.
+
+00:13:25.620 --> 00:13:26.160
+Ecco l'analogia
+
+00:13:26.160 --> 00:13:26.640
+che di solito
+
+00:13:26.640 --> 00:13:27.220
+colpisce di più
+
+00:13:27.220 --> 00:13:28.100
+gli amministratori.
+
+00:13:28.660 --> 00:13:29.180
+Immagina di essere
+
+00:13:29.180 --> 00:13:29.760
+a un concerto.
+
+00:13:30.420 --> 00:13:31.060
+Copilot normale
+
+00:13:31.060 --> 00:13:32.020
+è bloccato tra la folla
+
+00:13:32.020 --> 00:13:32.780
+e coglie solo ciò
+
+00:13:32.780 --> 00:13:33.140
+che accade
+
+00:13:33.140 --> 00:13:34.260
+sul palco principale.
+
+00:13:35.180 --> 00:13:35.780
+Non appena aggiungi
+
+00:13:35.780 --> 00:13:36.400
+Graph Connector
+
+00:13:36.400 --> 00:13:36.760
+Copilot
+
+00:13:36.760 --> 00:13:37.340
+tira un pass
+
+00:13:37.340 --> 00:13:38.220
+per l'accesso completo.
+
+00:13:39.540 --> 00:13:39.940
+Improvvisamente
+
+00:13:39.940 --> 00:13:40.760
+nel dietro le quinte
+
+00:13:40.760 --> 00:13:41.600
+a leggere la scaletta
+
+00:13:41.600 --> 00:13:42.380
+a parlare con lo staff
+
+00:13:42.380 --> 00:13:43.440
+ascoltare la storia vera
+
+00:13:43.440 --> 00:13:44.000
+che non vedi mai
+
+00:13:44.000 --> 00:13:44.840
+dai posti a sedere.
+
+00:13:46.220 --> 00:13:46.700
+Non è magia
+
+00:13:46.700 --> 00:13:48.000
+è solo un contesto ritrovato.
+
+00:13:49.280 --> 00:13:49.580
+Le domande
+
+00:13:49.580 --> 00:13:49.900
+che prima
+
+00:13:49.900 --> 00:13:50.880
+non ottenevano risposta
+
+00:13:50.880 --> 00:13:51.500
+iniziano a tornare
+
+00:13:51.500 --> 00:13:52.020
+con dettagli
+
+00:13:52.020 --> 00:13:52.760
+che tutti credevano
+
+00:13:52.760 --> 00:13:54.000
+persi o chiusi a chiave.
+
+00:13:54.780 --> 00:13:55.420
+Facciamo qualche nome
+
+00:13:55.420 --> 00:13:56.700
+così non resta solo teoria.
+
+00:13:57.420 --> 00:13:58.080
+Microsoft fornisce
+
+00:13:58.080 --> 00:13:58.960
+connettori predefiniti
+
+00:13:58.960 --> 00:13:59.620
+per i pesi massimi
+
+00:13:59.620 --> 00:14:00.100
+del settore.
+
+00:14:00.900 --> 00:14:01.800
+Salesforce è un di questi
+
+00:14:01.800 --> 00:14:02.800
+quindi le note sui clienti
+
+00:14:02.800 --> 00:14:03.360
+che custodito
+
+00:14:03.360 --> 00:14:03.900
+per un decennio
+
+00:14:03.900 --> 00:14:04.800
+finalmente si uniscono
+
+00:14:04.800 --> 00:14:05.680
+alla conversazione.
+
+00:14:06.880 --> 00:14:07.380
+ServiceNow
+
+00:14:07.380 --> 00:14:07.900
+è un altro
+
+00:14:07.900 --> 00:14:08.960
+che permette a Copilot
+
+00:14:08.960 --> 00:14:09.760
+di trovare articoli
+
+00:14:09.760 --> 00:14:10.440
+della knowledge base
+
+00:14:10.440 --> 00:14:11.040
+che richiederebbero
+
+00:14:11.040 --> 00:14:12.080
+un agente 15 click
+
+00:14:12.080 --> 00:14:13.440
+per essere raggiunti.
+
+00:14:14.440 --> 00:14:15.020
+Ci sono connettori
+
+00:14:15.020 --> 00:14:15.620
+per MediaWiki
+
+00:14:15.620 --> 00:14:16.860
+siti SharePoint interni
+
+00:14:16.860 --> 00:14:17.640
+anche quelli su versioni
+
+00:14:17.640 --> 00:14:18.220
+più vecchie
+
+00:14:18.220 --> 00:14:19.160
+SQL Server
+
+00:14:19.160 --> 00:14:20.460
+e molti altri.
+
+00:14:21.280 --> 00:14:22.280
+Se vivi con molteplici
+
+00:14:22.280 --> 00:14:23.180
+isole di informazioni
+
+00:14:23.180 --> 00:14:23.780
+i connettori
+
+00:14:23.780 --> 00:14:25.440
+diventano ancora di salvezza
+
+00:14:25.440 --> 00:14:26.600
+che aiuta Copilot
+
+00:14:26.600 --> 00:14:27.740
+ad attraversare quei ponti
+
+00:14:27.740 --> 00:14:28.480
+senza costringere
+
+00:14:28.480 --> 00:14:29.120
+l'organizzazione
+
+00:14:29.120 --> 00:14:29.960
+a migrazioni di dati
+
+00:14:29.960 --> 00:14:30.960
+rischiose o costose
+
+00:14:30.960 --> 00:14:31.860
+o costose.
+
+00:14:33.160 --> 00:14:34.200
+E per chi gestisce
+
+00:14:34.200 --> 00:14:34.800
+questi sistemi
+
+00:14:34.800 --> 00:14:35.680
+poter mantenere le cose
+
+00:14:35.680 --> 00:14:36.300
+così come sono
+
+00:14:36.300 --> 00:14:36.960
+e vedere comunque
+
+00:14:36.960 --> 00:14:37.900
+il loro valore
+
+00:14:37.900 --> 00:14:39.100
+emergere tramite Copilot
+
+00:14:39.100 --> 00:14:40.100
+è un'enorme vittoria
+
+00:14:40.100 --> 00:14:42.800
+Di racconto una storia
+
+00:14:42.800 --> 00:14:43.540
+ho lavorato con una
+
+00:14:43.540 --> 00:14:44.360
+società finanziaria
+
+00:14:44.360 --> 00:14:45.300
+che gestiva un CRM
+
+00:14:45.300 --> 00:14:45.760
+di vendita
+
+00:14:45.760 --> 00:14:46.700
+basato su un framework
+
+00:14:46.700 --> 00:14:47.820
+.net all'avanguardia
+
+00:14:47.820 --> 00:14:48.560
+nel 2011.
+
+00:14:49.500 --> 00:14:50.160
+Nessuno va a toccare
+
+00:14:50.160 --> 00:14:50.640
+ma gli affari
+
+00:14:50.640 --> 00:14:51.180
+e le cronologie
+
+00:14:51.180 --> 00:14:51.660
+dei clienti
+
+00:14:51.660 --> 00:14:52.160
+al suo interno
+
+00:14:52.160 --> 00:14:53.100
+erano ancora fondamentali
+
+00:14:53.100 --> 00:14:54.220
+per le operazioni quotidiane.
+
+00:14:55.080 --> 00:14:55.800
+Dopo averlo collegato
+
+00:14:55.800 --> 00:14:56.760
+con un Graph Connector
+
+00:14:56.760 --> 00:14:57.240
+Copilot
+
+00:14:57.240 --> 00:14:58.060
+non solo è riuscito
+
+00:14:58.060 --> 00:14:58.540
+a riassumere
+
+00:14:58.540 --> 00:14:59.660
+il percorso di quei clienti
+
+00:14:59.660 --> 00:15:00.860
+ma ha anche potuto
+
+00:15:00.860 --> 00:15:02.020
+rispondere istantaneamente
+
+00:15:02.020 --> 00:15:02.780
+a domande del tipo
+
+00:15:02.780 --> 00:15:03.480
+chi si è occupato
+
+00:15:03.480 --> 00:15:03.860
+di questo
+
+00:15:03.860 --> 00:15:04.520
+l'ultima volta.
+
+00:15:04.520 --> 00:15:06.580
+Prima queste risposte
+
+00:15:06.580 --> 00:15:07.120
+dipendevano
+
+00:15:07.120 --> 00:15:07.860
+dalla memoria
+
+00:15:07.860 --> 00:15:08.780
+da conversazioni
+
+00:15:08.780 --> 00:15:09.480
+in corridoio
+
+00:15:09.480 --> 00:15:10.780
+o dalla ricerca
+
+00:15:10.780 --> 00:15:11.320
+in pdf
+
+00:15:11.320 --> 00:15:12.540
+sull'unità condivisa.
+
+00:15:13.720 --> 00:15:14.600
+Ora quelle risposte
+
+00:15:14.600 --> 00:15:14.960
+appaiono
+
+00:15:14.960 --> 00:15:15.920
+nella chat di Copilot
+
+00:15:15.920 --> 00:15:16.600
+insieme ai dadi
+
+00:15:16.600 --> 00:15:17.500
+estratti da fonti
+
+00:15:17.500 --> 00:15:18.060
+aggiornate.
+
+00:15:19.220 --> 00:15:20.360
+È come se Copilot
+
+00:15:20.360 --> 00:15:21.260
+avesse improvvisamente
+
+00:15:21.260 --> 00:15:21.740
+ereditato
+
+00:15:21.740 --> 00:15:22.180
+un decennio
+
+00:15:22.180 --> 00:15:23.000
+di memoria aziendale
+
+00:15:23.000 --> 00:15:23.920
+senza che nessuno
+
+00:15:23.920 --> 00:15:24.700
+dovesse affrontare
+
+00:15:24.700 --> 00:15:25.940
+una complessa migrazione.
+
+00:15:27.100 --> 00:15:27.520
+Naturalmente
+
+00:15:27.520 --> 00:15:27.960
+la sicurezza
+
+00:15:27.960 --> 00:15:28.560
+è sempre il grande
+
+00:15:28.560 --> 00:15:29.240
+punto interrogativo
+
+00:15:29.240 --> 00:15:29.700
+in questo tipo
+
+00:15:29.700 --> 00:15:30.380
+di integrazioni.
+
+00:15:30.380 --> 00:15:31.860
+La buona notizia
+
+00:15:31.860 --> 00:15:32.640
+è che i Graph Connector
+
+00:15:32.640 --> 00:15:33.340
+non sono una porta
+
+00:15:33.340 --> 00:15:33.800
+sul retro.
+
+00:15:34.500 --> 00:15:35.020
+Mantengono tutti
+
+00:15:35.020 --> 00:15:35.720
+i controlli di accesso
+
+00:15:35.720 --> 00:15:36.500
+che avete già impostato.
+
+00:15:37.020 --> 00:15:37.400
+Se qualcuno
+
+00:15:37.400 --> 00:15:37.800
+non può vedere
+
+00:15:37.800 --> 00:15:38.640
+i documenti finanziari
+
+00:15:38.640 --> 00:15:39.500
+non li vedrà in Copilot
+
+00:15:39.500 --> 00:15:40.340
+non importa quanto sia
+
+00:15:40.340 --> 00:15:41.140
+astuto il suo prompt.
+
+00:15:42.320 --> 00:15:43.180
+Il sistema rispetta
+
+00:15:43.180 --> 00:15:44.020
+tutti i permissi utenti
+
+00:15:44.020 --> 00:15:44.400
+e le policy
+
+00:15:44.400 --> 00:15:45.220
+che avete messo in atto
+
+00:15:45.220 --> 00:15:45.900
+indipendentemente
+
+00:15:45.900 --> 00:15:46.520
+dalla provenienza
+
+00:15:46.520 --> 00:15:46.900
+dei dati.
+
+00:15:48.320 --> 00:15:49.340
+E poiché l'inserimento
+
+00:15:49.340 --> 00:15:50.000
+avviene nel sicuro
+
+00:15:50.000 --> 00:15:50.720
+Microsoft Graph
+
+00:15:50.720 --> 00:15:51.580
+non state introducendo
+
+00:15:51.580 --> 00:15:52.800
+nuovi rischi per l'azienda.
+
+00:15:53.660 --> 00:15:54.320
+State semplicemente
+
+00:15:54.320 --> 00:15:55.220
+sbloccando la conoscenza
+
+00:15:55.220 --> 00:15:55.780
+in modo controllo.
+
+00:15:56.360 --> 00:15:57.000
+Ciò che ottenete
+
+00:15:57.000 --> 00:15:57.480
+è un Copilot
+
+00:15:57.480 --> 00:15:58.420
+che inizia a comportarsi
+
+00:15:58.420 --> 00:15:59.620
+molto meno come un estraneo
+
+00:15:59.620 --> 00:16:00.740
+e più come un vero veterano
+
+00:16:00.740 --> 00:16:02.060
+della vostra organizzazione.
+
+00:16:02.660 --> 00:16:03.400
+La grande differenza.
+
+00:16:03.820 --> 00:16:04.800
+Nessuna migrazione forzata.
+
+00:16:05.240 --> 00:16:05.840
+Nessuna pressione
+
+00:16:05.840 --> 00:16:06.600
+per spostare tutti
+
+00:16:06.600 --> 00:16:07.360
+sull'ultima novità
+
+00:16:07.360 --> 00:16:08.260
+solo per amore degli A.
+
+00:16:09.220 --> 00:16:10.180
+Con i Graph Connector
+
+00:16:10.180 --> 00:16:11.300
+raggiungete i vostri utenti
+
+00:16:11.300 --> 00:16:11.840
+e i vostri dati
+
+00:16:11.840 --> 00:16:13.080
+esattamente dove già lavorano.
+
+00:16:14.800 --> 00:16:16.060
+È il tipo di vantaggio pratico
+
+00:16:16.060 --> 00:16:17.180
+che rende Copilot utile
+
+00:16:17.180 --> 00:16:18.240
+in modi che le demo originali
+
+00:16:18.240 --> 00:16:19.320
+non avevano mai mostrato.
+
+00:16:20.320 --> 00:16:21.000
+Una volta che tutte
+
+00:16:21.000 --> 00:16:21.640
+quelle connessioni
+
+00:16:21.640 --> 00:16:22.340
+iniziano a fluire
+
+00:16:22.340 --> 00:16:23.360
+sorge una domanda naturale.
+
+00:16:23.480 --> 00:16:24.500
+Tutto questo ripaga davvero
+
+00:16:24.500 --> 00:16:25.240
+nel mondo reale.
+
+00:16:26.040 --> 00:16:26.600
+È qui che le cose
+
+00:16:26.600 --> 00:16:27.400
+si fanno interessanti
+
+00:16:27.400 --> 00:16:28.660
+perché l'impatto aziendale
+
+00:16:28.660 --> 00:16:29.360
+non è solo teorico
+
+00:16:29.360 --> 00:16:30.100
+una volta che Copilot
+
+00:16:30.100 --> 00:16:31.040
+vede il quadro completo.
+
+00:16:32.320 --> 00:16:33.220
+L'impatto aziendale.
+
+00:16:33.400 --> 00:16:33.980
+Un ROI reale
+
+00:16:33.980 --> 00:16:35.340
+da un Copilot più intelligente.
+
+00:16:36.520 --> 00:16:37.220
+È facile gestire
+
+00:16:37.220 --> 00:16:37.840
+un progetto IT
+
+00:16:37.840 --> 00:16:39.060
+collegare alcuni connettori
+
+00:16:39.060 --> 00:16:39.620
+e dichiarare
+
+00:16:39.620 --> 00:16:40.480
+missione compiuta
+
+00:16:40.480 --> 00:16:42.100
+ma questo sposta davvero
+
+00:16:42.100 --> 00:16:43.380
+l'ago della bilancia
+
+00:16:43.380 --> 00:16:44.280
+per chi usa Copilot
+
+00:16:44.280 --> 00:16:44.900
+ogni giorno?
+
+00:16:45.780 --> 00:16:46.460
+Abbiamo tutti visto
+
+00:16:46.460 --> 00:16:47.260
+il management proporre
+
+00:16:47.260 --> 00:16:48.420
+un nuovo progetto scintillante
+
+00:16:48.420 --> 00:16:49.300
+per poi scoprire
+
+00:16:49.300 --> 00:16:49.960
+che dopo tre mesi
+
+00:16:49.960 --> 00:16:50.540
+nessuno ha cambiato
+
+00:16:50.540 --> 00:16:51.480
+il proprio modo di lavorare.
+
+00:16:51.920 --> 00:16:52.920
+Questo è il metro di giudizio
+
+00:16:52.920 --> 00:16:53.480
+che conta per
+
+00:16:53.480 --> 00:16:54.640
+l'estensibilità di Copilot.
+
+00:16:54.640 --> 00:16:56.220
+Le persone stanno
+
+00:16:56.220 --> 00:16:57.280
+tenendo risposte migliori
+
+00:16:57.280 --> 00:16:58.000
+facendo meno lavoro
+
+00:16:58.000 --> 00:16:58.460
+di routine
+
+00:16:58.460 --> 00:16:59.900
+e lavorando più velocemente
+
+00:16:59.900 --> 00:17:00.900
+senza nemmeno pensarci.
+
+00:17:01.520 --> 00:17:02.200
+State solo spuntando
+
+00:17:02.200 --> 00:17:03.080
+una casella di conformità
+
+00:17:03.080 --> 00:17:03.960
+lasciando che lo strumento
+
+00:17:03.960 --> 00:17:04.680
+accumuli polvere?
+
+00:17:06.140 --> 00:17:06.800
+È qui che il divario
+
+00:17:06.800 --> 00:17:07.900
+tra aspettativa e realtà
+
+00:17:07.900 --> 00:17:08.900
+emerge chiaramente
+
+00:17:08.900 --> 00:17:09.680
+specialmente
+
+00:17:09.680 --> 00:17:10.560
+con gli strumenti di IA.
+
+00:17:11.620 --> 00:17:12.500
+La maggior parte
+
+00:17:12.500 --> 00:17:12.920
+dell'azienda
+
+00:17:12.920 --> 00:17:13.540
+non è interessata
+
+00:17:13.540 --> 00:17:14.360
+a un altro chatbot
+
+00:17:14.360 --> 00:17:15.160
+o una glorificata
+
+00:17:15.160 --> 00:17:15.980
+casella di ricerca.
+
+00:17:16.740 --> 00:17:17.420
+Ciò che conta davvero
+
+00:17:17.420 --> 00:17:18.300
+è estrarre le informazioni
+
+00:17:18.300 --> 00:17:19.200
+dal cervello collettivo
+
+00:17:19.200 --> 00:17:19.700
+dell'azienda
+
+00:17:19.700 --> 00:17:20.320
+e metterle
+
+00:17:20.320 --> 00:17:21.180
+nelle mani di qualcuno
+
+00:17:21.180 --> 00:17:21.400
+proprio
+
+00:17:21.400 --> 00:17:22.580
+quando ne ha bisogno.
+
+00:17:22.580 --> 00:17:24.480
+Potrebbe sembrare semplice
+
+00:17:24.480 --> 00:17:25.060
+ma la realtà è che
+
+00:17:25.060 --> 00:17:25.920
+la conoscenza tribale
+
+00:17:25.920 --> 00:17:26.540
+ovvero come le cose
+
+00:17:26.540 --> 00:17:27.340
+vengono fatte davvero
+
+00:17:27.340 --> 00:17:28.580
+vive in un bizzarro mix
+
+00:17:28.580 --> 00:17:29.120
+di formati.
+
+00:17:30.140 --> 00:17:30.780
+A volte è sepolto
+
+00:17:30.780 --> 00:17:31.600
+in una vecchia wiki
+
+00:17:31.600 --> 00:17:32.460
+di cui solo l'IT
+
+00:17:32.460 --> 00:17:33.700
+ricorda l'esistenza
+
+00:17:33.700 --> 00:17:34.660
+a volte è una nota
+
+00:17:34.660 --> 00:17:36.200
+su un'unità condivisa
+
+00:17:36.200 --> 00:17:37.400
+o una lista di controllo
+
+00:17:37.400 --> 00:17:37.980
+modificata
+
+00:17:37.980 --> 00:17:38.900
+quattro anni fa
+
+00:17:38.900 --> 00:17:39.560
+da qualcuno
+
+00:17:39.560 --> 00:17:40.420
+che ha già lasciato
+
+00:17:40.420 --> 00:17:40.940
+l'azienda.
+
+00:17:42.540 --> 00:17:43.140
+Questi frammenti
+
+00:17:43.140 --> 00:17:43.640
+di conoscenza
+
+00:17:43.640 --> 00:17:44.140
+raramente
+
+00:17:44.140 --> 00:17:44.700
+sopravvivono
+
+00:17:44.700 --> 00:17:45.960
+a riorganizzazioni aziendali
+
+00:17:45.960 --> 00:17:47.220
+audit di sicurezza
+
+00:17:47.220 --> 00:17:48.120
+o aggiornamenti software
+
+00:17:48.120 --> 00:17:49.360
+così la memoria istituzionale
+
+00:17:49.360 --> 00:17:50.600
+svanisce silenziosamente.
+
+00:17:51.900 --> 00:17:52.260
+Copilot
+
+00:17:52.260 --> 00:17:52.860
+collegato solo
+
+00:17:52.860 --> 00:17:53.900
+a Microsoft 365
+
+00:17:53.900 --> 00:17:55.160
+è sostanzialmente limitato
+
+00:17:55.160 --> 00:17:56.480
+a fornire consigli generici.
+
+00:17:57.400 --> 00:17:57.700
+Una volta
+
+00:17:57.700 --> 00:17:58.380
+che inizia a integrare
+
+00:17:58.380 --> 00:17:59.060
+quelle altre fonti
+
+00:17:59.060 --> 00:17:59.920
+con i connettori di graph
+
+00:17:59.920 --> 00:18:00.400
+avviene
+
+00:18:00.400 --> 00:18:01.720
+un vero cambiamento.
+
+00:18:02.380 --> 00:18:03.060
+Vediamo le risorse umane
+
+00:18:03.060 --> 00:18:03.340
+come se
+
+00:18:03.340 --> 00:18:04.420
+ogni organizzazione
+
+00:18:04.420 --> 00:18:05.520
+pensa che il proprio onboarding
+
+00:18:05.520 --> 00:18:06.580
+sia documentato chiaramente
+
+00:18:06.580 --> 00:18:07.400
+finché è un nuovo assunto
+
+00:18:07.400 --> 00:18:08.560
+non si presenta davvero.
+
+00:18:09.500 --> 00:18:10.340
+Il personale a car
+
+00:18:10.340 --> 00:18:11.200
+riceve le stesse domande
+
+00:18:11.200 --> 00:18:11.760
+più e più volte
+
+00:18:11.760 --> 00:18:12.760
+cercando quella vecchia lista
+
+00:18:12.760 --> 00:18:13.340
+di controllo
+
+00:18:13.340 --> 00:18:14.360
+la policy della formazione
+
+00:18:14.360 --> 00:18:15.000
+sulla conformità
+
+00:18:15.000 --> 00:18:15.760
+dell'anno scorso
+
+00:18:15.760 --> 00:18:16.700
+o la procedura
+
+00:18:16.700 --> 00:18:18.100
+per richiedere un portatile.
+
+00:18:18.980 --> 00:18:20.340
+Prima dei connettori di graph
+
+00:18:20.340 --> 00:18:21.220
+chi seguiva l'onboarding
+
+00:18:21.220 --> 00:18:22.460
+poteva ottenere solo frammenti
+
+00:18:22.460 --> 00:18:23.440
+da una cartella SharePoint
+
+00:18:23.440 --> 00:18:24.360
+o da una conversazione
+
+00:18:24.360 --> 00:18:25.240
+Teams a metà.
+
+00:18:25.880 --> 00:18:26.900
+C'erano buone probabilità
+
+00:18:26.900 --> 00:18:28.040
+che la risposta più accurata
+
+00:18:28.040 --> 00:18:28.800
+arrivasse bloccando
+
+00:18:28.800 --> 00:18:29.680
+qualcuno immensa.
+
+00:18:30.580 --> 00:18:31.620
+Ora con alcuni connettori
+
+00:18:31.620 --> 00:18:32.020
+mirati
+
+00:18:32.020 --> 00:18:32.500
+Copilot
+
+00:18:32.500 --> 00:18:33.500
+ha accesso diretto
+
+00:18:33.500 --> 00:18:33.840
+e può dire
+
+00:18:33.840 --> 00:18:34.380
+a nuovo assunto
+
+00:18:34.380 --> 00:18:35.040
+tutti i passaggi
+
+00:18:35.040 --> 00:18:35.520
+dell'onboarding
+
+00:18:35.520 --> 00:18:36.800
+esattamente come sono oggi.
+
+00:18:38.100 --> 00:18:38.920
+Anche se la procedura
+
+00:18:38.920 --> 00:18:39.700
+risiede in una vecchia
+
+00:18:39.700 --> 00:18:40.680
+wiki del 2018
+
+00:18:40.680 --> 00:18:41.820
+o in una serie di documenti
+
+00:18:41.820 --> 00:18:42.100
+Word
+
+00:18:42.100 --> 00:18:43.300
+nascosti in unità
+
+00:18:43.300 --> 00:18:44.120
+di rete condivisa.
+
+00:18:45.180 --> 00:18:45.780
+Questo non solo
+
+00:18:45.780 --> 00:18:46.880
+risparmia ore di ricerche
+
+00:18:46.880 --> 00:18:47.840
+ma libera il personale
+
+00:18:47.840 --> 00:18:48.200
+HR
+
+00:18:48.200 --> 00:18:49.660
+per lavorare su cose importanti
+
+00:18:49.660 --> 00:18:50.320
+invece di rispondere
+
+00:18:50.320 --> 00:18:50.960
+alla stessa domanda
+
+00:18:50.960 --> 00:18:52.120
+una dozzina di volte al mese.
+
+00:18:53.240 --> 00:18:53.880
+Anche l'impatto qui
+
+00:18:53.880 --> 00:18:54.320
+non è vago.
+
+00:18:55.360 --> 00:18:56.140
+Studi e lanci pilota
+
+00:18:56.140 --> 00:18:57.140
+mostrano costantemente
+
+00:18:57.140 --> 00:18:57.980
+che quando Copilot
+
+00:18:57.980 --> 00:18:58.960
+può far emergere dati
+
+00:18:58.960 --> 00:18:59.680
+tra i vari silos
+
+00:18:59.680 --> 00:19:00.380
+il tempo medio
+
+00:19:00.380 --> 00:19:00.840
+per rispondere
+
+00:19:00.840 --> 00:19:01.740
+a una domanda procedurale
+
+00:19:01.740 --> 00:19:02.880
+si riduce di oltre la metà.
+
+00:19:04.680 --> 00:19:05.420
+Ciò si traduce
+
+00:19:05.420 --> 00:19:06.820
+in meno messaggi su Teams
+
+00:19:06.820 --> 00:19:07.900
+meno tempo speso
+
+00:19:07.900 --> 00:19:09.220
+a cercare vecchie informazioni
+
+00:19:09.220 --> 00:19:10.500
+e punteggi di soddisfazione
+
+00:19:10.500 --> 00:19:10.980
+più alti
+
+00:19:10.980 --> 00:19:12.060
+da parte di chi lo utilizza.
+
+00:19:13.100 --> 00:19:14.120
+In alcune organizzazioni
+
+00:19:14.120 --> 00:19:14.760
+che hanno collegato
+
+00:19:14.760 --> 00:19:15.700
+i propri CRM
+
+00:19:15.700 --> 00:19:17.060
+e documentazioni più datati
+
+00:19:17.060 --> 00:19:18.380
+i tempi di onboarding
+
+00:19:18.380 --> 00:19:19.060
+sono migliorati
+
+00:19:19.060 --> 00:19:19.900
+fino al 30%
+
+00:19:19.900 --> 00:19:21.600
+i membri del team
+
+00:19:21.600 --> 00:19:22.700
+riferiscono di dedicare
+
+00:19:22.700 --> 00:19:23.220
+meno tempo
+
+00:19:23.220 --> 00:19:24.140
+a duplicare il lavoro
+
+00:19:24.140 --> 00:19:25.780
+o ripetere le stesse ricerche.
+
+00:19:27.680 --> 00:19:28.540
+Non si tratta di un IA
+
+00:19:28.540 --> 00:19:29.840
+che genera riassunti eleganti
+
+00:19:29.840 --> 00:19:30.840
+ma di rendere accessibili
+
+00:19:30.840 --> 00:19:31.320
+la storia
+
+00:19:31.320 --> 00:19:32.260
+e le procedure reali
+
+00:19:32.260 --> 00:19:32.960
+della tua azienda
+
+00:19:32.960 --> 00:19:34.180
+anche se il formato
+
+00:19:34.180 --> 00:19:35.520
+o la posizione
+
+00:19:35.520 --> 00:19:36.700
+non sono perfetti.
+
+00:19:36.700 --> 00:19:38.480
+molte aziende
+
+00:19:38.480 --> 00:19:39.560
+vedono il beneficio maggiore
+
+00:19:39.560 --> 00:19:40.840
+dove meno se lo aspettavano.
+
+00:19:41.640 --> 00:19:42.000
+Di solito
+
+00:19:42.000 --> 00:19:42.720
+non sono i sistemi
+
+00:19:42.720 --> 00:19:43.360
+di alto profilo
+
+00:19:43.360 --> 00:19:44.160
+a fare la differenza
+
+00:19:44.160 --> 00:19:44.940
+ma le fonti di dati
+
+00:19:44.940 --> 00:19:45.560
+dimenticate
+
+00:19:45.560 --> 00:19:46.740
+la vecchia wiki
+
+00:19:46.740 --> 00:19:47.860
+che nessuno vuole mantenere
+
+00:19:47.860 --> 00:19:48.940
+o il sistema di ticketing
+
+00:19:48.940 --> 00:19:49.780
+abbandonato anni fa
+
+00:19:49.780 --> 00:19:50.860
+dopo una fusione.
+
+00:19:51.900 --> 00:19:52.460
+Tutti ricordano
+
+00:19:52.460 --> 00:19:53.120
+la frustrazione
+
+00:19:53.120 --> 00:19:53.740
+di aver bisogno
+
+00:19:53.740 --> 00:19:54.700
+di un dettaglio oscuro
+
+00:19:54.700 --> 00:19:56.100
+risalente a 5 progetti fa
+
+00:19:56.100 --> 00:19:56.640
+e nessuno
+
+00:19:56.640 --> 00:19:57.700
+vuole passare
+
+00:19:57.700 --> 00:19:58.240
+mezza giornata
+
+00:19:58.240 --> 00:19:58.840
+a cercarlo.
+
+00:19:59.860 --> 00:20:00.340
+Quando Copilot
+
+00:20:00.340 --> 00:20:00.940
+inizia a estrarre
+
+00:20:00.940 --> 00:20:01.820
+quei dettagli su richiesta
+
+00:20:01.820 --> 00:20:02.700
+e il vantaggio competitivo
+
+00:20:02.700 --> 00:20:03.540
+rispetto ai concorrenti
+
+00:20:03.540 --> 00:20:04.200
+improvvisamente
+
+00:20:04.200 --> 00:20:06.340
+c'è un valore enorme
+
+00:20:06.340 --> 00:20:06.940
+nel rendere
+
+00:20:06.940 --> 00:20:07.880
+ogni parte
+
+00:20:07.880 --> 00:20:08.980
+della conoscenza aziendale
+
+00:20:08.980 --> 00:20:09.540
+disponibile
+
+00:20:09.540 --> 00:20:10.500
+istantaneamente
+
+00:20:10.500 --> 00:20:11.700
+non solo ciò che è salvato
+
+00:20:11.700 --> 00:20:12.580
+nell'ultima app.
+
+00:20:13.540 --> 00:20:14.540
+È il tipo di capacità
+
+00:20:14.540 --> 00:20:15.640
+che permette ai team
+
+00:20:15.640 --> 00:20:17.420
+di decidere più velocemente
+
+00:20:17.420 --> 00:20:19.960
+evitare di reinventare
+
+00:20:19.960 --> 00:20:20.400
+la ruota
+
+00:20:20.400 --> 00:20:21.240
+e sfruttare
+
+00:20:21.240 --> 00:20:22.920
+anni di esperienza accumulata.
+
+00:20:24.060 --> 00:20:25.200
+C'è un ulteriore vantaggio
+
+00:20:25.200 --> 00:20:26.360
+man mano che la conoscenza
+
+00:20:26.360 --> 00:20:27.520
+di Copilot si espande
+
+00:20:27.520 --> 00:20:28.920
+i team si sentono più sicuri
+
+00:20:28.920 --> 00:20:29.440
+nel decidere
+
+00:20:29.440 --> 00:20:30.260
+perché le risposte
+
+00:20:30.260 --> 00:20:31.800
+arrivano con il contesto giusto
+
+00:20:31.800 --> 00:20:33.640
+se durante una riunione
+
+00:20:33.640 --> 00:20:34.280
+sorge una domanda
+
+00:20:34.280 --> 00:20:35.080
+su un vecchio prodotto
+
+00:20:35.080 --> 00:20:35.700
+non devi tirare
+
+00:20:35.700 --> 00:20:36.340
+a indovinare
+
+00:20:36.340 --> 00:20:37.280
+o promettere di aggiornarti
+
+00:20:37.280 --> 00:20:37.780
+in seguito
+
+00:20:37.780 --> 00:20:39.660
+Copilot recupera immediatamente
+
+00:20:39.660 --> 00:20:40.720
+il riepilogo delle vendite
+
+00:20:40.720 --> 00:20:42.040
+allega la cronologia tecnica
+
+00:20:42.040 --> 00:20:43.140
+e indica chi ci ha lavorato
+
+00:20:43.140 --> 00:20:43.660
+per ultimo
+
+00:20:43.660 --> 00:20:46.840
+quel livello di richiamo immediato
+
+00:20:46.840 --> 00:20:47.420
+non è possibile
+
+00:20:47.420 --> 00:20:48.200
+quando le informazioni
+
+00:20:48.200 --> 00:20:48.940
+sono intrappolate
+
+00:20:48.940 --> 00:20:49.960
+in mezza dozzina
+
+00:20:49.960 --> 00:20:51.000
+di sistemi disconnessi
+
+00:20:51.000 --> 00:20:51.400
+tra loro
+
+00:20:51.400 --> 00:20:53.380
+la parte migliore
+
+00:20:53.380 --> 00:20:54.160
+è che questi risultati
+
+00:20:54.160 --> 00:20:54.640
+non richiedano
+
+00:20:54.640 --> 00:20:55.340
+una revisione totale
+
+00:20:55.340 --> 00:20:56.380
+del vostro stack tecnologico
+
+00:20:56.380 --> 00:20:57.800
+non state chiedendo ai reparti
+
+00:20:57.800 --> 00:20:58.380
+di abbandonare
+
+00:20:58.380 --> 00:20:58.900
+gli strumenti
+
+00:20:58.900 --> 00:20:59.700
+su cui fanno affidamento
+
+00:20:59.700 --> 00:21:00.360
+ogni giorno
+
+00:21:00.360 --> 00:21:02.100
+state invece rendendo
+
+00:21:02.100 --> 00:21:02.860
+la somma dell'esperienza
+
+00:21:02.860 --> 00:21:03.720
+aziendale disponibile
+
+00:21:03.720 --> 00:21:04.580
+ovunque i dipendenti
+
+00:21:04.580 --> 00:21:05.280
+lavorino già
+
+00:21:05.280 --> 00:21:06.700
+ciò che si ottiene
+
+00:21:06.700 --> 00:21:07.380
+va ben oltre
+
+00:21:07.380 --> 00:21:08.220
+un semplice bot
+
+00:21:08.220 --> 00:21:08.720
+utile
+
+00:21:08.720 --> 00:21:09.960
+quando Copilot
+
+00:21:09.960 --> 00:21:10.620
+conosce davvero
+
+00:21:10.620 --> 00:21:11.300
+la vostra attività
+
+00:21:11.300 --> 00:21:12.740
+grazie a tutti questi connettori
+
+00:21:12.740 --> 00:21:13.880
+diventa più acuto
+
+00:21:13.880 --> 00:21:14.460
+più veloce
+
+00:21:14.460 --> 00:21:15.380
+capace di agire
+
+00:21:15.380 --> 00:21:16.420
+come un vero consulente
+
+00:21:16.420 --> 00:21:16.980
+aziendale
+
+00:21:16.980 --> 00:21:17.580
+all'interno di
+
+00:21:17.580 --> 00:21:18.840
+Microsoft 365
+
+00:21:18.840 --> 00:21:20.480
+il classico
+
+00:21:20.480 --> 00:21:21.440
+è solo un altro progetto IT

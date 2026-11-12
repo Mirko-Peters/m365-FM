@@ -1,0 +1,979 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:03.060
+Welkom bij Microsoft Knowledge Nubbets. Ik ben Mo Peters.
+
+00:00:03.300 --> 00:00:05.660
+Het onderwerp van vandaag zorgt vaak voor verwarring.
+
+00:00:05.920 --> 00:00:13.060
+Wat is Dataverse nu precies? Is het een database, een app of een verborgen Dynamics 365 dienst die alleen IT-ers moeten begrijpen?
+
+00:00:13.220 --> 00:00:19.220
+Hier is de simpelste definitie. Dataverse is de gedeelde gegevensfundering achter veel Dynamics 365 ervaringen.
+
+00:00:19.420 --> 00:00:21.980
+Zie Dynamics 365 als een kantoorpand.
+
+00:00:22.200 --> 00:00:28.960
+Sales, klantenservice en andere apps zijn de kamers waar mensen werken, terwijl Dataverse het archiefsysteem en de regels achter de muren is.
+
+00:00:28.960 --> 00:00:36.140
+Aan het eind van deze aflevering weet je waar Dynamics gegevens wonen en hoe één klantupdate kan verschijnen in saleswerk, automatisering en rapportages.
+
+00:00:36.380 --> 00:00:40.000
+Maar voordat we in productnamen duiken, beginnen we bij de zakelijke puinhoop.
+
+00:00:40.080 --> 00:00:41.800
+Dit lost één gedeelde plek op.
+
+00:00:42.740 --> 00:00:47.840
+Stel je in plaats van losse kopieën een bedrijf voor met een sales team, een support team en een financieel team.
+
+00:00:48.100 --> 00:00:50.140
+Sales houdt klantgegevens bij in een spreadsheet.
+
+00:00:50.520 --> 00:00:52.600
+Support werkt in een aparte tool voor klantvragen.
+
+00:00:52.860 --> 00:00:55.120
+Finance heeft klantnamen in zijn eigen systeem staan.
+
+00:00:55.120 --> 00:01:00.780
+Iemand anders slaat email threads op in een gedeelde mailbox, terwijl weer een ander noties is bewaard in een map die niemand anders kan vinden.
+
+00:01:00.980 --> 00:01:02.880
+Dezelfde klant bestaat nu op vijf plekken.
+
+00:01:03.080 --> 00:01:07.000
+Die opzet voelt in het begin normaal, omdat elk team alleen het stukje werk voor hun neus ziet.
+
+00:01:07.180 --> 00:01:08.060
+Maar hier is het punt.
+
+00:01:08.320 --> 00:01:12.760
+Zodra een klant het telefoonnummer, adres, bedrijfsnaam of hoofdcontactpersoon wijzigt, beginnen de problemen.
+
+00:01:12.960 --> 00:01:14.300
+Sales werkt de spreadsheet bij.
+
+00:01:14.520 --> 00:01:15.420
+Support ziet dit niet.
+
+00:01:15.640 --> 00:01:17.980
+Finance stuurt documenten nog steeds naar het oude adres.
+
+00:01:18.240 --> 00:01:24.320
+Dan exporteert iemand een lijst, maakt deze handmatig schoon, mailt deze rond en plotseling geloven drie mensen dat hun kopie de juiste is.
+
+00:01:24.320 --> 00:01:25.780
+Welke lijst moet je vertrouwen?
+
+00:01:25.960 --> 00:01:27.660
+Die vraag kost meer tijd dan je zou denken.
+
+00:01:27.920 --> 00:01:30.020
+Medewerkers stoppen met hun werk om gegevens te vergelijken.
+
+00:01:30.220 --> 00:01:33.000
+Managers vragen zich af waarom een rapport niet overeenkomt met het salesysteem.
+
+00:01:33.140 --> 00:01:37.520
+Een supportmedewerker opent een ticket voor een klant van wie de gegevens al ergens anders staan, alleen net even anders.
+
+00:01:37.780 --> 00:01:39.300
+Niemand probeert er een puinhoop van te maken.
+
+00:01:39.540 --> 00:01:40.980
+De puinhoop ontstaat door kopieën.
+
+00:01:41.080 --> 00:01:46.120
+Twintig jaar geleden betekenden aparte systemen aparte servers, aparte databases en aparte teams die hun eigen informatie bijhielden.
+
+00:01:46.280 --> 00:01:49.900
+Het koppelen ervan vergt de maatwerk, geplande imports en veel handmatige controle.
+
+00:01:49.900 --> 00:01:54.120
+Een wijziging op de ene plek bereikte een ander systeem misschien morgen, volgende week of nooit.
+
+00:01:54.320 --> 00:01:57.500
+Dataverse geeft bedrijfsapps een gedeelde plek voor dit soort informatie.
+
+00:01:57.700 --> 00:02:02.340
+In gewone taal, Dataverse is Microsoft's Cloud Data platform voor bedrijfsinformatie.
+
+00:02:02.540 --> 00:02:10.460
+Het slaat die informatie op in gestructureerde tabellen, zodat de data een duidelijke vorm heeft in plaats van als losse notices, bestanden en onsamenhangende spreadsheet tabbladen te bestaan.
+
+00:02:10.600 --> 00:02:15.380
+Je kunt het zien als het archief van het bedrijf, maar dan één waar meerdere goedgekeurde tools tegelijkertijd gebruik van kunnen maken.
+
+00:02:15.380 --> 00:02:17.460
+Een klant komt één keer voor in Dataverse.
+
+00:02:17.700 --> 00:02:21.940
+Die klant kan opduiken in Dynamics 365 sales wanneer een verkoper aan een deal werkt.
+
+00:02:21.940 --> 00:02:27.820
+Dezelfde klantgegevens kunnen verschijnen in Dynamics 365 Customer Service wanneer een medewerker een ondersteuningsverzoek afhandelt.
+
+00:02:27.980 --> 00:02:34.420
+Een power-app kan dezelfde klantinformatie gebruiken voor een buitendienstmedewerker of accountmanager, zonder dat iemand de gegevens eerst naar een nieuwe app hoeft te kopiëren.
+
+00:02:34.580 --> 00:02:36.680
+Eén klanttrei, één gedeeld referentiepunt.
+
+00:02:36.920 --> 00:02:39.340
+Dit betekent niet dat elk team plotseling alles kan zien.
+
+00:02:39.520 --> 00:02:42.160
+Toegang heeft nog steeds regels nodig, en daar komen we zo op terug.
+
+00:02:42.160 --> 00:02:47.620
+Het betekent dat goedgekeurde apps kunnen werken met dezelfde bedrijfsinformatie in plaats van hun eigen concurrerende versie daarvan te bouwen.
+
+00:02:47.760 --> 00:02:51.320
+Dit is waarom Dynamics 365 en Dataverse zo natuurlijk op elkaar aansluiten.
+
+00:02:51.560 --> 00:02:56.560
+Dynamics 365 apps zoals Sales en Customer Service gebruiken Dataverse om de gegevens waarmee ze werken op te slaan en te beveiligen.
+
+00:02:56.720 --> 00:02:57.600
+Maar hier is het punt.
+
+00:02:57.840 --> 00:03:04.240
+Wanneer iemand praat over het integreren van Dynamics 365 met Dataverse, denken ze vaak aan twee aparte producten waar een koppeling tussen nodig is.
+
+00:03:04.420 --> 00:03:07.220
+Voor veel Dynamics 365 apps is dat niet het geval.
+
+00:03:07.400 --> 00:03:09.300
+De gegevens bevinden zich al in Dataverse.
+
+00:03:09.300 --> 00:03:15.920
+Je haalt geen klantenlijst uit Dynamics 365 om deze naar een andere database te kopiëren in de hoop dat beide kanten actueel blijven.
+
+00:03:16.060 --> 00:03:21.560
+Je kunt voortbouwen op hetzelfde fundament met gebruik van dezelfde bedrijfsinformatie die Dynamics 365 al gebruikt.
+
+00:03:21.760 --> 00:03:22.900
+Dat verandert het gesprek.
+
+00:03:23.080 --> 00:03:31.240
+In plaats van de vraag, hoe synchroniseren we deze twee klantenlijsten, kun je vragen welke mensen en apps moeten met dit klantrecord werken en wat mag ieder van hen doen.
+
+00:03:31.480 --> 00:03:34.720
+Nu is het zo dat Dataverse niet elk systeem van een bedrijf vervangt.
+
+00:03:34.720 --> 00:03:41.980
+Een bedrijf kan nog steeds financiële software, sectorale tools, magazijnssystemen, websites of oudere applicaties gebruiken die hun eigen data bevatten.
+
+00:03:42.340 --> 00:03:46.220
+Dataverse is geen tovermiddel dat elk extern systeem van de ene op de andere dag verwijderd.
+
+00:03:46.380 --> 00:03:50.620
+Wat het je biedt, is een centrale plek voor de bedrijfsgegevens die verbonden apps moeten delen.
+
+00:03:51.340 --> 00:03:55.000
+Klantgegevens, verkoopwerk, ondersteuningswerk, taken en follow-ups.
+
+00:03:55.000 --> 00:03:59.120
+Die records kunnen samenleven met één bron die goedgekeurde tools kunnen lezen en bijwerken.
+
+00:03:59.320 --> 00:04:01.120
+Dus, open dat archief samen met mij.
+
+00:04:01.360 --> 00:04:08.960
+Zodra je ziet hoe Dataverse de informatie organiseert, wordt de hele Dynamics 365 connectie veel gemakkelijker te begrijpen.
+
+00:04:09.180 --> 00:04:11.840
+De archieftabellen, rijen, kolommen en relaties.
+
+00:04:12.120 --> 00:04:13.480
+Laten we dat archief openen.
+
+00:04:13.680 --> 00:04:15.760
+Binnen Dataverse staat informatie en tabellen.
+
+00:04:16.040 --> 00:04:18.460
+Denk erover als een echte archiefkast met aparte lades.
+
+00:04:18.700 --> 00:04:22.720
+Eén lade bevat bedrijven, een andere bevat personen en een derde bevat ondersteuningsverzoeken.
+
+00:04:22.720 --> 00:04:26.680
+Je gooit niet elk papiertje in één enorme laden in de hoop dat iemand het later kan uitzoeken.
+
+00:04:26.840 --> 00:04:28.040
+Elke lade heeft een taak.
+
+00:04:28.180 --> 00:04:30.880
+In Dataverse bevat een tabel dus één type bedrijfsinformatie.
+
+00:04:31.040 --> 00:04:33.280
+Een account-tabel bevat meestal bedrijven waar u mee werkt.
+
+00:04:33.420 --> 00:04:35.760
+Een contact-persoon-tabel bevat individuele personen.
+
+00:04:35.880 --> 00:04:38.980
+Een lead-tabel bevat potentiële klanten voordat ze echte klanten worden.
+
+00:04:39.140 --> 00:04:45.700
+Een casu-stabel bevat ondersteuningsverzoeken, terwijl een activiteiten-tabel werkt zoals telefoontjes, e-mails, afspraken en taken bijhoudt.
+
+00:04:45.820 --> 00:04:46.920
+Dat zijn standaard-tabellen.
+
+00:04:47.160 --> 00:04:51.700
+Microsoft levert deze mee omdat de meeste bedrijven klanten, mensen, werk en gesprekken moeten bijhouden.
+
+00:04:51.700 --> 00:04:55.880
+U hoeft niet opnieuw het wiel uit te vinden voor iets algemeens als een standaard-tabel al aan uw behoefte voldoet.
+
+00:04:56.040 --> 00:04:58.420
+Maar elk bedrijf heeft ook zijn eigen specifieke werkzaamheden.
+
+00:04:58.580 --> 00:05:01.340
+Een trainingsbedrijf moet misschien cursussen en certificaten bijhouden.
+
+00:05:01.500 --> 00:05:04.600
+Een vastgoedbedrijf heeft misschien gebouwen, eenheden en inspecties nodig.
+
+00:05:04.780 --> 00:05:07.780
+Een fabrikant houdt wellicht apparatuurcontroles of servicebezoeken bij.
+
+00:05:07.940 --> 00:05:12.120
+In die gevallen kunt u aangepaste tabellen maken die aansluiten bij het werk dat uw bedrijf daadwerkelijk doet.
+
+00:05:12.340 --> 00:05:16.560
+Zie een aangepaste tabel als het toevoegen van een nieuwe laden aan de kast en deze vervolgens een duidelijk label geven.
+
+00:05:16.560 --> 00:05:20.140
+Elke tabel bevat nu rijen. Een rij is één item in die laden.
+
+00:05:20.300 --> 00:05:25.480
+Een rij in de contacttabel zou bijvoorbeeld Maria Gomez kunnen vertegenwoordigen, een persoon bij een klantbedrijf.
+
+00:05:25.560 --> 00:05:29.460
+Haar rij bevat haar eigen gegevens, gescheiden van elke andere contactpersoon in het systeem.
+
+00:05:29.600 --> 00:05:32.380
+Kolommen beschrijven de details die u voor elke rij wilt bewaren.
+
+00:05:32.500 --> 00:05:39.260
+De contactrij van Maria kan kolommen hebben voor haar voornaam, achternaam, e-mailadres, telefoonnummer, functietitel, bedrijf, record-eigenaar en status.
+
+00:05:39.540 --> 00:05:42.340
+Een kolom bepaalt het type informatie dat op die plek thuis hoort.
+
+00:05:42.340 --> 00:05:47.000
+Een e-mailkolom verwacht dus een e-mailadres en een statuskolom kan de goedgekeurde statuskeuzes bevatten.
+
+00:05:47.200 --> 00:05:49.700
+Zo krijgt bedrijfsinformatie een betrouwbare vorm.
+
+00:05:49.940 --> 00:05:57.080
+Zonder kolommen typte een telefoonnummer in een notitievak, voegt een andere toe aan een naamveld en voert iemand anders het misschien helemaal niet in.
+
+00:05:57.260 --> 00:06:01.500
+Met een duidelijke contacttabel werkt iedereen met dezelfde set details op dezelfde plekken.
+
+00:06:01.660 --> 00:06:03.940
+Die structuur helpt apps ook om de gegevens te begrijpen.
+
+00:06:04.120 --> 00:06:10.000
+Een formulier kan de juiste vakjes tonen, een rapport kan contactpersonen groeperen op status en een automatisering kan reageren wanneer een eigenaar wijzigt.
+
+00:06:10.000 --> 00:06:12.260
+De informatie wordt niet zomaar ergens opgeslagen.
+
+00:06:12.460 --> 00:06:15.560
+Het heeft labels die aan gekoppelde tools vertellen wat elk onderdeel betekent.
+
+00:06:15.740 --> 00:06:18.740
+Begin met de standaardtabellen wanneer deze aansluiten bij uw zakelijke behoefte.
+
+00:06:18.920 --> 00:06:23.580
+Als u aan bedrijven verkoopt, beschrijven accounts en contactpersonen al een patroon dat de meeste mensen begrijpen.
+
+00:06:23.760 --> 00:06:26.780
+Als u klant ondersteuning biedt, geven casussen u een startpunt.
+
+00:06:26.980 --> 00:06:31.660
+Voeg dan alleen aangepaste tabellen toe als uw bedrijf informatie heeft die niet in de ingebouwde patronen past.
+
+00:06:31.900 --> 00:06:36.580
+Dit voorkomt een veelvoorkomend probleem, het maken van vijf verschillende tabellen die allemaal klant betekenen.
+
+00:06:36.580 --> 00:06:41.420
+Het ene team noemt het cliënt, het andere klantoverzicht en een derde partner contact EU.
+
+00:06:41.600 --> 00:06:44.220
+Al snel weten mensen niet meer welke tabel ze moeten gebruiken.
+
+00:06:44.460 --> 00:06:49.680
+Duidelijke standaardtabellen en zorgvuldig benoemde aangepaste tabellen houden het systeem begrijpelijk naarmate meer mensen eraan bouwen.
+
+00:06:49.840 --> 00:06:52.500
+Het volgende onderdeel is waar die lades met elkaar gaan samenwerken.
+
+00:06:52.660 --> 00:06:54.320
+Een contactpersoon hoort bij een account.
+
+00:06:54.600 --> 00:06:56.240
+Maria werkt voor Contoso Looted.
+
+00:06:56.440 --> 00:07:01.040
+In plaats van het adres, het hoofdtelefoonnummer en de bedrijfsgegevens van Contoso opnieuw in de rij van Maria te typen,
+
+00:07:01.180 --> 00:07:03.840
+kan Dataverse een relatie leggen tussen de contacttabel en de accounttabel.
+
+00:07:03.840 --> 00:07:08.140
+Maria is gekoppeld aan Contoso en die link is belangrijk omdat bedrijfsinformatie bij het bedrijf blijft.
+
+00:07:08.280 --> 00:07:11.540
+Als Contoso van kantooradres verandert, werkt iemand de accountreis slecht één keer bij.
+
+00:07:11.720 --> 00:07:16.120
+Elke gerelateerde contactpersoon kan nog steeds naar hetzelfde bedrijf verwijzen zonder een eigen verouderde kopie te bewaren.
+
+00:07:16.260 --> 00:07:19.400
+Relaties verbinden ook een support ticket met de klant die het heeft ingediend.
+
+00:07:19.640 --> 00:07:24.180
+Ze kunnen een verkoopkans verbinden met de gesprekken, e-mails, vergaderingen en taken rondom die deal.
+
+00:07:24.420 --> 00:07:30.880
+Wanneer een verkoper een verkoopkans opent, kunnen ze de bijbehorende activiteiten zien in plaats van te zoeken in irrelevante notices en agenda's.
+
+00:07:30.880 --> 00:07:34.240
+De informatie heeft context. Je kijkt niet alleen naar een ticketnummer.
+
+00:07:34.440 --> 00:07:38.460
+Oh, je kunt zien bij welke klant het hoort. Je bekijkt niet alleen een contactpersoon.
+
+00:07:38.660 --> 00:07:40.880
+Je kunt het bedrijf zien dat aan die persoon is gekoppeld.
+
+00:07:41.080 --> 00:07:45.540
+Die koppelingen houden de gegevens bruikbaar zonder dat je steeds dezelfde feiten op meerdere plekken hoeft te typen.
+
+00:07:45.680 --> 00:07:49.520
+Een kleine opmerking over de naamgeving voordat je oudere handleidingen leest of video's bekijkt.
+
+00:07:49.680 --> 00:07:52.020
+Je hoort wellicht de termen entiteit, veld en record.
+
+00:07:52.280 --> 00:07:54.000
+Dat zijn oudere dataverse termen.
+
+00:07:54.240 --> 00:07:58.900
+Microsoft gebruikt nu tabel in plaats van entiteit, kolom in plaats van veld en rij in plaats van record.
+
+00:07:58.900 --> 00:08:00.740
+De betekenis is niet veranderd.
+
+00:08:00.840 --> 00:08:05.560
+Oh, een oudere handleiding die zegt dat je een entiteit moet maken, bedoelt het maken van een tabel.
+
+00:08:05.760 --> 00:08:08.060
+Een veld is een kolom en een record is een rij.
+
+00:08:08.320 --> 00:08:11.940
+Beide sets woorden kennen voorkomt dat je denkt dat je een ander product hebt gevonden.
+
+00:08:12.160 --> 00:08:15.300
+Tabellen organiseren dus de informatie en de relaties die zijn verbonden.
+
+00:08:15.520 --> 00:08:18.060
+Maar een goed georganiseerde kast heeft ook controle nodig.
+
+00:08:18.300 --> 00:08:21.940
+Iemand moet beslissen wat mensen kunnen invoeren, wijzigen en veilig kunnen inzien.
+
+00:08:22.120 --> 00:08:24.280
+De regels en de receptie achter de gegevens.
+
+00:08:24.500 --> 00:08:27.420
+Gedeelde gegevens werken alleen als de juiste mensen er veilig mee kunnen werken.
+
+00:08:27.420 --> 00:08:29.180
+Een verkoper heeft klantgegevens nodig.
+
+00:08:29.360 --> 00:08:31.220
+Een supportmedewerker heeft een ticketgeschiedenis nodig.
+
+00:08:31.400 --> 00:08:33.020
+Een manager heeft een breder overzicht nodig.
+
+00:08:33.200 --> 00:08:36.240
+En een externe partner heeft misschien alleen toegang nodig tot een klein deel van het proces.
+
+00:08:36.460 --> 00:08:38.580
+Ze zouden niet allemaal dezelfde informatie moeten zien.
+
+00:08:38.820 --> 00:08:43.340
+Denk aan een klantrecord met een privénoticie, een onderhandelde prijs en een openstaand supportticket.
+
+00:08:43.520 --> 00:08:46.640
+Elke gebruiker volledige toegang geven, brengt snel risico's met zich mee.
+
+00:08:46.840 --> 00:08:50.040
+Iedereen zo streng beperken dat ze hun werk niet kunnen doen, creëert een ander probleem.
+
+00:08:50.320 --> 00:08:52.180
+Dataverse bied je hiervoor de nodige controles.
+
+00:08:52.180 --> 00:08:54.260
+De eerste controle begint bij identiteit.
+
+00:08:54.460 --> 00:08:58.220
+Wanneer je inlogt met je bedrijfsaccount, identificeert Microsoft EntraID je.
+
+00:08:58.420 --> 00:09:01.160
+Zie EntraID als de receptie bij de ingang van het kantoor.
+
+00:09:01.320 --> 00:09:05.160
+Je komt aan, toont je badge en de receptionist controleert wie je bent voordat je naar binnen mag.
+
+00:09:05.560 --> 00:09:08.920
+Dataverse gebruikt die identiteit om te weten welke gebruiker met de gegevens werkt.
+
+00:09:09.060 --> 00:09:11.560
+Het stopt niet bij de vraag of deze persoon naar binnen mag.
+
+00:09:11.720 --> 00:09:14.440
+Het vraagt ook wat deze persoon mag doen nadat hij binnen is.
+
+00:09:14.680 --> 00:09:16.640
+Daar komen beveiligingsrollen om de hoek kijken.
+
+00:09:16.860 --> 00:09:20.180
+Een beveiligingsrol is een set machtigingen gekoppeld aan een functie of verantwoordelijkheid.
+
+00:09:20.180 --> 00:09:25.480
+Je kunt één rol maken voor verkoopmedewerkers, een andere voor klantenservice medewerkers en weer een andere voor managers.
+
+00:09:25.700 --> 00:09:27.680
+Elke rol kan de toegang tot een tabel beheren.
+
+00:09:27.820 --> 00:09:32.540
+Een verkoper mag bijvoorbeeld accounts, contactpersonen, leads en verkoopkansen lezen, aanmaken en bijwerken.
+
+00:09:32.740 --> 00:09:35.700
+Mogelijk mag deze persoon geen belangrijke klantinformatie verwijderen.
+
+00:09:35.840 --> 00:09:39.660
+Een supportmedewerker mag cases aanmaken en bijwerken, maar geen verkoopkansen wijzigen.
+
+00:09:39.840 --> 00:09:43.500
+De machtigingen kunnen betrekking hebben op het lezen, aanmaken, wijzigen en verwijderen van rijen.
+
+00:09:43.680 --> 00:09:47.420
+Dit betekent dat toegang niet afhangt van het onthouden van welke knoppen in elke app moeten worden verborgen.
+
+00:09:47.420 --> 00:09:52.760
+De machtigingen liggen bij de gegevens zelf, dus dezelfde kaders gelden overal waar die dataverse gegevens verschijnen.
+
+00:09:52.920 --> 00:09:54.880
+Vervolgens kun je de toegang nog verder inperken.
+
+00:09:55.420 --> 00:09:58.520
+Rijbeveiliging bepaalt met welke individuele rijen een persoon kan werken.
+
+00:09:58.700 --> 00:10:04.100
+Een verkoper ziet misschien alleen de klanten die van hem zijn, terwijl een salesmanager de klantrijen van het hele team kan zien.
+
+00:10:04.360 --> 00:10:06.140
+Beiden gebruiken dezelfde accounttabel.
+
+00:10:06.400 --> 00:10:08.120
+Ze zien alleen niet hetzelfde deel ervan.
+
+00:10:08.340 --> 00:10:12.340
+Die opzet helpt mensen zich op hun eigen werk te concentreren, terwijl managers het nodige overzicht houden.
+
+00:10:12.340 --> 00:10:16.520
+Het verkleint ook de kans dat iemand informatie opent over een klant die ze niet hoeven in te zien.
+
+00:10:16.760 --> 00:10:19.160
+Sommige informatie heeft nog strengere bescherming nodig.
+
+00:10:19.780 --> 00:10:22.640
+Kolombeveiliging kan individuele kolommen in een tabel beschermen.
+
+00:10:22.800 --> 00:10:28.740
+Misschien mag een gebruiker een klantrij openen, maar geen persoonsgegevens, salaris, bankgegevens of privénotices zien.
+
+00:10:28.920 --> 00:10:31.460
+De klantrij blijft beschikbaar voor het werk dat ze moeten doen.
+
+00:10:31.700 --> 00:10:33.860
+De beveiligde kolom blijft beperkt toegankelijk.
+
+00:10:34.120 --> 00:10:38.180
+Voor grotere bedrijven kunnen bedrijfseenheden grenzen creëren tussen organisatieonderdelen.
+
+00:10:38.180 --> 00:10:42.880
+Een bedrijf kan regio's, divisies of dochterondernemingen scheiden die met verschillende klantgroepen werken.
+
+00:10:43.400 --> 00:10:46.160
+Bedrijfseenheden helpen vorm te geven hoe toegang over die grenzen heen werkt.
+
+00:10:46.340 --> 00:10:49.180
+Dit betekent niet dat elk bedrijf een ingewikkeld beveiligingsplan nodig heeft.
+
+00:10:49.340 --> 00:10:51.720
+Een klein team heeft misschien slechts een paar duidelijke rollen nodig.
+
+00:10:51.900 --> 00:10:55.900
+Een groter bedrijf heeft wellicht meer lagen nodig omdat teams, regio's en verantwoordelijkheden verschillen.
+
+00:10:56.020 --> 00:10:59.420
+Het punt is dat dataverse de toegang kan afstemmen op hoe het bedrijf daadwerkelijk werkt.
+
+00:10:59.680 --> 00:11:04.020
+Toegangsbeheer beschermt wie bij de gegevens kan, maar regels beschermen ook de kwaliteit van de gegevens zelf.
+
+00:11:04.020 --> 00:11:08.120
+Een bedrijfsregel kan vereisen dat iemand een telefoonnummer invoert voordat een nieuw contact wordt opgeslagen.
+
+00:11:08.300 --> 00:11:11.820
+Het kan een voorwaarde controleren, zoals het vereisen van een reden wanneer een case wordt gesloten.
+
+00:11:12.000 --> 00:11:15.200
+Het kan ook veranderen wat gebruikers zien op basis van de informatie die zij invoeren.
+
+00:11:15.460 --> 00:11:18.180
+Dezelfde regel is van toepassing op alle apps die die tabel gebruiken.
+
+00:11:18.360 --> 00:11:22.540
+Dit is belangrijk, want u wilt niet dat de ene app onvolledige gegevens accepteert terwijl een andere app ze weigert.
+
+00:11:22.720 --> 00:11:26.420
+De regel hoort bij de bedrijfsinformatie, niet bij één scherm dat deze toevallig weergeeft.
+
+00:11:26.820 --> 00:11:30.860
+Dataverse kan ook logica op de achtergrond uitvoeren om bedrijfsprocessen consistent te houden.
+
+00:11:30.860 --> 00:11:33.120
+Het detail dat u moet onthouden is eenvoudig.
+
+00:11:33.120 --> 00:11:36.080
+De gegevens komen met regels, niet alleen met opslag.
+
+00:11:36.260 --> 00:11:41.200
+De basisomvat dus de informatie, de mensen die ermee mogen werken en de regels die het bruikbaar houden.
+
+00:11:41.440 --> 00:11:47.840
+Zodra Dynamics 365 op diezelfde basis werkt, heeft het geen traditionele brug nodig om bij zijn eigen bedrijfsgegevens te komen.
+
+00:11:48.080 --> 00:11:54.460
+Wat Dynamics 365 integratie werkelijk betekent, de meeste mensen horen Dynamics 365 integratie met dataverse
+
+00:11:54.460 --> 00:11:57.300
+en stellen zich twee afzonderlijke systemen voor die verbonden zijn door een connector.
+
+00:11:57.300 --> 00:12:05.620
+Het ene systeem bevat de klantgegevens, het andere systeem heeft een kopie nodig, dus iemand stelt een synchronisatie in, wacht tot deze is uitgevoerd en hoopt dat er onderweg niets misgaat.
+
+00:12:05.760 --> 00:12:08.140
+Dat beeld is logisch voor veel zakelijke hulpmiddelen.
+
+00:12:08.340 --> 00:12:15.540
+Maar hier is het punt, voor Dynamics 365 Sales en Dynamics 365 Customer Service is de verbinding veel nauwer dan dat.
+
+00:12:15.760 --> 00:12:18.300
+Deze apps gebruiken dataverse als hun gedeelde gegevensbasis.
+
+00:12:19.080 --> 00:12:23.480
+Het zijn geen afzonderlijke databases die klantgegevens heen en weer sturen om elkaar te begrijpen.
+
+00:12:23.480 --> 00:12:26.440
+Ze werken vanaf het begin met dezelfde bedrijfsinformatie.
+
+00:12:26.680 --> 00:12:34.060
+Stel u voor, u bent een verkoper en u maakt een nieuw bedrijf aan in Dynamics 365 Sales.
+
+00:12:34.280 --> 00:12:37.180
+U voegt het hoofdcontact toe en u begint te werken aan een mogelijke deal.
+
+00:12:37.400 --> 00:12:40.740
+Die details worden onmiddellijk onderdeel van de gedeelde gegevens die de app gebruikt.
+
+00:12:40.980 --> 00:12:43.020
+Later neemt die klant contact op met de ondersteuning.
+
+00:12:43.240 --> 00:12:46.940
+De ondersteuningsmedewerker kan met exact dezelfde bedrijfs- en contactgegevens werken.
+
+00:12:47.160 --> 00:12:51.020
+Niemand hoeft een lijst uit sales te exporteren of de klant opnieuw aan te maken in een aparte ondersteuningstool.
+
+00:12:51.020 --> 00:12:57.160
+De medewerker koppelt de ondersteuningscase eenvoudig aan die klant en ziet de geschiedenis die helpt begrijpen wat er aan de hand is.
+
+00:12:57.380 --> 00:12:58.240
+Sales ziet de deal.
+
+00:12:58.480 --> 00:13:01.460
+Support ziet de case en beide teams werken rondom dezelfde klant.
+
+00:13:01.680 --> 00:13:06.380
+Dat betekent natuurlijk niet dat elk scherm er hetzelfde uitziet of dat elk team hetzelfde proces volgt.
+
+00:13:06.600 --> 00:13:09.740
+Sales heeft leads, verkoopkansen, telefoontjes en vergaderingen nodig.
+
+00:13:10.040 --> 00:13:12.940
+Klantenservice heeft cases, wachtrijen en servicehistorie nodig.
+
+00:13:13.180 --> 00:13:20.060
+Elke Dynamics 365 app biedt mensen hulpmiddelen voor hun werk, terwijl de onderliggende bedrijfsinformatie overal verbonden kan zijn.
+
+00:13:20.060 --> 00:13:25.700
+Die gedeelde basis is wat men vaak bedoelt bij Dynamics 365 en dataverse integratie.
+
+00:13:25.860 --> 00:13:28.540
+Het gaat niet alleen om data van A naar B verplaatsen.
+
+00:13:28.840 --> 00:13:33.660
+Het gaat om apps die met dezelfde rijen, relaties, regels en toegangscontroles werken.
+
+00:13:33.940 --> 00:13:37.080
+Laten we vanaf het begin een eenvoudig verkooptraject doorlopen.
+
+00:13:37.320 --> 00:13:39.900
+Een lead komt binnen via een website of evenement.
+
+00:13:40.180 --> 00:13:45.760
+Een verkoper werkt met die lead, leert de persoon kennen en zet de lead om in een klantrelatie en een verkoopkans.
+
+00:13:45.760 --> 00:13:49.980
+Gesprekken, e-mails, afspraken en taken kunnen allemaal aan dat werk worden gekoppeld.
+
+00:13:50.120 --> 00:13:53.640
+Het team hoeft dus niet in verschillende tools naar het volledige verhaal te zoeken.
+
+00:13:53.880 --> 00:13:58.180
+Als de klant later hulp nodig heeft, kan een support case aan diezelfde klant worden gekoppeld.
+
+00:13:58.380 --> 00:14:01.460
+De support medewerker ziet niet alleen een naam en e-mailadres.
+
+00:14:01.760 --> 00:14:05.340
+Zij kunnen werken binnen de context van de reeds bekende klantrelatie.
+
+00:14:05.340 --> 00:14:12.060
+Ondertussen kan het verkoopteam zien dat de klant een openstaand serviceprobleem heeft om onvoorbereid een verlengingsgesprek te vermijden.
+
+00:14:12.260 --> 00:14:15.000
+Een klantrelatie kan verschillende soorten werk ondersteunen.
+
+00:14:15.180 --> 00:14:19.120
+Dat is veel nuttiger dan simpelweg een overeenkomende klantnaam in twee systemen bijhouden.
+
+00:14:19.260 --> 00:14:23.100
+U wordt wellicht ook de term common data model, soms afgekoord tot CDM.
+
+00:14:23.380 --> 00:14:25.760
+Laat de naam het niet mysterieuzer maken dan het is.
+
+00:14:25.760 --> 00:14:33.560
+Het betekent simpelweg dat Microsoft standaard bedrijfstabelpatronen biedt voor zaken die veel bedrijven bijhouden, zoals accounts, contactpersonen, activiteiten en cases.
+
+00:14:33.560 --> 00:14:38.080
+Deze patronen geven Dynamics 365 en Dataverse apps een gedeelde basis taal.
+
+00:14:38.220 --> 00:14:39.700
+Een account staat voor een bedrijf.
+
+00:14:39.780 --> 00:14:41.400
+Een contactpersoon staat voor een persoon.
+
+00:14:41.580 --> 00:14:44.140
+Een activiteit houdt werk rond een zakelijke relatie bij.
+
+00:14:44.320 --> 00:14:50.020
+U kunt de instellingen voor uw bedrijf aanpassen en eigen tabellen toevoegen, maar u hoeft niet telkens vanaf nul te beginnen.
+
+00:14:50.120 --> 00:14:56.880
+Wanneer de ene app een accounttabel begrijpt en een andere app diezelfde tabel gebruikt, verwijzen beide apps naar hetzelfde type bedrijfsinformatie.
+
+00:14:57.120 --> 00:14:58.660
+Dit verandert ook wat u kunt bouwen.
+
+00:14:58.660 --> 00:15:04.240
+Stel dat uw buitendienst een eenvoudige app nodig heeft om een klant op te zoeken, een bezoek te bevestigen en na aflopen notitie toe te voegen.
+
+00:15:04.380 --> 00:15:09.220
+U kunt een power app bouwen die werkt met dezelfde dataverse tabellen die Dynamics 365 al gebruikt.
+
+00:15:09.380 --> 00:15:12.600
+Het is niet nodig om klanten naar een nieuwe lijst te exporteren voor die app.
+
+00:15:12.700 --> 00:15:16.880
+De buitendienstmedewerker opent de app, vindt de klant en werkt de bezoekinformatie bij.
+
+00:15:17.100 --> 00:15:23.860
+De gegevens blijven verbonden met de klantrelatie die Sales of Klantenservice al gebruikt, onderworpen aan de beveiligingsregels die we eerder bespraken.
+
+00:15:24.060 --> 00:15:27.260
+Voor meer gestructureerd zakelijk werk kun je een modelgestuurde app bouwen.
+
+00:15:27.260 --> 00:15:29.660
+Een modelgestuurde app begint met een gegevensmodel.
+
+00:15:29.820 --> 00:15:34.860
+Je kiest de dataverse tabellen, definieert hun relaties, stelt formulieren en weergaven in en past beveiligingsrollen toe.
+
+00:15:35.020 --> 00:15:38.580
+Power Apps gebruikt die structuur vervolgens om een werkende zakelijke app ervaring te creëren.
+
+00:15:38.780 --> 00:15:42.420
+Zie het als het inrichten van een werkbank rondom de tools en materialen die het team daadwerkelijk gebruikt.
+
+00:15:42.560 --> 00:15:43.880
+De tabellen beschrijven het werk.
+
+00:15:44.120 --> 00:15:45.900
+Relaties verbinden de onderdelen met elkaar.
+
+00:15:46.120 --> 00:15:48.700
+Formulieren bieden mensen een plek om details in te voeren en te bekijken.
+
+00:15:48.920 --> 00:15:51.300
+Weergaven helpen hen de rijen te vinden die aandacht vereisen.
+
+00:15:51.620 --> 00:15:54.140
+Beveiliging bepaalt wat elke persoon kan openen of wijzigen.
+
+00:15:54.140 --> 00:15:58.660
+Een modelgestuurde app kan naast Dynamics 365 bestaan omdat beide met dataverse werken.
+
+00:15:58.800 --> 00:16:06.660
+Misschien behandelt Dynamics 365 zelfs het volledige verkoopproces, terwijl een kleinere modelgestuurde app contractbeheerders een gerichte plek geeft om klantafspraken bij te houden.
+
+00:16:06.860 --> 00:16:10.760
+Beiden kunnen met gerelateerde klantgegevens werken zonder een tweede klantendatabase aan te maken.
+
+00:16:10.980 --> 00:16:13.280
+Natuurlijk vereist die toegang nog steeds zorgvuldigheid.
+
+00:16:13.480 --> 00:16:19.860
+Alleen omdat een app met een dataverse tabel kan werken, betekent dit niet dat elke gebruiker elke rij moet bewerken of elke kolom moet zien.
+
+00:16:19.860 --> 00:16:23.620
+De rolgebaseerde rijtoegang en bedrijfsregels bepalen nog steeds wat er gebeurt.
+
+00:16:23.800 --> 00:16:29.860
+Een veldtab kan iemand precies de klantdetails en acties bieden die nodig zijn, zonder de rest van de bedrijfsgegevens bloot te stellen.
+
+00:16:30.100 --> 00:16:35.800
+Dus de integratie van Dynamics 365 met dataverse is niet langer een kabel die twee verre kamers verbindt.
+
+00:16:35.940 --> 00:16:41.460
+Dynamics 365 apps, aangepaste apps en bedrijfsprocessen kunnen allemaal vanuit hetzelfde gedeelde fundament werken.
+
+00:16:41.680 --> 00:16:44.200
+Zodra je dat ziet, wordt de volgende vraag duidelijk.
+
+00:16:44.200 --> 00:16:49.520
+Wat kan er nog meer gebruik maken van diezelfde klantupdate binnen het verbonden Microsoft platform?
+
+00:16:50.160 --> 00:16:52.460
+Hoe werkt het verbonden platform in de praktijk?
+
+00:16:52.640 --> 00:16:56.280
+Een gedeelde klantupdate wordt nuttig wanneer de tools eromheen kunnen reageren.
+
+00:16:56.440 --> 00:17:02.440
+Power Automate regelt het vervolgwerk door een wijziging in een dataverse rij in de gaten te houden en een actie te starten wanneer die wijziging plaatsvindt.
+
+00:17:02.540 --> 00:17:06.020
+Bijvoorbeeld, een nieuwe lead komt binnen in Dynamics 365 sales.
+
+00:17:06.240 --> 00:17:11.020
+Een flow kan de toegewezen verkoper informeren, een bericht in Teams plaatsen of een vervolgtaak aanmaken.
+
+00:17:11.020 --> 00:17:13.940
+Niemand hoeft de hele dag een gedeelde inbox in de gaten te houden.
+
+00:17:13.940 --> 00:17:17.040
+De lead verandert en de volgende stap wordt automatisch gestart.
+
+00:17:17.480 --> 00:17:21.260
+Power Automate heeft geen aparte kopie van de lead nodig om dat werk te doen.
+
+00:17:21.680 --> 00:17:26.640
+Het kan reageren op de rij in dataverse met gebruik van dezelfde klant en eigendomsdetails die de sales app gebruikt.
+
+00:17:26.880 --> 00:17:32.880
+En dat houdt de automatisering dicht bij het bedrijfsproces in plaats van te vertrouwen op iemand die een bestand exporteert en een handmatige e-mailketen start.
+
+00:17:33.100 --> 00:17:34.240
+Dan is er nog Power B.
+
+00:17:34.420 --> 00:17:37.020
+Een salesmanager wil wellicht de huidige pipeline inzien.
+
+00:17:37.020 --> 00:17:44.800
+Een klantenservicemanager wil wellicht weten hoeveel aanvragen er deze week zijn binnengekomen, welke nog openstaan of welke klanten het vaakst contact opnemen met de supportafdeling.
+
+00:17:44.960 --> 00:17:52.020
+Power B kan rapporteren over dataverse bedrijfsgegevens, zodat deze teams de voortgang kunnen zien zonder elke vrijdagmiddag nieuwe spreadsheets te hoeven exporteren.
+
+00:17:52.680 --> 00:17:55.600
+Het rapport is gebaseerd op de bedrijfsgegevens die mensen al gebruiken.
+
+00:17:55.820 --> 00:17:59.020
+Dit betekent dat een pijplijn grafiek kan veranderen naarmate kansen zich ontwikkelen.
+
+00:17:59.160 --> 00:18:03.100
+Een dashboard voor aanvragen kan de huidige werkdruk tonen terwijl medewerkers de dossiers bijwerken.
+
+00:18:03.100 --> 00:18:06.900
+Het punt is niet dat een dashboard vervangt dat mensen de details controleren.
+
+00:18:07.020 --> 00:18:11.180
+Het geeft hen een duidelijker overzicht van het werk voordat ze bepalen wat aandacht vereist.
+
+00:18:11.380 --> 00:18:14.020
+Power Apps voegt een andere route toe aan hetzelfde proces.
+
+00:18:14.300 --> 00:18:17.360
+Stel je een buitendienstmedewerker voor die op locatie bij een klant aankomt.
+
+00:18:17.540 --> 00:18:20.900
+Zij hebben geen Dynamics 365 sales ervaring nodig.
+
+00:18:21.140 --> 00:18:27.180
+Ze hoeven misschien alleen de klant op te zoeken, de details van het bezoek door te nemen, te bevestigen wat er is gebeurd en een notitie of foto toe te voegen.
+
+00:18:27.360 --> 00:18:30.060
+Een gerichte Power App kan hen die beperkte ervaring bieden.
+
+00:18:30.060 --> 00:18:33.460
+Een accountteam heeft wellicht een app nodig voor het beoordelen van klantovereenkomsten.
+
+00:18:33.600 --> 00:18:36.520
+Een manager heeft misschien een eenvoudige app nodig voor het goedkeuren van een verzoek.
+
+00:18:36.640 --> 00:18:41.060
+Elke app kan zich richten op één taak, terwijl op de achtergrond met dezelfde beheerde dataverse informatie wordt gewerkt.
+
+00:18:41.220 --> 00:18:43.660
+De persoon ziet de tool die past bij hun dagelijkse werkzaamheden.
+
+00:18:43.840 --> 00:18:45.780
+Het bedrijf behoudt de verbonden informatie.
+
+00:18:46.040 --> 00:18:48.140
+Soms begint die informatie buiten dataverse.
+
+00:18:48.340 --> 00:18:52.320
+Een bedrijf kan een lijst van een online bron hebben die onderdeel moet worden van de bedrijfsgegevens.
+
+00:18:52.520 --> 00:18:59.560
+Power Query kan gegevens uit ondersteunde online bronnen halen, ze tijdens het importeren opschonen en in de juiste dataverse tabel laden.
+
+00:18:59.560 --> 00:19:04.900
+Dit is handig wanneer een externe bron informatie bevat die uw Dynamics en Power Platform tools moeten gebruiken.
+
+00:19:05.060 --> 00:19:09.340
+U moet nog steeds bepalen wat er in dataverse thuishoort en hoe dit verbonden moet worden met de bestaande tabellen.
+
+00:19:09.580 --> 00:19:13.720
+Gegevens importeren zonder die overweging verplaatst de verwarring simpelweg naar een nieuwe locatie.
+
+00:19:13.940 --> 00:19:16.280
+Laten we de stukjes samenvoegen tot één alledaagse flow.
+
+00:19:16.480 --> 00:19:18.560
+Een nieuwe lead komt binnen in Dynamics 365.
+
+00:19:19.160 --> 00:19:23.080
+Een toewijzingsregel controleert wie de eigenaar van die lead moet zijn, bijvoorbeeld op basis van regio of product.
+
+00:19:23.280 --> 00:19:27.480
+De eigenaar ontvangt een teamsbericht via een Power Automate Flow, zodat deze weet dat er werk klaar ligt.
+
+00:19:27.480 --> 00:19:34.520
+Terwijl de verkoper de lead bijwerkt en door het verkoopproces leidt, verandert het Power B dashboard om het team, ons team en de huidige pijplijn weer te geven.
+
+00:19:34.700 --> 00:19:37.000
+Eén update start nuttig werk op verschillende plaatsen.
+
+00:19:37.160 --> 00:19:39.800
+Power Automate verplaatst werk van de ene stap naar de volgende.
+
+00:19:39.980 --> 00:19:42.060
+Power B helpt mensen het werk inzichtelijk te maken.
+
+00:19:42.260 --> 00:19:45.140
+Power Apps bieden specifieke teams een gerichte manier om deel te nemen.
+
+00:19:45.540 --> 00:19:49.780
+Dataverse houdt de bedrijfsinformatie georganiseerd en veilig terwijl deze tools hun werk doen.
+
+00:19:50.000 --> 00:19:51.120
+Dat verschil is belangrijk.
+
+00:19:51.120 --> 00:19:55.400
+Automatisering is niet het archiefsysteem en een dashboard is niet de klantendatabase.
+
+00:19:55.560 --> 00:19:59.020
+Elke tool heeft zijn eigen taak, maar ze kunnen allemaal werken vanuit dezelfde bron.
+
+00:19:59.260 --> 00:20:05.620
+Dat weten helpt je de juiste tool te kiezen, in plaats van elk spreadsheet of simpele lijst te gebruiken alsof het een heel bedrijfsproces moet aansturen.
+
+00:20:06.680 --> 00:20:09.180
+Wanneer dataverse past en wat het niet vervangt?
+
+00:20:09.640 --> 00:20:10.340
+Dit is het punt.
+
+00:20:10.580 --> 00:20:14.360
+Kies voor dataverse wanneer meerdere mensen en apps moeten werken met gekoppelde bedrijfsgegevens.
+
+00:20:14.360 --> 00:20:17.300
+Je hebt duidelijke toegangsregels en herhaalbaar processen nodig.
+
+00:20:17.740 --> 00:20:19.920
+Dataverse regelt dat, maar het vervangt niet alles.
+
+00:20:20.120 --> 00:20:23.240
+Excel blijft je beste keuze voor persoonlijke analyses en snelle lijsten.
+
+00:20:23.460 --> 00:20:26.160
+SharePoint lijsten werken goed voor eenvoudig bijhouden binnen Teams.
+
+00:20:26.360 --> 00:20:30.260
+En als je een ontwikkelaar bent die diepe controle nodig heeft, blijft SQL een sterke keuze.
+
+00:20:30.440 --> 00:20:32.000
+Dus wanneer past dataverse echt?
+
+00:20:32.220 --> 00:20:37.900
+Wanneer je gegevens verbonden moeten zijn tussen Dynamics 365, apps, automatisering en rapporten zonder een nieuwe kopie te maken.
+
+00:20:38.080 --> 00:20:39.380
+Dat is waar het uitblinkt.
+
+00:20:39.500 --> 00:20:42.460
+Nu de conclusie één fundament, veelzakelijke tools.
+
+00:20:42.460 --> 00:20:44.340
+Dus dit is de kern van de zaak.
+
+00:20:44.520 --> 00:20:51.760
+Dynamics 365 en dataverse werken het best wanneer al je gegevens, regels, beveiliging, apps, automatisering en rapporten één gemeenschappelijke basis delen.
+
+00:20:51.920 --> 00:20:59.600
+Abonneer je op Microsoft Knowledge Nuggets op M365FM voor meer duidelijke handleidingen over Dynamics 365, Power Platform en Microsoft 365.
+
+00:20:59.920 --> 00:21:05.340
+Bekijk daarna onze aflevering over model Driven apps om te zien hoe dataverse tabellen veranderen in een werkende bedrijfsapp.

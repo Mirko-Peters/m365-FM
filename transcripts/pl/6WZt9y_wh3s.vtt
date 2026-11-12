@@ -1,0 +1,805 @@
+WEBVTT
+
+00:00:01.460 --> 00:00:08.820
+Faktura od dostawcy trafia na Twoje biurko. Towar może już być w magazynie, a usługa wykonana, ale zegar płatności rusza od razu.
+
+00:00:08.820 --> 00:00:14.760
+Co więc tak naprawdę dzieje się, zanim pieniądze opuszczą firmę? Witamy w kolejnej porcji wiedzy od M365FM.
+
+00:00:14.940 --> 00:00:18.820
+Nazywam się Mir Peters i dziś przyjrzymy się modułowi rozrachunków z dostawcami w Dynamics 365.
+
+00:00:19.440 --> 00:00:22.520
+To nie jest tylko miejsce, gdzie ktoś przepisuje faktury do komputera.
+
+00:00:22.700 --> 00:00:28.460
+To dział finansowy firmy, który sprawdza każdy rachunek, kto go wystawił, co firma kupiła i czy płatność jest zasadna.
+
+00:00:28.460 --> 00:00:34.580
+Oto najprostsza definicja. Rozrachunki z dostawcami to pieniądze, które Twoja firma jest winna sprzedawcom za już zakupione towary lub usługi.
+
+00:00:34.740 --> 00:00:37.360
+Pomyśl o tym, jak o biurze płatności wewnątrz dużego budynku.
+
+00:00:37.580 --> 00:00:43.820
+Rachunki trafiają do recepcji, są sprawdzane z dokumentacją firmy, przechodzą proces akceptacji i dopiero wtedy trafiają do osoby realizującej przelew.
+
+00:00:43.920 --> 00:00:47.400
+Prześledzimy tę drogę od rekordu dostawcy aż do końcowej pieczątki. Zapłacono.
+
+00:00:47.660 --> 00:00:50.320
+Dynamics 365 nazywa to rozliczeniem.
+
+00:00:50.560 --> 00:00:52.560
+Dlaczego istnieją rozrachunki z dostawcami?
+
+00:00:52.800 --> 00:00:55.860
+Wyobraź sobie, że prowadzisz małą firmę sprzedającą meble biurowe.
+
+00:00:55.860 --> 00:01:03.880
+Musisz mieć biurka, zanim będziesz mógł je sprzedać. Potrzebujesz też kartonów, usług sprzątania, dostępu do internetu, części zamiennych i być może firmy kurierskiej.
+
+00:01:04.140 --> 00:01:08.900
+Gdybyś musiał płacić każdemu dostawcy w momencie składania zamówienia, zakupy stałyby się bardzo trudne.
+
+00:01:09.120 --> 00:01:12.300
+Większość firm kupuje najpierw, a płaci później na uzgodnionych warunkach.
+
+00:01:12.500 --> 00:01:16.320
+Dostawca dostarcza towar lub wykonuje pracę, a następnie wysyła fakturę, czyli swój rachunek.
+
+00:01:16.480 --> 00:01:20.500
+Twoja firma jest winna tę kwotę, ale nie przelewa pieniędzy bez wcześniejszego sprawdzenia szczegółów.
+
+00:01:20.500 --> 00:01:23.480
+Ta nieuregulowana kwota widnieje w księgach firmy jako zobowiązanie.
+
+00:01:23.720 --> 00:01:27.540
+Zobowiązanie może brzmieć jak straszne słowo finansowe, ale jego znaczenie jest proste.
+
+00:01:27.640 --> 00:01:30.020
+To kwota, którą firma jest winna komuś innemu.
+
+00:01:30.260 --> 00:01:36.480
+Jeśli Twoja firma otrzymuje rachunek za artykuły biurowe i jeszcze go nie opłaciła, faktura ta trafia do rozrachunków, dopóki nie zostanie uregulowana.
+
+00:01:36.740 --> 00:01:39.820
+Firma nadal dysponuje gotówką, ale ma też obietnice do spełnienia.
+
+00:01:40.080 --> 00:01:45.520
+Ma to znaczenie, ponieważ stan konta bankowego firmy może wyglądać dobrze, mimo że ma ona stos nieopłaconych rachunków.
+
+00:01:45.520 --> 00:01:51.680
+Działy finansowe muszą widzieć obie strony, ile gotówki jest w banku i ile z niej będzie musiało wkrótce z niego wypłynąć.
+
+00:01:51.840 --> 00:01:56.000
+Przed erą zintegrowanych systemów finansowych praca ta często przypominała zabawę w kotka i myszkę.
+
+00:01:56.200 --> 00:02:02.460
+Faktura mogła dotrzeć pocztą, leżeć na biurku, potem krążyć w obiegu wewnętrznym do akceptacji, podczas gdy inna czekała w skrzynce e-mail.
+
+00:02:02.660 --> 00:02:07.900
+Ktoś mógł wpisać ten sam rachunek do arkusza kalkulacyjnego, podczas gdy inna osoba wprowadzała go do systemu księgowego.
+
+00:02:08.100 --> 00:02:09.480
+To rodzi dobrze znane problemy.
+
+00:02:09.480 --> 00:02:16.880
+Menedżer przeoczy e-mail z zatwierdzeniem, rachunek zostanie opłacony z opóźnieniem lub dostawca wyśle tę samą fakturę ponownie i nikt nie zauważy, że już dotarła do działu finansowego.
+
+00:02:17.080 --> 00:02:21.400
+Co gorsza, może zostać opłacona dwukrotnie, ponieważ kopia papierowa i e-mailowa wyglądają jak oddzielne rachunki.
+
+00:02:21.640 --> 00:02:25.100
+Dynamics 365 zapewnia firmie jedno miejsce do monitorowania tej pracy.
+
+00:02:25.360 --> 00:02:30.620
+Rejestruje zobowiązania firmy, pomaga w weryfikacji faktur i wyznacza jasną ścieżkę od wpłynięcia rachunku do jego opłacenia.
+
+00:02:30.800 --> 00:02:33.800
+Nie oznacza to, że każda faktura jest procedowana bez kontroli człowieka.
+
+00:02:33.800 --> 00:02:40.720
+Zespół finansowy nadal decyduje, gdy coś wygląda podejrzanie, ale system dostarcza im dokumentację i reguły, by podjąć taką decyzję bez biegania z papierami po budynku.
+
+00:02:40.880 --> 00:02:43.640
+W tej samej rozmowie można również usłyszeć o należnościach.
+
+00:02:43.800 --> 00:02:47.240
+Nazwy brzmią niemal identycznie, ale dotyczą przeciwnych kierunków przepływu pieniędzy.
+
+00:02:47.480 --> 00:02:51.140
+Zobowiązania śledzą środki opuszczające firmę, ponieważ jesteś winny pieniądze dostawcom.
+
+00:02:51.360 --> 00:02:55.240
+Należności śledzą środki wpływające do firmy, ponieważ klienci są winni pieniądze Tobie.
+
+00:02:55.440 --> 00:02:59.080
+Jeśli Twoja firma kupuje drukarki od dostawcy, ten rachunek trafia do zobowiązań.
+
+00:02:59.080 --> 00:03:03.900
+Jeśli Twoja firma sprzedaje biurka klientowi i wysyła mu fakturę, ten rachunek klienta trafia do należności.
+
+00:03:04.140 --> 00:03:08.520
+Zatem zobowiązania śledzą to, co musisz zapłacić, a należności to, co inni muszą zapłacić Tobie.
+
+00:03:08.660 --> 00:03:11.080
+Celem zobowiązań jest bardzo praktyczny rezultat.
+
+00:03:11.220 --> 00:03:14.320
+Zapłacić właściwemu dostawcy właściwą kwotę w uzgodnionym terminie.
+
+00:03:14.520 --> 00:03:17.560
+Zapłać za wcześnie, a firma traci gotówkę wcześniej niż musi.
+
+00:03:17.800 --> 00:03:22.220
+Zapłać za późno, a dostawca może upominać się o płatność lub przestać oferować korzystne warunki.
+
+00:03:22.220 --> 00:03:28.660
+Zapłać niewłaściwą kwotę, a ktoś będzie musiał później wyjaśniać pomyłkę, często za pomocą e-maili not korygujących i z wielką frustracją.
+
+00:03:28.920 --> 00:03:36.700
+Zanim więc jakakolwiek faktura przejdzie przez ten proces, Dynamics 365 musi dokładnie wiedzieć, kim jest dostawca i jakie zasady mają zastosowanie do tej relacji.
+
+00:03:36.940 --> 00:03:38.540
+Budowanie fundamentu dostawców.
+
+00:03:38.760 --> 00:03:43.520
+Zanim Dynamics 365 będzie mógł przetworzyć pojedynczy rachunek, musi najpierw dokładnie wiedzieć, kto go wysłał.
+
+00:03:43.640 --> 00:03:45.600
+W tym miejscu pojawia się kartoteka dostawcy.
+
+00:03:45.840 --> 00:03:48.860
+Bez niej system nie wie, komu zapłacić ani jakich zasad przestrzegać.
+
+00:03:48.860 --> 00:03:52.700
+Dostawca może dostarczać towary fizyczne, takie jak papier, laptopy czy części zamienne.
+
+00:03:52.960 --> 00:03:56.400
+Może również świadczyć usługi, takie jak księgowość czy wsparcie oprogramowania.
+
+00:03:56.600 --> 00:03:58.860
+Produkt się zmienia, ale rola pozostaje taka sama.
+
+00:03:59.040 --> 00:04:01.580
+To podmiot, któremu Twoja firma może być winna pieniądze.
+
+00:04:01.760 --> 00:04:05.100
+Traktuj kartotekę dostawcy jak jego akta wewnątrz Dynamics 365.
+
+00:04:05.540 --> 00:04:10.620
+Przechowuje podstawowe dane, których potrzebuje Twój zespół finansowy, ale także ustala reguły kontrolujące późniejsze działania.
+
+00:04:10.860 --> 00:04:15.460
+Wypełniasz nazwę dostawcy, adres i dane kontaktowe, aby firma dokładnie wiedziała, z kim ma do czynienia.
+
+00:04:15.460 --> 00:04:21.540
+Możesz również zapisać walutę używaną do faktur i płatności, co ma duże znaczenie przy zakupach od dostawców z różnych krajów.
+
+00:04:21.600 --> 00:04:25.680
+Jeśli chodzi o szczegóły płatności, rekord dostawcy może zawierać warunki oraz metodę płatności.
+
+00:04:25.960 --> 00:04:29.400
+Mogą to być tylko małe pola na ekranie, ale odpowiadają one na bardzo praktyczne pytania.
+
+00:04:29.580 --> 00:04:33.180
+Kiedy ten dostawca powinien otrzymać zapłatę i w jaki sposób firma powinna przesłać pieniądze?
+
+00:04:33.360 --> 00:04:35.360
+Warunki płatności określają zasady dotyczące terminu wymagalności.
+
+00:04:35.580 --> 00:04:38.040
+Niektórzy dostawcy pozwalają płacić 30 dni od daty wystawienia faktury.
+
+00:04:38.240 --> 00:04:40.000
+Inni oczekują zapłaty w ciągu 14 dni.
+
+00:04:40.000 --> 00:04:42.400
+Niektórzy oferują nawet rabat, jeśli zapłacisz wcześniej.
+
+00:04:42.640 --> 00:04:47.240
+Dynamics 365 używa zapisanych warunków, aby automatycznie obliczyć termin płatności każdej faktury.
+
+00:04:47.440 --> 00:04:49.240
+Nikt nie musi pamiętać o zawartej umowie.
+
+00:04:49.520 --> 00:04:50.580
+Zapewnia to spójność.
+
+00:04:50.800 --> 00:04:55.320
+Jeśli 5 różnych osób przetwarza faktury dla tego samego dostawcy, wszystkie stosują tę samą zasadę płatności.
+
+00:04:55.560 --> 00:04:59.700
+Nikt nie musi przeszukiwać starych wiadomości e-mail ani dzwonić do działu zakupów, aby zapytać, kiedy należy opłacić rachunek.
+
+00:04:59.860 --> 00:05:02.520
+Metoda płatności opisuje, w jaki sposób pieniądze docierają do odbiorcy.
+
+00:05:02.700 --> 00:05:06.240
+Twoja firma może płacić jednemu dostawcy przelewem elektronicznym, a innemu czekiem.
+
+00:05:06.240 --> 00:05:09.080
+W niektórych przypadkach firma może również użyć Wexley.
+
+00:05:09.320 --> 00:05:14.740
+Dynamics 365 pozwala zdefiniować własne metody płatności, łącząc je w razie potrzeby z typami systemowymi.
+
+00:05:14.920 --> 00:05:17.560
+Firmy zazwyczaj współpracują z więcej niż jednym dostawcą.
+
+00:05:17.800 --> 00:05:21.080
+Rozwijający się biznes może mieć dziesiątki, setki, a nawet tysiące dostawców.
+
+00:05:21.240 --> 00:05:25.140
+Tworzenie wszystkich ustawień od zera dla każdego z nich byłoby stratą czasu i prowadziłoby do błędów.
+
+00:05:25.300 --> 00:05:28.020
+Dlatego Dynamics 365 stosuje grupy dostawców.
+
+00:05:28.220 --> 00:05:31.680
+Grupa dostawców gromadzi kontrahentów, których obowiązują te same ogólne zasady finansowe.
+
+00:05:31.680 --> 00:05:36.400
+Można na przykład umieścić lokalnych dostawców artykułów biurowych w jednej grupie, a zagranicznych dostawców towarów w drugiej.
+
+00:05:36.620 --> 00:05:42.780
+Grupa zawiera wspólne ustawienia dotyczące księgowania, transakcji, działania płatności i rozliczeń oraz raportowania salt dostawców.
+
+00:05:43.000 --> 00:05:45.600
+Nadal utrzymujesz oddzielny rekord dla każdego dostawcy.
+
+00:05:45.860 --> 00:05:50.540
+Jest to ważne, ponieważ każdy dostawca wymaga własnej nazwy, adresu, szczegółów płatności i historii.
+
+00:05:50.760 --> 00:05:55.940
+Grupa dostawców stanowi po prostu wspólny punkt wyjścia, więc dział finansowy nie musi ciągle od nowa tworzyć tych samych zasad.
+
+00:05:56.140 --> 00:05:59.220
+W tle działa kolejny element, zwany profilem księgowania dostawców.
+
+00:05:59.220 --> 00:06:02.180
+Nazwa brzmi technicznie, więc powiedzmy to prostszym językiem.
+
+00:06:02.340 --> 00:06:07.880
+Profil księgowania to mapa, która informuje Dynamics 365, gdzie transakcje dostawcy powinny trafić w księdze głównej.
+
+00:06:08.060 --> 00:06:10.440
+Księga główna to główna księga rachunkowa firmy.
+
+00:06:10.640 --> 00:06:17.360
+Podczas księgowania faktury Dynamics 365 musi zarejestrować zarówno zobowiązanie firmy, jak i miejsce przypisania powiązanego kosztu.
+
+00:06:17.520 --> 00:06:23.240
+Profil księgowania kieruje stroną dostawcy w tym zapisie księgowym, używając reguł ustawionych dla danego dostawcy lub grupy dostawców.
+
+00:06:23.400 --> 00:06:27.100
+Pracownicy działu finansowego nie muszą za każdym razem wybierać tych kont księgowych z pamięci.
+
+00:06:27.100 --> 00:06:32.780
+Zamiast tego system korzysta z mapy, która ogranicza niespójne wpisy i daje zespołowi finansowemu znacznie wyraźniejszy obraz zadłużenia wobec dostawców.
+
+00:06:32.940 --> 00:06:35.600
+Firma przygotowuje również stronę płatności, zanim dotrą faktury.
+
+00:06:35.780 --> 00:06:39.640
+W module zarządzania kasą i bankami konfiguruje się konta bankowe, z których będą finansowane płatności dla dostawców.
+
+00:06:39.820 --> 00:06:44.600
+Dzienniki płatności zapewniają pracownikom finansowym przestrzeń do przygotowywania i księgowania płatności przy użyciu zatwierdzonych metod.
+
+00:06:44.880 --> 00:06:47.960
+Podsumowując, kartoteka dostawcy określa, kto otrzymuje środki.
+
+00:06:47.960 --> 00:06:54.060
+Warunki płatności decydują o terminie, a metoda płatności i konto bankowe określają, w jaki sposób środki opuszczają firmę.
+
+00:06:54.260 --> 00:07:00.120
+Dzięki tym zasadom faktura może trafić do działu finansowego i rozpocząć swoją drogę od wpływu do zatwierdzenia.
+
+00:07:00.640 --> 00:07:06.000
+Dzięki gotowej kartotece dostawcy system Dynamics 365 wie, komu płacić i na jakich zasadach.
+
+00:07:06.140 --> 00:07:08.260
+Co więc dzieje się, gdy faktycznie przychodzi faktura?
+
+00:07:08.420 --> 00:07:10.880
+Czasami pracownik działu finansowego wprowadza ją ręcznie.
+
+00:07:11.120 --> 00:07:16.620
+Jest to konieczne, gdy faktura przychodzi pocztą e-mail papierową lub przez portal dostawcy i ktoś musi wpisać dane do systemu.
+
+00:07:16.620 --> 00:07:24.220
+Pracownik wybiera dostawcę, wpisuje numer i datę faktury, a następnie dodaje wiersze, kwoty, podatek oraz wszelkie referencje zamówienia zakupu.
+
+00:07:24.400 --> 00:07:26.480
+Numer faktury zasługuje na szczególną uwagę.
+
+00:07:26.760 --> 00:07:30.720
+Pochodzi on od dostawcy, a nie od Twojej firmy i pomaga zidentyfikować ten konkretny rachunek.
+
+00:07:30.880 --> 00:07:39.920
+Jeśli faktura na 1200 dolarów od Norwind Office Supplies o numerze N148 trafi do systemu Dynamics 365, sprawdzi ten numer w kartotece dostawcy, aby wykryć duplikat.
+
+00:07:40.140 --> 00:07:41.940
+Do rekordu należą również załączniki.
+
+00:07:41.940 --> 00:07:47.340
+Faktura PDF, zeskanowany dokument lub dokumentacja pomocnicza mogą być przechowywane obok faktury w systemie Dynamics 365.
+
+00:07:47.820 --> 00:07:53.940
+Oznacza to, że osoba weryfikująca rekord może zobaczyć dokument źródłowy bez przeszukiwania wspólnej skrzynki odbiorczej czy segregatorów.
+
+00:07:54.660 --> 00:07:57.920
+W przypadku większych wolumenów faktury mogą być wprowadzane elektronicznie.
+
+00:07:58.140 --> 00:08:01.880
+Dynamics 365 obsługuje import danych faktur za pomocą jednostek danych.
+
+00:08:02.080 --> 00:08:07.860
+Pomyśl o jednostce danych jak o standardowym formularzu, który inny system może wypełnić przed wysłaniem informacji do Dynamics 365.
+
+00:08:07.860 --> 00:08:14.720
+Zewnętrzna usługa przechwytywania faktur może np. wysłać nagłówek faktury, wiersze i załącznik w jednym pakiecie danych.
+
+00:08:14.940 --> 00:08:20.780
+Nagłówek zawiera główne dane rachunku, dostawcę, numer faktury, daty, walutę, kwotę całkowitą i numer zamówienia zakupu.
+
+00:08:20.980 --> 00:08:23.100
+Wiersze wyjaśniają, za co jesteś obciążany.
+
+00:08:23.340 --> 00:08:27.000
+Jeden wiersz może obejmować papier do drukarki, inny toner, a kolejny dostawę.
+
+00:08:27.000 --> 00:08:30.740
+Dzięki rozbiciu tych szczegółów pracownicy finansowi widzą dokładnie, co zatwierdzają.
+
+00:08:30.920 --> 00:08:33.420
+Informacje podatkowe również są przekazywane wraz z fakturą.
+
+00:08:33.640 --> 00:08:38.180
+Dynamics 365 potrzebuje kwoty podatku i powiązanych szczegółów, aby firma poprawnie zaksięgowała rachunek.
+
+00:08:38.340 --> 00:08:41.360
+Kilka rzeczy może wstrzymać procesowanie faktury bez wcześniejszej weryfikacji.
+
+00:08:41.580 --> 00:08:45.600
+Brakujący dostawca, nieprawidłowa data, powtórzony numer faktury lub niezgodna suma.
+
+00:08:45.740 --> 00:08:46.940
+Ta pauza chroni firmę.
+
+00:08:47.120 --> 00:08:51.560
+Polityka faktur od dostawców sprawdza, czy faktura jest zgodna z zasadami wybranymi przez Twoją firmę.
+
+00:08:51.560 --> 00:08:56.600
+Kontrola duplikatów szuka faktur, które wydają się znajome, np. od tego samego dostawcy i z tym samym numerem, które już zapisano.
+
+00:08:56.760 --> 00:08:58.680
+Celem nie jest oskarżanie dostawcy o błąd.
+
+00:08:58.800 --> 00:09:01.660
+Dostawcy mogą wysyłać faktury ponownie, jeśli nie mają pewności, czy dotarły.
+
+00:09:01.800 --> 00:09:04.600
+Pracownik może przez pomyłkę wprowadzić ten sam plik PDF dwa razy.
+
+00:09:04.720 --> 00:09:07.600
+Tak czy inaczej, płacenie dwa razy za to samo generuje niepotrzebną pracę.
+
+00:09:07.760 --> 00:09:10.960
+Gdy Dynamics 365 zaakceptuje fakturę, kolejne pytanie jest proste.
+
+00:09:11.100 --> 00:09:12.540
+Kto jest uprawniony do jej zatwierdzenia?
+
+00:09:12.760 --> 00:09:14.080
+Tutaj do gry wchodzi Workflow.
+
+00:09:14.300 --> 00:09:16.700
+Workflow to ścieżka zatwierdzania wewnątrz systemu.
+
+00:09:16.700 --> 00:09:24.800
+Zamiast wysyłać PDF do menedżera z nadzieją, że wróci Dynamics 365, wysyła fakturę do osoby lub roli wskazanej w zasadach firmy.
+
+00:09:24.980 --> 00:09:29.340
+Każda organizacja ustala te zasady w oparciu o to, jak chce zarządzać decyzjami finansowymi.
+
+00:09:29.540 --> 00:09:31.840
+Mała, rutynowa faktura może mieć krótką ścieżkę.
+
+00:09:32.040 --> 00:09:35.060
+Faktura powyżej określonej kwoty może wymagać zgody wyższego menedżera.
+
+00:09:35.280 --> 00:09:38.540
+Rachunek przypisany do konkretnego działu może trafić do menedżera tego działu.
+
+00:09:38.720 --> 00:09:41.640
+Możesz nawet tworzyć różne ścieżki zatwierdzania dla różnych typów dostawców, np.
+
+00:09:41.980 --> 00:09:43.840
+dostawców towarów, usług czy kontrahentów.
+
+00:09:43.840 --> 00:09:46.140
+Ścieżka podąża za zasadami, a nie za czyjąś pamięcią.
+
+00:09:46.140 --> 00:09:48.540
+Dzięki temu zatwierdzenia są znacznie łatwiejsze do śledzenia.
+
+00:09:48.780 --> 00:09:53.280
+Dział finansowy widzi, czy faktura czeka na weryfikację, została zatwierdzona, czy wymaga uzupełnienia informacji.
+
+00:09:53.500 --> 00:09:57.900
+Osoba zatwierdzająca może sprawdzić rachunek i zdecydować, czy należy do jej działu oraz czy kwota jest prawidłowa.
+
+00:09:58.100 --> 00:10:01.280
+Niektóre faktury spełniają wszystkie zasady i przechodzą dalej automatycznie.
+
+00:10:01.500 --> 00:10:05.460
+Dostawca jest znany importowane dane kompletne, a faktura przechodzi weryfikację polityki.
+
+00:10:05.640 --> 00:10:09.140
+Takie faktury nie wymagają, aby ktoś za każdym razem powtarzał te same podstawowe sprawdzenia.
+
+00:10:09.380 --> 00:10:10.940
+Inne faktury stają się wyjątkami.
+
+00:10:10.940 --> 00:10:12.580
+Może brakuje konta dostawcy.
+
+00:10:12.820 --> 00:10:14.440
+Może numer faktury już istnieje.
+
+00:10:14.440 --> 00:10:16.500
+Może zaimportowany wiersz zawiera błąd.
+
+00:10:16.640 --> 00:10:24.320
+Dynamics 365 przechowuje te faktury na liście błędów importu, gdzie pracownicy finansowi mogą zobaczyć komunikat o błędzie i naprawić problem przed utworzeniem oczekującej faktury.
+
+00:10:24.540 --> 00:10:26.760
+Dokument jest nadal ważny podczas weryfikacji.
+
+00:10:27.000 --> 00:10:34.240
+Dynamics 365 zawiera podgląd załączników na stronach faktur, więc pracownik finansowy może zobaczyć obraz faktury obok rekordu, który poprawia.
+
+00:10:34.400 --> 00:10:39.500
+Nie trzeba przełączać się między ekranami, aby sprawdzić, czy dostawca wpisał 6 tysięcy czy 8 tysięcy na oryginalnym rachunku.
+
+00:10:39.500 --> 00:10:41.760
+Automatyzacja zajmuje się rutynowymi czynnościami.
+
+00:10:41.980 --> 00:10:43.860
+Ludzie zajmują się kwestiami wymagającymi decyzji.
+
+00:10:44.020 --> 00:10:49.600
+Zatwierdzenie potwierdza, że odpowiednia osoba zgodziła się procesować fakturę, ale nie dowodzi jeszcze, że dostawca wystawił rachunek dokładnie za to, co zamówiono lub otrzymano.
+
+00:10:49.720 --> 00:10:52.440
+W tym celu Dynamics 365 porównuje dokumentację.
+
+00:10:52.820 --> 00:10:53.640
+Dopasowywanie faktur.
+
+00:10:53.840 --> 00:10:57.480
+Sprawdzenie zamówień firmy i zatwierdzenie potwierdza, że właściwa osoba przejrzała fakturę.
+
+00:10:57.480 --> 00:10:59.620
+Jednak dopasowywanie odpowiada na inne pytanie.
+
+00:10:59.820 --> 00:11:02.740
+Czy faktura jest zgodna z tym, co firma faktycznie zobowiązała się kupić?
+
+00:11:02.860 --> 00:11:07.420
+Gdy zakup zaczyna się od zamówienia zakupu, Dynamics 365 ma rekord, z którym można go porównać.
+
+00:11:07.560 --> 00:11:10.360
+Potraktuj zamówienie zakupu jak pokwitowanie zamówienia firmy.
+
+00:11:10.600 --> 00:11:13.980
+Rejestruje ono dostawcę, przedmiot zamówienia, ilość, cenę i warunki.
+
+00:11:14.200 --> 00:11:17.260
+Ktoś z działu zakupów tworzy to zamówienie, zanim nadejdzie jakikolwiek rachunek.
+
+00:11:17.460 --> 00:11:18.400
+Dlaczego to jest ważne?
+
+00:11:18.680 --> 00:11:21.260
+Zamówienie zakupu rejestruje umowę, zanim pojawi się faktura.
+
+00:11:21.500 --> 00:11:24.540
+Bez niego pracownik finansowy widzi tylko rachunek wystawiony na nazwisko dostawcy.
+
+00:11:24.540 --> 00:11:27.620
+Dzięki niemu może porównać obciążenie dostawcy z pierwotnym żądaniem.
+
+00:11:27.840 --> 00:11:30.740
+W przypadku towarów fizycznych istnieje jeszcze jeden ważny rekord.
+
+00:11:30.820 --> 00:11:38.040
+Gdy dostawa dotrze, zespół magazynowy rejestruje przyjęcie produktu, co stanowi dowód w Dynamics 365, że towary dotarły do firmy wraz z ich ilością.
+
+00:11:38.220 --> 00:11:42.300
+Nie oznacza to, że każdy element był idealny, ale rejestruje, co zostało odebrane w ramach tego zamówienia.
+
+00:11:42.540 --> 00:11:44.880
+Wyobraźmy sobie firmę zamawiającą 10 krzeseł biurowych.
+
+00:11:45.080 --> 00:11:51.420
+Zamówienie zakupu wymienia 10 krzeseł w uzgodnionej cenie, ale gdy ciężarówka przyjeżdża, magazyn liczy tylko 8, ponieważ 2 są w zamówieniu oczekującym.
+
+00:11:51.420 --> 00:11:54.780
+Zespół do spraw. Przyjęć księguje przyjęcie produktu dla 8 sztuk.
+
+00:11:54.920 --> 00:12:00.860
+Następnie dostawca wysyła fakturę na 10 krzeseł, co może być poprawne z jego perspektywy, jeśli wystawia fakturę za całe zamówienie przed wysyłką ostatnich dwóch sztuk.
+
+00:12:01.040 --> 00:12:02.660
+Ale teraz twoja firma ma różnicę.
+
+00:12:02.880 --> 00:12:05.500
+Zamówiono 10, otrzymano 8, zafakturowano za 10.
+
+00:12:05.740 --> 00:12:09.260
+Dynamics 365 może wychwycić tę różnicę poprzez dopasowywanie faktur.
+
+00:12:09.420 --> 00:12:15.120
+Dopasowywanie dwustronne porównuje zamówienie zakupu z fakturą dostawcy, sprawdzając, czy rachunek zgadza się z zamówieniem pod względem ceny i ilości.
+
+00:12:15.120 --> 00:12:19.280
+Sprawdza się to przy zakupach, gdzie sprawdzenie oryginalnego zamówienia zapewnia wystarczającą kontrolę.
+
+00:12:19.420 --> 00:12:27.940
+Wychwytuje, jeśli dostawca wystawił wyższą cenę lub zamówiono więcej jednostek, ale nie sprawdza, czy towary faktycznie dotarły, ponieważ porównuje tylko dwa rekordy – zamówienie zakupu i fakturę.
+
+00:12:28.160 --> 00:12:35.520
+Dopasowywanie trójstronne dodaje przyjęcie produktu, więc Dynamics 365 porównuje teraz zamówienie zakupu, przyjęcie produktu i fakturę razem.
+
+00:12:35.520 --> 00:12:44.940
+W naszym przykładzie z krzesłami system widzi zamówienie na 10, przyjęcie na 8 i fakturę na 10. I ta różnica staje się powodem, by wstrzymać fakturę, zamiast pozwolić jej przejść dalej.
+
+00:12:45.200 --> 00:12:55.520
+Dla firm kupujących zapasy, sprzęt lub duże ilości towarów fizycznych, ta kontrola daje działowi finansów silniejszą kontrolę, pomagając uniknąć płacenia za przedmioty, które nigdy nie dotarły lub płacenia za więcej niż otrzymano.
+
+00:12:56.260 --> 00:13:01.440
+Dział zakupów potwierdza umowę, dział przyjęć potwierdza dostawę, a faktura od dostawcy wzywa do zapłaty.
+
+00:13:01.440 --> 00:13:06.860
+Och, wszystkie trzy dokumenty muszą być ze sobą zgodne. W biznesie zdarzają się niewielkie różnice.
+
+00:13:07.080 --> 00:13:11.860
+Cena może różnić się przez zaokrąglenia, a dostawca może uwzględnić dopuszczalną zmianę w ilości.
+
+00:13:12.160 --> 00:13:17.200
+Gdyby każda drobna różnica wstrzymywała fakturę, działy finansowe traciłyby zbyt wiele czasu na wyjaśnianie błahostek.
+
+00:13:17.380 --> 00:13:22.180
+Dlatego Dynamics 365 pozwala firmie ustawić zasady dopasowania i limity tolerancji.
+
+00:13:22.360 --> 00:13:29.400
+Tolerancja to dopuszczalna różnica, a firma decyduje, jaką kwotę lub procent zaakceptuje dla ceny, ilości, sumy lub opłat.
+
+00:13:29.400 --> 00:13:35.060
+Wszystko w ramach tego limitu przechodzi dalej zgodnie z zasadami firmy, a powyżej tego progu jest oznaczane do weryfikacji.
+
+00:13:35.220 --> 00:13:36.640
+To firma ustala te limity.
+
+00:13:36.900 --> 00:13:42.020
+Firma może dopuścić małą różnicę przy tanich materiałach biurowych, ale ustalić surowsze limity dla drogich maszyn.
+
+00:13:42.240 --> 00:13:44.400
+System nie decyduje o tym, co jest rozsądne.
+
+00:13:44.620 --> 00:13:48.980
+Działy finansów i zakupów ustalają zasady, a Dynamics 365 konsekwentnie je stosuje.
+
+00:13:49.160 --> 00:13:51.800
+To zmienia sposób, w jaki zespół finansowy wykorzystuje swój czas.
+
+00:13:52.020 --> 00:13:55.920
+Zamiast sprawdzać każdą poprawną fakturę linijka po linijce, mogą skupić się na wyjątkach.
+
+00:13:55.920 --> 00:14:00.320
+Och, badając faktury, gdzie cena się zmieniła, brakuje potwierdzenia lub ilość się nie zgadza.
+
+00:14:00.460 --> 00:14:04.840
+Poprawne faktury nadal przechodzą automatycznie, a pracownicy skupiają się tam, gdzie potrzebna jest decyzja.
+
+00:14:05.020 --> 00:14:06.820
+Na tym polega prawdziwa wartość dopasowania.
+
+00:14:07.040 --> 00:14:10.980
+Pozwala systemowi obsłużyć rutynowe kontrole, podczas gdy ludzie zajmują się kwestiami wymagającymi osądu.
+
+00:14:11.120 --> 00:14:13.100
+To nie jest system zastępujący ludzki osąd.
+
+00:14:13.220 --> 00:14:15.720
+To oddzielanie rutynowych sprawdzeń od rzeczywistych problemów.
+
+00:14:15.880 --> 00:14:17.580
+Jeden punkt może powodować zamieszanie.
+
+00:14:17.800 --> 00:14:21.900
+Standardowe dopasowanie w Dynamics 365 wspiera dopasowanie dwustronne i trójstronne.
+
+00:14:21.900 --> 00:14:28.300
+Jeśli firma potrzebuje dopasowania czterostronnego, np. z dodatkową kontrolą jakości, wymaga to dostosowań lub innego rozwiązania.
+
+00:14:28.500 --> 00:14:30.080
+Zatem dopasowanie ma jasne zadanie.
+
+00:14:30.280 --> 00:14:36.400
+Och, porównuje fakturę dostawcy z własnymi dokumentami zakupu i przyjęcia, wskazując luki przed dokonaniem płatności.
+
+00:14:36.680 --> 00:14:44.000
+Gdy faktura przejdzie weryfikację i dopasowanie, staje się zobowiązaniem firmy, co pozwala zaplanować płatności i uregulować księgi.
+
+00:14:44.420 --> 00:14:49.120
+Gdy faktura przejdzie wymagane kontrole, Dynamics 365 może ją zaksięgować.
+
+00:14:49.120 --> 00:14:56.680
+Księgowanie oznacza, że faktura staje się oficjalnym dokumentem finansowym, a firma rejestruje zobowiązanie wobec dostawcy jako nieopłacone.
+
+00:14:56.860 --> 00:15:00.060
+Faktura jest gotowa, ale to nie oznacza natychmiastowego wyjścia pieniędzy.
+
+00:15:00.300 --> 00:15:03.680
+Działy finansowe muszą zdecydować, które faktury opłacić w danej transzy płatności.
+
+00:15:03.940 --> 00:15:11.220
+Dynamics 365 pomaga poprzez propozycję płatności, która analizuje wymagalne faktury i sugeruje te do opłacenia na podstawie zasad firmy.
+
+00:15:11.400 --> 00:15:14.840
+Propozycja płatności to lista wyjściowa, która nadal wymaga weryfikacji przez człowieka.
+
+00:15:14.840 --> 00:15:20.340
+Może się zdarzyć, że faktura od dostawcy przypada do zapłaty w tym tygodniu, podczas gdy inna, zgodnie z uzgodnionymi warunkami, może poczekać do końca miesiąca.
+
+00:15:20.520 --> 00:15:25.920
+Zespół finansowy sprawdza proponowane faktury, usuwa lub dodaje pozycje w razie potrzeby, a następnie przygotowuje dziennik płatności.
+
+00:15:26.140 --> 00:15:30.260
+W ten sposób płatności są grupowane i kontrolowane, zamiast wysyłania ich w sposób nieskoordynowany.
+
+00:15:30.420 --> 00:15:33.220
+Pomyśl o dzienniku płatności jako o arkuszu płatności firmy.
+
+00:15:33.420 --> 00:15:37.480
+Zawiera on listę płatności dla dostawców, które firma planuje wysłać kwoty oraz szczegóły płatności.
+
+00:15:37.480 --> 00:15:43.320
+Personel finansowy używa go do przygotowania kontrolowanej partii płatności, zamiast wysyłać pieniądze za każdą fakturę z osobna bez wspólnego zapisu.
+
+00:15:43.480 --> 00:15:45.220
+W jaki sposób pieniądze opuszczają firmę?
+
+00:15:45.420 --> 00:15:48.340
+Zależy to od metody płatności skonfigurowanej dla dostawcy i firmy.
+
+00:15:48.540 --> 00:15:55.280
+Dynamics 365 pozwala firmie tworzyć własne metody płatności i łączyć je z typami płatności, takimi jak czeki, płatności elektroniczne lub weksle.
+
+00:15:55.440 --> 00:15:56.660
+Czek jest powszechnie znany.
+
+00:15:56.880 --> 00:16:00.080
+Płatność elektroniczna przesyła środki za pośrednictwem procesu bankowego firmy.
+
+00:16:00.280 --> 00:16:03.480
+Weksle stanowi formalne zobowiązanie do zapłaty na uzgodnionych warunkach.
+
+00:16:03.480 --> 00:16:08.920
+Nie każda firma korzysta z każdej metody, ale Dynamics 365 daje firmie możliwość zarejestrowania używanej ścieżki.
+
+00:16:09.080 --> 00:16:12.600
+Każda metoda płatności musi być również powiązana z odpowiednim kontem bankowym firmy.
+
+00:16:12.720 --> 00:16:18.100
+To połączenie ma znaczenie, ponieważ firma może posiadać oddzielne konta dla różnych podmiotów prawnych, walut lub celów płatności.
+
+00:16:18.320 --> 00:16:22.520
+Kiedy dział finansowy przygotowuje płatność, system musi wiedzieć, które konto bankowe ją finansuje.
+
+00:16:22.720 --> 00:16:26.340
+W przeciwnym razie personel mógłby utworzyć poprawną płatność z niewłaściwego konta.
+
+00:16:26.500 --> 00:16:28.380
+Termin płatności również wymaga uwagi.
+
+00:16:28.580 --> 00:16:32.740
+Płacenie po terminie może prowadzić do upomnień, sporów lub pogorszenia relacji z dostawcą.
+
+00:16:32.740 --> 00:16:36.580
+Płacenie zbyt wcześnie powoduje odpływ gotówki, zanim firma musi ją uwolnić.
+
+00:16:36.720 --> 00:16:43.800
+Dynamics 365 utrzymuje widoczność terminu płatności faktury, dzięki czemu dział finansowy może planować płatności zgodnie z warunkami uzgodnionymi z każdym dostawcą,
+
+00:16:43.900 --> 00:16:46.700
+co daje firmie większą kontrolę nad gotówką opuszczającą przedsiębiorstwo.
+
+00:16:46.900 --> 00:16:49.880
+Dynamics 365 musi odpowiedzieć na proste pytanie.
+
+00:16:50.140 --> 00:16:51.840
+Którą fakturę pokryła ta płatność?
+
+00:16:52.020 --> 00:16:53.340
+Odpowiedzią jest rozliczenie.
+
+00:16:53.580 --> 00:16:57.260
+Rozliczenie łączy płatność z konkretną fakturą lub fakturami dostawcy, który opłaca.
+
+00:16:57.440 --> 00:17:00.480
+Pomyśl o tym, jak o dopasowaniu paragonu do rachunku, który on reguluje.
+
+00:17:00.480 --> 00:17:06.620
+Bez rozliczenia firma może widzieć fakturę i płatność na tym samym koncie dostawcy, ale nie mieć jasnego zapisu, że należą one do siebie.
+
+00:17:06.820 --> 00:17:10.420
+Pełna płatność rozlicza całą fakturę, ale biznes nie zawsze jest tak uporządkowany.
+
+00:17:10.660 --> 00:17:13.420
+Firma może teraz zapłacić tylko część faktury, a resztę później.
+
+00:17:13.680 --> 00:17:19.340
+Rozliczenie rejestruje częściową płatność i pozostawia pozostałe saldo otwarte, aby dział finansowy widział dokładnie, ile firma jest jeszcze winna dostawcy.
+
+00:17:19.460 --> 00:17:22.140
+Ta przejrzystość jest kluczowa dla dokładnych sald dostawców.
+
+00:17:22.360 --> 00:17:24.640
+Jedna płatność może również pokryć kilka faktur.
+
+00:17:24.640 --> 00:17:29.200
+Być może firma opłaca pięć zaległych faktur od tego samego dostawcy jednym przelewem elektronicznym.
+
+00:17:29.420 --> 00:17:32.940
+Rozliczenie łączy tę jedną kwotę wychodzącą z każdą fakturą, którą ona pokrywa.
+
+00:17:33.140 --> 00:17:39.280
+Jeśli płatność nie pokrywa każdej faktury w całości, saldo do zapłaty pozostaje widoczne, zamiast znikać w niejasnej sumie całkowitej.
+
+00:17:39.420 --> 00:17:44.360
+Tworzy to możliwy do prześledzenia zapis, dzięki któremu można śledzić fakturę poprzez jej zatwierdzenie i wynik dopasowania.
+
+00:17:44.640 --> 00:17:49.120
+Zobacz płatność przygotowaną w dzienniku i sprawdź, w jaki sposób ta płatność rozliczyła saldo dostawcy.
+
+00:17:49.120 --> 00:17:55.200
+Gdy ktoś pyta, dlaczego pieniądze opuściły firmę, dział finansowy nie musi rekonstruować historii na podstawie e-maili i wyciągów bankowych.
+
+00:17:55.400 --> 00:18:04.480
+Proces może być widoczny na oddzielnych stronach w Dynamics 365, ale każdy rekord łączy się z kolejnym w jeden kontrolowany przepływ, spójny obraz zobowiązań.
+
+00:18:04.660 --> 00:18:07.700
+Wyobraź sobie, że otrzymujesz jedną fakturę za materiały biurowe.
+
+00:18:07.940 --> 00:18:13.180
+Rekord dostawcy zawiera zasady płatności, a zaimportowana faktura wnosi szczegóły rachunku oraz sam dokument.
+
+00:18:13.180 --> 00:18:15.460
+Dział zakupów dostarcza zamówienie zakupu.
+
+00:18:15.620 --> 00:18:19.580
+Dział przyjęć dostarcza dokument przyjęcia, więc proces dopasowania ma rzeczywiste rekordy do porównania.
+
+00:18:19.780 --> 00:18:23.860
+Teraz w tle profil księgowania umieszcza zadłużenie i wydatek na właściwych kontach księgi głównej.
+
+00:18:24.080 --> 00:18:28.860
+Moduł zarządzania gotówką i bankami kontroluje, jakiej metody płatności używasz i z którego konta bankowego wysyłane są środki.
+
+00:18:29.060 --> 00:18:33.960
+Załącznik pozostaje powiązany z transakcją, więc zawsze możesz później pobrać oryginalną fakturę do weryfikacji.
+
+00:18:34.320 --> 00:18:37.140
+Automatyzacja nie zastępuje osądu zespołu finansowego.
+
+00:18:50.340 --> 00:18:50.780
+Ciepło.
+
+00:19:09.750 --> 00:19:10.170
+Ciepło.

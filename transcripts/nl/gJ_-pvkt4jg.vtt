@@ -1,0 +1,856 @@
+WEBVTT
+
+00:00:00.140 --> 00:00:07.540
+Klaar voor 10 dagen Microsoft 365, Copilot, AI, Azure en de mensen die de toekomst van werk vormgeven?
+
+00:00:07.880 --> 00:00:12.440
+Deze januari is M365, kom terug en we pakken groter uit.
+
+00:00:12.680 --> 00:00:18.500
+Doe mee voor live sessies, praktijkdemo's en praktische kennis van MVP's en experts van over de hele wereld.
+
+00:00:18.740 --> 00:00:21.700
+Geen generieke dia's, geen eindeloze modewoorden.
+
+00:00:22.000 --> 00:00:29.120
+We pakken de echte uitdagingen aan Copilot Studio, AI Agents, Fabric, Beveiliging, Governance en Automatisering.
+
+00:00:29.120 --> 00:00:34.980
+Of je nu een IT-professional, ontwikkelaar of zakelijk leider bent, er zijn sessies speciaal voor jou.
+
+00:00:35.220 --> 00:00:40.500
+Met 10 volledige dagen kun je diverse technologieën verkennen en in contact komen met een wereldwijde community.
+
+00:00:40.840 --> 00:00:44.620
+Kijk live mee en neem praktische inzichten mee terug naar jouw organisatie.
+
+00:00:44.880 --> 00:00:49.160
+Januari 2027, 10 dagen, 1 Microsoft Community.
+
+00:00:49.720 --> 00:00:51.220
+Registratie is nu geopend.
+
+00:00:51.900 --> 00:00:53.300
+Claim vandaag nog jouw plek.
+
+00:00:55.420 --> 00:00:57.680
+Dat is M365.com.net
+
+00:00:57.680 --> 00:01:04.590
+Meld je nu aan op M365.com.net en we zien je live in januari.
+
+00:01:04.830 --> 00:01:08.550
+Welkom bij een nieuwe aflevering van Microsoft Knowledge Nuggets hier op M365.fm.
+
+00:01:08.990 --> 00:01:10.370
+Ik ben je gastheer, Mirko Peters.
+
+00:01:10.570 --> 00:01:14.290
+Het onderwerp van vandaag is er een waar bijna iedereen van heeft gehoord, maar minder mensen echt begrijpen.
+
+00:01:14.510 --> 00:01:16.290
+DNS, wat staat voor domeen namensystem.
+
+00:01:16.490 --> 00:01:20.570
+Je hebt het waarschijnlijk wel eens het telefoonboek van het internet horen noemen en die beschrijving klopt aardig.
+
+00:01:20.730 --> 00:01:21.670
+De taak is simpel.
+
+00:01:21.670 --> 00:01:29.830
+Neem een naam die je kunt onthouden, zoals contoso, kom en verander die in een nummer dat computers begrijpen, zoals 20.90.152.20.
+
+00:01:30.150 --> 00:01:34.790
+Computers leven van getallen, wij van namen en DNS zit daar precies tussenin om de vertaling te maken.
+
+00:01:35.010 --> 00:01:39.130
+Maar hier is het punt, de meeste mensen weten dat het een opzoeking uitvoert, maar ze zien nooit de volledige keten.
+
+00:01:39.310 --> 00:01:41.810
+Wat gebeurt er eigenlijk op het moment dat je een domein in je browser typt?
+
+00:01:41.810 --> 00:01:43.890
+En belangrijker nog, waar past Azure in het plaatje?
+
+00:01:44.010 --> 00:01:47.150
+Aan het einde van deze aflevering begrijp je wat Azure DNS echt is.
+
+00:01:47.330 --> 00:01:49.890
+Je kent het verschil tussen openbare en privé DNS zones.
+
+00:01:50.190 --> 00:01:52.210
+Je weet welke recordtypes je echt nodig hebt.
+
+00:01:52.390 --> 00:01:55.070
+En je ziet hoe delegatie de controle overdraagt aan Azure.
+
+00:01:55.270 --> 00:01:58.210
+We behandelen de bouwstenen in duidelijke taal, zonder poespas.
+
+00:01:58.430 --> 00:01:59.790
+Wat DNS werkelijk doet.
+
+00:02:00.050 --> 00:02:01.590
+Laten we beginnen met de kerntaak.
+
+00:02:01.790 --> 00:02:03.430
+DNS zet namen om in cijfers.
+
+00:02:03.710 --> 00:02:08.230
+Wanneer je contoso.com in je browser typt, heeft je computer geen idee wat die reeks betekent.
+
+00:02:08.230 --> 00:02:15.450
+Hij heeft een IP-adres nodig, iets zoals 20.190.152.20, om verbinding te maken met de server die die website host.
+
+00:02:15.690 --> 00:02:17.470
+DNS zorgt dat die vertaling gebeurt.
+
+00:02:17.690 --> 00:02:18.550
+Waarom is dit belangrijk?
+
+00:02:18.870 --> 00:02:22.430
+Omdat computers alleen getallen begrijpen, terwijl mensen alleen namen onthouden.
+
+00:02:22.570 --> 00:02:25.310
+Je onthoudt het telefoonnummer van je vriend niet, je onthoudt hun naam.
+
+00:02:25.510 --> 00:02:26.770
+Hetzelfde geldt voor websites.
+
+00:02:27.090 --> 00:02:30.930
+Dankzij DNS kun je Google.com typen in plaats van een reeks cijfers die je nooit uit elkaar zou houden.
+
+00:02:31.110 --> 00:02:33.690
+Dus, wat gebeurt er nou echt wanneer je een domein in je browser typt?
+
+00:02:33.850 --> 00:02:34.670
+Het is een keten.
+
+00:02:34.670 --> 00:02:38.410
+Je browser controleert eerst de eigen cache met de vraag, heb ik dit onlangs opgezocht?
+
+00:02:38.610 --> 00:02:43.550
+Zo niet, dan stuurt hij een verzoek naar een recursieve resolver, meestal aangeboden door je internetprovider.
+
+00:02:43.950 --> 00:02:46.050
+Van daaruit controleert de resolver de eigen cache.
+
+00:02:46.270 --> 00:02:47.270
+Nog steeds geen antwoord?
+
+00:02:47.470 --> 00:02:48.710
+Dan klimt hij door de hiërarchie.
+
+00:02:48.870 --> 00:02:50.350
+Hij vraagt eerst een root server.
+
+00:02:50.630 --> 00:02:56.350
+Die root server kent het IP-adres van contoso.com niet, maar weet wel wie hij vervolgens moet vragen, de TLD-server voorkom.
+
+00:02:56.530 --> 00:03:01.110
+Die TLD-server kent het exacte IP-adres ook niet, maar hij kent wel de gezaghebbende naamserver voor dat domein.
+
+00:03:01.310 --> 00:03:02.470
+Dat is de laatste halte.
+
+00:03:02.470 --> 00:03:05.110
+De gezaghebbende naamserver bevat de werkelijke records.
+
+00:03:05.270 --> 00:03:06.490
+Hij antwoordt met het IP-adres.
+
+00:03:06.630 --> 00:03:10.050
+De resolver slaat dit op in de cache, stuurt het terug naar je browser en je browser laat de pagina.
+
+00:03:10.210 --> 00:03:11.890
+Je hoeft niet elke stap uit je hoofd te leren.
+
+00:03:12.130 --> 00:03:13.850
+Weet gewoon dat er een hiërarchie is en dat het werkt.
+
+00:03:14.010 --> 00:03:17.250
+Het onderdeel dat voor ons van belang is, is die laatste stap, de gezaghebbende naamserver.
+
+00:03:17.510 --> 00:03:19.250
+Dat is waar Azure DNS in beeld komt.
+
+00:03:19.490 --> 00:03:20.350
+Wat is Azure DNS?
+
+00:03:20.730 --> 00:03:23.770
+Azure DNS is Microsoft's beheerde DNS hosting service.
+
+00:03:24.030 --> 00:03:29.490
+In begrijpelijke taal betekent dit dat je nooit je eigen DNS-servers hoeft te draaien, te patchen of na te denken over hoge beschikbaarheid.
+
+00:03:29.630 --> 00:03:31.210
+Azure regelt dat allemaal voor je.
+
+00:03:31.210 --> 00:03:39.170
+Je maakt een DNS-zone in Azure voor je domein, voegt je records toe zoals A-Records, C-Name Records of wat je ook nodig hebt en Azure host die records op zijn wereldwijde infrastructuur.
+
+00:03:39.350 --> 00:03:43.010
+Wanneer iemand waar dan ook op internet je domein opvraagt, antwoorden de naamservers van Azure.
+
+00:03:43.210 --> 00:03:47.250
+En omdat het gebouwd is op het wereldwijde netwerk van Azure, is het snel, veerkrachtig en schaalt het automatisch.
+
+00:03:47.370 --> 00:03:48.650
+Je hoeft er niet over na te denken.
+
+00:03:48.870 --> 00:03:49.690
+Het werkt gewoon.
+
+00:03:49.890 --> 00:03:55.070
+Je beheert alles via de Azure portal, de opdrachtregel of arm-schablonen als je van infrastructuur als code houdt.
+
+00:03:55.170 --> 00:03:58.950
+Geen handmatige serverconfiguraties, geen SSH-sessies naar een server onzonebestanden te bewerken.
+
+00:03:58.950 --> 00:04:01.370
+Het is allemaal point-and-click of script-and-deploy.
+
+00:04:01.550 --> 00:04:03.690
+Laten we dat nu vergelijken met de traditionele aanpak.
+
+00:04:03.810 --> 00:04:06.190
+Twintig jaar geleden draaide je je eigen DNS-survers.
+
+00:04:06.410 --> 00:04:13.850
+Je was zelf verantwoordelijk voor het patchen van het OS, zorgen voor redundantie zodat een enkele server-storing je domein niet offline haalt en capaciteitsplanning voor verkeerspieken.
+
+00:04:14.030 --> 00:04:16.610
+Met Azure DNS is dat allemaal het probleem van iemand anders.
+
+00:04:16.830 --> 00:04:19.590
+Je maakt gewoon je zone aan, voegt je records toe en je bent klaar.
+
+00:04:19.710 --> 00:04:20.810
+Maar hier wordt het interessant.
+
+00:04:21.050 --> 00:04:23.150
+Azure DNS is niet alleen voor openbare websites.
+
+00:04:23.150 --> 00:04:26.730
+Het regelt ook interne naamomzetting binnen je Azure virtuele netwerken.
+
+00:04:26.870 --> 00:04:30.970
+Dat is waar het onderscheid tussen openbare en privé gebaseerde DNS-zones om de hoek komt kijken.
+
+00:04:31.230 --> 00:04:33.870
+Openbare DNS-zones versus private DNS-zones.
+
+00:04:34.190 --> 00:04:37.090
+Laten we de twee smaken DNS-zones in Azure eens onder de loep nemen.
+
+00:04:37.270 --> 00:04:41.530
+Publieke DNS-zones zijn precies wat de naam zegt, domeinen die bereikbaar moeten zijn vanaf het internet.
+
+00:04:41.770 --> 00:04:47.510
+Elke naam die iemand buiten je netwerk moet kunnen omzetten, zoals je website, API, eindpunt of e-mail server, komt in een publieke zone.
+
+00:04:47.710 --> 00:04:49.850
+Private DNS-zones zijn het tegenovergestelde.
+
+00:04:49.850 --> 00:04:53.650
+Deze zijn bedoeld voor namen die alleen binnen je Azure virtuele netwerken opgelost moeten worden.
+
+00:04:53.870 --> 00:04:55.690
+Stel bijvoorbeeld dat je een database server hebt.
+
+00:04:55.850 --> 00:04:58.330
+Je wilt niet dat het hele internet naar het IP-adres ervan kan vragen.
+
+00:04:58.490 --> 00:05:00.550
+Je wilt alleen dat je applicatie-VMs deze kunnen vinden.
+
+00:05:00.730 --> 00:05:04.430
+Dus maak je een private zone aan en alleen de netwerken die je eraan koppelt, kunnen die namen omzetten.
+
+00:05:04.590 --> 00:05:05.910
+Hier is een concreet voorbeeld.
+
+00:05:06.190 --> 00:05:10.830
+Stel je hebt een database server en je wilt deze intern db.enternal.contosho.com noemen.
+
+00:05:11.070 --> 00:05:13.830
+Die naam betekent niets voor de buitenwereld en dat hoort ook zo.
+
+00:05:14.010 --> 00:05:15.970
+Maar je app-VMs moeten de server wel kunnen vinden.
+
+00:05:15.970 --> 00:05:25.990
+Met een private DNS-zone maak je dat record aan, koppel je de zone aan je virtuele netwerk en plotseling kan elke VM in dat netwerk db.enternal.contosho.com omzetten naar het privé IP van de database.
+
+00:05:26.190 --> 00:05:28.450
+Er zijn geen aangepaste DNS-survers nodig.
+
+00:05:28.690 --> 00:05:30.710
+Nu wordt het pas echt interessant bij private zones.
+
+00:05:30.990 --> 00:05:34.790
+Je kunt één zone koppelen aan meerdere virtuele netwerken, zelfs over verschillende regio's heen.
+
+00:05:34.930 --> 00:05:40.270
+Dus als je een webapp in East-US hebt en een database in West-Europe, kunnen beide VNET's dezelfde private zone delen.
+
+00:05:40.430 --> 00:05:44.410
+De webapp lost de database naam prima op, ook al staan ze in verschillende datacenters.
+
+00:05:44.410 --> 00:05:48.550
+Geen peringconfiguratie voor DNS, geen doorstuurregels, je koppelt simpelweg de zone.
+
+00:05:49.230 --> 00:05:51.450
+Autoregistratie is een andere functie die het vermelden waard is.
+
+00:05:51.650 --> 00:05:56.890
+Wanneer je dit inschakelt op een virtuele netwerkkoppeling, maakt Azure automatisch A-records aan voor elke VM zodra deze wordt opgestart.
+
+00:05:57.010 --> 00:06:00.010
+Je implementeert een nieuwe VM en binnen enkele minuten is er een DNS-record voor.
+
+00:06:00.170 --> 00:06:02.030
+Verwijder je de VM, dan verdwijnt het record ook.
+
+00:06:02.210 --> 00:06:03.590
+Geen handmatig beheer van records.
+
+00:06:03.830 --> 00:06:06.290
+Dit is vooral handig in dynamische omgevingen waar VM's komen en gaan.
+
+00:06:06.470 --> 00:06:09.350
+Ik hoor vaak dat mensen denken dat private zones een geregistreerde domeinnaam nodig hebben.
+
+00:06:09.350 --> 00:06:14.510
+Dat is niet zo. Je kunt een private zone noemen zoals je wilt, zoals een turnel, contosop.com, corp.local of db.
+
+00:06:14.690 --> 00:06:18.070
+Een turnel. Het maakt niet uit, want niemand buiten je netwerk zal er ooit een query op uitvoeren.
+
+00:06:18.210 --> 00:06:20.850
+Er is geen domein-registerar bij betrokken en geen publieke delegatie.
+
+00:06:21.030 --> 00:06:23.670
+Het is puur intern. Laten we het verschil samenvatten.
+
+00:06:23.810 --> 00:06:25.370
+Publieke zones zijn voor het internet.
+
+00:06:25.590 --> 00:06:27.590
+Private zones zijn voor je virtuele netwerken.
+
+00:06:27.770 --> 00:06:30.950
+Publieke zones vereisen een domein dat je bezit en delegatie van je registrar.
+
+00:06:31.130 --> 00:06:33.730
+Private zones hebben alleen een naam en een V-net-koppeling nodig.
+
+00:06:33.730 --> 00:06:38.630
+Zodra je zone is ingesteld, publiek of privaat, heb je records nodig om naam en aan resources te koppelen.
+
+00:06:38.870 --> 00:06:39.570
+Dat is de basis.
+
+00:06:39.930 --> 00:06:42.730
+En als je dat eenmaal door hebt, is de rest enkel nog records toevoegen.
+
+00:06:42.930 --> 00:06:44.550
+Recordtypes die u echt zult gebruiken.
+
+00:06:44.770 --> 00:06:46.910
+Dus, welke DNS-records ga je dagelijks gebruiken?
+
+00:06:47.050 --> 00:06:48.130
+Laten we ze eens doornemen.
+
+00:06:48.350 --> 00:06:50.110
+Het A-record is degene die iedereen kent.
+
+00:06:50.290 --> 00:06:52.370
+Het koppelt de naam aan een IPv4-adres.
+
+00:06:52.570 --> 00:06:54.870
+Typ www.contosop.com in je browser.
+
+00:06:54.870 --> 00:06:58.890
+En dat A-record vertelt dat de server zich op 20.190 bevindt.
+
+00:06:59.190 --> 00:07:00.630
+152.20
+
+00:07:00.630 --> 00:07:02.150
+Eenvoudig en universeel.
+
+00:07:02.150 --> 00:07:04.690
+Het is het meest voorkomende recordtype op het internet.
+
+00:07:04.910 --> 00:07:07.830
+A-A-A-records doen hetzelfde voor IPv6-adressen.
+
+00:07:08.030 --> 00:07:11.350
+Als je dienst IPv6 ondersteunt, heb je ze nodig naast je A-records.
+
+00:07:11.530 --> 00:07:14.830
+De meeste mensen gebruiken deze niet dagelijks, maar ze zijn er wanneer je ze nodig hebt.
+
+00:07:15.030 --> 00:07:16.470
+C-Name records werken anders.
+
+00:07:16.690 --> 00:07:20.330
+In plaats van een naam aan een IP te koppelen, koppelt een C-Name een naam aan een andere naam.
+
+00:07:20.330 --> 00:07:24.610
+Je zou bijvoorbeeld www.contosop.com als C-Name kunnen laten verwijzen naar Contoso.
+
+00:07:24.790 --> 00:07:26.150
+Azure Websites.net
+
+00:07:26.150 --> 00:07:33.230
+Wanneer iemand www.contosop.com opvraagt, volgt de DNS resolver de keten tot het daadwerkelijke IP is gevonden.
+
+00:07:33.450 --> 00:07:34.670
+En dit is het mooie ervan.
+
+00:07:34.950 --> 00:07:37.070
+C-Name's zijn perfect voor aliasing.
+
+00:07:37.350 --> 00:07:40.570
+Wijzig het doe één keer en alles wat ernaar verwijst, wordt automatisch bijgewerkt.
+
+00:07:40.730 --> 00:07:42.670
+MX records regelen e-mail routering.
+
+00:07:42.670 --> 00:07:50.110
+Als iemand een e-mail stuurt naar user-at-contosop.com, vraagt de versedende server het MX record op om te bepalen welke mailserver deze moet ontvangen.
+
+00:07:50.290 --> 00:07:53.230
+Je hebt meestal een of meer MX records met prioriteitswaarde.
+
+00:07:53.470 --> 00:07:55.750
+Lagere getallen betekenen een hogere prioriteit.
+
+00:07:55.970 --> 00:08:01.290
+Dus mail.contosop.com met prioriteit 10 wordt geprobeerd voor backup.contosop.com met prioriteit 20.
+
+00:08:01.510 --> 00:08:05.310
+Text records slaan tekstinformatie op en worden voor allerlei zaken gebruikt.
+
+00:08:05.530 --> 00:08:07.450
+Domein verificatie is een belangrijke.
+
+00:08:07.450 --> 00:08:13.450
+Wanneer je Microsoft 365 instelt, vragen ze je een tekstrecord toe te voegen om te bewijzen dat je de eigenaar van het domein bent.
+
+00:08:13.630 --> 00:08:14.870
+E-mail-authenticatie ook.
+
+00:08:15.070 --> 00:08:18.230
+SPF records, DKIM sleutels, DMARC beleid.
+
+00:08:18.430 --> 00:08:19.850
+Dat zijn allemaal tekstrecords.
+
+00:08:20.070 --> 00:08:23.750
+Ze zien eruit als willekeurige reekse tekst, maar ze dienen belangrijke veiligheidsdoeleinden.
+
+00:08:23.950 --> 00:08:28.470
+Nu voegt Azure DNS iets toe wat je niet vindt bij traditionele DNS hosting, alias records.
+
+00:08:28.730 --> 00:08:31.470
+Deze zijn specifiek voor Azure en ze zijn uiterst nuttig.
+
+00:08:31.630 --> 00:08:36.550
+Met een alias record kun je een naam direct naar een Azure resource laten verwijzen in plaats van naar een statisch IP-adres.
+
+00:08:36.550 --> 00:08:43.470
+Dus in plaats van een A-record met een vast IP voor je load balancer te maken, maak je een alias record dat naar de load balancer resource zelf verwijst.
+
+00:08:43.630 --> 00:08:47.050
+En dat is belangrijk omdat Azure resources hun IP-adressen kunnen wijzigen.
+
+00:08:47.230 --> 00:08:51.430
+Een load balancer wordt opnieuw geïmplementeerd of een CDN-eindpunt krijgt een nieuw front-end IP.
+
+00:08:51.730 --> 00:08:56.150
+Bij een regulier A-record zou je elke keer dat dit gebeurt het DNS-record handmatig moeten bijwerken.
+
+00:08:56.350 --> 00:08:59.250
+Maar met een alias record regelt Azure dit automatisch.
+
+00:08:59.610 --> 00:09:02.690
+Het record verwijst altijd naar het huidige IP van de resource.
+
+00:09:02.690 --> 00:09:07.870
+Geen handmatig werk, geen vergeten updates en geen downtime omdat iemand vergat een record te wijzigen.
+
+00:09:08.070 --> 00:09:10.510
+Nog één ding over hoe Azure records organiseert.
+
+00:09:10.670 --> 00:09:15.270
+In Azure DNS worden records van hetzelfde type en dezelfde naam gegroepeerd in een record set.
+
+00:09:15.450 --> 00:09:23.350
+Dus als je twee webservers hebt voor dezelfde site, maak je één A-record set voor www.contoso.com met twee IP-adressen erin.
+
+00:09:23.530 --> 00:09:26.490
+De DNS resolver geeft beide terug en de client kiest er een.
+
+00:09:26.650 --> 00:09:28.450
+Dat is een eenvoudige vorm van load balancing.
+
+00:09:28.730 --> 00:09:31.690
+Hetzelfde principe geldt voor MX records met meerdere mailsurvers.
+
+00:09:31.690 --> 00:09:33.490
+De record set houdt alles netjes.
+
+00:09:33.670 --> 00:09:39.390
+Je hebt je zone, je hebt je records, maar er is nog één stap voordat het internet daadwerkelijk je Azure DNS-zone gaat gebruiken.
+
+00:09:39.550 --> 00:09:43.290
+Je moet de rest van de wereld laten weten dat Azure nu de autoriteit is voor jouw domein.
+
+00:09:43.530 --> 00:09:44.930
+Dat proces heet delegatie.
+
+00:09:45.390 --> 00:09:47.570
+Delegatie is de manier waarop je de controle overdraagt.
+
+00:09:47.730 --> 00:09:52.370
+Je hebt dus je openbare DNS-zone in Azure aangemaakt, je records toegevoegd en alles ziet er aan jouw kant goed uit.
+
+00:09:52.530 --> 00:09:53.310
+Hier is het punt.
+
+00:09:53.570 --> 00:09:56.790
+Niemand op internet weet dat Azure vragen voor jouw domein moet beantwoorden.
+
+00:09:57.050 --> 00:09:58.010
+Dat moet je ze vertellen.
+
+00:09:58.250 --> 00:09:59.510
+Dat is wat delegatie is.
+
+00:09:59.510 --> 00:10:04.950
+Delegatie is het proces waarbij je tegen de rest van het internet zegt, Azure DNS is nu de autoriteit voor mijn domein.
+
+00:10:05.150 --> 00:10:10.190
+Dit doe je bij je domein registrar, GoDaddy, Namecheap, Google Domains, waar je je domein ook hebt gekocht.
+
+00:10:10.370 --> 00:10:13.970
+Je gaat naar hun DNS-instellingen en wijzigt de nameserver records zodat ze naar Azure wijzen.
+
+00:10:14.210 --> 00:10:18.530
+Wanneer je een openbare DNS-zone in Azure aanmaakt, geeft de service je vier nameserveradressen.
+
+00:10:18.710 --> 00:10:24.490
+Ze zien er ongeveer zo uit ns1.neo1.azuredense.com, ns2.neo1.azuredense.net enzovoort.
+
+00:10:24.490 --> 00:10:27.270
+Dat zijn de servers die vragen voor jouw domein zullen beantwoorden.
+
+00:10:27.450 --> 00:10:30.930
+Je neemt die vier adressen en plaatst ze in de nameserver configuratie van je registrar.
+
+00:10:31.170 --> 00:10:31.830
+Dat is alles.
+
+00:10:32.110 --> 00:10:33.290
+Dat is de delegatiestap.
+
+00:10:33.510 --> 00:10:37.150
+Zodra je die wijzigingen opslaat, begint de informatie zich over het internet te verspreiden.
+
+00:10:37.350 --> 00:10:40.590
+De root servers en tld servers voor je domein worden bijgewerkt.
+
+00:10:40.750 --> 00:10:46.890
+Ze leren dat wanneer iemand om contoso.com vraagt, ze de query naar de nameservers van Azure moeten sturen in plaats van waar het voorheen naar toe wees.
+
+00:10:46.890 --> 00:10:57.370
+Verspreiding gebeurt meestal binnen enkele minuten, maar in sommige gevallen kan het tot 48 uur duren omdat DNS-resolvers wereldwijd de oude informatie in de cache bewaren en pas op updates controleren als hun cache verloopt.
+
+00:10:57.590 --> 00:10:58.630
+Nu iets belangrijks.
+
+00:10:59.110 --> 00:11:00.470
+Delegatie werkt één kant op.
+
+00:11:00.670 --> 00:11:02.190
+Azure beheert je registrar niet.
+
+00:11:02.370 --> 00:11:05.410
+Je verlengt je domein nog steeds via GoDaddy of Namecheap of wie dan ook.
+
+00:11:05.550 --> 00:11:07.210
+Je beheert de registratie nog steeds daar.
+
+00:11:07.410 --> 00:11:08.950
+Azure host alleen de DNS-records.
+
+00:11:09.150 --> 00:11:10.130
+De twee zijn gescheiden.
+
+00:11:10.310 --> 00:11:13.050
+Je registrar regelt het, ik ben eigenaar van dit domein, gedeelte.
+
+00:11:13.210 --> 00:11:16.110
+Azure regelt het, hier is het IP-adres voor dit domein, gedeelte.
+
+00:11:16.110 --> 00:11:19.090
+Er is hier een veelvoorkomend struikelblok dat mensen overvalt.
+
+00:11:19.290 --> 00:11:24.270
+Wanneer je je naamsurfers wijzigt naar Azure, stoppen de DNS-records bij je oude host met werken.
+
+00:11:24.530 --> 00:11:31.370
+Allemaal, je A-records, MX-records en Text-records verdwijnen omdat het internet niet langer je oude host om antwoorden vraagt.
+
+00:11:31.650 --> 00:11:35.570
+Zorg er dus voor dat je elk record opnieuw hebt aangemaakt in Azure voordat je de overstap maakt.
+
+00:11:35.770 --> 00:11:40.130
+Anders gaat je website plat, stopt je e-mailverkeer en ben je koortsachtig aan het zoeken naar wat je hebt gemist.
+
+00:11:40.310 --> 00:11:41.850
+Plan de migratie zorgvuldig.
+
+00:11:42.010 --> 00:11:45.590
+Maak de zone aan in Azure, voeg al je records toe en wijzig daarna pas de naamsurfers.
+
+00:11:45.590 --> 00:11:46.530
+Niet andersom.
+
+00:11:46.930 --> 00:11:49.230
+Delegatie is het laatste puzzelstuk voor publieke zones.
+
+00:11:49.570 --> 00:11:53.050
+Het verbindt je Azure DNS-zone met de wereldwijde DNS-infrastructuur.
+
+00:11:53.210 --> 00:11:55.430
+Maar voor private zones is het verhaal compleet anders.
+
+00:11:55.670 --> 00:11:58.110
+Er komt geen registrar aan te pas en er is geen delegatie.
+
+00:11:58.290 --> 00:12:01.630
+In plaats daarvan koppel je je zone direct aan de virtuele netwerken die het nodig hebben.
+
+00:12:01.810 --> 00:12:03.150
+Private DNS in actie.
+
+00:12:03.330 --> 00:12:04.950
+Koppelen aan virtuele netwerken.
+
+00:12:05.170 --> 00:12:07.550
+Dus, hoe maak je een private DNS-zone eigenlijk nuttig?
+
+00:12:07.710 --> 00:12:11.550
+Zie het als een container voor records, maar het is nutteloos totdat je het koppelt aan een netwerk.
+
+00:12:11.550 --> 00:12:14.850
+Die koppeling vertelt Azure welke netwerken de namen mogen omzetten.
+
+00:12:15.090 --> 00:12:18.310
+Zonder die koppeling bestaat de zone wel, maar kan niemand er een query op uitvoeren.
+
+00:12:18.510 --> 00:12:20.770
+Het is als een telefoonboek zonder telefoons om mee te bellen.
+
+00:12:20.890 --> 00:12:22.050
+De installatie is eenvoudig.
+
+00:12:22.210 --> 00:12:26.250
+Je maakt een virtuele netwerkkoppeling aan vanuit de private zone naar elk VNet dat resolutie nodig heeft.
+
+00:12:26.450 --> 00:12:28.990
+Kies het VNet, geef de koppeling een naam en sla deze op.
+
+00:12:29.130 --> 00:12:34.550
+Zodra dat is gedaan, werkt de zone voor elke VM en service binnen dat netwerk, zonder aangepaste DNS-survers of hostbestanden.
+
+00:12:35.270 --> 00:12:36.070
+Het werkt gewoon.
+
+00:12:36.290 --> 00:12:37.550
+Dit is hoe het zit met automatische registratie.
+
+00:12:37.550 --> 00:12:38.190
+Automatische registratie
+
+00:12:38.190 --> 00:12:40.470
+Wanneer je een VNet-koppeling maakt, heb je een keuze.
+
+00:12:40.670 --> 00:12:43.370
+Wijs het aan als een registratie, VNet of laat het als alleen resolutie.
+
+00:12:43.510 --> 00:12:44.950
+En dat verschil is erg belangrijk.
+
+00:12:45.290 --> 00:12:48.150
+Automatische registratie werkt alleen op het VNet dat je markeert voor registratie.
+
+00:12:48.310 --> 00:12:51.890
+Elke VM die daar wordt opgestart, krijgt automatisch een A-record in de private zone.
+
+00:12:52.310 --> 00:12:55.410
+Implementeren nieuwe VM en binnen enkele minuten verschijnt er een DNS-record.
+
+00:12:55.650 --> 00:12:57.550
+Verwijder die VM en het record verdwijnt.
+
+00:12:57.710 --> 00:12:58.690
+Geen handmatig werk.
+
+00:12:58.890 --> 00:13:01.210
+Hoe zit het met andere VNets die aan dezelfde zone zijn gekoppeld?
+
+00:13:01.370 --> 00:13:02.550
+Die zijn alleen voor resolutie.
+
+00:13:02.550 --> 00:13:05.650
+Ze kunnen namen opzoeken en antwoorden krijgen, maar ze registreren niet automatisch.
+
+00:13:05.650 --> 00:13:08.250
+Hun VM's krijgen dus niet automatisch records aangemaakt.
+
+00:13:08.430 --> 00:13:11.570
+Dat is bewust, vooral voor een gedeelde private zone voor een centrale service.
+
+00:13:11.850 --> 00:13:15.390
+Je wilt niet dat elke VM in elk spooknetwerk automatisch records aanmaakt.
+
+00:13:15.590 --> 00:13:20.390
+Hou registratie liever op het VNet waar je daadwerkelijke servers staan en laat de rest alleen resolutie gebruiken.
+
+00:13:20.610 --> 00:13:22.210
+Laat me je een praktijkscenario geven.
+
+00:13:22.490 --> 00:13:26.510
+Stel dat je een webtoepassing hebt die in het ene VNet draait en een database-server in een ander VNet.
+
+00:13:26.690 --> 00:13:28.590
+Misschien zelfs in verschillende Azure-regio's.
+
+00:13:28.590 --> 00:13:33.190
+De webapp moet verbinding maken met de database, maar je wilt het privé IP van de database niet hardcoderen.
+
+00:13:33.410 --> 00:13:34.170
+Dat is fragiel.
+
+00:13:34.170 --> 00:13:37.770
+Als de database opnieuw wordt geïmplementeerd met een nieuw IP-adres, werkt je webapp niet meer.
+
+00:13:37.990 --> 00:13:42.970
+Maak daarom in plaats daarvan een privé DNS-zone, voeg een A-record toe voor de database-naam en koppel de zone aan beide VNets.
+
+00:13:43.150 --> 00:13:47.230
+Nu vertaalt de webapp db.internel.contoso.com naar het IP-adres van de database.
+
+00:13:47.490 --> 00:13:52.110
+Wanneer dat IP-adres wijzigt, hoef je slechts één record bij te werken in plaats van te zoeken in configuratiebestanden.
+
+00:13:52.290 --> 00:13:54.670
+Koppelen tussen regio's werkt prima met privézones.
+
+00:13:54.670 --> 00:13:59.790
+Je kunt een VNet in East US en een ander in West Europe hebben die beide zijn gekoppeld aan dezelfde privézone.
+
+00:14:00.070 --> 00:14:03.030
+Een naamsomzetting werkt over regio's heen zonder extra configuratie.
+
+00:14:03.030 --> 00:14:09.430
+Azure regelt de routering achter de schermen, iets wat je niet krijgt bij traditionele DNS-survers zonder complexe doorstuurregels in te stellen.
+
+00:14:09.630 --> 00:14:15.310
+Dus delegatie voor openbare zones, VNet-koppelingen voor privézones, twee verschillende mechanismen voor twee verschillende doeleinden.
+
+00:14:15.590 --> 00:14:21.030
+Zodra je beide hebt ingesteld, heb je de basis, maar dan blijft de vraag hoe je alles veilig en gezond houdt.
+
+00:14:22.170 --> 00:14:24.250
+Beveiliging, monitoring en best practices.
+
+00:14:24.590 --> 00:14:27.390
+Laten we het nu hebben over het gezond en veilig houden van je DNS.
+
+00:14:27.390 --> 00:14:32.930
+Azure DNS integreert met Azure RBAC, zodat je precies bepaalt wie records kan maken of wijzigen.
+
+00:14:33.110 --> 00:14:37.270
+Je wilt niet dat iemand per ongeluk je MX-record verwijderd en de e-mail voor het hele bedrijf platlegt.
+
+00:14:37.530 --> 00:14:40.690
+Geef je DNS-team contributor toegang en iedereen anders alleen lezen.
+
+00:14:40.950 --> 00:14:41.790
+Zo simpel is het.
+
+00:14:41.930 --> 00:14:45.590
+Je kunt ook Azure Policy gebruiken om regels af te dwingen in je hele organisatie.
+
+00:14:45.810 --> 00:14:48.370
+Misschien wil je NA-amgavings, conventies voor je zones afdwingen,
+
+00:14:48.470 --> 00:14:51.170
+of misschien zegt je beveiligingsteam dat openbare zones niet zijn toegestaan.
+
+00:14:51.170 --> 00:14:52.370
+Alles moet privé zijn.
+
+00:14:52.630 --> 00:14:57.190
+Schrijf een beleid, pas het toe op het niveau van de beheergroep en het wordt overal afgedwongen zonder uitzonderingen.
+
+00:14:57.390 --> 00:15:00.150
+Er is ook ingebouwde dreigingsinformatie op DNS-niveau.
+
+00:15:00.310 --> 00:15:04.370
+Onderdeel van Microsoft Defender for Cloud kan het oplossen van bekende kwaadaardige domeinen blokkeren.
+
+00:15:04.570 --> 00:15:09.770
+Als een VM in je netwerk probeert een domein te achterhalen dat is gemarkeerd als phishing site of malware command en control server,
+
+00:15:09.970 --> 00:15:11.690
+kan Azure DNS weigeren antwoord te geven.
+
+00:15:11.890 --> 00:15:14.870
+Het is een beveiligingslaag die je krijgt zonder enige extra configuratie.
+
+00:15:15.110 --> 00:15:16.490
+Monitoring is ook eenvoudig.
+
+00:15:16.630 --> 00:15:19.690
+Azure Monitor volgt query volumes, latentie en foute personen.
+
+00:15:19.690 --> 00:15:23.710
+Je kunt waarschuwingen instellen, zodat als het query volume plotseling daalt, je weet dat er iets kapot is.
+
+00:15:23.870 --> 00:15:25.990
+Als de latentie piekt, is er een netwerkprobleem.
+
+00:15:25.990 --> 00:15:30.370
+Je krijgt inzicht in hoe je DNS presteert zonder dat je aparte monitoring tools hoeft te gebruiken.
+
+00:15:30.550 --> 00:15:34.930
+Een best practice gebruikt Alias Records in plaats van statische A-records voor Azure resources.
+
+00:15:35.190 --> 00:15:37.790
+We hebben dit al eerder behandeld, maar het is de moeite waard om te herhalen.
+
+00:15:37.950 --> 00:15:41.190
+Alias Records worden automatisch bijgewerkt wanneer de onderliggende bron verandert.
+
+00:15:41.470 --> 00:15:42.950
+Statische A-records doen dat niet.
+
+00:15:43.130 --> 00:15:48.190
+Als je naar een load balancer, CD en eindpunt of Traffic Manager profiel verwijst, gebruik dan een Alias record.
+
+00:15:48.390 --> 00:15:50.690
+Het is weer iets minder om aan te denken als er iets verandert.
+
+00:15:50.690 --> 00:15:56.250
+Voor hybride omgevingen met workloads on-premises en in Azure is er een dienst genaamd Azure DNS Private Resolver.
+
+00:15:56.450 --> 00:15:57.370
+Het is een beheerde.

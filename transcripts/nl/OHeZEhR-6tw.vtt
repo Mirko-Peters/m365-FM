@@ -1,0 +1,898 @@
+WEBVTT
+
+00:00:00.080 --> 00:00:03.940
+Welkom bij weer een nieuwe aflevering van Microsoft Knowledge Nuggets hier op M365FM.
+
+00:00:04.080 --> 00:00:05.520
+Ik ben je gastheer Mirko Peters.
+
+00:00:05.760 --> 00:00:09.260
+In deze serie pakken we één Microsoft technologie en leggen we deze in begrijpelijke taal uit.
+
+00:00:09.420 --> 00:00:11.600
+Het onderwerp van vandaag is er een waar bijna iedereen van heeft gehoord,
+
+00:00:11.780 --> 00:00:13.240
+maar de meeste mensen niet echt kunnen uitleggen.
+
+00:00:13.360 --> 00:00:14.360
+Azure Landing Zones.
+
+00:00:14.700 --> 00:00:15.380
+Dit is het beeld.
+
+00:00:15.620 --> 00:00:18.660
+Stel je voor dat je een Azure tenant erft waar elk team zijn eigen gang ging.
+
+00:00:18.900 --> 00:00:22.560
+Geen NAAM-evingsconventie, geen beleid, geen netwerkplan, overal subscriptions.
+
+00:00:22.960 --> 00:00:25.860
+Sommige voor productie, sommige voor testen, en je kunt het verschil niet zien.
+
+00:00:26.060 --> 00:00:29.140
+Niemand weet wie wat bezit, de rekening is een mysterie en als er iets kapot gaat,
+
+00:00:29.140 --> 00:00:30.680
+kost het uren om het probleem te vinden.
+
+00:00:30.920 --> 00:00:33.940
+Dat is het probleem van Cloud Chaos en het komt verrassend vaak voor.
+
+00:00:34.180 --> 00:00:35.260
+Vaker dan je zou denken.
+
+00:00:35.500 --> 00:00:38.800
+Azure Landing Zones zijn wat deze puinhoop voorkomt voordat het begint.
+
+00:00:39.000 --> 00:00:42.300
+Aan het einde van deze aflevering begrijp je wat een landing zone echt is,
+
+00:00:42.460 --> 00:00:46.180
+waarom de acht ontwerpgebieden ertoe doen en hoe je de meest gemaakte fouten vermijdt.
+
+00:00:46.240 --> 00:00:48.000
+Pak je koffie en laten we erin duiken.
+
+00:00:48.500 --> 00:00:50.180
+Wat is eigenlijk een Azure Landing Zone?
+
+00:00:50.420 --> 00:00:54.080
+De meeste mensen denken dat een Azure Landing Zone een product is waarop je klikt om te implementeren,
+
+00:00:54.260 --> 00:00:54.840
+maar dat is het niet.
+
+00:00:55.000 --> 00:00:57.700
+Er is geen knop in de portal waarop staat, maak landing zone.
+
+00:00:57.780 --> 00:00:58.780
+Zo werkt het niet.
+
+00:00:58.780 --> 00:01:02.580
+Een landing zone is een vooraf geconfigureerde omgeving waar vangrails al aanwezig zijn.
+
+00:01:02.860 --> 00:01:07.280
+Netwerken, identiteit, monitoring, beleid, alles is al verbonden voordat er workloads arriveren.
+
+00:01:07.460 --> 00:01:11.640
+Zie het als het kopen van een huis dat al elektriciteit, leidingwerk en een beveiligingssysteem heeft.
+
+00:01:11.820 --> 00:01:15.220
+Je trekt er gewoon in en begint te werken zonder zelf de bedrading aan te hoeven leggen.
+
+00:01:15.360 --> 00:01:19.660
+Het belangrijkste idee is dat de subscription de eenheid van isolatie is, niet de resource group.
+
+00:01:19.780 --> 00:01:21.940
+Een subscription is je grens voor de blessed radius.
+
+00:01:22.200 --> 00:01:25.460
+Je geeft een team een subscription omdat subscriptions hun eigen quota-limieten,
+
+00:01:25.700 --> 00:01:27.600
+beleidstoewijzingen en facturering dragen.
+
+00:01:27.600 --> 00:01:31.020
+De landing zone omhult die subscription met alles wat centraal is besloten.
+
+00:01:31.220 --> 00:01:34.380
+Welke regio's zijn toegestaan, met welk netwerk ze verbinding maken,
+
+00:01:34.640 --> 00:01:36.680
+welke tekst verplicht zijn en wat ze verboden zijn te doen.
+
+00:01:36.880 --> 00:01:38.500
+Dus wat dwingt de regels eigenlijk af?
+
+00:01:38.640 --> 00:01:41.480
+Azure policy, geen documentatie, geen goede bedoelingen.
+
+00:01:41.620 --> 00:01:44.280
+Het wordt toegewezen op managementgroepniveau en doet drie dingen.
+
+00:01:44.520 --> 00:01:47.900
+Deny blokkeert zaken zoals niet toegestane regio's of publieke IP-adressen.
+
+00:01:48.060 --> 00:01:50.620
+Adit markeert niet conforme resources zonder ze te blokkeren.
+
+00:01:50.840 --> 00:01:54.540
+De ploi IF Not Exists herstelt automatisch door zaken zoals diagnostische instellingen
+
+00:01:54.540 --> 00:01:57.220
+voor Log Analytics of Microsoft Defender plannen te implementeren.
+
+00:01:57.460 --> 00:02:01.100
+Dit is het verschil tussen governance die een wiki-pagina is en governance die code is.
+
+00:02:01.320 --> 00:02:05.520
+Teams bewegen snel binnen hun bugs, maar het platform team beheert de bugs, niet de inhoud.
+
+00:02:05.740 --> 00:02:10.160
+De grote verschuiving is dat teams hun eigen subscriptions hebben terwijl het centrale team de regels bepaalt.
+
+00:02:10.540 --> 00:02:13.220
+Identiteit en governance, de voordeur en het regelboek.
+
+00:02:13.360 --> 00:02:17.880
+Het zit zo, een landingzone is niet zomaar iets, het is opgebouwd uit acht ontwerpgebieden.
+
+00:02:17.880 --> 00:02:19.840
+Laten we de eerste drie onder de loop nemen.
+
+00:02:20.040 --> 00:02:22.560
+Als eerste zijn er Azure facturering en de Entra tenant.
+
+00:02:22.840 --> 00:02:26.000
+Dit gaat over het vanaf het begin correct instellen van je tenant en abonnement.
+
+00:02:26.180 --> 00:02:29.580
+Klinkt simpel, maar je zult verbaasd zijn hoeveel organisaties dit fout doen.
+
+00:02:29.740 --> 00:02:35.960
+Je moet nadenken over je factuurstructuur, je inschrijving en hoe alles verbonden is met je Entra tenant voordat je iets implementeert.
+
+00:02:36.160 --> 00:02:39.300
+Je primaire beveiligingsgrens is identiteits- en toegangsbeheer.
+
+00:02:39.520 --> 00:02:42.240
+Zie Entra ID als de receptie in een kantoorgebouw.
+
+00:02:42.360 --> 00:02:44.540
+Het bepaalt wie er binnenkomt en wat ze mogen doen.
+
+00:02:44.540 --> 00:02:50.040
+Je wilt Privileged Identity Management of PIM gebruiken en RBAC rollen met de minste rechten afdwingen.
+
+00:02:50.200 --> 00:02:53.280
+Geef niet iedereen eigenaar toegang, dat is vragen om problemen.
+
+00:02:53.460 --> 00:02:57.580
+Gebruik in plaats daarvan PIM om tijdelijke just-in-time toegang te verlenen wanneer iemand die echt nodig heeft.
+
+00:02:57.820 --> 00:03:00.960
+En stel periodieke toegangsbeoordelingen in om overbodige rechten op te schonen.
+
+00:03:01.100 --> 00:03:03.640
+Het derde ontwerpgebied is resource-organisatie.
+
+00:03:04.060 --> 00:03:06.480
+Beheergroepen, abonnementen en resource-groepen.
+
+00:03:06.780 --> 00:03:12.300
+Beheergroepen staan boven abonnementen en beleid en roltoewijzingen worden via de boomstructuur naar beneden overgeerft.
+
+00:03:12.300 --> 00:03:18.280
+De referentie-hierarchie van het Cloud Adoption Framework begint bij de tenant route, gevolgd door een tussengroep voor je organisatie.
+
+00:03:18.500 --> 00:03:22.380
+Daaronder heb je platform, landing zones, buitengebruik gesteld en sandbox.
+
+00:03:22.580 --> 00:03:26.700
+Platform bevat je gedeelde abonnementen, identiteitsbeheer en connectiviteit.
+
+00:03:26.960 --> 00:03:32.900
+Landing zones zijn opgesplitst in korp voor workloads die on-premises connectiviteit nodig hebben en online voor internetgerichte apps.
+
+00:03:33.200 --> 00:03:34.680
+Waarom is deze structuur belangrijk?
+
+00:03:34.680 --> 00:03:38.500
+Je wijst beleid één keer hoog in de boom toe en alles daaronder voldoet automatisch.
+
+00:03:38.660 --> 00:03:43.840
+Een praktijkvoorbeeld, een weigeringsbeleid aan de top blokkeert niet toegestane regio's voor elk abonnement daaronder.
+
+00:03:44.040 --> 00:03:46.020
+Je hoeft het niet vijftig keer te configureren.
+
+00:03:46.280 --> 00:03:50.180
+Stel het één keer in en het wordt overgeerft, dat is de echte kracht van de beheergroep-hierarchie.
+
+00:03:50.500 --> 00:03:52.980
+Netwerken en beveiliging, de muren en de sloten.
+
+00:03:53.320 --> 00:03:57.500
+Identiteit en governance bepalen de regels, maar niets daarvan werkt als het netwerk een chaos is.
+
+00:03:58.180 --> 00:04:02.600
+Netwerktopologie en connectiviteit is ontwerpgebied 4, hoe je virtuele netwerken zijn gestructureerd.
+
+00:04:02.600 --> 00:04:09.420
+Er zijn twee hoofdpatronen, hub en spook, waarbij je één centraal virtueel netwerk als hub hebt met meerdere spooknetwerken die daarmee verbinden,
+
+00:04:09.680 --> 00:04:13.700
+of Azure Virtual One, Microsofts beheerde versie van dat idee op grotere schaal.
+
+00:04:13.920 --> 00:04:15.740
+De hub bevat al je gedeelde surfaces.
+
+00:04:16.080 --> 00:04:23.600
+Azure Firewall voor verkeersinspectie, express route of VPN, gateways voor on-premises connectiviteit, DNS-omzetting, dingen die elke workload nodig heeft.
+
+00:04:23.760 --> 00:04:26.280
+De spokes zijn de plekken waar je workloads daadwerkelijk draaien.
+
+00:04:26.480 --> 00:04:31.440
+Ze koppelen met de hub, zodat verkeer door centrale surfaces stroomt, maar elke spook blijft geïsoleerd van de andere.
+
+00:04:31.440 --> 00:04:33.060
+Hier is een veelgemaakte fout.
+
+00:04:33.260 --> 00:04:39.300
+Teams creëren een enorm pering netwerk in plaats van een hub te gebruiken, waarbij elk virtueel netwerk direct met elk ander netwerk wordt verbonden.
+
+00:04:39.500 --> 00:04:41.920
+Dat werkt een tijdje, maar het wordt al snel een puinhoop.
+
+00:04:42.040 --> 00:04:44.740
+Je eindigt met een web van verbindingen dat niemand meer kan volgen.
+
+00:04:44.920 --> 00:04:46.360
+Een hub vereenvoudigt alles.
+
+00:04:46.580 --> 00:04:48.980
+Eén plek om te beheren, één plek om te beveiligen.
+
+00:04:49.160 --> 00:04:51.060
+Plan je IP-adres bereiken vooraf.
+
+00:04:51.240 --> 00:04:52.620
+Dit is belangrijker dan je denkt.
+
+00:04:52.900 --> 00:04:56.760
+Zodra spokes verbonden zijn met een hub, zijn overlappende adresruimtes lastig te herstellen.
+
+00:04:56.940 --> 00:04:58.400
+Je kunt ze niet zomaar wijzigen.
+
+00:04:58.400 --> 00:05:01.840
+Je moet de pering verbreken, het bereik bijwerken en opnieuw verbinden.
+
+00:05:02.020 --> 00:05:07.720
+Als je productieworkloads hebt draaien, betekent dit downtime, dus kies je CIDR bereiken vroegtijdig en zorg dat ze niet overlappen.
+
+00:05:07.900 --> 00:05:14.060
+Ontwerp vlak 5 betreft beveiligingsaanbevelingen, waaronder encryptie, identiteitsbescherming, dreigingsdetectie en vulnerability management.
+
+00:05:14.320 --> 00:05:18.140
+Schakel Microsoft Defender 4 Cloud in voor alle abonnementen als basislijn.
+
+00:05:18.320 --> 00:05:23.660
+Het geeft je aanbevelingen voor posture management, waarschuwingen en hersteladvies voor alles in je omgeving.
+
+00:05:23.660 --> 00:05:27.460
+Gebruik private endpoints om services buiten het openbare internet te houden.
+
+00:05:27.600 --> 00:05:32.540
+In plaats van een storage account via een openbaar IP te benaderen, geef je het een privaat IP binnen je virtuele netwerk.
+
+00:05:32.720 --> 00:05:34.780
+Het verkeer verlaat nooit de Microsoft backbone.
+
+00:05:35.020 --> 00:05:36.900
+Het is veiliger en eenvoudiger te beheren.
+
+00:05:37.080 --> 00:05:41.500
+Plaats netwerkbeveiligingsgroepen op elk subnet en blokkeer standaard inkomende RDP vanaf het internet.
+
+00:05:41.740 --> 00:05:43.020
+Dat zou de standaard moeten zijn.
+
+00:05:43.240 --> 00:05:47.920
+Als iemand externe toegang nodig heeft, gebruikt die Azure Bastion of een Jumpbox geen directe RDP regel.
+
+00:05:47.920 --> 00:05:52.380
+Een voorbeeld uit de praktijk, een weigeringsbeleid dat openbare IP-adressen op storage accounts blokkeert.
+
+00:05:52.500 --> 00:05:58.660
+Je wijst het beleid toe op het niveau van de beheergroep en zodra iemand een storage account met een openbaar eindpunt probeert te implementeren, mislukt de implementatie.
+
+00:05:58.840 --> 00:06:02.360
+Het foutbericht vertelt waarom mensen moeten in plaats daarvan een privaat eindpunt gebruiken.
+
+00:06:02.560 --> 00:06:07.120
+Geen uitzonderingen, dat is governance die echt werkt, niet zomaar een suggestie in een of ander document.
+
+00:06:07.340 --> 00:06:10.400
+Beheer, governance en automatisering om alles draaiende te houden.
+
+00:06:10.540 --> 00:06:13.660
+Dus, je hebt je gebouw met muren en sloten, maar wat gebeurt er eigenlijk binnenin?
+
+00:06:13.820 --> 00:06:15.200
+Je hebt toezicht nodig op alles.
+
+00:06:15.200 --> 00:06:20.400
+Ontwerp vlak 6 is beheer. Dat omvat monitoring, backup, logging en de operationele kant van de zaak.
+
+00:06:20.480 --> 00:06:24.140
+Je wilt één centrale Log Analytics werkruimte waar elk abonnement zijn logs naartoe stuurt.
+
+00:06:24.300 --> 00:06:27.500
+Eén plek om alles te bevragen, waarschuwingen in te stellen en problemen op te lossen.
+
+00:06:27.680 --> 00:06:31.660
+Dat is het doel. Hoe zorg je er nu voor dat elke resource zijn diagnostische logs daarnaartoe stuurt?
+
+00:06:31.860 --> 00:06:33.060
+Dat doe je niet handmatig.
+
+00:06:33.200 --> 00:06:37.680
+Je maakt een beleid dat zegt, elke resource moet zijn diagnostische logs naar deze Log Analytics werkruimte sturen.
+
+00:06:37.840 --> 00:06:40.900
+En je stelt dat beleid in om te draaien in de deploy-if-not-exists-modus.
+
+00:06:40.900 --> 00:06:43.760
+Het resultaat, elke nieuwe resource wordt automatisch geconfigureerd.
+
+00:06:43.760 --> 00:06:46.080
+Niemand hoeft eraan te denken. Het gebeurt gewoon.
+
+00:06:46.300 --> 00:06:50.020
+Ontwerp gebied 7 is Governance, waarbij Azure Policy wordt gebruikt om naleving af te dwingen.
+
+00:06:50.140 --> 00:06:54.120
+Je bundelt gerelateerde regels in wat een beleidsinitiatief of beleidszet wordt genoemd.
+
+00:06:54.240 --> 00:06:56.760
+Eén initiatief voor beveiliging, een andere voor kostenbeheer.
+
+00:06:57.540 --> 00:07:00.180
+Elk bevat meerdere beleidsregels die samenwerken.
+
+00:07:00.380 --> 00:07:05.780
+Hier is een voorbeeld, een beleidszet die encryptie, tagging en toegestaande grootte voor virtuele machines afdwingt.
+
+00:07:05.900 --> 00:07:08.020
+Je past dit toe op het niveau van de beheergroep.
+
+00:07:08.020 --> 00:07:10.400
+Elk abonnement daaronder neemt die regels over.
+
+00:07:10.600 --> 00:07:15.400
+Wanneer een ontwikkelaar een VM probeert te implementeren, controleert het beleid of deze een goedgekeurde grootte heeft.
+
+00:07:15.560 --> 00:07:17.820
+De vereiste tags bevat en versleutelde schijven gebruikt.
+
+00:07:17.960 --> 00:07:21.620
+Als een controle mislukt, wordt de implementatie direct geblokkeerd of gemarkeerd.
+
+00:07:21.840 --> 00:07:26.340
+Laten we duidelijk zijn over het verschil tussen governance op een wikipagina en governance als daadwerkelijke code.
+
+00:07:26.520 --> 00:07:29.040
+Een wikipagina zegt, tag alsjeblieft uw resources.
+
+00:07:29.460 --> 00:07:32.980
+Beleid zegt, u kunt geen resource implementeren zonder de vereiste tags.
+
+00:07:33.200 --> 00:07:36.080
+De N is een suggestie, de ander wordt automatisch afgedwongen.
+
+00:07:36.080 --> 00:07:39.160
+Ontwerpgebied 8 is platform automatisering en DevOps.
+
+00:07:39.700 --> 00:07:42.200
+Infrastructure als code en CI-CD pipelines.
+
+00:07:42.440 --> 00:07:44.180
+Behandel de landingzone zelf als code.
+
+00:07:44.440 --> 00:07:47.840
+Dat betekent bicep, ARM templates of terraform opgeslagen in bronbeheer.
+
+00:07:48.000 --> 00:07:49.800
+Elke wijziging gaat via een pull request.
+
+00:07:50.020 --> 00:07:51.880
+Elke implementatie verloopt via een pipeline.
+
+00:07:52.100 --> 00:07:53.580
+Niet rondklikken in de Azure portal.
+
+00:07:53.860 --> 00:07:55.900
+Dit is waar subscription vending om de hoek komt kijken.
+
+00:07:56.120 --> 00:07:58.780
+Een herhaalbaar pipeline die op aanvraag nieuwe abonnementen maakt.
+
+00:07:58.940 --> 00:08:03.340
+Een team dient een verzoek in met parameters zoals kostenplaats, netwerkgrote en omgevingstype.
+
+00:08:03.340 --> 00:08:08.180
+De pipeline maakt het abonnement, plaatst het onder de juiste beheergroep, wijst budgetten toe,
+
+00:08:08.380 --> 00:08:10.900
+configureert het spooknetwerk en koppelt het aan de hub.
+
+00:08:11.000 --> 00:08:12.360
+Alles geautomatiseerd.
+
+00:08:12.600 --> 00:08:13.480
+Waarom is dit belangrijk?
+
+00:08:13.800 --> 00:08:16.900
+Omdat het nieuwe abonnement compliant is vanaf het moment dat het bestaat.
+
+00:08:17.040 --> 00:08:21.040
+Het beleid is al van kracht op de beheergroep en het abonnement erft alles automatisch over.
+
+00:08:21.220 --> 00:08:23.200
+Er is geen tijdsbestek waarin het niet wordt beheerd.
+
+00:08:23.420 --> 00:08:25.620
+Niemand hoeft eraan te denken om de regels toe te passen.
+
+00:08:25.800 --> 00:08:26.580
+Ze zijn er al.
+
+00:08:26.820 --> 00:08:31.180
+Dit stelt een platformteam in staat om honderden abonnementen te ondersteunen zonder een knelpunt te worden.
+
+00:08:31.180 --> 00:08:37.660
+De automatisering doet het zware werk en het team focust op het verbeteren van het platform in plaats van voor elk verzoek door de portal te klikken.
+
+00:08:37.800 --> 00:08:41.540
+De splitsing tussen platform en applicatie, de meest voorkomende verwarring.
+
+00:08:41.780 --> 00:08:45.020
+Dat zijn dus de acht ontwerpgebieden, maar hier gaan de meeste mensen de fout in.
+
+00:08:45.180 --> 00:08:49.080
+Er zijn twee soorten landingzones en ze door elkaar halen is de meest voorkomende fout die ik zie.
+
+00:08:49.220 --> 00:08:51.680
+Platform landingzones en applicatie landingzones.
+
+00:08:51.920 --> 00:08:53.420
+Ze dienen totaal verschillende doelen.
+
+00:08:53.600 --> 00:08:57.140
+Platform landingzones zijn de gedeelde basis die eigendom is van het platformteam.
+
+00:08:57.140 --> 00:09:02.740
+Je hebt een identiteitsabonnement met je domain services, een beheerabonnement met log analytics en automation accounts,
+
+00:09:03.000 --> 00:09:08.500
+en een connectiviteitsabonnement met het HAP virtuele netwerk, Azure firewall en express route of VPN gateways.
+
+00:09:08.720 --> 00:09:11.540
+Dit zijn de gedeelde services waar elke workload van afhankelijk is.
+
+00:09:11.860 --> 00:09:14.620
+Applicatie landingzones zijn de plekken waar workloads daadwerkelijk draaien.
+
+00:09:14.820 --> 00:09:17.000
+Dit zijn de abonnementen die applicatieteams krijgen.
+
+00:09:17.220 --> 00:09:18.140
+Er zijn er veel van.
+
+00:09:18.360 --> 00:09:19.240
+Ze zijn vervanbaar.
+
+00:09:19.460 --> 00:09:21.420
+En ze volgen elke keer hetzelfde patroon.
+
+00:09:21.580 --> 00:09:22.680
+Een team krijgt een abonnement.
+
+00:09:22.920 --> 00:09:24.500
+Het wordt in de juiste beheergroep geplaatst.
+
+00:09:24.500 --> 00:09:28.000
+Het neemt het beleid over, koppelt aan het HAP netwerk en ze beginnen met implementeren.
+
+00:09:28.140 --> 00:09:29.980
+Het verschil in eigenaarschap is belangrijk.
+
+00:09:30.380 --> 00:09:33.300
+Platformzones zijn er weinig, misschien drie tot vijf abonnementen in totaal.
+
+00:09:33.460 --> 00:09:35.820
+Ze gaan lang mee en worden centraal beheerd door het platformteam.
+
+00:09:36.460 --> 00:09:37.360
+Applicatiezones zijn er veel.
+
+00:09:37.560 --> 00:09:39.000
+Je kunt er tientallen of honderden hebben.
+
+00:09:39.220 --> 00:09:40.020
+Ze zijn tijdelijk.
+
+00:09:40.180 --> 00:09:43.220
+Een workload wordt ingezet, draait een tijdje en wordt daarna buiten gebruik gesteld.
+
+00:09:43.400 --> 00:09:45.920
+Het abonnement wordt opgeschoond en het patroon herhaalt zich.
+
+00:09:46.120 --> 00:09:47.620
+Dit is het klassieke antipatroon.
+
+00:09:47.800 --> 00:09:50.280
+Iemand plaatst een gedeelde firewall in een applicatieabonnement,
+
+00:09:50.280 --> 00:09:55.040
+of ze implementeren de ExpressRouteGateway in een workloadabonnement in plaats van in het connectiviteitsabonnement.
+
+00:09:55.180 --> 00:09:57.820
+Nu zijn gedeelde services verspreid over de hele omgeving.
+
+00:09:58.040 --> 00:09:59.320
+Niemand weet waar alles staat.
+
+00:09:59.540 --> 00:10:03.280
+Het platformteam kan de firewall niet beheren omdat deze in iemands anders abonnement staat
+
+00:10:03.280 --> 00:10:05.160
+en het applicatieteam wil het niet onderhouden.
+
+00:10:05.340 --> 00:10:06.400
+Het is een puinhoop.
+
+00:10:06.480 --> 00:10:08.380
+Hou gedeelde services in de platform laag.
+
+00:10:08.560 --> 00:10:11.380
+Het connectiviteitsabonnement bevat het HAP virtuele netwerk,
+
+00:10:11.620 --> 00:10:13.380
+Azure Firewall en de ExpressRouteGateway.
+
+00:10:13.780 --> 00:10:15.500
+Applicatieabonnementen koppelen hieraan.
+
+00:10:15.700 --> 00:10:17.040
+Ze zijn nergens eigenaar van.
+
+00:10:17.240 --> 00:10:18.200
+Ze gebruiken het alleen.
+
+00:10:18.200 --> 00:10:21.340
+Wat dit voor jou betekent is een duidelijke scheiding van verantwoordelijkheden.
+
+00:10:21.500 --> 00:10:25.620
+Het platformteam beheert de kaders, de vangrails, de gedeelde services en het beleid.
+
+00:10:26.180 --> 00:10:27.780
+Applicatieteams bewegen zich snel daarbinnen.
+
+00:10:28.020 --> 00:10:31.020
+Ze krijgen een abonnement dat al compliant, al verbonden en al gemonitord is.
+
+00:10:31.200 --> 00:10:32.760
+Ze hoeven niet na te denken over de basis.
+
+00:10:33.100 --> 00:10:34.700
+Ze bouwen er simpelweg bovenop.
+
+00:10:34.780 --> 00:10:36.320
+Hoe de stukjes met elkaar verbinden.
+
+00:10:36.520 --> 00:10:37.340
+Het aha moment.
+
+00:10:37.620 --> 00:10:40.580
+Je kent nu de individuele bouwstenen, maar dit is wat echt telt.
+
+00:10:40.820 --> 00:10:42.120
+Ze werken niet in isolatie.
+
+00:10:42.380 --> 00:10:45.780
+Ze werken samen als één verbonden systeem en dat is waar alles op zijn plek valt.
+
+00:10:46.020 --> 00:10:47.040
+Denk er eens zo over na.
+
+00:10:47.040 --> 00:10:49.600
+Identiteit bepaalt wie er door de voordeur naar binnen mag.
+
+00:10:49.800 --> 00:10:53.240
+Governance vertelt ze vervolgens in welke kamers ze mogen zijn zodra ze binnen zijn.
+
+00:10:53.520 --> 00:10:55.800
+Netwerken bepaalt hoe ze zich tussen die kamers bewegen.
+
+00:10:56.180 --> 00:10:58.480
+Beveiliging houdt bij elke hoek toezicht op bedreigingen.
+
+00:10:58.700 --> 00:11:01.200
+Beheer zorgt ervoor dat het hele gebouw soepel blijft draaien.
+
+00:11:01.380 --> 00:11:04.740
+En automatisering maakt elke stap herhaalbaar, zodat niets wordt vergeten.
+
+00:11:04.900 --> 00:11:09.160
+Elk onderdeel hangt van de andere af en samen creëren ze iets dat veel groter is dan elk afzonderlijk deel.
+
+00:11:09.160 --> 00:11:12.420
+Laat me u een concreet voorbeeld geven van hoe deze interactie precies werkt.
+
+00:11:12.620 --> 00:11:15.020
+Stel je voor dat een nieuw team een workload moet implementeren.
+
+00:11:15.020 --> 00:11:20.880
+Ze dienen een aanvraag in via de Subscription Vending Pipeline, die automatisch een gloednieuwe subscription aanmaakt.
+
+00:11:21.120 --> 00:11:27.180
+Deze wordt onder de juiste beheergroep geplaatst, waardoor de subscription direct alle beleidsregels van die groep overneemt.
+
+00:11:28.020 --> 00:11:33.640
+Versleutelingsverreisten, toegestane regio's, verplichte tags, logboekconfiguraties, alles wat nodig is.
+
+00:11:33.820 --> 00:11:37.300
+De pipeline configureert ook het spooknetwerk en koppelt dit aan de hub.
+
+00:11:37.300 --> 00:11:44.260
+Diagnostische instellingen sturen logboeken direct naar de centrale log analytics werkruimte, terwijl de vendor voor cloud de beveiliging activeert.
+
+00:11:44.440 --> 00:11:50.020
+De volledige subscription is binnen een enkele minuten compliant, verbonden en gemonitord, zonder menselijke tussenkomst.
+
+00:11:50.220 --> 00:11:53.260
+Dat is het werkelijke verschil tussen cloud chaos en cloud controle.
+
+00:11:53.520 --> 00:11:58.400
+In de rommelige omgeving die ik aan het begin beschreef, hangt elke stap af van iemand die eraan denkt.
+
+00:11:58.400 --> 00:11:59.660
+En mensen vergeten dingen.
+
+00:11:59.860 --> 00:12:02.800
+Of ze doen het elke keer anders, of ze doen het helemaal niet.
+
+00:12:02.960 --> 00:12:05.260
+Maar met een goede landingzone gaat dit automatisch.
+
+00:12:05.440 --> 00:12:09.060
+Het systeem dwingt zichzelf af en het team kan snel werken zonder dingen te breken.
+
+00:12:09.260 --> 00:12:11.160
+Hier struikelen de meeste organisaties.
+
+00:12:11.400 --> 00:12:15.740
+Ze behandelen de landingzone als een eenmalig project, implementeren, afwinken en doorgaan.
+
+00:12:15.780 --> 00:12:17.600
+Maar een landingzone is een levend platform.
+
+00:12:17.820 --> 00:12:19.540
+Azure brengt constant nieuwe functies uit.
+
+00:12:19.740 --> 00:12:21.780
+Uw compliance-eisen veranderen in de loop van de tijd.
+
+00:12:21.980 --> 00:12:22.880
+Uw bedrijf groeit.
+
+00:12:23.040 --> 00:12:25.480
+De landingzone moet meegroeien, anders gaat deze tegen u werken.
+
+00:12:25.480 --> 00:12:28.220
+Het operationele model is eigenlijk belangrijker dan de technische sjablonen.
+
+00:12:28.400 --> 00:12:29.600
+Wie is eigenaar van de landingzone?
+
+00:12:29.780 --> 00:12:30.700
+Hoe evolueert deze?
+
+00:12:30.880 --> 00:12:32.240
+Hoe worden uitzonderingen afgehandeld?
+
+00:12:32.420 --> 00:12:35.140
+Als uw enige antwoord is het platformteam beheert het, dan is dat niet genoeg.
+
+00:12:35.260 --> 00:12:36.520
+U heeft echte processen nodig.
+
+00:12:36.720 --> 00:12:37.980
+U heeft een goede backlog nodig.
+
+00:12:38.180 --> 00:12:40.600
+U moet de landingzone als een product behandelen, niet als een project.
+
+00:12:40.780 --> 00:12:42.020
+Hier is een praktijkvoorbeeld.
+
+00:12:42.220 --> 00:12:45.600
+Een platformteam ondersteunt 200 subscriptions zonder een knelpunt te worden.
+
+00:12:45.800 --> 00:12:48.720
+Het geheim is subscription-vending gecombineerd met beleidsovererving.
+
+00:12:48.940 --> 00:12:51.980
+Het team hoeft niet door de portal te klikken om elke subscription aan te maken.
+
+00:12:52.180 --> 00:12:53.920
+De pipeline regelt dat automatisch.
+
+00:12:53.920 --> 00:12:56.660
+Ze configureren niet handmatig de logboeken voor elke workload.
+
+00:12:56.660 --> 00:12:58.320
+Beleid dwingt dit consistent af.
+
+00:12:58.480 --> 00:13:00.580
+Ze controleren niet elke implementatie op compliance.
+
+00:13:00.780 --> 00:13:02.940
+Het compliance dashboard toont hen alleen de uitzonderingen.
+
+00:13:03.080 --> 00:13:05.900
+Ze concentreren zich op de afwijkingen in plaats van op routine-clushes.
+
+00:13:06.080 --> 00:13:09.920
+En dat is het verschil tussen een platform dat schaalt en een platform dat de business verstikt.
+
+00:13:10.260 --> 00:13:11.480
+Concrete actiepunten.
+
+00:13:11.720 --> 00:13:13.120
+Begin klein, groei slim.
+
+00:13:13.120 --> 00:13:15.040
+Dus, wat doe je maandagochtend echt?
+
+00:13:15.260 --> 00:13:16.620
+Hier is het eerlijke antwoord.
+
+00:13:16.760 --> 00:13:20.200
+Probeer niet op de eerste dag de volledige enterprise-schaalhierarchie op te bouwen.
+
+00:13:20.400 --> 00:13:21.960
+Dat is een valstrik die u wilt vermijden.
+
+00:13:22.140 --> 00:13:26.860
+Je zult maanden besteden aan het ontwerpen voor scenario's die misschien nooit voorkomen en je zult nooit echt iets bruikbaars opleveren.
+
+00:13:27.020 --> 00:13:31.100
+Begin in plaats daarvan met een minimum viable landingzone of wel een MVLZ.
+
+00:13:31.100 --> 00:13:32.880
+De kerncomponenten zijn simpel.
+
+00:13:33.060 --> 00:13:44.520
+Een hiërarchie van beheergroepen, een paar kernbeleidsregels zoals regio-beperkingen, versleuteling en verplichte tags, basisnetwerken met één hap virtueel netwerk en één spook en gecentraliseerde logboekregistratie naar een log-analytics werkruimte.
+
+00:13:44.720 --> 00:13:45.440
+Dat is voldoende.
+
+00:13:45.660 --> 00:13:50.920
+Je hebt niet vanaf dag één Azure Virtual One nodig en je hebt geen complex beleidsinitiatief vol met 200 regels nodig.
+
+00:13:51.120 --> 00:13:54.180
+Je hebt alleen genoeg van rails nodig om veilig te zijn en niet meer dan dat.
+
+00:13:54.380 --> 00:13:57.220
+Verplaats daarna je eerste echte workload naar die MVLZ.
+
+00:13:57.380 --> 00:14:00.460
+Geen test-VM, maar een daadwerkelijke workload waar je team om geeft.
+
+00:14:00.460 --> 00:14:05.380
+Kijk hoe het beleid zich gedraagt, zie wat er misgaat, leer van de knelpunten en itereer vanaf daar.
+
+00:14:05.580 --> 00:14:11.960
+Voeg beleid toe wanneer je het nodig hebt, breed het netwerk uit wanneer dat nodig is en laat de landingzone op natuurlijke wijze meegroeien met je organisatie.
+
+00:14:12.160 --> 00:14:15.100
+Laat me je drie concrete tips geven die je direct kunt toepassen.
+
+00:14:15.540 --> 00:14:20.580
+Tip 1. Implementeer de Azure landing zones accelerator vanuit de portal in een testtenant.
+
+00:14:20.760 --> 00:14:29.040
+Het kost niets, het duurt ongeveer een uur en het leert je meer over hoe beheergroepen, beleid en overerving echt werken dan welk diagram of documentatie dan ook.
+
+00:14:29.040 --> 00:14:35.700
+Je kunt de hiërarchie zien, het beleid in real-time zien, toegepast worden en experimenteren zonder iets belangrijks te verbreken.
+
+00:14:35.880 --> 00:14:40.160
+Tip 2. Schakel beleidsregels eerst in de audit-modus in, niet in de weigeringsmodus.
+
+00:14:40.340 --> 00:14:44.380
+In de audit-modus zie je precies wat niet voldoet in je omgeving zonder iemand te blokkeren.
+
+00:14:44.600 --> 00:14:50.740
+Hou het compliance dashboard in de gaten en ik beloof je dat je verrast zult zijn door hoeveel resources stilletjes de regels overtreden waarvan je dacht dat ze duidelijk waren.
+
+00:14:50.740 --> 00:14:55.100
+Zodra je je landschap begrijpt, kun je de belangrijke beleidsregels omzetten naar de weigeringsmodus.
+
+00:14:55.260 --> 00:14:59.720
+Maar begin met audit, zodat je je eigen teams niet afsluit voordat je weet waar je mee te maken hebt.
+
+00:15:00.140 --> 00:15:05.360
+Tip 3. Plan je IP-adres bereiken en de hiërarchie van beheergroepen voordat je iets implementeert.
+
+00:15:05.540 --> 00:15:08.660
+Ik weet dat dat saai klinkt, maar ze later wijzigen is echt pijnlijk.
+
+00:15:08.860 --> 00:15:16.260
+Overlappende IP-bereiken betekenen het afbreken van netwerkpering en het herstructureren van beheergroepen betekent abonnementen verplaatsen en beleidstoewijzingen opnieuw evalueren.
+
+00:15:16.260 --> 00:15:20.260
+Zorg dat deze twee zaken vooraf goed staan, dan bespaar je jezelf later weken aan extra werk.
+
+00:15:20.400 --> 00:15:22.660
+De veel voorkomende valkuilen zijn vrij duidelijk.
+
+00:15:22.940 --> 00:15:26.520
+Overmatig ontwerpen leidt tot analyseverlamming, waardoor je nooit iets implementeert.
+
+00:15:26.680 --> 00:15:31.060
+Onder ontwikkeling laat je achter zonder enige vangrails, wat simpelweg cloud chaos onder een andere naam is.
+
+00:15:31.220 --> 00:15:35.720
+En de landingzone behandelen als een eenmalig project in plaats van een levend platform garandeert dat je achterop raakt.
+
+00:15:35.920 --> 00:15:38.860
+Vermijd die drie vallen en je loopt al voor op de meeste organisaties.
+
+00:15:39.040 --> 00:15:41.160
+Onthoud, het doel is geen perfecte landingzone.
+
+00:15:41.380 --> 00:15:45.200
+Het doel is een beheerdebasis waarmee teams snel kunnen werken zonder chaos te creëren.
+
+00:15:45.200 --> 00:15:48.480
+Begin klein, itereer en laat beleid het zware werk voor je doen.
+
+00:15:48.720 --> 00:15:51.380
+Dat zijn dus Azure landing zones in begrijpelijke taal.
+
+00:15:51.540 --> 00:15:53.560
+Het is geen ingewikkeld bedrijfsconcept.
+
+00:15:53.820 --> 00:15:56.520
+Zie het als een beheerdabonnement met ingebouwde vangrails.
+
+00:15:56.740 --> 00:16:00.880
+De acht ontwerpgebieden zijn simpelweg de vragen die je moet beantwoorden voordat je begint met implementeren.
+
+00:16:01.160 --> 00:16:04.200
+Identiteit, netwerken, beveiliging, beheer, governance, automatisering.
+
+00:16:05.040 --> 00:16:09.160
+Beantwoord ze één keer, bouw ze in de basis en elke workload daarna profiteert ervan.
+
+00:16:09.400 --> 00:16:10.800
+Dit is het beste wat je nu kunt doen.
+
+00:16:11.120 --> 00:16:14.640
+Implementeer de accelerator in een testtenant en zie hoe policies worden overgenomen.
+
+00:16:14.640 --> 00:16:17.280
+Dat uur leert je meer dan welk diagram dan ook ooit zou kunnen.
+
+00:16:17.440 --> 00:16:21.580
+Abonneer je voor meer uitleg in begrijpelijke taal zoals deze en laat een reactie achter als het kwartje is gevallen.
+
+00:16:21.780 --> 00:16:22.460
+Ik lees ze allemaal.

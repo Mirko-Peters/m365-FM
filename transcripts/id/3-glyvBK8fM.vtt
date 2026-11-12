@@ -1,0 +1,1156 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:07.020
+Bayangkan skenario ini. Anda sedang membangun aplikasi dan membutuhkan kunci API untuk terhubung ke layanan kata sandi basis data atau kunci akun penyimpanan.
+
+00:00:07.500 --> 00:00:10.940
+Jadi Anda memasukkannya langsung ke dalam kode mungkin diberkas konfigurasi atau variabel lingkungan.
+
+00:00:16.630 --> 00:00:18.990
+Dan begitu saja, rahasia Anda tidak lagi menjadi rahasia.
+
+00:00:19.490 --> 00:00:22.530
+Jika kode itu jatuh ke tangan yang salah, seluruh sistem Anda akan terekspos.
+
+00:00:23.110 --> 00:00:25.550
+Nah, Azure Key Vault adalah alat yang memperbaiki masalah tersebut.
+
+00:00:26.210 --> 00:00:29.590
+Ini memberi Anda tempat aman untuk menyimpan rahasia agar tidak pernah berakhir di kodean.
+
+00:00:29.910 --> 00:00:31.410
+Namun inilah hal yang sering diselapami banyak orang.
+
+00:00:31.410 --> 00:00:34.450
+Hanya memiliki Key Vault tidak serta-merta membuat Anda aman.
+
+00:00:34.450 --> 00:00:38.630
+Cara Anda mengaturnya, mengontrol akses, dan menetapkan izin juga sama pentingnya.
+
+00:00:38.950 --> 00:00:41.830
+Di akhir episode ini, Anda akan tahu apa itu Key Vault sebenarnya.
+
+00:00:42.050 --> 00:00:46.750
+Apa yang bisa disimpan di dalamnya, cara kerja akses, dan kesalahan terbesar yang bisa membuat rahasia Anda terekspos.
+
+00:00:47.370 --> 00:00:49.750
+Semua dalam bahasa yang sederhana tanpa jargon, hanya poin-poin yang Anda butuh.
+
+00:00:50.190 --> 00:00:51.430
+Jadi apa sebenarnya Azure Key Vault itu?
+
+00:00:52.210 --> 00:00:53.030
+Apa itu Azure Key Vault?
+
+00:00:53.470 --> 00:00:54.730
+Berikut adalah alat definisi paling sederhana.
+
+00:00:55.050 --> 00:00:57.750
+Azure Key Vault adalah perangkas digital berbasis cloud untuk rahasia.
+
+00:00:57.750 --> 00:01:05.190
+Ini adalah layanan terkola dari Microsoft untuk kunci API, kata sandi basis data, string koneksi, kunci enkripsi, dan sertifikat di satu tempat terpusat.
+
+00:01:05.930 --> 00:01:09.790
+Anda tidak perlu khawatir tentang infrastruktur karena Azure menangani pembaruan waktu operasional dan keamanannya.
+
+00:01:10.090 --> 00:01:10.770
+Anda cukup menggunakan.
+
+00:01:11.150 --> 00:01:12.370
+Bayangkan seperti sebuah gedung perkantor.
+
+00:01:12.690 --> 00:01:14.650
+Anda memiliki ruang kerja, ruang rapat, dan lemari arsip.
+
+00:01:14.650 --> 00:01:18.510
+Tetapi di suatu tempat di ruang bawah tanah terdapat ruang berangkas aman tempat Anda menyimpan hal penting.
+
+00:01:18.930 --> 00:01:20.810
+Kunci utama, uang tunai dokumen hukum.
+
+00:01:21.230 --> 00:01:22.990
+Tidak ada yang bisa masuk tanpa izin dan autentikasi.
+
+00:01:23.470 --> 00:01:25.190
+Dan setiap kali seseorang membuka pintunya, itu akan dicat.
+
+00:01:25.470 --> 00:01:26.090
+Telah Key Vault.
+
+00:01:26.650 --> 00:01:28.590
+Ruangan aman di ruang bawah tanah arsitektur Azure Anda.
+
+00:01:29.990 --> 00:01:31.350
+Sekarang bandingkan ditunai cara langsung.
+
+00:01:31.790 --> 00:01:36.590
+20 tahun lalu, jika Anda membutuhkan kata sandi basis data, Anda akan menulisnya langsung di berkas konfigurasi,
+
+00:01:36.590 --> 00:01:40.290
+mungkin di variabel lingkungan, atau lebih buruk lagi, membiarkannya dalam teks biasa di kode sumber.
+
+00:01:40.810 --> 00:01:43.290
+Jika seseorang mendapatkan akses ke server itu, mereka memiliki sebuah.
+
+00:01:43.630 --> 00:01:46.710
+Dan jika Anda perlu mengganti kata sandi tersebut, Anda harus memperbarunya di mana.
+
+00:01:47.130 --> 00:01:50.450
+Setiap berkas konfigurasi, setiap lingkungan, setiap penerapan, itu adalah mimpi buruk.
+
+00:01:50.790 --> 00:01:51.690
+Key Vault mengubah semua itu.
+
+00:01:52.270 --> 00:01:56.490
+Alih-alih menyebar rahasia di seluruh kode dan berkas konfigurasi Anda menyimpannya di satu tempat terpusat.
+
+00:01:57.170 --> 00:01:59.750
+Aplikasi Anda memintanya saat waktu proses runtime hanya ketika membutuhkan.
+
+00:01:59.830 --> 00:02:03.390
+Dan karena semuanya terpusat, Anda dapat merotasi rahasia di satu tempat,
+
+00:02:03.670 --> 00:02:08.390
+dan setiap aplikasi yang menggunakannya akan mengambil nilai baru secara otomatis tanpa perubahan kode atau penyebaran ulang.
+
+00:02:08.390 --> 00:02:12.210
+Namun masalahnya, Key Vault bukan sekadar pengelola kata sandi untuk aplikasi Anda.
+
+00:02:12.530 --> 00:02:13.590
+Ini adalah layanan keamanan ini.
+
+00:02:14.150 --> 00:02:15.970
+Setiap layanan Azure dapat berintegrasi dengannya.
+
+00:02:16.690 --> 00:02:21.850
+App Service, Functions, AKS, Data Factory, Synapse, Logic Apps, dan Pipeline DevOps semuanya tahu cara berkomunikasi dengan Key Vault.
+
+00:02:22.670 --> 00:02:24.670
+Ini menjadi tulang punggung arsitektur cloud Anda yang aman.
+
+00:02:25.070 --> 00:02:28.270
+Dan setelah Anda mengaturnya dengan benar, Anda tidak perlu lagi memikirkan manajemen kredensial.
+
+00:02:29.130 --> 00:02:29.950
+Apa saja yang bisa Anda simpulkan?
+
+00:02:30.690 --> 00:02:34.090
+Sekarang setelah Anda tahu apa itu Key Vault, mari kita bahas apa yang sebenarnya bisa Anda masukkan ke dalamnya.
+
+00:02:34.090 --> 00:02:37.770
+Anda memiliki tiga kategori utama, rahasia, kunci, dan sertifikat.
+
+00:02:37.770 --> 00:02:42.770
+Masing-masing memiliki fungsi berbeda dan memahami perbedaannya yang membantu Anda menggunakan Key Vault dengan cara yang tepat.
+
+00:02:42.930 --> 00:02:43.730
+Mari kita mulai dengan rahasi.
+
+00:02:44.150 --> 00:02:45.450
+Ini adalah hal paling umum yang disimpan orang.
+
+00:02:46.010 --> 00:02:50.350
+Rahasia mencakup string koneksi, kunci API, kata sandi basis data, kunci akun penyimpanan,
+
+00:02:50.430 --> 00:02:54.150
+pada dasarnya semua kredensial sehari-hari yang dibutuhkan aplikasi Anda untuk berbicara dengan layanan light.
+
+00:02:54.250 --> 00:02:57.490
+Alih-alih menyimpannya di kode atau file konfigurasi yang Anda menaruhnya di Key Vault.
+
+00:02:58.050 --> 00:03:01.150
+Aplikasi Anda mengambilnya saat runtime dan tidak ada yang melihatnya dalam bentuk text base.
+
+00:03:01.270 --> 00:03:03.930
+Bayangkan ini seperti laci terkunci di lemari R-SHIP digital Anda.
+
+00:03:04.550 --> 00:03:04.950
+Rah kunci.
+
+00:03:04.950 --> 00:03:06.950
+Ini adalah kunci encryption untuk data address.
+
+00:03:07.530 --> 00:03:11.250
+Jika Anda menggunakan kunci yang dikelola pelanggan untuk Azure Storage, basis data SQL,
+
+00:03:11.550 --> 00:03:14.390
+atau mengenkripsi disk mesin virtual, kunci tersebut dapat disimpan di Key Vault.
+
+00:03:14.690 --> 00:03:17.250
+Itu memberi Anda kendali penuh atas siapa yang dapat menggunakannya dan kapan.
+
+00:03:17.590 --> 00:03:20.410
+Dan jika Anda memerlukan kunci berbasis perangkat keras untuk kepatuhan,
+
+00:03:20.570 --> 00:03:22.130
+tingkat premium menyediakannya dengan perlindungan.
+
+00:03:22.470 --> 00:03:23.370
+Dan kita memiliki sertifikat.
+
+00:03:23.830 --> 00:03:27.450
+Sertifikat TLS dan SSL untuk aplikasi web API dan layanan internal Anda.
+
+00:03:27.850 --> 00:03:29.950
+Key Vault dapat menyimpannya, mengelola siklus hidupnya,
+
+00:03:30.050 --> 00:03:32.010
+bahkan memperbarunya secara otomatis saat mendekati masa.
+
+00:03:32.010 --> 00:03:36.570
+Ini sangat membantu bagi siapapun yang pernah mengalami sertifikat gelaluarsa pada pukul 3 pagi di hari minggu.
+
+00:03:37.150 --> 00:03:37.870
+Berikut contoh nyata.
+
+00:03:38.310 --> 00:03:42.950
+Bayangkan Anda memiliki aplikasi web yang membutuhkan string koneksi basis data dan kunci API untuk layanan pihak ketiga.
+
+00:03:43.370 --> 00:03:46.150
+Cara lama Anda akan memasukkan keduanya ke dalam file JSON pengaturan aplikasi Anda.
+
+00:03:46.430 --> 00:03:48.610
+Kemungkinan besar jika file tersebut masuk ke repository Anda,
+
+00:03:48.710 --> 00:03:51.450
+siapapun yang memiliki akses ke kode tersebut dapat melihat kredensial basis data Anda.
+
+00:03:52.410 --> 00:03:54.590
+Dengan Key Vault, Anda menyimpan kedua nilai tersebut sebagai rahsia.
+
+00:03:54.590 --> 00:03:57.910
+Aplikasi Anda mengambilnya saat startup dan nilai tersebut tidak pernah muncul di kode sumber.
+
+00:03:58.050 --> 00:03:59.410
+Perlu merotasi kata sandi basis data?
+
+00:03:59.810 --> 00:04:00.750
+Perbarui saja di Key Vault.
+
+00:04:01.010 --> 00:04:04.050
+Aplikasi akan mengambil nilai baru tersebut secara otomatis pada saat dimulai ulang berikut.
+
+00:04:04.230 --> 00:04:05.690
+Tidak ada perubahan kode, tidak ada redeplot.
+
+00:04:06.010 --> 00:04:08.570
+Satu hal yang sering mengejutkan orang adalah fitur pembuatan versi yang sudah baru.
+
+00:04:08.790 --> 00:04:11.410
+Saat Anda memperbarui rahasia, Key Vault tidak menyimpan nilai yang lama.
+
+00:04:11.670 --> 00:04:12.550
+Sistem membuat versi baru.
+
+00:04:12.910 --> 00:04:15.930
+Versi lama tetap disimpan agar Anda bisa melakukan pemulihan jika terjadi kesalahan.
+
+00:04:15.930 --> 00:04:17.550
+Ini sangat berguna saat terjadi insiden.
+
+00:04:17.550 --> 00:04:22.290
+Anda dapat dengan cepat kembali ke rahasia sebelumnya tanpa perlu mengingat nilai lamanya.
+
+00:04:23.030 --> 00:04:26.670
+Anda bisa menyimpan ketiganya, rahasia, kunci, dan sertifikat, di dalam vault yang sama.
+
+00:04:27.330 --> 00:04:29.650
+Namun praktik terbaiknya adalah misalkannya berdasarkan lingkungan.
+
+00:04:30.010 --> 00:04:32.970
+Gunakan satu vault untuk pengembangan, satu untuk produksi, satu untuk produksi.
+
+00:04:33.510 --> 00:04:40.250
+Ini mencegah seseorang tidak sengaja menggunakan rahasia produksi di lingkungan dev dan membatasi risiko jika satu vault disusupi, jika satu vault disusupi.
+
+00:04:40.730 --> 00:04:42.270
+Tidak menyimpan rahasia hanya setengah dari cerita.
+
+00:04:42.590 --> 00:04:44.570
+Pertanyaan sebenarnya adalah siapa yang boleh mengaksesnya.
+
+00:04:45.230 --> 00:04:46.150
+Cara kerja kontrol akses.
+
+00:04:46.150 --> 00:04:47.890
+Mari kita bahas siapa saja yang bisa masuk.
+
+00:04:48.350 --> 00:04:52.610
+Key vault punya dua cara berbeda untuk mengontrol akses dan pilihan Anda sangat berpengaruh.
+
+00:04:53.410 --> 00:04:54.870
+Modal pertama adalah kebijakan akses warisan.
+
+00:04:55.470 --> 00:04:56.250
+Ini adalah cara yang lama.
+
+00:04:56.810 --> 00:05:04.030
+Anda membuat kebijakan langsung pada vault dan menetapkan izin ke pengguna atau grup tertentu untuk jenis data tertentu, rahasia, kunci, atau sertifikat.
+
+00:05:04.790 --> 00:05:07.150
+Masalahnya, kebijakan ini terikat langsung dengan vault tersebut.
+
+00:05:07.530 --> 00:05:10.470
+Jika Anda memiliki banyak vault, Anda harus menolak kebijakan di tiap vault secara terbisa.
+
+00:05:10.710 --> 00:05:11.790
+Itu tidak bisa ditingkatkan emisi.
+
+00:05:12.070 --> 00:05:15.950
+Microsoft kini tidak menyarankan penggunaannya karena ada masalah keamanan yang diketahui.
+
+00:05:16.550 --> 00:05:21.070
+Kebijakan ini tidak mendukung manajemen identitas istimewa dan bisa menciptakan jalur eskalasi hak akses yang tak terduga.
+
+00:05:21.850 --> 00:05:24.470
+Modal kedua adalah Azure RBC, kontrol akses berbasis peran.
+
+00:05:24.990 --> 00:05:25.730
+Ini adalah cara yang modern.
+
+00:05:26.130 --> 00:05:30.210
+Cara ini menggunakan identitas intra-ID dan konsisten dengan cara Anda mengelola izin di tempat lain di Azure.
+
+00:05:30.210 --> 00:05:35.950
+Jika Anda sudah tahu cara memberi akses ke akun penyimpanan atau mesin virtual, Anda sudah tahu cara memberi akses ke key vault.
+
+00:05:36.590 --> 00:05:38.010
+Sistem yang sama, pola yang sama.
+
+00:05:38.490 --> 00:05:40.230
+Inilah aturan emasnya, hak akses minimum.
+
+00:05:40.910 --> 00:05:43.350
+Berikan akses minimum yang diperlukan seseorang, tidak lebih.
+
+00:05:44.310 --> 00:05:47.730
+Jika seseorang hanya perlu membaca rahasia, jangan beri izin untuk membuat atau menghapusnya.
+
+00:05:48.190 --> 00:05:51.050
+Jika seseorang hanya perlu mengelola sertifikat, jangan beri akses ke kunci.
+
+00:05:51.750 --> 00:05:52.630
+Mari saya jelaskan benar-benar.
+
+00:05:53.190 --> 00:05:53.990
+Ada key vault reader.
+
+00:05:54.650 --> 00:05:56.930
+Ini memungkinkan seorang melihat daftar rahasia tetapi tidak bisa membaca.
+
+00:05:57.290 --> 00:05:58.350
+Key vault secret user.
+
+00:05:58.930 --> 00:06:00.850
+Ini memungkinkan seseorang benar-benar membaca nilai rahasia.
+
+00:06:01.250 --> 00:06:02.410
+Dan key vault secret officer.
+
+00:06:02.410 --> 00:06:05.290
+Ini memungkinkan seseorang membuat, memperbarui, dan menghapus rahasia.
+
+00:06:05.910 --> 00:06:06.610
+Perhatikan polanya.
+
+00:06:07.070 --> 00:06:09.970
+Setiap peran spesifik untuk data di dalam vault bukan untuk vault itu sendiri.
+
+00:06:10.710 --> 00:06:13.450
+Sekarang, bandingkan itu dengan peran umum pemilik kontributor pembaca.
+
+00:06:13.930 --> 00:06:16.530
+Peran ini berlaku untuk vault sebagai sumber daya, bukan untuk data di dalam.
+
+00:06:16.890 --> 00:06:18.490
+Seorang pemilik dapat menghapus seluruh.
+
+00:06:18.850 --> 00:06:20.570
+Seorang kontributor dapat mengubah pengaturan.
+
+00:06:20.870 --> 00:06:24.850
+Namun, tidak ada satupun dari peran ini yang memberikan akses ke rahasia di dalamnya.
+
+00:06:25.150 --> 00:06:27.630
+Itu adalah lapisan izin yang terpisah dan itulah poin kuncinya.
+
+00:06:27.990 --> 00:06:29.190
+Kontrol akses adalah sebuah tingkat.
+
+00:06:29.750 --> 00:06:32.130
+Anda memerlukan akses ke vault itu sendiri, itulah lapisan pertama.
+
+00:06:32.410 --> 00:06:34.810
+Dan Anda memerlukan akses ke data di dalam vault itulah lapisan kedua.
+
+00:06:35.530 --> 00:06:36.790
+Keduanya harus diberikan secara terpisah.
+
+00:06:37.230 --> 00:06:40.090
+Kebanyakan pemula hanya memikirkan lapisan pertama dan merupakan lapisan kedua.
+
+00:06:40.610 --> 00:06:41.430
+Disitulah masalah dimulai.
+
+00:06:42.250 --> 00:06:43.270
+Salahan keamanan nomor satu.
+
+00:06:43.630 --> 00:06:44.150
+Begini masalahnya.
+
+00:06:44.430 --> 00:06:47.150
+Kebanyakan orang melihat peran kontributor key vault dan menganggapnya amat.
+
+00:06:47.270 --> 00:06:50.470
+Mereka melihat kata kontributor dan berasumsi mereka bisa mengelola pengaturan vault
+
+00:06:50.470 --> 00:06:51.850
+tetapi tidak bisa menyentuh rahasia di dalam.
+
+00:06:52.070 --> 00:06:54.530
+Dokumentasi Microsoft sendiri awalnya mengatakan hal yang sama persis.
+
+00:06:54.530 --> 00:06:57.830
+Peran ini tidak mengizinkan Anda untuk mengakses rahasia kunci atau sertifikat.
+
+00:06:58.390 --> 00:06:59.270
+Hanya saja itu tidak sepenuhnya.
+
+00:06:59.270 --> 00:07:03.730
+Pengguna dengan peran kontributor key vault dapat mengubah kebijakan akses pada vault.
+
+00:07:04.390 --> 00:07:07.910
+Dan jika vault tersebut masih menggunakan kebijakan akses warisan yang banyak dilakukan,
+
+00:07:08.070 --> 00:07:12.130
+maka mereka cukup memberikan diri mereka akses baca penuh ke setiap rahasia kunci dan sertifikat di dalamnya.
+
+00:07:12.730 --> 00:07:14.950
+Tidak perlu eksploitasi khusus, tidak ada kerentanan yang perlu diperbaiki.
+
+00:07:15.390 --> 00:07:16.530
+Begitulah cara kerja izin tersebut.
+
+00:07:16.930 --> 00:07:19.610
+Peneliti keamanan di Datadoc membuktikan hal ini pada tahun 2020.
+
+00:07:19.610 --> 00:07:23.690
+Mereka menunjukkan bahwa kontributor dapat meningkatkan hak akses ke akses data penuh di vault
+
+00:07:23.690 --> 00:07:25.410
+manapun yang menggunakan kebijakan akses warisan.
+
+00:07:25.750 --> 00:07:26.810
+Tanggapan Microsoft cukup menarik.
+
+00:07:27.370 --> 00:07:30.670
+Mereka mengatakan ini bukan kerentanan karena kontributor dirancang untuk mengelola kebijakan akses.
+
+00:07:31.090 --> 00:07:34.250
+Tetapi mereka juga memperbarui dokumentasi untuk secara eksplisit memperingatkan bahwa peran tersebut
+
+00:07:34.250 --> 00:07:36.930
+dapat memperingatkan bahwa peran tersebut dapat memberikan akses data kepada dirinya sendiri.
+
+00:07:37.070 --> 00:07:38.490
+Jadi ini bukan bug di key vault itu sendiri,
+
+00:07:38.610 --> 00:07:39.690
+melainkan jebakan konfigurasi.
+
+00:07:39.690 --> 00:07:43.070
+Dan ini menjebak tim yang berpengalaman sekalipun karena nama perannya terdengar tidak berbahaya.
+
+00:07:43.070 --> 00:07:46.490
+Kontributor tidak terdengar seperti seseorang yang bisa membaca kata sandi bahasi data Anda.
+
+00:07:46.590 --> 00:07:47.690
+Tetapi dalam prakteknya mereka bisa.
+
+00:07:48.010 --> 00:07:48.770
+Pikirkan risikonya.
+
+00:07:49.190 --> 00:07:52.370
+Jika penyerang mengkompromikan akun dengan peran kontributor pada key vault Anda,
+
+00:07:52.570 --> 00:07:54.510
+mereka tidak perlu membobol vault tersebut.
+
+00:07:55.190 --> 00:07:56.310
+Mereka tidak perlu mecahkan enkripsi.
+
+00:07:56.630 --> 00:07:58.230
+Mereka hanya mengubah kebijakan akses,
+
+00:07:58.410 --> 00:07:59.650
+memberikan diri mereka akses baca,
+
+00:07:59.850 --> 00:08:02.330
+dan secara diam-diam mencuri setiap rahasia yang Anda simpan,
+
+00:08:02.330 --> 00:08:05.350
+string koneksi, kunci API, sertifikat, semuanya.
+
+00:08:05.730 --> 00:08:08.850
+Dan karena perubahan kebijakan akses adalah aktivitas administratif yang normal,
+
+00:08:09.030 --> 00:08:10.730
+hal itu mungkin tidak memicu peringatan apa-apa.
+
+00:08:10.750 --> 00:08:11.230
+Apa solusinya?
+
+00:08:11.230 --> 00:08:14.730
+Gunakan Azure RBAC untuk akses bidang data alih-alih kebijakan akses warisan.
+
+00:08:15.390 --> 00:08:17.650
+RBAC memisahkan pengelolaan vault dari data di dalamnya.
+
+00:08:18.510 --> 00:08:20.490
+Kedua, jangan pernah memberikan peran kontributor key vault
+
+00:08:20.490 --> 00:08:22.130
+kepada siapapun yang tidak benar-benar membutuhkan.
+
+00:08:22.730 --> 00:08:24.990
+Ketiga, jika Anda sudah memiliki pengguna dengan peran tersebut,
+
+00:08:25.090 --> 00:08:25.830
+segera audit mereka hari.
+
+00:08:26.230 --> 00:08:28.210
+Ganti peran kontributor dengan peran yang lebih spesifik
+
+00:08:28.210 --> 00:08:30.690
+seperti pengguna rahasia key vault atau petugas rahasia key vault.
+
+00:08:31.210 --> 00:08:32.790
+Ada kesalahan kedua yang memperparah hal ini,
+
+00:08:32.930 --> 00:08:35.110
+yaitu menaruh semua rahasia Anda dalam satu vault.
+
+00:08:35.570 --> 00:08:37.410
+Jika Anda memiliki satu vault untuk semuanya,
+
+00:08:37.410 --> 00:08:40.410
+dev, test, staging, produksi, semua aplikasi Anda,
+
+00:08:40.410 --> 00:08:43.250
+dan vault itu disusupi, semuanya akan terekspos.
+
+00:08:43.810 --> 00:08:44.790
+Itu adalah titik kegagalan itu.
+
+00:08:45.150 --> 00:08:47.550
+Kita akan membahas lebih lanjut tentang strategi multi vault sebentar lagi.
+
+00:08:47.650 --> 00:08:48.450
+Tetapi prinsipnya sederh.
+
+00:08:48.750 --> 00:08:50.450
+Jangan menaruh semua telur dalam satu keranjang,
+
+00:08:50.590 --> 00:08:53.090
+terutama jika keranjang itu memegang kunci seluruh infrastruktur Anda.
+
+00:08:54.270 --> 00:08:55.950
+Identitas terkelola, standar emasnya.
+
+00:08:56.270 --> 00:08:57.170
+Jadi bagaimana cara melakukan ini?
+
+00:08:57.270 --> 00:08:59.210
+Mari kita bahas secara terbaik untuk mengakses key vault.
+
+00:08:59.650 --> 00:09:00.490
+Ada masalah mendasar.
+
+00:09:00.950 --> 00:09:02.470
+Untuk mendapatkan kredensial dari key vault,
+
+00:09:02.570 --> 00:09:04.210
+aplikasi Anda perlu mengautentikasi diri.
+
+00:09:04.410 --> 00:09:06.310
+Tetapi untuk mengautentikasi aplikasi butuh kredensial.
+
+00:09:06.310 --> 00:09:09.410
+Di mana Anda menyimpan kredensial yang digunakan aplikasi Anda untuk mendapatkan kredensial?
+
+00:09:09.690 --> 00:09:10.830
+Ini adalah masalah ayam dan telur.
+
+00:09:11.090 --> 00:09:13.690
+Jawaban lama adalah service prinsipal dengan client secret.
+
+00:09:13.970 --> 00:09:15.670
+Tetapi client secret itu harus ada di suatu tempat.
+
+00:09:15.830 --> 00:09:17.790
+Mungkin di file konfigurasi, varia melingkungan,
+
+00:09:17.910 --> 00:09:20.050
+atau pipeline penyebaran, atau pipeline penyebaran.
+
+00:09:20.110 --> 00:09:21.450
+Dan sekarang Anda kembali ke masalah yang sama.
+
+00:09:21.810 --> 00:09:23.250
+Anda hanya memindahkan rahasia itu ke tempat lain.
+
+00:09:23.670 --> 00:09:25.150
+Identitas terkelola menyelesaikan masalah ini.
+
+00:09:25.290 --> 00:09:26.150
+Begini cara kerjanya.
+
+00:09:26.530 --> 00:09:29.230
+Saat Anda mengaktifkan identitas terkelola pada sumber daya Azure,
+
+00:09:29.370 --> 00:09:31.790
+misalnya web app, function, atau virtual machine,
+
+00:09:32.250 --> 00:09:35.130
+Azure otomatis membuat identitas untuk sumber daya tersebut di Entra ID.
+
+00:09:35.130 --> 00:09:37.510
+Identitas itu dikelola sepenuhnya oleh Azure.
+
+00:09:38.050 --> 00:09:39.230
+Tidak ada kredensial untuk dibuat.
+
+00:09:39.350 --> 00:09:40.410
+Tidak ada rahasia untuk dirotasi.
+
+00:09:40.510 --> 00:09:41.270
+Tidak ada yang perlu disimpan.
+
+00:09:41.970 --> 00:09:44.570
+Sumber daya tersebut hanya memiliki identitas yang diketahui oleh Azure.
+
+00:09:44.970 --> 00:09:45.550
+Ada dua jenis.
+
+00:09:46.070 --> 00:09:49.230
+Identitas terkelola yang ditetapkan sistem terikat pada satu sumber daya tertentu.
+
+00:09:49.970 --> 00:09:51.890
+Jika Anda menghapus sumber daya tersebut, identitasnya pun negenir.
+
+00:09:52.370 --> 00:09:54.970
+Keduanya berbagi siklus hidup yang sama yang membuat administrasi menjadi sederhan.
+
+00:09:55.450 --> 00:09:58.210
+Identitas terkelola yang ditetapkan pengguna adalah identitas mandiri
+
+00:09:58.210 --> 00:10:00.170
+yang dapat Anda tetapkan ke beberapa sumber daya.
+
+00:10:00.590 --> 00:10:02.630
+Identitas ini tidak berbagi siklus hidup dengan salah satunya,
+
+00:10:02.630 --> 00:10:05.230
+sehingga berguna jika Anda membutuhkan identitas yang sama di beberapa layanan.
+
+00:10:05.810 --> 00:10:07.050
+Begini tampilannya dalam prakteknya.
+
+00:10:07.650 --> 00:10:10.970
+Anda memiliki aplikasi web yang perlu membaca string koneksi database dari Key Vault.
+
+00:10:11.470 --> 00:10:14.490
+Anda mengaktifkan identitas terkelola yang ditetapkan sistem pada aplikasi web tersebut.
+
+00:10:14.990 --> 00:10:18.710
+Kemudian Anda berikan identitas tersebut peran pengguna rahasia Key Vault pada Vault Anda.
+
+00:10:19.730 --> 00:10:22.210
+Tidak ada string koneksi di kode, tidak ada klien secret di file konfigurasi.
+
+00:10:22.930 --> 00:10:26.030
+Aplikasi web melakukan autentikasi ke Key Vault menggunakan identitas terkelolanya
+
+00:10:26.030 --> 00:10:28.790
+dan Azure menangani semua manajemen kredensial di latar belakang.
+
+00:10:29.250 --> 00:10:31.990
+Ini adalah hal yang paling mendekati autentikasi tanpa kredensial di Azure.
+
+00:10:32.690 --> 00:10:34.270
+Ini adalah terobosan bagi keamanan,
+
+00:10:34.630 --> 00:10:37.490
+karena menghilangkan vektor serangan paling umum, yaitu pencurian kredensial.
+
+00:10:38.250 --> 00:10:41.410
+Jika tidak ada kredensial untuk dicuri, tidak ada yang bisa dikompromikan oleh penyerang.
+
+00:10:41.990 --> 00:10:43.170
+Izinkan saya memberikan contoh dunianya.
+
+00:10:44.010 --> 00:10:46.770
+Bayangkan jalur data di Synapse yang perlu mengakses akun penyimpanan.
+
+00:10:47.510 --> 00:10:51.030
+Cara lama, Anda akan menyimpan kunci akun penyimpanan dalam konfigurasi jalur data.
+
+00:10:51.030 --> 00:10:53.910
+Jika seseorang mendapatkan akses ke jalur data itu, mereka memiliki kunci.
+
+00:10:54.430 --> 00:10:57.090
+Dengan identitas terkelola, ruang kerja Synapse memiliki identitas.
+
+00:10:57.630 --> 00:11:01.110
+Identitas itu diberi akses ke Key Vault tempat kunci akun penyimpanan disimpan.
+
+00:11:01.870 --> 00:11:05.510
+Jalur data mengambil kunci saat runtime, menggunakannya, dan tidak pernah menyimpannya di mana pun.
+
+00:11:06.030 --> 00:11:08.750
+Tidak ada kunci dalam kode, tidak ada rahasia dalam konfigurasi jalur data.
+
+00:11:09.090 --> 00:11:12.410
+Ketika Anda menggabungkan identitas terkelola dengan RBAC dan hak akses paling rendah,
+
+00:11:12.410 --> 00:11:14.330
+Anda mendapatkan fondasi aman untuk beban kerja Azure.
+
+00:11:14.650 --> 00:11:16.770
+Aplikasi Anda melakukan autentikasi tanpa kredensial.
+
+00:11:16.770 --> 00:11:20.310
+Aplikasi tersebut hanya mengakses apa yang diperlukan, dan setiap akses dicatat dan dapat.
+
+00:11:20.470 --> 00:11:23.490
+Ini adalah pola yang direkomendasikan Microsoft untuk hampir setiap skenario.
+
+00:11:24.010 --> 00:11:26.970
+Setelah Anda mulai menggunakannya, Anda akan bertanya-tanya mengapa Anda pernah melakukan channel.
+
+00:11:27.570 --> 00:11:29.010
+Biaya dan strategi multifalk.
+
+00:11:29.510 --> 00:11:30.770
+Jadi, mari kita bicara tentang biaya.
+
+00:11:31.090 --> 00:11:32.490
+Di sinilah sebagian besar orang terkejut.
+
+00:11:33.050 --> 00:11:34.570
+Berapa sebenarnya biaya Azure Key Vault?
+
+00:11:35.090 --> 00:11:35.990
+Mode penetapan harganya sederhana.
+
+00:11:36.390 --> 00:11:37.470
+Tidak ada biaya penyimpanan perhasil.
+
+00:11:37.570 --> 00:11:40.110
+Anda tidak membayar untuk setiap kredensian di atau kunci api yang ada simp.
+
+00:11:40.270 --> 00:11:41.530
+Sebaliknya, Anda membayar per operasi.
+
+00:11:41.530 --> 00:11:44.990
+Untuk tingkat standar, biayanya sekitar 3 sen untuk setiap 10 ribu operasi.
+
+00:11:45.430 --> 00:11:47.410
+Panggilan untuk mendapatkan rahasia dihitung sebagai satu operasi.
+
+00:11:47.690 --> 00:11:49.930
+Begitu juga dengan membuat rahasia atau mencantumkan apa yang ada dalam.
+
+00:11:50.250 --> 00:11:53.430
+Untuk aplikasi kecil hingga menengah, jumlahnya hanya beberapa sen per bulan.
+
+00:11:54.110 --> 00:11:54.670
+Beberapa sen?
+
+00:11:55.250 --> 00:11:56.890
+Bandikan itu dengan AWS Secrets Manager.
+
+00:11:57.530 --> 00:12:01.930
+Mereka mengenakan biaya 40 sen per rahasia per bulan hanya untuk menyimpannya ditambah biaya tambahan untuk panggilan api.
+
+00:12:02.170 --> 00:12:05.350
+Jika Anda memiliki 100 rahasia, itu berarti 40 hal per bulan bahkan sebelum Anda membaca satu.
+
+00:12:05.350 --> 00:12:09.570
+Dengan Azure Key Vault, 100 rahasia dengan penggunaan moderat mungkin hanya menghabiskan 15 sen.
+
+00:12:09.570 --> 00:12:11.310
+Perbedaannya berkembang yang cepat dalam skala.
+
+00:12:11.470 --> 00:12:12.450
+Ada tingkat premium.
+
+00:12:13.030 --> 00:12:17.370
+Ini menambahkan kunci berbasis HSM untuk beban kerja yang memerlukan tingkat jaminan kriptografi tertinggi.
+
+00:12:17.730 --> 00:12:20.510
+Bayangkan transaksi keuangan, data kesehatan, sistem pemerintah.
+
+00:12:21.270 --> 00:12:25.130
+Biaya per operasi lebih tinggi, sekitar 15 sen per 10 ribu operasi untuk jenis kunci.
+
+00:12:25.390 --> 00:12:27.750
+Lanjutan ditambah biaya bulanan per kunci HSM.
+
+00:12:28.850 --> 00:12:31.750
+Namun bagi sebagian besar aplikasi, tingkat standar sudah lebih dari cukup.
+
+00:12:31.910 --> 00:12:34.410
+Inilah kejutan biaya yang seringkali membuat orang tidak siap.
+
+00:12:34.910 --> 00:12:38.130
+Untuk aplikasi web biasa, dengan segelintir rahasia dan beberapa ribu operasi per bulan,
+
+00:12:38.130 --> 00:12:40.030
+key vault menghabiskan biaya kurang dari 1 dolar.
+
+00:12:40.570 --> 00:12:42.890
+Anda akan menghabiskan lebih banyak uang untuk kopi yang dibindung saatnya.
+
+00:12:43.390 --> 00:12:45.110
+Namun, ada strategi yang lebih penting daripada biaya.
+
+00:12:45.630 --> 00:12:46.490
+Seberapa banyak vault yang ada?
+
+00:12:46.930 --> 00:12:48.530
+Pendekatan cerdasnya adalah strategi multi-vault.
+
+00:12:49.370 --> 00:12:52.190
+Gunakan vault terpisah untuk pengembangan, pengujian, staging, dan produksi.
+
+00:12:52.650 --> 00:12:54.090
+Ini mencegah kecelakaan yang paling umum terjadi.
+
+00:12:54.510 --> 00:12:57.910
+Seseorang menjalankan skrip uji yang secara tidak sengaja membaca basis data produksi
+
+00:12:57.910 --> 00:12:59.570
+karena string koneksinya berada di vault yang sama.
+
+00:13:00.090 --> 00:13:02.430
+Saat lingkungan dipisahkan, kesalahan tersebut menjadi mustahil terjadi.
+
+00:13:02.770 --> 00:13:05.250
+Anda juga harus memisahkan berdasarkan unit bisnis atau domain kepatu.
+
+00:13:05.250 --> 00:13:09.150
+Jika Anda menangani data kartu pembayaran, simpan rahasia tersebut di vault miliknya sendiri.
+
+00:13:09.530 --> 00:13:12.390
+Beban kerja bisnis umum di vault lain, data kesehatan di vault ketiga.
+
+00:13:12.830 --> 00:13:15.410
+Ini bukan tentang mempersulit, tetapi tentang membatasi dampak kerusakan.
+
+00:13:15.970 --> 00:13:19.010
+Jika satu vault disusupi, hanya rahasia di dalam vault itu yang terekspos.
+
+00:13:19.670 --> 00:13:21.050
+Infrastruktur Anda yang lain tetap aman.
+
+00:13:21.450 --> 00:13:23.270
+Dan dua jaring pengaman bawaan yang harus selalu anaktif.
+
+00:13:23.730 --> 00:13:26.910
+Sob delete berarti jika seseorang menghampus rahasia, rahasia itu tidak hilang secara permanen.
+
+00:13:27.230 --> 00:13:31.870
+Rahasia tersebut masuk ke status yang dapat dipulihkan selama periode retensi yang Anda pilih hingga 90 hari.
+
+00:13:32.550 --> 00:13:33.770
+Bridge protection melangkah lebih jauh.
+
+00:13:33.770 --> 00:13:38.210
+Tidak seorang pun dapat menghapus vault atau isinya secara permanen sampai periode retensi berakhir.
+
+00:13:38.530 --> 00:13:42.830
+Bersama-sama, fitur ini mencegah jenis kehilangan data tak disengaja yang membuat tim keamanan sulit tidur.
+
+00:13:43.550 --> 00:13:44.290
+Bagaimana semuanya, Tuan?
+
+00:13:44.630 --> 00:13:46.790
+Mari kita rangkaian semua ini dan lihat bagaimana bagian-bagiannya saling.
+
+00:13:47.190 --> 00:13:48.310
+Key Vault bukanlah pula yang tersewas.
+
+00:13:48.610 --> 00:13:51.530
+Ini adalah sistem syarat pusat untuk rahasia dalam arsitektur Azure Anda.
+
+00:13:52.270 --> 00:13:55.210
+Saat Anda memahami bagaimana seluruh sistem mengalir, semuanya akan terasa masuk akal.
+
+00:13:55.210 --> 00:13:57.830
+Inilah yang terjadi ketika sebuah aplikasi memerlukan rahasia.
+
+00:13:58.210 --> 00:14:00.410
+Aplikasi memintanya menggunakan identitas terkelolanya.
+
+00:14:00.410 --> 00:14:02.830
+Identitas tersebut sudah terdaftar di Enter ID.
+
+00:14:03.450 --> 00:14:06.990
+Azure membuatnya secara otomatis saat Anda mengaktifkan identitas terkelola pada sumber Rek.
+
+00:14:08.130 --> 00:14:12.070
+Enter ID memvalidasi bahwa identitas tersebut sah, lalu meneruskan permintaan ke key vault.
+
+00:14:12.650 --> 00:14:14.790
+Key vault memeriksa izin RBS yang telah Anda tetapkan.
+
+00:14:15.430 --> 00:14:19.110
+Jika identitas memiliki peran yang tepat, misalnya key vault secret user, rahasia akan dikembalikan.
+
+00:14:19.590 --> 00:14:20.970
+Semua ini terjadi dalam hitungan midgeting.
+
+00:14:20.970 --> 00:14:22.530
+Aplikasi tidak pernah melihat kredensial.
+
+00:14:23.030 --> 00:14:24.070
+Aplikasi tidak pernah menyimpan rahasia.
+
+00:14:24.370 --> 00:14:25.350
+Aplikasi yang tidak dibutuhkannya.
+
+00:14:25.890 --> 00:14:28.190
+Sekarang pikirkan berapa banyak layanan Azure yang bisa terhubung ke sini.
+
+00:14:28.430 --> 00:14:32.430
+App Service, Functions, AKS, Data Factory, Synapse, Logic Apps, DevOps, Pipeline, semuanya tahu.
+
+00:14:32.890 --> 00:14:34.070
+Cara berkomunikasi dengan key vault.
+
+00:14:34.650 --> 00:14:38.410
+Anda dapat mengonfigurasi aplikasi web untuk mereferensikan rahasia secara langsung di pengaturan aplikasinya.
+
+00:14:38.970 --> 00:14:43.270
+Anda dapat menyiapkan pipeline data factory untuk mengambil kunci akun penyimpanan dari key vault saat rangta.
+
+00:14:43.690 --> 00:14:47.930
+Anda dapat mengonfigurasi kluster kubernetes untuk menarik rahasia menggunakan driver CSE key vault.
+
+00:14:48.450 --> 00:14:50.070
+Setiap layanan terintegrasi dengan cara yang sama.
+
+00:14:50.070 --> 00:14:54.150
+Menggunakan sistem identitas yang sama, peran RBAC yang sama, dan pencatatan audit yang sama.
+
+00:14:54.930 --> 00:14:56.530
+Pola CI plus CD sangatlah kuat.
+
+00:14:57.110 --> 00:14:59.650
+Pipelines Anda mengambil rahasia dari key vault saat waktu penerapan dibutuh.
+
+00:14:59.930 --> 00:15:02.730
+Mereka tidak pernah menyimpannya dalam variabel pipeline atau rahasia repositor.
+
+00:15:03.230 --> 00:15:06.250
+Jika Anda perlu merotasi kata sandi basis data, Anda cukup memperbaruinya di key vault.
+
+00:15:06.730 --> 00:15:09.770
+Saat pipeline Anda berjalan berikutnya, sistem akan mengambil nilai baru tersebut secara tenang.
+
+00:15:10.090 --> 00:15:12.530
+Tidak ada perubahan pipeline, tidak ada perubahan kode, tidak ada penerapan ulang.
+
+00:15:13.010 --> 00:15:14.250
+Inilah hal yang membuat semuanya masuk akal.
+
+00:15:14.430 --> 00:15:19.690
+Setelah Anda mengatur key vault dengan identitas terkelola dan RBAC, Anda tidak perlu lagi memikirkan manajemen kredensial.
+
+00:15:19.690 --> 00:15:21.130
+Aplikasi Anda akan langsung berjalan.
+
+00:15:21.370 --> 00:15:23.170
+Rahasia diperbarui tanpa disadari oleh siak apa.
+
+00:15:23.610 --> 00:15:25.470
+Sertifikat diperbarui tanpa keadaan darurat dengan malam.
+
+00:15:26.010 --> 00:15:27.390
+Sistem menangani semuanya di latar belakang.
+
+00:15:27.670 --> 00:15:29.190
+Inilah postur keamanan yang sesungguhnya.
+
+00:15:29.870 --> 00:15:31.510
+Identitas adalah perimeter, bukan jaringan.
+
+00:15:31.930 --> 00:15:34.850
+Tidak masalah apakah seseorang berada di dalam jaringan virtual Anda atau di luar.
+
+00:15:35.310 --> 00:15:38.250
+Yang terpenting adalah apakah mereka memiliki identitas yang valid dengan izin yang tukar.
+
+00:15:38.710 --> 00:15:40.230
+Key vault memperlakukan hal ini secara desain.
+
+00:15:40.770 --> 00:15:46.130
+Setiap permintaan akses melalui autentikasi intra-ID dan otorisasi RBAC dari manapun permintaan itu berasal.
+
+00:15:46.130 --> 00:15:51.950
+Dan semuanya dicatat, setiap pembaca rahasia, setiap operasi kunci, setiap pengambilan sertifikat, Anda dapat melihat siapa yang mengakses aparan.
+
+00:15:52.290 --> 00:15:55.010
+Jika ada yang terlihat mencurigakan, Anda memiliki data untuk menyelidikinya.
+
+00:15:55.350 --> 00:15:59.230
+Ini sangat penting untuk kepatuhan, respons insiden, dan mengetahui apa yang terjadi di lingkungan Anda.
+
+00:15:59.810 --> 00:16:00.650
+Itulah keindari semuanya.
+
+00:16:01.030 --> 00:16:06.030
+Key vault, intra-ID, RBAC, dan identitas terkelola bekerja bersama sebagai kerangka kerja keamanan yang terpadu.
+
+00:16:06.590 --> 00:16:07.830
+Setiap bagian memperkuat bagian lainnya.
+
+00:16:07.830 --> 00:16:15.230
+Dan ketika semuanya diatur dengan benar, Anda memiliki sistem manajemen kredensial yang lebih aman dan lebih mudah dioperasikan daripada yang bisa Anda bangun sendiri.
+
+00:16:16.270 --> 00:16:17.050
+Poin pentingnya dapat ditirin.
+
+00:16:17.470 --> 00:16:18.610
+Jadi apa yang harus Anda lakukan sekarang?
+
+00:16:19.210 --> 00:16:20.810
+Mari kita ubah pengetahuan ini menjadi tindak.
+
+00:16:21.210 --> 00:16:22.650
+Berikut adalah hal-hal yang dapat Anda kerjakan.
+
+00:16:22.910 --> 00:16:24.030
+Mulailah dengan model izin Anda.
+
+00:16:24.370 --> 00:16:27.670
+Buka key vault Anda di portal, buka konfigurasi akses, dan periksa apa yang tertulis di sana.
+
+00:16:27.910 --> 00:16:30.530
+Jika Anda melihat kebijakan akses vault-to-vaul akses polisi, itu adalah cara.
+
+00:16:30.530 --> 00:16:33.550
+Anda sebaiknya menggunakan kontrol akses berbasis peran Azure-Azure RBS.
+
+00:16:33.710 --> 00:16:34.510
+Negasi sangat sederhana.
+
+00:16:34.510 --> 00:16:40.470
+Ubah model izin dan tetapkan peran RBAC kepada orang yang sama yang sebelumnya memiliki kebijakan akses akun ini.
+
+00:16:41.030 --> 00:16:44.550
+Microsoft merekomendasikannya, dan penelitian yang kita bahas menunjukkan alasan tepatnya.
+
+00:16:45.150 --> 00:16:47.590
+Selanjutnya, audit akun apapun yang menggang peran kontributor keyboard.
+
+00:16:48.530 --> 00:16:51.350
+Buka panel IAM di vault Anda dan lihat siapa saja yang memiliki akses kontributor.
+
+00:16:51.870 --> 00:16:55.350
+Setiap orang dengan peran tersebut harus memiliki alasan yang sebagian besar waktu mereka tidak melakukan.
+
+00:16:55.690 --> 00:16:57.530
+Ganti kontributor dengan sesuatu yang lebih spesifik.
+
+00:16:57.650 --> 00:17:00.730
+Jika seseorang hanya perlu membaca rahasia, berikan mereka key vault secrets user.
+
+00:17:01.150 --> 00:17:03.890
+Jika mereka perlu mengelola rahasia, gunakan key vault secrets officer.
+
+00:17:04.510 --> 00:17:06.670
+Tujuannya adalah menutup jalur eskalasi itu sepenuhnya.
+
+00:17:07.210 --> 00:17:08.470
+Kemudian manfaatkan identitas identiti.
+
+00:17:09.290 --> 00:17:12.010
+Setiap layanan Azure yang membutuhkan akses ke key vault harus menggunakannya.
+
+00:17:12.390 --> 00:17:17.750
+Jika Anda memiliki aplikasi web fungsi data factory atau mesin virtual yang masih menggunakan perwakilan layanan,
+
+00:17:18.070 --> 00:17:20.150
+dengan rahasia klien beralihlah ke manajat identiti.
+
+00:17:20.690 --> 00:17:23.970
+Ini lebih sederhana, lebih aman, dan memicahkan masalah ayam dan telur yang kita bahas.
+
+00:17:24.350 --> 00:17:27.090
+Azure menangani pengelolaan kredensial untuk Anda di balik layar.
+
+00:17:27.090 --> 00:17:30.870
+Satu hal lagi, aktifkan penghapusan lunak dan perlindungan pembersihan di setiap vault.
+
+00:17:31.110 --> 00:17:34.590
+Penghapusan lunak aktif secara default untuk vault baru, tetapi perlindungan pembersihan tidak.
+
+00:17:35.090 --> 00:17:40.110
+Aktifkan pengaturan itu mencegah siapapun menghapus vault atau isinya secara permanen selama periode retensi.
+
+00:17:40.730 --> 00:17:42.990
+Setelah menyelamatkan lebih dari satu tim dari kesalahan yang fatal.
+
+00:17:43.470 --> 00:17:44.590
+Inilah ajakan untuk bertindak lagi.
+
+00:17:45.090 --> 00:17:46.370
+Lihat pendekatan pengelolaan rahasia Anda setelah.
+
+00:17:46.370 --> 00:17:50.990
+Temukan satu rahasia masih ada di file konfigurasi, variabel lingkungan, atau di hardcode dalam kode.
+
+00:17:51.630 --> 00:17:52.770
+Pindahkan ke key vault minggu ini.
+
+00:17:53.070 --> 00:17:53.450
+Hanya satu.
+
+00:17:53.770 --> 00:17:55.810
+Setelah Anda melihat betapa sederhananya hal itu, Anda akan sisanya.
+
+00:17:56.090 --> 00:17:57.190
+Keamanan bukanlah pengaturan sekali.
+
+00:17:57.490 --> 00:17:58.230
+Dari sebuah praktik.
+
+00:17:58.570 --> 00:18:01.530
+Key vault membuat praktik itu lebih mudah, tetapi hanya jika Anda menggunakannya yang benar.
+
+00:18:01.850 --> 00:18:02.650
+Al-alannya sudah tersedia.
+
+00:18:02.970 --> 00:18:03.710
+Pola-pelanya sudah terbukti.
+
+00:18:04.270 --> 00:18:05.490
+Sekarang terserah Anda untuk menerapkannya.
+
+00:18:06.150 --> 00:18:06.750
+Itulah sistemnya.
+
+00:18:07.150 --> 00:18:11.170
+Key vault adalah berangkas digital Anda, tetapi hanya akan seaman kontrol akses yang Anda terapkan di sekitarnya.
+
+00:18:11.490 --> 00:18:12.970
+Mulai dengan audit yang baru saja saya jelaskan.
+
+00:18:12.970 --> 00:18:17.770
+Periksa model izin Anda, periksa penugasan kontributor Anda, dan pindahkan satu rahasia ke dalam vault minggu ini.
+
+00:18:17.950 --> 00:18:23.410
+Berlangganan untuk tips keamanan kode lainnya dalam bahasa yang sederhana, dan bagikan ini dengan seseorang yang masih menyimpan rahasia di file konfigurasi.

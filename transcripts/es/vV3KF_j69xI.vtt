@@ -1,0 +1,1108 @@
+WEBVTT
+
+00:00:00.080 --> 00:00:02.640
+Bienvenidos a otra píldora de conocimiento en M365FM.
+
+00:00:03.100 --> 00:00:04.220
+Soy su anfitrión, Milco Pites.
+
+00:00:04.420 --> 00:00:05.960
+Hoy hablaremos sobre la gestión de inventarios.
+
+00:00:06.500 --> 00:00:07.880
+El stock que no ves puede costarte dinero.
+
+00:00:08.320 --> 00:00:11.220
+Puedes responder cinco preguntas sobre un solo artículo en tu almacén en este momento.
+
+00:00:11.600 --> 00:00:12.900
+¿Cuántos tiene? ¿Dónde están?
+
+00:00:13.140 --> 00:00:15.640
+¿Puedes venderlos? ¿Quién pertenece? ¿Y cuánto cuesta?
+
+00:00:15.900 --> 00:00:18.700
+Para la mayoría de las empresas, esas respuestas residen en lugares completamente distintos.
+
+00:00:19.300 --> 00:00:21.900
+Una hoja de cálculo dice una cosa, un conteo en el almacén dice otra,
+
+00:00:22.000 --> 00:00:23.420
+y finanzas tiene una tercera cifra.
+
+00:00:24.360 --> 00:00:27.720
+Imagina la gestión de inventarios de Dynamics 365 como un archivo compartido
+
+00:00:27.720 --> 00:00:29.920
+para cada caja, pieza y producto que maneja tu empresa.
+
+00:00:30.600 --> 00:00:32.360
+Cuando algo se mueve, su registro también se mueve.
+
+00:00:32.960 --> 00:00:35.920
+Al final de este episodio, seguirás un artículo desde la entrega del proveedor
+
+00:00:35.920 --> 00:00:38.880
+hasta el envío al cliente, incluyendo el dinero vinculado a él.
+
+00:00:40.690 --> 00:00:42.530
+¿Por qué existe la gestión de inventarios?
+
+00:00:44.010 --> 00:00:45.350
+Imagina que vendes máquinas de café.
+
+00:00:45.810 --> 00:00:48.150
+Un cliente realiza un pedido, pero no quedan existencias,
+
+00:00:48.270 --> 00:00:50.590
+así que ventas promete una fecha de entrega de todos modos.
+
+00:00:51.070 --> 00:00:52.690
+Compras se apresura a llamar a un proveedor,
+
+00:00:52.950 --> 00:00:54.930
+y el cliente podría decidir comprar en otro lugar.
+
+00:00:55.470 --> 00:00:55.990
+Eso quiere esto.
+
+00:00:56.470 --> 00:01:00.010
+Tener poco stock significa pedidos retrasados, ventas perdidas y clientes insatisfechos.
+
+00:01:00.010 --> 00:01:01.890
+También puede detener la producción por completo.
+
+00:01:02.410 --> 00:01:04.570
+Si fabricas máquinas y te quedas sin una pieza pequeña,
+
+00:01:04.950 --> 00:01:06.030
+toda línea puede detenerse.
+
+00:01:06.390 --> 00:01:08.670
+Pero llenar cada estante con stock extra no resuelve el problema.
+
+00:01:09.350 --> 00:01:11.870
+Cada caja en un estante representa dinero que tu empresa ya gastó.
+
+00:01:12.350 --> 00:01:14.570
+Pagas por almacenarlo, y algunos productos pueden romperse,
+
+00:01:14.630 --> 00:01:16.790
+caducar, pasar de moda o simplemente dejar de venderse.
+
+00:01:17.290 --> 00:01:19.590
+Ese dinero no puede pagar un proveedor, financiar un nuevo proyecto
+
+00:01:19.590 --> 00:01:21.350
+ni cubrir la nómina mientras está en el almacén.
+
+00:01:21.350 --> 00:01:24.130
+¿Gestión de inventarios te ayuda a encontrar el punto medio?
+
+00:01:24.570 --> 00:01:26.630
+Necesitas suficiente stock para satisfacer la demanda,
+
+00:01:26.730 --> 00:01:29.690
+pero no tanto como para que tu almacén se convierta en un cuarto de almacenamiento muy costoso.
+
+00:01:30.050 --> 00:01:32.650
+Un inventario no significa solo productos terminados listos para los clientes.
+
+00:01:32.910 --> 00:01:36.370
+Un fabricante de muebles rastrea madera, tornillos, tela y pintura como materia espina.
+
+00:01:36.790 --> 00:01:38.750
+Una vez que los trabajadores comiencen a construir una silla,
+
+00:01:38.830 --> 00:01:40.990
+esa silla es parcialmente terminada, se convierte en el trabajo en curso.
+
+00:01:41.210 --> 00:01:43.990
+Y cuando la silla está lista para la venta, se convierte en un producto terminado.
+
+00:01:43.990 --> 00:01:47.490
+Una empresa también podría rastrear repuestos, suministros de limpieza,
+
+00:01:47.670 --> 00:01:49.490
+embalajes o piezas de reemplazo para mantenimiento.
+
+00:01:49.650 --> 00:01:53.370
+Aunque no aparezcan en el producto final, el negocio los necesita para seguir funcionando.
+
+00:01:54.170 --> 00:01:55.510
+Ahora imagina la antigua forma de hacer esto.
+
+00:01:56.050 --> 00:01:59.310
+Compras mantiene una lista de lo que pidió, el personal del almacén cuenta lo que llegó,
+
+00:01:59.490 --> 00:02:03.830
+ventas sigue los pedidos de clientes, producción registra lo que usó y finanzas rastrea el costo.
+
+00:02:04.530 --> 00:02:07.530
+Cada equipo trabaja duro, pero al tener listas separadas las cifras se desajustan.
+
+00:02:07.910 --> 00:02:10.190
+Alguien recibe una entrega, pero actualiza la hoja de cálculo más tarde.
+
+00:02:10.630 --> 00:02:13.150
+Alguien mueve un palea a otro almacén, pero olvida avisar a ventas.
+
+00:02:13.150 --> 00:02:16.670
+Alguien envía un pedido, pero finanzas no ve el costo hasta días después.
+
+00:02:17.150 --> 00:02:18.930
+Eso crea discusiones sobre una pregunta sencilla.
+
+00:02:19.190 --> 00:02:20.430
+¿Cuánto stock tenemos realmente?
+
+00:02:21.150 --> 00:02:24.690
+La gestión de inventario de Dynamics 365 ofrece a estos equipos un resistencia a compartir.
+
+00:02:25.470 --> 00:02:28.670
+Compras registra la mercancía entrante, el personal del almacén registra movimientos,
+
+00:02:28.870 --> 00:02:30.970
+ventas registra las salidas, producción registra las salidas,
+
+00:02:31.150 --> 00:02:34.110
+producción registra los materiales usados y finanzas ve el valor detrás de sus movimientos.
+
+00:02:34.770 --> 00:02:37.490
+Ya nadie tiene que crear una nueva versión de la misma hoja de cálculo cada viernes.
+
+00:02:37.850 --> 00:02:39.910
+El objetivo no es que los almacenes parezcan más técnicos,
+
+00:02:39.910 --> 00:02:42.910
+sino dar a la gente una respuesta actual y compartida cuando lo necesiten.
+
+00:02:43.150 --> 00:02:44.350
+Podemos completar este pedido.
+
+00:02:44.650 --> 00:02:46.030
+¿A dónde deberíamos enviar la próxima entrega?
+
+00:02:46.290 --> 00:02:48.290
+¿Por qué el recuento físico difiere del sistema?
+
+00:02:48.990 --> 00:02:52.730
+Para responder esas preguntas, Dynamics necesita más que un nombre de producto y un número.
+
+00:02:53.250 --> 00:02:55.710
+Necesita un registro claro de lo que cambió cada vez que un artículo se mueve.
+
+00:02:56.410 --> 00:02:58.190
+El registro digital detrás de cada artículo.
+
+00:02:58.890 --> 00:03:02.850
+Bienvenidos a otro episodio de Píldoras de Conocimiento de Microsoft aquí en M3Sne5FM.
+
+00:03:03.290 --> 00:03:04.230
+Soy su anfitrión Marco Pito.
+
+00:03:04.430 --> 00:03:08.970
+Hoy hablamos de lo que ocurre dentro de Dynamics 365 cuando el stock se mueve de un lugar a otro.
+
+00:03:08.970 --> 00:03:14.270
+Entonces, ¿qué registra exactamente Dynamics 365 cuando un artículo cambia de manos o de ubicación?
+
+00:03:14.810 --> 00:03:16.070
+Aquí está la definición más sencilla.
+
+00:03:16.750 --> 00:03:17.930
+Rastrea cinco cosas.
+
+00:03:18.150 --> 00:03:18.730
+¿Cuánto tienes?
+
+00:03:19.050 --> 00:03:19.470
+¿Dónde está?
+
+00:03:19.590 --> 00:03:20.290
+Si puedes usarlo.
+
+00:03:20.350 --> 00:03:21.590
+¿Quién lo posee y cuánto cuesta?
+
+00:03:22.090 --> 00:03:25.250
+Parece sencillo, pero cada parte responde a una pregunta de negocio diferente.
+
+00:03:25.990 --> 00:03:26.650
+Analicemoslo.
+
+00:03:27.010 --> 00:03:28.670
+Lacan te dice cuántas máquinas de café hay.
+
+00:03:29.510 --> 00:03:32.390
+La ubicación responde a qué edificio, almacén o estante las contiene.
+
+00:03:33.310 --> 00:03:35.970
+El estado indica si podemos venderlas o si están esperando una inspección.
+
+00:03:36.630 --> 00:03:40.710
+La propiedad explica si somos dueños de estas máquinas o si un proveedor las está almacenando aquí.
+
+00:03:41.670 --> 00:03:43.930
+Y el costo responde, ¿qué valor hay en este stock?
+
+00:03:44.970 --> 00:03:47.290
+El punto de partida para todo esto es el registro del producto.
+
+00:03:47.730 --> 00:03:50.010
+Cada artículo necesita una identidad dentro del sistema.
+
+00:03:50.470 --> 00:03:52.570
+Normalmente es un número de artículo y una descripción clara.
+
+00:03:53.130 --> 00:03:54.910
+También defines la unidad en la que lo cuentas.
+
+00:03:54.910 --> 00:03:58.250
+Hora, pieza, caja, palé, kilogramo o metro.
+
+00:03:58.810 --> 00:04:00.970
+Aquí es donde las pequeñas cosas pueden convertirse en grandes problemas.
+
+00:04:00.970 --> 00:04:04.810
+Si compras adquiere filtros de café por caja, pero ventas los vende por paquete,
+
+00:04:05.190 --> 00:04:07.250
+Dynamics debe entender cómo se relacionan esas unidades.
+
+00:04:07.790 --> 00:04:09.550
+De lo contrario, un equipo cree que tiene 10 cajas,
+
+00:04:09.650 --> 00:04:11.690
+mientras que otro piensa que tiene 10 filtros individuales.
+
+00:04:12.010 --> 00:04:13.090
+Es una receta para la confusión.
+
+00:04:13.550 --> 00:04:14.770
+Algunos productos también vienen en variaciones.
+
+00:04:15.370 --> 00:04:17.310
+Una camiseta puede tener tallas pequeñas, medianas y grandes.
+
+00:04:17.650 --> 00:04:18.870
+Podría ser negra, azul o blanca.
+
+00:04:19.690 --> 00:04:23.130
+Un mismo producto puede tener diferentes tamaños, colores, estilos o configuraciones.
+
+00:04:23.570 --> 00:04:26.430
+El sistema puede tratar cada combinación como su propio registro de inventario.
+
+00:04:26.830 --> 00:04:28.110
+Así que no solo tienes una camiseta.
+
+00:04:28.110 --> 00:04:33.010
+Podrías tener 12 camisetas negras medianas en un almacén y 6 blancas grandes en otro lugar.
+
+00:04:33.370 --> 00:04:36.110
+Ese es el tipo de detalle que importa cuando un cliente pide algo específico.
+
+00:04:37.730 --> 00:04:40.430
+Dynamics utiliza dimensiones de inventario para mantener esos detalles organizados.
+
+00:04:41.130 --> 00:04:44.530
+Esa frase suena técnica, pero simplemente se refiere a las etiquetas que ayudan al sistema
+
+00:04:44.530 --> 00:04:46.170
+a distinguir una pieza de stock de otra.
+
+00:04:47.010 --> 00:04:48.230
+Ponden a dos preguntas prácticas.
+
+00:04:48.550 --> 00:04:50.250
+¿Dónde está el artículo y qué artículo es exactamente?
+
+00:04:50.770 --> 00:04:52.830
+Vamos a desglosarlo en los componentes principales.
+
+00:04:53.330 --> 00:04:54.710
+Primero están las dimensiones de almacenamiento.
+
+00:04:54.710 --> 00:04:56.930
+Estas describen el lugar donde se encuentra el inventario.
+
+00:04:57.330 --> 00:05:00.430
+Dynamics puede rastrear un sitio, un almacén y una ubicación dentro de ese almacén.
+
+00:05:00.930 --> 00:05:02.050
+Piénsalo como la dirección de un artículo.
+
+00:05:02.590 --> 00:05:06.710
+El sitio representa un lugar de negocio amplio como un área de fábrica o un centro de distribución.
+
+00:05:07.590 --> 00:05:09.450
+Dentro de ese sitio podrías tener varios almacenes.
+
+00:05:09.970 --> 00:05:13.990
+Quizás uno para mercancía recibida, uno para productos terminados y otro para devoluciones.
+
+00:05:14.550 --> 00:05:15.410
+Luego puedes profundizar más.
+
+00:05:15.410 --> 00:05:20.970
+Una ubicación señala el lugar preciso dentro del almacén, como un pasillo, estante, repisa y contenedor.
+
+00:05:21.490 --> 00:05:25.390
+Así, en lugar de decirle a un trabajador de almacén, las piezas de máquina están en algún lugar del almacén A.
+
+00:05:25.470 --> 00:05:28.750
+El sistema puede decir, revisa el pasillo 4, estante 2, repisa 3, contenedor 1.
+
+00:05:29.410 --> 00:05:31.750
+Eso ahorra tiempo cuando alguien necesita encontrar existencias reales.
+
+00:05:32.030 --> 00:05:36.030
+Las dimensiones de almacenamiento dicen dónde se encuentra, pero las dimensiones de seguimiento te dicen qué inventario es.
+
+00:05:36.830 --> 00:05:40.470
+Los números de lote agrupan artículos que llegaron o se produjeron juntos.
+
+00:05:40.470 --> 00:05:46.170
+Son importantes cuando los productos tienen fechas de caducidad, resultados de pruebas o registros de proveedores que podrían necesitar de eso.
+
+00:05:46.430 --> 00:05:48.930
+Imagina que una empresa de alimentos recibe dos entregas del mismo producto.
+
+00:05:49.650 --> 00:05:53.090
+Los frascos parecen idénticos, pero un lote vence en junio y el otro en septiembre.
+
+00:05:53.950 --> 00:05:58.870
+Si surge un problema de calidad, la empresa necesita encontrar el lote afectado sin retirar todos los frascos de todos los estantes.
+
+00:05:59.070 --> 00:06:00.170
+Los números de serie van a más lejos.
+
+00:06:00.630 --> 00:06:05.970
+Un número de serie identifica un artículo individual, una computadora portátil, un dispositivo médico o una máquina industrial.
+
+00:06:05.970 --> 00:06:11.070
+Eso ayuda con reparaciones, reclamos de garantía, devoluciones y retiradas porque puede rastrear una unidad exacta.
+
+00:06:11.630 --> 00:06:15.230
+Cuando abres la vista de existencias en Dynamics, no obtienes un número vago de toda la empresa.
+
+00:06:15.770 --> 00:06:20.110
+Puedes ver el inventario por sitio, ubicación de almacén, lote, número de serie y otros detalles que tu negocio necesite.
+
+00:06:20.630 --> 00:06:25.890
+También puede ver dónde se encuentra físicamente la cantidad, si está disponible para su uso, reservada por un pedido o retenida.
+
+00:06:26.450 --> 00:06:27.970
+Es por eso que el nombre de un producto por si siente.
+
+00:06:28.310 --> 00:06:30.710
+El componente final es el historial de transacciones del artículo.
+
+00:06:30.710 --> 00:06:37.750
+Cada vez que el inventario llega, se transfiere, se contabiliza, recibe una corrección o entra en producción de Dynamics, registra una transacción en Ansax.
+
+00:06:37.990 --> 00:06:40.430
+Ese historial permite a las personas investigar en lugar de adivinar.
+
+00:06:40.910 --> 00:06:45.270
+Si el conteo parece incorrecto, puedes revisar el registro del artículo y preguntar qué movimiento cambió este número.
+
+00:06:45.990 --> 00:06:46.810
+Esa es la magia de esto.
+
+00:06:47.230 --> 00:06:52.370
+A continuación, sigamos un artículo en su recorrido diario, ya que estos registros se entienden mucho mejor cuando el inventario comienza a moverse.
+
+00:06:53.890 --> 00:06:55.710
+Desde la entrega del probador hasta el pedido del cliente.
+
+00:06:56.510 --> 00:06:59.470
+Imagine que su negocio de máquinas de café pide 100 bombas de agua a un proveedor.
+
+00:06:59.470 --> 00:07:00.950
+La orden de compra inicia el viaje.
+
+00:07:01.390 --> 00:07:05.430
+Registra lo que espera, cuántas unidades pidió, quién las enviará y dónde deben llegar.
+
+00:07:06.390 --> 00:07:09.650
+Antes de que el camión llegue a sus instalaciones, el negocio ya tiene una expectativa clara.
+
+00:07:10.370 --> 00:07:12.910
+Eso es importante porque una entrega esperada no es inventario que pueda vender.
+
+00:07:13.350 --> 00:07:16.250
+Cuando llegue el envío, alguien verifica la entrega contra la orden de compra.
+
+00:07:16.750 --> 00:07:17.950
+Envió el proveedor las bombas correctas.
+
+00:07:18.510 --> 00:07:19.670
+Enviaron 100 o 98.
+
+00:07:20.350 --> 00:07:21.410
+Llegaron al almacén correcto.
+
+00:07:21.890 --> 00:07:25.490
+Una vez que se registra la recepción de mercancías, Dynamics sabe que las bombas llegaron físicamente.
+
+00:07:25.490 --> 00:07:30.470
+El sistema puede aumentar el registro de inventario físico, pero eso no siempre significa que las bombas estén listas para un pedido de cliente.
+
+00:07:30.910 --> 00:07:32.170
+Algunos bienes necesitan inspección privada.
+
+00:07:32.630 --> 00:07:35.310
+Una empresa de alimentos puede verificar un lote por daños o fechas de caducidad.
+
+00:07:35.770 --> 00:07:37.730
+Un fabricante puede probar una pieza antes que entre en producción.
+
+00:07:38.230 --> 00:07:42.190
+Un negocio que maneja bienes regulados puede necesitar pruebas de que el envío cumple con sus normas.
+
+00:07:42.650 --> 00:07:47.550
+En Dynamics, el inventario puede ir a un área de cuarentena o recibir un estado que impide que las personas lo usen demasiado pronto.
+
+00:07:48.130 --> 00:07:49.830
+El personal del almacén puede ver que las bombas llegan.
+
+00:07:50.350 --> 00:07:52.790
+Ventas y producción también pueden ver que aún no están disponibles.
+
+00:07:53.770 --> 00:07:57.710
+Eso evita el error doloroso de prometer a un cliente un inventario que aún necesita aprobación.
+
+00:07:58.390 --> 00:08:02.170
+Tras la inspección, las bombas se mueven del área de recepción a su ubicación del almacenamiento normal.
+
+00:08:02.710 --> 00:08:07.550
+Esto se llama ubicación, aunque el trabajo real puede implicar un montacargas, una transpaleta o alguien llevando una caja pequeña en un estante.
+
+00:08:08.030 --> 00:08:08.630
+El movimiento se importa.
+
+00:08:09.070 --> 00:08:11.930
+Un muelle de carga no es el lugar al que pertenecen las bombas para los próximos seis meses.
+
+00:08:11.930 --> 00:08:15.750
+El equipo del almacén las necesita en el lugar correcto para que alguien pueda encontrarlas cuando llegue un pedido.
+
+00:08:15.750 --> 00:08:19.870
+Dynamics registra movimiento interno, desde la recepción hasta la ubicación asignada en el almacén.
+
+00:08:20.330 --> 00:08:21.930
+Ahora, imagina que la demanda cambie a Andoro City.
+
+00:08:22.430 --> 00:08:24.010
+Su almacén principal tiene 80 bombas.
+
+00:08:24.430 --> 00:08:27.290
+Un centro de servicio en otra ciudad necesita 20 para trabajos de reparación.
+
+00:08:27.630 --> 00:08:31.570
+No querrá que el equipo de servicio simplemente los tome de un estante y espere que alguien actualice una lista más tarde.
+
+00:08:31.970 --> 00:08:35.210
+Una orden de transferencia registra la solicitud y el movimiento entre almacenes o sitios.
+
+00:08:35.690 --> 00:08:38.690
+Mientras la mercancía viaja, Dynamics puede tratarla como en tránsito.
+
+00:08:39.090 --> 00:08:41.450
+No han desaparecido, pero tampoco han llegado a su destino.
+
+00:08:42.030 --> 00:08:43.610
+Eso brinda más ubicaciones, un panorama más claro.
+
+00:08:43.950 --> 00:08:45.570
+El almacén de envío sabe que el inventario salió.
+
+00:08:45.970 --> 00:08:47.990
+El almacén de recepción sabe lo que debe esperar.
+
+00:08:48.650 --> 00:08:52.010
+Si el camión llega con faltantes, la diferencia tiene un registro que alguien puede investigar.
+
+00:08:52.510 --> 00:08:53.530
+Un cliente realiza un pedido.
+
+00:08:53.890 --> 00:08:56.590
+El pedido de venta le indica al negocio qué quiere el cliente y cuándo lo necesita.
+
+00:08:57.370 --> 00:09:01.810
+Si existe inventario y el negocio decide comprometerlo con ese cliente, Dynamics puede reservar la cantidad.
+
+00:09:02.570 --> 00:09:05.210
+La reserva significa que esas bombas ya no son solo inventario general.
+
+00:09:05.790 --> 00:09:10.010
+Se reservan para un pedido específico para que otro vendedor no prometa las mismas unidades a alguien más.
+
+00:09:10.330 --> 00:09:14.890
+Esto es más importante cuando el inventario es bajo o cuando un cliente tiene una fecha límite de entrega que debe cumplir.
+
+00:09:14.890 --> 00:09:17.910
+Luego, el almacén recoge las bombas de su ubicación de almacenamiento.
+
+00:09:18.170 --> 00:09:21.350
+Para una operación sencilla, un trabajador puede imprimir una lista de preparación y recorrer al mercado.
+
+00:09:21.750 --> 00:09:26.290
+En una operación más grande, la gestión del almacén puede dirigir ese trabajo mediante escaneo móvil y reglas de almacén.
+
+00:09:26.690 --> 00:09:28.370
+El registro de inventario sigue involucrado de cualquier manera.
+
+00:09:28.810 --> 00:09:31.050
+Después de la preparación, el pedido pasa por el embalaje de envío.
+
+00:09:31.050 --> 00:09:34.510
+Una vez que se envían los productos, Dynamics registra que las bombas salieron de la almacén.
+
+00:09:34.830 --> 00:09:36.470
+La cantidad disponible para el negocio cambia.
+
+00:09:36.610 --> 00:09:41.370
+El historial del artículo ahora muestra una cadena completa desde la recepción del proveedor hasta el almacenamiento interno y la entrega al cliente.
+
+00:09:42.110 --> 00:09:44.890
+Pero el trabajo de almacén real rara vez sigue una línea recta perfecta.
+
+00:09:45.330 --> 00:09:47.510
+Un cliente podría devolver una bomba porque llegó dañada.
+
+00:09:48.130 --> 00:09:50.270
+Un trabajador puede descubrir dos unidades rotas en un estante.
+
+00:09:50.710 --> 00:09:53.750
+Durante un conteo de inventario, el número físico puede diferir del número en el sistema.
+
+00:09:54.170 --> 00:09:58.350
+Dynamics puede registrar devoluciones, diferencias de conteo, correcciones de movimiento y ajustes manuales.
+
+00:09:58.350 --> 00:10:01.790
+Estas acciones no deberían convertirse en una forma silenciosa de borrar errores.
+
+00:10:02.110 --> 00:10:04.990
+Crean un rastro que le dice a las personas qué cambió, cuándo cambió y por qué.
+
+00:10:05.630 --> 00:10:07.050
+Ese rastro ayuda a los equipos a encontrar patrón.
+
+00:10:07.290 --> 00:10:09.450
+Tal vez la misma ubicación sigue produciendo errores de conteo.
+
+00:10:09.650 --> 00:10:11.370
+Tal vez un envío de un proveedor a menudo llega con falta.
+
+00:10:11.730 --> 00:10:15.410
+Tal vez los productos devueltos necesitaban un proceso de inspección más claro antes de volver al inventario.
+
+00:10:15.710 --> 00:10:17.330
+La cantidad le dice qué sucedió con las bombas.
+
+00:10:17.330 --> 00:10:21.510
+Pero cada bomba también conlleva un costo y ahí es donde la actividad del almacén se conecta directamente con las finanzas.
+
+00:10:22.110 --> 00:10:26.090
+Suscríbase en su plataforma de podcast favorita y comparte esto con alguien que esté comenzando su trayectoria.
+
+00:10:26.090 --> 00:10:28.590
+El dinero vinculado al inventar
+
+00:10:28.590 --> 00:10:33.570
+Esas bombas que tienen los estantes de su almacén son algo más que objetos físicos esperando ser enviados.
+
+00:10:34.110 --> 00:10:35.790
+Son dinero que la empresa ya ha gastado.
+
+00:10:36.130 --> 00:10:42.450
+Y ese dinero permanece en los registros financieros de la empresa como un activo hasta que las bombas se venden, se usan, se dan de baja o salen del inventario de alguna otra forma.
+
+00:10:43.370 --> 00:10:45.390
+Ese simple vínculo cambia la forma en que usted ve un recibo.
+
+00:10:45.830 --> 00:10:50.070
+La cuestión es que cuando llegan 100 bombas, el equipo de almacén ve 100 unidades.
+
+00:10:50.990 --> 00:10:53.670
+El departamento de finanzas también necesita saber el valor que se acaba de inventar.
+
+00:10:53.670 --> 00:11:00.450
+Y cuando esas bombas se envían a un cliente, el almacén ve espacios libres en las estanterías, mientras que finanzas debe registrar el costo de los productos que salen.
+
+00:11:00.930 --> 00:11:02.770
+Dynamics conecta ambas perspectivas automáticamente.
+
+00:11:03.210 --> 00:11:04.250
+Ahí es donde entran en juego los grupos de.
+
+00:11:04.510 --> 00:11:09.130
+Piensa en un grupo de artículos como una forma de organizar productos similares para que el sistema sepa cómo gestionar sus finanzas.
+
+00:11:09.550 --> 00:11:14.790
+Por ejemplo, puede poner las piezas de repuesto en un grupo, las cafeteras terminadas en otro y las materias primas en un tercero.
+
+00:11:15.090 --> 00:11:22.610
+Detrás de escena, esos grupos le indican a Dynamics qué cuentas del libro mayor deben recibir el aspecto financiero de cada compra, venta, ajuste o actividad de producción.
+
+00:11:22.610 --> 00:11:25.210
+No necesitas ser contador para entender esto.
+
+00:11:25.830 --> 00:11:33.350
+El libro mayor es simplemente el registro financiero principal de la empresa, el libro de contabilidad oficial donde finanzas arrastra todo, activos, costos, ventas, el panorama completo.
+
+00:11:34.250 --> 00:11:39.510
+La gestión de inventario envía todos los importes relacionados con el stock de ese registro utilizando las reglas que usted configuró en sus grupos de artículos.
+
+00:11:40.330 --> 00:11:47.010
+Esto significa que a fin de mes el equipo de almacén y el de finanzas no están comparando dos sistemas diferentes ni discutiendo sobre qué número es el correcto.
+
+00:11:47.010 --> 00:11:51.970
+Ambos observan la misma actividad de artículos en Dynamics, pero aún queda una gran pregunta por responder.
+
+00:11:52.770 --> 00:11:56.070
+¿Cuánto cuesta realmente una bomba? Eso depende del método de costos que usted elige.
+
+00:11:56.590 --> 00:12:00.930
+Un método de costos es simplemente la regla que Dynamics utiliza al asignar un costo al stock que sale del inventario.
+
+00:12:01.410 --> 00:12:02.170
+Déjeme darle un ejemplo.
+
+00:12:02.610 --> 00:12:04.210
+FIFO significa primero en entrar, primero en salir.
+
+00:12:04.210 --> 00:12:09.410
+Supongamos que compra 50 bombas en enero a 20 dólares cada una y otras 50 en febrero a 24 dólares cada una.
+
+00:12:09.610 --> 00:12:13.750
+Cuando envía 10 bombas usando FIFO, Dynamics trata a las bombas más antiguas como las primeras en salir.
+
+00:12:14.210 --> 00:12:16.910
+Por lo tanto, esas 10 provienen del suelote de enero a 20 dólares cada una.
+
+00:12:17.370 --> 00:12:23.530
+Este método suele ajustarse a productos donde físicamente desea usar el stock más antiguo antes que el nuevo, como alimentos, medicinas o cualquier cosa que pueda caducar.
+
+00:12:23.870 --> 00:12:25.450
+El promedio ponderado adopta un enfoque diferente.
+
+00:12:25.530 --> 00:12:32.230
+En lugar de mantener separados el costo de enero y el de febrero para cada unidad saliente, combina el costo de todas las unidades disponibles en un solo promedio.
+
+00:12:32.230 --> 00:12:39.510
+Entonces, si compra bombas similares a diferentes precios, el sistema calcula un costo promedio por bomba, basado en el valor total del inventario dividido por el total de unidades.
+
+00:12:40.070 --> 00:12:44.270
+Esto tiene sentido cuando las unidades individuales se mezclan y no necesita realizar un seguimiento de cada entrega por separado.
+
+00:12:44.570 --> 00:12:49.490
+El promedio móvil también utiliza un promedio, pero este cambia cada vez que llega nuevo inventario a un precio distinto.
+
+00:12:49.990 --> 00:12:51.530
+El costo estándar funciona de otra manera.
+
+00:12:52.410 --> 00:12:57.790
+La empresa establece un costo esperado por un artículo y luego registra cualquier diferencia entre ese costo planificado y lo que realmente paga.
+
+00:12:58.450 --> 00:13:00.390
+Cada método responde a la misma pregunta a su manera.
+
+00:13:00.390 --> 00:13:03.130
+¿Qué costo debe asignarse este artículo a salir del inventario?
+
+00:13:03.470 --> 00:13:06.410
+Pero los costos no cambian solo cuando recibe una entrega o envía un pedido.
+
+00:13:06.890 --> 00:13:12.370
+Un fabricante podría enviar materias primas a producción y luego devolver productos terminados al inventario con un nuevo costo asociado.
+
+00:13:12.670 --> 00:13:14.850
+Una corrección de conto cíclico puede cambiar el valor del inventario.
+
+00:13:15.190 --> 00:13:16.830
+Las mercancías dañadas dadas de baja pueden reducir.
+
+00:13:17.230 --> 00:13:19.530
+Es precisamente por eso que el inventario no puede estar separado a las unidades.
+
+00:13:19.530 --> 00:13:25.290
+Si sus registros de almacén muestran 500 bombas, pero Finanzas calcula el valor de 450, tiene un problema.
+
+00:13:25.930 --> 00:13:27.550
+Incluso si nadie lo nota en el almacén.
+
+00:13:28.490 --> 00:13:33.330
+Toda decisión sobre ganancias de efectivo, compras y ventas depende de que tanto la cantidad como el costo sean precisos.
+
+00:13:33.850 --> 00:13:39.330
+Una vez que Dynamics mantiene sus registros unidos, puede mirar más allá del conteo de hoy y tomar decisiones de inventario más inteligentes cada día.
+
+00:13:39.330 --> 00:13:42.510
+Visibilidad, reabastecimiento y control diario.
+
+00:13:42.970 --> 00:13:46.350
+Una vez que puede confiar en sus registros de existencia, las decisiones diarias se vuelven mucho más fáciles.
+
+00:13:46.790 --> 00:13:50.010
+Un comprador no tiene que llamar a cada almacén y pedirle a alguien que verifique físicamente un artículo.
+
+00:13:50.350 --> 00:13:56.110
+Pueden ver exactamente lo que hay a mano en todos los sitios, almacenes y ubicaciones, incluso el inventario en tránsito o en espera de inspección.
+
+00:13:57.130 --> 00:13:58.110
+Esa distinción es importante.
+
+00:13:58.650 --> 00:14:03.070
+Puede tener 500 unidades en total, pero solo 300 están realmente disponibles para prometer a los clientes.
+
+00:14:03.630 --> 00:14:08.150
+Algunas están en tránsito, otras esperan controles de calidad y otras ya están reservadas para otros pedidos.
+
+00:14:08.150 --> 00:14:12.370
+Dynamics lo ayuda a ver la cantidad utilizable y no solo el número más grande posible.
+
+00:14:12.930 --> 00:14:14.910
+Esa visión clara también favorece un mejor reabastecimiento.
+
+00:14:15.590 --> 00:14:19.450
+Toda empresa necesita saber cuándo comprar más, pero la respuesta no depende solo de la cantidad actual.
+
+00:14:20.070 --> 00:14:26.870
+También debe pensar en qué tan rápido se vende el artículo, cuánto tarda su proveedor en entregar y cuánto inventario de reserva desea en caso de un aumento repentino de la demanda.
+
+00:14:27.310 --> 00:14:29.010
+Ese margen adicional se denomina stock de seguridad.
+
+00:14:29.470 --> 00:14:32.610
+Piensa en ello como su plan de respaldo para los días en que las cosas no salen según lo previo.
+
+00:14:32.830 --> 00:14:33.810
+Un proveedor entrega tarde.
+
+00:14:34.010 --> 00:14:35.790
+Un cliente realiza un pedido más grande de lo habitual.
+
+00:14:35.790 --> 00:14:38.430
+Una línea de producción usa más material de lo esperado.
+
+00:14:38.990 --> 00:14:41.010
+Sin ese margen, una sorpresa puede tenerlo todo.
+
+00:14:41.450 --> 00:14:44.210
+Pero con demasiado inventario de reserva, vuelves a almacenar dinero en los estantes.
+
+00:14:44.930 --> 00:14:48.050
+Dynamics le brinda los datos para establecer esos niveles de existencias con mayor cuidado
+
+00:14:48.050 --> 00:14:51.050
+y revisarlos cuando cambie la demanda o los plazos de entrega de los proveedores.
+
+00:14:51.290 --> 00:14:54.510
+Pero todo esto solo funciona si los registros de su sistema coinciden con el mundo real.
+
+00:14:54.950 --> 00:14:57.350
+Es por eso que el conteo de inventario sigue siendo parte del control diario.
+
+00:14:57.910 --> 00:14:59.930
+Algunos equipos hacen un inventario completo una vez al año,
+
+00:14:59.930 --> 00:15:02.570
+mientras que otros cuentan grupos más pequeños de artículos durante el año.
+
+00:15:02.650 --> 00:15:03.750
+Eso se llama conteo cíclico.
+
+00:15:04.510 --> 00:15:05.150
+El proceso es sencillo.
+
+00:15:05.950 --> 00:15:07.330
+Cuenta lo que realmente está en el estante,
+
+00:15:07.530 --> 00:15:09.430
+lo compara con lo que Dynamics dice que debería estar allí
+
+00:15:09.430 --> 00:15:12.350
+e investiga cualquier diferencia antes de registrar una corrección.
+
+00:15:13.110 --> 00:15:15.170
+Esa diferencia podría provenir de daños, robos,
+
+00:15:15.230 --> 00:15:16.790
+un escaneo omitido, una ubicación incorrecta
+
+00:15:16.790 --> 00:15:18.470
+o un error antiguo de un movimiento anterior.
+
+00:15:18.990 --> 00:15:20.110
+La corrección arregla el número.
+
+00:15:20.230 --> 00:15:21.390
+La investigación arregla el proceso.
+
+00:15:21.870 --> 00:15:24.530
+Dynamics también puede ayudar a detectar existencias que han estado demasiado tiempo.
+
+00:15:24.530 --> 00:15:27.510
+La antigüedad del inventario le muestra los artículos que no se han movido en un tiempo.
+
+00:15:27.990 --> 00:15:30.030
+Eso es crucial para productos con fechas de caducidad,
+
+00:15:30.170 --> 00:15:31.690
+productos de temporada, repuestos antiguos,
+
+00:15:31.790 --> 00:15:33.230
+artículos que los clientes ya no quieren.
+
+00:15:34.030 --> 00:15:35.910
+Detecte ese inventario antiguo a tiempo y tendrá opción.
+
+00:15:36.550 --> 00:15:37.610
+Puede venderlo con descuento,
+
+00:15:37.730 --> 00:15:39.610
+moverlo a un lugar donde la demanda sea mayor,
+
+00:15:39.830 --> 00:15:42.330
+devolverlo si su acuerdo lo permite o simplemente dejar de comprar más.
+
+00:15:43.050 --> 00:15:45.390
+Si espera hasta que sus estantes estén llenos de inventario obsoleto,
+
+00:15:45.470 --> 00:15:46.450
+esas opciones desaparecerán.
+
+00:15:46.790 --> 00:15:48.950
+Tampoco todos los artículos merecen el mismo nivel de atención.
+
+00:15:49.750 --> 00:15:52.510
+El análisis ABC le ayuda a clasificar los artículos según su impacto financiero.
+
+00:15:52.510 --> 00:15:55.470
+Pequeño número de artículos podría representar la mayor parte del valor de su inventario.
+
+00:15:55.870 --> 00:15:57.410
+Sus necesitan conteos más estrictos,
+
+00:15:57.510 --> 00:16:00.330
+decisiones de ordenamiento más precisas y una revisión más cuidadosa.
+
+00:16:00.530 --> 00:16:02.310
+Sus artículos de bajo costo que se mueven con frecuencia
+
+00:16:02.310 --> 00:16:03.470
+pueden tener control más sencillo.
+
+00:16:03.610 --> 00:16:04.990
+El objetivo no es tratar todo por igual,
+
+00:16:05.610 --> 00:16:08.150
+es dedicar su tiempo donde un error le costaría más al negocio.
+
+00:16:09.490 --> 00:16:11.210
+También hay un caso especial que vale la pena conocer,
+
+00:16:11.410 --> 00:16:12.310
+el inventario en consignación.
+
+00:16:12.850 --> 00:16:14.910
+Imagina que un proveedor coloca sus piezas en su almacén,
+
+00:16:15.070 --> 00:16:16.410
+pero el proveedor sigue siendo el dueño.
+
+00:16:16.890 --> 00:16:18.130
+Las existencias están allí mismo,
+
+00:16:18.230 --> 00:16:19.310
+junto a su equipo de producción,
+
+00:16:19.490 --> 00:16:20.930
+listas para usarse cuando sea necesario,
+
+00:16:20.930 --> 00:16:22.310
+pero no se convierte en su inventario,
+
+00:16:22.310 --> 00:16:23.670
+hasta que usted toma posesión.
+
+00:16:24.210 --> 00:16:25.430
+Dynamics puede rastrearse a diferencia.
+
+00:16:25.910 --> 00:16:27.670
+Su equipo ve que las piezas están en sitio,
+
+00:16:27.930 --> 00:16:30.070
+mientras que el departamento de finanzas mantiene clara la propiedad.
+
+00:16:30.710 --> 00:16:31.690
+Cuando utiliza esa pieza,
+
+00:16:31.890 --> 00:16:34.390
+el sistema registra el cambio de propiedad y el costo pasa a ser suyo.
+
+00:16:34.830 --> 00:16:37.390
+Esto es excelente cuando necesita acceso rápido a las existencias
+
+00:16:37.390 --> 00:16:38.530
+sin pagar todo por adelantado.
+
+00:16:39.230 --> 00:16:40.950
+Todo esto funciona porque los equipos de compras,
+
+00:16:41.050 --> 00:16:42.430
+ventas, producción, almacén y finanzas
+
+00:16:42.430 --> 00:16:43.910
+trabajan con datos compartidos.
+
+00:16:44.330 --> 00:16:46.430
+Los informes pueden extraer datos del mismo historial que existen.
+
+00:16:46.850 --> 00:16:49.310
+Otros sistemas empresariales también pueden conectarse a ese historial
+
+00:16:49.310 --> 00:16:50.710
+en lugar de crear otra lista por separado.
+
+00:16:50.710 --> 00:16:54.590
+Aún así, una confusión común puede concertar a los nuevos usuarios de Dynamics.
+
+00:16:55.330 --> 00:16:57.110
+La gestión de inventario y la gestión de almacenes
+
+00:16:57.110 --> 00:16:59.290
+trabajan muy unidas, pero no significan lo mismo.
+
+00:16:59.930 --> 00:17:01.310
+Este es un tema para otra cápsula de conocimiento.
+
+00:17:02.350 --> 00:17:04.850
+La gestión de inventario y la de almacenes relacionadas,
+
+00:17:05.030 --> 00:17:05.630
+pero no iguales.
+
+00:17:05.630 --> 00:17:08.810
+Aclararemos un punto común de confusión.
+
+00:17:09.450 --> 00:17:12.090
+La gestión de inventario y la gestión de almacenes resuelven problemas distintos.
+
+00:17:12.410 --> 00:17:14.770
+La gestión de inventario mantiene el registro de existencias de toda la empresa.
+
+00:17:15.170 --> 00:17:16.230
+Responde a las grandes preguntas.
+
+00:17:16.690 --> 00:17:17.230
+¿Cuánto tenemos?
+
+00:17:17.570 --> 00:17:18.370
+¿Dónde está registrado?
+
+00:17:18.570 --> 00:17:19.330
+¿Podemos usarlo?
+
+00:17:19.610 --> 00:17:20.250
+¿Y cuánto vale?
+
+00:17:20.630 --> 00:17:23.250
+Ese registro sigue al stock por todas partes a través de compras,
+
+00:17:23.350 --> 00:17:26.190
+ventas, producción, transferencias, devoluciones y recuentos.
+
+00:17:26.850 --> 00:17:29.550
+La gestión de almacenes se ocupa del trabajo físico dentro del almacén.
+
+00:17:30.050 --> 00:17:31.970
+Guía a los trabajadores en la recepción de mercancías,
+
+00:17:32.130 --> 00:17:34.430
+su almacenamiento, la preparación de pedidos y la carga de envíos.
+
+00:17:35.150 --> 00:17:36.590
+En configuraciones más detalladas,
+
+00:17:36.790 --> 00:17:39.730
+los trabajadores usan dispositivos móviles para escanear códigos de barras
+
+00:17:39.730 --> 00:17:41.110
+y rastrear palés con números de placa.
+
+00:17:41.510 --> 00:17:42.350
+Piénselo de esta forma.
+
+00:17:42.590 --> 00:17:44.370
+La gestión de inventario es el archivador principal.
+
+00:17:44.810 --> 00:17:46.810
+Contiene la historia completa de las existencias para toda la empresa.
+
+00:17:47.450 --> 00:17:48.430
+La gestión de almacenes.
+
+00:17:48.670 --> 00:17:52.450
+Ayuda a realizar el trabajo en el piso del almacén usando la información de ese archivador.
+
+00:17:53.090 --> 00:17:54.030
+Uno registra la historia.
+
+00:17:54.030 --> 00:17:57.930
+El otro ayuda a los trabajadores a manejar el stock de forma precisa y rápida en sitio físico.
+
+00:17:58.330 --> 00:17:59.950
+No todas las empresas necesitan la misma profundidad.
+
+00:18:00.390 --> 00:18:02.890
+Un distribuidor pequeño podría empezar con registros claros de artículos,
+
+00:18:03.050 --> 00:18:04.310
+almacenes, transferencias y recuentos.
+
+00:18:04.530 --> 00:18:07.710
+Una operación más grande con muchos trabajadores, contenedores, palés y pedidos rápidos
+
+00:18:07.710 --> 00:18:09.730
+puede requerir procesos de almacén más profundos.
+
+00:18:10.170 --> 00:18:12.970
+Pero de cualquier forma, cada departamento necesita el mismo historial de artículos.
+
+00:18:14.430 --> 00:18:14.830
+Conclusión.
+
+00:18:15.170 --> 00:18:16.290
+Una historia de stock compartida.
+
+00:18:16.390 --> 00:18:17.150
+La gestión de inventario.
+
+00:18:17.230 --> 00:18:19.350
+Dynamics 365 registra toda la vida del stock,
+
+00:18:19.450 --> 00:18:21.450
+desde la recepción del proveedor y almacenamiento,
+
+00:18:21.450 --> 00:18:23.270
+hasta el envío al cliente y el valor financiero.
+
+00:18:24.030 --> 00:18:26.350
+Es una única historia de stock compartida para toda su empresa.
+
+00:18:26.950 --> 00:18:28.310
+Gracias por ver otra cápsula de conocimiento.
+
+00:18:28.870 --> 00:18:32.270
+Suscríbase para más episodios conmigo, Milko Peters, en M365 FM.
+
+00:18:32.850 --> 00:18:36.590
+Y vea el próximo episodio para ver cómo la gestión de la cadena de suministro de Dynamics 365
+
+00:18:36.590 --> 00:18:40.350
+conecta compras, almacenes y planificación en torno a ese mismo registro de stock compartido.

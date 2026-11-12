@@ -1,0 +1,922 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:04.060
+Witajcie w kolejnym odcinku Microsoft Knowledge Nugget tutaj w M365FM.
+
+00:00:04.220 --> 00:00:06.320
+Nazywam się Mirko Peters i jestem Waszym gospodarzem.
+
+00:00:06.540 --> 00:00:10.980
+Dzisiejszy temat jest znany niemal każdemu, kto pracuje w łańcuchach dostaw, ale niewielu naprawdę go rozumie.
+
+00:00:11.200 --> 00:00:13.240
+Zarządzanie transportem w Dynamics 365.
+
+00:00:13.980 --> 00:00:14.580
+Oto problem.
+
+00:00:14.820 --> 00:00:22.200
+Klient składa zamówienie, towar leży w magazynie, przewoźnik potrzebuje terminu odbioru, klient oczekuje dostawy, a później rachunek za fracht trafia na czyjeś biurko.
+
+00:00:22.420 --> 00:00:27.200
+Przez lata te kroki funkcjonowały w oddzielnych arkuszach, rozmowach telefonicznych, cennikach i przekazach między zespołami.
+
+00:00:27.380 --> 00:00:28.420
+Och, i to tworzy luki.
+
+00:00:28.420 --> 00:00:31.380
+Magazyn może przygotować towar, zanim transport będzie miał plan.
+
+00:00:31.580 --> 00:00:34.600
+Dział finansowy może otrzymać fakturę, nie wiedząc, na co ktokolwiek się umówił.
+
+00:00:34.740 --> 00:00:36.780
+Czym więc dokładnie jest zarządzanie transportem?
+
+00:00:37.000 --> 00:00:41.520
+Mówiąc prościej, to Centrum Obsługi Transportu w module Dynamics 365 Supply Chain Management.
+
+00:00:41.760 --> 00:00:44.540
+Łączy ono bramy magazynowe, dostawców, klientów i przewoźników.
+
+00:00:44.820 --> 00:00:48.660
+Będziemy planować załadunki, wybierać trasy i stawki, wysyłać towary i sprawdzać opłaty za przewóz.
+
+00:00:48.800 --> 00:00:53.540
+Pod koniec tego odcinka zobaczysz, jak wszystkie te elementy pasują do siebie, ułatwiając Ci pracę.
+
+00:00:55.280 --> 00:00:57.980
+Dlaczego zarządzanie transportem w ogóle istnieje?
+
+00:00:57.980 --> 00:01:00.000
+Zacznijmy od podstawowej prawdy.
+
+00:01:00.140 --> 00:01:04.200
+Towary fizyczne nie przemieszczają się tylko dlatego, że zamówienie sprzedaży widnieje na ekranie.
+
+00:01:04.340 --> 00:01:07.820
+Potrzebują ciężarówki, naczepy, kontenera lub innego sposobu podróży.
+
+00:01:08.000 --> 00:01:14.340
+Ktoś musi wiedzieć, skąd towar wyrusza, dokąd ma dotrzeć, ile zajmuje miejsca, kiedy musi wyjechać i ile powinna kosztować podróż.
+
+00:01:14.540 --> 00:01:17.880
+Gdy wyobrazisz sobie jedną paczkę dla jednego klienta, brzmi to prosto.
+
+00:01:17.880 --> 00:01:26.280
+Ale prawdziwa firma może wysyłać wiele zamówień z tego samego magazynu tego samego dnia, przyjmować towar od wielu dostawców i jednocześnie przenosić zapasy między własnymi oddziałami.
+
+00:01:26.480 --> 00:01:29.920
+Każde przemieszczenie wiąże się z ludźmi, terminami, przestrzenią i pieniędzmi.
+
+00:01:30.140 --> 00:01:33.260
+Bez wspólnego systemu każdy zespół widzi tylko swój własny wycinek pracy.
+
+00:01:33.520 --> 00:01:35.240
+Dział sprzedaży widzi zamówienie klienta.
+
+00:01:35.460 --> 00:01:37.280
+Dział zakupów widzi zamówienie od dostawcy.
+
+00:01:37.460 --> 00:01:40.920
+Personel magazynu widzi towary do pobrania, spakowania, przyjęcia lub odłożenia na miejsce.
+
+00:01:40.920 --> 00:01:45.460
+Zespół transportowy widzi listę rzeczy do przewiezienia, często dopiero wtedy, gdy wszyscy inni już wykonali swoje zadania.
+
+00:01:45.600 --> 00:01:47.740
+I to właśnie tam zaczynają się opóźnienia oraz chaos.
+
+00:01:47.900 --> 00:01:48.920
+Oto konkretny przykład.
+
+00:01:49.180 --> 00:01:52.600
+Wyobraź sobie, że magazyn ma 10 zamówień klientów gotowych do wysyłki w to samo miasto.
+
+00:01:52.860 --> 00:02:00.620
+Jeśli nikt nie połączy tych zamówień przed zamówieniem transportu, firma może zorganizować kilka częściowo załadowanych kursów albo przewoźnik przyjedzie, zanim magazyn będzie wiedział, które towary mają trafić do pojazdu.
+
+00:02:00.740 --> 00:02:03.180
+Towary są gotowe, ale przemieszczenie nie jest zaplanowane.
+
+00:02:03.420 --> 00:02:08.560
+Zarządzanie transportem nadaje więc temu procesowi odpowiednie miejsce wewnątrz Dynamics 365 Supply Chain Management.
+
+00:02:08.560 --> 00:02:13.960
+To nie jest oddzielna konsumencka aplikacja wysyłkowa, w której wpisujesz numer śledzenia i obserwujesz przesyłkę na mapie.
+
+00:02:14.180 --> 00:02:17.660
+Zamiast tego działa ona na danych biznesowych znajdujących się już w połączonej platformie.
+
+00:02:17.880 --> 00:02:20.040
+Zamówienie generuje potrzebę przemieszczenia towarów.
+
+00:02:20.220 --> 00:02:21.560
+Magazyn przygotowuje towar.
+
+00:02:21.780 --> 00:02:25.360
+Moduł zarządzania transportem planuje sposób przemieszczania tych towarów między lokalizacjami.
+
+00:02:25.620 --> 00:02:28.080
+Wyobraź sobie to jak biuro transportowe w budynku biurowym.
+
+00:02:28.340 --> 00:02:30.780
+Dział sprzedaży zgłasza do tego biura prośby klientów.
+
+00:02:30.960 --> 00:02:33.360
+Dział zakupów informuje, że dostawca wyśle towar.
+
+00:02:33.560 --> 00:02:36.220
+Magazyn udostępnia faktyczny towar oraz doki załadunkowe.
+
+00:02:36.220 --> 00:02:39.400
+Biuro transportowe łączy te prośby z planem transportowym firmy.
+
+00:02:39.580 --> 00:02:41.100
+Istnieją dwa główne kierunki.
+
+00:02:41.300 --> 00:02:44.320
+Transport przychodzący oznacza, że towary trafiają do Twojej firmy.
+
+00:02:44.540 --> 00:02:47.720
+Zamówiłeś produkty od dostawcy i muszą one dotrzeć do Twojego magazynu.
+
+00:02:47.880 --> 00:02:50.720
+Czasami transportem zarządza dostawca, a czasami Twoja firma.
+
+00:02:50.920 --> 00:02:55.480
+Tak czy inaczej, potrzebujesz jasnego planu dostarczenia towaru we właściwe miejsce i odebrania go po przyjeździe.
+
+00:02:55.680 --> 00:02:58.700
+Transport wychodzący oznacza, że towary opuszczają Twoją firmę.
+
+00:02:58.880 --> 00:03:00.220
+Klient zamówił produkty.
+
+00:03:00.460 --> 00:03:04.260
+Magazyn je przygotowuje, a przewoźnik lub pojazd firmowy dostarcza je do klienta.
+
+00:03:04.260 --> 00:03:07.160
+Oba przepływy dotyczą przemieszczania, ale różnią się punktem wyjścia.
+
+00:03:07.320 --> 00:03:09.720
+Transport przychodzący zaczyna się od zamówienia zakupu i dostawcy.
+
+00:03:09.880 --> 00:03:12.280
+Transport wychodzący zaczyna się od zamówienia sprzedaży i klienta.
+
+00:03:12.440 --> 00:03:15.820
+Istnieje również trzeci typ, który początkujący często pomijają zlecenia przesunięcia.
+
+00:03:16.040 --> 00:03:19.240
+Zlecenie przesunięcia przenosi zapasy między własnymi lokalizacjami firmy.
+
+00:03:19.460 --> 00:03:22.300
+Może jeden magazyn ma nadmiar towaru, a drugi go potrzebuje.
+
+00:03:22.520 --> 00:03:25.940
+Nie ma tu zakupu klienta, ale fizyczny towar nadal wymaga transportu.
+
+00:03:26.120 --> 00:03:30.760
+W systemie 365 Transportation Management zlecenia przesunięcia należą do scenariusza wychodzącego
+
+00:03:30.760 --> 00:03:32.780
+i można je planować wraz z zamówieniami sprzedaży.
+
+00:03:32.980 --> 00:03:35.480
+Ma to sens, gdy wyobrazisz sobie rampę załadunkową.
+
+00:03:35.700 --> 00:03:40.260
+Och, niezależnie od tego, czy paleta jedzie do płacącego klienta, czy do innego magazynu firmy,
+
+00:03:40.380 --> 00:03:44.420
+ktoś musi zorganizować pojazd, zarezerwować miejsce i wysłać ją z tych samych drzwi.
+
+00:03:44.660 --> 00:03:49.660
+Zatem to połączone podejście zastępuje stary łańcuch oddzielnych list i telefonów wspólnymi informacjami.
+
+00:03:49.900 --> 00:03:52.440
+Zamówienie informuje system, co musi zostać przemieszczone.
+
+00:03:52.440 --> 00:03:54.040
+Magazyn przygotowuje towary.
+
+00:03:54.260 --> 00:03:56.940
+Zarządzanie transportem zmienia tę potrzebę w plan transportowy.
+
+00:03:57.160 --> 00:04:00.940
+Gdy towar musi ruszyć w drogę, system najpierw potrzebuje wykonalnego planu wysyłki.
+
+00:04:01.100 --> 00:04:02.080
+Planowanie ładunku.
+
+00:04:02.360 --> 00:04:06.200
+Dzisiejsza porcja wiedzy dotyczy czegoś, czego potrzebuje każdy zespół logistyczny,
+
+00:04:06.360 --> 00:04:07.840
+ale często wyjaśnia to inaczej.
+
+00:04:08.060 --> 00:04:09.060
+Planowanie ładunku.
+
+00:04:09.440 --> 00:04:12.800
+Planowanie transportu można rozpocząć od zamówień lub od wysyłek.
+
+00:04:13.000 --> 00:04:13.460
+Jestem.
+
+00:04:14.500 --> 00:04:16.040
+I od razu obalmy pewien mit.
+
+00:04:16.220 --> 00:04:17.880
+Plan wysyłki nie powstaje od zera.
+
+00:04:18.140 --> 00:04:20.000
+Bazuje on na rekordach, które już posiadasz.
+
+00:04:20.000 --> 00:04:22.180
+Zamówienie sprzedaży zawiera to, co kupił klient.
+
+00:04:22.180 --> 00:04:24.740
+Zamówienie zakupu wymienia to, co musi wysłać dostawca.
+
+00:04:24.960 --> 00:04:29.240
+Wysyłka grupuje te elementy w bardziej konkretny dokument przewozowy, gotowy do połączenia z innymi.
+
+00:04:29.460 --> 00:04:30.900
+Od czego zatem warto zacząć?
+
+00:04:30.980 --> 00:04:32.800
+To zależy od sposobu pracy twojej firmy.
+
+00:04:33.000 --> 00:04:35.860
+Niektóre zespoły planują wcześnie, patrząc bezpośrednio na linię zamówień.
+
+00:04:36.020 --> 00:04:39.040
+Inne najpierw tworzą wysyłki, a potem decydują, co powinno podróżować razem.
+
+00:04:39.260 --> 00:04:40.960
+Obie ścieżki prowadzą do tego samego pytania.
+
+00:04:41.140 --> 00:04:42.880
+Co powinno znaleźć się w tym samym pojeździe?
+
+00:04:43.040 --> 00:04:44.340
+Oto najprostsza definicja.
+
+00:04:44.540 --> 00:04:47.400
+Ładunek to cyfrowy zapis planowanego przemieszczenia towarów.
+
+00:04:47.400 --> 00:04:52.500
+Możesz wyobrazić go sobie jako jedną ciężarówkę, naczepę, kontener lub zestaw wysyłek, które podróżują razem.
+
+00:04:52.720 --> 00:04:56.660
+Daje ci jedno miejsce, w którym zobaczysz, co powinno być razem, zanim zaczną się prace fizyczne.
+
+00:04:56.840 --> 00:04:58.500
+Oto coś, co wielu ludzi źle rozumie.
+
+00:04:58.680 --> 00:05:01.540
+Ładunek nie oznacza, że każdy przedmiot mieści się w jednym fizycznym pudełku.
+
+00:05:01.740 --> 00:05:04.320
+Oznacza, że system grupuje towary wokół jednego planu transportowego.
+
+00:05:04.540 --> 00:05:06.740
+Kilka wysyłek klientów może dzielić jedną ciężarówkę.
+
+00:05:06.980 --> 00:05:09.380
+Duże zamówienie może samodzielnie wypełnić całą naczepę.
+
+00:05:09.540 --> 00:05:13.520
+Kontener przybywający od dostawcy może stać się ładunkiem jeszcze zanim magazyn go przyjmie.
+
+00:05:13.520 --> 00:05:16.720
+Chodzi o to, aby przestać traktować każde zamówienie jak osobną podróż.
+
+00:05:16.880 --> 00:05:20.340
+Wyobraź sobie dystrybutora, który ma sześć zamówień klientów gotowych na piątkową dostawę.
+
+00:05:20.520 --> 00:05:23.860
+Wszystkie sześć znajduje się w tym samym miejscu, a każde wypełnia tylko część ciężarówki.
+
+00:05:24.080 --> 00:05:28.200
+Wysyłanie sześciu połowicznie zapełnionych pojazdów to marnowanie przestrzeni i sześć osobnych zleceń transportowych.
+
+00:05:28.420 --> 00:05:31.240
+Zespół może zamiast tego zgrupować kompatybilne wysyłki w jeden ładunek.
+
+00:05:31.420 --> 00:05:34.000
+Kompatybilne oznacza, że mogą one zasadnie podróżować razem.
+
+00:05:34.000 --> 00:05:39.560
+Wychodzą z tego samego magazynu, muszą dotrzeć w podobnym czasie, mieszczą się w limitach pojazdu i przestrzegają twoich zasad wysyłki.
+
+00:05:39.800 --> 00:05:44.120
+System pomaga zebrać te rekordy zamiast polegać na kimś, kto wypatrzy wzorzec w arkuszu kalkulacyjnym.
+
+00:05:44.280 --> 00:05:45.800
+Ta grupa ma teraz wspólny plan.
+
+00:05:45.980 --> 00:05:47.880
+Twój magazyn widzi, co należy do ładunku.
+
+00:05:48.060 --> 00:05:50.520
+Planista transportu widzi całkowitą przestrzeń i wagę.
+
+00:05:50.740 --> 00:05:53.860
+Ludzie nie muszą tworzyć tej samej listy w mailach, notatkach czy osobnym pliku.
+
+00:05:54.040 --> 00:05:55.120
+Ale jest pewien szczegół.
+
+00:05:55.340 --> 00:05:57.960
+Grupowanie towarów to nie tylko umieszczanie większej liczby przedmiotów razem.
+
+00:05:58.180 --> 00:06:00.900
+Ciężarówka ma swoje limity, wagę, powierzchnię podłogi, wysokość.
+
+00:06:04.000 --> 00:06:07.780
+Od sprawdzenia tych limitów ładunek może wyglądać dobrze na ekranie, ale zawieść na rampie załadunkowej.
+
+00:06:07.980 --> 00:06:11.280
+Dynamics 365 używa szablonów ładunków, aby tego uniknąć.
+
+00:06:11.380 --> 00:06:15.660
+Pomyśl o szablonie ładunku jak o zestawie limitów dla typu pojazdu lub kontenera wielokrotnego użytku.
+
+00:06:15.900 --> 00:06:19.960
+Stwórz jeden dla małej ciężarówki dostawczej, inny dla większej naczepy, a kolejny dla kontenera.
+
+00:06:20.180 --> 00:06:24.640
+Każdy szablon zawiera limity wagi, objętości, wysokości oraz inne zasady wymagane przez twoją firmę.
+
+00:06:24.840 --> 00:06:27.580
+Szablon nadaje ładunkowi kształt, zanim zaczniesz go wypełniać.
+
+00:06:27.580 --> 00:06:32.420
+Jeśli więc przesyłka waży zbyt wiele lub zajmuje za dużo miejsca, planista widzi, że nie pasuje do danego załadunku.
+
+00:06:32.780 --> 00:06:36.660
+Rozwiązaniem może być drugi pojazd, inny szablon lub inne pogrupowanie przesyłek.
+
+00:06:36.880 --> 00:06:41.660
+Oprogramowanie nie podnosi palet, ale zapewnia twojemu zespołowi jaśniejszy plan, zanim rozpocznie się praca fizyczna.
+
+00:06:41.860 --> 00:06:45.400
+Jednym z wbudowanych podejści jest tworzenie załadunku oparte na objętości.
+
+00:06:45.680 --> 00:06:47.680
+Brzmi to bardziej technicznie niż powinno.
+
+00:06:47.880 --> 00:06:53.240
+Oznacza to, że system korzysta z maksymalnej wysokości i wagi z twojego szablonu załadunku podczas tworzenia lub sugerowania ładunku.
+
+00:06:53.240 --> 00:06:56.640
+Mówiąc prościej, sprawdza, czy towary mieszczą się w ustalonych przez ciebie limitach.
+
+00:06:56.740 --> 00:06:58.440
+Te wartości nie są zablokowane na zawsze.
+
+00:06:58.640 --> 00:07:01.120
+Planista może je nadpisać, gdy zmieniają się realne potrzeby.
+
+00:07:01.340 --> 00:07:02.920
+Może przewoźnik wyśle inną naczepę.
+
+00:07:03.120 --> 00:07:04.880
+Może trasa pozwala na inną wysokość.
+
+00:07:05.060 --> 00:07:09.600
+Szablon dostarcza ogólną zasadę, a nadpisanie obsługuje wyjątek bez konieczności przebudowywania wszystkiego.
+
+00:07:09.820 --> 00:07:11.640
+Wróćmy do tych sześciu zamówień klientów.
+
+00:07:11.820 --> 00:07:14.400
+Każde z osobna może zajmować 15% ciężarówki.
+
+00:07:14.560 --> 00:07:17.700
+Planując oddzielnie, mógłbyś wysłać sześć w większości pustych pojazdów.
+
+00:07:17.700 --> 00:07:21.700
+Pogrupowane w jeden ładunek te same zamówienia mogą zapełnić większość ciężarówki z miejscem na więcej.
+
+00:07:21.920 --> 00:07:23.360
+To lepsze wykorzystanie przestrzeni.
+
+00:07:23.540 --> 00:07:25.460
+Ta sama idea sprawdza się w obu kierunkach.
+
+00:07:25.640 --> 00:07:28.860
+W planowaniu przychodzącym utwórz załadunek wokół towarów przychodzących od dostawcy.
+
+00:07:29.040 --> 00:07:33.760
+Plan transportu łączy się z oczekiwanym przyjęciem, więc magazyn wie, co ma dotrzeć i przygotowuje się na przyjazd.
+
+00:07:33.880 --> 00:07:38.440
+Zamiast dowiadywać się o dostawie dopiero, gdy pojawi się w bramie, zespół przyjmujący ma zaplanowany rekord.
+
+00:07:38.660 --> 00:07:43.500
+W planowaniu wychodzącym wybierz towary magazynowe, które muszą trafić do klientów i pogrupuj je w ładunek.
+
+00:07:43.500 --> 00:07:47.460
+Magazyn przygotowuje te towary na podstawie szczegółów załadunku, a nie osobnej listy.
+
+00:07:47.660 --> 00:07:52.400
+Jeden pełny załadunek nadal potrzebuje sposobu transportu firmy do jego przewiezienia i oczekiwanej opłaty.
+
+00:07:55.440 --> 00:07:58.020
+Załadunek mówi Ci teraz, co musi podróżować razem.
+
+00:07:58.280 --> 00:08:02.640
+Następnie musisz zdecydować, kto to przewiezie, jakiej usługi użyje i jaki powinien być koszt tej podróży.
+
+00:08:02.860 --> 00:08:05.340
+Firma, która przewozi Twoje towary nazywana jest przewoźnikiem.
+
+00:08:05.560 --> 00:08:08.540
+Może to być zewnętrzna firma transportowa, która odbiera i dostarcza Twój fracht.
+
+00:08:08.760 --> 00:08:12.140
+Może to również oznaczać Twoją własną flotę, jeśli posiadasz własne ciężarówki i kierowców.
+
+00:08:12.140 --> 00:08:15.120
+Tak czy inaczej, przewoźnik odpowiada za fizyczną podróż.
+
+00:08:15.260 --> 00:08:19.300
+To rozróżnienie jest ważne, ponieważ nadal potrzebujesz planu, nawet jeśli ciężarówka należy do Ciebie.
+
+00:08:19.500 --> 00:08:22.440
+Z zewnętrznym przewoźnikiem ustalasz ceny i usługi z wyprzedzeniem.
+
+00:08:22.660 --> 00:08:27.980
+W przypadku własnej floty nadal możesz chcieć obliczyć koszt transportu, zwłaszcza jeśli koszty dostawy pojawiają się w zamówieniach klientów.
+
+00:08:28.160 --> 00:08:31.640
+Zarządzanie transportem w Dynamics 365 obsługuje obie sytuacje.
+
+00:08:31.800 --> 00:08:33.020
+A potem jest jeszcze trasa.
+
+00:08:33.200 --> 00:08:36.680
+Trasa to zaplanowana droga od odbioru do miejsca docelowego wraz z wyborem usługi.
+
+00:08:36.680 --> 00:08:38.500
+Odpowiada ona na praktyczne pytania.
+
+00:08:38.740 --> 00:08:40.620
+Z którego magazynu przewoźnik odbiera towar?
+
+00:08:40.840 --> 00:08:42.840
+Który klient lub lokalizacja otrzymuje towar?
+
+00:08:43.040 --> 00:08:45.200
+Która usługa przewozowa obsługuje ten przejazd?
+
+00:08:45.340 --> 00:08:48.400
+Wyobraź sobie dostawę z głównego magazynu do klienta po drugiej stronie kraju.
+
+00:08:48.600 --> 00:08:52.080
+Jedna trasa może wykorzystywać standardowy transport drogowy, który jest tańszy, ale trwa dłużej.
+
+00:08:52.300 --> 00:08:54.580
+Inna może wykorzystywać szybszą, droższą usługę.
+
+00:08:54.720 --> 00:08:57.740
+Ten sam punkt początkowy i końcowy, ale wybór transportu jest inny.
+
+00:08:57.960 --> 00:08:59.920
+Stawka to przewidywana opłata za dany wybór.
+
+00:08:59.920 --> 00:09:02.460
+Nie jest to przypadkowa liczba wpisana w ostatniej chwili.
+
+00:09:02.460 --> 00:09:06.360
+Stawki wynikają z umów cenowych z przewoźnikami oraz szczegółów przesyłki lub trasy.
+
+00:09:06.620 --> 00:09:10.500
+Skąd towar wyrusza, dokąd trafia, jaka usługa jest użyta, jaka ilość jest przewożona.
+
+00:09:10.720 --> 00:09:14.360
+Zatem trasa mówi, jak towar powinien się przemieszczać, a stawka mówi, ile masz zapłacić.
+
+00:09:14.500 --> 00:09:18.140
+Te dwa pojęcia są ze sobą powiązane, ponieważ tania trasa może nie spełnić obietnicy dostawy,
+
+00:09:18.240 --> 00:09:20.420
+a szybkość może kosztować więcej niż przewiduje zamówienie.
+
+00:09:20.580 --> 00:09:22.940
+Planowanie transportu to nie tylko znalezienie ciężarówki,
+
+00:09:23.020 --> 00:09:26.760
+to wybór usługi dopasowanej do zobowiązań wobec klienta i zasad kosztowych firmy.
+
+00:09:27.100 --> 00:09:30.400
+Dynamics 365 zawiera panel Rate Route Workbench.
+
+00:09:30.400 --> 00:09:32.860
+Nazwa brzmi formalnie, ale cel jest prosty.
+
+00:09:33.060 --> 00:09:37.060
+Daje planistom miejsce do porównywania opcji tras i stawek dla przesyłki obok siebie.
+
+00:09:37.380 --> 00:09:40.900
+Zamiast sprawdzać tabelę poszczególnych przewoźników i porównywać je w oddzielnym pliku,
+
+00:09:41.040 --> 00:09:43.440
+przeglądasz opcje powiązane z daną potrzebą wysyłki.
+
+00:09:43.680 --> 00:09:47.200
+Może jedna opcja dotrze do klienta szybciej, a inna będzie kosztować mniej.
+
+00:09:47.500 --> 00:09:52.580
+System nie wie, czy każdy klient ceni prędkość bardziej niż koszt, ponieważ firmy działają inaczej.
+
+00:09:52.800 --> 00:09:56.400
+Klient mógł zapłacić za pilną dostawę, więc szybsza trasa ma sens.
+
+00:09:56.400 --> 00:09:59.980
+Inny akceptuje dłuższą dostawę i niższa opłata pasuje bardziej.
+
+00:10:00.240 --> 00:10:01.800
+Decyzje nadal podejmują ludzie.
+
+00:10:02.060 --> 00:10:05.180
+Zarządzanie transportem dostarcza uzgodnione opcje i przewidywane koszty,
+
+00:10:05.280 --> 00:10:07.740
+a Twoja firma decyduje, który kompromis jest właściwy.
+
+00:10:07.900 --> 00:10:09.840
+Oto co faktycznie robi wbudowany moduł.
+
+00:10:10.000 --> 00:10:14.300
+Informacje o stawkach pochodzą z tabel stawek, które firma wprowadza i utrzymuje w Dynamics 365.
+
+00:10:14.960 --> 00:10:18.600
+Traktuj te tabele jako zapisy uzgodnionych cen przewoźników i zasad trasowania.
+
+00:10:18.860 --> 00:10:23.660
+Jeśli wynegocjowałeś ceny za określoną usługę i trasę, informacja ta znajduje się w systemie i wspiera planowanie.
+
+00:10:23.660 --> 00:10:26.460
+Działa to dobrze, gdy Twoje stawki wynikają ze znanych umów.
+
+00:10:26.460 --> 00:10:31.820
+Na przykład współpracujesz z kilkoma stałymi przewoźnikami, obsługujesz znane trasy i aktualizujesz ceny, gdy zmieniają się kontrakty.
+
+00:10:31.960 --> 00:10:37.820
+Planista transportu korzysta z już zapisanych stawek zamiast przeszukiwać stare e-maile, ale jest coś, co wielu źle rozumie.
+
+00:10:38.020 --> 00:10:41.720
+Wbudowany moduł nie działa jak sklep internetowy połączony z każdym przewoźnikiem.
+
+00:10:41.900 --> 00:10:46.480
+Nie pobiera automatycznie świeżych cen z kanałów na żywo i nie porównuje ich w czasie rzeczywistym w ramach szerokiej sieci.
+
+00:10:46.720 --> 00:10:51.360
+Jeśli Twoja firma potrzebuje porównywania stawek wielu przewoźników, bezpośrednich linków do rezerwacji lub szczegółowych aktualizacji statusu przesyłek,
+
+00:10:51.360 --> 00:10:55.040
+zazwyczaj podłącza się zewnętrzny system. Nie jest to porażka systemu zarządzania transportem.
+
+00:10:55.260 --> 00:11:00.620
+Jasno określa on swoje zadanie. Narzędzia te obsługują ustrukturyzowane planowanie transportu w ramach łańcucha dostaw,
+
+00:11:00.760 --> 00:11:04.200
+wykorzystując informacje o przewoźnikach, trasach i stawkach utrzymywane przez firmę.
+
+00:11:04.340 --> 00:11:07.160
+To także nie jest konsumencka witryna do śledzenia paczek.
+
+00:11:07.360 --> 00:11:12.540
+Nie używa się go jak mapy, gdzie wpisujesz numer śledzenia i obserwujesz ikonę pojazdu poruszającą się po drodze.
+
+00:11:12.800 --> 00:11:16.680
+Moduł ten koncentruje się na biznesowych decyzjach transportowych przed wysyłką i wokół niej.
+
+00:11:16.680 --> 00:11:21.800
+Które towary są przewożone razem, który przewoźnik je obsługuje, jaka trasa obowiązuje i jaki powinien być koszt podróży.
+
+00:11:22.000 --> 00:11:26.020
+Gdy firma wybierze ten plan, zespoły magazynowe i transportowe muszą go zrealizować.
+
+00:11:26.200 --> 00:11:31.720
+Od drzwi magazynu do drzwi klienta plan transportu jest przydatny tylko wtedy, gdy ludzie potrafią faktycznie zamienić go w realną wysyłkę.
+
+00:11:31.940 --> 00:11:35.660
+W przypadku zamówienia wychodzącego proces zazwyczaj zaczyna się, gdy klient dokona zakupu.
+
+00:11:35.840 --> 00:11:39.540
+Zamówienie sprzedaży mówi firmie, czego chce klient, gdzie ma to trafić i kiedy powinno dotrzeć.
+
+00:11:39.540 --> 00:11:44.320
+Zamówienie staje się przesyłką, a przesyłka dołącza do zaplanowanego ładunku wraz z innymi towarami podróżującymi w tej samej trasie.
+
+00:11:44.480 --> 00:11:46.060
+Następnie do akcji wkracza magazyn.
+
+00:11:46.200 --> 00:11:50.100
+Pracownicy pobierają produkty z magazynu, pakują je i dostarczają do odpowiedniego obszaru załadunkowego.
+
+00:11:50.280 --> 00:11:55.240
+Ponieważ przesyłka należy do ładunku, zespół widzi, które towary muszą wyjechać razem i który przewoźnik je odbierze.
+
+00:11:55.460 --> 00:12:00.000
+Gdy pojazd przyjeżdża, towary trafiają z magazynu do przewoźnika, a on dostarcza je do klienta.
+
+00:12:00.200 --> 00:12:02.380
+Każdy krok łączy się z tym samym zapisem przemieszczenia.
+
+00:12:02.380 --> 00:12:04.680
+Brzmi to zwyczajnie, ale wyobraź sobie dawne metody.
+
+00:12:04.860 --> 00:12:07.100
+Pracownik mógł pracować na podstawie wydrukowanego zamówienia.
+
+00:12:07.280 --> 00:12:13.260
+Planista transportu mógł mieć osobną listę, a ktoś przy rampie załadunkowej mógł przeszukiwać maile, by sprawdzić, który przewoźnik ma zabrać które palety.
+
+00:12:13.480 --> 00:12:16.660
+Jeśli zmienił się choć jeden szczegół, każdy potrzebował zaktualizowanej wersji.
+
+00:12:16.920 --> 00:12:20.080
+Dzięki zarządzaniu transportem ładunek zapewnia zespołom wspólną dokumentację.
+
+00:12:20.320 --> 00:12:22.260
+Magazyn widzi towary powiązane z ładunkiem.
+
+00:12:22.380 --> 00:12:28.020
+Planista transportu widzi szczegóły przesyłki, a osoba organizująca odbiór widzi zaplanowanego przewoźnika i usługę.
+
+00:12:28.020 --> 00:12:34.280
+Zamiast przekazywać sobie kilka papierowych list, ludzie pracują w oparciu o informacje powiązane z tym samym zamówieniem i przesyłką.
+
+00:12:34.480 --> 00:12:35.500
+Oto prosty przykład.
+
+00:12:35.740 --> 00:12:39.140
+Magazyn ma zamówienia dla kilku klientów w tym samym obszarze dostaw.
+
+00:12:39.340 --> 00:12:44.860
+Jeden klient zamówił kartony środków czystości, inny produkty papierowe, a trzeci niewielką partię sprzętu.
+
+00:12:45.040 --> 00:12:49.500
+Każde zamówienie wymaga pobrania i pakowania, ale zespół transportowy nie musi traktować ich jako osobnych kursów.
+
+00:12:49.660 --> 00:12:51.940
+Przypisują oni przesyłki do jednego zaplanowanego ładunku.
+
+00:12:52.120 --> 00:12:56.120
+Personel magazynowy kompletuje każde zamówienie, pakuje je odpowiednio i przygotowuje do strefy załadunku.
+
+00:12:56.120 --> 00:12:59.540
+Dokument ładunku informuje ich, że wszystkie te przesyłki podróżują razem.
+
+00:12:59.760 --> 00:13:06.100
+Gdy przyjeżdża przewoźnik, zespół przekazuje towar w ramach jednego zaplanowanego ruchu, zamiast próbować dopasować palety do kierowcy w ostatniej chwili.
+
+00:13:06.300 --> 00:13:08.740
+Klient nadal otrzymuje swoje indywidualne zamówienie.
+
+00:13:08.960 --> 00:13:12.120
+Jednak za kulisami firma zaplanowała tę dostawę jako część większego przedsięwzięcia.
+
+00:13:12.900 --> 00:13:19.020
+To powiązanie pomaga magazynowi współpracować z zespołem transportowym, zamiast działać przed nim lub czekać na spóźnione instrukcje.
+
+00:13:19.200 --> 00:13:23.260
+Transport przychodzący opiera się na tej samej idei połączenia, tylko w przeciwnym kierunku.
+
+00:13:23.260 --> 00:13:26.980
+Zamówienie zakupu informuje, że firma spodziewa się towarów od dostawcy.
+
+00:13:27.220 --> 00:13:33.400
+Gdy firma organizuje transport, zaplanowany ładunek przychodzący łączy przybywające produkty z trasą, zanim dotrą one do magazynu.
+
+00:13:33.580 --> 00:13:37.520
+Dostawca wysyła przesyłkę, przewoźnik dostarcza ją do obiektu, a magazyn ją przyjmuje.
+
+00:13:37.720 --> 00:13:40.900
+Personel działu przyjęć może się przygotować, ponieważ wie, co powinno dotrzeć.
+
+00:13:41.080 --> 00:13:45.100
+Mogą sprawdzić zaplanowany ładunek w odniesieniu do towarów, które pojawiają się na doku, to znacznie lepsze niż ciężarówka,
+
+00:13:45.100 --> 00:13:48.840
+która pojawia się bez ostrzeżenia, gdy ktoś próbuje ustalić, do którego zamówienia zakupu należą palety.
+
+00:13:49.060 --> 00:13:51.380
+Zlecenia przesunięć również pasują do tego procesu.
+
+00:13:51.540 --> 00:13:55.060
+Jedna lokalizacja firmy wysyła zapasy, podczas gdy inna lokalizacja je odbiera.
+
+00:13:55.260 --> 00:14:00.520
+Pierwszy magazyn przygotowuje i wysyła produkty, a drugi magazyn oczekuje na nie i przyjmuje je na stan.
+
+00:14:00.720 --> 00:14:06.240
+Na końcu tej trasy nie ma zewnętrznego klienta, ale firma nadal potrzebuje jasnego przekazania między obiema lokalizacjami.
+
+00:14:06.460 --> 00:14:10.020
+Ładunek łączy proces wysyłki i odbioru wokół jednego zaplanowanego ruchu.
+
+00:14:10.020 --> 00:14:13.700
+Wybory dotyczące dostaw klienta również pozostają powiązane z decyzją o wysyłce.
+
+00:14:13.880 --> 00:14:19.320
+Jeśli planista wybierze szybszą usługę przewozową, ponieważ klient potrzebuje towaru szybko, ten wybór zostaje przypisany do przesyłki.
+
+00:14:19.480 --> 00:14:24.060
+Jeśli firma korzysta z tańszej usługi, ponieważ data dostawy na to pozwala, ten wybór również zostaje uwzględniony.
+
+00:14:24.280 --> 00:14:28.160
+Można prześledzić koszt dostawy wstecz, aż do trasy i wyboru przewoźnika, które go wygenerowały.
+
+00:14:28.320 --> 00:14:32.620
+Pojazd może opuścić dok, a towary mogą dotrzeć bezpiecznie, ale praca wciąż nie jest zakończona.
+
+00:14:32.820 --> 00:14:36.280
+Przewoźnik przesyła później rachunek za fracht i ktoś musi go zweryfikować.
+
+00:14:36.280 --> 00:14:42.060
+Koszty frachtu i uzgadnianie płatności. Towary opuściły magazyn, a dostawa może być już nawet zakończona.
+
+00:14:42.260 --> 00:14:44.260
+Następnie przychodzi faktura od przewoźnika.
+
+00:14:44.500 --> 00:14:54.380
+Fakturę tę należy sprawdzić, ponieważ kwota na rachunku powinna być zgodna z wyborem transportu, który firma zaplanowała wcześniej, w tym przewoźnika, trasy, usługi, szczegółów ładunku i przewidywanej opłaty frachtowej.
+
+00:14:54.580 --> 00:15:00.360
+Podczas planowania system Dynamics 365 potrafi obliczyć przewidywany koszt transportu na podstawie informacji o stawkach firmy.
+
+00:15:00.500 --> 00:15:04.460
+Ta przewidywana kwota daje firmie punkt wyjścia, zanim przewoźnik poprosi o płatność.
+
+00:15:04.460 --> 00:15:06.880
+Później przewoźnik przesyła fakturę za fracht.
+
+00:15:07.040 --> 00:15:12.020
+Uzgadnianie frachtu oznacza porównanie tej faktury ze stawką i szczegółami przesyłki zapisanymi już w systemie.
+
+00:15:12.220 --> 00:15:17.300
+Mówiąc prościej, firma sprawdza, czy przewoźnik naliczył tyle, ile oczekiwano za usługę, w ramach której faktycznie przewieziono towar.
+
+00:15:17.500 --> 00:15:20.120
+Wyobraźmy sobie, że plan zakładał koszt 500 dolarów.
+
+00:15:20.300 --> 00:15:23.960
+Faktura przewoźnika również opiewa na 500 dolarów, a szczegóły przesyłki są zgodne.
+
+00:15:24.160 --> 00:15:28.600
+Taka faktura przechodzi przez proces weryfikacji bez przeszkód, ponieważ zapis planistyczny zgadza się z fakturą.
+
+00:15:28.600 --> 00:15:30.920
+Jednak faktury nie zawsze pokrywają się z planem.
+
+00:15:31.140 --> 00:15:37.800
+Może tabela stawek była błędna, może przewoźnik naliczył opłatę za inną usługę, albo może ładunek zmienił się po zaplanowaniu i wymaga wyjaśnienia.
+
+00:15:38.060 --> 00:15:44.520
+Bez powiązanego zapisu dział finansowy widzi tylko numer faktury i kwotę, a następnie traci czas, pytając magazyn i zespół transportowy, co się stało.
+
+00:15:44.740 --> 00:15:48.240
+Zarządzanie transportem utrzymuje decyzję transportową w powiązaniu z tą weryfikacją.
+
+00:15:48.500 --> 00:15:52.580
+Reguły mogą porównać fakturę przewoźnika z przewidywaną kwotą i informacjami o planowanej przesyłce.
+
+00:15:52.580 --> 00:15:56.780
+Gdy szczegóły mieszczą się w zaakceptowanych przez firmę regułach, faktura może zostać przekazana dalej.
+
+00:15:57.000 --> 00:16:00.760
+Gdy szczegóły nie pasują, system wysyła różnice do sprawdzenia przez odpowiednią osobę.
+
+00:16:00.940 --> 00:16:04.000
+Oznacza to, że nikt nie zatwierdza każdej opłaty frachtowej w ciemno.
+
+00:16:04.140 --> 00:16:11.060
+Planista transportu może musieć potwierdzić, że przewoźnik użył innej usługi lub ktoś z działu finansowego musi zapytać, skąd wzięła się dodatkowa opłata.
+
+00:16:11.300 --> 00:16:14.080
+Nie chodzi o to, by zakładać, że każda niezgodność jest błędem.
+
+00:16:14.280 --> 00:16:16.820
+Chodzi o to, by zauważyć niezgodność przed dokonaniem płatności.
+
+00:16:17.000 --> 00:16:19.460
+To jednoczy operację i finanse wokół tej samej przesyłki.
+
+00:16:19.460 --> 00:16:23.940
+Zespół transportowy wybiera przewoźnika i usługę. Ten wybór generuje oczekiwany koszt.
+
+00:16:24.100 --> 00:16:29.000
+Magazyn wysyła towar, a dział finansowy sprawdza późniejszą fakturę z zapisem tego, co zaplanowała firma.
+
+00:16:29.180 --> 00:16:32.740
+Każdy zespół widzi inny wycinek, ale wszyscy patrzą na powiązane informacje.
+
+00:16:32.980 --> 00:16:35.020
+Wbudowany proces ma jednak wyraźny zakres.
+
+00:16:35.260 --> 00:16:41.200
+Firmy, które potrzebują szeroko zakrojonego, wysoce zautomatyzowanego audytu frachtu, często dodają zewnętrzny system zarządzania transportem.
+
+00:16:41.400 --> 00:16:45.700
+Narzędzia te mogą zapewnić głębsze połączenia z przewoźnikami i bardziej zautomatyzowane reguły weryfikacji.
+
+00:16:45.700 --> 00:16:53.820
+Wbudowany moduł obsługuje planowane koszty i uzgadnianie w ramach zarządzania łańcuchem dostaw, podczas gdy inny system może rozszerzyć te działania, gdy firma potrzebuje więcej.
+
+00:16:54.000 --> 00:16:59.880
+Po złożeniu tych wszystkich elementów w całość zaczyna wyłaniać się pełny obraz tego, gdzie system pasuje, a czego nie robi.
+
+00:17:00.140 --> 00:17:02.540
+Gdzie więc faktycznie znajduje się zarządzanie transportem?
+
+00:17:02.760 --> 00:17:07.300
+Należy ono do Dynamics 365 Supply Chain Management działającego w ramach aplikacji Finance & Operations.
+
+00:17:07.300 --> 00:17:10.140
+To jest jego miejsce. Oto dla kogo jest przeznaczone.
+
+00:17:10.360 --> 00:17:19.460
+Firmy, które potrzebują ustrukturyzowanego sposobu planowania dostaw przychodzących, wysyłek do klientów oraz transferów zapasów między oddziałami, korzystając z własnych rejestrów przewoźników, tabel, stawek i zasad załadunku.
+
+00:17:19.700 --> 00:17:21.300
+Wyjaśnijmy teraz powszechny powód nieporozumień.
+
+00:17:22.100 --> 00:17:23.520
+Biznes Central jest inny.
+
+00:17:23.740 --> 00:17:26.300
+Biznes Central nie zawiera tego wbudowanego modułu zarządzania transportem.
+
+00:17:27.020 --> 00:17:31.660
+Jeśli korzystasz z Biznes Central i potrzebujesz planowania transportu, musisz rozważyć zewnętrzny system zarządzania transportem.
+
+00:17:31.860 --> 00:17:32.700
+Taka jest granica.
+
+00:17:32.700 --> 00:17:35.180
+Utrzymujmy również tę granicę wyraźną z drugiej strony.
+
+00:17:35.400 --> 00:17:40.060
+Wbudowany moduł nie zastępuje każdego portalu przewoźnika, serwisu ruchu drogowego ani zaawansowanego narzędzia do śledzenia.
+
+00:17:40.280 --> 00:17:47.320
+Gdy firma potrzebuje stawek na żywo od wielu przewoźników, większego wyboru przewoźników lub dokładniejszego śledzenia po opuszczeniu doku przez towar, łączy się z zewnętrznym TMS.
+
+00:17:47.480 --> 00:17:49.520
+Te narzędzia obsługują działania zewnętrzne.
+
+00:17:49.740 --> 00:17:51.020
+Wróćmy myślami do biurowca.
+
+00:17:51.240 --> 00:17:54.060
+Zarządzanie transportem to biuro transportowe wewnątrz tego budynku.
+
+00:17:54.260 --> 00:17:56.800
+Łączy się ono z zamówieniami, pracą magazynu i finansami.
+
+00:17:56.800 --> 00:17:59.440
+Utrzymuje spójność własnego planu transportowego firmy.
+
+00:17:59.660 --> 00:18:02.820
+Zewnętrzne narzędzia przewoźników mogą obsługiwać działania poza tym biurem.
+
+00:18:03.000 --> 00:18:05.220
+Dwie różne warstwy współpracujące ze sobą.
+
+00:18:05.980 --> 00:18:06.540
+Wnioski.
+
+00:18:06.820 --> 00:18:08.000
+Kolejna porcja wiedzy.
+
+00:18:08.220 --> 00:18:10.280
+Oto najprostszy sposób, by o tym myśleć.
+
+00:18:10.480 --> 00:18:13.920
+Zarządzanie transportem zmienia zamówienia biznesowe w zaplanowany ruch towarów.
+
+00:18:14.100 --> 00:18:17.460
+Następnie łączy ten ruch z kosztami frachtu, które firma sprawdza później.
+
+00:18:17.680 --> 00:18:18.560
+To pełna pętla.
+
+00:18:18.800 --> 00:18:21.300
+Zasubskrybuj na swojej ulubionej platformie podcastowej.
+
+00:18:21.300 --> 00:18:25.920
+Udostępnij te porcje wiedzy komuś, kto uczy się Dynamics 365 Supply Chain Management.
+
+00:18:26.200 --> 00:18:28.900
+A następnie sprawdź nasze odcinki o magazynie i zapasach.
+
+00:18:29.080 --> 00:18:32.120
+Każdy ładunek nadal zależy od zapasów znajdujących się za bramą magazynu.

@@ -1,0 +1,1399 @@
+WEBVTT
+
+00:00:00.040 --> 00:00:03.880
+Lorsqu'un client clique sur AKHT et lui sur votre site web, l'article souhaité peut se trouver dans un entrepôt,
+
+00:00:04.240 --> 00:00:06.640
+dans un magasin, à l'autre bout de la ville, ou chez un partenaire de livraison.
+
+00:00:07.000 --> 00:00:10.960
+Pourtant, le client n'attend réellement que deux choses, une promesse claire et un colis livré à sa porte.
+
+00:00:11.420 --> 00:00:14.740
+Bienvenue dans un nouvel épisode de Microsoft Knowledge Nuggets sur M365FM.
+
+00:00:15.260 --> 00:00:19.860
+Je suis Mo Peters et aujourd'hui nous explorons la gestion intelligente des commandes de Dynamics 365 en toute simplicité.
+
+00:00:20.160 --> 00:00:23.540
+Nous allons suivre cette commande du clic lors du paiement jusqu'au travail permettant sa livraison effective.
+
+00:00:24.080 --> 00:00:27.060
+Voyez cela comme le bureau de répartition centrale d'un immeuble de bureau très fréquenté.
+
+00:00:27.060 --> 00:00:29.680
+Ce n'est pas une autre boutique en ligne, et ce n'est pas là qu'on emballe les cartons.
+
+00:00:29.960 --> 00:00:33.260
+Cela oriente simplement les bonnes personnes et les bons systèmes pour que le travail se fasse au bon endroit.
+
+00:00:38.140 --> 00:00:42.880
+Imaginez que vous vendiez les mêmes écouteurs via votre site web, vos magasins physiques, une place de marché en ligne et un centre d'appel.
+
+00:00:43.680 --> 00:00:46.040
+Pour le client, ce ne sont que différentes façons d'acheter des écouteurs.
+
+00:00:46.620 --> 00:00:49.600
+Mais en coulisse, chaque canal envoie les détails de la commande dans un système totalement différent.
+
+00:00:50.560 --> 00:00:54.380
+Votre site web conserve un enregistrement, le point de vente du magasin en garde un autre,
+
+00:00:54.380 --> 00:00:58.260
+une place de marché utilise son propre format et un agent de centre d'appel crée une commande ailleurs.
+
+00:00:59.220 --> 00:01:03.180
+Une simple promesse client est ainsi fragmentée en plusieurs éléments mobiles qui ne communiquent pas entre eux,
+
+00:01:03.540 --> 00:01:05.380
+et le stock ajoute une couche de complexité supplémentaire.
+
+00:01:05.760 --> 00:01:09.180
+L'entrepôt principal peut en avoir 20 paires, un magasin à l'autre bout de la ville en a 5,
+
+00:01:09.360 --> 00:01:10.700
+et un autre entrepôt a aussi du stock.
+
+00:01:11.200 --> 00:01:13.240
+Mais il est plus éloigné avec des frais d'expédition plus éloignés.
+
+00:01:13.600 --> 00:01:16.980
+Une partie du stock est déjà réservée pour d'autres commandes, des articles tournés ou des clients en magasin.
+
+00:01:17.560 --> 00:01:20.160
+Donc voir un chiffre à côté d'un produit ne règle pas réellement le problème.
+
+00:01:20.160 --> 00:01:22.400
+Ensuite, vous devez décider comment livrer.
+
+00:01:22.860 --> 00:01:25.340
+Est-ce l'entrepôt qui doit expédier ? Est-ce le magasin qui doit expédier ?
+
+00:01:25.340 --> 00:01:27.080
+Ou le client peut-il le récupérer localement ?
+
+00:01:27.080 --> 00:01:29.240
+Et si quelqu'un achète deux articles et qu'aucun site n'a les deux,
+
+00:01:29.360 --> 00:01:33.120
+divisez-vous la commande en deux colis ou attendez-vous que tout puisse être expédié ensemble ?
+
+00:01:33.120 --> 00:01:36.460
+Chaque choix affecte le coût, le délai de livraison et la promesse faite au client.
+
+00:01:36.900 --> 00:01:40.380
+Il y a 20 ans, les entreprises géraient ces tâches dans des systèmes séparés avec des équipes distinctes.
+
+00:01:40.620 --> 00:01:42.560
+Les ventes prenaient la commande. Quelqu'un vérifiait le stock.
+
+00:01:42.820 --> 00:01:43.800
+L'entrepôt recevait une demande.
+
+00:01:44.200 --> 00:01:45.720
+Un partenaire d'expédition recevait une autre demande.
+
+00:01:46.080 --> 00:01:47.440
+La facturation gérait sa propre partie plus tard.
+
+00:01:47.780 --> 00:01:50.360
+Cela fonctionnait bien quand les commandes étaient simples et les volumes restaient faibles.
+
+00:01:50.720 --> 00:01:51.300
+Voici le problème.
+
+00:01:51.740 --> 00:01:54.720
+Quand les mises à jour circulent lentement entre les systèmes, les gens commencent à combler les lacunes.
+
+00:01:55.160 --> 00:01:58.420
+Un agent du service client vérifie un écran, envoie un email à une équipe d'entrepôt,
+
+00:01:58.560 --> 00:01:59.440
+puis appelle un transporteur.
+
+00:01:59.680 --> 00:02:01.720
+Et pendant ce temps, un produit peut se vendre via un autre canal
+
+00:02:01.720 --> 00:02:03.580
+avant que la mise à jour du stock n'atteigne le site web.
+
+00:02:04.160 --> 00:02:06.340
+Voilà maintenant avec une commande pour un produit que vous ne pouvez pas exprimer.
+
+00:02:06.460 --> 00:02:07.440
+C'est ainsi que survient la survente.
+
+00:02:07.820 --> 00:02:09.420
+Et c'est aussi pourquoi les choix de livraison prennent trop de temps.
+
+00:02:09.800 --> 00:02:11.900
+Les équipes copient sans cesse des détails d'un endroit à l'autre
+
+00:02:11.900 --> 00:02:14.620
+et les clients reçoivent des mises à jour vagues au lieu de réponses fermes.
+
+00:02:14.800 --> 00:02:17.280
+Du point de vue du client, toute cette complexité n'a pas d'importance,
+
+00:02:17.420 --> 00:02:18.600
+car il ne pose qu'une seule question.
+
+00:02:19.240 --> 00:02:20.500
+Où est ma commande ?
+
+00:02:20.500 --> 00:02:23.220
+Ce dont une entreprise a vraiment besoin, c'est d'un outil capable de visualiser
+
+00:02:23.220 --> 00:02:25.560
+le parcours de la commande à travers toutes ses applications métiers connectés,
+
+00:02:25.680 --> 00:02:27.160
+tout en laissant chacune faire ce qu'elle fait de mieux.
+
+00:02:27.700 --> 00:02:28.780
+Les ventes enregistrent la transaction.
+
+00:02:29.280 --> 00:02:30.960
+L'entrepôt gère la préparation et l'emballage.
+
+00:02:31.260 --> 00:02:32.260
+L'expédition gère l'évraison.
+
+00:02:32.520 --> 00:02:33.540
+La facturation s'occupe des paiements.
+
+00:02:33.760 --> 00:02:35.280
+Personne n'a besoin de jeter tous ces systèmes.
+
+00:02:35.660 --> 00:02:37.080
+Ce qui manque, c'est le coordinateur entre eux.
+
+00:02:37.080 --> 00:02:39.640
+Un point, un endroit capable de recevoir une commande,
+
+00:02:39.780 --> 00:02:41.700
+de déterminer la suite des opérations et de diriger le travail
+
+00:02:41.700 --> 00:02:43.160
+sans dépendre d'une chaîne de transfert manuelle.
+
+00:02:44.540 --> 00:02:45.200
+C'est ça le problème.
+
+00:02:45.620 --> 00:02:50.460
+Dynamics 365 Intelligent Order Management répond à cette définition simple.
+
+00:02:50.940 --> 00:02:54.860
+Alors qu'est-ce que Dynamics 365 Intelligent Order Management exactement ?
+
+00:02:54.860 --> 00:02:57.820
+Nous allons aujourd'hui vous expliquer cela en toute simplicité.
+
+00:02:58.940 --> 00:03:00.060
+Voici la définition la plus simple.
+
+00:03:00.440 --> 00:03:02.200
+C'est une application cloud qui prend une commande
+
+00:03:02.200 --> 00:03:05.600
+et la guide à travers tous les systèmes déjà utilisés par l'entreprise
+
+00:03:05.600 --> 00:03:07.800
+du moment où la commande arrive jusqu'à son exécution
+
+00:03:07.800 --> 00:03:08.920
+et sa facturation.
+
+00:03:09.960 --> 00:03:11.140
+Imaginez une gare très fréquentée.
+
+00:03:11.760 --> 00:03:13.080
+Les trains arrivent de différentes directions.
+
+00:03:13.580 --> 00:03:14.900
+Les passagers ont besoin de différents quais.
+
+00:03:15.260 --> 00:03:17.200
+Certaines correspondances sont rapides, d'autres doivent attendre.
+
+00:03:17.480 --> 00:03:20.140
+Intelligent Order Management fonctionne comme la salle de contrôle de la gare.
+
+00:03:20.460 --> 00:03:21.880
+Il ne conduit pas le train et ne vend pas de billets,
+
+00:03:22.400 --> 00:03:25.060
+mais il voit tout l'itinéraire et indique à chaque système ce qu'il doit faire ensuite.
+
+00:03:25.620 --> 00:03:28.100
+Microsoft a construit Intelligent Order Management sur Dataverse.
+
+00:03:28.780 --> 00:03:30.500
+Dataverse est la base de données partagées derrière
+
+00:03:30.500 --> 00:03:33.040
+de nombreuses applications Dynamics 365 et Power Platform.
+
+00:03:33.040 --> 00:03:36.380
+En termes simples, il offre aux applications métiers un lieu
+
+00:03:36.380 --> 00:03:38.600
+et un format commun pour stocker les informations.
+
+00:03:39.280 --> 00:03:41.520
+Cela signifie qu'une commande ne signifie pas quelque chose de totalement différent
+
+00:03:41.520 --> 00:03:43.160
+selon l'écran où le système utilisé est utilisé.
+
+00:03:43.400 --> 00:03:44.580
+Certes, cette base partagée est utile,
+
+00:03:44.660 --> 00:03:47.300
+mais vous n'avez pas besoin d'acheter toutes les autres applications Dynamics 365
+
+00:03:47.300 --> 00:03:48.920
+pour utiliser Intelligent Order Management.
+
+00:03:49.240 --> 00:03:52.640
+Une entreprise peut utiliser Dynamics 365 Finance ou Supply Chain Management.
+
+00:03:53.340 --> 00:03:55.120
+Une autre peut utiliser un système d'entrepôt différent,
+
+00:03:55.540 --> 00:03:57.780
+une boutique en ligne différente ou un service d'expédition tiers.
+
+00:03:58.720 --> 00:04:00.820
+Tête application fonctionne aussi bien avec des logiciels Microsoft
+
+00:04:00.820 --> 00:04:01.860
+qu'avec d'autres applications métiers.
+
+00:04:02.160 --> 00:04:03.560
+Les points de connexion sont appelés des cas fournisseurs.
+
+00:04:04.160 --> 00:04:06.380
+Fournisseurs transfèrent les informations de commande et d'exécution
+
+00:04:06.380 --> 00:04:08.620
+entre Intelligent Order Management et un autre système.
+
+00:04:09.160 --> 00:04:10.860
+Considérez un fournisseur comme un traducteur à la porte.
+
+00:04:11.220 --> 00:04:12.880
+Un système envoie une commande dans son propre format.
+
+00:04:13.240 --> 00:04:14.460
+Le fournisseur comprend ce format,
+
+00:04:14.820 --> 00:04:16.860
+transmet l'information à Intelligent Order Management
+
+00:04:16.860 --> 00:04:18.720
+et peut renvoyer la requête suivante
+
+00:04:18.720 --> 00:04:20.620
+dans un format compréhensible par l'autre système.
+
+00:04:21.160 --> 00:04:23.140
+L'application centralise donc les informations de commande,
+
+00:04:23.240 --> 00:04:24.720
+même si celle-ci a été passée ailleurs.
+
+00:04:24.720 --> 00:04:26.940
+Un client peut effectuer un achat via un site de commerce Ayo.
+
+00:04:27.560 --> 00:04:29.720
+Un autre peut passer commande via un système de points de vente.
+
+00:04:30.320 --> 00:04:32.260
+Un client professionnel peut envoyer une commande électronique
+
+00:04:32.260 --> 00:04:33.420
+via un processus B2B.
+
+00:04:34.680 --> 00:04:36.560
+La gestion intelligente des commandes offre à l'entreprise
+
+00:04:36.560 --> 00:04:37.900
+un point de vue unique sur ses commandes
+
+00:04:37.900 --> 00:04:39.140
+et leur état d'avancement.
+
+00:04:39.980 --> 00:04:41.360
+Toutes les commandes ne suivent pas le même cheminement.
+
+00:04:41.900 --> 00:04:42.940
+Certaines peuvent être en attente de stock.
+
+00:04:43.180 --> 00:04:44.520
+D'autres peuvent déjà se trouver en entrepôt.
+
+00:04:44.920 --> 00:04:46.900
+Une troisième peut nécessiter une facturation après livraison.
+
+00:04:47.400 --> 00:04:48.480
+L'application suit cet état
+
+00:04:48.480 --> 00:04:50.720
+pour que l'équipe voit bien plus qu'une simple réception de commandes.
+
+00:04:51.600 --> 00:04:53.780
+Elle peut voir exactement où se situe la commande dans son parcours.
+
+00:04:53.780 --> 00:04:55.420
+Voici l'aspect que les gens oublient parfois.
+
+00:04:56.440 --> 00:04:58.580
+La gestion intelligente des commandes ne remplace pas toutes les tâches.
+
+00:04:59.360 --> 00:05:01.720
+Elle ne devient pas soudainement l'écran de préparation des magasiniers,
+
+00:05:02.000 --> 00:05:04.640
+le réseau du transporteur ou le système de facturation financier.
+
+00:05:05.540 --> 00:05:08.000
+Ces applications connectées continuent de réaliser leur travail spécialisé.
+
+00:05:08.140 --> 00:05:10.640
+La gestion intelligente des commandes orchestre les transferts entre elles.
+
+00:05:11.160 --> 00:05:13.000
+Elle reçoit la demande, vérifie l'itinéraire,
+
+00:05:13.240 --> 00:05:15.280
+transmet le travail, puis attend la prochaine mise à jour.
+
+00:05:16.360 --> 00:05:18.100
+Suivons à présent une commande sur ce parcours,
+
+00:05:18.340 --> 00:05:20.980
+car le cycle de commande permet de mieux comprendre le concept.
+
+00:05:20.980 --> 00:05:24.320
+Le cycle de commande définit les règles qui dirigent le travail.
+
+00:05:25.180 --> 00:05:28.560
+Imaginez qu'un client commande deux articles sur votre site en fin d'après-midi
+
+00:05:28.560 --> 00:05:30.520
+et souhaite être livré dès demain.
+
+00:05:31.660 --> 00:05:33.880
+La boutique en ligne enregistre la commande, le nom du client,
+
+00:05:34.100 --> 00:05:36.620
+l'adresse de livraison, les deux lignes de commande et le choix de livraison.
+
+00:05:36.620 --> 00:05:39.660
+Fournisseur intègre cette commande à la gestion intelligente
+
+00:05:39.660 --> 00:05:42.320
+et le parcours peut commencer avant toute exécution.
+
+00:05:42.480 --> 00:05:45.620
+Le système valide la commande pour s'assurer que toutes les informations requises
+
+00:05:45.620 --> 00:05:47.860
+sont présentes et conformes aux règles de l'entreprise.
+
+00:05:49.100 --> 00:05:51.300
+Il vérifie l'entête de commande pour les détails du client et de la livraison.
+
+00:05:51.760 --> 00:05:53.420
+Il contrôle chaque ligne pour le produit et la quantité.
+
+00:05:53.940 --> 00:05:55.680
+Il confirme que l'adresse est complète pour la livraison
+
+00:05:55.680 --> 00:05:58.360
+et s'assure que la commande respecte les règles du canal de vente.
+
+00:05:59.200 --> 00:06:02.540
+Ce premier contrôle empêche les mauvaises informations de circuler en aval
+
+00:06:02.540 --> 00:06:03.520
+et d'engendrer des problèmes.
+
+00:06:04.200 --> 00:06:05.860
+Imaginez une commande où manque le numéro d'appartement.
+
+00:06:05.860 --> 00:06:08.420
+Si elle va directement d'entrepôt puis chez le transporteur,
+
+00:06:08.660 --> 00:06:11.100
+le problème ne sera détecté qu'une fois le colis impossible à livrer.
+
+00:06:11.960 --> 00:06:13.700
+Une étape de validation détecte le souci plus tôt
+
+00:06:13.700 --> 00:06:16.740
+lorsqu'il est encore temps de contacter le client ou de suspendre la commande.
+
+00:06:17.420 --> 00:06:19.520
+La base de ce travail réside dans un flux d'orchestration.
+
+00:06:20.200 --> 00:06:21.900
+Ce terme semble technique, mais il est simple.
+
+00:06:22.360 --> 00:06:23.860
+Un flux d'orchestration est une carte visuelle
+
+00:06:23.860 --> 00:06:25.720
+indiquant à la gestion intelligente des commandes,
+
+00:06:25.940 --> 00:06:27.820
+ce qui doit se produire à l'arrivée des informations
+
+00:06:27.820 --> 00:06:29.680
+et des événements des systèmes connectés.
+
+00:06:30.500 --> 00:06:32.620
+Vous créez cette carte en fonction de votre propre processus métier.
+
+00:06:32.900 --> 00:06:35.300
+Flux de commandes basiques peut démarrer à l'arrivée d'une nouvelle commande.
+
+00:06:35.300 --> 00:06:36.880
+Il valide l'entête et les lignes.
+
+00:06:37.360 --> 00:06:39.060
+Il envoie la commande pour décision d'exécution.
+
+00:06:39.440 --> 00:06:42.220
+Ensuite, il envoie la commande d'exécution au système connecté approprié.
+
+00:06:42.700 --> 00:06:44.080
+Une fois que le travail atteint le stade requis,
+
+00:06:44.460 --> 00:06:46.600
+il peut envoyer les informations de commande à un fournisseur de facturation.
+
+00:06:46.880 --> 00:06:47.900
+Chaque action a un rôle précis.
+
+00:06:48.300 --> 00:06:49.300
+Validez l'entête de commande.
+
+00:06:49.540 --> 00:06:50.540
+Vérifiez les détails principaux.
+
+00:06:51.100 --> 00:06:52.440
+Validez la ligne de commande avec sa vente.
+
+00:06:52.580 --> 00:06:53.960
+Vérifiez les produits et les quantités.
+
+00:06:54.460 --> 00:06:55.300
+Envoyez à l'exécution.
+
+00:06:55.460 --> 00:06:58.120
+Kéké transmet la commande au prestataire en charge de cette tâche.
+
+00:06:58.860 --> 00:06:59.460
+Voyez à la facturation.
+
+00:06:59.460 --> 00:07:01.480
+Kéké transmet les informations de commande au prestataire concerné.
+
+00:07:01.480 --> 00:07:04.080
+Ces noms évoquent un panneau de contrôle industriel,
+
+00:07:04.280 --> 00:07:07.740
+ce qui est utile car chaque libellé indique précisément ce qui se passe à cette étape du flux.
+
+00:07:08.820 --> 00:07:11.360
+Mais une entreprise réelle a souvent besoin de plus qu'une simple ligne droite.
+
+00:07:11.880 --> 00:07:14.020
+Les commandes du site web peuvent suivre un chemin différent
+
+00:07:14.020 --> 00:07:15.720
+de celle des clients professionnels.
+
+00:07:16.460 --> 00:07:18.440
+Un certain type de produit peut nécessiter une approbation spéciale.
+
+00:07:18.580 --> 00:07:21.040
+Une commande peut ne progresser que si l'étape précédente réussit.
+
+00:07:21.440 --> 00:07:23.940
+La gestion intelligente des commandes inclut des conditions pour ses choix.
+
+00:07:24.480 --> 00:07:25.580
+Une condition crée un chemin.
+
+00:07:25.800 --> 00:07:25.980
+Kéké.
+
+00:07:25.980 --> 00:07:29.780
+Si l'action précédente réussit, la commande peut continuer via le chemin.
+
+00:07:30.580 --> 00:07:33.420
+En cas d'échec, le flux peut diriger la commande vers un autre chemin.
+
+00:07:34.380 --> 00:07:36.860
+Cela ne résout pas tout, mais cela offre une réponse planifiée
+
+00:07:36.860 --> 00:07:39.960
+au lieu de laisser une équipe découvrir une erreur par hasard.
+
+00:07:40.880 --> 00:07:41.960
+Il existe également des répartiteurs.
+
+00:07:42.360 --> 00:07:45.300
+Un répartiteur envoie le flux sur plusieurs chemins, selon des règles que vous définissez.
+
+00:07:45.920 --> 00:07:49.080
+Vous pouvez l'utiliser si les commandes de sources différentes exigent des vérifications distinctes
+
+00:07:49.080 --> 00:07:51.100
+ou si différentes tâches requièrent des routes différentes.
+
+00:07:51.820 --> 00:07:54.860
+Certains chemins séparés peuvent se rejoindre plus tard, tandis que d'autres continuent seuls.
+
+00:07:54.860 --> 00:07:57.760
+Les actions personnalisées couvrent les besoins propres à une entreprise.
+
+00:07:58.280 --> 00:08:01.380
+Une entreprise peut avoir son propre système de fabrication ou un système partenaire
+
+00:08:01.380 --> 00:08:02.720
+non couvert par une action standard.
+
+00:08:03.360 --> 00:08:06.680
+Une action personnalisée intègre cette étape dans le flux pour que le processus reste visible
+
+00:08:06.680 --> 00:08:08.860
+au lieu de masquer une partie dans des emails ou des tâches manuelles.
+
+00:08:10.060 --> 00:08:11.300
+Revenons à notre commande de deux articles.
+
+00:08:11.820 --> 00:08:15.580
+Le système la reçoit du site web et vérifie les détails du client, l'adresse et les lignes de produit.
+
+00:08:16.080 --> 00:08:18.100
+La commande atteint ensuite l'étape de décision d'exécution.
+
+00:08:18.740 --> 00:08:23.600
+Si les deux articles peuvent suivre la même route, le flux peut envoyer la demande d'exécution en un bloc.
+
+00:08:23.600 --> 00:08:27.680
+Si les règles de l'entreprise imposent un résultat différent, la commande peut prendre un autre chemin.
+
+00:08:27.980 --> 00:08:29.740
+Les deux articles peuvent nécessiter des demandes distinctes,
+
+00:08:29.780 --> 00:08:32.220
+où la commande peut exiger une option de livraison différente.
+
+00:08:32.620 --> 00:08:33.440
+Le flux ne devine pas.
+
+00:08:33.860 --> 00:08:36.960
+Il suit les règles créées par l'entreprise et les événements renvoyés par les systèmes connectés.
+
+00:08:37.380 --> 00:08:38.900
+Mais, ce dernier point est crucial.
+
+00:08:39.420 --> 00:08:41.200
+La gestion intelligente des commandes dirige le travail,
+
+00:08:41.520 --> 00:08:44.020
+mais les systèmes connectés rendent compte de l'avancement au fur et à mesure.
+
+00:08:44.520 --> 00:08:46.320
+Un prestataire logistique peut recevoir la demande.
+
+00:08:46.840 --> 00:08:49.120
+Un prestataire de facturation peut recevoir les détails de la commande.
+
+00:08:49.720 --> 00:08:52.060
+Les événements font avancer le parcours de la commande dans le flux.
+
+00:08:52.060 --> 00:08:54.620
+L'application n'est donc pas un système de remplacement géant.
+
+00:08:55.020 --> 00:08:56.920
+C'est un ensemble de règles qui relie les spécialistes,
+
+00:08:57.300 --> 00:08:59.420
+donnant à chaque système le travail nécessaire au bon moment.
+
+00:08:59.780 --> 00:09:01.220
+La boutique en ligne enregistre la commande.
+
+00:09:01.540 --> 00:09:03.220
+Le système de préparation de commande gère la logistique.
+
+00:09:03.460 --> 00:09:05.060
+Le système de facturation gère la facturation.
+
+00:09:05.300 --> 00:09:07.700
+La gestion intelligente des commandes gère le parcours entre ses tâches.
+
+00:09:08.360 --> 00:09:10.060
+Les personnes responsables du processus de commande
+
+00:09:10.060 --> 00:09:12.120
+peuvent concevoir ces flux directement dans l'application.
+
+00:09:12.540 --> 00:09:14.620
+Elles n'ont pas besoin de coder chaque chemin manuellement,
+
+00:09:15.080 --> 00:09:18.340
+ni de demander à un administrateur IT de modifier chaque règle métier.
+
+00:09:18.340 --> 00:09:22.360
+Cela donne à l'équipe de la chaîne logistique un moyen de modéliser le processus dont elle a réellement besoin.
+
+00:09:22.620 --> 00:09:23.880
+Cependant, c'est changement de la prudence.
+
+00:09:24.240 --> 00:09:27.240
+Flux d'orchestration reste non publié pendant sa phase de conception et de test.
+
+00:09:27.780 --> 00:09:30.440
+Durant cette étape, les données entrantes ne circulent pas dans le flux.
+
+00:09:30.920 --> 00:09:34.560
+Une fois publié, le flux et ses actions s'exécutent dès que des données entrent dans le système.
+
+00:09:35.020 --> 00:09:37.360
+Après publication, vous ne pouvez pas modifier ce flux directement.
+
+00:09:37.980 --> 00:09:40.840
+Si l'entreprise a besoin d'un changement, l'équipe peut arrêter le flux publié,
+
+00:09:41.120 --> 00:09:42.900
+ce qui le ramène à un état non publié.
+
+00:09:42.900 --> 00:09:45.820
+Ils peuvent modifier le flux, puis publier la nouvelle version une fois prête.
+
+00:09:46.200 --> 00:09:49.720
+Cette configuration incite les équipes à tester le parcours avant que les commandes réelles n'y transitent.
+
+00:09:50.100 --> 00:09:52.640
+Un parcours ne fonctionne que s'il connaît le stock réellement disponible.
+
+00:09:53.280 --> 00:09:56.580
+Cela nous amène aux informations d'inventaire en temps réel derrière chaque décision logistique,
+
+00:09:57.080 --> 00:10:00.800
+la visibilité des stocks, voir ce que vous pouvez réellement vendre.
+
+00:10:01.740 --> 00:10:02.720
+Voici une vérité simple.
+
+00:10:03.240 --> 00:10:05.440
+Vous ne pouvez pas honorer une commande si vous ne savez pas que vous avez le stock.
+
+00:10:06.060 --> 00:10:08.960
+Cela semble évident, mais le stock peut se cacher dans un entrepôt, un magasin,
+
+00:10:09.060 --> 00:10:11.660
+chez un partenaire ou entre différentes entités juridiques.
+
+00:10:11.660 --> 00:10:15.000
+Quand chaque lieu gère son propre compte, vous ne pouvez pas répondre à la question
+
+00:10:15.000 --> 00:10:17.600
+« Que puis-je promettre à ce client-là tout de suite ? »
+
+00:10:17.600 --> 00:10:20.020
+La visibilité des stocks donne à la gestion intelligente des commandes
+
+00:10:20.020 --> 00:10:22.060
+une vue en direct de tout ce stock sur votre réseau.
+
+00:10:22.560 --> 00:10:24.640
+Voyez cela comme un tableau de bord des stocks dans un centre de distribution.
+
+00:10:25.160 --> 00:10:26.600
+Au lieu d'appeler chaque entrepôt pour vérifier,
+
+00:10:26.860 --> 00:10:30.500
+le processus de commande consulte une vue partagée alimentée par tous vos systèmes.
+
+00:10:31.400 --> 00:10:33.560
+Cependant, ce n'est pas parce qu'un article apparaît en stock quelque part
+
+00:10:33.560 --> 00:10:35.080
+qui peut honorer n'importe quelle commande.
+
+00:10:36.020 --> 00:10:38.100
+Un produit peut être en entrepôt mais déjà réservé,
+
+00:10:38.360 --> 00:10:40.700
+ou être en magasin pour vente locale mais non expédiable,
+
+00:10:40.700 --> 00:10:43.640
+ou simplement trop loin pour respecter le délai promis.
+
+00:10:44.640 --> 00:10:46.700
+Il y a une grande différence entre un stock existant quelque part
+
+00:10:46.700 --> 00:10:49.140
+et un stock capable d'honorer cette commande immédiatement.
+
+00:10:49.760 --> 00:10:52.300
+Imaginez qu'un client achète une veste en ligne et la veuille pour demain.
+
+00:10:52.940 --> 00:10:54.380
+Votre entrepôt principal n'en a plus en stock.
+
+00:10:54.840 --> 00:10:55.820
+Sans donner d'inventaire à jour,
+
+00:10:55.960 --> 00:10:58.840
+votre site web pourrait accepter la commande sur la base d'un ancien chiffre
+
+00:10:58.840 --> 00:11:01.660
+et l'entrepôt recevrait une demande pour un article qu'il ne peut pas envoyer,
+
+00:11:01.800 --> 00:11:03.860
+laissant le client le découvrir après le paiement.
+
+00:11:04.760 --> 00:11:05.820
+Cela crée du travail pour tout le monde.
+
+00:11:05.820 --> 00:11:07.880
+Grâce à des informations de stocks connectés,
+
+00:11:08.180 --> 00:11:12.080
+la gestion intelligente des commandes voit que l'entrepôt principal n'a pas la veste pour cette commande,
+
+00:11:12.380 --> 00:11:13.320
+mais qu'un magasin proche l'a.
+
+00:11:13.680 --> 00:11:15.800
+Si ce magasin j'ai à des expéditions, il peut honorer la commande.
+
+00:11:16.240 --> 00:11:19.180
+Si le client a choisi le retrait, ce même magasin devient le point de collecte.
+
+00:11:19.620 --> 00:11:21.560
+La décision commence par une meilleure visibilité des stocks.
+
+00:11:22.080 --> 00:11:23.840
+Pour une entreprise avec plusieurs entités juridiques,
+
+00:11:23.980 --> 00:11:25.840
+cette vue couvre l'inventaire de toutes ces entités.
+
+00:11:25.840 --> 00:11:29.400
+C'est important lorsque vous opérez dans plusieurs pays, régions ou unités commerciales
+
+00:11:29.400 --> 00:11:31.620
+et que le stock n'est pas répertorié dans un seul jeu d'enregistrement.
+
+00:11:32.220 --> 00:11:35.820
+Le processus de commande utilise des données d'inventaire en temps réel pour décider du chemin à suivre.
+
+00:11:36.520 --> 00:11:40.420
+Un entrepôt, un magasin ou toute autre source de stock gère toujours ses propres registres.
+
+00:11:41.200 --> 00:11:44.200
+La visibilité des stocks intègre les chiffres actuels dans le processus de commande global,
+
+00:11:44.460 --> 00:11:46.200
+où les règles d'exécution peuvent les utiliser.
+
+00:11:46.960 --> 00:11:49.440
+Cela vous évite de faire des promesses basées sur des données obsolètes
+
+00:11:49.440 --> 00:11:53.600
+et donne au service Clear une réponse claire lorsqu'on demande si un article peut arriver à temps.
+
+00:11:53.600 --> 00:11:56.600
+Au lieu de chercher dans plusieurs systèmes en espérant que les informations concordent,
+
+00:11:57.380 --> 00:12:00.100
+l'équipe de commande voit la situation des stocks qui a guidé le choix d'exécution.
+
+00:12:00.780 --> 00:12:03.280
+Bien sûr, voir tous les emplacements possibles ne répond pas à toutes les questions.
+
+00:12:04.140 --> 00:12:05.820
+Pourriez trouver l'article dans cinq endroits différents.
+
+00:12:06.360 --> 00:12:08.780
+L'un est plus proche du client, un autre a plus de stocks, un troisième,
+
+00:12:09.420 --> 00:12:11.200
+permet d'expédier les deux produits ensemble.
+
+00:12:11.700 --> 00:12:13.160
+Quelqu'un ou quelque chose doit encore choisir.
+
+00:12:13.600 --> 00:12:16.080
+Ce travail revient à l'optimisation de l'exécution.
+
+00:12:18.600 --> 00:12:19.000
+Exécution
+
+00:12:19.000 --> 00:12:20.920
+Optimisation
+
+00:12:20.920 --> 00:12:23.480
+Choisir le meilleur endroit pour expédier une commande.
+
+00:12:24.980 --> 00:12:27.040
+L'optimisation compare les emplacements possibles pour une commande
+
+00:12:27.040 --> 00:12:29.420
+et en sélectionne un en fonction des règles définies par votre entreprise.
+
+00:12:30.360 --> 00:12:31.600
+En termes simples, elle répond à la question.
+
+00:12:31.940 --> 00:12:33.500
+D'où cette commande doit-elle provenir ?
+
+00:12:33.500 --> 00:12:34.960
+Le meilleur ne signifie pas toujours le plus proche.
+
+00:12:35.540 --> 00:12:36.900
+Le magasin le plus proche peut voir l'article,
+
+00:12:37.080 --> 00:12:38.820
+mais l'expédition depuis cet endroit pourrait coûter plus cher.
+
+00:12:39.180 --> 00:12:42.140
+Un entrepôt plus éloigné peut déjà avoir les deux articles prêts à être emballés ensemble,
+
+00:12:42.520 --> 00:12:43.780
+et un autre emplacement peut avoir du stock,
+
+00:12:43.920 --> 00:12:46.040
+mais ne pas pouvoir respecter la date de livraison choisie par le client.
+
+00:12:46.440 --> 00:12:48.940
+Chaque entreprise doit décider ce qu'elle souhaite privilégier dans ses règles.
+
+00:12:49.460 --> 00:12:50.980
+Certaines entreprises donnent la priorité à l'évraison.
+
+00:12:50.980 --> 00:12:52.920
+D'autres veulent limiter les coûts d'expédition.
+
+00:12:53.460 --> 00:12:55.760
+Une entreprise peut également vouloir protéger les stocks en magasin
+
+00:12:55.760 --> 00:12:58.600
+pour les clients sur place ou éviter de diviser une commande en plusieurs colis,
+
+00:12:59.000 --> 00:12:59.940
+sauf en dernier recours.
+
+00:13:00.920 --> 00:13:03.340
+La gestion intelligente des commandes utilise des stratégies d'exécution
+
+00:13:03.340 --> 00:13:04.240
+qui reflètent ces choix.
+
+00:13:04.800 --> 00:13:06.900
+Voyez cela comme le choix d'un itinéraire pour une camionnale de livraison.
+
+00:13:07.400 --> 00:13:09.100
+La route la plus courte n'est pas forcément la plus rapide
+
+00:13:09.100 --> 00:13:11.400
+en raison du trafic, des travaux ou d'un arrêt prolongé.
+
+00:13:12.100 --> 00:13:14.840
+De même, le bâtiment le plus proche n'est pas toujours le plus efficace
+
+00:13:14.840 --> 00:13:15.940
+une fois les coûts de stock
+
+00:13:15.940 --> 00:13:19.100
+et les délais de livraison pris en compte.
+
+00:13:20.100 --> 00:13:22.200
+Revenons au client qui a acheté deux articles en ligne.
+
+00:13:22.800 --> 00:13:24.420
+Un magasin situé à 10 minutes dispose du premier article.
+
+00:13:25.040 --> 00:13:27.500
+L'entrepôt possède les deux articles, mais il est plus éloigné.
+
+00:13:28.860 --> 00:13:31.560
+Si le magasin expédie le premier article et l'entrepôt le second,
+
+00:13:31.720 --> 00:13:33.180
+le client recevra deux colis dans les délais,
+
+00:13:33.420 --> 00:13:35.600
+mais cela augmente les frais d'expédition.
+
+00:13:36.100 --> 00:13:38.580
+L'entrepôt pourrait être en mesure d'envoyer les deux articles ensemble.
+
+00:13:38.680 --> 00:13:40.500
+S'il peut respecter la date de livraison promise,
+
+00:13:40.800 --> 00:13:43.100
+un seul colis provenant de cet endroit est peut-être préférable.
+
+00:13:43.100 --> 00:13:46.060
+La règle peut privilégier un nombre réduit d'expédition et des coûts moins.
+
+00:13:47.020 --> 00:13:48.860
+Mais si la livraison pour demain est prioritaire,
+
+00:13:49.000 --> 00:13:51.260
+le système peut choisir le magasin pour un article
+
+00:13:51.260 --> 00:13:53.280
+et l'entrepôt pour l'autre, c'est une commande fractionnée.
+
+00:13:54.260 --> 00:13:56.040
+Une commande fractionnée ne signifie pas que le système a échoué.
+
+00:13:56.620 --> 00:13:58.020
+C'est parfois le choix prévu lorsqu'aucun site
+
+00:13:58.020 --> 00:14:00.260
+ne peut honorer la commande entière de manière optimale.
+
+00:14:01.080 --> 00:14:03.020
+L'entreprise décide du bien fondé du fractionnement
+
+00:14:03.020 --> 00:14:04.620
+via sa stratégie de traitement des commandes.
+
+00:14:05.200 --> 00:14:06.520
+Le même raisonnement s'applique à l'achat en ligne
+
+00:14:06.520 --> 00:14:07.760
+avec expédition depuis le magasin.
+
+00:14:07.920 --> 00:14:09.200
+Un client passe commande sur un site,
+
+00:14:09.660 --> 00:14:11.020
+mais un magasin proche possède le stock
+
+00:14:11.020 --> 00:14:11.900
+et peut l'envoyer rapidement.
+
+00:14:12.880 --> 00:14:14.580
+Ce magasin devient donc la source d'expédition,
+
+00:14:14.820 --> 00:14:16.160
+même si le client ne l'a jamais visité.
+
+00:14:16.680 --> 00:14:19.260
+Cela permet aussi l'achat en ligne avec retrait en magasin.
+
+00:14:19.860 --> 00:14:21.420
+Le système utilise les données de stock
+
+00:14:21.420 --> 00:14:24.600
+pour trouver un magasin capable de préparer la commande,
+
+00:14:24.920 --> 00:14:26.440
+offrant au client le retrait local
+
+00:14:26.440 --> 00:14:29.100
+tout en orientant la commande au bon endroit.
+
+00:14:30.840 --> 00:14:32.320
+Ces choix n'ont pas besoin d'être isolés
+
+00:14:32.320 --> 00:14:33.520
+dans chaque canal de vente.
+
+00:14:34.480 --> 00:14:36.460
+Sans un processus de décision unifié,
+
+00:14:36.680 --> 00:14:38.660
+le site web, la marketplace et le centre d'appel
+
+00:14:38.660 --> 00:14:40.580
+ont chacun leurs propres règles d'acheminement.
+
+00:14:41.220 --> 00:14:43.380
+Lorsque l'entreprise modifie sa politique d'expédition
+
+00:14:43.380 --> 00:14:44.660
+ou utilise ses magasins,
+
+00:14:44.880 --> 00:14:47.000
+les équipes doivent mettre à jour plusieurs systèmes.
+
+00:14:47.600 --> 00:14:48.920
+L'optimisation du traitement des commandes
+
+00:14:48.920 --> 00:14:51.320
+centralise ce processus décisionnel dans le parcours de commandes.
+
+00:14:51.580 --> 00:14:53.100
+Le site web continue de prendre des commandes,
+
+00:14:53.240 --> 00:14:53.920
+tout comme la marketplace,
+
+00:14:54.300 --> 00:14:55.900
+et le magasin continue de vendre ses produits.
+
+00:14:57.340 --> 00:14:59.940
+L'entreprise peut modifier la sélection du site d'expédition
+
+00:14:59.940 --> 00:15:01.820
+sans reconstruire les règles par canal,
+
+00:15:02.160 --> 00:15:04.580
+offrant plus de contrôle lors des mouvements de stock
+
+00:15:04.580 --> 00:15:05.980
+ou de changements de promesses clients.
+
+00:15:07.800 --> 00:15:09.740
+Toutefois, la stratégie ne peut comparer les sites
+
+00:15:09.740 --> 00:15:11.240
+que si les informations nécessaires
+
+00:15:11.240 --> 00:15:12.520
+proviennent des systèmes sources.
+
+00:15:13.760 --> 00:15:14.740
+Commandes doivent être reçues.
+
+00:15:15.020 --> 00:15:16.640
+Les stocks mis à jour et les partenaires
+
+00:15:16.640 --> 00:15:17.760
+doivent recevoir leurs tâches
+
+00:15:17.760 --> 00:15:19.200
+et signaler leur progression.
+
+00:15:19.940 --> 00:15:21.800
+Ce travail de connexion dépend des fournisseurs.
+
+00:15:23.080 --> 00:15:24.520
+Les fournisseurs et les connexions,
+
+00:15:24.840 --> 00:15:26.000
+ce sont les portes du bâtiment.
+
+00:15:26.620 --> 00:15:28.380
+Pour que la gestion intelligente des commandes fonctionne,
+
+00:15:28.840 --> 00:15:30.740
+elle doit pouvoir communiquer avec tout son environnement.
+
+00:15:31.340 --> 00:15:32.640
+Les fournisseurs sont ceux qui rendent cela possible.
+
+00:15:32.640 --> 00:15:34.360
+Un fournisseur est essentiellement une connexion
+
+00:15:34.360 --> 00:15:35.540
+qui transfère les détails des commandes
+
+00:15:35.540 --> 00:15:36.600
+et les mises à jour d'exécution
+
+00:15:36.600 --> 00:15:38.080
+entre la gestion intelligente des commandes
+
+00:15:38.080 --> 00:15:38.940
+et un autre système.
+
+00:15:39.720 --> 00:15:40.940
+Les informations circulent dans les deux sens.
+
+00:15:41.040 --> 00:15:42.580
+Ainsi, personne n'a à copier quoi que ce soit manuellement.
+
+00:15:43.360 --> 00:15:45.020
+Imaginez un bâtiment avec de nombreuses portes de livraison.
+
+00:15:45.480 --> 00:15:47.440
+Une porte reçoit les commandes de votre boutique en ligne.
+
+00:15:47.940 --> 00:15:49.580
+Une autre se connecte à votre système d'inventaire.
+
+00:15:50.020 --> 00:15:51.460
+Une troisième envoie le travail à un entrepôt
+
+00:15:51.460 --> 00:15:52.500
+ou un partenaire de livraison.
+
+00:15:53.160 --> 00:15:54.340
+Chaque porte a un but précis
+
+00:15:54.340 --> 00:15:56.920
+et les fournisseurs gèrent les informations qui y transitent.
+
+00:15:57.680 --> 00:15:59.800
+Microsoft construit lui-même certains de ses connecteurs.
+
+00:16:00.360 --> 00:16:01.720
+Il les appelle fournisseurs de première partie.
+
+00:16:01.720 --> 00:16:03.760
+Il connecte la gestion intelligente des commandes
+
+00:16:03.760 --> 00:16:06.900
+à des applications comme Dynamics 365 Supply Chain Management,
+
+00:16:07.100 --> 00:16:09.700
+Dynamics 365 Commerce ou Dynamics 365 Finance.
+
+00:16:10.120 --> 00:16:11.500
+Les services d'inventaire et d'exécution
+
+00:16:11.500 --> 00:16:12.960
+au sein de la gestion intelligente des commandes
+
+00:16:12.960 --> 00:16:15.120
+utilisent également ces fournisseurs pour échanger des données.
+
+00:16:16.160 --> 00:16:17.700
+Maintenant, vous avez probablement déjà d'autres systèmes.
+
+00:16:18.240 --> 00:16:19.460
+C'est là que les fournisseurs tiers rentrent en jeu.
+
+00:16:20.000 --> 00:16:21.680
+Ils connectent des services que Microsoft ne développe pas.
+
+00:16:22.080 --> 00:16:23.680
+Il peut s'agir de votre plateforme e-commerce actuelle,
+
+00:16:23.760 --> 00:16:25.400
+d'une place de marché, d'une société de logistique
+
+00:16:25.400 --> 00:16:26.300
+ou d'un système d'entrepôt.
+
+00:16:26.720 --> 00:16:27.720
+Le but n'est pas de vous forcer à utiliser
+
+00:16:27.720 --> 00:16:28.660
+un ensemble d'applications précises.
+
+00:16:29.500 --> 00:16:30.740
+C'est de vous permettre de connecter les systèmes
+
+00:16:30.740 --> 00:16:31.900
+qui conviennent déjà à votre entreprise.
+
+00:16:32.440 --> 00:16:33.760
+En coulisses, ces fournisseurs utilisent
+
+00:16:33.760 --> 00:16:35.320
+des connecteurs Power Automate.
+
+00:16:35.880 --> 00:16:38.280
+Power Platform dispose de plus de 200 connecteurs prédéfinis.
+
+00:16:38.440 --> 00:16:39.900
+Vous avez donc de nombreux points de départ.
+
+00:16:40.660 --> 00:16:41.420
+Et si aucun ne convient,
+
+00:16:41.620 --> 00:16:42.380
+vous ou votre partenaire
+
+00:16:42.380 --> 00:16:43.900
+pouvez créer votre propre fournisseur.
+
+00:16:44.360 --> 00:16:46.060
+Chaque application connectée continue de faire son propre.
+
+00:16:46.360 --> 00:16:47.940
+Votre boutique en ligne enregistre l'achat.
+
+00:16:48.360 --> 00:16:49.780
+Le système d'inventaire suit les stocks.
+
+00:16:50.260 --> 00:16:52.180
+Un partenaire d'exécution prépare et livre la commande.
+
+00:16:52.540 --> 00:16:54.160
+Un système de facturation gère les finances.
+
+00:16:54.580 --> 00:16:55.640
+La gestion intelligente des commandes
+
+00:16:55.640 --> 00:16:57.040
+coordonne les messages et les prochaines étapes
+
+00:16:57.040 --> 00:16:57.980
+entre tous ces acteurs.
+
+00:16:58.480 --> 00:16:59.980
+Une fois que ces systèmes partagent leur mise à jour,
+
+00:16:59.980 --> 00:17:01.320
+votre entreprise peut voir ce qui se passe
+
+00:17:01.320 --> 00:17:02.640
+tout au long du processus de commande.
+
+00:17:03.080 --> 00:17:05.040
+Fini la recherche d'informations sur des écrans séparés.
+
+00:17:06.940 --> 00:17:08.460
+Place aux analyses et à une vision d'ensemble.
+
+00:17:09.480 --> 00:17:11.060
+Ces informations partagées vous donnent une image
+
+00:17:11.060 --> 00:17:12.580
+beaucoup plus claire de votre flux de commandes.
+
+00:17:13.060 --> 00:17:14.280
+La gestion intelligente des commandes
+
+00:17:14.280 --> 00:17:15.760
+inclut des tableaux de bord Power BI
+
+00:17:15.760 --> 00:17:17.800
+qui regroupent les métriques de commande et d'exécution.
+
+00:17:18.500 --> 00:17:19.960
+Le service client peut identifier les commandes
+
+00:17:19.960 --> 00:17:20.640
+qui ne progressent plus.
+
+00:17:21.120 --> 00:17:22.040
+Les opérations peuvent détecter
+
+00:17:22.040 --> 00:17:22.840
+les blocages sur les routes
+
+00:17:22.840 --> 00:17:23.720
+ou les retards d'exécution.
+
+00:17:24.120 --> 00:17:25.380
+Et les dirigeants peuvent rechercher des modèles
+
+00:17:25.380 --> 00:17:26.440
+sur l'ensemble du processus.
+
+00:17:27.200 --> 00:17:28.600
+Sans cette vue, un retard peut sembler
+
+00:17:28.600 --> 00:17:30.240
+être un problème isolé, isolé.
+
+00:17:30.540 --> 00:17:31.600
+Mais quand les données sont réunies,
+
+00:17:32.060 --> 00:17:32.920
+votre équipe peut remarquer
+
+00:17:32.920 --> 00:17:33.840
+que de nombreuses commandes
+
+00:17:33.840 --> 00:17:35.460
+ralentissent chez un partenaire spécifique
+
+00:17:35.460 --> 00:17:37.100
+ou qu'une option de livraison
+
+00:17:37.100 --> 00:17:38.620
+crée plus d'exceptions que prévue.
+
+00:17:39.460 --> 00:17:41.220
+Le tableau de bord ne résout pas le problème par lui-même,
+
+00:17:41.540 --> 00:17:43.180
+mais il aide chacun à savoir exactement où regarder.
+
+00:17:44.020 --> 00:17:45.060
+Repensez à l'immeuble de bureau.
+
+00:17:45.560 --> 00:17:46.700
+La gestion intelligente des commandes
+
+00:17:46.700 --> 00:17:48.180
+réunit l'accueil qui reçoit les demandes,
+
+00:17:48.380 --> 00:17:50.340
+le tableau des stocks qui indique les disponibilités,
+
+00:17:50.600 --> 00:17:51.920
+le planificateur d'itinéraire
+
+00:17:51.920 --> 00:17:53.080
+qui choisit le lieu de traitement
+
+00:17:53.080 --> 00:17:54.360
+et la salle de rapport
+
+00:17:54.360 --> 00:17:56.000
+où les équipes suivent l'activité.
+
+00:17:56.000 --> 00:17:57.880
+Chaque partie a un rôle différent,
+
+00:17:58.260 --> 00:17:59.260
+mais la commande les relie toutes.
+
+00:18:01.730 --> 00:18:02.990
+En conclusion, une commande,
+
+00:18:03.070 --> 00:18:03.850
+un parcours coordonné.
+
+00:18:04.950 --> 00:18:05.730
+Merci de m'avoir rejoint
+
+00:18:05.730 --> 00:18:06.690
+pour cette pépite de connaissants.
+
+00:18:07.170 --> 00:18:08.230
+La gestion intelligente des commandes
+
+00:18:08.230 --> 00:18:09.490
+trace une voie unique et directe
+
+00:18:09.490 --> 00:18:10.550
+à travers tout votre processus
+
+00:18:10.550 --> 00:18:11.350
+de la capture initiale
+
+00:18:11.350 --> 00:18:12.150
+à la facturation finale.
+
+00:18:12.870 --> 00:18:13.810
+Abonnez-vous sur votre plateforme
+
+00:18:13.810 --> 00:18:14.530
+de podcast préférée
+
+00:18:14.530 --> 00:18:15.410
+et regardez le prochain épisode.
+
+00:18:15.870 --> 00:18:16.870
+Vous verrez exactement comment
+
+00:18:16.870 --> 00:18:18.410
+Dynamics 365 et Power Platform
+
+00:18:18.410 --> 00:18:19.370
+gèrent le travail en coulisses.
+
+00:18:19.370 --> 00:18:49.350
+Merci d'avoir regardé cette vidéo !

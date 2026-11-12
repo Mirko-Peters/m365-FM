@@ -1,0 +1,853 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:00.640
+Imaginez ceci.
+
+00:00:00.940 --> 00:00:02.500
+Vous utilisez une application dans votre entreprise.
+
+00:00:02.680 --> 00:00:05.540
+Peut-être le portail RH, une base de données de support client ou le wiki interne
+
+00:00:05.540 --> 00:00:07.300
+avec toutes ces politiques à respecter.
+
+00:00:07.900 --> 00:00:09.300
+Vous tapez une question dans la barre de recherche.
+
+00:00:09.780 --> 00:00:12.680
+Quelque chose comme comment remplir une note de frais pour un dîner client ?
+
+00:00:12.680 --> 00:00:14.780
+Vous appuyez sur Entrée et qu'obtenez-vous ?
+
+00:00:14.780 --> 00:00:14.980
+Rien.
+
+00:00:15.640 --> 00:00:19.500
+Ou pire, une liste de PDF aléatoires vieux de 3 ans qui correspondent vaguement au mot tapé.
+
+00:00:19.980 --> 00:00:21.620
+La recherche est un outil que nous utilisons chaque jour.
+
+00:00:22.140 --> 00:00:23.460
+Et la plupart du temps, c'est médiocre.
+
+00:00:23.960 --> 00:00:25.240
+Mais voilà, cela ne devrait pas être le cas.
+
+00:00:25.860 --> 00:00:27.880
+Si vos applications pouvaient vraiment comprendre ce que vous demandez,
+
+00:00:27.880 --> 00:00:30.620
+et si elles cherchaient comme Google en trouvant la bonne réponse,
+
+00:00:30.880 --> 00:00:32.880
+même sans les mots parfaits, harfaits,
+
+00:00:33.580 --> 00:00:35.040
+aujourd'hui, nous abordons Azure et iSearch.
+
+00:00:35.760 --> 00:00:37.760
+Ce que c'est, comment cela fonctionne et pourquoi,
+
+00:00:37.900 --> 00:00:40.260
+c'est le moteur de recherche des applications modernes.
+
+00:00:40.900 --> 00:00:42.160
+Prenez votre café et plongeons dans le sujet.
+
+00:00:42.620 --> 00:00:44.060
+Pourquoi la recherche a fait les défaillants ?
+
+00:00:44.060 --> 00:00:45.220
+Pour comprendre pourquoi la recherche échouit,
+
+00:00:45.300 --> 00:00:46.880
+il faut voir comment la plupart des applications fonctionnent.
+
+00:00:47.980 --> 00:00:50.640
+La méthode traditionnelle s'appelle la recherche par mot-clé ou recherche lexicale.
+
+00:00:51.440 --> 00:00:54.560
+Vous tapez le mot ordinateur et le système cherche tous les documents
+
+00:00:54.560 --> 00:00:56.380
+contenant exactement ce mot.
+
+00:00:56.380 --> 00:01:00.780
+En coulisses, beaucoup de ces systèmes utilisent un algorithme appelé BM25.
+
+00:01:01.400 --> 00:01:03.320
+Ce n'est pas complexe, mais c'est assez astucieux.
+
+00:01:04.280 --> 00:01:06.040
+BM25 classe les résultats selon quelques critères.
+
+00:01:07.320 --> 00:01:08.600
+La fréquence du terme dans le document,
+
+00:01:08.740 --> 00:01:11.440
+la longueur du document et la rareté du terme dans l'ensemble des données.
+
+00:01:12.920 --> 00:01:14.440
+Imaginez un compteur de mots sophistiqué
+
+00:01:14.440 --> 00:01:17.380
+qui détermine la pertinence des documents selon ses facteurs.
+
+00:01:18.760 --> 00:01:19.440
+C'est là que ça coince.
+
+00:01:19.820 --> 00:01:20.840
+Le langage humain est complexe.
+
+00:01:21.220 --> 00:01:23.280
+Les gens n'utilisent pas les mêmes mots que ceux figurant dans les documents.
+
+00:01:23.980 --> 00:01:25.020
+Prenons un exemple concret.
+
+00:01:25.020 --> 00:01:27.580
+Un utilisateur tape ceci dans un portail de supplication.
+
+00:01:28.480 --> 00:01:30.320
+Mon ordinateur se bloque pendant les appels vidéo.
+
+00:01:31.460 --> 00:01:33.420
+La recherche par mot-clé cherchera les documents contenant
+
+00:01:33.420 --> 00:01:38.040
+ordinateur, bloc, pendant, appel et vidéo.
+
+00:01:38.900 --> 00:01:40.340
+Mais si le meilleur article s'intitule
+
+00:01:40.340 --> 00:01:43.420
+« Résoudre les blocages systèmes lors des réunions Teams 1 »
+
+00:01:43.420 --> 00:01:46.620
+ou « Gérer le bridage CPU sur les ordinateurs connectés »,
+
+00:01:46.620 --> 00:01:48.380
+la recherche par mot-clé ignore totalement ses résultats.
+
+00:01:48.980 --> 00:01:49.960
+Parce que les mots ne correspondent pas.
+
+00:01:50.220 --> 00:01:51.320
+Le problème fondamental est suivant.
+
+00:01:51.660 --> 00:01:53.080
+La recherche par mot-clé comprend l'orthographe.
+
+00:01:53.300 --> 00:01:55.860
+Elle comprend les motifs de caractère, mais elle ne comprend pas le sens.
+
+00:01:56.480 --> 00:01:59.260
+Vous obtenez des résultats avec les bonnes lettres, mais souvent le mauvais contenu.
+
+00:01:59.780 --> 00:02:01.740
+Alors, si la correspondance exacte des mots laisse autant de lacunes,
+
+00:02:02.000 --> 00:02:02.820
+quelle est l'alternative ?
+
+00:02:02.820 --> 00:02:05.140
+La nouvelle méthode, la recherche vectorielle.
+
+00:02:05.520 --> 00:02:07.960
+Alors, la recherche vectorielle, c'est une façon totalement différente de procéder.
+
+00:02:08.500 --> 00:02:10.960
+Au lieu de faire correspondre des mots exacts, elle fait correspondre le sens.
+
+00:02:11.320 --> 00:02:12.880
+Cela semble abstrait, alors simplifions les choses.
+
+00:02:13.200 --> 00:02:15.220
+La définition la plus simple à retenir est la suivante.
+
+00:02:15.280 --> 00:02:18.420
+Un vecteur est juste une liste de nombres représentant quelque chose qu'un ordinateur peut traiter.
+
+00:02:19.040 --> 00:02:20.280
+C'est tout, une liste de nombres.
+
+00:02:20.780 --> 00:02:23.780
+Un plongement est un type particulier de vecteur qui capture le sens d'un texte.
+
+00:02:23.860 --> 00:02:26.500
+Il prend une phrase, un paragraphe, voire un document entier,
+
+00:02:26.760 --> 00:02:28.340
+et le transforme en une longue liste de nombres.
+
+00:02:28.800 --> 00:02:31.360
+L'ordinateur ne comprend pas les mots, mais il comprend les nombres.
+
+00:02:31.360 --> 00:02:32.860
+Voici une analogie utile.
+
+00:02:33.180 --> 00:02:34.720
+Imaginez les vecteurs comme des coordonnées sur une carte.
+
+00:02:35.200 --> 00:02:37.060
+Sur une carte, les lieux similaires sont proches les uns des autres.
+
+00:02:37.220 --> 00:02:39.960
+Dans l'espace vectoriel, les concepts similaires se retrouvent proches les uns des autres.
+
+00:02:40.120 --> 00:02:44.600
+Le vecteur pour Y et le vecteur pour Renek sont proches car ils représentent des idées liées-liées.
+
+00:02:45.100 --> 00:02:47.660
+Le vecteur pour Y et K et le vecteur pour Pam K sont très éloignés.
+
+00:02:48.380 --> 00:02:50.560
+L'ordinateur ne sait pas ce que Rowing signifie au sens humain,
+
+00:02:51.040 --> 00:02:54.720
+mais il peut mesurer la distance entre ces coordonnées et celles de tout autre mot ou document.
+
+00:02:55.500 --> 00:02:56.980
+C'est comme avoir un GPS pour les idées.
+
+00:02:57.360 --> 00:03:00.520
+Le système sait à quelle distance se trouvent les concepts en regardant simplement les nombres.
+
+00:03:00.520 --> 00:03:04.740
+Lorsque vous effectuez une recherche par vecteur, le système convertit votre requête en un plongement.
+
+00:03:05.300 --> 00:03:07.680
+Ensuite, il trouve les documents dont les plongements sont les plus proches du vôtre.
+
+00:03:08.320 --> 00:03:12.180
+Il trouve des choses sémantiquement similaires, qui partagent un sens, pas juste vocabulaire.
+
+00:03:12.920 --> 00:03:15.260
+Imaginez que vous cherchiez un document pour dépanner un ordinateur portable.
+
+00:03:15.560 --> 00:03:19.020
+Avec une recherche par mots-clés, vous devriez taper à blocageux ou gagelleux exactement.
+
+00:03:19.560 --> 00:03:22.680
+Mais avec la recherche vectorielle, vous pouvez taper à car mon ordinateur n'arrête pas de se figer.
+
+00:03:22.780 --> 00:03:23.640
+Bégaille trouve le bon document.
+
+00:03:24.140 --> 00:03:25.800
+C'est là toute la puissance de la compréhension du sens.
+
+00:03:26.240 --> 00:03:27.820
+Revenons à notre exemple de recherche défaillante.
+
+00:03:28.380 --> 00:03:29.960
+Mon ordinateur portable n'arrête pas de figer.
+
+00:03:30.520 --> 00:03:34.500
+Avec la recherche vectorielle, le système peut renvoyer l'article sur les blocages systèmes durant les réunions Teams,
+
+00:03:34.620 --> 00:03:36.780
+même si aucun de ces mots n'apparaît dans la requête.
+
+00:03:37.920 --> 00:03:38.580
+Pourquoi ?
+
+00:03:38.580 --> 00:03:42.200
+Parce que le sens de cache système égneux est très proche de coordinateurs qui se figent au cas dans l'espace vectoriel.
+
+00:03:43.220 --> 00:03:45.400
+Les concepts vivent près les uns des autres, sur cette carte.
+
+00:03:45.940 --> 00:03:48.480
+Le système ne se soucie pas des mots exacts, il se soucie de ce que vous voulez dire.
+
+00:03:49.280 --> 00:03:50.040
+C'est là toute la percée.
+
+00:03:50.540 --> 00:03:52.880
+Les ordinateurs commencent à comprendre l'intention, pas seulement l'orthographe.
+
+00:03:53.260 --> 00:03:55.540
+Ils trouvent des réponses qu'une recherche par mots-clés ignorerait totalement.
+
+00:03:56.200 --> 00:03:57.640
+Mais la recherche vectorielle a aussi une faiblesse.
+
+00:03:57.700 --> 00:04:00.380
+Elle peut manquer des correspondances exactes qui sont absolument critiques.
+
+00:04:01.440 --> 00:04:06.400
+Si un technicien recherche un code d'erreur spécifique comme l'erreur XQ1-670-570-570,
+
+00:04:06.840 --> 00:04:11.320
+une recherche vectorielle pourrait privilégier des documents sur les erreurs de disque ou la corruption du système de fichiers,
+
+00:04:11.900 --> 00:04:14.080
+plutôt que le document exact analysant ce code précis.
+
+00:04:14.760 --> 00:04:16.340
+Elle sacrifie la précision au profit de la compréhence.
+
+00:04:16.620 --> 00:04:17.460
+Nous avons donc deux méthodes.
+
+00:04:17.840 --> 00:04:19.260
+La recherche par mots-clés est excellente pour la précision.
+
+00:04:19.600 --> 00:04:22.280
+Elle identifie parfaitement les termes exacts, les identifiants de produits et les numéros de contrat.
+
+00:04:22.680 --> 00:04:24.080
+La recherche vectorielle est idéale pour le sens.
+
+00:04:24.160 --> 00:04:26.760
+Elle trouve la bonne réponse même lorsque vous n'utilisez pas les bons mots.
+
+00:04:27.300 --> 00:04:28.220
+Chacune a ses angles morts.
+
+00:04:28.220 --> 00:04:29.980
+Cela soulève une question évidente.
+
+00:04:30.480 --> 00:04:33.760
+Et si vous pouviez combiner les deux approches pour obtenir le meilleur des deux mondes ?
+
+00:04:33.760 --> 00:04:34.480
+La percée hybride.
+
+00:04:34.920 --> 00:04:36.700
+La recherche hybride offre le meilleur des deux mondes.
+
+00:04:37.000 --> 00:04:39.560
+Elle exécute simultanément la recherche par mots-clés et vectoriels,
+
+00:04:39.740 --> 00:04:41.860
+puis combine les résultats en une seule liste classée.
+
+00:04:42.380 --> 00:04:43.900
+Au lieu de choisir une approche plutôt qu'une autre,
+
+00:04:44.000 --> 00:04:47.020
+le système utilise une méthode appelée fusion de rang réciproque ou RRF.
+
+00:04:47.440 --> 00:04:48.280
+Voici comment cela fonctionne.
+
+00:04:48.500 --> 00:04:52.680
+Le RRF examine le classement de chaque document dans les résultats par mots-clés et dans les résultats vectoriels.
+
+00:04:53.240 --> 00:04:54.240
+Ensuite, il attribue un score comme.
+
+00:04:54.640 --> 00:04:56.620
+Si un document est bien classé dans les deux, il reçoit un boost.
+
+00:04:56.980 --> 00:04:59.000
+C'est comme prendre deux avis d'experts et en faire la moyenne.
+
+00:04:59.460 --> 00:05:02.080
+La réponse finale est plus fiable que celle obtenue par l'une ou l'autre méthode seule.
+
+00:05:02.540 --> 00:05:06.160
+C'est important car la recherche par mots-clés et la recherche vectorielle ont des forces fondamentalement différentes.
+
+00:05:06.700 --> 00:05:08.340
+La recherche par mots-clés excelle dans les correspondants exemples.
+
+00:05:08.700 --> 00:05:10.540
+C'est votre outil privilégié pour les identifiants de produits,
+
+00:05:10.640 --> 00:05:12.220
+numéros de contrat, non spécifiques, code d'erreur.
+
+00:05:12.700 --> 00:05:13.620
+Elle est précise et prévisible.
+
+00:05:14.440 --> 00:05:16.680
+La recherche vectorielle excelle dans la similarité sémantique,
+
+00:05:16.920 --> 00:05:20.440
+trouvant des documents qui partagent le sens de votre requête, même sans les mots exacts.
+
+00:05:21.200 --> 00:05:22.900
+Ensemble, elles couvrent mutuellement leurs angles morts.
+
+00:05:23.340 --> 00:05:26.440
+Le système capture à la fois les correspondances exactes et conceptuelles en une seule requête.
+
+00:05:26.780 --> 00:05:27.840
+C'est l'accurité de la vérité à pulsant.
+
+00:05:28.000 --> 00:05:29.140
+Et ce n'est pas seulement théorique.
+
+00:05:30.060 --> 00:05:35.240
+Les recherches sur la recherche hybride en entreprise montrent qu'elle offre une précision de récupération de 70 à 80% selon l'ensemble de données.
+
+00:05:35.780 --> 00:05:39.500
+C'est environ 15 à 20 points de pourcentage de plus que ce que vous obtenez avec la recherche vectorielle seule.
+
+00:05:39.940 --> 00:05:42.840
+La différence est significative et se reflète dans les résultats commerciaux réels.
+
+00:05:42.840 --> 00:05:44.600
+Prenons la plateforme de comptabilité Xero.
+
+00:05:45.240 --> 00:05:49.100
+Ils ont implémenté la recherche hybride dans leur expérience de support client via une entreprise appelée Coveo.
+
+00:05:49.840 --> 00:05:53.140
+En trois mois, ils ont constaté une augmentation de 20% de la résolution en libre-service.
+
+00:05:53.780 --> 00:05:56.940
+Les clients ont trouvé les réponses par eux-mêmes plus souvent, sans avoir besoin de contacter le support.
+
+00:05:57.820 --> 00:06:02.600
+D'autres clients de la même étude de cas ont vu jusqu'à 40% de réduction du temps de résolution pour les dossiers de support.
+
+00:06:03.400 --> 00:06:06.920
+Cela signifie que les agents ont trouvé les bonnes informations plus vite, les clients ont obtenu des réponses plus rapidement.
+
+00:06:07.320 --> 00:06:08.680
+Et les coûts de support ont baissé.
+
+00:06:08.780 --> 00:06:12.180
+Ce n'est pas juste une fonctionnalité agréable, c'est un impact mesurable sur les résultats financiers.
+
+00:06:12.180 --> 00:06:13.320
+C'est là le point essentiel.
+
+00:06:13.660 --> 00:06:17.400
+La recherche hybride n'est pas juste une amélioration ou une case à cocher, elle est nettement plus performante.
+
+00:06:17.980 --> 00:06:20.580
+Elle offre une meilleure précision, un meilleur rappel et de meilleurs résultats pour l'utilisateur.
+
+00:06:21.620 --> 00:06:25.180
+C'est cette combinaison d'approche qui rend Azure et iSearch puissants pour les applications modernes.
+
+00:06:26.540 --> 00:06:29.880
+Cette combinaison permet une autre technologie qui attire beaucoup d'attention en ce moment.
+
+00:06:29.880 --> 00:06:32.660
+Il s'agit du RAG, la connexion RAG.
+
+00:06:32.900 --> 00:06:35.800
+Parlons donc du RAG ou génération augmentée par récupération.
+
+00:06:35.940 --> 00:06:37.060
+Génération augmentée par récupération.
+
+00:06:37.180 --> 00:06:38.120
+C'est un terme complexe.
+
+00:06:38.240 --> 00:06:39.380
+Mais voici la définition la plus simple.
+
+00:06:39.600 --> 00:06:42.820
+C'est un cadre qui donne aux assistants IA accès à des informations sur lesquelles ils n'ont pas été entraînés.
+
+00:06:42.820 --> 00:06:47.640
+Les modèles de langage comme GPT connaissent bien l'histoire, la science et le code.
+
+00:06:48.120 --> 00:06:54.560
+Mais ils ignorent vos documents internes, vos politiques, l'historique, client ou vos procédures spécifiques, euh spécifiques.
+
+00:06:55.400 --> 00:06:59.020
+La plupart des gens pensent qu'il suffit d'injecter toutes ces connaissances internes dans le modèle lui-même.
+
+00:06:59.500 --> 00:07:00.120
+Cela ne fonctionne pas.
+
+00:07:00.380 --> 00:07:01.500
+C'est coûteux et difficile à mettre à jour.
+
+00:07:01.940 --> 00:07:03.240
+Le RAG résout ce problème de manière ingénieuse.
+
+00:07:03.440 --> 00:07:08.800
+Au lieu de tout entasser dans le modèle, vous récupérez les informations pertinentes dans une base de connaissances au moment de la question.
+
+00:07:09.840 --> 00:07:12.380
+Vous prenez la requête de l'utilisateur, cherchez dans vos données internes,
+
+00:07:12.380 --> 00:07:17.260
+trouvez les documents pertinents et fournissez ce contexte au LLM avec la question originale, avec la question originale.
+
+00:07:17.600 --> 00:07:19.620
+Le LLM génère alors une réponse basée sur vos données.
+
+00:07:20.200 --> 00:07:20.880
+C'est là toute la magie.
+
+00:07:21.300 --> 00:07:24.180
+Azure AI Search constitue la moitié récupération de cette équation.
+
+00:07:24.900 --> 00:07:28.060
+C'est le moteur qui trouve les bons documents pour que le LLM puisse répondre avec précision.
+
+00:07:29.060 --> 00:07:32.600
+Sans une couche de récupération solide, un système RAG ne vaut que ce que valent les documents qu'il trouve.
+
+00:07:33.360 --> 00:07:37.320
+C'est là que la recherche hybride brille, car les requêtes RAG sont souvent des questions au langage naturel,
+
+00:07:37.860 --> 00:07:40.780
+avec des réponses situées dans des documents vocabulaires très différents.
+
+00:07:40.780 --> 00:07:43.340
+Laissez-moi vous donner quelques chiffres qui montrent vraiment la différence.
+
+00:07:44.220 --> 00:07:51.960
+Une étude sur la recherche en entreprise a révélé qu'un cadre RAG hybride améliorait la précision de récupération kkaguée de 18 à 25 fois par rapport à une recherche par mots-clés seule.
+
+00:07:53.160 --> 00:07:55.760
+La précision de l'exécution des tâches a été multipliée par 21.
+
+00:07:56.540 --> 00:07:59.420
+Cela signifie que les utilisateurs réussissaient bien mieux leurs tâches complexes,
+
+00:07:59.760 --> 00:08:02.300
+avec un système RAG utilisant la recherche hybride.
+
+00:08:02.300 --> 00:08:07.840
+Dans l'ensemble, des systèmes RAG bien implémentés peuvent augmenter la précision de recherche de 85% en moyenne,
+
+00:08:08.040 --> 00:08:10.680
+certains domaines spécialisés atteignant 89% sans.
+
+00:08:11.160 --> 00:08:14.840
+Comme le LLM génère des réponses basées sur le contexte récupéré plutôt que sur des suppositions,
+
+00:08:14.940 --> 00:08:18.800
+les systèmes RAG ont montré une réduction d'environ 40% des hallucinations.
+
+00:08:19.580 --> 00:08:22.720
+C'est pourquoi Azure Eye Search est essentiel pour créer des agents IA et des copilotes.
+
+00:08:23.480 --> 00:08:28.000
+Il fournit la récupération de faits vérifiables qui rend les LLM dignes de confiance dans un contexte professionnel.
+
+00:08:28.000 --> 00:08:31.940
+Si vous créez un assistant qui doit répondre avec précision aux questions et citer ses sources,
+
+00:08:32.020 --> 00:08:35.300
+la recherche hybride associée au RAG est l'architecture que vous privilégierez.
+
+00:08:35.700 --> 00:08:37.940
+La recherche hybride et le RAG forment donc une combinaison puissante.
+
+00:08:38.820 --> 00:08:41.000
+Mais qu'est-ce que cela donne en pratique ?
+
+00:08:41.600 --> 00:08:42.980
+Quel est l'impact réel ?
+
+00:08:42.980 --> 00:08:44.940
+Où cela se manifeste-t-il concrètement ?
+
+00:08:44.940 --> 00:08:46.020
+Laissez-moi vous donner quelques exemples.
+
+00:08:46.300 --> 00:08:48.120
+Le commerce en ligne est probablement l'exemple le plus courant.
+
+00:08:48.700 --> 00:08:50.960
+Un clientable chaussure de course confortable qui est dans la barre de recherche.
+
+00:08:51.540 --> 00:08:53.740
+La fiche produit indique peut-être qu'à baskets à Morty Higri,
+
+00:08:54.060 --> 00:08:56.020
+car l'équipe marketing a choisi des termes différents.
+
+00:08:56.020 --> 00:08:58.840
+Une recherche par mots-clés passerait totalement à côté du résultat.
+
+00:08:59.620 --> 00:09:03.160
+Avec Azure et iSearch, le système comprend que cas confortables et gun et amorti gun
+
+00:09:03.160 --> 00:09:05.020
+ont pratiquement le même sens dans ce contexte.
+
+00:09:05.480 --> 00:09:07.800
+Il affiche le bon produit même lorsque les termes ne correspondent pas.
+
+00:09:08.620 --> 00:09:10.180
+Résultat, le client trouve ce qu'il cherche.
+
+00:09:10.360 --> 00:09:13.640
+Au lieu de quitter le site, frustré, les portails de support client fonctionnent de la même manière.
+
+00:09:14.300 --> 00:09:15.620
+Imaginez qu'un client type ?
+
+00:09:15.620 --> 00:09:16.940
+Comment annuler mon abonnement ?
+
+00:09:16.940 --> 00:09:20.020
+La politique concernée pourrait être intitulée « Résiliation de contrat de service gun ».
+
+00:09:20.020 --> 00:09:24.480
+La recherche hybride trouve ce document précis grâce à la correspondance des mots-clés juridiques,
+
+00:09:24.580 --> 00:09:29.660
+mais elle affiche aussi une FAQ connexe sur la fin anticipée d'un forfait grâce à la similarité sémantique.
+
+00:09:30.180 --> 00:09:30.860
+Grâce à la sémantique.
+
+00:09:31.920 --> 00:09:35.240
+Le client obtient une réponse complète au lieu de voir fouiller dans cinq articles différents.
+
+00:09:36.280 --> 00:09:38.000
+La récupération de documents juridiques en est un autre exemple.
+
+00:09:38.480 --> 00:09:42.160
+Les avocats doivent rechercher des contrats par numéro de clause et référence de section exacte.
+
+00:09:42.160 --> 00:09:47.940
+C'est le domaine pur des mots-clés, mais ils ont aussi besoin de trouver des formulations similaires dans divers accords, même si les termes diffèrent.
+
+00:09:48.880 --> 00:09:50.640
+La recherche hybride gère les deux en une seule requête,
+
+00:09:50.920 --> 00:09:55.580
+et dans les secteurs réglementés, pouvoir retracer précisément pourquoi un résultat est apparu et crucial pour la conformité.
+
+00:09:56.140 --> 00:09:57.580
+Les bases de connaissances internes en profitent également.
+
+00:09:59.000 --> 00:10:02.460
+Un employé cherchant la politique de congé obtient le document officiel des RH,
+
+00:10:02.860 --> 00:10:05.660
+mais aussi un email lié de l'équipe juridique sur le report des jours,
+
+00:10:06.200 --> 00:10:08.060
+et une mise à jour récente sur l'intranet.
+
+00:10:09.160 --> 00:10:11.600
+La recherche comprend que tous ces éléments sont liés à la même question.
+
+00:10:12.160 --> 00:10:15.180
+L'industrie manufacturière est un exemple moins évident, mais très puissant.
+
+00:10:15.760 --> 00:10:18.820
+Un technicien tape car réparation surchauffe moteur que que dans l'interface de recherche.
+
+00:10:19.820 --> 00:10:22.180
+Le système renvoie la section de dépannage du manuel d'équipement,
+
+00:10:22.320 --> 00:10:24.720
+ainsi qu'un schéma numérisé montrant les pièces concernées.
+
+00:10:25.720 --> 00:10:29.900
+Même si le schéma est une image, Azure et iSearch peuvent extraire et indexer son contenu textuel
+
+00:10:29.900 --> 00:10:31.280
+pour qu'il apparaisse dans les résultats.
+
+00:10:31.940 --> 00:10:34.640
+Le point commun entre tous ces exemples est le recours aux données non structurées.
+
+00:10:35.360 --> 00:10:38.140
+PDF, document Word, ticket de support par email, image numérisée.
+
+00:10:38.340 --> 00:10:42.000
+Les requêtes de base de données et la recherche par mots-clés classiques n'ont jamais été conçues pour ce type de données.
+
+00:10:42.700 --> 00:10:44.820
+Azure et iSearch est conçu spécifiquement pour ce monde,
+
+00:10:45.040 --> 00:10:48.520
+et plus on l'étudie, plus il devient clair que la recherche hybride n'est pas qu'une simple option.
+
+00:10:49.340 --> 00:10:51.980
+C'est un élément fondamental dans la création des applications modernes.
+
+00:10:52.740 --> 00:10:54.220
+Comment les pièces s'assemblent ?
+
+00:10:54.220 --> 00:10:56.620
+Alors comment tout cela fonctionne-t-il vraiment en coulisses ?
+
+00:10:56.620 --> 00:10:58.440
+Azure et iSearch repose sur trois piliers.
+
+00:10:58.700 --> 00:11:01.240
+La source de données, l'indexeur et l'index de recherche.
+
+00:11:02.060 --> 00:11:03.960
+La source de données est l'endroit où résident vos informations.
+
+00:11:04.420 --> 00:11:09.120
+Il peut s'agir d'un stockage blob, d'une base de données Azure SQL, de Cosmos DB, ou même de SharePoint.
+
+00:11:09.680 --> 00:11:11.420
+C'est la matière première qui doit devenir interrogeable.
+
+00:11:11.980 --> 00:11:14.200
+Voyez cela comme une pile de documents en attente d'être organisé.
+
+00:11:15.180 --> 00:11:18.700
+L'indexeur et le pipeline qui lit les données de cette source extraient le contenu,
+
+00:11:18.880 --> 00:11:21.920
+appliquent l'enrichissement IA, configuré et construit l'index de recherche.
+
+00:11:23.400 --> 00:11:24.560
+Voici une façon simple de l'imaginer.
+
+00:11:24.560 --> 00:11:28.080
+Imaginez un bibliothécaire entrant dans un entrepôt rempli de livres.
+
+00:11:28.600 --> 00:11:30.460
+Il lit chaque ouvrage, prend des notes détaillées,
+
+00:11:30.740 --> 00:11:32.000
+identifie les thèmes et entités clés,
+
+00:11:32.520 --> 00:11:34.260
+et organise le tout dans un catalogue sur fiche.
+
+00:11:34.740 --> 00:11:37.100
+Cette lecture et cette prise de notes constituent le processus d'indexation.
+
+00:11:37.360 --> 00:11:38.720
+L'index de recherche est ce catalogue sur fiche.
+
+00:11:39.220 --> 00:11:40.180
+Ce ne sont pas les livres eux-mêmes.
+
+00:11:40.920 --> 00:11:43.440
+C'est le système structuré et optimisé qui vous permet de trouver exactement
+
+00:11:43.440 --> 00:11:45.160
+ce dont vous avez besoin en quelques millisecondes.
+
+00:11:45.780 --> 00:11:49.120
+Lorsque vous tapez une requête, le système ne revient pas aux documents originaux pour les analyser.
+
+00:11:50.160 --> 00:11:51.520
+Au lieu de cela, il consulte l'index,
+
+00:11:51.640 --> 00:11:53.600
+qui sait déjà exactement où tout est situé.
+
+00:11:54.560 --> 00:11:56.640
+Cette préorganisation est appelée index inversé.
+
+00:11:57.260 --> 00:11:59.400
+Au lieu de stocker des documents avec la liste des mots qu'ils contiennent,
+
+00:11:59.560 --> 00:12:01.540
+vous stockez des mots avec la liste des documents où ils apparaissent.
+
+00:12:02.060 --> 00:12:04.620
+Cela signifie que lorsque vous cherchez un terme, vous accédez directement au bon endroit.
+
+00:12:05.100 --> 00:12:06.160
+Pas besoin de feuilleter chaque page.
+
+00:12:06.780 --> 00:12:08.340
+Le résultat est un gain de vitesse considérable.
+
+00:12:08.700 --> 00:12:11.000
+Au lieu de devoir analyser chaque document, ce qui prend plus de temps.
+
+00:12:11.240 --> 00:12:12.700
+À mesure que vos données augmentent, vous allez droit.
+
+00:12:12.940 --> 00:12:13.860
+Au but, non.
+
+00:12:14.800 --> 00:12:17.660
+Avec des millions de documents, c'est la différence entre une recherche qui prend des secondes
+
+00:12:17.660 --> 00:12:19.960
+et une autre qui prend des millisecondes.
+
+00:12:20.580 --> 00:12:22.240
+Vous comprenez maintenant ce qu'est Azure Eye Search,
+
+00:12:22.240 --> 00:12:24.520
+comment ces composants s'articulent et pourquoi la recherche hybride
+
+00:12:24.520 --> 00:12:25.080
+change la donne.
+
+00:12:26.160 --> 00:12:28.320
+Concluons avec quelques exemples concrets de ce que vous pouvez en faire.
+
+00:12:29.120 --> 00:12:30.280
+Premièrement, comprenez vos données.
+
+00:12:30.760 --> 00:12:33.140
+Si elles sont déjà structurées, comme des tables produits SQL
+
+00:12:33.140 --> 00:12:35.100
+ou des dossiers clients, tout ce qui présente des lignes.
+
+00:12:35.240 --> 00:12:38.240
+Et colonne propre, vous pouvez les interroger directement en SQL.
+
+00:12:39.440 --> 00:12:41.480
+Azure Eye Search est conçu pour le texte non structuré.
+
+00:12:41.900 --> 00:12:43.980
+C'est-à-dire les PDF, e-mail, documents Word, tickets de support.
+
+00:12:44.820 --> 00:12:46.180
+C'est là qu'il apporte une réelle valeur ajoutée.
+
+00:12:46.820 --> 00:12:49.740
+Deuxièmement, si vous créez une application RAG ou un assistant IA,
+
+00:12:50.140 --> 00:12:53.680
+Azure Eye Search, avec sa recherche hybride, est le moteur de récupération qu'il vous faut.
+
+00:12:54.180 --> 00:12:56.420
+Il vous offre des correspondances par mots-clés exacts pour la précision
+
+00:12:56.420 --> 00:12:58.060
+et une compréhension sémantique pour le contexte.
+
+00:12:58.500 --> 00:13:01.040
+Cette combinaison produit des réponses plus fiables et faciles à citer
+
+00:13:01.040 --> 00:13:02.980
+que chaque approche séparément à…
+
+00:13:02.980 --> 00:13:05.340
+Troisièmement, ne compliquez pas inutilement la configuration.
+
+00:13:05.840 --> 00:13:07.580
+Le portail Azure dispose d'un assistant d'importation.
+
+00:13:07.900 --> 00:13:10.160
+Connectez votre stockage blob, configurez quelques paramètres
+
+00:13:10.160 --> 00:13:11.820
+et laissez l'indexeur créer votre premier index.
+
+00:13:12.160 --> 00:13:14.180
+Vous pouvez effectuer votre première recherche en main du…
+
+00:13:14.180 --> 00:13:15.800
+Voilà donc Azure Eye Search, expliquez simplement.
+
+00:13:16.280 --> 00:13:18.600
+Il transforme des informations désordonnées et non structurées
+
+00:13:18.600 --> 00:13:20.740
+en connaissances interrogeables et prêtes pour l'IA.
+
+00:13:21.340 --> 00:13:22.100
+Merci de m'avoir suivi.
+
+00:13:22.520 --> 00:13:24.060
+Abonnez-vous et je vous retrouve dans le prochain épisode.

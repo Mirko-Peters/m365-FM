@@ -1,0 +1,1456 @@
+WEBVTT
+
+00:00:00.180 --> 00:00:02.460
+Imaginez déployer Copilot auprès de tous vos collaborateurs
+
+00:00:02.460 --> 00:00:06.120
+pour réaliser ensuite qu'ils peuvent l'utiliser pour accéder en quelques secondes à des contrats ultra confidentiels.
+
+00:00:07.080 --> 00:00:08.100
+Ce n'est pas de la science-fiction.
+
+00:00:08.480 --> 00:00:11.340
+C'est l'un des risques les plus courants liés à Copilot auxquels les entreprises sont confrontées actuellement.
+
+00:00:11.640 --> 00:00:14.000
+Le plus choquant, c'est que la plupart des entreprises ignorent que cela se produit.
+
+00:00:14.840 --> 00:00:17.600
+Aujourd'hui, nous allons voir comment Microsoft Overview assure le contrôle,
+
+00:00:17.880 --> 00:00:21.440
+vous permettant de tirer parti de Copilot sans compromettre la conformité et la sécurité.
+
+00:00:22.920 --> 00:00:24.400
+Les risques cachés de Copilot aujourd'hui.
+
+00:00:24.800 --> 00:00:28.240
+La plupart des responsables informatiques supposent que Copilot fonctionne comme n'importe quelle autre fonctionnalité,
+
+00:00:28.240 --> 00:00:31.040
+Microsoft 365, juste un bouton supplémentaire dans Word, Outlook ou Teams.
+
+00:00:31.420 --> 00:00:33.820
+Cela semble simple, presque comme un correcteur orthographique,
+
+00:00:33.900 --> 00:00:36.840
+mais la différence, c'est que Copilot ne s'arrête pas aux limites d'un seul fichier.
+
+00:00:37.600 --> 00:00:41.420
+Par conception, il puise dans les bibliothèques SharePoint, les dossiers OneDrive et d'autres données de votre tenant.
+
+00:00:42.180 --> 00:00:44.620
+Au lieu d'attendre des approbations ou de créer un ticket de demande,
+
+00:00:44.940 --> 00:00:49.240
+Copilot agrège tout ce à quoi un utilisateur a techniquement accès et le centralise et le centralise.
+
+00:00:49.840 --> 00:00:53.300
+Ce passage de l'ouverture d'un fichier à la réception instantanée d'un contexte fusionné
+
+00:00:53.300 --> 00:00:55.300
+est là où le risque caché commence.
+
+00:00:55.300 --> 00:00:59.340
+À côté, cet accès fluide explique les gains de productivité immédiats des services.
+
+00:01:00.660 --> 00:01:03.160
+Une simple requête peut produire un brouillon qui synthétise des mois d'email,
+
+00:01:03.260 --> 00:01:04.880
+de notes de réunion ou de présentation archivées.
+
+00:01:05.420 --> 00:01:07.900
+D'un autre côté, il n'existe aucune barrière intégrée disant à Copilot,
+
+00:01:08.020 --> 00:01:10.320
+ne combine pas, les données de ce dossier restreint Hug.
+
+00:01:11.100 --> 00:01:13.320
+Si le contenu relève des autorisations d'un utilisateur,
+
+00:01:13.420 --> 00:01:15.000
+Copilot le traite comme une donnée utilisable.
+
+00:01:16.320 --> 00:01:18.680
+C'est très différent d'un humain ouvrant un document volontairement,
+
+00:01:19.120 --> 00:01:23.000
+car l'IA peut assembler des informations sans que l'utilisateur sache d'où elles proviennent.
+
+00:01:23.000 --> 00:01:28.840
+Prenons un exemple simple, un analyste junior en finance chargé de rédiger un court résumé de performance.
+
+00:01:30.260 --> 00:01:32.220
+Auparavant, il aurait dû compiler la présentation l'an dernier,
+
+00:01:32.360 --> 00:01:35.660
+vérifier un dossier de modèle et attendre des approbations avant de citer des chiffres sensibles.
+
+00:01:36.940 --> 00:01:38.580
+Avec Copilot, il peut poser une seule question
+
+00:01:38.580 --> 00:01:42.960
+et recevoir instantanément un compte rendu incluant des prévisions de revenus destinées uniquement à la direction.
+
+00:01:42.960 --> 00:01:47.060
+L'analyste n'a jamais eu à chercher le fichier, ni même à savoir qu'il existait.
+
+00:01:47.900 --> 00:01:49.780
+Pourtant, l'information s'est retrouvée dans son brouillon.
+
+00:01:50.500 --> 00:01:54.140
+Cette rapidité est puissante, mais elle crée une exposition lorsque les résultats incluent des données
+
+00:01:54.140 --> 00:01:56.040
+qui n'étaient pas destinées à être largement diffusées.
+
+00:01:56.560 --> 00:01:57.700
+Ce n'est pas un cas isolé rare.
+
+00:01:58.260 --> 00:02:01.640
+L'expérience montre que lorsque Copilot est déployé sans gouvernance,
+
+00:02:01.780 --> 00:02:06.020
+les entreprises découvrent que des informations très sensibles se retrouvent dans des documents.
+
+00:02:06.020 --> 00:02:11.200
+Et il ne s'agit pas seulement de vieux fichiers, mais de dossiers RH, de contrats légaux
+
+00:02:11.200 --> 00:02:14.380
+ou d'audits en cours apparaissant de façon inattendue.
+
+00:02:14.980 --> 00:02:18.220
+Pour la responsable IT, le défi est que Copilot ne viole pas les règles d'autorisation sur le papier.
+
+00:02:19.060 --> 00:02:22.380
+Au lieu de cela, il opère selon ses permissions, mais change la façon dont l'information est consommée,
+
+00:02:22.840 --> 00:02:24.800
+effaçant de fait les lignes de séparation existantes.
+
+00:02:25.980 --> 00:02:27.740
+L'ancien modèle de permission était facile à comprendre.
+
+00:02:28.260 --> 00:02:29.860
+Soit vous ouvriez le fichier, soit vous ne l'ouvriez pas.
+
+00:02:30.380 --> 00:02:32.100
+Les journaux enregistraient qui voyait quoi ?
+
+00:02:32.100 --> 00:02:35.280
+Mais quand Copilot résume plusieurs documents en une réponse, la visibilité disparaît,
+
+00:02:35.280 --> 00:02:40.120
+L'utilisateur n'a jamais ouvert dix fichiers, pourtant l'assistant a pu extraire des éléments de chacun d'eux.
+
+00:02:40.700 --> 00:02:42.860
+La piste d'audit traditionnelle ne décrit plus ce qui s'est réellement passé.
+
+00:02:43.680 --> 00:02:46.020
+Des études sectorielles ont également mis en évidence un problème connexe.
+
+00:02:46.380 --> 00:02:49.160
+De nombreuses organisations échouent déjà à suivre pleinement l'activité des fichiers dans le cloud.
+
+00:02:49.740 --> 00:02:52.980
+Ajoutez les réponses de l'IA par-dessus et vous retrouvez avec d'importants angles morts.
+
+00:02:53.800 --> 00:02:55.460
+C'est comme faire fonctionner vos caméras de sécurité,
+
+00:02:55.680 --> 00:02:58.420
+mais manquez ce qui se passe quand quelqu'un passe en dehors de leur champ de vision.
+
+00:02:59.140 --> 00:03:00.740
+C'est ce qui rend ces risques si difficiles à gérer.
+
+00:03:01.020 --> 00:03:04.500
+Avec Copilot, des employés peuvent exposer involontairement des informations sensibles
+
+00:03:04.500 --> 00:03:07.560
+et des responsables de la conformité peuvent ne pas avoir de traces claires des accès
+
+00:03:07.560 --> 00:03:11.700
+et le personnel informatique peut être incapable de reconstituer quels fichiers ont contribué à une réponse.
+
+00:03:12.980 --> 00:03:15.760
+Si vous travaillez sous des cadres stricts comme la finance, la santé ou le gouvernement,
+
+00:03:15.980 --> 00:03:18.760
+manquez ce niveau de responsabilité devient un problème d'audit en attente.
+
+00:03:18.760 --> 00:03:23.940
+En résumé, Copilot, sans supervision, ne crée pas seulement un risque, il le dissimule.
+
+00:03:25.080 --> 00:03:27.920
+Quand on ne peut pas mesurer ou voir ce qui se passe, on ne peut pas l'atténuer.
+
+00:03:28.560 --> 00:03:31.000
+Bien que les gains de productivité potentiels soient réels, soit réels,
+
+00:03:31.380 --> 00:03:33.940
+aucune organisation ne peut se permettre de sacrifier la transparence pour la vitesse.
+
+00:03:34.320 --> 00:03:35.820
+Alors comment combler ce déficit de visibilité ?
+
+00:03:35.820 --> 00:03:38.580
+Purview fournit les contrôles, mais pas là où commence la supervision.
+
+00:03:39.340 --> 00:03:40.260
+Des garde-fous avec Purview.
+
+00:03:40.260 --> 00:03:44.020
+Voici comment Purview transforme Copilot un assistant non gouverné en un assistant gouverné.
+
+00:03:45.020 --> 00:03:48.380
+Imaginez savoir quel type de contenu Copilot peut utiliser avant qu'il ne construise une réponse
+
+00:03:48.380 --> 00:03:50.760
+et avoir des règles en place pour respecter ses limites.
+
+00:03:51.280 --> 00:03:54.020
+Ce n'est pas quelque chose que vous obtenez par défaut avec seulement des permissions ou la DLP.
+
+00:03:54.600 --> 00:03:56.300
+Purview introduit une gouvernance au niveau du contenu,
+
+00:03:56.720 --> 00:03:59.920
+donnant aux administrateurs un moyen d'influencer la façon dont Copilot interagit avec les données,
+
+00:03:59.920 --> 00:04:02.120
+non seulement après leur accès, mais avant même qu'elles ne soient utilisées.
+
+00:04:02.420 --> 00:04:03.980
+Une réaction courante des équipes informatiques est
+
+00:04:03.980 --> 00:04:06.900
+« Nous avons déjà la DLP. Nous avons déjà des permissions. »
+
+00:04:06.900 --> 00:04:07.960
+Pourquoi cela ne suffit pas ?
+
+00:04:07.960 --> 00:04:10.920
+La réponse courte est que ces deux contrôles ont été conçus autour de l'accès explicite
+
+00:04:10.920 --> 00:04:13.020
+au fichier et du transfert de données, pas de la synthèse par IA.
+
+00:04:14.460 --> 00:04:17.260
+La DLP empêche le contenu de sortir via des e-mails ou des téléchargements.
+
+00:04:17.940 --> 00:04:20.040
+Les permissions verrouillent les fichiers pour des groupes spécifiques.
+
+00:04:21.200 --> 00:04:22.800
+Utiles, mais ils opèrent à la limite de l'accès.
+
+00:04:23.580 --> 00:04:26.640
+Copilot extrait le contexte à travers des fichiers auxquels une personne a déjà des droits techniques
+
+00:04:26.640 --> 00:04:27.860
+et le livre dans des réponses fusionnées.
+
+00:04:29.000 --> 00:04:30.860
+C'est pourquoi la classification du contenu est importante.
+
+00:04:31.340 --> 00:04:32.860
+Avec Purview, les règles voyagent avec les données.
+
+00:04:33.360 --> 00:04:37.360
+Au lieu de réagir après coup, la classification garantit que chaque fichier ou fragment
+
+00:04:37.360 --> 00:04:41.300
+applique les politiques en vigueur, où qu'ils se trouvent, y compris, dans le contenu
+
+00:04:41.300 --> 00:04:42.180
+généré par l'IA.
+
+00:04:43.300 --> 00:04:45.040
+Pour illustrer cela, repensez à la manière dont nous ne travaillons pas.
+
+00:04:45.940 --> 00:04:48.840
+Un analyste demandant des chiffres de revenus devait ouvrir le modèle financier
+
+00:04:48.840 --> 00:04:51.720
+ou la présentation du directeur financier et chaque étape laissait une trace d'accès.
+
+00:04:52.880 --> 00:04:55.940
+Aujourd'hui, ce même analyste peut demander à copilote les tendances de performance du trimestre.
+
+00:04:57.420 --> 00:05:00.100
+En quelques secondes, il obtient un résultat combinant un classeur budgétaire,
+
+00:05:00.100 --> 00:05:02.060
+un projet de prévision et des notes de ressources humaines.
+
+00:05:02.060 --> 00:05:05.280
+Tout est techniquement accessible, mais n'était pas censé être présenté ensemble.
+
+00:05:05.840 --> 00:05:07.680
+La DLP ne l'a pas arrêté, les autorisations n'ont pas bloqué.
+
+00:05:08.080 --> 00:05:10.460
+C'est là que la classification devient la première véritable mesure de protection.
+
+00:05:11.200 --> 00:05:14.640
+Correctement configurée, les étiquettes de confidentialité dans Purview imposent
+
+00:05:14.640 --> 00:05:18.700
+des règles dans Microsoft 365 et influencent la gestion du contenu par les services Microsoft,
+
+00:05:18.920 --> 00:05:19.600
+donc copilote.
+
+00:05:20.680 --> 00:05:23.740
+Des étiquettes comme RH confidentiel ou finance restreint UGM ne sont pas que des marqueurs
+
+00:05:23.740 --> 00:05:24.080
+de fichiers.
+
+00:05:24.740 --> 00:05:27.820
+Elles peuvent appliquer un chiffrement, des filigranes et des restrictions réduisant le risque
+
+00:05:27.820 --> 00:05:30.220
+que du contenu sensible n'apparaisse dans un contexte inapproprié.
+
+00:05:30.220 --> 00:05:34.440
+Vérifiez dans votre tenant, cela signifie que les données RH n'apparaissent pas dans
+
+00:05:34.440 --> 00:05:37.300
+les résumés hors du groupe RH et que les projections financières ne sont pas réutilisées
+
+00:05:37.300 --> 00:05:38.200
+dans des supports marketing.
+
+00:05:39.140 --> 00:05:42.720
+La réponse exacte de copilote dépend de la configuration et des licences, il est
+
+00:05:42.720 --> 00:05:46.120
+donc crucial de vérifier l'application des règles dans votre environnement avant
+
+00:05:46.120 --> 00:05:46.980
+un déploiement large.
+
+00:05:48.040 --> 00:05:49.840
+Cette approche basée sur le contenu change la donne.
+
+00:05:50.460 --> 00:05:53.420
+Au lieu de se concentrer sur l'analyse de la périphérie réseau, vous intégrez les
+
+00:05:53.420 --> 00:05:54.360
+règles au cœur même des données.
+
+00:05:55.120 --> 00:05:58.120
+Les documents et fichiers conservent leur classification où qu'ils aillent.
+
+00:05:58.120 --> 00:06:02.220
+Cela réduit la charge des équipes IT car vous n'avez pas à ajuster manuellement
+
+00:06:02.220 --> 00:06:05.260
+les filtres de requêtes ou les politiques mal configurées à chaque mise à jour de
+
+00:06:05.260 --> 00:06:05.660
+copilote.
+
+00:06:06.280 --> 00:06:09.300
+Vous placez des défenses au niveau des fichiers, permettant au marquage de confidentialité
+
+00:06:09.300 --> 00:06:11.920
+de servir de signaux cohérents pour chaque service Microsoft 365.
+
+00:06:12.640 --> 00:06:15.980
+Si un nouvel ensemble de dossiers juridiques arrive dans SharePoint, la classification s'applique
+
+00:06:15.980 --> 00:06:18.900
+immédiatement et copilote ajuste son comportement en conséquence.
+
+00:06:19.300 --> 00:06:21.360
+Pour les administrateurs, voici l'étape pratique à retenir.
+
+00:06:21.780 --> 00:06:23.300
+N'essayez pas d'étiqueter tout dès le premier jour.
+
+00:06:23.900 --> 00:06:26.620
+Commencez un projet pilote avec les bibliothèques contenant vos données les plus sensibles.
+
+00:06:26.620 --> 00:06:27.780
+Finance RH juridique.
+
+00:06:29.220 --> 00:06:32.500
+Définissez les étiquettes nécessaires, testez leur comportement et mappez les politiques
+
+00:06:32.500 --> 00:06:35.000
+d'application selon la façon dont vous voulez que copilote agisse dans ces zones.
+
+00:06:35.960 --> 00:06:37.960
+Une fois validé, étendez progressivement la couverture.
+
+00:06:38.680 --> 00:06:41.540
+Cette approche par étape offre un contrôle mesurable sans submerger vos équipes.
+
+00:06:42.500 --> 00:06:44.080
+Le résultat n'est pas la disparition de tout risque.
+
+00:06:44.680 --> 00:06:47.640
+Copilote continuera d'opérer selon les autorisations des utilisateurs mais les règles deviennent
+
+00:06:47.640 --> 00:06:48.060
+plus claires.
+
+00:06:48.940 --> 00:06:52.280
+Le contenu classifié offre des protections prévisibles et une supervision bien plus pratique
+
+00:06:52.280 --> 00:06:53.520
+qu'une détection a posteriori.
+
+00:06:53.520 --> 00:06:57.320
+Du point de vue de l'utilisateur, copilote reste un assistant productif.
+
+00:06:58.320 --> 00:07:00.580
+Du point de vue de l'administrateur, les ensembles de données sensibles ne s'échappent
+
+00:07:00.580 --> 00:07:01.540
+plus là où ils ne devraient pas être.
+
+00:07:02.480 --> 00:07:05.060
+Cet équilibre est ce qui fait passer copilote d'une expérimentation incontrôlée à une
+
+00:07:05.060 --> 00:07:05.780
+adoption encadrée.
+
+00:07:06.740 --> 00:07:08.780
+La gouvernance toutefois ne se limite pas à définir des règles.
+
+00:07:09.380 --> 00:07:11.880
+La question la plus difficile est de savoir si vous pouvez prouver que ces règles fonctionnent.
+
+00:07:12.640 --> 00:07:15.520
+Si copilote appuisait dans un fichier sensible la semaine dernière, le sauriez-vous ?
+
+00:07:16.280 --> 00:07:19.300
+Sans visibilité sur la manière dont les réponses de l'IA sont composées, vous restez avec
+
+00:07:19.300 --> 00:07:19.900
+des angles morts.
+
+00:07:19.900 --> 00:07:23.280
+C'est là qu'intervient le niveau suivant, suivre et auditer ce que copilote touche réellement
+
+00:07:23.280 --> 00:07:24.820
+une fois actif dans votre environnement.
+
+00:07:25.880 --> 00:07:28.220
+Éclairer, auditer et suivre l'IA.
+
+00:07:29.180 --> 00:07:31.800
+Lorsque les équipes commencent à utiliser les copilotes, la première chose qu'elles
+
+00:07:31.800 --> 00:07:34.500
+réalisent est la facilité avec laquelle les résultats peuvent masquer l'origine des
+
+00:07:34.500 --> 00:07:34.920
+informations.
+
+00:07:35.740 --> 00:07:39.240
+Un utilisateur peut rédiger un résumé qui semble parfait alors que la source de ces
+
+00:07:39.240 --> 00:07:42.180
+détails, qu'il s'agisse d'un modèle public, d'une prévision privée ou d'un
+
+00:07:42.180 --> 00:07:44.240
+fichier RH sensible, est cachée.
+
+00:07:44.240 --> 00:07:48.620
+Dans les flux de travail traditionnels, vous avez des indicateurs solides, qui a ouvert
+
+00:07:48.620 --> 00:07:50.620
+quel fichier, à quel moment et sur quel appareil.
+
+00:07:51.240 --> 00:07:52.820
+Cela signifie que vous pouviez reconstruire l'activité.
+
+00:07:53.320 --> 00:07:56.940
+Avec l'IA, le fichier lui-même peut ne jamais être explicitement ouvert, laissant les
+
+00:07:56.940 --> 00:07:59.300
+administrateurs dans l'incertitude quant à la manière dont le contenu est apparent.
+
+00:07:59.680 --> 00:08:02.120
+C'est dans cette incertitude que le risque s'installe discrètement.
+
+00:08:02.760 --> 00:08:05.440
+Les enjeux augmentent dès que l'on confronte cet écart aux attentes en matière de conformité.
+
+00:08:06.000 --> 00:08:08.500
+Les régulateurs ne veulent pas seulement savoir qui a accès au fichier, ils veulent la
+
+00:08:08.500 --> 00:08:11.280
+preuve de la manière dont l'information a été utilisée et dans quel contexte.
+
+00:08:11.280 --> 00:08:15.760
+Si un contrat sensible apparaît dans un rapport préliminaire et circule ensuite, vous ne
+
+00:08:15.760 --> 00:08:19.040
+pouvez pas toujours retracer s'il a été copié manuellement ou généré via copiloteur.
+
+00:08:20.020 --> 00:08:23.000
+La journalisation traditionnelle ne le montrera pas, car aucun téléchargement de fichiers
+
+00:08:23.000 --> 00:08:24.160
+ni aucune entrée Sharpen n'existe.
+
+00:08:24.540 --> 00:08:27.420
+Au moment où ces brouillons se propagent dans des présentations ou des emails, le lien
+
+00:08:27.420 --> 00:08:29.140
+vers le document original est rompu.
+
+00:08:29.760 --> 00:08:33.120
+D'un point de vue gouvernance, cette invisibilité rend les audits plus difficiles et la responsabilité
+
+00:08:33.120 --> 00:08:33.700
+plus fragiles.
+
+00:08:34.320 --> 00:08:37.340
+C'est là que les fonctions d'audit et d'e-discovery de Purview comblent le vide.
+
+00:08:37.340 --> 00:08:42.120
+Plutôt que de dépendre uniquement des journaux d'accès aux fichiers, Purview donne aux administrateurs
+
+00:08:42.120 --> 00:08:45.540
+la capacité de suivre la circulation du contenu lorsque l'IA entre en jeu, lorsque l'IA.
+
+00:08:46.100 --> 00:08:49.640
+Bien que la profondeur exacte de la télémétrie dépende de la configuration, des paramètres
+
+00:08:49.640 --> 00:08:53.220
+de rétention et de votre niveau d'abonnement, le cadre aide les équipes à relier l'activité
+
+00:08:53.220 --> 00:08:55.220
+de copilote aux sources de contenu sous-jacentes.
+
+00:08:56.320 --> 00:09:00.020
+Cela signifie que vous pouvez identifier quels documents sensibles ont influencé une réponse
+
+00:09:00.020 --> 00:09:03.800
+quand ce matériel est intervenu et évaluer si son apparition était appropriée.
+
+00:09:03.800 --> 00:09:07.820
+Pour les équipes de conformité et de sécurité, le résultat est un enregistrement qui transforme
+
+00:09:07.820 --> 00:09:09.120
+les conjectures en historiques vérifiables.
+
+00:09:09.760 --> 00:09:10.720
+Prenons un exemple simplifié.
+
+00:09:11.400 --> 00:09:14.120
+Imaginez un service juridique examinant des propositions et tombant sur des termes
+
+00:09:14.120 --> 00:09:17.040
+qui reflètent clairement un texte issu d'un dossier de litige restreint.
+
+00:09:18.000 --> 00:09:20.340
+Sans supervision, leur suspicion immédiate est le vol de données.
+
+00:09:21.000 --> 00:09:24.500
+Mais en utilisant e-discovery de Purview, l'équipe peut vérifier si le brouillon provient
+
+00:09:24.500 --> 00:09:27.480
+d'une session copilot, voire quelles bibliothèques de contenu ont été impliquées
+
+00:09:27.480 --> 00:09:30.420
+et confirmer que c'est la requête de l'utilisateur et non une intention malveillante
+
+00:09:30.420 --> 00:09:31.440
+qui a causé l'exposition.
+
+00:09:31.440 --> 00:09:33.700
+Cela redéfinit l'enquête.
+
+00:09:34.100 --> 00:09:36.800
+Au lieu de traiter l'employé comme une menace interne potentielle, l'organisation
+
+00:09:36.800 --> 00:09:39.400
+y voit une lacune dans la gouvernance de la supervision de l'IA.
+
+00:09:40.200 --> 00:09:43.160
+Le bénéfice n'est pas seulement une résolution plus rapide, mais aussi une meilleure compréhension
+
+00:09:43.160 --> 00:09:44.500
+des points où renforcer les politiques.
+
+00:09:45.300 --> 00:09:47.060
+L'audit s'étend également au-delà de la réponse aux incites.
+
+00:09:47.340 --> 00:09:50.120
+Parce que les journaux de Purview sont liés aux enquêtes et aux examens, ils fournissent
+
+00:09:50.120 --> 00:09:52.960
+des preuves défendables lors des demandes réglementaires.
+
+00:09:53.320 --> 00:09:56.260
+Si votre équipe de conformité doit prouver que les contrats restreints n'ont pas été
+
+00:09:56.260 --> 00:09:59.720
+divulgués de manière inappropriée, les journaux peuvent montrer ce que Copilot a utilisé
+
+00:09:59.720 --> 00:10:01.020
+et ce qu'il n'a pas utilisé.
+
+00:10:01.440 --> 00:10:04.200
+Cet historique documenté est essentiel dans les secteurs réglementés.
+
+00:10:05.000 --> 00:10:07.860
+Sans audit, les organisations sont réduites à des explications basées sur des souvenirs
+
+00:10:07.860 --> 00:10:10.840
+d'utilisateurs ou des spéculations qui résistent ni les niveaux d'un examen approfondi.
+
+00:10:11.240 --> 00:10:12.700
+Comparer cela avec la DLP traditionnelle.
+
+00:10:13.240 --> 00:10:15.800
+Les outils de prévention des pertes de données surveillent les fichiers traversant les limites,
+
+00:10:15.940 --> 00:10:17.520
+les emails, les téléchargements et les transferts en masse.
+
+00:10:17.920 --> 00:10:21.140
+Ils ne révèlent pas comment une IA assemble des informations partielles provenant de multiples
+
+00:10:21.140 --> 00:10:22.100
+emplacements internes.
+
+00:10:23.060 --> 00:10:27.120
+Purview étant la supervision à ce domaine, permettant de suivre non seulement le contenu en transit,
+
+00:10:27.120 --> 00:10:30.080
+mais aussi le contenu contribuant aux résultats générés par l'IA.
+
+00:10:31.440 --> 00:10:34.460
+Il ne s'agit pas de capturer chaque frappe au clavier, mais d'obtenir une image exploitable
+
+00:10:34.460 --> 00:10:36.860
+de l'endroit où le matériel sensible entre dans le flux de travail de l'IA.
+
+00:10:37.560 --> 00:10:40.320
+Vérifiez toujours la télémétrie exacte activée dans votre tenant, car les détails
+
+00:10:40.320 --> 00:10:41.180
+d'audit peuvent varier.
+
+00:10:42.180 --> 00:10:45.140
+Pour les responsables informatiques qui envisagent le déploiement, il existe une étape simple
+
+00:10:45.140 --> 00:10:45.780
+mais percutante.
+
+00:10:46.300 --> 00:10:49.460
+Assurez-vous que vos fenêtres de rétention d'audit et vos politiques de conservation et discovery
+
+00:10:49.460 --> 00:10:52.840
+correspondent à vos calendriers réglementaires, bien avant que Copilot ne soit largement déployé.
+
+00:10:52.840 --> 00:10:56.020
+Les journaux ne sont précieux que s'ils existent au moment où quelqu'un a besoin
+
+00:10:56.020 --> 00:10:56.600
+de les consulter.
+
+00:10:57.640 --> 00:11:00.820
+Perdre la visibilité parce que les données ont dépassé la période de rétention compromet
+
+00:11:00.820 --> 00:11:01.620
+l'ensemble de l'effort.
+
+00:11:02.500 --> 00:11:05.500
+Mettre cela en place tôt évite la précipitation ultérieure lorsque la conformité pose des
+
+00:11:05.500 --> 00:11:06.640
+questions auxquelles vous ne pouvez pas répondre.
+
+00:11:07.620 --> 00:11:10.760
+Fin de compte, l'audit ne change pas le fait que Copilot modifie la circulation de
+
+00:11:10.760 --> 00:11:11.240
+l'information.
+
+00:11:12.520 --> 00:11:15.020
+Ce qu'il fait, c'est fournir la piste de preuve pour que vous puissiez démontrer votre
+
+00:11:15.020 --> 00:11:15.300
+contrôle.
+
+00:11:16.300 --> 00:11:19.020
+Il transforme l'activité cachée en gouvernance documentée, faisant passer les équipes
+
+00:11:19.020 --> 00:11:20.020
+de la supposition à la preuve.
+
+00:11:20.020 --> 00:11:22.560
+Cependant, les audits sont par définition réactifs.
+
+00:11:22.960 --> 00:11:25.420
+Ils vous aident à expliquer ce qui s'est passé et pourquoi, mais n'arrêtent pas une
+
+00:11:25.420 --> 00:11:26.800
+exposition au moment où elle prend forme.
+
+00:11:27.400 --> 00:11:28.960
+Cela laisse une question importante en suspens.
+
+00:11:29.660 --> 00:11:32.920
+Quels mécanismes peuvent réduire le risque que du contenu sensible apparaisse en premier
+
+00:11:32.920 --> 00:11:36.720
+lieu plutôt que de le documenter après coup pour passer d'une gestion des risques
+
+00:11:36.720 --> 00:11:38.660
+réactives à proactives ?
+
+00:11:38.660 --> 00:11:41.640
+La gestion des risques internes transforme les audits en alertes précoces afin que vous
+
+00:11:41.640 --> 00:11:43.620
+puissiez arrêter les problèmes avant qu'ils ne deviennent des incidents.
+
+00:11:44.440 --> 00:11:47.500
+Au lieu de simplement corriger les problèmes une fois que les données se sont glissées dans
+
+00:11:47.500 --> 00:11:49.980
+un brouillon Copilot, cette fonctionnalité vous permet
+
+00:11:49.980 --> 00:11:54.000
+de repérer plus tôt les comportements inhabituels, de les évaluer et d'éviter que les situations
+
+00:11:54.000 --> 00:11:54.740
+ne s'aggravent.
+
+00:11:55.920 --> 00:11:59.020
+Il s'agit de passer de la détection à la prévention en surveillant discrètement
+
+00:11:59.020 --> 00:12:01.840
+les signes de risque pendant que les employés continuent de travailler sans interruption.
+
+00:12:03.480 --> 00:12:05.840
+Voici la réalité pour la plupart des organisations adoptant Copilot.
+
+00:12:06.580 --> 00:12:09.300
+Certaines données sensibles apparaîtront de manière involontaire.
+
+00:12:09.900 --> 00:12:12.620
+Un employé rédigeant un résumé rapide peut inclure des termes restreints et exposés
+
+00:12:12.620 --> 00:12:14.320
+accidentellement du contenu privé dans un brouillon.
+
+00:12:14.320 --> 00:12:18.560
+D'autres scénarios sont délibérés, comme quelqu'un exportant de gros volumes de documents
+
+00:12:18.560 --> 00:12:19.780
+au moment de quitter l'entreprise.
+
+00:12:20.640 --> 00:12:22.600
+L'intention peut différer, mais l'impact est le même.
+
+00:12:22.680 --> 00:12:24.920
+C'est pourquoi la gestion des risques internes ne fait pas de distinction.
+
+00:12:25.420 --> 00:12:27.800
+Elle recherche des comportements préoccupants, quel qu'en soit le motif.
+
+00:12:28.660 --> 00:12:30.760
+Les contrôles de sécurité traditionnels sont comme des barrières fixes.
+
+00:12:31.220 --> 00:12:33.080
+Ils définissent qui a accès et qui n'en a pas, mais Copilot.
+
+00:12:33.080 --> 00:12:36.240
+Et l'IA, en général, ne respecte pas ces frontières nettes.
+
+00:12:36.300 --> 00:12:40.060
+L'IA puise dans le contexte de plusieurs systèmes et fusionne des informations de manière inattendue.
+
+00:12:41.000 --> 00:12:44.080
+Si vous ne comptez que sur les audits, vous attendez que les faits soient accomplis,
+
+00:12:44.700 --> 00:12:47.540
+en examinant ce qui a mal tourné une fois que l'impact est déjà visible.
+
+00:12:48.180 --> 00:12:50.980
+Une approche proactive signifie détecter les écarts au moment où ils se produisent.
+
+00:12:51.640 --> 00:12:54.600
+Téléchargement volumineux inhabituel, activités à des heures de travail atypiques ou requêtes
+
+00:12:54.600 --> 00:12:56.140
+ne correspondant pas au modèle de travail habituel.
+
+00:12:56.860 --> 00:13:00.120
+La question n'est pas de savoir s'il faut surveiller, mais comment repérer les premiers indicateurs
+
+00:13:00.120 --> 00:13:02.300
+sans submerger vos équipes de bruit, de bruit.
+
+00:13:02.300 --> 00:13:04.760
+Pensez à deux déclencheurs à fort impact méritant d'être priorisé.
+
+00:13:05.360 --> 00:13:08.240
+Premièrement, un utilisateur téléchargeant soudainement des dizaines de fichiers étiquetés
+
+00:13:08.240 --> 00:13:09.920
+qu'à qui finance compte période.
+
+00:13:10.600 --> 00:13:13.520
+Même s'il y a techniquement accès, cette action mérite clairement un examen approfondi.
+
+00:13:14.600 --> 00:13:16.700
+Configurez Purview pour générer une alerte conditionnelle
+
+00:13:16.700 --> 00:13:19.920
+et envoyer le cas dans une file d'attente avant que les données ne quittent votre environnement.
+
+00:13:20.780 --> 00:13:23.880
+Deuxièmement, des demandes répétées d'informations RH sensibles en dehors des heures de travail.
+
+00:13:25.080 --> 00:13:26.920
+De tels modèles ne correspondent pas au travail habituel,
+
+00:13:26.920 --> 00:13:29.160
+alors configurez une remontée de ces situations pour enquête.
+
+00:13:29.160 --> 00:13:32.640
+Ces deux exemples montrent que le contexte compte plus que les autorisations brutes
+
+00:13:32.640 --> 00:13:36.700
+et qu'une alerte bien réglée peut empêcher de petits problèmes de devenir de larges expositions.
+
+00:13:37.620 --> 00:13:40.180
+Les fonctionnalités de risque interne de Purview peuvent faire remonter des signaux
+
+00:13:40.180 --> 00:13:42.820
+liés à des comportements inhabituels et combiner des indicateurs pour examen,
+
+00:13:43.260 --> 00:13:45.620
+mais les seuils précis doivent être ajustés à votre environnement et à vos politiques.
+
+00:13:45.620 --> 00:13:49.740
+L'objectif n'est pas d'afficher des avertissements à chaque fois que quelqu'un pose une question à Copilot.
+
+00:13:50.540 --> 00:13:54.220
+Le but est de filtrer des millions d'actions pour n'en garder qu'une poignée de cas de revue significatifs.
+
+00:13:55.100 --> 00:13:58.780
+En combinant la sensibilité des fichiers, l'historique de l'utilisateur et le contexte comportemental,
+
+00:13:58.840 --> 00:14:01.780
+la plateforme aide les équipes de conformité à identifier ce qui sort réellement de l'ordinaire.
+
+00:14:02.280 --> 00:14:04.620
+Une configuration appropriée garantit que vous travaillez des signaux fiables
+
+00:14:04.620 --> 00:14:05.980
+et non avec un bruit qui détourne votre attention.
+
+00:14:06.520 --> 00:14:07.520
+Illustrons cela par un scénario.
+
+00:14:07.520 --> 00:14:11.240
+Un responsable régional utilise Copilot pour rédiger un email d'embauche
+
+00:14:11.240 --> 00:14:14.240
+et inclut des données RH sur le nouvel employé dans sa requête.
+
+00:14:15.320 --> 00:14:17.300
+Copilot rédige un contenu qui, sans supervision,
+
+00:14:17.940 --> 00:14:21.200
+pourrait intégrer des données personnelles comme des adresses privées ou des plannings d'intégration.
+
+00:14:21.820 --> 00:14:24.640
+La gestion des risques internes détecte la présence d'informations personnelles sensibles,
+
+00:14:24.780 --> 00:14:27.460
+oriente le brouillon vers une vérification et avertit l'employé, avertit l'employé
+
+00:14:27.460 --> 00:14:28.980
+avant même que le message ne quitte le système.
+
+00:14:29.600 --> 00:14:33.400
+Le responsable identifie ce qui a posé problème, corrige le brouillon et aucune donnée n'est divulguée.
+
+00:14:34.060 --> 00:14:36.440
+C'est cela, la gouvernance proactive stoppait le problème instantanément
+
+00:14:36.440 --> 00:14:38.720
+au lieu de le découvrir des semaines plus tard lors d'un audit.
+
+00:14:39.520 --> 00:14:42.340
+Une inquiétude courante est que de tels cadres puissent ralentir les équipes.
+
+00:14:43.420 --> 00:14:46.000
+Les dirigeants ne veulent pas que leurs employés hésitent à chaque requête copilote
+
+00:14:46.000 --> 00:14:47.040
+ou attendent des approbations.
+
+00:14:47.880 --> 00:14:50.320
+La solution consiste à concevoir des règles résistantes au bruit,
+
+00:14:50.480 --> 00:14:54.680
+à privilégier les signaux fiables et à ne faire remonter que les cas répétitifs ou critifs ou critiques.
+
+00:14:55.620 --> 00:14:57.340
+Ainsi, la productivité quotidienne est préservée
+
+00:14:57.340 --> 00:14:59.840
+et les employés ne sont sollicités qu'en cas de risque réel.
+
+00:15:00.260 --> 00:15:02.140
+Bien mis en œuvre, ces contrôles fonctionnent en arrière-plan,
+
+00:15:02.240 --> 00:15:03.980
+favorisant des comportements sûrs sans entraver le travail.
+
+00:15:03.980 --> 00:15:06.740
+Pour la direction, la leçon opérationnelle est claire.
+
+00:15:07.820 --> 00:15:08.700
+Prochette étape concrète.
+
+00:15:08.860 --> 00:15:11.280
+Définissez les cas d'usages acceptables de copilote dans votre organisation
+
+00:15:11.280 --> 00:15:14.360
+puis déterminez les comportements devant déclencher une vérification automatique.
+
+00:15:15.080 --> 00:15:17.580
+Intégrer ces règles directement dans votre configuration de gestion des risques intérêts.
+
+00:15:18.180 --> 00:15:20.640
+Cet alignement garantit non seulement une gouvernance réactive de copilote
+
+00:15:20.640 --> 00:15:22.820
+mais établit aussi des attentes claires pour les utilisateurs de copilote,
+
+00:15:22.880 --> 00:15:23.800
+pour les équipes de sécurité.
+
+00:15:24.700 --> 00:15:25.760
+Le retour sur investissement est mesurable.
+
+00:15:26.420 --> 00:15:28.400
+Les responsables de la conformité gagnent en visibilité,
+
+00:15:28.700 --> 00:15:30.120
+l'informatique allège sa charge de travail
+
+00:15:30.120 --> 00:15:32.240
+et les dirigeants obtiennent l'assurance nécessaire
+
+00:15:32.240 --> 00:15:34.880
+pour prouver aux parties prenantes que copilote n'expose pas l'entreprise
+
+00:15:34.880 --> 00:15:36.000
+à des risques incontrôlés.
+
+00:15:37.320 --> 00:15:39.320
+A ce stade, nous sommes passés de la classification à l'audit
+
+00:15:39.320 --> 00:15:41.740
+puis à la surveillance proactive, chaque couche s'appuyant sur la précédente.
+
+00:15:42.320 --> 00:15:43.580
+Aucun de ces éléments ne fonctionne de manière réelle.
+
+00:15:43.940 --> 00:15:44.840
+Ils se renforcent mutuellement.
+
+00:15:45.600 --> 00:15:47.220
+Le défi est désormais de les séquencer correctement.
+
+00:15:47.700 --> 00:15:49.580
+Une mauvaise planification entraîne du travail supplémentaire,
+
+00:15:49.660 --> 00:15:50.840
+des failles oublies ou un blocage de l'adoption.
+
+00:15:50.840 --> 00:15:52.740
+C'est pourquoi l'étape suivante consiste à prendre du recul
+
+00:15:52.740 --> 00:15:53.640
+pour examiner la feuille de route.
+
+00:15:54.060 --> 00:15:56.280
+Comment les entreprises avisées structurent ces contrôles
+
+00:15:56.280 --> 00:15:58.520
+dès le départ pour éviter que l'adoption de copilote
+
+00:15:58.520 --> 00:16:00.300
+ne devienne chaotique ?
+
+00:16:00.300 --> 00:16:01.960
+Établissez la feuille de route de la compréhension.
+
+00:16:02.240 --> 00:16:05.300
+A la supervision, une séquence pratique assure la stabilité
+
+00:16:05.300 --> 00:16:06.180
+de l'adoption de copilote.
+
+00:16:06.860 --> 00:16:08.100
+Premièrement, les étiquettes de sensibilité.
+
+00:16:08.620 --> 00:16:09.320
+Deuxièmement, l'audit.
+
+00:16:09.660 --> 00:16:11.360
+Troisièmement, la gestion des risques à terre dans cet ordre précis.
+
+00:16:11.880 --> 00:16:13.860
+Cette feuille de route en trois étapes transforme la gouvernance.
+
+00:16:13.960 --> 00:16:16.300
+D'un ajout tardif, elle devient un pilier de la stratégie de déploiement,
+
+00:16:16.300 --> 00:16:19.480
+en facilitant la surveillance à mesure que l'usage se développe.
+
+00:16:20.000 --> 00:16:21.860
+La plupart des déploiements d'IA démarrent à tout vitesse.
+
+00:16:22.100 --> 00:16:23.820
+Les licences sont attribuées, les projets pilotes lancés
+
+00:16:23.820 --> 00:16:25.080
+et les collaborateurs commencent leurs expériences.
+
+00:16:25.280 --> 00:16:26.820
+Les premières semaines sont enthousiasmantes.
+
+00:16:26.940 --> 00:16:28.940
+Copilote rédige des messages, compile des rapports
+
+00:16:28.940 --> 00:16:30.760
+et génère des résumés rapides.
+
+00:16:31.840 --> 00:16:34.420
+Le risque est que cet élan initial masque des vulnérabilités sous-jacentes.
+
+00:16:34.900 --> 00:16:35.960
+Sans feuilles de route structurées,
+
+00:16:36.180 --> 00:16:38.180
+les entreprises constatent souvent que les gains de productivité
+
+00:16:38.180 --> 00:16:40.780
+sont par la suite éclipsés par des problèmes de conformité imprévus,
+
+00:16:40.980 --> 00:16:42.360
+des enquêtes ou des projets de remédiation.
+
+00:16:42.980 --> 00:16:44.400
+Ce qui distingue les équipes qui gardent le cap
+
+00:16:44.400 --> 00:16:46.080
+n'est ni l'enthousiasme ni la compétence technique.
+
+00:16:46.740 --> 00:16:48.420
+C'est la discipline de suivre les étapes dans le bon ordre.
+
+00:16:49.060 --> 00:16:51.260
+La première pierre angulaire est celle des étiquettes de confidentialité.
+
+00:16:51.760 --> 00:16:53.060
+Cela peut sembler être un travail de fond,
+
+00:16:53.320 --> 00:16:55.220
+mais si les fichiers ne sont pas classifiés de manière cohérente
+
+00:16:55.220 --> 00:16:56.500
+avant l'usage intensif de copilote,
+
+00:16:56.580 --> 00:16:57.760
+tout devient plus difficile par la suite.
+
+00:16:58.720 --> 00:17:00.320
+Les étiquettes déterminent quels ensembles de données
+
+00:17:00.320 --> 00:17:02.640
+nécessitent des protections et indiquent à Microsoft 365
+
+00:17:02.640 --> 00:17:03.460
+où appliquer les restrictions.
+
+00:17:04.140 --> 00:17:06.720
+Sauter cette étape contraint les équipes à une reclassification pénible
+
+00:17:06.720 --> 00:17:08.240
+une fois l'adoption généralisée.
+
+00:17:09.100 --> 00:17:10.600
+C'est la différence entre peindre une pièce
+
+00:17:10.600 --> 00:17:11.620
+avant d'y installer les meubles
+
+00:17:11.620 --> 00:17:13.900
+ou essayer de tout déplacer pendant qu'on applique une couche de peinture.
+
+00:17:14.740 --> 00:17:16.100
+Les étiquettes ne sont peut-être pas spectaculaires,
+
+00:17:16.200 --> 00:17:18.220
+mais elles constituent la base de la gouvernance dont copilote dépend.
+
+00:17:18.840 --> 00:17:20.920
+Une fois le marquage en place, l'audit est la deuxième étape.
+
+00:17:21.700 --> 00:17:22.860
+Les étiquettes définissent les règles,
+
+00:17:23.060 --> 00:17:24.880
+mais l'audit apporte la preuve qu'elles sont réellement appliquées.
+
+00:17:25.960 --> 00:17:27.800
+Dans Purview, les journaux d'audit offrent une visibilité
+
+00:17:27.800 --> 00:17:29.760
+sur la gestion des données dans Microsoft 365
+
+00:17:29.760 --> 00:17:32.420
+permettant aux responsables conformités et IT d'examiner l'activité
+
+00:17:32.420 --> 00:17:33.940
+plutôt que de s'appuyer sur des suppositions.
+
+00:17:35.100 --> 00:17:36.420
+Lorsque copilote puise dans le contenu,
+
+00:17:36.480 --> 00:17:37.980
+la visibilité sur ces modèles est essentielle.
+
+00:17:38.740 --> 00:17:40.080
+Les équipes avec lesquelles nous travaillons
+
+00:17:41.620 --> 00:17:42.900
+suffisantes des journaux d'audit changent
+
+00:17:42.900 --> 00:17:45.420
+leur capacité à répondre aux questions des régulateurs.
+
+00:17:46.620 --> 00:17:47.860
+Sans cette preuve, la garantie se limite
+
+00:17:47.860 --> 00:17:49.960
+au récit des utilisateurs sur ce qui s'est probablement passé.
+
+00:17:50.800 --> 00:17:52.720
+Cela ne suffit pas lorsqu'une responsabilité doit être établie.
+
+00:17:53.220 --> 00:17:54.640
+La troisième étape concerne les risques internes.
+
+00:17:54.980 --> 00:17:57.020
+Cette phase devient proactive, agissant sur les signaux
+
+00:17:57.020 --> 00:17:58.100
+dès l'apparition d'anomalies.
+
+00:17:59.560 --> 00:18:01.000
+Une fois les données à haute valeur marquées
+
+00:18:01.000 --> 00:18:02.380
+et l'accès confirmé par l'audit,
+
+00:18:02.500 --> 00:18:04.980
+les règles sur les risques internes aident à prévenir les problèmes en amont.
+
+00:18:05.840 --> 00:18:07.200
+Il ne s'agit pas de punir les employés,
+
+00:18:07.400 --> 00:18:09.160
+mais d'intercepter les comportements inattendus
+
+00:18:09.160 --> 00:18:11.600
+avant que des informations ne circulent là où elles ne devraient pas.
+
+00:18:12.560 --> 00:18:13.880
+Des requêtes utilisant des termes restreints,
+
+00:18:13.940 --> 00:18:15.520
+une activité de téléchargement énormément élevée
+
+00:18:15.520 --> 00:18:17.080
+ou des demandes hors des schémas habituels
+
+00:18:17.080 --> 00:18:18.200
+peuvent déclencher des vérifications.
+
+00:18:19.480 --> 00:18:21.480
+La gestion des risques internes est plus efficace à la fin
+
+00:18:21.480 --> 00:18:22.940
+car elle nécessite la structure de classification
+
+00:18:22.940 --> 00:18:24.140
+et de journalisation en amont.
+
+00:18:24.780 --> 00:18:26.280
+Sans cela, les signaux manquent de contexte.
+
+00:18:26.880 --> 00:18:28.260
+Pour illustrer l'importance de la séquence,
+
+00:18:28.400 --> 00:18:30.180
+pensons à deux entreprises déployant copilotes.
+
+00:18:30.980 --> 00:18:32.080
+L'une déploie les licences largement
+
+00:18:32.080 --> 00:18:33.520
+sans configurer Purview au préalable.
+
+00:18:34.660 --> 00:18:36.120
+Pendant quelques semaines, tout semble normal.
+
+00:18:36.580 --> 00:18:37.520
+Jusqu'à ce que quelqu'un remarque
+
+00:18:37.520 --> 00:18:39.640
+que des détails RH privés apparaissent dans un brouillon.
+
+00:18:39.640 --> 00:18:41.800
+L'entreprise est contrainte à une urgence tardive,
+
+00:18:41.900 --> 00:18:42.940
+reclassifiant des milliers de fichiers
+
+00:18:42.940 --> 00:18:44.860
+alors que le personnel dépend déjà de copilotes de copiables.
+
+00:18:45.360 --> 00:18:47.380
+A l'inverse, une autre organisation privilégie le marquage
+
+00:18:47.380 --> 00:18:48.920
+et active discrètement l'audit dès le début.
+
+00:18:50.120 --> 00:18:51.680
+Lorsque copilotes se déploient dans les services,
+
+00:18:51.780 --> 00:18:53.280
+les données sensibles conservent leurs règles
+
+00:18:53.280 --> 00:18:54.880
+et les journaux sont prêts en cas de besoin.
+
+00:18:55.960 --> 00:18:57.640
+Plus tard, les alertes de risque interne mettent en lumière
+
+00:18:57.640 --> 00:18:59.300
+quelques anomalies avant qu'elles ne deviennent des failles.
+
+00:19:00.040 --> 00:19:01.800
+La seconde organisation n'est pas à l'abri des surprises
+
+00:19:01.800 --> 00:19:02.980
+mais elle est mieux armée pour évoluer
+
+00:19:02.980 --> 00:19:04.460
+avec moins de chocs de gouvernance.
+
+00:19:04.460 --> 00:19:06.340
+Ce contraste confirme la conclusion
+
+00:19:06.340 --> 00:19:07.760
+lors de la feuille de route et primordiale.
+
+00:19:08.400 --> 00:19:10.180
+Sauter les fondations garantit quasiment la nécessité
+
+00:19:10.180 --> 00:19:10.740
+de refaire le travail.
+
+00:19:11.500 --> 00:19:12.780
+Commencer par les étiquettes, puis l'audit
+
+00:19:12.780 --> 00:19:13.680
+et enfin les risques internes
+
+00:19:13.680 --> 00:19:15.320
+permet de bâtir un cadre qui soutient l'adoption
+
+00:19:15.320 --> 00:19:15.960
+au lieu de l'entraver.
+
+00:19:17.000 --> 00:19:18.780
+Bien utilisé, Purview ne freine pas la progression.
+
+00:19:19.460 --> 00:19:21.100
+Il permet aux dirigeants de déployer copilotes
+
+00:19:21.100 --> 00:19:21.780
+en toute sécurité
+
+00:19:21.780 --> 00:19:23.920
+et de répondre aux questions complexes de la conformité
+
+00:19:23.920 --> 00:19:26.120
+avec des preuves plutôt que des suppositions.
+
+00:19:26.880 --> 00:19:28.260
+Voici une liste de contrôle rapide pour la première salle.
+
+00:19:28.920 --> 00:19:30.020
+Cartographiez vos domaines sensibles,
+
+00:19:30.420 --> 00:19:31.720
+lancez un projet pilote d'étiquetage,
+
+00:19:31.840 --> 00:19:33.440
+activez l'audit avec une rétention suffisante
+
+00:19:33.440 --> 00:19:36.260
+et configurez la gestion des risques internes.
+
+00:19:36.980 --> 00:19:38.860
+Cela crée une dynamique sans surcharger vos équipes
+
+00:19:38.860 --> 00:19:40.460
+et garantit que la supervision progresse
+
+00:19:40.460 --> 00:19:41.820
+au même rythme que la productivité.
+
+00:19:42.320 --> 00:19:43.880
+Le passage de la visibilité à la supervision
+
+00:19:43.880 --> 00:19:44.660
+n'est pas théorique.
+
+00:19:45.540 --> 00:19:46.760
+Il s'agit d'intégrer la gouvernance
+
+00:19:46.760 --> 00:19:47.780
+dans le déploiement lui-même.
+
+00:19:48.540 --> 00:19:49.920
+Les dirigeants qui adoptent cette approche
+
+00:19:49.920 --> 00:19:51.420
+renforcent la confiance des équipes IT,
+
+00:19:51.640 --> 00:19:53.320
+de la conformité et des cadres dirigeants.
+
+00:19:54.680 --> 00:19:55.620
+Avec une approche ordonnée,
+
+00:19:55.740 --> 00:19:57.540
+la supervision fait partie du quotidien de copilotes
+
+00:19:57.540 --> 00:19:59.620
+plutôt qu'une correction ajoutée après coup.
+
+00:20:00.780 --> 00:20:02.180
+Passons maintenant à une vision plus globale.
+
+00:20:02.820 --> 00:20:03.900
+Que doivent répondre les dirigeants
+
+00:20:03.900 --> 00:20:05.560
+quand le conseil d'administration demande
+
+00:20:05.560 --> 00:20:07.680
+quel est le risque réel d'activer copilote ?
+
+00:20:07.680 --> 00:20:08.100
+Copilote.
+
+00:20:08.540 --> 00:20:10.020
+Le risque ce n'est pas copilote lui-même,
+
+00:20:10.500 --> 00:20:12.000
+c'est de le déployer sans supervision.
+
+00:20:12.720 --> 00:20:13.960
+La séquence pour l'éviter est simple.
+
+00:20:14.640 --> 00:20:16.020
+Commencez par les étiquettes de sensibilité,
+
+00:20:16.340 --> 00:20:17.540
+ajoutez l'audit pour la visibilité
+
+00:20:17.540 --> 00:20:19.140
+et terminez par les risques internes
+
+00:20:19.140 --> 00:20:19.900
+pour détecter les anomalies.
+
+00:20:20.640 --> 00:20:22.440
+Sauter ces étapes vous oblige à colmater les brèches
+
+00:20:22.440 --> 00:20:23.420
+une fois l'adoption lancée.
+
+00:20:24.320 --> 00:20:25.440
+Si vous ne pouvez faire qu'une chose
+
+00:20:25.440 --> 00:20:26.660
+avant un déploiement massif,
+
+00:20:26.660 --> 00:20:28.180
+étiquetez vos contenus critiques
+
+00:20:28.180 --> 00:20:30.100
+et vérifiez vos paramètres d'audit
+
+00:20:30.100 --> 00:20:31.440
+et de rétention.
+
+00:20:33.000 --> 00:20:34.700
+Cette étape unique vous offre une base de contrôle
+
+00:20:34.700 --> 00:20:36.660
+et maintient l'intégrité de votre gouvernance des données.
+
+00:20:37.520 --> 00:20:38.820
+Laissez un commentaire sur la plus grande question
+
+00:20:38.820 --> 00:20:40.300
+de gouvernance copilote à laquelle vous êtes confronté.
+
+00:20:40.700 --> 00:20:42.160
+Abonnez-vous pour plus de conseils pratiques
+
+00:20:42.160 --> 00:20:43.720
+et partagez cette vidéo avec vos collègues
+
+00:20:43.720 --> 00:20:44.780
+en charge de la conformité.
+
+00:20:45.560 --> 00:20:47.360
+Ainsi, vous ne vous contentez pas d'accélérer avec l'IA
+
+00:20:47.360 --> 00:20:48.720
+vous garder le contrôle de vos données
+
+00:20:48.720 --> 00:20:49.860
+et de votre conformité.
+
+00:20:50.760 --> 00:20:51.420
+Note de production,
+
+00:20:51.700 --> 00:20:53.380
+vérifiez les capacités spécifiques de Purview
+
+00:20:53.380 --> 00:20:54.940
+dans la documentation officielle du produit
+
+00:20:54.940 --> 00:20:57.000
+avant l'enregistrement pour garantir l'exactitude.

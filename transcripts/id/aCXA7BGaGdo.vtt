@@ -1,0 +1,1099 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:01.200
+Selamat datang di episode lainnya.
+
+00:00:01.680 --> 00:00:05.780
+Topik hari ini mungkin pernah Anda dengar dalam rapat atau artikel teknologi, yaitu Microsoft Fabric.
+
+00:00:06.360 --> 00:00:09.200
+Namun jika Anda seperti kebanyakan orang, Anda belum sepenuhnya yakin apa sebenarnya?
+
+00:00:09.660 --> 00:00:11.160
+Apakah ini hanya produk Microsoft lainnya?
+
+00:00:11.280 --> 00:00:13.940
+Perubahan merek dari sesuatu yang lama atau sesuatu yang benar-benar berbeda?
+
+00:00:14.340 --> 00:00:15.420
+Ijinkan saya berikan jawaban singkat.
+
+00:00:15.840 --> 00:00:17.260
+Microsoft Fabric bukan sekadar produk biasa.
+
+00:00:17.880 --> 00:00:21.660
+Ini adalah platform data lengkap, satu tempat di mana Anda bisa melakukan semua pekerjaan data,
+
+00:00:22.060 --> 00:00:24.820
+penyimpanan, transformasi, analitik, dan pelaporan semuanya di satu tempat.
+
+00:00:25.420 --> 00:00:28.940
+Di akhir episode ini, Anda akan memahami apa itu Fabric, mengapa Microsoft membangunnya,
+
+00:00:28.940 --> 00:00:31.020
+dan bagaimana bagian-bagian utamanya saling melengkapi.
+
+00:00:31.280 --> 00:00:32.600
+Ambil kopi Anda dan mari kita mulai.
+
+00:00:33.480 --> 00:00:35.660
+Cara lama, mengapa data menjadi terpecah?
+
+00:00:40.640 --> 00:00:44.760
+20 tahun yang lalu jika Anda menjalankan perusahaan, Anda harus membeli server untuk menyimpan data,
+
+00:00:44.940 --> 00:00:48.340
+alat terpisah untuk membuat laporan, dan produk lain untuk analisis waktu nyata.
+
+00:00:49.060 --> 00:00:52.420
+Tanpa disadari, Anda memiliki 5 sistem berbeda, masing-masing dengan login sendiri,
+
+00:00:52.560 --> 00:00:54.860
+cara kerja sendiri, cara kerja sendiri, dan tim yang mengelola.
+
+00:00:55.080 --> 00:00:58.700
+Untuk waktu yang lama data beradam silo, data penjualan ada di satu sistem,
+
+00:00:59.080 --> 00:01:02.260
+data pelanggan di sistem lain, dan data keuangan di tempat yang benar-benar berbeda.
+
+00:01:02.260 --> 00:01:05.240
+Jika Anda ingin mengajukan pertanyaan yang melintasi sistem tersebut,
+
+00:01:05.360 --> 00:01:08.480
+seperti pelanggan mana yang membeli produk paling menguntungkan, Anda harus memindahkan data.
+
+00:01:09.260 --> 00:01:13.060
+Ekspor dari satu sistem, ubah, muat ke sistem lain, lalu lakukan lagi saat data berubah.
+
+00:01:13.640 --> 00:01:17.300
+Lebih banyak waktu dihabiskan untuk memindahkan data antar sistem daripada benar-benar menganalisisnya.
+
+00:01:17.460 --> 00:01:19.720
+Integrasi data menjadi pekerjaan penuh waktu bagi seluruh tim.
+
+00:01:20.240 --> 00:01:24.000
+Bagian terburuknya adalah setiap kali Anda memindahkan data, Anda membuat salinan lain,
+
+00:01:24.140 --> 00:01:27.820
+versi kebenaran lain, dan tak lama kemudian tidak ada yang tahu salinan mana yang benar.
+
+00:01:28.660 --> 00:01:31.420
+Microsoft melihat fragmentasi ini dan mengajukan pertanyaan sederhana.
+
+00:01:31.420 --> 00:01:33.360
+Bagaimana jika semua layanan ini bekerja bersama?
+
+00:01:33.620 --> 00:01:37.240
+Bagaimana jika alih menyatukan produk yang terpisah, Anda memiliki satu platform yang melakukan segalanya?
+
+00:01:37.540 --> 00:01:39.540
+Pertanyaan itulah yang mengarah pada Microsoft Fabric.
+
+00:01:40.280 --> 00:01:41.940
+Apa sebenarnya Microsoft Fabric itu?
+
+00:01:42.640 --> 00:01:43.320
+Jadi apa itu Fabric?
+
+00:01:43.720 --> 00:01:45.020
+Berikut adalah definisi paling sederhana.
+
+00:01:45.320 --> 00:01:48.120
+Microsoft Fabric adalah platform data dan analitik terpadu.
+
+00:01:48.560 --> 00:01:49.680
+Satu tempat untuk semua pekerjaan data.
+
+00:01:50.060 --> 00:01:51.620
+Bayangkan ini seperti gedung kantor modern.
+
+00:01:52.000 --> 00:01:55.480
+Setiap alat seperti Power BI atau Azure Synapse adalah ruangan di dalam gedung tersebut.
+
+00:01:55.480 --> 00:01:59.260
+Mereka memiliki tujuan, perabotan, dan alatnya sendiri, tetapi semuanya merupakan bagian dari struktur yang sama.
+
+00:01:59.260 --> 00:02:02.240
+Anda tidak perlu berjalan keluar untuk berpindah dari satu ruangan ke ruangan sembilan sektor.
+
+00:02:02.640 --> 00:02:03.380
+Telah dilakukan Fabric.
+
+00:02:03.700 --> 00:02:09.500
+Platform ini menyatukan rekayasa data, integrasi data, pergudangan data, analitik waktu nyataan, kecerdasan bisnis dalam satu platform.
+
+00:02:09.880 --> 00:02:13.160
+Semuanya berjalan di satu platform saat, yang berarti tidak ada infrastruktur terpisah untuk dikola,
+
+00:02:13.380 --> 00:02:16.860
+tidak ada serut untuk disediakan atau jaringan untuk disediakan atau jaringan untuk dikonfigurasi.
+
+00:02:16.960 --> 00:02:18.000
+Microsoft menangani semua itu Anda.
+
+00:02:18.400 --> 00:02:23.260
+Sejak diluncurkan pada tahun 2023, Fabric telah menjadi produk data dengan pertumbuhan tercepat dalam sejarah mikrofon.
+
+00:02:23.260 --> 00:02:27.340
+Saat ini, lebih dari 25.000 pelanggan menggunakannya, termasuk 80% dari Fortune 500.
+
+00:02:27.760 --> 00:02:29.140
+Itu adalah tingkat adopsinya yang sangat singkat.
+
+00:02:29.720 --> 00:02:34.060
+Perbedaan utamanya adalah, di masa lalu Anda membeli produk terpisah dan mencoba membuat semuanya saling terhubung.
+
+00:02:34.640 --> 00:02:37.160
+Dengan Fabric, Anda tidak perlu lagi menyatukan berbagai layanan yang berbeda.
+
+00:02:37.480 --> 00:02:40.680
+Ini adalah satu pengalaman, satu login, satu cara kerja, dan itu mengubah segalanya.
+
+00:02:41.640 --> 00:02:42.660
+One Lake Sang Fondasi
+
+00:02:42.660 --> 00:02:45.580
+Sekarang, mari kita bicara tentang fondasi yang membuat semua ini berfungsi.
+
+00:02:46.060 --> 00:02:48.280
+Inti dari Fabric adalah sesuatu yang disebut One Lake.
+
+00:02:48.840 --> 00:02:51.620
+Cara termudah untuk membayangkan One Lake adalah seperti OneDrive untuk data Anda.
+
+00:02:51.620 --> 00:02:55.560
+Anda tahu bagaimana OneDrive memberikan satu tempat untuk menyimpan semua file pribadi Anda,
+
+00:02:55.720 --> 00:02:58.000
+dan setiap aplikasi di komputer Anda dapat mengakses file tersebut.
+
+00:02:58.160 --> 00:03:00.960
+One Lake melakukan hal yang sama, tetapi untuk data organisasi Anda.
+
+00:03:01.360 --> 00:03:02.240
+Inilah yang membayang sangat ceng.
+
+00:03:02.740 --> 00:03:06.720
+Setiap beban kerja Fabric, baik itu Lighthouse, Warehouse, atau pekerja analitik waktu nyata,
+
+00:03:06.880 --> 00:03:08.620
+secara otomatis menyimpan datanya di One Lake,
+
+00:03:09.000 --> 00:03:11.700
+Anda tidak perlu menyalahkan apapun secara manual atau mengkonfigurasi koneksi.
+
+00:03:12.120 --> 00:03:13.060
+Sebenarnya terjadi secara otomatis.
+
+00:03:13.280 --> 00:03:14.880
+Dan hanya ada satu One Lake perpenyewa,
+
+00:03:15.260 --> 00:03:17.740
+satu sumber kebenaran tunggal untuk seluruh organisasi Anda.
+
+00:03:18.040 --> 00:03:20.560
+Sekarang Anda mungkin berpikir bagaimana jika saya ingin pindah platform nanti.
+
+00:03:20.560 --> 00:03:21.600
+Apakah saya terkunci?
+
+00:03:22.000 --> 00:03:22.760
+Jawabannya adalah tidak.
+
+00:03:23.260 --> 00:03:25.980
+One Lake menyimpan data dalam format terbuka seperti Delta Parkway,
+
+00:03:26.340 --> 00:03:29.000
+format standar industri yang digunakan oleh Databricks dan Apache Spark.
+
+00:03:29.440 --> 00:03:30.700
+Anda tidak pernah terkunci di Microsoft.
+
+00:03:31.280 --> 00:03:33.100
+Jika Anda ingin memindahkan data tempat lain, Anda bisa melakukan.
+
+00:03:33.500 --> 00:03:34.000
+Itu data Anda.
+
+00:03:35.020 --> 00:03:36.660
+Namun, di sini One Lake menjadi sangat menarik.
+
+00:03:36.920 --> 00:03:37.540
+Pintasan shortcut.
+
+00:03:37.880 --> 00:03:40.380
+Pintasan adalah penunjuk virtual ke data yang tersimpan di tempat lain.
+
+00:03:40.740 --> 00:03:43.760
+Anda dapat membuat pintasan ke data yang disimpan di AWS S3, Google Cloud,
+
+00:03:43.880 --> 00:03:44.840
+atau bahkan penyimpanan lokal,
+
+00:03:44.840 --> 00:03:47.460
+dan data tersebut akan muncul di One Lake seolah-olah tersimpan di sana.
+
+00:03:48.180 --> 00:03:49.920
+Tidak perlu pemindahan data, tidak ada duplikasi.
+
+00:03:50.560 --> 00:03:52.540
+Anda cukup menunjuk ke sana dan data itu muncul.
+
+00:03:53.400 --> 00:03:55.300
+One Lake dibangun di atas Azure Data Lake Storage,
+
+00:03:55.440 --> 00:03:57.020
+penyimpanan kelas-kelas perusahaan dari Microsoft,
+
+00:03:57.180 --> 00:03:59.100
+tetapi Anda tidak perlu mengelola infrastrukturnya
+
+00:03:59.100 --> 00:04:00.760
+karena semuanya ditangani sebagai layanan SaaS.
+
+00:04:01.180 --> 00:04:03.400
+Anda tidak perlu menyediakan server atau mengonfigurasi jaringan,
+
+00:04:03.480 --> 00:04:04.100
+Anda tinggal menggunakan.
+
+00:04:04.520 --> 00:04:05.320
+Apa artinya ini bagi Anda?
+
+00:04:05.760 --> 00:04:08.040
+Artinya, Anda bisa memiliki data dari berbagai sumber,
+
+00:04:08.160 --> 00:04:10.840
+penyimpanan cloud, basis data lokal, platform pihak ketiga,
+
+00:04:11.020 --> 00:04:12.980
+semua muncul di satu tempat tanpa duplikasi.
+
+00:04:13.480 --> 00:04:14.660
+Dan apa kekuatan sebenarnya?
+
+00:04:15.060 --> 00:04:18.480
+Data apapun yang ditulis ke One Lake dapat langsung digunakan oleh beban kerja fabrik apapun.
+
+00:04:18.480 --> 00:04:21.380
+Anda melihatnya sekali dan setiap alat di fabrik dapat melihatnya.
+
+00:04:21.600 --> 00:04:22.520
+Itulah kajaiban One Lake.
+
+00:04:23.480 --> 00:04:25.060
+Lake House, pusat rekayasa data.
+
+00:04:25.760 --> 00:04:28.000
+Data Anda sudah ada di One Lake, Anda perlu mengolahnya.
+
+00:04:28.380 --> 00:04:29.380
+Disinilah Lake House berperang.
+
+00:04:29.700 --> 00:04:30.900
+Berikut adalah definisi paling sederhana.
+
+00:04:31.220 --> 00:04:34.240
+Lake House adalah penyimpanan data yang menggabungkan fleksibilitas data lake
+
+00:04:34.240 --> 00:04:35.480
+dengan struktur basis data.
+
+00:04:36.340 --> 00:04:38.780
+Di data lake tradisional, Anda bisa menyimpan apa saja,
+
+00:04:38.980 --> 00:04:41.640
+file CSV mentah, dokumen JSON, gambar, file video,
+
+00:04:42.040 --> 00:04:43.760
+namun berantakan tanpa struktur atau skema,
+
+00:04:43.760 --> 00:04:44.980
+sehingga sulit di-query.
+
+00:04:45.620 --> 00:04:48.220
+Di basis data tradisional, semuanya terstruktur dan dapat di-query,
+
+00:04:48.340 --> 00:04:50.300
+tetapi Anda hanya bisa menyimpan jenis data tertentu.
+
+00:04:50.560 --> 00:04:51.420
+Lake House memberi Anda kedua.
+
+00:04:51.760 --> 00:04:54.060
+Anda dapat menyimpan file mentah seperti CSV, JSON,
+
+00:04:54.380 --> 00:04:55.580
+atau bahkan gambar di Lake House.
+
+00:04:56.280 --> 00:04:59.320
+Dan Anda juga dapat menyimpan tabel terstruktur yang dapat Anda query dengan SQ.
+
+00:04:59.700 --> 00:05:00.780
+Keduanya berada di tempat yang sama.
+
+00:05:00.960 --> 00:05:02.760
+Tabel tersebut menggunakan format Delta Parkway,
+
+00:05:03.040 --> 00:05:05.440
+format terbuka dan cepat yang sama seperti yang digunakan oleh Databricks
+
+00:05:05.440 --> 00:05:08.000
+dan platform besar lainnya dirancang untuk menangani data dalam jumlah besar.
+
+00:05:08.340 --> 00:05:09.680
+Lake House mendukung berbagai alat.
+
+00:05:10.300 --> 00:05:12.480
+Anda dapat menggunakan Spark untuk pemrosesan data skala besar.
+
+00:05:12.480 --> 00:05:14.420
+Anda dapat menggunakan Python untuk pembelajaran mesin.
+
+00:05:14.720 --> 00:05:16.200
+Anda dapat menggunakan SQL untuk query, sederhana.
+
+00:05:16.620 --> 00:05:18.780
+Apapun alat yang Anda sukai, Lake House dapat menangaminya.
+
+00:05:19.340 --> 00:05:22.160
+Anggap Lake House sebagai ruang kerja Anda untuk membangun saluran data-data pepint.
+
+00:05:22.700 --> 00:05:26.120
+Anda memasukkan data mentah, mengubahnya, membersihkannya, dan menyiapkannya untuk analisis.
+
+00:05:26.700 --> 00:05:28.180
+Anda dapat menjalankan moda pemrosesan di atasnya.
+
+00:05:28.760 --> 00:05:30.640
+Anda dapat membuat sedata pelatihan, semua di satu tempat.
+
+00:05:31.020 --> 00:05:33.280
+Bagi insinyur data yang lebih menyukai lingkungan ramah kode,
+
+00:05:33.460 --> 00:05:34.500
+Lake House mendukung notebook.
+
+00:05:35.000 --> 00:05:36.940
+Ini adalah dokumen interaktif tempat Anda menulis kode,
+
+00:05:37.060 --> 00:05:38.960
+melihat hasil, dan mendokumentasikan pekerjaan Anda
+
+00:05:38.960 --> 00:05:40.340
+seperti buku catatan laboratorium untuk data.
+
+00:05:40.600 --> 00:05:42.200
+Anda dapat menulis kode Spark di satu sel,
+
+00:05:42.320 --> 00:05:43.440
+melihat hasilnya di sel berikutnya,
+
+00:05:43.540 --> 00:05:45.100
+dan menjelaskan apa yang Anda lakukan di sel setel.
+
+00:05:45.520 --> 00:05:48.560
+Lake House adalah titik masuk bagi sebagian besar insinyur data yang bekerja di fabrik.
+
+00:05:49.280 --> 00:05:50.820
+Di sinilah pekerjaan berat dilakukan.
+
+00:05:50.980 --> 00:05:52.520
+Dan karena semuanya disimpan dalam satu leg,
+
+00:05:52.640 --> 00:05:54.920
+data apapun yang Anda masukkan ke Lake House langsung tersedia
+
+00:05:54.920 --> 00:05:56.860
+untuk setiap beban kerja fabrik lainnya di warehouse.
+
+00:05:57.300 --> 00:05:58.760
+Mesin analitik, SQL.
+
+00:05:59.820 --> 00:06:01.860
+Sekarang, jika Lake House adalah pusat rekayasa data,
+
+00:06:01.860 --> 00:06:03.740
+anggap warehouse sebagai mesin analitik SQL
+
+00:06:03.740 --> 00:06:05.280
+yang dibangun untuk jenis pengguna yang berbeda.
+
+00:06:06.040 --> 00:06:09.220
+Warehouse di fabrik adalah basis data analitik SQL yang dikelola sepenuhnya.
+
+00:06:09.800 --> 00:06:12.040
+Jika Anda seorang administrator basis data atau pengembang SQL,
+
+00:06:12.120 --> 00:06:13.240
+di sinilah Anda akan merasa nyaman.
+
+00:06:14.020 --> 00:06:15.360
+Anda dapat menulis kualitas SQL,
+
+00:06:15.540 --> 00:06:17.860
+membuat tampilan, prosedur tersimpan, dan kebijakan keamanan.
+
+00:06:18.680 --> 00:06:20.560
+Tampilannya terasa seperti gudang data tradisional,
+
+00:06:20.740 --> 00:06:21.760
+namun inilah yang membuatnya berbeda.
+
+00:06:22.100 --> 00:06:23.660
+Berbeda dengan gudang data tradisional,
+
+00:06:23.800 --> 00:06:25.660
+warehouse fabrik menyimpan data langsung di satu leg.
+
+00:06:26.100 --> 00:06:27.420
+Tidak ada lapisan penyimpanan terpisah,
+
+00:06:27.560 --> 00:06:29.020
+tidak ada infrastruktur tambahan untuk dikelola.
+
+00:06:29.020 --> 00:06:30.520
+Data berada di satu leg,
+
+00:06:30.940 --> 00:06:33.240
+dan warehouse hanyalah antar muka yang Anda gunakan untuk mengquery.
+
+00:06:33.720 --> 00:06:36.400
+Hal ini penting karena warehouse dan lake house berbagi data yang sama,
+
+00:06:36.560 --> 00:06:38.160
+jadi Anda tidak menduplikasi apapun.
+
+00:06:38.740 --> 00:06:40.740
+Jika seorang data engineer memuat data ke lake house,
+
+00:06:41.160 --> 00:06:43.380
+developer SQL dapat segera mengquery-nya dari warehouse,
+
+00:06:43.800 --> 00:06:44.960
+tanpa menyalin, tanpa memindahkan.
+
+00:06:45.240 --> 00:06:47.540
+Ini adalah data yang sama yang diakses melalui alat yang berbeda.
+
+00:06:48.100 --> 00:06:50.240
+Warehouse ini dibangun untuk analitik berskala besar.
+
+00:06:51.000 --> 00:06:51.560
+Di balik layar,
+
+00:06:51.620 --> 00:06:53.180
+ia menggunakan pemrosesan parallel masif
+
+00:06:53.180 --> 00:06:54.640
+untuk menangani kumpulan data yang sangat besar.
+
+00:06:54.640 --> 00:06:57.100
+Dan Microsoft telah berinvestasi besar-besaran dalam hal perform.
+
+00:06:57.100 --> 00:06:58.600
+Dalam 6 bulan terakhir saja,
+
+00:06:58.900 --> 00:07:01.060
+performa telah meningkat sebesar 36%.
+
+00:07:01.060 --> 00:07:02.980
+Itu adalah peningkatan yang signifikan Anda waktu singkat.
+
+00:07:03.360 --> 00:07:04.760
+Jika Anda bermigrasi dari platform lain,
+
+00:07:04.940 --> 00:07:08.300
+Fabric memiliki asisten migrasi yang membantu Anda berpindah dari snowflake atau synapse.
+
+00:07:08.900 --> 00:07:11.400
+Ia menganalisis pengaturan Anda saat ini dan membantu Anda prosesnya.
+
+00:07:11.860 --> 00:07:13.680
+Tujuannya adalah membuat migrasi semudah mungkin.
+
+00:07:14.200 --> 00:07:15.940
+Jadi apa perbedaan antara lake house dan warehouse?
+
+00:07:16.400 --> 00:07:17.400
+Semuanya berumur apa dan terbuka.
+
+00:07:17.620 --> 00:07:19.240
+Warehouse mengutamakan SQL.
+
+00:07:19.780 --> 00:07:23.180
+Warehouse dibangun untuk orang-orang yang berpikir dalam bentuk tabel, query, dan prosedur tersebut.
+
+00:07:23.520 --> 00:07:24.820
+Lakehouse mengutamakan developer.
+
+00:07:24.820 --> 00:07:28.000
+Lakehouse dibangun untuk mereka yang ingin menggunakan Spark, Python, dan Node.
+
+00:07:28.460 --> 00:07:30.620
+Namun di dasarnya, keduanya menyimpan data di satu lake yang sama.
+
+00:07:30.880 --> 00:07:32.700
+Keduanya adalah dua cara untuk bekerja dengan data yang sama.
+
+00:07:33.340 --> 00:07:35.640
+Mengasukkan data, data factory, mirroring, dan shortcut.
+
+00:07:36.360 --> 00:07:38.320
+Jadi Anda memiliki satu lake untuk penyimpanan,
+
+00:07:38.380 --> 00:07:40.580
+lakehouse untuk transformasi, dan warehouse untuk query.
+
+00:07:40.900 --> 00:07:42.240
+Namun bagaimana data sebenarnya masuk?
+
+00:07:42.760 --> 00:07:43.940
+Disitulah data factory berperan.
+
+00:07:44.220 --> 00:07:46.400
+Data factory adalah layanan integrasi data bawaan Fabric
+
+00:07:46.400 --> 00:07:48.280
+yang menyediakan lebih dari 200 konektor
+
+00:07:48.280 --> 00:07:50.280
+untuk menarik data dari basis data, penyimpanan cloud,
+
+00:07:50.380 --> 00:07:51.540
+aplikasi SaaS, dan banyak lagi.
+
+00:07:51.540 --> 00:07:55.120
+Ini adalah alat integrasi data yang paling banyak digunakan di dunia dan dengan rasa lengku.
+
+00:07:55.480 --> 00:07:57.660
+Di dalam data factory, Anda mendapatkan data Flows Gen 2
+
+00:07:57.660 --> 00:08:01.020
+yang memberi Anda cara tanpa kode untuk mentransformasi data menggunakan Power Query.
+
+00:08:01.180 --> 00:08:04.480
+Jika Anda pernah menggunakan Power Query di Excel atau Power BI, Anda pasti sudah paham caranya.
+
+00:08:04.860 --> 00:08:07.900
+Anda cukup klik melalui antar muka visual untuk membersihkan, membentuk ulang, dan menggabungkan.
+
+00:08:08.140 --> 00:08:11.620
+Tidak perlu coding, dan alat ini berskala enterprise yang mampu menangani data set masih.
+
+00:08:12.280 --> 00:08:15.620
+Lebih dari 22 miliar orkestrasi berjalan di data factory setiap bulan,
+
+00:08:15.940 --> 00:08:18.320
+yang berarti miliaran pergerakan data terjadi secara otomatis,
+
+00:08:18.320 --> 00:08:20.320
+menjadikannya bagian infrastruktur yang sangat penting.
+
+00:08:20.760 --> 00:08:23.680
+Namun, ada cara yang lebih sederhana untuk memasukkan data ke One Lake, itu mirroring.
+
+00:08:24.460 --> 00:08:27.800
+Mirroring menyalin data dari basis data eksternal seperti Azure SQL, Oracle,
+
+00:08:28.000 --> 00:08:31.380
+atau Google BigQuery ke One Lake secara hampir waktu nyata, dan inilah bagian terbaiknya.
+
+00:08:32.320 --> 00:08:34.740
+Layanan ini gratis sudah termasuk di dalam layanan tanpa biaya tambah.
+
+00:08:35.280 --> 00:08:37.980
+Anda cukup mengarahkannya ke basis data sumber Anda dan fabrik akan menangani.
+
+00:08:38.180 --> 00:08:40.620
+Lalu ada pintasan, shortcuts yang sempat kita singgung sebelumnya,
+
+00:08:40.620 --> 00:08:41.860
+namun layak mendapatkan perhatian Anda.
+
+00:08:42.120 --> 00:08:46.000
+Pintasan adalah penunjuk virtual ke data yang disimpan di tempat lain tanpa memerlukan pergerakan data.
+
+00:08:46.000 --> 00:08:50.800
+Anda membuat pintasan ke bakat AWS S3 dan pintasan tersebut muncul di One Lake seolah-olah tersimpan di sana,
+
+00:08:50.940 --> 00:08:52.560
+padahal data tetap berada di tempat asalnya.
+
+00:08:52.980 --> 00:08:53.780
+Anda hanya menunjuk ke sana.
+
+00:08:54.200 --> 00:08:56.200
+Dan sekarang pintasan bisa melakukan lebih dari sekali menuju.
+
+00:08:56.880 --> 00:09:00.140
+Transformasi pintasan memungkinkan Anda menerapkan transformasi bertenaga air secara otomatis.
+
+00:09:00.700 --> 00:09:03.120
+Anda dapat menjalankan analisis sentimen pada data teks,
+
+00:09:03.320 --> 00:09:08.580
+menerjemahkan konten, atau mendeteksi informasi identitas pribadi semuanya tanpa memindahkan data atau membangun pipeline.
+
+00:09:09.200 --> 00:09:10.920
+Transformasi terjadi saat Anda mengaksesnya.
+
+00:09:11.760 --> 00:09:13.180
+Tujuan dari semua alat ini sederhana.
+
+00:09:13.180 --> 00:09:16.460
+Membawa semua data Anda ke One Lake tanpa harus membangun pipeline yang kompleks.
+
+00:09:17.080 --> 00:09:19.440
+Baik Anda menggunakan data factory untuk ETL tradisional,
+
+00:09:19.680 --> 00:09:21.500
+mirroring untuk replikasi hampir waktu nyata,
+
+00:09:21.640 --> 00:09:23.900
+atau pintasan untuk akses virtual, hasilnya tetap sama.
+
+00:09:24.980 --> 00:09:27.760
+Data Anda berakhir di One Lake, siap untuk pembangun kerja Fabric apapun.
+
+00:09:29.120 --> 00:09:31.060
+Kecerdasan waktu nyata, basis data, dan AI.
+
+00:09:31.460 --> 00:09:33.980
+Sejauh ini kita telah berbicara tentang memindahkan data dan menyimpannya,
+
+00:09:34.100 --> 00:09:35.520
+tetapi bagaimana dengan data yang terus bergerak?
+
+00:09:35.840 --> 00:09:39.560
+Data streaming dari sensor IoT, klik situs web, telemetri dari perangkat.
+
+00:09:39.560 --> 00:09:41.400
+Disitulah peran kecerdasan waktu nyata.
+
+00:09:42.080 --> 00:09:45.080
+Fabric menangani data streaming melalui sesuatu yang disebut event house,
+
+00:09:45.720 --> 00:09:48.940
+yang menyimpan dan menguari data deret waktu bervolume tinggi menggunakan KQL,
+
+00:09:49.100 --> 00:09:49.920
+Gusto Query Language.
+
+00:09:50.820 --> 00:09:53.000
+Ini adalah mesin yang sama yang mendukung Azure Data Explorer,
+
+00:09:53.200 --> 00:09:55.880
+dibuat untuk kecepatan sehingga Anda dapat menyerap jutaan peristiwa per detik
+
+00:09:55.880 --> 00:09:56.980
+dan mengairinya dalam mili detik.
+
+00:09:57.580 --> 00:09:58.520
+Dia penting dan inilah alasan.
+
+00:09:59.200 --> 00:10:02.160
+46 persen pelanggan Fabric telah menggunakan kecerdasan waktu nyata.
+
+00:10:02.160 --> 00:10:03.260
+Itu hampir separuh.
+
+00:10:03.620 --> 00:10:04.640
+Kasus penggunaannya ada di mana-mana.
+
+00:10:05.380 --> 00:10:07.100
+Perusahaan logistik melacak truk pengiriman,
+
+00:10:07.400 --> 00:10:09.300
+berita memantau lalu lintas pengunjung di toko,
+
+00:10:09.580 --> 00:10:11.540
+produsen mengawasi data sensor dari peralatan Fabric,
+
+00:10:11.640 --> 00:10:13.060
+semuanya terjadi secara waktu nyata.
+
+00:10:14.160 --> 00:10:15.600
+Namun Fabric bukan hanya tantangan itu.
+
+00:10:16.020 --> 00:10:17.800
+Fabric juga menyertakan basis data operasional,
+
+00:10:17.920 --> 00:10:20.220
+seperti basis data SQL untuk data relasional dan Cosmos DB
+
+00:10:20.220 --> 00:10:21.240
+untuk pembeban kerjaan WSKL.
+
+00:10:21.460 --> 00:10:24.120
+Ini adalah basis data yang sama yang Anda gunakan untuk menjalankan aplikasian.
+
+00:10:24.580 --> 00:10:26.140
+Dan karena sudah terintegrasi ke dalam Fabric,
+
+00:10:26.240 --> 00:10:28.340
+mereka secara otomatis menyimpan datanya di One Lake,
+
+00:10:28.780 --> 00:10:30.360
+tanpa pipeline tambahan, tanpa penyalahan manual.
+
+00:10:30.360 --> 00:10:33.640
+Data transaksional dan data analitis Anda berada di tempat yang sama.
+
+00:10:34.320 --> 00:10:35.660
+Sekarang mari kita bicara tentang AI,
+
+00:10:35.800 --> 00:10:37.240
+karena disinilah Fabric menjadi sangat menarik.
+
+00:10:37.800 --> 00:10:39.760
+Integrasi AI berjalan mendalam di seluruh platform,
+
+00:10:40.160 --> 00:10:41.540
+dan Anda mendapatkan model siap pakai
+
+00:10:41.540 --> 00:10:43.520
+untuk analisis teks, terjemahan, dan analisis sentimen.
+
+00:10:43.900 --> 00:10:45.740
+Anda dapat menggunakannya langsung dalam aliran data Anda
+
+00:10:45.740 --> 00:10:46.800
+tanpa perlu menulis kode apapun.
+
+00:10:47.080 --> 00:10:47.880
+Cukup tunjuk data Anda,
+
+00:10:48.140 --> 00:10:49.260
+pilih modelnya dan itu akan berjalan.
+
+00:10:49.680 --> 00:10:50.440
+Lalu ada Copilot,
+
+00:10:50.940 --> 00:10:51.940
+yang disematkan di seluruh Fabric,
+
+00:10:52.340 --> 00:10:53.420
+yang membantu Anda menulis query,
+
+00:10:53.560 --> 00:10:55.060
+membuat laporan, dan membuat alur kerja.
+
+00:10:55.440 --> 00:10:56.880
+Anda cukup menjelaskan apa yang Anda inginkan
+
+00:10:56.880 --> 00:10:57.880
+dengan bahasa yang mudah dipahami,
+
+00:10:57.880 --> 00:10:59.000
+dan Copilot akan membuat kodenya.
+
+00:10:59.220 --> 00:11:01.020
+Rasanya seperti memiliki teknisi data junior
+
+00:11:01.020 --> 00:11:02.640
+di samping Anda siap membantu kapan saja.
+
+00:11:02.940 --> 00:11:03.680
+Visinya sederhana.
+
+00:11:04.260 --> 00:11:06.460
+AI bekerja pada data Anda tanpa memindahkannya kemanapun.
+
+00:11:06.900 --> 00:11:08.040
+Data Anda tetap berada di one leg,
+
+00:11:08.140 --> 00:11:09.320
+dan model AI mendatangi data tersebut.
+
+00:11:09.740 --> 00:11:11.080
+Tanpa penyalinan, tanpa ekspor,
+
+00:11:11.220 --> 00:11:12.260
+tanpa risiko keamanan,
+
+00:11:13.000 --> 00:11:14.680
+data depan meninggalkan lingkungan Anda yang terkelola.
+
+00:11:16.640 --> 00:11:18.440
+Power BI Tata Kelola dan Nilai Bisnis
+
+00:11:18.440 --> 00:11:20.460
+Sekarang kita sampai pada bagian yang paling banyak
+
+00:11:20.460 --> 00:11:22.500
+dilihat orang pintu gerbang menuju wawasan, yaitu Power BI.
+
+00:11:23.100 --> 00:11:25.560
+Ini digunakan oleh 590 ribu organisasi
+
+00:11:25.560 --> 00:11:28.000
+dan 34 juta pengguna setiap bulan menjadikannya
+
+00:11:28.000 --> 00:11:30.800
+alat intelijen bisnis yang paling banyak digunakan di dunia.
+
+00:11:31.640 --> 00:11:33.800
+Dan dalam fabrik, ini menjadi sesuatu yang jauh lebih kuat.
+
+00:11:34.220 --> 00:11:34.600
+Ini kuncin.
+
+00:11:35.120 --> 00:11:37.460
+Di fabrik, Power BI terhubung langsung ke one leg
+
+00:11:37.460 --> 00:11:39.380
+menggunakan mode yang disebut direct leg.
+
+00:11:39.920 --> 00:11:41.720
+Ini berbeda dari mode import tradisional
+
+00:11:41.720 --> 00:11:44.020
+di mana Anda menyalin data ke penyimpanan internal Power BI.
+
+00:11:44.660 --> 00:11:47.400
+Sebaliknya, direct leg menguri data di tempatnya berada di one leg,
+
+00:11:47.620 --> 00:11:49.320
+tanpa perlu penyegaran, tanpa duplikasi,
+
+00:11:49.460 --> 00:11:51.080
+dan data selalu terkini serta sangat cepat.
+
+00:11:51.080 --> 00:11:54.980
+Di balik setiap laporan Power BI, terdapat model semantik otak dari
+
+00:11:54.980 --> 00:11:58.640
+laporan Anda tempat Anda mendefinisikan logika bisnis, ukuran, dan hubungan.
+
+00:11:59.440 --> 00:12:01.880
+Dan sekarang Anda dapat membuat model ini sepenuhnya di peramban web.
+
+00:12:02.560 --> 00:12:04.140
+Pemodelan web kini tersedia secara umum
+
+00:12:04.140 --> 00:12:06.440
+sehingga Anda dapat membuat model semantik membangun hubungan
+
+00:12:06.440 --> 00:12:08.420
+dan menulis ukuran DAG semuanya dari peramban,
+
+00:12:08.680 --> 00:12:09.180
+bahkan di Mac.
+
+00:12:09.520 --> 00:12:10.560
+Tidak diperlukan aplikasi desktop.
+
+00:12:10.820 --> 00:12:12.860
+Namun, semua kekuatan data ini tidak berarti apa-apa
+
+00:12:12.860 --> 00:12:15.040
+tanpa tata kelola yang terintegrasi sejak awal.
+
+00:12:15.580 --> 00:12:17.660
+Microsoft Review menyediakan label sensitivitas
+
+00:12:17.660 --> 00:12:18.900
+yang mengikuti data Anda kemana saja.
+
+00:12:19.500 --> 00:12:21.420
+Jika sebuah laporan berisi informasi sensitif,
+
+00:12:21.540 --> 00:12:23.640
+label tersebut tetap melekat padanya bahkan saat diekspor.
+
+00:12:24.260 --> 00:12:25.700
+Kebijakan pencegahan kehilangan data
+
+00:12:25.700 --> 00:12:27.460
+secara otomatis mendeteksi data sensitif
+
+00:12:27.460 --> 00:12:29.120
+dan memblokir berbagi yang tidak sah.
+
+00:12:33.720 --> 00:12:36.060
+Domain membantu Anda mengatur data berdasarkan area bisnis
+
+00:12:36.060 --> 00:12:37.500
+dengan aturan tata kelola yang terpisah
+
+00:12:37.500 --> 00:12:39.380
+sehingga data keuangan Anda dapat memiliki kontrol
+
+00:12:39.380 --> 00:12:40.820
+yang lebih ketat daripada data pemasaranan.
+
+00:12:41.220 --> 00:12:42.860
+Setiap domain dapat dikelola oleh timnya sendiri,
+
+00:12:43.160 --> 00:12:45.400
+menciptakan tata kelola yang berkembang bersama organisasi Anda.
+
+00:12:45.760 --> 00:12:47.160
+Sekarang mari kita bicara tentang hasilnya.
+
+00:12:47.320 --> 00:12:48.520
+Ini bukan sekadar teori.
+
+00:12:48.520 --> 00:12:50.960
+Eastman Chemical menggunakan fabrik untuk mengurangi
+
+00:12:50.960 --> 00:12:53.100
+waktu persiapan penjualan sebesar 83%.
+
+00:12:53.100 --> 00:12:55.000
+Apa yang dulunya memakan waktu 4 jam kini
+
+00:12:55.000 --> 00:12:55.880
+hanya butuh sekitar 4.
+
+00:12:56.280 --> 00:12:58.960
+Ethan Solutions memangkas upaya manual hingga 75%
+
+00:12:58.960 --> 00:13:01.160
+dengan proses yang tadinya butuh 10 hingga 15 langkah
+
+00:13:01.160 --> 00:13:02.100
+kini hanya 2 langkah.
+
+00:13:02.700 --> 00:13:05.300
+Dan Sonata Software menghemat 30 ribu jam rekonsiliasi manual
+
+00:13:05.300 --> 00:13:07.100
+setiap tahun mengalihkan upaya manusia tersebut
+
+00:13:07.100 --> 00:13:08.600
+ke pekerjaan bernilai lebih tinggi.
+
+00:13:09.240 --> 00:13:10.260
+Model biayanya sangat sederhana.
+
+00:13:10.940 --> 00:13:12.140
+Anda membayar untuk kapasitas,
+
+00:13:12.440 --> 00:13:14.000
+yaitu daya komputasi yang menjalankan beban kerjaan.
+
+00:13:14.000 --> 00:13:15.700
+Microsoft memiliki fitur perlataan smoothing
+
+00:13:15.700 --> 00:13:16.980
+dan perlindungan lonjakan search placement.
+
+00:13:16.980 --> 00:13:19.400
+Fitur perlataan menyebarkan biaya operasi latar belakang
+
+00:13:19.400 --> 00:13:20.240
+selama 24 jam
+
+00:13:20.240 --> 00:13:21.820
+agar Anda tidak terkenal lonjakan mendadak
+
+00:13:21.820 --> 00:13:24.100
+dan perlindungan lonjakan membatasi tugas latar belakang
+
+00:13:24.100 --> 00:13:25.520
+saat sibuk guna menjaga setelah belakang
+
+00:13:25.520 --> 00:13:27.260
+saat sibuk guna menjaga stabilitas performa interaktif.
+
+00:13:27.600 --> 00:13:28.720
+Anda membayar apa yang Anda gunakan
+
+00:13:28.720 --> 00:13:29.800
+sehingga tidak akan ada kejutan.
+
+00:13:31.080 --> 00:13:31.900
+Hari kita rangkum semuanya.
+
+00:13:32.440 --> 00:13:33.860
+Fabrik bukan sekadar produk Microsoft lain.
+
+00:13:34.460 --> 00:13:35.660
+Ini adalah pemikiran ulang menyeluruh
+
+00:13:35.660 --> 00:13:37.500
+tentang bagaimana platform data seharusnya pekerjaan.
+
+00:13:37.580 --> 00:13:38.760
+Satu platform, satu dano data,
+
+00:13:38.880 --> 00:13:40.800
+satu salinan data dan kemungkinannya tak terbatas.
+
+00:13:40.800 --> 00:13:42.420
+Dengan AI serta kopilot bawaan,
+
+00:13:42.420 --> 00:13:43.760
+platform ini dapat diakses oleh siapa saja.
+
+00:13:43.900 --> 00:13:45.120
+Bukan hanya bagi profesional data,
+
+00:13:45.240 --> 00:13:46.880
+tetapi juga analis bisnis, tim penjualan,
+
+00:13:46.940 --> 00:13:48.840
+manager operasional, siapapun yang butuhkan jawaban dari data.
+
+00:13:48.940 --> 00:13:49.580
+Ini tugas untuk Anda.
+
+00:13:49.960 --> 00:13:51.580
+Kunjungi fabric.microsoft.com
+
+00:13:51.580 --> 00:13:52.760
+mulai uji coba gratis
+
+00:13:52.760 --> 00:13:54.040
+dan buat ruang kerja pertama Anda.
+
+00:13:54.420 --> 00:13:54.820
+Coba saja.
+
+00:13:55.300 --> 00:13:56.700
+Anda akan melihat bagaimana semua bagaimana
+
+00:13:56.700 --> 00:13:58.180
+menyatu dengan cara yang tidak bisa digantikan
+
+00:13:58.180 --> 00:13:58.840
+oleh sekadar membelajar.
+
+00:13:59.380 --> 00:14:00.460
+Jika episode ini membantu Anda
+
+00:14:00.460 --> 00:14:01.240
+lebih memahami Fabrik,
+
+00:14:01.580 --> 00:14:03.160
+belangananlah di platform podcast favorit Anda
+
+00:14:03.160 --> 00:14:04.160
+dan bagikan kepada seseorang
+
+00:14:04.160 --> 00:14:05.160
+yang sedang mulai perjalanan datang.
+
+00:14:05.160 --> 00:14:06.400
+Mereka berterima kasih kepada Anda.
+
+00:14:06.660 --> 00:14:08.660
+Lain kali, kita akan membahas pintasan One Nick
+
+00:14:08.660 --> 00:14:09.680
+dalam bahasa yang sederhana.
+
+00:14:10.460 --> 00:14:12.160
+Cara kerjanya, mengapa itu penting,
+
+00:14:12.320 --> 00:14:14.180
+dan cara menggunakannya tanpa memindahkan data.
+
+00:14:14.820 --> 00:14:15.640
+Itu ada yang ingin menawarkan.
+
+00:14:16.120 --> 00:14:17.120
+Sampai jumpa terus dalam belajar.

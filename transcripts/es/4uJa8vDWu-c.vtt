@@ -1,0 +1,856 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:02.740
+La ciudad se quedó en silencio. Demasiado silencio.
+
+00:00:03.880 --> 00:00:08.040
+¿Conoces esa sensación que tienes cuando entras en una oficina un lunes por la mañana esperando el caos habitual,
+
+00:00:08.140 --> 00:00:10.720
+los teléfonos sonando sin parar, la bandeja de entrada gritándote?
+
+00:00:11.560 --> 00:00:13.360
+Pero en cambio solo hay silencio.
+
+00:00:14.800 --> 00:00:18.000
+Sí, es desconcertante. Parece la calma que precede a la tormenta.
+
+00:00:18.660 --> 00:00:21.880
+O en el mundo de la atención al cliente, normalmente significa que el servidor no funciona.
+
+00:00:22.280 --> 00:00:22.720
+Exactamente.
+
+00:00:23.600 --> 00:00:26.680
+Pero en la historia que veremos hoy, el silencio no fue un colapso.
+
+00:00:27.440 --> 00:00:28.060
+Fue una limpieza.
+
+00:00:28.060 --> 00:00:33.320
+Exploramos una narrativa que enmarca la automatización del servicio al cliente,
+
+00:00:33.780 --> 00:00:37.880
+con Dynamics 1365 como si fuera una historia, de detectives negra.
+
+00:00:38.860 --> 00:00:44.080
+Es cruda, dramática y sorprendentemente precisa sobre el desastre en el que se encuentran la mayoría de las empresas.
+
+00:00:44.900 --> 00:00:48.140
+Es una metáfora brillante, porque si piensas en una bandeja de entrada compartida hoy en día,
+
+00:00:48.460 --> 00:00:49.500
+es realmente una escena del crimen.
+
+00:00:49.960 --> 00:00:52.660
+Cartas muertas por todas partes, clientes gritando en el vacío,
+
+00:00:53.200 --> 00:00:55.840
+casos pudriéndose como, bueno, sigamos con la temática del género negro,
+
+00:00:55.840 --> 00:00:58.340
+como cuerpos olvidados en un callejón, como callejón.
+
+00:00:58.880 --> 00:01:02.600
+Es una imagen vívida, algo desagradable, pero toca la fibra sensible.
+
+00:01:03.580 --> 00:01:06.280
+Todos hemos visto ese buzón compartido donde los correos mueren.
+
+00:01:06.280 --> 00:01:11.520
+Cartas muertas es la frase, y el delito no es que la gente no se esfuerce, el delito desiste.
+
+00:01:11.980 --> 00:01:14.620
+Es el triaje manual. Es lo que yo llamo enrutamiento por vibración.
+
+00:01:15.120 --> 00:01:16.040
+¿Enrutamiento por vibración?
+
+00:01:16.340 --> 00:01:19.180
+Sí, ya sabes, me gustan las preguntas de facturación, así que responderé esta.
+
+00:01:19.640 --> 00:01:22.240
+O estoy cansado, así que dejaré ese complejo problema técnico para alguien más.
+
+00:01:23.720 --> 00:01:24.040
+Scout.
+
+00:01:24.500 --> 00:01:26.560
+Se basa en el ánimo humano, no en la lógica empresarial,
+
+00:01:26.780 --> 00:01:28.640
+y ahí entra en juego la noche en que murieron los correos.
+
+00:01:29.400 --> 00:01:33.140
+Presenta a tres agentes autónomos, el equipo de limpieza, que resuelven este crimen.
+
+00:01:33.780 --> 00:01:35.820
+Me encanta eso, el equipo de limpieza.
+
+00:01:36.420 --> 00:01:38.060
+Entonces recorramos esta escena del crimen.
+
+00:01:38.980 --> 00:01:41.620
+Tenemos una víctima, la experiencia del cliente.
+
+00:01:42.580 --> 00:01:44.860
+Tenemos un sospechoso, la bandeja de entrada heredada.
+
+00:01:45.640 --> 00:01:48.340
+¿Quién es el primer operador que interviene para limpiar las calles?
+
+00:01:48.980 --> 00:01:50.780
+El primer operador es el escáner de casos.
+
+00:01:51.540 --> 00:01:53.820
+Imagínate que el detective con la cámara la escena del crimen.
+
+00:01:53.820 --> 00:01:58.440
+En una configuración tradicional, llega un correo electrónico y un humano tiene que abrirlo,
+
+00:01:58.660 --> 00:02:01.020
+leerlo, averiguar si está enfadado o contento,
+
+00:02:01.080 --> 00:02:03.220
+buscar el número de pedido y quizá descargar un archivo adjunto.
+
+00:02:03.680 --> 00:02:08.180
+Y los humanos dudamos, logeamos, que no se capan cosas.
+
+00:02:08.720 --> 00:02:09.040
+Exactamente.
+
+00:02:09.380 --> 00:02:10.440
+El escáner de casos no parpadea.
+
+00:02:10.860 --> 00:02:12.980
+Usa la ingestión de correo a caso, pero con esteroides.
+
+00:02:13.440 --> 00:02:15.540
+No solo reenvía el correo electrónico, sino que lo descompone en par.
+
+00:02:15.900 --> 00:02:18.380
+Lee el asunto, el cuerpo del texto e incluso el pie de página.
+
+00:02:19.200 --> 00:02:20.000
+Pero aquí está el truco.
+
+00:02:20.780 --> 00:02:21.780
+También lee los archivos adjunto.
+
+00:02:21.780 --> 00:02:25.920
+Espera, entonces sí envía una captura de pantalla de un producto roto o un recibo.
+
+00:02:26.600 --> 00:02:29.780
+En PDF, el escáner analiza esa imagen antes de que la vea un humano.
+
+00:02:31.400 --> 00:02:33.440
+OCR, reconocimiento óptico de caracteres,
+
+00:02:33.520 --> 00:02:37.460
+ve una foto de una chaqueta con una cremallera rota a la etiqueta como mercancía dañada.
+
+00:02:38.080 --> 00:02:40.480
+Ve un contrato en PDF y extrae el número de póliza.
+
+00:02:41.320 --> 00:02:43.840
+Convierte el ruido no estructurado en pruebas estructuradas.
+
+00:02:44.920 --> 00:02:48.820
+Crea el expediente, rellena los campos, cliente, producto, prioridad y lo sella.
+
+00:02:49.960 --> 00:02:51.280
+Eso cambia las reglas del juego.
+
+00:02:51.780 --> 00:02:53.240
+Ya no empiezas de cero.
+
+00:02:54.000 --> 00:02:55.760
+Empiezas con un expediente que ya está creado.
+
+00:02:56.200 --> 00:02:56.520
+Exactamente.
+
+00:02:56.860 --> 00:02:58.960
+La carta muerta revive antes siquiera de tocar el suelo.
+
+00:02:59.620 --> 00:03:00.820
+Pero eso nos lleva al segundo problema.
+
+00:03:01.400 --> 00:03:02.480
+¿Y el expediente por quién lo resuelve?
+
+00:03:02.880 --> 00:03:05.560
+En la ciudad vieja solo gritas en la sala a quien se encarga de evoluciones.
+
+00:03:06.240 --> 00:03:06.680
+Correcto.
+
+00:03:07.040 --> 00:03:09.760
+O se queda en una cola general hasta que alguien lo selecciona.
+
+00:03:11.080 --> 00:03:13.460
+Lo que nos lleva al segundo operador, el controlador de tráfico,
+
+00:03:13.800 --> 00:03:15.440
+es el enrutamiento unificado a la cuadrícula.
+
+00:03:15.440 --> 00:03:18.040
+Esto suena menos a detective y más a control.
+
+00:03:18.320 --> 00:03:19.180
+¿De tráfico aéreo?
+
+00:03:19.820 --> 00:03:20.920
+Es una comparación justa.
+
+00:03:21.120 --> 00:03:23.260
+El controlador de tráfico se para sobre el mapa de la ciudad.
+
+00:03:23.780 --> 00:03:24.220
+No le importa eso.
+
+00:03:24.900 --> 00:03:26.080
+Le importan tres cosas.
+
+00:03:26.580 --> 00:03:27.800
+Reglas, habilidades y capacidad.
+
+00:03:28.900 --> 00:03:30.720
+Mira el caso que acaba de crear el escáner, digamos.
+
+00:03:31.100 --> 00:03:33.000
+Una devolución de alta prioridad para un cliente VP.
+
+00:03:33.220 --> 00:03:35.120
+Y mira la fuerza laboral.
+
+00:03:36.260 --> 00:03:38.440
+Entonces, ¿sabe que el agente Rivera es bueno en devoluciones,
+
+00:03:38.580 --> 00:03:40.680
+pero que el agente Smith es mejor en soporte técnico?
+
+00:03:41.600 --> 00:03:42.100
+Va más allá.
+
+00:03:42.800 --> 00:03:45.240
+Sabe que el agente Rivera es bueno en devoluciones, habla español,
+
+00:03:45.460 --> 00:03:47.800
+y actualmente tiene capacidad para un caso más.
+
+00:03:48.640 --> 00:03:50.420
+Sabe que el agente Smith es técnicamente capaz,
+
+00:03:50.560 --> 00:03:52.340
+pero ya está aplicando la línea roja en otras tres multas.
+
+00:03:53.060 --> 00:03:54.960
+Enruta el caso como un semáforo en una intersección.
+
+00:03:55.660 --> 00:03:56.620
+Sin almas que se pregunten.
+
+00:03:56.960 --> 00:03:59.320
+Eso elimina por completo el problema de la selección de casos.
+
+00:04:00.100 --> 00:04:00.580
+Por completo.
+
+00:04:00.960 --> 00:04:01.580
+Y evita el agotamiento.
+
+00:04:02.240 --> 00:04:03.280
+Si el carril está atascado,
+
+00:04:03.280 --> 00:04:05.560
+el controlador mantiene el semáforo en rojo o abre un nuevo carril.
+
+00:04:05.920 --> 00:04:06.420
+Es dinámico.
+
+00:04:07.020 --> 00:04:08.500
+Y lo mejor, guarda los recibes.
+
+00:04:08.500 --> 00:04:10.680
+Si un caso va a la persona equivocada,
+
+00:04:10.920 --> 00:04:12.500
+tienes un diagnóstico de la caja negra.
+
+00:04:13.580 --> 00:04:16.720
+Puedes ver exactamente qué regla lo envió allí y corregir la regla.
+
+00:04:17.640 --> 00:04:19.440
+No culpas a la persona, corriges la lógica.
+
+00:04:19.940 --> 00:04:21.300
+Ese es un gran cambio cultural.
+
+00:04:21.880 --> 00:04:23.560
+Dejas de preguntar por qué cogiste esto.
+
+00:04:24.100 --> 00:04:26.220
+Y empiezas a preguntar por qué el sistema envió esto.
+
+00:04:26.960 --> 00:04:28.320
+Elimina la política de la cola.
+
+00:04:28.900 --> 00:04:29.760
+Limpia las calles,
+
+00:04:29.760 --> 00:04:31.960
+pero todavía nos queda un enorme cuello de botella.
+
+00:04:32.760 --> 00:04:34.860
+Se cree el caso, se dirige a la persona adecuada,
+
+00:04:35.360 --> 00:04:37.360
+pero ahora esa persona tiene que escribir la respuesta.
+
+00:04:37.360 --> 00:04:39.620
+El temido cursor parpadeante.
+
+00:04:40.320 --> 00:04:41.800
+El gracias por su correo electrónico.
+
+00:04:42.200 --> 00:04:43.160
+Valoramos su negocio.
+
+00:04:44.060 --> 00:04:45.400
+Escribirlo 100 veces al día.
+
+00:04:46.320 --> 00:04:47.180
+Es agotador y lento.
+
+00:04:48.320 --> 00:04:50.060
+Para el tercer operador, el operador en la sombra.
+
+00:04:50.420 --> 00:04:51.200
+Eso es un ominoso.
+
+00:04:52.060 --> 00:04:53.520
+Realidad es el socio más útrico a pedir.
+
+00:04:54.100 --> 00:04:54.940
+Este es Copilot Studio.
+
+00:04:55.480 --> 00:04:56.980
+Se encuentra en la sala conectada al servicio.
+
+00:04:57.940 --> 00:05:00.060
+Mientras el controlador de tráfico dirige el caso,
+
+00:05:00.420 --> 00:05:01.880
+el operador en la sombra ya lo está leyendo.
+
+00:05:02.860 --> 00:05:04.860
+Escanea el archivo, verifica la base de conocimientos,
+
+00:05:05.060 --> 00:05:05.780
+y redacta la respuesta.
+
+00:05:05.780 --> 00:05:08.260
+Entonces, cuando la gente abre el caso,
+
+00:05:08.360 --> 00:05:09.280
+la respuesta ya está ahí.
+
+00:05:10.200 --> 00:05:11.440
+No solo una respuesta, la respuesta.
+
+00:05:12.100 --> 00:05:13.920
+No hace preguntas cuyas respuestas la empresa ya conoce.
+
+00:05:14.800 --> 00:05:16.220
+¿Sabe lo frustrante que es cuando una empresa
+
+00:05:16.220 --> 00:05:19.140
+le pide su número de pedido cuando estaba en la línea de asunto?
+
+00:05:19.800 --> 00:05:20.880
+O me vuelve loco.
+
+00:05:21.840 --> 00:05:23.040
+Parece que no están escuchando.
+
+00:05:23.920 --> 00:05:25.000
+El operador en la sombra escucha.
+
+00:05:25.540 --> 00:05:26.380
+Ve el número de pedido.
+
+00:05:27.100 --> 00:05:28.180
+Ve la política de devoluciones.
+
+00:05:29.000 --> 00:05:30.120
+Redacta una respuesta que dice,
+
+00:05:30.180 --> 00:05:32.480
+hola, veo que la cremallera de la chaqueta verde bosque está rota.
+
+00:05:32.480 --> 00:05:35.360
+He iniciado un reemplazo, aquí tiene la etiqueta de devolución.
+
+00:05:36.160 --> 00:05:38.120
+Cita el artículo específico de la base de conocimientos,
+
+00:05:38.240 --> 00:05:41.180
+por ejemplo, KB 2499, y se lo presenta al agente humano.
+
+00:05:41.520 --> 00:05:44.020
+Por lo tanto, el agente humano ya no es el escritor, sino el editor.
+
+00:05:45.060 --> 00:05:45.420
+Exactamente.
+
+00:05:45.900 --> 00:05:46.380
+Es el juez.
+
+00:05:46.860 --> 00:05:49.000
+La sombra habla, pero el humano aprieta el gatillo.
+
+00:05:50.180 --> 00:05:52.460
+El agente revisa el borrador, tal vez suaviza el tono,
+
+00:05:52.520 --> 00:05:54.540
+tal vez comprueba la lógica y presiona enviar.
+
+00:05:54.540 --> 00:05:58.300
+Lo que solía llevar 10 minutos de búsqueda de información y escritura
+
+00:05:58.300 --> 00:05:59.900
+lleva 30 segundos de revisión.
+
+00:06:00.940 --> 00:06:02.980
+Esa frase de la historia realmente se me quedó grabada.
+
+00:06:03.760 --> 00:06:04.760
+Más rápido que el arrepentimiento.
+
+00:06:05.440 --> 00:06:06.120
+Es poético, ¿verdad?
+
+00:06:06.680 --> 00:06:08.820
+Implica que la velocidad no es solo una cuestión de eficiencia,
+
+00:06:08.960 --> 00:06:10.020
+sino de salvación emocional.
+
+00:06:10.880 --> 00:06:12.880
+Si esperas 48 horas para responder una queja,
+
+00:06:13.020 --> 00:06:14.820
+el cliente ya ha pasado de estar molesto a estar furioso.
+
+00:06:15.680 --> 00:06:16.640
+Estás gestionando el arrepentimiento.
+
+00:06:16.960 --> 00:06:19.460
+Si respondes en 3 minutos con una solución, eres un héroe.
+
+00:06:19.940 --> 00:06:22.400
+Revisemos los expedientes de casos reales citados en la historia.
+
+00:06:22.400 --> 00:06:26.020
+Los desglosaron en venta minorista, seguros y RRH.
+
+00:06:26.460 --> 00:06:29.160
+Quiero profundizar en el de seguros porque parece de alto riesgo.
+
+00:06:30.920 --> 00:06:32.420
+Caso número 0228.
+
+00:06:34.100 --> 00:06:34.820
+El sótano inundado.
+
+00:06:35.280 --> 00:06:37.540
+Este es un ejemplo clásico de gravedad oculta a plena vista.
+
+00:06:38.260 --> 00:06:40.400
+En el sistema antiguo, un correo dice agua por doquier.
+
+00:06:41.260 --> 00:06:42.880
+Se queda en la piel a comprar mi contraseña,
+
+00:06:43.020 --> 00:06:45.280
+pero para el cliente, su casa se está destruyendo sola.
+
+00:06:46.380 --> 00:06:46.860
+Correcto.
+
+00:06:46.920 --> 00:06:48.600
+Y cada minuto que el agua permanece allí,
+
+00:06:48.680 --> 00:06:49.880
+la reclamación se vuelve más cara.
+
+00:06:49.880 --> 00:06:53.680
+El escáner de casos detecta agua estancada, paneles de yeso y sótano.
+
+00:06:54.300 --> 00:06:55.920
+Lo marca como daños materiales graves.
+
+00:06:56.880 --> 00:06:59.320
+El controlador de tráfico ve que esto no es un puesto para Junior.
+
+00:07:00.000 --> 00:07:02.660
+Lo deriva de inmediato a un perito experto en daños por inundaciones.
+
+00:07:03.620 --> 00:07:06.940
+Y el operador en la sombra redacta una respuesta que no dice que hemos recibido su solicitud.
+
+00:07:07.500 --> 00:07:09.880
+Dice, hemos registrado la reclamación 821-821.
+
+00:07:10.320 --> 00:07:11.500
+Envíe dos fotos a la altura de los ojos.
+
+00:07:11.980 --> 00:07:13.180
+Y tiene enlace al portal de carga.
+
+00:07:13.660 --> 00:07:14.540
+Es una acción inmediata.
+
+00:07:15.040 --> 00:07:15.920
+Detiene la hemorragia.
+
+00:07:15.920 --> 00:07:18.000
+Y piensa en la experiencia de la gente en ese caso.
+
+00:07:18.760 --> 00:07:21.540
+No tuvieron que clasificar 700 correos electrónicos para encontrar esa emergencia.
+
+00:07:22.220 --> 00:07:23.720
+El sistema se la entregó en bandeja de plata.
+
+00:07:24.620 --> 00:07:27.320
+Dejaron de jugar a los arqueólogos, desempolvando archivos viejos.
+
+00:07:27.800 --> 00:07:29.940
+Y empezaron a hacer su trabajo real, que es ayudar a la gente.
+
+00:07:30.460 --> 00:07:31.520
+¿Qué hay del ejemplo de RR?
+
+00:07:31.940 --> 00:07:32.220
+Chech.
+
+00:07:32.820 --> 00:07:34.060
+Ese parecía más.
+
+00:07:34.720 --> 00:07:35.160
+Tranquilo.
+
+00:07:36.000 --> 00:07:38.360
+Menos dramático que una inundación, pero igual de desordenado.
+
+00:07:38.920 --> 00:07:39.960
+El agujero negro de la BPO.
+
+00:07:40.720 --> 00:07:42.800
+Bandejas compartidas donde se pierden currículos y contratos.
+
+00:07:43.500 --> 00:07:45.120
+La historia menciona un asunto que pide ayuda.
+
+00:07:45.920 --> 00:07:47.520
+En el viejo mundo, eso es un misterio.
+
+00:07:48.040 --> 00:07:53.020
+En el nuevo mundo, el escáner abre el archivo adjunto, ve que es un contrato, detecta la inscripción a beneficios y lo dirige al especialista.
+
+00:07:53.260 --> 00:07:54.700
+En incorporación, lo hago.
+
+00:07:55.300 --> 00:07:56.380
+¿Y el operador oculto?
+
+00:07:56.980 --> 00:07:59.520
+Extrae los pasos específicos de bienvenida a bordo de la wiki interna.
+
+00:08:00.180 --> 00:08:02.060
+Une la respuesta a partir de hechos, no de una plantilla.
+
+00:08:02.580 --> 00:08:05.860
+Dice, aquí tienes tus siguientes tres acciones y vínculos reales.
+
+00:08:07.020 --> 00:08:09.980
+Converte un vago pedido de ayuda en un proceso completado.
+
+00:08:09.980 --> 00:08:13.180
+Aquí hay un cambio filosófico que me parece muy interesante.
+
+00:08:14.260 --> 00:08:17.660
+A menudo hablamos de que la IA quita empleos, pero esta narrativa lo plantea distinto.
+
+00:08:18.500 --> 00:08:23.940
+Dice, los humanos están para juzgar, negociar y resolver casos extremos, no para filtrar lo que nos sirve.
+
+00:08:23.940 --> 00:08:25.800
+Ese es el mensaje principal.
+
+00:08:26.240 --> 00:08:28.520
+Vivamos 20 años pidiendo a los humanos que actúen como máquina.
+
+00:08:28.960 --> 00:08:30.520
+Lea este código, cópialo aquí y pégalo allí.
+
+00:08:31.120 --> 00:08:31.760
+Los humanos son malos.
+
+00:08:32.220 --> 00:08:33.460
+Nos aburrimos, nos cansamos.
+
+00:08:33.820 --> 00:08:34.820
+Las máquinas son excelentes en eso.
+
+00:08:35.360 --> 00:08:38.360
+Al permitir que el equipo de limpieza gestione la recepción, el enrutamiento y la redacción,
+
+00:08:38.760 --> 00:08:39.640
+dejas que el humano sea humano.
+
+00:08:40.400 --> 00:08:41.320
+Les dejas usar la empatía.
+
+00:08:41.880 --> 00:08:43.740
+¿Pero existe el riesgo de que se vuelva demasiado frío?
+
+00:08:44.760 --> 00:08:47.280
+La historia menciona manos frías, pulso firme.
+
+00:08:48.320 --> 00:08:51.080
+Si la IA lo redacta todo, ¿perdemos el toque personal?
+
+00:08:51.080 --> 00:08:54.140
+Ese es el elemento noir, el miedo a la máquina fría.
+
+00:08:54.940 --> 00:08:55.600
+Lo menos resulta.
+
+00:08:55.920 --> 00:08:58.580
+¿Es más personal que un humano escriba algo genérico como
+
+00:08:58.580 --> 00:09:01.780
+estamos experimentando un gran volumen de correos electrónicos después de tres días?
+
+00:09:01.900 --> 00:09:06.880
+¿O es más personal obtener una solución inmediata y precisa redactada por la IA y aprobada por un humano?
+
+00:09:07.640 --> 00:09:08.600
+Ese es un gran punto.
+
+00:09:09.340 --> 00:09:10.980
+¿La competencia es su propia forma de empatía?
+
+00:09:12.340 --> 00:09:14.700
+Respetar mi tiempo es la forma más elevada de servicio al cliente.
+
+00:09:15.260 --> 00:09:16.640
+Y aquí también hay una capa de gobernanza.
+
+00:09:17.520 --> 00:09:20.540
+La historia enfatiza que el juicio humano permanece en el disparador.
+
+00:09:21.080 --> 00:09:23.660
+El operador en la sombra redacta, no envía.
+
+00:09:24.260 --> 00:09:25.700
+El escáner etiqueta, no elimina.
+
+00:09:26.560 --> 00:09:28.140
+El humano sigue siendo el sheriff de la ciudad.
+
+00:09:29.120 --> 00:09:31.340
+La noche en que murieron los correos no es tragedia.
+
+00:09:32.200 --> 00:09:33.500
+Es la noche en que murió el ruido.
+
+00:09:34.180 --> 00:09:35.240
+Es la noche en que murió el desorden.
+
+00:09:35.800 --> 00:09:37.680
+La noche en que la ansiedad del correo sin leer murió.
+
+00:09:38.180 --> 00:09:40.700
+Cuando elimines el ruido, puedes escuchar al cliente.
+
+00:09:41.240 --> 00:09:44.340
+Y francamente, para las empresas que ejecutan estos sistemas, finalmente puedo ver los datos.
+
+00:09:44.860 --> 00:09:45.440
+Los recibos.
+
+00:09:45.740 --> 00:09:46.240
+Los recibos.
+
+00:09:46.240 --> 00:09:47.680
+No pueden mejorar lo que no pueden ver.
+
+00:09:48.320 --> 00:09:49.900
+Tu bandeja de entrada es una pila caótica.
+
+00:09:50.060 --> 00:09:51.420
+No sabes por qué los clientes están yendo.
+
+00:09:52.100 --> 00:09:55.260
+Una vez que la estructura, se escana el controlador, sombra, obtienes registros.
+
+00:09:55.720 --> 00:09:58.480
+Puedes ver, oh, el 30% de nuestro volumen son cremalleras.
+
+00:09:59.920 --> 00:10:00.860
+Vale, habla con fabricación.
+
+00:10:01.660 --> 00:10:02.300
+Arregla el cremallero.
+
+00:10:02.780 --> 00:10:05.160
+Pasas de arreglar el ticket a arreglar la causa raíz.
+
+00:10:06.160 --> 00:10:07.900
+Ese es el objetivo final, la mejora continua.
+
+00:10:08.660 --> 00:10:11.480
+Dejas de limitarte a sacar agua del barco y finalmente tapas el agujero.
+
+00:10:12.040 --> 00:10:14.340
+Quiero volver al concepto de la demostración de cine negro.
+
+00:10:15.020 --> 00:10:19.420
+La historia describe la velocidad de esta interacción como 3 segundos más rápida que el arrepentimiento.
+
+00:10:20.340 --> 00:10:21.440
+Es un gancho muy potente.
+
+00:10:22.560 --> 00:10:23.740
+Para una empresa que escucha esto,
+
+00:10:24.240 --> 00:10:27.400
+alguien que puede que se esté ahogando en su propia escena del crimen de una bandeja de entrada,
+
+00:10:27.880 --> 00:10:28.700
+¿cuál es el primer paso?
+
+00:10:29.760 --> 00:10:31.320
+¿Activa las tres cosas a la vez?
+
+00:10:31.940 --> 00:10:33.580
+Puedes hacerlo, pero suele ser una progresión.
+
+00:10:34.100 --> 00:10:34.800
+Empieza con el escáner.
+
+00:10:35.440 --> 00:10:36.180
+Detienes la hemorragia.
+
+00:10:36.580 --> 00:10:37.980
+Obtén visibilidad de lo que llega.
+
+00:10:38.880 --> 00:10:41.820
+Deja de tratar el correo electrónico como un simple texto y empieza a tratarlo como datos.
+
+00:10:42.420 --> 00:10:44.980
+Una vez que tienes los datos estructurados, activas el controlador de tráfico.
+
+00:10:45.300 --> 00:10:46.020
+Crea la cuadrícula.
+
+00:10:46.360 --> 00:10:47.340
+Dejas de enrutar por vibración.
+
+00:10:48.080 --> 00:10:49.860
+Y por último, el operador oculto.
+
+00:10:50.440 --> 00:10:52.420
+Una vez que tu enrutamiento está limpio, empoderas a los agentes.
+
+00:10:52.720 --> 00:10:53.760
+Les das el operador oculto.
+
+00:10:53.980 --> 00:10:54.940
+Es el multiplicador de fuerzas.
+
+00:10:55.380 --> 00:10:57.920
+De repente, un equipo de 10 personas puede hacer el trabajo de 20.
+
+00:10:57.920 --> 00:11:02.520
+No porque trabajen más, sino porque no pierden el tiempo escribiendo saludos cordiales 50 veces por hora.
+
+00:11:03.360 --> 00:11:03.940
+Es convincente.
+
+00:11:03.940 --> 00:11:06.820
+Convierte el centro de soporte de un centro de costes.
+
+00:11:07.120 --> 00:11:08.440
+Un lugar donde el dinero va a morir.
+
+00:11:08.640 --> 00:11:09.840
+En un activo estratégico.
+
+00:11:10.460 --> 00:11:11.680
+Y cambia la vida de la gente.
+
+00:11:12.140 --> 00:11:13.500
+Creo que esa es la parte que suele pasarse por alto.
+
+00:11:14.000 --> 00:11:16.780
+Hablamos de la experiencia del cliente, pero la experiencia del empleado también importa.
+
+00:11:17.260 --> 00:11:18.520
+Nadie quiere trabajar en la escena de un crimen.
+
+00:11:19.160 --> 00:11:23.260
+Todos quieren trabajar en una ciudad limpia y eficiente donde tengan las herramientas para resolver problemas.
+
+00:11:23.800 --> 00:11:24.640
+La ciudad respira.
+
+00:11:24.640 --> 00:11:25.920
+La ciudad respira.
+
+00:11:26.360 --> 00:11:28.660
+Pánico se calma y finalmente puede volver a casa la sincope.
+
+00:11:29.460 --> 00:11:31.720
+Sabiendo que no hay una bomba de relojería en el buzón compartido.
+
+00:11:32.160 --> 00:11:39.360
+Entonces, para nuestros oyentes, si su bandeja de entrada todavía controla su ciudad, si todavía ven esas cartas muertas y sienten ese pavor el domingo por la noche.
+
+00:11:40.160 --> 00:11:41.960
+Tal vez sea hora de llamar al equipo de limpieza.
+
+00:11:42.520 --> 00:11:46.000
+El escáner de casos, el controlador de tráfico y el operador en la sombra están listos para trabajar.
+
+00:11:46.000 --> 00:11:47.060
+Y no duermen.
+
+00:11:47.500 --> 00:11:48.620
+No hay piedad para el trabajo, Tarzán.
+
+00:11:48.940 --> 00:11:50.740
+Creo que ese es el lugar perfecto para dejarlo.
+
+00:11:51.640 --> 00:11:54.020
+La noche en que los correos murieron no es una historia de terror.
+
+00:11:54.720 --> 00:11:56.460
+Es una historia de éxito esperando a que suceda.
+
+00:11:56.960 --> 00:11:59.140
+Gracias por analizar los expedientes de los casos con nosotros.
+
+00:11:59.540 --> 00:12:00.920
+Siempre es un placer recorrer el camino.
+
+00:12:01.320 --> 00:12:01.980
+Hasta la próxima.
+
+00:12:02.340 --> 00:12:04.280
+Mantengan sus colas limpias y sus recibos a mano.

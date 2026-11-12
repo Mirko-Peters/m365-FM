@@ -1,0 +1,979 @@
+WEBVTT
+
+00:00:00.120 --> 00:00:02.820
+Welkom bij weer een kennisnakket op M365FM.
+
+00:00:02.960 --> 00:00:04.400
+Ik ben je gastheer Milko Peters.
+
+00:00:04.680 --> 00:00:06.280
+Vandaag praten we over voorraadbeheer.
+
+00:00:06.460 --> 00:00:08.280
+De voorraad die je niet ziet, kan je geld kosten.
+
+00:00:08.460 --> 00:00:11.380
+Kun je op dit moment vijf vragen beantwoorden over één enkel artikel in je magazijn?
+
+00:00:11.540 --> 00:00:12.320
+Hoeveel heb je er?
+
+00:00:12.520 --> 00:00:13.080
+Waar liggen ze?
+
+00:00:13.240 --> 00:00:14.120
+Kun je ze verkopen?
+
+00:00:14.300 --> 00:00:15.040
+Van wie zijn ze?
+
+00:00:15.180 --> 00:00:16.020
+En wat kosten ze?
+
+00:00:16.200 --> 00:00:19.300
+Bij de meeste bedrijven staan die antwoorden op totaal verschillende plekken.
+
+00:00:19.460 --> 00:00:23.800
+Een spreadsheet zegt het ene, een magazijntelling het andere, en finance heeft een derde getal.
+
+00:00:24.020 --> 00:00:28.160
+Zie voorraadbeheer in Dynamics 365 als een gedeelde archiefkast voor elke doos,
+
+00:00:28.160 --> 00:00:30.540
+elk onderdeel en elk product dat je bedrijf verwerkt.
+
+00:00:30.740 --> 00:00:32.980
+Wanneer iets verplaatst, verplaatst het dossier ook.
+
+00:00:33.140 --> 00:00:37.680
+Aan het einde van deze aflevering volg je één artikel van leverancierslevering tot klantverzending,
+
+00:00:37.880 --> 00:00:39.620
+inclusief het geld dat eraan vastzit.
+
+00:00:41.200 --> 00:00:42.800
+Waarom voorraadbeheer bestaat?
+
+00:00:43.660 --> 00:00:45.740
+Stel je voor dat je koffiemachines verkoopt.
+
+00:00:45.940 --> 00:00:50.700
+Een klant plaatst een bestelling, maar het magazijn heeft er geen meer, dus verkoop belooft toch een leverdatum.
+
+00:00:50.880 --> 00:00:54.980
+Inkoop haast zich om een leverancier te bellen en de klant kan besluiten ergens anders te kopen.
+
+00:00:55.220 --> 00:00:56.400
+Dat is een voorraad tekort.
+
+00:00:56.400 --> 00:01:00.260
+Te weinig voorraad betekent vertraagde bestellingen, gemiste verkopen en ontevreden klanten.
+
+00:01:00.440 --> 00:01:02.360
+Het kan ook de productie volledig stilleggen.
+
+00:01:02.520 --> 00:01:06.160
+Als je machines bouwt en je hebt één klein onderdeel niet meer, kan de hele lijn stilkomen te staan.
+
+00:01:06.360 --> 00:01:09.080
+Maar elke plank vullen met extra voorraad lost het probleem niet op.
+
+00:01:09.240 --> 00:01:12.300
+Elke doos op een plank vertegenwoordigt geld dat je bedrijf al heeft uitgegeven.
+
+00:01:12.460 --> 00:01:17.160
+Je betaalt voor opslag en sommige goederen kunnen kapot gaan, bederven, uit de mode raken of simpelweg niet meer verkopen.
+
+00:01:17.380 --> 00:01:22.020
+Dat geld kan geen leverancier betalen, een nieuw project financieren of het loondekken terwijl het in het magazijn ligt.
+
+00:01:22.520 --> 00:01:24.060
+Voorraadbeheer helpt je de middenweg te vinden.
+
+00:01:24.060 --> 00:01:29.700
+Je hebt genoeg voorraad nodig om aan de klantvraag te voldoen, maar niet zoveel dat je magazijn verandert in een zeer dure opslagruimte.
+
+00:01:29.880 --> 00:01:33.000
+Voorraad betekent niet alleen afgewerkte producten die klaar zijn voor klanten.
+
+00:01:33.200 --> 00:01:36.660
+Een meubelmaker houdt hout, schroeven, stof en verf bij als grondstoffen.
+
+00:01:36.840 --> 00:01:41.140
+Zodra werknemers beginnen met het bouwen van een stoel, worden die deels voltooide stoelen onderhanden werk.
+
+00:01:41.300 --> 00:01:44.200
+En wanneer de stoel klaar is voor verkoop, wordt het een eindproduct.
+
+00:01:44.500 --> 00:01:49.820
+Een bedrijf kan ook reserveonderdelen, schoonmaakmiddelen, verpakkingen of vervangende onderdelen voor servicewerk bijhouden,
+
+00:01:49.820 --> 00:01:53.880
+die verschijnen misschien niet in het eindproduct, maar het bedrijf heeft ze nog steeds nodig om te blijven draaien.
+
+00:01:54.060 --> 00:01:55.880
+Stel je nu de oude manier van werken voor.
+
+00:01:56.080 --> 00:02:00.160
+Inkoop houdt een lijst bij van wat is besteld, magazijnmedewerkers stellen wat is binnengekomen,
+
+00:02:00.400 --> 00:02:04.160
+verkoop volgt klantorders, productie volgt wat ze hebben gebruikt en finance volgt de kosten.
+
+00:02:04.400 --> 00:02:07.480
+Elk team werkt hard, maar door aparte lijsten lopen de cijfers uiteen.
+
+00:02:07.640 --> 00:02:10.340
+Iemand ontvangt een levering, maar werkt het spreadsheet pas later bij.
+
+00:02:10.520 --> 00:02:13.680
+Iemand verplaatst een pallet naar een ander magazijn, maar vergeet de verkoopafdeling in te lichten.
+
+00:02:13.900 --> 00:02:17.260
+Iemand verstuurt een bestelling, maar de financiële afdeling ziet de kosten pas dagen later.
+
+00:02:17.260 --> 00:02:20.880
+Dat leidt tot discussies over een simpele vraag, hoeveel voorraad hebben we nu echt?
+
+00:02:21.120 --> 00:02:25.280
+Dynamics 365 Voorraadbeheer geeft deze teams een gedeeld voorraadrecord.
+
+00:02:25.480 --> 00:02:29.160
+Inkoop registreert inkomende goederen, magazijnmedewerkers registreren verplaatsingen,
+
+00:02:29.360 --> 00:02:34.380
+verkoop registreert wat eruit gaat, productie registreert verbruikte materialen en finance ziet de waarde achter die bewegingen.
+
+00:02:34.540 --> 00:02:37.620
+Niemand hoeft elke vrijdag een nieuwe versie van hetzelfde spreadsheet te maken.
+
+00:02:37.840 --> 00:02:42.900
+Het doel is niet om magazijnen technischer te maken, maar om mensen een actueel, gedeeld antwoord te geven wanneer ze dat nodig hebben.
+
+00:02:43.060 --> 00:02:44.540
+Kunnen we deze bestelling uitvoeren?
+
+00:02:44.540 --> 00:02:46.580
+Waar moeten we de volgende levering naartoe sturen?
+
+00:02:46.780 --> 00:02:48.780
+Waarom wijkt de fysieke telling af van het systeem?
+
+00:02:48.900 --> 00:02:52.820
+Om die vragen te beantwoorden, heeft Dynamics meer nodig dan alleen een productnaam en een getal.
+
+00:02:53.000 --> 00:02:56.420
+Het heeft een duidelijk overzicht nodig van wat er is veranderd telkens wanneer een item beweegt.
+
+00:02:56.560 --> 00:02:58.480
+Het digitale record achter elk item.
+
+00:02:58.760 --> 00:03:02.980
+Welkom bij weer een aflevering van Microsoft Knowledge Nuggets hier op M365 FM.
+
+00:03:03.180 --> 00:03:04.480
+Ik ben je host Marco Peters.
+
+00:03:04.760 --> 00:03:09.640
+Vandaag praten we over wat er binnen Dynamics 365 gebeurt wanneer voorraad van de ene naar de andere plek verplaatst.
+
+00:03:09.640 --> 00:03:14.880
+Dus, wat legt Dynamics 365 precies vast wanneer een item van eigenaar of locatie wisselt?
+
+00:03:14.980 --> 00:03:16.540
+Dit is de simpelste definitie.
+
+00:03:16.720 --> 00:03:21.840
+Het houdt vijf dingen bij, hoeveel je hebt, waar het ligt, of je het kunt gebruiken, wie de eigenaar is en wat het kost.
+
+00:03:22.060 --> 00:03:25.760
+Dat klinkt eenvoudig, maar elk onderdeel beantwoordt een andere zakelijke vraag.
+
+00:03:26.000 --> 00:03:26.960
+Laten we het opdelen.
+
+00:03:27.180 --> 00:03:29.440
+Aantal vertelt je hoeveel koffiemachines er zijn.
+
+00:03:29.780 --> 00:03:33.100
+Locatie beantwoordt welk gebouw, magazijn of schap ze bevat.
+
+00:03:33.100 --> 00:03:42.100
+Status zegt, kunnen we ze verkopen of wachten ze op inspectie, eigendom verklaard, zijn deze machines al van ons, of slaat een leverancier ze hier op en kosten beantwoordt.
+
+00:03:42.740 --> 00:03:44.720
+Welke waarde vertegenwoordigt deze voorraad?
+
+00:03:44.900 --> 00:03:47.460
+Het uitgangspunt voor dit alles is het productrecord.
+
+00:03:47.700 --> 00:03:50.240
+Elk item heeft een identiteit nodig binnen het systeem.
+
+00:03:50.460 --> 00:03:53.040
+Dat is meestal een artikelnummer en een duidelijke omschrijving.
+
+00:03:53.240 --> 00:03:58.460
+Je definieert ook de eenheid waarin je het telt, per uur, per stuk, doos, pallet, kilogram of meter.
+
+00:03:58.760 --> 00:04:01.260
+Dit is waar kleine dingen tot grote problemen kunnen leiden.
+
+00:04:01.260 --> 00:04:07.500
+Als inkoop koffiefilters per doos inkoopt, maar verkoop ze per pak verkoopt, moet Dynamics begrijpen hoe die eenheden zich tot elkaar verhouden.
+
+00:04:07.660 --> 00:04:11.700
+Anders denkt het ene team dat het 10 dozen heeft, terwijl het andere denkt dat het 10 losse filters heeft.
+
+00:04:11.940 --> 00:04:13.120
+Dat is recept voor verwarring.
+
+00:04:13.360 --> 00:04:15.360
+Sommige producten zijn er ook in verschillende variaties.
+
+00:04:15.540 --> 00:04:17.700
+Een t-shirt is er misschien in small, medium en large.
+
+00:04:17.860 --> 00:04:19.560
+Het kan zwart, blauw of wit zijn.
+
+00:04:19.780 --> 00:04:23.440
+Eén enkel product kan verschillende maten, kleuren, stijlen of configuraties hebben.
+
+00:04:23.620 --> 00:04:26.740
+Het systeem kan elke combinatie als een eigen voorraadrecord behandelen.
+
+00:04:26.900 --> 00:04:28.420
+Je hebt dus niet zomaar een t-shirt.
+
+00:04:28.420 --> 00:04:33.400
+Je hebt misschien 12 zwarte medium t-shirts in het ene magazijn en 6 witte large t-shirts ergens anders.
+
+00:04:33.660 --> 00:04:37.180
+Dat is het soort detail dat ertoe doet wanneer een klant om iets specifieks vraagt.
+
+00:04:37.480 --> 00:04:40.820
+Dynamics gebruikt voorraaddimensies om die details nauwkeurig bij te houden.
+
+00:04:41.000 --> 00:04:46.420
+Die term klinkt technisch, maar betekent simpelweg de labels die het systeem helpen het ene voorraadartikel van het andere te onderscheiden.
+
+00:04:46.620 --> 00:04:48.300
+Ze beantwoorden twee praktische vragen.
+
+00:04:48.520 --> 00:04:50.820
+Waar bevindt het artikel zich en welk specifiek artikel is het?
+
+00:04:50.960 --> 00:04:53.200
+Laten we het opsplitsen in de belangrijkste onderdelen.
+
+00:04:53.360 --> 00:04:54.420
+Ten eerste zijn er opslagdimensies.
+
+00:04:55.300 --> 00:04:57.320
+Deze beschrijven de plek waar de voorraad zich bevindt.
+
+00:04:57.320 --> 00:05:00.880
+Dynamics kan een vestiging, een magazijn en een locatie binnen dat magazijn bijhouden.
+
+00:05:01.080 --> 00:05:02.540
+Zie het als een adres voor een artikel.
+
+00:05:02.740 --> 00:05:07.360
+De vestiging vertegenwoordigt een brede bedrijfslocatie, zoals een fabrieksterrein of distributiecentrum.
+
+00:05:07.580 --> 00:05:09.960
+Binnen die vestiging kun je verschillende magazijnen hebben.
+
+00:05:10.200 --> 00:05:14.400
+Misschien één voor ontvangen goederen, één voor eindproducten en één voor retourzendingen.
+
+00:05:14.560 --> 00:05:15.720
+Dan kun je nog dieper gaan.
+
+00:05:15.940 --> 00:05:21.100
+Een locatie wijst naar de exacte plek in het magazijn, zoals een gampad, stelling, schap en bak.
+
+00:05:21.100 --> 00:05:24.940
+Dus in plaats van tegen een magazijnmedewerker te zeggen, de machineonderdelen liggen ergens
+
+00:05:24.940 --> 00:05:29.280
+in magazijn A, kan het systeem zeggen, kijk in gampad 4, stelling 2, schap 3, bak 1.
+
+00:05:29.480 --> 00:05:31.920
+Dat bespaart tijd wanneer iemand snel voorraad moet vinden.
+
+00:05:32.500 --> 00:05:36.020
+Opslagdimensies vertellen je waar het ligt, maar trackingdimensies vertellen je welke voorraad
+
+00:05:36.020 --> 00:05:36.320
+het is.
+
+00:05:36.540 --> 00:05:40.420
+Badge-nummers, soms ook lotnummers genoemd, groeperen artikelen die samen zijn aangekomen
+
+00:05:40.420 --> 00:05:41.180
+of geproduceerd.
+
+00:05:41.360 --> 00:05:45.220
+Ze zijn belangrijk wanneer goederen houdbaarheidsdata, testresultaten of leveranciersgegevens hebben
+
+00:05:45.220 --> 00:05:46.220
+die je later nodig kunt hebben.
+
+00:05:46.220 --> 00:05:49.740
+Stel je voor dat een levensmiddelenbedrijf twee leveringen van dezelfde bron ontvangt.
+
+00:05:49.820 --> 00:05:53.600
+De potten zien er identiek uit, maar de ene batch verloopt in juni en de andere in september.
+
+00:05:53.780 --> 00:05:57.200
+Als er een kwaliteitsprobleem optreedt, moet het bedrijf de betreffende batch vinden zonder
+
+00:05:57.200 --> 00:05:58.900
+elke pot uit elk schap te hoeven halen.
+
+00:05:59.260 --> 00:06:00.640
+Serienummers gaan nog een stap verder.
+
+00:06:00.840 --> 00:06:05.060
+Een serienummer identificeert één individueel item, één laptop, één medisch apparaat of
+
+00:06:05.060 --> 00:06:06.220
+één industriële machine.
+
+00:06:06.440 --> 00:06:10.040
+Dat helpt bij reparaties, garantieclaims, retourzendingen en terugroepacties, omdat je één
+
+00:06:10.040 --> 00:06:11.360
+specifieke eenheid kunt traceren.
+
+00:06:11.600 --> 00:06:15.060
+Wanneer je de voorraadweergave in Dynamics opent, krijg je niet één vaag totaalcijfer voor het
+
+00:06:16.220 --> 00:06:19.840
+voorraad zien per vestiging, magazijnlocatie, batch, serienummer en andere details die je
+
+00:06:19.840 --> 00:06:20.560
+bedrijf nodig heeft.
+
+00:06:20.720 --> 00:06:23.900
+Je kunt ook zien waar de voorraad zich fysiek bevindt, of deze beschikbaar is voor gebruik,
+
+00:06:24.080 --> 00:06:26.220
+gereserveerd is voor een order of apart wordt gehouden.
+
+00:06:26.420 --> 00:06:28.260
+Daarom is een productnaam alleen niet voldoende.
+
+00:06:28.500 --> 00:06:31.040
+De laatste bouwsteen is de artikeltransactiehistorie.
+
+00:06:31.220 --> 00:06:35.320
+Elke keer als er voorraad binnenkomt, wordt verzonden, verplaatst, geteld, gecorrigeerd of
+
+00:06:35.320 --> 00:06:37.780
+in productie genomen, registreert Dynamics een transactie.
+
+00:06:37.940 --> 00:06:40.860
+Die historie geeft mensen een manier om onderzoek te doen in plaats van te gissen.
+
+00:06:40.860 --> 00:06:45.040
+Als het aantal niet klopt, kun je het artikelrecord bekijken en je afvragen welke beweging heeft
+
+00:06:45.040 --> 00:06:45.840
+dit getal veranderd.
+
+00:06:46.000 --> 00:06:47.080
+Dat is de magie ervan.
+
+00:06:47.340 --> 00:06:50.860
+Laten we vervolgens één artikel volgen op zijn dagelijkse reis, omdat deze records
+
+00:06:50.860 --> 00:06:53.420
+veel makkelijker te begrijpen zijn wanneer voorraad in beweging komt.
+
+00:06:53.820 --> 00:06:55.840
+Van leverancierslevering tot klantorder.
+
+00:06:56.120 --> 00:06:59.640
+Stel je voor dat je koffiemachinebedrijf 100 waterpompen bestelt bij een leverancier.
+
+00:06:59.820 --> 00:07:01.420
+De inkooporder begint de reis.
+
+00:07:01.620 --> 00:07:05.540
+Het legt vast wat je verwacht, hoeveel eenheden je hebt besteld, wie ze verstuurt en waar ze
+
+00:07:05.540 --> 00:07:06.180
+moeten aankomen.
+
+00:07:06.440 --> 00:07:09.820
+Voordat de vrachtwagen je pand bereikt, heeft het bedrijf al een duidelijke verwachting.
+
+00:07:09.820 --> 00:07:13.140
+Dat is belangrijk, want een verwachte levering is geen voorraad die je al kunt verkopen.
+
+00:07:13.140 --> 00:07:16.320
+Wanneer de zending aankomt, controleert iemand de levering aan de hand van de inkooporder.
+
+00:07:16.520 --> 00:07:18.280
+Heeft de leverancier de juiste pompen gestuurd?
+
+00:07:18.440 --> 00:07:20.220
+Heeft hij er 100 of 98 gestuurd?
+
+00:07:20.440 --> 00:07:22.100
+Zijn ze aangekomen in het juiste magazijn?
+
+00:07:22.280 --> 00:07:25.780
+Zodra de goederenontvangst is vastgelegd, weet Dynamics dat de pompen fysiek zijn aangekomen.
+
+00:07:25.960 --> 00:07:29.160
+Het systeem kan het fysieke voorraadrecord verhogen, maar dat betekent niet altijd dat
+
+00:07:29.160 --> 00:07:30.380
+de pompen klaar zijn voor een klantorder.
+
+00:07:30.620 --> 00:07:32.520
+Sommige goederen moeten eerst worden geïnspecteerd.
+
+00:07:32.680 --> 00:07:35.620
+Een levensmiddelenbedrijf controleert een batch misschien op schade- of vervaldata.
+
+00:07:35.800 --> 00:07:38.400
+Een fabrikant test een onderdeel wellicht voordat het in productie gaat.
+
+00:07:38.400 --> 00:07:41.860
+Een bedrijf dat gereguleerde goederen verwerkt, heeft misschien bewijs nodig dat de zending
+
+00:07:41.860 --> 00:07:42.700
+aan de regels voldoet.
+
+00:07:42.840 --> 00:07:46.540
+In Dynamics kan voorraad naar een quarantainegebied gaan of een status krijgen die voorkomt dat
+
+00:07:46.540 --> 00:07:47.640
+mensen het te vroeg gebruiken.
+
+00:07:48.460 --> 00:07:50.400
+Magazijnmedewerkers kunnen zien dat de pompen zijn aangekomen.
+
+00:07:50.620 --> 00:07:53.540
+Verkoop en productie kunnen ook zien dat ze nog niet beschikbaar zijn.
+
+00:07:53.780 --> 00:07:57.640
+Dat voorkomt de pijnlijke fout om een klant voorraad te beloven die nog goedgekeurd moet
+
+00:07:57.640 --> 00:07:57.920
+worden.
+
+00:07:58.160 --> 00:08:02.320
+Na inspectie verplaatsen de pompen zich van de ontvangstzone naar hun normale opslaglocatie.
+
+00:08:02.540 --> 00:08:05.940
+Dit heet uitslag, hoewel het echte werk kan bestaan uit een heftruck, een palletwagen of
+
+00:08:05.940 --> 00:08:07.620
+iemand die een kleine doos naar hun schap draagt.
+
+00:08:07.780 --> 00:08:08.980
+De beweging is belangrijk.
+
+00:08:09.180 --> 00:08:12.180
+Een laadperron is niet de plek waar de pompen de komende zes maanden horen te liggen.
+
+00:08:12.300 --> 00:08:15.360
+Het magazijnteam moet ze op de juiste plek hebben zodat iemand ze kan vinden wanneer er
+
+00:08:15.360 --> 00:08:16.100
+een order binnenkomt.
+
+00:08:16.300 --> 00:08:19.940
+Dynamics registreert de interne verplaatsing van de ontvangst naar de toegewezen magazijnlocatie.
+
+00:08:20.160 --> 00:08:22.380
+Stel je nu voor dat de vraag op een andere locatie verandert.
+
+00:08:22.560 --> 00:08:24.420
+Je hoofdmagazijn houdt 80 pompen aan.
+
+00:08:24.600 --> 00:08:27.580
+Een servicecentrum in een andere stad heeft er 20 nodig voor reparaties.
+
+00:08:27.780 --> 00:08:30.960
+Je wilt niet dat het service team ze zomaar uit de schappen pakt en hoopt dat iemand later
+
+00:08:30.960 --> 00:08:31.780
+een lijst bijwerkt.
+
+00:08:31.780 --> 00:08:35.560
+Een transferorder legt het verzoek en de verplaatsing tussen magazijnen of locaties vast.
+
+00:08:35.740 --> 00:08:38.900
+Terwijl de goederen onderweg zijn, kan Dynamics ze als onderweg behandelen.
+
+00:08:39.080 --> 00:08:41.620
+Ze zijn niet verdwenen, maar ook nog niet op de bestemming aangekomen.
+
+00:08:41.860 --> 00:08:43.780
+Dat geeft beide locaties een duidelijker beeld.
+
+00:08:43.940 --> 00:08:46.200
+Het versedende magazijn weet dat de voorraad is vertrokken.
+
+00:08:46.340 --> 00:08:48.440
+Het ontvangende magazijn weet wat het kan verwachten.
+
+00:08:48.660 --> 00:08:51.960
+Als de vrachtwagen met een tekort aankomt, is er een registratie van het verschil die onderzocht
+
+00:08:51.960 --> 00:08:52.280
+kan worden.
+
+00:08:52.500 --> 00:08:53.900
+Dan plaatst een klant een bestelling.
+
+00:08:54.120 --> 00:08:57.380
+De verkooporder vertelt het bedrijf wat de klant wil en wanneer ze het nodig hebben.
+
+00:08:57.380 --> 00:09:01.240
+Als er voorraad is en het bedrijf besluit deze aan die klant toe te wijzen, kan Dynamics
+
+00:09:01.240 --> 00:09:02.280
+het aantal reserveren.
+
+00:09:02.660 --> 00:09:05.500
+Reserveren betekent dat die pompen niet langer algemene voorraad zijn.
+
+00:09:05.720 --> 00:09:09.480
+Ze worden apart gezet voor een specifieke order, zodat een andere verkoper dezelfde eenheden
+
+00:09:09.480 --> 00:09:10.580
+niet aan iemand anders belooft.
+
+00:09:10.780 --> 00:09:14.440
+Dit is vooral belangrijk als de voorraad laag is of als een klant een leveringsdeadline heeft
+
+00:09:14.440 --> 00:09:15.120
+die je moet halen.
+
+00:09:15.280 --> 00:09:18.020
+Het magazijn pikt vervolgens de pompen vanaf hun opslaglocatie.
+
+00:09:18.240 --> 00:09:21.700
+Bij een eenvoudige operatie kan een medewerker een piklijst printen en de goederen verzamelen.
+
+00:09:21.940 --> 00:09:26.240
+Bij een grotere operatie kan magazijnbeheer het werk aansturen via mobiele scans en magazijnregels.
+
+00:09:26.240 --> 00:09:28.740
+De voorraadregistratie blijft in beide gevallen betrokken.
+
+00:09:28.900 --> 00:09:31.320
+Na het pikken gaat de order door het inpak- en verzendproces.
+
+00:09:31.560 --> 00:09:34.980
+Zodra de goederen zijn verzonden, legt Dynamics vast dat de pompen het magazijn hebben verlaten.
+
+00:09:35.140 --> 00:09:38.240
+De voor het bedrijf beschikbare hoeveelheid verandert en de artikelhistorie toont nu een
+
+00:09:38.240 --> 00:09:41.820
+complete keten van ontvangst bij de leverancier tot interne opslag en levering aan de klant.
+
+00:09:41.960 --> 00:09:44.960
+Maar echt magazijnwerk verloopt zelden via een perfecte rechte lijn.
+
+00:09:45.080 --> 00:09:47.880
+Een klant kan een pomp retourneren omdat deze beschadigd is aangekomen.
+
+00:09:48.060 --> 00:09:50.700
+Een medewerker kan ontdekken dat twee eenheden in het schap kapot zijn.
+
+00:09:50.700 --> 00:09:54.120
+Tijdens een voorraadtelling kan het fysieke aantal afwijken van het nummer in het systeem.
+
+00:09:54.320 --> 00:09:58.760
+Dynamics kan retourzendingen, tofferschillen, verplaatsingscorrecties en handmatige aanpassingen vastleggen.
+
+00:09:58.920 --> 00:10:01.780
+Deze acties zouden geen stille manier moeten worden om fouten uit te wissen.
+
+00:10:02.020 --> 00:10:05.360
+Ze creëren een spoor dat mensen vertelt wat er is veranderd, wanneer het veranderde en waarom.
+
+00:10:05.520 --> 00:10:07.100
+Dat spoor helpt teams patronen te vinden.
+
+00:10:07.360 --> 00:10:09.600
+Misschien blijft dezelfde locatie telfouten produceren.
+
+00:10:09.760 --> 00:10:11.900
+Misschien komt een leveranciersending vaak met een tekort aan.
+
+00:10:12.100 --> 00:10:15.840
+Misschien hebben geretourneerde goederen een duidelijker inspectieproces nodig voordat ze weer de voorraad ingaan.
+
+00:10:15.840 --> 00:10:22.160
+Het aantal vertelt je wat er met de pompen is gebeurd, maar elke pomp heeft ook een kostprijs en daar verbindt magazijnactiviteit zich direct met financiën.
+
+00:10:22.400 --> 00:10:26.660
+Abonneer je op je favoriete podcast platform en deel dit met iemand die aan zijn reis begint.
+
+00:10:27.140 --> 00:10:28.940
+Het geld dat aan voorraad is verbonden.
+
+00:10:29.200 --> 00:10:33.680
+Die pompen op de schappen van je magazijn zijn dus meer dan alleen fysieke objecten die wachten op verzending.
+
+00:10:33.920 --> 00:10:35.980
+Het is geld dat het bedrijf al heeft uitgegeven.
+
+00:10:36.160 --> 00:10:42.980
+En dat geld blijft in de financiële administratie van het bedrijf als een actiefstaan totdat de pompen worden verkocht, gebruikt, afgeschreven of op een andere manier uit de voorraad gaan.
+
+00:10:42.980 --> 00:10:46.120
+Die simpele link verandert de manier waarop je naar een ontvangstbewijs kijkt.
+
+00:10:46.280 --> 00:10:50.480
+Het punt is, wanneer er 100 pompen binnenkomen, ziet het magazijn team 101heden.
+
+00:10:50.660 --> 00:10:54.180
+Maar financiën moet ook weten welke waarde er zojuist aan de voorraad is toegevoegd.
+
+00:10:54.260 --> 00:11:00.440
+En wanneer die pompen naar een klant worden verzonden, ziet het magazijn schapruimte vrijkomen, terwijl financiën de kosten van de vertrekkende goederen moet registreren.
+
+00:11:00.700 --> 00:11:02.900
+Dynamics verbindt die twee perspectieven automatisch.
+
+00:11:03.100 --> 00:11:04.840
+Dat is waar artikelgroepen om de hoek komen kijken.
+
+00:11:05.060 --> 00:11:09.600
+Zie een artikelgroep als een manier om vergelijkbare producten te organiseren, zodat het systeem weet hoe de financiële afhandeling moet verlopen.
+
+00:11:09.600 --> 00:11:15.020
+Je zou bijvoorbeeld reserveonderdelen in één groep kunnen plaatsen, afgewerkte koffiemachines in een andere en grondstoffen in een derde.
+
+00:11:15.140 --> 00:11:23.300
+Op de achtergrond vertellen die groepen aan Dynamics welke grootboekrekeningen de financiële kant van elke inkoop, verkoop, correctie of productieactiviteit moeten verwerken.
+
+00:11:23.460 --> 00:11:25.500
+Je hoeft geen accountant te zijn om dit te volgen.
+
+00:11:25.700 --> 00:11:34.100
+Het grootboek is simpelweg het centrale financiële register van het bedrijf, het officiële boekhoudsysteem waar financiën alles bijhoudt, activa, kosten, verkopen, het complete overzicht.
+
+00:11:34.100 --> 00:11:39.980
+Voorraadbeheer stuurt al die voorraadgerelateerde bedragen naar dat register met behulp van de regels die je in je artikelgroepen hebt ingesteld.
+
+00:11:40.220 --> 00:11:47.420
+Dat betekent dat het magazijnteam en het financiële team aan het eind van de maand niet twee verschillende systemen hoeven te vergelijken en hoeven te discussiëren over wiens cijfer klopt.
+
+00:11:47.620 --> 00:11:52.700
+Ze kijken allebei naar dezelfde artikelactiviteit in Dynamics, maar er is nog één grote vraag die beantwoord moet worden.
+
+00:11:52.880 --> 00:11:54.120
+Wat kost één pomp eigenlijk?
+
+00:11:54.360 --> 00:11:56.440
+Dat hangt af van de kostprijsmethode die je kiest.
+
+00:11:56.440 --> 00:12:01.180
+Een kostprijsmethode is simpelweg de regel die Dynamics gebruikt wanneer het een kostprijs toewijst aan voorraad die het magazijn verlaat.
+
+00:12:01.260 --> 00:12:02.240
+Ik geef je een voorbeeld.
+
+00:12:02.460 --> 00:12:04.760
+Vivo staat voor first in first out, eerst in eerst uit.
+
+00:12:04.980 --> 00:12:09.580
+Stel, je koopt 50 pompen in januari voor 20 dollar per stuk en daarna nog eens 50 in februari voor 24 dollar per stuk.
+
+00:12:09.800 --> 00:12:14.140
+Wanneer je 10 pompen verzendt met Vivo, behandelt Dynamics de oudste pompen als de eenheden die als eerste vertrekken.
+
+00:12:14.320 --> 00:12:17.320
+Dus, die 10 stuks komen uit je januari-batch van 20 dollar per stuk.
+
+00:12:17.520 --> 00:12:23.700
+Deze methode past vaak bij goederen waarbij je fysiek oudere voorraad voor nieuwe voorraad wilt gebruiken, zoals voedsel, medicijnen of alles wat verouderd kan raken.
+
+00:12:26.440 --> 00:12:32.640
+Om de kosten van januari en februari gescheiden te houden voor elke uitgaande eenheid, combineert het de kosten van alle beschikbare eenheden tot één gemiddelde.
+
+00:12:32.800 --> 00:12:39.900
+Dus, als u vergelijkbare pompen tegen verschillende prijzen inkoopt, berekent het systeem een gemiddelde kostprijs per pomp op basis van de totale voorraadwaarde gedeeld door het totaal aantal eenheden.
+
+00:12:40.080 --> 00:12:44.440
+Dat is logisch wanneer individuele eenheden met elkaar vermengd raken en u elke levering niet afzonderlijk hoeft te volgen.
+
+00:12:44.440 --> 00:12:50.020
+Bij een voortschrijdend gemiddelde wordt ook een gemiddelde gebruikt, maar dit gemiddelde verandert telkens wanneer er nieuwe voorraad binnenkomt tegen een nieuwe prijs.
+
+00:12:50.220 --> 00:12:51.940
+Standaard kostprijzen werken anders.
+
+00:12:51.940 --> 00:12:58.000
+Het bedrijf stelt een verwachte kostprijs in voor een artikel en registreert vervolgens de verschillen tussen die geplande kosten en wat u werkelijk betaalt.
+
+00:12:58.200 --> 00:13:00.720
+Elke methode beantwoordt dezelfde vraag op een eigen manier.
+
+00:13:00.960 --> 00:13:03.440
+Welke kostprijs moet dit artikel volgen als het uit de voorraad gaat?
+
+00:13:03.620 --> 00:13:07.000
+Maar kosten veranderen niet alleen wanneer u een levering ontvangt of een bestelling verzendt.
+
+00:13:07.000 --> 00:13:12.260
+Een fabrikant kan grondstoffen uitgeven aan productie en vervolgens gereed product terug in de voorraad brengen met een nieuwe kostprijs.
+
+00:13:12.380 --> 00:13:14.900
+Een correctie na een voorraadtelling kan de voorraadwaarde veranderen.
+
+00:13:15.060 --> 00:13:17.220
+Beschadigde goederen die worden afgeschreven, kunnen deze verlagen.
+
+00:13:17.420 --> 00:13:20.160
+Dat is precies waarom voorraadbeheer niet los kan staan van de financiële administratie.
+
+00:13:20.300 --> 00:13:26.000
+Als uw magazijn records 500 pompen aangeven, maar de financiële administratie gaat uit van de waarde van 450, dan hebt u een probleem.
+
+00:13:26.160 --> 00:13:28.020
+Zelfs als niemand dat op de werkvloer merkt.
+
+00:13:28.020 --> 00:13:33.820
+Elke beslissing over winst, cashflow, inkoop en verkoop hangt af van de nauwkeurigheid van zowel de hoeveelheid als de kostprijs.
+
+00:13:34.000 --> 00:13:39.840
+Zodra Dynamics die records bij elkaar houdt, kunt u verder kijken dan alleen de huidige telling en dagelijks slimmere voorraadbeslissingen nemen.
+
+00:13:40.200 --> 00:13:42.480
+Zichtbaarheid, nabestellen en dagelijkse controle.
+
+00:13:42.800 --> 00:13:46.560
+Wanneer u uw voorraad records kunt vertrouwen, worden dagelijkse beslissingen een stuk eenvoudiger.
+
+00:13:47.220 --> 00:13:50.460
+Maar hoeft niet elk magazijn rond te bellen en iemand te vragen om fysiek naar een artikel te zoeken.
+
+00:13:50.680 --> 00:13:56.660
+Ze kunnen precies zien wat er op voorraad is op alle locaties en in alle magazijnen, inclusief voorraad die onderweg is of wacht op inspectie.
+
+00:13:56.660 --> 00:13:58.260
+En dat onderscheid is belangrijk.
+
+00:13:58.560 --> 00:14:03.640
+U bezit misschien 500 eenheden in totaal, maar er zijn er slechts 300 daadwerkelijk beschikbaar om aan klanten te beloven.
+
+00:14:03.860 --> 00:14:08.520
+Sommigen zijn onderweg, sommigen wachten op kwaliteitscontroles en sommigen zijn al gereserveerd voor andere orders.
+
+00:14:08.840 --> 00:14:12.660
+Dynamics helpt u de bruikbare hoeveelheid te zien, niet alleen het grootst mogelijke getal.
+
+00:14:12.900 --> 00:14:15.320
+Dat heldere overzicht ondersteunt ook beter nabestellen.
+
+00:14:15.320 --> 00:14:19.940
+Elk bedrijf moet weten wanneer er meer moet worden ingekocht, maar het antwoord gaat niet alleen over de huidige hoeveelheid.
+
+00:14:20.100 --> 00:14:27.160
+U moet ook nadenken over hoe snel het artikel verkoopt, hoe lang uw leverancier nodig heeft voor levering en hoeveel buffer voorraad u wilt in het geval van een plotselinge vraagpiek.
+
+00:14:27.300 --> 00:14:29.420
+Die extra buffer noemen we veiligheidsvoorraad.
+
+00:14:29.600 --> 00:14:32.640
+Zie het als uw back-up plan voor de dagen dat dingen niet volgens plan verlopen.
+
+00:14:32.820 --> 00:14:36.400
+Een leverancier levert te laat, een klant plaatst een grotere bestelling dan gebruikelijk.
+
+00:14:36.580 --> 00:14:38.800
+Een productielijn verbruikt meer materiaal dan verwacht.
+
+00:14:39.040 --> 00:14:41.460
+Zonder die buffer kan één verrassing alles stilleggen.
+
+00:14:41.460 --> 00:14:44.740
+Maar bij te veel voorraad ben je weer geld op de planken aan het opslaan.
+
+00:14:45.100 --> 00:14:50.920
+Dynamics geeft je de data om die voorraadniveaus zorgvuldiger in te stellen en te herzien wanneer de vraag of lever tijden veranderen.
+
+00:14:51.040 --> 00:14:54.500
+Maar dit alles werkt alleen als je systeemgegevens overeen komen met de werkelijkheid.
+
+00:14:54.720 --> 00:14:57.760
+Daarom is het tellen van de voorraad nog steeds onderdeel van de dagelijkse controle.
+
+00:14:58.040 --> 00:15:03.120
+Sommige teams doen één keer per jaar een volledige inventarisatie, terwijl anderen het hele jaar door kleinere groepen artikelen tellen.
+
+00:15:03.220 --> 00:15:04.280
+Dat noemen we cycle counting.
+
+00:15:04.280 --> 00:15:05.940
+Het proces is eenvoudig.
+
+00:15:06.080 --> 00:15:12.780
+Je telt wat er daadwerkelijk in het schap ligt, vergelijkt dit met wat er volgens Dynamics zou moeten liggen en onderzoekt het verschil voordat je een correctie boekt.
+
+00:15:13.000 --> 00:15:18.640
+Dat verschil kan komen door schade, liefstal, een gemiste scan, een verkeerde locatie of een oude fout bij een eerdere verplaatsing.
+
+00:15:18.800 --> 00:15:21.660
+De correctie herstelt het getal, het onderzoek herstelt het proces.
+
+00:15:21.920 --> 00:15:24.800
+Dynamics kan je ook helpen bij het opsporen van voorraad die er al te lang ligt.
+
+00:15:25.000 --> 00:15:28.020
+Met voorraadouderdom zie je welke artikelen al een tijdje niet zijn verplaatst.
+
+00:15:28.020 --> 00:15:33.840
+Dat is cruciaal voor goederen met vervaldata, seizoensproducten, oude reserveonderdelen of artikelen waar klanten geen behoefte meer aan hebben.
+
+00:15:34.280 --> 00:15:36.320
+Als je die oude voorraad vroeg opmerkt, heb je opties.
+
+00:15:36.500 --> 00:15:42.940
+Je kunt het met korting verkopen, verplaatsen naar een locatie waar de vraag hoger is, returneren als je overeenkomst dat toelaat of simpelweg stoppen met inkopen.
+
+00:15:43.180 --> 00:15:46.500
+Wacht tot je schappen vol liggen met verouderde voorraad en die opties verdwijnen.
+
+00:15:46.720 --> 00:15:49.120
+Bovendien verdient niet elk artikel evenveel aandacht.
+
+00:15:49.340 --> 00:15:52.700
+ABC-analyse helpt je artikelen te sorteren op basis van hun financiële impact.
+
+00:15:52.880 --> 00:15:56.000
+Een klein aantal artikelen kan het grootste deel van je voorraadwaarde vertegenwoordigen.
+
+00:15:56.000 --> 00:16:00.120
+Die hebben nauwkeurigere tellingen, strakkere bestelbeslissingen en een zorgvuldiger beheer nodig.
+
+00:16:00.120 --> 00:16:03.460
+Goedkope artikelen die vaak bewegen, kunnen eenvoudiger worden beheerd.
+
+00:16:03.600 --> 00:16:05.660
+Het doel is niet om alles hetzelfde te behandelen.
+
+00:16:05.860 --> 00:16:08.980
+Het is om je tijd te besteden waar een fout het bedrijf het meest zou kosten.
+
+00:16:09.200 --> 00:16:12.440
+Er is ook een speciaal geval dat de moeite waard is, consignatievoorraad.
+
+00:16:12.640 --> 00:16:17.140
+Stel je voor dat een leverancier onderdelen in jouw magazijn plaatst, maar dat de leverancier er nog steeds eigenaar van is.
+
+00:16:17.320 --> 00:16:23.800
+De voorraad staat klaar voor je productieteam, direct bruikbaar wanneer nodig, maar het wordt pas jouw voorraad zodra je het eigendom overneemt.
+
+00:16:23.800 --> 00:16:30.400
+Dynamics kan dat onderscheid bijhouden. Je team ziet dat de onderdelen aanwezig zijn, terwijl finance het eigendom helder in kaart houdt.
+
+00:16:30.480 --> 00:16:34.840
+Wanneer je dat onderdeel gebruikt, registreert het systeem de eigendomsoverdracht en zijn de kosten voor jou.
+
+00:16:35.040 --> 00:16:38.900
+Dit is ideaal als je snel toegang wilt tot voorraad zonder alles vooraf te hoeven betalen.
+
+00:16:39.120 --> 00:16:44.120
+Dit alles werkt omdat inkoop, verkoop, productie, magazijn en finance allemaal met gedeelde data werken.
+
+00:16:44.320 --> 00:16:46.680
+Rapporten kunnen putten uit dezelfde voorraadgeschiedenis.
+
+00:16:46.880 --> 00:16:51.060
+Andere bedrijfssystemen kunnen ook op die historie aansluiten, in plaats van een aparte lijst aan te maken.
+
+00:16:51.060 --> 00:16:55.260
+Toch is er één veelvoorkomende verwarring die nieuwe Dynamics gebruikers in de war kan brengen.
+
+00:16:55.620 --> 00:16:59.640
+Voorraadbeheer en magazijnbeheer werken nauw samen, maar ze betekenen niet hetzelfde.
+
+00:16:59.860 --> 00:17:02.160
+Dat is een onderwerp voor een ander kennisfragment.
+
+00:17:02.720 --> 00:17:06.020
+Voorraadbeheer en magazijnbeheer, verwant, maar niet hetzelfde.
+
+00:17:06.520 --> 00:17:09.140
+Laten we een veelvoorkomend punt van verwarring ophelderen.
+
+00:17:09.500 --> 00:17:12.180
+Voorraadbeheer en magazijnbeheer lossen verschillende problemen op.
+
+00:17:12.420 --> 00:17:15.000
+Voorraadbeheer houdt het bedrijfsbrede overzicht van de voorraad bij.
+
+00:17:15.180 --> 00:17:17.280
+Het beantwoordt de grote vragen, hoeveel hebben we?
+
+00:17:17.280 --> 00:17:20.800
+Waar staat het geregistreerd? Kunnen we het gebruiken? En wat is het waard?
+
+00:17:20.800 --> 00:17:26.800
+Dat overzicht volgt de voorraad overal via inkoop, verkoop, productie, overboekingen, retourzendingen en tellingen.
+
+00:17:27.260 --> 00:17:29.700
+Magazijnbeheer draait om het fysieke werk in het magazijn.
+
+00:17:29.900 --> 00:17:35.040
+Het begeleidt medewerkers bij het ontvangen van goederen, opslaan, pikken van orders en laden van zendingen.
+
+00:17:35.180 --> 00:17:41.400
+In meer gedetailleerde opstellingen gebruiken medewerkers mobiele apparaten om barcodes te scannen en pallets met kentekenplaten te volgen.
+
+00:17:41.640 --> 00:17:44.420
+Zie het zo, voorraadbeheer is de centrale archiefkast.
+
+00:17:44.420 --> 00:17:47.520
+Het bevat het volledige voorraadverhaal voor het hele bedrijf.
+
+00:17:47.520 --> 00:17:52.560
+Magazijnbeheer helpt mensen het werk op de werkvloer uit te voeren met behulp van de informatie in die kast.
+
+00:17:52.760 --> 00:17:58.060
+De een legt het verhaal vast, de ander helpt medewerkers de voorraad nauwkeurig en snel op de fysieke locatie te verwerken.
+
+00:17:58.280 --> 00:18:00.160
+Niet elk bedrijf heeft dezelfde diepgang nodig.
+
+00:18:00.380 --> 00:18:04.540
+Een kleine distributeur kan beginnen met heldere artikel records, magazijnen, overboekingen en tellingen.
+
+00:18:04.660 --> 00:18:10.240
+Een grotere operatie met veel medewerkers, bakken, pallets en snelle orders heeft mogelijk diepere magazijnprocessen nodig.
+
+00:18:10.240 --> 00:18:13.620
+Maar hoe dan ook, elke afdeling heeft dezelfde artikelhistorie nodig.
+
+00:18:13.840 --> 00:18:15.520
+Conclusie, één gedeeld voorraadverhaal.
+
+00:18:15.680 --> 00:18:23.780
+Dynamics 365 Voorraadbeheer legt de volledige levenscyclus van voorraad vast, van ontvangst bij de leverancier en opslag tot verzending aan de klant en financiële waarde.
+
+00:18:23.960 --> 00:18:26.560
+Het is één gedeeld voorraadverhaal voor je gehele bedrijf.
+
+00:18:26.700 --> 00:18:28.680
+Bedankt voor het kijken naar weer een kennisfragment.
+
+00:18:28.680 --> 00:18:32.980
+Abonneer je voor meer afleveringen met mij, Milko Peters, op M365FM.
+
+00:18:33.160 --> 00:18:40.620
+En bekijk de volgende aflevering om te zien hoe Dynamics 365 Supply Chain Management in koop, magazijnen en planning verbindt rondom datzelfde gedeelde voorraadrecord.

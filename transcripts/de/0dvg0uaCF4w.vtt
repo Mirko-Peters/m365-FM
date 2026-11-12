@@ -1,0 +1,1102 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:07.920
+Warum erfordert der Monatsabschluss immer noch fünf verschiedene Tabellenversionen die Suche nach der richtigen Datei und einem Manager, der auf eine Antwort wartet, die längst offensichtlich sein sollte?
+
+00:00:08.800 --> 00:00:14.880
+Sie haben vielleicht ein Hauptbuch, mehrere Abteilungen und tausende von Transaktionen, aber Sie können trotzdem keine saubere finanzielle Bilanz ziehen.
+
+00:00:15.400 --> 00:00:17.040
+Genau hier kommt Dynamics 365 Spiel.
+
+00:00:17.620 --> 00:00:24.620
+Ich bin Mirko Peters von M35565FM und dieser Wissenshappen erklärt, wie gebuchte Finanzdaten zu berichten werden, die man wirklich lesen kann.
+
+00:00:24.620 --> 00:00:31.540
+Stellen Sie sich jede Transaktion als ein Dokument vor, das einmal zentral abgelegt wird und dann auf verschiedene Weise ausgewertet werden kann, ohne die Zahlen jedes Mal nur berechnet zu machen.
+
+00:00:31.680 --> 00:00:33.300
+Beginnen wir mit den Unterlagen in diesem Archiv.
+
+00:00:34.440 --> 00:00:37.060
+Das Fundament. Hauptbuch, Hauptkonten und Kategorien.
+
+00:00:38.160 --> 00:00:43.040
+Das Hauptbuch ist das zentrale Finanzverzeichnis eines Unternehmens, in dem jede gebuchte Transaktion in irgendeiner Form landet.
+
+00:00:44.080 --> 00:00:49.960
+Eine Kundenrechnung, eine Lieferantenrechnung, ein Lohnbuchungssatz, eine Bankzahlung oder eine Lageranpassung? Hinterlassen alle einen Buchungsbeleg.
+
+00:00:50.600 --> 00:00:54.060
+Stellen Sie sich das Hauptbuch wie einen großen Aktenschrank mit einer strengen Regel vor.
+
+00:00:54.060 --> 00:00:59.220
+Man legt keine Mietrechnung in dieselbe Schublade wie Produktverkäufe und keinen Banksaldo zum Mitarbeiterlöhnen, Löhnen.
+
+00:00:59.840 --> 00:01:01.160
+Jeder Betrag braucht ein finanzielles Zuhause.
+
+00:01:01.560 --> 00:01:05.520
+Dieses Zuhause beginnt mit einem Hauptkonto, das eine einfache Frage beantwortet, worauf bezieht sich dieses Geld?
+
+00:01:05.920 --> 00:01:08.520
+Bargeld liegt auf einem Hauptkonto, Umsatzerlöse auf einem anderen.
+
+00:01:08.840 --> 00:01:13.420
+Und Mietaufwand, Löhne, Forderungen, Verbindlichkeiten, Darlehen und Steuern haben jeweils ein eigenes.
+
+00:01:13.980 --> 00:01:19.520
+Wenn Ihr Unternehmen also eine monatliche Mietrechnung bezahlt, verbucht Dynamics 365 Finance diesen Betrag auf dem Mietaufwandskonto.
+
+00:01:19.520 --> 00:01:25.840
+Und wenn ein Kunde eine Rechnung bezahlt, landet der Erlös auf einem Umsatzkonto, während der offene Betrag auf dem Forderungskonto verbucht wird.
+
+00:01:26.540 --> 00:01:28.740
+Das Konto teilt Finance mit, was finanziell geschehen ist.
+
+00:01:29.100 --> 00:01:32.020
+Diese Struktur ist wichtig, denn ein Finanzbericht erfindet keine Zahlen.
+
+00:01:32.260 --> 00:01:36.360
+Er liest und gruppiert Zahlen, die bereits im Hauptbuch gebucht wurden, die bereits im Hauptbuch wurden.
+
+00:01:36.540 --> 00:01:41.060
+Landen die Buchungen an der falschen Stelle, kann kein Berichtsdesign die Bedeutung später ohne manuelle Arbeit korrigieren.
+
+00:01:41.520 --> 00:01:42.800
+Nun haben Hauptkonten auch Typen.
+
+00:01:43.100 --> 00:01:46.940
+Und ein Kontotyp gibt Dynamics 365 Finance eine grundlegende Klassifizierung.
+
+00:01:46.940 --> 00:01:51.280
+Erfolgsrechnungskonten erfassen Erträge und Aufwendungen für einen Zeitraum.
+
+00:01:51.620 --> 00:01:54.040
+Und Ihr kombinierter Saldo trägt zum Jahresergebnis bei, bei.
+
+00:01:54.580 --> 00:01:59.880
+Die Bilanz erfasst, was das Unternehmen besitzt, was es schuldet und die Anteile der Eigentümer, also Aktiva, Verbindlichkeiten und Eigenkapital.
+
+00:02:00.620 --> 00:02:02.860
+Bargeld ist normalerweise ein Vermögenswert, ein Bankdarlehen.
+
+00:02:03.000 --> 00:02:06.220
+Normalerweise eine Verbindlichkeit, Umsatzerlöse gehören zur Erfolgsrechnung und Miete zum Aufwand.
+
+00:02:06.700 --> 00:02:12.080
+Das klingt vielleicht nach einfacher Buchhaltung und, das ist es auch, oi, aber es ist gleichzeitig der erste Kontrollpunkt für die Berichterstattung,
+
+00:02:12.080 --> 00:02:15.220
+da das System wissen muss, ob ein Konto zu Gewinn- und Verlustrechnung oder zur Bilanz gehört.
+
+00:02:15.220 --> 00:02:19.420
+Es gibt auch einen speziellen Summenkontotyp, der die Salden mehrerer Konten addieren kann.
+
+00:02:19.960 --> 00:02:22.960
+Diesen verwenden Sie beispielsweise, wenn Sie eine Summe über einen bestimmten Bereich hinwegbilden möchten.
+
+00:02:23.480 --> 00:02:26.600
+Viele Finanzteams erstellen ihre Summen jedoch direkt im Finanzberichtswesen.
+
+00:02:27.600 --> 00:02:30.380
+Kontotypen bleiben allgemein gehalten. Genau hier kommen Hauptkontokategorien ins Spiel.
+
+00:02:30.780 --> 00:02:33.840
+Sie schaffen eine nützlichere Berichtsgruppe innerhalb dieser groben Klassifizierung.
+
+00:02:33.840 --> 00:02:40.800
+Vermögenskonten können beispielsweise in Kategorien wie Barmittel, Anlagevermögen, Forderungen oder kurzfristige Anlagen unterteilt werden.
+
+00:02:41.700 --> 00:02:45.500
+Verbindlichkeitskonten hingegen können unter Verbindlichkeiten aus Lieferungen und Leistungen, Steuerschulden und langfristige Schulden fallen.
+
+00:02:46.200 --> 00:02:46.980
+Der Unterschied ist einfach.
+
+00:02:47.460 --> 00:02:49.900
+Der Kontotyp gibt Ihnen die allgemeine buchhalterische Klasse an,
+
+00:02:50.040 --> 00:02:53.360
+während die Hauptkontokategorie die Berichtsgruppe definiert, die für den Betrachter relevant ist.
+
+00:02:54.100 --> 00:02:57.260
+Stellen Sie sich vor, Sie haben mehrere Bankkonten, eine Barkasse und ein Kassenverrechnungskonto.
+
+00:02:57.800 --> 00:03:01.900
+Jedes davon kann ein eigenes Hauptkonto haben, weil das Finanzwesen diesen Detaillierungsgrad benötigt.
+
+00:03:02.380 --> 00:03:04.120
+Dennoch können alle dieser Kassenkategorie zugeordnen.
+
+00:03:04.600 --> 00:03:07.980
+So kann ein Bericht einen übersichtlichen Kassenposten anzeigen, wenn das für den Leser ausreicht.
+
+00:03:08.320 --> 00:03:11.060
+Deshalb verwenden die Standardfinanzberichte Hauptkontokategorien.
+
+00:03:11.540 --> 00:03:17.980
+Sie benötigen eine vertraute Struktur, bevor Sie Salden in Abschnitten wie Vermögenswerte, Verbindlichkeiten, Erträge oder Aufwendungen anzeigen können.
+
+00:03:18.920 --> 00:03:23.600
+Eine saubere Einrichtung zahlt sich aus, denn wenn Hauptkonten klaren Regeln folgen, Kontotypen korrekt sind
+
+00:03:23.600 --> 00:03:26.260
+und die Kategorien der Leseweise Ihrer Finanzberichte entsprechen,
+
+00:03:26.260 --> 00:03:28.340
+wird die Berichterstattung viel einfacher.
+
+00:03:29.520 --> 00:03:31.400
+Sie beginnen mit Daten, die bereits an Ihrem richtigen Platz sind.
+
+00:03:31.800 --> 00:03:34.840
+Konten erklären, was finanziell geschehen ist, aber Führungskräfte verlangen meist mehr.
+
+00:03:35.800 --> 00:03:40.840
+Sie möchten auch wissen, wo es geschah, wer das Geld ausgegeben hat und welcher Geschäftsbereich das Ergebnis erzielt hat.
+
+00:03:43.260 --> 00:03:46.040
+Finanzdimensionen ergänzen genau die Fragen, die Führungskräfte tatsächlich stellen.
+
+00:03:46.780 --> 00:03:48.560
+Ein Hauptkonto sagt Ihnen, worauf sich das Geld bezieht.
+
+00:03:48.860 --> 00:03:49.740
+Einfach genug, nicht wahr?
+
+00:03:50.820 --> 00:03:53.680
+Doch Finanzdimensionen fügen den geschäftlichen Kontext zu diesem Betrag hinzu.
+
+00:03:53.680 --> 00:03:56.240
+Sie beantworten die Fragen, die Führungskräfte stellen, wenn sie eine Summe sehen.
+
+00:03:56.520 --> 00:03:57.420
+Welche Abteilung hat es ausgegeben?
+
+00:03:57.720 --> 00:03:58.780
+An welchem Standort Wirtschaft wirtschaften?
+
+00:03:59.020 --> 00:04:00.040
+Welcher Geschäftsbereich wird beteiligt?
+
+00:04:00.220 --> 00:04:01.100
+War es an ein Projekt gebunden?
+
+00:04:01.560 --> 00:04:02.540
+Betrachten wir Mietaufwendungen.
+
+00:04:02.820 --> 00:04:06.700
+Ihr Unternehmen zahlt möglicherweise Miete für die Zentrale, ein Lager und mehrere Einzelhandelsstandorte.
+
+00:04:07.000 --> 00:04:09.420
+Wenn jede Zahlung auf das Mietaufwandskonto gebucht wird, sehen Sie die Gesamtrete.
+
+00:04:09.680 --> 00:04:13.000
+Das ist vernützlich, sagt einem Regionalleiter aber nicht, was ein spezifischer Standort kostet.
+
+00:04:13.340 --> 00:04:14.760
+Eine Finanzdimension schließt diese Lücke.
+
+00:04:15.160 --> 00:04:17.560
+Sie können Abteilung, Finanzen, Vertrieb oder Betrieb hinzufügen.
+
+00:04:17.720 --> 00:04:20.500
+Oder Kostenstelle, Geschäftsbereich, Region oder Projekt.
+
+00:04:20.500 --> 00:04:22.880
+Diese Werte werden bei der Buchungssatz gespeichert.
+
+00:04:23.480 --> 00:04:26.480
+Das Kontoblatt also Mietaufwand, aber der Buchungssatz erzählt eine vollständigere Geschichte.
+
+00:04:26.840 --> 00:04:28.620
+Eine Zahlung lautet vielleicht Mietaufwand Hauptsitz.
+
+00:04:29.060 --> 00:04:30.200
+Eine andere Mietaufwand Lager.
+
+00:04:30.700 --> 00:04:32.500
+Eine dritte Mietaufwand Einzelhandel Norden.
+
+00:04:32.820 --> 00:04:34.340
+Gleiches Konto, andere geschäftliche Bedeutung.
+
+00:04:34.880 --> 00:04:39.700
+Das gibt der Finanzabteilung eine konsistente Kontenstruktur und lässt Führungskräfteergebnisse für ihren Unternehmensbereich einsehen.
+
+00:04:40.380 --> 00:04:41.680
+Der Vertriebsleiter betrachtet die Umsätze.
+
+00:04:42.140 --> 00:04:43.640
+Der Lagerleiter betrachtet das Lager.
+
+00:04:44.020 --> 00:04:46.000
+Die Finanzabteilung sieht die Gesamtsumme über alle Bereiche hinweg.
+
+00:04:46.340 --> 00:04:48.180
+Dies macht Schluss mit einer gängigen Tabellenkalkulationsgerunde.
+
+00:04:48.660 --> 00:04:52.500
+Ohne Dimensionen exportiert jemand Hauptbuchsalden und beginnt manuell Spalten hinzuzufügen,
+
+00:04:53.280 --> 00:04:55.420
+sortieren, filtern, Zahlen in eine neue Arbeitsmappe kopieren
+
+00:04:55.420 --> 00:04:58.100
+und dann erklären, warum die Abteilungssumme nicht mit der Unternehmenssumme übereinstimmt.
+
+00:04:58.980 --> 00:05:02.440
+Wenn Dimensionen bei der Buchung eingegeben werden, startet die Arbeit von einer besseren Grundlage aus.
+
+00:05:02.680 --> 00:05:04.680
+Das Detail gehört bereits zum Buchungssatz.
+
+00:05:05.220 --> 00:05:07.260
+Funktioniert aber nur, wenn die Werte konsistent bleiben.
+
+00:05:07.260 --> 00:05:11.440
+Wenn eine Person Region Nord wählt, eine andere Nord und eine dritte Nord,
+
+00:05:11.880 --> 00:05:16.460
+01 teilt der Bericht, was eigentlich ein Saldo sein sollte, in separate Zeilen auf.
+
+00:05:17.280 --> 00:05:21.180
+Die Finanzabteilung benötigt klare Namen, klare Zuständigkeiten und Regeln für die verwendbaren Werte.
+
+00:05:22.080 --> 00:05:24.700
+Dynamics Guide 65 Finance unterstützt dies durch Kontenregeln.
+
+00:05:25.160 --> 00:05:29.360
+Je nach Konto kann das System eine Dimension vorschreiben oder die auswählbaren Werte für Benutzer einschränken.
+
+00:05:29.920 --> 00:05:32.260
+Zum Beispiel benötigt ein Aufwandskonto vielleicht eine Kostenstelle,
+
+00:05:32.600 --> 00:05:34.520
+während ein Bankkonto nur einen Geschäftsbereich erfordert.
+
+00:05:34.520 --> 00:05:36.880
+Sie benötigen nicht für jedes Konto denselben Detailgrad.
+
+00:05:37.260 --> 00:05:38.080
+Hier ist eine einfache Regel.
+
+00:05:38.580 --> 00:05:42.700
+Verwenden Sie eine Finanzdimension, wenn Sie den Wert wiederverwenden und Salden über die Zeit hinweg danach auswerten möchten.
+
+00:05:43.020 --> 00:05:43.980
+Abteilung ist wiederverwendbar.
+
+00:05:44.360 --> 00:05:45.260
+Kostenstelle ist wiederverwendbar.
+
+00:05:45.680 --> 00:05:46.680
+Region ist wiederverwendbar.
+
+00:05:47.060 --> 00:05:50.200
+Projekt auch, falls Ihr Finanzteam Salden und Kosten nach Projekten verfolgt.
+
+00:05:50.380 --> 00:05:51.360
+Rechnungsnummern sind anders.
+
+00:05:51.480 --> 00:05:52.840
+Bestellnummern sind anders.
+
+00:05:53.560 --> 00:05:56.800
+Diese Werte gehören oft zu einer Transaktion oder einer kurzlebigen Aufgabe.
+
+00:05:56.800 --> 00:06:03.600
+Das Erstellen einer Finanzdimension für jede Rechnungsnummer hinterlässt tausende einzigartige Werte, die niemand auf einem Auszug sehen will.
+
+00:06:04.180 --> 00:06:05.300
+Hier passen Finanztags besser?
+
+00:06:06.560 --> 00:06:11.900
+Ein Finanztag speichert einen flexiblen Verweis wie eine Rechnungsnummer, Bestellnummer, Zahlungsreferenz oder eine externe System-ID.
+
+00:06:13.240 --> 00:06:18.680
+Er liegt auf dem Buchungssatz für Details und Analysen, spielt aber nicht die gleiche strukturierte Rolle wie eine Finanzdimension.
+
+00:06:18.680 --> 00:06:21.540
+Finanzdimensionen sind Teil der Kontenstruktur.
+
+00:06:22.020 --> 00:06:25.840
+Das System prüft, ob der Wert gültig ist und die Finanzabteilung kann ihn zur Saldenzusammenfassung nutzen.
+
+00:06:26.620 --> 00:06:27.560
+Finanztags sind leichter.
+
+00:06:28.020 --> 00:06:31.580
+Sie kennzeichnen eine Transaktion, ohne dieses Label in ein permanentes Berichtssegment zu verwandeln.
+
+00:06:31.960 --> 00:06:35.240
+Erstellen Sie also keine Dimensionen namens Rechnungsnummer, um später Rechnungen zu finden.
+
+00:06:35.780 --> 00:06:37.940
+Verwenden Sie dafür Transaktionsdetails oder einen Finanztag.
+
+00:06:38.240 --> 00:06:39.460
+Ein weiterer Einrichtungspunkt im Akten.
+
+00:06:39.900 --> 00:06:43.840
+Das Finanzberichtswesen kann die bereits in Ihrem System vorhandenen Dimensionen ohne zusätzliche Bericht zu nutzen.
+
+00:06:44.020 --> 00:06:47.200
+Auf der Einrichtungsseite für das Finanzberichtswesen legt die Finanzabteilung fest,
+
+00:06:47.200 --> 00:06:50.180
+welche Dimensionen für das Berichtdesign und die Ansicht erscheinen und in welcher Reihenfolge.
+
+00:06:50.580 --> 00:06:52.020
+Diese Reihenfolge ist wichtiger als es klingt.
+
+00:06:52.560 --> 00:06:56.020
+Wenn Ihre Berichte normalerweise Hauptkonto, Abteilung, Kostenstelle und Projektanzeigen,
+
+00:06:56.100 --> 00:06:57.340
+wissen die Leute, wo sie suchen müssen.
+
+00:06:58.040 --> 00:07:01.940
+Ändert sich die Reihenfolge von Bericht zu Bericht, wird das Lesen der Details langsamer und Fehler passieren leichter.
+
+00:07:02.660 --> 00:07:05.140
+Sobald jeder Eintrag die richtigen, wiederverwendbaren Bezeichnungen trägt,
+
+00:07:05.500 --> 00:07:07.660
+kann das Hauptbuch mehr beantworten als nur, was haben wir ausgegeben.
+
+00:07:08.120 --> 00:07:10.480
+Es beantwortet das wo, das wer und welchen Unternehmensbereich.
+
+00:07:10.660 --> 00:07:16.800
+Und mit diesen Details kann Dynamics 365 Finance diese gebuchten Einträge in einen Finanzbericht umwandeln.
+
+00:07:17.920 --> 00:07:19.220
+Was das Finanzberichtswesen eigentlich ist?
+
+00:07:19.880 --> 00:07:22.340
+Wenn Ihre Bucheinträge also die richtigen Konten und Dimensionen enthalten,
+
+00:07:22.400 --> 00:07:23.980
+was macht das Finanzberichtswesen eigentlich damit?
+
+00:07:24.840 --> 00:07:29.740
+Das Finanzberichtswesen ist das Add-in in Dynamics 365 Finance zum Erstellen, Verwalten und Anzeigen von Finanzberichten.
+
+00:07:30.380 --> 00:07:32.020
+Das klingt technisch, also drücken wir es einfach aus.
+
+00:07:32.980 --> 00:07:37.100
+Es ist der Teil von Dynamics 365 Finance, der ihre Hauptbuchsalden in Berichte verwandelt,
+
+00:07:37.100 --> 00:07:42.420
+wie Gewinn- und Verlustrechnung, Bilanz, Cashflow, Summen- und Saldenliste oder Budget-Ist-Vergleiche.
+
+00:07:43.280 --> 00:07:44.060
+Es ist kein neues Hauptbuch.
+
+00:07:44.480 --> 00:07:47.600
+Niemand bucht eine Rechnung im Finanzberichtswesen oder bezahlt darüber einen Lieferant.
+
+00:07:48.240 --> 00:07:52.840
+Die Buchung erfolgt in Dynamics 365 Finance und das Finanzberichtswesen liest die Ergebnisse anschließend aus.
+
+00:07:53.460 --> 00:07:55.180
+Es ist auch nicht nur ein Dashboard mit ein paar Diagrammen.
+
+00:07:55.640 --> 00:07:57.360
+Ein Dashboard ermöglicht es Ihnen, Trends schnell zu überblicken.
+
+00:07:57.360 --> 00:08:02.580
+Ein Finanzbericht bietet eine strukturierte Ansicht mit Kontengruppen, Summen, Berichtszeiträumen,
+
+00:08:02.980 --> 00:08:05.800
+Vergleichen und der Möglichkeit, die Details hinter einer Zahl zu prüfen.
+
+00:08:06.540 --> 00:08:08.940
+Stellen Sie es sich wie einen Berichtraum vor, der mit dem Hauptbuch verbunden ist.
+
+00:08:09.280 --> 00:08:10.540
+Das Hauptbuch zeichnet Transaktionen auf.
+
+00:08:10.880 --> 00:08:16.060
+Das Finanzberichtswesen ordnet Sie in das Format, das Ihr Finanzteam, Manager, Wirtschaftsprüfer oder Vorstandsmitglieder benötigen.
+
+00:08:16.580 --> 00:08:20.840
+Im Hintergrund nutzt das Finanzberichtswesen ein Finanzdatamart, der sich aus dem Hauptbuch aktualisiert, dasiert.
+
+00:08:21.180 --> 00:08:25.540
+Ein Datamart ist eine Berichtskopie der Finanzdaten, die so angeordnet ist, dass Berichte erstellt werden können,
+
+00:08:25.620 --> 00:08:27.840
+ohne die Mitarbeiter bei der Rechnungserfassung oder Journalbuchung zu verlangsamen.
+
+00:08:28.960 --> 00:08:33.000
+Diese Trennung hilft, damit die Finanzabteilung einen Bericht prüfen kann, während andere Benutzer weiterarbeiten.
+
+00:08:33.740 --> 00:08:37.620
+Sie müssen nicht jeden Saldo in eine Tabelle exportieren, nur um einen sauberen Monatsbericht zu erstellen.
+
+00:08:38.160 --> 00:08:42.260
+Microsoft liefert 22 standardmäßige Finanzberichte mit Dynamics 365 Finance mit.
+
+00:08:42.760 --> 00:08:46.940
+Sie erhalten eine Gewinn- und Verlustrechnung, Bilanz, Cashflowbericht, detaillierte Summen- und Saldenliste,
+
+00:08:46.940 --> 00:08:51.460
+zusammenfassende Summen- und Saldenliste, rollierende Ausgabenberichte und Budget-ist-Vergleicher.
+
+00:08:52.400 --> 00:08:57.160
+Plusberichte für wöchentliche Umsätze und Rabatte, Prüfungsdetails, Kennzahlen oder eine Bilanz neben einer Gewinn- und Verlustrechnung.
+
+00:08:57.400 --> 00:08:59.720
+Das bedeutet jedoch nicht, dass alles von Anfang an mit Ihrem Unternehmen übereinstimmt.
+
+00:09:00.220 --> 00:09:05.060
+Das Berichtslayout mag korrekt aussehen, aber Ihre eigenen Hauptkonnen und Kategorien müssen dennoch den Zeilen korrekt zugeordnet werden.
+
+00:09:05.540 --> 00:09:09.720
+Wenn Ihr Unternehmen eine Kontengruppe Direktkosten nennt, während der Standardbericht Umsatzkosten erwartet,
+
+00:09:09.720 --> 00:09:11.680
+muss jemand diese Einrichtung überprüfen.
+
+00:09:12.100 --> 00:09:13.540
+Beginnen Sie trotzdem mit einem Standardberichten.
+
+00:09:13.540 --> 00:09:17.680
+Er bietet Ihnen ein funktionierendes Beispiel, eine vertraute Struktur und einen weitaus schnelleren Startpunkt,
+
+00:09:17.760 --> 00:09:19.540
+als jeden Bericht auf einer leeren Seite aufzubauen.
+
+00:09:20.180 --> 00:09:23.300
+Öffnen Sie ihn, vergleichen Sie die Salden mit Ihrem Hauptbuch, prüfen Sie die Kontenkopierung
+
+00:09:23.300 --> 00:09:25.160
+und passen Sie nur das an, was Ihr Unternehmen benötigt.
+
+00:09:25.600 --> 00:09:29.760
+Dynamics 365 Finance verfügt über verschiedene Berichtstools und hier kommt es oft zur Verwechslung.
+
+00:09:30.180 --> 00:09:33.200
+Die Finanzberichterstattung befasst Sie mit Finanzberichten auf Basis des Hauptbuchs.
+
+00:09:34.360 --> 00:09:38.700
+SSRS SQL Server Reporting Services bearbeitet meist formatierte Geschäftsdokumente
+
+00:09:38.700 --> 00:09:44.520
+und detaillierte Berichte wie Rechnungen, Bestellungen, Kontoauszüge oder lange Transaktionslisten.
+
+00:09:45.460 --> 00:09:47.520
+Es ist für Seiten konzipiert, die ein festes Layout erfordern.
+
+00:09:48.460 --> 00:09:51.700
+Die elektronische Berichterstattung verarbeitet Dateien, die extern weitergeleitet werden müssen,
+
+00:09:51.800 --> 00:09:55.600
+wie Bankdateien, Steuererklärungen, XML-Dateien, CSV-Dateien oder andere regulierte Formate.
+
+00:09:56.260 --> 00:09:58.940
+Dieses Tool konzentriert sich auf das Senden oder Empfangen strukturierter Daten.
+
+00:09:59.440 --> 00:10:01.020
+Power BI übernimmt die interaktive Analyse.
+
+00:10:01.020 --> 00:10:05.160
+Sie verwenden Power BI, wenn Sie Diagramme, Filter, Trends und Managementansichten benötigen,
+
+00:10:05.160 --> 00:10:06.600
+die bei der Beantwortung von Fragen helfen.
+
+00:10:07.080 --> 00:10:08.880
+Welche Region weist das schnellste Kostenwachstum auf?
+
+00:10:09.180 --> 00:10:11.820
+Wie vergleichen sich die tatsächlichen Ausgaben mit dem Budget über mehrere Monate?
+
+00:10:12.480 --> 00:10:14.760
+Die Finanzberichterstattung erstellt den formalen Abschluss.
+
+00:10:15.500 --> 00:10:17.920
+Power BI hilft dabei, die zugrunde liegenden Muster zu untersuchen.
+
+00:10:18.400 --> 00:10:21.480
+Excel bietet der Finanzabteilung einen vertrauten Ort zur Prüfung von Zahlen
+
+00:10:21.480 --> 00:10:23.660
+oder für zusätzliche Analysen, sollte aber nicht der Ort sein,
+
+00:10:23.740 --> 00:10:25.540
+an dem jeder Finanzbericht von Grund auf neu beginnt.
+
+00:10:26.040 --> 00:10:26.940
+Jedes Tool hat seine Aufgaben.
+
+00:10:27.140 --> 00:10:28.120
+Wählen Sie das Richtige.
+
+00:10:28.440 --> 00:10:30.620
+Und beim Berichtswesen geht es weniger um das Neuerstellen von Zahlen,
+
+00:10:30.700 --> 00:10:31.620
+sondern mehr um deren Interpretation.
+
+00:10:31.620 --> 00:10:38.740
+Jeder Finanzbericht beginnt mit einer Form.
+
+00:10:39.160 --> 00:10:42.000
+Sie müssen festlegen, was auf der linken Seite steht, was oben erscheint
+
+00:10:42.000 --> 00:10:44.060
+und wie der Bericht beides zusammenführt.
+
+00:10:44.780 --> 00:10:47.180
+In Dynamics 3 und 5 Investi Finance nennen wir diese Teile
+
+00:10:47.180 --> 00:10:49.900
+Zeilendefinitionen, Spaltendefinitionen und Berichtsdefinitionen.
+
+00:10:50.400 --> 00:10:51.220
+Beginnen wir mit den Zeilen.
+
+00:10:51.820 --> 00:10:54.040
+Eine Zeilendefinition steuert die linke Seite Ihres Berichts.
+
+00:10:54.040 --> 00:10:58.060
+Sie weist das System, an welche Konten, Kontenkategorien oder Dimensionskombinationen abgerufen werden sollen.
+
+00:10:58.360 --> 00:11:01.160
+Sie legt auch fest, wie jede Zeile benannt wird und wo Summen erscheinen sollen.
+
+00:11:01.540 --> 00:11:03.280
+Denken Sie an eine normale Gewinn- und Verlustrechnung.
+
+00:11:03.600 --> 00:11:05.840
+Umsatz oben, dann die Umsatzkosten, danach die Bruttomarge.
+
+00:11:06.380 --> 00:11:09.180
+Darunter folgen die Betriebsausgaben und ganz unten das Nettoergebnis.
+
+00:11:09.940 --> 00:11:11.680
+Jede dieser Zeilen benötigt ihre eigenen Anweisungen.
+
+00:11:12.000 --> 00:11:13.960
+Der Umsatz könnte auf eine Gruppe von Verkaufskonten verweisen,
+
+00:11:14.120 --> 00:11:15.600
+während die Umsatzkosten auf Kostenkonten verweisen.
+
+00:11:16.040 --> 00:11:18.980
+Die Bruttomarge verweist überhaupt nicht auf ein Konto.
+
+00:11:20.060 --> 00:11:22.860
+Sie berechnet eine Summe, indem sie die Umsatzkosten vom Umsatz abzieht.
+
+00:11:23.120 --> 00:11:24.800
+Das ist die Aufgabe einer Zeilendefinition.
+
+00:11:25.180 --> 00:11:28.180
+Sie teilt dem Finanzbericht mit, welche gebuchten Seiten in jede Zeile gehören
+
+00:11:28.180 --> 00:11:31.340
+und weist den Bericht an, wie diese Zeilen zu addieren, zu addieren oder subtrahieren sind,
+
+00:11:31.400 --> 00:11:32.420
+um Gesamtsummen zu berechnen.
+
+00:11:33.180 --> 00:11:35.960
+Sie können eine Zeile auf Basis einzelner Hauptkonten eines Kontenbereichs
+
+00:11:35.960 --> 00:11:37.440
+oder einer Hauptkontokategorie erstellen.
+
+00:11:38.000 --> 00:11:39.340
+Kategorien sparen viel Einrichtungsaufwand.
+
+00:11:39.740 --> 00:11:42.900
+Eine Bilanz trennt beispielsweise normalerweise aktiver, passiver und Eigenkapital.
+
+00:11:43.960 --> 00:11:47.560
+Innerhalb der Aktiver könnten Sie Bargeld, Forderungen, Anlagevermögen und Vorräte ausweisen.
+
+00:11:47.560 --> 00:11:51.440
+Wenn diese Konten bereits den richtigen Hauptkontokategorien zugeordnet sind,
+
+00:11:51.540 --> 00:11:54.980
+können die Standardbilanzzeilen diese Gruppen nutzen, ohne jedes Konto einzeln aufzuführen.
+
+00:11:55.520 --> 00:11:56.660
+Das sorgt für ein übersichtlicheres Design.
+
+00:11:57.100 --> 00:11:59.580
+Finance behält zwar separate Konten für separate Salden bei,
+
+00:11:59.920 --> 00:12:03.200
+aber der Leser sieht nur den Detaillierungsgrad, der für einen offiziellen Abschluss sinnvoll ist.
+
+00:12:03.920 --> 00:12:05.620
+Wenn mehr Details benötigt werden, kann man die nicht hier eintauchen.
+
+00:12:06.020 --> 00:12:08.660
+Der Abschluss selbst muss kein Telefonbuch voller Kontonummern werden.
+
+00:12:09.420 --> 00:12:10.340
+Zahlen beantwortende Frage.
+
+00:12:10.680 --> 00:12:11.340
+Was berichten wir?
+
+00:12:12.000 --> 00:12:12.980
+Spalten beantwortende andere.
+
+00:12:13.200 --> 00:12:13.980
+Wie wollen wir es betrachten?
+
+00:12:14.720 --> 00:12:17.380
+Eine Spaltendefinition steuert die Information, die quer über die Seite verlassen.
+
+00:12:18.100 --> 00:12:22.140
+Sie könnten den aktuellen Monat, die Ergebnisse, seit Jahresbeginn, die Vorjahresergebnisse,
+
+00:12:22.320 --> 00:12:25.580
+das Budget, die Istwerte oder die Differenz zwischen Ist und Budget anzeigen.
+
+00:12:26.360 --> 00:12:28.980
+Eine einfache Gewinn- und Verlustrechnung könnte mit einer Beschreibungsspalte beginnen.
+
+00:12:29.580 --> 00:12:31.840
+Als nächstes könnten Sie die Istwerte für den aktuellen Zeitraum,
+
+00:12:31.960 --> 00:12:34.460
+dann die Werte seit Jahresbeginn, dann das Budget und dann die Abweichung anzeigen.
+
+00:12:35.580 --> 00:12:37.840
+Diese Abweichungsspalte berechnet die Differenz automatisch,
+
+00:12:37.840 --> 00:12:41.720
+sodass Manager nach der Berichtserstellung nicht erst Excel öffnen und eine weitere Formel erstellen müssen.
+
+00:12:42.580 --> 00:12:45.920
+Sie können auch Zeiträume nebeneinander platzieren, etwa Januar bis Dezember.
+
+00:12:45.920 --> 00:12:49.780
+Dieses Quartal neben dem gleichen Quartal des Vorjahres oder ist Ergebnisse neben einer Prognose.
+
+00:12:50.640 --> 00:12:52.920
+Die Zeilen bestimmen die Themen und die Spalten bestimmen die Sichtweise.
+
+00:12:53.620 --> 00:12:56.460
+Setzen Sie diese beiden Teile zusammen, haben Sie den Großteil eines Finanzberichts.
+
+00:12:56.840 --> 00:12:59.080
+Aber das System benötigt noch einen Ort, an dem Sie den Bericht benennen
+
+00:12:59.080 --> 00:13:02.500
+und der NEMX 365 Finance mitteilen, welche Zeilen uns mitteilen, welche Zeilen uns spannen gehören.
+
+00:13:02.740 --> 00:13:03.920
+Das ist die Berichtsdefinition.
+
+00:13:04.880 --> 00:13:08.380
+Eine Berichtsdefinition kombiniert die Zeilen und Spalten zu etwas, das Benutzer generieren können.
+
+00:13:08.800 --> 00:13:11.440
+Sie steuert auch Einstellungen wie Rundungen und die Darstellung negativer Beträge.
+
+00:13:11.440 --> 00:13:13.700
+Hier ist ein konkretes Beispiel.
+
+00:13:14.600 --> 00:13:18.140
+Sie könnten eine Zeilendefinition namens GUV-Zeilen und dann eine Spalten-Definition namens
+
+00:13:18.140 --> 00:13:20.040
+monatliche Istwerte, Budget und Abweichung erstellen.
+
+00:13:20.940 --> 00:13:24.080
+Die Berichtsdefinition verbindet Sie und gibt dem fertigen Bericht einen Namen,
+
+00:13:24.240 --> 00:13:26.080
+vielleicht eine betriebswirtschaftliche Erfolgsrechnung.
+
+00:13:26.760 --> 00:13:29.100
+Diese Trennung ist nützlich, da Sie die Teile wiederverwenden können.
+
+00:13:30.180 --> 00:13:34.460
+Eine Zeilendefinition für eine Erfolgsrechnung könnte mit einem monatlichen Spalten-Layout,
+
+00:13:34.680 --> 00:13:37.260
+einem Jahresbericht oder einem Vorjahresvergleich funktionieren.
+
+00:13:37.260 --> 00:13:42.040
+Sie müssen nicht jedes Mal, wenn jemand eine neue Frage stellt, dieselbe Ertrags- und Aufwandsstruktur
+
+00:13:42.040 --> 00:13:42.540
+neu erstellen.
+
+00:13:42.960 --> 00:13:44.640
+Manche Unternehmen benötigen einen Bericht für eine Firma.
+
+00:13:45.360 --> 00:13:47.880
+Andere benötigen einen Bericht, der einer größeren Unternehmensstruktur folgt.
+
+00:13:48.660 --> 00:13:50.140
+Genau hier kommt ein Berichtsstrukturbaum ins Spiel.
+
+00:13:50.600 --> 00:13:53.640
+Ein Berichtsbaum ermöglicht es Ihnen, Finanzergebnisse in Berichtseinheiten zu organisieren.
+
+00:13:54.220 --> 00:13:57.440
+Diese Einheiten können juristische Personen, Regionen, Abteilungen, Geschäftsbereiche oder
+
+00:13:57.440 --> 00:13:59.160
+andere Teile der Unternehmensstruktur darstellen.
+
+00:13:59.640 --> 00:14:01.280
+Stellen Sie sich eine Gruppe mit drei Tochtergesellschaften vor.
+
+00:14:01.540 --> 00:14:04.960
+Die Muttergesellschaft möchte jede Tochtergesellschaft einzeln sehen und dann einen Gesamtwert für die Gruppe.
+
+00:14:04.960 --> 00:14:09.300
+Ein Berichtsbaum kann diese Struktur abbilden, jede Tochtergesellschaft als Berichtseinheit
+
+00:14:09.300 --> 00:14:10.300
+und die Gruppensumme darüber.
+
+00:14:11.160 --> 00:14:12.520
+Der gleiche Ansatz funktioniert auf der Region.
+
+00:14:13.000 --> 00:14:16.160
+Sie könnten Nord, Süd und West als separate Einheiten darstellen und dann eine Gesamtsumme
+
+00:14:16.160 --> 00:14:17.260
+für das gesamte Unternehmen einfügen.
+
+00:14:17.880 --> 00:14:21.240
+Oder ein Abteilungsleiter muss vielleicht nur seine eigene Einheit sehen, während das
+
+00:14:21.240 --> 00:14:22.900
+Finanzteam die Gesamtansicht benötigt.
+
+00:14:23.400 --> 00:14:26.660
+Eine Berichtsdefinition kann jeweils mit einem Berichtsbaum verknüpft werden, wählen Sie
+
+00:14:26.660 --> 00:14:28.860
+also die Struktur, die zur Fragestellung des Berichts passt.
+
+00:14:28.860 --> 00:14:33.060
+Für Neulinge enthält der Reportdesigner einen Assistenten, der beim Aufbau dieser Teile
+
+00:14:33.060 --> 00:14:35.040
+hilft, ohne dass man sofort alle Optionen überblicken muss.
+
+00:14:35.820 --> 00:14:39.540
+Sie wählen den Berichtstyp, gehen die grundlegenden Einstellungen durch und erstellen einen ersten
+
+00:14:39.540 --> 00:14:39.880
+Entwurf.
+
+00:14:40.540 --> 00:14:44.300
+Wenn Ihr Finanzteam erfahrener wird, kann es Zeilendefinitionen, Spaltendefinitionen,
+
+00:14:44.380 --> 00:14:46.640
+Berichtsdefinitionen und Berichtsstrukturen direkt bearbeiten.
+
+00:14:47.540 --> 00:14:51.560
+Das gibt Ihnen mehr Kontrolle über Berechnungen, Layout, Gruppierungen und die Darstellung von Dimensionen.
+
+00:14:51.560 --> 00:14:54.680
+Das Ziel ist es nicht, den kompliziertestmöglichen Bericht zu erstellen.
+
+00:14:55.700 --> 00:14:58.620
+Es geht darum, einen Bericht zu erstellen, bei dem jede Zeile eine echte Geschäftsfrage
+
+00:14:58.620 --> 00:15:01.900
+beantwortet, jede Spalte im Vergleich verdeutlicht und die Zahlen mit dem Hauptbuch übereinstimmen.
+
+00:15:03.360 --> 00:15:04.840
+Berichte ausführen, lesen und pflegen
+
+00:15:04.840 --> 00:15:09.140
+Ein Bericht ist nur dann nützlich, wenn die Leute ihn lesen, hinterfragen und den gezeigten
+
+00:15:09.140 --> 00:15:09.980
+Daten vertrauen können.
+
+00:15:10.860 --> 00:15:14.180
+Nachdem Sie einen Finanzbericht erstellt haben, sind Sie nicht automatisch auf eine statische
+
+00:15:14.180 --> 00:15:14.900
+Seite festgelegt.
+
+00:15:15.620 --> 00:15:19.120
+Sie können das Berichtsdatum ändern, eine Währung wählen, zwischen Zusammenfassung und Details
+
+00:15:19.120 --> 00:15:21.120
+wechseln und Filter für Finanzdimensionen oder Attribute anwenden.
+
+00:15:22.100 --> 00:15:25.400
+Das bedeutet, derselbe Bericht kann verschiedene Fragen beantworten, ohne dass jemand ihn in
+
+00:15:25.400 --> 00:15:26.560
+eine neue Arbeitsmappe kopieren muss.
+
+00:15:26.880 --> 00:15:29.640
+Ein Finanzmanager könnte mit der vollständigen Erfolgsrechnung des Unternehmens für den
+
+00:15:29.640 --> 00:15:30.380
+aktuellen Monat beginnen.
+
+00:15:30.780 --> 00:15:33.740
+Dann können Sie es auf eine Geschäftseinheit filtern, in einer anderen Währung anzeigen
+
+00:15:33.740 --> 00:15:35.840
+oder das Datum ändern, um einen anderen Zeitraum zu vergleichen.
+
+00:15:36.120 --> 00:15:37.380
+Das Berichtsdesign bleibt dabei erhalten.
+
+00:15:37.780 --> 00:15:39.780
+Die Ansicht ändert sich je nach aktueller Fragestellung.
+
+00:15:39.840 --> 00:15:40.780
+Hierbei sind zwei Ansichten wichtig.
+
+00:15:41.120 --> 00:15:45.920
+Die Zusammenfassungsansicht bietet Ihnen den finanziellen Überblick, Gesamtumsatz, Gesamtkosten, Nettoergebnis.
+
+00:15:46.380 --> 00:15:49.860
+Die Detailansicht bietet mehr Zahlen zur Überprüfung, wenn ein Gesamtwert nicht mit meiner Erwartung übereinstimmt.
+
+00:15:49.860 --> 00:15:51.060
+Und das bringt uns zum Drilldown.
+
+00:15:51.440 --> 00:15:53.960
+Stellen Sie sich vor, eine Betriebskostenzeile erscheint deutlich höher als budgetiert.
+
+00:15:54.280 --> 00:15:58.100
+Anstatt eine E-Mail zu senden, eine Buchungsliste zu exportieren und Kontonummern manuell abzugleichen,
+
+00:15:58.180 --> 00:16:00.120
+können Sie direkt aus dem Bericht in diesen Betrag eintauchen.
+
+00:16:00.620 --> 00:16:03.440
+Sie können den Saldo bis zu den zugrunde liegenden Transaktionen zurückverfolgen.
+
+00:16:03.440 --> 00:16:07.900
+So sehen Sie die Buchungssätze, Daten, Belege und andere Details, die zu der Zahl geführt haben.
+
+00:16:08.580 --> 00:16:12.080
+Der Bericht wird zum Ausgangspunkt für ein Gespräch, nicht zur endgültigen Antwort auf Papier.
+
+00:16:12.640 --> 00:16:14.300
+Dies ist besonders zum Monatsabschluss hilfreich.
+
+00:16:14.700 --> 00:16:16.780
+Jemand fragt, warum sind die Lagerkosten gestiegen?
+
+00:16:17.500 --> 00:16:20.960
+Sie beginnen mit der Lageransicht, finden die Kostenzeile, schauen in die Transaktionen und sehen,
+
+00:16:21.080 --> 00:16:24.780
+ob der Anstieg durch Miete, Reparaturen, Personal oder eine einmalige Belastung entstand.
+
+00:16:25.780 --> 00:16:29.760
+Das Finanzteam verbringt weniger Zeit mit der Quellensuche und mehr Zeit damit, das Ergebnis zu erklären.
+
+00:16:29.760 --> 00:16:31.940
+Berichte können auch nach Zeitplan ausgeführt werden.
+
+00:16:32.380 --> 00:16:35.940
+Ein Team kann je nach Aufgabe Berichte täglich, wöchentlich, monatlich oder jährlich erstellen.
+
+00:16:36.500 --> 00:16:38.740
+Monatliche Managementberichte sind das offensichtliche Beispiel,
+
+00:16:38.920 --> 00:16:43.380
+aber Zeitpläne helfen Teams auch bei regelmäßigen Budgetprüfungen oder wiederkehrenden Gruppenberichten oder wiederkehrenden Gruppen.
+
+00:16:43.800 --> 00:16:48.480
+Für Unternehmen mit mehreren Rechtseinheiten kann das Finanzreporting Berichte über diese Einheiten hinweg unterstützen
+
+00:16:48.480 --> 00:16:50.840
+und Währungen für Berichtsbedarfe umrechnen.
+
+00:16:51.840 --> 00:16:55.140
+Ein Konzernfinanzteam benötigt möglicherweise jeden Abschluss in der Lokalwährung,
+
+00:16:55.300 --> 00:16:57.740
+während die Geschäftsführung eine Ansicht in eine Berichtswährung braucht.
+
+00:16:57.740 --> 00:17:00.540
+Die Struktur erfordert eine sorgfältige Einrichtung,
+
+00:17:00.640 --> 00:17:03.560
+aber der Leser muss den Bericht nicht jeden Monat aus separaten Dateien neu erstellen.
+
+00:17:04.160 --> 00:17:06.360
+Hier ist ein wichtiger Wartungshinweis, den Sie sich merken sollten.
+
+00:17:07.300 --> 00:17:10.720
+Neu generierte Berichte erhalten standardmäßig ein Ablaufdatum von 90 Tagen.
+
+00:17:11.380 --> 00:17:14.120
+Benutzer mit entsprechenden Sicherheitsberechtigungen können diesen Zeitraum ändern,
+
+00:17:14.240 --> 00:17:16.120
+einschließlich der Einstellung, dass ein Bericht nie abläuft.
+
+00:17:16.480 --> 00:17:19.100
+Die Person, die einen Bericht erstellt, kann ihren eigenen Bericht löschen.
+
+00:17:19.820 --> 00:17:23.780
+Benutzer mit der Sicherheitsrolle für Finanzreporting können von anderen Benutzern erstellte Berichte löschen
+
+00:17:23.780 --> 00:17:25.420
+und die Ablaufeinstellung für Berichte verwalten.
+
+00:17:25.420 --> 00:17:28.940
+Das schützt die Berichtsliste davor, zu einem langen Archiv alter Läufe zu werden,
+
+00:17:29.000 --> 00:17:30.140
+die niemand mehr zuordnen kann.
+
+00:17:30.760 --> 00:17:32.320
+Aber seien Sie auch bei älteren Berichten vorsichtig.
+
+00:17:32.900 --> 00:17:37.600
+Ab Financial Reporting Version 10.0.40 verwendet Dynamics 365 Finance
+
+00:17:37.600 --> 00:17:39.340
+beim erneuten Ausführen eines gespeicherten Berichts
+
+00:17:39.340 --> 00:17:41.680
+oder beim Drilldown in Details die aktuellen Transaktionsdaten.
+
+00:17:42.400 --> 00:17:45.780
+Wenn jemand nach der ersten Berichtserstellung eine zugrunde liegende Transaktion bearbeitet hat,
+
+00:17:46.100 --> 00:17:48.260
+können die Drilldown-Details von der ursprünglichen Ansicht abweichen.
+
+00:17:48.960 --> 00:17:51.460
+Die gespeicherten Salden auf oberster Ebene ändern sich in der Regel nicht,
+
+00:17:51.520 --> 00:17:52.780
+die zugrunde liegenden Details jedoch schon.
+
+00:17:52.780 --> 00:17:55.580
+Wenn das Finanzwesen also eine unveränderliche Revisionskopie
+
+00:17:55.580 --> 00:17:57.060
+für einen abgeschlossenen Zeitraum benötigt,
+
+00:17:57.140 --> 00:17:59.440
+exportieren Sie den fertigen Bericht als Excel- oder PDF-Datei
+
+00:17:59.440 --> 00:18:01.520
+und bewahren Sie diese gemäßiger üblichen Dokumentationsprozesse.
+
+00:18:01.900 --> 00:18:03.720
+Ein letzter Warnhinweis zum Add-In selbst.
+
+00:18:04.580 --> 00:18:06.860
+Wenn jemand das Financial Reporting Add-In deinstalliert,
+
+00:18:07.200 --> 00:18:10.500
+löscht Dynamics 365 von Westig Finance dauerhaft alle zuvor erstellten Berichte,
+
+00:18:10.600 --> 00:18:12.120
+Berichtsentwürfe und Konfigurationen.
+
+00:18:12.980 --> 00:18:15.400
+Microsoft bietet keine Unterstützung für die Wiederherstellung nach einer solchen Aktie.
+
+00:18:15.660 --> 00:18:18.660
+Betrachten Sie es wie das Entfernen eines gemeinsam genutzten Finanzarbeitsbereichs,
+
+00:18:18.700 --> 00:18:20.040
+nicht wie das Löschen einer App von Ihrem Smartphone.
+
+00:18:20.040 --> 00:18:23.740
+Formelle Abschlüsse helfen dem Finanzwesen, die Zahlen in einem kontrollierten Format zu erläutern.
+
+00:18:24.240 --> 00:18:27.620
+Für schnellere visuelle Analysen und Trendfragen eignet sich ein ergänzendes Werkzeug,
+
+00:18:28.520 --> 00:18:29.960
+wo Power BI und Excel ihren Platz haben.
+
+00:18:30.540 --> 00:18:32.380
+Wo genau passen also Power BI und Excel ins Bild?
+
+00:18:32.860 --> 00:18:36.100
+Das Finanzberichtswesen kümmert sich um Ihre formellen Abschlüsse, die auch die Prüfer benötigen.
+
+00:18:36.500 --> 00:18:39.380
+Power BI übernimmt Diagramme, Trends und interaktive Managementansichten.
+
+00:18:40.120 --> 00:18:42.120
+Umsatz nach Regionen, Budget-Iss-Vergleiche.
+
+00:18:42.120 --> 00:18:43.800
+Auch Excel hat nach wie vor seine Berechtigung.
+
+00:18:44.640 --> 00:18:47.540
+Ihr Team nutzt es für Prüfungen, Berechnungen und den Austausch von Zahlen in einem Format,
+
+00:18:47.600 --> 00:18:48.620
+das jedem bereits vertraut ist.
+
+00:18:49.480 --> 00:18:52.720
+Der Arbeitsbereich Finanzanalyse enthält Power BI-Inhalte für gängige Ansichten,
+
+00:18:52.960 --> 00:18:55.460
+doch konzentrieren Sie jedes Dashboard auf eine spezifische Fragestellung.
+
+00:18:55.700 --> 00:18:57.280
+Überladen Sie nicht alles auf einem einzigen Bildschirm.
+
+00:18:57.680 --> 00:19:00.660
+Das Beste daran ist, alle diese Tools greifen auf dieselben Finanzdatensitze zu.
+
+00:19:00.920 --> 00:19:02.140
+Alles arbeitet nahtlos zusammen.
+
+00:19:03.040 --> 00:19:03.460
+Fazit.
+
+00:19:04.140 --> 00:19:05.240
+Erstellen Sie zuerst das Hauptbuch.
+
+00:19:06.420 --> 00:19:08.420
+Ein übersichtlicher Bericht beginnt nicht mit dem Layout.
+
+00:19:08.800 --> 00:19:09.500
+Er beginnt schon viel früher.
+
+00:19:09.500 --> 00:19:11.460
+Saubere Hauptkonten.
+
+00:19:12.360 --> 00:19:14.020
+Ohne dieses Fundament ist alles andere Zweck nur.
+
+00:19:14.560 --> 00:19:15.700
+Beginnen Sie mit einem Standardbericht.
+
+00:19:15.920 --> 00:19:17.440
+Testen Sie ihn mit Ihren tatsächlichen Salden
+
+00:19:17.440 --> 00:19:19.680
+und passen Sie anschließend nur das an, was Ihr Unternehmen wirklich benötigt.
+
+00:19:20.440 --> 00:19:24.420
+Abonnieren Sie den Kanal für weitere Microsoft-Wissens-Häppchen von Mirko Peters beim 365FM
+
+00:19:24.420 --> 00:19:26.480
+und teilen Sie dieses Video mit jemandem, der immer noch glaubt,
+
+00:19:26.540 --> 00:19:28.760
+dass Dynamics 365 Finanzberichte nur aus Excel bestehen.

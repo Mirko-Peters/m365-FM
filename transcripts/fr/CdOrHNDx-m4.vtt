@@ -1,0 +1,769 @@
+WEBVTT
+
+00:00:00.340 --> 00:00:05.780
+Prêt pour 10 jours consacrés à Microsoft 365, Copilot, l'IA Azure et aux acteurs qui façonnent.
+
+00:00:05.960 --> 00:00:08.080
+L'avenir du travail est...
+
+00:00:08.080 --> 00:00:11.900
+En janvier, M365Con revient et nous voyons les choses en grand.
+
+00:00:12.920 --> 00:00:18.220
+Rejoignez-nous pour des sessions en direct, des démonstrations concrètes et des connaissances pratiques apportées par des MVP et des experts du monde entier.
+
+00:00:18.920 --> 00:00:21.300
+Fini les présentations génériques et les mots à la mode interminable.
+
+00:00:22.120 --> 00:00:28.480
+Nous abordons les vrais défis, Copilot Studio, les agents IA, Fabrique, la sécurité, la gouvernance et l'automatisation.
+
+00:00:28.480 --> 00:00:34.320
+Que vous soyez professionnel de l'IT, développeur ou dirigeant, il y a des sessions conçues pour vous.
+
+00:00:35.520 --> 00:00:40.100
+Avec 10 jours complets, vous pourrez explorer de multiples technologies et échanger avec une communauté mondiale.
+
+00:00:41.020 --> 00:00:44.240
+Suivez le direct et rapportez des idées pratiques dans votre organisation.
+
+00:00:45.240 --> 00:00:49.000
+Janvier 2027, 10 jours, une seule communauté Microsoft.
+
+00:00:49.500 --> 00:00:50.660
+Les inscriptions sont ouvertes.
+
+00:00:51.940 --> 00:00:55.600
+Rendez-vous sur m365con.net pour réserver votre place dès aujourd'hui.
+
+00:00:55.600 --> 00:00:58.440
+C'est bien m365con.net.
+
+00:01:00.260 --> 00:01:04.780
+Scrivez-vous sur m365con.net et nous nous retrouverons en direct en janvier.
+
+00:01:05.440 --> 00:01:06.880
+Il est 03h4078EC.
+
+00:01:07.760 --> 00:01:09.260
+La plupart de l'équipe informatique dort.
+
+00:01:09.900 --> 00:01:12.180
+Mais quelque part dans les journaux du cloud, un schéma se dessine.
+
+00:01:12.920 --> 00:01:13.640
+Cela commence petit.
+
+00:01:13.980 --> 00:01:17.040
+Trois nouvelles listes SharePoint nommées Catastiquet, créées en 4 minutes.
+
+00:01:18.160 --> 00:01:20.760
+Puis un pic soudain de changement d'autorisation sans ticket associé.
+
+00:01:21.720 --> 00:01:24.460
+Enfin, une série de Flux Power Automate échoue simultanément.
+
+00:01:24.460 --> 00:01:26.340
+Et le téléphone ne sonne pas.
+
+00:01:26.720 --> 00:01:27.500
+C'est ça le plus effrayant.
+
+00:01:27.800 --> 00:01:30.540
+Le DSI ne reçoit aucun appel car techniquement le système n'est pas en panne.
+
+00:01:31.060 --> 00:01:32.280
+Les voyants des serveurs sont toujours au vert.
+
+00:01:33.080 --> 00:01:35.580
+Mais si vous examinez ce schéma de près, ce n'est pas une panne que vous voyez.
+
+00:01:35.780 --> 00:01:36.500
+C'est de l'entropie.
+
+00:01:36.660 --> 00:01:37.120
+C'est de l'entropie.
+
+00:01:37.480 --> 00:01:38.800
+De l'entropie ?
+
+00:01:38.800 --> 00:01:40.460
+Ce déclin graduel vers le désordre ?
+
+00:01:42.610 --> 00:01:45.610
+On a l'impression de tellement se concentrer sur les pannes bruyantes, les ransomware,
+
+00:01:45.730 --> 00:01:48.170
+les attaques des DOS, qu'on ignore cette lente dégradation.
+
+00:01:48.170 --> 00:01:52.990
+Nous parlons aujourd'hui de la mort par mille coupures agtech dans l'écosystème Microsoft
+
+00:01:52.990 --> 00:01:54.590
+365, n'est-ce pas ?
+
+00:01:54.590 --> 00:01:55.670
+N'est-ce pas ?
+
+00:01:55.670 --> 00:01:56.110
+Exactement.
+
+00:01:56.410 --> 00:01:59.030
+Nous expliquons comment les systèmes de plateformes échouent silencieusement bien
+
+00:01:59.030 --> 00:01:59.910
+avant d'échouer bruyamment.
+
+00:02:00.290 --> 00:02:04.050
+Et surtout, comment stopper cette dérive par la discipline qui est de l'héroïsme,
+
+00:02:04.170 --> 00:02:04.930
+plutôt que par l'héroïsme.
+
+00:02:05.250 --> 00:02:07.590
+Parce qu'actuellement, la plupart des organisations fonctionnent sur l'héroïsme.
+
+00:02:08.370 --> 00:02:11.530
+Elles ont ce fameux expert Power Platform qui répare le flux quand ils plantent à minuit.
+
+00:02:12.090 --> 00:02:13.450
+Ce n'est pas une stratégie, c'est un risque.
+
+00:02:13.450 --> 00:02:15.830
+Alors, analysons cette entropie.
+
+00:02:16.690 --> 00:02:20.330
+La source que nous étudions aujourd'hui la décrit comme une instabilité cumulée.
+
+00:02:21.210 --> 00:02:23.970
+Tout commence par le substrat lui-même, SharePoint.
+
+00:02:25.410 --> 00:02:28.390
+SharePoint, le couteau suisse que tout le monde tente d'utiliser à la fois comme un marteau,
+
+00:02:28.950 --> 00:02:30.830
+une scie et une base de données relationnelles.
+
+00:02:31.490 --> 00:02:34.070
+Le problème fondamental est que SharePoint est un substrat de collaboration.
+
+00:02:35.150 --> 00:02:37.850
+Il est conçu pour des documents et des listes de données lisibles par des humains.
+
+00:02:38.850 --> 00:02:41.030
+Les gens essaient de le traiter comme SQL Server ?
+
+00:02:41.030 --> 00:02:42.230
+J'ai vu cela une centaine de fois.
+
+00:02:43.450 --> 00:02:45.370
+Vous recevez une demande pour un simple outil de suivi.
+
+00:02:45.790 --> 00:02:47.910
+Et soudain, vous retrouvez avec une liste de 50 colonnes,
+
+00:02:48.330 --> 00:02:49.530
+5 chaînes de recherche différentes
+
+00:02:49.530 --> 00:02:52.550
+et une structure de permission qui nécessite un doctorat pour être comprise.
+
+00:02:53.650 --> 00:02:54.650
+C'est là que la dégradation commence.
+
+00:02:55.030 --> 00:02:56.510
+Le document appelle cela la discipline du schéma.
+
+00:02:57.250 --> 00:02:58.770
+Cela semble ennuyeux, mais c'est essentiel.
+
+00:02:59.150 --> 00:03:00.250
+Par exemple, le nommage des listes.
+
+00:03:00.710 --> 00:03:03.690
+Vous voyez des listes nommées, cap suivi des 7 Gen Kenk ou projet X Tampé.
+
+00:03:04.250 --> 00:03:06.550
+C'est acceptable pour un bac à sable, mais pas en production.
+
+00:03:07.550 --> 00:03:08.990
+Nommez la liste après le concept métier.
+
+00:03:09.390 --> 00:03:10.730
+C'est un incident, pas le suivi de Genk.
+
+00:03:10.730 --> 00:03:14.310
+Et la dette technique s'accumule aussi dans les noms de colonnes, n'est-ce pas ?
+
+00:03:14.310 --> 00:03:15.190
+N'est-ce pas ?
+
+00:03:15.190 --> 00:03:17.130
+Vous nommez une colonne StatueAker, aujourd'hui,
+
+00:03:17.310 --> 00:03:19.170
+puis changez le nom d'affichage enquête à ActualAker,
+
+00:03:19.810 --> 00:03:21.150
+mais l'API voit toujours StatueAker.
+
+00:03:22.150 --> 00:03:24.070
+Ensuite, vous la supprimez et créez Statue2CQ.
+
+00:03:24.870 --> 00:03:25.390
+Statue2K.
+
+00:03:26.070 --> 00:03:29.930
+C'est un cauchemar pour quiconque essaye de construire une application par-dessus.
+
+00:03:29.930 --> 00:03:32.610
+La règle est simple, les noms internes ne changent jamais.
+
+00:03:33.310 --> 00:03:35.490
+Les étiquettes sont pour l'interface utilisateur, pas pour l'API.
+
+00:03:36.150 --> 00:03:38.810
+Si vous ne faites pas respecter ça, vous construisez un gratte-ciel sur un marécage.
+
+00:03:39.330 --> 00:03:40.690
+Et puis, il y a la question des relations.
+
+00:03:41.190 --> 00:03:42.710
+Oh, la redoutable colonne de recherche.
+
+00:03:43.170 --> 00:03:44.030
+Les recherches sont séduisantes.
+
+00:03:44.470 --> 00:03:45.550
+Elles ressemblent à une jointure relationnelle,
+
+00:03:45.650 --> 00:03:47.310
+mais SharePoint n'est pas ce de données relationnelles.
+
+00:03:47.730 --> 00:03:48.090
+Relationnelles.
+
+00:03:48.430 --> 00:03:49.730
+Les directives à ce sujet sont strictes.
+
+00:03:50.490 --> 00:03:53.010
+Une recherche par vue critique, peut-être deux si vous avez de la chance.
+
+00:03:53.010 --> 00:03:59.210
+Si vous essayez de faire des relations à sceaux multiples comme filtrer une liste basée sur une recherche qui interroge une autre liste,
+
+00:03:59.270 --> 00:04:00.650
+vous devez arrêter.
+
+00:04:01.210 --> 00:04:02.010
+Alors, vers quoi se tourner ?
+
+00:04:02.770 --> 00:04:05.650
+Si SharePoint ne peut pas gérer cette complexité, devez-vous simplement abonner.
+
+00:04:06.250 --> 00:04:06.870
+Déplacer les données.
+
+00:04:07.390 --> 00:04:09.190
+C'est une discussion sur Dataverse ou sur SQL.
+
+00:04:09.910 --> 00:04:12.390
+Si vous avez besoin d'intégrité transactionnelle et de jointure complexe,
+
+00:04:12.470 --> 00:04:15.190
+vous abusez de SharePoint et le système vous punira pour cela.
+
+00:04:16.510 --> 00:04:19.810
+Pas aujourd'hui, peut-être pas demain, mais finalement, une requête atteindra le seuil.
+
+00:04:19.810 --> 00:04:23.170
+La délégation échouera et votre application affichera des écrans vides.
+
+00:04:24.330 --> 00:04:26.850
+En parlant de casser les choses, parlons des permissions.
+
+00:04:27.770 --> 00:04:31.130
+C'est un point sensible majeur, le piège des permissions au niveau de l'élément.
+
+00:04:31.890 --> 00:04:32.770
+C'est la requête classique.
+
+00:04:32.870 --> 00:04:34.790
+Je veux que seul le créateur puisse voir ses propres éléments.
+
+00:04:35.270 --> 00:04:38.110
+Cela semble raisonnable, mais techniquement, c'est un cul-de-sac.
+
+00:04:38.990 --> 00:04:42.050
+Si vous rompez l'héritage sur chaque élément d'une liste de 55 000 entrées,
+
+00:04:43.090 --> 00:04:47.510
+le serveur doit vérifier la liste de contrôle d'accès pour chaque ligne à chaque fois qu'un utilisateur l'interroge.
+
+00:04:48.070 --> 00:04:49.270
+Cela détruit les performances.
+
+00:04:49.810 --> 00:04:53.250
+Donc la solution est de rompre l'héritage au niveau du site, pas au niveau de l'élément.
+
+00:04:53.810 --> 00:04:54.070
+Toujours.
+
+00:04:54.930 --> 00:04:57.150
+Si vous avez sécurisé des lignes différemment, vous avez besoin de différentes.
+
+00:04:58.410 --> 00:04:59.390
+S'il vous plaît, utilisez des groupes.
+
+00:04:59.710 --> 00:05:01.510
+N'assignez jamais de permission à une personne individuelle.
+
+00:05:01.870 --> 00:05:02.990
+Les gens partent, les groupes restent.
+
+00:05:03.570 --> 00:05:05.770
+Il semble que le thème ici soit d'arrêter l'improvisation,
+
+00:05:05.910 --> 00:05:08.730
+ce qui nous mène parfaitement au deuxième pilier, Power Apps.
+
+00:05:09.170 --> 00:05:10.250
+Hein ?
+
+00:05:10.250 --> 00:05:14.350
+Le texte décrit Power Apps soit comme déterministe, soit comme un chaos doté d'un bouton d'enregistrement.
+
+00:05:14.350 --> 00:05:16.570
+C'est une dichotomie assez frappante.
+
+00:05:17.070 --> 00:05:17.950
+C'est vrai, c'est exact.
+
+00:05:18.290 --> 00:05:20.110
+Une application Canvas ressemble à une toile vierge.
+
+00:05:20.430 --> 00:05:21.290
+Vous pouvez peindre ce que vous voulez.
+
+00:05:21.770 --> 00:05:22.310
+C'est là tout le danger.
+
+00:05:22.890 --> 00:05:25.890
+Une application déterministe signifie que vous, le développeur, contrôlez l'état.
+
+00:05:26.570 --> 00:05:30.310
+Vous savez exactement quelles données sont chargées quand elles sont soumises et ce qui se passe en cas d'échec.
+
+00:05:30.310 --> 00:05:34.590
+Contrairement à l'approche chaotique, qui consiste, je suppose, à placer des contrôles sur un écran
+
+00:05:34.590 --> 00:05:37.110
+en espérant que la fonction de soumission de formulaire fonctionne, fonctionne.
+
+00:05:37.670 --> 00:05:38.030
+Précisément.
+
+00:05:38.850 --> 00:05:40.710
+Le chaos, c'est se reposer sur des comportements implicites.
+
+00:05:41.410 --> 00:05:44.610
+C'est placer une logique complexe dans la propriété unselect, unselect, unge,
+
+00:05:44.750 --> 00:05:49.010
+d'un bouton qui modifie trois sources de données, envoie un email et navigue vers un nouvel écran,
+
+00:05:49.210 --> 00:05:50.310
+le tout sans gestion d'erreur.
+
+00:05:51.550 --> 00:05:54.250
+Si Internet se coupe au milieu de tout cela, vos données sont corrompues.
+
+00:05:54.670 --> 00:05:56.310
+Alors comment rendre cela déterministe ?
+
+00:05:56.890 --> 00:05:58.310
+Vous centralisez vos lectures et vos écritures.
+
+00:05:58.310 --> 00:06:01.270
+Vos contrôles ne devraient pas interroger directement la base de données.
+
+00:06:01.990 --> 00:06:04.670
+Ils devraient s'appuyer sur des collections locales ou des variables lorsque c'est approprié.
+
+00:06:05.290 --> 00:06:08.010
+Et vous devez traiter la soumission de formulaire comme une opération atomique.
+
+00:06:08.550 --> 00:06:10.970
+Si vous n'utilisez pas de chequeux, vous devez gérer la concurrence.
+
+00:06:11.670 --> 00:06:12.930
+La concurrence est un point majeur.
+
+00:06:13.510 --> 00:06:15.890
+Deux personnes éditant le même enregistrement en même temps.
+
+00:06:16.730 --> 00:06:19.410
+Si vous ne le gérez pas explicitement, la dernière personne a enregistré gain
+
+00:06:19.410 --> 00:06:21.670
+et le travail de l'autre est écrasé sans qu'elle le sache.
+
+00:06:22.110 --> 00:06:23.310
+C'est encore cet échec silencieux.
+
+00:06:24.170 --> 00:06:26.010
+Le système n'a pas planté, mais les données sont erronées.
+
+00:06:26.010 --> 00:06:29.050
+Le texte mentionne également la discipline opérationnelle dans les applications,
+
+00:06:29.590 --> 00:06:31.950
+en enregistrant ce que l'application a fait et pas seulement ce qu'elle était censée faire.
+
+00:06:32.530 --> 00:06:33.970
+C'est la différence entre un jouet et un outil.
+
+00:06:34.770 --> 00:06:36.410
+Une application professionnelle génère de la thémétrie.
+
+00:06:37.290 --> 00:06:39.570
+L'utilisateur X a navigué vers l'écran Y et l'utilisateur Z.
+
+00:06:39.770 --> 00:06:43.090
+Attendez de soumettre le formulaire échec avec le code d'erreur 133-1.
+
+00:06:43.710 --> 00:06:45.850
+Si vous n'avez pas ces journaux, vous déboguez en devinant.
+
+00:06:46.650 --> 00:06:48.030
+Passons maintenant à la salle des machines.
+
+00:06:48.410 --> 00:06:49.090
+Power Automate.
+
+00:06:49.590 --> 00:06:50.730
+La description ici est frappante.
+
+00:06:51.190 --> 00:06:53.010
+Des bombes à retardement désamorcer par des protocoles.
+
+00:06:53.010 --> 00:06:55.510
+Les flux sont terrifiants parce qu'ils s'exécutent en arrière-plan.
+
+00:06:55.930 --> 00:06:57.590
+Vous ne pouvez pas voir s'ils échouent à moins de surveiller.
+
+00:06:57.810 --> 00:07:01.270
+Et ils échouent comme les bâtiments brûlent, silencieusement au début, puis tout d'un coup.
+
+00:07:02.230 --> 00:07:04.370
+Quelle est la cause numéro 1 de cet incendie ?
+
+00:07:04.370 --> 00:07:06.550
+Un manque de conception défensive en particulier concernant les déclenchants.
+
+00:07:07.190 --> 00:07:09.970
+Si vous avez un flux qui se déclenche lorsqu'un élément est modifié
+
+00:07:09.970 --> 00:07:12.150
+et que vous ne définissez pas de conditions de déclenchement,
+
+00:07:12.430 --> 00:07:14.610
+ce flux s'exécute chaque fois que quelqu'un touche à cet élément,
+
+00:07:14.830 --> 00:07:16.590
+même pour une simple correction orthographique.
+
+00:07:17.010 --> 00:07:20.770
+Ainsi, vous avez des milliers d'exécutions inutiles qui saturent vos limites d'API.
+
+00:07:20.770 --> 00:07:22.730
+Exact. Vous avez besoin de déclencher votre compte.
+
+00:07:23.190 --> 00:07:25.070
+Exécutez ce flux uniquement si le statut passe à approuver.
+
+00:07:25.710 --> 00:07:27.850
+Ce simple changement peut réduire votre charge de 80.100.
+
+00:07:28.470 --> 00:07:29.350
+Et puis il y a la concurrence.
+
+00:07:29.650 --> 00:07:34.070
+Exact. Par défaut, Power Automate essaye de tout exécuter en parallèle pour être utile.
+
+00:07:35.030 --> 00:07:37.510
+Ce qui est un désastre si vous essayez de mettre à jour le même élément de liste
+
+00:07:37.510 --> 00:07:38.550
+ou d'incrémenter un compteur.
+
+00:07:38.890 --> 00:07:40.430
+Non. Vous obtenez des conditions de concurrence créatives.
+
+00:07:40.790 --> 00:07:42.050
+Vous devez définir des limites de concurrence.
+
+00:07:42.430 --> 00:07:44.110
+Parfois, il faut forcer une exécution séquentielle,
+
+00:07:44.510 --> 00:07:46.190
+un par un, pour garantir l'intégrité des données.
+
+00:07:46.890 --> 00:07:47.770
+Et la gestion des erreurs ?
+
+00:07:47.770 --> 00:07:52.530
+Le modèle try-catch n'est pas natif au concepteur visuel comme il l'est dans le code, n'est-ce pas ?
+
+00:07:52.530 --> 00:07:54.090
+Vous devez le construire.
+
+00:07:54.810 --> 00:07:57.230
+Vous créez un bloc de portée pour vos actions principales, c'est votre try,
+
+00:07:57.410 --> 00:08:00.670
+puis un bloc parallèle qui ne s'exécute que si le premier échoue, c'est votre catch.
+
+00:08:01.830 --> 00:08:03.630
+Si vous n'avez pas de bloc catch pour vous alerter,
+
+00:08:03.870 --> 00:08:05.890
+un flux peut échouer pendant des semaines sans que vous le sachiez
+
+00:08:05.890 --> 00:08:08.210
+jusqu'à ce qu'un utilisateur demande « Eh, où est mon approbation ? »
+
+00:08:08.210 --> 00:08:09.970
+Ce silence est l'ennemi.
+
+00:08:10.790 --> 00:08:13.190
+Il semble que le but de tous ces protocoles soit de transformer
+
+00:08:13.190 --> 00:08:16.530
+les échecs silencieux en échecs, bruyants et circonscrits.
+
+00:08:17.570 --> 00:08:20.670
+Oui, je veux que le système me crie dessus quand quelque chose casse pour que je puisse le réparer.
+
+00:08:21.070 --> 00:08:21.390
+Immédiatement.
+
+00:08:22.030 --> 00:08:24.650
+Je ne veux pas qu'il chuchote pendant qu'il corrompt la base donnée pendant six mois.
+
+00:08:24.650 --> 00:08:28.550
+Maintenant, on ne peut pas parler de l'avenir de cette plateforme sans parler d'IA.
+
+00:08:29.750 --> 00:08:31.530
+Le générateur, d'IA de copilotes.
+
+00:08:32.390 --> 00:08:35.770
+Tout le monde veut les activer, mais le texte avertit.
+
+00:08:36.430 --> 00:08:39.350
+Le pic n'a pas commencé avec du code, il a commencé avec un PDF.
+
+00:08:40.930 --> 00:08:42.910
+L'IA est l'accélérateur ultime.
+
+00:08:43.630 --> 00:08:46.050
+Si votre gouvernance est mauvaise, l'IA la rendra mauvaise plus rapidement.
+
+00:08:46.710 --> 00:08:49.550
+Le danger avec l'IA, spécifiquement les grands modèles de langage ou les copilotes,
+
+00:08:49.650 --> 00:08:51.590
+ce sont les hallucinations et l'accès excessif.
+
+00:08:53.490 --> 00:08:54.410
+Bibliothécaire, pas Oracle.
+
+00:08:55.610 --> 00:08:56.510
+J'ai aimé cette phrase.
+
+00:08:57.210 --> 00:08:58.030
+C'est l'analogie parfaite.
+
+00:08:58.630 --> 00:08:59.910
+Un oracle invente la vérité.
+
+00:09:00.570 --> 00:09:02.510
+Un bibliothécaire trouve la vérité qui existe déjà.
+
+00:09:03.150 --> 00:09:04.950
+Nous voulons que notre IA d'entreprise soit un bibliothécaire.
+
+00:09:05.590 --> 00:09:08.050
+Elle ne devrait répondre qu'en se basant sur des sources de connaissances autorisées.
+
+00:09:08.770 --> 00:09:11.070
+Si elle ne trouve pas le document, elle doit dire je ne sais pas mais gay,
+
+00:09:11.250 --> 00:09:12.490
+et non, inventer une politique.
+
+00:09:13.190 --> 00:09:15.470
+Et comment applique-t-on cela techniquement ?
+
+00:09:15.470 --> 00:09:16.110
+Vous avez besoin de limites.
+
+00:09:16.650 --> 00:09:18.050
+Pour le traitement de documents par IA Builder,
+
+00:09:18.050 --> 00:09:20.390
+il faut une intervention humaine pour les scores de confiance faibles.
+
+00:09:20.870 --> 00:09:23.450
+S'il y a un n'est pas sûr à 90% que cette facture est de 500$,
+
+00:09:23.450 --> 00:09:25.230
+un humain doit la vérifier.
+
+00:09:25.910 --> 00:09:27.390
+Vous ne pouvez pas simplement la laisser écrire dans l'air.
+
+00:09:27.830 --> 00:09:30.670
+Et pour les chatbots, les copilotes ?
+
+00:09:30.670 --> 00:09:31.650
+Les citations sont obligatoires.
+
+00:09:32.090 --> 00:09:34.010
+Si le bot donne une réponse, il doit renvoyer au document source.
+
+00:09:34.650 --> 00:09:35.810
+Pas de citation, pas de réponse.
+
+00:09:35.810 --> 00:09:38.590
+Et surtout, aucune mutation directe des données.
+
+00:09:39.270 --> 00:09:41.750
+Vous ne laissez pas un chatbot modifier directement votre base de données SQL.
+
+00:09:42.490 --> 00:09:46.170
+Le chatbot doit déclencher un flux Power Automate strictement encadré pour effectuer la modification.
+
+00:09:46.810 --> 00:09:47.630
+Le flux est le gardien.
+
+00:09:48.630 --> 00:09:50.010
+Donc l'IA n'est que l'interface.
+
+00:09:50.770 --> 00:09:54.530
+La logique de gouvernance réside toujours dans les couches rigides et déterministes dont nous avons parlé.
+
+00:09:54.530 --> 00:09:56.150
+Exactement.
+
+00:09:56.490 --> 00:09:57.770
+L'IA est la façade souple et intuitive.
+
+00:09:58.590 --> 00:10:00.610
+Le moteur doit rester froid, dur et logique.
+
+00:10:01.410 --> 00:10:02.450
+Nous avons couvert les piliers.
+
+00:10:02.810 --> 00:10:03.850
+SharePoint, les applications.
+
+00:10:04.130 --> 00:10:04.970
+Automate, l'IA.
+
+00:10:06.010 --> 00:10:09.730
+Mais rien de tout cela ne fonctionne sans ce que le texte appelle l'épine dorsale de la gouvernance.
+
+00:10:10.590 --> 00:10:11.810
+Les contrôles qui ne faiblissent jamais.
+
+00:10:12.810 --> 00:10:14.370
+C'est le travail ingrate qui vous sauve la mise.
+
+00:10:15.370 --> 00:10:18.090
+DLP, politique de prévention des pertes de données, stratégie d'environnement.
+
+00:10:18.430 --> 00:10:21.450
+Vous ne pouvez pas laisser les gens créer des applications de production dans l'environnement par défaut.
+
+00:10:21.450 --> 00:10:23.390
+L'environnement par défaut est le Far West.
+
+00:10:24.050 --> 00:10:24.990
+C'est là que la gouvernance va mourir.
+
+00:10:25.350 --> 00:10:26.810
+Vous avez besoin de séparation de dev, test, prod.
+
+00:10:27.170 --> 00:10:28.130
+Vous avez besoin de solutions gérées.
+
+00:10:28.490 --> 00:10:32.070
+Si vous déplacez des fichiers ZIP bruts de solutions non gérées en production, vous cherchez les ennuis.
+
+00:10:33.210 --> 00:10:34.810
+Et les principaux de service ?
+
+00:10:34.810 --> 00:10:37.090
+Arrêtez d'exécuter les flux d'entreprise avec le compte de Steve.
+
+00:10:37.670 --> 00:10:40.250
+Car quand Steve gagnera au loto et démissionnera ?
+
+00:10:40.250 --> 00:10:41.910
+Tout le processus de comptabilité fournit sans s'arrêter.
+
+00:10:42.630 --> 00:10:44.750
+Utilisez un principal de service, une identité non humaine,
+
+00:10:44.870 --> 00:10:47.990
+pour que le système repose sur l'architecture, pas sur le personnel, pas son âme.
+
+00:10:48.490 --> 00:10:50.650
+Tout se résume à un choix, n'est-ce pas ?
+
+00:10:50.650 --> 00:10:51.830
+La conclusion le montre clairement.
+
+00:10:52.470 --> 00:10:54.010
+Alignement ou entropie ?
+
+00:10:54.010 --> 00:10:54.630
+C'est le choix binaire.
+
+00:10:55.050 --> 00:10:55.790
+Il n'y a pas de juste milieu.
+
+00:10:56.190 --> 00:10:58.810
+Soit vous imposez une structure taux, ce qui semble restrictif,
+
+00:10:58.910 --> 00:11:02.090
+et vous ralentiez au début, soit vous payez pour reconstruire plus tard.
+
+00:11:02.810 --> 00:11:04.990
+Et la reconstruction coûte toujours dix fois plus cher.
+
+00:11:05.570 --> 00:11:06.130
+C'est intéressant.
+
+00:11:06.710 --> 00:11:08.550
+Nous avons commencé par parler de paramètres techniques,
+
+00:11:08.730 --> 00:11:10.570
+de colonnes indexées, de limites de concurrence.
+
+00:11:10.650 --> 00:11:14.670
+Mais c'est vraiment une posture philosophique sur la gestion technologique, sur la gestion technologique.
+
+00:11:14.970 --> 00:11:15.210
+C'est vrai.
+
+00:11:15.510 --> 00:11:16.510
+Il s'agit de respecter l'outil.
+
+00:11:17.150 --> 00:11:20.530
+SharePoint, Power Platform, IA, ce sont des outils incroyablement puissants.
+
+00:11:20.650 --> 00:11:21.150
+Mec.

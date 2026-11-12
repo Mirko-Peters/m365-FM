@@ -1,0 +1,2062 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:01.200
+para el sector técnico.
+
+00:00:01.600 --> 00:00:03.780
+El tema de hoy es algo de lo que casi todos han oído hablar,
+
+00:00:03.880 --> 00:00:05.120
+pero pocos realmente entienden.
+
+00:00:05.320 --> 00:00:07.760
+Ven, probablemente has visto Azure Monitor en el portal
+
+00:00:07.760 --> 00:00:10.160
+y quizás hiciste clic un poco solo para sentirte perdido.
+
+00:00:11.120 --> 00:00:11.940
+Eso es completamente normal.
+
+00:00:12.320 --> 00:00:13.140
+Aquí está el verdadero problema.
+
+00:00:13.540 --> 00:00:15.180
+Tienes un panel para tus máquinas virtuales,
+
+00:00:15.240 --> 00:00:16.840
+otro para tus aplicaciones, otro para seguridad,
+
+00:00:17.040 --> 00:00:18.100
+y ninguno se comunica con el otro.
+
+00:00:18.900 --> 00:00:21.420
+Cuando algo falla, saltas entre cinco pantallas diferentes
+
+00:00:21.420 --> 00:00:22.940
+intentando reconstruir qué sucedió.
+
+00:00:23.440 --> 00:00:24.900
+Entonces, ¿qué tal si pudieras ver todo?
+
+00:00:25.020 --> 00:00:27.520
+Métricas, registros, alertas, incluso identidad y correo,
+
+00:00:27.580 --> 00:00:28.300
+en un solo lugar.
+
+00:00:28.300 --> 00:00:31.700
+Al final de este episodio, entenderás qué es realmente
+
+00:00:31.700 --> 00:00:34.460
+Azure Monitor y cómo te ofrece esa vista unificada.
+
+00:00:35.280 --> 00:00:35.900
+Panorama general.
+
+00:00:36.480 --> 00:00:37.140
+¿Qué es Azure Monitor?
+
+00:00:37.740 --> 00:00:39.200
+Entonces, ¿qué es exactamente Azure Monitor?
+
+00:00:39.600 --> 00:00:41.060
+Comencemos con una definición sencilla.
+
+00:00:41.800 --> 00:00:43.900
+Azure Monitor es la plataforma de observabilidad central
+
+00:00:43.900 --> 00:00:46.600
+de Microsoft para recopilar, analizar y actuar
+
+00:00:46.600 --> 00:00:47.920
+sobre datos de telemetría.
+
+00:00:48.440 --> 00:00:49.780
+Eso suena complicado, así que vamos a desglosar.
+
+00:00:50.000 --> 00:00:51.400
+Piénsalo como un edificio de oficinas modernas.
+
+00:00:51.840 --> 00:00:54.080
+Tienes un mostrador de seguridad central en la entrada principal.
+
+00:00:54.460 --> 00:00:56.040
+Ese escritorio ve a todos los que entran,
+
+00:00:56.040 --> 00:00:57.760
+a qué piso van, qué habitación ocupan
+
+00:00:57.760 --> 00:00:58.640
+y cuándo salen.
+
+00:00:59.220 --> 00:01:01.160
+Es el único punto de conocimiento para todo el edificio.
+
+00:01:01.840 --> 00:01:03.420
+Azure Monitor es exactamente eso para tu nube.
+
+00:01:03.780 --> 00:01:05.800
+Es el sistema nervioso central que conecta todo.
+
+00:01:07.040 --> 00:01:07.440
+Y está el punto.
+
+00:01:07.880 --> 00:01:09.300
+Azure Monitor no es una sola herramienta.
+
+00:01:09.640 --> 00:01:11.080
+Es una plataforma que reúne métricas,
+
+00:01:11.280 --> 00:01:12.700
+registros, trazas y alertas de Azure,
+
+00:01:12.820 --> 00:01:14.540
+entornos locales e incluso otras nubes.
+
+00:01:15.180 --> 00:01:17.180
+Hace 20 años comprabas productos separados para todo.
+
+00:01:17.640 --> 00:01:18.660
+Una herramienta para servidores,
+
+00:01:18.820 --> 00:01:19.480
+otra para aplicaciones,
+
+00:01:19.640 --> 00:01:20.140
+otra para redes.
+
+00:01:20.760 --> 00:01:22.840
+Permanecían en silos sin compartir información nunca.
+
+00:01:23.580 --> 00:01:25.560
+Azure Monitor reemplaza esa fragmentación por completo.
+
+00:01:26.200 --> 00:01:27.020
+Ahora quizás te preguntes,
+
+00:01:27.160 --> 00:01:28.580
+¿es esto solo para operaciones de TI?
+
+00:01:29.160 --> 00:01:29.700
+En absoluto.
+
+00:01:30.200 --> 00:01:32.760
+Azure Monitor respalda de hecho a Microsoft Defender for Cloud
+
+00:01:32.760 --> 00:01:33.760
+y Microsoft Sentinel.
+
+00:01:34.760 --> 00:01:36.280
+Así que es la base para la seguridad también.
+
+00:01:36.640 --> 00:01:39.180
+La misma plataforma de datos que te indica que tu CPU tiene picos
+
+00:01:39.180 --> 00:01:40.600
+también alimenta tus herramientas de seguridad.
+
+00:01:40.600 --> 00:01:43.000
+Es una idea poderosa cuando te detienes a pensar.
+
+00:01:43.300 --> 00:01:44.100
+Pero seamos científicos.
+
+00:01:44.460 --> 00:01:46.780
+Azure Monitor maneja dos tipos principales de datos
+
+00:01:46.780 --> 00:01:48.700
+y entender la diferencia entre ellos es clave
+
+00:01:48.700 --> 00:01:50.040
+para comprender toda la plataforma.
+
+00:01:51.120 --> 00:01:53.140
+Los dos bloques fundamentales, métricas y registro.
+
+00:01:53.520 --> 00:01:54.360
+Empecemos con las métricas.
+
+00:01:55.000 --> 00:01:57.060
+Son valores numéricos recopilados a intervalos regulares.
+
+00:01:57.640 --> 00:01:58.960
+Piénsalas como tus signos vitales,
+
+00:01:59.040 --> 00:02:00.660
+como el ritmo cardíaco, la presión arterial
+
+00:02:00.660 --> 00:02:01.840
+o la temperatura corporal.
+
+00:02:02.540 --> 00:02:03.720
+Te muestran cómo van las cosas a este modelo.
+
+00:02:04.200 --> 00:02:06.700
+En Azure Monitor las métricas parecen porcentaje de CPU,
+
+00:02:06.880 --> 00:02:08.380
+uso de memoria o lecturas de disco por segundo.
+
+00:02:08.500 --> 00:02:10.320
+Son ligeras y llegan casi en tiempo real,
+
+00:02:10.600 --> 00:02:11.900
+perfectas para paneles y activadores.
+
+00:02:12.260 --> 00:02:13.460
+Es un pico el momento en que sucede.
+
+00:02:13.940 --> 00:02:15.660
+Luego tienen los registros, que son completamente diferentes.
+
+00:02:15.980 --> 00:02:17.400
+Son registros detallados de eventos,
+
+00:02:17.480 --> 00:02:18.860
+como un diario o una caja negra.
+
+00:02:19.500 --> 00:02:20.780
+Una entrada de registro te dice
+
+00:02:20.780 --> 00:02:22.380
+cuando alguien reinicia una máquina virtual
+
+00:02:22.380 --> 00:02:24.020
+qué código de error lanzó una aplicación,
+
+00:02:24.280 --> 00:02:26.360
+quién inició sesión, desde dónde y a qué hora exacta.
+
+00:02:26.960 --> 00:02:28.560
+Los registros son mucho más ricos que las métricas,
+
+00:02:28.600 --> 00:02:29.300
+pero también son más pesados.
+
+00:02:29.700 --> 00:02:31.400
+Viven en un área de trabajo de Log Analytics
+
+00:02:31.400 --> 00:02:33.480
+y los consultas usando algo llamado
+
+00:02:33.480 --> 00:02:36.400
+Custo Query Language o KYQL para abreviar.
+
+00:02:36.900 --> 00:02:37.880
+Entonces esta es la diferencia clara.
+
+00:02:38.160 --> 00:02:39.320
+Las métricas te dicen que algo anda mal.
+
+00:02:39.860 --> 00:02:40.640
+Los registros dicen por qué.
+
+00:02:40.860 --> 00:02:41.680
+Imagina que conduces tú.
+
+00:02:42.120 --> 00:02:43.480
+La luz de Check Engine se enciende
+
+00:02:43.480 --> 00:02:45.260
+y esa es una métrica diciéndote que algo está mal
+
+00:02:45.260 --> 00:02:46.660
+ahora mismo, pero no sabes qué.
+
+00:02:47.240 --> 00:02:50.040
+Entonces vas al mecánico y realizan un informe diagnóstico.
+
+00:02:50.540 --> 00:02:51.620
+Ese informe te dice exactamente
+
+00:02:51.620 --> 00:02:53.140
+qué sensor falló y qué código arrojó.
+
+00:02:53.560 --> 00:02:54.120
+Eso es el registro.
+
+00:02:54.380 --> 00:02:55.520
+Las métricas son la luz de Check Engine.
+
+00:02:55.840 --> 00:02:57.560
+Los registros son el informe diagnóstico del mecánico.
+
+00:02:57.800 --> 00:02:58.120
+Gran buzo.
+
+00:02:58.560 --> 00:03:00.200
+Aquí hay un detalle práctico, rápido, gratis.
+
+00:03:00.620 --> 00:03:02.080
+Tienen 90 días de retención de registro.
+
+00:03:02.340 --> 00:03:03.380
+Es un buen margen para la mayoría
+
+00:03:03.380 --> 00:03:04.200
+de la resolución de problemas,
+
+00:03:04.340 --> 00:03:06.400
+pero si necesitas más tiempo para cumplimiento de auditoría,
+
+00:03:06.520 --> 00:03:07.180
+puedes extenderlo.
+
+00:03:07.660 --> 00:03:09.240
+Solo recuerda, una mayor retención cuesta más,
+
+00:03:09.320 --> 00:03:10.060
+así que planifícalo.
+
+00:03:10.400 --> 00:03:12.040
+Entonces ahora entiendes los dos bloques de construcción.
+
+00:03:12.620 --> 00:03:13.720
+Métricas para un chequeo rápido,
+
+00:03:13.860 --> 00:03:15.080
+registros para una inmersión profunda,
+
+00:03:15.160 --> 00:03:16.600
+pero ¿de dónde viene realmente toda esa información?
+
+00:03:17.040 --> 00:03:17.640
+Es la siguiente red.
+
+00:03:20.040 --> 00:03:21.880
+Ahora, ¿de dónde viene realmente toda esta información?
+
+00:03:22.340 --> 00:03:23.280
+Esa es la parte interesante,
+
+00:03:23.420 --> 00:03:25.780
+porque Azure Monitor no solo vigila tus máquinas virtuales,
+
+00:03:25.860 --> 00:03:26.440
+vigila todo.
+
+00:03:27.140 --> 00:03:28.220
+Comencemos con la fuente más fácil.
+
+00:03:28.900 --> 00:03:30.180
+Cada recurso de Azure que creas,
+
+00:03:30.280 --> 00:03:31.700
+como máquinas virtuales, bases de datos,
+
+00:03:31.860 --> 00:03:33.400
+cuentas de almacenamiento y servicios de aplicaciones,
+
+00:03:33.500 --> 00:03:35.020
+emite automáticamente métricas de plataforma.
+
+00:03:35.580 --> 00:03:37.740
+Uso de CPU, ese disco de rendimiento de red.
+
+00:03:38.560 --> 00:03:39.240
+Esto viene integrado.
+
+00:03:39.640 --> 00:03:40.720
+No tienes que configurar nada.
+
+00:03:41.220 --> 00:03:43.100
+Lo obtienes gratis en el momento en que creas el recurso.
+
+00:03:43.420 --> 00:03:44.420
+Pero eso es solo la superficie.
+
+00:03:44.740 --> 00:03:46.840
+Para tus aplicaciones, necesitas Application Insights,
+
+00:03:46.940 --> 00:03:48.560
+el servicio de gestión de rendimiento de aplicaciones
+
+00:03:48.560 --> 00:03:49.220
+de Azure Monitor.
+
+00:03:49.220 --> 00:03:51.460
+Realiza un seguimiento de las tasas de solicitud,
+
+00:03:51.560 --> 00:03:53.440
+tiempos de respuesta, excepciones y llamadas de dependencia.
+
+00:03:53.840 --> 00:03:55.620
+Si tu aplicación web llama a una base de datos
+
+00:03:55.620 --> 00:03:58.060
+o una API externa, Application Insights ve esa llamada
+
+00:03:58.060 --> 00:03:59.200
+y mide cuánto tiempo tomó,
+
+00:03:59.540 --> 00:04:01.120
+como tener un detective dentro de tu código.
+
+00:04:01.540 --> 00:04:02.300
+Ahora vayamos profundo.
+
+00:04:02.780 --> 00:04:04.220
+Las métricas de plataforma a las que hablamos
+
+00:04:04.220 --> 00:04:06.400
+te indican lo que Azure ve desde fuera de tu máquina virtual,
+
+00:04:06.840 --> 00:04:07.980
+pero no te dicen qué está ocurriendo
+
+00:04:07.980 --> 00:04:08.860
+dentro del sistema operativo.
+
+00:04:09.560 --> 00:04:11.180
+Para eso necesitas el agente de Azure Monitor,
+
+00:04:11.180 --> 00:04:13.460
+un pequeño programa que instalas dentro de tu máquina virtual.
+
+00:04:13.920 --> 00:04:15.980
+Recopila métricas y registros del sistema operativo,
+
+00:04:15.980 --> 00:04:17.860
+como la presión de memoria, la longitud de cola del disco
+
+00:04:17.860 --> 00:04:19.160
+y bloqueos de aplicaciones específicos.
+
+00:04:19.380 --> 00:04:21.160
+Aquí es donde puedes ver lo que realmente está sucediendo
+
+00:04:21.160 --> 00:04:21.900
+dentro de la máquina.
+
+00:04:22.360 --> 00:04:23.720
+La buena noticia es que ese mismo agente
+
+00:04:23.720 --> 00:04:24.800
+también funciona fuera de Azure.
+
+00:04:25.260 --> 00:04:27.220
+Si tienes servidores ejecutándose de forma local
+
+00:04:27.220 --> 00:04:29.280
+o en otra nube, puedes usar Azure Arc para conectarlos.
+
+00:04:29.940 --> 00:04:30.660
+Una vez conectados,
+
+00:04:30.800 --> 00:04:32.700
+el agente de Azure Monitor funciona exactamente igual,
+
+00:04:32.840 --> 00:04:34.800
+ofreciéndote los mismos datos, paneles y alertas,
+
+00:04:34.920 --> 00:04:36.560
+sin importar dónde resida tu servidor.
+
+00:04:37.040 --> 00:04:40.140
+También existe la capacidad de transmitir datos de Microsoft 365
+
+00:04:40.140 --> 00:04:42.260
+y Microsoft entra directamente a Azure Monitor.
+
+00:04:42.260 --> 00:04:44.500
+Registro desde inicio de sesión, registro de auditoría,
+
+00:04:44.600 --> 00:04:46.620
+cada vez que alguien intenta iniciar sesión
+
+00:04:46.620 --> 00:04:47.660
+desde una ubicación inusual,
+
+00:04:47.840 --> 00:04:49.900
+ese evento puede fluir a tu área de trabajo de Log Analytics.
+
+00:04:50.660 --> 00:04:52.180
+Puedes correlacionarlo con los datos de rendimiento
+
+00:04:52.180 --> 00:04:53.640
+de aplicación y obtener una visión completa.
+
+00:04:54.160 --> 00:04:55.440
+Y finalmente, datos de seguridad.
+
+00:04:56.020 --> 00:04:57.940
+Microsoft Defender for Cloud y Microsoft Sentinel
+
+00:04:57.940 --> 00:04:59.740
+se integran sobre la misma plataforma de datos.
+
+00:05:00.120 --> 00:05:01.800
+Por lo tanto, al investigar un incidente de seguridad,
+
+00:05:01.800 --> 00:05:03.480
+estás consultando los mismos registros que usas
+
+00:05:03.480 --> 00:05:04.660
+para solucionar problemas de rendimiento.
+
+00:05:04.900 --> 00:05:05.920
+No necesitas una herramienta separada.
+
+00:05:06.220 --> 00:05:07.020
+Todo está en un solo lugar.
+
+00:05:07.240 --> 00:05:09.380
+Entonces tienes todos estos datos llegando desde tu aspecto.
+
+00:05:09.380 --> 00:05:11.640
+Máquinas virtuales, aplicaciones, servidores locales,
+
+00:05:11.720 --> 00:05:13.020
+sistemas de identidad y herramientas de seguridad.
+
+00:05:13.380 --> 00:05:14.300
+¿Cómo logras entender todo esto?
+
+00:05:15.380 --> 00:05:16.980
+Visualización, tu panel único de control.
+
+00:05:17.600 --> 00:05:19.320
+Entonces, ¿cómo ves realmente todos estos datos?
+
+00:05:19.980 --> 00:05:21.220
+Azure Monitor te ofrece varias formas,
+
+00:05:21.360 --> 00:05:22.700
+pero la herramienta principal son los libros.
+
+00:05:23.300 --> 00:05:24.820
+Los libros son informes interactivos
+
+00:05:24.820 --> 00:05:26.640
+que combinan texto, métricas, registros
+
+00:05:26.640 --> 00:05:28.380
+y parámetros en paneles personalizados.
+
+00:05:29.080 --> 00:05:30.460
+Piénsalo como tu centro de comando.
+
+00:05:30.700 --> 00:05:31.520
+Aquí hay un ejemplo concreto.
+
+00:05:32.220 --> 00:05:33.580
+Imagina que creas un único libro
+
+00:05:33.580 --> 00:05:35.780
+que muestra tres cosas en una sola página.
+
+00:05:35.780 --> 00:05:37.780
+Estado de la máquina virtual,
+
+00:05:37.940 --> 00:05:39.020
+tiempos de respuesta de la aplicación
+
+00:05:39.020 --> 00:05:40.100
+y anomalías de inicio de sesión.
+
+00:05:40.380 --> 00:05:41.160
+¿Están funcionando tu servidor?
+
+00:05:41.420 --> 00:05:42.480
+¿Está lenta tu aplicación web?
+
+00:05:42.860 --> 00:05:44.360
+¿Hay intentos de inicio de sesión inusuales
+
+00:05:44.360 --> 00:05:44.920
+desde fuera de tu país?
+
+00:05:45.380 --> 00:05:46.340
+¿Has tres cosas en una sola pantalla?
+
+00:05:46.840 --> 00:05:48.560
+No necesitas tres herramientas diferentes.
+
+00:05:48.680 --> 00:05:49.160
+Solo un libro.
+
+00:05:49.680 --> 00:05:51.360
+Y los libros no son solo gráficos estáticos.
+
+00:05:51.480 --> 00:05:53.560
+Admiten codificación por colores y conos y umbrales.
+
+00:05:53.820 --> 00:05:55.600
+Un servidor saludable muestra una marca de verificación.
+
+00:05:55.760 --> 00:05:57.360
+Un servidor que se acerca a su capacidad
+
+00:05:57.360 --> 00:05:58.180
+muestra una advertencia.
+
+00:05:58.340 --> 00:05:59.920
+Un servidor que está caído muestra un color rojo.
+
+00:06:00.200 --> 00:06:00.900
+Puedes echar un vistazo
+
+00:06:00.900 --> 00:06:02.480
+y saber exactamente dónde están tus problemas.
+
+00:06:02.920 --> 00:06:03.720
+La mejor característica.
+
+00:06:03.720 --> 00:06:05.060
+Esos gráficos tienen enlaces en lo que puedes hacer.
+
+00:06:05.520 --> 00:06:07.400
+Si ves un servidor con uso alto de CPU,
+
+00:06:07.680 --> 00:06:08.260
+haz clic en él
+
+00:06:08.260 --> 00:06:09.900
+y te llevará directamente a ese recurso
+
+00:06:09.900 --> 00:06:10.720
+en el portal de Azure.
+
+00:06:11.360 --> 00:06:12.680
+Sin búsqueda, sin copiar y pegar,
+
+00:06:12.800 --> 00:06:13.900
+solo haz clic y listo.
+
+00:06:14.420 --> 00:06:15.840
+Sin embargo, los libros trabajan unos son de uno.
+
+00:06:16.280 --> 00:06:17.960
+También tienes paneles en el portal de Azure.
+
+00:06:18.520 --> 00:06:19.900
+Estos te permiten anclar mosaicos
+
+00:06:19.900 --> 00:06:21.280
+de diferentes fuentes para un resumen rápido.
+
+00:06:21.600 --> 00:06:23.140
+Piénsalo como tu reunión informativa de la mañana.
+
+00:06:23.500 --> 00:06:24.800
+Un vistazo rápido para asegurarte
+
+00:06:24.800 --> 00:06:25.440
+de que en este tiempo.
+
+00:06:25.840 --> 00:06:27.140
+Luego está el explorador de métricas
+
+00:06:27.140 --> 00:06:27.860
+para gráficos Adobe.
+
+00:06:28.200 --> 00:06:29.060
+¿Quieres ver el uso de CPU
+
+00:06:29.060 --> 00:06:30.140
+en todas tus máquinas virtuales
+
+00:06:30.140 --> 00:06:30.820
+durante la última hora?
+
+00:06:31.200 --> 00:06:32.400
+Abre el explorador de métricas,
+
+00:06:32.400 --> 00:06:33.280
+selecciona tus recursos
+
+00:06:33.280 --> 00:06:34.540
+y obtendrás un gráfico en segundos.
+
+00:06:34.800 --> 00:06:35.680
+No requiere configuración.
+
+00:06:36.020 --> 00:06:37.120
+Y si necesitas compartir informes
+
+00:06:37.120 --> 00:06:38.640
+con partes interesadas que no usan Azure,
+
+00:06:39.040 --> 00:06:40.200
+puedes integrarlo con Power BI.
+
+00:06:40.540 --> 00:06:42.120
+Tu equipo ejecutivo recibe un informe mensual
+
+00:06:42.120 --> 00:06:43.180
+que muestra el estado del servicio,
+
+00:06:43.280 --> 00:06:43.840
+el tiempo de actividad
+
+00:06:43.840 --> 00:06:44.880
+y las tendencias de rendimiento.
+
+00:06:45.260 --> 00:06:46.520
+No necesitan entender KQL
+
+00:06:46.520 --> 00:06:47.540
+ni análisis de registro.
+
+00:06:47.920 --> 00:06:49.260
+Solo ven los números que les interesan.
+
+00:06:49.700 --> 00:06:50.360
+El objetivo es simple.
+
+00:06:50.760 --> 00:06:51.580
+Un solo lugar que acudir
+
+00:06:51.580 --> 00:06:52.380
+cuando algo parece no estar.
+
+00:06:52.660 --> 00:06:54.160
+Ya no hay que saltar entre cinco pantallas
+
+00:06:54.160 --> 00:06:54.960
+ni iniciar sesión
+
+00:06:54.960 --> 00:06:56.000
+en tres herramientas diferentes
+
+00:06:56.000 --> 00:06:56.900
+para averiguar que se rompió.
+
+00:06:57.260 --> 00:06:58.100
+Abres Azure Monitor
+
+00:06:58.100 --> 00:06:59.160
+y ves todo.
+
+00:06:59.640 --> 00:07:00.540
+Es la vista única integral.
+
+00:07:01.300 --> 00:07:02.340
+Alertas y automatización.
+
+00:07:02.680 --> 00:07:03.460
+Cuando necesitas actuar.
+
+00:07:03.900 --> 00:07:04.980
+Ver los datos es genial,
+
+00:07:05.260 --> 00:07:06.200
+pero también necesitas saber
+
+00:07:06.200 --> 00:07:06.740
+cuándo actuar.
+
+00:07:07.040 --> 00:07:08.000
+Ahí es donde entran las alertas.
+
+00:07:08.320 --> 00:07:09.160
+Las alertas de Azure Monitor
+
+00:07:09.160 --> 00:07:10.100
+funcionan tanto con métricas
+
+00:07:10.100 --> 00:07:10.560
+como con reglas.
+
+00:07:10.800 --> 00:07:11.880
+Estableces una condición
+
+00:07:11.880 --> 00:07:12.720
+y cuando se cumple,
+
+00:07:12.800 --> 00:07:13.400
+sucede algo.
+
+00:07:14.420 --> 00:07:14.820
+Analicémoslo.
+
+00:07:15.260 --> 00:07:16.060
+Las alertas de métricas
+
+00:07:16.060 --> 00:07:16.780
+se basan en umbrales
+
+00:07:16.780 --> 00:07:17.480
+y son muy rápidas.
+
+00:07:17.840 --> 00:07:18.760
+Dices CPU por encima
+
+00:07:18.760 --> 00:07:20.140
+del 90% durante cinco minutos
+
+00:07:20.140 --> 00:07:20.960
+y cuando eso sucede
+
+00:07:20.960 --> 00:07:21.840
+se dispara una alerta.
+
+00:07:22.100 --> 00:07:22.660
+Simple, directo,
+
+00:07:22.720 --> 00:07:23.280
+casi en tiempo real.
+
+00:07:23.520 --> 00:07:24.060
+Son excelentes
+
+00:07:24.060 --> 00:07:24.900
+cuando sabes exactamente
+
+00:07:24.900 --> 00:07:25.760
+qué significa que algo haya.
+
+00:07:26.060 --> 00:07:26.740
+Las alertas de registro
+
+00:07:26.740 --> 00:07:27.140
+son diferentes.
+
+00:07:27.480 --> 00:07:28.320
+Se basan en consultas
+
+00:07:28.320 --> 00:07:29.160
+y son mucho más flexibles.
+
+00:07:29.160 --> 00:07:30.420
+En lugar de un umbral simple,
+
+00:07:30.540 --> 00:07:31.380
+es que es una consulta
+
+00:07:31.380 --> 00:07:32.740
+que busca un patrón específico.
+
+00:07:33.180 --> 00:07:34.000
+Encuentra cualquier intento
+
+00:07:34.000 --> 00:07:34.800
+de inicio o sesión fallido
+
+00:07:34.800 --> 00:07:35.860
+desde fuera de U
+
+00:07:35.860 --> 00:07:36.780
+en la última hora.
+
+00:07:37.420 --> 00:07:38.660
+Si la consulta devuelve resultados,
+
+00:07:38.760 --> 00:07:39.400
+se dispara alerta.
+
+00:07:40.000 --> 00:07:40.980
+Esto te permite detectar
+
+00:07:40.980 --> 00:07:41.660
+escenarios complejos
+
+00:07:41.660 --> 00:07:42.320
+que un umbral simple
+
+00:07:42.320 --> 00:07:42.960
+pasaría por alto.
+
+00:07:43.360 --> 00:07:44.280
+Cuando se dispare una alerta,
+
+00:07:44.320 --> 00:07:44.880
+¿qué sucede después?
+
+00:07:45.080 --> 00:07:45.900
+Ahí es donde entre los grupos.
+
+00:07:46.160 --> 00:07:47.020
+Un grupo de acciones
+
+00:07:47.020 --> 00:07:47.660
+define la respuesta.
+
+00:07:48.200 --> 00:07:49.340
+Puede enviar un correo electrónico,
+
+00:07:49.440 --> 00:07:49.920
+un SMS,
+
+00:07:50.180 --> 00:07:51.580
+una notificación push a tu teléfono
+
+00:07:51.580 --> 00:07:52.520
+o activar un webhook
+
+00:07:52.520 --> 00:07:53.680
+que llame a otro sistema.
+
+00:07:54.100 --> 00:07:55.320
+Pero la opción realmente poderosa
+
+00:07:55.320 --> 00:07:56.500
+es activar una aplicación lógica
+
+00:07:56.500 --> 00:07:57.600
+para la remediación automatizada.
+
+00:07:58.000 --> 00:07:58.480
+Imagina esto,
+
+00:07:58.560 --> 00:07:59.300
+se dispara una alerta
+
+00:07:59.300 --> 00:07:59.900
+porque a un servidor
+
+00:07:59.900 --> 00:08:00.500
+se le está agotando
+
+00:08:00.500 --> 00:08:01.080
+el espacio en disco.
+
+00:08:01.540 --> 00:08:02.240
+En lugar de despertar
+
+00:08:02.240 --> 00:08:02.900
+a alguien a las 2A,
+
+00:08:03.780 --> 00:08:04.420
+la alerta activa
+
+00:08:04.420 --> 00:08:05.200
+una aplicación lógica
+
+00:08:05.200 --> 00:08:06.220
+que ejecuta automáticamente
+
+00:08:06.220 --> 00:08:07.100
+un script de limpieza.
+
+00:08:07.440 --> 00:08:08.200
+El problema se soluciona
+
+00:08:08.200 --> 00:08:09.220
+antes de que alguien se dé cuenta.
+
+00:08:09.680 --> 00:08:09.840
+Ahora,
+
+00:08:09.840 --> 00:08:11.140
+aquí hay algo nuevo en 2026
+
+00:08:11.140 --> 00:08:11.900
+que cambia las reglas.
+
+00:08:12.060 --> 00:08:13.100
+Los umbrales dinámicos
+
+00:08:13.100 --> 00:08:14.340
+utilizan aprendizaje automático
+
+00:08:14.340 --> 00:08:14.760
+para aprender
+
+00:08:14.760 --> 00:08:15.860
+cómo es el comportamiento normal
+
+00:08:15.860 --> 00:08:16.800
+de su entorno específico.
+
+00:08:17.120 --> 00:08:17.440
+Toma en cuenta
+
+00:08:17.440 --> 00:08:18.640
+patrones horarios y semanales.
+
+00:08:19.400 --> 00:08:19.740
+Así que,
+
+00:08:19.820 --> 00:08:21.000
+si su servidor normalmente funciona
+
+00:08:23.680 --> 00:08:26.440
+por una copia de seguridad
+
+00:08:26.440 --> 00:08:27.420
+programada del sistema,
+
+00:08:27.680 --> 00:08:28.200
+lo aprende.
+
+00:08:28.760 --> 00:08:29.860
+No la alerta por ese pico,
+
+00:08:30.160 --> 00:08:31.040
+solo cuando ocurre algo
+
+00:08:31.040 --> 00:08:32.020
+realmente anormal.
+
+00:08:32.680 --> 00:08:33.600
+Esto reduce drásticamente
+
+00:08:33.600 --> 00:08:34.220
+los positivos.
+
+00:08:34.680 --> 00:08:35.680
+Hay otra característica nueva,
+
+00:08:35.780 --> 00:08:36.420
+alertas de métricas
+
+00:08:36.420 --> 00:08:36.920
+basadas en Google.
+
+00:08:37.240 --> 00:08:38.040
+Estas le permiten usar
+
+00:08:38.040 --> 00:08:39.040
+consultas estilo QQL
+
+00:08:39.040 --> 00:08:40.020
+sobre métricas de Prometheus
+
+00:08:40.020 --> 00:08:40.740
+y OpenTelemetry.
+
+00:08:41.380 --> 00:08:41.720
+Entonces,
+
+00:08:41.920 --> 00:08:42.720
+si ejecuta Kubernetes
+
+00:08:42.720 --> 00:08:43.420
+y usa Prometheus
+
+00:08:43.420 --> 00:08:44.140
+para las métricas,
+
+00:08:44.280 --> 00:08:45.180
+puede escribir el mismo tipo
+
+00:08:45.180 --> 00:08:46.320
+de consultas de estilo log
+
+00:08:46.320 --> 00:08:47.740
+para sus datos de métricas.
+
+00:08:48.320 --> 00:08:49.640
+Esto unifica su lógica de alertas
+
+00:08:49.640 --> 00:08:51.040
+en todas sus fuentes de telemetría.
+
+00:08:51.700 --> 00:08:52.080
+En resumen,
+
+00:08:52.180 --> 00:08:53.500
+la supervisión se vuelve proactiva
+
+00:08:53.500 --> 00:08:54.660
+cuando configura las alertas
+
+00:08:54.660 --> 00:08:55.240
+correctamente.
+
+00:08:55.740 --> 00:08:56.500
+La detecta los problemas
+
+00:08:56.500 --> 00:08:57.520
+antes de que los usuarios los noten.
+
+00:08:57.780 --> 00:08:58.380
+Esa es la diferencia
+
+00:08:58.380 --> 00:08:59.260
+entre recibir una llamada
+
+00:08:59.260 --> 00:09:00.060
+de su jefe a las 3A
+
+00:09:00.060 --> 00:09:01.400
+diciendo que el sitio web
+
+00:09:01.400 --> 00:09:01.760
+está caído,
+
+00:09:02.020 --> 00:09:03.320
+recibir una notificación a las 3A
+
+00:09:03.320 --> 00:09:04.620
+diciendo que corregimos
+
+00:09:04.620 --> 00:09:05.380
+un problema potencial
+
+00:09:05.380 --> 00:09:06.400
+antes de que alguien lo notara.
+
+00:09:07.360 --> 00:09:08.520
+Cae de nuevo en 2026
+
+00:09:08.520 --> 00:09:09.300
+y por qué es importante.
+
+00:09:10.640 --> 00:09:10.840
+Ahora,
+
+00:09:10.960 --> 00:09:11.820
+hablemos de lo que realmente
+
+00:09:11.820 --> 00:09:12.720
+cambió en Azure Monitor
+
+00:09:12.720 --> 00:09:13.600
+para 2026
+
+00:09:13.600 --> 00:09:14.560
+porque esta es una nueva plataforma
+
+00:09:14.560 --> 00:09:15.220
+de hace dos años.
+
+00:09:16.340 --> 00:09:17.260
+Esta es la mayor actualización.
+
+00:09:17.620 --> 00:09:18.140
+OpenTelemetry
+
+00:09:18.140 --> 00:09:18.980
+es ahora el estándar.
+
+00:09:19.700 --> 00:09:20.880
+La ingesta nativa de OTLP
+
+00:09:20.880 --> 00:09:21.780
+funciona directamente
+
+00:09:21.780 --> 00:09:22.600
+con la gente de Azure Monitor.
+
+00:09:22.600 --> 00:09:23.920
+Lo que eso significa para ustedes
+
+00:09:23.920 --> 00:09:24.360
+es que puede usar
+
+00:09:24.360 --> 00:09:25.280
+instrumentación independiente
+
+00:09:25.280 --> 00:09:25.920
+del proveedor en todas
+
+00:09:25.920 --> 00:09:26.500
+sus aplicaciones.
+
+00:09:26.960 --> 00:09:27.500
+No está limitado
+
+00:09:27.500 --> 00:09:28.440
+a los SK específicos
+
+00:09:28.440 --> 00:09:28.800
+de Microsoft.
+
+00:09:29.680 --> 00:09:30.500
+Escriba su instrumentación
+
+00:09:30.500 --> 00:09:31.700
+una vez con estándares abiertos
+
+00:09:31.700 --> 00:09:32.740
+y funcionará si envía datos
+
+00:09:32.740 --> 00:09:33.300
+Azure Monitor,
+
+00:09:33.440 --> 00:09:35.140
+Datadoc o cualquier otro.
+
+00:09:35.680 --> 00:09:36.420
+Eso es un gran avance
+
+00:09:36.420 --> 00:09:37.180
+si su organización
+
+00:09:37.180 --> 00:09:38.060
+valora flexibilidad.
+
+00:09:39.080 --> 00:09:39.560
+A continuación,
+
+00:09:39.640 --> 00:09:40.780
+el soporte para ese ISLO
+
+00:09:40.780 --> 00:09:41.760
+ahora es de primera clase.
+
+00:09:42.300 --> 00:09:43.240
+Puede definir indicadores
+
+00:09:43.240 --> 00:09:43.960
+de nivel de servicio
+
+00:09:43.960 --> 00:09:45.220
+para disponibilidad y latencia,
+
+00:09:45.540 --> 00:09:46.220
+agrupar sus recursos
+
+00:09:46.220 --> 00:09:47.000
+en grupos de servicio
+
+00:09:47.000 --> 00:09:47.840
+y realizar un seguimiento
+
+00:09:47.840 --> 00:09:48.480
+de sus objetivos
+
+00:09:48.480 --> 00:09:49.600
+de fiabilidad de forma nativa.
+
+00:09:49.600 --> 00:09:51.400
+Se acabó el exportar datos
+
+00:09:51.400 --> 00:09:52.080
+a una hoja de cálculo
+
+00:09:52.080 --> 00:09:52.540
+para calcular
+
+00:09:52.540 --> 00:09:53.000
+el porcentaje
+
+00:09:53.000 --> 00:09:53.600
+de tiempo de actividad.
+
+00:09:54.000 --> 00:09:54.440
+Te ha integrado
+
+00:09:54.440 --> 00:09:55.280
+directamente en la plataforma.
+
+00:09:55.900 --> 00:09:56.080
+Ahora,
+
+00:09:56.180 --> 00:09:57.200
+esto es algo en lo que debe actuar
+
+00:09:57.200 --> 00:09:57.880
+si aún no lo ha hecho.
+
+00:09:58.560 --> 00:09:59.140
+El agente heredado
+
+00:09:59.140 --> 00:09:59.620
+de Log Analytics
+
+00:09:59.620 --> 00:10:00.660
+está totalmente retirado.
+
+00:10:01.360 --> 00:10:02.420
+El 2 de marzo de 2026,
+
+00:10:02.520 --> 00:10:03.660
+el backend se cerró definitivamente.
+
+00:10:04.240 --> 00:10:05.140
+Si todavía está ejecutando
+
+00:10:05.140 --> 00:10:05.760
+ese viejo agente,
+
+00:10:05.860 --> 00:10:07.060
+sus datos han dejado de fluir.
+
+00:10:07.500 --> 00:10:08.020
+Todo debe estar
+
+00:10:08.020 --> 00:10:09.060
+en el agente de Azure Monitor
+
+00:10:09.060 --> 00:10:10.360
+con reglas de recopilación de datos.
+
+00:10:11.020 --> 00:10:11.740
+Si aún no ha migrado,
+
+00:10:11.920 --> 00:10:13.120
+esa es su prioridad número uno.
+
+00:10:14.020 --> 00:10:14.920
+Y otro cambio próximo.
+
+00:10:15.380 --> 00:10:16.240
+Microsoft EntraID
+
+00:10:16.240 --> 00:10:17.000
+ahora es necesario
+
+00:10:17.000 --> 00:10:17.820
+para consultar datos
+
+00:10:17.820 --> 00:10:18.860
+de Application Insights.
+
+00:10:19.240 --> 00:10:20.200
+Las antiguas claves de API
+
+00:10:20.200 --> 00:10:20.980
+están desapareciendo.
+
+00:10:21.280 --> 00:10:21.820
+La fecha límite
+
+00:10:21.820 --> 00:10:23.380
+es el 30 de septiembre de 2026.
+
+00:10:23.800 --> 00:10:24.160
+Por lo tanto,
+
+00:10:24.240 --> 00:10:24.880
+si tienes scripts
+
+00:10:24.880 --> 00:10:25.740
+o herramientas que usan
+
+00:10:25.740 --> 00:10:26.620
+esas claves antiguas,
+
+00:10:26.700 --> 00:10:27.300
+debe actualizarlos
+
+00:10:27.300 --> 00:10:28.200
+para usar la autenticación
+
+00:10:28.200 --> 00:10:28.780
+de EntraID.
+
+00:10:29.500 --> 00:10:29.900
+Finalmente,
+
+00:10:29.980 --> 00:10:30.500
+los nuevos niveles
+
+00:10:30.500 --> 00:10:31.260
+de registro básico
+
+00:10:31.260 --> 00:10:31.640
+y auxiliar
+
+00:10:31.640 --> 00:10:32.460
+hacen mucho más barato
+
+00:10:32.460 --> 00:10:33.120
+almacenar datos
+
+00:10:33.120 --> 00:10:33.700
+a los que se accede
+
+00:10:33.700 --> 00:10:34.520
+con menos frecuencia.
+
+00:10:35.060 --> 00:10:35.560
+Hablaremos más
+
+00:10:35.560 --> 00:10:36.500
+sobre costos en un momento,
+
+00:10:36.720 --> 00:10:37.360
+pero esto es importante
+
+00:10:37.360 --> 00:10:37.820
+para cualquiera
+
+00:10:37.820 --> 00:10:38.520
+que intente controlar
+
+00:10:38.520 --> 00:10:39.520
+su factura de monitoreo.
+
+00:10:40.160 --> 00:10:40.920
+Consejos prácticos
+
+00:10:40.920 --> 00:10:41.920
+y optimización de costos.
+
+00:10:42.680 --> 00:10:43.400
+Hablando de costos,
+
+00:10:43.680 --> 00:10:44.480
+profundicemos en cómo
+
+00:10:44.480 --> 00:10:45.140
+funciona realmente
+
+00:10:45.140 --> 00:10:45.940
+el precio de Azure Monitor
+
+00:10:45.940 --> 00:10:46.820
+porque puede sorprenderlo
+
+00:10:46.820 --> 00:10:47.500
+si no tiene cuidado.
+
+00:10:48.420 --> 00:10:48.840
+Azure Monitor
+
+00:10:48.840 --> 00:10:49.500
+se basa en el uso.
+
+00:10:50.020 --> 00:10:50.720
+Todo paga por la ingesta
+
+00:10:50.720 --> 00:10:51.140
+de registros,
+
+00:10:51.240 --> 00:10:51.540
+retención,
+
+00:10:51.640 --> 00:10:52.420
+métricas personalizadas
+
+00:10:52.420 --> 00:10:52.880
+y alertas.
+
+00:10:53.300 --> 00:10:54.360
+No hay una tarifa mensual fija,
+
+00:10:54.440 --> 00:10:55.100
+lo cual es excelente
+
+00:10:55.100 --> 00:10:55.620
+cuando es pequeño,
+
+00:10:55.860 --> 00:10:56.800
+pero puede crecer rápidamente
+
+00:10:56.800 --> 00:10:57.600
+si no presta atención.
+
+00:10:58.060 --> 00:10:58.860
+Aquí está lo más importante
+
+00:10:58.860 --> 00:10:59.360
+que debe entender.
+
+00:10:59.780 --> 00:11:00.820
+Hay tres niveles de registro.
+
+00:11:01.260 --> 00:11:02.060
+Los registros de análisis
+
+00:11:02.060 --> 00:11:02.680
+cuestan alrededor
+
+00:11:02.680 --> 00:11:04.220
+de 2.30 dólares por gigabyte.
+
+00:11:04.560 --> 00:11:05.340
+Estos son sus registros
+
+00:11:05.340 --> 00:11:06.100
+de fidelidad total
+
+00:11:06.100 --> 00:11:07.420
+con capacidades de consulta completas.
+
+00:11:07.700 --> 00:11:08.400
+Los registros básicos
+
+00:11:08.400 --> 00:11:08.900
+cuestan alrededor
+
+00:11:08.900 --> 00:11:10.100
+de 0.50 dólares por gigabyte.
+
+00:11:10.260 --> 00:11:10.780
+Son para datos
+
+00:11:10.780 --> 00:11:11.580
+que necesita conservar
+
+00:11:11.580 --> 00:11:12.440
+pero que no consulta a menudo.
+
+00:11:12.780 --> 00:11:13.660
+Y los registros auxiliares
+
+00:11:13.660 --> 00:11:14.160
+cuestan alrededor
+
+00:11:14.160 --> 00:11:15.440
+de 0.5 dólares por gigabyte.
+
+00:11:15.680 --> 00:11:16.420
+Ese es precio de archivo.
+
+00:11:17.040 --> 00:11:17.920
+Lo guarda por cumplimiento
+
+00:11:17.920 --> 00:11:18.700
+pero casi nunca lo mete.
+
+00:11:19.360 --> 00:11:20.560
+Obtiene 5 gigas por mes
+
+00:11:20.560 --> 00:11:21.400
+gratis para registros
+
+00:11:21.400 --> 00:11:21.880
+de análisis.
+
+00:11:22.540 --> 00:11:23.060
+Eso es suficiente
+
+00:11:23.060 --> 00:11:24.000
+para un entorno pequeño,
+
+00:11:24.180 --> 00:11:24.960
+pero desaparece rápido
+
+00:11:24.960 --> 00:11:25.680
+una vez que comienza
+
+00:11:25.680 --> 00:11:26.180
+a monitorear
+
+00:11:26.180 --> 00:11:26.840
+múltiples servidores
+
+00:11:26.840 --> 00:11:27.360
+y aplicaciones.
+
+00:11:28.060 --> 00:11:28.860
+Si su ingesta diaria
+
+00:11:28.860 --> 00:11:29.680
+es estable y superior
+
+00:11:29.680 --> 00:11:30.760
+a 100 gigabytes por día,
+
+00:11:30.920 --> 00:11:31.840
+los niveles de compromiso
+
+00:11:31.840 --> 00:11:32.540
+pueden ahorrarle
+
+00:11:32.540 --> 00:11:33.900
+del 15 al 30%.
+
+00:11:33.900 --> 00:11:35.660
+Usted se compromete
+
+00:11:35.660 --> 00:11:36.300
+a una cierta cantidad
+
+00:11:36.300 --> 00:11:36.860
+de datos diarios
+
+00:11:38.400 --> 00:11:39.060
+pero hágalo solo
+
+00:11:39.060 --> 00:11:40.100
+si su uso es predecible.
+
+00:11:40.980 --> 00:11:41.960
+Si fluctúa drásticamente,
+
+00:11:42.060 --> 00:11:42.580
+el pago por uso
+
+00:11:42.580 --> 00:11:43.340
+podría ser más barato.
+
+00:11:43.880 --> 00:11:44.000
+Entonces,
+
+00:11:44.100 --> 00:11:44.980
+¿qué debería hacer realmente
+
+00:11:44.980 --> 00:11:45.500
+para mantener
+
+00:11:45.500 --> 00:11:46.400
+los costos bajo control?
+
+00:11:46.760 --> 00:11:47.420
+Comience moviendo
+
+00:11:47.420 --> 00:11:48.460
+los registros de bajo valor
+
+00:11:48.460 --> 00:11:49.660
+a los niveles básico o auxiliar.
+
+00:11:50.520 --> 00:11:51.520
+Ese registro de depuración
+
+00:11:51.520 --> 00:11:52.420
+de su entorno de desarrollo
+
+00:11:52.420 --> 00:11:53.340
+no necesita estar
+
+00:11:53.340 --> 00:11:54.360
+en un nivel de análisis.
+
+00:11:55.000 --> 00:11:55.540
+A continuación,
+
+00:11:55.620 --> 00:11:56.220
+establezca políticas
+
+00:11:56.220 --> 00:11:56.920
+de retención por todo.
+
+00:11:57.460 --> 00:11:58.040
+Mantenga los datos
+
+00:11:58.040 --> 00:11:59.060
+operativos durante 30 años.
+
+00:11:59.460 --> 00:12:00.040
+Mantenga los datos
+
+00:12:00.040 --> 00:12:01.040
+de cumplimiento por más tiempo
+
+00:12:01.040 --> 00:12:01.900
+pero no guarde todo precio.
+
+00:12:02.420 --> 00:12:03.160
+Luego, utilice el muestre
+
+00:12:03.160 --> 00:12:03.840
+en Application Insight.
+
+00:12:04.240 --> 00:12:05.460
+No necesita que cada solicitud
+
+00:12:05.460 --> 00:12:05.960
+sea registrada.
+
+00:12:06.660 --> 00:12:07.580
+Una muestra estadísticamente
+
+00:12:07.580 --> 00:12:08.240
+significativa
+
+00:12:08.240 --> 00:12:09.320
+le brinda las mismas perspectivas
+
+00:12:09.320 --> 00:12:10.260
+a una fracción del costo.
+
+00:12:10.780 --> 00:12:11.180
+Finalmente,
+
+00:12:11.300 --> 00:12:11.940
+establezca límites
+
+00:12:11.940 --> 00:12:13.500
+de gasto diario y alerta.
+
+00:12:13.720 --> 00:12:14.460
+Reciba notificaciones
+
+00:12:14.460 --> 00:12:15.440
+cuando alcance el 80%
+
+00:12:15.440 --> 00:12:15.960
+de su presupuesto.
+
+00:12:16.840 --> 00:12:17.620
+El mayor error
+
+00:12:17.620 --> 00:12:18.300
+que comete la gente
+
+00:12:18.300 --> 00:12:18.860
+es enviar todo
+
+00:12:18.860 --> 00:12:19.500
+al nivel de análisis
+
+00:12:19.500 --> 00:12:20.040
+por defecto.
+
+00:12:20.520 --> 00:12:21.340
+Teagorice su telemetría.
+
+00:12:21.640 --> 00:12:22.320
+No todos los registros
+
+00:12:22.320 --> 00:12:22.980
+necesitan capacidades
+
+00:12:22.980 --> 00:12:23.640
+de consulta completa.
+
+00:12:24.080 --> 00:12:25.040
+Trata los datos baratos
+
+00:12:25.040 --> 00:12:25.780
+como datos baratos.
+
+00:12:26.500 --> 00:12:27.160
+¿Cómo encaja todo?
+
+00:12:27.820 --> 00:12:28.480
+Esto es lo que ocurre
+
+00:12:28.480 --> 00:12:29.140
+con Azure Monitor.
+
+00:12:29.580 --> 00:12:30.360
+No funciona por sí solo.
+
+00:12:30.720 --> 00:12:31.460
+Es la pieza central
+
+00:12:31.460 --> 00:12:32.180
+que conecta todo
+
+00:12:32.180 --> 00:12:33.060
+en tu mundo Microsoft.
+
+00:12:33.860 --> 00:12:34.380
+Déjame empezarte
+
+00:12:34.380 --> 00:12:34.920
+cómo se ve eso.
+
+00:12:35.300 --> 00:12:36.320
+Los registros de Azure AD
+
+00:12:36.320 --> 00:12:37.380
+fluyen hacia Azure Monitor
+
+00:12:37.380 --> 00:12:38.240
+mediante la configuración
+
+00:12:38.240 --> 00:12:38.740
+de diagnóstico.
+
+00:12:39.180 --> 00:12:39.300
+Entonces,
+
+00:12:39.360 --> 00:12:39.720
+cuando alguien dice
+
+00:12:39.720 --> 00:12:40.580
+que una aplicación va lenta,
+
+00:12:40.700 --> 00:12:41.360
+revisas los registros
+
+00:12:41.360 --> 00:12:41.960
+de inicio de sesión
+
+00:12:41.960 --> 00:12:42.960
+junto a los datos de rendimiento.
+
+00:12:43.380 --> 00:12:44.460
+¿Un retraso en la autenticación?
+
+00:12:44.920 --> 00:12:45.720
+¿Se activa una política
+
+00:12:45.720 --> 00:12:46.400
+de acceso condicional?
+
+00:12:46.780 --> 00:12:47.700
+Lo ves tú no hacia la pantalla.
+
+00:12:48.260 --> 00:12:48.960
+Microsoft Sentinel
+
+00:12:48.960 --> 00:12:49.920
+funciona en el mismo espacio
+
+00:12:49.920 --> 00:12:50.860
+de trabajo de Log Analytics.
+
+00:12:51.500 --> 00:12:52.380
+Tus datos de operaciones
+
+00:12:52.380 --> 00:12:53.380
+y tus datos de seguridad
+
+00:12:53.380 --> 00:12:53.940
+conviven.
+
+00:12:54.500 --> 00:12:55.680
+Cuando investigas un incidente,
+
+00:12:55.720 --> 00:12:56.500
+no cambias de herramienta.
+
+00:12:56.880 --> 00:12:57.980
+Consulta a su único conjunto de datos.
+
+00:12:58.260 --> 00:12:59.040
+Ese es el verdadero poder.
+
+00:12:59.260 --> 00:13:00.540
+Un evento de seguridad sospechoso
+
+00:13:00.540 --> 00:13:01.260
+podría explicarse
+
+00:13:01.260 --> 00:13:02.120
+por un problema de rendimiento
+
+00:13:02.120 --> 00:13:02.840
+que ya detectaste.
+
+00:13:03.760 --> 00:13:04.500
+Defender for Cloud
+
+00:13:04.500 --> 00:13:05.700
+también se nutre de Azure Monitor.
+
+00:13:06.220 --> 00:13:07.240
+No crea su propia telemetría.
+
+00:13:07.800 --> 00:13:08.840
+Utiliza las mismas métricas
+
+00:13:08.840 --> 00:13:10.020
+y registros que ya recopilas.
+
+00:13:10.380 --> 00:13:10.660
+Así que,
+
+00:13:10.800 --> 00:13:11.460
+cuando Defender marca
+
+00:13:11.460 --> 00:13:12.560
+una vulnerabilidad en una AVM,
+
+00:13:12.680 --> 00:13:13.460
+puedes comprobar los datos
+
+00:13:13.460 --> 00:13:14.380
+de rendimiento de esa AVM
+
+00:13:14.380 --> 00:13:15.400
+de inmediato para ver el impacto.
+
+00:13:15.680 --> 00:13:16.780
+Incluso los datos de gobernanza
+
+00:13:16.780 --> 00:13:17.520
+de Microsoft ProView
+
+00:13:17.520 --> 00:13:18.140
+pueden conectarse
+
+00:13:18.140 --> 00:13:19.140
+para el monitoreo de cumplimiento.
+
+00:13:19.500 --> 00:13:20.600
+Tus políticas de clasificación
+
+00:13:20.600 --> 00:13:21.460
+y retención de datos
+
+00:13:21.460 --> 00:13:21.960
+se vinculan
+
+00:13:21.960 --> 00:13:22.680
+a la misma plataforma
+
+00:13:22.680 --> 00:13:23.380
+de observabilidad.
+
+00:13:24.200 --> 00:13:25.220
+El Cloud Adoption Framework
+
+00:13:25.220 --> 00:13:25.640
+de Microsoft
+
+00:13:25.640 --> 00:13:26.780
+recomienda Azure Monitor
+
+00:13:26.780 --> 00:13:27.600
+como tu plataforma
+
+00:13:27.600 --> 00:13:28.600
+de monitoreo principal.
+
+00:13:29.100 --> 00:13:29.800
+Esa es su propia guía.
+
+00:13:30.280 --> 00:13:30.680
+¿Están diciendo
+
+00:13:30.680 --> 00:13:31.500
+que construyes herramienta?
+
+00:13:31.500 --> 00:13:32.840
+Ahora imagina
+
+00:13:32.840 --> 00:13:33.240
+que alguien dice
+
+00:13:33.240 --> 00:13:34.200
+que SharePoint va lento.
+
+00:13:34.880 --> 00:13:35.580
+Con Azure Monitor
+
+00:13:35.580 --> 00:13:36.260
+abres un libro,
+
+00:13:36.400 --> 00:13:37.000
+verificas el estado
+
+00:13:37.000 --> 00:13:37.900
+del servicio de SharePoint,
+
+00:13:38.200 --> 00:13:38.660
+miras la AVM
+
+00:13:38.660 --> 00:13:39.580
+que aloja el front-end web,
+
+00:13:39.800 --> 00:13:40.500
+revisas los registros
+
+00:13:40.500 --> 00:13:41.080
+de inicio de sesión
+
+00:13:41.080 --> 00:13:41.460
+de EntraID
+
+00:13:41.460 --> 00:13:42.340
+en busca de retrasos
+
+00:13:42.340 --> 00:13:42.860
+de autenticación
+
+00:13:42.860 --> 00:13:43.460
+y ves los datos
+
+00:13:43.460 --> 00:13:43.980
+de autenticación
+
+00:13:43.980 --> 00:13:44.580
+desde aplicación
+
+00:13:44.580 --> 00:13:45.160
+desde Applications.
+
+00:13:45.600 --> 00:13:46.400
+Todo desde una pantalla.
+
+00:13:46.900 --> 00:13:47.560
+No más altos
+
+00:13:47.560 --> 00:13:48.060
+entre el centro
+
+00:13:48.060 --> 00:13:49.140
+de administración de SharePoint,
+
+00:13:49.360 --> 00:13:50.180
+el panel de la AVM,
+
+00:13:50.500 --> 00:13:50.880
+entre ID
+
+00:13:50.880 --> 00:13:52.040
+y Application Insights.
+
+00:13:52.740 --> 00:13:53.160
+Tato de M.
+
+00:13:53.880 --> 00:13:54.100
+Entonces,
+
+00:13:54.200 --> 00:13:54.900
+aquí está la conclusión.
+
+00:13:55.260 --> 00:13:55.760
+Azure Monitor
+
+00:13:55.760 --> 00:13:56.780
+no es solo otra herramienta
+
+00:13:56.780 --> 00:13:57.300
+de monitoreo.
+
+00:13:57.620 --> 00:13:58.460
+Es el panel central
+
+00:13:58.460 --> 00:13:59.740
+que reúne tus aplicaciones,
+
+00:13:59.900 --> 00:14:00.460
+infraestructura,
+
+00:14:00.680 --> 00:14:01.520
+identidad y seguridad.
+
+00:14:02.220 --> 00:14:02.840
+El verdadero valor
+
+00:14:02.840 --> 00:14:03.560
+es la integración,
+
+00:14:03.700 --> 00:14:04.900
+no una sola característica.
+
+00:14:05.520 --> 00:14:06.440
+Una plataforma de datos,
+
+00:14:06.680 --> 00:14:07.540
+un lenguaje consulta,
+
+00:14:07.580 --> 00:14:08.380
+un lugar donde mirar.
+
+00:14:08.980 --> 00:14:09.700
+Si estás comenzando
+
+00:14:09.700 --> 00:14:10.360
+tu viaje en la nube,
+
+00:14:10.640 --> 00:14:11.500
+habilita a Azure Monitor
+
+00:14:11.500 --> 00:14:12.900
+en tu primera AVM hoy mismo.
+
+00:14:13.440 --> 00:14:13.820
+Solo activa
+
+00:14:13.820 --> 00:14:14.880
+la configuración de diagnóstico
+
+00:14:14.880 --> 00:14:15.960
+y mira lo que te has estado perdiendo.
+
+00:14:16.480 --> 00:14:16.860
+Suscríbete
+
+00:14:16.860 --> 00:14:18.160
+en tu plataforma de podcast favorita
+
+00:14:18.160 --> 00:14:18.960
+y comparte este episodio
+
+00:14:18.960 --> 00:14:19.880
+con alguien que se esté ahogando
+
+00:14:19.880 --> 00:14:20.760
+en demasiados paneles.
+
+00:14:21.320 --> 00:14:21.900
+Soy Mirko Peter.
+
+00:14:22.480 --> 00:14:23.660
+Esto es Microsoft Knowledge Nuggets
+
+00:14:23.660 --> 00:14:24.660
+en M305.

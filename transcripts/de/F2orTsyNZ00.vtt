@@ -1,0 +1,787 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:02.400
+Stellen Sie sich das vor. Sie arbeiten in der App Ihres Unternehmens.
+
+00:00:02.640 --> 00:00:07.600
+Vielleicht ist es das HR-Portal, eine Kundensupport-Datenbank oder das interne Wiki mit all den Richtlinien, die Sie befolgen müssen.
+
+00:00:07.960 --> 00:00:12.340
+Sie geben eine Frage in die Suchleiste ein. Etwa so, wie reiche ich einen Spesenbericht für einen Kunden-Denner ein?
+
+00:00:12.960 --> 00:00:15.100
+Sie drücken die Eingabetaste und was bekommen Sie? Nichts.
+
+00:00:15.620 --> 00:00:19.540
+Oder noch schlimmer, eine Liste mit zufälligen PDFs von vor drei Jahren, die irgendwie zu Ihren Wörtern passen.
+
+00:00:20.020 --> 00:00:23.440
+Suche ist etwas, das wir jeden Tag benutzen. Und meistens ist sie furchtbar.
+
+00:00:23.860 --> 00:00:25.380
+Aber wissen Sie was? Das muss nicht so sein.
+
+00:00:25.760 --> 00:00:28.020
+Was wäre, wenn Ihre Apps tatsächlich verstehen können, wonach Sie fragen?
+
+00:00:28.020 --> 00:00:32.980
+Was wäre, wenn Sie wie Google suchen könnten und die richtige Antwort fänden, selbst wenn Sie nicht die perfekten Worte wählen?
+
+00:00:33.540 --> 00:00:35.080
+Heute beschäftigen wir uns mit der Azure AI Search.
+
+00:00:35.660 --> 00:00:40.220
+Was sie genau ist, wie sie im Hintergrund funktioniert und warum sie die Suchmaschine ist, auf der moderne Apps basieren.
+
+00:00:40.840 --> 00:00:42.080
+Nehmen Sie sich einen Kaffee und legen wir los.
+
+00:00:42.680 --> 00:00:43.360
+Warum suchen Sie besser?
+
+00:00:44.120 --> 00:00:47.420
+Um zu verstehen, warum die Suche meist scheitert, müssen wir uns ansehen, wie die meisten Apps dies tun.
+
+00:00:47.960 --> 00:00:50.700
+Die traditionelle Methode nennt sich Stichwortsuche oder lexikalische Suche.
+
+00:00:51.380 --> 00:00:56.180
+Sie geben das Wort Laptop in das Feld ein und das System sucht nach jedem Dokument, das exakt dieses Wort enthält.
+
+00:00:56.180 --> 00:01:00.180
+Im Hintergrund verwenden viele dieser Systeme einen Algorithmus namens BM25.
+
+00:01:01.280 --> 00:01:03.240
+Er ist nicht kompliziert, aber auf seine Art clever.
+
+00:01:04.220 --> 00:01:06.180
+BM25 bewertet Ergebnisse basierend auf ein paar Faktoren.
+
+00:01:06.780 --> 00:01:11.720
+Wie oft Ihr Suchbegriff in einem Dokument vorkommt, wie lang das Dokument ist und wie selten der Suchbegriff im gesamten Datensatz ist.
+
+00:01:12.800 --> 00:01:18.120
+Stellen Sie es sich wie einen hochentwickelten Wortzähler vor, der anhand dieser Faktoren ermittelt, welche Dokumente am relevantesten sind.
+
+00:01:18.500 --> 00:01:19.640
+Genau hier stößt das Thema seine Grenze.
+
+00:01:19.900 --> 00:01:20.840
+Menschliche Sprache komplex.
+
+00:01:21.140 --> 00:01:23.820
+Menschen stellen Fragen nicht mit denselben Wörtern, die in Dokumenten verwendet werden.
+
+00:01:23.820 --> 00:01:25.180
+Ich gebe Ihnen ein konkretes Beispiel.
+
+00:01:25.760 --> 00:01:27.380
+Ein Benutzer gibt dies in ein Supportportal.
+
+00:01:28.520 --> 00:01:30.420
+Mein Laptop friert bei Videokonferenzen ständig ein.
+
+00:01:32.060 --> 00:01:34.700
+Die Stichwortsuche sucht pflichtbewusst nach Dokumenten, die Laptop friert.
+
+00:01:35.180 --> 00:01:35.400
+Ein.
+
+00:01:36.140 --> 00:01:37.260
+Videokonferenzen und ständig enthalten.
+
+00:01:38.880 --> 00:01:43.160
+Aber was ist, wenn der beste Artikel zu dem Thema den Titelfehlerbehebung bei Systemaufhängern während Teams Meetings trägt?
+
+00:01:43.820 --> 00:01:46.080
+Oder Verwaltung von CPU-Drosselungen bei angetockten Laptops?
+
+00:01:46.520 --> 00:01:48.100
+Die Stichwortsuche ignoriert diese komplett.
+
+00:01:48.500 --> 00:01:48.660
+Warum?
+
+00:01:48.660 --> 00:01:49.940
+Weil die Wörter nicht übereinstimmen.
+
+00:01:50.280 --> 00:01:51.320
+Das Kernproblem ist folgendes.
+
+00:01:51.640 --> 00:01:53.020
+Die Stichwortsuche versteht Rechtschreibung.
+
+00:01:53.340 --> 00:01:55.720
+Sie versteht Zeichenfolgen, aber sie versteht keine Bedeutung.
+
+00:01:56.440 --> 00:01:59.380
+Sie erhalten Ergebnisse mit den richtigen Buchstaben, aber oft mit dem falschen Inhalt.
+
+00:01:59.760 --> 00:02:02.740
+Wenn exakte Wortübereinstimmungen also so viele Lücken hinterlassen, was ist die Alternative?
+
+00:02:03.760 --> 00:02:04.960
+Der neue Weg, die Vektorsuche.
+
+00:02:05.520 --> 00:02:07.900
+Also Vektorsuche, das ist eine völlig andere Art, Dinge anzugehen.
+
+00:02:08.520 --> 00:02:11.020
+Statt nach exakten Wörtern zu suchen, sucht sie nach der Bedeutung.
+
+00:02:11.340 --> 00:02:12.800
+Das klingt abstrakt, also lassen Sie uns das auf.
+
+00:02:13.140 --> 00:02:14.940
+Die einfachste Definition, die Sie kennen müssen, ist,
+
+00:02:14.940 --> 00:02:18.360
+Ein Vektor ist nur eine Liste von Zahlen, die etwas darstellt, womit ein Computer arbeiten kann.
+
+00:02:19.020 --> 00:02:20.300
+Das ist alles eine Liste von Zahlen.
+
+00:02:20.820 --> 00:02:23.760
+Ein Embedding ist eine spezielle Art von Vektor, der die Bedeutung von Text erfasst.
+
+00:02:24.220 --> 00:02:28.140
+Er nimmt einen Satz, einen Absatz oder sogar ein ganzes Dokument und verwandelt es in eine lange Zahlenreihe.
+
+00:02:28.800 --> 00:02:31.440
+Der Computer versteht zwar nicht die Wörter, aber er versteht die Zahlen.
+
+00:02:31.840 --> 00:02:32.700
+Hier ist ein Vergleich, der hilft.
+
+00:02:33.120 --> 00:02:34.920
+Stellen Sie sich Vektoren wie Koordinaten auf einer Landkarte vor.
+
+00:02:35.300 --> 00:02:36.840
+Auf einer Karte liegen ähnliche Orte nah beieinander.
+
+00:02:36.840 --> 00:02:39.540
+Im Vektorraum landen ähnliche Konzepte nah beieinander.
+
+00:02:40.060 --> 00:02:44.440
+Der Vektor für König und der Vektor für Königin liegen nah beieinander, weil sie verwandte Ideen darstellen.
+
+00:02:44.940 --> 00:02:47.580
+Der Vektor für König und der Vektor für Apfel liegen weit auseinander.
+
+00:02:48.300 --> 00:02:50.620
+Der Computer weiß zwar nicht, was König im menschlichen Sinne bedeutet,
+
+00:02:50.940 --> 00:02:54.720
+aber er kann den Abstand zwischen dessen Koordinaten und den jedes anderen Wortes oder Dokuments messen.
+
+00:02:55.440 --> 00:02:57.000
+Es ist, als hätte man ein GPS für Ideen.
+
+00:02:57.620 --> 00:03:00.500
+Das System weiß anhand der Zahlen, wie weit Konzepte voneinander entfernt sind.
+
+00:03:00.980 --> 00:03:04.740
+Wenn Sie mit Vektoren suchen, wandelt das System Ihre Anfrage in ein Embedding um.
+
+00:03:04.980 --> 00:03:07.820
+Dann findet es die Dokumente, deren Embeddings Ihrem am nächsten liegen.
+
+00:03:08.100 --> 00:03:10.460
+Es findet Dinge, die semantisch ähnlich sind, die Bedeutung teilen.
+
+00:03:10.580 --> 00:03:12.620
+Nicht nur Vokabeln, nicht nur Vokabeln.
+
+00:03:12.620 --> 00:03:15.460
+Denn Sie sich vor, Sie suchen ein Dokument zur Fehlerbehebung bei einem eingefrorenen Laptop.
+
+00:03:15.740 --> 00:03:18.860
+Bei der Stichwortsuche müssten Sie exakt eingefroren oder aufgehängt eingeben.
+
+00:03:19.640 --> 00:03:23.540
+Mit der Vektorsuche können Sie mein Computer hängt sich ständig auf Eingeben und das richtige Dokument finden.
+
+00:03:24.080 --> 00:03:25.640
+Das ist die Kraft des Bedeutung Verstehens.
+
+00:03:26.140 --> 00:03:27.980
+Gehen wir zurück zu unserem Beispiel mit der fehlerhaften Suche.
+
+00:03:28.360 --> 00:03:30.400
+Ein Nutzer gibt ein, mein Laptop fritt ständig ein.
+
+00:03:30.940 --> 00:03:34.940
+Mit der Vektorsuche kann das System den Artikel über Systemabstürze während Teams Meetings liefern,
+
+00:03:35.240 --> 00:03:37.220
+obwohl keines dieser Wörter in der Suchanfrage vorkommt.
+
+00:03:37.220 --> 00:03:38.100
+Warum?
+
+00:03:38.600 --> 00:03:42.180
+Weil die Bedeutung von Systemabstürzen im Vektorraum sehr nah am Einfrieren des Computers liegt.
+
+00:03:43.200 --> 00:03:45.200
+Diese Konzepte liegen auf dieser Karte nah beieinander.
+
+00:03:45.960 --> 00:03:48.660
+Dem System sind die exakten Wörter egal, es interessiert sich für das, was Sie meinen.
+
+00:03:49.240 --> 00:03:49.980
+Das ist der Durchbruch.
+
+00:03:50.460 --> 00:03:52.780
+Computer beginnen die Absicht zu verstehen, nicht nur die Schreibweise.
+
+00:03:53.220 --> 00:03:55.640
+Sie finden Antworten, die eine Stichwortsuche völlig übersehen würde.
+
+00:03:56.220 --> 00:03:57.480
+Aber die Vektorsuche hat auch eine Schwäche.
+
+00:03:57.940 --> 00:04:00.600
+Sie kann exakte Übereinstimmungen verpassen, die absolut kritisch sind.
+
+00:04:00.600 --> 00:04:06.600
+Wenn ein Techniker nach einem spezifischen Fehlercode wie X80070570 Suchtriovisiert eine Vektorsuche,
+
+00:04:06.880 --> 00:04:10.400
+möglicherweise Dokumente über Festplattenfehler oder Dateisystembeschädigungen,
+
+00:04:10.600 --> 00:04:13.500
+anstatt das exakte Dokument, das genau diesen Code erläutert.
+
+00:04:14.600 --> 00:04:16.400
+Sie tauscht Präzision gegen Verständen.
+
+00:04:16.620 --> 00:04:17.440
+Wir haben also zwei Methoden.
+
+00:04:17.780 --> 00:04:19.180
+Die Stichwortsuche ist hervorragend für Präzision.
+
+00:04:19.640 --> 00:04:22.120
+Sie findet exakte Begriffe, Produkt-IDs und Vertragsnummern.
+
+00:04:22.600 --> 00:04:24.040
+Die Vektorsuche ist hervorragend für Bedeutung.
+
+00:04:24.400 --> 00:04:26.800
+Sie findet die richtige Antwort, selbst wenn man nicht die richtigen Wörter verwendet.
+
+00:04:27.240 --> 00:04:28.220
+Jeder hat ihre blinden Flecken.
+
+00:04:28.220 --> 00:04:30.080
+Und das wirft eine offensichtliche Frage auf.
+
+00:04:30.360 --> 00:04:33.000
+Was wäre, wenn man beide Ansätze kombinieren und das Beste aus beiden Welten erhalten?
+
+00:04:33.600 --> 00:04:34.520
+Der hybride Durchbruch.
+
+00:04:34.880 --> 00:04:36.560
+Hybride Suche ist das Beste aus beiden Welten.
+
+00:04:37.020 --> 00:04:39.380
+Sie führt die Stichwort- und die Vektorsuche gleichzeitig aus
+
+00:04:39.380 --> 00:04:41.860
+und kombiniert die Ergebnisse in einer einzigen Rangliste.
+
+00:04:42.380 --> 00:04:43.780
+Anstatt sich für einen Ansatz zu entscheiden,
+
+00:04:44.000 --> 00:04:47.020
+nutzt das System eine Methode namens Reciprocal Rank Fusion, kurz RAF.
+
+00:04:47.440 --> 00:04:48.100
+So funktioniert es.
+
+00:04:48.460 --> 00:04:51.220
+RAF prüft, wo jedes Dokument in den Stichwort-Ergebnissen rangiert
+
+00:04:51.220 --> 00:04:52.660
+und wo es in den Vektor-Ergebnissen steht.
+
+00:04:53.140 --> 00:04:54.340
+Dafür gibt es eine kombinierte Punktzahl.
+
+00:04:54.340 --> 00:04:56.660
+Wenn ein Dokument in beiden gut abschneidet, erhält es einen Schuh.
+
+00:04:56.660 --> 00:04:59.120
+Es ist, als würde man zwei Expertenmeinungen einholen und sie mitteln.
+
+00:04:59.540 --> 00:05:01.820
+Das SEND-Ergebnis ist zuverlässiger als jede Methode allein.
+
+00:05:02.480 --> 00:05:06.120
+Dies ist wichtig, da Stichwort- und Vektorsuche grundlegend unterschiedliche Stärken haben.
+
+00:05:06.540 --> 00:05:08.380
+Die Stichwort-Suche glänzt bei exakten Übereinstimmungen.
+
+00:05:08.820 --> 00:05:12.100
+Sie ist die erste Wahl für Produkt-IDs, Vertragsnummern, spezifische Namen und Federcodes.
+
+00:05:12.600 --> 00:05:13.800
+Sie ist präzise und vorhersehbar.
+
+00:05:14.380 --> 00:05:16.440
+Die Vektorsuche glänzt bei semantischer Ähnlichkeit
+
+00:05:16.440 --> 00:05:18.860
+und findet Dokumente, die die gleiche Bedeutung wie Ihre Anfrage haben,
+
+00:05:19.020 --> 00:05:20.420
+auch wenn die exakten Wörter nicht vorkommen.
+
+00:05:21.040 --> 00:05:22.800
+Zusammen decken Sie die blinden Flecken des jeweils anderen.
+
+00:05:22.800 --> 00:05:26.500
+Das System erfasst exakte und konzeptionelle Übereinstimmungen mit einer einzigen Anfrage.
+
+00:05:26.800 --> 00:05:27.580
+Das ist die wahre Stärke.
+
+00:05:28.040 --> 00:05:29.160
+Und das ist nicht nur theoretisch.
+
+00:05:30.120 --> 00:05:32.060
+Untersuchungen zur hybriden Suche in Unternehmen zeigen,
+
+00:05:32.160 --> 00:05:35.160
+dass sie je nach Datensatz eine Suchpräzision von 70 bis 80 Prozent liefert.
+
+00:05:35.960 --> 00:05:39.440
+Das sind etwa 15 bis 20 Prozentpunkte mehr, als man mit der Vektorsuche allein erhält.
+
+00:05:39.980 --> 00:05:42.800
+Der Unterschied ist signifikant und zeigt sich in realen Geschäftsergebnissen.
+
+00:05:43.380 --> 00:05:44.540
+Nehmen wir die Buchhaltungsplattform Xero.
+
+00:05:45.200 --> 00:05:48.980
+Sie implementierten die hybride Suche in Ihren Kundensupport durch ein Unternehmen namens Covio.
+
+00:05:48.980 --> 00:05:53.360
+Innerhalb von drei Monaten verzeichneten sie eine Steigerung der Self-Service-Lösungsrate um 20 Prozent.
+
+00:05:53.700 --> 00:05:56.980
+Kunden fanden häufiger eigenständige Antworten, ohne den Support kontaktieren zu müssen.
+
+00:05:57.820 --> 00:06:02.520
+Andere Kunden in derselben Fallstudie sahen eine Reduzierung der Bearbeitungszeit für Supportfälle um bis zu 40 Prozent.
+
+00:06:03.220 --> 00:06:08.100
+Das bedeutet, Mitarbeiter fanden Informationen schneller, Kunden erhielten Antworten zügiger und die Supportkosten sanken.
+
+00:06:08.500 --> 00:06:12.200
+Und das ist nicht nur ein nettes Feature, sondern hat einen messbaren Einfluss auf das Geschäftsergebnis.
+
+00:06:12.540 --> 00:06:13.280
+Das ist der entscheidende Punkt.
+
+00:06:13.280 --> 00:06:16.660
+Hybride Suche ist nicht nur ein nettes Upgrade oder ein Häkchen auf einer Funktionsliste.
+
+00:06:16.820 --> 00:06:17.520
+Sie ist messbar besser.
+
+00:06:17.940 --> 00:06:20.780
+Sie liefert eine höhere Präzision, einen besseren Abruf und bessere Ergebnisse für den Nutzen.
+
+00:06:21.180 --> 00:06:25.620
+Und genau diese Kombination von Ansätzen macht Azure AI Search so leistungsfähig für moderne Anwendungen.
+
+00:06:26.480 --> 00:06:30.560
+Aber es gibt noch eine weitere Technologie, die durch diese Kombination erschlossen wird und die derzeit viel Aufmerksamkeit erhält.
+
+00:06:30.920 --> 00:06:32.560
+Sie heißt RAG, die RAG-Verbindung.
+
+00:06:32.960 --> 00:06:34.140
+Lassen Sie uns also über RAG sprechen.
+
+00:06:34.500 --> 00:06:36.940
+RAG steht für Retrieval Augmented Generation, also eine abrufgeschütztige Enerio.
+
+00:06:36.940 --> 00:06:39.120
+Das klingt kompliziert, aber hier ist die einfachste Definition.
+
+00:06:39.540 --> 00:06:43.000
+Es ist ein Framework, das KI-Assistenten Zugriff auf Informationen gibt, mit denen sie nicht trainiert wurden.
+
+00:06:43.900 --> 00:06:47.720
+Große Sprachmodelle wie GPT wissen viel über Geschichte, Wissenschaft und Programmierung.
+
+00:06:48.200 --> 00:06:54.200
+Aber sie kennen nicht ihre internen Firmendokumente, Richtlinien, Kundendaten oder die spezifischen Verfahren ihres Teams.
+
+00:06:55.280 --> 00:06:58.920
+Die meisten Leute denken, man könne all dieses interne Wissen einfach in das Modell selbst einspeisen.
+
+00:06:59.380 --> 00:07:01.500
+Das funktioniert nicht. Es ist teuer und schwer zu aktualisieren.
+
+00:07:01.960 --> 00:07:03.400
+RAG löst dieses Problem auf clevere Weise.
+
+00:07:03.640 --> 00:07:09.420
+Anstatt alles in das Modell zu stopfen, rufen sie die relevanten Informationen aus einer Wissensdatenbank ab, genau in dem Moment, in dem man eine Frage stellt.
+
+00:07:09.420 --> 00:07:16.920
+Sie nehmen die Benutzeranfrage, durchsuchen ihre internen Daten, finden die relevantesten Dokumente und speisen diesen Kontext zusammen mit der ursprünglichen Frage in das LLM ein.
+
+00:07:17.520 --> 00:07:19.680
+Das LLM generiert dann eine Antwort, die auf ihren Daten basiert.
+
+00:07:20.140 --> 00:07:20.920
+Es ist das Magische daran.
+
+00:07:21.300 --> 00:07:24.260
+Azure AI Search bildet dabei die Retrieval-Hälfte dieser Gleichung.
+
+00:07:24.800 --> 00:07:28.180
+Es ist die Engine, die die richtigen Dokumente findet, damit das LLM präzise antworten kann.
+
+00:07:28.180 --> 00:07:32.620
+Ohne eine solide Retrieval-Ebene ist ein RAG-System nur so gut wie die Dokumente, die es findet.
+
+00:07:33.320 --> 00:07:34.980
+Und genau hier glänzt die hybride Suche.
+
+00:07:35.200 --> 00:07:40.820
+Denn RAG-Anfragen sind oft Fragen in natürlicher Sprache, während die Antworten oft in Dokumenten mit völlig unterschiedlicher Terminologie stehen.
+
+00:07:41.380 --> 00:07:43.320
+Lassen Sie mich Ihnen einige Zahlen an, in den den Unterschied wirklich verdrehen.
+
+00:07:44.080 --> 00:07:52.160
+Eine Studie zur Suche in Unternehmensanwendungen ergab, dass ein hybrides RAG-Framework die Top-K-Retrieval-Genauigkeit um das 18-25-Fache gegenüber einer reinen Stichwortsuche verbesserte.
+
+00:07:52.160 --> 00:07:55.880
+Die Genauigkeit beim Abschluss von Arbeitsabläufen verbesserte sich um das 21.
+
+00:07:56.280 --> 00:08:02.380
+Das bedeutet, dass Benutzer mit Unterstützung eines RAG-Systems, das hybride Suche verwendet, komplexe Aufgaben wesentlich erfolgreicher abschließen können.
+
+00:08:03.060 --> 00:08:07.740
+Insgesamt können ordnungsgemäß implementierte RAG-Systeme die Suchgenauigkeit um durchschnittlich 85% steigern,
+
+00:08:07.740 --> 00:08:10.680
+wobei einige spezialisierte Bereiche eine Genauigkeit von nahezu 90% erreichen.
+
+00:08:11.100 --> 00:08:15.420
+Und da das LLM Antworten auf Basis des abgerufenen Kontexts generiert und nicht auf eigenen Vermutungen,
+
+00:08:15.640 --> 00:08:18.740
+zeigten RAG-Systeme eine Verringerung halluzinierter Antworten um etwa 40%.
+
+00:08:18.740 --> 00:08:22.880
+Deshalb ist Azure AI Search so zentral für die Entwicklung von KI-Agenten und Co-Piloten.
+
+00:08:23.500 --> 00:08:27.900
+Es bietet den fundierten, faktenbasierten Abruf, der LLMs in einem geschäftlichen Kontext vertrauenswürdig macht.
+
+00:08:28.560 --> 00:08:32.100
+Wenn Sie einen Assistenten entwickeln, der Fragen präzise beantworten und seine Quellen angeben soll,
+
+00:08:32.100 --> 00:08:35.260
+ist eine hybride Suche in Kombination mit RAG die Architektur Ihrer Wahl.
+
+00:08:35.680 --> 00:08:38.140
+Hybride Suche plus RAG ist also ein leistungsstarker Kombination.
+
+00:08:38.720 --> 00:08:40.320
+Doch wie sieht das Ganze in der Praxis aus?
+
+00:08:41.560 --> 00:08:44.460
+Die Auswirkungen der Realnummer. Wo kommt das also in der Praxis zum Einsatz?
+
+00:08:44.840 --> 00:08:46.000
+Lassen Sie mich Ihnen ein paar Beispiele nennen.
+
+00:08:46.380 --> 00:08:47.940
+E-Commerce ist wahrscheinlich das bekannteste Beispiel.
+
+00:08:48.740 --> 00:08:50.820
+Ein Kunde gibt bequeme Laufschuhe in die Suchleiste ein.
+
+00:08:51.520 --> 00:08:53.620
+In der Produktbeschreibung steht vielleicht gepolsterte Sportschuhe,
+
+00:08:53.660 --> 00:08:55.500
+weil das Marketing-Team andere Begriffe gewählt hat.
+
+00:08:56.480 --> 00:08:59.060
+Eine reine Stichwort-Suche würde diesen Treffer komplett verfehlen.
+
+00:08:59.420 --> 00:09:04.420
+Mit Azure AI Search versteht das System, das bequem und gepolstert in diesem Kontext ungefähr das gleiche bedeuten.
+
+00:09:05.100 --> 00:09:07.920
+Es zeigt das richtige Produkt an, auch wenn die Begriffe nicht exakt übereinstimmen.
+
+00:09:08.520 --> 00:09:11.440
+So findet der Kunde, was er sucht, anstatt frustriert die Seite zu verlassen.
+
+00:09:12.040 --> 00:09:13.640
+Kundensupport-Portale funktionieren nach demselben Prinzip.
+
+00:09:14.240 --> 00:09:16.680
+Stellen Sie sich vor, ein Kunde fragt, wie kann ich mein Abonnement kündigen?
+
+00:09:16.680 --> 00:09:20.480
+Die entsprechende Richtlinie trägt vielleicht den Titel Beendigung der Dienstleistungsvereinbarung.
+
+00:09:20.880 --> 00:09:24.860
+Die hybride Suche findet genau dieses Dokument durch den Abgleich juristischer Fachbegriffe,
+
+00:09:25.380 --> 00:09:29.760
+liefert aber durch semantische Ähnlichkeit auch eine passende FAQ zur vorzeitigen Vertragsbeendigung.
+
+00:09:30.460 --> 00:09:35.400
+Der Kunde erhält eine umfassende Antwort, anstatt fünf verschiedene Artikel durchsuchen zu müssen.
+
+00:09:35.400 --> 00:09:37.900
+Die Suche nach Rechtsdokumenten ist ein weiteres Beispiel.
+
+00:09:38.480 --> 00:09:42.140
+Anwälte müssen Verträge nach exakten Klauselnummern und Abschnittsverweisen durchsuchen.
+
+00:09:42.840 --> 00:09:44.340
+Das ist reines Terrain für die Stichwort-Suche.
+
+00:09:44.620 --> 00:09:48.000
+Aber Sie müssen auch ähnliche Formulierungen in verschiedenen Verträgen finden, selbst wenn die Wortwahl variiert.
+
+00:09:48.820 --> 00:09:53.380
+Die hybride Suche bewältigt beides in einer einzigen Abfrage und in regulierten Branchen ist es für die Compliance entscheidend,
+
+00:09:53.440 --> 00:09:55.600
+genau nachvollziehen zu können, warum ein Ergebnis angezeigt wurde.
+
+00:09:56.120 --> 00:09:57.600
+Auch interne Wissensdatenbanken profitieren davon.
+
+00:09:57.600 --> 00:10:02.480
+Ein Mitarbeiter, der nach der Urlaubsrichtlinie sucht, erhält das offizielle H-Dokument,
+
+00:10:02.900 --> 00:10:05.620
+aber auch eine diesbezügliche E-Mail der Rechtsabteilung zu Resturlaubstagen,
+
+00:10:06.060 --> 00:10:08.100
+sowie eine aktuelle Mitteilung aus dem Firmenintranet.
+
+00:10:09.300 --> 00:10:11.820
+Die Suche versteht, dass all diese Dinge mit derselben Frage zusammenhängen.
+
+00:10:12.440 --> 00:10:15.080
+Die Fertigungsindustrie ist ein weniger offensichtliches, aber sehr starkes Beispiel.
+
+00:10:15.800 --> 00:10:18.740
+Ein Techniker gibt Motorüberhitzung beheben in die Suchoberfläche ein.
+
+00:10:18.980 --> 00:10:22.040
+Das System liefert den Abschnitt zur Fehlerbehebung aus dem Gerätehandbuch
+
+00:10:22.040 --> 00:10:25.420
+sowie ein gescanntes Diagramm mit den relevanten Bauteilen mit den relevanten Bauteilen.
+
+00:10:25.420 --> 00:10:29.700
+Obwohl das Diagramm ein Bild ist, kann Azure AI Search den Textinhalt extrahieren und indexieren,
+
+00:10:29.920 --> 00:10:31.280
+sodass er in den Suchergebnissen erscheint.
+
+00:10:31.920 --> 00:10:34.560
+Der rote Faden bei all diesen Beispielen sind unstrukturierte Daten.
+
+00:10:35.400 --> 00:10:37.980
+PDFs, Word-Dokumente, E-Mail-Support-Tickets, gescannte Bilder.
+
+00:10:38.640 --> 00:10:42.080
+Herkömmliche Datenbankabfragen und Stichwort-Suchen waren nie für diese Art von Daten konzipiert.
+
+00:10:42.660 --> 00:10:46.300
+Azure AI Search ist speziell für diese Welt entwickelt und je intensiver man sich damit befasst,
+
+00:10:46.380 --> 00:10:48.780
+desto klarer wird, dass hybride Suche nicht nur ein nettes Feature ist.
+
+00:10:49.320 --> 00:10:51.860
+Es ist ein grundlegender Bestandteil, wie moderne Anwendungen aufgebaut sind.
+
+00:10:52.700 --> 00:10:53.580
+Die Details zusammenpassen.
+
+00:10:53.900 --> 00:10:55.680
+Wie funktioniert das Ganze also eigentlich im Hintergrund?
+
+00:10:56.380 --> 00:10:58.520
+Azure AI Search hat drei Kernkomponenten.
+
+00:10:58.840 --> 00:11:01.140
+Die Datenquelle, den Indexer und den Suchindex.
+
+00:11:01.900 --> 00:11:04.020
+Die Datenquelle ist der Ort, an dem Ihre Informationen liegen.
+
+00:11:04.420 --> 00:11:08.980
+Das kann Blob Storage, eine Azure SQL-Datenbank, Cosmos DB oder sogar SharePoint sein.
+
+00:11:09.560 --> 00:11:11.480
+Es ist das Rohmaterial, das durchsuchbar gemacht werden muss.
+
+00:11:11.960 --> 00:11:14.400
+Denen Sie es sich wie ein Stapel Dokumente vor, der darauf wartet, organisiert zu werden.
+
+00:11:14.880 --> 00:11:17.480
+Der Indexer ist die Pipeline, die Daten aus der Quelle liest,
+
+00:11:17.960 --> 00:11:20.820
+den Inhalt extrahiert, konfigurierte KI-Anreicherungen anwendet
+
+00:11:20.820 --> 00:11:22.500
+und dann den Suchindex aufbaut.
+
+00:11:23.280 --> 00:11:24.820
+Hier ist eine einfache Möglichkeit, Sie das vorzustellen.
+
+00:11:25.360 --> 00:11:28.220
+Stellen Sie sich einen Bibliothekar vor, der ein Lagerhaus voller Bücher betritt.
+
+00:11:28.700 --> 00:11:31.000
+Er liest jedes einzelne, macht sich detaillierte Notizen,
+
+00:11:31.180 --> 00:11:34.180
+identifiziert Schlüsselthemen und Entitäten und ordnet alles in einem Katalog.
+
+00:11:34.820 --> 00:11:36.780
+Dieses Lesen und Notieren ist der Indizierungsprozess.
+
+00:11:37.380 --> 00:11:38.680
+Der Suchindex ist dieser Katalog.
+
+00:11:39.200 --> 00:11:40.100
+Es sind nicht die Bücher selbst.
+
+00:11:40.100 --> 00:11:44.960
+Es ist das strukturierte, optimierte System, mit dem Sie in Millisekunden genau das finden, was Sie brauchen.
+
+00:11:45.800 --> 00:11:49.480
+Wenn Sie eine Suchanfrage eingeben, durchsucht das System nicht die Originaldokumente Mente.
+
+00:11:50.200 --> 00:11:53.660
+Stattdessen schlägt es im Index nach, der bereits genau weiß, wo sich alles befindet.
+
+00:11:54.560 --> 00:11:56.520
+Diese Voraborganisation nennt man einen invertierten Index.
+
+00:11:57.100 --> 00:11:59.380
+Anstatt Dokumente mit einer Liste Ihrer Wörter zu speichern,
+
+00:11:59.460 --> 00:12:01.660
+speichern Sie Wörter mit einer Liste der Dokumente, in denen Sie vorkommen.
+
+00:12:02.000 --> 00:12:04.720
+Das bedeutet, wenn Sie nach einem Begriff suchen, springen Sie direkt an die richtige Stelle.
+
+00:12:05.040 --> 00:12:06.260
+Kein Blättern durch jede einzelne Seite.
+
+00:12:06.260 --> 00:12:08.280
+Das Ergebnis ist eine enorme Geschwindigkeitscheck.
+
+00:12:08.640 --> 00:12:11.860
+Anstatt jedes Dokument scannen zu müssen, was bei wachsender Datenmenge immer länger dauert,
+
+00:12:11.940 --> 00:12:13.420
+springen Sie direkt an die richtige Position.
+
+00:12:13.700 --> 00:12:13.900
+Sehr.
+
+00:12:14.740 --> 00:12:18.040
+Bei Millionen von Dokumenten macht das den Unterschied zwischen einer Suche, die Sekunden dauert,
+
+00:12:18.240 --> 00:12:19.860
+und einer, die nur Millisekunden benötigt.
+
+00:12:20.520 --> 00:12:23.840
+Sie verstehen jetzt also, was Azure AI Search ist, wie die Kernkomponenten zusammenwirken
+
+00:12:23.840 --> 00:12:25.260
+und warum die hybride Suche alles verändert.
+
+00:12:26.160 --> 00:12:28.040
+Fassen wir zusammen, was Sie damit konkret tun können.
+
+00:12:29.000 --> 00:12:30.180
+Erstens verstehen Sie Ihre Daten.
+
+00:12:30.620 --> 00:12:35.060
+Wenn Sie bereits strukturiert sind, etwa Produkttabellen in SQL, Kundendatensätze in einer Datenbank
+
+00:12:35.060 --> 00:12:38.500
+oder alles mit sauberen Zeilen und Spalten, können Sie diese direkt mit SQL abfragen.
+
+00:12:39.320 --> 00:12:41.480
+Azure AI Search wurde für unstrukturierten Text entwickelt.
+
+00:12:41.920 --> 00:12:44.040
+Das sind PDFs, E-Mails, Word-Dokumente und Support-Tickets.
+
+00:12:44.820 --> 00:12:45.960
+Dort liefert es den echten Mehrwert.
+
+00:12:46.700 --> 00:12:50.060
+Zweitens, wenn Sie eine RAG-Anwendung oder einen KI-Assistenten entwickeln,
+
+00:12:50.200 --> 00:12:53.520
+ist Azure AI Search mit hybrider Suche die ideale Retrieval-Engine dafür.
+
+00:12:54.180 --> 00:12:57.880
+Es bietet exakte Keyword-Treffer für Präzision und semantisches Verständnis für den Kontext.
+
+00:12:58.500 --> 00:13:02.440
+Diese Kombination liefert zuverlässigere, zitierfähige Antworten als jeder Ansatz für Sie allein.
+
+00:13:02.440 --> 00:13:05.380
+Drittens, komplizieren Sie das Setup mit unnötig.
+
+00:13:05.920 --> 00:13:07.560
+Das Azure Portal bietet einen Assistenten für den Daten.
+
+00:13:07.900 --> 00:13:10.320
+Verbinden Sie Ihren Blob-Speicher, konfigurieren Sie einige Einstellungen
+
+00:13:10.320 --> 00:13:12.020
+und lassen Sie den Indexer Ihren ersten Index erstellen.
+
+00:13:12.200 --> 00:13:13.920
+Sie können Ihre erste Suche in unter einer Stunde starten.
+
+00:13:14.220 --> 00:13:15.760
+Das ist also Azure AI Search, einfach erklärt.
+
+00:13:16.220 --> 00:13:18.180
+Es nimmt ungeordnete, unstrukturierte Informationen
+
+00:13:18.180 --> 00:13:20.900
+und macht daraus durchsuchbares, KI-fähiges Wissen.
+
+00:13:21.400 --> 00:13:22.140
+Danke, dass Sie dabei waren.
+
+00:13:22.460 --> 00:13:23.980
+Abonnieren Sie und wir sehen uns in der nächsten Folge.
+
+00:13:23.980 --> 00:13:53.960
+Abonnieren Sie und wir sehen uns in der nächsten Folge.

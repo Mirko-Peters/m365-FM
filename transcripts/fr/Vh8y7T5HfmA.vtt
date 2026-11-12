@@ -1,0 +1,2053 @@
+WEBVTT
+
+00:00:00.430 --> 00:00:06.930
+Prêt pour 10 jours consacrés à Microsoft 365, Copilot, l'IA, Azure et aux personnes qui façonnent l'avenir du travail.
+
+00:00:07.930 --> 00:00:11.990
+En janvier prochain, la M365 Con revient et nous voyons les choses en grand.
+
+00:00:12.910 --> 00:00:18.150
+Rejoignez-nous pour des sessions en direct, des démonstrations concrètes et des connaissances pratiques partagées par des MVP et des experts du secteur.
+
+00:00:18.690 --> 00:00:21.150
+Pas de diapositives génériques, pas de mots à la mode interminable.
+
+00:00:21.950 --> 00:00:23.070
+Nous abordons les vrais défis.
+
+00:00:23.750 --> 00:00:28.530
+Copilot Studio, les agents IA fabriquent la sécurité, la gouvernance et l'automatisation.
+
+00:00:28.530 --> 00:00:34.310
+Que vous soyez professionnel de l'informatique, développeur ou dirigeant d'entreprise, des sessions sont conçues pour vous.
+
+00:00:35.550 --> 00:00:39.950
+Avec 10 jours complets, vous pourrez explorer de nombreuses technologies et échanger avec une communauté mondiale.
+
+00:00:40.910 --> 00:00:44.530
+Suivez les sessions en direct et rapportez des idées concrètes à votre organisation en...
+
+00:00:45.190 --> 00:00:48.950
+Janvier 2027, 10 jours, une seule communauté Microsoft.
+
+00:00:49.450 --> 00:00:50.650
+Les inscriptions sont ouvertes.
+
+00:00:51.910 --> 00:00:55.570
+Rendez-vous sur m365con.net pour réserver votre place dès aujourd'hui.
+
+00:00:55.570 --> 00:00:58.290
+C'est m365con.net.
+
+00:01:00.350 --> 00:01:04.290
+Inscrivez-vous sur m365con.net et nous vous attendons en janvier.
+
+00:01:04.550 --> 00:01:09.630
+Si vous pensez qu'Intune n'est qu'un moyen de déployer des stratégies sur des ordinateurs portables, vous passez à côté de l'essentiel.
+
+00:01:09.990 --> 00:01:13.150
+Et si je vous disais que la véritable puissance d'Intune ne réside pas seulement dans la gestion des appareils,
+
+00:01:13.350 --> 00:01:17.030
+mais dans le contrôle de l'identité des données et des applications au sein d'un écosystème interconnecté ?
+
+00:01:17.030 --> 00:01:21.390
+Aujourd'hui, nous allons voir pourquoi Microsoft Intune n'est pas qu'un outil informatique,
+
+00:01:21.530 --> 00:01:24.990
+mais un élément stratégique des modèles de sécurité et de conformité de Microsoft 365.
+
+00:01:25.910 --> 00:01:29.590
+Restez avec nous, car une fois que vous verrez comment Intune fonctionne avec Azure AD et Defender,
+
+00:01:29.750 --> 00:01:31.710
+vous repenserez la notion même de gestion des appareils.
+
+00:01:32.910 --> 00:01:35.210
+Pourquoi Intune est bien plus que de la gestion d'appareils ?
+
+00:01:35.210 --> 00:01:38.410
+La plupart des gens pensent encore qu'Intune sert uniquement à déployer des stratégies sur les ordinateurs,
+
+00:01:38.510 --> 00:01:39.430
+et honnêtement, ce n'est pas surprenant.
+
+00:01:39.430 --> 00:01:43.150
+Pendant des années, la gestion des appareils consistait à envoyer des paramètres,
+
+00:01:43.270 --> 00:01:45.650
+verrouiller certaines fonctionnalités et espérer que rien ne casse.
+
+00:01:46.650 --> 00:01:49.250
+Il s'agissait de contrôler le matériel à distance, désactiver ce port,
+
+00:01:49.430 --> 00:01:53.050
+imposer cette longueur de mot de passe, déployer des mises à jour durant les fenêtres de maintenance.
+
+00:01:54.050 --> 00:01:57.970
+Si vous avez connu l'époque où les objets de stratégie de groupe régissaient tout au sein d'un domaine d'entreprise,
+
+00:01:57.970 --> 00:02:00.410
+vous savez à quel point ce modèle était rigide.
+
+00:02:01.530 --> 00:02:04.190
+Il était conçu pour un monde où chaque ordinateur était sur le même réseau,
+
+00:02:04.330 --> 00:02:07.470
+connecté directement au serveur et quittait rarement le périmètre.
+
+00:02:07.470 --> 00:02:10.290
+A l'époque, les ordinateurs portables étaient l'exception, pas la règle.
+
+00:02:11.390 --> 00:02:13.630
+Le problème, c'est que ce style de gestion a mal vieilli.
+
+00:02:14.070 --> 00:02:16.770
+Lorsque le travail à distance a exposé, les failles de ce système sont devenues flagrantes.
+
+00:02:17.470 --> 00:02:20.210
+Déployer une stratégie via des outils anciens entraînait souvent des conflits.
+
+00:02:20.410 --> 00:02:22.390
+Deux paramètres superposés qui semblaient corrects sur le papier,
+
+00:02:22.570 --> 00:02:25.130
+mais qui en réalité bloquaient les utilisateurs le lundi matin.
+
+00:02:25.570 --> 00:02:27.330
+C'était lourd et pire encore, c'était réactif.
+
+00:02:28.010 --> 00:02:31.210
+Si quelqu'un emportait un ordinateur portable chez lui et se déconnectait du VPN de l'entreprise,
+
+00:02:31.290 --> 00:02:33.590
+vos politiques n'avaient que peu d'effet jusqu'au retour de l'appareil sur le réseau.
+
+00:02:33.590 --> 00:02:36.990
+Et il y avait la question de l'identité, ou plus précisément de son absence totale.
+
+00:02:37.410 --> 00:02:40.730
+Le système ne se souciait pas de savoir qui se connectait tant que la machine respectait les règles de configuration.
+
+00:02:41.610 --> 00:02:44.430
+Cela pouvait sembler sûr au premier abord, mais en réalité cela laissait de grandes failles.
+
+00:02:44.810 --> 00:02:45.410
+Voyez les choses ainsi.
+
+00:02:45.910 --> 00:02:49.150
+Gérer uniquement les appareils revient à verrouiller la porte de votre bureau chaque soir,
+
+00:02:49.230 --> 00:02:50.930
+tout en laissant toutes les fenêtres grandes ouvertes.
+
+00:02:51.590 --> 00:02:53.470
+La porte semble sécurisée, elle l'est techniquement,
+
+00:02:53.930 --> 00:02:56.870
+mais vous avez ignoré la vue d'ensemble sur la façon dont les gens entrent et sortent réellement.
+
+00:02:57.730 --> 00:03:01.230
+C'est tout le problème de considérer une thune comme un simple moyen de verrouiller l'écran d'un ordinateur portable.
+
+00:03:01.950 --> 00:03:04.170
+On passe à côté des besoins plus larges d'un environnement moderne
+
+00:03:04.170 --> 00:03:06.510
+où les employés se connectent de n'importe où sur n'importe quel appareil
+
+00:03:06.510 --> 00:03:08.430
+et attendent des applications qu'elles fonctionnent simplement.
+
+00:03:09.270 --> 00:03:12.770
+C'est là qu'un thune passe d'un outil limité à un rôle bien plus important.
+
+00:03:13.630 --> 00:03:15.270
+Au lieu de se concentrer uniquement sur l'appareil,
+
+00:03:15.510 --> 00:03:18.830
+sa mission est de lier l'identité, les applications et la sécurité.
+
+00:03:19.670 --> 00:03:21.110
+Vous ne vous contentez pas d'appliquer une politique,
+
+00:03:21.210 --> 00:03:23.670
+vous définissez la manière dont les utilisateurs interagissent avec leurs données,
+
+00:03:23.770 --> 00:03:25.870
+quelles applications peuvent être ouvertes et sous quelles conditions ils y accèdent.
+
+00:03:25.870 --> 00:03:28.970
+Cela signifie que vos fenêtres sont fermées, vos portes verrouillées
+
+00:03:28.970 --> 00:03:30.950
+et chaque point d'entrée est lié au même système de clé.
+
+00:03:31.190 --> 00:03:33.090
+Et cela crée un alignement entre des couches
+
+00:03:33.090 --> 00:03:34.750
+que les anciens modèles de gestion ne pouvaient pas atteindre.
+
+00:03:35.230 --> 00:03:36.910
+Tout administrateur informatique peut vous raconter
+
+00:03:36.910 --> 00:03:38.430
+comment certaines politiques ont bloqué des flux de travail.
+
+00:03:38.910 --> 00:03:40.530
+Peut-être qu'Outlook a cessé de se synchroniser
+
+00:03:40.530 --> 00:03:42.950
+parce qu'une règle conditionnelle n'était pas alignée avec le client VPN.
+
+00:03:43.450 --> 00:03:44.790
+Peut-être que les appels Teams ont échoués
+
+00:03:44.790 --> 00:03:48.190
+parce qu'un certificat a expiré ou bloqué par une configuration d'appareil restrictive.
+
+00:03:48.990 --> 00:03:51.450
+Ces situations nuisent à la productivité et génèrent de la frustration
+
+00:03:51.450 --> 00:03:53.190
+car les appareils étaient gérés de manière isolée
+
+00:03:53.190 --> 00:03:55.330
+sans tenir compte de leur utilisation réelle, sans réelle.
+
+00:03:56.310 --> 00:03:57.410
+En opérant de manière globale,
+
+00:03:57.690 --> 00:03:59.070
+Intune aide à réduire ses mauvaises surprises.
+
+00:03:59.570 --> 00:04:00.890
+Il ne se contente pas d'imposer, il coordonne.
+
+00:04:01.330 --> 00:04:02.270
+Et lorsque l'on pense à l'échelle,
+
+00:04:02.350 --> 00:04:03.810
+cette coordination est encore plus importante.
+
+00:04:04.310 --> 00:04:06.390
+Intune fonctionne pour une startup de 50 personnes
+
+00:04:06.390 --> 00:04:08.870
+qui veut simplement séparer les emails personnels
+
+00:04:08.870 --> 00:04:09.790
+des données d'entreprise,
+
+00:04:10.130 --> 00:04:11.190
+mais il s'adapte aussi aux multinationales
+
+00:04:11.870 --> 00:04:13.930
+gérant des dizaines de milliers de terminaux.
+
+00:04:14.670 --> 00:04:17.410
+L'essentiel est que la même plateforme s'adapte à tous ses scénarios.
+
+00:04:18.130 --> 00:04:19.870
+Il n'est pas nécessaire d'avoir un ensemble d'outils
+
+00:04:19.870 --> 00:04:22.550
+pour les petites structures et un autre pour les entreprises mondiales.
+
+00:04:23.110 --> 00:04:24.110
+Le plan de gestion s'adapte,
+
+00:04:24.250 --> 00:04:26.690
+ce qui, non seulement réduit la prolifération des fournisseurs,
+
+00:04:26.810 --> 00:04:28.550
+mais rationalise aussi la cohérence des politiques
+
+00:04:28.550 --> 00:04:30.330
+et la conformité entre les différentes régions.
+
+00:04:31.150 --> 00:04:33.170
+Le véritable avantage ici n'est donc pas qu'intune
+
+00:04:33.170 --> 00:04:35.090
+facilite la configuration des ordinateurs portables.
+
+00:04:35.470 --> 00:04:36.670
+C'est devenu le strict minimum aujourd'hui.
+
+00:04:36.950 --> 00:04:38.590
+L'intérêt est de faire de la gestion des appareils
+
+00:04:38.590 --> 00:04:40.150
+une couche de sécurité stratégique,
+
+00:04:40.250 --> 00:04:41.950
+étroitement liée aux obligations de conformité
+
+00:04:41.950 --> 00:04:43.570
+et à la réalité du travail actuel.
+
+00:04:43.910 --> 00:04:44.310
+Et actuel.
+
+00:04:45.150 --> 00:04:45.910
+Bien utilisé,
+
+00:04:46.110 --> 00:04:48.350
+la gestion des appareils devient une pièce d'un puzzle plus vaste
+
+00:04:48.350 --> 00:04:49.670
+qui assure l'alignement des applications,
+
+00:04:49.970 --> 00:04:52.550
+des données et des identités sous un même modèle de protection.
+
+00:04:53.130 --> 00:04:54.330
+C'est bien plus que de simples appareils.
+
+00:04:54.670 --> 00:04:55.870
+Il s'agit d'orchestrer la confiance
+
+00:04:55.870 --> 00:04:57.550
+autour de tout ce qui touche à vos données d'entreprise.
+
+00:04:58.090 --> 00:04:59.790
+Mais comment cela fonctionne-t-il concrètement ?
+
+00:04:59.790 --> 00:05:01.750
+La réponse ne se trouve pas du tout dans les paramètres de l'appareil.
+
+00:05:02.130 --> 00:05:03.990
+Elle vient de la façon dont Intune se connecte directement
+
+00:05:03.990 --> 00:05:04.890
+à Azure Active Directory.
+
+00:05:05.810 --> 00:05:06.970
+La connexion par l'identité,
+
+00:05:07.150 --> 00:05:08.070
+Intune et Azure AD.
+
+00:05:08.870 --> 00:05:11.030
+Si la gestion d'un appareil ne concernait pas l'appareil lui-même,
+
+00:05:11.170 --> 00:05:12.310
+mais la personne qui se connecte,
+
+00:05:13.050 --> 00:05:14.130
+c'est ce changement de perspective
+
+00:05:14.130 --> 00:05:15.590
+qui rend Intune réellement pertinent.
+
+00:05:15.590 --> 00:05:18.390
+Car le contrôle ne réside pas dans l'appareil lui-même,
+
+00:05:18.530 --> 00:05:20.090
+mais dans l'identité qui y est associée.
+
+00:05:21.250 --> 00:05:23.110
+Un ordinateur ou un téléphone sans utilisateur
+
+00:05:23.110 --> 00:05:23.930
+n'est que du matériel,
+
+00:05:24.030 --> 00:05:25.790
+une brique coûteuse qui n'ouvre rien par elle-même.
+
+00:05:26.310 --> 00:05:28.050
+Mais dès que quelqu'un se connecte avec des identifiants
+
+00:05:28.050 --> 00:05:29.550
+permettant d'accéder aux données d'entreprise,
+
+00:05:29.790 --> 00:05:30.610
+tout change.
+
+00:05:31.690 --> 00:05:33.850
+L'accès, les risques et la conformité suivent l'identité
+
+00:05:33.850 --> 00:05:34.570
+et non la machine.
+
+00:05:35.230 --> 00:05:36.610
+C'est là qu'intervient Azure Active Directory.
+
+00:05:37.330 --> 00:05:39.230
+Si l'on considère l'écosystème de sécurité de Microsoft
+
+00:05:39.230 --> 00:05:41.110
+comme un corps, Azure AD en est le cerveau.
+
+00:05:41.590 --> 00:05:43.530
+Il prend les décisions sur l'identité de l'utilisateur,
+
+00:05:43.530 --> 00:05:46.050
+ses autorisations et la sécurité des conditions d'accès.
+
+00:05:47.750 --> 00:05:49.910
+Antune s'appuie sur cette intelligence liée à l'identité.
+
+00:05:50.650 --> 00:05:52.670
+Au lieu de simplement savoir qu'un appareil existe,
+
+00:05:52.770 --> 00:05:54.430
+les politiques s'appliquent en fonction de l'utilisateur,
+
+00:05:54.550 --> 00:05:56.410
+de son rôle et des circonstances de l'accès.
+
+00:05:57.170 --> 00:05:59.370
+Il ne s'agit pas de contrôler brutalement un ordinateur,
+
+00:05:59.430 --> 00:06:01.310
+mais de centraliser la confiance autour de l'identité
+
+00:06:01.310 --> 00:06:02.690
+et puis de laisser la gestion des appareils
+
+00:06:02.690 --> 00:06:04.330
+appliquer des décisions contextuelles.
+
+00:06:05.030 --> 00:06:06.090
+Examinons maintenant les failles d'un modèle
+
+00:06:06.090 --> 00:06:06.910
+basé uniquement sur l'appareil.
+
+00:06:07.270 --> 00:06:08.650
+Si un ordinateur est perdu ou volé,
+
+00:06:08.830 --> 00:06:10.890
+les outils traditionnels permettent de l'effacer à distance.
+
+00:06:10.890 --> 00:06:13.170
+C'est utile, mais cela ne traite que partiellement le risque.
+
+00:06:13.850 --> 00:06:15.070
+Si les identifiants sont en cache
+
+00:06:15.070 --> 00:06:16.770
+ou si un attaquant a déjà trouvé le mot de passe,
+
+00:06:16.970 --> 00:06:19.210
+les données peuvent être compromises avant tout effacement.
+
+00:06:19.930 --> 00:06:20.930
+Quand on se concentre sur la machine,
+
+00:06:21.010 --> 00:06:21.890
+on est toujours dans la réaction.
+
+00:06:22.710 --> 00:06:23.790
+En reliant l'accès à l'identité,
+
+00:06:24.070 --> 00:06:24.830
+l'équilibre change.
+
+00:06:25.770 --> 00:06:27.570
+Grâce à la connexion Intune et Azure AD,
+
+00:06:27.770 --> 00:06:29.290
+même avec un ordinateur professionnel,
+
+00:06:29.610 --> 00:06:31.510
+l'accès aux fichiers sensibles est limité
+
+00:06:31.510 --> 00:06:34.230
+si l'identité ne répond pas aux politiques en vigueur.
+
+00:06:35.470 --> 00:06:36.390
+Voici un exemple concret.
+
+00:06:36.750 --> 00:06:37.870
+Prenons un prestataire qui se connecte
+
+00:06:37.870 --> 00:06:38.870
+depuis son ordinateur personnel.
+
+00:06:38.870 --> 00:06:40.550
+Quelle est la plus grande préoccupation ?
+
+00:06:40.550 --> 00:06:43.290
+L'ordinateur lui-même ou l'identité qui l'utilise ?
+
+00:06:43.290 --> 00:06:44.250
+Pour la plupart des entreprises,
+
+00:06:44.330 --> 00:06:46.250
+un prestataire n'a pas besoin d'un accès illimité
+
+00:06:46.250 --> 00:06:47.150
+au réseau de l'organisation
+
+00:06:47.150 --> 00:06:49.870
+et ne devrait pas être traité comme un employé à temps plein.
+
+00:06:50.770 --> 00:06:52.210
+Avec l'identité comme point d'ancrage,
+
+00:06:52.710 --> 00:06:54.050
+Intune identifie un compte externe
+
+00:06:54.050 --> 00:06:55.650
+et, via l'accès conditionnel,
+
+00:06:55.810 --> 00:06:58.250
+applique des règles adaptées à ce contexte.
+
+00:06:58.870 --> 00:07:00.990
+L'accès peut être limité à une version web d'Outlook
+
+00:07:00.990 --> 00:07:03.570
+et de Teams sans option de téléchargement local de fichiers.
+
+00:07:04.010 --> 00:07:05.910
+Cette décision ne repose pas sur une estimation de l'état
+
+00:07:05.910 --> 00:07:07.290
+d'un ordinateur portable au hasard.
+
+00:07:07.290 --> 00:07:09.250
+Elle repose sur une confiance appliquée précisément
+
+00:07:09.250 --> 00:07:10.190
+en fonction de l'utilisateur.
+
+00:07:10.990 --> 00:07:13.270
+L'accès conditionnel devient alors le gendarme de ce système.
+
+00:07:14.450 --> 00:07:15.950
+Intune définit l'état de santé de l'appareil
+
+00:07:15.950 --> 00:07:17.630
+et Azure AD détermine si cet appareil
+
+00:07:17.630 --> 00:07:19.130
+et cet utilisateur peuvent continuer.
+
+00:07:19.730 --> 00:07:20.750
+Ensemble, ils créent un système
+
+00:07:20.750 --> 00:07:22.830
+où l'accès n'est pas un simple EUC ou non EQ.
+
+00:07:23.250 --> 00:07:23.910
+Il est contextuel.
+
+00:07:24.350 --> 00:07:26.330
+Imaginez un utilisateur avec un système d'exploitation pseudo.
+
+00:07:26.770 --> 00:07:28.490
+Il tente de se connecter à OneDrive depuis cette machine.
+
+00:07:29.370 --> 00:07:30.070
+Au lieu de bloquer l'accès,
+
+00:07:30.130 --> 00:07:31.210
+les politiques Intune peuvent exiger
+
+00:07:31.210 --> 00:07:32.710
+l'installation préalable des mises à jour.
+
+00:07:32.710 --> 00:07:34.610
+En attendant, l'accès aux applications
+
+00:07:34.610 --> 00:07:36.070
+ou aux données sensibles est empêché.
+
+00:07:36.650 --> 00:07:37.510
+Le système est dynamique.
+
+00:07:37.870 --> 00:07:38.970
+Dès que l'utilisateur est conforme,
+
+00:07:39.170 --> 00:07:39.790
+l'accès est rétabli
+
+00:07:39.790 --> 00:07:41.490
+et le travail continue sans intervention manuelle
+
+00:07:41.490 --> 00:07:42.510
+d'un administrateur IT.
+
+00:07:43.130 --> 00:07:44.090
+C'est là que rétale le changement.
+
+00:07:44.550 --> 00:07:45.590
+Ce passage nous fait évoluer
+
+00:07:45.590 --> 00:07:46.790
+d'une approche qu'appareil d'abord,
+
+00:07:47.430 --> 00:07:49.170
+Eger, centré sur l'application de règles
+
+00:07:49.170 --> 00:07:50.390
+aux ordinateurs ou téléphones,
+
+00:07:50.890 --> 00:07:52.530
+vers une approche qu'a identité d'abord Eger
+
+00:07:52.530 --> 00:07:54.370
+qui suit l'utilisateur sur n'importe quel appareil.
+
+00:07:54.750 --> 00:07:56.030
+Il ne s'agit plus de verrouiller un terminal,
+
+00:07:56.230 --> 00:07:56.810
+mais de façonner.
+
+00:07:56.810 --> 00:07:58.110
+Une confiance conditionnelle
+
+00:07:58.110 --> 00:07:59.450
+pour l'ensemble des collaborateurs.
+
+00:08:00.510 --> 00:08:01.630
+Les appareils vont et viennent.
+
+00:08:01.730 --> 00:08:03.490
+Les utilisateurs emploient plusieurs plateformes chaque jour.
+
+00:08:03.770 --> 00:08:04.710
+Mais l'identité demeure.
+
+00:08:05.630 --> 00:08:06.870
+Lié Intune à Azure AD
+
+00:08:06.870 --> 00:08:08.370
+signifie que vos politiques de sécurité
+
+00:08:08.370 --> 00:08:10.150
+et de conformité suivent l'utilisateur
+
+00:08:10.150 --> 00:08:11.010
+partout où il va.
+
+00:08:12.030 --> 00:08:13.750
+Cela signifie aussi que l'accès n'est plus statique.
+
+00:08:14.390 --> 00:08:16.270
+Au lieu qu'un appareil soit simplement approuvé ou non,
+
+00:08:16.450 --> 00:08:17.890
+le système s'adapte en permanence.
+
+00:08:18.730 --> 00:08:19.390
+A chaque connexion,
+
+00:08:19.490 --> 00:08:21.010
+la santé de l'identité et du terminal
+
+00:08:21.010 --> 00:08:22.430
+est évaluée en temps réel.
+
+00:08:23.070 --> 00:08:24.110
+En cas de connexion suspecte,
+
+00:08:24.170 --> 00:08:24.790
+l'accès peut être limité.
+
+00:08:25.010 --> 00:08:26.450
+Si un risque de logiciel malveillant
+
+00:08:26.450 --> 00:08:27.150
+est détecté sur l'appareil,
+
+00:08:27.210 --> 00:08:28.670
+les applications critiques sont automatiquement bloquées.
+
+00:08:28.950 --> 00:08:30.030
+En faisant suivre la sécurité
+
+00:08:30.030 --> 00:08:31.390
+par le contexte de l'utilisateur
+
+00:08:31.390 --> 00:08:32.330
+et de l'appareil,
+
+00:08:32.530 --> 00:08:33.950
+les entreprises renforcent leur contrôle
+
+00:08:33.950 --> 00:08:35.250
+tout en offrant plus de flexibilité
+
+00:08:35.250 --> 00:08:35.910
+pour le travail mobile.
+
+00:08:36.490 --> 00:08:38.010
+Le bénéfice est donc simple mais puissant.
+
+00:08:38.710 --> 00:08:40.590
+Lorsque Intune s'intègre profondément à Azure AD,
+
+00:08:40.750 --> 00:08:42.190
+les décisions d'accès ne sont plus binaires,
+
+00:08:42.310 --> 00:08:43.270
+elles deviennent intelligentes.
+
+00:08:44.110 --> 00:08:45.770
+Elles visent à aligner l'identité,
+
+00:08:46.010 --> 00:08:46.890
+l'état de santé de l'appareil
+
+00:08:46.890 --> 00:08:47.570
+et les risques métiers
+
+00:08:47.570 --> 00:08:48.790
+dans un modèle plus adaptatif.
+
+00:08:50.050 --> 00:08:51.670
+Ce qui était une application rigide des politiques
+
+00:08:51.670 --> 00:08:52.810
+se transforme en un contrôle.
+
+00:08:53.130 --> 00:08:54.370
+D'accès contextuel qui s'ajuste
+
+00:08:54.370 --> 00:08:55.290
+selon les conditions.
+
+00:08:55.290 --> 00:08:57.090
+La sécurité se renforce
+
+00:08:57.090 --> 00:08:58.150
+sans nuire à la productivité
+
+00:08:58.150 --> 00:08:58.810
+et les équipes,
+
+00:08:59.190 --> 00:09:00.210
+et IT gagne en sérénité
+
+00:09:00.210 --> 00:09:01.330
+sachant qu'un facteur isolé,
+
+00:09:01.590 --> 00:09:02.630
+comme un ordinateur perdu,
+
+00:09:02.870 --> 00:09:04.670
+ne compromettra pas leur environnement.
+
+00:09:05.450 --> 00:09:06.370
+Maintenant que les appareils
+
+00:09:06.370 --> 00:09:07.590
+sont directement liés à l'identité,
+
+00:09:07.730 --> 00:09:09.210
+l'étape suivante consiste à protéger
+
+00:09:09.210 --> 00:09:09.930
+ce qui compte vraiment,
+
+00:09:10.070 --> 00:09:10.590
+les applications
+
+00:09:10.590 --> 00:09:12.290
+où résident les données professionnelles.
+
+00:09:13.670 --> 00:09:14.530
+Sécuriser les applications
+
+00:09:14.530 --> 00:09:15.450
+qui font tourner l'entreprise.
+
+00:09:15.890 --> 00:09:17.230
+Les appareils, les identités sont importants
+
+00:09:17.230 --> 00:09:18.030
+mais les véritables joyeuses
+
+00:09:18.030 --> 00:09:18.670
+sont les applications
+
+00:09:18.670 --> 00:09:19.430
+où se trouvent réellement
+
+00:09:19.430 --> 00:09:20.210
+les données de l'entreprise.
+
+00:09:20.630 --> 00:09:21.530
+Ce n'est pas le téléphone lui-même
+
+00:09:21.530 --> 00:09:22.710
+qui rend une entreprise vulnérable,
+
+00:09:22.810 --> 00:09:24.050
+c'est le fait que Outlook,
+
+00:09:24.050 --> 00:09:25.370
+Teams ou les outils CRM
+
+00:09:25.370 --> 00:09:26.250
+installés sur ce téléphone
+
+00:09:26.250 --> 00:09:26.750
+contiennent tous
+
+00:09:26.750 --> 00:09:27.670
+des informations sensibles.
+
+00:09:28.210 --> 00:09:29.210
+L'objectif de la sécurité,
+
+00:09:29.490 --> 00:09:29.750
+shangle,
+
+00:09:30.050 --> 00:09:30.930
+l'objectif de la sécurité,
+
+00:09:31.050 --> 00:09:31.150
+shangle.
+
+00:09:31.370 --> 00:09:31.950
+Au lieu de simplement
+
+00:09:31.950 --> 00:09:32.670
+verrouiller l'appareil,
+
+00:09:32.750 --> 00:09:33.930
+la réflexion porte sur ce qui se passe
+
+00:09:33.930 --> 00:09:34.830
+à l'intérieur des applications
+
+00:09:34.830 --> 00:09:36.170
+que les employés utilisent chaque jour.
+
+00:09:36.710 --> 00:09:37.310
+C'est là que la gestion
+
+00:09:37.310 --> 00:09:38.170
+des applications mobiles
+
+00:09:38.170 --> 00:09:39.010
+d'Intune ou MAM
+
+00:09:39.010 --> 00:09:40.410
+entre en jeu, entre en jeu.
+
+00:09:40.770 --> 00:09:41.610
+Elle complète les contrôles
+
+00:09:41.610 --> 00:09:42.510
+d'appareils traditionnels
+
+00:09:42.510 --> 00:09:43.390
+mais déplace l'attention
+
+00:09:43.390 --> 00:09:44.510
+directement vers la protection
+
+00:09:44.510 --> 00:09:45.410
+des données traitées
+
+00:09:45.410 --> 00:09:46.070
+par les applications
+
+00:09:46.070 --> 00:09:47.430
+plutôt que de considérer
+
+00:09:47.430 --> 00:09:47.990
+le matériel
+
+00:09:47.990 --> 00:09:49.270
+comme le seul point faible.
+
+00:09:50.330 --> 00:09:50.990
+Le problème auquel
+
+00:09:50.990 --> 00:09:51.790
+la plupart des organisations
+
+00:09:51.790 --> 00:09:53.210
+sont confrontées aujourd'hui
+
+00:09:53.210 --> 00:09:54.130
+est de savoir comment offrir
+
+00:09:54.130 --> 00:09:55.050
+la flexibilité du
+
+00:09:55.050 --> 00:09:55.870
+Bring Your Own Device
+
+00:09:55.870 --> 00:09:56.490
+tout en empêchant
+
+00:09:56.490 --> 00:09:57.610
+les informations professionnelles
+
+00:09:57.610 --> 00:09:58.050
+de se retrouver
+
+00:09:58.050 --> 00:09:59.050
+dans des espaces personnels.
+
+00:09:59.470 --> 00:09:59.850
+De se retrouver
+
+00:09:59.850 --> 00:10:00.690
+dans des espaces personnels.
+
+00:10:01.150 --> 00:10:01.890
+Les employés ne veulent pas
+
+00:10:01.890 --> 00:10:02.670
+que le service informatique
+
+00:10:02.670 --> 00:10:03.330
+leur dise ce qu'ils peuvent
+
+00:10:03.330 --> 00:10:04.630
+installer sur leur téléphone personnel,
+
+00:10:05.150 --> 00:10:05.910
+s'attende à utiliser
+
+00:10:05.910 --> 00:10:06.830
+iOS ou Android
+
+00:10:06.830 --> 00:10:07.750
+comme bon leur semble.
+
+00:10:08.590 --> 00:10:08.910
+Pourtant,
+
+00:10:09.170 --> 00:10:10.310
+l'entreprise a la responsabilité
+
+00:10:10.310 --> 00:10:11.050
+de maintenir les données
+
+00:10:11.050 --> 00:10:11.450
+sous verrou
+
+00:10:11.450 --> 00:10:12.150
+quel que soit l'appareil
+
+00:10:12.150 --> 00:10:13.210
+utilisé pour y accéder.
+
+00:10:13.790 --> 00:10:14.290
+Cette tension
+
+00:10:14.290 --> 00:10:15.290
+entre liberté personnelle
+
+00:10:15.290 --> 00:10:16.410
+et sécurité organisationnelle
+
+00:10:16.410 --> 00:10:17.250
+aboutissait autrefois
+
+00:10:17.250 --> 00:10:18.310
+à l'une de ces deux situations.
+
+00:10:18.790 --> 00:10:19.670
+Soit le service informatique
+
+00:10:19.670 --> 00:10:20.610
+verrouillait tout si étroitement
+
+00:10:20.610 --> 00:10:21.250
+que cela frustrait
+
+00:10:21.250 --> 00:10:21.930
+les utilisateurs,
+
+00:10:22.170 --> 00:10:22.690
+soit il autorisait
+
+00:10:22.690 --> 00:10:23.210
+un accès large
+
+00:10:23.210 --> 00:10:23.890
+en espérant simplement
+
+00:10:23.890 --> 00:10:24.530
+que règnerait de travers.
+
+00:10:25.690 --> 00:10:26.450
+Imaginez un commercial
+
+00:10:26.450 --> 00:10:26.990
+en déplacement
+
+00:10:26.990 --> 00:10:28.270
+avec son iPhone personnel.
+
+00:10:28.750 --> 00:10:29.470
+Il ouvre une proposition
+
+00:10:29.470 --> 00:10:30.130
+client en Word
+
+00:10:30.130 --> 00:10:30.910
+juste avant une réunion.
+
+00:10:31.810 --> 00:10:32.790
+Sans gestion des applications,
+
+00:10:32.950 --> 00:10:33.670
+ce document pourrait être
+
+00:10:33.670 --> 00:10:34.090
+transféré
+
+00:10:34.090 --> 00:10:35.290
+via une messagerie personnelle,
+
+00:10:35.510 --> 00:10:36.390
+chargé sur un compte cloud
+
+00:10:36.390 --> 00:10:36.850
+non géré
+
+00:10:36.850 --> 00:10:37.930
+ou même copié directement
+
+00:10:37.930 --> 00:10:38.550
+dans une application
+
+00:10:38.550 --> 00:10:39.330
+de messagerie privée.
+
+00:10:39.750 --> 00:10:40.370
+L'appareil lui-même
+
+00:10:40.370 --> 00:10:41.170
+peut être sécurisé,
+
+00:10:41.370 --> 00:10:42.050
+mais les données échappent
+
+00:10:42.050 --> 00:10:42.670
+désormais totalement
+
+00:10:42.670 --> 00:10:43.550
+au contrôle de l'entreprise.
+
+00:10:44.330 --> 00:10:45.010
+C'est là que se situe
+
+00:10:45.010 --> 00:10:45.710
+la véritable fuite
+
+00:10:45.710 --> 00:10:46.730
+pour la plupart des organisations.
+
+00:10:47.010 --> 00:10:47.890
+Non pas le vol d'un téléphone,
+
+00:10:48.010 --> 00:10:48.810
+mais le contenu sensible
+
+00:10:48.810 --> 00:10:49.730
+qui s'infiltre discrètement
+
+00:10:49.730 --> 00:10:50.770
+dans des applications personnelles
+
+00:10:50.770 --> 00:10:51.630
+sans aucune surveillance.
+
+00:10:52.550 --> 00:10:53.130
+Et une fois sur place,
+
+00:10:53.210 --> 00:10:54.050
+il est pratiquement impossible
+
+00:10:54.050 --> 00:10:54.630
+de les récupérer.
+
+00:10:55.130 --> 00:10:56.050
+Intune s'attaque directement
+
+00:10:56.050 --> 00:10:56.450
+à ce problème
+
+00:10:56.450 --> 00:10:57.110
+en gérant la manière
+
+00:10:57.110 --> 00:10:57.690
+dont les applications
+
+00:10:57.690 --> 00:10:59.110
+interagissent avec le contenu professionnel.
+
+00:10:59.570 --> 00:10:59.970
+Par exemple,
+
+00:11:00.090 --> 00:11:00.890
+il peut chiffrer les données
+
+00:11:00.890 --> 00:11:01.490
+des applications
+
+00:11:01.490 --> 00:11:02.110
+afin que,
+
+00:11:02.470 --> 00:11:03.650
+même sur des appareils personnels,
+
+00:11:03.750 --> 00:11:04.570
+les documents d'entreprise
+
+00:11:04.570 --> 00:11:05.230
+restent protégés
+
+00:11:05.230 --> 00:11:06.530
+et isolés du reste du téléphone.
+
+00:11:07.250 --> 00:11:07.670
+Au-delà de cela,
+
+00:11:07.730 --> 00:11:08.510
+les paramètres de stratégie
+
+00:11:08.510 --> 00:11:09.290
+peuvent empêcher des actions
+
+00:11:09.290 --> 00:11:10.030
+telles que le copier-coller
+
+00:11:13.550 --> 00:11:14.430
+Le document pourrait être ouvert
+
+00:11:14.430 --> 00:11:14.890
+dans Word,
+
+00:11:15.010 --> 00:11:15.670
+mais tenter de coller
+
+00:11:15.670 --> 00:11:16.430
+le contenu dans WhatsApp
+
+00:11:16.430 --> 00:11:17.570
+ou dans un compte Gmail personnel
+
+00:11:17.570 --> 00:11:18.890
+ne fonctionnerait tout simplement pas.
+
+00:11:19.530 --> 00:11:20.010
+Il ne s'agit pas
+
+00:11:20.010 --> 00:11:20.670
+d'empêcher le commercial
+
+00:11:20.670 --> 00:11:21.950
+d'utiliser son appareil librement.
+
+00:11:22.690 --> 00:11:23.410
+Ils peuvent toujours envoyer
+
+00:11:23.410 --> 00:11:24.090
+des messages à leurs amis,
+
+00:11:24.230 --> 00:11:24.730
+prendre des photos
+
+00:11:24.730 --> 00:11:25.590
+ou installer des applications
+
+00:11:25.590 --> 00:11:25.990
+de leur choix.
+
+00:11:26.510 --> 00:11:27.330
+Le contrôle ne s'applique
+
+00:11:27.330 --> 00:11:28.350
+qu'aux données liées à l'entreprise,
+
+00:11:28.590 --> 00:11:29.570
+offrant aux services informatiques
+
+00:11:29.570 --> 00:11:30.770
+à la fois une application stricte
+
+00:11:30.770 --> 00:11:31.510
+et de la souplesse.
+
+00:11:32.330 --> 00:11:33.270
+Sans cette couche de protection,
+
+00:11:33.470 --> 00:11:34.170
+les données d'entreprise
+
+00:11:34.170 --> 00:11:35.310
+peuvent se retrouver dispersées
+
+00:11:35.310 --> 00:11:36.490
+presque sans que les utilisateurs
+
+00:11:36.490 --> 00:11:37.110
+ne s'en rendent compte.
+
+00:11:37.650 --> 00:11:38.610
+Quelqu'un transfère un email
+
+00:11:38.610 --> 00:11:39.490
+vers sa boîte personnelle
+
+00:11:39.490 --> 00:11:40.570
+juste pour l'imprimer chez lui.
+
+00:11:41.850 --> 00:11:42.590
+Une autre personne
+
+00:11:42.590 --> 00:11:43.370
+prend une capture d'écran
+
+00:11:43.370 --> 00:11:44.470
+d'une présentation confidentielle
+
+00:11:44.470 --> 00:11:45.570
+et la partage via une messagerie
+
+00:11:45.570 --> 00:11:45.950
+grand public
+
+00:11:45.950 --> 00:11:46.690
+parce que cela semblait
+
+00:11:46.690 --> 00:11:47.670
+plus rapide sur le moment.
+
+00:11:48.330 --> 00:11:49.290
+Ces actions ne sont pas mal vires.
+
+00:11:49.630 --> 00:11:50.350
+Elles sont généralement dictées
+
+00:11:50.350 --> 00:11:51.070
+par une recherche de facility.
+
+00:11:51.450 --> 00:11:52.430
+Elles exposent les organisations
+
+00:11:52.430 --> 00:11:53.370
+à des problèmes de conformité
+
+00:11:53.370 --> 00:11:54.230
+et à des risques de sécurité.
+
+00:11:55.070 --> 00:11:56.050
+Avec les politiques même d'Intune,
+
+00:11:56.150 --> 00:11:56.850
+ces fuites accidentelles
+
+00:11:56.850 --> 00:11:57.570
+sont bloquées à la source.
+
+00:11:58.230 --> 00:11:59.190
+L'utilisateur fait simplement
+
+00:11:59.190 --> 00:11:59.810
+face à un refus
+
+00:11:59.810 --> 00:12:00.810
+s'il essaie de déplacer des données
+
+00:12:00.810 --> 00:12:01.790
+là où elle ne devrait pas aller
+
+00:12:01.790 --> 00:12:02.730
+mais tout fonctionne parfaitement
+
+00:12:02.730 --> 00:12:03.590
+dans les applications gérées.
+
+00:12:04.370 --> 00:12:05.390
+L'un des avantages d'Intune
+
+00:12:05.390 --> 00:12:06.430
+est qu'il ne se limite pas
+
+00:12:06.430 --> 00:12:08.030
+au contrôle des outils Microsoft Home.
+
+00:12:08.750 --> 00:12:09.930
+Certes, il s'intègre étroitement
+
+00:12:09.930 --> 00:12:10.570
+à des applications
+
+00:12:10.570 --> 00:12:12.230
+comme Outlook, OneDrive ou Teams
+
+00:12:12.230 --> 00:12:13.690
+où la gestion est presque invisible
+
+00:12:13.690 --> 00:12:14.450
+pour l'utilisateur
+
+00:12:14.450 --> 00:12:15.950
+mais il s'étend aussi
+
+00:12:15.950 --> 00:12:16.910
+à de nombreuses applications
+
+00:12:16.910 --> 00:12:18.570
+tierces essentielles au quotidien.
+
+00:12:19.510 --> 00:12:20.330
+Cela signifie que le MAM
+
+00:12:20.330 --> 00:12:21.250
+n'enferme pas les entreprises
+
+00:12:21.250 --> 00:12:22.690
+dans un environnement 100% Microsoft.
+
+00:12:23.090 --> 00:12:23.810
+Il applique les mêmes normes
+
+00:12:23.810 --> 00:12:24.610
+de protection des données
+
+00:12:24.610 --> 00:12:25.410
+de manière cohérente
+
+00:12:25.410 --> 00:12:26.230
+que les données transitent
+
+00:12:26.230 --> 00:12:27.650
+par une application 365
+
+00:12:27.650 --> 00:12:29.610
+ou un outil de productivité partenaire.
+
+00:12:30.910 --> 00:12:31.950
+Les utilisateurs peuvent travailler
+
+00:12:31.950 --> 00:12:32.510
+comme ils le souhaitent
+
+00:12:32.510 --> 00:12:33.530
+avec les applications requises
+
+00:12:33.530 --> 00:12:34.530
+mais ils ne peuvent en aucun cas
+
+00:12:34.530 --> 00:12:35.370
+placer des données protégées
+
+00:12:35.370 --> 00:12:36.430
+dans des endroits non sécurisés.
+
+00:12:37.430 --> 00:12:38.190
+C'est l'élément qui résout
+
+00:12:38.190 --> 00:12:39.870
+le défi persistant du BYODO.
+
+00:12:40.690 --> 00:12:41.890
+Les entreprises veulent éviter
+
+00:12:41.890 --> 00:12:43.130
+de fournir des appareils professionnels
+
+00:12:43.130 --> 00:12:43.510
+à tout le monde
+
+00:12:43.510 --> 00:12:44.730
+pour des raisons de coût et de logistique.
+
+00:12:45.710 --> 00:12:46.630
+Les employés veulent la liberté
+
+00:12:46.630 --> 00:12:47.910
+d'utiliser leur propre matériel
+
+00:12:47.910 --> 00:12:48.550
+sans avoir l'impression
+
+00:12:48.550 --> 00:12:49.430
+que le service informatique
+
+00:12:49.430 --> 00:12:49.970
+a pris le contrôle
+
+00:12:49.970 --> 00:12:50.830
+de leur téléphone ou tablette.
+
+00:12:51.110 --> 00:12:52.150
+Intune concilie ces deux besoins
+
+00:12:52.150 --> 00:12:53.150
+en sécurisant les applications
+
+00:12:53.150 --> 00:12:53.990
+et les données qu'elles contiennent
+
+00:12:53.990 --> 00:12:55.050
+plutôt que d'essayer de contrôler
+
+00:12:55.050 --> 00:12:56.530
+l'appareil entier entier.
+
+00:12:57.370 --> 00:12:57.970
+Tout le monde est gagnant.
+
+00:12:58.470 --> 00:12:59.550
+Les utilisateurs conservent leur liberté
+
+00:12:59.550 --> 00:13:00.190
+et l'entreprise garde
+
+00:13:00.190 --> 00:13:01.010
+ses informations en sécurité.
+
+00:13:01.670 --> 00:13:02.630
+Mais même lorsque les appareils,
+
+00:13:02.630 --> 00:13:03.590
+les identités et les applications
+
+00:13:03.590 --> 00:13:04.210
+sont sous contrôle,
+
+00:13:04.330 --> 00:13:05.130
+le tableau n'est pas complet.
+
+00:13:05.730 --> 00:13:07.070
+L'écosystème devient bien plus solide
+
+00:13:07.070 --> 00:13:08.170
+lorsqu'Intune partage ses signaux
+
+00:13:08.170 --> 00:13:09.110
+avec Microsoft Defender
+
+00:13:09.110 --> 00:13:10.090
+car c'est là que la sécurité
+
+00:13:10.090 --> 00:13:11.370
+des applications et des identités
+
+00:13:11.370 --> 00:13:12.170
+rencontrent la protection
+
+00:13:12.170 --> 00:13:13.290
+contre les menaces en temps réel.
+
+00:13:14.510 --> 00:13:15.130
+Boucler la boucle
+
+00:13:15.130 --> 00:13:16.530
+à la conformité avec Intune et Purview.
+
+00:13:17.210 --> 00:13:18.230
+Gérer les risques est une bonne chose
+
+00:13:18.230 --> 00:13:19.270
+mais prouver la conformité
+
+00:13:19.270 --> 00:13:20.050
+est souvent ce qui empêche
+
+00:13:20.050 --> 00:13:20.810
+les DSI de dormir.
+
+00:13:21.330 --> 00:13:22.090
+Les contrôles de sécurité
+
+00:13:22.090 --> 00:13:22.790
+peuvent être infaillibles
+
+00:13:22.790 --> 00:13:23.490
+mais les régulateurs
+
+00:13:23.490 --> 00:13:24.230
+ne veulent pas seulement l'entrée.
+
+00:13:24.510 --> 00:13:25.290
+Il ne suffit pas de dire
+
+00:13:25.290 --> 00:13:26.530
+que les informations sont protégées,
+
+00:13:26.630 --> 00:13:27.190
+il faut le démontrer.
+
+00:13:27.850 --> 00:13:28.770
+C'est là que Microsoft Purview
+
+00:13:28.770 --> 00:13:29.590
+intervient dans l'équation.
+
+00:13:30.130 --> 00:13:30.990
+Alors qu'Intune établit
+
+00:13:30.990 --> 00:13:32.250
+et applique les garde-faux au quotidien,
+
+00:13:32.350 --> 00:13:33.330
+Purview constitue le système
+
+00:13:33.330 --> 00:13:34.590
+d'enregistrement pour la gouvernance,
+
+00:13:34.670 --> 00:13:36.050
+l'audit et le suivi de la conformité
+
+00:13:36.050 --> 00:13:36.990
+et le suivi de la conformité.
+
+00:13:37.430 --> 00:13:38.150
+Cela devient la couche
+
+00:13:38.150 --> 00:13:39.190
+qui traduit toutes ces décisions
+
+00:13:39.190 --> 00:13:40.070
+de politique en preuve
+
+00:13:40.070 --> 00:13:41.770
+compréhensible par un auditeur
+
+00:13:41.770 --> 00:13:42.450
+ou un régulateur.
+
+00:13:43.030 --> 00:13:43.410
+Sans cela,
+
+00:13:43.770 --> 00:13:45.010
+la sécurité vit dans une bulle,
+
+00:13:45.450 --> 00:13:46.310
+déconnectée des rapports
+
+00:13:46.310 --> 00:13:47.310
+qui prouvent qu'une organisation
+
+00:13:47.310 --> 00:13:48.690
+respecte les exigences légales
+
+00:13:48.690 --> 00:13:49.450
+ou sectorielles.
+
+00:13:50.450 --> 00:13:51.910
+Purview se concentre sur la visibilité
+
+00:13:51.910 --> 00:13:53.030
+tout au long du cycle de vie des deux.
+
+00:13:53.310 --> 00:13:54.270
+Voyez cela comme le registre
+
+00:13:54.270 --> 00:13:55.090
+qui suit non seulement
+
+00:13:55.090 --> 00:13:56.050
+où les politiques sont définies
+
+00:13:56.050 --> 00:13:57.490
+mais aussi comment elles sont appliquées
+
+00:13:57.490 --> 00:13:58.190
+dans le monde réel.
+
+00:13:58.990 --> 00:13:59.810
+Quand Intune impose
+
+00:13:59.810 --> 00:14:00.810
+des restrictions aux appareils,
+
+00:14:00.930 --> 00:14:02.270
+configure des contrôles d'application
+
+00:14:02.270 --> 00:14:02.990
+ou applique des règles
+
+00:14:02.990 --> 00:14:03.910
+d'accès conditionnels,
+
+00:14:04.330 --> 00:14:04.950
+Purview est l'endroit
+
+00:14:04.950 --> 00:14:06.090
+où ces actions sont surveillées
+
+00:14:06.090 --> 00:14:07.650
+et journalisées à grande échelle.
+
+00:14:08.330 --> 00:14:08.930
+Cela en fait bien plus
+
+00:14:08.930 --> 00:14:09.750
+qu'une simple case à cocher
+
+00:14:09.750 --> 00:14:10.270
+pour la conformité.
+
+00:14:10.610 --> 00:14:11.350
+Cela lie l'application
+
+00:14:11.350 --> 00:14:12.130
+des politiques de risque
+
+00:14:12.130 --> 00:14:13.530
+directement au rapport de gouvernance,
+
+00:14:13.690 --> 00:14:14.590
+évitant à votre équipe IT
+
+00:14:14.590 --> 00:14:16.290
+de devoir reconstituer précipitamment
+
+00:14:16.290 --> 00:14:17.430
+les événements des mois plus tard
+
+00:14:17.430 --> 00:14:18.290
+lors d'un audit.
+
+00:14:19.330 --> 00:14:20.950
+La tension ici est assez directe.
+
+00:14:21.270 --> 00:14:22.570
+Peu importe que votre posture de sécurité
+
+00:14:22.570 --> 00:14:23.610
+soit forte en interne
+
+00:14:23.610 --> 00:14:24.310
+si vous ne pouvez pas
+
+00:14:24.310 --> 00:14:26.050
+démontrer cette force en externe.
+
+00:14:26.730 --> 00:14:27.750
+Les réglementations mondiales
+
+00:14:27.750 --> 00:14:28.470
+du RGPD et IPA
+
+00:14:28.470 --> 00:14:29.730
+en passant par PCI DSS
+
+00:14:29.730 --> 00:14:30.730
+se soucient de deux choses,
+
+00:14:30.930 --> 00:14:31.470
+se soucient de deux.
+
+00:14:32.050 --> 00:14:32.830
+D'abord que les données
+
+00:14:32.830 --> 00:14:33.530
+soient sécurisées
+
+00:14:33.530 --> 00:14:34.610
+et ensuite que les organisations
+
+00:14:34.610 --> 00:14:35.110
+puissent prouver
+
+00:14:35.110 --> 00:14:36.170
+que la sécurité a été appliquée
+
+00:14:36.170 --> 00:14:36.930
+de manière cohérente.
+
+00:14:37.850 --> 00:14:38.590
+Même dans les entreprises
+
+00:14:38.590 --> 00:14:39.570
+qui se soucient réellement
+
+00:14:39.570 --> 00:14:40.130
+de la sécurité,
+
+00:14:40.410 --> 00:14:41.430
+c'est là que les défis apparaissent.
+
+00:14:42.370 --> 00:14:43.130
+Si les contrôles résident
+
+00:14:43.130 --> 00:14:43.790
+dans plusieurs systèmes
+
+00:14:43.790 --> 00:14:44.410
+sans rapport clair,
+
+00:14:44.490 --> 00:14:45.230
+la conformité devient
+
+00:14:45.230 --> 00:14:46.330
+un cauchemar de feuilles de calcul.
+
+00:14:46.970 --> 00:14:48.090
+Les équipes finissent par extraire
+
+00:14:48.090 --> 00:14:48.730
+des fichiers journaux,
+
+00:14:48.810 --> 00:14:49.450
+des captures d'écrans
+
+00:14:49.450 --> 00:14:50.310
+et des fragments de preuves,
+
+00:14:50.310 --> 00:14:51.250
+reconstituant l'histoire
+
+00:14:51.250 --> 00:14:51.690
+après coup
+
+00:14:51.690 --> 00:14:52.330
+plutôt que de montrer
+
+00:14:52.330 --> 00:14:53.510
+un enregistrement automatisé
+
+00:14:53.510 --> 00:14:54.490
+continue, continue.
+
+00:14:54.950 --> 00:14:55.550
+Prenons un exemple.
+
+00:14:56.090 --> 00:14:57.330
+Une société de services financiers
+
+00:14:57.330 --> 00:14:58.110
+permet à ses employés
+
+00:14:58.110 --> 00:14:58.910
+d'accéder à des dossiers
+
+00:14:58.910 --> 00:14:59.530
+clients sensibles
+
+00:14:59.530 --> 00:15:00.370
+sur leur propre téléphone
+
+00:15:00.370 --> 00:15:01.090
+car cela favorise
+
+00:15:01.090 --> 00:15:01.710
+la productivité
+
+00:15:01.710 --> 00:15:02.330
+et réduit les coûts.
+
+00:15:04.130 --> 00:15:04.970
+D'un point de vue sécurité,
+
+00:15:05.210 --> 00:15:05.570
+Entune gère
+
+00:15:05.570 --> 00:15:06.550
+les restrictions d'application
+
+00:15:06.550 --> 00:15:07.090
+et garantit
+
+00:15:07.090 --> 00:15:07.910
+qu'aucun document client
+
+00:15:07.910 --> 00:15:08.630
+ne quitte une application
+
+00:15:08.630 --> 00:15:09.590
+protégée comme Outlook
+
+00:15:09.590 --> 00:15:10.010
+ou Word.
+
+00:15:10.910 --> 00:15:12.190
+Cela traite la couche de sécurité
+
+00:15:12.190 --> 00:15:13.510
+mais lorsqu'un auditeur intervient,
+
+00:15:13.590 --> 00:15:14.170
+la question devient
+
+00:15:14.170 --> 00:15:14.910
+comment prouvez-vous
+
+00:15:14.910 --> 00:15:16.190
+que ces contrôles étaient actifs
+
+00:15:16.190 --> 00:15:16.990
+sur chaque appareil
+
+00:15:16.990 --> 00:15:19.190
+au moment de l'accès aux données ?
+
+00:15:19.190 --> 00:15:20.190
+Il ne suffit pas que l'IT dise
+
+00:15:20.190 --> 00:15:20.930
+« Nous avons activé
+
+00:15:20.930 --> 00:15:22.670
+les politiques Intune-Kun-Kun ».
+
+00:15:22.670 --> 00:15:23.370
+Ils doivent montrer
+
+00:15:23.370 --> 00:15:24.070
+des journaux prouvant
+
+00:15:24.070 --> 00:15:24.750
+que ces politiques
+
+00:15:24.750 --> 00:15:25.490
+étaient appliquées,
+
+00:15:25.630 --> 00:15:26.870
+surveillées et imposées
+
+00:15:26.870 --> 00:15:28.290
+à chaque tentative de connexion,
+
+00:15:28.530 --> 00:15:29.850
+même sur un appareil personnel.
+
+00:15:30.590 --> 00:15:31.570
+C'est précisément ici
+
+00:15:31.570 --> 00:15:32.230
+qu'Intune et Purview
+
+00:15:32.230 --> 00:15:33.070
+s'articulent ensemble.
+
+00:15:33.890 --> 00:15:34.850
+Intune génère en continu
+
+00:15:34.850 --> 00:15:35.490
+des données de posture
+
+00:15:35.490 --> 00:15:36.150
+de conformité
+
+00:15:36.150 --> 00:15:37.270
+indiquant si les appareils
+
+00:15:37.270 --> 00:15:38.330
+respectaient les correctifs,
+
+00:15:38.670 --> 00:15:39.670
+si les protections d'application
+
+00:15:39.670 --> 00:15:40.290
+étaient actives
+
+00:15:40.290 --> 00:15:41.030
+et si l'accès
+
+00:15:41.030 --> 00:15:42.410
+a été accordé ou bloqué.
+
+00:15:43.730 --> 00:15:45.010
+Purview collecte cette télémétrie,
+
+00:15:45.070 --> 00:15:45.610
+la normalise
+
+00:15:45.610 --> 00:15:46.210
+et rend les rapports
+
+00:15:46.210 --> 00:15:47.190
+disponibles à la demande.
+
+00:15:47.190 --> 00:15:48.370
+Cela signifie que
+
+00:15:48.370 --> 00:15:49.050
+lorsque les régulateurs
+
+00:15:49.050 --> 00:15:49.570
+posent des questions,
+
+00:15:49.670 --> 00:15:50.410
+votre équipe de gouvernance
+
+00:15:50.410 --> 00:15:51.070
+ne passe pas un mois
+
+00:15:51.070 --> 00:15:52.050
+à fouiller dans des pistes d'audit.
+
+00:15:52.790 --> 00:15:53.210
+Au lieu de cela,
+
+00:15:53.270 --> 00:15:54.210
+ils peuvent extraire un rapport
+
+00:15:54.210 --> 00:15:55.010
+montrant non seulement
+
+00:15:55.010 --> 00:15:55.930
+quelles politiques existent
+
+00:15:55.930 --> 00:15:56.610
+mais aussi qu'elles ont été
+
+00:15:56.610 --> 00:15:57.770
+systématiquement exécutées.
+
+00:15:58.270 --> 00:15:59.430
+C'est comme archiver automatiquement
+
+00:15:59.430 --> 00:16:00.350
+la preuve de chaque action
+
+00:16:00.350 --> 00:16:00.850
+de sécurité.
+
+00:16:01.490 --> 00:16:02.230
+Et cela ne se limite pas
+
+00:16:02.230 --> 00:16:03.210
+à la conformité des appareils.
+
+00:16:03.570 --> 00:16:04.730
+Purview unifie les activités
+
+00:16:04.730 --> 00:16:05.650
+au sein de l'écosystème
+
+00:16:05.650 --> 00:16:07.170
+cloud Microsoft plus large.
+
+00:16:08.350 --> 00:16:09.110
+Classification des données,
+
+00:16:09.290 --> 00:16:10.110
+politique de risque interne,
+
+00:16:10.370 --> 00:16:11.170
+étiquette de protection,
+
+00:16:11.390 --> 00:16:12.390
+tout alimente le même plan
+
+00:16:12.390 --> 00:16:13.470
+de gouvernance.
+
+00:16:13.470 --> 00:16:14.670
+Ainsi,
+
+00:16:14.750 --> 00:16:15.670
+les rapports de conformité
+
+00:16:15.670 --> 00:16:16.430
+reflètent non seulement
+
+00:16:16.430 --> 00:16:17.530
+la sécurité des terminaux
+
+00:16:17.530 --> 00:16:18.150
+mais toute la chaîne
+
+00:16:18.150 --> 00:16:19.030
+de protection des données.
+
+00:16:19.950 --> 00:16:21.010
+Avec l'intégration directe
+
+00:16:21.010 --> 00:16:21.710
+de l'état d'un thune,
+
+00:16:22.010 --> 00:16:22.670
+la couche terminale
+
+00:16:22.670 --> 00:16:23.550
+n'est plus une exception
+
+00:16:23.550 --> 00:16:24.530
+ni un angle mort.
+
+00:16:25.310 --> 00:16:25.850
+Elle est intégrée
+
+00:16:25.850 --> 00:16:26.750
+au même dossier de preuve
+
+00:16:26.750 --> 00:16:27.750
+que les outils de collaboration,
+
+00:16:28.050 --> 00:16:29.310
+le stockage et la messagerie.
+
+00:16:30.030 --> 00:16:30.890
+Le bénéfice pour les équipes
+
+00:16:30.890 --> 00:16:32.170
+IT et conformité est immense.
+
+00:16:32.810 --> 00:16:33.670
+Au lieu de rapports réactifs
+
+00:16:33.670 --> 00:16:34.130
+où vous courez
+
+00:16:34.130 --> 00:16:34.850
+pour reconstituer
+
+00:16:34.850 --> 00:16:35.690
+les événements après coup,
+
+00:16:35.750 --> 00:16:36.370
+le système travaille
+
+00:16:36.370 --> 00:16:37.170
+de manière proactive.
+
+00:16:37.950 --> 00:16:38.530
+Les rapports existent
+
+00:16:38.530 --> 00:16:39.310
+avant même que quelqu'un ne l'aime.
+
+00:16:39.310 --> 00:16:41.570
+Les tendances de dérive
+
+00:16:41.570 --> 00:16:42.190
+de conformité
+
+00:16:42.190 --> 00:16:42.990
+sont détectées tôt,
+
+00:16:43.190 --> 00:16:44.470
+non par des vérifications manuelles
+
+00:16:44.470 --> 00:16:45.410
+mais parce que le tableau de bord
+
+00:16:45.410 --> 00:16:46.590
+indique déjà les failles.
+
+00:16:48.110 --> 00:16:49.410
+Cela transforme la conformité
+
+00:16:49.410 --> 00:16:50.470
+passant d'un exercice
+
+00:16:50.470 --> 00:16:51.570
+d'urgence occasionnel
+
+00:16:51.570 --> 00:16:53.370
+à un bilan de santé courant
+
+00:16:53.370 --> 00:16:54.530
+réduisant le stress
+
+00:16:54.530 --> 00:16:55.750
+à tous les niveaux.
+
+00:16:56.130 --> 00:16:56.330
+Vada.

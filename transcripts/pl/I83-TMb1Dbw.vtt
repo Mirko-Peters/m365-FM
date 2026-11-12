@@ -1,0 +1,694 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:04.220
+Witajcie w kolejnym odcinku Microsoft Knowledge Nugget tutaj w M365FM.
+
+00:00:04.360 --> 00:00:06.380
+Nazywam się Mirko Peters i jestem Waszym gospodarzem.
+
+00:00:06.600 --> 00:00:10.140
+Dzisiejszy temat jest czymś, o czym słyszał prawie każdy, ale niewielu potrafi faktycznie wyjaśnić.
+
+00:00:10.220 --> 00:00:11.740
+Kopilot dla Microsoft Fabrik.
+
+00:00:11.960 --> 00:00:15.500
+Słowo kopilot słyszy się dziś wszędzie w Wordzie, Teamsach, GitHub'e czy Windowsie.
+
+00:00:15.640 --> 00:00:19.660
+Więc kiedy ktoś wspomina o kopilocie dla Fabrik, pewnie myślicie, to samo, inna aplikacja, prawda?
+
+00:00:19.960 --> 00:00:20.360
+Błąd.
+
+00:00:20.460 --> 00:00:24.360
+Pod koniec tego odcinka będziecie dokładnie wiedzieć, czym on jest, gdzie działa i dlaczego jest ważny,
+
+00:00:24.460 --> 00:00:27.080
+nawet jeśli nigdy nie napisaliście ani linijki kodu SQL.
+
+00:00:27.380 --> 00:00:28.640
+Zamieszanie wokół kopilota.
+
+00:00:28.640 --> 00:00:32.640
+Rzecz w tym, że Microsoft ma mnóstwo kopilotów i większość ludzi wrzuca je do jednego worka,
+
+00:00:32.760 --> 00:00:33.940
+ale to zupełnie różne narzędzia.
+
+00:00:34.160 --> 00:00:37.600
+Microsoft 365 Kopilot pomaga pisać dokumenty w Wordzie,
+
+00:00:37.720 --> 00:00:40.160
+podsumowywać e-maile w Outlooku i robić notatki w Teams.
+
+00:00:40.400 --> 00:00:43.260
+GitHub Kopilot podpowiada kod, gdy pracujesz w VS Code.
+
+00:00:43.500 --> 00:00:47.500
+Jest przeznaczony dla programistów budujących aplikację, a potem mamy kopilota w Fabrik.
+
+00:00:47.660 --> 00:00:48.840
+Ten jest zupełnie inny.
+
+00:00:49.060 --> 00:00:51.840
+Działa on konkretnie na danych i analityce wewnątrz Microsoft Fabrik.
+
+00:00:51.980 --> 00:00:53.200
+Pomyślcie o tym w ten sposób.
+
+00:00:53.480 --> 00:00:55.440
+Wyobraźcie sobie firmę z trzema specjalistami.
+
+00:00:55.440 --> 00:00:59.840
+Jeden pisze raporty dla zarządu, drugi tworzy oprogramowanie, a trzeci zajmuje się wszystkimi danymi firmy,
+
+00:00:59.960 --> 00:01:01.920
+czyści je, przeszukuje i tworzy z nich raporty.
+
+00:01:02.060 --> 00:01:04.920
+Wszyscy są inteligentni, ale wykonują kompletnie inne zadania.
+
+00:01:05.100 --> 00:01:07.180
+Tak właśnie działają kopiloty od Microsoftu.
+
+00:01:07.320 --> 00:01:09.780
+M365 Kopilot to Wasz autor raportów.
+
+00:01:09.880 --> 00:01:13.420
+GitHub Kopilot to Wasz programista, a Fabrik Kopilot to Wasz specjalista od danych.
+
+00:01:13.660 --> 00:01:16.860
+Skoro wiemy już, czym nie jest, porozmawiajmy o tym, czym faktycznie jest.
+
+00:01:17.060 --> 00:01:19.000
+Czym właściwie jest Kopilot dla Fabrik?
+
+00:01:19.000 --> 00:01:21.020
+Witajcie w kolejnym odcinku Knowledge Nugget.
+
+00:01:21.200 --> 00:01:23.600
+Nazywam się Mirko Peters z M365FM.
+
+00:01:23.760 --> 00:01:26.820
+Dzisiejszy temat to coś, o czym wielu słyszało, ale niewielu naprawdę rozumie.
+
+00:01:26.960 --> 00:01:27.940
+Kopilot dla Fabrik.
+
+00:01:28.160 --> 00:01:29.340
+Więc czym to właściwie jest?
+
+00:01:29.480 --> 00:01:30.780
+Oto najprostsza definicja.
+
+00:01:30.940 --> 00:01:34.480
+Kopilot dla Fabrik to asystent AI wbudowany bezpośrednio w Microsoft Fabrik.
+
+00:01:34.680 --> 00:01:39.340
+Wpisujesz swoje potrzeby prostym językiem, a on pisze kod, tworzy zapytania lub generuje raporty za Ciebie.
+
+00:01:39.600 --> 00:01:42.180
+Wykorzystuje duże modele językowe z Azure OpenAI.
+
+00:01:42.400 --> 00:01:43.920
+Ale oto co jest najważniejsze.
+
+00:01:44.220 --> 00:01:47.040
+Rozumie on Twoje konkretne schematy, tabele i dane.
+
+00:01:47.040 --> 00:01:54.300
+Więc kiedy wpiszesz, pokaż mi całkowitą sprzedaż według regionu za ostatni kwartał, on już wie, do których tabel zajrzeć i jak napisać to zapytanie.
+
+00:01:54.440 --> 00:01:59.380
+Pomyśl o tym, jak o posiadaniu młodszego analityka danych, który pracuje niesamowicie szybko, ale potrzebuje, żebyś sprawdzał jego pracę.
+
+00:01:59.580 --> 00:02:02.640
+Dajesz mu instrukcję, a kilka sekund później tworzy coś użytecznego.
+
+00:02:02.880 --> 00:02:07.100
+Czasami mogą błędnie zinterpretować Twoje polecenie lub napisać kod, który działa, ale nie jest wydajny.
+
+00:02:07.280 --> 00:02:10.040
+Dlatego zawsze sprawdzaj wyniki przed ich uruchomieniem w środowisku produkcyjnym.
+
+00:02:10.760 --> 00:02:12.380
+Prawdziwa korzyść Ci jest oczywista.
+
+00:02:12.580 --> 00:02:15.380
+Nie musisz znać SQL, DAX ani Pyspark, aby zacząć.
+
+00:02:15.380 --> 00:02:19.780
+Jeśli rozumiesz swoje dane i potrafisz opisać, czego potrzebujesz, Copilot pomoże Ci to osiągnąć.
+
+00:02:20.000 --> 00:02:22.520
+Gdzie dokładnie to narzędzie pojawia się wewnątrz Fabrik?
+
+00:02:22.740 --> 00:02:25.340
+Miejsce działania Data Factory i Data Engineering.
+
+00:02:25.660 --> 00:02:28.520
+Copilot jest zintegrowany z wieloma obciążeniami roboczymi Fabrik.
+
+00:02:28.660 --> 00:02:30.860
+To nie jest osobne narzędzie, które musisz otwierać.
+
+00:02:31.060 --> 00:02:32.780
+Działa dokładnie tam, gdzie już pracujesz.
+
+00:02:33.020 --> 00:02:34.340
+Zacznijmy od Data Factory.
+
+00:02:34.560 --> 00:02:37.500
+To tutaj tworzysz potoki do przesyłania i przekształcania danych.
+
+00:02:37.800 --> 00:02:43.020
+Zamiast przeciągać aktywności na obszar roboczy i konfigurować każdą z osobna, po prostu opisujesz swoje potrzeby.
+
+00:02:43.020 --> 00:02:46.300
+Na przykład połącz te dwie tabele i usuń puste wartości.
+
+00:02:46.480 --> 00:02:48.980
+Copilot wygeneruje dla Ciebie kroki Power Query.
+
+00:02:49.220 --> 00:02:53.080
+Tworzy scalanie, filtry i zmiany typów danych na podstawie jednego zdania.
+
+00:02:53.340 --> 00:02:56.540
+Nadal sprawdzasz wynik, ale powtarzalna praca jest wykonana za Ciebie.
+
+00:02:56.760 --> 00:02:59.740
+Następnie mamy Data Engineering, a konkretnie notatniki Fabrik.
+
+00:02:59.880 --> 00:03:04.000
+To tutaj piszesz kod Pyspark, aby ładować, czyścić i przekształcać dane na dużą skalę.
+
+00:03:04.180 --> 00:03:08.940
+Jeśli nie znasz składni Spark, napisanie nawet prostej transformacji może być jak nauka nowego języka.
+
+00:03:08.940 --> 00:03:15.880
+Copilot to zmienia. Opisujesz logikę, załaduj ten plik CSV z Lakehouse, odfiltruj anulowane zamówienia i pogrupuj według regionu.
+
+00:03:16.000 --> 00:03:19.880
+A on generuje kod Pyspark. Możesz go uruchomić, poprawić i się na nim uczyć.
+
+00:03:20.080 --> 00:03:21.780
+Oto coś, o czym wiele osób nie wie.
+
+00:03:21.960 --> 00:03:24.220
+Copilot potrafi również wyjaśnić istniejący kod.
+
+00:03:24.380 --> 00:03:28.120
+Otwierasz notatnik napisany przez kogoś innego i nie masz pojęcia, co robi konkretna komórka?
+
+00:03:28.280 --> 00:03:30.320
+Po prostu zapytaj, co robi ta transformacja?
+
+00:03:30.520 --> 00:03:33.100
+Copilot odczyta kod i podsumuje go prostym językiem.
+
+00:03:33.100 --> 00:03:38.960
+To samo dotyczy potoków. Poproś o podsumowanie złożonego potoku, a dowiesz się, co robi każdy krok i w jakiej kolejności.
+
+00:03:39.180 --> 00:03:40.560
+Ale to tylko połowa historii.
+
+00:03:40.740 --> 00:03:43.280
+Copilot jest również tam, gdzie korzystasz ze swoich danych.
+
+00:03:43.520 --> 00:03:45.640
+Miejsce działania Data Warehouse i Power BI.
+
+00:03:45.880 --> 00:03:48.460
+Gdzie więc Copilot faktycznie znajduje się w Microsoft 365?
+
+00:03:49.020 --> 00:03:51.220
+W dwóch głównych miejscach Data Warehouse i Power BI.
+
+00:03:51.420 --> 00:03:52.640
+Zacznijmy od Data Warehouse.
+
+00:03:52.880 --> 00:03:55.240
+Możesz tutaj poprosić o zapytanie SQL w prostym języku.
+
+00:03:55.420 --> 00:03:58.260
+Wpisz, pokaż mi całkowitą sprzedaż według produktu za ostatni kwartał.
+
+00:03:58.360 --> 00:04:00.520
+A Copilot wygeneruje dla Ciebie kod SQL.
+
+00:04:00.520 --> 00:04:03.740
+Nie musisz pamiętać dokładnej składni GroupB czy UR.
+
+00:04:03.860 --> 00:04:06.500
+Po prostu opisujesz, czego chcesz, a Copilot pisze kod.
+
+00:04:06.700 --> 00:04:10.340
+Rzecz w tym, że wiele osób zna swoje dane na wylot, ale nie pisze w SQL codziennie.
+
+00:04:10.580 --> 00:04:11.940
+Znasz swoje pytanie biznesowe.
+
+00:04:12.160 --> 00:04:16.220
+Wiesz, które tabele zawierają odpowiedź, ale przekształcenie tego w poprawne i wydajne zapytanie wymaga czasu.
+
+00:04:16.400 --> 00:04:17.660
+Copilot usuwa te przeszkody.
+
+00:04:17.860 --> 00:04:18.720
+A teraz Power BI.
+
+00:04:18.940 --> 00:04:21.240
+Większość użytkowników biznesowych spędza tu najwięcej czasu.
+
+00:04:21.440 --> 00:04:23.400
+Copilot pomaga tworzyć raporty od podstaw.
+
+00:04:23.620 --> 00:04:24.900
+Opisz, czego potrzebujesz.
+
+00:04:25.140 --> 00:04:28.500
+Stwórz raport pokazujący przychody w ujęciu miesięcznym na wykresie słupkowym.
+
+00:04:28.500 --> 00:04:32.700
+Copilot sugeruje odpowiednie wizualizacje, układa je i pisze miary DAX w tle.
+
+00:04:32.940 --> 00:04:35.260
+Może również podsumować dla Ciebie pulpit nawigacyjny.
+
+00:04:35.460 --> 00:04:39.320
+Wyobraź sobie, że otwierasz raport z 20 wizualizacjami i masz 5 minut na prezentację.
+
+00:04:39.500 --> 00:04:43.600
+Poproś Copilota o podsumowanie, a otrzymasz prosty przegląd kluczowych trendów i liczb.
+
+00:04:43.640 --> 00:04:46.180
+Copilot może również wyjaśnić, jak obliczana jest dana miara.
+
+00:04:46.400 --> 00:04:48.240
+Widzisz liczbę i nie masz pewności, skąd się wzięła?
+
+00:04:48.360 --> 00:04:49.220
+Po prostu zapytaj.
+
+00:04:49.360 --> 00:04:51.340
+Copilot odczytuje kod DAX i wyjaśnia, co on robi.
+
+00:04:51.340 --> 00:04:53.840
+Oznacza to, że użytkownicy biznesowi mogą zadawać pytania prostym językiem
+
+00:04:53.840 --> 00:04:55.420
+i otrzymywać odpowiedzi bez czekania na zespół do spraw.
+
+00:04:55.620 --> 00:04:55.980
+Danych.
+
+00:04:56.180 --> 00:04:57.960
+Przyjrzyjmy się kilku rzeczywistym przykładom.
+
+00:04:58.080 --> 00:04:59.660
+To tutaj wszystko łączy się w całość.
+
+00:04:59.860 --> 00:05:01.800
+Prawdziwe przykłady, jak to działa w praktyce.
+
+00:05:02.020 --> 00:05:05.600
+Wyobraź sobie firmę detaliczną, która prowadzi sprzedaż zarówno online, jak i w sklepach stacjonarnych.
+
+00:05:05.780 --> 00:05:08.100
+Ich dane sprzedażowe pochodzą z kilku różnych źródeł.
+
+00:05:08.280 --> 00:05:12.780
+Zapisy transakcji z systemu POSP, dane klientów z systemu CRM oraz logi magazynowe.
+
+00:05:12.960 --> 00:05:15.120
+Typowe dane biznesowe, które wymagają analizy.
+
+00:05:15.120 --> 00:05:17.100
+Teraz wyobraź sobie trzy różne osoby w zespole.
+
+00:05:17.280 --> 00:05:18.800
+Każda z nich używa Copilota inaczej.
+
+00:05:19.020 --> 00:05:20.400
+Zacznijmy od inżyniera danych.
+
+00:05:20.640 --> 00:05:23.020
+Jego zadaniem jest przygotowanie surowych danych do analizy.
+
+00:05:23.140 --> 00:05:24.800
+Otwiera notatnik w fabrik i wpisuje
+
+00:05:24.800 --> 00:05:26.920
+Wczytaj plik CSV ze sprzedażą z Lakehouse.
+
+00:05:27.040 --> 00:05:29.440
+Odfiltruj wiersze, w których typ transakcji to zwrot,
+
+00:05:29.520 --> 00:05:33.100
+a następnie pogrupuj według regionu i oblicz całkowity przychód dla każdej grupy.
+
+00:05:33.320 --> 00:05:35.640
+Copilot generuje kod Pyspark w kilka sekund.
+
+00:05:35.840 --> 00:05:38.140
+Inżynier sprawdza go, uruchamia i przechodzi dalej.
+
+00:05:38.320 --> 00:05:40.580
+To, co kiedyś zajmowało 20 minut, teraz zajmuje dwie.
+
+00:05:40.780 --> 00:05:42.340
+Następnie mamy analityka biznesowego.
+
+00:05:42.340 --> 00:05:44.860
+Potrzebuje on raportu na cotygodniowe spotkanie sprzedażowe.
+
+00:05:44.980 --> 00:05:47.940
+Otwiera Power B, łączy się z oczyszczonymi danymi i prosi Copilota
+
+00:05:47.940 --> 00:05:52.400
+Stwórz raport pokazujący przychody w ujęciu miesięcznym na wykresie słupkowym i dodaj linię celu.
+
+00:05:52.540 --> 00:05:57.140
+Copilot tworzy układ, dobiera odpowiednie wizualizacje i pisze miarę DAX dla porównania z celem.
+
+00:05:57.340 --> 00:06:01.840
+Analityk poprawia kolory, dostosowuje układ i ma gotowy, profesjonalny raport w kilka minut zamiast kilku godzin.
+
+00:06:02.040 --> 00:06:05.140
+Na koniec mamy kogoś, kto zna SQL, ale nie jest ekspertem od baz danych.
+
+00:06:05.360 --> 00:06:07.820
+Musi dodać kolumnę marży zysku do istniejącej tabeli.
+
+00:06:07.820 --> 00:06:15.920
+Otwiera hurtownię danych i wpisuje dodaj kolumnę marży zysku do tabeli sprzedaży obliczoną jako przychód minus, koszt podzielony przez przychód, sformatowaną jako wartość procentowa.
+
+00:06:16.080 --> 00:06:17.960
+Copilot pisze instrukcję Alter Table.
+
+00:06:18.200 --> 00:06:20.880
+Użytkownik ją uruchamia, weryfikuje liczby i przechodzi dalej.
+
+00:06:21.100 --> 00:06:22.900
+Rzecz w tym, że Copilot nie jest doskonały.
+
+00:06:23.120 --> 00:06:26.960
+Czasami błędnie interpretuje Twoje intencje, czasami kod działa, ale nie jest optymalny.
+
+00:06:27.120 --> 00:06:28.940
+Czasami wybiera niewłaściwą wizualizację.
+
+00:06:29.200 --> 00:06:32.100
+Zawsze musisz sprawdzić wynik, zanim użyjesz go w środowisku produkcyjnym.
+
+00:06:32.100 --> 00:06:36.320
+Ale do rozpoczęcia pracy, prototypowania czy nauki, to jak posiadanie fabryki szablonów pod ręką.
+
+00:06:36.600 --> 00:06:39.100
+Opisujesz, czego potrzebujesz, otrzymujesz gotowy szkic i go dopracowujesz.
+
+00:06:39.880 --> 00:06:42.180
+Czego więc naprawdę potrzebujesz, aby zacząć z tego korzystać?
+
+00:06:42.300 --> 00:06:43.840
+Czego potrzebujesz, by z tego korzystać?
+
+00:06:43.940 --> 00:06:45.980
+Czego więc naprawdę potrzebujesz, aby korzystać z Copilota?
+
+00:06:46.160 --> 00:06:48.180
+Wymagania są prostsze niż mogłoby się wydawać.
+
+00:06:48.280 --> 00:06:52.120
+Po pierwsze, potrzebujesz płatnej pojemności fabrik, konkretnie F2 SKU lub wyższej.
+
+00:06:52.320 --> 00:06:56.180
+Jeśli korzystasz z wersji próbnej lub masz Power BI Premium, możesz już mieć dostęp.
+
+00:06:56.440 --> 00:06:58.640
+Sprawdź ustawienia dzierżawy, aby to potwierdzić.
+
+00:06:58.640 --> 00:07:02.380
+Po drugie, twój administrator Fabrik musi włączyć Copilota w ustawieniach dzierżawy.
+
+00:07:02.620 --> 00:07:04.880
+Nie jest on domyślnie włączony w każdej organizacji.
+
+00:07:05.100 --> 00:07:09.700
+Niektórzy administratorzy wolą wdrażać go stopniowo, testować z grupą pilotażową, a potem udostępnić wszystkim.
+
+00:07:09.960 --> 00:07:13.380
+Jeśli więc otwierasz Fabrik i nie widzisz ikony Copilota, prawdopodobnie to jest powód.
+
+00:07:13.580 --> 00:07:15.560
+Najlepiej porozmawiać ze swoim administratorem.
+
+00:07:15.820 --> 00:07:19.740
+Dobra wiadomość jest taka, że nie ma dodatkowych kosztów licencyjnych poza pojemnością Fabrik.
+
+00:07:19.900 --> 00:07:20.960
+Copilot jest w cenie.
+
+00:07:21.160 --> 00:07:24.420
+Nie musisz kupować osobnej subskrypcji ani zapisywać się do kolejnej usługi.
+
+00:07:24.420 --> 00:07:28.560
+Jeśli masz Fabrik, masz też Copilota, o ile administrator przełączył odpowiedni przełącznik.
+
+00:07:28.740 --> 00:07:31.420
+Gdy zostanie włączony, zobaczysz ikonę Copilota w obsługiwanych obciążeniach.
+
+00:07:32.080 --> 00:07:35.320
+Kliknij ją, a otworzy się panel, w którym możesz wpisywać swoje polecenia.
+
+00:07:35.460 --> 00:07:36.800
+To wszystko, co musisz zrobić.
+
+00:07:37.020 --> 00:07:40.340
+Żadnej konfiguracji, żadnego ustawiania, żadnych danych treningowych do przygotowania.
+
+00:07:40.520 --> 00:07:42.960
+Po prostu zaczynasz pisać, a Copilot zaczyna pomagać.
+
+00:07:43.100 --> 00:07:44.760
+Jest jednak jedno ważne ograniczenie.
+
+00:07:44.960 --> 00:07:47.500
+Copilot działa tylko z danymi, do których już masz dostęp.
+
+00:07:47.800 --> 00:07:49.680
+Respektuje Twoje istniejące uprawnienia.
+
+00:07:49.920 --> 00:07:53.120
+Jeśli nie widzisz tabeli w magazynie danych, Copilot również jej nie zobaczy.
+
+00:07:53.120 --> 00:07:57.280
+Jeśli nie masz dostępu do modelu semantycznego, Copilot nie wygeneruje dla niego zapytań.
+
+00:07:57.400 --> 00:07:59.120
+I to jest właściwie dobra wiadomość.
+
+00:07:59.280 --> 00:08:01.880
+Oznacza to, że Copilot nie omija Twoich zabezpieczeń.
+
+00:08:02.060 --> 00:08:03.980
+Działa w ramach granic, które już wyznaczyłeś.
+
+00:08:04.140 --> 00:08:06.860
+Dlaczego więc powinno to mieć znaczenie, jeśli dopiero zaczynasz z analizą danych?
+
+00:08:07.040 --> 00:08:09.040
+Dlaczego początkujący powinni się tym zainteresować?
+
+00:08:09.260 --> 00:08:12.680
+Największą barierą w pracy z danymi nigdy nie była inteligencja czy wiedza biznesowa.
+
+00:08:12.920 --> 00:08:15.840
+Zawsze były to umiejętności techniczne SQL, Python, DAX.
+
+00:08:16.040 --> 00:08:20.300
+Ich nauka wymaga czasu, miesięcy, a czasem lat, zanim staniesz się w pełni produktywny.
+
+00:08:20.300 --> 00:08:24.100
+A dla kogoś, czyją główną pracą nie jest inżynieria danych, po prostu brakuje na to czasu.
+
+00:08:24.320 --> 00:08:27.120
+Masz raporty do stworzenia, pytania do odpowiedzi, decyzje do podjęcia.
+
+00:08:27.340 --> 00:08:30.200
+Nauka pisania idealnej funkcji okna nie znajduje się na liście priorytetów.
+
+00:08:30.340 --> 00:08:32.220
+Copilot drastycznie obniża tę barierę.
+
+00:08:32.420 --> 00:08:35.740
+Możesz wyjaśnić, czego potrzebujesz, prostym językiem i otrzymać działający kod.
+
+00:08:35.900 --> 00:08:39.760
+Nie zawsze idealny, ale działający kod, który możesz uruchomić, sprawdzić i się z niego uczyć.
+
+00:08:39.940 --> 00:08:41.640
+To całkowicie zmienia dynamikę pracy.
+
+00:08:41.640 --> 00:08:48.020
+W praktyce nietechniczni członkowie zespołu mogą zacząć badać dane, tworzyć raporty i zadawać pytania bez czekania na dział IT.
+
+00:08:48.160 --> 00:08:53.440
+Osoba w marketingu, która musi zrozumieć wyniki kampanii, nie musi składać zgłoszenia i czekać trzy dni.
+
+00:08:53.660 --> 00:08:56.740
+Otwiera fabrik, opisuje swoje potrzeby i otrzymuje raport.
+
+00:08:56.880 --> 00:09:00.880
+Kierownik operacyjny, który chce śledzić trendy zapasów, nie musi uczyć się Pysparka.
+
+00:09:01.040 --> 00:09:02.000
+Po prostu o to pyta.
+
+00:09:02.240 --> 00:09:05.980
+Dla samoobsługowej analityki to zmiana, która przekształca sposób działania zespołów.
+
+00:09:06.060 --> 00:09:07.260
+Ale jest pewien haczyk.
+
+00:09:07.400 --> 00:09:10.380
+Działa to dobrze tylko wtedy, gdy dane są odpowiednio uporządkowane.
+
+00:09:10.380 --> 00:09:15.580
+Jeśli twoje dane są niechlujne, tabele mają niejasne nazwy, a relacje nie są zdefiniowane, kopilot ma problemy.
+
+00:09:15.740 --> 00:09:18.060
+Zasada śmieci na wejściu, śmieci na wyjściu nadal obowiązuje.
+
+00:09:18.240 --> 00:09:20.860
+Sztuczna inteligencja jest tylko tak dobra, jak fundamenty, na których się opiera.
+
+00:09:21.140 --> 00:09:23.840
+Początkujący nadal muszą rozumieć, o co pytają i weryfikować wyniki.
+
+00:09:24.020 --> 00:09:28.660
+Kopilot może napisać zapytanie, które wygląda poprawnie, ale daje błędną odpowiedź, bo zadałeś złe pytanie.
+
+00:09:28.940 --> 00:09:32.220
+Może wygenerować pięknie wyglądający raport, który używa niewłaściwej miary.
+
+00:09:32.460 --> 00:09:35.140
+Narzędzie przyspiesza pracę, ale nie zastępuje twojego osądu.
+
+00:09:35.320 --> 00:09:36.560
+Pomyśl o tym w ten sposób.
+
+00:09:36.560 --> 00:09:40.360
+Kopilot to narzędzie przyspieszające naukę, a nie zastępstwo dla zrozumienia.
+
+00:09:40.600 --> 00:09:44.600
+Nadal musisz wiedzieć, czym jest złączenie join, co robi miara i co oznacza filtr.
+
+00:09:44.780 --> 00:09:49.580
+Zamiast spędzać tygodnie na zapamiętywaniu składni, możesz poświęcić ten czas na zrozumienie koncepcji.
+
+00:09:49.820 --> 00:09:52.940
+Widzisz kod, który pisze kopilot, czytasz go, modyfikujesz i uczysz się.
+
+00:09:53.120 --> 00:09:56.640
+To jak posiadanie korepetytora, który najpierw pisze odpowiedź, a potem ją wyjaśnia.
+
+00:09:56.840 --> 00:09:58.840
+Z czasem zaczynasz rozpoznawać wzorce.
+
+00:09:59.020 --> 00:10:01.360
+Te samą składnię, złączenia, działanie filtra.
+
+00:10:01.620 --> 00:10:04.800
+Budujesz swoje umiejętności bez frustracji związanej z patrzeniem w pusty ekran.
+
+00:10:04.800 --> 00:10:07.340
+Jest jednak jeszcze jedna rzecz, o której warto pamiętać.
+
+00:10:07.500 --> 00:10:08.740
+Człowiek wciąż ma znaczenie.
+
+00:10:08.940 --> 00:10:12.140
+Prawda jest taka, kopilot jest potężny, ale nie jest idealny.
+
+00:10:12.380 --> 00:10:16.840
+Może źle zinterpretować twoje intencje, wygenerować kod, który technicznie działa, ale jest wolny,
+
+00:10:16.900 --> 00:10:20.660
+lub napisać zapytanie DAX pobierające złe liczby, bo wybrał niewłaściwą tabelę.
+
+00:10:20.760 --> 00:10:22.380
+I to nie jest jakiś rzadki błąd.
+
+00:10:22.460 --> 00:10:27.300
+Zdarza się to na tyle często, że musisz traktować wszystko, co generuje kopilot jako szkic, a nie gotową odpowiedź.
+
+00:10:27.440 --> 00:10:32.140
+Twoim zadaniem jest sprawdzenie SQL, przetestowanie DAX i zweryfikowanie każdego kroku potoku przed wdrożeniem.
+
+00:10:32.140 --> 00:10:34.780
+Tu nie chodzi o brak zaufania, lecz o odpowiedzialność.
+
+00:10:34.940 --> 00:10:38.720
+Jeśli raport pokazuje błędne dane, biznes nie przejmuje się tym, że to kopilot napisał miarę.
+
+00:10:38.840 --> 00:10:40.740
+Obchodzi ich to, że ty się pod tym podpisałeś.
+
+00:10:40.880 --> 00:10:44.200
+Traktuj kopilota jak inteligentnego asystenta, a nie autonomicznego pracownika.
+
+00:10:44.460 --> 00:10:49.880
+Zajmuje się nudnymi zadaniami, szablonowymi zapytaniami, powtarzalnymi skryptami daje punkt wyjścia znacznie lepszy niż czysta kartka.
+
+00:10:50.040 --> 00:10:52.140
+Ale to ty wciąż podejmujesz ostateczne decyzje.
+
+00:10:52.300 --> 00:10:55.740
+Ty decydujesz, co jest poprawne, co trafia na produkcję i co faktycznie widzi biznes.
+
+00:10:55.920 --> 00:10:57.340
+A ład korporacyjny nie znika.
+
+00:10:57.340 --> 00:11:01.020
+Jakość danych, kontrola dostępu, zgodność z przepisami to wszystko nadal spoczywa na tobie.
+
+00:11:01.180 --> 00:11:04.340
+Kopilot nie wyczyści twoich danych ani nie wyegzekwuje polityk bezpieczeństwa.
+
+00:11:04.560 --> 00:11:09.900
+Działa w ramach uprawnień, które ustawiłeś, ale nie naprawi błędnego modelu danych czy źle zaprojektowanej struktury dostępu.
+
+00:11:10.020 --> 00:11:13.720
+Te fundamenty muszą być solidne, aby kopilot mógł wnieść realną wartość.
+
+00:11:13.940 --> 00:11:15.980
+Dla specjalistów IT jest w tym pewien plus.
+
+00:11:16.140 --> 00:11:21.140
+Kopilot zajmuje się rutynową pracą, standardowymi raportami, podstawowymi zapytaniami i codziennymi potokami.
+
+00:11:21.140 --> 00:11:27.460
+To zwalnia cię z trudniejszych zadań, takich jak optymalizacja wydajności, architektura danych czy złożone modelowanie pracy, która naprawdę przynosi efekty.
+
+00:11:27.600 --> 00:11:34.020
+A ponieważ użytkownicy biznesowi mogą sami odpowiadać na swoje proste pytania, twój zespół otrzymuje mniej rutynowych zgłoszeń i ma więcej czasu na analizy, które mają znaczenie.
+
+00:11:34.200 --> 00:11:35.440
+Oto najważniejsze wnioski.
+
+00:11:35.640 --> 00:11:39.660
+Kopilot dla fabrik to asystent AI, który zmienia język naturalny w pracy z danymi.
+
+00:11:39.820 --> 00:11:43.820
+Potoki, zapytania, raporty opisujesz, czego potrzebujesz, a kopilot pisze kod.
+
+00:11:43.940 --> 00:11:48.220
+To nie magia, to narzędzie, które pomaga początkującym zacząć, a ekspertom działać szybciej.
+
+00:11:48.220 --> 00:11:52.040
+Jeśli dopiero zaczynasz z fabrik, kopilot jest najlepszym przyjacielem, o którego istnieniu nie wiedziałeś.
+
+00:11:52.180 --> 00:11:56.940
+Zasubskrybuj na swojej ulubionej platformie podcastowej i udostępnij ten odcinek każdemu, kto próbuje zrozumieć Microsoft Fabrik.

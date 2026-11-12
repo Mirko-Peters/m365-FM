@@ -1,0 +1,2746 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:01.320
+Was ist ein virtuelles Azure-Netzwerk?
+
+00:00:01.600 --> 00:00:04.040
+Die meisten Leute hören diesen Begriff und denken, es sei nur eine weitere Einstellung,
+
+00:00:04.140 --> 00:00:05.920
+die man beim Bereitstellen einer virtuellen Maschine aktiviert.
+
+00:00:05.980 --> 00:00:07.540
+Etwas, das man kurz anklickt und dann vergisst.
+
+00:00:07.660 --> 00:00:08.980
+Etwas, das man kurz anklickt und dann vergisst.
+
+00:00:09.100 --> 00:00:09.740
+Doch hier ist die Wahrheit.
+
+00:00:10.100 --> 00:00:11.920
+Ein virtuelles Azure-Netzwerk ist nicht nur eine Einstellung.
+
+00:00:12.440 --> 00:00:14.240
+Es ist das Fundament für alles, was Sie in Azure aufbauen.
+
+00:00:15.140 --> 00:00:18.020
+Jede virtuelle Maschine, jede Datenbank, jeder App-Service und jede Funktion,
+
+00:00:18.080 --> 00:00:19.700
+die Sie bereitstellen, befinden sich darin.
+
+00:00:20.360 --> 00:00:22.700
+Und wenn Sie nicht verstehen, wie Sie funktionieren, arbeiten Sie blind.
+
+00:00:23.320 --> 00:00:26.000
+Am Ende dieser Folge werden Sie verstehen, was ein VNet eigentlich ist,
+
+00:00:26.080 --> 00:00:28.400
+wie es funktioniert und warum jede einzelne Ressource,
+
+00:00:28.400 --> 00:00:29.540
+die Sie bereitstellen, davon abhängt.
+
+00:00:30.000 --> 00:00:32.300
+Wir behandeln, was ein VNet ist, wie IP-Adressen funktionieren,
+
+00:00:32.380 --> 00:00:34.640
+Subnetze, Sicherheit, Routing und wie man VNet miteinander verbindet.
+
+00:00:35.160 --> 00:00:36.420
+Schnappen Sie sich Ihren Kaffee und legen wir los.
+
+00:00:37.200 --> 00:00:37.840
+Was ist ein VNet?
+
+00:00:38.140 --> 00:00:39.180
+Das private Cloud-Netzwerk.
+
+00:00:39.600 --> 00:00:41.040
+Beginnen wir mit der einfachsten Definition.
+
+00:00:41.700 --> 00:00:43.740
+Ein virtuelles Azure-Netzwerk, kurz VNet,
+
+00:00:43.820 --> 00:00:45.940
+ist Ihr eigenes privates Netzwerk innerhalb von Azure.
+
+00:00:46.840 --> 00:00:48.420
+Stellen Sie es sich wie ein privates Bürogebäude vor.
+
+00:00:48.740 --> 00:00:49.980
+Nur Personen, denen Sie den Zutritt gestalten.
+
+00:00:50.280 --> 00:00:52.660
+Sie kontrollieren, wer durch die Tür kommt, wer an welche Etage gelangt
+
+00:00:52.660 --> 00:00:54.020
+und wer komplett ausgesperrt bleibt.
+
+00:00:54.860 --> 00:00:56.440
+Bevor es VNet gab, war alles anders.
+
+00:00:56.620 --> 00:00:58.800
+Man stellte eine virtuelle Maschine in der Cloud bereit
+
+00:00:58.800 --> 00:01:00.820
+und sie war standardmäßig praktisch dem Internet ausgesetzt.
+
+00:01:01.180 --> 00:01:02.480
+Kein privates Netzwerk drumherum.
+
+00:01:02.720 --> 00:01:04.960
+Jeder, die IP-Adresse kannte, konnte versuchen, eine Verbindung herzustellen.
+
+00:01:05.140 --> 00:01:06.100
+Das war ein Sicherheitsalbtraum.
+
+00:01:06.440 --> 00:01:07.020
+Was hat sich geändert?
+
+00:01:07.480 --> 00:01:08.540
+Azure gab Ihnen die Möglichkeit,
+
+00:01:08.720 --> 00:01:10.560
+isolierte private Netzwerkbereiche zu erstellen.
+
+00:01:10.760 --> 00:01:11.580
+Die definierende Grenze.
+
+00:01:11.940 --> 00:01:12.860
+Sie entscheiden, was hineinkommen.
+
+00:01:13.280 --> 00:01:14.760
+Nichts außerhalb dieser Grenze kann eindringen,
+
+00:01:14.840 --> 00:01:16.020
+es sei denn, Sie erlauben es ausdrücklich.
+
+00:01:16.580 --> 00:01:19.400
+Eines vorab, Ihr VNet existiert in einer bestimmten Azure-Region.
+
+00:01:19.880 --> 00:01:20.460
+Es ist nicht global.
+
+00:01:20.900 --> 00:01:22.180
+Erstellen Sie ein VNet in Westeuropa,
+
+00:01:22.180 --> 00:01:22.920
+dann bleibt es auch dort.
+
+00:01:23.420 --> 00:01:25.380
+Ressourcen in einer anderen Region können nicht einfach hineinspringen.
+
+00:01:25.800 --> 00:01:26.840
+Sie bräuchten Ihr eigenes VNet
+
+00:01:26.840 --> 00:01:28.340
+oder Sie müssten sie später verbinden.
+
+00:01:28.760 --> 00:01:29.900
+Wenn Sie ein VNet erstellen,
+
+00:01:30.040 --> 00:01:31.460
+definieren Sie den IP-Adressraum selbst.
+
+00:01:31.800 --> 00:01:32.760
+Azure wählt die nicht für Sie aus.
+
+00:01:33.100 --> 00:01:34.640
+Sie entscheiden über den Bereich der IP-Adressen,
+
+00:01:34.680 --> 00:01:35.660
+die Ihre Ressourcen nutzen werden.
+
+00:01:35.920 --> 00:01:37.040
+Das ist eine große Verantwortung
+
+00:01:37.040 --> 00:01:38.260
+und wir werden im nächsten Abschnitt besprechen,
+
+00:01:38.360 --> 00:01:39.020
+wie man das richtig macht.
+
+00:01:39.480 --> 00:01:40.240
+Hier ist der entscheidende Punkt.
+
+00:01:40.720 --> 00:01:41.700
+VNet sind das Fundament.
+
+00:01:42.440 --> 00:01:43.400
+Jede virtuelle Maschine,
+
+00:01:43.780 --> 00:01:44.480
+jede Datenbank
+
+00:01:44.480 --> 00:01:45.760
+und jede Azure-Funktion,
+
+00:01:45.960 --> 00:01:46.760
+die Sie bereitstellen,
+
+00:01:46.960 --> 00:01:48.120
+befindet sich darin.
+
+00:01:48.700 --> 00:01:50.000
+Ohne ein VNet haben Ihre Ressourcen
+
+00:01:50.000 --> 00:01:51.240
+keinen privaten Netzwerkkontext.
+
+00:01:51.740 --> 00:01:52.780
+Sie schweben einfach in der Cloud,
+
+00:01:52.880 --> 00:01:54.620
+ohne Grenzen, ohne Isolation, ohne Sicherheit.
+
+00:01:55.500 --> 00:01:56.340
+Was bedeutet das also für Sie?
+
+00:01:56.760 --> 00:01:57.980
+Wenn Sie in Azure etwas aufbauen,
+
+00:01:58.060 --> 00:01:59.320
+beginnen Sie zuerst mit einem VNet,
+
+00:01:59.500 --> 00:02:01.220
+nicht erst nach der Bereitstellung Ihrer Ressourcen,
+
+00:02:01.420 --> 00:02:01.820
+sondern davor.
+
+00:02:02.200 --> 00:02:03.880
+Ihr VNet ist das Land, auf dem Sie bauen.
+
+00:02:04.260 --> 00:02:05.180
+Sie würden kein Haus bauen,
+
+00:02:05.240 --> 00:02:06.340
+ohne vorher das Grundstück zu kaufen, oder?
+
+00:02:06.580 --> 00:02:07.400
+Dasselbe Prinzipiert hier.
+
+00:02:07.580 --> 00:02:08.740
+IP-Adressierung, CRDR,
+
+00:02:08.980 --> 00:02:10.160
+die Wahl Ihres Adressbereichs.
+
+00:02:10.800 --> 00:02:11.480
+Legen wir also los.
+
+00:02:12.120 --> 00:02:13.180
+Wenn Sie ein VNet erstellen,
+
+00:02:13.180 --> 00:02:14.240
+ist die erste wichtige Entscheidung
+
+00:02:14.240 --> 00:02:15.360
+die Wahl eines IP-Bereichs.
+
+00:02:15.500 --> 00:02:16.940
+Das tun Sie mithilfe der CRDR-Notation.
+
+00:02:16.940 --> 00:02:19.480
+CRDR steht für Classless Inter-Domain-Routing,
+
+00:02:19.640 --> 00:02:21.100
+aber im Grunde bedeutet es nur,
+
+00:02:21.180 --> 00:02:22.920
+ich benötige so und so viele IP-Adressen.
+
+00:02:23.960 --> 00:02:24.580
+Warum ist das wichtig?
+
+00:02:25.140 --> 00:02:26.580
+Weil der von Ihnen gewählte Bereich bestimmt,
+
+00:02:26.680 --> 00:02:28.880
+wie viele Ressourcen in Ihr virtuelles Netzwerk passen.
+
+00:02:30.000 --> 00:02:30.640
+So funktioniert es.
+
+00:02:31.060 --> 00:02:32.480
+CRDR verwendet einen Schrägstrich
+
+00:02:32.480 --> 00:02:33.820
+und eine Zahl wie 16 oder 24.
+
+00:02:34.440 --> 00:02:36.220
+Diese Zahl gibt Ihnen die Größe des Adressraums an.
+
+00:02:36.900 --> 00:02:39.920
+Ein 16R-Bereich bietet Ihnen etwa 65.000 IP-Adressen.
+
+00:02:39.920 --> 00:02:40.740
+Das ist eine ganze Menge.
+
+00:02:41.060 --> 00:02:43.200
+Ein 24R-Bereich bietet etwa 250,
+
+00:02:43.360 --> 00:02:44.420
+was perfekt für ein kleines Team
+
+00:02:44.420 --> 00:02:45.680
+oder eine einzelne Anwendungsebene ist.
+
+00:02:45.680 --> 00:02:47.540
+Wenn Sie also Ihr Vornet planen,
+
+00:02:47.620 --> 00:02:48.160
+müssen Sie überlegen,
+
+00:02:48.240 --> 00:02:49.240
+wie viele Ressourcen Sie haben
+
+00:02:49.240 --> 00:02:50.900
+und wie Sie diese kopieren wollen.
+
+00:02:51.460 --> 00:02:53.160
+Nun, Sie können nicht einfach irgendeinen IP-Bereich wählen.
+
+00:02:53.660 --> 00:02:55.720
+Azure folgt dem RFC 1918-Standard,
+
+00:02:55.860 --> 00:02:58.360
+der private IP-Bereiche für interne Netzwerke reserviert.
+
+00:02:59.460 --> 00:03:00.220
+Sie haben drei Optionen.
+
+00:03:00.700 --> 00:03:02.260
+Der 10.x-Bereich ist der größte
+
+00:03:02.260 --> 00:03:03.560
+und bietet viel Raum für Wachstum.
+
+00:03:04.280 --> 00:03:06.620
+Der 172.16x-Bereich ist etwas kleiner,
+
+00:03:06.820 --> 00:03:07.560
+aber dennoch nützlich.
+
+00:03:08.340 --> 00:03:10.740
+Und der 192.16x-Bereich ist der,
+
+00:03:10.820 --> 00:03:12.560
+den Sie wahrscheinlich zu Hause an Ihrem Router haben.
+
+00:03:12.920 --> 00:03:13.400
+Ist der Punkt.
+
+00:03:13.400 --> 00:03:14.840
+Der Adressraum Ihres Vornets
+
+00:03:14.840 --> 00:03:16.400
+darf sich nicht mit anderen Netzwerken überschneiden,
+
+00:03:16.460 --> 00:03:17.720
+mit denen Sie eine Verbindung herstellen möchten.
+
+00:03:17.980 --> 00:03:18.800
+Dies ist ein häufiger Fehler.
+
+00:03:19.220 --> 00:03:20.220
+Viele Leute wählen einen Bereich,
+
+00:03:20.320 --> 00:03:21.120
+der Ihnen vertraut vorkommt,
+
+00:03:21.220 --> 00:03:22.140
+nur um später festzustellen,
+
+00:03:22.220 --> 00:03:23.680
+dass er mit Ihrem Firmennetzwerk in Konflikt steht.
+
+00:03:24.040 --> 00:03:26.900
+Wenn also Ihr Büronetzwerk 10.0.0.16 verwendet,
+
+00:03:26.960 --> 00:03:27.960
+nutzen Sie denselben Bereich,
+
+00:03:28.100 --> 00:03:28.740
+nicht den Azure.
+
+00:03:29.540 --> 00:03:30.040
+Wenn Sie versuchen,
+
+00:03:30.120 --> 00:03:30.780
+sich später zu verbinden,
+
+00:03:30.840 --> 00:03:31.420
+gibt es Konflikte
+
+00:03:31.420 --> 00:03:32.400
+und der Datenverkehr weiß nicht,
+
+00:03:32.440 --> 00:03:33.080
+wohin er fließen soll.
+
+00:03:33.580 --> 00:03:34.700
+Lassen Sie mich in ein konkretes Beispiel.
+
+00:03:35.080 --> 00:03:35.760
+Stellen Sie sich vor,
+
+00:03:35.840 --> 00:03:37.040
+Sie bauen ein Hybrid-Setup auf,
+
+00:03:37.040 --> 00:03:39.840
+bei dem Azure mit Ihrem lokalen Rechenzentrum verbunden wird
+
+00:03:39.840 --> 00:03:42.780
+und Ihr Rechenzentrum 10.0.0.0.0.16 nutzt,
+
+00:03:42.840 --> 00:03:43.700
+dann 0.16 nutzt.
+
+00:03:44.220 --> 00:03:45.900
+Wenn Sie ein V-Net mit demselben Bereich erstellen,
+
+00:03:45.980 --> 00:03:46.820
+haben Sie zwei Netzwerke,
+
+00:03:46.900 --> 00:03:48.060
+die um dieselben IPs konkurrieren.
+
+00:03:48.720 --> 00:03:49.440
+Denken Sie darüber nach.
+
+00:03:49.860 --> 00:03:50.480
+Zwei Netzwerke,
+
+00:03:50.520 --> 00:03:51.640
+die denselben IP-Bereich verwenden,
+
+00:03:51.720 --> 00:03:52.820
+können nicht ordnungsgemäß kommunizieren.
+
+00:03:53.060 --> 00:03:53.960
+Es ist wie bei zwei Häusern
+
+00:03:53.960 --> 00:03:54.600
+mit derselben Adresse.
+
+00:03:55.020 --> 00:03:55.800
+Die Pus kommt durcheinander.
+
+00:03:56.260 --> 00:03:56.880
+Das ist ein Problem,
+
+00:03:56.960 --> 00:03:58.180
+das Sie nicht im Nachhinein lösen möchten.
+
+00:03:58.540 --> 00:03:59.220
+Planen Sie also voraus
+
+00:03:59.220 --> 00:04:00.180
+und wählen Sie einen eindeutigen Bereich.
+
+00:04:00.600 --> 00:04:01.400
+Und hier ein Planungstipp.
+
+00:04:01.820 --> 00:04:02.720
+Wählen Sie einen größeren Bereich,
+
+00:04:02.720 --> 00:04:03.320
+als Sie zu benötigen.
+
+00:04:03.500 --> 00:04:04.360
+Sie denken vielleicht,
+
+00:04:04.360 --> 00:04:05.840
+Sie brauchen jetzt nur ein 24-N-Netz,
+
+00:04:05.900 --> 00:04:06.880
+aber wenn Ihre Anwendung wächst,
+
+00:04:06.960 --> 00:04:08.320
+werden Sie sich ein 16-Netz wünschen.
+
+00:04:08.840 --> 00:04:10.020
+Sie können es später nicht einfach ändern.
+
+00:04:10.480 --> 00:04:11.660
+Sobald Ihr V-Net erstellt ist
+
+00:04:11.660 --> 00:04:13.040
+und Sie Ressourcen bereitgestellt haben,
+
+00:04:13.120 --> 00:04:14.600
+ist das Ändern des Adressraums kompliziert.
+
+00:04:14.880 --> 00:04:15.380
+Es ist möglich,
+
+00:04:15.880 --> 00:04:16.660
+aber das möchten Sie nicht
+
+00:04:16.660 --> 00:04:17.880
+an einem laufenden System durchführen.
+
+00:04:18.140 --> 00:04:19.200
+Eben Sie sich also Raum zum Wachsen.
+
+00:04:19.520 --> 00:04:20.400
+Was bedeutet das für Sie?
+
+00:04:20.680 --> 00:04:22.200
+Betrachten Sie den Adressraum Ihres V-Netzes
+
+00:04:22.200 --> 00:04:22.820
+wie den Kauf von Lamm.
+
+00:04:23.020 --> 00:04:23.780
+Sorgen Sie für genügend Platz
+
+00:04:23.780 --> 00:04:24.480
+für zukünftiges Wachstum.
+
+00:04:24.740 --> 00:04:25.160
+Wenn Sie glauben,
+
+00:04:25.240 --> 00:04:26.100
+Sie brauchen ein kleines Grundstück,
+
+00:04:26.100 --> 00:04:26.820
+kaufen Sie ein mittleres.
+
+00:04:27.000 --> 00:04:28.080
+Sie werden sich später selbst erweitern.
+
+00:04:28.080 --> 00:04:29.420
+Das ist die wichtigste Erkenntnis.
+
+00:04:29.680 --> 00:04:30.600
+Planen Sie Ihren Adressraum
+
+00:04:30.600 --> 00:04:31.940
+mit Blick auf zukünftiges Wachstum.
+
+00:04:32.740 --> 00:04:34.360
+Subnetze die Unterteilung Ihres Netzwerks.
+
+00:04:34.940 --> 00:04:35.760
+Sie haben also Ihr V-Net
+
+00:04:35.760 --> 00:04:37.040
+und Ihren Adressraum ausgewählt.
+
+00:04:37.400 --> 00:04:37.720
+Was nun?
+
+00:04:38.020 --> 00:04:38.920
+Sie werfen nicht einfach alles
+
+00:04:38.920 --> 00:04:39.640
+in einen großen Topf.
+
+00:04:39.960 --> 00:04:40.820
+Wir kommen Subnetze ins Spiel.
+
+00:04:41.280 --> 00:04:42.640
+Subnetze sind einer der grundlegenden
+
+00:04:42.640 --> 00:04:43.800
+Bausteine Ihres V-Netzes.
+
+00:04:44.180 --> 00:04:44.840
+Sie ermöglichen es Ihnen,
+
+00:04:45.000 --> 00:04:46.120
+Ressourcen zu organisieren und zu schützen.
+
+00:04:46.620 --> 00:04:48.100
+Ein Subnetz ist ein kleinerer Bereich
+
+00:04:48.100 --> 00:04:49.420
+des Adressraums Ihres V-Netzes.
+
+00:04:49.680 --> 00:04:51.280
+Wenn Ihr V-Net das Gebäude ist,
+
+00:04:51.440 --> 00:04:52.660
+sind Subnetze die einzelnen Räume.
+
+00:04:53.160 --> 00:04:54.140
+Sie würden Ihren Serverraum,
+
+00:04:54.140 --> 00:04:55.400
+Ihren Empfang und Ihren Pausenraum
+
+00:04:55.400 --> 00:04:55.980
+doch auch nicht alle
+
+00:04:55.980 --> 00:04:57.380
+in einen einzigen offenen Raum stellen, oder?
+
+00:04:57.720 --> 00:04:58.400
+Dasselbe gilt hier.
+
+00:04:58.640 --> 00:04:59.660
+Es ist ein einfaches Konzept,
+
+00:04:59.800 --> 00:05:00.700
+das aber einen großen Unterschied
+
+00:05:00.700 --> 00:05:01.840
+in der Netzwerkverwaltung macht.
+
+00:05:02.220 --> 00:05:02.860
+Verschiedene Ressourcen
+
+00:05:02.860 --> 00:05:03.760
+kommen in verschiedene Subnetze.
+
+00:05:04.100 --> 00:05:05.460
+Ihre Web-Server kommen in ein Subnetz,
+
+00:05:05.640 --> 00:05:07.020
+Ihre Datenbanken in ein anderes
+
+00:05:07.020 --> 00:05:08.880
+und Ihre Anwendungslogik in ein drittes.
+
+00:05:09.240 --> 00:05:09.460
+Warum?
+
+00:05:09.840 --> 00:05:10.280
+Zwei Gründe.
+
+00:05:10.700 --> 00:05:11.600
+Sicherheit und Organisation.
+
+00:05:12.080 --> 00:05:13.320
+Sprechen wir zuerst über Sicherheit,
+
+00:05:13.660 --> 00:05:14.920
+da diese meist am wichtigsten ist.
+
+00:05:15.280 --> 00:05:15.920
+Sicherheit zuerst.
+
+00:05:16.280 --> 00:05:17.720
+Wenn jemand in Ihren Web-Server eindringt,
+
+00:05:17.880 --> 00:05:18.340
+möchten Sie nicht,
+
+00:05:18.440 --> 00:05:19.160
+dass er direkten Zugriff
+
+00:05:19.160 --> 00:05:20.040
+auf Ihre Datenbank hat.
+
+00:05:20.520 --> 00:05:21.280
+Getrennte Subnetze
+
+00:05:21.280 --> 00:05:22.240
+schaffen eine natürliche Barriere.
+
+00:05:22.660 --> 00:05:24.160
+Der Angreifer müsste diese Grenze überschreiten
+
+00:05:24.160 --> 00:05:25.100
+und Sie können genau kontrollieren,
+
+00:05:25.160 --> 00:05:25.620
+was hier passiert.
+
+00:05:26.200 --> 00:05:27.700
+Sie können auch Netzwerksicherheitsgruppen verwenden,
+
+00:05:27.780 --> 00:05:28.400
+um den Datenverkehr
+
+00:05:28.400 --> 00:05:29.340
+zwischen Subnetzen zu steuern.
+
+00:05:29.700 --> 00:05:30.360
+Das ist ein Thema
+
+00:05:30.360 --> 00:05:31.200
+für ein anderes Video,
+
+00:05:31.320 --> 00:05:32.080
+aber es ist gut zu wissen,
+
+00:05:32.180 --> 00:05:33.180
+dass Subnetze das Fundament
+
+00:05:33.180 --> 00:05:34.020
+für diese Sicherheit bilden.
+
+00:05:34.860 --> 00:05:35.600
+Organisation der Zweite.
+
+00:05:36.020 --> 00:05:37.140
+Wenn alles seinen Platz hat,
+
+00:05:37.380 --> 00:05:38.320
+ist die Verwaltung einfacher.
+
+00:05:38.860 --> 00:05:39.180
+Sie wissen,
+
+00:05:39.280 --> 00:05:40.000
+welches Subnetz
+
+00:05:40.000 --> 00:05:41.400
+Ihre Frontend-Ressourcen enthält
+
+00:05:41.400 --> 00:05:42.780
+und welches Ihre Backend-Daten.
+
+00:05:43.360 --> 00:05:44.640
+Sie können Richtlinien und Regeln
+
+00:05:44.640 --> 00:05:45.700
+auf das gesamte Subnetz
+
+00:05:45.700 --> 00:05:46.580
+gleichzeitig anwenden,
+
+00:05:46.700 --> 00:05:47.440
+anstatt jede Ressource
+
+00:05:47.440 --> 00:05:48.540
+einzeln zu konfigurieren.
+
+00:05:48.540 --> 00:05:50.360
+Das spart Zeit und reduziert Fehler.
+
+00:05:51.120 --> 00:05:51.780
+Nun ein Detail,
+
+00:05:51.880 --> 00:05:52.800
+das viele Leute überrascht.
+
+00:05:53.520 --> 00:05:55.000
+Azure reserviert 5 IP-Adressen
+
+00:05:55.000 --> 00:05:55.800
+in jedem Subnetz
+
+00:05:55.800 --> 00:05:56.860
+für eigene interne Zwecke
+
+00:05:56.860 --> 00:05:57.960
+wie Routing und DNS.
+
+00:05:58.480 --> 00:05:59.320
+Wenn Sie also ein Subnetz
+
+00:05:59.320 --> 00:06:00.820
+mit einem 24R-Bereich erstellen,
+
+00:06:00.900 --> 00:06:02.300
+der Ihnen 256 Adressen gibt,
+
+00:06:02.440 --> 00:06:03.040
+erhalten Sie tatsächlich
+
+00:06:03.040 --> 00:06:04.360
+nur 2 Adressengebte Adress.
+
+00:06:04.720 --> 00:06:05.460
+Das ist eine häufige Falle.
+
+00:06:05.800 --> 00:06:06.600
+Du planst für 256,
+
+00:06:07.040 --> 00:06:07.780
+aber du erhältst nur 200.
+
+00:06:08.140 --> 00:06:09.120
+Also plane bei der Größe
+
+00:06:09.120 --> 00:06:09.660
+deiner Subnetze
+
+00:06:09.660 --> 00:06:10.320
+immer etwas Puffer ein.
+
+00:06:10.680 --> 00:06:11.360
+Die gute Nachricht ist,
+
+00:06:11.360 --> 00:06:12.000
+dass du nach dem Erstellen
+
+00:06:12.000 --> 00:06:12.440
+des Vornetzes
+
+00:06:12.440 --> 00:06:13.420
+weitere Subnetze hinzufügen kannst.
+
+00:06:13.680 --> 00:06:14.560
+Du bist nicht an die gebunden,
+
+00:06:14.620 --> 00:06:15.220
+die du bei der Erstellung
+
+00:06:15.220 --> 00:06:15.900
+festgelegt hast.
+
+00:06:15.900 --> 00:06:17.000
+Wenn du also merkst,
+
+00:06:17.020 --> 00:06:17.800
+dass du ein eigenes Subnetz
+
+00:06:17.800 --> 00:06:18.480
+für Management-Tools
+
+00:06:18.480 --> 00:06:19.280
+oder Überwachungssysteme
+
+00:06:19.280 --> 00:06:20.360
+brauchst, füge es später hinzu,
+
+00:06:20.660 --> 00:06:21.000
+brauchst du.
+
+00:06:21.340 --> 00:06:21.820
+Kein Problem.
+
+00:06:22.240 --> 00:06:23.060
+Aber es ist dennoch besser,
+
+00:06:23.160 --> 00:06:24.080
+sie im Voraus zu planen.
+
+00:06:24.520 --> 00:06:25.160
+Das nachträgliche
+
+00:06:25.160 --> 00:06:26.100
+Hinzufügen von Subnetzen
+
+00:06:26.100 --> 00:06:26.480
+ist möglich,
+
+00:06:26.600 --> 00:06:27.200
+kann aber das Verschieben
+
+00:06:27.200 --> 00:06:28.060
+von Ressourcen erfordern,
+
+00:06:28.100 --> 00:06:28.700
+was störend sein kann.
+
+00:06:28.960 --> 00:06:29.940
+Aber hier ist die bewährte Methode.
+
+00:06:30.360 --> 00:06:31.040
+Nutze von Anfang an
+
+00:06:31.040 --> 00:06:31.760
+separate Subnetze
+
+00:06:31.760 --> 00:06:32.520
+für die verschiedenen Ebenen
+
+00:06:32.520 --> 00:06:33.100
+deiner Anwendung.
+
+00:06:33.420 --> 00:06:33.880
+Denk über deine
+
+00:06:33.880 --> 00:06:34.740
+Anwendungsarchitektur nach.
+
+00:06:35.960 --> 00:06:36.580
+Normalerweise hast du
+
+00:06:36.580 --> 00:06:37.380
+eine Frontend-Ebene
+
+00:06:37.380 --> 00:06:38.300
+für Benutzeranfragen,
+
+00:06:38.400 --> 00:06:39.060
+eine Backend-Ebene
+
+00:06:39.060 --> 00:06:39.940
+für Geschäftslogik
+
+00:06:39.940 --> 00:06:40.900
+und eine Datenebene
+
+00:06:40.900 --> 00:06:41.480
+für Information.
+
+00:06:42.900 --> 00:06:43.480
+Jeder davon sollte
+
+00:06:43.480 --> 00:06:44.260
+ein eigenes Subnetz haben.
+
+00:06:44.640 --> 00:06:45.820
+Warte nicht bis zur Produktion,
+
+00:06:45.900 --> 00:06:46.280
+um zu merken,
+
+00:06:46.340 --> 00:06:47.320
+dass du Dinge trennen musst.
+
+00:06:47.680 --> 00:06:48.400
+Das ist viel schwieriger,
+
+00:06:48.480 --> 00:06:49.020
+wenn die Ressourcen
+
+00:06:49.020 --> 00:06:49.960
+bereits bereitgestellt sind.
+
+00:06:50.280 --> 00:06:51.020
+Was bedeutet das für dich?
+
+00:06:51.380 --> 00:06:51.980
+Über Subnetze
+
+00:06:51.980 --> 00:06:52.820
+hältst du dein Netzwerk
+
+00:06:52.820 --> 00:06:53.700
+organisiert und sicher.
+
+00:06:54.180 --> 00:06:54.720
+Sie sind wie die Räume
+
+00:06:54.720 --> 00:06:55.220
+in deinem Gebäude.
+
+00:06:55.580 --> 00:06:56.100
+Plane sie früh
+
+00:06:56.100 --> 00:06:56.820
+und gib jeder Ebene
+
+00:06:56.820 --> 00:06:57.420
+deiner Anwendung
+
+00:06:57.420 --> 00:06:58.180
+in ihren eigenen Bereich.
+
+00:06:58.580 --> 00:06:59.380
+So hältst du dein Netzwerk
+
+00:06:59.380 --> 00:07:00.020
+sauber und sicher.
+
+00:07:01.120 --> 00:07:02.380
+Öffentliche versus Privat-IPs.
+
+00:07:02.720 --> 00:07:03.260
+Wer kann das sehen?
+
+00:07:03.720 --> 00:07:04.160
+Lass uns über
+
+00:07:04.160 --> 00:07:05.120
+IP-Adressen sprechen,
+
+00:07:05.440 --> 00:07:06.600
+denn nicht alle IP-Adressen
+
+00:07:06.600 --> 00:07:07.080
+sind gleich.
+
+00:07:09.060 --> 00:07:12.440
+Das ist die Adresse,
+
+00:07:12.580 --> 00:07:13.200
+über die sie mit anderen
+
+00:07:13.200 --> 00:07:14.640
+Ressourcen im V-Net kommuniziert.
+
+00:07:15.260 --> 00:07:15.640
+Stell es dir
+
+00:07:15.640 --> 00:07:16.780
+wie eine interne Telefondurchwahl.
+
+00:07:17.200 --> 00:07:17.820
+Nur Leute innerhalb
+
+00:07:17.820 --> 00:07:18.280
+des Gebäudes
+
+00:07:18.280 --> 00:07:18.760
+können sie erreichen.
+
+00:07:19.240 --> 00:07:20.160
+Private-IPs sind nur
+
+00:07:20.160 --> 00:07:20.900
+aus dem V-Net
+
+00:07:20.900 --> 00:07:21.780
+oder verbundenen
+
+00:07:21.780 --> 00:07:22.880
+Netzwerken erreichbar.
+
+00:07:23.520 --> 00:07:24.040
+Wenn du zu Hause
+
+00:07:24.040 --> 00:07:24.880
+an deinem Laptop sitzt,
+
+00:07:25.040 --> 00:07:25.540
+erreichst du keine
+
+00:07:25.540 --> 00:07:26.640
+private IP in Azure.
+
+00:07:27.480 --> 00:07:28.080
+Sie ist nicht im Internet.
+
+00:07:28.460 --> 00:07:28.900
+Sie befindet sich
+
+00:07:28.900 --> 00:07:29.700
+in deinem privaten Netzwerk.
+
+00:07:30.480 --> 00:07:31.220
+Wie machst du eine Ressource
+
+00:07:31.220 --> 00:07:32.260
+also aus dem Internet erreichbar?
+
+00:07:32.700 --> 00:07:33.060
+Du gibst dir
+
+00:07:33.060 --> 00:07:33.920
+eine öffentliche IP-Adresse.
+
+00:07:34.220 --> 00:07:35.040
+Das ist die nach außen
+
+00:07:35.040 --> 00:07:35.880
+sichtbare Adresse,
+
+00:07:36.320 --> 00:07:37.060
+wie eine öffentliche
+
+00:07:37.060 --> 00:07:37.820
+Telefonnummer statt
+
+00:07:37.820 --> 00:07:38.900
+einer internen Durchwahl.
+
+00:07:39.060 --> 00:07:40.020
+Das ist der entscheidende Punkt.
+
+00:07:40.540 --> 00:07:41.440
+Öffentliche IPs sind optional.
+
+00:07:41.920 --> 00:07:42.900
+Du weißt sie explizit zu,
+
+00:07:43.000 --> 00:07:44.440
+da Azure deine Ressourcen
+
+00:07:44.440 --> 00:07:45.480
+nie eine öffentliche IP gibt,
+
+00:07:45.540 --> 00:07:46.340
+außer du fragst danach.
+
+00:07:47.040 --> 00:07:47.540
+Das ist Absicht.
+
+00:07:47.940 --> 00:07:49.020
+Der Standard sollte privat sein,
+
+00:07:49.080 --> 00:07:49.500
+öffentlich sollte
+
+00:07:49.500 --> 00:07:50.480
+eine bewusste Entscheidung sein.
+
+00:07:50.860 --> 00:07:51.280
+Und hier machen
+
+00:07:51.280 --> 00:07:52.260
+viele Anfänger einen Fehler.
+
+00:07:52.740 --> 00:07:53.200
+Sie geben allem
+
+00:07:53.200 --> 00:07:54.160
+öffentliche IP-Adressen.
+
+00:07:54.680 --> 00:07:55.160
+Ihr Web-Server,
+
+00:07:55.240 --> 00:07:55.800
+ihre Datenbank,
+
+00:07:55.860 --> 00:07:56.580
+ihre Backend-API
+
+00:07:56.580 --> 00:07:57.240
+erhalten alle eine.
+
+00:07:57.660 --> 00:07:58.460
+Das ist ein Sicherheitsrisiko.
+
+00:07:58.820 --> 00:07:59.480
+Deine Datenbank
+
+00:07:59.480 --> 00:08:00.400
+muss nicht aus dem Internet
+
+00:08:00.400 --> 00:08:01.080
+erreichbar sein,
+
+00:08:01.180 --> 00:08:02.560
+genau wie deine Backend-API.
+
+00:08:03.260 --> 00:08:04.200
+Nur Frontend-Ressourcen,
+
+00:08:04.300 --> 00:08:04.780
+mit denen Benutzer
+
+00:08:04.780 --> 00:08:05.620
+tatsächlich interagieren,
+
+00:08:05.620 --> 00:08:07.140
+sollten öffentliche IP-Adressen haben.
+
+00:08:07.140 --> 00:08:08.680
+Nun, öffentliche IP-Adressen
+
+00:08:08.680 --> 00:08:09.560
+gibt es in zwei Varianten,
+
+00:08:09.720 --> 00:08:10.740
+statisch und dynamisch.
+
+00:08:10.800 --> 00:08:12.040
+Eine statische öffentliche IP
+
+00:08:12.040 --> 00:08:12.580
+bleibt gleich,
+
+00:08:12.660 --> 00:08:13.320
+auch wenn Sie die Ressource
+
+00:08:13.320 --> 00:08:14.060
+stoppen und neu starten.
+
+00:08:14.440 --> 00:08:15.440
+Eine dynamische öffentliche IP
+
+00:08:15.440 --> 00:08:15.780
+kann Sie ja.
+
+00:08:16.140 --> 00:08:17.320
+Wenn Sie eine Produktionsanwendung
+
+00:08:17.320 --> 00:08:17.680
+betreiben,
+
+00:08:17.820 --> 00:08:18.580
+benötigen Sie wahrscheinlich
+
+00:08:18.580 --> 00:08:19.400
+statische IPs,
+
+00:08:19.440 --> 00:08:20.020
+damit Ihre Benutzer
+
+00:08:20.020 --> 00:08:20.560
+sie immer finden.
+
+00:08:20.880 --> 00:08:21.640
+Wenn Sie etwas testen,
+
+00:08:21.700 --> 00:08:22.660
+reicht eine dynamische IP
+
+00:08:22.660 --> 00:08:23.380
+möglicherweise aus.
+
+00:08:23.760 --> 00:08:24.260
+Sie können auch ein
+
+00:08:24.260 --> 00:08:25.720
+sogenanntes öffentliches IP-Präfix
+
+00:08:25.720 --> 00:08:26.020
+verwenden,
+
+00:08:26.100 --> 00:08:26.980
+mit dem Sie einen Adressblock
+
+00:08:26.980 --> 00:08:27.540
+reservieren können.
+
+00:08:28.360 --> 00:08:29.680
+Anstatt sie einzeln zu erstellen,
+
+00:08:29.900 --> 00:08:31.020
+reservieren Sie einen Bereich
+
+00:08:31.020 --> 00:08:31.980
+und weisen daraus
+
+00:08:31.980 --> 00:08:33.280
+individuelle Adressen zu.
+
+00:08:33.920 --> 00:08:34.840
+Nützlich, wenn Sie wissen,
+
+00:08:34.840 --> 00:08:36.140
+dass Sie mehrere öffentliche IPs
+
+00:08:36.140 --> 00:08:37.120
+für ein Projekt benötigen.
+
+00:08:37.780 --> 00:08:38.600
+Was bedeutet das für Sie?
+
+00:08:39.060 --> 00:08:39.840
+Private IP-Adressen
+
+00:08:39.840 --> 00:08:40.840
+sind die sichere Standardeinschuldung.
+
+00:08:41.120 --> 00:08:41.520
+Sie sind wie eine
+
+00:08:41.520 --> 00:08:42.380
+interne Telefonnummer.
+
+00:08:42.660 --> 00:08:43.340
+Öffentliche IPs
+
+00:08:43.340 --> 00:08:44.300
+sind eine bewusste Entscheidung,
+
+00:08:44.400 --> 00:08:44.980
+die Sie nur treffen,
+
+00:08:45.060 --> 00:08:45.700
+wenn etwas von außen
+
+00:08:45.700 --> 00:08:46.440
+erreichbar sein muss.
+
+00:08:46.720 --> 00:08:47.760
+Und wenn Sie diese benötigen,
+
+00:08:48.000 --> 00:08:48.420
+überlegen Sie,
+
+00:08:48.500 --> 00:08:49.580
+ob statisch oder dynamisch
+
+00:08:49.580 --> 00:08:50.020
+nötig ist
+
+00:08:50.020 --> 00:08:51.320
+und ob ein Präfix Sinn ergibt.
+
+00:08:52.360 --> 00:08:52.740
+Netzwerksicherheitsgruppen
+
+00:08:52.740 --> 00:08:53.860
+zur Steuerung des Datenverkehrs.
+
+00:08:54.160 --> 00:08:55.120
+Sie haben also Ihr VNet,
+
+00:08:55.220 --> 00:08:55.760
+Ihre Subnetze
+
+00:08:55.760 --> 00:08:56.980
+und Ihre IP-Adressen geklärt.
+
+00:08:57.480 --> 00:08:58.160
+Aber wie steuern Sie
+
+00:08:58.160 --> 00:08:58.580
+tatsächlich,
+
+00:08:58.720 --> 00:08:59.420
+welcher Datenverkehr
+
+00:08:59.420 --> 00:09:00.220
+ein- und ausgehen darf?
+
+00:09:00.220 --> 00:09:01.780
+Hier kommen Netzwerksicherheitsgruppen
+
+00:09:01.780 --> 00:09:02.420
+NSGs ins Spiel.
+
+00:09:02.920 --> 00:09:04.080
+Ein NSG ist der Türsteher,
+
+00:09:04.160 --> 00:09:04.660
+der kontrolliert,
+
+00:09:04.740 --> 00:09:05.400
+welcher Datenverkehr
+
+00:09:05.400 --> 00:09:06.220
+Ihre Ressourcen erreicht
+
+00:09:06.220 --> 00:09:06.680
+oder verlässt.
+
+00:09:07.000 --> 00:09:07.460
+Stellen Sie sich
+
+00:09:07.460 --> 00:09:08.200
+wie ein Türsteher
+
+00:09:08.200 --> 00:09:08.880
+in einem Club vor.
+
+00:09:09.040 --> 00:09:09.740
+Der Ausweise prüft,
+
+00:09:09.800 --> 00:09:10.600
+auf die Gästeliste schaut
+
+00:09:10.600 --> 00:09:11.260
+und jeden abweist,
+
+00:09:11.340 --> 00:09:12.260
+der nicht dort sein sollte,
+
+00:09:12.500 --> 00:09:13.020
+der nicht dort sein.
+
+00:09:13.420 --> 00:09:14.300
+Jedes Datenpaket,
+
+00:09:14.360 --> 00:09:14.760
+das versucht,
+
+00:09:14.840 --> 00:09:15.840
+Ihre Ressource zu erreichen,
+
+00:09:16.020 --> 00:09:16.400
+muss zuerst
+
+00:09:16.400 --> 00:09:17.300
+an diesem Türsteher vorbei.
+
+00:09:18.000 --> 00:09:19.160
+NSGs funktionieren mit Regeln.
+
+00:09:19.820 --> 00:09:20.620
+Jede Regel besagt
+
+00:09:20.620 --> 00:09:21.740
+Zulassen oder Verweigern,
+
+00:09:21.940 --> 00:09:22.980
+basierend auf vier Faktoren.
+
+00:09:23.280 --> 00:09:24.060
+Quell-IP-Adresse,
+
+00:09:24.440 --> 00:09:25.140
+Ziel-IP-Adresse,
+
+00:09:25.280 --> 00:09:26.780
+Portnummer und Protokoll.
+
+00:09:30.220 --> 00:09:31.280
+243 zulassen
+
+00:09:31.280 --> 00:09:32.440
+oder den gesamten
+
+00:09:32.440 --> 00:09:33.140
+Internetdatenverkehr
+
+00:09:33.140 --> 00:09:34.340
+auf Port 22 verweigern.
+
+00:09:34.960 --> 00:09:35.820
+Genau diese Art von Kontrolle.
+
+00:09:36.120 --> 00:09:37.040
+Nun ein leistungsstärkes Feature.
+
+00:09:37.600 --> 00:09:38.380
+Sie können eine NSG
+
+00:09:38.380 --> 00:09:39.000
+an ein Subnetz
+
+00:09:39.000 --> 00:09:39.600
+oder direkt an die
+
+00:09:39.600 --> 00:09:40.320
+Netzwerkschnittstelle
+
+00:09:40.320 --> 00:09:41.540
+einer einzelnen VM anbinden.
+
+00:09:42.220 --> 00:09:43.600
+Wenn Sie sie an ein Subnetz anbinden,
+
+00:09:43.820 --> 00:09:45.280
+gilt die NSG für alles darin.
+
+00:09:45.780 --> 00:09:46.900
+Jede VM, jede Datenbank,
+
+00:09:47.020 --> 00:09:47.480
+jede Ressource.
+
+00:09:47.820 --> 00:09:48.680
+Es ist eine pauschale Richtung.
+
+00:09:49.140 --> 00:09:49.700
+Wenn Sie sie an die
+
+00:09:49.700 --> 00:09:50.460
+Netzwerkschnittstelle
+
+00:09:50.460 --> 00:09:51.780
+einer bestimmten VM anbinden,
+
+00:09:51.900 --> 00:09:53.100
+gilt sie nur für diese eine Maschine.
+
+00:09:53.720 --> 00:09:54.680
+Sie können sogar beides tun.
+
+00:09:55.280 --> 00:09:56.640
+Eine NSG auf Subnetzebene
+
+00:09:56.640 --> 00:09:57.560
+für allgemeine Regeln
+
+00:09:57.560 --> 00:09:59.300
+und eine NSG-Ebene für Ausnahmen.
+
+00:10:00.220 --> 00:10:00.820
+Die Standardregeln,
+
+00:10:00.900 --> 00:10:01.440
+die Azure erstellt,
+
+00:10:01.520 --> 00:10:02.180
+sind ziemlich sinnvoll.
+
+00:10:02.740 --> 00:10:03.720
+Sie erlauben den gesamten
+
+00:10:03.720 --> 00:10:05.260
+Datenverkehr innerhalb des VNet,
+
+00:10:05.360 --> 00:10:06.080
+damit Ihre Ressourcen
+
+00:10:06.080 --> 00:10:07.360
+miteinander kommunizieren können
+
+00:10:07.360 --> 00:10:08.220
+und blockieren den gesamten
+
+00:10:08.220 --> 00:10:09.100
+Datenverkehr aus dem Internet,
+
+00:10:09.180 --> 00:10:09.860
+sodass niemand von außen
+
+00:10:09.860 --> 00:10:10.920
+auf Ihre Ressourcen zugreifen kann,
+
+00:10:11.020 --> 00:10:12.300
+sofern Sie dies nicht explizit erlauben.
+
+00:10:12.340 --> 00:10:13.280
+Das ist ein guter Ausgangspunkt.
+
+00:10:13.600 --> 00:10:13.880
+Lassen Sie mich
+
+00:10:13.880 --> 00:10:14.660
+ein gängiges Beispiel nennen.
+
+00:10:14.960 --> 00:10:15.300
+Angenommen,
+
+00:10:15.380 --> 00:10:16.200
+Sie verwalten eine virtuelle
+
+00:10:16.200 --> 00:10:16.780
+Linux-Maschine
+
+00:10:16.780 --> 00:10:17.580
+und müssen sich per SSH
+
+00:10:17.580 --> 00:10:18.020
+darauf verbinden.
+
+00:10:18.300 --> 00:10:19.680
+Sie würden eine NSG-Regel erstellen,
+
+00:10:19.760 --> 00:10:20.680
+die eingehenden Datenverkehr
+
+00:10:20.680 --> 00:10:21.760
+auf Port 22 zulässt,
+
+00:10:21.820 --> 00:10:22.540
+aber Sie möchten SSH
+
+00:10:22.540 --> 00:10:23.300
+nicht für jeden freigeben.
+
+00:10:23.740 --> 00:10:24.380
+Das wäre riskant.
+
+00:10:24.920 --> 00:10:25.960
+Also beschränken Sie den Zugriff
+
+00:10:25.960 --> 00:10:27.020
+auf Ihre eigene IP-Adresse,
+
+00:10:27.120 --> 00:10:28.640
+damit nur Sie per SSH zugreifen können
+
+00:10:28.640 --> 00:10:29.660
+und alle anderen blockiert werden.
+
+00:10:30.160 --> 00:10:31.040
+Dasselbe gilt für RDP
+
+00:10:31.040 --> 00:10:32.520
+über Port 3.089
+
+00:10:32.520 --> 00:10:33.240
+bei Windows-Maschinen.
+
+00:10:33.600 --> 00:10:34.500
+Was bedeutet das für Sie?
+
+00:10:34.860 --> 00:10:35.840
+NSGs sind Ihre erste
+
+00:10:35.840 --> 00:10:36.620
+Verteidigungslinie
+
+00:10:36.620 --> 00:10:37.300
+und das Beste daran,
+
+00:10:37.360 --> 00:10:37.980
+sie sind kostenlos.
+
+00:10:38.320 --> 00:10:39.380
+Es gibt keine zusätzlichen Kosten
+
+00:10:39.380 --> 00:10:39.820
+für die Nutzung,
+
+00:10:39.880 --> 00:10:40.500
+also gibt es keinen Grund,
+
+00:10:40.560 --> 00:10:41.020
+Sie die einzurichten.
+
+00:10:41.520 --> 00:10:42.720
+Jedes Subnetz und jede Ressource
+
+00:10:42.720 --> 00:10:44.000
+sollte mit einer NSG verknüpft sein.
+
+00:10:44.380 --> 00:10:45.340
+Beginnen Sie mit alles ablehnen
+
+00:10:45.340 --> 00:10:46.080
+und öffnen Sie nur das,
+
+00:10:46.140 --> 00:10:46.700
+was Sie wirklich benötigen.
+
+00:10:47.280 --> 00:10:48.340
+Routing-Tabellen und Routing,
+
+00:10:48.340 --> 00:10:49.420
+die Lenkung des Datenverkehrs.
+
+00:10:49.680 --> 00:10:50.620
+Kommen wir nun zum Routing.
+
+00:10:51.240 --> 00:10:51.940
+Denn wenn Sie erst einmal
+
+00:10:51.940 --> 00:10:52.480
+festgelegt haben,
+
+00:10:52.560 --> 00:10:53.620
+welcher Datenverkehr erlaubt ist,
+
+00:10:53.680 --> 00:10:54.180
+müssen Sie entscheiden,
+
+00:10:54.240 --> 00:10:55.160
+wohin er tatsächlich fließen soll.
+
+00:10:55.260 --> 00:10:55.680
+Die Sache ist,
+
+00:10:55.760 --> 00:10:56.960
+die Azure erstellt automatisch
+
+00:10:56.960 --> 00:10:58.300
+Systemrouten für jedes Subnetz.
+
+00:10:58.720 --> 00:10:59.600
+Sie müssen sich um nichts kümmern.
+
+00:11:00.180 --> 00:11:00.660
+Stellen Sie es sich
+
+00:11:00.660 --> 00:11:01.600
+wie ein Standard-Navi vor,
+
+00:11:01.660 --> 00:11:02.820
+das die grundlegenden Straßen kennt.
+
+00:11:03.420 --> 00:11:04.440
+Datenverkehr innerhalb des V-Net,
+
+00:11:04.620 --> 00:11:05.780
+Datenverkehr zu verbundenen V-Net,
+
+00:11:05.940 --> 00:11:06.640
+Datenverkehr ins Internet.
+
+00:11:07.560 --> 00:11:08.500
+Alles funktioniert sofort,
+
+00:11:08.980 --> 00:11:09.740
+aber manchmal führt Sie
+
+00:11:09.740 --> 00:11:10.780
+das Standard-Navi nicht dorthin,
+
+00:11:10.840 --> 00:11:11.360
+wo Sie hinwollen.
+
+00:11:11.940 --> 00:11:12.600
+Dann benötigen Sie
+
+00:11:12.600 --> 00:11:14.300
+benutzerdefinierte Routen oder UDRs.
+
+00:11:14.700 --> 00:11:15.800
+Damit können Sie die Systemrouten
+
+00:11:18.340 --> 00:11:19.060
+Wie funktioniert das?
+
+00:11:19.360 --> 00:11:20.340
+Sie erstellen eine Routing-Tabelle.
+
+00:11:20.620 --> 00:11:21.040
+Sie fügen Ihre
+
+00:11:21.040 --> 00:11:22.060
+benutzerdefinierten Routen.
+
+00:11:22.140 --> 00:11:23.340
+Dann ordnen Sie diese Routing-Tabelle
+
+00:11:23.340 --> 00:11:23.980
+einem Subnetz zu.
+
+00:11:24.300 --> 00:11:25.240
+Von diesem Moment an folgt
+
+00:11:25.240 --> 00:11:25.860
+der Datenverkehr,
+
+00:11:25.920 --> 00:11:26.700
+der das Subnetz verlässt,
+
+00:11:26.740 --> 00:11:28.000
+Ihren Regeln anstelle der Standard ein.
+
+00:11:28.140 --> 00:11:29.240
+Ich gebe Ihnen ein konkretes Beispiel.
+
+00:11:29.740 --> 00:11:30.020
+Angenommen,
+
+00:11:30.080 --> 00:11:31.220
+der gesamte Internet-Datenverkehr
+
+00:11:31.220 --> 00:11:32.180
+Ihres V-Netz soll zuerst
+
+00:11:32.180 --> 00:11:33.280
+durch eine Firewall geleitet werden.
+
+00:11:33.480 --> 00:11:34.420
+Vielleicht müssen Sie ihn überprüfen,
+
+00:11:34.520 --> 00:11:35.180
+protokollieren oder
+
+00:11:35.180 --> 00:11:36.160
+bösartige Seiten blockieren.
+
+00:11:39.370 --> 00:11:40.530
+Das ist nicht das, was Sie wollen.
+
+00:11:40.670 --> 00:11:41.670
+Also erstellen Sie eine Route,
+
+00:11:41.750 --> 00:11:42.150
+die besagt,
+
+00:11:42.230 --> 00:11:43.370
+dass der gesamte Datenverkehr
+
+00:11:43.370 --> 00:11:44.550
+an 0.0.0,
+
+00:11:44.650 --> 00:11:45.310
+also ins Internet,
+
+00:11:45.310 --> 00:11:46.430
+stattdessen an die Firewall
+
+00:11:46.430 --> 00:11:47.310
+gesendet werden soll,
+
+00:11:47.450 --> 00:11:48.670
+also es ist eine
+
+00:11:48.670 --> 00:11:49.430
+benutzerdefinierte Route.
+
+00:11:49.850 --> 00:11:50.730
+Routing-Tabellen verwenden
+
+00:11:50.730 --> 00:11:51.710
+das Konzept des Next Hop.
+
+00:11:52.050 --> 00:11:52.650
+Das ist das Ziel,
+
+00:11:52.710 --> 00:11:53.430
+an das der Datenverkehr
+
+00:11:53.430 --> 00:11:54.290
+als nächstes gesendet wird.
+
+00:11:54.550 --> 00:11:55.790
+Sie haben dabei mehrere Optionen.
+
+00:11:55.870 --> 00:11:56.490
+Sie können ihn an ein
+
+00:11:56.490 --> 00:11:57.150
+virtuelles Gerät
+
+00:11:57.150 --> 00:11:57.990
+wie eine Firewall senden.
+
+00:11:58.350 --> 00:11:59.050
+Sie können ihn an ein
+
+00:11:59.050 --> 00:12:00.450
+virtuelles Netzwerk-Gateway senden,
+
+00:12:00.510 --> 00:12:01.210
+über das Sie Verbindungen
+
+00:12:01.210 --> 00:12:02.310
+zu lokalen Netzwerken herstellen.
+
+00:12:02.850 --> 00:12:03.490
+Sie können ihn direkt
+
+00:12:03.490 --> 00:12:04.270
+ins Internet leiten
+
+00:12:04.270 --> 00:12:05.550
+oder an None senden,
+
+00:12:05.690 --> 00:12:06.510
+was den Datenverkehr
+
+00:12:06.510 --> 00:12:07.370
+im Grunde verwirft.
+
+00:12:08.250 --> 00:12:09.250
+Das Wichtigste ist zu verstehen,
+
+00:12:09.370 --> 00:12:10.470
+dass Routing die Methode ist,
+
+00:12:10.530 --> 00:12:11.130
+mit der Sie den Pfad
+
+00:12:11.130 --> 00:12:11.890
+des Datenverkehrs
+
+00:12:11.890 --> 00:12:12.850
+durch Ihr Netzwerk steuern.
+
+00:12:13.830 --> 00:12:14.370
+Systemrouten sind
+
+00:12:14.370 --> 00:12:15.350
+eine gute Standardeinstellung,
+
+00:12:15.430 --> 00:12:15.850
+aber nicht immer
+
+00:12:15.850 --> 00:12:16.910
+für Ihre Situation geeignet.
+
+00:12:17.310 --> 00:12:17.950
+Wenn Datenverkehr
+
+00:12:17.950 --> 00:12:18.550
+einen Prüfpunkt
+
+00:12:18.550 --> 00:12:19.430
+oder ein bestimmtes Gateway
+
+00:12:19.430 --> 00:12:20.030
+passieren muss
+
+00:12:20.030 --> 00:12:21.590
+oder komplett blockiert werden soll,
+
+00:12:21.770 --> 00:12:22.210
+benötigen Sie
+
+00:12:22.210 --> 00:12:23.130
+benutzerdefinierte Routen.
+
+00:12:23.510 --> 00:12:24.350
+Was bedeutet das für Sie?
+
+00:12:24.810 --> 00:12:25.390
+Routing bestimmt,
+
+00:12:25.510 --> 00:12:26.670
+wohin der Datenverkehr fließt
+
+00:12:26.670 --> 00:12:27.450
+und Sie haben jederzeit
+
+00:12:27.450 --> 00:12:27.890
+die Möglichkeit,
+
+00:12:28.030 --> 00:12:28.750
+die Standardeinstellungen
+
+00:12:28.750 --> 00:12:29.650
+von Azure zu überschreiben.
+
+00:12:30.330 --> 00:12:31.510
+Beginnen Sie mit den Systemrouten,
+
+00:12:31.570 --> 00:12:32.590
+verstehen Sie deren Funktion
+
+00:12:32.590 --> 00:12:33.090
+und fügen Sie
+
+00:12:33.090 --> 00:12:34.310
+benutzerdefinierte Routen hinzu,
+
+00:12:34.370 --> 00:12:35.050
+wenn Ihre Architektur
+
+00:12:35.050 --> 00:12:35.570
+dies erfordert.
+
+00:12:36.550 --> 00:12:37.850
+VNet-Peering-Netzwerke verbinden.
+
+00:12:38.550 --> 00:12:39.070
+Bisher haben wir über
+
+00:12:39.070 --> 00:12:40.090
+ein einzelnes VNet gesprochen.
+
+00:12:40.510 --> 00:12:40.870
+Ein Gebäude,
+
+00:12:40.950 --> 00:12:41.710
+ein privates Netzwerk.
+
+00:12:42.170 --> 00:12:42.670
+Aber was passiert,
+
+00:12:42.750 --> 00:12:43.650
+wenn Sie mehrere VNet haben?
+
+00:12:44.030 --> 00:12:44.490
+Vielleicht haben Sie
+
+00:12:44.490 --> 00:12:45.810
+eines für Ihre Produktionsumgebung
+
+00:12:45.810 --> 00:12:46.850
+und ein anderes zum Testen
+
+00:12:46.850 --> 00:12:48.050
+oder Sie betreiben Anwendungen
+
+00:12:48.050 --> 00:12:49.510
+in verschiedenen Azure-Regionen.
+
+00:12:50.090 --> 00:12:50.850
+Standardmäßig sind diese
+
+00:12:50.850 --> 00:12:51.890
+VNet vollständig isoliert.
+
+00:12:52.310 --> 00:12:52.670
+Sie können nicht
+
+00:12:52.670 --> 00:12:53.270
+miteinander kommunizieren.
+
+00:12:53.610 --> 00:12:54.590
+Sie sind wie getrennte Gebäude
+
+00:12:54.590 --> 00:12:55.450
+ohne Straßen dazwischen.
+
+00:12:55.790 --> 00:12:56.650
+Hier kommt das VNet-Peering
+
+00:12:56.650 --> 00:12:56.990
+ins Spiel.
+
+00:12:57.410 --> 00:12:58.010
+Es ermöglicht Ihnen,
+
+00:12:58.090 --> 00:12:59.230
+zwei VNets privat zu verbinden
+
+00:12:59.230 --> 00:13:00.010
+und zwar wirklich privat.
+
+00:13:00.450 --> 00:13:01.110
+Der Datenverkehr
+
+00:13:01.110 --> 00:13:01.970
+zwischen gepaerten VNet
+
+00:13:01.970 --> 00:13:03.510
+bleibt im Microsoft-Backbone-Netzwerk.
+
+00:13:03.930 --> 00:13:04.510
+Er berührt niemals
+
+00:13:04.510 --> 00:13:05.150
+das öffentliche Internet.
+
+00:13:05.550 --> 00:13:06.630
+Das bedeutet geringe Latenz,
+
+00:13:06.630 --> 00:13:07.250
+hohe Bandbreite
+
+00:13:07.250 --> 00:13:07.790
+und keinen Schutz
+
+00:13:07.790 --> 00:13:08.710
+gegen Bedrohungen von außen.
+
+00:13:09.150 --> 00:13:09.590
+Hier ist etwas,
+
+00:13:09.690 --> 00:13:10.310
+das viele überrascht.
+
+00:13:10.950 --> 00:13:11.530
+Peering funktioniert
+
+00:13:11.530 --> 00:13:12.390
+auch über Regionen hinweg.
+
+00:13:12.850 --> 00:13:13.810
+Es nennt man globales Peering.
+
+00:13:14.310 --> 00:13:15.050
+Sie können ein VNet
+
+00:13:15.050 --> 00:13:15.710
+in Westeuropa
+
+00:13:15.710 --> 00:13:16.390
+mit einem VNet
+
+00:13:16.390 --> 00:13:17.470
+in Südostasien verbinden
+
+00:13:17.470 --> 00:13:18.610
+und der Datenverkehr dazwischen
+
+00:13:18.610 --> 00:13:19.610
+bleibt im privaten Netzwerk
+
+00:13:19.610 --> 00:13:20.130
+von Microsoft.
+
+00:13:20.590 --> 00:13:21.510
+Keine VPN-Gateways,
+
+00:13:21.610 --> 00:13:22.330
+keine öffentlichen IPs,
+
+00:13:22.390 --> 00:13:23.410
+einfach eine direkte private verbinden.
+
+00:13:23.650 --> 00:13:24.430
+Es gibt jedoch eine Regel,
+
+00:13:24.490 --> 00:13:24.890
+die Sie auf keinem
+
+00:13:24.890 --> 00:13:25.410
+Verbrechen dürfen.
+
+00:13:25.950 --> 00:13:26.670
+Gepaerte VNets
+
+00:13:26.670 --> 00:13:27.530
+müssen überlappungsfreie
+
+00:13:27.530 --> 00:13:28.250
+Adressbereiche haben.
+
+00:13:28.630 --> 00:13:29.350
+Wenn beide VNets
+
+00:13:29.350 --> 00:13:29.730
+versuchen,
+
+00:13:29.850 --> 00:13:31.310
+den Bereich 10.0.0.16
+
+00:13:31.310 --> 00:13:31.810
+zu nutzen,
+
+00:13:31.810 --> 00:13:32.990
+können sie nicht gepaert werden,
+
+00:13:33.170 --> 00:13:34.030
+können sie nicht gepaert werden.
+
+00:13:34.330 --> 00:13:35.030
+Die IP-Adressen
+
+00:13:35.030 --> 00:13:35.690
+würden kollidieren
+
+00:13:35.690 --> 00:13:36.590
+und Azure wüsste nicht,
+
+00:13:36.650 --> 00:13:37.310
+zu welchem Netzwerk
+
+00:13:37.310 --> 00:13:38.050
+ein Paket gehört.
+
+00:13:38.990 --> 00:13:39.550
+Erinnern Sie sich
+
+00:13:39.550 --> 00:13:40.630
+an den früheren Planungstipp,
+
+00:13:40.730 --> 00:13:41.350
+den Adressbereich
+
+00:13:41.350 --> 00:13:42.250
+sorgfältig zu wählen.
+
+00:13:42.730 --> 00:13:43.270
+Das ist der Grund.
+
+00:13:43.810 --> 00:13:44.310
+Wenn Sie glauben,
+
+00:13:44.390 --> 00:13:44.810
+dass Sie später
+
+00:13:44.810 --> 00:13:45.630
+wie Netzpaaren könnten,
+
+00:13:45.810 --> 00:13:46.270
+stellen Sie sicher,
+
+00:13:46.370 --> 00:13:47.010
+dass sich Ihre Bereiche
+
+00:13:47.010 --> 00:13:48.010
+von Anfang an nicht überschneiden.
+
+00:13:48.470 --> 00:13:49.010
+Hier ist ein Detail,
+
+00:13:49.090 --> 00:13:49.890
+dass viele stolpern lässt.
+
+00:13:50.230 --> 00:13:51.070
+Peering ist nicht transitiv.
+
+00:13:51.450 --> 00:13:52.070
+Was bedeutete das?
+
+00:13:52.270 --> 00:13:52.750
+Nehmen wir an,
+
+00:13:52.830 --> 00:13:54.370
+VNet A ist mit VNet B gepaert
+
+00:13:54.370 --> 00:13:55.690
+und VNet B mit VNet C.
+
+00:13:56.510 --> 00:13:57.750
+VNet A erreicht VNet C
+
+00:13:57.750 --> 00:13:58.810
+nicht automatisch über B.
+
+00:13:59.050 --> 00:13:59.830
+Sie sind nicht verbunden.
+
+00:14:00.370 --> 00:14:00.830
+Jedes Peering
+
+00:14:00.830 --> 00:14:01.650
+ist eine direkte Verbindung
+
+00:14:01.650 --> 00:14:02.650
+zwischen genau zwei VNets.
+
+00:14:03.070 --> 00:14:04.310
+Wenn A mit C kommunizieren soll,
+
+00:14:04.370 --> 00:14:04.770
+benötigen Sie
+
+00:14:04.770 --> 00:14:05.530
+ein separates Peering
+
+00:14:05.530 --> 00:14:06.230
+zwischen A und C.
+
+00:14:06.410 --> 00:14:06.950
+Wie geht man also damit
+
+00:14:06.950 --> 00:14:07.690
+in großem Maßstab um?
+
+00:14:07.890 --> 00:14:08.450
+Sie verwenden eine
+
+00:14:08.450 --> 00:14:09.290
+Hub-and-Spoke-Architektur.
+
+00:14:09.590 --> 00:14:10.510
+Ein zentrales VNet,
+
+00:14:10.590 --> 00:14:11.210
+der Hub ist mit vielen
+
+00:14:11.210 --> 00:14:11.790
+anderen VNets
+
+00:14:11.790 --> 00:14:12.490
+den Spokes verbunden.
+
+00:14:12.910 --> 00:14:14.170
+Der Hub kann gemeinsame Dienste
+
+00:14:14.170 --> 00:14:14.910
+wie eine Firewall,
+
+00:14:15.010 --> 00:14:15.770
+ein VPN-Gateway
+
+00:14:15.770 --> 00:14:16.810
+oder Überwachungstools enthalten.
+
+00:14:17.390 --> 00:14:17.890
+In den Spokes
+
+00:14:17.890 --> 00:14:19.450
+befinden sich individuellen Workloads.
+
+00:14:19.590 --> 00:14:20.370
+Jeder Spoke ist direkt
+
+00:14:20.370 --> 00:14:21.030
+mit dem Hub verbunden,
+
+00:14:21.130 --> 00:14:21.510
+aber die Spokes
+
+00:14:21.510 --> 00:14:22.450
+sind nicht untereinander verbunden.
+
+00:14:22.970 --> 00:14:23.490
+Wenn ein Spoker
+
+00:14:23.490 --> 00:14:24.530
+einen anderen Spoker erreichen muss,
+
+00:14:24.590 --> 00:14:25.190
+läuft der Datenverkehr
+
+00:14:25.190 --> 00:14:25.550
+über den Hub.
+
+00:14:26.070 --> 00:14:26.950
+Das sorgt für Ordnung
+
+00:14:26.950 --> 00:14:28.150
+und bietet einen zentralen Ort
+
+00:14:28.150 --> 00:14:29.190
+für Sicherheitsrichtlinien.
+
+00:14:30.170 --> 00:14:30.970
+Was bedeutet das für Sie?
+
+00:14:31.250 --> 00:14:31.970
+Peering ist die Art,
+
+00:14:32.050 --> 00:14:32.830
+Netzwerke zu erstellen,
+
+00:14:32.910 --> 00:14:33.630
+die mehrere VNets
+
+00:14:33.630 --> 00:14:34.350
+und Regionen umspannen.
+
+00:14:34.670 --> 00:14:35.170
+Es ist die Brücke
+
+00:14:35.170 --> 00:14:35.890
+zwischen Ihren Gebäuden.
+
+00:14:36.330 --> 00:14:37.330
+Planen Sie Ihre Adressbereiche
+
+00:14:37.330 --> 00:14:38.370
+so, dass Sie sich nicht überschneiden.
+
+00:14:38.730 --> 00:14:39.230
+Denken Sie daran,
+
+00:14:39.290 --> 00:14:40.510
+dass Peering nicht transitiv ist
+
+00:14:40.510 --> 00:14:41.950
+und erwägen Sie ein Hub-Spoke-Design,
+
+00:14:42.010 --> 00:14:42.850
+wenn Sie über ein einzelnes
+
+00:14:42.850 --> 00:14:43.670
+VNet hinaus wachsen.
+
+00:14:44.770 --> 00:14:45.530
+Wie alles zusammenhängt
+
+00:14:45.530 --> 00:14:46.170
+das große Ganze.
+
+00:14:46.590 --> 00:14:47.630
+Treten wir also einen Schritt zurück
+
+00:14:47.630 --> 00:14:47.950
+und schauen,
+
+00:14:47.950 --> 00:14:48.970
+wie die Teile zusammenpassen.
+
+00:14:49.310 --> 00:14:50.210
+Genau da liegt die wahre Stärke.
+
+00:14:50.530 --> 00:14:51.330
+Sie beginnen mit einem VNet.
+
+00:14:51.750 --> 00:14:52.890
+Das ist Ihr privater Bereich in Azure.
+
+00:14:53.370 --> 00:14:53.770
+Stellen Sie sich
+
+00:14:53.770 --> 00:14:54.390
+Ihr Grundstück vor.
+
+00:14:54.570 --> 00:14:55.250
+Auf diesem Grundstück
+
+00:14:55.250 --> 00:14:56.110
+erstellen Sie Subnetze.
+
+00:14:56.450 --> 00:14:57.050
+Das sind Ihre Räume.
+
+00:14:57.510 --> 00:14:58.250
+Einer für Web-Server,
+
+00:14:58.330 --> 00:14:58.970
+einer für Datenbanken,
+
+00:14:59.070 --> 00:14:59.930
+einer für Verwaltungstools.
+
+00:15:00.810 --> 00:15:01.690
+Jedes Subnetz erhält
+
+00:15:01.690 --> 00:15:02.710
+einen eigenen Adressblock
+
+00:15:02.710 --> 00:15:03.950
+aus dem Adressraum des VNets.
+
+00:15:04.490 --> 00:15:05.390
+Dann fügen Sie Sicherheit hinzu.
+
+00:15:06.350 --> 00:15:06.710
+Netzwerksicherheitsgruppen
+
+00:15:06.710 --> 00:15:07.830
+werden an Ihre Subnetze angehängt.
+
+00:15:08.230 --> 00:15:08.650
+Sie steuern,
+
+00:15:08.750 --> 00:15:09.490
+welcher Datenverkehr
+
+00:15:09.490 --> 00:15:10.290
+ein- und ausgehen darf.
+
+00:15:10.890 --> 00:15:11.570
+Ihr Web-Subnetz
+
+00:15:11.570 --> 00:15:12.730
+lässt Datenverkehr aus dem Internet
+
+00:15:12.730 --> 00:15:13.770
+auf Port 4.3 zu.
+
+00:15:13.770 --> 00:15:15.270
+Ihr Datenbank-Subnetz
+
+00:15:15.270 --> 00:15:16.050
+lässt nur Datenverkehr
+
+00:15:16.050 --> 00:15:16.770
+vom Web-Subnetz
+
+00:15:16.770 --> 00:15:18.030
+auf Port 4.3 zu.
+
+00:15:18.510 --> 00:15:19.530
+Der Türsteher an jeder Tür
+
+00:15:19.530 --> 00:15:19.930
+weiß genau,
+
+00:15:19.990 --> 00:15:20.490
+wer hinein darf.
+
+00:15:20.910 --> 00:15:21.850
+Als nächstes Routing ein.
+
+00:15:22.310 --> 00:15:23.110
+Vielleicht soll der gesamte
+
+00:15:23.110 --> 00:15:24.010
+ausgehende Internetverkehr
+
+00:15:24.010 --> 00:15:25.390
+zur Prüfung über eine Firewall laufen.
+
+00:15:26.190 --> 00:15:27.250
+Sie erstellen eine Routing-Tabelle,
+
+00:15:27.430 --> 00:15:28.730
+fügen eine benutzerdefinierte Route hinzu
+
+00:15:28.730 --> 00:15:29.590
+und verknüpfen sie mit Ihren Subnetze.
+
+00:15:29.590 --> 00:15:30.990
+Jetzt folgt der Datenverkehr
+
+00:15:30.990 --> 00:15:32.030
+dem von Ihnen entworfenen Pfad
+
+00:15:32.030 --> 00:15:32.830
+statt dem Standard von Azure.
+
+00:15:33.290 --> 00:15:33.690
+Und schließlich
+
+00:15:33.690 --> 00:15:34.890
+verbinden Sie alles miteinander.
+
+00:15:35.590 --> 00:15:36.390
+Sie verbinden Ihr VNet
+
+00:15:36.390 --> 00:15:37.290
+mit anderen VNets,
+
+00:15:37.530 --> 00:15:38.310
+vielleicht einem Hub-File
+
+00:15:38.310 --> 00:15:39.670
+und Dienste, RL.
+
+00:15:40.450 --> 00:15:41.690
+Jetzt umspannt Ihre Anwendung
+
+00:15:41.690 --> 00:15:42.750
+mehrere Netzwerke,
+
+00:15:43.110 --> 00:15:43.770
+funktioniert aber
+
+00:15:43.770 --> 00:15:44.910
+als ein System.
+
+00:15:45.630 --> 00:15:46.470
+Hier kommt der Aha-Moment.
+
+00:15:46.990 --> 00:15:47.750
+Keines dieser Elemente
+
+00:15:47.750 --> 00:15:48.450
+funktioniert isoliert.
+
+00:15:48.790 --> 00:15:49.930
+Ein VNet ohne Subnetze
+
+00:15:49.930 --> 00:15:50.410
+ist nur leerer.
+
+00:15:50.750 --> 00:15:51.710
+Subnetze ohne NSGs
+
+00:15:51.710 --> 00:15:52.210
+sind weit offen.
+
+00:15:52.690 --> 00:15:53.890
+Routing ohne klares Design
+
+00:15:53.890 --> 00:15:55.210
+leitet Daten an die falschen Orte.
+
+00:15:55.630 --> 00:15:56.430
+Peering ohne Planung
+
+00:15:56.430 --> 00:15:57.470
+erzeugt Adresskonflikte.
+
+00:15:57.550 --> 00:15:58.610
+Sie bilden ein System.
+
+00:15:58.950 --> 00:15:59.950
+Jedes Teil hängt von den anderen.
+
+00:16:00.410 --> 00:16:01.550
+Ich gebe Ihnen ein konkretes Beispiel.
+
+00:16:02.050 --> 00:16:03.150
+Stellen Sie sich eine Web-Anwendung vor.
+
+00:16:03.530 --> 00:16:04.330
+Ihre Web-Server stehen
+
+00:16:04.330 --> 00:16:05.410
+in einem öffentlichen Subnetz
+
+00:16:05.410 --> 00:16:06.050
+mit einer NSG,
+
+00:16:06.150 --> 00:16:06.970
+die HTTPS-Verkehr
+
+00:16:06.970 --> 00:16:07.850
+aus dem Internet erlaubt.
+
+00:16:08.150 --> 00:16:09.010
+Ihre Anwendungs-Server
+
+00:16:09.010 --> 00:16:10.250
+stehen in einem privaten Subnetz,
+
+00:16:10.490 --> 00:16:11.230
+das nur Datenverkehr
+
+00:16:11.230 --> 00:16:12.370
+vom Web-Subnetz akzeptiert.
+
+00:16:12.830 --> 00:16:13.930
+Ihre Datenbank befindet sich
+
+00:16:13.930 --> 00:16:14.890
+in einem privaten Subnetz,
+
+00:16:14.930 --> 00:16:15.690
+das nur Datenverkehr
+
+00:16:15.690 --> 00:16:16.850
+vom App-Subnetz akzeptiert.
+
+00:16:17.390 --> 00:16:18.190
+Eine Routing-Tabelle
+
+00:16:18.190 --> 00:16:18.950
+leitet den gesamten
+
+00:16:18.950 --> 00:16:19.910
+ausgehenden Datenverkehr
+
+00:16:19.910 --> 00:16:20.610
+zur Protokollierung
+
+00:16:20.610 --> 00:16:21.690
+und Prüfung durch eine Firewall
+
+00:16:21.690 --> 00:16:22.110
+im Hub-Einheit.
+
+00:16:22.490 --> 00:16:22.950
+Und das Ganze ist
+
+00:16:22.950 --> 00:16:23.850
+mit Ihrem Unternehmensnetzwerk
+
+00:16:23.850 --> 00:16:24.210
+verbunden,
+
+00:16:24.290 --> 00:16:25.190
+sodass Ihr internes Teams
+
+00:16:25.190 --> 00:16:25.870
+verwalten kann.
+
+00:16:26.510 --> 00:16:27.370
+Das ist der wahre Mehrwert,
+
+00:16:27.450 --> 00:16:28.230
+nicht ein einzelnes Feature.
+
+00:16:28.750 --> 00:16:29.450
+Es ist das Zusammenspiel
+
+00:16:29.450 --> 00:16:30.010
+aller Komponenten.
+
+00:16:30.350 --> 00:16:30.970
+Vor 20 Jahren
+
+00:16:30.970 --> 00:16:32.030
+kauften Sie einzelne Server,
+
+00:16:32.210 --> 00:16:33.310
+konfigurierten physische Router
+
+00:16:33.310 --> 00:16:34.530
+und verwalteten Firewalls
+
+00:16:34.530 --> 00:16:35.650
+pro Gerät, V-Gerät.
+
+00:16:36.410 --> 00:16:37.210
+Alles war manuell,
+
+00:16:37.350 --> 00:16:38.010
+langsam und teuer.
+
+00:16:38.390 --> 00:16:38.950
+Azure bietet Ihnen
+
+00:16:38.950 --> 00:16:40.070
+das alles als Dienstleistung an.
+
+00:16:40.530 --> 00:16:41.150
+Sie definieren es
+
+00:16:41.150 --> 00:16:41.850
+mit wenigen Klicks
+
+00:16:41.850 --> 00:16:42.450
+oder einem Skript
+
+00:16:42.450 --> 00:16:43.550
+und es funktioniert einfach.
+
+00:16:44.110 --> 00:16:44.970
+Was bedeutet das für Sie?
+
+00:16:45.430 --> 00:16:46.150
+Sobald Sie verstehen,
+
+00:16:46.250 --> 00:16:47.330
+wie diese Teile zusammenpassen,
+
+00:16:47.430 --> 00:16:48.230
+wird Azure Networking
+
+00:16:48.230 --> 00:16:48.850
+vorhersehbar.
+
+00:16:49.470 --> 00:16:50.230
+Sie müssen nicht raten,
+
+00:16:50.510 --> 00:16:51.070
+Sie planen.
+
+00:16:51.570 --> 00:16:52.490
+Und wenn etwas ausfällt,
+
+00:16:52.670 --> 00:16:53.150
+wissen Sie genau,
+
+00:16:53.210 --> 00:16:53.870
+wo Sie suchen müssen,
+
+00:16:53.930 --> 00:16:54.870
+weil Sie das System verstehen.
+
+00:16:55.750 --> 00:16:56.130
+Hier ist das,
+
+00:16:56.190 --> 00:16:56.870
+was Sie aus dieser Folge
+
+00:16:56.870 --> 00:16:57.430
+mitnehmen sollten.
+
+00:16:58.150 --> 00:16:59.150
+Erstens der wichtigste Schritt,
+
+00:16:59.210 --> 00:16:59.770
+den Sie machen können.
+
+00:17:00.490 --> 00:17:01.270
+Erstellen Sie ein V-Net
+
+00:17:01.270 --> 00:17:02.190
+mit einem gut geplanten
+
+00:17:02.190 --> 00:17:02.650
+Adressraum,
+
+00:17:02.730 --> 00:17:03.690
+bevor Sie irgendetwas bereitstellen.
+
+00:17:03.690 --> 00:17:04.690
+Diese eine Entscheidung
+
+00:17:04.690 --> 00:17:05.810
+wirkt sich auf alles Weitere aus.
+
+00:17:06.410 --> 00:17:07.630
+Zweitens nutzen Sie Subnetze,
+
+00:17:07.710 --> 00:17:08.690
+um Ihre Anwendungsebenen
+
+00:17:08.690 --> 00:17:09.030
+zu trennen.
+
+00:17:09.530 --> 00:17:10.330
+Webserver, App-Server,
+
+00:17:10.430 --> 00:17:11.290
+Datenbanken geben Sie
+
+00:17:11.290 --> 00:17:12.170
+jedem seinen eigenen Raum.
+
+00:17:12.570 --> 00:17:13.270
+Und drittens beginnen Sie
+
+00:17:13.270 --> 00:17:13.730
+mit NSGs.
+
+00:17:14.070 --> 00:17:14.730
+Sie sind kostenlos.
+
+00:17:14.950 --> 00:17:15.870
+Sie sind leistungsstark
+
+00:17:15.870 --> 00:17:16.910
+und verbessern Ihre Sicherheit
+
+00:17:16.910 --> 00:17:18.130
+vom ersten Tag an drastisch.
+
+00:17:18.590 --> 00:17:19.550
+Ihr V-Net ist das Fundament
+
+00:17:19.550 --> 00:17:19.870
+für alles,
+
+00:17:19.950 --> 00:17:20.790
+was Sie in Azure aufbauen.
+
+00:17:21.410 --> 00:17:22.010
+Machen Sie es richtig
+
+00:17:22.010 --> 00:17:23.150
+und alles andere wird einfacher.
+
+00:17:23.630 --> 00:17:24.130
+Machen Sie es falsch
+
+00:17:24.130 --> 00:17:25.090
+und Sie verbringen Ihre ganze Zeit
+
+00:17:25.090 --> 00:17:26.130
+damit, gegen Ihr Netzwerk zu kämpfen.
+
+00:17:26.530 --> 00:17:27.110
+Abonnieren Sie uns
+
+00:17:27.110 --> 00:17:28.470
+auf Ihrer Lieblings-Podcast-Plattform
+
+00:17:28.470 --> 00:17:29.610
+und teilen Sie dies mit jemandem,
+
+00:17:29.610 --> 00:17:30.650
+der seine Azure-Reise beginnt.
+
+00:17:30.870 --> 00:17:31.750
+Hinterlassen Sie einen Kommentar,
+
+00:17:31.790 --> 00:17:32.470
+falls es bei Ihnen klicken mag.
+
+00:17:32.790 --> 00:17:34.010
+Wir sehen uns in der nächsten Folge.

@@ -1,0 +1,1066 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:03.420
+Die meisten Menschen denken, Datenschutz bedeutet eine starke Mauer, um die Daten zu errichten.
+
+00:00:03.720 --> 00:00:06.800
+Netzwerk abriegeln, die Bösen aussperren, aber man ist sicher.
+
+00:00:07.160 --> 00:00:10.860
+Das Problem ist nur, diese Mauer nützt nichts, sobald sich die Daten darin befinden und bewegt werden.
+
+00:00:11.660 --> 00:00:16.120
+Ein Mitarbeiter mit legitimem Zugriff kann eine Kundenliste nehmen und dann sein persönliches Konto mailen
+
+00:00:16.120 --> 00:00:19.520
+und die Firewall lässt es durch, weil die Anfrage von einem vertrauenswürdigen Benutzer kam.
+
+00:00:20.680 --> 00:00:23.400
+Microsoft Purview wird heutzutage überall erwähnt, aber was ist das eigentlich?
+
+00:00:24.000 --> 00:00:24.900
+Es ist kein einzelnes Tool.
+
+00:00:25.340 --> 00:00:28.640
+Es ist eine Familie von Lösungen, die sich auf eine Sache konzentriert, den Schutz ihrer Daten.
+
+00:00:28.640 --> 00:00:30.100
+Nicht nur ihrer Infrastruktur.
+
+00:00:30.660 --> 00:00:34.560
+Es gibt drei Säulen Data Governance, also zu wissen, welche Daten man hat, Datensicherheit,
+
+00:00:34.660 --> 00:00:37.660
+also deren Schutz und Data Compliance, um die Einhaltung von Regeln nachzuweisen.
+
+00:00:38.600 --> 00:00:42.440
+Am Ende dieser Folge werden Sie verstehen, wie diese drei Teile zusammenpassen und wo man anfangen soll.
+
+00:00:42.700 --> 00:00:45.480
+Aber um zu verstehen, warum es Purview gibt, muss man das Problem kennen, dass es löst.
+
+00:00:47.120 --> 00:00:49.880
+Eigentliche Problem, warum Infrastruktursicherheit nicht ausreicht.
+
+00:00:50.600 --> 00:00:53.760
+Die meisten Unternehmen gehen davon aus, dass die Daten sicher sind, wenn das Netzwerk abgeregelt ist.
+
+00:00:54.360 --> 00:00:58.140
+Vor 20 Jahren, als sich alles in einem physischen Büro befand, war das eine berechtigte Annahme.
+
+00:00:58.640 --> 00:00:59.500
+Das stimmt heute einfach nicht mehr.
+
+00:01:00.000 --> 00:01:01.060
+Daten befinden sich jetzt überall.
+
+00:01:01.520 --> 00:01:05.560
+Cloud-Apps, private Geräte, E-Mail-Anhänge, freigegebene Laufwerke, Team-Chat-Nachrichten verstreut,
+
+00:01:05.880 --> 00:01:07.540
+über Umgebungen, die sie nicht vollständig kontrollieren.
+
+00:01:08.660 --> 00:01:12.420
+Und sobald ein Benutzer legitimen Zugriff hat, authentifiziert ist und sich im Gebäude befindet,
+
+00:01:12.520 --> 00:01:15.780
+kann die Infrastruktursicherheit nicht mehr kontrollieren, was er mit diesen Daten macht.
+
+00:01:16.320 --> 00:01:17.240
+Betrachten wir dieses Beispiel.
+
+00:01:17.820 --> 00:01:20.780
+Ein Mitarbeiter lädt eine Kundenliste auf einen persönlichen USB-Stick herunter.
+
+00:01:20.780 --> 00:01:24.680
+Die Firewall hat es nicht gestoppt und das Intrusion-Detection-System hat es nicht erkannt,
+
+00:01:24.740 --> 00:01:25.920
+weil die Daten nicht abgefangen wurden.
+
+00:01:26.680 --> 00:01:28.800
+Es wurde von jemandem zugegriffen, der die Berechtigung dafür hat.
+
+00:01:29.460 --> 00:01:33.200
+Die Sicherheitstools suchten nach einem Angriff von außen, aber die Bedrohung kam von innen.
+
+00:01:33.660 --> 00:01:34.760
+Das ist der grundlegende Wandel.
+
+00:01:35.320 --> 00:01:38.240
+Der Schutz muss von der Infrastrukturebene auf die Datenebene selbst verlagert werden.
+
+00:01:38.780 --> 00:01:41.360
+Anstatt nur das Gebäude zu bewachen, müssen sie die Dateien darin schützen.
+
+00:01:41.880 --> 00:01:42.740
+Genau das tut Purview.
+
+00:01:43.420 --> 00:01:46.940
+Es wendet Richtlinien direkt auf die Daten an, nicht nur auf das System, das sie enthält.
+
+00:01:47.440 --> 00:01:48.020
+Denn siehste vor.
+
+00:01:48.620 --> 00:01:51.480
+Der Gebäudeschutz bewacht die Tür durch Ausweiskontrollen und stellt sicher,
+
+00:01:51.620 --> 00:01:55.000
+dass nur die richtigen Leute reinkommen, aber drinnen folgt ihnen niemand mehr.
+
+00:01:55.860 --> 00:01:56.520
+Purview ist anders.
+
+00:01:57.020 --> 00:01:58.540
+Es bringt ein Schloss direkt am Aktenschrank an.
+
+00:01:59.180 --> 00:02:02.620
+Selbst wenn jemand im Gebäude ist, kann er den Schrank nur öffnen, wenn er dazu berechtigt ist.
+
+00:02:03.440 --> 00:02:05.320
+Purview bedeutet also, den Aktenschrank abzuschließen.
+
+00:02:05.500 --> 00:02:07.700
+Aber bevor man ihn abschließen kann, muss man wissen, was drin ist.
+
+00:02:08.720 --> 00:02:10.120
+Säule 1, Data Governance.
+
+00:02:10.360 --> 00:02:11.000
+Wissen, was man hat.
+
+00:02:11.740 --> 00:02:15.100
+Zu wissen, welche Daten man tatsächlich besitzt, ist der erste Schritt jeder Datenschutzstrategie.
+
+00:02:15.100 --> 00:02:18.060
+Das klingt offensichtlich, aber die meisten Organisationen haben keine Ahnung,
+
+00:02:18.140 --> 00:02:20.540
+was in ihren SharePoint-Sites, Dateifreigaben oder Datenbanken liegt.
+
+00:02:21.000 --> 00:02:25.940
+Sie haben jahrelang Inhalte angesammelt, wie alte Projektdateien, doppelte Dokumente und Tabellenkalkulationen
+
+00:02:25.940 --> 00:02:30.440
+mit Kundeninformationen, deren Erstellung niemand mehr kennt, deren Erstellung niemand mehr kennt.
+
+00:02:30.860 --> 00:02:32.320
+Die Datamap von Purview ist dieses Problem.
+
+00:02:32.900 --> 00:02:36.380
+Sie scannt ihre gesamte Umgebung über Azure, Multicloud und On-Premises hinweg
+
+00:02:36.380 --> 00:02:38.320
+und erfasst Metadaten zu allem, was sie findet.
+
+00:02:39.120 --> 00:02:42.040
+Sie beantwortet Fragen wie, um welche Art von Daten handelt es sich, wo sind sie gespeichert,
+
+00:02:42.040 --> 00:02:43.360
+wer ist der Eigentümer und wie sensibel sind sie.
+
+00:02:43.360 --> 00:02:46.040
+Die Datamap erstellt ein vollständiges Bild ihrer Datenlandschaft.
+
+00:02:46.440 --> 00:02:49.120
+Von dort aus werden all diese Metadaten im einheitlichen Katalog organisieren.
+
+00:02:49.520 --> 00:02:51.380
+Stellen sie es sich wie eine Bibliothek mit einem Kartenkatalog vor.
+
+00:02:51.920 --> 00:02:55.440
+Bevor es den Katalog gab, mussten sie durch jeden Gang gehen und hoffen, das Richtige zu finden,
+
+00:02:55.580 --> 00:02:58.920
+aber mit dem Katalog suchen sie einmal und wissen genau, in welchem Regal welches Buch steht.
+
+00:02:59.900 --> 00:03:03.740
+Sie können Daten in Governance-Domänen wie Finanzen, Personalwesen und Forschung und Entwicklung organisieren,
+
+00:03:03.860 --> 00:03:06.260
+sodass Business-Anwender finden, was sie brauchen, ohne die IT zu fragen.
+
+00:03:06.900 --> 00:03:10.280
+Ein Finanzanalyst kann die Finanzdomäne durchsuchen und alle genehmigten Datensätze sehen,
+
+00:03:10.280 --> 00:03:11.920
+komplett mit Beschreibungen und Eigentümern.
+
+00:03:12.440 --> 00:03:15.780
+Die Datenherkunft zeigt, woher Daten stammen und wie sie sich im Laufe der Zeit verändert haben.
+
+00:03:16.200 --> 00:03:19.280
+Wenn sie sich auf ein Audit vorbereiten und jemand fragt, woher kommt diese Zahl?
+
+00:03:20.120 --> 00:03:22.360
+Die Herkunft Lineage verfolgt sie durch jede Transformation zurück,
+
+00:03:22.540 --> 00:03:25.500
+was entscheidend ist, wenn Regulierungsbehörden den Nachweis wollen, dass ihre Berichte korrekt sind.
+
+00:03:25.760 --> 00:03:27.920
+Das Unternehmensklossar fügt verständliche Beschreibungen hinzu,
+
+00:03:28.000 --> 00:03:30.180
+damit Analysten die Bedeutung eines Datensatzes verstehen können,
+
+00:03:30.540 --> 00:03:32.980
+ohne die Person ausfindig machen zu müssen, die ihn vor drei Jahren erstellt hat.
+
+00:03:32.980 --> 00:03:37.160
+Anstatt eine Tabelle namens Cust-Out 2023 Find-A-Roll zu sehen,
+
+00:03:37.300 --> 00:03:39.760
+sehen Sie Kundenaufträge 2023 Endversionen.
+
+00:03:40.580 --> 00:03:41.700
+Einfach erinnern, riesiger Unterschied.
+
+00:03:42.200 --> 00:03:42.800
+Warum ist das wichtig?
+
+00:03:43.280 --> 00:03:45.560
+Sie können keine Daten schützen, von deren Existenz Sie nichts wissen.
+
+00:03:45.900 --> 00:03:48.920
+Wenn Sie nicht wissen, dass es eine SharePoint-Zeit mit Sozialversicherungsnummern von Kunden gibt,
+
+00:03:48.980 --> 00:03:51.920
+können Sie diese nicht absichern und Governance ist das Fundament, auf dem alles andere aufbaut.
+
+00:03:52.480 --> 00:03:55.860
+Sobald Sie wissen, welche Daten Sie haben und wo Sie liegen, ist die nächste Frage offensichtlich.
+
+00:03:56.640 --> 00:03:58.040
+Wie schützen Sie die sensiblen Informationen?
+
+00:03:58.640 --> 00:04:01.440
+Säule 2, Datensicherheit, Vertraulichkeitsbezeichnungen, Sensitivity Lab.
+
+00:04:01.440 --> 00:04:04.880
+Governance sagt Ihnen, welche Daten existieren und Sicherheit sagt Ihnen, was Sie damit tun sollen.
+
+00:04:05.540 --> 00:04:08.320
+Das wichtigste Werkzeug dafür sind sogenannte Vertraulichkeitsbezeichnungen.
+
+00:04:08.940 --> 00:04:11.280
+Stellen Sie sich Vertraulichkeitsbezeichnungen wie digitale Etiketten vor,
+
+00:04:11.360 --> 00:04:13.020
+die Daten basierend auf Ihrer Sensibilität klassifizieren.
+
+00:04:13.360 --> 00:04:16.380
+Häufige Beispiele sind öffentlich, intern vertraulich und streng vertraulich,
+
+00:04:16.820 --> 00:04:17.840
+aber Sie sind nicht auf diese beschränkt.
+
+00:04:18.240 --> 00:04:21.260
+Sie können benutzerdefinierte Bezeichnungen erstellen, die den Anforderungen Ihrer Organisation entsprechen.
+
+00:04:21.660 --> 00:04:26.220
+Vielleicht möchten Sie eine Bezeichnung wie Personaldaten, Finanzergebnisse oder Kunden vertraulich.
+
+00:04:26.780 --> 00:04:27.220
+Sie entscheiden.
+
+00:04:27.660 --> 00:04:28.660
+Hier ist das Wichtige an Bezeichnungen.
+
+00:04:29.000 --> 00:04:29.840
+Sie wandern mit den Daten mit.
+
+00:04:29.840 --> 00:04:33.280
+Wenn ein Dokument als vertraulich markiert ist und jemand es an eine E-Mail anhängt,
+
+00:04:33.420 --> 00:04:34.440
+bleibt die Bezeichnung erhalten.
+
+00:04:35.320 --> 00:04:39.080
+Egal, ob das Dokument heruntergeladen, auf OneDrive kopiert oder über Teams geteilt wird,
+
+00:04:39.220 --> 00:04:40.640
+diese Bezeichnung folgt ihm überall hin.
+
+00:04:41.120 --> 00:04:44.500
+Es ist kein Aufkleber auf dem Aktenschrank, sondern ein Wasserzeichen direkt im Papier.
+
+00:04:45.140 --> 00:04:46.740
+Bezeichnungen können automatisch Aktionen auslösen.
+
+00:04:47.320 --> 00:04:50.000
+Sie können das Dokument verschlüsseln, sodass es nur autorisierte Personen öffnen können.
+
+00:04:50.780 --> 00:04:52.820
+Zugriffsbeschränkungen können das Bearbeiten oder Drucken blockieren
+
+00:04:52.820 --> 00:04:55.740
+und Sie können Kopfzeilen, Fußzeilen, Fußzeilen oder Wasserzeichen hinzufügen,
+
+00:04:55.820 --> 00:04:57.140
+die groß vertraulich über die Seite drucken.
+
+00:04:57.140 --> 00:05:00.560
+Die Bezeichnung sagt dem System, was zu tun ist und das System erledigt das Automat.
+
+00:05:00.860 --> 00:05:02.120
+Bezeichnungen werden auf drei Arten angewöhnt.
+
+00:05:02.460 --> 00:05:04.700
+Manuell bedeutet, dass der Benutzer die Bezeichnung selbst auswählt.
+
+00:05:05.360 --> 00:05:08.740
+Automatisch bedeutet, dass Purview sensible Inhalte wie eine Kreditkartennummer erkennt
+
+00:05:08.740 --> 00:05:10.520
+und die Bezeichnung von selbst anwendet.
+
+00:05:11.180 --> 00:05:13.480
+Richtlinienempfehlung bedeutet, dass das System eine Bezeichnung vorschlägt
+
+00:05:13.480 --> 00:05:14.480
+und der Benutzer diese bestätigt.
+
+00:05:14.480 --> 00:05:16.360
+Bei dieser mittleren Option wird es interessant.
+
+00:05:16.860 --> 00:05:17.280
+Das ist ein Beispiel.
+
+00:05:17.840 --> 00:05:19.400
+Ein Dokument enthält eine Kreditkartennummer.
+
+00:05:19.780 --> 00:05:22.220
+Die Klassifizierungsengine von Purview erkennt dieses Muster
+
+00:05:22.220 --> 00:05:26.040
+und wendet noch vor dem Speichern des Dokuments automatisch die Bezeichnung streng vertraulich an
+
+00:05:26.040 --> 00:05:28.060
+und verschlüsselt es ohne menschliches Eingreifen.
+
+00:05:28.440 --> 00:05:29.460
+Ohne menschliches Eingreifen.
+
+00:05:29.580 --> 00:05:31.620
+Die Daten sind ab dem Moment ihrer Erstellung geschützt,
+
+00:05:31.840 --> 00:05:33.920
+aber Bezeichnungen gelten nicht nur für einzelne Dateien.
+
+00:05:34.420 --> 00:05:38.760
+Sie gelten auch für Container wie SharePoint-Websites, Teams-Kanäle und Microsoft 365-Gruppen.
+
+00:05:39.260 --> 00:05:40.520
+Das bedeutet, Sie können festlegen,
+
+00:05:40.520 --> 00:05:44.160
+jede als vertraulich gekennzeichnete Team-Website blockiert standardmäßig die externe Freigabe.
+
+00:05:44.780 --> 00:05:47.900
+Sie legen die Regel einmal fest und jede Website mit dieser Bezeichnung erbt den Schutz.
+
+00:05:48.480 --> 00:05:49.980
+Sie müssen nicht jede einzeln konfigurieren.
+
+00:05:50.520 --> 00:05:51.880
+Bezeichnungen sagen Ihnen also, was etwas ist.
+
+00:05:52.220 --> 00:05:54.860
+Sie klassifizieren es, markieren es und wenden automatisch Schutzmaßnahmen an.
+
+00:05:55.100 --> 00:05:56.200
+Aber was passiert, wenn jemand versucht,
+
+00:05:56.280 --> 00:05:58.100
+diese gekennzeichneten Daten an einen unzulässigen Ort zu senden?
+
+00:05:58.920 --> 00:06:00.560
+Datenschutz Data Loss Prevention blockiert diese Text.
+
+00:06:00.900 --> 00:06:04.100
+Bezeichnungen klassifizieren DLP, Data Loss Prevention ergreift Maßnahmen.
+
+00:06:04.560 --> 00:06:07.680
+An dieser Stelle hört das System auf, passiv zu sein und beginnt, Dinge in Echtzeit zu blockieren.
+
+00:06:07.680 --> 00:06:12.400
+DLP-Richtlinien durchsuchen E-Mails, Dokumente, Chat-Nachrichten und Cloud-Apps nach sensiblen Informationen.
+
+00:06:13.300 --> 00:06:15.900
+Wenn ein Risiko erkannt wird, kann die Aktion vollständig blockiert,
+
+00:06:16.240 --> 00:06:19.000
+dem Benutzer einen Richtlinientipp angezeigt, den Administrator benachrichtigt
+
+00:06:19.000 --> 00:06:21.120
+oder das Ereignis nur zur späteren Überprüfung protokolliert wird.
+
+00:06:21.460 --> 00:06:23.240
+Sie entscheiden, welche Reaktion zur Situation passt.
+
+00:06:23.520 --> 00:06:24.500
+Lassen Sie mich ein echtes Beispiel nennen.
+
+00:06:24.920 --> 00:06:29.220
+Ein Mitarbeiter versucht, eine Tabelle mit Sozialversicherungsnummern an sein persönliches Gmail-Konto zu senden.
+
+00:06:30.020 --> 00:06:33.300
+DLP erkennt die sensiblen Daten, identifiziert den externen Empfänger
+
+00:06:33.300 --> 00:06:35.780
+und blockiert die Nachricht, bevor sie ihre Organisation verlässt.
+
+00:06:35.780 --> 00:06:37.780
+Der Benutzer erhält eine Warnung mit dem Text.
+
+00:06:38.020 --> 00:06:40.900
+Diese Nachricht enthält vertrauliche Informationen und wurde nicht zugestellt.
+
+00:06:41.820 --> 00:06:43.720
+Die Aktion wird blockiert und bietet eine Lerneinheit.
+
+00:06:44.180 --> 00:06:45.000
+Kein Lake, kein Verstuhl.
+
+00:06:45.260 --> 00:06:49.500
+DLP funktioniert in Exchange, SharePoint, OneDrive, Teams und sogar auf Windows-Endpunkten.
+
+00:06:50.040 --> 00:06:52.720
+Es spielt keine Rolle, wo sich die Daten befinden oder wie jemand versucht, sie zu verschieben.
+
+00:06:53.200 --> 00:06:55.540
+Wenn Sie vertrauliche Informationen enthalten, greift die Richtlinie an.
+
+00:06:56.420 --> 00:06:59.480
+Gut zu wissen, Sie können DLP-Richtlinien zunächst im Simulationsmodus ausführen.
+
+00:07:00.060 --> 00:07:02.920
+Das bedeutet, Sie testen, was blockiert würde, ohne tatsächlich etwas zu sperren.
+
+00:07:02.920 --> 00:07:05.880
+Sie erhalten einen Bericht, der zeigt, wie viele Elemente erfasst worden wären,
+
+00:07:06.220 --> 00:07:09.240
+welche Datentypen die Richtlinie ausgelöst haben und welche Benutzer beteiligt waren.
+
+00:07:09.460 --> 00:07:11.420
+Dann passen Sie die Einstellungen an, bevor Sie die Durchsetzung aktivieren.
+
+00:07:11.720 --> 00:07:14.240
+Es ist eine sichere Methode zum Lernen, ohne die Arbeit von jemandem zu unterbrechen.
+
+00:07:14.500 --> 00:07:15.820
+Die beste Vorgehensweise ist kein Anzug.
+
+00:07:16.220 --> 00:07:19.220
+Wählen Sie eine Art sensibler Daten, zum Beispiel Kreditkartennummern,
+
+00:07:19.260 --> 00:07:21.600
+und wenden Sie DLP auf eine kleine Benutzergruppe an.
+
+00:07:22.100 --> 00:07:22.800
+Obachten Sie, was passiert.
+
+00:07:23.140 --> 00:07:26.180
+Informieren Sie Benutzer mit Richtlinientipps, die erklären, warum etwas blockiert wurde.
+
+00:07:26.640 --> 00:07:29.320
+Erweitern Sie dann schrittweise die Durchsetzung, wenn sich die Leute daran gewöhnt haben.
+
+00:07:29.320 --> 00:07:31.160
+Diese Richtlinientipps sind übrigens sehr wirkungsvoll.
+
+00:07:31.580 --> 00:07:33.820
+Anstatt nur blockiert anzuzeigen, sagen Sie dem Benutzer,
+
+00:07:34.080 --> 00:07:35.580
+dieses Dokument enthält sensible Daten.
+
+00:07:36.340 --> 00:07:37.400
+Sind Sie sicher, dass Sie es senden möchten?
+
+00:07:37.860 --> 00:07:41.080
+Es gibt Ihnen die Chance, es sich zu überlegen, ohne das Gefühl zu haben, dass das System Sie bestraft.
+
+00:07:41.480 --> 00:07:43.080
+Die meisten Leute beabsichtigen nicht Datenpreis.
+
+00:07:43.320 --> 00:07:44.300
+Sie arbeiten einfach nur schnell.
+
+00:07:44.660 --> 00:07:48.000
+Wir kennen nun unsere Daten, schützen Sie mit Bezeichnungen und verhindern Lacks mit DLP.
+
+00:07:48.740 --> 00:07:50.900
+Doch was passiert, wenn ein Prüfer kommt und nach Nachweisen fragt?
+
+00:07:51.820 --> 00:07:53.060
+Säule 3, Datencompliance.
+
+00:07:53.740 --> 00:07:54.740
+Beweisen Sie, dass Sie die Regeln ein.
+
+00:07:55.200 --> 00:07:57.920
+Bei Compliance geht es darum, Sicherheit nachzuweisen, nicht nur sicher zu sein.
+
+00:07:57.920 --> 00:08:00.180
+Sie können die besten Schutzmaßnahmen der Welt haben.
+
+00:08:00.320 --> 00:08:03.500
+Aber wenn ein Aufseher kommt und Beweise verlangt, brauchen Sie mehr als nur gute Absichten.
+
+00:08:04.020 --> 00:08:06.660
+Sie benötigen Dokumentation, Audit-Trails und einbelegbaren Prozess.
+
+00:08:06.800 --> 00:08:08.360
+Hier kommt der Compliance-Manager von Purvienspiel.
+
+00:08:08.820 --> 00:08:12.280
+Er gibt Ihnen eine Bewertung, basierend darauf, wie gut Sie die regulatorischen Anforderungen erfüllen.
+
+00:08:12.620 --> 00:08:14.600
+Stellen Sie sich eine Kreditwürdigkeitsprüfung vor nur für Compliance.
+
+00:08:14.940 --> 00:08:16.600
+Je höher Ihr Wert, desto besser Ihre Position.
+
+00:08:17.020 --> 00:08:19.320
+Und er ändert sich, wenn Sie Maßnahmen zu seiner Verbesserung ergreifen.
+
+00:08:20.000 --> 00:08:23.800
+Der Compliance-Manager enthält integrierte Bewertungen für die wichtigsten Vorschriften, von denen Sie wahrscheinlich schon gehört haben.
+
+00:08:23.800 --> 00:08:41.160
+Wenn es eine Verordnung gibt, die für Ihre Branche gilt, gibt es wahrscheinlich auch eine Bewertung dafür.
+
+00:08:41.160 --> 00:08:43.880
+Jede Bewertung unterteilt die Verordnung in Kontrollmaßnahmen.
+
+00:08:44.260 --> 00:08:47.560
+Jede Kontrolle wird in weitere Verbesserungsmaßnahmen mit Schritt-für-Schritt-Anleitungen unterteilt.
+
+00:08:48.280 --> 00:08:49.540
+Es sagt Ihnen genau, was Sie tun müssen.
+
+00:08:50.280 --> 00:08:54.040
+Audit-Protokollierung aktivieren, Vertraulichkeitsbezeichnung konfigurieren, Aufbewahrungsrichtlinie einrichten.
+
+00:08:54.640 --> 00:08:56.140
+Sie müssen nicht mehr raten, wie Compliance aussieht.
+
+00:08:56.480 --> 00:08:57.240
+Das System sagt es Ihnen.
+
+00:08:57.560 --> 00:09:00.020
+Sie weisen diese Verbesserungsmaßnahmenpersonen in Ihrem Unternehmen zu.
+
+00:09:00.780 --> 00:09:02.500
+Der IT-Admin erhält die technischen Aufgaben.
+
+00:09:02.800 --> 00:09:07.500
+Der Compliance-Beauftragte die Richtliniendokumentation, das Rechtsteam die Arbeitsabläufe für Betroffenen anfragen.
+
+00:09:07.500 --> 00:09:11.640
+Jeder weiß, wofür er verantwortlich ist und Sie können den Fortschritt in Echtzeit verfolgen.
+
+00:09:12.220 --> 00:09:14.180
+Kein Hin- und Herschicken von Tabellenkalkulationen mehr bei Ihnen.
+
+00:09:14.360 --> 00:09:17.860
+Wenn jemand eine Maßnahme abschließt, lädt der Nachweise direkt in den Compliance-Manager hoch.
+
+00:09:18.480 --> 00:09:21.240
+Diese Nachweise können Screenshots sein, die zeigen, dass eine Richtlinie korrekt konfiguriert ist.
+
+00:09:21.580 --> 00:09:23.180
+Es können von Ihnen erstellte Richtliniendokumente sein.
+
+00:09:23.500 --> 00:09:25.320
+Es können aus dem System gezogene Audit-Protokolle sein.
+
+00:09:25.640 --> 00:09:29.240
+Alles befindet sich an einem Ort, nach Kontrolle organisiert und bereit für das nächste Audit.
+
+00:09:29.500 --> 00:09:30.360
+Hier kommt der intelligente Teil.
+
+00:09:30.720 --> 00:09:34.760
+Der Compliance-Manager scannt Ihre Microsoft 365-Umgebung automatisch auf bestimmte Kontrollen hin.
+
+00:09:34.760 --> 00:09:38.840
+Wenn Sie Vertraulichkeitsbezeichnungen konfiguriert haben, erkennt er das und rechnet es Ihnen automatisch an.
+
+00:09:39.180 --> 00:09:41.140
+Wenn Sie die Audit-Protokollierung aktiviert haben, sieht er auch das.
+
+00:09:41.540 --> 00:09:43.400
+Sie müssen nicht jede einzelne Sache manuell nachweisen.
+
+00:09:43.800 --> 00:09:44.820
+Das System prüft sich selbst.
+
+00:09:45.160 --> 00:09:48.300
+Audit-Protokolle in Purview erfassen jede Aktivität in Ihrer gesamten Umgebung.
+
+00:09:48.400 --> 00:09:49.520
+Wer hat auf welches Dokument zugegriffen?
+
+00:09:49.880 --> 00:09:50.840
+Wann wurde darauf zugegriffen?
+
+00:09:51.080 --> 00:09:51.440
+Wo aus?
+
+00:09:51.640 --> 00:09:52.360
+Was wurde damit gemacht?
+
+00:09:52.640 --> 00:09:54.180
+Jede Aktion wird protokolliert und ist durchsuchbar.
+
+00:09:54.640 --> 00:09:57.000
+Wenn ein Prüfer fragt, wer hat diese Datei wann gesehen?
+
+00:09:57.900 --> 00:09:59.300
+Haben Sie die Antwort in Sekunden, nicht in Tagen.
+
+00:09:59.300 --> 00:10:05.380
+e-Discovery gibt Rechtsteams die Möglichkeit, alle Daten, E-Mails, Dokumente, Teams-Nachrichten und SharePoint-Websites zu durchsuchen
+
+00:10:05.380 --> 00:10:08.540
+und für Untersuchungen oder Klagen relevante Inhalte aufzubewahren.
+
+00:10:08.920 --> 00:10:13.860
+Bei einem Rechtsstreit können Sie alle zugehörigen Daten sichern und als Beweismittel vorlegen.
+
+00:10:14.480 --> 00:10:17.660
+Kein hektisches Suchen nach Dateien, keine Sorge, dass jemand etwas Wichtiges gelöscht hat.
+
+00:10:18.260 --> 00:10:23.780
+Die Datensatzverwaltung stellt sicher, dass kritische Dokumente für die erforderlichen Zeiträume aufbewahrt werden und nicht vorzeitig gelöscht werden können.
+
+00:10:24.120 --> 00:10:28.140
+Wenn Vorschriften besagen, dass Sie Finanzunterlagen sieben Jahre lang aufbewahren müssen, setzt die Datensatzverwaltung dies durch.
+
+00:10:28.140 --> 00:10:31.220
+Benutzer können Sie nicht löschen. Administratoren können die Richtung nicht umgehen.
+
+00:10:31.620 --> 00:10:35.300
+Die Daten bleiben bis zum Ablauf der Aufbewahrungsfrist bestehen und werden dann kontrolliert entsorgt.
+
+00:10:35.720 --> 00:10:36.460
+Warum ist das alles wichtig?
+
+00:10:37.200 --> 00:10:40.300
+Regulierungsbehörden ist es egal, welche Tools Sie haben. Es ist Ihnen egal, dass Sie Perview gekauft haben.
+
+00:10:40.680 --> 00:10:42.620
+Sie interessieren sich dafür, dass Sie einen vertretbaren Prozess vorweisen.
+
+00:10:42.960 --> 00:10:47.920
+Sie wollen sehen, dass Sie Risiken identifiziert, Kontrollen implementiert, die Einhaltung überwacht und für jeden Schritt Nachweise erbracht haben.
+
+00:10:48.200 --> 00:10:51.320
+Der Compliance Manager liefert Ihnen diese Nachweise in einem Format, das Prüfer anerkennen.
+
+00:10:51.320 --> 00:10:53.600
+Aber hier ist etwas Neues, das das Bild verändert.
+
+00:10:53.900 --> 00:10:54.120
+KI.
+
+00:10:55.180 --> 00:10:55.980
+KI-Governance.
+
+00:10:56.700 --> 00:10:58.320
+Was ändert sich, wenn Co-Pilot auftaucht?
+
+00:10:58.800 --> 00:10:59.900
+Hier ist die einfachste Definition.
+
+00:11:00.800 --> 00:11:03.340
+Traditioneller Datenschutz ging davon aus, dass Menschen auf Daten zugreifen.
+
+00:11:03.740 --> 00:11:04.960
+Diese Annahme war jahrzehntelang sinnvoll.
+
+00:11:05.380 --> 00:11:07.760
+Eine Person meldet sich an, sucht eine Datei, öffnet und liest sie.
+
+00:11:08.160 --> 00:11:10.320
+Das System weiß, wer was getan hat und kann jede Aktion nachverfolgen.
+
+00:11:11.040 --> 00:11:12.320
+Ändert diese Berechnung grundlegend.
+
+00:11:12.800 --> 00:11:16.180
+Co-Pilot und andere KI-Agenten können in Sekunden auf riesige Datenbestände zugreifen.
+
+00:11:16.520 --> 00:11:17.480
+Sie lesen nicht nur eine Datei an.
+
+00:11:17.480 --> 00:11:22.840
+Sie scannen tausende Dokumente, fassen Inhalte zusammen und finden Informationen, von denen der Nutzer vielleicht gar nichts weiß.
+
+00:11:23.420 --> 00:11:25.880
+Diese Geschwindigkeit und dieser Umfang schaffen eine völlig neue Risikokategorie.
+
+00:11:26.320 --> 00:11:28.080
+Stellen Sie sich Ihre Daten wie einen Aktenschrank vor.
+
+00:11:28.800 --> 00:11:30.460
+In der alten Welt brauchte jede Schublade einen Schlüssel.
+
+00:11:30.860 --> 00:11:33.100
+Nur die berechtigte Person konnte auf die richtige Datei zugreifen.
+
+00:11:33.500 --> 00:11:38.160
+Co-Pilot ist wie ein intelligenter Assistent, der alle Schubladen auf einmal öffnen kann, wenn die Schlüssel im Schloss stecken.
+
+00:11:38.620 --> 00:11:43.160
+Wenn Ihre Daten nicht korrekt klassifiziert sind, könnte Co-Pilot vertrauliche Informationen für jemanden sichtbar machen, der sie nicht sehen sollte.
+
+00:11:43.800 --> 00:11:46.680
+Nicht, weil das System defekt ist, sondern weil die Daten nie gekennzeichnet wurden.
+
+00:11:46.680 --> 00:11:54.480
+Eine SharePoint-Seite mit personenbezogenen Kundendaten, die für jeden im Unternehmen zugänglich war, wird durch KI plötzlich auf eine Weise sichtbar, wie es vorher nie der Fall war.
+
+00:11:55.120 --> 00:11:57.040
+Die Wand war schon immer da, die KI hat nur die Tür gefunden.
+
+00:11:57.560 --> 00:11:58.440
+Das tut Purview also dagegen.
+
+00:11:58.900 --> 00:12:01.580
+Purview erweitert seine bestehenden Kontrollen auf KI-Interaktionen.
+
+00:12:02.420 --> 00:12:05.540
+DLP-Richtlinien scannen jetzt auch KI-Prompte und Antworten, nicht nur E-Mails und Dokumente.
+
+00:12:05.540 --> 00:12:10.260
+Wenn jemand Co-Pilot eine Frage stellt, die sensible Daten liefert, kann DLP dies blockieren?
+
+00:12:11.420 --> 00:12:13.760
+Vertraulichkeitsbezeichnungen werden auf KI-generierte Inhalte angewendet?
+
+00:12:14.300 --> 00:12:19.300
+Er stellt Co-Pilot eine Zusammenfassung eines vertraulichen Dokuments, erbt diese Zusammenfassung das gleiche Label und den gleichen Schutz?
+
+00:12:20.480 --> 00:12:24.540
+Das Data Security Posture Management für KI überwacht über Freigaben und Missbrauch in Echtzeit.
+
+00:12:25.340 --> 00:12:30.400
+Es beobachtet, wie KI-Tools genutzt werden, auf welche Daten sie zugreifen und ob Richtlinien verletzt werden.
+
+00:12:30.400 --> 00:12:36.580
+Wenn jemand beginnt, Co-Pilot Fragen zu stellen, die darauf hindeuten, dass er nach Daten sucht, auf die er keinen Zugriff haben sollte, schlägt das System Alarm.
+
+00:12:37.000 --> 00:12:40.940
+Der Compliance Manager enthält jetzt vorgefertigte Bewertungen für KI-Vorschriften wie den EU-AI-Act.
+
+00:12:41.780 --> 00:12:45.600
+Wenn Ihr Unternehmen KI-Tools einsetzt, müssen Sie die Einhaltung dieser neuen Regeln nachweisen.
+
+00:12:46.100 --> 00:12:48.460
+Die Bewertungsvorlagen sind bereits vorhanden und einsatzbereit.
+
+00:12:48.940 --> 00:12:54.020
+Der KI-Hub bietet Ihnen Transparenz darüber, welche KI-Apps in Ihrem Unternehmen verwendet werden und auf welche Daten sie zugreifen.
+
+00:12:54.020 --> 00:13:00.500
+Sie können sehen, welche Mitarbeiter Co-Pilot nutzen, welche KI-Tools von Drittanbietern verbunden sind und welche Art von Daten durch sie fließen.
+
+00:13:01.260 --> 00:13:02.020
+Keine toten Winkel.
+
+00:13:03.160 --> 00:13:05.980
+Purview kann auch KI-Prompts und Antworten für Audit-Protokolle speichern.
+
+00:13:06.900 --> 00:13:12.020
+Wenn eine Aufsichtsbehörde fragt, was hat dieser Mitarbeiter die KI gefragt und was hat sie geantwortet, haben Sie den Beleg.
+
+00:13:12.480 --> 00:13:17.200
+Prompts, Antworten, Zeitstempel, Benutzeridentität, alles bleibt für Untersuchungen oder Compliance-Prüfungen erhalten.
+
+00:13:17.880 --> 00:13:22.680
+Betrachten Sie es einmal so, die drei Säulen, über die wir gesprochen haben, Governance, Sicherheit und Compliance, gelten auch für KI.
+
+00:13:22.680 --> 00:13:23.920
+Doch hier ist mehr zu verlieren.
+
+00:13:24.360 --> 00:13:27.440
+Wenn Ihre Daten vorher nicht sicher waren, wird die KI jede Schwachstelle aufdecken.
+
+00:13:27.880 --> 00:13:31.020
+Purview bietet Ihnen die Werkzeuge, um diese Lücken zu schließen, bevor Sie zur Sicherheitsverletzung führen.
+
+00:13:31.260 --> 00:13:34.240
+Diese drei Säulen sind keine getrennten Projekte, sie arbeiten in einem Kreislauf zusammen.
+
+00:13:35.740 --> 00:13:37.680
+Wie die drei Säulen zusammenhängen.
+
+00:13:37.720 --> 00:13:38.640
+Wie passt das alles zusammen?
+
+00:13:39.100 --> 00:13:42.700
+Governance findet die Daten, Sicherheit schützt sie, Compliance belegt die Einhaltung der Regeln.
+
+00:13:43.200 --> 00:13:44.660
+Drei getrennte Aufgaben, ein Vernetzungssystem.
+
+00:13:45.280 --> 00:13:46.460
+Aber hier ist der Punkt, den viele übersehen.
+
+00:13:47.120 --> 00:13:49.400
+Sie arbeiten nicht nur nacheinander, sie verstärken sich gegenseitig.
+
+00:13:49.680 --> 00:13:52.520
+Ein Compliance-Audit deckt eine Lücke in Ihrer Datenklassifizierung auf.
+
+00:13:53.000 --> 00:13:55.680
+Vielleicht haben Sie eine SharePoint-Website mit nicht gekennzeichneten Kundendaten übersetzt.
+
+00:13:56.140 --> 00:13:59.020
+Diese Lücke fließt zurück in die Governance, die den Scan der Datenlandkarte aktualisiert.
+
+00:13:59.400 --> 00:14:00.420
+Governance findet die neuen Daten.
+
+00:14:00.840 --> 00:14:01.860
+Sicherheit wendet Schutzmaßnahmen.
+
+00:14:02.240 --> 00:14:03.160
+Compliance sagt den Punkt ab.
+
+00:14:03.480 --> 00:14:04.400
+Der Kreislauf dreht sich weit.
+
+00:14:04.660 --> 00:14:06.280
+Lassen Sie mich Ihnen ein reales Szenario schildern.
+
+00:14:06.500 --> 00:14:08.220
+Die Datenlandkarte durchsucht Ihre Umgebung.
+
+00:14:08.440 --> 00:14:11.580
+Sie findet eine SharePoint-Website mit personenbezogenen Kundendaten, die nie gekennzeichnet wurden.
+
+00:14:11.760 --> 00:14:12.560
+Niemand wusste, dass sie dort war.
+
+00:14:12.560 --> 00:14:18.560
+Die Klassifizierungs-Engine von Purview erkennt den sensiblen Inhalt und wendet automatisch ein Hochvertraulich-Label mit Verschlüsselung an.
+
+00:14:18.560 --> 00:14:21.740
+Dieses Label löst eine DLP-Richtlinie aus, die Sie bereits konfiguriert haben.
+
+00:14:22.200 --> 00:14:25.440
+Jede E-Mail, die dieses Label an eine externe Adresse weiterleitet, wird automatisch blockiert.
+
+00:14:26.020 --> 00:14:29.100
+Der Compliance-Manager erkennt, dass die Kontrolle implementiert ist und rechnet sie im Score an.
+
+00:14:29.620 --> 00:14:31.540
+Das Audit-Protokoll zeichnet den gesamten Prozess an.
+
+00:14:31.900 --> 00:14:35.420
+Wer die Daten fand, wann das Label angewendet wurde, welche Richtlinie die Aktion blockierte.
+
+00:14:35.420 --> 00:14:38.920
+Wenn das nächste Audit ansteht, haben Sie die vollständige Geschichte zur Hand.
+
+00:14:39.540 --> 00:14:41.940
+Das ist die Stärke von Purview als einheitliche Plattform.
+
+00:14:42.620 --> 00:14:46.900
+Es sind keine drei getrennten Tools, die sich zufällig ein Portal teilen, sondern eine Engine, in der jeder Teil den anderen speist.
+
+00:14:47.480 --> 00:14:48.620
+Die Integration erfolgt automatisch.
+
+00:14:49.180 --> 00:14:55.420
+Sobald Ihre Governance steht, sobald Sie Ihre Umgebung gescannt und Ihre Daten klassifiziert haben, profitieren Sicherheit und Compliance ohne zusätzliche Konfiguration.
+
+00:14:56.540 --> 00:14:58.540
+Sie müssen Ihre Labels nicht für den Compliance-Manager neu erstellen.
+
+00:14:59.060 --> 00:15:00.320
+Sie müssen nicht für DLP neu scannen.
+
+00:15:00.880 --> 00:15:02.100
+Alles basiert auf demselben Fundament.
+
+00:15:02.100 --> 00:15:06.720
+Die meisten Unternehmen scheitern beim Datenschutz, weil sie dies als getrennte Initiativen betrachten.
+
+00:15:07.340 --> 00:15:09.540
+Sie haben ein Governance-Team, das nicht mit der Sicherheit spricht.
+
+00:15:10.440 --> 00:15:12.740
+Einen Compliance-Beauftragten, der mit einer anderen Tabelle arbeitet.
+
+00:15:13.180 --> 00:15:16.380
+Ein IT-Team, das Richtlinien umsetzt, ohne die geschäftlichen Anforderungen zu verstehen.
+
+00:15:17.000 --> 00:15:20.320
+Purview erzwingt diese Gespräche, indem es die Abhängigkeiten sichtbar macht.
+
+00:15:20.860 --> 00:15:22.740
+Ohne Governance lässt sich Compliance nicht korrekt umsetzen.
+
+00:15:23.180 --> 00:15:25.860
+Ohne zu wissen, welche Daten Sie schützen, lässt sich Sicherheit nicht korrekt umsetzen.
+
+00:15:26.240 --> 00:15:26.920
+Wo fängt man also an?
+
+00:15:27.340 --> 00:15:28.460
+Nicht, indem man alles auf einmal einschaltet.
+
+00:15:28.860 --> 00:15:29.700
+Fangen Sie mit Governance an.
+
+00:15:29.700 --> 00:15:31.300
+Finden Sie Ihre Daten, klassifizieren Sie sie.
+
+00:15:31.300 --> 00:15:32.020
+Der Leist ergibt sich daraus.
+
+00:15:32.340 --> 00:15:33.560
+Das ist der Wissensnugget für heute.
+
+00:15:34.160 --> 00:15:34.740
+Ihr ersten Schritt.
+
+00:15:35.280 --> 00:15:36.040
+Also legen wir los.
+
+00:15:36.480 --> 00:15:39.540
+Öffnen Sie den Datenexplorer von Purview und sehen Sie, welche sensiblen Informationen
+
+00:15:39.540 --> 00:15:40.840
+bereits in Ihrer Umgebung existieren.
+
+00:15:40.960 --> 00:15:42.220
+Sie werden überrascht sein, was Sie finden.
+
+00:15:43.120 --> 00:15:46.960
+Kreditkartennummern in E-Mail-Anhängen, Sozialversicherungsnummern auf alten Sharepoint-Seiten,
+
+00:15:47.560 --> 00:15:49.760
+medizinische Informationen in vergessenen Teams-Chats.
+
+00:15:50.240 --> 00:15:51.720
+Versuchen Sie nicht am ersten Tag alles zu beheben.
+
+00:15:52.080 --> 00:15:52.480
+Schauen Sie nur.
+
+00:15:52.840 --> 00:15:54.300
+Konzentrieren Sie sich zuerst auf die größten Risiken.
+
+00:15:54.800 --> 00:15:57.180
+Finanzdaten, Krankenakten, persönliche Informationen.
+
+00:15:57.180 --> 00:15:59.680
+Das sind die Dinge, die Ihn Ärger mit den Aufsichtsbehörden einbringen.
+
+00:16:00.320 --> 00:16:03.500
+Investieren Sie Ihre Energie dort, bevor Sie sich um das interne Memo zur Weihnachtsfeier
+
+00:16:03.500 --> 00:16:03.820
+sorgen.
+
+00:16:04.800 --> 00:16:07.540
+Wenden Sie dann Vertraulichkeitsbezeichnungen auf diese kritischen Inhalte an.
+
+00:16:07.780 --> 00:16:09.060
+Aber rollen Sie sie noch nicht für alle aus.
+
+00:16:09.480 --> 00:16:10.720
+Beginnen Sie mit einer kleinen Gruppe von Benutzern.
+
+00:16:11.080 --> 00:16:13.680
+Lassen Sie sie testen, sich damit vertraut machen und Ihnen Feedback geben.
+
+00:16:14.140 --> 00:16:16.860
+So bemerken Sie Konfigurationsfehler, bevor diese das ganze Unternehmen betreffen.
+
+00:16:17.160 --> 00:16:19.060
+Richten Sie dann eine DLP-Richtlinie im Testmodus ein.
+
+00:16:19.520 --> 00:16:22.560
+Führen Sie sie als Simulation aus, damit Sie sehen, was blockiert würde, ohne tatsächlich etwas
+
+00:16:22.560 --> 00:16:22.960
+zu sperren.
+
+00:16:23.440 --> 00:16:26.360
+Prüfen Sie die Berichte, passen Sie Ihre Regeln an und aktivieren Sie die Durchsetzung
+
+00:16:26.360 --> 00:16:26.720
+schrittweise.
+
+00:16:27.340 --> 00:16:29.060
+Nutzen Sie den Compliance-Manager als Ihren Verabler.
+
+00:16:29.480 --> 00:16:33.200
+Er zeigt Ihnen genau, was getan werden muss, um die Branchenvorschriften zu erfüllen.
+
+00:16:34.040 --> 00:16:35.280
+Sie müssen das nicht alleine herausfinden.
+
+00:16:35.800 --> 00:16:38.600
+Die Bewertungen sagen Ihnen, was zu tun ist, in welcher Reihenfolge und wie Sie es nachweisen.
+
+00:16:39.080 --> 00:16:41.000
+Hier ist das mächtigste Werkzeug, das Sie jetzt einsetzen können.
+
+00:16:41.440 --> 00:16:43.000
+Führen Sie den Datenklassifizierungsscan aus.
+
+00:16:43.220 --> 00:16:43.820
+Führen Sie ihn einfach auf.
+
+00:16:43.820 --> 00:16:45.380
+Zu wissen, was man hat, ändert alles.
+
+00:16:45.780 --> 00:16:47.240
+Alles Weitere ergibt sich aus diesem einen Schritt.
+
+00:16:47.920 --> 00:16:49.080
+Microsoft Purview ist nicht nur ein Produkt.
+
+00:16:49.080 --> 00:16:52.720
+Es ist ein System, das sicherstellt, dass Ihre Daten gefunden, geschützt und verteidigungsfähig
+
+00:16:52.720 --> 00:16:52.920
+sind.
+
+00:16:53.620 --> 00:16:56.920
+Starten Sie mit Governance, fügen Sie Sicherheit hinzu und nutzen Sie Compliance für die
+
+00:16:56.920 --> 00:16:57.320
+Einhaltung.
+
+00:16:57.700 --> 00:17:00.120
+Das Framework funktioniert für traditionelle Daten genauso wie für KI.
+
+00:17:00.760 --> 00:17:01.360
+Ja, auch für KI.
+
+00:17:01.760 --> 00:17:04.000
+Denn es ist für die Welt gemacht, in der die meisten von uns bereits leben.
+
+00:17:04.600 --> 00:17:07.320
+Wenn Ihnen das den Überblick verschafft hat, abonnieren Sie die Microsoft Knowledge
+
+00:17:07.320 --> 00:17:09.020
+Nuggets auf M365FM.
+
+00:17:09.380 --> 00:17:11.220
+Hinterlassen Sie einen Kommentar, mit dem es als nächstes erklärt wird.
+
+00:17:11.460 --> 00:17:12.300
+Danke fürs Zuhören.

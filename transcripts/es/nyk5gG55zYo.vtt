@@ -1,0 +1,1069 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:03.460
+La mayoría de la gente piensa que proteger los datos consiste en construir un muro fuerte a su alrededor,
+
+00:00:03.840 --> 00:00:06.700
+bloquea la red, detena a los malos y estarás a salvo.
+
+00:00:07.200 --> 00:00:10.720
+El problema es que ese muro no hace nada una vez que los datos están dentro y moviéndose.
+
+00:00:11.700 --> 00:00:16.240
+Un empleado con acceso legítimo puede tomar una lista de clientes y enviarla por correo a su cuenta personal
+
+00:00:16.240 --> 00:00:19.640
+y el firewall lo permite porque la solicitud viene de un usuario confiable.
+
+00:00:20.660 --> 00:00:23.700
+Microsoft Purview se menciona en todas partes hoy en día, pero ¿qué es realmente?
+
+00:00:24.080 --> 00:00:24.860
+Es una herramienta única.
+
+00:00:25.420 --> 00:00:28.460
+Es una familia de soluciones centradas en una sola cosa, proteger tus datos,
+
+00:00:28.460 --> 00:00:30.080
+no solo tu infraestructura.
+
+00:00:30.680 --> 00:00:31.780
+Hay tres pilares que entender.
+
+00:00:32.180 --> 00:00:36.300
+Gobierno de datos, saber qué datos tienes, seguridad de datos y proteger los cumplimientos de datos.
+
+00:00:36.640 --> 00:00:37.920
+Demostrar que sigues las reglas.
+
+00:00:38.820 --> 00:00:42.360
+Al final de este episodio verás cómo estas tres piezas encajan y por dónde empezar.
+
+00:00:42.720 --> 00:00:45.720
+Pero para entender por qué existe Purview, debes comprender el problema que resuelve.
+
+00:00:47.100 --> 00:00:49.900
+El problema real, ¿por qué la seguridad de la infraestructura no es suficiente?
+
+00:00:50.620 --> 00:00:53.700
+La mayoría de las empresas asumen que si la red está bloqueada, los datos están seguros.
+
+00:00:54.120 --> 00:00:58.080
+Hace 20 años, cuando todo residía dentro de una oficina física, esa era una suposición válida.
+
+00:00:58.800 --> 00:00:59.280
+Ya no es así.
+
+00:00:59.980 --> 00:01:01.080
+Los datos viven en todas partes ahora.
+
+00:01:01.640 --> 00:01:05.040
+Aplicaciones en la nube, dispositivos personales, archivos adjuntos de correo, unidades compartidas,
+
+00:01:05.140 --> 00:01:07.740
+chats de equipo, dispersos en entornos que no controlas por completo.
+
+00:01:08.960 --> 00:01:11.460
+Y una vez que un usuario tiene acceso legítimo, una vez que está autenticado,
+
+00:01:11.600 --> 00:01:15.580
+y dentro del edificio la seguridad de la infraestructura no puede controlar lo que hace con esos datos.
+
+00:01:16.480 --> 00:01:17.200
+Considera este ejemplo.
+
+00:01:17.900 --> 00:01:20.960
+Un empleado descargó una lista de clientes a una unidad USB personal.
+
+00:01:20.960 --> 00:01:25.940
+El firewall no lo detuvo y el sistema de detección de intrusos no lo detectó porque los datos no fueron interceptados.
+
+00:01:26.800 --> 00:01:28.640
+Fueron excedidos por alguien que tenía permiso para verlos.
+
+00:01:29.480 --> 00:01:33.240
+Las herramientas de seguridad buscaban un ataque desde el exterior, pero la amenaza vino desde el interior.
+
+00:01:33.860 --> 00:01:34.780
+Este es el cambio fundamental.
+
+00:01:34.780 --> 00:01:38.300
+La protección debe moverse de la capa de infraestructura a la capa de datos en sí.
+
+00:01:38.660 --> 00:01:41.580
+En lugar de solo proteger el edificio, necesitas proteger los archivos dentro de él.
+
+00:01:41.860 --> 00:01:43.000
+Eso es exactamente lo que hace Purview.
+
+00:01:43.480 --> 00:01:46.940
+Aplica políticas directamente a los datos, no solo al sistema que los contiene.
+
+00:01:47.500 --> 00:01:48.060
+Piénsalo esta mano.
+
+00:01:48.520 --> 00:01:52.900
+La seguridad del edificio vigila la puerta comprobando identificaciones y asegurando que solo las personas correctas entren,
+
+00:01:53.000 --> 00:01:55.240
+pero una vez dentro, la seguridad no lo sigue a todas partes.
+
+00:01:55.840 --> 00:01:56.520
+Purview es diferente.
+
+00:01:57.100 --> 00:02:00.600
+Pone un candado al archivador mismo, lo que significa que incluso si alguien está dentro del edificio,
+
+00:02:00.660 --> 00:02:02.640
+no puede abrir el archivador a menos que deba hacerlo.
+
+00:02:02.640 --> 00:02:07.720
+Entonces Purview trata sobre cerrar el archivador, pero antes de cerrarlo, necesitas saber qué hay dentro.
+
+00:02:08.840 --> 00:02:10.440
+Pilar 1. Gobernanza de datos.
+
+00:02:10.680 --> 00:02:11.240
+Sepa lo que tiene.
+
+00:02:11.760 --> 00:02:15.200
+Saber qué datos posee realmente es el primer paso en cualquier estrategia de protección de datos.
+
+00:02:15.640 --> 00:02:19.100
+Parece obvio, pero la mayoría de las organizaciones no tienen idea de lo que hay en sus sitios de SharePoint,
+
+00:02:19.220 --> 00:02:20.780
+recursos compartidos o bases de datos.
+
+00:02:21.860 --> 00:02:26.620
+Tienen años de contenido acumulado, como archivos de proyectos antiguos, documentos duplicados y hojas de cálculo
+
+00:02:26.620 --> 00:02:29.600
+con información de clientes que nadie recuerda haber creado.
+
+00:02:30.540 --> 00:02:32.400
+El mapa de datos de Purview resuelve esto.
+
+00:02:33.020 --> 00:02:38.240
+Analiza todo su entorno en Azure, múltiples nubes y entornos locales, capturando metadatos de todo lo que encuentra.
+
+00:02:39.240 --> 00:02:43.260
+Responde preguntas como qué tipo de datos son, dónde están almacenados, quién los posee y qué tan confidenciales son.
+
+00:02:43.720 --> 00:02:46.160
+El mapa de datos construye una imagen completa de su patrimonio de datos.
+
+00:02:46.500 --> 00:02:49.000
+A partir de ahí, todos los metadatos se organizan en un catálogo unificado.
+
+00:02:49.500 --> 00:02:51.300
+Pense en ello como una biblioteca con un catálogo de fichas.
+
+00:02:52.080 --> 00:02:56.040
+Antes de que existiera el catálogo, tenía que recorrer cada pasillo esperando encontrar lo que necesitaba,
+
+00:02:56.300 --> 00:02:58.840
+pero con él busca una vez y sabe exactamente qué instante tiene que libro.
+
+00:02:59.940 --> 00:03:04.160
+Puede organizar los datos en dominios de gobernanza como finanzas, recursos humanos, investigación y desarrollo
+
+00:03:04.160 --> 00:03:06.320
+para que los usuarios encuentren lo que necesitan sin preguntar a ti.
+
+00:03:06.320 --> 00:03:10.760
+Un analista financiero puede explorar el dominio de finanzas y ver todos los conjuntos de datos aprobados,
+
+00:03:10.860 --> 00:03:12.220
+completos con descripciones y propietarios.
+
+00:03:12.600 --> 00:03:15.740
+El linaje de datos muestra de dónde provienen los datos y cómo han cambiado con el tiempo.
+
+00:03:16.300 --> 00:03:19.360
+Si se está preparando para una auditoría y alguien pregunta, ¿de dónde salió este número?
+
+00:03:20.120 --> 00:03:22.280
+El linaje lo rastrea a través de cada transformación,
+
+00:03:22.560 --> 00:03:25.460
+algo crucial cuando los reguladores quieren pruebas de que sus informes son precisos.
+
+00:03:25.820 --> 00:03:29.460
+El glosario de negocios añade descripciones claras para que los analistas entiendan
+
+00:03:29.460 --> 00:03:32.780
+qué significa un conjunto de datos sin buscar a quien lo creó hace tres años.
+
+00:03:32.780 --> 00:03:39.520
+En lugar de ver una tabla llamada PetClip 23-B2-Final, ven Pedidos de clientes versión Final 2023.
+
+00:03:40.340 --> 00:03:41.760
+Un cambio simple, una gran diferencia.
+
+00:03:42.260 --> 00:03:45.360
+Porque es importante, no puede proteger datos que no sabe que existen.
+
+00:03:45.880 --> 00:03:48.460
+Si no sabe que hay un sitio de SharePoint con números de seguridad social de clientes,
+
+00:03:48.500 --> 00:03:49.240
+no puede protegerlo.
+
+00:03:49.300 --> 00:03:51.680
+La gobernanza es la base sobre la que todo se construye.
+
+00:03:52.560 --> 00:03:55.840
+Una vez que sabe qué datos tiene y dónde viven, la siguiente pregunta es obvia.
+
+00:03:56.640 --> 00:03:58.080
+¿Cómo protege lo confidencial?
+
+00:03:58.780 --> 00:04:01.220
+Pilar 2. Etiquetas de sensibilidad para la seguridad de los datos.
+
+00:04:01.220 --> 00:04:04.860
+La gobernanza le dice qué datos existen y la seguridad dice qué hacer con ellos.
+
+00:04:05.560 --> 00:04:08.040
+La herramienta principal para ellos se llama etiqueta sensibilidad.
+
+00:04:08.980 --> 00:04:11.900
+Piensa en las etiquetas de sensibilidad como etiquetas digitales que clasifican los datos
+
+00:04:11.900 --> 00:04:12.880
+según su nivel de confidencial.
+
+00:04:13.300 --> 00:04:16.560
+Las más comunes que verás son público, interno, confidencial y altamente confidencial.
+
+00:04:16.860 --> 00:04:17.600
+Pero no tiene que limitarse.
+
+00:04:18.020 --> 00:04:21.300
+Puede crear etiquetas personalizadas que se adapten a las necesidades de su organización.
+
+00:04:21.600 --> 00:04:26.320
+Quizás quiera una etiqueta llamada datos de RR, resultados financieros o confidencial de cliente.
+
+00:04:26.900 --> 00:04:27.200
+Decide.
+
+00:04:27.720 --> 00:04:29.680
+Esto es lo importante de las etiquetas. Viajan con los datos.
+
+00:04:29.680 --> 00:04:34.660
+Si un documento está marcado como confidencial y alguien lo adjunta a un correo, la etiqueta permanece.
+
+00:04:35.380 --> 00:04:38.880
+No importa si el documento se descarga, se copia a OneDrive o se comparte por Teams.
+
+00:04:38.960 --> 00:04:40.520
+La etiqueta lo sigue a todas partes.
+
+00:04:41.160 --> 00:04:44.400
+No es una pegatina en el archivador, es una marca de agua integrada en el propio papel.
+
+00:04:45.140 --> 00:04:46.760
+Las etiquetas pueden activar acciones automáticas.
+
+00:04:47.400 --> 00:04:49.980
+Puede cifrar el documento para que solo personas autorizadas puedan abrirlo.
+
+00:04:50.640 --> 00:04:54.080
+Las restricciones de acceso pueden bloquear la edición o impresión y puede añadir encabezados,
+
+00:04:54.200 --> 00:04:56.740
+pies de página o marcas de agua que digan confidencial en la página.
+
+00:04:56.740 --> 00:05:00.500
+La etiqueta le indica el sistema qué hacer y el sistema lo hace automáticamente.
+
+00:05:01.020 --> 00:05:02.140
+Las etiquetas se aplican de tres formas.
+
+00:05:02.460 --> 00:05:04.560
+Manual significa que el usuario elige la etiqueta por sí mismo.
+
+00:05:05.420 --> 00:05:10.360
+Automático significa que Purview detecta contenido confidencial como un número de tarjeta y aplica la etiqueta solo.
+
+00:05:11.100 --> 00:05:14.500
+Recomendación de directiva significa que el sistema sugiere una etiqueta y el usuario la confirma.
+
+00:05:14.920 --> 00:05:16.580
+Es opción intermedia donde las cosas ponen interesado.
+
+00:05:16.580 --> 00:05:17.420
+Aquí un ejemplo.
+
+00:05:17.800 --> 00:05:19.300
+Un documento contiene un número de tarjeta de crédito.
+
+00:05:19.800 --> 00:05:23.960
+El motor de clasificación de Purview reconoce ese patrón y, antes de guardar el documento,
+
+00:05:24.080 --> 00:05:28.880
+aplica automáticamente la etiqueta de alta confidencialidad y los cifras sin intervención humana.
+
+00:05:29.480 --> 00:05:31.560
+Los datos están protegidos desde el momento en que se crean,
+
+00:05:31.960 --> 00:05:34.040
+pero las etiquetas no solo se aplican a archivos individuales.
+
+00:05:34.400 --> 00:05:38.320
+También se aplican a contenedores como sitios de SharePoint, canales de Teams y grupos de Microsoft 365.
+
+00:05:39.240 --> 00:05:40.260
+Esto significa que puedes ir.
+
+00:05:40.620 --> 00:05:44.300
+Cualquier sitio de equipo etiquetado como confidencial bloquea el uso compartido externo de forma predeterminada.
+
+00:05:44.300 --> 00:05:48.060
+Establece la regla a una vez y cada sitio con esa etiqueta hereda la protección.
+
+00:05:48.540 --> 00:05:51.720
+No tiene que configurar cada uno individualmente, así que las etiquetas le dicen que es algo.
+
+00:05:52.260 --> 00:05:54.540
+Lo clasifican, lo marcan y aplican protección automáticamente.
+
+00:05:55.100 --> 00:05:58.020
+¿Pero qué pasa si alguien intenta enviar esos datos etiquetados a donde lo debería?
+
+00:05:58.880 --> 00:05:59.820
+Prevención de pérdida de datos.
+
+00:05:59.900 --> 00:06:00.400
+Bloqueando la FUE.
+
+00:06:00.940 --> 00:06:01.960
+Las etiquetas clasifican.
+
+00:06:02.080 --> 00:06:02.400
+La DLP.
+
+00:06:02.580 --> 00:06:03.460
+Prevención de pérdida de datos.
+
+00:06:03.640 --> 00:06:04.000
+Toma medidas.
+
+00:06:04.680 --> 00:06:07.480
+Aquí es donde el sistema deja de ser pasivo y empieza a bloquear cosas en tiempo real.
+
+00:06:08.180 --> 00:06:12.720
+Las directivas de DLP analizan correos, documentos, chats y aplicaciones en la nube en busca de información confidencial.
+
+00:06:12.720 --> 00:06:21.000
+Cuando detecta algo de riesgo, puede bloquear la acción por completo, mostrar una sugerencia directiva al usuario, notificar a un administrador o registrar el evento.
+
+00:06:21.580 --> 00:06:23.220
+Te decide qué respuesta se ajusta a la situación.
+
+00:06:23.540 --> 00:06:24.540
+Déjeme darle un ejemplo real.
+
+00:06:24.860 --> 00:06:29.400
+Un empleado intenta enviar por correo una hoja de cálculo con números de seguro social a su cuenta personal de Gmail.
+
+00:06:30.100 --> 00:06:31.860
+DLP detecta los datos confidenciales.
+
+00:06:32.080 --> 00:06:35.760
+Reconoce al destinatario externo y bloquea el mensaje antes de que salga de su organización.
+
+00:06:35.760 --> 00:06:40.960
+El usuario recibe una advertencia que dice, este mensaje contiene información confidencial y no se entregó.
+
+00:06:41.800 --> 00:06:43.900
+La acción se bloquea y se convierte en una oportunidad de aprendizaje.
+
+00:06:44.180 --> 00:06:44.980
+Sin fuga, sin brecha.
+
+00:06:45.300 --> 00:06:49.500
+DLP funciona en Exchange, SharePoint, OneDrive, Teams e incluso en puntos de conexión de Windows.
+
+00:06:50.100 --> 00:06:52.520
+No importa dónde estén los datos o cómo alguien intente moverlos.
+
+00:06:53.300 --> 00:06:55.540
+Si contiene información confidencial, la directiva la detecta.
+
+00:06:56.400 --> 00:06:59.680
+Algo que vale la pena saber es que primero puede ejecutar las directivas de DLP en modo de simulación.
+
+00:07:00.180 --> 00:07:02.940
+Eso significa que aprueba lo que se bloquearía sin bloquear nada en realidad.
+
+00:07:02.940 --> 00:07:06.060
+Obtiene un informe que muestra cuántos elementos se habrían detectado,
+
+00:07:06.280 --> 00:07:09.340
+qué tipos de datos activaron la directiva y qué usuarios estuvieron involucrados.
+
+00:07:09.680 --> 00:07:11.340
+Luego, realice ajustes antes de activar la aplicación.
+
+00:07:11.760 --> 00:07:14.000
+Es una forma segura de aprender sin interrumpir el trabajo de nada.
+
+00:07:14.420 --> 00:07:15.580
+La mejor práctica es empezar poco.
+
+00:07:16.240 --> 00:07:19.400
+Elija un tipo de datos confidenciales, por ejemplo, números de tarjeta de crédito
+
+00:07:19.400 --> 00:07:21.540
+y aplique DLP a un pequeño grupo de usuarios.
+
+00:07:22.120 --> 00:07:22.840
+Observe qué sucede.
+
+00:07:23.160 --> 00:07:26.340
+Eduque a los usuarios con sugerencias de directivas que expliquen por qué se bloqueó algo.
+
+00:07:26.700 --> 00:07:29.320
+Luego, amplie gradualmente la aplicación a medida que la gente se acostumbre.
+
+00:07:29.700 --> 00:07:31.140
+Esas sugerencias de directivas son muy útiles.
+
+00:07:31.140 --> 00:07:33.900
+En lugar de solo decir que está bloqueado, le indican al usuario.
+
+00:07:34.100 --> 00:07:36.280
+Este documento contiene datos confidenciales.
+
+00:07:36.380 --> 00:07:37.540
+Está seguro de que desea enviarlo.
+
+00:07:37.920 --> 00:07:41.100
+Les da la oportunidad de reconsiderar sin sentir que el sistema los está castigando.
+
+00:07:41.760 --> 00:07:43.180
+La mayoría de la gente no intenta filtrar datos.
+
+00:07:43.620 --> 00:07:44.360
+Simplemente van rápido.
+
+00:07:44.700 --> 00:07:48.080
+Entonces ahora conocemos nuestros datos, los protegemos con etiquetas y bloqueamos las fugas con DLP.
+
+00:07:48.740 --> 00:07:50.860
+Pero, ¿qué sucede cuando aparece un auditor pidiendo pruebas?
+
+00:07:51.720 --> 00:07:53.000
+Pilar 3. Cumplimiento de datos.
+
+00:07:53.860 --> 00:07:54.720
+Demuestra que sigue la regla.
+
+00:07:54.720 --> 00:07:57.800
+El cumplimiento consiste en demostrar que es seguro, no solo en serlo.
+
+00:07:58.440 --> 00:08:00.040
+Puede tener las mejores protecciones del mundo.
+
+00:08:00.440 --> 00:08:03.620
+Pero si un regulador aparece y pide pruebas, necesita más que buenas intenciones.
+
+00:08:04.060 --> 00:08:06.520
+Necesita documentación, registros de auditoría y un proceso defendible.
+
+00:08:06.740 --> 00:08:08.420
+Ahí es donde entra en juego el administrador de cumplimiento.
+
+00:08:08.820 --> 00:08:12.180
+Le da una puntuación basada en qué tan bien cumple con los requisitos normativos.
+
+00:08:12.740 --> 00:08:14.560
+Imagínese una puntuación de crédito, pero para el cumplimiento.
+
+00:08:14.900 --> 00:08:17.200
+Cuanto más alta sea su puntuación, mejor será su postura.
+
+00:08:17.200 --> 00:08:19.340
+Y esta cambia a medida que realiza acciones que la mejora.
+
+00:08:19.980 --> 00:08:23.820
+El administrador de cumplimiento incluye evaluaciones integradas para las principales regulaciones de las que probablemente hay oído.
+
+00:08:24.260 --> 00:08:25.880
+GDPR para la privacidad de datos en Europa.
+
+00:08:26.480 --> 00:08:28.400
+IPA para información de salud en los Estados Unidos.
+
+00:08:28.860 --> 00:08:31.060
+Hizo 27001 para la gestión de seguridad de la información.
+
+00:08:31.540 --> 00:08:32.800
+FINRA para servicios financieros.
+
+00:08:32.920 --> 00:08:34.840
+FEDRAMP para servicios en la nube gubernamentales.
+
+00:08:35.000 --> 00:08:35.420
+Muchos más.
+
+00:08:35.720 --> 00:08:37.440
+Más de 320 plantillas en total.
+
+00:08:38.040 --> 00:08:41.380
+Si existe una regulación que se aplica a su industria, probablemente hay una evaluación para ella.
+
+00:08:41.740 --> 00:08:43.820
+Cada evaluación desglosa la regulación en controles.
+
+00:08:43.820 --> 00:08:47.500
+Cada control se divide además en acciones de mejora con una guía paso a paso.
+
+00:08:48.300 --> 00:08:49.640
+Le indica exactamente lo que debe hacer.
+
+00:08:50.280 --> 00:08:51.320
+Habilita el registro de auditoría.
+
+00:08:51.580 --> 00:08:52.860
+Configura etiquetas de confidencialidad.
+
+00:08:53.100 --> 00:08:54.240
+Establezca directivas de retención.
+
+00:08:54.680 --> 00:08:56.080
+No tiene que adivinar cómo es el cumplimiento.
+
+00:08:56.480 --> 00:08:57.120
+El sistema se lo dice.
+
+00:08:57.620 --> 00:09:00.060
+Usted asigna estas acciones de mejora a personas de su organización.
+
+00:09:00.760 --> 00:09:02.640
+El administrador de TI recibe las tareas técnicas.
+
+00:09:02.940 --> 00:09:05.640
+El responsable de cumplimiento de la documentación de directivas y el equipo legal.
+
+00:09:05.740 --> 00:09:07.620
+Los flujos de trabajo de solicitudes de interesados.
+
+00:09:08.460 --> 00:09:11.780
+Todos saben de qué son responsables y usted puede realizar un seguimiento de progreso en tiempo real.
+
+00:09:11.780 --> 00:09:14.100
+Se acabó de enviar hojas de cálculo por correo electrónico.
+
+00:09:14.400 --> 00:09:17.920
+Cuando alguien completa una acción, carga la evidencia directamente en el administrador de cumplimiento.
+
+00:09:18.500 --> 00:09:21.100
+Esa evidencia pueden ser capturas de pantalla que muestran que una directiva está configurada.
+
+00:09:21.440 --> 00:09:23.120
+Pueden ser documentos directivos que usted arrega.
+
+00:09:23.540 --> 00:09:25.100
+Pueden ser registros de auditoría que se el sistema.
+
+00:09:25.640 --> 00:09:29.180
+Todo reside en un solo lugar, organizado por control, listo para la próxima auditoría.
+
+00:09:29.660 --> 00:09:30.280
+Aquí está la prendería.
+
+00:09:30.680 --> 00:09:34.580
+El administrador de cumplimiento analiza automáticamente su entorno de Microsoft 305 para algunos controles.
+
+00:09:34.580 --> 00:09:38.820
+Si ha configurado etiquetas de confidencialidad, lo detecta y le otorga crédito automáticamente.
+
+00:09:39.220 --> 00:09:41.340
+Si ha habilitado el registro de auditoría, también lo detecta.
+
+00:09:41.600 --> 00:09:43.420
+No tiene que demostrar manualmente cada detalle.
+
+00:09:43.860 --> 00:09:44.840
+El sistema se verifica así mismo.
+
+00:09:45.180 --> 00:09:48.320
+Los registros de auditoría en Purview registran cada actividad en su entorno.
+
+00:09:48.580 --> 00:09:49.320
+¿Quién accedió a Comento?
+
+00:09:49.860 --> 00:09:50.640
+¿Cuándo accedieron a él?
+
+00:09:50.900 --> 00:09:51.340
+¿Desde dónde?
+
+00:09:51.540 --> 00:09:52.260
+¿Qué hicieron con él?
+
+00:09:52.540 --> 00:09:54.180
+Cada acción queda registrada y es fácil de buscar.
+
+00:09:54.640 --> 00:09:57.160
+Cuando un auditor pregunta, ¿quién vio este archivo y cuándo?
+
+00:09:57.860 --> 00:09:59.320
+Usted tiene la respuesta en segundos, no en día.
+
+00:09:59.320 --> 00:10:09.220
+E-Discovery brinda a los equipos leales la capacidad de buscar en todos sus datos, correos, documentos, mensajes de Teams, sitios de SharePoint y retener contenido relevante para investigaciones o demandas.
+
+00:10:10.140 --> 00:10:14.020
+Si hay una disputa legal, puede preservar cada fragmento de datos relacionados y presentarlo como prueba.
+
+00:10:14.500 --> 00:10:17.760
+No hay que correr para encontrar archivos ni preocuparse de que alguien haya eliminado algo importante.
+
+00:10:18.280 --> 00:10:23.760
+La administración de registros asegura que los documentos críticos se retengan durante los periodos requeridos y no puedan eliminarse antes de tiempo.
+
+00:10:24.180 --> 00:10:28.160
+Si las regulaciones exigen conservar registros financieros por siete años, la administración de registros lo hace cumplir.
+
+00:10:28.160 --> 00:10:29.520
+Los usuarios no pueden eliminarlo.
+
+00:10:29.780 --> 00:10:31.340
+Los administradores no pueden omitir la directiva.
+
+00:10:31.620 --> 00:10:35.520
+Los datos permanecen hasta que expira el periodo de retención y luego se eliminan de forma controlada.
+
+00:10:35.840 --> 00:10:36.780
+¿Por qué es importante todo esto?
+
+00:10:36.900 --> 00:10:38.560
+A los reguladores no les importa qué herramientas tengan.
+
+00:10:38.860 --> 00:10:40.100
+No les importa que haya comprado preview.
+
+00:10:40.640 --> 00:10:42.560
+Les importa que pueda demostrar un proceso defendible.
+
+00:10:42.940 --> 00:10:47.360
+Quieren ver que identificó riesgos, implementó controles, supervisó el cumplimiento y tiene evidencia de cada paso.
+
+00:10:48.140 --> 00:10:51.540
+El administrador de cumplimiento le brinda esa evidencia en un formato que los auditores reconocen.
+
+00:10:51.920 --> 00:10:53.560
+Pero aquí hay algo nuevo que cambia el panorama.
+
+00:10:53.920 --> 00:10:54.240
+La IA.
+
+00:10:55.220 --> 00:10:55.820
+Gobierno de IA.
+
+00:10:55.820 --> 00:10:58.180
+¿Qué cambia cuando aparece Copilot?
+
+00:10:58.840 --> 00:10:59.920
+Esta es la definición más sencilla.
+
+00:11:00.660 --> 00:11:03.340
+La protección de datos tradicional suponía que los humanos acceden a los datos.
+
+00:11:03.820 --> 00:11:05.140
+Esa suposición dura durante décadas.
+
+00:11:05.480 --> 00:11:07.840
+Una persona inicia sesión, busca un archivo, lo abre y lo lee.
+
+00:11:08.160 --> 00:11:10.520
+El sistema sabe quién hizo qué y puede rastrear cada acción.
+
+00:11:11.040 --> 00:11:12.420
+La IA cambia ese cálculo por completo.
+
+00:11:12.780 --> 00:11:16.200
+Copilot y otros agentes de IA pueden acceder a enormes volúmenes de datos en segundos.
+
+00:11:16.600 --> 00:11:17.560
+No leen un archivo a la vez.
+
+00:11:17.560 --> 00:11:22.680
+Escanea miles de documentos, resume el contenido y muestra información que el usuario quizás ni sabía que existía.
+
+00:11:23.480 --> 00:11:26.060
+Esa velocidad y escala cae en una categoría de riesgo totalmente nueva.
+
+00:11:26.420 --> 00:11:27.940
+Imagine que sus datos son como un archivador.
+
+00:11:28.860 --> 00:11:30.460
+En el pasado, cada cajón necesita una llave.
+
+00:11:30.940 --> 00:11:33.180
+Solo la persona correcta podría acceder al archivo correcto.
+
+00:11:33.500 --> 00:11:38.240
+Copilot es como un asistente inteligente que puede abrir todos los cajones a la vez si las llaves están puestas.
+
+00:11:38.680 --> 00:11:43.360
+Si sus datos no están clasificados correctamente, Copilot podría mostrar información sensible a alguien que no debería verla.
+
+00:11:43.860 --> 00:11:46.520
+No porque el sistema falle, sino porque los datos nunca se etiquetaron.
+
+00:11:47.120 --> 00:11:51.040
+Un sitio de SharePoint con información de identificación personal de clientes, accesible para cualquiera en la empresa,
+
+00:11:51.400 --> 00:11:54.320
+se vuelve visible a través de la IA de formas que antes no era posible.
+
+00:11:55.080 --> 00:11:57.140
+El muro siempre estuvo ahí, la IA simplemente encontró la puerta.
+
+00:11:57.540 --> 00:11:58.440
+Entonces, ¿qué hace Provió al respecto?
+
+00:11:58.840 --> 00:12:01.700
+Provió extiende sus controles existentes para cubrir las interacciones con él.
+
+00:12:02.000 --> 00:12:05.940
+Las políticas de DLP para escanean las instrucciones y respuestas de IA, no solo correos y documentos.
+
+00:12:05.940 --> 00:12:10.360
+Si alguien le hace a Copilot una pregunta que devuelve datos sensibles, DLP puede bloquearla.
+
+00:12:10.920 --> 00:12:13.640
+Las etiquetas de sensibilidad se aplican al contenido generado por IA.
+
+00:12:14.560 --> 00:12:19.240
+Si Copilot crea un resumen de un documento confidencial, ese resumen hereda la misma etiqueta de protección.
+
+00:12:20.420 --> 00:12:24.740
+La gestión de la postura de seguridad de datos para IA monitorea el uso compartido excesivo y el mal uso en tiempo real.
+
+00:12:25.400 --> 00:12:30.320
+Observa cómo se utilizan las herramientas de IA, a qué datos acceden y si se está violando alguna política.
+
+00:12:30.900 --> 00:12:35.640
+Si alguien comienza a hacerle preguntas a Copilot que sugieren que busca datos que no debería tener, el sistema lo marca.
+
+00:12:36.940 --> 00:12:41.260
+Compliance Manager ahora incluye evaluaciones preconfiguradas para regulaciones de IA como la ley de IA dela.
+
+00:12:41.740 --> 00:12:45.780
+Si su organización utiliza herramientas de IA, necesita demostrar el cumplimiento de estas nuevas reglas.
+
+00:12:46.160 --> 00:12:48.320
+Las plantillas de evaluación ya están ahí, listas para usar.
+
+00:12:49.000 --> 00:12:53.980
+El centro de IA le brinda visibilidad sobre qué aplicaciones de IA se utilizan en su organización y a qué datos acceden.
+
+00:12:54.780 --> 00:13:00.160
+Puede ver qué empleados usan Copilot, qué herramientas de IA de terceros están conectadas y qué tipo de datos fluyen a través de ellas.
+
+00:13:01.060 --> 00:13:01.980
+Sin puntos ciegos.
+
+00:13:03.080 --> 00:13:06.220
+Purview también puede retener las instrucciones y respuestas de la IA para pistas de auditorio.
+
+00:13:07.060 --> 00:13:12.080
+Si un regulador pregunta qué le preguntó ese empleado a la IA y qué le respondió, detiene el registro.
+
+00:13:12.460 --> 00:13:17.240
+Prompts, respuestas, marcas de tiempo, identidad de usuario, todo se conserva para investigaciones o revisión de cumplimiento.
+
+00:13:17.780 --> 00:13:18.520
+Piénselo de esta manera.
+
+00:13:18.640 --> 00:13:23.600
+Los mismos tres pilares de los que hemos hablado, gobernanza, seguridad y cumplimiento, siguen aplicándose la IA, pero con mayor riesgo.
+
+00:13:23.800 --> 00:13:24.360
+Pero con mayor riesgo.
+
+00:13:24.460 --> 00:13:27.380
+Si sus datos no estaban bloqueados antes, la IA expondrá cada fisura.
+
+00:13:27.860 --> 00:13:30.960
+Purview le brinde las herramientas para reparar esas fisuras antes de que se convierten en brecha.
+
+00:13:31.300 --> 00:13:34.440
+Esos tres pilares no son proyectos separados, trabajan juntos en un ciclo.
+
+00:13:35.840 --> 00:13:37.060
+¿Cómo se conectan los tres pilares?
+
+00:13:37.700 --> 00:13:38.700
+Entonces, ¿cómo encaja todo esto?
+
+00:13:39.060 --> 00:13:42.800
+La gobernanza encuentra los datos, la seguridad los protege y el cumplimiento demuestra que siguió las reglas.
+
+00:13:43.220 --> 00:13:44.760
+Tres trabajos separados son sistema conectado.
+
+00:13:45.300 --> 00:13:46.560
+Pero aquí está lo que muchos pasan por algo.
+
+00:13:46.560 --> 00:13:49.340
+No solo funcionan en secuencias, se refuerzan mutuamente.
+
+00:13:49.820 --> 00:13:52.680
+Una auditoría de cumplimiento revela una brecha en la clasificación de sus datos.
+
+00:13:53.020 --> 00:13:55.640
+Quizás pasó por alto un sitio de SharePoint con datos de clientes sin etiqueta.
+
+00:13:56.220 --> 00:13:58.940
+Esta brecha retroalimenta la gobernanza, lo que actualiza el análisis del mapa de datos.
+
+00:13:59.380 --> 00:14:00.540
+La gobernanza encuentra los nuevos datos.
+
+00:14:00.800 --> 00:14:01.920
+La seguridad aplica la protección.
+
+00:14:02.300 --> 00:14:03.140
+El cumplimiento valida.
+
+00:14:03.540 --> 00:14:04.320
+El ciclo sigue girando.
+
+00:14:04.720 --> 00:14:06.280
+Permítame guiarlo a través de un escenario real.
+
+00:14:06.520 --> 00:14:07.860
+El mapa de datos analiza su entorno.
+
+00:14:08.400 --> 00:14:11.360
+Encuentra un sitio de SharePoint con información personal de clientes que nunca fue etiquetada.
+
+00:14:11.720 --> 00:14:12.420
+Nadie sabía que estaba allí.
+
+00:14:12.540 --> 00:14:15.660
+El motor de clasificación de Purview detecta el contenido confidencial
+
+00:14:15.660 --> 00:14:18.560
+y aplica automáticamente una etiqueta de alta confidencialidad con cifrado.
+
+00:14:19.160 --> 00:14:21.660
+Esa etiqueta activa una política de DLP que usted ya configuró.
+
+00:14:22.280 --> 00:14:25.560
+Cualquier correo electrónico que le envíe esa etiqueta a una dirección externa se bloquea automáticamente.
+
+00:14:26.000 --> 00:14:29.240
+Compliance Manager ve que el control está implementado y le otorga crédito en su puntuación.
+
+00:14:29.700 --> 00:14:31.420
+El registro de auditoría documenta todo el proceso.
+
+00:14:31.900 --> 00:14:32.880
+¿Quién encontró los datos?
+
+00:14:33.080 --> 00:14:34.200
+¿Cuándo se aplicó la etiqueta?
+
+00:14:34.300 --> 00:14:35.380
+¿Qué política bloqueó la acción?
+
+00:14:35.960 --> 00:14:39.180
+Cuando llegue la próxima auditoría, tendrá la historia completa lista para presentar.
+
+00:14:39.320 --> 00:14:42.140
+Ese es el poder de Purview como plataforma unificada.
+
+00:14:42.140 --> 00:14:44.900
+No son tres herramientas separadas que comparten un portal.
+
+00:14:45.040 --> 00:14:46.860
+Es un motor donde cada parte alimenta a las demás.
+
+00:14:47.560 --> 00:14:48.540
+La integración es automática.
+
+00:14:49.180 --> 00:14:53.000
+Una vez que su gobernanza está implementada, una vez que haya analizado su entorno y clasificado sus datos,
+
+00:14:53.100 --> 00:14:55.620
+la seguridad y el cumplimiento se benefician sin configuración adicional.
+
+00:14:56.360 --> 00:14:58.500
+No tiene que reconstruir sus etiquetas para Compliance Manager.
+
+00:14:59.040 --> 00:15:00.380
+No tiene que volver a analizar para DLP.
+
+00:15:00.880 --> 00:15:02.000
+Todo comparte la misma base.
+
+00:15:02.640 --> 00:15:06.140
+La mayoría de las organizaciones fallan en la protección de datos porque tratan esto como iniciativas desconectadas.
+
+00:15:07.360 --> 00:15:09.560
+Tienen un equipo de gobernanza que no habla con seguridad.
+
+00:15:09.560 --> 00:15:12.780
+Un oficial de cumplimiento que trabaja con hoja de cálculo diferente.
+
+00:15:13.260 --> 00:15:16.380
+Un equipo de TI que implementa políticas sin entender lo que necesita el negocio.
+
+00:15:17.000 --> 00:15:20.220
+Purview obliga a que esas conversaciones sucedan al hacer visibles las dependencias.
+
+00:15:21.040 --> 00:15:22.680
+No puede hacer bien el cumplimiento sin gobernanza.
+
+00:15:23.200 --> 00:15:25.620
+No puede hacer bien la seguridad sin saber qué datos está protegiendo.
+
+00:15:26.300 --> 00:15:26.980
+Entonces, ¿por dónde empezar?
+
+00:15:27.400 --> 00:15:28.480
+No activando todo a la vez.
+
+00:15:28.880 --> 00:15:29.580
+Empieza por la gobernanza.
+
+00:15:29.960 --> 00:15:32.060
+Encuentra tus datos, clasifícalos y lo demás vendrá solo.
+
+00:15:32.360 --> 00:15:33.560
+Esa es la pila del reconocimiento de hoy.
+
+00:15:34.180 --> 00:15:34.960
+Tus primeros pasos.
+
+00:15:34.960 --> 00:15:35.960
+Así que empecemos.
+
+00:15:36.620 --> 00:15:40.440
+Abre el explorador de datos de Purview y mira qué información confidencial existe ya en tu entorno.
+
+00:15:40.900 --> 00:15:42.340
+Podría sorprenderte lo que encuentre.
+
+00:15:42.740 --> 00:15:44.760
+Números de tarjetas de crédito en archivos adjuntos.
+
+00:15:44.900 --> 00:15:46.980
+Números de seguro social en sitios antiguos de SharePoint.
+
+00:15:47.480 --> 00:15:49.760
+Información médica en chats de Teams que olvidaste.
+
+00:15:50.280 --> 00:15:51.580
+No intentes arreglarlo todo el primer día.
+
+00:15:52.160 --> 00:15:52.600
+Observa.
+
+00:15:52.840 --> 00:15:54.280
+Concéntrate primero en los mayores riesgos.
+
+00:15:54.500 --> 00:15:55.300
+Datos financieros.
+
+00:15:55.440 --> 00:15:56.160
+Registros médicos.
+
+00:15:56.560 --> 00:15:57.240
+Información personal.
+
+00:15:57.680 --> 00:15:59.560
+Esos son los que te meten en problemas con los reguladores.
+
+00:16:00.280 --> 00:16:03.860
+Pon tu energía ahí antes de preocuparte por ese memorando interno sobre la fiesta de oficina.
+
+00:16:03.860 --> 00:16:07.600
+Luego, aplique etiquetas de confidencialidad a ese contenido crítico.
+
+00:16:07.860 --> 00:16:09.180
+Pero no lo despliegues a todos todavía.
+
+00:16:09.620 --> 00:16:10.780
+Empieza con un grupo pequeño de usuarios.
+
+00:16:11.080 --> 00:16:13.740
+Deja que lo prueben, se familiaricen y te den su opinión.
+
+00:16:14.180 --> 00:16:16.640
+Detectarás errores de configuración antes de que afecten a toda la empresa.
+
+00:16:17.200 --> 00:16:18.940
+Luego, configura una directiva de pen modo de prueba.
+
+00:16:19.600 --> 00:16:22.800
+Ejecuta la simulación para ver que se bloquearía sin bloquear nada realmente.
+
+00:16:23.480 --> 00:16:26.700
+Revisa los informes, ajusta tus reglas y activa la aplicación de forma gradual.
+
+00:16:27.320 --> 00:16:29.040
+Use el administrador de cumplimiento como tu error.
+
+00:16:29.560 --> 00:16:33.060
+Demuestra exactamente qué debe suceder para cumplir con las regulaciones de tu sector.
+
+00:16:33.060 --> 00:16:35.360
+No tienes que descifrar esto por tu cuenta.
+
+00:16:35.840 --> 00:16:38.660
+Las evaluaciones te dicen qué hacer, en qué orden y cómo demostrar que lo hiciste.
+
+00:16:39.080 --> 00:16:40.940
+Aquí tienes la acción más poderosa que puedes tomar ahora mismo.
+
+00:16:41.440 --> 00:16:43.000
+Ejecuta el análisis de clasificación de datos.
+
+00:16:43.260 --> 00:16:43.820
+Pero ejecútalo.
+
+00:16:44.140 --> 00:16:47.080
+Saber lo que tienes lo cambia todo, donde lo demás surge de ese único paso.
+
+00:16:47.860 --> 00:16:49.020
+Microsoft Preview no es un solo plan.
+
+00:16:49.540 --> 00:16:53.000
+Es un sistema para garantizar que tus datos sean encontrados, protegidos y defendibles.
+
+00:16:53.680 --> 00:16:54.540
+Empieza con gobernanza.
+
+00:16:54.760 --> 00:16:55.240
+Añade seguridad.
+
+00:16:55.460 --> 00:16:57.220
+Y usa el cumplimiento para mantener la integridad.
+
+00:16:57.220 --> 00:17:00.040
+El marco funciona tanto para datos tradicionales como para IA.
+
+00:17:00.860 --> 00:17:04.080
+Sí, también IA, porque está diseñado para el mundo en el que la mayoría ya vivimos.
+
+00:17:04.740 --> 00:17:07.700
+Si esto te dio una visión general, suscríbete a las píldoras de conocimiento de Microsoft
+
+00:17:07.700 --> 00:17:09.020
+en M375 FM.
+
+00:17:09.660 --> 00:17:11.100
+Deja un comentario con lo que quieras que expliquemos eso.
+
+00:17:11.560 --> 00:17:12.180
+Gracias por escuchar.

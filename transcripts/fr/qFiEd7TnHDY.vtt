@@ -1,0 +1,2611 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:03.780
+Vous avez réalisé la vente, vous avez envoyé la facture, mais quand l'argent arrive-t-il vraiment sur votre compte ?
+
+00:00:03.780 --> 00:00:05.060
+Et que se passe-t-il si ce n'est pas le cas ?
+
+00:00:05.060 --> 00:00:08.860
+Bienvenue dans un nouvel épisode de Microsoft Knowledge Nuggets sur M365FM,
+
+00:00:08.980 --> 00:00:10.200
+Sam Schumer Copieters.
+
+00:00:10.680 --> 00:00:13.600
+Aujourd'hui, nous simplifions le fonctionnement des comptes clients dans Dynamics 365.
+
+00:00:14.820 --> 00:00:18.100
+A la fin de cet épisode, vous suivrez le solde d'un client, de la vente jusqu'au paiement,
+
+00:00:18.260 --> 00:00:20.720
+et vous verrez comment l'entreprise réagit en cas de retard.
+
+00:00:21.800 --> 00:00:22.900
+Voici la définition la plus saine.
+
+00:00:23.700 --> 00:00:27.720
+La comptabilité client assure le suivi de l'argent dû par les clients et des paiements reçus.
+
+00:00:28.140 --> 00:00:29.360
+Voyez cela comme un classeur.
+
+00:00:29.360 --> 00:00:31.060
+Pour l'argent au sein de votre entreprise.
+
+00:00:31.620 --> 00:00:32.820
+Chaque client dispose de son propre dossier.
+
+00:00:33.180 --> 00:00:37.100
+Ce dossier contient ses factures, ses paiements, ses dates d'échéance et dates d'échéance, et tout suivi nécessaire.
+
+00:00:37.500 --> 00:00:41.520
+Un tableur peut lister ces éléments, mais il ne peut pas relier de manière fiable une nouvelle vente,
+
+00:00:41.820 --> 00:00:45.060
+une date d'échéance convenue, un virement bancaire et une décision de crédit à l'échelle de l'entreprise.
+
+00:00:45.540 --> 00:00:47.080
+Dynamics 365 Finance, lui, le peu.
+
+00:00:47.460 --> 00:00:48.500
+Commençons donc par le commencement.
+
+00:00:48.960 --> 00:00:49.580
+Le compte client.
+
+00:00:50.660 --> 00:00:53.760
+Primo, le compte client, le point de départ de chaque facture.
+
+00:00:55.580 --> 00:00:57.920
+Imaginez que vous travaillez avec un client nommé Northwind Equipment.
+
+00:00:57.920 --> 00:01:03.000
+Avant qu'il ne puisse passer commande, Dynamics 365 a besoin de plus qu'un simple nom et un numéro de téléphone.
+
+00:01:03.500 --> 00:01:05.500
+Il a besoin des règles financières pour traiter avec Northwind.
+
+00:01:06.240 --> 00:01:08.980
+Le compte client est ce dossier étiqueté dans notre classeur.
+
+00:01:09.780 --> 00:01:13.240
+Il contient tous les détails indiquant à Dynamics 365 qui est le client,
+
+00:01:13.440 --> 00:01:15.580
+pour envoyer les factures, comment il paye habituellement,
+
+00:01:15.840 --> 00:01:18.180
+et quel crédit l'entreprise est prête à lui accorder.
+
+00:01:19.180 --> 00:01:22.180
+Cela peut sembler être une configuration basique, mais cela évite beaucoup de confusion par la suite.
+
+00:01:22.380 --> 00:01:24.760
+Par exemple, le compte enregistre l'adresse de facturation du client.
+
+00:01:24.760 --> 00:01:26.880
+Celle-ci est souvent différente de l'adresse de livraison.
+
+00:01:27.200 --> 00:01:30.260
+Le matériel peut être expédié à une usine tandis que les factures sont envoyées au service financier.
+
+00:01:30.480 --> 00:01:31.780
+Il contient également les conditions de paiement.
+
+00:01:32.120 --> 00:01:33.720
+Conditions de paiement répondent à une question simple.
+
+00:01:34.000 --> 00:01:36.020
+Combien de temps ce client a-t-il pour payer ?
+
+00:01:36.020 --> 00:01:37.220
+Northwind peut payer sous 30 jours.
+
+00:01:37.660 --> 00:01:39.080
+Un autre client paie à l'avance ?
+
+00:01:39.080 --> 00:01:40.860
+Un client plus important pourrait négocier 60 jours.
+
+00:01:41.340 --> 00:01:42.860
+Une fois ces conditions enregistrées sur le compte,
+
+00:01:42.960 --> 00:01:45.440
+Dynamics 365 calcule automatiquement la date d'échéance.
+
+00:01:46.080 --> 00:01:47.540
+Personne n'a besoin de chercher dans des fils d'email,
+
+00:01:47.540 --> 00:01:51.480
+ou de deviner si un délai de 30 jours court à partir de la date de commande, de livraison ou de facturation.
+
+00:01:51.480 --> 00:01:53.600
+Le système le sait tout simplement. Voici le point important.
+
+00:01:53.900 --> 00:01:55.920
+Le compte client contient également le mode de paiement habituel.
+
+00:01:56.500 --> 00:01:59.200
+Si Northwind paie par virement bancaire et un autre client par carte bancaire,
+
+00:01:59.280 --> 00:02:02.060
+l'équipe financière suit le processus adéquat au moment du paiement.
+
+00:02:02.540 --> 00:02:04.320
+Ils n'ont pas à traiter chaque client comme un cas isolé.
+
+00:02:04.800 --> 00:02:05.800
+Ensuite, il y a la limite de crédit.
+
+00:02:06.220 --> 00:02:10.100
+Une limite de crédit est le montant maximum qu'une entreprise autorise un client à devoir à un instant T.
+
+00:02:10.520 --> 00:02:12.380
+Voyez cela comme la réception d'un immeuble de bureau.
+
+00:02:13.020 --> 00:02:15.580
+Le réceptionniste vérifie si quelqu'un est autorisé à accéder à un étage.
+
+00:02:15.580 --> 00:02:18.600
+Non pas si le visiteur est sympathique, mais simplement si le règlement l'y autorise.
+
+00:02:19.140 --> 00:02:19.780
+C'est la même idée ici.
+
+00:02:19.780 --> 00:02:22.340
+La limite de crédit définit une frontière claire entre les ventes et la finance.
+
+00:02:23.040 --> 00:02:25.800
+Northwind est peut-être un bon client, mais s'il doit déjà une somme importante,
+
+00:02:25.900 --> 00:02:28.400
+l'entreprise doit marquer une pause avant d'accepter une nouvelle grosse commande.
+
+00:02:29.020 --> 00:02:32.700
+En coulisses, Dynamics 365 peut aussi utiliser des groupes de clients et des profils de validation.
+
+00:02:33.280 --> 00:02:34.460
+Ne vous laissez pas d'effrayer par ces tas.
+
+00:02:34.900 --> 00:02:37.120
+Un groupe de clients est simplement un moyen de rassembler des clients similaires.
+
+00:02:37.720 --> 00:02:39.560
+Le détail dans un groupe, la vente en gros dans un autre.
+
+00:02:40.020 --> 00:02:42.660
+Ainsi, l'entreprise peut appliquer des règles communes, là où c'est pertinent.
+
+00:02:43.260 --> 00:02:46.240
+Un profil de validation est une règle comptable qui indique à Dynamics 365
+
+00:02:46.240 --> 00:02:49.200
+quels comptes financiers doivent enregistrer la dette lors de l'émission d'une facture.
+
+00:02:49.780 --> 00:02:52.220
+En tant que commercial ou client, vous ne verrez généralement pas ce travail.
+
+00:02:53.320 --> 00:02:56.360
+Mais la finance en dépend, car les comptes doivent refléter chaque montant au bon endroit.
+
+00:02:56.980 --> 00:02:57.880
+Et voici le véritable atout.
+
+00:02:58.540 --> 00:03:01.060
+Le compte client relie l'aspect commercial à l'aspect financier.
+
+00:03:01.840 --> 00:03:03.540
+Un commercial peut créer une commande pour Northwind,
+
+00:03:03.940 --> 00:03:06.140
+et la finance n'a pas besoin de ressaisir ses informations plus tard.
+
+00:03:06.620 --> 00:03:09.100
+Elle voit le client, les conditions de paiement, la position de crédit et le montant du.
+
+00:03:09.560 --> 00:03:10.740
+Tout est lié automatiquement.
+
+00:03:11.260 --> 00:03:13.420
+C'est là toute la différence entre une liste de contacts et un compte client.
+
+00:03:13.900 --> 00:03:15.320
+Une liste de contacts vous aide à appeler quelqu'un.
+
+00:03:15.740 --> 00:03:17.760
+Un compte client enregistre la relation financière,
+
+00:03:17.760 --> 00:03:20.340
+y compris les règles régissant les ventes effectuées auprès de ce client.
+
+00:03:21.260 --> 00:03:22.880
+Une fois que Northwind achète quelque chose,
+
+00:03:22.980 --> 00:03:26.020
+Dynamics 365 doit transformer cette vente en une demande de paiement appropriée,
+
+00:03:28.830 --> 00:03:31.110
+créer la facture, transformer une vente en une créance.
+
+00:03:32.470 --> 00:03:34.970
+Quelle est donc la différence entre une commande et une facture ?
+
+00:03:34.970 --> 00:03:36.390
+Une commande indique ce que le client veut.
+
+00:03:36.530 --> 00:03:37.610
+Une facture indique ce qu'il doit payer.
+
+00:03:38.150 --> 00:03:38.750
+Voici le point important.
+
+00:03:39.090 --> 00:03:41.210
+Une facture crée un solde à régler sur le compte client.
+
+00:03:42.170 --> 00:03:44.310
+Une fois comptabilisé, vous facturez officiellement le client,
+
+00:03:44.410 --> 00:03:46.070
+et la comptabilité client peut suivre les sommes dues.
+
+00:03:46.070 --> 00:03:47.930
+Reprenons l'exemple de Northwind & Queen.
+
+00:03:48.430 --> 00:03:49.390
+Ils ont commandé 10 équipements.
+
+00:03:49.590 --> 00:03:50.910
+Votre équipe commerciale enregistre la commande,
+
+00:03:50.970 --> 00:03:51.910
+l'entrepôt prépare les articles,
+
+00:03:51.970 --> 00:03:53.410
+et vous les expédiez, et vous les expédiez.
+
+00:03:53.650 --> 00:03:54.890
+Northwind possède maintenant de matériel.
+
+00:03:55.090 --> 00:03:57.030
+A ce stade, vous avez besoin d'un enregistrement clair,
+
+00:03:57.270 --> 00:03:59.250
+de ce qu'ils ont acheté, du coût, et de l'échéance du paiement.
+
+00:03:59.630 --> 00:04:00.970
+Cet enregistrement est la facture client.
+
+00:04:01.430 --> 00:04:03.510
+La plupart des factures dans Dynamics 365 Finance
+
+00:04:03.510 --> 00:04:04.790
+proviennent directement d'une commande client.
+
+00:04:05.410 --> 00:04:07.470
+Cela permet de lier la facture à la vente initiale.
+
+00:04:07.870 --> 00:04:09.270
+Les articles, prix, quantité,
+
+00:04:09.270 --> 00:04:11.450
+et toutes les règles convenues sont déjà enregistrées.
+
+00:04:11.450 --> 00:04:13.910
+Plus besoin de demander à quelqu'un de ressaisir ces détails
+
+00:04:13.910 --> 00:04:15.170
+dans un système de facturation distinct.
+
+00:04:15.870 --> 00:04:17.170
+Une fois les marchandises expédiées
+
+00:04:17.170 --> 00:04:18.890
+ou un service arrivés à une étape facturable,
+
+00:04:19.050 --> 00:04:20.810
+vous créez la facture à partir de cette commande client.
+
+00:04:21.370 --> 00:04:23.210
+Le moment précis dépend du fonctionnement de votre entreprise.
+
+00:04:23.870 --> 00:04:25.310
+Certaines entreprises facturent à l'expédition,
+
+00:04:25.470 --> 00:04:26.690
+d'autres après la fin d'une étape de travail.
+
+00:04:27.090 --> 00:04:28.430
+Un cabinet de conseil pourrait facturer
+
+00:04:28.430 --> 00:04:29.630
+après avoir atteint une étape clé.
+
+00:04:30.550 --> 00:04:33.470
+Dynamics 365 suit le processus que vous avez déjà mis en place.
+
+00:04:34.210 --> 00:04:35.830
+Vous entendrez peut-être parler de factures basées sur le bon niveau.
+
+00:04:36.650 --> 00:04:38.970
+Un bon de livraison confirme ce qu'a physiquement quitté l'entrepôt
+
+00:04:38.970 --> 00:04:40.090
+et atteint l'étape de livraison.
+
+00:04:40.090 --> 00:04:42.390
+Lorsque votre entreprise facture sur la base
+
+00:04:42.390 --> 00:04:43.450
+de ce qui a réellement été expédié,
+
+00:04:43.570 --> 00:04:45.930
+la facture peut utiliser ces détails de livraison confirmée.
+
+00:04:46.410 --> 00:04:47.470
+Cela évite un problème courant.
+
+00:04:47.990 --> 00:04:49.130
+Imaginez une commande de 10 unités
+
+00:04:49.130 --> 00:04:50.310
+mais seules 8 sont expédiées aujourd'hui
+
+00:04:50.310 --> 00:04:51.370
+car 2 sont en attente de stock.
+
+00:04:51.810 --> 00:04:52.850
+Si vous facturez à partir du bon,
+
+00:04:53.170 --> 00:04:54.870
+de livraison vous ne facturez que les 8 unités expédiées.
+
+00:04:55.270 --> 00:04:56.670
+Vous ne facturez pas Northwind pour les 10
+
+00:04:56.670 --> 00:04:57.670
+avant qu'il ne les ait reçues.
+
+00:04:58.310 --> 00:04:59.210
+La commande reste importante,
+
+00:04:59.470 --> 00:05:01.150
+mais la livraison confirmée indique à la facturation
+
+00:05:01.150 --> 00:05:02.230
+ce qui doit figurer sur cette facture.
+
+00:05:02.830 --> 00:05:04.590
+Mais toutes les factures ne commencent pas par une commande client.
+
+00:05:05.050 --> 00:05:06.470
+Parfois vous devez facturer des frais ponctuels
+
+00:05:06.470 --> 00:05:07.430
+qui n'impliquent pas d'expédition.
+
+00:05:08.270 --> 00:05:10.310
+Peut-être que Northwind demande une session de formation spéciale.
+
+00:05:10.670 --> 00:05:11.610
+Il peut s'agir de frais de service,
+
+00:05:11.730 --> 00:05:12.270
+d'une charge de projet
+
+00:05:12.270 --> 00:05:14.130
+ou d'une correction nécessitant sa propre facture.
+
+00:05:14.790 --> 00:05:15.210
+Pour ces cas,
+
+00:05:15.510 --> 00:05:18.170
+Dynamics 365 Finance prend en charge la facture en texte libre.
+
+00:05:18.890 --> 00:05:20.670
+Texte libre ne signifie pas aléatoire ou informel.
+
+00:05:21.010 --> 00:05:22.730
+Cela signifie que la facture n'est pas liée à une commande client.
+
+00:05:23.210 --> 00:05:24.050
+Vous saisissez le client,
+
+00:05:24.310 --> 00:05:25.130
+la charge, le montant,
+
+00:05:25.370 --> 00:05:26.410
+les détails fiscaux si nécessaire
+
+00:05:26.410 --> 00:05:27.630
+et les informations de paiement.
+
+00:05:28.150 --> 00:05:28.790
+Une fois validée,
+
+00:05:28.930 --> 00:05:30.570
+elle devient un montant du normal sur le compte client.
+
+00:05:31.110 --> 00:05:32.570
+Le client reçoit toujours une facture en bonne forme.
+
+00:05:32.870 --> 00:05:34.430
+Le service financier voit toujours un solde à recouvrir.
+
+00:05:34.430 --> 00:05:35.970
+Qu'en est-il du travail récurrent ?
+
+00:05:35.970 --> 00:05:37.450
+Supposons que Northwind paie des frais mensuels
+
+00:05:37.450 --> 00:05:38.530
+pour la maintenance de ses équipements.
+
+00:05:39.070 --> 00:05:40.390
+Créer la même facture à la main chaque mois
+
+00:05:40.390 --> 00:05:41.110
+est une perte de temps
+
+00:05:41.110 --> 00:05:42.450
+et favorise les petites erreurs.
+
+00:05:43.330 --> 00:05:44.170
+La facturation d'abonnement
+
+00:05:44.170 --> 00:05:45.210
+utilise des calendriers de facturation
+
+00:05:45.210 --> 00:05:46.210
+pour gérer les charges répétitives.
+
+00:05:46.970 --> 00:05:47.890
+Vous configurez l'accord
+
+00:05:47.890 --> 00:05:49.130
+et le calendrier de facturation.
+
+00:05:49.330 --> 00:05:50.410
+Puis Dynamics 365
+
+00:05:50.410 --> 00:05:52.350
+crée les factures à chaque période.
+
+00:05:53.490 --> 00:05:54.870
+Cela vous offre un moyen reproductible
+
+00:05:54.870 --> 00:05:56.210
+de facturer des services récurrents
+
+00:05:56.210 --> 00:05:57.390
+et le client reçoit des factures
+
+00:05:57.390 --> 00:05:58.510
+selon le calendrier convenu.
+
+00:05:59.090 --> 00:05:59.950
+La validation est le moment
+
+00:05:59.950 --> 00:06:01.270
+qui modifie le statut de la vente.
+
+00:06:02.150 --> 00:06:03.010
+Elle enregistre le montant
+
+00:06:03.010 --> 00:06:04.110
+sur le compte client de Northwind
+
+00:06:04.110 --> 00:06:04.770
+comme une somme due.
+
+00:06:05.410 --> 00:06:06.410
+Elle envoie également le montant
+
+00:06:06.410 --> 00:06:07.330
+dans les registres financiers
+
+00:06:07.330 --> 00:06:07.870
+de l'entreprise
+
+00:06:07.870 --> 00:06:08.990
+où vous voyez que la vente
+
+00:06:08.990 --> 00:06:09.710
+a été facturée
+
+00:06:09.710 --> 00:06:11.130
+et le paiement en attente.
+
+00:06:11.830 --> 00:06:12.690
+La facture n'est plus un brouillon
+
+00:06:12.690 --> 00:06:13.630
+que quelqu'un pourrait modifier
+
+00:06:13.630 --> 00:06:14.070
+par mégarde.
+
+00:06:14.550 --> 00:06:15.250
+Elle fait désormais partie
+
+00:06:15.250 --> 00:06:15.910
+du registre financier.
+
+00:06:16.310 --> 00:06:16.930
+Soyons concrets.
+
+00:06:17.430 --> 00:06:18.150
+Northwind commande
+
+00:06:18.150 --> 00:06:19.550
+pour 10 $ d'équipement.
+
+00:06:20.070 --> 00:06:21.250
+8 unités sont expédiées en premier
+
+00:06:21.250 --> 00:06:21.950
+vous comptabilisez donc
+
+00:06:21.950 --> 00:06:22.830
+une facture pour ces 8 unies.
+
+00:06:23.310 --> 00:06:24.330
+La facture indique le montant,
+
+00:06:24.730 --> 00:06:25.270
+la date d'échéance
+
+00:06:25.270 --> 00:06:26.090
+et les instructions de paiement.
+
+00:06:26.710 --> 00:06:27.830
+Northwind reçoit la facture
+
+00:06:27.830 --> 00:06:28.930
+et Dynamics 365
+
+00:06:28.930 --> 00:06:30.070
+enregistre le même montant
+
+00:06:30.070 --> 00:06:31.430
+comme étant ouvert sur leur compte.
+
+00:06:34.110 --> 00:06:34.790
+entrepôt et de finances
+
+00:06:34.790 --> 00:06:35.990
+de se concentrer sur la même transaction.
+
+00:06:36.330 --> 00:06:36.910
+Fini les disputes
+
+00:06:36.910 --> 00:06:37.750
+sur les différentes versions
+
+00:06:37.750 --> 00:06:38.490
+dans divers fichiers,
+
+00:06:38.830 --> 00:06:39.710
+mais une facture ne fait que
+
+00:06:39.710 --> 00:06:40.330
+réclamer de l'argent.
+
+00:06:40.710 --> 00:06:41.590
+La tâche suivante consiste
+
+00:06:41.590 --> 00:06:42.450
+à reconnaître le paiement
+
+00:06:42.450 --> 00:06:42.910
+à son arrivée
+
+00:06:42.910 --> 00:06:43.970
+et à le lier au bon solde ouvert
+
+00:06:43.970 --> 00:06:44.890
+et à lui lier au...
+
+00:06:44.890 --> 00:06:46.150
+2-3 réception et rapprochement
+
+00:06:46.150 --> 00:06:46.510
+des paiements.
+
+00:06:46.930 --> 00:06:47.810
+Clôturer la bonne facture.
+
+00:06:48.290 --> 00:06:48.890
+L'arrivée d'un paiement
+
+00:06:48.890 --> 00:06:49.350
+semble sain.
+
+00:06:49.910 --> 00:06:50.570
+Le solde bancaire augmente
+
+00:06:50.570 --> 00:06:51.470
+donc le travail est fait,
+
+00:06:51.590 --> 00:06:52.530
+n'est-ce pas ?
+
+00:06:52.530 --> 00:06:53.010
+Pas tout à fait.
+
+00:06:53.330 --> 00:06:54.290
+Le service financier doit encore
+
+00:06:54.290 --> 00:06:55.010
+répondre à deux questions.
+
+00:06:55.450 --> 00:06:56.030
+Qui a envoyé l'argent
+
+00:06:56.030 --> 00:06:56.850
+et quelle facture ouverte
+
+00:06:56.850 --> 00:06:57.390
+ou quelle facture
+
+00:06:57.390 --> 00:06:58.630
+cet argent doit-il clôturer ?
+
+00:06:58.630 --> 00:06:59.650
+Cet argent doit-il clôturer ?
+
+00:06:59.650 --> 00:07:00.350
+Pensez à Northwind
+
+00:07:00.350 --> 00:07:01.390
+qui règle la facture d'équipement.
+
+00:07:01.930 --> 00:07:02.590
+La banque peut afficher
+
+00:07:02.590 --> 00:07:03.010
+un paiement
+
+00:07:03.010 --> 00:07:04.030
+avec une courte référence,
+
+00:07:04.210 --> 00:07:05.090
+un montant et une date.
+
+00:07:05.790 --> 00:07:06.310
+Sans rapprochement
+
+00:07:06.310 --> 00:07:06.770
+de ce paiement
+
+00:07:06.770 --> 00:07:07.930
+avec le solde ouvert de Northwind,
+
+00:07:08.230 --> 00:07:09.030
+le système pourrait montrer
+
+00:07:09.030 --> 00:07:09.710
+de l'argent en banque
+
+00:07:09.710 --> 00:07:10.290
+tout en indiquant
+
+00:07:10.290 --> 00:07:11.150
+que Northwind doit encore
+
+00:07:11.150 --> 00:07:11.630
+cette somme.
+
+00:07:12.050 --> 00:07:12.590
+Ces enregistrements
+
+00:07:12.590 --> 00:07:13.090
+doivent se rencontrer.
+
+00:07:13.670 --> 00:07:15.190
+Dynamics 365 Finance
+
+00:07:15.190 --> 00:07:16.730
+gère plusieurs méthodes
+
+00:07:16.730 --> 00:07:17.510
+de paiement client.
+
+00:07:18.430 --> 00:07:18.910
+Vous pouvez recevoir
+
+00:07:18.910 --> 00:07:19.450
+des espèces,
+
+00:07:19.530 --> 00:07:19.830
+des chèques,
+
+00:07:19.910 --> 00:07:20.570
+des paiements par carte,
+
+00:07:20.650 --> 00:07:21.290
+des virements bancaires
+
+00:07:21.290 --> 00:07:21.910
+ou des traites
+
+00:07:26.850 --> 00:07:27.990
+dans les enregistrements financiers.
+
+00:07:28.530 --> 00:07:29.210
+Un virement bancaire
+
+00:07:29.210 --> 00:07:29.590
+peut apparaître
+
+00:07:29.590 --> 00:07:30.270
+sur un relevé bancaire.
+
+00:07:30.630 --> 00:07:31.470
+Un chèque peut nécessiter
+
+00:07:31.470 --> 00:07:31.950
+un enregistrement
+
+00:07:31.950 --> 00:07:32.370
+avant que la banque
+
+00:07:32.370 --> 00:07:32.710
+l'encaisse.
+
+00:07:33.310 --> 00:07:33.950
+Un paiement par carte
+
+00:07:33.950 --> 00:07:34.270
+peut arriver
+
+00:07:34.270 --> 00:07:35.070
+via un service de paiement.
+
+00:07:35.910 --> 00:07:37.190
+Dynamics 365 offre
+
+00:07:37.190 --> 00:07:37.930
+à la finance un endroit
+
+00:07:37.930 --> 00:07:38.550
+pour enregistrer
+
+00:07:38.550 --> 00:07:39.230
+les détails de paiement
+
+00:07:39.230 --> 00:07:39.990
+sur le bon compte client.
+
+00:07:40.470 --> 00:07:41.210
+Cet endroit est souvent
+
+00:07:41.210 --> 00:07:42.310
+le journal des paiements clients.
+
+00:07:42.730 --> 00:07:43.290
+Un journal évoque
+
+00:07:43.290 --> 00:07:43.970
+un registre papier
+
+00:07:43.970 --> 00:07:45.150
+mais dans Dynamics 365
+
+00:07:45.150 --> 00:07:45.770
+c'est simplement
+
+00:07:45.770 --> 00:07:46.590
+un espace contrôlé
+
+00:07:46.590 --> 00:07:47.470
+pour saisir et vérifier
+
+00:07:47.470 --> 00:07:47.810
+les paiements
+
+00:07:47.810 --> 00:07:48.770
+avant leur comptabilisation.
+
+00:07:49.770 --> 00:07:50.450
+Le service financier
+
+00:07:50.450 --> 00:07:50.910
+registre le client,
+
+00:07:51.150 --> 00:07:51.530
+le montant,
+
+00:07:51.530 --> 00:07:52.370
+le mode de paiement,
+
+00:07:52.610 --> 00:07:53.190
+le compte bancaire
+
+00:07:53.190 --> 00:07:53.830
+et toute référence
+
+00:07:53.830 --> 00:07:54.630
+accompagnant le paiement.
+
+00:07:55.470 --> 00:07:56.130
+Il y a ensuite un mot
+
+00:07:56.130 --> 00:07:56.670
+qui semble souvent
+
+00:07:56.670 --> 00:07:57.670
+plus difficile qu'il ne l'est,
+
+00:07:57.930 --> 00:07:58.410
+le lettrage.
+
+00:07:58.950 --> 00:07:59.630
+Le lettrage signifie
+
+00:07:59.630 --> 00:08:00.550
+faire correspondre un paiement
+
+00:08:00.550 --> 00:08:01.410
+à la facture qu'il règle.
+
+00:08:02.170 --> 00:08:02.730
+Northwind règle
+
+00:08:02.730 --> 00:08:03.490
+le montant exact
+
+00:08:03.490 --> 00:08:04.510
+de sa facture d'équipement.
+
+00:08:04.970 --> 00:08:05.650
+Le service financier
+
+00:08:05.650 --> 00:08:06.370
+sélectionne le paiement
+
+00:08:06.370 --> 00:08:07.170
+et la facture ouverte
+
+00:08:07.170 --> 00:08:07.830
+puis les lettres ensemble.
+
+00:08:08.430 --> 00:08:09.210
+Une fois comptabilisé,
+
+00:08:09.270 --> 00:08:10.070
+la facture n'apparaît plus
+
+00:08:10.070 --> 00:08:10.610
+comme un payé.
+
+00:08:11.230 --> 00:08:12.110
+Le paiement l'a clôturé.
+
+00:08:12.670 --> 00:08:13.270
+Le solde client
+
+00:08:13.270 --> 00:08:14.110
+diminue le même montant.
+
+00:08:14.830 --> 00:08:15.310
+C'est important
+
+00:08:15.310 --> 00:08:16.450
+car un paiement sans lettrage
+
+00:08:16.450 --> 00:08:17.230
+peut laisser une facture
+
+00:08:17.230 --> 00:08:18.010
+ouverte sur le compte
+
+00:08:18.010 --> 00:08:18.690
+alors que vous avez
+
+00:08:18.690 --> 00:08:20.230
+déjà reçu l'argent.
+
+00:08:21.010 --> 00:08:22.070
+Cela crée de mauvais rapports,
+
+00:08:22.430 --> 00:08:23.070
+des suivis inutiles
+
+00:08:23.070 --> 00:08:23.770
+et des appels gênants
+
+00:08:23.770 --> 00:08:24.330
+auprès de clients
+
+00:08:24.330 --> 00:08:25.130
+qui ont déjà payé.
+
+00:08:25.490 --> 00:08:26.090
+Parfois, le paiement
+
+00:08:26.090 --> 00:08:27.010
+ne couvre pas la totalité
+
+00:08:27.010 --> 00:08:27.470
+de la facture.
+
+00:08:28.130 --> 00:08:28.730
+Peut-être que Northwind
+
+00:08:28.730 --> 00:08:29.530
+paie une partie du montant
+
+00:08:29.530 --> 00:08:29.810
+maintenant
+
+00:08:29.810 --> 00:08:30.670
+et accepte de régler
+
+00:08:30.670 --> 00:08:31.190
+le reste plus tard.
+
+00:08:31.870 --> 00:08:32.650
+Dynamics 365
+
+00:08:32.650 --> 00:08:33.590
+peut imputer le montant
+
+00:08:33.590 --> 00:08:34.310
+reçu sur la facture
+
+00:08:34.310 --> 00:08:34.750
+tout en laissant
+
+00:08:34.750 --> 00:08:35.770
+la partie impayée ouverte.
+
+00:08:36.690 --> 00:08:37.410
+La facture ne disparaît
+
+00:08:37.410 --> 00:08:37.770
+pas simplement
+
+00:08:37.770 --> 00:08:38.250
+parce qu'une somme
+
+00:08:38.250 --> 00:08:38.830
+a été reçue.
+
+00:08:39.470 --> 00:08:39.970
+Le service financier
+
+00:08:39.970 --> 00:08:40.430
+peut voir exactement
+
+00:08:40.430 --> 00:08:40.910
+ce qu'elle a sa payée.
+
+00:08:41.150 --> 00:08:41.490
+C'est bien mieux
+
+00:08:41.490 --> 00:08:42.270
+que de marquer par erreur
+
+00:08:42.270 --> 00:08:43.250
+une facture comme entièrement
+
+00:08:43.250 --> 00:08:44.030
+réglée et puis d'essayer
+
+00:08:44.030 --> 00:08:44.970
+de se souvenir du montant
+
+00:08:44.970 --> 00:08:45.750
+manquant dans une note
+
+00:08:45.750 --> 00:08:47.030
+ou une feuille de calcul séparée.
+
+00:08:47.690 --> 00:08:48.530
+Pour de nombreuses entreprises,
+
+00:08:48.630 --> 00:08:49.170
+les paiements bancaires
+
+00:08:49.170 --> 00:08:49.690
+arrivent en grenon.
+
+00:08:50.530 --> 00:08:51.270
+Vérifiez manuellement
+
+00:08:51.270 --> 00:08:51.890
+chaque virement
+
+00:08:51.890 --> 00:08:52.830
+et chaque facture ouverte
+
+00:08:52.830 --> 00:08:53.290
+prend du temps,
+
+00:08:53.630 --> 00:08:54.330
+surtout lorsque les clients
+
+00:08:54.330 --> 00:08:55.190
+règlent plusieurs factures
+
+00:08:55.190 --> 00:08:56.410
+ensemble ou saisissent
+
+00:08:56.410 --> 00:08:57.790
+une référence peu claire.
+
+00:08:59.530 --> 00:09:00.830
+Dynamics 365 dispose
+
+00:09:00.830 --> 00:09:01.730
+d'un journal de rapprochement
+
+00:09:01.730 --> 00:09:02.550
+bancaire pour ce travail.
+
+00:09:03.150 --> 00:09:03.930
+Une équipe peut importer
+
+00:09:03.930 --> 00:09:04.410
+les informations
+
+00:09:04.410 --> 00:09:05.130
+de relevés bancaires
+
+00:09:05.130 --> 00:09:05.990
+et les utiliser
+
+00:09:05.990 --> 00:09:06.770
+pour faire correspondre
+
+00:09:06.770 --> 00:09:07.430
+les paiements entrants
+
+00:09:10.430 --> 00:09:10.730
+et le montant.
+
+00:09:11.010 --> 00:09:11.650
+Les détails des clients
+
+00:09:11.650 --> 00:09:12.690
+et les règles de correspondance
+
+00:09:12.690 --> 00:09:13.650
+aident le système à suggérer
+
+00:09:13.650 --> 00:09:14.770
+où le paiement doit être affecté.
+
+00:09:15.410 --> 00:09:16.530
+Vous vérifiez toujours le résultat,
+
+00:09:16.610 --> 00:09:17.450
+cette étape est importante.
+
+00:09:18.050 --> 00:09:19.010
+L'automatisation réduit
+
+00:09:19.010 --> 00:09:19.530
+les recherches,
+
+00:09:19.930 --> 00:09:21.130
+mais la finance reste responsable
+
+00:09:21.130 --> 00:09:22.010
+de s'assurer qu'un paiement
+
+00:09:22.010 --> 00:09:23.650
+règle la bonne facture.
+
+00:09:24.450 --> 00:09:24.990
+Si un client envoie
+
+00:09:24.990 --> 00:09:25.530
+un seul paiement
+
+00:09:25.530 --> 00:09:26.230
+pour plusieurs factures,
+
+00:09:26.310 --> 00:09:27.230
+la personne chargée du traitement
+
+00:09:27.230 --> 00:09:28.090
+peut répartir ce paiement
+
+00:09:28.090 --> 00:09:28.710
+sur ses factures.
+
+00:09:29.830 --> 00:09:30.570
+Si une référence pointe
+
+00:09:30.570 --> 00:09:31.210
+vers le mauvais document,
+
+00:09:31.310 --> 00:09:31.810
+elle peut la corriger
+
+00:09:31.810 --> 00:09:32.670
+avant la comptabilisation.
+
+00:09:33.330 --> 00:09:33.810
+Le but n'est pas
+
+00:09:33.810 --> 00:09:34.730
+de supprimer le jugement humain,
+
+00:09:35.210 --> 00:09:36.190
+mais d'éviter aux collaborateurs
+
+00:09:36.190 --> 00:09:36.850
+de passer leur journée
+
+00:09:36.850 --> 00:09:38.070
+à chercher dans les fichiers bancaires
+
+00:09:38.070 --> 00:09:38.910
+et les listes de factures.
+
+00:09:39.870 --> 00:09:40.430
+Imaginons maintenant
+
+00:09:40.430 --> 00:09:41.310
+que Northwind opère
+
+00:09:41.310 --> 00:09:42.150
+via plusieurs sociétés
+
+00:09:42.150 --> 00:09:42.930
+au sein d'un même groupe.
+
+00:09:43.830 --> 00:09:44.530
+Une entité juridique
+
+00:09:44.530 --> 00:09:45.210
+peut vendre l'équipement
+
+00:09:45.210 --> 00:09:46.610
+tandis qu'une société financière centrale
+
+00:09:46.610 --> 00:09:47.150
+reçoit les paiements
+
+00:09:47.150 --> 00:09:47.750
+pour tout le groupe.
+
+00:09:48.910 --> 00:09:49.870
+Dynamics 365
+
+00:09:49.870 --> 00:09:50.590
+prend en charge
+
+00:09:50.590 --> 00:09:51.410
+les paiements centralisés
+
+00:09:51.410 --> 00:09:52.050
+pour cette situation.
+
+00:09:52.610 --> 00:09:53.870
+Un paiement peut être enregistré
+
+00:09:53.870 --> 00:09:54.790
+dans une entité juridique
+
+00:09:54.790 --> 00:09:55.430
+pour le compte d'une autre.
+
+00:09:56.050 --> 00:09:56.870
+L'entreprise n'a pas besoin
+
+00:09:56.870 --> 00:09:57.550
+de prétendre que l'argent
+
+00:09:57.550 --> 00:09:58.110
+est arrivé d'abord
+
+00:09:58.110 --> 00:09:58.930
+dans la société vendeuse
+
+00:09:58.930 --> 00:10:00.210
+ou de gérer le processus
+
+00:10:00.210 --> 00:10:00.890
+en dehors du système.
+
+00:10:01.570 --> 00:10:02.190
+Les enregistrements
+
+00:10:02.190 --> 00:10:02.650
+peuvent montrer
+
+00:10:06.190 --> 00:10:06.730
+un travail financier
+
+00:10:06.730 --> 00:10:07.470
+partagé plus propre
+
+00:10:07.470 --> 00:10:08.650
+surtout lorsque plusieurs sociétés
+
+00:10:08.650 --> 00:10:09.330
+utilisent une équipe
+
+00:10:09.330 --> 00:10:10.230
+de trésorerie centrale.
+
+00:10:10.910 --> 00:10:11.550
+Ainsi, le processus
+
+00:10:11.550 --> 00:10:12.090
+de paiement complet
+
+00:10:12.090 --> 00:10:12.650
+ne se limite pas
+
+00:10:12.650 --> 00:10:13.530
+à enregistrer l'argent en banque.
+
+00:10:14.350 --> 00:10:15.450
+Dynamics 365
+
+00:10:15.450 --> 00:10:16.090
+lie le client,
+
+00:10:16.370 --> 00:10:17.230
+le paiement et la facture
+
+00:10:17.230 --> 00:10:18.110
+jusqu'à ce que le solde
+
+00:10:18.110 --> 00:10:18.410
+soit nul
+
+00:10:18.410 --> 00:10:19.550
+ou que le montant restant
+
+00:10:19.550 --> 00:10:20.290
+indique à la finance
+
+00:10:20.290 --> 00:10:21.350
+qu'un paiement supplémentaire
+
+00:10:21.350 --> 00:10:21.690
+est dû.
+
+00:10:22.430 --> 00:10:23.150
+Cela règle le paiement
+
+00:10:23.150 --> 00:10:23.530
+d'aujourd'hui.
+
+00:10:24.030 --> 00:10:24.610
+La question suivante
+
+00:10:24.610 --> 00:10:25.530
+se pose avant la vente suivante.
+
+00:10:26.170 --> 00:10:26.790
+L'entreprise doit-elle
+
+00:10:26.790 --> 00:10:27.350
+autoriser un client
+
+00:10:27.350 --> 00:10:29.730
+à devoir encore plus ?
+
+00:10:29.730 --> 00:10:30.970
+4. La gestion du crédit
+
+00:10:30.970 --> 00:10:32.570
+décidez quand continuer à vendre.
+
+00:10:32.570 --> 00:10:34.590
+Vous recevez donc un paiement
+
+00:10:34.590 --> 00:10:35.910
+et cela solde un ancien compte.
+
+00:10:36.350 --> 00:10:37.810
+Assez simple, n'est-ce pas ?
+
+00:10:37.810 --> 00:10:38.590
+Mais voici ce que la gestion
+
+00:10:38.590 --> 00:10:39.170
+du crédit demande
+
+00:10:39.170 --> 00:10:40.010
+avant que la commande suivante
+
+00:10:40.010 --> 00:10:40.510
+ne soit validée.
+
+00:10:40.950 --> 00:10:41.450
+Quel niveau de risque
+
+00:10:41.450 --> 00:10:42.370
+supplémentaire votre entreprise
+
+00:10:42.370 --> 00:10:43.390
+est à prête à pas ?
+
+00:10:43.390 --> 00:10:44.450
+Pensez à la réception d'un hôtel.
+
+00:10:44.830 --> 00:10:45.610
+Un client souhaite prolonger
+
+00:10:45.610 --> 00:10:46.270
+son séjour d'une nuit,
+
+00:10:46.410 --> 00:10:47.250
+alors le personnel vérifie
+
+00:10:47.250 --> 00:10:47.830
+la réservation,
+
+00:10:47.970 --> 00:10:48.570
+le statut du paiement
+
+00:10:48.570 --> 00:10:48.970
+et les règles
+
+00:10:48.970 --> 00:10:49.610
+avant de lui remettre
+
+00:10:49.610 --> 00:10:50.170
+une nouvelle clé.
+
+00:10:50.750 --> 00:10:51.410
+C'est exactement ce que
+
+00:10:51.410 --> 00:10:52.250
+la gestion du crédit fait
+
+00:10:52.250 --> 00:10:53.310
+pour une commande client.
+
+00:10:53.990 --> 00:10:54.790
+Elle ne cherche pas à savoir
+
+00:10:54.790 --> 00:10:55.750
+si Northwind Equipment
+
+00:10:55.750 --> 00:10:56.790
+est un bon client dans l'ensemble.
+
+00:10:57.490 --> 00:10:58.230
+Elle vérifie simplement
+
+00:10:58.230 --> 00:10:59.410
+sa situation financière actuelle
+
+00:10:59.410 --> 00:11:00.030
+par rapport aux règles
+
+00:11:00.030 --> 00:11:00.950
+établies par votre entreprise.
+
+00:11:01.530 --> 00:11:02.090
+L'une de ces règles
+
+00:11:02.090 --> 00:11:02.790
+est la limite de crédit.
+
+00:11:03.750 --> 00:11:04.490
+Une limite de crédit
+
+00:11:04.490 --> 00:11:05.350
+est le montant maximal
+
+00:11:05.350 --> 00:11:06.130
+qu'un client peut devoir
+
+00:11:06.130 --> 00:11:06.750
+à un instant T.
+
+00:11:07.010 --> 00:11:07.910
+Ainsi, si Northwind
+
+00:11:07.910 --> 00:11:09.110
+a une limite de 15 000 dollars
+
+00:11:09.110 --> 00:11:10.410
+et doit déjà 45 000 dollars
+
+00:11:10.410 --> 00:11:11.930
+et nécessite une attention particulière,
+
+00:11:13.230 --> 00:11:13.810
+le client peut toujours
+
+00:11:13.810 --> 00:11:14.490
+passer la commande,
+
+00:11:14.630 --> 00:11:15.250
+mais votre entreprise
+
+00:11:15.250 --> 00:11:15.750
+ne doit pas laisser
+
+00:11:15.750 --> 00:11:16.970
+cette décision passer inaperçue.
+
+00:11:17.390 --> 00:11:18.130
+Dynamics 365
+
+00:11:18.130 --> 00:11:19.030
+peut vérifier bien plus
+
+00:11:19.030 --> 00:11:19.670
+qu'un simple chiffre.
+
+00:11:20.050 --> 00:11:21.270
+Il examine les factures ouvertes,
+
+00:11:21.390 --> 00:11:22.490
+la durée de retard éventuelle,
+
+00:11:22.730 --> 00:11:23.750
+la valeur de la nouvelle commande
+
+00:11:23.750 --> 00:11:25.050
+et le crédit encore disponible
+
+00:11:25.050 --> 00:11:25.610
+pour ce client.
+
+00:11:25.610 --> 00:11:27.550
+Un client qui paie à temps
+
+00:11:27.550 --> 00:11:28.830
+peut avoir une marge de crédit,
+
+00:11:28.930 --> 00:11:29.830
+tandis qu'un autre
+
+00:11:29.830 --> 00:11:30.770
+peut être en dessous de sa limite
+
+00:11:30.770 --> 00:11:31.610
+mais avoir une facture
+
+00:11:31.610 --> 00:11:32.350
+très en retard.
+
+00:11:33.210 --> 00:11:34.050
+Ce sont des risques différents.
+
+00:11:34.550 --> 00:11:35.530
+Lorsqu'une règle est déclenchée,
+
+00:11:35.610 --> 00:11:36.450
+Dynamics 365
+
+00:11:36.450 --> 00:11:37.330
+peut mettre la commande
+
+00:11:37.330 --> 00:11:38.050
+en attente de crédit,
+
+00:11:38.130 --> 00:11:38.870
+suspendant la commande
+
+00:11:38.870 --> 00:11:39.570
+avant que vous n'expédiez
+
+00:11:39.570 --> 00:11:40.230
+plus de marchandises
+
+00:11:40.230 --> 00:11:40.950
+ou n'acceptiez plus
+
+00:11:40.950 --> 00:11:41.770
+de travail impayé.
+
+00:11:42.550 --> 00:11:43.210
+Les ventes peuvent voir
+
+00:11:43.210 --> 00:11:43.830
+la mise en attente,
+
+00:11:43.910 --> 00:11:44.990
+la finance peut en voir la raison
+
+00:11:44.990 --> 00:11:46.310
+et personne ne découvre le problème
+
+00:11:46.310 --> 00:11:47.090
+une fois que l'entrepôt
+
+00:11:47.090 --> 00:11:47.730
+a déjà expédié
+
+00:11:47.730 --> 00:11:48.450
+une nouvelle livraison.
+
+00:11:49.130 --> 00:11:49.930
+Une mise en attente de crédit
+
+00:11:49.930 --> 00:11:50.410
+ne signifie pas
+
+00:11:50.410 --> 00:11:50.970
+que la commande a été
+
+00:11:50.970 --> 00:11:51.730
+définitivement rejetée.
+
+00:11:51.970 --> 00:11:52.670
+Cela signifie que quelqu'un
+
+00:11:52.670 --> 00:11:53.110
+doit l'examiner.
+
+00:11:53.570 --> 00:11:54.270
+Peut-être que Northwind
+
+00:11:54.270 --> 00:11:55.150
+a envoyé la preuve
+
+00:11:55.150 --> 00:11:55.970
+que le paiement est en route,
+
+00:11:56.070 --> 00:11:57.030
+qu'un responsable financier
+
+00:11:57.030 --> 00:11:57.970
+sait que la facture en retard
+
+00:11:57.970 --> 00:11:59.150
+est liée à une erreur de facturation
+
+00:11:59.150 --> 00:12:00.370
+ou que le client a demandé
+
+00:12:00.370 --> 00:12:01.490
+une augmentation temporaire
+
+00:12:01.490 --> 00:12:03.110
+pour un gros projet approuvé.
+
+00:12:03.970 --> 00:12:04.750
+Le personnel autorisé
+
+00:12:04.750 --> 00:12:05.570
+peut libérer une commande
+
+00:12:05.570 --> 00:12:06.550
+lorsqu'il existe une raison valable.
+
+00:12:07.050 --> 00:12:07.830
+Cet aspect est important
+
+00:12:07.830 --> 00:12:08.670
+car les règles métiers
+
+00:12:08.670 --> 00:12:09.670
+doivent laisser place à la réalité.
+
+00:12:10.170 --> 00:12:10.950
+Le système peut bloquer
+
+00:12:10.950 --> 00:12:11.910
+une décision automatique
+
+00:12:11.910 --> 00:12:12.970
+mais les responsables
+
+00:12:12.970 --> 00:12:13.650
+décident de la suite
+
+00:12:13.650 --> 00:12:14.650
+et laissent une trace claire
+
+00:12:14.650 --> 00:12:15.390
+de cette décision.
+
+00:12:16.110 --> 00:12:16.630
+C'est là que les ventes
+
+00:12:16.630 --> 00:12:17.370
+et la finance doivent travailler
+
+00:12:17.370 --> 00:12:18.410
+sur la base d'une vision commune.
+
+00:12:18.770 --> 00:12:19.610
+Les ventes veulent satisfaire
+
+00:12:19.610 --> 00:12:20.170
+le client surtout
+
+00:12:20.170 --> 00:12:20.850
+quand la commande compte
+
+00:12:20.850 --> 00:12:21.490
+tandis que la finance
+
+00:12:21.490 --> 00:12:22.410
+doit protéger l'entreprise
+
+00:12:22.410 --> 00:12:22.890
+contre une dette
+
+00:12:22.890 --> 00:12:24.390
+qui pourrait ne jamais être recouvrée,
+
+00:12:24.510 --> 00:12:25.630
+qui pourrait ne jamais être recouvrée.
+
+00:12:25.950 --> 00:12:26.530
+Aucun des deux camps
+
+00:12:26.530 --> 00:12:27.230
+n'a besoin de gagner de dispute.
+
+00:12:27.730 --> 00:12:28.490
+Ils ont simplement besoin
+
+00:12:28.490 --> 00:12:28.990
+de la commande,
+
+00:12:28.990 --> 00:12:29.670
+du montant à payer
+
+00:12:29.670 --> 00:12:30.530
+et des règles de crédit
+
+00:12:30.530 --> 00:12:31.490
+réunies au même endroit.
+
+00:12:32.370 --> 00:12:32.790
+Beaucoup de gens
+
+00:12:32.790 --> 00:12:33.890
+entendent gestion du crédit
+
+00:12:33.890 --> 00:12:34.870
+et supposent que cela signifie
+
+00:12:34.870 --> 00:12:35.610
+refuser des clients.
+
+00:12:36.110 --> 00:12:36.570
+Ce n'est pas le cas.
+
+00:12:36.990 --> 00:12:37.710
+Cela signifie convenir
+
+00:12:37.710 --> 00:12:38.290
+de limites sûres
+
+00:12:38.290 --> 00:12:39.110
+avant qu'un paiement au retard
+
+00:12:39.110 --> 00:12:39.710
+ne devienne un problème
+
+00:12:39.710 --> 00:12:40.310
+beaucoup plus grave.
+
+00:12:40.690 --> 00:12:41.590
+Vous pouvez toujours soutenir
+
+00:12:41.590 --> 00:12:42.110
+vos bons clients,
+
+00:12:42.470 --> 00:12:43.170
+approuver des exceptions
+
+00:12:43.170 --> 00:12:44.210
+et vendre en toute confiance.
+
+00:12:45.010 --> 00:12:45.690
+Vous évitez simplement
+
+00:12:45.690 --> 00:12:46.410
+d'accumuler de la dette
+
+00:12:46.410 --> 00:12:47.310
+sans vérifier au préalable.
+
+00:12:48.030 --> 00:12:48.890
+Une fois la date d'échéance
+
+00:12:48.890 --> 00:12:49.650
+d'une facture dépassée,
+
+00:12:49.690 --> 00:12:50.750
+la prévention laisse place au suivi.
+
+00:12:52.330 --> 00:12:53.810
+5. Recouvrement et litige
+
+00:12:53.810 --> 00:12:55.050
+Relancez les paiements
+
+00:12:55.050 --> 00:12:55.890
+sans perdre le client.
+
+00:12:55.890 --> 00:12:58.070
+Une fois la date d'échéance passée,
+
+00:12:58.130 --> 00:12:58.630
+le travail change.
+
+00:12:58.970 --> 00:12:59.990
+L'entreprise ne décide plus
+
+00:12:59.990 --> 00:13:00.990
+s'il faut accorder du crédit.
+
+00:13:01.410 --> 00:13:02.330
+Elle a besoin d'un moyen clair
+
+00:13:02.330 --> 00:13:02.870
+et respectueux
+
+00:13:02.870 --> 00:13:03.870
+de demander le paiement dû.
+
+00:13:05.010 --> 00:13:06.290
+Dynamics 365 Finance
+
+00:13:06.290 --> 00:13:07.030
+centralise cette tâche
+
+00:13:07.030 --> 00:13:07.870
+sur la page de recouvrement.
+
+00:13:08.250 --> 00:13:09.490
+Voyez cela comme un bureau partagé
+
+00:13:09.490 --> 00:13:10.510
+pour les comptes clients en retard.
+
+00:13:11.150 --> 00:13:11.790
+Au lieu qu'une personne
+
+00:13:11.790 --> 00:13:12.790
+prenne des notes par email,
+
+00:13:13.010 --> 00:13:13.970
+une autre suive les appels
+
+00:13:13.970 --> 00:13:14.750
+sur une feuille de calcul
+
+00:13:14.750 --> 00:13:15.910
+et une troisième vérifie
+
+00:13:15.910 --> 00:13:16.430
+les factures.
+
+00:13:16.850 --> 00:13:17.810
+L'équipe de recouvrement
+
+00:13:17.810 --> 00:13:18.790
+voit le solde client
+
+00:13:18.790 --> 00:13:20.310
+et le suivi au même endroit
+
+00:13:20.310 --> 00:13:21.710
+et le suivi au même endroit.
+
+00:13:22.230 --> 00:13:22.970
+Cela change la donne.
+
+00:13:24.270 --> 00:13:25.210
+Un agent de recouvrement
+
+00:13:25.210 --> 00:13:26.430
+travaille à partir de listes
+
+00:13:26.430 --> 00:13:27.370
+créées par des critères,
+
+00:13:27.570 --> 00:13:28.550
+trouvant les clients
+
+00:13:28.550 --> 00:13:29.390
+ayant des factures
+
+00:13:29.390 --> 00:13:30.430
+en retard de X jours
+
+00:13:30.430 --> 00:13:31.830
+au-delà d'un montant défini
+
+00:13:31.830 --> 00:13:33.430
+ou nécessitant une attention
+
+00:13:33.430 --> 00:13:35.210
+selon vos règles internes.
+
+00:13:36.750 --> 00:13:37.590
+Ainsi, l'équipe n'a pas besoin
+
+00:13:37.590 --> 00:13:38.830
+de deviner qui contacter en priorité.
+
+00:13:40.030 --> 00:13:40.590
+Pour chaque client,
+
+00:13:40.970 --> 00:13:41.770
+l'agent peut agir,
+
+00:13:42.070 --> 00:13:42.790
+envoyer un rappel,
+
+00:13:43.090 --> 00:13:43.990
+créer une lettre de relance,
+
+00:13:44.130 --> 00:13:44.710
+envoyer un email
+
+00:13:44.710 --> 00:13:45.910
+ou planifier un appel.
+
+00:13:47.210 --> 00:13:47.830
+Le but n'est pas
+
+00:13:47.830 --> 00:13:48.830
+d'envoyer des messages agressifs.
+
+00:13:49.350 --> 00:13:50.430
+La plupart des retards de paiement
+
+00:13:50.430 --> 00:13:51.250
+ont des causes banales.
+
+00:13:51.830 --> 00:13:52.290
+Une facture,
+
+00:13:52.830 --> 00:13:53.830
+envoyer à la mauvaise adresse,
+
+00:13:53.830 --> 00:13:55.110
+un client ayant besoin d'une copie
+
+00:13:55.110 --> 00:13:55.890
+ou une équipe comptable
+
+00:13:55.890 --> 00:13:57.050
+ayant manqué l'échéance.
+
+00:13:57.710 --> 00:13:58.350
+Un rappel calme
+
+00:13:58.350 --> 00:13:59.150
+peut résoudre bien des choses.
+
+00:13:59.710 --> 00:14:00.590
+Parfois, le client promet
+
+00:14:00.590 --> 00:14:01.850
+de payer le vendredi suivant.
+
+00:14:02.770 --> 00:14:03.650
+Dynamics 365
+
+00:14:03.650 --> 00:14:04.590
+peut enregistrer cela
+
+00:14:04.590 --> 00:14:05.430
+comme une promesse de paiement.
+
+00:14:05.790 --> 00:14:06.890
+L'équipe sait qu'un engagement existe
+
+00:14:06.890 --> 00:14:07.390
+et peut vérifier
+
+00:14:07.390 --> 00:14:08.170
+si le paiement arrive bien
+
+00:14:08.170 --> 00:14:08.750
+à la date prévue.
+
+00:14:09.050 --> 00:14:09.310
+Prévu.
+
+00:14:09.830 --> 00:14:10.730
+Sans cet enregistrement,
+
+00:14:11.010 --> 00:14:11.530
+l'agent suivant
+
+00:14:11.530 --> 00:14:12.250
+pourrait rappeler le client
+
+00:14:12.250 --> 00:14:13.050
+le lendemain ignorant
+
+00:14:13.050 --> 00:14:13.590
+qu'une date
+
+00:14:13.590 --> 00:14:14.850
+a déjà été convenue.
+
+00:14:15.390 --> 00:14:16.410
+Les litiges requièrent
+
+00:14:16.410 --> 00:14:16.970
+la même attention.
+
+00:14:17.690 --> 00:14:18.370
+Un litige signifie
+
+00:14:18.370 --> 00:14:19.170
+que le client conteste
+
+00:14:19.170 --> 00:14:20.190
+tout ou partie d'une facture.
+
+00:14:20.190 --> 00:14:22.770
+Peut-être une erreur de prix,
+
+00:14:23.310 --> 00:14:24.390
+des marchandises non reçues,
+
+00:14:25.010 --> 00:14:25.630
+une facture liée
+
+00:14:25.630 --> 00:14:26.570
+à un travail non approuvé.
+
+00:14:28.230 --> 00:14:28.730
+La pire réaction
+
+00:14:28.730 --> 00:14:29.390
+est de laisser ce problème
+
+00:14:29.390 --> 00:14:30.550
+s'égarer dans une boîte de réception.
+
+00:14:31.150 --> 00:14:31.870
+Dynamics 365
+
+00:14:31.870 --> 00:14:33.110
+permet de marquer la facture
+
+00:14:33.110 --> 00:14:33.770
+comme litigeuse
+
+00:14:33.770 --> 00:14:34.530
+et de la garder visible
+
+00:14:34.530 --> 00:14:35.390
+durant le travail de recouvrement.
+
+00:14:35.850 --> 00:14:37.030
+L'équipe peut suivre l'état
+
+00:14:37.030 --> 00:14:38.070
+et le travail nécessaire
+
+00:14:38.070 --> 00:14:38.790
+à la résolution
+
+00:14:38.790 --> 00:14:39.690
+au lieu de prendre le silence
+
+00:14:39.690 --> 00:14:40.750
+pour un motif de relance
+
+00:14:40.750 --> 00:14:41.650
+automatique.
+
+00:14:42.410 --> 00:14:43.210
+Cela aide aussi l'entreprise
+
+00:14:43.210 --> 00:14:44.170
+à identifier les problèmes récourts.
+
+00:14:45.310 --> 00:14:45.990
+Si plusieurs clients
+
+00:14:45.990 --> 00:14:47.150
+contestent le même type de frais,
+
+00:14:47.450 --> 00:14:48.230
+le service financier
+
+00:14:48.230 --> 00:14:48.830
+apprend bien plus
+
+00:14:48.830 --> 00:14:49.590
+qu'un simple retard
+
+00:14:49.590 --> 00:14:50.130
+de paiement.
+
+00:14:50.670 --> 00:14:51.510
+La facturation,
+
+00:14:51.650 --> 00:14:51.910
+les ventes,
+
+00:14:51.970 --> 00:14:52.370
+la livraison
+
+00:14:52.370 --> 00:14:53.070
+ou le service client
+
+00:14:53.070 --> 00:14:53.490
+doivent peut-être
+
+00:14:53.490 --> 00:14:54.230
+corriger le processus
+
+00:14:54.230 --> 00:14:55.150
+à l'origine de ces litiges.
+
+00:14:56.030 --> 00:14:57.030
+Le recouvrement utilise aussi
+
+00:14:57.030 --> 00:14:57.830
+des rapports de balance AG
+
+00:14:57.830 --> 00:14:59.090
+qui classent les montants impayés
+
+00:14:59.090 --> 00:15:00.310
+selon leur ancienneté
+
+00:15:00.310 --> 00:15:01.890
+pour examiner les montants
+
+00:15:01.890 --> 00:15:02.430
+d'us immédiatement
+
+00:15:02.430 --> 00:15:03.030
+puis ceux en retard
+
+00:15:03.030 --> 00:15:04.210
+de 30, 60 ou 90 jours.
+
+00:15:04.850 --> 00:15:05.530
+Ces tranches temporelles
+
+00:15:05.530 --> 00:15:05.970
+aident l'équipe
+
+00:15:05.970 --> 00:15:06.730
+à identifier les dettes
+
+00:15:06.730 --> 00:15:07.950
+nécessitant une attention particulière
+
+00:15:07.950 --> 00:15:08.450
+avant qu'elles ne mènent
+
+00:15:08.450 --> 00:15:09.350
+à des échanges plus délicats.
+
+00:15:10.070 --> 00:15:10.990
+Une facture avec deux jours
+
+00:15:10.990 --> 00:15:11.390
+de retard
+
+00:15:11.390 --> 00:15:12.130
+ne mérite pas toujours
+
+00:15:12.130 --> 00:15:12.750
+la même réaction
+
+00:15:12.750 --> 00:15:13.630
+qu'une facture impayée
+
+00:15:13.630 --> 00:15:14.270
+depuis trois mois.
+
+00:15:14.270 --> 00:15:16.590
+Le service financier
+
+00:15:16.590 --> 00:15:17.330
+peut également utiliser
+
+00:15:17.330 --> 00:15:18.170
+des prédictions de paiement
+
+00:15:18.170 --> 00:15:18.850
+si disponibles
+
+00:15:18.850 --> 00:15:19.390
+pour estimer
+
+00:15:19.390 --> 00:15:20.230
+si les factures ouvertes
+
+00:15:20.230 --> 00:15:21.010
+seront réglées à temps,
+
+00:15:21.190 --> 00:15:22.350
+en retard ou très en retard
+
+00:15:22.350 --> 00:15:23.370
+sur la base des données clients
+
+00:15:23.370 --> 00:15:24.590
+et de l'historique des paiements.
+
+00:15:26.230 --> 00:15:27.350
+Un rapport de balance AG
+
+00:15:27.350 --> 00:15:27.910
+montre le passé
+
+00:15:27.910 --> 00:15:28.570
+mais une prédiction
+
+00:15:28.570 --> 00:15:29.430
+aide l'équipe
+
+00:15:29.430 --> 00:15:29.830
+à choisir
+
+00:15:29.830 --> 00:15:30.750
+ou concentrer ses efforts
+
+00:15:30.750 --> 00:15:31.770
+avant qu'un retard de paiement
+
+00:15:31.770 --> 00:15:32.670
+ne devienne un problème.
+
+00:15:33.390 --> 00:15:34.050
+Cela ne remplace pas
+
+00:15:34.050 --> 00:15:34.630
+le jugement humain.
+
+00:15:36.070 --> 00:15:36.730
+Cela donne à l'équipe
+
+00:15:36.730 --> 00:15:37.270
+de recouvrement
+
+00:15:37.270 --> 00:15:38.170
+un signal supplémentaire
+
+00:15:38.170 --> 00:15:39.070
+pour prioriser les actions
+
+00:15:39.070 --> 00:15:40.050
+parmi une longue liste de comptes.
+
+00:15:40.190 --> 00:15:40.990
+L'objectif est simple,
+
+00:15:41.210 --> 00:15:42.010
+recouvrez les fonds
+
+00:15:42.010 --> 00:15:42.690
+de manière régulière
+
+00:15:42.690 --> 00:15:43.330
+et transparente
+
+00:15:43.330 --> 00:15:44.430
+tout en traitant le client comme tel
+
+00:15:44.430 --> 00:15:45.950
+et non comme un simple numéro de dossier
+
+00:15:45.950 --> 00:15:47.430
+et non comme un simple numéro de dossier.
+
+00:15:47.610 --> 00:15:48.030
+Mettons maintenant
+
+00:15:48.030 --> 00:15:48.690
+tout ce processus
+
+00:15:48.690 --> 00:15:49.830
+en un exemple simple.
+
+00:15:51.150 --> 00:15:52.210
+6. Une facture
+
+00:15:52.210 --> 00:15:53.350
+Un processus connecté
+
+00:15:53.350 --> 00:15:54.270
+Une vue d'ensemble
+
+00:15:54.270 --> 00:15:56.510
+Analysons ce qui se passe
+
+00:15:56.510 --> 00:15:57.250
+lorsque Northwind
+
+00:15:57.250 --> 00:15:58.070
+passe une commande
+
+00:15:58.070 --> 00:15:59.070
+votre système la traite
+
+00:15:59.070 --> 00:16:00.650
+et une fois le point de facturation
+
+00:16:00.650 --> 00:16:01.230
+convenu atteint
+
+00:16:01.230 --> 00:16:02.630
+une facture est émise.
+
+00:16:03.190 --> 00:16:03.650
+Le compte client
+
+00:16:03.650 --> 00:16:04.170
+contient déjà
+
+00:16:04.170 --> 00:16:05.010
+ses conditions de paiement
+
+00:16:05.010 --> 00:16:06.510
+donc Dynamics 365
+
+00:16:06.510 --> 00:16:07.290
+calcule automatiquement
+
+00:16:07.290 --> 00:16:07.910
+la date d'échéance
+
+00:16:07.910 --> 00:16:09.050
+selon les règles convenues
+
+00:16:09.050 --> 00:16:10.410
+avec Northwindswind.
+
+00:16:11.430 --> 00:16:12.090
+Le service financier
+
+00:16:12.090 --> 00:16:12.650
+voit le mont tendu
+
+00:16:12.650 --> 00:16:13.430
+et le client reçoit
+
+00:16:13.430 --> 00:16:14.390
+une demande de paiement claire.
+
+00:16:15.050 --> 00:16:15.970
+C'est le début du processus.
+
+00:16:16.550 --> 00:16:17.290
+Quelques semaines plus tard,
+
+00:16:17.430 --> 00:16:17.910
+Northwind envoie
+
+00:16:17.910 --> 00:16:18.590
+un virement bancaire
+
+00:16:18.590 --> 00:16:19.550
+avec la référence de la facture.
+
+00:16:20.130 --> 00:16:20.750
+Le service financier
+
+00:16:20.750 --> 00:16:21.250
+approche le paiement
+
+00:16:21.250 --> 00:16:21.670
+de la facture
+
+00:16:21.670 --> 00:16:22.110
+puis la pure.
+
+00:16:22.810 --> 00:16:23.630
+Le solde ouvert est clos
+
+00:16:23.630 --> 00:16:24.390
+et le compte client
+
+00:16:24.390 --> 00:16:25.110
+indique désormais
+
+00:16:25.110 --> 00:16:25.650
+que cette partie
+
+00:16:25.650 --> 00:16:26.730
+de la relation est finalisée.
+
+00:16:27.410 --> 00:16:28.330
+Aucune vérification manuelle
+
+00:16:28.330 --> 00:16:28.730
+n'est nécessaire.
+
+00:16:29.070 --> 00:16:29.570
+Mais que se passe-t-il
+
+00:16:29.570 --> 00:16:30.210
+si les choses se déroulent
+
+00:16:30.210 --> 00:16:30.910
+différemment ?
+
+00:16:30.910 --> 00:16:31.570
+Si Northwind manque
+
+00:16:31.570 --> 00:16:32.270
+la date d'échéance,
+
+00:16:32.370 --> 00:16:33.490
+la facture passe au recouvrement.
+
+00:16:33.990 --> 00:16:35.050
+Un agent envoie un rappel,
+
+00:16:35.310 --> 00:16:35.930
+Northwind répond
+
+00:16:35.930 --> 00:16:36.650
+qu'une partie des frais
+
+00:16:36.650 --> 00:16:37.110
+est incorrect
+
+00:16:37.110 --> 00:16:37.650
+et l'équipe
+
+00:16:37.650 --> 00:16:38.670
+enregistre un litige
+
+00:16:38.670 --> 00:16:39.450
+au lieu de considérer cela
+
+00:16:39.450 --> 00:16:40.290
+comme un retard de paiement
+
+00:16:40.290 --> 00:16:41.110
+inexpliqué.
+
+00:16:41.870 --> 00:16:42.290
+Tout le monde voit
+
+00:16:42.290 --> 00:16:42.810
+le même statut
+
+00:16:42.810 --> 00:16:43.930
+et connaît la prochaine étape
+
+00:16:43.930 --> 00:16:45.290
+car tout est centralisé.
+
+00:16:46.290 --> 00:16:47.270
+Voici la différence.
+
+00:16:47.430 --> 00:16:48.890
+Avec Dynamics 365 Finance,
+
+00:16:49.050 --> 00:16:49.970
+rien ne reste cloisonné.
+
+00:16:51.150 --> 00:16:51.670
+Les commandes,
+
+00:16:51.750 --> 00:16:52.090
+factures,
+
+00:16:52.210 --> 00:16:52.470
+paiements,
+
+00:16:52.610 --> 00:16:53.410
+vérifications de crédit
+
+00:16:53.410 --> 00:16:54.290
+et tâches de recouvrement
+
+00:16:54.290 --> 00:16:54.810
+sont tous liés
+
+00:16:54.810 --> 00:16:56.050
+à la même relation client
+
+00:16:56.050 --> 00:16:56.950
+nous évitant de chercher
+
+00:16:56.950 --> 00:16:57.510
+des informations
+
+00:16:57.510 --> 00:16:58.670
+dans plusieurs systèmes.
+
+00:16:59.670 --> 00:17:00.150
+Cela signifie
+
+00:17:00.150 --> 00:17:01.050
+des décisions plus rapides
+
+00:17:01.050 --> 00:17:01.550
+et moins d'erreurs.
+
+00:17:02.170 --> 00:17:02.750
+L'ancienne méthode
+
+00:17:02.750 --> 00:17:03.630
+dispersait les informations
+
+00:17:03.630 --> 00:17:04.510
+entre feuilles de calcul,
+
+00:17:04.710 --> 00:17:05.270
+dossiers d'email,
+
+00:17:05.690 --> 00:17:06.110
+notes papier
+
+00:17:06.110 --> 00:17:07.110
+et fichiers bancaires
+
+00:17:07.110 --> 00:17:08.310
+faisant perdre du temps
+
+00:17:08.310 --> 00:17:09.130
+à vérifier quelle version
+
+00:17:09.130 --> 00:17:09.570
+était la bonne.
+
+00:17:10.690 --> 00:17:11.890
+Dynamics 365 maintient
+
+00:17:11.890 --> 00:17:12.550
+une continuité
+
+00:17:12.550 --> 00:17:13.350
+offrant une vue unique
+
+00:17:13.350 --> 00:17:14.610
+du client de bout en bout.
+
+00:17:15.390 --> 00:17:16.230
+La gestion des comptes clients
+
+00:17:16.230 --> 00:17:16.850
+consiste à savoir
+
+00:17:16.850 --> 00:17:17.550
+qui vous doit de l'argent
+
+00:17:17.550 --> 00:17:18.110
+quand il est dû,
+
+00:17:18.170 --> 00:17:19.110
+ce qui s'est passé jusqu'à présent
+
+00:17:19.110 --> 00:17:20.110
+et quelle est la prochaine étape.
+
+00:17:20.750 --> 00:17:21.510
+Si un élément manque,
+
+00:17:21.650 --> 00:17:22.690
+une entreprise peut beaucoup vendre
+
+00:17:22.690 --> 00:17:23.210
+et pourtant peiner
+
+00:17:23.210 --> 00:17:24.490
+à savoir où se trouve sa trésorerie.
+
+00:17:24.850 --> 00:17:25.630
+C'est pourquoi ce processus
+
+00:17:25.630 --> 00:17:26.330
+connecté est important.
+
+00:17:27.530 --> 00:17:27.850
+Conclusion
+
+00:17:27.850 --> 00:17:29.390
+Gardez le contrôle
+
+00:17:29.390 --> 00:17:30.030
+des fonds internes.
+
+00:17:31.050 --> 00:17:31.510
+Une facture
+
+00:17:31.510 --> 00:17:32.690
+n'est que le début du processus.
+
+00:17:33.050 --> 00:17:34.190
+Votre service comptabilité client
+
+00:17:34.190 --> 00:17:34.770
+suit-il l'argent
+
+00:17:34.770 --> 00:17:35.810
+jusqu'à la clôture du solde
+
+00:17:35.810 --> 00:17:36.590
+ou jusqu'à ce qu'une action
+
+00:17:36.590 --> 00:17:37.750
+soit menée sur les impayés.
+
+00:17:39.430 --> 00:17:40.210
+Garder le contrôle
+
+00:17:40.210 --> 00:17:40.690
+de ces fonds
+
+00:17:40.690 --> 00:17:41.210
+est essentiel
+
+00:17:41.210 --> 00:17:42.170
+pour la santé de l'entreprise.
+
+00:17:42.730 --> 00:17:43.450
+Je suis Mirko Peters.
+
+00:17:43.850 --> 00:17:44.170
+Abonnez-vous
+
+00:17:44.170 --> 00:17:45.170
+à Microsoft Knowledge Magnet
+
+00:17:45.170 --> 00:17:46.390
+sur M365 FM
+
+00:17:46.390 --> 00:17:47.410
+puis regardez l'épisode associé
+
+00:17:47.410 --> 00:17:48.830
+de Dynamics 365 Finance
+
+00:17:48.830 --> 00:17:49.430
+sur votre écran
+
+00:17:49.430 --> 00:17:49.870
+pour continuer
+
+00:17:49.870 --> 00:17:50.590
+à tout comprendre
+
+00:17:50.590 --> 00:17:51.210
+simplement
+
+00:17:51.210 --> 00:17:52.590
+pour la santé de l'entreprise.
+
+00:17:52.590 --> 00:17:53.590
+Merci.
+
+00:17:53.590 --> 00:17:54.590
+Merci.
+
+00:17:54.590 --> 00:17:55.590
+Merci.
+
+00:17:55.590 --> 00:17:56.590
+Merci.
+
+00:17:56.590 --> 00:17:57.590
+Merci.
+
+00:17:57.590 --> 00:17:58.590
+Merci.
+
+00:17:58.590 --> 00:17:59.590
+Merci.
+
+00:17:59.590 --> 00:18:00.590
+Merci.
+
+00:18:00.590 --> 00:18:01.590
+Merci.
+
+00:18:01.590 --> 00:18:02.590
+Merci.
+
+00:18:02.590 --> 00:18:03.590
+Merci.

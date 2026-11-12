@@ -1,0 +1,577 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:03.500
+Immaginate questo. State lavorando su un'app della vostra azienda. Magari il portale delle
+
+00:00:03.500 --> 00:00:07.220
+risorse umane, un database di assistenza clienti o il wiki interno con tutte le politiche da
+
+00:00:07.220 --> 00:00:11.200
+seguire. Digitate una domanda nella barra di ricerca. Qualcosa come, come invio una nota
+
+00:00:11.200 --> 00:00:16.600
+a spese per una cena con un cliente. Premete invio e cosa ottenete? Nuda. O peggio, un elenco
+
+00:00:16.600 --> 00:00:20.400
+di pdf casuali di tre anni fa che corrispondono vagamente alle parole digitali. La ricerca è
+
+00:00:20.400 --> 00:00:24.500
+qualcosa che usiamo ogni singolo giorno. Il più delle volte è terribile. Ma il punto è questo,
+
+00:00:24.580 --> 00:00:28.060
+non deve esserlo per forza. Se le vostre app potessero davvero capire cosa state chiedendo
+
+00:00:28.060 --> 00:00:32.080
+e se potessero cercare come fa Google trovando la risposta giusta anche quando non usate le
+
+00:00:32.080 --> 00:00:37.620
+parole perfette, oggi parliamo di Azure AI Search. Cos'è in realtà, come funziona nel retroscena
+
+00:00:37.620 --> 00:00:41.560
+e perché è il motore di ricerca su cui si basano le app moderne. Prendete un caffè
+
+00:00:41.560 --> 00:00:45.660
+e iniziamo. Perché la ricerca non funziona. Per capire perché la ricerca solitamente fallisce
+
+00:00:45.660 --> 00:00:49.060
+dobbiamo guardare come la fanno la maggior parte delle app. Il metodo tradizionale è chiamato
+
+00:00:49.060 --> 00:00:53.700
+ricerca per parole chiave o ricerca lessica. Digitate la parola portatile nella casella e sistema
+
+00:00:53.700 --> 00:00:57.960
+a cercare ogni singolo documento che contiene esattamente quella parola. Nel retroscena molti
+
+00:00:57.960 --> 00:01:02.940
+di questi sistemi usano un algoritmo chiamato BM25. Non è complicato ma è ingegnoso a modo
+
+00:01:02.940 --> 00:01:07.760
+suo. BM25 classifica risultati in base ad alcuni fattori. Con quanta frequenza il termine
+
+00:01:07.760 --> 00:01:10.860
+di ricerca appare in un documento quanto è lungo il documento e quanto è raro il termine
+
+00:01:10.860 --> 00:01:15.880
+nell'intero set di dati. Immaginatelo come un contaparole davvero sofisticato che determina
+
+00:01:15.880 --> 00:01:19.480
+quali documenti sono più rilevanti in base a quei fattori. È qui che il sistema cede.
+
+00:01:19.800 --> 00:01:22.880
+Il linguaggio umano è complesso. Le persone non pongono domande usando le stesse parole
+
+00:01:22.880 --> 00:01:26.640
+presenti nei documenti. Lasciate che vi faccio un esempio concreto. Un utente digita questo
+
+00:01:26.640 --> 00:01:30.480
+in un portale di supporto. Il mio portatile continua a bloccarsi durante le videochiamate.
+
+00:01:31.200 --> 00:01:35.300
+La ricerca per parole chiave cercherà diligentemente documenti contenenti portatile e continua a
+
+00:01:35.300 --> 00:01:40.200
+bloccarsi durante video e chiamate video e chiamate. Ma cosa succede se il miglior articolo
+
+00:01:40.200 --> 00:01:43.420
+sull'argomento si intitola risoluzione dei blocchi di sistema durante le riunioni attive
+
+00:01:43.420 --> 00:01:47.000
+o gestione del throttling della CPU su portatili collegati alla docking state? La ricerca per parole
+
+00:01:47.000 --> 00:01:50.580
+chiave ignora completamente questi risultati. Perché le parole non corrispondono. Il problema
+
+00:01:50.580 --> 00:01:54.060
+fondamentale è questo. La ricerca per parole chiave comprende l'ortogramma. Comprendi i pattern
+
+00:01:54.060 --> 00:01:58.080
+dei caratteri ma non ne comprende il significato. Ottenete risultati che hanno le lettere giuste
+
+00:01:58.080 --> 00:02:01.560
+ma spesso il contenuto sbagliato. Quindi se la corrispondenza esatta delle parole lascia
+
+00:02:01.560 --> 00:02:05.740
+così tante lacune qual è l'alternativa? Il nuovo metodo, la ricerca vettoriale. Dunque
+
+00:02:05.740 --> 00:02:09.620
+la ricerca vettoriale è un modo di operare completamente diverso. Invece di cercare corrispondenze
+
+00:02:09.620 --> 00:02:12.840
+esatte tra le parole cerca il significato. Sembra astratto quindi analizziamolo nel dettaglio.
+
+00:02:13.220 --> 00:02:16.520
+La definizione più semplice da ricordare è questa. Un vettore è solo una lista di numeri che
+
+00:02:16.520 --> 00:02:21.700
+rappresenta qualcosa che il computer può elaborare. Tutto qui, una lista di numeri. Un embedding è un tipo
+
+00:02:21.700 --> 00:02:25.600
+speciale di vettore che cattura il significato di un test. Prende una frase, un paragrafo o persino
+
+00:02:25.600 --> 00:02:30.360
+un intero documento e lo trasforma in una lunga lista di numeri. Il computer non comprende le parole
+
+00:02:30.360 --> 00:02:34.440
+ma comprende i numeri. Ecco un'analogia che può aiutare. Immagini i vettori come le coordinate su
+
+00:02:34.440 --> 00:02:38.520
+una mappa. Su una mappa i luoghi simili sono vicini tra loro, nello spazio vettoriale. I concetti
+
+00:02:38.520 --> 00:02:42.680
+simili finiscono per essere vicini. Il vettore per re e il vettore per regina sono vicini perché
+
+00:02:42.680 --> 00:02:49.160
+rappresentano idee correlate. Il vettore per re e il vettore per mera sono molto distanti. Il computer non sa
+
+00:02:49.160 --> 00:02:53.460
+cosa significhi re in senso umano ma può misurare la distanza tra le sue coordinate e quelle di ogni
+
+00:02:53.460 --> 00:02:59.340
+altra parola o documento. È come avere un gps per l'idea? Il sistema sa quanto sono distanti i concetti
+
+00:02:59.340 --> 00:03:03.120
+semplicemente osservando i numeri. Quando si effettua una ricerca tramite vettori il sistema
+
+00:03:03.120 --> 00:03:07.640
+converte la query in un embedding. Quindi trova i documenti cui i embedding sono più vicini al tuo.
+
+00:03:08.300 --> 00:03:13.360
+Trova elementi semanticamente simili che condividono il significato, non solo il vocabolario. Immagina di
+
+00:03:13.360 --> 00:03:16.540
+cercare un documento sulla risoluzione dei problemi di un computer blocco. Con la ricerca per parole
+
+00:03:16.540 --> 00:03:20.780
+chiave dovresti digitare esattamente blocco o si è bloccato. Ma con la ricerca vettoriale puoi
+
+00:03:20.780 --> 00:03:24.720
+digitare il mio computer continua a bloccarsi e troverà il documento giusto. È questo il potere
+
+00:03:24.720 --> 00:03:29.120
+di comprendere il significato? Torniamo al nostro esempio di ricerca inefficiente. Un utente digita
+
+00:03:29.120 --> 00:03:33.000
+il mio portatile continua a bloccarsi? Con la ricerca vettoriale il sistema può restituire
+
+00:03:33.000 --> 00:03:36.320
+l'articolo sui blocchi di sistema durante le riunioni teams anche se nessuna di quelle parole
+
+00:03:36.320 --> 00:03:41.480
+appare nella query. Perché? Perché il significato di blocco di sistema è molto vicino a computer che si
+
+00:03:41.480 --> 00:03:46.380
+blocca nello spazio vettoriale. Questi concetti risiedono vicini l'uno all'altro su quella mappa. Al sistema
+
+00:03:46.380 --> 00:03:51.100
+non interessano le parole esatte, interessa ciò che intende. Questa è la svolta. I computer iniziano
+
+00:03:51.100 --> 00:03:54.940
+a comprendere l'intento, non solo ortografie. Trovano risposte che la ricerca per parole chiave
+
+00:03:54.940 --> 00:03:58.920
+si perderebbe completamente. Ma anche la ricerca vettoriale è un punto di... può mancare corrispondenze
+
+00:03:58.920 --> 00:04:03.700
+esatte che sono assolutamente fondamentali. Se un tecnico cerca uno specifico codice di errore
+
+00:04:03.700 --> 00:04:09.160
+come l'errore X807-Z570, una ricerca vettoriale potrebbe dare priorità a documenti su errori del disco
+
+00:04:09.160 --> 00:04:15.640
+o corruzione del file system invece del documento esatto che analizza quel codice specifico. Sacrifica la precisione
+
+00:04:15.640 --> 00:04:18.960
+in favore della comprensione. Quindi abbiamo due metodi. La ricerca per parole chiave è ottima
+
+00:04:18.960 --> 00:04:23.580
+per la precisione. Trova termini esatti, ID prodotto, numeri di contratto. La ricerca vettoriale è ottima
+
+00:04:23.580 --> 00:04:27.880
+per significato. Trova la risposta giusta anche quando non usi le parole giuste. Ognuna dei punti
+
+00:04:27.880 --> 00:04:32.380
+c'è. Questo solleva una domanda ovvia. E se si potessero combinare entrambi gli approcci per ottenere
+
+00:04:32.380 --> 00:04:36.560
+il meglio da entrambi i mondi? La svolta ibrida. La ricerca ibrida è il meglio di entrambi i mondi.
+
+00:04:37.000 --> 00:04:40.740
+Esegue contemporaneamente sia la ricerca per parole chiave che quella vettoriale, quindi combina i risultati
+
+00:04:40.740 --> 00:04:44.820
+in un unico elenco classificato. Invece di scegliere un approccio rispetto all'altro, il sistema utilizza
+
+00:04:44.820 --> 00:04:49.860
+un metodo chiamato Reciprocal Rank Fusion o RRF. Ecco come funziona. RRF analizza la posizione di ogni
+
+00:04:49.860 --> 00:04:54.080
+documento nei risultati per parole chiave e nei risultati vettoriali, quindi assegna un punteggio
+
+00:04:54.080 --> 00:04:57.940
+comune. Se un documento è valido in entrambi riceve una spinta, è come prendere due pareri di
+
+00:04:57.940 --> 00:05:03.000
+esperti e mediarli. La risposta finale è più affidabile di una sola presa singolarmente. Questo è importante
+
+00:05:03.000 --> 00:05:07.080
+perché la ricerca per parole chiave e quella vettoriale hanno punti di forza fondamenti diversi. La ricerca per
+
+00:05:07.080 --> 00:05:10.560
+parole chiave c'è la mia corrispondenza esatta. È il punto di riferimento per i di prodotto, numeri di
+
+00:05:10.560 --> 00:05:15.260
+contratto, nomi specifici, codici di errore. È precisa e prevedibile. La ricerca vettoriale c'è
+
+00:05:15.260 --> 00:05:19.060
+nella somiglianza semantica, trovando documenti che condividono il significato con la tua query
+
+00:05:19.060 --> 00:05:23.740
+anche quando le parole esatte non appaiono. Insieme coprono i punti ciechi dell'altro. Il sistema
+
+00:05:23.740 --> 00:05:28.480
+cattura corrispondenze esatte e concettuali in un'unica query. Questa è la vera potenza. E non è solo
+
+00:05:28.480 --> 00:05:33.160
+teoria. La ricerca sulla ricerca ibrida aziendale mostra che offre una precisione di recupero
+
+00:05:33.160 --> 00:05:37.860
+dal 70 all'80 per centima seconda del set di dati. È circa il 15-20 per cento più rispetto a quello
+
+00:05:37.860 --> 00:05:41.860
+che si ottiene con la sola ricerca vettoriale. La differenza è significativa e si riflette sui
+
+00:05:41.860 --> 00:05:46.140
+risultati aziendali reali. Prendiamo le piattaforme di Contabilia Texan. Hanno implementato la ricerca
+
+00:05:46.140 --> 00:05:50.480
+ibrida nella loro esperienza di assistenza a clienti tramite un'azienda chiamata Coveo. Entro tre mesi
+
+00:05:50.480 --> 00:05:54.800
+hanno visto un aumento del 20 per cento alla risoluzione self-service. I clienti hanno trovato risposte
+
+00:05:54.800 --> 00:05:59.180
+autonomamente più spesso senza dover contattare l'assistenza. Altri clienti, nello stesso caso di studio,
+
+00:05:59.180 --> 00:06:02.900
+hanno visto una riduzione fino al 40 per cento del tempo di risoluzione per i casi di assistenza.
+
+00:06:03.160 --> 00:06:06.400
+Ciò significa che gli agenti hanno trovato le informazioni giuste più velocemente, i clienti
+
+00:06:06.400 --> 00:06:09.600
+hanno ottenuto risposte più rapidamente, i costi dell'assistenza sono diminuiti. Non è solo una
+
+00:06:09.600 --> 00:06:13.940
+bella funzione, è un impatto misurabile sul profitto. Questo è il punto chiave. La ricerca
+
+00:06:13.940 --> 00:06:17.300
+ibrida non è solo un buon aggiornamento, una spunta e un elenco di funzionalità. È decisamente
+
+00:06:17.300 --> 00:06:21.560
+migliore. Offre una precisione migliore, un migliore richiamo e risultati migliori per l'utente. Ed è
+
+00:06:21.560 --> 00:06:25.120
+questa combinazione di approcci a rendere Azure e iSearch così potente per le applicazioni
+
+00:06:25.120 --> 00:06:29.360
+moderne. Ma c'è un'altra tecnologia che questa combinazione sblocca, una che sta ricevendo
+
+00:06:29.360 --> 00:06:33.960
+molta attenzione al momento. Si chiama RUG, la connessione RUG, quindi parliamo di RUG.
+
+00:06:34.840 --> 00:06:40.400
+RUG è un termine complesso, ma ecco la definizione più semplice. È un framework che fornisce
+
+00:06:40.400 --> 00:06:44.400
+agli assistenti all'accesso a informazioni su cui non sono stati addestrati. I modelli
+
+00:06:44.400 --> 00:06:48.600
+linguistici di grandi dimensioni come GPT sanno molto di storia, scienza e programmazione,
+
+00:06:48.700 --> 00:06:53.080
+ma non conoscono i documenti interni, le policy, la storia dei clienti o le procedure specifiche
+
+00:06:53.080 --> 00:06:57.700
+seguite dal tuo team. Molti pensano che si possa semplicemente riversare tutta quella
+
+00:06:57.700 --> 00:07:01.460
+conoscenza interna nel modello stesso. Non funziona. È costoso e difficile da giornare.
+
+00:07:02.000 --> 00:07:05.520
+Risolvi questo problema in modo intelligente. Invece di stipare tutto nel modello, recuperi
+
+00:07:05.520 --> 00:07:08.560
+le informazioni rilevanti da una base di conoscenza nel momento in cui qualcuno pone
+
+00:07:08.560 --> 00:07:13.000
+una domanda. Prendi la query dell'utente, cerchi nei tuoi dati interni, trovi i documenti
+
+00:07:13.000 --> 00:07:18.340
+più pertinenti e fornisci quel contesto all'LLM insieme alla domanda originale. L'LLM genera
+
+00:07:18.340 --> 00:07:22.640
+quindi una risposta basata sui tuoi dati. Questa è la magia. Ora, Azure AI Search è la
+
+00:07:22.640 --> 00:07:26.620
+metà di recupero di quell'equazione. È il motore che trova i documenti giusti affinché
+
+00:07:26.620 --> 00:07:31.060
+l'LLM possa rispondere con precisione. Senza un solido livello di recupero, un sistema RAG
+
+00:07:31.060 --> 00:07:35.020
+è valido solo quanti documenti che trova. Ed è qui che la ricerca ibrida brilla davvero,
+
+00:07:35.120 --> 00:07:38.420
+perché le query RAG sono spesso domande in linguaggio naturale e le risposte risiedono
+
+00:07:38.420 --> 00:07:42.020
+spesso in documenti che usano terminologie totalmente diverse. Lascio che ti dia alcuni
+
+00:07:42.020 --> 00:07:45.780
+numeri che mostrano davvero la differenza. Uno studio sulla ricerca in applicazioni aziendali
+
+00:07:45.780 --> 00:07:49.900
+ha rilevato che un framework RAG ibrido ha migliorato la precisione di recupero top cap
+
+00:07:49.900 --> 00:07:54.080
+da 18 a 25 volte rispetto alla sola ricerca per parole chiave. La precisione nel completamento
+
+00:07:54.080 --> 00:07:57.660
+delle attività di flusso di lavoro è migliorata di 21. Ciò significa che gli utenti avevano
+
+00:07:57.660 --> 00:08:01.300
+molte più probabilità di completare con successo compiti complessi quando supportati da un sistema
+
+00:08:01.300 --> 00:08:05.620
+RAG che utilizza la ricerca ibrido. Nel complesso, sistemi RAG implementati correttamente possono
+
+00:08:05.620 --> 00:08:09.580
+aumentare la precisione della ricerca in media dell'85% con alcuni domini specializzati
+
+00:08:09.580 --> 00:08:14.460
+che raggiungono il 91% e poiché l'LLM genera risposte basate sul contesto recuperato piuttosto
+
+00:08:14.460 --> 00:08:18.220
+che sulle proprie supposizioni, i sistemi RAG hanno mostrato una riduzione di circa il 40%
+
+00:08:18.220 --> 00:08:22.180
+nelle risposte allucinanti. Ecco perché Azure AI Search è fondamentale per creare agenti e
+
+00:08:22.180 --> 00:08:26.880
+copiloti. Fornisce il recupero basato su fatti concreti che rende gli LLM affidabili in un
+
+00:08:26.880 --> 00:08:31.240
+contesto aziendale. Se stai creando un assistente che deve rispondere alle domande in modo accurato
+
+00:08:31.240 --> 00:08:36.060
+e citare le fonti, la ricerca ibrida unita RAG è l'architettura a cui dovrai ricorrere. Quindi la
+
+00:08:36.060 --> 00:08:40.380
+ricerca ibrida più RAG è una combinazione potente. Ma come si traduce tutto questo nella pratica?
+
+00:08:41.600 --> 00:08:46.000
+L'impatto nel mondo reale. Dunque, dove si manifesta concretamente? Lascia che ti faccio alcuni esempi.
+
+00:08:46.000 --> 00:08:50.500
+L'e-commerce è probabilmente l'esempio più noto. Un cliente digita scarpe da corsa comode in una
+
+00:08:50.500 --> 00:08:54.420
+barra di ricerca. La scheda del prodotto potrebbe riportare calzature sportive ammortizzate perché
+
+00:08:54.420 --> 00:08:58.360
+il team di marketing ha scelto termini diversi. La sola ricerca per parole chiave perderebbe
+
+00:08:58.360 --> 00:09:02.880
+completamente risultato. Con Azure AI Search il sistema comprende che comode e ammortizzate
+
+00:09:02.880 --> 00:09:06.820
+significano più o meno la stessa cosa in questo contesto. Propone il prodotto giusto anche quando
+
+00:09:06.820 --> 00:09:10.900
+le parole non coincidono. Questo significa che il cliente trova ciò che cerca invece di abbandonare
+
+00:09:10.900 --> 00:09:15.140
+il sito frustrato. I portali di assistenza clienti funzionano allo stesso modo. Immagina che un cliente
+
+00:09:15.140 --> 00:09:19.460
+scriva come possa annullare il mio abbonamento. La polisi pertinente potrebbe intitolarsi risoluzione
+
+00:09:19.460 --> 00:09:24.120
+del contratto di servizio. La ricerca ibrida trova quel documento esatto tramite la corrispondenza
+
+00:09:24.120 --> 00:09:27.980
+di parole chiave sulla terminologia legale ma propone anche una facco correlata sulla chiusura
+
+00:09:27.980 --> 00:09:32.920
+anticipata del piano tramite la somiglianza semantica. Il cliente ottiene una risposta
+
+00:09:32.920 --> 00:09:37.620
+completa invece di dover scavare tra cinque diversi articoli. Il recupero di documenti legali è un altro
+
+00:09:37.620 --> 00:09:41.780
+esempio. Gli avvocati devono cercare nei contratti numeri di clausola e riferimenti di sezione
+
+00:09:41.780 --> 00:09:46.180
+esatti. Questo è il dominio delle parole chiave ma devono anche trovare formulazioni simili
+
+00:09:46.180 --> 00:09:50.140
+in accordi diversi anche quando la dicitura varia. La ricerca ibrida gestisce entrambi
+
+00:09:50.140 --> 00:09:53.760
+in un'unica query e nei settori regolamentati poter tracciare esattamente il motivo per cui
+
+00:09:53.760 --> 00:09:56.960
+è apparso un risultato è fondamentale per la conformità. Anche le basi di conoscenza
+
+00:09:56.960 --> 00:10:01.580
+internet agronomata. Un dipendente che cerca la politica sulle ferie ottiene il documento
+
+00:10:01.580 --> 00:10:05.480
+ufficiale delle risorse umane ma anche un'email correlata dal team legale sui giorni di riporto
+
+00:10:05.480 --> 00:10:10.300
+e un recente aggiornamento pubblicato sull'intranet aziendale. La ricerca comprende che tutti
+
+00:10:10.300 --> 00:10:13.660
+questi elementi sono collegati alla stessa domanda. La produzione manifatturiere è un
+
+00:10:13.660 --> 00:10:17.920
+esempio meno ovvio ma potente. Un tecnico digita riparazione sul riscaldamento motore
+
+00:10:17.920 --> 00:10:21.480
+in un'interfaccia di ricerca. Il sistema restituisce la sezione di risoluzione dei
+
+00:10:21.480 --> 00:10:24.300
+problemi dal manuale dell'attrezzatura più uno schema scansionato che mostra le parti
+
+00:10:24.300 --> 00:10:28.960
+interessate. Anche se il diagramma è un'immagine, Azure AI Search può estrarre e indicizzare
+
+00:10:28.960 --> 00:10:32.620
+il suo contenuto testuale in modo che appaia nei risultati di ricerca. Il filo conduttore
+
+00:10:32.620 --> 00:10:37.080
+di tutti questi esempi sono i dati non strutturati. PDF, documenti Word, Tic di assistenza
+
+00:10:37.080 --> 00:10:40.160
+via mail, immagini scansionate. Le query sui database tradizionali e la ricerca
+
+00:10:40.160 --> 00:10:43.880
+per parole chiave non sono mai state progettate per questo tipo di. Azure AI Search è costruita
+
+00:10:43.880 --> 00:10:47.200
+appositamente per questo mondo e più lo si osserva più diventa chiaro che la ricerca
+
+00:10:47.200 --> 00:10:50.780
+ibrida non è solo una bella funzionalità. È un elemento fondamentale del modo in cui
+
+00:10:50.780 --> 00:10:54.400
+vengono create le applicazioni modelle. Come i vari pezzi si incastrano solo. Quindi
+
+00:10:54.400 --> 00:10:58.500
+come funziona tutto questo nel concreto? Azure AI Search ha tre componenti fondamentali.
+
+00:10:59.020 --> 00:11:03.180
+L'origine dati, l'indicizzatore e l'indice di ricerca. L'origine dati è il luogo in cui
+
+00:11:03.180 --> 00:11:06.980
+risiedono le tue informazioni. Potrebbe trattarsi di un archivio blob, un database SQL di Azure,
+
+00:11:06.980 --> 00:11:12.240
+Cosmos DB o persino SharePoint. È la materia prima che deve andare ricercabile. Tensalo
+
+00:11:12.240 --> 00:11:16.380
+come a una pila di documenti in attesa di essere organizzati. L'indicizzatore è la pipeline
+
+00:11:16.380 --> 00:11:21.540
+che legge i dati dalla fonte, estrae il contenuto, applica l'arricchimento AI configurato e crea
+
+00:11:21.540 --> 00:11:26.400
+l'indice di ricerca. È come modo semplice per visualizzarlo. Immagina un bibliotecario
+
+00:11:26.400 --> 00:11:30.740
+che entra in un magazzino pieno di libri. Li legge tutti, prende appunti dettagliati,
+
+00:11:30.900 --> 00:11:35.360
+identifica temi, identità chiave e organizza tutto in uno schedario. Quella lettura è presa
+
+00:11:35.360 --> 00:11:39.320
+di appunti e il processo di indicizzazione. L'indice di ricerca è quello schedario. Non
+
+00:11:39.320 --> 00:11:43.820
+sono i libri stessi. È il sistema strutturato ottimizzato che ti permette di trovare esattamente
+
+00:11:43.820 --> 00:11:47.700
+ciò che ti serve in pochi minuti secondi. Quando digiti una query, il sistema non torna
+
+00:11:47.700 --> 00:11:52.540
+ai documenti originali per scansionarli. Invece consulta l'indice che sa già esattamente
+
+00:11:52.540 --> 00:11:58.020
+dove si trova ogni cosa. Questa preorganizzazione è chiamata indice invertito. Invece di memorizzare
+
+00:11:58.020 --> 00:12:02.460
+documenti con un elenco di parole, memorizzi le parole con un elenco di documenti. Ciò significa
+
+00:12:02.460 --> 00:12:06.020
+che quando cerchi un termine vai dritto al punto giusto, senza dover sfogliare ogni
+
+00:12:06.020 --> 00:12:09.740
+pagina. Il risultato è un enorme miglioramento della velocità. Invece di scansionare ogni
+
+00:12:09.740 --> 00:12:12.900
+singolo documento, il che richiede più tempo, man mano che i dati crescono, vai dritto alla
+
+00:12:12.900 --> 00:12:17.400
+posizione corretta. Con milioni di documenti, quella differenza tra una ricerca che richiede
+
+00:12:17.400 --> 00:12:20.940
+secondi e una che ne richiede millisecondi e una che ne richiede millisecondi. Ora sai cos'è
+
+00:12:20.940 --> 00:12:25.020
+Azure AI Search, come si integrano i componenti principali e perché la ricerca ibrida cambia le regole
+
+00:12:25.020 --> 00:12:28.140
+del gioco. Concludiamo con alcune cose che puoi fare concretamente.
+
+00:12:28.140 --> 00:12:32.660
+Per prima cosa, comprendi i tuoi dati. Se sono già strutturati, come tabelle di prodotti
+
+00:12:32.660 --> 00:12:36.780
+in SQL, record di clienti in un database o qualsiasi cosa con righe e colonne pulite, puoi
+
+00:12:36.780 --> 00:12:41.540
+interrogarli direttamente con SQL. Azure AI Search è progettato per testi non strutturati.
+
+00:12:41.840 --> 00:12:45.620
+Si tratta di PDF, email, documenti word, ticket di assistente. È lì che offre il suo vero
+
+00:12:45.620 --> 00:12:51.020
+valore. In secondo luogo, se stai creando un'applicazione RAG o un assistente AI, Azure AI Search
+
+00:12:51.020 --> 00:12:55.940
+con ricerca ibrida è il motore di recupero ideale. Ti offre corrispondenze esatte per precisione,
+
+00:12:55.940 --> 00:13:00.240
+comprensione semantica per il contesto. Questa combinazione produce risposte più
+
+00:13:00.240 --> 00:13:04.580
+affidabili e citabili rispetto ai singoli approcci. Terzo, non complicare eccessivamente
+
+00:13:04.580 --> 00:13:07.820
+la configurazione. Portale Azzurri dispone di una procedura guidata per l'importazione.
+
+00:13:08.100 --> 00:13:11.420
+Connetti il tuo archivio blob, configura alcune impostazioni e lascia che l'indicizzatore
+
+00:13:11.420 --> 00:13:14.640
+crea il primo indice. Puoi eseguire la tua prima ricerca in meno di un'ora. Dunque, questo
+
+00:13:14.640 --> 00:13:18.260
+è Azure AI Search in parole semplici. Prendi informazioni disordinate e non strutturate,
+
+00:13:18.400 --> 00:13:22.200
+trasformandone in conoscenza ricercabile e pronta per l'IA. Grazie per essere stati con
+
+00:13:22.200 --> 00:13:24.380
+me. Iscriviti e ci vediamo nel prossimo episodio.

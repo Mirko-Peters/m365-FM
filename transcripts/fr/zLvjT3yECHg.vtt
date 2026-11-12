@@ -1,0 +1,2299 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:04.420
+Bonjour à tous et bienvenue dans un nouvel épisode de Microsoft Knowledge Nugget sur M365FM.
+
+00:00:04.720 --> 00:00:06.320
+Femme, je suis votre hôte Mirko Peters.
+
+00:00:06.660 --> 00:00:08.820
+Le sujet du jour est un sujet dont presque tout le monde a entendu parler,
+
+00:00:09.120 --> 00:00:10.460
+mais que très peu de gens comprennent réellement.
+
+00:00:10.860 --> 00:00:11.720
+Les bases de données vectoriales.
+
+00:00:12.000 --> 00:00:13.960
+Vous avez probablement déjà vu ce terme dans des articles sur l'IA
+
+00:00:13.960 --> 00:00:16.380
+ou l'avez entendu dans des conversations sur Copilot et ChatGPT.
+
+00:00:16.840 --> 00:00:18.560
+Et qu'est-ce qu'une base de données vectoriale exacte ?
+
+00:00:18.560 --> 00:00:21.020
+S'agit-il simplement d'une base de données ordinaire avec un nom plus sophistique ?
+
+00:00:21.020 --> 00:00:22.580
+S'agit-il de quelque chose de complètement différent ?
+
+00:00:22.580 --> 00:00:24.960
+Imaginez que vous recherchiez une veste rouge sur un site de commerce électronique
+
+00:00:24.960 --> 00:00:27.680
+et que vous obteniez des résultats indiquant manteau cramoisi, cramoisi, cramoisi, cramoisi, etc.
+
+00:00:28.460 --> 00:00:30.680
+Comment l'ordinateur sait-il qu'il s'agit de la même chose ?
+
+00:00:30.680 --> 00:00:31.680
+Il ne fait pas correspondre les mots-clés.
+
+00:00:32.360 --> 00:00:34.220
+Cramoisi n'est pas rouge et manteau n'est pas veste.
+
+00:00:35.280 --> 00:00:36.940
+Pourtant, le moteur de recherche comprend qu'ils sont liés
+
+00:00:36.940 --> 00:00:38.400
+et c'est la recherche vectorielle en action.
+
+00:00:39.340 --> 00:00:42.120
+A la fin de cet épisode, vous comprendrez ce que sont réellement les bases de données vectoriales,
+
+00:00:42.180 --> 00:00:43.760
+pourquoi elles alimentent la recherche par l'IA et Copilot
+
+00:00:43.760 --> 00:00:45.740
+et comment elles s'intègrent dans le cloud de Microsoft.
+
+00:00:46.940 --> 00:00:47.680
+Nous restons simples.
+
+00:00:48.500 --> 00:00:50.800
+Pas de mathématiques, pas de jargon, juste des éléments de base clairs.
+
+00:00:51.700 --> 00:00:52.680
+Qu'est-ce qu'un vecteur ?
+
+00:00:54.960 --> 00:00:56.860
+Qu'est-ce qu'un vecteur exactement ?
+
+00:00:56.860 --> 00:00:58.560
+Lorsque la plupart des gens entendent le mot vecteur,
+
+00:00:58.660 --> 00:01:01.380
+ils imaginent une flèche tirée d'un cours de physique, sa direction et sa magnitude.
+
+00:01:02.020 --> 00:01:03.080
+En informatique, c'est beaucoup plus sain.
+
+00:01:03.560 --> 00:01:05.020
+Un vecteur n'est en réalité qu'une liste de nombres.
+
+00:01:05.760 --> 00:01:08.920
+Un tableau unidimensionnel qui représente quelque chose dans un format que l'ordinateur peut traiter.
+
+00:01:09.600 --> 00:01:10.980
+Voici une façon pratique de le représenter.
+
+00:01:11.240 --> 00:01:12.840
+Si je vous disais de me retrouver au troisième étage,
+
+00:01:13.000 --> 00:01:15.980
+dans l'aile B, salle 12, ce sont trois nombres décrivant un emplacement spécifique.
+
+00:01:16.660 --> 00:01:19.920
+C'est un vecteur tridimensionnel qui vous indique exactement où se trouve quelque chose dans un bâtiment.
+
+00:01:20.420 --> 00:01:21.600
+Imaginez maintenant que j'ajoute plus d'adétal.
+
+00:01:21.600 --> 00:01:24.320
+La couleur de la porte, la taille de la pièce, le prix au mètre carré.
+
+00:01:25.100 --> 00:01:26.700
+Chaque nouveau détail devient une autre dimension.
+
+00:01:27.340 --> 00:01:30.600
+Ainsi, plus vous créez des dimensions, plus vous pouvez capturer d'informations sur cet objet.
+
+00:01:31.180 --> 00:01:34.680
+Une voiture pourrait être décrite par sa vitesse, son kilométrage, son prix, son poids et son indice de sécurité.
+
+00:01:35.020 --> 00:01:36.060
+C'est un vecteur à cinq dimensions.
+
+00:01:36.720 --> 00:01:39.000
+Un produit pourrait être décrit par des centaines de caractéristiques,
+
+00:01:39.100 --> 00:01:40.400
+ce qui vous donne un vecteur à grande dimension.
+
+00:01:40.920 --> 00:01:41.360
+Voici le truc.
+
+00:01:41.720 --> 00:01:44.120
+Les vecteurs nous permettent de transformer des choses en nombres que les ordinateurs ne peuvent pas.
+
+00:01:44.420 --> 00:01:47.600
+Les mots, les images, les sons, les documents, tout peut devenir une liste de nombres.
+
+00:01:47.740 --> 00:01:49.020
+Une fois que tout est devenu des nombres,
+
+00:01:49.020 --> 00:01:51.140
+vous pouvez commencer à mesurer à quel point deux choses sont similaires.
+
+00:01:51.740 --> 00:01:53.400
+Deux pièces au même étage avec des couleurs de portes similaires
+
+00:01:53.400 --> 00:01:55.180
+finissent par être proches l'une de l'autre dans l'espace vectoriel.
+
+00:01:55.740 --> 00:01:58.080
+Et deux produits avec des fonctionnalités similaires se regroupent également.
+
+00:01:59.020 --> 00:02:01.160
+Cette idée simple est ce qui rend possible la recherche par IA moderne.
+
+00:02:01.940 --> 00:02:04.800
+Des vecteurs représentation vectorielle continue, tous les vecteurs ne sont pas identiques.
+
+00:02:04.960 --> 00:02:07.320
+Il existe un type particulier appelé représentation vectorielle continue
+
+00:02:07.320 --> 00:02:08.200
+et c'est là que résiste toute cette pièce.
+
+00:02:08.440 --> 00:02:09.860
+Qu'est-ce qu'une représentation vectorielle continue ?
+
+00:02:09.860 --> 00:02:13.720
+Une représentation vectorielle continue est un vecteur qui représente un modèle d'apprentissage automatique
+
+00:02:13.720 --> 00:02:16.020
+comme la représentation vectorielle continue d'Azure OpenAI
+
+00:02:16.020 --> 00:02:18.240
+et il lit le texte et le place dans un espace à haute dimension.
+
+00:02:18.880 --> 00:02:20.680
+Le modèle a appris à partir de milliards d'exemples,
+
+00:02:21.000 --> 00:02:22.540
+il comprend donc comment les mots sont liés.
+
+00:02:23.320 --> 00:02:24.880
+Le roi et la reine finissent par être proches l'un de l'autre
+
+00:02:24.880 --> 00:02:26.360
+parce qu'ils partagent un contexte similaire.
+
+00:02:26.980 --> 00:02:28.700
+Le roi et le café finissent par être très éloignés l'un de l'autre
+
+00:02:28.700 --> 00:02:29.780
+parce qu'ils ne partagent pas le contexte.
+
+00:02:30.060 --> 00:02:31.280
+Voici ce que cela signifie en termes simples.
+
+00:02:31.820 --> 00:02:32.980
+Lorsque vous recherchez veste rouge,
+
+00:02:33.320 --> 00:02:34.640
+le système trouve manteau cramoisi.
+
+00:02:35.940 --> 00:02:38.020
+Le modèle d'intégration reconnaît que rouge et cramoisi
+
+00:02:38.020 --> 00:02:40.660
+ont une signification proche et que veste et manteau le sont également.
+
+00:02:41.660 --> 00:02:42.940
+Les intégrations de ces deux expressions
+
+00:02:42.940 --> 00:02:44.540
+deviennent voisines dans l'espace vectoriel.
+
+00:02:44.980 --> 00:02:46.540
+L'ordinateur ne fait plus correspondre les lettres,
+
+00:02:47.100 --> 00:02:47.800
+fait correspondre le sens.
+
+00:02:49.120 --> 00:02:50.480
+Laissez-moi vous donner un exemple classique.
+
+00:02:50.940 --> 00:02:51.820
+Prenez le vecteur du roi,
+
+00:02:52.000 --> 00:02:53.080
+soustrayez le vecteur de l'homme
+
+00:02:53.080 --> 00:02:54.420
+et ajoutez le vecteur de la femme.
+
+00:02:55.600 --> 00:02:57.600
+Le résultat est très proche du vecteur de la reine.
+
+00:02:58.380 --> 00:02:59.820
+Roi moins homme plus femme égale reine.
+
+00:03:00.480 --> 00:03:01.300
+Cela peut sembler magique,
+
+00:03:01.400 --> 00:03:02.360
+mais c'est en réalité la manière
+
+00:03:02.360 --> 00:03:04.060
+dont le modèle transforme les relations en nombre.
+
+00:03:05.240 --> 00:03:06.820
+Il a appris que le roi et la reine
+
+00:03:06.820 --> 00:03:09.380
+partagent une relation similaire à celle entre l'homme et la femme
+
+00:03:09.380 --> 00:03:11.640
+et cette relation est codée dans les coordonnées.
+
+00:03:11.640 --> 00:03:13.820
+Ainsi, les modèles d'intégration
+
+00:03:13.820 --> 00:03:14.600
+prennent vos données brutes,
+
+00:03:14.680 --> 00:03:16.420
+qu'il s'agisse de textes, d'images ou d'audios,
+
+00:03:16.540 --> 00:03:17.940
+et les convertissent en une liste de nombres
+
+00:03:17.940 --> 00:03:19.320
+qui représentent leur signification.
+
+00:03:20.120 --> 00:03:21.240
+Ces nombres deviennent des coordonnées
+
+00:03:21.240 --> 00:03:22.640
+dans un espace à haute dimension.
+
+00:03:23.540 --> 00:03:24.720
+Ensuite, lorsque vous effectuez une recherche,
+
+00:03:24.800 --> 00:03:25.660
+votre requête est convertie
+
+00:03:25.660 --> 00:03:26.720
+dans le même type de coordonnées.
+
+00:03:27.320 --> 00:03:28.840
+Il suffit de mesurer la distance entre elles.
+
+00:03:29.280 --> 00:03:29.900
+C'est l'idée centrale.
+
+00:03:30.320 --> 00:03:31.320
+Pourquoi les bases de données traditionnelles
+
+00:03:31.320 --> 00:03:32.320
+sont-elles insuffisantes ?
+
+00:03:32.320 --> 00:03:33.560
+Si les représentations vectorielles continuent
+
+00:03:33.560 --> 00:03:34.040
+sont si puissantes,
+
+00:03:34.120 --> 00:03:34.860
+pourquoi ne pouvons-nous pas simplement
+
+00:03:34.860 --> 00:03:35.780
+utiliser les données classiques ?
+
+00:03:35.780 --> 00:03:36.440
+Répondons à cette question.
+
+00:03:37.560 --> 00:03:38.980
+Les bases de données SQL traditionnelles
+
+00:03:38.980 --> 00:03:40.240
+sont conçues pour des correspondances exactes.
+
+00:03:40.580 --> 00:03:42.240
+Vous écrivez où la couleur est égale au rouge,
+
+00:03:42.420 --> 00:03:43.240
+et elle trouve toutes les lignes
+
+00:03:43.240 --> 00:03:44.000
+où la colonne de couleur
+
+00:03:44.000 --> 00:03:45.060
+est littéralement égale au rouge.
+
+00:03:45.580 --> 00:03:46.400
+Cela fonctionne très bien
+
+00:03:46.400 --> 00:03:47.220
+pour les données structurées
+
+00:03:47.220 --> 00:03:48.000
+telles que les noms de clients,
+
+00:03:48.120 --> 00:03:49.400
+les dates de commande ou les prix des produits,
+
+00:03:49.720 --> 00:03:50.680
+mais cela ne fonctionne pas du tout
+
+00:03:50.680 --> 00:03:51.320
+lorsque vous avez besoin
+
+00:03:51.320 --> 00:03:52.140
+d'une signification floue.
+
+00:03:52.780 --> 00:03:53.980
+Essayez d'écrire une requête SQL
+
+00:03:53.980 --> 00:03:55.160
+qui trouve du code cramoisi,
+
+00:03:55.440 --> 00:03:57.360
+alors que vos données ne disent que Veste Bordeaux.
+
+00:03:58.180 --> 00:03:58.680
+Vous ne pouvez pas,
+
+00:03:58.780 --> 00:04:00.020
+car SQL ne comprend pas les concepts.
+
+00:04:00.920 --> 00:04:01.980
+Les bases de données traditionnelles
+
+00:04:01.980 --> 00:04:03.380
+stockent les données en ligne et en colonne.
+
+00:04:04.100 --> 00:04:05.400
+Elles sont optimisées pour les jointures,
+
+00:04:05.400 --> 00:04:07.140
+les agrégations et les recherches exactes.
+
+00:04:08.000 --> 00:04:09.380
+Elles ne savent pas que voitures et automobiles
+
+00:04:09.380 --> 00:04:10.100
+sont la même chose.
+
+00:04:10.660 --> 00:04:11.960
+Elles ne savent pas qu'excitées ravisent.
+
+00:04:12.220 --> 00:04:13.220
+Ce sont des émotions similaires.
+
+00:04:13.680 --> 00:04:14.340
+Elles correspondent simplement
+
+00:04:14.340 --> 00:04:14.960
+à des chaînes de carrément.
+
+00:04:15.240 --> 00:04:16.380
+Et si vos données ne sont pas structurées,
+
+00:04:16.480 --> 00:04:17.580
+comme des PDF, des images,
+
+00:04:17.680 --> 00:04:18.360
+des enregistrements audios
+
+00:04:18.360 --> 00:04:18.920
+ou de longs documents,
+
+00:04:19.240 --> 00:04:20.220
+les bases de données traditionnelles
+
+00:04:20.220 --> 00:04:21.280
+peuvent les stocker sous forme de blob.
+
+00:04:21.600 --> 00:04:22.540
+Elles les stockent sous forme de blob,
+
+00:04:22.620 --> 00:04:23.220
+mais elles ne peuvent pas vraiment
+
+00:04:23.220 --> 00:04:23.860
+rechercher leur contenu.
+
+00:04:23.960 --> 00:04:24.740
+Vous auriez besoin d'une recherche
+
+00:04:24.740 --> 00:04:25.420
+en texte intégrale
+
+00:04:25.420 --> 00:04:26.560
+qui repose toujours sur la correspondance
+
+00:04:26.560 --> 00:04:26.900
+de mots-clés.
+
+00:04:27.460 --> 00:04:28.240
+Si l'utilisateur tape
+
+00:04:28.240 --> 00:04:28.960
+rapport budgétaire,
+
+00:04:29.020 --> 00:04:29.800
+mais que le document indique
+
+00:04:29.800 --> 00:04:30.580
+résumé financier,
+
+00:04:30.700 --> 00:04:31.620
+la recherche par mots-clés
+
+00:04:31.620 --> 00:04:32.580
+ne le trouve pas du tout,
+
+00:04:32.760 --> 00:04:33.360
+ne le trouve pas du tout.
+
+00:04:33.440 --> 00:04:34.180
+Voyez les choses de cette façon.
+
+00:04:34.440 --> 00:04:35.340
+Une base de données classique
+
+00:04:35.340 --> 00:04:35.900
+est comme un classeur.
+
+00:04:36.380 --> 00:04:37.440
+Vous devez connaître le nom exact
+
+00:04:37.440 --> 00:04:38.240
+du fichier pour trouver
+
+00:04:38.240 --> 00:04:38.800
+ce que vous recherchez.
+
+00:04:39.340 --> 00:04:40.320
+Une base de données vectorielle
+
+00:04:40.320 --> 00:04:41.220
+est comme un bibliothécaire
+
+00:04:41.220 --> 00:04:42.060
+qui comprend ce que vous voulez dire.
+
+00:04:42.560 --> 00:04:42.880
+Vous pouvez dire
+
+00:04:42.880 --> 00:04:43.760
+car j'ai besoin de ce document
+
+00:04:43.760 --> 00:04:45.060
+sur les dépenses du dernier trimestre.
+
+00:04:45.720 --> 00:04:47.040
+Et le bibliothécaire sait exactement
+
+00:04:47.040 --> 00:04:47.820
+quel dossier extraire,
+
+00:04:47.920 --> 00:04:48.900
+même si le dossier est intitulé
+
+00:04:48.900 --> 00:04:50.480
+résumé financier du troisième trimestre.
+
+00:04:51.320 --> 00:04:52.660
+Le bibliothécaire comprend l'intention,
+
+00:04:52.660 --> 00:04:53.620
+pas seulement les étiquettes.
+
+00:04:54.180 --> 00:04:54.680
+C'est pourquoi les bases
+
+00:04:54.680 --> 00:04:55.600
+de données vectorielles existent.
+
+00:04:55.900 --> 00:04:56.820
+Elles stockent les représentations
+
+00:04:56.820 --> 00:04:57.540
+vectorielles continues,
+
+00:04:57.720 --> 00:04:58.720
+ces vecteurs de capture de sens,
+
+00:04:58.820 --> 00:04:59.620
+et les indexent d'une manière
+
+00:04:59.620 --> 00:05:00.420
+qui accélère la recherche
+
+00:05:00.420 --> 00:05:01.000
+de similarités.
+
+00:05:01.540 --> 00:05:02.060
+Elles ne remplacent pas
+
+00:05:02.060 --> 00:05:03.060
+les bases de données traditionnelles.
+
+00:05:03.460 --> 00:05:04.080
+Ils ajoutent une couche
+
+00:05:04.080 --> 00:05:05.080
+de compréhension par-dessus
+
+00:05:05.080 --> 00:05:06.420
+et cette couche change tout.
+
+00:05:07.320 --> 00:05:07.980
+Ils ajoutent une couche
+
+00:05:07.980 --> 00:05:09.000
+de compréhension par-dessus
+
+00:05:09.000 --> 00:05:10.140
+et cette couche change tout.
+
+00:05:10.680 --> 00:05:11.200
+Comment fonctionnent
+
+00:05:11.200 --> 00:05:12.320
+les bases de données vectorielles ?
+
+00:05:12.320 --> 00:05:13.060
+Alors comment tout cela
+
+00:05:13.060 --> 00:05:14.320
+fonctionne-t-il en coulisses ?
+
+00:05:14.320 --> 00:05:15.680
+Examinons les deux phases principales,
+
+00:05:16.020 --> 00:05:16.840
+l'ingestion et la requête.
+
+00:05:17.240 --> 00:05:18.400
+L'ingestion et la phase de configuration.
+
+00:05:19.120 --> 00:05:20.140
+Vous prenez vos données brutes,
+
+00:05:20.360 --> 00:05:21.160
+vos descriptions de produits,
+
+00:05:21.460 --> 00:05:22.220
+vos tickets d'assistance,
+
+00:05:22.620 --> 00:05:23.340
+vos documents internes,
+
+00:05:23.400 --> 00:05:23.900
+tout ce que vous avez,
+
+00:05:24.040 --> 00:05:25.100
+et vous soumettez chaque élément
+
+00:05:25.100 --> 00:05:25.760
+à ce que l'on appelle
+
+00:05:25.760 --> 00:05:26.780
+un modèle d'intégration.
+
+00:05:27.800 --> 00:05:28.840
+Ce modèle transforme le texte
+
+00:05:28.840 --> 00:05:29.400
+en un vecteur,
+
+00:05:29.720 --> 00:05:30.820
+qui est en gros une liste de nombres
+
+00:05:30.820 --> 00:05:31.780
+qui capture le sens.
+
+00:05:32.460 --> 00:05:33.500
+Ensuite, vous stockez ce vecteur
+
+00:05:33.500 --> 00:05:34.140
+dans la base de données
+
+00:05:34.140 --> 00:05:34.920
+avec des métadonnées,
+
+00:05:35.000 --> 00:05:35.660
+le texte original,
+
+00:05:35.860 --> 00:05:36.540
+un horodatage,
+
+00:05:36.700 --> 00:05:37.520
+peut-être une catégorie
+
+00:05:37.520 --> 00:05:39.020
+ou une URL source.
+
+00:05:39.540 --> 00:05:40.540
+Maintenant, voici la partie intelligente.
+
+00:05:40.800 --> 00:05:41.760
+Si vous aviez un million de documents,
+
+00:05:41.980 --> 00:05:42.760
+vérifiez chaque vecteur
+
+00:05:42.760 --> 00:05:43.940
+un par un prendrait une éternité.
+
+00:05:44.680 --> 00:05:45.520
+C'est pourquoi mes bases de données
+
+00:05:45.520 --> 00:05:46.280
+utilisent ce qu'on appelle
+
+00:05:46.280 --> 00:05:46.920
+l'indexation.
+
+00:05:47.440 --> 00:05:48.280
+Pensez à l'indexation
+
+00:05:48.280 --> 00:05:49.360
+comme à la création d'une carte
+
+00:05:49.360 --> 00:05:50.240
+de l'espace vectoriel
+
+00:05:50.240 --> 00:05:51.500
+au lieu de frapper à chaque porte.
+
+00:05:52.280 --> 00:05:52.920
+Deux méthodes courantes
+
+00:05:52.920 --> 00:05:54.140
+sont l'IVF et le HNSW.
+
+00:05:54.680 --> 00:05:55.260
+IVF signifie
+
+00:05:55.260 --> 00:05:56.160
+index de fichiers inversés.
+
+00:05:56.580 --> 00:05:57.420
+Il fonctionne en regroupant
+
+00:05:57.420 --> 00:05:58.480
+les vecteurs similaires en groupe.
+
+00:05:59.200 --> 00:06:00.220
+Lorsque vous effectuez une recherche,
+
+00:06:00.320 --> 00:06:00.820
+au lieu de parcourir
+
+00:06:00.820 --> 00:06:01.600
+tous les millions de vecteurs,
+
+00:06:01.680 --> 00:06:02.440
+vous ne vérifiez que les groupes
+
+00:06:02.440 --> 00:06:03.060
+les plus prometteurs.
+
+00:06:03.460 --> 00:06:04.180
+C'est comme chercher un livre
+
+00:06:04.180 --> 00:06:04.860
+dans une bibliothèque.
+
+00:06:05.360 --> 00:06:06.120
+Vous vous dirigez directement
+
+00:06:06.120 --> 00:06:06.720
+vers la bonne section
+
+00:06:06.720 --> 00:06:07.280
+au lieu de parcourir
+
+00:06:07.280 --> 00:06:07.820
+toutes les étagères.
+
+00:06:08.340 --> 00:06:09.200
+HNSW signifie
+
+00:06:09.200 --> 00:06:10.840
+Hierarchical Navigable Small World.
+
+00:06:11.260 --> 00:06:12.300
+L'idée est assez élégante.
+
+00:06:12.780 --> 00:06:13.380
+Il construit une carte
+
+00:06:13.380 --> 00:06:14.420
+multicouche de vos vecteurs.
+
+00:06:15.200 --> 00:06:15.800
+La couche supérieure
+
+00:06:15.800 --> 00:06:16.560
+contient quelques vecteurs
+
+00:06:16.560 --> 00:06:17.160
+représentatifs
+
+00:06:17.160 --> 00:06:17.740
+qui vous donnent une idée
+
+00:06:17.740 --> 00:06:18.640
+approximative de l'emplacement
+
+00:06:18.640 --> 00:06:18.940
+des choses.
+
+00:06:19.640 --> 00:06:20.240
+Chaque couche en dessous
+
+00:06:20.240 --> 00:06:20.960
+devient plus détaillée.
+
+00:06:21.340 --> 00:06:21.920
+Lorsque vous effectuez
+
+00:06:21.920 --> 00:06:22.280
+une recherche,
+
+00:06:22.380 --> 00:06:23.060
+vous commencez par le haut,
+
+00:06:23.120 --> 00:06:23.860
+trouvez le quartier général,
+
+00:06:24.060 --> 00:06:24.940
+puis explorez couche par couche
+
+00:06:24.940 --> 00:06:25.300
+jusqu'à trouver
+
+00:06:25.300 --> 00:06:26.460
+la correspondance exacte.
+
+00:06:26.760 --> 00:06:27.000
+Exact.
+
+00:06:27.560 --> 00:06:28.460
+C'est comme utiliser d'abord
+
+00:06:28.460 --> 00:06:28.960
+un plan de ville,
+
+00:06:29.240 --> 00:06:29.980
+puis un plan de quartier,
+
+00:06:30.240 --> 00:06:30.840
+puis un plan de rue.
+
+00:06:31.540 --> 00:06:32.340
+Chacun vous rapproche.
+
+00:06:32.780 --> 00:06:33.540
+Le résultat est que vous pouvez
+
+00:06:33.540 --> 00:06:34.640
+rechercher des millions de vecteurs
+
+00:06:39.200 --> 00:06:40.040
+dans un copilote
+
+00:06:40.040 --> 00:06:40.720
+et obtenez une réponse
+
+00:06:40.720 --> 00:06:41.420
+en quelques secondes.
+
+00:06:41.860 --> 00:06:42.160
+Quelque part,
+
+00:06:42.220 --> 00:06:43.060
+une base de données vectorielle
+
+00:06:43.060 --> 00:06:43.880
+vient d'effectuer une recherche
+
+00:06:43.880 --> 00:06:44.440
+de similarité
+
+00:06:44.440 --> 00:06:45.000
+dans des milliers
+
+00:06:45.000 --> 00:06:45.820
+ou des millions de documents.
+
+00:06:46.200 --> 00:06:46.760
+La phase de requête
+
+00:06:46.760 --> 00:06:47.560
+fonctionne de la même manière,
+
+00:06:47.680 --> 00:06:48.240
+mais en sens inverse.
+
+00:06:48.440 --> 00:06:49.200
+Vous saisissez votre question.
+
+00:06:49.560 --> 00:06:50.420
+Cette question est convertie
+
+00:06:50.420 --> 00:06:51.300
+en vecteur en utilisant
+
+00:06:51.300 --> 00:06:52.180
+exactement le même modèle
+
+00:06:52.180 --> 00:06:52.700
+d'intégration.
+
+00:06:53.120 --> 00:06:53.680
+La base de données
+
+00:06:53.680 --> 00:06:54.460
+trouve ensuite les voisins
+
+00:06:54.460 --> 00:06:54.900
+les plus proches
+
+00:06:54.900 --> 00:06:55.780
+de votre vecteur de requête
+
+00:06:55.780 --> 00:06:56.400
+à l'aide de l'index.
+
+00:06:57.000 --> 00:06:57.900
+Elle renvoie les résultats
+
+00:06:57.900 --> 00:06:58.460
+les plus similaires
+
+00:06:58.460 --> 00:06:59.240
+classés par distance.
+
+00:07:00.080 --> 00:07:01.040
+Plus les vecteurs sont proches,
+
+00:07:01.380 --> 00:07:02.340
+plus le résultat est pertinent.
+
+00:07:03.300 --> 00:07:04.300
+L'écosystème Microsoft
+
+00:07:04.300 --> 00:07:05.400
+où vivent les vecteurs.
+
+00:07:05.960 --> 00:07:06.420
+Alors où tout cela
+
+00:07:06.420 --> 00:07:06.820
+se trouve-t-il
+
+00:07:06.820 --> 00:07:08.100
+dans le monde Microsoft ?
+
+00:07:08.100 --> 00:07:08.920
+La réponse courte est partout.
+
+00:07:09.480 --> 00:07:10.100
+Microsoft ajoute
+
+00:07:10.100 --> 00:07:11.060
+des fonctionnalités vectorielles
+
+00:07:11.060 --> 00:07:11.740
+aux plateformes de données
+
+00:07:11.740 --> 00:07:12.560
+que vous utilisez déjà
+
+00:07:12.560 --> 00:07:13.180
+au lieu de vous pousser
+
+00:07:13.180 --> 00:07:13.940
+vers une base de données
+
+00:07:13.940 --> 00:07:15.060
+spécialisées distinctes.
+
+00:07:15.780 --> 00:07:16.780
+Passons en revue les principales.
+
+00:07:17.320 --> 00:07:18.120
+Azure AI Search
+
+00:07:18.120 --> 00:07:19.080
+est le magasin de vecteurs
+
+00:07:19.080 --> 00:07:19.600
+le plus courant
+
+00:07:19.600 --> 00:07:20.600
+pour les données d'entreprise.
+
+00:07:21.700 --> 00:07:22.440
+Il s'agit de la génération
+
+00:07:22.440 --> 00:07:23.360
+augmentée de récupération.
+
+00:07:24.060 --> 00:07:24.560
+Il prend en charge
+
+00:07:24.560 --> 00:07:25.260
+la recherche hybride,
+
+00:07:25.380 --> 00:07:25.700
+ce qui signifie
+
+00:07:25.700 --> 00:07:26.620
+qu'il combine la correspondance
+
+00:07:26.620 --> 00:07:27.440
+de mots-clés traditionnels
+
+00:07:27.440 --> 00:07:28.560
+avec la similarité vectorielle.
+
+00:07:29.280 --> 00:07:30.320
+Pourquoi est-ce important ?
+
+00:07:30.320 --> 00:07:31.100
+Parce que certaines recherches
+
+00:07:31.100 --> 00:07:31.520
+fonctionnent mieux
+
+00:07:31.520 --> 00:07:32.060
+avec des mots-clés,
+
+00:07:32.260 --> 00:07:33.200
+des codes de produits exacts,
+
+00:07:33.240 --> 00:07:33.780
+des noms, des dates,
+
+00:07:33.840 --> 00:07:34.340
+tandis que d'autres
+
+00:07:34.340 --> 00:07:35.960
+nécessitent une compréhension sémantique.
+
+00:07:36.320 --> 00:07:36.900
+La recherche hybride
+
+00:07:36.900 --> 00:07:37.400
+vous offre les deux.
+
+00:07:38.020 --> 00:07:38.800
+Azure AI Search
+
+00:07:38.800 --> 00:07:39.320
+inclut également
+
+00:07:39.320 --> 00:07:40.320
+la vectorisation intégrée,
+
+00:07:40.700 --> 00:07:41.140
+ce qui vous permet
+
+00:07:41.140 --> 00:07:42.080
+de configurer un pipeline
+
+00:07:42.080 --> 00:07:43.060
+qui segmente automatiquement
+
+00:07:43.060 --> 00:07:43.500
+les documents,
+
+00:07:43.660 --> 00:07:44.420
+génère des intégrations
+
+00:07:44.420 --> 00:07:44.860
+et les index
+
+00:07:44.860 --> 00:07:46.560
+sans écrire de code personnalisé.
+
+00:07:47.580 --> 00:07:48.640
+Cosmos DB propose désormais
+
+00:07:48.640 --> 00:07:49.560
+une recherche vectorielle native
+
+00:07:49.560 --> 00:07:50.440
+avec indexation à disque.
+
+00:07:50.780 --> 00:07:51.420
+ANN sur disque
+
+00:07:51.420 --> 00:07:51.800
+signifie
+
+00:07:51.800 --> 00:07:53.120
+« Quakeupaceproche approximative
+
+00:07:53.120 --> 00:07:54.120
+basée sur disque Pac-B
+
+00:07:54.120 --> 00:07:55.500
+et est conçu pour une latence inférieure
+
+00:07:55.500 --> 00:07:56.200
+à 20 millisecondes
+
+00:07:56.200 --> 00:07:56.880
+même à grande échelle.
+
+00:07:57.320 --> 00:07:58.040
+C'est une excellente solution
+
+00:07:58.040 --> 00:07:59.120
+pour les données opérationnelles
+
+00:07:59.120 --> 00:08:00.300
+qui résident déjà dans Cosmos DB.
+
+00:08:01.060 --> 00:08:01.780
+Imaginons que vous développiez
+
+00:08:01.780 --> 00:08:02.980
+une application de commerce électronique
+
+00:08:02.980 --> 00:08:03.960
+avec Cosmos DB comme backend.
+
+00:08:04.400 --> 00:08:04.900
+Vous pouvez désormais
+
+00:08:04.900 --> 00:08:05.900
+ajouter la recherche vectorielle
+
+00:08:05.900 --> 00:08:07.200
+directement à votre catalogue de produits
+
+00:08:07.200 --> 00:08:08.000
+sans déplacer les données
+
+00:08:08.000 --> 00:08:08.760
+vers un service distinct.
+
+00:08:09.420 --> 00:08:10.060
+Un client recherche
+
+00:08:10.060 --> 00:08:10.940
+des chaussures d'été légère
+
+00:08:10.940 --> 00:08:11.640
+et votre application
+
+00:08:11.640 --> 00:08:12.420
+trouve des produits
+
+00:08:12.420 --> 00:08:13.520
+avec des descriptions similaires,
+
+00:08:13.620 --> 00:08:14.240
+le tout dans votre
+
+00:08:14.240 --> 00:08:15.820
+base de données existantes.
+
+00:08:16.820 --> 00:08:18.220
+Azure SQL Server 2025
+
+00:08:18.220 --> 00:08:19.080
+et Azure SQL Database
+
+00:08:19.080 --> 00:08:20.020
+ont également rejoint la fête.
+
+00:08:20.640 --> 00:08:21.200
+Ils incluent désormais
+
+00:08:21.200 --> 00:08:22.380
+un type de données vectorielles natifs
+
+00:08:22.380 --> 00:08:22.800
+et des fonctions
+
+00:08:22.800 --> 00:08:23.780
+telles que la recherche vectorielle.
+
+00:08:24.220 --> 00:08:24.720
+Cela signifie
+
+00:08:24.720 --> 00:08:25.320
+que vous pouvez stocker
+
+00:08:25.320 --> 00:08:26.320
+des intégrations directement
+
+00:08:26.320 --> 00:08:27.580
+à côté de vos données relationnelles.
+
+00:08:27.640 --> 00:08:28.580
+Des enregistrements clients
+
+00:08:28.580 --> 00:08:29.860
+avec des représentations vectorielles
+
+00:08:29.860 --> 00:08:30.480
+de leurs préférences,
+
+00:08:30.660 --> 00:08:31.340
+des articles en stock
+
+00:08:31.340 --> 00:08:32.480
+avec des descriptions vectorielles,
+
+00:08:32.680 --> 00:08:33.460
+des tickets d'assistance
+
+00:08:33.460 --> 00:08:34.720
+avec des intégrations vectorielles
+
+00:08:34.720 --> 00:08:35.260
+de leurs contenus.
+
+00:08:35.780 --> 00:08:36.360
+Vous n'avez pas besoin
+
+00:08:36.360 --> 00:08:37.400
+d'une base de données vectorialistes.
+
+00:08:37.700 --> 00:08:38.780
+Vos compétences SQL existantes
+
+00:08:38.780 --> 00:08:39.280
+s'appliquent toujours.
+
+00:08:39.760 --> 00:08:40.360
+Ajoutez simplement
+
+00:08:40.360 --> 00:08:41.120
+une colonne vectorielle,
+
+00:08:41.220 --> 00:08:41.640
+créez un index
+
+00:08:41.640 --> 00:08:42.400
+et commencez à interroger
+
+00:08:42.400 --> 00:08:43.020
+par similarité.
+
+00:08:43.640 --> 00:08:44.500
+Voici comment Copilote
+
+00:08:44.500 --> 00:08:45.240
+utilise cela en coulisses.
+
+00:08:45.880 --> 00:08:46.540
+Lorsque vous demandez
+
+00:08:46.540 --> 00:08:47.380
+« Montrez-moi le rapport
+
+00:08:47.380 --> 00:08:48.400
+des ventes du troisième trimestre
+
+00:08:48.400 --> 00:08:48.920
+de l'année dernière.
+
+00:08:49.060 --> 00:08:49.820
+Copilote ne recherche pas
+
+00:08:49.820 --> 00:08:50.420
+l'expression exact
+
+00:08:50.420 --> 00:08:50.940
+rapport des ventes
+
+00:08:50.940 --> 00:08:51.720
+du troisième trimestre
+
+00:08:51.720 --> 00:08:53.100
+exact rapport des ventes. »
+
+00:08:53.100 --> 00:08:53.900
+Il convertit votre question
+
+00:08:53.900 --> 00:08:54.340
+en vecteur,
+
+00:08:54.760 --> 00:08:55.380
+effectue une recherche
+
+00:08:55.380 --> 00:08:56.260
+dans les documents d'index,
+
+00:08:56.520 --> 00:08:56.920
+les emails,
+
+00:08:57.040 --> 00:08:57.660
+les fichiers SharePoint,
+
+00:08:57.760 --> 00:08:58.480
+les documents OneDrive,
+
+00:08:58.560 --> 00:08:59.220
+les discussions Teams
+
+00:08:59.220 --> 00:09:00.260
+et trouve le document
+
+00:09:00.260 --> 00:09:00.900
+dont l'incorporation
+
+00:09:00.900 --> 00:09:01.380
+est la plus proche
+
+00:09:01.380 --> 00:09:02.060
+de votre requête.
+
+00:09:03.380 --> 00:09:04.100
+Il peut trouver un fichier
+
+00:09:04.100 --> 00:09:05.240
+intitulé « Cac-assumé financier »
+
+00:09:05.240 --> 00:09:05.900
+du troisième trimestre
+
+00:09:05.900 --> 00:09:08.040
+2024, car la signification corresponde,
+
+00:09:08.080 --> 00:09:08.640
+même si les mots exacts
+
+00:09:08.640 --> 00:09:09.140
+ne correspondent pas.
+
+00:09:09.500 --> 00:09:10.220
+C'est la recherche vectorielle
+
+00:09:10.220 --> 00:09:10.520
+en action.
+
+00:09:11.020 --> 00:09:11.540
+L'idée clé ici,
+
+00:09:11.620 --> 00:09:12.440
+la stratégie de Microsoft.
+
+00:09:13.140 --> 00:09:13.540
+Au lieu de dire
+
+00:09:13.540 --> 00:09:14.180
+« Allez acheter une base
+
+00:09:14.180 --> 00:09:15.300
+de données vectorielles spécialisée »
+
+00:09:15.300 --> 00:09:16.900
+ils ajoutent des fonctionnalités vectorielles
+
+00:09:16.900 --> 00:09:18.140
+aux outils que vous utilisez déjà.
+
+00:09:18.780 --> 00:09:19.540
+Azure AI Search,
+
+00:09:19.620 --> 00:09:20.100
+Cosmos DB,
+
+00:09:20.220 --> 00:09:20.780
+SQL Server,
+
+00:09:20.880 --> 00:09:21.600
+ils parlent tous les vecteurs
+
+00:09:21.600 --> 00:09:22.220
+et désormais,
+
+00:09:22.720 --> 00:09:23.200
+vous n'avez pas besoin
+
+00:09:23.200 --> 00:09:24.020
+d'apprendre un nouveau système.
+
+00:09:24.380 --> 00:09:25.560
+Vous devez juste comprendre le concept
+
+00:09:25.560 --> 00:09:26.800
+et Microsoft s'occupe
+
+00:09:26.800 --> 00:09:27.640
+du gros du travail.
+
+00:09:28.980 --> 00:09:29.780
+Cas d'utilisation concrète
+
+00:09:29.780 --> 00:09:30.060
+de l'IA
+
+00:09:30.060 --> 00:09:31.680
+Alors, où voyez-vous réellement
+
+00:09:31.680 --> 00:09:32.760
+les bases de données vectorielles
+
+00:09:32.760 --> 00:09:34.020
+à l'œuvre aujourd'hui ?
+
+00:09:34.020 --> 00:09:34.980
+Voici comment cela se passe
+
+00:09:34.980 --> 00:09:35.300
+dans le monde.
+
+00:09:35.700 --> 00:09:36.520
+RG est le plus important.
+
+00:09:36.920 --> 00:09:37.920
+Cela signifie génération
+
+00:09:37.920 --> 00:09:39.100
+augmentée de récupération aiguée
+
+00:09:39.100 --> 00:09:39.960
+et c'est ainsi que la plupart
+
+00:09:39.960 --> 00:09:40.620
+des IA d'entreprise
+
+00:09:40.620 --> 00:09:41.200
+fonctionnent désormais.
+
+00:09:41.200 --> 00:09:42.580
+Lorsque vous posez une question
+
+00:09:42.580 --> 00:09:43.080
+à un chatbot,
+
+00:09:43.260 --> 00:09:43.680
+il ne devine pas
+
+00:09:43.680 --> 00:09:44.660
+à partir de ces données d'entraînement.
+
+00:09:44.980 --> 00:09:45.440
+Au lieu de cela,
+
+00:09:45.540 --> 00:09:46.300
+il recherche dans une base
+
+00:09:46.300 --> 00:09:47.040
+de données vectorielles
+
+00:09:47.040 --> 00:09:47.840
+les documents pertinents,
+
+00:09:47.980 --> 00:09:48.860
+récupère les correspondances
+
+00:09:48.860 --> 00:09:49.360
+les plus proches
+
+00:09:49.360 --> 00:09:50.620
+et les transmet au modèle linguistique
+
+00:09:50.620 --> 00:09:51.460
+en tant que contexte.
+
+00:09:52.020 --> 00:09:52.940
+Le modèle construit ensuite
+
+00:09:52.940 --> 00:09:53.680
+une réponse à partir
+
+00:09:53.680 --> 00:09:54.540
+de ces documents réels.
+
+00:09:55.040 --> 00:09:56.140
+Cela signifie des réponses précises
+
+00:09:56.140 --> 00:09:56.680
+sur les politiques,
+
+00:09:56.800 --> 00:09:57.380
+les produits ou les données
+
+00:09:57.380 --> 00:09:57.980
+de votre entreprise.
+
+00:09:58.600 --> 00:09:59.740
+Sans base de données vectorielles,
+
+00:09:59.960 --> 00:10:00.500
+l'IA devinerait
+
+00:10:00.500 --> 00:10:01.600
+à partir de connaissances générales
+
+00:10:01.600 --> 00:10:01.980
+sur Internet.
+
+00:10:02.520 --> 00:10:02.880
+Avec elle,
+
+00:10:02.940 --> 00:10:03.760
+elle extrait directement
+
+00:10:03.760 --> 00:10:04.460
+vos fichiers réels.
+
+00:10:04.980 --> 00:10:05.780
+Les moteurs de recommandation
+
+00:10:05.780 --> 00:10:06.840
+sont un autre cas d'utilisation majeure.
+
+00:10:07.220 --> 00:10:08.200
+Netflix, Amazon, YouTube,
+
+00:10:08.280 --> 00:10:08.760
+ils fonctionnent tous
+
+00:10:08.760 --> 00:10:09.320
+de la même manière.
+
+00:10:10.000 --> 00:10:10.980
+Ils transforment les utilisateurs
+
+00:10:10.980 --> 00:10:11.660
+en vecteurs en fonction
+
+00:10:11.660 --> 00:10:12.360
+de leur comportement,
+
+00:10:12.560 --> 00:10:13.140
+de ce que vous regardez,
+
+00:10:13.480 --> 00:10:14.120
+achetez ou cliquez.
+
+00:10:15.060 --> 00:10:15.920
+Et ils transforment les éléments
+
+00:10:15.920 --> 00:10:16.580
+en vecteurs en fonction
+
+00:10:16.580 --> 00:10:17.060
+de descriptions,
+
+00:10:17.240 --> 00:10:17.960
+d'avis et de fonctionnalités.
+
+00:10:18.480 --> 00:10:18.680
+Ensuite,
+
+00:10:18.740 --> 00:10:19.200
+ils trouvent simplement
+
+00:10:19.200 --> 00:10:19.940
+les voisins les plus proches.
+
+00:10:20.340 --> 00:10:21.060
+Votre vecteur est proche
+
+00:10:21.060 --> 00:10:21.760
+d'un vecteur de film,
+
+00:10:21.960 --> 00:10:22.660
+il recommande ce film.
+
+00:10:23.180 --> 00:10:24.400
+C'est une recherche de similarité
+
+00:10:24.400 --> 00:10:25.340
+à grande échelle,
+
+00:10:25.740 --> 00:10:26.760
+exécutée des centaines de fois
+
+00:10:26.760 --> 00:10:27.300
+par seconde
+
+00:10:27.300 --> 00:10:28.300
+pour chaque utilisateur.
+
+00:10:28.820 --> 00:10:29.440
+La recherche sémantique
+
+00:10:29.440 --> 00:10:29.920
+est le troisième cas
+
+00:10:29.920 --> 00:10:30.580
+d'utilisation majeure.
+
+00:10:31.040 --> 00:10:31.700
+Il s'agit d'une recherche
+
+00:10:31.700 --> 00:10:32.460
+par signification
+
+00:10:32.460 --> 00:10:32.980
+et non par boucle.
+
+00:10:33.560 --> 00:10:34.320
+Un agent d'assistance
+
+00:10:34.320 --> 00:10:35.180
+tape à car le client
+
+00:10:35.180 --> 00:10:35.920
+ne peut pas se connecter
+
+00:10:35.920 --> 00:10:36.780
+après la réinitialisation
+
+00:10:36.780 --> 00:10:37.240
+du mot de passe
+
+00:10:37.240 --> 00:10:38.020
+et trouve un article
+
+00:10:38.020 --> 00:10:38.560
+intitulé qui est
+
+00:10:38.560 --> 00:10:39.340
+dépannage des échecs
+
+00:10:39.340 --> 00:10:39.940
+d'authentification
+
+00:10:39.940 --> 00:10:40.520
+après la mise à jour
+
+00:10:40.520 --> 00:10:41.480
+des informations d'identification.
+
+00:10:41.940 --> 00:10:42.760
+Les mots ne correspondent pas,
+
+00:10:42.900 --> 00:10:43.540
+mais la signification,
+
+00:10:44.100 --> 00:10:44.520
+c'est ce que permet
+
+00:10:44.520 --> 00:10:45.260
+la recherche vectorielle.
+
+00:10:45.660 --> 00:10:46.320
+Pour une équipe qui traite
+
+00:10:46.320 --> 00:10:47.360
+des centaines de tickets par jour,
+
+00:10:47.480 --> 00:10:48.440
+cela réduit considérablement
+
+00:10:48.440 --> 00:10:49.120
+le temps de résolution.
+
+00:10:49.880 --> 00:10:50.220
+Il y a ensuite
+
+00:10:50.220 --> 00:10:51.060
+la détection des anomalies,
+
+00:10:51.380 --> 00:10:52.380
+moins évidente mais puissante.
+
+00:10:53.080 --> 00:10:54.340
+Vous intégrez un comportement normal,
+
+00:10:54.340 --> 00:10:55.660
+des modèles de transactions typiques,
+
+00:10:55.900 --> 00:10:56.880
+des mesures système habituelles,
+
+00:10:56.980 --> 00:10:57.940
+des actions utilisateurs standards.
+
+00:10:58.920 --> 00:10:59.760
+Stocker ses vecteurs,
+
+00:11:00.020 --> 00:11:01.200
+puis signaler tout ce qui atterrit
+
+00:11:01.200 --> 00:11:02.000
+loin du cluster.
+
+00:11:02.440 --> 00:11:02.860
+Une transaction
+
+00:11:02.860 --> 00:11:03.480
+qui ne ressemble à rien
+
+00:11:03.480 --> 00:11:03.820
+à la normale,
+
+00:11:03.900 --> 00:11:04.280
+c'est une fraude.
+
+00:11:04.720 --> 00:11:05.460
+Une mesure de serveur
+
+00:11:05.460 --> 00:11:06.400
+qui sort de la plage habituelle,
+
+00:11:06.480 --> 00:11:07.500
+c'est un incident en préparation.
+
+00:11:07.920 --> 00:11:08.840
+Pour reste de données vectorielles,
+
+00:11:08.900 --> 00:11:09.440
+rendre cette opération
+
+00:11:09.440 --> 00:11:10.140
+suffisamment rapide
+
+00:11:10.140 --> 00:11:10.800
+pour s'exécuter en temps.
+
+00:11:11.160 --> 00:11:11.980
+Dans le monde de Microsoft,
+
+00:11:12.280 --> 00:11:12.980
+cela apparaît partout.
+
+00:11:13.500 --> 00:11:14.960
+PowerApps utilise la recherche vectorielle
+
+00:11:14.960 --> 00:11:15.800
+pour les suggestions d'IA
+
+00:11:15.800 --> 00:11:16.760
+lorsque vous créez des formulaires.
+
+00:11:17.360 --> 00:11:18.620
+Dynamics 365 l'utilise
+
+00:11:18.620 --> 00:11:19.520
+pour une recherche intelligente
+
+00:11:19.520 --> 00:11:20.560
+dans les enregistrements clients.
+
+00:11:21.180 --> 00:11:21.680
+Les transcriptions
+
+00:11:21.680 --> 00:11:22.240
+des réunions d'équipe
+
+00:11:22.240 --> 00:11:23.060
+sont transformées en vecteurs.
+
+00:11:23.620 --> 00:11:24.140
+Vous pouvez donc rechercher
+
+00:11:24.140 --> 00:11:24.780
+qu'avons-nous décidé
+
+00:11:24.780 --> 00:11:25.460
+concernant le budget
+
+00:11:25.460 --> 00:11:26.780
+et trouver le moment exact
+
+00:11:26.780 --> 00:11:27.440
+dans un enregistrement.
+
+00:11:28.520 --> 00:11:30.180
+Copilot pour Microsoft 365
+
+00:11:30.180 --> 00:11:31.060
+est essentiellement
+
+00:11:31.060 --> 00:11:31.900
+un système RA géant
+
+00:11:31.900 --> 00:11:33.400
+fonctionnant sur vos données personnelles
+
+00:11:33.400 --> 00:11:34.160
+et d'entreprise,
+
+00:11:34.420 --> 00:11:35.040
+le tout optimisé
+
+00:11:35.040 --> 00:11:36.160
+par la recherche vectorielle.
+
+00:11:37.540 --> 00:11:38.240
+L'ETL vectorielle
+
+00:11:38.240 --> 00:11:39.180
+permet de tout synchroniser.
+
+00:11:39.920 --> 00:11:40.980
+Voici maintenant le défi pratique.
+
+00:11:41.660 --> 00:11:42.280
+Les données changent,
+
+00:11:42.360 --> 00:11:43.200
+les documents sont mis à jour,
+
+00:11:43.300 --> 00:11:44.200
+de nouveaux produits sont ajoutés
+
+00:11:44.200 --> 00:11:45.080
+et les anciennes politiques
+
+00:11:45.080 --> 00:11:45.740
+sont archivées.
+
+00:11:46.380 --> 00:11:47.340
+Chaque fois que vos données source changent,
+
+00:11:47.380 --> 00:11:48.720
+vos vecteurs doivent également changer.
+
+00:11:49.260 --> 00:11:49.780
+C'est là qu'intervient
+
+00:11:49.780 --> 00:11:50.380
+l'ETL vectorielle.
+
+00:11:50.380 --> 00:11:51.820
+ETS signifie extraire,
+
+00:11:51.920 --> 00:11:52.540
+transformer, charger.
+
+00:11:52.900 --> 00:11:53.960
+Pour les bases de données vectorielles,
+
+00:11:54.120 --> 00:11:55.140
+le processus se déroule comme suit.
+
+00:11:55.620 --> 00:11:56.040
+Tout d'abord,
+
+00:11:56.320 --> 00:11:57.440
+vous extrayez les documents nouveaux
+
+00:11:57.440 --> 00:11:58.340
+ou modifiez votre source,
+
+00:11:58.460 --> 00:11:59.440
+peut-être un conteneur de stockage
+
+00:11:59.440 --> 00:11:59.900
+d'objets blob,
+
+00:12:00.140 --> 00:12:00.920
+une bibliothèque SharePoint
+
+00:12:00.920 --> 00:12:01.740
+ou une base de données SQL.
+
+00:12:02.400 --> 00:12:03.400
+Ensuite, vous les transformez
+
+00:12:03.400 --> 00:12:04.220
+en découpant le texte
+
+00:12:04.220 --> 00:12:04.900
+en morceaux gérables
+
+00:12:04.900 --> 00:12:06.120
+et en exécutant chaque morceau
+
+00:12:06.120 --> 00:12:07.300
+dans votre modèle d'intégration.
+
+00:12:08.220 --> 00:12:09.600
+Enfin, vous chargez les vecteurs résultants
+
+00:12:09.600 --> 00:12:10.720
+dans votre magasin vectoriel
+
+00:12:10.720 --> 00:12:11.720
+avec des métadonnées
+
+00:12:11.720 --> 00:12:12.820
+telles que l'URL source d'origine,
+
+00:12:12.960 --> 00:12:13.540
+un horodatage
+
+00:12:13.540 --> 00:12:15.360
+et la version du modèle utilisée.
+
+00:12:16.000 --> 00:12:16.700
+La meilleure pratique ici
+
+00:12:16.700 --> 00:12:17.780
+de procès de manière incrémentielle.
+
+00:12:18.300 --> 00:12:19.440
+Ne réintégrez pas l'intégralité
+
+00:12:19.440 --> 00:12:19.980
+de votre corpus
+
+00:12:19.980 --> 00:12:21.040
+à chaque fois que quelque chose change.
+
+00:12:21.420 --> 00:12:22.240
+Ne traitez que les documents
+
+00:12:22.240 --> 00:12:23.140
+qui ont réellement changé.
+
+00:12:23.760 --> 00:12:24.640
+Suivez la version du modèle
+
+00:12:24.640 --> 00:12:25.640
+qui a généré chaque intégration,
+
+00:12:26.020 --> 00:12:26.880
+mettez à niveau votre modèle
+
+00:12:26.880 --> 00:12:27.840
+et les anciens vecteurs
+
+00:12:27.840 --> 00:12:28.520
+deviennent incohérents
+
+00:12:28.520 --> 00:12:28.940
+avec les nouveaux.
+
+00:12:29.600 --> 00:12:30.480
+Et surveillez vos coups.
+
+00:12:30.800 --> 00:12:32.300
+Les API d'intégration facturent par jetons
+
+00:12:32.300 --> 00:12:33.700
+donc le traitement de millions de documents
+
+00:12:33.700 --> 00:12:34.460
+s'additionne rapidement.
+
+00:12:35.240 --> 00:12:35.640
+Dans Azure,
+
+00:12:35.740 --> 00:12:36.840
+un flux de travail typique est simple.
+
+00:12:37.340 --> 00:12:37.960
+Placez vos documents
+
+00:12:37.960 --> 00:12:38.880
+dans le stockage d'objets blob.
+
+00:12:39.400 --> 00:12:40.580
+Ensuite, configurez un indexeur
+
+00:12:40.580 --> 00:12:41.400
+de recherche Azure AI
+
+00:12:41.400 --> 00:12:43.220
+avec un ensemble de compétences intégrées
+
+00:12:43.220 --> 00:12:44.060
+qui gèrent automatiquement
+
+00:12:44.060 --> 00:12:45.220
+la segmentation et l'intégration.
+
+00:12:45.840 --> 00:12:46.980
+Microsoft fournit la compétence
+
+00:12:46.980 --> 00:12:47.720
+de fractionnement de texte
+
+00:12:47.720 --> 00:12:48.400
+pour la segmentation
+
+00:12:48.400 --> 00:12:49.780
+et la compétence de modèle d'intégration
+
+00:12:49.780 --> 00:12:50.340
+Azure Open AI
+
+00:12:50.340 --> 00:12:51.380
+pour la génération de vecteurs.
+
+00:12:51.940 --> 00:12:52.820
+L'indexeur s'exécute
+
+00:12:52.820 --> 00:12:53.580
+selon un calendrier,
+
+00:12:53.780 --> 00:12:54.620
+récupère les nouveaux fichiers,
+
+00:12:54.720 --> 00:12:55.340
+les traite et insère
+
+00:12:55.340 --> 00:12:56.220
+les vecteurs dans l'index.
+
+00:12:56.980 --> 00:12:58.140
+Aucun code de pipeline personnalisé
+
+00:12:58.140 --> 00:12:58.560
+n'est nécessaire.
+
+00:12:58.940 --> 00:12:59.900
+Voici une erreur courante.
+
+00:13:00.020 --> 00:13:00.780
+Ignorez les métadonnées.
+
+00:13:01.440 --> 00:13:02.180
+Chaque vecteur a besoin
+
+00:13:02.180 --> 00:13:02.940
+de sa référence source,
+
+00:13:03.120 --> 00:13:03.800
+du nom et de la version
+
+00:13:03.800 --> 00:13:04.580
+du modèle d'intégration
+
+00:13:04.580 --> 00:13:05.740
+ainsi que d'un neurodata de création.
+
+00:13:06.140 --> 00:13:06.400
+Sans cela,
+
+00:13:06.400 --> 00:13:07.120
+vous ne pouvez pas retracer
+
+00:13:07.120 --> 00:13:07.880
+l'origine d'un résultat,
+
+00:13:07.960 --> 00:13:08.740
+vous ne pouvez pas réintégrer
+
+00:13:08.740 --> 00:13:09.440
+lorsque les modèles changent
+
+00:13:09.440 --> 00:13:09.940
+et vous aurez du mal,
+
+00:13:10.020 --> 00:13:11.040
+change et vous aurez du mal
+
+00:13:11.040 --> 00:13:11.920
+avec les audits de conformité.
+
+00:13:12.320 --> 00:13:12.940
+Traitez vos vecteurs
+
+00:13:12.940 --> 00:13:13.640
+comme n'importe quelle autre
+
+00:13:13.640 --> 00:13:14.120
+donnée métier,
+
+00:13:14.220 --> 00:13:14.820
+suivez leurs lignes.
+
+00:13:16.160 --> 00:13:16.820
+Aux prochaines étapes.
+
+00:13:17.340 --> 00:13:18.040
+Alors, prêt à essayer
+
+00:13:18.040 --> 00:13:19.560
+par vous-même ?
+
+00:13:19.560 --> 00:13:20.160
+Commencez simplement.
+
+00:13:20.580 --> 00:13:21.360
+Ouvrez le portail Azure
+
+00:13:21.360 --> 00:13:22.080
+et créez une ressource
+
+00:13:22.080 --> 00:13:22.920
+de recherche Azure AI.
+
+00:13:23.480 --> 00:13:24.680
+Activez ensuite la recherche vectorielle
+
+00:13:24.680 --> 00:13:25.420
+sur un index existant.
+
+00:13:25.860 --> 00:13:26.720
+Téléchargez quelques documents,
+
+00:13:27.040 --> 00:13:27.960
+choisissez un modèle d'intégration
+
+00:13:27.960 --> 00:13:28.620
+et exécuter une requête
+
+00:13:28.620 --> 00:13:29.100
+de similarité.
+
+00:13:29.560 --> 00:13:30.180
+Réveillez que cela fonctionne
+
+00:13:30.180 --> 00:13:30.640
+dans moins d'une heure.
+
+00:13:31.080 --> 00:13:31.720
+Pour les développeurs,
+
+00:13:31.820 --> 00:13:32.860
+récupérez le SDK Python,
+
+00:13:33.160 --> 00:13:34.200
+intégrer une poignée de documents
+
+00:13:34.200 --> 00:13:35.080
+à l'aide d'Azure OpenAI,
+
+00:13:35.260 --> 00:13:36.680
+stockez-les dans la recherche vectorielle
+
+00:13:36.680 --> 00:13:37.340
+de Cosmos DB
+
+00:13:37.340 --> 00:13:38.260
+et écrivez une requête
+
+00:13:38.260 --> 00:13:39.240
+qui trouve la correspondance
+
+00:13:39.240 --> 00:13:39.880
+la plus proche.
+
+00:13:40.740 --> 00:13:41.820
+Microsoft fournit des exemples
+
+00:13:41.820 --> 00:13:42.360
+de codes clairs
+
+00:13:42.360 --> 00:13:42.980
+et de la documentation
+
+00:13:42.980 --> 00:13:43.520
+pour vous guider.
+
+00:13:43.960 --> 00:13:44.400
+Vous n'avez pas besoin
+
+00:13:44.400 --> 00:13:45.300
+de devenir un data scientist
+
+00:13:45.300 --> 00:13:45.960
+ou d'utiliser des bases
+
+00:13:45.960 --> 00:13:46.640
+de données vectorielles.
+
+00:13:47.120 --> 00:13:47.880
+Les outils de Microsoft
+
+00:13:47.880 --> 00:13:49.240
+gèrent la génération d'intégration,
+
+00:13:49.580 --> 00:13:50.140
+l'indexation
+
+00:13:50.140 --> 00:13:51.040
+et la logique de requête.
+
+00:13:51.520 --> 00:13:52.140
+Votre seule tâche
+
+00:13:52.140 --> 00:13:53.320
+consiste à comprendre le concept
+
+00:13:53.320 --> 00:13:54.180
+et à pointer les outils
+
+00:13:54.180 --> 00:13:54.960
+vers vos propres données.
+
+00:13:55.560 --> 00:13:56.060
+Voici un défi.
+
+00:13:56.480 --> 00:13:57.320
+Pensez au problème de recherche
+
+00:13:57.320 --> 00:13:58.280
+auquel vous êtes confronté aujourd'hui.
+
+00:13:58.600 --> 00:13:59.040
+Il peut s'agir
+
+00:13:59.040 --> 00:13:59.980
+de trouver des documents internes,
+
+00:14:00.040 --> 00:14:00.480
+de faire une recherche
+
+00:14:00.480 --> 00:14:01.340
+dans un catalogue de produits
+
+00:14:01.340 --> 00:14:02.140
+ou de répondre aux questions
+
+00:14:02.140 --> 00:14:02.700
+des clients à partir
+
+00:14:02.700 --> 00:14:03.380
+d'une base de connaissances.
+
+00:14:04.040 --> 00:14:04.760
+La recherche vectorielle
+
+00:14:04.760 --> 00:14:05.320
+pourrait-elle faire mieux
+
+00:14:05.320 --> 00:14:07.520
+que la recherche par mots-clés ?
+
+00:14:07.520 --> 00:14:08.480
+Choisissez un petit ensemble
+
+00:14:08.480 --> 00:14:08.800
+de données,
+
+00:14:08.900 --> 00:14:09.520
+même sans documents,
+
+00:14:09.920 --> 00:14:10.460
+et essayez.
+
+00:14:11.160 --> 00:14:12.020
+Vous sentirez immédiatement
+
+00:14:12.020 --> 00:14:12.480
+la différence.
+
+00:14:13.900 --> 00:14:14.480
+Vous comprenez maintenant
+
+00:14:14.480 --> 00:14:15.020
+ce que sont réellement
+
+00:14:15.020 --> 00:14:16.020
+les bases de données vectorielles.
+
+00:14:16.480 --> 00:14:16.980
+Il ne s'agit pas
+
+00:14:16.980 --> 00:14:18.180
+d'une mystérieuse technologie d'IA,
+
+00:14:18.340 --> 00:14:19.040
+mais simplement d'un moyen
+
+00:14:19.040 --> 00:14:20.060
+de stocker et de rechercher
+
+00:14:20.060 --> 00:14:20.720
+le sens de vos données
+
+00:14:20.720 --> 00:14:21.600
+plutôt que les mots exacts.
+
+00:14:22.300 --> 00:14:22.740
+Elles alimentent
+
+00:14:22.740 --> 00:14:23.240
+les fonctionnalités
+
+00:14:23.240 --> 00:14:24.020
+de recherche intelligente
+
+00:14:24.020 --> 00:14:25.320
+et d'IA de Microsoft 365,
+
+00:14:25.660 --> 00:14:26.480
+Azure, Ecopilot.
+
+00:14:27.200 --> 00:14:27.920
+Chaque fois que vous posez
+
+00:14:27.920 --> 00:14:28.280
+une question
+
+00:14:28.280 --> 00:14:29.480
+et obtenez une réponse pertinente,
+
+00:14:29.580 --> 00:14:30.500
+une base de données vectorielle
+
+00:14:30.500 --> 00:14:31.060
+trouve quelque part
+
+00:14:31.060 --> 00:14:31.640
+la correspondance
+
+00:14:31.640 --> 00:14:32.760
+la plus proche de votre requête.
+
+00:14:33.480 --> 00:14:34.220
+Vos faits structurés,
+
+00:14:34.460 --> 00:14:34.980
+les noms de vos clients,
+
+00:14:35.200 --> 00:14:35.900
+les montants de vos commandes,
+
+00:14:35.960 --> 00:14:36.460
+les inventaires,
+
+00:14:36.660 --> 00:14:37.400
+tout cela se trouve toujours
+
+00:14:37.400 --> 00:14:38.540
+dans les bases de données traditionnelles.
+
+00:14:39.000 --> 00:14:40.020
+Les bases de données vectorielles
+
+00:14:40.020 --> 00:14:41.160
+ajoutent une couche de compréhension.
+
+00:14:41.600 --> 00:14:42.520
+Elles permettent à votre application
+
+00:14:42.520 --> 00:14:43.340
+d'effectuer des recherches
+
+00:14:43.340 --> 00:14:44.500
+par sens, par intention et par conté.
+
+00:14:44.860 --> 00:14:45.620
+Voilà pour la vue d'un seul.
+
+00:14:50.060 --> 00:14:50.740
+Nous verrons comment fonctionnent
+
+00:14:50.740 --> 00:14:51.700
+réellement les pipelines RAG
+
+00:14:51.700 --> 00:14:52.540
+et comment vous pouvez en créer
+
+00:14:52.540 --> 00:14:53.280
+en un après-midi.
+
+00:14:53.860 --> 00:14:54.440
+Merci de votre écoute.

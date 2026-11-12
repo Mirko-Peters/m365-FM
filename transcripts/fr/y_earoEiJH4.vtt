@@ -1,0 +1,1159 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:02.280
+Tout le monde jure que son entreprise est axée sur les données.
+
+00:00:02.460 --> 00:00:04.900
+Puis ils ouvrent SQL Management Studio et se figent.
+
+00:00:05.040 --> 00:00:07.580
+Le tableau de bord pourrait tout aussi bien commencer à parler Klingon.
+
+00:00:07.760 --> 00:00:13.400
+Toute initiative axée sur l'entreprise s'effondre dès que quelqu'un réalise que les données sont piégées derrière un mur de points virgulés de crochets.
+
+00:00:13.600 --> 00:00:15.020
+Vous avez probablement déjà vu cela.
+
+00:00:15.200 --> 00:00:19.320
+Des océans de données, vous savez, des registres de vente, des données de télémétrie, des journaux de transactions,
+
+00:00:19.660 --> 00:00:21.900
+mais l'accès est protégé par des personnes qui ont mémorisé la syntaxe.
+
+00:00:22.020 --> 00:00:24.880
+SQL, ce vieux bureaucrate fier, préside aux archives.
+
+00:00:25.100 --> 00:00:27.820
+Précis, efficace et totalement allergique à l'anglais courant.
+
+00:00:27.820 --> 00:00:34.060
+Vous devez vous plier à sa grammaire, ponctuer votre « saut » et terminer chaque pensée par un point virgule sous peine d'erreur d'exécution par syntaxe.
+
+00:00:34.120 --> 00:00:37.020
+Pendant ce temps, le directeur commercial moyen veut juste une réponse.
+
+00:00:37.220 --> 00:00:39.180
+Quel a été notre chiffre d'affaires par trimestre ?
+
+00:00:39.180 --> 00:00:44.820
+Au lieu de cela, on lui dit de déposer une demande, d'attendre 3 jours, puis de recevoir un fichier CSV qu'il ne peut pas ouvrir car il fait 400 méga octets.
+
+00:00:45.320 --> 00:00:45.880
+C'est absurde.
+
+00:00:46.000 --> 00:00:50.380
+Vous pouvez commander une voiture avec votre voix, mais vous ne pouvez pas demander à votre propre système combien d'argent vous avez gagné sans interprète.
+
+00:00:50.560 --> 00:00:51.520
+Voilà donc le scandale.
+
+00:00:51.680 --> 00:00:54.340
+Le goulot d'étranglement de l'analyse commerciale ne réside pas dans les données.
+
+00:00:54.340 --> 00:00:55.060
+C'est la langue.
+
+00:00:55.060 --> 00:01:00.320
+Le coût de traduction de la curiosité humaine en instruction SQL continue de grignoter les budgets du monde entier.
+
+00:01:00.540 --> 00:01:05.560
+Chaque analyste supplémentaire, chaque rapport en retard, chaque friction linguistique déguisée en complexité.
+
+00:01:05.760 --> 00:01:09.560
+Entrez dans Copilot Studio, le middleware linguistique dont vous ne saviez pas avoir besoin.
+
+00:01:09.760 --> 00:01:16.220
+Il s'interpose poliment entre vous et Microsoft Fabric, écoute votre question commerciale mal formulée et la traduit en une logique de données parfaite.
+
+00:01:16.360 --> 00:01:21.020
+Il supprime le bruit, conserve l'intention et, plus importante encore, vous permet de parler à nouveau comme un humain.
+
+00:01:21.020 --> 00:01:25.320
+Bientôt, vous interrogerez des péta-octets avec un anglais de niveau primaire, sans certification, sans sélection.
+
+00:01:25.520 --> 00:01:28.660
+Vous demanderez, montrez-moi les 5 meilleurs produits du trimestre dernier en termes de bénéfices.
+
+00:01:28.780 --> 00:01:29.860
+Et Fabric vous répondra.
+
+00:01:30.340 --> 00:01:30.700
+Instantanément.
+
+00:01:30.900 --> 00:01:32.520
+En phrase, pas dans des feuilles de calcul.
+
+00:01:32.780 --> 00:01:37.920
+Avant de vous réjouir du chômage imminent de la moitié du service d'analyse, décortiquons le fonctionnement de cet engin.
+
+00:01:38.040 --> 00:01:43.560
+Car si vous pensez que Copilot Studio n'est qu'un énième chatbot agrafé sur une base de données, vous vous trompez lourdement.
+
+00:01:43.820 --> 00:01:45.660
+Ce que fait réellement Copilot Studio ?
+
+00:01:45.660 --> 00:01:48.140
+Commençons par éliminer les idées fausses les plus fainéantes.
+
+00:01:48.280 --> 00:01:50.340
+Copilot Studio n'est pas qu'un simple chatbot.
+
+00:01:50.560 --> 00:01:52.840
+C'est comme appeler Internet un tas de zones de texte.
+
+00:01:52.980 --> 00:01:55.800
+Ce qu'il est en réalité, c'est un moteur de traduction d'intention.
+
+00:01:56.040 --> 00:01:58.860
+Vous parlez en logique métier, il parle couramment fabrique.
+
+00:01:59.080 --> 00:02:01.940
+Voici ce qui se passe en coulisses, sans les drames inutiles.
+
+00:02:02.360 --> 00:02:04.880
+Première étape, l'analyse du langage naturel.
+
+00:02:05.280 --> 00:02:08.840
+Copilot Studio prend votre phrase et la déconstruit pour en tirer du sens.
+
+00:02:08.840 --> 00:02:13.180
+Des verbes comme GET, des noms comme SAL, des références comme LAST CAR T.
+
+00:02:13.680 --> 00:02:15.920
+Deuxième étape, le mappage sémantique.
+
+00:02:16.100 --> 00:02:19.480
+Il détermine où se trouvent ces concepts dans votre modèle de données fabrique.
+
+00:02:19.760 --> 00:02:21.380
+SAL est mappé à une table de faits.
+
+00:02:21.460 --> 00:02:23.420
+LAST CAR T est résolu en un filtre de date.
+
+00:02:23.600 --> 00:02:25.620
+Troisième étape, l'appel de données fabrique.
+
+00:02:25.800 --> 00:02:27.920
+Il écrit, exécute et récupère le résultat.
+
+00:02:28.120 --> 00:02:30.220
+Obéissance assurée, aucun SQL visible.
+
+00:02:30.480 --> 00:02:33.420
+Si SQL est du code MORSE, Copilot Studio est de la voix sur IP.
+
+00:02:33.700 --> 00:02:38.000
+Même signal, même fidélité, mais vous n'avez pas besoin de mémoriser des schémas point-tirés pour dire bonjour.
+
+00:02:38.000 --> 00:02:39.540
+Cela humanise le protocole.
+
+00:02:39.740 --> 00:02:44.300
+La machine traite toujours les commandes structurées, simplement dissimulées derrière votre formulation informelle.
+
+00:02:44.460 --> 00:02:45.200
+Et elle n'oublie pas.
+
+00:02:45.360 --> 00:02:48.020
+Demandez, affichez les performances du magasin au deuxième trimestre.
+
+00:02:48.140 --> 00:02:50.240
+Puis poursuivez avec, répartir cela par région.
+
+00:02:50.420 --> 00:02:52.280
+Elle se souvient de ce à quoi cela fait référence.
+
+00:02:52.500 --> 00:02:55.560
+Le contexte conversationnel est sa fonctionnalité la plus sous-estimée.
+
+00:02:55.740 --> 00:03:00.220
+Vous pouvez avoir un véritable échange de données sans avoir à répéter l'historique complet des requêtes à chaque fois.
+
+00:03:00.420 --> 00:03:05.500
+Le modèle construit un minuscule fil sémantique, ce que les ingénieurs de Microsoft appellent une arborescence de contexte,
+
+00:03:05.500 --> 00:03:06.980
+et le transmet pour assurer la continuité.
+
+00:03:06.980 --> 00:03:09.620
+Ce fil se connecte ensuite à un agent de données fabrique.
+
+00:03:09.880 --> 00:03:11.960
+Considérez l'agent comme un majordome discipliné.
+
+00:03:12.140 --> 00:03:16.980
+Il gère les demandes, applique la gouvernance et s'assure que vous ne vous aventurez jamais dans des salles restreintes.
+
+00:03:17.600 --> 00:03:19.360
+Copilot Studio ne stocke pas vos données.
+
+00:03:19.560 --> 00:03:22.080
+Il emprunte poliment l'accès via des canaux authentifiés.
+
+00:03:22.280 --> 00:03:27.500
+Chaque interaction respecte les politiques de sécurité fabrique, le même accès basé sur les rôles, la même prévention contre la perte de données.
+
+00:03:27.700 --> 00:03:32.960
+Même votre stagiaire curieux ne pourrait pas le convaincre de révéler les chiffres de vente de la direction si ses autorisations ne le lui permettent pas.
+
+00:03:32.960 --> 00:03:34.580
+Cette obéissance est intégrée.
+
+00:03:34.720 --> 00:03:40.020
+L'avantage de la conception est que Copilot Studio hérite de la gouvernance de fabrique au lieu d'essayer de la réinventer.
+
+00:03:40.220 --> 00:03:41.880
+Vous obtenez la commodité sans le chaos.
+
+00:03:42.120 --> 00:03:47.680
+Donc, une hiérarchie simplifiée, vous, Copilot Studio, l'agent de données fabrique, l'entrepôt, une réponse,
+
+00:03:47.960 --> 00:03:50.880
+de préférence formatée dans quelque chose de plus lisible qu'un tableau de mille lignes.
+
+00:03:51.020 --> 00:03:54.240
+Et si vous vous dites, cette chaîne de commandement ne ralentit-elle pas les choses ?
+
+00:03:54.240 --> 00:03:57.200
+Non, car Fabrique ne récupère pas l'intégralité de la base de données.
+
+00:03:57.400 --> 00:04:00.460
+Il exécute une requête délimitée interprétée à partir de votre phrase.
+
+00:04:00.460 --> 00:04:05.520
+La précision reste intacte. Ce que Copilot Studio ajoute n'est pas magique, c'est l'efficacité de la traduction.
+
+00:04:05.720 --> 00:04:08.560
+Il remplace la discipline syntaxique par la liberté conversationnelle.
+
+00:04:08.760 --> 00:04:11.080
+Vous vous concentrez sur le sens, il renforce la structure.
+
+00:04:11.360 --> 00:04:13.440
+C'est le compromis que nous aurions dû faire il y a des décennies.
+
+00:04:13.560 --> 00:04:18.320
+Et maintenant que notre traducteur est à l'aise, il est temps de le connecter à quelque chose qui vaille la peine d'être traduit.
+
+00:04:18.480 --> 00:04:22.380
+Une véritable base de données qui respecte les réglementations et qui vous dit parfois non.
+
+00:04:23.080 --> 00:04:24.940
+Connecter Copilot Studio à Fabrique.
+
+00:04:25.200 --> 00:04:28.360
+Vient maintenant la partie qui sépare généralement les passionnés des praticiens.
+
+00:04:28.360 --> 00:04:33.300
+Connecter Copilot Studio à Fabrique sans accorder accidentellement au stagiaire l'accès à la paie.
+
+00:04:34.020 --> 00:04:36.720
+Sur le plan conceptuel, cette connexion est élégante.
+
+00:04:36.900 --> 00:04:40.560
+En pratique, c'est une poignée de mains bureaucratiques entre deux systèmes extrêmement prudents.
+
+00:04:40.740 --> 00:04:42.400
+Commencez par un agent de données Fabrique.
+
+00:04:42.620 --> 00:04:43.480
+C'est votre passerelle.
+
+00:04:43.680 --> 00:04:44.160
+Publiez-le.
+
+00:04:44.380 --> 00:04:46.500
+Ne le laissez en aucun cas languir en mode brouillon.
+
+00:04:46.700 --> 00:04:50.260
+Le mode brouillon est ce que vous utilisez pour tester si l'objet peut vous chuchoter des réponses.
+
+00:04:50.260 --> 00:04:53.580
+Le mode publication est ce qui lui permet de parler réellement au monde extérieur.
+
+00:04:53.580 --> 00:04:58.820
+Imaginez un bibliothécaire qui s'entraîne à la prononciation à huit clous plutôt qu'un autre qui attend au comptoir des questions.
+
+00:04:59.060 --> 00:05:00.080
+C'est ce dernier que vous voulez.
+
+00:05:00.320 --> 00:05:01.800
+Les brouillons se chuchotent à eux-mêmes.
+
+00:05:02.040 --> 00:05:03.700
+Les agents publiés parlent à tout le monde.
+
+00:05:03.920 --> 00:05:05.540
+Ensuite, choisissez un environnement.
+
+00:05:05.760 --> 00:05:11.640
+Chaque environnement Copilot Studio, Dev, QA, Production, est son propre petit univers avec des autorisations et des identifiants distincts.
+
+00:05:11.680 --> 00:05:12.720
+Ne levez pas les yeux au ciel.
+
+00:05:12.920 --> 00:05:15.120
+Il s'agit de gouvernance, pas de travail fastidieux.
+
+00:05:15.120 --> 00:05:17.480
+L'environnement de développement est autorisé à tout casser discrètement.
+
+00:05:17.800 --> 00:05:22.880
+L'assurance qualité confirme que personne n'a mis le feu aux poudres et la production est ce sur quoi les dirigeants finiront par cliquer en panique dentime.
+
+00:05:23.060 --> 00:05:27.060
+Les relier tous via le même conduit serait l'équivalent en données d'une brosse à dents partagées.
+
+00:05:27.300 --> 00:05:28.360
+Maintenez la séparation.
+
+00:05:28.580 --> 00:05:31.000
+Une fois l'environnement prêt, associez les identifiants.
+
+00:05:31.180 --> 00:05:33.340
+Copilot Studio peut s'authentifier de deux manières principales.
+
+00:05:33.680 --> 00:05:37.760
+Via votre propre compte pendant les tests ou en transmettant les identifiants de l'utilisateur final au moment de l'exécution.
+
+00:05:37.960 --> 00:05:39.360
+Préférez toujours la seconde méthode.
+
+00:05:39.360 --> 00:05:45.120
+Lorsque vous laissez l'authentification passer par l'identité de l'utilisateur, Fabrique applique automatiquement sa sécurité au niveau du rôle.
+
+00:05:45.340 --> 00:05:52.580
+Cela signifie que lorsque Linda du marketing demande des revenus trimestriels, elle ne voit que les chiffres de sa région, pas les prévisions mondiales qui la feraient douter de sa prime.
+
+00:05:52.760 --> 00:05:55.080
+L'assistant de connexion gère le travail fastidieux.
+
+00:05:55.260 --> 00:06:00.200
+Il lance une poignée de main API sécurisée, valide l'accès à Fabrique et lit l'agent à votre copilote.
+
+00:06:00.380 --> 00:06:05.780
+Une fois terminé, Copilot Studio devient multilingue dans la seule langue qui compte, les métadonnées Fabrique.
+
+00:06:05.780 --> 00:06:17.380
+A partir de là, tout invite en langage naturel que vous envoyez et transmise par cet agent, converti en un appel de données Fabrique légitime et récupère les résultats encadrés par la gouvernance que votre administrateur a laborieusement configuré le trimestre dernier.
+
+00:06:17.620 --> 00:06:23.820
+Parlons maintenant des canaux, car une fois que votre copilote respire, vous pouvez le publier partout où une conversation polie a lieu.
+
+00:06:24.120 --> 00:06:27.480
+Microsoft Team, SharePoint ou même intégré à un portail web.
+
+00:06:27.740 --> 00:06:32.380
+Chaque canal se comporte comme un cercle social différent, la même personne, le ton adapté.
+
+00:06:32.380 --> 00:06:35.560
+Un déploiement Team est idéal pour des échanges analytiques rapides.
+
+00:06:35.760 --> 00:06:36.980
+Montrez-moi les ventes du jour.
+
+00:06:37.200 --> 00:06:43.620
+SharePoint propose des requêtes formelles en salle de réunion, et le chat web est votre FAQ destiné au client qui a accès à des données réelles.
+
+00:06:43.820 --> 00:06:45.980
+L'agent ne se soucie pas de l'endroit où il est convoqué.
+
+00:06:46.140 --> 00:06:48.080
+Tant qu'il est authentifié, il fonctionne.
+
+00:06:48.300 --> 00:06:50.480
+Oui, l'utilisateur devra toujours se connecter.
+
+00:06:50.700 --> 00:06:54.880
+Chaque présentation sur la consultation en IA finit par atteindre ce moment de déception humaine.
+
+00:06:55.180 --> 00:06:56.740
+Microsoft ne fait pas de sorcellerie.
+
+00:06:56.940 --> 00:06:59.900
+Il ne peut pas répondre aux questions des personnes qui refusent de s'authentifier.
+
+00:06:59.900 --> 00:07:03.880
+Le redémarrage de la civilisation après chaque mise à jour est ennuyeux, mais nécessaire.
+
+00:07:04.040 --> 00:07:09.220
+Au moment où vous avez câblé les identifiants et les canaux de l'environnement, ce que vous avez construit est essentiellement une plomberie pour le langage.
+
+00:07:09.400 --> 00:07:13.020
+Les questions affluent, les requêtes structurées sortent, les réponses gouvernées reviennent.
+
+00:07:13.240 --> 00:07:15.720
+C'est une conversation de données via des pipelines certifiées.
+
+00:07:15.880 --> 00:07:20.160
+Une fois toute cette plomberie terminée, nous pouvons cesser d'admirer les tuyaux et commencer à admirer l'eau.
+
+00:07:20.260 --> 00:07:22.960
+Car le prochain saut n'est pas technique, il est conversationnel.
+
+00:07:23.180 --> 00:07:26.460
+À quoi ressemble réellement un dialogue intelligent avec un entrepôt ?
+
+00:07:26.460 --> 00:07:27.080
+Découvrons-le.
+
+00:07:27.080 --> 00:07:29.020
+L'intelligence conversationnelle en action.
+
+00:07:29.200 --> 00:07:31.700
+Enfin, la partie amusante, faire parler Fabrique.
+
+00:07:31.860 --> 00:07:34.760
+La plupart des gens s'attendent à ce que Copilot Studio se comporte comme un génie.
+
+00:07:34.940 --> 00:07:37.340
+Une question, une réponse, puis retour à la lampe.
+
+00:07:37.440 --> 00:07:42.460
+Au lieu de cela, il se comporte plutôt comme un analyste patient qui se souvient de tout ce que vous avez dit et relie tranquillement les points.
+
+00:07:42.640 --> 00:07:45.820
+Imaginez que vous demandiez, quels ont été nos 5 meilleurs jours de voyage ?
+
+00:07:45.820 --> 00:07:51.160
+Le système appelle Fabrique, trie par nombre total de voyages et présente les gagnants, dont le 1er novembre 2013.
+
+00:07:51.160 --> 00:07:53.920
+Vous continuez en demandant, pourquoi ces jours-là ?
+
+00:07:53.920 --> 00:07:55.760
+Maintenant, Copilot ne panique pas.
+
+00:07:56.000 --> 00:08:01.260
+Il reprend la mesure d'origine, reconnaît pourquoi en tant que sonde causale et recherche les facteurs corrélés.
+
+00:08:01.460 --> 00:08:07.820
+Lorsque votre message suivant indique, affichez également la température, il comprend déjà que vous voulez dire les mêmes jours, le même ensemble de données, le contexte étendu.
+
+00:08:07.820 --> 00:08:13.220
+La conversation devient un modèle itératif de pensée, pas des recherches isolées, mais un fil conducteur évolutif de raisonnement.
+
+00:08:13.340 --> 00:08:17.860
+En coulisses, il construit ce que les ingénieurs de Microsoft appellent affectueusement des arbres de contexte.
+
+00:08:17.980 --> 00:08:21.480
+Chaque branche représente une question, un filtre ou un attribut que vous avez ajouté.
+
+00:08:21.620 --> 00:08:24.080
+Le tronc est votre sujet principal, les trajets par jour.
+
+00:08:24.260 --> 00:08:27.820
+Les feuilles sont des modificateurs, la météo, l'arrondissement, le type de foire.
+
+00:08:27.980 --> 00:08:35.560
+Il ne s'agit pas de refaire une requête à partir de zéro à chaque fois, mais d'affiner un modèle sémantique interne en renvoyant des jetons structurés à l'agent de données Fabrique pour exécution.
+
+00:08:35.560 --> 00:08:39.360
+Le résultat ressemble moins à une navigation dans une base de données qu'à un débat avec une base de données.
+
+00:08:39.560 --> 00:08:44.440
+Voici l'astuce, l'astuce, car les agents fabriquent obéissent à la même enveloppe de sécurité, la conversation reste légale.
+
+00:08:44.560 --> 00:08:47.480
+Copilot Studio peut résonner sur des données qu'il n'est pas autorisé à afficher.
+
+00:08:47.740 --> 00:08:53.940
+Demandez des primes trimestrielles au cadre, et il vous répondra par un refus parfaitement poli, accompagné d'une explication de la politique de gouvernance.
+
+00:08:54.120 --> 00:08:55.940
+C'est le genre de manière que SQL n'a jamais eue.
+
+00:08:56.060 --> 00:08:58.240
+Avant, il se contentait de renvoyer une erreur et de bouder.
+
+00:08:58.420 --> 00:09:00.620
+Lorsqu'il répond, ce que vous recevez n'est pas du texte aveugle.
+
+00:09:00.620 --> 00:09:06.380
+Il peut présenter des résumés structurés, des tableaux, des comparaisons à puces, voire des sorties de type carte thermique, selon les instructions que vous lui donnez.
+
+00:09:06.500 --> 00:09:11.440
+Dites, répertoriez les résultats sous forme de tableaux que je peux copier dans Excel, et la mise en forme s'ajuste instantanément.
+
+00:09:11.600 --> 00:09:18.960
+Le contexte, la mémoire et la mise en forme des réponses créent ensemble ce que Microsoft appelle l'intelligence conversationnelle, la capacité d'adapter non seulement ce qu'il faut dire, mais aussi la manière de le dire.
+
+00:09:19.120 --> 00:09:23.240
+Maintenant, comme cet ensemble de fonctionnalités est encore en préversion, il arrive qu'il oublie les manières.
+
+00:09:23.240 --> 00:09:27.820
+Vous pourriez obtenir la mauvaise source de données ou une explication trop confiante provenant du web au lieu de Fabrique.
+
+00:09:27.960 --> 00:09:31.100
+Traitez ces moments comme des phases d'apprentissage, et non comme des défauts fatals.
+
+00:09:31.300 --> 00:09:36.440
+La précision s'améliore lorsque vous spécifiez des limites dans l'invite de votre système, par exemple, utilisez Fabrique uniquement.
+
+00:09:36.620 --> 00:09:40.220
+En d'autres termes, l'IA conversationnelle se comporte bien lorsque vous l'apparent correctement.
+
+00:09:40.380 --> 00:09:44.240
+Pour ceux qui regrettent la transparence de SQL, calmez-vous, vous pouvez toujours voir la logique.
+
+00:09:44.400 --> 00:09:50.660
+La vue du traceur de Copilot Studio affiche le chemin de raisonnement, ce qu'il a interprété, quel agent de données il a appelé et comment la réponse a été tronquée.
+
+00:09:50.660 --> 00:09:53.160
+Considérez-le comme un analyseur de requêtes pour les humains.
+
+00:09:53.340 --> 00:09:54.820
+Vous observez sa chaîne de pensée.
+
+00:09:55.040 --> 00:09:59.180
+Langage naturel, carte sémantique, requêtes fabriques, sorties gouvernées.
+
+00:09:59.360 --> 00:10:04.420
+Lorsqu'un résultat semble anormal, ce traceur vous indique exactement quelle branche de l'arbre de conversation a causé la confusion.
+
+00:10:04.700 --> 00:10:06.820
+Déboguer la curiosité n'a jamais été aussi simple.
+
+00:10:07.000 --> 00:10:09.420
+Un autre élément de conception sous-estimée est le feedback.
+
+00:10:09.640 --> 00:10:13.540
+Chaque fois que vous reformulez ou corrigez quelque chose, non, je voulais dire 2014, pas 2013.
+
+00:10:14.040 --> 00:10:16.420
+Cette clarification alimente le modèle local de votre style de conversation.
+
+00:10:16.600 --> 00:10:19.940
+Il ne s'agit pas d'un apprentissage global, mais d'un recyclage interne limité à la session.
+
+00:10:19.940 --> 00:10:23.140
+Au sein de cette discussion, vos bizarreries linguistiques deviennent des données d'entraînement.
+
+00:10:23.360 --> 00:10:26.900
+L'IA devient plus rapide, plus précise et étonnamment douée pour refléter votre formulation.
+
+00:10:27.240 --> 00:10:30.680
+Vous devenez votre propre ensemble de données de réglage sans écrire un seul jeton de code.
+
+00:10:30.900 --> 00:10:32.360
+Vous voulez un scénario concret ?
+
+00:10:32.360 --> 00:10:34.840
+Deux directeurs commerciaux ouvrent team lors d'une réunion du lundi.
+
+00:10:35.020 --> 00:10:36.680
+L'un d'eux demande au copilot lié à Fabric.
+
+00:10:37.000 --> 00:10:39.240
+Affichez les produits les plus vendus au deuxième trimestre par région.
+
+00:10:39.460 --> 00:10:41.680
+Lorsque le graphique apparaît, le deuxième responsable répond.
+
+00:10:42.100 --> 00:10:44.580
+Quelle région a connu la croissance la plus rapide d'un trimestre à l'autre ?
+
+00:10:44.580 --> 00:10:50.460
+Ecopilot se souvient de la première structure de table, calcule un delta et répond aux deux questions en conservant la continuité du contexte.
+
+00:10:50.520 --> 00:10:55.100
+En quelques secondes, ils analysent les écarts de performance sans avoir à invoquer une seule procédure stockée.
+
+00:10:55.220 --> 00:10:58.100
+Et si quelqu'un se trompe de calendrier et tombe en 2027,
+
+00:10:58.480 --> 00:11:04.220
+Copilot renvoie simplement zéro enregistrement trouvé au lieu de la trace de pile passive agressive que SQL utilisait auparavant.
+
+00:11:04.400 --> 00:11:06.000
+La curiosité en tant que code ?
+
+00:11:06.000 --> 00:11:06.760
+Quel concept ?
+
+00:11:06.760 --> 00:11:12.420
+Cette conception itérative et sensible à la mémoire transforme l'analyse en boucle de conversation plutôt qu'en interrogation ponctuelle.
+
+00:11:12.660 --> 00:11:14.700
+Chaque question devient à la fois un résultat et une entrée,
+
+00:11:15.000 --> 00:11:18.780
+transformant les utilisateurs de consommateurs de tableaux de bord en participant au raisonnement sur les données.
+
+00:11:18.960 --> 00:11:22.060
+Le véritable pouvoir de l'outil n'est pas l'automatisation, mais l'engagement.
+
+00:11:22.280 --> 00:11:25.040
+À présent, la question n'est plus « Puis-je accéder aux données ? »
+
+00:11:25.040 --> 00:11:25.920
+Vous le pouvez clairement.
+
+00:11:26.140 --> 00:11:29.140
+La question devient « Que puis-je faire faire à la conversation ensuite ? »
+
+00:11:29.140 --> 00:11:34.120
+Car une fois que votre système d'analyse écoute, se souvient et clarifie, vous ne faites plus de requêtes, vous collaborez.
+
+00:11:34.120 --> 00:11:36.760
+Pourquoi cela change-t-il le travail de l'analyste ?
+
+00:11:36.760 --> 00:11:39.720
+Résolvons la panique qui se propage discrètement dans les services d'analyse.
+
+00:11:40.420 --> 00:11:43.200
+Si Copilot peut parler aux données, pourquoi avons-nous besoin d'analystes ?
+
+00:11:43.200 --> 00:11:43.760
+Détendez-vous.
+
+00:11:43.940 --> 00:11:46.960
+Les analystes ne sont pas en voie de disparition, ils sont promus hors des tranchées.
+
+00:11:47.220 --> 00:11:49.400
+Historiquement, les analystes ont fonctionné comme des traducteurs,
+
+00:11:49.620 --> 00:11:52.400
+des humains qui connaissent à la fois l'anglais et SQL, payés pour convertir,
+
+00:11:52.560 --> 00:11:53.820
+pourquoi les revenus sont-ils en baisse ?
+
+00:11:53.820 --> 00:11:55.940
+En déclaration commune que personne d'autre ne comprend.
+
+00:11:56.180 --> 00:11:58.900
+Cette taxe de traduction a absorbé la moitié de leur emploi du temps.
+
+00:11:59.100 --> 00:12:02.020
+Avec les requêtes conversationnelles, la machine gère la grammaire.
+
+00:12:02.020 --> 00:12:04.000
+L'analyste est libre de gérer le sens.
+
+00:12:04.220 --> 00:12:06.120
+C'est le cœur de la démocratisation des données.
+
+00:12:06.360 --> 00:12:09.320
+L'IA supprime le contrôle d'accès, mais préserve la gouvernance.
+
+00:12:09.500 --> 00:12:13.200
+Copilot Studio ne donne pas à tout le monde des laissés-passer pour les bases de données de production.
+
+00:12:13.500 --> 00:12:16.580
+Il leur remet des micro-filtres et câblés via la sécurité de fabrique.
+
+00:12:16.780 --> 00:12:19.280
+La politique reste intacte, mais la curiosité s'accroît.
+
+00:12:19.480 --> 00:12:21.580
+Lorsque tout le monde peut poser des questions éclairées en toute sécurité,
+
+00:12:21.900 --> 00:12:24.340
+les analystes cessent d'être des commis et commencent à être des chefs d'orchestre.
+
+00:12:24.460 --> 00:12:27.280
+Ils orchestrent la logique, la sémantique, le contrôle qualité.
+
+00:12:27.280 --> 00:12:28.600
+Imaginez un orchestre.
+
+00:12:28.740 --> 00:12:31.360
+Des dizaines d'utilisateurs professionnels jouant des instruments de leur service,
+
+00:12:31.640 --> 00:12:33.500
+comme les ventes, la finance, les RH.
+
+00:12:33.700 --> 00:12:37.380
+L'analyste ne s'attarde plus sur des tickets intitulés « Veuillez créer un rapport Excel ».
+
+00:12:37.380 --> 00:12:39.000
+Au lieu de cela, il donne le tempo.
+
+00:12:39.220 --> 00:12:41.020
+Il conçoit la manière dont les questions sont résolues,
+
+00:12:41.260 --> 00:12:43.800
+s'assure que les définitions correspondent aux indicateurs de l'entreprise
+
+00:12:43.800 --> 00:12:47.080
+et affinent les invites afin que Copilot interprète correctement la marge et le bénéfice.
+
+00:12:47.260 --> 00:12:49.860
+Moins de parenthèses de saisie, plus de conversations structurées.
+
+00:12:50.000 --> 00:12:51.620
+Il y a là un miracle d'évolutivité.
+
+00:12:51.620 --> 00:12:54.460
+Un analyste compétent affine un agent Copilot une seule fois,
+
+00:12:54.720 --> 00:12:57.700
+en définissant les relations d'entités, les synonymes et les exclusions.
+
+00:12:57.880 --> 00:13:00.700
+Des centaines d'employés non techniques acquièrent alors une autonomie instantanée
+
+00:13:00.700 --> 00:13:01.860
+sans enfreindre la conformité.
+
+00:13:02.100 --> 00:13:03.580
+C'est un effet de levier exponentiel.
+
+00:13:03.780 --> 00:13:07.320
+L'analyste devient un multiplicateur d'infrastructures plutôt qu'un goulot d'étranglement.
+
+00:13:07.500 --> 00:13:08.700
+L'économie le confirme.
+
+00:13:08.860 --> 00:13:11.540
+Les recherches sur la démocratisation alimentée par l'IA estiment
+
+00:13:11.540 --> 00:13:15.280
+que la productivité mondiale potentielle pourrait être débloquée à 15 000 milliards de dollars.
+
+00:13:15.440 --> 00:13:18.840
+Un chiffre trop important pour être compris au-delà d'une grande partie du PIB.
+
+00:13:19.500 --> 00:13:21.320
+Cette valeur n'émerge pas de nouvelles données.
+
+00:13:21.320 --> 00:13:24.860
+Elle émerge de données existantes enfin utilisables par des humains normaux.
+
+00:13:25.040 --> 00:13:28.780
+Chaque fois qu'un responsable commercial se sert lui-même d'un insight au lieu de déposer un ticket,
+
+00:13:29.100 --> 00:13:31.040
+une feuille de calcul quelque part soupire de soulagement.
+
+00:13:31.240 --> 00:13:32.820
+Comparer cela au PIB hérité.
+
+00:13:32.980 --> 00:13:38.940
+Tableau A, par exemple, est un superbe virtuose, dense, prédictif, mais coûteux et insulaire.
+
+00:13:39.060 --> 00:13:42.520
+Il est excellent pour les performances en solo, mais mauvais pour la coordination d'ensemble.
+
+00:13:42.760 --> 00:13:46.160
+L'avantage de Copilot Studio est l'intégration de l'écosystème et son prix abordable.
+
+00:13:46.160 --> 00:13:53.920
+Il associe le dialogue génératif à l'ADN collaboratif de Microsoft 365, Team, SharePoint, Outlook, les endroits où les affaires se déroulent réellement.
+
+00:13:54.040 --> 00:13:57.920
+Au lieu d'exporter des visuels, vous posez des questions directes au sein même du flux de travail.
+
+00:13:58.140 --> 00:14:00.160
+Et oui, la gouvernance reste la force civilisatrice.
+
+00:14:00.960 --> 00:14:04.300
+Copilot obéit à la lettre au modèle de sécurité centralisé de fabrique.
+
+00:14:04.540 --> 00:14:07.060
+Chaque requête est acheminée via des canaux authentifiés.
+
+00:14:07.280 --> 00:14:09.360
+Chaque résultat hérite du traçage de lignées.
+
+00:14:09.360 --> 00:14:12.300
+La démocratisation sans discipline est une anarchie.
+
+00:14:12.500 --> 00:14:16.560
+L'architecture de Microsoft garantit la démocratie, y compris la bureaucratie.
+
+00:14:16.720 --> 00:14:20.140
+Les analystes définissent toujours des politiques, classent les données et auditent les journaux.
+
+00:14:20.340 --> 00:14:23.440
+L'IA ne peut parler librement qu'à l'intérieur des barrières que les analystes construisent.
+
+00:14:23.620 --> 00:14:26.260
+Donc non, Copilot Studio ne remplace pas les analystes.
+
+00:14:26.380 --> 00:14:27.160
+Il les amplifie.
+
+00:14:27.360 --> 00:14:33.480
+Il les émancipe de la corvée de la syntaxe et élève leur attention vers la conception de modèles, la précision sémantique et la gestion éthique.
+
+00:14:33.620 --> 00:14:36.440
+Il passe du statut d'esclave des requêtes à celui d'architecte du langage.
+
+00:14:36.440 --> 00:14:39.300
+Mieux il forme l'agent, plus l'organisation semble intelligente.
+
+00:14:39.420 --> 00:14:41.560
+Le futur analyste est mi-linguiste, mi-gardien.
+
+00:14:41.740 --> 00:14:46.940
+Il organisera les vocabulaires, façonnera les boucles de rétroaction et débaugera la logique dans la conversation plutôt que dans le code.
+
+00:14:47.140 --> 00:14:50.920
+Leurs livrables ne sont plus des rapports produits mais des questions auxquelles on répond en toute sécurité.
+
+00:14:51.200 --> 00:14:53.440
+Cela change fondamentalement la vélocité organisationnelle.
+
+00:14:54.200 --> 00:14:56.120
+Les décisions n'attendent plus d'être traduites.
+
+00:14:56.260 --> 00:14:57.720
+Les discussions ont lieu à la demande.
+
+00:14:57.940 --> 00:15:01.720
+Les analystes restent les gardiens de la vérité, mais la vérité devient conversationnelle.
+
+00:15:01.900 --> 00:15:05.300
+En bref, ils ne perdent pas de leur pertinence, ils gagnent en omniprésence.
+
+00:15:05.300 --> 00:15:13.400
+Maintenant, tandis que les analystes évoluent vers des chefs d'orchestre, le reste de l'entreprise a aussi des devoirs à faire, apprendre à parler des données sans invoquer accidentellement des absurdités.
+
+00:15:13.600 --> 00:15:17.640
+Cela nécessite de la culture, pas du code, ce qui nous amène directement au point suivant.
+
+00:15:18.000 --> 00:15:20.960
+À quoi ressemble réellement une organisation data literate ?
+
+00:15:20.960 --> 00:15:23.140
+Construire une organisation data literate.
+
+00:15:23.360 --> 00:15:26.340
+La technologie n'est jamais le goulot d'étranglement, ce sont les personnes.
+
+00:15:26.580 --> 00:15:34.280
+Vous pouvez déployer Copilot Studio dans tous les espaces de travail, et pourtant regarder les employés taper, montrez-moi des trucs d'argent, et se demander pourquoi rien d'utile ne revient.
+
+00:15:34.280 --> 00:15:40.260
+La data literate, la capacité à poser des questions précises, est la dernière frontière de l'automatisation de l'intelligence.
+
+00:15:40.420 --> 00:15:46.000
+Une véritable démocratie des données ne dépend pas du fait que tout le monde devienne un expert SQL, mais que tout le monde devienne un questionneur éloquent.
+
+00:15:46.200 --> 00:15:49.260
+Fabrique plus Copilot Studio ne fonctionne que si les humains savent quoi demander.
+
+00:15:49.480 --> 00:15:52.280
+Le premier changement culturel est donc la curiosité avec précision.
+
+00:15:52.480 --> 00:15:57.560
+Apprenez aux utilisateurs que les ventes par région pour le dernier trimestre sont fructueuses parce que chaque nom et chaque période encrent le sens.
+
+00:15:57.560 --> 00:16:00.120
+Une ambiguïté inepte donne toujours des réponses ineptes.
+
+00:16:00.220 --> 00:16:00.900
+Commencez petit.
+
+00:16:01.120 --> 00:16:06.340
+Choisissez des domaines à fort impact, les ventes, la finance, les opérations, où les indicateurs sont clairs et exigent une visibilité constante.
+
+00:16:06.520 --> 00:16:08.600
+Ils offrent une preuve immédiate du retour sur investissement.
+
+00:16:08.800 --> 00:16:12.700
+Un directeur des ventes qui obtient des réponses en quelques secondes devient une publicité ambulante pour l'adoption.
+
+00:16:12.880 --> 00:16:15.240
+Les réussites se propagent plus vite que les sessions de formation.
+
+00:16:15.520 --> 00:16:18.020
+Pendant ce temps, la gouvernance reste strict au cœur.
+
+00:16:18.200 --> 00:16:20.000
+Les administrateurs gardent les rênes.
+
+00:16:20.160 --> 00:16:23.900
+Copilot peut répondre, mais Fabrique dicte ce qu'il est autorisé à dire.
+
+00:16:23.900 --> 00:16:25.420
+C'est son intégration géniale.
+
+00:16:25.620 --> 00:16:27.880
+Les limites de privilèges sont intégrées dans la conversation.
+
+00:16:28.120 --> 00:16:31.900
+Les administrateurs peuvent dormir la nuit pendant que les employés jouent au karaoké de données pendant la journée.
+
+00:16:32.100 --> 00:16:35.580
+La lignée automatisée de Fabrique garantit que chaque conversation laisse des miettes de pain.
+
+00:16:35.800 --> 00:16:37.720
+Chaque requête fait partie de la piste d'audit.
+
+00:16:37.880 --> 00:16:39.700
+Qui a demandé quoi, quand et pourquoi ?
+
+00:16:39.700 --> 00:16:43.180
+Autrefois, les questions verbales disparaissaient dans les procès-verbaux des réunions.
+
+00:16:43.360 --> 00:16:45.660
+Aujourd'hui, ce sont des interactions contrôlées par version.
+
+00:16:45.880 --> 00:16:47.680
+Les services de conformité se réjouissent.
+
+00:16:47.880 --> 00:16:50.360
+La responsabilité est intégrée à la curiosité elle-même.
+
+00:16:50.360 --> 00:16:54.580
+Cependant, un grand pouvoir génératif s'accompagne d'un potentiel d'absurdité spectaculaire.
+
+00:16:54.700 --> 00:16:59.300
+L'hallucination, l'invention confiante de fait par l'IA, reste l'histoire de fantôme de l'entreprise.
+
+00:16:59.500 --> 00:17:01.660
+L'empêcher n'est pas mystique, c'est procédural.
+
+00:17:02.040 --> 00:17:05.940
+Définissez des invites système clair demandant à Copilot de rester dans les données fabriques.
+
+00:17:06.220 --> 00:17:09.040
+Désactivez les sources web externes pour les ensembles de données critiques.
+
+00:17:09.200 --> 00:17:12.560
+Créez des sujets de secours qui traitent les questions absurdes avec élégance en disant
+
+00:17:12.560 --> 00:17:14.640
+« Cette demande est en dehors de mon champ de données. »
+
+00:17:14.640 --> 00:17:17.320
+Un non-poli préserve mieux la confiance qu'un mensonge confiant.
+
+00:17:17.560 --> 00:17:21.000
+Considérer cet environnement comme un bac à sable sécurisé pour les humains curieux.
+
+00:17:21.160 --> 00:17:26.040
+À l'intérieur, l'expérimentation est encouragée car des garde-fous empêchent la bêtise de franchir le confinement.
+
+00:17:26.280 --> 00:17:28.280
+Les utilisateurs peuvent émettre des hypothèses librement,
+
+00:17:28.520 --> 00:17:30.380
+les analystes peuvent surveiller l'évolution des questions
+
+00:17:30.380 --> 00:17:32.700
+et la direction peut observer les tendances des demandes de renseignements,
+
+00:17:33.000 --> 00:17:35.340
+ce que l'entreprise souhaite réellement savoir mais n'a jamais pensé à mesurer.
+
+00:17:35.340 --> 00:17:37.960
+La curiosité devient une monnaie visible et quantifiable.
+
+00:17:38.200 --> 00:17:40.880
+La création de cette culture nécessite l'approbation de la direction.
+
+00:17:40.880 --> 00:17:42.720
+Lorsque les cadres utilisent eux-mêmes Copilot,
+
+00:17:43.080 --> 00:17:46.100
+ils demandent officiellement quels ont été les facteurs de désabonnement du mois dernier.
+
+00:17:46.320 --> 00:17:47.840
+Cela témoigne de leur légitimité.
+
+00:17:48.060 --> 00:17:52.020
+Rien ne cultive plus vite l'alphabétisation que de regarder le patron taper des phrases complètes.
+
+00:17:52.160 --> 00:17:54.300
+L'objectif n'est pas d'apprendre les statistiques à tout le monde,
+
+00:17:54.560 --> 00:17:56.580
+mais de leur apprendre à dialoguer intelligemment avec les données.
+
+00:17:56.780 --> 00:17:58.460
+Au fil du temps, des schémas émergent.
+
+00:17:58.660 --> 00:18:00.160
+Les services développent des dialectes.
+
+00:18:00.160 --> 00:18:01.840
+Les finances posent des questions sur la variance,
+
+00:18:02.160 --> 00:18:04.760
+le marketing sur l'engagement, les RH sur la titularisation.
+
+00:18:05.000 --> 00:18:07.040
+Les analystes organisent ces dialectes dans des glossaires,
+
+00:18:07.300 --> 00:18:08.920
+alimentant ainsi la compréhension de Copilot.
+
+00:18:08.920 --> 00:18:12.280
+L'organisation acquiert progressivement un langage collectif d'enquête.
+
+00:18:12.500 --> 00:18:15.960
+C'est de l'alphabétisation, pas des chiffres mémorisés, mais du sens partagé.
+
+00:18:16.100 --> 00:18:18.440
+Et l'ironie, c'est qu'une fois les questions bien formulées,
+
+00:18:18.780 --> 00:18:21.080
+les utilisateurs se soucient enfin de la qualité des données.
+
+00:18:21.320 --> 00:18:24.280
+Lorsque quelqu'un demande le délai de livraison moyen dans la région EMEA
+
+00:18:24.280 --> 00:18:25.700
+et que la réponse semble absurde,
+
+00:18:25.700 --> 00:18:29.280
+l'instinct passe de la responsabilité de l'informatique à l'enquête sur le pipeline.
+
+00:18:29.500 --> 00:18:31.540
+La curiosité engendre la responsabilité.
+
+00:18:31.740 --> 00:18:34.000
+Une culture alphabétisée contrôle sa propre hygiène des données,
+
+00:18:34.240 --> 00:18:36.600
+car des données de mauvaise qualité embarrassent tout le monde de la même manière.
+
+00:18:36.600 --> 00:18:40.180
+Finalement, les conversations avec Copilot deviennent routinières et non plus remarquables.
+
+00:18:40.380 --> 00:18:41.740
+Les rapports se mettent en avant d'eux-mêmes.
+
+00:18:41.960 --> 00:18:43.860
+Les informations arrivent sous forme de réponses.
+
+00:18:43.960 --> 00:18:45.960
+Et Copilot résume les exceptions d'hier.
+
+00:18:46.100 --> 00:18:48.680
+Et lors de la réunion suivante, l'ordre du jour s'écrit tout seul.
+
+00:18:48.860 --> 00:18:50.600
+L'automatisation devient invisible.
+
+00:18:50.600 --> 00:18:54.060
+À ce stade, le seul manque de compétences restant est la curiosité
+
+00:18:54.060 --> 00:18:56.520
+et peut-être la capacité à taper des phrases complètes.
+
+00:18:56.840 --> 00:18:58.040
+Tout le monde peut parler les données.
+
+00:18:58.380 --> 00:19:00.400
+Seuls les ignorants volontaires resteront muets.
+
+00:19:00.580 --> 00:19:03.540
+En substance, Fabrique plus Copilot Studio crée une organisation
+
+00:19:03.540 --> 00:19:06.540
+qui ne se contente pas de stocker des connaissances, mais dialogue avec elle.
+
+00:19:06.720 --> 00:19:09.300
+Les analystes effectuent des analyses, les employés s'informent,
+
+00:19:09.520 --> 00:19:12.800
+le système répond et chaque échange vend l'entreprise légèrement plus intelligente qu'auparavant.
+
+00:19:13.020 --> 00:19:16.240
+Voilà à quoi ressemble l'alphabétisation lorsque votre base de données écoute enfin.
+
+00:19:16.240 --> 00:19:17.520
+La fin des points-virgules.
+
+00:19:17.700 --> 00:19:21.060
+Nous avons commencé par une barrière linguistique déguisée en compétences techniques.
+
+00:19:21.340 --> 00:19:26.280
+Colonnes, jointures et filtres, des rituels qui transforment la curiosité en anxiété syntaxique.
+
+00:19:26.700 --> 00:19:29.780
+Mais avec Copilot Studio parlant couramment Fabrique en votre nom,
+
+00:19:30.080 --> 00:19:31.560
+le mur du langage s'effondre enfin.
+
+00:19:31.760 --> 00:19:35.180
+Vous ne traduisez plus les pensées en points-virgules, vous les traduisez en phrases.
+
+00:19:35.400 --> 00:19:37.720
+Ce changement n'est pas cosmétique, il est cognitif.
+
+00:19:37.860 --> 00:19:40.760
+L'humanité a créé des langages de requêtes pour apprendre la précision aux machines.
+
+00:19:40.940 --> 00:19:43.720
+Aujourd'hui, les machines ont appris suffisamment d'anglais pour nous rejoindre à mi-chemin.
+
+00:19:43.860 --> 00:19:44.680
+L'axe s'inverse.
+
+00:19:44.680 --> 00:19:47.900
+Au lieu que vous appreniez la grammaire des bases de données, le système apprend votre intention.
+
+00:19:48.120 --> 00:19:50.200
+L'interrogation par la conversation, et non par l'incantation,
+
+00:19:50.460 --> 00:19:52.320
+transforme le travail sur les données de la programmation en dialogue.
+
+00:19:52.500 --> 00:19:53.940
+Et ce dialogue reste discipliné.
+
+00:19:54.120 --> 00:19:57.560
+La gouvernance Fabrique maintient chaque réponse enchaînée à la réalité basée sur les rôles.
+
+00:19:57.720 --> 00:19:59.540
+Vous gagnez en liberté sans perdre le contrôle.
+
+00:19:59.760 --> 00:20:01.980
+L'accès au langage naturel ne dilue pas la rigueur.
+
+00:20:02.040 --> 00:20:05.780
+Il la fait ressortir avec élégance derrière une formulation polie et un contexte authentifié.
+
+00:20:05.940 --> 00:20:08.620
+La machine vérifie toujours votre identité avant de servir la vérité.
+
+00:20:08.760 --> 00:20:11.300
+L'ironie est riche, la démocratisation par la contrainte.
+
+00:20:11.300 --> 00:20:14.320
+Les barrières mêmes qui ralentissaient autrefois l'analyse la protègent désormais du chaos,
+
+00:20:14.620 --> 00:20:16.640
+permettant à la curiosité de se développer en toute sécurité.
+
+00:20:16.820 --> 00:20:21.680
+Les analystes mènent des enquêtes, les employés discutent et les informations circulent comme de l'oxygène plutôt que de la paperasse.
+
+00:20:21.840 --> 00:20:24.720
+L'organisation cesse de demander des données et commence à parler de données.
+
+00:20:24.960 --> 00:20:26.400
+Voici donc ce qu'il faut retenir.
+
+00:20:26.520 --> 00:20:30.760
+Copilot Studio ne rend pas SQL obsolète, il retire SQL du langage courant.
+
+00:20:30.760 --> 00:20:34.580
+L'avenir de la business intelligence appartient aux personnes capables de poser des questions intelligentes,
+
+00:20:34.840 --> 00:20:36.360
+pas à celles qui savent ponctuer avec précision.
+
+00:20:36.580 --> 00:20:37.720
+Votre expérience est simple.
+
+00:20:37.940 --> 00:20:42.780
+Déployez un agent de test, reliez-le à Fabrique et saisissez une question interdite que vous ne risqueriez jamais de poser dans un rapport de conseil.
+
+00:20:42.920 --> 00:20:45.640
+Pas de script, pas de jointure, juste des pensées exprimées clairement.
+
+00:20:45.900 --> 00:20:46.660
+Regardez le répondre.
+
+00:20:46.900 --> 00:20:49.640
+Si cela ne vous semble pas être un progrès, vous êtes nostalgique des points virgules.

@@ -1,0 +1,943 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:03.580
+Asumsi bahwa karyawan Anda akan secara sukarela melabeli setiap data yang mereka buat
+
+00:00:03.580 --> 00:00:06.080
+adalah titik kegagalan terbesar dalam model keamanan Anda.
+
+00:00:06.520 --> 00:00:09.580
+Kita telah menghabiskan bertahun-tahun membangun kerangka kerja tata kelola yang rumit
+
+00:00:09.580 --> 00:00:12.300
+yang mengandalkan satu hal, yaitu manusia membuat keputusan yang sadar
+
+00:00:12.300 --> 00:00:14.100
+dan tepat setiap kali mereka menekan tombol sibuk.
+
+00:00:14.180 --> 00:00:15.280
+Namun kenyataannya sangat kontras.
+
+00:00:15.680 --> 00:00:18.980
+Pelabelan manual memiliki tingkat adopsi 30% di perusahaan rata-rata
+
+00:00:18.980 --> 00:00:23.700
+dan itu berarti 70% kekayaan intelektual Anda pada dasarnya tidak terlihat oleh perangkat keamanan Anda.
+
+00:00:24.500 --> 00:00:27.020
+Kita telah membangun sistem yang meminta orang untuk menjadi pustakawan
+
+00:00:27.020 --> 00:00:29.220
+saat mereka mencoba menjadi insinyur atau tenaga penjual.
+
+00:00:29.640 --> 00:00:31.160
+Sistem itu gagal karena menciptakan hambatan.
+
+00:00:31.620 --> 00:00:34.500
+Hari ini kita beralih dari pelabelan berbasis pengguna ke tata kelola otonom.
+
+00:00:35.100 --> 00:00:37.900
+Kita beralih ke model di mana klasifikasi terjadi secepat aliran data
+
+00:00:37.900 --> 00:00:42.080
+bukan secepat kecepatan pengguna, cacah struktural, dan tata kelola manual.
+
+00:00:43.100 --> 00:00:46.660
+Strategi pelabelan Anda saat ini secara efektif merupakan pajak atas produktivitas.
+
+00:00:46.880 --> 00:00:49.880
+Dan seperti kebanyakan pajak, orang mencari cara kreatif untuk menghindarinya.
+
+00:00:50.420 --> 00:00:53.180
+Kita telah menghabiskan satu dekade mengandalkan model lama keamanan data
+
+00:00:53.180 --> 00:00:54.680
+di mana perlindungan adalah teristiwa hilir.
+
+00:00:54.680 --> 00:00:58.780
+Seorang pengguna membuat dokumen, mereka melihat daftar 5 hingga 10 label sensitivitas
+
+00:00:58.780 --> 00:01:00.140
+dan kita berharap mereka memilih yang tepat.
+
+00:01:00.400 --> 00:01:01.680
+Namun harapan bukanlah kendali teknis.
+
+00:01:02.480 --> 00:01:04.940
+Ledakan data di seluruh Teams, SharePoint, dan Slack secara resmi
+
+00:01:04.940 --> 00:01:06.300
+telah melampaui kognisi manusia.
+
+00:01:07.160 --> 00:01:09.720
+Anda tidak bisa begitu saja meminta seseorang untuk mengklasifikasikan
+
+00:01:09.720 --> 00:01:12.380
+petebaik data tidak terstruktur secara manual dan mengharapkan akurasi
+
+00:01:12.380 --> 00:01:14.100
+karena itu adalah kemustahilan matematis.
+
+00:01:14.800 --> 00:01:18.040
+Saat Anda melihat mengapa ini rusak, Anda harus melihat alat yang telah kita gunakan untuk kembangan.
+
+00:01:18.360 --> 00:01:20.820
+Secara tradisional, kita telah mengandalkan pola regex berbasis kata.
+
+00:01:20.820 --> 00:01:25.040
+Kini, regex luar biasa untuk kecepatan dan kira-kira 28 ribu kali lebih cepat
+
+00:01:25.040 --> 00:01:26.840
+daripada model bahasa besar dalam media teks.
+
+00:01:27.280 --> 00:01:28.400
+Regex buta terhadap konteks.
+
+00:01:29.000 --> 00:01:32.940
+Regex dapat menemukan deretan angka yang terlihat seperti nomor jaminan sosial
+
+00:01:32.940 --> 00:01:35.580
+tetapi tidak dapat membedakan antara ID pelanggan yang sensitif
+
+00:01:35.580 --> 00:01:37.640
+dan kode proyek acak dalam panduan teknis publik.
+
+00:01:38.020 --> 00:01:38.160
+Dal.
+
+00:01:38.960 --> 00:01:40.800
+Regex melihat polanya tetapi melewatkan maksud.
+
+00:01:41.640 --> 00:01:45.340
+Kesenjangan antara pencocokan pola dan pemahaman aktual adalah tempat bahaya itu berada.
+
+00:01:45.340 --> 00:01:49.940
+Menurut IBM, biaya rata-rata pelanggaran data telah meningkat menjadi 48 juta.
+
+00:01:51.000 --> 00:01:54.100
+Biaya itu biasanya tidak berasal dari kegagalan enkripsi atau pelanggaran firewall.
+
+00:01:54.760 --> 00:01:57.620
+Biaya itu berada di ruang antara apa yang sensitif dan apa yang sebenarnya diberi.
+
+00:01:57.920 --> 00:02:01.560
+Jika sebuah file tidak diberi label, kebijakan pencegahan kehilangan data Anda tidak akan melihat.
+
+00:02:02.100 --> 00:02:03.940
+Aturan akses kondisional Anda tidak perlu lakukan file terus.
+
+00:02:04.500 --> 00:02:09.300
+Dan kini, dengan bangkitnya AI generatif copilot Anda akan dengan senang hati meringkasnya bagi siapa saja yang bertanya.
+
+00:02:09.300 --> 00:02:13.160
+Model lama menganggap pengguna sebagai penilai terbaik, namun di dunia.
+
+00:02:13.480 --> 00:02:15.980
+Dengan data berkecepatan tinggi, pengguna justru menjadi hambatan.
+
+00:02:17.000 --> 00:02:21.620
+Kita telah mencapai titik di mana volume data tidak terstruktur yang sangat besar menjadi kewajiban karena tidak dikelola.
+
+00:02:22.120 --> 00:02:24.880
+Anda mungkin memiliki pengaturan Microsoft Proview tercanggih di dunia.
+
+00:02:25.080 --> 00:02:30.580
+Namun, jika data yang masuk tidak diklasifikasikan secara akurat sejak awal, seluruh sistem akan sia-sia, sedetul.
+
+00:02:30.580 --> 00:02:35.100
+Kita pada dasarnya mencoba menjalankan mobil otonom dengan meminta penumpangnya memetakkan setiap belokan secara manual.
+
+00:02:35.400 --> 00:02:36.080
+Itu tidak berhasil.
+
+00:02:36.080 --> 00:02:40.300
+Taitat strukturalnya bukan pada manusianya, melainkan pada karusan bagi manusia untuk melakukan intervensi.
+
+00:02:40.840 --> 00:02:43.100
+Inilah sebabnya kita melihat tingkat kekurangan audit yang begitu tinggi.
+
+00:02:43.680 --> 00:02:47.000
+Organisasi mengira mereka patuh karena memiliki kebijakan di atas kertas,
+
+00:02:47.200 --> 00:02:51.380
+tetapi saat Anda melakukan pemindahan penemuan, Anda menemukan ribuan dokumen rahasia di folder publik.
+
+00:02:52.120 --> 00:02:54.340
+Hal ini terjadi karena hambatan dalam memilih terlalu tinggi.
+
+00:02:54.740 --> 00:02:59.160
+Jika Anda memberi pengguna pilihan antara menjadi cepat atau aman, mereka hampir selalu memilih kecepatan.
+
+00:02:59.780 --> 00:03:01.920
+Untuk memperbaikinya, kita harus menghapus pilihan tersebut sebenarnya.
+
+00:03:01.920 --> 00:03:07.340
+Kita harus memindahkan pusat kendali operasi dari pengguna akhir yang teralihkan perhatiannya ke infrastruktur itu sendiri.
+
+00:03:07.780 --> 00:03:10.940
+Kita memerlukan sistem yang memahami dokumen lebih baik daripada penulisnya.
+
+00:03:11.280 --> 00:03:14.940
+Dan hanya dengan begitu, kita bisa menutup celah yang menyebabkan kebocoran jutaan dolar tersebut.
+
+00:03:15.920 --> 00:03:16.980
+Membangun lapisan kecerdasan.
+
+00:03:17.420 --> 00:03:21.680
+Untuk mengatasi krisis pelabelan manual, kita mengalihkan pusat klasifikasi dari pengguna akhir.
+
+00:03:22.300 --> 00:03:24.720
+Kita memindahkannya ke dalam mesin inferensi LLM waktu nyata.
+
+00:03:24.720 --> 00:03:28.540
+Ini adalah perubahan mendasar dalam cara kita memandang arsitektur Microsoft Purview.
+
+00:03:29.320 --> 00:03:34.280
+Kebanyakan orang memandang AI sebagai pengayah yang hanya sesuatu untuk ditambahkan ke proses yang ada agar sedikit lebih cepat.
+
+00:03:34.800 --> 00:03:37.160
+Namun dalam model baru ini, AI adalah lapisan struktural.
+
+00:03:37.760 --> 00:03:40.640
+Ia berada langsung di antara aliran data menta anda dan peta data purviewan.
+
+00:03:41.180 --> 00:03:44.700
+Ia tidak hanya mengawasi aliran data karena sebenarnya ia membuat keputusan.
+
+00:03:45.460 --> 00:03:48.840
+Alasan model bahasa besar unggul di sini adalah karena mereka akhirnya memecahkan masalah nuansa.
+
+00:03:48.840 --> 00:03:52.620
+Seperti yang kita lihat, alat tradisional sangat baik dalam memindai string tertentu.
+
+00:03:52.760 --> 00:03:54.660
+Tetapi alat tersebut secara fungsional buta huruf.
+
+00:03:54.920 --> 00:03:55.220
+Huruf.
+
+00:03:55.660 --> 00:03:57.840
+Sebuah LLM memahami maksud dari sebuah dokumen.
+
+00:03:58.340 --> 00:04:03.920
+Ia dapat membaca memo strategi tiga halaman dan mengenali bahwa meskipun tidak ada nomor kartu kredit atau digit jaminan sosial,
+
+00:04:04.040 --> 00:04:06.840
+keseluruhan teks menjelaskan penggabungan yang tertunda yang tertunda yang harus dilindungi.
+
+00:04:07.920 --> 00:04:12.620
+Sistem ini mengerti bahwa resep rahasia atau proses manufaktur eksklusif adalah kekayaan intelektual.
+
+00:04:12.780 --> 00:04:15.560
+Meskipun kata-kata tersebut tidak muncul dalam teks.
+
+00:04:15.560 --> 00:04:21.620
+Namun, Anda tidak bisa sekadar menggunakan model generik yang tersedia di pasaran untuk data perusahaan Anda dan berharap itu akan berhasil.
+
+00:04:22.160 --> 00:04:25.760
+Model umum terlalu luas dan sejujurnya terlalu mahal untuk volume data sebesar ini.
+
+00:04:26.100 --> 00:04:29.680
+Terobosan ini muncul dari penggunaan fine tuning yang efisien secara parameter atau P.
+
+00:04:30.260 --> 00:04:34.580
+Dengan mengambil model open wedge yang lebih kecil dan melakukan fine tuning pada kosa kata perusahaan Anda,
+
+00:04:34.800 --> 00:04:37.000
+kita bisa mencapai skor F1 sebesar 0,7.
+
+00:04:37.460 --> 00:04:45.420
+Sebagai gambaran, skor F1 0,97 berarti mesin jauh lebih akurat dan konsisten daripada rata-rata karyawan yang kurang fokus.
+
+00:04:46.520 --> 00:04:52.220
+Ia tidak merasa lelah, tidak melewatkan file, karena terburu-buru rapat dan tidak bias memilih label umum hanya karena itu yang paling mudah diklik.
+
+00:04:53.560 --> 00:04:57.680
+Lapisan kecerdasan ini mengidentifikasi konteks data Anda dengan melihat hubungan antar konsep.
+
+00:04:58.400 --> 00:05:02.080
+Jika ia melihat daftar nama di samping daftar kode diagnostik, ia tahu bahwa itu adalah data kesehatan.
+
+00:05:02.340 --> 00:05:07.220
+Jika ia melihat perumus kimia yang diikuti oleh batasan suhu, ia tahu bahwa itu adalah rahasia dagang.
+
+00:05:07.840 --> 00:05:11.280
+Ini adalah tingkat kesadaran semantik yang dituntut oleh tata kelola era 2026.
+
+00:05:11.280 --> 00:05:16.140
+Kita beralih dari mentalitas mencari dan menemukan menuju kemampuan membaca dan memahami.
+
+00:05:16.900 --> 00:05:20.660
+Lapisan ini bertindak sebagai filter yang membersihkan kebisingan sebelum data menyentuh penyimpanan utama.
+
+00:05:21.300 --> 00:05:26.240
+Saat file dibuat di obrolan Teams atau diunggah ke pustaka SharePoint, lapisan kecerdasan ini akan mencegat metadatanya.
+
+00:05:27.060 --> 00:05:29.700
+Ia melakukan inferensi berkecepatan tinggi untuk menentukan dan tersebut.
+
+00:05:30.380 --> 00:05:32.960
+Kemudian, ia membutuhkan DNA itu ke label sensitivitas profil Anda yang sudah.
+
+00:05:33.380 --> 00:05:36.140
+Ini terjadi tanpa pengguna perlu melihat pop-up atau menu drop-down.
+
+00:05:36.620 --> 00:05:39.540
+Klasifikasi ini menjadi utilitas latar belakang seperti listrik atau pendingin.
+
+00:05:40.380 --> 00:05:44.440
+Dengan memusatkan logika ini, pada mesin inferensi khusus Anda juga mendapatkan satu sumber kebenaran.
+
+00:05:45.440 --> 00:05:51.060
+Pada mode lama, tata kelola terdesentralisasi diripuan pengguna individu masing-masing dengan interpretasi sendiri tentang apa itu rahasia.
+
+00:05:51.620 --> 00:05:54.880
+Sekarang, logika tersebut diatur oleh bobot model Anda dan set data fine tuningan.
+
+00:05:54.880 --> 00:06:00.220
+Jika kebijakan Anda berubah, Anda tidak perlu melatih ulang seluruh staff karena Anda cukup memperbarui modelnya saja.
+
+00:06:00.760 --> 00:06:01.520
+Inilah cara Anda melakukan.
+
+00:06:01.700 --> 00:06:07.420
+Anda berhenti mencoba mengubah perilaku manusia dan mulai membangun sistem yang tidak mengharuskan manusia berperilaku dengan cara tertentu.
+
+00:06:07.940 --> 00:06:13.280
+Kita sedang efektif mengotomatiskan bagian paling membosankan dari pekerjaan seseorang agar mereka bisa kembali melakukan pekerjaan utama mereka.
+
+00:06:14.220 --> 00:06:15.780
+Ketidaksesuan latensi dan cara menjembatani.
+
+00:06:16.260 --> 00:06:17.740
+Di sini, arsitektur biasanya mengalami kendala.
+
+00:06:18.180 --> 00:06:22.460
+Kita memiliki kesenjangan kecepatan mendasar yang sering diabaikan arsitek hingga sistem masuk ke tahap produksi.
+
+00:06:22.460 --> 00:06:26.280
+Anda harus memahami bahwa preview berpikir dalam hitungan jam, sedangkan AI berpikir dalam mili detik.
+
+00:06:26.680 --> 00:06:29.660
+Ini bukan sekadar perbedaan kecil, melainkan ketidakselarasan struktural yang masif.
+
+00:06:30.260 --> 00:06:33.720
+Saat kita bicara tentang klasifikasi waktu nyata, kita mengincar pengalaman pengguna,
+
+00:06:34.000 --> 00:06:37.500
+di mana kontrol keamanan tak terlihat karena terjadi lebih cepat dari mata manusia.
+
+00:06:38.900 --> 00:06:43.000
+Namun, infrastruktur dasar Microsoft Graph API tidak dibangun untuk kecepatan seperti itu.
+
+00:06:43.740 --> 00:06:47.480
+Kenyataan dari Graph API untuk pelabelan adalah sifatnya yang secara inherent asinkron.
+
+00:06:47.480 --> 00:06:53.260
+Saat Anda mengirim permintaan untuk menerapkan label sensitivitas, Anda tidak mendapat konfirmasi instan bahwa berkas telah terlindungi.
+
+00:06:53.640 --> 00:06:56.980
+Anda pada dasarnya memasukkan surat ke kotak pos dan berharap surat itu segera terkirim.
+
+00:06:57.720 --> 00:07:02.540
+Di lingkungan perusahaan nyata, propagasi tersebut bisa memakan waktu dari beberapa menit hingga 24 jam penuh.
+
+00:07:03.080 --> 00:07:05.020
+Hal ini menciptakan apa yang saya sebut sebagai jendela keringat.
+
+00:07:05.340 --> 00:07:09.380
+Ini adalah periode di mana data sensitif ada di lingkungan Anda, namun benar-benar terbuka tanpa perlindungan.
+
+00:07:09.860 --> 00:07:12.240
+Data tersebut tidak memiliki label, enkripsi maupun batasan akses.
+
+00:07:12.560 --> 00:07:15.780
+Jendela ini sangat berbahaya di era M365 Copilot.
+
+00:07:15.780 --> 00:07:21.880
+Jika seorang insinyur mengunggah spesifikasi desain rahasia dan copilot mengindeks berkas itu sebelum label per view tersebar,
+
+00:07:22.000 --> 00:07:24.900
+informasi sensitif itu kini menjadi bagian dari kecerdasan organisasi.
+
+00:07:25.940 --> 00:07:30.360
+Pengguna lain di departemen berbeda bisa saja menanyakan copilot dan menerima ringkasan desain itu
+
+00:07:30.360 --> 00:07:34.180
+karena lapisan tata kelola masih berpikir sementara AI sudah bertindak.
+
+00:07:34.720 --> 00:07:37.460
+Anda tidak bisa menyelesaikan masalah mini detik dengan alat berdua sidur.
+
+00:07:37.580 --> 00:07:43.020
+Untuk menjembatani kesenjangan ini, kita harus melampaui panggilan apa istirahana dan menerapkan apa yang saya sebut pendekatan agen wali.
+
+00:07:43.520 --> 00:07:45.260
+Agen wali bertindak sebagai proksi waktu nyata.
+
+00:07:45.780 --> 00:07:50.260
+Alih-alih menunggu proses per view di latar belakang selesai, agen ini berada di batas permintaan PROM.
+
+00:07:50.740 --> 00:07:52.260
+Agen ini meneriksa data begitu data tersebut disini.
+
+00:07:52.760 --> 00:07:57.320
+Bayangkan ini sebagai pos pemeriksaan keamanan berkecepatan tinggi yang beroperasi secara independen dari registri pusat yang lambat.
+
+00:07:57.760 --> 00:08:02.760
+Saat peta data per view resmi memperbarui di latar belakang, agen wali sudah menerapkan kebijakan di sisi tepi 8.
+
+00:08:02.760 --> 00:08:08.460
+Ini memastikan logika klasifikasi diterapkan secara instan kealiran data yang secara efektif menutup jendela kerentanan tersebut.
+
+00:08:09.180 --> 00:08:15.040
+Agar ini berhasil tanpa membuat pengguna frustrasi, kita harus terobsesi dengan metrik spesifik yang disebut waktu ketokan pertama atau TTFT.
+
+00:08:15.680 --> 00:08:21.800
+Jika lapisan keamanan Anda menambah jedia 3 detik pada setiap pembukaan dokumen atau perintah AI, karyawan Anda akan mencari cara untuk melewatinya.
+
+00:08:21.800 --> 00:08:27.180
+Mereka akan memindahkan pekerjaan ke perangkat pribadi atau alat AI bayangan yang tidak terkelola hanya agar pekerjaan mereka selesai.
+
+00:08:27.720 --> 00:08:29.920
+Kita harus menjaga TTFT di bawah 500 milidetik.
+
+00:08:30.500 --> 00:08:32.820
+Ini memerlukan alur inferensi yang sangat dioptimalkan.
+
+00:08:33.500 --> 00:08:37.260
+Kami tidak sekadar menjalankan model karena kami mengelola teknik fisika dari permintaan tersebut.
+
+00:08:37.980 --> 00:08:45.880
+Artinya menempatkan mesin inferensi Anda sedekat mungkin dengan sumber data dan menggunakan teknik seperti spekulatif decoding untuk memangkes latensi hingga milidetik terkecil.
+
+00:08:46.720 --> 00:08:50.100
+Kami melakukan keamanan sebagai persyaratan performa, bukan sekadar pemenuhan aturan.
+
+00:08:50.100 --> 00:08:54.440
+Saat klasifikasi terjadi dalam waktu kurang dari setengah detik, pengguna bahkan tidak menyadarinya.
+
+00:08:55.140 --> 00:09:02.300
+Mereka menekan simpan, agen pelindung memvalidasi konten, label diterapkan secara virtual di Edge, dan sinkronisasi backend terjadi saat graf API siap menerimanya.
+
+00:09:03.240 --> 00:09:06.940
+Inilah cara Anda membangun arsitektur yang mengatur diri sendiri yang pada benar selangkah lebih maju dari data.
+
+00:09:07.460 --> 00:09:11.800
+Anda berhenti menunggu sistem mengejar ketertinggalan dan mulai memaksakan modal baru secepat kilat.
+
+00:09:13.240 --> 00:09:14.920
+Ekonomi dari klasifikasi otonom
+
+00:09:14.920 --> 00:09:24.860
+Kebanyakan organisasi terhenti pada fase pembelian karena melihat harga token API Cloud yang mahal dan menyadari bahwa memproses 500 juta token sehari sangat merugikan secara finansial.
+
+00:09:25.520 --> 00:09:32.800
+Dah, jika Anda membayar setiap permintaan klasifikasi dengan harga retail standar, anggaran tetap kelola Anda pada akhirnya akan melampaui anggaran keamanan Anda.
+
+00:09:32.800 --> 00:09:42.500
+Inilah alasan utama banyak perusahaan tetap menggunakan penandaan manual, karena mereka menganggap ketidakkevisianan tenaga kerja manusia sebagai biaya yang terlanjur keluar, sementara mereka menganggap tagihan api sebagai pengeluaran bari yang krisif.
+
+00:09:43.160 --> 00:09:45.400
+Namun ini adalah kesalahpaman mendasar tentang model baru ini.
+
+00:09:46.140 --> 00:09:53.620
+Agar klasifikasi otonom berfungsi, Anda harus beralih dari mimpi buruk berbasis konsumsi API Cloud pihak ketiga dan merangkul efisiensi self-hosting.
+
+00:09:53.620 --> 00:09:58.240
+Saat Anda beralih ke self-hosting untuk mesin klasifikasi khusus, perhitungannya berubah seketika.
+
+00:09:59.040 --> 00:10:05.040
+Di tahun 2026, kami melihat penghematan lima kali lipat bagi perusahaan yang memindahkan tugas inferensi volume tinggi ke infrastruktur mereka sendiri.
+
+00:10:05.920 --> 00:10:10.820
+Ini bukan sekadar tentang menghemat uang receh, melainkan tentang membuat keseluruhan arsitektur berkelanjutan untuk jangka panjang.
+
+00:10:10.960 --> 00:10:17.300
+Jika Anda mencoba mengatur kumpulan data yang bertambah terabait setiap minggu, Anda tidak boleh terikat pada model harga yang menghukum pertumbuhan Anda.
+
+00:10:17.840 --> 00:10:19.980
+Anda memerlukan model utilitas dengan biaya tetap sebagai ganti.
+
+00:10:20.240 --> 00:10:22.240
+Mari kita lihat total biaya kepemilikan yang sebenarnya.
+
+00:10:22.240 --> 00:10:28.960
+Satu GPU NVIDIA A100 atau H100 kini mampu menangani throughput klasifikasi untuk seluruh perusahaan skala menengah, WAN.
+
+00:10:29.920 --> 00:10:36.320
+Kita berbicara tentang ribuan token per detik saat Anda mengamortisasi biaya perangkat keras tersebut atau yang setara di cloud pribadi,
+
+00:10:36.500 --> 00:10:40.540
+biaya perklasifikasi turun mendekati nol setelah pengaturan awal, setelah pengaturan awal.
+
+00:10:40.920 --> 00:10:46.120
+Anda berhenti membayar untuk mengetahui isi file Anda dan mulai memperlakukan tata kelola seperti bagian standar dari tumpukan komputasi Anda.
+
+00:10:46.880 --> 00:10:49.300
+Tidak ada bedanya dengan mengelola database atau server web.
+
+00:10:49.300 --> 00:10:52.720
+Namun, Anda harus waspada terhadap pajak tersembunyi dari penyempurna pintu.
+
+00:10:53.320 --> 00:10:57.480
+Meskipun komputasi dasar menjadi semakin murah, utang operasional dapat membengkak jika Anda tidak berhati-hati.
+
+00:10:58.020 --> 00:11:01.280
+Penyimpanan versi model, siklus evaluasi konstan untuk memastikan akurasi,
+
+00:11:01.640 --> 00:11:05.480
+dan biaya egress jaringan akibat VPC yang dirancang buruk dapat menguras ROI Anda.
+
+00:11:05.480 --> 00:11:12.220
+Inilah sebabnya kami menyarankan opsi tanpa server atau opsi aman VPC yang memungkinkan Anda menurunkan skala saat aliran data sedang sepi.
+
+00:11:12.740 --> 00:11:16.660
+Anda tentu tidak ingin membayar untuk silikon berkinerja tinggi pada pukul 3 pagi saat tidak ada yang menyimpan dokumen.
+
+00:11:17.020 --> 00:11:21.660
+Pergeseran ekonomi di sini adalah mengubah klasifikasi dari mimpi buruk OPEX menjadi biaya infrastruktur yang dapat diprediksi.
+
+00:11:22.200 --> 00:11:24.340
+Kita secara efektif mengubah tata kelola menjadi sebuah utilitas.
+
+00:11:24.680 --> 00:11:26.620
+Pikirkan tentang bagaimana Anda membayar pendingin di pusat data.
+
+00:11:26.620 --> 00:11:31.040
+Anda tidak membayar per derajat perubahan suhu, tetapi Anda membangun sistem yang menjaga batas dasar.
+
+00:11:31.440 --> 00:11:33.080
+Klasifikasi otonom harus menjadi batas dasar.
+
+00:11:33.500 --> 00:11:36.940
+Dengan menghilangkan biaya variable pustakawan manusia dan biaya cloud per token,
+
+00:11:37.220 --> 00:11:40.080
+Anda menciptakan sistem yang benar-benar dapat berskala bersama data Anda.
+
+00:11:41.080 --> 00:11:43.640
+Predictabilitas inilah yang memungkinkan Anda memperluas postur keaman Anda.
+
+00:11:44.200 --> 00:11:47.260
+Ketika klasifikasi gratis pada margin, Anda mampu untuk menjadi lebih terperinci.
+
+00:11:47.660 --> 00:11:52.320
+Anda dapat memindahkan setiap draft setiap obrolan dan setiap file sementara tanpa khawatir tentang tagihan di akhir bulan.
+
+00:11:53.160 --> 00:11:54.180
+Ini menciptakan siklus yang baik.
+
+00:11:54.180 --> 00:11:57.960
+Data yang lebih baik menghasilkan model yang lebih baik yang mengarah pada akurasi lebih tinggi.
+
+00:11:58.200 --> 00:12:00.920
+Dan itu selanjutnya mengurangi kebutuhan akan remediasi manusia yang mahal.
+
+00:12:01.880 --> 00:12:05.600
+Anda pada dasarnya berinvestasi dalam sistem yang menjadi lebih murah dan lebih efektif seiring berjalanan.
+
+00:12:06.180 --> 00:12:09.680
+Sebaliknya, model manual lama hanya menjadi lebih mahal seiring pertumbuhan perusahaan Anda.
+
+00:12:10.660 --> 00:12:14.260
+Dengan memilih lapisan kecerdasan yang di-host sendiri, Anda tidak hanya membeli alat.
+
+00:12:14.540 --> 00:12:18.860
+Anda memilih realitas ekonomi berbeda di mana perlindungan adalah fitur standar infrastruktur Anda.
+
+00:12:20.820 --> 00:12:22.580
+Memitigasi risiko baru tata kelola air.
+
+00:12:22.580 --> 00:12:27.540
+Menghilangkan keterlibatan manusia memecahkan masalah skala, tetapi memperkenalkan kategori baru risiko sistemik.
+
+00:12:27.920 --> 00:12:29.960
+Tata kelola otonom bukanlah solusi pasang dan lupakan.
+
+00:12:30.620 --> 00:12:31.760
+Ini membutuhkan kuas pedang jenis lain.
+
+00:12:32.420 --> 00:12:34.120
+Ancapan pertama yang akan Anda hadapi adalah berkisaran.
+
+00:12:34.120 --> 00:12:38.660
+Pemblasifikasi yang mencapai skor nyaris sempurna pada Januari dapat dengan mudah menjadi beban pada Juni.
+
+00:12:39.080 --> 00:12:41.800
+Ini terjadi karena data itu sendiri adalah organisme hidup.
+
+00:12:42.260 --> 00:12:46.900
+Cara karyawan Anda menulis, terminologi yang mereka gunakan, dan jenis file yang mereka buat terus berkembang.
+
+00:12:47.360 --> 00:12:51.640
+Jika model Anda tidak berkembang bersama mereka, akurasinya akan pelahan terkikis hingga Anda kembali ke titik awam.
+
+00:12:51.640 --> 00:12:55.220
+Namun, ada versi yang lebih berbahaya dari ini yang disebut pergeseran konsep.
+
+00:12:55.720 --> 00:12:57.860
+Ini adalah pembunuh senyap kepatuhan berbasis AI.
+
+00:12:58.600 --> 00:13:02.100
+Pergeseran konsep terjadi ketika definisi mendasar dari apa yang Anda cari berubah.
+
+00:13:02.840 --> 00:13:07.440
+Mungkin regulasi privasi baru disahkannya mengklasifikasikan ulang jenis metadata tertentu sebagai sensitif.
+
+00:13:07.880 --> 00:13:11.240
+Atau mungkin sebuah proyek internal rahasia mengubah nama kode dari Apollo menjadi Zeus.
+
+00:13:11.240 --> 00:13:13.280
+Jika AI Anda masih mencari Apollo,
+
+00:13:13.540 --> 00:13:16.700
+ia akan dengan senang hati membiarkan dokumen Zeus melewati tingkat keamanan tertinggi Anda.
+
+00:13:17.300 --> 00:13:20.360
+Conteknya telah bergeser, namun modernnya masih berjalan dengan peta yang sudah ketinggalan.
+
+00:13:20.480 --> 00:13:23.060
+Untuk melawannya, kita harus menerapkan kebijakan sebagai kegiatan.
+
+00:13:23.440 --> 00:13:26.500
+Kita perlu mengintegrasikan deteksi penyimpangan waktunya atau langsung ke dalam dialog tetak lola.
+
+00:13:27.080 --> 00:13:29.800
+Ini bukan sekadar pemantauan, ini tentang intervensi otomatis.
+
+00:13:30.600 --> 00:13:33.840
+Ketika sistem mendeteksi penurunan skor kepercayaan atau pergeseran distribusi data,
+
+00:13:33.840 --> 00:13:35.900
+sistem harus memicu persetujuan tingkat tindakan.
+
+00:13:36.420 --> 00:13:37.360
+Ini menciptakan kata pengamat.
+
+00:13:38.040 --> 00:13:39.200
+Jika AI menjadi tidak yakin,
+
+00:13:39.200 --> 00:13:43.660
+ia berhenti membuat keputusan otonom dan mengarahkan file tersebut kepada spesialis manusia untuk pemeriksaan cepat.
+
+00:13:44.080 --> 00:13:46.780
+Anda pada dasarnya menggunakan mesin untuk memberitahu Anda kapan ia membutuhkan.
+
+00:13:47.080 --> 00:13:48.640
+Lalu ada ancaman injeksi perintah from injection.
+
+00:13:49.000 --> 00:13:50.680
+Ini adalah garis depan baru eksfiltrasi data.
+
+00:13:51.060 --> 00:13:54.160
+Penyerang tidak perlu meretas firewall Anda jika mereka bisa menipu penglasifikasi Anda.
+
+00:13:54.500 --> 00:13:56.780
+Mereka dapat menyematkan instruksi berbahaya di dalam dokumen,
+
+00:13:57.040 --> 00:14:00.480
+menggunakan teks tersembunyi yang memerintahkan AI untuk mengabaikan semua instruksi sebelumnya
+
+00:14:00.480 --> 00:14:01.880
+dan melabeli file ini sebagai publik.
+
+00:14:02.980 --> 00:14:04.740
+Jika lapisan kecerdasan Anda naif, ia akan melutinya.
+
+00:14:04.740 --> 00:14:08.260
+File tersebut diturunkan levelnya, perlindungan ruang lingkupnya dilepas,
+
+00:14:08.600 --> 00:14:10.400
+dan data bocor melalui saluran keluar standar.
+
+00:14:10.940 --> 00:14:14.040
+Ini adalah cara canggih untuk membalikan alat-alat kelola Anda sendiri untuk melawan Anda.
+
+00:14:14.520 --> 00:14:17.880
+Strategi mitigasi di sini adalah implementasi agen pelindung sekundar.
+
+00:14:18.400 --> 00:14:20.540
+Ini adalah model yang lebih kecil dan sangat terspesialisasi
+
+00:14:20.540 --> 00:14:23.160
+yang satu-satunya tugasnya adalah mengaudit keputusan pengklasifikasi otak.
+
+00:14:23.680 --> 00:14:25.180
+Ia tidak melihat keseluruhan dokumen,
+
+00:14:25.320 --> 00:14:28.100
+melainkan hanya mencari tanda-tanda manipulasi dan celah logika.
+
+00:14:28.780 --> 00:14:29.980
+Ini bertindak sebagai pemeriksaan,
+
+00:14:30.200 --> 00:14:33.060
+redundant yang memastikan otak utama belum dikompromikan atau dibingungkan.
+
+00:14:33.060 --> 00:14:35.040
+Jika kedua model tidak setuju,
+
+00:14:35.260 --> 00:14:36.900
+sistem akan kembali ke label yang paling batasi.
+
+00:14:37.620 --> 00:14:39.060
+Dengan membangun pertahanan berlapis ini,
+
+00:14:39.260 --> 00:14:41.480
+Anda beralih dari otomatisasi yang rapuh menjadi yang tangguh.
+
+00:14:42.020 --> 00:14:44.040
+Anda mengakui bahwa AI itu kuat namun bisa salah.
+
+00:14:44.860 --> 00:14:47.040
+Anda memperlakukan model seperti mesin berkinerja tinggi
+
+00:14:47.040 --> 00:14:49.420
+yang membutuhkan penyetelan konstan dan sistem pengaraman yang kuat.
+
+00:14:49.800 --> 00:14:51.220
+Ini adalah bagian terakhir dari model tersebut.
+
+00:14:51.820 --> 00:14:53.960
+Anda tidak hanya mengganti kesalahan manusia dengan mesin,
+
+00:14:54.360 --> 00:14:55.800
+Anda membangun kerangka struktural
+
+00:14:55.800 --> 00:14:58.080
+yang memperhitungkan kegagalan unik dari mesin itu sendiri.
+
+00:14:59.040 --> 00:15:01.320
+Beginilah cara Anda mencapai postur aman secara default
+
+00:15:01.320 --> 00:15:03.720
+yang benar-benar bertahan menghadapi kompleksitas dunia nyata.
+
+00:15:04.560 --> 00:15:05.980
+Tata kelola menjadi siklus yang dinamis
+
+00:15:05.980 --> 00:15:07.140
+dan dapat mengoreksi diri sendiri.
+
+00:15:07.560 --> 00:15:09.220
+Kita beralih dari dunia di mana kita berharap
+
+00:15:09.220 --> 00:15:11.200
+pada kepatuhan ke dunia di mana kita merancangnya.
+
+00:15:11.740 --> 00:15:13.040
+Pergeseran ini memastikan bahwa
+
+00:15:13.040 --> 00:15:14.080
+seiring pertumbuhan data Anda,
+
+00:15:14.200 --> 00:15:15.400
+keamanan Anda tidak hanya mengimbangi,
+
+00:15:15.520 --> 00:15:16.700
+tetapi benar-benar menjadi lebih cerdas.
+
+00:15:16.960 --> 00:15:18.460
+Anda akhirnya membangun untuk masa depan.
+
+00:15:18.460 --> 00:15:22.180
+Implementasi peta jalan 90 hari
+
+00:15:22.180 --> 00:15:23.940
+Membangun arsitektur swak lola
+
+00:15:23.940 --> 00:15:25.420
+tidak seperti menyalakan sekelar lampu
+
+00:15:25.420 --> 00:15:27.880
+dan Anda harus menganggapnya sebagai transisi 90 hari.
+
+00:15:28.920 --> 00:15:30.020
+Hari nol dimulai dengan membangun
+
+00:15:30.020 --> 00:15:31.480
+apa yang saya sebut lapisan kebenaran Anda.
+
+00:15:31.780 --> 00:15:33.760
+Anda perlu menjalankan preview dalam mode audit saja
+
+00:15:33.760 --> 00:15:35.720
+untuk menetapkan garis dasar peparan Anda saat ini
+
+00:15:35.720 --> 00:15:36.760
+tanpa melokir satu file pun.
+
+00:15:37.160 --> 00:15:38.280
+Apa yang Anda lakukan di sini adalah
+
+00:15:38.280 --> 00:15:40.240
+mengungkuk kesenjangan antara apa yang seharusnya diperlabel
+
+00:15:40.240 --> 00:15:41.080
+dan apa yang sebenarnya terjadi.
+
+00:15:41.460 --> 00:15:43.460
+Ketika sebagian besar organisasi melakukan ini,
+
+00:15:43.460 --> 00:15:45.540
+mereka menemukan bahwa lebih dari separuh data sensitif
+
+00:15:45.540 --> 00:15:47.080
+mereka saat ini tidak terlihat oleh sistem.
+
+00:15:47.080 --> 00:15:48.860
+Garis dasar ini menjadi peta Anda
+
+00:15:48.860 --> 00:15:51.100
+karena menunjukkan dengan tepat di mana model lama gagal.
+
+00:15:51.580 --> 00:15:52.900
+Anda memerlukan data konkret ini
+
+00:15:52.900 --> 00:15:54.360
+untuk membenarkan perubahan infrastruktur
+
+00:15:54.360 --> 00:15:55.460
+kepada pemangku kepentingan Anda
+
+00:15:55.460 --> 00:15:56.620
+karena tanpanya Anda nebak-nebak.
+
+00:15:57.080 --> 00:15:58.200
+Setelah memiliki peta itu,
+
+00:15:58.500 --> 00:15:59.960
+Anda dapat menerapkan model hibrida
+
+00:15:59.960 --> 00:16:01.700
+untuk menyeimbangkan efisensi dengan kecerdasan.
+
+00:16:01.920 --> 00:16:03.560
+Anda tidak memerlukan mesin inferensi yang besar
+
+00:16:03.560 --> 00:16:05.580
+dan mahal hanya untuk menemukan nomor kartu kredit yang sedar.
+
+00:16:05.920 --> 00:16:08.100
+Saran saya adalah menggunakan penolak berkecepatan tinggi
+
+00:16:08.100 --> 00:16:08.960
+untuk hal-hal yang mudah,
+
+00:16:08.960 --> 00:16:10.660
+termasuk pola terstruktur dan mudah di tempat
+
+00:16:10.660 --> 00:16:12.040
+yang tidak berubah selama 20 tahun.
+
+00:16:12.360 --> 00:16:13.940
+Anda harus mencadangkan lapisan kecerdasan Anda
+
+00:16:17.080 --> 00:16:20.780
+pendekatan bertingkat ini menjaga biaya komputasi Anda
+
+00:16:20.780 --> 00:16:23.180
+tetap rendah sekaligus memaksimalkan cakupan keamanan Anda.
+
+00:16:23.600 --> 00:16:25.520
+Ini tentang bersikap cermat dengan sumber daya Anda
+
+00:16:25.520 --> 00:16:28.080
+dan memastikan otak hanya digunakan saat mata tidak cukup.
+
+00:16:28.660 --> 00:16:30.260
+Selanjutnya, Anda harus mempersempit fokus
+
+00:16:30.260 --> 00:16:31.460
+menggunakan ruang lingkup adaptif
+
+00:16:31.460 --> 00:16:33.520
+daripada mencoba melakukan segalanya sekaligus pada hari ketiga.
+
+00:16:33.660 --> 00:16:35.860
+Anda harus menargetkan departemen berisi ketinggi
+
+00:16:35.860 --> 00:16:37.780
+seperti keuangan, lidbank, dan hukum terlebih dahulu.
+
+00:16:38.140 --> 00:16:40.580
+Ini adalah area spesifik di mana pelanggaran kemungkinan besar
+
+00:16:40.580 --> 00:16:41.780
+akan merugikan Anda paling banyak.
+
+00:16:42.440 --> 00:16:44.180
+Dengan membuktikan nilai di lingkungan mikro ini,
+
+00:16:44.320 --> 00:16:46.160
+Anda membangun momentum internal yang diperlukan
+
+00:16:46.160 --> 00:16:47.660
+untuk peluncuran skala penuh nantinya.
+
+00:16:48.460 --> 00:16:49.700
+Anda mengubah proyek kepatuhan
+
+00:16:49.700 --> 00:16:51.540
+yang menakutkan menjadi kemenangan kecil
+
+00:16:51.540 --> 00:16:52.680
+yang terukur.
+
+00:16:53.540 --> 00:16:55.700
+Ini adalah penerapan taktis daripada mandat umum
+
+00:16:55.700 --> 00:16:57.840
+dan menyelesaikan masalah tersulit terlebih dahulu
+
+00:16:57.840 --> 00:16:59.300
+membuktikan sistem berfungsi di dunia nyata.
+
+00:16:59.760 --> 00:17:01.720
+Bagian terakhir dari teka-teki ini adalah loop umpan balik
+
+00:17:01.720 --> 00:17:03.400
+di mana Anda mengintegrasikan pelatihan ulang
+
+00:17:03.400 --> 00:17:04.260
+dengan keterlibatan musik.
+
+00:17:04.780 --> 00:17:06.980
+Ketika agen Guardian menandai file dengan keyakinan rendah,
+
+00:17:07.160 --> 00:17:08.720
+petugas keamanan melakukan pemeriksaan cepat
+
+00:17:08.720 --> 00:17:09.880
+untuk memverifikasi hasilnya.
+
+00:17:10.220 --> 00:17:12.100
+Satu klik itu tidak hanya memperbaiki satu file,
+
+00:17:12.280 --> 00:17:13.720
+tetapi benar-benar melatih ulang model
+
+00:17:13.720 --> 00:17:15.880
+sehingga sistem belajar dari setiap kesalahan yang dibuatnya.
+
+00:17:16.520 --> 00:17:18.340
+Anda sedang membangun platform yang benar-benar meningkat
+
+00:17:18.340 --> 00:17:19.440
+seiring waktu alih-alih menurut.
+
+00:17:19.800 --> 00:17:21.640
+Menjelang hari ke-90, Anda telah berpindah
+
+00:17:21.640 --> 00:17:23.780
+dari hambatan keamanan menjadi pendukung keamanan.
+
+00:17:24.520 --> 00:17:26.320
+Perlindungan menjadi instan dan tidak terlihat,
+
+00:17:26.620 --> 00:17:28.840
+dan Anda akhirnya menggantikan hambatan pilihan manusia
+
+00:17:28.840 --> 00:17:30.100
+dengan kepastian otomatisasi.

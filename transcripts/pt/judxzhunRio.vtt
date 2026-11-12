@@ -1,0 +1,1372 @@
+WEBVTT
+
+00:00:00.280 --> 00:00:01.800
+Novamente, aqui está a verdade.
+
+00:00:02.040 --> 00:00:03.920
+Treinamento não é uma reunião, é um sistema.
+
+00:00:04.120 --> 00:00:07.800
+Se você não implementar um centro de aprendizado atualizado e governado, está apenas fingindo
+
+00:00:07.800 --> 00:00:08.440
+um helpdesk.
+
+00:00:08.580 --> 00:00:12.340
+Nos próximos minutos, mostrarei o modelo que reduz chamados, elimina documentos paralelos
+
+00:00:12.340 --> 00:00:13.400
+e centraliza a governança.
+
+00:00:13.580 --> 00:00:17.240
+Você terá a arquitetura, um plano de implementação e os KIPs que provam que está funcionando.
+
+00:00:17.440 --> 00:00:19.540
+Sem demonstração ao vivo, operações reais.
+
+00:00:19.780 --> 00:00:21.660
+Por que seu treinamento para o Copiló falha?
+
+00:00:21.840 --> 00:00:24.680
+Bem, basicamente, você está executando um programa de treinamento estático contra um
+
+00:00:24.680 --> 00:00:25.080
+alvo móvel.
+
+00:00:25.220 --> 00:00:26.580
+O Copiló muda semanalmente.
+
+00:00:26.840 --> 00:00:27.900
+Seus slides, não.
+
+00:00:28.100 --> 00:00:29.620
+Usuários esquecem, o Copiló não.
+
+00:00:29.620 --> 00:00:31.460
+Essa incompatibilidade é a causa-raiz.
+
+00:00:31.640 --> 00:00:33.680
+Você treina para um produto, mas tem um motor de comportamento.
+
+00:00:33.820 --> 00:00:34.880
+E sim, isso importa.
+
+00:00:35.100 --> 00:00:36.920
+Aqui está o que a maioria das pessoas não percebe.
+
+00:00:37.080 --> 00:00:39.440
+Planos de adoção tradicionais assumem um caminho linear de habilidades.
+
+00:00:39.660 --> 00:00:41.280
+Iniciante, intermediário, avançado.
+
+00:00:41.420 --> 00:00:45.000
+O Copiló não é linear, é conversacional, depende de contexto e é extremamente sensível
+
+00:00:45.000 --> 00:00:46.680
+a limites de dados e a qualidade dos prômpites.
+
+00:00:46.920 --> 00:00:48.780
+Ensinar uma vez é não ensinar ninguém.
+
+00:00:49.040 --> 00:00:53.120
+Ensinar no fluxo de trabalho resolve 80% da confusão diária antes que vire um chamado.
+
+00:00:53.340 --> 00:00:55.600
+A falácia do usuário médio torna tudo pior.
+
+00:00:55.600 --> 00:00:59.580
+Ao otimizar para os menos preparados, você cria o caos do mínimo denominador comum.
+
+00:00:59.780 --> 00:01:03.640
+Você dilui prômpites, esconde nuances e remove a governança até que se torne inofensivo
+
+00:01:03.640 --> 00:01:04.100
+e inútil.
+
+00:01:04.260 --> 00:01:04.740
+O resultado?
+
+00:01:05.140 --> 00:01:05.580
+Dois grupos.
+
+00:01:05.820 --> 00:01:08.820
+Usuários avançados que ignoram você e criam suas próprias práticas paralelas, e
+
+00:01:08.820 --> 00:01:10.660
+usuários confusos que escalam problemas ruidosamente.
+
+00:01:10.860 --> 00:01:12.860
+Vamos listar os chamados que você continua vendo.
+
+00:01:13.100 --> 00:01:13.580
+Número 1.
+
+00:01:13.880 --> 00:01:14.640
+Por onde eu começo?
+
+00:01:14.820 --> 00:01:16.340
+Isso é uma falha de descoberta.
+
+00:01:16.580 --> 00:01:17.160
+Número 2.
+
+00:01:17.480 --> 00:01:18.000
+Qual Copiló?
+
+00:01:18.160 --> 00:01:20.920
+Outlook, Word, Teams, Graph Grounded, Studio Build.
+
+00:01:21.060 --> 00:01:23.060
+Os usuários acham que o Copiló é uma coisa só.
+
+00:01:23.060 --> 00:01:26.100
+São múltiplas superfícies e agentes com capacidades e riscos diferentes.
+
+00:01:26.360 --> 00:01:26.960
+Número 3.
+
+00:01:27.260 --> 00:01:27.880
+Isso é seguro?
+
+00:01:28.040 --> 00:01:28.360
+Tradução.
+
+00:01:28.640 --> 00:01:31.700
+Você nunca deixou claro os limites de dados, políticas de transcrição ou conectores
+
+00:01:31.700 --> 00:01:33.320
+aprovados onde o usuário realmente trabalha.
+
+00:01:33.440 --> 00:01:34.020
+Número 4.
+
+00:01:34.320 --> 00:01:35.380
+Por que ele respondeu aquilo?
+
+00:01:35.540 --> 00:01:38.780
+Isso é um problema de padrão de prompt e contexto de recuperação, não um erro do
+
+00:01:38.780 --> 00:01:39.080
+Copiló.
+
+00:01:39.240 --> 00:01:41.200
+Entre na economia de treinamento paralelo.
+
+00:01:41.200 --> 00:01:46.000
+Apresentações no Teams, PDFs em chats, páginas wiki com títulos heróicos como Guia Definitivo
+
+00:01:46.000 --> 00:01:47.260
+do Copiló V7 Final Final.
+
+00:01:47.480 --> 00:01:50.480
+Sem controle de versão, sem dono, sem política de descarte.
+
+00:01:50.700 --> 00:01:54.800
+Assim que você publica sua orientação oficial, cinco cópias não oficiais surgem como gremlins
+
+00:01:54.800 --> 00:01:55.640
+após a meia-noite.
+
+00:01:55.820 --> 00:01:59.840
+Agora a busca retorna a contradições, e sua única fonte da verdade vira um conto
+
+00:01:59.840 --> 00:02:00.180
+popular.
+
+00:02:00.420 --> 00:02:05.220
+Causa confusão, aumento de chamados, resultados inconsistentes, risco de dados e, meu favorito,
+
+00:02:05.220 --> 00:02:08.340
+executivos questionando o gasto com licenças porque não vemos ROI.
+
+00:02:08.600 --> 00:02:11.800
+Você desperdiça tempo ensinando o básico de promptes repetidamente enquanto agentes
+
+00:02:11.800 --> 00:02:14.140
+não autorizados se multiplicam em ambientes não gerenciados.
+
+00:02:14.340 --> 00:02:16.180
+Isso não é adoção, é entropia.
+
+00:02:16.340 --> 00:02:17.180
+E a parte estranha.
+
+00:02:17.420 --> 00:02:19.580
+Você tenta consertar isso com webinars trimestrais.
+
+00:02:19.760 --> 00:02:23.660
+Os usuários não precisam de palestras agendadas, eles precisam de respostas onde a dúvida surge.
+
+00:02:23.840 --> 00:02:26.580
+No Word, no Teams, ao lado da caixa de composição.
+
+00:02:26.800 --> 00:02:30.980
+Se a orientação não estiver dentro das ferramentas ou há apenas um clique de distância, é como
+
+00:02:30.980 --> 00:02:32.060
+se estivesse em um museu.
+
+00:02:32.060 --> 00:02:35.700
+Tudo fez sentido quando percebi que a adoção do copilou é um problema de arquitetura de
+
+00:02:35.700 --> 00:02:37.320
+informação disfarçado de treinamento.
+
+00:02:37.560 --> 00:02:40.800
+Você está enxugando o chão ao responder chamados enquanto a válvula acima continua
+
+00:02:40.800 --> 00:02:41.220
+vazando.
+
+00:02:41.420 --> 00:02:44.620
+Conserte a válvula, crie um centro governado e sempre atualizado, que seja consciente do
+
+00:02:44.620 --> 00:02:45.920
+tenã, versionado e localizável.
+
+00:02:46.080 --> 00:02:48.100
+Depois, direcione todos para lá incansavelmente.
+
+00:02:48.440 --> 00:02:50.480
+Em outras palavras, pare de empurrar conhecimento.
+
+00:02:50.680 --> 00:02:53.100
+Torne-o acessível, proposital e comprovadamente atual.
+
+00:02:53.320 --> 00:02:57.240
+Isso significa páginas canônicas com selos de atualização, promptes aprovados que explicam
+
+00:02:57.240 --> 00:03:00.020
+por que funcionam e árvores de decisão que definem qual copilou usar.
+
+00:03:00.020 --> 00:03:03.560
+Em menos de três cliques, significa exibir transcrições e políticas de privacidade
+
+00:03:03.560 --> 00:03:06.400
+antes que alguém insira conteúdo sensível no chat e culpe a ferramenta.
+
+00:03:06.560 --> 00:03:10.440
+A versão simples é, se seu treinamento não for um sistema com propriedade, ciclo de
+
+00:03:10.440 --> 00:03:12.780
+vida e telemetria, ele se tornará apenas folclore.
+
+00:03:12.900 --> 00:03:15.340
+E o folclore escala perfeitamente em chamados.
+
+00:03:15.600 --> 00:03:19.220
+Vamos substituir o folclore por um centro de aprendizado do copilou governado que responde
+
+00:03:19.220 --> 00:03:23.220
+perguntas antes mesmo de existirem, desvia intenções e elimina o oxigênio que treinamentos
+
+00:03:23.220 --> 00:03:24.720
+paralelos precisam para sobreviver.
+
+00:03:24.860 --> 00:03:27.700
+Agora, vamos construir a base pela qual você deveria ter começado.
+
+00:03:27.700 --> 00:03:30.920
+O que é o centro de aprendizado do copilou, na verdade, arquitetura.
+
+00:03:31.060 --> 00:03:34.360
+Ok, basicamente isso não é um site do SharePoint com alguns links.
+
+00:03:34.540 --> 00:03:38.880
+É um hub governado e consciente do Tenan que centraliza o know-how do copilou, artefatos
+
+00:03:38.880 --> 00:03:41.340
+e padrões de uso seguro, tornando-os inevitáveis.
+
+00:03:41.540 --> 00:03:43.280
+É a espinha dorsal da adoção do copilou.
+
+00:03:43.520 --> 00:03:45.360
+Não é decoração de conteúdo, é estrutura.
+
+00:03:45.520 --> 00:03:48.040
+Pense nisso como um aeroporto, não como um mural de avisos.
+
+00:03:48.180 --> 00:03:50.960
+Portões, segurança, sinalização e controle de tráfego aéreo.
+
+00:03:51.040 --> 00:03:53.280
+As pessoas se movem porque o sistema as direciona.
+
+00:03:53.280 --> 00:03:57.420
+Entre no centro, um hub moderno do SharePoint como terminal, webparts SPF-X para os portões,
+
+00:03:57.640 --> 00:04:01.080
+PNP ModernSert para sinalização e uma camada de governança para, sim, segurança.
+
+00:04:01.280 --> 00:04:02.120
+Você não o visita.
+
+00:04:02.340 --> 00:04:03.460
+Você opera por meio dele.
+
+00:04:03.620 --> 00:04:04.740
+Primeiro a fundação.
+
+00:04:04.960 --> 00:04:08.940
+O SharePoint moderno oferece uma tela rápida e responsiva com integração nativa ao Teams.
+
+00:04:09.140 --> 00:04:13.000
+Usamos um hub para que cada site secundário herde navegação, tema e governança.
+
+00:04:13.160 --> 00:04:14.800
+Esse hub abriga três áreas principais.
+
+00:04:15.080 --> 00:04:16.360
+Aprender, fazer e governar.
+
+00:04:16.520 --> 00:04:18.040
+Aprender é o conhecimento curado.
+
+00:04:18.280 --> 00:04:20.100
+Fazer é o diretório de promptes e agentes.
+
+00:04:20.100 --> 00:04:23.400
+Governar é a política em destaque, onde os usuários realmente a veem, não enterrada
+
+00:04:23.400 --> 00:04:24.440
+em arqueologia de conformidade.
+
+00:04:24.620 --> 00:04:25.960
+Agora, os componentes.
+
+00:04:26.080 --> 00:04:28.460
+As webparts SPF-X fazem o trabalho pesado.
+
+00:04:28.640 --> 00:04:31.660
+Cartões de diretório para agentes do Copiló Estúdio, galerias de promptes baseadas em
+
+00:04:31.660 --> 00:04:33.660
+funções e banners de contexto que mostram o escopo do ambiente.
+
+00:04:33.840 --> 00:04:35.020
+Por que SPF-X?
+
+00:04:35.160 --> 00:04:38.640
+Porque ele reconhece o Tenan, é rápido e é implantado no SharePoint, abas do Teams e Viva
+
+00:04:38.640 --> 00:04:39.580
+Connections sem eFrames.
+
+00:04:39.800 --> 00:04:42.440
+Você quer um único pacote de código que apareça em toda parte.
+
+00:04:42.440 --> 00:04:47.000
+Isso se chama eficiência, algo que o usuário comum raramente valoriza, mas a liderança sim.
+
+00:04:47.180 --> 00:04:49.480
+A descoberta é onde os projetos vivem ou morrem.
+
+00:04:49.480 --> 00:04:52.900
+Implementamos a busca moderna PNP como motor de encontrabilidade.
+
+00:04:53.100 --> 00:04:54.500
+A taxonomia é importante.
+
+00:04:54.760 --> 00:04:57.800
+Taxonomia para interface, Word, Outlook, Teams, Graph.
+
+00:04:58.020 --> 00:05:00.380
+Função, resumir, gerar, analisar.
+
+00:05:00.500 --> 00:05:03.120
+Cargo, vendas, finanças, RH e risco.
+
+00:05:03.280 --> 00:05:05.140
+Interno, externo, regulamentado.
+
+00:05:05.320 --> 00:05:07.240
+Escopos são toda a minha equipe e organização.
+
+00:05:07.440 --> 00:05:10.280
+Assim, um vendedor vê primeiro os promptes aprovados para sua função, não um arquivo
+
+00:05:10.280 --> 00:05:11.160
+aleatório de 2023.
+
+00:05:11.440 --> 00:05:14.560
+Modelos de resultados exibem cartões com selos de atualização, proprietário e última
+
+00:05:14.560 --> 00:05:16.280
+auditoria, para que a confiança seja visível.
+
+00:05:16.420 --> 00:05:18.480
+As fontes de conteúdo não são um mistério.
+
+00:05:18.480 --> 00:05:22.200
+Agregamos feeds do Microsoft Learning e Viva Learning com rótulos claros de procedência.
+
+00:05:22.420 --> 00:05:24.020
+Oficial, comunidade, interno.
+
+00:05:24.160 --> 00:05:26.900
+Caminhos da comunidade são permitidos, mas não são autoritativos.
+
+00:05:27.080 --> 00:05:29.180
+POPS internos e guias de função têm regras de ciclo de vida.
+
+00:05:29.400 --> 00:05:31.600
+Rascunho, revisão por pares, publicação, desativação.
+
+00:05:31.760 --> 00:05:34.040
+Cadência de atualização mensal com trilhas de auditoria.
+
+00:05:34.260 --> 00:05:36.980
+Se não tiver um proprietário e uma data de validade, não entra em produção.
+
+00:05:37.280 --> 00:05:37.740
+De nada.
+
+00:05:37.740 --> 00:05:41.460
+O Diretório de Arquivos de IA é sua única fonte de verdade para ativos de interface
+
+00:05:41.460 --> 00:05:42.900
+do Copilou e agentes do estúdio.
+
+00:05:43.080 --> 00:05:47.920
+Cada entrada é um objeto com campos, proprietário, ambiente, políticas de dados, conectores,
+
+00:05:48.200 --> 00:05:50.240
+propósito, o que é ideal e o que é proibido.
+
+00:05:50.440 --> 00:05:54.460
+Inclua notas de uso e links de telemetria, adicione um botão de teste para ambientes
+
+00:05:54.460 --> 00:05:58.280
+seguros e um fluxo de solicitação de acesso real, não baseado em esperanças.
+
+00:05:58.540 --> 00:06:00.960
+Governança não é um rodapé, é a porta de entrada.
+
+00:06:01.200 --> 00:06:05.060
+Exiba retenção de transcrições, políticas de privacidade e limites de dados em cada página
+
+00:06:05.060 --> 00:06:06.780
+relevante via componente de cabeçalho.
+
+00:06:06.920 --> 00:06:08.600
+Conectores aprovados são listados com dicas.
+
+00:06:08.880 --> 00:06:10.560
+Permitido, condicional, bloqueado.
+
+00:06:10.780 --> 00:06:13.640
+Mostre exemplos de solicitações não permitidas em texto vermelho.
+
+00:06:13.860 --> 00:06:14.940
+Ninguém lê política.
+
+00:06:15.240 --> 00:06:17.900
+Todos se lembram de um exemplo vivido de, não faça isso.
+
+00:06:18.060 --> 00:06:21.280
+A verdade, o medo aplicado com precisão, é um controle maravilhoso.
+
+00:06:21.280 --> 00:06:23.160
+O, justi em time, é fundamental.
+
+00:06:23.420 --> 00:06:25.860
+Use o Viva Connections para fixar o centro no Teams.
+
+00:06:26.080 --> 00:06:28.540
+Adicione links diretos ao lado das caixas de composição.
+
+00:06:28.780 --> 00:06:32.000
+Ajude-me a escrever, com segurança, abrindo padrões de prompt específicos da função com botões
+
+00:06:32.000 --> 00:06:32.800
+de copiar e executar.
+
+00:06:32.920 --> 00:06:35.040
+Páginas de contexto são incorporadas diretamente nos canais do Teams.
+
+00:06:35.380 --> 00:06:37.680
+Se o usuário tiver que sair do seu fluxo para aprender, ele não aprenderá.
+
+00:06:37.780 --> 00:06:38.900
+Então ele abrirá um chamado.
+
+00:06:39.140 --> 00:06:40.160
+Então você vai reclamar.
+
+00:06:40.300 --> 00:06:41.280
+Podemos evitar os três.
+
+00:06:41.480 --> 00:06:42.980
+Conteúdo sempre atual é inegociável.
+
+00:06:43.200 --> 00:06:44.640
+Defina um ciclo de vida de conteúdo.
+
+00:06:44.860 --> 00:06:47.900
+Ondas de atualização mensal, selos de versão e regras de desativação automática.
+
+00:06:47.900 --> 00:06:50.540
+O SPFX mostra o status de atualização em linha.
+
+00:06:50.720 --> 00:06:53.480
+Revisado a 12 dias versus obsoleto a 94 dias.
+
+00:06:53.800 --> 00:06:55.320
+Proprietários recebem lembretes.
+
+00:06:55.480 --> 00:06:57.460
+Páginas obsoletas são rebaixadas na busca.
+
+00:06:57.680 --> 00:07:01.800
+O treinamento paralelo acaba quando páginas oficiais superam as outras e links obsoletos redirecionam
+
+00:07:01.800 --> 00:07:02.220
+para a home.
+
+00:07:02.380 --> 00:07:03.960
+A responsabilidade é explícita.
+
+00:07:03.960 --> 00:07:06.720
+Cada página tem um responsável definido, um substituto e um SLA.
+
+00:07:06.880 --> 00:07:08.260
+As alterações são registradas.
+
+00:07:08.500 --> 00:07:10.940
+Os usuários podem ver o que mudou sem precisar investigar.
+
+00:07:11.080 --> 00:07:13.920
+Essa transparência gera confiança, o que gera a redução de chamados.
+
+00:07:14.100 --> 00:07:16.740
+Em outras palavras, centralize antes de evangelizar.
+
+00:07:16.920 --> 00:07:20.540
+Você não pode gerenciar o que não vê, e não pode escalar o que não encontra.
+
+00:07:20.780 --> 00:07:23.000
+Construa o aeroporto, depois os aviões.
+
+00:07:23.400 --> 00:07:25.360
+Seus usuários aterrissam onde deveriam.
+
+00:07:25.540 --> 00:07:28.720
+Como isso resolve chamados e a mecânica de treinamentos paralelos?
+
+00:07:28.720 --> 00:07:32.640
+Ok, basicamente paramos de responder perguntas aleatórias e passamos a redirecionar intenções.
+
+00:07:32.840 --> 00:07:36.340
+O volume de chamados cai quando o usuário mapeia o que quer ao que clica, sem abrir o
+
+00:07:36.340 --> 00:07:37.500
+Outlook para pedir ajuda.
+
+00:07:37.700 --> 00:07:39.100
+Fazemos isso com três alavancas.
+
+00:07:39.360 --> 00:07:42.300
+Mapeamento de intenção, respostas oficiais e atualização visível.
+
+00:07:42.500 --> 00:07:43.780
+Mapeamento de intenção primeiro.
+
+00:07:44.140 --> 00:07:47.020
+Vincule seu FAQ a consultas reais, não ao que você acha que perguntam.
+
+00:07:47.220 --> 00:07:50.020
+Distribua os logs de busca e chamados em quatro eixos principais.
+
+00:07:50.240 --> 00:07:50.860
+Comece por.
+
+00:07:51.100 --> 00:07:53.100
+Qual copilou é seguro e por que essa resposta?
+
+00:07:53.100 --> 00:07:55.460
+Cada eixo tem uma página inicial com dois ativos.
+
+00:07:55.740 --> 00:07:57.220
+Árvore de decisão e exemplo de prompt.
+
+00:07:57.440 --> 00:08:00.320
+A árvore de decisão define o caminho em menos de três cliques.
+
+00:08:00.520 --> 00:08:03.780
+O exemplo de prompt mostra o que é bom e o antepadrão, ao lado.
+
+00:08:03.980 --> 00:08:06.460
+Usuários não precisam de teoria, precisam de contraste.
+
+00:08:06.580 --> 00:08:08.440
+Qual copilou, se torna uma escolha guiada.
+
+00:08:08.720 --> 00:08:10.840
+Superfície, função, sensibilidade dos dados.
+
+00:08:11.040 --> 00:08:12.300
+Três chaves de alternância.
+
+00:08:12.540 --> 00:08:14.320
+A página é atualizada em tempo real.
+
+00:08:14.600 --> 00:08:19.320
+Use Teams para anotações, Outlook para triagem, Word para textos longos e o estúdio para
+
+00:08:19.320 --> 00:08:21.580
+contexto de negócio com conectores aprovados.
+
+00:08:21.580 --> 00:08:25.740
+E sim, ele explica quando não usar nada, pois não fazer nada às vezes é a ação
+
+00:08:25.740 --> 00:08:26.340
+mais segura.
+
+00:08:26.480 --> 00:08:30.300
+A orientação no momento certo elimina o comportamento de, onde está aquele arquivo.
+
+00:08:30.520 --> 00:08:35.240
+Incorpore páginas de contexto no Teams, adicione um link de, me ajude a escrever, perto das
+
+00:08:35.240 --> 00:08:37.700
+áreas de redação que abre um prompt baseado na função.
+
+00:08:37.940 --> 00:08:41.380
+Não apenas o prompt, mas também anota sobre o porquê de ele funcionar.
+
+00:08:41.500 --> 00:08:43.940
+Ele define intenção, escopo e restrições.
+
+00:08:44.140 --> 00:08:45.660
+Ele nomeia as fontes de dados.
+
+00:08:45.980 --> 00:08:47.840
+Ele evita instruções tendenciosas.
+
+00:08:48.000 --> 00:08:51.420
+Abaixo da caixa vermelha, o, não faça isso, com um exemplo tentador, porém inseguro.
+
+00:08:51.580 --> 00:08:52.060
+De nada.
+
+00:08:52.300 --> 00:08:54.320
+A biblioteca de prompts é opinativa.
+
+00:08:54.580 --> 00:08:56.080
+Todo prompt aprovado tem quatro campos.
+
+00:08:56.320 --> 00:08:58.580
+Propósito, anatomia, variações e modos de falha.
+
+00:08:58.760 --> 00:09:00.300
+Propósito é a função em uma linha.
+
+00:09:00.520 --> 00:09:03.340
+Anatomia rotula cada cláusula para que usuários possam remixar sem quebrar.
+
+00:09:03.560 --> 00:09:05.500
+Variações mostram ajustes de tom ou de cargo.
+
+00:09:05.760 --> 00:09:07.780
+Modos de falha explicam por que algo deu errado.
+
+00:09:08.060 --> 00:09:11.780
+Verbos ambíguos, falta de contexto, armadilhas de alucinação, além da correção rápida.
+
+00:09:11.940 --> 00:09:14.760
+Botões de copiar e executar respeitam limites de cargo e dados.
+
+00:09:14.760 --> 00:09:19.080
+Se você não tem acesso, verá o caminho para solicitar, não uma surpresa de erro 403.
+
+00:09:19.240 --> 00:09:22.860
+O treinamento paralelo morre quando respostas oficiais superam tudo e conteúdos obsoletos
+
+00:09:22.860 --> 00:09:23.560
+se autodestroem.
+
+00:09:23.740 --> 00:09:24.760
+Nós fazemos ambos.
+
+00:09:25.020 --> 00:09:27.840
+Páginas oficiais ganham prioridade no hub e impulsionamento nas buscas.
+
+00:09:28.100 --> 00:09:31.200
+Links legados são redirecionados para a página oficial relevante com um aviso.
+
+00:09:31.400 --> 00:09:32.860
+Este recurso foi arquivado.
+
+00:09:33.040 --> 00:09:34.640
+Aqui está a orientação atual.
+
+00:09:34.880 --> 00:09:36.360
+Vicks de sites não são excluídas.
+
+00:09:36.520 --> 00:09:37.100
+Elas expiram.
+
+00:09:37.100 --> 00:09:40.320
+Regras de expiração automática sinalizam e rebaixam qualquer coisa sem um proprietário
+
+00:09:40.320 --> 00:09:41.000
+ou revisão atual.
+
+00:09:41.200 --> 00:09:42.760
+Você pode manter seu blog de hobby.
+
+00:09:42.960 --> 00:09:45.220
+Ele apenas não induzirá pessoas ao erro em grande escala.
+
+00:09:45.400 --> 00:09:48.100
+A clareza de propriedade evita dúvidas sobre quem mantém esse teatro.
+
+00:09:48.300 --> 00:09:51.200
+Cada página mostra proprietário, backup, SLA e frescor.
+
+00:09:51.340 --> 00:09:52.420
+O emblema é direto.
+
+00:09:52.640 --> 00:09:54.380
+Verde, revisado nos últimos 30 dias.
+
+00:09:54.580 --> 00:09:56.000
+Âmbar, 31 a 90 dias.
+
+00:09:56.200 --> 00:09:57.740
+Vermelho, obsoleto há mais de 90 dias.
+
+00:09:57.940 --> 00:10:00.780
+Tiquetes gerados a partir de uma página vermelha são enviados ao proprietário com um lembrete
+
+00:10:00.780 --> 00:10:01.260
+para atualizar.
+
+00:10:01.420 --> 00:10:05.060
+Os usuários veem o mesmo emblema, então confiam no verde, questionam o âmbar e evitam o vermelho.
+
+00:10:05.060 --> 00:10:08.380
+Essa transparência evita e-mails atuais antes mesmo de existirem.
+
+00:10:08.520 --> 00:10:11.160
+Estruturas de segurança não são um PDF, estão em toda parte.
+
+00:10:11.380 --> 00:10:13.680
+Limites de dados ficam no topo das páginas de decisão.
+
+00:10:13.860 --> 00:10:17.280
+A lista de conectores aprovados permite acesso condicional e bloqueado com códigos de motivo.
+
+00:10:17.480 --> 00:10:20.560
+A política de retenção de transcrições aparece antes do primeiro chat, não após
+
+00:10:20.560 --> 00:10:21.060
+uma violação.
+
+00:10:21.280 --> 00:10:23.700
+Exemplos em vermelho mostram solicitações proibidas.
+
+00:10:23.900 --> 00:10:27.780
+As pessoas lembram mais de não envie dados de pacientes, ponto final, do que do parágrafo
+
+00:10:27.780 --> 00:10:28.740
+7a da sua política.
+
+00:10:28.980 --> 00:10:31.400
+Use o córtex frontal, não o teatro da conformidade.
+
+00:10:31.660 --> 00:10:33.620
+Estímulos de adoção mantêm o ciclo vivo.
+
+00:10:33.620 --> 00:10:36.000
+Cada página termina com, isso foi útil?
+
+00:10:36.160 --> 00:10:39.660
+Uma micro pesquisa de dois cliques com um campo opcional para o que faltou.
+
+00:10:39.880 --> 00:10:43.140
+Fale com um especialista, escala para uma fila governada com categorias mapeadas para
+
+00:10:43.140 --> 00:10:43.700
+proprietários.
+
+00:10:43.880 --> 00:10:45.940
+A triagem semanal revisa os acertos e erros.
+
+00:10:46.240 --> 00:10:48.000
+Atualizações mensais entregam correções.
+
+00:10:48.220 --> 00:10:49.700
+Publique o registro de alterações.
+
+00:10:49.920 --> 00:10:53.080
+Os usuários veem que você ouve e param de escrever seus próprios guias para compensar.
+
+00:10:53.200 --> 00:10:56.200
+A verdade é que você não reduz tickets dizendo às pessoas para pararem de abrir
+
+00:10:56.200 --> 00:10:56.600
+tickets.
+
+00:10:56.820 --> 00:11:01.680
+Você reduz tickets chegando na resposta antes do ticket, tornando-a óbvia, atual, segura e tornando
+
+00:11:01.680 --> 00:11:04.220
+toda cópia não oficial propositalmente pior que a original.
+
+00:11:04.220 --> 00:11:08.400
+Vou contar o estudo de caso, resultados antes e depois, e vitórias de governança.
+
+00:11:08.540 --> 00:11:10.020
+Primeiro, a linha de base.
+
+00:11:10.220 --> 00:11:14.300
+Uma empresa, milhares de licenças do Copilô, parecia ocupada e não aprendia nada.
+
+00:11:14.500 --> 00:11:16.660
+Fila de tickets dominada por quatro temas.
+
+00:11:16.880 --> 00:11:17.480
+Por onde começar?
+
+00:11:17.700 --> 00:11:18.340
+Qual Copilô usar?
+
+00:11:18.520 --> 00:11:19.800
+É seguro, porque essa resposta.
+
+00:11:20.020 --> 00:11:21.680
+Orientação espalhada por todo lado.
+
+00:11:21.940 --> 00:11:25.160
+Vicks de equipes, apresentações, PDFs com nomes de arquivos heróicos.
+
+00:11:25.160 --> 00:11:27.320
+Proprietários, desconhecidos.
+
+00:11:27.560 --> 00:11:29.520
+Datas de revisão, fictícias.
+
+00:11:29.700 --> 00:11:32.760
+Usuários pesquisavam, encontravam contradições e escalavam.
+
+00:11:32.960 --> 00:11:36.360
+Agentes paralelos surgiam em ambientes aleatórios com conectores misteriosos.
+
+00:11:36.500 --> 00:11:38.080
+A pergunta da liderança era previsível.
+
+00:11:38.320 --> 00:11:39.140
+Onde está o ROI?
+
+00:11:39.340 --> 00:11:41.420
+A intervenção não foi uma palestra motivacional.
+
+00:11:41.680 --> 00:11:43.220
+Implementamos o Rab Copilô Learning Center.
+
+00:11:43.480 --> 00:11:45.500
+Aprenda, faça, governe, fixado no Teams.
+
+00:11:45.680 --> 00:11:49.600
+Lançamos um FAQ opinativo mapeado por intenções, uma biblioteca de promptes baseada em funções
+
+00:11:49.600 --> 00:11:52.980
+com copiar e executar, e um diretório de agentes com campos de proprietário, ambiente
+
+00:11:52.980 --> 00:11:53.840
+e política de dados.
+
+00:11:54.000 --> 00:11:56.900
+O PNP Modern Search impulsionou as páginas canônicas.
+
+00:11:57.160 --> 00:12:00.760
+Links legados redirecionados com banners de orientação atual arquivados.
+
+00:12:00.960 --> 00:12:04.660
+Cada página exibia proprietário, backup, SLA e um selo de atualização.
+
+00:12:04.900 --> 00:12:08.820
+A governança migrou de PDF para cabeçalho de página, retenção de transcrições, conectores
+
+00:12:08.820 --> 00:12:10.360
+aprovados e exemplos de linhas vermelhas.
+
+00:12:10.640 --> 00:12:11.120
+Resultados.
+
+00:12:11.420 --> 00:12:12.500
+A tendência é a história.
+
+00:12:12.680 --> 00:12:16.160
+A deflexão de chamados aumentou semana a semana, porque as respostas estavam onde
+
+00:12:16.160 --> 00:12:16.980
+as dúvidas surgiam.
+
+00:12:16.980 --> 00:12:20.680
+O sucesso da busca cresceu à medida que usuários acessavam árvores de decisão que resolviam
+
+00:12:20.680 --> 00:12:22.380
+qual copilou usar em menos de três cliques.
+
+00:12:22.380 --> 00:12:24.300
+Artefatos duplicados diminuíram.
+
+00:12:24.520 --> 00:12:27.560
+Vicks de sites sem proprietários expiraram automaticamente e saíram dos resultados.
+
+00:12:27.800 --> 00:12:30.120
+A biblioteca de promptes tornou-se o centro gravitacional.
+
+00:12:30.360 --> 00:12:32.660
+Alto nível de reutilização nas páginas iniciais por função.
+
+00:12:32.960 --> 00:12:35.940
+Menos reclamações de alucinação de ti, pois os modos de falha e suas correções
+
+00:12:35.940 --> 00:12:36.660
+eram explícitos.
+
+00:12:36.820 --> 00:12:39.140
+O engajamento não era vaidade, era direcional.
+
+00:12:39.440 --> 00:12:43.480
+Visitantes únicos concentrados em, comece aqui, qual copilou, e três guias de funções.
+
+00:12:43.480 --> 00:12:47.400
+O tempo na página estabilizou em durações de leitura e ação, não de rolagem infinita.
+
+00:12:47.800 --> 00:12:49.720
+Micropesquisas produziram dois tipos de feedback.
+
+00:12:49.720 --> 00:12:52.360
+Variações ausentes e exemplos de limites mais claros.
+
+00:12:52.540 --> 00:12:54.480
+Lançamos ambos na atualização mensal.
+
+00:12:54.660 --> 00:12:56.640
+O registro de alterações comprovou a evolução.
+
+00:12:56.900 --> 00:12:59.640
+Usuários aprenderam a voltar porque o conteúdo realmente evoluía.
+
+00:12:59.820 --> 00:13:01.800
+As vitórias na governança foram mensuráveis.
+
+00:13:02.080 --> 00:13:05.280
+Agentes não autorizados diminuíram conforme os criadores perceberam que havia um diretório
+
+00:13:05.280 --> 00:13:07.140
+sancionado com caminho de acesso e visibilidade.
+
+00:13:07.320 --> 00:13:09.760
+O roteamento de ambiente passou a ser respeitado.
+
+00:13:09.860 --> 00:13:13.560
+Agentes de alto risco migraram para ambientes gerenciados com o DLP correto.
+
+00:13:13.720 --> 00:13:17.180
+A orientação sobre transcrições deixou de ser apócrifa e tornou-se realidade pré-chat.
+
+00:13:17.180 --> 00:13:20.660
+Ocorreram menos eventos de, não deveríamos ter colado isso, porque a página alertava
+
+00:13:20.660 --> 00:13:21.740
+educadamente antes de colar.
+
+00:13:21.840 --> 00:13:23.980
+A mudança cultural é a vitória silenciosa.
+
+00:13:24.180 --> 00:13:27.380
+O reflexo mudou de, pergunte a ele, para, verifique a central.
+
+00:13:27.620 --> 00:13:32.240
+Até usuários avançados participaram, enviando variações de promptes pelo fluxo de contribuição
+
+00:13:32.240 --> 00:13:34.400
+em vez de publicar folclore em canais privados.
+
+00:13:34.580 --> 00:13:37.940
+A clareza de propriedade acabou com o teatro do, quem mantém isso?
+
+00:13:38.200 --> 00:13:40.080
+Selos verdes conquistaram confiança.
+
+00:13:40.360 --> 00:13:42.340
+Selos âmbar dispararam lembretes úteis.
+
+00:13:42.520 --> 00:13:45.440
+Selos vermelhos eram raros e constrangedores, exatamente como deveria ser.
+
+00:13:45.440 --> 00:13:48.720
+Lições aprendidas, porque você repetirá esses erros a menos que eu o impeça.
+
+00:13:48.860 --> 00:13:50.120
+Priorize a incontrabilidade.
+
+00:13:50.500 --> 00:13:53.080
+Taxonomia e escopos definem o sucesso da relevância.
+
+00:13:53.360 --> 00:13:55.360
+Suposições aumentam o volume de chamados.
+
+00:13:55.640 --> 00:13:58.400
+Declare o que está obsoleto com redirecionamentos implacáveis.
+
+00:13:58.680 --> 00:14:00.340
+Não negocie com links quebrados.
+
+00:14:00.580 --> 00:14:02.740
+Publique caminhos iniciais baseados em funções.
+
+00:14:02.980 --> 00:14:05.180
+Orientação genérica convida a erros genéricos.
+
+00:14:05.420 --> 00:14:06.260
+Instrumente tudo.
+
+00:14:06.500 --> 00:14:08.600
+Termos de busca, taxa de cliques, rejeição.
+
+00:14:08.760 --> 00:14:10.920
+O ciclo informa o que corrigir no próximo mês.
+
+00:14:11.120 --> 00:14:12.340
+Agora a recompensa prometida.
+
+00:14:12.340 --> 00:14:14.760
+A chave de governança que acaba com o treinamento paralelo.
+
+00:14:14.920 --> 00:14:18.760
+Definimos uma política de descoberta centralizada com o app do Teams fixado e o hub do SharePoint
+
+00:14:18.760 --> 00:14:19.940
+como ponto de entrada oficial.
+
+00:14:20.160 --> 00:14:23.200
+Todo conteúdo relacionado ao copilou vive sob essa arquitetura de informação.
+
+00:14:23.520 --> 00:14:25.120
+Sem exceções de vics paralelas.
+
+00:14:25.360 --> 00:14:27.380
+Links legados resolvem para o conteúdo canônico.
+
+00:14:27.560 --> 00:14:30.880
+Páginas fora do hub exibem avisos e regras de arquivamento automático eliminam o resto.
+
+00:14:31.100 --> 00:14:32.780
+Você não persegue o folclore corporativo.
+
+00:14:32.980 --> 00:14:33.840
+Você o priva de oxigênio.
+
+00:14:33.980 --> 00:14:36.380
+A chave de governança que derruba o treinamento paralelo.
+
+00:14:36.600 --> 00:14:37.640
+Aqui está a chave.
+
+00:14:37.900 --> 00:14:39.440
+Exija um único serviço de descoberta.
+
+00:14:39.640 --> 00:14:41.120
+Não é uma sugestão, é uma política.
+
+00:14:41.120 --> 00:14:45.140
+Fixe o centro de aprendizado como um aplicativo no Teams para todos e defina o hub do SharePoint
+
+00:14:45.140 --> 00:14:46.440
+como ponto de entrada oficial.
+
+00:14:46.620 --> 00:14:48.100
+Todo caminho começa ali.
+
+00:14:48.320 --> 00:14:53.060
+O custo cognitivo de onde procurar cai a zero e a relevância da sua busca para de competir
+
+00:14:53.060 --> 00:14:54.740
+com 12 vics com nomes heróicos.
+
+00:14:54.920 --> 00:14:56.320
+Em seguida, a política.
+
+00:14:56.600 --> 00:15:00.920
+Todo conteúdo relacionado ao copilou, guias, promptes, documentos de agentes e fax, deve
+
+00:15:00.920 --> 00:15:02.660
+residir na arquitetura de informação do hub.
+
+00:15:02.840 --> 00:15:07.880
+Sem vics paralelas, sem apresentações temporárias em equipes aleatórias, sem PDFs em canais privados.
+
+00:15:07.880 --> 00:15:09.960
+Se não está no hub, não é oficial.
+
+00:15:10.200 --> 00:15:13.440
+Essa linha binária é como você elimina o folclore, sem destruir a cultura.
+
+00:15:13.620 --> 00:15:15.700
+A aplicação das normas é tediosa e bela.
+
+00:15:15.900 --> 00:15:17.620
+Primeiro, governança de links.
+
+00:15:18.180 --> 00:15:22.140
+Redirecionamentos de URLs antigas levam automaticamente para a página canônica.
+
+00:15:22.380 --> 00:15:26.220
+Usuários clicam em um link obsoleto e caem na resposta certa, com um banner explicando
+
+00:15:26.220 --> 00:15:26.640
+a mudança.
+
+00:15:26.880 --> 00:15:29.300
+Segundo, banners de aviso em conteúdo fora do hub.
+
+00:15:29.440 --> 00:15:31.940
+Esta página não é oficial, veja as diretrizes atuais.
+
+00:15:32.160 --> 00:15:34.240
+Terceiro, regras de arquivamento automático.
+
+00:15:34.240 --> 00:15:38.100
+Conteúdo sem proprietário ou data de revisão é sinalizado, rebaixado na busca e enviado
+
+00:15:38.100 --> 00:15:38.780
+para arquivamento.
+
+00:15:38.980 --> 00:15:41.860
+Você não apaga a história, você a remove do caminho de decisão.
+
+00:15:42.020 --> 00:15:44.920
+Papéis e responsabilidades mantêm o sistema honesto.
+
+00:15:45.120 --> 00:15:47.100
+Defina proprietários para cada área.
+
+00:15:47.380 --> 00:15:51.260
+Aprender, fazer, governar, mais cada guia de função e cada entrada de agente.
+
+00:15:51.500 --> 00:15:53.160
+Proprietários devem ter substitutos.
+
+00:15:53.360 --> 00:15:55.040
+Revisões trimestrais são inegociáveis.
+
+00:15:55.260 --> 00:15:57.300
+Elas acontecem conforme o calendário, não por feeling.
+
+00:15:57.460 --> 00:15:59.060
+A telemetria direciona a limpeza.
+
+00:15:59.260 --> 00:16:01.920
+Páginas com poucos cliques são corrigidas, mescladas ou aposentadas.
+
+00:16:01.920 --> 00:16:04.520
+Buscas de alto atrito acionam a criação de conteúdo.
+
+00:16:04.740 --> 00:16:07.980
+E sim, proprietários perdem privilégios se ignorarem seus SLAS.
+
+00:16:08.660 --> 00:16:10.840
+Responsabilidade não é maldade, é manutenção.
+
+00:16:11.020 --> 00:16:14.080
+O alinhamento com DLP não é nota de rodapé, é o prólogo.
+
+00:16:14.320 --> 00:16:18.320
+Exiba políticas de dados no topo de páginas relevantes em linguagem simples com exemplos.
+
+00:16:18.500 --> 00:16:20.200
+Não pode resumir e-mails internos.
+
+00:16:20.340 --> 00:16:22.880
+Não pode colar PI, informações de identificação pessoal, de clientes.
+
+00:16:23.060 --> 00:16:25.300
+Compartilhamento externo condicional via conector aprovado.
+
+00:16:25.520 --> 00:16:28.700
+Inclua exemplos proibidos que ativam alertas propositalmente, com a explicação do motivo.
+
+00:16:28.880 --> 00:16:31.200
+O usuário comum não memoriza códigos de política.
+
+00:16:31.200 --> 00:16:34.920
+Eles lembram de limites simples e claros apresentados no momento da intenção.
+
+00:16:35.160 --> 00:16:37.080
+Kips mostram se a mudança funcionou.
+
+00:16:37.320 --> 00:16:40.520
+Observe a mudança no mix de tickets, do básico ao avançado.
+
+00:16:40.740 --> 00:16:43.420
+Monitore o tempo de resposta através da navegação do Hub.
+
+00:16:43.580 --> 00:16:47.040
+Três cliques ou menos para 70% das perguntas sobre o copilô é a meta.
+
+00:16:47.300 --> 00:16:49.580
+Monitore a queda na taxa de conteúdo obsoleto.
+
+00:16:49.840 --> 00:16:52.520
+Selos de atualização devem estar em verde até o segundo mês.
+
+00:16:52.680 --> 00:16:55.700
+A taxa de sucesso da busca deve subir à medida que o copilô evolui.
+
+00:16:55.880 --> 00:16:57.840
+Árvores de decisão eliminam a confusão.
+
+00:16:57.840 --> 00:17:01.460
+A decadência de documentos paralelos vira uma linha no seu painel, não um boato no canal.
+
+00:17:01.620 --> 00:17:04.560
+A parte contraintuitiva é que a centralização aumenta a contribuição.
+
+00:17:04.820 --> 00:17:08.660
+Quando sabem onde a fonte oficial vive, as pessoas enviam melhorias em vez de criar regras paralelas.
+
+00:17:08.860 --> 00:17:11.040
+Seu fluxo de contribuição torna isso indolor.
+
+00:17:11.200 --> 00:17:15.560
+Proponha uma mudança, anexe evidências, encaminhe ao responsável, publique com registro de alterações.
+
+00:17:15.780 --> 00:17:17.640
+Dê crédito visível aos colaboradores.
+
+00:17:17.880 --> 00:17:21.140
+A prova social impulsiona a governança muito melhor do que um memorando rígido.
+
+00:17:21.280 --> 00:17:22.840
+E sim, há um empurrão cultural.
+
+00:17:22.840 --> 00:17:25.980
+Defina sua ajuda padrão no Teams para abrir o centro de aprendizado.
+
+00:17:26.200 --> 00:17:30.260
+Inclua o centro no onboarding, capacitação de desempenho e revisões trimestrais.
+
+00:17:30.440 --> 00:17:36.540
+Quando líderes perguntarem o que há de novo com o copilô, eles recebem o link do registro de alterações, público, datado e impiedosamente breve.
+
+00:17:36.700 --> 00:17:37.480
+A mensagem é clara.
+
+00:17:37.680 --> 00:17:40.100
+As respostas vivem aqui, evoluem aqui e em nenhum outro lugar.
+
+00:17:40.320 --> 00:17:42.920
+Vire a chave e elimine o treinamento informal de propósito.
+
+00:17:43.160 --> 00:17:45.300
+Manual de equipes, provando que funcionou.
+
+00:17:45.460 --> 00:17:48.600
+Ok, basicamente, você precisa de números que encerrem argumentos.
+
+00:17:48.600 --> 00:17:50.560
+Comece com métricas estrela-guia.
+
+00:17:50.740 --> 00:17:55.360
+Taxa de desvio de chamados, visitantes únicos, reuso de biblioteca de promptes e decadência de docs.
+
+00:17:55.560 --> 00:17:58.340
+Se elas se moverem na direção certa, tudo mais é apenas comentário.
+
+00:17:58.540 --> 00:18:00.820
+Indicadores antecedentes provam a direção precocemente.
+
+00:18:01.060 --> 00:18:04.920
+Rastree a taxa de sucesso de busca, cliques no copilô e tempo de página nos guias de função.
+
+00:18:05.180 --> 00:18:09.300
+Se usuários resolvem em três cliques ou menos em 70% das vezes, o roteamento está correto.
+
+00:18:09.480 --> 00:18:11.580
+Se eles saem, sua taxonomia está errada.
+
+00:18:11.780 --> 00:18:13.080
+Corrija, não há eles.
+
+00:18:13.340 --> 00:18:15.860
+Indicadores defasados confirmam a mudança de comportamento.
+
+00:18:15.860 --> 00:18:20.120
+Conte menos ativos informais, menos agentes duplicados e maior satisfação.
+
+00:18:20.360 --> 00:18:21.940
+Vincule isso à telemetria.
+
+00:18:22.160 --> 00:18:24.840
+As insígnias vermelhas estão sumindo e as verdes se mantendo?
+
+00:18:25.060 --> 00:18:27.140
+Bom, o conteúdo perene está funcionando.
+
+00:18:27.380 --> 00:18:29.200
+Metas, porque suposições são para amadores.
+
+00:18:29.440 --> 00:18:32.120
+Alcance 30 a 40% de desvio em 60 a 90 dias.
+
+00:18:32.360 --> 00:18:34.940
+Converta 70% das perguntas sobre copilô em três cliques.
+
+00:18:35.180 --> 00:18:37.980
+Reduza a taxa de conteúdo obsoleto abaixo de 10% no segundo mês.
+
+00:18:38.180 --> 00:18:40.900
+Impulsione o reuso de promptes nos cinco principais guias semanalmente.
+
+00:18:41.060 --> 00:18:43.060
+A instrumentação é leve e implacável.
+
+00:18:43.060 --> 00:18:46.820
+Análise de uso do SharePoint, logs de busca e um painel no Power BI.
+
+00:18:46.960 --> 00:18:50.340
+Triagem semanal, atualização mensal, auditoria de governança trimestral.
+
+00:18:50.480 --> 00:18:51.620
+Publique o scorecard.
+
+00:18:51.920 --> 00:18:53.940
+Executivos querem o ROI das licenças.
+
+00:18:54.140 --> 00:18:56.840
+Mostre menos chamados, respostas mais rápidas, uso mais seguro.
+
+00:18:57.020 --> 00:18:58.160
+Orçamento garantido.
+
+00:18:58.380 --> 00:19:00.820
+A verdade é, se não está no painel, não aconteceu.
+
+00:19:01.080 --> 00:19:03.340
+Messa, corrija, publique, repita.
+
+00:19:03.500 --> 00:19:04.420
+Conclusão principal.
+
+00:19:04.840 --> 00:19:09.560
+Treinamento é um sistema perene e governado que responde antes dos chamados e para o treinamento informal.
+
+00:19:09.560 --> 00:19:14.940
+Se isso esclareceu o caminho, implante o centro de aprendizado, trave a busca e execute o manual de equipes.
+
+00:19:15.080 --> 00:19:17.840
+Então leve os números à liderança e garanta seu orçamento.
+
+00:19:18.100 --> 00:19:20.260
+Inscreva-se para a série de governança em primeiro lugar do Copilot.
+
+00:19:20.520 --> 00:19:23.060
+A seguir, segurança de agentes, roteamento de ambiente e telemetria.

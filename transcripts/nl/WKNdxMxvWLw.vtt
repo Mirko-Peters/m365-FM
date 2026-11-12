@@ -1,0 +1,766 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:03.240
+Het onderwerp van vandaag heb je waarschijnlijk wel eens gehoord, maar begrijp je misschien nog niet helemaal.
+
+00:00:03.420 --> 00:00:06.560
+Het model context protocol voor Dynamics 365 ERP.
+
+00:00:06.640 --> 00:00:11.180
+Je hebt het acroniem MCP vastgezien in aankondigingen van Microsoft Partner Wenner's en Community Posts,
+
+00:00:11.260 --> 00:00:14.260
+maar wat betekent het voor iemand die dagelijks met Dynamics 365 werkt?
+
+00:00:14.440 --> 00:00:17.280
+Dit is het punt. Je ERP bevat je belangrijkste gegevens.
+
+00:00:17.580 --> 00:00:22.000
+Financiële gegevens, supply chain transacties, voorraadniveaus, leveranciersinformatie, klantgeschiedenissen.
+
+00:00:22.720 --> 00:00:27.040
+Het is hoe je bedrijf draait, maar die gegevens in AI Tools krijgen is altijd een hoofdpijn dossier geweest.
+
+00:00:27.040 --> 00:00:30.520
+Je had aangepaste APIs, speciale connectoren en beveiligingsoplossingen nodig.
+
+00:00:30.640 --> 00:00:34.460
+Elke keer dat je een AI-assistent aan je ERP wilde koppelen, moest je weer bij nul beginnen.
+
+00:00:34.640 --> 00:00:39.360
+Aan het einde van deze aflevering begrijp je wat de MCP-server is, waarom Microsoft deze heeft gebouwd
+
+00:00:39.360 --> 00:00:42.800
+en hoe het je ERP verandert in een systeem waar AI-agents direct mee kunnen communiceren.
+
+00:00:43.040 --> 00:00:46.400
+Geen aangepaste code nodig. Dus pak je koffie en laten we beginnen.
+
+00:00:46.660 --> 00:00:50.080
+Wat is een model context protocol? Hier is de simpelste definitie.
+
+00:00:50.260 --> 00:00:55.640
+MCP is een open standaard waarmee AI-applicaties op een gestructureerde manier tools en gegevensbronnen kunnen ontdekken en aanroepen.
+
+00:00:55.640 --> 00:00:57.700
+Zie het als een universele afstandsbediening.
+
+00:00:57.880 --> 00:01:02.100
+Zonder MCP heeft elk AI-agent zijn eigen aangepaste bedrading naar elk systeem nodig.
+
+00:01:02.280 --> 00:01:05.900
+Eén kabel voor je CRM, een andere voor je ERP, nog een voor je data warehouse.
+
+00:01:06.140 --> 00:01:08.900
+Elke keer dat je een systeem toevoegt, leg je weer een nieuwe kabel aan.
+
+00:01:09.080 --> 00:01:11.620
+Met MCP plug je één keer in en krijg je toegang tot alles.
+
+00:01:11.820 --> 00:01:14.260
+Eén verbinding, één protocol, één manier van werken.
+
+00:01:14.460 --> 00:01:18.220
+Voordat MCP bestond, was het koppelen van een AI-assistent aan je ERP een heel project.
+
+00:01:18.440 --> 00:01:23.920
+Je moest aangepaste APIs bouwen, connectoren onderhouden, beveiligingsproblemen oplossen en alles bijwerken zodra het ERP veranderde.
+
+00:01:23.920 --> 00:01:25.700
+Het was duur, traag en kwetsbaar.
+
+00:01:26.040 --> 00:01:27.300
+MCP verandert dat allemaal.
+
+00:01:27.580 --> 00:01:32.660
+In plaats van elke keer een aangepaste brug te bouwen, krijg je een standaard interface die elke MCP-compatibele tool kan gebruiken.
+
+00:01:32.800 --> 00:01:35.040
+Het model, context, gedeelte is ook belangrijk.
+
+00:01:35.240 --> 00:01:36.980
+De AI-agent krijgt niet alleen ruwe data.
+
+00:01:37.240 --> 00:01:41.860
+Hij krijgt gedetailleerde informatie over welke tools er bestaan, wat ze doen, hoe ze te gebruiken zijn en welke data beschikbaar is.
+
+00:01:42.000 --> 00:01:47.040
+Dus wanneer een agent iets moet doen, kan hij naar de tools kijken, begrijpen welke bij de taak past en deze correct aanroepen.
+
+00:01:47.240 --> 00:01:49.980
+Zo neemt hij slimme beslissingen, omdat hij het systeem begrijpt.
+
+00:01:49.980 --> 00:01:53.260
+Dus waarom is dit specifiek voor Dynamics 365 van belang?
+
+00:01:53.560 --> 00:02:02.460
+Microsoft heeft een MCP-server gebouwd voor finance- en operations-apps en dat betekent dat honderdduizenden ERP-functies tools worden die AI-agents kunnen ontdekken en gebruiken.
+
+00:02:02.660 --> 00:02:09.440
+Van het aanmaken van een inkooporder tot het boeken van een journaalpost en het draaien van een financieel rapport, elke functie wordt ontsloten via één enkele beheerde interface.
+
+00:02:09.680 --> 00:02:10.640
+Dat is het grote idee.
+
+00:02:10.900 --> 00:02:14.040
+Maar hoe ziet die MCP-server er precies uit in Dynamics 365?
+
+00:02:14.680 --> 00:02:15.800
+Laten we het opsplitsen.
+
+00:02:15.800 --> 00:02:17.620
+De twee smaken van ERP-MCP
+
+00:02:17.620 --> 00:02:22.300
+Toen Microsoft de ERP-MCP-server voor het eerst uitbracht, hadden ze de volledige visie nog niet voor ogen.
+
+00:02:22.480 --> 00:02:24.900
+De eerste versie kwam met een vaste set van 13 tools.
+
+00:02:25.140 --> 00:02:28.960
+Je kon specifieke dingen doen, zoals goedgekeurde leveranciers zoeken of inkoopaanvraagregels vrijgeven.
+
+00:02:29.120 --> 00:02:30.640
+Het was nuttig, maar ook beperkt.
+
+00:02:30.860 --> 00:02:32.240
+Zie het als een verkoopautomaat.
+
+00:02:32.360 --> 00:02:34.040
+Je kon alleen kiezen uit wat er op voorraad was.
+
+00:02:34.260 --> 00:02:36.440
+Als je iets wilde dat niet op het menu stond, had je pech.
+
+00:02:36.560 --> 00:02:38.380
+Toen heeft Microsoft het verder ontwikkeld.
+
+00:02:38.560 --> 00:02:42.500
+De nieuwe dynamische MCP-server, nu in public preview, is totaal iets anders.
+
+00:02:42.500 --> 00:02:47.680
+In plaats van een vaste lijst met tools, laat het agents door ERP-formulieren navigeren zoals een menselijke gebruiker dat zou doen.
+
+00:02:47.840 --> 00:02:51.580
+De agent kan formulieren openen, veldwaarden instellen, op knoppen klikken en acties uitvoeren.
+
+00:02:51.720 --> 00:02:55.520
+En het werkt via dezelfde bedrijfslogica en validatieregels die gelden wanneer je het handmatig doet.
+
+00:02:55.700 --> 00:02:57.140
+Het verschil, dag en nacht.
+
+00:02:57.360 --> 00:02:59.280
+De statische server was een verkoopautomaat.
+
+00:02:59.400 --> 00:03:01.220
+De dynamische server is een complete supermarkt.
+
+00:03:01.380 --> 00:03:04.220
+Je kunt door elk gangpad bladeren en alles pakken wat je beveiligingsrechten toelaten.
+
+00:03:04.380 --> 00:03:05.700
+En dan bedoel ik ook echt alles.
+
+00:03:05.700 --> 00:03:09.620
+We hebben het over honderdduizenden ERP-functies verspreid over tienduizenden formulieren.
+
+00:03:09.840 --> 00:03:13.160
+Finance, Supply Chain, Human Resources, Project Operations.
+
+00:03:13.460 --> 00:03:17.860
+Elk formulier, elke actie, elke knop waar een gebruiker bij kan, komt beschikbaar voor de agent.
+
+00:03:18.080 --> 00:03:21.720
+Dit is het deel dat echt belangrijk is voor organisaties die hun ERP hebben aangepast.
+
+00:03:22.060 --> 00:03:25.660
+Aanpassingen en ISV-extensies worden automatisch zichtbaar voor de agent.
+
+00:03:25.860 --> 00:03:29.940
+Je hoeft geen speciale code te schrijven om je aangepaste velden of processen bloot te stellen.
+
+00:03:30.120 --> 00:03:33.980
+Als het in het ERP zit en een gebruiker kan ermee werken, dan maakt de MCP-server het beschikbaar.
+
+00:03:33.980 --> 00:03:37.800
+Geen extra codering nodig, maar bij MCP gaat het niet alleen om het ondernemen van acties.
+
+00:03:37.960 --> 00:03:41.360
+Het gaat ook om het begrijpen van je data, de Analytics MCP-server.
+
+00:03:41.560 --> 00:03:44.700
+Dus we hebben deze dynamische server die acties kan ondernemen in je ERP.
+
+00:03:44.800 --> 00:03:46.320
+Maar acties zonder data zijn blind.
+
+00:03:46.540 --> 00:03:49.020
+Je moet weten wat er gebeurt voordat je kunt beslissen wat je moet doen.
+
+00:03:49.260 --> 00:03:50.960
+Dat is waar het tweede onderdeel in beeld komt.
+
+00:03:51.200 --> 00:03:54.040
+Microsoft kondigde ook een aparte Analytics MCP-server aan.
+
+00:03:54.260 --> 00:03:56.900
+Deze ging in december 2025 in public preview.
+
+00:03:57.200 --> 00:04:00.900
+Deze server maakt verbinding met iets dat Business Performance Analytics of BPA heet.
+
+00:04:00.900 --> 00:04:03.900
+Zie BPA als de analytische gegevensopslag voor je ERP.
+
+00:04:03.980 --> 00:04:09.840
+Het brengt gegevens van al je ERP-instanties samen in één uniform schema met vooraf gebouwde rapporten en dimensionale modellen.
+
+00:04:10.040 --> 00:04:16.060
+In plaats van gegevens uit vijf verschillende omgevingen te moeten halen en zelf te bedenken hoe je die koppelt, doet BPA dat werk voor je.
+
+00:04:16.220 --> 00:04:20.060
+De MCP-laag erbovenop geeft AI-agents nu een manier om die gegevens op te vragen.
+
+00:04:20.220 --> 00:04:21.640
+En dit is het elegante gedeelte.
+
+00:04:21.820 --> 00:04:23.160
+Het heeft slechts twee tools nodig.
+
+00:04:23.420 --> 00:04:25.500
+Datasetschema ophalen en DAX-query uitvoeren.
+
+00:04:25.660 --> 00:04:26.300
+Dat is alles.
+
+00:04:26.300 --> 00:04:30.920
+De agent vraagt eerst om het schema om te begrijpen welke data beschikbaar is, welke tabellen er zijn en welke maatstaven zijn gedefinieerd.
+
+00:04:31.060 --> 00:04:33.960
+Vervolgens schrijft het een DAX-query om precies de gegevens op te halen die het nodig heeft.
+
+00:04:34.160 --> 00:04:34.980
+Waarom is dit belangrijk?
+
+00:04:35.260 --> 00:04:41.580
+Omdat je in plaats van complexe Power BI-dashboards te bouwen en te wachten tot iemand ze ververst, vragen in natuurlijke taal kunt stellen en direct antwoord krijgt.
+
+00:04:41.740 --> 00:04:43.700
+Wat zijn mijn top 10 leveranciers met een risico?
+
+00:04:43.880 --> 00:04:46.440
+Laat me de stijging in de kostprijs van verkopen per kwartaal zien.
+
+00:04:46.640 --> 00:04:48.720
+Welke klanten hebben de hoogste openstaande saldi?
+
+00:04:48.720 --> 00:04:52.400
+De agent achterhaalt het schema, schrijft de query en brengt het antwoord terug.
+
+00:04:52.580 --> 00:04:53.960
+Geen dashboardbouw vereist.
+
+00:04:54.180 --> 00:04:56.900
+Maar de echte magie gebeurt wanneer je beide servers combineert.
+
+00:04:57.120 --> 00:05:02.060
+Stel je een agent voor die de Analytics MCP gebruikt om een leverancier met meer dan vijf achterstallige facturen te identificeren.
+
+00:05:02.220 --> 00:05:04.160
+Het markeert die leverancier als een hoog risico.
+
+00:05:04.380 --> 00:05:08.300
+Vervolgens gebruikt het de actie MCP om die leverancier automatisch op in afwachting te zetten in je erp.
+
+00:05:08.380 --> 00:05:09.180
+Geen mens nodig.
+
+00:05:09.440 --> 00:05:11.720
+Inzichten leiden tot acties in één continu stroom.
+
+00:05:11.980 --> 00:05:13.900
+Dat is de visie waar Microsoft naartoe werkt.
+
+00:05:14.080 --> 00:05:15.600
+Dus hoe ziet dit er in de praktijk uit?
+
+00:05:15.820 --> 00:05:17.500
+Laten we naar een paar echte voorbeelden kijken.
+
+00:05:17.800 --> 00:05:19.100
+Toepassingen in de echte wereld.
+
+00:05:19.280 --> 00:05:22.140
+Laten we beginnen met een echte demo die Microsoft liet zien tijdens hun tech-tak.
+
+00:05:22.280 --> 00:05:24.100
+De agent voor leveranciers risicobeheer.
+
+00:05:24.320 --> 00:05:26.740
+Dit ding monitort openstaande facturen in je systeem.
+
+00:05:26.860 --> 00:05:32.380
+En wanneer het een leverancier met meer dan vijf achterstallige facturen ziet, zet het die leverancier automatisch op in afwachting in het erp.
+
+00:05:32.480 --> 00:05:33.880
+Niemand hoeft een vinger uit te steken.
+
+00:05:34.100 --> 00:05:41.920
+De agent controleert de gegevens, neemt de beslissing, blokkeert nieuwe inkooporders bij die leverancier en stuurt vervolgens een e-mail naar het krediteurenteam waarin wordt uitgelegd wat er is gebeurd en waarom.
+
+00:05:42.060 --> 00:05:44.600
+Dit alles verloopt zonder enige menselijke tussenkomst.
+
+00:05:44.600 --> 00:05:49.640
+De volgende is automatisering van vooruitbetalingsfacturen en deze komt van Ted Olson bij Capgemini.
+
+00:05:49.780 --> 00:05:56.680
+Een gebruiker vraagt een agent om een vooruitbetalingsvoorstel te maken voor een specifieke verkooporder en de agent navigeert zelfstandig door de erp formulieren.
+
+00:05:56.840 --> 00:06:04.040
+Het stelt het type vooruitbetaling in op percentage, zet de waarde op 50%, bevestigt de verkooporder, maakt de vooruitbetalingsfactuur aan en boekt deze.
+
+00:06:04.260 --> 00:06:09.840
+Dat zijn meerdere stappen in verschillende formulieren, allemaal afgehandeld door de agent die door de interface loopt, net zoals een persoon dat zou doen.
+
+00:06:09.840 --> 00:06:13.840
+De gebruiker beschreef alleen in begrijpelijke taal wat hij nodig had en de agent deed de rest.
+
+00:06:14.020 --> 00:06:14.840
+Nu voor de meest spectaculaire.
+
+00:06:15.700 --> 00:06:20.840
+Scott Gaines, een solution architect, bouwde een team van AI agents in VS code die een volledige erpomgeving configureren.
+
+00:06:21.640 --> 00:06:28.400
+Hij zette een projectmanager agent op die het werk orkestreert, een solution architect agent die de vereisten beoordeelt en een consultant agent die de feitelijke setup uitvoert,
+
+00:06:28.640 --> 00:06:32.240
+inclusief het aanmaken van juridische entiteiten, rekeningsschema's en fiscale calendars.
+
+00:06:32.240 --> 00:06:35.200
+En een datamigratie-agent die stamgegevens uploadt.
+
+00:06:35.280 --> 00:06:37.360
+Deze agents dragen het werk aan elkaar over.
+
+00:06:37.560 --> 00:06:43.460
+De projectmanager draagt over aan de consultant, de consultant configureert het erp en de datamigratie-agent laat de rekeningen.
+
+00:06:43.640 --> 00:06:48.480
+Een volledige erp-implementatie, gedeeltelijk geautomatiseerd door een team van samenwerkende AI agents.
+
+00:06:48.740 --> 00:06:50.580
+Dit zijn geen powerpoint-concepten.
+
+00:06:50.740 --> 00:06:55.460
+Het zijn echte demo's van echte partners, Capgemini, Scott Gaines, Avantico en Microsoft zelf.
+
+00:06:55.680 --> 00:06:57.480
+MCP is niet louter theoretisch.
+
+00:06:57.660 --> 00:06:59.720
+Het werkt vandaag al in preview-omgevingen.
+
+00:06:59.720 --> 00:07:03.940
+De kernboodschap is simpel. MCP vertaalt natuurlijke taal naar erp-acties.
+
+00:07:04.120 --> 00:07:06.780
+Je hoeft geen menupaden uit je hoofd te leren of code te schrijven.
+
+00:07:06.940 --> 00:07:09.480
+Je beschrijft wat je nodig hebt en de agent zoekt uit hoe hij het moet doen.
+
+00:07:09.640 --> 00:07:11.160
+Maar hoe zet je dit nu daadwerkelijk op?
+
+00:07:11.360 --> 00:07:12.640
+Laten we de basis doornemen.
+
+00:07:12.840 --> 00:07:13.900
+Hoe je aan de slag gaat.
+
+00:07:14.100 --> 00:07:16.060
+Dus je bent geïnteresseerd om dit uit te proberen.
+
+00:07:16.220 --> 00:07:17.680
+Wat heb je nu echt nodig om te beginnen?
+
+00:07:17.860 --> 00:07:18.720
+Eerst de vereisten.
+
+00:07:18.960 --> 00:07:24.360
+Je hebt een Dynamics 365 Finance & Operations-omgeving nodig met versie 10.0.38 of hoger.
+
+00:07:24.500 --> 00:07:29.300
+Als je de Analytics MCP gebruikt, heb je ook Business Performance Analytics versie 2.5 of later nodig.
+
+00:07:29.300 --> 00:07:32.360
+En je hebt een MCP-compatibele client nodig om met de server te praten.
+
+00:07:32.520 --> 00:07:33.220
+Dat is alles.
+
+00:07:33.480 --> 00:07:33.940
+Drie dingen.
+
+00:07:34.140 --> 00:07:36.340
+Je hebt nu twee belangrijke opties om verbinding te maken.
+
+00:07:36.540 --> 00:07:38.120
+De makkelijkste weg is Copilot Studio.
+
+00:07:38.440 --> 00:07:40.860
+Je gaat daarheen, maakt een nieuwe agent en voegt een tool toe.
+
+00:07:41.080 --> 00:07:43.660
+Zoek naar Dynamics 365 ERP MCP.
+
+00:07:43.880 --> 00:07:46.280
+Maak verbinding met je omgeving en je bent klaar om te prompten.
+
+00:07:46.420 --> 00:07:47.700
+Het is een low-code ervaring.
+
+00:07:47.940 --> 00:07:49.240
+Er is geen code vereist.
+
+00:07:49.460 --> 00:07:51.820
+Gewoon configureren en beginnen met praten tegen je ERP.
+
+00:07:51.960 --> 00:07:53.860
+De tweede optie is Visual Studio Code.
+
+00:07:54.060 --> 00:07:57.380
+Als je technischer bent of dingen direct wilt testen, geeft dit je meer controle.
+
+00:07:57.380 --> 00:08:02.660
+Je gebruikt de VS-code MCP client, plakt de ERP MCP endpoint URL, voert je inloggegevens
+
+00:08:02.660 --> 00:08:03.440
+in en je bent verbonden.
+
+00:08:03.640 --> 00:08:07.220
+Het zijn een paar stappen meer dan in Copilot Studio, maar het is nog steeds eenvoudig.
+
+00:08:07.340 --> 00:08:10.880
+En Microsoft heeft documentatie die je door de exacte URL-indeling leidt.
+
+00:08:11.000 --> 00:08:13.340
+Hier is iets belangrijks om te begrijpen over beveiliging.
+
+00:08:13.520 --> 00:08:16.860
+De agent gebruikt de beveiligingsrechten van de gebruikersidentiteit die verbonden is.
+
+00:08:17.020 --> 00:08:20.540
+Dus alle op rollen gebaseerde toegangscontroles die je in Dynamics 365 hebt ingesteld, zijn
+
+00:08:20.540 --> 00:08:21.360
+automatisch van toepassing.
+
+00:08:21.520 --> 00:08:25.080
+Als een gebruiker alleen zijn eigen juridische entiteit kan zien, kan de agent ook alleen die juridische
+
+00:08:25.080 --> 00:08:28.420
+entiteit zien. Als een gebruiker geen journalen kan boeken, kan de agent dat ook niet.
+
+00:08:28.540 --> 00:08:31.460
+Uw bestaande beveiligingsmodel wordt het beveiligingsmodel van de agent.
+
+00:08:31.680 --> 00:08:33.660
+Geen afzonderlijke configuratie nodig.
+
+00:08:33.880 --> 00:08:35.640
+Een paar tips voor het schrijven van goede prompts.
+
+00:08:35.940 --> 00:08:38.200
+Geef altijd de juridische entiteit op waarbinnen u werkt.
+
+00:08:38.380 --> 00:08:42.160
+De agent gaat nergens vanuit. Als u het niet aangeeft, kiest hij mogelijk het verkeerde bedrijf.
+
+00:08:42.320 --> 00:08:43.880
+Gebruik duidelijke natuurlijke taal.
+
+00:08:44.020 --> 00:08:45.720
+U hoeft niet in technische termen te spreken.
+
+00:08:45.920 --> 00:08:48.120
+En breek complexe taken op in kleinere stappen.
+
+00:08:48.320 --> 00:08:51.920
+Vraag in plaats van een proces van 10 stappen in 1 prompt om 1 stap tegelijk.
+
+00:08:51.920 --> 00:08:54.980
+De agent is slim, maar betrouwbaarder als u zaken gefocust houdt.
+
+00:08:55.060 --> 00:08:56.860
+Een eerlijke opmerking over beperkingen.
+
+00:08:57.040 --> 00:08:58.300
+Dit is nog in publieke preview.
+
+00:08:58.560 --> 00:09:02.280
+Er is een uitvoeringstime-out van 120 seconden, dus langlopende bewerkingen kunnen mislukken.
+
+00:09:02.440 --> 00:09:06.700
+Elke query kan ongeveer 10 megabyte aan gegevens returneren, wat voldoende is voor de meeste vragen,
+
+00:09:06.920 --> 00:09:08.120
+maar niet voor enorme datadumps.
+
+00:09:08.320 --> 00:09:10.120
+En de AI is nog niet perfect consistent.
+
+00:09:10.480 --> 00:09:14.620
+Het kan de ene dag een taak perfect afhandelen en de volgende dag moeite hebben met dezelfde taak.
+
+00:09:14.740 --> 00:09:17.120
+Test grondig voordat u het vertrouwt met iets belangrijks.
+
+00:09:17.340 --> 00:09:18.400
+Dus, wat komt er hierna?
+
+00:09:18.560 --> 00:09:20.880
+Microsoft heeft een duidelijke roadmap voor MCP.
+
+00:09:20.880 --> 00:09:22.540
+Roadmap en toekomstige richting.
+
+00:09:22.720 --> 00:09:24.320
+Dus, waar gaat Microsoft hiermee heen?
+
+00:09:24.460 --> 00:09:26.200
+Ze zetten volledig in op MCP.
+
+00:09:26.380 --> 00:09:31.080
+Alle nieuwe ARP agents worden hierop gebouwd en bestaande agents migreren voor december 2025.
+
+00:09:31.600 --> 00:09:32.780
+Dit is geen zijproject.
+
+00:09:33.000 --> 00:09:35.420
+Het is de strategische richting voor het hele platform.
+
+00:09:35.720 --> 00:09:38.800
+Specifiek voor de Analytics MCP komen er verschillende functies aan.
+
+00:09:39.000 --> 00:09:42.520
+Granulaire schema-opvraging is onderweg, zodat de agent kleinere delen van het datamodel
+
+00:09:42.520 --> 00:09:44.400
+kan opvragen in plaats van alles tegelijk te trekken.
+
+00:09:44.560 --> 00:09:47.920
+Dat is beter voor de prestaties en voor het beheren van het contextvenster van AI-modellen.
+
+00:09:47.920 --> 00:09:51.340
+Agents zullen ook rechtstreeks dashboards en meetwaarden kunnen maken en bijwerken,
+
+00:09:51.500 --> 00:09:53.120
+in plaats van alleen bestaanden te bevragen.
+
+00:09:53.340 --> 00:09:57.300
+Een native integratie in Copilot en Teams staat op de roadmap, zodat u vragen over uw
+
+00:09:57.300 --> 00:09:59.900
+ARP data kunt stellen zonder uw dagelijkse tools te verlaten.
+
+00:10:00.100 --> 00:10:01.740
+Dit is waar Microsoft het heen ziet gaan.
+
+00:10:01.980 --> 00:10:05.580
+Stel u voor dat een CFO een dashboard opent in Business Performance Analytics en op een
+
+00:10:05.580 --> 00:10:06.500
+analyseknop klikt.
+
+00:10:06.680 --> 00:10:10.580
+Een agent scant direct de data, vindt een piek in de kostprijs van verkochte goederen en
+
+00:10:10.580 --> 00:10:11.200
+markeert deze.
+
+00:10:11.200 --> 00:10:15.560
+Hij duikt in de uitgaven aan leveranciers, identificeert de leverancier die de stijging
+
+00:10:15.560 --> 00:10:19.840
+veroorzaakt, trekt externe data erbij zoals tariefwijzigingen en nieuwsberichten, bouwt
+
+00:10:19.840 --> 00:10:23.100
+een presentatie die de oorzaak verklaart en markeert actiepunten voor het team.
+
+00:10:23.320 --> 00:10:27.560
+Dit alles gebeurt in seconden, van een dashboard-klik tot een volledige analyse met aanbevelingen,
+
+00:10:27.780 --> 00:10:29.600
+zonder dat iemand één query hoeft te schrijven.
+
+00:10:29.780 --> 00:10:33.900
+MCP breidt zich ook uit buiten finance en operations naar commerce, business central en
+
+00:10:33.900 --> 00:10:34.500
+klantenservice.
+
+00:10:34.820 --> 00:10:39.740
+Dat creëert een uniforme AI-agentlaag over het gehele Dynamics 365-ecosysteem.
+
+00:10:39.740 --> 00:10:44.500
+Een agent die met je erp werkt, kan via hetzelfde protocol ook communiceren met je handelsysteem
+
+00:10:44.500 --> 00:10:45.660
+en klantenservice platform.
+
+00:10:45.860 --> 00:10:51.880
+Het partner-ecosysteem groeit snel, waarbij RSM, HSO, Fellow Mint, KPMG, Crow en anderen
+
+00:10:51.880 --> 00:10:54.780
+al agents op MCP bouwen voor specifieke branchbehoeften.
+
+00:10:54.980 --> 00:10:58.880
+Denk aan automatisering van de werkvloer voor productie, factuurbetalingsagents voor
+
+00:10:58.880 --> 00:11:03.960
+crediteurenadministratie, inkomende vrachtverwerking voor logistiek en recall agents voor productveiligheid.
+
+00:11:04.140 --> 00:11:06.740
+Ze maken allemaal gebruik van dezelfde MCP-basis.
+
+00:11:06.740 --> 00:11:10.400
+Op lange termijn wordt MCP de standaard manier om erpsystemen te integreren.
+
+00:11:10.560 --> 00:11:14.240
+Je zult de term headless erp met agentische workflows horen, wat betekent dat het erp
+
+00:11:14.240 --> 00:11:18.160
+op de achtergrond als systeem van registratie draait en AI-agents de front-end interacties
+
+00:11:18.160 --> 00:11:18.640
+afhandelen.
+
+00:11:18.800 --> 00:11:21.920
+Dus in plaats van door formulieren te klikken, beschrijf je wat je nodig hebt en laten
+
+00:11:21.920 --> 00:11:22.800
+de agents het gebeuren.
+
+00:11:23.020 --> 00:11:25.040
+Laten we afsluiten met wat dit voor jou betekent.
+
+00:11:25.240 --> 00:11:26.440
+Wat dit voor jou betekent.
+
+00:11:26.640 --> 00:11:29.760
+Als je een Dynamics 365 gebruiker bent, is dit wat er verandert.
+
+00:11:29.920 --> 00:11:33.500
+Je zult binnenkort routinetaken delegeren, zoals journaalposten boeken, inkooporders aanmaken,
+
+00:11:33.500 --> 00:11:36.860
+reconciliaties uitvoeren en leveranciers al die controleren, simpelweg door te beschrijven
+
+00:11:36.860 --> 00:11:37.440
+wat je nodig hebt.
+
+00:11:37.440 --> 00:11:41.220
+In plaats van door menus te navigeren, vertel je het aan een agent en die regel te stappen.
+
+00:11:41.340 --> 00:11:44.340
+Je werk verschuift van het uitvoeren van taken naar het toezichthouden erop.
+
+00:11:44.460 --> 00:11:47.400
+Als je een IT-professional bent, vereenvoudigt MCP je leven.
+
+00:11:47.640 --> 00:11:51.580
+Geen aangepaste APIs voor elke AI-integratie, geen aparte connectoren voor elke tool.
+
+00:11:51.760 --> 00:11:55.320
+Je bestaande beveiligingsmodel is automatisch van toepassing, dus de agent neemt de rechten
+
+00:11:55.320 --> 00:11:56.540
+over die je al hebt ingesteld.
+
+00:11:56.760 --> 00:12:01.520
+Dat betekent minder maatwerkkode, minder onderhoud, stress en een snellere levering van nieuwe functionaliteiten.
+
+00:12:01.520 --> 00:12:05.280
+Als je een partner of ISV bent, opent MCP nieuwe mogelijkheden.
+
+00:12:05.460 --> 00:12:08.500
+Je kunt herbruikbare agents bouwen die in meerdere tenants werken.
+
+00:12:08.680 --> 00:12:13.100
+Je aanpassingen zijn standaard, agent-ready, zonder dat er speciale blootstellingslagen nodig zijn.
+
+00:12:13.300 --> 00:12:16.080
+Als het werkt in de ERP-interface, werkt het via MCP.
+
+00:12:16.300 --> 00:12:17.460
+Dit is het grotere geheel.
+
+00:12:17.660 --> 00:12:20.280
+Dit is niet zomaar een nieuwe functie, het is een structurele verandering.
+
+00:12:20.460 --> 00:12:23.240
+We bewegen van systemen voor registratie naar systemen voor actie.
+
+00:12:23.400 --> 00:12:26.500
+In plaats van informatie op te slaan en te wachten tot mensen ernaar handelen,
+
+00:12:26.720 --> 00:12:30.580
+wordt het ERP een platform dat AI-agents gebruiken om bedrijfsprocessen direct uit te voeren.
+
+00:12:30.580 --> 00:12:33.580
+De data is er nog steeds, maar nu is deze verbonden met actie.
+
+00:12:33.760 --> 00:12:36.020
+Eén waarschuwing, governance blijft belangrijk.
+
+00:12:36.220 --> 00:12:38.740
+Plan voor human-in-t-loop bij risicovolle acties,
+
+00:12:39.000 --> 00:12:42.620
+zoals het boeken van grote financiële transacties of het wijzigen van leveranciersvoorwaarden.
+
+00:12:42.820 --> 00:12:45.260
+Monitor het gedrag van agents en houd audit trails bij.
+
+00:12:45.460 --> 00:12:48.280
+De technologie is krachtig, maar vereist verantwoord toezicht.
+
+00:12:48.540 --> 00:12:52.240
+Begin met taken met een laag risico, bouw vertrouwen op en breed vanaf daaruit.
+
+00:12:52.420 --> 00:12:54.960
+Dus, dat is de MCP-server in begrijpelijke taal.
+
+00:12:55.120 --> 00:12:58.280
+Het geeft AI-agents een gecontroleerde manier om met je ERP te communiceren.
+
+00:12:58.280 --> 00:13:03.080
+Een beetje zoals Dynamics 365 veranderen in een gereedschapskist die elke slimme assistent kan openen en gebruiken.
+
+00:13:03.220 --> 00:13:04.140
+Hier is je huiswerk.
+
+00:13:04.320 --> 00:13:06.780
+Als je een ondersteunde versie hebt, probeer dan de publieke preview.
+
+00:13:07.060 --> 00:13:10.640
+Maak een eenvoudige agent in Copilot Studio die je vijf belangrijkste openstaande facturen leest.
+
+00:13:10.860 --> 00:13:12.260
+Zie hoe makkelijk het eigenlijk is.
+
+00:13:12.460 --> 00:13:15.120
+Ik ben Mirko Peters en dit was een Microsoft Kennis Nugget.
+
+00:13:15.320 --> 00:13:19.000
+Abonneer je op je favoriete podcast platform voor meer uitleg in begrijpelijke taal.
+
+00:13:19.160 --> 00:13:22.480
+De volgende keer kijken we naar hoe MCP werkt met Power Platform Agents.
+
+00:13:22.480 --> 00:13:25.400
+Deel deze aflevering met iemand die AI in ERP onderzoekt.

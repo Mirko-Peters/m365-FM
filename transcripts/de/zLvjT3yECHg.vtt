@@ -1,0 +1,811 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:04.480
+Hallo zusammen und herzlich willkommen zu einer weiteren Folge von Microsoft Knowledge Nuggets hier auf M365FM.
+
+00:00:04.840 --> 00:00:06.120
+Ähm, bin ja Gastgeber, mir kopiert.
+
+00:00:06.660 --> 00:00:10.320
+Das heutige Thema ist etwas, von dem fast jeder schon gehört hat, das aber nur sehr wenige wirklich verstehen.
+
+00:00:11.160 --> 00:00:11.520
+Vektordatenbank.
+
+00:00:12.000 --> 00:00:16.320
+Sie haben diesen Begriff wahrscheinlich schon in Artikeln über KI gesehen oder in Gesprächen über Co-Pilot und Chat-GPT gehört.
+
+00:00:16.960 --> 00:00:18.140
+Doch was genau ist eine Vektordatenbank?
+
+00:00:18.580 --> 00:00:20.440
+Ist es nur eine normale Datenbank mit einem schickeren Namen?
+
+00:00:21.020 --> 00:00:22.100
+Oder ist es etwas völlig anderes?
+
+00:00:22.540 --> 00:00:27.840
+Stellen Sie sich vor, Sie suchen auf einer E-Commerce-Seite nach rote Jacke unterhalten Ergebnisse wie Kamesin-roter Mantel oder berunderfarbene Oberbekleidung.
+
+00:00:27.840 --> 00:00:29.980
+Woher weiß der Computer, dass das derselbe ist?
+
+00:00:30.540 --> 00:00:31.900
+Es geht hier nicht um das Abgleich von Schlüsselwirt.
+
+00:00:32.360 --> 00:00:34.660
+Kamesin-rot ist nicht rot und ein Mantel ist nicht gleich eine Jacke.
+
+00:00:35.260 --> 00:00:37.240
+Doch irgendwie versteht die Suchmaschine, dass sie zusammengehören.
+
+00:00:37.380 --> 00:00:38.700
+Und genau das ist Vektorsuche in Aktion.
+
+00:00:39.360 --> 00:00:42.220
+Am Ende dieser Folge werden Sie verstehen, was Vektordatenbanken eigentlich sind,
+
+00:00:42.320 --> 00:00:46.080
+warum Sie KI-Suche und Co-Pilot antreiben und wie Sie in die Microsoft Cloud passen.
+
+00:00:46.880 --> 00:00:47.980
+Wir bleiben bei einer einfachen Sprache.
+
+00:00:48.540 --> 00:00:50.840
+Keine Mathematik, kein Fachchinesisch, nur klare Bausteine.
+
+00:00:51.680 --> 00:00:52.520
+Was ist eigentlich ein Vektor?
+
+00:00:53.380 --> 00:00:54.500
+Beginnen wir mit der Kernfrage.
+
+00:00:55.120 --> 00:00:56.020
+Was genau ist ein Vektor?
+
+00:00:56.020 --> 00:01:00.500
+Wenn die meisten Menschen das Wort Vektor hören, stellen sie sich einen Pfeil aus dem Physikunterricht vor,
+
+00:01:00.580 --> 00:01:01.420
+mit Richtung und Stärke.
+
+00:01:01.980 --> 00:01:03.120
+In der Informatik ist es viel einfacher.
+
+00:01:03.580 --> 00:01:05.000
+Ein Vektor ist eigentlich nur eine Liste von Zahlen.
+
+00:01:05.660 --> 00:01:09.100
+Ein dimensionales Array, das etwas in einem Format darstellt, mit dem der Computer arbeiten kann.
+
+00:01:09.500 --> 00:01:10.900
+Hier ist eine praktische Art, sich das vorzustellen.
+
+00:01:11.240 --> 00:01:14.080
+Wenn ich Ihnen sage, Sie sollen mich im dritten Stock in Flügel B-Raum 12 treffen,
+
+00:01:14.160 --> 00:01:16.020
+dann sind das drei Zahlen, die einen bestimmten Ort beschreiben.
+
+00:01:16.600 --> 00:01:19.980
+Das ist ein dreidimensionaler Vektor, der Ihnen genau sagt, wo sich etwas in einem Gebäude befindet.
+
+00:01:20.280 --> 00:01:21.540
+Stellen Sie sich nun vor, ich füge weitere Tests.
+
+00:01:21.880 --> 00:01:24.420
+Farbe der Tür, Größe des Raumes, Preis pro Quadratmeter.
+
+00:01:24.420 --> 00:01:26.740
+Ja, jedes neue Detail wird zu einer weiteren Dimension.
+
+00:01:27.280 --> 00:01:30.620
+Je mehr Dimensionen Sie also aufbauen, desto mehr Informationen können Sie über eine Sache erfassen.
+
+00:01:31.160 --> 00:01:34.660
+Ein Auto könnte durch Geschwindigkeit, Kilometerstand, Preisgewicht und Sicherheitsbewertung beschrieben werden.
+
+00:01:35.000 --> 00:01:36.140
+Das ist ein fünffdimensionaler Vektor.
+
+00:01:36.700 --> 00:01:40.460
+Ein Produkt könnte durch hunderte Merkmale beschrieben werden, was einen hochdimensionalen Vektor ergibt.
+
+00:01:40.840 --> 00:01:41.300
+Das ist der Punkt.
+
+00:01:41.800 --> 00:01:44.180
+Vektoren erlauben es uns, Dinge in Zahlen umzuwandeln, die Computer vergleichen.
+
+00:01:44.420 --> 00:01:47.380
+Wörter, Bilder, Töne, Dokumente, alles kann zu einer Liste von Zahlen werden.
+
+00:01:47.940 --> 00:01:51.080
+Sobald alles aus Zahlen besteht, können Sie beginnen zu messen, wie ähnlich sich zwei Dinge wirklich sind.
+
+00:01:51.760 --> 00:01:55.160
+Zwei Räume auf derselben Etage mit ähnlichen Türfarben landen im Vektorraum nah beieinander.
+
+00:01:55.760 --> 00:01:58.120
+Und auch zwei Produkte mit ähnlichen Merkmalen kopieren sich zusammen.
+
+00:01:58.880 --> 00:02:01.220
+Diese einfache Idee ist es, die moderne KI-Suche ermöglicht.
+
+00:02:01.960 --> 00:02:02.980
+Von Vektoren zu Embeddings?
+
+00:02:03.420 --> 00:02:04.540
+Nicht alle Vektoren sind gleich.
+
+00:02:05.060 --> 00:02:06.760
+Es gibt eine spezielle Art, die nennt sich Embedding.
+
+00:02:06.880 --> 00:02:08.140
+Und genau darin liegt die Ware stärk.
+
+00:02:08.500 --> 00:02:09.380
+Was genau so ein Embedding?
+
+00:02:09.860 --> 00:02:11.800
+Ein Embedding ist ein Vektor, der Bedeutung repräsentiert.
+
+00:02:11.800 --> 00:02:18.080
+Ein Machine Learning Modell wie Text Embedding 3 Small von Azure OpenAI liest Text und ordnet ihn in einem hochdimensionalen Raum an.
+
+00:02:18.860 --> 00:02:22.740
+Das Modell hat aus Milliarden von Beispielen gelernt und versteht daher, wie Wörter zusammenhängen.
+
+00:02:23.380 --> 00:02:26.320
+König und Königin landen nah beieinander, da sie einen ähnlichen Kontext teilen.
+
+00:02:27.020 --> 00:02:29.520
+König und Kaffee landen weit voneinander entfernt, da dies nicht der Falle.
+
+00:02:30.000 --> 00:02:31.320
+Hier ist die Bedeutung in einfachen Worten erklärt.
+
+00:02:31.680 --> 00:02:34.700
+Wenn Sie nach rote Jacke suchen, findet das System Kamesin-roter Mantel.
+
+00:02:35.620 --> 00:02:40.980
+Das Embedding-Modell erkennt, dass Rot und Kamesin eine ähnliche Bedeutung haben und Jacke und Mantel ebenfalls nah beieinander liegen.
+
+00:02:41.440 --> 00:02:44.580
+Die Embeddings für diese beiden Ausdrücke werden zu Nachbarn im Vektorraum.
+
+00:02:45.100 --> 00:02:47.900
+Der Computer gleicht nicht mehr nur Buchstaben ab, er gleicht Bedeutungen ab.
+
+00:02:48.740 --> 00:02:50.440
+Lassen Sie mich Ihnen nun ein klassisches Beispiel geben.
+
+00:02:50.920 --> 00:02:54.500
+Nehmen Sie den Vektor für König, ziehen Sie den Vektor für Mann ab und addieren Sie den Vektor für Frau.
+
+00:02:55.580 --> 00:02:57.640
+Das Ergebnis liegt sehr nah am Vektor für Königin.
+
+00:02:58.320 --> 00:02:59.860
+König minus Mann plus Frau ergibt Königin.
+
+00:03:00.460 --> 00:03:04.060
+Das mag wie Magie klingen, aber so bettet das Modell Beziehungen in Zahlen ein.
+
+00:03:04.060 --> 00:03:11.640
+Es hat gelernt, dass König und Königin eine ähnliche Beziehung haben wie Mann und Frau und diese Beziehung ist in den Koordinaten kodiert.
+
+00:03:12.640 --> 00:03:19.440
+Embedding-Modelle nehmen also Ihre Rohdaten, egal ob Text, Bilder oder Audio, und wandeln sie in eine Liste von Zahlen, um die deren Bedeutung repräsentieren.
+
+00:03:19.960 --> 00:03:22.880
+Diese Zahlen werden zu Koordinaten in einem hochdimensionalen Raum.
+
+00:03:23.480 --> 00:03:26.660
+Wenn Sie dann suchen, wird Ihre Anfrage in dieselbe Art von Koordinaten umgewandelt.
+
+00:03:27.180 --> 00:03:29.100
+Alles, was Sie tun müssen, ist den Abstand zwischen Ihnen zu messen.
+
+00:03:29.240 --> 00:03:29.980
+Das ist die Kernidee.
+
+00:03:30.460 --> 00:03:32.000
+Warum traditionelle Datenbanken an Ihre Grenzen?
+
+00:03:32.360 --> 00:03:35.240
+Wenn Embeddings leistungsfähig sind, warum können wir nicht einfach eine normale Datenbank verwenden?
+
+00:03:35.600 --> 00:03:36.400
+Lassen Sie es jetzt beantworten.
+
+00:03:37.700 --> 00:03:40.060
+Traditionelle SQL-Datenbanken sind für exakte Beeinstimmung gebaut.
+
+00:03:40.160 --> 00:03:45.080
+Sie schreiben where color equals red und es findet jede Zeile, in der die Farbspalte buchstäblich wait enthält.
+
+00:03:45.080 --> 00:03:51.780
+Das funktioniert hervorragend für strukturierte Daten wie Kundennamen, Bestelldaten oder Preise, scheitert aber völlig, wenn man ungenaue Bedeutungen benötigt.
+
+00:03:52.580 --> 00:03:57.480
+Versuchen Sie mal, eine SQL-Abfrage zu schreiben, die Kamesin-roter Mantel findet, wenn in Ihren Daten nur Burgunder-Rote-Jacke steht.
+
+00:03:58.120 --> 00:03:59.960
+Das geht nicht, weil SQL keine Konzepte versteht?
+
+00:04:00.920 --> 00:04:03.380
+Traditionelle Datenbanken speichern Daten in Zeilen und Spalten.
+
+00:04:04.100 --> 00:04:07.060
+Sie sind für Joints, Aggregation und exakte Suchabfragen optimiert.
+
+00:04:07.640 --> 00:04:10.160
+Sie wissen nicht, dass Auto und Fahrzeug dasselbe sind.
+
+00:04:10.680 --> 00:04:13.080
+Sie wissen nicht, dass aufgeregt und begeistert ähnliche Emotionen sind.
+
+00:04:13.400 --> 00:04:14.880
+Sie gleichen lediglich Zeichenfolgen.
+
+00:04:15.280 --> 00:04:23.320
+Und wenn Ihre Daten unstrukturiert sind, wie PDFs, Bilder, Audioaufnahmen oder lange Dokumente, können traditionelle Datenbanken diese zwar als Blob speichern, aber Ihren Inhalt nicht wirklich durchsuchen.
+
+00:04:23.800 --> 00:04:26.820
+Sie bräuchten eine Volltextsuche, die jedoch weiterhin auf Schlüsselwortabgleichen basiert.
+
+00:04:27.480 --> 00:04:32.500
+Wenn der Nutzer Budgetbericht eingibt, das Dokument aber Finanzbericht heißt, findet die Schlüsselwortsuche es gar nicht.
+
+00:04:33.460 --> 00:04:34.120
+Stellen Sie sich so vor.
+
+00:04:34.360 --> 00:04:35.940
+Eine herkömmliche Datenbank ist wie ein Aktenschrank.
+
+00:04:36.360 --> 00:04:38.700
+Sie müssen den genauen Dateinamen kennen, um zu finden, was Sie suchen.
+
+00:04:39.340 --> 00:04:42.000
+Eine Vektordatenbank ist wie ein Bibliothekar, der versteht, was Sie meinen.
+
+00:04:42.000 --> 00:04:45.160
+Sie können sagen, ich brauche das Dokument über die Ausgaben des letzten Quartals.
+
+00:04:45.760 --> 00:04:50.420
+Und der Bibliothekar weiß genau, welchen Ordner er hervorholen muss, selbst wenn der Ordner Finanzbericht Q3Y heißt.
+
+00:04:51.240 --> 00:04:53.480
+Der Bibliothekar versteht die Absicht, nicht nur die Beschriftungen.
+
+00:04:53.480 --> 00:04:55.380
+Deshalb gibt es Vektordatenbanken.
+
+00:04:55.920 --> 00:05:00.940
+Sie speichern Embeddings, also Vektoren, die Bedeutung erfassen und indexieren diese so, dass Ähnlichkeitssuchen schnell ablaufen.
+
+00:05:01.420 --> 00:05:02.980
+Sie ersetzen keine herkömmlichen Datenbanken.
+
+00:05:03.400 --> 00:05:06.700
+Sie fügen eine Ebene des Verständnisses hinzu und diese Ebene verändert alles.
+
+00:05:07.240 --> 00:05:11.780
+Sie fügen eine Ebene des Verständnisses hinzu und diese Ebene verändert alles, wie Vektordatenbanken funktionieren.
+
+00:05:12.240 --> 00:05:13.900
+Wie läuft das Ganze also hinter den Kulissen ab?
+
+00:05:14.460 --> 00:05:16.620
+Gehen wir die zwei Hauptphasen durch, Aufnahme und Abfrage.
+
+00:05:16.620 --> 00:05:18.500
+Die Aufnahme ist die Einrichtungsphase.
+
+00:05:19.120 --> 00:05:23.820
+Sie nehmen Ihre Rohdatenproduktbeschreibungen, Support-Tickets, interne Dokumente, was auch immer,
+
+00:05:24.340 --> 00:05:26.720
+und jagen jedes Stück durch ein sogenanntes Embedding-Modell.
+
+00:05:27.600 --> 00:05:31.860
+Dieses Modell wandelt den Text in einen Vektor um, was im Grunde eine Liste von Zahlen ist, die den Sinn erfasst.
+
+00:05:32.400 --> 00:05:39.120
+Dann speichern Sie diesen Vektor zusammen mit Metadaten, dem Originaltext, einem Zeitstempel oder vielleicht einer Kategorie oder Quell-URL in der Datenbank.
+
+00:05:39.620 --> 00:05:40.480
+Jetzt kommt der raffinierte Teil.
+
+00:05:40.700 --> 00:05:44.480
+Bei einer Million Dokumenten würde es ewig dauern, jeden einzelnen Vektor nacheinander zu prüfen.
+
+00:05:44.480 --> 00:05:46.980
+Deshalb nutzen Datenbanken ein Verfahren namens Indexierung.
+
+00:05:47.440 --> 00:05:51.720
+Stellen Sie sich Indexierung wie das Erstellen einer Karte des Vektorraums vor, statt an jede einzelne Tür zu klopfen.
+
+00:05:52.280 --> 00:05:54.260
+Zwei gängige Methoden sind IVF und HNSW.
+
+00:05:54.720 --> 00:05:56.020
+IVF steht für Inverted File Index.
+
+00:05:56.460 --> 00:05:58.640
+Es funktioniert, indem ähnliche Vektoren in Clustern gruppiert werden.
+
+00:05:59.140 --> 00:06:03.080
+Wenn Sie suchen, durchsuchen Sie nicht alle Millionen Vektoren, sondern prüfen nur die vielversprechendsten Cluster.
+
+00:06:03.460 --> 00:06:04.800
+Das ist wie die Suche in einer Bibliothek.
+
+00:06:05.440 --> 00:06:07.700
+Sie gehen direkt zum richtigen Bereich, statt jedes Regal abzusuchen.
+
+00:06:08.280 --> 00:06:10.580
+HNSW steht für Hierarchical Navigable Small World.
+
+00:06:11.080 --> 00:06:12.160
+Die Idee ist ziemlich elegant.
+
+00:06:12.420 --> 00:06:14.460
+Es erstellt eine mehrschichtige Karte Ihrer Vektoren.
+
+00:06:15.120 --> 00:06:18.840
+Die oberste Ebene enthält einige repräsentative Vektoren, die eine grobe Vorstellung davon geben, wo sich Dinge befinden.
+
+00:06:19.400 --> 00:06:20.840
+Jede darunterliegende Ebene wird detaillierter.
+
+00:06:21.260 --> 00:06:26.160
+Bei der Suche beginnen Sie oben, finden die allgemeine Umgebung und arbeiten sich dann Ebene für Ebene vor, bis Sie den exakten Treffer landen.
+
+00:06:26.320 --> 00:06:27.360
+Bis Sie den exakten Treffer landen.
+
+00:06:27.480 --> 00:06:31.100
+Das ist, als würden Sie erst eine Stadtkarte, dann eine Umgebungskarte und schließlich einen Straßenplan nutzen.
+
+00:06:31.500 --> 00:06:32.280
+Jeder Schritt bringt Sie näher.
+
+00:06:32.780 --> 00:06:35.760
+Das Ergebnis ist, dass Sie Millionen von Vektoren in Millisekunden durchsuchen können.
+
+00:06:36.080 --> 00:06:37.740
+Das ermöglicht KI-Funktionen in Echtzeit.
+
+00:06:37.740 --> 00:06:45.800
+Wenn Sie eine Frage in einen Co-Piloten eingeben und in Sekunden eine Antwort erhalten, hat irgendwo eine Vektordatenbank gerade eine Ähnlichkeitssuche über Tausende oder Millionen Dokumente ausgeführt.
+
+00:06:46.100 --> 00:06:48.080
+Die Abfragephase funktioniert in umgekehrter Richtung genauso.
+
+00:06:48.460 --> 00:06:49.260
+Sie geben Ihre Frage ein.
+
+00:06:49.500 --> 00:06:52.540
+Diese Frage wird mit demselben Embedding-Modell in einen Vektor umgewandelt.
+
+00:06:52.540 --> 00:06:56.380
+Dann findet die Datenbank mithilfe des Index die nächsten Nachbarn zu ihrem Abfragevektor.
+
+00:06:56.960 --> 00:06:59.320
+Sie liefert die ähnlichsten Ergebnisse, sortiert nach Distanz.
+
+00:06:59.980 --> 00:07:02.320
+Je näher die Vektoren beieinander liegen, desto relevanter das Ergebnis.
+
+00:07:03.340 --> 00:07:05.280
+Das Microsoft-Ökosystem, in dem Vektoren leben.
+
+00:07:05.920 --> 00:07:07.540
+Wo ist das alles also in der Microsoft-Welt zu finden?
+
+00:07:08.100 --> 00:07:09.060
+Die kurze Antwort lautet überall.
+
+00:07:09.440 --> 00:07:14.920
+Microsoft integriert Vektorfähigkeiten in die Datenplattform, die Sie bereits nutzen, anstatt sie zu einer separaten Spezialdatenbank zu drängen.
+
+00:07:15.740 --> 00:07:16.580
+Gehen wir die wichtigsten durch.
+
+00:07:17.160 --> 00:07:20.880
+Azure AI Search ist der gängigste Vektorspeicher für Enterprise ARG AG.
+
+00:07:20.880 --> 00:07:23.320
+Das steht für Retrieval Augmented Generation.
+
+00:07:23.860 --> 00:07:24.980
+Es unterstützt Hybride-Suche.
+
+00:07:25.220 --> 00:07:29.040
+Das heißt, es kombiniert klassisches Keyword-Matching mit Vektorähnlichkeit mit Vektorähnlichkeit.
+
+00:07:29.360 --> 00:07:30.000
+Warum ist das wichtig?
+
+00:07:30.420 --> 00:07:35.680
+Weil manche Suche mit Keywords exakten Produkten, Codes, Namen oder Daten am besten funktionieren, während andere semantisches Verständnis erfordern.
+
+00:07:36.260 --> 00:07:37.240
+Hybride-Suche bietet beides.
+
+00:07:37.920 --> 00:07:42.160
+Azure AI Search bietet zudem integrierte Vektorisierung, sodass Sie eine Pipeline erstellen können,
+
+00:07:42.220 --> 00:07:46.880
+die Dokumente automatisch in Stücke unterteilt, Embeddings generiert und diese indexiert, ohne eigenen Code zu schreiben.
+
+00:07:47.560 --> 00:07:50.300
+Cosmos DB verfügt jetzt über eine native Vektorsuche mit Diskan-Indexierung.
+
+00:07:50.800 --> 00:07:56.960
+Disk-ANN steht für diskbasierten, ungefähren nächsten Nachbarn und ist für Latenzen unter 20 Millisekunden selbst bei massiver Skalierung ausgelegt.
+
+00:07:57.300 --> 00:08:00.360
+Das ist großartig für operative Daten, die bereits in Cosmos DB liegen.
+
+00:08:01.140 --> 00:08:03.760
+Gehren Sie sich vor, Sie bauen eine E-Commerce-App mit Cosmos DB als Backend.
+
+00:08:04.400 --> 00:08:08.760
+Sie können jetzt direkt Vektorsuche zu Ihrem Produktkatalog hinzufügen, ohne Daten in einen separaten Dienst zu verschieben.
+
+00:08:09.300 --> 00:08:15.380
+Ein Kunde sucht nach leichten Sommerschuhen und Ihre App findet Produkte mit ähnlichen Beschreibungen direkt in Ihrer bestehenden Datenbank.
+
+00:08:15.380 --> 00:08:20.120
+Azure SQL Server 2025 und Azure SQL Database sind ebenfalls mit dabei.
+
+00:08:20.680 --> 00:08:23.700
+Sie enthalten jetzt einen nativen Vektordatentyp und Funktionen wie die Vektorsuche.
+
+00:08:24.180 --> 00:08:27.000
+Das bedeutet, Sie können Embeddings direkt neben Ihren relationalen Daten speichern.
+
+00:08:27.000 --> 00:08:34.840
+Kundendatensätze mit Vektordarstellung Ihrer Präferenzen, Inventar, Gegenstände mit Vektorbeschreibungen, Support-Tickets mit Vektor-Embeddings Ihres Inhalts.
+
+00:08:35.640 --> 00:08:37.360
+Sie benötigen keine separate Vektordatenbank.
+
+00:08:37.720 --> 00:08:39.320
+Ihre vorhandenen SQL-Kennnisse sind weiternahmend.
+
+00:08:39.660 --> 00:08:43.020
+Fügen Sie einfach eine Vektorspalte hinzu, erstellen Sie einen Index und beginnen Sie die Suche nach Ähnlichkeit.
+
+00:08:43.720 --> 00:08:45.160
+So nutzt Co-Pilot dies im Hintergrund.
+
+00:08:45.980 --> 00:08:49.060
+Wenn Sie fragen, zeigt mir den Q3-Verkaufsbericht vom letzten Jahr.
+
+00:08:49.440 --> 00:08:52.320
+Sucht Co-Pilot nicht nach dem exakten Begriff Q3-Verkaufsbericht.
+
+00:08:52.320 --> 00:08:59.240
+Es wandelt Ihre Frage in einen Vektor um, durchsucht indexierte Dokumente, E-Mails, SharePoint-Dateien, OneDrive-Dokumente sowie Teams-Chats
+
+00:08:59.240 --> 00:09:02.180
+und findet das Dokument, dessen Embedding Ihrer Anfrage am nächsten kommt.
+
+00:09:03.440 --> 00:09:08.960
+Es könnte eine Datei namens Finanzbericht Q3 2024 finden, weil die Bedeutung übereinstimmt, auch wenn die genauen Wörter nicht passen.
+
+00:09:09.480 --> 00:09:10.600
+Das ist Vektorsuche in der Praxis.
+
+00:09:10.960 --> 00:09:12.640
+Die zentrale Erkenntnis hier ist Microsoft-Strategie.
+
+00:09:13.000 --> 00:09:18.140
+Anstatt zu sagen, kaufen Sie eine spezielle Vektordatenbank, fügen Sie die Vektorfähigkeiten in Tools hinzu, die Sie bereits nutzen.
+
+00:09:18.800 --> 00:09:22.020
+Azure AI Search, Cosmos DB, SQL Server, Sie alle beherrschen jetzt Vektoren.
+
+00:09:22.820 --> 00:09:24.000
+Sie müssen kein neues System erlernen.
+
+00:09:24.420 --> 00:09:27.360
+Sie müssen nur das Konzept verstehen, die schwere Arbeit übernimmt Microsoft.
+
+00:09:28.560 --> 00:09:30.040
+Reale Anwendungsfälle in der KI.
+
+00:09:30.760 --> 00:09:33.340
+Wo sieht man Vektordatenbanken heute also tatsächlich im Einsatz?
+
+00:09:33.920 --> 00:09:35.140
+Hier ist, wie sich das in der Welt auswirkt.
+
+00:09:35.720 --> 00:09:36.660
+R.G. ist der wichtigste Punkt.
+
+00:09:36.660 --> 00:09:40.600
+Das steht für Retrieval Augmented Generation und so funktioniert die meiste Unternehmens-KI heute.
+
+00:09:41.320 --> 00:09:44.660
+Wenn Sie einem Chatbot eine Frage stellen, rät er nicht basierend auf seinen Trainingsdaten.
+
+00:09:45.040 --> 00:09:51.340
+Stattdessen durchsucht er eine Vektordatenbank nach relevanten Dokumenten, greift sich die passendsten Ergebnisse und übergibt sie dem Sprachmodell als Kontext.
+
+00:09:51.340 --> 00:09:54.620
+Das Modell erstellt dann eine Antwort aus diesen tatsächlichen Dokumenten.
+
+00:09:54.980 --> 00:09:58.140
+Das bedeutet präzise Antworten zu den Richtlinien, Produkten oder Daten Ihres Unternehmens.
+
+00:09:58.620 --> 00:10:01.940
+Ohne Vektordatenbanken würde die KI basierend auf allgemeinem Internetwissen raten.
+
+00:10:02.460 --> 00:10:04.500
+Mit ihnen greift sie direkt auf ihre echten Dateien zu.
+
+00:10:05.060 --> 00:10:06.760
+Empfehlungsengines sind ein weiterer riesiger Anwendungsfall.
+
+00:10:07.180 --> 00:10:09.420
+Netflix, Amazon, YouTube, sie alle funktionieren auf die gleiche Weise.
+
+00:10:09.960 --> 00:10:14.160
+Sie wandeln Nutzer in Vektoren um, basierend auf ihrem Verhalten, was sie schauen, kaufen oder anklicken.
+
+00:10:14.160 --> 00:10:18.100
+Und sie wandeln Artikel in Vektoren um, basierend auf Beschreibung, Bewertung und Merkmal.
+
+00:10:18.460 --> 00:10:19.820
+Dann suchen sie einfach nach den nächsten Nachbarn.
+
+00:10:20.260 --> 00:10:22.660
+Legt ihr Vektor nahe an einen Filmvektor, wird ihnen dieser Film empfohlen.
+
+00:10:23.200 --> 00:10:28.160
+Das ist Ähnlichkeitssuche in riesigem Maßstab, die hunderte Male pro Sekunde für jeden einzelnen Nutzer abläuft.
+
+00:10:28.800 --> 00:10:30.500
+Remantische Suche ist der dritte große Anwendungsfall.
+
+00:10:31.020 --> 00:10:32.940
+Hierbei wird nach Bedeutung gesucht, nicht nach Schlüsselwürde.
+
+00:10:33.740 --> 00:10:36.900
+Ein Support-Mitarbeiter tippt, Kunde kann sich nach Passwort-Reset nicht einloggen.
+
+00:10:37.500 --> 00:10:41.440
+Und findet einen Artikel mit dem Titel Fehlerbehebung bei Authentifizierungsproblemen nach Aktualisierung der Anmeldet an.
+
+00:10:41.440 --> 00:10:43.680
+Die Wörter stimmen nicht überein, aber die Bedeutung schon.
+
+00:10:44.060 --> 00:10:45.260
+Genau das ermöglicht Vektorsuch.
+
+00:10:45.580 --> 00:10:49.120
+Für ein Team, das täglich hunderte von Tickets bearbeitet, verkürzt dies die Lösungszeit dramatisch.
+
+00:10:49.700 --> 00:10:51.000
+Dann gibt es noch die Anomalieerkennung.
+
+00:10:51.320 --> 00:10:52.580
+Weniger offensichtlich, aber Leistungsstatt.
+
+00:10:52.920 --> 00:10:58.320
+Sie betten normales Verhalten, typische Transaktionsmuster, übliche Systemmetriken und Standardnutzeraktionen ein.
+
+00:10:58.760 --> 00:11:01.960
+Speichern Sie diese Vektoren und markieren Sie dann alles, was weit außerhalb des Clusters liegt.
+
+00:11:02.300 --> 00:11:04.480
+Eine Transaktion, die ganz anders als gewöhnlich aussieht, ist Betrug.
+
+00:11:04.780 --> 00:11:07.780
+Eine Servermetrik weit außerhalb des üblichen Bereichs, da bahnt sich ein Vorfall an.
+
+00:11:08.440 --> 00:11:10.660
+Vektordatenbanken machen die schnell genug, um es in Echtzeit auszuführen.
+
+00:11:10.660 --> 00:11:12.960
+In der Welt von Microsoft taucht dies überall auf.
+
+00:11:13.560 --> 00:11:16.700
+PowerApps nutzt die Vektorsuche für KI-Vorschläge bei der Erstellung von Formularen.
+
+00:11:17.300 --> 00:11:20.660
+Dynamics 365 verwendet sie für eine intelligente Suche in Kundendatensätzen.
+
+00:11:21.280 --> 00:11:24.240
+Teams Besprechungsprotokolle werden in Vektoren umgewandelt, damit sie suchen können,
+
+00:11:24.300 --> 00:11:27.460
+was haben wir zum Budget beschlossen und den genauen Moment in einer Aufnahme finden.
+
+00:11:28.200 --> 00:11:31.780
+Co-Pilot für Microsoft 365 ist im Grunde ein riesiges AAG-System,
+
+00:11:31.920 --> 00:11:35.300
+das auf ihren persönlichen und Unternehmensdaten läuft und durch Vektorsuche betrieben wird.
+
+00:11:35.900 --> 00:11:37.040
+Und durch Vektorsuche betrieben wird.
+
+00:11:37.380 --> 00:11:38.280
+Alles synchron halten.
+
+00:11:38.700 --> 00:11:39.360
+Vektor-ETL.
+
+00:11:39.360 --> 00:11:40.980
+Nun zur praktischen Herausforderung.
+
+00:11:41.480 --> 00:11:45.700
+Daten ändern sich, Dokumente werden aktualisiert, neue Produkte hinzugefügt, alte Richtlinien archiviert.
+
+00:11:46.240 --> 00:11:48.840
+Jedes Mal, wenn sich Ihre Quelldaten ändern, müssen sich auch Ihre Vektoren ändern.
+
+00:11:49.200 --> 00:11:50.360
+Hier kommt Vektor-ETL ins Spiel.
+
+00:11:50.840 --> 00:11:52.840
+Detail für Extract, Transform, Load, Extrahieren, Transformieren, Land.
+
+00:11:53.020 --> 00:11:55.000
+Für Vektor-Datenbanken sieht der Prozess so aus.
+
+00:11:55.620 --> 00:11:58.240
+Zuerst extrahieren Sie neue oder geänderte Dokumente aus Ihrer Quelle.
+
+00:11:58.640 --> 00:12:01.820
+Etwa in einem Blob-Storage-Container, einer SharePoint-Bibliothek oder einer SQL-Datenbank.
+
+00:12:01.820 --> 00:12:07.440
+Dann transformieren Sie diese, indem Sie den Text in handliche Stücke zerlegen und jedes Stück durch Ihr Embedding-Modell laufen lassen.
+
+00:12:08.160 --> 00:12:15.420
+Schließlich laden Sie die resultierenden Vektoren zusammen mit Metadaten, wie der ursprünglichen Quell-URL, einem Zeitstempel und der verwendeten Modellversion in Ihren Vektorspeicher.
+
+00:12:15.420 --> 00:12:17.900
+Die bewährte Methode hierbei, inkrementelle Verarbeitung.
+
+00:12:18.280 --> 00:12:20.920
+Verarbeiten Sie nicht Ihren gesamten Korpus neu, wenn sich etwas ändert.
+
+00:12:21.360 --> 00:12:23.320
+Verarbeiten Sie nur die Dokumente, die sich tatsächlich geändert haben.
+
+00:12:23.700 --> 00:12:29.000
+Verfolgen Sie, welche Modellversion jedes Embedding generiert hat, aktualisieren Sie Ihr Modell und die alten Vektoren werden inkonsistent mit den neuen.
+
+00:12:29.560 --> 00:12:30.460
+Und achten Sie auf Ihre Kosten.
+
+00:12:30.840 --> 00:12:34.560
+Embedding-APIs berechnen Gebühren pro Token, daher summiert sich die Verarbeitung von Dokumenten schnell.
+
+00:12:35.040 --> 00:12:36.860
+In Azure ist ein typischer Arbeitsablauf unkompliziert.
+
+00:12:37.340 --> 00:12:38.760
+Legen Sie Ihre Dokumente in Block Storage ab.
+
+00:12:38.760 --> 00:12:45.180
+Richten Sie dann einen Azure AI Search Indexer mit einem integrierten Skillset ein, das das Chunking und Embedding automatisch übernimmt.
+
+00:12:45.880 --> 00:12:51.140
+Microsoft stellt den Tag Split Skill für das Chunking und den Azure Open AI Embedding Modell Skill für die Vektorgenerierung bereit.
+
+00:12:51.940 --> 00:12:56.540
+Der Indexer läuft nach Zeitplan, erfasst neue Dateien, verarbeitet sie und fügt die Vektoren per Upset in den Index ein.
+
+00:12:57.040 --> 00:12:58.480
+Kein benutzerdefinierter Pipeline-Code erforderlich.
+
+00:12:58.920 --> 00:13:00.820
+Hier ist ein häufiger Fehler das Ignorieren von Metadaten.
+
+00:13:01.020 --> 00:13:05.800
+Jeder Vektor benötigt seine Quellenreferenz, den Namen und die Version des Embedding-Modells sowie einen Zeitstempel der Erstellung.
+
+00:13:05.800 --> 00:13:12.060
+Ohne diese können Sie nicht nachverfolgen, woher ein Ergebnis stammt, können bei Modelländerungen nicht neu einbetten und nicht neu einbetten und werden bei Compliance Audits Schwierigkeiten nach.
+
+00:13:12.160 --> 00:13:15.160
+Behandeln Sie Ihre Vektoren wie jede andere Geschäftsdaten und verfolgen Sie deren Herkunft.
+
+00:13:16.140 --> 00:13:16.740
+Ihre nächsten Schritte.
+
+00:13:17.320 --> 00:13:18.720
+Also bereit, es selbst einmal auszuprobieren?
+
+00:13:19.560 --> 00:13:20.140
+Fangen Sie einfach an.
+
+00:13:20.520 --> 00:13:23.040
+Öffnen Sie das Azure Portal und erstellen Sie eine Azure AI Search Ressource.
+
+00:13:23.460 --> 00:13:25.400
+Aktivieren Sie dann die Vektorsuche für einen bestehenden Index.
+
+00:13:25.720 --> 00:13:29.160
+Laden Sie einige Dokumente hoch, wählen Sie ein Embedding-Modell und führen Sie eine Ähnlichkeitsanfrage durch.
+
+00:13:29.480 --> 00:13:30.660
+Sie werden sehen, dass es in unter einer Stunde ist.
+
+00:13:31.040 --> 00:13:32.900
+Entwickler können das Python SDK nutzen.
+
+00:13:32.900 --> 00:13:40.140
+Einige Dokumente mittels Azure OpenAI einbetten, diese in der Vektorsuche von Cosmos DB speichern und eine Abfrage für die beste Übereinstimmung schreiben.
+
+00:13:40.660 --> 00:13:43.680
+Microsoft bietet klare Codebeispiele und Dokumentationen, die Sie durch den Prozess finden.
+
+00:13:43.980 --> 00:13:46.480
+Sie müssen kein Data Scientist werden, um Vektordatenbanken zu verwenden.
+
+00:13:47.100 --> 00:13:50.900
+Die Tools von Microsoft übernehmen die Erstellung der Embeddings, die Indizierung und die Abfragelogik.
+
+00:13:51.440 --> 00:13:55.060
+Ihre einzige Aufgabe ist es, das Konzept zu verstehen und die Tools auf Ihre eigenen Daten auszurichten.
+
+00:13:55.480 --> 00:13:56.200
+Das ist eine Herausforderung.
+
+00:13:56.200 --> 00:13:58.240
+Denken Sie an das Suchproblem, mit dem Sie heute konfrontiert sind.
+
+00:13:58.640 --> 00:14:03.460
+Vielleicht geht es um das Finden interner Dokumente, die Suche in einem Produktkatalog oder die Beantwortung von Kundenanfragen aus einer Wissensdaten.
+
+00:14:03.960 --> 00:14:06.040
+Könnte die Vektorsuche besser abschneiden als eine Schlagwort sucht?
+
+00:14:07.300 --> 00:14:10.460
+Wählen Sie einen kleinen Datensatz, etwa 100 Dokumente und probieren Sie es aus.
+
+00:14:11.200 --> 00:14:12.480
+Sie werden den Unterschied sofort bemerken.
+
+00:14:13.820 --> 00:14:15.920
+Sie verstehen jetzt also, was Vektordatenbanken eigentlich sind?
+
+00:14:15.920 --> 00:14:21.760
+Sie sind keine mysteriöse KI-Technologie, sondern lediglich eine Methode, um die Bedeutung Ihrer Daten zu speichern und zu durchsuchen und statt nur exakten Wörtern.
+
+00:14:22.180 --> 00:14:26.900
+Sie bilden die Grundlage für die intelligente Such- und KI-Funktionen in Microsoft 365, Azure und Coupello.
+
+00:14:27.220 --> 00:14:32.840
+Jedes Mal, wenn Sie eine Frage stellen und eine relevante Antwort erhalten, hat irgendwo eine Vektordatenbank die beste Übereinstimmung für Ihre Anfrage gefunden.
+
+00:14:33.780 --> 00:14:38.140
+Ihre strukturierten Fakten, Kundennamen, Bestellmengen oder Bestandszahlen liegen weiterhin in traditionellen Datenbanken.
+
+00:14:39.360 --> 00:14:41.120
+Vektordatenbanken fügen die Ebene des Verständnisses hinzu.
+
+00:14:41.580 --> 00:14:44.560
+Sie ermöglichen es, ihre Anwendung nach Bedeutung, Absicht und Kontext zu suchen.
+
+00:14:44.560 --> 00:14:45.580
+Das ist das große Ganze.
+
+00:14:45.920 --> 00:14:48.780
+Abonnieren Sie uns für weitere verständliche Erklärungen zu Microsoft-Technologien.
+
+00:14:49.360 --> 00:14:53.500
+Beim nächsten Mal schauen wir uns an, wie RIG-Pipelines wirklich funktionieren und wie Sie selbst an einem Nachmittag erstellen können.
+
+00:14:53.880 --> 00:14:54.460
+Vielen Dank fürs Zuhören.

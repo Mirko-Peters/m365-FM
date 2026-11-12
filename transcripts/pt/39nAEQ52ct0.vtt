@@ -1,0 +1,1201 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:02.880
+Você já ouviu falar de Kubernetes e AKS em conversas sobre nuvem?
+
+00:00:03.620 --> 00:00:05.440
+Talvez você tenha concordado, mas honestamente,
+
+00:00:05.520 --> 00:00:08.340
+o que eles realmente significam para alguém que executa aplicativos na nuvem?
+
+00:00:09.060 --> 00:00:11.120
+Os containers mudaram a forma como criamos software
+
+00:00:11.120 --> 00:00:12.840
+porque são leves, portáteis e consistentes.
+
+00:00:13.340 --> 00:00:15.620
+O problema é que gerenciá-los manualmente fica complicado rapidamente.
+
+00:00:16.100 --> 00:00:17.620
+Você consegue lidar com alguns containers,
+
+00:00:17.840 --> 00:00:19.420
+mas quando tem dezenas ou centenas,
+
+00:00:19.860 --> 00:00:22.080
+gasta todo o seu tempo em dimensionamento, atualizações,
+
+00:00:22.140 --> 00:00:24.500
+lidando com falhas, em vez de criar seu produto real.
+
+00:00:25.160 --> 00:00:27.780
+Ao final deste episódio, você entenderá as quatro principais coisas
+
+00:00:27.780 --> 00:00:29.620
+que o Azure Kubernetes Service lida para você.
+
+00:00:29.620 --> 00:00:32.160
+O plano de controle, os nós, a rede e a segurança.
+
+00:00:33.080 --> 00:00:34.620
+Também detalharemos quanto isso realmente custa.
+
+00:00:35.120 --> 00:00:36.960
+Sem enrolação de marketing, apenas em inglês simples.
+
+00:00:37.960 --> 00:00:39.840
+O problema dos containers, por que precisamos do AKS?
+
+00:00:40.320 --> 00:00:42.260
+Os containers venceram por resolver em um modo real,
+
+00:00:42.860 --> 00:00:44.600
+um pacote que reúne o código do seu aplicativo
+
+00:00:44.600 --> 00:00:46.260
+e bibliotecas de tempo de execução e configuração.
+
+00:00:46.920 --> 00:00:48.500
+Ele roda da mesma forma no seu laptop,
+
+00:00:48.600 --> 00:00:49.780
+em um servidor de teste ou em produção.
+
+00:00:50.660 --> 00:00:52.040
+Não funciona mais na minha máquina?
+
+00:00:53.040 --> 00:00:54.800
+Executar alguns containers funciona bem.
+
+00:00:55.640 --> 00:00:58.380
+Você os inicia manualmente, verifica seus logs e os reinicia quando eles falham.
+
+00:00:58.380 --> 00:01:01.780
+Mas quando você tem dezenas ou centenas espalhados por vários servidores,
+
+00:01:01.860 --> 00:01:03.780
+você se depara com um novo conjunto de problemas.
+
+00:01:04.460 --> 00:01:06.180
+Você precisa decidir para onde cada container vai,
+
+00:01:06.300 --> 00:01:09.000
+qual servidor recebe qual container e como eles se encontram na rede.
+
+00:01:09.860 --> 00:01:11.720
+O que acontece quando um deles falha às três da manhã?
+
+00:01:12.460 --> 00:01:16.260
+Como lidar com um pico de tráfego que exige mais 50 cópias do seu aplicativo em 30 segundos?
+
+00:01:17.100 --> 00:01:19.980
+Kubernetes é uma plataforma de código aberto projetada exatamente para esse problema.
+
+00:01:20.560 --> 00:01:21.840
+Ele agenda containers em servidores,
+
+00:01:21.960 --> 00:01:23.160
+os dimensiona para cima e para baixo,
+
+00:01:23.240 --> 00:01:25.300
+verifica sua integridade e roteio o tráfego entre eles.
+
+00:01:25.300 --> 00:01:28.080
+Kubernetes é o padrão do setor para a orquestração de containers.
+
+00:01:28.700 --> 00:01:31.260
+Mas o Kubernetes resolve um problema e cria outro.
+
+00:01:32.320 --> 00:01:33.480
+Executá-lo vai ser bem complexo.
+
+00:01:34.020 --> 00:01:35.940
+Você precisa configurar e manter um plano de controle,
+
+00:01:36.100 --> 00:01:37.880
+o cérebro do cluster e gerenciar a noite de trabalho,
+
+00:01:37.980 --> 00:01:39.740
+aplicar patches de segurança, atualizar versões,
+
+00:01:39.840 --> 00:01:41.340
+fazer backup dos dados de configuração.
+
+00:01:41.900 --> 00:01:43.900
+Esse é um trabalho de tempo integral para alguém que sabe o que está fazendo.
+
+00:01:44.780 --> 00:01:46.840
+Serviços gerenciados como Azure Kubernetes Service
+
+00:01:46.840 --> 00:01:48.740
+tiram esse fardo operacional dos seus ombros.
+
+00:01:49.500 --> 00:01:51.400
+A Microsoft executa o plano de controle para você
+
+00:01:51.400 --> 00:01:52.860
+e lida com atualizações, patches e backups.
+
+00:01:52.860 --> 00:01:54.380
+Vai ser esse conselho em seus aplicativos.
+
+00:01:54.760 --> 00:01:56.240
+Então, o que exatamente o AKS faz para você?
+
+00:01:56.700 --> 00:01:58.700
+Vamos começar com a parte mais importante, o plano de controle.
+
+00:01:59.700 --> 00:02:01.100
+O que é o serviço Azure Kubernetes?
+
+00:02:01.860 --> 00:02:04.020
+O AKS é a versão gerenciada do Kubernetes da Microsoft,
+
+00:02:04.240 --> 00:02:04.720
+pura e simplesmente.
+
+00:02:05.780 --> 00:02:08.080
+Você obtém um cluster Kubernetes totalmente funcional
+
+00:02:08.080 --> 00:02:10.800
+sem precisar configurar ou manter a infraestrutura subjacente.
+
+00:02:11.300 --> 00:02:13.080
+A Microsoft executa o plano de controle para você
+
+00:02:13.080 --> 00:02:14.940
+e você se concentra em implantar e executar seus aplicativos.
+
+00:02:15.540 --> 00:02:16.920
+Pense nisso como alugar um apartamento
+
+00:02:16.920 --> 00:02:17.980
+em vez de construir uma casa.
+
+00:02:18.780 --> 00:02:19.840
+Quando você constrói uma casa,
+
+00:02:19.900 --> 00:02:22.340
+é responsável por tudo, a fundação, o encanamento, a eletricidade, o telhado.
+
+00:02:22.340 --> 00:02:24.180
+Quando você aluga, o locador cuida de tudo.
+
+00:02:24.420 --> 00:02:25.580
+Você apenas se muda e corre.
+
+00:02:25.980 --> 00:02:26.820
+O AKS é o locador.
+
+00:02:27.420 --> 00:02:28.720
+A Microsoft cuida da fundação,
+
+00:02:29.060 --> 00:02:31.600
+do plano de controle da rede, dos patches, segurança e das atualizações.
+
+00:02:32.100 --> 00:02:33.820
+Você traz os móveis, seus aplicativos em containers,
+
+00:02:33.960 --> 00:02:35.560
+configurações e pipelines de implantação.
+
+00:02:36.180 --> 00:02:38.240
+Mas o AKS não é apenas um cluster Kubernetes dependente.
+
+00:02:38.580 --> 00:02:40.480
+Ele trabalha de forma integrada ao restante da plataforma Azure.
+
+00:02:41.100 --> 00:02:43.940
+O Entrade lida com a autenticação do usuário e o controle de acesso.
+
+00:02:44.500 --> 00:02:47.520
+O Azure Monitor coleta logs e métricas do seu cluster e dos seus aplicativos.
+
+00:02:48.000 --> 00:02:50.500
+O Azure Policy permite que você aplique regras em todos os seus clusters,
+
+00:02:50.500 --> 00:02:52.700
+coisas como nenhum container sendo executado como raiz,
+
+00:02:52.860 --> 00:02:54.960
+ou todas as imagens devem vir de um registro aprovado.
+
+00:02:55.800 --> 00:02:59.560
+É isso que torna o AKS mais do que apenas Kubernetes em execução em VMs do Azure.
+
+00:03:00.500 --> 00:03:02.920
+Agora, você ainda precisa conhecer os conceitos básicos do Kubernetes,
+
+00:03:03.060 --> 00:03:04.340
+pods, implantações e serviços.
+
+00:03:05.220 --> 00:03:06.160
+Esse é o conhecimento que você traz.
+
+00:03:06.440 --> 00:03:07.440
+O AKS não substitui isso.
+
+00:03:07.940 --> 00:03:11.020
+Mas o que ele remove é a sobrecarga operacional de manter o cluster íntegro.
+
+00:03:11.680 --> 00:03:13.400
+Você não se preocupa com a queda do plano de controle.
+
+00:03:13.900 --> 00:03:15.540
+Você não atualiza mamãe as versões do Kubernetes.
+
+00:03:16.000 --> 00:03:18.480
+Você não faz backup do ATCD ao banco de dados de configuração do cluster.
+
+00:03:18.480 --> 00:03:20.120
+A Microsoft lida com tudo isso.
+
+00:03:20.440 --> 00:03:22.780
+Então, vamos abrir a cortina sobre esse cérebro, o plano de controle.
+
+00:03:23.320 --> 00:03:25.180
+O plano de controle, o cérebro que a Microsoft gerencia.
+
+00:03:25.740 --> 00:03:27.080
+O que exatamente está dentro desse plano de controle?
+
+00:03:27.520 --> 00:03:28.500
+Quatro componentes principais.
+
+00:03:29.140 --> 00:03:30.500
+Servidor de API é a porta de entrada.
+
+00:03:31.220 --> 00:03:33.820
+Cada comando, solicitação e interação com o seu cluster passa por ele.
+
+00:03:34.280 --> 00:03:36.460
+O agendador decide qual não executa cada novo pod.
+
+00:03:36.880 --> 00:03:39.200
+O gerenciador do controlador observa o estado do cluster
+
+00:03:39.200 --> 00:03:41.300
+e garante que a realidade corresponda ao que você solicitou.
+
+00:03:41.780 --> 00:03:43.640
+E o ATCD armazena todos os dados de configuração.
+
+00:03:44.020 --> 00:03:45.220
+Pense nele como a memória do seu cluster.
+
+00:03:45.220 --> 00:03:48.080
+Se o ATCD for corrompido ou perdido, você perdeu o cluster.
+
+00:03:48.840 --> 00:03:51.540
+Se você mesmo configurou o Kubernetes, você é responsável por tudo isso.
+
+00:03:51.960 --> 00:03:53.920
+Você corrige o servidor de API quando surgem vulnerabilidades.
+
+00:03:54.320 --> 00:03:55.460
+Você faz backup do ATCD igualmente.
+
+00:03:55.980 --> 00:03:58.360
+Você lida com falhas de hardware nas máquinas que executam esses componentes.
+
+00:03:58.740 --> 00:03:59.420
+Dá muito trabalho.
+
+00:03:59.900 --> 00:04:01.560
+Com o AKS, a Microsoft tira isso de você.
+
+00:04:02.060 --> 00:04:04.000
+Eles executam o plano de controle em sua própria infração.
+
+00:04:04.560 --> 00:04:05.780
+Eles o corrigem, fazem backup e monitor.
+
+00:04:06.300 --> 00:04:07.520
+Você nunca vê as máquinas subjacentes.
+
+00:04:07.900 --> 00:04:10.180
+Você apenas interage com o endpoint do servidor de API.
+
+00:04:10.400 --> 00:04:11.800
+Todo o resto acontece nos bastidores.
+
+00:04:12.540 --> 00:04:14.000
+Mas nem todos os planos de controle são iguais.
+
+00:04:14.000 --> 00:04:16.120
+O AKS oferece três níveis.
+
+00:04:16.280 --> 00:04:17.340
+Gratuito, padrão e premium.
+
+00:04:17.880 --> 00:04:21.700
+O nível gratuito oferece o plano de controle sem custo extra, sem SLA no servidor de API.
+
+00:04:22.380 --> 00:04:26.600
+É bom para ambientes de aprendizado, desenvolvimento ou teste, onde alguns minutos de inatividade não farão mal.
+
+00:04:27.100 --> 00:04:28.940
+Mas para cargas de trabalho de produção precisarão de mais.
+
+00:04:29.600 --> 00:04:32.240
+O nível padrão custa cerca de US 72 por mês por cluster.
+
+00:04:32.800 --> 00:04:37.820
+Isso lhe dá um SLA de 99,5% do servidor de API ao usar zonas de disponibilidade.
+
+00:04:37.820 --> 00:04:41.020
+Se o plano de controle cair, a Microsoft lhe dará o crédito.
+
+00:04:41.620 --> 00:04:43.400
+É escolha padrão para a maioria dos clusters de produção.
+
+00:04:43.400 --> 00:04:46.360
+O nível premium custa cerca de US 4732 por mês.
+
+00:04:46.960 --> 00:04:49.780
+Você obtém tudo no padrão, além de suporte de longo prazo para a versão descoberta.
+
+00:04:50.740 --> 00:04:56.600
+Se você estiver executando uma carga de trabalho regulamentada que precisa permanecer em uma versão específica por meses ou anos, é aí que o premium faz sentido.
+
+00:04:57.180 --> 00:04:58.120
+Mas aqui está o ponto principal.
+
+00:04:58.560 --> 00:05:00.540
+Na verdade, você não paga pelo plano de controle em si.
+
+00:05:00.940 --> 00:05:02.100
+O nível gratuito é realmente gratuito.
+
+00:05:02.680 --> 00:05:06.700
+Padrão e premium são taxas para o SLA e suporte de longo prazo, não para os recursos do plano de controle.
+
+00:05:06.700 --> 00:05:09.940
+O que você paga são os nós de trabalho, as VMs que executam seus containers.
+
+00:05:10.400 --> 00:05:12.880
+Elas são criadas separadamente nas taxas padrão de VM do Azure.
+
+00:05:13.300 --> 00:05:14.080
+Então pense desta forma.
+
+00:05:14.440 --> 00:05:15.580
+O plano de controle é o cérebro.
+
+00:05:15.980 --> 00:05:17.120
+A Microsoft gerencia para você.
+
+00:05:17.460 --> 00:05:19.920
+Colhe a camada de serviço de acordo com suas necessidades de configuração.
+
+00:05:20.240 --> 00:05:22.900
+Mas o trabalho real de executar seus aplicativos acontece nos nós de trabalho.
+
+00:05:22.900 --> 00:05:26.000
+Esses nós de trabalho são onde seus aplicativos realmente são executados.
+
+00:05:26.380 --> 00:05:27.180
+Vamos falar sobre eles.
+
+00:05:27.620 --> 00:05:28.920
+Os nós trabalhadores pelos quais você paga.
+
+00:05:29.600 --> 00:05:31.640
+Nós são máquinas virtuais do Azure e, pura e simplesmente,
+
+00:05:32.380 --> 00:05:36.960
+VMs padrão do Azure que hospedam seus pods, que são a menor unidade no Kubernetes, executando um ou mais containers.
+
+00:05:37.960 --> 00:05:38.980
+Você escolhe o tamanho e o número.
+
+00:05:39.420 --> 00:05:43.320
+Portanto, se você quiser um D2S em acelerar V3 com duas vCPUs e 8 GB de RAM, você pode fazer isso.
+
+00:05:43.780 --> 00:05:47.960
+Precisa de um E32 com memória otimizada com 32 vCPUs e 256 GB.
+
+00:05:48.380 --> 00:05:48.860
+Isso também funciona.
+
+00:05:49.740 --> 00:05:51.480
+Agora, se você não junta VMs aleatórias,
+
+00:05:51.480 --> 00:05:54.020
+o AKS as organiza em pools de nós.
+
+00:05:54.700 --> 00:05:57.920
+Um pool de nós é um grupo de VMs idênticas com o mesmo tamanho e configuração.
+
+00:05:58.520 --> 00:06:00.240
+Você pode ter vários pools de nós em um único cluster.
+
+00:06:00.640 --> 00:06:03.360
+Um pool com VMs da série D de uso geral para seu front-end da web,
+
+00:06:03.460 --> 00:06:06.020
+outro com VMs da série E otimizadas para a memória para seu banco de dados,
+
+00:06:06.120 --> 00:06:08.960
+e um terceiro com VMs habilitados para GPU para cargas de trabalho de aprendizado de máquina.
+
+00:06:09.060 --> 00:06:10.480
+Cada pool é dimensionado de forma independente.
+
+00:06:11.000 --> 00:06:12.120
+E esse dimensionamento é automático.
+
+00:06:12.640 --> 00:06:14.600
+O dimensionador automático de cluster monitora seus pontos.
+
+00:06:15.080 --> 00:06:18.220
+Quando eles precisam de mais recursos do que os nós atuais podem fornecer, ele adiciona novos nós.
+
+00:06:18.220 --> 00:06:21.400
+E quando o tráfego cai e as cargas ficam ociosas, ele nos remove.
+
+00:06:22.240 --> 00:06:25.200
+E você define o tamanho mínimo e máximo para cada pool e o AKS cuida do resto.
+
+00:06:26.000 --> 00:06:27.240
+É aqui que você economiza de verdade.
+
+00:06:27.720 --> 00:06:30.260
+Você não está pagando por capacidade ociosa fora do horário de pico.
+
+00:06:31.100 --> 00:06:32.900
+As atualizações de nós são outra coisa que o AKS cuida.
+
+00:06:33.360 --> 00:06:36.940
+Quando sai um novo patch de segurança no SEO, o AKS pode aplicá-lo aos seus nós.
+
+00:06:37.300 --> 00:06:40.460
+E quando uma nova versão do Kubernetes é lançada, o AKS pode atualizar seu cluster.
+
+00:06:41.040 --> 00:06:41.860
+Você controla a programação.
+
+00:06:42.160 --> 00:06:44.100
+Você decide quando as atualizações acontecem ao Microsoft.
+
+00:06:44.100 --> 00:06:48.820
+O trabalho real de drenar pods, atualizar nós e colocá-los novamente online é feito para você.
+
+00:06:49.740 --> 00:06:50.560
+Agora o custo.
+
+00:06:50.920 --> 00:06:53.020
+Você paga taxas de VM padrão do Azure para seus nós.
+
+00:06:53.780 --> 00:06:57.800
+Um D2 V3 no leste dos EUA custa cerca de US 70 dólares por mês e uma VM maior custa mais.
+
+00:06:58.560 --> 00:06:59.820
+Porém, há maneiras de reduzir isso significativamente.
+
+00:06:59.820 --> 00:07:06.920
+Instâncias reservadas permitem um compromisso de 1 ou 3 anos com desconto, economizando até 72% ante o modelo de pagamento conforme o outro.
+
+00:07:07.360 --> 00:07:12.000
+Se você conhece sua capacidade básica e os nós que sempre precisa executar, reservá-los faz muito sentido.
+
+00:07:12.640 --> 00:07:15.740
+VMs e pods são mais baratas, com 90% de desconto no pagamento por uso.
+
+00:07:16.160 --> 00:07:16.900
+Mas aqui está o problema.
+
+00:07:17.500 --> 00:07:22.260
+O Azure pode retomar essa capacidade a qualquer momento, dando aos seus nós 30 segundos antes da remoção.
+
+00:07:22.260 --> 00:07:30.260
+Isso funciona para trabalhos em lote, pipeline de CISD ou cargas sem estado que toleram interrupções, mas não para sua API de produção voltada ao cliente.
+
+00:07:30.980 --> 00:07:37.100
+Portanto, você paga pelos trabalhadores, escolhe o tamanho, o número e o modelo de preços, enquanto o AKS gerencia os pools, o dimensionamento e as atualizações.
+
+00:07:37.740 --> 00:07:39.420
+Seus nós e pods precisam se comunicar em C.
+
+00:07:39.960 --> 00:07:40.780
+E aí que entra a rede.
+
+00:07:42.000 --> 00:07:43.700
+Rede, como os pods se comunicam.
+
+00:07:44.240 --> 00:07:47.260
+Cada pod no seu cluster precisa de um endereço IP, mas os pods vêm e vão constantemente.
+
+00:07:48.360 --> 00:07:50.220
+Eles falham, aumentam de tamanho e são substituídos.
+
+00:07:50.220 --> 00:07:54.580
+Portanto, você precisa de um sistema que distribui IPs dinamicamente e garanta que os pods se comunicarem.
+
+00:07:55.160 --> 00:07:56.680
+É isso que a interface de rede do container faz.
+
+00:07:57.460 --> 00:08:02.760
+O Azure CNA é implementação da Microsoft e gerencia como os pods obtêm endereço e como o tráfego flui entre eles.
+
+00:08:03.240 --> 00:08:05.060
+Existem dois modelos principais de rede que você pode escolher.
+
+00:08:05.640 --> 00:08:10.460
+A rede de sobreposição fornece aos pods IPs de um intervalo de endereço separado que não faz parte da sua rede virtual.
+
+00:08:10.960 --> 00:08:12.020
+Esta é a opção mais escalável.
+
+00:08:12.520 --> 00:08:15.900
+Você pode ter até 5 mil nós e 250 mil pods em um único cluster.
+
+00:08:15.900 --> 00:08:21.900
+Como os IPs dos pods são isolados da sua venete, você pode reutilizar o mesmo espaço de endereço em vários clusters sem conflitos.
+
+00:08:22.680 --> 00:08:25.940
+A desvantagem é que os pods não podem ser acessados diretamente de fora do cluster.
+
+00:08:26.720 --> 00:08:29.300
+O tráfego que sai de um pod é convertido para o endereço IP do nome.
+
+00:08:30.320 --> 00:08:34.000
+A outra opção é a rede plana, na qual os pods obtêm IPs diretamente do seu intervalo de venete.
+
+00:08:34.520 --> 00:08:37.300
+Os sistemas externos podem acessar os pods diretamente se necessário.
+
+00:08:37.300 --> 00:08:42.180
+Mas a desvantagem é que você está consumindo o endereço IP da sua venete, que podem acabar rapidamente se você tiver muitos pods.
+
+00:08:42.860 --> 00:08:44.880
+Você precisa planejar cuidadosamente os tamanhos da sua subida.
+
+00:08:45.240 --> 00:08:47.020
+Agora, vamos falar sobre o tráfego que sai do seu cluster.
+
+00:08:47.460 --> 00:08:52.040
+Quando um pod precisa acessar algo na internet, uma API externa, um banco de dados ou um serviço de terceiros,
+
+00:08:52.140 --> 00:08:53.600
+esse tráfego precisa passar por algo.
+
+00:08:54.780 --> 00:08:59.120
+Por padrão, o AKS usa um balanceador de carga do Azure para conexões externas, atendendo bem a maioria das cargas.
+
+00:08:59.960 --> 00:09:04.740
+Mas se seus aplicativos fizerem muitas conexões de saída, você poderá se deparar com algo chamado exaustão de portas NAT.
+
+00:09:04.740 --> 00:09:08.700
+Cada ano recebe um número fixo de portas de conversão de endereço de rede de origem.
+
+00:09:09.080 --> 00:09:11.080
+E quando elas acabam, novas conexões falham.
+
+00:09:11.460 --> 00:09:15.500
+A solução é o Azure NetGate, o que lida muito melhor com altas contagens de conexão.
+
+00:09:16.300 --> 00:09:19.180
+Para expor seus aplicativos à internet, há duas abordagens principais.
+
+00:09:19.800 --> 00:09:25.060
+Para aplicativos que se comunicam por TCP ou UDP, como servidores de jogos, bancos de dados ou protocolos personalizados,
+
+00:09:25.420 --> 00:09:26.780
+usam um serviço de balanceador de carga.
+
+00:09:27.380 --> 00:09:29.980
+Ele dá ao seu app um IP público e encaminha o tráfego na camada 4.
+
+00:09:30.360 --> 00:09:34.240
+Para aplicativos da web que usam HTTP ou HTTPS, você deseja um controlador de entrada.
+
+00:09:34.740 --> 00:09:35.660
+Ele funciona na camada 7.
+
+00:09:36.060 --> 00:09:38.040
+Ele entende URLs, caminhos e nomes de host.
+
+00:09:38.820 --> 00:09:42.780
+Você pode rotear o tráfego para diferentes serviços com base no nome de domínio ou no caminho da URL
+
+00:09:42.780 --> 00:09:45.000
+e um IP público pode atender a dezenas de aplicativos.
+
+00:09:45.880 --> 00:09:49.380
+O AKS suporta opções de entradas gerenciadas, como o gateway de aplicativo para containers,
+
+00:09:49.480 --> 00:09:51.840
+ou você pode rodar o seu como NG em X e X.
+
+00:09:52.300 --> 00:09:55.740
+Um erro que as pessoas costumam cometer é criar seu cluster AKS com uma subrede muito pequena.
+
+00:09:55.740 --> 00:09:58.580
+Talvez uma subrede de 28, 16 IPs no total.
+
+00:09:59.180 --> 00:10:02.140
+Isso funciona para um pequeno cluster de teste, mas o AKS reserva IPs por não.
+
+00:10:02.660 --> 00:10:06.420
+Um cluster de 3, nós com 28, pode ser bom hoje, mas no mês que vem você adiciona um pool de nós,
+
+00:10:06.480 --> 00:10:08.180
+seu tráfego aumenta e de repente você não consegue escalar.
+
+00:10:08.760 --> 00:10:11.540
+E você não pode alterar o CDR da subrede depois que o cluster é criado.
+
+00:10:12.180 --> 00:10:15.340
+Ela, você teria que reconstruir o cluster ou criar um novo pool de nós em uma subrede diferente,
+
+00:10:15.440 --> 00:10:16.620
+migrar suas câvias de trabalho.
+
+00:10:17.880 --> 00:10:19.720
+Planeje o tamanho das subredes para crescer desde o início.
+
+00:10:19.720 --> 00:10:22.920
+Quando o app estiver rodando e é acessível, você precisará bloqueá-lo.
+
+00:10:23.820 --> 00:10:24.220
+Segurança.
+
+00:10:24.680 --> 00:10:25.080
+Entra.
+
+00:10:25.520 --> 00:10:27.260
+Então, como a segurança realmente funciona no AKS?
+
+00:10:27.540 --> 00:10:29.740
+Pense nele como um prédio com várias camadas de proteção.
+
+00:10:30.220 --> 00:10:33.080
+A primeira camada é identidade e acesso, que entra pela porta.
+
+00:10:33.640 --> 00:10:36.540
+Você conecta seu cluster ou entre a ID, que é o serviço de identidade da Microsoft.
+
+00:10:37.560 --> 00:10:39.780
+Ele costumava ser chamado de Azure Active Directory.
+
+00:10:40.600 --> 00:10:43.980
+Sua equipe acessa com as credenciais de trabalho usuais, sem precisar de contas separadas.
+
+00:10:44.440 --> 00:10:47.460
+Além disso, você adiciona o Kubernetes RBAC, que é o controle de acesso para a defunção.
+
+00:10:47.460 --> 00:10:51.140
+Ele decide quem pode ver o quê, quem pode implantar pods e quem pode excluir recursos.
+
+00:10:52.100 --> 00:10:54.720
+Um desenvolvedor pode ter acesso apenas ao seu próprio namespace,
+
+00:10:55.120 --> 00:10:58.720
+enquanto um operador tem leitura no cluster e um administrador tem controle total.
+
+00:10:59.260 --> 00:11:00.120
+Você pode mapear grupos.
+
+00:11:00.260 --> 00:11:01.500
+Entra diretamente para as funções do Kubernetes.
+
+00:11:01.940 --> 00:11:05.840
+Assim, quando alguém entra ou sai da equipe, você atualiza o grupo Enter e as permissões são automaticamente aplicadas.
+
+00:11:06.440 --> 00:11:08.820
+É a recepção que lida com o acesso para todo o prédio.
+
+00:11:09.520 --> 00:11:10.680
+A segurança da rede é a camada dor.
+
+00:11:11.140 --> 00:11:14.860
+Por padrão, um servidor de API do seu cluster AKS pode ser acessado pela internet pública,
+
+00:11:14.860 --> 00:11:18.280
+embora você possa restringi-lo em intervalos de IP específicos do endpoint bem disposto.
+
+00:11:18.900 --> 00:11:21.420
+Para cardas de trabalho e de produção, você vai criar um cluster privado.
+
+00:11:22.320 --> 00:11:25.160
+Dessa forma, o servidor de API obtém um IP interno da sua VNet,
+
+00:11:25.440 --> 00:11:28.280
+acessível somente pelo Azure Private Link, sem exposição pública alguma.
+
+00:11:29.220 --> 00:11:31.580
+Qualquer pessoa que gerencie o cluster precisa estar conectada à sua rede,
+
+00:11:31.800 --> 00:11:34.400
+seja por meio de uma VPN, ExpressRoute ou Jumpbox dentro da VNet.
+
+00:11:35.080 --> 00:11:38.500
+Em seguida, chegamos à segurança do podre, que é onde ocorre a maioria das vulnerabilidades do container.
+
+00:11:38.500 --> 00:11:40.840
+A regra número um é não executar containers como root.
+
+00:11:41.220 --> 00:11:44.980
+Se um container for executado como root, um invasor invadir e terá acesso root no host.
+
+00:11:45.500 --> 00:11:47.200
+O mesmo vale para a escalada de privilégio.
+
+00:11:47.280 --> 00:11:47.640
+Desative.
+
+00:11:48.180 --> 00:11:50.840
+Use o Azure Policy para Kubernetes para impor essas regras automaticamente.
+
+00:11:51.660 --> 00:11:54.980
+Você pode dizer que nenhum container neste namespace pode ser executado como root
+
+00:11:54.980 --> 00:11:58.120
+e a política bloqueia qualquer implantação que viole essa regra antes mesmo de chegar a um nó.
+
+00:11:58.480 --> 00:11:59.380
+Os segredos são o problema.
+
+00:12:00.080 --> 00:12:04.200
+Nunca armazene senhas-chave de API ou cadeia de conexão em seu código ou imagens de container.
+
+00:12:04.200 --> 00:12:09.260
+As pessoas fazem isso o tempo todo, codificam uma senha de banco de dados e um arquivo de configuração,
+
+00:12:09.480 --> 00:12:12.900
+criam uma imagem, a enviam para um registro e essa senha fica incorporada para sempre.
+
+00:12:13.580 --> 00:12:15.620
+Qualquer pessoa com acesso ao registro pode extraí-la.
+
+00:12:15.960 --> 00:12:17.000
+Em vez disso, o Azure Key volte.
+
+00:12:17.640 --> 00:12:21.560
+Armazene seus segredos lá e permita que seus pods os acessem por meio do driver CS e do Secret Store.
+
+00:12:21.940 --> 00:12:25.340
+O pod monta o segredo como um volume ou variável de ambiente em tempo de execução
+
+00:12:25.340 --> 00:12:27.480
+e o segredo nunca toca em sua imagem ou código-fonte.
+
+00:12:28.180 --> 00:12:29.060
+Por fim, monitoramento.
+
+00:12:29.620 --> 00:12:33.460
+Microsoft Defender for Containers verifica suas imagens em busca de vulnerabilidades
+
+00:12:33.460 --> 00:12:37.040
+e monitora seu cluster contra atividades suspeitas, tentativas de escalamento de privilégios,
+
+00:12:37.140 --> 00:12:39.840
+conexões de rede em comuns e cargas de trabalho de criptomineração.
+
+00:12:40.640 --> 00:12:43.940
+Não é uma ferramenta do tipo Configure Esqueça, mas detecta coisas que você pode deixar passar.
+
+00:12:44.620 --> 00:12:46.200
+Mesmo com tudo isso, as coisas podem dar errado.
+
+00:12:46.900 --> 00:12:48.240
+Então vamos analisar as armadilhas mais comuns.
+
+00:12:49.000 --> 00:12:50.140
+Armadilhas comuns que der errado.
+
+00:12:50.640 --> 00:12:51.580
+O que mais confunde as pessoas?
+
+00:12:52.000 --> 00:12:53.280
+Vamos analisar os suspeitos de sempre.
+
+00:12:53.620 --> 00:12:54.800
+Primeiro, os limites de cota do Azure.
+
+00:12:55.180 --> 00:12:58.960
+Sua assinatura do Azure tem limites sobre quantas VCPUs você pode usar em uma determinada região.
+
+00:12:58.960 --> 00:13:02.320
+E o mesmo vale para IPs públicos, balanceadores de carga e outros recursos.
+
+00:13:02.320 --> 00:13:05.300
+Quando você cria um cluster do AKS, ele consome parte dessa cota.
+
+00:13:05.640 --> 00:13:08.600
+Ao atingir o limite, a criação do cluster falha, o dimensionamento para.
+
+00:13:09.200 --> 00:13:12.340
+A solução é simples, solicite um aumento de cota pelo portal do Azure.
+
+00:13:13.240 --> 00:13:16.280
+Mas faça isso antes de precisar, não quando uma implantação estiver travada as duas.
+
+00:13:16.640 --> 00:13:20.280
+A próxima etapa é o dimensionamento da subrede, e isso é difícil porque não é possível consertá-lo depois.
+
+00:13:20.940 --> 00:13:25.220
+O AKS reserva endereços IP por nó, e cada nó precisa de um determinado número de IPs para pods.
+
+00:13:25.760 --> 00:13:31.100
+Se sua subrede for muito pequena, você ficará sem endereços e não poderá expandir uma subrede após a criação do cluster.
+
+00:13:31.100 --> 00:13:32.620
+No tanto, planeja o crescimento.
+
+00:13:32.960 --> 00:13:36.180
+Se você acha que precisa de 10 nós hoje, provisione IPs suficientes para 50.
+
+00:13:36.480 --> 00:13:41.060
+Uma subrede 24 fornece 251 IPs utilizáveis, o que é um bom ponto de partida para a maioria dos clusters.
+
+00:13:41.960 --> 00:13:44.960
+O erro de pull-off de imagem é provavelmente o erro de pod mais comum que você verá.
+
+00:13:45.520 --> 00:13:47.640
+Seu pod tenta extrair uma imagem de container e falha.
+
+00:13:48.420 --> 00:13:49.700
+Normalmente é um problema de autenticação.
+
+00:13:50.180 --> 00:13:51.780
+Seu cluster não consegue acessar o registro comum.
+
+00:13:52.340 --> 00:13:55.720
+Talvez você esteja usando um registro privado sem credenciais ou as credenciais expiraram.
+
+00:13:55.720 --> 00:13:57.720
+Verifique seus segredos de pull de imagem.
+
+00:13:57.820 --> 00:14:01.240
+Garanta que a conta de serviço acesse o registro e confirme se o nome da imagem está correto.
+
+00:14:01.740 --> 00:14:02.680
+Raramente é um bug do Kubernetes.
+
+00:14:03.080 --> 00:14:04.560
+Crash loop backoff é outro erro frequente.
+
+00:14:05.000 --> 00:14:08.360
+Seu pod iniciado, executado por alguns segundos, trava, reinicia e trava novamente.
+
+00:14:09.140 --> 00:14:11.060
+O instinto natural é culpar o Kubernetes, mas não faça isso.
+
+00:14:11.660 --> 00:14:13.260
+9 entre 10 vezes esse aplicativo.
+
+00:14:13.480 --> 00:14:14.900
+Uma variável de ambiente mal configurada.
+
+00:14:15.280 --> 00:14:16.120
+Uma dependência ausente.
+
+00:14:16.180 --> 00:14:18.700
+Uma string de conexão de banco de dados apontando para o servidor errado.
+
+00:14:19.220 --> 00:14:20.760
+Verifique os logs do pod com os logs do Kubernetes.
+
+00:14:20.760 --> 00:14:22.640
+A mensagem de erro geralmente está ali.
+
+00:14:23.200 --> 00:14:24.760
+Depois há o esgotamento da conexão de saída.
+
+00:14:25.300 --> 00:14:30.100
+Seus aplicativos fazem muitas conexões com serviços externos, APIs, bancos de dados e ferramentas de terceiros.
+
+00:14:30.720 --> 00:14:34.940
+Cada conexão usa uma porta snap e cada nó tem um número limitado dessas portas.
+
+00:14:35.480 --> 00:14:37.500
+Quando elas acabam, novas conexões falham silenciosamente.
+
+00:14:37.840 --> 00:14:40.520
+Seu aplicativo parece íntegro, mas não consegue acessar nada fora do cluster.
+
+00:14:41.000 --> 00:14:46.240
+A solução é mudar para o Azure NAT Gateway, que lida com altas contagens de conexão muito melhor do que o balanceador de carga padrão,
+
+00:14:46.360 --> 00:14:48.880
+ou usar tamanhos de nó maiores que obtêm mais portas snap por nó.
+
+00:14:48.880 --> 00:14:52.740
+Todas essas partes têm um preço, então vamos analisar o que você realmente pagará.
+
+00:14:53.620 --> 00:14:54.300
+Custos e preços.
+
+00:14:54.840 --> 00:14:56.040
+Então, quanto o AQS realmente custa?
+
+00:14:56.400 --> 00:14:56.940
+Vamos ser claro.
+
+00:14:57.420 --> 00:15:01.780
+A maior parte da sua conta vem das VMs do nó de trabalho, da computação, do armazenamento e da rede.
+
+00:15:02.200 --> 00:15:03.040
+Para lá que eu adino de verdade.
+
+00:15:03.420 --> 00:15:06.920
+Um nó D2 e V3 no leste do ZOA custa cerca de US$ 70 por mês.
+
+00:15:07.760 --> 00:15:10.520
+Cinco nós, US$ 350, 10 nós, US$ 700.
+
+00:15:10.820 --> 00:15:12.320
+Esses custos de VMs somam rápido.
+
+00:15:13.100 --> 00:15:14.700
+O plano de controle tem três níveis de preço.
+
+00:15:15.220 --> 00:15:18.120
+O plano gratuito oferece o plano de controle sem custo adicional, mas não é assim.
+
+00:15:18.120 --> 00:15:25.240
+O plano padrão custa cerca de US$ 72 por mês por cluster com um SLA de 99,95% no servidor de API.
+
+00:15:26.180 --> 00:15:30.640
+O plano premium custa cerca de US$ 32 mensais e adiciona suporte de longo prazo ao Kubernetes.
+
+00:15:31.540 --> 00:15:33.860
+Para a maioria das cargas de trabalho de produção, o plano padrão é ideal.
+
+00:15:34.400 --> 00:15:35.820
+Mas você pode reduzir esses custos de venda.
+
+00:15:36.420 --> 00:15:41.380
+Instâncias reservadas permitem contratos de um ou três anos, economizando até 72% de pagamento por uso.
+
+00:15:41.880 --> 00:15:46.420
+Se você conhece sua capacidade básica e os nós que sempre precisa executar, reservá-los é uma decisão fácil.
+
+00:15:46.420 --> 00:15:51.260
+Os planos de economia do Azure funcionam de forma semelhante, mas oferecem mais flexibilidade em diferentes famílias de venda.
+
+00:15:51.640 --> 00:15:54.800
+Você se compromete com um determinado gasto por hora e o Azure aplica o desconto automaticamente.
+
+00:15:55.320 --> 00:15:56.420
+A economia chega a 65%.
+
+00:15:57.060 --> 00:16:00.340
+Os VMs e spots são a opção mais barata, com até 90% de desconto, mas é que está o problema.
+
+00:16:00.800 --> 00:16:02.760
+O Azure pode recuperar essa capacidade a qualquer momento.
+
+00:16:03.240 --> 00:16:04.920
+Se os nós são removidos, seus pods são reprogramados.
+
+00:16:05.700 --> 00:16:09.200
+Isso funciona bem para tarefas em lote, executores de CECD ou cargas stateless.
+
+00:16:09.760 --> 00:16:10.940
+Não tanto para sua API de produção.
+
+00:16:10.940 --> 00:16:13.300
+A otimização de custos não envolve apenas discos.
+
+00:16:13.620 --> 00:16:14.540
+Dimensione os nós corretamente.
+
+00:16:14.920 --> 00:16:17.800
+Não provisione uma VM de 16 núcleos quando seus pods usam apenas duas.
+
+00:16:17.960 --> 00:16:21.600
+Use o dimensionador automático de cluster para não pagar por nós ociosos durante tráfego baixo.
+
+00:16:21.900 --> 00:16:24.500
+Para cargas de trabalho de CPU baixas, considere VMs da série B.
+
+00:16:24.660 --> 00:16:26.680
+Elas são expansíveis e bem mais baratas que a série D.
+
+00:16:27.440 --> 00:16:29.160
+Não esqueça do armazenamento e transferência de dados.
+
+00:16:29.580 --> 00:16:30.980
+Os volumes persistentes aumentam os custos.
+
+00:16:31.240 --> 00:16:32.720
+O disco do Azure é rápido, mas caro.
+
+00:16:33.100 --> 00:16:34.840
+Arquivos do Azure são mais baratos, porém lentos.
+
+00:16:35.160 --> 00:16:37.200
+Escolha conforme o desempenho necessário da sua carga de trabalho.
+
+00:16:37.200 --> 00:16:40.840
+A saída de dados, o tráfego que sai do Azure, custa dinheiro.
+
+00:16:41.580 --> 00:16:43.360
+Mantenha seu tráfego na mesma região quando possível.
+
+00:16:43.960 --> 00:16:45.320
+Então, quando o AKS realmente faz sentido?
+
+00:16:45.760 --> 00:16:46.920
+Vamos falar sobre orientações práticas.
+
+00:16:47.620 --> 00:16:48.540
+Quando se deve usar o AKS?
+
+00:16:48.980 --> 00:16:51.000
+O AKS destaca a arquitetura de microserviços.
+
+00:16:51.380 --> 00:16:53.940
+Ele tem vários serviços independentes que precisam ser dimensionados separadamente.
+
+00:16:54.420 --> 00:16:57.160
+O front-end pode precisar de 10 réplicas durante os horários de pico,
+
+00:16:57.240 --> 00:16:58.520
+enquanto o back-end precisa de apenas...
+
+00:16:58.520 --> 00:17:00.100
+O AKS lida com isso naturalmente.
+
+00:17:00.920 --> 00:17:03.700
+Cada serviço escala de forma independente segundo seu tráfego.
+
+00:17:04.240 --> 00:17:05.760
+Alta disponibilidade é outro argumento forte.
+
+00:17:05.760 --> 00:17:08.220
+O AKS distribui seus pods em vários nós.
+
+00:17:08.820 --> 00:17:11.200
+Se um não falhar, os pods serão reprogramados para nós íntegros.
+
+00:17:11.560 --> 00:17:12.860
+Se você usar zonas de disponibilidade,
+
+00:17:12.940 --> 00:17:15.220
+seu cluster poderá sobreviver a uma queda de data center inteira.
+
+00:17:15.900 --> 00:17:18.180
+Para apps que precisam estar ativos 24x7, isso é valioso.
+
+00:17:18.620 --> 00:17:20.840
+A integração de C e CD é onde o AKS realmente compensa.
+
+00:17:21.580 --> 00:17:23.780
+Você cria sua imagem container, a envia para um registro,
+
+00:17:23.940 --> 00:17:26.620
+e o AKS implanta a nova versão com uma atualização contínua.
+
+00:17:27.220 --> 00:17:27.740
+Lembrando atividades.
+
+00:17:27.940 --> 00:17:29.340
+Se algo der errado, se reverte.
+
+00:17:29.980 --> 00:17:32.260
+Sem SSH manual em servidores, sem copiar e colar arquivos,
+
+00:17:32.620 --> 00:17:33.520
+o pipeline lida com tudo.
+
+00:17:33.520 --> 00:17:35.660
+Mas o AKS nem sempre é a resposta certa.
+
+00:17:36.520 --> 00:17:39.360
+Se você tiver um aplicativo monolítico simples de execução em uma única VM,
+
+00:17:39.520 --> 00:17:40.700
+o AKS tem muitos benefícios.
+
+00:17:41.900 --> 00:17:44.140
+Eu estaria gerenciando Kubernetes apenas por gerenciá-lo.
+
+00:17:44.580 --> 00:17:45.980
+Às vezes, um serviço de VM e aplicativo,
+
+00:17:46.060 --> 00:17:48.160
+ou até mesmo Azure Functions, é a opção mais simples e barata.
+
+00:17:48.740 --> 00:17:50.500
+Se você está começando, use o nível gratuito.
+
+00:17:50.980 --> 00:17:52.740
+Crie um cluster, implante um aplicativo de teste,
+
+00:17:52.840 --> 00:17:53.800
+interrompa as coisas e conserte.
+
+00:17:54.240 --> 00:17:55.920
+Aprenda os conceitos sem se preocupar com custos.
+
+00:17:56.280 --> 00:17:57.940
+Quando estiver pronto para a produção, passe o padrão.
+
+00:17:58.380 --> 00:17:59.120
+Vamos reunir tudo isso.
+
+00:17:59.120 --> 00:18:00.960
+Então, aqui está o que você precisa lembrar.
+
+00:18:01.320 --> 00:18:02.800
+O AKS cuida de quatro coisas importantes.
+
+00:18:03.220 --> 00:18:05.700
+A Microsoft herencia o plano de controle, que é o cérebro do cluster.
+
+00:18:06.180 --> 00:18:08.460
+E escolhe o tamanho e o número de nós, as VMs de trabalho.
+
+00:18:08.680 --> 00:18:10.540
+E o AKS lida com os pulsos e o dimensionamento.
+
+00:18:11.020 --> 00:18:13.400
+Para a rede, os pods se comunicam entre si com o mundo externo
+
+00:18:13.400 --> 00:18:14.460
+por meio do Azure CNA.
+
+00:18:14.560 --> 00:18:16.800
+E o AKS se integra a ele para que tudo funcione.
+
+00:18:16.800 --> 00:18:19.240
+Ferramentas de segurança são integradas.
+
+00:18:19.340 --> 00:18:21.340
+Identidade, isolamento de rede, proteção de pod.
+
+00:18:22.140 --> 00:18:24.960
+Você paga apenas pela computação, nós, armazenamento e rede.
+
+00:18:25.620 --> 00:18:27.380
+O plano de controle em si é gratuito, nível gratuito.
+
+00:18:27.820 --> 00:18:31.260
+Você só precisa do padrão ou plenum se quiser o SLA ou suporte de longo prazo.
+
+00:18:31.980 --> 00:18:35.080
+Sua próxima etapa é criar um cluster AKS gratuito no portal do Azure.
+
+00:18:35.460 --> 00:18:38.720
+Implante um aplicativo de teste simples, NGNX ou um container Hello World.
+
+00:18:39.200 --> 00:18:40.540
+Veja como ele funciona, analise e conserte.
+
+00:18:40.960 --> 00:18:42.660
+Essa experiência prática supera qualquer tutorial.
+
+00:18:42.660 --> 00:18:46.840
+Se este episódio ajudou, inscreva-se para obter mais explicações simples sobre o Azure.
+
+00:18:47.200 --> 00:18:49.140
+Compartilhe com alguém que esteja começando sua jornada no NU.
+
+00:18:49.460 --> 00:18:50.360
+Só precisa agradecer a minha história.

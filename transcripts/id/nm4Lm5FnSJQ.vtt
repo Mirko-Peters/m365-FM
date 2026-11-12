@@ -1,0 +1,1744 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:02.240
+Selamat datang di episode lain Microsoft Knowledge Nuggets.
+
+00:00:02.580 --> 00:00:03.720
+Saya pembawa acara Anda, Mero Peter.
+
+00:00:04.120 --> 00:00:05.140
+Jadi beginilah skenario-nya.
+
+00:00:05.500 --> 00:00:08.300
+Anda bekerja di bisnis sentral dan membutuhkan satu perubahan kecil.
+
+00:00:08.680 --> 00:00:10.340
+Mungkin kolom tambahan pada catatan pelanggan,
+
+00:00:10.600 --> 00:00:11.780
+langkah persetujuan yang berbeda,
+
+00:00:11.900 --> 00:00:14.220
+atau aturan yang memeriksa pesanan sebelum seseorang mempostingnya.
+
+00:00:14.580 --> 00:00:18.200
+Kemudian seseorang menyebutkan ekstensi AL, tabel, halaman, dan unit kode,
+
+00:00:18.320 --> 00:00:21.420
+dan tiba-tiba permintaan kecil itu terdengar seperti bahasa yang benar-benar baru.
+
+00:00:21.980 --> 00:00:24.360
+Memang itu sebuah bahasa, tetapi tidak harus terasa misteri.
+
+00:00:24.780 --> 00:00:26.260
+Anggap bisnis sentral sebagai sebuah gedung perkantun.
+
+00:00:26.260 --> 00:00:30.300
+AL memberikan instruksi kepada pengembang untuk menambahkan ruangan, formulir,
+
+00:00:30.400 --> 00:00:32.860
+atau aturan baru tanpa harus membobol bangunan itu sendiri.
+
+00:00:33.300 --> 00:00:34.720
+Itulah informasi penting untuk hari ini.
+
+00:00:35.060 --> 00:00:37.760
+Di akhir episode ini, Anda akan mengetahui apa arti pengembangan AL,
+
+00:00:37.880 --> 00:00:41.240
+mengapa ekstensi ada, dan bagaimana pekerjaan kustom disesuaikan ke dalam bisnis sentral.
+
+00:00:42.120 --> 00:00:44.080
+Mengapa bisnis melakukan kustomisasi pada bisnis sentral?
+
+00:00:44.280 --> 00:00:48.280
+Bisnis sentral sudah menangani banyak pekerjaan harian seperti keuangan, pelanggan, pesanan penjualan,
+
+00:00:48.380 --> 00:00:51.800
+faktor stok, semua dalam satu sistem yang terhubung alih-alih tumpukan lembar kerja dan alat terpisah.
+
+00:00:52.040 --> 00:00:54.920
+Bagi banyak perusahaan, pengaturan standar tersebut mencakup sebagian besar.
+
+00:00:54.920 --> 00:00:56.260
+Namun, inilah masalahnya.
+
+00:00:56.640 --> 00:00:58.240
+Tidak ada dua perusahaan yang bekerja dengan cara yang sama.
+
+00:00:58.640 --> 00:01:01.960
+Ambil contoh distributor makanan yang membutuhkan detail batch yang tidak pernah digunakan perusahaan lain.
+
+00:01:02.340 --> 00:01:05.440
+Bisnis layanan yang memerlukan proses persetujuan khusus sebelum penagihan.
+
+00:01:06.040 --> 00:01:08.340
+Pengecer yang menginginkan tingkatan hadiah untuk diskon.
+
+00:01:08.800 --> 00:01:12.680
+Dan orang lain yang membutuhkan formulir dengan kolom kata-kata mereka sendiri dan aturan internal.
+
+00:01:13.840 --> 00:01:16.160
+Bisnis tidak akan mengubah cara mereka hanya karena satu kolom ini.
+
+00:01:16.500 --> 00:01:20.380
+Dan Anda juga tidak ingin setiap permintaan kecil berubah menjadi perubahan berisiko bagi seluruh sistem.
+
+00:01:20.860 --> 00:01:21.820
+Itu menjadi masalah yang besar.
+
+00:01:21.820 --> 00:01:26.000
+Dalam sistem yang lebih lama, pengembang membuka kode asli dan mengeditnya secara langsung.
+
+00:01:26.480 --> 00:01:28.260
+Dan itu berhasil sampai pembaruan berikutnya tiba.
+
+00:01:28.600 --> 00:01:31.300
+Kemudian perusahaan memiliki versi baru Microsoft di satu sisi.
+
+00:01:31.780 --> 00:01:33.120
+Perubahan mereka sendiri di sisi lain.
+
+00:01:33.480 --> 00:01:36.440
+Dan seseorang harus menyelaraskan semuanya sebelum pembaruan dapat dilanjutkan.
+
+00:01:37.160 --> 00:01:40.860
+Bayangkan sebuah kantor di mana setiap penyewa menjalankan kabel baru melalui dinding tanpa rencana.
+
+00:01:41.640 --> 00:01:46.060
+Itu berhasil untuk sementara waktu tetapi ketika gedung membutuhkan perbaikan tidak ada yang tahu kabel mana milik.
+
+00:01:46.060 --> 00:01:48.300
+Bisnis sentral menempuh jalur yang berbeda.
+
+00:01:48.740 --> 00:01:50.320
+Alih-alih menulis ulah aplikasi standar.
+
+00:01:50.560 --> 00:01:52.640
+Pengembang membangun add-on terpisah yang terhubung dengannya.
+
+00:01:53.260 --> 00:01:54.780
+Menjaga bagian standar tetap di tempatnya.
+
+00:01:54.880 --> 00:01:58.860
+Sementara perubahan perusahaan sendiri berada di sampingnya dan bekerja melalui titik-titik yang didukung dalam sistem.
+
+00:01:59.580 --> 00:02:02.880
+Pemisahan itu penting ketika pembaruan tiba karena Microsoft memperbarui bagian bangunannya.
+
+00:02:03.000 --> 00:02:05.060
+Sementara pekerjaan custom tetap di ruangnya sendiri.
+
+00:02:05.800 --> 00:02:07.140
+Masih ada pengujian dan perbaikan.
+
+00:02:07.480 --> 00:02:09.420
+Bagaimanapun juga ini adalah perubahan perangkat lunak.
+
+00:02:09.420 --> 00:02:13.900
+Tetapi pengembang tidak diharapkan untuk menyalin dan mengerjakan ulang seterperubahan di dalam kode asli Microsoft.
+
+00:02:14.400 --> 00:02:15.960
+Jadi apa sebenarnya yang dikustomisasi oleh sebuah bisnis?
+
+00:02:16.280 --> 00:02:17.360
+Kustomisasi menambahkan data.
+
+00:02:18.160 --> 00:02:23.520
+Sistem standar tidak menyimpan data seperti instruksi pengiriman, skor risiko internal, tingkat keanggotaan, tetapkan ke sistem luar.
+
+00:02:24.320 --> 00:02:27.260
+Dan kustomisasi menambahkan layar yang memandu staff melalui tugas dalam urutan itu.
+
+00:02:27.720 --> 00:02:31.280
+Kustomisasi juga menegakkan aturan seperti menghentikan pesanan saat dokumen yang diperlukan tidak ada.
+
+00:02:31.700 --> 00:02:33.860
+Pekerjaan custom juga membantu orang menghindari langkah manual.
+
+00:02:33.860 --> 00:02:37.680
+Bayangkan staff menyalin data pelanggan dari bisnis sentral ke alat lain setiap Jumat,
+
+00:02:37.800 --> 00:02:41.000
+memeriksa kondisi secara manual, lalu mengirim laporan ke manajer.
+
+00:02:41.560 --> 00:02:44.640
+Perubahan yang dirancang dengan baik menyimpan informasi tersebut di bisnis sentral,
+
+00:02:44.740 --> 00:02:48.500
+menerapkan aturan secara konsisten, dan memberi staff tombol atau halaman yang sesuai dengan pekerjaan harian.
+
+00:02:48.800 --> 00:02:49.620
+Bagi kita haruskan suam mitos.
+
+00:02:50.040 --> 00:02:51.580
+Anda tidak ingin mengustomisasi segalanya.
+
+00:02:52.020 --> 00:02:54.500
+Bisnis sentral standar sudah memiliki banyak proses yang terpasang.
+
+00:02:54.820 --> 00:02:58.320
+Mengubat sesuatu hanya karena terlihat berbeda dari sistem lain, menciptakan pekerjaan tambahan nantinya.
+
+00:02:58.380 --> 00:03:01.000
+Jadi pekerjaan custom yang baik dimulai dengan alasan bisnis yang jelas.
+
+00:03:01.000 --> 00:03:10.240
+Ketika produk standar tidak memenuhi kebutuhan tersebut, AL mulai berperan.
+
+00:03:10.800 --> 00:03:15.260
+AL berfokus pada bisnis sentral itu sendiri, membaca, menambahkan, dan mengubah data di tingkat basis data
+
+00:03:15.260 --> 00:03:18.680
+sambil mengendalikan apa yang terjadi di halaman, laporan, dan bagian aplikasi lainnya.
+
+00:03:19.100 --> 00:03:23.820
+Dan AL menghitung nilai, memindahkan data, serta menampilkan pesan saat aturan gagal di seluruh proses.
+
+00:03:24.000 --> 00:03:29.180
+Itu adalah pekerjaan yang banyak untuk satu bahasa, tetapi AL bukanlah alat umum untuk setiap jenis perangkat lunak
+
+00:03:29.180 --> 00:03:33.680
+dan Anda tidak akan memilihnya untuk membangun situs web belanja publik, game seluler, atau aplikasi desktop mandiri.
+
+00:03:34.720 --> 00:03:38.580
+AL ada untuk satu pekerjaan terfokus, membentuk data dan perilaku di dalam bisnis sentral
+
+00:03:38.580 --> 00:03:40.760
+agar sistem sesuai dengan cara perusahaan beroperasi.
+
+00:03:41.120 --> 00:03:42.560
+Dan itulah tepatnya yang akan kita lihat selanjutnya.
+
+00:03:43.220 --> 00:03:45.580
+AL dan ekstensi, model tambahan yang aman.
+
+00:03:46.940 --> 00:03:48.720
+AL adalah singkatan dari application language.
+
+00:03:49.300 --> 00:03:51.740
+Ini adalah bahasa pemrograman Microsoft untuk bisnis sentral.
+
+00:03:51.740 --> 00:03:55.120
+Dan memberikan cara terstruktur bagi pengembang untuk membuat fungsi bisnis baru
+
+00:03:55.120 --> 00:03:57.300
+atau mengubah perilaku bagian sistem yang sudah ada.
+
+00:03:58.160 --> 00:04:00.200
+Namun, kata ekstensi sama pentingnya dengan AL.
+
+00:04:00.960 --> 00:04:03.280
+Ekstensi adalah aplikasi terpisah yang dapat install oleh bisnis sentral.
+
+00:04:03.760 --> 00:04:05.600
+Ekstensi menampung pekerjaan kustom perusahaan,
+
+00:04:05.680 --> 00:04:08.200
+sementara aplikasi bisnis sentral standar tetap tidak tersentuh.
+
+00:04:08.720 --> 00:04:10.560
+Anggaplah ini bukan seperti menulis ulang buku panduan,
+
+00:04:10.660 --> 00:04:12.140
+mainkan menambahkan halaman yang disetujui ke dalam.
+
+00:04:12.560 --> 00:04:14.860
+Oh, halaman yang mengikuti aturan asli tanpa menghapusnya.
+
+00:04:15.400 --> 00:04:16.740
+Itu mungkin terdengar seperti detail teknis,
+
+00:04:16.740 --> 00:04:18.800
+tetapi mengubah bagaimana pekerjaan kustom bertansi iring waktu.
+
+00:04:18.800 --> 00:04:21.740
+Bayangkan sebuah perusahaan membutuhkan ruang kantor baru untuk tim khusus.
+
+00:04:22.120 --> 00:04:24.500
+Pendekatan lama berarti membobol dinding di bangunan utama
+
+00:04:24.500 --> 00:04:25.700
+dan mengubah strukturnya sendiri.
+
+00:04:26.360 --> 00:04:28.140
+Mungkin ini menyelesaikan kebutuhan saat ini,
+
+00:04:28.260 --> 00:04:30.000
+namun perbaikan di masa depan menjadi mimpi buruk
+
+00:04:30.000 --> 00:04:32.180
+karena bangunan asli tidak lagi sesuai dengan cetak birunya,
+
+00:04:32.920 --> 00:04:34.400
+sebuah ekstensi bekerja dengan cara berbeda.
+
+00:04:34.480 --> 00:04:36.480
+Bangunan tersebut sudah memiliki pintu, stop kontak,
+
+00:04:36.580 --> 00:04:37.680
+dan aturan untuk menambah ruang.
+
+00:04:38.140 --> 00:04:40.220
+Anda membangun ruangan baru melalui sambungan yang telah disetujui.
+
+00:04:40.460 --> 00:04:41.900
+Ruangan itu milik perusahaan,
+
+00:04:41.980 --> 00:04:43.900
+namun bangunan utama tetap dapat menerima perawatan
+
+00:04:43.900 --> 00:04:45.280
+tanpa harus membongkar setiap dinding kustom.
+
+00:04:45.460 --> 00:04:47.320
+Begitulah tepatin cara kerja ekstensi bisnis sentral.
+
+00:04:47.780 --> 00:04:50.360
+Aplikasi dasar berisi pekerjaan standar yang disediakan Microsoft.
+
+00:04:51.080 --> 00:04:53.080
+Ekstensi dapat melambahkan bidang, layar, tombol,
+
+00:04:53.220 --> 00:04:55.520
+aturan laporan, bahkan tautan ke sistem lain miliknya sendiri.
+
+00:04:56.180 --> 00:04:58.480
+Ekstensi dapat bereaksi saat tindakan bisnis tertentu terjadi,
+
+00:04:58.600 --> 00:05:00.140
+tetapi melakukannya melalui cara yang didukung
+
+00:05:00.140 --> 00:05:01.520
+untuk terhubung ke aplikasi standar.
+
+00:05:02.160 --> 00:05:03.160
+Jadi batas-batas yang terpasang.
+
+00:05:03.480 --> 00:05:04.120
+Itu adalah hal yang baik.
+
+00:05:04.560 --> 00:05:06.300
+Tanpa batasan, permintaan kustom yang kecil
+
+00:05:06.300 --> 00:05:08.220
+dapat menjangkau jauh ke area yang seharusnya tidak bisa.
+
+00:05:08.220 --> 00:05:11.380
+Dengan ekstensi, pengembang bekerja dengan tipe objek yang jelas
+
+00:05:11.380 --> 00:05:12.560
+dan titik koneksi yang ditentukan.
+
+00:05:13.000 --> 00:05:16.140
+Sehingga kode lebih mudah dipahami saat orang lain perlu membacanya nanti.
+
+00:05:16.940 --> 00:05:19.640
+Pendekatan ini juga sangat cocok dengan versi cloud business sentral.
+
+00:05:20.200 --> 00:05:22.080
+Microsoft memperbarui layanan secara berkala.
+
+00:05:22.480 --> 00:05:24.940
+Perusahaan tetap perlu menguji ekstensinya setelah ada perubahan,
+
+00:05:25.280 --> 00:05:27.840
+terutama jika bergantung pada bagian produk yang telah diubah.
+
+00:05:28.280 --> 00:05:30.060
+Perangkat lunak tidak pernah menghilangkan kebutuhan utama.
+
+00:05:30.440 --> 00:05:32.360
+Namun, menjaga kode kustom tetap terpisah
+
+00:05:32.360 --> 00:05:34.180
+menurunkan kemungkinan setiap pembaruan berubah
+
+00:05:34.180 --> 00:05:36.260
+menjadi pembangunan ulang besar-besaran dari modifikasi lain.
+
+00:05:36.260 --> 00:05:38.180
+Anda mungkin mendengar orang menyebut CL
+
+00:05:38.180 --> 00:05:40.640
+saat mereka berbicara tentang sistem Dynamics NF yang lebih lama.
+
+00:05:41.040 --> 00:05:42.760
+CL berasal dari model pengembangan awal
+
+00:05:42.760 --> 00:05:46.280
+di mana pengembang sering mengubah objek ke aplikasi asli secara langsung.
+
+00:05:46.800 --> 00:05:48.900
+Banyak perusahaan menjalankan sistem yang sukses dengan cara itu
+
+00:05:48.900 --> 00:05:49.840
+selama bertahun-tahun,
+
+00:05:49.960 --> 00:05:52.580
+tetapi hal itu mengikat pekerjaan kustom jauh lebih erat ke kode standar.
+
+00:05:52.940 --> 00:05:55.300
+Dan pembaruan memerlukan banyak perbandingan dan pekerjaan perbaikan.
+
+00:05:55.660 --> 00:05:58.260
+AL mengalihkan bisnis sentral menuju pengembangan berbasis aplikasi.
+
+00:05:58.520 --> 00:06:00.820
+Itu tidak berarti setiap ekstensi berukuran besar atau rumit.
+
+00:06:01.180 --> 00:06:03.580
+Satu ekstensi mungkin hanya menambahkan bidang kecatatan pelanggan
+
+00:06:03.580 --> 00:06:05.060
+dan menampilkannya di layar yang familiar.
+
+00:06:05.520 --> 00:06:08.340
+Yang lain mungkin berisi solusi lengkap untuk jenis bisnis tertentu
+
+00:06:08.340 --> 00:06:11.320
+dengan catatan, proses, halaman, dan laporannya sendiri.
+
+00:06:12.200 --> 00:06:13.600
+Berduanya mengikuti ide dasar yang sama.
+
+00:06:14.260 --> 00:06:15.920
+Aplikasi kustom hidup di samping bisnis sentral
+
+00:06:15.920 --> 00:06:17.440
+alih-alih menyembunyikan pendulisan ulang darinya.
+
+00:06:17.960 --> 00:06:19.800
+Anda juga dapat menginstall lebih dari satu ekstensi.
+
+00:06:20.320 --> 00:06:21.760
+Sebuah perusahaan mungkin menggunakan ekstensi
+
+00:06:21.760 --> 00:06:23.360
+dari mitra perangkat lunak untuk penggajian,
+
+00:06:23.500 --> 00:06:24.480
+satu lagi untuk pengiriman,
+
+00:06:24.720 --> 00:06:27.640
+dan ekstensi internal kecil untuk aturan yang hanya penting bagi perusahaan tersebut.
+
+00:06:28.160 --> 00:06:30.380
+Bisnis sentral menyatukan mereka dalam sistem kerja yang sama
+
+00:06:30.380 --> 00:06:33.200
+selama mereka mengikuti aturan platform dan tidak berkonflik.
+
+00:06:34.000 --> 00:06:35.560
+Jadi AL bukan sekadar cara untuk menulis kode.
+
+00:06:36.000 --> 00:06:38.600
+Ini adalah bahasa yang digunakan pengembang untuk membuat aplikasi tambahan ini,
+
+00:06:38.800 --> 00:06:42.300
+dan ekstensi adalah wadah yang membawa perubahan tersebut ke dalam bisnis sentral.
+
+00:06:42.640 --> 00:06:45.040
+Model tersebut memungkinkan perusahaan menyesuaikan sistem sekaligus
+
+00:06:45.040 --> 00:06:47.580
+menjaga produk standar tetap dapat dikenali dan lebih mudah dipelihara.
+
+00:06:47.700 --> 00:06:50.480
+Sekarang mari kita buka salah satu ekstensi ini dan melihat blok penyusun di dalam.
+
+00:06:51.540 --> 00:06:54.120
+Blok penyusun AL utama di dalam ekstensi AL,
+
+00:06:54.640 --> 00:06:55.760
+pengembang bekerja dengan objek.
+
+00:06:56.240 --> 00:06:58.900
+Objek adalah satu bagian penama dari aplikasi dengan tugas yang jelas,
+
+00:06:58.900 --> 00:07:02.520
+seperti menyimpan informasi, menampilkan layar, menjalankan aturan, atau menghasilkan dokumen.
+
+00:07:03.060 --> 00:07:04.920
+Setelah Anda melihat tugas-tugas tersebut secara terpisah,
+
+00:07:05.000 --> 00:07:06.880
+AL terasa jauh lebih sederhana dan tidak lagi seperti itu.
+
+00:07:07.240 --> 00:07:09.400
+Mari kita mulai dari tempat di mana informasi bisnis disimpan.
+
+00:07:09.880 --> 00:07:11.500
+Tabel menyimpan data di bisnis sentral.
+
+00:07:11.840 --> 00:07:14.620
+Bayangkan tabel sebagai lemari arsip digital untuk satu jenis catat.
+
+00:07:15.060 --> 00:07:16.380
+Satu lemari mungkin berisi pelanggan,
+
+00:07:16.520 --> 00:07:18.900
+yang lain berisi item, dan yang lainnya berisi pesanan penjualan.
+
+00:07:19.340 --> 00:07:21.400
+Setiap catatan adalah satu file di dalam lemari tersebut.
+
+00:07:21.760 --> 00:07:24.140
+Tabel pelanggan berisi satu catatan untuk setiap pelanggan.
+
+00:07:24.340 --> 00:07:26.760
+Tabel item berisi satu catatan untuk setiap produk.
+
+00:07:26.760 --> 00:07:30.980
+Jika perusahaan Anda memerlukan informasi yang tidak disimpan oleh bisnis sentral standar,
+
+00:07:31.100 --> 00:07:32.540
+ekstensi dapat membuat tabelnya sendiri,
+
+00:07:32.980 --> 00:07:36.340
+mungkin untuk tingkat penghargaan, inspeksi peralatan, atau persetujuan proyek.
+
+00:07:37.480 --> 00:07:39.500
+Bidang adalah ruang berlabel di dalam setiap catatan.
+
+00:07:39.880 --> 00:07:42.780
+Catatan pelanggan dapat mencakup nama, alamat, syarat pembayaran,
+
+00:07:42.900 --> 00:07:46.000
+dan nomor telepon karena tabel pelanggan berisi bidang untuk detail tersebut.
+
+00:07:47.140 --> 00:07:50.160
+Bidang dapat berisi teks, tanggal, jumlah, jawaban ya atau tidak,
+
+00:07:50.160 --> 00:07:51.520
+atau pilihan dari daftar tetap.
+
+00:07:52.100 --> 00:07:53.600
+Sebuah bidang juga dapat mengarah ke catatan.
+
+00:07:53.940 --> 00:07:56.340
+Misalnya, pelanggan dapat berisi bidang ID penghargaan.
+
+00:07:56.340 --> 00:07:58.020
+Alih-alih mengetik teks sembarang,
+
+00:07:58.280 --> 00:08:00.940
+staff memilih tingkat penghargaan dari tabel penghargaan terpisah.
+
+00:08:01.380 --> 00:08:04.340
+Tautan itu menjaga data tetap bersih karena semua orang memilih dari ketahui,
+
+00:08:04.920 --> 00:08:05.900
+jadi tabel menyimpan fakta.
+
+00:08:06.140 --> 00:08:08.280
+Namun bagaimana orang melihat dan bekerja dengan fakta tersebut?
+
+00:08:08.620 --> 00:08:08.940
+Halaman.
+
+00:08:09.200 --> 00:08:11.020
+Halaman adalah layar yang Anda buka di bisnis sentral.
+
+00:08:11.260 --> 00:08:12.380
+Kartu pelanggan adalah sebuah halaman.
+
+00:08:12.880 --> 00:08:14.480
+Daftar pesanan penjualan adalah sebuah halaman.
+
+00:08:14.760 --> 00:08:18.040
+Halaman mengontrol apa yang dapat dilihat, dimasukkan, dicari, dan ditindak lanjuti oleh bu.
+
+00:08:18.140 --> 00:08:19.680
+Halaman yang berbeda cocok untuk pekerjaan yang berbeda.
+
+00:08:19.880 --> 00:08:22.180
+Halaman kartu berfokus pada satu catatan dalam satu waktu,
+
+00:08:22.180 --> 00:08:23.600
+seperti satu pelanggan atau satu ad.
+
+00:08:23.840 --> 00:08:25.920
+Halaman daftar menampilkan banyak catatan dalam baris
+
+00:08:25.920 --> 00:08:27.700
+yang berfungsi dengan baik saat Anda perlu memindai,
+
+00:08:27.840 --> 00:08:29.500
+memfilter, atau menemukan sesuatu dengan cepat.
+
+00:08:29.780 --> 00:08:31.380
+Halaman lembar kerja mendukung pekerjaan
+
+00:08:31.380 --> 00:08:34.520
+di mana orang memasukkan atau memproses beberapa baris informasi secara bersamaan.
+
+00:08:34.760 --> 00:08:35.920
+Tabel menyimpan informasinya.
+
+00:08:36.500 --> 00:08:37.720
+Halaman menampilkannya di depan pengguna.
+
+00:08:38.320 --> 00:08:40.720
+Pemisahan itu bermanfaat karena Anda dapat mengubah layar
+
+00:08:40.720 --> 00:08:42.040
+tanpa mengubah tempat data berada
+
+00:08:42.040 --> 00:08:45.160
+atau menggunakan kembali tabel yang sama di lebih dari satu halaman saat tim
+
+00:08:45.160 --> 00:08:48.080
+yang berbeda memerlukan tampilan catatan yang sama dengan cara berbeda.
+
+00:08:48.340 --> 00:08:51.100
+Bagaimana jika datanya sudah ada di catatan bisnis sentral standar?
+
+00:08:52.180 --> 00:08:53.400
+Jika Anda tidak membuat tabel pelanggan pengganti
+
+00:08:53.400 --> 00:08:54.860
+hanya karena butuh satu kolom tambahan,
+
+00:08:55.360 --> 00:08:56.340
+Anda menggunakan ekstensi tabel.
+
+00:08:56.680 --> 00:08:59.420
+Ekstensi tabel menambahkan kolom Anda ke tabel pelanggan yang sudah ada.
+
+00:09:00.000 --> 00:09:01.800
+Catatan pelanggan standar tetap di tempatnya,
+
+00:09:01.960 --> 00:09:04.480
+sementara ekstensi Anda menambahkan detail spesifik perusahaan
+
+00:09:04.480 --> 00:09:05.540
+di samping kolom standar.
+
+00:09:06.240 --> 00:09:08.300
+Itu bisa berupaya di penghargaan catatan pengiriman,
+
+00:09:08.460 --> 00:09:10.940
+manajer akun, atau kolom yang terhubung ke bagian lain dari bisnis.
+
+00:09:11.400 --> 00:09:14.520
+Namun, menambahkan kolom ke tabel tidak secara otomatis menampilkannya di layar.
+
+00:09:14.880 --> 00:09:16.200
+Untuk itu, Anda menggunakan ekstensi halaman.
+
+00:09:16.320 --> 00:09:18.360
+Ekstensi halaman menambahkan kolom, group,
+
+00:09:18.360 --> 00:09:19.680
+atau tindakan ke halaman yang sudah ada.
+
+00:09:19.880 --> 00:09:22.200
+Jika bisnis mengharuskan staff memilih tingkat penghargaan
+
+00:09:22.200 --> 00:09:23.020
+saat melihat pelanggan,
+
+00:09:23.320 --> 00:09:25.560
+ekstensi halaman dapat menempatkan kolom ID penghargaan
+
+00:09:25.560 --> 00:09:27.460
+di kartu pelanggan tepat di tempat staff bekerja.
+
+00:09:28.100 --> 00:09:29.260
+Itu membuat pengalaman tetap familiar.
+
+00:09:29.860 --> 00:09:31.820
+Alih-alih mengirim pengguna ke layar khusus terpisah
+
+00:09:31.820 --> 00:09:34.180
+untuk detail sederhana ekstensi menambahkan detail tersebut
+
+00:09:34.180 --> 00:09:35.420
+ke halaman yang sudah mereka kenal.
+
+00:09:35.920 --> 00:09:38.040
+Ekstensi halaman juga dapat menambahkan tindakan,
+
+00:09:38.220 --> 00:09:40.420
+tombol, atau perintah menu yang memulai tugas.
+
+00:09:40.880 --> 00:09:42.840
+Misalnya, kartu pelanggan dapat menyertakan
+
+00:09:42.840 --> 00:09:44.800
+tindakan penghargaan yang membuka daftar penghargaan.
+
+00:09:44.800 --> 00:09:47.400
+Di balik layar, Anda memerlukan tempat untuk aturan bisnis.
+
+00:09:47.740 --> 00:09:48.960
+Tempat itu seringkali berupa kode unit.
+
+00:09:49.380 --> 00:09:50.780
+Kode unit berisi prosedur AL,
+
+00:09:50.980 --> 00:09:53.200
+yaitu potongan kode bernama yang melakukan tugas tertentu.
+
+00:09:53.720 --> 00:09:55.300
+Anggaplah itu sebagai tim kantor belakang
+
+00:09:55.300 --> 00:09:56.720
+yang menangani tugas saat halaman,
+
+00:09:56.900 --> 00:09:58.720
+laporan, atau proses lain meminta bantuan.
+
+00:09:59.320 --> 00:10:01.040
+Misalkan tingkat penghargaan menentukan diskon
+
+00:10:01.040 --> 00:10:02.280
+mana yang berlaku untuk pelanggan.
+
+00:10:02.960 --> 00:10:04.740
+Penghitungan diskon ada di dalam kode unit,
+
+00:10:05.180 --> 00:10:06.820
+bukan di halaman kartu pelanggan itu sendiri.
+
+00:10:07.420 --> 00:10:09.080
+Jadi, proses penjualan, laporan,
+
+00:10:09.200 --> 00:10:11.380
+atau halaman mendatang dapat menggunakan aturan yang sama
+
+00:10:11.380 --> 00:10:13.120
+tanpa menyalinnya ke beberapa tempat.
+
+00:10:13.120 --> 00:10:15.220
+Satu aturan, satu tempat untuk memeliharanya.
+
+00:10:15.620 --> 00:10:17.320
+Bisnis sentral juga menyertakan tipe objek lain
+
+00:10:17.320 --> 00:10:18.180
+untuk tugas yang berbeda.
+
+00:10:18.640 --> 00:10:20.420
+Laporan mengumpulkan data dan menyajikannya
+
+00:10:20.420 --> 00:10:21.680
+dalam dokumen atau tata letak
+
+00:10:21.680 --> 00:10:22.840
+seperti faktur atau penjualan.
+
+00:10:23.400 --> 00:10:25.280
+Query mengajukan pertanyaan terfokus pada data
+
+00:10:25.280 --> 00:10:27.220
+misalnya pelanggan mana yang membesar item tertentu
+
+00:10:27.220 --> 00:10:28.440
+selama periode tertentu.
+
+00:10:28.520 --> 00:10:30.380
+Contohnya, XML port membantu masukkan
+
+00:10:30.380 --> 00:10:32.140
+atau mengeluarkan data dalam format terstruktur
+
+00:10:32.140 --> 00:10:34.160
+seringkali saat sistem lain perlu bertukar informasi
+
+00:10:34.160 --> 00:10:35.020
+dengan bisnis sentral.
+
+00:10:35.780 --> 00:10:36.900
+Satukan bagian-bagian tersebut,
+
+00:10:37.120 --> 00:10:39.240
+dan Anda dapat membayangkan ekstensi penghargaan pelanggan yang kecil.
+
+00:10:39.240 --> 00:10:41.080
+Tabel penghargaan menyimpan setiap tingkat
+
+00:10:41.080 --> 00:10:42.060
+dan presentasi diskonnya.
+
+00:10:42.480 --> 00:10:44.640
+Halaman penghargaan menginginkan staff mengelola tingkat tersebut.
+
+00:10:44.920 --> 00:10:47.020
+Ekstensi tabel pelanggan menambahkan ID penghargaan
+
+00:10:47.020 --> 00:10:48.240
+ke setiap pelanggan ke setiap pelanggan
+
+00:10:48.240 --> 00:10:49.780
+sementara ekstensi halaman kartu pelanggan.
+
+00:10:50.040 --> 00:10:51.760
+Tindakan halaman membuka daftar reward
+
+00:10:51.760 --> 00:10:53.740
+dan kode unit menghitung aturan diskon.
+
+00:10:54.620 --> 00:10:56.300
+Setiap objek menangani satu bagian tugas.
+
+00:10:56.960 --> 00:10:58.860
+Hal ini membuat ekstensi lebih mudah dibaca,
+
+00:10:59.100 --> 00:11:01.860
+diuji, dan diubah saat aturan bisnis berubah 6 bulan kemudian.
+
+00:11:02.200 --> 00:11:04.080
+Namun, aturan bisnis seringkali harus dijalankan
+
+00:11:04.080 --> 00:11:04.840
+pada momen yang tepat,
+
+00:11:04.840 --> 00:11:06.500
+misalnya saat seseorang memposting pesanan.
+
+00:11:06.500 --> 00:11:08.260
+Di situlah peramai micu trigger dan peristiwa.
+
+00:11:08.580 --> 00:11:09.980
+Peristiwa pemicu dan aturan bisnis.
+
+00:11:10.300 --> 00:11:11.820
+Jadi Anda telah menambahkan bidang reward, Pak.
+
+00:11:12.240 --> 00:11:12.560
+Bagus.
+
+00:11:12.940 --> 00:11:13.760
+Inilah pertanyaan yang sebenarnya.
+
+00:11:14.180 --> 00:11:16.200
+Taban bisnis sentral benar-benar harus menggunakan bidang tersebut.
+
+00:11:16.440 --> 00:11:18.000
+Bayangkan Anda akan memposting pesanan penjualan.
+
+00:11:18.220 --> 00:11:19.420
+Sebelum sistem membuat entry final,
+
+00:11:19.560 --> 00:11:20.960
+Anda ingin satu pemeriksaan tambahan.
+
+00:11:21.480 --> 00:11:22.840
+Mungkin pelanggan perlu tingkat reward
+
+00:11:22.840 --> 00:11:24.380
+yang disetujui sebelum diskon berlaku.
+
+00:11:24.980 --> 00:11:26.900
+Atau mungkin dokumen pengiriman yang diperlukan
+
+00:11:26.900 --> 00:11:29.000
+harus ada sebelum pesanan dapat diproses.
+
+00:11:29.200 --> 00:11:31.240
+Anda ingin pemeriksaan itu pada momen yang tepat,
+
+00:11:31.340 --> 00:11:33.000
+tetapi Anda tidak ingin menyalin seluruh proses
+
+00:11:33.000 --> 00:11:34.540
+posting penjualan ke ekstensi Anda sendiri
+
+00:11:34.540 --> 00:11:35.740
+hanya untuk menambahkan satu aturan.
+
+00:11:35.980 --> 00:11:37.880
+Proses tersebut sudah menangani banyak hal di balik layar.
+
+00:11:38.300 --> 00:11:39.240
+Jika Anda menyalinnya,
+
+00:11:39.420 --> 00:11:40.480
+ekstensi Anda sekarang terjebak
+
+00:11:40.480 --> 00:11:42.120
+memelihara semua perubahan di masa mendatang.
+
+00:11:42.400 --> 00:11:42.780
+Tidak ideal.
+
+00:11:43.080 --> 00:11:44.220
+Jadi AL memberikan beberapa cara
+
+00:11:44.220 --> 00:11:45.340
+bagi pengembang untuk menjalankan.
+
+00:11:45.640 --> 00:11:47.740
+Mana yang Anda pilih bergantung pada apa yang perlu terjadi.
+
+00:11:48.100 --> 00:11:48.820
+Pertama, pemicu.
+
+00:11:49.240 --> 00:11:50.360
+Pemicu adalah titik bernama.
+
+00:11:50.600 --> 00:11:52.360
+Di dalam objek AL, tempat kode dapat berjalan.
+
+00:11:52.920 --> 00:11:54.620
+Saat seseorang mengubah nilai pada bidang tabel,
+
+00:11:54.720 --> 00:11:55.780
+pemicu akan menjalankan kode.
+
+00:11:56.260 --> 00:11:57.480
+Saat halaman dibuka atau ditutup,
+
+00:11:57.480 --> 00:11:58.240
+pemicu akan menjalankan kode.
+
+00:11:58.720 --> 00:12:01.340
+Laporan, query, XML, port, tabel, ekstensi, AO,
+
+00:12:01.600 --> 00:12:02.600
+semuanya memiliki titik ini
+
+00:12:02.600 --> 00:12:04.000
+di mana pengembang dapat menambahkan atur.
+
+00:12:04.220 --> 00:12:05.720
+Ambil bidang ID reward pada pelanggan.
+
+00:12:06.060 --> 00:12:07.420
+Saat pengguna memilih tingkat reward,
+
+00:12:07.720 --> 00:12:08.920
+pemicu validasi dapat berjalan.
+
+00:12:09.240 --> 00:12:10.620
+Kode meriksa apakah pelanggan di blokir.
+
+00:12:11.220 --> 00:12:12.400
+Apakah tingkat reward tersebut ada?
+
+00:12:12.740 --> 00:12:13.880
+Apakah bidang lain perlu diperbarui?
+
+00:12:14.300 --> 00:12:16.060
+Pemeriksaan terjadi tepat saat nilai berubah,
+
+00:12:16.300 --> 00:12:18.200
+bukan nanti ketika seseorang menemukan kesalahan.
+
+00:12:18.500 --> 00:12:19.520
+Pemicu bekerja dengan baik
+
+00:12:19.520 --> 00:12:21.580
+jika aturan tersebut berkaitan erat dengan objek tersebut.
+
+00:12:21.580 --> 00:12:23.280
+Namun, bisnis sentral juga menggunakan peristiwa.
+
+00:12:23.660 --> 00:12:24.440
+Peristiwa pemberitahuan.
+
+00:12:24.880 --> 00:12:27.820
+Satu bagian aplikasi mengirimkannya saat sesuatu terjadi.
+
+00:12:28.220 --> 00:12:30.240
+Ini mungkin mengumumkan bahwa catatan akan dimasukkan
+
+00:12:30.240 --> 00:12:32.460
+atau dokumen akan diposting atau suatu proses.
+
+00:12:32.980 --> 00:12:33.960
+Telah selesai,
+
+00:12:34.520 --> 00:12:36.200
+ekstensi anda dapat mendengarkan pemeriksaan tersebut.
+
+00:12:36.520 --> 00:12:38.140
+Kode yang mendengarkan disebut pelanggan peristiwa,
+
+00:12:38.240 --> 00:12:38.720
+event subscriber.
+
+00:12:39.140 --> 00:12:40.580
+Kode ini menunggu peristiwa bernama tertentu.
+
+00:12:40.920 --> 00:12:42.720
+Saat bisnis sentral memunculkan peristiwa tersebut,
+
+00:12:42.880 --> 00:12:44.260
+pelanggan menjalankan prosedurnya sendiri.
+
+00:12:44.600 --> 00:12:45.880
+Proses standar tetap memegang kendali.
+
+00:12:46.320 --> 00:12:49.120
+Misalnya, saat bisnis sentral mulai memposting pesanan penjualan,
+
+00:12:49.120 --> 00:12:50.860
+ia memunculkan peristiwa sebelum melanjutkan.
+
+00:12:51.020 --> 00:12:52.860
+Ekstensi rewards anda menerima pemberitahuan tersebut.
+
+00:12:53.160 --> 00:12:55.360
+Ekstensi ini memeriksa ID reward pelanggan dan aturan diskon.
+
+00:12:55.640 --> 00:12:57.620
+Kemudian, sistem akan mengizinkan proses berlanjut
+
+00:12:57.620 --> 00:12:59.180
+atau menghentikannya dengan pesan yang jelas.
+
+00:12:59.540 --> 00:13:02.340
+Proses posting standar tetap menjadi milik bisnis sentral.
+
+00:13:02.960 --> 00:13:05.500
+Ekstensi anda hanya menambahkan aturan khusus perusahaan
+
+00:13:05.500 --> 00:13:06.460
+di titik koneksi tersebut.
+
+00:13:06.760 --> 00:13:08.120
+Anda akan sering mendengar nama event,
+
+00:13:08.280 --> 00:13:09.520
+seperti on before atau on after.
+
+00:13:10.120 --> 00:13:12.580
+On before berarti kode anda berjalan sebelum suatu tindakan selesai.
+
+00:13:12.580 --> 00:13:14.980
+Ini sempurna untuk pemiksaan yang dapat mencegah langkah berikut.
+
+00:13:14.980 --> 00:13:18.280
+Oh, seperti menghentikan pesanan penjualan jika kondisi tidak terpenuhi.
+
+00:13:18.820 --> 00:13:20.220
+After berarti tindakan tersebut sudah terjadi.
+
+00:13:20.800 --> 00:13:21.580
+Anda bisa memberikan reaksi.
+
+00:13:21.820 --> 00:13:23.720
+Membuat catatan terkait memperbarui catatan
+
+00:13:23.720 --> 00:13:24.880
+atau memulai pekerjaan lain.
+
+00:13:25.220 --> 00:13:27.260
+Nama-nama tersebut menunjukkan waktu dan waktu itu penting.
+
+00:13:27.600 --> 00:13:29.580
+Aturan yang berjalan setelah posting tidak dapat mencegahnya.
+
+00:13:29.960 --> 00:13:32.680
+Aturan yang berjalan terlalu awal mungkin belum memiliki data yang dibutuhkan.
+
+00:13:33.020 --> 00:13:35.920
+Jadi pengembang memilih event berdasarkan apa yang harus dilakukan aturan bisnis sentral.
+
+00:13:36.320 --> 00:13:37.640
+Kode juga bisa dimulai dari suatu tindakan.
+
+00:13:37.980 --> 00:13:40.460
+Mengguna mengeklik tombol seperti cek status reward
+
+00:13:40.460 --> 00:13:42.260
+dan tindakan itu memanggil prosedur.
+
+00:13:42.260 --> 00:13:45.800
+Kode juga bisa berjalan saat satu objek memanggil objek lain melalui variable.
+
+00:13:46.120 --> 00:13:47.720
+Itu terdengar teknis, tapi sebenarnya sederhana.
+
+00:13:48.120 --> 00:13:50.680
+Satu bagian dari ekstensi meminta bagian lain untuk melakukan tugas.
+
+00:13:50.900 --> 00:13:51.880
+Variable membantu dalam hal itu.
+
+00:13:52.200 --> 00:13:55.380
+Variable adalah tempat bernama yang menyimpan nilai saat kode berjalan.
+
+00:13:55.920 --> 00:13:58.740
+Bisa berupa angka, teks, tanggal, atau bahkan catatan bisnis sentral
+
+00:13:58.740 --> 00:13:59.680
+seperti pelanggan saat ini.
+
+00:14:00.160 --> 00:14:01.700
+Dalam AL, Anda mendeklarasikan NFAR.
+
+00:14:02.400 --> 00:14:05.440
+Misalnya, prosedur rewards mungkin menggunakan variable bernama customer
+
+00:14:05.440 --> 00:14:07.100
+untuk menyimpan catatan pelanggan saat ini.
+
+00:14:07.580 --> 00:14:10.460
+Variable lain bernama discount% menyimpan nilai discount.
+
+00:14:10.960 --> 00:14:11.800
+Ini bukan catatan bermane.
+
+00:14:11.800 --> 00:14:13.960
+Ini hanyalah nilai kerja untuk bagian kode tersebut.
+
+00:14:14.360 --> 00:14:15.660
+Inilah hal tentang di mana kode berada.
+
+00:14:16.060 --> 00:14:17.540
+Jika suatu aturan mungkin digunakan decode,
+
+00:14:17.640 --> 00:14:18.820
+lebih dari satu tempat letakkan decode.
+
+00:14:19.260 --> 00:14:21.760
+Dengan begitu, kartu pelanggan, proses penjualan,
+
+00:14:22.280 --> 00:14:25.620
+dan laporan semuanya dapat memanggil prosedur diskon yang sama.
+
+00:14:26.780 --> 00:14:28.120
+Hal itu menghindari masalah yang umum terjadi.
+
+00:14:28.640 --> 00:14:30.220
+Satu layar menerapkan diskon 10%,
+
+00:14:30.220 --> 00:14:31.520
+layar lain menerapkan 5%,
+
+00:14:31.520 --> 00:14:33.520
+dan tidak ada yang tahu aturan mana yang harus dipercaya.
+
+00:14:34.200 --> 00:14:36.300
+Menyimpan aturan bisnis bersama dalam satu kode unit
+
+00:14:36.300 --> 00:14:38.400
+memberikan satu sumber keputusan bagi ekstensi.
+
+00:14:38.740 --> 00:14:41.160
+Jadi trigger menangani aturan yang dekat dengan suatu objek.
+
+00:14:41.160 --> 00:14:42.960
+Event memungkinkan ekstensi bereaksi
+
+00:14:42.960 --> 00:14:44.540
+terhadap proses bisnis sentral itu sendiri.
+
+00:14:44.980 --> 00:14:46.700
+Code unit menjaga logika bersama tetap menyatu.
+
+00:14:47.160 --> 00:14:48.520
+Setelah bagian-bagian tersebut terhubung,
+
+00:14:48.600 --> 00:14:49.600
+pertanyaan berikutnya adalah
+
+00:14:49.600 --> 00:14:50.780
+di mana pengembang menulis,
+
+00:14:50.940 --> 00:14:52.480
+menguji, dan memeriksa semua kode AL ini.
+
+00:14:53.000 --> 00:14:55.600
+Pengembangan AL biasanya dilakukan di Visual Studio Code
+
+00:14:55.600 --> 00:14:57.500
+yang sering disebut sebagai VS Code.
+
+00:14:58.140 --> 00:14:59.880
+Ini adalah ruang kerja Anda untuk menulis file AL.
+
+00:15:00.140 --> 00:15:01.300
+Ini menjaga ekstensi Anda tetap terhubung.
+
+00:15:01.800 --> 00:15:03.160
+Ini membantu Anda menemukan masalah
+
+00:15:03.160 --> 00:15:04.720
+dan mengirim aplikasi yang sudah selesai
+
+00:15:04.720 --> 00:15:06.280
+ke lingkungan bisnis sentral untuk pengujian.
+
+00:15:06.280 --> 00:15:08.740
+Namun VS Code sendiri hanyalah editor kode umum.
+
+00:15:09.340 --> 00:15:11.340
+Perlu ekstensi bahasa AL dari Microsoft?
+
+00:15:11.900 --> 00:15:13.300
+Ekstensi itu mengajarkan VS Code
+
+00:15:13.300 --> 00:15:14.480
+cara kerja bisnis sentral.
+
+00:15:14.940 --> 00:15:16.520
+Ia dapat menyerangkan nama objek saat Anda menunjukkan.
+
+00:15:16.900 --> 00:15:18.540
+Ia menunjukkan kesalahan sebelum Anda memublikasikan.
+
+00:15:18.920 --> 00:15:20.640
+Ia membantu Anda menelusuri field dan prosedur.
+
+00:15:20.960 --> 00:15:22.180
+Dan ia menghubungkan proyek Anda
+
+00:15:22.180 --> 00:15:23.320
+ke lingkungan bisnis sentral.
+
+00:15:23.580 --> 00:15:24.420
+Itu menghemat banyak penempat.
+
+00:15:24.880 --> 00:15:26.320
+Saat Anda memulai proyek AL baru,
+
+00:15:26.440 --> 00:15:27.960
+Anda dapat menjalankan perintah ALGO
+
+00:15:27.960 --> 00:15:29.020
+di dalam VS Code.
+
+00:15:29.360 --> 00:15:30.680
+Ini membuat folder proyek dasar
+
+00:15:30.680 --> 00:15:32.220
+dan file pengaturan untuk nama ekstensi,
+
+00:15:32.220 --> 00:15:34.000
+penerbit, versi, dan lingkungan bisnis sentral
+
+00:15:34.000 --> 00:15:35.600
+mana yang akan digunakan.
+
+00:15:36.440 --> 00:15:38.600
+Anggap folder proyek tersebut sebagai meja kerja ekstensi.
+
+00:15:38.900 --> 00:15:39.840
+Tiap file AL berada di sana.
+
+00:15:40.180 --> 00:15:41.280
+Atau file mungkin berisi tabel,
+
+00:15:41.380 --> 00:15:42.540
+file lain berisi ekstensi halaman,
+
+00:15:42.660 --> 00:15:44.060
+unit kode dapat memiliki file-nya sendiri.
+
+00:15:44.380 --> 00:15:46.220
+Dengan begitu, saat seseorang membuka proyek,
+
+00:15:46.300 --> 00:15:47.700
+mereka dapat menemukan bagian yang tepat
+
+00:15:47.700 --> 00:15:49.120
+tanpa harus menggulir satu dokumen besar.
+
+00:15:49.480 --> 00:15:50.380
+Saat kode siap duji,
+
+00:15:50.520 --> 00:15:52.500
+VS Code mengompilasinya menjadi paket aplikasi.
+
+00:15:53.200 --> 00:15:54.760
+Itulah versi ekstensi yang dapat diinstal.
+
+00:15:55.220 --> 00:15:56.780
+Bisnis sentral membaca paket tersebut
+
+00:15:56.780 --> 00:15:58.320
+dan menambahkan ekstensi ke lingkungan.
+
+00:15:58.640 --> 00:15:59.720
+Jika ada field yang hilang,
+
+00:15:59.720 --> 00:16:02.180
+salah eja atau masalah apapun yang mencegah aplikasi dibangun,
+
+00:16:02.280 --> 00:16:04.120
+VS Code memberi tahu Anda sebelum paket tersebut
+
+00:16:04.120 --> 00:16:05.180
+sampai ke bisnis sentral.
+
+00:16:05.960 --> 00:16:07.800
+Pengujian harus dilakukan di lingkungan sandbox terbidup.
+
+00:16:08.140 --> 00:16:09.800
+Sandbox adalah lingkungan bisnis sentral
+
+00:16:09.800 --> 00:16:11.520
+terbisa tempat Anda dapat mencoba perubahan
+
+00:16:11.520 --> 00:16:13.040
+tanpa membahayakan pekerjaan bisnis langsung.
+
+00:16:13.180 --> 00:16:14.340
+Anda mempunyakasikan ekstensi,
+
+00:16:14.440 --> 00:16:15.020
+membuka halaman,
+
+00:16:15.140 --> 00:16:15.540
+mengubahnya,
+
+00:16:15.660 --> 00:16:16.460
+memasukkan data uji,
+
+00:16:16.620 --> 00:16:17.860
+dan melihat apakah aturan berfungsi
+
+00:16:17.860 --> 00:16:18.680
+seperti yang diharapkan.
+
+00:16:19.020 --> 00:16:19.740
+Pemisahan itu penting.
+
+00:16:20.360 --> 00:16:22.020
+Anda tidak ingin menemukan bahwa aturan validasi
+
+00:16:22.020 --> 00:16:23.140
+baru memblokir pesanan penjualan
+
+00:16:23.140 --> 00:16:24.380
+saat staff mencoba melakukan mereka.
+
+00:16:24.380 --> 00:16:26.540
+Di sandbox Anda dapat membuat kesalahan,
+
+00:16:26.660 --> 00:16:27.480
+menghapus data uji,
+
+00:16:27.680 --> 00:16:28.160
+mengubah kode,
+
+00:16:28.260 --> 00:16:29.120
+dan memblikasikan lagi
+
+00:16:29.120 --> 00:16:30.620
+tanpa mengaruhi catatan langsung.
+
+00:16:31.180 --> 00:16:32.100
+Terkadang kode berjalan,
+
+00:16:32.320 --> 00:16:33.520
+tetapi hasilnya masih terlihat salah.
+
+00:16:33.920 --> 00:16:34.820
+Saat itulah debaging membantu.
+
+00:16:35.320 --> 00:16:36.740
+Anda empatkan titik henti breakpoint
+
+00:16:36.740 --> 00:16:37.500
+dalam kode,
+
+00:16:37.840 --> 00:16:38.300
+memulai proses,
+
+00:16:38.400 --> 00:16:39.100
+dan ekstensi berhenti
+
+00:16:39.100 --> 00:16:39.880
+sementara saat dijarak.
+
+00:16:40.280 --> 00:16:41.040
+Saat jeda itu,
+
+00:16:41.260 --> 00:16:42.500
+Anda dapat memeriksa nilai
+
+00:16:42.500 --> 00:16:43.740
+seperti pelanggan saat ini,
+
+00:16:44.040 --> 00:16:45.240
+level hadiah yang dipilih,
+
+00:16:45.340 --> 00:16:46.380
+atau persentase diskon
+
+00:16:46.380 --> 00:16:47.420
+yang dihitung oleh prosedur.
+
+00:16:47.820 --> 00:16:49.320
+Daripada menebak mengapa aturan gagal,
+
+00:16:49.560 --> 00:16:51.300
+Anda dapat melihat dengan tepat apa yang tersebut.
+
+00:16:51.300 --> 00:16:52.880
+Tim pengembang juga menggunakan Git
+
+00:16:52.880 --> 00:16:54.340
+untuk menyimpan riwayat pekerjaan mereka.
+
+00:16:54.740 --> 00:16:56.260
+Git mencatat perubahan pada file proyek
+
+00:16:56.260 --> 00:16:57.040
+dari waktu ke waktu.
+
+00:16:57.500 --> 00:16:58.600
+Jika seseorang mengubah aturan
+
+00:16:58.600 --> 00:16:59.560
+dan menyebabkan masalah,
+
+00:16:59.880 --> 00:17:01.040
+tim dapat membandingkan versi,
+
+00:17:01.240 --> 00:17:02.040
+melihat apa yang berubah,
+
+00:17:02.160 --> 00:17:03.180
+dan mengembalikannya jika perlu.
+
+00:17:03.560 --> 00:17:04.360
+Ini juga membantu
+
+00:17:04.360 --> 00:17:05.560
+ketika lebih dari satu pengembang
+
+00:17:05.560 --> 00:17:06.740
+mengerjakan ekstensi yang sama.
+
+00:17:07.140 --> 00:17:07.660
+Bagi pemula,
+
+00:17:07.880 --> 00:17:08.640
+langkah terbaik adalah
+
+00:17:08.640 --> 00:17:09.500
+memulai dari yang kecil.
+
+00:17:10.400 --> 00:17:11.560
+Pelajari cara kerja bisnis sentral
+
+00:17:11.560 --> 00:17:12.060
+terlebih dahulu,
+
+00:17:12.340 --> 00:17:13.080
+lalu buat satu tabel
+
+00:17:13.080 --> 00:17:13.860
+dan satu halaman.
+
+00:17:14.360 --> 00:17:14.720
+Setelah itu,
+
+00:17:14.900 --> 00:17:15.700
+perluas halaman standar,
+
+00:17:15.860 --> 00:17:16.920
+tambahkan aturan bisnis sederhana
+
+00:17:21.300 --> 00:17:22.180
+bagian-bagian tersebut
+
+00:17:22.180 --> 00:17:23.360
+melalui satu add-on kecil
+
+00:17:23.360 --> 00:17:24.720
+yang benar-benar bisa digunakan oleh bisnis.
+
+00:17:26.730 --> 00:17:27.490
+Sebuah contoh sederhana,
+
+00:17:27.650 --> 00:17:29.190
+membangun add-on penghargaan pelanggan.
+
+00:17:30.210 --> 00:17:30.870
+Seperti apa sebenarnya
+
+00:17:30.870 --> 00:17:31.950
+ekstensi AL yang nyata itu?
+
+00:17:32.390 --> 00:17:33.870
+Mari kita bahas contoh sederhana.
+
+00:17:35.090 --> 00:17:35.870
+Bayangkan perusahaan Anda
+
+00:17:35.870 --> 00:17:37.370
+menginginkan tingkat penghargaan pelanggan
+
+00:17:37.370 --> 00:17:38.530
+masing-masing dengan diskonnya sendiri.
+
+00:17:38.850 --> 00:17:40.190
+Anda mulai dengan membuat tabel pengharga.
+
+00:17:40.750 --> 00:17:41.390
+Anggap saja itu
+
+00:17:41.390 --> 00:17:42.730
+sebagai lemari arsip digital
+
+00:17:42.730 --> 00:17:44.150
+di mana setiap file menyimpan ID,
+
+00:17:44.410 --> 00:17:44.850
+deskripsi,
+
+00:17:45.010 --> 00:17:45.890
+dan persentase diskon.
+
+00:17:46.350 --> 00:17:47.770
+Emas mendapatkan diskon 10% misalnya.
+
+00:17:48.170 --> 00:17:49.610
+Staff Anda perlu mengelola tingkat tersebut
+
+00:17:49.610 --> 00:17:50.810
+tanpa menyentuh alat teknis.
+
+00:17:51.130 --> 00:17:52.070
+Jadi Anda menambahkan
+
+00:17:52.070 --> 00:17:53.010
+dua halaman penghargaan
+
+00:17:53.010 --> 00:17:54.030
+untuk melihat semua tingkat
+
+00:17:54.030 --> 00:17:55.070
+dan halaman kartu penghargaan
+
+00:17:55.070 --> 00:17:56.150
+untuk mengedit atau membuatnya.
+
+00:17:56.590 --> 00:17:57.810
+Mereka dapat menambah tingkat baru,
+
+00:17:58.170 --> 00:17:59.150
+menyesuaikan persentase,
+
+00:17:59.290 --> 00:18:00.150
+atau menjau apa yang ada
+
+00:18:00.150 --> 00:18:01.770
+tanpa muka lingkungan pengembangan apapun.
+
+00:18:02.230 --> 00:18:02.670
+Selanjutnya,
+
+00:18:02.830 --> 00:18:03.710
+Anda memperluas tabel pelanggan
+
+00:18:03.710 --> 00:18:05.150
+dengan bidang baru yang disebut ID penghargaan.
+
+00:18:05.490 --> 00:18:06.290
+Bidang itu menghubungkan
+
+00:18:06.290 --> 00:18:07.970
+setiap pelanggan ke satu catatan penghargaan,
+
+00:18:08.070 --> 00:18:09.250
+dan Anda menempatkan bidang itu
+
+00:18:09.250 --> 00:18:10.350
+tepat di halaman kartu pelanggan
+
+00:18:10.350 --> 00:18:11.890
+tempat staff sudah mengelola detail pelanggan.
+
+00:18:12.310 --> 00:18:13.010
+Lalu Anda menambahkan
+
+00:18:13.010 --> 00:18:13.790
+tindakan penghargaan
+
+00:18:13.790 --> 00:18:14.610
+agar mereka dapat membuka
+
+00:18:14.610 --> 00:18:15.450
+daftar penghargaan langsung
+
+00:18:15.450 --> 00:18:16.150
+dari kartu yang sama.
+
+00:18:16.770 --> 00:18:17.630
+Aturan diskon itu sendiri
+
+00:18:17.630 --> 00:18:18.930
+berada di dalam unit kode.
+
+00:18:19.410 --> 00:18:20.150
+Ketika proses lain
+
+00:18:20.150 --> 00:18:21.210
+membutuhkan diskon pelanggan,
+
+00:18:21.550 --> 00:18:22.250
+proses itu memanggil
+
+00:18:22.250 --> 00:18:23.090
+unit kode tersebut
+
+00:18:23.090 --> 00:18:24.110
+alih-alih menghitungnya
+
+00:18:24.110 --> 00:18:25.270
+berulang kali di setiap halaman.
+
+00:18:25.690 --> 00:18:26.070
+Efisien.
+
+00:18:26.530 --> 00:18:27.370
+Unit kode instalasi
+
+00:18:27.370 --> 00:18:28.630
+menambahkan tingkat penghargaan awal
+
+00:18:28.630 --> 00:18:29.330
+saat ekstensi Anda
+
+00:18:29.330 --> 00:18:30.070
+pertama kali di install.
+
+00:18:30.350 --> 00:18:31.210
+Dan pelanggan acara
+
+00:18:31.210 --> 00:18:32.490
+memeriksa tingkat penghargaan
+
+00:18:32.490 --> 00:18:33.930
+yang dipilih selama proses penjualan,
+
+00:18:34.330 --> 00:18:35.430
+menerapkan aturan perusahaan Anda
+
+00:18:35.430 --> 00:18:36.490
+tepat pada momen yang tepat.
+
+00:18:36.490 --> 00:18:38.050
+Itu adalah satu ekstensi kecil,
+
+00:18:38.370 --> 00:18:39.390
+tapi perhatikan apa isinya.
+
+00:18:39.850 --> 00:18:40.310
+Tabel data,
+
+00:18:40.490 --> 00:18:41.050
+layar pengguna,
+
+00:18:41.230 --> 00:18:41.970
+tindakan navigasi,
+
+00:18:42.150 --> 00:18:42.830
+logika pengaturan,
+
+00:18:42.950 --> 00:18:43.590
+dan aturan bisnis.
+
+00:18:43.870 --> 00:18:44.630
+Semua bekerja bersama.
+
+00:18:44.970 --> 00:18:46.010
+Itulah kekuatan sebenarnya dari AL.
+
+00:18:46.330 --> 00:18:46.670
+Baiklah.
+
+00:18:47.070 --> 00:18:47.870
+Kesimpulan titik awal
+
+00:18:47.870 --> 00:18:48.670
+pengembangan AL Anda.
+
+00:18:49.250 --> 00:18:50.210
+Jadi inilah poin utamanya.
+
+00:18:50.590 --> 00:18:51.370
+Pengembangan AL
+
+00:18:51.370 --> 00:18:52.350
+memungkinkan Anda
+
+00:18:52.350 --> 00:18:53.630
+menambahkan fitur spesifik
+
+00:18:53.630 --> 00:18:54.630
+yang dibutuhkan perusahaan Anda
+
+00:18:54.630 --> 00:18:55.330
+ke bisnis sentral
+
+00:18:55.330 --> 00:18:56.630
+tanpa menyentuh aplikasi inti.
+
+00:18:57.090 --> 00:18:57.690
+Dan Anda tidak harus
+
+00:18:57.690 --> 00:18:58.670
+membangun semuanya sekaligus.
+
+00:18:58.990 --> 00:18:59.890
+Mulai dengan satu bidang,
+
+00:19:00.070 --> 00:19:01.090
+satu ekstensi halaman,
+
+00:19:01.090 --> 00:19:02.290
+dan satu aturan yang jelas.
+
+00:19:02.490 --> 00:19:02.790
+Itu adalah
+
+00:19:02.790 --> 00:19:03.610
+blok bangunan pertamaan.
+
+00:19:04.030 --> 00:19:04.730
+Jika Anda merasa
+
+00:19:04.730 --> 00:19:05.970
+wawasan singkat ini bermanfaat,
+
+00:19:06.110 --> 00:19:06.650
+berlanggananlah
+
+00:19:06.650 --> 00:19:07.990
+di platform podcast favorit Anda
+
+00:19:07.990 --> 00:19:08.930
+dan bagikan kepada
+
+00:19:08.930 --> 00:19:09.890
+seseorang yang baru memulai
+
+00:19:09.890 --> 00:19:10.850
+pengembangan bisnis sentral.
+
+00:19:11.010 --> 00:19:11.670
+Bergabunglah dengan kami
+
+00:19:11.670 --> 00:19:12.250
+di episode berikutnya
+
+00:19:12.250 --> 00:19:12.770
+di mana kami akan
+
+00:19:12.770 --> 00:19:13.010
+buat pengembangan.
+
+00:19:13.250 --> 00:19:14.270
+Saya Merko Peters
+
+00:19:14.270 --> 00:19:15.570
+dan ini adalah episode lain
+
+00:19:15.570 --> 00:19:16.810
+dari wawasan singkat Microsoft
+
+00:19:16.810 --> 00:19:17.690
+di M3 Microsoft
+
+00:19:17.690 --> 00:19:18.530
+di M3 FM.

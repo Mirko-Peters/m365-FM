@@ -1,0 +1,1345 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:06.980
+Stellen Sie sich folgendes in Erinnerung. Sie entwickeln eine Anwendung und benötigen einen API-Schlüssel für einen Dienst, ein Datenbankpasswort oder einen Storage-Account-Schlüssel.
+
+00:00:07.540 --> 00:00:10.840
+Also fügen Sie ihn direkt in Ihren Code ein, vielleicht in eine Konfigurationsdatei über eine Umgebungsvariante.
+
+00:00:11.780 --> 00:00:15.480
+Und alles läuft einwandfrei, bis Sie den Code auf GitHub hochladen oder ein Notebook mit einem Kollegen teilen.
+
+00:00:16.580 --> 00:00:18.440
+Und schon ist Ihr Geheimnis nicht mehr so geheim.
+
+00:00:19.400 --> 00:00:22.380
+In dieser Code in die falschen Hände gerät, ist Ihr gesamtes System gefährdet.
+
+00:00:23.120 --> 00:00:25.540
+Azure Key Vault ist das Werkzeug, das dieses Problem löst.
+
+00:00:25.940 --> 00:00:29.480
+Es bietet einen sicheren Ort zur Speicherung von Geheimnissen, damit diese nie in Ihrem Code landen.
+
+00:00:29.480 --> 00:00:31.300
+Aber hier liegt der Punkt, den die meisten falsch verstehen.
+
+00:00:31.700 --> 00:00:34.300
+Ein Key Vault allein macht Sie noch nicht automatisch sicher.
+
+00:00:34.840 --> 00:00:38.520
+Die Art und Weise, wie Sie ihn einrichten, den Zugriff kontrollieren und Berechtigungen vergeben, ist genauso wichtig.
+
+00:00:39.020 --> 00:00:46.080
+Am Ende dieser Folge wissen Sie, was Key Vault wirklich ist, was Sie darin speichern können, wie der Zugriff funktioniert und welches der größte Fehler ist, der Ihre Geheimnisse gefährden könnte.
+
+00:00:47.160 --> 00:00:49.840
+Alles in verständlicher Sprache, ohne Fachjargon und das Wesentliche, das Sie brauchen.
+
+00:00:50.240 --> 00:00:51.340
+Was genau ist also Azure Key Vault?
+
+00:00:52.180 --> 00:00:53.040
+Was ist Azure Key Vault?
+
+00:00:53.540 --> 00:00:54.520
+Ist die einfachste Definition.
+
+00:00:55.080 --> 00:00:57.920
+Azure Key Vault ist ein cloudbasierter, digitaler Tresor für Ihre Geheimnisse.
+
+00:00:57.920 --> 00:01:05.040
+Es ist ein verwalteter Dienst von Microsoft für IPI-Schlüssel, Datenbankpasswörter, Verbindungszeichenfolgen, Verschlüsselungsschlüssel und Zertifikate an einem zentralen Ort.
+
+00:01:05.920 --> 00:01:09.500
+Sie müssen sich nicht um die Infrastruktur kümmern, denn Azure übernimmt Patches, Verfügbarkeit und Sicherheit.
+
+00:01:10.080 --> 00:01:10.840
+Sie nutzen ihn einfach.
+
+00:01:11.200 --> 00:01:12.360
+Stellen Sie es sich wie ein Bürogebäude vor.
+
+00:01:12.680 --> 00:01:18.320
+Sie haben Arbeitsplätze, Besprechungsräume und Aktenschränke, aber irgendwo im Keller gibt es einen sicheren Tresorraum für die wichtigen Dinge.
+
+00:01:19.060 --> 00:01:20.700
+Hauptschlüssel, Bargeld, rechtliche Dokumente.
+
+00:01:21.100 --> 00:01:23.100
+Niemand geht ohne Erlaubnis und Authentifizierung hinein.
+
+00:01:23.100 --> 00:01:25.280
+Und jedes Mal, wenn jemand die Tür öffnet, wird dies protokolliert.
+
+00:01:25.580 --> 00:01:26.120
+Das ist Key Vault.
+
+00:01:26.660 --> 00:01:28.720
+Der sichere Raum im Keller Ihrer Azure Architektur.
+
+00:01:30.120 --> 00:01:31.380
+Vergleichen Sie das nur mit der alten Folgen.
+
+00:01:31.720 --> 00:01:37.700
+Vor 20 Jahren, wenn man ein Datenbankpasswort brauchte, hat man es fest in eine Konfigurationsdatei oder eine Umgebungsvariable programmiert.
+
+00:01:37.940 --> 00:01:40.320
+Oder noch schlimmer, im Klartext, im Quellcode belassen.
+
+00:01:41.100 --> 00:01:43.060
+Wenn jemand Zugriff auf diesen Server erhielt, hat er alles.
+
+00:01:43.720 --> 00:01:46.540
+Und wenn man das Passwort ändern musste, musste man es überall aktualisieren.
+
+00:01:47.080 --> 00:01:49.420
+In jeder Konfigurationsdatei, jeder Umgebung, jedem Deployment.
+
+00:01:49.420 --> 00:01:51.640
+Es war ein Albtraum. Key Vault ändert das alles.
+
+00:01:52.160 --> 00:01:56.680
+Anstatt Geheimnisse über Ihren Code und Ihre Konfigurationsdateien zu verteilen, speichern Sie sie an einem zentralen Ort.
+
+00:01:57.160 --> 00:01:59.740
+Ihre Anwendungen fragen Sie zur Laufzeit nur dann ab, wenn Sie sie wirklich benötigen.
+
+00:02:00.180 --> 00:02:03.220
+Und da alles zentralisiert ist, können Sie ein Geheimnis an einer Stelle rotieren.
+
+00:02:03.560 --> 00:02:08.200
+Und jede Anwendung, die es nutzt, übernimmt automatisch den neuen Wert ohne Codeänderungen oder erneute Bereitstellungen.
+
+00:02:09.480 --> 00:02:12.160
+Aber hier ist der Punkt. Key Vault ist nicht nur ein Passwortmanager für Ihre Anwendungen.
+
+00:02:12.520 --> 00:02:13.700
+Es ist ein zentraler Sicherheitsdienst.
+
+00:02:14.140 --> 00:02:15.840
+Jeder Azure-Dienst kann damit integriert werden.
+
+00:02:15.840 --> 00:02:22.000
+App Service Functions, IKS, Data Factories, Synapse Logic Apps und DevOps Pipelines wissen alle, wie Sie mit Key Vault kommunizieren.
+
+00:02:22.620 --> 00:02:24.620
+Es wird zum Rückgrat Ihrer sicheren Cloud-Architektur.
+
+00:02:25.060 --> 00:02:28.340
+Und sobald Sie es richtig eingerichtet haben, müssen Sie sich überhaupt keine Gedanken mehr über das Anmeldedatenmanagement.
+
+00:02:29.080 --> 00:02:29.820
+Das können Sie speichern.
+
+00:02:30.660 --> 00:02:34.200
+Nachdem Sie nun wissen, was Key Vault ist, lassen Sie uns darüber sprechen, was Sie tatsächlich darin ablegen können.
+
+00:02:34.480 --> 00:02:35.580
+Sie haben drei Hauptkategorien.
+
+00:02:36.020 --> 00:02:37.720
+Geheimnisse, Schlüssel und Zertifikate.
+
+00:02:38.180 --> 00:02:42.440
+Jede davon erfüllt einen anderen Zweck und das Verständnis dieser Unterschiede hilft Ihnen, Key Vault richtig einzusetzen.
+
+00:02:42.800 --> 00:02:43.780
+Fangen wir mit den Geheimnissen an.
+
+00:02:44.100 --> 00:02:45.600
+Dies ist das, was am häufigsten gespeichert wird.
+
+00:02:46.180 --> 00:02:49.960
+Geheimnisse sind Verbindungszeichenfolgen, API-Schlüssel, Datenbank, Passwörter, Speicherkontoschlüssel,
+
+00:02:50.360 --> 00:02:53.740
+im Grunde alle alltäglichen Anmeldedaten, die Ihre Apps für die Kommunikation mit anderen Diensten benötigen.
+
+00:02:54.140 --> 00:02:57.640
+Anstatt Sie in Ihren Code oder Ihre Konfigurationsdatei zu schreiben, legen Sie sie in Key Vault ab.
+
+00:02:58.040 --> 00:03:00.920
+Ihre App ruft Sie zur Laufzeit ab und niemand sieht Sie jemals im Klartext.
+
+00:03:01.360 --> 00:03:04.100
+Stellen Sie es sich wie eine verschlossene Schublade in Ihrem digitalen Aktenschrank vor.
+
+00:03:04.440 --> 00:03:05.180
+Als nächstes kommen die Schlüssel.
+
+00:03:05.640 --> 00:03:07.080
+Dies sind Verschlüsselungsschlüssel für ruhende Daten.
+
+00:03:07.080 --> 00:03:14.160
+Wenn Sie vom Kunden verwaltete Schlüssel für Azure Storage, SQL-Datenbanken oder die Verschlüsselung von virtuellen Festplatten verwenden, können diese Schlüssel in Key Vault liegen.
+
+00:03:14.800 --> 00:03:17.080
+Das gibt Ihnen die volle Kontrolle darüber, wer Sie wann verwenden kann.
+
+00:03:17.540 --> 00:03:22.120
+Und wenn Sie hardwarebasierte Schlüssel für Compliance-Anforderungen benötigen, bietet Ihnen der Premium-Tarif-HSM-Schutz.
+
+00:03:22.460 --> 00:03:23.320
+Dann haben wir die Zertifikate.
+
+00:03:23.900 --> 00:03:27.320
+TLS- und SSL-Zertifikate für Ihre Web-Apps, APIs und internen Dienste.
+
+00:03:27.940 --> 00:03:31.940
+Key Vault kann Sie speichern, Ihren Lebenszyklus verwalten und Sie sogar automatisch erneuern, wenn Sie kurz vor dem Ablauf stehen.
+
+00:03:32.320 --> 00:03:36.620
+Das ist ein Lebensretter für jeden, der schon einmal erlebt hat, dass ein Zertifikat an einem Sonntag um drei morgens abgelaufen ist.
+
+00:03:37.120 --> 00:03:37.800
+Hier ist das praktische Beispiel.
+
+00:03:38.340 --> 00:03:43.180
+Stellen Sie sich vor, Sie haben eine Web-App, die eine Datenbankverbindungszeichenfolge und einen API-Schlüssel für einen Drittanbieterdienst benötigt.
+
+00:03:43.180 --> 00:03:46.100
+Auf die alte Weise würden Sie beides in Ihre JSON-App-Einstellungsdatei schreiben.
+
+00:03:46.100 --> 00:03:50.980
+Wenn diese Datei in Ihrem Repository landet, kann jeder mit Zugriff auf den Code Ihre Datenbankanmeldedaten sehen.
+
+00:03:52.460 --> 00:03:54.480
+Mit Key Vault speichern Sie beide Werte als Geheimnisse.
+
+00:03:54.900 --> 00:03:57.600
+Ihre App ruft Sie beim Start ab und Sie erscheinen niemals in Ihrem Quellcode.
+
+00:03:58.060 --> 00:04:00.700
+Müssen Sie das Datenbankpasswort rotieren? Aktualisieren Sie einfach in Key Vault.
+
+00:04:01.060 --> 00:04:03.940
+Die App übernimmt den neuen Wert automatisch beim nächsten Neustart.
+
+00:04:04.200 --> 00:04:05.840
+Keine Codeänderungen, keine Neutebereitstellung.
+
+00:04:05.840 --> 00:04:08.400
+Was viele überrascht ist, dass eine Versionsverwaltung integriert ist.
+
+00:04:08.640 --> 00:04:11.400
+Wenn Sie ein Geheimnis aktualisieren, überschreibt Key Vault den alten Wert nicht.
+
+00:04:11.600 --> 00:04:12.420
+Es erstellt eine neue Version.
+
+00:04:12.840 --> 00:04:15.840
+Die alten Versionen bleiben erhalten, sodass Sie bei Problemen ein Roarback durchführen können.
+
+00:04:16.100 --> 00:04:17.740
+Das ist bei Vorfällen unglaublich praktisch.
+
+00:04:18.380 --> 00:04:22.280
+Sie können schnell zu einem früheren Geheimnis zurückkehren, ohne sich an den alten Wert erinnern zu müssen.
+
+00:04:23.100 --> 00:04:26.380
+Sie können alle drei Typen Geheimnisse, Schlüssel und Zertifikate im selben Tresor speichern.
+
+00:04:27.160 --> 00:04:29.480
+Die bewährte Methode ist jedoch die Trennung nach Umgebung.
+
+00:04:30.000 --> 00:04:32.920
+Verwenden Sie ein Tresor für die Entwicklung, einen für Tests und einen für die Produktion.
+
+00:04:33.380 --> 00:04:37.320
+Dies verhindert, dass jemand versehentlich ein Produktionsgeheimnis in einer Entwicklungsumgebung verwendet
+
+00:04:37.320 --> 00:04:39.800
+und begrenzt den Schaden, falls ein Tresor kompromittiert wird, wird.
+
+00:04:40.660 --> 00:04:42.300
+Aber das Speichern von Geheimnissen ist nur die halbe.
+
+00:04:42.680 --> 00:04:44.400
+Die eigentliche Frage ist, wer darauf zugreifen darf.
+
+00:04:44.400 --> 00:04:46.360
+Wie die Zugriffskontrolle funktioniert
+
+00:04:46.360 --> 00:04:47.780
+Lassen Sie unter ursprünglich mehr Zugänge.
+
+00:04:48.180 --> 00:04:51.260
+Keyword bietet zwei verschiedene Möglichkeiten, den Zugriff auf die Inhalte zu steuern
+
+00:04:51.260 --> 00:04:53.260
+und die Wahl ist entscheidend und die Wahl ist entscheidend.
+
+00:04:53.360 --> 00:04:55.080
+Das erste Modell sind Legacy-Zugriffsrichtlinien.
+
+00:04:55.500 --> 00:04:56.300
+Das ist die alte Methode.
+
+00:04:57.000 --> 00:04:58.560
+Sie erstellen Richtlinien direkt im Tresor
+
+00:04:58.560 --> 00:05:00.860
+und weisen bestimmten Benutzern oder Gruppenberechtigungen
+
+00:05:00.860 --> 00:05:03.800
+für bestimmte Datentypen zu Geheimnisse, Schlüssel oder Zertifikate.
+
+00:05:04.760 --> 00:05:07.060
+Das Problem ist, dass diese Richtlinien direkt an den Tresor gebunden sind.
+
+00:05:07.520 --> 00:05:10.480
+Wenn Sie mehrere Tresore haben, müssen Sie die Richtlinien für jeden Einzelnen verwalten.
+
+00:05:10.820 --> 00:05:11.700
+Das lässt Sie nicht gut skalieren.
+
+00:05:11.700 --> 00:05:15.800
+Microsoft rät inzwischen von deren Verwendung ab, da bekannte Sicherheitsprobleme bestehen.
+
+00:05:16.540 --> 00:05:18.360
+Sie unterstützen kein Privileged Identity Management
+
+00:05:18.360 --> 00:05:20.960
+und können unerwartete Pfade zur Privilegienerweiterung schaffen.
+
+00:05:21.780 --> 00:05:24.480
+Das zweite Modell ist Azure RBAC, die rollenbasierte Zugriffskontrolle.
+
+00:05:24.940 --> 00:05:25.720
+Das ist die moderne Methode.
+
+00:05:26.120 --> 00:05:29.240
+Sie nutzt Entra-ID-Identitäten und ist konsistent mit der Berechtigungsverwaltung
+
+00:05:29.240 --> 00:05:30.240
+an anderen Stellen in Azure.
+
+00:05:30.780 --> 00:05:32.780
+Wenn Sie bereits wissen, wie man Zugriff auf ein Speicherkonto
+
+00:05:32.780 --> 00:05:33.980
+oder eine virtuelle Maschine gewährt,
+
+00:05:34.400 --> 00:05:35.980
+wissen Sie auch, wie man Zugriff auf Key Vault gewährt.
+
+00:05:35.980 --> 00:05:37.920
+Dasselbe System, dieselben Muster.
+
+00:05:38.380 --> 00:05:40.520
+Hier gilt die goldene Regel, das Prinzip der geringsten Privilegien.
+
+00:05:40.900 --> 00:05:42.680
+Geben Sie nur den minimalen Zugriff, den jemand benötigt.
+
+00:05:42.960 --> 00:05:43.320
+Mehr nicht.
+
+00:05:44.260 --> 00:05:45.660
+Wenn jemand nur Geheimnisse lesen muss,
+
+00:05:45.760 --> 00:05:47.660
+geben Sie ihm keine Berechtigung zum Erstellen oder Löschen.
+
+00:05:48.140 --> 00:05:49.740
+Wenn jemand nur Zertifikate verwalten muss,
+
+00:05:49.840 --> 00:05:51.120
+geben Sie ihm keinen Zugriff auf Schlüsse.
+
+00:05:51.680 --> 00:05:53.000
+Lassen Sie mich die wichtigsten Rollen erläutern.
+
+00:05:53.240 --> 00:05:54.140
+Es gibt den Key Vault Reader.
+
+00:05:54.760 --> 00:05:56.820
+Damit kann man Geheimnisse auflisten, aber ihre Werte nicht lesen.
+
+00:05:57.560 --> 00:05:58.380
+Key Vault Secrets User.
+
+00:05:58.920 --> 00:06:00.820
+Damit kann man tatsächlich Geheimniswerte lesen.
+
+00:06:01.340 --> 00:06:02.320
+Und Key Vault Secrets Officer.
+
+00:06:02.940 --> 00:06:05.200
+Damit kann man Geheimnisse erstellen, aktualisieren und löschen.
+
+00:06:05.840 --> 00:06:06.560
+Achten Sie auf das Muster.
+
+00:06:06.980 --> 00:06:09.060
+Jede Rolle bezieht sich auf die Daten innerhalb des Tresors,
+
+00:06:09.480 --> 00:06:10.260
+nicht auf den Tresor selbst.
+
+00:06:10.720 --> 00:06:12.320
+Stellen Sie denen nun die allgemeinen Rollen gegenüber
+
+00:06:12.320 --> 00:06:13.440
+Besitzer mitwirkender Leser.
+
+00:06:13.960 --> 00:06:15.640
+Diese beziehen sich auf den Tresor als Ressource,
+
+00:06:15.640 --> 00:06:16.580
+nicht auf die Daten daran.
+
+00:06:16.920 --> 00:06:18.420
+Ein Besitzer kann den gesamten Tresor löschen.
+
+00:06:18.880 --> 00:06:20.500
+Ein Mitwirkender kann die Tresoreinstellung ändern.
+
+00:06:21.040 --> 00:06:23.040
+Doch keine dieser Rollen gewährt für sich allein Zugriff
+
+00:06:23.040 --> 00:06:24.200
+auf die enthaltenen Geheimnisse.
+
+00:06:24.200 --> 00:06:26.540
+Das ist eine separate Berechtigungsebene
+
+00:06:26.540 --> 00:06:27.620
+und genau das ist der entscheidende Punkt.
+
+00:06:28.080 --> 00:06:29.600
+Zugriffskontrolle ist wie eine Torte mit mehreren Schichten.
+
+00:06:29.960 --> 00:06:31.540
+Sie benötigen Zugriff auf den Tresor selbst,
+
+00:06:31.640 --> 00:06:32.240
+das ist die erste Ebene.
+
+00:06:32.540 --> 00:06:34.160
+Und Sie benötigen Zugriff auf die Daten im Tresor,
+
+00:06:34.240 --> 00:06:35.080
+das ist die zweite Ebene.
+
+00:06:35.540 --> 00:06:36.620
+Beides muss separat gewährt werden.
+
+00:06:37.220 --> 00:06:39.000
+Die meisten Anfänger denken nur an die erste Ebene
+
+00:06:39.000 --> 00:06:39.840
+und vergessen die zweite.
+
+00:06:40.520 --> 00:06:41.460
+Da fangen die Probleme an.
+
+00:06:42.200 --> 00:06:43.200
+Der Sicherheitsfehler Nummer eins.
+
+00:06:43.560 --> 00:06:44.100
+Die Sache ist die.
+
+00:06:44.420 --> 00:06:46.340
+Die meisten Leute sehen die Rolle Key Vault Mitwirkender
+
+00:06:46.340 --> 00:06:47.000
+und halten sie für sicher.
+
+00:06:47.240 --> 00:06:48.460
+Sie lesen das Wort Mitwirkender
+
+00:06:48.460 --> 00:06:50.620
+und gehen davon aus, dass sie die Tresoreinstellung verwalten,
+
+00:06:50.720 --> 00:06:51.920
+aber die Geheimnisse daran nicht anfassen können.
+
+00:06:51.920 --> 00:06:54.560
+Die eigene Dokumentation von Microsoft besagte ursprünglich genau das.
+
+00:06:54.900 --> 00:06:56.020
+Diese Rolle erlaubt keinen Zugriff
+
+00:06:56.020 --> 00:06:57.720
+auf Geheimnisse, Schlüssel oder Zertifikate.
+
+00:06:58.400 --> 00:06:59.160
+Nur stimmt das nicht ganz.
+
+00:06:59.980 --> 00:07:01.840
+Ein Benutzer mit der Rolle Key Vault Mitwirkender
+
+00:07:01.840 --> 00:07:03.740
+kann Zugriffsrichtlinien für den Tresor ändern.
+
+00:07:04.440 --> 00:07:06.940
+Und wenn dieser Tresor noch Legacy-Zugriffsrichtlinien verwendet,
+
+00:07:06.980 --> 00:07:07.520
+was viele tun,
+
+00:07:07.600 --> 00:07:09.520
+können sie sich einfach selbst vollständigen Lesezugriff
+
+00:07:09.520 --> 00:07:10.680
+auf jedes Geheimnis, jeden Schlüssel
+
+00:07:10.680 --> 00:07:12.060
+und jedes Zertifikat darin gewähren.
+
+00:07:12.580 --> 00:07:13.760
+Kein spezieller Exploit nötig,
+
+00:07:13.760 --> 00:07:15.200
+keine Sicherheitslücke, die behoben werden muss.
+
+00:07:15.420 --> 00:07:16.520
+So funktionieren die Berechtigungen.
+
+00:07:16.520 --> 00:07:19.400
+Sicherheitsforscher bei Datadoc bewiesen dies im Jahr 2024.
+
+00:07:19.940 --> 00:07:21.960
+Sie zeigten, dass ein Mitwirkender in jedem Tresor,
+
+00:07:22.240 --> 00:07:23.780
+der Legacy-Zugriffsrichtlinien verwendet,
+
+00:07:23.820 --> 00:07:25.320
+den Zugriff auf alle Daten erzwingen kann.
+
+00:07:25.880 --> 00:07:26.900
+Microsofts Reaktion war interessant.
+
+00:07:27.460 --> 00:07:28.940
+Sie sagten, dies sei keine Sicherheitslücke,
+
+00:07:29.160 --> 00:07:30.520
+da Mitwirkende dazu konzipiert sind,
+
+00:07:30.580 --> 00:07:31.700
+Zugriffsrichtlinien zu verwalten,
+
+00:07:31.820 --> 00:07:33.460
+aktualisierten aber dennoch die Dokumentation,
+
+00:07:33.560 --> 00:07:34.540
+um ausdrücklich davor zu wahren,
+
+00:07:34.620 --> 00:07:36.500
+dass die Rolle sich selbst Datenebene Zugriff gewähren kann.
+
+00:07:36.580 --> 00:07:38.340
+Es ist also kein Fehler im Key Vault selbst,
+
+00:07:38.460 --> 00:07:39.540
+sondern eine Konfigurationsfalle.
+
+00:07:39.960 --> 00:07:41.500
+Und sie erwischt selbst erfahrene Teams,
+
+00:07:41.780 --> 00:07:42.900
+weil der Rollenname harmlos klingt.
+
+00:07:43.580 --> 00:07:44.800
+Mitwirkender klingt nicht nach jemandem,
+
+00:07:44.800 --> 00:07:46.260
+der ihre Datenbank-Passwörter lesen kann,
+
+00:07:46.340 --> 00:07:47.480
+aber in der Praxis können sie das.
+
+00:07:47.920 --> 00:07:48.700
+Denken Sie an das Risiko.
+
+00:07:49.180 --> 00:07:51.240
+Wenn ein Angreifer ein Konto mit der Rolle Mitwirkende
+
+00:07:51.240 --> 00:07:52.760
+für ihren Key Vault kompromittiert,
+
+00:07:52.960 --> 00:07:54.320
+muss er nicht in den Tresor einbrechen.
+
+00:07:55.160 --> 00:07:56.320
+Er muss keine Verschlüsselung knacken.
+
+00:07:56.640 --> 00:07:58.120
+Er ändert einfach die Zugriffsrichtlinie,
+
+00:07:58.380 --> 00:07:59.300
+gewährt sich Lesezugriff
+
+00:07:59.300 --> 00:08:01.420
+und schleust heimlich jedes gespeicherte Geheimnis aus,
+
+00:08:01.580 --> 00:08:03.820
+Verbindungszeichenfolgen, API-Schlüsselzertifikate,
+
+00:08:04.120 --> 00:08:04.940
+einfach alles.
+
+00:08:05.680 --> 00:08:07.200
+Und da Änderungen an Zugriffsrichtlinien
+
+00:08:07.200 --> 00:08:08.800
+normale administrative Tätigkeiten sind,
+
+00:08:09.020 --> 00:08:10.560
+lösen sie möglicherweise keine Alarme aus.
+
+00:08:10.740 --> 00:08:11.160
+Das ist also die Lösung.
+
+00:08:11.540 --> 00:08:13.700
+Verwenden Sie für den Zugriff auf die Datenebene Azure ABSC
+
+00:08:14.800 --> 00:08:15.320
+Sicherheitsrichtlinien.
+
+00:08:15.420 --> 00:08:16.980
+RBAC trennt die Verwaltung des Tresors
+
+00:08:16.980 --> 00:08:18.020
+von den darin enthaltenen Daten.
+
+00:08:18.560 --> 00:08:20.440
+Zweitens, geben Sie die Rolle Key Vault Mitwirkender
+
+00:08:20.440 --> 00:08:22.220
+niemals jemandem, der Sie nicht unbedingt benötigt.
+
+00:08:22.820 --> 00:08:24.880
+Drittens, falls Sie bereits Benutzer mit dieser Rolle haben,
+
+00:08:24.980 --> 00:08:25.720
+prüfen Sie diese noch heute.
+
+00:08:26.220 --> 00:08:28.080
+Ersetzen Sie Mitwirkender durch spezifische Rollen
+
+00:08:28.080 --> 00:08:30.580
+wie Key Vault Geheimnisbenutzer oder Key Vault Geheimnisbeauftragter.
+
+00:08:31.120 --> 00:08:32.940
+Es gibt einen zweiten Fehler, der diesen noch verstärkt,
+
+00:08:33.300 --> 00:08:35.180
+alle Geheimnisse in einem einzigen Tresor zu speichern.
+
+00:08:35.580 --> 00:08:37.020
+Wenn Sie einen Tresor für alles nutzen,
+
+00:08:37.360 --> 00:08:40.560
+Entwicklung, Tests, Staging, Produktion und alle Anwendungen
+
+00:08:40.560 --> 00:08:42.240
+und dieser Tresor kompromittiert wird,
+
+00:08:42.240 --> 00:08:43.260
+ist alles gefährdet.
+
+00:08:43.800 --> 00:08:44.720
+Es ist ein Single Point of Fail.
+
+00:08:45.160 --> 00:08:47.280
+Wir werden gleich mehr über eine Multi-Void-Strategie sprechen,
+
+00:08:47.400 --> 00:08:48.240
+aber das Prinzip ist einfach.
+
+00:08:48.780 --> 00:08:50.220
+Legen Sie nicht alle Eier in einen Korb,
+
+00:08:50.400 --> 00:08:51.540
+besonders wenn dieser Korb die Schlüssel
+
+00:08:51.540 --> 00:08:52.960
+zu Ihrer gesamten Infrastruktur enthält.
+
+00:08:54.300 --> 00:08:55.900
+Verwaltet die Identität der Goldstandard.
+
+00:08:56.300 --> 00:08:57.040
+Wie macht man es also richtig?
+
+00:08:57.480 --> 00:08:58.360
+Lassen Sie Sie über den besten Weg
+
+00:08:58.360 --> 00:08:59.260
+für den Zugriff auf den Key Vault.
+
+00:08:59.660 --> 00:09:00.540
+Es gibt ein grundlegendes Problem.
+
+00:09:00.880 --> 00:09:02.680
+Um Anmeldeinformationen aus dem Key Vault zu erhalten,
+
+00:09:02.760 --> 00:09:04.180
+muss sich Ihre Anwendung authentifizieren.
+
+00:09:04.660 --> 00:09:06.260
+Aber zur Authentifizierung benötigt Sie Anmeldeinformation.
+
+00:09:06.560 --> 00:09:07.680
+Wo speichern Sie die Anmeldeinformation,
+
+00:09:07.880 --> 00:09:09.360
+die Ihre App benötigt, um Anmeldeinformation zu erhalten?
+
+00:09:09.420 --> 00:09:10.740
+Es ist ein Henne-Ei-Problem.
+
+00:09:10.740 --> 00:09:12.760
+Die alte Antwort war ein Dienstprinzipal
+
+00:09:12.760 --> 00:09:13.760
+mit einem Client-Geheimnis.
+
+00:09:14.220 --> 00:09:15.340
+Aber dieses muss irgendwo liegen,
+
+00:09:15.440 --> 00:09:16.800
+vielleicht in einer Konfigurationsdatei,
+
+00:09:16.920 --> 00:09:19.060
+Umgebungsvariablen oder einer Bereitstellungspipeline.
+
+00:09:19.800 --> 00:09:21.360
+Und schon sind Sie wieder beim gleichen Problem.
+
+00:09:21.740 --> 00:09:23.320
+Sie haben das Geheimnis nur an einen anderen Ort verschoben.
+
+00:09:23.320 --> 00:09:25.280
+Die verwaltete Identität löst dies vollständig.
+
+00:09:25.520 --> 00:09:26.180
+So funktioniert es.
+
+00:09:26.480 --> 00:09:29.200
+Wenn Sie die verwaltete Identität für eine Azure-Ressource aktivieren,
+
+00:09:29.280 --> 00:09:32.220
+zum B, eine Web-App, eine Funktion oder eine virtuelle Maschine,
+
+00:09:32.320 --> 00:09:34.760
+erstellt Azure automatisch eine Identität für diese Ressource in N3ID.
+
+00:09:35.700 --> 00:09:37.580
+Diese Identität wird vollständig von Azure verwaltet.
+
+00:09:38.040 --> 00:09:39.480
+Keine Anmeldeinformationen zu erstellen,
+
+00:09:39.560 --> 00:09:41.260
+keine Geheimnisse zu rotieren, nichts zu speichern.
+
+00:09:41.960 --> 00:09:43.540
+Die Ressource besitzt einfach eine Identität,
+
+00:09:43.600 --> 00:09:44.380
+die Azure bekannt ist.
+
+00:09:44.880 --> 00:09:45.520
+Es gibt zwei Typen.
+
+00:09:46.000 --> 00:09:48.100
+Die systemseitig zugewiesene verwaltete Identität
+
+00:09:48.100 --> 00:09:49.340
+ist an eine bestimmte Ressource gebunden.
+
+00:09:49.960 --> 00:09:50.800
+Wenn Sie die Ressource löschen,
+
+00:09:50.880 --> 00:09:51.760
+verschwindet auch die Identität.
+
+00:09:51.760 --> 00:09:53.680
+Sie teilen sich ein Lebenszyklus,
+
+00:09:53.760 --> 00:09:54.800
+was die Verwaltung vereinfacht.
+
+00:09:55.320 --> 00:09:57.560
+Die benutzerseitig zugewiesene verwaltete Identität
+
+00:09:57.560 --> 00:09:58.940
+ist eine eigenständige Identität,
+
+00:09:59.020 --> 00:10:00.180
+die Sie mehreren Ressourcen zuweisen.
+
+00:10:00.560 --> 00:10:02.160
+Sie teilt sich keinen Lebenszyklus mit diesen,
+
+00:10:02.260 --> 00:10:02.980
+daher ist sie nützlich,
+
+00:10:03.040 --> 00:10:05.240
+wenn Sie dieselbe Identität für mehrere Dienste benötigen.
+
+00:10:05.920 --> 00:10:07.020
+So sieht das in der Praxis aus.
+
+00:10:07.600 --> 00:10:08.300
+Sie haben eine Web-App,
+
+00:10:08.380 --> 00:10:11.060
+die eine Datenbankverbindungszeichenfolge aus dem Key Vault lesen muss.
+
+00:10:11.540 --> 00:10:14.480
+Sie aktivieren die systemseitig zugewiesene verwaltete Identität für die Web-App.
+
+00:10:14.900 --> 00:10:16.260
+Dann erteilen Sie dieser Identität
+
+00:10:16.260 --> 00:10:18.680
+die Rolle Key Vault Geheimnis Benutzer für Ihren Tresor.
+
+00:10:19.040 --> 00:10:19.420
+Das ist alles.
+
+00:10:19.780 --> 00:10:20.900
+Keine Verbindungszeichenfolge im Code,
+
+00:10:20.900 --> 00:10:22.420
+keine kleinen Geheimnisse im Konfigurationsdatei.
+
+00:10:22.920 --> 00:10:24.900
+Die Web-App authentifiziert sich gegenüber dem Key Vault
+
+00:10:24.900 --> 00:10:26.180
+über ihre verwaltete Identität
+
+00:10:26.180 --> 00:10:28.680
+und Azure übernimmt die gesamte Anmeldedatenverwaltung im Hintergrund.
+
+00:10:29.220 --> 00:10:32.080
+Dies kommt einer anmeldedatenfreien Authentifizierung in Azure am nächsten.
+
+00:10:32.620 --> 00:10:34.380
+Es ist ein entscheidender Vorteil für die Sicherheit,
+
+00:10:34.740 --> 00:10:37.500
+da es den häufigsten Angriffsvektor ausschließt gestohlene Anmeldedaten.
+
+00:10:38.180 --> 00:10:39.840
+Wenn es keine Anmeldedaten zu stehlen gibt,
+
+00:10:39.940 --> 00:10:41.420
+kann ein Angreifer auch nichts kompromittieren.
+
+00:10:41.980 --> 00:10:43.320
+Lassen Sie mich ein Beispiel aus der Praxis nennen.
+
+00:10:43.900 --> 00:10:45.680
+Stellen Sie sich eine Datenpipeline in Synapse vor,
+
+00:10:45.720 --> 00:10:47.140
+die auf ein Speicherkonto zugreifen muss.
+
+00:10:47.140 --> 00:10:50.920
+Früher hätte man den Speicherkontoschlüssel in der Pipeline-Konfiguration gespeichert.
+
+00:10:51.560 --> 00:10:53.620
+Wenn jemand Zugriff auf diese Pipeline erhielt hat, den Schlüssel.
+
+00:10:54.280 --> 00:10:57.220
+Mit einer verwalteten Identität besitzt der Synapse-Arbeitsbereich eine eigene Identität.
+
+00:10:57.620 --> 00:10:59.380
+Diese Identität wird Zugriff auf den Key Vault gewährt,
+
+00:10:59.460 --> 00:11:01.160
+in dem der Speicherkontoschlüssel gespeichert ist.
+
+00:11:01.880 --> 00:11:03.600
+Die Pipeline ruft den Schlüssel zur Laufzeit ab,
+
+00:11:03.680 --> 00:11:05.200
+verwendet ihn und speichert ihn nirgendwo.
+
+00:11:06.060 --> 00:11:06.880
+Keine Schlüssel im Code,
+
+00:11:07.000 --> 00:11:08.140
+keine Geheimnisse in der Pipeline-Konfiguration.
+
+00:11:09.100 --> 00:11:10.880
+Wenn Sie verwaltete Identitäten mit RBC
+
+00:11:10.880 --> 00:11:12.640
+und dem Prinzip der geringsten Rechte kombinieren,
+
+00:11:12.700 --> 00:11:14.420
+erhalten Sie eine sichere Basis für jede Azure Workload.
+
+00:11:14.420 --> 00:11:16.780
+Ihre Anwendungen authentifizieren sich ohne Anmeldedaten.
+
+00:11:17.160 --> 00:11:18.640
+Sie greifen nur auf das zu, was Sie benötigen
+
+00:11:18.640 --> 00:11:20.360
+und jeder Zugriff wird protokolliert und ist prüfbar.
+
+00:11:20.560 --> 00:11:23.400
+Es ist das Muster, das Microsoft für fast jedes Szenario empfiehlt.
+
+00:11:24.060 --> 00:11:25.640
+Sobald Sie es einmal nutzen, werden Sie sich fragen,
+
+00:11:25.720 --> 00:11:26.860
+warum Sie es jemals anders gemacht haben.
+
+00:11:27.600 --> 00:11:28.940
+Kosten- und Multivahlstrategie.
+
+00:11:29.500 --> 00:11:30.740
+Lassen Sie uns also über Kosten sprechen.
+
+00:11:31.160 --> 00:11:32.360
+Hier sind die meisten Leute überrascht.
+
+00:11:33.020 --> 00:11:34.440
+Wie viel kostet Azure Key Vault eigentlich?
+
+00:11:35.040 --> 00:11:35.960
+Das Preismodell ist einfach.
+
+00:11:36.300 --> 00:11:37.540
+Es gibt keine Speichergebühr pro Geheim.
+
+00:11:37.880 --> 00:11:40.020
+Sie zahlen nicht für jedes Passwort oder den AP-Schlüssel, den Sie sprechen.
+
+00:11:40.380 --> 00:11:41.440
+Stattdessen zahlen Sie pro Vorgang.
+
+00:11:41.440 --> 00:11:44.780
+Für den Standardtarif sind es etwa 3 Cent pro 10.000 Vorgänge.
+
+00:11:45.280 --> 00:11:47.420
+Ein Aufruf zum Abrufen eines Geheimnisses zählt als infolgt.
+
+00:11:47.680 --> 00:11:50.160
+Ebenso das Erstellen eines Geheimnisses oder das Auflisten des Waldinhalts.
+
+00:11:50.420 --> 00:11:53.620
+Für eine typische kleine bis mittlere Anwendung summiert sich das auf wenige Cent pro Monat.
+
+00:11:54.020 --> 00:11:54.860
+Buchstäblich nur ein paar Cent.
+
+00:11:55.260 --> 00:11:57.000
+Vergleichen Sie das mit dem ABS Secrets Manager.
+
+00:11:57.680 --> 00:12:00.360
+Dort berechnet man 40 Cent pro Geheimnis und Monat allein für die Speicherung
+
+00:12:00.360 --> 00:12:01.680
+plus zusätzliche Gebühren für Abrufe.
+
+00:12:02.120 --> 00:12:04.260
+Wenn Sie 100 Geheimnisse haben, sind das 40 Dollar pro Monat,
+
+00:12:04.340 --> 00:12:05.300
+bevor Sie überhaupt eines davon gelisten.
+
+00:12:05.300 --> 00:12:09.440
+Mit Azure Key Vault könnten 100 Geheimnisse bei moderater Nutzung 15 Cent kosten.
+
+00:12:09.440 --> 00:12:11.400
+Der Unterschied wächst bei größerem Umfang schnell an.
+
+00:12:11.820 --> 00:12:12.740
+Es gibt auch einen Premium-Tarif.
+
+00:12:13.080 --> 00:12:17.120
+Dieser bietet HSM-gestützte Schlüssel für Workloads, die höchste kryptografische Sicherheit erfordern.
+
+00:12:17.580 --> 00:12:20.680
+Denken Sie an Finanztransaktionen, Gesundheitsdaten oder staatliche Systeme.
+
+00:12:21.100 --> 00:12:22.320
+Die Kosten pro Vorgang sind höher.
+
+00:12:22.420 --> 00:12:25.360
+Etwa 15 Cent pro 10.000 Vorgängen für fortgeschrittene Schlüsseltypen
+
+00:12:25.360 --> 00:12:28.100
+zuzüglich einer monatlichen Gebühr pro HSM-Schlüssel, Schlüssel.
+
+00:12:28.820 --> 00:12:31.560
+Aber für die meisten Anwendungen ist der Standardtarif mehr als ausreichend.
+
+00:12:31.900 --> 00:12:34.500
+Hier ist die Kostenüberraschung, die viele Leute unvorbereitet trippen.
+
+00:12:34.500 --> 00:12:38.480
+Für eine typische Web-App mit einer Handvoll Geheimnissen und ein paar tausend Operationen pro Monat
+
+00:12:38.480 --> 00:12:39.900
+kostet Key Vault weniger als einen Dollar.
+
+00:12:40.680 --> 00:12:42.700
+Sie geben mehr für den Kaffee aus, den Sie während der Einrichtung trinken.
+
+00:12:43.340 --> 00:12:45.220
+Doch es gibt eine Strategie, die wichtiger ist als die Kosten.
+
+00:12:45.660 --> 00:12:46.480
+Wie viele Vaults Sie verwenden.
+
+00:12:46.940 --> 00:12:48.780
+Der intelligente Ansatz ist eine Multi-Vault-Strategie.
+
+00:12:49.380 --> 00:12:52.200
+Verwenden Sie separate Vaults für Entwicklung, Tests, Staging und Produktion.
+
+00:12:52.640 --> 00:12:53.980
+Dies verhindert den häufigsten Unfall.
+
+00:12:54.520 --> 00:12:57.620
+Jemand führt ein Test-Skript aus, das versehentlich eine Produktionsdatenbank liest,
+
+00:12:57.680 --> 00:12:59.480
+weil die Verbindungszeichenfolge im selben Vault lag.
+
+00:13:00.080 --> 00:13:02.080
+Wenn Umgebungen getrennt sind, wird dieser Fehler unmöglich.
+
+00:13:02.080 --> 00:13:05.280
+Sie sollten auch nach Geschäftseinheiten oder Compliance-Bereichen trennen.
+
+00:13:05.760 --> 00:13:09.080
+Wenn Sie Zahlungskartendaten verarbeiten, legen Sie diese Geheimnisse in einen eigenen Vault.
+
+00:13:09.500 --> 00:13:12.500
+Allgemeine Geschäftsworkloads kommen in einen anderen, Gesundheitsdaten in einen dritten.
+
+00:13:12.800 --> 00:13:15.340
+Es geht nicht darum, es kompliziert zu machen, sondern die Schadensradius zu begrenzen.
+
+00:13:15.960 --> 00:13:18.900
+Wenn ein Vault kompromittiert wird, sind nur die Geheimnisse in diesem Vault betroffen.
+
+00:13:19.500 --> 00:13:21.000
+Der Rest Ihrer Infrastruktur bleibt sicher.
+
+00:13:21.440 --> 00:13:23.380
+Und zwei integrierte Sicherheitsnetze, die Sie marktivieren sollten.
+
+00:13:23.760 --> 00:13:26.900
+Soft-Delete bedeutet, wenn jemand ein Geheimnis löscht, ist es nicht dauerhaft weg.
+
+00:13:27.020 --> 00:13:32.020
+Es geht in einen wiederherstellbaren Zustand für einen Zeitraum Ihrer Wahl bis zu 90 Tage, bis zu 90 Tage.
+
+00:13:32.380 --> 00:13:34.020
+Der Lash-Schutz, Perch-Protection geht noch ein Schritt weiter.
+
+00:13:34.540 --> 00:13:38.180
+Niemand kann den Vault oder dessen Inhalt dauerhaft löschen, bis dieser Aufbewahrungszeitraum abgelaufen ist.
+
+00:13:38.540 --> 00:13:42.920
+Zusammen verhindern Sie die Art von versehentlichem Datenverlust, die Sicherheitsteams um den Schlaf bringt.
+
+00:13:43.600 --> 00:13:44.280
+Wie alles zusammenhängt.
+
+00:13:44.700 --> 00:13:46.760
+Führen wir das alles zusammen und sehen, wie die Teile ineinander greifen.
+
+00:13:47.220 --> 00:13:48.160
+Key Vault ist keine Insel.
+
+00:13:48.580 --> 00:13:51.600
+Es ist das zentrale Nervensystem für Geheimnisse in Ihrer Azure-Architektur.
+
+00:13:52.240 --> 00:13:55.060
+Wenn Sie verstehen, wie das gesamte System funktioniert, ergibt alles einen Sinn.
+
+00:13:55.280 --> 00:13:57.660
+Hier ist was passiert, wenn eine Anwendung ein Geheimnis benötigt.
+
+00:13:58.080 --> 00:14:00.560
+Die Anwendung fordert es unter Verwendung Ihrer verwalteten Identität an.
+
+00:14:00.560 --> 00:14:03.000
+Diese Identität ist bereits in EntraID registriert.
+
+00:14:03.460 --> 00:14:06.840
+Azure hat sie automatisch erstellt, als Sie die verwaltete Identität für die Ressource aktiviert haben.
+
+00:14:08.180 --> 00:14:12.160
+EntraID validiert die Legitimität der Identität und leitet die Anfrage an Key Vault weiter.
+
+00:14:12.720 --> 00:14:14.740
+Key Vault prüft die Erberechtigung, die Sie zugewiesen haben.
+
+00:14:15.340 --> 00:14:19.300
+Wenn die Identität die richtige Rolle hat, wie Key Vault Secrets User, wird das Geheimnis zurückgegeben.
+
+00:14:19.300 --> 00:14:20.800
+All das geschieht in Millisekunden.
+
+00:14:21.240 --> 00:14:22.880
+Die Anwendung sieht niemals einer mit dem Informationspaar.
+
+00:14:23.120 --> 00:14:24.040
+Sie speichern niemals ein Passwort.
+
+00:14:24.360 --> 00:14:25.560
+Sie erhält einfach den Wert, den Sie benötigt.
+
+00:14:25.840 --> 00:14:28.040
+Denken Sie nun daran, wie viele Azure-Dienste dies nutzen können.
+
+00:14:28.360 --> 00:14:32.620
+App Service Functions, AKS, Data Factory, Synapse Logic Apps, DevOps Pipelines, DevOps Pipelines.
+
+00:14:32.860 --> 00:14:34.300
+Sie alle wissen, wie man mit Key Vault kommuniziert.
+
+00:14:34.620 --> 00:14:38.600
+Sie können eine Web-App so konfigurieren, dass Sie direkt in Ihren Anwendungseinstellungen auf ein Geheimnis verweist.
+
+00:14:39.320 --> 00:14:43.400
+Sie können eine Data Factory Pipeline so einrichten, dass Sie zur Laufzeit einen Storage-Account-Schlüssel aus Key Vault ab.
+
+00:14:43.880 --> 00:14:47.980
+Sie können einen Kubernetes-Cluster so konfigurieren, dass er Geheimnisse über den Key Vault-CSI-Treiber abruft.
+
+00:14:47.980 --> 00:14:49.940
+Jeder Dienst integriert sich auf die gleiche Weise.
+
+00:14:50.320 --> 00:14:54.340
+Unter Verwendung desselben Identitätssystems, derselben ABA-C-Rollen und derselben Audit-Protokollierung.
+
+00:14:54.760 --> 00:14:56.800
+Das CI-CD-Muster ist besonders leistungsfähig.
+
+00:14:57.080 --> 00:14:59.640
+Ihre Pipelines rufen Geheimnisse zum Zeitpunkt der Bereitstellung aus dem Key Vault.
+
+00:15:00.000 --> 00:15:02.880
+Sie speichern diese niemals in Pipeline-Variablen oder Repository-Secrets.
+
+00:15:03.260 --> 00:15:06.720
+Wenn Sie ein Datenbank-Passwort rotieren müssen, aktualisieren Sie es einfach im Key Vault.
+
+00:15:06.740 --> 00:15:09.580
+Beim nächsten Durchlauf Ihrer Pipeline wird der neue Wert automatisch übernommen.
+
+00:15:09.980 --> 00:15:12.520
+Keine Pipeline-Änderung, keine Code-Anpassung, keine erneuten Bereitstellung.
+
+00:15:12.920 --> 00:15:14.120
+Hier ist der Punkt, der alles verständlich macht.
+
+00:15:14.120 --> 00:15:19.860
+Sobald Sie Key Vault mit verwalteter Identität und RBRC eingerichtet haben, müssen Sie sich nicht mehr um die Anmeldeinformationsverwaltung kümmern.
+
+00:15:20.000 --> 00:15:21.100
+Ihre Anwendungen funktionieren einfach.
+
+00:15:21.440 --> 00:15:23.220
+Geheimnisse werden rotiert, ohne dass es jemand merkt.
+
+00:15:23.880 --> 00:15:25.460
+Zertifikate erneuern sich ohne Notfälle mit Nennen.
+
+00:15:25.920 --> 00:15:27.220
+Das System erledigt das alles im Hintergrund.
+
+00:15:27.680 --> 00:15:29.260
+Das ist die Sicherheitslage, auf die es ankommt.
+
+00:15:29.700 --> 00:15:31.500
+Die Identität ist der Perimeter, nicht das Netzwerk.
+
+00:15:31.940 --> 00:15:34.760
+Es spielt keine Rolle, ob jemand innerhalb oder außerhalb Ihres virtuellen Netzwerks ist.
+
+00:15:35.340 --> 00:15:38.260
+Wichtig ist nur, ob die Person eine gültige Identität mit den richtigen Berechtigungen besitzt.
+
+00:15:38.760 --> 00:15:40.100
+Key Vault erzwingt dies durch sein Design.
+
+00:15:40.680 --> 00:15:46.040
+Jede Zugriffsanfrage durchläuft die Entra-ID-Authentifizierung und RBRC-Autorisierung, egal woher die Anfrage kommt.
+
+00:15:46.680 --> 00:15:47.540
+Und alles wird protokolliert.
+
+00:15:47.960 --> 00:15:50.440
+Jeder Lesezugriff auf Geheimnisse, jeder Schlüsselvorgang, jede Zertifikatserfolg.
+
+00:15:50.680 --> 00:15:52.080
+Sie können sehen, wer wann auf was zugegriffen hat.
+
+00:15:52.280 --> 00:15:54.720
+Wenn etwas verdächtig aussieht, haben Sie die Daten für eine Untersuchung.
+
+00:15:55.240 --> 00:15:59.260
+Dies ist entscheidend für die Compliance, die Reaktion auf Vorfälle und um einfach zu wissen, was in Ihrer Umgebung geschieht.
+
+00:15:59.260 --> 00:16:00.660
+Das ist schön an der ganzen Sache.
+
+00:16:01.060 --> 00:16:05.920
+Key Vault, Entra-ID, ABS-C und verwaltete Identitäten arbeiten als einheitliches Sicherheitsframework zusammen.
+
+00:16:06.560 --> 00:16:07.620
+Jedes Element steckt die anderen.
+
+00:16:08.240 --> 00:16:15.360
+Und wenn alles korrekt eingerichtet ist, haben Sie ein Verwaltungssystem für Anmeldeinformationen, das sicherer und einfacher zu betreiben ist, als alles, was Sie selbst aufbauen könnten oder gönnten.
+
+00:16:16.240 --> 00:16:17.040
+Praktische Erkenntnisse.
+
+00:16:17.520 --> 00:16:18.640
+Was sollten Sie also jetzt konkret tun?
+
+00:16:19.160 --> 00:16:20.780
+Lassen Sie uns dieses Wissen in Taten umsetzen.
+
+00:16:21.140 --> 00:16:22.740
+Hier sind die Aufgaben, die Sie diese Woche angehen können.
+
+00:16:23.040 --> 00:16:24.140
+Beginnen Sie mit Ihrem Berechtigungsmodell.
+
+00:16:24.460 --> 00:16:27.820
+Öffnen Sie Ihren Key Vault im Portal, gehen Sie zur Zugriffskonfiguration und prüfen Sie die Einstellung.
+
+00:16:27.820 --> 00:16:30.240
+Wenn Sie Vault-Zugriffsrichtlinien sehen, ist das der alte Weg.
+
+00:16:30.780 --> 00:16:33.200
+Wir möchten stattdessen die rollenbasierte Zugriffssteuerung von Azure nutzen.
+
+00:16:33.580 --> 00:16:34.340
+Die Migration ist einfach.
+
+00:16:35.100 --> 00:16:39.700
+Wechseln Sie das Berechtigungsmodell und weisen Sie die RBAC-Rollen denselben Personen zu, die bereits Zugriffsrichtlinien hatten.
+
+00:16:40.160 --> 00:16:40.620
+Tun Sie es noch halt.
+
+00:16:41.100 --> 00:16:44.260
+Microsoft empfiehlt dies und unsere Untersuchung hat genau gezeigt, warum.
+
+00:16:45.100 --> 00:16:48.060
+Überprüfen Sie als nächstes alle Konten, die die Rolle Key Vault-Mitwirkender innehaben.
+
+00:16:48.500 --> 00:16:51.500
+Öffnen Sie das IAM-Blade Ihres Vaults und sehen Sie nach, wer mitwirkende Zugriff hat.
+
+00:16:51.960 --> 00:16:53.780
+Jede Person mit dieser Rolle benötigt einen guten Grund dafür.
+
+00:16:54.180 --> 00:16:55.020
+Meistens tun Sie das nicht.
+
+00:16:55.520 --> 00:16:57.520
+Ersetzen Sie Mitwirkender durch etwas Spezifischeres.
+
+00:16:57.820 --> 00:17:00.620
+Wenn jemand nur Geheimnisse lesen muss, geben Sie ihm die Rolle Key Vault-Geheimnisbenutzer.
+
+00:17:01.120 --> 00:17:04.040
+Wenn er Geheimnisse verwalten muss, verwenden Sie Key Vault-Geheimnisbeauftragter.
+
+00:17:04.460 --> 00:17:06.700
+Das Ziel ist, dass diesen Eskalationspfad vollständig ist zu schließen.
+
+00:17:07.160 --> 00:17:08.780
+Nutzen Sie anschließend verwaltete Identitäten.
+
+00:17:09.360 --> 00:17:11.880
+Jeder Azure-Dienst, der Zugriff auf Key Vault benötigt, sollte diese verwenden.
+
+00:17:12.400 --> 00:17:15.900
+Wenn Sie eine Web-App, eine Funktion, eine Data Factory oder einen virtuellen Computer haben,
+
+00:17:16.220 --> 00:17:20.060
+der noch einen Dienstprinzipal mit Client-Geheimnis verwendet, wechseln Sie zu einer verwalteten Identität.
+
+00:17:20.460 --> 00:17:23.840
+Es ist einfacher, sicherer und löst das zuvor besprochene HEN-Ei-Problem.
+
+00:17:24.640 --> 00:17:27.000
+Er übernimmt die Anmeld-Informationsverwaltung im Hintergrund für Sie.
+
+00:17:27.360 --> 00:17:30.860
+Noch etwas. Aktivieren Sie das vorläufige Löschen und den Bereinigungsschutz für jeden Tresor.
+
+00:17:31.120 --> 00:17:34.760
+Das vorläufige Löschen ist bei neuen Tresoren standardmäßig aktiviert, der Bereinigungsschutz jedoch nicht.
+
+00:17:35.100 --> 00:17:35.600
+Schalten Sie ein.
+
+00:17:35.920 --> 00:17:40.140
+Diese Einstellung verhindert, dass jemand einen Tresor oder dessen Inhalt während des Aufbewahrungszeitraums dauerhaft löscht.
+
+00:17:40.760 --> 00:17:43.080
+Sie hat schon so manches Team vor einem katastrophalen Fehler bewahrt.
+
+00:17:43.460 --> 00:17:44.520
+Hier ist Ihre Handlungsaufforderung.
+
+00:17:45.040 --> 00:17:46.460
+Überprüfen Sie Ihren aktuellen Ansatz zur Verwaltung.
+
+00:17:46.820 --> 00:17:51.160
+Finden Sie ein Geheimnis, das noch in einer Konfigurationsdatei einer Umgebungsvariablen oder fest im Code steht.
+
+00:17:51.620 --> 00:17:52.740
+Verschieben Sie es diese Woche in den Key Vault.
+
+00:17:53.040 --> 00:17:53.220
+Nein.
+
+00:17:53.620 --> 00:17:55.800
+Sobald Sie sehen, wie einfach es ist, werden Sie den Rest ebenfalls verschieben.
+
+00:17:57.000 --> 00:17:58.460
+Einrichtung. Es ist eine ständige Praxis.
+
+00:17:58.740 --> 00:18:01.500
+Key Vault erleichtert diese Praxis aber nur, wenn Sie es korrekt verwenden.
+
+00:18:01.840 --> 00:18:03.600
+Die Werkzeuge sind vorhanden. Die Muster sind bewährt.
+
+00:18:04.060 --> 00:18:05.460
+Jetzt liegt es an Ihnen, Sie umzusetzen.
+
+00:18:06.100 --> 00:18:06.700
+Das ist das System.
+
+00:18:07.100 --> 00:18:11.080
+Key Vault ist Ihr digitaler Safe, aber er ist nur so sicher wie die Zugriffskontrollen, die Sie da rumherum aufbauen.
+
+00:18:11.360 --> 00:18:12.920
+Beginnen Sie mit dem Audit, das ich gerade beschrieben habe.
+
+00:18:13.260 --> 00:18:14.200
+Überprüfen Sie Ihr Bewechtigungsmodell.
+
+00:18:14.620 --> 00:18:17.800
+Überprüfen Sie Ihre Zuweisungen für Mitwirkende und verschieben Sie diese Woche ein Geheimnis in ein Tresor.
+
+00:18:18.040 --> 00:18:23.420
+Abonnieren Sie für weitere Cloud-Sicherheitstipps in einfachem Deutsch und teilen Sie dies mit jemandem, der Geheimnis immer noch in Konfigurationsdateien speichert.

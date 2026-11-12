@@ -1,0 +1,2380 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:02.000
+Copilot no está confundido. Es obediente.
+
+00:00:02.420 --> 00:00:07.540
+Ese alegre párrafo que acaba de escribir sobre el inexistente y estirar aumento del cuarto trimestre de su empresa no fue un error.
+
+00:00:07.780 --> 00:00:09.840
+Es la verdad absoluta según sus propios datos mal estructurados.
+
+00:00:10.480 --> 00:00:12.420
+Este es el efecto de basura, entra, confianza, sale.
+
+00:00:13.100 --> 00:00:16.420
+La forma educada en que Microsoft Fabric le dice que usted mismo entrenó a su mentiroso.
+
+00:00:17.160 --> 00:00:21.840
+Copilot alucinará patrones alegremente porque sus tablas le susurraron dulces inconsistencias en su contexto.
+
+00:00:22.480 --> 00:00:23.320
+Esto es lo que está sucediendo.
+
+00:00:23.560 --> 00:00:27.480
+Tiene uniones duplicadas, semántica ausente y capas de medallón a medio ser que se disfrazan de verdad.
+
+00:00:27.980 --> 00:00:29.440
+Luego llama a Copilot y le pide ideas.
+
+00:00:29.440 --> 00:00:31.060
+No razona, reorganiza.
+
+00:00:31.880 --> 00:00:36.760
+Fabric le alimenta metadatos mal formados y Copilot devuelve un sueño lúcido disfrazado de análisis.
+
+00:00:37.820 --> 00:00:43.780
+Hoy le mostraré por qué sucede, dónde le traiciona su modelo de datos y cómo reconstruirlo para que Copilot deje de inventar historias.
+
+00:00:44.340 --> 00:00:47.740
+Al final tendrá una idea precisa, explicable y por fin confiable.
+
+00:00:49.320 --> 00:00:50.360
+La ilusión de la inteligencia.
+
+00:00:51.120 --> 00:00:52.020
+¿Por qué miente Copilot?
+
+00:00:52.460 --> 00:00:54.040
+La gente espera que Copilot sepa cosas.
+
+00:00:54.480 --> 00:00:54.820
+La sabe.
+
+00:00:54.820 --> 00:01:00.340
+Realiza coincidencias de patrones a partir de sus metadatos, contexto y el sentido frágil de las relaciones que ha definido en Fabric.
+
+00:01:00.640 --> 00:01:03.140
+Cree que habla con inteligencia, pero en realidad habla con un reflejo.
+
+00:01:03.800 --> 00:01:07.300
+Le lee ambigüedad y le devolverá esa misma ambigüedad, solo que más brillante.
+
+00:01:07.840 --> 00:01:08.620
+Este es el verdadero problema.
+
+00:01:08.620 --> 00:01:17.300
+La mayoría de las implementaciones de Fabric tratan el diseño del esquema como algo secundario, tablas de hechos unidas por la clave incorrecta, medidas escritas de forma inconsistente, descripciones que faltan por completo.
+
+00:01:18.000 --> 00:01:20.880
+Copilot lee este caos como un niño, que lee una frase sin puntuación.
+
+00:01:21.520 --> 00:01:23.120
+Simplemente adivina dónde debería ir el significado.
+
+00:01:23.640 --> 00:01:26.180
+El resultado suena coherente, pero quizás es totalmente erróneo.
+
+00:01:26.620 --> 00:01:32.140
+Digamos que su capa Gold contiene ingresos de una fuente y ventas totales de otra, ambas sin estandarizar, ambas sin estandarizar.
+
+00:01:32.140 --> 00:01:36.380
+Copilot ve nombres de columnas similares y en su infinita cortesía los fusiona.
+
+00:01:36.800 --> 00:01:38.400
+Se pregunta cuál fue el ingreso del último tema.
+
+00:01:39.020 --> 00:01:45.360
+Combina medidas con una granularidad que no coincide, produce un promedio en escalas incompatibles y se lo presenta con total confianza y celopresencia.
+
+00:01:45.760 --> 00:01:47.840
+El gráfico parece profesional, pero las matemáticas son fix.
+
+00:01:48.220 --> 00:01:49.980
+La ilusión proviene del tono.
+
+00:01:50.000 --> 00:01:54.820
+El lenguaje natural parece comprensión, pero las respuestas naturales de Copilot solo ocultan una imitación estadística.
+
+00:01:55.340 --> 00:01:57.380
+Cuando hace una pregunta, el modelo no valida hechos.
+
+00:01:58.140 --> 00:02:01.680
+Recupera patrones, uniones probables, columnas plausibles y texto digerible.
+
+00:02:02.140 --> 00:02:06.120
+Sin un linaje de datos estricto, gobierno semántico, inventa lo que no puede deducir.
+
+00:02:06.940 --> 00:02:08.960
+Es en efecto su esquema con presencia sémica.
+
+00:02:09.500 --> 00:02:10.520
+Fabric agrava esta ilusión.
+
+00:02:11.380 --> 00:02:22.300
+Debido a que los agentes de datos en Fabric pasan contexto a través de metadatos, cualquier brecha en las relaciones, claves foráneas faltantes, dimensiones sin etiquetas o nombres de medidas ambiguos, se tratan como sugerencias opcionales en lugar de mandatos.
+
+00:02:23.440 --> 00:02:26.100
+El modelo llena esos vacíos mediante la finalización de patrones no con lógica.
+
+00:02:26.720 --> 00:02:28.320
+¿Quería unir las ventas por región y fecha?
+
+00:02:29.280 --> 00:02:32.100
+Podría interpretar o unir ventas con cualquier cosa que vuela geográfico.
+
+00:02:32.600 --> 00:02:35.240
+Y el SQL que genera coopera servilmente con ese sinsentido.
+
+00:02:35.720 --> 00:02:38.520
+Los usuarios caen en ello porque la interfaz democratiza la sintaxis de la consulta.
+
+00:02:38.800 --> 00:02:40.420
+Escribes una frase y te vuelve un gráfico.
+
+00:02:41.020 --> 00:02:43.900
+Asumes que comprende, pero el modelo opera en una niebla estadística.
+
+00:02:44.560 --> 00:02:47.300
+¿Cuántas menos restricciones de finas más amables se vuelven sus mentiras?
+
+00:02:47.880 --> 00:02:49.100
+El cambio mental de clave es este.
+
+00:02:49.440 --> 00:02:50.400
+Copilot no es un oráculo.
+
+00:02:50.980 --> 00:02:54.580
+No tiene epistemología ni concepto de verdad, solo espejos construidos con tus metadatos.
+
+00:02:55.080 --> 00:02:57.640
+Convierte tu modelo de datos en un espacio de probabilidad lingüística.
+
+00:02:58.520 --> 00:03:00.960
+Cada defecto estructural se convierte en una alucinación semántica.
+
+00:03:01.640 --> 00:03:05.320
+Donde tu esquema es inconsistente, la IA alucina una coherencia que no existe.
+
+00:03:06.620 --> 00:03:07.760
+Y la tragedia es predecible.
+
+00:03:08.620 --> 00:03:12.680
+Los ejecutivos toman decisiones basadas en ficción que parece válida por venir de Microsoft Fabric.
+
+00:03:12.680 --> 00:03:18.300
+Si tu capa de oro flaquea por transformes inconsistentes, Copilot amplifica esa falla en una narrativa convincente.
+
+00:03:19.160 --> 00:03:21.740
+La elocuencia del modelo disfraza la podredumbre de tu canalización.
+
+00:03:22.180 --> 00:03:23.680
+Piensa en Copilot como un motor de reflexión.
+
+00:03:24.240 --> 00:03:26.400
+Su inteligencia empieza y termina con la calidad de tu esquema.
+
+00:03:27.440 --> 00:03:32.600
+Si tus uniones son erróneas, tu linaje está roto o tu semántica no es clara, refleja incertidumbre como certeza.
+
+00:03:33.460 --> 00:03:36.980
+Y es por eso que la cura no comienza con la ingeniería de PROMP, sino con higiene arquitectónica.
+
+00:03:37.660 --> 00:03:41.360
+Así que, si Copilot es tan veraz como tu arquitectura, analicemos dónde empieza la podredumbre.
+
+00:03:41.360 --> 00:03:44.580
+El mito del medallón, cuando el bronce contamina el oro.
+
+00:03:44.980 --> 00:03:47.960
+Todo ingeniero de datos recita la arquitectura del medallón, como las escrituras.
+
+00:03:48.120 --> 00:03:50.740
+Bronce, plata, oro. Crudo, refinado, confiable.
+
+00:03:51.380 --> 00:03:58.480
+En teoría, es una peregrinación del caos a la claridad, donde cada capa limpia la ambigüedad hasta que los datos ganan su halo de verdad.
+
+00:03:59.460 --> 00:04:07.040
+En la práctica, la mayoría construye un tobogán, de parque temático, donde la inconsistencia viaja directo del bronce al oro sin limpiar nada en medio.
+
+00:04:07.540 --> 00:04:08.240
+Comencemos desde abajo.
+
+00:04:08.240 --> 00:04:14.800
+El bronce es tu zona de aterrizaje, archivos parquet, CSUS, ingesta de IoT, el registro fósil de tu organización, el registro de organización.
+
+00:04:14.920 --> 00:04:16.880
+No se supone que sea bonito, solo que esté capturado por uno.
+
+00:04:17.400 --> 00:04:20.280
+No es así, la gente olvida que el bronce es una cuarentena, no un ingrediente activo.
+
+00:04:20.740 --> 00:04:25.480
+Cuando esa basura cruda se filtra hacia arriba por atajos perezosos, consultas directas o lógica de transformación ausente,
+
+00:04:25.560 --> 00:04:28.700
+le das a Copilot ruido sin tratar como contexto, sin tratar como contenido.
+
+00:04:28.980 --> 00:04:29.240
+Sí, alucinará.
+
+00:04:29.240 --> 00:04:29.800
+Alucinará.
+
+00:04:30.320 --> 00:04:33.220
+Tiene buenas razones, le entregaste un diario de sueños y le pediste una auditoría.
+
+00:04:33.680 --> 00:04:35.340
+La plata está diseñada para refinácerlo.
+
+00:04:35.820 --> 00:04:41.600
+Aquí es donde mueren los duplicados, se alinean esquemas, coinciden tipos de datos y las claves universales finalmente acuerdan que es un cliente.
+
+00:04:42.680 --> 00:04:44.540
+Pero mira, la mayoría de las configuraciones de fabric.
+
+00:04:44.800 --> 00:04:48.860
+Y la plata es una disculpa media, sus uniones rápidas, búsquedas frágiles, conversiones sin documentar.
+
+00:04:49.860 --> 00:04:52.540
+La excusa es siempre la misma, la arreglaremos en el oro.
+
+00:04:52.820 --> 00:04:55.400
+Es equivalente a corregir la gramática publicando el diccionario tarde.
+
+00:04:55.900 --> 00:04:58.460
+Cuando llegas al nivel oro, aparece la ilusión de confianza.
+
+00:04:59.080 --> 00:05:03.160
+Todo en oro parece analítico, tablas limpias, nombres orientados al negocio y paneles que radian seguridad.
+
+00:05:03.940 --> 00:05:10.540
+Pero debajo has acumulado conversiones erróneas, marcas de tiempo desincronizadas y colisiones de ID que se remontan hasta el nivel bronce.
+
+00:05:11.220 --> 00:05:17.300
+Los metadatos de Fabric rastrean esas relaciones automáticamente y adivinas en qué relaciones confía Copilot al interpretar lenguaje natural.
+
+00:05:17.300 --> 00:05:20.780
+Todo decide. Así que cuando el linaje miente, el modelo hereda el engaño.
+
+00:05:21.460 --> 00:05:25.440
+Aquí hay un escenario del mundo real. Tienes datos transaccionales de dos sistemas de reservas.
+
+00:05:25.880 --> 00:05:28.440
+Ambos se alimentan a bronce con formatos de clave ligeramente distinto.
+
+00:05:28.760 --> 00:05:31.040
+Uno usa un ID de viaje numérico, el otro mezcla letras.
+
+00:05:31.880 --> 00:05:35.900
+En plata, alguien los fusiona mediante un inner join en subcadenas truncadas para estandarizar.
+
+00:05:37.380 --> 00:05:40.660
+Técnicamente tienes datos unificados semánticamente a cada coincidencia es fantasma.
+
+00:05:41.560 --> 00:05:46.580
+Ahora Copilot calcula con confianza el ingreso promedio por viaje, incluyendo transacciones de contextos totalmente diferentes.
+
+00:05:46.580 --> 00:05:50.420
+Es un sinsentido preciso, sintaxis exacta, semántica fabricada.
+
+00:05:50.900 --> 00:05:54.860
+Este es el mito del medallón. La idea es que tener capas se entrega pureza automáticamente.
+
+00:05:55.600 --> 00:05:57.920
+Las capas solo son tan veraces como la disciplina dentro de ella.
+
+00:05:58.320 --> 00:05:59.720
+Bronce debería exponer la entropía en bruto.
+
+00:06:00.260 --> 00:06:01.860
+Plata debe imponer la descontaminación.
+
+00:06:02.360 --> 00:06:04.740
+Oro tiene que representar lógica de negocio certificada.
+
+00:06:05.320 --> 00:06:07.480
+Sin anulaciones manuales, sin parches temporales.
+
+00:06:08.320 --> 00:06:11.000
+Si rompes esa cadena, sustituyes el refinamiento por una contaminación.
+
+00:06:11.480 --> 00:06:12.820
+Copilot, por supuesto, no saben a esto.
+
+00:06:12.820 --> 00:06:16.280
+Toma lo que el modelo de Fabric proclama como linaje y asume causalidad.
+
+00:06:17.220 --> 00:06:20.880
+Si una columna en oro referencia a un híbrido de tres fuentes inconsistentes,
+
+00:06:21.320 --> 00:06:22.760
+la IA ve un concepto único.
+
+00:06:23.340 --> 00:06:24.840
+Pregunta por qué se dispararon las ventas en marzo.
+
+00:06:25.440 --> 00:06:29.160
+Genera alegremente un SQL que agrega cada registro etiquetado como marzo en todas las regiones,
+
+00:06:29.240 --> 00:06:32.080
+divisas y zonas horarias porque nunca le dijiste a plata que impusiera esos límites.
+
+00:06:33.040 --> 00:06:34.000
+La IA no está mintiendo.
+
+00:06:34.500 --> 00:06:36.940
+Está traduciendo tu negligencia colectiva en una ficción fluida.
+
+00:06:37.540 --> 00:06:39.540
+Por esto, la procedencia de los datos no es un metado opcional.
+
+00:06:39.900 --> 00:06:40.720
+Es el GPS de Copilot.
+
+00:06:41.460 --> 00:06:44.000
+Cada transformación, cada unión y cada definición de medida
+
+00:06:44.000 --> 00:06:46.060
+es un rastro de migajas que conduce a tu fuente de verdad.
+
+00:06:46.500 --> 00:06:48.100
+Fabric rastrea el linaje visualmente,
+
+00:06:48.340 --> 00:06:50.640
+pero el linaje sin validación es como un mapa dibujado a lápiz.
+
+00:06:51.700 --> 00:06:54.120
+La IA lee esas líneas difusas como si fueran un horde absoluta.
+
+00:06:54.200 --> 00:06:54.920
+Así que impone validación.
+
+00:06:55.800 --> 00:06:58.240
+Entre bronce y plata ejecuta pruebas de esquema automatizadas.
+
+00:06:58.840 --> 00:07:01.800
+Se alinean los ID's, se manejan los nulos, son consistentes así.
+
+00:07:02.420 --> 00:07:03.960
+Entre plata y oro, despliega de uniones.
+
+00:07:04.620 --> 00:07:06.060
+Verifica las expectativas de un aú.
+
+00:07:06.700 --> 00:07:10.340
+Monitorea la deriva de agregación y verifica la continuidad del linaje a nivel de columna.
+
+00:07:10.740 --> 00:07:11.900
+Estos no son rituales burocráticos.
+
+00:07:12.240 --> 00:07:14.020
+Son herramientas de supervivencia para la precisión de ley.
+
+00:07:14.820 --> 00:07:17.800
+Cuando la consulta de Copilot se ejecuta a través de capas que has verificado,
+
+00:07:17.960 --> 00:07:19.320
+hereda disciplina en lugar de desorden.
+
+00:07:19.800 --> 00:07:20.720
+La ironía es deliciosa.
+
+00:07:20.980 --> 00:07:22.820
+Creía es que Copilot automatizará el análisis,
+
+00:07:22.820 --> 00:07:25.700
+pero la base de la que depende todavía requiere higiene a la antigua.
+
+00:07:26.320 --> 00:07:27.400
+Entra basura, sale confianza.
+
+00:07:27.400 --> 00:07:29.760
+Hasta que no trates la arquitectura como una filosofía moral
+
+00:07:29.760 --> 00:07:31.960
+y el refinamiento como una obligación, no como una sugerencia.
+
+00:07:32.120 --> 00:07:33.220
+Nunca tendrás una ya veraz.
+
+00:07:33.700 --> 00:07:35.800
+Incluso con capas impecables, Copilot puede tropezar.
+
+00:07:36.280 --> 00:07:38.920
+Porque saber qué datos existen no significa saber qué significan.
+
+00:07:39.700 --> 00:07:42.740
+Un flujo de datos perfecto puede alimentar un modelo semánticamente vacío,
+
+00:07:42.800 --> 00:07:46.040
+lo que nos lleva al traductor perdido entre números y significado la capa semántica,
+
+00:07:46.160 --> 00:07:47.920
+el cerebro que tus datos olvidaron construir.
+
+00:07:49.180 --> 00:07:52.000
+El cerebro faltante, las capas semánticas y el déficit de contexto.
+
+00:07:52.700 --> 00:07:55.700
+Aquí es donde la mayoría de las implementaciones de Fabric pierden la razón literalmente.
+
+00:07:55.700 --> 00:07:58.220
+La capa semántica es el cerebro de tu modelo de datos,
+
+00:07:58.360 --> 00:08:00.540
+pero muchas organizaciones la tratan como un adorno decorativo.
+
+00:08:01.340 --> 00:08:03.700
+Piensa que si existen tablas, el significado vendrá automáticamente.
+
+00:08:04.580 --> 00:08:06.540
+Las tablas son memoria, la semántica es comprensión.
+
+00:08:07.100 --> 00:08:09.280
+Sin esa capa, Copilot lee números como un turista,
+
+00:08:09.340 --> 00:08:11.060
+leyendo señales de tráfico en otro idioma fonéticamente,
+
+00:08:11.940 --> 00:08:13.900
+con confianza y absolutamente sin contexto.
+
+00:08:14.720 --> 00:08:15.440
+Definámoslo correctamente.
+
+00:08:16.120 --> 00:08:19.080
+El modelo semántico en Fabric le dice a Copilot qué significan tus datos,
+
+00:08:19.520 --> 00:08:20.300
+no solo cómo se llaman.
+
+00:08:21.240 --> 00:08:24.080
+Es el diccionario que traduce etiquetas de columnas en lógica de negocio.
+
+00:08:24.080 --> 00:08:27.280
+Ingresos se convierten en la suma de ventas excluyendo reembolsos.
+
+00:08:28.460 --> 00:08:31.460
+Clientes se convierten en un ID de comprador único a través de los límites del año fiscal.
+
+00:08:32.360 --> 00:08:35.240
+Sin él, Copilot trata estas palabras como meros tokens coincidente.
+
+00:08:36.060 --> 00:08:40.040
+Podrías pedir ventas totales y obtener ingresos brutos un día e ingresos netos al siguiente.
+
+00:08:40.740 --> 00:08:42.640
+No es caprichoso, está lingüísticamente a la deriva.
+
+00:08:43.400 --> 00:08:46.120
+La verdad es que un modelo semántico actúa como un intérprete bilingüe
+
+00:08:46.120 --> 00:08:48.280
+entre el lenguaje humano y la lógica DAX o SQL.
+
+00:08:48.280 --> 00:08:50.160
+Alínea la intención con el cálculo.
+
+00:08:50.660 --> 00:08:52.040
+Cuando falta, Copilot debe adivinar.
+
+00:08:52.560 --> 00:08:54.880
+Y los modelos de lenguaje extensos son adivinadores, notoriosos.
+
+00:08:55.260 --> 00:08:59.120
+Ensamblan uniones probables, no precisas y confía mucho más en los nombres de las columnas
+
+00:08:59.120 --> 00:09:00.240
+que en tus definiciones de negocio.
+
+00:09:00.580 --> 00:09:02.460
+En un modelo, reserva se refiere a reservaciones.
+
+00:09:03.280 --> 00:09:04.520
+En otro, cuenta viajes completado.
+
+00:09:05.000 --> 00:09:06.080
+Para Copilot, eso es un sinónimo.
+
+00:09:06.660 --> 00:09:08.780
+Acabas de pedir reservas por trimestre y te sirvió ambas.
+
+00:09:09.160 --> 00:09:10.260
+Eficientemente equivocadas.
+
+00:09:10.780 --> 00:09:11.280
+Comparados al que te...
+
+00:09:11.280 --> 00:09:14.960
+En un almacén de datos básico, Copilot observa directamente las tablas.
+
+00:09:15.260 --> 00:09:17.200
+Fecha, cantidad, tipo...
+
+00:09:17.200 --> 00:09:18.760
+Son sustantivos bonitos, pero sin contexto.
+
+00:09:19.040 --> 00:09:20.000
+Entonces busca patrones.
+
+00:09:20.520 --> 00:09:23.840
+Ventas igual a cantidad por región igual a cualquier campo que huele a geografía.
+
+00:09:24.920 --> 00:09:27.280
+En un modelo semántico, sin embargo, esos campos han sido civilizados.
+
+00:09:28.100 --> 00:09:32.060
+El monto de ventas incluye una medida DAX que define el alcance, la moneda y la lógica de agregación.
+
+00:09:32.720 --> 00:09:34.620
+Región tiene relaciones definidas, explícitamente.
+
+00:09:34.960 --> 00:09:38.200
+Así que cuando haces esa misma pregunta, Copilot no tantea en la oscuridad.
+
+00:09:38.560 --> 00:09:40.100
+Camina por un sendero iluminado que tú puedes mandar.
+
+00:09:40.100 --> 00:09:43.140
+El conjunto de herramientas de Fabry de 2025 incluso te da más para esto.
+
+00:09:44.140 --> 00:09:45.960
+Direct Lake para modelado de baja latencia.
+
+00:09:46.300 --> 00:09:47.520
+TAX para la lógica de medidas.
+
+00:09:47.920 --> 00:09:51.260
+Sinónimos para flexibilidad lingüística y grupos de cálculo para la consistencia.
+
+00:09:52.360 --> 00:09:53.940
+Piensa en los sinónimos como un vocabulario elástico.
+
+00:09:54.640 --> 00:09:58.060
+Si los usuarios dicen ingreso neto, pero su medida es ganancia, no cambia el nombre de la columna.
+
+00:09:58.500 --> 00:09:59.360
+Le enseña a copiar a reducir.
+
+00:10:00.140 --> 00:10:05.020
+Los grupos de cálculo refuerzan la gramática asegurando que la inteligencia temporal o las conversiones de monedas se apliquen uniformemente.
+
+00:10:05.540 --> 00:10:07.700
+Juntos forman el sistema de fundamentación del modelo de lengua.
+
+00:10:07.700 --> 00:10:10.200
+Pero muy pocas personas se molestan en conectarlos correcto.
+
+00:10:10.500 --> 00:10:13.780
+Vuelcan tablas en Fabric y asumen que la idea de Copilot interpretará los matices.
+
+00:10:14.360 --> 00:10:15.140
+Spoiler, no lo hará.
+
+00:10:15.780 --> 00:10:18.060
+El modelo no infiere sus KPIs por convicción moral.
+
+00:10:18.880 --> 00:10:20.400
+Los infiere a partir de etiquetas de metado.
+
+00:10:21.200 --> 00:10:25.720
+Si no ha etiquetado medidas, descrito relaciones o especificado el orden de cálculo, Copilot improvisa.
+
+00:10:26.480 --> 00:10:30.160
+La improvisación es encantadora en clubes de jazz, pero desastrosa en el análisis empresarial.
+
+00:10:30.720 --> 00:10:32.140
+Entonces, ¿cómo se refuerza la semántica?
+
+00:10:32.540 --> 00:10:34.020
+Comienza auditando el vocabulario y su modelo.
+
+00:10:34.600 --> 00:10:38.380
+Cada medida necesita una definición consistente, almacenada centralmente y referenciada universalmente.
+
+00:10:38.800 --> 00:10:41.000
+Resista la tentación de renombrar columnas en cada informe.
+
+00:10:41.660 --> 00:10:43.300
+Asigne ales en la capa semántica en su lugar.
+
+00:10:43.880 --> 00:10:45.800
+Crea grupos de cálculo para toda la lógica común.
+
+00:10:46.180 --> 00:10:46.820
+Totales anuales.
+
+00:10:46.960 --> 00:10:47.500
+Promedios móviles.
+
+00:10:47.660 --> 00:10:48.400
+Tases de conversión.
+
+00:10:48.760 --> 00:10:49.440
+Tases de conversión.
+
+00:10:49.700 --> 00:10:53.820
+Luego, añada sinónimos para que el motor del lenguaje natural de Copilot no invente su propia correlación.
+
+00:10:54.260 --> 00:10:56.540
+Ahora conecte la semántica con la arquitectura de instrucciones de Copilot.
+
+00:10:56.540 --> 00:11:00.900
+Fábrica ofrece dos niveles de control, instrucciones de fuente de datos e instrucciones de agente.
+
+00:11:01.540 --> 00:11:06.100
+Las instrucciones de fuente de datos aclaran detalles del esquema, uniones, referencias de medidas y nombres preferidos,
+
+00:11:06.180 --> 00:11:08.440
+mientras que las de agente rigen el tono, formato y restricciones.
+
+00:11:09.080 --> 00:11:12.600
+Estas interactúan mediante programas de fundamentación que dependen totalmente de la alineación semántica.
+
+00:11:13.240 --> 00:11:15.760
+Si su modelo semántico define claramente las ventas totales,
+
+00:11:15.840 --> 00:11:19.220
+las instrucciones de fuente de datos pueden aplicar esa definición cuando Copilot escribe en SQL.
+
+00:11:19.820 --> 00:11:23.580
+La instrucción de agente asegura que la respuesta sea concisa, tabular o resumida.
+
+00:11:24.080 --> 00:11:26.120
+Combínelas y reemplazará el caos con un protocolo.
+
+00:11:26.880 --> 00:11:29.300
+Sin semántica, cada respuesta de Copilot es una improvisación.
+
+00:11:29.760 --> 00:11:31.760
+Con semántica, cada respuesta se convierte en evidencia.
+
+00:11:32.520 --> 00:11:34.200
+No está ajustando Proms, está enseñando lógica.
+
+00:11:34.980 --> 00:11:37.180
+Una vez que otorga a Copilot un diccionario consistente,
+
+00:11:37.340 --> 00:11:40.020
+su precisión aumenta porque la incertidumbre ya no tiene donde esconderse.
+
+00:11:40.800 --> 00:11:42.120
+Ahora que Copilot entiende el lenguaje,
+
+00:11:42.200 --> 00:11:45.160
+le enseñaremos disciplina a las reglas de comportamiento que lo mantienen honesto.
+
+00:11:46.120 --> 00:11:48.280
+Disciplina para máquinas, datos e instrucciones de agente.
+
+00:11:48.940 --> 00:11:52.000
+Copilot puede entender finalmente su vocabulario, pero necesita modales.
+
+00:11:52.320 --> 00:11:55.340
+La semántica enseña el significado, las instrucciones enseñan comportamiento.
+
+00:11:55.340 --> 00:11:59.380
+Y en Microsoft Fabric, esos comportamientos se moldean mediante dos correas distintas,
+
+00:11:59.480 --> 00:12:01.860
+instrucciones de fuente de datos e instrucciones de agente.
+
+00:12:02.440 --> 00:12:04.920
+Una estructura al perro, la otra lo entrena para no morder los muebles.
+
+00:12:05.460 --> 00:12:08.100
+Comience con instrucciones de fuente de datos, los mandamientos específicos del esquema.
+
+00:12:08.100 --> 00:12:12.740
+Estos yacen más cerca de los datos y le dicen a Copilot exactamente cómo interpretar su modelo.
+
+00:12:13.140 --> 00:12:15.220
+Recuerda nuestro caso anterior con las uniones de datos meteorológicas.
+
+00:12:15.540 --> 00:12:17.180
+Las instrucciones de fuente de datos son donde solucionan.
+
+00:12:17.540 --> 00:12:22.260
+TED especifica que los datos de temperatura y lluvia deben unirse por ID de geografía de recogida e ID de fecha.
+
+00:12:22.860 --> 00:12:25.600
+Esto elimina las suposiciones del modelo y las sustituye por obligación.
+
+00:12:26.200 --> 00:12:29.260
+Fabric lee esas declaraciones siempre que Copilot redacta SQL o DAX,
+
+00:12:29.320 --> 00:12:32.040
+asegurando que cada consulta se base en las claves correctas.
+
+00:12:32.700 --> 00:12:34.420
+Piensa en ellas como la constitución relacional,
+
+00:12:34.760 --> 00:12:37.600
+textos legales inmutables que definen cómo pueden conectarse las entidades.
+
+00:12:38.600 --> 00:12:41.000
+Estas instrucciones también manejan sinónimos y definiciones de medida.
+
+00:12:41.520 --> 00:12:43.460
+Suponga que sus analistas usan ventas totales,
+
+00:12:43.680 --> 00:12:45.860
+importe justo y recibos brutos de forma intercambiada.
+
+00:12:46.360 --> 00:12:48.120
+Para los humanos, todos significan más o menos lo mismo.
+
+00:12:48.740 --> 00:12:50.900
+Para Copilot son variables distintas que compiten por atención.
+
+00:12:51.680 --> 00:12:53.560
+En las instrucciones de la fuente de datos, ¿usted lo salió?
+
+00:12:53.980 --> 00:12:56.820
+Siempre que se mencione ventas totales, usa importe total justo.
+
+00:12:57.320 --> 00:13:00.640
+Ahora su IA deja de jugar a la ruleta semántica y empieza a responder de forma coherente.
+
+00:13:01.400 --> 00:13:04.020
+Incluso pueden definir lógica de agrupación para análisis categóricos.
+
+00:13:04.880 --> 00:13:06.840
+Cuando un usuario pregunta por ventas según la temperatura,
+
+00:13:06.980 --> 00:13:08.120
+usted puede predefinir rangos.
+
+00:13:08.780 --> 00:13:10.780
+Por debajo de 32 grados equivale a congelación,
+
+00:13:10.880 --> 00:13:14.360
+hasta 53 frío, de 53 a 72 templado, y así sucesivamente.
+
+00:13:15.240 --> 00:13:17.560
+Sin eso, Copilot devuelve infinitos valores numéricos,
+
+00:13:17.620 --> 00:13:19.860
+ahogando al usuario en trivialidades demasiado detalladas.
+
+00:13:20.400 --> 00:13:22.940
+Al integrar estos grupos directamente en sus instrucciones,
+
+00:13:23.060 --> 00:13:25.560
+genera una agregación predecible y una lógica reproducible.
+
+00:13:26.200 --> 00:13:29.440
+Lo que realmente está haciendo aquí es convertir metadatos latentes en reglas explícitas.
+
+00:13:29.440 --> 00:13:32.860
+El agente de datos de Fabric procesa esto antes de construir consultas,
+
+00:13:32.940 --> 00:13:34.240
+tratándolo como una verdad inmutable.
+
+00:13:34.860 --> 00:13:37.520
+No tenerlas es la razón por la que las consultas anteriores producían resolvidos.
+
+00:13:37.800 --> 00:13:40.280
+Generaba un SQL perfectamente válido para la pregunta incorrecta.
+
+00:13:40.700 --> 00:13:42.460
+Con instrucciones de datos redactadas correctamente,
+
+00:13:42.520 --> 00:13:44.940
+las consultas de Copilot se mantienen ancladas en reglas de negocio
+
+00:13:44.940 --> 00:13:46.120
+en lugar de probabilidades lingüísticas.
+
+00:13:46.780 --> 00:13:48.720
+Ahora subamos su nivel hacia las instrucciones de la gente
+
+00:13:48.720 --> 00:13:50.540
+en la escuela de etiqueta para el comportamiento del LM.
+
+00:13:51.300 --> 00:13:53.620
+Mientras que las instrucciones de la fuente de datos le dicen a Copilot
+
+00:13:53.620 --> 00:13:54.580
+qué significan los datos,
+
+00:13:54.660 --> 00:13:56.400
+las instrucciones de la gente dictan cómo debe responder.
+
+00:13:56.400 --> 00:13:59.060
+Define en la presentación el estilo y el alcance analítico.
+
+00:13:59.900 --> 00:14:00.400
+Puede indicar,
+
+00:14:00.680 --> 00:14:02.220
+resuma siempre con una tabla concisa.
+
+00:14:03.060 --> 00:14:03.280
+O,
+
+00:14:03.720 --> 00:14:04.940
+cuando existan múltiples fuentes,
+
+00:14:05.100 --> 00:14:06.740
+aclare la procedencia antes de la agregación.
+
+00:14:07.740 --> 00:14:08.140
+Esencialmente,
+
+00:14:08.260 --> 00:14:10.340
+transforma a Copilot de un pasante demasiado entusiasta
+
+00:14:10.340 --> 00:14:11.500
+en un analista disciplinado.
+
+00:14:11.500 --> 00:14:14.840
+Considere la regla de las cinco filas principales
+
+00:14:14.840 --> 00:14:15.960
+de la configuración de la gente de datos.
+
+00:14:16.480 --> 00:14:17.880
+En lugar de devolver miles de registros,
+
+00:14:17.960 --> 00:14:19.600
+le dice muestre solo las cinco principales
+
+00:14:19.600 --> 00:14:21.120
+a menos que el usuario solicite lo contrario.
+
+00:14:22.260 --> 00:14:23.280
+La IA impone brevedad,
+
+00:14:23.380 --> 00:14:24.700
+evitando que el gerente promedio
+
+00:14:24.700 --> 00:14:26.960
+tenga que desplazarse por una novela de datos.
+
+00:14:27.960 --> 00:14:28.860
+Otra directiva útil.
+
+00:14:29.840 --> 00:14:31.940
+Proporciones siempre nos resumen al principio de cada respuesta.
+
+00:14:33.240 --> 00:14:34.380
+Esto actúa como un metacomentario.
+
+00:14:35.100 --> 00:14:36.400
+Copilot explica lo que muestra
+
+00:14:36.400 --> 00:14:37.860
+permitiendo a los usuarios verificar
+
+00:14:37.860 --> 00:14:39.400
+que las medidas, uniones y filtros
+
+00:14:39.400 --> 00:14:40.660
+coincidan con las expectativas.
+
+00:14:41.700 --> 00:14:42.780
+Convierte el razonamiento invisible
+
+00:14:42.780 --> 00:14:43.800
+en una confirmación visible,
+
+00:14:43.860 --> 00:14:44.940
+algo crucial para la confianza.
+
+00:14:45.920 --> 00:14:46.580
+Note la interacción.
+
+00:14:47.160 --> 00:14:48.800
+Las instrucciones de datos definen los hechos.
+
+00:14:49.060 --> 00:14:50.880
+Las instrucciones del agente definen la voz.
+
+00:14:51.500 --> 00:14:53.140
+Juntos forman el código ético de Copilot.
+
+00:14:53.820 --> 00:14:55.020
+El agente de datos los combina
+
+00:14:55.020 --> 00:14:55.900
+en un mensaje compuesto
+
+00:14:55.900 --> 00:14:57.240
+cada vez que responde a una pregunta.
+
+00:14:58.080 --> 00:14:59.320
+El modelo de lenguaje no improvisa.
+
+00:14:59.940 --> 00:15:01.400
+Se condiciona a sí mismo mediante tus reglas.
+
+00:15:01.980 --> 00:15:03.180
+Ahora la gobernanza entra en escena.
+
+00:15:03.620 --> 00:15:04.940
+Estas instrucciones no pueden vivir
+
+00:15:04.940 --> 00:15:06.080
+en copias individuales anárquicas.
+
+00:15:06.080 --> 00:15:07.760
+Si cada usuario de Fabric
+
+00:15:07.760 --> 00:15:09.220
+personaliza los sinónimos a su gusto,
+
+00:15:09.320 --> 00:15:10.760
+habrá reintroducido la torre de Babel
+
+00:15:10.760 --> 00:15:12.260
+que tardaste meses en eliminar.
+
+00:15:12.800 --> 00:15:14.380
+Obtendrá cinco definiciones de ganancias
+
+00:15:14.380 --> 00:15:15.060
+y cero acuerdos
+
+00:15:15.060 --> 00:15:16.460
+durante las revisiones trimestrales.
+
+00:15:17.240 --> 00:15:18.660
+Centraliza los conjuntos de instrucciones.
+
+00:15:18.840 --> 00:15:20.020
+Púlicalos a través del área de trabajo
+
+00:15:20.020 --> 00:15:20.740
+de gestión de Fabric.
+
+00:15:21.080 --> 00:15:22.500
+Válida los mediante revisión por pares
+
+00:15:22.500 --> 00:15:24.160
+y bloquea los bajo control de versiones.
+
+00:15:24.640 --> 00:15:25.820
+La flexibilidad sin gobernanza
+
+00:15:25.820 --> 00:15:27.320
+es rebelión disfrazada de innovación.
+
+00:15:28.060 --> 00:15:28.520
+Por supuesto,
+
+00:15:28.920 --> 00:15:29.940
+incluso estas reglas decaen
+
+00:15:29.940 --> 00:15:30.820
+si nunca las verificas.
+
+00:15:31.400 --> 00:15:32.240
+El enfoque inteligente
+
+00:15:32.240 --> 00:15:33.720
+es tratar la calidad de las instrucciones
+
+00:15:33.720 --> 00:15:34.820
+como la calidad del código.
+
+00:15:34.820 --> 00:15:36.200
+Después de que adición pruebe
+
+00:15:36.200 --> 00:15:37.280
+el comportamiento de Copilot,
+
+00:15:37.580 --> 00:15:38.580
+haz la misma pregunta dos veces
+
+00:15:38.580 --> 00:15:39.380
+después de borrar el caché.
+
+00:15:39.740 --> 00:15:40.960
+Observa si repite el mismo SQL.
+
+00:15:41.740 --> 00:15:42.760
+Termina las consultas generadas.
+
+00:15:43.660 --> 00:15:44.440
+Asegúrate de que reflejen
+
+00:15:44.440 --> 00:15:45.200
+las uniones forzadas
+
+00:15:45.200 --> 00:15:46.040
+y las medidas correctas.
+
+00:15:46.420 --> 00:15:47.520
+Si los resultados se desvían,
+
+00:15:47.660 --> 00:15:48.500
+revisa tus instrucciones.
+
+00:15:48.980 --> 00:15:50.100
+Incluso los ingenieros de Microsoft
+
+00:15:50.100 --> 00:15:50.960
+admiten que este ajuste
+
+00:15:50.960 --> 00:15:51.740
+es más arte que ciencia,
+
+00:15:51.840 --> 00:15:52.560
+lo cual es un atajo
+
+00:15:52.560 --> 00:15:54.520
+alegador para decir depuración constante.
+
+00:15:55.280 --> 00:15:56.000
+Y es donde las consultas
+
+00:15:56.000 --> 00:15:56.760
+de ejemplo te rescatan.
+
+00:15:57.280 --> 00:15:58.200
+Son la respuesta de Fabric
+
+00:15:58.200 --> 00:15:59.160
+a los mecanismos de seguridad,
+
+00:15:59.300 --> 00:16:00.600
+permitiéndote codificar fragmentos
+
+00:16:00.600 --> 00:16:01.420
+de SQL canónicos
+
+00:16:01.420 --> 00:16:03.100
+para intenciones analíticas comunes.
+
+00:16:03.100 --> 00:16:05.000
+Digamos que sabes
+
+00:16:05.000 --> 00:16:05.720
+que el ingreso total
+
+00:16:05.720 --> 00:16:06.600
+por segmento de temperatura
+
+00:16:06.600 --> 00:16:07.440
+siempre debe realizar
+
+00:16:07.440 --> 00:16:08.020
+una doble unión
+
+00:16:08.020 --> 00:16:08.820
+en geografía y fecha.
+
+00:16:09.480 --> 00:16:10.800
+Lo registras como una consulta de ejemplo.
+
+00:16:11.460 --> 00:16:12.060
+Cuando los usuarios
+
+00:16:12.060 --> 00:16:12.940
+hacen cualquier variación
+
+00:16:12.940 --> 00:16:13.440
+de esa frase,
+
+00:16:13.640 --> 00:16:14.920
+Copilot evita la improvisación
+
+00:16:14.920 --> 00:16:16.520
+y reutiliza tu lógica exacta.
+
+00:16:17.160 --> 00:16:18.100
+Es el equivalente en IA
+
+00:16:18.100 --> 00:16:19.860
+a emitir formularios preaprobados,
+
+00:16:20.300 --> 00:16:21.580
+completados correctamente cada vez,
+
+00:16:21.980 --> 00:16:23.160
+incapaces de sabotaje creativo.
+
+00:16:24.020 --> 00:16:24.520
+Con el tiempo,
+
+00:16:24.680 --> 00:16:25.580
+puedes construir una biblioteca
+
+00:16:25.580 --> 00:16:26.660
+de estas consultas de ejemplo,
+
+00:16:26.800 --> 00:16:27.640
+transformando a Copilot
+
+00:16:27.640 --> 00:16:28.400
+de un generalista
+
+00:16:28.400 --> 00:16:29.460
+a un experto en el dominio.
+
+00:16:29.840 --> 00:16:30.720
+Piénsalo como Memorevo.
+
+00:16:30.720 --> 00:16:32.500
+La IA aprende gradualmente
+
+00:16:32.500 --> 00:16:33.180
+que es lo correcto
+
+00:16:33.180 --> 00:16:34.160
+mediante la repetición
+
+00:16:34.160 --> 00:16:34.980
+y la restricción
+
+00:16:34.980 --> 00:16:35.720
+en lugar de un genio
+
+00:16:35.720 --> 00:16:36.340
+de forma libre.
+
+00:16:36.920 --> 00:16:37.140
+Aun así,
+
+00:16:37.200 --> 00:16:38.300
+las instrucciones más inteligentes
+
+00:16:38.300 --> 00:16:38.860
+no pueden redimir
+
+00:16:38.860 --> 00:16:39.580
+un pecado arquitecto.
+
+00:16:39.980 --> 00:16:40.880
+Si tu tubería de datos
+
+00:16:40.880 --> 00:16:41.800
+flaquea bajo capas
+
+00:16:41.800 --> 00:16:42.740
+de medallón inconsistentes
+
+00:16:42.740 --> 00:16:43.540
+o falta de semántica,
+
+00:16:43.660 --> 00:16:44.740
+todas estas medidas de seguridad
+
+00:16:44.740 --> 00:16:46.180
+equivalen a discursos severos
+
+00:16:46.180 --> 00:16:47.000
+pronunciados en un barco
+
+00:16:47.000 --> 00:16:47.500
+que se hunde.
+
+00:16:48.440 --> 00:16:49.400
+Las instrucciones limitan
+
+00:16:49.400 --> 00:16:49.780
+el lenguaje
+
+00:16:49.780 --> 00:16:50.800
+y no pueden inventar la verdad.
+
+00:16:51.280 --> 00:16:52.080
+Es por eso que el ajuste
+
+00:16:52.080 --> 00:16:52.820
+es un ciclo cerrado.
+
+00:16:52.900 --> 00:16:54.080
+La arquitectura define la fiabilidad,
+
+00:16:54.160 --> 00:16:55.440
+la semántica define el significado
+
+00:16:55.440 --> 00:16:56.040
+y las instrucciones
+
+00:16:56.040 --> 00:16:56.880
+definen la obediencia.
+
+00:16:57.700 --> 00:16:58.980
+El flujo de trabajo pragmático se hace.
+
+00:16:59.500 --> 00:17:01.040
+Construye capas de medallón limpias,
+
+00:17:01.300 --> 00:17:02.680
+define un modelo semántico preciso,
+
+00:17:03.060 --> 00:17:04.020
+codifica esas definiciones
+
+00:17:04.020 --> 00:17:05.280
+en instrucciones de origen de datos,
+
+00:17:05.800 --> 00:17:07.020
+modera la personalidad de Copilot
+
+00:17:07.020 --> 00:17:08.240
+mediante instrucciones de gente
+
+00:17:08.240 --> 00:17:09.580
+y prueba incansablemente.
+
+00:17:10.300 --> 00:17:11.600
+Cada anomalía que detectas a tiempo
+
+00:17:11.600 --> 00:17:12.560
+te ahorra el correo electrónico
+
+00:17:12.560 --> 00:17:13.980
+enojado de un ejecutivo más tarde.
+
+00:17:14.440 --> 00:17:15.340
+Sigue así la disciplina importa.
+
+00:17:15.700 --> 00:17:16.320
+No es glamuroso.
+
+00:17:16.660 --> 00:17:17.480
+No es magia de IA.
+
+00:17:18.360 --> 00:17:19.400
+Es aplicación de reglas,
+
+00:17:19.540 --> 00:17:20.360
+limpieza de caché,
+
+00:17:20.540 --> 00:17:21.380
+pruebas de consistencia
+
+00:17:21.380 --> 00:17:22.440
+y la verificación ocasional
+
+00:17:22.440 --> 00:17:23.020
+de autoestima
+
+00:17:23.020 --> 00:17:24.240
+cuando tu IA todavía insiste
+
+00:17:24.240 --> 00:17:25.160
+en que las ventas totales
+
+00:17:25.160 --> 00:17:26.100
+equivalen a ventas brutas
+
+00:17:26.100 --> 00:17:26.680
+más reembolsos,
+
+00:17:26.760 --> 00:17:27.320
+más milagros.
+
+00:17:28.360 --> 00:17:29.380
+Pero una vez que la disciplina
+
+00:17:29.380 --> 00:17:29.840
+se asienta,
+
+00:17:29.920 --> 00:17:31.500
+Copilot se vuelve inquietantemente confiado.
+
+00:17:31.960 --> 00:17:33.260
+Sus alucinaciones disminuyen,
+
+00:17:33.380 --> 00:17:34.360
+sus uniones se comportan
+
+00:17:34.360 --> 00:17:35.660
+y tus paneles dejan de engañarte.
+
+00:17:36.320 --> 00:17:37.220
+Debes establecer las reglas
+
+00:17:37.220 --> 00:17:37.920
+dentro de Fabric,
+
+00:17:38.040 --> 00:17:39.160
+pero la honestidad de Copilot
+
+00:17:39.160 --> 00:17:39.860
+sigue dependiendo
+
+00:17:39.860 --> 00:17:41.340
+de la arquitectura más allá de Fabric,
+
+00:17:41.420 --> 00:17:42.500
+la gobernanza sistémica
+
+00:17:42.500 --> 00:17:43.380
+que controla la verdad
+
+00:17:43.380 --> 00:17:44.800
+en todo tu entorno de datos
+
+00:17:44.800 --> 00:17:46.000
+y ahí es exactamente
+
+00:17:46.000 --> 00:17:46.820
+hacia donde nos dirigimos.
+
+00:17:47.440 --> 00:17:48.180
+La cura sistémica
+
+00:17:48.180 --> 00:17:49.560
+construyendo para una verdad verificable.
+
+00:17:50.120 --> 00:17:50.600
+Alejemosla.
+
+00:17:51.080 --> 00:17:52.500
+Después de todos los ajustes sinónimos
+
+00:17:52.500 --> 00:17:53.460
+y el entrenamiento de obediencia
+
+00:17:53.460 --> 00:17:53.880
+de la IA,
+
+00:17:53.880 --> 00:17:55.100
+todavía queda una realidad brutal.
+
+00:17:55.900 --> 00:17:56.780
+La veracidad de Copilot
+
+00:17:56.780 --> 00:17:57.660
+depende de la integridad
+
+00:17:57.660 --> 00:17:58.320
+de tu ecosistema.
+
+00:17:58.940 --> 00:17:59.560
+Puedes entrenarla,
+
+00:17:59.640 --> 00:18:00.940
+regañarla con resultados claros,
+
+00:18:01.000 --> 00:18:01.700
+pero si la arquitectura
+
+00:18:01.700 --> 00:18:02.400
+que rodea a Fabric
+
+00:18:02.400 --> 00:18:03.380
+o te da corrupción de datos,
+
+00:18:03.480 --> 00:18:05.200
+la IA seguirá mintiendo educadamente.
+
+00:18:06.380 --> 00:18:07.040
+Lo que necesitas
+
+00:18:07.040 --> 00:18:08.140
+es una cura sistémica,
+
+00:18:08.220 --> 00:18:08.740
+gobernanza,
+
+00:18:08.960 --> 00:18:09.900
+cumplimiento del linaje
+
+00:18:09.900 --> 00:18:11.180
+y una disciplina arquitectónica
+
+00:18:11.180 --> 00:18:11.800
+que haga que mentir
+
+00:18:11.800 --> 00:18:12.860
+sea físicamente imposible.
+
+00:18:13.620 --> 00:18:14.560
+A nivel arquitectónico,
+
+00:18:14.720 --> 00:18:15.620
+Fabrics lo tiene éxito
+
+00:18:15.620 --> 00:18:16.320
+cuando todo lo que está
+
+00:18:16.320 --> 00:18:17.140
+por encima y por debajo
+
+00:18:17.140 --> 00:18:18.480
+comparte la misma brújula moral
+
+00:18:18.480 --> 00:18:19.240
+de higiene de datos.
+
+00:18:19.900 --> 00:18:20.380
+Eso comienza
+
+00:18:20.380 --> 00:18:21.220
+con la aplicación de Scheme.
+
+00:18:21.580 --> 00:18:22.700
+Cada conjunto de datos
+
+00:18:22.700 --> 00:18:23.800
+en tu lighthouse y almacén
+
+00:18:23.800 --> 00:18:24.560
+necesita claves,
+
+00:18:24.680 --> 00:18:25.200
+tipos de datos
+
+00:18:25.200 --> 00:18:26.320
+y relaciones definidos.
+
+00:18:27.280 --> 00:18:28.000
+Contratos inmutables
+
+00:18:28.000 --> 00:18:28.460
+que describan
+
+00:18:28.460 --> 00:18:29.520
+cómo se entrelazan las entidades.
+
+00:18:30.220 --> 00:18:31.160
+Una desviación en una tabla
+
+00:18:31.160 --> 00:18:32.440
+no debería afectar silenciosamente
+
+00:18:32.440 --> 00:18:33.020
+a tu capa de oro.
+
+00:18:33.620 --> 00:18:33.980
+En cambio,
+
+00:18:34.060 --> 00:18:34.820
+la aplicación de esquemas
+
+00:18:34.820 --> 00:18:36.160
+lo detecta como un linter de código,
+
+00:18:36.280 --> 00:18:36.960
+deteniéndole en gesta
+
+00:18:36.960 --> 00:18:38.060
+hasta que las definiciones se alineen.
+
+00:18:38.620 --> 00:18:39.160
+En la práctica,
+
+00:18:39.300 --> 00:18:40.440
+esto no ralentiza el desarrollo,
+
+00:18:40.560 --> 00:18:41.080
+sino que previene
+
+00:18:41.080 --> 00:18:42.020
+la corrupción silenciosa
+
+00:18:42.020 --> 00:18:43.100
+antes de que se propague
+
+00:18:43.100 --> 00:18:44.200
+a las respuestas de Copilot.
+
+00:18:44.780 --> 00:18:45.320
+A continuación,
+
+00:18:45.440 --> 00:18:46.500
+introduce el control de versión Scheme.
+
+00:18:46.960 --> 00:18:47.680
+Trata tus modelos de datos
+
+00:18:47.680 --> 00:18:48.220
+como si fueran solo.
+
+00:18:48.640 --> 00:18:49.400
+Cada vez que modifiques
+
+00:18:49.400 --> 00:18:50.100
+una definición,
+
+00:18:50.640 --> 00:18:51.160
+cambies el nombre
+
+00:18:51.160 --> 00:18:51.700
+de una columna,
+
+00:18:51.780 --> 00:18:52.360
+ajustes la fórmula
+
+00:18:52.360 --> 00:18:52.840
+de una medida
+
+00:18:52.840 --> 00:18:53.820
+o alteres una relación.
+
+00:18:54.060 --> 00:18:54.720
+Incrementa la versión.
+
+00:18:55.320 --> 00:18:56.100
+Fabric no reconoce
+
+00:18:56.100 --> 00:18:56.820
+automáticamente
+
+00:18:56.820 --> 00:18:57.860
+el impacto filosófico
+
+00:18:57.860 --> 00:18:58.240
+de que
+
+00:18:58.240 --> 00:18:59.360
+ingresos igual a bruto
+
+00:18:59.360 --> 00:19:00.080
+menos descuentos
+
+00:19:00.080 --> 00:19:00.800
+se convierta en
+
+00:19:00.800 --> 00:19:02.120
+ingresos igual a neto
+
+00:19:02.120 --> 00:19:02.920
+después de impuestos.
+
+00:19:04.020 --> 00:19:04.520
+Lo suman en cielo.
+
+00:19:05.280 --> 00:19:06.120
+El control de versiones
+
+00:19:06.120 --> 00:19:07.240
+preserva el historial del linaje,
+
+00:19:07.340 --> 00:19:08.140
+permitiéndote rastrear
+
+00:19:08.140 --> 00:19:08.980
+qué respuesta de Copilot
+
+00:19:08.980 --> 00:19:10.300
+dependieron de semánticas obsoletas.
+
+00:19:10.720 --> 00:19:11.100
+Sin esto,
+
+00:19:11.240 --> 00:19:12.060
+nunca podrás auditar
+
+00:19:12.060 --> 00:19:12.920
+cuando entró una mentira
+
+00:19:12.920 --> 00:19:13.460
+en circulación.
+
+00:19:14.040 --> 00:19:14.180
+Ahora,
+
+00:19:14.260 --> 00:19:14.940
+vincula la aplicación
+
+00:19:14.940 --> 00:19:15.640
+con la documentación.
+
+00:19:16.080 --> 00:19:16.880
+Microsoft Purview
+
+00:19:16.880 --> 00:19:17.680
+o el catálogo de datos
+
+00:19:17.680 --> 00:19:18.100
+de One Lake
+
+00:19:18.100 --> 00:19:19.060
+no son simples adornos,
+
+00:19:19.420 --> 00:19:20.320
+son la memoria institucional
+
+00:19:20.320 --> 00:19:21.100
+que evita la amnesia
+
+00:19:21.100 --> 00:19:21.600
+de esquemas.
+
+00:19:22.620 --> 00:19:23.400
+Los conjuntos de datos
+
+00:19:23.400 --> 00:19:24.580
+certificados en estos catálogos
+
+00:19:24.580 --> 00:19:25.520
+actúan como las únicas fuentes
+
+00:19:25.520 --> 00:19:26.440
+permitidas para Copilot
+
+00:19:26.440 --> 00:19:27.080
+y Power BI.
+
+00:19:28.060 --> 00:19:29.340
+Piénsalos como entidades notariadas,
+
+00:19:29.520 --> 00:19:30.360
+representaciones de la verdad
+
+00:19:30.360 --> 00:19:31.340
+legalmente vinculantes.
+
+00:19:32.060 --> 00:19:32.820
+Si un conjunto de datos
+
+00:19:32.820 --> 00:19:33.580
+no está certificado,
+
+00:19:33.660 --> 00:19:34.440
+Copilot no deberá todo.
+
+00:19:34.980 --> 00:19:36.000
+Al integrar los metadatos
+
+00:19:36.000 --> 00:19:36.460
+de Purview
+
+00:19:36.460 --> 00:19:37.360
+con los agentes de datos
+
+00:19:37.360 --> 00:19:37.820
+de Fabric,
+
+00:19:37.980 --> 00:19:39.040
+aseguras que cada consulta
+
+00:19:39.040 --> 00:19:39.820
+impulsada por IAC
+
+00:19:39.820 --> 00:19:41.120
+tiene una procedencia verificable.
+
+00:19:41.720 --> 00:19:42.460
+Cuando alguien pregunte
+
+00:19:42.460 --> 00:19:43.620
+¿De dónde salió este número?
+
+00:19:44.160 --> 00:19:44.880
+Para representar.
+
+00:19:44.880 --> 00:19:46.100
+Para la continuidad
+
+00:19:46.100 --> 00:19:47.080
+del contexto entre sistemas
+
+00:19:47.080 --> 00:19:48.000
+se habilita la replicación
+
+00:19:48.000 --> 00:19:48.380
+de Mirroring
+
+00:19:48.380 --> 00:19:48.820
+y el modelado
+
+00:19:48.820 --> 00:19:49.660
+de gemelos digitales.
+
+00:19:50.300 --> 00:19:50.920
+La replicación
+
+00:19:50.920 --> 00:19:52.020
+replica fuentes externas
+
+00:19:52.020 --> 00:19:52.940
+como SQL Server,
+
+00:19:53.160 --> 00:19:53.620
+Cosmos DB
+
+00:19:53.620 --> 00:19:54.460
+o PostgreSQL
+
+00:19:54.460 --> 00:19:55.600
+en fábrica en tiempo real,
+
+00:19:55.760 --> 00:19:56.540
+preservando el esquema
+
+00:19:56.540 --> 00:19:57.240
+y la frescura.
+
+00:19:57.720 --> 00:19:58.640
+Es el sistema inmunológico
+
+00:19:58.640 --> 00:19:58.940
+de Fabric
+
+00:19:58.940 --> 00:19:59.500
+contra la latencia
+
+00:19:59.500 --> 00:20:00.260
+y la discrepanciedad.
+
+00:20:00.780 --> 00:20:01.220
+El modelado
+
+00:20:01.220 --> 00:20:02.020
+de gemelos digitales
+
+00:20:02.020 --> 00:20:02.680
+recién introducido
+
+00:20:02.680 --> 00:20:03.520
+lleva esto más lejos.
+
+00:20:04.480 --> 00:20:05.820
+Construye una contraparte digital
+
+00:20:05.820 --> 00:20:06.240
+en vivo
+
+00:20:06.240 --> 00:20:07.140
+de entornos físicos
+
+00:20:07.140 --> 00:20:07.900
+o de negocios.
+
+00:20:09.060 --> 00:20:10.200
+Copilot puede entonces
+
+00:20:10.200 --> 00:20:11.320
+consultar estos gemelos
+
+00:20:11.320 --> 00:20:12.140
+comprendiendo relaciones
+
+00:20:12.140 --> 00:20:12.820
+como que la producción
+
+00:20:12.820 --> 00:20:13.280
+de fábrica
+
+00:20:13.280 --> 00:20:14.100
+afecta los retrasos
+
+00:20:14.100 --> 00:20:15.660
+en el transporte.
+
+00:20:15.840 --> 00:20:16.780
+Esto mantiene su razonamiento
+
+00:20:16.780 --> 00:20:17.420
+basado en una realidad
+
+00:20:17.420 --> 00:20:18.000
+sincronizada,
+
+00:20:18.120 --> 00:20:19.200
+no en extractos obsoletos.
+
+00:20:19.920 --> 00:20:20.240
+Pero incluso
+
+00:20:20.240 --> 00:20:21.000
+la mejor arquitectura
+
+00:20:21.000 --> 00:20:21.800
+se desvía con el tiempo.
+
+00:20:22.260 --> 00:20:22.960
+Por eso se realizan
+
+00:20:22.960 --> 00:20:23.840
+auditorías de veracidad
+
+00:20:23.840 --> 00:20:24.440
+periódicas,
+
+00:20:24.600 --> 00:20:25.260
+revisiones rituales
+
+00:20:25.260 --> 00:20:25.880
+donde los resultados
+
+00:20:25.880 --> 00:20:26.300
+de la IA
+
+00:20:26.300 --> 00:20:26.740
+se validan
+
+00:20:26.740 --> 00:20:27.280
+frente a la fuente
+
+00:20:27.280 --> 00:20:27.680
+de la verdad.
+
+00:20:28.300 --> 00:20:29.020
+Se elige consultas
+
+00:20:29.020 --> 00:20:29.680
+representativas,
+
+00:20:29.860 --> 00:20:30.500
+las vuelve a ejecutar
+
+00:20:30.500 --> 00:20:31.020
+manualmente
+
+00:20:31.020 --> 00:20:32.200
+o mediante SQL almacenado
+
+00:20:32.200 --> 00:20:33.220
+y compara el resultado.
+
+00:20:34.080 --> 00:20:34.820
+Cualquier divergencia
+
+00:20:34.820 --> 00:20:36.140
+señala entropía arquitectónica,
+
+00:20:36.380 --> 00:20:37.100
+uniones corruptas,
+
+00:20:37.180 --> 00:20:37.880
+medidas desviadas
+
+00:20:37.880 --> 00:20:38.860
+o linaje expirado.
+
+00:20:39.220 --> 00:20:39.880
+O linaje expirado.
+
+00:20:40.280 --> 00:20:41.020
+Piénselo como una prueba
+
+00:20:41.020 --> 00:20:41.520
+de polígrafo
+
+00:20:41.520 --> 00:20:42.020
+para Copilot.
+
+00:20:42.720 --> 00:20:43.680
+Realizada trimestralmente,
+
+00:20:43.740 --> 00:20:44.460
+le permite recalibrar
+
+00:20:44.460 --> 00:20:45.400
+conjuntos de instrucciones
+
+00:20:45.400 --> 00:20:45.960
+y semántica
+
+00:20:45.960 --> 00:20:46.880
+antes de que la desconfianza
+
+00:20:46.880 --> 00:20:47.580
+escale en la vergüenza
+
+00:20:47.580 --> 00:20:48.320
+en la sala de juntas.
+
+00:20:49.100 --> 00:20:49.500
+Fundamentalmente,
+
+00:20:49.600 --> 00:20:50.060
+todas las capas
+
+00:20:50.060 --> 00:20:50.880
+de su pila de análisis
+
+00:20:50.880 --> 00:20:51.540
+BI, Copilot
+
+00:20:51.540 --> 00:20:52.160
+y el área de trabajo
+
+00:20:52.160 --> 00:20:52.580
+de Fabric
+
+00:20:52.580 --> 00:20:53.200
+deben provenir
+
+00:20:53.200 --> 00:20:54.800
+de una única fuente semántica.
+
+00:20:55.340 --> 00:20:56.040
+Los conjuntos de datos
+
+00:20:56.040 --> 00:20:56.480
+en las sombras.
+
+00:20:56.960 --> 00:20:57.860
+Cada vez que un departamento
+
+00:20:57.860 --> 00:20:58.960
+ambicioso clona un modelo
+
+00:20:58.960 --> 00:21:00.000
+para avanzar más rápido
+
+00:21:00.000 --> 00:21:01.200
+crea otro dialecto
+
+00:21:01.200 --> 00:21:01.680
+de la verdad.
+
+00:21:02.420 --> 00:21:02.820
+De repente,
+
+00:21:02.960 --> 00:21:03.820
+Power BI, Copilot
+
+00:21:03.820 --> 00:21:04.540
+y Excel Copilot
+
+00:21:04.540 --> 00:21:05.360
+hablan tres idiomas
+
+00:21:05.360 --> 00:21:06.320
+ligeramente diferentes
+
+00:21:06.320 --> 00:21:07.180
+sobre la misma cifra
+
+00:21:07.180 --> 00:21:07.700
+de ingresos.
+
+00:21:08.320 --> 00:21:09.540
+La cura es la unidad forzada,
+
+00:21:09.820 --> 00:21:10.800
+semántica centralizada
+
+00:21:10.800 --> 00:21:11.280
+en un modelo,
+
+00:21:11.580 --> 00:21:12.540
+exponerlo de solo lectura
+
+00:21:12.540 --> 00:21:13.520
+a los consumidores finales
+
+00:21:13.520 --> 00:21:14.400
+y vincular el cumplimiento
+
+00:21:14.400 --> 00:21:14.880
+de políticas
+
+00:21:14.880 --> 00:21:15.640
+a la certificación
+
+00:21:15.640 --> 00:21:16.400
+del conjunto de datos.
+
+00:21:17.020 --> 00:21:17.700
+Si Johnny en ventas
+
+00:21:17.700 --> 00:21:18.980
+quiere una métrica personalizada,
+
+00:21:19.140 --> 00:21:19.640
+negocia a través
+
+00:21:19.640 --> 00:21:20.200
+de la gobernanza,
+
+00:21:20.280 --> 00:21:21.100
+no por canales secundarios.
+
+00:21:21.560 --> 00:21:21.960
+Finalmente,
+
+00:21:22.060 --> 00:21:22.900
+cierra el ciclo de aprendizaje.
+
+00:21:23.240 --> 00:21:23.660
+La gobernanza
+
+00:21:23.660 --> 00:21:24.600
+no es papeleo estático,
+
+00:21:24.900 --> 00:21:25.940
+es un diálogo continuo
+
+00:21:25.940 --> 00:21:26.800
+entre analistas humanos
+
+00:21:26.800 --> 00:21:27.780
+y agentes de IA.
+
+00:21:28.580 --> 00:21:29.500
+Los humanos ajustan,
+
+00:21:29.620 --> 00:21:30.420
+Copilot ejecuta,
+
+00:21:30.460 --> 00:21:31.320
+los humanos verifican
+
+00:21:31.320 --> 00:21:32.120
+y Copilot mejora
+
+00:21:32.120 --> 00:21:33.240
+a través de contexto actualizado.
+
+00:21:36.320 --> 00:21:38.260
+Con el tiempo,
+
+00:21:38.400 --> 00:21:39.100
+esta retroalimentación
+
+00:21:39.100 --> 00:21:39.600
+se convierte
+
+00:21:39.600 --> 00:21:40.560
+en infraestructura invisible,
+
+00:21:40.780 --> 00:21:41.880
+el andamiaje de la precisión.
+
+00:21:42.200 --> 00:21:43.220
+Cuando alcance esta madurez,
+
+00:21:43.540 --> 00:21:44.560
+sucede algo extraordinario.
+
+00:21:45.160 --> 00:21:46.180
+Copilot deja de parecer
+
+00:21:46.180 --> 00:21:47.080
+un oráculo impredecible
+
+00:21:47.080 --> 00:21:47.760
+y empieza a comportarse
+
+00:21:47.760 --> 00:21:48.860
+como un analista junior rápido,
+
+00:21:49.240 --> 00:21:50.120
+consistente y respetuoso
+
+00:21:50.120 --> 00:21:50.720
+con las políticas.
+
+00:21:51.800 --> 00:21:52.980
+Las alucinaciones se evaporan,
+
+00:21:53.360 --> 00:21:53.860
+no porque la IA
+
+00:21:53.860 --> 00:21:54.520
+se haya vuelto honesta
+
+00:21:54.520 --> 00:21:54.880
+de repente,
+
+00:21:55.360 --> 00:21:56.280
+sino porque la deshonestidad
+
+00:21:56.280 --> 00:21:57.380
+ya no encaja en la estructura.
+
+00:21:58.160 --> 00:21:58.940
+La verdad se convirtió
+
+00:21:58.940 --> 00:21:59.300
+en el camino
+
+00:21:59.300 --> 00:22:00.180
+de menor resistencia,
+
+00:22:00.300 --> 00:22:01.160
+por lo que la cura sistémica
+
+00:22:01.160 --> 00:22:01.760
+no es el glamour,
+
+00:22:01.800 --> 00:22:02.540
+es la gobernanza.
+
+00:22:03.380 --> 00:22:04.260
+La aplicación de esquemas
+
+00:22:04.260 --> 00:22:05.160
+mantiene la estructura,
+
+00:22:05.160 --> 00:22:06.560
+el control de versiones semántico
+
+00:22:06.560 --> 00:22:07.300
+recuerda la historia,
+
+00:22:07.600 --> 00:22:08.700
+la certificación de Purview
+
+00:22:08.700 --> 00:22:09.580
+protege la integridad
+
+00:22:09.580 --> 00:22:11.400
+y la semántica de fuente única
+
+00:22:11.400 --> 00:22:12.320
+preserva la coherencia.
+
+00:22:13.520 --> 00:22:14.380
+El reflejo une la realidad
+
+00:22:14.380 --> 00:22:14.800
+con la imagen
+
+00:22:14.800 --> 00:22:15.880
+y las auditorías de veracidad
+
+00:22:15.880 --> 00:22:17.420
+mantienen ambos sincronizados.
+
+00:22:17.900 --> 00:22:18.300
+Entre ellos,
+
+00:22:18.380 --> 00:22:19.700
+Copilot no necesita inventar,
+
+00:22:20.060 --> 00:22:20.800
+simplemente informa.
+
+00:22:21.540 --> 00:22:22.240
+Una vez que ha forzado
+
+00:22:22.240 --> 00:22:23.460
+la verdad estructuralmente,
+
+00:22:23.540 --> 00:22:24.220
+se ha ganado el derecho
+
+00:22:24.220 --> 00:22:25.220
+de automatizar la información
+
+00:22:25.220 --> 00:22:25.880
+y eso nos lleva
+
+00:22:25.880 --> 00:22:26.560
+a la lección final,
+
+00:22:27.000 --> 00:22:27.880
+enseñar a las máquinas
+
+00:22:27.880 --> 00:22:28.520
+a decir la verdad
+
+00:22:28.520 --> 00:22:29.060
+por diseño,
+
+00:22:29.300 --> 00:22:30.080
+no por persuasión.
+
+00:22:30.800 --> 00:22:31.440
+Enseñar a Copilot
+
+00:22:31.440 --> 00:22:32.040
+a decir la verdad.
+
+00:22:32.800 --> 00:22:33.860
+Copilot nunca fue indigno
+
+00:22:33.860 --> 00:22:34.440
+de confianza,
+
+00:22:34.520 --> 00:22:35.060
+era obediente.
+
+00:22:35.840 --> 00:22:36.680
+Respondía fielmente
+
+00:22:36.680 --> 00:22:37.340
+a cualquier caos
+
+00:22:37.340 --> 00:22:38.160
+que usted codificara.
+
+00:22:38.740 --> 00:22:39.240
+Una vez que le da
+
+00:22:39.240 --> 00:22:40.260
+una arquitectura disciplinada,
+
+00:22:40.360 --> 00:22:41.280
+semántica consistente
+
+00:22:41.280 --> 00:22:42.320
+e instrucciones explícitas,
+
+00:22:42.680 --> 00:22:43.200
+deja de alucinar
+
+00:22:43.200 --> 00:22:43.820
+no por moralidad,
+
+00:22:43.940 --> 00:22:44.820
+sino por inevitabilidad,
+
+00:22:44.940 --> 00:22:45.820
+sino por inevitabilidad.
+
+00:22:46.060 --> 00:22:47.240
+Esta es la ecuación perdurable.
+
+00:22:47.720 --> 00:22:48.680
+Capas de medallón limpias,
+
+00:22:48.760 --> 00:22:49.740
+más disciplina semántica,
+
+00:22:49.840 --> 00:22:50.820
+más instrucciones gobernadas
+
+00:22:50.820 --> 00:22:51.540
+equivalen a verdad
+
+00:22:51.540 --> 00:22:52.340
+y a verificable.
+
+00:22:52.940 --> 00:22:53.720
+Elimine la ambigüedad
+
+00:22:53.720 --> 00:22:54.280
+en la fuente,
+
+00:22:54.640 --> 00:22:55.580
+documente el significado
+
+00:22:55.580 --> 00:22:56.200
+con precisión,
+
+00:22:56.440 --> 00:22:57.560
+pruebe los resultados regularmente
+
+00:22:57.560 --> 00:22:58.520
+y Copilot se convertirá
+
+00:22:58.520 --> 00:22:59.200
+en un espejo pulido
+
+00:22:59.200 --> 00:23:00.080
+para reflejar solo hechos.
+
+00:23:00.500 --> 00:23:01.480
+Si su entorno de tejido
+
+00:23:01.480 --> 00:23:02.740
+aún susurra contradicciones,
+
+00:23:02.940 --> 00:23:03.480
+este es su llamado
+
+00:23:03.480 --> 00:23:04.220
+para auditarlo.
+
+00:23:04.860 --> 00:23:05.960
+Aplique contratos de esquema,
+
+00:23:06.240 --> 00:23:07.300
+certifique conjuntos de datos,
+
+00:23:07.420 --> 00:23:08.300
+cree versiones de semántica
+
+00:23:08.300 --> 00:23:09.000
+y realice auditorías
+
+00:23:09.000 --> 00:23:09.880
+de verdad trimestrales.
+
+00:23:10.560 --> 00:23:11.020
+Luego observe
+
+00:23:11.020 --> 00:23:11.600
+cómo Copilot
+
+00:23:11.600 --> 00:23:12.120
+se transforma
+
+00:23:12.120 --> 00:23:12.660
+en un improvisador
+
+00:23:12.660 --> 00:23:13.800
+confiado a un colega calculable.
+
+00:23:14.160 --> 00:23:15.520
+La precisión no es magia,
+
+00:23:15.600 --> 00:23:16.260
+es mantenimiento.
+
+00:23:16.860 --> 00:23:17.540
+No es una estructura
+
+00:23:17.540 --> 00:23:18.020
+tan estrecha
+
+00:23:18.020 --> 00:23:18.940
+que las mentiras físicamente
+
+00:23:18.940 --> 00:23:19.520
+no pueden pasar.
+
+00:23:20.060 --> 00:23:20.480
+Haga eso
+
+00:23:20.480 --> 00:23:21.420
+y cada futuro mensaje
+
+00:23:21.420 --> 00:23:22.280
+producirá no historias
+
+00:23:22.280 --> 00:23:23.100
+sino declaraciones.
+
+00:23:23.100 --> 00:23:24.980
+Si esto le ahorró horas
+
+00:23:24.980 --> 00:23:25.960
+una posible vergüenza
+
+00:23:25.960 --> 00:23:27.080
+recompensa al esfuerzo,
+
+00:23:27.520 --> 00:23:29.020
+suscríbase al M365 Show.
+
+00:23:29.760 --> 00:23:30.400
+Nos especializamos
+
+00:23:30.400 --> 00:23:31.020
+en hacer que la idea
+
+00:23:31.020 --> 00:23:31.400
+de Microsoft
+
+00:23:31.400 --> 00:23:32.240
+sea realmente confiable.
+
+00:23:32.780 --> 00:23:33.560
+El próximo tutorial
+
+00:23:33.560 --> 00:23:34.380
+profundiza aún más
+
+00:23:34.380 --> 00:23:34.880
+en la ingeniería
+
+00:23:34.880 --> 00:23:35.860
+de precisión de Copilot.
+
+00:23:36.160 --> 00:23:36.540
+La eficiencia
+
+00:23:36.540 --> 00:23:37.460
+pertenece a los disciplinados.
+
+00:23:37.880 --> 00:23:38.400
+Mantenga aceptado.

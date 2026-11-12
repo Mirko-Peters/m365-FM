@@ -1,0 +1,1009 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:02.160
+Bayangkan sebuah meja keamanan di depan sebuah gedung kantor.
+
+00:00:02.700 --> 00:00:05.280
+Seseorang masuk menunjukkan kartu identitasnya dengan daftar.
+
+00:00:05.800 --> 00:00:07.420
+Mereka mengisi buku tamu dan mungkin mendapatkan kartu.
+
+00:00:07.780 --> 00:00:10.020
+Sekarang bayangkan gedung yang sama itu tidak memiliki pintu atau din.
+
+00:00:10.380 --> 00:00:12.480
+Orang-orang bisa masuk dari mana saja di seluruh dunia kapanpun.
+
+00:00:13.180 --> 00:00:15.520
+Itulah perbedaan antara jaringan tradisional dan jaringan cloud.
+
+00:00:16.440 --> 00:00:19.840
+Di akhir episode ini, Anda akan memahami apa itu Azure Firewall sebenarnya,
+
+00:00:20.060 --> 00:00:23.700
+mengapa Firewall Cloud bekerja sangat berbeda dari kota fisik yang dibayangkan kebanyakan orang,
+
+00:00:24.200 --> 00:00:28.240
+dan bagaimana satu layanan memeriksa serta mengontrol lalu lintas di seluruh lingkungan Azure Anda.
+
+00:00:28.620 --> 00:00:29.620
+Mari kita bedah.
+
+00:00:30.000 --> 00:00:32.280
+Pertama, apa itu Firewall tanpa istilah teknis yang rumit?
+
+00:00:32.640 --> 00:00:35.400
+Kemudian, mengapa Cloud mengubah segalanya tentang cara kerja Firewall?
+
+00:00:35.860 --> 00:00:39.680
+Dan akhirnya, bagaimana Azure Firewall menyatukan semuanya menjadi satu sistem yang bisa Anda gunakan?
+
+00:00:40.240 --> 00:00:41.900
+Diapkan kopi Anda. Mari kita mulai.
+
+00:00:42.340 --> 00:00:43.080
+Apa itu Firewall?
+
+00:00:43.780 --> 00:00:46.080
+Kebanyakan orang sudah mendengar kata Firewall ribuan kali,
+
+00:00:46.080 --> 00:00:50.100
+tetapi jika Anda meminta mereka menjelaskan apa fungsinya, mereka mungkin akan sedikit bingung.
+
+00:00:50.580 --> 00:00:51.420
+Jadi kita bersedul anak unggih.
+
+00:00:51.840 --> 00:00:53.460
+Firewall adalah penjaga di pintu jaringan.
+
+00:00:54.200 --> 00:00:56.940
+Setiap data yang mencoba masuk atau keluar dari jaringan Anda harus melewatinya,
+
+00:00:56.940 --> 00:01:00.780
+dan Firewall membeli setiap paket untuk memutuskan apakah akan membiarkannya lewat atau memblokir.
+
+00:01:01.180 --> 00:01:03.520
+Untuk waktu yang lama, Firewall berupa kotak fisik.
+
+00:01:04.140 --> 00:01:07.600
+Anda membelinya, mencolokkannya ke ruang server, mengonfigurasinya, dan memeliharannya selama bertontoh.
+
+00:01:08.220 --> 00:01:11.080
+Kotak-kotak itu berfungsi dengan baik set jaringan Anda memiliki batasan yang jelas.
+
+00:01:11.620 --> 00:01:14.400
+Satu kantor, satu koneksi internet, satu pintu depan.
+
+00:01:14.940 --> 00:01:16.060
+Namun, Cloud tidak bekerja seperti itu.
+
+00:01:16.480 --> 00:01:20.880
+Aplikasi Anda mungkin berjalan di satu wilayah, database di wilayah lain, dan pengguna Anda tersebar di seluruh dunia.
+
+00:01:21.220 --> 00:01:24.520
+Beberapa lain Anda berada di Azure, beberapa di tempat, tidak ada pintu depan.
+
+00:01:25.020 --> 00:01:29.600
+Masalahnya begini, Anda tidak bisa memasang kotak firewall fisik di pusat data yang bukan milik Anda.
+
+00:01:30.060 --> 00:01:33.860
+Dan meskipun Anda bisa, itu tidak akan membantu, karena tidak ada lagi satu pintu tunggal untuk dijaga.
+
+00:01:34.480 --> 00:01:35.820
+Mengapa Firewall Cloud berbeda?
+
+00:01:36.380 --> 00:01:37.880
+Di Azure, Anda membuat jaringan virtual.
+
+00:01:38.340 --> 00:01:41.180
+Anggaplah itu sebagai lingkungan pribadi di cloud tempat aplikasi Anda tinggal.
+
+00:01:41.860 --> 00:01:43.120
+Mereka tidak terikat pada bangunan fisik.
+
+00:01:43.820 --> 00:01:44.740
+Mereka hanyalah ruang logis.
+
+00:01:45.260 --> 00:01:46.160
+Mari kita bahas lalu lintasnya.
+
+00:01:46.460 --> 00:01:48.760
+Lalu lintas di jaringan virtual ini bergerak ke dua arah.
+
+00:01:48.760 --> 00:01:54.060
+Lalu lintas utara-selatan adalah data yang datang dari internet ke jaringan Anda atau keluar dari jaringan Anda menuju internet.
+
+00:01:54.500 --> 00:01:57.520
+Anggap saja seperti pengunjung yang tiba di gedung Anda atau paket yang dikirim keluar.
+
+00:01:58.100 --> 00:02:04.740
+Lalu ada lintas timur-barat, yaitu data yang berpindah antar beban kerja Anda di dalam Azure, di antar aplikasi basis data dan akun penyimpanan.
+
+00:02:05.400 --> 00:02:08.040
+Itu seperti orang-orang yang berjalan antar departemen dalam sebuah perusahaan.
+
+00:02:08.260 --> 00:02:09.440
+Kedua arah tersebut perlu diperiksa.
+
+00:02:10.040 --> 00:02:13.480
+Jika peretas masuk satu beban kerja, Anda tidak ingin mereka bebas berkeliaran ke beban kerja.
+
+00:02:13.900 --> 00:02:14.920
+Begitulah cara pelanggaran menyebab.
+
+00:02:14.920 --> 00:02:20.780
+Aplikasi Anda juga terhubung ke layanan lain, akun penyimpanan, layanan surel, API pihak ketiga, dan firewall.
+
+00:02:21.140 --> 00:02:23.100
+Juga mengontrol koneksi keluar tersebut.
+
+00:02:23.760 --> 00:02:26.200
+Firewall memutuskan apa yang boleh dan tidak boleh dihubungi oleh aplikasi Anda.
+
+00:02:26.540 --> 00:02:27.120
+Gini masalahnya.
+
+00:02:27.400 --> 00:02:28.860
+Firewall ini bukanlah kotak yang harus Anda melihat.
+
+00:02:29.380 --> 00:02:32.100
+Anda tidak perlu menambahnya, memperbaruhinya, atau khawatir akan kehabisan kapasitas.
+
+00:02:32.240 --> 00:02:32.700
+Itu sudah layanan.
+
+00:02:33.040 --> 00:02:34.380
+Microsoft menangani semua infrastrukturnya.
+
+00:02:34.900 --> 00:02:36.080
+Anda cukup menentukan aturannya.
+
+00:02:36.580 --> 00:02:38.980
+Dan layanan tersebut akan menerapkannya secara otomatis dalam skala besar.
+
+00:02:38.980 --> 00:02:42.580
+Jadi, jika lalu lintas Anda melonjak pada pukul 3 sore hari selasa, firewall akan berkembang.
+
+00:02:42.920 --> 00:02:46.080
+Jika Microsoft merilis patch keamanan, patch tersebut diterapkan tanpa Anda sadari.
+
+00:02:46.540 --> 00:02:47.220
+Itulah perbedaan cloud.
+
+00:02:47.840 --> 00:02:49.800
+Firewall menjadi infrastruktur yang tidak terlihat.
+
+00:02:50.700 --> 00:02:51.720
+Memperkenalkan Azure Firewall.
+
+00:02:52.200 --> 00:02:53.500
+Jadi, apa sebenarnya Azure Firewall itu?
+
+00:02:53.940 --> 00:02:56.600
+Ini adalah firewall cloud native yang dikelolas penuhnya sebagai sebuah layanan.
+
+00:02:56.940 --> 00:02:58.380
+Istilah yang rumit, namun inilah praktek.
+
+00:02:59.160 --> 00:03:01.340
+Anda menerapkannya melalui portal Azure dalam hitungan menit.
+
+00:03:01.340 --> 00:03:06.080
+Tidak perlu memesan perangkat keras, mengonfigurasi mesin virtual, atau menambah sistem operasi.
+
+00:03:06.740 --> 00:03:09.920
+Cukup klik beberapa tombol, tentukan jaringan Anda, dan firewall pun berjalan.
+
+00:03:10.340 --> 00:03:12.180
+Firewall ini dilengkapi dengan ketersediaan tinggi bawah Anda.
+
+00:03:12.400 --> 00:03:14.880
+Jika satu instans gagal, instans lain akan langsung mengambil alu.
+
+00:03:15.240 --> 00:03:16.620
+Dan firewall ini berskala secara otomatis.
+
+00:03:16.940 --> 00:03:19.680
+Jika lalu lintas Anda meningkat dua kali lipat, firewall akan berkembang mengikutnya.
+
+00:03:19.900 --> 00:03:21.880
+Anda tidak perlu menempat banyak kapasitas yang Anda butuhkan.
+
+00:03:21.880 --> 00:03:26.040
+Cara termudah untuk memikirkannya adalah seperti menyiwat tim keamanan untuk gedung kantor cloud Anda.
+
+00:03:26.620 --> 00:03:29.980
+Anda tidak perlu mengelola setiap menjaga secara individu melatih mereka atau menjatuhalkan gira-reger.
+
+00:03:29.980 --> 00:03:34.080
+Anda menetapkan kebijakannya, siapa yang boleh masuk, paket apa yang diizinkan,
+
+00:03:34.580 --> 00:03:36.580
+dan mereka menegakkan kebijakan tersebut sepanjang waktu.
+
+00:03:37.120 --> 00:03:40.940
+Azure Firewall berada di titik pusat jaringan Anda dan meriksa semua yang melewatinya.
+
+00:03:41.600 --> 00:03:45.840
+Firewall memeriksa lalu lintas terhadap tiga jenis aturan, aturan jaringan, dan aturan aplikasi.
+
+00:03:46.420 --> 00:03:48.140
+Kami akan mengulangkan masing-masing sebentar lagi.
+
+00:03:48.140 --> 00:03:50.440
+Nah inilah sesuatu yang tidak disadari oleh kebanyakan orang.
+
+00:03:50.960 --> 00:03:53.120
+Azure Firewall dilengkapi dengan intelijen ancaman bawah.
+
+00:03:53.760 --> 00:03:57.340
+Microsoft terus memantau pola serangan global dan alamat IP berbahaya yang diketahui,
+
+00:03:57.340 --> 00:04:01.440
+domain berbahaya, serta ancaman yang muncul, semuanya dimasukkan ke firewall Anda secara otomatis.
+
+00:04:02.280 --> 00:04:05.440
+Jadi, jika kelompok peretas di negara lain mulai menargetkan pelanggan Azure,
+
+00:04:05.880 --> 00:04:09.140
+firewall Anda sudah tahu untuk memblokir mereka bahkan sebelum mereka mencapai jaringan Anda.
+
+00:04:09.580 --> 00:04:12.160
+Perlindungannya meningkat secara terus-menerus tanpa Anda melakukan apapun.
+
+00:04:12.600 --> 00:04:15.160
+Tanpa pemberonan manual, tanpa unduhan tanda tangan, semua yang terjadi otomatis.
+
+00:04:15.160 --> 00:04:17.000
+Tidak semua orang membutuhkan tingkat perlindungan yang sama.
+
+00:04:17.360 --> 00:04:21.560
+Usaha kecil yang menjalankan satu aplikasi memiliki kebutuhan berbeda dengan bank yang memproses transaksi keuangan.
+
+00:04:22.180 --> 00:04:24.240
+Itulah sebabnya Azure Firewall hadir dalam tiga versi.
+
+00:04:24.240 --> 00:04:27.780
+Tiga SKO tersebut adalah Basic, Standar, dan Premium.
+
+00:04:28.440 --> 00:04:33.220
+Mari mulai dengan Azure Firewall Basic, opsi tingkat dasar yang dibuat untuk bisnis kecil dan lingkungan yang lebih sederhana.
+
+00:04:34.020 --> 00:04:39.740
+Layanan ini menangani lalu lintas hingga sekitar 250 Mbps, cukup untuk aplikasi sederhana atau pengaturan pengembangan.
+
+00:04:40.000 --> 00:04:45.980
+Basic mencakup pemfilteran jaringan esensial yang memeriksa lalu lintas dan menerapkan aturan berdasarkan alamat IP dan port,
+
+00:04:46.340 --> 00:04:48.380
+ditambah intelijen ancaman dalam mode peringatan saja.
+
+00:04:48.540 --> 00:04:52.680
+Jadi, ia akan memperingatkan Anda saat muncul sesuatu yang mencurigakan tetapi tidak akan memblokirnya secara otomatis.
+
+00:04:52.680 --> 00:04:55.840
+Anggap Basic sebagai penjaga keamanan yang mengawasi pintu masuk dengan cermat,
+
+00:04:56.100 --> 00:04:58.940
+melihat masalah, melaporkannya tetapi butuh izin sebelum menghentikan siapapun.
+
+00:04:59.400 --> 00:05:03.540
+Lalu ada Azure Firewall Standard, pilihan paling umum untuk beban kerja perusahaan karena alasan yang tepat.
+
+00:05:04.200 --> 00:05:09.360
+Layanan ini berskala hingga sekitar 30 Gbps menangani lalu lintas produksi bagi sebagian besar organisasi dengan nyaman.
+
+00:05:09.360 --> 00:05:13.500
+Dengan standar, intelijen ancaman bekerja dalam mode peringatan dan penolakan,
+
+00:05:13.660 --> 00:05:16.880
+sehingga firewall dapat memblokir aktor jahat secara otomatis tanpa menunggu Anda.
+
+00:05:17.680 --> 00:05:19.240
+Layanan ini juga menambahkan pemfilteran keter.
+
+00:05:19.600 --> 00:05:23.320
+Anda dapat memblokir seluruh kategori seperti media sosial atau perjudian di seluruh jaringan Anda
+
+00:05:23.320 --> 00:05:25.000
+dan mendukung konfigurasi DNS custom.
+
+00:05:25.740 --> 00:05:28.320
+Standar adalah tim keamanan lengkap Anda yang memiliki webanan untuk bertim.
+
+00:05:28.720 --> 00:05:31.120
+Mereka melihat masalah dan menanganinya, tambah perlu menunggu persetujuan.
+
+00:05:31.120 --> 00:05:35.500
+Terakhir, ada Azure Firewall Premium yang dibuat untuk lingkungan yang sangat sensitif
+
+00:05:35.500 --> 00:05:38.720
+seperti keuangan, kesehatan, pemerintah, dan apapun yang menangani data teregulasi.
+
+00:05:39.440 --> 00:05:43.100
+Layanan ini berskala hingga 100 Gbps tetapi perbedaan utamanya terletak pada apanya.
+
+00:05:43.300 --> 00:05:46.800
+Premium menambahkan inspeksi TLS yang mendekripsi lalu lintas terenkripsi,
+
+00:05:46.800 --> 00:05:49.240
+memeriksa isinya, dan mengenkripsinya kembali sebelum mengirimkannya.
+
+00:05:49.600 --> 00:05:53.380
+Hal itu penting karena sebagian besar lalu lintas berbahaya saat ini bersembunyi di dalam koneksi terenkripsi,
+
+00:05:53.740 --> 00:05:55.120
+tanpa inspeksi terbang, tanpa navigasi.
+
+00:05:55.680 --> 00:05:58.640
+Premium juga menambahkan IDPS, sistem deteksi, dan pencegahan intrusi
+
+00:05:58.640 --> 00:06:02.180
+dengan lebih dari 67 ribu tanda tangan di lebih dari 50 kategori
+
+00:06:02.180 --> 00:06:03.440
+yang diperbarui secara waktu nyata.
+
+00:06:04.000 --> 00:06:05.740
+Sistem ini memeriksa setiap paket untuk pola serangan
+
+00:06:05.740 --> 00:06:08.700
+yang diketahui seperti injeksi SKL, callback malware, dan pemindahan port,
+
+00:06:08.880 --> 00:06:10.740
+lalu memutus lalu lintas segera setelah menemukan sesuatu.
+
+00:06:11.000 --> 00:06:12.740
+Premium juga menambahkan pemfilteran URL,
+
+00:06:12.740 --> 00:06:15.440
+memungkinkan Anda mengizinkan atau memblokir alamat web tertentu
+
+00:06:15.440 --> 00:06:18.300
+alih-alih seluruh kategori, memberikan kontrol terpenci di tingkat halaman.
+
+00:06:18.780 --> 00:06:19.780
+Ini adalah perlindungan Klaus Mid.
+
+00:06:20.200 --> 00:06:23.420
+Namun ini now cadas, sesuaikan SKU dengan apa yang benar-benar Anda butuhkan.
+
+00:06:23.420 --> 00:06:25.800
+Standar mencakup sebagian besar kasut penggunaan perusahaan.
+
+00:06:26.240 --> 00:06:28.760
+Gunakan premium hanya jika data sensitif memperlua inspeksi mendalam.
+
+00:06:29.280 --> 00:06:31.700
+Gunakan basic untuk lingkungan kecil atau pengembangan dan pengujian,
+
+00:06:31.840 --> 00:06:33.560
+dan jangan bayar untuk kapabilitas yang tidak Anda gunakan.
+
+00:06:34.300 --> 00:06:35.320
+Arsitektur dan lalu lintas
+
+00:06:35.320 --> 00:06:37.920
+Setelah memilih SKU, pertanyaan berikutnya adalah cara
+
+00:06:37.920 --> 00:06:41.180
+menatur jaringan Anda agar firewall dapat meliksa lalu lintas secara efektif.
+
+00:06:41.260 --> 00:06:41.920
+Karena masalahnya begini,
+
+00:06:42.500 --> 00:06:45.260
+firewall hanya berfungsi jika lalu lintas benar-benar melewatinya.
+
+00:06:45.840 --> 00:06:48.300
+Jika Anda dapatkannya di posisi yang salah, sama saja firewall itu tidak ada.
+
+00:06:49.000 --> 00:06:51.380
+Pendekatan yang paling umum disebut arsitektur hub and spoke.
+
+00:06:51.380 --> 00:06:53.020
+Bayangkan roda sepeda.
+
+00:06:53.780 --> 00:06:56.280
+Hub adalah bagian tengah dengan jari-jari yang memancar keluar.
+
+00:06:57.040 --> 00:06:58.960
+Di Azure, Anda membuat satu jaringan virtual pusat.
+
+00:06:59.680 --> 00:07:01.440
+Itulah hub tempat Azure firewall Anda berada.
+
+00:07:02.100 --> 00:07:04.100
+Kemudian Anda membuat beberapa jaringan spoke masing-masing
+
+00:07:04.100 --> 00:07:05.480
+untuk beban kerja atau lingkungan yang terpis.
+
+00:07:05.700 --> 00:07:07.180
+Mungkin satu spoke untuk aplikasi web,
+
+00:07:07.300 --> 00:07:08.260
+satu lagi untuk basis data,
+
+00:07:08.380 --> 00:07:09.920
+dan yang ketiga untuk lingkungan pengembangan.
+
+00:07:10.620 --> 00:07:11.860
+Semua lalu lintas antar spoke,
+
+00:07:12.180 --> 00:07:14.980
+serta antara spoke dan internet diarahkan melalui hub untuk diperiksa.
+
+00:07:15.380 --> 00:07:17.820
+Anda mendapatkan satu pos pemeriksaan keamanan untuk seluruh.
+
+00:07:18.100 --> 00:07:20.420
+Jaringan efisien, konsisten, dan jauh lebih mudah dikelola
+
+00:07:20.420 --> 00:07:22.220
+daripada menempatkan firewall di setiap spoke.
+
+00:07:22.920 --> 00:07:24.360
+Untuk organisasi yang lebih besar,
+
+00:07:24.480 --> 00:07:25.540
+tersedia juga virtual one,
+
+00:07:25.660 --> 00:07:27.500
+layanan jaringan terkelola dengan Azure firewall
+
+00:07:27.500 --> 00:07:29.120
+yang terintegrasi langsung ke dalam hub.
+
+00:07:30.420 --> 00:07:31.700
+Penggulan utamanya adalah otomatisasi.
+
+00:07:32.280 --> 00:07:34.160
+Virtual one menangani perhutian untuk Anda
+
+00:07:34.160 --> 00:07:35.940
+sehingga lalu lintas dari kantor cabang,
+
+00:07:36.040 --> 00:07:37.040
+pengguna jarak jauh,
+
+00:07:37.120 --> 00:07:39.040
+dan jaringan spoke semuanya mengalir melalui firewall
+
+00:07:39.040 --> 00:07:39.980
+tanpa konfigurasi menu.
+
+00:07:40.620 --> 00:07:42.720
+Ini lebih praktis dan berskala lebih baik untuk penyebaran global.
+
+00:07:42.720 --> 00:07:44.840
+Sekarang apa yang sebenarnya diperiksa oleh firewall?
+
+00:07:45.340 --> 00:07:45.760
+Tiga hal,
+
+00:07:46.040 --> 00:07:47.120
+lalu lintas masuk dari internet,
+
+00:07:47.460 --> 00:07:48.400
+lalu lintas keluar ke internet,
+
+00:07:48.840 --> 00:07:49.800
+dan lalu lintas timur barat
+
+00:07:49.800 --> 00:07:51.440
+antar beban kerja Anda sendiri di dalam Azure.
+
+00:07:51.780 --> 00:07:52.920
+Poin ketiga itu sangat kerusian.
+
+00:07:53.280 --> 00:07:55.060
+Jika terjadi pelanggaran pada satu beban kerja,
+
+00:07:55.160 --> 00:07:57.340
+pemeriksaan timur barat akan menghentikan penyebarannya ke beban kerja.
+
+00:07:57.520 --> 00:07:57.980
+Tanpanya,
+
+00:07:58.100 --> 00:08:01.080
+peretas yang masuk ke server web Anda dapat dengan bebas bergerak ke basis data
+
+00:08:01.080 --> 00:08:02.780
+dengan adanya pemeriksaan pergerakan tersebut.
+
+00:08:03.280 --> 00:08:04.140
+Poin utamanya adalah,
+
+00:08:04.380 --> 00:08:06.320
+lalu lintas hanya akan diperiksa jika melewati firewall.
+
+00:08:06.320 --> 00:08:06.900
+Jadi,
+
+00:08:07.040 --> 00:08:09.580
+arsitekturnya harus memaksa lalu lintas melewati tipusat tersebut.
+
+00:08:09.900 --> 00:08:11.980
+Anda merancangnya agar tidak ada jalur alternatif.
+
+00:08:12.400 --> 00:08:14.900
+Itulah sebabnya desain penyebaran sama pentingnya dengan aturan itu sendiri.
+
+00:08:15.640 --> 00:08:17.520
+Kumpulan aturan yang sempurna tidak berarti apa-apa
+
+00:08:17.520 --> 00:08:19.480
+jika lalu lintas dapat melewati firewall sepenuhnya.
+
+00:08:20.220 --> 00:08:20.660
+Anda lama-lama.
+
+00:08:21.080 --> 00:08:21.560
+Sekarang,
+
+00:08:21.640 --> 00:08:23.080
+mari kita bicara tentang aturan itu sendiri,
+
+00:08:23.280 --> 00:08:25.220
+karena inilah cara Anda mengendalikan apa yang boleh lewat.
+
+00:08:25.900 --> 00:08:27.720
+Azure Firewall menggunakan tiga jenis aturan
+
+00:08:27.720 --> 00:08:29.340
+dan masing-masing memiliki fungsi berbeda.
+
+00:08:30.060 --> 00:08:30.500
+Pertama,
+
+00:08:30.600 --> 00:08:32.140
+aturan nate penerjaman alamat jaringan.
+
+00:08:32.780 --> 00:08:34.420
+Anggaplah ini sebagai meja resepsionis
+
+00:08:34.420 --> 00:08:37.160
+yang menyembunyikan server internal Anda di balik alamat IP publik firewall.
+
+00:08:37.540 --> 00:08:39.600
+Seseorang di internet terhubung ke IP firewall Anda,
+
+00:08:40.180 --> 00:08:42.080
+dan firewall menerjemahkan alamat publik tersebut
+
+00:08:42.080 --> 00:08:43.820
+ke alamat privat server backend Anda.
+
+00:08:44.360 --> 00:08:46.260
+Dunia luar tidak akan pernah melihat jaringan internal Anda.
+
+00:08:46.620 --> 00:08:47.700
+Server Anda tetap tidak terlihat.
+
+00:08:48.180 --> 00:08:48.520
+Selanjutnya,
+
+00:08:48.600 --> 00:08:49.400
+Anda memiliki aturan jaringan.
+
+00:08:49.660 --> 00:08:51.660
+Ini didasarkan pada alamat IP port dan protokol.
+
+00:08:52.280 --> 00:08:53.700
+Penyaringan layer tiga dan layer empat
+
+00:08:53.700 --> 00:08:55.100
+jika Anda peduli dengan istilah teknis.
+
+00:08:55.640 --> 00:08:58.380
+Anda bisa mengatakan izinkan lalu lintas dari alamat IP ini
+
+00:08:58.380 --> 00:09:00.340
+pada port 4 IP yang lain dan blokir yang lainnya.
+
+00:09:01.360 --> 00:09:02.320
+Sederhana dan kuat.
+
+00:09:03.140 --> 00:09:04.040
+Namun inilah batasannya,
+
+00:09:04.040 --> 00:09:06.240
+aturan jaringan tidak memahami jenis lalu lintasnya.
+
+00:09:06.700 --> 00:09:08.580
+Mereka tidak tahu kemana tujuannya dan port apa yang digunakannya.
+
+00:09:08.920 --> 00:09:09.200
+Ketiga,
+
+00:09:09.340 --> 00:09:10.040
+aturan aplikasi.
+
+00:09:10.660 --> 00:09:11.140
+Lebih cerdas.
+
+00:09:11.540 --> 00:09:14.640
+Mereka menyaring berdasarkan nama domain yang menuhi syarat FGDN dan pola web.
+
+00:09:14.980 --> 00:09:17.140
+Jadi daripada mengizinkan lalu lintas ke alamat IP tertentu,
+
+00:09:17.200 --> 00:09:19.220
+Anda mengatakan izinkan lalu lintas ke microsoft.com
+
+00:09:19.220 --> 00:09:20.640
+atau izinkan lalu lintas pemberon Windows.
+
+00:09:21.320 --> 00:09:23.020
+Kini firewall memahami lapisan aplikasi.
+
+00:09:23.580 --> 00:09:25.900
+Ia dapat memblokir atau mengizinkan berdasarkan apa lalu lintas itu
+
+00:09:25.900 --> 00:09:26.800
+sebenarnya bukan hanya ke mana.
+
+00:09:27.200 --> 00:09:27.540
+Sekarang,
+
+00:09:27.640 --> 00:09:29.160
+aturan tidak hanya dimasukkan ke dalam draft data.
+
+00:09:29.160 --> 00:09:32.020
+Aturan diatur ke dalam grup koleksi aturan dan koleksi aturan.
+
+00:09:32.640 --> 00:09:34.320
+Anggap saja seperti folder dan subfolder.
+
+00:09:34.640 --> 00:09:36.460
+Anda mungkin memiliki satu grup untuk sistem SDM,
+
+00:09:36.720 --> 00:09:38.740
+grup lain untuk keuangan masing-masing dengan prioritasnya sendiri.
+
+00:09:39.160 --> 00:09:41.660
+Hal itu menjaga kerapian saat Anda memiliki puluhan atau ratusan.
+
+00:09:42.400 --> 00:09:43.220
+Urutan sangatlah penting.
+
+00:09:43.760 --> 00:09:45.860
+Firewall memproses aturan dalam urutan tertentu.
+
+00:09:46.600 --> 00:09:48.280
+Aturan nat pertama adalah aturan jaringan,
+
+00:09:48.360 --> 00:09:49.240
+kemudian aturan aplikasi.
+
+00:09:49.800 --> 00:09:50.540
+Dalam setiap jenis,
+
+00:09:50.660 --> 00:09:52.100
+aturan diproses berdasarkan prioritas.
+
+00:09:52.480 --> 00:09:53.980
+Angka yang lebih rendah dievaluasi terlebih dahulu.
+
+00:09:54.360 --> 00:09:57.040
+Ini penting karena aturan jaringan luas yang mengizinkan semua lalu lintas
+
+00:09:57.040 --> 00:09:57.880
+akan diproses lebih dulu.
+
+00:09:57.880 --> 00:09:59.960
+Jika aturan jaringan mengizinkan semuanya,
+
+00:10:00.220 --> 00:10:02.940
+aturan aplikasi di bawahnya mungkin tidak akan pernah dievaluasi.
+
+00:10:03.480 --> 00:10:06.080
+Semua aturan aplikasi yang telah Anda susun dengan cermat menjadi tidak berguna.
+
+00:10:06.720 --> 00:10:08.440
+Grup IP adalah alat lain yang perlu diketahui.
+
+00:10:08.980 --> 00:10:10.940
+Anda membuat grup alamat IP memberinya nama
+
+00:10:10.940 --> 00:10:12.660
+dan mereferensikannya di berbagai aturan.
+
+00:10:13.420 --> 00:10:16.320
+Ubah satu grup IP dan setiap aturan yang menggunakannya akan diperbarui secara otomat.
+
+00:10:16.740 --> 00:10:18.720
+Itu menghemat waktu dan mengurangi kesalahan,
+
+00:10:18.960 --> 00:10:22.500
+terutama berguna saat Anda memiliki sekumpulan IP yang sama muncul di banyak aturan.
+
+00:10:23.740 --> 00:10:24.620
+Diturlindungan lanjutan.
+
+00:10:24.860 --> 00:10:26.280
+Aturan menangani dasar-dasarnya,
+
+00:10:26.280 --> 00:10:28.460
+tetapi Azure Firewall Premium langkah jauh lebih dalam.
+
+00:10:28.960 --> 00:10:29.940
+Mari kita mulai dengan ancaman.
+
+00:10:30.720 --> 00:10:32.680
+Ini adalah feed yang terus diperbarui dari Microsoft
+
+00:10:32.680 --> 00:10:35.560
+tentang IP, domain, dan URL berbahaya yang diketahui.
+
+00:10:36.200 --> 00:10:39.160
+Setiap koneksi yang diproses firewall Anda diperiksa terhadap feed ini,
+
+00:10:39.620 --> 00:10:40.540
+saat menemukan kecocokan,
+
+00:10:40.620 --> 00:10:42.220
+ia dapat memberitahu Anda atau memblok ring sejarah.
+
+00:10:42.500 --> 00:10:43.460
+Tidak perlu menulis aturan manual,
+
+00:10:43.560 --> 00:10:44.400
+tidak perlu melihara daftar.
+
+00:10:45.000 --> 00:10:47.380
+Tim Keamanan Global Microsoft melakukan pekerjaan itu untuk Anda.
+
+00:10:47.700 --> 00:10:50.420
+Lalu ada IDPS, sistem deteksi, dan pencegahan intrusi.
+
+00:10:50.420 --> 00:10:55.020
+Itu mencakup lebih dari 67 ribu tanda tangan yang meriksa setiap paket untuk pola serangan yang diketahui.
+
+00:10:55.340 --> 00:10:56.760
+Hal-hal seperti upaya injeksi SKL,
+
+00:10:56.900 --> 00:10:59.800
+di mana seseorang mencoba menyuntikkan perintah basis data berbahaya melalui formula.
+
+00:11:00.260 --> 00:11:02.980
+Pemindahan port di mana penyerang memperiksa jaringan Anda untuk mencari pintu terbuka.
+
+00:11:03.320 --> 00:11:04.100
+Panggilan balik malware,
+
+00:11:04.320 --> 00:11:06.580
+di mana sistem yang terinfeksi mencoba menghubungi server komando.
+
+00:11:07.280 --> 00:11:10.780
+Firewall mengenali pola tersebut dan memblokir lalu lintas sebelum mencapai targetnya.
+
+00:11:11.560 --> 00:11:13.100
+Tanda tangan ini diperbarui secara waktu nyata.
+
+00:11:13.100 --> 00:11:16.100
+Saat tim keamanan Microsoft mengidentifikasi pola serangan baru,
+
+00:11:16.260 --> 00:11:17.360
+pola tersebut ditambahkan keempat.
+
+00:11:17.800 --> 00:11:19.380
+Firewall Anda segera mulai memblokirnya.
+
+00:11:19.860 --> 00:11:21.100
+Tidak perlu menegar selasa untuk pembaruan.
+
+00:11:21.340 --> 00:11:22.240
+Sekarang inspeksi TLS.
+
+00:11:22.580 --> 00:11:24.560
+Ini adalah poin penting bagi lingkungan yang diatur regulasi.
+
+00:11:24.880 --> 00:11:26.420
+Lalu lintas terenkripsi bagus untuk privasi,
+
+00:11:26.660 --> 00:11:28.520
+tetapi juga bagus untuk menyembunyikan data berbahaya.
+
+00:11:28.820 --> 00:11:29.500
+Penyerang mengetahuinya.
+
+00:11:29.820 --> 00:11:32.180
+Mereka membungkus muatan mereka dalam koneksi HTTPS
+
+00:11:32.180 --> 00:11:34.240
+karena sebagian besar firewall tidak bisa melihat isinya.
+
+00:11:34.500 --> 00:11:35.160
+Premium bisa menggoyah.
+
+00:11:35.160 --> 00:11:36.660
+Ini mendekripsi lalu lintas,
+
+00:11:36.780 --> 00:11:38.900
+memeriksemuatan, mengenkripsinya kembali, dan mengirimkan.
+
+00:11:38.900 --> 00:11:40.380
+Seluruh proses ini hanya memakan waktu mirip.
+
+00:11:40.760 --> 00:11:43.480
+Tanpa ini, serangan terenkripsi akan lewat begitu saja tanpa terdeteksi.
+
+00:11:43.920 --> 00:11:45.660
+Pemfilteran URL melampaui sekadar nama domain.
+
+00:11:45.940 --> 00:11:48.220
+Anda dapat mengizinkan atau memblokir jalur tertentu di sebuah situs.
+
+00:11:48.360 --> 00:11:50.420
+Mungkin Anda ingin mengizinkan akses ke Microsoft,
+
+00:11:50.560 --> 00:11:51.800
+tetapi memblokir halaman unduhan,
+
+00:11:52.040 --> 00:11:53.780
+atau mengizinkan titik akhir API tertentu
+
+00:11:53.780 --> 00:11:55.400
+sambil memblokir yang lainnya di domain tersebut.
+
+00:11:55.760 --> 00:11:56.580
+Semua ini bekerja bersama.
+
+00:11:57.180 --> 00:11:58.920
+Intelligent ancaman menangkap pelaku kejahatan.
+
+00:11:58.920 --> 00:12:00.420
+IDPS menangkap pola serangan.
+
+00:12:00.660 --> 00:12:02.360
+Inspeksi TLS menangkap muatan tersembunyi.
+
+00:12:02.800 --> 00:12:04.720
+Berbagai lapisan pertahanan bekerja sebagai satu sistem.
+
+00:12:04.720 --> 00:12:07.540
+Bagaimana semuanya terhubung di tabat perlindungan juti.
+
+00:12:08.200 --> 00:12:09.460
+Jadi beginilah cara semuanya menyatu.
+
+00:12:10.520 --> 00:12:12.560
+Azure Firewall bukan hanya satu layanan tunggal.
+
+00:12:12.920 --> 00:12:14.560
+Ini adalah sistem komoran yang bekerja sebagai sebuah tim.
+
+00:12:15.460 --> 00:12:17.560
+Arsitekturnya menyanurkan semua lalu di satu titik pusat.
+
+00:12:17.980 --> 00:12:19.680
+Kemudian aturan menentukan apa yang diizinkan,
+
+00:12:19.780 --> 00:12:22.280
+sementara Intelligent Ancaman dan IDPS menangkap hal mencurigakan.
+
+00:12:22.280 --> 00:12:24.740
+Dan inspeksi TLS mengungkap apa yang tersembunyi
+
+00:12:24.740 --> 00:12:25.940
+di dalam koneksi terenkripsi.
+
+00:12:26.780 --> 00:12:28.320
+Setiap lapisan menambahkan pemeriksaan lain,
+
+00:12:28.480 --> 00:12:29.800
+dan itulah pertahanan dalam tindakan.
+
+00:12:30.420 --> 00:12:32.720
+Jika Anda mengelola beberapa firewall di berbagai wilayah,
+
+00:12:32.840 --> 00:12:34.660
+Azure Firewall Manager adalah alat Anda.
+
+00:12:35.340 --> 00:12:37.200
+Ini gratis, dan Anda membuat kebijakan sekali
+
+00:12:37.200 --> 00:12:38.200
+dan merapkannya di mana saja.
+
+00:12:38.860 --> 00:12:41.500
+Anda dapat menetapkan kebijakan global yang berlaku untuk semua firewall,
+
+00:12:41.660 --> 00:12:43.640
+lalu menyesuaikan kebijakan lokal per tim atau wilayah.
+
+00:12:44.360 --> 00:12:46.140
+Satu alat untuk mengelola sebuah aset firewall Anda.
+
+00:12:46.520 --> 00:12:47.880
+Sekarang, mari bicara soal biaya,
+
+00:12:47.880 --> 00:12:50.480
+karena firewall berjalan 2.7 dan memproses banyak data.
+
+00:12:50.760 --> 00:12:53.100
+Cara mudah untuk membangkas biaya adalah dengan menggunakan
+
+00:12:53.100 --> 00:12:55.240
+paket tabel dasar log analytics untuk log firewall Anda.
+
+00:12:55.940 --> 00:12:57.780
+Anda dapat menghemat hingga dapat berapa persen pada pihak penyerapan data.
+
+00:12:58.220 --> 00:13:00.700
+Itulah perbedaan antara tagihan yang wajar dan tagihan yang mengejut.
+
+00:13:00.980 --> 00:13:02.060
+Untuk lingkungan non-produksi,
+
+00:13:02.060 --> 00:13:05.040
+digunakan Azure Automation untuk menghentikan firewall di luar jam kerja
+
+00:13:05.040 --> 00:13:06.540
+dan menyalakannya lagi di pagi hari.
+
+00:13:07.220 --> 00:13:10.000
+Lingkungan pengembangan dan pengujian tidak memerlukan pelindungan pada jam 2 pagi,
+
+00:13:10.100 --> 00:13:11.380
+jadi itu penghematan besar seiring waktu.
+
+00:13:11.840 --> 00:13:13.480
+Untuk mengurangi biaya pemprosesan data,
+
+00:13:13.480 --> 00:13:14.300
+tingjau perhatihan Anda,
+
+00:13:14.380 --> 00:13:16.800
+dan pastikan hanya lalu lintas yang perlu saja yang melewati firewall.
+
+00:13:16.800 --> 00:13:20.060
+Gunakan titik akhir privat untuk layanan Azure jika memungkinkan,
+
+00:13:20.340 --> 00:13:23.900
+agar layanan terpercaya dapat terhubung langsung alih-alih merutakan semuanya melalui pemeriksaan.
+
+00:13:24.900 --> 00:13:27.620
+Langkah paling berdampak yang bisa Anda ambil hari ini adalah
+
+00:13:27.620 --> 00:13:30.400
+memulai dengan SKU standar dalam arsitektur hub and spoke.
+
+00:13:31.000 --> 00:13:32.740
+Aktifkan log terstruktur dengan paket tabel dasar
+
+00:13:32.740 --> 00:13:35.420
+dan siapkan intelijen ancaman dalam wadah peringatan terlebih dahulu.
+
+00:13:35.960 --> 00:13:38.760
+Lihat apa yang menjangkau jaringan Anda sebelum beralih ke pencegahan penuh.
+
+00:13:39.220 --> 00:13:40.960
+Hal itu memberi Anda visibilitas tanpa kejutan.
+
+00:13:40.960 --> 00:13:42.860
+Jadi itulah Azure Firewall,
+
+00:13:43.100 --> 00:13:45.340
+layanan keamanan cloud native yang memeriksa lalu lintas
+
+00:13:45.340 --> 00:13:47.900
+memblokir ancaman dan menyesuaikan dengan jaringan Anda
+
+00:13:47.900 --> 00:13:49.200
+tanpa perlu mengelola satu server pun.
+
+00:13:49.520 --> 00:13:50.980
+Mulai dengan standar dalam konfigurasi hub and spoke.
+
+00:13:51.520 --> 00:13:52.680
+Itulah angka paling berdampak bagi Anda.
+
+00:13:53.240 --> 00:13:55.060
+Berlanggananlah di platform podcast favorit Anda
+
+00:13:55.060 --> 00:13:57.660
+dan bagikan ini kepada seseorang yang sedang memulai perjalanan Azure Monique.

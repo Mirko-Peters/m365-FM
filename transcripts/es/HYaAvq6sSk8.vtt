@@ -1,0 +1,1729 @@
+WEBVTT
+
+00:00:00.340 --> 00:00:06.720
+¿Listo para 10 días de Microsoft 365, Copilot, EA Azure y las personas que están dando forma al futuro del trabajo?
+
+00:00:07.540 --> 00:00:11.240
+Este enero, M365 con regresa y venimos con más fuerza.
+
+00:00:11.580 --> 00:00:12.400
+Y venimos con más fuerza.
+
+00:00:12.880 --> 00:00:18.080
+Únete a nosotros para sesiones en vivo, demostraciones reales y conocimientos prácticos de MVPs y expertos de la industria de todo el mundo.
+
+00:00:18.860 --> 00:00:21.300
+Nada de diapositivas genéricas ni tecnicismos interminables.
+
+00:00:22.120 --> 00:00:23.560
+Abordaremos los desafíos reales.
+
+00:00:23.740 --> 00:00:28.500
+Copilot Studio, agentes de EA Fabric, seguridad, gobernanza y automatización.
+
+00:00:28.500 --> 00:00:34.420
+Ya seas profesional de TI, desarrollador o líder empresarial, hay sesiones diseñadas para ti.
+
+00:00:35.540 --> 00:00:39.960
+Con 10 días completos, puedes explorar múltiples tecnologías y conectar con una comunidad global.
+
+00:00:40.960 --> 00:00:44.280
+Mira las sesiones en vivo y lleva ideas prácticas de vuelta a tu organización.
+
+00:00:45.140 --> 00:00:48.920
+Enero de 2027. 10 días. Una sola comunidad de Microsoft.
+
+00:00:49.460 --> 00:00:50.460
+El registro ya está abierto.
+
+00:00:51.880 --> 00:00:55.660
+Ve a m365com.net y asegura tu lugar hoy mismo.
+
+00:00:55.660 --> 00:00:58.580
+Eso es m365com.net.
+
+00:01:00.240 --> 00:01:04.720
+Únete ahora a m365com.net y nos vemos en vivo en enero.
+
+00:01:05.240 --> 00:01:11.820
+¿Qué tal si la razón por la que tu aplicación de Atarverse vuelve lenta no es el tamaño de tus datos, sino cómo están configuradas tus relaciones?
+
+00:01:11.820 --> 00:01:18.300
+Hoy vamos a analizar la conexión oculta entre el diseño del esquema y la capacidad de respuesta y por qué.
+
+00:01:19.260 --> 00:01:23.060
+Tantos creadores de Power Platform se condenan a un bajo rendimiento desde el primer día.
+
+00:01:25.050 --> 00:01:27.110
+¿Las trampas de rendimiento ocultas en tus tablas?
+
+00:01:27.890 --> 00:01:32.670
+¿Alguna vez te has preguntado por qué una tabla con solo unos pocos miles de filas se siente más lenta que una con un millón con un millón?
+
+00:01:32.670 --> 00:01:38.970
+Es uno de esos momentos en los que tu instinto te dice que debería estar bien, pero Dataverse actúa como si se moviera a través de cemento fresco.
+
+00:01:40.050 --> 00:01:44.970
+La sorprendente verdad es que no es el tamaño bruto lo que ralentiza tu aplicación, sino la forma en que se diseñó la tabla desde el principio.
+
+00:01:44.970 --> 00:01:51.610
+Y esas decisiones de diseño comienzan a causar problemas mucho antes de que alcanzes los límites reales de la plataforma.
+
+00:01:52.290 --> 00:01:54.150
+Muchos creadores culpan a factores externos.
+
+00:01:54.150 --> 00:01:59.650
+Asumen que su inquilino está limitado, que la red es inestable, o que hay algún cuello de botella de almacenamiento oculto en el servicio.
+
+00:02:00.990 --> 00:02:07.470
+Pero en muchos casos, esos formularios lentos, búsquedas con retraso y flujos de Power Automate que siguen agotando el tiempo de espera
+
+00:02:07.470 --> 00:02:14.150
+pueden rastrearse hasta un esquema que parecía perfecto en la fase de construcción, pero que se estructuró de forma que ralentiza cada consulta.
+
+00:02:15.170 --> 00:02:22.910
+Si alguna vez has tenido un usuario quejándose de que Dataverse es lento sin dar contexto, es muy probable que el verdadero culpable sea el diseño de tu tabla sea el diseño de tu tabla.
+
+00:02:22.910 --> 00:02:24.270
+Piénsalo como un archivador.
+
+00:02:25.290 --> 00:02:31.870
+Si cada cajón está lleno de papeles y nada está etiquetado, no importa si solo hay 50 archivos dentro, igual perderás tiempo buscando entre ellos.
+
+00:02:33.050 --> 00:02:40.670
+Una tabla de Dataverse funciona a manera repleta de campos que rara vez usa si unida con relaciones innecesarias puede hacer que hasta las operaciones de datos más simples se vuelvan lentas.
+
+00:02:41.170 --> 00:02:41.810
+Se vuelvan lentas.
+
+00:02:41.910 --> 00:02:46.330
+Y a diferencia de un armario desordenado, aquí el desorden no es visible de inmediato para ti ni para el usuario ni para el usuario.
+
+00:02:46.810 --> 00:02:49.190
+El único síntoma es una penalización de rendimiento acumulado.
+
+00:02:49.190 --> 00:02:55.050
+He visto proyectos donde el esquema de la tabla parecía una recopilación de todos los pedidos de cada interesado.
+
+00:02:55.630 --> 00:02:57.870
+Necesitas un campo para notas internas en tres formatos distintos.
+
+00:02:58.210 --> 00:02:58.430
+Hecho.
+
+00:02:58.910 --> 00:03:01.830
+Una docena de variaciones de la misma búsqueda por si alguien la necesita más tarde.
+
+00:03:02.530 --> 00:03:02.910
+Agrégalo.
+
+00:03:03.290 --> 00:03:05.230
+Con el tiempo estos campos se convierten en un peso muerto.
+
+00:03:05.550 --> 00:03:11.870
+Se indexan innecesariamente, ralentizan las inserciones y actualizaciones y hacen que la interfaz del formulario sea más pesada de lo debido.
+
+00:03:11.870 --> 00:03:18.530
+Un ejemplo real involucraba una tabla de clientes con más de 250 campos, la mayoría de los cuales existían por si acaso.
+
+00:03:19.530 --> 00:03:23.750
+El resultado, un formulario que tardaba más de 12 segundos en cargarse con una conexión de alta velocidad.
+
+00:03:24.350 --> 00:03:25.910
+Y eso antes de que cualquier automatización entrara.
+
+00:03:26.370 --> 00:03:29.550
+La propia documentación de Microsoft explica las contrapartidas de la normalización.
+
+00:03:30.270 --> 00:03:34.710
+Según el manual, dividir los datos en muchas tablas pequeñas relacionadas protege contra la redundancia.
+
+00:03:34.710 --> 00:03:41.910
+En la práctica, normalizar en exceso puede perjudicar el rendimiento de Dataverse si las operaciones normales requieren demasiadas uniones entre esas tablas.
+
+00:03:42.850 --> 00:03:45.050
+Cada unión es trabajo adicional para el motor de consultas.
+
+00:03:45.550 --> 00:03:48.970
+Y si tienes columnas que casi nunca cambian almacenadas en tablas relacionadas separadas,
+
+00:03:49.110 --> 00:03:52.330
+estás pagando un costo de procesamiento sin ningún beneficio real, sin ningún beneficio real.
+
+00:03:52.990 --> 00:03:56.170
+Eliminar campos no críticos no es un trabajo glamoroso, pero vale la pena rápidamente.
+
+00:03:56.830 --> 00:04:01.030
+Identifica los atributos que no se usan en informes que rara vez cambian o que duplican información en otra parte.
+
+00:04:01.030 --> 00:04:05.810
+Conserva solo lo que sirve a un proceso actual, no lo que podría necesitarse algún día.
+
+00:04:06.410 --> 00:04:07.450
+Lo mismo ocurre con la normalización.
+
+00:04:07.890 --> 00:04:11.690
+Ahora vale la pena revisar dónde puedes combinar datos relacionados de baja actividad para reducir las uniones.
+
+00:04:12.270 --> 00:04:14.530
+El objetivo no es descartar los buenos principios de diseño,
+
+00:04:14.630 --> 00:04:18.310
+sino encontrar un equilibrio entre la teoría y cómo funciona realmente tu aplicación bajo carga.
+
+00:04:18.570 --> 00:04:18.850
+Y carga.
+
+00:04:19.290 --> 00:04:23.550
+La realidad es que un rendimiento escalable no se obtiene simplemente añadiendo más recursos a Dataverse.
+
+00:04:24.190 --> 00:04:26.510
+Comienza con el gemma diseñado por un propósito específico.
+
+00:04:26.510 --> 00:04:28.070
+Las tablas ligeras se ejecutan más rápido,
+
+00:04:28.570 --> 00:04:30.170
+los formulores se cargan de forma más predecible,
+
+00:04:30.170 --> 00:04:33.170
+y la automatización se dispara a tiempo, incluso a medida que tu entorno crece.
+
+00:04:33.910 --> 00:04:37.890
+Cada campo innecesario o elección de normalización mal pensada
+
+00:04:37.890 --> 00:04:40.890
+añade un poco más de fricción a cada consulta.
+
+00:04:41.550 --> 00:04:44.050
+Con el tiempo, esa fricción se suma y provoca un retraso notable.
+
+00:04:44.730 --> 00:04:46.730
+Ahora que el factor del desorden ha salido a la luz,
+
+00:04:47.570 --> 00:04:50.030
+el siguiente desafío se oculta en cómo interactúan tus tablas,
+
+00:04:50.170 --> 00:04:53.110
+y ahí es donde el diseño de relaciones puede determinar el rendimiento.
+
+00:04:53.110 --> 00:04:56.710
+Cuando las relaciones se convierten en obstáculos,
+
+00:04:56.850 --> 00:05:00.010
+algunas relaciones de Dataverse parecen cruces en hora punta, parecen hora punta.
+
+00:05:00.430 --> 00:05:03.510
+Todos embotellan un punto y el flujo completo se ralentiza hasta casi detenerse.
+
+00:05:04.610 --> 00:05:07.490
+Sobre el papel, la estructura de datos parece limpia y lógica,
+
+00:05:07.570 --> 00:05:10.790
+pero en la práctica, un solo punto de unión sobrecargado puede dejar inoperante
+
+00:05:10.790 --> 00:05:12.250
+toda una aplicación basada en modelos.
+
+00:05:13.250 --> 00:05:15.450
+Esto no se trata de datos erróneos o volúmenes enormes,
+
+00:05:15.510 --> 00:05:17.890
+sino de cómo están configuradas las relaciones internamente.
+
+00:05:17.890 --> 00:05:22.050
+El diseño de las relaciones puede introducir silenciosamente problemas de rendimiento
+
+00:05:22.050 --> 00:05:23.650
+que solo aparecen al alcanzar una escala real.
+
+00:05:24.070 --> 00:05:26.850
+Entornos de prueba más pequeños, incluso las uniones ineficientes funcionan bien.
+
+00:05:27.390 --> 00:05:29.630
+Implementa el mismo diseño en un entorno empresarial
+
+00:05:29.630 --> 00:05:32.390
+con miles de usuarios activos y procesos interconectados,
+
+00:05:32.510 --> 00:05:34.490
+y de repente los formularios tardan segundos en cargar,
+
+00:05:34.710 --> 00:05:36.770
+las subcuadrículas agotan su tiempo de espera,
+
+00:05:37.230 --> 00:05:40.030
+y todo lo que toque esas tablas vinculadas se siente lento.
+
+00:05:41.870 --> 00:05:44.070
+Estas no son misteriosas ralentizaciones de la nube,
+
+00:05:44.070 --> 00:05:47.050
+son el resultado natural de relaciones diseñadas para ser claras,
+
+00:05:47.050 --> 00:05:50.930
+sin considerar cómo Dataverse ejecuta realmente las consultas.
+
+00:05:51.910 --> 00:05:55.430
+He visto esto de primera mano en un proyecto que usaba una relación de muchos a muchos
+
+00:05:55.430 --> 00:05:58.010
+para vincular contactos a múltiples planes de servicio.
+
+00:05:59.090 --> 00:06:01.150
+En las pruebas iniciales, con unos pocos cientos de registros,
+
+00:06:01.250 --> 00:06:02.090
+todo funcionaba sin problema.
+
+00:06:03.550 --> 00:06:06.350
+Pero una vez que el conjunto de datos activo creció a cientos de miles
+
+00:06:06.350 --> 00:06:08.990
+y los usuarios consultaban esos enlaces a diario,
+
+00:06:09.130 --> 00:06:12.810
+esa tabla de muchos a muchos se convirtió en la parte más lenta del sistema.
+
+00:06:12.810 --> 00:06:16.770
+Cada carga de formulario activa unes complejas en tres tablas,
+
+00:06:16.930 --> 00:06:21.730
+y cada unión añadía más sobrecarga hasta que las operaciones básicas tardaban mucho más de lo esperado.
+
+00:06:22.770 --> 00:06:24.570
+El costo oculto no está solones en sí mismas.
+
+00:06:25.630 --> 00:06:28.630
+Los campos de búsqueda en Dataverse pueden conllevar comportamientos en cascada
+
+00:06:28.630 --> 00:06:31.810
+como resignaciones, eliminaciones o actualizaciones automáticas de registros
+
+00:06:31.810 --> 00:06:34.010
+que se ejecutan cada vez que cambia el registro vinculado.
+
+00:06:35.130 --> 00:06:37.390
+Aunque son excelentes para mantener los datos sincronizados,
+
+00:06:37.390 --> 00:06:39.710
+también significan más procesamiento en segundo plano,
+
+00:06:40.030 --> 00:06:41.310
+cada vez que ocurre una actualización,
+
+00:06:41.510 --> 00:06:44.050
+incluso para campos no relacionados con la operación principal.
+
+00:06:45.130 --> 00:06:46.050
+En tablas de alta actividad,
+
+00:06:46.330 --> 00:06:48.210
+esas cascadas pueden acumularse rápidamente,
+
+00:06:48.350 --> 00:06:50.630
+reduciendo el rendimiento y ralentizando las interacciones
+
+00:06:50.630 --> 00:06:52.730
+sin un disparador visible evidente.
+
+00:06:53.670 --> 00:06:56.650
+La propia guía de Microsoft recomienda evitar uniones complejas innecesarias,
+
+00:06:56.710 --> 00:06:57.610
+y por una buena razón.
+
+00:06:59.230 --> 00:07:01.110
+Cada unión adicional en una consulta
+
+00:07:01.110 --> 00:07:03.310
+obliga al motor de Dataverse a trabajar más,
+
+00:07:03.310 --> 00:07:06.130
+traducir más datos y mantener más información en la memoria,
+
+00:07:06.130 --> 00:07:07.510
+mientras se evalúa las condiciones.
+
+00:07:08.670 --> 00:07:10.410
+Esto es manejable en dosis pequeñas,
+
+00:07:10.830 --> 00:07:13.370
+pero una vez que empiezas a superponer múltiples relaciones
+
+00:07:13.370 --> 00:07:15.750
+de muchos a muchos y cascadas en el mismo proceso,
+
+00:07:15.990 --> 00:07:19.270
+el tiempo de ejecución aumenta mucho más rápido de lo que esperarías.
+
+00:07:20.110 --> 00:07:21.330
+Un caso particularmente revelador
+
+00:07:21.330 --> 00:07:23.230
+implicó cambiar una relación de muchos a muchos
+
+00:07:23.230 --> 00:07:25.830
+por una búsqueda única con un campo de opción de apoyo.
+
+00:07:26.770 --> 00:07:29.010
+La lógica de negocio se relaboró ligeramente
+
+00:07:29.010 --> 00:07:31.050
+para que no requiriera resolver dinámicamente
+
+00:07:31.050 --> 00:07:32.470
+múltiples registros vinculados,
+
+00:07:32.470 --> 00:07:35.350
+y el resultado fue una reducción inmediata del 80%
+
+00:07:35.350 --> 00:07:37.250
+en el tiempo de carga del formulario.
+
+00:07:38.510 --> 00:07:40.870
+Esa mejora no se debió a que el conjunto de datos se redujera,
+
+00:07:40.990 --> 00:07:41.970
+o a que el hardware mejorara.
+
+00:07:42.910 --> 00:07:44.710
+Se debió completamente a que se le dio a Dataverse
+
+00:07:44.710 --> 00:07:47.450
+una ruta más sencilla y directa a la información que necesitaba.
+
+00:07:48.290 --> 00:07:50.230
+Los diseños alternativos como plan de estructuras
+
+00:07:50.230 --> 00:07:51.230
+también pueden dar sus frutos.
+
+00:07:51.230 --> 00:07:53.830
+A veces, un dato no necesita residir
+
+00:07:53.830 --> 00:07:55.510
+en su propia tabla relacionada dedicada.
+
+00:07:56.710 --> 00:07:57.970
+Si requiere poco mantenimiento
+
+00:07:57.970 --> 00:07:59.090
+y cambia con poca frecuencia,
+
+00:07:59.430 --> 00:08:01.190
+almacenarlo directamente en el registro principal
+
+00:08:01.190 --> 00:08:02.030
+como un campo de opción
+
+00:08:02.030 --> 00:08:04.090
+significa una unión menos al realizar la recuperación.
+
+00:08:05.590 --> 00:08:06.230
+De igual manera,
+
+00:08:06.630 --> 00:08:07.610
+algunas tablas de enlace
+
+00:08:07.610 --> 00:08:10.150
+pueden reemplazarse por campos calculados o acumulados
+
+00:08:10.150 --> 00:08:12.830
+y se usan principalmente para mostrar información resumida.
+
+00:08:13.550 --> 00:08:15.350
+Esto mantiene la capa de presentación rápida
+
+00:08:15.350 --> 00:08:17.630
+y evita operaciones de consulta pesadas en segundo plano.
+
+00:08:17.630 --> 00:08:20.970
+La lección aquí es que el diseño de relaciones
+
+00:08:20.970 --> 00:08:22.530
+no se trata solo de claridad lógica
+
+00:08:22.530 --> 00:08:24.650
+o de cumplir con estándares de normalización.
+
+00:08:25.830 --> 00:08:27.610
+También se trata de comprender el costo de ejecución.
+
+00:08:28.390 --> 00:08:29.670
+Cada tipo de relación que elijas
+
+00:08:29.670 --> 00:08:31.590
+cambia la forma en que Dataverse debe recuperar,
+
+00:08:31.750 --> 00:08:33.090
+combinar y procesar tus datos.
+
+00:08:35.090 --> 00:08:36.970
+Centrarse solo en la apariencia del esquema
+
+00:08:36.970 --> 00:08:38.390
+sin considerar su funcionamiento.
+
+00:08:39.090 --> 00:08:40.430
+Puede dejarte con una estructura
+
+00:08:40.430 --> 00:08:41.710
+que tiene sentido en papel,
+
+00:08:41.910 --> 00:08:43.750
+pero que es lenta en producción.
+
+00:08:45.430 --> 00:08:46.990
+Aunque optimizar las relaciones
+
+00:08:46.990 --> 00:08:49.630
+elimina gran parte de esa carga de procesamiento,
+
+00:08:49.810 --> 00:08:51.050
+existe otro factor que decide
+
+00:08:51.050 --> 00:08:52.630
+qué tan rápido responde Dataverse,
+
+00:08:52.730 --> 00:08:55.290
+la estrategia de indexación que impulsa esas consultas.
+
+00:08:56.710 --> 00:08:59.130
+La indexación en multiplicador silencioso de rendimiento.
+
+00:08:59.730 --> 00:09:00.830
+Las consultas son tan rápidas
+
+00:09:00.830 --> 00:09:02.050
+como las rutas que pueden tomar.
+
+00:09:02.630 --> 00:09:04.450
+Y en Dataverse la indexación decide esa ruta.
+
+00:09:05.510 --> 00:09:06.510
+La mayoría de los creadores
+
+00:09:06.510 --> 00:09:07.750
+saben que existen los índices,
+
+00:09:07.910 --> 00:09:08.530
+pero en la práctica
+
+00:09:08.530 --> 00:09:10.470
+es una de las partes menos comprendidas
+
+00:09:10.470 --> 00:09:11.610
+del ajuste de rendimiento.
+
+00:09:12.850 --> 00:09:14.710
+Puedes tener una estructura de tabla limpia
+
+00:09:14.710 --> 00:09:15.970
+y relaciones optimizadas,
+
+00:09:16.290 --> 00:09:18.850
+pero si Dataverse no puede encontrar rápidamente
+
+00:09:18.850 --> 00:09:19.550
+los registros,
+
+00:09:19.950 --> 00:09:21.430
+todo lo demás se ralentiza.
+
+00:09:22.430 --> 00:09:22.990
+Piensa en ello,
+
+00:09:23.070 --> 00:09:24.350
+como intentar encontrar una caja
+
+00:09:24.350 --> 00:09:25.270
+en un almacén enorme.
+
+00:09:26.490 --> 00:09:27.130
+Sin indexación,
+
+00:09:27.270 --> 00:09:28.970
+tendrías que recorrer pasillo por pasillo
+
+00:09:28.970 --> 00:09:30.450
+revisando cada estante
+
+00:09:30.450 --> 00:09:32.290
+hasta encontrar la correcta.
+
+00:09:33.250 --> 00:09:34.930
+Eso funciona cuando el almacén es pequeño,
+
+00:09:35.050 --> 00:09:36.610
+pero al escalar a millones de artículos
+
+00:09:36.610 --> 00:09:37.750
+se vuelve absurdo.
+
+00:09:38.690 --> 00:09:39.910
+La indexación es el equivalente
+
+00:09:39.910 --> 00:09:40.810
+a tener un mapa preciso
+
+00:09:40.810 --> 00:09:42.510
+y una ruta directa al estante exacto.
+
+00:09:42.510 --> 00:09:44.070
+Cuanto menos trabajo
+
+00:09:44.070 --> 00:09:44.910
+tenga que hacer Dataverse
+
+00:09:44.910 --> 00:09:45.970
+para localizar un registro,
+
+00:09:46.030 --> 00:09:46.850
+más rápido se ejecutarán
+
+00:09:46.850 --> 00:09:48.450
+las vistas, filtros y automatizaciones.
+
+00:09:49.650 --> 00:09:50.870
+Dataverse crea automáticamente
+
+00:09:50.870 --> 00:09:52.050
+ciertos índices para ti,
+
+00:09:53.170 --> 00:09:54.550
+principalmente en claves primarias,
+
+00:09:54.730 --> 00:09:56.330
+búsquedas y algunas columnas del sistema.
+
+00:09:57.270 --> 00:09:58.210
+Por eso los entornos nuevos
+
+00:09:58.210 --> 00:09:59.570
+funcionan bien sin indexación manual,
+
+00:09:59.710 --> 00:10:00.730
+pero la indexación automática
+
+00:10:00.730 --> 00:10:01.730
+tiene límites.
+
+00:10:02.670 --> 00:10:03.550
+Las consultas complejas
+
+00:10:03.550 --> 00:10:04.450
+con múltiples condiciones,
+
+00:10:04.670 --> 00:10:06.150
+especialmente en columnas personalizadas,
+
+00:10:06.250 --> 00:10:07.290
+pueden terminar escaneando
+
+00:10:07.290 --> 00:10:08.310
+gran parte de la tabla
+
+00:10:08.310 --> 00:10:09.770
+si no hay un índice específico
+
+00:10:09.770 --> 00:10:10.770
+que las guíe.
+
+00:10:10.770 --> 00:10:13.530
+Ahí es cuando empiezas a ver paneles
+
+00:10:13.530 --> 00:10:15.070
+lentos, retrasos en reportes
+
+00:10:15.070 --> 00:10:15.710
+y vistas de lista
+
+00:10:15.710 --> 00:10:17.030
+que no cargan correctamente.
+
+00:10:17.810 --> 00:10:18.770
+El otro extremo,
+
+00:10:18.830 --> 00:10:19.630
+el exceso de indexación
+
+00:10:19.630 --> 00:10:20.550
+puede ser igual de malo.
+
+00:10:21.110 --> 00:10:21.890
+Cada vez que insertas,
+
+00:10:21.970 --> 00:10:22.730
+actualizas o eliminas
+
+00:10:22.730 --> 00:10:23.630
+un registro de Dataverse,
+
+00:10:23.730 --> 00:10:24.230
+tiene que mantener
+
+00:10:24.230 --> 00:10:25.990
+todos los índices relevantes.
+
+00:10:27.050 --> 00:10:28.450
+Demasiados índices personalizados
+
+00:10:28.450 --> 00:10:29.810
+pueden aumentar los tiempos de escritura
+
+00:10:29.810 --> 00:10:31.610
+y ralentizar las actualizaciones masivas.
+
+00:10:33.210 --> 00:10:34.410
+El arte aquí es saber
+
+00:10:34.410 --> 00:10:35.890
+qué columnas vale la pena indexar
+
+00:10:35.890 --> 00:10:37.270
+y, algo igual de importante,
+
+00:10:37.490 --> 00:10:37.970
+cuáles no.
+
+00:10:37.970 --> 00:10:40.230
+Los índices son más valiosos
+
+00:10:40.230 --> 00:10:41.450
+en campos usados frecuentemente
+
+00:10:41.450 --> 00:10:41.970
+en filtros,
+
+00:10:42.050 --> 00:10:42.950
+ordenamientos o uniones,
+
+00:10:43.130 --> 00:10:44.270
+no en campos que solo importan,
+
+00:10:44.670 --> 00:10:45.490
+en vistas de formulario
+
+00:10:45.490 --> 00:10:46.310
+ocasionales.
+
+00:10:47.330 --> 00:10:47.690
+Por ejemplo,
+
+00:10:47.790 --> 00:10:48.650
+en una tabla de solicitudes
+
+00:10:48.650 --> 00:10:49.590
+de servicio de alto volumen,
+
+00:10:49.670 --> 00:10:50.350
+los informes tardaban
+
+00:10:50.350 --> 00:10:51.050
+hasta 6 segundos
+
+00:10:51.050 --> 00:10:51.650
+solo en devolver
+
+00:10:51.650 --> 00:10:52.330
+una lista filtrada
+
+00:10:52.330 --> 00:10:53.030
+para los gerentes.
+
+00:10:54.210 --> 00:10:55.070
+El problema principal
+
+00:10:55.070 --> 00:10:55.830
+era que el filtrado
+
+00:10:55.830 --> 00:10:56.350
+se realizaba
+
+00:10:56.350 --> 00:10:57.490
+en una columna personalizada
+
+00:10:57.490 --> 00:10:58.270
+de tipo de solicitud
+
+00:10:58.270 --> 00:10:58.970
+sin un índice dedicado.
+
+00:11:00.590 --> 00:11:01.230
+Agregar un índice
+
+00:11:01.230 --> 00:11:02.370
+no agrupado en esa columna
+
+00:11:02.370 --> 00:11:03.270
+redujo inmediatamente
+
+00:11:03.270 --> 00:11:04.250
+el tiempo de consulta
+
+00:11:04.250 --> 00:11:05.730
+a menos de 200 milisegundos,
+
+00:11:05.730 --> 00:11:07.090
+esa no es una mejora sutil.
+
+00:11:07.650 --> 00:11:08.270
+Cambió por completo
+
+00:11:08.270 --> 00:11:09.370
+la sensación de la aplicación
+
+00:11:09.370 --> 00:11:10.450
+para los usuarios diarios.
+
+00:11:11.050 --> 00:11:11.610
+Lo mejor de todo
+
+00:11:11.610 --> 00:11:12.190
+es que no requirió
+
+00:11:12.190 --> 00:11:13.230
+tocar el modelo de datos real
+
+00:11:13.230 --> 00:11:14.310
+ni la lógica de la interfaz
+
+00:11:14.310 --> 00:11:15.250
+solo una ruta de recuperación
+
+00:11:15.250 --> 00:11:16.050
+más inteligente.
+
+00:11:17.030 --> 00:11:18.110
+Pero obtener ese beneficio
+
+00:11:18.110 --> 00:11:18.690
+después del hecho
+
+00:11:18.690 --> 00:11:19.250
+no es lo ideal.
+
+00:11:20.110 --> 00:11:20.750
+Adaptar índices
+
+00:11:20.750 --> 00:11:21.730
+en un sistema en vivo
+
+00:11:21.730 --> 00:11:22.730
+conlleva riesgos.
+
+00:11:24.330 --> 00:11:24.790
+Debe probar
+
+00:11:24.790 --> 00:11:25.750
+los impactos en la escritura,
+
+00:11:26.010 --> 00:11:26.590
+programar cambios
+
+00:11:26.590 --> 00:11:27.150
+durante ventanas
+
+00:11:27.150 --> 00:11:27.730
+de poco uso
+
+00:11:27.730 --> 00:11:28.110
+y a veces
+
+00:11:28.110 --> 00:11:29.450
+lidiar con la sobrecarga
+
+00:11:29.450 --> 00:11:29.890
+de migración
+
+00:11:29.890 --> 00:11:30.290
+si la tabla
+
+00:11:30.290 --> 00:11:31.690
+es extremadamente grande.
+
+00:11:32.930 --> 00:11:33.430
+Por el contrario,
+
+00:11:33.530 --> 00:11:34.410
+planificar su estrategia
+
+00:11:34.410 --> 00:11:34.930
+de indexación
+
+00:11:34.930 --> 00:11:35.670
+antes del lanzamiento
+
+00:11:35.670 --> 00:11:36.750
+hace que todo el sistema
+
+00:11:36.750 --> 00:11:37.690
+sea más resistente.
+
+00:11:38.290 --> 00:11:39.070
+Pueden parejar índices
+
+00:11:39.070 --> 00:11:39.770
+con sus consultas
+
+00:11:39.770 --> 00:11:40.290
+más comunes
+
+00:11:40.290 --> 00:11:40.970
+desde el primer día,
+
+00:11:41.230 --> 00:11:41.990
+reduciendo la necesidad
+
+00:11:41.990 --> 00:11:42.470
+de correcciones
+
+00:11:42.470 --> 00:11:42.970
+de rendimiento
+
+00:11:42.970 --> 00:11:43.410
+de emergencia
+
+00:11:43.410 --> 00:11:43.890
+más adelante.
+
+00:11:44.690 --> 00:11:45.290
+Un buen enfoque
+
+00:11:45.290 --> 00:11:46.110
+durante la planificación
+
+00:11:46.110 --> 00:11:46.630
+del esquema
+
+00:11:46.630 --> 00:11:47.570
+es mapear sus consultas
+
+00:11:47.570 --> 00:11:48.250
+de mayor tráfico
+
+00:11:48.250 --> 00:11:48.730
+e identificar
+
+00:11:48.730 --> 00:11:49.230
+en qué campos
+
+00:11:49.230 --> 00:11:49.970
+filtran a menudo.
+
+00:11:50.970 --> 00:11:51.710
+Si sabe que una vista
+
+00:11:51.710 --> 00:11:52.630
+o pantalla de aplicación
+
+00:11:52.630 --> 00:11:53.410
+siempre se ordenará
+
+00:11:53.410 --> 00:11:54.470
+en una columna particular,
+
+00:11:54.670 --> 00:11:55.390
+considera indexarla
+
+00:11:55.390 --> 00:11:56.170
+desde el principio.
+
+00:11:56.770 --> 00:11:57.070
+Lo mismo
+
+00:11:57.070 --> 00:11:57.750
+para las condiciones
+
+00:11:57.750 --> 00:11:58.410
+de unión-relaciones
+
+00:11:58.410 --> 00:11:59.450
+que sabe que son fundamentales
+
+00:11:59.450 --> 00:11:59.850
+para el flujo
+
+00:11:59.850 --> 00:12:00.630
+de trabajo de la aplicación.
+
+00:12:01.350 --> 00:12:01.530
+Luego,
+
+00:12:01.530 --> 00:12:02.430
+revise periódicamente
+
+00:12:02.430 --> 00:12:03.170
+las estadísticas
+
+00:12:03.170 --> 00:12:03.890
+de uso de los índices
+
+00:12:03.890 --> 00:12:04.770
+para encontrar candidatos
+
+00:12:04.770 --> 00:12:05.370
+que puede eliminar
+
+00:12:05.370 --> 00:12:05.910
+porque raramente
+
+00:12:05.910 --> 00:12:06.790
+se usan en consultas
+
+00:12:06.790 --> 00:12:07.350
+del mundo real.
+
+00:12:08.350 --> 00:12:09.230
+La indexación
+
+00:12:09.230 --> 00:12:09.870
+no es llamativa
+
+00:12:09.870 --> 00:12:10.730
+y no aparece
+
+00:12:10.730 --> 00:12:11.550
+en la interfaz de usuario
+
+00:12:11.550 --> 00:12:11.990
+como lo hace
+
+00:12:11.990 --> 00:12:12.750
+un nuevo formulario
+
+00:12:12.750 --> 00:12:13.090
+o panel
+
+00:12:13.090 --> 00:12:14.090
+pero es un multiplicador
+
+00:12:14.090 --> 00:12:14.690
+silencioso.
+
+00:12:15.950 --> 00:12:16.970
+Cada consulta optimizada
+
+00:12:16.970 --> 00:12:17.910
+se beneficia de ella
+
+00:12:17.910 --> 00:12:19.090
+y cada una mal indexada
+
+00:12:19.090 --> 00:12:20.110
+se convierte en un lastre
+
+00:12:20.110 --> 00:12:20.710
+a medida que crece
+
+00:12:20.710 --> 00:12:21.550
+su conjunto de datos.
+
+00:12:22.250 --> 00:12:22.850
+Una estrategia
+
+00:12:22.850 --> 00:12:23.810
+de indexación eficaz
+
+00:12:23.810 --> 00:12:24.630
+asegura un margen
+
+00:12:24.630 --> 00:12:25.170
+de rendimiento
+
+00:12:25.170 --> 00:12:26.010
+y convierte la ejecución
+
+00:12:26.010 --> 00:12:26.550
+de consultas
+
+00:12:26.550 --> 00:12:27.310
+de un posible coyote
+
+00:12:27.310 --> 00:12:28.710
+en una fortaleza confiable.
+
+00:12:29.490 --> 00:12:29.970
+Pero todavía queda
+
+00:12:29.970 --> 00:12:30.490
+una palanca más
+
+00:12:30.490 --> 00:12:32.130
+para mantener
+
+00:12:32.130 --> 00:12:33.370
+realmente Dataverse
+
+00:12:33.370 --> 00:12:34.150
+rápido a escala
+
+00:12:34.150 --> 00:12:34.770
+debe pasar
+
+00:12:34.770 --> 00:12:35.370
+de solucionar
+
+00:12:35.370 --> 00:12:36.270
+los cuellos de botella
+
+00:12:36.270 --> 00:12:36.910
+después de que
+
+00:12:36.910 --> 00:12:38.030
+aparecen a diseñar
+
+00:12:38.030 --> 00:12:38.990
+formas que eviten
+
+00:12:38.990 --> 00:12:40.190
+que se formen
+
+00:12:40.190 --> 00:12:42.570
+de correcciones reactivas
+
+00:12:42.570 --> 00:12:43.630
+en la arquitectura proactiva.
+
+00:12:44.090 --> 00:12:44.390
+La mayoría
+
+00:12:44.390 --> 00:12:44.870
+de las correcciones
+
+00:12:44.870 --> 00:12:45.330
+de rendimiento
+
+00:12:45.330 --> 00:12:45.730
+en Dataverse
+
+00:12:45.730 --> 00:12:46.750
+se sienten como apaganicen.
+
+00:12:47.190 --> 00:12:47.910
+Un usuario informa
+
+00:12:47.910 --> 00:12:48.850
+sobre formularios lentos
+
+00:12:48.850 --> 00:12:49.250
+o se realiza
+
+00:12:49.250 --> 00:12:50.070
+algunas comprobaciones,
+
+00:12:50.230 --> 00:12:51.070
+hace cambios quirúrgicos
+
+00:12:51.070 --> 00:12:52.030
+y espera que se resuelva.
+
+00:12:52.730 --> 00:12:53.270
+¿Pero qué pasaría
+
+00:12:53.270 --> 00:12:54.030
+si pudiera construir
+
+00:12:54.030 --> 00:12:54.430
+de una manera
+
+00:12:54.430 --> 00:12:54.830
+que evitar
+
+00:12:54.830 --> 00:12:55.350
+que sus problemas
+
+00:12:55.350 --> 00:12:56.330
+aparecieran por completo?
+
+00:12:57.030 --> 00:12:57.810
+La verdad silenciosa
+
+00:12:57.810 --> 00:12:58.490
+es que las aplicaciones
+
+00:12:58.490 --> 00:12:58.970
+de Dataverse
+
+00:12:58.970 --> 00:12:59.770
+más rápidas y estables
+
+00:12:59.770 --> 00:13:00.930
+no solo están bien ajustadas,
+
+00:13:01.070 --> 00:13:01.870
+no solo están bien ajustadas.
+
+00:13:02.010 --> 00:13:02.590
+Fueron diseñadas
+
+00:13:02.590 --> 00:13:03.250
+desde el primer día
+
+00:13:03.250 --> 00:13:04.590
+pensando en la escalabilidad.
+
+00:13:05.330 --> 00:13:05.810
+La planificación
+
+00:13:05.810 --> 00:13:06.790
+arquitectónica temprana
+
+00:13:06.790 --> 00:13:07.330
+es el impulso
+
+00:13:07.330 --> 00:13:07.750
+de rendimiento
+
+00:13:07.750 --> 00:13:08.330
+más económico
+
+00:13:08.330 --> 00:13:09.130
+que jamás implementará.
+
+00:13:10.070 --> 00:13:10.630
+No se trata
+
+00:13:10.630 --> 00:13:11.990
+de agregar capas adicionales
+
+00:13:11.990 --> 00:13:12.470
+por si acaso,
+
+00:13:12.590 --> 00:13:13.170
+sino de pensar
+
+00:13:13.170 --> 00:13:14.250
+en cómo se comportarán
+
+00:13:14.250 --> 00:13:14.750
+sus tablas,
+
+00:13:14.930 --> 00:13:15.990
+relaciones e índices
+
+00:13:15.990 --> 00:13:16.950
+cuando la aplicación
+
+00:13:16.950 --> 00:13:18.190
+tenga toda la carga
+
+00:13:18.190 --> 00:13:18.890
+de producción,
+
+00:13:19.530 --> 00:13:19.770
+Sean.
+
+00:13:20.910 --> 00:13:21.790
+En la fase de desarrollo
+
+00:13:21.790 --> 00:13:22.370
+cualquier cambio
+
+00:13:22.370 --> 00:13:23.250
+tiene un costo bajo.
+
+00:13:24.090 --> 00:13:24.790
+Una vez que la aplicación
+
+00:13:24.790 --> 00:13:25.250
+está activa,
+
+00:13:25.310 --> 00:13:25.850
+ese mismo cambio
+
+00:13:25.850 --> 00:13:26.470
+podría implicar
+
+00:13:26.470 --> 00:13:26.970
+refactorizar
+
+00:13:26.970 --> 00:13:27.650
+docenas de flujos,
+
+00:13:27.750 --> 00:13:27.990
+paneles,
+
+00:13:28.050 --> 00:13:28.270
+flujos,
+
+00:13:28.270 --> 00:13:29.050
+paneles y formularios
+
+00:13:29.050 --> 00:13:29.830
+controlados por modelo.
+
+00:13:30.030 --> 00:13:30.470
+La diferencia
+
+00:13:30.470 --> 00:13:30.970
+en el esfuerzo
+
+00:13:30.970 --> 00:13:31.510
+es abismal.
+
+00:13:31.930 --> 00:13:32.770
+He trabajado con equipos
+
+00:13:32.770 --> 00:13:33.450
+que no hicieron pruebas
+
+00:13:33.450 --> 00:13:33.970
+de rendimiento
+
+00:13:33.970 --> 00:13:34.610
+hasta justo antes
+
+00:13:34.610 --> 00:13:35.290
+del lanzamiento.
+
+00:13:36.050 --> 00:13:36.750
+Todo se había construido
+
+00:13:36.750 --> 00:13:37.510
+de forma lógica,
+
+00:13:37.690 --> 00:13:38.250
+se veía limpio
+
+00:13:38.250 --> 00:13:38.650
+en el esquema
+
+00:13:38.650 --> 00:13:39.270
+y funcionaba bien
+
+00:13:39.270 --> 00:13:39.650
+en las pruebas
+
+00:13:39.650 --> 00:13:40.110
+de aceptación
+
+00:13:40.110 --> 00:13:40.930
+de usuario UAT.
+
+00:13:41.710 --> 00:13:42.210
+Pero luego,
+
+00:13:42.410 --> 00:13:43.310
+los informes analíticos
+
+00:13:43.310 --> 00:13:43.990
+empezaron a tardar
+
+00:13:43.990 --> 00:13:44.870
+minutos en cargarse.
+
+00:13:45.230 --> 00:13:46.270
+Los flujos de Power Automate
+
+00:13:46.270 --> 00:13:46.690
+expiraban
+
+00:13:46.690 --> 00:13:47.490
+y ciertos formularios
+
+00:13:47.490 --> 00:13:48.050
+solo abrían
+
+00:13:48.050 --> 00:13:48.870
+la mitad de las veces.
+
+00:13:49.930 --> 00:13:50.490
+En un caso,
+
+00:13:50.690 --> 00:13:51.230
+una aplicación
+
+00:13:51.230 --> 00:13:52.210
+de programación principal
+
+00:13:52.210 --> 00:13:53.210
+tuvo que ser desmantelada
+
+00:13:53.210 --> 00:13:53.910
+y reconstruida
+
+00:13:53.910 --> 00:13:55.070
+porque varias consultas
+
+00:13:55.070 --> 00:13:55.890
+clave dependían
+
+00:13:55.890 --> 00:13:56.310
+de campos
+
+00:13:56.310 --> 00:13:57.170
+sin indexar ocultos
+
+00:13:57.170 --> 00:13:57.590
+en relaciones
+
+00:13:57.590 --> 00:13:58.450
+de muchos a muchos.
+
+00:13:59.210 --> 00:14:00.030
+La reconstrucción
+
+00:14:00.030 --> 00:14:00.870
+retrasó el lanzamiento
+
+00:14:00.870 --> 00:14:01.390
+tres meses
+
+00:14:01.390 --> 00:14:01.950
+y consumió
+
+00:14:01.950 --> 00:14:02.710
+semanas de horas
+
+00:14:02.710 --> 00:14:03.250
+de desarrollo
+
+00:14:03.250 --> 00:14:03.930
+y pruebas.
+
+00:14:05.070 --> 00:14:05.850
+La clave para evitar
+
+00:14:05.850 --> 00:14:06.350
+ese escenario
+
+00:14:06.350 --> 00:14:07.330
+es hacer que el rendimiento
+
+00:14:07.330 --> 00:14:07.970
+sea un requisito
+
+00:14:07.970 --> 00:14:08.450
+de diseño,
+
+00:14:08.550 --> 00:14:09.890
+no una ocurrencia tardía.
+
+00:14:10.810 --> 00:14:11.350
+Eso significa
+
+00:14:11.350 --> 00:14:12.270
+planificar la indexación
+
+00:14:12.270 --> 00:14:12.730
+al mismo tiempo
+
+00:14:12.730 --> 00:14:13.550
+que diseñas las tablas,
+
+00:14:13.890 --> 00:14:14.470
+saber qué campos
+
+00:14:14.470 --> 00:14:15.230
+estarán en cada filtro
+
+00:14:15.230 --> 00:14:15.730
+y asegurarte
+
+00:14:15.730 --> 00:14:16.350
+de que estén listos
+
+00:14:16.350 --> 00:14:17.590
+para buscarse eficientemente.
+
+00:14:18.950 --> 00:14:19.790
+Significa resistir
+
+00:14:19.790 --> 00:14:20.210
+la tentación
+
+00:14:20.210 --> 00:14:21.430
+de añadir docenas de campos
+
+00:14:21.430 --> 00:14:22.010
+por si acaso
+
+00:14:22.010 --> 00:14:23.050
+durante el prototipado,
+
+00:14:23.270 --> 00:14:23.790
+ya que cada uno
+
+00:14:23.790 --> 00:14:24.350
+añade peso
+
+00:14:24.350 --> 00:14:24.990
+a los formularios
+
+00:14:24.990 --> 00:14:25.830
+y transacciones.
+
+00:14:26.970 --> 00:14:27.830
+Y significa
+
+00:14:27.830 --> 00:14:28.830
+modelar las relaciones
+
+00:14:28.830 --> 00:14:29.990
+según cómo funcionarán
+
+00:14:29.990 --> 00:14:30.470
+a escala,
+
+00:14:30.570 --> 00:14:31.230
+no solo por lo bien
+
+00:14:31.230 --> 00:14:32.130
+que se vean diagramadas
+
+00:14:32.130 --> 00:14:33.250
+en una sesión de trabajo.
+
+00:14:34.170 --> 00:14:34.650
+Cuando tratas
+
+00:14:34.650 --> 00:14:35.130
+el rendimiento
+
+00:14:35.130 --> 00:14:36.170
+como parte de arquitectura
+
+00:14:36.170 --> 00:14:37.030
+dependes mucho menos
+
+00:14:37.030 --> 00:14:37.610
+de la resolución
+
+00:14:37.610 --> 00:14:38.050
+de problemas
+
+00:14:38.050 --> 00:14:39.050
+tras la implementación.
+
+00:14:39.910 --> 00:14:40.490
+Detectas posibles
+
+00:14:40.490 --> 00:14:41.130
+cuellos de botella
+
+00:14:41.130 --> 00:14:41.630
+cuando todavía
+
+00:14:41.630 --> 00:14:42.230
+es fácil cambiar
+
+00:14:42.230 --> 00:14:42.770
+la dirección.
+
+00:14:43.630 --> 00:14:44.310
+Si un determinado
+
+00:14:44.310 --> 00:14:45.050
+modelo de relación
+
+00:14:45.050 --> 00:14:46.030
+ralentizara las uniones
+
+00:14:46.030 --> 00:14:46.850
+en grandes conjuntos
+
+00:14:46.850 --> 00:14:47.170
+de datos,
+
+00:14:47.330 --> 00:14:47.950
+buscas una estructura
+
+00:14:47.950 --> 00:14:48.730
+alternativa antes
+
+00:14:48.730 --> 00:14:49.250
+de que sustente
+
+00:14:49.250 --> 00:14:49.870
+un sistema en vivo.
+
+00:14:50.590 --> 00:14:51.110
+Si un índice
+
+00:14:51.110 --> 00:14:51.930
+pudiera ser instantáneo
+
+00:14:51.930 --> 00:14:52.250
+en la vista
+
+00:14:52.250 --> 00:14:52.850
+de alto tráfico,
+
+00:14:52.850 --> 00:14:53.430
+lo añades antes
+
+00:14:53.430 --> 00:14:53.870
+de que la vista
+
+00:14:53.870 --> 00:14:54.750
+sea de misión crítica.
+
+00:14:55.330 --> 00:14:56.170
+Eso es mucho más fácil
+
+00:14:56.170 --> 00:14:56.990
+que explicar a los usuarios
+
+00:14:56.990 --> 00:14:57.450
+de negocio
+
+00:14:57.450 --> 00:14:58.530
+por qué su aplicación
+
+00:14:58.530 --> 00:14:59.390
+funciona distinto ahora
+
+00:14:59.390 --> 00:15:00.090
+porque tuviste que arreglar
+
+00:15:00.090 --> 00:15:00.550
+algo que ellos
+
+00:15:00.550 --> 00:15:01.970
+no sabían que estaba roto.
+
+00:15:02.670 --> 00:15:03.390
+Existen herramientas
+
+00:15:03.390 --> 00:15:04.350
+en el ecosistema Microsoft
+
+00:15:04.350 --> 00:15:05.350
+que hacen que esta mentalidad
+
+00:15:05.350 --> 00:15:06.610
+proactiva sea mucho más fácil
+
+00:15:06.610 --> 00:15:07.110
+de aplicar.
+
+00:15:08.110 --> 00:15:08.970
+El comprobador de soluciones
+
+00:15:08.970 --> 00:15:09.890
+escaneará tu entorno
+
+00:15:09.890 --> 00:15:10.910
+y señalará patrones
+
+00:15:10.910 --> 00:15:11.630
+que sabe que podrían
+
+00:15:11.630 --> 00:15:12.710
+afectar el rendimiento.
+
+00:15:13.730 --> 00:15:14.770
+Las perspectivas de rendimiento
+
+00:15:14.770 --> 00:15:15.710
+en el centro de administración
+
+00:15:15.710 --> 00:15:16.390
+de Power Platform
+
+00:15:16.390 --> 00:15:17.010
+pueden ayudarte
+
+00:15:17.010 --> 00:15:18.190
+a detectar consultas lentas,
+
+00:15:18.310 --> 00:15:18.870
+rastrear tiempos
+
+00:15:18.870 --> 00:15:19.790
+de carga de formularios
+
+00:15:19.790 --> 00:15:20.390
+e identificar
+
+00:15:20.390 --> 00:15:21.370
+dónde se está retrasando
+
+00:15:21.370 --> 00:15:22.010
+la recuperación
+
+00:15:22.010 --> 00:15:22.910
+o el procesamiento.
+
+00:15:23.850 --> 00:15:24.790
+Ejecutar estas herramientas
+
+00:15:24.790 --> 00:15:25.450
+durante el desarrollo
+
+00:15:25.450 --> 00:15:26.270
+y antes de lanzamientos
+
+00:15:26.270 --> 00:15:26.770
+importantes
+
+00:15:26.770 --> 00:15:27.470
+es lo más cercano
+
+00:15:27.470 --> 00:15:28.290
+a un seguro de rendimiento
+
+00:15:28.290 --> 00:15:29.210
+sin que los usuarios finales
+
+00:15:29.210 --> 00:15:29.670
+se conviertan
+
+00:15:29.670 --> 00:15:30.250
+en los probadores.
+
+00:15:31.230 --> 00:15:31.710
+La recompensa
+
+00:15:31.710 --> 00:15:32.510
+de trabajar de esta manera
+
+00:15:32.510 --> 00:15:32.930
+es sencilla.
+
+00:15:34.050 --> 00:15:34.990
+Las aplicaciones creadas
+
+00:15:34.990 --> 00:15:35.670
+con un pensamiento
+
+00:15:35.670 --> 00:15:36.670
+de rendimiento proactivo
+
+00:15:36.670 --> 00:15:37.290
+tienden a escalar
+
+00:15:37.290 --> 00:15:37.770
+sin problemas
+
+00:15:37.770 --> 00:15:38.690
+con ajustes mínimos.
+
+00:15:39.610 --> 00:15:40.070
+Cuando el volumen
+
+00:15:40.070 --> 00:15:40.790
+de datos crece
+
+00:15:40.790 --> 00:15:41.490
+no alcanzan límites
+
+00:15:41.490 --> 00:15:42.490
+inesperados de repente.
+
+00:15:43.110 --> 00:15:43.630
+Cuando se añaden
+
+00:15:43.630 --> 00:15:44.370
+nuevas funciones
+
+00:15:44.370 --> 00:15:45.570
+nada se detiene por completo
+
+00:15:45.570 --> 00:15:46.490
+porque el diseño original
+
+00:15:46.490 --> 00:15:47.090
+dejó espacio.

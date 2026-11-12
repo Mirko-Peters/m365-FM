@@ -1,0 +1,928 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:03.460
+Selamat datang di episode lain Microsoft Knowledge Nuggets di M365FM.
+
+00:00:03.940 --> 00:00:07.200
+Saya Mirko Peters, dan hari ini kita akan membahas Microsoft Defender XDR.
+
+00:00:07.580 --> 00:00:09.720
+Layangkan ini, Anda berada di meja kerja pada masa pagi.
+
+00:00:10.220 --> 00:00:11.820
+Ponsel Anda bergetar, ada peringatan keaman.
+
+00:00:12.200 --> 00:00:13.440
+Apakah ini nyata atau hanya gangguan?
+
+00:00:13.780 --> 00:00:15.640
+Lalu peringatan lain tentang email mencurigakan.
+
+00:00:15.880 --> 00:00:18.000
+Satu lagi tentang login aneh dari lokasi asing.
+
+00:00:18.460 --> 00:00:19.080
+Apakah keduanya true?
+
+00:00:19.420 --> 00:00:20.260
+Mungkin ya, mungkin tidak.
+
+00:00:20.760 --> 00:00:22.400
+Itulah masalah yang direpi sebagian besar bisnis saya.
+
+00:00:22.880 --> 00:00:25.380
+Hari ini kita akan melihat apa itu Defender XDR sebenarnya.
+
+00:00:25.880 --> 00:00:27.020
+Mengapa Microsoft membuatnya?
+
+00:00:27.020 --> 00:00:30.140
+Dan mengapa itu penting bagi organisasi manapun yang menggunakan Microsoft 365?
+
+00:00:30.620 --> 00:00:31.860
+Inilah hal mengenai serangan modern.
+
+00:00:32.360 --> 00:00:33.720
+Penyerang tidak hanya menyerang satu hal.
+
+00:00:34.280 --> 00:00:34.960
+Mereka bergerak cepat.
+
+00:00:35.280 --> 00:00:37.440
+Email, perangkat, identitas mereka menyerang semuanya.
+
+00:00:38.020 --> 00:00:39.380
+Alat keamanan Anda harus bisa mengimbangi.
+
+00:00:39.860 --> 00:00:42.480
+Kita akan membedah lima blok penyusun yang membentuk Defender XDR
+
+00:00:42.480 --> 00:00:45.460
+dan menunjukkan bagaimana mereka menyatu menjadi satu lapisan keamanan terpadu.
+
+00:00:45.540 --> 00:00:47.640
+Namun pertama, kita perlu bicara tentang masalah yang diselesaikan.
+
+00:00:48.320 --> 00:00:49.820
+Masalahnya keamanan yang terkotak-kotak sih.
+
+00:00:50.420 --> 00:00:51.880
+20 tahun lalu keamanan itu sederhana.
+
+00:00:52.320 --> 00:00:56.280
+Anda membeli antivirus untuk PC, filter spam untuk email, firewall, untuk jaringan Anda.
+
+00:00:56.280 --> 00:00:59.620
+Nah, setiap alat melakukan satu tugas dan mereka tidak pernah saling berkomunikasi.
+
+00:01:00.120 --> 00:01:02.540
+Itu sudah masalah saat itu, karena serangan juga lebih sederhana.
+
+00:01:03.020 --> 00:01:04.060
+Tapi inilah yang terjadi hari ini.
+
+00:01:04.460 --> 00:01:05.680
+Penyerang mengirim email phishing.
+
+00:01:06.160 --> 00:01:06.920
+Seseorang mengkliknya.
+
+00:01:07.200 --> 00:01:08.100
+Malware mendarat di perangkat.
+
+00:01:08.500 --> 00:01:09.580
+Malware tersebut mencuri kata sandi.
+
+00:01:09.880 --> 00:01:13.240
+Sekarang penyerang bergerak ke aplikasi cloud, penyimpanan file, dan data pelanggan Anda.
+
+00:01:13.240 --> 00:01:14.180
+Dan data pelanggan Anda.
+
+00:01:14.340 --> 00:01:15.080
+Ini adalah syarat kristiwa.
+
+00:01:15.540 --> 00:01:17.320
+Tapi alat Anda melihatnya sebagai email musuh atau bisa.
+
+00:01:17.940 --> 00:01:19.280
+Filter email melihat sebuah pesan.
+
+00:01:19.680 --> 00:01:20.680
+Antivirus melihat sebuah file.
+
+00:01:21.140 --> 00:01:22.380
+Sistem identitas melihat sebuah login.
+
+00:01:22.380 --> 00:01:24.480
+Dan tidak satu pun dari mereka tahu bahwa mereka serangan saham.
+
+00:01:24.780 --> 00:01:26.540
+Anggaplah seperti gedung dengan tiga satpam.
+
+00:01:26.900 --> 00:01:29.260
+Satu di pintu depan, satu di tempat parkir, satu di ruang surat.
+
+00:01:29.660 --> 00:01:30.680
+Mereka tidak pernah berbagi informasi.
+
+00:01:31.180 --> 00:01:34.360
+Seorang pencuri masuk lewat pintu depan dan satpam ruang surat tidak tahu mereka datang.
+
+00:01:34.840 --> 00:01:36.040
+Begitulah cara kerja sebagian pesanat ini.
+
+00:01:36.520 --> 00:01:38.200
+Mereka berada di gedung yang sama tapi tidak saling bicara.
+
+00:01:38.540 --> 00:01:41.300
+Jadi hasilnya, tim Anda mendapatkan lima peringatan alih-alih satu cerita.
+
+00:01:41.680 --> 00:01:43.200
+Mereka membuang waktu mengejar alam palsu.
+
+00:01:43.540 --> 00:01:44.980
+Anca menyata bersembunyi dalam kebisingan tersebut.
+
+00:01:44.980 --> 00:01:47.640
+Saat seseorang berhasil menghubungkan titik-titiknya, penjarang sudah menang.
+
+00:01:47.780 --> 00:01:50.920
+Yang benar-benar Anda butuhkan adalah sistem yang melihat melintasi semua domain tersebut dan berkata,
+
+00:01:51.160 --> 00:01:52.120
+peringatan ini terhubung.
+
+00:01:52.460 --> 00:01:53.180
+Itulah gambaran lengkapnya.
+
+00:01:53.440 --> 00:01:54.100
+Inilah yang harus dilakukan.
+
+00:01:55.060 --> 00:01:57.540
+Itulah persisnya yang dibangun oleh Microsoft Defender XDR.
+
+00:01:58.080 --> 00:01:58.940
+Kata Defender XDR?
+
+00:01:59.680 --> 00:02:00.080
+Layungnya.
+
+00:02:00.400 --> 00:02:01.760
+Jadi mari kita definisikan apa sebenarnya hal ini.
+
+00:02:02.300 --> 00:02:06.080
+Microsoft Defender XDR adalah sesuatu yang disebut platform deteksi dan respons yang diperluas.
+
+00:02:06.420 --> 00:02:07.620
+Dertengar sangat rumit, saya mengerti.
+
+00:02:07.700 --> 00:02:08.920
+Tapi gagasan intinya sangat sederhana.
+
+00:02:08.920 --> 00:02:14.540
+Sistem ini mengambil sinyal dari seluruh Microsoft 365, titik akhir, email, akun pengguna, aplikasi, cloud Anda,
+
+00:02:14.700 --> 00:02:17.580
+dan menyatukannya ke dalam satu tampilan terpadu, B-Ray.
+
+00:02:18.540 --> 00:02:20.720
+XDR singkatan dari Extended Detection and Response.
+
+00:02:21.280 --> 00:02:25.000
+Dan kata paling penting di sana adalah Extended, karena ini bukan lagi sekadar tentang komputer.
+
+00:02:25.840 --> 00:02:28.580
+Ini mencakup email, identitas, aplikasi cloud, dan banyak lagi.
+
+00:02:29.340 --> 00:02:34.120
+Perbedaannya seperti menonton satu kamera keamanan dibandingkan menonton setiap kamera di sebuah gedung dari satu layar.
+
+00:02:34.680 --> 00:02:36.260
+Anda mendapatkan gambar lengkap alien kecil saja.
+
+00:02:36.680 --> 00:02:38.400
+Inilah hal yang mengejutkan kebanyakan orang.
+
+00:02:38.920 --> 00:02:41.640
+Defender XDR bukanlah produk baru yang harus Anda beli secara terpisah.
+
+00:02:42.080 --> 00:02:45.420
+Ini lebih seperti lapisan penyatu yang berada di atas alat keamanan yang mungkin sudah Anda miliki.
+
+00:02:45.840 --> 00:02:47.580
+Anggap saja ini sebagai pusat komando yang saya sebutkan tadi.
+
+00:02:48.540 --> 00:02:52.980
+Produk Defender Individu, Defender for Endpoint, Defender for Office Tigan Sanclima,
+
+00:02:53.480 --> 00:02:57.260
+Defender for Identity, Defender for Cloud Apps, dan alat manajemen kerentanan,
+
+00:02:57.480 --> 00:03:00.200
+itu seperti kamera keamanan yang mengawasi ruangan yang berbeda.
+
+00:03:01.240 --> 00:03:05.460
+Defender XDR adalah operator yang duduk di layar utama, menghubungkan titik-titik di antara semuanya.
+
+00:03:05.700 --> 00:03:06.920
+Jadi apa sebenarnya dilakukan?
+
+00:03:06.920 --> 00:03:10.240
+Ia secara otomatis mengumpulkan peringatan dari semua Defender individu tersebut.
+
+00:03:10.660 --> 00:03:13.380
+Kemudian ia mengelompokkan peringatan terkait menjadi sesuatu yang disebut insi.
+
+00:03:13.580 --> 00:03:18.540
+Jadi, alih-alih 10 alam terpisah mungkin sering berkaitan, Anda mendapatkan satu insiden yang menceritakan keseluruhan kejadian.
+
+00:03:18.940 --> 00:03:21.980
+Email yang memulai serangan, perangkat yang terinfeksi, akun yang dikompromikan,
+
+00:03:22.140 --> 00:03:23.840
+semuanya ada di satu tempat tepat di depan Anda.
+
+00:03:24.520 --> 00:03:25.840
+Dan bagian ini membuat orang terkejut.
+
+00:03:26.300 --> 00:03:28.580
+Anda tidak membeli Defender XDR sebagai item terpisah.
+
+00:03:28.580 --> 00:03:33.380
+Ini sudah termasuk dalam Microsoft 365 E5 dan juga merupakan bagian dari add-on keamanan E5.
+
+00:03:34.300 --> 00:03:37.000
+Jika Anda memiliki Microsoft 365 Business Premium atau E3,
+
+00:03:37.180 --> 00:03:41.280
+dengan add-on tertentu Anda mungkin sudah memiliki akses ke beberapa kemampuannya tanpa Anda sadari.
+
+00:03:41.960 --> 00:03:44.600
+Kita akan membahas lebih lanjut tentang lisensi nanti, tapi kesimpulannya sederhana.
+
+00:03:45.060 --> 00:03:46.840
+Jika Anda sudah membayar untuk Microsoft 365,
+
+00:03:47.240 --> 00:03:49.820
+Anda mungkin jauh lebih dekat untuk mendapatkan perlindungan ini daripada yang dikit.
+
+00:03:50.260 --> 00:03:51.040
+Kelima komponennya.
+
+00:03:51.860 --> 00:03:54.200
+Mari kita uraikan lima bagian yang sebenarnya membentuk sistem ini
+
+00:03:54.200 --> 00:03:57.580
+karena Defender XDR terdengar abstrak sampai Anda memahami apa saja yang menjadi inputnya.
+
+00:03:57.580 --> 00:03:59.680
+Pertama, Defender for Endpoint.
+
+00:04:00.180 --> 00:04:03.400
+Yang satu ini melindungi perangkat Windows, Mac, Linux, bahkan Poncel.
+
+00:04:03.920 --> 00:04:07.040
+Ini adalah versi modern dari antivirus, tetapi fungsinya jauh melampaui itu.
+
+00:04:07.600 --> 00:04:09.600
+Alih-alih hanya memindai file berbahaya yang sudah diketahui,
+
+00:04:09.720 --> 00:04:11.040
+ia mengawasi perilaku yang mencurigakan.
+
+00:04:11.620 --> 00:04:13.340
+Jika suatu program mulai bertindak aneh,
+
+00:04:13.500 --> 00:04:15.560
+mengenkripsi file terhubung ke server tadi kenal,
+
+00:04:15.720 --> 00:04:18.360
+atau mengubah pengaturan sistem, Defender for Endpoint akan menandainya.
+
+00:04:18.740 --> 00:04:20.640
+Program ini dapat melakukan investigasi otomatis
+
+00:04:20.640 --> 00:04:22.780
+dan jika diperlukan, mengisolasi perangkat tersebut dari jaringan.
+
+00:04:22.940 --> 00:04:25.000
+Satu klik dan mesin tersebut terputus dari segalanya.
+
+00:04:25.620 --> 00:04:27.120
+Berikutnya adalah Defender for Office Tideman.
+
+00:04:27.580 --> 00:04:29.320
+Ini melindungi email dan perangkat kolaborasi Anda.
+
+00:04:30.200 --> 00:04:32.580
+Ini berfungsi memblokir email phishing lampiran berbahaya
+
+00:04:32.580 --> 00:04:34.540
+dan tautan tidak aman sebelum mencapai kotak masuk,
+
+00:04:34.720 --> 00:04:36.800
+sekaligus memindai pesan Teams, file SharePoint,
+
+00:04:37.180 --> 00:04:39.320
+dan penyimpanan OneDrive dari ancaman.
+
+00:04:40.120 --> 00:04:42.320
+Jadi jika seorang membagikan file berbahaya dalam operasi Teams,
+
+00:04:42.420 --> 00:04:43.280
+sistem ini akan mendeteksi.
+
+00:04:43.700 --> 00:04:44.880
+Kalau kita memiliki Defender for Identity,
+
+00:04:45.340 --> 00:04:47.320
+sistem ini mengawasi infrastruktur identitas Anda.
+
+00:04:48.100 --> 00:04:50.040
+Jika Anda memiliki aktif directory lokal,
+
+00:04:50.040 --> 00:04:53.100
+sistem yang mengelola akun dan kata sandi pengguna di kantor Anda,
+
+00:04:53.300 --> 00:04:56.040
+Defender for Identity memantaunya dari aktivitas mencurigakan.
+
+00:04:56.040 --> 00:04:58.180
+Sistem ini mendeteksi pencurian kredensial,
+
+00:04:58.280 --> 00:05:00.660
+di mana penyerang mencurigakan kata sandi dan mencoba menggunakannya di tempat lain.
+
+00:05:00.980 --> 00:05:04.380
+Sistem ini mendeteksi pergerakan lateral saat seseorang berpindah dari satu akun ke akun lain,
+
+00:05:04.500 --> 00:05:08.040
+serta menandai eskalasi hat istimewa saat pengguna biasa tiba-tiba mencoba mendapatkan akses admin.
+
+00:05:08.600 --> 00:05:11.820
+Ini adalah teknik yang persis digunakan penyerang setelah mereka masuk ke jaringan Anda.
+
+00:05:12.660 --> 00:05:14.120
+Bagian keempat adalah Defender for Clothing.
+
+00:05:14.120 --> 00:05:20.000
+Ini memberi Anda visibilitas ke semua aplikasi cloud yang digunakan karyawan baik yang telah Anda setujui maupun yang belum.
+
+00:05:20.560 --> 00:05:24.000
+Sistem ini menemukan shadow IT yang berarti layanan yang didaftarkan tim Anda tanpa pengetahuanan.
+
+00:05:24.400 --> 00:05:28.240
+Sistem ini mendeteksi perilaku tidak wajar seperti pengguna yang mengunduh ribuan file pada jam 2 pagi,
+
+00:05:28.360 --> 00:05:31.940
+serta dapat memblokir aplikasi berisiko atau mengontrol data apa yang dibagikan melalui aplikasi tersebut.
+
+00:05:32.360 --> 00:05:33.680
+Terakhir adalah manajemen kerentanan.
+
+00:05:33.940 --> 00:05:37.700
+Ini sudah terintegrasi ke dalam Defender for Endpoint namun layak disebutkan secara khusus.
+
+00:05:38.060 --> 00:05:41.340
+Sistem ini terus-menerus memindai perangkat Anda untuk mencari patch keamanan yang hilang,
+
+00:05:41.340 --> 00:05:42.820
+konfigurasi yang lemah, dan paparan lain.
+
+00:05:42.980 --> 00:05:46.080
+Kemudian sistem ini memberikan daftar prioritas tentang apa yang harus diperbaiki terlebih dahulu.
+
+00:05:46.260 --> 00:05:48.420
+Jadi daripada menebak pembaruan mana yang paling penting,
+
+00:05:48.580 --> 00:05:51.660
+sistem ini memberi tahu Anda kerentanan mana yang paling mungkin dieksploitasi.
+
+00:05:52.220 --> 00:05:53.080
+Ini lawasan utamanya.
+
+00:05:53.740 --> 00:05:57.040
+Masing-masing produk ini ada secara terpisah sebelum Defender XDR muncul.
+
+00:05:57.700 --> 00:05:59.660
+Microsoft membangunnya secara terpisah selama bertahun-tahun,
+
+00:05:59.780 --> 00:06:01.280
+dan kemudian seseorang mengajukan pertanyaan cerita.
+
+00:06:01.620 --> 00:06:02.780
+Bagaimana jika semuanya bekerja bersama?
+
+00:06:03.140 --> 00:06:05.000
+Itulah tepatnya yang diwujudkan oleh Defender XDR.
+
+00:06:05.440 --> 00:06:08.400
+Ini adalah perkat yang mengubah 5 produk bagus menjadi 1 sistem yang kuat.
+
+00:06:08.400 --> 00:06:10.220
+Bagaimana mereka bekerja bersama?
+
+00:06:10.620 --> 00:06:13.160
+Ijinkan saya memandu Anda melalui skenario nyata agar Anda dapat melihat terjadi.
+
+00:06:13.620 --> 00:06:15.140
+Salah satu karyawan Anda menerima email phishing.
+
+00:06:15.520 --> 00:06:18.260
+Email itu terlihat seolah-olah dari atasan mereka yang meminta untuk meninjau sebuah dokumen.
+
+00:06:18.520 --> 00:06:21.340
+Defender for Office 365 mungkin tidak menandainya karena tautan tersebut terlihat sah.
+
+00:06:21.900 --> 00:06:25.940
+Jadi, karyawan tersebut mengeklik dan mengetik kata sandinya di halaman masuk Microsoft yang tampak asli,
+
+00:06:26.200 --> 00:06:27.840
+dan penyerang pun mendapatkan kredensial mereka.
+
+00:06:28.300 --> 00:06:32.760
+Dalam hitungan menit, Defender for Identity mendeteksi pengguna yang sama masuk dari negara yang belum pernah mereka kunjungi.
+
+00:06:32.760 --> 00:06:37.960
+Sementara Defender for Endpoint menangkap proses mencurigakan di laptop yang mencoba terhubung ke server eksternal.
+
+00:06:38.480 --> 00:06:40.020
+Sekarang pikirkan apa yang terjadi tanpa XDR.
+
+00:06:40.500 --> 00:06:41.860
+Anda mendapatkan tiga peringatan terpisah.
+
+00:06:42.180 --> 00:06:45.900
+Satu dari keamanan email, satu dari pemantauan identitas, dan satu dari perlindungan titik akhir.
+
+00:06:46.320 --> 00:06:48.120
+Masing-masing dikonsol berbeda dengan login yang berbeda pula.
+
+00:06:48.440 --> 00:06:50.800
+Tim keamanan Anda mencari tahu secara menolah apakah ketigian yang saling terhubung.
+
+00:06:51.140 --> 00:06:54.640
+Apapun hasilnya, penyerang terus bergerak lebih dalam ke jaringan Anda saat mereka mencari.
+
+00:06:54.900 --> 00:06:57.220
+Dengan Defender XDR, seluruh proses tersebut otomatis.
+
+00:06:57.540 --> 00:06:59.040
+Platform ini menghubungkan berbagai titik tersebut.
+
+00:06:59.040 --> 00:07:04.300
+Ia mengenali bahwa email, masuk yang aneh, dan proses ganjil itu semua adalah bagian dari satu rantai serangan.
+
+00:07:04.500 --> 00:07:06.000
+Ia membangun satu insi dan tunggal ini masa.
+
+00:07:06.380 --> 00:07:07.740
+Anda membukanya dan melihat cerita lengkap.
+
+00:07:08.180 --> 00:07:10.860
+Proses masuk, aktivitas perangkat, semuanya tersusun rapi sesuai urut.
+
+00:07:11.020 --> 00:07:12.280
+Dan sistem ini tidak hanya memberitahu apa yang terjadi.
+
+00:07:12.540 --> 00:07:13.780
+Defender XDR juga bisa mengambil tindakan.
+
+00:07:14.220 --> 00:07:18.720
+Bergantung pada pengaturan Anda, sistem mungkin secara otomatis mengisolasi perangkat yang terkompromi dari jaringan,
+
+00:07:18.800 --> 00:07:21.920
+mengatur ulang kata sandi pengguna, atau memblokir login dari lokasi mencurigakan itu.
+
+00:07:22.300 --> 00:07:24.980
+Semua dalam hitungan menit tanpa perlu ada yang membuka tiket atau melakukan panggilan.
+
+00:07:24.980 --> 00:07:30.760
+Bayangkan seperti spesialis, seorang petugas pemadam kebakaran, para medis, dan polisi semuanya melapor ke satu koordinator.
+
+00:07:31.280 --> 00:07:36.900
+Koordinator mendengar dari masing-masing pihak, melihat polanya, dan mengerahkan respons yang tepat bahkan sebelum orang lain menyadari ada masalah.
+
+00:07:37.320 --> 00:07:39.340
+Ini bukan soal kenyaman, ini soal kecepatan.
+
+00:07:39.720 --> 00:07:42.620
+Penyerang bisa bersembunyi di dalam jaringan selama berhari-hari sebelum ada yang menyadari.
+
+00:07:42.820 --> 00:07:45.300
+Di aneh SDR, jendela waktu itu menyusut menjadi hitungan jam atau bahkan.
+
+00:07:45.680 --> 00:07:48.600
+Dan dalam keamanan, waktu adalah satu-satunya hal yang tidak bisa Anda dapatkan kembali.
+
+00:07:48.980 --> 00:07:49.980
+Apa yang sebenarnya dilakukan dengan Tuhan?
+
+00:07:50.580 --> 00:07:51.880
+Jadi apa arti semua ini bagi bisnis Anda?
+
+00:07:52.060 --> 00:07:53.020
+Mari kita menyatakan.
+
+00:07:53.020 --> 00:07:54.920
+Pertama, lebih sedikit peringatan untuk dikejut.
+
+00:07:55.160 --> 00:07:59.420
+Saat Defender XDR mengompokkan peringatan terkait ke dalam insiden, tim Anda tidak akan melihat ratusan alam terpisah.
+
+00:07:59.540 --> 00:08:03.400
+Mereka mungkin mendapatkan 10 cerita yang jelas, masing-masing dengan konteks, bukti, dan langkah selanjutnya yang disat.
+
+00:08:03.620 --> 00:08:05.820
+Mereka bekerja menangani ancaman nyata alih-alih mengejar bank.
+
+00:08:06.100 --> 00:08:07.420
+Lalu ada investigasi yang lebih cepat.
+
+00:08:08.360 --> 00:08:11.040
+Dari tampilan insiden, Anda melihat keseluruhan serangan sebagai lini maksa.
+
+00:08:11.640 --> 00:08:16.160
+Klik bagian manapun, perangkat, akun pengguna, atau email, dan dapatkan detail lebih lanjut tanpa meninggalkan lain.
+
+00:08:16.480 --> 00:08:17.540
+Semua yang Anda butuhkan dari sana.
+
+00:08:17.540 --> 00:08:20.180
+Tidak perlu berpindah-pindah konsol, tidak perlu menyalin dan menempel.
+
+00:08:20.600 --> 00:08:22.800
+Dan mungkin keuntungan terbesar adalah pembersihan otomatis.
+
+00:08:23.440 --> 00:08:26.480
+Jika ancaman yang jelas, Defender XDR menangani pemulihannya sendiri.
+
+00:08:27.260 --> 00:08:29.680
+Sistem menghapus email berbahaya dari kotak masuk semua orang,
+
+00:08:30.200 --> 00:08:31.920
+menghapus file terinfeksi dari perangkat,
+
+00:08:32.400 --> 00:08:34.820
+bahkan membatalkan perubahan registri yang dibuat penyerang.
+
+00:08:34.820 --> 00:08:37.460
+Anggaplah ini seperti sistem keamanan yang merusihkan diri yang sini.
+
+00:08:37.820 --> 00:08:40.380
+Anda tidak perlu mengirim orang untuk mengupegang sistemlah yang memberaskan kekacauan.
+
+00:08:40.840 --> 00:08:43.820
+Lalu ada angka proaktif, disinilah manajemen kerentanan berperan penting.
+
+00:08:44.420 --> 00:08:47.180
+Alih-alih hanya bereaksi, Defender XDR membantu Anda mencegah serangan.
+
+00:08:47.520 --> 00:08:51.580
+Sistem terus memindahi perangkat Anda untuk mencari patch yang belum terpasang kata sandi lemah dan kesalahan konfigurasi.
+
+00:08:52.140 --> 00:08:55.200
+Anda mendapatkan daftar prioritas mengenai apa yang harus diperbaiki terlebih dahulu
+
+00:08:55.200 --> 00:08:57.060
+berdasarkan kerentanan yang paling mungkin di eksploitasi.
+
+00:08:57.480 --> 00:08:59.320
+Tidak ada lagi tebak-tebakan, hanya rencana yang jelas.
+
+00:08:59.320 --> 00:09:01.000
+Dan ini sesuatu yang sering dilawatkan banyak orang.
+
+00:09:01.000 --> 00:09:03.540
+Defender XDR bekerja lintas platform, bukan hanya di Windows.
+
+00:09:03.840 --> 00:09:05.720
+Sistem ini juga mencakup Mac, Linux, iOS, dan Android.
+
+00:09:06.220 --> 00:09:08.660
+Jika bisnis Anda memiliki beragam perangkat, Anda tetap terlindung.
+
+00:09:09.220 --> 00:09:09.860
+Ini adalah kasus nyata.
+
+00:09:10.340 --> 00:09:13.160
+Kami bekerja sama dengan mitra yang mengelola keamanan untuk perusahaan skala menang.
+
+00:09:13.680 --> 00:09:16.600
+Sebelum XDR, waktu respons inside dan mereka rata-rata sekitar 4 jam.
+
+00:09:17.160 --> 00:09:19.820
+Setelah diaktifkan dan dikonfigurasi dengan aturan respons otomatis,
+
+00:09:19.900 --> 00:09:21.320
+waktu itu turun menjadi sekitar 20 men.
+
+00:09:21.820 --> 00:09:24.120
+Perbedaannya bukanlah tim yang lebih besar atau pelatihan yang lebih baik,
+
+00:09:24.120 --> 00:09:26.020
+melainkan sistem yang menghubungkan titik-titik bagi mereka.
+
+00:09:26.520 --> 00:09:27.700
+Jadi itulah dampak praktisnya.
+
+00:09:27.700 --> 00:09:32.220
+Lebih sedikit peringatan, investigasi lebih cepat, pembersihan otomatis, dan pencegahan proaktif.
+
+00:09:32.900 --> 00:09:34.680
+Ini bukan sekadar memiliki alat yang lebih baik,
+
+00:09:34.820 --> 00:09:38.160
+tetapi alat yang bekerja bersama agar tim Anda dapat fokus pada hal yang paling penting.
+
+00:09:39.440 --> 00:09:41.080
+Koneksi kekuatan sebenarnya adalah integrasi.
+
+00:09:41.660 --> 00:09:43.100
+Kita telah membahas kelima komponennya.
+
+00:09:43.300 --> 00:09:45.640
+Tetapi intinya, nilai sebenarnya bukan pada salah satu komponen,
+
+00:09:45.780 --> 00:09:47.140
+melainkan bagaimana semuanya terintegrasi.
+
+00:09:47.620 --> 00:09:49.840
+Saat Defender for Endpoint melihat file sedang diunduh,
+
+00:09:49.980 --> 00:09:53.540
+Defender for Identity mendeteksi perubahan kata sandi dari lokasi yang tidak biasa,
+
+00:09:54.140 --> 00:09:57.540
+dan Defender for Cloud Apps mendeteksi data yang diunggah ke layanan penyimpanan pribadi,
+
+00:09:57.700 --> 00:10:01.700
+jika sendirian, masing-masing hanya berupa titik data sekilas tanda di dashboard.
+
+00:10:03.020 --> 00:10:04.880
+Namun jika digabungkan, mereka menceritakan suatu kisah.
+
+00:10:05.220 --> 00:10:08.620
+Akun seseorang telah disusupi, dan data sedang keluar dari organisasi Anda.
+
+00:10:09.340 --> 00:10:13.240
+Kebanyakan orang mengira keamanan berarti membeli antivirus terbaik atau filter email terbaik.
+
+00:10:13.600 --> 00:10:15.300
+Itulah yang diajarkan industri kepada kita selama peluang.
+
+00:10:15.520 --> 00:10:18.760
+Namun kenyataannya, keamanan bukan tentang satu produk tunggal,
+
+00:10:19.300 --> 00:10:22.620
+melainkan menghubungkan titik-titik dari semua yang terjadi di lingkungan Anda.
+
+00:10:23.120 --> 00:10:25.680
+Defender XDR menghubungkan titik-titik itu secara otomatis,
+
+00:10:25.680 --> 00:10:28.000
+sehingga tim Anda tidak perlu menyatukan semuanya secara manual.
+
+00:10:28.440 --> 00:10:29.680
+Ada efek pengganda di sini yang mudah terlewatkan.
+
+00:10:30.660 --> 00:10:32.980
+Ketika satu komponen Defender mendeteksi sesuatu yang baru,
+
+00:10:33.180 --> 00:10:35.100
+informasi tersebut langsung dibagikan ke semua komponen lain.
+
+00:10:35.340 --> 00:10:36.220
+Jumkan contoh konkretnya.
+
+00:10:36.700 --> 00:10:40.300
+Katakanlah Defender for Endpoint menemukan jenis malware baru di salah satu perangkat Anda.
+
+00:10:40.700 --> 00:10:42.120
+Informasi tidak dibiarkan begitu saja.
+
+00:10:42.820 --> 00:10:46.240
+Defender for Office 365 segera mulai memindai indah masuk untuk malware yang sama,
+
+00:10:46.420 --> 00:10:49.440
+dan Defender for Identity memantau tanda-tanda pencurian kredensial.
+
+00:10:49.440 --> 00:10:52.720
+Deteksi di satu tempat memperkuat perlindungan di tempat lainnya.
+
+00:10:53.120 --> 00:10:54.960
+Itu adalah tingkat koordinasi yang tidak bisa Anda bangun
+
+00:10:54.960 --> 00:10:56.920
+hanya dengan membeli alat terpisah dari vendor yang berbeda.
+
+00:10:57.480 --> 00:11:00.140
+Anda akan membutuhkan tim khusus hanya untuk menjaga integrasi tersebut tetap.
+
+00:11:00.820 --> 00:11:03.240
+Inilah sebabnya mengapa Microsoft dapat bersaing dengan perusahaan
+
+00:11:03.240 --> 00:11:05.380
+seperti CrowdStrike dan Palo Alto di Rana XDR.
+
+00:11:06.440 --> 00:11:09.400
+Bukan karena satu komponen Defender jauh lebih baik daripada produk pesaing,
+
+00:11:09.500 --> 00:11:13.120
+melainkan karena integrasi di seluruh Microsoft 365 bersifat bawaan.
+
+00:11:13.880 --> 00:11:15.060
+Semuanya sudah tetanam langsung di dalam blog.
+
+00:11:15.480 --> 00:11:17.360
+Vendorline juga bisa mengintegrasikan produk mereka,
+
+00:11:17.660 --> 00:11:20.180
+tetapi tidak akan pernah semulus saat semuanya berasal dari perusahaan yang sama
+
+00:11:20.180 --> 00:11:21.360
+dan berbagi model data yang sama.
+
+00:11:21.880 --> 00:11:22.920
+Jadi, siapa yang paling disuntungan dari?
+
+00:11:23.120 --> 00:11:25.080
+Jika bisnis Anda menggunakan Microsoft 365,
+
+00:11:25.280 --> 00:11:26.900
+Anda sudah memiliki sebagian infrastruktur ini.
+
+00:11:27.720 --> 00:11:30.340
+Beralih ke E5 atau menambahkan add-on keamanan E5
+
+00:11:30.340 --> 00:11:32.580
+akan membuka pengalaman Defender XDR secara penuh.
+
+00:11:33.120 --> 00:11:34.280
+Untuk bisnis yang lebih kecil,
+
+00:11:34.500 --> 00:11:37.860
+Microsoft 365 Business Premium memberikan subset kemampuan yang mumpuni.
+
+00:11:38.180 --> 00:11:40.760
+Intinya, Anda mungkin tidak perlu membeli tumpukan keamanan baru secara keseluruh.
+
+00:11:41.100 --> 00:11:42.860
+Anda mungkin hanya perlu mengaktifkan apa yang sudah Anda miliki.
+
+00:11:43.120 --> 00:11:44.460
+Koin penting, apa yang harus Anda lakukan?
+
+00:11:45.020 --> 00:11:47.980
+Mari kita akhiri ini dengan tiga langkah konkret yang bisa Anda ambil mulai hari ini.
+
+00:11:48.720 --> 00:11:50.040
+Langkah pertama, periksa lisensi Anda.
+
+00:11:50.460 --> 00:11:51.620
+Ini adalah hal termudah yang bisa Anda lakukan.
+
+00:11:52.200 --> 00:11:53.920
+Buka pusat admin Microsoft tiga nan Anda
+
+00:11:53.920 --> 00:11:57.060
+dan periksa apa yang Anda bayar dan periksa apa yang Anda bayar.
+
+00:11:57.160 --> 00:11:59.840
+Apakah Anda memiliki E5, E3 dengan add-on keamanan atau bisnis premium?
+
+00:12:00.700 --> 00:12:02.960
+Itu menunjukkan kemampuan Defender apa yang sudah bisa Anda akses
+
+00:12:02.960 --> 00:12:04.760
+dan Anda mungkin terkejut dengan apa yang disertakan.
+
+00:12:05.700 --> 00:12:07.720
+Langkah kedua, jika Anda memiliki lisensi yang tepat,
+
+00:12:07.840 --> 00:12:08.800
+aktifkan Defender XDR.
+
+00:12:09.320 --> 00:12:10.620
+Feature ini tidak selalu aktif secara demok.
+
+00:12:10.620 --> 00:12:12.380
+Buka security.microsoft.com
+
+00:12:12.380 --> 00:12:13.700
+Temukan bagian penaturan
+
+00:12:13.700 --> 00:12:15.660
+dan aktifkan pengalaman insiden terpadu.
+
+00:12:16.420 --> 00:12:18.860
+Dokumentasi Microsoft menyatakan bahwa ini hanya memakan waktu sekitar.
+
+00:12:19.240 --> 00:12:21.000
+Anda tidak perlu mengonfigurasi semuanya sekaligus.
+
+00:12:21.440 --> 00:12:23.020
+Cukup dengan mengaktifkan mesin korelasi,
+
+00:12:23.120 --> 00:12:25.220
+Anda akan segera mendapatkan visibilitas yang lebih baik.
+
+00:12:26.180 --> 00:12:28.040
+Langkah ketiga, mulai dengan langkah yang paling mudah.
+
+00:12:28.480 --> 00:12:31.020
+Terapkan Defender for Endpoint ke semua perangkat Anda jika belum melakukannya.
+
+00:12:31.720 --> 00:12:33.340
+Jika Anda menggunakan Intune, proses ini sangat mudah.
+
+00:12:33.620 --> 00:12:36.120
+Aktifkan kebijakan keamanan prasetal Defender for Office 365.
+
+00:12:36.120 --> 00:12:38.940
+Terdapat kebijakan standar dan kebijakan ketat,
+
+00:12:39.040 --> 00:12:41.980
+dan keduanya mampu memblokir sebagian besar ancaman email umum secara langsung.
+
+00:12:42.660 --> 00:12:44.580
+Kemudian, lihat dashboard manajemen kerentanan.
+
+00:12:45.100 --> 00:12:48.660
+Dashboard tersebut akan menunjukkan paparan paling kritis dan memberitahu Anda dengan tempat apa yang harus diperbaiki.
+
+00:12:48.880 --> 00:12:51.440
+Satu peringatan di sini, jangan mencoba melakukan semuanya sekaligus.
+
+00:12:52.080 --> 00:12:54.640
+Setiap komponen menambah perlindungan, namun juga menambah kerumitan.
+
+00:12:55.220 --> 00:12:58.500
+Mulailah dengan satu bagian, pahami cara kerjanya, perutambahkan yang berikutnya.
+
+00:12:59.120 --> 00:13:02.140
+Mencoba mengaktifkan semuanya, di hari pertama hanya akan melimbulkan rasa frustrasi.
+
+00:13:02.560 --> 00:13:06.120
+Jika Anda hanya melakukan satu hal, aktifkan kebijakan prasetal Defender untuk Office 365.
+
+00:13:06.940 --> 00:13:09.760
+Email masih menjadi cara utama penyerang untuk masuk ke dalam organisasi.
+
+00:13:10.180 --> 00:13:13.460
+Memblokir ancaman tersebut di gerbang masuk adalah langkah paling efektif yang bisa Anda lakukan.
+
+00:13:14.040 --> 00:13:17.860
+Setelah semuanya berjalan, gunakan dashboard Microsoft Seager Score untuk melacak kemajuan Anda.
+
+00:13:18.200 --> 00:13:20.540
+Dashboard ini memberikan daftar tindakan yang disarankan,
+
+00:13:20.720 --> 00:13:23.140
+dan menunjukkan bagaimana setiap tindakan meningkatkan postur keamanan.
+
+00:13:23.140 --> 00:13:25.660
+Ini seperti daftar tugas yang memprioritaskan dirinya sendiri.
+
+00:13:26.140 --> 00:13:30.460
+Jika Anda tidak yakin apa yang Anda miliki atau harus mulai dari mana hubungi penyedia TI atau mitra Microsoft-an,
+
+00:13:30.920 --> 00:13:33.880
+mereka dapat mengaudit lisensi, membantu mengatur perlindungan tepat,
+
+00:13:34.200 --> 00:13:36.900
+dan memastikan Anda tidak menyanyiakan anggaran atau keamanan.
+
+00:13:37.760 --> 00:13:39.280
+Jadi itulah Microsoft Defender XDR.
+
+00:13:39.840 --> 00:13:41.520
+Ini bukanlah produk tunggal yang Anda beli langsung jadi.
+
+00:13:41.940 --> 00:13:46.940
+Sebaliknya, ini adalah lapisan keamanan terpadu yang menghubungkan perlindungan Anda saat ini menjadi satu sistem cerdas.
+
+00:13:47.400 --> 00:13:49.600
+Nilai sebenarnya datang dari cara komponen-komponen ini bekerja sama.
+
+00:13:49.600 --> 00:13:54.020
+Mereka saling berkomunikasi, mengotomatiskan respon, dan memangkas waktu penyerang untuk menyebabkan kerusakan.
+
+00:13:54.720 --> 00:13:56.860
+Mulailah dengan audit lisensi, lalu aktifkan hal asal.
+
+00:13:57.460 --> 00:13:59.160
+Anda sebenarnya sudah memiliki perlindungan lebih banyak deh, kawan-kawan.
+
+00:13:59.360 --> 00:14:00.260
+Terima kasih telah menonton.
+
+00:14:00.600 --> 00:14:04.060
+Jika ini membantu, bagikan kepada seseorang yang sedang mencoba memahami keamanan Microsoft.
+
+00:14:04.320 --> 00:14:05.060
+Sampai jumpa di lain waktu.
+
+00:14:05.060 --> 00:14:35.040
+Terima kasih telah menonton.

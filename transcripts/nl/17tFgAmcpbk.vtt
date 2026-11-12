@@ -1,0 +1,931 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:04.920
+Hallo iedereen en welkom bij weer een aflevering van Microsoft Knowledge Nuggets hier op M365FM.
+
+00:00:05.080 --> 00:00:06.700
+Ik ben jullie gastheer Mirko Peters.
+
+00:00:06.940 --> 00:00:09.680
+Het onderwerp van vandaag is er een waar bijna iedereen van heeft gehoord, maar die weinig
+
+00:00:09.680 --> 00:00:10.240
+in echt begrijpen.
+
+00:00:10.520 --> 00:00:11.840
+Microsoft Power Platform.
+
+00:00:12.100 --> 00:00:12.960
+Stel je dit eens voor.
+
+00:00:13.140 --> 00:00:16.800
+Je zit aan je bureau met vier browser-tabladen open, een Excel-bestand dat je elke ochtend
+
+00:00:16.800 --> 00:00:20.440
+handmatig bijwerkt, een Outlook-inbox waar goedkeuringsverzoeken zich opstapelen, een
+
+00:00:20.440 --> 00:00:24.100
+SharePoint-lijst van drie jaar oud die niemand vertrouwt, en ergens in die chaos kopieer je
+
+00:00:24.100 --> 00:00:27.020
+gegevens van het ene systeem naar het andere, in de hoop geen typfouten te maken.
+
+00:00:27.200 --> 00:00:28.060
+Klinkt dit bekend?
+
+00:00:28.060 --> 00:00:32.280
+Zo werken de meeste bedrijven, een lappendeken van tools die niet met elkaar communiceren,
+
+00:00:32.500 --> 00:00:34.660
+bij elkaar gehouden door mensen die repetitief werk doen.
+
+00:00:34.800 --> 00:00:37.760
+Maar wat als je dat allemaal met elkaar zou kunnen verbinden in één systeem zonder één
+
+00:00:37.760 --> 00:00:38.720
+regelcode te schrijven?
+
+00:00:38.940 --> 00:00:40.820
+Dat is wat Microsoft Power Platform is.
+
+00:00:41.000 --> 00:00:42.560
+Hier is de eenvoudigste definitie.
+
+00:00:42.740 --> 00:00:47.260
+Het is een verbonden laag bovenop je bestaande Microsoft 365 tools, je e-mail, Teams, SharePoint,
+
+00:00:47.460 --> 00:00:50.600
+en het stelt iedereen in je bedrijf in staat om apps te bouwen, workflows te automatiseren
+
+00:00:50.600 --> 00:00:53.020
+en data te analyseren, zonder dat daar een ontwikkelaar voor nodig is.
+
+00:00:53.160 --> 00:00:57.180
+Aan het einde van deze aflevering begrijp je wat elk onderdeel doet en hoe ze allemaal op elkaar
+
+00:00:57.180 --> 00:00:57.740
+aansluiten.
+
+00:00:57.960 --> 00:00:59.420
+Pak je koffie en laten we beginnen.
+
+00:00:59.680 --> 00:01:02.080
+Het probleem waarom Power Platform bestaat.
+
+00:01:02.280 --> 00:01:03.280
+Het zit namelijk zo.
+
+00:01:03.520 --> 00:01:07.420
+De meeste organisaties draaien op een lappendeken van Excel spreadsheets, e-mailketens en papieren
+
+00:01:07.420 --> 00:01:07.920
+formulieren.
+
+00:01:08.120 --> 00:01:11.400
+Iemand vult een Word document in, e-mailt het naar zijn manager, de manager print het uit,
+
+00:01:11.520 --> 00:01:13.300
+ondertekent het, scant het in en e-mailt het terug.
+
+00:01:13.520 --> 00:01:14.620
+Dat is geen overdrijving.
+
+00:01:14.860 --> 00:01:16.680
+Dat is hoeveel bedrijven nog steeds werken.
+
+00:01:16.840 --> 00:01:21.020
+Kant een klare software zou dit moeten oplossen, maar of het kost een fortuin of het past niet
+
+00:01:21.020 --> 00:01:24.800
+bij je proces, waardoor je uiteindelijk je workflow aanpast aan de software in plaats
+
+00:01:24.800 --> 00:01:25.420
+van andersom.
+
+00:01:25.620 --> 00:01:26.860
+En dat werkt nooit goed.
+
+00:01:27.080 --> 00:01:31.180
+Het traditionele alternatief was het bouwen van maatwerksoftware, maar dat betekende maanden
+
+00:01:31.180 --> 00:01:35.420
+of jarenlang ontwikkelaars inhuren en een eenvoudige app kon tienduizenden euro's kosten.
+
+00:01:35.640 --> 00:01:38.940
+En tegen de tijd dat het af was, waren je bedrijfsbehoeften alweer veranderd.
+
+00:01:39.060 --> 00:01:40.980
+Dus eindig je met afzonderlijke silo's.
+
+00:01:41.140 --> 00:01:45.140
+Je data staat in SharePoint, je goedkeuringen verlopen via e-mail, je rapportages zitten in
+
+00:01:45.140 --> 00:01:47.520
+Powerbee maar zijn niet verbonden en niets communiceert met elkaar.
+
+00:01:47.660 --> 00:01:51.300
+Power Platform lost dit op door niet ontwikkelaars de kracht te geven om op één plek te bouwen,
+
+00:01:51.440 --> 00:01:52.760
+automatiseren en analyseren.
+
+00:01:52.760 --> 00:01:56.080
+De meeste mensen denken dat Power Platform alleen voor IT professionals is.
+
+00:01:56.300 --> 00:01:56.980
+Dat is niet zo.
+
+00:01:57.160 --> 00:02:01.240
+Het is ontworpen voor iedereen in je bedrijf, van sales tot hour en operaties, om oplossingen
+
+00:02:01.240 --> 00:02:02.780
+te creëren zonder code te schrijven.
+
+00:02:02.940 --> 00:02:05.640
+En het maakt al deel uit van de Microsoft tools die je gebruikt.
+
+00:02:05.840 --> 00:02:08.980
+En dan nu het eerste bouwblok, degene die je helpt je data te zien.
+
+00:02:09.640 --> 00:02:11.200
+Powerbee, zie wat er gebeurt.
+
+00:02:11.420 --> 00:02:14.200
+De meesten hebben wel van Powerbee gehoord, maar wat doet het eigenlijk?
+
+00:02:14.440 --> 00:02:18.500
+Simpel gezegd, het neemt je ruwe data, rijen en kolommen en verandert deze in grafieken
+
+00:02:18.500 --> 00:02:20.440
+en dashboards die je in één oogopslag begrijpt.
+
+00:02:20.440 --> 00:02:25.400
+Het verbindt het met Excel, SQL, dataverse of zelfs Salesforce en het maakt visuals die
+
+00:02:25.400 --> 00:02:26.280
+echt iets betekenen.
+
+00:02:26.460 --> 00:02:27.860
+Hier is een concreet voorbeeld.
+
+00:02:28.160 --> 00:02:31.920
+Stel, je bent een manager en wilt weten welke producten deze week het snelst verkopen.
+
+00:02:32.100 --> 00:02:35.360
+Op de oude manier zou je iemand vragen een rapport te draaien, een dag wachten, een spreadsheet
+
+00:02:35.360 --> 00:02:36.780
+krijgen en proberen daar wijs uit te worden.
+
+00:02:36.980 --> 00:02:39.180
+Met Powerbee wordt dat dashboard automatisch bijgewerkt.
+
+00:02:39.340 --> 00:02:41.380
+Dus wanneer je het opent, staan de cijfers daar direct.
+
+00:02:41.600 --> 00:02:42.980
+Geen handmatig werk vereist.
+
+00:02:43.160 --> 00:02:45.920
+Maar het punt is, Powerbee is meer dan alleen een rapportage tool.
+
+00:02:45.920 --> 00:02:47.600
+Het zijn de ogen van het platform.
+
+00:02:47.840 --> 00:02:50.500
+Het laat je in realtime zien wat er in je hele bedrijf gebeurt.
+
+00:02:50.680 --> 00:02:53.080
+En die dashboards hoeven niet alleen in Powerbee te staan.
+
+00:02:53.280 --> 00:02:56.640
+Je kunt ze insluiten in Teams, in Powerapps, zelfs in SharePoint.
+
+00:02:56.860 --> 00:02:59.000
+Je data is zichtbaar waar je al aan het werk bent.
+
+00:02:59.200 --> 00:03:00.960
+Het probleem zien is nog maar het halve werk.
+
+00:03:01.180 --> 00:03:03.120
+Wat als je de oplossing zou kunnen automatiseren?
+
+00:03:03.340 --> 00:03:04.880
+Daar komt de volgende tool in beeld.
+
+00:03:05.060 --> 00:03:06.060
+Power Automate.
+
+00:03:06.280 --> 00:03:07.740
+Laat werk automatisch gebeuren.
+
+00:03:07.940 --> 00:03:11.680
+Powerbee laat zien wat er gebeurt, wat nuttig is, maar je blijft zitten met het eigenlijke werk.
+
+00:03:11.680 --> 00:03:15.180
+Iemand moet nog steeds e-mails sturen, spreadsheets bijwerken en goedkeuringen najagen.
+
+00:03:15.320 --> 00:03:17.240
+En dat is waar Power Automate om de hoek komt kijken.
+
+00:03:17.440 --> 00:03:20.040
+Als Power bieden ogen zijn, is Power Automate de spierkracht.
+
+00:03:20.180 --> 00:03:22.200
+Het doet het zware werk zodat jij dat niet hoeft te doen.
+
+00:03:22.380 --> 00:03:23.260
+Dit is hoe het werkt.
+
+00:03:23.400 --> 00:03:26.700
+Je stelt een trigger in iets dat in je systeem gebeurt, zoals een e-mail die binnenkomt,
+
+00:03:26.840 --> 00:03:29.180
+een rij die aan een lijst wordt toegevoegd of een datum die verstrijkt.
+
+00:03:29.380 --> 00:03:32.860
+Wanneer die trigger afgaat, voert Power Automate automatisch een reeks acties uit.
+
+00:03:33.040 --> 00:03:35.160
+Alles met slepen en neerzetten, geen code vereist.
+
+00:03:35.320 --> 00:03:36.580
+Ik geef je een concreet voorbeeld.
+
+00:03:36.840 --> 00:03:39.480
+Stel dat er een nieuwe verkoopkans wordt toegevoegd in Dynamics 365.
+
+00:03:39.480 --> 00:03:42.780
+Op de oude manier zou een verkoper die lead moeten opmerken, handmatig een taak moeten
+
+00:03:42.780 --> 00:03:45.680
+aanmaken, een follow-up e-mail schrijven en deze aan zijn agenda moeten toevoegen.
+
+00:03:45.840 --> 00:03:47.980
+Met Power Automate gebeurt dit allemaal direct.
+
+00:03:48.180 --> 00:03:51.860
+De lead verschijnt, een taak wordt aangemaakt, een e-mail wordt verstuurd en de verkoper krijgt
+
+00:03:51.860 --> 00:03:52.660
+een melding in Teams.
+
+00:03:52.880 --> 00:03:54.480
+Niemand hoeft er een vinger voor uit te steken.
+
+00:03:54.700 --> 00:03:57.820
+Hier is er nog een waar bijna elk bedrijf mee te maken heeft, goedkeuring van onkosten.
+
+00:03:58.020 --> 00:04:00.860
+Een werknemer dient een onkostennota in van meer dan 500 dollar.
+
+00:04:01.080 --> 00:04:04.640
+Power Automate vangt dat op, stuurt een e-mail naar de manager met een goedkeuringsverzoek en
+
+00:04:04.640 --> 00:04:07.940
+wanneer de manager op goedkeuren klikt, wordt de spreadsheet automatisch bijgewerkt.
+
+00:04:09.480 --> 00:04:12.080
+Heb je mijn mail gezien en niemand meer in de gang opjagen?
+
+00:04:12.260 --> 00:04:14.260
+En dit is niet beperkt tot Microsoft Tools.
+
+00:04:14.440 --> 00:04:17.420
+Power Automate heeft meer dan 1400 kant- en klare connectoren.
+
+00:04:17.560 --> 00:04:21.900
+Outlook, Teams, SharePoint natuurlijk, maar ook Slack, Twitter, Dropbox, Salesforce en
+
+00:04:21.900 --> 00:04:22.500
+DocuSign.
+
+00:04:22.660 --> 00:04:24.520
+Je kunt eigenlijk alles met alles verbinden.
+
+00:04:24.740 --> 00:04:28.920
+Dus nu kun je je gegevens zien en je workflows automatiseren, maar er ontbreekt nog een stukje,
+
+00:04:29.000 --> 00:04:31.300
+een plek waar mensen echt met het proces kunnen interacteren.
+
+00:04:31.500 --> 00:04:32.660
+Dat is wat hierna komt.
+
+00:04:32.880 --> 00:04:34.860
+Power Apps, bouw de interface.
+
+00:04:35.100 --> 00:04:39.240
+Power BI laat je de gegevens zien en Power Automate doet het werk, maar mensen hebben nog steeds
+
+00:04:39.240 --> 00:04:44.080
+een manier nodig om met het systeem te communiceren, iets in te dienen, te controleren of bij te werken.
+
+00:04:44.320 --> 00:04:46.560
+Dat is precies waar Power Apps voor gebouwd is.
+
+00:04:46.720 --> 00:04:49.520
+Power Apps is waar je het gebruikersgedeelte van je oplossing maakt.
+
+00:04:49.700 --> 00:04:53.560
+Mobiele apps, webapps, tabletapps, wat je mensen ook nodig hebben en je bouwt ze zonder
+
+00:04:53.560 --> 00:04:54.860
+traditionele code te schrijven.
+
+00:04:55.020 --> 00:04:56.120
+Er zijn twee hoofdtypen.
+
+00:04:56.300 --> 00:04:59.020
+Canvas Apps geven je volledige controle over het ontwerp.
+
+00:04:59.100 --> 00:05:03.420
+Je sleept knoppen, tekstvakken, afbeeldingen en gegevensvelden precies naar de plek op het scherm
+
+00:05:03.420 --> 00:05:04.160
+waar je ze wilt hebben.
+
+00:05:04.320 --> 00:05:05.880
+Het is als het ontwerpen van een poster.
+
+00:05:05.880 --> 00:05:07.980
+Elk element komt te staan waar jij beslist.
+
+00:05:08.160 --> 00:05:10.940
+Als je een groene knop in de rechterbovenhoek wilt, dan zet je die daar.
+
+00:05:11.440 --> 00:05:12.680
+Modelgestuurde apps werken anders.
+
+00:05:12.940 --> 00:05:14.740
+Ze zijn gebouwd rondom je datastructuur.
+
+00:05:14.920 --> 00:05:19.200
+Je definieert je tabellen en relaties in dataverse en de app genereert de interface automatisch.
+
+00:05:19.420 --> 00:05:23.280
+Visueel is het minder flexibel, maar voor complexe gegevensbewerkingen is het veel beter.
+
+00:05:23.540 --> 00:05:26.820
+Dingen zoals begeleide gegevensinvoer, bedrijfsregels en processtromen.
+
+00:05:26.940 --> 00:05:28.060
+Hier is een echt voorbeeld.
+
+00:05:28.340 --> 00:05:32.200
+Stel je hebt buitendienstmedewerkers die veiligheidsuitrusting op werklocaties moeten inspecteren.
+
+00:05:32.380 --> 00:05:34.960
+Je bouwt een eenvoudige Canvas-app die op een telefoon draait.
+
+00:05:34.960 --> 00:05:39.120
+Ze openen de app, vinken items op een lijst af, maken een foto als er iets kapot is en dienen het in.
+
+00:05:39.260 --> 00:05:41.000
+De gegevens gaan rechtstreeks je systeem in.
+
+00:05:41.180 --> 00:05:44.040
+Geen papieren formulieren, geen aantekeningen uitwerken aan het eind van de dag.
+
+00:05:44.200 --> 00:05:46.220
+Power Apps gebruikt iets genaamd Power FX.
+
+00:05:46.480 --> 00:05:48.640
+Het is een formuletaal die erg op Excel lijkt.
+
+00:05:48.820 --> 00:05:52.220
+Dus, als je weet hoe je een som schrijft in een spreadsheet, heb je al een voorsprong.
+
+00:05:52.380 --> 00:05:54.420
+Je kunt het gebruiken om logica in je app te bouwen.
+
+00:05:54.600 --> 00:05:56.860
+Toon dit veld wanneer dat selectievakje is aangevinkt.
+
+00:05:57.000 --> 00:05:58.860
+Bereken dit totaal uit die invoergegevens.
+
+00:05:59.120 --> 00:06:01.340
+Denk aan Power Apps als het bouwen van een Lego huis.
+
+00:06:01.340 --> 00:06:06.000
+Je klikt vooraf gebouwde blokken, knoppen, formulieren, galerijen en datakoppelingen aan elkaar.
+
+00:06:06.200 --> 00:06:07.660
+En je krijgt precies wat je nodig hebt.
+
+00:06:07.960 --> 00:06:09.020
+Solderen is niet nodig.
+
+00:06:09.260 --> 00:06:10.740
+Dus, we hebben tot nu toe drie tools.
+
+00:06:10.920 --> 00:06:13.540
+De data inzien, het werk automatiseren, de interface bouwen.
+
+00:06:13.680 --> 00:06:16.580
+Maar in 2026 is er een vierde onderdeel dat alles verandert.
+
+00:06:16.760 --> 00:06:18.920
+Copilot Studio voegt AI agents toe.
+
+00:06:19.140 --> 00:06:21.820
+Laten we het nu hebben over een nieuwer onderdeel, Copilot Studio.
+
+00:06:22.060 --> 00:06:24.280
+Het heette voorheen Power Virtual Agents.
+
+00:06:24.460 --> 00:06:26.840
+Hier maak je AI gestuurde chatbots en agents.
+
+00:06:26.840 --> 00:06:33.800
+Geen onhandige types die slechts drie vragen kunnen beantwoorden, maar echte agents die begrijpen wat iemand nodig heeft, actie ondernemen en zelfs met andere agents praten.
+
+00:06:34.040 --> 00:06:37.120
+Deze agents kunnen in Teams, op je website of in een mobiele app werken.
+
+00:06:37.300 --> 00:06:39.780
+Een medewerker stelt een vraag en de agent beantwoordt deze.
+
+00:06:39.980 --> 00:06:41.140
+Maar het gaat verder dan dat.
+
+00:06:41.300 --> 00:06:43.380
+De agent kan een Power Automate Flow starten.
+
+00:06:43.600 --> 00:06:44.920
+Zo wordt een gesprek een actie.
+
+00:06:45.080 --> 00:06:46.440
+Hier is een praktisch voorbeeld.
+
+00:06:46.640 --> 00:06:48.240
+Een bedrijf bouwt een ouder agent.
+
+00:06:48.440 --> 00:06:49.760
+Een medewerker typt in Teams.
+
+00:06:49.900 --> 00:06:51.320
+Hoeveel ziektedagen heb ik nog over?
+
+00:06:51.500 --> 00:06:55.400
+De agent controleert het ouder systeem, haalt het dossier van de medewerker op en antwoordt direct.
+
+00:06:55.400 --> 00:06:58.660
+Vervolgens vraagt de medewerker, ik wil aanstaande vrijdag vrijnemen.
+
+00:06:58.820 --> 00:07:03.260
+De agent maakt een verlofaanvraag aan, stuurt deze naar de manager voor goedkeuring en verstuurt een bevestiging.
+
+00:07:03.420 --> 00:07:06.640
+Alles in één chatgesprek, geen formulieren, geen e-mails, geen heen en weer.
+
+00:07:06.820 --> 00:07:08.840
+En dit is het krachtige deel voor 2026.
+
+00:07:09.260 --> 00:07:10.700
+Agents kunnen nu met elkaar praten.
+
+00:07:11.000 --> 00:07:13.080
+Microsoft noemt het agent naar agentcommunicatie.
+
+00:07:13.280 --> 00:07:17.640
+Een agent behandelt ouder vragen, een andere IT-support, weer een andere onkostendeclaraties.
+
+00:07:17.640 --> 00:07:22.160
+Als een medewerker een vraag stelt die afdelingen overstijgt, coördineren de agents dit achter de schermen.
+
+00:07:22.280 --> 00:07:23.600
+De gebruiker ziet hier niets van.
+
+00:07:23.820 --> 00:07:25.120
+Ze krijgen gewoon hun antwoord.
+
+00:07:25.120 --> 00:07:26.440
+We hebben dus nu vier tools.
+
+00:07:26.660 --> 00:07:28.460
+Inzien, automatiseren, bouwen, praten.
+
+00:07:28.660 --> 00:07:30.160
+Maar ze hebben allemaal één ding gemeen.
+
+00:07:30.320 --> 00:07:32.120
+Ze hebben een plek nodig om hun data op te slaan.
+
+00:07:32.500 --> 00:07:34.040
+Dataverse, de motor die eronder draait.
+
+00:07:34.200 --> 00:07:35.620
+We hebben dus de vier tools behandeld.
+
+00:07:35.800 --> 00:07:37.160
+Power BI laat zien wat er gebeurt.
+
+00:07:37.360 --> 00:07:38.820
+Power Automate voert het werk uit.
+
+00:07:39.020 --> 00:07:41.120
+Power Apps geeft mensen een manier om te interageren.
+
+00:07:41.240 --> 00:07:44.500
+En Copilot Studio voegt AI-agents toe die kunnen converseren en actie ondernemen.
+
+00:07:44.500 --> 00:07:47.600
+Maar ze hebben allemaal één ding gemeen, een plek om hun data op te slaan.
+
+00:07:47.720 --> 00:07:49.420
+Dat is waar Dataverse om de hoek komt kijken.
+
+00:07:49.640 --> 00:07:53.100
+En dit is het onderdeel dat de meeste mensen nooit zien, omdat het stilletjes op de achtergrond werkt.
+
+00:07:53.100 --> 00:07:58.880
+Dataverse is de veilige, cloud-gebaseerde database-achter Power Apps, Power Automate en zelfs Dynamics 365.
+
+00:07:59.540 --> 00:08:02.340
+Zie het als de enige bron van waarheid voor je bedrijfsgegevens.
+
+00:08:02.600 --> 00:08:06.820
+Geen versnipperde informatie meer over 20 Excel-bestanden en 6 SharePoint-lijsten.
+
+00:08:07.000 --> 00:08:10.520
+Alles staat op één plek gestructureerd, veilig en klaar voor gebruik.
+
+00:08:10.640 --> 00:08:13.600
+Dit is het verschil met alles zomaar in een gedeeld werkblad dumpen.
+
+00:08:13.980 --> 00:08:15.760
+Dataverse heeft ingebouwde beveiliging.
+
+00:08:15.960 --> 00:08:18.700
+Dankzij op hollige baseerde toegang bepaal jij precies wie wat ziet.
+
+00:08:18.700 --> 00:08:21.320
+Een manager kan salarisgegevens inzien, een teamlid niet.
+
+00:08:21.500 --> 00:08:24.220
+Dit wordt op database-niveau geregeld, niet in de code van je app.
+
+00:08:24.300 --> 00:08:25.700
+Het heeft ook ingebouwde bedrijfsregels.
+
+00:08:26.420 --> 00:08:30.320
+Je kunt instellen als dit veld een bepaalde waarde overschrijdt, maakt dit andere veld dan verplicht.
+
+00:08:30.500 --> 00:08:35.680
+Of, wanneer een nieuwe order wordt aangemaakt, bereken dan automatisch het totaal op basis van de orderregels.
+
+00:08:35.900 --> 00:08:39.300
+Die logica zit in dataverse, niet in elke afzonderlijke app.
+
+00:08:39.540 --> 00:08:42.620
+Zo volgt elke app die de data gebruikt, dezelfde regels.
+
+00:08:42.820 --> 00:08:44.780
+En het beheert relaties tussen gegevens.
+
+00:08:45.020 --> 00:08:47.340
+Dit is waar een gedeeld Excel-bestand tekort schiet.
+
+00:08:47.340 --> 00:08:52.160
+In Excel heb je een tabblad voor klanten en een voor orders, maar er is geen echte verbinding tussen beide.
+
+00:08:52.400 --> 00:08:54.260
+Iemand moet ze handmatig synchroon houden.
+
+00:08:54.440 --> 00:08:56.480
+In dataverse definieer je een relatie.
+
+00:08:56.700 --> 00:08:57.940
+Een klant heeft veel orders.
+
+00:08:58.180 --> 00:08:59.640
+Een order hoort bij één klant.
+
+00:08:59.820 --> 00:09:01.120
+De database dwingt dat af.
+
+00:09:01.280 --> 00:09:04.960
+Als je een klant verwijdert, kun je kiezen of je ook een orders verwijdert of de verwijdering blokkeert.
+
+00:09:05.140 --> 00:09:06.980
+De data blijft automatisch opgeschoond.
+
+00:09:07.160 --> 00:09:08.480
+Hier is een concreet voorbeeld.
+
+00:09:08.700 --> 00:09:12.040
+Je hebt een tabel voor klanten, een tabel voor orders en een relatie ertussen.
+
+00:09:12.260 --> 00:09:15.500
+Power Apps leest uit beide tabellen om de orderhistorie van een klant te tonen.
+
+00:09:15.500 --> 00:09:19.000
+Power Automate schrijft naar de ordertabel wanneer er een nieuwe verkoop binnenkomt.
+
+00:09:19.120 --> 00:09:22.120
+Power B leest uit beide voor een rapport over de omzet per klant.
+
+00:09:22.280 --> 00:09:25.780
+Iedereen gebruikt dezelfde data in dezelfde structuur met dezelfde beveiligingsregels.
+
+00:09:26.000 --> 00:09:27.720
+Geen kopieën, geen synchronisatieproblemen.
+
+00:09:27.880 --> 00:09:30.040
+Niemand die vraagt welke versie van het werkblad is de juiste.
+
+00:09:30.280 --> 00:09:31.880
+Dat is de echte waarde van dataverse.
+
+00:09:32.120 --> 00:09:34.800
+Het zorgt ervoor dat het hele platform naadloos samenwerkt.
+
+00:09:35.060 --> 00:09:37.440
+Zonder dit val je terug in hetzelfde oude probleem.
+
+00:09:37.580 --> 00:09:39.440
+Tools die niet met elkaar communiceren.
+
+00:09:39.440 --> 00:09:44.480
+Laten we alles nu samenbrengen in een praktijkvoorbeeld dat het volledige systeem in actie laat zien.
+
+00:09:45.060 --> 00:09:47.520
+Hoe alles verbonden is, het complete systeem.
+
+00:09:47.680 --> 00:09:51.260
+Ik loop met je door een volledig proces, een workflow voor onkostegoedkeuring.
+
+00:09:51.500 --> 00:09:56.260
+Let op hoeveel tools bij dit ene proces betrokken zijn en hoe naadloos ze de taken aan elkaar overdragen.
+
+00:09:56.540 --> 00:09:57.080
+Stap 1.
+
+00:09:57.220 --> 00:09:58.820
+Een medewerker is op zakenreis.
+
+00:09:59.060 --> 00:10:01.320
+Ze betalen voor een hotel en een diner met een klant.
+
+00:10:01.500 --> 00:10:04.980
+Ze pakken hun telefoon, openen een Power App en dienen een onkostendeclaratie in.
+
+00:10:05.140 --> 00:10:08.880
+Ze maken een foto van de bon, voeren het bedrag in, selecteren de categorie en drukken op verzenden.
+
+00:10:08.880 --> 00:10:10.660
+Het kostte ze ongeveer 30 seconden.
+
+00:10:10.820 --> 00:10:11.240
+Stap 2.
+
+00:10:11.380 --> 00:10:12.740
+Die data komt terecht in dataverse.
+
+00:10:12.960 --> 00:10:13.940
+Het is gestructureerd.
+
+00:10:14.060 --> 00:10:14.700
+Het is veilig.
+
+00:10:14.880 --> 00:10:17.380
+De werknemer kan de eigen inzendingen zien, maar niet die van anderen.
+
+00:10:17.580 --> 00:10:21.560
+De afbeelding van de bon wordt opgeslagen, het bedrag geregistreerd en de status op in afwachting, gezet.
+
+00:10:21.700 --> 00:10:22.080
+Stap 3.
+
+00:10:22.240 --> 00:10:23.580
+Power Automate pikt de gebeurtenis op.
+
+00:10:23.680 --> 00:10:24.940
+Er is een nieuwe uitgave toegevoegd.
+
+00:10:25.040 --> 00:10:26.200
+Het controleert het bedrag.
+
+00:10:26.420 --> 00:10:27.460
+Meer dan 500 dollar?
+
+00:10:27.700 --> 00:10:30.100
+Dan wordt het doorgestuurd naar de manager van de werknemer voor goedkeuring.
+
+00:10:30.280 --> 00:10:32.900
+Er wordt een adaptieve kaart naar het teamskanaal van de manager gestuurd.
+
+00:10:32.900 --> 00:10:36.660
+De kaart toont het bedrag, de categorie en een knop om goed te keuren of af te wijzen.
+
+00:10:36.840 --> 00:10:38.760
+De manager hoeft geen aparte app te openen.
+
+00:10:38.960 --> 00:10:39.960
+Het staat gewoon in de chat.
+
+00:10:40.180 --> 00:10:40.640
+Stap 4.
+
+00:10:40.800 --> 00:10:42.840
+Voordat de manager beslist, wil deze context hebben.
+
+00:10:43.020 --> 00:10:44.700
+Hoeveel heeft dit team deze maand uitgegeven?
+
+00:10:44.880 --> 00:10:47.420
+Ze openen een Power BI dashboard dat direct in Teams is ingebed.
+
+00:10:47.580 --> 00:10:49.660
+Het toont maandelijkse uitgaventrends per afdeling.
+
+00:10:49.900 --> 00:10:53.280
+Ze kunnen zien dat dit team binnen het budget blijft en dat deze uitgave redelijk is.
+
+00:10:53.480 --> 00:10:55.740
+Die context helpt hen sneller een beslissing te nemen.
+
+00:10:56.180 --> 00:10:56.760
+Stap 5.
+
+00:10:56.760 --> 00:10:58.700
+Hier komt Co-Pilot Studio in beeld.
+
+00:10:58.880 --> 00:11:03.160
+In plaats van alleen op goedkeuren te klikken, krijgt de manager een bericht van een AI-agent in Teams.
+
+00:11:03.360 --> 00:11:07.640
+De agent zegt, ik zie dat je een openstaande onkostendeclaratie van Sarah hebt van 750 dollar.
+
+00:11:07.820 --> 00:11:09.960
+Ik heb het budget gecontroleerd, je zit binnen de limieten.
+
+00:11:10.140 --> 00:11:10.960
+Wil je dat ik dit verwerk?
+
+00:11:11.660 --> 00:11:12.020
+Aanhalingsteken.
+
+00:11:12.200 --> 00:11:14.140
+De manager zegt ja, de agent regelt het.
+
+00:11:14.300 --> 00:11:14.740
+Stap 6.
+
+00:11:14.860 --> 00:11:17.400
+Eenmaal goedgekeurd, start Power Automate een volgende flow.
+
+00:11:17.580 --> 00:11:19.680
+Het werkt de onkostendeclaratie bij een dataverse.
+
+00:11:19.920 --> 00:11:22.000
+Het stuurt een bevestigingsmail naar de werknemer.
+
+00:11:22.000 --> 00:11:25.680
+Het verstuurt de gegevens via een connector naar het ERP-systeem van het bedrijf.
+
+00:11:25.680 --> 00:11:27.760
+En het locht de goedkeuring in het auditspoor.
+
+00:11:27.920 --> 00:11:29.000
+Eén uniforme flow.
+
+00:11:29.320 --> 00:11:29.940
+Zes stappen.
+
+00:11:30.120 --> 00:11:30.800
+Vijf tools.
+
+00:11:31.060 --> 00:11:32.540
+Nul handmatige overdrachten.
+
+00:11:32.800 --> 00:11:33.920
+Geen doorstuurde e-mail.
+
+00:11:34.180 --> 00:11:36.720
+Niemand kopieerde data van het ene naar het andere systeem.
+
+00:11:36.900 --> 00:11:38.700
+Niemand vroeg, heb je dit al goedgekeurd?
+
+00:11:38.860 --> 00:11:42.860
+Het hele proces verliep automatisch met het juiste menselijke toezicht op het juiste moment.
+
+00:11:43.080 --> 00:11:46.180
+De magie zit niet in één enkele tool, maar in hoe ze op elkaar aansluiten.
+
+00:11:46.400 --> 00:11:47.480
+Power BI toont de context.
+
+00:11:47.700 --> 00:11:49.020
+Power Automate doet de routering.
+
+00:11:49.020 --> 00:11:50.660
+Power Apps levert het invoerformulier.
+
+00:11:50.860 --> 00:11:54.140
+Co-Pilot Studio voegt de gesprekslaag toe en dataverse houdt alles bij elkaar.
+
+00:11:54.360 --> 00:11:55.540
+Dit is niet theoretisch.
+
+00:11:55.980 --> 00:11:57.900
+Organisaties over de hele wereld doen dit al.
+
+00:11:58.060 --> 00:12:03.480
+De Singapore Civil Defense Force gebruikte het Power Platform om processen om te zetten in geautomatiseerde oplossingen.
+
+00:12:03.740 --> 00:12:05.020
+Wat miljoenen dollars bespaarde.
+
+00:12:05.300 --> 00:12:08.560
+Deutsche Bahn stelde hun medewerkers in staat om low-code apps te bouwen.
+
+00:12:08.760 --> 00:12:11.040
+Wat innovatie in de hele organisatie versnelde.
+
+00:12:11.260 --> 00:12:15.480
+Dit zijn echte bedrijven die echte problemen oplossen met dezelfde tools die we net hebben besproken.
+
+00:12:15.700 --> 00:12:16.880
+Concrete actiepunten.
+
+00:12:17.060 --> 00:12:17.780
+Waar moet je beginnen?
+
+00:12:17.780 --> 00:12:19.300
+Dus, waar begin je eigenlijk?
+
+00:12:19.500 --> 00:12:22.700
+De meeste mensen storten zich erin en proberen alle vijfde tools tegelijk te leren.
+
+00:12:22.700 --> 00:12:26.700
+Doe dat niet. Kies in plaats daarvan de ene tool die vandaag jouw grootste knelpunt oplost.
+
+00:12:26.880 --> 00:12:30.720
+Als je grootste hoofdpijn dossier is dat je niet weet wat er in je bedrijf gebeurt, begin dan met Power BI.
+
+00:12:30.880 --> 00:12:34.260
+Als je verdrinkt in herhalend handmatig werk, begin dan met Power Automate.
+
+00:12:34.400 --> 00:12:38.000
+En als je een mobiel formulier nodig hebt dat papier vervangt, begin dan met Power Apps.
+
+00:12:38.000 --> 00:12:40.200
+Eén tool, één probleem, los dat eerst op.
+
+00:12:40.340 --> 00:12:43.040
+Dit is het goede nieuws, je kunt dit allemaal gratis uitproberen.
+
+00:12:43.180 --> 00:12:46.360
+Ga gewoon naar make.powerapps.com en meld je aan voor een ontwikkelaarsplan.
+
+00:12:46.560 --> 00:12:48.720
+Hiermee krijg je kosteloos een dataverse omgeving.
+
+00:12:48.940 --> 00:12:51.340
+Je kunt bouwen, testen en leren zonder een cent uit te geven.
+
+00:12:51.580 --> 00:12:54.080
+Zodra je je tool hebt gekozen, is de volgende stap simpel.
+
+00:12:54.280 --> 00:12:56.920
+Kies één repetitief proces op het werk en automatiseer het.
+
+00:12:57.060 --> 00:13:03.160
+Misschien is het automatisch opslaan van e-mailbijlagen in SharePoint of het routeren van goedkeuringsverzoeken via Teams in plaats van eindeloze e-mailketens.
+
+00:13:03.380 --> 00:13:05.780
+Begin klein, behaal een succes en bouw vanaf daar verder.
+
+00:13:05.780 --> 00:13:11.140
+Als je de diepte in wilt gaan, heeft Microsoft Learn een gratis leertraject voor de Place 900 certificering.
+
+00:13:11.320 --> 00:13:15.420
+Het leidt je door alles wat we net hebben behandeld of wordt lid van de Power Platform community.
+
+00:13:15.680 --> 00:13:19.340
+Duizenden mensen delen schablonen, beantwoorden vragen en helpen elkaar met bouwen.
+
+00:13:19.560 --> 00:13:22.760
+Dat is het systeem in een notendop en hier is de ene zin die het samenvat.
+
+00:13:22.880 --> 00:13:29.800
+Power Platform is niet uit vier losse apps opgebouwd, maar is één verbonden laag waarmee iedereen kan bouwen, automatiseren en analyseren zonder dat er een ontwikkelaar nodig is.
+
+00:13:30.000 --> 00:13:32.420
+Begin met de tool die jouw grootste hoofdpijndossier oplost.
+
+00:13:32.420 --> 00:13:36.720
+Zodra je ziet hoe ze op elkaar aansluiten, wil je nooit meer terug naar spreadsheets en e-mailgoedkeuringen.
+
+00:13:36.920 --> 00:13:39.780
+Abonneer je en deel dit met een collega die verdrinkt in het handmatige werk.
+
+00:13:40.020 --> 00:13:42.420
+Laat een reactie achter en vertel me welk proces jij wilt automatiseren.
+
+00:13:43.180 --> 00:13:44.620
+Ik zie je in de volgende aflevering.

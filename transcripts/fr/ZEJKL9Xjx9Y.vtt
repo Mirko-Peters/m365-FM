@@ -1,0 +1,1954 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:04.300
+On vous a dit qu'il était facile d'ajouter le protocole de contexte de modèle, MCP en abrégé, à Copilot Studio.
+
+00:00:04.440 --> 00:00:06.720
+Il suffit d'utiliser un connecteur personnalisé, disent-ils.
+
+00:00:06.960 --> 00:00:07.900
+Techniquement, c'est vrai.
+
+00:00:08.360 --> 00:00:09.640
+Fonctionnellement, c'est un mensonge.
+
+00:00:09.800 --> 00:00:14.780
+Le même genre de mensonge que de simplement brancher l'USB sans vous dire quel côté est en haut ou que vous avez besoin d'un pilote,
+
+00:00:15.020 --> 00:00:18.900
+de trois modifications de registre et d'une légère prière au dieu du cloud pour la stabilité des paquets.
+
+00:00:19.320 --> 00:00:22.100
+MCP est commercialisé comme USB pour les agents d'IA.
+
+00:00:22.400 --> 00:00:23.540
+L'idée semble claire.
+
+00:00:23.780 --> 00:00:27.180
+Tout agent peut échanger avec toute source de données s'ils suivent le même protocole,
+
+00:00:27.560 --> 00:00:29.780
+une poignée de mains universelles dédiées au contexte.
+
+00:00:29.780 --> 00:00:33.180
+Mais Microsoft, toujours aussi minimaliste, ne vous remet que le port.
+
+00:00:33.300 --> 00:00:36.320
+Pas de câbles, pas de schéma de brochage, pas même d'étiquette d'avertissement.
+
+00:00:36.540 --> 00:00:40.060
+Donc, oui, vous pouvez connecter quelque chose, mais la moitié du temps, ce n'est cornemental.
+
+00:00:40.220 --> 00:00:42.460
+Le mythe persiste car l'interface semble obéissante.
+
+00:00:42.620 --> 00:00:44.040
+Ajoutez un outil, il roucoule.
+
+00:00:44.260 --> 00:00:45.980
+Filtrez par protocole de contexte de modèle.
+
+00:00:46.240 --> 00:00:50.220
+Vous cliquez, une liste déroulante apparaît, et voilà, l'interopérabilité est instantanée.
+
+00:00:50.400 --> 00:00:50.860
+Sauf que non.
+
+00:00:51.060 --> 00:00:55.300
+Ce à quoi vous vous connectez réellement, ce sont des MCP intégrés, une fois directement connectés au produit.
+
+00:00:55.620 --> 00:00:58.440
+Dataverse MCP, cela fonctionne parce que c'est celui de Microsoft.
+
+00:00:58.440 --> 00:01:02.780
+Votre MCP personnalisé, Copilot ne le reconnaît même pas tant que vous n'avez pas créé un traducteur,
+
+00:01:03.000 --> 00:01:05.300
+un connecteur personnalisé qui ne se comporte pas comme un raccourci,
+
+00:01:05.600 --> 00:01:08.840
+mais comme une mission diplomatique complète entre des systèmes qui ne partagent ni vocabulaire ni tempo.
+
+00:01:09.000 --> 00:01:11.120
+Aujourd'hui, nous allons donc démanteler ce mythe.
+
+00:01:11.260 --> 00:01:13.000
+Je vais vous montrer ce qu'est réellement le MCP,
+
+00:01:13.280 --> 00:01:15.640
+pourquoi votre connecteur n'est pas aussi connecté qu'il le prétend,
+
+00:01:15.720 --> 00:01:19.240
+et comment en créer un qui échange véritablement du contexte au lieu de mimer la connectivité.
+
+00:01:19.400 --> 00:01:22.040
+Le MCP n'est pas une source de données, c'est un pont contextuel,
+
+00:01:22.280 --> 00:01:24.680
+l'interprète entre votre Copilot et votre intelligence externe.
+
+00:01:24.680 --> 00:01:27.120
+Et les connecteurs personnalisés ne sont pas des modules complémentaires,
+
+00:01:27.360 --> 00:01:29.100
+ce sont des échafaudages de construction pour ce pont.
+
+00:01:29.220 --> 00:01:31.400
+Alors, enlevons le vernis marketing de Microsoft
+
+00:01:31.400 --> 00:01:35.580
+et examinons ce qui se passe réellement dans Copilot Studio lorsque vous pensez avoir connecté un MCP.
+
+00:01:35.740 --> 00:01:37.040
+L'illusion de la simplicité.
+
+00:01:37.240 --> 00:01:42.160
+A première vue, Copilot Studio donne l'impression que l'intégration MCP est aussi simple que d'ajouter du lait dans du café.
+
+00:01:42.360 --> 00:01:45.360
+Cliquez sur Ajouter un outil, filtrez par protocole de contexte de modèle,
+
+00:01:45.720 --> 00:01:47.180
+choisissez votre serveur, et c'est fait.
+
+00:01:47.340 --> 00:01:50.600
+Quelques secondes plus tard, le voilà, fièrement répertorié sous outil.
+
+00:01:50.600 --> 00:01:55.320
+La plupart des utilisateurs s'arrêtent là et publient des messages sur les forums en se vantant que leur contexte externe est actif.
+
+00:01:55.480 --> 00:01:56.140
+Ce n'est pas le cas.
+
+00:01:56.340 --> 00:01:57.880
+Ce que vous avez connecté est un placebo.
+
+00:01:58.180 --> 00:01:58.780
+Voici pourquoi.
+
+00:01:59.020 --> 00:02:02.340
+Ce filtre MCP convivial n'affiche que les éléments intégrés de Microsoft.
+
+00:02:02.720 --> 00:02:06.560
+Dataverse MCP, Share.mcp, peut-être un pour GitHub si vous avez de la chance.
+
+00:02:06.760 --> 00:02:09.220
+Il réside au plus profond de la même infrastructure de locataire.
+
+00:02:09.420 --> 00:02:13.780
+Dès que vous essayez de lier un MCP externe, disons Microsoft Learn ou votre recherche sémantique interne,
+
+00:02:14.000 --> 00:02:15.060
+vous découvrez une étagère vide.
+
+00:02:15.200 --> 00:02:18.980
+Il n'y a pas d'emplacement d'importation, pas d'invite d'authentification, pas de véritable poignée de main.
+
+00:02:18.980 --> 00:02:23.380
+L'option de protocole supposé n'est en réalité qu'une étiquette de catégorie sur les jouets préinstallés.
+
+00:02:23.560 --> 00:02:27.020
+Sous le capot, Copilot attend une discipline de formatage très spécifique.
+
+00:02:27.240 --> 00:02:31.680
+Il veut un point de terminaison HTTP diffusable en continu qui soit conforme au schéma MCP.
+
+00:02:31.920 --> 00:02:37.860
+Requête en JSON contextuelle, réponse en événement, le temps est à la diffusion des jetons et non à leur vidage massif.
+
+00:02:38.080 --> 00:02:42.260
+Votre service externe, aussi intelligent soit-il, est invisible s'il ne répond pas dans ce dialecte.
+
+00:02:42.400 --> 00:02:47.960
+Sans cela, Copilot agit comme un touriste qui a mémorisé trois phrases de voyage et insiste sur le fait que les habitants ne parlent pas correctement.
+
+00:02:47.960 --> 00:02:49.460
+C'est là le mensonge fondamental.
+
+00:02:49.700 --> 00:02:52.320
+Ce qui ressemble à du plug-and-play est en fait du code et de la prière.
+
+00:02:52.480 --> 00:02:56.000
+L'interface utilisateur visible masque l'application du schéma qui fait fonctionner MCP.
+
+00:02:56.200 --> 00:02:59.980
+Lorsque vous sélectionnez un MCP dans le menu, vous n'intégrez pas votre propre contexte de modèle.
+
+00:03:00.240 --> 00:03:02.540
+Vous invoquez un mécanisme de récupération interne.
+
+00:03:02.720 --> 00:03:05.980
+Il fonctionne ingénieusement bien avec les index de style Bing et les API Dataverse,
+
+00:03:06.320 --> 00:03:10.200
+mais il ne consulte jamais votre point de terminaison MCP, sauf si vous créez manuellement le pont.
+
+00:03:10.340 --> 00:03:11.960
+Et c'est là que réside le paradoxe.
+
+00:03:11.960 --> 00:03:18.500
+Copilot Studio est à la fois l'un des outils d'orchestration les plus puissants jamais créés par Microsoft et l'un des plus trompeusement limités.
+
+00:03:18.680 --> 00:03:21.920
+Il promet un échange de contexte universel, mais offre une amnésie sélective,
+
+00:03:22.220 --> 00:03:24.680
+sauf si vous lui apprenez de nouvelles manières par le biais de la configuration.
+
+00:03:24.940 --> 00:03:27.880
+La plupart des admins découvrant cela pour la première fois croient à un bug.
+
+00:03:28.120 --> 00:03:33.220
+Ils ont donc suivi la documentation, importé l'URL, cliqué trois fois sur Actualiser, mais rien n'apparaît.
+
+00:03:33.400 --> 00:03:34.840
+C'est parce qu'ils n'ont pas construit le pont.
+
+00:03:35.020 --> 00:03:37.000
+Ils ont simplement peint un tunnel sur le mur.
+
+00:03:37.000 --> 00:03:39.900
+Reconnaître cette illusion est la première étape vers la compétence.
+
+00:03:40.140 --> 00:03:42.460
+Votre panneau de connexion ne ment pas de manière malveillante.
+
+00:03:42.620 --> 00:03:46.500
+Il ne fait que raconter la version simplifiée de la réalité destinée aux utilisateurs moyens.
+
+00:03:46.720 --> 00:03:47.600
+Mais vous n'êtes pas moyens.
+
+00:03:47.960 --> 00:03:49.440
+C'est vous qui devez la faire fonctionner.
+
+00:03:49.740 --> 00:03:51.720
+Et c'est la première étape vers l'illumination.
+
+00:03:52.140 --> 00:03:54.960
+Savoir que ce charmant petit panneau de Copilot Studio vous ment.
+
+00:03:55.320 --> 00:03:56.500
+Ce qu'est réellement MCP.
+
+00:03:56.720 --> 00:03:59.340
+D'accord, définissons la créature à laquelle nous avons affaire.
+
+00:03:59.560 --> 00:04:03.660
+MCP, le protocole de contexte de modèle, n'est pas un format de fichier ou un rappeur d'API.
+
+00:04:03.660 --> 00:04:09.840
+C'est une lingua franca pour les systèmes d'intelligence artificielle, un moyen pour des cerveaux distincts de partager non pas des données, mais le sens des données.
+
+00:04:10.100 --> 00:04:20.880
+Microsoft l'appelle USB pour les agents, non pas parce qu'il transmet des octets, mais parce qu'il standardise la poignée de main, qui se branche où, quel courant circule et comment les deux parties conviennent que ce qui bouge est un contexte valide et non du bruit.
+
+00:04:21.120 --> 00:04:29.080
+Techniquement, MCP définit la manière dont un agent et une source de contexte échangent des métadonnées structurées, des schémas d'outils, des actions, des paramètres et des jetons de contexte.
+
+00:04:29.080 --> 00:04:34.540
+Considérez cela comme une diplomatie internationale. Le serveur MCP représente une nation souveraine d'informations.
+
+00:04:34.740 --> 00:04:39.820
+Un ensemble de règles sur la manière dont un corpus particulier de connaissances peut être interrogé, résumé ou mis à jour.
+
+00:04:40.000 --> 00:04:45.200
+Le client MCP, dans ce cas Copilot Studio, est l'envoyé en visite qui parle au nom de l'utilisateur.
+
+00:04:45.640 --> 00:04:53.440
+Et le connecteur relie les deux, notre traducteur très patient qui s'assure que la requête share. dans une langue devient une requête de contexte post-V1 dans une autre.
+
+00:04:53.440 --> 00:05:02.640
+Au sein du protocole, tout est JSON, de manière prévisible, efficace, parfois fastidieuse, de sorte que même un grand modèle de langage peut l'analyser sans rêverie.
+
+00:05:02.840 --> 00:05:07.640
+Chaque requête contient une intention. Chaque réponse contient des jetons de contexte et des citations facultatives.
+
+00:05:07.820 --> 00:05:10.420
+Plus intéressante encore, ces réponses sont diffusables en continu.
+
+00:05:10.580 --> 00:05:14.060
+Copilot reçoit des fragments partiels tandis que le serveur MCP assemble le sens.
+
+00:05:14.300 --> 00:05:17.700
+Cela empêche l'IA de se figer au milieu de sa réflexion et d'attendre la réponse complète.
+
+00:05:17.900 --> 00:05:20.020
+C'est une course de relais, pas une livraison de colis.
+
+00:05:20.020 --> 00:05:23.540
+La métaphore USB de Microsoft séduit car elle évoque la simplicité.
+
+00:05:23.760 --> 00:05:26.820
+Brancher A sur B et des électrons de connaissance commencent à circuler.
+
+00:05:27.000 --> 00:05:29.140
+Mais cette analogie s'effondre presque immédiatement.
+
+00:05:29.320 --> 00:05:33.700
+Un câble USB physique suppose des broches fixes, des tensions stables et un seul type d'électricité.
+
+00:05:33.920 --> 00:05:36.760
+MCP, en revanche, négocie des schémas dynamiques.
+
+00:05:36.960 --> 00:05:42.760
+Chaque appareil, chaque implémentation de serveur, peut définir ses propres verbes, propriétés et affordances contextuelles.
+
+00:05:42.940 --> 00:05:46.460
+Imaginez une clé USB qui change de câblage en fonction de la personne à qui elle est branchée.
+
+00:05:46.660 --> 00:05:47.780
+C'est plus proche de la réalité.
+
+00:05:48.000 --> 00:05:49.760
+Alors, qu'est-ce qui se trouve exactement où ?
+
+00:05:49.760 --> 00:05:54.820
+Au niveau de la couche de base, le serveur MCP contient des définitions d'outils, des descriptions d'actions telles que rechercher des documents,
+
+00:05:55.120 --> 00:05:58.500
+créer un enregistrement ou répertorier des tables, ainsi que les paramètres et les types de données requis.
+
+00:05:58.680 --> 00:06:00.160
+C'est le cortex de l'intelligence.
+
+00:06:00.340 --> 00:06:06.380
+Le client MCP, Copilot Studio, héberge le cerveau de l'agent qui interprète les invites en langage naturel et décide des actions à invoquer.
+
+00:06:06.540 --> 00:06:15.020
+Entre eux, le connecteur personnalisé implémente le contrat, gère l'authentification, valide le schéma et diffuse la conversation via HTTP tout en préservant la structure.
+
+00:06:15.020 --> 00:06:21.300
+Lorsque Copilot envoie une invite, par exemple, rechercher des articles sur l'indexation SharePoint, il ne récupère pas de page web.
+
+00:06:21.480 --> 00:06:29.980
+Il génère une requête contextuelle intégrée au format JSON, la transmet via le connecteur au serveur MCP et reçoit en retour une charge utile contextuelle structurée et non du texte brut.
+
+00:06:29.980 --> 00:06:37.840
+Cette charge utile contient des métadonnées, des sources, des scores de pertinence et des extraits de texte que le modèle linguistique étendu condense ensuite en anglais courant pour l'utilisateur.
+
+00:06:38.000 --> 00:06:40.740
+Il s'agit d'une synthèse contextuelle et non d'une simple récupération.
+
+00:06:41.000 --> 00:06:45.180
+Sans cette discipline, Copilot fonctionne comme un perroquet répétant des résumés de tout ce qu'on lui fournit.
+
+00:06:45.340 --> 00:06:47.640
+Ajoutez MCP et il se souvient soudainement des relations.
+
+00:06:47.900 --> 00:06:54.520
+Quel document fait référence à quelle API ? Quel champ dans Dataverse correspond à quelle propriété dans votre CRM ? Quelle clause de licence régit cette action ?
+
+00:06:54.520 --> 00:07:02.160
+En substance, MCP fait passer Copilot de la saisie semi-automatique avec Swagger à un analyste semi-fiable qui comprend réellement la topologie des données de votre organisation.
+
+00:07:02.460 --> 00:07:09.960
+Donc, oui, USB pour les agents semble accrocheur, mais l'interprétation pratique est que MCP impose une conversation polie entre des systèmes très opiniâtres.
+
+00:07:09.960 --> 00:07:15.400
+Il indique à Copilot Studio de demander « Puis-je interroger ce schéma ? » au lieu de dire « Donnez-moi tout ».
+
+00:07:15.400 --> 00:07:19.340
+Cette petite courtoisie fait la différence entre une hallucination et une réponse conforme.
+
+00:07:19.440 --> 00:07:21.820
+Et voici le rebondissement que Microsoft ne souligne jamais.
+
+00:07:21.820 --> 00:07:26.600
+Le menu déroulant MCP dans Copilot Studio parle déjà ce protocole, mais uniquement avec son propre service.
+
+00:07:26.840 --> 00:07:30.760
+Lorsque vous en créez un personnalisé, vous créez en fait un nouveau dialecte au sein de ce traité.
+
+00:07:30.960 --> 00:07:34.340
+Vous définissez ce que signifie réellement le contexte au sein de votre entreprise.
+
+00:07:34.580 --> 00:07:42.520
+Savoir ce qu'est MCP, une grammaire structurée dynamique pour le contexte, et non une source de données, vous donne la théorie avant de commettre le crime de la mise en œuvre.
+
+00:07:42.660 --> 00:07:44.240
+Parce que nous allons le commettre ensemble.
+
+00:07:44.460 --> 00:07:50.620
+Nous allons créer la poignée de main nous-mêmes et prouver que le véritable pouvoir de Copilot Studio ne vient pas du menu, mais de la compréhension du contrat.
+
+00:07:50.620 --> 00:07:51.820
+C'est notre hérésie pratique.
+
+00:07:52.200 --> 00:07:58.300
+Construire votre propre connecteur personnalisé entièrement conforme et diffusable en continu qui parle couramment le MCP au lieu de mimer l'accent.
+
+00:07:58.480 --> 00:08:00.560
+Construire un véritable connecteur personnalisé.
+
+00:08:00.740 --> 00:08:04.680
+Nous entrons maintenant dans la partie que tout le monde traverse à la hâte, la construction proprement dite.
+
+00:08:04.840 --> 00:08:08.460
+La plupart des tutoriels agitent vaguement la main et disent, importez simplement depuis GitHub.
+
+00:08:08.720 --> 00:08:15.240
+Ils omettent le champ de mine des incohérences de schéma, des erreurs de configuration de l'hôte et des bizarreries d'authentification qui attendent sous ce bouton d'apparence innocente.
+
+00:08:15.240 --> 00:08:21.440
+Aujourd'hui, nous allons le parcourir de manière pédante, car la précision fait la différence entre un agent qui réfléchit et un autre qui boude en silence.
+
+00:08:21.580 --> 00:08:23.860
+Tout d'abord, comprenez le squelette du flux de travail.
+
+00:08:24.200 --> 00:08:27.760
+Importation GitHub, configuration du point de terminaison, publication du connecteur.
+
+00:08:27.900 --> 00:08:28.420
+Trois os.
+
+00:08:28.640 --> 00:08:31.020
+S'il manque une articulation, le membre devient sans vie.
+
+00:08:31.200 --> 00:08:33.960
+Commençons donc par là où Microsoft cache les os dans PowerApp.
+
+00:08:34.120 --> 00:08:37.540
+C'est là que naissent les connecteurs personnalisés et non dans Copilot Studio lui-même.
+
+00:08:37.760 --> 00:08:40.940
+Copilot n'est que le consommateur final de l'articulation que vous créez ici.
+
+00:08:40.940 --> 00:08:49.540
+Lorsque vous cliquez sur Nouveaux connecteurs personnalisés, des options vous sont proposées directement depuis le chapeau du magicien, depuis OpenAPI, depuis Postman, depuis Zéro ou une importation bénie depuis Giton.
+
+00:08:49.700 --> 00:08:55.780
+Choisissez cette dernière option, car Microsoft maintient discrètement un référentiel de modèle de connecteur MCP dans sa branche développeur.
+
+00:08:55.920 --> 00:08:59.100
+Le modèle dont vous avez réellement besoin est étiqueté MCP Streamable.
+
+00:08:59.340 --> 00:09:05.840
+Tout ce qui n'est pas Streamable semblera fonctionnel jusqu'à ce que Copilot pose la première question, après quoi il échouera silencieusement.
+
+00:09:06.280 --> 00:09:09.260
+Pas de feu d'artifice, pas d'erreur, juste un rien poli.
+
+00:09:09.260 --> 00:09:13.840
+Après avoir choisi MCP Streamable, pointez vers la branche dev et cliquez sur Continuer.
+
+00:09:14.020 --> 00:09:17.860
+Le système récupère un blob de JSON définissant les paramètres du connecteur.
+
+00:09:18.280 --> 00:09:18.760
+Authentification
+
+00:09:18.760 --> 00:09:27.100
+Généralement pas d'authentification car MCP repose actuellement sur l'isolation du locataire, une poignée de corps de requêtes requis et des mappages d'entête critiques pour le streaming.
+
+00:09:27.460 --> 00:09:29.060
+Ne touchez pas à ces éléments pour l'instant.
+
+00:09:29.280 --> 00:09:33.320
+L'instinct de chacun est de les modifier immédiatement, ce qui interrompt inévitablement toute la séquence.
+
+00:09:33.580 --> 00:09:34.880
+Faites plutôt défiler jusqu'à haute.
+
+00:09:35.040 --> 00:09:38.560
+La documentation de Microsoft le chuchote en notes de bas de page, mais voici la vérité.
+
+00:09:38.560 --> 00:09:40.680
+Le champ haute attend uniquement le nom de domaine.
+
+00:09:40.920 --> 00:09:50.100
+Si vous collez une URL complète avec HTTPS comme taille incluse ou si vous laissez le chemin de fin vers l'API MCP, l'étape de validation du connecteur échoue dans un silence exquis.
+
+00:09:50.320 --> 00:09:54.540
+Il vous indique que tout a été validé correctement, puis refuse d'apparaître dans Copilot.
+
+00:09:54.920 --> 00:09:59.000
+Supprimez le préfixe, découpez l'API MCP et alimentez-le avec l'hôte nue.
+
+00:09:59.140 --> 00:10:00.660
+Pas de barre oblique, pas de schéma.
+
+00:10:00.660 --> 00:10:05.020
+Cette intervention chirurgicale corrige 80% des choses qui n'apparaissent pas dans mes plaintes déroulantes.
+
+00:10:05.140 --> 00:10:07.260
+Ensuite, vous devez ajuster l'URL de base.
+
+00:10:07.480 --> 00:10:09.880
+Le modèle inclut API MCP par défaut.
+
+00:10:10.100 --> 00:10:10.660
+Supprimez-le.
+
+00:10:10.780 --> 00:10:15.380
+Pourquoi ? Parce que lorsque Copilot concatène les chemins en interne, il suppose déjà ce préfixe.
+
+00:10:15.600 --> 00:10:24.040
+Laissez-le et vous produirez des racines doublées comme API MCP, API MCP Search, que le serveur rejette car elles sont à la fois redondantes et ridicules.
+
+00:10:24.380 --> 00:10:25.280
+Et laguez sans pitié.
+
+00:10:25.280 --> 00:10:27.840
+Maintenant, nommez votre création avec clarté.
+
+00:10:28.060 --> 00:10:30.120
+Résistez à l'envie de l'appeler connecteur de test.
+
+00:10:30.320 --> 00:10:33.060
+Le cache interne de Copilot ne respecte que les noms uniques.
+
+00:10:33.280 --> 00:10:37.020
+Dupliquez-en un et votre nouveau connecteur se cache comme un enfant timide derrière le premier.
+
+00:10:37.280 --> 00:10:38.660
+Adoptez des titres descriptifs.
+
+00:10:39.060 --> 00:10:42.240
+Microsoft Learn MCP ou Internal Research Context MCP.
+
+00:10:42.420 --> 00:10:43.600
+Cliquez ensuite sur Créer.
+
+00:10:43.760 --> 00:10:47.520
+A ce stade, l'interface utilisateur de Microsoft effectue une longue pause théâtrale.
+
+00:10:47.680 --> 00:10:52.980
+Le service de connecteur valide la structure, enregistre les métadonnées dans l'environnement et les distribue dans les centres de données régionaux.
+
+00:10:52.980 --> 00:10:54.640
+Cela peut prendre jusqu'à 5 minutes.
+
+00:10:54.640 --> 00:10:56.820
+Pendant ces minutes, vous serez tenté d'actualiser.
+
+00:10:56.980 --> 00:10:57.580
+Ne le faites pas.
+
+00:10:57.760 --> 00:11:01.460
+Chaque actualisation redémarre la mise en cache, ce qui prolonge votre attente comme sisyphe avec la roue tournante.
+
+00:11:01.620 --> 00:11:02.500
+Allez chercher une boisson.
+
+00:11:02.740 --> 00:11:07.240
+Lorsque la validation est terminée avec succès, le connecteur existe désormais officiellement dans votre environnement.
+
+00:11:07.440 --> 00:11:09.300
+Mais être né n'est pas synonyme d'être utile.
+
+00:11:09.480 --> 00:11:13.780
+L'étape suivante, ignorée par presque tous les blocs de démarrage rapide, est l'alignement du schéma.
+
+00:11:13.960 --> 00:11:18.900
+Les réponses du serveur MCP incluent des champs tels que la description de l'action, le schéma de l'outil et l'idée du jeton de flux.
+
+00:11:19.080 --> 00:11:22.600
+Copilot les attend précisément tels qu'ils sont définis dans la spécification MCP.
+
+00:11:22.600 --> 00:11:28.260
+Si votre serveur MCP externe utilise une case différente ou un brique des métadonnées sous la réponse de la charge utile au lieu de data.
+
+00:11:28.780 --> 00:11:30.840
+Tool, Copilot les rejette comme du charabia.
+
+00:11:30.960 --> 00:11:34.040
+Pas d'avertissement, pas d'erreur, juste encore une fois, le silence.
+
+00:11:34.220 --> 00:11:38.340
+Le LLM derrière Copilot interprète cela comme « Je ne sais pas comment vous aider avec ça. »
+
+00:11:38.340 --> 00:11:40.680
+Félicitations, vous avez créé un void conforme.
+
+00:11:40.780 --> 00:11:44.680
+Pour un alignement correct, ouvrez l'onglet de définition dans votre connecteur nouvellement créé.
+
+00:11:44.880 --> 00:11:48.060
+Développez la première opération, généralement Query ou Get Context,
+
+00:11:48.060 --> 00:11:51.400
+et comparez sa section de réponse au dernier schéma MCP sur GitHub.
+
+00:11:51.620 --> 00:11:54.520
+Ajustez les noms et les types de propriétés afin que les tableaux soient des tableaux,
+
+00:11:54.800 --> 00:11:57.400
+les objets soient des objets et que chaque chaîne utilise la case correcte.
+
+00:11:57.480 --> 00:11:59.120
+Oui, cela semble administratif.
+
+00:11:59.320 --> 00:12:00.460
+Bienvenue dans la diplomatie.
+
+00:12:00.680 --> 00:12:02.360
+Les traducteurs n'improvisent pas la grammaire.
+
+00:12:02.500 --> 00:12:05.560
+Une fois l'alignement terminé, basculez la prise en charge du streaming sur Wii.
+
+00:12:05.740 --> 00:12:10.060
+Encore une fois, la documentation place cela derrière un accordéon intitulé « Paramètres avancés facultatifs »
+
+00:12:10.640 --> 00:12:12.620
+comme s'il s'agissait de la garniture plutôt que de l'entrée.
+
+00:12:12.620 --> 00:12:17.440
+Mais Copilot exige des points de terminaison streamables, car il génère les réponses de l'IA de façon incrémentielle.
+
+00:12:17.640 --> 00:12:21.260
+Si vous ne le signalez pas, le connecteur s'authentifie techniquement mais expire au milieu de la réponse,
+
+00:12:21.540 --> 00:12:24.440
+produisant des demi-phrases ou pire, un markdown qui se termine au milieu d'un mot.
+
+00:12:24.560 --> 00:12:25.580
+Quelqu'un demande invariablement.
+
+00:12:25.860 --> 00:12:27.740
+Ne puis-je pas simplement utiliser Sync à la place ?
+
+00:12:27.740 --> 00:12:27.900
+Non.
+
+00:12:28.120 --> 00:12:30.600
+MCP attend des flux tokenisés, et non des vidages en masse,
+
+00:12:30.860 --> 00:12:32.780
+précisément pour maintenir le flux conversationnel en vie.
+
+00:12:33.040 --> 00:12:36.160
+Considérez cela comme une perfusion intraveineuse du grand modèle linguistique
+
+00:12:36.160 --> 00:12:37.980
+plutôt que de lui faire avaler un repas entier.
+
+00:12:38.160 --> 00:12:40.400
+La perfusion lui permet de réfléchir pendant qu'il mange.
+
+00:12:40.400 --> 00:12:42.820
+A ce stade, vous pourriez croire que le succès est visible.
+
+00:12:43.020 --> 00:12:45.300
+Vous retournez dans Copilot Studio, cliquez sur Ajouter un outil,
+
+00:12:45.580 --> 00:12:48.320
+filtrez MCP et actualisez à plusieurs reprises lorsque votre connecteur n'apparaît pas.
+
+00:12:48.460 --> 00:12:49.500
+Voici la vérité qui dérange.
+
+00:12:49.820 --> 00:12:52.760
+La propagation environnementale est en retard de plusieurs minutes par rapport à la publication.
+
+00:12:53.000 --> 00:12:56.380
+L'espace de travail doit synchroniser sa liste de connecteurs avec le service Power Platform.
+
+00:12:56.600 --> 00:12:58.720
+Le spam d'actualisation retarde la synchronisation.
+
+00:12:58.940 --> 00:13:00.480
+L'administrateur efficace s'en va.
+
+00:13:00.660 --> 00:13:03.980
+L'impatient se retrouve dans un paradoxe temporel de sa propre création.
+
+00:13:04.240 --> 00:13:05.600
+Lorsque votre connecteur apparaît enfin,
+
+00:13:05.900 --> 00:13:08.840
+vous remarquerez quelque chose de légèrement différent des connecteurs natifs de Microsoft.
+
+00:13:08.840 --> 00:13:11.040
+Son icône ne comporte pas le sigil intégré.
+
+00:13:11.200 --> 00:13:13.160
+C'est parfait, vous avez créé quelque chose d'unique.
+
+00:13:13.400 --> 00:13:16.420
+Sélectionnez-le, choisissez Ajouter et authentifiez-vous si vous y êtes invité.
+
+00:13:16.600 --> 00:13:19.220
+Copilot établit désormais une liaison avec ce connecteur,
+
+00:13:19.500 --> 00:13:23.120
+récupérant ses métadonnées d'outils, son titre, sa description et ses paramètres.
+
+00:13:23.300 --> 00:13:26.340
+La présence de ces métadonnées est la preuve que la négociation a réussi.
+
+00:13:26.640 --> 00:13:29.080
+Si vous ne voyez rien, revoyez l'alignement de votre schéma.
+
+00:13:29.280 --> 00:13:32.420
+Le point de terminaison parle, mais Copilot ne peut pas transmettre l'accent.
+
+00:13:32.640 --> 00:13:35.000
+Deux pièges subsistent, tous deux délicieusement stupides.
+
+00:13:35.220 --> 00:13:37.180
+Premièrement, la validation du certificat.
+
+00:13:37.180 --> 00:13:39.300
+Si votre serveur MCP utilise TLS autosigné
+
+00:13:39.300 --> 00:13:41.600
+et que vous n'avez pas ajouté ce certificat à l'environnement du connecteur,
+
+00:13:41.800 --> 00:13:43.300
+les conversations s'arrêteront lors de la connexion.
+
+00:13:43.460 --> 00:13:46.040
+Utilisez un certificat validé mis par une autorité de certification publique
+
+00:13:46.040 --> 00:13:48.680
+ou téléchargez votre certificat racine via les paramètres Power Platform.
+
+00:13:48.900 --> 00:13:51.120
+Deuxièmement, la budgétisation du délai d'expiration.
+
+00:13:51.360 --> 00:13:55.180
+Les points de terminaison streamables doivent répondre avec l'entête transfer encoding chunked.
+
+00:13:55.380 --> 00:13:58.000
+Sans cela, Copilot suppose un HTTP standard
+
+00:13:58.000 --> 00:14:00.580
+proche de la fin du signal du message et trompe prématurément.
+
+00:14:00.760 --> 00:14:02.720
+Testez avec Curl avant d'accuser Microsoft.
+
+00:14:03.040 --> 00:14:05.600
+Voici une micro-histoire qui résume parfaitement ce rituel.
+
+00:14:05.600 --> 00:14:09.200
+Un administrateur s'est plaint un jour que son connecteur avait soudainement cessé de fonctionner.
+
+00:14:09.320 --> 00:14:10.640
+Après une inspection médico-légale,
+
+00:14:10.860 --> 00:14:13.340
+nous avons découvert que son ingénieur d'hébergement avait introduit Cloude Flair
+
+00:14:13.340 --> 00:14:16.260
+devant le point de terminaison MCP, ostensiblement pour la mise en cache.
+
+00:14:16.420 --> 00:14:18.500
+Et Cloude Flair, dans son ignorance bienveillante,
+
+00:14:18.740 --> 00:14:21.140
+a supprimé les entêtes de streaming pour compresser le trafic.
+
+00:14:21.520 --> 00:14:22.820
+Résultat, silence total.
+
+00:14:23.100 --> 00:14:25.380
+Moralité, le tuyau ne se soucie pas de vos optimisations.
+
+00:14:25.640 --> 00:14:28.040
+Suivez les spécifications ou profitez du purgatoire du débogage.
+
+00:14:28.240 --> 00:14:29.380
+Maintenant, l'épiphanie.
+
+00:14:29.520 --> 00:14:31.640
+Tout ce processus n'est pas une complexité malveillante.
+
+00:14:31.840 --> 00:14:33.120
+Microsoft n'a pas tendu de piège,
+
+00:14:33.120 --> 00:14:35.040
+il suppose simplement une patience professionnelle.
+
+00:14:35.200 --> 00:14:37.140
+Le mensonge du connecteur personnalisé persiste
+
+00:14:37.140 --> 00:14:40.400
+car l'interface utilisateur omet les étapes de bas niveau qui garantissent l'exactitude.
+
+00:14:40.620 --> 00:14:42.820
+Il dit une demi-vérité pour le public occasionnel.
+
+00:14:43.040 --> 00:14:45.780
+Si vous regardez toujours, vous avez déjà transcendé ce public.
+
+00:14:46.020 --> 00:14:46.980
+Lorsque c'est fait correctement,
+
+00:14:47.240 --> 00:14:48.920
+ce que vous avez construit est plus qu'un connecteur,
+
+00:14:49.220 --> 00:14:50.520
+c'est une tête de pont vers la vérité.
+
+00:14:50.700 --> 00:14:53.140
+Votre copilote ne simulera plus les connaissances de Bing.
+
+00:14:53.320 --> 00:14:55.700
+Il effectuera un échange de contexte authentifié,
+
+00:14:56.020 --> 00:14:59.420
+conforme au schéma et diffusable avec la couche d'intelligence que vous exposez.
+
+00:14:59.420 --> 00:15:03.020
+La prochaine fois qu'un membre de votre organisation dira « J'ai connecté MCP »,
+
+00:15:03.020 --> 00:15:03.760
+mais il ne répond pas,
+
+00:15:04.000 --> 00:15:05.860
+vous sourirez d'un air sombre et répondrez « Oui,
+
+00:15:06.080 --> 00:15:08.340
+parce que vous avez construit une peinture de tunnel, pas un pont ».
+
+00:15:08.340 --> 00:15:09.600
+Maintenant que le pont est debout,
+
+00:15:09.980 --> 00:15:11.800
+vérifions que le passage fonctionne réellement.
+
+00:15:12.040 --> 00:15:14.120
+Car un beau pont suspendu est toujours inutile
+
+00:15:14.120 --> 00:15:15.920
+tant que quelque chose ne le traverse pas.
+
+00:15:17.020 --> 00:15:18.640
+Tester et vérifier l'intégration.
+
+00:15:18.860 --> 00:15:20.940
+La vérification est la partie que tout le monde traite
+
+00:15:20.940 --> 00:15:24.180
+comme une réflexion après coup jusqu'à ce que son agent sourit poliment et dise
+
+00:15:24.180 --> 00:15:26.180
+« Je ne sais pas comment vous aider avec ça ».
+
+00:15:26.180 --> 00:15:28.740
+Cette phrase est la version de Copilot d'un écran bleu.
+
+00:15:28.900 --> 00:15:31.980
+Le protocole a échoué quelque part entre le connecteur et le modèle.
+
+00:15:32.220 --> 00:15:33.460
+Tester MCP n'est pas glamour,
+
+00:15:33.700 --> 00:15:35.680
+mais c'est ainsi que vous prouvez que vous avez construit un pont
+
+00:15:35.680 --> 00:15:36.960
+et non une performance artistique.
+
+00:15:37.120 --> 00:15:38.680
+Commencez par le test décisif.
+
+00:15:38.840 --> 00:15:41.320
+Copilot Studio voit-il réellement votre connecteur ?
+
+00:15:41.320 --> 00:15:42.380
+Dans le panneau « Outils »,
+
+00:15:42.380 --> 00:15:44.820
+filtré à nouveau par « Protocole de contexte de modèle ».
+
+00:15:44.820 --> 00:15:47.320
+Votre nouveau titre, peut-être Microsoft Learn MCP,
+
+00:15:47.660 --> 00:15:49.960
+devrait apparaître à côté du MCP officiel de Dataverse.
+
+00:15:50.180 --> 00:15:51.660
+Si ce n'est pas le cas, arrêtez-vous là.
+
+00:15:52.060 --> 00:15:53.340
+Visibilité égale enregistrement.
+
+00:15:53.340 --> 00:15:56.060
+Aucune entrée signifie que le schéma ou l'hôte n'est toujours pas aligné.
+
+00:15:56.180 --> 00:15:58.780
+En supposant qu'il apparaisse, ajoutez l'outil à votre Copilot.
+
+00:15:59.100 --> 00:15:59.960
+Dès que vous le connectez,
+
+00:16:00.240 --> 00:16:03.000
+Copilot récupère les métadonnées descriptives du serveur MCP,
+
+00:16:03.340 --> 00:16:04.620
+un dictionnaire des outils disponibles,
+
+00:16:04.940 --> 00:16:07.080
+chacun avec des paramètres et des descriptions en anglais simple.
+
+00:16:07.280 --> 00:16:09.300
+Si vous remarquez que le champ de description est renseigné
+
+00:16:09.300 --> 00:16:11.020
+avec Microsoft DocSearch ou similaire,
+
+00:16:11.280 --> 00:16:13.160
+félicitations, la poignée de main a fonctionné.
+
+00:16:13.300 --> 00:16:15.580
+Le contexte est désormais reconnu et non deviné.
+
+00:16:15.720 --> 00:16:17.000
+Pour vérifier la fonctionnalité,
+
+00:16:17.340 --> 00:16:18.780
+vous avez besoin d'une question contrôlée.
+
+00:16:18.780 --> 00:16:21.500
+Utilisez le MCP Microsoft Learn comme terrain d'essai,
+
+00:16:21.720 --> 00:16:24.120
+car il est public, poli et peu susceptible d'exploser.
+
+00:16:24.340 --> 00:16:25.080
+Demandez à votre agent
+
+00:16:25.080 --> 00:16:27.760
+Comment configurer Share.com source de connaissances ?
+
+00:16:27.760 --> 00:16:30.320
+Si votre pipeline est intact, observez la télémétrie.
+
+00:16:30.500 --> 00:16:31.520
+L'invite parcourt ce chemin.
+
+00:16:32.020 --> 00:16:34.920
+Utilisateur, connecteur personnalisé, serveur MCP,
+
+00:16:35.260 --> 00:16:37.480
+modèle de langage volumineux, réponse avec citation.
+
+00:16:37.740 --> 00:16:39.920
+Chaque étape présente une défaillance potentielle.
+
+00:16:40.880 --> 00:16:42.900
+Lorsque la réponse renvoie un anglais incohérent
+
+00:16:42.900 --> 00:16:45.920
+avec des citations en markdown renvoyant au tiercé sacré,
+
+00:16:45.920 --> 00:16:48.800
+connexion, compréhension et contextualisation.
+
+00:16:49.860 --> 00:16:53.320
+Le markdown lui-même est la preuve que le mode streaming fonctionne correctement.
+
+00:16:53.520 --> 00:16:55.500
+Vous verrez le texte s'afficher de manière incrémentielle,
+
+00:16:55.760 --> 00:16:57.580
+phrase, pause, phrase, citation,
+
+00:16:57.940 --> 00:16:59.000
+plutôt que de tout vider en même temps.
+
+00:16:59.180 --> 00:17:01.280
+Ce rythme est le battement de cœur révélateur de MCP,
+
+00:17:01.580 --> 00:17:02.860
+mais si quelque chose ne fonctionne pas,
+
+00:17:03.120 --> 00:17:04.520
+Copilot devient passif-agressif.
+
+00:17:04.720 --> 00:17:05.780
+Décryptons ses humeurs.
+
+00:17:06.000 --> 00:17:06.600
+Réponse vide.
+
+00:17:06.800 --> 00:17:08.040
+Vous avez tapé une requête valide,
+
+00:17:08.260 --> 00:17:09.840
+Copilot a hoché la tête et n'a rien livré.
+
+00:17:09.840 --> 00:17:11.120
+C'est un désalignement du RL,
+
+00:17:11.360 --> 00:17:13.520
+très probablement un double préfixe API, MCP.
+
+00:17:13.520 --> 00:17:16.300
+Vérifiez le chemin complet dans l'onglet de définition de votre connecteur,
+
+00:17:16.600 --> 00:17:17.460
+supprimez la redondance,
+
+00:17:17.740 --> 00:17:18.200
+republiez,
+
+00:17:18.500 --> 00:17:19.880
+attendez les 5 minutes obligatoires.
+
+00:17:20.060 --> 00:17:20.840
+Markdown tronqué,
+
+00:17:21.100 --> 00:17:23.140
+la réponse arrive mais se termine au milieu de la phrase
+
+00:17:23.140 --> 00:17:25.600
+comme un stagiaire qui s'ennuie et qui sort au milieu d'une conversation.
+
+00:17:25.900 --> 00:17:29.120
+Votre point de terminaison ne déclare pas l'encodage de transfert en morceaux.
+
+00:17:29.280 --> 00:17:29.980
+En d'autres termes,
+
+00:17:30.180 --> 00:17:32.660
+vous avez promis le streaming mais avez envoyé un vidage statique.
+
+00:17:32.860 --> 00:17:35.820
+Alignez vos entêtes avec les règles de streaming HTTP 1.1.
+
+00:17:35.980 --> 00:17:37.040
+Je ne sais pas comment vous aider.
+
+00:17:37.040 --> 00:17:38.940
+Cela suscite une peur existentielle.
+
+00:17:39.160 --> 00:17:41.420
+Cela signifie que Copilot peut atteindre le connecteur
+
+00:17:41.420 --> 00:17:42.640
+mais ne peut pas transmettre le schéma.
+
+00:17:42.640 --> 00:17:45.340
+Vos noms de propriété divergent de la spécification MCP
+
+00:17:45.340 --> 00:17:46.580
+ou un objet apparent et manquant.
+
+00:17:46.740 --> 00:17:49.080
+Comparez à nouveau avec le JSON de référence de Microsoft.
+
+00:17:49.380 --> 00:17:51.360
+La correction n'est pas mystique, juste administrative.
+
+00:17:51.680 --> 00:17:53.100
+Et si vous recevez des échecs de connexion,
+
+00:17:53.400 --> 00:17:55.100
+inspectez votre chaîne de certificat SSL.
+
+00:17:55.260 --> 00:17:58.300
+Les certificats auto-signés ou expirés provoquent souvent des rejets silencieux
+
+00:17:58.300 --> 00:18:01.040
+car les services Power Platform se méfient des racines non vérifiées.
+
+00:18:01.240 --> 00:18:03.460
+Remplacez-le par un certificat d'une autorité de confiance
+
+00:18:03.460 --> 00:18:05.660
+ou téléchargez explicitement le certificat racine.
+
+00:18:05.860 --> 00:18:06.180
+Maintenant,
+
+00:18:06.520 --> 00:18:08.540
+les tests de confirmation ne sont pas simplement techniques,
+
+00:18:08.780 --> 00:18:09.380
+ils sont logiques.
+
+00:18:09.520 --> 00:18:12.060
+Posez des questions variées pour détecter les dérives sémantiques.
+
+00:18:12.060 --> 00:18:14.080
+Montrez-moi que l'indexation des documents SharePoint
+
+00:18:14.080 --> 00:18:16.520
+devrait déclencher la même action de recherche de documents Microsoft
+
+00:18:16.520 --> 00:18:18.360
+que la manière dont SharePoint indexe les fichiers.
+
+00:18:18.520 --> 00:18:20.480
+Une formulation différente, un choix d'outils identiques,
+
+00:18:20.720 --> 00:18:21.820
+c'est une compréhension contextuelle,
+
+00:18:22.060 --> 00:18:23.080
+pas une récupération de mots-clés.
+
+00:18:23.240 --> 00:18:25.200
+Si les réponses restent stables d'une formulation à l'autre,
+
+00:18:25.540 --> 00:18:26.980
+votre copilot est officiellement fluide.
+
+00:18:27.180 --> 00:18:29.480
+Voici l'astuce de diagnostic que peu de personnes mentionnent.
+
+00:18:29.640 --> 00:18:32.260
+Observez les entêtes de flux dans l'onglet réseau de votre navigateur.
+
+00:18:32.420 --> 00:18:34.180
+Vous devriez voir des blocs de réponse préfixés
+
+00:18:34.180 --> 00:18:37.260
+par des données suivies d'objets JSON représentant des jetons incrémentiels.
+
+00:18:37.500 --> 00:18:39.460
+Chaque bloc correspond à une partie de la réponse.
+
+00:18:39.460 --> 00:18:41.540
+Si vous voyez une seule charge utile massive à la fin du flux,
+
+00:18:41.780 --> 00:18:43.580
+vous avez perdu le streaming et vous risquez des délais d'attente
+
+00:18:43.580 --> 00:18:44.380
+sur les requêtes plus longues.
+
+00:18:44.520 --> 00:18:45.480
+D'un point de vue conceptuel,
+
+00:18:45.760 --> 00:18:47.500
+imaginez les tests comme la direction d'un orchestre.
+
+00:18:47.620 --> 00:18:49.040
+Le serveur MCP joue les instruments,
+
+00:18:49.380 --> 00:18:51.160
+les données, le schéma, les index.
+
+00:18:51.360 --> 00:18:52.600
+Le connecteur tient le bâton.
+
+00:18:52.780 --> 00:18:54.560
+Copilot est l'oreille de votre chef d'orchestre,
+
+00:18:54.800 --> 00:18:55.640
+interprétant le rythme.
+
+00:18:55.840 --> 00:18:58.320
+Si un musicien est en retard ou commence dans la mauvaise tonalité,
+
+00:18:58.660 --> 00:18:59.680
+la musique s'effondre en bruit.
+
+00:18:59.840 --> 00:19:01.440
+La vérification est votre répétition
+
+00:19:01.440 --> 00:19:03.520
+pour aligner le timing de chacun avant le concert
+
+00:19:03.520 --> 00:19:05.180
+pour les cadres qui supposent que c'est magique.
+
+00:19:05.180 --> 00:19:06.880
+Lorsque chaque section s'harmonise,
+
+00:19:07.180 --> 00:19:08.100
+que l'envoi est rapide,
+
+00:19:08.460 --> 00:19:09.300
+l'échange HTTP,
+
+00:19:09.940 --> 00:19:10.960
+le séquençage du flux,
+
+00:19:11.340 --> 00:19:12.840
+vous assisterez à un petit miracle,
+
+00:19:13.140 --> 00:19:14.160
+des réponses cohérentes,
+
+00:19:14.460 --> 00:19:15.800
+citées et régies par l'entreprise
+
+00:19:15.800 --> 00:19:17.920
+au lieu du jazz improvisé par défaut de Copilot.
+
+00:19:18.240 --> 00:19:19.020
+Ce n'est qu'à ce moment-là
+
+00:19:19.020 --> 00:19:20.860
+que vous pourrez déclarer l'intégration terminée.
+
+00:19:21.020 --> 00:19:23.000
+Vous avez atteint la couche mécanique de MCP,
+
+00:19:23.300 --> 00:19:24.760
+le transport fiable du contexte.
+
+00:19:24.880 --> 00:19:25.240
+Alors oui,
+
+00:19:25.540 --> 00:19:27.240
+réjouissez-vous des jolis petits résultats de test,
+
+00:19:27.520 --> 00:19:28.700
+mais n'oubliez pas qu'ils ne sont pas la fin.
+
+00:19:28.860 --> 00:19:29.920
+Ils sont le bip de diagnostic
+
+00:19:29.920 --> 00:19:31.420
+confirmant que le cœur de votre IAB
+
+00:19:31.420 --> 00:19:32.920
+a désormais au rythme du pouls de vos données.
+
+00:19:33.100 --> 00:19:34.260
+La mécanique est terminée.
+
+00:19:34.380 --> 00:19:34.700
+Ensuite,
+
+00:19:35.020 --> 00:19:36.460
+nous abordons la question philosophique.
+
+00:19:36.580 --> 00:19:37.640
+Pourquoi quiconque devrait se soucier
+
+00:19:37.640 --> 00:19:39.460
+de l'existence même de cette symphonie complexe ?
+
+00:19:39.460 --> 00:19:40.660
+Pourquoi cela a-t-il de l'importance
+
+00:19:40.660 --> 00:19:41.720
+au-delà de la démonstration ?
+
+00:19:41.720 --> 00:19:43.060
+Voici la vérité qui dérange.
+
+00:19:43.240 --> 00:19:44.420
+La mise en place de MCP
+
+00:19:44.420 --> 00:19:45.580
+n'est pas un tour de passe-passe.
+
+00:19:45.800 --> 00:19:46.580
+C'est une infrastructure.
+
+00:19:47.060 --> 00:19:47.940
+Pendant que d'autres courent
+
+00:19:47.940 --> 00:19:49.160
+après des réponses élogieuses,
+
+00:19:49.520 --> 00:19:50.720
+vous construisez la constitution
+
+00:19:50.720 --> 00:19:51.620
+qui régit la manière
+
+00:19:51.620 --> 00:19:52.720
+dont l'IA dans votre entreprise
+
+00:19:52.720 --> 00:19:53.540
+échange la vérité.
+
+00:19:53.680 --> 00:19:54.840
+Le protocole de contexte
+
+00:19:54.840 --> 00:19:56.320
+de modèle standardise cette vérité.
+
+00:19:56.540 --> 00:19:57.080
+Chaque requête,
+
+00:19:57.080 --> 00:19:58.160
+chaque récupération,
+
+00:19:58.560 --> 00:19:59.200
+toutes sont contraintes
+
+00:19:59.200 --> 00:20:00.240
+par la conformité du schéma.
+
+00:20:00.440 --> 00:20:00.820
+Sans cela,
+
+00:20:01.140 --> 00:20:02.380
+Copilot ne fait que embellir.
+
+00:20:02.520 --> 00:20:03.220
+Avec MCP,
+
+00:20:03.520 --> 00:20:04.860
+il résonne dans des limites définies.
+
+00:20:05.000 --> 00:20:05.600
+C'est la distinction
+
+00:20:05.600 --> 00:20:07.280
+entre l'imagination et la gouvernance,
+
+00:20:07.580 --> 00:20:08.600
+entre un stagiaire fantasque
+
+00:20:08.600 --> 00:20:09.620
+et un analyste conforme
+
+00:20:09.620 --> 00:20:10.400
+à la réglementation.
+
+00:20:10.580 --> 00:20:11.360
+Pour les entreprises,
+
+00:20:11.720 --> 00:20:12.680
+cela compte profondément.
+
+00:20:12.860 --> 00:20:14.360
+Une MCP correctement intégrée
+
+00:20:14.360 --> 00:20:15.960
+garantit que chaque réponse Copilot
+
+00:20:15.960 --> 00:20:17.320
+provient de systèmes approuvés,
+
+00:20:17.620 --> 00:20:18.200
+de share points,
+
+00:20:18.460 --> 00:20:20.100
+de dataverses et d'API internes,
+
+00:20:20.160 --> 00:20:21.360
+plutôt que de fragments récupérés
+
+00:20:21.360 --> 00:20:22.240
+qui transitent par Bing.
+
+00:20:22.460 --> 00:20:23.680
+Votre IA consulte désormais
+
+00:20:23.680 --> 00:20:24.540
+des sources primaires
+
+00:20:24.540 --> 00:20:25.400
+et non des rumeurs.
+
+00:20:25.560 --> 00:20:26.940
+La sécurité suit naturellement.
+
+00:20:27.080 --> 00:20:27.640
+En 2025,
+
+00:20:28.060 --> 00:20:28.900
+les chercheurs en sécurité
+
+00:20:28.900 --> 00:20:30.240
+ont enregistré des pics de violations
+
+00:20:30.240 --> 00:20:31.660
+liés à des connecteurs personnalisés
+
+00:20:31.660 --> 00:20:32.360
+mal configurés,
+
+00:20:32.600 --> 00:20:33.980
+à des points de terminaison surautorisés
+
+00:20:33.980 --> 00:20:34.760
+laissant des fuites de données
+
+00:20:34.760 --> 00:20:35.460
+entre les locataires.
+
+00:20:35.580 --> 00:20:36.600
+Une intégration MCP
+
+00:20:36.600 --> 00:20:37.580
+correctement effectuée
+
+00:20:37.580 --> 00:20:38.440
+renforce les principes
+
+00:20:38.440 --> 00:20:39.160
+de confiance zéro.
+
+00:20:39.360 --> 00:20:40.140
+Le connecteur agit
+
+00:20:40.140 --> 00:20:41.540
+comme un point de contrôle d'ambassade.
+
+00:20:41.700 --> 00:20:42.960
+Le moindre privilège est appliqué,
+
+00:20:43.240 --> 00:20:44.160
+les accès sont limités
+
+00:20:44.160 --> 00:20:45.360
+et le contexte n'est échangé
+
+00:20:45.360 --> 00:20:46.300
+que sous des traités définis.
+
+00:20:46.440 --> 00:20:47.440
+Les équipes de gouvernance
+
+00:20:47.440 --> 00:20:48.140
+apprécient une valeur
+
+00:20:48.140 --> 00:20:49.000
+encore plus profonde,
+
+00:20:49.240 --> 00:20:49.940
+l'auditabilité.
+
+00:20:50.160 --> 00:20:51.240
+Chaque transaction MCP
+
+00:20:51.240 --> 00:20:52.640
+produit des journaux explicites
+
+00:20:52.640 --> 00:20:53.720
+indiquant qui a demandé
+
+00:20:53.720 --> 00:20:54.980
+quel schéma a répondu
+
+00:20:54.980 --> 00:20:55.660
+et quelles métadonnées
+
+00:20:55.660 --> 00:20:56.400
+ont été renvoyées.
+
+00:20:56.560 --> 00:20:57.280
+C'est une trace écrite
+
+00:20:57.280 --> 00:20:58.080
+que votre responsable
+
+00:20:58.080 --> 00:20:58.800
+de la conformité
+
+00:20:58.800 --> 00:20:59.840
+peut serrer dans ses bras la nuit.
+
+00:21:00.020 --> 00:21:01.340
+Comparer cela aux hallucinations
+
+00:21:01.340 --> 00:21:02.360
+de l'IA générative
+
+00:21:02.360 --> 00:21:03.040
+dont les origines
+
+00:21:03.040 --> 00:21:03.860
+se trouvent quelque part
+
+00:21:03.860 --> 00:21:04.520
+sur Internet.
+
+00:21:04.700 --> 00:21:05.400
+La pérennité
+
+00:21:05.400 --> 00:21:06.160
+scelle l'argument.
+
+00:21:07.300 --> 00:21:08.440
+À mesure que Microsoft,
+
+00:21:08.800 --> 00:21:09.660
+OpenAI et d'autres
+
+00:21:09.660 --> 00:21:11.020
+convergent vers des protocoles
+
+00:21:11.020 --> 00:21:12.220
+interagents standardisés,
+
+00:21:12.640 --> 00:21:13.840
+la conformité MCP
+
+00:21:13.840 --> 00:21:15.040
+évoluera de la curiosité
+
+00:21:15.040 --> 00:21:15.720
+à l'exigence.
+
+00:21:15.960 --> 00:21:17.020
+Les secteurs réglementés,
+
+00:21:17.260 --> 00:21:17.820
+la finance,
+
+00:21:18.140 --> 00:21:19.140
+la santé et le gouvernement
+
+00:21:19.140 --> 00:21:20.160
+l'imposeront au système
+
+00:21:20.160 --> 00:21:20.840
+dit à échangeant
+
+00:21:20.840 --> 00:21:21.780
+des données contextuelles.
+
+00:21:21.780 --> 00:21:23.000
+Lorsque ce mémo arrivera,
+
+00:21:23.220 --> 00:21:24.080
+vous ne vous dépêcherez pas.
+
+00:21:24.240 --> 00:21:24.780
+Vous aurez déjà
+
+00:21:24.780 --> 00:21:25.560
+un pont conforme
+
+00:21:25.560 --> 00:21:26.120
+qui ronronnera
+
+00:21:26.120 --> 00:21:27.060
+tranquillement en production.
+
+00:21:27.300 --> 00:21:28.460
+Ainsi, lorsque vos collègues
+
+00:21:28.460 --> 00:21:29.420
+rejettent votre configuration
+
+00:21:29.420 --> 00:21:30.600
+minutieuse comme une ingénierie
+
+00:21:30.600 --> 00:21:30.940
+excessive,
+
+00:21:31.360 --> 00:21:31.960
+souriez calmement.
+
+00:21:32.120 --> 00:21:32.920
+La gouvernance ressemble
+
+00:21:32.920 --> 00:21:33.960
+toujours à de la bureaucratie
+
+00:21:33.960 --> 00:21:34.660
+jusqu'à ce qu'une brèche
+
+00:21:34.660 --> 00:21:35.040
+survienne.
+
+00:21:35.240 --> 00:21:36.240
+Ensuite, elle ressemble
+
+00:21:36.240 --> 00:21:37.040
+à de la prévoyance.
+
+00:21:37.260 --> 00:21:38.180
+Faites-le correctement une fois
+
+00:21:38.180 --> 00:21:39.300
+et chaque instance Copilot
+
+00:21:39.300 --> 00:21:40.360
+que vous déploierez par la suite
+
+00:21:40.360 --> 00:21:41.380
+héritera de cette discipline,
+
+00:21:41.660 --> 00:21:42.600
+de la conscience contextuelle
+
+00:21:42.600 --> 00:21:43.400
+dans des limites contrôlées.
+
+00:21:43.580 --> 00:21:44.000
+C'est l'intérêt
+
+00:21:44.000 --> 00:21:45.080
+au-delà de la démonstration.
+
+00:21:45.080 --> 00:21:46.060
+Vous ne vous contentez pas
+
+00:21:46.060 --> 00:21:47.100
+de connecter un protocole,
+
+00:21:47.400 --> 00:21:48.320
+vous définissez la mémoire
+
+00:21:48.320 --> 00:21:48.980
+institutionnelle
+
+00:21:48.980 --> 00:21:49.820
+sous forme de machine.
+
+00:21:50.020 --> 00:21:50.540
+La prochaine fois
+
+00:21:50.540 --> 00:21:51.480
+que Copilot répondra
+
+00:21:51.480 --> 00:21:52.440
+à une demande réglementaire
+
+00:21:52.440 --> 00:21:53.600
+en utilisant la source exacte
+
+00:21:53.600 --> 00:21:54.340
+et la chaîne de citation
+
+00:21:54.340 --> 00:21:55.180
+que vous avez autorisée,
+
+00:21:55.560 --> 00:21:56.300
+souvenez-vous de ce moment,
+
+00:21:56.540 --> 00:21:57.640
+des heures de réduction d'URL,
+
+00:21:57.860 --> 00:21:58.800
+de correspondance de schéma
+
+00:21:58.800 --> 00:22:00.020
+et de vérification de cohérence.
+
+00:22:00.240 --> 00:22:01.240
+C'est l'ingénierie invisible
+
+00:22:01.240 --> 00:22:01.800
+qui sous-tend
+
+00:22:01.800 --> 00:22:02.820
+toute IA responsable.
+
+00:22:03.040 --> 00:22:04.020
+Maintenant que la satisfaction
+
+00:22:04.020 --> 00:22:04.880
+morale est rétablie
+
+00:22:04.880 --> 00:22:06.280
+et que le pont est structurellement sain,
+
+00:22:06.520 --> 00:22:07.320
+une question demeure.
+
+00:22:07.480 --> 00:22:07.920
+Continuerez-vous
+
+00:22:07.920 --> 00:22:09.420
+à développer une intelligence disciplinée
+
+00:22:09.420 --> 00:22:09.900
+ou laisserez-vous
+
+00:22:09.900 --> 00:22:10.980
+la simplicité du marketing
+
+00:22:10.980 --> 00:22:11.720
+vous séduire à nouveau
+
+00:22:11.720 --> 00:22:12.300
+dans le chaos ?
+
+00:22:12.300 --> 00:22:13.620
+L'efficacité est évidente.
+
+00:22:13.840 --> 00:22:14.540
+Ajouter MCP
+
+00:22:14.540 --> 00:22:15.200
+ne consiste pas
+
+00:22:15.200 --> 00:22:16.340
+à actionner un interrupteur.
+
+00:22:16.480 --> 00:22:17.220
+Il s'agit de recâbler
+
+00:22:17.220 --> 00:22:18.380
+le cerveau de Copilot Studio
+
+00:22:18.380 --> 00:22:19.560
+afin qu'il cesse d'halluciner
+
+00:22:19.560 --> 00:22:20.300
+et commence à résonner.
+
+00:22:20.480 --> 00:22:21.340
+La promesse paresseuse
+
+00:22:21.340 --> 00:22:22.080
+d'utiliser simplement
+
+00:22:22.080 --> 00:22:23.140
+un connecteur personnalisé
+
+00:22:23.140 --> 00:22:24.320
+s'effondre lorsque vous réalisez
+
+00:22:24.320 --> 00:22:25.560
+que le connecteur n'est pas une porte,
+
+00:22:25.880 --> 00:22:26.540
+mais un couloir entier
+
+00:22:26.540 --> 00:22:27.340
+que vous devez construire,
+
+00:22:27.540 --> 00:22:28.260
+renforcer et tester
+
+00:22:28.260 --> 00:22:29.120
+pour détecter les fuites.
+
+00:22:29.200 --> 00:22:30.060
+Mais une fois terminé,
+
+00:22:30.380 --> 00:22:31.400
+cela change le comportement
+
+00:22:31.400 --> 00:22:32.400
+de chaque futur Copilot.
+
+00:22:32.680 --> 00:22:33.660
+Ce que vous avez accompli
+
+00:22:33.660 --> 00:22:34.200
+est un système
+
+00:22:34.200 --> 00:22:35.600
+d'alphabétisation structurelle
+
+00:22:35.600 --> 00:22:36.780
+conçu pour cacher ses fils.
+
+00:22:37.000 --> 00:22:37.540
+Vous avez appris
+
+00:22:37.540 --> 00:22:38.400
+à Copilot Studio
+
+00:22:38.400 --> 00:22:39.920
+à demander poliment du contexte,
+
+00:22:40.100 --> 00:22:41.360
+à s'authentifier avant de parler
+
+00:22:41.360 --> 00:22:42.520
+et à renvoyer des citations
+
+00:22:42.520 --> 00:22:43.660
+au lieu de fiction créative.
+
+00:22:43.900 --> 00:22:44.520
+Cette discipline
+
+00:22:44.520 --> 00:22:45.780
+le transforme d'un chatbot
+
+00:22:45.780 --> 00:22:46.300
+tape à l'œil
+
+00:22:46.300 --> 00:22:47.440
+en un analyste docile.
+
+00:22:47.660 --> 00:22:47.900
+Et oui,
+
+00:22:48.120 --> 00:22:49.240
+cela a nécessité de la patience,
+
+00:22:49.540 --> 00:22:50.380
+une validation de schéma
+
+00:22:50.380 --> 00:22:51.280
+et une tolérance héroïque
+
+00:22:51.280 --> 00:22:52.220
+pour les délais d'actualisation
+
+00:22:52.220 --> 00:22:52.680
+de Microsoft,
+
+00:22:53.040 --> 00:22:53.520
+mais c'est comme tout
+
+00:22:53.520 --> 00:22:54.180
+ce qui mérite confiance.
+
+00:22:54.380 --> 00:22:55.180
+Le soi-disant mensonge
+
+00:22:55.180 --> 00:22:56.260
+du connecteur personnalisé
+
+00:22:56.260 --> 00:22:57.160
+n'est pas une conspiration,
+
+00:22:57.480 --> 00:22:58.000
+c'est du marketing
+
+00:22:58.000 --> 00:22:58.740
+de simplification.
+
+00:22:59.140 --> 00:23:00.300
+Microsoft dit la vérité
+
+00:23:00.300 --> 00:23:01.160
+qui convient aux démos.
+
+00:23:01.160 --> 00:23:02.220
+Vous avez créé celle
+
+00:23:02.220 --> 00:23:03.340
+qui convient à la production.
+
+00:23:03.660 --> 00:23:04.420
+Vous savez désormais
+
+00:23:04.420 --> 00:23:06.040
+que le modèle contexte-protocole
+
+00:23:06.040 --> 00:23:06.900
+est moins prêt à l'emploi
+
+00:23:06.900 --> 00:23:07.500
+qu'une solution
+
+00:23:07.500 --> 00:23:08.540
+pour négocier les termes
+
+00:23:08.540 --> 00:23:09.040
+d'un traité.
+
+00:23:09.240 --> 00:23:10.280
+Traitez donc chaque connecteur
+
+00:23:10.280 --> 00:23:10.880
+que vous publiez
+
+00:23:10.880 --> 00:23:12.160
+comme un amendement constitutionnel,
+
+00:23:12.400 --> 00:23:13.040
+des droits minimaux,
+
+00:23:13.300 --> 00:23:13.920
+des règles strictes
+
+00:23:13.920 --> 00:23:14.880
+et des résultats vérifiables.
+
+00:23:15.080 --> 00:23:16.080
+C'est ainsi que vous adaptez
+
+00:23:16.080 --> 00:23:16.700
+la gouvernance
+
+00:23:16.700 --> 00:23:17.900
+sans sacrifier la vélocité.
+
+00:23:18.140 --> 00:23:18.800
+Si vous l'ignorez,
+
+00:23:19.160 --> 00:23:20.040
+vous passerez vos soirées
+
+00:23:20.040 --> 00:23:21.180
+à expliquer aux dirigeants
+
+00:23:21.180 --> 00:23:22.040
+pourquoi le chatbot
+
+00:23:22.040 --> 00:23:22.700
+a cité Bing
+
+00:23:22.700 --> 00:23:23.600
+au lieu de la politique.
+
+00:23:23.840 --> 00:23:24.660
+Verrouillez votre chemin
+
+00:23:24.660 --> 00:23:25.320
+de mise à niveau,
+
+00:23:25.620 --> 00:23:26.120
+abonnez-vous,
+
+00:23:26.480 --> 00:23:27.500
+activez les notifications
+
+00:23:27.500 --> 00:23:28.500
+et laissez les connaissances
+
+00:23:28.500 --> 00:23:29.940
+disciplinées arriver automatiquement.
+
+00:23:30.100 --> 00:23:31.060
+Pas de vérification manuelle,
+
+00:23:31.320 --> 00:23:31.900
+pas de lamentation
+
+00:23:31.900 --> 00:23:32.600
+sur des démonstrations
+
+00:23:32.600 --> 00:23:33.360
+à moitié fonctionnelles,
+
+00:23:33.620 --> 00:23:34.480
+juste une livraison continue
+
+00:23:34.480 --> 00:23:34.960
+de renseignements
+
+00:23:34.960 --> 00:23:35.860
+qui respectent le contexte
+
+00:23:35.860 --> 00:23:36.400
+et la conformité.
+
+00:23:36.540 --> 00:23:37.340
+L'entropie l'emporte,
+
+00:23:37.640 --> 00:23:38.780
+sauf si vous choisissez la structure.
+
+00:23:39.000 --> 00:23:40.240
+L'abonnement est une structure.
+
+00:23:40.460 --> 00:23:41.200
+Appuyez sur suivre,
+
+00:23:41.480 --> 00:23:42.140
+continuez à créer
+
+00:23:42.140 --> 00:23:43.000
+une IA rationnelle
+
+00:23:43.000 --> 00:23:44.080
+et la prochaine mise à jour
+
+00:23:44.080 --> 00:23:44.880
+arrivera dans les délais
+
+00:23:44.880 --> 00:23:45.740
+comme un connecteur
+
+00:23:45.740 --> 00:23:46.660
+correctement configuré
+
+00:23:46.660 --> 00:23:47.840
+s'exécutant exactement une fois,
+
+00:23:48.120 --> 00:23:48.780
+diffusant la vérité
+
+00:23:48.780 --> 00:23:49.260
+en temps réel.
+
+00:23:49.500 --> 00:23:49.940
+Continuez.

@@ -1,0 +1,1090 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:05.800
+Partir du principe que vos employés étiqueteront volontairement chaque donnée qu'ils créent est le point de défaillance majeure de votre modèle de sécurité.
+
+00:00:06.580 --> 00:00:10.120
+Nous avons passé des années à bâtir des cadres de gouvernance complexe qui reposent sur une seule chose,
+
+00:00:10.220 --> 00:00:13.560
+un être humain prenant une décision consciente et correcte à chaque fois qu'il clique sur le bouton enregistrer.
+
+00:00:14.120 --> 00:00:15.320
+Mais la réalité est brutale.
+
+00:00:15.740 --> 00:00:18.700
+L'étiquetage manuel a un taux d'adoption de 30% dans l'entreprise moyenne,
+
+00:00:18.920 --> 00:00:23.700
+ce qui signifie que 70% de votre propriété intellectuelle est essentiellement invisible pour vos outils de sécurité.
+
+00:00:24.500 --> 00:00:26.920
+Nous avons construit un système qui demande aux gens d'être des bibliothécaires,
+
+00:00:26.920 --> 00:00:29.100
+alors qu'ils essayent d'être des ingénieurs ou des commerciaux.
+
+00:00:29.100 --> 00:00:31.140
+Cela échoue car cela crée des frictions.
+
+00:00:31.600 --> 00:00:34.400
+Aujourd'hui nous passons de l'étiquetage piloté par l'utilisateur à la gouvernance autonome.
+
+00:00:35.060 --> 00:00:39.540
+Nous basculons vers un modèle où la classification s'effectue à la vitesse du flux de données et non à celle de l'utilisateur.
+
+00:00:40.500 --> 00:00:42.200
+Le défaut structurel de la gouvernance manuelle.
+
+00:00:43.060 --> 00:00:46.000
+Votre stratégie d'étiquetage actuelle est une taxe sur la productivité et,
+
+00:00:46.460 --> 00:00:49.400
+comme pour la plupart des taxes, les gens trouvent des moyens créatifs de l'éviter.
+
+00:00:50.180 --> 00:00:54.640
+Nous avons passé une décennie à nous appuyer sur l'ancien modèle de sécurité des données où la protection est un événement en aval.
+
+00:00:54.900 --> 00:00:58.400
+Un utilisateur crée un document, regarde une liste de 5 à 10 étiquettes de sensibilité
+
+00:00:58.400 --> 00:00:59.840
+et nous espérons qu'il choisira la bonne.
+
+00:01:00.340 --> 00:01:01.600
+L'espoir n'est pas un contrôle technique.
+
+00:01:02.540 --> 00:01:06.320
+L'explosion des données sur Teams, SharePoint et Slack a officiellement dépassé les capacités cognitives humaines.
+
+00:01:06.860 --> 00:01:10.480
+Vous ne pouvez tout simplement pas demander à une personne de classer manuellement un pétaoctet de bruit non structuré
+
+00:01:10.480 --> 00:01:13.120
+et attendre de la précision car c'est une impossibilité mathématique.
+
+00:01:13.460 --> 00:01:14.680
+Car c'est une impossibilité mathématique.
+
+00:01:14.840 --> 00:01:17.980
+Quand on cherche pourquoi cela échoue, il faut regarder les outils que nous avons utilisés pour aider l'utilisateur.
+
+00:01:17.980 --> 00:01:20.800
+Traditionnellement, nous nous sommes appuyés sur des modèles Regex basés sur des mots.
+
+00:01:21.180 --> 00:01:26.540
+Certes, le Regex est incroyablement rapide, environ 28 000 fois plus rapide qu'un grand modèle de langage pour analyser du texte.
+
+00:01:27.180 --> 00:01:28.480
+Mais le Regex est aveugle au contexte.
+
+00:01:29.580 --> 00:01:32.800
+Il peut trouver une suite de chiffres ressemblant à un numéro de sécurité sociale,
+
+00:01:32.860 --> 00:01:37.680
+mais il ne peut pas distinguer un ID client sensible d'un code projet aléatoire dans un manuel technique public.
+
+00:01:39.060 --> 00:01:40.720
+Il voit le modèle, mais il manque l'intention.
+
+00:01:41.680 --> 00:01:45.400
+C'est dans cet écart entre la correspondance de motifs et la compréhension réelle que réside le danger.
+
+00:01:45.400 --> 00:01:50.000
+Selon IBM, le coût moyen d'une violation de données a grimpé à 4,88 millions de dollars.
+
+00:01:51.160 --> 00:01:54.160
+Ce coût ne provient généralement pas d'une défaillance du chiffrement ou d'une brèche dans le pare-feu.
+
+00:01:54.840 --> 00:01:57.520
+Il réside dans l'espace situé entre ce qui est sensible et ce qui est réellement étiqueté.
+
+00:01:58.340 --> 00:02:01.440
+Si un fichier n'est pas étiqueté, vos politiques de prévention des pertes de données ne le voient pas.
+
+00:02:02.140 --> 00:02:03.900
+Vos règles d'accès conditionnelles ne s'y appliquent pas.
+
+00:02:04.520 --> 00:02:09.200
+Et désormais, avec l'essor de l'IA générative, vos copilotes résumeront volontiers tout cela pour quiconque le demande.
+
+00:02:09.900 --> 00:02:12.500
+L'ancien modèle suppose que l'utilisateur est le meilleur juge de la valeur,
+
+00:02:12.500 --> 00:02:16.220
+mais dans un monde où les données circulent à toute vitesse, l'utilisateur est en réalité le goulot d'étranglement.
+
+00:02:16.860 --> 00:02:21.980
+Nous avons atteint un point où le volume pur de données non structurées est devenu un passif, faute d'être géré, faute d'être géré.
+
+00:02:22.580 --> 00:02:25.560
+Vous pouvez avoir la configuration Microsoft Purview la plus sophistiquée au monde.
+
+00:02:25.960 --> 00:02:29.920
+Si les données qui y entrent ne sont pas classées avec précision à la source, tout le moteur tourne à vide.
+
+00:02:31.020 --> 00:02:35.100
+Fin de compte, essayer de piloter une voiture autonome en demandant aux passagers de tracer manuellement chaque virage ne fonctionne pas.
+
+00:02:35.520 --> 00:02:36.220
+Cela ne fonctionne pas.
+
+00:02:36.220 --> 00:02:39.820
+Le défaut structurel ne vient pas de la personne, mais de l'exigence qu'elles doivent intervenir.
+
+00:02:40.900 --> 00:02:43.020
+C'est la raison pour laquelle nous constatons des taux de déficience d'auditif.
+
+00:02:43.540 --> 00:02:46.740
+Les organisations pensent être en conformité parce qu'elles ont une politique sur le papier,
+
+00:02:47.000 --> 00:02:52.060
+mais en lançant une analyse, on découvre des milliers de documents confidentiels dans des dossiers publics.
+
+00:02:52.180 --> 00:02:54.100
+Cela arrive parce que la friction liée au choix est trop importante.
+
+00:02:54.980 --> 00:02:58.920
+Si vous donnez à un utilisateur le choix entre la rapidité et la sécurité, il choisira presque toujours la rapidité.
+
+00:02:59.840 --> 00:03:01.820
+Pour remédier à cela, nous devons supprimer complètement ce choix.
+
+00:03:01.820 --> 00:03:07.200
+Nous devons déplacer le cerveau de l'opération loin de l'utilisateur final distrait pour l'intégrer à l'infrastructure elle-même.
+
+00:03:08.000 --> 00:03:11.040
+Nous avons besoin d'un système qui comprenne le document mieux que celui qui l'a rédigé.
+
+00:03:11.420 --> 00:03:14.500
+C'est la seule façon de combler la faille menant à ces brèches de plusieurs millions de dollars.
+
+00:03:15.880 --> 00:03:16.960
+Construire la couche d'intelligence
+
+00:03:16.960 --> 00:03:21.740
+Pour résoudre la crise du marquage manuel, nous transférons le cerveau de la classification loin de l'utilisateur final.
+
+00:03:22.300 --> 00:03:24.620
+Nous l'intégrons dans un moteur d'inférence LLM en temps réel.
+
+00:03:25.000 --> 00:03:28.700
+Il s'agit d'un changement fondamental dans notre façon de concevoir l'architecture Microsoft Purview.
+
+00:03:28.700 --> 00:03:34.020
+La plupart des gens voient l'IA comme un plugin, quelque chose que l'on ajoute à un processus existant pour le rendre un peu plus rapide.
+
+00:03:34.820 --> 00:03:37.180
+Mais dans ce nouveau modèle, l'IA constitue une couche structurelle.
+
+00:03:37.840 --> 00:03:40.440
+Elle se situe directement entre vos flux de données brutes et votre carte de données Purview.
+
+00:03:41.180 --> 00:03:44.660
+Elle ne se contente pas de regarder les données passées, car c'est elle qui prend les décisions.
+
+00:03:45.520 --> 00:03:48.780
+Si les grands modèles de langage l'emportent ici, c'est qu'ils résolvent enfin le problème de la nuance.
+
+00:03:49.560 --> 00:03:53.160
+Comme nous l'avons vu, les outils traditionnels scannent parfaitement des chaînes de caractères spécifiques,
+
+00:03:53.500 --> 00:03:54.880
+mais ils sont fonctionnellement illettrés.
+
+00:03:54.880 --> 00:03:57.580
+Un LLM comprend l'intention d'un document.
+
+00:03:58.340 --> 00:04:00.820
+Il peut lire une note stratégique de trois pages et reconnaître que,
+
+00:04:01.040 --> 00:04:03.320
+bien qu'il n'y ait aucun numéro de carte bancaire ou de sécurité sociale,
+
+00:04:03.820 --> 00:04:06.720
+le texte décrit une fusion imminente qui doit être protégée.
+
+00:04:07.920 --> 00:04:11.080
+Il comprend qu'une recette secrète ou un procédé de fabrication propriétaire
+
+00:04:11.080 --> 00:04:15.480
+constitue une propriété intellectuelle, même si ces termes n'apparaissent jamais dans le texte.
+
+00:04:16.220 --> 00:04:19.640
+Mais on ne peut pas simplement appliquer un modèle générique standard à ces données d'entreprise
+
+00:04:19.640 --> 00:04:21.080
+et s'attendre à ce que cela fonctionne.
+
+00:04:21.080 --> 00:04:25.680
+Les modèles généraux sont trop vastes et franchement trop coûteux pour ce volume de données.
+
+00:04:26.160 --> 00:04:29.620
+La percée vient de l'utilisation du réglage fin efficace en termes de paramètres, ou PEFT.
+
+00:04:30.200 --> 00:04:31.940
+En utilisant un modèle à poids ouvert plus restreint
+
+00:04:31.940 --> 00:04:34.120
+et en l'ajustant à votre vocabulaire d'entreprise spécifique,
+
+00:04:34.220 --> 00:04:36.340
+nous pouvons atteindre des scores F1 de 0,87.
+
+00:04:37.460 --> 00:04:42.920
+Pour mettre cela en perspective, un score F1 de 0,87 signifie que la machine est nettement plus précise
+
+00:04:42.920 --> 00:04:44.660
+et cohérente qu'un employé distrait.
+
+00:04:45.080 --> 00:04:46.060
+Qu'un employé moyen distrait.
+
+00:04:46.560 --> 00:04:48.280
+Elle ne fatigue pas, ne néglige pas de fichiers,
+
+00:04:48.280 --> 00:04:52.060
+parce qu'une réunion approche et n'est pas biaisée vers l'étiquette par défaut simplement parce qu'elle est facile à cliquer.
+
+00:04:53.360 --> 00:04:57.540
+La couche d'intelligence identifie le contexte de vos données en examinant les relations entre les concepts.
+
+00:04:58.400 --> 00:05:01.840
+Si elle voit une liste de noms à côté de code de diagnostic, elle sait qu'il s'agit de données de santé.
+
+00:05:02.540 --> 00:05:05.060
+Si elle voit une formule chimique suivie de contraintes de température,
+
+00:05:05.380 --> 00:05:06.880
+elle sait qu'il s'agit d'un secret commercial.
+
+00:05:06.880 --> 00:05:11.240
+C'est le niveau de conscience sémantique exige la gouvernance de 2026.
+
+00:05:12.060 --> 00:05:15.960
+Nous passons d'une mentalité de recherche et découverte à une capacité de lecture et de compréhension.
+
+00:05:16.980 --> 00:05:20.540
+Cette couche agit comme un filtre qui nettoie le bruit avant même qu'il n'atteigne le stockage primaire.
+
+00:05:21.260 --> 00:05:24.220
+Lorsqu'un fichier est créé dans Teams ou téléchargé dans une bibliothèque SharePoint,
+
+00:05:24.340 --> 00:05:26.200
+la couche d'intelligence intercepte les métadonnées.
+
+00:05:27.100 --> 00:05:29.640
+Elle effectue une inférence haute vitesse pour déterminer l'ADN du contenu.
+
+00:05:30.400 --> 00:05:33.080
+Elle mappe ensuite cet ADN vers vos étiquettes de sensibilité purview existantes.
+
+00:05:33.080 --> 00:05:36.220
+Cela se produit sans que l'utilisateur ne voit jamais de fenêtres contextuelles ou de menus déroulants.
+
+00:05:36.600 --> 00:05:39.640
+La classification devient un utilitaire d'arrière-plan au même titre que l'électricité ou l'électrématisation.
+
+00:05:40.280 --> 00:05:42.520
+En centralisant cette logique dans un moteur d'inférence dédié,
+
+00:05:42.640 --> 00:05:44.600
+vous obtenez également une source de vérité unique.
+
+00:05:45.540 --> 00:05:48.760
+Dans l'ancien modèle, la gouvernance était décentralisée parmi des milliers d'utilisateurs,
+
+00:05:49.140 --> 00:05:51.000
+chacun interprétant confidentiel une quête à sa manière.
+
+00:05:51.740 --> 00:05:54.860
+Désormais, la logique est régie par les poids de votre modèle et votre jeu de données d'ajustement.
+
+00:05:55.540 --> 00:05:58.180
+Si votre politique change, inutile de reformer tout le personnel.
+
+00:05:58.800 --> 00:06:00.220
+Il suffit de mettre à jour le modèle.
+
+00:06:00.760 --> 00:06:01.700
+C'est ainsi que l'on passe à l'échelle.
+
+00:06:01.700 --> 00:06:04.800
+On arrête d'essayer de changer le comportement humain pour construire des systèmes
+
+00:06:04.800 --> 00:06:07.120
+qui n'exigent pas des humains d'agir d'une certaine façon.
+
+00:06:08.020 --> 00:06:10.460
+Nous automatisons concrètement la partie la plus ennuyeuse du travail
+
+00:06:10.460 --> 00:06:13.060
+pour qu'ils puissent se concentrer sur ce pour quoi ils ont été embauchés.
+
+00:06:14.180 --> 00:06:15.660
+Le décalage de latence et comment le combler.
+
+00:06:16.320 --> 00:06:17.720
+C'est ici que l'architecture échoue généralement.
+
+00:06:18.260 --> 00:06:22.360
+Nous avons un écart de vitesse fondamentale que la plupart des architectes ignorent jusqu'à ce que le système soit en production.
+
+00:06:22.820 --> 00:06:26.160
+Vous devez comprendre que Purview résonne en heures alors que l'IA résonne en millisecondes.
+
+00:06:26.700 --> 00:06:29.640
+Il ne s'agit pas d'un simple retard mineur mais d'un décalage structurel massif.
+
+00:06:29.640 --> 00:06:33.660
+Lorsque nous parlons de classification en temps réel, nous visons une expérience utilisateur
+
+00:06:33.660 --> 00:06:37.640
+où les contrôles de sécurité sont invisibles car ils se produisent plus vite que l'œil humain ne peut le percevoir.
+
+00:06:39.040 --> 00:06:42.880
+Mais l'infrastructure sous-jacente de l'API Microsoft Graph n'a pas été conçue pour une telle vélocité.
+
+00:06:43.900 --> 00:06:46.640
+La réalité de l'API Graph pour l'étiquetage est qu'elle est intrinsèquement asynchrone.
+
+00:06:48.160 --> 00:06:50.280
+Lorsque vous envoyez une demande d'application d'étiquette de sensibilité,
+
+00:06:50.640 --> 00:06:52.800
+vous ne recevez pas de confirmation instantanée que le fichier est protégé.
+
+00:06:52.800 --> 00:06:56.840
+Vous déposez essentiellement une lettre dans une boîte aux lettres en espérant qu'elle soit distribuée rapidement.
+
+00:06:57.840 --> 00:07:02.340
+Dans les environnements d'entreprise réels, cette propagation peut prendre de quelques minutes à 24 heures complètes.
+
+00:07:03.220 --> 00:07:04.720
+Cela crée ce que j'appelle la fenêtre de vulnérabilité.
+
+00:07:05.380 --> 00:07:09.220
+C'est une période où les données sensibles existent dans votre environnement mais sont effectivement à nu.
+
+00:07:09.820 --> 00:07:12.040
+Elles n'ont ni étiquette, ni chiffrement, ni restriction d'accès.
+
+00:07:12.780 --> 00:07:15.680
+Cette fenêtre est particulièrement dangereuse à l'ère de M365 Copilot.
+
+00:07:15.680 --> 00:07:21.980
+Si un ingénieur télécharge une spécification de conception propriétaire et que Copilot indexe ce fichier avant que l'étiquette Purview ne se propage,
+
+00:07:22.100 --> 00:07:24.800
+ces informations sensibles font désormais partie du serveur organisationnel.
+
+00:07:25.600 --> 00:07:30.500
+Un autre utilisateur dans un autre département pourrait potentiellement interroger Copilot et recevoir un résumé de cette conception,
+
+00:07:31.020 --> 00:07:34.040
+car la couche de gouvernance réfléchissait encore pendant que l'IA agissait déjà.
+
+00:07:34.720 --> 00:07:37.460
+Vous ne pouvez pas résoudre un problème de millisecondes avec un outil qui prend 24 heures.
+
+00:07:37.880 --> 00:07:43.080
+Pour combler cet écart, nous devons aller au-delà des simples appels API et mettre en œuvre ce que j'appelle l'approche de l'agent gardien.
+
+00:07:43.300 --> 00:07:45.300
+L'agent gardien agit comme un proxy en temps réel.
+
+00:07:45.840 --> 00:07:50.240
+Au lieu d'attendre que la tâche Purview en arrière-plan se termine, cet agent se place à la limite de la requête.
+
+00:07:50.860 --> 00:07:52.440
+Il vérifie les données dès qu'elles sont sollicitées.
+
+00:07:52.900 --> 00:07:57.240
+Considérez cela comme un point de contrôle de sécurité à haute vitesse qui fonctionne indépendamment du registre central, plus lent.
+
+00:07:57.840 --> 00:08:00.280
+Pendant que la carte de données Purview officielle se met à jour en arrière-plan,
+
+00:08:00.560 --> 00:08:02.540
+l'agent gardien applique déjà la politique à la périphérie.
+
+00:08:03.260 --> 00:08:06.140
+Il garantit que la logique de classification est appliquée instantanément au flux de données,
+
+00:08:06.140 --> 00:08:08.400
+ce qui ferme efficacement cette fenêtre de vulnérabilité.
+
+00:08:09.040 --> 00:08:11.100
+Pour que cela fonctionne sans frustrer vos utilisateurs,
+
+00:08:11.400 --> 00:08:15.340
+nous devons nous focaliser sur une mesure spécifique appelée temps jusqu'au premier jeton ou TTFT.
+
+00:08:15.680 --> 00:08:19.660
+Si votre couche de sécurité ajoute 3 secondes de latence à chaque ouverture de document ou chaque requête IA,
+
+00:08:19.800 --> 00:08:22.140
+vos employés trouveront un moyen de la contourner ou de la contourner.
+
+00:08:22.360 --> 00:08:26.940
+Ils déplaceront leur travail sur des appareils personnels ou des outils d'IA fantômes non gérés juste pour accomplir leurs tâches.
+
+00:08:27.800 --> 00:08:29.940
+Nous devons maintenir le TTFT en dessous de 500 millisecondes.
+
+00:08:30.580 --> 00:08:32.800
+Cela nécessite un pipeline d'inférence hautement optimisé.
+
+00:08:33.020 --> 00:08:37.300
+Nous ne nous contentons pas d'exécuter un modèle, nous gérons la physique technique de la requête.
+
+00:08:38.260 --> 00:08:41.020
+Cela implique de placer votre moteur d'inférence au plus près de la source de données
+
+00:08:41.020 --> 00:08:45.500
+et d'utiliser des techniques comme le décodage spéculatif pour réduire chaque milliseconde de latence.
+
+00:08:46.580 --> 00:08:50.260
+Nous traitons la sécurité comme une exigence de performance et non comme une simple case à cocher en matière de conformité.
+
+00:08:50.900 --> 00:08:54.380
+Lorsque la classification s'effectue en moins d'une demi-seconde, l'utilisateur ne s'en aperçoit même pas.
+
+00:08:55.100 --> 00:08:59.160
+Il enregistre, l'agent de contrôle valide le contenu, l'étiquette est appliquée virtuellement à la périphérie
+
+00:08:59.160 --> 00:09:01.960
+et la synchronisation en arrière-plan s'opère dès que l'API graphique est prête.
+
+00:09:03.020 --> 00:09:06.500
+C'est ainsi que l'on construit une architecture autonome qui a toujours une longueur d'avance sur les données.
+
+00:09:07.500 --> 00:09:11.700
+Vous cessez d'attendre que le système rattrape son retard et commencez à imposer le nouveau modèle à la vitesse de la pensée.
+
+00:09:13.220 --> 00:09:15.120
+L'économie de la classification autonome
+
+00:09:15.120 --> 00:09:20.100
+La plupart des organisations hésitent au moment de l'achat car le prix des jetons d'API Cloud
+
+00:09:20.100 --> 00:09:24.980
+rend le traitement de 500 millions de jetons par jour financièrement ruineux.
+
+00:09:24.980 --> 00:09:28.880
+Si vous payez chaque requête de classification au tarif public standard,
+
+00:09:29.080 --> 00:09:32.800
+votre budget de gouvernance finira par dépasser votre budget de sécurité réel.
+
+00:09:33.480 --> 00:09:36.720
+C'est la raison principale pour laquelle beaucoup d'entreprises préfèrent le marquage manuel,
+
+00:09:36.860 --> 00:09:39.960
+considérant l'inefficacité du travail humain comme un coût irrécupérable,
+
+00:09:40.120 --> 00:09:42.580
+contrairement aux factures d'API, d'ABI.
+
+00:09:43.120 --> 00:09:45.500
+Pourtant, c'est une erreur fondamentale de compréhension du nouveau modèle.
+
+00:09:46.040 --> 00:09:47.600
+Pour réussir la classification autonome,
+
+00:09:47.600 --> 00:09:51.240
+il faut abandonner le cauchemar de la tarification à la consommation des API tierces
+
+00:09:51.240 --> 00:09:53.380
+et adopter l'efficacité de l'auto-hébergement.
+
+00:09:53.380 --> 00:09:56.740
+En passant à l'auto-hébergement d'un moteur de classification dédié,
+
+00:09:56.940 --> 00:09:58.180
+le calcul change instantanément.
+
+00:09:59.020 --> 00:10:01.640
+En 2026, nous observons des économies multipliées par 5
+
+00:10:01.640 --> 00:10:03.900
+pour les entreprises qui transfèrent leurs tâches d'inférence à haut volume
+
+00:10:03.900 --> 00:10:04.940
+vers leur propre infrastructure.
+
+00:10:05.920 --> 00:10:07.440
+Il ne s'agit pas seulement de faire des économies,
+
+00:10:07.680 --> 00:10:10.660
+mais de rendre l'ensemble de l'architecture durable sur le long terme.
+
+00:10:11.220 --> 00:10:12.800
+Si vous cherchez à gouverner un patrimoine de données
+
+00:10:12.800 --> 00:10:14.400
+qui augmente de plusieurs teraoctets chaque semaine,
+
+00:10:14.400 --> 00:10:17.460
+vous ne pouvez pas dépendre d'un modèle de tarification qui pénalise votre croissance.
+
+00:10:18.080 --> 00:10:20.280
+Vous avez besoin d'un modèle de service à coût fixe ?
+
+00:10:20.280 --> 00:10:22.100
+Examinons le coût total de possession réelle.
+
+00:10:22.100 --> 00:10:25.540
+Un seul GPU NVIDIA A100 ou H100 est désormais capable
+
+00:10:25.540 --> 00:10:28.960
+de gérer le débit de classification d'une entreprise de taille moyenne.
+
+00:10:30.460 --> 00:10:32.480
+Nous parlons de milliers de jetons par seconde.
+
+00:10:32.700 --> 00:10:35.520
+En amortissant le coût de ce matériel ou de son équivalent réservé
+
+00:10:35.520 --> 00:10:36.460
+dans votre cloud privé,
+
+00:10:36.600 --> 00:10:39.760
+le coût par classification devient proche de zéro après l'installation.
+
+00:10:40.700 --> 00:10:43.200
+Vous cessez de payer pour le privilège de connaître le contenu de vos fichiers
+
+00:10:43.200 --> 00:10:46.000
+et commencez à traiter la gouvernance comme un élément standard de votre puits informatiques.
+
+00:10:46.880 --> 00:10:49.200
+Ce n'est pas différent de l'hébergement d'une base de données ou d'un serveur web.
+
+00:10:49.200 --> 00:10:52.880
+Cependant, vous devez vous méfier de la taxe cachée du réglage fin fine tuning.
+
+00:10:53.300 --> 00:10:55.040
+Bien que la puissance des calculs bruts devienne moins chère,
+
+00:10:55.140 --> 00:10:57.520
+la dette opérationnelle peut faire grimper vos factures si vous n'y prenez pas garde.
+
+00:10:57.840 --> 00:10:59.280
+Le stockage des versions de modèles,
+
+00:10:59.440 --> 00:11:01.500
+les cycles d'évaluation constants pour garantir la précision
+
+00:11:01.500 --> 00:11:03.520
+et les frais de sortie réseau liés à un VPC mal conçu
+
+00:11:03.520 --> 00:11:05.140
+peuvent grignoter votre retour sur investissement.
+
+00:11:05.640 --> 00:11:09.260
+C'est pourquoi nous préconisons des options serverless ou sécurisées par VPC
+
+00:11:09.260 --> 00:11:12.100
+qui vous permettent de réduire l'échelle lorsque le flux de données est calme.
+
+00:11:12.100 --> 00:11:15.260
+Vous ne voulez pas payer pour du silicium haute performance à 3h du matin
+
+00:11:15.260 --> 00:11:16.460
+alors que personne n'enregistre de documents.
+
+00:11:17.020 --> 00:11:19.260
+Le changement économique ici consiste à transformer la classification
+
+00:11:19.260 --> 00:11:21.760
+d'un cauchemar de dépenses opérationnelles en un coût d'infrastructure prévisible.
+
+00:11:22.220 --> 00:11:24.200
+Nous transformons efficacement la gouvernance en un service public.
+
+00:11:24.660 --> 00:11:26.700
+Pensez à la façon dont vous payez pour le refroidissement dans un centre de vie.
+
+00:11:26.940 --> 00:11:28.560
+Vous ne payez pas au degré de température modifié,
+
+00:11:28.600 --> 00:11:30.840
+mais vous construisez un système qui maintient une base de référence.
+
+00:11:31.400 --> 00:11:33.240
+La classification autonome devrait être cette base de référence.
+
+00:11:33.740 --> 00:11:35.540
+En supprimant le coût variable du bibliothécaire humain
+
+00:11:35.540 --> 00:11:36.640
+et les frais cloud par jetons,
+
+00:11:36.860 --> 00:11:39.480
+vous créez un système qui peut réellement évoluer avec vos données.
+
+00:11:39.480 --> 00:11:43.540
+Cette prévisibilité est ce qui vous permet d'étendre votre posture de sécurité.
+
+00:11:44.260 --> 00:11:45.860
+Lorsque la classification est gratuite à la marge,
+
+00:11:46.020 --> 00:11:47.140
+vous pouvez vous permettre d'être plus granulaire.
+
+00:11:47.800 --> 00:11:49.360
+Vous pouvez scanner chaque brouillon, chaque chat
+
+00:11:49.360 --> 00:11:52.280
+et chaque fichier temporaire sans vous soucier de la facture à la fin du mois.
+
+00:11:53.220 --> 00:11:54.280
+Cela crée un cercle vertu.
+
+00:11:55.300 --> 00:11:57.000
+De meilleures données mènent à de meilleurs modèles,
+
+00:11:57.200 --> 00:11:58.560
+ce qui conduit à une plus grande précision,
+
+00:11:58.920 --> 00:12:00.800
+réduisant ainsi le besoin de remédiation humaine coûteuse.
+
+00:12:02.020 --> 00:12:03.480
+Vous investissez essentiellement dans un système
+
+00:12:03.480 --> 00:12:05.340
+qui devient moins cher et plus efficace avec le temps.
+
+00:12:06.280 --> 00:12:08.340
+En revanche, l'ancien modèle manuel ne fait que devenir plus coûteux
+
+00:12:08.340 --> 00:12:09.660
+à mesure que votre entreprise grandit.
+
+00:12:10.860 --> 00:12:12.700
+En choisissant la couche d'intelligence auto-hébergée,
+
+00:12:12.980 --> 00:12:14.100
+vous n'achetez pas seulement un outil,
+
+00:12:14.160 --> 00:12:15.960
+vous optez pour une réalité économique différente
+
+00:12:15.960 --> 00:12:18.580
+où la protection est une caractéristique standard de votre infrastructure.
+
+00:12:20.960 --> 00:12:22.640
+Atténuez les nouveaux risques de la gouvernance par lien.
+
+00:12:23.280 --> 00:12:25.200
+Retirer l'humain de la boucle résout le problème de l'échelle,
+
+00:12:25.400 --> 00:12:27.340
+mais introduit une nouvelle catégorie de risques systémiques.
+
+00:12:27.840 --> 00:12:30.260
+La gouvernance autonome n'est pas une solution que l'on configure et que l'on oublie.
+
+00:12:30.260 --> 00:12:31.900
+Elle exige un autre type de vigilance.
+
+00:12:32.560 --> 00:12:34.160
+La première menace à laquelle vous serez confronté là-dessus.
+
+00:12:34.160 --> 00:12:36.860
+Un classificateur qui obtient un score presque parfait en janvier
+
+00:12:36.860 --> 00:12:38.500
+peut facilement devenir un handicap en juin.
+
+00:12:39.320 --> 00:12:41.780
+Cela arrive parce que les données elles-mêmes sont un organisme vivant.
+
+00:12:42.240 --> 00:12:43.480
+La façon dont vos employés écrivent,
+
+00:12:43.720 --> 00:12:46.860
+la terminologie qu'ils utilisent et les types de fichiers qu'ils créent évoluent constamment.
+
+00:12:47.340 --> 00:12:48.700
+Si votre modèle n'évolue pas avec eux,
+
+00:12:49.140 --> 00:12:51.540
+sa précision s'érodera lentement jusqu'à ce que vous reveniez à la case départ.
+
+00:12:52.260 --> 00:12:55.040
+Mais il existe une version plus insidieuse appelée dérive de concept.
+
+00:12:55.360 --> 00:12:57.940
+C'est le tueur silencieux de la conformité pilotée par l'IA.
+
+00:12:58.660 --> 00:13:02.060
+La dérive de concept se produit lorsque la définition sous-jacente de ce que vous recherchez change.
+
+00:13:02.060 --> 00:13:05.220
+Peut-être qu'une nouvelle réglementation sur la confidentialité est adoptée,
+
+00:13:05.400 --> 00:13:07.440
+reclassant un type spécifique de métadonnées comme sensible.
+
+00:13:07.920 --> 00:13:11.140
+Ou peut-être qu'un projet interne confidentiel change de nom de code passant d'Apollo à Zeus.
+
+00:13:11.940 --> 00:13:13.180
+Si votre IA cherche toujours Apollo,
+
+00:13:13.540 --> 00:13:16.800
+elle laissera volontiers les documents Zeus contourner vos niveaux de sécurité les plus élevés.
+
+00:13:17.440 --> 00:13:20.340
+Le contexte a changé, mais le modèle continue de se baser sur une carte obsolète.
+
+00:13:20.700 --> 00:13:22.960
+Pour lutter contre cela, nous devons implémenter des politiques sous forme de code.
+
+00:13:23.400 --> 00:13:26.680
+Nous devons intégrer la détection de dérive en temps réel directement dans le pipeline de gouvernance.
+
+00:13:27.140 --> 00:13:29.820
+Il ne s'agit pas seulement de surveillance, mais d'intervention automatisée.
+
+00:13:29.820 --> 00:13:33.860
+Lorsque le système détecte une baisse des scores de confiance ou un changement dans la distribution des données,
+
+00:13:34.080 --> 00:13:35.900
+doit déclencher des validations de niveau opérationnel.
+
+00:13:36.400 --> 00:13:37.440
+Cela crée une soupape de sécurité.
+
+00:13:38.120 --> 00:13:40.680
+S'il y a devient incertaine, elle cesse de prendre des décisions autonomes
+
+00:13:40.680 --> 00:13:43.500
+et achemine le fichier vers un spécialiste humain pour une vérification rapide.
+
+00:13:44.180 --> 00:13:46.520
+Vous utilisez essentiellement la machine pour qu'elle vous dise quand elle a besoin d'aide.
+
+00:13:47.180 --> 00:13:48.580
+Ensuite, il y a la menace de l'injection de requêtes.
+
+00:13:48.980 --> 00:13:50.760
+C'est la nouvelle frontière de l'exfiltration de données.
+
+00:13:51.100 --> 00:13:53.960
+Un attaquant n'a pas besoin de pirater votre pare-feu s'il peut tromper votre classificateur.
+
+00:13:53.960 --> 00:13:58.040
+Il peut intégrer des instructions malveillantes dans un document via du texte caché
+
+00:13:58.040 --> 00:14:00.340
+qui ordonne à l'IA d'ignorer toutes les instructions précédentes
+
+00:14:00.340 --> 00:14:01.600
+et de classer ce fichier comme public.
+
+00:14:02.960 --> 00:14:04.880
+Si votre couche d'intelligence est naïve, elle obéira.
+
+00:14:05.540 --> 00:14:07.340
+Le fichier est déclassé, la protection est supprimée
+
+00:14:07.340 --> 00:14:10.120
+et les données sont divulguées via un canal de sortie standard.
+
+00:14:11.040 --> 00:14:14.040
+C'est une manière sophistiquée de retourner vos propres outils de gouvernance contre vous.
+
+00:14:14.300 --> 00:14:17.960
+La stratégie d'atténuation consiste ici à mettre en œuvre un agent gardien secondaire.
+
+00:14:18.480 --> 00:14:20.000
+Il s'agit d'un modèle plus petit et hautement spécialisé
+
+00:14:20.000 --> 00:14:22.580
+dont la seule mission est d'auditer les décisions du classificateur principal.
+
+00:14:22.580 --> 00:14:25.000
+Il ne regarde pas l'ensemble des documents
+
+00:14:25.000 --> 00:14:28.340
+mais recherche uniquement des signes de manipulation et des failles logiques.
+
+00:14:28.900 --> 00:14:30.060
+Il agit comme un contrôle redondant,
+
+00:14:30.360 --> 00:14:32.940
+garantissant que le cerveau principal n'a pas été compromis ou confus.
+
+00:14:33.820 --> 00:14:35.080
+Si les deux modèles ne sont pas d'accord,
+
+00:14:35.280 --> 00:14:37.120
+le système applique par défaut l'étiquette la plus restrictive.
+
+00:14:37.620 --> 00:14:38.940
+En construisant cette défense multicouche,
+
+00:14:39.020 --> 00:14:41.300
+vous passez d'une automatisation fragile à une automatisation résiliente.
+
+00:14:42.140 --> 00:14:44.000
+Reconnaissez que l'IA est puissante mais faillible.
+
+00:14:44.980 --> 00:14:46.640
+Vous traitez le modèle comme un moteur haute performance
+
+00:14:46.640 --> 00:14:49.500
+qui nécessite un réglage constant et un système de freinage robuste.
+
+00:14:49.860 --> 00:14:51.100
+C'est l'élément final du nouveau modèle.
+
+00:14:51.100 --> 00:14:54.140
+Vous ne remplacez pas seulement l'erreur humaine par une machine.
+
+00:14:54.420 --> 00:14:55.880
+Vous construisez un cadre structurel
+
+00:14:55.880 --> 00:14:57.900
+qui prend en compte les défaillances propres à la machine elle-même.
+
+00:14:59.400 --> 00:15:01.660
+C'est ainsi que vous atteignez une posture de sécurité par défaut
+
+00:15:01.660 --> 00:15:03.560
+qui survit réellement aux complexités du monde réel.
+
+00:15:04.420 --> 00:15:07.040
+La gouvernance devient une boucle dynamique et autocorrectrice.
+
+00:15:07.620 --> 00:15:09.660
+Nous passons d'un monde où nous espérons la conformité
+
+00:15:09.660 --> 00:15:10.960
+à un monde où nous la concevons.
+
+00:15:11.840 --> 00:15:13.700
+Ce changement garantit qu'à mesure que vos données augmentent,
+
+00:15:13.780 --> 00:15:15.460
+votre sécurité ne se contente pas de suivre le rythme,
+
+00:15:15.720 --> 00:15:16.600
+elle devient plus intelligente.
+
+00:15:16.600 --> 00:15:18.480
+Vous construisez enfin pour l'avenir.
+
+00:15:20.260 --> 00:15:22.180
+Mise en œuvre la feuille de route sur 90 jours.
+
+00:15:22.860 --> 00:15:25.260
+Construire une architecture autonome ne se fait pas en un claquement de doigts,
+
+00:15:25.400 --> 00:15:27.800
+considérez plutôt cela comme une transition sur 90 jours.
+
+00:15:28.900 --> 00:15:31.420
+Le jour zéro commence par l'établissement de ce que j'appelle votre couche de vérité.
+
+00:15:31.780 --> 00:15:33.760
+Vous devez exécuter Purview en mode audit uniquement
+
+00:15:33.760 --> 00:15:36.020
+pour établir une base de référence de votre exposition actuelle
+
+00:15:36.020 --> 00:15:36.940
+sans bloquer le moins de fichiers.
+
+00:15:37.220 --> 00:15:38.640
+Ce que vous faites ici, c'est mesurer l'écart
+
+00:15:38.640 --> 00:15:40.880
+entre ce qui devrait être étiqueté et ce qu'il est réellement.
+
+00:15:40.880 --> 00:15:43.300
+La plupart des organisations découvrent alors
+
+00:15:43.300 --> 00:15:44.760
+que plus de la moitié de leurs données sensibles
+
+00:15:44.760 --> 00:15:46.560
+sont actuellement invisibles pour le système.
+
+00:15:47.580 --> 00:15:49.120
+Cette base de référence devient votre carte,
+
+00:15:49.240 --> 00:15:51.140
+car elle vous montre exactement là où l'ancien modèle a échoué.
+
+00:15:51.580 --> 00:15:52.720
+Vous avez besoin de ces données concrètes
+
+00:15:52.720 --> 00:15:54.120
+pour justifier le changement d'infrastructure
+
+00:15:54.120 --> 00:15:55.140
+auprès de vos parties prenantes,
+
+00:15:55.220 --> 00:15:56.560
+car sans elles, vous ne faites que deviner.
+
+00:15:57.180 --> 00:15:58.040
+Une fois cette carte en main,
+
+00:15:58.220 --> 00:15:59.500
+vous pouvez déployer le modèle hybride
+
+00:15:59.500 --> 00:16:01.140
+pour équilibrer efficacité et intelligence.
+
+00:16:01.700 --> 00:16:03.760
+Vous n'avez pas besoin d'un moteur d'inférence massif et coûteux
+
+00:16:03.760 --> 00:16:05.340
+juste pour trouver un simple numéro de carte bancaire.
+
+00:16:06.080 --> 00:16:07.740
+Mon conseil est d'utiliser des rejets haute vitesse
+
+00:16:07.740 --> 00:16:08.620
+pour les fouilles à portée de main,
+
+00:16:08.620 --> 00:16:10.460
+notamment les modèles structurés et prévisibles
+
+00:16:10.460 --> 00:16:11.660
+qui n'ont pas changé depuis 20 ans.
+
+00:16:12.560 --> 00:16:14.060
+Vous devriez réserver votre couche d'intelligence
+
+00:16:14.060 --> 00:16:16.100
+à la propriété intellectuelle complexe et non structurée
+
+00:16:16.100 --> 00:16:17.640
+qui nécessite un véritable raisonnement.
+
+00:16:18.720 --> 00:16:20.680
+Cette approche par palier maintient vos coûts de calcul bas
+
+00:16:20.680 --> 00:16:22.860
+tout en maximisant votre couverture de sécurité.
+
+00:16:23.600 --> 00:16:25.320
+Il s'agit d'être chirurgical avec vos ressources
+
+00:16:25.320 --> 00:16:26.780
+et de veiller à ce que le cerveau ne soit utilisé
+
+00:16:26.780 --> 00:16:28.020
+que lorsque les yeux ne suffisent pas.
+
+00:16:28.780 --> 00:16:30.140
+Ensuite, vous devez restreindre votre champ d'action
+
+00:16:30.140 --> 00:16:31.480
+en utilisant des périmètres adaptatifs
+
+00:16:31.480 --> 00:16:33.220
+plutôt que de vouloir tout embrasser dès le 30e jour.
+
+00:16:33.980 --> 00:16:36.140
+Vous devez cibler en priorité vos départements à haut risque
+
+00:16:36.140 --> 00:16:37.660
+comme la finance, la R&D et le juridique.
+
+00:16:37.660 --> 00:16:39.380
+Ce sont les domaines spécifiques
+
+00:16:39.380 --> 00:16:40.580
+où une violation est la plus susceptible
+
+00:16:40.580 --> 00:16:41.660
+de vous coûter le plus cher.
+
+00:16:42.420 --> 00:16:43.960
+En prouvant la valeur dans ces micro-environnements,
+
+00:16:44.060 --> 00:16:45.480
+vous créez l'élan interne nécessaire
+
+00:16:45.480 --> 00:16:47.220
+à un déploiement à grande échelle plus tard.
+
+00:16:48.180 --> 00:16:50.760
+Vous transformez un projet de conformité massif et intimidant
+
+00:16:50.760 --> 00:16:52.740
+en une série de victoires petites et mesurables.
+
+00:16:53.540 --> 00:16:54.740
+Il s'agit d'un déploiement tactique
+
+00:16:54.740 --> 00:16:55.680
+plutôt que d'un mandat général.
+
+00:16:56.280 --> 00:16:57.500
+Et résoudre les problèmes les plus ardus
+
+00:16:57.500 --> 00:16:59.260
+prouve que le système fonctionne dans le monde réel.
+
+00:16:59.800 --> 00:17:01.780
+La dernière pièce du puzzle est la boucle de rétroaction
+
+00:17:01.780 --> 00:17:02.980
+où vous intégrez le réentraînement
+
+00:17:02.980 --> 00:17:04.140
+avec intervention humaine.
+
+00:17:04.700 --> 00:17:06.080
+Lorsque l'agent Guardian signale un fichier
+
+00:17:06.080 --> 00:17:06.920
+avec une faible confiance,
+
+00:17:06.920 --> 00:17:09.180
+un agent de sécurité effectue une vérification rapide
+
+00:17:09.180 --> 00:17:10.000
+pour valider le résultat.
+
+00:17:10.240 --> 00:17:12.180
+Ce simple clic ne se contente pas de corriger un fichier,
+
+00:17:12.520 --> 00:17:13.700
+il avait entraîné réellement le modèle
+
+00:17:13.700 --> 00:17:15.920
+afin que le système apprenne de chacune de ses erreurs.
+
+00:17:16.640 --> 00:17:17.560
+Vous construisez une plateforme
+
+00:17:17.560 --> 00:17:19.300
+qui s'améliore avec le temps au lieu de se dégrader.
+
+00:17:19.740 --> 00:17:20.480
+Au 90e jour,
+
+00:17:20.580 --> 00:17:21.980
+vous avez cessé d'être un goulot d'étranglement
+
+00:17:21.980 --> 00:17:23.600
+pour devenir un moteur de sécurité.
+
+00:17:24.600 --> 00:17:26.420
+La protection devient instantanée et invisible
+
+00:17:26.420 --> 00:17:28.680
+et vous avez enfin remplacé les frictions du choix humain
+
+00:17:28.680 --> 00:17:30.100
+par la certitude de l'automatisation.

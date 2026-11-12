@@ -1,0 +1,1165 @@
+WEBVTT
+
+00:00:00.400 --> 00:00:06.860
+Prêt pour 10 jours consacrés à Microsoft 365, copilote l'IA, Azure et aux acteurs qui façonnent l'avenir du travail.
+
+00:00:07.940 --> 00:00:12.000
+En janvier prochain, la M365Con est de retour et nous voyons les choses en grand.
+
+00:00:12.880 --> 00:00:17.980
+Rejoignez-nous pour des sessions en direct, des démos concrètes et des connaissances pratiques partagées par des MVP et des experts du monde entier.
+
+00:00:18.780 --> 00:00:21.100
+Pas de diapositif générique, pas de jargon marketing interminable.
+
+00:00:21.940 --> 00:00:28.720
+Nous abordons les vrais défis. Copilot Studio, les agents IA fabriquent, la sécurité, la gouvernance et l'automatisation.
+
+00:00:28.720 --> 00:00:34.260
+Que vous soyez professionnel de l'informatique, développeur ou dirigeant, des sessions ont été conçues pour vous.
+
+00:00:35.440 --> 00:00:40.160
+Avec 10 journées complètes, vous pourrez explorer de multiples technologies et échanger avec une communauté mondiale.
+
+00:00:41.000 --> 00:00:44.120
+Suivez-nous en direct et rapportez des idées concrètes à votre organisation.
+
+00:00:45.220 --> 00:00:50.880
+Janvier 2027, des 10 jours, une seule communauté, Microsoft, les inscriptions sont désormais ouvertes.
+
+00:00:51.780 --> 00:00:53.000
+Réservez votre place dès aujourd'hui.
+
+00:00:54.140 --> 00:00:58.240
+Rendez-vous sur m365con.net.net.
+
+00:00:58.720 --> 00:01:04.440
+Inscrivez-vous sur m365con.net et nous nous retrouverons en direct en janvier.
+
+00:01:05.380 --> 00:01:07.160
+Imaginez que vous deviez envoyer un message à un collègue.
+
+00:01:07.620 --> 00:01:10.620
+Vous allez le voir, lui donner une note et attendez qu'il la lise et y réponde.
+
+00:01:11.360 --> 00:01:13.080
+Cela fonctionne très bien quand vous êtes tous les deux sur place.
+
+00:01:13.320 --> 00:01:16.580
+Mais que se passe-t-il s'il est en réunion, à déjeuner ou en vacances pour une semaine ?
+
+00:01:16.580 --> 00:01:19.300
+Vous êtes bloqué. Vous ne pouvez pas avancer dans votre travail tant qu'il n'a pas répondu.
+
+00:01:19.660 --> 00:01:22.240
+C'est exactement ce qui se produit lorsque deux applications communiquent directement.
+
+00:01:22.240 --> 00:01:23.800
+Une application envoie une requête et attend.
+
+00:01:24.460 --> 00:01:27.300
+Si l'autre application est l'ante occupée ou en panne, la première est bloquée.
+
+00:01:27.300 --> 00:01:29.580
+Les développeurs appellent cela un couplage fort.
+
+00:01:30.040 --> 00:01:31.060
+Les deux applications sont liées à l'une.
+
+00:01:31.480 --> 00:01:33.260
+Si l'une tombe en panne, l'autre tombe aussi.
+
+00:01:33.640 --> 00:01:36.220
+Dans un système comportant des dizaines de services, c'est un désastre.
+
+00:01:36.560 --> 00:01:37.760
+La solution, placer un intermédiaire en train.
+
+00:01:38.040 --> 00:01:42.120
+Un tampon numérique qui accepte les messages quand l'expéditeur est prêt et les garde jusqu'à ce que le destinataire puisse les traiter.
+
+00:01:42.640 --> 00:01:44.320
+Cet intermédiaire est appelé un courtier de messages bokeh.
+
+00:01:44.680 --> 00:01:47.120
+Et Azure Service Bus est la version Microsoft de cet intermédiaire.
+
+00:01:48.020 --> 00:01:50.060
+Qu'est-ce qu'un courtier de messages en réalité ?
+
+00:01:50.060 --> 00:01:51.820
+Alors qu'est-ce qu'un courtier de messages concrètement ?
+
+00:01:51.820 --> 00:01:54.720
+C'est un logiciel qui se place entre les applications et gère le transfert des messages.
+
+00:01:55.100 --> 00:01:57.240
+L'expéditeur envoie un message au courtier et passe à autre chose.
+
+00:01:57.920 --> 00:01:58.320
+Pas d'attente.
+
+00:01:58.780 --> 00:02:00.580
+Le destinataire récupère le message dès qu'il est prêt.
+
+00:02:01.040 --> 00:02:02.460
+Les deux parties ne communiquent jamais directement.
+
+00:02:02.960 --> 00:02:03.940
+Elles ne communiquent qu'avec le courtier.
+
+00:02:04.340 --> 00:02:06.320
+Les développeurs appellent cela le découplage et c'est tout l'intérêt.
+
+00:02:06.800 --> 00:02:09.040
+Lorsque deux applications sont découplées, elles peuvent échouer indépendamment.
+
+00:02:09.560 --> 00:02:11.680
+Si le destinataire tombe en panne, l'expéditeur ne s'en rende pas compte.
+
+00:02:12.040 --> 00:02:13.520
+Le message reste simplement en attendant le courtier.
+
+00:02:14.020 --> 00:02:16.280
+Quand le destinataire est de nouveau en ligne, il reprend là où il s'était arrêté.
+
+00:02:16.740 --> 00:02:18.120
+Aucune perte de données, aucune erreur à gérer.
+
+00:02:18.600 --> 00:02:19.840
+Elles peuvent également évoluer indépendamment.
+
+00:02:20.520 --> 00:02:23.900
+Si l'émetteur reçoit un flot de trafic, il peut continuer à envoyer des messages aussi vite qu'il le souhaite.
+
+00:02:24.440 --> 00:02:25.560
+Le courtier absorbe le pic de chat.
+
+00:02:25.940 --> 00:02:27.560
+Le récepteur traite les données à son propre rythme.
+
+00:02:28.140 --> 00:02:29.520
+10 messages par minute ou 10 0 0.
+
+00:02:30.060 --> 00:02:33.060
+Et si vous devez mettre à jour une application, vous pouvez le faire sans arrêter tout le système.
+
+00:02:33.660 --> 00:02:34.760
+L'autre côté ne remarque jamais la différence.
+
+00:02:35.400 --> 00:02:36.420
+Voici une façon simple d'y penser.
+
+00:02:36.600 --> 00:02:39.640
+Vous êtes dans un immeuble de bureau et devez donner un document à quelqu'un au troisième étage,
+
+00:02:39.740 --> 00:02:40.840
+mais cette personne est en réunion.
+
+00:02:41.460 --> 00:02:43.140
+Vous pourriez attendre devant la salle de réunion
+
+00:02:43.140 --> 00:02:45.400
+ou laissez le document à la réception.
+
+00:02:46.220 --> 00:02:48.200
+La réceptionniste le prend, vous retournez à votre bureau
+
+00:02:48.200 --> 00:02:49.900
+et le document est remis quand la personne est libre.
+
+00:02:50.640 --> 00:02:52.100
+Le comptoir de réception est votre côté de message.
+
+00:02:52.680 --> 00:02:54.440
+Il accepte le message, le conserve en sécurité
+
+00:02:54.440 --> 00:02:56.200
+et le livre quand le destinataire est prêt.
+
+00:02:57.380 --> 00:02:59.580
+Azure Service Bus, c'est la version entièrement gérée par Microsoft
+
+00:02:59.580 --> 00:03:00.700
+de ce comptoir de réception.
+
+00:03:01.740 --> 00:03:04.000
+Entièrement gérée signifie que vous ne vous souciez pas de l'infrastructure.
+
+00:03:04.520 --> 00:03:06.320
+Pas de serveur à corriger, pas de disque dur à remplacer,
+
+00:03:06.420 --> 00:03:07.300
+pas de sauvegarde à planifié.
+
+00:03:07.680 --> 00:03:08.680
+Microsoft s'occupe de tout cela.
+
+00:03:09.080 --> 00:03:10.080
+Vous créez simplement un espace de nom,
+
+00:03:10.160 --> 00:03:11.520
+configurez vos files d'attente et vos rubriques
+
+00:03:11.520 --> 00:03:12.600
+et commencez à envoyer des messages.
+
+00:03:12.600 --> 00:03:14.040
+C'est de la messagerie sans serveur.
+
+00:03:14.460 --> 00:03:15.600
+Vous payez pour ce que vous utilisez
+
+00:03:15.600 --> 00:03:17.020
+et ne pensez jamais au matériel sous-jacent.
+
+00:03:17.540 --> 00:03:19.740
+Alors comment cet intermédiaire organise-t-il les messages ?
+
+00:03:19.740 --> 00:03:20.960
+Il utilise deux structures principales,
+
+00:03:21.080 --> 00:03:21.840
+les files d'attente et les rubriques.
+
+00:03:22.160 --> 00:03:23.240
+Commençons par la plus simple,
+
+00:03:24.220 --> 00:03:24.940
+anatomie d'un message.
+
+00:03:25.420 --> 00:03:26.420
+Nous avons donc couvert les structures.
+
+00:03:26.840 --> 00:03:28.680
+Parlons maintenant de ce qui circule réellement à travers elles,
+
+00:03:29.220 --> 00:03:29.840
+le message lui-même.
+
+00:03:31.720 --> 00:03:33.560
+Considérez un message dans Azure Service Bus
+
+00:03:33.560 --> 00:03:35.880
+comme un conteneur avec deux parties principales,
+
+00:03:36.600 --> 00:03:37.740
+le corps et les métadonnées.
+
+00:03:38.440 --> 00:03:39.880
+Le corps est votre donnée réelle,
+
+00:03:39.960 --> 00:03:40.940
+ce que vous essayez d'envoyer.
+
+00:03:40.940 --> 00:03:43.180
+Il est généralement formaté en JSON ou en XML.
+
+00:03:43.800 --> 00:03:44.780
+Le texte brut fonctionne aussi.
+
+00:03:45.160 --> 00:03:46.420
+Les données binaires sont prises en charge,
+
+00:03:46.760 --> 00:03:48.660
+mais en pratique, JSON est le format le plus courant.
+
+00:03:49.040 --> 00:03:50.620
+Il est lisible par l'homme, facile à manipuler,
+
+00:03:50.900 --> 00:03:52.300
+et chaque langage de programmation peut le gérer.
+
+00:03:52.760 --> 00:03:54.420
+C'est dans les métadonnées que les choses deviennent intéressantes.
+
+00:03:54.840 --> 00:03:56.780
+Chaque message est accompagné d'un ensemble de propriétés système
+
+00:03:56.780 --> 00:03:58.220
+que Service Bus attribue automatiquement.
+
+00:03:58.220 --> 00:04:01.200
+Des éléments comme un identifiant de message unique,
+
+00:04:01.320 --> 00:04:03.560
+un horodatage indiquant quand le message a été mis en fil d'attente
+
+00:04:03.560 --> 00:04:05.220
+et un numéro de séquence indiquant sa position.
+
+00:04:05.980 --> 00:04:07.040
+Ces éléments sont gérés par le système.
+
+00:04:07.300 --> 00:04:08.780
+Vous ne les définissez pas, ils sont simplement présents.
+
+00:04:09.240 --> 00:04:11.080
+Mais vous pouvez également ajouter vos propres propriétés personnalisées.
+
+00:04:11.640 --> 00:04:13.360
+Il s'agit de perc les valeurs que vous définissez,
+
+00:04:13.660 --> 00:04:15.260
+comme la région du client avec une valeur Europe,
+
+00:04:15.400 --> 00:04:19.300
+le total de la commande avec 29.999.99 ou la priorité,
+
+00:04:19.700 --> 00:04:21.000
+avec une valeur élevée.
+
+00:04:21.920 --> 00:04:24.540
+Ces propriétés personnalisées sont essentielles pour le filtrage dans les rubriques.
+
+00:04:25.000 --> 00:04:27.200
+Vous souvenez-vous des filtres d'abonnement dont nous avons parlé ?
+
+00:04:27.200 --> 00:04:29.420
+Ils fonctionnent en faisant correspondre ces propriétés personnalisées.
+
+00:04:29.840 --> 00:04:31.200
+Vous définissez le filtre qui indique
+
+00:04:31.200 --> 00:04:34.460
+« Ne recevoir que les messages dont la région client est l'Europe picker »
+
+00:04:34.460 --> 00:04:36.360
+et l'abonnement utilise la propriété personnalisée
+
+00:04:36.360 --> 00:04:38.080
+pour décider d'accepter ou non le message.
+
+00:04:38.820 --> 00:04:40.020
+Il existe des limites à la taille des messages.
+
+00:04:40.360 --> 00:04:43.360
+Dans le niveau standard, un message peut atteindre 256 Kiko.
+
+00:04:44.120 --> 00:04:45.720
+C'est suffisant pour la plupart des données commerciales,
+
+00:04:45.800 --> 00:04:47.860
+un enregistrement de commande, un profil client, une confirmation de paiement,
+
+00:04:47.940 --> 00:04:49.140
+tout cela reste bien de paiement, tout cela vaut.
+
+00:04:49.660 --> 00:04:52.340
+Si vous avez besoin de plus, le niveau premium prend en charge les messages jusqu'à Améwa.
+
+00:04:52.880 --> 00:04:54.860
+Cependant, si vous envoyez régulièrement des données plus volumineuses,
+
+00:04:54.860 --> 00:04:56.760
+vous ne devriez probablement pas les mettre dans un message.
+
+00:04:57.480 --> 00:04:59.980
+Stockez les données volumineuses ailleurs et insérez une référence dans le message.
+
+00:05:00.360 --> 00:05:01.100
+C'est le modèle courant.
+
+00:05:01.560 --> 00:05:03.200
+La remise planifiée est une fonctionnalité utile.
+
+00:05:03.560 --> 00:05:04.500
+Vous envoyez un message maintenant,
+
+00:05:04.580 --> 00:05:07.200
+mais demandez à Servicebus de ne le rendre visible qu'à un moment précis dans le futur.
+
+00:05:07.980 --> 00:05:10.520
+Imaginez que vous souhaitiez envoyer un email de rappel dans 24 heures.
+
+00:05:11.100 --> 00:05:13.880
+Vous envoyez le message maintenant avec une heure de mise en file d'attente planifiée pour demain.
+
+00:05:14.560 --> 00:05:15.380
+Servicebus le conserve.
+
+00:05:15.620 --> 00:05:16.180
+Il reste invisible.
+
+00:05:16.420 --> 00:05:17.080
+Personne ne peut le lire.
+
+00:05:17.080 --> 00:05:20.900
+Ensuite, à l'heure prévue, il apparaît dans la file d'attente comme s'il venait d'être envoyé.
+
+00:05:21.640 --> 00:05:25.160
+C'est parfait pour les flux de travail temporels, les rappels, les délais d'attente et les traitements différents.
+
+00:05:25.680 --> 00:05:27.240
+Le cycle de vie d'un message se déroule comme celui-ci.
+
+00:05:27.600 --> 00:05:29.120
+Tout d'abord, il est envoyé dans la file d'attente ou la rubrique.
+
+00:05:29.760 --> 00:05:32.560
+Servicebus le stoppe de manière durable, écrit sur un stockage triple redondant.
+
+00:05:32.820 --> 00:05:34.080
+Ensuite, un récepteur demande un message.
+
+00:05:34.500 --> 00:05:37.060
+Servicebus le verrouille, afin qu'aucun autre récepteur ne puisse le récupérer.
+
+00:05:37.060 --> 00:05:38.360
+Le récepteur traite le message.
+
+00:05:38.940 --> 00:05:41.060
+Si tout se passe bien, le récepteur appelle « Complete eager ».
+
+00:05:41.860 --> 00:05:43.120
+Servicebus supprime le message.
+
+00:05:43.120 --> 00:05:46.320
+Si quelque chose ne va pas, le récepteur peut appeler « CAC abandon ».
+
+00:05:46.320 --> 00:05:49.260
+Le verrou est libéré, et le message retourne dans la file d'attente pour une nouvelle tentative.
+
+00:05:49.900 --> 00:05:52.900
+Si le message continue d'échouer, il finit par être déplacé vers la file d'attente des lettres mortes.
+
+00:05:53.300 --> 00:05:54.060
+Nous en parlerons ensuite.
+
+00:05:54.540 --> 00:05:56.080
+L'essentiel est que les messages sont durables.
+
+00:05:56.540 --> 00:05:58.000
+Ils ne disparaissent pas si un récepteur ne tombe en bas.
+
+00:05:58.340 --> 00:05:59.780
+Ils ne sont pas perdus si le réseau ne tombe en bas.
+
+00:06:00.140 --> 00:06:01.820
+Ils restent dans Servicebus, stockés en toute sécurité,
+
+00:06:02.220 --> 00:06:05.240
+jusqu'à ce qu'ils soient traités avec succès ou explicitement déplacés vers la file d'attente des lettres mortes.
+
+00:06:05.740 --> 00:06:08.440
+Cette fiabilité est la raison même d'utiliser un courtier de messages.
+
+00:06:08.440 --> 00:06:11.620
+Des fonctionnalités avancées qui font la différence.
+
+00:06:12.160 --> 00:06:14.780
+Maintenant, parlons des fonctionnalités qui transforment une simple file d'attente de messages
+
+00:06:14.780 --> 00:06:17.780
+en une plateforme sur laquelle vous pouvez compter en commençant par la file d'attente des lettres mortes.
+
+00:06:18.460 --> 00:06:22.060
+Nous avons mentionné plus tôt que les messages qui échouent continuellement finissent par être déplacés ailleurs.
+
+00:06:22.640 --> 00:06:24.380
+Cet autre endroit, c'est la file d'attente des lettres mortes.
+
+00:06:24.560 --> 00:06:25.860
+Considérez cela comme une cellule de détention.
+
+00:06:26.200 --> 00:06:30.580
+Lorsqu'un message dépasse son nombre maximal de tentatives de remise ou expire après avoir atteint sa durée de vie,
+
+00:06:30.800 --> 00:06:31.460
+il ne disparaît pas.
+
+00:06:31.880 --> 00:06:34.700
+Il est déplacé vers une sous-file d'attente distincte au sein de la même file ou du même abonnement.
+
+00:06:34.700 --> 00:06:38.840
+Vous pouvez inspecter ces messages, comprendre ce qui a échoué et décider quoi faire.
+
+00:06:39.480 --> 00:06:41.360
+Peut-être que les données étaient mal formées et que vous devez les corriger.
+
+00:06:41.900 --> 00:06:43.360
+Peut-être que la logique de traitement contient un bug.
+
+00:06:43.780 --> 00:06:46.180
+Peut-être que le système en aval était hors ligne et que vous voulez réessayer plus tard.
+
+00:06:46.540 --> 00:06:48.240
+La file d'attente des lettres mortes vous offre un plan de secours.
+
+00:06:48.540 --> 00:06:49.620
+Rien n'est perdu silencieusement.
+
+00:06:50.280 --> 00:06:52.380
+Éclaircissons maintenant un malentendu courant concernant les sessions.
+
+00:06:52.960 --> 00:06:56.540
+Par défaut, Azure Service Bus ne garantit pas que les messages sont traités dans l'ordre.
+
+00:06:57.300 --> 00:07:00.080
+Je sais que nous avons dit que les files étaient FIFO, première entrée, première sortie.
+
+00:07:00.080 --> 00:07:03.360
+C'est vrai pour l'arrivée des messages, mais l'ordre de traitement est une autre histoire.
+
+00:07:03.360 --> 00:07:06.440
+Si vous avez plusieurs consommateurs qui récupèrent des messages d'une même file
+
+00:07:06.440 --> 00:07:08.440
+et qu'un message met plus de temps à être traité qu'un autre,
+
+00:07:08.940 --> 00:07:10.440
+le second peut finir avant le premier.
+
+00:07:11.360 --> 00:07:11.980
+L'ordre est perdu.
+
+00:07:12.500 --> 00:07:13.260
+Les sessions corrigent cela.
+
+00:07:13.660 --> 00:07:15.220
+Une session regroupe les messages associés.
+
+00:07:15.900 --> 00:07:17.600
+Vous assignez un ID de session à chaque message,
+
+00:07:17.780 --> 00:07:20.280
+comme un numéro de commande client ou un ID d'instance de workflow.
+
+00:07:20.820 --> 00:07:24.020
+Tous les messages ayant le même ID de session sont traités par le même consommateur,
+
+00:07:24.200 --> 00:07:25.180
+un par un, dans l'ordre.
+
+00:07:25.920 --> 00:07:27.140
+Aucun autre consommateur ne peut y toucher.
+
+00:07:27.280 --> 00:07:30.040
+Cela vous permet un traitement strictement FIFO au sein de cette session.
+
+00:07:30.040 --> 00:07:33.600
+Différentes sessions peuvent toujours être traitées en parallèle par différents consommateurs.
+
+00:07:34.060 --> 00:07:36.740
+Ainsi, vous maintenez votre débit tout en préservant l'ordre là où c'est important.
+
+00:07:37.120 --> 00:07:38.940
+La détection des doublons est une autre fonctionnalité intéressante.
+
+00:07:39.300 --> 00:07:40.320
+Parfois, le réseau connaît des OK.
+
+00:07:40.820 --> 00:07:43.280
+Votre application envoie un message, mais la réponse est perdue.
+
+00:07:43.700 --> 00:07:46.020
+Alors, votre application le renvoie pensant que le premier n'est jamais arrivé.
+
+00:07:46.860 --> 00:07:49.260
+Sans détection des doublons, ce message serait traité deux fois.
+
+00:07:50.120 --> 00:07:52.000
+Avec elle, Service Bus mémorise l'ID du message
+
+00:07:52.000 --> 00:07:55.040
+pendant une fenêtre configurable généralement, jusqu'à 30 jours.
+
+00:07:55.040 --> 00:07:58.740
+S'il voit à nouveau le même ID, il rejette silencieusement le doublon.
+
+00:07:59.340 --> 00:08:00.860
+Le récepteur ne sait jamais qu'il y a eu une nouvelle tentative.
+
+00:08:01.360 --> 00:08:04.100
+Les transactions permettent de regrouper plusieurs opérations en unités atomiques.
+
+00:08:04.780 --> 00:08:06.660
+Peut-être devez-vous récupérer un message d'une file de traité
+
+00:08:06.660 --> 00:08:08.380
+et envoyer un résultat vers une autre file.
+
+00:08:08.900 --> 00:08:11.080
+Si une étape échoue, vous voulez que tout soit annulé.
+
+00:08:11.580 --> 00:08:12.920
+Le message retourne dans la première file.
+
+00:08:13.380 --> 00:08:14.300
+Le résultat n'est jamais envoyé.
+
+00:08:14.620 --> 00:08:15.520
+Tout reste cohérent.
+
+00:08:16.200 --> 00:08:17.700
+C'est crucial pour les systèmes financiers
+
+00:08:17.700 --> 00:08:19.960
+où un traitement partiel est pire qu'une absence de traitement.
+
+00:08:20.620 --> 00:08:22.340
+Le transfert automatique vous permet de chaîner les files en train.
+
+00:08:22.340 --> 00:08:25.680
+Les messages arrivent dans une file et sont automatiquement transférés vers une autre.
+
+00:08:26.220 --> 00:08:28.040
+C'est utile pour construire des pipelines de traitement.
+
+00:08:28.600 --> 00:08:29.980
+Un message brut arrive, est validé,
+
+00:08:30.060 --> 00:08:32.320
+puis est transféré vers une autre file d'attente pour le travail réel.
+
+00:08:32.720 --> 00:08:33.760
+La première file d'attente reste pour.
+
+00:08:34.040 --> 00:08:35.440
+La seconde file d'attente gère le gros du travail.
+
+00:08:35.920 --> 00:08:37.780
+Et le report vous permet d'ignorer temporairement un message.
+
+00:08:38.500 --> 00:08:39.420
+Peut-être recevez-vous un message,
+
+00:08:39.640 --> 00:08:41.240
+mais les données auxquelles il fait référence ne sont pas encore prêtes.
+
+00:08:41.560 --> 00:08:42.120
+Vous pouvez le reporter.
+
+00:08:42.660 --> 00:08:44.060
+Il reste dans la file d'attente, mais il est invisible.
+
+00:08:44.620 --> 00:08:46.040
+Plus tard, en utilisant le numéro de séquence,
+
+00:08:46.100 --> 00:08:48.020
+vous pouvez le récupérer et le traiter au bon moment.
+
+00:08:48.660 --> 00:08:50.940
+Ces fonctionnalités distinguent une simple file d'attente d'un système
+
+00:08:50.940 --> 00:08:52.440
+sur lequel vous pouvez bâtir votre entreprise.
+
+00:08:53.220 --> 00:08:54.500
+Service bus face aux alternatives.
+
+00:08:55.280 --> 00:08:57.820
+Alors, qu'en choisir service bus plutôt qu'autre chose ?
+
+00:08:57.820 --> 00:08:58.480
+Laissez-moi vous expliquer.
+
+00:08:59.020 --> 00:09:00.720
+Les Azure Storage Cue sont l'option la plus simple,
+
+00:09:00.900 --> 00:09:02.980
+peu coûteuse, rapide et facile à configurer.
+
+00:09:03.720 --> 00:09:04.400
+Mais elles sont limitées.
+
+00:09:04.880 --> 00:09:07.100
+Les messages sont limités à 64 kéco et vous n'avez pas.
+
+00:09:07.320 --> 00:09:10.080
+De rubriques, de sessions, de lettres mortes ou de transactions.
+
+00:09:11.000 --> 00:09:13.100
+Elles sont idéales pour les files d'attente de tâches de fonds basiques
+
+00:09:13.100 --> 00:09:14.260
+où il suffit de décharger du travail.
+
+00:09:14.600 --> 00:09:17.060
+Mais si vous avez besoin de l'une des fonctionnalités avancées dont nous avons parlé,
+
+00:09:17.380 --> 00:09:18.120
+vous les dépasserez vite.
+
+00:09:18.880 --> 00:09:20.720
+Event Hub est conçu pour quelque chose de totalement différent.
+
+00:09:21.420 --> 00:09:22.760
+Le streaming d'événements à haut débit.
+
+00:09:23.580 --> 00:09:25.740
+Pensez à des millions d'événements par seconde provenant d'appareils IoT
+
+00:09:25.740 --> 00:09:26.780
+ou de journaux d'applications.
+
+00:09:27.820 --> 00:09:29.960
+Ce n'est pas un courtier de messages, c'est un pipeline à gestion de données.
+
+00:09:30.460 --> 00:09:32.200
+Vous ne l'utiliserez donc pas pour des flux de travail transactionnel.
+
+00:09:32.560 --> 00:09:35.260
+Vous l'utilisez lorsque vous devez capturer et traiter des flux massifs de données.
+
+00:09:36.680 --> 00:09:38.920
+Event Grid est l'option légère, un système de publication abonnement
+
+00:09:38.920 --> 00:09:40.480
+pour les déclencheurs pilotés par les événements.
+
+00:09:41.420 --> 00:09:42.960
+Lorsqu'un blob est téléchargé vers le stockage,
+
+00:09:42.960 --> 00:09:44.520
+Event Grid peut déclencher une Azure Function.
+
+00:09:45.340 --> 00:09:47.860
+Lorsqu'une ressource est créée, il peut notifier d'autres services.
+
+00:09:48.320 --> 00:09:50.140
+C'est rapide, bon marché, parfait pour les scénarios réactifs,
+
+00:09:50.240 --> 00:09:51.180
+mais ce n'est pas une file d'attente.
+
+00:09:51.540 --> 00:09:53.580
+Il ne conserve pas les messages pour un traitement ultérieur,
+
+00:09:53.740 --> 00:09:55.460
+donc si le récepteur est hors ligne, l'événement est perdu.
+
+00:09:56.220 --> 00:09:57.920
+Maintenant, Service Bus se situe juste au milieu.
+
+00:09:58.580 --> 00:10:00.400
+Il offre les fonctionnalités riches d'un courtier d'entreprise,
+
+00:10:00.540 --> 00:10:02.060
+sans la complexité de gestion qui va avec.
+
+00:10:02.880 --> 00:10:04.620
+Si vous avez besoin de file d'attente de lettres mortes,
+
+00:10:04.700 --> 00:10:06.560
+de sessions, de transactions, de rubriques avec filtres
+
+00:10:06.560 --> 00:10:08.600
+ou d'une livraison garantie, Service Bus est le bon choix.
+
+00:10:08.880 --> 00:10:10.080
+Qu'en est-il de Kafka ?
+
+00:10:10.080 --> 00:10:11.080
+C'est une toute autre discussion.
+
+00:10:11.880 --> 00:10:14.060
+Service Bus est destiné aux commandes et aux flux de travail métier,
+
+00:10:14.060 --> 00:10:16.800
+tandis que Kafka est destiné au streaming d'événements et à l'analytique.
+
+00:10:17.280 --> 00:10:18.580
+Beaucoup de grands systèmes utilisent les deux.
+
+00:10:19.120 --> 00:10:20.740
+Service Bus gère la messagerie opérationnelle,
+
+00:10:20.840 --> 00:10:22.080
+Kafka gère le pipeline de données.
+
+00:10:22.580 --> 00:10:24.000
+Ils sont complémentaires, pas concurrents.
+
+00:10:24.320 --> 00:10:25.340
+Voici une règle empirique simple.
+
+00:10:25.740 --> 00:10:28.980
+Si vous demandez « Ce message a-t-il été traité correctement ? »
+
+00:10:28.980 --> 00:10:29.880
+Utilisez Service Bus.
+
+00:10:30.520 --> 00:10:33.600
+Si vous demandez « Puis-je rejouer le flux d'événements de la semaine dernière ? »
+
+00:10:33.600 --> 00:10:34.180
+Utilisez Kafka.
+
+00:10:34.600 --> 00:10:35.760
+Des outils différents pour des tâches différentes.
+
+00:10:36.380 --> 00:10:37.200
+Cas d'utilisation réelle.
+
+00:10:37.720 --> 00:10:39.040
+Illustrons cela par quelques exemples.
+
+00:10:39.360 --> 00:10:40.880
+Voici comment Service Bus fonctionne en production.
+
+00:10:41.240 --> 00:10:42.120
+Commençons par l'e-commerce.
+
+00:10:42.760 --> 00:10:44.360
+Un client passe une commande sur un site web.
+
+00:10:44.900 --> 00:10:46.000
+Le serveur web prend la commande,
+
+00:10:46.100 --> 00:10:48.120
+envoie immédiatement un message dans une file d'attente Service Bus,
+
+00:10:48.200 --> 00:10:51.680
+puis répond au client « Merci. Votre commande est confirmée. Merci. Votre commande est confirmée. »
+
+00:10:51.680 --> 00:10:53.600
+Le client reçoit une réponse rapide sans attendre.
+
+00:10:54.720 --> 00:10:57.220
+En arrière-plan, un groupe de services de traitement extrait les messages de cette file.
+
+00:10:57.760 --> 00:10:58.680
+Un service traite le paiement.
+
+00:10:58.880 --> 00:10:59.860
+Un autre vérifie le stock.
+
+00:11:00.000 --> 00:11:01.580
+Un troisième prépare l'étiquette d'expédition.
+
+00:11:02.180 --> 00:11:05.140
+Chaque service prend le message suivant, effectue sa tâche et passe au suivant.
+
+00:11:05.840 --> 00:11:07.040
+Le client ne voit rien de tout cela.
+
+00:11:07.460 --> 00:11:08.180
+Pas simplement la confirmation.
+
+00:11:08.180 --> 00:11:10.480
+C'est le modèle classique de traitement asynchrone.
+
+00:11:11.380 --> 00:11:12.660
+Un retour immédiat pour l'utilisateur.
+
+00:11:12.920 --> 00:11:13.880
+Un travail lourd en arrière-plan.
+
+00:11:14.480 --> 00:11:15.800
+Les systèmes financiers vont encore plus loin.
+
+00:11:16.340 --> 00:11:18.220
+Le traitement des paiements exige une livraison garantie.
+
+00:11:18.760 --> 00:11:20.620
+Vous ne pouvez pas perdre une transaction ni la traiter deux fois.
+
+00:11:21.260 --> 00:11:22.460
+Vous avez besoin de séquencement et de transaction.
+
+00:11:22.860 --> 00:11:24.000
+Service Bus vous offre tout cela.
+
+00:11:24.480 --> 00:11:25.960
+Un moyen de paiement arrive et traité,
+
+00:11:26.100 --> 00:11:27.880
+et le résultat est envoyé vers une autre file.
+
+00:11:28.540 --> 00:11:29.860
+En cas d'échec, tout est annulé,
+
+00:11:29.980 --> 00:11:31.860
+garantissant qu'aucun transfert d'argent ne soit éronné.
+
+00:11:32.800 --> 00:11:33.920
+C'est là que Service Bus excelle.
+
+00:11:34.380 --> 00:11:36.320
+Seulement transférer des données, mais les transférer en toute sécurité.
+
+00:11:36.320 --> 00:11:38.220
+Pensons maintenant à la diffusion multi-services, Fana.
+
+00:11:38.620 --> 00:11:40.100
+Un nouveau client s'inscrit sur votre plateforme.
+
+00:11:40.580 --> 00:11:41.660
+Vous voulez que le CRM soit informé,
+
+00:11:41.720 --> 00:11:43.460
+que le système marketing envoie un email de bienvenue
+
+00:11:43.460 --> 00:11:44.740
+et que l'équipe support crée un ticket.
+
+00:11:45.240 --> 00:11:46.440
+Au lieu d'appeler trois services différents,
+
+00:11:46.540 --> 00:11:48.000
+vous publiez un message sur un sujet appelé
+
+00:11:48.000 --> 00:11:49.680
+client-scrit, client-inscrit et gun-tube.
+
+00:11:50.280 --> 00:11:51.760
+Chaque service possède son propre abonnement.
+
+00:11:52.240 --> 00:11:53.840
+L'abonnement CRM reçoit chaque message.
+
+00:11:54.340 --> 00:11:56.000
+L'abonnement marketing filtre les nouveaux clients.
+
+00:11:56.260 --> 00:11:58.620
+Et l'abonnement support filtre les clients premium.
+
+00:11:59.560 --> 00:12:00.840
+Un seul message, trois réactions.
+
+00:12:00.840 --> 00:12:03.000
+Et si vous ajoutez un quatrième service plus tard,
+
+00:12:03.060 --> 00:12:04.180
+il suffit de créer un nouvel abonné.
+
+00:12:04.560 --> 00:12:05.480
+L'expéditeur ne change jamais.
+
+00:12:05.840 --> 00:12:07.640
+Les entreprises de logistique utilisent cela à grande échelle.
+
+00:12:07.900 --> 00:12:09.080
+Imaginez un système de suivi de colis
+
+00:12:09.080 --> 00:12:10.920
+où des centaines de milliers de camions envoient des mises à jour
+
+00:12:10.920 --> 00:12:12.840
+de localisation toutes les quelques secondes.
+
+00:12:13.800 --> 00:12:14.900
+Chaque mise à jour est un message
+
+00:12:14.900 --> 00:12:16.940
+et les mises à jour de chaque colis doivent être traitées dans l'ordre.
+
+00:12:17.580 --> 00:12:19.100
+Vous ne pouvez pas traiter la mise à jour à car livrée
+
+00:12:19.100 --> 00:12:20.360
+qu'une nouvelle avant celle de Kuneu et Kuneu.
+
+00:12:20.940 --> 00:12:21.660
+Les sessions gèrent cela.
+
+00:12:22.700 --> 00:12:24.340
+Chaque colis reçoit son propre ID de session
+
+00:12:24.340 --> 00:12:27.100
+et toutes les mises à jour le concernant passent par la même session dans l'ordre.
+
+00:12:27.100 --> 00:12:29.720
+Des colis différents peuvent toujours être traités en parallèle.
+
+00:12:30.380 --> 00:12:32.200
+Des millions de colis et des milliards de mises à jour,
+
+00:12:32.280 --> 00:12:33.100
+le tout géré de manière fiable.
+
+00:12:33.680 --> 00:12:35.640
+Les architectures de microservices utilisent Service Bus
+
+00:12:35.640 --> 00:12:37.120
+comme colonne vertébrale de communication.
+
+00:12:38.240 --> 00:12:39.640
+Les services ne s'appellent pas directement entre eux.
+
+00:12:40.020 --> 00:12:40.740
+Ils échangent des messages.
+
+00:12:41.980 --> 00:12:43.360
+Le service A envoie une commande dans une file.
+
+00:12:43.460 --> 00:12:45.460
+Le service B la récupère et effectue le travail.
+
+00:12:46.200 --> 00:12:47.960
+Le service C publie un événement vers un sujet
+
+00:12:47.960 --> 00:12:50.820
+et les services D et E réagissent chacun à leur manière.
+
+00:12:51.400 --> 00:12:52.780
+Pas d'appel direct, pas de couplage fort.
+
+00:12:53.280 --> 00:12:54.940
+Chaque service peut être mis à jour, mis à l'échelle
+
+00:12:54.940 --> 00:12:56.480
+ou remplacé sans toucher aux autres.
+
+00:12:56.480 --> 00:12:58.700
+Voici un modèle courant dans les entreprises plus anciennes.
+
+00:12:58.940 --> 00:13:01.240
+Elle possède un système existant sur site difficile à remplacer
+
+00:13:01.240 --> 00:13:03.480
+mais souhaite utiliser des services cloud modernes.
+
+00:13:04.160 --> 00:13:05.620
+Alors, elle compte se fausser avec Service Bus.
+
+00:13:06.060 --> 00:13:08.280
+Le système existant envoie des messages dans une file d'attente
+
+00:13:08.280 --> 00:13:09.580
+que les applications cloud consomment.
+
+00:13:10.140 --> 00:13:11.960
+L'ancien système ignore qu'il communique avec le cloud
+
+00:13:11.960 --> 00:13:14.340
+et le cloud ignore qu'il communique avec un ancien système.
+
+00:13:14.980 --> 00:13:17.180
+Service Bus se place au milieu pour traduire et relayer.
+
+00:13:17.760 --> 00:13:19.400
+La livraison planifiée gère les tâches temporelles.
+
+00:13:20.320 --> 00:13:21.800
+Envoyer un email de rappel dans 24 heures.
+
+00:13:22.500 --> 00:13:24.720
+Invalider cette réservation dans 30 minutes si elle n'est pas confirmée.
+
+00:13:24.720 --> 00:13:27.820
+Générer un rapport hebdomadaire chaque lundi à 8h0.
+
+00:13:28.380 --> 00:13:30.140
+Vous envoyez le message maintenant avec une date future
+
+00:13:30.140 --> 00:13:32.700
+et Service Bus le retient pour le libérer au bon moment.
+
+00:13:33.580 --> 00:13:35.160
+Pas de tâche cron, pas de minuteur en arrière-plan,
+
+00:13:35.240 --> 00:13:36.460
+juste un message avec une temporisation.
+
+00:13:36.960 --> 00:13:38.740
+Le fil conducteur de tous ces exemples est identique.
+
+00:13:40.020 --> 00:13:41.220
+L'émetteur n'attend pas le récepteur
+
+00:13:41.220 --> 00:13:43.720
+et le récepteur n'a pas besoin d'être en ligne lors de l'envoi.
+
+00:13:44.420 --> 00:13:45.020
+Ils sont découplés.
+
+00:13:45.380 --> 00:13:48.660
+Ce qui rend le système plus résilient, plus évolutif et plus facile à modifier.
+
+00:13:48.660 --> 00:13:52.380
+La vue d'ensemble, pourquoi tout cela s'articule ainsi ?
+
+00:13:52.380 --> 00:13:54.200
+Alors qu'est-ce que Service Bus exactement ?
+
+00:13:54.200 --> 00:13:55.980
+C'est l'épine dorsale qui permet aux services indépendants
+
+00:13:55.980 --> 00:13:57.900
+de communiquer de façon fiable sans dépendance mutuelle.
+
+00:13:59.120 --> 00:14:00.100
+Trois mots résument le concept.
+
+00:14:00.320 --> 00:14:01.740
+Découpler, mettre en tampon et acheminer.
+
+00:14:02.320 --> 00:14:04.400
+Découpler signifie que les services n'ont pas besoin de se connaître.
+
+00:14:04.960 --> 00:14:06.520
+Ils connaissent seulement la file d'attente ou le sujet.
+
+00:14:07.160 --> 00:14:09.640
+Cela signifie que vous pouvez modifier un service sans casser les autres,
+
+00:14:09.800 --> 00:14:11.600
+en mettre un à l'échelle sans impacter le reste
+
+00:14:11.600 --> 00:14:13.680
+et déployer des mises à jour pendant que les autres tournent.
+
+00:14:14.480 --> 00:14:16.080
+Mettre en tampon signifie qu'en cas de pic de trafic,
+
+00:14:16.080 --> 00:14:17.140
+toute la file d'attente absorbe la charge.
+
+00:14:17.580 --> 00:14:20.720
+L'émetteur continue à pleine vitesse tandis que le récepteur traite à son rythme.
+
+00:14:20.980 --> 00:14:22.780
+Personne ne plante, personne n'est surchargé
+
+00:14:22.780 --> 00:14:25.180
+et le tampon lisse les piques et comble les creux.
+
+00:14:26.460 --> 00:14:29.720
+Acheminer signifie que les files envoient des messages à un seul consommateur
+
+00:14:29.720 --> 00:14:31.320
+tandis que les sujets diffusent à plusieurs,
+
+00:14:31.640 --> 00:14:35.780
+avec des filtres garantissant que chacun reçoit ce dont il a besoin.
+
+00:14:36.760 --> 00:14:38.860
+Les files d'attente gèrent la distribution de travail point à point
+
+00:14:38.860 --> 00:14:41.000
+et les sujets gèrent la diffusion vers plusieurs consommateurs.
+
+00:14:41.760 --> 00:14:43.500
+Des fonctionnalités avancées gèrent les cas limites.
+
+00:14:43.500 --> 00:14:45.940
+Les échecs vont en fil de lettres mortes,
+
+00:14:46.080 --> 00:14:47.460
+les sessions utilisateurs sont ordonnées,
+
+00:14:47.620 --> 00:14:48.460
+les doublons sont détectés,
+
+00:14:48.540 --> 00:14:50.500
+les transactions assurent la cohérence et...
+
+00:14:50.500 --> 00:14:51.500
+...
+
+00:14:51.500 --> 00:14:55.500
+...
+
+00:14:55.500 --> 00:14:56.500
+...
+
+00:14:56.500 --> 00:14:58.500
+...
+
+00:14:58.500 --> 00:14:59.500
+...
+
+00:14:59.500 --> 00:15:00.500
+...

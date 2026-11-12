@@ -1,0 +1,811 @@
+WEBVTT
+
+00:00:00.340 --> 00:00:07.080
+Siap untuk 10 hari pembahasan Microsoft 365, Copilot AI, Azure, dan para tokoh pembentuk masa depan kerja.
+
+00:00:07.860 --> 00:00:12.000
+Januari ini, M365 Con kembali hadir dan kami tampil lebih besar.
+
+00:00:12.780 --> 00:00:18.240
+Bergabunglah dengan kami dalam sesi langsung demo dunia nyata dan pengetahuan praktis dari para MVP dan pakar industri di seluruh dunia.
+
+00:00:18.860 --> 00:00:21.300
+Tanpa slide umum, tanpa jargon yang tak ada abisnya.
+
+00:00:21.920 --> 00:00:28.780
+Kami akan membahas tantangan nyata, Copilot Studio, agen AI, fabrik, keamanan, tata kelola, dan otomatisasi VMA.
+
+00:00:28.780 --> 00:00:34.280
+Baik Anda seorang profesional TI, pengembang, atau pemimpin bisnis, ada sesi yang dirancang untuk Anda.
+
+00:00:35.440 --> 00:00:40.080
+Selama 10 hari penuh, Anda dapat menjelajahi berbagai teknologi dan terhubung dengan komunitas global.
+
+00:00:40.940 --> 00:00:44.300
+Tonton secara langsung dan bawa pulang wawasan praktis untuk organisasi Anda.
+
+00:00:45.180 --> 00:00:48.820
+Januari 2027, 10 hari, satu komunitas Microsoft.
+
+00:00:49.420 --> 00:00:50.540
+Pendaftaran sudah dibuka sekarang.
+
+00:00:51.860 --> 00:00:55.420
+Kunjungi m365con.net dan amankan tempat Anda hari ini.
+
+00:00:55.420 --> 00:00:58.780
+Itu adalah m365con.net.
+
+00:01:00.120 --> 00:01:04.760
+Bergabunglah sekarang di m365con.net dan sampai jumpa secara langsung di bulan Januari.
+
+00:01:05.280 --> 00:01:08.520
+Selamat datang di episode lain dari potongan pengetahuan Microsoft di m365FM.
+
+00:01:08.900 --> 00:01:09.980
+Saya pembawa cara dengan Copilot.
+
+00:01:10.160 --> 00:01:13.100
+Topik hari ini adalah sesuatu yang hampir ditemui oleh siapapun yang bekerja dengan Azure.
+
+00:01:13.800 --> 00:01:19.640
+Anda membuat mesin virtual baru dan standarnya adalah alamat IP publik dengan port RDP-39 yang terbuka ke internet.
+
+00:01:20.520 --> 00:01:24.040
+Jika Anda sudah melakukan ini cukup lama, Anda mungkin menanyakan pertanyaan yang sama dengan saya.
+
+00:01:24.040 --> 00:01:26.440
+Apakah ini benar-benar satu-satunya cara untuk masuk ke server saya?
+
+00:01:26.940 --> 00:01:31.800
+Masalahnya adalah setiap port yang terbuka adalah target dan kelompok ransomware terus-menerus memindai RDP yang terbuka.
+
+00:01:32.280 --> 00:01:34.000
+Ini bukan soal apakah mereka akan menemukan tapi kapan.
+
+00:01:34.440 --> 00:01:40.440
+Di akhir episode ini, Anda akan memahami apa sebenarnya Azure Bastion itu dan bagaimana ia menyediakan cara yang lebih baik untuk mengakses web Anda secara langsung.
+
+00:01:40.820 --> 00:01:46.980
+Kita akan melihat cara lama, mengapa itu bermasalah dan cara yang lebih baik ditambah integrasi Enter ID baru yang membuatnya jauh lebih sederhana duga yang Anda duga.
+
+00:01:47.500 --> 00:01:49.980
+Cara lama, jemboks dan RDP publik?
+
+00:01:50.820 --> 00:01:52.080
+Jadi mari kita mulai dengan cara yang lama.
+
+00:01:52.080 --> 00:01:54.140
+Pengaturan tradisionalnya seperti ini.
+
+00:01:54.360 --> 00:01:57.740
+Anda mendepui VM, memberikan IP publik, dan membuka port RDP 3389.
+
+00:01:58.580 --> 00:02:01.620
+Kemudian Anda menambahkan aturan grup keamanan jaringan untuk membatasi siapa yang bisa masuk.
+
+00:02:01.900 --> 00:02:04.920
+Mungkin Anda membatasinya ke rentang IP kantor Anda atau titik akhir VPN.
+
+00:02:05.340 --> 00:02:06.300
+Itu adalah pola dasarnya.
+
+00:02:06.620 --> 00:02:09.480
+Tetapi ada model lain yang sudah ada selama bertahun-tahun, yaitu jemboks.
+
+00:02:09.920 --> 00:02:11.300
+Agap saya jatuh seperti pos pemeriksaan kamu.
+
+00:02:11.660 --> 00:02:14.560
+Anda harus melewatinya sebelum Anda bisa mencapai bagian lain dari jaringan Anda.
+
+00:02:14.940 --> 00:02:18.180
+Jemboks adalah satu VM yang bertindak sebagai gerbang ke dalam jaringan pribadi Anda.
+
+00:02:18.180 --> 00:02:23.320
+Anda melakukan RDP ke kotak itu terlebih dahulu, lalu dari sana Anda melompat ke server lain di dalam jaringan Anda.
+
+00:02:23.860 --> 00:02:28.020
+Ini adalah ide sederhana yang telah berhasil selama bertahun-tahun dan masih berfungsi di lingkungan kecil satu.
+
+00:02:28.360 --> 00:02:32.220
+Masalahnya adalah metode ini hanya berhasil jika Anda memperkuat menambal mantau dan tidak pernah melakukan kesalahan.
+
+00:02:32.460 --> 00:02:36.260
+Masalahnya bukan karena tidak bisa bekerja, melainkan karena butuh upaya terus-menerus agar tetap.
+
+00:02:36.640 --> 00:02:37.560
+Jadi inilah masalah yang sebenarnya.
+
+00:02:37.560 --> 00:02:39.340
+Jemboks hanyalah VM biasa.
+
+00:02:39.860 --> 00:02:44.100
+VM tersebut memerlukan pemberuan OS, antivirus, baseline keamanan, dan seseorang untuk mengelola semua.
+
+00:02:44.460 --> 00:02:47.580
+VM tersebut memiliki IP publik dengan port RDP atau SSH yang terbuka.
+
+00:02:47.940 --> 00:02:51.060
+Meskipun Anda membatasi port tersebut dengan aturan NSG, mereka tetap dapat ditemukan.
+
+00:02:51.320 --> 00:02:52.900
+Mereka tetap dipindai setiap hari.
+
+00:02:54.980 --> 00:02:57.400
+Dalam skala besar, mengelola Jemboks menjadi sangat rumit.
+
+00:02:57.780 --> 00:03:01.480
+Anda memiliki banyak VM di berbagai wilayah, konfigurasi yang tidak konsisten, dan penyimpangan patch.
+
+00:03:02.040 --> 00:03:03.500
+Satu tim berkuat VM mereka tim lain tidak.
+
+00:03:03.500 --> 00:03:09.300
+Dan biaya tersembunyi yang jarang dibahas adalah jam kerja admin yang dihabiskan untuk menambah, memperkuat, dan memecahkan masalah sistem ini.
+
+00:03:09.600 --> 00:03:12.540
+Saya pernah melihat perkiraan sekitar 3 jam per bulan hanya untuk pemeliharaan.
+
+00:03:12.780 --> 00:03:13.500
+Itu adalah biaya yang nyata.
+
+00:03:14.100 --> 00:03:16.300
+Jadi bagaimana jika ada layanan yang menangani semua ini untuk Anda?
+
+00:03:16.780 --> 00:03:20.480
+Layanan yang menghapus endpoint publik sepenuhnya dan memberi Anda akses yang lebih bersih dan aman.
+
+00:03:21.200 --> 00:03:21.920
+Apa itu Azure Bastien?
+
+00:03:22.500 --> 00:03:24.140
+Jadi inilah definisi paling sederhana yang bisa sederhana.
+
+00:03:24.620 --> 00:03:32.280
+Azure Bastien adalah layanan PAS terkelola penuh yang memberi Anda akses RDPP dan SSH yang aman ke VM Azure tanpa mengekspos IP publik pada VM tersebut.
+
+00:03:32.280 --> 00:03:37.880
+Hanya itu, tanpa IP publik, tanpa port terbuka, tanpa endpoint manajemen yang terekspos, anggap sejenis berterolongan.
+
+00:03:38.200 --> 00:03:42.660
+Anda terhubung ke Bastien melalui HTTPS dan Bastien terhubung ke VM Anda secara pribadi dalam jaringan virtual.
+
+00:03:43.200 --> 00:03:48.000
+Browser Anda berkomunikasi dengan Bastien pada port 43, port yang sama dengan yang Anda gunakan untuk situs web app.
+
+00:03:48.320 --> 00:03:53.480
+Bastien kemudian berbicara ke VM Anda menggunakan RDPP atau SSH, tetapi percakapan itu tetap berada di dalam jaringan virtual Anda.
+
+00:03:53.920 --> 00:03:55.200
+Dunia luar tidak akan pernah melihatnya.
+
+00:03:55.640 --> 00:03:57.140
+Sekarang inilah perbedaan utama dengan jambung.
+
+00:03:57.520 --> 00:03:58.360
+Bastien bukanlah sebuah VM.
+
+00:03:58.760 --> 00:04:00.320
+Ini bukan sesuatu yang perlu Anda tambah atau pelihara.
+
+00:04:00.620 --> 00:04:01.560
+Microsoft menangani semua itu.
+
+00:04:01.560 --> 00:04:05.700
+Pembaruan OS, penguatan keamanan, dan penskalaan, semuanya diurus untuk Anda.
+
+00:04:06.100 --> 00:04:07.100
+Anda menyebarkannya dan menggunakan.
+
+00:04:07.440 --> 00:04:10.220
+Untuk penggunaan dasar, Anda terhubung dari portal Azure langsung di browser Anda.
+
+00:04:10.600 --> 00:04:14.940
+Tidak perlu perangkat lunak klien tambahan, tidak perlu menginstall klien VPN, tidak perlu mengonfigurasi klien RDPP.
+
+00:04:15.260 --> 00:04:16.560
+Hanya browser dan login Azure Anda.
+
+00:04:17.160 --> 00:04:21.060
+VM Anda tetap pribadi, tidak perlu IP publik, tidak ada port RDPP yang terekspos ke internet.
+
+00:04:21.600 --> 00:04:23.120
+Dan inilah hal tentang model keamanan modern.
+
+00:04:23.740 --> 00:04:25.560
+Bastien sangat cocok dengan kerangka kerja Zero Trust.
+
+00:04:26.080 --> 00:04:29.400
+Akses dibatasi oleh identitas dan kebijakan, bukan oleh lokasi jaringan.
+
+00:04:29.400 --> 00:04:31.460
+Anda tidak bisa masuk hanya karena berada di tentang IP yang mudah.
+
+00:04:31.840 --> 00:04:34.220
+Anda bisa masuk karena Anda adalah orang yang tepat dengan izin yang tepat.
+
+00:04:34.740 --> 00:04:38.520
+Mari kita bahas cara kerjanya dibanding layar, karena arsitekturnya lebih sederhana dari yang Anda kira.
+
+00:04:39.360 --> 00:04:40.260
+Cara kerja Azure Bastien
+
+00:04:40.260 --> 00:04:43.440
+Bastien diterapkan ke subnet khusus di jaringan virtual Anda,
+
+00:04:44.040 --> 00:04:46.720
+dan subnet tersebut harus diberi nama Azure Bastien Subnet
+
+00:04:46.720 --> 00:04:48.960
+dengan ruang alamat 26 atau lebih besar,
+
+00:04:49.340 --> 00:04:51.400
+minimal sekitar 64 alamat IP yang memberikan ruang,
+
+00:04:51.600 --> 00:04:53.480
+bagi layanan untuk beroperasi dan melakukan skala.
+
+00:04:54.060 --> 00:04:55.380
+Seperti yang disebut eksklusif untuk Bastien,
+
+00:04:55.480 --> 00:04:56.880
+jadi tidak ada hal lain yang bisa ditempatkan di sana.
+
+00:04:56.880 --> 00:04:58.840
+Tidak ada VM, tidak ada layanan lain, tidak ada apa-apa.
+
+00:04:59.220 --> 00:05:00.820
+Hal ini menjaga semuanya tetap bersih dan aman,
+
+00:05:00.900 --> 00:05:02.860
+dan Anda tahu bersih apa yang ada di subnet tersebut dan apa fungsi.
+
+00:05:03.340 --> 00:05:04.660
+Saat Anda terhubung melalui portal,
+
+00:05:04.800 --> 00:05:06.980
+browser Anda membuka CCTLS KIP Public Bastien
+
+00:05:06.980 --> 00:05:10.060
+di port 440 P3 terenkripsi agar tidak ada yang bisa melihat aktivitas Anda.
+
+00:05:10.540 --> 00:05:14.700
+Kemudian Bastien memulai RDP atau SSH ke VM target Anda melalui jaringan privat,
+
+00:05:14.980 --> 00:05:18.480
+sehingga VM melihat koneksi berasal dari dalam jaringan virtual, bukan dari internet.
+
+00:05:19.340 --> 00:05:21.080
+Dan VM tersebut bahkan tidak tahu bahwa dunia luar itu.
+
+00:05:21.160 --> 00:05:24.320
+Bastien dapat melayani VM di vnet yang sama dan vnet yang dipiring,
+
+00:05:24.320 --> 00:05:27.960
+serta dengan SKW yang tepat bahkan mesin on-premises yang terhubung melalui Express Route atau VPN.
+
+00:05:28.560 --> 00:05:31.920
+Anda bisa menggunakan satu penerapan Bastien untuk menjangkau VM di berbagai jaringan
+
+00:05:31.920 --> 00:05:34.380
+selama semuanya terhubung dan berada di tenant yang sama.
+
+00:05:35.080 --> 00:05:37.380
+Cara cerdas untuk memperketat keamanan lebih lanjut adalah
+
+00:05:37.380 --> 00:05:41.440
+dengan menggunakan grup keamanan jaringan untuk hanya mengizinkan RDP dan SSH dari subnet Bastien.
+
+00:05:41.720 --> 00:05:44.700
+Dengan begitu, meskipun seseorang entah bagaimana bisa masuk ke jaringan virtual Anda,
+
+00:05:44.780 --> 00:05:46.500
+mereka tetap tidak bisa mengakses port management tersebut.
+
+00:05:46.500 --> 00:05:47.640
+Mereka harus melalui Bastien,
+
+00:05:47.800 --> 00:05:50.360
+yang berarti mereka harus memiliki identitas dan izin yang tepat terlebih dahulu.
+
+00:05:50.700 --> 00:05:53.120
+Ini saja sudah merupakan peningkatan besar dibandingkan jump box,
+
+00:05:53.120 --> 00:05:56.660
+tetapi ada fitur baru yang meningkatkannya lebih jauh dan semuanya tentang identitas.
+
+00:05:58.360 --> 00:05:59.380
+Integrasi antara AD
+
+00:05:59.380 --> 00:06:01.320
+Ini mengubah segalanya.
+
+00:06:02.180 --> 00:06:05.260
+Selama bertahun-tahun, ada satu kendala dengan Bastien yang mengganggu banyak orang.
+
+00:06:05.860 --> 00:06:08.980
+Anda masih memerlukan akun lokal VM, nama pengguna, kata Sandi,
+
+00:06:09.220 --> 00:06:11.460
+atau kunci SSH yang harus Anda kelola di setiap mesin.
+
+00:06:12.040 --> 00:06:14.980
+Jadi, meskipun Bastien menyelesaikan masalah keamanan jaringan,
+
+00:06:15.060 --> 00:06:16.800
+Anda masih terjebak dengan masalah identitas yang lalu.
+
+00:06:17.160 --> 00:06:18.680
+Kata Sandi berbeda di VM berbeda,
+
+00:06:18.940 --> 00:06:21.900
+akun yang tidak pernah dihapus saat seseorang meninggalkan tim sungguh berantakan.
+
+00:06:21.900 --> 00:06:24.460
+Kemudian pada tahun 2025, Microsoft mengubahnya.
+
+00:06:24.900 --> 00:06:27.260
+Mereka menambahkan autentikasi antara AD di bawaan untuk Bastien,
+
+00:06:27.360 --> 00:06:28.280
+dan itu mengubah segalanya.
+
+00:06:28.900 --> 00:06:32.360
+Sekarang Anda bisa masuk ke VM Windows melalui Bastien menggunakan identitas kerja Anda,
+
+00:06:32.500 --> 00:06:34.520
+tanpa akun lokal dan tanpa kata Sandi untuk diingat.
+
+00:06:35.160 --> 00:06:36.320
+Cukup gunakan kredensial antara AD.
+
+00:06:36.520 --> 00:06:39.980
+Nama pengguna dan kata Sandi yang sama dengan digunakan untuk email, Teams, dan SharePoint Anda.
+
+00:06:40.860 --> 00:06:44.400
+Antara AD menghadirkan MFA dan kebijakan akses bersyarat ke login VM Anda.
+
+00:06:44.560 --> 00:06:48.040
+Jadi, kebijakan yang sama, yang melindungi email dan aplikasi Anda kini melindungi serveran.
+
+00:06:48.040 --> 00:06:51.520
+Jika perusahaan Anda mewajibkan MFA untuk mengakses data sensitif,
+
+00:06:51.680 --> 00:06:55.420
+permintaan MFA yang sama akan muncul saat Anda mencoba melakukan RDP ke VM.
+
+00:06:56.200 --> 00:06:59.700
+Dan jika kebijakan akses bersyarat Anda memblokir login dari lokasi yang tidak terpercaya,
+
+00:06:59.860 --> 00:07:00.680
+itu juga akan berlaku.
+
+00:07:01.200 --> 00:07:04.040
+Server Anda mewarisi postur keamanan yang sama dengan seluruh lingkungan Anda.
+
+00:07:04.500 --> 00:07:06.100
+Ada beberapa persyaratan yang perlu Anda ketahui.
+
+00:07:06.100 --> 00:07:10.640
+VM harus menjalankan Windows 10, 20H2, atau yang lebih baru atau Windows Server 2002,
+
+00:07:10.820 --> 00:07:13.340
+dan Anda harus menginstal ekstensi login AD di VM tersebut.
+
+00:07:13.880 --> 00:07:16.740
+Anda juga perlu menetapkan peran RBAC yang tepat kepada pengguna Anda.
+
+00:07:16.740 --> 00:07:20.080
+Ada dua peran di sini, virtual machine user login untuk akses standar,
+
+00:07:20.300 --> 00:07:23.240
+dan virtual machine administrator login jika seseorang memerlukan hub admin.
+
+00:07:23.760 --> 00:07:24.840
+Ini adalah pemisahan yang jelas,
+
+00:07:25.020 --> 00:07:27.980
+yang memungkinkan Anda memberikan tingkat akses yang tepat sesuai kebutuhan, tidak lebih.
+
+00:07:28.820 --> 00:07:30.040
+Setelah semuanya diatur dengan benar,
+
+00:07:30.340 --> 00:07:33.280
+Enter ID akan muncul sebagai jenis autentikasi default di bilah koneksi Bastien,
+
+00:07:33.280 --> 00:07:34.920
+dan hanya perlu satu klik untuk masuk.
+
+00:07:35.660 --> 00:07:38.120
+Tidak perlu mengetik nama pengguna, tidak perlu mencari kata sandi,
+
+00:07:38.240 --> 00:07:40.420
+tidak perlu menyalin kunci SSH cukup klik dan sembengkan.
+
+00:07:40.840 --> 00:07:43.060
+Di sinilah model jambok selama benar-benar tidak relevan,
+
+00:07:43.160 --> 00:07:45.080
+karena dengan Bastien dan Enter ID secara bersamaan,
+
+00:07:45.080 --> 00:07:47.360
+Anda mendapatkan sesuatu yang tidak pernah bisa diberikan oleh Campbox.
+
+00:07:47.840 --> 00:07:50.820
+Akses berbasis identitas yang didukung oleh tumpukan keamanan lengkap Anda,
+
+00:07:50.960 --> 00:07:52.320
+bukan sekadar akun lokal di VM.
+
+00:07:53.300 --> 00:07:54.880
+Harga SKU dan realitas dunia nyata.
+
+00:07:55.420 --> 00:07:56.180
+Berikut bicara soal biaya.
+
+00:07:56.720 --> 00:07:58.620
+Semua orang ingin tahu berapa biaya Bastien yang sebenarnya.
+
+00:07:59.320 --> 00:08:02.140
+Terdapat empat tingkatan, developer, basic, standar, dan premium.
+
+00:08:02.520 --> 00:08:03.220
+Developer gratis.
+
+00:08:03.760 --> 00:08:05.200
+Ini ditujukan untuk penggunaan, bukan pekerjaannya.
+
+00:08:05.660 --> 00:08:07.560
+Anda hanya dapat menghubungkan satu VM dalam satu waktu,
+
+00:08:07.640 --> 00:08:08.240
+dan ia berjalan-jalan.
+
+00:08:08.740 --> 00:08:10.560
+Bagus untuk belajar, tapi jangan penting di sana.
+
+00:08:11.220 --> 00:08:13.160
+Basic mulai dari sekitar 0,19 per jam,
+
+00:08:13.160 --> 00:08:14.700
+sekitar 140 per bulan.
+
+00:08:15.340 --> 00:08:16.660
+Ini berfungsi untuk pengaturan kecil,
+
+00:08:16.760 --> 00:08:17.920
+tetapi Anda kehilangan beberapa fitur.
+
+00:08:18.280 --> 00:08:19.300
+Tidak ada dukungan klien native,
+
+00:08:19.440 --> 00:08:20.460
+tidak ada unggah atau undo file,
+
+00:08:20.560 --> 00:08:21.460
+tidak ada tautan yang dapat dibagi.
+
+00:08:21.840 --> 00:08:23.000
+Cukup untuk akses portal dasar,
+
+00:08:23.100 --> 00:08:23.960
+tetapi tidak ada fitur check.
+
+00:08:24.380 --> 00:08:26.300
+Standar seharga 0,29 per jam,
+
+00:08:26.420 --> 00:08:27.640
+sekitar 211 per bulan.
+
+00:08:28.160 --> 00:08:29.740
+Itu sudah termasuk dua instan secara default.
+
+00:08:30.180 --> 00:08:31.880
+Dan di sini Anda benar-benar mendapatkan fitur-fitur unggung.
+
+00:08:32.400 --> 00:08:33.220
+Dukungan klien native,
+
+00:08:33.320 --> 00:08:35.580
+sehingga Anda dapat menggunakan klien RDP atau SSH
+
+00:08:35.580 --> 00:08:36.440
+biasa daripada browser.
+
+00:08:36.920 --> 00:08:38.380
+Tautan yang dapat dibagikan untuk akses sementara.
+
+00:08:38.820 --> 00:08:39.480
+Unggar dan undo file.
+
+00:08:39.480 --> 00:08:42.500
+Koneksi berbasis IP untuk menjangkau mesin on-premise
+
+00:08:42.500 --> 00:08:43.820
+melalui Express Route atau VPN.
+
+00:08:44.640 --> 00:08:46.520
+Premium biayanya 0,27 per jam,
+
+00:08:46.760 --> 00:08:48.020
+sekitar 200 dolar per bulan,
+
+00:08:48.180 --> 00:08:49.080
+juga dengan dua instansi.
+
+00:08:49.820 --> 00:08:51.440
+Nah, ini sedikit lebih murah daripada standar per jamnya.
+
+00:08:52.280 --> 00:08:53.680
+Premium menambahkan perekaman sesi
+
+00:08:53.680 --> 00:08:54.860
+dan penerapan khusus privat.
+
+00:08:55.320 --> 00:08:57.040
+Itu berarti biasanya sendiri tidak melalukan IP publik.
+
+00:08:57.380 --> 00:08:58.900
+Ini sangat penting bagi lingkungan yang syarat kepatuh.
+
+00:08:59.680 --> 00:09:00.940
+Nah, inilah perbandingan yang benar-benar penting.
+
+00:09:01.440 --> 00:09:02.560
+VM Jambox mungkin hanya memakan
+
+00:09:02.560 --> 00:09:04.040
+biaya 35 hingga 50 per bulan
+
+00:09:04.040 --> 00:09:05.140
+untuk komputasi dan penyimpanan,
+
+00:09:05.200 --> 00:09:06.200
+tetapi itu bukan biaya sebenarnya.
+
+00:09:06.200 --> 00:09:08.280
+Sebenarnya, biaya tersembunyi,
+
+00:09:08.340 --> 00:09:09.720
+patching, hardening, pemantauan,
+
+00:09:09.780 --> 00:09:11.500
+dan pengelolaan VM tersebut seringkali mendorong
+
+00:09:11.500 --> 00:09:13.920
+total biaya sebenarnya hingga lebih dari 200 dolar per bulan.
+
+00:09:14.280 --> 00:09:15.620
+Tiga jam waktu admin dengan biaya,
+
+00:09:15.760 --> 00:09:18.040
+60 dolar per jam saja sudah mencapai 180 dolar.
+
+00:09:18.460 --> 00:09:21.040
+Tambahkan biaya VM dan Anda mencapai 220 dolar atau lebih.
+
+00:09:21.620 --> 00:09:23.940
+Jadi, bastian standar seharga 200 dolar per bulan.
+
+00:09:24.060 --> 00:09:24.900
+Terlihat cukup masuk akal
+
+00:09:24.900 --> 00:09:27.080
+jika Anda memperhitungkan semua hal yang tidak perlu Anda bayar lagi.
+
+00:09:27.740 --> 00:09:29.280
+Untuk sebagian besar lingkungan produksi,
+
+00:09:29.420 --> 00:09:30.840
+standar atau premium adalah pilihan tepat.
+
+00:09:31.100 --> 00:09:32.460
+Perbedaan biaya antara keduanya
+
+00:09:32.460 --> 00:09:34.460
+dengan jam box yang dikelola dengan baik sangat kecil,
+
+00:09:34.460 --> 00:09:36.840
+sedangkan keuntungan keamanan dan operasionalnya sangat besar.
+
+00:09:37.960 --> 00:09:38.820
+Mari kita rangkum semuanya
+
+00:09:38.820 --> 00:09:40.040
+dan lihat bagaimana bagian-bagian ini
+
+00:09:40.040 --> 00:09:40.860
+menyatuh menjadi gambarannya.
+
+00:09:41.620 --> 00:09:43.420
+Gambaran besarnya, bagaimana semuanya terhubung.
+
+00:09:44.180 --> 00:09:45.060
+Mari kita lihat lebih luas
+
+00:09:45.060 --> 00:09:46.240
+dan melihat bagaimana semuanya menengah.
+
+00:09:46.940 --> 00:09:48.220
+Mode lama terlihat seperti ini.
+
+00:09:48.620 --> 00:09:49.760
+IP publik di VM Anda,
+
+00:09:50.100 --> 00:09:51.020
+port RDP terbuka,
+
+00:09:51.740 --> 00:09:53.000
+jam box yang perlu terus dirawat,
+
+00:09:53.160 --> 00:09:55.420
+dan akun lokal yang tersebar di setiap mesin.
+
+00:09:56.180 --> 00:09:57.980
+Setiap bagian adalah masalah terpisah yang harus Anda saikan.
+
+00:09:58.700 --> 00:09:59.480
+Keamanan jaringan,
+
+00:09:59.580 --> 00:10:00.740
+patching, manajemen identitas,
+
+00:10:00.740 --> 00:10:03.460
+rotasi kredensial itu adalah banyak bagian yang harus dikelola.
+
+00:10:03.460 --> 00:10:05.080
+Dan jika salah satunya gagal,
+
+00:10:05.220 --> 00:10:06.040
+Anda mengalami kebocoran.
+
+00:10:06.400 --> 00:10:07.660
+Sekarang lihat model baru dengan best.
+
+00:10:07.840 --> 00:10:09.360
+Tidak ada IP publik di VM Anda,
+
+00:10:09.460 --> 00:10:10.300
+tidak ada pop terbuka,
+
+00:10:11.100 --> 00:10:12.420
+layanan terkelola yang terus di-patch
+
+00:10:12.420 --> 00:10:13.560
+dan diperkuat oleh Microsoft,
+
+00:10:13.880 --> 00:10:16.440
+serta akses berbasis identitas dengan MFI dan akses bersyarat.
+
+00:10:17.240 --> 00:10:18.700
+Betiba tingkat kompleksitasnya menurun rasis,
+
+00:10:19.020 --> 00:10:20.480
+beginilah cara bagian-bagian ini membagi tugas.
+
+00:10:20.900 --> 00:10:22.280
+Peser menangani lapisan keamanan jaringan.
+
+00:10:22.860 --> 00:10:23.640
+Itulah cara Anda masuk.
+
+00:10:24.240 --> 00:10:26.460
+Ini memastikan VM Anda tidak terlihat oleh internet,
+
+00:10:26.460 --> 00:10:29.260
+dan setiap koneksi melalui terowangan aman yang dikelola.
+
+00:10:30.180 --> 00:10:31.840
+Entra ID menangani lapisan identitas.
+
+00:10:31.840 --> 00:10:33.980
+Itulah siapa Anda dan apakah Anda diizinkan.
+
+00:10:34.820 --> 00:10:36.240
+Ini memastikan hanya orang yang tepat,
+
+00:10:36.340 --> 00:10:37.120
+dengan izin yang tepat,
+
+00:10:37.200 --> 00:10:39.060
+dan postur perangkat yang tepat yang dapat terhubung.
+
+00:10:39.440 --> 00:10:39.960
+Bersama-sama,
+
+00:10:40.060 --> 00:10:41.940
+mereka akan sesuatu yang tidak dapat ditandingi oleh jambok,
+
+00:10:42.040 --> 00:10:43.060
+semanapun pemisahan yang bersih
+
+00:10:43.060 --> 00:10:44.660
+antara akses jaringan dan kontrol identitas.
+
+00:10:45.200 --> 00:10:46.380
+Anda tidak perlu mempercayai jaringan.
+
+00:10:46.760 --> 00:10:48.180
+Anda tidak perlu mempercayai alamat IP.
+
+00:10:48.660 --> 00:10:49.520
+Dan mempercayai identitasnya.
+
+00:10:50.180 --> 00:10:52.520
+Dan identitas itu didukung oleh tumpukan keamanan penuh Anda.
+
+00:10:53.120 --> 00:10:54.440
+Inilah arah yang didorong oleh Microsoft.
+
+00:10:54.820 --> 00:10:56.980
+Dan itulah arah perkembangan keamanan cloud saat ini.
+
+00:10:57.280 --> 00:10:58.900
+Kekuatan sebenarnya bukan pada produk individu,
+
+00:10:58.900 --> 00:11:00.240
+melainkan bagaimana mereka berkerjasama.
+
+00:11:01.700 --> 00:11:02.720
+Langkah awal Anda
+
+00:11:02.720 --> 00:11:04.520
+Dari mana Anda memulai?
+
+00:11:05.040 --> 00:11:05.820
+Ijinkan seaman yang mudah.
+
+00:11:06.160 --> 00:11:07.480
+Pertama, Anda perlu memutuskan
+
+00:11:07.480 --> 00:11:08.580
+apakah akan memulai dari awal
+
+00:11:08.580 --> 00:11:10.120
+atau bermigrasi dari jambok yang sudah ada.
+
+00:11:10.560 --> 00:11:11.480
+Jika Anda mulai dari awal,
+
+00:11:11.580 --> 00:11:12.440
+Anda berada berosisi terlalu.
+
+00:11:12.800 --> 00:11:13.800
+Namun jika Anda bermigrasi,
+
+00:11:13.900 --> 00:11:14.260
+jangan khawat.
+
+00:11:14.900 --> 00:11:16.160
+Bastian dapat hidup berdampingan
+
+00:11:16.160 --> 00:11:17.320
+dengan pengaturan Anda saat ini
+
+00:11:17.320 --> 00:11:18.220
+selama proses pemindahan.
+
+00:11:18.680 --> 00:11:19.560
+Lanjutnya, pilih SKU-an.
+
+00:11:20.140 --> 00:11:22.340
+SKU pengembang gratis dan bagus untuk pengujian,
+
+00:11:22.500 --> 00:11:24.460
+tetapi untuk produksi gunakan standar atau premium.
+
+00:11:24.940 --> 00:11:26.520
+Perbedaan biaya dari basic sangat kecil
+
+00:11:26.520 --> 00:11:28.140
+dan Anda mendapatkan fitur yang benar-benar digunakan.
+
+00:11:28.540 --> 00:11:29.660
+Kemudian Anda menerapkan Bastian
+
+00:11:29.660 --> 00:11:30.740
+ke dalam jaringan virtual Anda.
+
+00:11:31.220 --> 00:11:32.940
+Buat subnet Azure Bastian dengan sebuah.

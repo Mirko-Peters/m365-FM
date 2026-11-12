@@ -1,0 +1,646 @@
+WEBVTT
+
+00:00:00.040 --> 00:00:02.940
+Stel je dit eens voor, je bent aan het werk in een bedrijfsapplicatie.
+
+00:00:03.140 --> 00:00:08.000
+Misschien is het het oude, portaal, een klantenservice, database of de interne wiki met al die regels die je moet volgen.
+
+00:00:08.160 --> 00:00:09.760
+Je typt een vraag in de zoekbalk.
+
+00:00:09.960 --> 00:00:12.640
+Iets als, hoe dien ik een onkostennota in voor een klantendiner?
+
+00:00:12.920 --> 00:00:14.500
+Je drukt op enter en wat krijg je?
+
+00:00:14.700 --> 00:00:15.020
+Niets.
+
+00:00:15.220 --> 00:00:20.220
+Of erger nog, een lijst met willekeurige pdf's van drie jaar geleden die min of meer overeen komen met de woorden die je hebt getypt.
+
+00:00:20.420 --> 00:00:21.980
+Zoeken is iets wat we elke dag doen.
+
+00:00:22.180 --> 00:00:23.660
+En meestal is het verschrikkelijk.
+
+00:00:23.880 --> 00:00:25.720
+Maar het punt is, dat hoeft niet zo te zijn.
+
+00:00:25.940 --> 00:00:28.080
+Wat als je apps echt zouden begrijpen wat je vraagt?
+
+00:00:28.080 --> 00:00:33.380
+Wat als ze konden zoeken zoals Google en het juiste antwoord zouden vinden, zelfs als je niet de perfecte woorden gebruikt?
+
+00:00:33.540 --> 00:00:35.520
+Vandaag bespreken we Azure Eyes' arch.
+
+00:00:35.740 --> 00:00:40.520
+Wat het precies is, hoe het onder de motorkap werkt en waarom het de zoekmachine is waarop moderne apps zijn gebouwd.
+
+00:00:40.660 --> 00:00:42.420
+Pak je koffie erbij en laten we beginnen.
+
+00:00:42.700 --> 00:00:43.960
+Waarom zoeken niet goed werkt?
+
+00:00:44.100 --> 00:00:47.940
+Om te begrijpen waarom zoeken meestal faalt, moeten we kijken hoe de meeste apps dat eigenlijk doen.
+
+00:00:48.140 --> 00:00:51.360
+De traditionele manier heet trefwoordzoekopdracht of lexicaal zoeken.
+
+00:00:51.560 --> 00:00:56.540
+Je typt het woord laptop in het vak en het systeem zoekt elk document op dat precies dat woord bevat.
+
+00:00:56.540 --> 00:01:00.800
+Onder de motorkap gebruiken veel van deze systemen een algoritme genaamd BM25.
+
+00:01:01.200 --> 00:01:03.700
+Het is niet ingewikkeld, maar op zijn eigen manier wel slim.
+
+00:01:04.300 --> 00:01:06.940
+BM25 rangschikt resultaten op basis van een paar factoren.
+
+00:01:07.100 --> 00:01:12.400
+Hoe vaak je zoekterm in een document voorkomt, hoe lang het document is en hoe zeldzaam de zoekterm is in de gehele dataset.
+
+00:01:12.740 --> 00:01:18.200
+Zie het als een zeer geavanceerde woordenteller die op basis van die factoren bepaalt welke documenten het meest relevant zijn.
+
+00:01:18.420 --> 00:01:19.460
+Dit is waar het misgaat.
+
+00:01:19.720 --> 00:01:21.020
+Menselijke taal is rommelig.
+
+00:01:21.240 --> 00:01:24.080
+Mensen stellen vragen niet met dezelfde woorden als die in de documenten worden gebruikt.
+
+00:01:24.080 --> 00:01:28.260
+Laat me een concreet voorbeeld geven. Een gebruiker typt dit in een ondersteuningsportaal.
+
+00:01:28.440 --> 00:01:31.080
+Mijn laptop loopt steeds vast tijdens videogesprekken.
+
+00:01:31.400 --> 00:01:38.240
+Een trefwoordzoekopdracht zal braaf zoeken naar documenten die laptop, loopt, vast, tijdens, video en, gesprekken, bevatten.
+
+00:01:38.360 --> 00:01:43.400
+Maar wat als het beste artikel over dit onderwerp de titel heeft problemen met systeemvastlopers tijdens Teams vergaderingen oplossen?
+
+00:01:43.580 --> 00:01:46.180
+Of CPU-frotteling beheren op laptops in een dockingstation?
+
+00:01:46.380 --> 00:01:48.260
+De trefwoordzoekopdracht mist die volledig.
+
+00:01:48.460 --> 00:01:50.400
+Waarom? Omdat de woorden niet overeen komen.
+
+00:01:50.400 --> 00:01:56.320
+Het kernprobleem is dit. Trefwoordzoeken begrijpt spelling. Het begrijpt karakterpatronen, maar het begrijpt geen betekenis.
+
+00:01:56.500 --> 00:01:59.640
+Je krijgt resultaten met de juiste letters, maar vaak met de verkeerde inhoud.
+
+00:01:59.840 --> 00:02:03.560
+Dus als exacte woordovereenkomst zoveel gaten laat vallen, wat is dan het alternatief?
+
+00:02:03.700 --> 00:02:05.380
+De nieuwe manier, vectorse arg.
+
+00:02:05.740 --> 00:02:08.180
+Vectorse arg is dus een compleet andere manier van werken.
+
+00:02:08.360 --> 00:02:11.060
+In plaats van exacte woorden te matchen, matcht het de betekenis.
+
+00:02:11.260 --> 00:02:13.380
+Dat klinkt abstract, dus laten we het vereenvoudigen.
+
+00:02:13.380 --> 00:02:18.760
+De simpelste definitie die je moet weten is, een vector is gewoon een lijst getallen die iets voorstelt waar een computer mee kan werken.
+
+00:02:19.000 --> 00:02:20.580
+Dat is alles een lijst met getallen.
+
+00:02:20.760 --> 00:02:24.140
+Een embedding is een speciaal soort vector die de betekenis van tekst vastlegt.
+
+00:02:24.340 --> 00:02:28.680
+Het neemt een zin, een alinea, of zelfs een heel document en zet dit om in een lange reeks getallen.
+
+00:02:28.860 --> 00:02:31.420
+De computer begrijpt de woorden niet, maar wel de getallen.
+
+00:02:31.600 --> 00:02:32.980
+Hier is een analogie die helpt.
+
+00:02:33.200 --> 00:02:35.020
+Zie factoren als coördinaten op een kaart.
+
+00:02:35.180 --> 00:02:37.240
+Op een kaart liggen vergelijkbare plaatsen dicht bij elkaar.
+
+00:02:37.420 --> 00:02:40.240
+In vectorruimte komen vergelijkbare concepten dicht bij elkaar te staan.
+
+00:02:40.240 --> 00:02:44.960
+De vector voor koning en de vector voor koningin liggen bij elkaar omdat ze verwante ideeën vertegenwoordigen.
+
+00:02:45.120 --> 00:02:48.100
+De vector voor koning en de vector voor appel liggen ver uit elkaar.
+
+00:02:48.320 --> 00:02:54.860
+De computer weet niet wat koning in menselijke zin betekent, maar kan de afstand meten tussen de coördinaten en die van elk ander woord of document.
+
+00:02:55.160 --> 00:02:57.340
+Het is alsof je een gps hebt voor ideeën.
+
+00:02:57.480 --> 00:03:01.100
+Het systeem weet hoe ver concepten uit elkaar liggen door simpelweg naar de getallen te kijken.
+
+00:03:01.360 --> 00:03:04.780
+Wanneer je zoekt met factoren, zet het systeem je zoekopdracht om in een embedding.
+
+00:03:05.040 --> 00:03:08.260
+Vervolgens vindt het de documenten waarvan de embeddings het dichtst bij die van jou liggen.
+
+00:03:08.260 --> 00:03:12.460
+Het vindt zaken die semantisch vergelijkbaar zijn, die betekenis delen, niet alleen woordenschat.
+
+00:03:12.620 --> 00:03:15.920
+Stel je voor dat je zoekt naar een document over het oplossen van problemen met een bevroren laptop.
+
+00:03:16.120 --> 00:03:19.340
+Bij zoekwoorden moet je precies bevroren of vastlopen typen.
+
+00:03:19.480 --> 00:03:23.720
+Maar met vectorse arg kun je typen, mijn computer loopt steeds vast en vindt het het juiste document.
+
+00:03:23.980 --> 00:03:25.920
+Dat is de kracht van het begrijpen van betekenis.
+
+00:03:26.140 --> 00:03:28.520
+Laten we teruggaan naar ons voorbeeld van de defecte zoekopdracht.
+
+00:03:28.700 --> 00:03:30.900
+Een gebruiker typt, mijn laptop loopt steeds vast.
+
+00:03:31.120 --> 00:03:35.660
+Met vectorse arg kan het systeem het artikel over systeemvastlopers tijdens Teams vergaderingen tonen,
+
+00:03:35.660 --> 00:03:37.660
+ook al komen die woorden niet in de zoekopdracht voor.
+
+00:03:37.880 --> 00:03:43.080
+Waarom? Omdat de betekenis van systeemvastloper in vectorruimte heel dichtbij, computer loopt vast, ligt.
+
+00:03:43.300 --> 00:03:45.720
+Deze concepten bevinden zich dicht bij elkaar op die kaart.
+
+00:03:45.900 --> 00:03:49.060
+Het systeem geeft niet om de exacte woorden, het geeft om wat je bedoelt.
+
+00:03:49.280 --> 00:03:50.220
+Dit is de doorbraak.
+
+00:03:50.400 --> 00:03:53.020
+Computers beginnen intentie te begrijpen, niet alleen spelling.
+
+00:03:53.280 --> 00:03:56.180
+Ze vinden antwoorden die een zoekopdracht op trefwoorden volledig zou missen.
+
+00:03:56.320 --> 00:03:57.960
+Maar vectorse arg heeft ook een zwakte.
+
+00:03:58.200 --> 00:04:01.240
+Het kan exacte overeenkomsten missen die absoluut cruciaal zijn.
+
+00:04:01.240 --> 00:04:06.360
+Als een technicus zoekt naar een specifieke foutcode zoals fout X80070570,
+
+00:04:06.620 --> 00:04:11.720
+geeft een vectorzoekopdracht mogelijk prioriteit aan documenten over schijfouten of best NS-systeem corruptie
+
+00:04:11.720 --> 00:04:14.460
+in plaats van aan het exacte document dat die specifieke code ontleed.
+
+00:04:14.580 --> 00:04:16.180
+Het ruilt precisie in voor begrip.
+
+00:04:16.380 --> 00:04:17.520
+We hebben dus twee methoden.
+
+00:04:17.700 --> 00:04:19.580
+Zoeken op trefwoorden is geweldig voor precisie.
+
+00:04:19.720 --> 00:04:22.420
+Het vindt exact de juiste termen, product-idees en contractnummers.
+
+00:04:22.760 --> 00:04:24.300
+Vectorzoeken is geweldig voor betekenis.
+
+00:04:24.480 --> 00:04:27.100
+Het vindt het juiste antwoord, zelfs als je niet de juiste woorden gebruikt.
+
+00:04:27.260 --> 00:04:28.520
+Elk heeft zijn blinde vlekken.
+
+00:04:28.520 --> 00:04:30.420
+En dat roept hem voor de hand liggende vraag op.
+
+00:04:30.540 --> 00:04:33.580
+Wat als je beide benaderingen zou kunnen combineren en het beste van beide werelden zou krijgen?
+
+00:04:33.780 --> 00:04:34.860
+De hybride doorbraak.
+
+00:04:35.020 --> 00:04:36.820
+Hybride zoeken is het beste van beide werelden.
+
+00:04:37.040 --> 00:04:40.020
+Het voort zowel zoekopdrachten op trefwoorden als vectorzoekopdrachten tegelijkertijd uit
+
+00:04:40.020 --> 00:04:42.340
+en combineert vervolgens de resultaten tot één gerangschikte lijst.
+
+00:04:42.460 --> 00:04:44.440
+In plaats van de ene benadering boven de andere te kiezen,
+
+00:04:44.620 --> 00:04:47.460
+gebruikt het systeem een methode genaamd Reciprocal Rank Fusion of RRF.
+
+00:04:47.660 --> 00:04:48.280
+Zo werkt het.
+
+00:04:48.520 --> 00:04:52.660
+RRF kijkt naar waar elk document staat in de trefwoordresultaten en waar het staat in de vectorresultaten.
+
+00:04:52.940 --> 00:04:54.500
+Vervolgens geeft het een gecombineerde score.
+
+00:04:54.500 --> 00:04:56.800
+Als een document in beide goed scoort, krijgt het een boost.
+
+00:04:56.980 --> 00:04:59.700
+Het is alsof je twee deskundige adviezen neemt en daar het gemiddelde van berekend.
+
+00:04:59.840 --> 00:05:02.320
+Het uiteindelijke antwoord is betrouwbaarder dan elk afzonderlijk.
+
+00:05:02.520 --> 00:05:06.300
+Dit is belangrijk omdat zoeken op trefwoorden en vectorzoeken fundamenteel verschillende sterke punten hebben.
+
+00:05:06.520 --> 00:05:08.780
+Zoeken op trefwoorden blinkt uit in exacte overeenkomsten.
+
+00:05:08.960 --> 00:05:12.600
+Het is je eerste keuze voor productidees, contractnummers, specifieke namen en foutcodes.
+
+00:05:12.820 --> 00:05:14.240
+Het is precies en voorspelbaar.
+
+00:05:14.540 --> 00:05:19.120
+Vectorzoeken blinkt uit in semantische gelijkenis en vindt documenten die dezelfde betekenis delen als je zoekopdracht,
+
+00:05:19.260 --> 00:05:20.860
+zelfs als de exacte woorden niet voorkomen.
+
+00:05:20.860 --> 00:05:22.960
+Samen dekken ze elkaars blinde vlekken af.
+
+00:05:23.100 --> 00:05:26.760
+Het systeem vangt exacte overeenkomsten en conceptuele overeenkomsten in één zoekopdracht.
+
+00:05:26.960 --> 00:05:28.040
+Dat is de ware kracht.
+
+00:05:28.220 --> 00:05:29.800
+En dit is niet alleen theoretisch.
+
+00:05:30.000 --> 00:05:35.680
+Onderzoek naar hybride enterprise zoeken toont aan dat het 70 tot 80 procent nauwkeurigheid bij het ophalen levert, afhankelijk van de dataset.
+
+00:05:35.980 --> 00:05:39.780
+Dat is ongeveer 15 tot 20 procentpunt hoger dan wat je krijgt met alleen vectorzoeken.
+
+00:05:39.960 --> 00:05:43.200
+Het verschil is aanzienlijk en het is zichtbaar in echte bedrijfsresultaten.
+
+00:05:43.460 --> 00:05:45.000
+Neem het boekhoud Platform Zero.
+
+00:05:45.380 --> 00:05:49.660
+Zij implement eerder hybride zoeken in hun klantenservice via een bedrijf genaamd Coveo.
+
+00:05:49.660 --> 00:05:53.340
+Binnen drie maanden zagen ze een stijging van 20 procent in zelfoplossing.
+
+00:05:53.580 --> 00:05:57.480
+Klanten vonden vaker zelf antwoorden zonder contact op te hoeven nemen met de ondersteuning.
+
+00:05:57.660 --> 00:06:03.180
+Andere klanten in hetzelfde onderzoek zagen een vermindering tot 40 procent in de tijd die nodig was om ondersteuningscases op te lossen.
+
+00:06:03.360 --> 00:06:08.680
+Dat betekent dat medewerkers sneller de juiste informatie vonden, klanten sneller antwoorden kregen en de ondersteuningskosten daalden.
+
+00:06:08.860 --> 00:06:12.340
+Dat is niet zomaar een leuke extra functie, het is een meetbare impact op het bedrijfsresultaat.
+
+00:06:12.500 --> 00:06:13.680
+Dit is het belangrijkste punt.
+
+00:06:13.880 --> 00:06:17.760
+Hybride zoeken is niet zomaar een leuke upgrade of een vinkje op een lijst met functies, het is meetbaar beter.
+
+00:06:17.760 --> 00:06:21.420
+Het levert betere precisie, betere recall en betere resultaten voor gebruikers op.
+
+00:06:21.500 --> 00:06:26.220
+En deze combinatie van benaderingen is wat Azure Isearch zo krachtig maakt voor moderne applicaties.
+
+00:06:26.400 --> 00:06:30.840
+Maar er is nog een technologie die deze combinatie ontgrendelt en die momenteel veel aandacht krijgt.
+
+00:06:30.980 --> 00:06:32.680
+Het heet RAG, de RAG Connectie.
+
+00:06:32.880 --> 00:06:34.200
+Dus, laten we het over RAG hebben.
+
+00:06:34.380 --> 00:06:37.020
+RAG staat voor Retrieval Augmented Generation, terughalverrijkte generatie.
+
+00:06:37.220 --> 00:06:39.600
+Dat is een hele mond vol, maar hier is de eenvoudigste definitie.
+
+00:06:39.760 --> 00:06:43.760
+Het is een framework dat AI-assistenten toegang geeft tot informatie waar ze niet op getraind zijn.
+
+00:06:43.760 --> 00:06:48.860
+Grote taalmodellen zoals GPT weten veel over geschiedenis, wetenschap en programmeren,
+
+00:06:49.040 --> 00:06:54.980
+maar ze kennen niet de interne documenten, het beleid, de klantgeschiedenis of de specifieke procedures van je bedrijf.
+
+00:06:55.120 --> 00:06:59.100
+De meeste mensen denken dat je al die interne kennis zomaar in het model zelf kunt dumpen.
+
+00:06:59.340 --> 00:07:00.080
+Dat werkt niet.
+
+00:07:00.260 --> 00:07:01.980
+Het is duur en moeilijk om bij te werken.
+
+00:07:02.200 --> 00:07:03.760
+RAG lost dit op een slimme manier op.
+
+00:07:03.760 --> 00:07:09.640
+In plaats van alles in het model te proppen, haal je de relevante informatie uit een kennisbank op het moment dat iemand een vraag stelt.
+
+00:07:09.820 --> 00:07:17.000
+Je neemt de query van de gebruiker, doorzoekt je interne gegevens, vindt de meest relevante documenten en voert die context samen met de oorspronkelijke vraag in het LLM in.
+
+00:07:17.160 --> 00:07:20.080
+Het LLM genereert vervolgens een antwoord dat is gebaseerd op jouw data.
+
+00:07:20.340 --> 00:07:21.400
+Dat is de magie ervan.
+
+00:07:21.640 --> 00:07:24.600
+Nu, Azure Isearch is de retrieval helft van die vergelijking.
+
+00:07:24.800 --> 00:07:28.820
+Het is de motor die de juiste documenten vindt, zodat het LLM nauwkeurig kan antwoorden.
+
+00:07:28.820 --> 00:07:33.280
+Zonder een solide retrieval laag is een RAG-systeem slechts zo goed als de documenten die het vindt.
+
+00:07:33.320 --> 00:07:41.180
+En dit is waar hybride zoeken echt uitblinkt, omdat RAG-queries vaak vragen in natuurlijke taal zijn en de antwoorden vaak in documenten staan die totaal andere terminologie gebruiken.
+
+00:07:41.380 --> 00:07:43.760
+Laat me je wat cijfers geven die het verschil echt laten zien.
+
+00:07:43.940 --> 00:07:52.540
+Een onderzoek naar Enterprise-applicatie zoeken toonde aan dat een hybride RAG-framework de top-k-retrieval nauwkeurigheid 18 tot 25 keer verbeterde ten opzichte van alleen zoeken op trefwoorden.
+
+00:07:52.760 --> 00:07:56.380
+De nauwkeurigheid van het voltooien van workflow-taken verbeterde met 21 keer.
+
+00:07:56.380 --> 00:08:02.820
+Dat betekent dat gebruikers veel vaker in staat waren om complexe taken succesvol af te ronden wanneer ze werden ondersteund door een RAG-systeem met hybride zoeken.
+
+00:08:03.020 --> 00:08:11.000
+Over het algemeen kunnen goed geïmplementeerde RAG-systemen de zoeknauwkeurigheid met gemiddeld 85% verhogen, waarbij sommige gespecialiseerde domeinen de 99% nauwkeurigheid benaderen.
+
+00:08:11.160 --> 00:08:19.180
+En omdat het LLM-antwoorden genereert op basis van opgehaalde context in plaats van op eigen gissingen, liet de RAG-systemen een vermindering van ongeveer 40% in gefantaseerde antwoorden zien.
+
+00:08:19.380 --> 00:08:23.420
+Dit is waarom Azure Ice Arch centraal staat bij het bouwen van AI-agenten en co-pilots.
+
+00:08:23.420 --> 00:08:28.400
+Het biedt de gefundeerde, feitelijke retrieval die LLM's betrouwbaar maakt in een zakelijke context.
+
+00:08:28.640 --> 00:08:35.520
+Als je een assistent bouwt die vragen nauwkeurig moet beantwoorden en bronnen moet vermelden, is hybride zoeken plus RAG de architectuur die je nodig hebt.
+
+00:08:35.700 --> 00:08:38.560
+Hybride zoeken en RAG vormen dus een krachtige combinatie.
+
+00:08:38.740 --> 00:08:40.800
+Maar hoe ziet dit er in de praktijk eigenlijk uit?
+
+00:08:41.220 --> 00:08:42.780
+De impact in de echte wereld.
+
+00:08:43.000 --> 00:08:44.560
+Waar zie je dit in de praktijk terug?
+
+00:08:44.740 --> 00:08:46.080
+Ik geef je een paar voorbeelden.
+
+00:08:46.260 --> 00:08:48.560
+E-commerce is waarschijnlijk het meest bekende voorbeeld.
+
+00:08:48.740 --> 00:08:51.440
+Een klant typt comfortabele hardloopschoenen in de zoekbalk.
+
+00:08:51.440 --> 00:08:56.600
+De productpagina spreekt misschien van gedempte sportschoenen, omdat het marketingteam andere woorden heeft gekozen.
+
+00:08:56.840 --> 00:08:59.400
+Zoeken op trefwoorden alleen zou de match volledig missen.
+
+00:08:59.600 --> 00:09:05.040
+Met Azure Ice Arch begrijpt het systeem dat comfortabel en gedempt in deze context ongeveer hetzelfde betekenen.
+
+00:09:05.200 --> 00:09:08.260
+Het toont het juiste product, zelfs als de woorden niet overeenkomen.
+
+00:09:08.520 --> 00:09:11.920
+Dat is een klant die vindt wat hij zoekt, in plaats van gefrustreerd de site te verlaten.
+
+00:09:12.100 --> 00:09:14.320
+Klanten-service portals werken op dezelfde manier.
+
+00:09:14.320 --> 00:09:21.100
+Stel dat een klant typt, hoe zeg ik mijn abonnement op, het relevante beleid kan de titel, de eindiging van serviceovereenkomst, hebben.
+
+00:09:21.300 --> 00:09:30.780
+Hybride zoeken vindt dat document via trefwoordmatching op juridische termen, maar toont ook een gerelateerde FAQ over het vroegtijdig beëindigen van je plan via semantische gelijkenis.
+
+00:09:31.560 --> 00:09:35.680
+De klant krijgt een volledig antwoord in plaats van vijf verschillende artikelen door te spitten.
+
+00:09:35.900 --> 00:09:38.420
+Het ophalen van juridische documenten is er nog een.
+
+00:09:38.420 --> 00:09:42.480
+Advocaten moeten contracten doorzoeken op exacte clausules en sectieverwijzingen.
+
+00:09:42.660 --> 00:09:48.720
+Dat is puur terrein voor trefwoorden, maar ze moeten ook soortgelijke formuleringen in verschillende overeenkomsten vinden, zelfs als het woordgebruik verschilt.
+
+00:09:48.900 --> 00:09:56.040
+Hybride zoeken verwerkt beide in één zoekopdracht en in gereguleerde sectoren is het cruciaal voor compliance om precies te kunnen achterhalen waarom een resultaat verscheen.
+
+00:09:56.200 --> 00:09:58.480
+Interne kennisbanken profiteren hier ook van.
+
+00:09:58.480 --> 00:10:08.580
+Een werknemer die zoekt naar vakantiebeleid krijgt het officiële ouder document, maar ook een relevante e-mail van de juridische afdeling over overdraagbare dagen en een recente update op het intranet.
+
+00:10:08.780 --> 00:10:12.180
+De zoekfunctie begrijpt dat al deze zaken met dezelfde vraag te maken hebben.
+
+00:10:12.380 --> 00:10:15.660
+Productie is een minder voor de hand liggend voorbeeld, maar wel een krachtige.
+
+00:10:15.820 --> 00:10:19.360
+Een technieke stiept oplossing voor oververhitting motor in de zoekinterface.
+
+00:10:19.360 --> 00:10:25.220
+Het systeem geeft de sectie voor probleemoplossing uit de handleiding, plus een gescand diagram met de relevante onderdelen.
+
+00:10:25.220 --> 00:10:31.720
+Ook al is het diagram een afbeelding, Azure Isearch kan de tekst erin extraheren en indexeren, zodat deze in de zoekresultaten verschijnt.
+
+00:10:31.860 --> 00:10:34.820
+De rode draad in al deze voorbeelden is ongestructureerde data.
+
+00:10:35.240 --> 00:10:38.580
+PDF's, Word documenten, e-mail, tickets for support, gescande afbeeldingen.
+
+00:10:38.880 --> 00:10:42.560
+Traditionele database queries en zoekopdrachten op trefwoorden waren nooit ontworpen voor dit soort data.
+
+00:10:42.780 --> 00:10:49.000
+Azure Isearch is specifiek gebouwd voor deze wereld en hoe langer je ernaar kijkt, hoe duidelijker het wordt dat hybride zoeken niet zomaar een leuke extra is.
+
+00:10:49.160 --> 00:10:52.420
+Het is een fundamenteel onderdeel van hoe moderne applicaties worden gebouwd.
+
+00:10:52.420 --> 00:10:56.580
+Hoe de stukjes in elkaar passen, dus hoe werkt dit alles eigenlijk onder de motorkap?
+
+00:10:56.660 --> 00:11:01.760
+Azure Isearch heeft drie kerncomponenten, de gegevensbron, de indexeerfunctie en de zoekindex.
+
+00:11:01.920 --> 00:11:04.540
+De gegevensbron is de plek waar je informatie zich bevindt.
+
+00:11:04.660 --> 00:11:09.160
+Dit kan blobopslag zijn, een Azure SQL database, Cosmos DB of zelfs SharePoint.
+
+00:11:09.380 --> 00:11:11.840
+Het is het ruwe materiaal dat doorzoekbaar moet worden gemaakt.
+
+00:11:12.080 --> 00:11:14.840
+Zie het als de stapel documenten die wacht om georganiseerd te worden.
+
+00:11:14.840 --> 00:11:22.980
+De indexeerfunctie is de pijplijn die gegevens uit die bron leest, de inhoud extraheert, eventuele geconfigureerde AI-verrijkingen toepast en vervolgens de zoekindex opbouwt.
+
+00:11:23.100 --> 00:11:25.100
+Hier is een eenvoudige manier om het voor je te zien.
+
+00:11:25.360 --> 00:11:28.340
+Stel je een bibliothecaris voor die een pakhuis vol boeken binnenloopt.
+
+00:11:28.520 --> 00:11:33.840
+Ze lezen elk boek, maken gedetailleerde aantekeningen, identificeren de belangrijkste thema's en entiteiten en organiseren alles in een kaartcatalogus.
+
+00:11:34.600 --> 00:11:37.240
+Dat lezen en aantekeningen maken is het indexeringsproces.
+
+00:11:37.440 --> 00:11:39.220
+De zoekindex is die kaartcatalogus.
+
+00:11:39.220 --> 00:11:45.660
+Het zijn niet de boeken zelf. Het is het gestructureerde, geoptimaliseerde systeem waarmee je in milliseconden precies vindt wat je nodig hebt.
+
+00:11:45.860 --> 00:11:50.020
+Wanneer je een zoekopdracht typt, gaat het systeem niet terug naar de originele documenten om ze te doorzoeken.
+
+00:11:50.220 --> 00:11:53.980
+In plaats daarvan raadpleegt het de index, die al precies weet waar alles zich bevindt.
+
+00:11:54.120 --> 00:11:57.240
+Deze voorbereidende organisatie wordt een geïnverteerde index genoemd.
+
+00:11:57.340 --> 00:12:01.760
+In plaats van documenten op te slaan met een lijst van de woorden die ze bevatten, sla je woorden op met een lijst van de documenten erin.
+
+00:12:01.900 --> 00:12:05.020
+Dat betekent dat wanneer je zoekt naar een term, je direct naar de juiste plek springt.
+
+00:12:05.020 --> 00:12:08.940
+Niet bladeren door elke pagina. Het resultaat is een enorme snelheidswinst.
+
+00:12:09.100 --> 00:12:14.760
+In plaats van elk document te moeten scannen, wat langer duurt naarmate je data groeit, spring je direct naar de juiste locatie.
+
+00:12:14.980 --> 00:12:20.080
+Bij miljoenen documenten is dat het verschil tussen een zoekopdracht die seconden duurt en een milliseconde duurt.
+
+00:12:20.280 --> 00:12:25.940
+Dus, nu begrijp je wat Azure Eyes Arch is, hoe de kerncomponenten samenwerken en waarom hybride zoeken alles verandert.
+
+00:12:26.140 --> 00:12:28.700
+Laten we afsluiten met een paar dingen die je hiermee kunt doen.
+
+00:12:28.700 --> 00:12:38.600
+Ten eerste, begrijp je data. Als het al gestructureerd is, denk aan producttabellen in SQL, klantgegevens in een database, alles met nette rijen en kolommen, dan kun je dit direct opvragen met SQL.
+
+00:12:38.920 --> 00:12:46.560
+Azure Eyes Arch is gebouwd voor ongestructureerde tekst. Denk aan PDF's, e-mails, Word documenten en support tickets. Dat is waar het echte waarde toevoegt.
+
+00:12:46.760 --> 00:12:53.920
+Ten tweede, als je een RAG applicatie of AI-assistent bouwt, is Azure Eyes Arch met hybride zoeken de retrieval engine die je daarvoor wilt gebruiken.
+
+00:12:53.920 --> 00:13:03.120
+Het geeft je exacte trefwoordovereenkomsten voor precisie en semantisch begrip voor context. Die combinatie levert betrouwbaardere en beter onderbouwde antwoorden op dan beide benaderingen afzonderlijk.
+
+00:13:03.280 --> 00:13:08.040
+Ten derde, maak de installatie niet te ingewikkeld. De Azure Portal heeft een wizard voor het importeren van gegevens.
+
+00:13:08.220 --> 00:13:11.940
+Koppel je blobopslag, configureer een paar instellingen en laat de indexerfunctie je eerste index bouwen.
+
+00:13:12.080 --> 00:13:16.420
+Je kunt je eerste zoekopdracht al binnen een uur uitvoeren. Dat is dus Azure Eyes Arch in begrijpelijke taal.
+
+00:13:16.560 --> 00:13:21.000
+Het neemt rommelige, ongestructureerde informatie en verandert die in doorzoekbare, AI-klare kennis.
+
+00:13:21.000 --> 00:13:24.540
+Bedankt voor het kijken, abonneer je en dan zie ik je in de volgende aflevering.

@@ -1,0 +1,943 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:02.220
+Witajcie w kolejnym odcinku pigułek wiedzy o Microsoft.
+
+00:00:02.500 --> 00:00:03.580
+Nazywam się Mirko Peters.
+
+00:00:03.780 --> 00:00:05.880
+Tematem dzisiejszego odcinka są Azure Logic Apps.
+
+00:00:06.040 --> 00:00:06.600
+Oto pytanie.
+
+00:00:06.840 --> 00:00:09.960
+Co gdyby można było połączyć aplikację bez pisania ani jednej linijki kodu?
+
+00:00:10.180 --> 00:00:12.620
+Nie mówię tu o prostych czynnościach jak wysyłanie e-maila.
+
+00:00:12.840 --> 00:00:15.260
+Mówię o łączeniu systemów, które ze sobą nie współpracują.
+
+00:00:15.520 --> 00:00:20.360
+Twój e-mail, przechowywanie plików, baza danych, rejestry klientów, sprawienie, by działały automatycznie razem.
+
+00:00:20.680 --> 00:00:22.600
+Właśnie tym zajmuje się Azure Logic Apps.
+
+00:00:22.820 --> 00:00:29.220
+W tym odcinku wyjaśnię, czym to właściwie jest, jak działa i dlaczego jest ważne dla każdego, kto używa narzędzi Microsoft w pracy.
+
+00:00:29.220 --> 00:00:34.160
+Pod koniec zrozumiesz szerszy kontekst i będziesz wiedzieć, gdzie w Twoim świecie pasują Logic Apps.
+
+00:00:34.320 --> 00:00:36.900
+Problem, dlaczego automatyzacja potrzebuje spoiwa.
+
+00:00:37.140 --> 00:00:39.580
+Zacznijmy od scenariusza, który zna większość osób.
+
+00:00:39.780 --> 00:00:43.380
+Plik trafia do folderów SharePoint, a ktoś musi otrzymać o tym powiadomienie w Teams.
+
+00:00:43.600 --> 00:00:45.740
+Być może trzeba też zaktualizować bazę danych.
+
+00:00:45.940 --> 00:00:48.480
+Trzy oddzielne systemy bez żadnego połączenia między nimi.
+
+00:00:48.700 --> 00:00:49.520
+Co więc się dzieje?
+
+00:00:49.700 --> 00:00:56.180
+Ktoś ręcznie sprawdza folder, kopiuje informacje, wkleja je do Teams, a następnie otwiera bazę danych i dokonuje aktualizacji za każdym razem.
+
+00:00:56.360 --> 00:00:58.200
+To wolne, nudne i łatwo obłędy.
+
+00:00:58.200 --> 00:01:01.640
+Starym sposobem radzenia sobie z tym było zlecenie komuś napisania własnego kodu.
+
+00:01:01.840 --> 00:01:07.240
+Oznacza to znalezienie programisty, wyjaśnienie potrzeb, czekanie tygodniami na stworzenie rozwiązania, a potem znów czekanie, gdy coś się zepsuje.
+
+00:01:07.480 --> 00:01:12.640
+Dla większości zespołów to nie wchodzi w grę, ponieważ dział IT ma zaległości, a zespoły biznesowe potrzebują rozwiązań na już.
+
+00:01:12.820 --> 00:01:14.120
+Więc praca pozostaje ręczna.
+
+00:01:14.340 --> 00:01:16.440
+Problem nie polega na tym, że ludzie nie chcą automatyzacji.
+
+00:01:16.680 --> 00:01:18.780
+Chodzi o to, że łączenie różnych systemów jest trudne.
+
+00:01:18.780 --> 00:01:22.960
+Każdy system ma swój własny sposób obsługi autoryzacji, własny format danych, własne zasady.
+
+00:01:23.120 --> 00:01:28.200
+Pisanie kodu, aby to wszystko połączyć, wymaga czasu i wiedzy, a większość firm nie ma tylu programistów.
+
+00:01:28.340 --> 00:01:31.500
+Co gdyby istniała platforma, która wykona to całe łączenie za Ciebie?
+
+00:01:31.720 --> 00:01:40.500
+Platforma, która już wie, jak komunikować się z SharePoint, Teams, Outlook, bazami danych i setkami innych usług, gdzie po prostu mówisz, gdy stanie się to, zrób tamto, a resztą zajmuje się ona.
+
+00:01:40.740 --> 00:01:42.500
+Właśnie tym jest Azure Logic Apps.
+
+00:01:42.700 --> 00:01:44.240
+Czym właściwie są Logic Apps?
+
+00:01:44.460 --> 00:01:46.860
+Witajcie w kolejnym odcinku Pigułek Wiedzy o Microsoft.
+
+00:01:47.180 --> 00:01:50.560
+Nazywam się Mirko Peters i dzisiaj rozmawiamy o Azure Logic Apps w prostych słowach.
+
+00:01:50.680 --> 00:01:51.800
+Więc czym dokładnie to jest?
+
+00:01:51.980 --> 00:01:53.240
+Rozłóżmy to na czynniki pierwsze.
+
+00:01:53.480 --> 00:01:56.420
+Azure Logic Apps to oparta na chmurze usługa przepływu pracy od firmy Microsoft.
+
+00:01:56.700 --> 00:02:00.240
+Działa w Azure, co oznacza, że Microsoft zajmuje się serwerami, skalowaniem i czasem pracy.
+
+00:02:00.420 --> 00:02:01.980
+Ty nie musisz się o nic z tego martwić.
+
+00:02:02.100 --> 00:02:03.960
+Po prostu tworzysz swój przepływ pracy i on działa.
+
+00:02:03.960 --> 00:02:05.840
+Oto najprostszy sposób, by o tym myśleć.
+
+00:02:05.960 --> 00:02:07.720
+Wyobraź sobie, że Twoja firma to biurowiec.
+
+00:02:07.720 --> 00:02:09.080
+Każdy dział to oddzielny pokój.
+
+00:02:09.280 --> 00:02:10.360
+SharePoint to jeden pokój.
+
+00:02:10.540 --> 00:02:11.320
+Teams to kolejny.
+
+00:02:11.480 --> 00:02:13.160
+Twoja baza danych jest na końcu korytarza.
+
+00:02:13.360 --> 00:02:17.000
+Normalnie, jeśli chcesz coś przenieść z jednego pokoju do drugiego, ktoś musi to fizycznie zanieść.
+
+00:02:17.180 --> 00:02:18.940
+Logic Apps to zautomatyzowana poczta.
+
+00:02:19.200 --> 00:02:23.380
+Znajduje się w środku, wie dokąd wszystko musi trafić i automatycznie kieruje wiadomości między działami.
+
+00:02:23.580 --> 00:02:25.820
+Nie musisz budować nowych drzwi między każdym pokojem.
+
+00:02:26.000 --> 00:02:27.780
+Po prostu mówisz poczcie, co ma zrobić.
+
+00:02:28.020 --> 00:02:31.420
+Być może słyszałeś o Power Automate i zastanawiasz się, czy to nie to samo?
+
+00:02:31.420 --> 00:02:32.320
+Nie do końca.
+
+00:02:32.500 --> 00:02:34.980
+Power Automate jest stworzony dla użytkowników biznesowych.
+
+00:02:34.980 --> 00:02:39.440
+Zaprojektowano go do prostych, osobistych przepływów pracy, jak wyślij mi maila, gdy dostanę wiadomość w Teams.
+
+00:02:39.660 --> 00:02:42.340
+Logic Apps jest zbudowany dla zespołów IT i programistów.
+
+00:02:42.500 --> 00:02:47.780
+Obsługuje bardziej złożone scenariusze, większe wolumeny i potrzeby klasy korporacyjnej, jak bezpieczeństwo i zgodność z przepisami.
+
+00:02:47.940 --> 00:02:51.100
+Pomyśl o Power Automate jak o rowerze, świetnym do poruszania się po biurze.
+
+00:02:51.320 --> 00:02:54.620
+Logic Apps to ciężarówka dostawcza, stworzona do większych ładunków i dłuższych tras.
+
+00:02:54.800 --> 00:02:57.120
+Logic Apps jest również rozwiązaniem bezserwerowym, serverless.
+
+00:02:57.120 --> 00:02:59.140
+To techniczny termin, ale oznacza coś prostego.
+
+00:02:59.140 --> 00:03:01.620
+Płacisz tylko wtedy, gdy twoje przepływy pracy faktycznie działają.
+
+00:03:01.780 --> 00:03:03.940
+Jeśli przez cały dzień nic się nie dzieje, nie płacisz nic.
+
+00:03:04.120 --> 00:03:09.380
+Jeśli tysiąc plików zostanie przesłanych jednocześnie, platforma automatycznie zwiększa skalę, a ty płacisz za to, co wykorzystałeś.
+
+00:03:09.540 --> 00:03:14.080
+Żadnych serwerów do zarządzania, planowania pojemności ani marnowania pieniędzy na bezczynny sprzęt.
+
+00:03:14.200 --> 00:03:16.600
+Elementy konstrukcyjne, wyzwalacze i akcje.
+
+00:03:16.860 --> 00:03:19.340
+Każda Logic Apps zaczyna się tak samo od wyzwalacza.
+
+00:03:19.560 --> 00:03:22.080
+Wyzwalacz to po prostu coś, co uruchamia twój przepływ pracy.
+
+00:03:22.280 --> 00:03:23.880
+Pomyśl o nim jak o czujniku ruchu.
+
+00:03:24.080 --> 00:03:26.020
+Gdy czujnik wykryje ruch, światło się zapala.
+
+00:03:26.020 --> 00:03:29.120
+W Logic Apps, gdy wyzwalacz się aktywuje, twój przepływ pracy zaczyna działać.
+
+00:03:29.280 --> 00:03:31.160
+Wyzwalacze występują w dwóch głównych rodzajach.
+
+00:03:31.320 --> 00:03:33.280
+Wyzwalacze zdarzeniowe czekają, aż coś się wydarzy.
+
+00:03:33.440 --> 00:03:35.220
+Plik zostaje przesłany do SharePointa.
+
+00:03:35.360 --> 00:03:36.700
+E-mail dociera do Outlooka.
+
+00:03:36.880 --> 00:03:38.760
+Nowy wiersz pojawia się w tabeli bazy danych.
+
+00:03:38.980 --> 00:03:43.320
+Wyzwalacze oparte na harmonogramie działają według Teamera co godzinę, codziennie o 9 rano, w każdy poniedziałek.
+
+00:03:43.480 --> 00:03:45.320
+Wybierasz to, co ma sens w twoim scenariuszu.
+
+00:03:45.520 --> 00:03:47.160
+Gdy wyzwalacz się aktywuje, dodajesz akcje.
+
+00:03:47.340 --> 00:03:49.200
+Akcje to kroki, które wykonuje twój przepływ pracy.
+
+00:03:49.200 --> 00:03:50.520
+Wyślij wiadomość w Teams.
+
+00:03:50.720 --> 00:03:51.800
+Stwórz rekord w Salesforce.
+
+00:03:52.140 --> 00:03:53.420
+Zaktualizuj wiersz w SQL Server.
+
+00:03:53.540 --> 00:03:54.680
+Wywołaj zewnętrzny interfejs API.
+
+00:03:54.880 --> 00:03:57.280
+Każda akcja to element konstrukcyjny, który możesz ze sobą łączyć.
+
+00:03:57.440 --> 00:03:58.960
+Pozwól, że podam ci konkretny przykład.
+
+00:03:59.200 --> 00:04:02.480
+Załóżmy, że masz bibliotekę dokumentów w SharePoint, do której twój zespół przesyła propozycje.
+
+00:04:02.700 --> 00:04:05.780
+Gdy pojawia się nowa propozycja, chcesz, aby zespół dowiedział się o niej w aplikacji Teams.
+
+00:04:05.980 --> 00:04:08.380
+Twoim wyzwalaczem jest utworzenie pliku w programie SharePoint.
+
+00:04:08.620 --> 00:04:11.220
+Twoją akcją jest opublikowanie wiadomości na kanale Teams.
+
+00:04:11.480 --> 00:04:11.980
+Dwa bloki.
+
+00:04:12.180 --> 00:04:12.700
+To wszystko.
+
+00:04:12.700 --> 00:04:16.000
+Przepływ pracy uruchamia się automatycznie za każdym razem, gdy ktoś prześle plik.
+
+00:04:16.140 --> 00:04:18.100
+Nikt nie musi pamiętać o wysłaniu powiadomienia.
+
+00:04:18.360 --> 00:04:19.140
+Dzieje się to samo.
+
+00:04:19.380 --> 00:04:21.840
+Wizualny projektant to miejsce, w którym budujesz te przepływy pracy.
+
+00:04:22.000 --> 00:04:24.460
+To obszar roboczy typu przeciągnij i upuść w portalu Azure.
+
+00:04:24.700 --> 00:04:28.780
+Wybierasz wyzwalacz z listy, przeciągasz go na obszar roboczy, a następnie dodajesz akcję poniżej.
+
+00:04:29.000 --> 00:04:30.780
+Każda akcja łączy się z poprzednią.
+
+00:04:31.120 --> 00:04:32.260
+Możesz dodawać warunki.
+
+00:04:32.520 --> 00:04:37.240
+Jeśli plik ma ponad 1 MB, wyślij go do zespołu weryfikującego, w przeciwnym razie zarchiwizuj go.
+
+00:04:37.500 --> 00:04:38.600
+Możesz dodawać pętlę.
+
+00:04:38.600 --> 00:04:40.340
+Możesz dodawać równoległe gałęzie.
+
+00:04:40.540 --> 00:04:44.780
+Projektant pokazuje cały przepływ wizualnie, więc widzisz dokładnie, co wydarzy się na każdym etapie.
+
+00:04:44.920 --> 00:04:47.540
+I co najważniejsze, nie musisz być programistą, aby z tego korzystać.
+
+00:04:47.660 --> 00:04:50.280
+Jeśli potrafisz narysować schemat blokowy, możesz zbudować usługę Logic App.
+
+00:04:50.420 --> 00:04:52.820
+Platforma zajmuje się całą techniczną stroną działania w tle.
+
+00:04:53.100 --> 00:04:55.740
+Uwierzytelnianie, obsługa błędów, ponawianie prób, wszystko jest wbudowane.
+
+00:04:55.920 --> 00:04:59.400
+Ale prawdziwa moc to nie tylko sam przepływ pracy, lecz to, z czym możesz się połączyć.
+
+00:04:59.580 --> 00:05:01.080
+I tu dochodzimy do łączników.
+
+00:05:01.440 --> 00:05:03.020
+Łączniki, prawdziwa supermoc.
+
+00:05:03.020 --> 00:05:06.800
+Usługa Logic Apps oferuje ponad 1400 gotowych łączników.
+
+00:05:06.960 --> 00:05:10.240
+Ta liczba brzmi imponująco, ale powiem Ci, co to właściwie oznacza.
+
+00:05:10.420 --> 00:05:13.860
+Łącznik to gotowy most między usługą Logic Apps a innym serwisem.
+
+00:05:14.080 --> 00:05:20.040
+Firma Microsoft wykonała już trudną pracę związaną z uwierzytelnianiem obsługą błędów i ponawianiem prób, więc po prostu wybierasz usługę i wszystko działa.
+
+00:05:20.240 --> 00:05:21.400
+Chcesz pobrać dane z Salesforce?
+
+00:05:21.760 --> 00:05:22.780
+Jest do tego łącznik.
+
+00:05:22.960 --> 00:05:24.400
+Musisz zaktualizować rekord w SAP?
+
+00:05:24.580 --> 00:05:25.720
+Do tego też jest łącznik.
+
+00:05:25.720 --> 00:05:29.420
+A jeśli musisz wysłać wiadomość do kolejki serwisenow, dostępny jest gotowy łącznik.
+
+00:05:29.580 --> 00:05:34.120
+Usługi Microsoft 365, takie jak SharePoint, Teams, Outlook i OnDrive mają własne łączniki.
+
+00:05:34.340 --> 00:05:38.460
+Usługi Azure, takie jak SQL Database, Blob Storage i Event Grid są w pełni obsługiwane.
+
+00:05:38.640 --> 00:05:43.160
+Usługi innych firm, takie jak Dropbox, GitHub, Twitter i Slack, dla każdej z nich istnieją łączniki.
+
+00:05:43.380 --> 00:05:47.280
+Każdy łącznik udostępnia zestaw wyzwalaczy i akcji specyficznych dla danej usługi.
+
+00:05:47.500 --> 00:05:53.660
+Łącznik SharePoint nasłuchuje nowych plików, łącznik Outlook wysyła wiadomości e-mail, a łącznik SQL uruchamia zapytania i procedury składowane.
+
+00:05:53.660 --> 00:05:56.280
+Nie musisz uczyć się interfejsu API każdej usługi.
+
+00:05:56.480 --> 00:05:58.300
+Łącznik całkowicie to abstrahuje.
+
+00:05:58.480 --> 00:06:00.800
+Teraz dwa rodzaje łączników, o których warto wiedzieć.
+
+00:06:01.060 --> 00:06:04.280
+Wbudowane łączniki działają wewnątrz samego środowiska uruchomieniowego Logic Apps.
+
+00:06:04.520 --> 00:06:07.940
+Są szybsze i tańsze, ponieważ nie wymagają zewnętrznego wywołania hostowanej usługi.
+
+00:06:08.160 --> 00:06:12.880
+Wbudowane łączniki obejmują HTTP, Service Bus, Azure Functions oraz wybrane usługi Azure.
+
+00:06:13.100 --> 00:06:16.600
+Łączniki zarządzane są Hostowain przez Microsoft i obejmują szerszy ekosystem.
+
+00:06:16.880 --> 00:06:22.180
+Setki usług od firmy Microsoft i zewnętrznych dostawców kosztują nieco więcej za wywołanie, ale oferują znacznie większe możliwości.
+
+00:06:22.180 --> 00:06:25.180
+Jeśli nie ma łącznika dla potrzebnej usługi, nie jesteś na straconej pozycji.
+
+00:06:25.400 --> 00:06:29.360
+Logic Apps zawiera ogólną akcję HTTP, która pozwala bezpośrednio wywoływać dowolny API REST.
+
+00:06:29.560 --> 00:06:32.280
+Wystarczy podać adres URL, metodę, nagłówki i treść.
+
+00:06:32.520 --> 00:06:35.260
+Działa tak samo jak łącznik, tylko bez gotowej wygody użytkowania.
+
+00:06:35.560 --> 00:06:39.700
+Uwierzytelnianiem zajmujesz się sam, ale nadal otrzymujesz obsługę ponownych prób i błędów od Logic Apps.
+
+00:06:39.880 --> 00:06:44.480
+1400 łączników ma znaczenie, ponieważ usuwają największą barierę automatyzacji, pracę integracyjną.
+
+00:06:44.680 --> 00:06:48.620
+Każdy łącznik, którego nie musisz tworzyć samodzielnie, oszczędza tygodnie pracy programistycznej.
+
+00:06:48.620 --> 00:06:56.380
+A łącząc łączniki z wyzwalaczami i akcjami, możesz budować przepływy pracy obejmujące cały stos technologiczny bez pisania kodu integracyjnego.
+
+00:06:56.580 --> 00:06:59.640
+Consumption kontra standard, który model jest dla Ciebie odpowiedni?
+
+00:06:59.840 --> 00:07:03.880
+Wiesz już, czym jest Logic Apps, jak działają wyzwalacze i akcje oraz jaka jest siła łączników.
+
+00:07:04.120 --> 00:07:07.240
+Istnieje jednak jeszcze jedna decyzja, która wpływa na wysokość opłat.
+
+00:07:07.440 --> 00:07:13.540
+Logic Apps występuje w dwóch wersjach, Consumption i Standard, które różnią się od siebie, więc wybór niewłaściwej może Cię kosztować.
+
+00:07:13.540 --> 00:07:19.280
+Consumption to model płatności za każde wykonanie. Budujesz przepływ pracy i płacisz tylko wtedy, gdy jest on uruchamiany.
+
+00:07:19.480 --> 00:07:22.060
+Jeśli przez cały dzień pozostaje bezczynny, nie płacisz nic.
+
+00:07:22.240 --> 00:07:24.820
+Jeśli uruchomi się 100 razy, płacisz za 100 wykonań.
+
+00:07:25.000 --> 00:07:29.400
+Pierwsze 4 tysiące akcji w miesiącu są darmowe, a potem płaci się ułamki grosza za akcje.
+
+00:07:29.640 --> 00:07:32.400
+Wywołania łączników kosztują nieco więcej, ale to wciąż bardzo małe kwoty.
+
+00:07:32.660 --> 00:07:34.800
+Dla większości początkujących jest to właściwy punkt startowy.
+
+00:07:34.960 --> 00:07:36.640
+Pomyśl o modelu Consumption jak o taksówce.
+
+00:07:36.820 --> 00:07:38.320
+Płacisz za przejazd, który wykonujesz.
+
+00:07:38.320 --> 00:07:40.180
+Jeśli nigdzie nie jedziesz, nic nie płacisz.
+
+00:07:40.180 --> 00:07:42.260
+Jeśli odbywasz krótką trasę, kosztuje to niewiele.
+
+00:07:42.440 --> 00:07:44.380
+Jeśli odbywasz długą trasę, kosztuje to więcej.
+
+00:07:44.600 --> 00:07:46.440
+Cena dokładnie odzwierciedla Twoje zużycie.
+
+00:07:46.680 --> 00:07:47.660
+Standard jest inny.
+
+00:07:47.880 --> 00:07:51.740
+Działa na dedykowanych zasobach obliczeniowych, jak posiadanie własnego serwera, ale zarządzanego przez Microsoft.
+
+00:07:51.960 --> 00:07:55.180
+Płacisz stały miesięczny koszt w zależności od zarezerwowanej mocy obliczeniowej.
+
+00:07:55.400 --> 00:08:01.860
+Najmniejszy plan Standard kosztuje około 175 dolarów miesięcznie i zapewnia jeden wirtualny procesor oraz 3,5 GB pamięci.
+
+00:08:02.040 --> 00:08:07.420
+W tym planie możesz uruchamiać dowolną liczbę przepływów pracy, a cena nie zmienia się w zależności od liczby wykonań.
+
+00:08:07.420 --> 00:08:09.260
+Standard przypomina ratę za samochód.
+
+00:08:09.380 --> 00:08:12.760
+Płacisz taką samą kwotę co miesiąc, niezależnie od tego, czy jeździsz raz dziennie, czy raz w roku.
+
+00:08:13.000 --> 00:08:16.680
+Jeśli jeździsz dużo, ten stały koszt w przeliczeniu na przejazd może być niższy niż ciągłe korzystanie z taksówek.
+
+00:08:16.840 --> 00:08:19.600
+Jeśli jednak prawie nie jeździsz, płacisz za dostępność, której nie wykorzystujesz.
+
+00:08:19.760 --> 00:08:21.080
+Kiedy więc wybrać poszczególne opcje?
+
+00:08:21.320 --> 00:08:24.260
+Model zużycia Consumption świetnie sprawdza się w przypadku sporadycznych lub niewielkich obciążeń.
+
+00:08:24.420 --> 00:08:26.160
+Weźmy przepływ pracy, który uruchamia się kilka razy dziennie.
+
+00:08:26.160 --> 00:08:28.700
+Gdy ktoś przesyła plik, to koszt zaledwie kilku groszy miesięcznie w modelu zużycia.
+
+00:08:28.700 --> 00:08:31.420
+Dlatego uruchamianie go w planie Standard byłoby marnotrawstwem.
+
+00:08:31.560 --> 00:08:34.760
+Jeśli jednak masz przepływ pracy, który uruchamia się tysiące razy na godzinę,
+
+00:08:34.840 --> 00:08:38.400
+przetwarzając zamówienia, dane w czasie rzeczywistym lub koordynując złożone integracje,
+
+00:08:38.540 --> 00:08:40.940
+koszty za każde wykonanie w modelu zużycia szybko rosną.
+
+00:08:41.160 --> 00:08:44.580
+W takim momencie stała miesięczna opłata planu Standard staje się tańszą opcją.
+
+00:08:44.840 --> 00:08:46.860
+Jest jeszcze jedna różnica, którą warto znać.
+
+00:08:47.040 --> 00:08:48.580
+Standard daje większą kontrolę.
+
+00:08:48.760 --> 00:08:51.300
+Zyskujesz lepszą wydajność, ponieważ komputer jest dedykowany dla Ciebie,
+
+00:08:51.360 --> 00:08:54.640
+a dodatkowo otrzymujesz obsługę sieci wirtualnych dla rygorystycznych wymagań bezpieczeństwa.
+
+00:08:54.640 --> 00:08:58.160
+Możesz nawet uruchamiać przepływy pracy w planie Standard lokalnie na własnym sprzęcie.
+
+00:08:58.380 --> 00:09:01.560
+Model zużycia działa tylko w chmurze Microsoftu na współdzielonej infrastrukturze,
+
+00:09:01.640 --> 00:09:04.680
+więc nie masz tego samego poziomu kontroli, ale też nie musisz niczym zarządzać.
+
+00:09:04.900 --> 00:09:07.380
+Dla większości osób zaczynających przygodę odpowiedź jest prosta.
+
+00:09:07.620 --> 00:09:08.780
+Zacznij od modelu zużycia.
+
+00:09:09.040 --> 00:09:10.700
+Wypróbowanie go praktycznie nic nie kosztuje.
+
+00:09:10.920 --> 00:09:14.000
+Zbuduj swój pierwszy przepływ pracy, zobacz jak działa i przejmij się planem Standard tylko wtedy,
+
+00:09:14.120 --> 00:09:16.960
+gdy wolumen wzrośnie do punktu, w którym model zużycia stanie się droższy niż stały plan.
+
+00:09:17.160 --> 00:09:18.800
+Zawsze możesz dokonać migracji później.
+
+00:09:19.060 --> 00:09:20.220
+Przykłady z życia wzięte.
+
+00:09:20.220 --> 00:09:23.080
+Pokażę Ci, jak to wygląda, gdy korzystają z tego prawdziwe firmy.
+
+00:09:23.220 --> 00:09:26.100
+To nie tylko pomysły, to rzeczywiste przepływy pracy działające każdego dnia.
+
+00:09:26.260 --> 00:09:27.860
+Pierwszy przykład jest najprostszy.
+
+00:09:28.040 --> 00:09:31.140
+Plik trafia do biblioteki dokumentów SharePoint i to jest wyzwalacz.
+
+00:09:31.300 --> 00:09:33.960
+Akcja wysyła powiadomienie do kanału w Microsoft Teams.
+
+00:09:34.200 --> 00:09:36.920
+Nazwa pliku, informacja, kto go przesłał oraz link do jego otwarcia.
+
+00:09:37.240 --> 00:09:38.860
+Konfiguracja zajmuje około 3 minuty.
+
+00:09:39.180 --> 00:09:39.620
+Rezultat?
+
+00:09:39.760 --> 00:09:41.780
+Nikt nie musi już ręcznie sprawdzać folderu.
+
+00:09:41.960 --> 00:09:44.220
+Każdy członek zespołu widzi to powiadomienie natychmiast.
+
+00:09:44.400 --> 00:09:48.160
+W skali roku ten jeden przepływ pracy oszczędza godziny sprawdzania, przesyłania dalej i pytań typu
+
+00:09:48.160 --> 00:09:49.020
+czy widziałeś nowy plik.
+
+00:09:49.300 --> 00:09:49.780
+Wiadomości?
+
+00:09:49.940 --> 00:09:52.240
+To drobiazg, ale szybko sumuje się w oszczędność czasu.
+
+00:09:52.480 --> 00:09:54.000
+Drugi przykład jest bardziej złożony.
+
+00:09:54.180 --> 00:09:58.000
+Klient składa zamówienie na stronie internetowej, a zamówienie to trafia do bazy danych SQL.
+
+00:09:58.360 --> 00:10:03.580
+Logic App odbiera je, sprawdza stany magazynowe w innej bazie danych, wysyła e-mail z potwierdzeniem przez Outlooka,
+
+00:10:03.700 --> 00:10:07.320
+tworzy rekord w Salesforce i publikuje powiadomienie dla zespołu magazynowego w Teams.
+
+00:10:07.500 --> 00:10:10.080
+To pięć różnych systemów połączonych w jeden przepływ.
+
+00:10:10.200 --> 00:10:15.860
+Przed wprowadzeniem Logic Apps ktoś musiał ręcznie sprawdzać bazę danych, wysyłać e-mail, otwierać Salesforce i iść do magazynu.
+
+00:10:15.860 --> 00:10:19.520
+Teraz dzieje się to automatycznie w kilka sekund, bez żadnej ingerencji człowieka.
+
+00:10:19.660 --> 00:10:21.980
+To właśnie integracja, która ratuje całe działy.
+
+00:10:22.160 --> 00:10:24.420
+Trzeci przykład pochodzi z sektora opieki zdrowotnej.
+
+00:10:24.640 --> 00:10:28.280
+Badania udokumentowały przepływ pracy Logic Apps przy przyjmowaniu pacjentów.
+
+00:10:28.440 --> 00:10:31.880
+Gdy nowy pacjent został zarejestrowany w elektronicznej dokumentacji medycznej,
+
+00:10:32.020 --> 00:10:36.960
+aplikacja Logic App tworzyła konta w Microsoft 365, wysyłała materiały powitalne,
+
+00:10:37.080 --> 00:10:39.200
+umawiała wizytę i powiadamiała zespół medyczny.
+
+00:10:39.440 --> 00:10:40.840
+Wyniki były imponujące.
+
+00:10:40.840 --> 00:10:45.880
+Liczba błędów ręcznych spadła o 75%, a szybkość wdrażania poprawiła się o 40%.
+
+00:10:45.880 --> 00:10:50.580
+To nie tylko szybciej, to lepsza opieka nad pacjentem, bo zadania administracyjne nie są pomijane.
+
+00:10:50.760 --> 00:10:53.020
+Czwartym przykładem jest reakcja na incydenty IT.
+
+00:10:53.200 --> 00:10:55.720
+Alert Azure Monitor uruchamia się, gdy serwer ulega awarii.
+
+00:10:55.840 --> 00:10:57.700
+Ten alert wyzwala aplikację Logic App.
+
+00:10:57.860 --> 00:11:03.040
+Przepływ pracy tworzy zgłoszenie w serwisenow, publikuje wiadomość na kanale Teams ze szczegółami incydentu i uruchamia licznik.
+
+00:11:03.240 --> 00:11:07.160
+Jeśli nikt nie potwierdzi incydentu w ciągu 15 minut, Logic App eskaluje sprawę.
+
+00:11:07.160 --> 00:11:11.380
+Wysyła SMS do inżyniera dyżurnego, potem do lidera zespołu, a następnie do menedżera.
+
+00:11:11.600 --> 00:11:13.300
+Działa tak długo, aż ktoś zareaguje.
+
+00:11:13.500 --> 00:11:17.020
+Wcześniej zespoły IT polegały na alertach e-mail, które ginęły w skrzynkach odbiorczych.
+
+00:11:17.160 --> 00:11:20.500
+Teraz incydenty są rozwiązywane szybciej, ponieważ eskalacja jest automatyczna.
+
+00:11:20.700 --> 00:11:22.960
+Wspólny mianownik wszystkich tych przykładów jest ten sam.
+
+00:11:23.160 --> 00:11:25.800
+Logic Apps łączy systemy, które nie komunikują się ze sobą naturalnie.
+
+00:11:26.000 --> 00:11:27.460
+SharePoint nie wie o istnieniu Teams.
+
+00:11:27.660 --> 00:11:29.360
+Twoja baza danych nie wie o istnieniu Salesforce.
+
+00:11:29.700 --> 00:11:32.100
+Twoje narzędzia monitorujące nie wiedzą o systemie zgłoszeniowym.
+
+00:11:32.100 --> 00:11:36.280
+Logic Apps znajduje się pomiędzy nimi, nasłuchuje zdarzeń i kieruje informacje tam, gdzie powinny trafić.
+
+00:11:36.380 --> 00:11:38.900
+To spoiwo, które utrzymuje Twoją automatyzację w całości.
+
+00:11:39.180 --> 00:11:41.940
+Dokąd zmierza Logic Apps automatyzacja oparta na agentach?
+
+00:11:42.040 --> 00:11:45.380
+To stan, w jakim Logic Apps znajduje się dzisiaj, ale platforma szybko się zmienia,
+
+00:11:45.480 --> 00:11:47.820
+a najważniejsza zmiana jest czymś, o czym musisz wiedzieć.
+
+00:11:48.080 --> 00:11:51.640
+Nazywa się to automatyzacją opartą na agentach i zmienia ona możliwości przepływów pracy.
+
+00:11:51.860 --> 00:11:55.280
+Firma Microsoft ogłosiła automatyzację Logic Apps na konferencji Build 2026.
+
+00:11:55.540 --> 00:11:57.380
+Główna funkcja jest prosta, ale potężna.
+
+00:11:57.380 --> 00:12:01.880
+Możesz teraz opisać, czego potrzebujesz, używając języka naturalnego, a platforma zbuduje dla Ciebie przepływ pracy.
+
+00:12:02.120 --> 00:12:05.680
+Zamiast przeciągać i upuszczać każdy wyzwalacz i akcję, wpisujesz coś w stylu.
+
+00:12:05.840 --> 00:12:11.420
+Gdy wpłynie zgłoszenie do wsparcia, sprawdź historię klienta, a jeśli jest to klient premium, przypisz je do zespołu seniorów.
+
+00:12:11.620 --> 00:12:17.560
+Logic Apps analizuje Twoją prośbę, dobiera odpowiednie łączniki, konfiguruje parametry i tworzy zarys całego przepływu pracy.
+
+00:12:17.860 --> 00:12:21.260
+Możesz go następnie dostosować w edytorze wizualnym, ale najcięższą pracę masz już z głowy.
+
+00:12:21.520 --> 00:12:24.420
+Sama ta zmiana jest znacząca, ale jeszcze ważniejsze są agenci AI.
+
+00:12:24.420 --> 00:12:28.680
+Logic Apps pozwala teraz na bezpośrednią integrację agentów AI jako kroków w Twoim przepływie pracy.
+
+00:12:28.880 --> 00:12:31.460
+Ci agenci nie tylko wywołują API i zwracają wynik.
+
+00:12:31.600 --> 00:12:38.780
+Oni rozumują, korzystają z narzędzi, podejmują decyzje, nadajesz agentowi cel, zestaw narzędzi oraz instrukcje dotyczące zachowania.
+
+00:12:39.040 --> 00:12:45.960
+Agent następnie znajduje najlepszy sposób na osiągnięcie celu, wywołując łączniki, przeszukując bazy danych, a nawet prosząc o zatwierdzenie przez człowieka, gdy jest to potrzebne.
+
+00:12:46.140 --> 00:12:48.700
+Zastanów się, co to oznacza dla przykładów, które właśnie omówiliśmy.
+
+00:12:48.700 --> 00:12:52.660
+Powiadomienie z SharePoint do Teams jest proste, ale co z przepływem pracy zamówień klientów?
+
+00:12:52.840 --> 00:12:56.160
+Zamiast kodować każdy krok, możesz mieć agenta, który obsługuje wyjątki.
+
+00:12:56.400 --> 00:12:59.460
+Wpływa zamówienie z adresem klienta, który nie zgadza się z bazą danych.
+
+00:12:59.720 --> 00:13:06.640
+Zamiast błędów przepływie pracy, agent może sprawdzić historię klienta, wyszukać alternatywne adresy i zdecydować, czy przetworzyć zamówienie, czy oznaczyć je do weryfikacji.
+
+00:13:06.840 --> 00:13:09.800
+Adaptuje się do sytuacji, których projektant przepływu pracy nie przewidział.
+
+00:13:09.800 --> 00:13:13.460
+Kluczowy wniosek jest taki, że Logic Apps nie służy już tylko do łączenia aplikacji.
+
+00:13:13.720 --> 00:13:16.140
+Staje się warstwą orkiestracji dla sztucznej inteligencji.
+
+00:13:16.360 --> 00:13:22.060
+Łączniki dbają o infrastrukturę, przepływy pracy o logikę, a agenci o decyzje, które wcześniej wymagały udziału człowieka.
+
+00:13:22.220 --> 00:13:24.800
+To fundamentalnie inne podejście do myślenia o automatyzacji.
+
+00:13:25.640 --> 00:13:27.160
+Rozpoczęcie pracy z Logic Apps.
+
+00:13:27.380 --> 00:13:30.060
+Powiem Ci dokładnie, jak zacząć, jeśli chcesz spróbować samodzielnie.
+
+00:13:30.240 --> 00:13:31.160
+Nie potrzebujesz wiele.
+
+00:13:31.440 --> 00:13:33.060
+Będziesz potrzebować subskrypcji Azure.
+
+00:13:33.060 --> 00:13:36.900
+Jeśli jej nie masz, Microsoft daje 200 dolarów darmowego kredytu na pierwszy miesiąc.
+
+00:13:36.980 --> 00:13:40.360
+To wystarczy, by zbudować i przetestować kilka przepływów pracy bez wydawania ani grosza.
+
+00:13:40.580 --> 00:13:42.820
+Będziesz też potrzebować konta służbowego lub edukacyjnego.
+
+00:13:43.040 --> 00:13:47.920
+Osobiste konto Hotmail działa w niektórych przypadkach, ale dla pełnego doświadczenia użyj konta powiązanego z Twoją organizacją.
+
+00:13:48.180 --> 00:13:50.000
+Zacznij od planu zużycia Consumption Plan.
+
+00:13:50.160 --> 00:13:51.460
+To najtańszy sposób na naukę.
+
+00:13:51.700 --> 00:13:54.600
+Możesz zbudować swój pierwszy przepływ pracy bez zobowiązań do miesięcznych kosztów.
+
+00:13:54.800 --> 00:13:57.400
+Jeśli Twój przepływ uruchamia się raz dziennie, zapłacisz grosze miesięcznie.
+
+00:13:57.400 --> 00:13:58.500
+Nie ma żadnego ryzyka.
+
+00:13:58.500 --> 00:14:00.980
+Wybierz jeden scenariusz, który obecnie wykonujesz ręcznie.
+
+00:14:01.180 --> 00:14:03.280
+Nie próbuj automatyzować całego działu pierwszego dnia.
+
+00:14:03.540 --> 00:14:04.600
+Skup się na jednej rzeczy.
+
+00:14:04.880 --> 00:14:07.760
+Może to być powiadomienie, gdy plik trafi do określonego folderu
+
+00:14:07.760 --> 00:14:10.560
+lub automatyczne zapisywanie załączników z poczty do OnDrive
+
+00:14:10.560 --> 00:14:14.300
+albo publikowanie wiadomości w Teams, gdy w liście SharePoint pojawi się nowy element.
+
+00:14:14.520 --> 00:14:18.900
+Im prostszy scenariusz, tym szybciej go uruchomisz i tym pewniej poczujesz się, budując kolejny.
+
+00:14:19.040 --> 00:14:21.240
+Portal Azure posiada wizualny projektant.
+
+00:14:21.400 --> 00:14:24.180
+Otwórz, wybierz wyzwalacz z listy, dodaj akcję i przetestuj.
+
+00:14:24.180 --> 00:14:25.760
+Nie musisz pisać żadnego kodu.
+
+00:14:25.760 --> 00:14:29.620
+Projektant pokazuje cały przepływ, który możesz natychmiast uruchomić, by sprawdzić działanie.
+
+00:14:29.820 --> 00:14:32.740
+Microsoft udostępnia także szablony dla typowych scenariuszy.
+
+00:14:32.940 --> 00:14:36.300
+Otwórz projektanta Logic Apps, a zobaczysz galerię gotowych szablonów.
+
+00:14:36.440 --> 00:14:40.180
+Powiadomienia o przesłaniu plików, alerty e-mail na Teams, planowany eksport danych.
+
+00:14:40.480 --> 00:14:43.460
+Możesz użyć szablonu jako punktu wyjścia i dostosować go do swoich potrzeb.
+
+00:14:43.640 --> 00:14:45.620
+To najszybszy sposób, aby wszystko uruchomić.
+
+00:14:45.800 --> 00:14:46.620
+Zacznij już dziś.
+
+00:14:46.800 --> 00:14:49.800
+Wybierz jedno powtarzalne zadanie, które wykonujesz w aplikacjach i zautomatyzuj je.
+
+00:14:49.800 --> 00:14:53.080
+Nawet jeśli zaoszczędzisz 5 minut dziennie, to 5 minut, które odzyskujesz.
+
+00:14:53.080 --> 00:14:55.940
+Gdy zobaczysz, jakie to łatwe, zaczniesz znajdować kolejne.
+
+00:14:56.080 --> 00:14:57.420
+Oto co musisz zapamiętać.
+
+00:14:57.620 --> 00:15:00.260
+Logic Apps to automatyzacyjne spoiwo od Microsoftu.
+
+00:15:00.420 --> 00:15:02.900
+Łączy systemy, które naturalnie ze sobą nie rozmawiają.
+
+00:15:03.140 --> 00:15:07.280
+Zajmuje się technicznymi aspektami uwierzytelnianiem, ponownymi próbami obsługą błędów i skalowaniem,
+
+00:15:07.360 --> 00:15:08.820
+więc nie musisz zarządzać niczym z tego.
+
+00:15:09.080 --> 00:15:11.340
+Działa, nie zmuszając Cię do myślenia o serwerach.
+
+00:15:11.480 --> 00:15:12.860
+Kluczowy wniosek jest taki.
+
+00:15:13.040 --> 00:15:17.260
+Nie musisz być programistą, aby budować automatyzację i nie musisz być ekspertem IT, aby je uruchamiać.
+
+00:15:17.360 --> 00:15:21.500
+Wizualny projektant, gotowe łączniki, szablony, wszystko to zaprojektowano, by obniżyć barierę wejścia.
+
+00:15:21.720 --> 00:15:24.160
+Jeśli potrafisz opisać proces, możesz go zautomatyzować.
+
+00:15:24.340 --> 00:15:25.780
+Twoje zadanie domowe jest proste.
+
+00:15:25.940 --> 00:15:28.400
+Pomyśl o jednym powtarzalnym zadaniu, które wykonujesz między aplikacjami.
+
+00:15:28.600 --> 00:15:31.100
+Jedna rzecz, która polega na przenoszeniu informacji z jednego systemu do drugiego,
+
+00:15:31.220 --> 00:15:33.180
+a następnie spróbuj zautomatyzować to za pomocą Logic Apps.
+
+00:15:33.380 --> 00:15:34.940
+Zacznij od planu zużycia Consumption Plan.
+
+00:15:35.140 --> 00:15:36.460
+Użyj szablonu, jeśli istnieje.
+
+00:15:36.660 --> 00:15:37.820
+Zobacz, jak daleko zajdziesz.
+
+00:15:37.980 --> 00:15:40.320
+To wszystko w tym odcinku Microsoft Knowledge Nugget.
+
+00:15:40.320 --> 00:15:46.080
+Jeśli pomogło Ci to lepiej zrozumieć Logic Apps, udostępnij to komuś, kto zaczyna swoją przygodę z automatyzacją Microsoft.
+
+00:15:46.420 --> 00:15:50.200
+Zasubskrybuj na swojej ulubionej platformie podcastowej, aby nie przegapić kolejnego odcinka.
+
+00:15:50.440 --> 00:15:52.620
+Nazywam się Merko Peters i dziękuję za wysłuchanie.

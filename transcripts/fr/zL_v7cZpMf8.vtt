@@ -1,0 +1,877 @@
+WEBVTT
+
+00:00:00.370 --> 00:00:06.870
+Prêt pour 10 jours consacrés à Microsoft 365, Copilot, l'IA, Azure et aux acteurs qui façonnent l'avenir du travail.
+
+00:00:07.830 --> 00:00:12.250
+En janvier prochain, la M365-Con est de retour et nous voyons plus grand, puis grand.
+
+00:00:12.930 --> 00:00:17.990
+Rejoignez-nous pour des sessions en direct, des démonstrations concrètes et des conseils pratiques d'experts et de MVPs du monde entier.
+
+00:00:18.870 --> 00:00:21.130
+Pas de diapositives génériques, pas de jargon à non plus finir.
+
+00:00:21.950 --> 00:00:28.910
+Nous abordons les vrais défis, Copilot Studio, Agendia, Fabrica, Sécurité, Gouvernance et Automatisation et Navi.
+
+00:00:28.910 --> 00:00:34.370
+Que vous soyez professionnel de l'IT, développeur ou dirigeant d'entreprise, des sessions sont conçues pour vous.
+
+00:00:35.570 --> 00:00:40.010
+Sur 10 jours complets, explorez de multiples technologies et connectez-vous à une communauté mondiale.
+
+00:00:40.990 --> 00:00:44.190
+Suivez le direct et rapportez des connaissances pratiques à votre organisation.
+
+00:00:45.210 --> 00:00:48.970
+Janvier 2027, 10 jours, une seule communauté Microsoft.
+
+00:00:49.430 --> 00:00:50.810
+Les inscriptions sont désormais ouvertes.
+
+00:00:52.410 --> 00:00:54.610
+Réservez votre place dès aujourd'hui.
+
+00:00:54.610 --> 00:00:58.490
+Rendez-vous sur m365one.net
+
+00:00:58.490 --> 00:01:04.630
+Scrivez-vous sur m365one.net et nous nous retrouverons en direct en janvier.
+
+00:01:05.390 --> 00:01:07.430
+Azure propose déjà de nombreuses options de stockage.
+
+00:01:07.610 --> 00:01:08.810
+Blob, fichier, disque.
+
+00:01:09.350 --> 00:01:11.550
+Alors pourquoi Azure NetApp Files existe-t-il ?
+
+00:01:11.550 --> 00:01:13.630
+C'est la première question que l'on se pose en entendant ce nom.
+
+00:01:13.790 --> 00:01:14.430
+Et c'est légitime.
+
+00:01:14.810 --> 00:01:18.570
+Microsoft ajoute continuellement des services de stockage et on a l'impression qu'une nouvelle option apparaît chaque trimestre.
+
+00:01:18.970 --> 00:01:20.030
+Alors pour en ajouter un plus ?
+
+00:01:20.030 --> 00:01:20.610
+Voici la réponse.
+
+00:01:20.610 --> 00:01:23.190
+La plupart des stockages Azure conviennent parfaitement aux usages courants.
+
+00:01:23.730 --> 00:01:25.630
+Applications web, partage de fichiers, sauvegarde.
+
+00:01:25.830 --> 00:01:27.410
+Tout ce qui fait tourner une entreprise au quotidien.
+
+00:01:27.990 --> 00:01:29.610
+Mais certaines charges de travail ne rentrent pas dans ce mot.
+
+00:01:29.910 --> 00:01:31.050
+Elles ont besoin d'une vitesse incroyable.
+
+00:01:31.730 --> 00:01:33.210
+Une performance constante sous pression.
+
+00:01:33.570 --> 00:01:34.950
+Sans aucun délai supplémentaire.
+
+00:01:35.930 --> 00:01:38.610
+Azure NetApp Files est conçu spécifiquement pour ces charges de travail.
+
+00:01:39.570 --> 00:01:44.250
+A la fin de cet épisode, vous saurez exactement ce qu'est ANF, qu'en l'utiliser et qu'en préférer une solution plus simple.
+
+00:01:45.370 --> 00:01:49.290
+Nous verrons ce qu'il est réellement, ces trois principaux cas d'usage et comment il se compare à Azure Files.
+
+00:01:49.290 --> 00:01:51.390
+Commençons par une définition simple.
+
+00:01:52.390 --> 00:01:54.290
+Ce qu'est réellement Azure NetApp Files ?
+
+00:01:54.930 --> 00:01:59.490
+Azure NetApp Files est un service de stockage de fichiers d'entreprise gérés haute performance directement intégrés à Azure.
+
+00:02:00.230 --> 00:02:02.770
+Il ne s'agit pas d'un complément tiers ou d'un ajout greffé ultérieurement.
+
+00:02:03.590 --> 00:02:06.210
+C'est un service Microsoft natif entièrement intégré au portail Azure.
+
+00:02:06.870 --> 00:02:08.070
+Mais qu'est-ce qui le distingue ?
+
+00:02:08.070 --> 00:02:13.810
+Sous le capot, il repose sur la technologie NetApp, le même système de stockage qui alimente les centres de données sur site depuis des décennies.
+
+00:02:14.510 --> 00:02:17.090
+NetApp travaille sur le stockage de fichiers d'entreprise depuis les années 90.
+
+00:02:17.870 --> 00:02:19.470
+Il maîtrise la gestion de données rapide et fiable.
+
+00:02:20.050 --> 00:02:24.370
+Microsoft s'est associé à eux pour intégrer cette expertise dans Azure en tant que service géré, en tant que service géré.
+
+00:02:24.690 --> 00:02:25.930
+Alors qu'est-ce que cela signifie ?
+
+00:02:25.930 --> 00:02:29.030
+ANF prend en charge nativement les protocoles SMB et NFS.
+
+00:02:29.650 --> 00:02:32.390
+Charge de travail Windows ou Linux il gère, les deux.
+
+00:02:32.910 --> 00:02:34.110
+Vous n'êtes pas obligé de choisir l'un ou l'autre.
+
+00:02:34.570 --> 00:02:36.810
+Le même volume peut servir les deux types de clients, si nécessaire.
+
+00:02:37.410 --> 00:02:38.990
+C'est au niveau des performances qui se distinguent vraiment.
+
+00:02:39.290 --> 00:02:42.790
+Nous parlons d'une latence inférieure à la milliseconde et d'un débit massif, pas assez rapide.
+
+00:02:43.470 --> 00:02:44.730
+C'est réellement d'une rapidité fulgurante.
+
+00:02:45.490 --> 00:02:46.110
+Voici une analogie.
+
+00:02:46.210 --> 00:02:50.950
+Si Azure Files est la berline familiale fiable qui vous mène à destination, Azure NetApp Files est la voiture de sport.
+
+00:02:52.010 --> 00:02:54.110
+Conçue pour la vitesse, elle offre une maniabilité sans pareil.
+
+00:02:54.470 --> 00:02:55.750
+Et le meilleur dans tout ça, c'est que le service est entièrement géré.
+
+00:02:56.170 --> 00:02:57.590
+Pas de correctif de serveur, pas de remplacement nada.
+
+00:02:58.150 --> 00:03:01.290
+Il vous suffit de créer un volume, de choisir votre niveau de performance et de commencer à l'utiliser.
+
+00:03:01.910 --> 00:03:03.270
+Azure et NetApp s'occupent du reste.
+
+00:03:03.730 --> 00:03:05.630
+Mais pourquoi auriez-vous besoin d'une voiture de stockage ?
+
+00:03:05.630 --> 00:03:07.710
+Examinons les problèmes que le stockage classique ne peut pas résoudre.
+
+00:03:09.590 --> 00:03:11.290
+Les problèmes que le stockage classique ne peut pas résoudre.
+
+00:03:12.050 --> 00:03:14.330
+La plupart des stockages cloud gèrent très bien l'informatique quotidienne.
+
+00:03:14.930 --> 00:03:16.490
+Applications web, partage de fichiers, sauvegains.
+
+00:03:16.830 --> 00:03:17.890
+Pour la plupart des gens, cela suffit.
+
+00:03:18.070 --> 00:03:20.250
+Vous n'avez pas besoin d'un moteur de Formule 1 pour aller faire vos courses.
+
+00:03:21.030 --> 00:03:22.370
+Cependant, certaines charges de travail sont différentes.
+
+00:03:22.370 --> 00:03:25.850
+Considérez-les comme des athlètes exigeants qui ont besoin de chaque milliseconde et ne peuvent pas se permettre d'attendre.
+
+00:03:26.490 --> 00:03:26.950
+Voici le problème.
+
+00:03:27.290 --> 00:03:28.950
+Une latence élevée tue les performances des bases de données.
+
+00:03:29.610 --> 00:03:33.130
+Quelques millisecondes supplémentaires sur l'écriture d'un journal peuvent ralentir tout un système transactionnaire.
+
+00:03:33.870 --> 00:03:37.110
+Faible débit étouffe les simulations, transformant des tâches de quelques heures en jours de travail.
+
+00:03:37.110 --> 00:03:39.110
+L'incohérence des IOPS est un autre problème.
+
+00:03:39.510 --> 00:03:40.950
+C'est ce qui frustre le plus les utilisateurs de VDI.
+
+00:03:41.470 --> 00:03:42.270
+Une minute, tout va bien.
+
+00:03:42.830 --> 00:03:44.990
+La suivante, le bureau ralentit car le stockage ne suit plus.
+
+00:03:45.450 --> 00:03:46.650
+Laissez-moi vous donner un exemple concret.
+
+00:03:47.190 --> 00:03:51.350
+Une sauvegarde de base de données, SAP HANA de 2,3 troiteaux sur un stockage classique peut prendre une heure.
+
+00:03:52.030 --> 00:03:53.410
+C'est une heure d'attente et de problèmes potentiels.
+
+00:03:54.170 --> 00:03:56.890
+Sur Azure NetApp Files, la même sauvegarde s'effectue en deux minutes.
+
+00:03:57.450 --> 00:03:58.550
+Ce n'est pas une faute de frappe, deux minutes.
+
+00:03:59.110 --> 00:04:00.630
+Le problème n'est pas qu'Azure Files soit mauvais.
+
+00:04:01.270 --> 00:04:02.910
+C'est un excellent service pour ce pour quoi il est conçu.
+
+00:04:03.110 --> 00:04:05.390
+Mais il est optimisé pour le coup, pas pour la performance maximale.
+
+00:04:05.870 --> 00:04:09.310
+Il offre une vitesse suffisante à un prix raisonnable, ce qui convient à la plupart des charges de travail, mais pas à toutes.
+
+00:04:09.670 --> 00:04:11.070
+Azure NetApp Files compte cette lacune.
+
+00:04:11.470 --> 00:04:14.210
+Il est conçu pour les charges de travail qui ne peuvent faire aucun compromis sur la vitesse ou la coer.
+
+00:04:14.730 --> 00:04:16.790
+Quand chaque milliseconde compte, ANF est la réponse.
+
+00:04:17.270 --> 00:04:19.370
+Alors qui a réellement besoin de ce type de performance ?
+
+00:04:19.370 --> 00:04:21.830
+Commençons par l'un des plus gros utilisateurs, SAP HANA.
+
+00:04:22.230 --> 00:04:23.690
+Cas d'utilisation numéro 1, SAP HANA.
+
+00:04:24.110 --> 00:04:24.830
+Parlons de SAP HANA.
+
+00:04:25.450 --> 00:04:28.770
+Si vous n'êtes pas dans le monde des bases de données d'entreprise, vous n'en avez peut-être jamais entendu parler,
+
+00:04:28.770 --> 00:04:30.810
+mais c'est l'une des charges de travail les plus exigeantes du cloud.
+
+00:04:31.710 --> 00:04:35.530
+SAP HANA est une base de données en mémoire, ce qui signifie qu'elle conserve toutes ses données en RAM pour plus de rapidité.
+
+00:04:36.170 --> 00:04:37.430
+Mais même si les données résident en mémoire,
+
+00:04:37.670 --> 00:04:40.610
+HANA a toujours besoin d'un stockage ultra rapide pour les journaux, les sauvegardes, les instantanés.
+
+00:04:41.030 --> 00:04:42.770
+Ces écritures doivent être effectuées rapidement et de manière fiable.
+
+00:04:43.250 --> 00:04:45.330
+Si le stockage ne peut pas suivre, toute la base de données ralentit.
+
+00:04:45.630 --> 00:04:47.590
+C'est pourquoi Azure NetApp Files est certifié par SAP.
+
+00:04:48.490 --> 00:04:51.490
+Il figure dans le répertoire officiel du matériel SAP HANA,
+
+00:04:51.690 --> 00:04:54.770
+ce qui signifie qu'il a été testé et approuvé par SAP lui-même.
+
+00:04:55.390 --> 00:04:56.250
+Ce n'est pas un détail négligeable.
+
+00:04:56.250 --> 00:04:58.670
+SAP ne certifie pas n'importe quelle solution de stockage.
+
+00:04:59.330 --> 00:05:02.090
+Il les teste minutieusement et seules celles qui réussissent sont retenues.
+
+00:05:02.550 --> 00:05:04.510
+De quel niveau de performance parle-t-on ?
+
+00:05:04.510 --> 00:05:09.270
+Une latence constante inférieure à la milliseconde et jusqu'à 4,5 gigas par seconde de débit par volume.
+
+00:05:09.770 --> 00:05:14.630
+Pour mettre cela en perspective, l'exigence minimale de SAP pour les journaux HANA est une latence inférieure à 1 milliseconde
+
+00:05:14.630 --> 00:05:17.730
+et ANF se situe confortablement sous ce seuil et ANF sous ce seuil.
+
+00:05:18.070 --> 00:05:21.850
+C'est important car une latence supérieure à 1 milliseconde peut ralentir les transactions de la base de données.
+
+00:05:21.850 --> 00:05:25.870
+Lorsque vous traitez des milliers de transactions par seconde, chaque milliseconde supplémentaire s'accumule.
+
+00:05:26.550 --> 00:05:30.050
+Microsoft a même conçu un outil de déploiement spécial appelé Application Volume Group pour HANA.
+
+00:05:31.010 --> 00:05:34.630
+Il optimise la disposition des volumes en les répartissant sur plusieurs points de terminaison de stockage
+
+00:05:34.630 --> 00:05:36.590
+afin qu'aucun point ne devienne un goulot d'étranglement.
+
+00:05:37.310 --> 00:05:40.230
+Imaginez cela comme plusieurs voies sur une autoroute au lieu d'une route étroite
+
+00:05:40.230 --> 00:05:42.390
+et les chiffres concernant les sauvegardes méritent d'être sous.
+
+00:05:42.390 --> 00:05:45.930
+Une sauvegarde HANA de 2,3 tours s'effectue en environ 2 minutes avec HANA.
+
+00:05:46.550 --> 00:05:49.510
+Sur un stockage conventionnel, cette même sauvegarde pourrait prendre de 30 à 60 minutes.
+
+00:05:50.250 --> 00:05:53.230
+Ce n'est pas seulement une commodité, cela change ce qui est possible avec vos fenêtres de sauvegarde.
+
+00:05:53.650 --> 00:05:54.890
+L'aspect financier est également intéressant.
+
+00:05:55.390 --> 00:05:59.690
+Grâce au niveau de services flexibles, vous pouvez adapter la performance exactement aux besoins de HANA sans surprovisionnement.
+
+00:06:00.430 --> 00:06:03.090
+Vous ne payez pas pour une capacité supplémentaire juste pour obtenir le doble nécessaire.
+
+00:06:04.030 --> 00:06:09.050
+SAP est un cas d'usage majeur, mais ANF alimente également un type de charge de travail très différent, le calcul haute performance.
+
+00:06:09.050 --> 00:06:11.850
+Le calcul haute performance, ou HPC.
+
+00:06:12.510 --> 00:06:14.330
+Le calcul haute performance couvre un vaste domaine.
+
+00:06:15.290 --> 00:06:18.010
+Simulation, rendu, modélisation financière, recherche scientifique,
+
+00:06:18.470 --> 00:06:22.470
+tout ce qui implique l'exécution de tâches parallèles massives sur des centaines, voire des milliers de nœuds de calcul.
+
+00:06:23.250 --> 00:06:25.150
+Ces charges de travail ont un besoin très spécifique.
+
+00:06:25.530 --> 00:06:28.310
+Elles nécessitent un accès partagé au fichier avec un débit élevé et une faible latence.
+
+00:06:28.930 --> 00:06:31.390
+Plusieurs nœuds doivent lire et écrire les mêmes ensembles de données simultanément.
+
+00:06:32.010 --> 00:06:35.230
+Si votre stockage ne suit pas, vos nœuds de calcul restent inactifs en attendant les données.
+
+00:06:35.830 --> 00:06:37.550
+Et un temps de calcul inactif représente de l'argent gaspillé.
+
+00:06:37.550 --> 00:06:44.690
+Azure NetApp Files atteint jusqu'à 652 EOPES avec une latence inférieure à 2 millisecondes lors des tests de référence, lors des tests de référence.
+
+00:06:45.150 --> 00:06:47.070
+C'est un nombre considérable d'opérations d'entrée-sorties.
+
+00:06:47.270 --> 00:06:50.090
+Et c'est suffisamment rapide pour que le stockage ne soit plus un goulot d'étranglement.
+
+00:06:50.570 --> 00:06:53.490
+Pour les très grands ensembles de données, il existe la fonctionnalité de volume volumineux largement.
+
+00:06:53.750 --> 00:06:56.150
+Il prend en charge des capacités allant jusqu'à 2 pétaoctets par volume.
+
+00:06:56.670 --> 00:06:58.650
+Cela représente 2 EOPES dans un seul volume.
+
+00:06:59.090 --> 00:07:02.670
+Imaginez ce que cela signifie pour une équipe de recherche traitant d'énormes simulations ou un studio de cinéma,
+
+00:07:02.670 --> 00:07:04.230
+effectuant le rendu d'un long métrage.
+
+00:07:04.810 --> 00:07:05.570
+Il y a le mot de cas Breakthrough.
+
+00:07:06.010 --> 00:07:09.270
+Il pousse le débit jusqu'à 50 gigabits par seconde à partir d'un seul grand volume.
+
+00:07:09.710 --> 00:07:12.450
+C'est une bande passante suffisante pour déplacer rapidement des ensembles de données-causes.
+
+00:07:12.610 --> 00:07:13.630
+Voici un exemple concret.
+
+00:07:14.270 --> 00:07:18.030
+L'automatisation de la conception électronique, ou EDA, dans l'industrie des puces.
+
+00:07:19.210 --> 00:07:23.750
+Des entreprises comme Nvidia et AMD exécutent des milliers de simulations simultanément pour vérifier les designs avant la fabrication.
+
+00:07:24.530 --> 00:07:26.450
+Chaque simulation lit et écrit des données partagées.
+
+00:07:27.130 --> 00:07:29.670
+Le système de stockage doit gérer cette charge concurrente sans ralentir.
+
+00:07:30.310 --> 00:07:31.790
+ANF est conçu exactement pour ce modèle.
+
+00:07:32.350 --> 00:07:34.390
+Alors pourquoi ne pas simplement utiliser Azure Files pour cela ?
+
+00:07:34.390 --> 00:07:38.590
+Parce qu'Azure Files a des plafonds de débit au niveau du fichier, soit 300 MHz par seconde en sortie par fichier.
+
+00:07:39.150 --> 00:07:43.650
+Cela signifie que même si votre stockage dispose d'une capacité supérieure, un seul gros fichier ne peut pas dépasser cette limite.
+
+00:07:44.150 --> 00:07:45.230
+ANF n'a aucun niveau des fichiers.
+
+00:07:45.770 --> 00:07:47.510
+Chaque fichier peut saturer la connexion réseau.
+
+00:07:47.670 --> 00:07:50.850
+Pour les charges de travail traitant de gros fichiers de simulation, cette différence est importante.
+
+00:07:50.850 --> 00:07:58.470
+Les recommandations de Microsoft préconisent ANF pour les charges de travail HPC jusqu'à environ 4 zéros mises au rockeur et 6,5 gigas par seconde de débit.
+
+00:07:59.550 --> 00:08:05.310
+Au-delà, une architecture différente pourrait être nécessaire, mais pour la grande majorité des scénarios HPC, ANF est parfaitement adapté.
+
+00:08:06.230 --> 00:08:10.210
+Troisième cas d'usage majeur, l'infrastructure de bureaux virtuels, où l'expérience utilisateur est primordiale.
+
+00:08:11.170 --> 00:08:12.650
+Infrastructure de bureaux virtuels, VDI.
+
+00:08:12.650 --> 00:08:16.650
+Parlons maintenant de quelque chose que presque tout le monde utilise, l'expérience de bureau.
+
+00:08:17.070 --> 00:08:21.190
+L'infrastructure de bureaux virtuels, ou VDI, signifie héberger des bureaux Windows, dans le cloud.
+
+00:08:21.610 --> 00:08:23.130
+Pensez à Azure Virtual Desktop ou Citrix.
+
+00:08:24.030 --> 00:08:28.350
+Au lieu d'utiliser un PC complet sur votre bureau, le bureau réside sur un serveur distant et vous vous y connectez.
+
+00:08:29.370 --> 00:08:29.910
+Voici le défi.
+
+00:08:30.350 --> 00:08:33.850
+Les profils utilisateurs et les données d'application doivent être stockées de manière centralisée et accessibles rapidement.
+
+00:08:34.470 --> 00:08:38.470
+Chaque fois qu'une personne se connecte, son profil doit charger ses paramètres, fichiers et données d'application.
+
+00:08:38.470 --> 00:08:43.110
+Si ce stockage est lent, la connexion est lente et des connexions lentes frustrent rapidement les utilisateurs.
+
+00:08:43.670 --> 00:08:45.090
+Et c'est là qu'ANF fait une réelle différence.
+
+00:08:45.870 --> 00:08:49.630
+Les temps de chargement lent des profils sont la plainte numéro 1 dans les déploiements VDI depuis des années.
+
+00:08:50.190 --> 00:08:55.370
+Les utilisateurs comparent cela à leur ancien bureau sur site, et si la version cloud semble plus lente, ils le remarquent immédiatement.
+
+00:08:56.130 --> 00:08:59.330
+Azure NetApp Files résout ce problème avec des IEPS élevés et une faible latence.
+
+00:08:59.590 --> 00:09:00.910
+Et je ne parle pas d'amélioration théorique.
+
+00:09:00.910 --> 00:09:09.710
+Les résultats concrets montrent que les temps de connexion passent de 20-30 secondes à moins de 5 secondes lorsque les organisations passent d'Azure Files à ANF pour le stockage de leur profil.
+
+00:09:10.410 --> 00:09:12.150
+C'est le genre d'amélioration que les utilisateurs ressentent d'un an.
+
+00:09:12.510 --> 00:09:13.750
+Pourquoi cela fonctionne-t-il si bien ?
+
+00:09:13.750 --> 00:09:17.650
+Car ANF prend en charge jusqu'à 450 0 IOPs par volume.
+
+00:09:18.230 --> 00:09:20.970
+C'est important quand des centaines d'utilisateurs se connectent en même temps le matin.
+
+00:09:21.670 --> 00:09:22.730
+Ce qu'on appelle la tempête de connexion.
+
+00:09:23.110 --> 00:09:26.670
+Tout le monde arrive à 9h00, et soudain, chaque profil doit se charger simultanément.
+
+00:09:26.670 --> 00:09:30.110
+Un système de stockage qui ne peut pas gérer cette concurrence ralentira tout le monde.
+
+00:09:30.950 --> 00:09:31.950
+ANF le gère parfaitement.
+
+00:09:32.490 --> 00:09:34.590
+Il existe une autre fonctionnalité incroyablement utile pour le VDI.
+
+00:09:35.290 --> 00:09:37.690
+ANF prend en charge jusqu'à 255 snapshots par volume.
+
+00:09:38.190 --> 00:09:41.630
+Cela signifie que vous pouvez instantanément rétablir le profil d'un utilisateur à son état d'hier.
+
+00:09:41.970 --> 00:09:46.350
+Si le profil de quelqu'un est corrompu, ou qu'une mise à jour problématique survient, pas besoin de restaurer, depuis une sauvegarde.
+
+00:09:46.870 --> 00:09:48.610
+Suffit de pointer vers le snapshot d'hier et c'est terminé.
+
+00:09:49.170 --> 00:09:50.630
+Cela permet d'économiser des heures de support.
+
+00:09:50.950 --> 00:09:52.130
+Et la fiabilité compte également.
+
+00:09:53.030 --> 00:09:55.830
+ANF est accompagné d'un SLA de disponibilité de 90 à 99 heures.
+
+00:09:55.830 --> 00:10:01.170
+Pour les déploiements VDI critiques ou l'indisponibilité signifient perte de productivité, ce niveau de fiabilité est essentiel.
+
+00:10:01.570 --> 00:10:03.090
+Voici un aspect financier auquel vous ne vous attendez pas.
+
+00:10:03.470 --> 00:10:07.670
+Comme ANF est très rapide, vous pouvez utiliser des machines virtuelles plus petites et moins chères tout en gardant de bonnes performances.
+
+00:10:08.310 --> 00:10:10.630
+Le stockage a le travail intensif donc vos ressources de calcul n'ont pas le fait.
+
+00:10:11.090 --> 00:10:12.890
+Cela peut compenser une partie du coût du stockage premium.
+
+00:10:13.870 --> 00:10:16.310
+Vous voyez maintenant les trois piliers SAP, HPC, VDI.
+
+00:10:17.010 --> 00:10:19.830
+Mais comment ANF se compare-t-il réellement à son cousin Azure Files ?
+
+00:10:20.350 --> 00:10:23.250
+Comment Azure NetApp Files se compare à Azure Files ?
+
+00:10:23.250 --> 00:10:26.330
+Azure NetApp Files et Azure Files sont toutes deux des partages de fichiers gérés dans Azure.
+
+00:10:26.910 --> 00:10:29.290
+Cela signifie que vous ne gérez ni correctif de serveur ni remplacement de matériel.
+
+00:10:29.710 --> 00:10:31.590
+La vraie différence réside dans les performances et le prix.
+
+00:10:32.330 --> 00:10:33.230
+Comparons les chiffres bruts.
+
+00:10:33.910 --> 00:10:37.890
+Azure Files Premium est limité à 100 000 EPS par partage, ce qui est suffisant pour beaucoup de charges.
+
+00:10:38.890 --> 00:10:43.030
+Mais ANF atteint jusqu'à 450 000 EPS par volume, soit plus de 4 fois ce plafond.
+
+00:10:43.030 --> 00:10:47.430
+Lorsque vous exécutez des charges nécessitant un accès concurrent important, cet écart est déterminant.
+
+00:10:48.050 --> 00:10:49.410
+La latence raconte une histoire similaire.
+
+00:10:50.230 --> 00:10:53.990
+Azure Files standard tourne autour de 10 millisecondes et le Premium descend à 2 ou 3 millisecondes.
+
+00:10:55.410 --> 00:10:59.850
+C'est respectable, mais ANF offre une latence inférieure à la milliseconde environ 0,0,0 fègle ultra.
+
+00:11:00.750 --> 00:11:04.350
+C'est la différence entre un stockage qui est un facteur mineur et un stockage qui est essentiellement invisible.
+
+00:11:04.850 --> 00:11:06.730
+Le débit est là où l'écart se creuse encore plus.
+
+00:11:06.730 --> 00:11:13.790
+Azure Files a des plafonds au niveau fichier, 300 MDP de serp en sortie et 200 MDP de serp en entrée par fichier, en entrée par fichier.
+
+00:11:14.170 --> 00:11:18.270
+Donc même si votre back-end a plus de capacité, un seul gros fichier ne peut pas dépasser cette limite.
+
+00:11:18.870 --> 00:11:20.290
+ANF n'a aucune limite au niveau des fichiers.
+
+00:11:20.910 --> 00:11:24.910
+Chaque fichier peut utiliser autant de débit que le réseau le permet et la taille maximale de partage.
+
+00:11:25.270 --> 00:11:27.170
+Azure Files plafonne à 100 tours par partage.
+
+00:11:27.830 --> 00:11:29.750
+ANF monte jusqu'à 2 PO avec les grands volumes.
+
+00:11:30.390 --> 00:11:31.410
+C'est 20 fois la capacité.
+
+00:11:32.130 --> 00:11:33.550
+Alors quand utiliser l'un ou l'autre ?
+
+00:11:33.550 --> 00:11:38.550
+Azure Files est le choix idéal pour le partage de fichiers généraux, les partages départementaux, les cibles de sauvegarde et les charges de travail sensibles.
+
+00:11:39.350 --> 00:11:40.290
+Considérez cela comme une berlée.
+
+00:11:40.730 --> 00:11:42.250
+Fiable, abordable, fait le travail.
+
+00:11:43.050 --> 00:11:45.550
+NF est destiné aux charges de travail où la latence et le débit sont critiques.
+
+00:11:46.210 --> 00:11:49.390
+SAP, ANA, Oracle, SQL Server, HPC, VDI, tout scénario,
+
+00:11:49.550 --> 00:11:53.450
+où une latence inférieure à la milliseconde et un haut niveau d'IOP font une réelle différence sur les performances applicatives.
+
+00:11:54.210 --> 00:11:55.170
+Maintenant parlons du coût.
+
+00:11:55.630 --> 00:11:58.010
+Azure Files est moins cher pour la plupart des cas d'utilisation, laissez-vous.
+
+00:11:58.210 --> 00:12:00.850
+Mais NF peut réellement faire économiser de l'argent dans des scénarios spécifiques.
+
+00:12:00.850 --> 00:12:06.090
+S'il vous permet d'utiliser des machines virtuelles plus petites grâce à un stockage plus rapide, vous économisez sur les coûts de calcul.
+
+00:12:06.450 --> 00:12:10.870
+S'il évite de surprovisionner la capacité juste pour obtenir un débit suffisant, vous économisez sur les coûts de stockage.
+
+00:12:11.250 --> 00:12:13.110
+Ainsi, le tableau complet des coûts n'est pas toujours simple.
+
+00:12:13.510 --> 00:12:15.790
+Il existe une fonctionnalité qui change entièrement l'équation des coûts.
+
+00:12:16.330 --> 00:12:17.210
+Le niveau de service flexible.
+
+00:12:18.490 --> 00:12:20.730
+Le niveau de service flexible ajuste la performance au plus juste.
+
+00:12:21.370 --> 00:12:23.010
+Voici une fonctionnalité qui change l'équation des coûts.
+
+00:12:23.010 --> 00:12:26.690
+Traditionnellement, les poules de capacité ANF avaient un ratio fixe.
+
+00:12:26.810 --> 00:12:28.430
+Plus votre poule était grand, plus vous aviez de débit.
+
+00:12:28.650 --> 00:12:30.690
+Et plus votre poule était petit, moins vous aviez de débit.
+
+00:12:31.610 --> 00:12:34.110
+Cela semble raisonnable en apparence, mais cela crée un vrai problème.
+
+00:12:34.790 --> 00:12:38.790
+Imaginez que vous ayez une petite base de données, disons un taux haut, mais qu'elle nécessite un débit élevé pour fonctionner correctement.
+
+00:12:39.270 --> 00:12:42.750
+Avec l'ancien modèle, vous deviez surprovisionner la capacité juste pour obtenir suffisamment de performance.
+
+00:12:43.610 --> 00:12:50.230
+Vous pouviez devoir acheter 64 T-Hout au stockage sur le niveau standard juste pour obtenir le débit dont ce 1 taux a réellement besoin, avec les 63 taux restants inutilisés.
+
+00:12:51.010 --> 00:12:52.370
+Vous payez pour de l'espace que vous n'utilisez pas.
+
+00:12:52.730 --> 00:12:54.070
+Ce n'est pas efficace et ce n'est pas bon marché.
+
+00:12:54.510 --> 00:12:56.150
+Le niveau de service flexible change complètement cela.
+
+00:12:56.710 --> 00:13:00.210
+Il découple la capacité du débit avec deux curseurs indépendants au lieu d'un seul.
+
+00:13:00.730 --> 00:13:03.890
+Vous décidez de la quantité de stockage dont vous avez besoin et séparément de la performance nécessaire.
+
+00:13:04.330 --> 00:13:05.490
+Ils n'ont pas besoin de correspondre.
+
+00:13:05.490 --> 00:13:08.630
+Ainsi, vous pouvez désormais avoir un poule de 1 taux avec 1 giga par seconde de débit.
+
+00:13:09.630 --> 00:13:14.910
+Sous l'ancien modèle, cette même performance sur le niveau standard aurait nécessité 64 T-Hout capacité de capacité.
+
+00:13:15.090 --> 00:13:16.330
+C'est une différence de 64 pour 1.
+
+00:13:16.810 --> 00:13:19.270
+Avec le niveau de service flexible, vous payez exactement pour ce dont vous avez besoin.
+
+00:13:19.610 --> 00:13:20.430
+Les économies sont réelles.
+
+00:13:20.990 --> 00:13:25.750
+Dans de nombreux scénarios, vous pouvez espérer 30% ou plus par rapport à l'utilisation du niveau ultra pour la même performance.
+
+00:13:26.170 --> 00:13:28.670
+Et cela avant même de prendre en compte les remises sur la capacité réservée.
+
+00:13:29.190 --> 00:13:31.110
+Le scénario de reprise après sinistre rend cela encore plus clair.
+
+00:13:31.670 --> 00:13:34.190
+Imaginez que vous ayez besoin de 100 T-Hout capacité pour un site de secours,
+
+00:13:34.650 --> 00:13:37.390
+mais que vous n'ayez pas besoin de beaucoup de débit tant qu'un basculement réel n'a pas lieu.
+
+00:13:37.390 --> 00:13:41.150
+Sous l'ancien modèle, vous deviez provisionner pour la performance dont vous pourriez avoir besoin un jour.
+
+00:13:41.750 --> 00:13:44.230
+Avec le niveau de service flexible, vous ne payez que pour la capacité,
+
+00:13:44.670 --> 00:13:46.390
+avec un débit de base de 128 MHz par seconde.
+
+00:13:47.290 --> 00:13:47.690
+Et rien de plus.
+
+00:13:48.510 --> 00:13:51.230
+Lorsqu'un basculement survient, vous adaptez le débit à la demande.
+
+00:13:52.150 --> 00:13:55.170
+Une fois terminé, vous le réduisez après une période de refroidissement de 24 heures.
+
+00:13:56.050 --> 00:13:59.450
+En parlant de mise à l'échelle, vous pouvez augmenter le débit selon vos besoins dans certaines limites
+
+00:13:59.450 --> 00:14:00.790
+et réduire après 24 heures.
+
+00:14:00.790 --> 00:14:04.210
+C'est idéal pour gérer les pics de charge, les traitements de fin de mois,
+
+00:14:04.430 --> 00:14:07.810
+les migrations ou les variations saisonnières, sans payer cette capacité en permanence.
+
+00:14:08.770 --> 00:14:11.470
+Cette fonctionnalité est actuellement disponible en préversion dans toutes les régions NF.
+
+00:14:12.190 --> 00:14:13.930
+C'est l'un des ajouts les plus demandés au service,
+
+00:14:14.190 --> 00:14:16.690
+et il change déjà la vision des clients sur les coûts de stockage.
+
+00:14:17.450 --> 00:14:18.970
+Voilà le niveau de service flexible en quelques mots.
+
+00:14:19.570 --> 00:14:21.090
+Un changement simple qui résout un problème majeur.
+
+00:14:21.850 --> 00:14:23.170
+Section de connexion pour synthétiser le tout.
+
+00:14:23.170 --> 00:14:24.830
+Voici donc l'élément déclencheur.
+
+00:14:25.510 --> 00:14:27.430
+Azure NetApp Files ne concurrence pas Azure Files.
+
+00:14:28.190 --> 00:14:31.630
+Il comble un écart de performance spécifique, essentiel pour les bonnes charges de travail.
+
+00:14:32.290 --> 00:14:36.910
+Les trois cas d'utilisation que nous avons vus, SAP, HANA, HPC, VDI, ont tous un point commun.
+
+00:14:37.390 --> 00:14:40.010
+Ils nécessitent un accès aux fichiers cohérents, à faible latence et à haut débit.
+
+00:14:40.410 --> 00:14:41.870
+C'est le fil conducteur de chacun d'entre eux.
+
+00:14:42.070 --> 00:14:44.890
+Qu'il s'agisse d'une transaction de base de données, d'une simulation,
+
+00:14:44.890 --> 00:14:47.170
+ou d'un utilisateur se connectant à son bureau,
+
+00:14:47.730 --> 00:14:51.070
+le stockage doit répondre instantanément, sans aucune attente.
+
+00:14:51.070 --> 00:14:53.530
+Le niveau de service flexible rend cette performance abordable.
+
+00:14:54.270 --> 00:14:57.550
+Au lieu de surdimensionner une capacité inutile, vous ne payez que ce que vous consommez.
+
+00:14:58.310 --> 00:15:00.410
+Cela modifie toute l'économie du stockage haute performance.
+
+00:15:01.130 --> 00:15:02.030
+Cela rend la vitesse accessible.
+
+00:15:02.470 --> 00:15:05.010
+De plus, ANF s'intègre au reste de l'écosystème Azure.
+
+00:15:05.770 --> 00:15:07.410
+Il utilise Azure AD pour le contrôle des accès.
+
+00:15:07.910 --> 00:15:09.230
+Les instantanés gèrent les sauvegardes.
+
+00:15:09.370 --> 00:15:11.130
+Et la réplication assure la reprise après-sinistre.
+
+00:15:11.130 --> 00:15:13.470
+Ce n'est pas un outil isolé, c'est une partie de la plateforme globale.
+
+00:15:14.050 --> 00:15:16.790
+La vraie puissance réside dans cette combinaison, et non dans une fonctionnalité unique.
+
+00:15:17.370 --> 00:15:19.470
+Performance, flexibilité et simplicité de gestion réunie,
+
+00:15:19.470 --> 00:15:23.190
+vous obtenez un stockage de classe entreprise sans les contraintes associées, sans les contraintes associées.
+
+00:15:23.490 --> 00:15:26.050
+Considérez ANF comme l'outil spécialisé de votre boîte à outils de stockage.
+
+00:15:26.330 --> 00:15:27.470
+Vous n'utilisez pas pour tout mais quand ?

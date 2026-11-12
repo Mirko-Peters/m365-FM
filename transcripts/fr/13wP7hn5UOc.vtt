@@ -1,0 +1,3067 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:02.660
+Vous déplacez encore vos tâches manuellement dans Microsoft Planner ?
+
+00:00:02.660 --> 00:00:03.500
+Fascinant !
+
+00:00:03.500 --> 00:00:06.020
+Vous regardez, cliquez, tapez et glissez des cases une par une.
+
+00:00:06.440 --> 00:00:09.340
+C'est comme voir quelqu'un écrire des adresses sur des enveloppes, à l'air de l'email.
+
+00:00:09.780 --> 00:00:12.040
+C'est du travail administratif numérique déguisé en productivité.
+
+00:00:12.580 --> 00:00:15.520
+Planner est censé gérer vos projets, pas devenir une tâche supplémentaire en soi.
+
+00:00:16.560 --> 00:00:19.840
+Voici Copilot Studio, la partie de la Power Platform de Microsoft
+
+00:00:19.840 --> 00:00:22.820
+qui vous permet de créer des agents IA capables de raisonner sur vos demandes.
+
+00:00:23.800 --> 00:00:25.440
+Demandez-lui de créer trois tâches pour la semaine prochaine
+
+00:00:25.440 --> 00:00:28.200
+et il ne se contente pas d'acquitter ces poliments, il les crée réellement.
+
+00:00:28.200 --> 00:00:32.420
+Il peut lister, mettre à jour et même prioriser sans que vous ayez à lever le petit doigt.
+
+00:00:33.060 --> 00:00:35.820
+A la fin de cette vidéo, vous aurez créé votre propre agent Planner à partir de zéro.
+
+00:00:36.520 --> 00:00:37.500
+Pas de magie, juste de la logique.
+
+00:00:38.080 --> 00:00:41.020
+Nous verrons comment créer l'agent connecté à Planner, lui apprendre à raisonner et le tester
+
+00:00:41.020 --> 00:00:43.060
+dans Microsoft 365 Copilot.
+
+00:00:43.660 --> 00:00:45.420
+Vous occupez de la clarté et s'occupe du travail.
+
+00:00:46.220 --> 00:00:47.840
+Comprendre la connexion entre Planner et Copilot.
+
+00:00:48.480 --> 00:00:49.940
+Microsoft Planner est votre tableau de tâches.
+
+00:00:50.520 --> 00:00:53.320
+Carte, liste, échéance, l'illusion de l'ordre.
+
+00:00:53.740 --> 00:00:55.920
+Mais l'ordre maintenu par un effort manuel reste un chaos,
+
+00:00:56.060 --> 00:00:57.720
+juste soigneusement classé par ordre alphabétique.
+
+00:00:58.200 --> 00:01:00.080
+Planner n'a jamais été conçu pour multiplier le travail humain.
+
+00:01:00.460 --> 00:01:01.480
+Il a été conçu pour le structurer.
+
+00:01:02.080 --> 00:01:03.940
+Le problème, c'est que vous finissez toujours par être le goulot d'étranglant.
+
+00:01:04.440 --> 00:01:07.280
+Chaque date limite, chaque glissée déposée dépend de vous cliquant comme un pigeon mécanique.
+
+00:01:08.940 --> 00:01:11.680
+Copilot Studio règle ce problème, non pas en vous donnant plus de boutons à presser,
+
+00:01:12.120 --> 00:01:14.220
+mais en éliminant le besoin d'en presser tout court.
+
+00:01:15.080 --> 00:01:18.060
+C'est la couche conversationnelle qui transforme le langage humain en action automatisée.
+
+00:01:18.880 --> 00:01:21.220
+Vous demandez, ajoute une tâche pour tester le prototype,
+
+00:01:21.220 --> 00:01:25.580
+et l'agent comprend le contexte, quel projet, quel plan et comment cela s'insère en le tableau.
+
+00:01:26.200 --> 00:01:28.460
+Comparer cela à Power Automate qui gère la logique derrière plan,
+
+00:01:28.600 --> 00:01:30.840
+la plomberie invisible et des flux de travail basés sur des événements.
+
+00:01:31.460 --> 00:01:34.620
+Power Automate attend des déclencheurs, exécute des flux, suit des règles.
+
+00:01:35.360 --> 00:01:36.280
+Copilot Studio, lui, écoute.
+
+00:01:36.940 --> 00:01:37.400
+Il résonne.
+
+00:01:37.860 --> 00:01:39.260
+Il décide quand appeler quel connecteur.
+
+00:01:39.960 --> 00:01:42.140
+Considérez Power Automate comme le tapis roulant d'un entrepôt.
+
+00:01:42.760 --> 00:01:45.360
+Copilot Studio est le contre-maître qui lui dit quand commencer à bouger.
+
+00:01:45.360 --> 00:01:48.860
+Les deux sont des espèces complémentaires dans l'écosystème d'automatisation de Microsoft.
+
+00:01:49.260 --> 00:01:50.800
+Power Automate exécute des règles.
+
+00:01:51.260 --> 00:01:52.600
+Copilot Studio interprète une intention.
+
+00:01:53.120 --> 00:01:56.140
+Ensemble, ils font la différence entre une macro rigide et un assistant réactif.
+
+00:01:57.140 --> 00:02:00.820
+Sous le capot, Copilot Studio utilise ce que Microsoft appelle joliment l'orchestration.
+
+00:02:01.920 --> 00:02:03.820
+Ce n'est pas de la magie aléatoire, c'est un LLM.
+
+00:02:03.960 --> 00:02:07.340
+Un grand modèle de langage qui choisit le bon outil en fonction du contexte de votre instruction.
+
+00:02:08.420 --> 00:02:09.380
+Les outils sont des connecteurs.
+
+00:02:09.520 --> 00:02:10.860
+Planner, Outlook, SharePoint.
+
+00:02:11.240 --> 00:02:13.420
+Lorsque vous donnez une commande, le modèle traite votre demande,
+
+00:02:13.420 --> 00:02:18.040
+consulte les descriptions des outils disponibles et sélectionne celui qui correspond le mieux à votre intention.
+
+00:02:18.720 --> 00:02:21.960
+Par exemple, vous dites « Liste mes tâches en cours pour le projet de design ».
+
+00:02:21.960 --> 00:02:24.840
+Le modèle identifie qu'il a besoin de l'outil de liste des tâches dans le planeur,
+
+00:02:24.940 --> 00:02:27.080
+remplit les paramètres comme l'ID du plan et l'exécute.
+
+00:02:28.320 --> 00:02:30.080
+Vous obtenez votre réponse non pas par devinette,
+
+00:02:30.160 --> 00:02:32.020
+mais parce que vous lui avez appris quand chaque outil est pertinent.
+
+00:02:32.580 --> 00:02:33.880
+Maintenant, imaginez votre refus de travail actuel.
+
+00:02:34.820 --> 00:02:36.640
+Vous ouvrez Planner manuellement, lisez chaque tâche,
+
+00:02:36.640 --> 00:02:39.460
+mettez à jour les échéances, changez d'onglet, en oublié peut-être une, puis recommencez.
+
+00:02:40.320 --> 00:02:42.740
+C'est une inefficacité structurée, constante, mais coûteuse.
+
+00:02:43.280 --> 00:02:47.540
+Avec Copilot Studio, cette friction mentale se déplace de votre cerveau vers le moteur de raisonnement du modèle.
+
+00:02:48.520 --> 00:02:52.720
+Il mémorise le contexte, reconnaît les modèles et déplace les données exactement là où elles doivent être.
+
+00:02:53.760 --> 00:02:56.140
+Voici une métaphore aggravée dans votre cortex de productivité.
+
+00:02:56.700 --> 00:03:00.040
+Planner est le classeur, Copilot Studio est le stagiaire qui range tout pour vous,
+
+00:03:00.260 --> 00:03:04.640
+sans salaire, sans mauvaise humeur et sans pause café et sans pause café.
+
+00:03:05.200 --> 00:03:08.340
+Une fois configuré, votre nouvel employé numérique comprend des instructions naturelles
+
+00:03:08.340 --> 00:03:11.220
+comme « Créer les tâches pour le sprint de la semaine prochaine ».
+
+00:03:11.220 --> 00:03:13.000
+Ou met à jour le statut des tâches dues aujourd'hui.
+
+00:03:13.500 --> 00:03:14.900
+Quand vous parlez, il organise.
+
+00:03:15.540 --> 00:03:18.380
+La couche d'orchestration garantit que vos instructions ne sont pas seulement traitées,
+
+00:03:18.580 --> 00:03:20.080
+mais interprétées, mais…
+
+00:03:20.080 --> 00:03:21.020
+Et c'est là toute la distinction.
+
+00:03:21.440 --> 00:03:23.380
+L'automatisation sans raisonnement n'est qu'une vitesse stupide.
+
+00:03:23.640 --> 00:03:26.020
+L'automatisation avec raisonnement devient une intelligence adaptative.
+
+00:03:26.300 --> 00:03:27.880
+La plupart des gens abordent l'automatisation à l'envers.
+
+00:03:28.180 --> 00:03:31.080
+Ils commencent par les outils, puis se demandent pourquoi le flux de travail semble toujours robotique.
+
+00:03:31.600 --> 00:03:34.040
+Le bon ordre est « raisonnement d'abord », outil ensuite.
+
+00:03:34.040 --> 00:03:37.040
+Apprenez à l'agent pourquoi une tâche existe avant de lui apprendre.
+
+00:03:37.400 --> 00:03:39.040
+Comment l'exécuter ?
+
+00:03:39.040 --> 00:03:41.300
+Une fois cette hiérarchie mentale acquise, vous arrêtez d'écrire des scripts
+
+00:03:41.300 --> 00:03:42.840
+et commencez à concevoir des comportements.
+
+00:03:43.880 --> 00:03:46.680
+Maintenant que vous comprenez l'architecture, la relation entre votre planeur,
+
+00:03:46.740 --> 00:03:48.920
+vos flux Power Automate et votre interface conversationnelle,
+
+00:03:49.000 --> 00:03:50.060
+il est temps de passer à la pratique.
+
+00:03:51.200 --> 00:03:53.340
+Nous allons construire votre premier agent copilote studio,
+
+00:03:53.560 --> 00:03:55.640
+définir sa personnalité, limiter ses impulsions
+
+00:03:55.640 --> 00:03:58.760
+et lui faire effectuer le travail sur lequel votre cerveau humain perdait son temps.
+
+00:03:58.760 --> 00:04:02.360
+Préparez-vous à remplacer le glissé-déposé par créer et lancé.
+
+00:04:03.140 --> 00:04:04.600
+Construction de l'agent dans Copilot Studio
+
+00:04:04.600 --> 00:04:05.920
+Ouvrez Copilot Studio
+
+00:04:05.920 --> 00:04:08.360
+Ne clignez pas des yeux, ne vous dispersez pas
+
+00:04:08.360 --> 00:04:11.180
+et résistez à l'envie de cliquer partout sans but comme l'utilisateur moyen
+
+00:04:11.180 --> 00:04:12.740
+qui découvre un nouveau bouton.
+
+00:04:13.420 --> 00:04:14.560
+Nous allons faire quelque chose de délibéré.
+
+00:04:15.080 --> 00:04:16.740
+Cliquez sur nouvel agent, donnez-lui un nom censé,
+
+00:04:16.980 --> 00:04:20.260
+comme planificateur de tâches, par RoboPlaneur300 ou truc IA.
+
+00:04:21.060 --> 00:04:23.820
+Le nom de l'agent détermine la facilité avec laquelle vous le retrouverez plus tard
+
+00:04:23.820 --> 00:04:25.000
+et vous oublierez comment vous l'avez appelé.
+
+00:04:25.360 --> 00:04:27.880
+Maintenant, avant de commencer à imaginer un assistant de bureau conscient,
+
+00:04:27.880 --> 00:04:30.140
+rappelez-vous qu'il s'agit d'un employé IA, pas d'un voyant.
+
+00:04:30.600 --> 00:04:33.280
+Il faut lui dire qui il est, ce qu'il peut faire et surtout ce qu'il ne peut pas faire.
+
+00:04:34.000 --> 00:04:35.040
+C'est là qu'interviennent les instructions.
+
+00:04:35.400 --> 00:04:37.180
+Voyez-les comme la philosophie opérationnelle de l'agent,
+
+00:04:37.500 --> 00:04:40.200
+telles les lois de Tazimov, mais moins littéraires et plus bureaucratiques.
+
+00:04:40.920 --> 00:04:42.180
+Vous définissez le champ de raisonnement,
+
+00:04:42.420 --> 00:04:44.960
+créer, lister, mettre à jour des tâches Planeur et rien d'autre.
+
+00:04:45.780 --> 00:04:48.500
+L'éditeur d'instruction permet d'ajouter des paragraphes de conseil sur le ton,
+
+00:04:48.740 --> 00:04:49.760
+les objectifs et les limites.
+
+00:04:50.220 --> 00:04:50.560
+Soyez clair.
+
+00:04:51.100 --> 00:04:53.420
+Vous êtes un assistant Planeur qui peut créer des tâches, les listeurs
+
+00:04:53.420 --> 00:04:56.120
+et définir des dates d'échéance à l'aide des outils Planeur.
+
+00:04:56.880 --> 00:04:58.500
+Répondez de manière concise, ne spéculez jamais.
+
+00:04:59.240 --> 00:05:01.840
+La clarté ici se traduit directement par une meilleure orchestration par la suite.
+
+00:05:02.620 --> 00:05:04.060
+L'ambiguïté perturbe les modèles de langage,
+
+00:05:04.140 --> 00:05:06.000
+comme les invitations vagues à des réunions perturbe les humains.
+
+00:05:06.940 --> 00:05:08.600
+Une fois rédigé, vous verrez le volet de test à droite,
+
+00:05:08.700 --> 00:05:10.560
+un bac à sable à l'air engageant qui demande de l'attention.
+
+00:05:11.300 --> 00:05:11.700
+Ignorez-le.
+
+00:05:12.660 --> 00:05:14.840
+Je sais que cliquer sur tester donne une impression de progrès,
+
+00:05:14.840 --> 00:05:16.420
+mais pour l'instant, l'agent n'a rien à tester.
+
+00:05:17.200 --> 00:05:19.240
+C'est comme allumer un aspirateur sans électricité.
+
+00:05:20.140 --> 00:05:21.380
+Le modèle peut répéter des scripts,
+
+00:05:21.380 --> 00:05:23.340
+mais ne peut pas encore effectuer d'action car il manque d'outils,
+
+00:05:23.420 --> 00:05:26.180
+les muscles fonctionnels derrière son séduisant squelette conversationnel.
+
+00:05:27.200 --> 00:05:29.440
+Cela nous amène au cœur philosophique de Copilot Studio.
+
+00:05:30.100 --> 00:05:30.880
+Instructions contre outils.
+
+00:05:31.340 --> 00:05:33.180
+Les instructions sont la logique, les outils sont l'exécution.
+
+00:05:33.520 --> 00:05:35.040
+Les instructions lui disent quel type d'agent il est,
+
+00:05:35.140 --> 00:05:37.340
+les outils lui disent comment faire ce qu'il prétend faire.
+
+00:05:38.340 --> 00:05:40.400
+L'une définit le caractère, l'autre fournit la capacité.
+
+00:05:41.240 --> 00:05:42.540
+Beaucoup de gens ne font jamais cette distinction
+
+00:05:42.540 --> 00:05:44.820
+et se plaignent ensuite que Copilot n'a pas fait ce qu'ils ont demandé.
+
+00:05:45.540 --> 00:05:47.220
+Il ne l'a pas fait car ils n'ont jamais connecté les outils
+
+00:05:47.220 --> 00:05:48.260
+qui rendent l'obéissance possible.
+
+00:05:49.080 --> 00:05:50.260
+Maintenant, ouvrez le panneau des outils,
+
+00:05:50.260 --> 00:05:51.700
+vous verrez une bibliothèque de connecteurs,
+
+00:05:51.800 --> 00:05:53.920
+Planner, Outlook, Teams, SharePoint et bien d'autres.
+
+00:05:54.900 --> 00:05:57.400
+L'univers d'intégration de Microsoft s'étale devant vous comme un buffet
+
+00:05:57.400 --> 00:05:59.480
+et pourtant la plupart des utilisateurs se fichent à sa vue.
+
+00:06:00.120 --> 00:06:01.360
+Le paradoxe du choix infini.
+
+00:06:01.860 --> 00:06:02.760
+C'est là que la plupart des gens bloquent.
+
+00:06:03.200 --> 00:06:05.200
+Comme j'ai mal dit, Microsoft vous donne une boîte à outils.
+
+00:06:05.860 --> 00:06:06.880
+La plupart des gens sont contenteurs.
+
+00:06:07.360 --> 00:06:08.340
+Nous cependant ne le ferons pas.
+
+00:06:08.780 --> 00:06:09.800
+Nous allons filtrer par Planner
+
+00:06:09.800 --> 00:06:11.380
+et sélectionner les actions appropriées plus tard,
+
+00:06:11.480 --> 00:06:12.800
+mais remarquez d'abord ce qui est possible.
+
+00:06:13.580 --> 00:06:15.620
+Chaque connecteur représente un point de terminaison d'API
+
+00:06:15.620 --> 00:06:16.660
+enveloppé dans un langage clair.
+
+00:06:17.180 --> 00:06:19.100
+Créer une tâche, mettre à jour un enregistrement,
+
+00:06:19.100 --> 00:06:19.920
+envoyer un email.
+
+00:06:20.480 --> 00:06:22.020
+Copilot Studio délègue ses capacités
+
+00:06:22.020 --> 00:06:23.440
+à la couche de raisonnement de votre agent.
+
+00:06:24.200 --> 00:06:25.580
+Le modèle n'a pas de pouvoir mystique,
+
+00:06:26.100 --> 00:06:27.480
+c'est juste un bibliothécaire bien formé
+
+00:06:27.480 --> 00:06:28.780
+qui tire le bon livre de la bonne étagère.
+
+00:06:29.400 --> 00:06:30.500
+Avant d'ajouter des outils Planner,
+
+00:06:30.660 --> 00:06:32.180
+passez en revue les paramètres de configuration.
+
+00:06:33.140 --> 00:06:34.800
+Les connexions nécessitent des comptes authentifiés
+
+00:06:34.800 --> 00:06:37.100
+généralement liés à votre identité Microsoft 365.
+
+00:06:37.880 --> 00:06:39.440
+Utilisez le compte qui possède ou gère le plan
+
+00:06:39.440 --> 00:06:40.280
+que vous allez automatiser.
+
+00:06:40.940 --> 00:06:42.940
+Sinon, votre future session de test s'effondrera
+
+00:06:42.940 --> 00:06:44.200
+avec une erreur d'authentification
+
+00:06:44.200 --> 00:06:46.000
+qui vous fera remettre en question vos choix de vie.
+
+00:06:46.820 --> 00:06:48.280
+Les configurations sont stockées par agent.
+
+00:06:48.280 --> 00:06:50.460
+Cela signifie que si vous voulez plusieurs agents,
+
+00:06:50.720 --> 00:06:51.960
+par exemple un pour Planner et un pour Teams,
+
+00:06:52.040 --> 00:06:53.500
+vous devrez autoriser chacun séparément.
+
+00:06:54.320 --> 00:06:55.740
+Microsoft appelle cela la sécurité.
+
+00:06:56.480 --> 00:06:58.040
+J'appelle cela un léger obstacle à l'efficacité.
+
+00:06:58.620 --> 00:07:00.040
+Quoi qu'il en soit, faites-le correctement dès maintenant
+
+00:07:00.040 --> 00:07:01.180
+pour vous éviter des tourbons ultérieurs.
+
+00:07:01.860 --> 00:07:03.740
+Une fois l'identité et les instructions de l'agent verrouillés,
+
+00:07:03.880 --> 00:07:05.720
+il existe officiellement au sein de votre tenant,
+
+00:07:05.900 --> 00:07:06.440
+au sein de votre tenant.
+
+00:07:06.900 --> 00:07:08.460
+Félicitations, vous venez de construire une coquille vide,
+
+00:07:08.660 --> 00:07:09.560
+mais hautement consciente d'elle-même.
+
+00:07:10.160 --> 00:07:11.780
+Il sait qu'il est censé gérer les tâches Planner,
+
+00:07:11.780 --> 00:07:14.280
+mais sans connectivité, c'est comme un stagiaire sans accès réseau,
+
+00:07:14.280 --> 00:07:16.940
+bien habillé, mais inutile, mais inutile.
+
+00:07:17.220 --> 00:07:18.220
+C'est là que la retenue est importante.
+
+00:07:18.560 --> 00:07:20.060
+Beaucoup de gens se précipitent directement dans le débogage.
+
+00:07:20.580 --> 00:07:21.040
+Ne le faites pas.
+
+00:07:21.440 --> 00:07:23.320
+Votre objectif est de comprendre l'architecture avant la fonction.
+
+00:07:23.760 --> 00:07:25.800
+Nous avons défini la personnalité, les limites et la structure.
+
+00:07:26.300 --> 00:07:27.740
+Ensuite, nous devons lui donner des bras et des gens.
+
+00:07:28.780 --> 00:07:30.440
+Cela passe par l'ajout d'outils spécifiquement,
+
+00:07:30.620 --> 00:07:31.600
+des actions Planner,
+
+00:07:31.740 --> 00:07:34.180
+qui génèrent réellement des résultats au lieu de réponses polies.
+
+00:07:35.120 --> 00:07:37.100
+Les étapes à venir connecteront trois outils essentiels,
+
+00:07:37.100 --> 00:07:39.260
+créer une tâche, lister les tâches et mettre à jour une tâche.
+
+00:07:39.960 --> 00:07:42.720
+Chacun effectue une interaction au niveau de l'API avec Microsoft Planner,
+
+00:07:42.940 --> 00:07:44.960
+mais via A, un raisonnement en langage naturel
+
+00:07:44.960 --> 00:07:46.500
+plutôt que des déclencheurs prédéterminés.
+
+00:07:47.700 --> 00:07:48.640
+Une fois ce câblage terminé,
+
+00:07:48.720 --> 00:07:51.060
+votre agent de planification de tâches ne se contentera pas de répondre, il agira.
+
+00:07:51.540 --> 00:07:52.820
+Alors pour l'instant, enregistrez votre travail
+
+00:07:52.820 --> 00:07:54.340
+et laissez-le réfléchir à son identité un instant.
+
+00:07:54.660 --> 00:07:56.460
+Ce que vous avez construit, c'est le squelette, le système nerveux
+
+00:07:56.460 --> 00:07:57.640
+et juste une pointe de personnalité.
+
+00:07:58.780 --> 00:08:00.240
+Ensuite, nous greffons des fonctionnalités,
+
+00:08:00.400 --> 00:08:02.320
+des muscles pour rendre ce philosophe poli utile.
+
+00:08:02.960 --> 00:08:04.420
+Une fois ces outils Planner connectés,
+
+00:08:04.480 --> 00:08:06.480
+votre agent cesse de faire semblant et commence à agir.
+
+00:08:07.400 --> 00:08:08.180
+Vous avez construit l'esprit.
+
+00:08:08.180 --> 00:08:09.640
+Ensuite, nous construisons le mouvement.
+
+00:08:10.760 --> 00:08:11.740
+Ajoutez les outils Planner.
+
+00:08:12.000 --> 00:08:13.380
+Créer, lister, mettre à jour.
+
+00:08:14.000 --> 00:08:15.180
+Maintenant, il est temps de faire de cet agent
+
+00:08:15.180 --> 00:08:17.100
+quelque chose de plus qu'une vapeur existentielle polie.
+
+00:08:17.940 --> 00:08:19.740
+Nous sommes sur le point d'installer les outils Planner,
+
+00:08:20.100 --> 00:08:21.840
+les verbes qui permettent à votre planificateur de tâches
+
+00:08:21.840 --> 00:08:22.740
+de faire des choses concrètes.
+
+00:08:23.620 --> 00:08:24.660
+Ce sont les trois muscles cruciaux,
+
+00:08:24.980 --> 00:08:27.040
+créer une tâche, lister les tâches et mettre à jour une tâche.
+
+00:08:27.380 --> 00:08:30.100
+Une fois connecté, votre agent passera du statut de chatbot philosophique
+
+00:08:30.100 --> 00:08:31.360
+à celui d'assistant opérationnel.
+
+00:08:32.060 --> 00:08:33.120
+Commençons par créer une tâche.
+
+00:08:33.900 --> 00:08:35.240
+C'est l'acte atomique de la productivité,
+
+00:08:35.640 --> 00:08:36.560
+produisant une unité de travail.
+
+00:08:36.560 --> 00:08:39.200
+Sans cela, votre agent ne peut que commenter votre paresse,
+
+00:08:39.300 --> 00:08:39.800
+pas la corriger,
+
+00:08:40.180 --> 00:08:41.560
+donc dans le panneau des outils Rechercher Planner.
+
+00:08:42.320 --> 00:08:43.480
+Vous verrez une liste d'actions.
+
+00:08:44.100 --> 00:08:44.900
+Sélectionnez Créer une tâche.
+
+00:08:45.480 --> 00:08:46.340
+Ajoutez-la à votre agent.
+
+00:08:46.780 --> 00:08:47.840
+Vous pourrez demander à créer une connexion.
+
+00:08:48.380 --> 00:08:49.840
+Approuvez-la en utilisant le compte
+
+00:08:49.840 --> 00:08:51.540
+qui possède le groupe et le plan souhaité dans Planner.
+
+00:08:53.240 --> 00:08:54.360
+Trois paramètres apparaissent.
+
+00:08:54.880 --> 00:08:56.260
+ID du groupe, ID du plan et T.
+
+00:08:56.800 --> 00:08:58.660
+Ce sont les coordonnées de chaque tâche dans Planner.
+
+00:08:58.840 --> 00:09:00.560
+Le qui, le où et le quoi.
+
+00:09:01.560 --> 00:09:03.880
+Par défaut, l'agent tente de les remplir dynamiquement via l'IA,
+
+00:09:03.880 --> 00:09:05.260
+mais ce n'est pas toujours judicieux.
+
+00:09:06.360 --> 00:09:07.840
+Les ID de groupe et de plan changent rarement
+
+00:09:07.840 --> 00:09:09.880
+et l'agent n'a aucune intuition de votre structure organisationnelle.
+
+00:09:10.980 --> 00:09:12.580
+Passez ces deux éléments en valeur personnalisée.
+
+00:09:12.740 --> 00:09:13.880
+Sélectionnez votre groupe Microsoft 365,
+
+00:09:14.660 --> 00:09:15.400
+puis le plan associé.
+
+00:09:16.320 --> 00:09:17.360
+Cela verrouille les coordonnées
+
+00:09:17.360 --> 00:09:18.820
+pour que l'agent crée les tâches
+
+00:09:18.820 --> 00:09:19.680
+là où vous le souhaitez
+
+00:09:19.680 --> 00:09:21.900
+et non dans le vide de votre environnement de test.
+
+00:09:22.660 --> 00:09:23.560
+Laissez le titre dynamique,
+
+00:09:23.600 --> 00:09:24.540
+c'est ce que vous voulez qu'il y agère
+
+00:09:24.540 --> 00:09:25.760
+à partir du langage naturel.
+
+00:09:26.540 --> 00:09:28.400
+Cependant, ne négligez pas le champ intitulé Description.
+
+00:09:29.260 --> 00:09:29.920
+Il semble trivial,
+
+00:09:30.000 --> 00:09:30.700
+mais joue un rôle majeur
+
+00:09:30.700 --> 00:09:32.120
+dans la façon dont le modèle de langage résonne.
+
+00:09:32.120 --> 00:09:33.560
+Le modèle lit ses descriptions
+
+00:09:33.560 --> 00:09:34.800
+lorsqu'il décide quel outil correspond
+
+00:09:34.800 --> 00:09:35.820
+à la demande d'un utilisateur.
+
+00:09:36.860 --> 00:09:37.940
+Créer une nouvelle tâche dans Planner Ring
+
+00:09:37.940 --> 00:09:38.880
+est techniquement correcte,
+
+00:09:38.920 --> 00:09:39.780
+mais douloureusement générique,
+
+00:09:39.940 --> 00:09:41.980
+mais vous pouvez aider le moteur de raisonnement
+
+00:09:41.980 --> 00:09:43.140
+en lui fournissant une instruction plurique.
+
+00:09:43.720 --> 00:09:45.020
+Créez une ou plusieurs tâches Planner
+
+00:09:45.020 --> 00:09:46.460
+basées sur la demande de l'utilisateur.
+
+00:09:46.920 --> 00:09:47.980
+Résumez les titres longs
+
+00:09:47.980 --> 00:09:49.700
+et ne demandez pas explicitement de titre.
+
+00:09:50.220 --> 00:09:50.900
+Cette simple phrase
+
+00:09:50.900 --> 00:09:52.180
+empêche l'agent de vous solliciter
+
+00:09:52.180 --> 00:09:52.960
+pour des précisions
+
+00:09:52.960 --> 00:09:54.540
+à chaque fois que vous demandez plusieurs tâches.
+
+00:09:55.640 --> 00:09:56.700
+Désormais, il peut déduire les titres
+
+00:09:56.700 --> 00:09:58.240
+directement à partir du texte de la requête.
+
+00:09:58.940 --> 00:10:00.760
+Ainsi, si vous demandez de créer trois tâches,
+
+00:10:00.760 --> 00:10:01.860
+une pour revoir les designs,
+
+00:10:02.080 --> 00:10:03.220
+une pour mettre à jour les tarifs
+
+00:10:03.220 --> 00:10:04.660
+et une pour préparer la démo,
+
+00:10:04.760 --> 00:10:06.720
+le modèle analysera ses éléments distincts
+
+00:10:06.720 --> 00:10:08.000
+et exécutera l'action trois fois,
+
+00:10:08.360 --> 00:10:09.080
+sans autre demande.
+
+00:10:10.520 --> 00:10:12.160
+Ce stade, le squelette philosophique de votre agent
+
+00:10:12.160 --> 00:10:13.560
+possède son premier membre fonctionnel.
+
+00:10:14.740 --> 00:10:15.860
+Félicitations, il peut générer du travail
+
+00:10:15.860 --> 00:10:17.260
+plus rapidement que la plupart des stagiaires.
+
+00:10:17.960 --> 00:10:18.960
+Ensuite, lister les tâches.
+
+00:10:20.320 --> 00:10:21.160
+Vous pensez que c'est évident,
+
+00:10:21.260 --> 00:10:22.180
+pourtant c'est le héros méconnu
+
+00:10:22.180 --> 00:10:23.260
+de la gestion du contexte.
+
+00:10:24.440 --> 00:10:26.160
+Sans la capacité de lister les tâches existantes,
+
+00:10:26.480 --> 00:10:27.400
+le modèle travaille à l'aveugle.
+
+00:10:27.960 --> 00:10:28.560
+Il ne peut pas vérifier
+
+00:10:28.560 --> 00:10:29.460
+ce qui est déjà fait ou en attente.
+
+00:10:30.000 --> 00:10:30.960
+Ajoutez l'action au listeur des tâches
+
+00:10:30.960 --> 00:10:32.120
+plus que de plus votre connecteur planeur.
+
+00:10:32.740 --> 00:10:34.180
+Configurez-la avec les mêmes ID de groupe
+
+00:10:34.180 --> 00:10:35.200
+et de plan définis précédemment,
+
+00:10:35.300 --> 00:10:36.260
+tous deux en valeur personnalisée.
+
+00:10:37.080 --> 00:10:37.940
+La description pourrait dire
+
+00:10:37.940 --> 00:10:39.060
+listez les tâches du plan Euget,
+
+00:10:39.220 --> 00:10:39.780
+ce qui fonctionne,
+
+00:10:39.860 --> 00:10:40.860
+mais nous pouvons encore l'améliorer.
+
+00:10:41.500 --> 00:10:42.600
+Essayez récupérer toutes les tâches
+
+00:10:42.600 --> 00:10:43.580
+du plan planeur spécifié
+
+00:10:43.580 --> 00:10:44.880
+afin que l'agent puisse les référencer
+
+00:10:44.880 --> 00:10:45.980
+ou les valider dans ses réponses
+
+00:10:45.980 --> 00:10:46.580
+et conspigues.
+
+00:10:47.620 --> 00:10:48.520
+Cette formulation signale
+
+00:10:48.520 --> 00:10:49.440
+que l'action n'est pas seulement
+
+00:10:49.440 --> 00:10:50.160
+destinée à l'humain,
+
+00:10:50.340 --> 00:10:51.760
+mais constitue aussi une donnée contextuelle
+
+00:10:51.760 --> 00:10:52.680
+pour le raisonnement.
+
+00:10:53.320 --> 00:10:54.360
+Ouvrez maintenant le volet de test,
+
+00:10:54.360 --> 00:10:54.800
+mais cette fois,
+
+00:10:54.920 --> 00:10:55.980
+le test en vaut la peine.
+
+00:10:56.740 --> 00:10:57.060
+Demandez,
+
+00:10:57.440 --> 00:10:59.220
+quelles tâches ai-je dans mon plan ?
+
+00:10:59.220 --> 00:10:59.960
+Le modèle appellera
+
+00:10:59.960 --> 00:11:01.000
+listez les tâches QMU,
+
+00:11:01.080 --> 00:11:01.880
+récupérera les résultats
+
+00:11:01.880 --> 00:11:02.760
+et vous répondra naturellement.
+
+00:11:02.840 --> 00:11:03.220
+Par exemple,
+
+00:11:03.740 --> 00:11:04.640
+vous avez actuellement des tâches
+
+00:11:04.640 --> 00:11:07.300
+intitulées X, Y et Z QMU.
+
+00:11:07.780 --> 00:11:08.820
+La magie opère en coulisses.
+
+00:11:10.500 --> 00:11:11.480
+Ces résultats peuvent désormais
+
+00:11:11.480 --> 00:11:12.500
+alimenter les futures requêtes.
+
+00:11:13.280 --> 00:11:14.140
+Plus tard, quand vous dites
+
+00:11:14.140 --> 00:11:15.360
+fixe l'échéance de la tâche
+
+00:11:15.360 --> 00:11:16.360
+de revue de conception à demain,
+
+00:11:16.820 --> 00:11:17.840
+le modèle d'orchestration
+
+00:11:17.840 --> 00:11:18.880
+consulte à nouveau la liste,
+
+00:11:19.000 --> 00:11:19.860
+identifie le bon ID
+
+00:11:19.860 --> 00:11:20.960
+et appelle l'outil suivant
+
+00:11:20.960 --> 00:11:21.760
+que nous allons ajouter.
+
+00:11:22.420 --> 00:11:23.540
+Cela nous amène au troisième volet,
+
+00:11:23.840 --> 00:11:24.520
+la mise à jour de tâches.
+
+00:11:25.140 --> 00:11:26.000
+La fonction qui transforme
+
+00:11:26.000 --> 00:11:26.820
+des enregistrements statiques
+
+00:11:26.820 --> 00:11:27.720
+en progression dynamique.
+
+00:11:28.280 --> 00:11:29.360
+Ajoutez l'outil de mise à jour
+
+00:11:29.360 --> 00:11:30.180
+de tâches à votre agent.
+
+00:11:30.860 --> 00:11:32.220
+Vous verrez à nouveau des champs,
+
+00:11:32.320 --> 00:11:32.940
+l'ID de tâches,
+
+00:11:33.060 --> 00:11:33.800
+la date d'échéance
+
+00:11:33.800 --> 00:11:35.360
+et un menu de paramètre optionnel.
+
+00:11:36.240 --> 00:11:37.460
+L'ID de tâches doit rester dynamique.
+
+00:11:37.860 --> 00:11:39.080
+IA fera correspondre le bon élément
+
+00:11:39.080 --> 00:11:39.500
+par son nom
+
+00:11:39.500 --> 00:11:40.800
+à partir de l'action de liste précédente.
+
+00:11:41.140 --> 00:11:41.840
+Pour la date d'échéance,
+
+00:11:41.940 --> 00:11:43.060
+vous pouvez également la laisser dynamique
+
+00:11:43.060 --> 00:11:44.160
+car les humains prononcent rarement
+
+00:11:44.160 --> 00:11:45.420
+les dates au format ISO 8101
+
+00:11:45.420 --> 00:11:46.500
+dans une conversation courante.
+
+00:11:46.500 --> 00:11:47.420
+Heureusement,
+
+00:11:47.520 --> 00:11:48.160
+le modèle sous-jacent
+
+00:11:48.160 --> 00:11:49.020
+convertit demain HUC
+
+00:11:49.020 --> 00:11:49.820
+en un neurodatage
+
+00:11:49.820 --> 00:11:50.840
+correctement formaté.
+
+00:11:51.500 --> 00:11:52.080
+Mais donnez au modèle
+
+00:11:52.080 --> 00:11:52.960
+une indication descriptive.
+
+00:11:53.420 --> 00:11:54.020
+C'est dommage de voir
+
+00:11:54.020 --> 00:11:54.860
+combien d'agents échouent
+
+00:11:54.860 --> 00:11:55.720
+parce que les concepteurs
+
+00:11:55.720 --> 00:11:56.920
+ignorent les champs de documentation.
+
+00:11:57.500 --> 00:11:57.760
+Ajoutez,
+
+00:11:57.920 --> 00:11:58.900
+utilisez ceci pour modifier
+
+00:11:58.900 --> 00:11:59.580
+la date d'échéance
+
+00:11:59.580 --> 00:12:00.720
+ou les détails d'une tâche existante.
+
+00:12:01.120 --> 00:12:01.720
+Acceptez les dates
+
+00:12:01.720 --> 00:12:02.460
+en langage naturel
+
+00:12:02.460 --> 00:12:03.580
+comme vendredi prochain ou demain.
+
+00:12:04.180 --> 00:12:04.840
+Ce conseil indique
+
+00:12:04.840 --> 00:12:05.580
+à la couche de raisonnement
+
+00:12:05.580 --> 00:12:06.120
+ce qui est possible,
+
+00:12:06.260 --> 00:12:07.120
+améliorant sa capacité
+
+00:12:07.120 --> 00:12:08.380
+à traduire les requêtes informelles
+
+00:12:08.380 --> 00:12:09.080
+des utilisateurs
+
+00:12:09.080 --> 00:12:10.060
+en mise à jour structurée.
+
+00:12:11.700 --> 00:12:12.540
+Une fois enregistré,
+
+00:12:12.620 --> 00:12:13.000
+testé à nouveau.
+
+00:12:13.580 --> 00:12:13.880
+Demandez.
+
+00:12:16.500 --> 00:12:17.660
+La première fois que vous faites cela,
+
+00:12:17.900 --> 00:12:18.820
+Copilot Studio vous demande
+
+00:12:18.820 --> 00:12:19.900
+d'autoriser cette connexion
+
+00:12:19.900 --> 00:12:20.600
+à planeur.
+
+00:12:21.500 --> 00:12:21.940
+Approuvez-la.
+
+00:12:22.300 --> 00:12:22.880
+En quelques secondes,
+
+00:12:22.960 --> 00:12:23.620
+votre plan est mis à jour.
+
+00:12:23.840 --> 00:12:24.780
+La date correspond parfaitement.
+
+00:12:25.120 --> 00:12:26.040
+Vous n'avez absolument rien déplacé.
+
+00:12:26.380 --> 00:12:26.620
+Maintenant,
+
+00:12:26.740 --> 00:12:27.620
+pour une petite démonstration
+
+00:12:27.620 --> 00:12:28.400
+du multitâche de l'IA,
+
+00:12:28.600 --> 00:12:29.980
+essayez de dicter via Windows Plus H
+
+00:12:29.980 --> 00:12:31.400
+ou d'utiliser le micro de Teams.
+
+00:12:31.960 --> 00:12:32.900
+Dites-le qu'à fixer toutes mes tâches
+
+00:12:32.900 --> 00:12:33.600
+prévues cette semaine
+
+00:12:33.600 --> 00:12:34.240
+au mardi suivant.
+
+00:12:34.640 --> 00:12:36.060
+Le modèle listera les tâches actuelles,
+
+00:12:36.280 --> 00:12:37.420
+détectera celles qui correspondent
+
+00:12:37.420 --> 00:12:37.940
+à la condition
+
+00:12:37.940 --> 00:12:39.240
+puis effectuera les mises à jour
+
+00:12:39.240 --> 00:12:40.020
+en boucle.
+
+00:12:41.000 --> 00:12:41.380
+Admettez-le,
+
+00:12:41.420 --> 00:12:42.000
+vous êtes impressionné.
+
+00:12:42.000 --> 00:12:43.620
+Ce qui vous prenait 15 clics
+
+00:12:43.620 --> 00:12:45.020
+se fait désormais en une seule phrase parler.
+
+00:12:45.960 --> 00:12:46.780
+Avec ces trois outils,
+
+00:12:46.940 --> 00:12:47.200
+créer,
+
+00:12:47.380 --> 00:12:47.660
+lister
+
+00:12:47.660 --> 00:12:48.400
+et mettre à jour,
+
+00:12:48.580 --> 00:12:49.500
+vous avez doté votre agent
+
+00:12:49.500 --> 00:12:50.820
+d'une capacité crude complète,
+
+00:12:51.140 --> 00:12:51.260
+moins,
+
+00:12:51.580 --> 00:12:52.420
+le D pour suppression,
+
+00:12:52.540 --> 00:12:52.980
+car les humains
+
+00:12:52.980 --> 00:12:54.100
+panique toujours face
+
+00:12:54.100 --> 00:12:55.340
+aux actions irréversibles.
+
+00:12:56.480 --> 00:12:57.360
+Ce trio couvre presque
+
+00:12:57.360 --> 00:12:58.340
+tous les scénarios planeurs
+
+00:12:58.340 --> 00:12:59.320
+qui font gagner un temps humain
+
+00:12:59.320 --> 00:12:59.940
+mesurable.
+
+00:13:01.340 --> 00:13:02.660
+Voici la division éthique du travail.
+
+00:13:03.420 --> 00:13:04.300
+Vous apportez la clarté,
+
+00:13:04.580 --> 00:13:05.280
+il apporte la précision.
+
+00:13:05.840 --> 00:13:06.780
+Vous lui dites ce qui doit être fait
+
+00:13:06.780 --> 00:13:07.520
+et décide comment le faire.
+
+00:13:08.060 --> 00:13:08.720
+Arrêtez de microgérer
+
+00:13:08.720 --> 00:13:09.400
+votre propre logiciel.
+
+00:13:09.800 --> 00:13:10.700
+Lorsque vous décrivez clairement
+
+00:13:10.700 --> 00:13:11.220
+votre intention,
+
+00:13:11.220 --> 00:13:12.080
+le modèle d'orchestration
+
+00:13:12.080 --> 00:13:12.600
+résout le reste
+
+00:13:12.600 --> 00:13:13.400
+en remplissant les ID,
+
+00:13:13.560 --> 00:13:14.280
+en formatant les dates
+
+00:13:14.280 --> 00:13:15.380
+et en exécutant les appels.
+
+00:13:15.920 --> 00:13:16.360
+Soyez vague
+
+00:13:16.360 --> 00:13:17.660
+et il devinera conscieusement de travers.
+
+00:13:18.180 --> 00:13:18.840
+Plus important encore,
+
+00:13:18.880 --> 00:13:19.580
+ne vous obsessionnez pas
+
+00:13:19.580 --> 00:13:20.500
+sur des chaînes logiques parfaites.
+
+00:13:20.840 --> 00:13:21.920
+Le modèle d'orchestration s'adapte.
+
+00:13:22.320 --> 00:13:23.460
+Vous ne programmez pas avec du code,
+
+00:13:23.560 --> 00:13:24.720
+vous programmez avec des attentes.
+
+00:13:25.280 --> 00:13:26.760
+Apprenez-lui ce qu'est un bon comportement
+
+00:13:26.760 --> 00:13:27.920
+grâce à ses descriptions claires.
+
+00:13:28.440 --> 00:13:28.700
+A terme,
+
+00:13:28.760 --> 00:13:29.780
+il anticipera vos intentions
+
+00:13:29.780 --> 00:13:30.760
+tel un collègue courtois,
+
+00:13:30.920 --> 00:13:31.860
+mais un bras insuffisant,
+
+00:13:32.020 --> 00:13:32.780
+mais un bras insuffisant.
+
+00:13:33.120 --> 00:13:33.500
+Et avec cela,
+
+00:13:33.560 --> 00:13:34.540
+la transformation de votre agent
+
+00:13:34.540 --> 00:13:35.040
+est terminée.
+
+00:13:35.700 --> 00:13:36.340
+Passe maintenant à l'action.
+
+00:13:37.140 --> 00:13:37.940
+Chaque commande future,
+
+00:13:38.080 --> 00:13:38.700
+qu'elle soit parlée,
+
+00:13:38.820 --> 00:13:39.920
+tapée ou criée dans votre bureau,
+
+00:13:40.280 --> 00:13:41.240
+suit un raisonnement,
+
+00:13:41.340 --> 00:13:42.780
+trouve l'outil de planification adéquat
+
+00:13:42.780 --> 00:13:43.780
+et s'exécute sans plainte.
+
+00:13:44.340 --> 00:13:44.700
+Résultat,
+
+00:13:44.780 --> 00:13:45.500
+moins de tâches répétitives,
+
+00:13:45.580 --> 00:13:46.100
+plus d'efficacité.
+
+00:13:46.340 --> 00:13:46.620
+A présent,
+
+00:13:46.680 --> 00:13:48.040
+nous pouvons sortir cet assistant numérique
+
+00:13:48.040 --> 00:13:48.740
+de son bac à sable
+
+00:13:48.740 --> 00:13:49.980
+pour l'intégrer à votre travail quotidien.
+
+00:13:50.500 --> 00:13:51.460
+Cap sur le déploiement.
+
+00:13:52.220 --> 00:13:53.960
+Déploiement vers Microsoft 365 Copilot.
+
+00:13:54.620 --> 00:13:56.040
+Maintenant que votre agent peut penser et agir,
+
+00:13:56.120 --> 00:13:56.840
+il est temps de le lâcher
+
+00:13:56.840 --> 00:13:58.040
+là où le vrai travail se fait
+
+00:13:58.040 --> 00:14:00.240
+dans Microsoft 365 Copilot.
+
+00:14:00.940 --> 00:14:01.980
+Le limité à Copilot Studio
+
+00:14:01.980 --> 00:14:02.900
+revient à prendre un robot,
+
+00:14:03.020 --> 00:14:03.700
+à passer la serpillière
+
+00:14:03.700 --> 00:14:04.260
+puis à l'enfermer
+
+00:14:06.340 --> 00:14:07.620
+se manifeste que lorsqu'il opère
+
+00:14:07.620 --> 00:14:08.640
+dans votre environnement réel,
+
+00:14:08.860 --> 00:14:09.140
+Teams,
+
+00:14:09.720 --> 00:14:11.860
+Outlook ou l'interface Microsoft 365
+
+00:14:11.860 --> 00:14:12.420
+elle-même.
+
+00:14:13.140 --> 00:14:14.120
+Voici pourquoi le déploiement
+
+00:14:14.120 --> 00:14:14.620
+est n'importe quoi.
+
+00:14:14.940 --> 00:14:16.360
+Copilot Studio est dédié au développement.
+
+00:14:16.960 --> 00:14:18.080
+Microsoft 365 Copilot
+
+00:14:18.080 --> 00:14:18.780
+est dédié à la production.
+
+00:14:19.220 --> 00:14:20.380
+C'est là que les conversations ont lieu
+
+00:14:20.380 --> 00:14:21.620
+et que les demandes prennent naissance.
+
+00:14:22.380 --> 00:14:23.140
+R'intégrer à cet endroit
+
+00:14:23.140 --> 00:14:24.000
+signifie que vous pouvez dire
+
+00:14:24.000 --> 00:14:24.820
+créer deux tâches
+
+00:14:24.820 --> 00:14:26.200
+pour le sprint de la semaine prochaine.
+
+00:14:26.780 --> 00:14:27.940
+Directement dans la discussion Teams,
+
+00:14:28.080 --> 00:14:28.620
+sous les yeux de tous.
+
+00:14:29.560 --> 00:14:30.280
+Pas d'onglets séparés,
+
+00:14:30.460 --> 00:14:31.260
+pas de changement de contexte,
+
+00:14:31.320 --> 00:14:32.060
+pas de clics inutiles.
+
+00:14:32.860 --> 00:14:33.400
+L'IS s'exécute
+
+00:14:33.400 --> 00:14:34.200
+pendant que vous passez à autre chose.
+
+00:14:34.740 --> 00:14:35.380
+Dans Copilot Studio,
+
+00:14:35.380 --> 00:14:36.140
+sélectionnez cas publiés
+
+00:14:36.140 --> 00:14:37.300
+et cumulés dans le coin supérieur droit.
+
+00:14:37.860 --> 00:14:38.320
+Verrez les canaux.
+
+00:14:38.660 --> 00:14:39.880
+Ce sont vos points de terminaison de déploiement.
+
+00:14:40.140 --> 00:14:41.740
+Choisissez Microsoft 365 ou Teams.
+
+00:14:42.100 --> 00:14:42.540
+La première fois,
+
+00:14:42.600 --> 00:14:43.620
+il vous demandera de vous authentifier
+
+00:14:43.620 --> 00:14:44.560
+et d'approuver les autorisations.
+
+00:14:45.380 --> 00:14:45.740
+En clair,
+
+00:14:46.240 --> 00:14:46.980
+vous informez Microsoft
+
+00:14:46.980 --> 00:14:48.000
+que cet agent est autorisé
+
+00:14:48.000 --> 00:14:48.720
+à accéder à Planner
+
+00:14:48.720 --> 00:14:49.480
+pour votre compte.
+
+00:14:50.280 --> 00:14:50.760
+C'est une poignée de main
+
+00:14:50.760 --> 00:14:51.480
+de confiance indispensable.
+
+00:14:51.840 --> 00:14:52.780
+Ne cédez pas à la tentation
+
+00:14:52.780 --> 00:14:53.460
+d'ignorer les détails.
+
+00:14:53.980 --> 00:14:55.120
+Les équipes de gouvernance d'entreprise
+
+00:14:55.120 --> 00:14:55.620
+adorent refuser
+
+00:14:55.620 --> 00:14:56.500
+les demandes d'automatisation
+
+00:14:56.500 --> 00:14:57.800
+dépourvues d'autorisation documentée.
+
+00:14:58.260 --> 00:14:58.920
+Une fois publié,
+
+00:14:59.040 --> 00:14:59.720
+votre agent apparaît
+
+00:14:59.720 --> 00:15:00.680
+comme une extension Copilot
+
+00:15:00.680 --> 00:15:02.160
+disponible dans Microsoft 365.
+
+00:15:03.300 --> 00:15:03.700
+Ouvrez Teams
+
+00:15:03.700 --> 00:15:04.660
+et lancez une nouvelle conversation.
+
+00:15:05.140 --> 00:15:06.200
+Appelez votre agent de planification
+
+00:15:06.200 --> 00:15:06.700
+par son nom
+
+00:15:06.700 --> 00:15:07.600
+ou sélectionnez-le
+
+00:15:07.600 --> 00:15:08.360
+dans le volet Copilot.
+
+00:15:09.060 --> 00:15:09.580
+A partir de là,
+
+00:15:09.640 --> 00:15:10.220
+vos commandes deviennent
+
+00:15:10.220 --> 00:15:11.220
+des opérations en direct.
+
+00:15:11.960 --> 00:15:12.500
+Passons au test.
+
+00:15:13.020 --> 00:15:13.300
+Tapez
+
+00:15:13.300 --> 00:15:14.080
+ou dictez
+
+00:15:14.080 --> 00:15:15.080
+si vous aimez la mise en scène.
+
+00:15:15.840 --> 00:15:16.360
+Créez deux tâches.
+
+00:15:17.160 --> 00:15:17.960
+Rédigez le rapport client
+
+00:15:17.960 --> 00:15:19.120
+et organisez la revue du backlog.
+
+00:15:19.640 --> 00:15:20.200
+Observez l'IA
+
+00:15:20.200 --> 00:15:20.560
+Traiter,
+
+00:15:20.800 --> 00:15:21.180
+Raisonner
+
+00:15:21.180 --> 00:15:21.940
+et Confirmer.
+
+00:15:23.280 --> 00:15:24.060
+Si vous basculez
+
+00:15:24.060 --> 00:15:24.880
+sur votre tableau Planner,
+
+00:15:25.020 --> 00:15:25.800
+vous verrez les deux tâches
+
+00:15:25.800 --> 00:15:26.980
+apparaître presque instantanément.
+
+00:15:27.800 --> 00:15:28.360
+Le plaisir immense
+
+00:15:28.360 --> 00:15:29.100
+de ne pas avoir à déplacer
+
+00:15:29.100 --> 00:15:29.580
+une seule carte
+
+00:15:29.580 --> 00:15:30.500
+est difficile à surestimer.
+
+00:15:30.940 --> 00:15:31.480
+Test suivant,
+
+00:15:31.680 --> 00:15:32.080
+la liste.
+
+00:15:32.300 --> 00:15:32.580
+Demandez,
+
+00:15:32.780 --> 00:15:33.600
+quelles sont les tâches ouvertes
+
+00:15:33.600 --> 00:15:34.780
+dans mon plan de groupe ?
+
+00:15:34.780 --> 00:15:35.200
+Copilot,
+
+00:15:35.380 --> 00:15:36.460
+interroge Planner via votre agent,
+
+00:15:36.580 --> 00:15:37.160
+récupère les données
+
+00:15:37.160 --> 00:15:38.480
+à l'aide de l'outil de liste des tâches
+
+00:15:38.480 --> 00:15:40.280
+et génère une réponse conversationnelle.
+
+00:15:41.620 --> 00:15:42.560
+Ce n'est pas juste du texte,
+
+00:15:42.720 --> 00:15:43.480
+c'est un résultat fondé
+
+00:15:43.480 --> 00:15:44.080
+sur un raisonnement
+
+00:15:44.080 --> 00:15:45.240
+et soutenu par une activité API
+
+00:15:45.240 --> 00:15:45.680
+en temps réel.
+
+00:15:46.540 --> 00:15:47.660
+Ensuite, lancez-lui un défi.
+
+00:15:48.200 --> 00:15:48.840
+Définissez l'échéance
+
+00:15:48.840 --> 00:15:49.320
+de la tâche de revue
+
+00:15:49.320 --> 00:15:50.220
+du backlog au mercredi prochain.
+
+00:15:51.020 --> 00:15:52.400
+Il identifie le bon enregistrement
+
+00:15:52.400 --> 00:15:53.160
+en faisant correspondre
+
+00:15:53.160 --> 00:15:53.500
+pour le titre
+
+00:15:53.500 --> 00:15:54.640
+de son précédent appel de liste,
+
+00:15:54.740 --> 00:15:55.620
+transforme mercredi prochain
+
+00:15:55.620 --> 00:15:56.340
+un cœur en date ISO
+
+00:15:56.340 --> 00:15:57.500
+requise par le moteur de planeur
+
+00:15:57.500 --> 00:15:59.320
+et effectue la mise à jour.
+
+00:15:59.900 --> 00:16:00.220
+Félicitations,
+
+00:16:00.340 --> 00:16:00.880
+vous venez d'effectuer
+
+00:16:00.880 --> 00:16:01.880
+une transaction conversationnelle
+
+00:16:01.880 --> 00:16:02.640
+complète entre l'IA,
+
+00:16:02.800 --> 00:16:03.860
+les API Planner et Teams
+
+00:16:03.860 --> 00:16:05.160
+sans quitter l'interface de chat.
+
+00:16:06.000 --> 00:16:07.140
+Voici le modèle mental important,
+
+00:16:07.580 --> 00:16:08.200
+la boucle de raisonnement
+
+00:16:08.200 --> 00:16:08.580
+de Copilot.
+
+00:16:09.000 --> 00:16:10.020
+Chaque message de l'utilisateur
+
+00:16:10.020 --> 00:16:11.020
+déclenche une interprétation,
+
+00:16:11.140 --> 00:16:11.880
+un rappel de contexte
+
+00:16:11.880 --> 00:16:12.440
+et l'appel d'un outil.
+
+00:16:12.940 --> 00:16:13.460
+Lorsque vous dites
+
+00:16:13.460 --> 00:16:14.040
+« Mets à jour mes tâches
+
+00:16:14.040 --> 00:16:15.040
+en retard humain »,
+
+00:16:15.040 --> 00:16:16.020
+l'orchestration de Copilot
+
+00:16:16.020 --> 00:16:16.680
+ne se contente pas
+
+00:16:16.680 --> 00:16:17.340
+de chercher une règle.
+
+00:16:23.160 --> 00:16:27.380
+Vous pouvez également
+
+00:16:27.380 --> 00:16:28.080
+dicter des commandes
+
+00:16:28.080 --> 00:16:28.860
+via Windows plus H
+
+00:16:28.860 --> 00:16:30.060
+ou l'icône de microphone de Teams.
+
+00:16:30.940 --> 00:16:31.400
+La voix n'est pas
+
+00:16:31.400 --> 00:16:32.060
+qu'une simple nouveauté,
+
+00:16:32.160 --> 00:16:32.780
+c'est l'accessibilité
+
+00:16:32.780 --> 00:16:33.300
+avec du style.
+
+00:16:34.060 --> 00:16:34.700
+Dire marque mes tâches
+
+00:16:34.700 --> 00:16:35.480
+en cours pour cette semaine
+
+00:16:35.480 --> 00:16:36.380
+comme étant pour lundi prochain
+
+00:16:36.380 --> 00:16:37.520
+implique une formulation naturelle
+
+00:16:37.520 --> 00:16:38.620
+et une automatisation structurée.
+
+00:16:39.700 --> 00:16:40.760
+Copilot interprète le ton,
+
+00:16:40.900 --> 00:16:42.020
+analyse le langage temporel
+
+00:16:42.020 --> 00:16:42.620
+et le convertit
+
+00:16:42.620 --> 00:16:43.340
+en données planeur,
+
+00:16:43.460 --> 00:16:44.080
+déterministe.
+
+00:16:44.940 --> 00:16:45.840
+Pour une oreille non avertie,
+
+00:16:45.880 --> 00:16:46.280
+c'est de la magie.
+
+00:16:46.760 --> 00:16:47.040
+Pour vous,
+
+00:16:47.120 --> 00:16:47.780
+c'est la satisfaction
+
+00:16:47.780 --> 00:16:48.840
+d'une boucle de raisonnement
+
+00:16:48.840 --> 00:16:49.520
+bien conçue.
+
+00:16:50.220 --> 00:16:50.920
+Avertissement technique,
+
+00:16:51.040 --> 00:16:51.520
+la première fois
+
+00:16:51.520 --> 00:16:52.300
+qu'un outil s'exécute
+
+00:16:53.160 --> 00:16:53.880
+vous devrez réapprouver
+
+00:16:53.880 --> 00:16:55.060
+son autorisation de connecteur.
+
+00:16:55.940 --> 00:16:56.680
+C'est la vision de Microsoft
+
+00:16:56.680 --> 00:16:57.540
+en matière de cohérence
+
+00:16:57.540 --> 00:16:58.120
+de sécurité,
+
+00:16:58.360 --> 00:16:59.320
+redondante mais nécessaire.
+
+00:17:00.220 --> 00:17:00.920
+Approuvez-le une fois
+
+00:17:00.920 --> 00:17:01.920
+et il ne vous dérangera plus
+
+00:17:01.920 --> 00:17:02.980
+sauf si votre session expire.
+
+00:17:03.720 --> 00:17:04.000
+Maintenant,
+
+00:17:04.120 --> 00:17:04.960
+testons ensemble la parole
+
+00:17:04.960 --> 00:17:05.840
+et le raisonnement enchaîne.
+
+00:17:06.420 --> 00:17:06.700
+Dites,
+
+00:17:07.120 --> 00:17:08.080
+liste mes tâches en attente
+
+00:17:08.080 --> 00:17:08.880
+puis rigolez toutes
+
+00:17:08.880 --> 00:17:09.440
+pour vendredi.
+
+00:17:13.620 --> 00:17:14.540
+Le moteur d'orchestration
+
+00:17:14.540 --> 00:17:15.540
+traite la conjonction quai
+
+00:17:15.540 --> 00:17:16.560
+puis règle les toutes ces cas.
+
+00:17:17.880 --> 00:17:18.660
+Il conclut logiquement
+
+00:17:18.660 --> 00:17:19.120
+qu'il a besoin
+
+00:17:19.120 --> 00:17:19.900
+des actions de liste
+
+00:17:19.900 --> 00:17:20.420
+et de mise à jour,
+
+00:17:20.480 --> 00:17:21.320
+les appellent séquentiellement
+
+00:17:21.320 --> 00:17:22.360
+et rafraîchit le contexte.
+
+00:17:23.220 --> 00:17:24.120
+Le résultat apparaît
+
+00:17:24.120 --> 00:17:24.780
+quelques comptes plus tard.
+
+00:17:25.340 --> 00:17:25.780
+C'est d'ailleurs là
+
+00:17:25.780 --> 00:17:26.960
+que l'automatisation traditionnelle
+
+00:17:26.960 --> 00:17:27.420
+échoue.
+
+00:17:28.320 --> 00:17:29.180
+Plusieurs actions déclenchées
+
+00:17:29.180 --> 00:17:30.220
+par une seule phrase naturelle.
+
+00:17:30.940 --> 00:17:31.600
+Copilote le gère
+
+00:17:31.600 --> 00:17:32.480
+car il ne suit pas des règles,
+
+00:17:32.560 --> 00:17:33.500
+il résonne à travers elle.
+
+00:17:34.460 --> 00:17:35.380
+Une fois que vous avez validé
+
+00:17:35.380 --> 00:17:36.100
+les flux de création
+
+00:17:36.100 --> 00:17:36.960
+de liste et de mise à jour,
+
+00:17:37.080 --> 00:17:37.860
+fermez l'onglet du studio
+
+00:17:37.860 --> 00:17:38.600
+en toute confiance.
+
+00:17:39.440 --> 00:17:40.640
+Votre agent n'y vit plus désormais.
+
+00:17:41.460 --> 00:17:42.080
+Il évolue maintenant
+
+00:17:42.080 --> 00:17:43.000
+dans Teams et 365
+
+00:17:43.000 --> 00:17:44.340
+en tant qu'opérateur autonome.
+
+00:17:45.200 --> 00:17:45.680
+A partir de là,
+
+00:17:45.760 --> 00:17:46.260
+tout membre de l'équipe
+
+00:17:46.260 --> 00:17:47.120
+disposant des autorisations
+
+00:17:47.120 --> 00:17:47.540
+peut l'invoquer.
+
+00:17:47.960 --> 00:17:48.140
+Et oui,
+
+00:17:48.200 --> 00:17:49.000
+la première fois que quelqu'un
+
+00:17:49.000 --> 00:17:49.880
+réalisera qu'il peut dire
+
+00:17:49.880 --> 00:17:51.020
+n'ajoute trois tâches égaux.
+
+00:17:51.140 --> 00:17:52.100
+Au lieu de cliquer 14 fois,
+
+00:17:52.200 --> 00:17:53.080
+vous atteindrez un statut
+
+00:17:53.080 --> 00:17:53.600
+de demi-dieu.
+
+00:17:54.000 --> 00:17:54.420
+Demi-dieu.
+
+00:17:54.920 --> 00:17:55.880
+Votre déploiement est terminé.
+
+00:17:56.340 --> 00:17:56.960
+Le travailleur numérique
+
+00:17:56.960 --> 00:17:57.520
+travaille désormais
+
+00:17:57.520 --> 00:17:58.020
+là où vous travaillez.
+
+00:17:58.600 --> 00:17:59.200
+Vous avez remplacé
+
+00:17:59.200 --> 00:18:00.400
+la monotonie du glissé-déposé
+
+00:18:00.400 --> 00:18:01.000
+par une exécution
+
+00:18:01.000 --> 00:18:01.560
+basée sur le monde.
+
+00:18:02.180 --> 00:18:03.080
+Voyons comment maintenir
+
+00:18:03.080 --> 00:18:03.800
+cela efficace,
+
+00:18:03.920 --> 00:18:04.860
+conforme et évolutif
+
+00:18:04.860 --> 00:18:05.540
+avant que la nouveauté
+
+00:18:05.540 --> 00:18:06.100
+ne s'estompe.
+
+00:18:06.960 --> 00:18:07.960
+Stratégie d'automatisation
+
+00:18:07.960 --> 00:18:08.360
+et limites.
+
+00:18:09.000 --> 00:18:09.780
+Maintenant que vous profitez
+
+00:18:09.780 --> 00:18:10.880
+du succès d'une automatisation
+
+00:18:10.880 --> 00:18:11.680
+pleinement fonctionnelle,
+
+00:18:11.860 --> 00:18:12.740
+gâchons un peu ce plaisir
+
+00:18:12.740 --> 00:18:13.860
+en abordant la réalité,
+
+00:18:13.860 --> 00:18:15.280
+la stratégie et les limites.
+
+00:18:16.380 --> 00:18:17.140
+Tout système intelligent
+
+00:18:17.140 --> 00:18:18.060
+nécessite de la maintenance,
+
+00:18:18.180 --> 00:18:18.680
+de la gouvernance
+
+00:18:18.680 --> 00:18:19.300
+et, à l'occasion,
+
+00:18:19.440 --> 00:18:19.820
+une mise au point
+
+00:18:19.820 --> 00:18:20.260
+sur les limites.
+
+00:18:20.720 --> 00:18:21.500
+Voici la première vérité.
+
+00:18:21.820 --> 00:18:22.380
+Copilot Studio
+
+00:18:22.380 --> 00:18:22.980
+ne remplace pas
+
+00:18:22.980 --> 00:18:23.620
+Power Automate,
+
+00:18:23.760 --> 00:18:24.260
+le complète.
+
+00:18:25.040 --> 00:18:25.820
+Power Automate
+
+00:18:25.820 --> 00:18:26.960
+reste votre moteur backend
+
+00:18:26.960 --> 00:18:27.900
+pour les flux structurés,
+
+00:18:28.160 --> 00:18:29.040
+la machinerie invisible
+
+00:18:29.040 --> 00:18:30.220
+qui gère les déclencheurs courants.
+
+00:18:30.820 --> 00:18:31.540
+Copilot Studio
+
+00:18:31.540 --> 00:18:32.880
+est l'interface conversationnelle,
+
+00:18:33.260 --> 00:18:34.120
+la couche de raisonnement
+
+00:18:34.120 --> 00:18:35.240
+qui traduit les requêtes humaines
+
+00:18:35.240 --> 00:18:36.720
+complexes en logique structurée.
+
+00:18:37.640 --> 00:18:38.360
+Une fois combinés,
+
+00:18:38.460 --> 00:18:39.400
+ils forment une boucle fermée.
+
+00:18:40.180 --> 00:18:41.280
+Copilot parle aux personnes,
+
+00:18:41.640 --> 00:18:42.960
+Power Automate parle aux systèmes.
+
+00:18:43.760 --> 00:18:44.080
+Ensemble,
+
+00:18:44.140 --> 00:18:45.120
+ils vous suppriment de l'équation.
+
+00:18:45.720 --> 00:18:46.360
+Utilisez le bon outil
+
+00:18:46.360 --> 00:18:47.180
+pour le bon niveau de complexité.
+
+00:18:47.860 --> 00:18:48.480
+Lorsque vous avez besoin
+
+00:18:48.480 --> 00:18:49.260
+d'un flux déterministe,
+
+00:18:49.320 --> 00:18:49.680
+par exemple,
+
+00:18:49.980 --> 00:18:50.500
+dès qu'une réponse
+
+00:18:50.500 --> 00:18:51.320
+à un formulaire arrive,
+
+00:18:51.420 --> 00:18:51.960
+créez une tâche.
+
+00:18:52.540 --> 00:18:53.680
+C'est le domaine de Power Automate.
+
+00:18:54.180 --> 00:18:54.860
+Lorsque vous avez besoin
+
+00:18:54.860 --> 00:18:56.200
+d'une flexibilité interprétative,
+
+00:18:56.340 --> 00:18:57.160
+comme ajoute toutes les tâches
+
+00:18:57.160 --> 00:18:58.400
+évoquées lors de la réunion d'aujourd'hui,
+
+00:18:58.840 --> 00:18:59.840
+c'est le domaine de copilote.
+
+00:19:00.780 --> 00:19:02.420
+Le stratège en automatisation chevronnée
+
+00:19:02.420 --> 00:19:03.260
+privilégie la synergie
+
+00:19:03.260 --> 00:19:03.820
+à la redondance.
+
+00:19:04.520 --> 00:19:04.800
+Deuxièmement,
+
+00:19:04.940 --> 00:19:05.660
+affinez vos descriptions.
+
+00:19:06.540 --> 00:19:07.040
+Ces champs de texte
+
+00:19:07.040 --> 00:19:07.640
+que vous avez ignorées
+
+00:19:07.640 --> 00:19:08.240
+lors de l'ajout d'outils
+
+00:19:08.240 --> 00:19:08.820
+sont les instructions
+
+00:19:08.820 --> 00:19:09.420
+que le modèle lit
+
+00:19:09.420 --> 00:19:10.540
+pour décider de la marche à suivre.
+
+00:19:11.520 --> 00:19:12.000
+Les mettre à jour
+
+00:19:12.000 --> 00:19:13.240
+avec des phrases d'intention claires
+
+00:19:13.240 --> 00:19:14.040
+comme « gare ».
+
+00:19:14.040 --> 00:19:14.900
+Utiliser cette action
+
+00:19:14.900 --> 00:19:15.520
+quand l'utilisateur
+
+00:19:15.520 --> 00:19:16.240
+veut définir une date
+
+00:19:16.240 --> 00:19:17.680
+car améliore considérablement
+
+00:19:17.680 --> 00:19:18.200
+la fiabilité.
+
+00:19:18.860 --> 00:19:19.760
+Les descriptions médiocres
+
+00:19:19.760 --> 00:19:20.520
+sont la première cause
+
+00:19:20.520 --> 00:19:21.200
+d'erreur des agents.
+
+00:19:21.900 --> 00:19:22.260
+Troisièmement,
+
+00:19:22.300 --> 00:19:22.760
+la gouvernance.
+
+00:19:23.200 --> 00:19:24.140
+Chaque connexion utilisée
+
+00:19:24.140 --> 00:19:25.060
+par votre agent planeur,
+
+00:19:25.160 --> 00:19:25.840
+Teams, SharePoint
+
+00:19:25.840 --> 00:19:26.940
+fonctionne avec vos autorisations
+
+00:19:26.940 --> 00:19:28.200
+Microsoft 365.
+
+00:19:28.500 --> 00:19:29.180
+Respectez les limites.
+
+00:19:29.840 --> 00:19:30.700
+Ne donnez pas d'autorisation
+
+00:19:30.700 --> 00:19:31.900
+à la légère sur des tenants personnels
+
+00:19:31.900 --> 00:19:32.580
+si le plan appartient
+
+00:19:32.580 --> 00:19:33.400
+à des équipes d'entreprise.
+
+00:19:33.940 --> 00:19:34.540
+Auditez régulièrement
+
+00:19:34.540 --> 00:19:35.000
+les connexions.
+
+00:19:35.600 --> 00:19:36.260
+Votre futur mois
+
+00:19:36.260 --> 00:19:37.140
+chargé de la conformité
+
+00:19:37.140 --> 00:19:37.640
+de sécurité
+
+00:19:37.640 --> 00:19:38.420
+vous remerciera.
+
+00:19:39.220 --> 00:19:39.720
+La surveillance
+
+00:19:39.720 --> 00:19:40.960
+et le niveau de maturité suivant.
+
+00:19:41.740 --> 00:19:42.420
+Dans la vue analytique
+
+00:19:42.420 --> 00:19:43.120
+de Copilot Studio,
+
+00:19:43.240 --> 00:19:44.100
+suivez les taux d'invocation,
+
+00:19:44.200 --> 00:19:44.900
+les latences de réponse
+
+00:19:44.900 --> 00:19:45.700
+et les appels d'outils.
+
+00:19:46.340 --> 00:19:47.160
+Si une action échoue
+
+00:19:47.160 --> 00:19:47.720
+continuellement,
+
+00:19:47.820 --> 00:19:48.440
+c'est probablement dû
+
+00:19:48.440 --> 00:19:49.620
+à des identifiants mal configurés
+
+00:19:49.620 --> 00:19:50.600
+ou à des autorisations expires.
+
+00:19:50.960 --> 00:19:51.260
+Pourriez-vous,
+
+00:19:51.260 --> 00:19:51.620
+je vais republier
+
+00:19:51.620 --> 00:19:52.200
+et passer à la suite.
+
+00:19:52.780 --> 00:19:53.040
+Maintenant,
+
+00:19:53.120 --> 00:19:53.880
+la partie amusante,
+
+00:19:54.420 --> 00:19:54.920
+les limitations.
+
+00:19:55.240 --> 00:19:56.360
+Comme le marketing de Microsoft
+
+00:19:56.360 --> 00:19:57.080
+préfère les appeler,
+
+00:19:57.080 --> 00:19:58.660
+les considérations d'utilisation.
+
+00:19:59.760 --> 00:20:00.660
+La fenêtre de contexte
+
+00:20:00.660 --> 00:20:01.140
+de Copilot
+
+00:20:01.140 --> 00:20:01.820
+peut gérer environ
+
+00:20:01.820 --> 00:20:02.380
+3 heures au mot
+
+00:20:02.380 --> 00:20:02.960
+pour le raisonnement.
+
+00:20:03.460 --> 00:20:04.020
+Cela signifie
+
+00:20:04.020 --> 00:20:04.640
+que si vous collez
+
+00:20:04.640 --> 00:20:05.320
+l'historique complet
+
+00:20:05.320 --> 00:20:05.960
+de votre projet
+
+00:20:05.960 --> 00:20:06.640
+dans une discussion,
+
+00:20:07.100 --> 00:20:07.840
+il oubliera le début
+
+00:20:07.840 --> 00:20:09.180
+avant d'arriver au résumé.
+
+00:20:09.720 --> 00:20:10.580
+Gardez les requêtes concises,
+
+00:20:10.640 --> 00:20:11.260
+une intention à la fois.
+
+00:20:12.200 --> 00:20:12.500
+De plus,
+
+00:20:12.560 --> 00:20:13.220
+les environnements Teams
+
+00:20:13.220 --> 00:20:13.860
+imposent environ
+
+00:20:13.860 --> 00:20:14.700
+10 sessions Copilot
+
+00:20:14.700 --> 00:20:15.380
+par utilisateur
+
+00:20:15.380 --> 00:20:16.120
+toutes les 24 heures
+
+00:20:16.120 --> 00:20:16.680
+sauf si vous êtes
+
+00:20:16.680 --> 00:20:17.800
+sur un tenant entreprise complet.
+
+00:20:18.600 --> 00:20:19.300
+Atteignez cette limite
+
+00:20:19.300 --> 00:20:20.240
+et votre agent refusera
+
+00:20:20.240 --> 00:20:21.000
+poliment de vous servir
+
+00:20:21.000 --> 00:20:21.580
+jusqu'au lendemain.
+
+00:20:22.600 --> 00:20:23.120
+Considérez cela
+
+00:20:23.120 --> 00:20:23.800
+comme un repos forcé.
+
+00:20:24.140 --> 00:20:24.840
+Les robots méritent aussi
+
+00:20:24.840 --> 00:20:25.180
+des limites.
+
+00:20:25.860 --> 00:20:26.640
+Les licences sont importantes.
+
+00:20:27.220 --> 00:20:27.880
+Les tenants développeurs
+
+00:20:27.880 --> 00:20:28.300
+manquent souvent
+
+00:20:28.300 --> 00:20:28.880
+de fonctionnalités
+
+00:20:28.880 --> 00:20:29.620
+d'index sémantique,
+
+00:20:29.780 --> 00:20:30.180
+ce qui signifie
+
+00:20:30.180 --> 00:20:30.960
+pas de base riche
+
+00:20:30.960 --> 00:20:31.860
+dans les données SharePoint.
+
+00:20:32.900 --> 00:20:33.460
+Les environnements
+
+00:20:33.460 --> 00:20:33.900
+de production
+
+00:20:33.900 --> 00:20:34.260
+débloquent
+
+00:20:34.260 --> 00:20:35.200
+ces intégrations avancées.
+
+00:20:35.880 --> 00:20:36.280
+Traduction.
+
+00:20:36.740 --> 00:20:37.160
+Les prototypes
+
+00:20:37.160 --> 00:20:37.920
+peuvent paraître plus bêtes
+
+00:20:37.920 --> 00:20:38.700
+que les agents en production.
+
+00:20:39.300 --> 00:20:39.980
+Ce n'est pas votre faute,
+
+00:20:40.080 --> 00:20:40.580
+c'est la licence.
+
+00:20:41.380 --> 00:20:42.320
+Associer Copilot Studio
+
+00:20:42.320 --> 00:20:42.960
+à Power Automate
+
+00:20:42.960 --> 00:20:44.060
+pour gérer les dépendances complexes.
+
+00:20:44.640 --> 00:20:45.120
+Par exemple,
+
+00:20:45.560 --> 00:20:46.260
+laisser Copilot
+
+00:20:46.260 --> 00:20:47.300
+recueillir le contexte
+
+00:20:47.300 --> 00:20:48.080
+par la conversation,
+
+00:20:48.360 --> 00:20:49.040
+assigner des tâches
+
+00:20:49.040 --> 00:20:49.840
+à tous les participants
+
+00:20:49.840 --> 00:20:51.780
+et transmettre ces données
+
+00:20:51.780 --> 00:20:53.140
+à un flux Power Automate
+
+00:20:53.140 --> 00:20:53.840
+qui crée des tâches
+
+00:20:53.840 --> 00:20:54.940
+planeurs individuels
+
+00:20:54.940 --> 00:20:55.920
+pour chaque invité
+
+00:20:55.920 --> 00:20:59.000
+à laisser les humains discuter
+
+00:20:59.000 --> 00:21:00.240
+et les flux traiter la logique.
+
+00:21:00.640 --> 00:21:01.020
+Bonne pratique.
+
+00:21:01.740 --> 00:21:02.660
+Documenter vos configurations.
+
+00:21:03.520 --> 00:21:03.960
+Vous oublirez vite
+
+00:21:03.960 --> 00:21:04.620
+quel ID de groupe
+
+00:21:04.620 --> 00:21:05.600
+correspond à quel plan.
+
+00:21:06.520 --> 00:21:07.300
+Tenez un tableau simple
+
+00:21:07.300 --> 00:21:07.780
+dans OneNote
+
+00:21:07.780 --> 00:21:08.340
+ou SharePoint.
+
+00:21:09.260 --> 00:21:09.660
+Nom de l'agent,
+
+00:21:09.780 --> 00:21:10.360
+type de connecteur,
+
+00:21:10.460 --> 00:21:11.560
+propriétaire de l'authentification
+
+00:21:11.560 --> 00:21:12.560
+date de dernière publication.
+
+00:21:13.120 --> 00:21:14.100
+L'administration par tableur
+
+00:21:14.100 --> 00:21:14.920
+permet paradoxalement
+
+00:21:14.920 --> 00:21:15.480
+d'éviter le chaos
+
+00:21:15.480 --> 00:21:16.000
+causé par l'ir.
+
+00:21:16.480 --> 00:21:17.020
+Une courte histoire
+
+00:21:17.020 --> 00:21:17.720
+pour illustrer les gains.
+
+00:21:18.540 --> 00:21:19.380
+Une petite équipe produit
+
+00:21:19.380 --> 00:21:20.220
+a créé son propre agent
+
+00:21:20.220 --> 00:21:20.840
+de suivi de sprint
+
+00:21:20.840 --> 00:21:21.740
+en suivant ses étapes.
+
+00:21:22.540 --> 00:21:23.300
+Il gérait la création
+
+00:21:23.300 --> 00:21:23.980
+de tâches courantes,
+
+00:21:24.120 --> 00:21:25.340
+la planification hebdomadaire
+
+00:21:25.340 --> 00:21:26.540
+et l'alignement des échéances.
+
+00:21:27.260 --> 00:21:28.060
+Ce qui prenait 15 minutes
+
+00:21:28.060 --> 00:21:28.520
+par réunion
+
+00:21:28.520 --> 00:21:29.080
+a été réduit
+
+00:21:29.080 --> 00:21:30.380
+à une seule instruction verbale.
+
+00:21:31.320 --> 00:21:31.920
+Multipliez cela
+
+00:21:31.920 --> 00:21:32.700
+par 50 réunions
+
+00:21:32.700 --> 00:21:33.300
+par trimestre
+
+00:21:33.300 --> 00:21:34.040
+et ils ont gagné
+
+00:21:34.040 --> 00:21:34.640
+des jours par an
+
+00:21:34.640 --> 00:21:35.200
+sans écrire
+
+00:21:35.200 --> 00:21:36.740
+une seule ligne de code.
+
+00:21:37.340 --> 00:21:38.200
+Mais modérez vos attentes.
+
+00:21:38.900 --> 00:21:39.720
+L'intelligence de Copilot
+
+00:21:39.720 --> 00:21:40.820
+est limitée par le contexte
+
+00:21:40.820 --> 00:21:41.400
+et la clarté.
+
+00:21:42.180 --> 00:21:43.040
+Il excelle dans la conversion
+
+00:21:43.040 --> 00:21:44.040
+transformant les phrases humaines
+
+00:21:44.040 --> 00:21:44.900
+en actions structurées.
+
+00:21:45.480 --> 00:21:46.500
+Il est médiocre en philosophie.
+
+00:21:47.040 --> 00:21:47.400
+S'il hésite,
+
+00:21:47.460 --> 00:21:47.780
+c'est un problème
+
+00:21:47.780 --> 00:21:48.520
+de conception de prompt
+
+00:21:48.520 --> 00:21:49.080
+pas une rébellion
+
+00:21:49.080 --> 00:21:49.520
+de la machine.
+
+00:21:50.340 --> 00:21:50.720
+Pour résumer
+
+00:21:50.720 --> 00:21:51.440
+votre stratégie,
+
+00:21:51.680 --> 00:21:52.440
+raisonnez dans Copilot,
+
+00:21:52.560 --> 00:21:53.360
+exécutez dans Automate,
+
+00:21:53.480 --> 00:21:54.040
+surveillez dans Studio
+
+00:21:54.040 --> 00:21:54.800
+et respectez
+
+00:21:54.800 --> 00:21:55.540
+les limites des licences.
+
+00:21:56.360 --> 00:21:57.160
+Ce quatueur garantit
+
+00:21:57.160 --> 00:21:57.780
+une automatisation
+
+00:21:57.780 --> 00:21:58.660
+efficace et conforme.
+
+00:21:58.980 --> 00:21:59.560
+Vous n'avez pas seulement
+
+00:21:59.560 --> 00:22:00.580
+construit un stagiaire numérique
+
+00:22:00.580 --> 00:22:01.200
+mais une structure
+
+00:22:01.200 --> 00:22:01.900
+pour automatiser
+
+00:22:01.900 --> 00:22:02.580
+les tâches cognitives
+
+00:22:02.580 --> 00:22:03.680
+répétitives, répétitives.
+
+00:22:04.100 --> 00:22:04.440
+En bref,
+
+00:22:04.540 --> 00:22:05.380
+laissez-li-a gérer le banal
+
+00:22:05.380 --> 00:22:05.980
+et concentrez-vous
+
+00:22:05.980 --> 00:22:06.580
+sur l'essentiel.
+
+00:22:07.420 --> 00:22:07.620
+Maintenant,
+
+00:22:07.720 --> 00:22:08.660
+préparez votre chaîne requête.
+
+00:22:09.200 --> 00:22:10.060
+Un flux de travail complet
+
+00:22:10.060 --> 00:22:10.680
+attend vos ordres.
+
+00:22:11.740 --> 00:22:12.700
+Passez de jongleur de tâches
+
+00:22:12.700 --> 00:22:13.420
+à commandant de tâches.
+
+00:22:14.280 --> 00:22:14.660
+Voici donc
+
+00:22:14.660 --> 00:22:15.480
+le sentiment de progrès
+
+00:22:15.480 --> 00:22:16.020
+créé des tâches
+
+00:22:16.020 --> 00:22:16.540
+par la parole
+
+00:22:16.540 --> 00:22:17.340
+au lieu de les faire glisser
+
+00:22:17.340 --> 00:22:17.940
+comme un accro
+
+00:22:17.940 --> 00:22:18.480
+au tableur
+
+00:22:18.480 --> 00:22:19.160
+bas de gamme.
+
+00:22:20.220 --> 00:22:20.560
+Vous n'êtes plus
+
+00:22:20.560 --> 00:22:21.180
+un simple utilisateur
+
+00:22:21.180 --> 00:22:21.560
+de planeur,
+
+00:22:21.640 --> 00:22:22.060
+vous le dirigez.
+
+00:22:22.640 --> 00:22:23.280
+Votre nouvel agent
+
+00:22:23.280 --> 00:22:24.020
+Copilot Studio
+
+00:22:24.020 --> 00:22:24.440
+écoute,
+
+00:22:24.580 --> 00:22:25.380
+raisonne et exécute
+
+00:22:25.380 --> 00:22:26.140
+pendant que vous restez
+
+00:22:26.140 --> 00:22:27.400
+au niveau de la réflexion.
+
+00:22:28.100 --> 00:22:28.600
+Il ne s'agit pas
+
+00:22:28.600 --> 00:22:29.560
+d'automatiser pour le plaisir.
+
+00:22:30.380 --> 00:22:31.200
+Il s'agit de délégation
+
+00:22:31.200 --> 00:22:31.980
+exécutée à la vitesse
+
+00:22:31.980 --> 00:22:32.440
+de la machine.
+
+00:22:32.980 --> 00:22:33.380
+N'oubliez pas,
+
+00:22:33.440 --> 00:22:33.880
+vous n'avez pas juste
+
+00:22:33.880 --> 00:22:34.500
+connecté NAPI,
+
+00:22:34.580 --> 00:22:35.280
+vous avez créé la couche
+
+00:22:35.280 --> 00:22:35.680
+de raisonnement
+
+00:22:35.680 --> 00:22:36.200
+qui interprète
+
+00:22:36.200 --> 00:22:36.880
+l'intention humaine.
+
+00:22:43.900 --> 00:22:44.480
+La différence entre
+
+00:22:44.480 --> 00:22:45.080
+un projet noyé
+
+00:22:45.080 --> 00:22:46.100
+sous les mises à jour manuelles
+
+00:22:46.100 --> 00:22:47.100
+et un projet
+
+00:22:47.100 --> 00:22:47.960
+qui se maintient à jour
+
+00:22:47.960 --> 00:22:48.600
+est simplement le fait
+
+00:22:48.600 --> 00:22:49.020
+que quelqu'un
+
+00:22:49.020 --> 00:22:49.900
+comme vous a pris la peine
+
+00:22:49.900 --> 00:22:50.700
+de configurer cela.
+
+00:22:51.460 --> 00:22:51.840
+Au fond,
+
+00:22:52.200 --> 00:22:53.120
+c'est la vraie promesse
+
+00:22:53.120 --> 00:22:54.860
+de Microsoft 365 Copilot
+
+00:22:54.860 --> 00:22:55.540
+pas plus d'outils,
+
+00:22:55.820 --> 00:22:57.100
+mais une meilleure orchestration
+
+00:22:57.100 --> 00:22:57.540
+entre eux.
+
+00:22:58.680 --> 00:22:59.820
+Planeur reste planeur ?
+
+00:22:59.820 --> 00:23:00.340
+Vous l'avez simplement
+
+00:23:00.340 --> 00:23:01.020
+fait passer du statut
+
+00:23:01.020 --> 00:23:01.420
+tableau blanc
+
+00:23:01.420 --> 00:23:02.060
+à celui de force de travail.
+
+00:23:02.700 --> 00:23:02.960
+Alors oui,
+
+00:23:03.060 --> 00:23:03.840
+arrêtez de glisser, déposer
+
+00:23:03.840 --> 00:23:04.660
+et de cliquer dans des menus
+
+00:23:04.660 --> 00:23:05.820
+qui insultent votre intelligence.
+
+00:23:06.300 --> 00:23:06.740
+Vous avez construit
+
+00:23:06.740 --> 00:23:07.300
+un assistant IA
+
+00:23:07.300 --> 00:23:07.720
+pour une raison,
+
+00:23:07.820 --> 00:23:08.360
+laissez-le travailler.
+
+00:23:08.940 --> 00:23:09.720
+Vous gérez le jugement,
+
+00:23:09.840 --> 00:23:10.420
+la créativité
+
+00:23:10.420 --> 00:23:10.980
+et le leadership,
+
+00:23:11.140 --> 00:23:11.640
+ce que le silicium
+
+00:23:11.640 --> 00:23:12.460
+trouve encore déroutant.
+
+00:23:13.600 --> 00:23:14.460
+Si cela vous a fait gagner
+
+00:23:14.460 --> 00:23:15.780
+10 minutes ou un peu de sérénité,
+
+00:23:16.080 --> 00:23:16.700
+rendez-la pareil
+
+00:23:16.700 --> 00:23:17.560
+en vous abonnant.
+
+00:23:18.580 --> 00:23:19.100
+La suite arrive
+
+00:23:19.100 --> 00:23:19.820
+Power Platform,
+
+00:23:19.980 --> 00:23:20.820
+extension de Copilot,
+
+00:23:21.420 --> 00:23:22.140
+le bon genre d'addiction
+
+00:23:22.140 --> 00:23:22.860
+à l'automatisation.
+
+00:23:23.500 --> 00:23:24.160
+Appuyez sur suivre,
+
+00:23:24.360 --> 00:23:25.200
+activez les notifications
+
+00:23:25.200 --> 00:23:26.060
+et laissez la prochaine
+
+00:23:26.060 --> 00:23:26.500
+mise à jour
+
+00:23:26.500 --> 00:23:27.420
+se déployer seul.
+
+00:23:28.060 --> 00:23:29.000
+L'efficacité est une habitude,
+
+00:23:29.180 --> 00:23:29.800
+installez-la durablement.

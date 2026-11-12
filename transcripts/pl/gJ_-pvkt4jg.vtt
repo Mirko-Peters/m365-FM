@@ -1,0 +1,829 @@
+WEBVTT
+
+00:00:00.110 --> 00:00:07.550
+Gotowi na 10 dni z Microsoft 365, Copilot, AI, Azure oraz ludźmi kształtującymi przyszłość pracy?
+
+00:00:07.930 --> 00:00:12.350
+W styczniu powraca M365Con, tym razem z większym rozmachem.
+
+00:00:12.690 --> 00:00:18.390
+Dołącz do nas podczas sesji na żywo, praktycznych pokazów i wiedzy od MVP oraz ekspertów z całego świata.
+
+00:00:18.650 --> 00:00:21.830
+Żadnych ogólnych slajdów, żadnego żargonu bez pokrycia.
+
+00:00:22.250 --> 00:00:28.950
+Zajmujemy się realnymi wyzwaniami Copilot Studio, agenci, AI, fabrik, bezpieczeństwo, zarządzanie i automatyzacja.
+
+00:00:28.950 --> 00:00:35.130
+Niezależnie od tego, czy jesteś informatykiem, programistą czy liderem biznesowym, mamy sesje stworzone dla Ciebie.
+
+00:00:35.330 --> 00:00:40.550
+Podczas 10 pełnych dni odkryjesz nowe technologie i nawiążesz kontakt z globalną społecznością.
+
+00:00:40.830 --> 00:00:44.590
+Oglądaj na żywo i zabierz praktyczne wnioski do swojej organizacji.
+
+00:00:44.590 --> 00:00:51.150
+Styczeń 2027 roku, 10 dni, jedna społeczność Microsoft. Rejestracja jest już otwarta.
+
+00:00:51.690 --> 00:00:53.590
+Zarezerwuj swoje miejsce już dziś.
+
+00:00:55.270 --> 00:00:57.850
+Wejdź na m365.com.net
+
+00:00:57.850 --> 00:01:04.650
+Dołącz na m365.com.net i widzimy się na żywo w styczniu.
+
+00:01:04.850 --> 00:01:08.710
+Witajcie w kolejnym odcinku Microsoft Knowledge Nugget na m365.fm.
+
+00:01:09.330 --> 00:01:10.430
+Nazywam się Mirko Peters.
+
+00:01:10.670 --> 00:01:16.130
+Dzisiejszy temat to coś, o czym prawie każdy słyszał, ale niewielu naprawdę rozumie DNS, czyli Domain Name System.
+
+00:01:16.390 --> 00:01:20.450
+Pewnie słyszałeś określenie książka telefoniczna internetu i nie jest ono dalekie od prawdy.
+
+00:01:20.450 --> 00:01:29.870
+Zadanie jest proste. Weź nazwę, którą łatwo zapamiętać, jak Contozo.com i zamień ją na numer, który rozumieją komputery jak 20.90.152.20.
+
+00:01:29.870 --> 00:01:34.810
+Komputery żyją liczbami, my nazwami, a DNS znajduje się po środku, dokonując tego tłumaczenia.
+
+00:01:34.810 --> 00:01:39.150
+Ale rzecz w tym, że większość ludzi wie, że wykonuje on wyszukiwanie, ale nigdy nie widzi całego procesu.
+
+00:01:39.270 --> 00:01:43.750
+Co właściwie dzieje się w momencie wpisania domeny do przeglądarki i, co ważniejsze, gdzie pasuje do tego Azure?
+
+00:01:43.930 --> 00:01:46.990
+Pod koniec tego odcinka zrozumiesz, czym naprawdę jest Azure DNS.
+
+00:01:46.990 --> 00:01:49.910
+Poznasz różnice między publicznymi a prywatnymi strefami DNS.
+
+00:01:50.130 --> 00:01:52.430
+Dowiesz się, jakich typów rekordów faktycznie potrzebujesz.
+
+00:01:52.570 --> 00:01:55.070
+I zobaczysz, jak delegowanie przekazuje kontrolę do Azure.
+
+00:01:55.290 --> 00:01:58.130
+Omówimy podstawy prostym językiem, bez owijania w bawełnę.
+
+00:01:58.270 --> 00:01:59.710
+Co faktycznie robi DNS?
+
+00:01:59.970 --> 00:02:01.670
+Zacznijmy od podstawowego zadania.
+
+00:02:01.910 --> 00:02:03.450
+DNS zamienia nazwy na liczby.
+
+00:02:03.670 --> 00:02:08.470
+Kiedy wpisujesz Contozo.com w przeglądarce, twój komputer nie ma pojęcia, co oznacza ten ciąg znaków.
+
+00:02:08.630 --> 00:02:15.250
+Potrzebuje adresu IP, czegoś w rodzaju 2.0.190.152.20, aby połączyć się z serwerem hostującym tę stronę.
+
+00:02:15.250 --> 00:02:17.690
+DNS sprawia, że to tłumaczenie dochodzi do skutku.
+
+00:02:17.890 --> 00:02:18.610
+Dlaczego to ważne?
+
+00:02:18.850 --> 00:02:22.370
+Ponieważ komputery rozumieją tylko liczby, podczas gdy ludzie pamiętają tylko nazwy.
+
+00:02:22.570 --> 00:02:25.210
+Nie zapamiętujesz numeru telefonu przyjaciela, zapamiętujesz jego imię.
+
+00:02:25.390 --> 00:02:27.090
+Tak samo jest ze stronami internetowymi.
+
+00:02:27.290 --> 00:02:30.850
+DNS pozwala wpisać google.com zamiast ciągu cyfr, których nigdy byś nie zapamiętał.
+
+00:02:31.010 --> 00:02:33.450
+Więc co właściwie dzieje się, gdy wpisujesz domeny w przeglądarce?
+
+00:02:33.590 --> 00:02:34.690
+To cały łańcuch zdarzeń.
+
+00:02:34.870 --> 00:02:38.530
+Twoja przeglądarka najpierw sprawdza swoją pamięć podręczną, pytając, czy sprawdzałem to ostatnio?
+
+00:02:38.530 --> 00:02:43.670
+Jeśli nie, wysyła zapytanie do rekurencyjnego serwera rozpoznawania nazw, zazwyczaj dostarczanego przez Twojego dostawcę internetu.
+
+00:02:43.850 --> 00:02:46.030
+Stamtąd ten serwer sprawdza własną pamięć podręczną.
+
+00:02:46.250 --> 00:02:47.170
+Nadal brak odpowiedzi?
+
+00:02:47.330 --> 00:02:48.810
+Wtedy wspina się w górę hierarchii.
+
+00:02:49.030 --> 00:02:50.630
+Najpierw pyta serwer główny, root.
+
+00:02:50.790 --> 00:02:54.670
+Ten serwer root nie zna adresu IP dla contozo.com, ale wie, kogo zapytać dalej.
+
+00:02:54.810 --> 00:02:56.350
+Serwer TLD dla domeny.com.
+
+00:02:56.490 --> 00:03:01.130
+Ten serwer TLD również nie zna dokładnego adresu IP, ale zna autorytatywny serwer nazw dla tej domeny.
+
+00:03:01.310 --> 00:03:02.430
+To ostatni przystanek.
+
+00:03:02.430 --> 00:03:05.230
+Autorytatywny serwer nazw przechowuje właściwe rekordy.
+
+00:03:05.350 --> 00:03:10.090
+Odpowiada adresem IP, serwer rekurencyjny, zapisuje go w pamięci, odsyła do przeglądarki, a ta ładuje stronę.
+
+00:03:10.230 --> 00:03:11.810
+Nie musisz zapamiętywać każdego kroku.
+
+00:03:12.050 --> 00:03:14.150
+Wystarczy wiedzieć, że istnieje hierarchia i że to działa.
+
+00:03:14.410 --> 00:03:17.330
+Dla nas liczy się ten ostatni krok, autorytatywny serwer nazw.
+
+00:03:17.350 --> 00:03:18.890
+I właśnie tu wkracza Azure DNS.
+
+00:03:19.250 --> 00:03:20.410
+Czym jest Azure DNS?
+
+00:03:20.610 --> 00:03:23.910
+Azure DNS to usługa hostingu DNS zarządzana przez firmę Microsoft.
+
+00:03:24.010 --> 00:03:29.370
+Mówiąc prościej, oznacza to, że nie musisz uruchamiać własnych serwerów DNS, aktualizować ich, ani dbać o wysoką dostępność.
+
+00:03:29.370 --> 00:03:31.450
+Azure zajmuje się tym wszystkim za Ciebie.
+
+00:03:31.610 --> 00:03:38.370
+Tworzysz strefę DNS w Azure dla swojej domeny, dodajesz rekordy, takie jak A czy C, N, A, M, E, a Azure hostuje je w swojej globalnej infrastrukturze.
+
+00:03:39.190 --> 00:03:43.130
+Gdy ktoś z dowolnego miejsca w internecie zapyta o Twoją domenę, serwery nazw Azure odpowiedzą.
+
+00:03:43.310 --> 00:03:47.130
+Ponieważ opiera się na globalnej sieci Azure, jest szybki, odporny na awarię i skaluje się automatycznie.
+
+00:03:47.290 --> 00:03:48.750
+Nie musisz zaprzątać sobie tym głowy.
+
+00:03:48.930 --> 00:03:49.790
+To po prostu działa.
+
+00:03:50.070 --> 00:03:54.990
+Zarządzasz wszystkim przez portal Azure, wiersz poleceń lub szablony ARM, jeśli wolisz infrastrukturę jako kod.
+
+00:03:54.990 --> 00:03:58.950
+Żadnych ręcznych konfiguracji serwerów, żadnego logowania przez SSH w celu edycji plików stref.
+
+00:03:59.070 --> 00:04:01.370
+Wszystko opiera się na klikaniu lub skryptach i wdrażaniu.
+
+00:04:01.570 --> 00:04:03.570
+Porównajmy to teraz z tradycyjnym podejściem.
+
+00:04:03.730 --> 00:04:06.310
+20 lat temu trzeba było prowadzić własne serwery DNS.
+
+00:04:06.710 --> 00:04:13.990
+Odpowiadałeś za aktualizację systemu i tendencję, aby awaria jednego serwera nie wyłączyła domeny oraz planowanie przepustowości na czas wzrostu ruchu.
+
+00:04:14.190 --> 00:04:16.490
+Dzięki Azure DNS to już nie jest Twój problem.
+
+00:04:16.710 --> 00:04:19.370
+Po prostu tworzysz strefę, dodajesz rekordy i gotowe.
+
+00:04:19.370 --> 00:04:20.810
+Ale tutaj robi się ciekawie.
+
+00:04:21.010 --> 00:04:23.270
+Azure DNS to nie tylko publiczne strony internetowe.
+
+00:04:23.450 --> 00:04:26.830
+Obsługuje również wewnętrzne rozpoznawanie nazw w Twoich sieciach wirtualnych Azure.
+
+00:04:27.050 --> 00:04:30.930
+Właśnie tutaj pojawia się rozróżnienie między publicznymi a prywatnymi strefami DNS.
+
+00:04:31.150 --> 00:04:33.970
+Publiczne strefy DNS kontra prywatne strefy DNS.
+
+00:04:34.190 --> 00:04:36.890
+Przyjrzyjmy się bliżej tym dwóm rodzajom stref DNS w Azure.
+
+00:04:37.110 --> 00:04:41.690
+Publiczne strefy DNS są dokładnie tym, na co wskazują domenami, które muszą być osiągalne z internetu.
+
+00:04:41.870 --> 00:04:47.590
+Każda nazwa, którą ktoś spoza Twojej sieci musi rozwiązać, jak Twoja witryna, punkt końcowy API czy serwer poczty, trafia do strefy publicznej.
+
+00:04:47.590 --> 00:04:49.730
+Prywatne strefy DNS to przeciwieństwo.
+
+00:04:49.970 --> 00:04:53.570
+Służą one do nazw, które powinny być rozwiązywane tylko wewnątrz Twoich sieci wirtualnych Azure.
+
+00:04:53.830 --> 00:04:55.790
+Załóżmy na przykład, że masz serwer bazy danych.
+
+00:04:55.990 --> 00:04:58.110
+Nie chcesz, aby cały internet pytał o jego adres IP.
+
+00:04:58.370 --> 00:05:00.750
+Chcesz tylko, aby Twoje maszyny wirtualne aplikacji mogły go znaleźć.
+
+00:05:00.870 --> 00:05:04.530
+Tworzysz więc strefę prywatną i tylko sieci, które z nią powiążesz, będą mogły rozwiązywać te nazwy.
+
+00:05:04.710 --> 00:05:05.730
+Oto konkretny przykład.
+
+00:05:05.970 --> 00:05:10.830
+Powiedzmy, że masz serwer bazy danych i wewnętrznie chcesz go nazywać db.internal.kontozo.com.
+
+00:05:10.830 --> 00:05:16.310
+Ta nazwa nic nie znaczy dla świata zewnętrznego i tak powinno być, ale Twoje maszyny wirtualne aplikacji muszą go znaleźć.
+
+00:05:16.470 --> 00:05:25.930
+Dzięki prywatnej strefie DNS tworzysz ten rekord, łączysz strefę ze swoją siecią wirtualną i nagle każda maszyna w tej sieci może rozwiązać db.internal.kontozo.com na prywatny adres IP bazy danych.
+
+00:05:26.150 --> 00:05:28.370
+Nie są wymagane żadne niestandardowe serwery DNS.
+
+00:05:28.570 --> 00:05:31.110
+A teraz oto, gdzie strefy prywatne stają się naprawdę użyteczne.
+
+00:05:31.350 --> 00:05:34.610
+Możesz połączyć jedną strefę z wieloma sieciami wirtualnymi, nawet w różnych regionach.
+
+00:05:34.610 --> 00:05:40.170
+Więc jeśli masz aplikację internetową w East US i bazę danych w West Europę, obie sieci VNET mogą współdzielić tę samą strefę prywatną.
+
+00:05:40.330 --> 00:05:44.510
+Aplikacja internetowa bez problemu rozwiązuje nazwę bazy danych, mimo że znajdują się one w różnych centrach danych.
+
+00:05:44.730 --> 00:05:48.690
+Żadnej konfiguracji komunikacji równorzędnej dla DNS, żadnych reguł przekierowywania, po prostu łączysz strefę.
+
+00:05:48.890 --> 00:05:51.490
+Automatyczna rejestracja to kolejna funkcja, o której warto wiedzieć.
+
+00:05:51.730 --> 00:05:56.830
+Gdy włączysz ją w łączu sieci wirtualnej, Azure automatycznie tworzy rekordy, a dla każdej maszyny wirtualnej podczas jej uruchamiania.
+
+00:05:56.830 --> 00:06:00.190
+Wdrażasz nową maszynę wirtualną i w ciągu kilku minut pojawia się dla niej rekord DNS.
+
+00:06:00.350 --> 00:06:01.830
+Usuwasz maszynę, rekord znika.
+
+00:06:02.070 --> 00:06:03.490
+Brak ręcznego zarządzania rekordami.
+
+00:06:03.690 --> 00:06:06.430
+Jest to szczególnie przydatne w dynamicznych środowiskach, gdzie maszyny wirtualne często się zmieniają.
+
+00:06:06.630 --> 00:06:09.410
+Słyszę, że wiele osób uważa, iż prywatne strefy wymagają zarejestrowanej nazwy domeny.
+
+00:06:09.630 --> 00:06:10.250
+Nie wymagają.
+
+00:06:10.510 --> 00:06:14.850
+Możesz nazwać strefę prywatną jak chcesz internal, contozo.com, corplocal lub dubinternal.
+
+00:06:15.050 --> 00:06:18.110
+To nie ma znaczenia, ponieważ nikt spoza Twojej sieci nigdy nie będzie wysyłał do niej zapytań.
+
+00:06:18.110 --> 00:06:20.710
+Nie ma w to zaangażowanego rejestratora domen ani publicznej delegacji.
+
+00:06:20.870 --> 00:06:22.330
+To rozwiązanie czysto wewnętrzne.
+
+00:06:22.510 --> 00:06:23.510
+Podsumujmy różnicę.
+
+00:06:23.750 --> 00:06:25.350
+Strefy publiczne są dla internetu.
+
+00:06:25.530 --> 00:06:27.110
+Strefy prywatne są dla Twoich sieci wirtualnych.
+
+00:06:27.870 --> 00:06:31.190
+Strefy publiczne wymagają domeny, której jesteś właścicielem oraz delegacji od rejestratora.
+
+00:06:31.390 --> 00:06:33.750
+Strefy prywatne potrzebują tylko nazwy i łącza w net.
+
+00:06:33.890 --> 00:06:38.810
+Gdy już skonfigurujesz strefę publiczną lub prywatną, potrzebujesz rekordów, aby przypisać nazwy do zasobów.
+
+00:06:38.850 --> 00:06:42.490
+To jest podstawa, a gdy to zrozumiesz, reszta to tylko dodawanie rekordów.
+
+00:06:42.610 --> 00:06:44.710
+Typy rekordów, których faktycznie będziesz używać.
+
+00:06:44.710 --> 00:06:46.950
+Z jakich rekordów DNS będziesz korzystać na co dzień?
+
+00:06:47.090 --> 00:06:48.310
+Przejdźmy przez nie po kolei.
+
+00:06:48.490 --> 00:06:50.110
+Rekord, a to ten, który znają wszyscy.
+
+00:06:50.370 --> 00:06:51.710
+Mapuje on nazwę na adres IPv4.
+
+00:06:52.510 --> 00:06:59.030
+Wpisujesz www.kontozo.com w przeglądarce A-Rekord, a wskazuje, że serwer znajduje się pod 20.190.
+
+00:06:59.150 --> 00:07:00.590
+152.20
+
+00:07:00.590 --> 00:07:02.210
+Proste i uniwersalne.
+
+00:07:02.350 --> 00:07:04.550
+To najpopularniejszy typ rekordu w internecie.
+
+00:07:04.810 --> 00:07:07.670
+Rekordy AAA robią to samo dla adresów IPv6.
+
+00:07:07.870 --> 00:07:14.410
+Jeśli Twoja usługa wspiera IPv6, będziesz ich potrzebować obok rekordów, a większość osób nie używa ich codziennie, ale są dostępne, gdy zajdzie potrzeba.
+
+00:07:14.410 --> 00:07:16.590
+Rekordy CNA-ME działają inaczej.
+
+00:07:16.810 --> 00:07:20.330
+Zamiast mapować nazwę na IP, CNA-ME mapuje nazwę na inną nazwę.
+
+00:07:20.530 --> 00:07:24.630
+Możesz więc mieć www.kontozo.com jako CNA-ME wskazujący na Kontozo.
+
+00:07:24.810 --> 00:07:26.290
+Azure Websites.net
+
+00:07:26.290 --> 00:07:32.870
+Gdy ktoś zapyta o www.kontozo.com, resolver DNS podąża tym ciągiem, aż znajdzie właściwy adres IP.
+
+00:07:33.130 --> 00:07:34.810
+I na tym polega piękno tego rozwiązania.
+
+00:07:35.050 --> 00:07:37.370
+Rekordy CNA-ME są idealne do tworzenia aliasów.
+
+00:07:37.550 --> 00:07:40.530
+Zmieniasz cel raz, a wszystko, co na niego wskazuje, aktualizuje się automatycznie.
+
+00:07:40.710 --> 00:07:42.810
+Rekordy MX obsługują routing poczty e-mail.
+
+00:07:42.810 --> 00:07:49.890
+Jeśli ktoś wysyła e-mail na user małpa.kontozo.com, serwer wysyłający sprawdza rekord MX, by dowiedzieć się, który serwer pocztowy ma go przyjąć.
+
+00:07:50.070 --> 00:07:53.610
+Zazwyczaj posiada się jeden lub więcej rekordów MX z przypisanymi wartościami priorytetu.
+
+00:07:53.850 --> 00:08:01.070
+Niższe liczby oznaczają wyższy priorytet, więc mail.kontozo.com z priorytetem 10 będzie sprawdzany przed backup.kontozo.com z priorytetem 20.
+
+00:08:01.390 --> 00:08:05.410
+Rekordy TXT przechowują informacje tekstowe i są używane do wielu różnych celów.
+
+00:08:05.410 --> 00:08:07.650
+Weryfikacja domeny to jeden z najważniejszych.
+
+00:08:07.810 --> 00:08:13.170
+Konfigurując Microsoft 365, musisz dodać rekord TXT, aby potwierdzić, że posiadasz domenę.
+
+00:08:13.490 --> 00:08:15.050
+Uwierzytelnianie poczty e-mail również.
+
+00:08:15.290 --> 00:08:18.030
+Rekordy SPF, klucze DKIM, polityki DMARC.
+
+00:08:18.250 --> 00:08:19.830
+Wszystkie one są rekordami TXT.
+
+00:08:20.130 --> 00:08:23.690
+Wyglądają jak przypadkowe ciągi znaków, ale służą ważnym celom związanym z bezpieczeństwem.
+
+00:08:23.690 --> 00:08:28.750
+A teraz coś, co Azure DNS dodaje, a czego nie znajdziesz w tradycyjnym hostingu DNS – rekordy aliasów.
+
+00:08:28.930 --> 00:08:31.530
+Są one specyficzne dla Azure i niezwykle użyteczne.
+
+00:08:31.770 --> 00:08:36.370
+Rekord aliasu pozwala wskazać nazwą bezpośrednio na zasób Azure zamiast na statyczny adres IP.
+
+00:08:36.670 --> 00:08:43.330
+Zamiast tworzyć rekord, a ze sztywnym adresem IP dla równoważnika obciążenia, tworzysz rekord aliasu wskazujący na sam zasób równoważnika.
+
+00:08:43.610 --> 00:08:47.050
+Jest to istotne, ponieważ zasoby Azure mogą zmieniać swoje adresy IP.
+
+00:08:47.310 --> 00:08:51.710
+Równoważnik obciążenia zostaje wdrożony ponownie lub punkt końcowy CDN otrzymuje nowe IP front-endu.
+
+00:08:51.710 --> 00:08:55.810
+Przy zwykłym rekordzie, a musiałbyś ręcznie aktualizować DNS za każdym razem.
+
+00:08:56.010 --> 00:08:59.390
+Ale dzięki rekordowi aliasu, Azure zajmuje się tym automatycznie.
+
+00:08:59.630 --> 00:09:02.690
+Rekord zawsze wskazuje na aktualny adres IP danego zasobu.
+
+00:09:02.890 --> 00:09:07.750
+Zero ręcznej pracy, brak zapomnianych aktualizacji i brak przestojów spowodowanych tym, że ktoś zapomniał zmienić rekord.
+
+00:09:07.930 --> 00:09:10.790
+Jeszcze jedna uwaga na temat tego, jak Azure organizuje rekordy.
+
+00:09:10.970 --> 00:09:15.130
+W Azure DNS rekordy tego samego typu i nazwy są grupowane w zestawy rekordów.
+
+00:09:15.130 --> 00:09:20.170
+Jeśli więc masz dwa serwery www obsługujące tę samą witrynę, utworzysz pojedynczy zestaw rekordów typu,
+
+00:09:20.170 --> 00:09:23.250
+a dla www.kontozo.com z dwoma adresami IP.
+
+00:09:23.530 --> 00:09:26.650
+Resolver DNS zwraca oba adresy, a klient wybiera jeden z nich.
+
+00:09:26.770 --> 00:09:28.450
+To prosta forma równoważenia obciążenia.
+
+00:09:28.670 --> 00:09:31.610
+Ta sama zasada dotyczy rekordów MX z wieloma serwerami pocztowymi.
+
+00:09:31.830 --> 00:09:33.670
+Zestaw rekordów pozwala zachować porządek.
+
+00:09:33.830 --> 00:09:36.410
+Masz już swoją strefę, masz swoje rekordy, ale jest jeszcze jeden krok,
+
+00:09:36.510 --> 00:09:39.310
+zanim internet zacznie faktycznie korzystać z Twojej strefy Azure DNS.
+
+00:09:39.570 --> 00:09:43.370
+Musisz poinformować resztę świata, że Azure jest teraz organem rozstrzygającym dla Twojej domeny.
+
+00:09:43.370 --> 00:09:45.270
+Ten proces nazywa się delegacją.
+
+00:09:45.490 --> 00:09:47.450
+Delegacja to sposób przekazania kontroli.
+
+00:09:47.630 --> 00:09:52.130
+Utworzyłeś więc publiczną strefę DNS w Azure, dodałeś swoje rekordy i wszystko wygląda u Ciebie dobrze.
+
+00:09:52.350 --> 00:09:53.070
+Oto w czym rzecz.
+
+00:09:53.270 --> 00:09:56.790
+Nikt w internecie nie wie, że to Azure ma odpowiadać na zapytania dotyczące Twojej domeny.
+
+00:09:57.030 --> 00:09:58.230
+Musisz ich o tym powiadomić.
+
+00:09:58.390 --> 00:09:59.630
+Tym właśnie jest delegacja.
+
+00:09:59.870 --> 00:10:04.910
+Delegacja to proces informowania reszty internetu, że Azure DNS jest teraz organem zarządzającym dla mojej domeny.
+
+00:10:05.130 --> 00:10:06.870
+Robisz to u swojego rejestratora domen.
+
+00:10:07.090 --> 00:10:09.850
+Godadit Namechip, Google Domains, gdziekolwiek kupiłeś domenę,
+
+00:10:09.850 --> 00:10:13.970
+wchodzisz w ustawienia DNS i zmieniasz rekordy serwerów nazw, aby wskazywały na Azure.
+
+00:10:14.190 --> 00:10:18.590
+Gdy tworzysz publiczną strefę DNS w Azure, usługa podaje Ci cztery adresy serwerów nazw.
+
+00:10:18.670 --> 00:10:24.210
+Wyglądają one mniej więcej tak ns1.neo1.azurt.com, ns2.neo1.azurt.net itd.
+
+00:10:24.450 --> 00:10:27.350
+To właśnie te serwery będą odpowiadać na zapytania dotyczące Twojej domeny.
+
+00:10:27.550 --> 00:10:31.130
+Bierzesz te cztery adresy i wprowadzasz je w konfiguracji serwerów nazw u swojego rejestratora.
+
+00:10:31.230 --> 00:10:31.770
+To wszystko.
+
+00:10:31.990 --> 00:10:33.310
+To właśnie krok delegacji.
+
+00:10:33.570 --> 00:10:36.930
+Gdy zapiszesz te zmiany, informacje zaczną rozprzestrzeniać się w internecie.
+
+00:10:36.930 --> 00:10:40.630
+Serwery główne i serwery TLD dla Twojej domeny zostaną zaktualizowane.
+
+00:10:40.830 --> 00:10:46.710
+Dowiadują się, że gdy ktoś zapyta o contozo.com, powinien wysłać zapytanie do serwerów nazw Azure, a nie tam, gdzie wskazywały wcześniej.
+
+00:10:46.950 --> 00:10:51.030
+Propagacja zwykle następuje w ciągu kilku minut, ale w niektórych przypadkach może potrwać do 48 godzin,
+
+00:10:51.130 --> 00:10:57.270
+ponieważ rezolfery DNS na całym świecie przechowują stare informacje w pamięci podręcznej i nie sprawdzą aktualizacji, dopóki ich pamięć podręczna nie wygaśnie.
+
+00:10:57.430 --> 00:10:58.470
+A teraz coś ważnego.
+
+00:10:58.730 --> 00:11:00.490
+Delegacja działa tylko w jedną stronę.
+
+00:11:00.650 --> 00:11:02.390
+Azure nie zarządza Twoim rejestratorem.
+
+00:11:02.390 --> 00:11:05.430
+Nadal odnawiasz domeny przez Godaddy, Namechip lub ktokolwiek inny.
+
+00:11:05.570 --> 00:11:07.050
+Nadal zarządzasz tam rejestracją.
+
+00:11:07.230 --> 00:11:08.870
+Azure jedynie hostuje rekordy DNS.
+
+00:11:09.110 --> 00:11:10.330
+Te dwie rzeczy są rozdzielone.
+
+00:11:10.510 --> 00:11:13.070
+Twój rejestrator zajmuje się kwestią, jestem właścicielem tej domeny.
+
+00:11:13.230 --> 00:11:15.970
+Azure zajmuje się kwestią, oto adres IP dla tej domeny.
+
+00:11:16.210 --> 00:11:19.090
+Jest tu pewna pułapka, która często zaskakuje użytkowników.
+
+00:11:19.270 --> 00:11:24.430
+Kiedy zmieniasz serwery nazw, aby wskazywały na Azure, rekordy DNS u starego dostawcy przestają działać.
+
+00:11:24.430 --> 00:11:31.270
+Wszystkie Twoje rekordy AMX i TXT znikają, ponieważ internet nie pyta już starego hosta o odpowiedzi.
+
+00:11:31.490 --> 00:11:35.730
+Dlatego musisz upewnić się, że odtworzyłeś każdy rekord w Azure, zanim przełączysz usługę.
+
+00:11:35.930 --> 00:11:40.170
+W przeciwnym razie strona padnie, poczta przestanie działać, a Ty będziesz gorączkowo szukać błędów.
+
+00:11:40.370 --> 00:11:41.750
+Zaplanuj migrację ostrożnie.
+
+00:11:41.950 --> 00:11:45.710
+Utwórz strefę w Azure, dodaj wszystkie rekordy, a dopiero potem zmień serwery nazw.
+
+00:11:45.890 --> 00:11:46.530
+Nieodwrotnie.
+
+00:11:46.770 --> 00:11:49.230
+Delegacja to ostatni etap dla stref publicznych.
+
+00:11:49.390 --> 00:11:52.770
+To ona łączy Twoją strefę Azure DNS z globalną infrastrukturą DNS.
+
+00:11:52.770 --> 00:11:55.930
+Jednak w przypadku stref prywatnych sytuacja wygląda zupełnie inaczej.
+
+00:11:56.130 --> 00:11:57.770
+Nie ma tu rejestratora ani delegacji.
+
+00:11:58.030 --> 00:12:01.490
+Zamiast tego łączysz strefę bezpośrednio z sieciami wirtualnymi, które jej potrzebują.
+
+00:12:01.670 --> 00:12:03.130
+Prywatny DNS w praktyce.
+
+00:12:03.350 --> 00:12:04.810
+Łączenie z sieciami wirtualnymi.
+
+00:12:05.090 --> 00:12:07.650
+Jak więc sprawić, by prywatna strefa DNS była użyteczna?
+
+00:12:07.790 --> 00:12:11.550
+Pomyśl o niej jak o kontenerze na rekordy, który jest bezużyteczny, dopóki nie połączysz go z siecią.
+
+00:12:11.750 --> 00:12:14.950
+To połączenie informuje Azure, które sieci mogą rozwiązywać te nazwy.
+
+00:12:15.190 --> 00:12:18.410
+Bez tego połączenia strefa istnieje, ale nikt nie może jej odpytywać.
+
+00:12:18.410 --> 00:12:21.910
+To jak posiadanie książki telefonicznej bez telefonów konfiguracja jest prosta.
+
+00:12:21.910 --> 00:12:26.430
+Tworzysz połączenie sieci wirtualnej z prywatnej strefy do każdej sieci wnet wymagającej rozpoznawania nazw.
+
+00:12:26.570 --> 00:12:29.070
+Wybierz wnet, nadaj połączeniu nazwę i zapisz je.
+
+00:12:29.330 --> 00:12:35.070
+Gdy to zrobisz, strefa działa dla każdej maszyny wirtualnej i usługi w tej sieci bez potrzeby edycji hostów.
+
+00:12:35.210 --> 00:12:35.970
+Po prostu działa.
+
+00:12:36.250 --> 00:12:38.190
+A teraz kwestia automatycznej rejestracji.
+
+00:12:38.410 --> 00:12:40.370
+Podczas tworzenia połączenia wnet masz wybór.
+
+00:12:40.430 --> 00:12:43.510
+Oznacz je jako wnet rejestracyjny lub pozostaw tylko do rozpoznawania nazw.
+
+00:12:43.590 --> 00:12:44.970
+Ta różnica ma ogromne znaczenie.
+
+00:12:45.210 --> 00:12:47.990
+Automatyczna rejestracja działa tylko w sieci wnet oznaczonej do rejestracji.
+
+00:12:47.990 --> 00:12:52.070
+Każda uruchomiona tam maszyna VM automatycznie otrzymuje rekord, a utworzony w strefie prywatnej.
+
+00:12:52.250 --> 00:12:55.410
+Wdruż nową maszynę, a w ciągu kilku minut pojawi się rekord DNS.
+
+00:12:55.610 --> 00:12:57.470
+Usuń tę maszynę, a rekord zniknie.
+
+00:12:57.710 --> 00:13:02.730
+Bez ręcznej pracy, a co z innymi sieciami wnet połączonymi z tą samą strefą, służą tylko do rozpoznawania nazw.
+
+00:13:02.890 --> 00:13:05.650
+Mogą wyszukiwać nazwy i otrzymywać odpowiedzi, ale nie rejestrują się automatycznie.
+
+00:13:05.790 --> 00:13:08.150
+Więc ich maszyny VM nie tworzą automatycznie rekordów.
+
+00:13:08.330 --> 00:13:11.750
+Jest to zamierzone, szczególnie w przypadku współdzielonej strefy prywatnej dla centralnej usługi.
+
+00:13:11.750 --> 00:13:15.410
+Nie chcesz, aby każda maszyna w każdej sieci pobocznej tworzyła rekordy automatycznie.
+
+00:13:15.630 --> 00:13:20.290
+Zamiast tego włącz rejestrację tylko tam, gdzie są Twoje serwery, a reszcie pozwól tylko rozpoznawać nazwy.
+
+00:13:20.510 --> 00:13:22.350
+Przedstawię Ci teraz konkretny scenariusz.
+
+00:13:22.550 --> 00:13:28.510
+Załóżmy, że masz aplikację internetową działającą w jednej sieci wnet oraz serwer bazy danych w innej, być może nawet w różnych regionach Azure.
+
+00:13:28.750 --> 00:13:32.850
+Aplikacja musi połączyć się z bazą, ale nie chcesz wpisywać prywatnego adresu IP bazy na sztywno.
+
+00:13:33.030 --> 00:13:34.430
+To rozwiązanie jest nietrwałe.
+
+00:13:34.650 --> 00:13:37.930
+Jeśli baza danych zostanie wdrożona ponownie z nowym adresem IP, aplikacja przestanie działać.
+
+00:13:37.930 --> 00:13:42.850
+Dlatego utwórz prywatną strefę DNS, dodaj rekord adla nazwy bazy danych i połącz strefę z obiema sieciami wnet.
+
+00:13:42.990 --> 00:13:47.370
+Teraz aplikacja rozpoznaje nazwę db.internal.kontozo.com jako adres IP bazy danych.
+
+00:13:47.590 --> 00:13:51.930
+Gdy ten adres IP się zmieni, zaktualizujesz tylko jeden rekord, zamiast przeszukiwać pliki konfiguracyjne.
+
+00:13:52.070 --> 00:13:54.950
+Łączenie między regionami działa bezproblemowo w przypadku stref prywatnych.
+
+00:13:55.170 --> 00:14:00.070
+Możesz mieć sieć wnet w regionie East US i inną w West Europę, obie połączone z tą samą strefą prywatną,
+
+00:14:00.150 --> 00:14:03.090
+a rozpoznawanie nazw działa między regionami bez dodatkowej konfiguracji.
+
+00:14:03.090 --> 00:14:09.450
+Azure zajmuje się routingiem w tle, czego nie otrzymasz przy tradycyjnych serwerach DNS bez konfigurowania złożonych reguł przekierowania.
+
+00:14:09.710 --> 00:14:15.150
+Mamy więc delegowanie dla stref publicznych, łącza wnet dla stref prywatnych dwa różne mechanizmy do dwóch różnych celów.
+
+00:14:15.370 --> 00:14:21.090
+Gdy skonfigurujesz oba, masz fundament, ale pozostaje jeszcze kwestia zapewnienia bezpieczeństwa i utrzymania sprawności systemu.
+
+00:14:21.910 --> 00:14:24.310
+Bezpieczeństwo, monitorowanie i najlepsze praktyki.
+
+00:14:24.490 --> 00:14:27.550
+Porozmawiajmy teraz o utrzymaniu zdrowego i bezpiecznego systemu DNS.
+
+00:14:27.550 --> 00:14:32.930
+Azure DNS integruje się z Azure RBAC, więc kontrolujesz dokładnie, kto może tworzyć lub modyfikować rekordy.
+
+00:14:33.090 --> 00:14:37.150
+Nie chcesz, aby ktoś przypadkowo usunął rekord MX i wyłączył pocztę elektroniczną dla całej firmy.
+
+00:14:37.330 --> 00:14:40.870
+Przyznaj zespołowi DNS dostęp współtwórcy, a wszystkim innym tylko uprawnienia do odczytu.
+
+00:14:41.010 --> 00:14:41.770
+To takie proste.
+
+00:14:41.990 --> 00:14:45.530
+Możesz również użyć Azure Policy, aby wymusić zasady w całej organizacji.
+
+00:14:45.770 --> 00:14:48.790
+Może chcesz narzucić konwencję nazewnictwa dla stref albo twój zespół do spraw.
+
+00:14:49.150 --> 00:14:51.190
+Bezpieczeństwa zabrania tworzenia stref publicznych.
+
+00:14:51.390 --> 00:14:52.590
+Wszystko musi być prywatne.
+
+00:14:52.590 --> 00:14:57.130
+Napisz zasadę, zastosuj ją na poziomie grupy zarządzania i będzie egzekwowana wszędzie bez wyjątków.
+
+00:14:57.330 --> 00:15:00.130
+Wbudowana jest również ochrona przed zagrożeniami na poziomie DNS.
+
+00:15:00.130 --> 00:15:04.390
+Część rozwiązania Microsoft Defender for Cloud może blokować rozpoznawanie znanych złośliwych domen.
+
+00:15:04.590 --> 00:15:11.570
+Jeśli maszyna wirtualna w Twojej sieci próbuje rozpoznać domenę oznaczoną jako phishing lub serwer sterujący malwarem, Azure DNS może odmówić odpowiedzi.
+
+00:15:11.710 --> 00:15:14.730
+To warstwa bezpieczeństwa, którą otrzymujesz bez żadnej dodatkowej konfiguracji.
+
+00:15:14.970 --> 00:15:16.630
+Monitorowanie jest również bardzo proste.
+
+00:15:16.790 --> 00:15:19.730
+Azure Monitor śledzi liczbę zapytań, opóźnienia i błędy dla każdej strefy.
+
+00:15:19.970 --> 00:15:23.630
+Możesz skonfigurować alerty, więc jeśli liczba zapytań nagle spadnie, będziesz wiedział, że coś uległo awarii.
+
+00:15:23.630 --> 00:15:26.010
+Jeśli opóźnienie wzrośnie, oznacza to problem z siecią.
+
+00:15:26.230 --> 00:15:30.550
+Zyskujesz wgląd w wydajność DNS bez konieczności uruchamiania oddzielnych narzędzi monitorujących.
+
+00:15:30.750 --> 00:15:35.170
+Jedna dobra praktyka – używaj rekordów aliasów zamiast statycznych rekordów, a dla zasobów Azure.
+
+00:15:35.390 --> 00:15:37.630
+Omówiliśmy to wcześniej, ale warto powtórzyć.
+
+00:15:37.790 --> 00:15:41.110
+Rekordy aliasów aktualizują się automatycznie przy zmianie zasobu bazowego.
+
+00:15:41.390 --> 00:15:42.950
+Statyczne rekordy, a tego nie robią.
+
+00:15:42.950 --> 00:15:48.230
+Jeśli wskazujesz na równoważnik obciążenia, punkt końcowy CDN lub profil traffic managera, użyj rekordu aliasu.
+
+00:15:48.350 --> 00:15:50.850
+To jedna rzecz mniej do zapamiętania, gdy coś się zmienia.
+
+00:15:51.110 --> 00:15:56.430
+Dla środowisk hybrydowych z obciążeniami lokalnymi i w Azure istnieje usługa Azure DNS Private Resolver.
+
+00:15:56.590 --> 00:15:57.350
+To zarządzana.

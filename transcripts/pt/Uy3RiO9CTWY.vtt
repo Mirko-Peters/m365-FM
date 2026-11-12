@@ -1,0 +1,1090 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:03.240
+O tópico de hoje é algo que quase todo mundo que trabalha com Power BI já ouviu falar,
+
+00:00:03.480 --> 00:00:04.900
+mas quase ninguém consegue explicar.
+
+00:00:05.640 --> 00:00:06.500
+O que é exatamente o DAX?
+
+00:00:06.820 --> 00:00:09.900
+Serão apenas fórmulas do Excel dentro do Power BI ou algo completamente diferente?
+
+00:00:10.260 --> 00:00:13.380
+A questão é que a maioria das pessoas pensa que o DAX é basicamente fórmulas do Excel
+
+00:00:13.380 --> 00:00:14.200
+com outro nome, não é?
+
+00:00:14.680 --> 00:00:16.940
+O DAX é uma forma totalmente diferente de pensar sobre cálculos.
+
+00:00:17.620 --> 00:00:21.220
+Se você tentar tratá-lo como Excel, ficará frustrado e confuso sem entender por que seus
+
+00:00:21.220 --> 00:00:22.040
+números não batem.
+
+00:00:22.760 --> 00:00:26.120
+Ao final deste episódio, você saberá o que o DAX realmente é porque é importante
+
+00:00:26.120 --> 00:00:28.420
+e os conceitos básicos para começar a usá-lo com confiança.
+
+00:00:28.420 --> 00:00:30.240
+Pegue seu café e vamos começar.
+
+00:00:31.160 --> 00:00:32.000
+O que é exatamente o DAX?
+
+00:00:33.000 --> 00:00:37.200
+DAX significa Data Analysis Expressions e é a linguagem de fórmulas usada no Power BI,
+
+00:00:37.360 --> 00:00:40.520
+no Power Pivot do Excel e no SQL Server Analysis Services.
+
+00:00:41.480 --> 00:00:44.140
+Pense nele como um motor que alimenta seus cálculos nos bastidores.
+
+00:00:44.880 --> 00:00:45.580
+O DAX não é novidade.
+
+00:00:46.280 --> 00:00:49.120
+Ele existe desde que o Excel Power Pivot foi introduzido há mais de uma década.
+
+00:00:49.800 --> 00:00:53.720
+Mas com o Power BI, ele se tornou a linguagem principal para quem leva análise de dados a sério.
+
+00:00:54.340 --> 00:00:55.420
+E aqui está o que o torna diferente.
+
+00:00:55.420 --> 00:00:58.280
+No Excel você escreve fórmulas que trabalham com células individuais.
+
+00:00:59.000 --> 00:01:01.820
+Aponte para 1, multiplique por B1 e você obtém um resultado para uma célula.
+
+00:01:02.400 --> 00:01:03.300
+O DAX não funciona assim.
+
+00:01:03.660 --> 00:01:05.660
+Ele trabalha com tabelas e colunas inteiras de uma só vez.
+
+00:01:06.000 --> 00:01:07.300
+Você não calcula uma célula por vez.
+
+00:01:07.740 --> 00:01:09.180
+Em vez disso, você diz ao mecanismo,
+
+00:01:09.320 --> 00:01:13.500
+pegue toda esta coluna de números e some ao filtro esta tabela inteira com base nesta condição.
+
+00:01:14.320 --> 00:01:15.200
+Então como você pode visualizar?
+
+00:01:15.520 --> 00:01:17.100
+Imagine que você está construindo um prédio escritor.
+
+00:01:17.580 --> 00:01:20.200
+O Power BI fornece a estrutura, os andares, as paredes e as salas.
+
+00:01:20.580 --> 00:01:21.400
+Esse é o seu modelo de dados.
+
+00:01:21.740 --> 00:01:22.900
+O DAX é a fiação e encanamento.
+
+00:01:22.900 --> 00:01:24.260
+É o que faz tudo funcionar.
+
+00:01:24.720 --> 00:01:28.200
+Sem o DAX, você tem um prédio que parece bonito, mas não tem eletricidade nem água corrente.
+
+00:01:28.720 --> 00:01:33.160
+Com ele, as luzes acendem, as torneiras funcionam e seus relatórios respondem quando alguém clica em um filtro.
+
+00:01:33.640 --> 00:01:35.360
+Essa capacidade de resposta é o objetivo principal.
+
+00:01:35.700 --> 00:01:39.000
+O DAX permite criar cálculos que reagem automaticamente a filtros e interações.
+
+00:01:39.920 --> 00:01:44.880
+Crie uma medida e ela mostrará o número correto que alguém esteja olhando para o total de vendas por região, produto ou mês.
+
+00:01:45.440 --> 00:01:46.060
+Simplesmente funciona.
+
+00:01:46.060 --> 00:01:49.360
+Para usá-lo bem, você precisa entender as duas principais formas de trabalhar com o DAX.
+
+00:01:49.700 --> 00:01:50.480
+Vamos detalhá-las.
+
+00:01:51.440 --> 00:01:52.220
+Dois mundos.
+
+00:01:52.580 --> 00:01:54.060
+Colunas calculadas versus medidas.
+
+00:01:54.900 --> 00:01:57.000
+Hoje falaremos sobre dois blocos de construção no DAX.
+
+00:01:57.160 --> 00:01:58.320
+Colunas calculadas e medidas.
+
+00:01:58.800 --> 00:02:00.040
+A maioria das pessoas pensam na mesma coisa.
+
+00:02:00.420 --> 00:02:00.820
+Elas não são.
+
+00:02:01.280 --> 00:02:03.380
+Confundi-los é um dos erros mais comuns que vejo.
+
+00:02:03.920 --> 00:02:05.140
+Uma coluna calculada é estática.
+
+00:02:05.620 --> 00:02:07.000
+Ela adiciona uma nova coluna à sua tabela.
+
+00:02:07.320 --> 00:02:09.580
+Ela é preenchida durante uma atualização, então permanece lá.
+
+00:02:09.940 --> 00:02:11.420
+Ela não muda até a próxima atualização.
+
+00:02:11.920 --> 00:02:13.420
+Aqui está a maneira mais simples de pensar nisso.
+
+00:02:13.780 --> 00:02:14.820
+Imagine um arquivo de documentos.
+
+00:02:14.820 --> 00:02:16.280
+Você coloca um papel ou uma pasta.
+
+00:02:16.740 --> 00:02:18.200
+Esse papel tem o nome completo do cliente.
+
+00:02:18.420 --> 00:02:20.860
+Não importa se você olha o arquivo hoje ou na semana que vem.
+
+00:02:21.180 --> 00:02:21.720
+O nome ainda está lá.
+
+00:02:22.080 --> 00:02:22.980
+Isso é uma coluna calculada.
+
+00:02:23.300 --> 00:02:24.500
+Uma medida é completamente diferente.
+
+00:02:24.940 --> 00:02:25.680
+Ela não fica na tabela.
+
+00:02:26.200 --> 00:02:27.380
+Ela vive na memória do seu relatório.
+
+00:02:27.840 --> 00:02:32.260
+Toda vez que alguém filtra, segmenta ou clica em um visual, a medida desperta e recalcula.
+
+00:02:32.920 --> 00:02:33.600
+Por que isso importa?
+
+00:02:34.020 --> 00:02:37.740
+Se um usuário clica em um segmentador para a região nordeste, a medida recalcula instantaneamente.
+
+00:02:38.180 --> 00:02:39.760
+Uma coluna calculada ignora o segmentador.
+
+00:02:40.240 --> 00:02:40.680
+Ela tem que ver.
+
+00:02:40.980 --> 00:02:41.580
+Ela é estática.
+
+00:02:43.020 --> 00:02:43.880
+Aqui está a regra simples.
+
+00:02:43.880 --> 00:02:47.440
+Se o número precisa mudar, quando alguém clica em um botão, use uma medida.
+
+00:02:48.160 --> 00:02:50.720
+Se ele é o mesmo, não importa o que é uma coluna calculada, serve.
+
+00:02:51.560 --> 00:02:53.000
+O total de vendas deve sempre ser uma medida.
+
+00:02:53.580 --> 00:02:56.240
+Se alguém filtrar por região ou por mês, o total deve atualizar.
+
+00:02:56.640 --> 00:02:57.800
+O nome completo do cliente é uma coluna.
+
+00:02:58.180 --> 00:02:58.800
+Ele nunca muda.
+
+00:02:59.120 --> 00:03:00.260
+Um segmentador não irá alterar.
+
+00:03:00.480 --> 00:03:02.080
+Agora, é aqui que a maioria dos iniciantes se confunde.
+
+00:03:02.560 --> 00:03:03.980
+Eles criam colunas calculadas para tudo.
+
+00:03:04.420 --> 00:03:06.260
+Parece natural porque é assim que o Excel funciona.
+
+00:03:06.880 --> 00:03:08.700
+Mas usar colunas em excesso sobrecarrega-se a mudança.
+
+00:03:09.020 --> 00:03:10.060
+Seus relatórios ficam lentos.
+
+00:03:10.060 --> 00:03:13.560
+Colunas calculadas criam números estáticos que ignoram seus usuários.
+
+00:03:14.160 --> 00:03:15.720
+Medidas são quase sempre a melhor escolha.
+
+00:03:16.080 --> 00:03:16.780
+Elas são dinâmicas.
+
+00:03:17.140 --> 00:03:17.740
+Elas respondem.
+
+00:03:18.500 --> 00:03:21.820
+Assim que você entende essa diferença, está pronto para a verdadeira mágica do DAX.
+
+00:03:22.320 --> 00:03:23.860
+Essa mágica é chamada de contexto de filtro.
+
+00:03:24.700 --> 00:03:25.960
+A grande ideia é contexto de filtro.
+
+00:03:26.440 --> 00:03:27.620
+Ok, temos nossos dois blocos de construção.
+
+00:03:28.280 --> 00:03:29.760
+Agora, vamos falar sobre o motor por trás dele.
+
+00:03:29.760 --> 00:03:34.040
+Todo número que você vê em um relatório do Power BI é calculado dentro de algo chamado contexto de filtro.
+
+00:03:34.500 --> 00:03:35.780
+Parece complicado, mas é simples.
+
+00:03:36.740 --> 00:03:39.920
+Contexto de filtro é apenas um conjunto de filtros ativos naquele exato momento.
+
+00:03:40.260 --> 00:03:41.120
+De onde vêm esses filtros?
+
+00:03:41.500 --> 00:03:42.740
+Eles vêm dos segmentadores na sua página.
+
+00:03:43.060 --> 00:03:44.300
+Eles vêm do visual que você clicou.
+
+00:03:44.740 --> 00:03:45.700
+Eles vêm da própria página.
+
+00:03:46.180 --> 00:03:48.320
+Até a linha que você está olhando cria um contexto de filtro.
+
+00:03:48.840 --> 00:03:49.860
+Veja por que você devia se importar.
+
+00:03:50.160 --> 00:03:54.540
+Quando você escreve uma medida como total de vendas, você não diz a ela para olhar a região nordeste no terceiro trimestre.
+
+00:03:54.860 --> 00:03:56.300
+Você apenas diz para somar a coluna de venda.
+
+00:03:56.720 --> 00:03:57.120
+É só isso.
+
+00:03:57.120 --> 00:04:00.140
+A medida não conhece regiões, não conhece trimestres.
+
+00:04:00.340 --> 00:04:02.800
+Ela apenas soma todas as linhas que estão visíveis no momento.
+
+00:04:03.580 --> 00:04:05.140
+O contexto de filtro decide o que está visível.
+
+00:04:06.020 --> 00:04:06.880
+Imagine um holofote.
+
+00:04:07.340 --> 00:04:08.420
+Todo o seu conjunto de idades é essa lá.
+
+00:04:08.940 --> 00:04:10.280
+O contexto de filtro é holofote.
+
+00:04:10.700 --> 00:04:13.180
+A medida é uma câmera tirando uma foto exatamente do que a luz ilumina.
+
+00:04:13.620 --> 00:04:15.020
+Mova o holofote para a região nordeste.
+
+00:04:15.480 --> 00:04:16.280
+A medida recalcula.
+
+00:04:16.580 --> 00:04:18.140
+Mova para o terceiro trimestre, ela recalcula novamente.
+
+00:04:18.600 --> 00:04:19.400
+Você não alterou a fórmula.
+
+00:04:19.800 --> 00:04:20.580
+O contexto mudou.
+
+00:04:21.080 --> 00:04:22.220
+Isso confunde a maioria das pessoas.
+
+00:04:22.740 --> 00:04:23.540
+Elas criam uma medida.
+
+00:04:23.540 --> 00:04:26.800
+Ela parece correta em um visual, então a colocam em uma matriz com filtros diferentes.
+
+00:04:26.800 --> 00:04:27.520
+E o número muda.
+
+00:04:28.560 --> 00:04:29.620
+Elas acham que algo está quebrado.
+
+00:04:29.920 --> 00:04:30.500
+Não está quebrado.
+
+00:04:30.960 --> 00:04:32.420
+Isso é exatamente o que uma medida deve fazer.
+
+00:04:32.840 --> 00:04:33.440
+Ela é dinâmica.
+
+00:04:33.860 --> 00:04:34.500
+Este é o verdadeiro poder.
+
+00:04:34.820 --> 00:04:39.120
+Você escreve uma fórmula e ela funciona para cada combinação possível de filtros em todo o seu relatório.
+
+00:04:39.460 --> 00:04:40.960
+Uma fórmula, infinitas respostas.
+
+00:04:41.460 --> 00:04:42.320
+Mas você deve ser cuidadoso.
+
+00:04:42.820 --> 00:04:45.380
+Se você não souber quais filtros estão ativos, não entenderá o seu número.
+
+00:04:45.940 --> 00:04:46.900
+Você precisa rastrear o holofote.
+
+00:04:46.900 --> 00:04:50.700
+Fique confortável com o contexto de filtro e você desbloqueará o verdadeiro poder do DAX.
+
+00:04:51.220 --> 00:04:55.860
+E isso nos leva à estrela do show, a função Calculate, a função mais importante, Calculate.
+
+00:04:56.920 --> 00:05:00.120
+A dica de conhecimento de hoje é sobre a função mais importante do DAX.
+
+00:05:00.800 --> 00:05:01.500
+Ela se chama Calculate.
+
+00:05:02.040 --> 00:05:04.120
+Se você dominar apenas uma função que seja esta.
+
+00:05:04.720 --> 00:05:09.080
+A Calculate permite que você controle o contexto de filtro em vez de apenas aceitar os filtros ativos.
+
+00:05:09.700 --> 00:05:10.860
+Veja como as medidas normais funcionam.
+
+00:05:10.860 --> 00:05:14.240
+Quando você escreve uma medida, ela respeita o contexto de filtro atual automaticamente.
+
+00:05:14.660 --> 00:05:18.360
+Se alguém seleciona 2024 em um segmentador, sua medida mostra o número de 2024.
+
+00:05:18.980 --> 00:05:21.500
+Se escolherem região Nordeste, ela mostra números do Nordeste.
+
+00:05:21.840 --> 00:05:24.960
+A medida responde a quaisquer filtros em jogo, sem necessidade de trabalho extra.
+
+00:05:25.400 --> 00:05:26.240
+Esse é o comportamento padrão.
+
+00:05:26.700 --> 00:05:29.080
+Mas e se você precisar de um número que ignore os filtros atuais?
+
+00:05:29.620 --> 00:05:33.000
+Talvez você queira o total de vendas de todas as regiões ao lado das vendas da região selecionada.
+
+00:05:33.980 --> 00:05:36.960
+Ou você precisa das vendas do ano passado enquanto alguém visualiza este ano.
+
+00:05:37.400 --> 00:05:39.300
+Nesses casos, você não pode depender do contexto padrão.
+
+00:05:39.300 --> 00:05:40.480
+Você precisa modificá-lo.
+
+00:05:40.480 --> 00:05:41.820
+É exatamente isso que a Calculate faz.
+
+00:05:42.120 --> 00:05:44.560
+A Calculate funciona alterando temporariamente o contexto de filtro.
+
+00:05:44.920 --> 00:05:48.680
+Você fornece uma expressão para calcular, então fornece um ou mais filtros a serem aplicados.
+
+00:05:49.160 --> 00:05:52.060
+Ela altera o contexto, executa o cálculo e retorna o resultado.
+
+00:05:52.580 --> 00:05:54.280
+O contexto de filtro original permanece intocado.
+
+00:05:54.580 --> 00:05:55.020
+Essa é a mágica.
+
+00:05:55.540 --> 00:05:56.320
+A sintaxe é simples.
+
+00:05:56.880 --> 00:05:59.200
+Você escreve Calculate Expressão Filtro 1 Filtro 2.
+
+00:06:01.140 --> 00:06:02.920
+A expressão geralmente é uma medida que você já criou.
+
+00:06:03.460 --> 00:06:05.220
+Os filtros são as condições que você deseja aplicar.
+
+00:06:05.740 --> 00:06:07.360
+Você pode adicionar quantos filtros precisar.
+
+00:06:07.800 --> 00:06:08.440
+Vamos ver esse ação.
+
+00:06:08.440 --> 00:06:10.700
+Suponha que você tem uma medida chamada total de vendas.
+
+00:06:10.940 --> 00:06:12.560
+Ela mostra as vendas para o período selecionado.
+
+00:06:12.860 --> 00:06:16.040
+Para mostrar as vendas do mesmo período do ano passado, você escreve Calculate Total
+
+00:06:16.040 --> 00:06:18.280
+de Vendas Sem Period Last Year Calendar Date.
+
+00:06:18.600 --> 00:06:19.180
+É só isso que é necessário.
+
+00:06:19.620 --> 00:06:22.840
+A Calculate pega a sua medida existente e desloca o contexto de data em um ano.
+
+00:06:23.220 --> 00:06:24.860
+Você obtém a comparação necessária em uma única.
+
+00:06:25.260 --> 00:06:28.280
+Sem a Calculate, você fica preso ao contexto de filtro que existir.
+
+00:06:28.780 --> 00:06:32.280
+Com a Calculate, você pode sobrescrever filtros, adicionar novos ou remover os existentes.
+
+00:06:32.440 --> 00:06:36.580
+Você pode solicitar o total de vendas de todos os produtos mesmo quando alguém filtra uma categoria específica.
+
+00:06:36.580 --> 00:06:39.360
+Você pode buscar as vendas do mês passado, mesmo quando o relatório mostra o mês atual.
+
+00:06:39.760 --> 00:06:40.780
+Controle está em suas mãos.
+
+00:06:41.280 --> 00:06:43.520
+Cerca de 80% DAX avançado depende da Calculate.
+
+00:06:44.000 --> 00:06:47.480
+Inteligência de tempo, comparações dinâmicas, agregações personalizadas, totais acumulados,
+
+00:06:47.840 --> 00:06:49.240
+todos usam a Calculate internamente.
+
+00:06:49.780 --> 00:06:53.220
+Ficar confortável com essa única função lhe dá um poder enorme sobre seus relatórios.
+
+00:06:53.220 --> 00:06:55.220
+Mas a Calculate trabalha o nível de filtro.
+
+00:06:55.740 --> 00:06:59.620
+Quanto à lógica linha a linha dentro de uma medida, é aí que entra um conjunto diferente de funções.
+
+00:07:00.420 --> 00:07:02.540
+Funções iteradoras, para quando você precisa pensar linha por linha.
+
+00:07:03.220 --> 00:07:09.440
+Então a Calculate lida muito bem com mudanças no nível de filtro, mas às vezes você precisa entrar em uma tabela e calcular cada linha individualmente dentro de uma medida.
+
+00:07:10.040 --> 00:07:11.280
+O Sum Simples não consegue fazer isso.
+
+00:07:11.720 --> 00:07:13.620
+Você precisa de algo que percorra a tabela linha por linha.
+
+00:07:14.420 --> 00:07:15.340
+E aqui está uma situação comum.
+
+00:07:15.880 --> 00:07:18.580
+Tem uma tabela de vendas com quantidade e preço unitário em coluna separada.
+
+00:07:19.140 --> 00:07:20.540
+Isso aqui é uma medida que mostra a receita total.
+
+00:07:20.540 --> 00:07:23.260
+Você não pode simplesmente multiplicar uma quantidade por um preço unitário.
+
+00:07:24.060 --> 00:07:26.300
+Isso multiplicaria os totais, não as linhas individuais.
+
+00:07:26.880 --> 00:07:29.400
+Você precisa multiplicar a quantidade de cada linha pelo seu preço unitário.
+
+00:07:29.520 --> 00:07:30.860
+Então somar todos esses resultados.
+
+00:07:31.540 --> 00:07:32.520
+Isso é matemática linha por linha.
+
+00:07:34.160 --> 00:07:35.740
+As funções iteradoras foram feitas para ele.
+
+00:07:36.120 --> 00:07:37.600
+São as funções que terminam em X.
+
+00:07:37.860 --> 00:07:41.560
+SumEx, AverageEx, Context, Minx, Maxx, Maxx.
+
+00:07:41.900 --> 00:07:43.040
+O X significa expressão.
+
+00:07:43.580 --> 00:07:50.100
+Essas funções pegam uma tabela, percorrem cada linha, realizam um cálculo em cada uma e agregam os resultados em um único valor.
+
+00:07:50.540 --> 00:07:55.480
+Para o exemplo da receita, você escreve SumEx, Vendas, Quantidade de Vendas, Preço Unitário de Vendas.
+
+00:07:56.600 --> 00:07:58.720
+O primeiro argumento é a tabela a ser percorrida.
+
+00:07:59.500 --> 00:08:02.140
+O segundo argumento é a expressão a ser avaliada em cada linha.
+
+00:08:03.000 --> 00:08:06.860
+A SumEx vai linha por linha, multiplica a quantidade pelo preço e soma tudo.
+
+00:08:06.860 --> 00:08:10.640
+Uma medida lhe dá a receita total correta, de forma simples e direta.
+
+00:08:11.600 --> 00:08:14.720
+Use iteradores sempre que seu cálculo envolver múltiplas colunas da mesma linha.
+
+00:08:15.820 --> 00:08:18.760
+Lucro por item, preço com desconto, pontuações ponderadas.
+
+00:08:18.980 --> 00:08:23.200
+Sempre que o cálculo exigir uma lógica linha a linha dentro de uma medida, um iterador é a sua ferramenta.
+
+00:08:23.820 --> 00:08:25.280
+Mas os iteradores têm um custo de desempenho.
+
+00:08:25.740 --> 00:08:26.820
+Eles percorrem todas as linhas.
+
+00:08:26.820 --> 00:08:31.180
+Portanto, usá-los excessivamente em tabelas com milhões de registros pode deixar seus relatórios extremamente lento.
+
+00:08:31.760 --> 00:08:35.240
+A regra simples, use o iterador apenas quando realmente precisar de lógica linha a linha.
+
+00:08:35.760 --> 00:08:38.700
+Se uma soma ou média simples fornecer a resposta correta, use-as.
+
+00:08:39.100 --> 00:08:40.060
+Seus relatórios agradecerão.
+
+00:08:40.500 --> 00:08:41.040
+Mais uma dica.
+
+00:08:41.160 --> 00:08:44.740
+Às vezes uma coluna calculada somada a uma agregação simples é mais rápida do que uma suma X.
+
+00:08:44.740 --> 00:08:50.820
+Se você criar uma coluna calculada que realiza o cálculo por linha durante a atualização e depois usar uma soma regular nessa coluna,
+
+00:08:51.220 --> 00:08:54.320
+você evita pagar o custo do iterador toda vez que alguém visualiza o relatório.
+
+00:08:55.180 --> 00:08:56.780
+Teste ambas as abordagens e seus próprios dados.
+
+00:08:57.300 --> 00:09:00.440
+A opção mais rápida depende do tamanho do seu modelo e da frequência com que os dados mudam.
+
+00:09:00.980 --> 00:09:01.600
+Coré com sabedoria.
+
+00:09:02.040 --> 00:09:03.260
+Inteligência temporal simplificada.
+
+00:09:03.740 --> 00:09:07.660
+Agora vamos falar sobre um dos recursos mais solicitados no Power BI, comparação entre períodos.
+
+00:09:08.280 --> 00:09:10.200
+Como estão as vendas deste mês em comparação ao mês passado?
+
+00:09:10.560 --> 00:09:12.000
+Como o ano está indo em relação ao ano anterior?
+
+00:09:12.000 --> 00:09:15.060
+Essas perguntas surgem em quase todos os relatórios de negócios.
+
+00:09:15.280 --> 00:09:17.240
+E o DAX possui funções criadas justamente para isso.
+
+00:09:17.580 --> 00:09:20.140
+As funções de inteligência temporal lidam com totais acumulados.
+
+00:09:20.220 --> 00:09:23.380
+No ano, mesmo período do ano anterior, médias móveis e variações mês a mês.
+
+00:09:23.920 --> 00:09:27.320
+Elas fazem parte do DAX, então você não precisa criar uma lógica de filtro complexa do zero.
+
+00:09:27.980 --> 00:09:28.840
+Mas aqui está o detalhe.
+
+00:09:28.840 --> 00:09:33.600
+As funções de inteligência temporal precisam de uma tabela de datas adequada, não apenas de qualquer coluna de data da sua tabela fato.
+
+00:09:34.040 --> 00:09:38.200
+Você precisa de uma tabela separada com uma linha por dia, cobrindo todo o seu intervalo de datas sem lacunas.
+
+00:09:38.560 --> 00:09:40.520
+E ela deve ser marcada como uma tabela de datas no seu modelo.
+
+00:09:40.520 --> 00:09:43.320
+Se pular essa etapa, as funções simplesmente não funcionarão.
+
+00:09:44.140 --> 00:09:50.200
+Assim que configurar a tabela de datas, as funções mais úteis são TotalityD, SemiPeriodLastYear, DateDD e DateBetween.
+
+00:09:50.640 --> 00:09:51.580
+TotalityD é mais simples.
+
+00:09:52.080 --> 00:09:53.960
+Você escreve Total de Vendas, Data do Calendário.
+
+00:09:53.960 --> 00:09:58.300
+E você obtém um total acumulado desde o início do ano até a data que estiver no contexto.
+
+00:09:58.840 --> 00:10:02.700
+Coloque isso em um gráfico de linhas por mês e você verá esse total acumulado crescer conforme o ano avança.
+
+00:10:03.480 --> 00:10:05.360
+SemiPeriodLastYear faz exatamente o que o nome sugere.
+
+00:10:05.720 --> 00:10:07.320
+Ele desloca o contexto da data em um ano para trás.
+
+00:10:07.320 --> 00:10:09.040
+Você o combina com um Calculate desta forma.
+
+00:10:09.500 --> 00:10:12.580
+Calculate Total de Vendas, SemiPeriodLastYear, Data do Calendário.
+
+00:10:13.540 --> 00:10:17.220
+Agora você tem as vendas do ano passado ao lado dos números deste ano para facilitar a comparação.
+
+00:10:17.680 --> 00:10:18.780
+O DateDD é ainda mais flexível.
+
+00:10:19.120 --> 00:10:21.580
+Ele permite que você desloque por dias, meses, trimestres ou anos.
+
+00:10:22.020 --> 00:10:25.180
+Você pode comparar este trimestre com o mesmo trimestre de dois anos atrás.
+
+00:10:25.280 --> 00:10:27.080
+Ou ver os números do mês passado usando menos o mesmo.
+
+00:10:27.580 --> 00:10:29.200
+É o canivete suíço da mudança temporal.
+
+00:10:29.860 --> 00:10:32.360
+O erro mais comum que as pessoas cometem é esquecer de marcar sua tabela de datas.
+
+00:10:32.360 --> 00:10:36.980
+Você pode ter uma tabela de datas perfeita com todos os dias de 2020 e 2030, mas se não
+
+00:10:36.980 --> 00:10:40.800
+marcá-la como tabela de datas no modelo, as funções retornarão erros ou valores vazios.
+
+00:10:41.240 --> 00:10:42.140
+É uma configuração simples.
+
+00:10:42.520 --> 00:10:45.540
+Clique com o botão direito na tabela, escolha marcar como tabela de datas e selecione a coluna
+
+00:10:45.540 --> 00:10:45.760
+de datas.
+
+00:10:45.880 --> 00:10:47.300
+Faça isso uma vez e tudo começará a funcionar.
+
+00:10:47.560 --> 00:10:51.060
+Outro erro é usar funções de inteligência temporal em uma coluna de data dentro da sua
+
+00:10:51.060 --> 00:10:53.040
+tabela fato em vez de uma tabela de datas dedicada.
+
+00:10:53.800 --> 00:10:57.600
+As funções esperam intervalos de datas contínuos e sem lacunas e tabelas fato quase nunca
+
+00:10:57.600 --> 00:10:57.940
+tem isso.
+
+00:10:57.940 --> 00:11:01.900
+Portanto, crie uma tabela de datas adequada, marque a sua inteligência temporal funcionar
+
+00:11:01.900 --> 00:11:02.340
+perfeitamente.
+
+00:11:03.180 --> 00:11:04.160
+Amadilhas comuns de iniciantes.
+
+00:11:04.540 --> 00:11:07.220
+Mesmo com as funções certas, iniciantes ainda caem em armadilhas comuns.
+
+00:11:07.700 --> 00:11:10.360
+Deixe-me mostrar as maiores para que você possa evitá-las desde o primeiro dia.
+
+00:11:10.840 --> 00:11:14.380
+A fonte número 1 de erros no DAX é confundir contexto de linha com contexto de filtro.
+
+00:11:15.180 --> 00:11:18.940
+Anteriormente, falamos sobre como colunas calculadas criam contexto de linha, avaliando uma linha
+
+00:11:18.940 --> 00:11:22.340
+por vez enquanto medidas usam contexto de filtro baseado em quais filtros estão ativos.
+
+00:11:23.360 --> 00:11:26.840
+Iniciantes frequentemente escrevem uma medida como se ela tivesse acesso a linhas individuais
+
+00:11:26.840 --> 00:11:28.460
+e depois se perguntam por que os resultados estão errados.
+
+00:11:28.980 --> 00:11:32.100
+Se sua medida precisa ver linhas individuais, use uma função iteradora.
+
+00:11:34.350 --> 00:11:36.970
+O segundo grande erro é usar colunas calculadas quando uma medida funcionaria.
+
+00:11:37.710 --> 00:11:41.390
+Colunas calculadas parecem familiares porque você pode ver os valores na tabela, mas cada
+
+00:11:41.390 --> 00:11:44.390
+coluna calculada torna seu modelo maior e a atualização mais lenta.
+
+00:11:45.510 --> 00:11:49.310
+Antes de adicionar uma, pergunte se este valor precisa mudar quando alguém filtrar o relatório.
+
+00:11:50.110 --> 00:11:50.910
+Se sim, deve ser uma medida.
+
+00:11:51.450 --> 00:11:53.230
+Outra amadilha é ignorar o próprio modelo de dados.
+
+00:11:53.730 --> 00:11:54.750
+O DAX não funciona isoladamente.
+
+00:11:54.750 --> 00:11:57.210
+Ele depende dos relacionamentos entre suas tabelas.
+
+00:11:57.970 --> 00:12:01.270
+Se o seu modelo tem relacionamentos fracos, cardinalidade incorreta ou chaves de junção
+
+00:12:01.270 --> 00:12:03.450
+ausentes, suas fórmulas DAX falharão silenciosamente.
+
+00:12:03.830 --> 00:12:05.990
+Você obterá números que parecem plausíveis, mas que na verdade estão errados.
+
+00:12:06.270 --> 00:12:07.170
+A solução não é um DAX melhor.
+
+00:12:07.590 --> 00:12:08.470
+Corrige seu modelo primeiro.
+
+00:12:08.810 --> 00:12:09.730
+Depois, há uso em calculat.
+
+00:12:10.510 --> 00:12:14.530
+Iniciantes adicionam múltiplos filtros dentro do calculat sem perceber que eles podem se cancelar.
+
+00:12:15.490 --> 00:12:19.630
+Por exemplo, um filtro para vendas de 2024 e outro para vendas do ano passado entram em conflito
+
+00:12:19.630 --> 00:12:21.310
+e o resultado não será o que você espera.
+
+00:12:21.810 --> 00:12:23.990
+Cada filtro dentro do calculat deve ter um propósito claro.
+
+00:12:23.990 --> 00:12:27.210
+Se não tiver certeza do que ele está fazendo, teste isoladamente primeiro.
+
+00:12:27.810 --> 00:12:29.410
+Mas um erro comum é não utilizar variáveis.
+
+00:12:30.150 --> 00:12:33.830
+Variáveis declaradas com VAR permitem armazenar resultados intermediários e reutilizá-los
+
+00:12:33.830 --> 00:12:34.490
+na mesma medida.
+
+00:12:35.270 --> 00:12:39.010
+Sem elas, você repete o mesmo cálculo várias vezes na fórmula, deixando o código difícil
+
+00:12:39.010 --> 00:12:41.450
+de ler, depurar e executar e executar.
+
+00:12:41.670 --> 00:12:43.070
+Crie o hábito de usar VAR desde o início.
+
+00:12:43.490 --> 00:12:44.890
+Isso lhe poupará horas de frustração.
+
+00:12:45.290 --> 00:12:47.670
+E finalmente, sempre valide suas medidas em contextos diferentes.
+
+00:12:48.230 --> 00:12:51.550
+Uma medida que funciona perfeitamente em um visual de cartão pode falhar no total de
+
+00:12:51.550 --> 00:12:52.050
+uma matriz.
+
+00:12:52.590 --> 00:12:55.630
+Isso ocorre porque a linha de total é avaliada em um contexto de filtro diferente das linhas
+
+00:12:55.630 --> 00:12:56.170
+de detalhe.
+
+00:12:56.790 --> 00:13:00.230
+Teste suas medidas em tabelas, cartões, matrizes e com diferentes combinações de segmentador.
+
+00:13:01.050 --> 00:13:04.250
+Se uma medida funciona em todos esses cenários, você sabe que ela é sólida.
+
+00:13:05.570 --> 00:13:06.230
+Juntando tudo.
+
+00:13:06.870 --> 00:13:09.170
+Muito bem, vamos percorrer um exemplo real que reúne tudo.
+
+00:13:09.890 --> 00:13:11.650
+Imagine que você está criando um relatório de vendas.
+
+00:13:11.710 --> 00:13:12.670
+Você precisa mostrar três números.
+
+00:13:12.810 --> 00:13:17.030
+Vendas totais deste período, vendas totais do mesmo período no ano anterior, vendo a porcentagem
+
+00:13:17.030 --> 00:13:17.990
+de crescimento entre eles.
+
+00:13:18.770 --> 00:13:20.350
+Primeira coisa de que você precisa é uma tabela de datas.
+
+00:13:20.710 --> 00:13:24.650
+Vá ao seu modelo, crie uma tabela de datas que cubra todo o seu intervalo de datas, uma
+
+00:13:24.650 --> 00:13:25.750
+linha por dia, sem lacunas.
+
+00:13:26.170 --> 00:13:29.430
+Em seguida, clique com o botão direito e escolha marcar como tabela de datas e selecione a coluna
+
+00:13:29.430 --> 00:13:29.670
+de dados.
+
+00:13:29.870 --> 00:13:33.050
+Faça isso uma vez e toda a função de inteligência temporal que você escrever a partir daí
+
+00:13:33.050 --> 00:13:33.790
+simplesmente funcionará.
+
+00:13:34.070 --> 00:13:35.150
+A seguir, escreva sua medida base.
+
+00:13:35.590 --> 00:13:38.910
+Chame-a de vendas totais e digite vendas totais igual a soma do valor de vendas.
+
+00:13:39.470 --> 00:13:42.650
+Essa é a base e todo o resto dos cálculos será construído a partir desta única linha
+
+00:13:42.650 --> 00:13:43.090
+simples.
+
+00:13:43.710 --> 00:13:45.050
+Depois, escreve a medida do ano anterior.
+
+00:13:45.050 --> 00:13:47.230
+Use Calculate com Semi-Period Last Year.
+
+00:13:47.710 --> 00:13:48.310
+Fica assim.
+
+00:13:49.010 --> 00:13:52.570
+Vendas do ano anterior igual a Calculate, vendas totais, Semi-Period Last Year, calendário
+
+00:13:52.570 --> 00:13:52.990
+data.
+
+00:13:54.550 --> 00:13:56.270
+Agora você tem o ano atual ao lado do ano anterior.
+
+00:13:56.910 --> 00:13:57.970
+Agora a porcentagem de crescimento.
+
+00:13:58.810 --> 00:14:02.850
+Use e divide para lidar com casos em que as vendas do ano anterior possam ser zero e
+
+00:14:02.850 --> 00:14:03.290
+elas serão.
+
+00:14:04.290 --> 00:14:05.070
+Escreva desta forma.
+
+00:14:05.450 --> 00:14:06.910
+Percentual de crescimento igual a divide.
+
+00:14:07.310 --> 00:14:08.010
+Vendas totais.
+
+00:14:08.190 --> 00:14:08.970
+Vendas do ano anterior.
+
+00:14:09.210 --> 00:14:09.910
+Vendas do ano anterior.
+
+00:14:10.750 --> 00:14:14.430
+O divide retorna um valor em branco em vez de um erro caso o denominador seja zero.
+
+00:14:15.050 --> 00:14:16.530
+Essa é a maneira inteligente de evitar falhas.
+
+00:14:17.050 --> 00:14:19.850
+Agora você tem três medidas reutilizáveis que funcionam com qualquer filtro que você
+
+00:14:19.850 --> 00:14:20.230
+aplicar.
+
+00:14:20.710 --> 00:14:24.230
+Coloque-as em uma tabela por produto, por região, por mês e elas responderão corretamente
+
+00:14:24.230 --> 00:14:24.870
+todas as vezes.
+
+00:14:25.430 --> 00:14:26.090
+Esse é o ponto principal.
+
+00:14:26.510 --> 00:14:30.130
+Construa sobre um modelo limpo, domine algumas funções principais e o resto se encaixará.
+
+00:14:30.550 --> 00:14:32.550
+Portanto, não tente escrever DAX complexo logo no primeiro dia.
+
+00:14:32.850 --> 00:14:33.710
+Acerte seu modelo primeiro.
+
+00:14:34.230 --> 00:14:34.970
+Aprenda o básico.
+
+00:14:34.970 --> 00:14:37.370
+Medidas, contexto de filtro e calculate.
+
+00:14:37.490 --> 00:14:40.930
+E você resolverá a maioria dos problemas de negócio com apenas algumas linhas de
+
+00:14:40.930 --> 00:14:41.270
+código.
+
+00:14:42.090 --> 00:14:42.830
+Então é aqui que chegamos.
+
+00:14:43.290 --> 00:14:46.650
+Você sabe o que é DAX, por que o contexto de filtro importa e como as funções calculate
+
+00:14:46.650 --> 00:14:47.550
+e iteradoras funcionam.
+
+00:14:47.870 --> 00:14:49.910
+Você vê as armadilhas comuns e como evitá-las.
+
+00:14:50.550 --> 00:14:52.450
+E percorremos um exemplo real que une tudo isso.
+
+00:14:53.110 --> 00:14:56.470
+O verdadeiro poder do DAX não está em memorizar sem funções, mas em uma modelagem de dados
+
+00:14:56.470 --> 00:14:58.310
+limpa e alguns padrões fundamentais.
+
+00:14:58.910 --> 00:15:01.050
+Acerte o modelo e o DAX se torna quase óbvio.
+
+00:15:01.550 --> 00:15:02.650
+Aqui está o que eu sugiro que você tenha.
+
+00:15:02.650 --> 00:15:03.590
+Abra o Power BI.
+
+00:15:04.410 --> 00:15:07.750
+Crie um modelo simples com uma tabela de datas, uma de vendas e uma de produtos.
+
+00:15:08.490 --> 00:15:10.250
+Depois escreva uma medida por dia durante uma semana.
+
+00:15:10.650 --> 00:15:11.690
+Comece com um total de vendas.
+
+00:15:11.810 --> 00:15:13.550
+Adicione vendas do ano anterior percentual de crescimento.
+
+00:15:13.650 --> 00:15:14.690
+Depois tente acumulado no ano.
+
+00:15:15.270 --> 00:15:17.790
+Ao final da semana você estará escrevendo medidas sem nem precisar pensar.
+
+00:15:18.250 --> 00:15:18.990
+É assim que tudo se encaixa.
+
+00:15:19.330 --> 00:15:21.930
+Se este episódio ajudou, inscreva-se e continue construindo esse conhecimento.
+
+00:15:22.390 --> 00:15:25.910
+Na próxima vez falaremos sobre depurar DAX quando as coisas dão errado, porque elas
+
+00:15:25.910 --> 00:15:28.210
+darão e saber como corrigi-las é a metade da batalha.
+
+00:15:28.710 --> 00:15:28.970
+Até lá.

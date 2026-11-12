@@ -1,0 +1,1261 @@
+WEBVTT
+
+00:00:00.460 --> 00:00:06.920
+Siap untuk 10 hari pembahasan Microsoft 365, Copilot, AI, Azure, dan para tokoh pembentuk masa depan kerja.
+
+00:00:07.840 --> 00:00:12.300
+Januari ini, M365 con kembali dan kami hadir lebih besar, lebih besar.
+
+00:00:12.880 --> 00:00:17.940
+Bergabunglah dalam sesi langsung, demo dunia nyata, dan pengetahuan praktis dari MVP serta pakar industri global.
+
+00:00:18.720 --> 00:00:20.860
+Tanpa slide yang umum, tanpa jargon yang tidak.
+
+00:00:21.620 --> 00:00:28.480
+Kami membahas tantangan nyata, Copilot Studio, agen AI Fabric, keamanan, tata kelola, dan otomatisasi.
+
+00:00:28.480 --> 00:00:34.300
+Baik Anda profesional IT, pengembang, atau pemimpin bisnis, ada sesi yang dirancang untuk Anda.
+
+00:00:35.420 --> 00:00:40.020
+Dengan 10 hari penuh, Anda bisa menjelajahi berbagai teknologi dan terhubung dengan komunitas global.
+
+00:00:40.840 --> 00:00:44.220
+Tonton langsung, dan bawa wawasan praktis kembali ke organisasi Anda.
+
+00:00:45.060 --> 00:00:48.880
+20-27 Januari, 10 hari, satu komunitas Microsoft.
+
+00:00:49.460 --> 00:00:50.440
+Pendaftaran sudah dibuka.
+
+00:00:51.800 --> 00:00:55.340
+Kunjungi m365con.net dan amankan tempat Anda hari ini.
+
+00:00:56.280 --> 00:00:58.340
+Itu m365con.net.
+
+00:00:58.480 --> 00:01:04.660
+Bergabunglah sekarang di m365con.net dan sampai jumpa, langsung di bulan Januari.
+
+00:01:05.200 --> 00:01:10.320
+Pernah mencoba melatih model AI di laptop Anda lalu melihatnya berjalan sangat lambat selama berjam-jam atau malah crash total?
+
+00:01:11.100 --> 00:01:11.680
+Anda tidak sendiri.
+
+00:01:12.340 --> 00:01:15.460
+Sebagian besar kumpulan data bisnis kini melampaui kapasitas perangkat keras lokal kita.
+
+00:01:16.180 --> 00:01:20.580
+Namun, bagaimana jika seluruh kumpulan data multiterabyte Anda dapat diakses secara instan di buku catatan pelatihan Anda?
+
+00:01:21.080 --> 00:01:22.480
+Tanpa ekstrak, tanpa kacauan CSV?
+
+00:01:22.480 --> 00:01:29.620
+Hari ini, kita akan masuk ke buku catatan bawaan Microsoft Fabric tempat pelatihan model Anda dilakukan tepat di samping data lakehouse Anda.
+
+00:01:29.620 --> 00:01:37.860
+Kami akan mengurekan bagaimana pengaturan ini dapat menghemat waktu pemrosesan selama berhari-hari sambil tetap membiarkan Anda bekerja dengan Python atau R tanpa kompromi.
+
+00:01:37.860 --> 00:01:46.360
+Saat big data melampaui kapasitas laptop, bayangkan kipas laptop Anda berputar cukup keras hingga menenggelamkan suara rapat Anda saat mengerjakan spreadsheet.
+
+00:01:47.560 --> 00:01:53.620
+Sekarang, ganti spreadsheet itu dengan 12 terabyte transaksi pelanggan mentah yang tersebar selama bertahun-tahun dengan lusinan kolom percatatan.
+
+00:01:54.840 --> 00:01:57.640
+Bahkan sebelum Anda menekan tombol jalankan, Anda sudah tahu ini akan menyulit.
+
+00:01:58.140 --> 00:02:00.320
+Itulah kondisi yang dialami banyak tim pemasaran saat ini.
+
+00:02:00.980 --> 00:02:05.320
+Mereka memiliki basis data transaksional yang bisa dengan mudah menjadi tulang punggu proyek AI tingkat lanjut.
+
+00:02:05.320 --> 00:02:14.940
+Memprediksi churn, mengelompokkan audiens, mempersonalisasi kampanye secara near real time, tetapi alat mereka masih terjebak di desktop.
+
+00:02:17.280 --> 00:02:23.820
+Mereka membuka file di Excel atau Jupyter notebook lokal, memotong dan memfilter dalam potongan kecil hanya agar mesin tidak macet,
+
+00:02:24.040 --> 00:02:28.400
+dan berharap semuanya tetap stabil cukup lama untuk mendapatkan hasil yang dapat digunakan.
+
+00:02:29.560 --> 00:02:32.060
+Saat dia mencoba melakukan ini secara lokal, silam anehkan segera.
+
+00:02:32.060 --> 00:02:36.060
+Pemprosesan melambat drastis, elemen UI tertinggal beberapa detik setelah diklik,
+
+00:02:36.160 --> 00:02:38.740
+dan skrip ekspor yang dulu memakan waktu menik kini berjalan berjam-jam.
+
+00:02:39.260 --> 00:02:42.060
+Lebih buruk lagi, beban kerja yang lebih besar tidak hanya melambat, tapi benar-benar berat.
+
+00:02:42.420 --> 00:02:46.780
+Kesalahan memori, hard drive yang kewalahan, atau restart kernel, berarti pelatihan tidak hanya memakan waktu lebih lama,
+
+00:02:46.920 --> 00:02:48.160
+tetapi seringkali tidak pernah selesai.
+
+00:02:48.800 --> 00:02:54.640
+Dan saat Anda berbicara tentang pelatihan model AI, itu adalah pemborosan komputasi, waktu, dan peluang.
+
+00:02:54.640 --> 00:03:00.660
+Salah satu upaya prediksi churn yang pernah saya lihat dijadwalkan berjalan semalaman di lingkungan Python lokal.
+
+00:03:01.840 --> 00:03:03.980
+20 jam kemudian, proses tersebut akhirnya gagal,
+
+00:03:04.060 --> 00:03:07.340
+karena bagian terakhir dari kumpulan data membuat penggunaan RAM melampaui batas.
+
+00:03:07.580 --> 00:03:08.160
+Melampaui batas.
+
+00:03:08.480 --> 00:03:11.760
+Tim kehilangan satu hari pengubahkan tanpa mendapatkan satu pun metrik pelatihan kembali.
+
+00:03:12.260 --> 00:03:14.340
+Jika itu dengar ekstrem, hal itu kini semakin sering terjadi.
+
+00:03:14.980 --> 00:03:17.900
+Kumpulan data pemasaran perusahaan telah berkembang dari tahun ke tahun,
+
+00:03:17.900 --> 00:03:20.840
+didorong oleh pelacakan yang lebih kaya pengalaman omni channel,
+
+00:03:21.160 --> 00:03:24.140
+dan meningkatnya pencatatan berbasis peristiwa, danda.
+
+00:03:24.640 --> 00:03:26.320
+Bahkan pengaturan yang cukup standar,
+
+00:03:26.660 --> 00:03:31.340
+log kinerja kampanye, analitik web, data CRM dapat dengan mudah membengkak hingga ratusan gigabyte.
+
+00:03:32.260 --> 00:03:35.400
+Akun besar dengan berbagai lini produk seringkali berakhir di kisaran multi-trabite.
+
+00:03:35.900 --> 00:03:37.420
+Masalahnya bukan sekadar kapasitas penyimpanan.
+
+00:03:38.060 --> 00:03:40.720
+Beban pelatihan model besar menekan setiap batasan mesin lokal.
+
+00:03:41.940 --> 00:03:43.880
+CPU bekerja 100% untuk waktu yang lama,
+
+00:03:43.880 --> 00:03:46.420
+dan bahkan GPU kelas atas pun akhirnya menganggur,
+
+00:03:46.760 --> 00:03:48.620
+karena data masuk terlalu lambat.
+
+00:03:50.060 --> 00:03:52.200
+Input-output disk menjadi hambatan konstan,
+
+00:03:52.200 --> 00:03:56.620
+terutama jika kumpulan data berada di drive eksternal atau berbagi jaringan.
+
+00:03:57.620 --> 00:03:58.860
+Lalu ada lapisan perangkat lunaknya.
+
+00:03:59.300 --> 00:04:00.600
+Begitu file menjadi cukup besar,
+
+00:04:00.840 --> 00:04:03.920
+bahkan sesuatu yang serba guna seperti Jupyter Notebook mulai mencapai batasnya.
+
+00:04:04.720 --> 00:04:05.800
+Anda tidak bisa begitu saja,
+
+00:04:05.940 --> 00:04:08.880
+memuat data CSV ke memori jika ukuran file CSV lebih besar dari SSD Anda.
+
+00:04:09.360 --> 00:04:11.180
+Itulah sebabnya banyak tim mencoba mecah file,
+
+00:04:11.400 --> 00:04:12.240
+mengambil sampel data,
+
+00:04:12.420 --> 00:04:15.900
+atau membangun pengganti ringan untuk kumpulan data produksi yang sebenarnya.
+
+00:04:16.580 --> 00:04:18.540
+Ini adalah komprom yang menjaga laptop Anda tetap berfungsi,
+
+00:04:18.540 --> 00:04:19.920
+tetapi dengan mengorbankan hilangnya wawasan.
+
+00:04:20.500 --> 00:04:23.820
+Pengambilan sampel dapat menghilangkan pola halus yang seharusnya dapat meningkatkan kinerja modal.
+
+00:04:24.440 --> 00:04:26.760
+Memecah file menimbulkan berbagai jenis ketidak konsistenan
+
+00:04:26.760 --> 00:04:30.100
+dan membuat pelatihan ulang menjadi lebih menyulitkan dari yang seharusnya.
+
+00:04:31.200 --> 00:04:34.140
+Ada cara yang lebih cerdas untuk melewati seluruh siklus unduh dan impor itu.
+
+00:04:34.900 --> 00:04:38.080
+Microsoft Fabric mengalihkan pekerjaan berat dari lingkungan lokal Anda sepenuhnya.
+
+00:04:38.980 --> 00:04:40.160
+Pelatihan berpindah ke cloud,
+
+00:04:40.280 --> 00:04:43.540
+di mana sumber daya komputasi berada tepat di samping data yang tersimpan di Lighthouse.
+
+00:04:43.540 --> 00:04:49.780
+Anda tidak memindahkan terapik bolak-balik Anda mengirim kode Anda ke tempat data itu berada.
+
+00:04:51.040 --> 00:04:54.380
+Daripada mengkhawatirkan potongan riwayat pelanggan mana yang akan muat di RAM,
+
+00:04:54.520 --> 00:04:57.080
+Anda bisa fokus pada struktur dan logika pelatihan Anda.
+
+00:04:58.260 --> 00:05:01.140
+Dan inilah bagian yang sering diabaikan oleh banyak tim.
+
+00:05:01.740 --> 00:05:04.440
+Keuntungan sebenarnya bukan sekadar tenaga ekstra dari komputasi cloud.
+
+00:05:05.460 --> 00:05:07.780
+Ini adalah fakta bahwa Anda tidak perlu lagi memindahkan data sama sekali.
+
+00:05:08.940 --> 00:05:11.040
+Akses langsung ke Lighthouse tidak ada lagi kacauan CSV.
+
+00:05:11.040 --> 00:05:15.380
+Bagaimana jika notebook Anda dapat menarik terabyte data secara instan
+
+00:05:15.380 --> 00:05:17.860
+tanpa pernah menampilkan pilah progres pengunduhan?
+
+00:05:18.780 --> 00:05:19.740
+Tidak ada ekspor ke CSV,
+
+00:05:19.960 --> 00:05:22.160
+tidak perlu melihat indikator kemuatan yang merayap di layar.
+
+00:05:22.880 --> 00:05:23.680
+Cukup ketik query-nya,
+
+00:05:24.000 --> 00:05:24.540
+jalankan,
+
+00:05:25.020 --> 00:05:26.560
+dan mulai lalu bekerja dengan hasilnya di sana.
+
+00:05:27.340 --> 00:05:29.720
+Itulah bedanya jika lapisan data bukan langkah eksternal,
+
+00:05:29.840 --> 00:05:30.800
+melainkan terintegrasi
+
+00:05:30.800 --> 00:05:32.780
+dalam lingkungan tempat Anda mengoding.
+
+00:05:33.780 --> 00:05:34.700
+Di Fabric,
+
+00:05:35.200 --> 00:05:38.920
+Lighthouse bukan sekadar bakat penyimpanan terpisah yang sesekali Anda hubungkan.
+
+00:05:38.920 --> 00:05:42.080
+Ini adalah lapisan data asli untuk notebook.
+
+00:05:43.000 --> 00:05:43.420
+Artinya,
+
+00:05:43.600 --> 00:05:46.840
+kode Anda berjalan di lingkungan yang sama dengan tempat data berada secara fisik.
+
+00:05:47.860 --> 00:05:50.760
+Anda tidak perlu mengirim jutaan baris data melalui jaringan ke dalam sesian.
+
+00:05:51.580 --> 00:05:53.760
+Anda mengirimkan instruksi ke data di lokasi aslinya.
+
+00:05:54.640 --> 00:05:57.900
+Taluran input model bukanlah aksi bongkar pasang ekspor dan impor.
+
+00:05:58.380 --> 00:06:01.920
+Ini adalah jalur langsung dari penyimpanan ke Spark untuk logika Python atau R yang Anda tulis.
+
+00:06:01.920 --> 00:06:04.300
+Jika Anda terbiasa dengan alur kerja tradisional,
+
+00:06:04.440 --> 00:06:05.800
+Anda pasti tahu kenal yang biasanya terjadi.
+
+00:06:06.620 --> 00:06:08.500
+Seseorang membuat ekstrak dari data warehouse,
+
+00:06:08.660 --> 00:06:09.560
+menulisnya ke CSV,
+
+00:06:09.920 --> 00:06:12.060
+dan memberikannya ke tim data science.
+
+00:06:12.600 --> 00:06:14.180
+Sekarang, skemanya terkunci pada waktu itu.
+
+00:06:14.680 --> 00:06:15.320
+Minggu berikutnya,
+
+00:06:15.440 --> 00:06:17.640
+data sumber berubah dan ekstraknya pun sudah tidak relevan.
+
+00:06:18.500 --> 00:06:19.340
+Dalam beberapa kasus,
+
+00:06:19.440 --> 00:06:22.320
+dua tim berbeda bahkan membuat ekspor mereka sendiri yang sedikit berbeda.
+
+00:06:23.160 --> 00:06:25.960
+Dan sekarang Anda memiliki penyimpanan ganda dengan definisi yang tidak cocok.
+
+00:06:26.440 --> 00:06:27.880
+Dalam skenario terbaik, itu hanya ineficiency.
+
+00:06:28.100 --> 00:06:29.280
+Dalam skenario terburuk,
+
+00:06:29.400 --> 00:06:31.440
+itulah alasan dua model yang dilatih pada data yang sama.
+
+00:06:31.440 --> 00:06:33.000
+memberikan prediksi yang bertentangan.
+
+00:06:33.520 --> 00:06:36.540
+Satu tim yang bekerja dengan saya membutuhkan set catatan aktivitas pelanggan
+
+00:06:36.540 --> 00:06:38.120
+yang telah difilter untuk model chon baru.
+
+00:06:39.300 --> 00:06:41.680
+Mereka menarik semuanya dari warehouse ke database SQL lokal,
+
+00:06:41.840 --> 00:06:42.380
+memfilternya,
+
+00:06:42.520 --> 00:06:45.120
+lalu mengekspor hasilnya ke CSV untuk lingkungan pelatihan.
+
+00:06:46.260 --> 00:06:48.620
+Itu saja memakan waktu hampir seharian penuh di jaringan mereka.
+
+00:06:49.300 --> 00:06:51.900
+Ketika catatan aktivitas baru dimuat minggu berikutnya,
+
+00:06:52.040 --> 00:06:54.020
+mereka harus melakukan seluruh proses lagi dari awal.
+
+00:06:54.500 --> 00:06:55.900
+Saat mereka bisa mulai pelatihan yang sebenarnya,
+
+00:06:55.900 --> 00:06:58.600
+mereka menghabiskan lebih banyak waktu mengurus file daripada menulis kode.
+
+00:06:58.600 --> 00:07:02.280
+Penurunan performa bukan hanya soal waktu transfer data.
+
+00:07:03.540 --> 00:07:06.100
+Penelitian di berbagai perusahaan menunjukkan peningkatan konsisten
+
+00:07:06.100 --> 00:07:08.460
+saat transformasi dijalankan di tempat data disimpan.
+
+00:07:09.460 --> 00:07:13.360
+Saat Anda bisa melakukan join, filter, dan agregasi di tempat alih-alih di hilir,
+
+00:07:13.560 --> 00:07:16.900
+Anda mengurangi overhead, hub jaringan, dan pembacaan berlebih.
+
+00:07:16.900 --> 00:07:20.740
+Notebook Fabric memanfaatkan Spark di balik layar untuk memungkinkan hal itu.
+
+00:07:21.520 --> 00:07:24.680
+Jadi, daripada menarik 400 juta baris ke sesi Notebook,
+
+00:07:25.060 --> 00:07:27.400
+Spark menjalankan agregasi di dalam lingkungan Lighthouse
+
+00:07:27.400 --> 00:07:30.600
+dan hanya mengembalikan hasil yang dibutuhkan model Anda.
+
+00:07:32.060 --> 00:07:35.380
+Jika Anda bekerja dengan Python atau R, Anda juga tidak mulai dari sel kosong.
+
+00:07:36.840 --> 00:07:38.520
+Fabric hadir dengan sekumpulan pustaka
+
+00:07:38.520 --> 00:07:41.160
+yang sudah terintegrasi untuk pekerjaan skala besar,
+
+00:07:41.360 --> 00:07:44.460
+PiSpark, Pandas on Spark, Sparklear, dan banyak lagi.
+
+00:07:44.460 --> 00:07:47.100
+Jadi, pemprosesan terdistribusi menjadi pilihan
+
+00:07:47.100 --> 00:07:48.500
+sejak Anda membuka notebook baru.
+
+00:07:49.820 --> 00:07:52.300
+Hal itu penting saat Anda menggabungkan tabel fakta
+
+00:07:52.300 --> 00:07:54.340
+dan dimensi berukuran ratusan gigabyte
+
+00:07:54.340 --> 00:07:56.920
+atau saat Anda perlu menghitung jendela bergulir
+
+00:07:56.920 --> 00:07:58.980
+selama beberapa tahun riwayat pelanggan.
+
+00:08:00.340 --> 00:08:01.420
+Segera setelah query selesai,
+
+00:08:01.680 --> 00:08:03.080
+set data agregat yang bersih siap
+
+00:08:03.080 --> 00:08:05.560
+untuk langsung dipindahkan ke proses rekayasa fitur Anda.
+
+00:08:06.500 --> 00:08:08.220
+Tidak ada fase perantara untuk menyimpan ke disk,
+
+00:08:08.220 --> 00:08:08.980
+memperiksa skema,
+
+00:08:09.380 --> 00:08:11.780
+dan mengimpor ulang ke buku catatan pelatihan lokal.
+
+00:08:12.680 --> 00:08:14.080
+Anda telah melewatkan seluruh tapu siap.
+
+00:08:14.460 --> 00:08:15.780
+Tim dulu menghabiskan waktu berhari-hari
+
+00:08:15.780 --> 00:08:16.860
+hanya untuk menyelaraskan kolom
+
+00:08:16.860 --> 00:08:18.820
+dan menjalankan ulang filter saat data sumber berubah.
+
+00:08:19.380 --> 00:08:20.240
+Dengan pengaturan ini,
+
+00:08:20.400 --> 00:08:22.120
+mereka dapat mengeksplorasi kombinasi fitur
+
+00:08:22.120 --> 00:08:23.440
+untuk modal dalam jam yang sama
+
+00:08:23.440 --> 00:08:24.860
+saat data mentah diperbarui.
+
+00:08:25.900 --> 00:08:27.460
+Dan disitulah hal itu menjadi menarik
+
+00:08:27.460 --> 00:08:29.560
+karena begitu Anda memiliki set data masif
+
+00:08:29.560 --> 00:08:30.320
+yang bersih,
+
+00:08:30.420 --> 00:08:32.420
+yang mengalir langsung ke sesi buku catatan Anda.
+
+00:08:33.060 --> 00:08:35.360
+Cara Anda berpikir tentang membangun fitur mulai berubah.
+
+00:08:35.360 --> 00:08:38.740
+Rekayasa Fitur dan Pemilihan Model dalam Skala Besar
+
+00:08:38.740 --> 00:08:40.580
+Set data Anda mungkin cukup besar
+
+00:08:40.580 --> 00:08:41.800
+untuk memprediksi hampir semua hal,
+
+00:08:41.880 --> 00:08:43.620
+tetapi bukan berarti setiap kolom di dalamnya
+
+00:08:43.620 --> 00:08:45.140
+layak masuk dalam model Anda.
+
+00:08:46.180 --> 00:08:47.880
+Perbedaan antara model yang menghasilkan
+
+00:08:47.880 --> 00:08:48.720
+prediksi bermakna
+
+00:08:48.720 --> 00:08:49.760
+dan model yang menghasilkan
+
+00:08:49.760 --> 00:08:51.080
+terlalu seringkali bergantung pada
+
+00:08:51.080 --> 00:08:53.080
+cara Anda memilih dan membentuk fitur Anda.
+
+00:08:53.840 --> 00:08:54.920
+Skala memberikan kemungkinan,
+
+00:08:55.060 --> 00:08:56.540
+tetapi juga memperbesar kesalahan.
+
+00:08:57.680 --> 00:08:58.640
+Dengan set data masif,
+
+00:08:58.800 --> 00:09:01.020
+memasukkan semua bidang mentah ke algoritma Anda
+
+00:09:01.020 --> 00:09:01.980
+tidak hanya berantakan,
+
+00:09:02.120 --> 00:09:04.260
+tetapi juga dapat secara aktif menurunkan kinerja.
+
+00:09:04.260 --> 00:09:05.840
+Semakin banyak kolom,
+
+00:09:06.020 --> 00:09:08.200
+berarti semakin banyak parameter yang harus diestimasi
+
+00:09:08.200 --> 00:09:09.700
+dan semakin banyak peluang
+
+00:09:09.700 --> 00:09:11.900
+bagi model Anda untuk menyesuaikan keanehan
+
+00:09:11.900 --> 00:09:14.720
+dalam data pelatihan yang tidak tergeneralisasi.
+
+00:09:15.460 --> 00:09:16.660
+Overfitting menjadi lebih mudah,
+
+00:09:16.760 --> 00:09:18.440
+bukan lebih sulit ketika set fitur membengkak.
+
+00:09:19.180 --> 00:09:20.560
+Selain itu, setiap variable tambahan
+
+00:09:20.560 --> 00:09:21.880
+berarti lebih banyak komputasi.
+
+00:09:23.100 --> 00:09:24.700
+Bahkan di lingkungan cloud yang lengkap,
+
+00:09:24.800 --> 00:09:27.140
+500 fitur mentah akan memperlambat pelatihan,
+
+00:09:27.540 --> 00:09:28.800
+meningkatkan penggunaan memori,
+
+00:09:28.800 --> 00:09:30.440
+dan mempersulit setiap langkah hilir
+
+00:09:30.440 --> 00:09:32.740
+dibandingkan dengan 50 fitur yang dirancang
+
+00:09:32.740 --> 00:09:33.660
+dengan baik.
+
+00:09:34.260 --> 00:09:36.040
+Biaya tersembunyi tidak selalu terlihat
+
+00:09:36.040 --> 00:09:36.720
+dari waktu yang berjalan.
+
+00:09:37.220 --> 00:09:39.720
+Jalur 500 fitur itu mungkin selesai tanpa kesalahan,
+
+00:09:39.780 --> 00:09:41.620
+tetapi bisa membuat Anda memiliki model
+
+00:09:41.620 --> 00:09:43.740
+yang sedikit lebih akurat pada data pelatihan,
+
+00:09:43.900 --> 00:09:45.920
+namun jauh lebih buruk pada data baru.
+
+00:09:48.020 --> 00:09:50.000
+Saat Anda menyusutkan dan menyempurnakan,
+
+00:09:50.280 --> 00:09:52.420
+fitur-fitur tersebut menggabungkan variable terkait,
+
+00:09:52.660 --> 00:09:54.520
+mengodekan kategori secara lebih efisien,
+
+00:09:54.640 --> 00:09:56.160
+atau membangun agregat yang menangkap
+
+00:09:56.160 --> 00:09:57.500
+pola alih-alih nilai mentah,
+
+00:09:57.500 --> 00:09:59.960
+Anda memangkas waktu komputasi sekaligus,
+
+00:09:59.960 --> 00:10:02.660
+meningkatkan prediksi model di masa depan.
+
+00:10:03.800 --> 00:10:06.420
+Bentuk data tertentu membuat hal ini lebih sukses.
+
+00:10:06.420 --> 00:10:08.340
+Fitur dengan kardinalitas tinggi,
+
+00:10:08.580 --> 00:10:10.800
+seperti SKU produk unik atau ID pelanggan,
+
+00:10:10.960 --> 00:10:13.420
+dapat membengkak menjadi ribuan kolom yang dikodekan
+
+00:10:13.420 --> 00:10:15.340
+jika ditangani dengan naif.
+
+00:10:16.560 --> 00:10:17.160
+Data jarang,
+
+00:10:17.300 --> 00:10:18.600
+di mana sebagian besar bidang kosong
+
+00:10:18.600 --> 00:10:19.840
+untuk sebagian besar catatan,
+
+00:10:20.060 --> 00:10:21.300
+dapat menyembunyikan sinyal berguna,
+
+00:10:21.420 --> 00:10:23.200
+tetapi menghabiskan sumber gaya untuk menyimpan
+
+00:10:23.200 --> 00:10:25.200
+dan memproses nilai yang sebagian besar hilang.
+
+00:10:25.200 --> 00:10:28.020
+Dalam kasus seperti prediksi churn pelanggan,
+
+00:10:28.140 --> 00:10:29.820
+Anda mungkin juga memiliki pola temporal,
+
+00:10:30.160 --> 00:10:31.000
+siklus pembelian,
+
+00:10:31.320 --> 00:10:32.240
+aktivitas musiman,
+
+00:10:32.460 --> 00:10:34.180
+atau fase orientasi
+
+00:10:34.180 --> 00:10:36.660
+yang tidak muncul di bidang statis biasa.
+
+00:10:38.600 --> 00:10:39.880
+Rekayasa fitur pada skala ini
+
+00:10:39.880 --> 00:10:41.940
+berarti merancang transformasi yang memadatkan
+
+00:10:41.940 --> 00:10:44.980
+dan memunculkan pola tanpa membanjiri set data dengan draw.
+
+00:10:46.020 --> 00:10:47.920
+Disitulah alat otomatisasi dan pemprosesan
+
+00:10:47.920 --> 00:10:49.360
+berdistribusi mulai membuahkan hasil.
+
+00:10:50.180 --> 00:10:51.220
+Pustaka seperti feature tools
+
+00:10:51.220 --> 00:10:52.920
+dapat mengotomatiskan pembuatan agregat
+
+00:10:52.920 --> 00:10:54.920
+dan fitur bergulir di seluruh set data relasional
+
+00:10:54.920 --> 00:10:55.400
+yang besar.
+
+00:10:56.540 --> 00:10:57.020
+Di fabrik,
+
+00:10:57.160 --> 00:10:59.020
+transformasi tersebut dapat berjalan di spark
+
+00:10:59.020 --> 00:11:00.700
+sehingga Anda dapat memperluas pembuatan
+
+00:11:00.700 --> 00:11:01.800
+ratusan kandidat fitur
+
+00:11:01.800 --> 00:11:04.140
+tanpa menarik semuanya ke dalam memori satu mesin.
+
+00:11:06.080 --> 00:11:07.320
+Pengelompokan berbasis waktu,
+
+00:11:07.620 --> 00:11:08.660
+agregat tingkat pelanggan,
+
+00:11:08.860 --> 00:11:10.060
+rasio antarmetrik terkait,
+
+00:11:10.220 --> 00:11:12.500
+semua ini dapat dibuat dan diuji secara berulang
+
+00:11:12.500 --> 00:11:14.040
+tanpa mengganggu alur kerja Anda.
+
+00:11:15.140 --> 00:11:16.460
+Setelah Anda menyusun set fitur,
+
+00:11:16.620 --> 00:11:18.960
+pemilihan model menjadi upaya penyeimbang tersendiri.
+
+00:11:20.140 --> 00:11:21.320
+Algoritma yang berbeda berinteraksi
+
+00:11:21.320 --> 00:11:23.000
+dengan data bersekala besar dengan cara yang berbeda pun.
+
+00:11:23.000 --> 00:11:24.920
+Kerangka kerja peningkatan gradien
+
+00:11:24.920 --> 00:11:26.580
+seperti XGBoost atau LightGBM
+
+00:11:26.580 --> 00:11:28.880
+dapat menangani set data taburan besar secara efisien
+
+00:11:28.880 --> 00:11:30.640
+namun tetap memerlukan biaya per fitur baik
+
+00:11:30.640 --> 00:11:32.340
+dalam memori maupun waktu iterasi.
+
+00:11:33.500 --> 00:11:35.120
+Regresi logistik berskala baik
+
+00:11:35.120 --> 00:11:36.220
+dan melatih dengan cepat,
+
+00:11:36.520 --> 00:11:38.060
+tetapi tidak akan menangkap hubungan
+
+00:11:38.060 --> 00:11:39.380
+non-linear yang kompleks
+
+00:11:39.380 --> 00:11:40.620
+kecuali Anda membangunnya
+
+00:11:40.620 --> 00:11:41.780
+ke dalam fitur itu sendiri.
+
+00:11:42.960 --> 00:11:44.440
+Model pembelajaran mendalam secara teori
+
+00:11:44.440 --> 00:11:45.780
+dapat menemukan pola yang lebih kaya
+
+00:11:45.780 --> 00:11:47.460
+tetapi juga menuntut lebih banyak penyetelan
+
+00:11:47.460 --> 00:11:48.060
+dan komputasi.
+
+00:11:48.540 --> 00:11:49.260
+Dalam lingkungan fabrik,
+
+00:11:49.420 --> 00:11:50.280
+Anda dapat menyediakannya,
+
+00:11:50.280 --> 00:11:52.260
+tetapi Anda harus mempertimbangkan apakah keuntungan
+
+00:11:52.260 --> 00:11:53.460
+yang didapat sepanan dengan biaya pelatihan.
+
+00:11:54.320 --> 00:11:55.120
+Kabar baiknya adalah,
+
+00:11:55.380 --> 00:11:56.840
+dengan notebook fabrik yang terhubung langsung
+
+00:11:56.840 --> 00:11:57.560
+ke Lighthouse Anda,
+
+00:11:57.760 --> 00:11:59.080
+Anda dapat menguji strategi ini
+
+00:11:59.080 --> 00:12:00.260
+tanpa hambatan tradisional.
+
+00:12:01.380 --> 00:12:03.440
+Anda dapat menjalankan beberapa pelatihan
+
+00:12:03.440 --> 00:12:04.780
+dengan set fitur dan algoritma
+
+00:12:04.780 --> 00:12:06.200
+berbeda menggunakan data dasar
+
+00:12:06.200 --> 00:12:07.840
+yang sama tanpa harus menguat ulang
+
+00:12:07.840 --> 00:12:08.860
+atau membentuknya kembali
+
+00:12:08.860 --> 00:12:09.920
+untuk setiap percobaan.
+
+00:12:09.920 --> 00:12:12.240
+Kemampuan untuk berulang dengan cepat
+
+00:12:12.240 --> 00:12:13.780
+berarti Anda tidak terpaku pada tebakan
+
+00:12:13.780 --> 00:12:14.740
+tentang pendekatan mana
+
+00:12:14.740 --> 00:12:15.820
+yang akan bekerja paling baik.
+
+00:12:16.240 --> 00:12:17.080
+Anda dapat memutuskan,
+
+00:12:17.560 --> 00:12:18.760
+fitur yang direkayasa dengan baik
+
+00:12:18.760 --> 00:12:20.720
+dan disesuaikan dengan arsitektur model yang tepat
+
+00:12:20.720 --> 00:12:22.580
+dapat memangkas waktu proses secara signifikan,
+
+00:12:22.940 --> 00:12:23.840
+mengurangi pengguna memori,
+
+00:12:24.060 --> 00:12:25.080
+dan tetap meningkatkan akurasi
+
+00:12:25.080 --> 00:12:26.060
+pada data yang belum terlihat.
+
+00:12:27.040 --> 00:12:28.780
+Anda mendapatkan siklus eksperimen
+
+00:12:28.780 --> 00:12:30.360
+yang lebih cepat dan hasil yang lebih andal,
+
+00:12:30.880 --> 00:12:32.560
+serta menghabiskan anggaran komputasi Anda
+
+00:12:32.560 --> 00:12:34.060
+untuk pelatihan yang benar-benar penting
+
+00:12:34.060 --> 00:12:35.860
+daripada memproses beban yang tidak berguna.
+
+00:12:36.980 --> 00:12:38.400
+Selanjutnya adalah langkah yang menjaga
+
+00:12:38.400 --> 00:12:40.200
+agar proses skala besar ini tetap produktif,
+
+00:12:40.680 --> 00:12:42.540
+memantau dan mengevaluasinya secara real-time
+
+00:12:42.540 --> 00:12:44.500
+agar Anda tahu persis apa yang terjadi saat model
+
+00:12:44.500 --> 00:12:45.720
+dilatih di cloud.
+
+00:12:47.140 --> 00:12:49.420
+Latihan pemantauan dan evaluasi pada skala cloud
+
+00:12:49.420 --> 00:12:51.580
+melatih data berukuran gigabyte terdengar
+
+00:12:51.580 --> 00:12:53.040
+seperti impian sampai Anda duduk di sana
+
+00:12:53.040 --> 00:12:55.000
+bertanya-tanya apakah pekerjaannya masih berjalan
+
+00:12:55.000 --> 00:12:56.720
+atau sudah berhenti diam-diam sejam yang lalu.
+
+00:12:58.100 --> 00:12:59.260
+Saat semuanya terjadi di cloud,
+
+00:12:59.400 --> 00:13:00.600
+Anda kehilangan umpan balik instan
+
+00:13:00.600 --> 00:13:01.920
+yang Anda dapatkan dari melihat log
+
+00:13:01.920 --> 00:13:03.620
+yang lewat di terminal lokal.
+
+00:13:04.200 --> 00:13:05.540
+Itu tidak masalah jika percayaannya selesai
+
+00:13:05.540 --> 00:13:06.580
+dalam beberapa minggu.
+
+00:13:06.600 --> 00:13:08.120
+Itu menjadi masalah ketika waktu berjalan
+
+00:13:08.120 --> 00:13:09.440
+hingga berjam-jam dan Anda tidak tahu
+
+00:13:09.440 --> 00:13:10.400
+apakah Anda membuat kemajuan.
+
+00:13:11.180 --> 00:13:13.120
+Menjalankan pelatihan di lingkungan jarak jauh,
+
+00:13:13.260 --> 00:13:15.040
+mengubah cara Anda berpikir tentang visibilitas.
+
+00:13:15.900 --> 00:13:18.120
+Dalam sesi lokal, Anda menemukan masalah dengan segera.
+
+00:13:18.860 --> 00:13:19.960
+Nilai yang hilang dalam kolom,
+
+00:13:20.420 --> 00:13:21.440
+ketidakcocokan di pedata,
+
+00:13:21.720 --> 00:13:22.600
+atau impor yang terhenti.
+
+00:13:23.440 --> 00:13:24.200
+Pada kluster cloud,
+
+00:13:24.400 --> 00:13:25.460
+kesalahan yang sama mungkin
+
+00:13:25.460 --> 00:13:27.980
+terkumpur dalam velok yang baru Anda periksa
+
+00:13:27.980 --> 00:13:29.100
+jauh setelahnya.
+
+00:13:29.880 --> 00:13:31.500
+Dan karena sumber daya disediakan
+
+00:13:31.500 --> 00:13:32.760
+dan dibuat saat proses berjalan,
+
+00:13:32.900 --> 00:13:34.340
+setiap menit kegagalan tetap menjadi
+
+00:13:34.340 --> 00:13:36.500
+biaya yang harus dibayar,
+
+00:13:36.500 --> 00:13:37.340
+yang harus dibayar.
+
+00:13:37.520 --> 00:13:39.040
+Biaya akibat mendeteksi masalah yang terlambat
+
+00:13:39.040 --> 00:13:39.960
+akan membengkak dengan cepat.
+
+00:13:40.620 --> 00:13:42.040
+Saya pernah melihat pekerjaan prediksi churn
+
+00:13:42.040 --> 00:13:43.480
+yang dimulai pada Jumat malam
+
+00:13:43.480 --> 00:13:45.140
+dengan estimasi 8 jam.
+
+00:13:46.740 --> 00:13:48.480
+Senin pagi, tim menyadari proses gagal
+
+00:13:48.480 --> 00:13:49.780
+sebelum epok pertama dimulai
+
+00:13:49.780 --> 00:13:51.180
+karena satu kolom yang seharusnya.
+
+00:13:51.560 --> 00:13:52.660
+Numerik terbaca sebagai teks.
+
+00:13:53.940 --> 00:13:54.680
+Berapa lama waktu proses?
+
+00:13:55.160 --> 00:13:56.480
+10 menit terbuang di awal,
+
+00:13:56.600 --> 00:13:57.960
+8 jam tetap tertagi dan beteran.
+
+00:13:58.680 --> 00:13:59.800
+Itu adalah jenis kesalahan
+
+00:13:59.800 --> 00:14:01.260
+yang mengikis kepercayaan pada proses
+
+00:14:01.260 --> 00:14:03.380
+dan membuat siklus iterasi berjalan sangat lambat.
+
+00:14:03.380 --> 00:14:05.280
+Fabric mengatasi hal ini
+
+00:14:05.280 --> 00:14:06.460
+dengan pemantauan pekerjaan.
+
+00:14:07.100 --> 00:14:08.140
+Real time yang bisa Anda buka
+
+00:14:08.140 --> 00:14:09.100
+di samping notebook Anda.
+
+00:14:09.380 --> 00:14:09.660
+Ya nah,
+
+00:14:10.580 --> 00:14:11.760
+Anda mendapatkan metrik langsung
+
+00:14:11.760 --> 00:14:12.840
+mengenai konsumsi memori,
+
+00:14:13.040 --> 00:14:13.760
+penggunaan CPU,
+
+00:14:13.980 --> 00:14:15.960
+dan kemajuan melalui epok pelatihan.
+
+00:14:17.960 --> 00:14:19.680
+Log mengalir saat pekerjaan berjalan
+
+00:14:19.680 --> 00:14:21.020
+sehingga Anda bisa menemukan
+
+00:14:21.020 --> 00:14:22.360
+peringatan atau kesalahan
+
+00:14:22.360 --> 00:14:23.880
+sebelum menjadi kegagalan total.
+
+00:14:25.300 --> 00:14:26.120
+Jika ada yang terlihat aneh,
+
+00:14:26.240 --> 00:14:27.460
+Anda bisa menghentikan proses saat itu
+
+00:14:27.460 --> 00:14:29.040
+juga daripada harus menanggung akibatnya nanti.
+
+00:14:29.720 --> 00:14:30.920
+Ini bukan hanya soal mengawasi saja.
+
+00:14:30.920 --> 00:14:33.300
+Anda bisa mengatur checkpoint selama pelatihan
+
+00:14:33.300 --> 00:14:35.060
+agar status model tersimpan secara berkala.
+
+00:14:35.740 --> 00:14:36.800
+Jika pekerjaan berhenti,
+
+00:14:37.000 --> 00:14:37.960
+baik karena kesalahan,
+
+00:14:38.060 --> 00:14:38.840
+batas sumber daya,
+
+00:14:38.940 --> 00:14:39.840
+atau interupsi sengaja,
+
+00:14:39.980 --> 00:14:40.980
+Anda bisa memulai kembali
+
+00:14:40.980 --> 00:14:42.100
+dari checkpoint terakhir,
+
+00:14:42.260 --> 00:14:43.040
+bukan dari awal,
+
+00:14:43.200 --> 00:14:43.860
+bukan dari awal.
+
+00:14:44.460 --> 00:14:45.640
+Thershening juga berperan di sini.
+
+00:14:46.580 --> 00:14:47.720
+Dengan menyimpan versi model
+
+00:14:47.720 --> 00:14:48.700
+yang telah dilatih beserta
+
+00:14:48.700 --> 00:14:50.500
+parameter dan pembagian data terkait,
+
+00:14:50.660 --> 00:14:52.340
+Anda bisa meninjok konfigurasi masa lalu
+
+00:14:52.340 --> 00:14:53.760
+tanpa harus membuat ulang
+
+00:14:53.760 --> 00:14:55.600
+seluruh lingkungan yang menghasilkannya.
+
+00:14:56.820 --> 00:14:58.720
+Penyimpanan sementara bukan sekadar pengaman,
+
+00:14:58.720 --> 00:15:00.600
+itu adalah hal yang membuat eksperimen
+
+00:15:00.600 --> 00:15:01.960
+skala besar menjadi mungkin.
+
+00:15:02.960 --> 00:15:04.520
+Anda bisa membuat cabang dari checkpoint
+
+00:15:04.520 --> 00:15:05.220
+yang menjanjikan
+
+00:15:05.220 --> 00:15:06.680
+dan mencoba hyperparameter berbeda
+
+00:15:06.680 --> 00:15:08.120
+tanpa membuang waktu untuk memuat
+
+00:15:08.120 --> 00:15:10.000
+dan melatih ulang model dasar.
+
+00:15:10.660 --> 00:15:12.500
+Dengan set data berukuran multi gigabyte,
+
+00:15:12.600 --> 00:15:13.520
+itu bisa menjadi perbedaan
+
+00:15:13.520 --> 00:15:14.780
+antara menjalankan tiga eksperimen
+
+00:15:14.780 --> 00:15:15.820
+dalam sehari atau hanya satu.
+
+00:15:16.460 --> 00:15:17.580
+Setelah model selesai,
+
+00:15:17.960 --> 00:15:18.940
+evaluasi pada skala ini
+
+00:15:18.940 --> 00:15:20.160
+memiliki tantangannya sendiri.
+
+00:15:20.160 --> 00:15:22.820
+Anda tidak selalu bisa mencetak skor
+
+00:15:22.820 --> 00:15:23.920
+terhadap set pengujian penuh
+
+00:15:23.920 --> 00:15:24.640
+dalam satu putaran
+
+00:15:24.640 --> 00:15:25.680
+tanpa memperlambat semuanya.
+
+00:15:27.000 --> 00:15:28.220
+Sampling seimbang membantu di sini
+
+00:15:28.220 --> 00:15:29.280
+menjaga proporsi kelas
+
+00:15:29.280 --> 00:15:30.460
+sembari memotong set data
+
+00:15:30.460 --> 00:15:32.160
+keukuran yang dievaluasi lebih cepat.
+
+00:15:32.700 --> 00:15:33.780
+Untuk akurasi lebih tinggi,
+
+00:15:34.060 --> 00:15:34.880
+evaluasi terdistribusi
+
+00:15:34.880 --> 00:15:35.560
+memungkinkan Anda
+
+00:15:35.560 --> 00:15:36.440
+membagi tugas penilaian
+
+00:15:36.440 --> 00:15:37.140
+ke seluruh kluster
+
+00:15:37.140 --> 00:15:38.080
+dengan hasil
+
+00:15:38.080 --> 00:15:39.920
+yang diagregasi secara otomatis.
+
+00:15:40.860 --> 00:15:42.080
+Fabrik mendukung pustaka paitan
+
+00:15:42.080 --> 00:15:42.780
+seperti MLip
+
+00:15:42.780 --> 00:15:43.800
+dan alur kerja sikitlan
+
+00:15:43.800 --> 00:15:44.440
+terdistribusi
+
+00:15:44.440 --> 00:15:46.160
+untuk memungkinkan hal tersebut.
+
+00:15:46.160 --> 00:15:48.600
+Daripada menunggu satu mesin
+
+00:15:48.600 --> 00:15:49.420
+menjalankan metrik
+
+00:15:49.420 --> 00:15:50.440
+pada ratusan juta data,
+
+00:15:50.580 --> 00:15:51.920
+Anda dapat membagi tugas tersebut
+
+00:15:51.920 --> 00:15:53.440
+dan menarik kembali skor akurasi,
+
+00:15:53.580 --> 00:15:55.140
+presisi, recall, atau F1
+
+00:15:55.140 --> 00:15:56.160
+yang terkonsolidasi
+
+00:15:56.160 --> 00:15:57.580
+dalam waktu yang jauh lebih singkat.
+
+00:15:58.760 --> 00:16:00.200
+Data tidak pernah keluar dari leghouse,
+
+00:16:00.300 --> 00:16:01.400
+jadi Anda tidak perlu berurusan
+
+00:16:01.400 --> 00:16:02.420
+dengan ekspor set pengujian
+
+00:16:02.420 --> 00:16:03.260
+atau penggabungan manual.

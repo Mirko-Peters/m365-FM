@@ -1,0 +1,2086 @@
+WEBVTT
+
+00:00:00.240 --> 00:00:07.040
+Pronto para 10 dias de Microsoft 365, Copilot, IA, Azure e as pessoas que estão moldando o futuro do trabalho.
+
+00:00:07.920 --> 00:00:12.100
+Em janeiro, a M3 e M65 com está de volta, vamos ser ainda maiores.
+
+00:00:12.860 --> 00:00:18.180
+Junte-se a nós para sessões ao vivo, demonstrações reais e conhecimento prático de MVPs e especialistas do setor em todo o mundo.
+
+00:00:18.860 --> 00:00:21.160
+Nada de genéricos, nada de chavões intermináveis.
+
+00:00:22.200 --> 00:00:28.400
+Estamos enfrentando os desafios reais, Copilot Studio, agentes de IA, Fabric, Segurança, Governança e Automação.
+
+00:00:28.400 --> 00:00:34.240
+Seja você um profissional de TI, desenvolvedor ou líder de negócios, há sessões criadas para você.
+
+00:00:35.440 --> 00:00:39.980
+Com 10 dias completos, você pode explorar várias tecnologias e se conectar com uma comunidade global.
+
+00:00:40.920 --> 00:00:44.100
+Assista ao vivo e leve insights práticos para sua organização.
+
+00:00:45.180 --> 00:00:48.820
+Janeiro de 2027, 10 dias, uma comunidade Microsoft.
+
+00:00:49.380 --> 00:00:50.520
+As inscrições já estão abertas.
+
+00:00:51.780 --> 00:00:52.920
+Garanta seu lugar hoje mesmo.
+
+00:00:52.920 --> 00:00:57.960
+É em mm3d5.net
+
+00:00:57.960 --> 00:01:04.400
+Participe agora em m3d5.net e nos vemos ao vivo em janeiro.
+
+00:01:05.240 --> 00:01:08.780
+Bem-vindo a mais um episódio do Microsoft Knowledge Nuggets aqui no m3d5.fm.
+
+00:01:08.880 --> 00:01:10.060
+Eu sou seu apresentador, Mirko Peters.
+
+00:01:10.360 --> 00:01:13.820
+O tema de hoje é algo que quase todo mundo já ouviu falar, mas poucos realmente entendem.
+
+00:01:14.260 --> 00:01:15.920
+DNS que significa também Name System.
+
+00:01:16.580 --> 00:01:20.140
+E essa é provavelmente o que eu chamarei de lista telefônica da internet e essa descrição não está longe da verdade.
+
+00:01:20.840 --> 00:01:21.380
+O trabalho é simples.
+
+00:01:21.380 --> 00:01:23.800
+Pega um nome que você consegue lembrar, como contorso.
+
+00:01:24.620 --> 00:01:27.760
+E transforme em um número que os computadores entendem como 20.220.
+
+00:01:28.240 --> 00:01:29.280
+52 pintorso, 20.
+
+00:01:30.220 --> 00:01:32.180
+Computadores vivem de números, nós vivemos de nomes.
+
+00:01:32.280 --> 00:01:34.320
+E o DNS fica bem no meio, fazendo a tradução.
+
+00:01:35.140 --> 00:01:35.900
+Mas aqui está a questão.
+
+00:01:36.020 --> 00:01:38.680
+A maioria das pessoas sabe que ele realiza uma consulta, mas nunca vê a cadeia completa.
+
+00:01:39.100 --> 00:01:41.780
+E realmente acontece no momento em que você digita um dominio no seu navegador.
+
+00:01:41.860 --> 00:01:43.560
+E mais importante, onde o Azure se encaixa nisso.
+
+00:01:44.040 --> 00:01:47.040
+Ao final deste episódio, você entenderá o que o Azure DNS realmente é.
+
+00:01:47.440 --> 00:01:49.640
+Você saberá a diferença entre zonas DNS públicas e privadas.
+
+00:01:49.640 --> 00:01:51.920
+Você saberá quais tipos de registros você realmente precisa.
+
+00:01:52.240 --> 00:01:54.660
+E verá como a delegação transfere o controle para o Azure.
+
+00:01:55.320 --> 00:01:57.620
+Estamos cobrindo os conceitos básicos de forma simples, sem enrolação.
+
+00:01:58.420 --> 00:01:59.460
+O que o DNS realmente faz?
+
+00:02:00.100 --> 00:02:01.200
+Vamos começar com a função principal.
+
+00:02:01.640 --> 00:02:02.920
+DNS transforma nomes em números.
+
+00:02:03.380 --> 00:02:05.560
+Quando você digita contoso.com no seu navegador,
+
+00:02:05.840 --> 00:02:08.100
+seu computador não faz ideia do que essa sequência significa.
+
+00:02:08.540 --> 00:02:09.400
+Ele precisa de um endereço IP.
+
+00:02:10.380 --> 00:02:15.000
+Algo como 20.190 x 52.20 para se conectar ao servidor que hospeda esse site.
+
+00:02:15.620 --> 00:02:17.080
+O DNS faz essa tradução acontecer.
+
+00:02:17.460 --> 00:02:18.140
+Por que isso é importante?
+
+00:02:18.140 --> 00:02:22.300
+Porque computadores só entendem números, enquanto humanos só se lembram de nomes.
+
+00:02:22.860 --> 00:02:25.140
+Você não memoriza o número de telefone e seu amigo, você se lembra do nome dele.
+
+00:02:25.600 --> 00:02:26.240
+Mas isso vale para os sites.
+
+00:02:26.740 --> 00:02:28.700
+O DNS permite que você digite google.com,
+
+00:02:28.820 --> 00:02:30.880
+em vez de uma sequência de dígitos que você nunca conseguiria declarar.
+
+00:02:31.080 --> 00:02:33.380
+Então, o que realmente acontece quando você digita um domínio no seu navegador?
+
+00:02:33.700 --> 00:02:34.120
+É uma cadeia.
+
+00:02:34.580 --> 00:02:36.620
+Seu navegador primeiro verifica seu próprio cache perguntando
+
+00:02:36.620 --> 00:02:37.820
+Eu procurei por isso recentemente?
+
+00:02:38.720 --> 00:02:41.460
+Se não, ele envia uma solicitação a um resolvedor recursivo,
+
+00:02:41.540 --> 00:02:43.740
+geralmente fornecido pelo seu provedor de serviço de internet.
+
+00:02:44.240 --> 00:02:45.920
+A partir daí, o resolvedor verifica seu próprio cache.
+
+00:02:46.340 --> 00:02:46.880
+Ainda sem resposta?
+
+00:02:46.880 --> 00:02:48.000
+Então, ele sobe nele aqui.
+
+00:02:48.340 --> 00:02:49.700
+Primeiro, eu consulto um servidor raiz.
+
+00:02:50.360 --> 00:02:52.880
+Esse servidor raiz não sabe o endereço IP de contuso.com,
+
+00:02:53.300 --> 00:02:56.280
+mas sabe a quem perguntar em seguida, o servidor TLD para .com.
+
+00:02:56.700 --> 00:02:58.480
+Esse servidor TLD também não sabe o IP exato,
+
+00:02:58.540 --> 00:03:00.740
+mas conhece o servidor de nomes autoritativo para aquele domínio.
+
+00:03:01.260 --> 00:03:02.040
+Essa é a parada final.
+
+00:03:02.620 --> 00:03:04.640
+O servidor de nomes autoritativo contém os registros reais.
+
+00:03:05.220 --> 00:03:07.720
+Ele responde com o endereço IP, o resolvedor, o armazen em caixa,
+
+00:03:07.800 --> 00:03:10.000
+e envia de volta ao seu navegador, e seu navegador carrega a página.
+
+00:03:10.460 --> 00:03:11.640
+Você não precisa memorizar cada passo.
+
+00:03:12.040 --> 00:03:13.520
+A pena saber que existe uma hierarquia e ela funciona.
+
+00:03:13.520 --> 00:03:17.040
+A parte que importa para nós é esse último passo, o servidor de nomes autoritativo.
+
+00:03:17.500 --> 00:03:18.660
+É aí que o Azure DNS entra.
+
+00:03:19.300 --> 00:03:19.960
+O Azure DNS.
+
+00:03:20.580 --> 00:03:23.300
+O Azure DNS é o serviço de hospedagem de DNS agenciado da Microsoft.
+
+00:03:23.880 --> 00:03:26.840
+Em termos simples, isso significa que você nunca precisa executar seus próprios servidores.
+
+00:03:27.260 --> 00:03:29.000
+DNS, corrigi-los ou planejar a sua disponibilidade.
+
+00:03:29.580 --> 00:03:30.780
+O Azure cuida de tudo isso para você.
+
+00:03:31.460 --> 00:03:33.700
+Você cria uma zona DNS no Azure para seu domínio,
+
+00:03:33.760 --> 00:03:36.380
+adiciona seus registros com registros A, registros CNAME que precisar,
+
+00:03:36.620 --> 00:03:38.700
+e o Azure hospeda esses registros em sua infraestrutura global.
+
+00:03:38.700 --> 00:03:41.580
+Quando alguém em qualquer lugar na internet consulta seu domínio,
+
+00:03:41.660 --> 00:03:43.060
+os servidores de nomes do Azure respondem.
+
+00:03:43.440 --> 00:03:45.040
+E por ser construído na rede global do Azure,
+
+00:03:45.180 --> 00:03:46.940
+é rápido e resiliente e escala automaticamente.
+
+00:03:47.360 --> 00:03:48.200
+Você não precisa pensar nisso.
+
+00:03:48.660 --> 00:03:49.260
+Simplesmente funciona.
+
+00:03:49.720 --> 00:03:51.660
+Você gerencia tudo através do portal do Azure,
+
+00:03:51.920 --> 00:03:53.420
+da linha de comando ou de modelos ARM,
+
+00:03:53.500 --> 00:03:55.020
+se você prefere infraestrutura como código.
+
+00:03:55.480 --> 00:03:56.780
+Sem configurações monais do servidor,
+
+00:03:56.880 --> 00:03:58.840
+sem acessar via SSH para editar arquivos de zona.
+
+00:03:59.160 --> 00:04:01.100
+É tudo apontar e clicar ou criar scripts e implantar.
+
+00:04:01.480 --> 00:04:03.100
+Agora vamos comparar isso com a abordagem tradicional.
+
+00:04:03.600 --> 00:04:05.520
+Há 20 anos você executava seus próprios servidores, DNS.
+
+00:04:05.520 --> 00:04:08.160
+Você seria responsável por atualizar o SEO.
+
+00:04:08.460 --> 00:04:10.380
+Garantir redundância para que uma falha de servidor
+
+00:04:10.380 --> 00:04:11.520
+não tirasse seu domínio do ar
+
+00:04:11.520 --> 00:04:13.660
+e planejar a capacidade para picos de tráfego.
+
+00:04:14.540 --> 00:04:16.140
+Com o Azure DNS, é problema de outra pessoa.
+
+00:04:16.620 --> 00:04:19.260
+Você apenas cria sua zona, adiciona seus registros e pronto.
+
+00:04:19.760 --> 00:04:20.740
+Mas é aqui que fica interessante.
+
+00:04:21.160 --> 00:04:23.020
+O Azure DNS não serve apenas para sites públicos.
+
+00:04:23.100 --> 00:04:25.120
+Ele também gerencia a resolução de nomes interna
+
+00:04:25.120 --> 00:04:26.380
+dentro de suas redes virtuais do Azure.
+
+00:04:26.940 --> 00:04:29.640
+É aí que entra a distinção entre zonas DNS públicas e privadas.
+
+00:04:31.820 --> 00:04:33.920
+Zonas DNS públicas versus zonas DNS privadas.
+
+00:04:34.360 --> 00:04:36.540
+Vamos analisar os dois tipos de zonas DNS no Azure.
+
+00:04:37.040 --> 00:04:39.320
+Zonas DNS públicas são exatamente o que o nome sugere.
+
+00:04:39.420 --> 00:04:41.260
+Domínios que precisam ser acessíveis a partir da internet.
+
+00:04:41.900 --> 00:04:43.920
+Qualquer nome que alguém fora da sua rede precise resolver,
+
+00:04:44.060 --> 00:04:46.000
+como seu site, endpoint de API ou servidor de e-mail,
+
+00:04:46.100 --> 00:04:47.140
+vai para uma zona pública.
+
+00:04:47.940 --> 00:04:49.460
+Zonas DNS privadas são o oposto.
+
+00:04:49.920 --> 00:04:51.720
+Elas servem para nomes que devem ser resolvidos
+
+00:04:51.720 --> 00:04:53.440
+apenas dentro das suas redes virtuais do Azure.
+
+00:04:53.920 --> 00:04:55.520
+Por exemplo, digamos que você tem um servidor de banco de dados.
+
+00:04:56.000 --> 00:04:57.900
+Você não quer que toda a internet solicite o endereço IP dele.
+
+00:04:58.380 --> 00:05:00.100
+Você só quer que suas VMs de aplicação encontrem.
+
+00:05:00.420 --> 00:05:01.660
+Então você cria uma zona privada
+
+00:05:01.660 --> 00:05:04.140
+e apenas as redes que você vincular a ela poderão resolver esse zono.
+
+00:05:04.480 --> 00:05:05.400
+Aqui está um exemplo concreto.
+
+00:05:05.400 --> 00:05:07.480
+Digamos que você tenha um servidor de banco de dados
+
+00:05:07.480 --> 00:05:10.700
+e internamente queira chamá-lo de db.internal.contoso.com.
+
+00:05:11.220 --> 00:05:12.800
+Esse nome não significa nada para o mundo exterior.
+
+00:05:13.200 --> 00:05:13.680
+Não deveria.
+
+00:05:14.080 --> 00:05:15.340
+Mas suas VMs de aplicação precisam.
+
+00:05:15.860 --> 00:05:17.240
+Com uma zona DNS privada,
+
+00:05:17.480 --> 00:05:18.500
+você cria esse registro,
+
+00:05:18.660 --> 00:05:19.860
+vincula a zona à sua rede virtual
+
+00:05:19.860 --> 00:05:21.860
+e, de repente, cada VM nessa rede pode resolver
+
+00:05:21.860 --> 00:05:23.800
+db.internal.contoso.com
+
+00:05:23.800 --> 00:05:25.520
+para o IP privado do banco de dados
+
+00:05:25.520 --> 00:05:28.160
+em um servidor DNS personalizado necessário.
+
+00:05:28.160 --> 00:05:30.580
+Agora é aqui que as zonas privadas se tornam realmente úteis.
+
+00:05:31.120 --> 00:05:33.240
+Você vincula uma única zona a várias redes virtuais,
+
+00:05:33.380 --> 00:05:34.000
+mesmo entre regiões.
+
+00:05:34.460 --> 00:05:36.440
+Portanto, se você jogar um aplicativo web no leste do ZOA
+
+00:05:36.440 --> 00:05:37.780
+e um banco de dados no oeste da Europa,
+
+00:05:38.120 --> 00:05:40.040
+ambas as VNets podem compartilhar a mesma zona privada.
+
+00:05:40.340 --> 00:05:42.760
+O aplicativo web resolve o nome do banco de dados perfeitamente,
+
+00:05:42.860 --> 00:05:44.240
+mesmo estando em datacenters diferentes.
+
+00:05:44.900 --> 00:05:46.140
+Sem configuração de PM para DNA,
+
+00:05:46.280 --> 00:05:47.100
+sem regras de encaminhamento,
+
+00:05:47.180 --> 00:05:48.320
+você simplesmente vincula a zona.
+
+00:05:48.540 --> 00:05:50.920
+O registro automático é outro recurso que vale a pena conhecer.
+
+00:05:51.440 --> 00:05:53.240
+Quando você o habilita em um link de rede virtual,
+
+00:05:53.580 --> 00:05:55.860
+o Azure cria automaticamente registros A para cada VM
+
+00:05:55.860 --> 00:05:56.820
+à medida que ela é iniciada.
+
+00:05:57.260 --> 00:05:58.240
+Você implanta uma nova VM
+
+00:05:58.240 --> 00:06:00.060
+e em minutos existe um registro DNS para ela.
+
+00:06:00.400 --> 00:06:01.720
+Você exclui a VM e o registro aparece.
+
+00:06:02.060 --> 00:06:03.220
+Sem gerenciamento manual de registro.
+
+00:06:03.540 --> 00:06:05.080
+É especialmente útil em ambientes dinâmicos
+
+00:06:05.080 --> 00:06:06.300
+onde VMs aparecem e desaparecem.
+
+00:06:06.500 --> 00:06:08.020
+Ouço muitas pessoas pensarem que zonas privadas
+
+00:06:08.020 --> 00:06:09.340
+precisam de um nome de domínio registrado.
+
+00:06:09.820 --> 00:06:11.960
+Você pode nomear uma zona privada como quiser,
+
+00:06:12.080 --> 00:06:14.960
+internal, contoso.com, corpo local ou db.internal.
+
+00:06:15.420 --> 00:06:16.980
+Não importa, porque ninguém fora da sua rede
+
+00:06:16.980 --> 00:06:17.840
+jamais fará uma consulta.
+
+00:06:17.840 --> 00:06:19.740
+Não há registrador de domínio envolvido,
+
+00:06:19.820 --> 00:06:20.600
+nem delegação pública.
+
+00:06:20.980 --> 00:06:21.860
+É puramente interno.
+
+00:06:22.320 --> 00:06:23.220
+Vamos resumir a diferença.
+
+00:06:23.800 --> 00:06:24.860
+Zonas públicas são para a internet.
+
+00:06:24.860 --> 00:06:27.120
+Zonas privadas são para as suas redes virtuais.
+
+00:06:27.860 --> 00:06:29.180
+Zonas públicas exigem um domínio
+
+00:06:29.180 --> 00:06:30.700
+que você possua e delegação do seu registrador.
+
+00:06:31.140 --> 00:06:32.600
+Zonas privadas precisam apenas de um nome
+
+00:06:32.600 --> 00:06:33.200
+de um link de vnet.
+
+00:06:33.600 --> 00:06:34.740
+Depois de configurar sua zona,
+
+00:06:34.860 --> 00:06:35.540
+pública ou privada,
+
+00:06:35.600 --> 00:06:36.840
+você precisa de registro para mapear
+
+00:06:36.840 --> 00:06:38.400
+nomes para recursos, para recursos.
+
+00:06:38.880 --> 00:06:39.440
+Essa é a base.
+
+00:06:40.180 --> 00:06:41.160
+E uma vez que você entende isso,
+
+00:06:41.220 --> 00:06:42.220
+o resto é apenas adicionar registro.
+
+00:06:43.080 --> 00:06:44.620
+Tipos de registro que você realmente vai usar.
+
+00:06:44.960 --> 00:06:46.840
+Então quais registros DNS você usar no dia a dia?
+
+00:06:46.840 --> 00:06:47.880
+Vamos analisá-los?
+
+00:06:48.220 --> 00:06:49.560
+O registro A é o que todos conhecem.
+
+00:06:49.960 --> 00:06:51.540
+Ele mapea o nome para o endereço PV4.
+
+00:06:52.040 --> 00:06:54.160
+Digite www.contoso.com
+
+00:06:54.160 --> 00:06:55.000
+no seu navegador
+
+00:06:55.000 --> 00:06:56.000
+e esse registro A
+
+00:06:56.000 --> 00:06:57.180
+dirá que o servidor está em
+
+00:06:57.180 --> 00:06:58.580
+20.090.
+
+00:06:59.820 --> 00:07:00.420
+158.090.
+
+00:07:00.780 --> 00:07:01.520
+Simples e universal.
+
+00:07:02.280 --> 00:07:03.900
+É o tipo de registro mais comum na internet.
+
+00:07:05.280 --> 00:07:06.460
+O registro Ploba faz a mesma coisa
+
+00:07:06.460 --> 00:07:07.320
+para endereços IPv6.
+
+00:07:07.800 --> 00:07:09.380
+Se o seu serviço suporta IPv6,
+
+00:07:09.480 --> 00:07:10.220
+você precisará deles
+
+00:07:10.220 --> 00:07:11.360
+junto com seus registros A.
+
+00:07:11.580 --> 00:07:12.300
+A maioria das pessoas
+
+00:07:12.300 --> 00:07:13.020
+não os usa diariamente,
+
+00:07:13.240 --> 00:07:14.420
+mas eles estão lá quando você precisa.
+
+00:07:14.800 --> 00:07:15.540
+O registro Senami funciona
+
+00:07:15.540 --> 00:07:16.160
+de forma diferente.
+
+00:07:16.160 --> 00:07:17.880
+Em vez de mapear um nome para um IP
+
+00:07:17.880 --> 00:07:18.420
+ou Senami,
+
+00:07:18.680 --> 00:07:19.900
+mapeia um nome para outro nome.
+
+00:07:20.540 --> 00:07:21.200
+Então você pode ter
+
+00:07:21.200 --> 00:07:22.320
+www.toso.com
+
+00:07:22.320 --> 00:07:23.740
+como Senami apontando para Contoso.
+
+00:07:24.380 --> 00:07:25.700
+Azul e Websites.net
+
+00:07:25.700 --> 00:07:28.140
+Quando alguém consulta
+
+00:07:28.140 --> 00:07:30.160
+www.contoso.com
+
+00:07:30.160 --> 00:07:31.280
+o resolvedor DNS
+
+00:07:31.280 --> 00:07:31.960
+segue a cadeia
+
+00:07:31.960 --> 00:07:33.060
+até encontrar o IP real.
+
+00:07:33.820 --> 00:07:34.560
+E aqui está a beleza disso.
+
+00:07:35.200 --> 00:07:36.000
+Senami são perfeitos
+
+00:07:36.000 --> 00:07:36.880
+para criar apelidos Azul.
+
+00:07:37.260 --> 00:07:38.260
+Altere o destino uma vez
+
+00:07:38.260 --> 00:07:39.080
+e tudo o que aponta para ele
+
+00:07:39.080 --> 00:07:40.100
+é atualizado automaticamente.
+
+00:07:40.580 --> 00:07:41.060
+Registro MX
+
+00:07:41.060 --> 00:07:42.040
+lidam com rotina de e-mail.
+
+00:07:42.040 --> 00:07:43.480
+Se alguém envia um e-mail
+
+00:07:43.480 --> 00:07:45.220
+para usearroba.contoso.com
+
+00:07:45.220 --> 00:07:46.440
+o servidor de envio
+
+00:07:46.440 --> 00:07:47.460
+consulta o registro MX
+
+00:07:47.460 --> 00:07:48.040
+para descobrir
+
+00:07:48.040 --> 00:07:48.960
+qual servidor de e-mail
+
+00:07:48.960 --> 00:07:49.700
+deve recebê-lo.
+
+00:07:50.400 --> 00:07:51.220
+Você normalmente terá
+
+00:07:51.220 --> 00:07:52.360
+um ou mais registros MX
+
+00:07:52.360 --> 00:07:53.200
+com valores de prioridade.
+
+00:07:53.820 --> 00:07:54.420
+Números menores
+
+00:07:54.420 --> 00:07:55.500
+significam prioridade mais alta.
+
+00:07:55.620 --> 00:07:55.940
+Portanto,
+
+00:07:56.040 --> 00:07:57.060
+o e-mail.contoso.com
+
+00:07:57.060 --> 00:07:57.840
+com prioridade 10
+
+00:07:57.840 --> 00:07:58.980
+é tentado antes de backup.
+
+00:07:59.140 --> 00:07:59.960
+.contoso.com
+
+00:07:59.960 --> 00:08:00.760
+com prioridade 20
+
+00:08:00.760 --> 00:08:02.160
+registros TXT
+
+00:08:02.160 --> 00:08:03.660
+armazenam informações de texto
+
+00:08:03.660 --> 00:08:04.260
+e são usados
+
+00:08:04.260 --> 00:08:05.180
+para todo tipo de coisa.
+
+00:08:05.740 --> 00:08:06.580
+Verificação de domínio
+
+00:08:06.580 --> 00:08:07.140
+é uma das principais.
+
+00:08:07.500 --> 00:08:08.980
+Ao configurar o Microsoft 365
+
+00:08:08.980 --> 00:08:10.640
+pedem que você adicione
+
+00:08:10.640 --> 00:08:11.460
+um registro TXT
+
+00:08:11.460 --> 00:08:13.040
+para provar que possui o domínio.
+
+00:08:14.000 --> 00:08:14.860
+Autenticação de método
+
+00:08:14.860 --> 00:08:16.120
+registros SPF
+
+00:08:16.120 --> 00:08:16.820
+chaves DQM
+
+00:08:16.820 --> 00:08:17.720
+políticas de marque
+
+00:08:17.720 --> 00:08:19.380
+todos esses são registros TXT.
+
+00:08:19.880 --> 00:08:21.380
+Eles parecem cadeias aleatórias de texto
+
+00:08:21.380 --> 00:08:22.220
+mas servem a propósito
+
+00:08:22.220 --> 00:08:22.980
+de segurança importantes.
+
+00:08:23.540 --> 00:08:24.840
+Agora aqui é onde o Azure DNS
+
+00:08:24.840 --> 00:08:25.500
+adiciona algo
+
+00:08:25.500 --> 00:08:26.380
+que você não encontrará
+
+00:08:26.380 --> 00:08:27.480
+na hospedagem DNS tradicional
+
+00:08:27.480 --> 00:08:28.340
+registros de alias.
+
+00:08:29.000 --> 00:08:29.820
+Eles são específicos
+
+00:08:29.820 --> 00:08:31.160
+do Azure extremamente úteis.
+
+00:08:31.640 --> 00:08:32.460
+Um registro de alias
+
+00:08:32.460 --> 00:08:33.420
+permite apontar um nome
+
+00:08:33.420 --> 00:08:34.760
+diretamente para um recurso do Azure
+
+00:08:34.760 --> 00:08:36.020
+em vez de um endereço IP estático.
+
+00:08:36.500 --> 00:08:37.720
+Então em vez de criar um registro
+
+00:08:37.720 --> 00:08:38.640
+A com um IP fixo
+
+00:08:38.640 --> 00:08:39.780
+para seu balanceador de carga
+
+00:08:39.780 --> 00:08:41.220
+você cria um registro de alias
+
+00:08:41.220 --> 00:08:42.160
+que aponta para o recurso
+
+00:08:42.160 --> 00:08:43.240
+do balanceador de carga em si.
+
+00:08:43.740 --> 00:08:44.460
+E isso é importante
+
+00:08:44.460 --> 00:08:45.520
+porque os recursos do Azure
+
+00:08:45.520 --> 00:08:46.720
+podem alterar seus endereços IP.
+
+00:08:47.420 --> 00:08:48.260
+Um balanceador de carga
+
+00:08:48.260 --> 00:08:48.860
+reimplantado
+
+00:08:48.860 --> 00:08:49.900
+ou um endpoint CDN
+
+00:08:49.900 --> 00:08:50.960
+recebe um novo IP de Frontier.
+
+00:08:51.620 --> 00:08:52.540
+Com um registro A comum
+
+00:08:52.540 --> 00:08:53.820
+você teria que atualizar manualmente
+
+00:08:53.820 --> 00:08:54.460
+o registro DNS
+
+00:08:54.460 --> 00:08:55.300
+que isso acontecesse.
+
+00:08:56.060 --> 00:08:57.220
+Mas com um registro de alias
+
+00:08:57.220 --> 00:08:58.700
+o Azure cuida disso automaticamente.
+
+00:08:59.760 --> 00:09:01.060
+O registro sempre aponta
+
+00:09:01.060 --> 00:09:02.300
+para o IP atual do recurso.
+
+00:09:02.980 --> 00:09:03.680
+Sem trabalho manual,
+
+00:09:03.820 --> 00:09:04.940
+sem atualizações esquecidas
+
+00:09:04.940 --> 00:09:05.980
+e sem tempo de inatividade
+
+00:09:05.980 --> 00:09:06.720
+porque alguém esqueceu
+
+00:09:06.720 --> 00:09:07.500
+de alterar um registro.
+
+00:09:07.500 --> 00:09:08.460
+Mais uma coisa
+
+00:09:08.460 --> 00:09:09.100
+sobre como o Azure
+
+00:09:09.100 --> 00:09:10.080
+organiza os registros.
+
+00:09:10.860 --> 00:09:11.700
+No Azure e DNS
+
+00:09:11.700 --> 00:09:12.800
+registros do mesmo tipo
+
+00:09:12.800 --> 00:09:13.660
+e nome são agrupados
+
+00:09:13.660 --> 00:09:14.680
+em um conjunto de registros.
+
+00:09:15.280 --> 00:09:15.600
+Portanto,
+
+00:09:15.680 --> 00:09:16.880
+se você tiver dois servidores web
+
+00:09:16.880 --> 00:09:18.120
+atendendo ao mesmo site
+
+00:09:18.120 --> 00:09:19.280
+você criaria um único conjunto
+
+00:09:19.280 --> 00:09:20.040
+de registros A
+
+00:09:20.040 --> 00:09:21.740
+para www.contoso.com
+
+00:09:21.740 --> 00:09:22.980
+com dois endereços IP nele.
+
+00:09:24.020 --> 00:09:24.980
+O resolvedor de DNS
+
+00:09:24.980 --> 00:09:25.660
+retorna ambos
+
+00:09:25.660 --> 00:09:26.400
+e o cliente escolhe um.
+
+00:09:26.900 --> 00:09:27.560
+Essa é uma forma simples
+
+00:09:27.560 --> 00:09:28.180
+de balançar medicar.
+
+00:09:28.620 --> 00:09:29.140
+A mesma ideia
+
+00:09:29.140 --> 00:09:30.100
+se aplica a registros MX
+
+00:09:30.100 --> 00:09:31.080
+com vários servidores de e-mail.
+
+00:09:31.780 --> 00:09:32.380
+O conjunto de registros
+
+00:09:32.380 --> 00:09:33.080
+mantém tudo organizado.
+
+00:09:33.380 --> 00:09:33.560
+Então,
+
+00:09:33.660 --> 00:09:34.280
+você tem sua zona,
+
+00:09:34.380 --> 00:09:35.080
+tem seus registros,
+
+00:09:35.080 --> 00:09:36.040
+mas há mais um passo
+
+00:09:36.040 --> 00:09:36.900
+antes que a internet
+
+00:09:36.900 --> 00:09:38.440
+realmente use sua zona DNS
+
+00:09:38.440 --> 00:09:38.940
+do Azure.
+
+00:09:39.720 --> 00:09:40.480
+Você precisa informar
+
+00:09:40.480 --> 00:09:40.960
+ao resto do mundo
+
+00:09:40.960 --> 00:09:41.680
+que o Azure agora
+
+00:09:41.680 --> 00:09:42.820
+é a autoridade do seu domínio.
+
+00:09:43.420 --> 00:09:44.120
+Esse processo é chamado
+
+00:09:44.120 --> 00:09:44.760
+de delegação.
+
+00:09:45.600 --> 00:09:46.140
+Delegação é como
+
+00:09:46.140 --> 00:09:46.980
+você transfere o controle.
+
+00:09:47.500 --> 00:09:47.680
+Então,
+
+00:09:47.800 --> 00:09:48.820
+você criou sua zona DNS
+
+00:09:48.820 --> 00:09:49.620
+pública no Azure
+
+00:09:49.620 --> 00:09:50.660
+e adicionou seus registros
+
+00:09:50.660 --> 00:09:51.480
+e tudo parece correto
+
+00:09:51.480 --> 00:09:51.840
+do seu lado.
+
+00:09:52.420 --> 00:09:52.980
+Aqui está o ponto.
+
+00:09:53.480 --> 00:09:54.140
+Ninguém na internet
+
+00:09:54.140 --> 00:09:54.900
+sabe que o Azure
+
+00:09:54.900 --> 00:09:55.500
+deve responder
+
+00:09:55.500 --> 00:09:56.760
+as consultas do seu domínio.
+
+00:09:57.140 --> 00:09:57.820
+Você precisa avisá-los.
+
+00:09:58.260 --> 00:09:58.960
+Eu disse que você tem a delegação.
+
+00:09:59.600 --> 00:10:00.500
+Delegação é o processo
+
+00:10:00.500 --> 00:10:01.600
+de dizer ao resto da internet
+
+00:10:01.600 --> 00:10:02.680
+que o Azure DNS
+
+00:10:02.680 --> 00:10:03.700
+agora é a autoridade
+
+00:10:03.700 --> 00:10:04.340
+para o meu domínio.
+
+00:10:04.340 --> 00:10:05.380
+Você faz isso
+
+00:10:05.380 --> 00:10:06.500
+no seu registrador de domínio.
+
+00:10:06.960 --> 00:10:07.440
+GoDaddy,
+
+00:10:07.480 --> 00:10:08.500
+NameShip e Google Domains,
+
+00:10:08.600 --> 00:10:09.140
+onde quer que você tenha
+
+00:10:09.140 --> 00:10:09.900
+comprado seu domínio,
+
+00:10:10.080 --> 00:10:11.060
+você entra nas configurações
+
+00:10:11.060 --> 00:10:11.720
+de DNS deles
+
+00:10:11.720 --> 00:10:12.420
+e altera o registro
+
+00:10:12.420 --> 00:10:13.040
+de servidor de nomes
+
+00:10:13.040 --> 00:10:13.640
+para apontar para o Azure.
+
+00:10:14.220 --> 00:10:15.320
+Ao criar uma zona DNS
+
+00:10:15.320 --> 00:10:15.980
+pública no Azure,
+
+00:10:16.120 --> 00:10:16.840
+o serviço fornece
+
+00:10:16.840 --> 00:10:17.420
+quatro endereços
+
+00:10:17.420 --> 00:10:18.320
+de servidor de nomes.
+
+00:10:18.800 --> 00:10:19.520
+Eles se parecem com
+
+00:10:19.520 --> 00:10:21.480
+ns1.nel1.azurredns.com,
+
+00:10:21.640 --> 00:10:23.740
+ns2.nel1.azurredns.net
+
+00:10:23.740 --> 00:10:24.240
+e assim por diante.
+
+00:10:24.740 --> 00:10:25.520
+Esses são os servidores
+
+00:10:25.520 --> 00:10:26.100
+que responderão
+
+00:10:26.100 --> 00:10:27.080
+às consultas do seu domínio.
+
+00:10:27.460 --> 00:10:28.500
+Você pega esses quatro endereços
+
+00:10:28.500 --> 00:10:29.460
+e os coloca na configuração
+
+00:10:29.460 --> 00:10:30.160
+de servidor de nome
+
+00:10:30.160 --> 00:10:30.740
+do seu registrador.
+
+00:10:31.200 --> 00:10:32.900
+Esse é o passo da delegação.
+
+00:10:33.340 --> 00:10:34.100
+Assim que você salva
+
+00:10:34.100 --> 00:10:34.720
+essas alterações,
+
+00:10:34.820 --> 00:10:35.400
+a informação começa
+
+00:10:35.400 --> 00:10:36.440
+a se propagar pela internet.
+
+00:10:37.120 --> 00:10:37.900
+Os servidores raiz
+
+00:10:37.900 --> 00:10:38.740
+e os servidores TRD
+
+00:10:38.740 --> 00:10:39.300
+do seu domínio
+
+00:10:39.300 --> 00:10:40.140
+são atualizados.
+
+00:10:40.640 --> 00:10:41.340
+Eles aprendem que
+
+00:10:41.340 --> 00:10:42.080
+quando alguém solicita
+
+00:10:42.080 --> 00:10:42.840
+contouzo.com,
+
+00:10:43.040 --> 00:10:43.920
+devem enviar a consulta
+
+00:10:43.920 --> 00:10:44.420
+para os servidores
+
+00:10:44.420 --> 00:10:45.120
+de nomes do Azure
+
+00:10:45.120 --> 00:10:45.660
+em vez de para onde
+
+00:10:45.660 --> 00:10:46.320
+ela apontava antes.
+
+00:10:46.940 --> 00:10:47.980
+A propagação geralmente
+
+00:10:47.980 --> 00:10:48.760
+ocorre em minutos,
+
+00:10:49.140 --> 00:10:49.860
+mas pode levar até
+
+00:10:49.860 --> 00:10:51.160
+48 horas em alguns casos
+
+00:10:51.160 --> 00:10:51.960
+porque os resolvedores
+
+00:10:51.960 --> 00:10:53.080
+de DNS ao redor do mundo
+
+00:10:53.080 --> 00:10:54.000
+armazenam as informações
+
+00:10:54.000 --> 00:10:54.760
+antigas em caixa
+
+00:10:54.760 --> 00:10:55.980
+e não verificarão atualizações
+
+00:10:55.980 --> 00:10:56.920
+até que o caixa expire.
+
+00:10:57.520 --> 00:10:58.560
+Agora, aqui está algo importante.
+
+00:10:58.560 --> 00:11:00.240
+A delegação é uma via de mão única.
+
+00:11:00.700 --> 00:11:01.380
+O Azure não gerencia
+
+00:11:01.380 --> 00:11:01.940
+seu registrador.
+
+00:11:02.520 --> 00:11:03.120
+Você ainda renova
+
+00:11:03.120 --> 00:11:04.080
+seu domínio pelo GoDaddy,
+
+00:11:04.160 --> 00:11:05.220
+NameShip ou quem quer que seja.
+
+00:11:05.800 --> 00:11:06.380
+Você ainda gerencia
+
+00:11:06.380 --> 00:11:06.940
+o registro lá.
+
+00:11:07.340 --> 00:11:07.840
+O Azure apenas
+
+00:11:07.840 --> 00:11:08.780
+hospeda os registros dele.
+
+00:11:09.100 --> 00:11:09.840
+As duas são separadas.
+
+00:11:10.220 --> 00:11:10.980
+Seu registrador lida
+
+00:11:10.980 --> 00:11:11.540
+com a parte de
+
+00:11:11.540 --> 00:11:12.460
+eu possuo este domínio.
+
+00:11:12.880 --> 00:11:13.860
+O Azure lida com a parte
+
+00:11:13.860 --> 00:11:15.080
+de aqui está o endereço IP
+
+00:11:15.080 --> 00:11:15.700
+para este domínio.
+
+00:11:16.280 --> 00:11:17.080
+Há uma armadilha comum
+
+00:11:17.080 --> 00:11:17.840
+aqui que pega as pessoas
+
+00:11:17.840 --> 00:11:18.280
+de surpresa.
+
+00:11:19.000 --> 00:11:19.740
+Quando você altera
+
+00:11:19.740 --> 00:11:20.620
+seus servidores de nomes
+
+00:11:20.620 --> 00:11:21.480
+para apontar para o Azure,
+
+00:11:21.580 --> 00:11:22.340
+os registros DNS
+
+00:11:22.340 --> 00:11:23.140
+no seu host antigo
+
+00:11:23.140 --> 00:11:23.860
+param de funcionar.
+
+00:11:24.420 --> 00:11:24.880
+Todos eles.
+
+00:11:24.880 --> 00:11:25.980
+Seus registros A,
+
+00:11:26.060 --> 00:11:26.620
+registros MX,
+
+00:11:26.820 --> 00:11:27.560
+registros TXT,
+
+00:11:28.060 --> 00:11:28.580
+eles aparecem
+
+00:11:28.580 --> 00:11:29.000
+porque a internet
+
+00:11:29.000 --> 00:11:29.880
+não está mais perguntando
+
+00:11:29.880 --> 00:11:30.540
+ao seu host antigo
+
+00:11:30.540 --> 00:11:31.160
+por respostas.
+
+00:11:31.880 --> 00:11:32.220
+Portanto,
+
+00:11:32.300 --> 00:11:32.920
+você precisa garantir
+
+00:11:32.920 --> 00:11:33.880
+que recriou cada registro
+
+00:11:33.880 --> 00:11:35.320
+no Azure antes de mudar a chave.
+
+00:11:35.880 --> 00:11:36.520
+Caso contrário,
+
+00:11:36.600 --> 00:11:37.420
+seu site sai do ar,
+
+00:11:37.520 --> 00:11:38.320
+seu e-mail pare de chegar,
+
+00:11:38.500 --> 00:11:39.100
+você terá que correr
+
+00:11:39.100 --> 00:11:39.860
+para descobrir o que perdeu.
+
+00:11:40.380 --> 00:11:41.340
+Planeje a migração com cuidado.
+
+00:11:41.940 --> 00:11:42.820
+Crie a zona no Azure
+
+00:11:42.820 --> 00:11:44.020
+e adicione todos os seus registros
+
+00:11:44.020 --> 00:11:45.280
+e então altere os servidores de nomes.
+
+00:11:45.660 --> 00:11:46.300
+Não o contrário.
+
+00:11:46.980 --> 00:11:47.960
+Delegação é a peça final
+
+00:11:47.960 --> 00:11:48.800
+para as zonas públicas.
+
+00:11:49.500 --> 00:11:50.140
+É o que conecta
+
+00:11:50.140 --> 00:11:51.400
+a sua zona DNS do Azure
+
+00:11:51.400 --> 00:11:52.700
+à infraestrutura global de DNS.
+
+00:11:52.700 --> 00:11:54.240
+Mas para as zonas privadas,
+
+00:11:54.280 --> 00:11:55.320
+a história é completamente diferente.
+
+00:11:55.880 --> 00:11:57.040
+Não há registrador envolvido
+
+00:11:57.040 --> 00:11:57.580
+em delegação.
+
+00:11:57.980 --> 00:11:58.420
+Em vez disso,
+
+00:11:58.480 --> 00:11:59.200
+você vincula a sua zona
+
+00:11:59.200 --> 00:12:00.280
+diretamente às redes virtuais
+
+00:12:00.280 --> 00:12:00.620
+que precisam.
+
+00:12:01.980 --> 00:12:02.960
+DNS privada em ação.
+
+00:12:03.580 --> 00:12:04.500
+Vinculando a redes virtuais.
+
+00:12:05.000 --> 00:12:05.100
+Então,
+
+00:12:05.180 --> 00:12:06.000
+como você realmente torna
+
+00:12:06.000 --> 00:12:07.160
+uma zona DNS privada útil?
+
+00:12:07.660 --> 00:12:08.640
+Pense nela como um container
+
+00:12:08.640 --> 00:12:09.300
+para registros,
+
+00:12:09.400 --> 00:12:10.300
+mas é inútil até que você
+
+00:12:10.300 --> 00:12:11.060
+a vincule a uma rede.
+
+00:12:11.520 --> 00:12:12.640
+Esse vínculo diz ao Azure
+
+00:12:12.640 --> 00:12:13.700
+quais redes têm permissão
+
+00:12:13.700 --> 00:12:14.540
+para resolver esses nomes.
+
+00:12:15.240 --> 00:12:15.900
+Sem esse vínculo,
+
+00:12:15.940 --> 00:12:16.600
+a zona existe,
+
+00:12:17.040 --> 00:12:18.080
+mas ninguém pode consultá-la.
+
+00:12:18.560 --> 00:12:19.600
+Como tem uma lista telefônica
+
+00:12:19.600 --> 00:12:20.840
+sem telefones para fazer chamadas,
+
+00:12:20.880 --> 00:12:21.760
+a configuração é direta.
+
+00:12:21.760 --> 00:12:22.900
+Você cria um vínculo
+
+00:12:22.900 --> 00:12:24.300
+de rede virtual da zona privada
+
+00:12:24.300 --> 00:12:24.960
+para cada vnete
+
+00:12:24.960 --> 00:12:25.700
+que precisa de resolução.
+
+00:12:26.420 --> 00:12:27.140
+Escolha a vnete,
+
+00:12:27.220 --> 00:12:28.340
+dê um nome ao vínculo e salve.
+
+00:12:28.800 --> 00:12:29.560
+Uma vez feito isso,
+
+00:12:29.620 --> 00:12:30.160
+a zona funciona
+
+00:12:30.160 --> 00:12:31.200
+para cada vnete e serviço
+
+00:12:31.200 --> 00:12:31.900
+dentro dessa rede
+
+00:12:31.900 --> 00:12:32.520
+sem a necessidade
+
+00:12:32.520 --> 00:12:33.980
+de servidores DNS personalizados
+
+00:12:33.980 --> 00:12:35.160
+ou edições de arquivos de host.
+
+00:12:35.500 --> 00:12:36.100
+Simplesmente funciona.
+
+00:12:36.420 --> 00:12:37.000
+Aqui está o ponto
+
+00:12:37.000 --> 00:12:37.920
+sobre o registro automático.
+
+00:12:38.340 --> 00:12:39.460
+Quando você cria um vínculo de vnete,
+
+00:12:39.520 --> 00:12:40.000
+você tem uma escolha.
+
+00:12:40.440 --> 00:12:42.000
+Designá-lo como uma vnete de registro
+
+00:12:42.000 --> 00:12:43.240
+ou deixá-lo apenas para a resolução.
+
+00:12:43.700 --> 00:12:44.720
+E essa diferença importa muito.
+
+00:12:45.120 --> 00:12:45.820
+O registro automático
+
+00:12:45.820 --> 00:12:46.720
+só funciona na vnete
+
+00:12:46.720 --> 00:12:47.500
+sem marcar para o registro.
+
+00:12:47.500 --> 00:12:49.060
+Qualquer VM iniciada nela
+
+00:12:49.060 --> 00:12:50.100
+recebe automaticamente
+
+00:12:50.100 --> 00:12:50.680
+um registro A
+
+00:12:50.680 --> 00:12:51.620
+criado na zona privada.
+
+00:12:52.240 --> 00:12:53.220
+Implante uma nova VM
+
+00:12:53.220 --> 00:12:53.760
+e em minutos
+
+00:12:53.760 --> 00:12:54.940
+um registro DNS aparece.
+
+00:12:55.600 --> 00:12:56.440
+Exclua essa VM
+
+00:12:56.440 --> 00:12:57.480
+e o registro desaparece.
+
+00:12:57.900 --> 00:12:58.660
+Sem trabalho manual.
+
+00:12:59.140 --> 00:12:59.900
+E quanto a outras vnetes
+
+00:12:59.900 --> 00:13:00.760
+vinculadas à mesma zona?
+
+00:13:01.260 --> 00:13:02.280
+Elas são apenas para a resolução.
+
+00:13:02.640 --> 00:13:03.640
+Elas podem pesquisar nomes
+
+00:13:03.640 --> 00:13:04.320
+e obter respostas,
+
+00:13:04.420 --> 00:13:05.340
+mas não fazem registro automático.
+
+00:13:05.540 --> 00:13:06.260
+Portanto, suas VMs
+
+00:13:06.260 --> 00:13:06.900
+não têm registros
+
+00:13:06.900 --> 00:13:07.840
+criados automaticamente.
+
+00:13:08.220 --> 00:13:08.960
+Isso é intencional,
+
+00:13:09.080 --> 00:13:10.200
+especialmente para uma zona privada
+
+00:13:10.200 --> 00:13:11.280
+compartilhada com o serviço central.
+
+00:13:11.680 --> 00:13:12.620
+Você não quer que cada VM
+
+00:13:12.620 --> 00:13:13.040
+em cada rede
+
+00:13:13.040 --> 00:13:14.900
+expor que crie registros automaticamente.
+
+00:13:14.900 --> 00:13:16.060
+Em vez disso,
+
+00:13:16.160 --> 00:13:17.260
+mantenha o registro na vnete
+
+00:13:17.260 --> 00:13:18.660
+onde seus servidores reais vivem
+
+00:13:18.660 --> 00:13:19.700
+e deixe todos os outros
+
+00:13:19.700 --> 00:13:20.440
+apenas resolverem.
+
+00:13:20.740 --> 00:13:21.660
+Deixe-me dar um cenário real.
+
+00:13:22.100 --> 00:13:22.880
+Imagine que você tem
+
+00:13:22.880 --> 00:13:23.640
+um aplicativo web
+
+00:13:23.640 --> 00:13:24.360
+em uma vnete
+
+00:13:24.360 --> 00:13:25.540
+e um servidor de banco de dados
+
+00:13:25.540 --> 00:13:25.940
+em outra,
+
+00:13:26.040 --> 00:13:27.400
+talvez até em regiões diferentes
+
+00:13:27.400 --> 00:13:28.340
+do Azure e tal.
+
+00:13:28.800 --> 00:13:29.460
+O aplicativo web
+
+00:13:29.460 --> 00:13:30.140
+precisa se conectar
+
+00:13:30.140 --> 00:13:30.760
+ao banco de dados,
+
+00:13:30.900 --> 00:13:31.700
+mas você não quer fixar
+
+00:13:31.700 --> 00:13:32.280
+o IP privado
+
+00:13:32.280 --> 00:13:33.160
+do banco de dados no código.
+
+00:13:33.540 --> 00:13:33.980
+Isso é frágil.
+
+00:13:34.400 --> 00:13:34.960
+Se o banco de dados
+
+00:13:34.960 --> 00:13:36.080
+for reimplantado com um novo IP,
+
+00:13:36.180 --> 00:13:36.740
+seu aplicativo web
+
+00:13:36.740 --> 00:13:37.260
+para ele funcionar.
+
+00:13:37.620 --> 00:13:38.400
+Portanto, em vez disso,
+
+00:13:38.520 --> 00:13:39.760
+crie uma zona DNS privada,
+
+00:13:39.860 --> 00:13:40.720
+adicione um registro A
+
+00:13:40.720 --> 00:13:41.600
+para o nome do banco de dados
+
+00:13:41.600 --> 00:13:42.800
+e vincule a zona ambas as vnetes.
+
+00:13:43.060 --> 00:13:44.060
+Agora, o aplicativo web
+
+00:13:44.060 --> 00:13:46.060
+resolve dp.internal.contoso.com
+
+00:13:46.060 --> 00:13:46.940
+para o IP do banco de dados.
+
+00:13:47.560 --> 00:13:48.280
+Quando esse IP muda,
+
+00:13:48.320 --> 00:13:49.480
+você atualiza um único registro
+
+00:13:49.480 --> 00:13:50.040
+em vez de procurar
+
+00:13:50.040 --> 00:13:50.680
+em vários arquivos
+
+00:13:50.680 --> 00:13:51.460
+de configuração.
+
+00:13:52.280 --> 00:13:53.140
+A vinculação entre regiões
+
+00:13:53.140 --> 00:13:54.160
+funciona bem com zonas privadas.
+
+00:13:54.600 --> 00:13:55.600
+Você pode ter uma vnete
+
+00:13:55.600 --> 00:13:56.360
+no leste do ZOA
+
+00:13:56.360 --> 00:13:57.360
+e outra no oeste da Europa,
+
+00:13:57.460 --> 00:13:58.100
+ambas vinculadas
+
+00:13:58.100 --> 00:13:59.160
+à mesma zona privada
+
+00:13:59.160 --> 00:14:00.140
+e a resolução de nomes
+
+00:14:00.140 --> 00:14:00.980
+ocorre entre regiões
+
+00:14:00.980 --> 00:14:02.520
+sem nenhuma configuração extra.
+
+00:14:03.260 --> 00:14:03.940
+O Azure cuida
+
+00:14:03.940 --> 00:14:05.040
+do roteamento nos bastidores,
+
+00:14:05.180 --> 00:14:05.940
+algo que você não obtém
+
+00:14:05.940 --> 00:14:07.380
+com servidores DNS tradicionais
+
+00:14:07.380 --> 00:14:07.900
+sem configurar
+
+00:14:07.900 --> 00:14:09.280
+regras complexas de encaminhamento.
+
+00:14:09.800 --> 00:14:10.440
+Então, delegação
+
+00:14:10.440 --> 00:14:11.220
+para zonas públicas,
+
+00:14:11.300 --> 00:14:11.840
+vínculos de vnete
+
+00:14:11.840 --> 00:14:12.600
+para zonas privadas,
+
+00:14:12.680 --> 00:14:13.560
+dois mecanismos diferentes
+
+00:14:13.560 --> 00:14:14.540
+para dois propósitos diferentes.
+
+00:14:15.220 --> 00:14:16.340
+Depois de configurar ambos,
+
+00:14:16.420 --> 00:14:17.080
+você tem a base,
+
+00:14:17.460 --> 00:14:18.380
+mas ainda resta a questão
+
+00:14:18.380 --> 00:14:19.200
+de manter tudo seguro
+
+00:14:19.200 --> 00:14:20.460
+e garantir que permaneça saudável.
+
+00:14:22.320 --> 00:14:23.400
+Segurança, monitoramento
+
+00:14:23.400 --> 00:14:24.180
+e melhores práticas.
+
+00:14:24.980 --> 00:14:25.600
+Agora, vamos falar
+
+00:14:25.600 --> 00:14:26.840
+sobre manter seu DNS seguro.
+
+00:14:27.340 --> 00:14:28.180
+O Azure e DNS
+
+00:14:28.180 --> 00:14:29.420
+integra-se ao Azure RBA
+
+00:14:29.420 --> 00:14:30.360
+para que você controle
+
+00:14:30.360 --> 00:14:31.420
+exatamente quem pode criar
+
+00:14:31.420 --> 00:14:32.500
+ou modificar registros.
+
+00:14:33.360 --> 00:14:34.080
+Você não quer que alguém
+
+00:14:34.080 --> 00:14:34.880
+exclua acidentalmente
+
+00:14:34.880 --> 00:14:35.460
+seu registro MX
+
+00:14:35.460 --> 00:14:36.140
+e derruba o e-mail
+
+00:14:36.140 --> 00:14:36.840
+de toda a empresa.
+
+00:14:36.840 --> 00:14:38.340
+Dê à sua equipe de DNS
+
+00:14:38.340 --> 00:14:39.160
+acesso ao colaborador
+
+00:14:39.160 --> 00:14:39.760
+e a todos os outros
+
+00:14:39.760 --> 00:14:40.540
+acessos somente leito.
+
+00:14:40.840 --> 00:14:41.360
+É simples isso.
+
+00:14:41.900 --> 00:14:42.700
+Você também pode usar
+
+00:14:42.700 --> 00:14:43.260
+o Azure Policy
+
+00:14:43.260 --> 00:14:44.060
+para aplicar regras
+
+00:14:44.060 --> 00:14:45.240
+em toda a sua organização.
+
+00:14:45.900 --> 00:14:46.480
+Talvez você queira
+
+00:14:46.480 --> 00:14:47.160
+aplicar convenções
+
+00:14:47.160 --> 00:14:47.760
+de nomenclatura
+
+00:14:47.760 --> 00:14:48.300
+para suas zonas
+
+00:14:48.300 --> 00:14:49.200
+ou talvez sua equipe de segurança
+
+00:14:49.200 --> 00:14:50.140
+diga que zonas públicas
+
+00:14:50.140 --> 00:14:50.740
+não são permitidas.
+
+00:14:51.080 --> 00:14:51.980
+Tudo deve ser privado.
+
+00:14:52.540 --> 00:14:53.280
+Escreva uma política,
+
+00:14:53.460 --> 00:14:53.960
+aplique no nível
+
+00:14:53.960 --> 00:14:54.840
+do grupo de gerenciamento
+
+00:14:54.840 --> 00:14:55.720
+e ela será aplicada
+
+00:14:55.720 --> 00:14:56.260
+em todos os lugares
+
+00:14:56.260 --> 00:14:56.840
+sem exceções.
+
+00:14:57.540 --> 00:14:58.280
+Há também inteligência
+
+00:14:58.280 --> 00:14:58.860
+contra ameaças
+
+00:14:58.860 --> 00:14:59.840
+em nível de DNS integrado.
+
+00:15:00.260 --> 00:15:00.920
+Parte do Microsoft
+
+00:15:00.920 --> 00:15:01.700
+defender para a nuvem
+
+00:15:01.700 --> 00:15:02.540
+pode bloquear a resolução
+
+00:15:02.540 --> 00:15:03.320
+de domínios maliciosos
+
+00:15:03.320 --> 00:15:03.660
+conhecidos.
+
+00:15:04.040 --> 00:15:05.500
+Se uma VM em sua rede
+
+00:15:05.500 --> 00:15:06.040
+tentar resolver
+
+00:15:06.040 --> 00:15:06.760
+um domínio marcado
+
+00:15:06.760 --> 00:15:07.720
+como site de phishing
+
+00:15:07.720 --> 00:15:08.540
+ou servidor de comando
+
+00:15:08.540 --> 00:15:09.360
+e controle de malware,
+
+00:15:09.500 --> 00:15:10.260
+o Azure DNS
+
+00:15:10.260 --> 00:15:11.500
+pode se recusar a responder.
+
+00:15:12.300 --> 00:15:13.100
+É uma camada de segurança
+
+00:15:13.100 --> 00:15:13.700
+que você obtém
+
+00:15:13.700 --> 00:15:14.580
+sem nenhuma configuração extra.
+
+00:15:15.080 --> 00:15:15.540
+O monitoramento
+
+00:15:15.540 --> 00:15:16.100
+também é direto.
+
+00:15:16.440 --> 00:15:17.120
+O Azure Monitor
+
+00:15:17.120 --> 00:15:18.400
+rastreia volume de consulta,
+
+00:15:18.460 --> 00:15:19.440
+latência e erros por zona.
+
+00:15:19.820 --> 00:15:20.940
+Você pode configurar alertas,
+
+00:15:21.000 --> 00:15:21.820
+então se o volume de consultas
+
+00:15:21.820 --> 00:15:22.420
+cai repentinamente,
+
+00:15:22.500 --> 00:15:23.100
+você saberá quebrar
+
+00:15:23.100 --> 00:15:23.540
+que está quebrado.
+
+00:15:23.540 --> 00:15:24.620
+Se a latência aumentar,
+
+00:15:24.700 --> 00:15:25.320
+há um problema de rede.
+
+00:15:25.700 --> 00:15:26.840
+Você obtém visibilidade
+
+00:15:26.840 --> 00:15:27.540
+como seu DNS
+
+00:15:27.540 --> 00:15:28.260
+está funcionando
+
+00:15:28.260 --> 00:15:28.800
+sem executar
+
+00:15:28.800 --> 00:15:29.720
+ferramentas de monitoramento
+
+00:15:29.720 --> 00:15:30.120
+separado.
+
+00:15:30.800 --> 00:15:31.460
+Uma melhor prática,
+
+00:15:31.640 --> 00:15:32.540
+use registros de alias
+
+00:15:32.540 --> 00:15:33.340
+em vez de registros
+
+00:15:33.340 --> 00:15:33.980
+A estáticos
+
+00:15:33.980 --> 00:15:35.060
+para recursos do Azure.
+
+00:15:35.520 --> 00:15:36.440
+Já cobrimos isso antes,
+
+00:15:36.540 --> 00:15:37.220
+mas vale a pena repetir.
+
+00:15:37.660 --> 00:15:38.320
+Registros de alias
+
+00:15:38.320 --> 00:15:39.540
+são atualizados automaticamente
+
+00:15:39.540 --> 00:15:40.100
+quando o recurso
+
+00:15:40.100 --> 00:15:41.040
+subjacente muda.
+
+00:15:41.420 --> 00:15:42.180
+Registros A estáticos
+
+00:15:42.180 --> 00:15:42.480
+não são.
+
+00:15:42.860 --> 00:15:43.900
+Se você estiver apontando
+
+00:15:43.900 --> 00:15:44.860
+para um balançador de carga,
+
+00:15:44.940 --> 00:15:45.780
+um endpoint CDN
+
+00:15:45.780 --> 00:15:46.880
+ou um perfil do Traffic Manager,
+
+00:15:47.040 --> 00:15:47.920
+use um registro de alias.
+
+00:15:48.400 --> 00:15:49.040
+É uma coisa a menos
+
+00:15:49.040 --> 00:15:49.440
+para lembrar
+
+00:15:49.440 --> 00:15:50.040
+quando algo mudar.
+
+00:15:50.780 --> 00:15:51.680
+Para ambientes híbridos
+
+00:15:51.680 --> 00:15:52.980
+com cargas de trabalho locais,
+
+00:15:53.080 --> 00:15:54.220
+no Excel existe um serviço
+
+00:15:54.220 --> 00:15:56.200
+chamado Azure DNS Private Resolver,
+
+00:15:56.540 --> 00:15:57.220
+um serviço gerencial.

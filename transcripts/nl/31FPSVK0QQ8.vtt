@@ -1,0 +1,952 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:04.280
+Hallo en welkom bij weer een aflevering van Microsoft Knowledge Nuggets hier op M365FM.
+
+00:00:04.440 --> 00:00:05.960
+Ik ben je gastheer Mirko Peters.
+
+00:00:06.200 --> 00:00:10.980
+Het onderwerp van vandaag is er een waar bijna iedereen die met supply chains werkt wel eens van heeft gehoord, maar dat weinigen echt begrijpen.
+
+00:00:11.180 --> 00:00:13.720
+Dynamics 365 Transportation Management.
+
+00:00:14.000 --> 00:00:14.780
+Dit is het probleem.
+
+00:00:14.940 --> 00:00:22.140
+Een klant plaatst een bestelling, voorraad ligt in het magazijn, een vervoerder heeft een ophaltijd nodig, de klant verwacht levering en later belandt een vrachtfactuur op iemands bureau.
+
+00:00:22.500 --> 00:00:26.980
+Jarenlang vonden die stappen plaats in losse spreadsheets, telefoontjes, tarievenlijsten en overdrachten tussen teams.
+
+00:00:27.180 --> 00:00:28.500
+Oh, en dat zorgt voor hiaten.
+
+00:00:28.500 --> 00:00:31.540
+Het magazijn bereidt goederen misschien voor voordat transport een plan heeft.
+
+00:00:31.700 --> 00:00:34.800
+Financiën ziet wellicht een factuur zonder te weten wat er is afgesproken om te betalen.
+
+00:00:35.000 --> 00:00:36.600
+Dus, wat is transportbeheer precies?
+
+00:00:36.780 --> 00:00:41.320
+In gewone mensentouw is het de transportafdeling binnen Dynamics 365 Supply Chain Management.
+
+00:00:41.560 --> 00:00:44.660
+Het verbindt magazijn deuren, leveranciers, klanten en vervoerders met elkaar.
+
+00:00:44.840 --> 00:00:48.520
+We plannen ladingen, kiezen routes en tarieven, verzenden goederen en controleren vrachtkosten.
+
+00:00:48.720 --> 00:00:53.560
+Aan het einde van deze aflevering zul je zien hoe al deze onderdelen samenkomen om je werk makkelijker te maken.
+
+00:00:55.960 --> 00:00:57.620
+Waarom transportbeheer bestaat
+
+00:00:57.620 --> 00:01:00.080
+Laten we beginnen met een basisfeit.
+
+00:01:00.280 --> 00:01:04.000
+Fysieke goederen verplaatsen zich niet zomaar omdat er een verkooporder op een scherm staat.
+
+00:01:04.220 --> 00:01:07.840
+Ze hebben een vrachtwagen, trailer, container of een andere manier van reizen nodig.
+
+00:01:08.040 --> 00:01:14.280
+Iemand moet weten waar de goederen starten, waar ze aan moeten komen, hoeveel ruimte ze innemen, wanneer ze moeten vertrekken en wat de rit moet kosten.
+
+00:01:14.500 --> 00:01:17.760
+Als je je voorstelt dat één doos naar één klant gaat, klinkt het simpel.
+
+00:01:17.760 --> 00:01:26.440
+Maar een echt bedrijf verstuurt misschien vele orders vanuit hetzelfde magazijn op dezelfde dag, ontvangt goederen van verschillende leveranciers en verplaatst tegelijkertijd voorraad tussen eigen locaties.
+
+00:01:26.640 --> 00:01:30.120
+Aan elke beweging zijn mensen, data, ruimte en geld verbonden.
+
+00:01:30.400 --> 00:01:33.540
+Zonder een gedeeld systeem ziet elk team alleen zijn eigen stukje.
+
+00:01:33.720 --> 00:01:35.060
+Verkoop ziet de klantorder.
+
+00:01:35.280 --> 00:01:36.800
+Inkoop ziet de leveranciersorder.
+
+00:01:37.480 --> 00:01:41.000
+Magazijnmedewerkers zien de artikelen die ze moeten pikken, verpakken, ontvangen of opbergen.
+
+00:01:41.140 --> 00:01:45.480
+Het transportteam ziet een lijst met goederen die vervoerd moeten worden, vaak nadat alle anderen hun deel al hebben gedaan.
+
+00:01:45.480 --> 00:01:47.580
+En dat is waar vertragingen en verwarring beginnen.
+
+00:01:47.760 --> 00:01:49.100
+Hier is een concreet voorbeeld.
+
+00:01:49.340 --> 00:01:52.540
+Stel je voor dat de magazijn tien klantorders klaar heeft staan voor dezelfde stad.
+
+00:01:52.720 --> 00:01:57.540
+Als niemand die orders koppelt voordat transport wordt geboekt, regelt het bedrijf misschien meerdere deels gevulde ritten...
+
+00:01:57.540 --> 00:02:00.680
+...of arriveert de vervoerder voordat het magazijn weet welke goederen op het voertuig horen.
+
+00:02:00.820 --> 00:02:03.300
+De goederen zijn klaar, maar de beweging is niet gepland.
+
+00:02:03.800 --> 00:02:08.340
+Transportbeheer geeft die beweging dus een plek binnen Dynamics 365 Supply Chain Management.
+
+00:02:08.640 --> 00:02:13.960
+Het is geen losse consumentenapp voor verzendingen waar je een trackingnummer invoert en ziet hoe een pakket over een kaart beweegt.
+
+00:02:13.960 --> 00:02:17.580
+In plaats daarvan werkt het met de bedrijfsgegevens die al in het verbonden platform staan.
+
+00:02:17.760 --> 00:02:20.100
+Een order creëert de behoefte om goederen te verplaatsen.
+
+00:02:20.260 --> 00:02:22.060
+Het magazijn bereidt de goederen voor.
+
+00:02:22.720 --> 00:02:25.300
+Transportbeheer plant hoe die goederen tussen locaties reizen.
+
+00:02:25.600 --> 00:02:27.840
+Zie het als de transportbalie in een kantoorpand.
+
+00:02:28.000 --> 00:02:30.440
+Het verkoopteam brengt een klantverzoek naar de balie.
+
+00:02:30.620 --> 00:02:33.260
+Inkoop brengt het nieuws dat een leverancier goederen zal opsturen.
+
+00:02:33.460 --> 00:02:36.220
+Het magazijn levert de daadwerkelijke voorraad en de laaddeuren.
+
+00:02:36.400 --> 00:02:39.660
+De transportbalie verbindt die verzoeken aan het transportplan van het bedrijf.
+
+00:02:39.660 --> 00:02:41.140
+Er zijn twee hoofdrichtingen.
+
+00:02:41.340 --> 00:02:44.000
+Inkomend transport betekent dat goederen je bedrijf binnenkomen.
+
+00:02:44.160 --> 00:02:47.740
+Je hebt artikelen besteld bij een leverancier en die artikelen moeten je magazijn bereiken.
+
+00:02:47.980 --> 00:02:50.920
+Soms regelt de leverancier die reis, soms regelt jouw bedrijf het.
+
+00:02:51.040 --> 00:02:55.600
+Hoe dan ook, je hebt een duidelijk plan nodig om de goederen op de juiste plek te krijgen en ze bij aankomst te ontvangen.
+
+00:02:55.820 --> 00:02:58.520
+Uitgaand transport betekent dat goederen je bedrijf verlaten.
+
+00:02:58.720 --> 00:03:00.280
+Een klant heeft producten besteld.
+
+00:03:00.520 --> 00:03:04.300
+Het magazijn maakt ze klaar en een vervoerder of eigen voertuig brengt ze naar de klant.
+
+00:03:04.540 --> 00:03:07.340
+Beide stromen draaien om beweging, maar het startpunt verschilt.
+
+00:03:07.340 --> 00:03:09.820
+Inkomend begint met een inkooporder en een leverancier.
+
+00:03:10.000 --> 00:03:12.120
+Uitgaand begint met een verkooporder en een klant.
+
+00:03:12.280 --> 00:03:15.480
+Er is ook een derde type dat beginners vaak missen, transferorders.
+
+00:03:15.740 --> 00:03:18.880
+Een transferorder verplaatst voorraad tussen je eigen bedrijfslocaties.
+
+00:03:19.100 --> 00:03:22.360
+Misschien heeft het ene magazijn te veel voorraad en het andere magazijn heeft het nodig.
+
+00:03:22.560 --> 00:03:26.200
+Er komt geen klantkoop aan te pas, maar de fysieke goederen moeten nog steeds worden vervoerd.
+
+00:03:26.380 --> 00:03:32.940
+In 365 Transportation Management horen transferorders bij het uitgaande scenario en kunnen ze samen met verkooporders worden geplant.
+
+00:03:33.120 --> 00:03:35.300
+Dat is logisch als je je het laadperron voorstelt.
+
+00:03:35.300 --> 00:03:39.320
+Of een pallet nu naar een betalende klant gaat of naar een ander magazijn van het bedrijf.
+
+00:03:39.520 --> 00:03:44.360
+Er moet nog steeds iemand het voertuig regelen, ruimte reserveren en het via dezelfde deur verzenden.
+
+00:03:44.640 --> 00:03:49.760
+Deze verbonden aanpak vervangt dus de oude keten van aparte lijsten en telefoontjes door gedeelde informatie.
+
+00:03:49.980 --> 00:03:52.240
+De order vertelt het systeem wat er verplaatst moet worden.
+
+00:03:52.440 --> 00:03:54.220
+Het magazijn bereidt de artikelen voor.
+
+00:03:54.800 --> 00:03:56.300
+Transportbeheer zet die behoefte om in een transportplan.
+
+00:03:57.100 --> 00:04:01.040
+Zodra goederen moeten worden verplaatst, heeft het systeem eerst een werkbaar verzendplan nodig.
+
+00:04:01.040 --> 00:04:07.620
+De lading plannen. De kennissnipper van vandaag gaat over iets wat elk logistiek team nodig heeft, maar vaak verschillend uitlegt.
+
+00:04:08.120 --> 00:04:09.020
+Een lading plannen.
+
+00:04:09.800 --> 00:04:12.760
+Je kunt transportplannen vanuit orders of vanuit zendingen.
+
+00:04:12.920 --> 00:04:13.040
+Ik ben...
+
+00:04:13.920 --> 00:04:16.240
+...en laat ik direct een fabeltje uit de wereld helpen.
+
+00:04:16.380 --> 00:04:18.140
+Een verzendplan begint niet vanaf nul.
+
+00:04:18.320 --> 00:04:19.920
+Het begint met gegevens die je al hebt.
+
+00:04:20.100 --> 00:04:22.120
+Een verkooporder bevat wat een klant heeft gekocht.
+
+00:04:22.280 --> 00:04:24.640
+Een inkooporder vermeld wat een leverancier moet opsturen.
+
+00:04:24.820 --> 00:04:29.240
+Een zending groepeert die artikelen in een gerichter verzend, record, klaar om met anderen te worden gecombineerd.
+
+00:04:29.240 --> 00:04:31.060
+Dus, welk startpunt moet u gebruiken?
+
+00:04:31.260 --> 00:04:32.880
+Dat hangt af van hoe uw bedrijf werkt.
+
+00:04:33.100 --> 00:04:35.760
+Sommige teams plannen vroeg en kijken direct naar orderregels.
+
+00:04:35.960 --> 00:04:39.180
+Andere teams maken eerst zendingen aan en beslissen daarna wat er samen meegaat.
+
+00:04:39.360 --> 00:04:40.980
+Beide paden leiden tot dezelfde vraag.
+
+00:04:41.220 --> 00:04:42.620
+Wat moet er op hetzelfde voertuig?
+
+00:04:42.780 --> 00:04:44.320
+Dit is de eenvoudigste definitie.
+
+00:04:44.480 --> 00:04:47.420
+Een lading is het digitale record voor een geplande verplaatsing van goederen.
+
+00:04:47.580 --> 00:04:52.520
+U kunt het zien als één vrachtwagen, één trailer, één container of één verzameling zendingen die samen reizen.
+
+00:04:52.720 --> 00:04:56.520
+Het geeft u één plek om te zien welke goederen bij elkaar horen voordat het fysieke werk begint.
+
+00:04:56.520 --> 00:04:58.680
+Nu, dit is iets wat veel mensen verkeerd begrijpen.
+
+00:04:58.680 --> 00:05:01.500
+Een lading betekent niet dat elk artikel in één fysieke doos past.
+
+00:05:01.680 --> 00:05:04.360
+Het betekent dat het systeem goederen groepeert rondom één transportplan.
+
+00:05:04.560 --> 00:05:06.820
+Verschillende klantenzendingen kunnen één vrachtwagen delen.
+
+00:05:06.920 --> 00:05:09.140
+Een grote order kan een hele trailer op zichzelf vullen.
+
+00:05:09.340 --> 00:05:13.800
+Een container die van een leverancier komt, kan ook een lading worden, zelfs voordat uw magazijn de goederen ontvangt.
+
+00:05:13.920 --> 00:05:16.760
+Het punt is om te stoppen met elke order als een eigen rit te behandelen.
+
+00:05:16.980 --> 00:05:20.280
+Stel u voor dat een distributeur zes klantorders klaar heeft voor levering op vrijdag.
+
+00:05:20.460 --> 00:05:23.860
+Alle zes staan in hetzelfde gebied en elke order vult slechts een deel van een vrachtwagen.
+
+00:05:23.860 --> 00:05:28.060
+Zes halflege voertuigen sturen verspildruimte en creëert zes afzonderlijke transporttaken.
+
+00:05:28.240 --> 00:05:31.180
+Het team kan in plaats daarvan compatibele zendingen groeperen tot één lading.
+
+00:05:31.480 --> 00:05:34.020
+Compatibel betekent dat ze redelijkerwijs samen kunnen reizen.
+
+00:05:34.240 --> 00:05:39.540
+Ze vertrekken vanuit hetzelfde magazijn, moeten rond dezelfde tijd weg, passen binnen de voertuiglimieten en volgen uw verzendregels.
+
+00:05:39.720 --> 00:05:44.240
+Het systeem helpt die records samen te brengen in plaats van te vertrouwen op iemand die het patroon in een spreadsheet ontdekt.
+
+00:05:44.400 --> 00:05:45.800
+Die groep heeft nu een gedeeld plan.
+
+00:05:45.980 --> 00:05:47.840
+Uw magazijn ziet wat er bij de lading hoort.
+
+00:05:47.840 --> 00:05:50.400
+De transportplanner ziet het totale volume en gewicht.
+
+00:05:50.560 --> 00:05:54.080
+Mensen hoeven niet steeds dezelfde lijst opnieuw op te bouwen in e-mails, notities of een apart bestand.
+
+00:05:54.220 --> 00:05:55.180
+Maar dit is het punt.
+
+00:05:55.700 --> 00:05:57.980
+Goederen groeperen draait niet alleen om meer artikelen bij elkaar zetten.
+
+00:05:58.140 --> 00:06:00.760
+Een vrachtwagen heeft limieten, gewicht, vloeroppervlak, hoogte.
+
+00:06:00.900 --> 00:06:02.520
+Een container heeft zijn eigen regels.
+
+00:06:02.720 --> 00:06:07.780
+Als het systeem goederen groepeert zonder die limieten te controleren, ziet de lading er op het scherm prima uit, maar faalt deze bij het laadperron.
+
+00:06:08.020 --> 00:06:11.320
+Dynamics 365 gebruikt laadjablonen om dat te helpen voorkomen.
+
+00:06:11.540 --> 00:06:15.400
+Zie een laadjablon als een herbruikbare set limieten voor een type voertuig of container.
+
+00:06:15.400 --> 00:06:20.140
+Maak er een voor een kleine bestelwagen, een andere voor een grotere trailer en weer een andere voor een verzendcontainer.
+
+00:06:20.260 --> 00:06:24.580
+Elk schabloon bevat limieten voor gewicht, volume, hoogte en andere regels die uw bedrijf nodig heeft.
+
+00:06:24.780 --> 00:06:27.580
+Het schabloon geeft de lading vorm voordat u deze begint te vullen.
+
+00:06:27.780 --> 00:06:32.320
+Dus als een zending te zwaar is of teveel ruimte inneemt, ziet de planner dat deze niet in die lading thuis hoort.
+
+00:06:32.500 --> 00:06:36.900
+De oplossing kan een tweede voertuig zijn, een ander schabloon of een andere groepering van zendingen.
+
+00:06:37.040 --> 00:06:41.720
+De software tilt geen pallets, maar geeft uw team wel een duidelijker plan voordat het fysieke werk begint.
+
+00:06:41.720 --> 00:06:44.720
+Een ingebouwde benadering heet volume-gestuurde lading-opbouw.
+
+00:06:45.400 --> 00:06:47.460
+Dat klinkt technischer dan nodig is.
+
+00:06:47.640 --> 00:06:53.200
+Het betekent dat het systeem de maximale hoogte en het gewicht uit uw laadschabloon gebruikt bij het opbouwen of voorstellen van een lading.
+
+00:06:53.420 --> 00:06:56.760
+Eenvoudig gezegd, het controleert of de goederen binnen de door u ingestelde limieten vallen.
+
+00:06:56.940 --> 00:06:58.280
+Die waarden staan niet voor altijd vast.
+
+00:06:58.460 --> 00:07:01.120
+Een planner kan ze overschrijven wanneer de behoeften in de praktijk veranderen.
+
+00:07:01.280 --> 00:07:03.000
+Misschien stuurt een vervoerder een andere trailer.
+
+00:07:03.260 --> 00:07:04.840
+Misschien staat een rit een andere hoogte toe.
+
+00:07:04.980 --> 00:07:09.460
+Het schabloon levert de normale regel en de overschrijving handelt de uitzondering af zonder alles opnieuw op te bouwen.
+
+00:07:09.460 --> 00:07:11.460
+Laten we terugkeren naar die zes klantorders.
+
+00:07:11.680 --> 00:07:14.520
+Elke order kan afzonderlijk 15% van een vrachtwagen in beslag nemen.
+
+00:07:14.680 --> 00:07:17.720
+Als ze apart worden geplant, zou u zes grotendeels lege voertuigen kunnen sturen.
+
+00:07:17.900 --> 00:07:21.780
+Gegroepeerd in één lading kunnen dezelfde orders het grootste deel van één vrachtwagen vullen, met ruimte over voor meer.
+
+00:07:21.960 --> 00:07:23.440
+Dat is een beter gebruik van de ruimte.
+
+00:07:23.680 --> 00:07:25.460
+Hetzelfde idee werkt nu in beide richtingen.
+
+00:07:25.680 --> 00:07:28.740
+Maak voor inkomende planning een lading rond artikelen die van een leverancier komen.
+
+00:07:28.920 --> 00:07:33.680
+Het transportplan koppelt aan de verwachte ontvangst, zodat het magazijn weet wat er komt en zich voorbereidt op aankomst.
+
+00:07:33.680 --> 00:07:38.600
+In plaats van pas van een levering te horen wanneer deze bij de poort verschijnt, heeft het ontvangsteam een gepland dossier.
+
+00:07:38.940 --> 00:07:43.100
+Selecteer voor uitgaande planning magazijn artikelen die naar klanten moeten en groepeer ze in een lading.
+
+00:07:43.280 --> 00:07:47.580
+Het magazijn bereidt die goederen voor op basis van de ladingsdetails, niet op basis van een losstaande lijst.
+
+00:07:47.720 --> 00:07:52.540
+Een volledige lading heeft nog steeds een manier van transport nodig, een bedrijf om het te verplaatsen en een verwachte prijs.
+
+00:07:52.960 --> 00:07:54.780
+Routes, vervoerders en tarieven
+
+00:07:54.780 --> 00:07:58.080
+De lading vertelt u nu wat er samen moet reizen.
+
+00:07:58.400 --> 00:08:02.500
+Vervolgens moet u beslissen wie het verplaatst, welke service ze gebruiken en wat die rit moet kosten.
+
+00:08:02.500 --> 00:08:05.360
+Het bedrijf dat uw goederen verplaatst, wordt de vervoerder genoemd.
+
+00:08:05.480 --> 00:08:08.540
+Dit kan een extern transportbedrijf zijn dat uw vracht ophaalt en aflevert.
+
+00:08:08.740 --> 00:08:12.080
+Het kan ook uw eigen wagenpark zijn als u met eigen vrachtwagens en chauffeurs werkt.
+
+00:08:12.220 --> 00:08:15.060
+Hoe dan ook, de vervoerder is verantwoordelijk voor de fysieke reis.
+
+00:08:15.280 --> 00:08:19.380
+Dat onderscheid is belangrijk omdat u nog steeds een plan nodig heeft, zelfs als de vrachtwagen van u is.
+
+00:08:19.580 --> 00:08:22.480
+Bij een externe vervoerder spreekt u vooraf prijzen en diensten af.
+
+00:08:22.640 --> 00:08:27.860
+Bij uw eigen wagenpark wilt u wellicht nog steeds de transportkosten berekenen, vooral als leveringskosten op klantorders verschijnen.
+
+00:08:28.080 --> 00:08:31.800
+Dynamics 365 Transportation Management ondersteunt beide situaties.
+
+00:08:31.800 --> 00:08:32.820
+Dan is er nog de route.
+
+00:08:33.080 --> 00:08:36.780
+Een route is het geplande traject van afhaling tot bestemming, inclusief de gekozen dienst.
+
+00:08:36.940 --> 00:08:38.440
+Het beantwoordt praktische vragen.
+
+00:08:38.660 --> 00:08:40.900
+Bij welk magazijn haalt de vervoerder de goederen op?
+
+00:08:41.000 --> 00:08:43.000
+Welke klant of locatie ontvangt de goederen?
+
+00:08:43.180 --> 00:08:44.880
+Welke vervoersdienst verzorgt de reis?
+
+00:08:45.060 --> 00:08:48.520
+Stel je een levering voor vanuit je hoofdmagazijn naar een klant aan de andere kant van het land.
+
+00:08:48.700 --> 00:08:51.840
+Een route gebruikt wellicht standaard wegvervoer dat minder kost maar langer duurt.
+
+00:08:52.020 --> 00:08:54.700
+Een andere route gebruikt wellicht een snellere, duurdere dienst.
+
+00:08:54.900 --> 00:08:57.680
+Hetzelfde begin- en eindpunt, maar met een andere transportkeuze.
+
+00:08:57.840 --> 00:08:59.740
+Een tarief is de verwachte kostprijs voor die keuze.
+
+00:08:59.740 --> 00:09:02.520
+Het is geen willekeurig getal dat op het laatste moment wordt ingevoerd.
+
+00:09:02.640 --> 00:09:06.440
+Tarieven komen voort uit prijsafspraken met vervoerders in combinatie met zendings- of routegegevens.
+
+00:09:06.660 --> 00:09:07.440
+Waar beginnen de goederen?
+
+00:09:07.640 --> 00:09:08.180
+Waar gaan ze heen?
+
+00:09:08.300 --> 00:09:09.200
+Welke dienst wordt gebruikt?
+
+00:09:09.360 --> 00:09:10.480
+De getransporteerde hoeveelheid.
+
+00:09:10.680 --> 00:09:14.460
+Dus, een route vertelt je hoe goederen verplaatst moeten worden, een tarief vertelt je wat je verwacht te betalen.
+
+00:09:14.640 --> 00:09:20.420
+Die twee ideeën horen bij elkaar omdat een goedkope route je leverbelofte kan schenden, terwijl snelheid meer kan kosten dan de order rechtvaardigt.
+
+00:09:20.980 --> 00:09:22.820
+Transportplanning is niet alleen een vrachtwagen vinden.
+
+00:09:23.140 --> 00:09:26.700
+Het is een dienst kiezen die past bij je klantbelofte en de kostenregels van het bedrijf.
+
+00:09:26.700 --> 00:09:30.200
+Dynamics 365 bevat de werkbank voor tarieven en routes.
+
+00:09:30.520 --> 00:09:32.900
+De naam klinkt formeel, maar het doel is eenvoudig.
+
+00:09:33.040 --> 00:09:37.160
+Het geeft planners een plek om route- en tariefopties voor een zending naast elkaar te vergelijken.
+
+00:09:37.340 --> 00:09:43.580
+In plaats van de ene vervoerderstabel na de andere te controleren en in een apart bestand te vergelijken, bekijk je de opties verbonden aan die verzendbehoefte.
+
+00:09:43.740 --> 00:09:47.140
+Misschien bereikt de ene optie de klant eerder, misschien kost de andere minder.
+
+00:09:47.140 --> 00:09:52.480
+Het systeem weet niet of elke klant snelheid meer waardeert dan kosten, omdat bedrijven verschillend werken.
+
+00:09:52.640 --> 00:09:56.440
+Een klant heeft misschien betaald voor spoedlevering, dus de snellere route is logisch.
+
+00:09:56.660 --> 00:10:00.080
+Een ander accepteert een langere levertijd en de lagere prijs past beter.
+
+00:10:00.340 --> 00:10:01.880
+Mensen nemen nog steeds de beslissing.
+
+00:10:02.240 --> 00:10:07.560
+Transportbeheer biedt je overeengekomen keuzes en verwachte kosten, terwijl jouw bedrijf bepaalt welke afweging werkt.
+
+00:10:07.780 --> 00:10:09.920
+Dit is wat de ingebouwde module daadwerkelijk doet.
+
+00:10:10.380 --> 00:10:14.200
+Tariefinformatie komt uit tarieftabellen die je bedrijf invoert en onderhoudt in Dynamics 365.
+
+00:10:14.500 --> 00:10:18.840
+Zie deze tabellen als opgeslagen gegevens van overeengekomen vervoerderstarieven en route-regels.
+
+00:10:18.980 --> 00:10:23.800
+Als je een prijs hebt onderhandeld voor een bepaalde dienst en route, staat die informatie in het systeem ter ondersteuning van de planning.
+
+00:10:23.800 --> 00:10:26.440
+Dat werkt goed wanneer je tarieven bekende afspraken volgen.
+
+00:10:26.640 --> 00:10:31.540
+Werk bijvoorbeeld met een paar vaste vervoerders, bedien bekende routes en update prijzen wanneer contracten wijzigen.
+
+00:10:31.720 --> 00:10:35.660
+De transportplanner gebruikt reeds vastgelegde tarieven in plaats van te zoeken in oude e-mails.
+
+00:10:35.900 --> 00:10:37.780
+Maar hier is iets wat velen verkeerd begrijpen.
+
+00:10:37.960 --> 00:10:41.840
+De ingebouwde module gedraagt zich niet als een live winkel website die verbonden is met elke vervoerder.
+
+00:10:42.000 --> 00:10:46.620
+Het haalt niet automatisch actuele prijzen op uit live feeds om deze in realtime over een breed netwerk te vergelijken.
+
+00:10:46.620 --> 00:10:52.740
+Als uw bedrijf behoefte heeft aan tarievergelijking tussen vervoerders, live bookingslinks of gedetailleerde status-updates van zendingen, koppelt u meestal een extern systeem.
+
+00:10:52.920 --> 00:10:54.960
+Dat is geen tekortkoming van transportmanagement.
+
+00:10:55.180 --> 00:10:56.800
+Het definieert zijn taak duidelijk.
+
+00:10:57.040 --> 00:11:04.320
+Deze tools verzorgen de gestructureerde transportplanning binnen supply chain management, gebruikmakend van de vervoerders, route- en tariefgegevens die uw bedrijf bijhoudt.
+
+00:11:04.340 --> 00:11:06.620
+En het is ook geen website voor het volgen van consumentenpakketten.
+
+00:11:07.360 --> 00:11:12.540
+U gebruikt het niet als een kaart waarop u één trackingnummer invoert en een voertuig pictogram over een weg ziet bewegen.
+
+00:11:12.540 --> 00:11:16.580
+Deze module richt zich op zakelijke transportbeslissingen voor en rondom de zending.
+
+00:11:16.840 --> 00:11:21.660
+Welke goederen gaan samen, welke vervoerder regelt het, welke route is van toepassing, wat de rit moet kosten.
+
+00:11:21.940 --> 00:11:26.100
+Zodra uw bedrijf dat plan kiest, moeten de magazijn- en transportteams het uitvoeren.
+
+00:11:26.320 --> 00:11:31.720
+Van magazijndeur tot klantdeur, een transportplan helpt alleen als mensen het daadwerkelijk kunnen omzetten in een echte zending.
+
+00:11:32.000 --> 00:11:35.440
+Bij een uitgaande order begint het proces meestal wanneer een klant iets koopt.
+
+00:11:35.640 --> 00:11:39.700
+De verkooporder vertelt het bedrijf wat de klant wil, waar het naartoe moet en wanneer het moet aankomen.
+
+00:11:39.700 --> 00:11:44.340
+Die order wordt een zending en de zending wordt onderdeel van een geplande lading met andere goederen op dezelfde rit.
+
+00:11:44.540 --> 00:11:45.920
+Dan neemt het magazijn het over.
+
+00:11:46.320 --> 00:11:50.020
+Medewerkers pakken de artikelen uit de opslag, verpakken ze en brengen ze naar de juiste laadzone.
+
+00:11:50.200 --> 00:11:55.080
+Omdat de zending bij een lading hoort, ziet het team welke goederen samen moeten vertrekken en welke vervoerder ze ophaalt.
+
+00:11:55.300 --> 00:12:00.000
+Wanneer het voertuig arriveert, gaan de goederen van het magazijn naar de vervoerder en brengt de vervoerder ze naar de klant.
+
+00:12:00.160 --> 00:12:02.440
+Elke stap is gekoppeld aan hetzelfde verplaatsingsrecord.
+
+00:12:02.680 --> 00:12:04.780
+Dat klinkt alledaags, maar stel u de oude werkwijze voor.
+
+00:12:04.920 --> 00:12:07.120
+Een orderverzamelaar werkte misschien met een geprinte order.
+
+00:12:07.120 --> 00:12:13.360
+Een transportplanner had wellicht een aparte lijst en iemand bij de laaddeur zocht in e-mails om te controleren welke vervoerder welke pallets moest meenemen.
+
+00:12:13.520 --> 00:12:16.660
+Als er één detail veranderde, had iedereen de bijgewerkte versie nodig.
+
+00:12:16.900 --> 00:12:19.880
+Met transportmanagement biedt de lading de teams een gedeeld overzicht.
+
+00:12:20.040 --> 00:12:28.060
+Het magazijn ziet de items verbonden aan de lading, de transportplanner ziet de zending details en de persoon die het ophalen regelt, ziet de geplande vervoerder en dienst.
+
+00:12:28.240 --> 00:12:33.960
+In plaats van verschillende papieren lijsten door te geven, werken mensen met informatie die gekoppeld is aan dezelfde order en zending.
+
+00:12:33.960 --> 00:12:39.180
+Hier is een simpel voorbeeld. Een magazijn heeft orders voor verschillende klanten in hetzelfde bezorggebied.
+
+00:12:39.340 --> 00:12:45.020
+Eén klant bestelde dozen met schoonmaakartikelen, een ander bestelde papierproducten en een derde bestelde een kleine partijapparatuur.
+
+00:12:45.220 --> 00:12:49.580
+Elke order moet worden verzameld en verpakt, maar het transportteam hoeft ze niet als volledig aparte ritten te behandelen.
+
+00:12:49.780 --> 00:12:51.880
+Zij wijzen de zendingen toe aan één geplande lading.
+
+00:12:52.580 --> 00:12:56.380
+Magazijnmedewerkers pikken elke order, pakken deze correct in en bereiden alles voor in de laadruimte.
+
+00:12:56.380 --> 00:12:59.240
+Het laat record geeft aan dat al die zendingen samen reizen.
+
+00:12:59.480 --> 00:13:06.340
+Wanneer de vervoerder arriveert, overhandigt het team de goederen voor één geplande beweging in plaats van op het laatste moment losse pallets aan een chauffeur te koppelen.
+
+00:13:06.520 --> 00:13:08.460
+De klant ontvangt nog steeds zijn eigen order.
+
+00:13:08.700 --> 00:13:12.740
+Achter de schermen heeft het bedrijf die levering echter geplant als onderdeel van een grotere beweging.
+
+00:13:12.960 --> 00:13:19.160
+Die koppeling helpt het magazijn om samen te werken met het transportteam, in plaats van vooruit te werken of te wachten op instructies die te laat komen.
+
+00:13:19.380 --> 00:13:23.320
+Inkomend transport volgt hetzelfde verbonden principe, alleen in de andere richting.
+
+00:13:23.320 --> 00:13:26.740
+Een inkooporder geeft aan dat uw bedrijf goederen verwacht van een leverancier.
+
+00:13:26.940 --> 00:13:33.280
+Wanneer uw bedrijf het transport regelt, verbindt een geplande inkomende lading de inkomende artikelen met de rit voordat de goederen het magazijn bereiken.
+
+00:13:33.460 --> 00:13:37.720
+De leverancier verzendt de zending, de vervoerder brengt deze naar uw locatie en het magazijn ontvangt deze.
+
+00:13:37.900 --> 00:13:40.900
+Ontvangend personeel kan zich voorbereiden omdat ze weten wat er moet aankomen.
+
+00:13:41.100 --> 00:13:48.960
+Ze kunnen de geplande lading vergelijken met de goederen die bij het laadperron verschijnen, veel duidelijker dan wanneer een vrachtwagen zonder waarschuwing opduikt en iemand moet uitzoeken bij welke inkooporder de pallets horen.
+
+00:13:49.400 --> 00:13:51.040
+Transferorders passen ook in dit proces.
+
+00:13:51.040 --> 00:13:54.940
+De ene bedrijfslocatie verzendt voorraad terwijl een andere bedrijfslocatie deze ontvangt.
+
+00:13:55.020 --> 00:14:00.820
+Het eerste magazijn bereidt de artikelen voor en verzendt ze en het tweede magazijn verwacht dezelfde artikelen en ontvangt ze in zijn voorraad.
+
+00:14:00.960 --> 00:14:06.340
+Er is geen externe klant aan het einde van die rit, maar het bedrijf heeft nog steeds een duidelijke overdracht nodig tussen de twee locaties.
+
+00:14:06.540 --> 00:14:10.160
+De lading verbindt het verzend- en ontvangstwerk rondom één geplande beweging.
+
+00:14:10.760 --> 00:14:13.040
+Leveringskeuzes van klanten blijven ook verbonden met de verzendbeslissing.
+
+00:14:13.840 --> 00:14:19.200
+Als een planner een snellere vervoersdienst kiest omdat een klant goederen snel nodig heeft, wordt die keuze gekoppeld aan de zending.
+
+00:14:19.200 --> 00:14:23.980
+Als het bedrijf een goedkopere dienst gebruikt omdat de leverdatum dat toelaat, wordt die keuze ook gekoppeld.
+
+00:14:24.160 --> 00:14:28.100
+Men kan de leveringskosten herleiden naar de gekozen route en vervoerder die deze hebben veroorzaakt.
+
+00:14:28.260 --> 00:14:32.700
+Het voertuig mag dan het laadperron verlaten en de goederen veilig aankomen, maar het werk is nog niet klaar.
+
+00:14:32.840 --> 00:14:36.360
+De vervoerder stuurt achteraf een vrachtfactuur en iemand moet deze controleren.
+
+00:14:37.160 --> 00:14:38.360
+Vrachtkosten en afstemming.
+
+00:14:38.540 --> 00:14:42.120
+De goederen hebben het magazijn verlaten en de levering is mogelijk zelfs voltooid.
+
+00:14:42.120 --> 00:14:44.320
+Vervolgens komt de factuur van de vervoerder aan.
+
+00:14:44.320 --> 00:14:54.360
+Die factuur moet worden gecontroleerd omdat het bedrag op de rekening moet aansluiten bij de transportkeuze die het bedrijf eerder heeft geplant, inclusief vervoerder, route, service, laat details en verwachte vrachtkosten.
+
+00:14:54.580 --> 00:15:00.420
+Tijdens de planning kan Dynamics 365 verwachte transportkosten berekenen op basis van de tariefinformatie van het bedrijf.
+
+00:15:00.580 --> 00:15:04.480
+Dat verwachte bedrag geeft het bedrijf een startpunt voordat de vervoerder om betaling vraagt.
+
+00:15:04.720 --> 00:15:06.780
+Later stuurt de vervoerder zijn vrachtfactuur.
+
+00:15:06.780 --> 00:15:11.980
+Vrachtafstemming betekent dat deze factuur wordt vergeleken met het tarief en de verzendgegevens die al in het systeem staan.
+
+00:15:12.180 --> 00:15:17.360
+In gewone taal controleert het bedrijf of de vervoerder heeft gerekend wat het bedrijf verwachtte voor de dienst die de goederen daadwerkelijk heeft verplaatst.
+
+00:15:17.540 --> 00:15:20.100
+Stel je voor dat de planning een bedrag van 500 dollar aangaf.
+
+00:15:20.260 --> 00:15:23.940
+De factuur van de vervoerder toont ook 500 dollar en de verzendgegevens komen overeen.
+
+00:15:24.100 --> 00:15:28.680
+Die factuur heeft een vrije doorgang door het controleproces omdat het geplandere koor en de factuur met elkaar overeenstemmen.
+
+00:15:28.780 --> 00:15:30.800
+Maar facturen komen niet altijd overeen met de planning.
+
+00:15:30.920 --> 00:15:34.780
+Misschien was de tarieventabel onjuist, misschien heeft de vervoerder een andere dienst gefactureerd,
+
+00:15:34.780 --> 00:15:38.000
+of misschien is de lading na de planning veranderd en moet een toeslag worden uitgelegd.
+
+00:15:38.120 --> 00:15:41.160
+Zonder een gekoppeld record ziet financiën misschien alleen een factuurnummer en een bedrag,
+
+00:15:41.340 --> 00:15:44.780
+waarna ze tijd moeten besteden aan vragen aan het magazijn en het transportteam wat er is gebeurd.
+
+00:15:45.340 --> 00:15:48.020
+Transportmanagement houdt de transportbeslissing gekoppeld aan die controle.
+
+00:15:48.320 --> 00:15:52.540
+Regels kunnen de factuur van de vervoerder vergelijken met het verwachte bedrag en de geplande verzendinformatie.
+
+00:15:52.780 --> 00:15:56.760
+Wanneer de details binnen de geaccepteerde regels van het bedrijf vallen, kan de factuur worden verwerkt.
+
+00:15:56.960 --> 00:16:00.800
+Wanneer de details niet overeenkomen, stuurt het systeem het verschil door zodat iemand het kan beoordelen.
+
+00:16:00.800 --> 00:16:03.940
+Dat betekent dat mensen niet blindelings elke vrachtkosten goedkeuren.
+
+00:16:03.940 --> 00:16:07.540
+Een transportplanner moet wellicht bevestigen dat de vervoerder een andere dienst heeft gebruikt,
+
+00:16:07.660 --> 00:16:11.160
+of iemand van financiën moet wellicht vragen waarom er een extra toeslag op de factuur staat.
+
+00:16:11.340 --> 00:16:14.140
+Het punt is niet om aan te nemen dat elke discrepantie fout is, toch.
+
+00:16:14.300 --> 00:16:16.660
+Het punt is om de discrepantie op te merken voor de betaling.
+
+00:16:16.900 --> 00:16:19.420
+Dit brengt operaties en financiën samen rond dezelfde zending.
+
+00:16:19.640 --> 00:16:21.800
+Het transportteam kiest een vervoerder en een dienst.
+
+00:16:22.000 --> 00:16:23.900
+Die keuze creëert een verwachte kostenpost.
+
+00:16:24.100 --> 00:16:29.260
+Het magazijn verstuurt de goederen en financiën controleert de latere factuur aan de hand van het dossier van wat het bedrijf had geplant.
+
+00:16:29.260 --> 00:16:32.440
+Elk team ziet een ander deel, maar ze kijken naar gekoppelde informatie.
+
+00:16:32.440 --> 00:16:35.300
+Het ingebouwde proces heeft echter een duidelijke rijkwijte.
+
+00:16:35.460 --> 00:16:41.300
+Bedrijven die grootschalige, sterk geautomatiseerde vrachtadders nodig hebben, voegen vaak een extern transportmanagementsysteem toe.
+
+00:16:41.480 --> 00:16:45.580
+Die tools kunnen diepere vervoerdersverbindingen en meer geautomatiseerde controleregels bieden.
+
+00:16:45.720 --> 00:16:50.260
+De ingebouwde module handelt de geplande kosten en afstemming af binnen supply chain management,
+
+00:16:50.520 --> 00:16:54.000
+terwijl een ander systeem dat werk kan uitbreiden wanneer het bedrijf meer nodig heeft.
+
+00:16:54.000 --> 00:16:59.880
+Als je al deze bouwstenen samenvoegt, begint het volledige beeld te verschijnen waar het past en wat het niet doet.
+
+00:17:00.140 --> 00:17:02.400
+Dus, waar bevindt transportmanagement zich eigenlijk?
+
+00:17:02.600 --> 00:17:07.200
+Het hoort thuis in Dynamics 365 supply chain management dat op de finance en operations apps draait.
+
+00:17:07.440 --> 00:17:08.740
+Dat is de plek waar het thuis hoort.
+
+00:17:08.940 --> 00:17:10.060
+Dit is voor wie het geschikt is.
+
+00:17:10.240 --> 00:17:13.080
+Bedrijven die een gestructureerde manier nodig hebben om inkomende leveringen,
+
+00:17:13.320 --> 00:17:16.280
+uitgaande klantenzendingen en voorraadverplaatsingen tussen bedrijfslocaties te plannen,
+
+00:17:16.440 --> 00:17:19.380
+met gebruik van hun eigen vervoerdersgegevens, tarieventabellen en laadregels.
+
+00:17:19.580 --> 00:17:22.060
+Laten we nu een veel voorkomend punt van verwarring ophelderen.
+
+00:17:22.060 --> 00:17:23.480
+Business Central is anders.
+
+00:17:23.780 --> 00:17:26.840
+Business Central bevat deze ingebouwde module voor transportbeheer niet.
+
+00:17:27.000 --> 00:17:29.580
+Als u met Business Central werkt en transportplanning nodig hebt,
+
+00:17:29.800 --> 00:17:31.640
+kijkt u naar een transportbeheersysteem van derden.
+
+00:17:31.860 --> 00:17:32.740
+Dat is de grens.
+
+00:17:32.960 --> 00:17:35.180
+Laten we de grens aan de andere kant ook duidelijk houden.
+
+00:17:35.360 --> 00:17:39.920
+De ingebouwde module vervangt niet elk vervoerdersportaal, live verkeersdienst of geavanceerde tracking tool.
+
+00:17:40.180 --> 00:17:41.980
+Wanneer een bedrijf live tarieven van veel vervoerders,
+
+00:17:42.140 --> 00:17:45.920
+meer keuze uit vervoerders of uitgebreidere tracking nodig heeft nadat goederen het laadperron hebben verlaten,
+
+00:17:46.080 --> 00:17:47.360
+wordt een TMS van derden gekoppeld.
+
+00:17:47.540 --> 00:17:49.580
+Die tools handelen de externe activiteiten af.
+
+00:17:49.580 --> 00:17:51.300
+Denk terug aan het kantoorgebouw.
+
+00:17:51.300 --> 00:17:53.860
+Transportbeheer is de transportbalie binnen dat gebouw.
+
+00:17:53.980 --> 00:17:56.920
+Het is verbonden met orders, magazijnwerkzaamheden en financiën.
+
+00:17:57.040 --> 00:17:59.520
+Het houdt het eigen transportplan van het bedrijf bij elkaar.
+
+00:17:59.740 --> 00:18:02.780
+Externe vervoerdersstoels kunnen activiteiten buiten die balie afhandelen.
+
+00:18:02.980 --> 00:18:04.880
+Twee verschillende lagen die samenwerken.
+
+00:18:06.000 --> 00:18:06.480
+Conclusie
+
+00:18:06.480 --> 00:18:08.000
+Volgende kennisfragment
+
+00:18:08.000 --> 00:18:10.480
+Dit is de eenvoudigste manier om erover na te denken.
+
+00:18:10.860 --> 00:18:13.640
+Transportbeheer zet bedrijfsorders om in een geplande goederenbeweging.
+
+00:18:13.860 --> 00:18:17.400
+Vervolgens koppelt het die beweging aan de vrachtkosten die het bedrijf achteraf controleert.
+
+00:18:17.400 --> 00:18:18.940
+Dat is de volledige cirkel.
+
+00:18:18.940 --> 00:18:21.320
+Abonneer u op uw favoriete podcastplatform.
+
+00:18:21.560 --> 00:18:25.920
+Deel dit kennisfragment met iemand die Dynamics 365 Supply Chain Management leert.
+
+00:18:26.140 --> 00:18:28.900
+Bekijk daarna onze afleveringen over magazijn en voorraad.
+
+00:18:29.040 --> 00:18:32.060
+Elke lading is nog steeds afhankelijk van de voorraad die achter de magazijndeur ligt.

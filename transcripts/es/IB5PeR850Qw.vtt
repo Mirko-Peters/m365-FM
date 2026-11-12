@@ -1,0 +1,763 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:03.320
+En realidad, la mayoría de la gente piensa que la identidad es solo un nombre de usuario y una contraseña.
+
+00:00:03.500 --> 00:00:05.000
+Los escribes, obtienes acceso y listo.
+
+00:00:05.460 --> 00:00:08.520
+Pero cuando eres una empresa que atiende clientes, la identidad se vuelve mucho más compleja.
+
+00:00:09.320 --> 00:00:12.460
+¿Qué pasa cuando tu aplicación necesita permitir que miles de personas se registren
+
+00:00:12.460 --> 00:00:15.320
+o inicien sesión con su cuenta de Google en lugar de crear otra contraseña?
+
+00:00:15.840 --> 00:00:20.020
+¿Y cómo mantienes seguros todos esos datos de clientes sin mezclarlos con tu directorio de empleados?
+
+00:00:20.460 --> 00:00:23.480
+Ese es exactamente el problema que Microsoft entre ExternalID fue creado para resolver.
+
+00:00:23.740 --> 00:00:24.200
+¿Qué tal punto?
+
+00:00:24.620 --> 00:00:26.740
+Está reemplazando a Azure a DB2C por completo.
+
+00:00:26.740 --> 00:00:31.200
+Al final de este episodio, entenderás qué es realmente ExternalID, las tres formas principales de usarlo
+
+00:00:31.200 --> 00:00:33.740
+y por qué es importante para cualquier aplicación orientada al cliente.
+
+00:00:35.380 --> 00:00:37.420
+A vieja forma, siglos de identidad separados.
+
+00:00:38.120 --> 00:00:40.740
+Imagina que hace 20 años construiste una aplicación para clientes.
+
+00:00:41.140 --> 00:00:42.900
+En aquel entonces, tenías que crear tu propio sistema.
+
+00:00:43.140 --> 00:00:46.800
+De inicio de sesión, escribir el código para las contraseñas, configurar una base de datos para almacenarlas
+
+00:00:46.800 --> 00:00:48.720
+y crear el flujo de recuperación de contraseña. Todo es decir.
+
+00:00:49.000 --> 00:00:51.740
+Eso funcionaba bien para una pequeña aplicación con unos pocos cientos de usuarios,
+
+00:00:51.840 --> 00:00:53.940
+pero a medida que las aplicaciones crecían, todo se complica rápidamente.
+
+00:00:53.940 --> 00:00:57.360
+Las empresas necesitaban permitir que los usuarios iniciaran sesión con Google o Facebook,
+
+00:00:57.480 --> 00:01:00.920
+requerían autenticación multifactor y necesitaban manejar millones de cuentas sin fallar.
+
+00:01:01.540 --> 00:01:03.760
+Construir todo eso por tu cuenta se convierte en una pesadilla.
+
+00:01:04.060 --> 00:01:06.200
+La primera respuesta de Microsoft fue Azure a DB2C.
+
+00:01:06.880 --> 00:01:09.900
+Era un servicio de identidad para clientes y en su momento resolvió un problema real.
+
+00:01:10.400 --> 00:01:11.620
+Pero aquí es donde empezó el dolor de cabeza.
+
+00:01:12.120 --> 00:01:14.400
+El mayor problema eran las llamadas políticas personalizadas.
+
+00:01:14.720 --> 00:01:16.200
+Y esas políticas estaban inscritas en XML.
+
+00:01:16.880 --> 00:01:19.880
+Si alguna vez has trabajado con archivos XML de cientos de líneas,
+
+00:01:19.980 --> 00:01:21.400
+sabes exactamente lo doloroso que es.
+
+00:01:21.400 --> 00:01:24.400
+Difícil de configurar, difícil de depurar y cuando algo fallaba.
+
+00:01:24.520 --> 00:01:25.900
+Buena suerte tratando de averiguar por qué.
+
+00:01:26.300 --> 00:01:29.820
+Además de eso, Azure AD B2C estaba separado de la plataforma de identidad principal de Microsoft.
+
+00:01:30.560 --> 00:01:34.700
+Entonces, si ya tenías Microsoft 365 o Azure AD para tus empleados B2C,
+
+00:01:34.940 --> 00:01:36.980
+se sentía como aprender un producto completamente nuevo.
+
+00:01:37.780 --> 00:01:40.300
+Como era de esperar, los equipos de TI luchaban por mantenerlo,
+
+00:01:40.420 --> 00:01:41.920
+los desarrolladores temían trabajar con él
+
+00:01:41.920 --> 00:01:45.140
+y los clientes terminaban con una experiencia de registro torpe que los hacía querer irse.
+
+00:01:45.780 --> 00:01:48.400
+Microsoft se dio cuenta de que necesitaban algo más simple y unificado
+
+00:01:48.400 --> 00:01:51.160
+y eso es exactamente lo que se convirtió en Microsoft Entra External ID.
+
+00:01:51.720 --> 00:01:54.020
+¿Qué es realmente Microsoft Entra External ID?
+
+00:01:54.480 --> 00:01:56.560
+Entonces, ¿qué es exactamente Microsoft Entra External ID?
+
+00:01:56.980 --> 00:01:58.400
+Aquí está la definición máxima.
+
+00:01:58.520 --> 00:02:02.040
+Es un servicio de identidad en la nube para usuarios externos, clientes, socios e invitados,
+
+00:02:02.200 --> 00:02:02.860
+no para empleados.
+
+00:02:03.120 --> 00:02:03.660
+No para empleados.
+
+00:02:03.900 --> 00:02:04.520
+Piénsalo de esta manera.
+
+00:02:04.780 --> 00:02:06.340
+Imagina que tu empresa tiene un edificio oficinal.
+
+00:02:06.700 --> 00:02:07.700
+Ese es tu inquilino de fuerza global.
+
+00:02:08.080 --> 00:02:10.040
+Es donde trabajan sus empleados, donde están sus escritorios,
+
+00:02:10.100 --> 00:02:11.300
+donde su credencial les permite tener acceso.
+
+00:02:11.740 --> 00:02:12.780
+Entra ID y gestiona ese edificio.
+
+00:02:12.780 --> 00:02:15.320
+Ahora, imagina que abre un escaparate para clientes,
+
+00:02:15.420 --> 00:02:17.600
+un espacio separado, con su propia entrada, sus propias reglas,
+
+00:02:17.720 --> 00:02:19.120
+y sus propias reglas y su propia seguridad.
+
+00:02:19.380 --> 00:02:21.460
+Los clientes no entran por error en la sala de descanso
+
+00:02:21.460 --> 00:02:24.140
+y los empleados no acceden accidentalmente a las cuentas de los clientes.
+
+00:02:24.500 --> 00:02:25.340
+Eso es External ID.
+
+00:02:25.820 --> 00:02:28.160
+Es parte de la familia Microsoft Entra, pero con un enfoque diferente.
+
+00:02:29.120 --> 00:02:32.000
+Está diseñado para CIEM, gestión de identidades y accesos de clientes,
+
+00:02:32.400 --> 00:02:34.620
+y maneja todo el ciclo de vida de un usuario externo.
+
+00:02:35.760 --> 00:02:37.740
+Registro, inicio de sesión, restablecimiento de contraseña,
+
+00:02:37.740 --> 00:02:39.480
+gestión de perfiles, MFI y emisión de tokens.
+
+00:02:39.480 --> 00:02:43.940
+Funciona con protocolos estándar como OAuth 2.0, OpenID, Connect y XAML,
+
+00:02:44.060 --> 00:02:46.100
+por lo que casi cualquier aplicación que cree puede conectarse.
+
+00:02:46.460 --> 00:02:48.700
+Pero aquí está la gran diferencia respecto a la antigua Azure AD B2C.
+
+00:02:49.180 --> 00:02:50.540
+External ID es más sencillo.
+
+00:02:50.640 --> 00:02:51.680
+Acabó el uso de directivos de XMD.
+
+00:02:52.160 --> 00:02:55.020
+En su lugar, usted configura los flujos de usuario directamente en el centro de administración.
+
+00:02:55.500 --> 00:02:57.540
+O bien utiliza extensiones de autenticación personalizadas
+
+00:02:57.540 --> 00:02:59.520
+que se conectan a su lógica de backend existente.
+
+00:02:59.900 --> 00:03:01.080
+La misma potencia, menos complicación.
+
+00:03:01.960 --> 00:03:03.080
+Los tres casos de uso principal.
+
+00:03:03.600 --> 00:03:05.140
+Entonces, ¿cómo se utiliza realmente External ID?
+
+00:03:05.220 --> 00:03:06.620
+Hay tres escenarios principales.
+
+00:03:06.620 --> 00:03:10.280
+Cubre en casi cualquier situación en la que necesite gestionar a alguien que no es un empleado.
+
+00:03:11.240 --> 00:03:14.100
+Empecemos por el más común, la identidad de cliente o B2C.
+
+00:03:14.840 --> 00:03:16.600
+Imagine que está creando una aplicación para pedir pizza.
+
+00:03:17.160 --> 00:03:19.880
+Necesita que la gente se registre, haga pedidos y vuelva la próxima semana.
+
+00:03:20.560 --> 00:03:23.680
+Quiere que inicie en sesión con su cuenta de Google en lugar de crear otra contraseña.
+
+00:03:24.220 --> 00:03:27.160
+Y necesita recopilar su nombre, número de teléfono y preferencias de entrega.
+
+00:03:27.560 --> 00:03:28.700
+External ID maneja todo eso.
+
+00:03:29.220 --> 00:03:30.800
+Obtiene flujos de registro en preconfigurados.
+
+00:03:30.800 --> 00:03:35.440
+Usted configura qué atributos recopilar, nombre, teléfono, lo que necesite.
+
+00:03:36.100 --> 00:03:38.960
+Configura el inicio de sesión social con Google, Facebook o App.
+
+00:03:39.720 --> 00:03:44.800
+Y cuando un usuario se autentica, External ID emite un token a su aplicación para que sepa quién es esa persona.
+
+00:03:46.020 --> 00:03:49.560
+Este es el reemplazo de Azure ID B2C y es por donde empiezan la mayoría de las organizaciones.
+
+00:03:50.200 --> 00:03:53.000
+Otro escenario es la colaboración entre empresas o B2B.
+
+00:03:53.000 --> 00:03:57.120
+Es cuando necesita dar acceso a socios o proveedores a sus aplicaciones internas.
+
+00:03:57.720 --> 00:04:04.580
+Quizás tenga un sitio de SharePoint que su socio logístico externo debe haber o una herramienta de gestión de proyectos que usen sus diseñadores independientes.
+
+00:04:05.280 --> 00:04:08.640
+En este escenario, usted los invita como usuarios, invitados en su inquilino de fuerza laboral.
+
+00:04:09.240 --> 00:04:15.780
+External ID maneja el correo de invitación, el proceso de canje donde aceptan la invitación y las políticas de acceso que controlan lo que pueden ver.
+
+00:04:16.340 --> 00:04:20.600
+Esto ha existido durante años como colaboración B2B dentro de Azure ID.
+
+00:04:20.600 --> 00:04:25.640
+Pero ahora es parte del paraguas de External ID, así que lo administras desde el mismo lugar que las identidades de tus clientes.
+
+00:04:26.160 --> 00:04:27.940
+Luego está el Machine to Machine o M2M.
+
+00:04:28.440 --> 00:04:30.760
+Este es menos visible para los usuarios finales, pero igual le importa.
+
+00:04:31.220 --> 00:04:37.420
+A veces, tu servicio backend necesita comunicarse con otra API, un procesador de pagos, un servicio de análisis de datos o un microservicio interno.
+
+00:04:38.080 --> 00:04:40.460
+No hay intervención humana, es simplemente una aplicación llamando a otra.
+
+00:04:41.380 --> 00:04:44.560
+External ID utiliza el flujo de credenciales de cliente de OAuth 2.0.
+
+00:04:44.820 --> 00:04:50.220
+Tu servicio se autentica usando una ID de cliente y un secreto y obtiene un token para llamar a la API de destino.
+
+00:04:51.060 --> 00:04:56.960
+Esto requiere el complemento Premium M2M, por lo que hay un factor de costo, pero si necesitas asegurar la comunicación API a API, ya está integrado.
+
+00:04:57.860 --> 00:05:01.740
+Ahora, estos tres escenarios cubren casi todas las situaciones de identidad externa que encontrarás.
+
+00:05:02.440 --> 00:05:05.800
+Pero hay una gran decisión que debes tomar, y es dónde viven realmente sus usuarios.
+
+00:05:06.240 --> 00:05:10.820
+Porque External ID puede ejecutarse en dos lugares muy diferentes, el inquilino de fuerza laboral frente al inquilino externo.
+
+00:05:11.480 --> 00:05:12.420
+Analicemos las dos opciones.
+
+00:05:12.740 --> 00:05:17.600
+External ID puede ejecutarse dentro de tu inquilino de fuerza laboral existente o puede ejecutarse como un inquilino externo completamente separado.
+
+00:05:17.780 --> 00:05:20.740
+No es lo mismo, y elegir el incorrecto puede causar problemas en el futuro.
+
+00:05:21.320 --> 00:05:22.900
+Comencemos con la opción del inquilino de fuerza laboral.
+
+00:05:23.320 --> 00:05:25.700
+¿Tu empresa ya tiene un inquilino? Entra ID para tus empleados.
+
+00:05:26.180 --> 00:05:27.240
+Ese es tu inquilino de fuerza laboral.
+
+00:05:27.240 --> 00:05:30.980
+Si habilitas una función llamada Registro Autoservicio de Invitados dentro de Sinkivino,
+
+00:05:31.380 --> 00:05:34.940
+los usuarios externos pueden registrarnos, pueden registrarse y aterrizar en el mismo directorio que tus empleados.
+
+00:05:35.100 --> 00:05:37.340
+Sus cuentas se ubican justo al lado de la cuenta de tu director ejecutivo.
+
+00:05:37.780 --> 00:05:41.280
+Para escenarios B2B más simples, como invitar un puñado de socios a un sitio de SharePoint,
+
+00:05:41.380 --> 00:05:43.600
+mezclarlos en el mismo directorio está perfectamente bien.
+
+00:05:44.240 --> 00:05:46.860
+Es sencillo de configurar y no necesitas administrar un inquilino separado.
+
+00:05:47.160 --> 00:05:47.740
+Pero aquí está el punto.
+
+00:05:48.140 --> 00:05:50.640
+Si estás creando una aplicación orientada al cliente con miles de usuarios,
+
+00:05:50.640 --> 00:05:53.700
+no querrás que sus clientes vivan en el mismo directorio que tus empleados.
+
+00:05:54.400 --> 00:05:55.220
+Eso es un riesgo de seguridad.
+
+00:05:55.220 --> 00:05:57.780
+Un empleado podría tropezar accidentalmente con datos de clientes.
+
+00:05:58.220 --> 00:06:01.200
+Un cambio de configuración destinado a los empleados podría afectar el acceso a los clientes.
+
+00:06:01.780 --> 00:06:05.580
+Y tu marca para las páginas de inicio de sesión de los clientes estaría ligada a lo que hayas configurado para tu empresa.
+
+00:06:05.940 --> 00:06:06.340
+Es una ciudad.
+
+00:06:06.900 --> 00:06:08.700
+La alternativa es la opción del inquilino externo.
+
+00:06:09.040 --> 00:06:12.460
+Creas un directorio aislado completamente nuevo específicamente para la identidad de los clientes.
+
+00:06:12.840 --> 00:06:13.460
+Ningún empleado vive.
+
+00:06:13.840 --> 00:06:15.080
+Es un espacio completamente separado.
+
+00:06:15.380 --> 00:06:17.120
+¿Recuerdas la analogía del edificio de oficinas de este mundo?
+
+00:06:17.460 --> 00:06:19.100
+El inquilino de fuerza laboral es tu sede corporativa.
+
+00:06:19.300 --> 00:06:22.480
+El inquilino externo es la tienda dedicada que abres para tus clientes.
+
+00:06:22.480 --> 00:06:26.080
+Tienen su propia entrada, sus propias reglas y su propia seguridad.
+
+00:06:26.860 --> 00:06:27.520
+Nada se mezcla.
+
+00:06:27.920 --> 00:06:29.840
+Entonces, ¿cuáles son los beneficios de un inquilino externo?
+
+00:06:30.200 --> 00:06:31.920
+Primero, obtienes un almacén de usuarios aislado.
+
+00:06:32.840 --> 00:06:37.540
+Los datos de los clientes se mantienen totalmente separados de los empleados, lo que reduce el riesgo y simplifica el cumplimiento.
+
+00:06:37.900 --> 00:06:39.280
+Segundo, obtienes una identidad visual separada.
+
+00:06:39.580 --> 00:06:44.580
+Puedes personalizar el aspecto de las páginas de inicio de sesión específicamente para tus clientes sin afectar nada en tu inquilino corporativo.
+
+00:06:44.580 --> 00:06:54.740
+Tercero, obtienes la app y de autenticación nativa para aplicaciones móviles, que te permite crear pantallas de inicio de sesión totalmente personalizadas dentro de tu app para iOS o Android, sin redirecciones al navegador ni vistas web poco fluidas.
+
+00:06:55.160 --> 00:06:57.580
+Y cuarto, obtienes precios basados en MAU, usuarios activos mensuales.
+
+00:06:58.540 --> 00:07:03.660
+Solo pagas por los usuarios que realmente se autentican en un mes determinado a lo que escala naturalmente con el crecimiento de tus clientes.
+
+00:07:04.320 --> 00:07:05.320
+Entonces, ¿cuándo elegir cuál?
+
+00:07:05.680 --> 00:07:06.400
+Es bastante sencillo.
+
+00:07:06.740 --> 00:07:10.260
+Si estás creando una aplicación B2C con miles de clientes, elige un inquilino externo.
+
+00:07:10.860 --> 00:07:13.540
+Ese es el enfoque recomendado y para lo que se diseñó External ID.
+
+00:07:13.540 --> 00:07:18.440
+Si solo estás invitando a socios a acceder a recursos internos, la opción de inquilino de fuerza laboral está bien.
+
+00:07:19.140 --> 00:07:23.820
+La clave es entender la diferencia antes de empezar a crear, porque emigrar de uno a otro más tarde no es algo trivial.
+
+00:07:25.600 --> 00:07:27.200
+Seguridad, MFA y acceso condicional.
+
+00:07:27.920 --> 00:07:28.940
+Ahora hablemos de seguridad.
+
+00:07:29.740 --> 00:07:33.560
+Si vas a permitir que los clientes entren en tu aplicación, debes asegurarte de que no entren las personas equivocadas.
+
+00:07:34.220 --> 00:07:38.880
+External ID incluye las mismas funciones de seguridad a nivel empresarial que EntraID ofrece para los empleados.
+
+00:07:39.260 --> 00:07:43.480
+Eso significa autenticación multifactor, acceso condicional y políticas basadas en riesgos.
+
+00:07:44.300 --> 00:07:46.000
+Para el MFA tienes dos opciones en este momento.
+
+00:07:46.620 --> 00:07:48.060
+El código de acceso único por electrónico es el.
+
+00:07:48.420 --> 00:07:51.400
+El sistema envía un código al correo del usuario, ellos lo ingresan y listo.
+
+00:07:51.900 --> 00:07:55.940
+El código de acceso único por SMS funciona igual, pero llega a su teléfono y conlleva costos de operador.
+
+00:07:56.280 --> 00:07:58.880
+Algo a tener en cuenta, todavía no hay soporte para Microsoft Authenticator.
+
+00:07:59.380 --> 00:08:02.620
+Esta es una limitación actual y algo en lo que Microsoft Powerade está trabajando, pero por ahora.
+
+00:08:02.760 --> 00:08:04.000
+Es correo o SMS.
+
+00:08:04.000 --> 00:08:06.540
+El acceso condicional es donde las cosas se van a interesar.
+
+00:08:07.060 --> 00:08:13.920
+Puedes definir reglas como solicitar MFA y cuando el inicio de sesión sea de riesgo medio o superior o bloquear el acceso desde países donde no operamos.
+
+00:08:14.920 --> 00:08:17.500
+El sistema evalúa cada intento de inicio de sesión en tiempo real.
+
+00:08:17.500 --> 00:08:26.740
+Si alguien intenta iniciar sesión desde una ubicación o dispositivo sospechoso, puede aumentar automáticamente los requisitos de seguridad sin que tengas que programar esa lógica.
+
+00:08:27.600 --> 00:08:30.120
+Pero hay una función que realmente destaca, la autenticación escalonada.
+
+00:08:30.500 --> 00:08:31.120
+Así es como funciona.
+
+00:08:31.120 --> 00:08:34.900
+Imagina que un usuario inicia sesión en tu app solo con una contraseña para navegar por tu catálogo de productos.
+
+00:08:35.480 --> 00:08:41.600
+Eso está bien para actividades de bajo riesgo, pero cuando intentan ver su historial de pagos o descargar una factura, ¿quieres una verificación adicional?
+
+00:08:42.340 --> 00:08:46.520
+Con la autenticación de paso superior, este POP puede exigir MFI solo para secciones específicas de su aplicación.
+
+00:08:46.760 --> 00:08:49.400
+El usuario no recibe una solicitud hasta que intenta acceder a algo confidencial.
+
+00:08:49.980 --> 00:08:54.560
+Y todo lo maneja external ID en segundo plano mediante algo llamado contexto de autenticación.
+
+00:08:54.940 --> 00:08:59.300
+Usted define qué partes de su aplicación necesitan seguridad adicional y el sistema se encarga del resto.
+
+00:08:59.300 --> 00:09:04.300
+El usuario obtiene una experiencia fluida para la navegación básica, pero los datos confidenciales permanecen protegidos.
+
+00:09:05.200 --> 00:09:06.260
+Branding y experiencia del usuario
+
+00:09:06.260 --> 00:09:12.100
+El control de marca es una de las mayores razones por las que las organizaciones eligen external ID en lugar de crear su propio sistema de inicio de sesión.
+
+00:09:12.580 --> 00:09:15.880
+Obtiene control total sobre el aspecto de sus páginas de registro e inicio de sesión.
+
+00:09:15.880 --> 00:09:23.860
+Suba su logotipo, configure colores de fondo, añade un favicón para la pestaña del navegador y personalice el encabezado y pie de página con enlaces a su política de privacidad y términos de servicio.
+
+00:09:24.100 --> 00:09:28.720
+Si desea aún más control, puede cargar un archivo CSS personalizado para anular fuentes, colores de botones y diseño.
+
+00:09:28.720 --> 00:09:31.260
+Es su marca, sus colores, todo lo que usted decida.
+
+00:09:31.860 --> 00:09:33.460
+Ahora bien, aquí es donde las cosas se complican un poco.
+
+00:09:33.860 --> 00:09:36.040
+El branding es global por inquilino, no por aplicación.
+
+00:09:36.440 --> 00:09:41.540
+Por lo tanto, si tiene varias aplicaciones, como un portal de clientes y una aplicación móvil, todas comparten las mismas páginas con la misma marca.
+
+00:09:42.040 --> 00:09:43.540
+No puede darle a cada aplicación su propio aspecto.
+
+00:09:43.940 --> 00:09:48.700
+El antiguo Azure ID B2C permitía el branding por aplicación, pero external ID aún no admite eso.
+
+00:09:49.500 --> 00:09:52.740
+Otra limitación, los mensajes de error en las páginas de inicio de sesión no se pueden personalizar.
+
+00:09:52.740 --> 00:09:59.220
+Si alguien escribe un correo electrónico que no existe, verá algo como no pudimos encontrar una cuenta con esta dirección de correo electrónico y no puede cambiar ese texto.
+
+00:10:00.380 --> 00:10:05.580
+Para algunas organizaciones eso está bien, pero para otras, especialmente en sectores regulados o con una voz de marca estricta, es un problema real.
+
+00:10:06.700 --> 00:10:08.080
+Las aplicaciones móviles tienen una opción mejor.
+
+00:10:08.320 --> 00:10:11.460
+External ID tiene una app de autenticación nativa para iOS y Android.
+
+00:10:11.460 --> 00:10:17.700
+En lugar de redirigir a los usuarios a una página de inicio de sesión basada en navegador, puede crear pantallas de inicio de sesión totalmente personalizadas dentro de su aplicación.
+
+00:10:18.120 --> 00:10:23.440
+Sin redirecciones de navegador ni vistas web poco manejables, el usuario permanece en su aplicación todo el tiempo y usted controla cada píxel.
+
+00:10:23.820 --> 00:10:27.580
+Es una experiencia mucho más fluida y es una de esas funciones que Azure AD B2C nunca tuvo.
+
+00:10:29.200 --> 00:10:30.640
+Migración desde Azure AD B2C
+
+00:10:30.640 --> 00:10:34.700
+Si ya utiliza Azure AD B2C, probablemente se pregunte qué significa esto para usted.
+
+00:10:35.020 --> 00:10:35.700
+La cuestión es esta.
+
+00:10:35.900 --> 00:10:38.440
+Microsoft seguirá dando soporte a B2C al menos hasta 2030.
+
+00:10:38.440 --> 00:10:42.420
+Por lo tanto, esos inquilinos actuales no dejarán de funcionar mañana, pero no habrá nuevas funciones.
+
+00:10:43.100 --> 00:10:50.380
+Toda la innovación como PASCIS, autenticación nativa y protección contra fraudes es exclusiva de External ID, donde está en una plataforma que esencialmente está común.
+
+00:10:50.680 --> 00:10:55.240
+Microsoft ha publicado herramientas y guías oficiales de migración y existen dos rutas dependiendo de su escala.
+
+00:10:55.820 --> 00:11:02.580
+Para inquilinos con menos de unos 5 millones de objetos de directorio, usuarios, grupos y atributos personalizados, la migración estándar es relativamente sencilla.
+
+00:11:03.160 --> 00:11:04.520
+Funciona como un traslado inquilino a inquilino.
+
+00:11:04.520 --> 00:11:10.380
+Usted crea un nuevo inquilino a External ID, migra a sus usuarios y sus credenciales, y luego transfiere sus aplicaciones.
+
+00:11:11.300 --> 00:11:18.080
+Microsoft proporciona herramientas para la exportación e importación masiva de usuarios y puede usar la migración de contraseñas justo a tiempo para reducir las interrupciones.
+
+00:11:19.080 --> 00:11:23.700
+Para inquilinos más grandes, con más de 5 millones de objetos de directorio, existe modo de compatibilidad a gran escala o HSC.
+
+00:11:23.700 --> 00:11:28.560
+En este modo, Azure ID, B2C y External ID funcionan simultáneamente en el mismo inquilino.
+
+00:11:29.320 --> 00:11:33.460
+Sus puntos de conexión B2C existentes permanecen activos mientras traslada gradualmente las aplicaciones.
+
+00:11:34.240 --> 00:11:38.920
+Está diseñado para organizaciones que no pueden migrar millones de usuarios de la noche a la mañana, pero conlleva compromisos.
+
+00:11:39.380 --> 00:11:44.660
+Sin proveedores de identidad social, sin claves de acceso, PASC, acceso condicional limitado, y algunas funciones simplemente no están disponibles.
+
+00:11:45.020 --> 00:11:47.180
+Considéralo como una estrategia de puente, no como una solución permanente.
+
+00:11:47.440 --> 00:11:48.160
+Ahora, un cambio importante.
+
+00:11:48.520 --> 00:11:49.900
+Las directivas personalizadas han desaparecido.
+
+00:11:49.900 --> 00:11:56.400
+Si ha creado flujos de autenticación complejos usando el marco de experiencia y identidad basado en XML de Azure ID, B2C, no funcionarán en External ID.
+
+00:11:56.680 --> 00:11:57.120
+No fue external.
+
+00:11:57.440 --> 00:12:01.160
+Tendrá que reconstruir esa lógica usando flujos de usuario y extensiones de autenticación personalizada.
+
+00:12:01.620 --> 00:12:04.460
+No existe una herramienta mágica que convierta su XML a nuevo formato.
+
+00:12:04.840 --> 00:12:05.840
+Simplemente tiene que hacer el trabajo.
+
+00:12:06.140 --> 00:12:07.240
+Entonces, esto es a lo que todo se reduce.
+
+00:12:07.600 --> 00:12:09.700
+Si comienza desde cero hoy, use External ID.
+
+00:12:10.200 --> 00:12:11.720
+No hay razón para siquiera considerar B2C.
+
+00:12:12.120 --> 00:12:15.180
+Si tiene un inquilino B2C existente, comience a planificar su migración ahora.
+
+00:12:15.180 --> 00:12:22.380
+Tiene hasta 2030, pero esperar hasta el último minuto significa que hará una migración compleja a toda prisa mientras intenta mantener las aplicaciones existentes funcionando.
+
+00:12:22.700 --> 00:12:23.280
+Piense poco a poco.
+
+00:12:23.860 --> 00:12:27.120
+Elija una aplicación, migréla, pruébela, aprenda el proceso y luego haga el resto.
+
+00:12:28.220 --> 00:12:29.560
+Experiencia de desarrollador y automatización.
+
+00:12:30.160 --> 00:12:36.420
+Microsoft realmente se enfocó en hacer que External ID sea fácil para los desarrolladores y es un cambio enorme respecto a las antiguas directivas personalizadas de B2C.
+
+00:12:37.120 --> 00:12:41.260
+¿Recuerda esos archivos XML que se extendían por cientos de líneas y se rompían si colocaban mal un solo corchet?
+
+00:12:41.580 --> 00:12:42.180
+Eso ya no existe.
+
+00:12:42.600 --> 00:12:45.740
+Hay una extensión de Visual Studio Code llamada Microsoft Enter External ID.
+
+00:12:46.440 --> 00:12:53.620
+Después de autenticarse, puede explorar a su inquilino, ver flujos de usuario, descargarlos como archivos JSON, incluso obtener una vista previa de su marca, todo sin salir de su editor.
+
+00:12:54.480 --> 00:12:56.980
+Puede ver cómo se ve su página de inicio de sesión antes de publicar.
+
+00:12:57.700 --> 00:12:59.300
+Luego está la API de Microsoft Graph.
+
+00:12:59.560 --> 00:13:04.840
+Casi todos los recursos de External ID, flujos de usuario, registros de aplicaciones y marcas se pueden administrar mediante programación.
+
+00:13:04.840 --> 00:13:10.120
+Esto significa que puede automatizar la configuración del inquilino en su canalización desde CECD usando PowerShell o llamadas REST.
+
+00:13:10.500 --> 00:13:15.520
+Cree un nuevo inquilino, configure los flujos de usuario, registre su aplicación y establezca la identidad visual todo desde un escrito.
+
+00:13:15.860 --> 00:13:18.120
+Si administra múltiples entornos, esto ahorra muchísimo tiempo.
+
+00:13:18.680 --> 00:13:21.380
+Las extensiones de autenticación personalizadas son donde reside el verdadero poder.
+
+00:13:21.640 --> 00:13:25.980
+En lugar de XML complejo, usted amplía los flujos de autenticación con simples llamadas HTTP Azure Functions.
+
+00:13:26.660 --> 00:13:28.160
+Hay cuatro eventos a los que puede conectarse.
+
+00:13:28.840 --> 00:13:33.480
+El inicio de emisión de tokens le permite agregar notificaciones personalizadas a los tokens como roles o información de nivel de lealtad.
+
+00:13:33.480 --> 00:13:39.660
+El inicio y envío de recolección de atributos le permiten validar o rellenar previamente los datos de registro llamando a su propio backend.
+
+00:13:40.080 --> 00:13:43.240
+Y el envío de OTP por correo electrónico le permite personalizar los correos de verificación.
+
+00:13:43.540 --> 00:13:46.960
+Es la misma flexibilidad que tenía B2C, pero en un modelo con el que cualquier desarrollador puede trabajar.
+
+00:13:47.240 --> 00:13:48.340
+Hay limitaciones que debe conocer.
+
+00:13:48.740 --> 00:13:53.780
+Aún no hay notificaciones de Microsoft GAF, por lo que no puede activar automáticamente un flujo de trabajo cuando un usuario nuevo se registra.
+
+00:13:54.120 --> 00:13:58.780
+Algunas configuraciones aún deben realizarse manualmente en el centro y no hay una página integrada para editar el perfil.
+
+00:13:58.780 --> 00:14:05.160
+Si desea que los usuarios actualicen su información, debe crear esa página en su aplicación y llamar al lápiz de grafos del mismo, pero en la dirección escala.
+
+00:14:05.680 --> 00:14:08.160
+Microsoft quiere que la identidad externa sea totalmente automatizable.
+
+00:14:08.700 --> 00:14:10.120
+Eso facilita la administración a gran escala.
+
+00:14:11.380 --> 00:14:17.420
+Ahora ya sabe que Microsoft entra a ExternalID, es el reemplazo moderno de Azure AD B2C, unificado bajo la marca Entra.
+
+00:14:17.420 --> 00:14:25.140
+Los tres casos de uso, identidad de cliente, colaboración con socios y máquina a máquina, cubren casi cualquier necesidad de identidad externa que pueda encontrar.
+
+00:14:26.060 --> 00:14:29.900
+Y la decisión clave es si usar su inquilino de fuerza laboral o crear un inquilino externo separado.
+
+00:14:30.520 --> 00:14:33.360
+Para aplicaciones dirigidas a clientes, usar uno separado es casi siempre mejor.
+
+00:14:33.760 --> 00:14:35.420
+La identidad es la puerta de entrada a su aplicación.
+
+00:14:35.900 --> 00:14:41.480
+Hacerlo bien de forma segura, con identidad visual y sencilla, impacta directamente en la confianza del usuario y el crecimiento del negocio.
+
+00:14:41.480 --> 00:14:47.560
+Su tarea, diríjese a Entra.Microsoft.com, cree un inquilino externo y pruebe la guía de introducción.
+
+00:14:48.660 --> 00:14:51.100
+Lo guiará a través de la configuración de una aplicación de muestra en minuto.
+
+00:14:51.600 --> 00:14:55.020
+Suscríbase para más explicaciones en lenguaje sencillo sobre la plataforma de identidad de Microsoft.

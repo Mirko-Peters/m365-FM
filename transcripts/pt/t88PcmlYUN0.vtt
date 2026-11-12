@@ -1,0 +1,1144 @@
+WEBVTT
+
+00:00:00.240 --> 00:00:06.540
+Preparado para 10 dias de Microsoft 365, Copilot, IA, Azure e as pessoas que estão moldando o futuro do trabalho?
+
+00:00:06.840 --> 00:00:07.020
+E aí?
+
+00:00:07.880 --> 00:00:11.860
+Em janeiro, M3M65 com está de volta e ainda maior.
+
+00:00:12.840 --> 00:00:18.160
+Junte-se a nós em sessões ao vivo, demonstrações reais e conhecimento prático com MVPs e especialistas do setor de todo mundo.
+
+00:00:18.940 --> 00:00:21.160
+Nada de slides genéricos ou jargões intermináveis.
+
+00:00:21.980 --> 00:00:23.560
+Estamos enfrentando os desafios reais.
+
+00:00:23.560 --> 00:00:28.840
+Copilot Studio, agentes de IA, Fabrique, Segurança, Governança e Automação.
+
+00:00:28.840 --> 00:00:34.240
+Seja você um profissional de TI, desenvolvedor ou líder de negócios, há sessões feitas para você.
+
+00:00:35.560 --> 00:00:39.900
+Com 10 dias inteiros, você pode explorar várias tecnologias e se conectar com uma comunidade global.
+
+00:00:40.940 --> 00:00:44.000
+Assista ao vivo e leve insights práticos para sua organização.
+
+00:00:45.120 --> 00:00:48.840
+Janeiro de 2027, 10 dias, uma única comunidade de Microsoft.
+
+00:00:49.360 --> 00:00:50.500
+As inscrições já estão abertas.
+
+00:00:52.300 --> 00:00:54.700
+Garanta seu lugar hoje mesmo.
+
+00:00:54.700 --> 00:00:58.500
+Acesse m3mcocom.net
+
+00:00:58.500 --> 00:01:04.520
+Inscreva-se agora em m3mcocom.net e nos vemos ao vivo em janeiro.
+
+00:01:05.420 --> 00:01:05.840
+Deixe uma situação.
+
+00:01:06.440 --> 00:01:14.240
+Você tem um aplicativo de calendário no seu celular que mostra suas reuniões do dia, mas você também tem reuniões no laptop e às vezes alguém altera um horário enquanto você está longe da mesa.
+
+00:01:14.240 --> 00:01:24.040
+Quando você abre o aplicativo no celular, espera ver essa mudança agora, não amanhã, ou como a maioria dos aplicativos lidam, eles baixam cada evento a cada poucos minutos, independentemente de algo ter mudado ou não.
+
+00:01:24.520 --> 00:01:25.280
+É esse início por um segundo.
+
+00:01:25.840 --> 00:01:30.620
+Se você tem mil eventos no calendário e apenas um deles mudou, o aplicativo ainda baixa todos os mil.
+
+00:01:30.900 --> 00:01:34.660
+É como ir ao supermercado e comprar tudo o que tem na loja só porque você precisava de leite, certo?
+
+00:01:35.180 --> 00:01:36.320
+Essa é a maneira antiga de fazer as coisas.
+
+00:01:36.600 --> 00:01:37.060
+E fica pior.
+
+00:01:37.440 --> 00:01:39.720
+Em uma conexão lenta, esse download completo leva tempo.
+
+00:01:40.140 --> 00:01:41.340
+Você fica ali encarando o ícone de carregamento.
+
+00:01:41.340 --> 00:01:42.580
+O aplicativo parece lento.
+
+00:01:42.880 --> 00:01:47.060
+Sua bateria acaba mais rápido e o servidor precisa lidar com todas essas solicitações mesmo quando nada mudou.
+
+00:01:47.380 --> 00:01:53.620
+Agora, imagine que você está criando um aplicativo que sincroniza usuários do Microsoft entre ID, e-mails do Exchange ou arquivos do SharePoint.
+
+00:01:54.120 --> 00:01:55.140
+O problema se multiplica.
+
+00:01:55.640 --> 00:01:57.480
+Você está movendo gigabytes de dados sem necessidade.
+
+00:01:58.040 --> 00:01:59.680
+Consultas Delta resolvem exatamente esse problema.
+
+00:01:59.920 --> 00:02:03.200
+Em vez de pedir por tudo, você pede apenas o que mudou desde a sua última verificação.
+
+00:02:03.980 --> 00:02:05.280
+E se eu pudesse pegar apenas as novidades?
+
+00:02:09.190 --> 00:02:10.970
+Essa é a pergunta que as consultas Delta respondem.
+
+00:02:10.970 --> 00:02:18.710
+Se você já esperou uma sincronização terminar em uma conexão lenta, ou criou um aplicativo que chama uma API a cada poucos minutos e se perguntou se havia um jeito melhor, isso é pra você.
+
+00:02:19.610 --> 00:02:21.330
+O que está por vir é um mecanismo simples de alterações.
+
+00:02:21.970 --> 00:02:22.570
+Sem mágica.
+
+00:02:22.990 --> 00:02:26.570
+Apenas um cálculo inteligente de tokens que permite perguntar ao Microsoft Graph.
+
+00:02:26.950 --> 00:02:28.650
+O que mudou desde a última vez que verifiquei?
+
+00:02:29.450 --> 00:02:30.310
+O que é uma consulta Delta?
+
+00:02:30.870 --> 00:02:32.210
+Então, o que exatamente é uma consulta Delta?
+
+00:02:32.730 --> 00:02:33.690
+Aqui está a definição mais simples.
+
+00:02:33.690 --> 00:02:37.950
+Uma consulta Delta solicita ao Microsoft Graph apenas as alterações desde a última verificação.
+
+00:02:38.350 --> 00:02:41.130
+Não tudo, apenas itens novos, atualizados ou excluídos.
+
+00:02:41.870 --> 00:02:42.730
+Pense na sua caixa de e-mail.
+
+00:02:43.230 --> 00:02:49.170
+Quando você abre de manhã, você não relê cada e-mail, você apenas olha os novos, aqueles que chegaram desde a última vez que você verificou.
+
+00:02:49.570 --> 00:02:52.670
+É exatamente isso que uma consulta Delta faz, mas para seus dados do Microsoft 365.
+
+00:02:53.290 --> 00:02:54.890
+Agora, contraste isso com uma sincronização completa.
+
+00:02:55.250 --> 00:02:59.430
+Uma sincronização completa é como fazer um backup total de toda a sua caixa de entrada cada vez que você verifica e-mail.
+
+00:02:59.430 --> 00:03:01.570
+Você teria milhares de cópias das mesmas mensagens.
+
+00:03:02.130 --> 00:03:02.930
+É um desperdício além.
+
+00:03:02.930 --> 00:03:05.670
+Uma consulta Delta é mais como um registro de alterações que diz
+
+00:03:05.670 --> 00:03:07.210
+Aqui está o que aconteceu desde a última vez.
+
+00:03:07.870 --> 00:03:08.270
+Nada mais.
+
+00:03:08.690 --> 00:03:10.730
+Isso funciona em muitos recursos do Microsoft Graph.
+
+00:03:10.970 --> 00:03:13.770
+Usuários, grupos, e-mail, eventos de calendário, contatos, arquivos.
+
+00:03:14.330 --> 00:03:17.830
+Se algo vive no Microsoft 365, é provável que exista um endpoint Delta para isso.
+
+00:03:18.210 --> 00:03:20.390
+Na primeira vez que você chama um endpoint Delta, ele retorna tudo.
+
+00:03:20.870 --> 00:03:21.410
+Essa é a sua base.
+
+00:03:21.850 --> 00:03:25.430
+Você recebe todos os dados, mas um link especial chamado Link Delta, você salva esse link.
+
+00:03:25.490 --> 00:03:31.350
+Então, nas chamadas subsequentes, você usa esse link salvo e o Microsoft Graph retorna apenas as alterações, adições, atualizações e exclusões.
+
+00:03:31.350 --> 00:03:33.330
+É isso. Por que isso é importante?
+
+00:03:33.670 --> 00:03:35.470
+Menos dados movimentados significam siglos mais rápidos.
+
+00:03:35.770 --> 00:03:37.490
+Sincronizações mais rápidas significam uma experiência melhor.
+
+00:03:37.970 --> 00:03:39.550
+Seu aplicativo parece rápido em vez de ler.
+
+00:03:40.070 --> 00:03:44.070
+E como você está movendo menos dados, você usa menos largura de banda e menos poder de processamento em ambas as pontas.
+
+00:03:44.550 --> 00:03:45.770
+Custo menor, melhor desempenho.
+
+00:03:45.770 --> 00:03:50.470
+A Microsoft projetou consultas Delta para aplicativos que precisam se manter atualizados sem sobrecarregar API.
+
+00:03:50.910 --> 00:03:55.130
+Se você já atingiu um limite de taxa por fazer consultas de forma muito agressiva, você sabe por que isso é importante.
+
+00:03:55.750 --> 00:03:58.530
+Consultas Delta permitem sincronizar de forma eficiente sem sofrer limitação.
+
+00:03:58.970 --> 00:04:00.050
+Como o sistema de token funciona?
+
+00:04:00.790 --> 00:04:02.730
+Então, como o sistema lembra de onde você parou?
+
+00:04:03.230 --> 00:04:04.070
+É aí que entram os tokens.
+
+00:04:04.070 --> 00:04:09.230
+Ao fazer aquela primeira consulta a Delta, o Microsoft Graph não apenas envia os dados e esquece.
+
+00:04:09.770 --> 00:04:11.110
+Ele fornece algo chamado Link Delta.
+
+00:04:11.550 --> 00:04:12.670
+Pense nele como um marcador de pára.
+
+00:04:12.910 --> 00:04:15.270
+Um marcador que diz ao Graph exatamente onde você parou de ler.
+
+00:04:15.730 --> 00:04:16.370
+Veja como funciona.
+
+00:04:16.930 --> 00:04:19.550
+Você faz sua primeira solicitação e o Graph envia todos os dados de volta.
+
+00:04:20.090 --> 00:04:22.870
+Seu conjunto completo de usuários, eventos ou qualquer coisa que você esteja rastreando.
+
+00:04:23.210 --> 00:04:26.750
+Na parte inferior dessa resposta há uma URL que contém algo chamado Token Delta.
+
+00:04:27.450 --> 00:04:29.190
+Você salva essa URL e a armazena em local segundo.
+
+00:04:29.550 --> 00:04:31.930
+Na próxima vez que quiser sincronizar, você não faz uma nova solicitação.
+
+00:04:31.930 --> 00:04:33.730
+Em vez disso, você chama aquela URL salva.
+
+00:04:34.010 --> 00:04:35.190
+O Graph diz, ah, me lembro de você.
+
+00:04:35.530 --> 00:04:36.110
+Você parou aqui.
+
+00:04:37.430 --> 00:04:39.690
+Então ele envia de volta apenas as alterações desde aquele ponto.
+
+00:04:40.210 --> 00:04:43.930
+Um novo usuário foi adicionado, um evento foi excluído, o número de telefone de um contato foi atualizado.
+
+00:04:44.310 --> 00:04:44.910
+É só isso que você recebe.
+
+00:04:45.170 --> 00:04:46.630
+Além de novo, o Link Delta para a próxima vez.
+
+00:04:46.990 --> 00:04:48.250
+Agora, e se houver muitas alterações?
+
+00:04:48.810 --> 00:04:51.370
+Demos que você não sincroniza há três dias e centenas de coisas mudaram.
+
+00:04:51.730 --> 00:04:53.410
+O Graph pode não enviar tudo em uma única resposta.
+
+00:04:53.690 --> 00:04:57.410
+Ele envia uma página de alterações e no final dessa página você vê algo chamado Link de Próximo, Nex.
+
+00:04:58.010 --> 00:04:59.330
+Isso significa continuar mais.
+
+00:04:59.330 --> 00:05:03.930
+Você chama esse Link de Próximo, obtém a próxima página e repete até finalmente ver o Link Delta.
+
+00:05:04.390 --> 00:05:05.530
+É assim que você sabe que está em dia.
+
+00:05:05.970 --> 00:05:07.590
+O Link de Próximo significa que há mais dados checos.
+
+00:05:07.810 --> 00:05:09.130
+O Link Delta significa que você terminou.
+
+00:05:09.330 --> 00:05:10.450
+Então é uma maneira de pensar sobre isso.
+
+00:05:10.830 --> 00:05:15.050
+Imagine que você vai ao mercado, compra um carrinho cheio de coisas e o caixa lhe entrega um recibo.
+
+00:05:15.590 --> 00:05:17.090
+Esse recibo é só a prova do que você comprou.
+
+00:05:17.490 --> 00:05:19.450
+A próxima vez que for comprar, você não leva a loja inteira com isso.
+
+00:05:19.710 --> 00:05:20.690
+Você apenas leva o recibo.
+
+00:05:21.070 --> 00:05:22.250
+O caixa olha para ele e diz, certo.
+
+00:05:22.510 --> 00:05:23.830
+Você já tem leite e ovos.
+
+00:05:24.650 --> 00:05:26.190
+Você só precisa das coisas que mudaram desde então.
+
+00:05:26.590 --> 00:05:27.730
+Esse recibo é o seu Link Delta.
+
+00:05:27.730 --> 00:05:29.710
+Você não precisa se lembrar do que já tem.
+
+00:05:30.110 --> 00:05:32.070
+O recibo lembra por você e esse é o ponto principal.
+
+00:05:32.550 --> 00:05:35.390
+Você não precisa armazenar registros de data e hora ou números de versão para o contador.
+
+00:05:35.630 --> 00:05:37.370
+Você não precisa descobrir o que mudou e o que não mudou.
+
+00:05:37.870 --> 00:05:39.430
+A Microsoft cuida de todo esse rastreamento.
+
+00:05:39.790 --> 00:05:42.410
+Se apenas salva o link, chama mais tarde e deixa o Graph fazer o trabalho pesado.
+
+00:05:42.870 --> 00:05:44.170
+As limitações que você não pode ignorar.
+
+00:05:44.570 --> 00:05:45.390
+Parece elegante, certo.
+
+00:05:45.650 --> 00:05:48.090
+Mas como qualquer sistema inteligente, há problemas que você precisa conhecer.
+
+00:05:48.650 --> 00:05:49.750
+Primeiro, a inspiração do token.
+
+00:05:49.750 --> 00:05:53.490
+Se você estiver sincronizando objetos de diretório, usuários, grupos, dispositivos,
+
+00:05:53.570 --> 00:05:55.230
+seu token Delta é válido apenas por 7 dias.
+
+00:05:55.570 --> 00:05:55.850
+É isso.
+
+00:05:56.270 --> 00:05:59.550
+Se seu aplicativo não sincronizar pelo menos uma vez a cada 7 dias, esse token expira.
+
+00:05:59.870 --> 00:06:02.290
+Quando ele expira, você não pode simplesmente continuar de onde parou.
+
+00:06:02.650 --> 00:06:04.130
+Você precisa recomeçar com uma sincronização completa.
+
+00:06:04.550 --> 00:06:05.710
+Isso é um problema maior do que parece.
+
+00:06:06.050 --> 00:06:08.070
+Imagine que você crie um aplicativo que sincroniza perfis do usuário.
+
+00:06:08.410 --> 00:06:09.030
+Ele funciona bem bem.
+
+00:06:09.410 --> 00:06:10.910
+Então alguém tira 2 semanas de férias.
+
+00:06:11.330 --> 00:06:12.950
+Quando volta, o token do aplicativo está morto.
+
+00:06:13.370 --> 00:06:14.550
+Ele precisa baixar tudo do zero.
+
+00:06:15.170 --> 00:06:16.310
+Isso é muito dado em muito tempo.
+
+00:06:16.310 --> 00:06:18.710
+Segundo, existe o termido erro 410-GON.
+
+00:06:19.090 --> 00:06:22.610
+Mesmo que seu token não tenha inspirado naturalmente, o Microsoft Graph pode invalidá-lo.
+
+00:06:23.130 --> 00:06:26.790
+Isso acontece durante manutenção interna, migrações de locatário ou outras mudanças
+
+00:06:26.790 --> 00:06:28.050
+de bastidores que você não controla.
+
+00:06:28.690 --> 00:06:31.250
+Quando acontece, o Graph retorna o status HTTP 410.
+
+00:06:32.070 --> 00:06:33.990
+É a maneira da Microsoft dizer, não me lembro desse token.
+
+00:06:34.610 --> 00:06:35.050
+Reconhece.
+
+00:06:35.510 --> 00:06:37.110
+Novamente, você precisa de uma ressonarização completa.
+
+00:06:37.630 --> 00:06:38.810
+Terceiro atraso no processamento.
+
+00:06:39.490 --> 00:06:41.030
+Aqui está algo que surpreende muitas pessoas.
+
+00:06:41.690 --> 00:06:45.350
+Quando alguém atualiza um usuário no Microsoft Entry-D, essa mudança não aparece instantaneamente
+
+00:06:45.350 --> 00:06:46.210
+nas consultas Delta.
+
+00:06:46.310 --> 00:06:47.270
+Há um atraso.
+
+00:06:47.530 --> 00:06:48.790
+Às vezes segundos, às vezes minutos.
+
+00:06:49.430 --> 00:06:52.650
+A mudança precisa se propagar pelos sistemas internos da Microsoft antes de aparecer no
+
+00:06:52.650 --> 00:06:53.130
+feed Delta.
+
+00:06:53.630 --> 00:06:55.970
+Então, se você está criando um aplicativo que precisa de atualizações dentro do real,
+
+00:06:56.090 --> 00:06:57.190
+a consulta Delta sozinha não basta.
+
+00:06:57.610 --> 00:07:00.250
+Você achará que nada mudou quando, na verdade, algo simplesmente é não aparecer.
+
+00:07:00.630 --> 00:07:02.070
+Quarto, propriedades não rastreadas.
+
+00:07:02.490 --> 00:07:04.890
+Nem toda propriedade e um recurso é rastreada pela consulta Delta.
+
+00:07:05.570 --> 00:07:07.090
+Veja a propriedade de habilidades e skill usuário.
+
+00:07:07.570 --> 00:07:09.850
+Dados ficam no SharePoint, não no armazenamento diretório principal.
+
+00:07:10.450 --> 00:07:13.350
+Portanto, se alguém atualiza as habilidades de um usuário, essa mudança não dispara uma
+
+00:07:13.350 --> 00:07:13.970
+resposta Delta.
+
+00:07:13.970 --> 00:07:15.270
+Seu aplicativo nunca velha.
+
+00:07:15.510 --> 00:07:18.390
+Você teria que fazer uma leitura completa dessa propriedade para capturar a atualização.
+
+00:07:18.650 --> 00:07:20.270
+Isso pega os desenvolvedores desprevenidos do tempo.
+
+00:07:20.770 --> 00:07:21.610
+Quinto, repetições.
+
+00:07:22.150 --> 00:07:25.450
+O Microsoft Graph faz o melhor esforço possível para evitar duplicados, mas não garante isso.
+
+00:07:26.290 --> 00:07:28.930
+A mesma mudança pode aparecer em 12 respostas Delta consecutivas.
+
+00:07:29.350 --> 00:07:31.030
+Isso significa que seu aplicativo precisa ser impotente.
+
+00:07:31.350 --> 00:07:33.650
+Ele deve lidar com a mesma atualização duas vezes sem quebrar.
+
+00:07:33.650 --> 00:07:37.090
+Se você estiver inserindo registros em um banco de dados, precisa verificar se o registro
+
+00:07:37.090 --> 00:07:38.250
+já existe antes de adicioná-lo.
+
+00:07:38.670 --> 00:07:41.870
+Se estiver atualizando um campo, precisa garantir que aplicar a mesma atualização duas vezes
+
+00:07:41.870 --> 00:07:42.830
+não corrompa seus dados.
+
+00:07:43.370 --> 00:07:45.250
+E sexto, restrições de parâmetros de consulta.
+
+00:07:45.870 --> 00:07:48.650
+Nos Endpoints Delta de usuário e grupo, você não pode usar Expand Order By.
+
+00:07:49.270 --> 00:07:51.490
+Quer incluir a propriedade do gerente na sincronização do seu usuário?
+
+00:07:52.210 --> 00:07:54.630
+Você pode, mas apenas se usar o Select de uma forma específica.
+
+00:07:55.190 --> 00:07:56.190
+Quer classificar o usuário por nome?
+
+00:07:56.570 --> 00:07:57.770
+Não é possível no Endpoint Delta.
+
+00:07:58.190 --> 00:08:00.430
+Você precisa contornar essas limitações com suas estações adicionais.
+
+00:08:00.430 --> 00:08:01.450
+Então, aqui está o resumo.
+
+00:08:01.750 --> 00:08:05.250
+A consulta Delta é poderosa, economiza largura de banda, reduz a latência e faz seu app
+
+00:08:05.250 --> 00:08:05.930
+parecer rápido.
+
+00:08:06.350 --> 00:08:07.410
+Mas não um sistema perfeito.
+
+00:08:07.690 --> 00:08:11.450
+Tokens expiram, mudanças atrasam, algumas propriedades são invisíveis, duplicatas ocorrem.
+
+00:08:11.850 --> 00:08:14.050
+Você não pode usar todos os recursos de consulta que está acostumado.
+
+00:08:14.290 --> 00:08:18.230
+Você precisa planejar esses casos extremos, criar a lógica de nova tentativa, lidar com
+
+00:08:18.230 --> 00:08:22.490
+erro 410, esperar repetições e, o mais importante, não assumir que o que a Delta Query mostra
+
+00:08:22.490 --> 00:08:24.230
+é o quadro completo, porque às vezes não é.
+
+00:08:25.330 --> 00:08:27.150
+Delta Query vs Notificações de Alteração
+
+00:08:27.150 --> 00:08:30.370
+Então, se a Delta Query tem essas lacunas, expiração de token, atraso de
+
+00:08:30.370 --> 00:08:31.790
+processamento, propriedades não rastreadas.
+
+00:08:31.870 --> 00:08:33.490
+Por que não usar notificações push em vez disso?
+
+00:08:34.070 --> 00:08:35.050
+Vamos comparar como elas funcionam.
+
+00:08:35.390 --> 00:08:37.090
+As notificações de alteração são baseadas em pull.
+
+00:08:37.650 --> 00:08:39.790
+A Microsoft chama seu Endpoint quando algo muda.
+
+00:08:40.190 --> 00:08:41.410
+Estamos falando de segundos, não minutos.
+
+00:08:41.810 --> 00:08:42.390
+Quase em tempo real.
+
+00:08:43.030 --> 00:08:46.990
+Se alguém atualiza um usuário no EntraEG, seu aplicativo fica sabendo quase instantaneamente
+
+00:08:46.990 --> 00:08:48.550
+em um pôneio necessário.
+
+00:08:49.070 --> 00:08:50.790
+A Delta Query, por outro lado, é baseada em pull.
+
+00:08:51.150 --> 00:08:52.570
+Você solicita as alterações conforme seu plano.
+
+00:08:52.690 --> 00:08:55.370
+Talvez a cada hora, talvez a cada 6 horas, talvez uma vez por dia.
+
+00:08:55.370 --> 00:08:57.770
+A latência é medida em minutos ou horas, não em segundos.
+
+00:08:58.230 --> 00:09:01.150
+Você decide quando verificar e recebe tudo o que mudou desde a sua última verificação.
+
+00:09:01.490 --> 00:09:02.590
+Então, quais são os prós do push?
+
+00:09:02.950 --> 00:09:04.010
+A baixa latência é o principal.
+
+00:09:04.370 --> 00:09:07.830
+Se você está criando um aplicativo que precisa reagir rapidamente, digamos, enviar
+
+00:09:07.830 --> 00:09:11.550
+um alerta de e-mail urgente quando um documento crítico é modificado, as notificações de
+
+00:09:11.550 --> 00:09:12.570
+alteração são suas aliadas.
+
+00:09:12.830 --> 00:09:14.210
+Você é notificado no momento em que acontece.
+
+00:09:14.570 --> 00:09:15.490
+Mas o push tem desvantagem.
+
+00:09:15.750 --> 00:09:18.270
+Primeiro, você precisa de um Endpoint HTTPS acessível publicamente.
+
+00:09:18.750 --> 00:09:20.910
+Isso significa que seu aplicativo precisa ser alcançável pela internet.
+
+00:09:21.370 --> 00:09:24.210
+Para aplicativos executados dentro de uma rede corporativa, isso é uma preocupação
+
+00:09:24.210 --> 00:09:24.610
+de segurança.
+
+00:09:25.170 --> 00:09:28.350
+Você precisa abrir portas, gerenciar certificados e lidar com o tráfego de entrada.
+
+00:09:28.830 --> 00:09:30.050
+Segundo, você tem que dar com a validação.
+
+00:09:30.570 --> 00:09:33.870
+Quando você cria uma assinatura, o Microsoft Graph envia um token de validação para
+
+00:09:33.870 --> 00:09:34.370
+seu Endpoint.
+
+00:09:35.010 --> 00:09:37.950
+Seu Endpoint precisa retornar esse token em texto simples dentro de 10 segundos.
+
+00:09:38.330 --> 00:09:39.550
+Se não retornar, a assinatura falha.
+
+00:09:40.110 --> 00:09:41.410
+Terceiro, as assinaturas expiram.
+
+00:09:41.870 --> 00:09:45.050
+Você precisa renová-las antes que expirem ou deixará de receber notificações.
+
+00:09:45.470 --> 00:09:46.510
+E quarto, as novas tentativas.
+
+00:09:47.010 --> 00:09:50.910
+Se seu Endpoint não responder dentro de 3 segundos, o Microsoft Graph tenta novamente com intervalo
+
+00:09:50.910 --> 00:09:52.250
+exponencial por até 4 horas.
+
+00:09:52.250 --> 00:09:55.590
+Se seu Endpoint for lento, as notificações podem ser descartadas por completo.
+
+00:09:55.990 --> 00:09:58.950
+Agora, para o lado do Pool, os prós da Delta Query são uma infraestrutura mais simples.
+
+00:09:59.390 --> 00:10:02.010
+Nenhum Endpoint público é necessário em um tráfego de entrada para gerenciar.
+
+00:10:02.270 --> 00:10:04.570
+Você apenas faz solicitações e saídas a partir do seu aplicativo.
+
+00:10:04.890 --> 00:10:05.210
+É isso.
+
+00:10:05.710 --> 00:10:07.450
+Você também tem mais controle sobre quando as coisas acontecem.
+
+00:10:07.930 --> 00:10:11.550
+Você pode agendá-las para horários de pouco movimento, pode agrupá-las, pode processar
+
+00:10:11.550 --> 00:10:12.730
+as alterações em seu próprio ritmo.
+
+00:10:13.110 --> 00:10:14.110
+Mas o Pool também tem contras.
+
+00:10:14.490 --> 00:10:15.230
+A latência, obviamente.
+
+00:10:15.770 --> 00:10:17.270
+Você só fica sabendo das alterações quando pergunta.
+
+00:10:17.270 --> 00:10:20.070
+Se faz Pool a cada hora, pode estar com até uma hora de atraso.
+
+00:10:20.530 --> 00:10:21.810
+A expiração do token é outro risco.
+
+00:10:22.110 --> 00:10:24.730
+Se você não sincronizar com frequência o suficiente, seu token inspira e você precisa
+
+00:10:24.730 --> 00:10:25.090
+recomeçar.
+
+00:10:25.570 --> 00:10:27.830
+E ainda há o esforço desperdiçado de fazer Pool mesmo quando não.
+
+00:10:28.310 --> 00:10:30.970
+Você faz a solicitação, recebe uma resposta vazia e precisa repetir tudo.
+
+00:10:31.290 --> 00:10:32.110
+No próximo ciclo.
+
+00:10:32.650 --> 00:10:33.470
+Então qual você deve escolher?
+
+00:10:34.170 --> 00:10:37.630
+Se você precisa de baixa latência, como para alertas de e-mail urgentes ou colaboração
+
+00:10:37.630 --> 00:10:39.750
+em tempo real, use notificações de alteração.
+
+00:10:40.250 --> 00:10:43.830
+Se você está fazendo sincronização em massa, mantendo um banco de dados local ou criando
+
+00:10:43.830 --> 00:10:45.910
+um aplicativo offline, use Consulta Delta.
+
+00:10:46.630 --> 00:10:47.330
+Cada um tem seu lugar.
+
+00:10:48.130 --> 00:10:48.890
+Abordagem híbrida.
+
+00:10:49.250 --> 00:10:50.090
+O melhor dos dois mundos.
+
+00:10:50.690 --> 00:10:52.150
+Na verdade, você não precisa escolher um ou outro.
+
+00:10:52.790 --> 00:10:54.450
+A abordagem mais inteligente é usar ambos em conjunto.
+
+00:10:55.010 --> 00:10:55.630
+Aqui está o balão.
+
+00:10:56.050 --> 00:10:58.550
+Você configura notificações de alteração para saber quando o algo mudou.
+
+00:10:58.970 --> 00:11:00.610
+Isso lhe dá um conhecimento quase em tempo real.
+
+00:11:00.990 --> 00:11:05.310
+Você sabe que algo aconteceu, mas não sabe exatamente o que mudou ou não quer processar
+
+00:11:05.310 --> 00:11:06.890
+a carga completa em cada notificação.
+
+00:11:07.410 --> 00:11:09.310
+Então você usa essa notificação como um gatilho.
+
+00:11:09.970 --> 00:11:13.370
+Quando você recebe uma notificação de push dizendo que algo mudou, você chama a Consulta
+
+00:11:13.370 --> 00:11:14.870
+Delta para buscar exatamente o que foi alterado.
+
+00:11:15.190 --> 00:11:16.310
+Pense no que isso lhe proporciona.
+
+00:11:16.710 --> 00:11:19.210
+Você só puxa os dados quando há uma mudança real, sem desperdício de polling.
+
+00:11:19.870 --> 00:11:21.490
+Você obtém a confiabilidade dos tokens Delta.
+
+00:11:21.850 --> 00:11:25.250
+Você pode rastrear alterações ao longo do tempo, gerenciar paginação e recuperar as
+
+00:11:25.250 --> 00:11:25.550
+de falha.
+
+00:11:25.970 --> 00:11:29.810
+E você evita a complexidade de processar cargas completas de alteração em cada notificação.
+
+00:11:30.530 --> 00:11:32.630
+A notificação apenas diz, ei, dê uma olhada aqui.
+
+00:11:33.290 --> 00:11:34.810
+A Consulta Delta faz o trabalho pesado.
+
+00:11:35.150 --> 00:11:35.950
+E aqui está um cenário real.
+
+00:11:36.270 --> 00:11:39.350
+Imagine um aplicativo que sincroniza perfis de usuário do Microsoft em Trade.
+
+00:11:39.750 --> 00:11:41.990
+Você se inscreve para receber notificações de alteração do recurso.
+
+00:11:41.990 --> 00:11:46.650
+Quando alguém atualiza seu cargo, o Microsoft Graph envia uma notificação para seu Endpoint.
+
+00:11:47.250 --> 00:11:50.650
+Seu aplicativo recebe a notificação e diz, ok, algo mudou com esse usuário.
+
+00:11:51.230 --> 00:11:53.950
+Em seguida, ele chama o Endpoint de Consulta Delta com seu token salvo.
+
+00:11:54.490 --> 00:11:56.610
+A Consulta Delta retorna os detalhes atualizados do usuário.
+
+00:11:57.050 --> 00:11:59.290
+Seu aplicativo processa a alteração e atualiza seu banco de dados.
+
+00:12:00.110 --> 00:12:02.770
+Esse padrão é suportado nativamente pelo Microsoft Graph.
+
+00:12:03.170 --> 00:12:06.610
+Você cria uma assinatura para notificações de alteração e mantém um link Delta para o
+
+00:12:06.610 --> 00:12:07.230
+mesmo recurso.
+
+00:12:07.970 --> 00:12:10.470
+Quando uma notificação chega, você dispara um ciclo de Consulta Delta.
+
+00:12:10.470 --> 00:12:12.950
+Essa é a abordagem recomendada para aplicativos em produtos.
+
+00:12:13.430 --> 00:12:16.790
+A própria documentação do Microsoft indica isso como uma forma de quase eliminar o polo
+
+00:12:16.790 --> 00:12:17.330
+infrequente.
+
+00:12:17.890 --> 00:12:19.090
+Isto é uma forma simples de visualizar.
+
+00:12:19.370 --> 00:12:20.130
+Alguém toca a campanha.
+
+00:12:20.470 --> 00:12:21.430
+Ela avisa que há alguém na porta.
+
+00:12:21.910 --> 00:12:23.670
+Você não precisa ficar do lado de fora esperando por visitantes.
+
+00:12:24.050 --> 00:12:25.190
+Mas a campanha não diz quem é.
+
+00:12:25.750 --> 00:12:26.670
+Então você verifica a câmera.
+
+00:12:27.070 --> 00:12:27.430
+Isso é o pull.
+
+00:12:27.890 --> 00:12:28.990
+Você olha o feed para ver quem está lá.
+
+00:12:29.550 --> 00:12:30.110
+Campanha mais câmera.
+
+00:12:30.710 --> 00:12:31.350
+Push mais pull.
+
+00:12:31.710 --> 00:12:32.510
+Eficiente e responsivo.
+
+00:12:32.930 --> 00:12:33.670
+Isso é o padrão híbrido.
+
+00:12:34.150 --> 00:12:36.250
+Para a maioria das aplicações reais, este é o padrão.
+
+00:12:36.250 --> 00:12:40.790
+Você obtém a rapidez das notificações push com a precisão da Delta Query e evita
+
+00:12:40.790 --> 00:12:43.750
+as fraquezas de cada abordagem quando usadas isoladamente.
+
+00:12:44.670 --> 00:12:46.350
+Regras práticas para construir com Delta Query.
+
+00:12:46.850 --> 00:12:50.790
+Olá a todos e bem-vindos a mais um episódio do Microsoft Knowledge Nuggets na M300FM.
+
+00:12:51.210 --> 00:12:52.350
+Eu sou seu apresentador, Mico Pito.
+
+00:12:52.630 --> 00:12:54.870
+Hoje vamos falar sobre como trabalhar com Delta Query em produção.
+
+00:12:55.250 --> 00:12:56.590
+Tudo se resume a algumas regras rígidas.
+
+00:12:56.990 --> 00:12:59.910
+Do tipo que impedem sua sincronização de falhar silenciosamente às duas da manhã.
+
+00:12:59.910 --> 00:13:02.810
+Siga estas seis regras e sua implementação será sólida.
+
+00:13:03.170 --> 00:13:04.830
+Ignore uma e você estará pedindo por problema.
+
+00:13:05.190 --> 00:13:05.530
+Regra 1.
+
+00:13:05.630 --> 00:13:06.810
+Salve seu Delta Link em um lugar seguro.
+
+00:13:07.270 --> 00:13:08.770
+Não em um arquivo de texto na sua área de trabalho.
+
+00:13:09.250 --> 00:13:10.510
+Não quantificado diretamente no seu quadro.
+
+00:13:10.810 --> 00:13:12.370
+Use um banco de dados adequado a um Key Story.
+
+00:13:12.790 --> 00:13:14.290
+Pense neste link com a chave do seu prédio.
+
+00:13:14.670 --> 00:13:15.990
+Perca-o e você ficará truncado para fora.
+
+00:13:16.230 --> 00:13:18.110
+Você voltará a estaca zero com uma sincronização corre.
+
+00:13:18.570 --> 00:13:20.910
+Potencialmente em gigabytes de dados que você terá que baixar tudo de novo.
+
+00:13:21.230 --> 00:13:21.690
+Regra 2.
+
+00:13:21.790 --> 00:13:23.650
+Recute seu loop de sincronização pelo menos a cada seis dias.
+
+00:13:23.850 --> 00:13:25.110
+Tóquens de diretório expiram em sete.
+
+00:13:25.110 --> 00:13:29.110
+Se você agendar sua sincronização para exatamente sete dias, terá margem de erro zero.
+
+00:13:29.710 --> 00:13:33.290
+Uma falha na rede, um feriado prolongado, um reinício de servidor e seu token morre.
+
+00:13:33.770 --> 00:13:35.170
+Seis dias dão a você um dia inteiro de margem.
+
+00:13:35.630 --> 00:13:36.030
+Regra 3.
+
+00:13:36.110 --> 00:13:37.070
+Espere pelo erro 410.
+
+00:13:37.410 --> 00:13:37.930
+Isso vai acontecer.
+
+00:13:38.390 --> 00:13:41.810
+O Microsoft Graph invalidará seu token durante manutenções ou migrações de tênis.
+
+00:13:42.350 --> 00:13:44.390
+Quando isso ocorrer, seu código precisa capturar o erro.
+
+00:13:44.470 --> 00:13:46.150
+Disparar uma ressincronização completa e optou.
+
+00:13:46.510 --> 00:13:47.770
+Não trate como um bug.
+
+00:13:47.870 --> 00:13:49.590
+Trate como uma parte normal do ciclo de vida.
+
+00:13:49.970 --> 00:13:50.490
+Regra 4.
+
+00:13:50.590 --> 00:13:52.130
+Projete seu app para lidar com duplicatas.
+
+00:13:52.590 --> 00:13:53.270
+Replays são reais.
+
+00:13:53.270 --> 00:13:56.210
+A mesma alteração pode aparecer em duas respostas consecutivas.
+
+00:13:56.810 --> 00:13:59.270
+Se estiver inserindo registros, verifique primeiro se eles existem.
+
+00:13:59.770 --> 00:14:02.710
+Se estiver atualizando o campus, garanta que a atualização seja segura para repetir.
+
+00:14:04.170 --> 00:14:04.770
+Regra 5.
+
+00:14:05.550 --> 00:14:06.210
+Comece pequeno.
+
+00:14:06.630 --> 00:14:09.530
+Não aponte seu código para um tenente com 10 mil usuários logo na primeira tentativa.
+
+00:14:10.010 --> 00:14:10.830
+Use o Graph Explorer.
+
+00:14:11.090 --> 00:14:12.050
+Escolha um intervalo curto.
+
+00:14:12.430 --> 00:14:13.750
+Verifique se o seu Delta Link funciona.
+
+00:14:14.070 --> 00:14:14.770
+Faça uma alteração.
+
+00:14:15.010 --> 00:14:15.670
+Veja se ela aparece.
+
+00:14:15.770 --> 00:14:17.330
+Familiarize-se com o fluxo antes de escalar.
+
+00:14:18.070 --> 00:14:18.670
+Regra 6.
+
+00:14:18.750 --> 00:14:19.790
+Fique atento aos seus limites de data.
+
+00:14:19.790 --> 00:14:22.690
+O Microsoft Graph limitará você se fizer chamadas rápido demais.
+
+00:14:22.690 --> 00:14:23.970
+Pense nisso como uma rodovia.
+
+00:14:24.370 --> 00:14:25.910
+Se correr demais, você será bloqueado.
+
+00:14:27.010 --> 00:14:29.970
+Consultas Delta ajudam a reduzir o volume de chamadas, mas você ainda precisa respeitar
+
+00:14:29.970 --> 00:14:30.330
+os limites.
+
+00:14:30.990 --> 00:14:31.690
+Respire as restrições.
+
+00:14:32.250 --> 00:14:34.270
+Use o Backoff de potencial ou encontrar um erro 429.
+
+00:14:34.830 --> 00:14:36.610
+Sua velocidade de sincronização não importa se for bloqueado.
+
+00:14:38.070 --> 00:14:40.370
+Um exemplo real, sincronizando eventos de calendário.
+
+00:14:40.930 --> 00:14:41.930
+Então, como isso funciona na hora?
+
+00:14:41.930 --> 00:14:44.690
+Digamos que você esteja criando um app que sincroniza eventos de calendário.
+
+00:14:45.150 --> 00:14:46.370
+Aqui está o fluxo do início ao fim.
+
+00:14:47.330 --> 00:14:47.730
+Passo 1.
+
+00:14:47.810 --> 00:14:51.330
+Você faz sua primeira requisição, a endpoint de visualização Delta do calendário, algo
+
+00:14:51.330 --> 00:14:53.590
+como traga a visualização Delta com hora de início e fim.
+
+00:14:55.230 --> 00:14:55.830
+Essa é a sua base.
+
+00:14:56.390 --> 00:14:58.470
+O Microsoft Graph retorna todos os eventos nesse intervalo.
+
+00:14:58.930 --> 00:15:00.430
+Talvez sejam 100 eventos, talvez 1000.
+
+00:15:01.010 --> 00:15:02.950
+No final dessa resposta, você recebe um Link Delta.
+
+00:15:03.390 --> 00:15:03.850
+Você o salva.
+
+00:15:04.230 --> 00:15:04.770
+Passo 2.
+
+00:15:04.770 --> 00:15:08.010
+No próximo ciclo de sincronização, uma hora ou um dia depois, chama esse Link Delta
+
+00:15:08.010 --> 00:15:08.510
+salvo.
+
+00:15:09.210 --> 00:15:11.510
+Desta vez, o Graph não retorna tudo, apenas as alterações.
+
+00:15:11.930 --> 00:15:13.030
+Pense nisso como um bibliotecário.
+
+00:15:13.430 --> 00:15:16.630
+Você pede pelos livros que mudaram desde sua última visita, muito mais rápido do que
+
+00:15:16.630 --> 00:15:17.830
+ler a biblioteca inteira novamente.
+
+00:15:18.450 --> 00:15:20.790
+Uma nova reunião, uma existente movida para um horário diferente.
+
+00:15:21.450 --> 00:15:25.450
+E se algo for excluído, aparece com a propriedade arroba removed, para que você saiba removê-lo
+
+00:15:25.450 --> 00:15:26.310
+do seu armazenamento local.
+
+00:15:26.890 --> 00:15:27.330
+Passo 3.
+
+00:15:27.410 --> 00:15:30.750
+Se houver muitas alterações, você pode receber um Link Next em vez de um Link Delta.
+
+00:15:31.010 --> 00:15:32.930
+Isso significa que há mais mudanças para processar.
+
+00:15:33.230 --> 00:15:36.770
+Você chama esse Link Next, obtém o próximo lote e continua até finalmente ver um Link Delta.
+
+00:15:37.190 --> 00:15:38.070
+Assim que você saiba que está em dia.
+
+00:15:38.510 --> 00:15:40.190
+Pense no quanto isso economiza para você ao longo do tempo.
+
+00:15:40.470 --> 00:15:41.430
+Digo, pense seriamente nisso.

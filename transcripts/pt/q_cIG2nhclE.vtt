@@ -1,0 +1,3106 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:03.000
+A 0347 UTC detectei um padrão.
+
+00:00:04.100 --> 00:00:07.320
+Falhas simultâneas de fluxos, edições de permissão sem chamados
+
+00:00:07.320 --> 00:00:11.560
+e três novas listas do SharePoint chamadas testes, criadas em quatro minutos.
+
+00:00:12.280 --> 00:00:14.800
+Não é uma interrupção ou intervenção de entropia autorizada.
+
+00:00:15.600 --> 00:00:18.240
+Vou mostrar os controles exatos para restaurar o alinhamento.
+
+00:00:19.040 --> 00:00:22.860
+Esquemas de SharePoint disciplinados, comportamento previsível de PowerApps,
+
+00:00:22.960 --> 00:00:27.160
+fluxos resilientes e IA que impõe limites, em vez de alucinar além deles.
+
+00:00:27.160 --> 00:00:32.620
+Você sairá daqui com uma lista de verificação de governança que impede que essa falha se repita.
+
+00:00:33.420 --> 00:00:34.300
+Não estou aqui para dar bronca.
+
+00:00:34.700 --> 00:00:37.260
+Estou aqui para conter o vazamento lento antes que vire uma enchente.
+
+00:00:38.560 --> 00:00:40.240
+Comece pelo substrato, SharePoint.
+
+00:00:41.280 --> 00:00:42.880
+Primeiro pilar, SharePoint.
+
+00:00:43.400 --> 00:00:45.320
+Substrato falho, impõe a disciplina.
+
+00:00:45.920 --> 00:00:48.540
+O SharePoint é ótimo até você tratá-lo com banco de dados,
+
+00:00:48.660 --> 00:00:51.720
+compartilhamento de arquivos e motor de fluxo de trabalho na mesma terça-feira.
+
+00:00:51.720 --> 00:00:56.160
+É uma plataforma de colaboração com listas que funcionam como tabelas leves
+
+00:00:56.160 --> 00:00:59.500
+e bibliotecas de documentos que funcionam como armazenamentos de conteúdo.
+
+00:01:00.400 --> 00:01:03.480
+Essa natureza dual é um motivo de ser poderosa e também frágil.
+
+00:01:04.220 --> 00:01:06.120
+Se você não traçar a linha, os criadores o farão.
+
+00:01:06.540 --> 00:01:10.080
+E eles vão traçá-la com um marca-texto e uma coluna de escolha aleatória chamada Status 2.
+
+00:01:10.960 --> 00:01:12.520
+O que a maioria das pessoas não percebe é isto.
+
+00:01:12.920 --> 00:01:14.100
+O SharePoint não é o vilão.
+
+00:01:14.660 --> 00:01:16.060
+O design inconsistente é.
+
+00:01:17.060 --> 00:01:19.280
+As listas escalam bem para milhares de itens,
+
+00:01:19.280 --> 00:01:22.420
+quando as consultas são delegáveis e indexadas.
+
+00:01:23.500 --> 00:01:25.280
+Mas elas parecem papelão molhado,
+
+00:01:25.480 --> 00:01:29.020
+quando você adiciona 347 colunas, 5 cadeias de busca
+
+00:01:29.020 --> 00:01:32.440
+e uma galeria tentando filtrar texto não indexado.
+
+00:01:34.140 --> 00:01:35.280
+Você acha que precisa de mais potência?
+
+00:01:35.920 --> 00:01:37.220
+Realmente precisa de menos antepadrões.
+
+00:01:37.760 --> 00:01:38.980
+Então aqui está a disciplina imposta.
+
+00:01:39.460 --> 00:01:40.060
+Primeiro esquema.
+
+00:01:40.820 --> 00:01:44.160
+Nomeie a lista pelo substantivo de negócio, não pelo apelido do projeto.
+
+00:01:44.160 --> 00:01:47.200
+Incidentes no rastreador de testes da Gen.
+
+00:01:48.100 --> 00:01:52.120
+Defina nomes de coluna que nunca incluam espaço, pontuação ou arrependimentos futuros.
+
+00:01:52.920 --> 00:01:54.800
+Você pode renomear para humanos no Power Apps.
+
+00:01:55.420 --> 00:01:57.260
+Você não pode renegociar a API depois.
+
+00:01:58.420 --> 00:02:01.480
+Use linha única de texto, número, data e sim, barra não para a maioria dos campos.
+
+00:02:02.120 --> 00:02:04.480
+Use escolha com moderação quando você controlar o vocabulário.
+
+00:02:05.400 --> 00:02:07.640
+Use look-up quando realmente precisar de um relacionamento,
+
+00:02:07.980 --> 00:02:10.160
+não quando estiver cansado demais para manter uma lista de opções.
+
+00:02:11.040 --> 00:02:12.060
+Segundo, relacionamentos.
+
+00:02:12.060 --> 00:02:15.580
+Look-ups do SharePoint funcionam bem para um salto, dois, se você tiver sorte.
+
+00:02:16.540 --> 00:02:18.720
+Depois disso, as galerias choram e a delegação quebra.
+
+00:02:19.620 --> 00:02:23.160
+Se seu design precisa de junções de múltiplos saltos ou integridade transacional, pare.
+
+00:02:23.880 --> 00:02:26.020
+Essa é uma conversa para a Dataverse ou SQL.
+
+00:02:26.820 --> 00:02:29.820
+A regra, um look-up por exibição de lista da qual seu aplicativo dependa.
+
+00:02:30.300 --> 00:02:32.680
+Indexe a coluna de look-up e a coluna de filtro primária.
+
+00:02:33.180 --> 00:02:36.800
+Se precisar filtrar por dois campos, indexe ambos e use uma exibição composta.
+
+00:02:37.580 --> 00:02:39.700
+Não dependa da esperança, dependa de índices.
+
+00:02:39.700 --> 00:02:42.420
+Terceiro, versionamento e retenção.
+
+00:02:43.420 --> 00:02:46.480
+Ative o versionamento principal para listas onde humanos editam dados.
+
+00:02:47.780 --> 00:02:53.180
+Defina um limite sensato, 50 ou 100, para ter uma janela de reversão, sem estourar o armazenamento.
+
+00:02:54.580 --> 00:02:58.660
+Exija checkout para bibliotecas de documentos com edições frequentes e sensíveis.
+
+00:02:59.520 --> 00:03:03.540
+Defina tipos de conteúdo na biblioteca, se precisar de esquemas diferentes.
+
+00:03:03.540 --> 00:03:08.200
+É aqui que você impede que o final V7 final se multiplique.
+
+00:03:09.000 --> 00:03:10.000
+Quarto, permissões.
+
+00:03:10.580 --> 00:03:12.540
+Quebre a herança no site, não no item.
+
+00:03:13.020 --> 00:03:14.640
+Permissões e nível de itens são uma estrela rolando.
+
+00:03:15.020 --> 00:03:15.580
+Você vai tropeçar.
+
+00:03:16.020 --> 00:03:22.020
+Se precisa proteger linhas, projete listas separadas com escopos diferentes e agregue via Power Apps com controle de acesso,
+
+00:03:22.540 --> 00:03:26.040
+ou mude para uma plataforma com segurança em nível de linha, sem truques.
+
+00:03:26.040 --> 00:03:29.760
+Proprietários, membros, visitantes, use de forma organizada.
+
+00:03:30.460 --> 00:03:33.000
+Pare de conceder acesso direto a apenas uma pessoa.
+
+00:03:34.000 --> 00:03:35.060
+Grupos existem por uma razão.
+
+00:03:35.780 --> 00:03:37.080
+Quinto, exibições e limites.
+
+00:03:37.860 --> 00:03:40.500
+O limite de exibição de lista é de 5 mil itens, não é um mito.
+
+00:03:40.960 --> 00:03:41.780
+É o seu limite de segurança.
+
+00:03:42.560 --> 00:03:48.340
+Você pode armazenar muito mais, mas deve segmentar os dados com filtros indexados nas exibições padrão.
+
+00:03:49.900 --> 00:03:52.800
+Crie uma exibição de filtro segura que cada aplicativo use como base.
+
+00:03:52.800 --> 00:03:56.400
+Filtre por status ou modificado maior ou igual a hoje, 30 indexados.
+
+00:03:57.440 --> 00:03:58.720
+Ensine os criadores a respeitá-lo.
+
+00:03:59.140 --> 00:04:02.960
+Se precisam de histórico completo, podem executar uma extração agendada por um data lake,
+
+00:04:03.180 --> 00:04:04.780
+em vez de consultar tudo ao vivo.
+
+00:04:05.480 --> 00:04:07.360
+Sexto, arquivos versus anexos.
+
+00:04:07.880 --> 00:04:09.380
+Anexos são impostos sobre a conveniência.
+
+00:04:09.960 --> 00:04:11.420
+Use bibliotecas de documentos preais.
+
+00:04:12.160 --> 00:04:14.700
+Armazene o ID do item da lista como metadado no arquivo,
+
+00:04:14.700 --> 00:04:18.460
+ou use uma pasta nomeada com o ID do item, se gosta de sofrer.
+
+00:04:18.460 --> 00:04:22.980
+Bibliotecas oferecem coautoria, rótulos de retenção e visualizações.
+
+00:04:23.600 --> 00:04:24.600
+Anexo trazem problemas.
+
+00:04:25.780 --> 00:04:27.140
+Sétima realidade de ALM
+
+00:04:27.140 --> 00:04:29.840
+O SharePoint é teimoso em ALM.
+
+00:04:30.840 --> 00:04:35.060
+Listas não são empacotadas facilmente entre ambientes, então padronize com script.
+
+00:04:35.480 --> 00:04:39.320
+De provisionamento, scripts de site JSON ou modelos PNP.
+
+00:04:40.000 --> 00:04:43.900
+Cria sites, tipos de conteúdo, listas, colunas, exibições e índices.
+
+00:04:44.440 --> 00:04:45.500
+O aplicativo nunca cria esquema.
+
+00:04:46.040 --> 00:04:47.360
+Humanos nunca criam esquemas em produção.
+
+00:04:47.360 --> 00:04:49.060
+Se isso parece rígido, que bom.
+
+00:04:49.480 --> 00:04:50.760
+É mais barato do que reconstruir.
+
+00:04:51.160 --> 00:04:52.400
+Oitavo, lógica delegável.
+
+00:04:53.000 --> 00:04:57.500
+PowerApps pode consultar o SharePoint eficientemente se você escrever fórmulas delegáveis.
+
+00:04:58.080 --> 00:04:58.200
+É.
+
+00:04:58.820 --> 00:05:01.380
+Isso significa filtrar, classificar e pesquisar com colunas indexadas.
+
+00:05:01.860 --> 00:05:03.180
+Nada de for all em listas inteiras.
+
+00:05:03.740 --> 00:05:05.780
+Nada de cadeias gigantes com with com pseudo consultas.
+
+00:05:06.540 --> 00:05:09.060
+Se precisar de correspondência aproximada e compostos,
+
+00:05:09.440 --> 00:05:13.000
+crie uma coluna auxiliar que concatena chaves normalizadas no momento certo.
+
+00:05:13.000 --> 00:05:17.280
+É feio, mas mantenha a consulta no servidor.
+
+00:05:17.360 --> 00:05:19.880
+Em vez de arrastar 25 mil linhas para o cliente.
+
+00:05:20.880 --> 00:05:22.160
+Nono, propriedade de dados.
+
+00:05:22.760 --> 00:05:25.040
+Cada lista tem um proprietário responsável, não a TI.
+
+00:05:26.160 --> 00:05:28.240
+Análise de propriedade expira um trimestralmente.
+
+00:05:28.900 --> 00:05:32.800
+Se o proprietário sair do site, o proprietário secundário é notificado e o aplicativo é realocado.
+
+00:05:33.380 --> 00:05:33.920
+Sem órfãos.
+
+00:05:34.760 --> 00:05:38.620
+Sem listas misteriosas, com dados críticos e uma caixa de correio nativa.
+
+00:05:38.620 --> 00:05:41.100
+Por fim, uma regra de bom senso.
+
+00:05:41.620 --> 00:05:44.800
+Se sua lista precisa de mais de um campo de texto rico de várias linhas,
+
+00:05:45.380 --> 00:05:48.400
+vários campos de busca e de pessoas, pare e reavalie.
+
+00:05:49.220 --> 00:05:52.060
+Você está projetando um modelo relacional com uma ferramenta de colaboração.
+
+00:05:52.740 --> 00:05:54.200
+Mova os dados principais para o Dataverse.
+
+00:05:54.940 --> 00:05:57.660
+Mantenha o SharePoint para arquivos e tabelas de referência leves.
+
+00:05:57.980 --> 00:05:58.700
+E conecte-os.
+
+00:05:59.320 --> 00:06:00.400
+Modelo híbrido super gambiadas.
+
+00:06:00.400 --> 00:06:03.180
+Disciplina imposta não é glamourosa.
+
+00:06:04.500 --> 00:06:08.900
+É a diferença entre um desempenho previsível e um colapso em câmera lenta.
+
+00:06:09.620 --> 00:06:12.200
+Você estabiliza a base ou tudo acima dela herdará a instabilidade.
+
+00:06:12.500 --> 00:06:12.820
+Idade.
+
+00:06:13.380 --> 00:06:14.700
+Agora subimos na pilha tecnológica.
+
+00:06:15.800 --> 00:06:16.360
+Pilar 2.
+
+00:06:16.700 --> 00:06:19.400
+Power Apps, tela determinística, não um álbum de recortes.
+
+00:06:20.280 --> 00:06:22.900
+Estabilize o SharePoint e depois faça o aplicativo se comportar.
+
+00:06:23.380 --> 00:06:26.900
+Um aplicativo de tela é determinístico ou é um caos com um botão de salvar.
+
+00:06:27.640 --> 00:06:29.900
+Direcionamos cada decisão para a previsibilidade, repetibilidade,
+
+00:06:31.100 --> 00:06:32.160
+e modos de falha claros.
+
+00:06:32.820 --> 00:06:35.280
+Sem improvisação, sem interface, estilo carta de sequestro.
+
+00:06:36.620 --> 00:06:37.380
+Comece pelo conector.
+
+00:06:38.440 --> 00:06:40.220
+Adicione o SharePoint como fonte de dados,
+
+00:06:40.320 --> 00:06:43.220
+mas nunca deixe que controles consultem listas diretamente.
+
+00:06:44.060 --> 00:06:45.440
+Centralize as leituras e gravações.
+
+00:06:46.000 --> 00:06:48.800
+No OnStart do aplicativo, defina um registro de configuração
+
+00:06:48.800 --> 00:06:51.180
+e pré-calcule as consultas necessárias repetidamente.
+
+00:06:52.340 --> 00:06:56.020
+Nem tudo carrega na inicialização, apenas dados de semente e contexto do usuário.
+
+00:06:56.580 --> 00:06:57.020
+Exemplo.
+
+00:06:57.600 --> 00:06:58.680
+Set var user.
+
+00:06:59.180 --> 00:06:59.400
+User.
+
+00:07:00.400 --> 00:07:01.740
+Set var today.
+
+00:07:02.080 --> 00:07:02.300
+Today.
+
+00:07:03.520 --> 00:07:04.160
+Clear collect.
+
+00:07:04.300 --> 00:07:05.280
+Call incident filter.
+
+00:07:05.940 --> 00:07:07.280
+Lista status igual ativo.
+
+00:07:08.900 --> 00:07:11.300
+Em seguida, adie o carregamento de listas pesadas
+
+00:07:11.300 --> 00:07:13.840
+para o nível da tela no OnVisible com filtros controlados.
+
+00:07:13.840 --> 00:07:18.220
+Isso evita o atraso na primeira renderização que as pessoas culpam o SharePoint,
+
+00:07:18.620 --> 00:07:21.400
+quando na verdade é seu app arrastando uma exibição de lista.
+
+00:07:22.140 --> 00:07:24.380
+Galerias versus formulários não é uma escolha de estilo.
+
+00:07:25.080 --> 00:07:27.180
+Galerias exibem formulários confirmam.
+
+00:07:27.180 --> 00:07:32.720
+Use uma galeria para navegação de listas com uma fórmula de itens estritamente delegável.
+
+00:07:32.720 --> 00:07:40.560
+Filter incidents status igual active and modified while var today 30.
+
+00:07:42.100 --> 00:07:44.240
+Tanto status quanto modified devem ter status.
+
+00:07:44.240 --> 00:07:48.200
+Não componha dados dentro da galeria com cadeias de if chamadas lookup.
+
+00:07:48.200 --> 00:07:54.120
+Pré-calcule buscas em coleções leves no início do app se precisar exibir nomes amigáveis.
+
+00:07:55.800 --> 00:07:59.180
+Objetivo é uma consulta delegável ao servidor, não 10 truques no cliente.
+
+00:08:00.180 --> 00:08:00.720
+Pré-edição.
+
+00:08:01.080 --> 00:08:04.020
+Use o formulário de edição com o SubmitForm quando seu esquema for simples
+
+00:08:04.020 --> 00:08:06.120
+e você puder viver dentro de seu ciclo de vida.
+
+00:08:06.120 --> 00:08:10.360
+O SubmitForm lida com validação atrelada a cartões de dados.
+
+00:08:11.040 --> 00:08:13.140
+Aplica patches em anexos nos bastidores.
+
+00:08:13.720 --> 00:08:16.800
+E gerencia a concorrência otimista como o SharePoint espera, mas trate.
+
+00:08:17.800 --> 00:08:19.840
+SubmitForm como uma operação atômica.
+
+00:08:20.520 --> 00:08:22.540
+Não envolva isso em outros 5 passos e torça melhor.
+
+00:08:23.060 --> 00:08:25.440
+Use explicitamente o OnSuccess e o OnFailure.
+
+00:08:26.120 --> 00:08:28.640
+No OnSuccess, registre o que mudou e navegue.
+
+00:08:29.520 --> 00:08:32.480
+No OnFailure, exiba o erro com uma mensagem que faça sentido.
+
+00:08:32.480 --> 00:08:36.680
+Notify, fale ao salvar, verifique campos obrigatórios ou concorrência.
+
+00:08:37.080 --> 00:08:37.520
+Ou com essa.
+
+00:08:38.600 --> 00:08:39.720
+NotificationType.error.
+
+00:08:40.520 --> 00:08:41.700
+Agora, a dura verdade.
+
+00:08:42.360 --> 00:08:45.120
+Que a maioria das pessoas não percebe é saber quando sair do formulário.
+
+00:08:45.960 --> 00:08:50.900
+Se precisar de atualizações parciais, transformações antes da escrita ou coordenação entre entidades,
+
+00:08:51.060 --> 00:08:52.600
+o patch é a ferramenta.
+
+00:08:53.140 --> 00:08:55.820
+O patch escreve exatamente o que você define e nada além disso.
+
+00:08:56.280 --> 00:08:56.940
+Isso é muito perigoso.
+
+00:08:57.380 --> 00:08:57.840
+Protejam.
+
+00:08:58.380 --> 00:09:01.960
+Use um registro de modelo tipado para tornar o patch legível e sustentável.
+
+00:09:02.480 --> 00:09:04.000
+Patching Incidentes.
+
+00:09:04.200 --> 00:09:04.540
+ID.
+
+00:09:05.140 --> 00:09:05.880
+Variedited.
+
+00:09:06.480 --> 00:09:07.080
+O data.
+
+00:09:07.580 --> 00:09:08.040
+E tag.
+
+00:09:08.740 --> 00:09:09.420
+Variedag.
+
+00:09:10.620 --> 00:09:11.200
+Status.
+
+00:09:11.980 --> 00:09:13.000
+DRP Status.
+
+00:09:14.880 --> 00:09:15.720
+Selected.
+
+00:09:16.520 --> 00:09:16.940
+Value.
+
+00:09:17.220 --> 00:09:17.820
+Priority.
+
+00:09:18.640 --> 00:09:19.280
+DRP.
+
+00:09:19.740 --> 00:09:20.380
+Priority.
+
+00:09:21.340 --> 00:09:21.980
+Selected.
+
+00:09:22.900 --> 00:09:23.700
+Value.
+
+00:09:24.320 --> 00:09:24.660
+Title.
+
+00:09:25.260 --> 00:09:25.600
+Text.
+
+00:09:26.560 --> 00:09:27.420
+Title Text.
+
+00:09:27.420 --> 00:09:31.760
+Sempre inclua e-tag para uma defesa básica de concorrência.
+
+00:09:32.880 --> 00:09:37.920
+Se o SharePoint retornar a um conflito, você receberá um erro claro em vez de uma sobrescrita silenciosa.
+
+00:09:38.940 --> 00:09:43.020
+Lide com isso em um padrão de repetição, com uma nova consulta e prompt de mesclagem,
+
+00:09:43.380 --> 00:09:44.380
+não com força bruta.
+
+00:09:44.380 --> 00:09:46.340
+Nunca use patch para anexos.
+
+00:09:47.060 --> 00:09:50.080
+Use uma biblioteca de documentos vinculada pelo ID do item.
+
+00:09:50.920 --> 00:09:54.400
+Armazene o arquivo na biblioteca com metadados de ID de item iguais a este.
+
+00:09:54.840 --> 00:09:56.880
+Depois exiba via galeria ninhada.
+
+00:09:57.960 --> 00:10:01.400
+Isso oferece visualizações de coautoria, etiquetas e ambiguidade zero.
+
+00:10:02.480 --> 00:10:07.420
+O atalho de apenas adicionar anexo é o motivo pelo qual seus usuários continuam enviando cópias por e-mail.
+
+00:10:08.620 --> 00:10:09.780
+Controle o estado explicitamente.
+
+00:10:09.780 --> 00:10:13.460
+Apps se perdem quando cada controle define variáveis globais.
+
+00:10:14.520 --> 00:10:15.300
+Prefira contexto.
+
+00:10:16.000 --> 00:10:21.220
+Use update context para flags de tela e um pequeno conjunto de variáveis globais para conceitos do app,
+
+00:10:21.320 --> 00:10:24.540
+como var user e alternadores de recursos, o IJ.
+
+00:10:25.100 --> 00:10:26.960
+Crie um registro único para o buffer de edição.
+
+00:10:27.560 --> 00:10:29.700
+Defina var edit como padrão de incidente.
+
+00:10:30.020 --> 00:10:32.680
+Depois escreva formulários e controles para vincular os campos de var edit.
+
+00:10:33.100 --> 00:10:34.860
+Ao salvar mapeio var edit para o patch,
+
+00:10:34.860 --> 00:10:39.960
+Isso isola a instabilidade da interface da integridade dos dados e torna o desfazer trivial.
+
+00:10:41.280 --> 00:10:44.000
+Limpe var edit, ou recarrega, da fonte.
+
+00:10:45.400 --> 00:10:47.840
+A validação pertence a três lugares, nesta ordem.
+
+00:10:48.420 --> 00:10:51.140
+Primeiro, regras do lado do servidor no SharePoint sempre que possível.
+
+00:10:51.940 --> 00:10:55.820
+Colunas obrigatórias, comprimentos máximos, restrições únicas via chaves calculadas.
+
+00:10:57.180 --> 00:11:02.040
+Segundo, propriedade de obrigatório e válido do cartão de dados alinhadas a essas regras não inventadas na hora.
+
+00:11:02.040 --> 00:11:05.040
+Terceiro, salvaguardas antes do envio.
+
+00:11:05.760 --> 00:11:10.740
+Se o formulário em incidentes for válido, notifique para corrigir erros de validação.
+
+00:11:11.260 --> 00:11:11.780
+Aviso.
+
+00:11:13.000 --> 00:11:13.360
+Retorno.
+
+00:11:14.480 --> 00:11:19.080
+O motivo disso funcionar é que você reutiliza a validação do motor em vez de reinventá-la 12 vezes.
+
+00:11:19.540 --> 00:11:19.640
+É.
+
+00:11:20.720 --> 00:11:23.280
+Padrões de navegação devem ser lineares e impotentes.
+
+00:11:24.220 --> 00:11:27.420
+Usuários começam em uma lista filtrada, selecionam um registro,
+
+00:11:27.420 --> 00:11:32.400
+editam em outra tela, confirmam e retornam ao filtro com a mesma posição de rolagem.
+
+00:11:33.540 --> 00:11:35.560
+Não reconstrua o universo a cada navegação.
+
+00:11:36.320 --> 00:11:38.860
+Armazene a semente da consulta da lista em uma variável.
+
+00:11:40.000 --> 00:11:45.440
+Ao salvar, atualize apenas a linha alterada com um patch direcionado em uma coleção local vinculada à galeria.
+
+00:11:46.680 --> 00:11:49.520
+Isso evita viagens de ida e volta completas e preserva o contexto.
+
+00:11:50.160 --> 00:11:52.640
+Estilização é um problema de governança disfarçado de gosto pessoal.
+
+00:11:53.240 --> 00:11:54.740
+Defina um registro de tema no aplicativo.
+
+00:11:54.740 --> 00:12:06.980
+No início, defina var team primary como 0, 04578, text como 100, 11, danger, 6, 50, F1, always.
+
+00:12:07.800 --> 00:12:09.260
+Todos os controles referenciam o var tempo.
+
+00:12:09.680 --> 00:12:10.600
+Bloqueie fontes e tamanhos.
+
+00:12:11.020 --> 00:12:12.880
+Se alguém exigir um gradiente, você recusa.
+
+00:12:13.580 --> 00:12:16.020
+Consistência não é sobre ser bonito, é sobre ser sustentável.
+
+00:12:16.840 --> 00:12:18.420
+O aplicativo deve parecer simples e rodar rápido.
+
+00:12:18.780 --> 00:12:19.860
+Offline não é uma caixa de seleção.
+
+00:12:19.860 --> 00:12:25.720
+Se você não tem um padrão de carregamento de armazenamento testado com serialização de JSON e resolução de conflitos, você não tem offline,
+
+00:12:26.440 --> 00:12:28.120
+diga não até que possa dizer sim adequadamente.
+
+00:12:28.540 --> 00:12:30.600
+Offline parcial cria incidentes completos.
+
+00:12:31.280 --> 00:12:32.360
+Finalmente, instrumentação.
+
+00:12:32.840 --> 00:12:34.620
+O aplicativo registra seu próprio comportamento.
+
+00:12:35.120 --> 00:12:36.540
+Ao iniciar, escreve um registração.
+
+00:12:36.540 --> 00:12:41.040
+A cada salvamento, registre o patch com a ID da solicitação.
+
+00:12:41.440 --> 00:12:44.820
+Usuário registra operação, duração, sucesso e erro.
+
+00:12:46.160 --> 00:12:49.820
+Se um fluxo estiver envolvido, correlacione com um guia de passado para o gatilho.
+
+00:12:50.700 --> 00:12:54.180
+Quando o pico da 0347 atinge novamente, você não vai adivinhar, você vai ver.
+
+00:12:55.200 --> 00:12:58.500
+Aplicativos determinísticos dizem o que fizeram, não o que esperavam fazer.
+
+00:13:00.540 --> 00:13:00.880
+Schmidt, o que...
+
+00:13:00.880 --> 00:13:05.170
+Eu quero, Rondi.
+
+00:13:05.470 --> 00:13:08.310
+E quando estar orgulhosa, tá orgulhosa.
+
+00:13:09.350 --> 00:13:10.370
+Algo pelo que eu queimo de paixão.
+
+00:13:11.810 --> 00:13:13.710
+E que eu ame fazer.
+
+00:13:15.990 --> 00:13:17.350
+Sucessos, claro, também.
+
+00:13:17.670 --> 00:13:19.310
+Nunca, nunca, nunca, bem...
+
+00:13:20.010 --> 00:13:20.310
+Acho que o dia que...
+
+00:13:21.070 --> 00:13:22.270
+Eu simplesmente senti.
+
+00:13:23.010 --> 00:13:23.930
+Algo assim nem existe.
+
+00:13:24.390 --> 00:13:24.950
+Existe sim.
+
+00:13:25.270 --> 00:13:25.990
+No artesanato.
+
+00:13:26.250 --> 00:13:27.170
+Nós fazemos carreira.
+
+00:13:27.590 --> 00:13:28.150
+Consentimento.
+
+00:13:29.050 --> 00:13:29.610
+Artesanato.
+
+00:14:29.920 --> 00:14:30.640
+Pilar 3.
+
+00:14:30.780 --> 00:14:31.580
+Power Automate.
+
+00:14:31.580 --> 00:14:34.460
+Bombas relógio desativadas com protocolos.
+
+00:14:35.100 --> 00:14:38.800
+Fluxos falham da mesma forma que prédios queimam silenciosamente no início e depois
+
+00:14:38.800 --> 00:14:39.780
+de tudo de uma vez.
+
+00:14:40.840 --> 00:14:43.160
+O pico da 0347 não foi misterioso.
+
+00:14:43.800 --> 00:14:45.480
+Uma coluna do SharePoint foi renomeada.
+
+00:14:45.760 --> 00:14:47.720
+Um proprietário de aprovação estava de licença.
+
+00:14:47.900 --> 00:14:52.120
+E um fluxo com 47 etapas sem proteção marchou direto para nulos e lá permaneceu.
+
+00:14:52.980 --> 00:14:54.120
+Não consertamos isso com esperança.
+
+00:14:54.640 --> 00:14:59.080
+Consertamos com protocolos que tornam a falha barulhenta, contida, irreversível e irreversível.
+
+00:14:59.440 --> 00:15:00.240
+Comece pelos gatilhos.
+
+00:15:01.580 --> 00:15:05.480
+Quando um item é criado ou modificado, não é uma estratégia, é uma comporta aberta.
+
+00:15:06.300 --> 00:15:06.880
+Delimite o escopo.
+
+00:15:07.400 --> 00:15:10.740
+No gatilho, adicione consultas de filtro que correspondam à base delegável do seu
+
+00:15:10.740 --> 00:15:11.220
+aplicativo.
+
+00:15:12.040 --> 00:15:15.800
+Status EQ pendente e modificado GOTC agora menos 1.
+
+00:15:16.640 --> 00:15:18.020
+Indexe essas colunas na lista.
+
+00:15:18.500 --> 00:15:21.140
+Se você precisa de um detector de mudanças, use uma coluna de hash calculada.
+
+00:15:21.140 --> 00:15:24.660
+O aplicativo atualiza apenas quando um campo significativo é alterado.
+
+00:15:25.160 --> 00:15:27.660
+Seu gatilho desperta por intenção, não por ruído de fundo.
+
+00:15:28.440 --> 00:15:29.320
+Em seguida, concorrência.
+
+00:15:29.320 --> 00:15:34.300
+Ative o controle de concorrência do gatilho e limite o grau para fluxos de trabalho que
+
+00:15:34.300 --> 00:15:37.340
+tocam o mesmo registro ou você criará conflitos consigo mesmo.
+
+00:15:38.600 --> 00:15:42.900
+Para manipuladores em massa, processe por chaves de partição, como site ou departamento,
+
+00:15:43.040 --> 00:15:44.280
+com um grau de 5 a 10.
+
+00:15:45.720 --> 00:15:48.440
+Paralelismo ilimitado é como você transforma o soluço em um engavetamento.
+
+00:15:48.440 --> 00:15:50.540
+Condições não são decorações.
+
+00:15:51.380 --> 00:15:53.260
+Use cláusulas de guarda-cedo e com frequência.
+
+00:15:54.160 --> 00:15:57.600
+A primeira ramificação no fluxo deve responder, eu deveria estar executando?
+
+00:15:58.620 --> 00:16:02.000
+Se o status do item não estiver pendente, termine como sucedido com motivo.
+
+00:16:02.900 --> 00:16:06.420
+Se os campos obrigatórios estiverem branco, termine como falha, com um código específico.
+
+00:16:06.420 --> 00:16:10.720
+Terminar silenciosamente não é resiliência, é um encobrimento.
+
+00:16:10.720 --> 00:16:13.940
+Aprovações parecem simples até alguém sair de férias.
+
+00:16:14.820 --> 00:16:19.220
+Use o recurso nativo de iniciar e aguardar a aprovação para decisões humanas, mas contextualize
+
+00:16:19.220 --> 00:16:19.680
+com a realidade.
+
+00:16:20.440 --> 00:16:23.620
+Defina um tempo limite realista para o negócio, com 72 horas, se não para sempre.
+
+00:16:24.460 --> 00:16:27.040
+Ao atingir o tempo limite, direcione para um caminho de escalonamento.
+
+00:16:28.140 --> 00:16:29.240
+Notifique o solicitante.
+
+00:16:29.780 --> 00:16:31.500
+Notifique um grupo de aprovadores substitutos.
+
+00:16:31.960 --> 00:16:33.220
+E registre um evento de governança.
+
+00:16:33.280 --> 00:16:37.740
+Se a sua cultura exige reatribuição, use grupos de entrada em vez de indivíduos para
+
+00:16:37.740 --> 00:16:39.500
+que a cobertura gire sem edições.
+
+00:16:39.500 --> 00:16:43.300
+O que a maioria das pessoas não percebe é que aprovações são máquinas de estados.
+
+00:16:43.560 --> 00:16:45.500
+O item da sua lista deve refletir esse estado.
+
+00:16:46.540 --> 00:16:51.700
+Escreva um status como aguardando a aprovação, depois aprovado ou rejeitado, em um campo
+
+00:16:51.700 --> 00:16:52.520
+de decisão por.
+
+00:16:53.260 --> 00:16:57.760
+Fluxo lê e escreve esse estado explicitamente para sobreviver a tentativas e mudanças humanas.
+
+00:16:58.500 --> 00:17:00.460
+Operações de dados são onde as promessas vão morrer.
+
+00:17:01.180 --> 00:17:02.740
+Analise o JSON sempre que o formato for importante.
+
+00:17:03.200 --> 00:17:04.620
+Pare de adivinhar o conteúdo dinâmico.
+
+00:17:05.540 --> 00:17:08.880
+Defina um contrato para a resposta de cada conector e fale rapidamente se ele mudar.
+
+00:17:09.500 --> 00:17:12.260
+Use padrões de TriCat com ações de escopo.
+
+00:17:13.600 --> 00:17:18.620
+Um escopo de tentativa para sua lógica principal e um escopo de captura configurado para falha,
+
+00:17:18.720 --> 00:17:20.660
+tempo limite ou ignorado para reunir contexto.
+
+00:17:22.660 --> 00:17:27.660
+ID da execução do fluxo, ID do item e tag, ID de correlação do app e envia um alerta
+
+00:17:27.660 --> 00:17:29.240
+único consolidado.
+
+00:17:30.160 --> 00:17:32.500
+O diferencial que ninguém menciona é a correlação.
+
+00:17:32.500 --> 00:17:37.340
+Passe um guia do app para o gatilho do fluxo e escreva em cada log, assunto de e-mail e
+
+00:17:37.340 --> 00:17:38.180
+cartão do Teams.
+
+00:17:39.620 --> 00:17:43.720
+Quando o pico ocorre, você segue um único ID através do app Fluxo e atualizações do
+
+00:17:43.720 --> 00:17:44.940
+SharePoint sem adivinhar.
+
+00:17:45.640 --> 00:17:48.080
+Escritas no SharePoint precisam de otimismo com comprovação.
+
+00:17:49.080 --> 00:17:52.020
+Antes de atualizar um item, obtenha o item atual para recuperar a tag.
+
+00:17:52.880 --> 00:17:55.480
+Escreva de volta com o cabeçalho IFMAT onde disponível.
+
+00:17:55.480 --> 00:17:59.960
+Ou use a ação de atualizar item e verifique o erro 412 Precondition Failed.
+
+00:18:00.960 --> 00:18:04.880
+Se alguém editou o registro entre o gatilho e a escrita, não sobrescreva.
+
+00:18:06.360 --> 00:18:10.700
+Direcione para um caminho de mesclagem, leia novamente, compare os campos alterados e
+
+00:18:10.700 --> 00:18:12.800
+reaplique ou peça ao solicitante que concilie.
+
+00:18:13.780 --> 00:18:15.820
+Sobrescritas silenciosas são a forma como você perde um F.
+
+00:18:16.300 --> 00:18:18.460
+Fluxos longos precisam de pontos de verificação.
+
+00:18:19.360 --> 00:18:23.860
+Após cada mutação crítica, persiste um campo de última etapa processada na lista,
+
+00:18:23.860 --> 00:18:29.060
+ou em uma lista de rastreamento secundária, chaveada pelo ID do item e GUID de correlação
+
+00:18:29.060 --> 00:18:30.080
+e GUID de correlação.
+
+00:18:30.820 --> 00:18:34.620
+Ao reexecutar a primeira ação, lê esse ponto de verificação e pula para o próximo bloco.
+
+00:18:35.140 --> 00:18:36.620
+Isso torna seu fluxo idempotente.
+
+00:18:37.160 --> 00:18:40.420
+Execuções não geram cobranças duplas nem enviam dois e-mails para o CFO.
+
+00:18:41.080 --> 00:18:42.340
+Em arquivo, são uma armadilha processada.
+
+00:18:42.760 --> 00:18:46.680
+Se o fluxo lida com documentos, use bibliotecas de documentos e tipos de conteúdo.
+
+00:18:47.440 --> 00:18:48.520
+Não anexos de lista.
+
+00:18:49.600 --> 00:18:53.680
+Use a obtenção de conteúdo de arquivo por caminho apenas, quando necessário.
+
+00:18:54.440 --> 00:18:56.400
+Prefira IDs para evitar mudanças no caminho.
+
+00:18:57.560 --> 00:19:01.020
+Ao gerar arquivos, escreva os metadados primeiro, depois carregue o conteúdo
+
+00:19:01.020 --> 00:19:03.840
+e em seguida atualize os metadados que dependem da versão do arquivo.
+
+00:19:04.080 --> 00:19:04.340
+Evo.
+
+00:19:04.840 --> 00:19:07.860
+É tedioso, mas mantenha a visualização, retenção e rótulos intactos.
+
+00:19:08.440 --> 00:19:10.360
+Tratamento de erros não é apenas um escopo de captura.
+
+00:19:10.720 --> 00:19:11.380
+É classificação.
+
+00:19:12.000 --> 00:19:13.080
+Nem todas as falhas são iguais.
+
+00:19:13.740 --> 00:19:16.420
+Crie três caminhos, repetíveis, permanentes e desconhecidos.
+
+00:19:17.060 --> 00:19:20.820
+Erros repetíveis incluem respostas 429 e 5X.
+
+00:19:20.820 --> 00:19:24.820
+Envolva com atraso exponencial máximo de três tentativas.
+
+00:19:26.020 --> 00:19:28.120
+Erros permanentes incluem falhas.
+
+00:19:28.520 --> 00:19:30.100
+Devalidação de nível 400.
+
+00:19:30.100 --> 00:19:34.900
+Notifique o criador com os nomes e valores exatos dos campos.
+
+00:19:35.680 --> 00:19:39.380
+Erros desconhecidos despejam um corpo bruto e cabeçalhos em um log seguro,
+
+00:19:39.860 --> 00:19:41.900
+com o GUID de correlação e o ambiente.
+
+00:19:41.900 --> 00:19:44.260
+Não cole segredos no Teams.
+
+00:19:45.040 --> 00:19:46.240
+Mascare cargas úteis por padrão.
+
+00:19:46.840 --> 00:19:49.160
+As notificações devem ser silenciosas e o...
+
+00:19:49.160 --> 00:19:51.040
+Uma mensagem por incidente, não por ação.
+
+00:19:51.920 --> 00:19:53.920
+Use cartões adaptáveis com o GUID de correlação,
+
+00:19:54.200 --> 00:19:56.660
+o link do item, a etapa falha e a próxima ação.
+
+00:19:57.660 --> 00:19:59.840
+Envie para um canal monitorado, não para uma pessoa.
+
+00:20:00.880 --> 00:20:03.680
+O canal tem um cabeçalho de incidente que muda de verde para âmbar
+
+00:20:03.680 --> 00:20:05.720
+quando qualquer erro desconhecido é postado.
+
+00:20:07.000 --> 00:20:09.160
+Volta ao verde quando um resolvedor clica em reconhecer
+
+00:20:09.160 --> 00:20:12.020
+e o sistema confirma que a próxima execução teve sucesso.
+
+00:20:13.660 --> 00:20:15.920
+Falando em próximas execuções, crie uma execução manual.
+
+00:20:17.800 --> 00:20:19.620
+Adicione um fluxo disparado por HTTP,
+
+00:20:20.060 --> 00:20:21.720
+ou uma tela de administrador do Power App,
+
+00:20:22.040 --> 00:20:24.640
+que usa o GUID de correlação, localiza o item e reinicia
+
+00:20:24.640 --> 00:20:26.400
+do último ponto de verificação seguro.
+
+00:20:27.840 --> 00:20:29.240
+Registre quem reexecutou e por quê.
+
+00:20:29.680 --> 00:20:30.600
+Humanos irão intervir.
+
+00:20:31.180 --> 00:20:31.920
+Torne isso auditável.
+
+00:20:33.060 --> 00:20:35.360
+Finalmente, documente o contrato na descrição da lista,
+
+00:20:35.600 --> 00:20:37.340
+link para um runbook, filtros de gatilho,
+
+00:20:37.340 --> 00:20:39.060
+campos obrigatórios, aprovação,
+
+00:20:39.160 --> 00:20:40.800
+SLA, as classes de erro,
+
+00:20:40.940 --> 00:20:43.460
+campos de checkpoint e etapas de reexecução.
+
+00:20:44.320 --> 00:20:45.180
+Criadores vêm e vão.
+
+00:20:45.800 --> 00:20:46.800
+Protocolos persistem.
+
+00:20:47.520 --> 00:20:49.020
+Quando alguém renomea uma coluna à meia-noite,
+
+00:20:49.100 --> 00:20:50.280
+o fluxo não entra em colapso.
+
+00:20:51.100 --> 00:20:52.600
+Ele reclama alto com um mapa.
+
+00:20:53.300 --> 00:20:54.860
+Essa é a diferença entre uma bomba relógio
+
+00:20:54.860 --> 00:20:55.880
+e uma queima controlada.
+
+00:20:56.640 --> 00:20:57.340
+Pilar 4.
+
+00:20:57.660 --> 00:20:58.860
+Documentos do AI Builder.
+
+00:20:58.980 --> 00:21:00.680
+Com um ano sóbrio no ciclo.
+
+00:21:01.680 --> 00:21:03.120
+O pico não começou com código.
+
+00:21:03.980 --> 00:21:04.700
+Começou com PDF.
+
+00:21:05.700 --> 00:21:06.620
+Faturas chegavam,
+
+00:21:06.620 --> 00:21:08.300
+alguém redigitava itens manualmente
+
+00:21:08.300 --> 00:21:11.220
+e um fluxo tentava adivinhar quais totais importavam.
+
+00:21:12.180 --> 00:21:13.960
+Adivinhar é como você obtém incidentes na meia-noite.
+
+00:21:14.880 --> 00:21:16.800
+Então, extraímos dados como adultos,
+
+00:21:17.120 --> 00:21:18.100
+com um modelo treinado,
+
+00:21:18.320 --> 00:21:19.200
+um esquema estável
+
+00:21:19.200 --> 00:21:21.460
+e um checkpoint onde o humano confirma.
+
+00:21:21.460 --> 00:21:23.740
+Aqui está o padrão disciplinado.
+
+00:21:24.780 --> 00:21:27.300
+Use o modelo de processamento de documentos do AI Builder
+
+00:21:27.300 --> 00:21:29.420
+para formulários estruturados que você vê repetidamente,
+
+00:21:29.580 --> 00:21:29.940
+fatura,
+
+00:21:30.480 --> 00:21:31.220
+formulário de entrada,
+
+00:21:31.360 --> 00:21:32.460
+relatório de inspeção.
+
+00:21:33.880 --> 00:21:36.620
+Treine com 5 a 10 exemplos limpos que correspondam ao layout.
+
+00:21:37.260 --> 00:21:39.740
+Defina os campos exatos que seu sistema se importa.
+
+00:21:39.740 --> 00:21:41.460
+Nome do fornecedor
+
+00:21:41.460 --> 00:21:42.520
+Número da fatura
+
+00:21:42.520 --> 00:21:43.780
+Data da fatura
+
+00:21:43.780 --> 00:21:44.520
+Subtotal
+
+00:21:44.520 --> 00:21:45.140
+Imposto
+
+00:21:45.140 --> 00:21:45.760
+Total
+
+00:21:45.760 --> 00:21:46.920
+Pedido de compra
+
+00:21:46.920 --> 00:21:48.840
+E um hash calculado que sua lógica
+
+00:21:48.840 --> 00:21:51.560
+downstream usa para detectar duplicatas.
+
+00:21:52.740 --> 00:21:54.840
+Mantenha os nomes dos campos chatos e permanentes.
+
+00:21:55.320 --> 00:21:56.340
+Até de evita o desvio.
+
+00:21:56.980 --> 00:21:57.820
+No Power Automate,
+
+00:21:57.940 --> 00:21:59.920
+dispare com um documento chegando em uma biblioteca
+
+00:21:59.920 --> 00:22:01.960
+dedicada com um tipo de conteúdo como fatura.
+
+00:22:02.660 --> 00:22:04.600
+Passe o conteúdo do arquivo para a ação de previsão.
+
+00:22:04.600 --> 00:22:07.460
+Analise imediatamente cada campo com o parceiro Jason
+
+00:22:07.460 --> 00:22:08.940
+usando um contrato que você controla.
+
+00:22:10.380 --> 00:22:12.260
+Nada de roleta russa com conteúdo dinâmico.
+
+00:22:13.340 --> 00:22:15.940
+Calcule seu próprio total como subtotal mais imposto
+
+00:22:15.940 --> 00:22:17.300
+e compare com o total do modelo.
+
+00:22:18.440 --> 00:22:19.260
+Se houver divergência,
+
+00:22:19.400 --> 00:22:21.140
+direcione para a revisão humana necessária.
+
+00:22:21.920 --> 00:22:23.360
+Presença humana não é um pedido de desculpas
+
+00:22:23.360 --> 00:22:24.240
+e é um ponto de controle.
+
+00:22:25.320 --> 00:22:26.540
+Crie uma tela de aprovação
+
+00:22:26.540 --> 00:22:29.100
+ou revisão personalizada em um app administrativo leve
+
+00:22:29.100 --> 00:22:31.160
+vinculado a uma lista de fila de revisão.
+
+00:22:32.340 --> 00:22:33.780
+Armazene os campos extraídos
+
+00:22:33.780 --> 00:22:35.080
+se a pontuação de confiança
+
+00:22:35.080 --> 00:22:36.320
+o link do arquivo
+
+00:22:36.320 --> 00:22:38.080
+e um ID de correlação passado pelo app
+
+00:22:38.080 --> 00:22:39.300
+ou gerado na ingestão.
+
+00:22:40.360 --> 00:22:41.960
+O revisor edita os campos, se necessário,
+
+00:22:42.000 --> 00:22:42.740
+e clica em Confirmar.
+
+00:22:43.840 --> 00:22:46.220
+Só então o fluxo escreve no sistema de registro
+
+00:22:46.220 --> 00:22:48.520
+e move o arquivo para uma pasta de processados
+
+00:22:48.520 --> 00:22:50.000
+com uma etiqueta de retenção
+
+00:22:50.000 --> 00:22:52.000
+que a maioria das pessoas esquece
+
+00:22:52.000 --> 00:22:54.320
+é fundamental o modelo com verificações determinísticas.
+
+00:22:55.560 --> 00:22:56.540
+Valide o nome do fornecedor
+
+00:22:56.540 --> 00:22:57.720
+na tabela de fornecedores.
+
+00:22:58.600 --> 00:23:00.580
+Valide a unicidade do número da fatura por fornecedor.
+
+00:23:01.500 --> 00:23:02.520
+Valide se a data da fatura
+
+00:23:02.520 --> 00:23:03.860
+está dentro de um intervalo sensato.
+
+00:23:04.400 --> 00:23:05.480
+Se qualquer validação falhar,
+
+00:23:05.560 --> 00:23:06.640
+não espere que esteja tudo bem.
+
+00:23:08.320 --> 00:23:09.300
+Encaminhe para a revisão
+
+00:23:09.300 --> 00:23:10.940
+e marque o incidente com um código de motivo
+
+00:23:10.940 --> 00:23:11.740
+para a telemetria.
+
+00:23:12.820 --> 00:23:13.860
+Baixe a confiança,
+
+00:23:14.260 --> 00:23:14.980
+erro matemático,
+
+00:23:15.100 --> 00:23:16.060
+fornecedor desconhecido,
+
+00:23:16.140 --> 00:23:16.640
+duplicata.
+
+00:23:17.820 --> 00:23:19.020
+Isso transforma a revisão aleatória
+
+00:23:19.020 --> 00:23:19.820
+em trabalho mensurável.
+
+00:23:20.480 --> 00:23:21.160
+Armazenamos, é claro.
+
+00:23:21.600 --> 00:23:22.820
+Não salve arquivos de negócios
+
+00:23:22.820 --> 00:23:23.800
+como anexos de lista.
+
+00:23:24.500 --> 00:23:26.040
+O documento deve ficar em uma biblioteca
+
+00:23:26.040 --> 00:23:26.980
+com tipos de conteúdo,
+
+00:23:27.180 --> 00:23:27.820
+rótulos e versionamento.
+
+00:23:27.820 --> 00:23:30.160
+Os campos extraídos
+
+00:23:30.160 --> 00:23:30.860
+ficam em uma lista
+
+00:23:30.860 --> 00:23:31.920
+ou tabela dataverse
+
+00:23:31.920 --> 00:23:33.920
+indexada pelo ID do documento
+
+00:23:33.920 --> 00:23:34.940
+e grid de correlação.
+
+00:23:35.700 --> 00:23:37.420
+Se o financeiro quiser exportações,
+
+00:23:37.560 --> 00:23:38.440
+agende uma extração
+
+00:23:38.440 --> 00:23:39.380
+para um data lake.
+
+00:23:40.280 --> 00:23:41.000
+Não deixe que eles criem
+
+00:23:41.000 --> 00:23:41.800
+consultas complexas
+
+00:23:41.800 --> 00:23:43.040
+diretamente nas bibliotecas ativas.
+
+00:23:43.560 --> 00:23:44.740
+O retreinamento é periódico,
+
+00:23:44.820 --> 00:23:45.420
+não impulsivo.
+
+00:23:46.000 --> 00:23:47.660
+Quando notar baixa confiança recorrente
+
+00:23:47.660 --> 00:23:48.920
+em um novo modelo de fornecedor,
+
+00:23:49.360 --> 00:23:50.560
+adicione duas amostras novas,
+
+00:23:50.700 --> 00:23:52.120
+retreine e versione o modelo.
+
+00:23:52.120 --> 00:23:54.920
+Só altere o fluxo de produção
+
+00:23:54.920 --> 00:23:56.360
+para o novo ID de modelo
+
+00:23:56.360 --> 00:23:58.440
+após um teste com documentos reservados
+
+00:23:58.440 --> 00:23:59.940
+passar nas suas validações.
+
+00:24:00.740 --> 00:24:02.020
+Modelos recebem controle de mudança
+
+00:24:02.020 --> 00:24:02.600
+assim como o código.
+
+00:24:02.980 --> 00:24:03.400
+Por fim,
+
+00:24:03.680 --> 00:24:04.700
+cada etapa é registrada
+
+00:24:04.700 --> 00:24:05.780
+com guia de correlação.
+
+00:24:06.680 --> 00:24:07.680
+Arquivo capturado,
+
+00:24:07.800 --> 00:24:08.620
+previsão completa,
+
+00:24:09.340 --> 00:24:10.300
+validação aprovada,
+
+00:24:10.480 --> 00:24:11.500
+falha, decisão humana,
+
+00:24:11.700 --> 00:24:12.120
+gravação confirmada.
+
+00:24:13.000 --> 00:24:15.820
+Se o padrão 0347 retornar,
+
+00:24:16.020 --> 00:24:17.240
+você o rastreia pelo GUID,
+
+00:24:17.340 --> 00:24:18.300
+não por boatos.
+
+00:24:19.300 --> 00:24:20.820
+A IA ajuda quando é cercada,
+
+00:24:20.820 --> 00:24:22.160
+medida e humilde.
+
+00:24:22.900 --> 00:24:24.160
+Acerca é o ponto de verificação humano.
+
+00:24:24.600 --> 00:24:26.620
+A medição é a validação
+
+00:24:26.620 --> 00:24:27.480
+e a telemetria.
+
+00:24:28.500 --> 00:24:29.860
+A humildade é saber
+
+00:24:29.860 --> 00:24:30.960
+quando pedir ajuda.
+
+00:24:32.480 --> 00:24:34.140
+Pilar 5, Copilot Studio.
+
+00:24:34.740 --> 00:24:35.520
+Converse com limites,
+
+00:24:35.600 --> 00:24:36.180
+não com megafone.
+
+00:24:59.110 --> 00:24:59.450
+Realmente.
+
+00:25:37.620 --> 00:25:38.460
+Pronto para 10 dias
+
+00:25:38.460 --> 00:25:39.800
+de Microsoft 365,
+
+00:25:40.260 --> 00:25:41.220
+Copilot e A,
+
+00:25:41.360 --> 00:25:42.220
+Azure e as pessoas
+
+00:25:42.220 --> 00:25:43.880
+que moldam o futuro do trabalho?
+
+00:25:44.840 --> 00:25:45.480
+Neste janeiro,
+
+00:25:45.780 --> 00:25:47.380
+a M3 MP5 PON está de volta.
+
+00:25:47.520 --> 00:25:48.900
+Estamos indo ainda mais longe.
+
+00:25:48.900 --> 00:25:50.500
+Junte-se a nós
+
+00:25:50.500 --> 00:25:51.280
+em sessões ao vivo,
+
+00:25:51.380 --> 00:25:52.120
+demonstrações reais
+
+00:25:52.120 --> 00:25:52.980
+e conhecimento prático
+
+00:25:52.980 --> 00:25:54.200
+de MVPs e especialistas
+
+00:25:54.200 --> 00:25:55.120
+do setor em todo o mundo.
+
+00:25:55.700 --> 00:25:56.700
+Nada de slides genéricos.
+
+00:25:57.100 --> 00:25:57.640
+Nada de palavras
+
+00:25:57.640 --> 00:25:58.340
+da mão determinada.
+
+00:25:58.920 --> 00:25:59.640
+Estamos abordando
+
+00:25:59.640 --> 00:26:00.500
+os desafios reais.
+
+00:26:00.640 --> 00:26:01.400
+Copilot Studio,
+
+00:26:01.640 --> 00:26:02.320
+agente de IA,
+
+00:26:02.620 --> 00:26:03.460
+fábrica e segurança,
+
+00:26:03.800 --> 00:26:05.480
+governança e automação.
+
+00:26:06.860 --> 00:26:08.080
+Seja você um profissional de TI,
+
+00:26:08.340 --> 00:26:09.720
+desenvolvedor ou líder de negócios,
+
+00:26:09.840 --> 00:26:11.220
+há sessões projetadas para você.
+
+00:26:12.280 --> 00:26:13.600
+Com 10 dias completos,
+
+00:26:13.660 --> 00:26:14.300
+você pode explorar
+
+00:26:14.300 --> 00:26:15.240
+várias tecnologias
+
+00:26:15.240 --> 00:26:15.980
+e conectar-se
+
+00:26:15.980 --> 00:26:16.860
+a uma comunidade global.
+
+00:26:17.840 --> 00:26:18.560
+Assista ao vivo
+
+00:26:18.560 --> 00:26:19.780
+e leve insights práticos
+
+00:26:19.780 --> 00:26:21.120
+de volta para a sua organização.
+
+00:26:22.080 --> 00:26:23.300
+Janeiro de 2027,
+
+00:26:23.800 --> 00:26:24.340
+10 dias,
+
+00:26:24.620 --> 00:26:25.680
+uma comunidade Microsoft.
+
+00:26:26.360 --> 00:26:26.880
+As inscrições
+
+00:26:26.880 --> 00:26:27.400
+já estão abertas?
+
+00:26:28.780 --> 00:26:30.760
+Acesse m3d5com.net
+
+00:26:30.760 --> 00:26:31.680
+e garanta sua vaga
+
+00:26:31.680 --> 00:26:32.440
+hoje mesmo.
+
+00:26:33.300 --> 00:26:35.420
+Isso é m3d5com.net.
+
+00:26:37.040 --> 00:26:37.880
+Inscreva-se agora
+
+00:26:37.880 --> 00:26:39.280
+em m3d5com.net
+
+00:26:39.280 --> 00:26:40.340
+e nos vemos ao vivo
+
+00:26:40.340 --> 00:26:41.740
+em janeiro, em janeiro.
+
+00:26:42.140 --> 00:26:42.860
+Outro pico
+
+00:26:42.860 --> 00:26:43.660
+veio de palavras
+
+00:26:43.660 --> 00:26:44.680
+ou de números.
+
+00:26:45.220 --> 00:26:45.940
+Um agente de chat
+
+00:26:45.940 --> 00:26:47.220
+respondeu uma pergunta sensível
+
+00:26:47.220 --> 00:26:48.040
+um pouco bem demais.
+
+00:26:48.600 --> 00:26:49.300
+Isso não é inteligência.
+
+00:26:49.700 --> 00:26:50.340
+Isso é um megafone
+
+00:26:50.340 --> 00:26:51.060
+sem botão de volume.
+
+00:26:51.780 --> 00:26:52.660
+Construímos agentes
+
+00:26:52.660 --> 00:26:53.700
+que conhecem seu papel,
+
+00:26:54.100 --> 00:26:55.000
+citam suas fontes
+
+00:26:55.000 --> 00:26:56.060
+e silenciam
+
+00:26:56.060 --> 00:26:56.660
+quando a pergunta
+
+00:26:56.660 --> 00:26:57.320
+cruza a linha.
+
+00:26:58.120 --> 00:26:59.020
+Comece com um propósito.
+
+00:27:00.120 --> 00:27:01.260
+O agente faz uma coisa,
+
+00:27:01.700 --> 00:27:02.240
+resolve dúvidas
+
+00:27:02.240 --> 00:27:02.840
+de procedimento
+
+00:27:02.840 --> 00:27:03.280
+e políticas
+
+00:27:03.280 --> 00:27:04.260
+para um domínio delimitado
+
+00:27:04.260 --> 00:27:04.760
+como política
+
+00:27:04.760 --> 00:27:05.780
+e processo de despesas.
+
+00:27:05.780 --> 00:27:08.420
+As fontes de conhecimento
+
+00:27:08.420 --> 00:27:09.440
+são páginas do SharePoint
+
+00:27:09.440 --> 00:27:10.300
+na lista de permissões
+
+00:27:10.300 --> 00:27:11.100
+com políticas atuais
+
+00:27:11.100 --> 00:27:11.520
+e uma lista
+
+00:27:11.520 --> 00:27:12.580
+de perguntas frequentes.
+
+00:27:13.360 --> 00:27:14.420
+Nada de busca ampla na web.
+
+00:27:15.140 --> 00:27:15.540
+Ele define isso
+
+00:27:15.540 --> 00:27:16.060
+como desativado.
+
+00:27:16.640 --> 00:27:17.560
+O agente lê apenas
+
+00:27:17.560 --> 00:27:18.600
+de conteúdo curado.
+
+00:27:19.380 --> 00:27:20.000
+Cada resposta
+
+00:27:20.000 --> 00:27:21.140
+inclui citações da página
+
+00:27:21.140 --> 00:27:22.400
+ou item da lista exato.
+
+00:27:23.000 --> 00:27:23.680
+Se não puder citar
+
+00:27:23.680 --> 00:27:24.300
+ele não dirá nada.
+
+00:27:24.700 --> 00:27:25.440
+Em seguida, proteções.
+
+00:27:25.940 --> 00:27:26.760
+Você define regras
+
+00:27:26.760 --> 00:27:27.160
+de instrução
+
+00:27:27.160 --> 00:27:27.720
+que sobrevivem
+
+00:27:27.720 --> 00:27:28.580
+a prontos inteligentes.
+
+00:27:29.200 --> 00:27:29.600
+Ele responde
+
+00:27:29.600 --> 00:27:30.620
+a perguntas operacionais.
+
+00:27:31.380 --> 00:27:31.880
+Ele não gera
+
+00:27:31.880 --> 00:27:32.360
+nem resumo
+
+00:27:32.360 --> 00:27:33.160
+de dados pessoais,
+
+00:27:33.260 --> 00:27:34.340
+registros de clientes
+
+00:27:34.340 --> 00:27:35.240
+ou qualquer coisa
+
+00:27:35.240 --> 00:27:35.760
+classificada
+
+00:27:35.760 --> 00:27:36.620
+como confidencial.
+
+00:27:38.060 --> 00:27:38.560
+Ele recusa
+
+00:27:38.560 --> 00:27:39.300
+solicitações
+
+00:27:39.300 --> 00:27:39.780
+que exijam
+
+00:27:39.780 --> 00:27:40.540
+ação de RH
+
+00:27:40.540 --> 00:27:41.600
+jurídico ou segurança.
+
+00:27:42.220 --> 00:27:42.680
+Ele encaminha
+
+00:27:42.680 --> 00:27:43.660
+essas para uma fila humana
+
+00:27:43.660 --> 00:27:44.640
+com uma mensagem modelo
+
+00:27:44.640 --> 00:27:45.180
+e um link
+
+00:27:45.180 --> 00:27:46.380
+que a maioria das pessoas
+
+00:27:46.380 --> 00:27:46.800
+esquece
+
+00:27:46.800 --> 00:27:47.620
+são as restrições sérias.
+
+00:27:48.780 --> 00:27:49.480
+Você define
+
+00:27:49.480 --> 00:27:50.120
+o tamanho máximo
+
+00:27:50.120 --> 00:27:50.680
+da resposta.
+
+00:27:50.880 --> 00:27:51.720
+Sessões necessárias,
+
+00:27:51.880 --> 00:27:52.540
+fonte da resposta,
+
+00:27:52.700 --> 00:27:53.300
+próximo passo
+
+00:27:53.300 --> 00:27:53.680
+em um tom,
+
+00:27:53.800 --> 00:27:54.140
+conciso,
+
+00:27:54.660 --> 00:27:55.000
+neutro,
+
+00:27:55.400 --> 00:27:55.640
+literal.
+
+00:27:56.920 --> 00:27:57.940
+Nada de floreios
+
+00:27:57.940 --> 00:27:58.540
+criativos.
+
+00:27:59.500 --> 00:28:00.060
+As ferramentas
+
+00:28:00.060 --> 00:28:00.680
+são cirúrgicas.
+
+00:28:01.220 --> 00:28:02.040
+Se você conectar
+
+00:28:02.040 --> 00:28:02.500
+o Outlook
+
+00:28:02.500 --> 00:28:03.540
+restringe a uma ação,
+
+00:28:03.540 --> 00:28:04.700
+enviar um e-mail
+
+00:28:04.700 --> 00:28:05.840
+ao usuário autenticado
+
+00:28:05.840 --> 00:28:06.460
+com resumo
+
+00:28:06.460 --> 00:28:07.040
+e links
+
+00:28:07.040 --> 00:28:08.460
+nunca para endereços
+
+00:28:08.460 --> 00:28:09.100
+de terceiros.
+
+00:28:09.920 --> 00:28:10.940
+Se você conectar
+
+00:28:10.940 --> 00:28:11.560
+um fluxo
+
+00:28:11.560 --> 00:28:12.640
+do Power Automate,
+
+00:28:12.840 --> 00:28:13.380
+ele deve aceitar
+
+00:28:13.380 --> 00:28:14.260
+um guia de correlação
+
+00:28:14.260 --> 00:28:15.100
+e um token de ação
+
+00:28:15.100 --> 00:28:16.040
+para idempotência.
+
+00:28:17.040 --> 00:28:17.840
+O agente não altera
+
+00:28:17.840 --> 00:28:18.820
+dados diretamente.
+
+00:28:19.860 --> 00:28:20.460
+Ele solicita
+
+00:28:20.460 --> 00:28:21.360
+um fluxo de trabalho
+
+00:28:21.360 --> 00:28:22.420
+e relata o resultado.
+
+00:28:23.600 --> 00:28:24.240
+Essa separação
+
+00:28:24.240 --> 00:28:24.980
+impede que um chat
+
+00:28:24.980 --> 00:28:25.660
+se torne um consórcio
+
+00:28:25.660 --> 00:28:26.240
+de administração.
+
+00:28:26.920 --> 00:28:27.960
+A privacidade explícita.
+
+00:28:28.680 --> 00:28:29.620
+O agente é executado
+
+00:28:29.620 --> 00:28:30.160
+com a identidade
+
+00:28:30.160 --> 00:28:30.760
+do usuário
+
+00:28:30.760 --> 00:28:31.820
+e adere a DLP.
+
+00:28:32.960 --> 00:28:33.380
+Ele não pode ver
+
+00:28:33.380 --> 00:28:33.740
+conteúdo
+
+00:28:33.740 --> 00:28:34.220
+que o usuário
+
+00:28:34.220 --> 00:28:34.720
+não pode ver.
+
+00:28:35.320 --> 00:28:36.020
+Ele não armazena
+
+00:28:36.020 --> 00:28:37.060
+transcrições de chat
+
+00:28:37.060 --> 00:28:38.160
+com conteúdo sensível
+
+00:28:38.160 --> 00:28:38.840
+além da política
+
+00:28:38.840 --> 00:28:39.500
+de retenção.
+
+00:28:41.460 --> 00:28:42.120
+Você configura
+
+00:28:42.120 --> 00:28:42.660
+o registro
+
+00:28:42.660 --> 00:28:43.220
+para gravar
+
+00:28:43.220 --> 00:28:43.700
+a intenção,
+
+00:28:43.980 --> 00:28:44.980
+rota e decisão
+
+00:28:44.980 --> 00:28:46.340
+mas mascara valores
+
+00:28:46.340 --> 00:28:47.280
+que pareçam e-mails,
+
+00:28:47.460 --> 00:28:49.200
+IDs ou valores monetários.
+
+00:28:50.360 --> 00:28:51.160
+Os logs incluem
+
+00:28:51.160 --> 00:28:52.180
+o guide de correlação,
+
+00:28:52.280 --> 00:28:53.080
+os IDs das fontes
+
+00:28:53.080 --> 00:28:54.060
+de conhecimento usadas
+
+00:28:54.060 --> 00:28:54.760
+e os motivos
+
+00:28:54.760 --> 00:28:55.200
+da recusa
+
+00:28:55.200 --> 00:28:56.040
+quando aplicável.
+
+00:28:56.040 --> 00:28:57.980
+Quando alguém
+
+00:28:57.980 --> 00:28:58.840
+pede todos os salários
+
+00:28:58.840 --> 00:28:59.620
+o agente recusa,
+
+00:28:59.720 --> 00:29:00.440
+registra a política
+
+00:29:00.440 --> 00:29:00.980
+de recusa
+
+00:29:00.980 --> 00:29:02.520
+e fornece o link
+
+00:29:02.520 --> 00:29:02.940
+da página
+
+00:29:02.940 --> 00:29:03.320
+de política
+
+00:29:03.320 --> 00:29:04.020
+de remuneração.
+
+00:29:05.020 --> 00:29:05.560
+Você não esconde
+
+00:29:05.560 --> 00:29:06.020
+a recusa.
+
+00:29:06.640 --> 00:29:07.060
+Você a torna
+
+00:29:07.060 --> 00:29:08.060
+monótona e consistente.
+
+00:29:08.700 --> 00:29:09.240
+O escalonamento
+
+00:29:09.240 --> 00:29:09.680
+é um caminho,
+
+00:29:09.820 --> 00:29:10.340
+não um descaso.
+
+00:29:11.020 --> 00:29:11.420
+Quando o agente
+
+00:29:11.420 --> 00:29:12.200
+não consegue resolver
+
+00:29:12.200 --> 00:29:12.960
+ele cria um chamado
+
+00:29:12.960 --> 00:29:13.920
+com campos estruturados
+
+00:29:13.920 --> 00:29:14.860
+extraídos do chat.
+
+00:29:16.400 --> 00:29:16.800
+Categoria,
+
+00:29:17.000 --> 00:29:17.540
+usuário,
+
+00:29:17.820 --> 00:29:18.540
+página de origem,
+
+00:29:18.780 --> 00:29:19.520
+última resposta,
+
+00:29:20.200 --> 00:29:21.240
+QID de correlação.
+
+00:29:22.600 --> 00:29:23.160
+Ele informa
+
+00:29:23.160 --> 00:29:23.580
+ao usuário
+
+00:29:23.580 --> 00:29:24.680
+exatamente o que aconteceu
+
+00:29:24.680 --> 00:29:25.700
+e o prazo esperado
+
+00:29:25.700 --> 00:29:26.280
+de resposta.
+
+00:29:27.440 --> 00:29:28.140
+O atendente humano
+
+00:29:28.140 --> 00:29:28.940
+visualiza o contexto
+
+00:29:28.940 --> 00:29:29.360
+do chat
+
+00:29:29.360 --> 00:29:30.420
+e as fontes consultadas
+
+00:29:30.420 --> 00:29:31.940
+sem redigitar,
+
+00:29:32.040 --> 00:29:32.600
+sem jogo de telefone,
+
+00:29:32.680 --> 00:29:32.980
+sem fio.
+
+00:29:33.580 --> 00:29:34.240
+Controle de mudança
+
+00:29:34.240 --> 00:29:34.900
+se aplica aqui também.
+
+00:29:35.700 --> 00:29:36.640
+Ao atualizar políticas
+
+00:29:36.640 --> 00:29:37.320
+você republica
+
+00:29:37.320 --> 00:29:38.180
+a base de conhecimento
+
+00:29:38.180 --> 00:29:38.680
+e executa
+
+00:29:38.680 --> 00:29:39.400
+prompt de teste
+
+00:29:39.400 --> 00:29:39.860
+em um conjunto
+
+00:29:39.860 --> 00:29:40.540
+de regressão.
+
+00:29:41.200 --> 00:29:41.780
+Se as respostas
+
+00:29:41.780 --> 00:29:42.360
+divergirem,
+
+00:29:42.520 --> 00:29:42.960
+você ajusta
+
+00:29:42.960 --> 00:29:43.580
+as instruções,
+
+00:29:43.800 --> 00:29:44.160
+não induz.
+
+00:29:44.560 --> 00:29:45.420
+Se a empresa deseja
+
+00:29:45.420 --> 00:29:46.240
+um escopo mais amplo,
+
+00:29:46.300 --> 00:29:47.040
+você adiciona fontes
+
+00:29:47.040 --> 00:29:47.680
+e testa novamente.
+
+00:29:48.160 --> 00:29:48.860
+O aumento de escopo
+
+00:29:48.860 --> 00:29:49.320
+é um incidente
+
+00:29:49.320 --> 00:29:50.160
+prestes a acontecer.
+
+00:29:51.440 --> 00:29:51.920
+Em resumo,
+
+00:29:52.000 --> 00:29:52.340
+o Copilot
+
+00:29:52.340 --> 00:29:53.200
+é um bibliotecário,
+
+00:29:53.420 --> 00:29:54.000
+não um oráculo.
+
+00:29:54.000 --> 00:29:55.280
+Ele encontra,
+
+00:29:55.440 --> 00:29:56.120
+cita e permanece
+
+00:29:56.120 --> 00:29:56.740
+dentro dos limites.
+
+00:29:57.600 --> 00:29:58.080
+Quando a pergunta
+
+00:29:58.080 --> 00:29:58.860
+está fora da base,
+
+00:29:58.940 --> 00:29:59.480
+ele descarta.
+
+00:30:00.520 --> 00:30:01.260
+É assim que a IA
+
+00:30:01.260 --> 00:30:02.160
+mantém você longe
+
+00:30:02.160 --> 00:30:02.960
+das manchetes
+
+00:30:02.960 --> 00:30:04.180
+e dentro do seu SLA?
+
+00:30:05.620 --> 00:30:06.420
+Sexto pilar,
+
+00:30:06.900 --> 00:30:07.680
+os inegociáveis
+
+00:30:07.680 --> 00:30:08.380
+à espinha dorsal
+
+00:30:08.380 --> 00:30:09.140
+da governança,
+
+00:30:09.900 --> 00:30:10.820
+a entropia começa
+
+00:30:10.820 --> 00:30:11.620
+onde os protocolos
+
+00:30:11.620 --> 00:30:12.120
+terminam.
+
+00:30:13.060 --> 00:30:13.860
+Esses são os controles
+
+00:30:13.860 --> 00:30:14.500
+que não piscam,
+
+00:30:14.580 --> 00:30:15.080
+não debatem
+
+00:30:15.080 --> 00:30:15.560
+e não esperam
+
+00:30:15.560 --> 00:30:16.260
+por consenso.
+
+00:30:16.920 --> 00:30:17.760
+Eles são aplicados
+
+00:30:17.760 --> 00:30:18.400
+porque impedem
+
+00:30:18.400 --> 00:30:19.840
+o padrão 0347.
+
+00:30:21.300 --> 00:30:22.120
+DL pembra o lugar.
+
+00:30:22.800 --> 00:30:23.220
+Nesse define
+
+00:30:23.220 --> 00:30:24.000
+grupo de conectores.
+
+00:30:24.300 --> 00:30:24.640
+Comerciais,
+
+00:30:24.720 --> 00:30:25.140
+não comerciais
+
+00:30:25.140 --> 00:30:25.680
+e bloqueados.
+
+00:30:26.460 --> 00:30:26.840
+SharePoint,
+
+00:30:27.000 --> 00:30:27.600
+Teams e Outlook
+
+00:30:27.600 --> 00:30:28.700
+residem em comerciais.
+
+00:30:29.760 --> 00:30:30.160
+Twitter,
+
+00:30:30.300 --> 00:30:30.740
+Dropbox,
+
+00:30:30.820 --> 00:30:31.280
+pessoal e tudo
+
+00:30:31.280 --> 00:30:32.000
+que você não enviaria
+
+00:30:32.000 --> 00:30:32.340
+por e-mail,
+
+00:30:32.420 --> 00:30:33.140
+o departamento jurídico
+
+00:30:33.140 --> 00:30:33.740
+cai em bloqueados.
+
+00:30:34.580 --> 00:30:35.180
+Nenhum aplicativo
+
+00:30:35.180 --> 00:30:36.140
+pode misturar o comercial
+
+00:30:36.140 --> 00:30:36.740
+com o não comercial
+
+00:30:36.740 --> 00:30:37.280
+entre ambientes.
+
+00:30:37.980 --> 00:30:38.900
+A regra é absoluta.
+
+00:30:39.320 --> 00:30:39.800
+Se um criador
+
+00:30:39.800 --> 00:30:40.800
+precisa de uma exceção,
+
+00:30:41.080 --> 00:30:42.180
+ele abre uma solicitação.
+
+00:30:42.420 --> 00:30:43.020
+Ela é limitada,
+
+00:30:43.100 --> 00:30:43.620
+registrada,
+
+00:30:43.820 --> 00:30:44.940
+respira-se em cerimônia.
+
+00:30:45.940 --> 00:30:46.920
+O motivo disso funcionar
+
+00:30:46.920 --> 00:30:47.380
+é simples.
+
+00:30:47.980 --> 00:30:48.420
+Os dados
+
+00:30:48.420 --> 00:30:49.180
+seguem trilhos
+
+00:30:49.180 --> 00:30:49.740
+permitidos
+
+00:30:49.740 --> 00:30:50.620
+ou não se movem.
+
+00:30:51.620 --> 00:30:52.820
+A estratégia de ambiente
+
+00:30:52.820 --> 00:30:53.200
+é próxima.
+
+00:30:53.620 --> 00:30:54.380
+Você tem desenvolvimento,
+
+00:30:54.520 --> 00:30:54.700
+teste,
+
+00:30:54.780 --> 00:30:55.700
+produção e pessoal.
+
+00:30:56.700 --> 00:30:57.380
+O de desenvolvimento
+
+00:30:57.380 --> 00:30:57.940
+é ruidoso,
+
+00:30:58.000 --> 00:30:58.720
+aberto aos criadores
+
+00:30:58.720 --> 00:30:59.180
+e preenchido
+
+00:30:59.180 --> 00:30:59.940
+com dados falsos.
+
+00:31:00.360 --> 00:31:00.820
+O de teste
+
+00:31:00.820 --> 00:31:01.420
+espelha a estrutura
+
+00:31:01.420 --> 00:31:01.820
+de produção
+
+00:31:01.820 --> 00:31:02.680
+com dados mascarados.
+
+00:31:03.080 --> 00:31:03.500
+O de produção
+
+00:31:03.500 --> 00:31:04.080
+é bloqueado,
+
+00:31:04.160 --> 00:31:04.700
+permitido apenas
+
+00:31:04.700 --> 00:31:05.260
+via mudanças
+
+00:31:05.260 --> 00:31:06.220
+e importações de solução.
+
+00:31:06.740 --> 00:31:07.080
+O pessoal
+
+00:31:07.080 --> 00:31:07.540
+é um sandbox
+
+00:31:07.540 --> 00:31:08.620
+com DLP configurado
+
+00:31:08.620 --> 00:31:09.240
+para não interagir
+
+00:31:09.240 --> 00:31:09.700
+com nada.
+
+00:31:09.700 --> 00:31:12.280
+Criações não gerenciadas
+
+00:31:12.280 --> 00:31:12.760
+em produção
+
+00:31:12.760 --> 00:31:13.600
+são excluídas
+
+00:31:13.600 --> 00:31:14.060
+ou migradas
+
+00:31:14.060 --> 00:31:14.500
+no local.
+
+00:31:15.060 --> 00:31:15.660
+Novos ambientes
+
+00:31:15.660 --> 00:31:16.560
+exigem um propósito,
+
+00:31:16.600 --> 00:31:17.240
+um proprietário,
+
+00:31:17.320 --> 00:31:18.240
+uma data de término.
+
+00:31:18.980 --> 00:31:19.740
+Avisos de expiração
+
+00:31:19.740 --> 00:31:20.180
+são enviados
+
+00:31:20.180 --> 00:31:20.680
+aos proprietários
+
+00:31:20.680 --> 00:31:21.120
+mensalmente.
+
+00:31:21.920 --> 00:31:22.760
+Se não houver resposta,
+
+00:31:22.840 --> 00:31:23.780
+o ambiente é pausado
+
+00:31:23.780 --> 00:31:24.720
+e depois arquivado.
+
+00:31:25.360 --> 00:31:25.840
+Você não negocia
+
+00:31:25.840 --> 00:31:26.640
+com a expansão descontrolada.
+
+00:31:27.120 --> 00:31:28.080
+Soluções e pipelines
+
+00:31:28.080 --> 00:31:28.580
+de ALM
+
+00:31:28.580 --> 00:31:29.640
+conduzem à mudança.
+
+00:31:30.800 --> 00:31:31.380
+Tudo que é oficial
+
+00:31:31.380 --> 00:31:31.740
+é enviado
+
+00:31:31.740 --> 00:31:32.720
+com uma solução gerenciada,
+
+00:31:33.120 --> 00:31:33.780
+sem edições manuais
+
+00:31:33.780 --> 00:31:34.140
+em produção.
+
+00:31:34.680 --> 00:31:35.340
+Você empacota
+
+00:31:35.340 --> 00:31:35.880
+Power Apps,
+
+00:31:36.180 --> 00:31:36.560
+Flows,
+
+00:31:36.780 --> 00:31:37.500
+variáveis de ambiente
+
+00:31:37.500 --> 00:31:38.220
+e conexões.
+
+00:31:38.220 --> 00:31:40.000
+Você nunca vincula
+
+00:31:40.000 --> 00:31:41.420
+conexões a usuários específicos.
+
+00:31:42.160 --> 00:31:43.360
+Apenas entidades de serviço
+
+00:31:43.360 --> 00:31:44.200
+ou contas de serviço
+
+00:31:44.200 --> 00:31:45.020
+com privilégio mínimo.
+
+00:31:46.460 --> 00:31:47.480
+Pipelines validam,
+
+00:31:47.760 --> 00:31:48.820
+soluções são compiladas,
+
+00:31:49.040 --> 00:31:50.280
+o verificador de soluções passa,
+
+00:31:50.480 --> 00:31:51.820
+testes unitários rodam
+
+00:31:51.820 --> 00:31:52.920
+e referências de conexão
+
+00:31:52.920 --> 00:31:53.920
+são resolvidas.
+
+00:31:54.920 --> 00:31:55.740
+Uma verificação falha
+
+00:31:55.740 --> 00:31:56.580
+e interrompe a implantação.
+
+00:31:57.400 --> 00:31:58.380
+Substituições humanas
+
+00:31:58.380 --> 00:31:59.000
+são registradas
+
+00:31:59.000 --> 00:31:59.960
+com número de mudança,
+
+00:32:00.080 --> 00:32:01.080
+motivo e aprovador.
+
+00:32:02.100 --> 00:32:02.880
+Se você está clicando
+
+00:32:02.880 --> 00:32:03.480
+em Avançar,
+
+00:32:03.600 --> 00:32:04.640
+o designer à meia-noite
+
+00:32:04.640 --> 00:32:05.920
+está fazendo errado.
+
+00:32:05.920 --> 00:32:08.320
+A propriedade é imposta.
+
+00:32:08.860 --> 00:32:09.540
+Todo aplicativo,
+
+00:32:09.660 --> 00:32:10.680
+fluxo, lista e ambiente
+
+00:32:10.680 --> 00:32:12.640
+tem um proprietário responsável
+
+00:32:12.640 --> 00:32:13.200
+e um backup.
+
+00:32:14.060 --> 00:32:14.780
+Detecção de órfãos
+
+00:32:14.780 --> 00:32:15.180
+só da semana.
+
+00:32:15.700 --> 00:32:16.700
+Órfãos são realocados
+
+00:32:16.700 --> 00:32:17.400
+ou desativados.
+
+00:32:17.900 --> 00:32:18.460
+Quando alguém sai,
+
+00:32:18.560 --> 00:32:19.400
+ativos são transferidos
+
+00:32:19.400 --> 00:32:20.580
+automaticamente para o backup
+
+00:32:20.580 --> 00:32:21.280
+via política,
+
+00:32:21.420 --> 00:32:22.140
+não por gentileza.
+
+00:32:22.900 --> 00:32:23.360
+Se um ativo
+
+00:32:23.360 --> 00:32:24.380
+não tem dono de negócio,
+
+00:32:24.800 --> 00:32:25.820
+não tem motivo para existir.
+
+00:32:26.360 --> 00:32:27.140
+Nomenclatura e marcação
+
+00:32:27.140 --> 00:32:27.680
+não são estilos,
+
+00:32:27.740 --> 00:32:28.480
+são chaves de busca.
+
+00:32:29.440 --> 00:32:30.580
+Você define prefixos
+
+00:32:30.580 --> 00:32:31.340
+para soluções,
+
+00:32:31.640 --> 00:32:32.600
+aplicativos e fluxo
+
+00:32:32.600 --> 00:32:33.140
+por domínio.
+
+00:32:34.080 --> 00:32:35.940
+FIM, RH, UPS.
+
+00:32:37.020 --> 00:32:37.960
+Tudo recebe tags,
+
+00:32:38.360 --> 00:32:38.980
+classe de dados,
+
+00:32:39.200 --> 00:32:40.140
+departamento proprietário,
+
+00:32:40.220 --> 00:32:41.320
+criticidade e expiração.
+
+00:32:42.280 --> 00:32:42.780
+Seu inventário
+
+00:32:42.780 --> 00:32:43.380
+não é um boato,
+
+00:32:43.440 --> 00:32:44.120
+é uma consulta.
+
+00:32:44.840 --> 00:32:45.900
+Telemetria obrigatória.
+
+00:32:47.580 --> 00:32:48.520
+Todo app fluxo
+
+00:32:48.520 --> 00:32:49.060
+emite um guia
+
+00:32:49.060 --> 00:32:49.680
+de correlação
+
+00:32:49.680 --> 00:32:50.460
+por transação,
+
+00:32:50.700 --> 00:32:51.680
+escreve um log central
+
+00:32:51.680 --> 00:32:52.280
+com o ambiente,
+
+00:32:52.460 --> 00:32:53.300
+versão da solução,
+
+00:32:53.560 --> 00:32:54.040
+usuário,
+
+00:32:54.280 --> 00:32:55.760
+duração e classe de erro.
+
+00:32:57.060 --> 00:32:58.260
+Picos de superfície
+
+00:32:58.260 --> 00:32:58.720
+em painéis
+
+00:32:58.720 --> 00:32:59.780
+frequentemente arriscam
+
+00:32:59.780 --> 00:33:00.640
+incidentes de DLP
+
+00:33:00.640 --> 00:33:01.840
+e desvio de ambiente.
+
+00:33:02.960 --> 00:33:03.880
+Alertas vão para canais,
+
+00:33:03.980 --> 00:33:04.780
+não para caixas de entrada.
+
+00:33:05.300 --> 00:33:05.920
+Verde, amarelo,
+
+00:33:06.000 --> 00:33:06.260
+vermelho,
+
+00:33:06.340 --> 00:33:07.000
+visível, monótonos.
+
+00:33:07.380 --> 00:33:08.180
+O acesso é baseado
+
+00:33:08.180 --> 00:33:08.600
+em funções.
+
+00:33:09.060 --> 00:33:10.080
+Criadores recebem acesso
+
+00:33:10.080 --> 00:33:10.520
+de criador,
+
+00:33:10.620 --> 00:33:11.600
+aprovadores recebem de aprovação.
+
+00:33:12.060 --> 00:33:12.960
+Administradores não executam
+
+00:33:12.960 --> 00:33:13.480
+os aplicativos.
+
+00:33:14.160 --> 00:33:14.880
+Contas de emergência
+
+00:33:14.880 --> 00:33:15.840
+e break glass existem,
+
+00:33:16.000 --> 00:33:17.200
+são monitoradas e expiram.
+
+00:33:17.860 --> 00:33:18.880
+Segredos nunca trafegam
+
+00:33:18.880 --> 00:33:19.560
+em textos simples.
+
+00:33:20.060 --> 00:33:21.160
+Apenas cofre de chaves
+
+00:33:21.160 --> 00:33:22.000
+ou variáveis de ambiente.
+
+00:33:23.060 --> 00:33:23.480
+Finalmente,
+
+00:33:23.600 --> 00:33:24.340
+políticas de controle
+
+00:33:24.340 --> 00:33:24.920
+de mudança,
+
+00:33:25.060 --> 00:33:25.940
+modelos e conectores
+
+00:33:25.940 --> 00:33:26.700
+recebem versão.
+
+00:33:27.540 --> 00:33:28.360
+Você testa em dev,
+
+00:33:28.460 --> 00:33:28.960
+valida em teste,
+
+00:33:29.060 --> 00:33:29.520
+publica em prod
+
+00:33:29.520 --> 00:33:30.320
+com plano de reversão,
+
+00:33:30.680 --> 00:33:31.260
+plano de reversão.
+
+00:33:31.620 --> 00:33:32.540
+Nada de troca silenciosa.
+
+00:33:32.920 --> 00:33:33.700
+Não, nós apenas fizemos
+
+00:33:33.700 --> 00:33:34.120
+um ajuste.
+
+00:33:34.720 --> 00:33:35.840
+A espinha sustenta
+
+00:33:35.840 --> 00:33:37.020
+ou o corpo colapsa.
+
+00:33:38.420 --> 00:33:38.860
+Conclusão,
+
+00:33:39.140 --> 00:33:40.400
+alinhamento ou entropia?
+
+00:33:41.440 --> 00:33:42.760
+Você estabiliza o SharePoint,
+
+00:33:43.140 --> 00:33:44.440
+torna apps determinísticos,
+
+00:33:44.760 --> 00:33:46.260
+cerca fluxos com protocolos
+
+00:33:46.260 --> 00:33:48.060
+e limita a IA com propósito.
+
+00:33:48.060 --> 00:33:49.360
+Isso é alinhamento.
+
+00:33:49.960 --> 00:33:50.900
+Todo o resto é entropia
+
+00:33:50.900 --> 00:33:52.120
+com uma interface amigável.
+
+00:33:52.980 --> 00:33:53.900
+Sua conclusão é simples.
+
+00:33:55.200 --> 00:33:56.140
+Implemente DLP,
+
+00:33:56.500 --> 00:33:57.660
+estratégia de ambiente LM
+
+00:33:57.660 --> 00:33:58.700
+baseada em solução
+
+00:33:58.700 --> 00:34:00.920
+ou espere o retorno
+
+00:34:00.920 --> 00:34:02.260
+do erro 0347.
+
+00:34:03.340 --> 00:34:03.900
+Para checklist
+
+00:34:03.900 --> 00:34:04.940
+e arquitetura de referência,
+
+00:34:05.060 --> 00:34:05.500
+inscreva-se
+
+00:34:05.500 --> 00:34:07.000
+e abra o próximo episódio.
+
+00:34:07.900 --> 00:34:08.380
+Se ignorar,
+
+00:34:08.440 --> 00:34:09.440
+voltarei quando seus alertas
+
+00:34:09.440 --> 00:34:10.220
+ficarem amarelos.
+
+00:34:11.800 --> 00:34:12.320
+Schmidt,
+
+00:34:12.740 --> 00:34:13.480
+o que você imagina
+
+00:34:13.480 --> 00:34:14.660
+para o seu futuro profissional?
+
+00:34:15.560 --> 00:34:16.220
+Fazer algo real?
+
+00:34:16.360 --> 00:34:17.300
+Onde eu me dedique totalmente,
+
+00:34:17.520 --> 00:34:17.660
+então.
+
+00:34:17.660 --> 00:34:18.640
+o que você imagina
+
+00:34:18.640 --> 00:34:19.260
+o que você imagina
+
+00:34:19.260 --> 00:34:19.840
+é o que você imagina
+
+00:34:19.840 --> 00:34:20.700
+e o que você imagina
+
+00:34:20.700 --> 00:34:21.340
+é o que você imagina
+
+00:34:21.340 --> 00:34:21.900
+e o que você imagina
+
+00:34:21.900 --> 00:34:22.600
+é o que você imagina
+
+00:34:22.600 --> 00:34:23.100
+e o que você imagina
+
+00:34:23.100 --> 00:34:23.600
+é o que você imagina
+
+00:34:23.600 --> 00:34:23.900
+e o que você imagina
+
+00:34:23.900 --> 00:34:24.200
+é o que você imagina
+
+00:34:24.200 --> 00:34:24.480
+e o que você imagina
+
+00:34:24.480 --> 00:34:25.200
+é o que você imagina
+
+00:34:25.200 --> 00:34:25.600
+e o que você imagina
+
+00:34:25.600 --> 00:34:25.980
+é o que você imagina
+
+00:34:25.980 --> 00:34:26.440
+e o que você imagina
+
+00:34:26.440 --> 00:34:26.940
+é o que você imagina
+
+00:34:26.940 --> 00:34:27.600
+e o que você imagina
+
+00:34:27.600 --> 00:34:27.980
+é o que você imagina
+
+00:34:27.980 --> 00:34:28.480
+e o que você imagina
+
+00:34:28.480 --> 00:34:28.900
+é o que você imagina
+
+00:34:28.900 --> 00:34:29.400
+e o que você imagina
+
+00:34:29.400 --> 00:34:30.100
+é o que você imagina
+
+00:34:30.100 --> 00:34:30.480
+e o que você imagina
+
+00:34:30.480 --> 00:34:30.980
+é o que você imagina
+
+00:34:30.980 --> 00:34:31.480
+e o que você imagina
+
+00:34:31.480 --> 00:34:32.480
+e o que você imagina
+
+00:34:32.480 --> 00:34:33.420
+e o que você imagina

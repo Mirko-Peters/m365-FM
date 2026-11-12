@@ -1,0 +1,946 @@
+WEBVTT
+
+00:00:00.140 --> 00:00:07.540
+Klaar voor 10 dagen Microsoft 365, Copilot, AI, Azure en de mensen die de toekomst van werk vormgeven?
+
+00:00:07.960 --> 00:00:12.360
+Deze januari is M365, kom terug en we pakken groter uit.
+
+00:00:12.700 --> 00:00:18.340
+Doe mee voor live sessies, praktijkdemo's en praktische kennis van MVPs en experts uit de hele wereld.
+
+00:00:18.540 --> 00:00:21.660
+Geen algemene presentaties, geen eindeloos jargon.
+
+00:00:21.660 --> 00:00:29.140
+We pakken de echte uitdagingen aan Copilot Studio, AI Agents, Fabric, Beveiliging, Governance en Automatisering.
+
+00:00:29.140 --> 00:00:34.940
+Of je nu IT-professional, ontwikkelaar of bedrijfsleider bent, er zijn sessies speciaal voor jou.
+
+00:00:35.240 --> 00:00:40.500
+Met 10 volledige dagen kun je diverse technologieën verkennen en in contact komen met een wereldwijde community.
+
+00:00:40.920 --> 00:00:44.560
+Kijk live mee en neem praktische inzichten mee terug naar je organisatie.
+
+00:00:44.900 --> 00:00:49.140
+Januari 2027, 10 dagen, 1 Microsoft Community.
+
+00:00:49.700 --> 00:00:51.180
+Registratie is nu geopend.
+
+00:00:51.860 --> 00:00:55.920
+Ga naar m365com.net en verzeker je vandaag nog van een plek.
+
+00:00:56.700 --> 00:00:58.960
+Dat is m365com.net.
+
+00:00:59.140 --> 00:01:04.860
+Meld je nu aan op m365com.net en we zien je live in januari.
+
+00:01:05.060 --> 00:01:16.500
+Als je ooit op een vrijdagmiddag een krashende bestandserver hebt meegemaakt, ken je de paniek, de verwoede telefoontjes, de vraag, werkt de backup, de vraag die niemand wil beantwoorden en de rit naar kantoor om alleen maar naar een knipperend kastje te kijken.
+
+00:01:16.720 --> 00:01:20.200
+Ik ben Mirko Peters en vandaag kijken we naar een betere manier, Azure Files.
+
+00:01:20.200 --> 00:01:22.560
+Dit is het punt met traditionele bestandsurvers.
+
+00:01:22.740 --> 00:01:28.140
+Ze zijn fysiek, wat betekent dat ze onderhoud, beveiligingspatches, backupbeheer en iemand nodig hebben om een harde schijf te vervangen als deze kapot gaat.
+
+00:01:28.320 --> 00:01:30.020
+Voor kleine teams is dat een enorme last.
+
+00:01:30.220 --> 00:01:31.600
+Je runt immers geen datacenter.
+
+00:01:31.800 --> 00:01:33.160
+Je probeert gewoon je werk te doen.
+
+00:01:33.360 --> 00:01:40.300
+Aan het einde van deze aflevering begrijp je wat Azure Files echt is, waarom de nieuwe Fileshairs resource de installatie veel eenvoudiger maakt en wanneer het de juiste keuze is voor jouw team.
+
+00:01:40.300 --> 00:01:41.900
+Pak je koffie en laten we beginnen.
+
+00:01:42.160 --> 00:01:43.100
+Wat is Azure Files?
+
+00:01:43.440 --> 00:01:45.120
+Dus, wat is Azure Files precies?
+
+00:01:45.320 --> 00:01:46.960
+Hier is de simpelste definitie.
+
+00:01:47.120 --> 00:01:56.200
+Azure Files is een cloudgebaseerde bestandshare die je kunt koppelen als een netwerkschijf, zonder serverbeheer, zonder hardware, zonder OS-updates en zonder backupschema's waar je wakker van ligt.
+
+00:01:56.420 --> 00:01:58.860
+Bij een traditionele bestandsurver ben jij de beheerder.
+
+00:01:59.100 --> 00:02:01.240
+Bij Azure Files is Microsoft de beheerder.
+
+00:02:01.460 --> 00:02:05.460
+Zie het als een archiefkast die in het datacenter van Microsoft staat in plaats van onder je bureau.
+
+00:02:05.460 --> 00:02:11.860
+Je opent nog steeds de laden en pakt een bestand, maar de kast zelf, de sloten, de brandveiligheid en het onderhoud, dat wordt allemaal voor je geregeld.
+
+00:02:12.040 --> 00:02:14.940
+Het verschil is dat je je nooit zorgen hoeft te maken dat de kast kapot gaat.
+
+00:02:15.140 --> 00:02:17.380
+Azure Files werkt met Windows, Linux en Mac.
+
+00:02:17.580 --> 00:02:24.480
+Elk apparaat dat SMB ondersteunt, de standaardtaal voor Windows bestandsdeling of NFS, de standaard voor Linux, kan verbinding maken.
+
+00:02:24.680 --> 00:02:29.380
+Je hebt er toegang toe via internet of via een privé netwerk als je verkeer buiten het openbare web wilt houden.
+
+00:02:29.540 --> 00:02:30.900
+En het wordt volledig beheerd.
+
+00:02:31.080 --> 00:02:34.900
+Microsoft regelt de hardware, software-updates, backups en hoge beschikbaarheid.
+
+00:02:35.460 --> 00:02:38.880
+Als er een schijf uitvalt in een datacenter, vervangen ze die zonder dat je het merkt.
+
+00:02:39.040 --> 00:02:42.000
+De meeste gebruikers merken niet eens dat het er is, maar het is een kerndienst.
+
+00:02:42.220 --> 00:02:44.220
+Geen nachtelijke noodritjes naar kantoor meer.
+
+00:02:44.420 --> 00:02:47.580
+Laten we, om te begrijpen waarom je dit zou willen, eerst naar de oude manier kijken.
+
+00:02:47.760 --> 00:02:49.780
+De pijn van traditionele bestandssurfers.
+
+00:02:50.020 --> 00:02:52.820
+Stel je voor dat je een klein bedrijf runt met 15 werknemers.
+
+00:02:53.060 --> 00:02:55.320
+Ergens in de bezemkast staat een fysieke server.
+
+00:02:55.620 --> 00:03:00.560
+Misschien is het een oude PC die je hebt hergebruikt, of een echte server die een paar jaar geleden duizenden euro's kostte.
+
+00:03:00.560 --> 00:03:04.320
+Hoe dan ook, hij draait op Windows-surfer en verzorgt bestandsshares voor iedereen in het bedrijf.
+
+00:03:04.320 --> 00:03:06.140
+Het punt is, harde schijven gaan kapot.
+
+00:03:06.340 --> 00:03:07.240
+Dat doen ze altijd.
+
+00:03:07.420 --> 00:03:09.600
+En als die schijf sterft, ligt de bestandsshare eruit.
+
+00:03:09.780 --> 00:03:11.340
+Misschien heb je een backup, misschien ook niet.
+
+00:03:11.500 --> 00:03:13.860
+Misschien valt de backup al zes maanden stilletjes zonder dat je het wist.
+
+00:03:14.040 --> 00:03:15.540
+Dat is een gesprek dat niemand wil voeren.
+
+00:03:15.740 --> 00:03:16.980
+Dan is er nog het ruimteprobleem.
+
+00:03:17.200 --> 00:03:18.680
+Bestandsurfers raken snel vol.
+
+00:03:18.860 --> 00:03:21.560
+Iemand zet 15 gig aan vakantiefoto's op de gedeelde schijf.
+
+00:03:21.680 --> 00:03:24.780
+Een andere afdeling hamstert oude projectbestanden van drie jaar geleden.
+
+00:03:24.940 --> 00:03:28.940
+Om opslag toe te voegen, moet je nieuwe hardware kopen of urenlang je bestaande systeem herconfigureren.
+
+00:03:28.940 --> 00:03:30.480
+Geen van beide opties is leuk.
+
+00:03:30.660 --> 00:03:31.480
+En dan het patchen.
+
+00:03:31.480 --> 00:03:35.300
+Windows Server heeft regelmatig beveiligingsupdates nodig, wat downtime betekent.
+
+00:03:35.440 --> 00:03:39.640
+Iemand moet in het weekend inloggen, de updates toepassen en hopen dat de server weer opstart.
+
+00:03:39.800 --> 00:03:42.600
+Als dat niet zo is, ben je de zondagmiddag kwijt aan probleemoplossing.
+
+00:03:42.980 --> 00:03:44.340
+Ransomware is een andere zorg.
+
+00:03:44.540 --> 00:03:47.820
+Een klik op de verkeerde e-mailbijlage en je bestandsurfer wordt versleuteld.
+
+00:03:47.980 --> 00:03:49.280
+Elk bestand is vergrendeld.
+
+00:03:49.480 --> 00:03:52.680
+Het herstelproces is pijnlijk en je moet er maar op hopen dat je backups echt werken.
+
+00:03:52.860 --> 00:03:55.520
+Als je kantoor meerdere vestigingen heeft, wordt het nog erger.
+
+00:03:55.740 --> 00:03:59.120
+Bestanden delen tussen vestigingen betekent VPN's opzetten of trage replicatie.
+
+00:03:59.120 --> 00:04:01.960
+De externe vestiging krijgt slechts een fractie van de snelheid van het hoofdkantoor.
+
+00:04:02.080 --> 00:04:04.540
+Mensen klagen en jij bent tijd kwijt aan het afstellen van verbindingen.
+
+00:04:04.640 --> 00:04:05.900
+Hier is een praktijkvoorbeeld.
+
+00:04:06.140 --> 00:04:11.000
+Een klein bouwbedrijf dat ik ken had 15 werknemers en een verouderde server in de hoek van de kantine staan.
+
+00:04:11.200 --> 00:04:16.060
+Elke keer als iemand zei, de bestandsurfer is traag, voelde de eigenaar een knoop in zijn maag.
+
+00:04:16.260 --> 00:04:17.120
+Was hij aan het sterven?
+
+00:04:17.320 --> 00:04:19.760
+Was het tijd om weer 5000 dollar aan hardware uit te geven?
+
+00:04:19.980 --> 00:04:22.460
+Moest hij een IT erinhuren om alleen dat ene kastje te beheren?
+
+00:04:22.620 --> 00:04:27.280
+Die stress, die constante lichte zorg over één enkel stuk hardware, is precies wat Azure Files wegneemt.
+
+00:04:27.280 --> 00:04:30.880
+Het gaat niet alleen om de functies, het gaat erom dat je er helemaal niet over na hoeft te denken.
+
+00:04:31.080 --> 00:04:32.820
+Azure Files neemt al die overhead weg.
+
+00:04:33.040 --> 00:04:34.780
+Laten we eens kijken hoe het echt werkt.
+
+00:04:34.940 --> 00:04:36.100
+Hoe Azure Files werkt?
+
+00:04:36.320 --> 00:04:38.040
+SMB, NFS en Mounten.
+
+00:04:38.200 --> 00:04:40.120
+Azure Files gebruikt standaard protocollen.
+
+00:04:40.360 --> 00:04:41.940
+Wat betekent dat in begrijpelijke taal?
+
+00:04:42.080 --> 00:04:45.260
+Het betekent dat je geen speciale software of aangepaste tools nodig hebt om verbinding te maken.
+
+00:04:45.460 --> 00:04:49.180
+Als je computer verbinding kan maken met een netwerkschijf, kan deze verbinding maken met Azure Files.
+
+00:04:49.420 --> 00:04:52.140
+Voor Windows machines is dat SMB Server Message Block.
+
+00:04:52.300 --> 00:04:55.040
+Het is hetzelfde protocol dat je huidige bestandsurfer gebruikt.
+
+00:04:55.040 --> 00:04:57.960
+Voor Linux systemen is dat NFS, Network Filesystem.
+
+00:04:58.200 --> 00:05:00.820
+Beide zijn industrie standaarden die al tientallen jaren bestaan.
+
+00:05:01.000 --> 00:05:02.960
+Azure Files spreekt beide talen vloeiend.
+
+00:05:03.180 --> 00:05:04.580
+Dus, hoe gebruik je het eigenlijk?
+
+00:05:04.820 --> 00:05:05.500
+Je mount het.
+
+00:05:05.680 --> 00:05:09.960
+Op Windows wijs je het toe als stationsletter, set of s of welke letter je ook wilt.
+
+00:05:10.160 --> 00:05:11.800
+Op Linux mount je het naar een mapbad.
+
+00:05:11.960 --> 00:05:14.680
+Hoe dan ook, het ziet eruit en voelt aan als lokale opslag.
+
+00:05:14.820 --> 00:05:16.320
+Open verkenner en daar staat het.
+
+00:05:16.500 --> 00:05:19.380
+Sleep bestanden zoals je dat bij een map op je eigen harde schijf zou doen.
+
+00:05:19.580 --> 00:05:21.180
+Dit is het gedeelte dat mensen verrast.
+
+00:05:21.180 --> 00:05:25.140
+Gegevens worden standaard versleuteld verzonden wanneer je SMB 3.0 of hoger gebruikt.
+
+00:05:25.260 --> 00:05:30.400
+Wat moderne Windows en macOS systemen ondersteunen, de verbinding tussen je computer en Azure Files is versleuteld tijdens het transport.
+
+00:05:30.620 --> 00:05:33.320
+Niemand op het netwerk kan je bestanden onderscheppen terwijl ze worden verplaatst.
+
+00:05:33.500 --> 00:05:36.280
+Dat is erg belangrijk voor de beveiliging en het is standaard ingeschakeld.
+
+00:05:36.460 --> 00:05:39.080
+Je kunt Azure Best & Shares vanaf vrijwel overal mounten.
+
+00:05:39.240 --> 00:05:41.740
+Vanaf een virtuele machine die in Azure draait, uiteraard.
+
+00:05:41.920 --> 00:05:44.880
+Vanaf een on-premise server verbonden via VPN of expressroute.
+
+00:05:45.140 --> 00:05:47.740
+Zelfs vanaf je laptop via internet als je het correct hebt ingesteld.
+
+00:05:47.900 --> 00:05:50.200
+De bestandshare bevindt zich in de cloud, maar voelt lokaal aan.
+
+00:05:50.380 --> 00:05:51.760
+Laat me een concreet voorbeeld geven.
+
+00:05:52.000 --> 00:05:54.840
+Stel dat je boekhoudteam toegang nodig heeft tot dezelfde set spreadsheets.
+
+00:05:55.040 --> 00:05:59.540
+In de oude wereld zou je een bestandserver opzetten, machtigingen configureren en hopen dat het netwerk niet uitvalt.
+
+00:05:59.720 --> 00:06:05.020
+Met Azure Files maak je één bestandshare aan, koppel je deze als schijfset op elke boekhoudmachine en ze zijn klaar.
+
+00:06:05.020 --> 00:06:08.340
+Ze weten nooit dat het in de cloud staat, ze zien gewoon een werkende stationsletter.
+
+00:06:08.800 --> 00:06:10.740
+Authenticatie wordt afgehandeld via identiteit.
+
+00:06:10.740 --> 00:06:17.460
+In plaats van opslagaccountsleutels te beheren, die lange reeksen die op wachtwoorden op steroïden lijken, gebruik je Azure Active Directory of je On-Premises Active Directory.
+
+00:06:17.700 --> 00:06:22.120
+Gebruikers loggen in met hun normale inloggegevens, dezelfde gebruikersnaam en hetzelfde wachtwoord die ze voor e-mail gebruiken.
+
+00:06:22.320 --> 00:06:25.060
+Geen extra sleutels om op te slaan, geen gedeelde geheimen om te roteren.
+
+00:06:25.220 --> 00:06:29.480
+De oorspronkelijke opzet van Azure Files had een eigenaardigheid en dat is waar de nieuwe verandering om de hoek komt kijken.
+
+00:06:29.680 --> 00:06:31.640
+De oude manier, opslagaccounts.
+
+00:06:31.640 --> 00:06:35.220
+Dit wordt een beetje technisch, maar geloof me, het is de moeite waard om even op te letten.
+
+00:06:35.380 --> 00:06:38.260
+Oorspronkelijk waren best-end shares in Azure geen op zichzelf staande entiteiten.
+
+00:06:38.440 --> 00:06:40.760
+Ze bevonden zich binnen iets dat een opslagaccount wordt genoemd.
+
+00:06:40.900 --> 00:06:42.960
+Stel je een opslagaccount voor als een grote container.
+
+00:06:43.160 --> 00:06:50.620
+In die container kon je blobs voor ongestructureerde data plaatsen, queues voor berichten, tabellen voor gestructureerde data en ja, je kon er ook best-end shares aanmaken.
+
+00:06:50.620 --> 00:06:59.100
+Maar hier is het probleem dat opslagaccount had limieten, IOPS-limieten, doorvoerlimieten, capaciteitslimieten en elke bestandshare in die container moest die limieten delen.
+
+00:06:59.220 --> 00:07:03.620
+Dus als je vijf best-end shares in één opslagaccount had, streden ze allemaal om dezelfde prestatiecapaciteit.
+
+00:07:04.340 --> 00:07:06.420
+Eén drukke share kon alle anderen vertragen.
+
+00:07:07.140 --> 00:07:08.800
+Netwerkinstellingen werkten op dezelfde manier.
+
+00:07:09.060 --> 00:07:12.780
+Firewall-regels en privé-eindpunten zijn van toepassing op het hele opslagaccount.
+
+00:07:12.780 --> 00:07:18.820
+Je kon niet zeggen dat deze bestandshare alleen toegankelijk is vanaf het netwerk van de financiële afdeling en die bestandshare voor iedereen open is.
+
+00:07:19.020 --> 00:07:20.920
+De netwerkregels waren alles of niets.
+
+00:07:21.180 --> 00:07:23.280
+Dan waren er nog de sleutels van het opslagaccount.
+
+00:07:23.500 --> 00:07:31.200
+Elk opslagaccount had twee toegangssleutels en die sleutels gaven volledige toegang tot alles binnenin, elke blob, elke queue, elke tabel en elke bestandshare.
+
+00:07:31.380 --> 00:07:35.080
+Als je alleen toegang nodig had tot één bestandshare, jammer dan, de sleutel opende alles.
+
+00:07:35.420 --> 00:07:36.820
+Facturering was een ander hoofdpijndossier.
+
+00:07:37.020 --> 00:07:38.980
+Alle kosten werden getoond op het niveau van het opslagaccount.
+
+00:07:39.160 --> 00:07:43.120
+Dus als je kosten wilde doorbelasten aan verschillende afdelingen, moest je handmatige berekeningen maken.
+
+00:07:43.320 --> 00:07:48.660
+Nou, de share van het marketingteam gebruikte ongeveer 30% van de opslag, dus zij zijn 30% van de rekening verschuldigd.
+
+00:07:48.760 --> 00:07:49.920
+Dat gaat snel vervelen.
+
+00:07:50.080 --> 00:07:51.040
+Hier is een vergelijking.
+
+00:07:51.200 --> 00:07:52.800
+Stel je voor dat je een magazijn huurt.
+
+00:07:53.000 --> 00:07:58.880
+In dat magazijn heb je verschillende kamers, maar het magazijn heeft één ingang, één beveiliger en één elektriciteitsmeter.
+
+00:07:58.880 --> 00:08:02.820
+Elke kamer deelt dezelfde stroom, dezelfde toegangsregels en dezelfde rekening.
+
+00:08:02.940 --> 00:08:06.400
+Als één kamer de airconditioning hoog zet, worden alle andere kamers warmer.
+
+00:08:06.620 --> 00:08:10.480
+Als je één kamer afzonderlijk wilt beveiligen, kan dat niet omdat er maar één deur is.
+
+00:08:10.720 --> 00:08:12.500
+Zo voelde het oude opslagaccountmodel.
+
+00:08:12.700 --> 00:08:16.280
+Een grote container met gedeelde limieten, gedeelde beveiliging en gedeelde facturering.
+
+00:08:16.480 --> 00:08:20.160
+Het werkte, maar het was niet elegant, vooral niet als je alleen een simpele bestandshare wilde.
+
+00:08:20.300 --> 00:08:22.860
+Maar Microsoft luisterde naar de feedback en bouwde iets beters.
+
+00:08:23.080 --> 00:08:24.520
+De nieuwe bestandshare resource.
+
+00:08:24.760 --> 00:08:26.220
+De nieuwe bestandshare resource.
+
+00:08:26.220 --> 00:08:27.780
+Dus, dit is wat er is veranderd.
+
+00:08:27.780 --> 00:08:30.000
+Microsoft heeft een goed nieuwe resource op het hoogste niveau gemaakt.
+
+00:08:30.160 --> 00:08:32.460
+Je maakt nu rechtstreeks een file share aan zonder een storage account als bovenliggend niveau.
+
+00:08:32.640 --> 00:08:33.880
+Het is een op zich zelfstaand iets.
+
+00:08:34.120 --> 00:08:35.440
+Denk erover zoals Managed Dix.
+
+00:08:35.640 --> 00:08:37.580
+Weet je nog hoe dat vroeger werkte met virtuele machines?
+
+00:08:37.840 --> 00:08:42.020
+Je moest een storage account aanmaken, daar een pageblop in maken en die blop vervolgens aan je VM koppelen.
+
+00:08:42.220 --> 00:08:43.260
+Het was een heel proces.
+
+00:08:43.500 --> 00:08:45.440
+Toen introduceerde Microsoft Managed Dix.
+
+00:08:45.620 --> 00:08:46.780
+Je maakt gewoon een disk aan.
+
+00:08:46.960 --> 00:08:49.860
+Klaar, geen storage account, geen pageblop, geen gedoe.
+
+00:08:50.020 --> 00:08:52.200
+De nieuwe file shares resource werkt op dezelfde manier.
+
+00:08:52.200 --> 00:08:55.160
+Achter de schermen is er een nieuwe resource provider genaamd Microsoft.
+
+00:08:55.380 --> 00:08:56.040
+File shares.
+
+00:08:56.040 --> 00:08:57.800
+Het is onafhankelijk en zelfstandig.
+
+00:08:57.940 --> 00:09:01.040
+Wanneer je nu een file share aanmaakt, creëer je geen kindelement van iets anders.
+
+00:09:01.240 --> 00:09:02.580
+Je creëert de resource zelf.
+
+00:09:02.780 --> 00:09:04.240
+Dus, wat levert dat je eigenlijk op?
+
+00:09:04.360 --> 00:09:05.800
+Laat me de voordelen met je doornemen.
+
+00:09:05.980 --> 00:09:09.380
+Ten eerste heeft elke share zijn eigen limieten, IOPS, doorvoer en capaciteit.
+
+00:09:09.620 --> 00:09:10.960
+Deze zijn nu allemaal per share.
+
+00:09:11.200 --> 00:09:13.220
+Geen gedeelde pol meer met andere file shares.
+
+00:09:13.460 --> 00:09:15.400
+Een drukke share kan een andere niet vertragen.
+
+00:09:15.620 --> 00:09:20.520
+Als je engineering team hun share overbelast met beeldartefacten, blijft de share van ouwer gewoon doorlopen.
+
+00:09:20.520 --> 00:09:23.220
+Ten tweede is de netwerkconfiguratie per share.
+
+00:09:23.220 --> 00:09:27.000
+Private endpoints en firewall regels stel je in op de individuele file share.
+
+00:09:27.200 --> 00:09:32.200
+Wil je één share die alleen toegankelijk is vanuit het virtuele netwerk van financiën en een andere die openstaat voor het hele bedrijf?
+
+00:09:32.340 --> 00:09:33.060
+Geen probleem.
+
+00:09:33.240 --> 00:09:34.220
+Ze zijn onafhankelijk.
+
+00:09:34.420 --> 00:09:36.540
+Ten derde is er geen storage account sleutel.
+
+00:09:36.760 --> 00:09:39.100
+Weet je nog die machtige sleutel die toegang gaf tot alles?
+
+00:09:39.500 --> 00:09:39.940
+Verdwenen.
+
+00:09:40.320 --> 00:09:43.040
+Authenticatie is gebaseerd op identiteit of via netwerkregels.
+
+00:09:43.040 --> 00:09:45.420
+Gebruikers loggen in met hun normale inloggegevens.
+
+00:09:45.640 --> 00:09:47.160
+Geen gedeelde geheimen om te beheren.
+
+00:09:47.360 --> 00:09:48.500
+Geen sleutels om te roteren.
+
+00:09:48.700 --> 00:09:51.000
+Geen risico dat een gelekte sleutel al je shares blootlegt.
+
+00:09:51.200 --> 00:09:53.040
+Ten vierde is de facturering per share.
+
+00:09:53.240 --> 00:09:56.260
+In Azure Cost Management zie je precies wat elke file share kost.
+
+00:09:56.440 --> 00:09:59.060
+Als je kosten moet doorbelasten aan afdelingen, staat het daar direct.
+
+00:09:59.260 --> 00:10:00.360
+Geen handmatige berekeningen.
+
+00:10:00.560 --> 00:10:01.220
+Geen spreadsheets.
+
+00:10:01.360 --> 00:10:01.880
+Geen giswerk.
+
+00:10:02.020 --> 00:10:04.300
+Ten vijfde heeft het controlepaneel zijn eigen quota.
+
+00:10:04.300 --> 00:10:09.980
+Het controlepaneel is de laag die bewerkingen afhandelt zoals shares aanmaken, wijzigen, verwijderen en snapshots maken.
+
+00:10:10.140 --> 00:10:15.420
+In het oude model konden veel beheerders die aan veel shares in één storage account werkten, de beheerlimiet te bereiken.
+
+00:10:15.660 --> 00:10:19.560
+Nu heeft elke share zijn eigen bucket voor die bewerkingen, waardoor een limiet veel moeilijker te bereiken is.
+
+00:10:19.740 --> 00:10:21.140
+Nu is er een addertje onder het gras.
+
+00:10:21.360 --> 00:10:25.720
+Bij algemene beschikbaarheid is deze nieuwe resource momenteel beperkt tot de SSD-tier en het NFS-protocol.
+
+00:10:25.960 --> 00:10:30.840
+Dat is een specifieke use case, krachtige Linux-fileshairs, maar SMB-ondersteuning en de HDD-tier komen eraan.
+
+00:10:31.020 --> 00:10:33.000
+Microsoft is duidelijk geweest over die roadmap.
+
+00:10:33.000 --> 00:10:39.100
+Dus in plaats van een grote bucket te beheren met veel shares die allemaal dezelfde limieten, netwerkregels, sleutels en factuur delen.
+
+00:10:39.260 --> 00:10:42.000
+Nu is elke share een eigen kleine bucket met een eigen slot.
+
+00:10:42.240 --> 00:10:42.640
+Simpel.
+
+00:10:42.880 --> 00:10:45.520
+Dus, wanneer is het logisch om Azure-files daadwerkelijk te gebruiken?
+
+00:10:45.740 --> 00:10:47.020
+Wanneer Azure-files gebruiken?
+
+00:10:47.200 --> 00:10:48.940
+Dus, wanneer is Azure-files echt zinvol?
+
+00:10:49.120 --> 00:10:50.560
+Laat me je door de scenario's leiden.
+
+00:10:50.720 --> 00:10:52.000
+Ten eerste is er lift en shift.
+
+00:10:52.180 --> 00:10:54.640
+Je hebt een oude applicatie die afhankelijk is van best-end shares.
+
+00:10:54.900 --> 00:10:58.760
+Misschien is het een legacy bedrijfsapplicatie of een aangepaste tool die je tien jaren geleden bouwde.
+
+00:10:58.900 --> 00:11:01.940
+Normaal gesproken betekent verhuizen naar de cloud het herschrijven van code,
+
+00:11:01.940 --> 00:11:04.560
+configuraties wijzigen en nadenken over datatoegang.
+
+00:11:04.720 --> 00:11:07.540
+Met Azure-files hoef je echter geen enkele regelcode aan te passen.
+
+00:11:07.700 --> 00:11:09.440
+De app ziet simpelweg een netwerkschijf.
+
+00:11:09.560 --> 00:11:13.020
+Het maakt niet uit of die schijf in de bezemkast op kantoor staat of in een Microsoft datacenter.
+
+00:11:13.240 --> 00:11:14.980
+Hetzelfde protocol, hetzelfde gedrag.
+
+00:11:15.220 --> 00:11:16.200
+Dat is precies het punt.
+
+00:11:16.420 --> 00:11:18.740
+Een andere belangrijke use case is het delen van configuratiebestanden,
+
+00:11:18.960 --> 00:11:20.620
+laks of gegevens over meerdere virtuele machines.
+
+00:11:20.920 --> 00:11:22.640
+Stel, je hebt een cluster van webservers.
+
+00:11:22.840 --> 00:11:24.660
+Ze hebben allemaal dezelfde configuratie nodig.
+
+00:11:24.660 --> 00:11:27.800
+In plaats van bestanden naar elke VM te kopiëren en te hopen dat ze synchroon blijven,
+
+00:11:27.900 --> 00:11:29.560
+koppel je één Azure-bestandshare aan elke server.
+
+00:11:29.780 --> 00:11:31.820
+Wijzig één bestand en elke server ziet het direct.
+
+00:11:32.020 --> 00:11:33.840
+Geen gedoe meer met uiteenlopende versies.
+
+00:11:34.040 --> 00:11:35.840
+Ontwikkel- en testteams zijn hier ook dol op.
+
+00:11:35.960 --> 00:11:37.940
+Je kunt binnen enkele minuten een bestandshare opzetten,
+
+00:11:38.120 --> 00:11:39.860
+een week gebruiken en dan verwijderen als je klaar bent.
+
+00:11:40.080 --> 00:11:42.680
+Geen hardware om te kopen, geen server om buiten gebruik te stellen.
+
+00:11:42.880 --> 00:11:45.660
+Voor iedereen die tijdelijke gedeelde opslag nodig heeft, is dit een enorme tijdsbesparing.
+
+00:11:46.460 --> 00:11:48.080
+Dan is er nog het hybride cloud-scenario.
+
+00:11:48.440 --> 00:11:50.960
+Azure-filesync laat je bestanden cachen op een lokale server,
+
+00:11:50.960 --> 00:11:53.040
+terwijl Azure-files de bron van waarheid blijft.
+
+00:11:53.160 --> 00:11:56.860
+Je on-premises gebruikers krijgen lokale prestaties voor de bestanden die ze het meest gebruiken.
+
+00:11:57.020 --> 00:11:59.560
+Ondertussen blijft de kopie in de cloud automatisch up-to-date.
+
+00:12:00.000 --> 00:12:01.960
+Nevenvestigingen zijn hier dol op, externe teams ook.
+
+00:12:02.080 --> 00:12:04.400
+Het biedt het beste van twee werelden zonder het hoofdpijndossier.
+
+00:12:04.600 --> 00:12:06.480
+Maar Azure-files is niet het antwoord op alles.
+
+00:12:06.740 --> 00:12:08.420
+Gebruik het niet voor hoogwaardige databases.
+
+00:12:08.740 --> 00:12:11.900
+Als je database-snelheid nodig hebt, kies dan voor Azure SQL of Managed X.
+
+00:12:12.080 --> 00:12:14.560
+Azure-files is een bestandshare, geen database engine.
+
+00:12:14.780 --> 00:12:18.060
+Het is geoptimaliseerd voor bestandstoegangspatronen, niet voor transactionele workloads.
+
+00:12:18.060 --> 00:12:20.180
+Het zijn verschillende tools voor verschillende taken.
+
+00:12:20.180 --> 00:12:23.540
+Gebruik het niet waar SharePoint of Microsoft Teams al in de behoefte voor ziet.
+
+00:12:23.700 --> 00:12:27.700
+Als je documenten deelt die mensen tegelijkertijd bewerken, is SharePoint een betere keuze.
+
+00:12:27.900 --> 00:12:32.600
+Je krijgt versiegeschiedenis, co-altering en diepe integratie met de rest van Microsoft 365.
+
+00:12:33.240 --> 00:12:36.420
+Azure-files is bedoeld voor scenario's waar SharePoint net niet voldoet.
+
+00:12:36.620 --> 00:12:39.860
+Gebruik het niet voor applicaties die aangepaste best- en S-systeemfuncties nodig hebben,
+
+00:12:40.080 --> 00:12:42.840
+zoals symbolische koppelingen, harde koppelingen of uitgebreide attributen.
+
+00:12:43.040 --> 00:12:45.840
+Azure-files kan uitstekend omgaan met standaard bestandssysteemgedrag,
+
+00:12:45.840 --> 00:12:47.780
+maar ondersteunt niet elk specifiek randgeval.
+
+00:12:47.940 --> 00:12:49.740
+Ken je vereisten voordat je een keuze maakt?
+
+00:12:49.740 --> 00:12:51.680
+Laat me een voorbeeld uit de praktijk geven.
+
+00:12:51.840 --> 00:12:54.080
+Een bouwbedrijf heeft vestigingen in drie steden.
+
+00:12:54.280 --> 00:12:58.600
+Elk kantoor heeft toegang nodig tot dezelfde blauwdrukken, contracten en inspectierapporten.
+
+00:12:58.740 --> 00:13:03.580
+In de oude opzet hadden ze een server op het hoofdkantoor en verbonden medewerkers op afstand via een trage VPN.
+
+00:13:03.860 --> 00:13:05.720
+Het openen van een blauwdruk kon minuten duren.
+
+00:13:05.940 --> 00:13:08.200
+Met Azure-files maken ze één gedeelde map in de cloud aan.
+
+00:13:08.380 --> 00:13:09.560
+Elk kantoor koppelt deze aan.
+
+00:13:09.780 --> 00:13:11.240
+Blauwdrukken openen in enkele seconden.
+
+00:13:11.380 --> 00:13:12.840
+Contracten zijn altijd de nieuwste versie.
+
+00:13:12.840 --> 00:13:14.140
+Geen VPN vereist.
+
+00:13:14.340 --> 00:13:15.620
+Geen server om te onderhouden.
+
+00:13:15.780 --> 00:13:16.620
+Het werkt gewoon.
+
+00:13:16.860 --> 00:13:20.300
+Maar prestaties en beveiliging doen er ook toe, dus laten we die bespreken.
+
+00:13:20.780 --> 00:13:22.960
+Prestaties, beveiliging en kosten op een rij.
+
+00:13:23.220 --> 00:13:24.820
+Laten we beginnen met prestaties.
+
+00:13:25.020 --> 00:13:29.580
+Als je snelheid nodig hebt, draait de premiumlaag op SSD's en levert een latentie van minder dan een milliseconde.
+
+00:13:29.780 --> 00:13:34.000
+We hebben het over maximaal 102.400 IOPS per share met het ProVision V2-model.
+
+00:13:34.220 --> 00:13:36.580
+Dat is serieuze doorvoersnelheid voor veel eisende workloads.
+
+00:13:36.580 --> 00:13:38.760
+De standaardlaag gebruikt normale harde schijven.
+
+00:13:38.960 --> 00:13:40.680
+Die is langzamer, maar veel goedkoper.
+
+00:13:40.860 --> 00:13:44.460
+Perfect voor archiefopslag of algemeen delen van bestanden waar snelheid niet kritiek is.
+
+00:13:44.660 --> 00:13:48.080
+Microsoft heeft onlangs metadata-caching toegevoegd voor SSD-shares.
+
+00:13:48.300 --> 00:13:52.760
+Dit verlaagt de latentie met wel 55% bij het weergeven van mappen of bladeren door folders.
+
+00:13:53.060 --> 00:13:58.200
+Als je workflow veel kleine bestanden en frequent navigeren door mappen bevat, merk je een duidelijk verschil.
+
+00:13:58.420 --> 00:13:59.340
+Nu, beveiliging.
+
+00:13:59.500 --> 00:14:02.360
+Azure-files heeft standaard-encryptie in rust-adrest ingeschakeld.
+
+00:14:02.520 --> 00:14:05.120
+Elke byte die je schrijft, wordt versleuteld voordat deze op de schijf terechtkomt.
+
+00:14:05.120 --> 00:14:06.480
+Je hoeft niets te configureren.
+
+00:14:06.660 --> 00:14:07.560
+Het staat gewoon aan.
+
+00:14:07.780 --> 00:14:11.120
+Encryptie tijdens transport staat ook standaard aan voor SMB 3.0 en hoger.
+
+00:14:11.280 --> 00:14:14.300
+Je gegevens blijven versleuteld terwijl ze reizen tussen je computer en de cloud.
+
+00:14:14.460 --> 00:14:15.880
+Niemand op het netwerk kan ze lezen.
+
+00:14:16.100 --> 00:14:19.900
+Microsoft raadt aan om op identiteit gebaseerde toegang te gebruiken in plaats van opslagaccount-sleutels.
+
+00:14:20.080 --> 00:14:24.220
+Dat betekent dat je gebruikers inloggen met hun normale werkgegevens, dezelfde die ze gebruiken voor e-mail en Teams.
+
+00:14:24.460 --> 00:14:27.300
+Geen gedeelde sleutels om te beheren, geen risico op een lekkende sleutel.
+
+00:14:27.460 --> 00:14:29.220
+Voor netwerkisolatie heb je opties.
+
+00:14:29.420 --> 00:14:33.440
+Private endpoints geven je bestandshare een privé-IP-adres binnen je eigen virtuele netwerk.
+
+00:14:33.440 --> 00:14:36.420
+Service endpoints houden het verkeer op de Microsoft-backbone.
+
+00:14:36.640 --> 00:14:39.820
+Firewall-regels laten je toegang beperken tot specifieke IP-bereiken.
+
+00:14:40.000 --> 00:14:43.560
+Je kunt deze combineren zoals je wilt en er is Microsoft Defender for Storage.
+
+00:14:43.800 --> 00:14:46.280
+Dit controleert je bestandshares op verdachte activiteiten.
+
+00:14:46.480 --> 00:14:49.900
+Als iemand malware uploadt via de rest API, kan Defender dit opvangen.
+
+00:14:50.100 --> 00:14:52.900
+Het is een extra beschermingslaag voor gevoelige omgevingen.
+
+00:14:52.900 --> 00:14:55.860
+Qua kosten hanteert de premium laag Previsioned Pricing.
+
+00:14:56.020 --> 00:15:00.620
+Je reserveert een bepaalde hoeveelheid capaciteit, IOPS en doorvoer en betaalt voor wat je reserveert.
+
+00:15:00.840 --> 00:15:02.140
+Standaard is Pay as You Go.
+
+00:15:02.340 --> 00:15:04.800
+Je betaalt alleen voor de opslag die je daadwerkelijk gebruikt.
+
+00:15:04.960 --> 00:15:09.500
+Als je workloads voorspelbaar zijn, kunnen Azure filesreserveringen je tot 36% besparen.
+
+00:15:09.740 --> 00:15:12.440
+Verbind je voor één of drie jaar en Microsoft geeft je een korting.
+
+00:15:12.660 --> 00:15:15.100
+Geen invloed op prestaties, alleen lagere rekeningen.
+
+00:15:15.320 --> 00:15:18.520
+Eén praktische tip, hou je compute en opslag in dezelfde Azure-regio.
+
+00:15:18.780 --> 00:15:21.180
+Data-transferkosten tussen regio's lopen snel op.
+
+00:15:21.180 --> 00:15:24.780
+Plaats je VM's en bestend shares bij elkaar en je vermijdt die egress kosten volledig.
+
+00:15:24.900 --> 00:15:26.120
+Dat is een hoop informatie.
+
+00:15:26.340 --> 00:15:29.360
+Laat ik het samenvatten, het grotere geheel waarom dit ertoe doet.
+
+00:15:29.600 --> 00:15:30.720
+Dit is de kern van het idee.
+
+00:15:30.960 --> 00:15:33.920
+Het oude opslagaccountmodel drong je alle complexiteit te beheren,
+
+00:15:34.120 --> 00:15:36.120
+zelfs als je alleen een simpele bestandsshare wilde.
+
+00:15:36.280 --> 00:15:41.800
+Je moest opslagaccounts, gedeelde limieten, netwerkregels die overal golden en facturati die alles op één hoop gooiden, begrijpen.
+
+00:15:41.960 --> 00:15:44.500
+Het was alsof je een heel gebouw huurde om slechts één kamer te gebruiken.
+
+00:15:44.700 --> 00:15:46.520
+De nieuwe file sharesresource lost dat op.
+
+00:15:46.700 --> 00:15:47.660
+Nu huur je alleen nog maar.

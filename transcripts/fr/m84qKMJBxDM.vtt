@@ -1,0 +1,2623 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:04.780
+La plupart des gens pensent que Power Apps consiste à faire glisser des boutons sur un écran jusqu'à ce qu'une vague application apparaisse.
+
+00:00:05.880 --> 00:00:07.980
+Cliquer, glisser, publier, c'est fini. Faux.
+
+00:00:08.520 --> 00:00:12.600
+C'est la version féerique que Microsoft a vendue pour émanciper tout le monde et ça a trop bien marché.
+
+00:00:13.420 --> 00:00:15.680
+Car aujourd'hui, une nouvelle espèce sévit dans l'écosystème.
+
+00:00:16.140 --> 00:00:16.780
+Le vibe code des cèques.
+
+00:00:17.420 --> 00:00:19.880
+C'est l'évolution où Power Apps rencontre le développement sérieux.
+
+00:00:20.280 --> 00:00:23.140
+À parts égales du JavaScript, de la discipline Git et du chaos assisté par IA.
+
+00:00:23.620 --> 00:00:26.460
+Voyez-vous, Power Apps a commencé comme un terrain de jeu pour les utilisateurs métiers.
+
+00:00:26.460 --> 00:00:30.380
+Des développeurs citoyens armés d'enthousiasme et de conventions de nommages douteuses.
+
+00:00:31.620 --> 00:00:34.420
+Le rêve était simple. Créer sa propre application sans écrire de code.
+
+00:00:35.280 --> 00:00:39.080
+Et oui, vous pouviez écrire un formulaire plus vite que le temps qu'il faut au service informatique pour dire politique de gouvernance.
+
+00:00:39.620 --> 00:00:45.580
+Mais quelque part entre la cinquième formule imbriquée en Power Apps et le troisième avertissement de délégation inexpliquée, le rêve s'est fissuré, le rêve s'est fissuré.
+
+00:00:46.020 --> 00:00:48.720
+Voici le schisme. Développeur citoyen contre développeur professionnel.
+
+00:00:49.140 --> 00:00:52.760
+D'un côté, les romantiques du glisser-déposer qui ne jurent que par la vitesse et la flexibilité.
+
+00:00:52.760 --> 00:00:56.760
+De l'autre, les pros du code qui regardent les formules des applications Canva et ressentent une profonde angoisse existentielle.
+
+00:00:58.080 --> 00:00:59.500
+Un groupe vit pour les résultats instantanés.
+
+00:00:59.880 --> 00:01:04.500
+L'autre exige des composants réutilisables, un contrôle de version et des environnements qui ne cassent pas quand quelqu'un remet un champ.
+
+00:01:05.140 --> 00:01:09.180
+Désormais, les applications basées sur le code, ou comme je préfère le dire le code, ramènent cette discipline manquante.
+
+00:01:10.120 --> 00:01:16.260
+Elles vous permettent d'utiliser Visual Studio Code, des frameworks adaptés comme React, tout en restant dans le jardin clos et conforme de la Power Platform.
+
+00:01:17.520 --> 00:01:20.420
+Ce n'est pas une rébellion. C'est une trêve entre créativité et contrôle.
+
+00:01:20.420 --> 00:01:28.800
+A la fin de cette vidéo, vous saurez exactement quand le vibe code l'emporte, quand le low code sauve la mise et comment GitHub Copilot lit les deux mondes plus vite que n'importe quel développeur junior.
+
+00:01:29.940 --> 00:01:36.500
+Nous allons décortiquer l'illusion de la simplicité, les mesures d'échelle et l'IA qui tire les ficelles entre ces deux mondes.
+
+00:01:37.160 --> 00:01:42.260
+Alors oubliez tout ce que vous croyez savoir sur Power Apps, car le low code pour tous n'a jamais été la vraie histoire.
+
+00:01:42.840 --> 00:01:43.620
+Ce n'était que le prologue.
+
+00:01:43.620 --> 00:01:48.380
+L'illusion du low code ? Le low code a vendu un fantasme bien commun. N'importe qui peut être développer.
+
+00:01:48.920 --> 00:01:55.740
+Cela semble noble jusqu'à ce que vous réalisiez que n'importe qui, inclut Gary de la comptabilité, qui vient de créer une application effectuant 20 requêtes SQL toutes les 5 secondes.
+
+00:01:56.300 --> 00:01:57.420
+La promesse est l'émancipation.
+
+00:01:57.840 --> 00:02:00.800
+Le résultat ? Un chaos syntaxique déguisé derrière des boutons aux couleurs pastels.
+
+00:02:01.500 --> 00:02:02.140
+Démestifiant tout ça.
+
+00:02:02.480 --> 00:02:05.060
+Power Apps existe en deux versions principales, Canvas et piloté par modèle.
+
+00:02:05.060 --> 00:02:08.640
+Les applications Canvas sont celles où vous concevez votre interface, la liberté incarnée.
+
+00:02:09.540 --> 00:02:13.980
+Faites glisser des composants sur une toile vierge, vous les connectez avec Power FX et vous vous sentez comme un Picasso avec une API.
+
+00:02:15.620 --> 00:02:17.720
+Les applications pilotées par modèle, en revanche, respectent la lettre.
+
+00:02:18.300 --> 00:02:22.080
+Elles utilisent vos tables Dataverse pour générer automatiquement une interface comme un robot discipliné.
+
+00:02:22.720 --> 00:02:23.940
+Ils sont structurés mais rigides.
+
+00:02:24.200 --> 00:02:27.180
+Parfaits pour des cas d'usage intensif en données, moins pour tout ce qui demande du style.
+
+00:02:27.860 --> 00:02:28.980
+Or ce qu'ils ont en commun c'est la vitesse.
+
+00:02:29.420 --> 00:02:31.380
+Vous pouvez créer un prototype en quelques heures, parfois quelques minutes.
+
+00:02:31.860 --> 00:02:34.060
+C'est le chute de dopamine sur lequel Microsoft a bâti cet empire.
+
+00:02:34.060 --> 00:02:36.540
+Les unités commerciales n'avaient plus besoin de l'aval de l'informatique.
+
+00:02:36.940 --> 00:02:37.980
+Elles pouvaient devenir autonomes.
+
+00:02:38.900 --> 00:02:43.420
+Mais le coup caché est apparu plus tard, sous forme de cauchemars de maintenance qui ont poussé comme des plantes invasives dans l'entreprise.
+
+00:02:44.300 --> 00:02:45.940
+Darkole au code queue ne signifie pas complexité.
+
+00:02:46.340 --> 00:02:49.460
+Cela masque simplement cette complexité derrière des noms joyeux et des clics de souris.
+
+00:02:49.800 --> 00:02:50.660
+Prenons Power FX par exemple.
+
+00:02:51.280 --> 00:02:54.360
+Cela semble inoffensif, un langage de formule inspiré d'Excel pour la logique applicative.
+
+00:02:54.820 --> 00:02:58.760
+Mais en coulisses, il crée des toiles de dépendance tentaculaires que seul le créateur initial peut démêler.
+
+00:02:59.660 --> 00:03:01.100
+Perdez cette personne et vous perdez la logique.
+
+00:03:01.520 --> 00:03:03.240
+Les outils de gouvernance peuvent aider ?
+
+00:03:03.240 --> 00:03:07.520
+Certes, mais la plupart des organisations finissent avec des dizaines de variantes de la même application de suivi de tâches,
+
+00:03:07.760 --> 00:03:10.360
+toutes légèrement défectueuses de manières uniques et fascinantes.
+
+00:03:11.220 --> 00:03:12.160
+L'analogie est inévitable.
+
+00:03:12.660 --> 00:03:13.960
+Le low-code, c'est comme des meubles IKEA.
+
+00:03:14.560 --> 00:03:18.300
+Vous les assemblez rapidement, vous vous sentez compétent, puis vous réalisez que vous ne savez pas d'où vient cette vie supplémentaire.
+
+00:03:18.860 --> 00:03:21.200
+Que Dieu vous vienne en aide si vous devez les déplacer ou les moderniser,
+
+00:03:21.320 --> 00:03:24.320
+car il manque toujours une documentation et une documentation et une clé à l'un mystère dans l'histoire.
+
+00:03:25.160 --> 00:03:27.880
+Départements atteignent leur point de rupture dès qu'ils exigent des intégrations sérieuses.
+
+00:03:27.880 --> 00:03:31.340
+Backend SQL, dépôt Git, pipeline automatisé.
+
+00:03:31.840 --> 00:03:33.760
+Les Canvas Apps n'ont pas été conçus pour une telle profondeur.
+
+00:03:34.160 --> 00:03:37.100
+Elles brillent pour des outils de processus rapides, des demandes de congés, des tableaux de bord,
+
+00:03:37.440 --> 00:03:39.840
+mais pas pour des systèmes de production complets devant survivre aux audits,
+
+00:03:39.900 --> 00:03:41.880
+aux passages à l'échelle et aux roulements des développeurs.
+
+00:03:42.720 --> 00:03:44.500
+C'est là que les équipes font face au moment de la réécriture
+
+00:03:44.500 --> 00:03:46.540
+où la commodité du low-code devient soudainement son prix à payer.
+
+00:03:47.200 --> 00:03:48.540
+Alors Microsoft a fait preuve d'intelligence.
+
+00:03:48.540 --> 00:03:50.440
+Au lieu de prétendre que le problème n'existait pas,
+
+00:03:50.900 --> 00:03:53.460
+ils ont fourni aux développeurs un nouveau moyen de reprendre la structure en main
+
+00:03:53.460 --> 00:03:55.460
+sans abandonner les avantages de la plateforme.
+
+00:03:56.320 --> 00:03:58.100
+C'est ainsi que le CapCodem est entré en scène,
+
+00:03:58.340 --> 00:04:00.640
+une forme de PowerApps qui se comporte comme un projet web moderne
+
+00:04:00.640 --> 00:04:02.580
+tout en bénéficiant du confort de la gouvernance d'entreprise,
+
+00:04:02.680 --> 00:04:03.920
+des connecteurs et de l'authentification,
+
+00:04:04.240 --> 00:04:05.420
+des connecteurs et de l'authentification.
+
+00:04:05.560 --> 00:04:06.960
+La suite change totalement la donne,
+
+00:04:07.920 --> 00:04:09.560
+car là où le low-code abstrait la complexité,
+
+00:04:09.760 --> 00:04:12.160
+les cas d'apps que Apps et qu'elle adopte selon vos propres termes.
+
+00:04:12.500 --> 00:04:13.780
+Il ne s'agit pas de rébellion gratuite,
+
+00:04:13.780 --> 00:04:16.780
+mais d'une thérapie d'infrastructure délivrée par la syntaxe.
+
+00:04:16.780 --> 00:04:19.680
+Voici le VibeCode, les PowerApps Code Apps.
+
+00:04:20.360 --> 00:04:21.560
+Nous passons maintenant à la table des grands.
+
+00:04:22.520 --> 00:04:25.560
+Le VibeCode, ou ce que Microsoft appelle humblement les PowerApps Code Apps,
+
+00:04:26.180 --> 00:04:28.060
+c'est ce qui arrive quand la Power Platform admet enfin
+
+00:04:28.060 --> 00:04:30.060
+qu'elle fait un nouveau parti de la famille des développeurs.
+
+00:04:31.320 --> 00:04:33.580
+Fini le temps des interfaces pastels et des boîtes de formules,
+
+00:04:34.280 --> 00:04:36.740
+c'est du React en costume cravate hébergé au sein de PowerApps.
+
+00:04:37.380 --> 00:04:40.060
+Voyez cela comme un appartement haut de gamme dans la même résidence sécurisée,
+
+00:04:40.060 --> 00:04:43.360
+mais cette unité est équipée d'électroménagers en inox et d'un contrôle de version.
+
+00:04:43.880 --> 00:04:44.860
+Voici la version simplifiée.
+
+00:04:44.860 --> 00:04:47.440
+Les CodeApps sont des applications web React à part entière
+
+00:04:47.440 --> 00:04:49.000
+qui s'exécutent au sein de la Power Platform.
+
+00:04:49.580 --> 00:04:50.120
+Oui, à l'intérieur.
+
+00:04:50.780 --> 00:04:53.380
+Vous écrivez dans votre IDE favori Visual Studio Code
+
+00:04:53.380 --> 00:04:54.600
+avec tous les outils modernes,
+
+00:04:55.300 --> 00:04:57.700
+Node, JS, TypeScript, .NET et Git.
+
+00:04:58.580 --> 00:05:01.200
+La Power Platform vous apporte structure, connecteur et sécurité.
+
+00:05:01.720 --> 00:05:03.140
+React vous offre une liberté créative totale.
+
+00:05:03.980 --> 00:05:04.920
+C'est le meilleur des deux mondes,
+
+00:05:04.920 --> 00:05:07.260
+la créativité d'un développeur full stack
+
+00:05:07.260 --> 00:05:10.640
+au sein de l'écosystème sécurisé de Microsoft.
+
+00:05:11.480 --> 00:05:12.420
+Décodons le flux de travail.
+
+00:05:12.420 --> 00:05:15.480
+Tout commence par la ligne de commande, là où les développeurs sont le plus à l'aise.
+
+00:05:16.200 --> 00:05:18.980
+Vous initialisez une CodeApp via la CLI Power Platform,
+
+00:05:19.100 --> 00:05:22.920
+l'outil qui connecte votre projet local directement à votre environnement Power Platform.
+
+00:05:23.580 --> 00:05:25.660
+Puis, avec quelques commandes comme PackCodeInitAgue,
+
+00:05:25.780 --> 00:05:27.000
+vous lancez un projet React standard,
+
+00:05:27.160 --> 00:05:30.800
+configurez votre PowerConfig.jsonAgue et le lié à votre environnement.
+
+00:05:31.340 --> 00:05:33.260
+C'est l'équivalent numérique d'un changement de résidence.
+
+00:05:34.380 --> 00:05:35.960
+Votre machine locale rencontre le cloud
+
+00:05:35.960 --> 00:05:38.080
+et s'y connecte de manière sécurisée.
+
+00:05:38.080 --> 00:05:39.940
+A partir de là, vous ajoutez des connecteurs.
+
+00:05:40.700 --> 00:05:47.180
+PowerApps en supporte plus de 1 500 SharePoint, SQL, Office, 365, ServiceNow, Azure et bien plus encore.
+
+00:05:48.660 --> 00:05:50.520
+Ajoutez-les directement dans votre app via la CLI
+
+00:05:50.520 --> 00:05:52.960
+et le nouveau service TypeScript apparaît comme s'il avait toujours été là.
+
+00:05:53.780 --> 00:05:56.760
+Fini les formules complexes, les conditions imbriquées qui tentent de simuler une logique.
+
+00:05:57.460 --> 00:06:00.200
+C'est juste du code, prévisible, lisible, testable.
+
+00:06:01.060 --> 00:06:02.260
+Si le low-code est un jeu de l'égout,
+
+00:06:02.600 --> 00:06:06.380
+les CodeApps sont l'imprimante 3D qui fabrique vos propres briques, vos propres briques.
+
+00:06:06.380 --> 00:06:08.820
+Vous n'êtes plus limité par des formes prédéfinies,
+
+00:06:08.960 --> 00:06:11.180
+vous sculptez votre propre UI, votre logique et vos composants.
+
+00:06:11.820 --> 00:06:13.120
+C'est pourquoi les développeurs adorent cet univers.
+
+00:06:13.580 --> 00:06:15.640
+Ça reste la Power Platform, mais qui respecte leur expertise.
+
+00:06:16.420 --> 00:06:17.480
+Imaginez ce cycle de vie.
+
+00:06:17.940 --> 00:06:19.380
+Ouvrez VS Code, tapez votre code,
+
+00:06:19.480 --> 00:06:22.980
+testez localement avec NPM Rund, avec Corrigé, Testez à nouveau, Corrigé.
+
+00:06:23.300 --> 00:06:26.000
+Et une fois satisfait, envoyez l'app vers PowerApps avec une commande,
+
+00:06:26.140 --> 00:06:26.760
+pas que de push-up.
+
+00:06:28.360 --> 00:06:32.100
+Quelques instants plus tard, votre app React apparaît aux côtés des apps Canvas,
+
+00:06:32.480 --> 00:06:35.500
+hérite des politiques de gouvernance et s'authentifie automatiquement.
+
+00:06:35.500 --> 00:06:37.400
+via Microsoft Entra.
+
+00:06:38.960 --> 00:06:40.720
+Vous restez conforme aux règles de l'entreprise,
+
+00:06:40.860 --> 00:06:43.840
+mais vous écrivez enfin votre propre logique sans subir de couches d'abstraction.
+
+00:06:44.680 --> 00:06:46.820
+Le vrai bonheur n'est pas seulement technologique, il est structurel.
+
+00:06:47.500 --> 00:06:49.500
+Le contrôle de version via Git devient la norme.
+
+00:06:50.060 --> 00:06:52.300
+La collaboration via les pull requests devient enfin possible.
+
+00:06:53.060 --> 00:06:54.660
+Les pipelines CICCD deviennent trivial.
+
+00:06:55.200 --> 00:06:58.300
+Tout ingénieur logiciel ayant déjà souffert sur une formule PowerFX corrompue
+
+00:06:58.300 --> 00:06:59.380
+peut enfin souffler.
+
+00:07:00.660 --> 00:07:02.700
+Le versionnage n'est plus un rêve, c'est une réalité fondamentale.
+
+00:07:02.700 --> 00:07:04.900
+Et pourtant Microsoft savait que ça ne suffisait pas.
+
+00:07:05.200 --> 00:07:07.780
+Bien que les code apps aient redonné ses lettres de noblesse au code pur,
+
+00:07:07.960 --> 00:07:10.660
+la productivité restait entravée par le fléau de toute équipe de développement,
+
+00:07:10.860 --> 00:07:11.460
+la répétition.
+
+00:07:12.840 --> 00:07:14.660
+Importation de type, appel de connecteur, ma page de données,
+
+00:07:14.760 --> 00:07:15.620
+tout cela n'est que du code répétit.
+
+00:07:16.040 --> 00:07:17.140
+Puissant certes, mais fastidieux.
+
+00:07:17.600 --> 00:07:19.900
+C'est pourquoi la prochaine pièce du puzzle n'est ni un autre framework,
+
+00:07:20.020 --> 00:07:21.920
+ni un SDK, mais quelque chose de bien plus grisant,
+
+00:07:22.000 --> 00:07:22.980
+l'intelligence artificielle.
+
+00:07:23.400 --> 00:07:24.340
+L'intelligence artificielle.
+
+00:07:25.100 --> 00:07:26.720
+Microsoft n'a pas seulement réintroduit une structure,
+
+00:07:26.840 --> 00:07:27.560
+ils sont ajoutés à la coït.
+
+00:07:27.560 --> 00:07:30.540
+La nouvelle ère du développement Power Apps commence avec une phrase
+
+00:07:30.540 --> 00:07:31.620
+qu'on n'aurait jamais imaginé prononcer,
+
+00:07:31.700 --> 00:07:32.980
+GitHub Copilot a créé ça pour moi.
+
+00:07:33.120 --> 00:07:33.720
+GitHub Copilot.
+
+00:07:34.680 --> 00:07:35.460
+GitHub Copilot.
+
+00:07:36.360 --> 00:07:37.020
+Le partenaire idéal.
+
+00:07:37.460 --> 00:07:38.920
+Parlons maintenant du stagiaire que personne n'a payé,
+
+00:07:38.960 --> 00:07:39.780
+mais sur lequel tout le monde compte.
+
+00:07:39.900 --> 00:07:40.580
+GitHub Copilot.
+
+00:07:40.800 --> 00:07:41.080
+Copilot.
+
+00:07:41.540 --> 00:07:43.300
+On pourrait l'appeler l'autocomplétion sous caféine,
+
+00:07:43.720 --> 00:07:46.080
+mais cela minimise ce qu'il apporte réellement aux développeurs Power Apps.
+
+00:07:46.880 --> 00:07:48.220
+Dans ce nouveau monde de A Vibe Code Ego,
+
+00:07:48.280 --> 00:07:49.400
+Copilot n'est pas juste un assistant,
+
+00:07:49.400 --> 00:07:52.120
+c'est un collaborateur silencieux qui écrit des sections entières de code
+
+00:07:52.120 --> 00:07:53.760
+avant même que votre cerveau ait eu le temps de suivre.
+
+00:07:54.540 --> 00:07:55.620
+Fixons d'abord des limites.
+
+00:07:55.620 --> 00:07:58.740
+Copilot ne définit pas la stratégie, il compose la syntaxe.
+
+00:07:59.260 --> 00:08:01.880
+C'est vous, le développeur, qui définissez ce qui doit exister.
+
+00:08:02.440 --> 00:08:05.300
+Un tableau de bord, un formulaire, un pool de données depuis SharePoint.
+
+00:08:07.040 --> 00:08:09.440
+Copilot gère le travail ingrat, échafaudage de composants,
+
+00:08:09.580 --> 00:08:11.240
+écriture de JSX, récupération de données,
+
+00:08:11.360 --> 00:08:13.160
+correction d'erreur de build et optimisation des imports.
+
+00:08:13.820 --> 00:08:15.400
+Il mémorise votre contexte tout au long de la session,
+
+00:08:15.400 --> 00:08:17.240
+donc au moment où vous dites, ajoute une carte de profil
+
+00:08:17.240 --> 00:08:19.080
+avec nom d'utilisateur, email et photo.
+
+00:08:19.640 --> 00:08:20.480
+Il est déjà en train d'écrire.
+
+00:08:21.320 --> 00:08:23.580
+Vous regardez les composants React s'assembler en temps réel
+
+00:08:23.580 --> 00:08:24.640
+et pendant une brève seconde,
+
+00:08:24.640 --> 00:08:27.120
+vous vous dites que Skynet mérite peut-être le pardon.
+
+00:08:28.240 --> 00:08:29.680
+C'est la couche d'amplification de puissance
+
+00:08:29.680 --> 00:08:31.920
+qui transforme les bons développeurs en développeurs rapides.
+
+00:08:32.900 --> 00:08:34.100
+Soudain, le développement de CodeApps
+
+00:08:34.100 --> 00:08:35.100
+prend la vitesse d'une startup.
+
+00:08:35.640 --> 00:08:36.500
+Besoin de vous connecter à DataVac.
+
+00:08:36.900 --> 00:08:37.860
+Tapez un seul commentaire,
+
+00:08:37.980 --> 00:08:40.000
+Ecopilot génère une interface de service complète
+
+00:08:40.000 --> 00:08:41.020
+reliée à votre connexion.
+
+00:08:41.700 --> 00:08:42.840
+Envie d'afficher une liste SharePoint
+
+00:08:42.840 --> 00:08:44.440
+sous forme de Taboo Kanban ?
+
+00:08:44.440 --> 00:08:46.120
+Demandez poliment et en quelques secondes,
+
+00:08:46.200 --> 00:08:47.520
+vous obtenez des colonnes déplaçables
+
+00:08:47.520 --> 00:08:49.500
+propulsées par une gestion d'état React moderne.
+
+00:08:49.500 --> 00:08:51.600
+L'efficacité qui nécessitait autrefois un sprint
+
+00:08:51.600 --> 00:08:52.700
+se résume désormais au temps d'un café.
+
+00:08:53.040 --> 00:08:54.020
+L'analogie est toute trouvée.
+
+00:08:54.660 --> 00:08:56.280
+Copilot n'est pas votre directeur artistique,
+
+00:08:56.560 --> 00:08:57.700
+c'est le stagiaire qui ne dort jamais,
+
+00:08:57.980 --> 00:08:58.880
+tape 120 mots par minute
+
+00:08:58.880 --> 00:09:01.000
+et ne se plaint jamais de la documentation.
+
+00:09:01.800 --> 00:09:02.540
+Il remplit les blancs
+
+00:09:02.540 --> 00:09:03.840
+pendant que vous pilotez l'architecture.
+
+00:09:04.880 --> 00:09:06.140
+Et lorsque vous testez et itérez,
+
+00:09:06.420 --> 00:09:07.500
+il apprend les modèles de vos promptes,
+
+00:09:08.540 --> 00:09:09.500
+devenant étrangement doué
+
+00:09:09.500 --> 00:09:10.800
+pour prédire votre prochain composant
+
+00:09:10.800 --> 00:09:11.540
+ou modèle de demande.
+
+00:09:12.000 --> 00:09:13.660
+L'IA ne remplace pas les programmeurs.
+
+00:09:14.280 --> 00:09:15.660
+Elle élimine la partie saisie du code
+
+00:09:15.660 --> 00:09:16.440
+qui, avouons-le,
+
+00:09:16.440 --> 00:09:18.020
+est la partie la plus ennuyeuse.
+
+00:09:18.840 --> 00:09:20.380
+Mais avant de commencer à déployer aveuglément,
+
+00:09:20.500 --> 00:09:21.500
+voici une mise en garde importante.
+
+00:09:21.920 --> 00:09:23.080
+Copilot accélère la syntaxe,
+
+00:09:23.140 --> 00:09:23.660
+pas la sémantique.
+
+00:09:24.180 --> 00:09:25.340
+Il peut écrire du code sans erreur
+
+00:09:25.340 --> 00:09:26.200
+qui est conceptuellement faux
+
+00:09:26.200 --> 00:09:26.860
+si vous ne surveillez pas.
+
+00:09:27.720 --> 00:09:28.520
+C'est pourquoi la discipline,
+
+00:09:28.760 --> 00:09:29.460
+les revues, les tests
+
+00:09:29.460 --> 00:09:30.200
+et le contrôle de version
+
+00:09:30.200 --> 00:09:30.920
+importent plus que jamais.
+
+00:09:31.580 --> 00:09:32.760
+Laissez Copilot générer, vous validez.
+
+00:09:33.620 --> 00:09:34.260
+Ce partenariat,
+
+00:09:34.460 --> 00:09:35.200
+et non l'automatisation,
+
+00:09:35.400 --> 00:09:36.540
+est l'atout du développeur intelligent.
+
+00:09:37.460 --> 00:09:38.220
+Lorsque cette dynamique
+
+00:09:38.220 --> 00:09:39.520
+s'opère au sein de la Power Platform,
+
+00:09:39.720 --> 00:09:40.680
+il se produit quelque chose
+
+00:09:40.680 --> 00:09:42.100
+de magique et de pragmatique.
+
+00:09:43.080 --> 00:09:43.920
+Les entreprises gagnent soudain
+
+00:09:43.920 --> 00:09:45.500
+la rapidité du développement citoyen
+
+00:09:45.500 --> 00:09:47.220
+avec l'intégrité du code professionnel.
+
+00:09:48.120 --> 00:09:48.920
+Les utilisateurs métiers
+
+00:09:48.920 --> 00:09:50.120
+obtiennent leur fonctionnalité plus vite,
+
+00:09:50.220 --> 00:09:51.280
+l'IT assure sa gouvernance
+
+00:09:51.280 --> 00:09:52.220
+et les développeurs sortent
+
+00:09:52.220 --> 00:09:54.000
+du marasme du plumbing front-end répétitif.
+
+00:09:54.460 --> 00:09:54.980
+Tout le monde y gagne,
+
+00:09:55.160 --> 00:09:56.260
+y compris les mesures d'utilisation
+
+00:09:56.260 --> 00:09:57.180
+des serveurs de Microsoft.
+
+00:09:58.200 --> 00:09:58.740
+L'effet net,
+
+00:09:59.000 --> 00:10:00.040
+les applications Power Apps
+
+00:10:00.040 --> 00:10:00.980
+propulsées par Copilot
+
+00:10:00.980 --> 00:10:02.440
+ressemblent moins à du développement système
+
+00:10:02.440 --> 00:10:03.740
+qu'à l'orchestration d'une intelligence.
+
+00:10:04.660 --> 00:10:05.460
+Décrivez vos intentions.
+
+00:10:06.220 --> 00:10:07.840
+La machine les traduit en code opérationnel.
+
+00:10:08.480 --> 00:10:09.980
+Le tout au sein d'un environnement gouverné,
+
+00:10:10.100 --> 00:10:11.440
+avec une authentification sécurisée
+
+00:10:11.440 --> 00:10:12.200
+et des connecteurs gérés.
+
+00:10:12.640 --> 00:10:13.420
+Ainsi, les deux mondes,
+
+00:10:13.600 --> 00:10:15.240
+le low-code et le k-webcode de milliers
+
+00:10:15.240 --> 00:10:16.360
+sont désormais en plein mouvement.
+
+00:10:17.080 --> 00:10:18.280
+L'un démocratise la création,
+
+00:10:18.380 --> 00:10:20.020
+l'autre formalise le passage à l'échelle.
+
+00:10:20.800 --> 00:10:21.760
+Mais lequel devrait piloter
+
+00:10:21.760 --> 00:10:23.120
+votre prochain projet ?
+
+00:10:23.120 --> 00:10:24.120
+C'est la question que les professionnels
+
+00:10:24.120 --> 00:10:25.740
+vont poser dans chaque réunion de stratégie.
+
+00:10:26.540 --> 00:10:27.900
+Nous avons goûté à la fois à la vitesse
+
+00:10:27.900 --> 00:10:28.460
+et à la structure
+
+00:10:28.460 --> 00:10:29.380
+et nous ne ferons pas marche arrière.
+
+00:10:29.940 --> 00:10:31.260
+La section suivante désignera le vainqueur.
+
+00:10:32.260 --> 00:10:33.420
+Vibe-code contre low-code,
+
+00:10:33.620 --> 00:10:34.400
+choisir son arme.
+
+00:10:35.120 --> 00:10:36.740
+C'est ici que le philosophique devient pratique.
+
+00:10:37.680 --> 00:10:38.640
+Le low-code et le vibe-code
+
+00:10:38.640 --> 00:10:39.500
+ne sont pas des choix moraux,
+
+00:10:39.560 --> 00:10:40.600
+ce sont des choix stratégiques.
+
+00:10:41.260 --> 00:10:42.100
+Les deux semblent séduisants.
+
+00:10:42.980 --> 00:10:43.920
+L'un donne à chacun l'illusion
+
+00:10:43.920 --> 00:10:45.060
+d'une productivité instantanée,
+
+00:10:45.240 --> 00:10:46.620
+l'autre offre un contrôle précis
+
+00:10:46.620 --> 00:10:47.900
+et un léger parfum de supériorité.
+
+00:10:48.680 --> 00:10:49.040
+La vérité.
+
+00:10:49.520 --> 00:10:49.980
+Vous devez savoir
+
+00:10:49.980 --> 00:10:51.340
+quand la vitesse prime sur l'architecture
+
+00:10:51.340 --> 00:10:52.340
+et quand la gouvernance
+
+00:10:52.340 --> 00:10:53.240
+l'emporte sur l'enthousiasme.
+
+00:10:53.680 --> 00:10:54.540
+Car que vous orchestriez
+
+00:10:54.540 --> 00:10:55.360
+un flux de travail unique
+
+00:10:55.360 --> 00:10:56.400
+ou un portefeuille de plateforme,
+
+00:10:56.520 --> 00:10:58.100
+votre arme définit votre résultat.
+
+00:10:58.860 --> 00:11:00.040
+Commençons par le flux de travail de développement.
+
+00:11:00.520 --> 00:11:01.620
+Le low-code semble convivial
+
+00:11:01.620 --> 00:11:02.260
+car il est graphique.
+
+00:11:02.640 --> 00:11:03.580
+Faites glisser, configurez
+
+00:11:03.580 --> 00:11:04.980
+et obtenez cette étincelle satisfaisante
+
+00:11:04.980 --> 00:11:05.960
+quand quelque chose fonctionne vraiment.
+
+00:11:06.280 --> 00:11:07.040
+Pas d'erreur de syntaxe,
+
+00:11:07.080 --> 00:11:07.620
+pas de build échoué,
+
+00:11:07.680 --> 00:11:08.580
+juste un formulaire fonctionnel.
+
+00:11:09.360 --> 00:11:10.520
+Mais ce que vous gagnez en accessibilité,
+
+00:11:10.520 --> 00:11:11.880
+vous le perdez en réutilisabilité.
+
+00:11:12.360 --> 00:11:13.220
+Les composants ne peuvent pas
+
+00:11:13.220 --> 00:11:14.440
+et nous vous donnons rendez-vous en janvier.
+
+00:11:15.220 --> 00:11:15.880
+Refactoriser signifie
+
+00:11:15.880 --> 00:11:17.160
+ouvrir les interfaces une par une.
+
+00:11:17.660 --> 00:11:18.280
+Debuguer ressemble
+
+00:11:18.280 --> 00:11:19.600
+au déchiffrage d'hiroglyphes.
+
+00:11:20.300 --> 00:11:21.040
+Vibecode en revanche
+
+00:11:21.040 --> 00:11:22.380
+sacrifie la facilité pour la puissance.
+
+00:11:23.240 --> 00:11:24.440
+Vous vivez dans Visual Studio Code,
+
+00:11:24.500 --> 00:11:25.440
+le CLI est votre maison
+
+00:11:25.440 --> 00:11:26.820
+et Git est votre filet de sécurité.
+
+00:11:27.640 --> 00:11:28.820
+Vous structurez votre base de code,
+
+00:11:28.960 --> 00:11:29.580
+partagez des modules
+
+00:11:29.580 --> 00:11:30.260
+entre les applications
+
+00:11:30.260 --> 00:11:31.020
+et automatisez tout,
+
+00:11:31.180 --> 00:11:31.820
+du build au déploiement.
+
+00:11:32.320 --> 00:11:33.260
+Les adeptes de l'interface graphique
+
+00:11:33.260 --> 00:11:34.040
+pourraient appeler cela un excès.
+
+00:11:34.400 --> 00:11:35.400
+Les ingénieurs appellent cela un mardi.
+
+00:11:35.880 --> 00:11:36.620
+La gouvernance est le point
+
+00:11:36.620 --> 00:11:37.740
+où le fossé se transforme en canyon.
+
+00:11:38.400 --> 00:11:39.180
+Le low-code opère
+
+00:11:39.180 --> 00:11:39.980
+au sein des environnements
+
+00:11:39.980 --> 00:11:40.660
+Power Platform,
+
+00:11:41.100 --> 00:11:42.780
+utile pour la scalabilité départementale
+
+00:11:42.780 --> 00:11:44.500
+mais limitée par les politiques d'ELP
+
+00:11:44.500 --> 00:11:45.500
+et de périmètres de données
+
+00:11:45.500 --> 00:11:46.620
+installés par les administrateurs.
+
+00:11:47.160 --> 00:11:48.100
+Idéal pour l'isolation,
+
+00:11:48.300 --> 00:11:49.220
+moins pour l'orchestration.
+
+00:11:50.040 --> 00:11:50.800
+Les applications codées,
+
+00:11:50.900 --> 00:11:51.220
+quant à elles,
+
+00:11:51.260 --> 00:11:52.060
+se synchronisent directement
+
+00:11:52.060 --> 00:11:52.780
+avec les pipeline DevOps.
+
+00:11:53.120 --> 00:11:53.680
+Vous pouvez imposer
+
+00:11:53.680 --> 00:11:54.840
+des approbations de pull requests,
+
+00:11:54.960 --> 00:11:55.740
+des tests automatisés,
+
+00:11:55.860 --> 00:11:56.320
+du linting,
+
+00:11:56.320 --> 00:11:57.500
+voire du versionnage sémantique.
+
+00:11:57.840 --> 00:11:58.740
+Ce n'est pas de la bureaucratie,
+
+00:11:58.840 --> 00:11:59.500
+c'est une question de survie
+
+00:11:59.500 --> 00:12:00.260
+lorsque plusieurs équipes
+
+00:12:00.260 --> 00:12:01.400
+déploient des changements chaque semaine.
+
+00:12:01.980 --> 00:12:02.660
+La gouvernance devient
+
+00:12:05.400 --> 00:12:06.280
+en low-code,
+
+00:12:06.340 --> 00:12:07.280
+l'abstraction vous protège
+
+00:12:07.280 --> 00:12:08.120
+mais vous entrave également.
+
+00:12:08.800 --> 00:12:09.640
+Chaque pression sur un bouton
+
+00:12:09.640 --> 00:12:10.260
+traverse des couches
+
+00:12:10.260 --> 00:12:11.320
+de l'interpréteur PowerFX
+
+00:12:11.320 --> 00:12:12.980
+puis le middleware des connecteurs
+
+00:12:12.980 --> 00:12:13.780
+pour enfin atteindre
+
+00:12:13.780 --> 00:12:14.420
+la source de données.
+
+00:12:15.220 --> 00:12:15.900
+Suffisamment efficace
+
+00:12:15.900 --> 00:12:16.580
+pour la plupart des cas
+
+00:12:16.580 --> 00:12:17.480
+d'usage métiers, certes.
+
+00:12:18.140 --> 00:12:18.860
+Mais si vous avez besoin
+
+00:12:18.860 --> 00:12:19.920
+de tableaux de bord en temps réel,
+
+00:12:20.040 --> 00:12:20.720
+de rendu dynamique
+
+00:12:20.720 --> 00:12:21.620
+ou de traitement intensif,
+
+00:12:21.700 --> 00:12:22.460
+ces couches invisibles
+
+00:12:22.460 --> 00:12:23.620
+deviennent un frein.
+
+00:12:24.280 --> 00:12:24.960
+Les applications codées,
+
+00:12:24.960 --> 00:12:25.520
+elles sont allégées.
+
+00:12:25.840 --> 00:12:26.420
+React gère l'état
+
+00:12:26.420 --> 00:12:27.200
+directement dans l'allégateur.
+
+00:12:27.900 --> 00:12:28.880
+Chavascript appelle les connecteurs
+
+00:12:28.880 --> 00:12:29.800
+directement via l'ESDG.
+
+00:12:30.440 --> 00:12:31.600
+Le rendu est immédiat.
+
+00:12:32.100 --> 00:12:32.700
+C'est comme comparer
+
+00:12:35.400 --> 00:12:36.560
+ce dernier réagit plus vite
+
+00:12:36.560 --> 00:12:37.300
+et l'on peut réellement
+
+00:12:37.300 --> 00:12:38.320
+voir le courant passer.
+
+00:12:38.840 --> 00:12:39.540
+La sécurité n'est pas
+
+00:12:39.540 --> 00:12:40.200
+un sujet aussi clivant
+
+00:12:40.200 --> 00:12:40.580
+qu'on le pense.
+
+00:12:41.080 --> 00:12:41.900
+Les deux univers reposent
+
+00:12:41.900 --> 00:12:42.600
+sur l'authentification
+
+00:12:42.600 --> 00:12:43.320
+Microsoft Entra.
+
+00:12:43.720 --> 00:12:44.340
+Tous deux respectent
+
+00:12:44.340 --> 00:12:45.120
+l'accès conditionnel,
+
+00:12:45.260 --> 00:12:45.740
+le chiffrement
+
+00:12:45.740 --> 00:12:46.520
+et les limites du tenant.
+
+00:12:47.060 --> 00:12:47.640
+La nuance réside
+
+00:12:47.640 --> 00:12:48.260
+dans la granularité.
+
+00:12:48.660 --> 00:12:49.240
+Le low-code applique
+
+00:12:49.240 --> 00:12:50.460
+la sécurité via la configuration
+
+00:12:50.460 --> 00:12:51.260
+des cases à cocher,
+
+00:12:51.520 --> 00:12:52.000
+des tables de rôle
+
+00:12:52.000 --> 00:12:52.820
+et des listes d'accès.
+
+00:12:53.560 --> 00:12:54.560
+Parfait pour la plupart des tâches
+
+00:12:54.560 --> 00:12:55.380
+mais limité pour tout
+
+00:12:55.380 --> 00:12:55.960
+ce qui est nuancé.
+
+00:12:56.500 --> 00:12:57.340
+Les applications codées
+
+00:12:57.340 --> 00:12:58.560
+intègrent la logique de sécurité
+
+00:12:58.560 --> 00:12:59.420
+directement dans votre code.
+
+00:13:00.040 --> 00:13:00.640
+Validation des rôles
+
+00:13:00.640 --> 00:13:01.180
+à l'exécution,
+
+00:13:01.340 --> 00:13:02.260
+appel API personnalisée
+
+00:13:02.260 --> 00:13:03.020
+avec gestion des jetons,
+
+00:13:03.180 --> 00:13:03.820
+interface utilisateur
+
+00:13:03.820 --> 00:13:04.840
+basée sur des permissions dynamiques.
+
+00:13:05.120 --> 00:13:05.580
+En d'autres termes,
+
+00:13:05.640 --> 00:13:06.320
+vous pouvez rendre l'application
+
+00:13:06.320 --> 00:13:06.880
+assez intelligente
+
+00:13:06.880 --> 00:13:08.100
+pour savoir qui interagit avec elle.
+
+00:13:08.920 --> 00:13:09.580
+Ce niveau de contrôle
+
+00:13:09.580 --> 00:13:10.400
+est crucial quand savoir
+
+00:13:10.400 --> 00:13:11.140
+qui a cliqué sur quoi
+
+00:13:11.140 --> 00:13:12.080
+devient une question d'audit
+
+00:13:12.080 --> 00:13:13.220
+et non plus une simple métrique.
+
+00:13:13.940 --> 00:13:14.320
+La maintenance
+
+00:13:14.320 --> 00:13:15.260
+est le tueur silencieux.
+
+00:13:15.700 --> 00:13:16.860
+Le low-code gagne au démarrage.
+
+00:13:17.420 --> 00:13:18.140
+Une application créée
+
+00:13:18.140 --> 00:13:18.720
+en quelques heures
+
+00:13:18.720 --> 00:13:19.980
+mais qui finit par s'effondrer
+
+00:13:19.980 --> 00:13:20.340
+sous le poids
+
+00:13:20.340 --> 00:13:21.200
+de ses propres raccourcis.
+
+00:13:21.760 --> 00:13:22.860
+Les connecteurs deviennent obsolètes,
+
+00:13:23.020 --> 00:13:24.140
+les contrôles changent de comportement,
+
+00:13:24.260 --> 00:13:24.880
+les formules cassent
+
+00:13:24.880 --> 00:13:26.080
+quand les types de données évoluent.
+
+00:13:31.180 --> 00:13:31.620
+Pendant ce temps,
+
+00:13:31.680 --> 00:13:32.380
+les applications codées
+
+00:13:32.380 --> 00:13:33.360
+vivent et meurent au rythme des comiques.
+
+00:13:33.640 --> 00:13:34.300
+Vous pouvez créer des branches,
+
+00:13:34.380 --> 00:13:34.700
+fusionner,
+
+00:13:34.840 --> 00:13:35.440
+revenir en arrière
+
+00:13:35.440 --> 00:13:36.060
+et recompiler.
+
+00:13:36.660 --> 00:13:37.560
+Quand Microsoft change
+
+00:13:37.560 --> 00:13:38.340
+les versions du SDK,
+
+00:13:38.940 --> 00:13:39.900
+vous mettez à jour vos paquets
+
+00:13:39.900 --> 00:13:40.880
+et reconstruisez
+
+00:13:40.880 --> 00:13:42.000
+sans tout recâbler manuellement.
+
+00:13:42.600 --> 00:13:43.700
+La pérennité favorise le code,
+
+00:13:43.840 --> 00:13:44.340
+pas la facilité.
+
+00:13:44.680 --> 00:13:45.520
+Ensuite, il y a l'alignement des égaux.
+
+00:13:45.980 --> 00:13:46.520
+Si vos concepteurs
+
+00:13:46.520 --> 00:13:47.300
+sont des analystes métiers
+
+00:13:47.300 --> 00:13:48.140
+qui connaissent les processus
+
+00:13:48.140 --> 00:13:49.060
+mais détestent la syntaxe,
+
+00:13:49.220 --> 00:13:50.420
+le low-code est leur terrain naturel.
+
+00:13:51.240 --> 00:13:52.100
+Ils comprennent les besoins
+
+00:13:52.100 --> 00:13:52.640
+et s'épanouissent
+
+00:13:52.640 --> 00:13:53.160
+dans un système
+
+00:13:53.160 --> 00:13:54.400
+qui abstrait les détails techniques.
+
+00:13:55.460 --> 00:13:56.300
+Mais une fois que vous impliquez
+
+00:13:56.300 --> 00:13:56.820
+des développeurs,
+
+00:13:56.920 --> 00:13:57.580
+ceux qui parlent couramment
+
+00:13:57.580 --> 00:13:57.920
+de JSON
+
+00:13:57.920 --> 00:13:59.000
+et méprisent le glissé-déposé,
+
+00:13:59.060 --> 00:14:00.440
+les forcer à utiliser CanvasApps
+
+00:14:00.440 --> 00:14:01.460
+et demander à un chirurgien
+
+00:14:01.460 --> 00:14:02.920
+d'opérer avec des moufles.
+
+00:14:04.140 --> 00:14:04.920
+Donnez-leur le clavier,
+
+00:14:05.080 --> 00:14:06.140
+la CLI et le dépôt
+
+00:14:06.140 --> 00:14:06.820
+et ils livreront
+
+00:14:06.820 --> 00:14:07.720
+quelque chose de maintenant
+
+00:14:07.720 --> 00:14:08.640
+plutôt que de mystique.
+
+00:14:09.500 --> 00:14:10.060
+Analysons cela
+
+00:14:10.060 --> 00:14:10.680
+à travers quelques points
+
+00:14:10.680 --> 00:14:11.260
+de réalité concrets.
+
+00:14:11.940 --> 00:14:13.100
+Imaginons que le service RH
+
+00:14:13.100 --> 00:14:13.660
+souhaite un outil
+
+00:14:13.660 --> 00:14:14.660
+qui automatise l'intégration
+
+00:14:14.660 --> 00:14:15.060
+des employés
+
+00:14:15.060 --> 00:14:16.140
+à partir d'une liste SharePoint,
+
+00:14:16.620 --> 00:14:17.300
+déclenche des emails,
+
+00:14:17.600 --> 00:14:18.480
+met à jour des lignes dataverse
+
+00:14:18.480 --> 00:14:20.140
+et signale les tâches informatiques.
+
+00:14:20.940 --> 00:14:21.760
+C'est le scénario idéal
+
+00:14:21.760 --> 00:14:22.300
+pour le low-code,
+
+00:14:26.300 --> 00:14:27.000
+qui ont besoin d'un système
+
+00:14:27.000 --> 00:14:28.140
+qui extrait des données de SQL,
+
+00:14:28.660 --> 00:14:29.340
+d'API externe
+
+00:14:29.340 --> 00:14:30.220
+et de la télémétrie IoT
+
+00:14:30.220 --> 00:14:31.320
+avec des graphiques personnalisées
+
+00:14:31.320 --> 00:14:32.380
+et des tableaux de bord réactifs.
+
+00:14:33.080 --> 00:14:33.840
+Ce n'est pas un problème pour Canvas.
+
+00:14:34.300 --> 00:14:35.120
+C'est le destin d'une application.
+
+00:14:35.800 --> 00:14:36.560
+Le low-code peut imiter
+
+00:14:36.560 --> 00:14:37.340
+une telle complexité,
+
+00:14:37.460 --> 00:14:38.440
+mais au prix de la maintenabilité.
+
+00:14:39.080 --> 00:14:39.900
+Le take-five code UQ
+
+00:14:39.900 --> 00:14:40.660
+prend naturellement le rue.
+
+00:14:41.280 --> 00:14:41.740
+C'est là que les choses
+
+00:14:41.740 --> 00:14:42.320
+deviennent amusantes.
+
+00:14:42.900 --> 00:14:43.880
+Malgré l'écart de puissance,
+
+00:14:44.340 --> 00:14:45.480
+le low-code ne disparaît pas,
+
+00:14:45.640 --> 00:14:46.000
+il mute.
+
+00:14:46.220 --> 00:14:46.580
+Il mute.
+
+00:14:47.240 --> 00:14:48.140
+L'avenir n'est pas un coup d'état
+
+00:14:48.140 --> 00:14:48.780
+où les développeurs
+
+00:14:48.780 --> 00:14:49.960
+renversent ses créateurs citoyens,
+
+00:14:49.960 --> 00:14:50.640
+c'est une coalition.
+
+00:14:51.380 --> 00:14:52.120
+Les constructions hybrides
+
+00:14:52.120 --> 00:14:52.720
+existent déjà,
+
+00:14:52.840 --> 00:14:53.620
+des applications Canvas
+
+00:14:53.620 --> 00:14:54.460
+intégrant des composants
+
+00:14:54.460 --> 00:14:55.220
+véhicules personnalisés
+
+00:14:55.220 --> 00:14:56.300
+et des applications codées
+
+00:14:56.300 --> 00:14:57.080
+utilisant des connecteurs
+
+00:14:57.080 --> 00:14:57.900
+configurés en low-code.
+
+00:14:58.380 --> 00:14:58.920
+Considérez cela
+
+00:14:58.920 --> 00:15:00.000
+comme une intelligence distribuée.
+
+00:15:00.440 --> 00:15:00.780
+D'un côté,
+
+00:15:00.860 --> 00:15:01.920
+on prototype des idées rapidement,
+
+00:15:02.060 --> 00:15:02.280
+de l'autre,
+
+00:15:02.360 --> 00:15:03.320
+on les met à l'échelle correctement.
+
+00:15:04.220 --> 00:15:05.080
+Lorsque les deux coexistent,
+
+00:15:05.140 --> 00:15:05.900
+toute la power plateforme
+
+00:15:05.900 --> 00:15:06.500
+se transforme,
+
+00:15:06.660 --> 00:15:07.560
+passant d'un chaos d'outil,
+
+00:15:07.820 --> 00:15:09.300
+un écosystème de développement cohérent.
+
+00:15:09.900 --> 00:15:10.720
+Oui, il y a une certaine ironie.
+
+00:15:11.460 --> 00:15:12.260
+La plateforme conçue
+
+00:15:12.260 --> 00:15:13.000
+pour éliminer le code
+
+00:15:13.000 --> 00:15:13.740
+en dépend à nouveau,
+
+00:15:14.080 --> 00:15:14.880
+mais avec élégance,
+
+00:15:15.200 --> 00:15:15.860
+IA accélérant
+
+00:15:15.860 --> 00:15:16.480
+les deux approches.
+
+00:15:18.140 --> 00:15:18.940
+Le code Vibe Code Hunt
+
+00:15:18.940 --> 00:15:19.700
+ne déclare pas la guerre
+
+00:15:19.700 --> 00:15:20.200
+au low-code.
+
+00:15:20.360 --> 00:15:20.920
+Il offre une sortie
+
+00:15:20.920 --> 00:15:21.380
+à ses limites
+
+00:15:21.380 --> 00:15:22.520
+tout en conservant la facilité
+
+00:15:22.520 --> 00:15:23.620
+qui a fait son succès initial.
+
+00:15:24.480 --> 00:15:25.660
+Canvas renforce la créativité.
+
+00:15:26.340 --> 00:15:27.500
+Le code assure la continuité.
+
+00:15:28.260 --> 00:15:28.580
+Ensemble,
+
+00:15:28.660 --> 00:15:29.540
+il forme une boucle fermée
+
+00:15:29.540 --> 00:15:30.600
+d'innovation et de gouvernance,
+
+00:15:30.680 --> 00:15:31.100
+l'histoire d'amour
+
+00:15:31.100 --> 00:15:31.860
+favorite de Microsoft.
+
+00:15:32.800 --> 00:15:33.380
+Lorsque vous commencez
+
+00:15:33.380 --> 00:15:34.200
+à voir la power plateforme
+
+00:15:34.200 --> 00:15:34.700
+sous cet angle,
+
+00:15:35.040 --> 00:15:35.700
+les débats sur lequel
+
+00:15:35.700 --> 00:15:36.100
+est le meilleur
+
+00:15:36.100 --> 00:15:36.940
+semblent puériles.
+
+00:15:37.980 --> 00:15:38.700
+Un marteau n'est pas meilleur
+
+00:15:38.700 --> 00:15:39.360
+qu'une clé à molette.
+
+00:15:40.080 --> 00:15:41.200
+Ce sont juste des outils différents
+
+00:15:41.200 --> 00:15:41.900
+pour des boulons du feu.
+
+00:15:42.360 --> 00:15:43.000
+La vraie compétence
+
+00:15:43.000 --> 00:15:43.380
+est de savoir
+
+00:15:43.380 --> 00:15:44.100
+quand il faut de la finesse
+
+00:15:44.100 --> 00:15:45.020
+ou un impact direct,
+
+00:15:45.340 --> 00:15:45.640
+direct.
+
+00:15:46.160 --> 00:15:46.980
+Les meilleurs architectes
+
+00:15:46.980 --> 00:15:47.700
+conçoivent des systèmes
+
+00:15:47.700 --> 00:15:48.300
+qui mélangent les deux.
+
+00:15:48.820 --> 00:15:49.700
+Des prototypes rapides
+
+00:15:49.700 --> 00:15:50.340
+via le low-code,
+
+00:15:50.540 --> 00:15:51.300
+renforcés par le cas
+
+00:15:51.300 --> 00:15:51.820
+avec le code Aker,
+
+00:15:51.920 --> 00:15:52.500
+le tout enveloppé
+
+00:15:52.500 --> 00:15:53.120
+par les suggestions
+
+00:15:53.120 --> 00:15:53.920
+de l'IA de copilote
+
+00:15:53.920 --> 00:15:54.840
+tournant comme une mécanique
+
+00:15:54.840 --> 00:15:56.120
+silencieuse en arrière-plan.
+
+00:15:57.200 --> 00:15:57.960
+C'est vers cet équilibre
+
+00:15:57.960 --> 00:15:58.620
+que les professionnels
+
+00:15:58.620 --> 00:15:59.060
+se dirigent.
+
+00:15:59.580 --> 00:16:00.600
+Idéation rapide mariée
+
+00:16:00.600 --> 00:16:01.860
+à une exécution disciplinée.
+
+00:16:02.220 --> 00:16:03.320
+La plateforme ne se fragmente pas,
+
+00:16:03.460 --> 00:16:04.080
+elle se spécialise.
+
+00:16:05.060 --> 00:16:05.840
+Alors avant de choisir
+
+00:16:05.840 --> 00:16:06.340
+votre camp,
+
+00:16:06.660 --> 00:16:07.240
+rappelez-vous que ce n'est
+
+00:16:07.240 --> 00:16:08.140
+pas l'arme qui fait le guerrier,
+
+00:16:08.520 --> 00:16:09.520
+elle rend juste son travail
+
+00:16:09.520 --> 00:16:10.040
+plus rapide,
+
+00:16:10.140 --> 00:16:10.540
+plus propre
+
+00:16:10.540 --> 00:16:12.180
+et, dans le cas de Power Apps,
+
+00:16:12.380 --> 00:16:13.300
+nettement plus conforme
+
+00:16:13.300 --> 00:16:14.180
+à la couche stratégique,
+
+00:16:14.360 --> 00:16:14.620
+à l'IA,
+
+00:16:14.780 --> 00:16:15.420
+à la gouvernance
+
+00:16:15.420 --> 00:16:16.020
+et à l'avenir
+
+00:16:16.020 --> 00:16:17.100
+de la Power Platform.
+
+00:16:18.300 --> 00:16:19.040
+Voici ce qui échappe
+
+00:16:19.040 --> 00:16:19.640
+à la plupart des gens.
+
+00:16:20.120 --> 00:16:20.980
+Microsoft ne prépare pas
+
+00:16:20.980 --> 00:16:21.460
+une guerre du code,
+
+00:16:21.540 --> 00:16:22.400
+il orchestre une fusion.
+
+00:16:23.400 --> 00:16:24.360
+L'avenir de la Power Platform
+
+00:16:24.360 --> 00:16:25.140
+n'est pas le low-code
+
+00:16:25.140 --> 00:16:25.880
+contre le pro-code.
+
+00:16:26.760 --> 00:16:27.720
+C'est l'unification des deux
+
+00:16:27.720 --> 00:16:28.880
+sous une gouvernance partagée
+
+00:16:28.880 --> 00:16:29.900
+et une architecture pilotée
+
+00:16:29.900 --> 00:16:30.260
+par l'IA.
+
+00:16:30.760 --> 00:16:31.720
+Un système nerveux unique
+
+00:16:31.720 --> 00:16:33.200
+qui connecte chaque impulsion créative
+
+00:16:33.200 --> 00:16:34.540
+à un contrôle de niveau entreprise.
+
+00:16:35.580 --> 00:16:36.620
+Voyez cela moins comme de camp
+
+00:16:36.620 --> 00:16:37.820
+et davantage comme un écosystème
+
+00:16:37.820 --> 00:16:38.740
+apprenant à s'autoréguler.
+
+00:16:39.460 --> 00:16:40.720
+C'est au niveau de la couche stratégique
+
+00:16:40.720 --> 00:16:41.900
+que cette évolution devient visible.
+
+00:16:43.140 --> 00:16:43.840
+Sur le plan technique,
+
+00:16:43.940 --> 00:16:45.000
+tout converge vers trois piliers
+
+00:16:45.000 --> 00:16:45.540
+Copilot,
+
+00:16:45.880 --> 00:16:46.340
+Dataverse
+
+00:16:46.340 --> 00:16:47.220
+et l'extensibilité
+
+00:16:47.220 --> 00:16:47.900
+gouvernée.
+
+00:16:48.700 --> 00:16:49.680
+Copilot Studio écrit désormais
+
+00:16:49.680 --> 00:16:50.560
+du code qui nécessitait
+
+00:16:50.560 --> 00:16:51.460
+auparavant des appels manuels
+
+00:16:51.460 --> 00:16:51.880
+au SDK.
+
+00:16:53.140 --> 00:16:53.900
+Les composants de code,
+
+00:16:54.000 --> 00:16:54.520
+cette technologie
+
+00:16:54.520 --> 00:16:55.560
+qui permet au contrôle REAC
+
+00:16:55.560 --> 00:16:56.120
+tout à être script
+
+00:16:56.120 --> 00:16:56.700
+de s'exécuter
+
+00:16:56.700 --> 00:16:57.740
+dans des applications Canevas,
+
+00:16:57.860 --> 00:16:58.460
+font tomber la barrière
+
+00:16:58.460 --> 00:16:59.400
+entre création citoyenne
+
+00:16:59.400 --> 00:17:00.220
+et professionnelle.
+
+00:17:01.000 --> 00:17:01.480
+Et Dataverse,
+
+00:17:01.580 --> 00:17:02.740
+le service de données centrales
+
+00:17:02.740 --> 00:17:03.480
+autrefois réservé
+
+00:17:03.480 --> 00:17:04.380
+aux puristes du pilotage
+
+00:17:04.380 --> 00:17:04.800
+par modèle,
+
+00:17:05.440 --> 00:17:06.420
+est désormais le terrain commun
+
+00:17:06.420 --> 00:17:06.920
+des deux camps.
+
+00:17:07.700 --> 00:17:08.380
+Il fournit le schéma,
+
+00:17:08.500 --> 00:17:09.880
+la sécurité et la logique relationnelle
+
+00:17:09.880 --> 00:17:10.340
+qui permettent
+
+00:17:10.340 --> 00:17:11.300
+à tous ces éléments disparates
+
+00:17:11.300 --> 00:17:11.740
+de fonctionner
+
+00:17:11.740 --> 00:17:12.620
+comme un seul organisme.
+
+00:17:13.220 --> 00:17:13.980
+Imaginez la plateforme
+
+00:17:13.980 --> 00:17:14.600
+comme un corps vivant.
+
+00:17:14.960 --> 00:17:15.760
+Les développeurs citoyens
+
+00:17:15.760 --> 00:17:16.320
+sont les cellules,
+
+00:17:16.860 --> 00:17:17.400
+générant rapidement
+
+00:17:17.400 --> 00:17:18.040
+de nouveaux tissus,
+
+00:17:18.460 --> 00:17:18.900
+tableaux de bord,
+
+00:17:19.160 --> 00:17:20.240
+formulaires et flux de travail.
+
+00:17:21.340 --> 00:17:22.460
+Les développeurs sont les neurones,
+
+00:17:22.620 --> 00:17:23.320
+reliant ces cellules,
+
+00:17:23.520 --> 00:17:24.260
+affinant les réflexes
+
+00:17:24.260 --> 00:17:25.000
+et s'assurant que l'or,
+
+00:17:25.320 --> 00:17:26.260
+l'organisme réfléchit
+
+00:17:26.260 --> 00:17:26.800
+avant d'agir.
+
+00:17:27.380 --> 00:17:27.960
+La gouvernance,
+
+00:17:28.040 --> 00:17:28.440
+quant à elle,
+
+00:17:28.800 --> 00:17:30.480
+agit comme le système immunitaire
+
+00:17:30.480 --> 00:17:31.660
+empêchant les cellules rebelles
+
+00:17:31.660 --> 00:17:32.520
+de créer des connecteurs
+
+00:17:32.520 --> 00:17:33.060
+non approuvés
+
+00:17:33.060 --> 00:17:33.520
+ou de violer
+
+00:17:33.520 --> 00:17:34.260
+les politiques de données.
+
+00:17:34.820 --> 00:17:35.340
+Ajoutez l'IA
+
+00:17:35.340 --> 00:17:36.080
+et soudain,
+
+00:17:36.160 --> 00:17:37.140
+ce corps commence à anticiper
+
+00:17:37.140 --> 00:17:37.960
+les besoins de l'entreprise
+
+00:17:37.960 --> 00:17:38.660
+plutôt que de simplement
+
+00:17:38.660 --> 00:17:39.160
+y réagir.
+
+00:17:39.840 --> 00:17:40.680
+D'un point de vue commercial,
+
+00:17:40.840 --> 00:17:41.340
+c'est une mine d'or.
+
+00:17:42.280 --> 00:17:42.960
+Cela standardise
+
+00:17:42.960 --> 00:17:43.940
+les pipelines de déploiement
+
+00:17:43.940 --> 00:17:45.000
+afin que chaque application,
+
+00:17:45.200 --> 00:17:45.680
+qu'elle soit créée
+
+00:17:45.680 --> 00:17:46.840
+par le marketing ou l'ingénierie,
+
+00:17:47.300 --> 00:17:48.120
+emprunte les mêmes artères
+
+00:17:48.120 --> 00:17:48.900
+CI, CCD.
+
+00:17:49.840 --> 00:17:50.820
+Cela centralise la surveillance,
+
+00:17:50.980 --> 00:17:52.080
+la sécurité et la conformité
+
+00:17:52.080 --> 00:17:52.680
+tout en préservant
+
+00:17:52.680 --> 00:17:53.460
+l'autonomie créative.
+
+00:17:54.420 --> 00:17:55.120
+Les développeurs citoyens
+
+00:17:55.120 --> 00:17:55.840
+peuvent expérimenter,
+
+00:17:56.140 --> 00:17:57.200
+l'IT gagne en traçabilité
+
+00:17:57.200 --> 00:17:58.240
+et la direction obtient
+
+00:17:58.240 --> 00:17:59.380
+un retour sur investissement mesurable.
+
+00:18:00.580 --> 00:18:01.440
+Les incitations de chacun
+
+00:18:01.440 --> 00:18:02.980
+s'alignent enfin sous une architecture unique
+
+00:18:02.980 --> 00:18:03.720
+au lieu de se disputer
+
+00:18:03.720 --> 00:18:04.300
+sur les outils.
+
+00:18:04.940 --> 00:18:06.060
+La couche IA cimente cette réalité.
+
+00:18:06.560 --> 00:18:07.360
+Coppilo ne privilégie
+
+00:18:07.360 --> 00:18:07.820
+ni les codeurs
+
+00:18:07.820 --> 00:18:08.420
+ni les citoyens
+
+00:18:08.420 --> 00:18:09.280
+et interprète les deux.
+
+00:18:09.940 --> 00:18:10.880
+Pour l'utilisateur métier,
+
+00:18:11.300 --> 00:18:11.760
+cela ressemble
+
+00:18:11.760 --> 00:18:12.240
+à de la magie
+
+00:18:12.240 --> 00:18:12.960
+en langage naturel.
+
+00:18:14.160 --> 00:18:14.700
+Crée-moi un outil
+
+00:18:14.700 --> 00:18:15.240
+de suivi de projet
+
+00:18:15.240 --> 00:18:16.380
+et donne instantanément
+
+00:18:16.380 --> 00:18:17.260
+une structure de Canva,
+
+00:18:17.700 --> 00:18:18.300
+une table d'ataverse
+
+00:18:18.300 --> 00:18:19.120
+et une logique de base.
+
+00:18:19.780 --> 00:18:20.420
+Pour le développeur,
+
+00:18:20.480 --> 00:18:21.180
+le même moteur propose
+
+00:18:21.180 --> 00:18:21.980
+des suggestions de code,
+
+00:18:22.240 --> 00:18:23.100
+des modèles de connecteurs
+
+00:18:23.100 --> 00:18:24.220
+et des structures de fonction
+
+00:18:24.220 --> 00:18:24.780
+qui prendraient
+
+00:18:24.780 --> 00:18:25.860
+des heures autrement.
+
+00:18:26.540 --> 00:18:27.220
+Ce sont deux dialectes,
+
+00:18:27.300 --> 00:18:27.980
+l'anglais et le javascript,
+
+00:18:27.980 --> 00:18:29.020
+parlé par un seul interprète
+
+00:18:29.020 --> 00:18:29.840
+qui ne dort jamais.
+
+00:18:30.400 --> 00:18:30.980
+Il existe un terme
+
+00:18:30.980 --> 00:18:31.600
+pour ce qu'un train de se faire.
+
+00:18:32.120 --> 00:18:32.920
+L'expressivité gouverne.
+
+00:18:33.580 --> 00:18:34.080
+Il ne s'agit plus
+
+00:18:34.080 --> 00:18:35.020
+de savoir qui peut coder,
+
+00:18:35.240 --> 00:18:35.900
+mais de l'efficacité
+
+00:18:35.900 --> 00:18:36.600
+avec laquelle chacun
+
+00:18:36.600 --> 00:18:37.640
+peut exprimer son intention
+
+00:18:37.640 --> 00:18:38.340
+et de la sécurité
+
+00:18:38.340 --> 00:18:39.440
+avec laquelle elle est déployée.
+
+00:18:39.940 --> 00:18:40.920
+L'architecture de Microsoft
+
+00:18:40.920 --> 00:18:41.880
+impose discrètement
+
+00:18:41.880 --> 00:18:42.540
+cet équilibre
+
+00:18:42.540 --> 00:18:43.360
+grâce à des politiques,
+
+00:18:43.480 --> 00:18:44.040
+une segmentation
+
+00:18:44.040 --> 00:18:44.540
+de l'environnement
+
+00:18:44.540 --> 00:18:45.060
+et désormais
+
+00:18:45.060 --> 00:18:46.100
+une assistance augmentée
+
+00:18:46.100 --> 00:18:46.700
+par copilote
+
+00:18:46.700 --> 00:18:47.660
+directement intégrée
+
+00:18:47.660 --> 00:18:48.080
+dans l'IDE.
+
+00:18:49.040 --> 00:18:50.160
+C'est la démocratisation
+
+00:18:50.160 --> 00:18:50.600
+sans l'entrôle.
+
+00:18:51.220 --> 00:18:51.760
+L'avenir proche
+
+00:18:51.760 --> 00:18:52.860
+ressemble moins à une position
+
+00:18:52.860 --> 00:18:53.540
+entre no kodoku
+
+00:18:53.540 --> 00:18:54.540
+et full kodokodoku
+
+00:18:54.540 --> 00:18:55.080
+qui a un spectre
+
+00:18:55.080 --> 00:18:56.300
+d'expressivité par citoyen.
+
+00:18:56.740 --> 00:18:57.380
+Quelqu'un qui construit
+
+00:18:57.380 --> 00:18:57.720
+dans Excel
+
+00:18:57.720 --> 00:18:58.900
+pourrait passer à PowerFX.
+
+00:18:59.720 --> 00:19:00.760
+Un utilisateur de PowerFX
+
+00:19:00.760 --> 00:19:01.280
+pourrait évoluer
+
+00:19:01.280 --> 00:19:01.780
+vers l'écriture
+
+00:19:01.780 --> 00:19:02.640
+de composants TypeScript.
+
+00:19:03.520 --> 00:19:04.480
+Et un développeur professionnel
+
+00:19:04.480 --> 00:19:05.160
+pourrait prototyper
+
+00:19:05.160 --> 00:19:05.860
+de nouvelles fonctionnalités
+
+00:19:05.860 --> 00:19:06.300
+en low-code
+
+00:19:06.300 --> 00:19:07.080
+avant de les consolider
+
+00:19:07.080 --> 00:19:07.620
+en réactant.
+
+00:19:08.500 --> 00:19:09.520
+C'est une échelle circulaire
+
+00:19:09.520 --> 00:19:10.260
+qui permet à chacun
+
+00:19:10.260 --> 00:19:10.800
+de contribuer
+
+00:19:10.800 --> 00:19:11.680
+à son niveau de confort
+
+00:19:11.680 --> 00:19:13.060
+sans briser l'écosystème.
+
+00:19:13.580 --> 00:19:14.080
+C'est ce que signifie
+
+00:19:14.080 --> 00:19:14.540
+réellement le
+
+00:19:14.540 --> 00:19:15.040
+Vibe Coding.
+
+00:19:15.320 --> 00:19:16.200
+Il ne s'agit pas seulement
+
+00:19:16.200 --> 00:19:17.060
+d'écrire du code avec Steve.
+
+00:19:17.500 --> 00:19:17.980
+C'est du développement
+
+00:19:17.980 --> 00:19:18.820
+qui ressemble à du low-code,
+
+00:19:18.820 --> 00:19:19.800
+rapide, itératif,
+
+00:19:19.900 --> 00:19:20.420
+assisté par l'IA
+
+00:19:20.420 --> 00:19:20.900
+mais qui évolue
+
+00:19:20.900 --> 00:19:21.780
+comme du code professionnel.
+
+00:19:22.240 --> 00:19:22.720
+Les environnements
+
+00:19:22.720 --> 00:19:23.440
+se synchronisent avec Gide.
+
+00:19:23.760 --> 00:19:24.520
+Les pipelines valident
+
+00:19:24.520 --> 00:19:24.960
+les déploiements.
+
+00:19:25.620 --> 00:19:26.160
+Copilot enseigne
+
+00:19:26.160 --> 00:19:26.740
+les meilleures pratiques
+
+00:19:26.740 --> 00:19:27.480
+de manière invisible.
+
+00:19:28.220 --> 00:19:28.960
+L'expérience devient
+
+00:19:28.960 --> 00:19:29.680
+un mouvement continu
+
+00:19:29.680 --> 00:19:30.480
+entre la réflexion
+
+00:19:30.480 --> 00:19:31.300
+et la construction
+
+00:19:31.300 --> 00:19:31.940
+et la construction.
+
+00:19:32.300 --> 00:19:32.660
+En réalité,
+
+00:19:32.800 --> 00:19:33.440
+la Power Platform
+
+00:19:33.440 --> 00:19:34.800
+devient un cerveau composable
+
+00:19:34.800 --> 00:19:36.340
+absorbant les nouveaux modèles
+
+00:19:36.340 --> 00:19:37.240
+de chaque utilisateur
+
+00:19:37.240 --> 00:19:37.760
+qu'il s'agisse
+
+00:19:37.760 --> 00:19:38.720
+de glisser des composants
+
+00:19:38.720 --> 00:19:39.620
+ou de refactoriser
+
+00:19:39.620 --> 00:19:40.140
+des fonctions.
+
+00:19:41.140 --> 00:19:42.120
+C'est l'horizon stratégique
+
+00:19:42.120 --> 00:19:43.060
+et une plateforme d'entreprise
+
+00:19:43.060 --> 00:19:43.680
+qui se comportent
+
+00:19:43.680 --> 00:19:44.700
+comme une intelligence collective.
+
+00:19:46.100 --> 00:19:46.760
+Quand on le voit ainsi,
+
+00:19:46.760 --> 00:19:47.680
+le dégueu du vibe-code
+
+00:19:47.680 --> 00:19:49.080
+ne semble plus mystique.
+
+00:19:49.720 --> 00:19:50.340
+C'est la résonance
+
+00:19:50.340 --> 00:19:51.340
+entre liberté et discipline,
+
+00:19:51.480 --> 00:19:52.580
+entre créativité humaine
+
+00:19:52.580 --> 00:19:53.680
+et gouvernance machine.
+
+00:19:54.520 --> 00:19:55.100
+Et quand ces vibrations
+
+00:19:55.100 --> 00:19:55.480
+s'alignent,
+
+00:19:55.540 --> 00:19:55.980
+tout le système
+
+00:19:55.980 --> 00:19:56.800
+entre en harmonie.
+
+00:19:57.780 --> 00:19:58.240
+La vraie vérité.
+
+00:19:58.680 --> 00:19:59.380
+Voici la vérité
+
+00:19:59.380 --> 00:20:00.200
+débarrassée des slogans.
+
+00:20:00.700 --> 00:20:01.320
+Le cas vibe-code
+
+00:20:01.320 --> 00:20:02.000
+que de Power Apps
+
+00:20:02.000 --> 00:20:02.760
+ne tue pas le low-code,
+
+00:20:02.900 --> 00:20:03.700
+il en corrige les excès.
+
+00:20:04.340 --> 00:20:05.300
+C'est la réalisation douce
+
+00:20:05.300 --> 00:20:06.220
+qu'une liberté totale
+
+00:20:06.220 --> 00:20:06.820
+sans règles
+
+00:20:06.820 --> 00:20:07.600
+crée des désordres
+
+00:20:07.600 --> 00:20:08.580
+que seuls les développeurs
+
+00:20:08.580 --> 00:20:09.560
+pro peuvent nettoyer.
+
+00:20:10.880 --> 00:20:11.860
+Le cas vibe-code
+
+00:20:11.860 --> 00:20:12.940
+ramène structure,
+
+00:20:13.180 --> 00:20:14.600
+visibilité et maintenabilité.
+
+00:20:14.980 --> 00:20:15.500
+Sans démanteler
+
+00:20:15.500 --> 00:20:16.000
+l'autonomie
+
+00:20:16.000 --> 00:20:16.940
+qui a fait le succès
+
+00:20:16.940 --> 00:20:17.520
+du low-code.
+
+00:20:18.720 --> 00:20:19.580
+Utilisez donc le low-code
+
+00:20:19.580 --> 00:20:20.040
+pour la vitesse,
+
+00:20:20.180 --> 00:20:20.820
+lancez des prototypes,
+
+00:20:20.980 --> 00:20:21.540
+validez des idées,
+
+00:20:21.640 --> 00:20:22.240
+prouvez des concepts,
+
+00:20:22.380 --> 00:20:22.820
+puis étendez-les
+
+00:20:22.820 --> 00:20:23.460
+avec le vibe-code
+
+00:20:23.460 --> 00:20:24.300
+pour la pérennité.
+
+00:20:25.060 --> 00:20:25.920
+Versionnez les composants,
+
+00:20:26.360 --> 00:20:27.260
+utilisez de vrais frameworks,
+
+00:20:27.420 --> 00:20:28.420
+automatisez les déploiements.
+
+00:20:29.200 --> 00:20:29.800
+Et à travers tout cela,
+
+00:20:29.900 --> 00:20:30.740
+laissez GitHub Copilot
+
+00:20:30.740 --> 00:20:31.660
+unifier les deux mondes.
+
+00:20:32.380 --> 00:20:33.400
+Votre traducteur silencieux
+
+00:20:33.400 --> 00:20:34.120
+entre logique métier
+
+00:20:34.120 --> 00:20:34.960
+et syntaxe technique.
+
+00:20:35.540 --> 00:20:36.280
+Dès que vous traitez l'IA
+
+00:20:36.280 --> 00:20:36.820
+comme un pont
+
+00:20:36.820 --> 00:20:37.880
+et non comme un remplaçant,
+
+00:20:37.980 --> 00:20:38.440
+vous développez
+
+00:20:38.440 --> 00:20:39.460
+à la vitesse de la pensée
+
+00:20:39.460 --> 00:20:40.260
+avec la rigueur
+
+00:20:40.260 --> 00:20:41.060
+de l'ingénierie.
+
+00:20:41.880 --> 00:20:42.580
+La Power Platform
+
+00:20:42.580 --> 00:20:43.500
+ne se fragmente pas.
+
+00:20:43.700 --> 00:20:44.160
+Elle évolue vers
+
+00:20:44.160 --> 00:20:45.280
+une intelligence composable
+
+00:20:45.280 --> 00:20:46.580
+où chaque flux,
+
+00:20:46.780 --> 00:20:47.820
+application et connecteur
+
+00:20:47.820 --> 00:20:49.060
+s'intègre à un modèle mental
+
+00:20:49.060 --> 00:20:50.860
+partagé de l'organisation.
+
+00:20:52.320 --> 00:20:53.180
+C'est ça la vraie transformation.
+
+00:20:53.480 --> 00:20:54.280
+Pas des formulaires plus rapides
+
+00:20:54.280 --> 00:20:55.200
+mais des systèmes plus intelligents
+
+00:20:55.200 --> 00:20:55.520
+qui apprennent
+
+00:20:55.520 --> 00:20:56.260
+de votre façon de construire.
+
+00:20:56.780 --> 00:20:57.240
+Si cette vision
+
+00:20:57.240 --> 00:20:57.920
+vous fait gagner du temps
+
+00:20:57.920 --> 00:20:58.420
+ou vous évite
+
+00:20:58.420 --> 00:20:59.440
+une énième analyse de gouvernance,
+
+00:20:59.560 --> 00:21:00.600
+renvoyez l'ascenseur.
+
+00:21:01.240 --> 00:21:01.700
+Abonnez-vous,
+
+00:21:01.840 --> 00:21:02.240
+suivez-moi
+
+00:21:02.240 --> 00:21:03.440
+et laissez la prochaine analyse
+
+00:21:03.440 --> 00:21:04.880
+approfondie arriver automatiquement
+
+00:21:04.880 --> 00:21:06.560
+comme un flux Power Automate
+
+00:21:06.560 --> 00:21:06.960
+programmé.
+
+00:21:07.280 --> 00:21:07.720
+La connaissance
+
+00:21:07.720 --> 00:21:08.240
+devrait se mettre à jour
+
+00:21:08.240 --> 00:21:08.560
+toute seule.
+
+00:21:08.800 --> 00:21:09.100
+Poursuivez.

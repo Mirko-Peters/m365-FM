@@ -1,0 +1,799 @@
+WEBVTT
+
+00:00:00.910 --> 00:00:06.390
+¿Listo para 10 días de Microsoft 365, Copilot y IU en las personas que están dando forma al futuro del trabajo?
+
+00:00:07.550 --> 00:00:11.830
+Este enero, M365 con regresa y venimos con más fuerza.
+
+00:00:12.830 --> 00:00:18.050
+Únete a nosotros para sesiones en vivo, demostraciones reales y conocimientos prácticos de MVPs y expertos de la industria de todo el mundo.
+
+00:00:18.850 --> 00:00:21.290
+Nada de diapositivas generales, nada de tecnicismos interminables.
+
+00:00:22.050 --> 00:00:23.390
+Abortaremos desafíos reales.
+
+00:00:23.730 --> 00:00:28.630
+Copilot Studio, agentes de IA, Fabric, seguridad, gobernanza y automatización.
+
+00:00:28.630 --> 00:00:34.450
+Ya seas un profesional de TI, desarrollador o líder empresarial, hay sesiones diseñadas para ti.
+
+00:00:35.510 --> 00:00:40.070
+Con 10 días completos, puedes explorar diversas tecnologías y conectar con una comunidad global.
+
+00:00:40.930 --> 00:00:44.230
+Míralo en vivo y lleva ideas prácticas de vuelta a tu organización.
+
+00:00:45.110 --> 00:00:48.890
+Enero de 2027. 10 días. Una sola comunidad de Microsoft.
+
+00:00:49.370 --> 00:00:50.590
+Las inscripciones ya están abiertas.
+
+00:00:51.770 --> 00:00:52.830
+Reserva tu lugar hoy mismo.
+
+00:00:52.830 --> 00:00:58.250
+Es M365.net.
+
+00:01:00.180 --> 00:01:04.660
+Únete ahora a M365.net y nos vemos en vivo en enero.
+
+00:01:05.060 --> 00:01:09.820
+¿Alguna vez has intentado preguntarle a Copilot sobre los datos heredados y ocultos de tu empresa y solo has recibido una respuesta genérica?
+
+00:01:10.000 --> 00:01:10.500
+No estás solo.
+
+00:01:10.900 --> 00:01:13.980
+El conocimiento predeterminado de Copilot se limita a lo que Microsoft le proporciona.
+
+00:01:14.400 --> 00:01:15.620
+¿Pero qué pasaría si pudieras cambiar eso?
+
+00:01:16.080 --> 00:01:22.880
+Hoy te mostraré cómo conectar tus propias fuentes de datos, como wikis internas o CRMs antiguos, directamente a Copilot usando conectores de Microsoft Graph.
+
+00:01:22.880 --> 00:01:28.080
+Al final sabrás exactamente cómo hacer que Copilot sea tan inteligente sobre tu negocio como tu mejor analista.
+
+00:01:29.320 --> 00:01:31.460
+¿Por qué Copilot no da en el blanco con tus datos?
+
+00:01:32.080 --> 00:01:36.440
+Si alguna vez le has pedido información a Copilot sobre tu empresa y lo has visto titubear, no estás solo.
+
+00:01:36.600 --> 00:01:36.980
+No estás solo.
+
+00:01:37.580 --> 00:01:44.520
+La mayoría queremos creer que Copilot ve todo lo importante, conversaciones con clientes, documentos antiguos, incluso esas hojas de Excel olvidadas en la carpeta compartida.
+
+00:01:45.340 --> 00:01:47.160
+Pero la realidad golpea bastante rápido.
+
+00:01:48.280 --> 00:01:52.400
+Copilot solo conoce lo que hay dentro de una caja bastante estrecha y tu negocio probablemente vive muy fuera de ella.
+
+00:01:52.880 --> 00:01:55.920
+Para quienes usan Microsoft 365 Diario, eso es una verdadera sorpresa.
+
+00:01:56.440 --> 00:02:04.840
+Abres Copilot esperando que funcione como un cerebro virtual para tu negocio, pero en lugar de eso empieza a actuar como ese nuevo empleado que aún no sabe ni dónde está la máquina de café.
+
+00:02:05.160 --> 00:02:05.480
+John.
+
+00:02:06.480 --> 00:02:08.680
+Aquí tienes un ejemplo rápido que todo gerente entenderá.
+
+00:02:09.340 --> 00:02:14.700
+Imagina que te sientas a preparar una revisión trimestral y le preguntas a Copilot cuál fue nuestro proceso de ventas el año pasado.
+
+00:02:14.700 --> 00:02:21.500
+En lugar de mostrar los pasos reales o al menos sugerir dónde buscar, Copilot simplemente se rinde.
+
+00:02:22.080 --> 00:02:22.280
+Nada.
+
+00:02:22.700 --> 00:02:32.480
+Podrías obtener un resumen de los chats de algún equipo de la semana pasada, tal vez un enlace a una presentación de marketing de enero o una declaración vaga sobre mejores prácticas, pero nada sobre el proceso que tu equipo de ventas realmente utilizo.
+
+00:02:32.480 --> 00:02:36.320
+Los detalles que necesitas están atrapados en sistemas que Copilot ni siquiera puede ver.
+
+00:02:37.060 --> 00:02:41.540
+Tal vez un CRM antiguo o un sitio de documentación privada creado por alguien que se fue hace tres años.
+
+00:02:42.440 --> 00:02:43.880
+El problema de raíz se reduce a esto.
+
+00:02:44.400 --> 00:02:49.040
+Los permisos predeterminados de Copilot solo cubren lo que ya está dentro del ecosistema de Microsoft 365.
+
+00:02:49.940 --> 00:02:52.040
+Piensa en Outlook, Teams, OneDrive, SharePoint.
+
+00:02:52.620 --> 00:02:54.380
+Si vive ahí, Copilot es bastante útil.
+
+00:02:54.380 --> 00:02:57.800
+Más allá de eso, es como si Copilot tuviera una venda en los ojos.
+
+00:02:58.460 --> 00:03:05.040
+La plataforma de tickets personalizada de su empresa, la wiki interna del Departamento de Finanzas o SCRM de 2012 con más parches que documentación.
+
+00:03:06.080 --> 00:03:07.040
+Nada de eso califica.
+
+00:03:07.960 --> 00:03:09.240
+No se trata solo de sistemas ocurridos.
+
+00:03:09.840 --> 00:03:15.920
+Documentos confidenciales, registros que viven en líneas de negocios separadas o cualquier cosa almacenada en una aplicación que no fue creada para Microsoft 365,
+
+00:03:16.520 --> 00:03:19.100
+permanece invisible para Copilot por defecto, por defecto.
+
+00:03:19.780 --> 00:03:21.160
+Esta limitación no es solo teórica.
+
+00:03:21.820 --> 00:03:22.660
+Los números los respaldan.
+
+00:03:22.660 --> 00:03:25.780
+Según varios estudios de la industria y los propios informes de Microsoft,
+
+00:03:26.080 --> 00:03:30.740
+hasta el 80% de los datos de una organización típica se encuentran fuera de las fuentes estándar de Microsoft 365.
+
+00:03:31.680 --> 00:03:35.420
+Eso significa que Copilot, si se deja solo, pierde la mayor parte del conocimiento real de su empresa.
+
+00:03:36.880 --> 00:03:43.740
+Entonces, cuando piensa en todos los procesos clave, documentos de estrategia históricos o notas de clientes que viven en otras herramientas o archivos compartidos,
+
+00:03:43.880 --> 00:03:51.460
+tiene sentido porque Copilot a veces se siente menos como un asistente genio y más como un pasante bien intencionado que acaba de empezar el lunes por la mañana.
+
+00:03:51.460 --> 00:03:58.240
+Esa brecha entre lo que Copilot ve y lo que usted realmente necesita conduce a una gran pérdida de tiempo.
+
+00:03:59.020 --> 00:04:04.280
+En lugar de recibir las respuestas, los equipos terminan enviándose mensajes por Teams, buscando en sitios antiguos de SharePoint,
+
+00:04:04.420 --> 00:04:08.600
+o si tienen suerte, encontrando a alguien que recuerde dónde vive el antiguo instructivo.
+
+00:04:09.200 --> 00:04:12.020
+Este tipo de búsqueda no solo es molesto, es un drenaje de productividad.
+
+00:04:12.020 --> 00:04:16.620
+Las personas pueden pasar media hora rastreando una respuesta que Copilot debería haber encontrado en 10 segundos.
+
+00:04:17.660 --> 00:04:25.120
+Multiplique eso por docenas de búsquedas a la semana en todos los empleados de una empresa y de repente verá jornadas laborales completas perdidas en el escondite digital.
+
+00:04:26.140 --> 00:04:27.740
+Hay otro lado de esto que duele un poco.
+
+00:04:28.560 --> 00:04:33.340
+Cuando Copilot no puede responder al tipo de preguntas que usted realmente tiene, la gente comienza a perder la confianza en él.
+
+00:04:33.840 --> 00:04:37.340
+La empresa lanza a Copilot en toda la organización, lo promociona como algo revolucionario,
+
+00:04:37.340 --> 00:04:40.000
+y luego la primera consulta del mundo real cae con un golpe sordo.
+
+00:04:40.800 --> 00:04:44.860
+Escuchará cosas como, ni siquiera pudo decirme dónde está la lista de verificación de incorporación del año pasado.
+
+00:04:45.260 --> 00:04:47.980
+O pregunté sobre nuestro antiguo modelo de precios y no obtuve nada.
+
+00:04:49.520 --> 00:04:54.460
+Eventualmente, el entusiasmo desaparece y la herramienta se convierte en solo otra aplicación que ocupa espacio en su flujo de trabajo.
+
+00:04:55.400 --> 00:04:56.520
+Pero aquí es donde cambia la historia.
+
+00:04:57.460 --> 00:04:59.440
+Reconocer estas limitaciones sea en realidad útil.
+
+00:05:00.040 --> 00:05:03.900
+La mayoría de las organizaciones ni siquiera se dan cuidex Copilot, pues asumen que lo que ves es lo que hay.
+
+00:05:03.900 --> 00:05:10.240
+Pero saber que la visión de Copilot se limita a Microsoft 365 te ayuda a dar un paso atrás y plantear mejores preguntas.
+
+00:05:11.620 --> 00:05:17.300
+¿Quieres que Copilot realmente ayude a las personas con procesos de negocio reales y no solo a reescribir correos o resumir chats?
+
+00:05:18.040 --> 00:05:22.200
+¿Tú necesitas una forma de abrirle más acceso a tus datos sin entregarle las llaves de todo el reino?
+
+00:05:23.360 --> 00:05:32.300
+Incluso si eres escéptico, considera lo que significaría si todas esas wikis internas, CRMs antiguos o sistemas de tickets heredados fueran repentinamente buscables desde Copilot.
+
+00:05:32.300 --> 00:05:38.820
+¿Se acabó de saltar entre sistemas, preguntar por ahí o esperar que la persona que creó ese documento siga en la empresa?
+
+00:05:39.780 --> 00:05:44.340
+Solo respuestas rápidas y fiables de una herramienta que conoce tu negocio, no solo tareas genéricas de Microsoft.
+
+00:05:45.020 --> 00:05:47.800
+Y para los administradores y arquitectos, esto era una conversación mucho mayor.
+
+00:05:48.640 --> 00:05:54.420
+Si la mayor parte de tu conocimiento está bajo llave, no sería liberarlo el primer paso real para que Copilot cumpla su promesa.
+
+00:05:54.420 --> 00:06:02.640
+Entonces la pregunta obvia ahora es ¿qué hace falta realmente para cerrar esa brecha en lo que sabe Copilot y lo que tu negocio necesita?
+
+00:06:02.640 --> 00:06:07.640
+Tres formas de hacer a Copilot más inteligente y porque los conectores de gráfico destacan.
+
+00:06:08.720 --> 00:06:09.600
+Seamos honestos por un segundo.
+
+00:06:10.200 --> 00:06:13.960
+La mayoría de la gente oye hablar de Copilot, ve las demostraciones, lo prueba y piensa que eso es todo lo que hay.
+
+00:06:14.260 --> 00:06:14.480
+¿Qué hay?
+
+00:06:15.060 --> 00:06:17.140
+Pero aquí está la clave, solo están arañando la superficie.
+
+00:06:17.720 --> 00:06:23.260
+Microsoft ofrece discretamente formas de llevar las habilidades de Copilot mucho más allá de las funciones estándar, pero solo si sabes dónde buscar.
+
+00:06:23.260 --> 00:06:31.560
+Más allá de los titulares llamativos, hay tres formas principales de desbloquear el potencial de Copilot, conectores de gráfico, complementos y fuentes de datos personalizadas.
+
+00:06:32.660 --> 00:06:36.340
+Cada una suena prometedora sobre el papel, pero cómo funcionan en el mundo real es otra historia.
+
+00:06:37.440 --> 00:06:40.980
+Así que analicemos dónde encaja cada opción y dónde definitivamente no.
+
+00:06:41.780 --> 00:06:43.700
+Los complementos están recibiendo mucha atención en este momento.
+
+00:06:44.360 --> 00:06:45.900
+Piensa en ellos como accesorios para Copilot.
+
+00:06:46.500 --> 00:06:49.420
+Conectas una herramienta y de repente un truco nuevo, aprende un truco nuevo.
+
+00:06:49.420 --> 00:06:53.400
+Eso podría hacer conectarse a una plataforma SaaS o ejecutar un flujo de trabajo específico.
+
+00:06:53.720 --> 00:06:55.640
+¿Es como poner un ambientador elegante en tu coche?
+
+00:06:56.300 --> 00:06:57.740
+Hace que el viaje sea un poco más agradable.
+
+00:06:58.640 --> 00:07:05.320
+Pero si tratas con bases de datos heredadas o archivos escritos en un lenguaje que solo tu ex administrador podía leer, los complementos se sienten limitados rápidamente.
+
+00:07:06.060 --> 00:07:08.120
+Lo mismo ocurre con los datos personalizados a través de apps.
+
+00:07:08.800 --> 00:07:10.560
+En teoría no hay límite a lo que puedes conectar.
+
+00:07:11.060 --> 00:07:18.260
+En la práctica, los desarrolladores se topan con muros al lidiar con datos no estructurados, esquemas impredecibles o sistemas diseñados en la era de los disquetes.
+
+00:07:18.260 --> 00:07:22.320
+Aquí es donde aparecen los conectores de gráfico y silenciosamente superan a todo lo demás.
+
+00:07:22.820 --> 00:07:27.780
+No los imagine como otro añadido, sino como puentes sólidos construidos directamente en la infraestructura de Microsoft 365.
+
+00:07:28.860 --> 00:07:34.640
+En lugar de solo enseñarle a Copilot una nueva habilidad, los conectores de graph realmente amplían su campo de visión.
+
+00:07:35.560 --> 00:07:37.640
+Donde los complementos son como añadir dispositivos.
+
+00:07:37.900 --> 00:07:42.960
+Los conectores de graph son más como derribar paredes para que Copilot finalmente vea toda la habitación.
+
+00:07:42.960 --> 00:07:51.740
+Y en la mayoría de las empresas, esa habitación estaba rotada de archivos olvidados, wikis de terceros, CRM antiguos y sistemas de tickets internos que se niegan a retirarse.
+
+00:07:52.860 --> 00:07:55.100
+Pongamos esto en perspectiva con algunas analogías rápidas.
+
+00:07:55.740 --> 00:08:00.480
+Los complementos son esos pequeños añadidos que tomas en la caja, prácticos, pero muy limitados.
+
+00:08:01.600 --> 00:08:03.020
+Las fuentes de datos personalizadas.
+
+00:08:03.300 --> 00:08:05.280
+Imaginé preparar su propia comida a medida desde cero.
+
+00:08:06.080 --> 00:08:11.420
+Está hecha exactamente a su gusto, pero requiere más trabajo de mantenimiento y no siempre es compatible con sus electrodomésticos.
+
+00:08:11.420 --> 00:08:15.000
+Ahora, los conectores de graph son más como puentes sobre un río.
+
+00:08:15.800 --> 00:08:22.200
+Conecta lo que usted quiere, de forma segura y masiva, para que el tráfico fluya y Copilot acceda realmente a lo que es valioso.
+
+00:08:23.260 --> 00:08:27.160
+Aquí es donde se pone interesante para los dolores de cabeza que la mayoría de los equipos de TI realmente sienten.
+
+00:08:28.800 --> 00:08:35.980
+De todas las opciones, solo los conectores de graph facilitan que Copilot indexe, comprenda y muestre datos de lugares donde nunca debió mirar.
+
+00:08:35.980 --> 00:08:43.020
+Ese wiki interna que todos olvidaron, el CRM da C2 Fusion, es un archivo compartido a medio acceso porque nadie recuerda quién es el dueño.
+
+00:08:44.120 --> 00:08:49.280
+De repente, Copilot puede extraer conocimiento estriculado de todos ellos y ofrecerlo dentro de su chat o búsqueda familiar.
+
+00:08:50.300 --> 00:08:51.120
+Esto tampoco es teórico.
+
+00:08:51.120 --> 00:08:59.720
+Trabajamos con un administrador que configuró un conector de graph para su portal de documentación interna, que funcionaba con un CMS sin soporte, desde 2015.
+
+00:09:01.200 --> 00:09:09.520
+En un día, Copilot podía responder preguntas técnicas detalladas, referenciar políticas archivadas y ayudar a usuarios que nunca habían visto la wiki original.
+
+00:09:09.520 --> 00:09:14.300
+Antes del conector, solo el autor original tenía alguna oportunidad de encontrar algo útil.
+
+00:09:15.620 --> 00:09:20.320
+Después, era como si esa base de conocimiento se hubiera convertido en parte del conjunto de habilidades nativas de Copilot.
+
+00:09:22.000 --> 00:09:25.840
+Los conectores de graph también logran algo que las otras dos opciones suelen pasar por alto.
+
+00:09:25.940 --> 00:09:28.080
+Seguridad y escalabilidad, sí.
+
+00:09:28.660 --> 00:09:34.240
+Respetan los mismos permisos ya integrados en su entorno de Microsoft 365, por lo que no tiene que reinventar su modelo de acceso.
+
+00:09:35.080 --> 00:09:38.380
+Si un usuario no puede ver un documento en el sistema antiguo, tampoco podrá ver de Copilot.
+
+00:09:38.380 --> 00:09:45.400
+Además, no se queda atrapado reestructurando cómo fluyen los datos entre aplicaciones o escribiendo código personalizado para ser elegibles formatos extraños.
+
+00:09:46.800 --> 00:09:53.300
+El conector trae datos externos al índice de Microsoft Graph, haciéndolos buscables y procesables sin romper el resto de su postura de seguridad.
+
+00:09:54.780 --> 00:09:57.120
+Entonces, ¿cuándo tiene sentido elegir una herramienta sobre otra?
+
+00:09:57.840 --> 00:10:03.820
+Los plugins son ideales cuando necesitas una integración específica como conectarte a un servicio crítico con una API definida, pero poco más.
+
+00:10:03.820 --> 00:10:10.480
+Las reglas de datos personalizadas funcionan si tienes necesidades muy especializadas y tiempo para crear tu propia lógica de conexión.
+
+00:10:11.300 --> 00:10:19.240
+Pero cuando deseas un acceso amplio, confiable y continuo a grandes cantidades de datos empresariales, especialmente desde plataformas que no se integran con las APIs de nube modernas,
+
+00:10:19.240 --> 00:10:31.100
+los conectores Graph son casi siempre la respuesta que te permiten conectar cilos completos, mantener la seguridad empresarial y escalar junto con tu negocio sin abrumar a tus administradores con scripts únicos.
+
+00:10:32.100 --> 00:10:33.560
+Todo esto apunta a una conclusión mayor.
+
+00:10:34.100 --> 00:10:36.620
+Los conectores Graph no son solo una opción más en el menú de Copilot.
+
+00:10:37.000 --> 00:10:42.800
+Son la pieza clave que permite a Copilot ir más allá de la automatización genérica y convertirse en parte real de tu flujo de trabajo empresarial.
+
+00:10:42.800 --> 00:10:45.760
+Pero la siguiente gran pregunta que todos hacen es esta.
+
+00:10:46.520 --> 00:10:49.480
+Una vez que tienes un conector configurado, ¿cómo se construye exactamente ese puente?
+
+00:10:50.140 --> 00:10:53.160
+¿Y qué tipos de sistemas puedes integrar al universo de Copilot?
+
+00:10:54.100 --> 00:10:59.640
+Como los conectores Graph cierran la brecha desde wikis internas hasta CRM antiguos a mi antiguo.
+
+00:11:00.180 --> 00:11:03.600
+Si alguna vez te has quedado mirando la pantalla de inicio de sesión de un CRM viejo,
+
+00:11:04.040 --> 00:11:09.720
+preguntándote si Copilot podría extraer el historial enterrado ahí, definitivamente no estás solo.
+
+00:11:09.720 --> 00:11:14.420
+Cada organización tiene focos de información que se niegan a desaparecer.
+
+00:11:15.120 --> 00:11:18.960
+Herramientas que se usan lo justo para justificar su presupuesto aunque nadie en TED quiera hacerse cargo de ellas.
+
+00:11:20.200 --> 00:11:23.240
+Suele ser la información en esos rincones olvidados, la que termina siendo más importante.
+
+00:11:24.160 --> 00:11:26.300
+Siempre hay una wiki interna que nadie quiere emigrar,
+
+00:11:26.540 --> 00:11:28.800
+alguna unidad compartida etiquetada como archivo final final,
+
+00:11:29.000 --> 00:11:32.780
+o una base de datos de tickets que has sobrevivido a más organizaciones que tu CEO.
+
+00:11:33.820 --> 00:11:37.900
+Para quienes han visto una tras otra las oleadas de anuncios de IA, es fácil volverse cínico.
+
+00:11:37.900 --> 00:11:42.480
+Esa emoción se desvanece rápido cuando te das cuenta de que la mayoría de las herramientas de IA modernas,
+
+00:11:42.860 --> 00:11:45.800
+Copilot incluido, no pueden ver nada de eso por defecto.
+
+00:11:46.240 --> 00:11:48.540
+El problema con el que se topan la mayoría de las empresas se ve así.
+
+00:11:49.060 --> 00:11:53.280
+Tu conocimiento empresarial crítico está disperso, atrapado en sistemas heredados o plataformas abandonadas.
+
+00:11:53.700 --> 00:11:57.120
+No son aplicaciones app modernas con APIs compatibles con Zapier.
+
+00:11:57.880 --> 00:12:00.960
+A menudo fueron creadas a medida, personalizadas por sus peculiaridades,
+
+00:12:01.240 --> 00:12:03.700
+o simplemente son demasiado costosas de actualizar.
+
+00:12:03.700 --> 00:12:07.520
+Hacer que todos se muden a una nueva plataforma, va a fácil decir qué hacen.
+
+00:12:07.880 --> 00:12:09.800
+La conversación sobre la migración surge cada año.
+
+00:12:09.880 --> 00:12:12.580
+Un proveedor cotiza el proyecto y luego se abandona porque el costo,
+
+00:12:12.920 --> 00:12:16.620
+el riesgo y el dolor de cabeza general siempre parecen peores que buscar una solución alternativa.
+
+00:12:17.340 --> 00:12:21.420
+Mientras tanto, los equipos aún necesitan responder preguntas que se remontan a esos sistemas antiguos.
+
+00:12:22.200 --> 00:12:24.240
+Hermana estándar de Copilot no ofrece mucho en este aspecto.
+
+00:12:25.080 --> 00:12:28.080
+Por diseño se mantiene dentro del jardín vallado de Microsoft 365.
+
+00:12:28.080 --> 00:12:31.120
+Pregúntale sobre cualquier cosa alojada en ese entorno.
+
+00:12:31.240 --> 00:12:34.460
+Tu bandeja de entrar a chats de Teams, archivos de OneDrive, todo está en terreno seguro.
+
+00:12:34.700 --> 00:12:35.480
+Todo está en terreno seguro.
+
+00:12:35.880 --> 00:12:38.780
+Pero en cuanto tus preguntas chocan con contenido en una wiki independiente
+
+00:12:38.780 --> 00:12:41.860
+o una base de datos anteriores o data, Copilot simplemente se encoge de hombros.
+
+00:12:43.080 --> 00:12:46.960
+Esto deja a los departamentos en la clásica situación de tener que copiar contenido a mano,
+
+00:12:47.260 --> 00:12:49.460
+esperando que alguien recuerde dónde están las cosas,
+
+00:12:49.720 --> 00:12:54.020
+o resignarse a nunca desbloquear los conocimientos ocultos tras años de información desestructurada.
+
+00:12:54.960 --> 00:12:56.880
+Ahí es donde los conectores de graph demuestran su valor.
+
+00:12:56.880 --> 00:12:58.820
+La idea no es glamurosa, pero es práctica.
+
+00:12:59.420 --> 00:13:03.080
+Indexa datos externos y deja que Copilot los muestre en las herramientas que la gente ya utiliza.
+
+00:13:03.680 --> 00:13:07.120
+Es menos común una actualización radical y más como darle a tu i a un pase detrás del escenario
+
+00:13:07.120 --> 00:13:08.540
+para conocer todos los secretos de la empresa.
+
+00:13:09.760 --> 00:13:14.040
+Copilot con los conectores de graph instalados no solo se limita al contenido público de Microsoft 365.
+
+00:13:15.580 --> 00:13:18.860
+Puede entrar por puertas laterales a Salesforce, ServiceNow, wikis de terceros,
+
+00:13:19.080 --> 00:13:21.740
+unidades de red compartidas, bases de datos de escuela y personalizadas,
+
+00:13:21.840 --> 00:13:24.300
+básicamente todos los lugares donde se realiza el trabajo real.
+
+00:13:24.300 --> 00:13:28.200
+Aquí está la analogía que suele conectar mejor con los administradores.
+
+00:13:28.660 --> 00:13:29.680
+Imagina que se hace un concierto.
+
+00:13:30.400 --> 00:13:34.300
+El Copilot normal se queda en la multitud captándose lo que sucede en el escenario principal.
+
+00:13:35.360 --> 00:13:38.380
+En cuanto añade los conectores de graph, Copilot obtiene un pase de acceso total.
+
+00:13:39.340 --> 00:13:41.740
+De repente, está en el camerino leyendo la lista de canciones,
+
+00:13:41.920 --> 00:13:45.040
+hablando con el equipo y escuchando la historia real que nunca ves desde tu asiento.
+
+00:13:46.100 --> 00:13:48.140
+No es magia, solo contexto recién descubierto.
+
+00:13:48.140 --> 00:13:53.960
+Las preguntas que antes no obtenían respuesta empiezan a volver con detalles que todos daban por perdidos o bloqueados.
+
+00:13:54.740 --> 00:13:56.920
+Mencionemos algunos nombres para que no sea solo algo teórico.
+
+00:13:57.460 --> 00:13:59.900
+Microsoft ofrece conectores preconstruidos para los pesos pesados.
+
+00:14:00.800 --> 00:14:05.860
+Salesforce es uno de ellos, por lo que esas notas de cuentas que has guardado durante una década finalmente se unen a la conversación.
+
+00:14:07.220 --> 00:14:10.760
+ServiceNow es otro, permitiendo que Copilot encuentre artículos de la base de conocimientos
+
+00:14:10.760 --> 00:14:13.360
+que a una gente le tomaría 15 clics a alcanzar.
+
+00:14:13.360 --> 00:14:20.160
+Hay conectores para MediaWiki y sitios internos de SharePoint, incluso los que funcionan en versiones anteriores, SQL Server, y muchos más.
+
+00:14:21.480 --> 00:14:25.460
+Si vives con múltiples islas de información, los conectores se convierten en un salvavidas
+
+00:14:25.460 --> 00:14:31.460
+que ayuda a Copilot a cruzar a sus puentes, sin forzar a la organización a realizar migraciones de datos costosas o arriesgadas.
+
+00:14:32.680 --> 00:14:36.900
+Y para las personas que gestionan estos sistemas, el simple hecho de poder mantener las cosas como están,
+
+00:14:36.900 --> 00:14:40.080
+pero aún así hacer que Copilot aproveche su valor es una gran victoria.
+
+00:14:40.080 --> 00:14:45.860
+Momento de contar una historia, trabajé con una compañía financiera que operaba un CRM de ventas
+
+00:14:45.860 --> 00:14:48.820
+construido sobre el marco Duntonet más avanzado de 2011.
+
+00:14:49.460 --> 00:14:54.200
+Nadie quería tocarlo, pero los tratos y el historial de clientes allí y contenidos seguían siendo fundamentales para las operaciones diarias.
+
+00:14:55.060 --> 00:14:59.340
+Después de conectarlo con un conector de graph, Copilot no solo podía resumir el recorrido de ese cliente,
+
+00:14:59.340 --> 00:15:04.600
+sino que también podía responder al instante preguntas sobre quién manejó esto por última vez.
+
+00:15:04.600 --> 00:15:12.240
+Antes, estas respuestas dependían de la memoria, de echarlas en el pasillo o de revisar PDFs en una unidad compartida.
+
+00:15:13.620 --> 00:15:18.220
+Ahora esas respuestas aparecen en el chat de Copilot, junto a datos extraídos de fuentes actualizadas.
+
+00:15:19.440 --> 00:15:25.980
+Es como si Copilot hubiera heredado de repente una década de memoria empresarial sin necesidad de una migración complicada.
+
+00:15:25.980 --> 00:15:30.320
+Por supuesto, la seguridad es siempre el tema pendiente con este tipo de integraciones.
+
+00:15:31.280 --> 00:15:33.800
+La buena noticia es que los conectores de graph no son una puerta trasera.
+
+00:15:34.500 --> 00:15:36.520
+Mantienen todos los controles de acceso que usted ya ha establecido.
+
+00:15:36.920 --> 00:15:40.940
+Si alguien no opera registros financieros, no los verá en Copilot, sin importar lo ingenioso que sea su prompt.
+
+00:15:42.320 --> 00:15:46.500
+El sistema respeta los mismos permisos y políticas de usuario que usted ha implementado, sin portar origen de los datos.
+
+00:15:48.080 --> 00:15:52.820
+Y, como la ingesta ocurre en el seguro Microsoft Graph, no se añaden nuevos riesgos a la empresa.
+
+00:15:53.680 --> 00:15:55.720
+Simplemente está desbloqueando el conocimiento de forma controlada.
+
+00:15:56.780 --> 00:16:01.720
+Lo que se obtiene es un Copilot que empieza a actuar menos como un extraño y más como un veterano de su organización.
+
+00:16:02.560 --> 00:16:03.160
+¿La gran diferencia?
+
+00:16:03.760 --> 00:16:04.820
+La inmigración esforzada.
+
+00:16:05.240 --> 00:16:08.080
+No hace falta obligar a todos a usar lo último solo por la IA.
+
+00:16:09.020 --> 00:16:13.220
+Con los conectores de graph usted encuentra a sus usuarios y a sus datos justo donde ya trabajan.
+
+00:16:14.220 --> 00:16:19.220
+Es el tipo de ventaja práctica que permite que Copilot sea útil de formas que las demostraciones originales no mostraron.
+
+00:16:20.360 --> 00:16:23.340
+Una vez que todas esas conexiones empiezan a fluir, surge una pregunta natural.
+
+00:16:23.460 --> 00:16:25.560
+¿Todo esto realmente vale la pena en el mundo real?
+
+00:16:25.980 --> 00:16:30.780
+Ahí es donde las cosas se ponen interesantes, porque el impacto empresarial no es solo teórico una vez que Copilot ve la historia completa.
+
+00:16:31.920 --> 00:16:33.080
+El impacto empresarial.
+
+00:16:33.380 --> 00:16:35.860
+Un retorno a inversión real gracias a un Copilot más inteligente.
+
+00:16:36.660 --> 00:16:41.420
+Es fácil ejecutar un proyecto de TI, conectar un par de elementos y declarar la misión cumplida.
+
+00:16:41.420 --> 00:16:44.800
+Pero, ¿realmente ayuda a quienes usan Copilot a diario?
+
+00:16:45.800 --> 00:16:51.160
+Todos hemos visto a la gerencia presentar un lanzamiento nuevo, solo para descubrir que a los 3 meses nadie cambió su forma de trabajar.
+
+00:16:52.060 --> 00:16:54.520
+Esa es la medida que importa con la extensibilidad de Copilot.
+
+00:16:56.100 --> 00:17:00.320
+¿Obtiene la gente mejores respuestas, reduce el trabajo rutinar y trabaja más rápido, sin siquiera pensarlo?
+
+00:17:00.320 --> 00:17:05.140
+¿O simplemente está marcando una casilla de cumplimiento y dejando que la herramienta acumule polvo, polvo?
+
+00:17:06.000 --> 00:17:10.760
+Aquí es donde la brecha entre las expectativas y la realidad se vuelve evidente, especialmente con las herramientas de IA.
+
+00:17:11.600 --> 00:17:16.040
+A la mayoría de las empresas no les interesa otro chatbot ni un buscador glorificado.
+
+00:17:16.960 --> 00:17:22.360
+Lo que realmente importa es sacar la información del cerebro colectivo de la empresa y ponerla en manos de quien la necesita en el momento justo.
+
+00:17:22.360 --> 00:17:29.040
+Puede sonar sencillo, pero la realidad es que el conocimiento compartido, cómo se hacen las cosas realmente, vive en una mezcla extraña de formatos.
+
+00:17:29.600 --> 00:17:41.240
+A veces está enterrada en una vieja wiki que solo TI recuerda que existe y otras veces es una nota en una unidad compartida o una lista de procesos editada hace cuatro años por alguien que ya dejó la empresa.
+
+00:17:42.700 --> 00:17:50.300
+Estos fragmentos de conocimiento raral vez sobreviven a reorganizaciones, auditorías de seguridad o actualizaciones de software, por lo que la memoria institucional se deteriora silenciosamente.
+
+00:17:50.300 --> 00:17:56.360
+Copilot conectado solo a Microsoft 365 básicamente se limita a dar consejos genéricos.
+
+00:17:57.380 --> 00:18:01.600
+Una vez que empiezas a integrar esas otras fuentes con conectores de gráfico, comienza el verdadero cambio.
+
+00:18:02.340 --> 00:18:03.180
+Toma un recurso con ejemplo.
+
+00:18:03.620 --> 00:18:08.700
+Toda organización cree que su proceso de incorporación está claramente documentado hasta que llega el nuevo empleado.
+
+00:18:09.140 --> 00:18:18.660
+Personal de red, H, recibe las mismas preguntas una y otra vez mientras busca esa vieja lista de verificación, la política de capacitación de cumplimiento del año pasado o el proceso para obtener una computadora portátil.
+
+00:18:18.660 --> 00:18:25.460
+Antes de los conectores de gráfico, quien estaba en proceso de incorporación podía obtener fragmentos de una carpeta de SharePoint o de una carpeta de SharePoint o de un determinado.
+
+00:18:25.900 --> 00:18:29.700
+Había muchas probabilidades de que la respuesta más precisa viniera de acorralar a alguien en el comedor.
+
+00:18:30.280 --> 00:18:37.240
+Ahora, con unos pocos conectores específicos, Copilot tiene acceso directo y puede decirle al nuevo empleado todos los pasos de incorporación, tal como existen hoy.
+
+00:18:37.240 --> 00:18:44.160
+Incluso si el proceso reside en una wiki antigua de 2018 o en un conjunto de documentos de Word, guardados en una unidad de red compartida.
+
+00:18:44.900 --> 00:18:47.820
+Esto no solo ahorra horas de búsqueda, sino que libera al personal de RRR.
+
+00:18:48.620 --> 00:18:52.340
+Para trabajar en importante, en lugar de responder la misma pregunta, una docena de veces al mes.
+
+00:18:53.180 --> 00:18:54.320
+El impacto aquí tampoco es ambiguo.
+
+00:18:54.320 --> 00:19:02.940
+Los estudios y despliegues piloto muestran constantemente que, cuando Copilot puede obtener datos en tres hilos, el tiempo promedio para responder a una consulta de procesos se reduce a más de la mitad.
+
+00:19:04.780 --> 00:19:12.120
+Eso se traduce en menos mensajes de Teams, menos tiempo dedicado a perseguir conocimientos antiguos y mayores puntajes de satisfacción de quienes lo usan.
+
+00:19:12.120 --> 00:19:19.760
+En algunas organizaciones que han conectado sus CRM y documentación antiguos, los tiempos de incorporación han mejorado hasta en un 30%.
+
+00:19:19.760 --> 00:19:25.600
+Los miembros del equipo informan que dedican menos tiempo a duplicar el trabajo o repetir la misma investigación.
+
+00:19:27.360 --> 00:19:36.600
+No se trata de que la IA genere resúmenes elegantes, sino de hacer que la historia y los manuales reales de su empresa sean accesibles, incluso si el formato o la ubicación no son perfectos.
+
+00:19:37.980 --> 00:19:40.760
+Muchas empresas ven el mayor beneficio donde menos lo esperaban.
+
+00:19:40.760 --> 00:19:50.680
+Por lo general, no son los sistemas de alto perfil los que marcan la diferencia, sino las fuentes de datos olvidadas, esa vieja wiki que nadie quiere mantener, o el sistema de tickets abandonado en la fusión de hace años.
+
+00:19:52.080 --> 00:19:58.560
+Todos recuerdan la frustración de necesitar algún detalle oscuro de hace cinco proyectos y nadie quiere pasar medio día buscándolo.
+
+00:19:59.800 --> 00:20:04.200
+Cuando Copilot comienza a extraer esos detalles bajo demanda, la ventaja sobre sus competidores crece repentinamente.
+
+00:20:04.200 --> 00:20:12.440
+Existe un valor enorme en hacer que cada parte del conocimiento institucional esté disponible al instante, no solo lo que se almacena en la aplicación más reciente.
+
+00:20:13.480 --> 00:20:22.200
+Es el tipo de capacidad que permite a los equipos tomar decisiones más rápidas, evitar reinventar la rueda y actuar realmente sobre años de experiencia acumulada.
+
+00:20:22.200 --> 00:20:31.700
+Hay una ventaja adicional. A medida que el conocimiento de Copilot se expande, los equipos se sienten más seguros al tomar decisiones porque las respuestas llegan con el contexto adecuado.
+
+00:20:32.840 --> 00:20:37.700
+Si surge una pregunta sobre un producto antiguo en una reunión, no tienes que adivinar, ni prometer volver a llamar después.
+
+00:20:38.360 --> 00:20:43.760
+Copilot recupera inmediatamente el resumen de ventas, adjunta el historial técnico y señala a quien trabajó en él por última vez.
+
+00:20:43.760 --> 00:20:51.220
+Ese nivel de recuperación instantánea simplemente no es posible cuando la información está atrapada en media docena de sistemas desconectados.
+
+00:20:52.840 --> 00:20:56.240
+Lo mejor de todo es que estos logros no requieren una renovación total de su pila tecnológica.
+
+00:20:56.720 --> 00:21:00.680
+No está pidiendo a los departamentos que abandonen las herramientas en las que confían todos los días.
+
+00:21:01.200 --> 00:21:05.300
+En cambio, está haciendo que la suma de la experiencia de la empresa esté disponible donde quiera que los empleados se trabajen.
+
+00:21:06.080 --> 00:21:08.900
+Lo que se obtiene al final va mucho más allá de un bot útil.
+
+00:21:08.900 --> 00:21:18.820
+Cuando Copilot realmente conoce su negocio a través de todos sus conectores, se vuelve más preciso, más rápido y capaz de desempeñar el papel de un verdadero asesor de negocios dentro de Microsoft 365.
+
+00:21:19.920 --> 00:21:21.320
+El clásico es solo otro proyecto de TI.

@@ -1,0 +1,769 @@
+WEBVTT
+
+00:00:00.300 --> 00:00:07.140
+Siap untuk 10 hari pembahasan Microsoft 365, Copilot AI Azure, dan para penggerak masa depan dunia kerja, diam.
+
+00:00:08.000 --> 00:00:11.880
+Januari ini, M365 Con kembali hadir dengan skala yang lebih besar.
+
+00:00:12.880 --> 00:00:17.980
+Bergabunglah dalam sesi langsung demo nyata dan ilmu praktis dari MVP serta pakar industri dunia.
+
+00:00:18.820 --> 00:00:21.040
+Tanpa slide yang umum, tanpa isi yang bertele-tele.
+
+00:00:21.980 --> 00:00:23.220
+Kami membahas tantangan nyata.
+
+00:00:23.800 --> 00:00:28.480
+Copilot Studio, agen AI, fabrik, keamanan, tata kelola, dan otomatisasi.
+
+00:00:28.480 --> 00:00:34.260
+Baik Anda seorang profesional IT, pengembang, atau pemimpin bisnis, ada sesi yang dirancang untuk Anda.
+
+00:00:35.400 --> 00:00:40.080
+Selama 10 hari penuh, Anda bisa menjelajahi berbagai teknologi dan terhubung dengan komunitas global.
+
+00:00:40.880 --> 00:00:44.280
+Tonton langsung dan bawa wawasan praktis kembali ke organisasi Anda.
+
+00:00:45.200 --> 00:00:48.920
+Januari 2027, 10 hari, satu komunitas Microsoft.
+
+00:00:49.440 --> 00:00:50.380
+Pendaftaran sudah dibuka.
+
+00:00:51.760 --> 00:00:55.540
+Kunjungi M365 Con.net dan amankan tempat Anda hari ini.
+
+00:00:55.540 --> 00:00:57.540
+Itu di M365 Con.net.
+
+00:00:58.480 --> 00:01:04.740
+Bergabunglah sekarang di M365 Con.net dan sampai jumpa langsung di bulan Januari.
+
+00:01:05.280 --> 00:01:09.100
+Topik hari ini adalah sesuatu yang hampir semua orang pernah dengar tapi belum sepenuhnya dipahami.
+
+00:01:09.420 --> 00:01:10.420
+Penyimpanan disk Azure.
+
+00:01:11.200 --> 00:01:16.000
+Ini adalah hard drive virtual untuk VM Cloud Anda dan ingat, setiap VM yang Anda buat butuh penyimpanan.
+
+00:01:16.620 --> 00:01:17.280
+Salah pilih tipe.
+
+00:01:17.620 --> 00:01:20.340
+Anda bisa membayar terlalu mahal atau mendapatkan performa yang buruk.
+
+00:01:20.860 --> 00:01:24.920
+Di akhir episode ini, Anda akan tahu empat tipe disk utama dan kapan harus menggunakan masing-masing.
+
+00:01:24.920 --> 00:01:27.180
+Siapkan kopi Anda dan mari kita mulut.
+
+00:01:28.000 --> 00:01:28.900
+Mengapa tipe disk penting?
+
+00:01:29.040 --> 00:01:30.400
+Kecepatan, kapasitas, dan biaya.
+
+00:01:30.880 --> 00:01:32.040
+Jadi, mengapa tipe disk itu penting?
+
+00:01:32.880 --> 00:01:34.180
+Tiga faktor menentukan performa.
+
+00:01:34.660 --> 00:01:36.160
+IOPS, throughput, dan latensi.
+
+00:01:37.300 --> 00:01:40.120
+IOPS adalah singkatan dari operasi input-output per detik.
+
+00:01:40.580 --> 00:01:43.640
+Singkatnya, seberapa banyak operasi baca atau tulis yang bisa ditangani disk aligus.
+
+00:01:44.140 --> 00:01:46.960
+Throughput adalah kecepatan transfer data yang diukur dalam megabyte per detik.
+
+00:01:47.520 --> 00:01:48.640
+Latensi adalah penundaan.
+
+00:01:48.640 --> 00:01:51.020
+Berapa lama byte pertama tiba setelah Anda memintanya?
+
+00:01:51.500 --> 00:01:52.800
+Bayangkan seperti kendaraan.
+
+00:01:52.920 --> 00:01:54.400
+Sedang cukup untuk urusan harian biasa.
+
+00:01:55.020 --> 00:01:56.360
+Rupika bisa membawa beban yang lebih baik.
+
+00:01:56.760 --> 00:01:58.460
+Dan mobil balap dibangun untuk kecepatan murung.
+
+00:01:58.840 --> 00:02:00.300
+Tipe disk yang berbeda mengikuti pola yang sama.
+
+00:02:00.940 --> 00:02:02.180
+Standar SSD adalah sedan anggap.
+
+00:02:02.440 --> 00:02:03.680
+Premium SSD adalah truk kerja.
+
+00:02:04.280 --> 00:02:06.720
+Premium SSD V2 adalah mobil sport yang bisa Anda atur sendiri.
+
+00:02:07.100 --> 00:02:08.520
+Dan ultradisk adalah mobil berlapur masalah.
+
+00:02:09.040 --> 00:02:09.620
+Ilah pertimbangannya.
+
+00:02:09.860 --> 00:02:11.500
+Performa yang lebih tinggi membutuhkan biaya lebih besar.
+
+00:02:11.700 --> 00:02:14.580
+Kuncinya adalah mencocokkan disk dengan kebutuhan beban kerja Anda
+
+00:02:14.580 --> 00:02:18.860
+agar tidak berlebihan dan membuang uang atau kekurangan dan mendapatkan performa lambat.
+
+00:02:19.600 --> 00:02:22.960
+Jadi, mari mulai dengan dua kategori luas disk yang akan Anda pasang ke VM.
+
+00:02:23.940 --> 00:02:25.800
+OSDisk versus DataDisk, dua pilihan yang ada.
+
+00:02:26.420 --> 00:02:29.600
+Saat Anda membuat VM di Azure, secara otomatis sistem menyertakan OSDisk.
+
+00:02:29.920 --> 00:02:33.720
+Disk tersebut menampung sistem operasi Windows atau Linux dan merupakan tempat VM melakukan butik.
+
+00:02:34.240 --> 00:02:39.560
+Disk OS memiliki kapasitas maksimal 4TB yang lebih dari cukup untuk OS itu sendiri dan beberapa aplikasi dasar.
+
+00:02:39.700 --> 00:02:42.400
+Memang begini masalahnya, Anda juga bisa menambahkan disk data.
+
+00:02:42.400 --> 00:02:47.880
+Ini bersifat opsional dan Anda melampirkannya secara terpisah untuk keperluan seperti aplikasi basis data atau penyimpanan file.
+
+00:02:48.300 --> 00:02:54.420
+Setiap disk data bisa mencapai 64TB dan Anda bisa melampirkan beberapa disk ke 1VM untuk penyimpanan disk.
+
+00:02:54.660 --> 00:02:55.480
+Tambahkan saja disk lain.
+
+00:02:55.960 --> 00:02:59.480
+Nah, baik disk OS maupun disk data menggunakan 4 tingkat kinerja yang sama.
+
+00:03:00.660 --> 00:03:04.460
+Standard SSD, Premium SSD, Premium SSD V2, dan UltraDisk.
+
+00:03:05.100 --> 00:03:06.980
+Perbedaannya bukan pada kecepatan, melainkan pada tujuan.
+
+00:03:07.440 --> 00:03:08.880
+Disk OS menjalankan sistem operasi.
+
+00:03:09.360 --> 00:03:10.600
+Disk data menjalankan aplikasi Anda.
+
+00:03:10.600 --> 00:03:13.020
+Namun kedua yang mengandalkan jenis disk dasar yang sama.
+
+00:03:13.580 --> 00:03:15.780
+Satu hal lagi, penyimpanan disk Azure bersisten.
+
+00:03:16.220 --> 00:03:19.260
+Itu berarti data Anda tetap tersimpan meskipun VM dihentikan atau dimulai ulang.
+
+00:03:19.580 --> 00:03:21.120
+Tidak ada yang hilang saat Anda mematikannya di mana-mana.
+
+00:03:21.760 --> 00:03:24.400
+Mari kita bahas ke 4 tingkat tersebut, dimulai dari yang paling terjangkau.
+
+00:03:25.600 --> 00:03:27.500
+Standard SSD, si pekerja keras yang ekonomis.
+
+00:03:28.040 --> 00:03:30.440
+Mari kita mulai dengan opsi tingkat dasar, standard SSD.
+
+00:03:31.240 --> 00:03:35.760
+Yang adalah biaya per gigabyte terendah di antara tingkat SSD dan memberikan kinerja yang layak untuk beban kerja dasar.
+
+00:03:35.760 --> 00:03:42.760
+Kita berbicara tentang maksimum sekitar 6.000 IOPS dan throughput hingga 600 MB per detik tergantung pada ukuran disk yang Anda pilih.
+
+00:03:43.380 --> 00:03:44.180
+Dari kapan Anda akan menggunakannya?
+
+00:03:44.480 --> 00:03:47.820
+Pikirkan lingkungan pengembangan dan pengujian di mana Anda membuat VM untuk bereksperimen.
+
+00:03:48.140 --> 00:03:49.720
+Server web yang tidak mendapatkan lalu lintas pada.
+
+00:03:50.080 --> 00:03:53.160
+Aplikasi dengan lalu lintas rendah di mana penundaan beberapa detik bukanlah masalah besar.
+
+00:03:53.160 --> 00:03:54.540
+Ingat analogi kendaraan tadi.
+
+00:03:55.020 --> 00:03:56.580
+Standard SSD adalah sedan Anda yang Anda.
+
+00:03:56.900 --> 00:03:58.280
+Kendaraan ini membawa Anda ke toko ngontong.
+
+00:03:58.720 --> 00:04:00.200
+Kendaraan ini menangani perjalanan sehari-hari.
+
+00:04:00.620 --> 00:04:03.220
+Anda tidak akan menggunakannya untuk menarik trailer penuh kayu atau balapan detik.
+
+00:04:03.860 --> 00:04:06.080
+Ini dibuat untuk tugas sehari-hari, bukan untuk keperjaan berat.
+
+00:04:06.680 --> 00:04:08.280
+Dan disinilah Anda harus jujur pada diri sendiri.
+
+00:04:08.740 --> 00:04:10.580
+Jika Anda menjalankan basis data produksi apapun,
+
+00:04:10.900 --> 00:04:13.500
+SQL Server, Oracle, MySQL, hindari standar SSD.
+
+00:04:14.560 --> 00:04:17.400
+Hal yang sama berlaku untuk apapun yang sensitif terhadap latensi,
+
+00:04:17.540 --> 00:04:20.440
+seperti aplikasi waktu nyata atau apapun yang membutuhkan banyak operasi IOPS.
+
+00:04:20.520 --> 00:04:22.180
+Standard SSD memang tidak dibuat untuk itu.
+
+00:04:22.180 --> 00:04:25.040
+Untuk skenario tersebut, Anda merupakan peningkatan ke premium SSD.
+
+00:04:26.000 --> 00:04:28.140
+Premium SSD, si profesional dapat diandalkan.
+
+00:04:28.720 --> 00:04:31.200
+Premium SSD menangani beban kerja produksi tanpa kesulitan.
+
+00:04:31.820 --> 00:04:35.260
+Anda mendapatkan latensi rendah yang konsisten dan IOPS yang jauh lebih tinggi daripada standar SSD.
+
+00:04:35.640 --> 00:04:37.620
+Disinilah kinerja nyata mulai terlihat.
+
+00:04:37.980 --> 00:04:39.000
+Berikut adalah rincin sederhana.
+
+00:04:39.400 --> 00:04:42.120
+Dengan premium SSD, performa terikat langsung pada ukuran disk.
+
+00:04:42.520 --> 00:04:45.100
+Pilih ukuran disk dan itu akan menentukan berapa banyak IOPS yang Anda dapat.
+
+00:04:45.460 --> 00:04:47.760
+P30 dengan 1TB memberi Anda 5.000 IOPS.
+
+00:04:48.100 --> 00:04:50.600
+P60 dengan 4TB memberikan 20.000 IOPS.
+
+00:04:50.600 --> 00:04:52.600
+Disk yang lebih besar berarti performa yang lebih tinggi.
+
+00:04:52.880 --> 00:04:53.820
+Jadi kapan Anda harus menggunakan?
+
+00:04:54.260 --> 00:04:56.580
+Aplikasi perusahaannya membutuhkan performa andal.
+
+00:04:57.520 --> 00:05:01.320
+Database SQL Server yang tidak terlalu masif namun tetap menuntut waktu respons yang konsisten.
+
+00:05:02.080 --> 00:05:04.200
+Desktop virtual di mana pengguna mengharapkan respons instan.
+
+00:05:04.460 --> 00:05:05.720
+Premium SSD mampu menangin semua itu.
+
+00:05:06.120 --> 00:05:06.860
+Namun inilah batasannya.
+
+00:05:06.860 --> 00:05:10.480
+Karena performa terkunci pada ukuran disk, Anda terjebak dalam tingkatan yang tetap.
+
+00:05:11.080 --> 00:05:11.720
+Ini lebih banyak ya, Pak.
+
+00:05:11.880 --> 00:05:13.240
+Anda harus membeli disk yang lebih besar.
+
+00:05:13.400 --> 00:05:15.240
+Meskipun Anda tidak memerlukan ruang penyimpanan ekstra.
+
+00:05:15.600 --> 00:05:17.060
+Itu mengarah pada cover provisioning.
+
+00:05:17.420 --> 00:05:20.820
+Membayar kapasitas yang tidak pernah digunakan hanya untuk mendapatkan performa yang sebenarnya Anda perlukan.
+
+00:05:21.220 --> 00:05:22.440
+Anggaplah itu seperti terkerja yang masih ada.
+
+00:05:22.940 --> 00:05:25.120
+Kinerjanya terbukti andal dan mampu menyelesaikan tugas.
+
+00:05:25.480 --> 00:05:29.200
+Tetapi Anda membayar seluruh truk bahkan jika Anda hanya membutuhkan kapasitas muatan ekstra sebulan sekat.
+
+00:05:29.200 --> 00:05:32.520
+Anda tidak bisa hanya menyewabak truknya saja selama sehari dan membiarkan bagian kebunat.
+
+00:05:32.520 --> 00:05:36.200
+Masalah itulah yang dibangun untuk diselesaikan oleh premium SSD V2.
+
+00:05:36.960 --> 00:05:39.280
+Premium SSD V2, si pekerja fleksibel.
+
+00:05:39.900 --> 00:05:41.060
+Nah, disinilah hal-hal menjadi menarik.
+
+00:05:41.800 --> 00:05:45.180
+Premium SSD V2 memperbaiki masalah besar pada premium SSD reguler,
+
+00:05:45.300 --> 00:05:48.200
+yaitu keharusan membeli kapasitas lebih hanya untuk mendapatkan performa lebih.
+
+00:05:48.760 --> 00:05:54.420
+Dengan premium SSD V2, Anda dapat menyesuaikan kapasitas IOPS dan keruput kelecara independen tanpa penggantian disk.
+
+00:05:54.580 --> 00:05:56.560
+Cukup ubah pengaturannya dan itu akan langsung terjadi.
+
+00:05:56.940 --> 00:05:57.880
+Basis kinerjanya sangat loh.
+
+00:05:57.880 --> 00:06:03.980
+Anda mendapatkan 3.000 IOPS dan 125 MB per detik layar reput kelecaraan tanpa biaya tambahan.
+
+00:06:04.500 --> 00:06:07.140
+Itu sudah lebih besar daripada batas maksimum beberapa disk SSD standard.
+
+00:06:07.560 --> 00:06:11.240
+Dari sana Anda dapat meningkatkan hingga 80.000 IOPS dan 1.200 MB per detik.
+
+00:06:11.840 --> 00:06:13.900
+Sangat cukup untuk sebagian besar beban kerja perusahaan tujuan.
+
+00:06:14.400 --> 00:06:16.780
+Kapasitas berkisar dari 1 GBB hingga 64 TB.
+
+00:06:17.560 --> 00:06:19.640
+Baik Anda membutuhkan disk kecil untuk aplikasi ringan,
+
+00:06:19.780 --> 00:06:23.200
+atau yang sangat besar untuk gudang data premium SSD V2 mencakupnya premium SSD.
+
+00:06:23.620 --> 00:06:24.460
+Lalu bagaimana dengan latin sih?
+
+00:06:24.460 --> 00:06:25.500
+Kurang dari 1 mililit.
+
+00:06:25.500 --> 00:06:29.200
+Untuk banyak beban kerja, performa yang sebanding dengan ultradis tanpa harga yang mahal.
+
+00:06:29.580 --> 00:06:30.360
+Inilah nilai sebenarnya.
+
+00:06:30.700 --> 00:06:34.840
+Premium SSD V2 jauh lebih murah daripada ultradis untuk tingkat performa yang serupa.
+
+00:06:35.360 --> 00:06:36.700
+Anda tidak membayar mahal hanya demi sebuah.
+
+00:06:36.840 --> 00:06:38.420
+Anda membayar tepat untuk apa yang Anda butuh.
+
+00:06:38.700 --> 00:06:40.460
+Perlu IOPS tinggi tetapi tidak butuh hubungan yang besar.
+
+00:06:40.700 --> 00:06:41.420
+Atur saja seperti itu.
+
+00:06:41.620 --> 00:06:43.080
+Perlu putar tinggi tetapi IOPS yang cukup.
+
+00:06:43.580 --> 00:06:44.360
+Atur dengan cara sebalik.
+
+00:06:44.760 --> 00:06:46.880
+Tidak ada paket satu ukuran untuk semua yang dipaksakan kepada Anda.
+
+00:06:47.040 --> 00:06:47.800
+Jadi untuk apa yang terbaik?
+
+00:06:48.120 --> 00:06:50.380
+Basis data produksi utama, aplikasi lini bisnis,
+
+00:06:50.380 --> 00:06:54.220
+beban kerja apapun yang membutuhkan kinerja tinggi namun tidak membutuhkan batas maksimal ultradis.
+
+00:06:54.320 --> 00:06:56.060
+SQL Server Oracle MongoDB Cassandra
+
+00:06:56.060 --> 00:06:57.940
+Basis data yang menggerakkan bisnis nyata.
+
+00:06:58.360 --> 00:07:00.040
+Premium SSD V2 dapat menangani semua ini.
+
+00:07:00.360 --> 00:07:01.540
+Satu keterbatasan yang perlu dicatat.
+
+00:07:01.780 --> 00:07:05.800
+Premium SSD V2 saat ini hanya tersedia dengan penyimpanan redundan lokal atau LRS.
+
+00:07:06.340 --> 00:07:08.880
+Itu berarti data Anda direplikasi tiga kali di dalam satu pusat data.
+
+00:07:09.720 --> 00:07:11.600
+Fitur ini belum mendukung penyimpanan redundan zona.
+
+00:07:12.060 --> 00:07:16.280
+Jadi jika Anda perlu data tersebar di beberapa zona ketersediaan untuk ketahanan lebih tinggi,
+
+00:07:16.720 --> 00:07:19.380
+Anda butuh opsi lain atau menambahkan redundansi tingkat aplikasi.
+
+00:07:20.380 --> 00:07:23.720
+Tetap saja, untuk sebagian besar skenario, Premium SSD V2 adalah pilihan yang pasang.
+
+00:07:23.900 --> 00:07:26.700
+Anda mendapatkan fleksibilitas untuk menyesuaikan ukuran penyimpanan,
+
+00:07:27.020 --> 00:07:28.660
+kinerja untuk menangani beban kerja berat,
+
+00:07:28.780 --> 00:07:31.460
+dan struktur biaya yang tidak menghukum Anda karena menginginkan IOPs yang lebih baik.
+
+00:07:32.000 --> 00:07:34.100
+Namun, jika beban kerja Anda menuntut kinerja tertinggi,
+
+00:07:34.220 --> 00:07:37.460
+seperti SAP HANA, rekam medis elektronik, atau perdagangan waktu nyata.
+
+00:07:38.460 --> 00:07:39.700
+Ada satu tingkat lagi yang perlu dibahas.
+
+00:07:40.260 --> 00:07:41.380
+Ultradis si mobil super.
+
+00:07:41.700 --> 00:07:42.960
+Sekarang mari kita bicara tentang ultradis.
+
+00:07:43.300 --> 00:07:43.940
+Ini ada tingkat teratas.
+
+00:07:44.280 --> 00:07:47.160
+Kita berbicara tentang hingga 400 ribu IOPs per disk,
+
+00:07:47.160 --> 00:07:49.040
+throughput 10 ribu megabita per detik,
+
+00:07:49.160 --> 00:07:51.460
+dan latensi yang diukur dalam mikrodetik bukan mili detik.
+
+00:07:52.300 --> 00:07:52.820
+Mikrodetik.
+
+00:07:53.260 --> 00:07:56.360
+Ultradis dibuat untuk beban kerja kritis di mana Anda tidak boleh mengatung tinggi.
+
+00:07:56.700 --> 00:07:57.740
+Aplikasi yang harus berjalan cepat.
+
+00:07:58.060 --> 00:08:00.180
+Basis data dalam memori yang masif seperti SAP HANA,
+
+00:08:00.480 --> 00:08:02.840
+sistem rekam medis di mana dokter memerlukan info secara instan,
+
+00:08:03.480 --> 00:08:06.120
+platform perdagangan frekuensi tinggi di mana mikrodetik bermilai jutaan,
+
+00:08:06.540 --> 00:08:09.340
+pekerjaan AI dan pembelajaran mesin yang mengolah set data raksasa.
+
+00:08:09.720 --> 00:08:10.380
+Harganya pun berbeda.
+
+00:08:10.920 --> 00:08:12.400
+Kinerja dan kapasitas dipisahkan.
+
+00:08:12.840 --> 00:08:14.500
+Anda memilih IOPs dan throughput Anda sendiri,
+
+00:08:14.500 --> 00:08:16.120
+dan membayarnya terpisah dari penyimpanan.
+
+00:08:16.120 --> 00:08:18.720
+Jadi Anda bisa memiliki disk kecil dengan kecepatan tinggi,
+
+00:08:18.820 --> 00:08:19.920
+atau disk besar dengan kecepatan sebaik.
+
+00:08:20.140 --> 00:08:22.340
+Anda tidak perlu memiliki kapasitas tambahan hanya untuk mendapatkan IOP.
+
+00:08:22.600 --> 00:08:24.080
+Tersedia juga penyimpanan redondan zona.
+
+00:08:24.500 --> 00:08:26.860
+DTS menyalin data Anda di tiga zona dalam wilayah yang sama.
+
+00:08:27.440 --> 00:08:29.320
+Jika satu pusat data mati, disk Anda tetap berfungsi.
+
+00:08:29.840 --> 00:08:31.760
+Itu penting untuk beban kerja yang ditangani ultradisk.
+
+00:08:32.500 --> 00:08:33.580
+Sekarang ini fitur yang lebih baru.
+
+00:08:33.840 --> 00:08:35.040
+Snapshot Akses Instant.
+
+00:08:35.720 --> 00:08:38.140
+Fitur ini dalam perhatian jauh untuk ultradisk dan premium SDV2.
+
+00:08:38.800 --> 00:08:42.220
+Biasanya membuat disk dari snapshot butuh waktu saat data melakukan rehidrasi.
+
+00:08:42.540 --> 00:08:45.640
+Dengan akses instant, Anda bisa membuat disk dalam hitungan detik, bukan jam.
+
+00:08:46.120 --> 00:08:48.600
+Dan disk baru tersebut langsung memiliki kinerja yang hampir penuh.
+
+00:08:49.180 --> 00:08:50.620
+Untuk pemulihan bencana ini sangat penting.
+
+00:08:51.040 --> 00:08:53.300
+Anda bisa menyalakan salin penuh basis data Anda dalam hitungan Anda.
+
+00:08:53.720 --> 00:08:56.440
+Bayangkan ultradisk seperti mobil balap Formula 1 kecepatan yang luar biasa.
+
+00:08:56.800 --> 00:08:57.760
+Setiap mili detik sangat berat.
+
+00:08:58.440 --> 00:09:00.800
+Anda tidak mengendali mobil Formula 1 untuk pergi belanja bahan makanan.
+
+00:09:01.300 --> 00:09:03.840
+Ia dibuat untuk satu hal, melaju secepat mungkin secara fisik.
+
+00:09:04.200 --> 00:09:05.200
+Dan Anda membayar untuk kecepatan.
+
+00:09:05.540 --> 00:09:06.540
+Dedica pernanya tidak perlu menggunakan.
+
+00:09:06.780 --> 00:09:08.680
+Untuk sebagian besar beban kerja ultradisk terlalu banyak.
+
+00:09:08.680 --> 00:09:12.360
+Premium SSD V2 mencakup 95% kasus dengan biaya jauh lebih murah.
+
+00:09:12.360 --> 00:09:17.500
+Jika Anda tidak menjalankan SAP HANA atau platform trading atau sesuatu yang ekstrem, Anda tidak butuh ultradisk.
+
+00:09:17.860 --> 00:09:18.900
+Mulai dengan premium SSD V2.
+
+00:09:19.440 --> 00:09:21.800
+Beralihlah ke ultra hanya jika pembantuan Anda menunjukkan Anda membutuhkan.
+
+00:09:21.860 --> 00:09:23.160
+Jadi kita sudah memasukkan 4 tingkatan tersebut.
+
+00:09:23.420 --> 00:09:24.200
+Bagaimana cara menerima?
+
+00:09:24.500 --> 00:09:25.460
+Bagaimana memilih disk yang tersebut?
+
+00:09:25.800 --> 00:09:26.780
+Anda punya ke 4 tingkatan tersebut.
+
+00:09:27.140 --> 00:09:27.980
+Bagaimana cara Anda memilih?
+
+00:09:28.220 --> 00:09:29.080
+Mulai dengan 3 pertanyaan.
+
+00:09:29.440 --> 00:09:30.920
+Pertama, apakah ini untuk produksi atau pengujian?
+
+00:09:31.280 --> 00:09:34.980
+Jika untuk pengembangan, pelab pengujian atau server web traffic rendah standar SSD sudah cukup.
+
+00:09:34.980 --> 00:09:35.980
+Jangan terlalu dipikirkan.
+
+00:09:36.260 --> 00:09:37.700
+Ini menghemat uang dan memberikan performa yang baik.
+
+00:09:37.700 --> 00:09:39.880
+Kedua, berapa IOPS dan latensi yang Anda butuhkan?
+
+00:09:40.360 --> 00:09:43.180
+Jika Anda butuh latensi rendah dan ribuan IOPS, Anda butuh premium.
+
+00:09:43.780 --> 00:09:44.860
+Pertanyaannya tingkat premium mana?
+
+00:09:45.280 --> 00:09:47.380
+Jika beban kerja Anda stabil, premium SSD biasa cukup.
+
+00:09:47.760 --> 00:09:52.000
+Jika Anda ingin fleksibilitas untuk menyesuaikan performa tanpa mengganti disk, gunakan premium SSD V2.
+
+00:09:52.680 --> 00:09:53.620
+Ketiga, berapa anggaran Anda?
+
+00:09:53.880 --> 00:09:54.700
+Sinalisme yang menjadi nyata.
+
+00:09:54.960 --> 00:09:58.400
+Premium SSD V2 lebih murah daripada ultra untuk performa yang serupa dalam banyak kasus.
+
+00:09:58.600 --> 00:10:02.640
+Namun, jika Anda menjalankan SAP HANA atau sistem trading, kecepatan lebih penting daripada biaya.
+
+00:10:03.020 --> 00:10:03.880
+Ijinkan panduan singkat.
+
+00:10:04.460 --> 00:10:06.680
+Pengembangan perpengujian dan server web standar SSD.
+
+00:10:06.680 --> 00:10:09.520
+Produksi dengan IOPS moderat, premium SSD.
+
+00:10:10.120 --> 00:10:13.600
+Produksi dengan IOPS tinggi di mana Anda ingin fleksibilitas premium SSD V2.
+
+00:10:14.500 --> 00:10:17.680
+IOPS ekstrem di mana latensi submineratik sangat penting, ultradisk.
+
+00:10:18.220 --> 00:10:20.920
+Berikut adalah beberapa tips optimasi biaya yang benar-benar menghemat waktu.
+
+00:10:21.200 --> 00:10:22.480
+Sesuaikan ukuran disk Anda sejak awal.
+
+00:10:22.880 --> 00:10:25.400
+Jangan membeli premium SSD 40 terabit jika Anda hanya butuh 500.
+
+00:10:25.740 --> 00:10:28.340
+Gunakan premium SSD V2 sebagai pengganti ultra jika menggantung.
+
+00:10:28.660 --> 00:10:30.220
+Ini mencakup sebagian besar kasus dengan biaya lebih.
+
+00:10:30.700 --> 00:10:31.500
+Bersihkan snapshot lama.
+
+00:10:31.880 --> 00:10:32.760
+Akan menempuh dan memperbaik.
+
+00:10:33.260 --> 00:10:36.100
+Dan pilih LRS daripada ZRS jika Anda tidak butuh redansi zona.
+
+00:10:36.680 --> 00:10:40.120
+LRS lebih murah dan tetap memberikan tiga salinan dalam satu pusat data.
+
+00:10:40.780 --> 00:10:42.840
+Satu hal yang tidak perlu Anda khawatirkan adalah enkripsi.
+
+00:10:43.200 --> 00:10:45.960
+Enkripsi si server dengan AIS 256-bit selalu aktif.
+
+00:10:46.260 --> 00:10:47.800
+Ini memenuhi standar repatuhan VIP-179.
+
+00:10:48.080 --> 00:10:49.720
+Tidak ada yang perlu diaktifkan, tidak ada yang perlu dikonfigurasi.
+
+00:10:49.880 --> 00:10:51.640
+Data Anda dienkripsi saat tidak digunakan secara default.
+
+00:10:51.820 --> 00:10:54.200
+Jika Anda butuh kontrol lebih, Anda bisa menggunakan kunci yang dikelola pelan.
+
+00:10:54.440 --> 00:10:56.700
+Namun untuk sebagian besar skenario, enkripsi default sudah cukup.
+
+00:10:57.160 --> 00:11:01.100
+Sebelum kita selesai, mari bahas beberapa fitur lagi yang penting untuk daya tahan dan keamanan.
+
+00:11:01.100 --> 00:11:04.060
+Keamanan, daya tahan, dan snapshot.
+
+00:11:04.780 --> 00:11:07.100
+Penyimpanan disk Azure menargetkan ketersediaan 99%.
+
+00:11:07.660 --> 00:11:08.680
+Beri kami angka 9.
+
+00:11:09.200 --> 00:11:10.220
+Bagaimana mereka melakukan itu?
+
+00:11:11.040 --> 00:11:12.260
+Tiga salinan dari setiap bagian data.
+
+00:11:13.140 --> 00:11:16.620
+Dengan penyimpanan redundan lokal, ketiga salinan itu tetap berada di dalam satu pusat data.
+
+00:11:16.960 --> 00:11:19.300
+Saat disk gagal, salinan lain langsung mengambil alih.
+
+00:11:20.020 --> 00:11:23.820
+Dengan penyimpanan redundan zona, salinan tersebar di tiga zona ketersediaan dalam wilayah yang sama.
+
+00:11:24.460 --> 00:11:26.660
+Satu pusat data mati total, data Anda tetap aman.
+
+00:11:27.100 --> 00:11:28.260
+Enkripsi selalu aktif server.
+
+00:11:28.840 --> 00:11:33.080
+Enkripsi si server menggunakan AIS 256-bit dan memenuhi standar VIP 142.
+
+00:11:34.100 --> 00:11:35.280
+Puncak beratang saat tidak digunakan.
+
+00:11:35.640 --> 00:11:36.840
+Namun mungkin Anda butuh kontrol lebih.
+
+00:11:37.260 --> 00:11:39.760
+Kunci yang dikelola pelanggan memungkinkan Anda memegang kunci enkripsi sendiri.
+
+00:11:40.540 --> 00:11:41.700
+Enkripsi dihost melangkah lebih jauh.
+
+00:11:42.300 --> 00:11:44.560
+Ini mencakup disk sementara dan kece disk yang secara diputus.

@@ -1,0 +1,817 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:01.440
+Et nous vous retrouverons en direct en jambes.
+
+00:00:01.700 --> 00:00:05.200
+Bienvenue dans un nouvel épisode de Microsoft Knowledge Nuggets, ici sur M365FM.
+
+00:00:05.520 --> 00:00:06.260
+Je suis votre auditeur.
+
+00:00:06.460 --> 00:00:09.680
+Le sujet d'aujourd'hui est celui dont vous avez certainement entendu parler si vous travaillez dans la finance,
+
+00:00:09.800 --> 00:00:12.100
+co-pilot pour Dynamics 365 Finance Operations.
+
+00:00:12.640 --> 00:00:13.180
+Mais voici le point.
+
+00:00:13.320 --> 00:00:17.100
+La plupart des gens entendent co-pilot-gig et imaginent un chatbot qui répond à des questions ou rédige peut-être un email.
+
+00:00:17.860 --> 00:00:21.080
+Mais que fait-il réellement pour une équipe financière un mardi matin ?
+
+00:00:21.080 --> 00:00:23.040
+Qu'est-ce que nous allons clarifier aujourd'hui, simplement ?
+
+00:00:23.040 --> 00:00:27.140
+Ce n'est pas un robot qui remplace votre comptable, c'est un assistant intégré aux outils que vous utilisez déjà,
+
+00:00:27.140 --> 00:00:29.640
+votre ERP, votre messagerie, vos feuilles de calcul.
+
+00:00:30.000 --> 00:00:33.960
+A la fin de cet épisode, vous saurez exactement ce que fait co-pilot dans D365FLO,
+
+00:00:34.100 --> 00:00:36.200
+où il est le plus efficace et ce qu'il apporte vraiment.
+
+00:00:36.820 --> 00:00:40.240
+Nous passerons en revue les principaux cas d'usage, en commençant par celui qui apporte la valeur la plus immédiate.
+
+00:00:40.460 --> 00:00:41.860
+Alors prenez votre café et plongeons dans le vif du sujet.
+
+00:00:42.580 --> 00:00:43.840
+Le problème que co-pilot résout.
+
+00:00:44.500 --> 00:00:48.000
+Il y a 20 ans, si vous travaillez dans la finance, votre journée consistait à vous connecter à l'ERP,
+
+00:00:48.340 --> 00:00:54.020
+exporter des données vers Excel, les traiter, rédiger des commentaires, envoyer des emails et répéter ce cycle chaque mois.
+
+00:00:54.440 --> 00:00:58.280
+Les données étaient là, mais vous passiez la majeure partie de votre temps à les chercher et à les déplacer.
+
+00:00:58.280 --> 00:01:00.340
+C'est le vrai problème que co-pilot résout.
+
+00:01:00.940 --> 00:01:03.440
+Les équipes financières ne manquent pas d'informations, elles ont en abondance.
+
+00:01:03.940 --> 00:01:06.100
+La friction réside dans la manière d'y accéder et d'agir en conséquence.
+
+00:01:06.500 --> 00:01:09.860
+Vous ouvrez une fiche client, puis un écran de balançager, un autre pour l'historique des paiements,
+
+00:01:09.960 --> 00:01:11.600
+puis vous passiez sur Outlook pour rédiger un email.
+
+00:01:12.460 --> 00:01:13.420
+Chaque étape coûte du temps.
+
+00:01:13.800 --> 00:01:14.700
+Co-pilot inverse ce modèle.
+
+00:01:15.220 --> 00:01:18.100
+Au lieu que vous alliez vers les données, les données viennent à vous au sein de votre flux de travail.
+
+00:01:18.620 --> 00:01:19.680
+Un seul écran, une seule conversation.
+
+00:01:20.140 --> 00:01:22.100
+Alors que peut-il faire concrètement ?
+
+00:01:22.100 --> 00:01:22.960
+Commençons par le plus important.
+
+00:01:23.680 --> 00:01:24.900
+Co-pilot pour le recouvrement à les comptes clients.
+
+00:01:25.440 --> 00:01:26.780
+Voici donc une autre pépite de connaissances pour vous.
+
+00:01:27.220 --> 00:01:30.540
+Le recouvrement est le principal cas d'usage de co-pilot dans D365FNO.
+
+00:01:30.980 --> 00:01:34.200
+C'est ce qui retient le plus l'attention, car c'est ce qui offre le retour sur temps le plus rapide.
+
+00:01:34.860 --> 00:01:35.600
+Laissez-moi vous expliquer quoi.
+
+00:01:35.940 --> 00:01:40.160
+Dans D365FNO, il existe un espace de travail à pléken résumé du coordinateur de recouvrement.
+
+00:01:40.160 --> 00:01:44.440
+Lorsque vous ouvrez une fiche client, Co-pilot génère un résumé de tout ce que vous devez savoir.
+
+00:01:45.640 --> 00:01:49.660
+Facture impayée, historique des paiements, balance âgée, exposition au risque, tout est regroupé au même endroit.
+
+00:01:50.360 --> 00:01:51.540
+Laissez-moi vous présenter un exemple concret.
+
+00:01:52.020 --> 00:01:54.940
+Imaginez que vous êtes chargé du recouvrement et que vous ouvrez le client Comptozo LTD.
+
+00:01:55.780 --> 00:02:00.480
+Co-pilot vous indique immédiatement que ce client a trois factures en retard, totalisant 12 000 dollars.
+
+00:02:01.040 --> 00:02:04.500
+Son dernier paiement remonte à 45 jours et il conteste la facture FT9.
+
+00:02:05.880 --> 00:02:09.340
+Autrefois, vous passiez 5 à 10 minutes à chercher ces informations sur différents écrans.
+
+00:02:10.200 --> 00:02:12.520
+Maintenant, vous les avez en quelques secondes, mais les résumés ne sont qu'un début.
+
+00:02:13.200 --> 00:02:17.520
+Co-pilot peut aussi rédiger des emails de rappel personnalisés selon l'historique et le ton du client.
+
+00:02:18.320 --> 00:02:19.980
+Vous relisez l'email, cliquez sur Envoyer et passez à la suite.
+
+00:02:20.420 --> 00:02:21.340
+C'est un flux de travail en deux clics.
+
+00:02:21.740 --> 00:02:22.980
+Afficher le résumé, créer l'email.
+
+00:02:23.480 --> 00:02:25.300
+Une tâche de 30 minutes se transforme en 30 secondes.
+
+00:02:25.640 --> 00:02:26.740
+Et voici ce qui rend cela encore meilleur.
+
+00:02:27.280 --> 00:02:31.540
+Cela fonctionne dans D365FNO et depuis Outlook via le complément Co-pilot for Finance.
+
+00:02:32.240 --> 00:02:38.380
+Ainsi, si un client vous écrit directement, vous pouvez accéder à son compte, voir son solde dû et rédiger une réponse sans quitter votre boîte de réception.
+
+00:02:39.340 --> 00:02:42.260
+L'activité de recouvrement est synchronisée automatiquement vers RFP.
+
+00:02:42.760 --> 00:02:46.600
+Le recouvrement est majeur, mais il existe un autre domaine où Co-pilot fait gagner encore plus de temps masqué.
+
+00:02:47.960 --> 00:02:50.700
+Co-pilot pour la clôture financière et le reporting, clôture de fin de mois.
+
+00:02:51.560 --> 00:02:52.840
+Toutes les équipes financières connaissent ce rythme.
+
+00:02:53.520 --> 00:02:55.640
+Rapprocher, ajuster, valider, rapporter, recommencer.
+
+00:02:56.200 --> 00:02:58.900
+C'est la même danse chaque mois et cela consomme des jours de travail concentrés.
+
+00:02:59.760 --> 00:03:01.980
+Co-pilot peut vous aider à chaque étape de ce cycle de clôture.
+
+00:03:02.580 --> 00:03:03.140
+Alors, examinons-en.
+
+00:03:03.140 --> 00:03:06.100
+Avant même le début de la clôture, Co-pilot effectue une analyse préalable.
+
+00:03:06.620 --> 00:03:11.400
+Il identifie les activités manquantes, les transactions inhabituelles et les écritures incomplètes nécessitant votre attention.
+
+00:03:11.960 --> 00:03:14.720
+Imaginez cela comme vérifier votre cuisine avant de préparer un grand repas.
+
+00:03:15.400 --> 00:03:19.400
+Vous voulez savoir s'il manque des ingrédients avant d'être à moitié de la recette, pas après.
+
+00:03:20.220 --> 00:03:22.780
+Pendant que vous effectuez la clôture, Co-pilot devient plus opérationnel.
+
+00:03:23.320 --> 00:03:26.520
+Il suggère des comptes d'écriture de journal et des descriptions basées sur vos modèles historiques.
+
+00:03:26.840 --> 00:03:30.520
+Ainsi, si vous enregistrez toujours les charges payées d'avance sur le même compte, Co-pilot l'apprend.
+
+00:03:30.780 --> 00:03:31.920
+Et le propose automatiquement.
+
+00:03:32.540 --> 00:03:33.400
+Et le propose automatiquement.
+
+00:03:33.660 --> 00:03:39.520
+Il signale aussi les écarts lors des rapprochements éléments non concordants, montants douteux, écritures inappropriées.
+
+00:03:40.240 --> 00:03:43.240
+Vous prenez toujours la décision finale, mais le travail de recherche est fait.
+
+00:03:43.820 --> 00:03:44.820
+Passons maintenant à la phase de révision.
+
+00:03:45.200 --> 00:03:46.360
+C'est là que Co-pilot brille vraiment.
+
+00:03:46.820 --> 00:03:50.740
+Il effectue une analyse des écarts et génère des explications en langage clair sur les états financiers.
+
+00:03:51.380 --> 00:03:52.240
+Voici un exemple concret.
+
+00:03:52.840 --> 00:03:55.720
+Vous examinez le compte de résultats mensuels et voyez un bon des charges d'exploitation.
+
+00:03:55.720 --> 00:04:00.900
+Au lieu de fouiller dans des feuilles de calcul pendant une heure, demander à Co-pilot explique l'écart des charges d'exploitation ce mois-ci.
+
+00:04:01.520 --> 00:04:04.200
+Il renvoie un résumé avec les trois causes principales et leur impact financier.
+
+00:04:04.960 --> 00:04:06.520
+Peut-être s'agit-il d'honoraires de conseils ponctuels.
+
+00:04:06.820 --> 00:04:08.040
+Peut-être est-ce une hausse des coûts énergétiques.
+
+00:04:08.440 --> 00:04:09.840
+Peut-être est-ce une augmentation des prix des fournisseurs.
+
+00:04:10.060 --> 00:04:11.780
+Vous obtenez la réponse en quelques secondes, pas en quelques-uns.
+
+00:04:12.080 --> 00:04:13.740
+Soyons clairs sur ce que Co-pilot ne fait pas ici.
+
+00:04:14.420 --> 00:04:15.500
+Il ne remplace pas votre jugement.
+
+00:04:16.020 --> 00:04:19.860
+Vous devez toujours examiner l'explication, valider les chiffres et décider des mesures à prendre.
+
+00:04:19.860 --> 00:04:24.440
+Ce que Co-pilot remplace, c'est la phase manuelle de collecte où vous ouvrez cinq rapports différents,
+
+00:04:24.600 --> 00:04:28.300
+exporter des données, créer des tableaux croisés dynamiques et tenter de reconstituer une histoire.
+
+00:04:29.100 --> 00:04:30.880
+C'est cette partie qui prend du temps et épuise votre énergie.
+
+00:04:31.420 --> 00:04:33.980
+Co-pilot s'en charge pour que vous puissiez vous concentrer sur l'analyse proprement dite.
+
+00:04:34.620 --> 00:04:35.880
+La clôture concerne le mois écoulé.
+
+00:04:36.440 --> 00:04:38.040
+Mais qu'en est-il de ce qui arrive ?
+
+00:04:38.040 --> 00:04:39.540
+Co-pilot pour la trésorerie et les prévisions.
+
+00:04:40.020 --> 00:04:42.260
+Pourquoi les prévisions de trésorerie sont-elles si difficiles ?
+
+00:04:42.260 --> 00:04:43.140
+Pensez à l'ancienne méthode.
+
+00:04:43.600 --> 00:04:46.780
+Vous exportez des données, créez des modèles dans Excel, faites des hypothèses sur les paiements clients,
+
+00:04:46.880 --> 00:04:48.420
+puis espérez être proche de la réalité.
+
+00:04:48.840 --> 00:04:49.400
+C'est réactif.
+
+00:04:49.720 --> 00:04:51.480
+Vous regardez le passé pour deviner l'avenir ?
+
+00:04:51.480 --> 00:04:52.460
+Co-pilot fonctionne différemment.
+
+00:04:52.780 --> 00:04:57.920
+Il analyse ce qui est déjà dans votre système, les transactions en cours, les modèles récurrents, la saisonnalité.
+
+00:04:58.200 --> 00:05:01.160
+Il utilise vos données réelles pour prédire les entrées et sorties de fonds.
+
+00:05:01.160 --> 00:05:02.600
+Vous ne construisez pas un modèle à partir de zéro.
+
+00:05:02.920 --> 00:05:04.520
+La prévision provient de vos chiffres réels.
+
+00:05:04.880 --> 00:05:05.940
+Passons maintenant à la partie pratique.
+
+00:05:06.580 --> 00:05:10.100
+Co-pilot signale les écarts rapidement, les retards de paiement inhabituels, les pics de coût imprévus.
+
+00:05:10.100 --> 00:05:13.300
+Un client qui paye d'habitude sous 30 jours n'a pas payé après 45 jours.
+
+00:05:13.800 --> 00:05:15.840
+Co-pilot repère la tendance et attire votre attention dessus.
+
+00:05:16.420 --> 00:05:19.260
+Vous voyez les problèmes de trésorerie au moment où ils surviennent pas à la fin du mois, pas à la fin du mois.
+
+00:05:19.640 --> 00:05:21.400
+Considérez cela comme un radar financier pour votre entreprise.
+
+00:05:21.780 --> 00:05:23.000
+Il repère les problèmes avant qu'ils n'arrivent.
+
+00:05:23.580 --> 00:05:24.780
+Et ensuite la planification de scénario.
+
+00:05:25.200 --> 00:05:26.980
+C'est là que Co-pilot devient un outil d'aide à la décision.
+
+00:05:27.660 --> 00:05:31.200
+Vous pouvez demander, que se passe-t-il si nous ralentissons les encaissements de 10 jours ?
+
+00:05:31.200 --> 00:05:34.060
+Ou que se passe-t-il si nous accélérons les paiements aux fournisseurs principaux ?
+
+00:05:34.060 --> 00:05:36.140
+Co-pilot analyse les données et montre l'impact.
+
+00:05:36.140 --> 00:05:39.700
+Vous testez différentes hypothèses sans créer de modèles séparés pour chacune.
+
+00:05:40.380 --> 00:05:41.560
+Cela transforme le rôle de la finance.
+
+00:05:42.220 --> 00:05:44.940
+Au lieu de passer du temps à expliquer ce qui est arrivé, vous réfléchissez à ce qui pourrait arriver.
+
+00:05:45.700 --> 00:05:48.040
+C'est un passage du reporting réactif aux décisions proactives.
+
+00:05:48.820 --> 00:05:50.100
+Voilà Co-pilot dans FNO.
+
+00:05:51.060 --> 00:05:53.460
+Mais Co-pilot accède aussi à votre boîte de réception et vos feuilles de calcul.
+
+00:05:54.320 --> 00:05:56.380
+Co-pilot pour la gestion des notes de frais et la comptabilité fournisseur.
+
+00:05:56.640 --> 00:05:57.500
+Parlons des notes de frais.
+
+00:05:58.060 --> 00:05:58.700
+Vous connaissez la routine.
+
+00:05:59.160 --> 00:06:00.260
+Quelqu'un vous donne un reçu froissé.
+
+00:06:00.260 --> 00:06:02.440
+Vous saisissez le montant, la date, le marchand et la catégorie.
+
+00:06:02.580 --> 00:06:07.020
+Puis vérifiez la politique et envoyez, pour approbation, chaque reçu à chaque fois.
+
+00:06:07.860 --> 00:06:10.980
+Co-pilot utilise la reconnaissance optique de caractère ECR, scanner reçu.
+
+00:06:11.480 --> 00:06:14.060
+Co-pilot extrait automatiquement le montant, la date et le marchand.
+
+00:06:14.740 --> 00:06:17.040
+Il génère une note de frais conforme sans que vous ayez attapé une seule ligne.
+
+00:06:17.640 --> 00:06:19.480
+Ensuite, il vérifie chaque ligne par rapport à la politique de l'entreprise.
+
+00:06:19.700 --> 00:06:20.400
+Il signale tout ce qui est normal.
+
+00:06:20.660 --> 00:06:22.040
+Un repas dépassant la limite quotidienne.
+
+00:06:22.200 --> 00:06:23.540
+Des frais d'hôtel nécessitant une pré-approbation.
+
+00:06:23.800 --> 00:06:24.540
+Il les détecte dès le début.
+
+00:06:25.000 --> 00:06:26.300
+Pour la comptabilité fournisseur, c'est similaire.
+
+00:06:26.800 --> 00:06:27.420
+Les factures arrivent.
+
+00:06:27.420 --> 00:06:32.020
+Co-pilot aide à les intégrer, suggère des codes comptables et déclenche les flux d'approbation appropriés.
+
+00:06:32.500 --> 00:06:34.780
+Vous n'avez pas besoin de coder manuellement chaque facture ni de la cheminée ?
+
+00:06:34.780 --> 00:06:35.860
+Co-pilot gère la configuration.
+
+00:06:36.540 --> 00:06:38.120
+Spécialiste comptable examine et confirme.
+
+00:06:38.620 --> 00:06:39.500
+Voici un scénario courant.
+
+00:06:40.120 --> 00:06:42.220
+Fournisseur envoie par e-mail une demande de modification d'un mont de command.
+
+00:06:42.440 --> 00:06:45.220
+Peut-être qu'il ne peut fournir que 50 unités au lieu de 30 ou que le prix a changé.
+
+00:06:46.100 --> 00:06:48.600
+Dans l'ancien flux, quelqu'un devait ouvrir le bon, mettre à jour la ligne,
+
+00:06:48.600 --> 00:06:50.960
+leur envoyer pour approbation et répondre au fournisseur.
+
+00:06:51.940 --> 00:06:53.660
+Avec Co-pilot, le système détecte le changement.
+
+00:06:54.240 --> 00:06:55.540
+Il affiche la différence côte à côte.
+
+00:06:55.540 --> 00:06:56.700
+Il vous demande si vous souhaitez l'appliquer.
+
+00:06:57.160 --> 00:06:58.380
+Vous examinez, vous cliquez sur confirme.
+
+00:06:58.680 --> 00:06:59.640
+Co-pilot s'occupe du reste.
+
+00:07:00.000 --> 00:07:00.840
+Le bon de commande est mis à jour.
+
+00:07:01.080 --> 00:07:02.140
+Le flux d'approbation est déclenché.
+
+00:07:02.500 --> 00:07:03.460
+Le fournisseur est averti.
+
+00:07:03.960 --> 00:07:06.660
+Cela signifie moins de saisie manuelle et moins d'erreur de frappe.
+
+00:07:07.220 --> 00:07:08.780
+Le comptable continue d'examiner et d'approuver.
+
+00:07:09.720 --> 00:07:12.540
+Mais la partie mécanique, la saisie, l'acheminement et la vérification des règles
+
+00:07:12.540 --> 00:07:13.720
+est traitée automatiquement.
+
+00:07:14.540 --> 00:07:15.540
+Tout cela semble génial.
+
+00:07:15.700 --> 00:07:17.780
+Mais il y a des prérequis à connaître avant de commencer.
+
+00:07:18.920 --> 00:07:20.180
+Ce dont vous avez besoin pour faire fonctionner Co-pilot.
+
+00:07:20.180 --> 00:07:24.620
+Parlons donc de ce qu'il faut réellement pour exécuter Co-pilot dans D365FNO.
+
+00:07:25.240 --> 00:07:27.360
+Je ne vais pas vous submerger de spécifications techniques.
+
+00:07:27.520 --> 00:07:29.680
+Mais il vous faut les bases pour éviter de vous heurter à un mur en cours de projet.
+
+00:07:30.360 --> 00:07:34.400
+Tout d'abord, votre version de D365FNO doit être 10.0.8 ou supérieure.
+
+00:07:34.760 --> 00:07:36.480
+C'est un obstacle majeur si vous utilisez une version intérieure.
+
+00:07:36.980 --> 00:07:37.900
+Aucune solution de contournement.
+
+00:07:39.400 --> 00:07:42.520
+Ensuite, l'intégration de Power Platform et de Dataverse doit être activée.
+
+00:07:43.440 --> 00:07:45.220
+C'est ainsi que Co-pilot accède à vos données FMO.
+
+00:07:46.040 --> 00:07:48.680
+Considérez Dataverse comme le pont entre votre ERP et la couche d'IA.
+
+00:07:49.360 --> 00:07:51.040
+Sans pont, Co-pilot n'a rien sur quoi travailler.
+
+00:07:51.560 --> 00:07:54.180
+Devez activer des fonctionnalités spécifiques dans la gestion des fonctionnalités.
+
+00:07:54.560 --> 00:07:57.280
+L'espace de travail de recouvrement et les résumés IA ne sont pas activés par défaut.
+
+00:07:57.520 --> 00:07:58.660
+Vous devez entrer et actionner ces commutations.
+
+00:07:58.960 --> 00:07:59.720
+Maintenant, les licences.
+
+00:08:00.140 --> 00:08:01.680
+C'est le point qui surprend souvent les gens.
+
+00:08:02.300 --> 00:08:07.520
+Co-pilot nécessite une licence Microsoft 365 Co-pilot en plus de votre licence D365 existante.
+
+00:08:08.120 --> 00:08:08.720
+C'est un coût distinct.
+
+00:08:09.200 --> 00:08:11.200
+Vous devez en tenir compte dans votre planification dès le premier jour.
+
+00:08:11.200 --> 00:08:13.280
+Et votre environnement doit être hébergé dans le cloud.
+
+00:08:13.720 --> 00:08:14.960
+Les déploiements sur site ne sont pas éligibles.
+
+00:08:15.460 --> 00:08:19.100
+Si vous êtes toujours sur site, vous devrez d'abord migrer vers le cloud pour que Co-pilot devienne une option.
+
+00:08:19.640 --> 00:08:21.020
+Je ne liste pas ces points pour vous décourager.
+
+00:08:21.480 --> 00:08:22.980
+Je les liste pour que vous sachiez à quoi vous attendre.
+
+00:08:23.500 --> 00:08:24.960
+Ces exigences sont claires et réalisables.
+
+00:08:25.260 --> 00:08:25.980
+Mais elles sont réelles.
+
+00:08:26.280 --> 00:08:28.280
+Et les ignorer mènent à des frustrations par la suite.
+
+00:08:28.880 --> 00:08:31.000
+Une fois que Co-pilot opérationnel, la vraie question devient
+
+00:08:31.000 --> 00:08:32.840
+comment amener votre équipe à l'utiliser réellement.
+
+00:08:33.880 --> 00:08:34.980
+Inciter les gens à vraiment l'utiliser.
+
+00:08:35.480 --> 00:08:36.520
+Voici un chiffre sur lequel réfléchir.
+
+00:08:37.020 --> 00:08:39.940
+Dans les organisations qui déploient Microsoft 365 Co-pilot,
+
+00:08:39.940 --> 00:08:44.420
+seuls 35% des utilisateurs sous licence l'utilisent activement sans un plan d'adoption réfléchi.
+
+00:08:45.580 --> 00:08:48.540
+Cela signifie qu'environ 2 personnes sur 3 ayant un accès ne l'ouvrent jamais.
+
+00:08:49.100 --> 00:08:51.100
+Elles ont une licence, elles paient pour, et elles ne l'utilisent jamais.
+
+00:08:51.920 --> 00:08:55.700
+L'échec le plus courant consiste à activer Co-pilot sans l'aligner sur vos processus existants.
+
+00:08:56.620 --> 00:08:57.400
+Voici la pure vérité.
+
+00:08:57.900 --> 00:08:59.980
+Co-pilot amplifie aussi bien les bons processus que les mauvais.
+
+00:09:00.680 --> 00:09:03.560
+Si votre flux de travail de recouvrement est chaotique, Co-pilot ne le corrigera pas.
+
+00:09:03.740 --> 00:09:05.640
+Il vous aidera simplement à générer des emails chaotiques plus rapidement.
+
+00:09:05.640 --> 00:09:09.200
+Vous devez d'abord assainir vos processus, puis laisser Co-pilot les accélérer.
+
+00:09:09.920 --> 00:09:10.920
+Alors qu'est-ce qui fonctionne vraiment ?
+
+00:09:10.920 --> 00:09:12.120
+Commencez par des projets pilotes ciblés.
+
+00:09:12.580 --> 00:09:14.260
+Choisissez 2 ou 3 flux de travail à fort impact,
+
+00:09:14.380 --> 00:09:17.000
+comme le recouvrement, la clôture mensuelle ou le traitement des notes de frais,
+
+00:09:17.220 --> 00:09:19.120
+et déployez Co-pilot auprès de ses équipes en premier.
+
+00:09:19.760 --> 00:09:20.880
+Ne donnez pas accès à tout le monde en même temps.
+
+00:09:21.460 --> 00:09:22.800
+Commencez petit, prouvez la valeur, puis étendez.
+
+00:09:23.380 --> 00:09:25.200
+Formez vos équipes sur des scénarios, pas sur des fonctionnalités.
+
+00:09:25.760 --> 00:09:28.360
+N'organisez pas une session de formation intitulée « Ce que Co-pilot peut faire ».
+
+00:09:28.360 --> 00:09:30.640
+Organisez-en une intitulée « Comment clôturer le moins en deux fois moins ».
+
+00:09:30.640 --> 00:09:33.780
+Montrez aux gens exactement comment Co-pilot s'intègre dans leur quotidien,
+
+00:09:34.140 --> 00:09:34.820
+ce qui marque les espoirs.
+
+00:09:35.100 --> 00:09:37.200
+Et attribuez les licences à des équipes entières, pas à des individus.
+
+00:09:37.680 --> 00:09:39.500
+Quand une équipe apprend ensemble et partage des astuces,
+
+00:09:39.580 --> 00:09:41.800
+compare les résultats et s'encourage mutuellement à l'utiliser davantage,
+
+00:09:42.140 --> 00:09:44.200
+l'apprentissage par les pairs favorise bien mieux l'adoption
+
+00:09:44.200 --> 00:09:45.380
+que n'importe quelle session de formation.
+
+00:09:46.240 --> 00:09:47.700
+Rassemblons tout cela dans une vue d'ensemble.
+
+00:09:48.660 --> 00:09:50.080
+La vue d'ensemble, comment tout cela est connecté.
+
+00:09:50.740 --> 00:09:51.980
+Voici ce qu'il faut savoir sur Co-pilot.
+
+00:09:51.980 --> 00:09:54.580
+Ce n'est pas un interrupteur que l'on bascule pour que tout change soudainement.
+
+00:09:55.260 --> 00:09:59.060
+C'est un ensemble d'assistants répartis dans FNO, Excel, Outlook et Teams.
+
+00:09:59.860 --> 00:10:01.140
+Chacun d'eux effectue une tâche spécifique.
+
+00:10:02.100 --> 00:10:04.320
+Recouvrement dans FNO, notes de frais via Outlook,
+
+00:10:04.520 --> 00:10:05.860
+analyse de trésorerie dans Excel.
+
+00:10:06.720 --> 00:10:08.640
+Des outils différents mais conçus pour fonctionner ensemble.
+
+00:10:09.100 --> 00:10:11.320
+C'est là que réside la véritable puissance, l'intégration.
+
+00:10:11.880 --> 00:10:12.800
+Imaginez une séquence typique.
+
+00:10:13.260 --> 00:10:16.720
+Vous êtes dans FNO et Co-pilot vous donne un résumé du solde en souffrance d'un client.
+
+00:10:17.820 --> 00:10:20.060
+De là vous passez dans Outlook pour rédiger un email de rappel
+
+00:10:20.060 --> 00:10:22.560
+et Co-pilot récupère ces mêmes données et l'écrit pour vous.
+
+00:10:23.000 --> 00:10:26.240
+Votre client répond « Les données des tiges sont mises à jour directement dans Outlook
+
+00:10:26.240 --> 00:10:28.320
+et le changement se synchronise automatiquement avec FNO.
+
+00:10:28.320 --> 00:10:31.180
+Vous n'avez jamais quitté votre flux de travail, les données vous en suivent. »
+
+00:10:31.180 --> 00:10:33.060
+Voici ce que les équipes financières doivent vraiment comprendre.
+
+00:10:33.520 --> 00:10:35.360
+Co-pilot respecte vos rôles de sécurité existants.
+
+00:10:35.980 --> 00:10:38.180
+Il ne montre que ce que l'utilisateur est déjà autorisé à voir.
+
+00:10:38.860 --> 00:10:40.460
+Les agents de recouvrement voient leurs propres clients,
+
+00:10:40.680 --> 00:10:41.900
+les contrôleurs voient le grand livre complet,
+
+00:10:42.040 --> 00:10:43.740
+les comptables fournisseurs voient les factures des vendeurs.
+
+00:10:44.620 --> 00:10:45.960
+Co-pilot ne crée aucun nouvel accès.
+
+00:10:46.620 --> 00:10:48.440
+Il fonctionne dans les limites que vous avez déjà définies.
+
+00:10:49.120 --> 00:10:51.740
+Parlons maintenant de ce que cela signifie concrètement pour ceux qui travaillent.
+
+00:10:52.120 --> 00:10:54.140
+Co-pilot ne remplace pas les professionnels de la finance.
+
+00:10:54.620 --> 00:10:56.100
+Il ne saisit pas d'écriture comptable de lui-même.
+
+00:10:56.100 --> 00:10:57.360
+Il n'approuve pas les paiements.
+
+00:10:57.840 --> 00:10:59.880
+Il automatise les tâches répétitives, les résumés,
+
+00:11:00.140 --> 00:11:02.700
+la rédaction et la collecte de données pour que l'humain se concentre sur le jugement,
+
+00:11:02.960 --> 00:11:04.420
+la négociation et la stratégie.
+
+00:11:04.980 --> 00:11:07.340
+C'est toujours au chargé de recouvrement de décider comment gérer un client difficile.
+
+00:11:08.060 --> 00:11:10.000
+Le comptable examine les écarts et choisit la bonne action
+
+00:11:10.000 --> 00:11:11.720
+tandis que le contrôleur valide la clôture.
+
+00:11:12.520 --> 00:11:14.380
+Co-pilot s'occupe de la préparation, vous prenez les décisions.
+
+00:11:15.140 --> 00:11:15.860
+C'est là tout le changement.
+
+00:11:16.300 --> 00:11:19.480
+Les équipes financières ont toujours su répondre à une question, que s'est-il passé ?
+
+00:11:19.480 --> 00:11:21.160
+Co-pilot les aide à passer une question plus pertinente.
+
+00:11:21.580 --> 00:11:23.060
+Que devons-nous faire à ce sujet ?
+
+00:11:23.060 --> 00:11:24.900
+Voici donc Co-pilot dans D365F.
+
+00:11:25.240 --> 00:11:26.540
+Pas un outil supplémentaire à apprendre.
+
+00:11:27.200 --> 00:11:30.380
+Juste des assistants IA intégrés au flux de travail que les équipes financières utilisent déjà.
+
+00:11:31.180 --> 00:11:33.600
+Recouvrement, clôture, gestion des dépenses, reporting, prévision.
+
+00:11:34.640 --> 00:11:37.820
+Si vous travaillez dans la finance et que votre entreprise utilise D365FNO,
+
+00:11:38.220 --> 00:11:39.600
+voici votre point de départ idéal.
+
+00:11:40.240 --> 00:11:42.040
+Commencez par l'espace de travail de recouvrement cette semaine.
+
+00:11:42.220 --> 00:11:42.960
+Ouvrez une fiche client.
+
+00:11:43.500 --> 00:11:44.440
+Lisez le résumé, je n'ai pas envie.
+
+00:11:44.740 --> 00:11:45.200
+Rédigez un email.
+
+00:11:45.580 --> 00:11:46.180
+Voyez ce que cela donne.
+
+00:11:46.180 --> 00:11:48.520
+Abonnez-vous pour plus de D365 en toute simplicité.
+
+00:11:48.640 --> 00:11:50.200
+Et laissez un commentaire si vous avez appris quelque chose aujourd'hui.
+
+00:11:52.530 --> 00:11:52.850
+Cliquez.

@@ -1,0 +1,763 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:03.840
+Un cliente invia un'email per un ordine rotto, poi chiama il giorno dopo, poi apre una chat
+
+00:00:03.840 --> 00:00:07.440
+perché nessuno sembra sapere cosa sia successo e ripetono la stessa storia ogni volta mentre
+
+00:00:07.440 --> 00:00:10.480
+il tuo team di supporto cerca tra inbox, note e strumenti separati.
+
+00:00:11.340 --> 00:00:14.120
+È esattamente questo che risolve la gestione dei casi di Dynamics 365.
+
+00:00:15.220 --> 00:00:18.860
+Immagina un caso come una cartella etichettata in un ufficio affollato dove ogni parte di
+
+00:00:18.860 --> 00:00:21.600
+un problema del cliente finisce in quella cartella dalla prima domanda alla risposta
+
+00:00:21.600 --> 00:00:21.920
+finale.
+
+00:00:22.360 --> 00:00:27.180
+Io sono Milko Peters di M365FM e in questa pilola di conoscenza vedremo come casi, routing,
+
+00:00:27.180 --> 00:00:30.680
+scadenze di risposta, articoli di supporto e chiusura si integrano tra loro.
+
+00:00:31.760 --> 00:00:33.660
+Cosa sia effettivamente un caso in 20 parole?
+
+00:00:34.340 --> 00:00:35.640
+Quindi cos'è esattamente un caso?
+
+00:00:36.060 --> 00:00:40.140
+Un caso, un record per un problema di un cliente che necessita di una risposta o di una soluzione,
+
+00:00:40.240 --> 00:00:43.500
+il problema potrebbe essere un prodotto danneggiato, una domanda di fatturazione, un problema di
+
+00:00:43.500 --> 00:00:45.320
+accesso, una richiesta di assistenza per un servizio.
+
+00:00:45.500 --> 00:00:48.280
+Ecco il punto, un cliente può avere diversi casi contemporaneamente.
+
+00:00:49.000 --> 00:00:52.340
+Un singolo cliente potrebbe chiedere informazioni su una fattura lunedì, segnalare un dispositivo
+
+00:00:52.340 --> 00:00:54.780
+guasto martedì e aver bisogno di aiuto per cambiare indirizzo venerdì.
+
+00:00:54.780 --> 00:00:58.980
+Sono problemi separati, quindi Dynamics 365 vi mantiene al record di casi distinti invece
+
+00:00:58.980 --> 00:01:01.360
+di accumulare ogni conversazione in un unico thread confuso.
+
+00:01:02.120 --> 00:01:04.940
+Quando un agente crea un caso lo collega direttamente al cliente.
+
+00:01:05.340 --> 00:01:08.960
+Quel cliente può essere un contatto intendendo una persona fisica oppure un account intendendo
+
+00:01:08.960 --> 00:01:10.000
+l'azienda per cui lavora.
+
+00:01:10.660 --> 00:01:14.360
+Quindi se Jamie di Northwind Traders segnala un problema il caso può puntare sia a Jamie
+
+00:01:14.360 --> 00:01:18.020
+che all'azienda e chiunque apre il record può vedere chi ha bisogno di aiuto e a quale
+
+00:01:18.020 --> 00:01:19.440
+organizzazione appartiene il problema.
+
+00:01:19.440 --> 00:01:25.000
+Il caso necessita anche di una chiara descrizione del problema solitamente iniziando con un titolo
+
+00:01:25.000 --> 00:01:29.300
+come la stampante si ferma dopo l'aggiornamento software o cliente ha debitato due volte per
+
+00:01:29.300 --> 00:01:33.440
+il piano annuale e quel titolo aiuta le persone a scansionare un elenco di casi aperti senza
+
+00:01:33.440 --> 00:01:34.480
+aprire ogni record.
+
+00:01:35.800 --> 00:01:37.440
+Sotto quel titolo l'agente aggiunge i dettagli.
+
+00:01:37.820 --> 00:01:38.380
+Cosa è successo?
+
+00:01:38.540 --> 00:01:39.060
+Quando è iniziato?
+
+00:01:39.360 --> 00:01:40.460
+Cosa ha già provato il cliente?
+
+00:01:40.960 --> 00:01:41.820
+Quale prodotto è coinvolto?
+
+00:01:42.180 --> 00:01:43.240
+E se si tratta di una domanda?
+
+00:01:43.440 --> 00:01:43.900
+Una richiesta?
+
+00:01:43.960 --> 00:01:44.340
+Un guasto?
+
+00:01:44.960 --> 00:01:47.820
+Questi dettagli trasformano un messaggio vago in un lavoro che qualcuno può prendere in carico
+
+00:01:47.820 --> 00:01:48.260
+e risolvere.
+
+00:01:48.960 --> 00:01:49.800
+Analizziamolo più a fondo.
+
+00:01:50.580 --> 00:01:53.300
+Un caso può contenere oggetto, prodotto, priorità e tipo di caso.
+
+00:01:53.880 --> 00:01:57.760
+L'oggetto raggruppa il problema in un'area come fatturazione o supporto tecnico, il prodotto
+
+00:01:57.760 --> 00:02:01.900
+identifica cosa usa il cliente, la priorità, indica al team quanto rapidamente intervenire.
+
+00:02:02.400 --> 00:02:05.660
+Il tipo di caso offre un ulteriore metodo per smistare il lavoro in base al processo di
+
+00:02:05.660 --> 00:02:06.200
+supporto.
+
+00:02:07.520 --> 00:02:10.580
+Nessuno di questi campi risolve da solo il problema dei clienti ma aiutano il team di
+
+00:02:10.580 --> 00:02:14.660
+supporto a visualizzare il lavoro chiaramente, specialmente quando arrivano centinaia di casi da
+
+00:02:14.660 --> 00:02:19.160
+clienti diversi. Un team che gestisce un grave disservizio non dovrebbe dover cercare tra le
+
+00:02:19.160 --> 00:02:23.840
+domande generiche per trovarlo. Ora, un caso non è solo un modulo che qualcuno compila e
+
+00:02:23.840 --> 00:02:28.500
+dimentica. Diventa il registro di lavoro per l'intera conversazione. Le mail possono essere
+
+00:02:28.500 --> 00:02:32.260
+collegate al caso, le telefonate possono apparire lì e un agente può aggiungere note dopo una
+
+00:02:32.260 --> 00:02:36.880
+chat, impostare un'attività di follow up o registrare un appuntamento. Ogni attività rimane
+
+00:02:36.880 --> 00:02:41.000
+legata allo stesso problema del cliente, così la persona successiva non deve ricostruire la storia
+
+00:02:41.000 --> 00:02:45.560
+da zero. Immagina che un agente inizia a lavorare al mattino e poi passi il caso a uno specialista
+
+00:02:45.560 --> 00:02:49.880
+di prodotto dopo pranzo. Senza il registro del caso, lo specialista potrebbe ricevere solo un
+
+00:02:49.880 --> 00:02:54.860
+breve messaggio come, oh, puoi dare un'occhiata a questo? Che non è sufficiente. Con il registro
+
+00:02:54.860 --> 00:02:58.080
+del caso può vedere il problema originale, i dettagli del cliente, cosa è successo durante
+
+00:02:58.080 --> 00:03:01.620
+la chiamata e cosa ha già verificato il primo agente. Questo offre un passaggio di consegne
+
+00:03:01.620 --> 00:03:06.340
+a modulo. Dynamics 365 mantiene il caso in uno stato chiaro mentre avanza nel processo di
+
+00:03:06.340 --> 00:03:10.460
+supporto. Può rimanere attivo mentre il team indaga e, una volta che il team risolve
+
+00:03:10.460 --> 00:03:14.700
+il problema o fornisce la risposta finale, lo chiude. Se la richiesta non richiede più
+
+00:03:14.700 --> 00:03:18.960
+lavoro, magari perché è arrivata per errore o il cliente l'ha ritirata, il team può annullarla.
+
+00:03:19.760 --> 00:03:25.320
+Attivo, risolto e annullato. Questi tre stati offrono al team una visione condivisa dello stato
+
+00:03:25.320 --> 00:03:30.740
+di ogni problema, così nessuno deve indovinare se un caso necessiti ancora di attenzione e i manager
+
+00:03:30.740 --> 00:03:37.080
+non devono trattare vecchi lavori conclusi come problemi recenti. Un singolo registro ti offre
+
+00:03:37.080 --> 00:03:41.620
+controllo e la cronologia completa del cliente fornisce all'agente il contesto. La storia del
+
+00:03:41.620 --> 00:03:46.320
+cliente di fra il caso. Un caso ti dice cosa deve essere riparato. Il registro del cliente ti dice
+
+00:03:46.320 --> 00:03:51.380
+cosa porta a questo modo. Quando un agente apre un caso in Dynamics 365 Customer Service può
+
+00:03:51.380 --> 00:03:56.420
+guardare oltre l'ultimo messaggio. Vede il quadro generale, i casi precedenti, le mail passate, i prodotti
+
+00:03:56.420 --> 00:04:02.120
+collegati al cliente e la loro cronologia di supporto. Il contesto cambia la conversazione. Perché il contesto
+
+00:04:02.120 --> 00:04:06.320
+è importante? Immagina che un cliente segnale un guasto al dispositivo. Se l'agente vede solo il
+
+00:04:06.320 --> 00:04:11.440
+messaggio di oggi potrebbe iniziare con domande di base. Che modello è? Quando è iniziato? L'ha
+
+00:04:11.440 --> 00:04:15.800
+riavviato? Ma il cliente ha già contattato l'assistenza due volte questa settimana. Il primo
+
+00:04:15.800 --> 00:04:18.800
+agente ha inviato i passaggi per la risoluzione dei problemi e il secondo ha organizzato la sostituzione
+
+00:04:18.800 --> 00:04:22.180
+di un compito. Un terzo agente che vede quello storico non chiederà al cliente di ricominciare
+
+00:04:22.180 --> 00:04:26.580
+da cap. Invece dirà vedo che ha già provato quei passaggi e che il pezzo sostitutivo non ha risolto
+
+00:04:26.580 --> 00:04:32.920
+il problema. Proviamo con qualcos'altro. È molto diverso da un può rispiegarmi il problema? Questo viene spesso
+
+00:04:32.920 --> 00:04:37.820
+chiamato visione a 360 gradi e clic. Il nome sono sofisticato ma è semplice. Significa che l'agente
+
+00:04:37.820 --> 00:04:42.240
+vede il cliente da più angolazioni non solo da un singolo messaggio isolato. L'agente vede la
+
+00:04:42.240 --> 00:04:46.300
+persona, l'azienda, le precedenti richieste di supporto, le conversazioni passate e i prodotti
+
+00:04:46.300 --> 00:04:50.240
+ad essi collegati. Per un team di supporto questo sostituisce le congetture con un chiaro punto di
+
+00:04:50.240 --> 00:04:54.560
+partenza. Ora non tutti i clienti ricevono lo stesso tipo di supporto. Un cliente potrebbe aver
+
+00:04:54.560 --> 00:04:58.840
+acquistato una garanzia, la sua azienda potrebbe pagare per un numero fisso di ore di supporto o potrebbe
+
+00:04:58.840 --> 00:05:02.320
+avere un contratto che consente un certo numero di casi o un supporto premium con assistenza più
+
+00:05:02.320 --> 00:05:08.080
+rapida. Nella Mix 365 tiene traccia di tutto questo tramite i diritti. Un diritto è l'accordo
+
+00:05:08.080 --> 00:05:12.540
+di supporto del cliente all'interno del sistema. Pensatelo come le condizioni di servizio associate
+
+00:05:12.540 --> 00:05:16.300
+al loro account. Prima che un agente prometta l'intervento di un tecnico o inizia un lavoro
+
+00:05:16.300 --> 00:05:21.720
+a pagamento verifica quale supporto è applicabile. Ciò evita spiacevoli sorprese. Ad esempio un cliente
+
+00:05:21.720 --> 00:05:24.900
+potrebbe avere ancora la copertura in garanzia per un prodotto difettore. Caso può seguire quel
+
+00:05:24.900 --> 00:05:29.320
+percorso. Un altro cliente potrebbe aver esaurito tutte le sue ore di supporto. L'agente lo vede prima di
+
+00:05:29.320 --> 00:05:33.060
+impegnarsi in un lavoro fuori contratto. Aiuta anche il team di supporto a trattare i clienti
+
+00:05:33.060 --> 00:05:37.300
+in modo evo. L'agente non deve cercare tra vecchi contratti o chiedere a un altro reparto. Le
+
+00:05:37.300 --> 00:05:40.260
+condizioni di supporto si trovano insieme alle informazioni del cliente proprio dove la gente
+
+00:05:40.260 --> 00:05:43.700
+può trovare. Poi c'è la base di conoscenza. I team di supporto risolvono gli stessi problemi
+
+00:05:43.700 --> 00:05:47.400
+più o più volte. Reimpostazione da password, distruzione di configurazione, un errore noto
+
+00:05:47.400 --> 00:05:50.440
+dopo un aggiornamento, una domanda di fatturazione con una risposta standard. Un articolo
+
+00:05:50.440 --> 00:05:54.220
+del knowledge base archiva quella risposta in no. All'interno dell'area di lavoro del servizio un agente
+
+00:05:54.220 --> 00:05:57.660
+può cercare articoli mentre lavora su un caso. Un articolo può includere una spiegazione
+
+00:05:57.660 --> 00:06:01.740
+semplice dei passaggi, uno screenshot o le verifiche esatte che il team dovrebbe completare.
+
+00:06:02.080 --> 00:06:06.060
+Invece di far scrivere a ogni agente la propria versione a memoria usano una risposta condivisa
+
+00:06:06.060 --> 00:06:09.700
+che il team ha revisionato. Ciò mantiene il supporto coerente. Aiuta anche gli agenti più
+
+00:06:09.700 --> 00:06:14.140
+recenti. Non servono anni di esperienza per gestire bene i problemi comuni perché le soluzioni note
+
+00:06:14.140 --> 00:06:18.420
+del team sono disponibili quando servono. I riepiloghi dei casi di Copilot aiutano con un altro
+
+00:06:18.420 --> 00:06:22.540
+problema comune, le lunghe cronogie dei casi. Un caso può accumulare molte mail note e aggiornamenti
+
+00:06:22.540 --> 00:06:26.680
+nel tempo. Leggeri tutti richiede tempo specialmente dopo un passaggio di conseglie. Copilot crea un breve
+
+00:06:26.680 --> 00:06:31.580
+riepilogo che raccoglie titolo del caso, cliente, oggetto, prodotto, priorità, tipo di caso,
+
+00:06:31.700 --> 00:06:36.240
+descrizione e attività recente. Un rapid briefing prima che l'agente inizia a lavorare. L'agente
+
+00:06:36.240 --> 00:06:40.180
+controlla comunque il record e usa il proprio giudizio, ma comprende la situazione più velocemente.
+
+00:06:40.640 --> 00:06:45.140
+Questo aiuta quando il cliente è in attesa e il caso è passato attraverso diverse mani. Una volta
+
+00:06:45.140 --> 00:06:51.280
+che l'agente comprende il cliente e il problema, il caso deve arrivare alla persona giusta. Dalla presa
+
+00:06:51.280 --> 00:06:55.460
+in carico alla corretta. Un cliente può chiedere aiuto in molti modi. E-mail, telefonata,
+
+00:06:55.460 --> 00:06:59.700
+chat, social media, portale self-service. Il canale cambia, ma il team di supporto ha comunque
+
+00:06:59.700 --> 00:07:04.460
+bisogno di un unico posto chiaro per gestire la richiesta. Dynamics 365 può creare casi da quelle
+
+00:07:04.460 --> 00:07:09.240
+conversazioni quando la configurazione include regole di creazione record. Pensa a un'email che arriva
+
+00:07:09.240 --> 00:07:13.180
+a un indirizzo di supporto condiviso. Invece di lasciarla in una casella di posta finché qualcuno
+
+00:07:13.180 --> 00:07:17.380
+non la nota, una regola trasforma quell'email in un caso. Il messaggio diventa l'inizio del lavoro
+
+00:07:17.380 --> 00:07:21.980
+all'interno del servizio cliente. Ciò riduce la copia manuale. Stessa idea si applica ad altri canali
+
+00:07:21.980 --> 00:07:26.820
+connessi. Il team sceglie quali messaggi creano un nuovo caso e quali appartengono a un esistente.
+
+00:07:27.620 --> 00:07:30.900
+Una risposta a un problema aperto rimane con quel problema. Una nuova domanda ottiene il proprio
+
+00:07:30.900 --> 00:07:34.460
+caso. Poi il caso ha bisogno di una collocazione mentre qualcuno se ne suona. Quella collocazione
+
+00:07:34.460 --> 00:07:38.320
+ha spesso una coda. Una coda è un'area di lavoro condivisa per un team. Non è la posta in arrivo di
+
+00:07:38.320 --> 00:07:42.980
+un singolo agente e non appartiene a chi ha visto la richiesta. Invece offre a tutto il team un posto dove
+
+00:07:42.980 --> 00:07:46.840
+vedere il lavoro in attesa di attenzione. Immagina un'azienda con un team di fatturazione, un team di
+
+00:07:46.840 --> 00:07:51.740
+supporto tecnico, un team per i resi. Ogni team ha la propria coda. Le domande di fatturazione vanno
+
+00:07:51.740 --> 00:07:55.760
+alla fatturazione i difetti di prodotto al supporto tecnico, le richieste di reso a chi conosce il
+
+00:07:55.760 --> 00:08:00.320
+processo di reso. Sembra semplice perché lo è. Una classificazione chiara evita alle persone di
+
+00:08:00.320 --> 00:08:04.040
+passarsi il lavoro alla cieca. Le regole di routing aiutano in questa classificazione. Una regola di
+
+00:08:04.040 --> 00:08:08.560
+routing controlla i dettagli di un caso e lo invia alla coda o alla persona giusta. Un caso su uno
+
+00:08:08.560 --> 00:08:14.140
+specifico prodotto va al team di prodotto. Un caso da una certa regione va al supporto locale. Un problema grave va in
+
+00:08:14.140 --> 00:08:18.280
+una coda urgente. Una domanda generale rimane con il team standard. Alcune organizzazioni
+
+00:08:18.280 --> 00:08:21.560
+distribuiscono il lavoro in base alle competenze. Ad esempio un cliente che scrive in francese ha
+
+00:08:21.560 --> 00:08:24.920
+bisogno di un operatore che parli francese. Un problema tecnico richiede qualcuno formato su
+
+00:08:24.920 --> 00:08:28.760
+uno specifico prodotto. L'instradamento avvicina il caso alla persona in grado di risolverlo invece
+
+00:08:28.760 --> 00:08:32.700
+di trattare ogni richiesta allo stesso modo. L'automazione aiuta ma le decisioni spettano ancora le persone.
+
+00:08:33.080 --> 00:08:37.020
+Un team lead potrebbe esaminare un caso difficile e assegnarlo direttamente all'operatore esperto. Magari
+
+00:08:37.020 --> 00:08:41.340
+qualcuno conosce già il cliente. Forse il problema riguarda diversi prodotti e richiede un'esperienza che una
+
+00:08:41.340 --> 00:08:45.620
+regola non può valutare. L'assegnazione manuale offre al team spazio per quella scelta umana. La
+
+00:08:45.620 --> 00:08:49.380
+titolarità di un caso può cambiare un operatore per aver bisogno di maggiori informazioni e restituire
+
+00:08:49.380 --> 00:08:53.460
+il caso a una coda. Un team potrebbe scoprire che il problema aspetta un altro reparto o una
+
+00:08:53.460 --> 00:08:57.780
+richiesta urgente potrebbe richiedere un'escalation se il team abituano un po' a risolverla. Dynamics
+
+00:08:57.780 --> 00:09:02.520
+365 mantiene il lavoro in movimento invece di lasciarlo bloccato con qualcuno. A volte un singolo
+
+00:09:02.520 --> 00:09:07.960
+problema genera molti casi. Immagina un'interruzione software che colpisce decine di clienti. Ogni cliente
+
+00:09:07.960 --> 00:09:10.780
+contatta l'assistenza separatamente quindi ogni segnalazione necessita di un proprio
+
+00:09:10.780 --> 00:09:14.800
+ma tutte le segnalazioni sono collegate a un problema più alto. Un caso padre tiene traccia
+
+00:09:14.800 --> 00:09:18.440
+di tale problema mentre i casi figli tracciano le singole segnalazioni dei clienti al suo interno.
+
+00:09:18.880 --> 00:09:21.640
+Ciò offre al team di supporto due prospettive contemporaneamente. Lavorano l'interruzione
+
+00:09:21.640 --> 00:09:25.340
+sottostante tramite il caso padre mentre ogni caso figlio mantiene informato il cliente
+
+00:09:25.340 --> 00:09:28.620
+corrispondente. Quando trovano una soluzione non devono indagare sulla stessa interruzione
+
+00:09:28.620 --> 00:09:33.360
+da zero per ogni chiamante. Casi duplicati creano un problema simile su scala ridotta. Un cliente
+
+00:09:33.360 --> 00:09:36.660
+potrebbe inviare un'email e chiamare per lo stesso problema oppure due operatori potrebbero aprire
+
+00:09:36.660 --> 00:09:40.700
+casi prima di accorgersi dell'altro. Invece di dividere gli sforzi il team può unire casi
+
+00:09:40.700 --> 00:09:45.620
+simili. Un caso diventa il record principale e il lavoro rimane unificato. Nessuno dovrebbe
+
+00:09:45.620 --> 00:09:49.000
+risolvere lo stesso problema due volte. Far arrivare un caso alla coda, la persona giusta
+
+00:09:49.000 --> 00:09:54.340
+è l'inizio del lavoro e il cliente si aspetta una risposta entro i tempi promessi. Mantenere
+
+00:09:54.340 --> 00:09:58.820
+le promesse con SLA e lavoro guidato. Far arrivare un caso alla persona giusta è solo metà
+
+00:09:58.820 --> 00:10:02.360
+del lavoro perché il cliente si aspetta anche assistenza entro i tempi promessi. Ed è qui
+
+00:10:02.360 --> 00:10:06.980
+che entra in gioco un accordo sul livello del servizio che chiamerò SLA. Uno SLA associa
+
+00:10:06.980 --> 00:10:10.540
+un timer al caso così il team sa esattamente quanto tempo ha per mantenere una promessa
+
+00:10:10.540 --> 00:10:14.580
+che si tratti della prima risposta o della risoluzione completa del problema. Ma qui
+
+00:10:14.580 --> 00:10:18.280
+l'automazione è fondamentale. Non sempre si tratta della stessa scadetta. Prendiamo
+
+00:10:18.280 --> 00:10:21.620
+un cliente che si aspetta il riscontro entro un'ora anche se al team tecnico servono due
+
+00:10:21.620 --> 00:10:26.980
+giorni lavorativi per trovare e testare la soluzione. Dynamics 365 tiene traccia separata
+
+00:10:26.980 --> 00:10:30.620
+dell'obiettivo di prima risposta e di quello di risoluzione così il team può agire rapidamente
+
+00:10:30.620 --> 00:10:34.000
+senza far credere che ogni problema si risolve istantaneamente. Ora immagina un cliente
+
+00:10:34.000 --> 00:10:37.720
+cui servizio ha smesso di funzionare. Non si aspetta una riparazione completa in dieci
+
+00:10:37.720 --> 00:10:41.280
+minuti ma si aspetta che qualcuno confermi che il problema è noto, spieghi cosa succederà
+
+00:10:41.280 --> 00:10:45.440
+e lo tenga informato. L'obiettivo di prima risposta tiene traccia del primo contatto
+
+00:10:45.440 --> 00:10:48.420
+mentre quello di risoluzione segue l'intero percorso verso una risposta a una soluzione
+
+00:10:48.420 --> 00:10:52.940
+e diversi clienti possono avere diverse promesse. Un'azienda con supporto premium ottiene obiettivi
+
+00:10:52.940 --> 00:10:57.080
+di risposta più rapidi rispetto a un cliente con un piano stand. Un'interruzione ad alta priorità
+
+00:10:57.080 --> 00:11:02.140
+ha una scadenza più breve rispetto a una domanda di routine. Gli accordi di supporto, la priorità e il
+
+00:11:02.140 --> 00:11:05.640
+tipo di caso, definiscono le regole temporiapiche. Ciò mantiene le promesse equi e chiare.
+
+00:11:06.260 --> 00:11:09.960
+Senza SLA un agente potrebbe lavorare sull'elemento più vecchio in lista mentre un caso urgente
+
+00:11:09.960 --> 00:11:14.040
+supera silenziosamente la sua scadenza. Con gli SLA la schermata del caso mostra indicatori
+
+00:11:14.040 --> 00:11:18.100
+temporali che dicono all'agente quale promessa richiede attenzione per primo. Vedrai la pressione
+
+00:11:18.100 --> 00:11:22.280
+aumentare. Un caso con molto tempo ha disposizione necessita di lavoro ma uno vicino alla scadenza
+
+00:11:22.280 --> 00:11:26.520
+di risposta richiede attenzione immediata. I team possono anche impostare avvisi o passaggi di
+
+00:11:26.520 --> 00:11:30.260
+escalation quando un obiettivo è vicino o già superato così un supervisore può intervenire prima
+
+00:11:30.260 --> 00:11:34.460
+che si è cliente a sollecitare. Gli obiettivi temporali guidano l'urgenza e i flussi di processo
+
+00:11:34.460 --> 00:11:38.760
+aziendale guidano il lavoro stesso. Un flusso di processo aziendale ha un insieme di fasi mostrate
+
+00:11:38.760 --> 00:11:42.120
+all'interno del caso. Fornisce all'agente un percorso chiaro da seguire in base a come
+
+00:11:42.120 --> 00:11:46.200
+l'organizzazione vuole che vengano gestiti i casi. Le fasi possono spaziare dall'acquisizione
+
+00:11:46.200 --> 00:11:50.300
+all'indagine fino alla risoluzione con le giuste domande e controlli in ogni punto. Pensalo come
+
+00:11:50.300 --> 00:11:54.280
+una lista di controllo inserita nel processo. Un nuovo agente non deve indovinare quali dettagli
+
+00:11:54.280 --> 00:11:57.940
+siano importanti prima di inviare un caso a uno specialista. Il flusso può richiedere il prodotto,
+
+00:11:57.940 --> 00:12:01.900
+il tipo di problema, l'impatto e altre informazioni necessarie al team successivo. Un agente più
+
+00:12:01.900 --> 00:12:05.060
+esperto può muoversi più velocemente ma il percorso condiviso mantiene comunque il team
+
+00:12:05.060 --> 00:12:08.740
+orientato nella stessa direzione. Ecco uno scenario. Arriva un'interruzione di servizio
+
+00:12:08.740 --> 00:12:12.700
+ad alta priorità. Il caso entra nella coda urgente e il suo SLA inizia il conto alla rovescia.
+
+00:12:13.480 --> 00:12:17.580
+L'agente conferma i dettagli del cliente, registra l'impatto e invia la prima risposta
+
+00:12:17.580 --> 00:12:22.860
+prima che l'obiettivo scada. Successivamente il flusso di processo sposta il caso nella diagnostica
+
+00:12:22.860 --> 00:12:27.020
+dove il team raccoglie dettagli dell'errore e controlla i report correlati. Il caso passa poi alla
+
+00:12:27.020 --> 00:12:30.260
+risoluzione quando il team identifica la causa e prepara un aggiornamento per il cliente.
+
+00:12:30.980 --> 00:12:35.200
+Quella sequenza offre anche ai manager un quadro più chiaro. Possono vedere dove il caso rallenta
+
+00:12:35.200 --> 00:12:39.220
+durante la presa in carico, la diagnosi o la risposta finale al cliente. Il flusso non risolve
+
+00:12:39.220 --> 00:12:42.680
+il problema per il team ma impedisce che passaggi fondamentali vadano persi durante una giornata
+
+00:12:42.680 --> 00:12:47.340
+intensa. Dynamics 365 può anche controllare quali modifiche di stato gli agenti possono scegliere
+
+00:12:47.340 --> 00:12:51.600
+in vari momenti. Queste sono chiamate transizioni dei motivi di stato che suona tecnico ma l'idea
+
+00:12:51.600 --> 00:12:56.340
+è semplice. Un caso dovrebbe avanzare attraverso passaggi sensati. Non vuoi che qualcuno segni un caso
+
+00:12:56.340 --> 00:12:59.860
+come risolto mentre ancora in attesa di un controllo interno richiesto che passi da nuovo
+
+00:12:59.860 --> 00:13:04.080
+caso direttamente ad annullato senza registrarne il motivo? Le scelte consentite possono cambiare
+
+00:13:04.080 --> 00:13:07.840
+man mano che il caso evolve. Ad esempio un caso sotto indagine può consentire a un agente di
+
+00:13:07.840 --> 00:13:12.700
+metterlo in attesa in attesa dei tagli del cliente. Dopo che il cliente risponde l'agente può riportarlo
+
+00:13:12.700 --> 00:13:17.360
+all'orativo. Quando il problema è risolto il caso può passare a risolto. Ciò crea una cronologia dei casi
+
+00:13:17.360 --> 00:13:21.620
+più buono. Una risposta da sola non concluderà. Il team deve registrare come sia concluso il problema
+
+00:13:21.620 --> 00:13:27.200
+poi chiudere il caso correttamente. Risoluzione apprendimento e servizio migliore. Inviare una
+
+00:13:27.200 --> 00:13:31.140
+risposta non chiude automaticamente un caso. Il team deve registrare la risoluzione che significa
+
+00:13:31.140 --> 00:13:34.840
+scrivere cosa ha risolto il problema o quale risposta finale ha ricevuto il cliente. Potrebbe
+
+00:13:34.840 --> 00:13:38.420
+essere un dispositivo sostitutivo inviato, un pagamento duplicato o rimborsato, il cliente che
+
+00:13:38.420 --> 00:13:43.160
+ha aggiornato l'impostazione che bloccava l'accesso. Quella nota diventa parte della scheda cliente e offre al
+
+00:13:43.160 --> 00:13:47.060
+prossimo agente un utile punto di partenza se lo stesso cliente contatta nuovamente l'assistenza mesi dopo
+
+00:13:47.060 --> 00:13:51.680
+con un problema correlato. A volte la prima soluzione non funziona. Forse il cliente segue le istruzioni
+
+00:13:51.680 --> 00:13:56.300
+e l'errore si ripresenta. Forse arriva un pezzo di ricambio ma non risolve il guasto. In quella
+
+00:13:56.300 --> 00:14:00.840
+situazione il team può riaprire il caso o rimetterlo in coda per ulteriori interventi invece di avviare
+
+00:14:00.840 --> 00:14:05.920
+un nuovo record senza cronologia. Il caso continua da dove il team aveva interrotto. Questo contocambio
+
+00:14:05.920 --> 00:14:09.820
+è responsabile. Un nuovo agente può vedere cosa ha provato il precedente, cosa ha confermato il cliente,
+
+00:14:09.920 --> 00:14:14.380
+cosa deve ancora essere verificato. Il cliente non deve spiegare l'intrastoria dall'inizio solo perché
+
+00:14:14.380 --> 00:14:18.920
+un'altra persona ha preso in carico il lavoro. Nel tempo tutti quei casi dicono al team di supporto
+
+00:14:18.920 --> 00:14:23.080
+cosa sta succedendo al di là del singolo problema del cliente. I manager possono monitorare il tempo
+
+00:14:23.080 --> 00:14:26.480
+di risoluzione che tiene traccia di quanto tempo impiega nei casi dall'apertura alla chiusura.
+
+00:14:26.960 --> 00:14:30.460
+Possono osservare il tempo di fase che mostra dove i casi trascorrono nel loro tempo. Possono anche
+
+00:14:30.460 --> 00:14:34.120
+monitorare la risoluzione a primo contatto ovvero quanto spesso la prima persona che parla con il
+
+00:14:34.120 --> 00:14:38.640
+cliente riesce a risolvere il problema senza trasferimenti. Anche il carico di lavoro è importante. Se una coda si
+
+00:14:38.640 --> 00:14:43.380
+riempie ogni lunedì mattina il team può vederlo. Se i casi tecnici restano giorni in attesa di un controllo
+
+00:14:43.380 --> 00:14:47.960
+interno quel ritardo appare nei dati dei casi. Se un team chiude i casi rapidamente ma i clienti
+
+00:14:47.960 --> 00:14:51.480
+continuano a riaprirli il team ha motivo di esaminare meglio la qualità di quelle prime
+
+00:14:51.480 --> 00:14:56.920
+soluzioni. I numeri non spiegano tutto da soli. Indicano al team quali domande vale la pena porsi.
+
+00:14:57.620 --> 00:15:01.240
+Perché i casi su un determinato prodotto sono noi? Perché un certo tipo di caso richiede più tempo
+
+00:15:01.240 --> 00:15:05.980
+del previsto? Perché gli agenti cercano ripetutamente la stessa risposta senza trovare un articolo di
+
+00:15:05.980 --> 00:15:10.820
+conoscenza utile? I modelli trasformano il lavoro di assistenza quotidiana in apprendimento. Un aumento di casi
+
+00:15:10.820 --> 00:15:14.480
+simili può indicare un difetto del prodotto. Può mostrare che un recente aggiornamento ha confuso i
+
+00:15:14.480 --> 00:15:18.860
+clienti. Può rivelare che una guida alle istruzioni necessita dei passaggi più chiari. Invece di trattare
+
+00:15:18.860 --> 00:15:22.860
+ogni richiesta come non correlata il team può individuare la causa comune e lavorarci su. Ciò può
+
+00:15:22.860 --> 00:15:26.920
+ridurre il volume futuro dei casi. Anche il feedback dei clienti fa parte di questo quadro. Un caso chiuso
+
+00:15:26.920 --> 00:15:30.880
+può mostrare che il team ha rispettato l'obiettivo di risposta ma il cliente potrebbe comunque sentirsi
+
+00:15:30.880 --> 00:15:35.320
+frustrato se ha dovuto contattare l'assistenza tre volte. Guardare sia la cronologia del caso che il feedback
+
+00:15:35.320 --> 00:15:39.680
+offre ai manager la misione più completa dell'esperienza. Alcuni clienti preferirebbero abitare del tutto di creare un caso.
+
+00:15:39.680 --> 00:15:44.140
+E' qui che un portale self-service può essere ad aiuto. Tramite un portale i clienti possono creare una richiesta,
+
+00:15:44.540 --> 00:15:49.500
+verificarne lo stato, aggiungere nuove informazioni o leggere articoli di supporto approvati senza chiamare il team di assistenza.
+
+00:15:50.120 --> 00:15:55.540
+Per domande semplici questo può far risparmiare tempo a tutti. Un cliente può controllare lo stato di una consegna, seguire una guida di
+
+00:15:55.540 --> 00:16:00.640
+configurazione quando gli è più comodo. Nel frattempo gli agenti possono dedicare più tempo ai problemi che richiedono una persona per
+
+00:16:00.640 --> 00:16:06.660
+indagare, spiegare o prendere una decisione. Dynamics 365 Customer Service può anche connettersi con strumenti Microsoft familiari
+
+00:16:06.660 --> 00:16:11.560
+durante il processo di gestione dei casi. Un agente può lavorare con le mail tramite Outlook. Un team può discutere di un problema
+
+00:16:11.560 --> 00:16:17.140
+difficile in Teams. Documenti e informazioni condivise possono risiedere in SharePoint. Power BI può trasformare i dati dei casi
+
+00:16:17.140 --> 00:16:21.760
+in report e dashboard, mentre gli strumenti di Power Platform possono supportare moduli aggiuntivi, avvisi o passaggi
+
+00:16:21.760 --> 00:16:26.700
+automatizzati per i processi del team. Ogni strumento ha il suo compito specifico. Il caso rimane il luogo in cui il problema
+
+00:16:26.700 --> 00:16:31.400
+di assistenza e la sua cronologia restano collegati, anche quando si utilizzano altri strumenti per comunicare e condividere file
+
+00:16:31.400 --> 00:16:36.220
+o rivedere il lavoro. La gestione dei casi non riguarda solo la compilazione di una schermata D. Si tratta di dare a ogni
+
+00:16:36.220 --> 00:16:39.880
+problema del cliente un percorso chiaro, una risposta registrata e un team che possa imparare da quanto
+
+00:16:39.880 --> 00:16:47.880
+così. Mantenete unita l'interastore del cliente. Ecco il vero punto fondamentale. La gestione dei casi di Dynamics 365
+
+00:16:47.880 --> 00:16:53.200
+mantiene il problema, il lavoro, le promesse e il risultato in un unico record. Niente più contesto perso,
+
+00:16:53.280 --> 00:16:59.340
+soluzioni ripetute. Osserva il tuo processo di supporto o dove spariscono le informazioni dei clienti. È qui che riunire tutto
+
+00:16:59.340 --> 00:17:04.320
+cambia ogni cosa. Iscriviti sulla tua piattaforma podcast preferita per altri consigli Microsoft da
+
+00:17:04.320 --> 00:17:10.160
+me Mirko Peters su m365.fm dove spieghiamo in modo semplice gli strumenti Microsoft dietro il lavoro quotidiano.

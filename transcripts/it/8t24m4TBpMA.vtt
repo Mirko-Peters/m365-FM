@@ -1,0 +1,1429 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:02.460
+Lo ospiti in un unico posto, ad esempio un data center in Virginia.
+
+00:00:02.980 --> 00:00:05.160
+Questo funziona bene per i clienti di New York o Chicago.
+
+00:00:05.460 --> 00:00:07.740
+Ma cosa succede a qualcuno a Tokyo, Londra o Sydney?
+
+00:00:08.520 --> 00:00:10.300
+Ogni volta che quella persona visita il tuo sito,
+
+00:00:10.420 --> 00:00:13.780
+la sua richiesta deve attraversare oceani e continenti solo per raggiungere il tuo server.
+
+00:00:14.780 --> 00:00:17.000
+Ogni immagine, ogni caricamento di pagina, ogni chiamata API
+
+00:00:17.000 --> 00:00:19.420
+che compie lo stesso lungo viaggio e quel ritardo si accumula rapidamente.
+
+00:00:19.800 --> 00:00:22.460
+In realtà, gli studi dimostrano che anche un ritardo di un secondo
+
+00:00:22.460 --> 00:00:24.900
+nel tempo di caricamento della pagina può costarti conversione
+
+00:00:24.900 --> 00:00:26.400
+e allontanare i visitatori frustrati.
+
+00:00:26.820 --> 00:00:27.440
+Ma ecco il punto.
+
+00:00:27.440 --> 00:00:29.280
+Cosa succede quando il tuo sito diventa virale?
+
+00:00:29.280 --> 00:00:30.840
+o una botnet decide di attaccarti.
+
+00:00:31.240 --> 00:00:32.740
+Il tuo sito del server in Virginia viene messo a durare.
+
+00:00:33.160 --> 00:00:34.620
+Rallenta e può persino bloccarsi del tu.
+
+00:00:34.960 --> 00:00:36.300
+Sei bloccato senza un piano di riserva.
+
+00:00:36.540 --> 00:00:39.040
+Puoi risolvere il problema di disponibilità creando copie del tuo sito
+
+00:00:39.040 --> 00:00:41.100
+in diverse regioni, Tokyo, Londra, San Paolo.
+
+00:00:41.540 --> 00:00:42.000
+Questo aiuta.
+
+00:00:42.680 --> 00:00:43.660
+Ma ora hai un nuovo problema.
+
+00:00:44.160 --> 00:00:46.200
+Come fai a inviare ogni visitatore alla posizione giusta?
+
+00:00:46.580 --> 00:00:49.100
+Non vuoi che qualcuno in Giappone acceda per sbaglio al tuo server statunitense.
+
+00:00:49.480 --> 00:00:51.440
+Hai bisogno di un modo intelligente per installare il traffico
+
+00:00:51.440 --> 00:00:53.020
+ed è proprio qui che entra in gioco Azure Front Door.
+
+00:00:53.840 --> 00:00:56.360
+Ecco il vigile urbano globale, ovvero Azure Front Door.
+
+00:00:56.360 --> 00:00:59.320
+Pensa ad Azure Front Door come a un vigile urbano globale.
+
+00:00:59.400 --> 00:01:01.600
+Non solo uno o un singolo incrocio, ma migliaia di vigili urbano
+
+00:01:01.600 --> 00:01:03.620
+posizionati nei principali incroci in tutto il mondo.
+
+00:01:04.080 --> 00:01:05.720
+Ogni volta che qualcuno visita il tuo sito web,
+
+00:01:05.840 --> 00:01:07.060
+il vigile più vicino interviene e dice
+
+00:01:07.060 --> 00:01:07.640
+Sei a Tokyo?
+
+00:01:08.160 --> 00:01:09.520
+Il negozio è più veloce per te è a Singapore.
+
+00:01:10.200 --> 00:01:10.920
+Lascia che ti ci porti.
+
+00:01:11.200 --> 00:01:13.340
+Quindi cosa si differenzia da un normale bilanciatore del carico?
+
+00:01:13.780 --> 00:01:16.260
+La maggior parte dei bilanciatori del carico funziona a livello 4
+
+00:01:16.260 --> 00:01:18.080
+esaminando indirizzi IP e porte per istrata del traffico.
+
+00:01:18.520 --> 00:01:19.840
+Questo va bene per l'esigenza di base,
+
+00:01:19.840 --> 00:01:21.900
+ma Azure Front Door funziona a livello 7
+
+00:01:21.900 --> 00:01:24.760
+il che significa che comprende il traffico HTTP e HTTPS.
+
+00:01:24.760 --> 00:01:27.220
+Puoi esaminare l'URL digitato da qualcuno,
+
+00:01:27.320 --> 00:01:28.720
+controllare le intestazioni del browser,
+
+00:01:28.840 --> 00:01:30.340
+vedere che tipo di contenuto sta richiedendo
+
+00:01:30.340 --> 00:01:32.600
+e prendere decisioni di routing intelligente in base a tutto ciò.
+
+00:01:33.460 --> 00:01:34.580
+Invece di dire semplicemente
+
+00:01:34.580 --> 00:01:35.860
+questo IP va a quel server,
+
+00:01:36.260 --> 00:01:38.120
+Front Door può dire questa richiesta di utenti IP
+
+00:01:38.120 --> 00:01:39.840
+va al tuo backend statunitense,
+
+00:01:39.940 --> 00:01:41.600
+ma questa richiesta di immagini
+
+00:01:41.600 --> 00:01:44.200
+va alla copia memorizzata nella cache a Tokyo.
+
+00:01:45.240 --> 00:01:47.020
+Ecco cosa rende possibile tutto ciò dietro le quinte.
+
+00:01:47.920 --> 00:01:50.800
+Azure Front Door viene eseguito sulla rete globale di Microsoft
+
+00:01:50.800 --> 00:01:52.600
+con oltre 210 punti di presenza
+
+00:01:52.600 --> 00:01:55.160
+in più di 130 aree metropolitane in tutto il mondo.
+
+00:01:56.120 --> 00:01:57.280
+Pensa a ogni punto di presenza
+
+00:01:57.280 --> 00:01:59.120
+come a una piccola cabina di controllo del traffico
+
+00:01:59.120 --> 00:02:00.580
+o un ufficio locale in ogni grande città
+
+00:02:00.580 --> 00:02:02.560
+in grado di gestire rapidamente le richieste iniziali.
+
+00:02:02.780 --> 00:02:04.240
+Quando un utente visita il tuo sito
+
+00:02:04.240 --> 00:02:05.660
+si connette alla cabina più vicina
+
+00:02:05.660 --> 00:02:08.080
+invece di dover raggiungere il tuo server di origine in Virginia.
+
+00:02:08.520 --> 00:02:09.960
+Quella cabina indirizza quindi la sua richiesta
+
+00:02:09.960 --> 00:02:12.060
+tramite la dorsale privata di Microsoft al tuo backend.
+
+00:02:12.720 --> 00:02:15.080
+Questo è importante perché la rete internet pubblica è imprevedibile.
+
+00:02:15.740 --> 00:02:16.860
+Il tuo traffico potrebbe effettuare
+
+00:02:16.860 --> 00:02:18.660
+una decina di passaggi attraverso reti diversi
+
+00:02:18.660 --> 00:02:20.960
+ognuna delle quali aggiunge latenza e potenziale perdita di pacchetti.
+
+00:02:20.960 --> 00:02:23.200
+La dorsale di Microsoft, d'altro canto,
+
+00:02:23.320 --> 00:02:24.740
+è una rete privata ad alta velocità
+
+00:02:24.740 --> 00:02:26.540
+che collega direttamente i suoi data center.
+
+00:02:27.000 --> 00:02:28.160
+Quindi una volta che la tua richiesta
+
+00:02:28.160 --> 00:02:29.820
+raggiunge il punto di presenza più vicino
+
+00:02:29.820 --> 00:02:32.200
+il resto del percorso avviene su un'autostrada veloce e affidabile.
+
+00:02:32.900 --> 00:02:34.520
+Ottieni tempi di caricamento più rapidi,
+
+00:02:34.640 --> 00:02:35.520
+una latenza inferiore
+
+00:02:35.520 --> 00:02:37.300
+o un'esperienza migliore per gli utenti ovunque
+
+00:02:37.300 --> 00:02:39.320
+che si trovino a Tokyo, Londra o San Paolo.
+
+00:02:40.040 --> 00:02:41.400
+E tutto questo avviene automaticamente
+
+00:02:41.400 --> 00:02:43.360
+senza che i tuoi visitatori si accorgli alla sua esistenza.
+
+00:02:44.180 --> 00:02:45.280
+Tre livelli di resilienza
+
+00:02:45.280 --> 00:02:46.880
+come funziona AFD.
+
+00:02:47.460 --> 00:02:49.040
+Ora potresti pensare che tutta questa idea
+
+00:02:49.040 --> 00:02:50.100
+di un vigile urbano globale
+
+00:02:50.100 --> 00:02:50.900
+sembri fantastica,
+
+00:02:50.980 --> 00:02:52.980
+ma cosa succede se il vigile urbano stesso si blocca?
+
+00:02:53.520 --> 00:02:55.220
+Se Azure Front Door è l'unico punto di accesso
+
+00:02:55.220 --> 00:02:55.860
+per l'intera app,
+
+00:02:55.940 --> 00:02:58.200
+si tratta di un singolo punto di errore piuttosto grande, giusto?
+
+00:02:58.520 --> 00:02:59.400
+Microsoft ci ha pensato.
+
+00:02:59.940 --> 00:03:01.680
+Ha creato tre livelli di resilienza in Front Door,
+
+00:03:01.760 --> 00:03:02.980
+quindi non si blocca quasi mai?
+
+00:03:03.620 --> 00:03:04.500
+Lascia che te li spieghi.
+
+00:03:04.840 --> 00:03:05.880
+Primo livello, front-end.
+
+00:03:06.740 --> 00:03:08.760
+Ricordi quegli oltre 210 punti di presenza
+
+00:03:08.760 --> 00:03:09.480
+che ho menzionato?
+
+00:03:10.340 --> 00:03:11.540
+Ognuna cabina di controllo del traffico
+
+00:03:11.540 --> 00:03:12.460
+completamente diversa.
+
+00:03:12.460 --> 00:03:15.640
+Questi POP si trovano in più di 130 aree metropolitane in tutto il mondo
+
+00:03:15.640 --> 00:03:17.660
+in esecuzione all'interno dei data center Microsoft
+
+00:03:17.660 --> 00:03:19.380
+e delle strutture di collocazione dei partner.
+
+00:03:20.060 --> 00:03:21.800
+Ogni singolo POP contiene più rack di server
+
+00:03:21.800 --> 00:03:23.080
+con controller perimetrali in cima
+
+00:03:23.080 --> 00:03:24.900
+che fungono da bilanciatore del carico integrato.
+
+00:03:25.640 --> 00:03:27.480
+Se un server all'interno di un POP non funziona,
+
+00:03:27.780 --> 00:03:29.840
+il controller perimetrale reindirizza il traffico
+
+00:03:29.840 --> 00:03:31.380
+a uno funzionante all'interno dello stesso POP.
+
+00:03:31.540 --> 00:03:32.780
+E se un intero POP non funziona,
+
+00:03:32.920 --> 00:03:34.800
+è qui che entra in gioco l'indirizzamento ai PNCast.
+
+00:03:35.180 --> 00:03:36.260
+La richiesta del visitatore
+
+00:03:36.260 --> 00:03:38.440
+viene automaticamente indirizzata al POP più vicino.
+
+00:03:38.440 --> 00:03:41.460
+Nessuna interruzione e nessun intervento manuale succede e basta.
+
+00:03:41.920 --> 00:03:42.860
+Secondo livello, il fallback.
+
+00:03:43.220 --> 00:03:44.720
+Cosa succede se un POP viene sovraccaricato?
+
+00:03:45.140 --> 00:03:46.920
+Supponiamo che si verifichi un picco di traffico enorme
+
+00:03:46.920 --> 00:03:48.940
+o che più POP in una regione non funzionino contemporaneamente.
+
+00:03:49.060 --> 00:03:51.160
+Proprio rimanenti potrebbero non essere in grado di gestire il carico.
+
+00:03:51.380 --> 00:03:52.600
+È qui che entra in gioco il livello di fallback.
+
+00:03:53.440 --> 00:03:56.080
+Si tratta di un set separato di POP, decine e non centinaia
+
+00:03:56.080 --> 00:03:57.960
+che eseguono esattamente lo stesso software e la stessa architettura.
+
+00:03:58.180 --> 00:03:59.700
+Si trovano solo nei data center Microsoft,
+
+00:03:59.860 --> 00:04:00.760
+non nelle strutture dei partner.
+
+00:04:01.400 --> 00:04:03.320
+Quando un POP frontend deve distribuire del traffico,
+
+00:04:03.560 --> 00:04:05.220
+sposta le richieste a questo livello di fallback.
+
+00:04:05.220 --> 00:04:07.660
+Stessa memorizzazione della cache, stessa routing, stessa grid.
+
+00:04:08.020 --> 00:04:09.440
+I visitatori non noteranno mai la differenza.
+
+00:04:09.680 --> 00:04:11.760
+Forse ricevono i loro contenuti un po' più lentamente,
+
+00:04:11.880 --> 00:04:12.660
+ma li ricevono comunque.
+
+00:04:12.960 --> 00:04:14.240
+Terzo livello è la protezione del traffico.
+
+00:04:14.460 --> 00:04:15.220
+Questo è il supervisore.
+
+00:04:15.720 --> 00:04:17.380
+Consideralo come un centro di comando globale
+
+00:04:17.380 --> 00:04:19.000
+che controlla l'intera rete front door,
+
+00:04:19.720 --> 00:04:21.340
+monitora i modelli di traffico, i livelli di carico
+
+00:04:21.340 --> 00:04:22.580
+e lo stato di integrità di tutti i POP.
+
+00:04:23.140 --> 00:04:25.240
+Quando rileva che determinati POP sono sovraccarichi,
+
+00:04:25.340 --> 00:04:27.660
+non si limita ad attendere che intervenga il livello di fallback.
+
+00:04:28.120 --> 00:04:29.340
+Sposta proattivamente il traffico
+
+00:04:29.340 --> 00:04:32.040
+aggiornando il modo in cui il DNS risolve l'endpoint di front door.
+
+00:04:32.920 --> 00:04:34.460
+Può passare da un'ipienica as globale
+
+00:04:34.460 --> 00:04:36.500
+a uno regionale spostando completamente i client
+
+00:04:36.500 --> 00:04:37.760
+su diversi set di POP.
+
+00:04:38.220 --> 00:04:39.980
+Può persino attraversare i continenti se necessario.
+
+00:04:40.160 --> 00:04:42.580
+La protezione del traffico è ciò che rende front door quasi magico.
+
+00:04:43.120 --> 00:04:44.840
+Si ottimizza costantemente dietro le quinte
+
+00:04:44.840 --> 00:04:47.140
+modificando i percorsi prima che si verifichino problemi.
+
+00:04:47.640 --> 00:04:48.620
+Ora dovrei dire una cosa qui.
+
+00:04:49.200 --> 00:04:51.220
+Nell'ottobre 2025 Azo front door ha subito
+
+00:04:51.220 --> 00:04:52.120
+un'interruzione significativa.
+
+00:04:52.440 --> 00:04:55.120
+Una modifica alla configurazione ha saltato le convalide di sicurezza
+
+00:04:55.120 --> 00:04:57.900
+e ha causato problemi diffusi su Microsoft 305, Xbox Live
+
+00:04:57.900 --> 00:04:59.440
+e migliaia di siti web dei clienti.
+
+00:04:59.920 --> 00:05:00.980
+Microsoft ha imparato da questo.
+
+00:05:01.360 --> 00:05:02.980
+Hanno rimosso tutta l'elaborazione asincrona
+
+00:05:02.980 --> 00:05:04.160
+dalla pipeline di configurazione.
+
+00:05:04.460 --> 00:05:06.900
+Ogni percorso di codice viene testato durante l'implementazione.
+
+00:05:07.320 --> 00:05:09.160
+Hanno ridotto il tempo di rollback da 4 ore a 1
+
+00:05:09.160 --> 00:05:11.360
+e puntano a 10 minuti entro marzo 2026.
+
+00:05:11.840 --> 00:05:12.380
+Stanno inoltre.
+
+00:05:12.840 --> 00:05:14.440
+Introducendo la segmentazione in microcelle
+
+00:05:14.440 --> 00:05:16.080
+per limitare qualsiasi impatto futuro
+
+00:05:16.080 --> 00:05:17.420
+a meno dell'1% dei tenant.
+
+00:05:18.020 --> 00:05:19.700
+Il punto è che nessun sistema è perfetto
+
+00:05:19.700 --> 00:05:21.480
+ma l'architettura a tre livelli di front door
+
+00:05:21.480 --> 00:05:23.560
+è progettata per sopravvivere a interruzioni regionali,
+
+00:05:23.660 --> 00:05:25.720
+picchi di traffico e persino ad alcuni errori di configurazione.
+
+00:05:26.140 --> 00:05:27.840
+Per la maggior parte delle applicazioni è più che sufficiente.
+
+00:05:28.260 --> 00:05:29.660
+Per sistemi veramente critici
+
+00:05:29.660 --> 00:05:31.860
+puoi sovrapporre Azure Traffic Manager a front door
+
+00:05:31.860 --> 00:05:32.980
+come percorso di sicurezza
+
+00:05:32.980 --> 00:05:34.940
+ma questo è un argomento avanzato per un altro giorno.
+
+00:05:35.820 --> 00:05:37.980
+Come indirizza il traffico, il routing e i gruppi di origine?
+
+00:05:38.640 --> 00:05:40.280
+Quindi abbiamo questo vigile urbano globale
+
+00:05:40.280 --> 00:05:42.400
+con oltre 210 cabine e tre livelli di backup
+
+00:05:42.400 --> 00:05:44.800
+ma come decide effettivamente dove inviare ogni visitatore?
+
+00:05:45.680 --> 00:05:46.900
+È qui che entra in gioco i gruppi di origine.
+
+00:05:47.360 --> 00:05:48.620
+Un gruppo di origine è fondamentalmente
+
+00:05:48.620 --> 00:05:49.960
+una raccolta dei tuoi server back-end.
+
+00:05:49.960 --> 00:05:51.940
+Consideralo come un elenco di negozi,
+
+00:05:52.020 --> 00:05:54.980
+ovvero i luoghi effettivi in cui viene eseguito il tuo sito web o la tua app.
+
+00:05:55.540 --> 00:05:58.220
+Potresti avere un server in Nord America, uno in Europa e uno in Asia?
+
+00:05:58.880 --> 00:06:00.080
+Vanno tutti nello stesso gruppo di origine.
+
+00:06:00.480 --> 00:06:02.540
+Front door non invia traffico a tutti alla CECA.
+
+00:06:03.000 --> 00:06:04.440
+Controlla costantemente se sono attivi.
+
+00:06:04.880 --> 00:06:06.140
+Questo si chiama sondaggio sullo Stato Unito.
+
+00:06:06.420 --> 00:06:07.300
+Ogni pochi secondi,
+
+00:06:07.560 --> 00:06:09.400
+ogni front door invia un ping ai tuoi server
+
+00:06:09.400 --> 00:06:10.840
+colpendo un percorso specifico,
+
+00:06:11.140 --> 00:06:12.560
+solitamente la radice del tuo sito
+
+00:06:12.560 --> 00:06:14.720
+o un endpoint di integrità dedicato come Health.
+
+00:06:14.720 --> 00:06:17.660
+Se un server non lo fa o risponde con un codice d'errore,
+
+00:06:17.860 --> 00:06:19.320
+front door lo contrassegna come non integro
+
+00:06:19.320 --> 00:06:20.980
+e interrompe l'invio del traffico.
+
+00:06:21.600 --> 00:06:22.900
+È come se un vigile urbano controllasse
+
+00:06:22.900 --> 00:06:24.260
+se un negozio è effettivamente aperto
+
+00:06:24.260 --> 00:06:25.380
+prima di far entrare i clienti.
+
+00:06:25.960 --> 00:06:27.360
+Ma una volta che hai più server integri,
+
+00:06:27.420 --> 00:06:29.560
+la domanda diventa quale dovrebbe ricevere i visitatori.
+
+00:06:31.080 --> 00:06:33.280
+Front door utilizza tre fattori per decidere
+
+00:06:33.280 --> 00:06:34.800
+priorità, latenza e peso
+
+00:06:34.800 --> 00:06:37.180
+e lavorano insieme in un ordine specifico.
+
+00:06:37.700 --> 00:06:38.400
+Primo è la priorità.
+
+00:06:38.800 --> 00:06:40.380
+Puoi designare un server come primario
+
+00:06:40.380 --> 00:06:41.320
+e un altro come di backup.
+
+00:06:42.020 --> 00:06:43.400
+Imposta il primario su priorità 1
+
+00:06:43.400 --> 00:06:44.580
+e il backup su priorità 2.
+
+00:06:45.140 --> 00:06:47.280
+In condizioni normali tutto il traffico va al primario.
+
+00:06:47.720 --> 00:06:48.740
+Se il server primario non funziona,
+
+00:06:48.900 --> 00:06:49.900
+il traffico si sposta sul server.
+
+00:06:50.380 --> 00:06:50.940
+Semplice, vero?
+
+00:06:51.180 --> 00:06:52.160
+Questa è una soluzione ideale
+
+00:06:52.160 --> 00:06:53.480
+per le configurazioni attive e passive
+
+00:06:53.480 --> 00:06:55.000
+in cui si desidera che una regione gestisca tutto
+
+00:06:55.000 --> 00:06:56.040
+a meno che non si verifichi un guasto.
+
+00:06:56.160 --> 00:06:57.660
+Ma cosa succede se si desidera entrare i server?
+
+00:06:57.940 --> 00:06:58.980
+Ecco dove entra in gioco la latenza.
+
+00:06:59.340 --> 00:07:00.840
+Se più server hanno la stessa priorità,
+
+00:07:01.060 --> 00:07:03.460
+front door invia il traffico a quello con la latenza più bassa,
+
+00:07:03.520 --> 00:07:04.880
+ovvero il tempo di risposta più rapido
+
+00:07:04.880 --> 00:07:06.060
+dalla posizione del visitatore.
+
+00:07:06.720 --> 00:07:09.080
+Quindi un utente a Londra viene indirizzato al server europeo
+
+00:07:09.080 --> 00:07:11.080
+mentre un utente a Tokyo riceve quello asiatico.
+
+00:07:11.080 --> 00:07:13.680
+È inoltre disponibile un'impostazione di sensibilità
+
+00:07:13.680 --> 00:07:14.880
+di default 50 millisecondi.
+
+00:07:15.420 --> 00:07:18.080
+Se due server sono a 50 millisecondi di distanza l'uno dall'altro,
+
+00:07:18.180 --> 00:07:19.540
+front door li considera ugualmente veloci.
+
+00:07:20.200 --> 00:07:21.980
+Ciò impedisce il passaggio continuo tra server
+
+00:07:21.980 --> 00:07:23.580
+che hanno sostanzialmente la stessa velocità.
+
+00:07:24.080 --> 00:07:25.100
+E quando la latenza è pari,
+
+00:07:25.160 --> 00:07:26.020
+ecco dove entra in gioco il peso.
+
+00:07:26.500 --> 00:07:27.460
+È possibile assegnare pesi
+
+00:07:27.460 --> 00:07:28.920
+per suddividere il traffico tra i server?
+
+00:07:29.540 --> 00:07:31.460
+Supponiamo che tu voglia testare una nuova versione della tua app.
+
+00:07:31.860 --> 00:07:33.880
+Potresti assegnare al tuo server attuale un peso di 90
+
+00:07:33.880 --> 00:07:34.840
+e al nuovo un peso di 10.
+
+00:07:35.200 --> 00:07:36.920
+Ciò significa che circa 9 visitatori su 10
+
+00:07:36.920 --> 00:07:37.960
+passano alla vecchia versione
+
+00:07:37.960 --> 00:07:39.140
+e 1 su 10 passa a quella nuova.
+
+00:07:39.660 --> 00:07:41.840
+Questa è la soluzione perfetta per implementazioni graduali,
+
+00:07:41.920 --> 00:07:43.660
+testa B o semplicemente per bilanciare il carico
+
+00:07:43.660 --> 00:07:44.920
+tra server con capacità diverse.
+
+00:07:45.600 --> 00:07:46.480
+Ecco la cosa importante.
+
+00:07:46.840 --> 00:07:48.160
+Tutto questo viene automaticamente.
+
+00:07:48.760 --> 00:07:50.200
+Configura il gruppo di origine una volta
+
+00:07:50.200 --> 00:07:51.480
+e front door gestisce il resto.
+
+00:07:52.060 --> 00:07:52.940
+Analizza i tuoi server,
+
+00:07:53.160 --> 00:07:53.920
+misura la latenza,
+
+00:07:54.060 --> 00:07:54.840
+rispetta le priorità
+
+00:07:54.840 --> 00:07:56.680
+e distribuisce il traffico in base al peso.
+
+00:07:56.680 --> 00:07:58.180
+E fa tutto questo al limite
+
+00:07:58.180 --> 00:08:00.260
+prima ancora che la richiesta raggiunga il tuo back end.
+
+00:08:01.060 --> 00:08:02.180
+Ciò significa che i tuoi server
+
+00:08:02.180 --> 00:08:04.060
+non devono capire da dove proviene il traffico,
+
+00:08:04.180 --> 00:08:04.780
+come instradarlo.
+
+00:08:05.200 --> 00:08:06.340
+Forniscono semplicemente contenuti.
+
+00:08:07.000 --> 00:08:08.420
+Sicurezza al limite, WAF e oltre.
+
+00:08:08.920 --> 00:08:09.920
+Ora parliamo di sicurezza.
+
+00:08:10.280 --> 00:08:11.720
+Poiché front door si trova proprio al limite
+
+00:08:11.720 --> 00:08:12.660
+della rete Microsoft,
+
+00:08:13.140 --> 00:08:14.840
+è il posto perfetto per fermare gli attacchi
+
+00:08:14.840 --> 00:08:16.380
+prima che raggiungano i tuoi server.
+
+00:08:16.940 --> 00:08:18.660
+Consideralo come un posto di blocco di sicurezza
+
+00:08:18.660 --> 00:08:19.520
+all'ingresso di un edificio.
+
+00:08:20.000 --> 00:08:21.920
+Chiunque voglia entrare deve prima passare.
+
+00:08:22.460 --> 00:08:24.960
+Quel checkpoint è chiamato web application firewall o WAF
+
+00:08:24.960 --> 00:08:26.660
+ed è integrato sia in front door standard
+
+00:08:26.660 --> 00:08:27.760
+che in premium
+
+00:08:27.760 --> 00:08:30.280
+blocca automaticamente i comuni attacchi web.
+
+00:08:31.080 --> 00:08:32.200
+Cose come l'iniezione SQL
+
+00:08:32.200 --> 00:08:34.860
+in cui un aggressore cerca di introdurre comandi di database
+
+00:08:34.860 --> 00:08:36.120
+dannosi in un campo di un modulo
+
+00:08:36.120 --> 00:08:37.420
+o lo scripting tra siti
+
+00:08:37.420 --> 00:08:39.380
+in cui inserisce script nelle tue pagine
+
+00:08:39.380 --> 00:08:40.620
+o gli attacchi di DDoS
+
+00:08:40.620 --> 00:08:42.820
+in cui cerca di sovraccaricare i tuoi server con traffico.
+
+00:08:43.220 --> 00:08:44.880
+Il WAF rileva tutto questo in modo permanente
+
+00:08:44.880 --> 00:08:46.900
+e lo elimina prima che la tua origine riesca a vedere qualcosa.
+
+00:08:47.660 --> 00:08:48.800
+Oltre alle protezioni automatiche
+
+00:08:48.800 --> 00:08:50.220
+puoi anche creare regole personalizzate.
+
+00:08:50.460 --> 00:08:52.700
+Ad esempio, se il tuo sito è destinato solo ai clienti in Europa
+
+00:08:52.700 --> 00:08:54.220
+puoi bloccare completamente il traffico
+
+00:08:54.220 --> 00:08:55.960
+proveniente da altre regioni.
+
+00:08:55.960 --> 00:08:57.780
+O forse hai notato uno specifico intervallo IP
+
+00:08:57.780 --> 00:08:59.080
+che continua a sondare il tuo sito
+
+00:08:59.080 --> 00:09:00.180
+puoi bloccare anche quello.
+
+00:09:00.580 --> 00:09:02.640
+Puoi anche filtrare in base alle intestazioni delle richieste
+
+00:09:02.640 --> 00:09:03.320
+ai modelli di URL
+
+00:09:03.320 --> 00:09:05.000
+o persino al browser utilizzato da qualcuno.
+
+00:09:05.120 --> 00:09:06.960
+Il WAF ti offre un controllo molto specifico
+
+00:09:06.960 --> 00:09:07.920
+su chi può accedere e chi no.
+
+00:09:08.440 --> 00:09:09.720
+Ecco dove contano i livelli di prezzo.
+
+00:09:10.220 --> 00:09:11.840
+Standard ti offre regole WAF personalizzate
+
+00:09:11.840 --> 00:09:13.680
+in cui definisci cosa bloccare e cosa consentire.
+
+00:09:14.560 --> 00:09:15.580
+Premium si spinge oltre
+
+00:09:15.580 --> 00:09:17.020
+aggiungendo set di regole gestite
+
+00:09:17.020 --> 00:09:19.000
+basate sull'intelligence e le minacce di Microsoft
+
+00:09:19.000 --> 00:09:20.440
+che vengono costantemente aggiornate
+
+00:09:20.440 --> 00:09:21.860
+in base ai modelli di attacco reali
+
+00:09:21.860 --> 00:09:23.700
+rilevati da Microsoft nell'intera rete.
+
+00:09:24.560 --> 00:09:26.380
+Premium include anche la protezione dai bot
+
+00:09:26.380 --> 00:09:28.460
+che blocca automaticamente scraper automatici,
+
+00:09:28.520 --> 00:09:29.920
+credential staffer e altri bot.
+
+00:09:30.320 --> 00:09:32.300
+Aggiunge inoltre il supporto per collegamenti privati
+
+00:09:32.300 --> 00:09:33.600
+che consente di connettersi alle origini
+
+00:09:33.600 --> 00:09:34.880
+tramite una connessione di rete privata
+
+00:09:34.880 --> 00:09:35.960
+anziché tramite internet pubblico.
+
+00:09:36.060 --> 00:09:37.360
+Ciò significa che i server back-end
+
+00:09:37.360 --> 00:09:38.940
+possono essere completamente nascosti
+
+00:09:38.940 --> 00:09:39.720
+al mondo esterno.
+
+00:09:40.100 --> 00:09:41.220
+Solo front-door può raggiungerli.
+
+00:09:41.600 --> 00:09:42.940
+Questo è un aspetto importante per la sicurezza.
+
+00:09:43.300 --> 00:09:44.840
+Molti attacchi non prendono di mira front-door.
+
+00:09:45.660 --> 00:09:46.640
+Cercano di trovare la back-door.
+
+00:09:46.640 --> 00:09:50.080
+Se il server di origine ha un indirizzo IP pubblico,
+
+00:09:50.260 --> 00:09:51.860
+gli aggressori possono sondarlo direttamente
+
+00:09:51.860 --> 00:09:53.420
+e aggirare tutte le protezioni di front-door.
+
+00:09:54.120 --> 00:09:55.520
+Con PrivateLink ciò non è possibile
+
+00:09:55.520 --> 00:09:57.440
+perché l'origine non ha un endpoint pubblico
+
+00:09:57.440 --> 00:09:59.040
+ed è accessibile solo tramite front-door.
+
+00:09:59.460 --> 00:10:01.500
+Quindi, anche se qualcuno scopre l'IP del server,
+
+00:10:01.620 --> 00:10:02.380
+non può raggiungerlo.
+
+00:10:02.760 --> 00:10:03.980
+Il risultato è una difesa approfondita.
+
+00:10:04.460 --> 00:10:06.040
+Il WAF blocca gli attacchi a livello di applicazione.
+
+00:10:06.460 --> 00:10:08.640
+Le regole personalizzate gestiscono i requisiti specifichi.
+
+00:10:08.720 --> 00:10:10.320
+La protezione dai bot blocca la minaccia automata.
+
+00:10:10.320 --> 00:10:12.240
+Il PrivateLink mantiene invisibili l'origine.
+
+00:10:12.860 --> 00:10:13.840
+Tutto questo viene al limite
+
+00:10:13.840 --> 00:10:15.920
+prima ancora che il traffico raggiunga la tua infrastruttura,
+
+00:10:15.920 --> 00:10:17.520
+in modo che i tuoi server siano concentrati
+
+00:10:17.520 --> 00:10:18.620
+sulla distribuzione dei contenuti,
+
+00:10:18.700 --> 00:10:19.580
+non sulla difesa dei taccchi.
+
+00:10:20.240 --> 00:10:22.020
+Memorizzazione nella cache per rendere le cose ancora più veloci.
+
+00:10:22.360 --> 00:10:23.900
+Abbiamo parlato di routing e sicurezza,
+
+00:10:24.000 --> 00:10:26.260
+ma c'è un'altra funzionalità che rende front-door davvero utile
+
+00:10:26.260 --> 00:10:27.580
+la memorizzazione nella cache.
+
+00:10:27.840 --> 00:10:28.300
+Ecco l'idea.
+
+00:10:28.740 --> 00:10:30.860
+Molti dei contenuti del tuo sito web non cambiano molto spesso.
+
+00:10:31.380 --> 00:10:34.160
+Immagini, file CSS, librerie, javascript, foto di prodotti,
+
+00:10:34.260 --> 00:10:35.560
+forse anche alcune pagine HTML.
+
+00:10:36.500 --> 00:10:39.480
+Se ogni singolo visitatore deve recuperarli dal tuo server di origine,
+
+00:10:39.480 --> 00:10:41.020
+sprechi tempo e larghezza di banda
+
+00:10:41.020 --> 00:10:43.540
+perché il server deve elaborare la stessa richiesta più e più volte
+
+00:10:43.540 --> 00:10:45.900
+inviando ogni volta gli stessi bytes su internet
+
+00:10:45.900 --> 00:10:48.480
+la memorizzazione nella cache risolve questo problema
+
+00:10:48.480 --> 00:10:50.300
+mantenendo una copia del contenuto statico al limite pop.
+
+00:10:50.520 --> 00:10:52.520
+La volta successiva che qualcuno richiede lo stesso file,
+
+00:10:52.660 --> 00:10:55.000
+il pop lo distribuisce immediatamente senza mai contattare la tua origine.
+
+00:10:55.360 --> 00:10:57.720
+È come avere un piccolo magazzino accanto a ogni casello del traffico.
+
+00:10:58.480 --> 00:11:00.280
+Invece di rimandare ogni cliente alla fabbrica principale
+
+00:11:00.280 --> 00:11:02.360
+consegni semplicemente ciò che è già sullo scaffale.
+
+00:11:02.640 --> 00:11:04.100
+La differenza di prestazione è notevole.
+
+00:11:04.380 --> 00:11:06.360
+Invece di un viaggio di andata e ritorno attraverso l'oceano,
+
+00:11:06.360 --> 00:11:08.180
+la risposta arriva da un server nella stessa città.
+
+00:11:08.720 --> 00:11:09.780
+Millisecondi anziché secondi.
+
+00:11:10.320 --> 00:11:12.960
+Il tuo server di origine si prende una pausa perché gestisce meno richieste
+
+00:11:12.960 --> 00:11:15.580
+e può concentrarsi sulle cose dinamiche che devono effettivamente essere elaborate.
+
+00:11:15.980 --> 00:11:17.960
+Ora, la memorizzazione nella cache non è automatica per te.
+
+00:11:18.300 --> 00:11:20.620
+Sei tu a controllare cosa viene memorizzato nella cache e per quanto tempo.
+
+00:11:21.380 --> 00:11:24.840
+Front Door rispetta le intestazioni di controllo della cache standard della tua origine
+
+00:11:24.840 --> 00:11:26.200
+come MaxAge o S-MaxAge
+
+00:11:26.200 --> 00:11:28.720
+e puoi anche configurare direttamente le regole di memorizzazione
+
+00:11:28.720 --> 00:11:30.640
+nella cache sovrascrivendo le tessazioni necessarie.
+
+00:11:31.040 --> 00:11:32.920
+Quando aggiorni il contenuto puoi svuotare la cache
+
+00:11:32.920 --> 00:11:35.540
+e dire a Front Door di eliminare le vecchie copie e recuperarne di nuove.
+
+00:11:36.060 --> 00:11:38.720
+Ciò è importante per cose come il lancio di prodotti o le modifiche di prezzo
+
+00:11:38.720 --> 00:11:40.580
+in cui la nuova versione deve essere visibile immediatamente.
+
+00:11:40.580 --> 00:11:43.640
+Ecco il punto. Front Door non è solo per i contenuti statici.
+
+00:11:43.860 --> 00:11:47.760
+Anche per i contenuti dinamici come api, pagine personalizzate o carrelli della spesa
+
+00:11:47.760 --> 00:11:51.080
+accelera comunque la consegna perché una volta che la richiesta raggiunge il pop è più vicino
+
+00:11:51.080 --> 00:11:53.880
+viaggia verso la tua origine tramite il backbone privato di Microsoft
+
+00:11:53.880 --> 00:11:55.280
+anziché tramite internet pubblico.
+
+00:11:55.660 --> 00:11:58.920
+Tale backbone privato è più veloce e più affidabile del web aperto.
+
+00:11:58.980 --> 00:12:01.540
+Quindi anche le richieste non memorizzate nella cache ottengono un aumento di velocità.
+
+00:12:01.860 --> 00:12:05.020
+Questa è una delle principali differenze tra Front Door e una CDN tradizionale.
+
+00:12:05.460 --> 00:12:07.800
+Una CDN memorizza nella cache i contenuti statici, questo è tu.
+
+00:12:07.800 --> 00:12:11.040
+Front Door memorizza nella cassa i contenuti statici e accelera tutto il resto.
+
+00:12:11.440 --> 00:12:12.160
+È un'offerta 2x1.
+
+00:12:13.020 --> 00:12:14.760
+Livelli di prezzo, quale scegliere?
+
+00:12:15.440 --> 00:12:17.460
+Bene, parliamo di soldi perché questa è la grande domanda.
+
+00:12:18.080 --> 00:12:20.460
+Quanto costa e quale livello dovresti effettivamente scegliere?
+
+00:12:21.040 --> 00:12:22.760
+Prima di entrare nei numeri ecco perché è importante.
+
+00:12:23.300 --> 00:12:25.380
+Il livello che scegli non influisce solo sul prezzo
+
+00:12:25.380 --> 00:12:29.100
+ma determina anche la sicurezza e le funzionalità disponibili per proteggere la tua applicazione.
+
+00:12:29.240 --> 00:12:32.320
+Come Front Door è disponibile in tre versioni, Classic e quella vecchia.
+
+00:12:32.740 --> 00:12:36.000
+Funziona ancora ma Microsoft sconsiglia di utilizzarla per nuovi progetti.
+
+00:12:36.000 --> 00:12:37.700
+Classics per uscire di servizio.
+
+00:12:38.120 --> 00:12:42.240
+Nessuna nuova risorsa dopo il 2025 e ritiro completo entro il 2027.
+
+00:12:42.360 --> 00:12:45.980
+Quindi, se stai iniziando da zero, stai valutando la versione Standard o Premium.
+
+00:12:46.420 --> 00:12:47.500
+Ecco la ripartizione più semplice.
+
+00:12:47.980 --> 00:12:50.480
+La versione Standard costa 35 euro al mese come tariffa base.
+
+00:12:51.160 --> 00:12:53.220
+La versione Premium costa 330 euro al mese.
+
+00:12:53.620 --> 00:12:55.040
+È un bel salto ma ecco la parte interessante.
+
+00:12:55.700 --> 00:12:59.120
+Le velocità di trasferimento dati per gigabyte sono identiche tra entrambi i livelli.
+
+00:12:59.120 --> 00:13:04.820
+In Nord America e in Europa il traffico in uscita costa circa 8,25 centesimi per gigabyte per i primi 10 terabyte.
+
+00:13:05.240 --> 00:13:07.640
+Trasferimento da Edge a Origin costa circa 2 centesimi per gigabyte.
+
+00:13:07.940 --> 00:13:08.840
+Stesso prezzo per entrambi.
+
+00:13:09.180 --> 00:13:11.020
+Quindi, cosa ti danno quei 300 dollari in più?
+
+00:13:11.920 --> 00:13:12.320
+Funzionalità.
+
+00:13:13.120 --> 00:13:16.760
+Premium aggiunge regole WAF gestite basate sull'intelligence e sulle minacce di Microsoft,
+
+00:13:16.900 --> 00:13:19.640
+regole che si aggiornano automaticamente in base a modelli di attacco reali.
+
+00:13:19.640 --> 00:13:23.720
+Ottieni anche protezione dai bot, supporto per collegamenti privati in modo che la tua origine
+
+00:13:23.720 --> 00:13:26.380
+rimanga nascosta dalla rete internet pubblica, analisi di sicurezza più approfondita.
+
+00:13:26.840 --> 00:13:30.700
+Standard ti offre bilanciamento del carico globale, memorizzazione nella cache, accelerazione dinamica,
+
+00:13:30.820 --> 00:13:31.720
+regole WAF personalizzate.
+
+00:13:32.220 --> 00:13:34.500
+Puoi bloccare intervalli IP, paesi o modelli di richiesta.
+
+00:13:35.160 --> 00:13:37.420
+Semplicemente non ottieni 7 regole gestite e il collegamento privato.
+
+00:13:37.700 --> 00:13:39.020
+Anche i costi delle richieste sono diversi.
+
+00:13:39.480 --> 00:13:43.140
+Standard costa circa 9 centesimi per 10.000 richieste per i primi 250 milioni.
+
+00:13:43.580 --> 00:13:45.680
+Premium costa circa 15 centesimi per 10.000.
+
+00:13:45.680 --> 00:13:47.180
+Su larga scala queste differenze si sono.
+
+00:13:47.420 --> 00:13:48.180
+Quindi, come scegliere?
+
+00:13:48.440 --> 00:13:49.160
+Quali mie regola pratica?
+
+00:13:49.160 --> 00:13:53.780
+Se gestisci un tipico sito web o un API, qualcosa che richiede prestazioni globali e sicurezza di base,
+
+00:13:54.140 --> 00:13:54.860
+inizia con Standard.
+
+00:13:55.220 --> 00:14:00.040
+La tariffa base di 35 dollari è conveniente e le regole WAF personalizzate gestiscono le minacce più comuni.
+
+00:14:00.380 --> 00:14:02.980
+Puoi sempre effettuare l'upgrade in un secondo momento se le tue esigenze di sicurezza.
+
+00:14:03.360 --> 00:14:08.540
+Se lavori in un settore regolamentato come sanità, finanza, governo o se gestisci dati sensibili dei clienti,
+
+00:14:08.680 --> 00:14:10.220
+premium, vale il costo aggiuntivo.
+
+00:14:11.060 --> 00:14:13.880
+Le regole WAF gestite rilevano minacce che potresti non pensare di bloccare.
+
+00:14:13.880 --> 00:14:18.280
+Il collegamento privato mantiene invisibili le tue origini e la protezione dei bot blocca gli attacchi automatizzati
+
+00:14:18.280 --> 00:14:19.220
+che Standard non rileverebbe.
+
+00:14:19.560 --> 00:14:23.680
+Un'ultima cosa, se stai solo distribuendo contenuti statici e non hai bisogno di funzionalità di routing o sicurezza,
+
+00:14:23.740 --> 00:14:25.440
+una CDN tradizionale potrebbe essere più economica.
+
+00:14:25.880 --> 00:14:30.280
+Azure CDN di Microsoft esiste ancora e per la distribuzione statica pura è spesso più conveniente.
+
+00:14:30.280 --> 00:14:35.040
+Ma per la maggior parte delle applicazioni del mondo reale, in cui hai bisogno di routing, sicurezza, memorizzazione,
+
+00:14:35.120 --> 00:14:37.720
+la cassa e accelerazione, Front Door Standard è la soluzione ideale.
+
+00:14:38.680 --> 00:14:40.580
+Mettendo tutto insieme, un esempio concreto.
+
+00:14:41.260 --> 00:14:45.260
+Lascia che ti spieghi uno scenario reale in modo che tu possa vedere esattamente come funzionano insieme tutti questi elementi.
+
+00:14:45.940 --> 00:14:47.140
+Immagina di gestire un sito di com.
+
+00:14:47.660 --> 00:14:49.960
+Hai server in tre regioni, Nord America, Europa e Asia.
+
+00:14:50.400 --> 00:14:53.140
+I tuoi clienti sono ovunque, dal Giappone al Brasile al Sud Africa.
+
+00:14:53.140 --> 00:14:57.840
+Senza Front Door, un cliente a Tokyo si connette direttamente al tuo server statunitense.
+
+00:14:58.580 --> 00:15:02.060
+Ogni immagine, pagina di prodotto e richiesta di pagamento deve attraversare l'oceano Pacifico.
+
+00:15:02.360 --> 00:15:02.760
+È lento.
+
+00:15:03.160 --> 00:15:05.560
+E se il tuo server statunitense si blocca, quel cliente visualizza Soma Raw.
+
+00:15:06.060 --> 00:15:06.820
+Raggiungi Front Door.
+
+00:15:07.280 --> 00:15:08.640
+Il cliente a Tokyo apre il tuo sito.
+
+00:15:09.480 --> 00:15:12.060
+Il suo browser accede alla posizione Azure più vicina, chiamiamola Tokyo.
+
+00:15:12.600 --> 00:15:16.320
+Tale posizione verifica lo stato dei tuoi tre server, tutti integri, misura la latenza.
+
+00:15:16.840 --> 00:15:21.240
+Il server asiatico risponde più velocemente, quindi indirizza la richiesta di tramite la dorsale privata di Microsoft.
+
+00:15:21.240 --> 00:15:23.520
+La pagina si carica a meno di un secondo invece di tre.
+
+00:15:23.940 --> 00:15:26.680
+Ora immagina che il server asiatico si sovraccarichi durante una vendita LAN.
+
+00:15:27.100 --> 00:15:29.700
+I soldi di stato di Front Door rilevano l'aumento della latenza.
+
+00:15:30.280 --> 00:15:33.220
+Inizia a spostare il traffico al server europeo, la seconda opzione migliore.
+
+00:15:34.160 --> 00:15:37.760
+I clienti ottengono comunque un'esperienza rapida, forse non così veloce come quella del server asiatico,
+
+00:15:37.780 --> 00:15:40.000
+ma comunque più veloce rispetto a quella che sembrerebbe andando fino negli Stati Uniti.
+
+00:15:40.420 --> 00:15:43.560
+L'intero failover avviene automaticamente, senza che nessuno tocchi una configurazione.
+
+00:15:44.060 --> 00:15:45.520
+Nel frattempo il WAFIM eseguito in periferica.
+
+00:15:45.820 --> 00:15:48.460
+Blocca un tentativo di iniezione SQL nel motolo di pagamento.
+
+00:15:48.460 --> 00:15:51.600
+Blocca il traffico proveniente da intervalli IP da nosionati.
+
+00:15:52.120 --> 00:15:55.260
+E limita la velocità delle richieste da un IP che sta eseguando lo scraping del catalogo dei prodotti.
+
+00:15:55.680 --> 00:15:57.700
+Nessuno di questi attacchi raggiunge mai server di origine.
+
+00:15:57.980 --> 00:15:59.580
+Il team backend non sa nemmeno che sono avvenuti.
+
+00:16:00.100 --> 00:16:03.720
+E contenuti statici, le immagini dei prodotti, i file CSS, le librerie e il javascript
+
+00:16:03.720 --> 00:16:05.740
+vengono memorizzati nella cache nella sede di Tokyo.
+
+00:16:06.340 --> 00:16:08.180
+Il primo visitatore li carica dall'origine asiatico.
+
+00:16:08.740 --> 00:16:11.200
+Il secondo visitatore li ottiene immediatamente dalla cache perimetrale.
+
+00:16:11.460 --> 00:16:14.320
+I visitatori abituali vedono tempi di caricamento quasi immediati
+
+00:16:14.320 --> 00:16:17.300
+perché tutto ciò di cui hanno bisogno è già presente nella sede perimetrale vicino a loro.
+
+00:16:17.300 --> 00:16:21.060
+Tutto questo, routing più rapido, failover automatico, sicurezza perimetrale
+
+00:16:21.060 --> 00:16:23.720
+e contenuti memorizzati nella cache funzionano insieme senza problemi.
+
+00:16:23.940 --> 00:16:26.820
+I clienti non sanno mai che c'è. Vedono solo un sito veloce e affidabile.
+
+00:16:27.320 --> 00:16:28.000
+Ecco cosa ricordare.
+
+00:16:28.420 --> 00:16:30.580
+Azure Front Door funge da vigile del traffico globale
+
+00:16:30.580 --> 00:16:32.140
+indirizzando gli utenti al server più veloce
+
+00:16:32.140 --> 00:16:35.260
+memorizzando nella cache i contenuti ai margini e bloccando gli attacchi prima che ti raggiunga.
+
+00:16:35.400 --> 00:16:36.880
+È basato su tre livelli di resilienza
+
+00:16:36.880 --> 00:16:39.720
+quindi anche se un'area geografica non funziona il tuo sito rimane attivo.
+
+00:16:39.720 --> 00:16:42.660
+Per la maggior parte dei progetti il livello standard
+
+00:16:42.660 --> 00:16:45.280
+ha soli 35 euro a mese tra prestazioni e costi.
+
+00:16:46.100 --> 00:16:48.280
+Esegui l'upgrade a premium quando hai bisogno di sicurezza avanzata
+
+00:16:48.280 --> 00:16:49.040
+o di un collegamento privato.
+
+00:16:49.520 --> 00:16:51.640
+Inizia in piccolo con un'unica origine e cresci da lì.
+
+00:16:52.280 --> 00:16:53.460
+Front Door si adatta alle tue esigenze.
+
+00:16:54.060 --> 00:16:56.280
+Se la tua app web ha utenti distribuiti in più aree geografiche
+
+00:16:56.280 --> 00:16:57.680
+configura oggi stesso un profilo front.
+
+00:16:57.940 --> 00:17:01.180
+Anche un singolo server ottiene vantaggi in termini di accelerazione e sicurezza globale.
+
+00:17:01.500 --> 00:17:03.360
+Iscriviti sulla tua piattaforma di podcast preferita
+
+00:17:03.360 --> 00:17:05.880
+e condividi questo con qualcuno che sta iniziando il suo percorso nel cloud.

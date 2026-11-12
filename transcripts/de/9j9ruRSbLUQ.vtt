@@ -1,0 +1,1069 @@
+WEBVTT
+
+00:00:00.120 --> 00:00:03.740
+Willkommen zu einer weiteren Folge von Microsoft Knowledge Nuggets hier auf M365FM.
+
+00:00:04.160 --> 00:00:05.060
+Bin der Moderator Mirko Peters?
+
+00:00:05.520 --> 00:00:08.220
+Sie haben Azure-Ressourcen bereitgestellt, indem Sie im Portal herumgeklickt haben.
+
+00:00:08.540 --> 00:00:09.940
+Funktioniert der einwandfrei, bis es nicht mehr funktioniert?
+
+00:00:10.260 --> 00:00:13.140
+Dann müssen Sie es erneut tun, können sich aber nicht mehr genau erinnern, was Sie ausgewählt haben.
+
+00:00:13.300 --> 00:00:16.180
+Sie müssen es an einen Teamkollegen übergeben und dieser kann Ihre Schritte nicht nachvollziehen.
+
+00:00:16.540 --> 00:00:18.080
+Versionskontrolle? Es gibt nichts, das Committed wird.
+
+00:00:18.480 --> 00:00:19.840
+Das ist das Problem, das wir heute lösen werden.
+
+00:00:20.520 --> 00:00:23.180
+Am Ende dieser Folge werden Sie verstehen, was Infrastructure as Code ist,
+
+00:00:23.280 --> 00:00:26.760
+warum BICEP existiert und wie es Azure-Bereitstellungen einfacher und zuverlässiger macht.
+
+00:00:26.760 --> 00:00:31.400
+Wir beginnen mit dem Problem, dann mit der Lösung und anschließend mit einem praktischen Beispiel, an dem Sie sich orientieren.
+
+00:00:31.860 --> 00:00:33.380
+Schnappen Sie sich Ihren Kaffee und legen wir los.
+
+00:00:34.280 --> 00:00:37.040
+Das Portalproblem. Die Click-to-Deploy-Falle fühlt sich schnell an.
+
+00:00:37.400 --> 00:00:39.840
+Sie melden sich an, füllen ein Formular aus, klicken auf Erstellen und sind fertig.
+
+00:00:40.180 --> 00:00:43.940
+Aber was passiert, wenn Sie es mit denselben Einstellungen der selben Region und Namenskonvention erneut tun müssen?
+
+00:00:44.200 --> 00:00:47.380
+Sie müssen sich an jede einzelne Auswahl erinnern und genau da bricht alles zusammen.
+
+00:00:47.940 --> 00:00:52.380
+Eine manuelle Bereitstellung führt zu inkonsistenten Ergebnissen, menschlichem Versagen und keinem Prüfpfad.
+
+00:00:52.920 --> 00:00:53.880
+Hier ist ein Beispiel aus der Praxis.
+
+00:00:53.880 --> 00:00:57.100
+Jemand in Ihrem Team erstellt eine Ressource mit leicht unterschiedlichen Einstellungen.
+
+00:00:57.660 --> 00:00:59.060
+Jetzt haben Sie zwei Umgebungen, die nicht übereinstimmen.
+
+00:00:59.560 --> 00:01:00.740
+Eine funktioniert, die andere nicht.
+
+00:01:01.180 --> 00:01:02.240
+Viel liegt beim Herausfinden, woran das liegt.
+
+00:01:02.880 --> 00:01:04.280
+Dann ist da noch das Problem mit der Dokumentation.
+
+00:01:04.860 --> 00:01:08.740
+Infrastruktur als Word-Dokument oder, schlimmer noch, ein YouTube-Video, das vor sechs Monaten aufgenommen wurde,
+
+00:01:08.800 --> 00:01:10.380
+als das Portal noch ganz anders aussah.
+
+00:01:10.940 --> 00:01:13.060
+Features werden verschoben, Menüs ändern sich, neue Optionen werden eingeschrieben.
+
+00:01:13.560 --> 00:01:15.980
+Ich habe mich mit einem Produktmanager des Azure-Portal-Teams zusammengesetzt
+
+00:01:15.980 --> 00:01:18.060
+und er sagte mir, dass Sie zweimal täglich neue Features veröffentlichen.
+
+00:01:18.360 --> 00:01:18.900
+Zweimal täglich.
+
+00:01:19.260 --> 00:01:21.400
+Ihr Word-Dokument ist veraltet, bevor Sie es fertig geschrieben haben.
+
+00:01:21.760 --> 00:01:22.260
+Hier ist das Problem.
+
+00:01:22.760 --> 00:01:23.900
+Herumklicken funktioniert zum Lernen.
+
+00:01:24.340 --> 00:01:25.060
+In der Produktion ist das Problem.
+
+00:01:25.420 --> 00:01:26.280
+Was ist also die Alternative?
+
+00:01:26.700 --> 00:01:29.820
+Sie schreiben eine Datei, die beschreibt, was Sie möchten und weisen Azure an, sie zu erstellen.
+
+00:01:30.580 --> 00:01:31.700
+Was ist Infrastruktur als Code?
+
+00:01:32.660 --> 00:01:35.200
+Infrastruktur als Code bedeutet, dass Sie Ihr Cloud-Setup mit Code verwalten,
+
+00:01:35.300 --> 00:01:36.500
+anstatt sich durch ein Webportal zu klicken.
+
+00:01:36.960 --> 00:01:37.760
+Hier ist die Kernidee.
+
+00:01:38.340 --> 00:01:40.500
+Sie schreiben eine Datei, die Ihre Infrastruktur beschreibt.
+
+00:01:40.780 --> 00:01:42.340
+Diese Datei befindet sich in Ihrem Repository.
+
+00:01:42.920 --> 00:01:46.060
+Sie können sie versionieren, in einem Pull-Request überprüfen und morgen erneut ausführen,
+
+00:01:46.120 --> 00:01:47.440
+um dasselbe Ergebnis zu erhalten.
+
+00:01:48.100 --> 00:01:49.700
+Hier gibt es einen Schlüsselbegriff, Deklarativ.
+
+00:01:49.700 --> 00:01:52.680
+Das bedeutet, Sie beschreiben, was Sie möchten und nicht, wie es erstellt werden soll.
+
+00:01:53.280 --> 00:01:55.640
+Sie weisen Azure nicht an, zuerst eine Ressourcengruppe zu erstellen,
+
+00:01:55.740 --> 00:01:58.140
+dann ein Speicherkonto hinzuzufügen und dann das Netzwerk zu konfigurieren.
+
+00:01:58.640 --> 00:02:01.560
+Stattdessen sagen Sie, ich möchte eine Ressourcengruppe mit einem Speicherkonto und einem Netzwerk,
+
+00:02:01.620 --> 00:02:02.720
+das auf diese Weise konfiguriert ist.
+
+00:02:03.000 --> 00:02:04.060
+Und Azure ermittelt die Reihenfolge.
+
+00:02:04.060 --> 00:02:06.000
+Das Ergebnis wird als Idempotenz bezeichnet.
+
+00:02:06.300 --> 00:02:08.840
+Führen Sie es einmal aus, führen Sie es hundertmal aus und Sie erhalten dasselbe Ergebnis.
+
+00:02:09.040 --> 00:02:09.620
+Darin liegt die Stärke.
+
+00:02:09.960 --> 00:02:12.060
+Stellen Sie es sich wie eine Blaupause im Gegensatz zur manuellen Erstellung.
+
+00:02:12.360 --> 00:02:15.040
+Eine Blaupause ist wiederholbar, gemeinsam nutzbar und überprüfbar.
+
+00:02:15.280 --> 00:02:17.540
+Geben Sie sie an jemand anderen weiter und er wird genau dasselbe erstellen.
+
+00:02:18.060 --> 00:02:19.120
+Mittlerweile gibt es dafür verschiedene Tools.
+
+00:02:19.500 --> 00:02:21.740
+Armvorlagen, Bizep, Terraform, Pulumi.
+
+00:02:22.140 --> 00:02:24.080
+Sie alle implementieren dasselbe Konzept auf unterschiedliche Weise.
+
+00:02:24.440 --> 00:02:25.340
+Das ist ein wichtiger Unterschied.
+
+00:02:26.040 --> 00:02:26.880
+Infrastruktur als Konzept.
+
+00:02:27.620 --> 00:02:29.180
+Reisep ist nur ein Tool, das dies implementiert.
+
+00:02:29.640 --> 00:02:30.560
+Aber hier ist der Clou.
+
+00:02:30.760 --> 00:02:33.420
+Azure verfügt seit Jahren über eine IAC-Sprache namens Armvorlagen.
+
+00:02:34.060 --> 00:02:35.700
+Und es gibt einen Grund, warum Microsoft er neu entwickelt hat.
+
+00:02:36.280 --> 00:02:37.180
+Das Problem mit Armvorlagen.
+
+00:02:37.640 --> 00:02:39.620
+Armvorlagen sind das ursprüngliche IAC-Format von Azure.
+
+00:02:40.040 --> 00:02:42.300
+Es handelt sich um JSON-Dateien, die viele Vorteile bieten.
+
+00:02:42.760 --> 00:02:46.640
+Sie decken alle Azure-Ressourcen vollständig ab und verwenden dieselbe Bereitstellungs-Engine,
+
+00:02:46.700 --> 00:02:47.660
+mit der Sie sie intern verwenden.
+
+00:02:48.060 --> 00:02:50.980
+Wenn Sie sie im Portal erstellen können, können Sie sie auch in einer Armvorlage definieren.
+
+00:02:51.560 --> 00:02:52.200
+Liegt also das Problem.
+
+00:02:52.520 --> 00:02:55.160
+JSON eignet sich hervorragend für Maschinen, aber für Menschen ist es schreckend.
+
+00:02:55.540 --> 00:02:56.260
+Zeige Ihnen, was ich meine.
+
+00:02:56.660 --> 00:02:59.260
+Ein Speicherkonto in einer Armvorlage benötigt etwa 20 Codezeilen.
+
+00:02:59.740 --> 00:03:01.860
+Das gleiche Speicherkonto in Bizep umfasst etwa 10 Zeilen.
+
+00:03:01.860 --> 00:03:03.900
+Die JSON-Version ist ungefähr doppelt so groß.
+
+00:03:04.340 --> 00:03:05.180
+Das sind nur einfache Ressourcen.
+
+00:03:05.800 --> 00:03:09.780
+Stellen Sie sich eine vollständige Bereitstellung mit Netzwerk, Compute, Datenbank und Sicherheitsregeln vor.
+
+00:03:10.420 --> 00:03:12.020
+Die Armvorlage wird zu einer Textwand.
+
+00:03:12.760 --> 00:03:14.240
+Die häufigsten Schwachstellen sind vorhersehbar.
+
+00:03:14.240 --> 00:03:20.180
+Fehlende Kommas, nicht übereinstimmende Klammern, ausführliche Verschachtelungen, die es schwer machen zu erkennen, wo eine Ressource endet und eine andere beginnt.
+
+00:03:20.660 --> 00:03:24.360
+Sie verbringen mehr Zeit mit dem Ring, mit der JSON-Syntax, als mit der eigentlichen Definition Ihrer Infrastruktur.
+
+00:03:24.680 --> 00:03:25.860
+Und dann sind da noch die Abhängigkeiten.
+
+00:03:26.360 --> 00:03:28.560
+In A müssen Sie Abhängigkeiten manuell deklarieren.
+
+00:03:28.560 --> 00:03:33.060
+Wenn Ressource A die Existenz von Ressource B benötigt, müssen Sie das explizit angeben.
+
+00:03:33.760 --> 00:03:35.420
+Wenn Sie eine vergessen schlägt, Ihre Bereitstellung fehlt.
+
+00:03:35.780 --> 00:03:37.260
+Viel liegt beim herausfinden, welche Sie vergessen haben.
+
+00:03:37.660 --> 00:03:41.300
+Wenn Sie jemals versucht haben, eine 200-zeilige JSON-Datei von Hand zu schreiben, wissen Sie, dass das keinen Spaß macht.
+
+00:03:41.540 --> 00:03:42.080
+Nicht einmal ein bisschen.
+
+00:03:42.500 --> 00:03:43.360
+Die Lernkurve ist steil.
+
+00:03:43.920 --> 00:03:46.120
+Neue Teammitglieder haben Schwierigkeiten, Armvorlagen zu verstehen.
+
+00:03:46.600 --> 00:03:47.700
+Die Einstiegshürden sind hoch.
+
+00:03:48.120 --> 00:03:48.980
+Und was passiert in der Praxis?
+
+00:03:49.480 --> 00:03:52.020
+Viele Teams haben am Ende nur noch eine Person, die die Armvorlage kennt.
+
+00:03:52.240 --> 00:03:54.140
+Diese Person wird zum Single Point of Failure.
+
+00:03:54.140 --> 00:03:57.980
+Sie ist die Einzige, die die Bereitstellung ändern und debuggen kann, wenn etwas nicht funktioniert.
+
+00:03:58.560 --> 00:03:59.240
+Es ist nicht tragbar.
+
+00:04:00.180 --> 00:04:03.540
+Microsoft hat das Feedback gehört und Bicep entwickelt, um genau diese Probleme zu beheben.
+
+00:04:04.300 --> 00:04:04.920
+Was ist Bicep?
+
+00:04:05.580 --> 00:04:06.500
+Was genau ist Bicep?
+
+00:04:06.880 --> 00:04:10.880
+Es handelt sich um eine Sprache, die für die Bereitstellung von Azure-Ressourcen entwickelt wurde und im Kern ein Transpiler ist.
+
+00:04:11.560 --> 00:04:13.840
+Sie schreiben Bicep und es wird in Arm-JSON kompiliert.
+
+00:04:14.640 --> 00:04:16.500
+Im Grunde ist es dieselbe Engine, aber die Schreibweise ist viel übersichtlich.
+
+00:04:16.880 --> 00:04:19.740
+Der Name Bicep setzt sich eigentlich aus Arm zusammen, das rückwärts geschrieben wird.
+
+00:04:20.220 --> 00:04:22.040
+Arm. Ein kleiner Insider-Witz von Microsoft.
+
+00:04:22.040 --> 00:04:24.240
+Aber wenn Sie es in Aktion sehen, ergibt es Sinn.
+
+00:04:24.620 --> 00:04:26.400
+Bicep setzt auf Arm auf, anstatt es zu ersetzen.
+
+00:04:26.920 --> 00:04:28.680
+Sie erhalten die gleiche Leistung mit einer einfachen Syntag.
+
+00:04:28.920 --> 00:04:30.780
+Bicep ersetzt Arm nicht, sondern baut darauf auf.
+
+00:04:31.420 --> 00:04:33.380
+Alles, was Sie mit Arm tun können, können Sie auch mit Bicep tun.
+
+00:04:33.740 --> 00:04:36.960
+Jeder Ressourcentyp, jede API-Version und jede Konfigurationsoption ist vorhanden.
+
+00:04:37.360 --> 00:04:38.640
+Der einzige Unterschied besteht in der Schreibweise.
+
+00:04:39.120 --> 00:04:40.180
+Die Syntagse ist viel übersichtlicher.
+
+00:04:40.580 --> 00:04:44.100
+Keine Anführungszeichen, um Eigenschaftsnamen, keine Kommas zwischen Eigenschaften und keine Klammern, die man beachten muss.
+
+00:04:44.180 --> 00:04:44.880
+Es ist einfach einfacher.
+
+00:04:45.280 --> 00:04:46.640
+Vergleichen Sie die beiden Versionen nebeneinander.
+
+00:04:46.640 --> 00:04:49.660
+Die Arm-JSON-Version eines Speicherkontos ist voller Informationen.
+
+00:04:50.220 --> 00:04:51.880
+Anführungszeichen, Kommas, Klammern, Verschachtelungen.
+
+00:04:52.800 --> 00:04:55.200
+Die Bicep-Version enthält dieselben Informationen, ist aber lesbar.
+
+00:04:55.980 --> 00:05:00.560
+Sie können sie betrachten und sofort verstehen, was sie tut, ohne dass die Schichten von JSON-Syntags durchlaufen müssen.
+
+00:05:01.500 --> 00:05:03.760
+Eine große Verbesserung ist die automatische Abhängigkeitsableitung.
+
+00:05:04.180 --> 00:05:06.100
+In Arm müssen Sie Depends-On manuell deklarieren.
+
+00:05:06.100 --> 00:05:12.100
+Wenn in Bicep jedoch Ressource A auf Ressource B verweist, ermittelt das System die Abhängigkeit automatisch.
+
+00:05:12.640 --> 00:05:13.520
+Sie müssen sie nicht aufschreiben.
+
+00:05:13.900 --> 00:05:14.560
+Es funktioniert einfach.
+
+00:05:14.780 --> 00:05:16.320
+Und das allein spart stundenlanges Debuggen.
+
+00:05:16.800 --> 00:05:18.100
+Module sind ein weiterer wichtiger Bestandteil.
+
+00:05:18.460 --> 00:05:22.520
+Sie können Ihre Infrastruktur in kleinere, wiederverwendbare Teile aufteilen und diese projekteübergreifend nutzen.
+
+00:05:23.320 --> 00:05:25.840
+Ein Team erstellt ein Netzwerkmodul und ein anderes Team verwendet es.
+
+00:05:26.380 --> 00:05:28.040
+Sie müssen nicht jedes Mal das Rad neu erfinden.
+
+00:05:28.480 --> 00:05:32.060
+Mit Parametern und Variablen können Sie Ihre Eingaben einmal definieren und überall wieder verwenden.
+
+00:05:32.720 --> 00:05:35.500
+Das Suchen und Ersetzen von festcodierten Werten gehört der Vergangenenheit.
+
+00:05:35.500 --> 00:05:40.080
+Und die Zeichenketteninterpolation bedeutet, dass Sie Präfixspeicheranstelle komplexer Verkettungsfunktionen schreiben können.
+
+00:05:40.640 --> 00:05:42.840
+Die Tools sind ein weiterer Grund, warum sich Bicep so angenehm verwenden.
+
+00:05:43.380 --> 00:05:47.820
+Die VS Code-Erweiterung bietet IntelliSense, Syntax-Hervorhebung und Echtzeitfehlerprüfung.
+
+00:05:48.360 --> 00:05:50.760
+Ehrlich gesagt ist sie eine der besten Spracherweiterungen in VS Code.
+
+00:05:51.080 --> 00:05:53.400
+Sie beginnen mit der Eingabe und sie schlägt vor, was als nächstes kommt.
+
+00:05:53.820 --> 00:05:55.560
+Machen Sie einen Fehler und Sie werden sofort darüber informiert.
+
+00:05:55.820 --> 00:05:58.800
+Sie müssen nicht mehr warten, bis eine Bereitstellung fehlschlägt, bevor Sie feststellen, dass Sie ein Komma vergessen.
+
+00:05:59.580 --> 00:06:01.000
+Wie sieht das nun in der Praxis aus?
+
+00:06:01.440 --> 00:06:02.940
+Sehen wir uns an, wie sich Bicep von Arm unterscheidet?
+
+00:06:02.940 --> 00:06:05.460
+Bicep im Vergleich zu Arm, was ist der Unterschied?
+
+00:06:06.140 --> 00:06:09.320
+Brechen wir darüber, was der Unterschied ist, wenn Sie Bicep anstelle von Arm.json schreiben.
+
+00:06:09.780 --> 00:06:11.200
+Die Dateigröße ist ein offensichtlicher Unterschied.
+
+00:06:11.660 --> 00:06:14.860
+Bicep-Dateien sind etwa halb so groß wie entsprechende Arm-Vorlagen.
+
+00:06:15.560 --> 00:06:16.360
+Das ist nicht übertrieben.
+
+00:06:16.860 --> 00:06:21.380
+Sie entfernen alle Anführungszeichen, Kommas, Klammern und Boilerplate-Codes und übrig bleibt nur die Infrastrukturdefinition.
+
+00:06:21.640 --> 00:06:22.820
+Die Hälfte des Codes desselbe ergibt.
+
+00:06:23.200 --> 00:06:24.380
+Die Lesbarkeit ergibt sich von selbst.
+
+00:06:24.880 --> 00:06:27.680
+Weniger Zeilen, übersichtlichere Struktur und auf einen Blick leichter Verständnis.
+
+00:06:27.680 --> 00:06:31.100
+Wenn Sie eine Bicep-Datei öffnen, können Sie sie scannen und nachvollziehen, was bereitgestellt wird.
+
+00:06:31.680 --> 00:06:36.080
+Bei Arm.json müssen Sie mehrere Verschachtelungsebenen durchlaufen, bevor Sie die eigentliche Ressourcenkonfiguration finden.
+
+00:06:36.460 --> 00:06:37.760
+Abhängigkeiten sparen enorm viel Zeit.
+
+00:06:38.420 --> 00:06:40.200
+In Arm deklarieren Sie Abhängigkeiten manuell.
+
+00:06:40.620 --> 00:06:42.220
+Wenn Sie eine vergessen, schlägt Ihre Bereitschlung fehl.
+
+00:06:42.580 --> 00:06:46.560
+Wenn in Bicep-Ressource A auf Ressource B verweist, wird dies vom System automatisch verarbeitet.
+
+00:06:47.480 --> 00:06:49.420
+Die Abhängigkeit wird beim Kompilieren in Arm.json zugefügt.
+
+00:06:49.820 --> 00:06:51.500
+Sie müssen nicht darüber nachdenken, es funktioniert einfach.
+
+00:06:51.880 --> 00:06:53.620
+Und das allein spart stundenlanges Debuggen.
+
+00:06:54.060 --> 00:06:55.360
+Module sind ein weiterer wichtiger Unterschied.
+
+00:06:55.360 --> 00:06:57.960
+Arm verfügt über verschachtelte Vorlagen, deren Arbeit jedoch mühsam.
+
+00:06:58.620 --> 00:07:01.000
+Separate Dateien, komplexe Verknüpfungen, schwer zu versionen.
+
+00:07:01.080 --> 00:07:04.360
+Bicep verfügt über Module, die übersichtlicher, versionierbar und wiederverwendbar sind.
+
+00:07:05.080 --> 00:07:08.800
+Sie definieren ein Modul einmal, veröffentlichen es in einer Registrierung und referenzieren von überall darauf.
+
+00:07:09.320 --> 00:07:11.140
+Gleiches Modul, jedes Mal dieselbe Konfiguration.
+
+00:07:11.680 --> 00:07:13.340
+Der Bereitstellungsprozess selbst ist identisch.
+
+00:07:13.760 --> 00:07:16.720
+Bicep wird in Arm.json kompiliert und dann von Azure Resource Manager bereitgestellt.
+
+00:07:17.200 --> 00:07:18.320
+Gleiche Engine, gleiche Pipeline.
+
+00:07:18.720 --> 00:07:22.220
+Sie müssen Ihren Bereitstellungsprozess nicht ändern, sondern nur die Art und Weise, wie Sie die Vorlagen schraben.
+
+00:07:22.220 --> 00:07:26.500
+Was wäre, wenn das eine Funktion, die Arm technisch gesehen bereits bietet, die aber durch Bicep wesentlich zugänglich ist?
+
+00:07:27.160 --> 00:07:31.420
+Sie können Änderungen vor der Bereitstellung in der Vorschau anzeigen und genau sehen, was erstellt, geändert oder gelöscht wird.
+
+00:07:31.840 --> 00:07:33.420
+Keine Überraschungen, keine versehentlichen Löschungen.
+
+00:07:33.920 --> 00:07:36.860
+Sie führen Was-wäre-wenn-aus, überprüfen die Ausgabe und stellen sie bereit, wenn Sie richtig haben.
+
+00:07:37.120 --> 00:07:39.100
+Die Lernkurve ist ein Bereich, in dem Bicep hervorsteht.
+
+00:07:39.540 --> 00:07:41.160
+Arm.json setzt voraus, dass Sie wissen, was Sie tun.
+
+00:07:41.440 --> 00:07:43.060
+Es wurde für Maschinen entwickelt, nicht für Menschen.
+
+00:07:43.460 --> 00:07:44.660
+Bicep wurde für Anfänger entwickelt.
+
+00:07:45.080 --> 00:07:46.600
+Intuitive Syntax-Tools, die Sie anleiten.
+
+00:07:46.940 --> 00:07:49.520
+Sie können es dann am Nachmittag lernen und am Ende der Woche produktiv sein.
+
+00:07:49.520 --> 00:07:52.400
+Microsoft hat Bicep zur empfohlenen Erstellungsumgebung gemacht.
+
+00:07:52.780 --> 00:07:55.040
+Alle neuen Funktionen und Verbesserungen zielen in erster Linie auf Bicep.
+
+00:07:55.580 --> 00:07:59.100
+Arm-Vorlagen funktionieren immer noch und werden nicht verschwinden, aber Sie sollten wahrscheinlich keine neuen schreiben.
+
+00:07:59.760 --> 00:08:02.240
+Wenn Sie heute ein neues Projekt starten, ist Bicep die richtige Wahl.
+
+00:08:02.720 --> 00:08:04.920
+Drei Zeilen Bicep, um eine Ressourcengruppe bereitzustellen.
+
+00:08:05.380 --> 00:08:05.920
+Nur drei Zeilen.
+
+00:08:06.300 --> 00:08:08.320
+Das entsprechende Arm.json umfasst etwa 15 Zeilen.
+
+00:08:08.560 --> 00:08:10.100
+Gleiches Ergebnis, gleiche Bereitstellung.
+
+00:08:10.380 --> 00:08:12.120
+Aber eine ist lesbar und die andere ist unleserlich.
+
+00:08:12.720 --> 00:08:14.380
+Jetzt fragen Sie sich vielleicht, was ist mit Terraform?
+
+00:08:14.800 --> 00:08:16.260
+Sollte ich Bicep oder Terraform lernen?
+
+00:08:17.000 --> 00:08:18.980
+Bicep oder Terraform, was sollten Sie verwenden?
+
+00:08:19.680 --> 00:08:21.440
+Willkommen zurück bei den Microsoft Knowledge Nuggets.
+
+00:08:21.760 --> 00:08:24.540
+Ich bin Mirko Peters und heute befassen wir uns mit einer Frage, die immer wieder auftaucht.
+
+00:08:24.860 --> 00:08:25.660
+Bicep oder Terraform?
+
+00:08:25.980 --> 00:08:26.940
+Lassen Sie es uns aufschlüsseln.
+
+00:08:27.140 --> 00:08:28.580
+Terraform funktioniert cloudübergreifend.
+
+00:08:28.800 --> 00:08:31.940
+Sie können es für Azure, AWS, GCP oder sogar für alle drei gleichzeitig verwenden.
+
+00:08:32.400 --> 00:08:34.400
+Bicep hingegen wurde speziell für Azure entwickelt.
+
+00:08:34.960 --> 00:08:36.420
+Dieser grundlegende Unterschied wirkt sich auf alles andere.
+
+00:08:36.840 --> 00:08:40.020
+Wenn Sie also cloudübergreifend arbeiten, ist Terraform die richtige Wahl.
+
+00:08:41.040 --> 00:08:44.700
+Sie lernen eine Sprache, ein Tool und ein Workflow und es funktioniert überall.
+
+00:08:45.400 --> 00:08:48.500
+Wenn Sie jedoch hauptsächlich mit Azure arbeiten, bietet Bicep einige echte Vorteile.
+
+00:08:48.500 --> 00:08:49.840
+Das ist der erste Vorteil.
+
+00:08:50.160 --> 00:08:51.260
+Keine Statusdateien, die verwaltet werden.
+
+00:08:51.800 --> 00:08:54.560
+Terraform speichert eine Statusdateien, der nachverfolgt wird, was bereitgestellt wird.
+
+00:08:54.840 --> 00:08:55.700
+Diese Datei teilt Deutung.
+
+00:08:56.200 --> 00:08:58.760
+Wenn sie beschädigt wird oder nicht mehr synchron ist, liegt ein ernstes Problem vor.
+
+00:08:59.340 --> 00:09:01.880
+Sie müssen die Datei sicher speichern, sichern und den Zugriff verwalten.
+
+00:09:02.520 --> 00:09:07.260
+Bicep kommuniziert direkt mit Azure Resource Manager, überprüft, was bereits vorhanden ist und ermittelt die Unterschiede.
+
+00:09:07.760 --> 00:09:10.880
+Keine Statusdatei bedeutet keine Synchronisierungsprobleme und keine Gefahr der Beschädigung.
+
+00:09:10.880 --> 00:09:12.800
+Zweiter Vorteil, DayZero Support.
+
+00:09:13.500 --> 00:09:17.500
+Wenn Microsoft ein neues Azure Feature veröffentlicht, unterstützt Bicep es sofort noch am selben Tag.
+
+00:09:18.500 --> 00:09:22.060
+Terraform muss auf ein Anbieter-Update warten, das manchmal schnell geht, manchmal aber Wochen dauert.
+
+00:09:23.060 --> 00:09:25.760
+Wenn Sie ein neues Feature sofort verwenden müssen, ist Bicep die einzige Option.
+
+00:09:26.700 --> 00:09:28.000
+Drittens wurde es vom Azure Team entwickelt.
+
+00:09:28.380 --> 00:09:32.800
+Die Tools, IntelliSense und Fehlermeldungen wurden alle auf die Funktionsweise von Azure ausgelegt.
+
+00:09:32.800 --> 00:09:37.600
+Wenn Sie Bicep schreiben, verwenden Sie eine Sprache, die Azure Ressourcen nativ versteht.
+
+00:09:38.280 --> 00:09:41.960
+Sie weiß, welche Eigenschaften erforderlich sind, welche Werte gültig sind und welche Abhängigkeiten bestehen.
+
+00:09:42.320 --> 00:09:44.980
+Diese tiefe Integration ist mit einem Drittanbieter-Tool nur schwer nachzubilden.
+
+00:09:45.300 --> 00:09:46.100
+Sie können auch beides verwenden.
+
+00:09:46.720 --> 00:09:50.960
+Viele Organisationen verwenden Bicep für Plattformen und Zielzonen und Terraform für Multicloud-Workloads.
+
+00:09:51.340 --> 00:09:52.700
+Diese beiden Konzepte schließen sich gegenseitig.
+
+00:09:53.060 --> 00:09:54.840
+Sie können für jede Aufgabe das richtige Tool auswählen.
+
+00:09:55.440 --> 00:09:59.420
+Die ehrliche Antwort lautet, wenn Sie sich speziell mit Azure vertraut machen möchten, verfügt Bicep überwiegliche Teile.
+
+00:09:59.420 --> 00:10:01.320
+Es ist ein einfacherer Weg, wenn Sie gerade das anfangen.
+
+00:10:01.320 --> 00:10:04.580
+Sie müssen sich nicht mit Statusdateien, Anbietern oder Backend-Konfigurationen vertraut machen.
+
+00:10:04.860 --> 00:10:07.800
+Sie installieren die Azure CLI, öffnen VSCode und beginnen mit dem Schreiben.
+
+00:10:08.220 --> 00:10:08.680
+Genug der Theorie.
+
+00:10:09.120 --> 00:10:11.200
+Lassen Sie uns darüber sprechen, was Sie tatsächlich für den Einstieg benötigen.
+
+00:10:12.040 --> 00:10:12.500
+Erste Schritte.
+
+00:10:12.940 --> 00:10:13.760
+Was Sie tatsächlich benötigen.
+
+00:10:14.200 --> 00:10:15.560
+Sie benötigen zwei Dinge, um loszulegen.
+
+00:10:15.880 --> 00:10:18.340
+Die Azure CLI und die Bicep-Erweiterung für VSCode.
+
+00:10:18.780 --> 00:10:19.200
+Das ist alles.
+
+00:10:19.600 --> 00:10:22.560
+Sie müssen keine separate Bicep-CLA installieren und keine zusätzlichen Tools konfigurieren.
+
+00:10:22.760 --> 00:10:24.280
+Bicep ist in der Azure CLI integriert.
+
+00:10:24.640 --> 00:10:26.300
+Die Installation der Azure CLI ist ziemlich einfach.
+
+00:10:26.680 --> 00:10:27.700
+Rufen Sie die Microsoft-Docs auf.
+
+00:10:27.860 --> 00:10:29.700
+Suchen Sie die Installationsseite für Ihr Betriebssystem.
+
+00:10:31.320 --> 00:10:32.420
+Währenden ist es nur ein Befehl.
+
+00:10:32.480 --> 00:10:33.640
+Blue install Azure CLI.
+
+00:10:34.100 --> 00:10:35.980
+Unter Windows gibt es ein MSI-Installationsprogramm.
+
+00:10:36.080 --> 00:10:37.160
+Laden Sie es herunter, füllen Sie es aus, fertig.
+
+00:10:37.580 --> 00:10:39.360
+Sie funktioniert auch unter Linux über Ihren Paketmanager.
+
+00:10:39.800 --> 00:10:42.900
+Füllen Sie nach der Installation AZ-Version aus, um zu überprüfen, ob alles funktioniert.
+
+00:10:43.740 --> 00:10:46.560
+Sowohl die Azure CLI-Version als auch die Bicep-Version sollten aufgeführt sein.
+
+00:10:47.160 --> 00:10:51.000
+Öffnen Sie nun VSCode, wechseln Sie zum Erweiterungsbereich auf der linken Seite und suchen Sie nach Bicep.
+
+00:10:51.560 --> 00:10:52.820
+Installieren Sie die Version von Microsoft.
+
+00:10:52.960 --> 00:10:54.660
+Keine Drittanbieter-Version, sondern die offizielle Version.
+
+00:10:55.080 --> 00:10:56.220
+Sie benötigen diese Erweiterung glücklich.
+
+00:10:56.220 --> 00:11:03.600
+Sie erhalten IntelliSense, das während der Eingabe Ressourceneigenschaften vorschlägt, die Syntax hervorhebt, sodass Sie Fehler auf einen Blick erkennen können und in Echtzeit nach Fehlern suchen.
+
+00:11:03.920 --> 00:11:07.500
+Sie sehen rote Wellenlinien unter allem, was falsch ist, noch bevor Sie überhaupt versuchen, es bereitzustellen.
+
+00:11:07.860 --> 00:11:12.680
+Ehrlich gesagt ist dies eine der besten Spracherweiterungen im VSCode und ein wichtiger Grund dafür, warum die Arbeit mit Bicep so angenehm ist.
+
+00:11:13.080 --> 00:11:15.320
+Erstellen Sie nun eine neue Datei und nennen Sie sie Main.bit.
+
+00:11:15.700 --> 00:11:18.220
+Diese Bicep-Erweiterung weist VSCode an, die Erweiterung zu aktivieren.
+
+00:11:18.720 --> 00:11:20.080
+Ohne sie schreiben Sie einfach nur Klartext.
+
+00:11:20.660 --> 00:11:22.220
+Mit ihr erhalten Sie die volle Tooling-Erfahrung.
+
+00:11:22.560 --> 00:11:23.640
+Das ist ein kurzes Beispiel.
+
+00:11:23.640 --> 00:11:25.800
+Eine Ressourcengruppenbereitstellung, drei Kurzzeilen.
+
+00:11:26.340 --> 00:11:32.040
+Zuerst legen Sie den Zielbereich auf Abonnement fest, dann definieren Sie die Ressource, eine Ressourcengruppe mit einem Namen und einem Speicherort.
+
+00:11:32.400 --> 00:11:33.200
+Das sind alles drei Zeilen.
+
+00:11:33.720 --> 00:11:37.780
+Vergleichen Sie dies mit dem ARM JSON-Äquivalent, das aus etwa 15 Zeilen mit Klammern und Anführungszeichen besteht.
+
+00:11:38.200 --> 00:11:40.080
+Verwenden Sie zum Bereitstellen die Azure CLI.
+
+00:11:40.660 --> 00:11:44.660
+Da Sie die Bereitstellung im Abonnementbereich durchführen, lautet der Befehl azDeploymentSubCreate.
+
+00:11:45.140 --> 00:11:48.560
+Sie übergeben einen Speicherort für die Bereitstellungsmetadaten und verweisen auf Ihre Bicep-Datei.
+
+00:11:48.560 --> 00:11:51.460
+Dies ist die Befehlszahlmethode, es gibt aber auch eine geführte Benutzeroberfläche.
+
+00:11:51.460 --> 00:11:54.940
+Klicken Sie in VS Code mit der rechten Maustaste auf die Bicep-Datei Bereitstellen aus.
+
+00:11:55.580 --> 00:11:56.680
+Sie werden durch den gesamten Prozess geführt.
+
+00:11:57.080 --> 00:12:04.000
+Sie werden nach einem Bereitstellungsnamen gefragt, müssen Ihr Abonnement auswählen, eine Ressourcengruppe erstellen oder auswählen und gefragt, ob Sie über eine Parameterdatei verfügen.
+
+00:12:04.520 --> 00:12:06.100
+Sie verneinen diese und die Bereitstellung wird durchgeführt.
+
+00:12:06.420 --> 00:12:07.880
+Das Ergebnis wird in Ihrem Azure Portal angezeigt.
+
+00:12:08.120 --> 00:12:11.060
+Dies entspricht dem Klicken im Portal, aber jetzt verfügen Sie über eine Datei, die Sie wiederverwenden.
+
+00:12:11.320 --> 00:12:14.500
+Sie können es in Ihrem Repository-Committen mit Ihrem Team teilen und morgen erneut ausführen.
+
+00:12:14.500 --> 00:12:15.640
+Und jetzt kommt der Clou.
+
+00:12:16.240 --> 00:12:18.560
+Führen Sie dieselbe Bereitstellung erneut aus und beobachten Sie, was passiert.
+
+00:12:19.660 --> 00:12:20.860
+Die Stärke der Idempotenz.
+
+00:12:21.320 --> 00:12:25.740
+Das Besondere an der Ausführung von Bereitstellungen ist, dass Sie diese immer wieder ausführen können, können, möchten, ohne dass Sie etwas kaputt haben.
+
+00:12:25.920 --> 00:12:27.200
+Genau das bietet Ihnen die Idempotenz.
+
+00:12:27.540 --> 00:12:30.120
+Wenn Sie die Bicep-Datei zum ersten Mal ausführen, wird die Ressourcengruppe erstellt.
+
+00:12:30.680 --> 00:12:32.340
+Beim zweiten Ausführen passiert jedoch nichts mehr.
+
+00:12:32.820 --> 00:12:34.280
+Kein Fehler, keine Duplikate, gar nichts.
+
+00:12:35.160 --> 00:12:39.300
+Bicep überprüft, was sich bereits in Azure befindet, vergleicht es mit Ihren Anforderungen und gibt an, dass es keine Änderungen gibt.
+
+00:12:39.300 --> 00:12:43.920
+Es wurde nicht versucht, eine neue Ressourcengruppe zu erstellen und es ist kein Fehler mit der Meinung aufgetreten, dass bereits eine vorhandene.
+
+00:12:44.160 --> 00:12:47.000
+Es wurde lediglich bestätigt, dass der aktuelle Status mit dem gewünschten Status übereinstimmt.
+
+00:12:47.300 --> 00:12:49.760
+Stellen Sie sich das wie das Ausführen vom Git-Status für ein leeres Repository vor.
+
+00:12:50.000 --> 00:12:50.800
+Sie müssen nichts weiter tun.
+
+00:12:51.220 --> 00:12:52.720
+Alles ist bereits genau so, wie es sein sollte.
+
+00:12:53.120 --> 00:12:54.640
+Das ist die Stärke von Infrastructure as Code.
+
+00:12:55.160 --> 00:12:58.420
+Sie können Ihre Bereitstellung immer wieder ausführen und erhalten jedes Mal dasselbe Ergebnis.
+
+00:12:59.180 --> 00:13:00.340
+Keine Überraschung, keine Abweichung.
+
+00:13:00.840 --> 00:13:02.900
+Sie wissen genau, was bereitgestellt wird, da es in der Datei steht.
+
+00:13:03.340 --> 00:13:04.980
+Die Datei wird zu Ihrer zentralen Informationsquelle.
+
+00:13:05.200 --> 00:13:08.720
+Sie müssen sich nie wieder fragen, ob Sie sich an eine Einstellung erinnert haben oder sich mit dem Problem,
+
+00:13:09.300 --> 00:13:13.020
+auf meinem Computer herumschlagen oder im Azure-Portal nachsehen, ob jemand etwas geändert hat, hat, hat, hat, hat.
+
+00:13:13.380 --> 00:13:14.720
+Die Datei gibt Ihnen den aktuellen Standpunkt.
+
+00:13:15.060 --> 00:13:17.540
+Wenn Sie etwas ändern möchten, ändern Sie die Datei und stellen Sie erneut bereit.
+
+00:13:17.860 --> 00:13:21.820
+Wenn Sie dies überprüfen möchten, führen Sie die Bereitstellung erneut aus und es wird bestätigt, dass alles übereinstimmt.
+
+00:13:22.300 --> 00:13:23.920
+So schaffen Sie Vertrauen in Ihre Infrastruktur.
+
+00:13:24.540 --> 00:13:25.940
+Die Datei ist die zentrale Informationsquelle.
+
+00:13:26.600 --> 00:13:30.400
+Nicht Ihre Erinnerung, kein Word-Dokument, kein YouTube-Video von vor sechs Monaten, die Datei.
+
+00:13:31.360 --> 00:13:33.520
+Wie fügt sich BICEP also in das Gesamtbild von Azure ein?
+
+00:13:34.200 --> 00:13:36.060
+Das Gesamtbild, in das BICEP passt.
+
+00:13:36.880 --> 00:13:39.260
+BICEP ist Teil des Azure Resource Manager Ökosystems.
+
+00:13:39.680 --> 00:13:40.640
+Es ist kein separates Tool.
+
+00:13:41.080 --> 00:13:44.540
+Viele denken, dass es das ist, aber es ist eigentlich nur eine bessere Möglichkeit, ARM-Vorlagen zu schreiben.
+
+00:13:45.040 --> 00:13:48.600
+Im Grunde ist es immer noch ARM, dieselbe Bereitstellungsengine, dieselbe API, alles ist gleich.
+
+00:13:49.020 --> 00:13:50.220
+Der einzige Unterschied besteht in der Schreibweise.
+
+00:13:50.860 --> 00:13:54.340
+Da BICEP in ARM kompiliert wird, funktioniert alles, was mit ARM funktioniert, auch mit BICEP.
+
+00:13:55.180 --> 00:13:57.480
+Azure Policy erzwingt die Compliance für Ihre Bereitstellungen.
+
+00:13:57.980 --> 00:13:59.440
+RBAC steuert, wer was bereitstellen kann.
+
+00:14:00.020 --> 00:14:01.800
+Cost Management verfolgt die Ausgaben für Ihre Ressourcen nach.
+
+00:14:02.180 --> 00:14:05.760
+Azure DevOps und GitHub Actions stellen Ihre BICEP-Dateien über Pipelines bereit.
+
+00:14:05.760 --> 00:14:09.140
+All dies funktioniert einwandfrei, da BICEP standardmäßiges ARM-JSON und so.
+
+00:14:09.800 --> 00:14:10.860
+Durch den Wechsel geht nichts verloren.
+
+00:14:11.300 --> 00:14:12.240
+Wir gewinnen sogar in Klarheit.
+
+00:14:12.820 --> 00:14:15.080
+Microsoft hat ein ganzes Ökosystem rund um BICEP aufgebaut.
+
+00:14:15.700 --> 00:14:20.860
+Azure Verified Modules oder AVM ist eine kuratierte Bibliothek von BICEP und Terraform-Modulen, die Best Practices folgen.
+
+00:14:21.300 --> 00:14:22.720
+Sie müssen nicht alles von Grund auf neu schreiben.
+
+00:14:22.720 --> 00:14:27.900
+Sie können vorgefertigte Module für gängige Muster wie virtuelle Netzwerke, Speicherkonten und App-Dienste verwenden.
+
+00:14:28.640 --> 00:14:31.640
+Sie werden getestet, gewartet und auf das Well-Architekte-Framework abgestimmt.
+
+00:14:32.240 --> 00:14:36.840
+Das Cloud-Adoption-Framework umfasst BICEP-Referenz-Implementierungen für standardisierte Unternehmensarchitekturen.
+
+00:14:37.360 --> 00:14:39.820
+Wenn Sie eine Zielzone erstellen, gibt es dafür eine BICEP-Vorlage.
+
+00:14:40.820 --> 00:14:43.780
+Bereitstellungsstapel ermöglichen Ihnen die Lebenszyklusverwaltung für Ressourcengruppen.
+
+00:14:44.000 --> 00:14:45.280
+Sie können einen Stapel bereitstellen.
+
+00:14:45.540 --> 00:14:48.560
+Und wenn Sie eine Ressource aus Ihrer BICEP-Datei entfernen, kann der Stapel diese für Sie bereinigen.
+
+00:14:49.300 --> 00:14:50.620
+Oder Sie vor versehentlichem Löschen schützen.
+
+00:14:50.620 --> 00:14:51.740
+Sie entscheiden.
+
+00:14:52.360 --> 00:14:56.960
+Das Ökosystem wächst kontinuierlich mit mehr Modulen, besseren Tools und einer tieferen Integration mit KI und GitHub Copilot.
+
+00:14:57.640 --> 00:14:59.780
+Sie können Ihre Anforderungen in einfachem Englisch beschreiben.
+
+00:15:00.000 --> 00:15:01.700
+Und Copilot generiert den BICEP-Code für Sie.
+
+00:15:02.620 --> 00:15:06.380
+Microsoft investiert weiterhin in BICEP als primäre Erstellungsumgebung für Azure.
+
+00:15:06.960 --> 00:15:08.700
+Daher zielen neue Features in erster Linie auf BICEP.
+
+00:15:09.380 --> 00:15:12.120
+ARM-Vorlagen funktionieren weiterhin, aber die Innovation findet in BICEP statt.
+
+00:15:12.440 --> 00:15:13.460
+Hier also die Quintessenz.
+
+00:15:13.540 --> 00:15:17.080
+Wenn Sie in Azure arbeiten, ist BICEP der natürliche nächste Schritt nach dem Klicken im Portal.
+
+00:15:17.700 --> 00:15:19.820
+Sie müssen weder Terraform lernen noch am JSON-Persche.
+
+00:15:19.820 --> 00:15:26.140
+Sie installieren zwei Dinge, schreiben ein paar Zeilen Code und stellen eine Infrastruktur bereit, die wiederholbar, versionskontrolliert und zuverlässig ist.
+
+00:15:26.680 --> 00:15:29.120
+Ich möchte Ihnen noch etwas Praktisches mit auf den Weg geben, das Sie heute umsetzen können.
+
+00:15:29.580 --> 00:15:34.120
+Sie wissen nun, was Infrastructure as Code ist, warum es BICEP gibt und wie es Azure-Bereitstellungen vereinfacht.
+
+00:15:34.500 --> 00:15:35.540
+Hier ist der springende Punkt.
+
+00:15:35.640 --> 00:15:37.340
+BICEP ist kein separates Bereitstellungssystem.
+
+00:15:37.340 --> 00:15:46.240
+Es ist eine bessere Möglichkeit, dieselben ARM-Vorlagen zu schreiben, die Sie sowieso schreiben würden und dabei dieselbe Engine und denselben Azure-Resource-Manager im Hintergrund zu verwenden und eine Sprache, die Menschen tatsächlich lesen und schreiben können.
+
+00:15:46.620 --> 00:15:47.660
+Hier ist eine Aufgabe für Sie.
+
+00:15:47.780 --> 00:15:51.580
+Erstellen Sie eine Datei für Main.BICEP, stellen Sie eine Ressourcengruppe bereit und führen Sie die Bereitstellung zu BICEP.
+
+00:15:51.660 --> 00:15:52.860
+Beobachten Sie, wie es beide Male funktioniert.
+
+00:15:53.280 --> 00:15:56.920
+Beim ersten Mal wird die Ressource erstellt und beim zweiten Mal wird bestätigt, dass sich nichts geändert hat.
+
+00:15:56.920 --> 00:16:01.000
+In diesem Moment macht es Klick und Sie werden feststellen, dass Sie nie wieder im Portal herumklicken möchten.
+
+00:16:01.560 --> 00:16:02.340
+Das ist die Grundlage.
+
+00:16:03.240 --> 00:16:07.360
+Von hier aus können Sie Speicherkonten, virtuelle Netzwerke und App-Dienste nach demselben Muster hinzufügen.
+
+00:16:08.160 --> 00:16:10.240
+Schreiben Sie eine Datei, stellen Sie sie bereit und finden Sie sie erneut.
+
+00:16:10.620 --> 00:16:13.660
+Diese Datei wird zu Ihrer Quelle der Wahrheit und alles andere ergibt sich daraus.
+
+00:16:14.060 --> 00:16:17.440
+Wenn Sie dies hilfreich fanden, leiten Sie es an jemanden weiter, der immer noch im Portal herumklickt.
+
+00:16:18.000 --> 00:16:18.540
+Er wird es Ihnen dankbar.
+
+00:16:18.880 --> 00:16:20.700
+Abonniere den Podcast auf deiner bevollzugten Plattform.
+
+00:16:20.700 --> 00:16:25.180
+In der nächsten Folge bringen wir BICEP noch weiter, indem wir echte Ressourcen mit echten Eigenschaften bereitstellen.

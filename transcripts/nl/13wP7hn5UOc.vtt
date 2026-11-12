@@ -1,0 +1,1228 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:09.540
+Sliep je nog steeds taken rond in Microsoft Planner? Fascinerend! Je zien klikken, typen en vakjes één voor één verslepen is als iemand observeren die je in het e-mailtijd berkhandmatig enveloppen adresseert.
+
+00:00:09.700 --> 00:00:16.180
+Het is digitaal bezigheidstherapie vermomd als productiviteit. Planner hoort je projecten te beheren, niet zelf een extra taak te worden.
+
+00:00:16.460 --> 00:00:23.200
+Maak kennis met Copilot Studio, het onderdeel van Microsoft's Power Platform waarmee je je AI-agents bouwt die kunnen redeneren over je verzoeken.
+
+00:00:23.200 --> 00:00:28.140
+Zeg dat het drie taken moet aanmaken voor volgende week en het knikt niet alleen beleefd. Het gaat ze daadwerkelijk aanmaken.
+
+00:00:28.140 --> 00:00:32.880
+Het kan taken vermelden, bijwerken en zelfs prioriteren zonder dat jij nog een digitale vinger hoeft uit te steken.
+
+00:00:33.080 --> 00:00:37.780
+Aan het einde van deze video bouw je je eigen Planner agent vanaf nul. Geen magie, gewoon logica.
+
+00:00:37.980 --> 00:00:43.600
+We bespreken hoe je de agent bouwt die verbonden is met Planner, hoe je hem leert redeneren en hoe je hem test in Microsoft 365 Copilot.
+
+00:00:43.820 --> 00:00:48.300
+Jij zorgt voor de duidelijkheid, de agent doet het werk. De Planner-Copilot verbinding begrijpen.
+
+00:00:48.600 --> 00:00:53.420
+Microsoft Planner is je takenboord. Kaarten, lijsten, deadlines, de illusie van orde.
+
+00:00:53.420 --> 00:00:57.840
+Maar orde die met handmatige inspanning wordt onderhouden, blijft chaos, alleen netjes op alfabet.
+
+00:00:57.840 --> 00:01:01.980
+Planner was nooit bedoeld om menselijke arbeid op te schalen. Het was bedoeld om het te structureren.
+
+00:01:02.180 --> 00:01:08.720
+Het probleem is dat jij telkens de flessenhals wordt. Elke vervaldatum, elke drag en drop is afhankelijk van jou geklikt als een mechanische duif.
+
+00:01:08.860 --> 00:01:14.640
+Copilot Studio lost dat op niet door je meer knoppen te geven om in te drukken, maar door de noodzaak om ze überhaupt in te drukken te elimineren.
+
+00:01:14.820 --> 00:01:18.780
+Het is de conversationele laag die menselijke taal omzet in geautomatiseerde actie.
+
+00:01:18.780 --> 00:01:25.640
+Jij vraagt, voeg een taak toe voor het testen van het prototype en de agent begrijpt de context, welk project, welk plan en hoe dit in het bord past.
+
+00:01:25.840 --> 00:01:31.240
+Vergelijk dat met Power Automate, dat de bekend logica regelt, het onzichtbare loodgieterswerk van eventgestuurde workflows.
+
+00:01:31.440 --> 00:01:34.780
+Power Automate wacht op triggers, voert stromen uit en volgt regels.
+
+00:01:35.000 --> 00:01:40.000
+Copilot Studio luistert echter. Het redeneert. Het beslist wanneer welke connector moet worden aangeroepen.
+
+00:01:40.200 --> 00:01:42.540
+Zie Power Automate als de lopende band in het magazijn.
+
+00:01:42.540 --> 00:01:45.700
+Copilot Studio is de opzichter die vertelt wanneer hij moet beginnen met bewegen.
+
+00:01:45.920 --> 00:01:49.280
+De twee zijn complementaire soorten in Microsoft's automatiserings-ecosysteem.
+
+00:01:49.400 --> 00:01:51.020
+Power Automate voert regels uit.
+
+00:01:51.160 --> 00:01:53.260
+Copilot Studio interpreteert de intentie.
+
+00:01:53.480 --> 00:01:56.900
+Samen vormen ze het verschil tussen een rigide macro en een responsieve assistent.
+
+00:01:57.080 --> 00:02:01.580
+Onder de motorkap gebruikt Copilot Studio wat Microsoft charmant orchestratie noemt.
+
+00:02:01.660 --> 00:02:04.040
+Het is geen willekeurige magie, het is een LLM.
+
+00:02:04.160 --> 00:02:07.900
+Een groot taalmodel dat de juiste tool kiest op basis van de context van je instructie.
+
+00:02:08.060 --> 00:02:11.200
+Tools zijn connectors, zoals Planner, Outlook en SharePoint.
+
+00:02:11.200 --> 00:02:18.580
+Wanneer je een opdracht geeft, verwerkt het model je verzoek, raadpleegt de beschrijvingen van beschikbare tools en selecteert degene die het meest overeenkomt met je intentie.
+
+00:02:18.800 --> 00:02:21.960
+Zeg bijvoorbeeld, toon mijn openstaande taken voor het designproject.
+
+00:02:22.160 --> 00:02:27.980
+Het model identificeert dat de lijst taken tool in Planner nodig is, vult parameters zoals de plan idee in en voert de actie uit.
+
+00:02:28.140 --> 00:02:32.440
+Je krijgt antwoord niet omdat het model gokte, maar omdat jij het hebt geleerd wanneer welke tool relevant is.
+
+00:02:32.660 --> 00:02:34.220
+Stel je nu je huidige workflow voor.
+
+00:02:34.400 --> 00:02:40.000
+Je opent Planner handmatig, leest elke taak, werkt deadlines bij, wisselt van tabblad, vergeet er misschien een en herhaalt het proces.
+
+00:02:40.000 --> 00:02:43.400
+Het is gestructureerde inefficiëntie, consistent, maar verspillend.
+
+00:02:43.540 --> 00:02:48.220
+Met Copilot Studio verschuift die mentale inspanning van jouw brein naar de redeneermotor van het model.
+
+00:02:48.440 --> 00:02:53.360
+Het onthoudcontext, herkent patronen en verplaatst gegevens precies waar ze thuis horen.
+
+00:02:53.560 --> 00:02:56.860
+Hier is een metafoor om in je productiviteitsgeheugen te graveren.
+
+00:02:57.280 --> 00:02:58.280
+Planner is het archief.
+
+00:02:58.480 --> 00:03:04.220
+Copilot Studio is de stagiair die alles voor je ordent zonder salaris, eigenwijsheid of koffiepauzes.
+
+00:03:04.220 --> 00:03:08.920
+Eenmaal geconfigureerd begrijp je nieuwe digitale klerk natuurlijke instructies zoals
+
+00:03:08.920 --> 00:03:11.060
+Maak taken aan voor de sprint van volgende week.
+
+00:03:11.200 --> 00:03:13.540
+Of update de status van taken die vandaag af moeten.
+
+00:03:13.800 --> 00:03:15.520
+Wanneer jij spreekt, organiseert het.
+
+00:03:15.660 --> 00:03:19.600
+De orkestratielaag zorgt ervoor dat je instructies niet alleen worden verwerkt, maar ook geïnterpreteerd.
+
+00:03:19.760 --> 00:03:21.260
+En dat is het cruciale onderscheid.
+
+00:03:21.620 --> 00:03:23.580
+Automatisering zonder redenering is domme snelheid.
+
+00:03:23.880 --> 00:03:26.120
+Automatisering met redenering wordt adaptieve intelligentie.
+
+00:03:26.280 --> 00:03:28.280
+De meeste mensen benaderen automatisering verkeerd.
+
+00:03:28.280 --> 00:03:31.820
+Ze beginnen bij de tools en vragen zich daarna af waarom de workflow zo robotachtig blijft.
+
+00:03:31.960 --> 00:03:34.800
+De juiste volgorde is eerst redeneren, dan pas tools.
+
+00:03:35.040 --> 00:03:38.540
+Leer de agent waarom een taak bestaat voordat je hem leert hoe hij deze moet uitvoeren.
+
+00:03:38.780 --> 00:03:42.780
+Zodra je die mentale hiërarchie op orde hebt, stop je met script schrijven en begin je met
+
+00:03:42.780 --> 00:03:43.580
+gedrag ontwerpen.
+
+00:03:43.780 --> 00:03:47.920
+Nu je de architectuur begrijpt, de relatie tussen je planner, je power automate flows en je
+
+00:03:47.920 --> 00:03:50.900
+conversatie interface, is het tijd om zelf aan de slag te gaan.
+
+00:03:51.100 --> 00:03:55.760
+We gaan je eerste copilot studio agent bouwen, de persoonlijkheid definiëren, impulsen
+
+00:03:55.760 --> 00:03:59.240
+inperken en het werk laten doen waar jouw menselijk brein tijd aan verspilt.
+
+00:03:59.440 --> 00:04:02.740
+Bereid je voor omslepen en neerzetten in te ruilen voor creëren en gaan.
+
+00:04:02.960 --> 00:04:04.820
+De agent bouwen in copilot studio.
+
+00:04:05.100 --> 00:04:06.440
+Open copilot studio.
+
+00:04:06.720 --> 00:04:10.720
+Knipper niet met je ogen, dwaal niet af en weersta de drang om doelloos rond te klikken
+
+00:04:10.720 --> 00:04:12.920
+zoals de gemiddelde gebruiker bij een nieuwe knop.
+
+00:04:13.340 --> 00:04:14.680
+We gaan iets doelgerichts doen.
+
+00:04:14.900 --> 00:04:19.500
+Klik op nieuwe agent, geef hem een zinnige naam, zoals taakplanner, geen plannerbot 300
+
+00:04:19.500 --> 00:04:20.520
+of AI dinges.
+
+00:04:20.740 --> 00:04:24.560
+De naam van de agent bepaalt hoe makkelijk je hem later terugvindt en je zult echt vergeten
+
+00:04:24.560 --> 00:04:25.420
+hoe je hem hebt genoemd.
+
+00:04:25.420 --> 00:04:29.300
+Voordat je je nu een bewuste kantoorassistent in beeldt, onthoud dat dit een AI-klerk is,
+
+00:04:29.480 --> 00:04:30.180
+geen helderziende.
+
+00:04:30.380 --> 00:04:33.600
+Het moet weten wie het is, wat het kan en, belangrijker nog, wat het niet kan.
+
+00:04:33.820 --> 00:04:35.400
+Daar komen instructies bij kijken.
+
+00:04:35.660 --> 00:04:39.800
+Zie ze als de bedrijfsfilosofie van de agent, zoals de wetten van Asimov, maar minder literair
+
+00:04:39.800 --> 00:04:40.620
+en bureaucratischer.
+
+00:04:40.840 --> 00:04:45.000
+Je bepaalt het bereik van het redeneren, planner taken maken, weergeven, bijwerken en niets
+
+00:04:45.000 --> 00:04:45.480
+daarbuiten.
+
+00:04:45.700 --> 00:04:50.060
+De instructie-editor biedt ruimte voor paragrafen met richtlijnen over toon, doelen en grenzen.
+
+00:04:50.280 --> 00:04:50.980
+Wees duidelijk.
+
+00:04:50.980 --> 00:04:55.320
+Je bent een plannerassistent die taken kan maken, taken kan weergeven en vervaldatums
+
+00:04:55.320 --> 00:04:56.700
+kan instellen met planner tools.
+
+00:04:56.860 --> 00:04:58.660
+Antwoord beknopt speculeer nooit.
+
+00:04:58.880 --> 00:05:02.120
+De duidelijkheid hier vertaalt zich later direct naar een betere orquestratie.
+
+00:05:02.460 --> 00:05:06.000
+Dubbelzinnigheid verwart taalmodellen op dezelfde manier als vage uitnodigingen voor vergaderingen
+
+00:05:06.000 --> 00:05:06.580
+mensen verwarren.
+
+00:05:06.760 --> 00:05:10.600
+Zodra dat is geschreven, zie je het testvenster aan de rechterkant, een vrolijk ogende zandbak
+
+00:05:10.600 --> 00:05:11.420
+die om aandacht smeekt.
+
+00:05:11.420 --> 00:05:12.200
+Negeer het.
+
+00:05:12.200 --> 00:05:16.380
+Ik weet dat op testen, klikken voelt als vooruitgang, maar op dit moment heeft de agent niets
+
+00:05:16.380 --> 00:05:17.040
+om te testen.
+
+00:05:17.200 --> 00:05:19.560
+Het is als een stofzuiger aanzetten zonder stroom.
+
+00:05:19.760 --> 00:05:23.580
+Het model kan scripts papegaaien, maar kan nog geen acties uitvoeren omdat het tools mist.
+
+00:05:23.740 --> 00:05:26.620
+De functionele spieren achter zijn charmante conversationele skelet.
+
+00:05:26.860 --> 00:05:29.520
+Dit brengt ons bij het filosofische hart van Copilot Studio.
+
+00:05:29.980 --> 00:05:31.120
+Instructies versus tools.
+
+00:05:31.500 --> 00:05:33.600
+Instructies zijn logica, tools zijn uitvoering.
+
+00:05:34.000 --> 00:05:37.380
+Instructies vertellen wat voor soort agent het is, tools vertellen hoe het moet doen wat het
+
+00:05:37.380 --> 00:05:38.000
+beweert te doen.
+
+00:05:38.200 --> 00:05:40.940
+De undefinieerd karakter, de ander biedt de mogelijkheden.
+
+00:05:40.940 --> 00:05:44.780
+Veel mensen maken dit onderscheid nooit en klagen dan dat Copilot niet deed wat ik
+
+00:05:44.780 --> 00:05:45.080
+zei.
+
+00:05:45.260 --> 00:05:48.740
+Dat deed het niet omdat ze nooit de tools hebben verbonden die gehoorzaamheid mogelijk maken.
+
+00:05:48.920 --> 00:05:53.620
+Open nu het tolpaneel, je ziet een bibliotheek met connectoren, Planner, Outlook, Teams, SharePoint
+
+00:05:53.620 --> 00:05:54.380
+en talloze anderen.
+
+00:05:54.820 --> 00:05:58.160
+Microsoft's universum van integraties ligt als een buffet voor je klaar en toch bevriest
+
+00:05:58.160 --> 00:05:59.660
+de meeste gebruikers bij het zien ervan.
+
+00:05:59.840 --> 00:06:01.420
+De paradox van oneindige keuze.
+
+00:06:01.640 --> 00:06:03.100
+Dat is waar de meeste mensen vastlopen.
+
+00:06:03.340 --> 00:06:05.640
+Zoals ik graag zeg, Microsoft geeft je een gereedschapskist.
+
+00:06:05.800 --> 00:06:07.460
+De meeste mensen staren er alleen maar naar.
+
+00:06:07.640 --> 00:06:08.820
+Wij zullen dat echter niet doen.
+
+00:06:08.820 --> 00:06:12.720
+We filteren straks op Planner en selecteren de juiste acties, maar kijk eerst naar wat
+
+00:06:12.720 --> 00:06:13.360
+er mogelijk is.
+
+00:06:13.500 --> 00:06:17.140
+Elke connector vertegenwoordigt een API-eindpunt verpakt in begrijpelijke taal.
+
+00:06:17.280 --> 00:06:20.200
+Een taak maken, een record bijwerken, een e-mail verzenden.
+
+00:06:20.380 --> 00:06:23.900
+Copilot Studio delegeert deze mogelijkheden naar de redeneerlaag van je agent.
+
+00:06:24.080 --> 00:06:25.780
+Het model heeft geen mystieke krachten.
+
+00:06:26.020 --> 00:06:29.380
+Het is gewoon een goed getrainde bibliothecaris die het juiste boek uit de juiste plank haalt.
+
+00:06:29.600 --> 00:06:32.740
+Controleer de configuratie instellingen voordat je Planner tools toevoegt.
+
+00:06:32.940 --> 00:06:36.960
+Verbindingen vereisen geverifieerde accounts die meestal gekoppeld zijn aan je Microsoft 365
+
+00:06:36.960 --> 00:06:40.900
+identiteit. Gebruik het account dat het plan dat je gaat automatiseren, bezit of beheert.
+
+00:06:41.080 --> 00:06:44.840
+Anders zal je toekomstige testsessie ineen storten door een authenticatiefout waardoor je
+
+00:06:44.840 --> 00:06:46.300
+aan je levenskeuzes gaat twijfelen.
+
+00:06:46.960 --> 00:06:48.680
+Configuraties worden per agent opgeslagen.
+
+00:06:48.960 --> 00:06:52.400
+Dat betekent dat als je meerdere agents wilt, zeg één voor Planner en één voor Teams,
+
+00:06:52.600 --> 00:06:54.180
+je ze elk afzonderlijk moet autoriseren.
+
+00:06:54.540 --> 00:06:56.080
+Microsoft noemt dit beveiliging.
+
+00:06:56.260 --> 00:06:58.460
+Ik noem het een kleine hindernis voor de efficiëntie.
+
+00:06:58.640 --> 00:07:01.500
+Hoe dan ook, doe het nu goed om jezelf later ellende te besparen.
+
+00:07:01.720 --> 00:07:05.820
+Zodra de identiteit en instructies van de agent zijn vastgelegd, bestaat deze officieel
+
+00:07:05.820 --> 00:07:06.400
+binnen je tenant.
+
+00:07:07.020 --> 00:07:10.260
+Gefeliciteerd, je hebt zojuist een lege maar zeer zelfbewuste schil gebouwd.
+
+00:07:10.420 --> 00:07:14.000
+Hij weet dat hij Planner taken moet beheren, maar zonder verbinding is hij als een stagiair
+
+00:07:14.000 --> 00:07:16.460
+zonder netwerktoegang, goed gekleed, maar nutteloos.
+
+00:07:16.640 --> 00:07:18.360
+Dit is waar terughoudendheid belangrijk is.
+
+00:07:18.600 --> 00:07:20.560
+Veel mensen haasten zich direct naar het debuggen.
+
+00:07:20.740 --> 00:07:21.100
+Niet doen.
+
+00:07:21.300 --> 00:07:23.740
+Je doel is de architectuur begrijpen voordat je naar de functies kijkt.
+
+00:07:23.900 --> 00:07:26.340
+We hebben persoonlijkheid, kaders en structuur gedefinieerd.
+
+00:07:26.620 --> 00:07:28.500
+Vervolgens moeten we hem armen en benen geven.
+
+00:07:28.500 --> 00:07:32.920
+Dat doen we door tools toe te voegen, specifiek Planner acties die daadwerkelijk resultaten
+
+00:07:32.920 --> 00:07:34.520
+boeken in plaats van beleefde antwoorden.
+
+00:07:34.740 --> 00:07:39.140
+De komende fase verbinden drie essentiële tools, taak aanmaken, takenlijst ophalen en
+
+00:07:39.140 --> 00:07:39.840
+taak bijwerken.
+
+00:07:40.020 --> 00:07:45.080
+Elk daarvan voert een API interactie uit met Microsoft Planner, maar via natuurlijke taalredenering
+
+00:07:45.080 --> 00:07:46.840
+in plaats van vooraf bepaalde triggers.
+
+00:07:47.160 --> 00:07:51.360
+Wanneer deze bedrading voltooid is, zal je taakplanner agent niet alleen antwoorden, maar ook handelen.
+
+00:07:51.580 --> 00:07:54.540
+Sla je werk voor nu dus op en laat hem even over zijn identiteit nadenken.
+
+00:07:54.540 --> 00:07:58.460
+Wat je hebt gebouwd is het skelet, het zenuwstelsel en een vleugje persoonlijkheid.
+
+00:07:58.640 --> 00:08:02.700
+Daarna enten we er functionaliteit op, spieren om deze beleefde filosoof nuttig te maken.
+
+00:08:02.960 --> 00:08:06.660
+Zodra die Planner tools zijn verbonden, stopt je agent met doen alsof en begint hij echt
+
+00:08:06.660 --> 00:08:07.280
+te presteren.
+
+00:08:07.420 --> 00:08:08.640
+Je hebt de geest gebouwd.
+
+00:08:08.860 --> 00:08:10.080
+Nu bouwen we de beweging.
+
+00:08:10.540 --> 00:08:13.620
+Voeg Planner tools toe, aanmaken, lijst, bijwerken.
+
+00:08:13.820 --> 00:08:17.760
+Nu is het tijd om van deze agent meer te maken dan alleen beleefde existentiële lucht.
+
+00:08:17.960 --> 00:08:22.080
+We gaan de Planner tools installeren, de werkwoorden waarmee je taakplanner daadwerkelijk
+
+00:08:22.080 --> 00:08:22.780
+dingen kan doen.
+
+00:08:22.780 --> 00:08:27.340
+Dit zijn de drie cruciale spieren, taak aanmaken, takenlijst ophalen en taak bijwerken.
+
+00:08:27.340 --> 00:08:31.700
+Eenmaal verbonden verandert je agent van een filosofische chatbot in een operationele assistent.
+
+00:08:31.860 --> 00:08:33.560
+Laten we beginnen met een taak aanmaken.
+
+00:08:33.760 --> 00:08:36.900
+Dit is de basishandeling voor productiviteit, het produceren van een werkeenheid.
+
+00:08:37.160 --> 00:08:40.260
+Zonder dit kan je agent alleen commentaar leveren op je luiheid, niet deze oplossen.
+
+00:08:40.520 --> 00:08:42.020
+Zoek dus in het tolpaneel naar Planner.
+
+00:08:42.260 --> 00:08:43.540
+Je ziet een lijst met acties.
+
+00:08:43.540 --> 00:08:45.200
+Selecteer taak aanmaken.
+
+00:08:45.360 --> 00:08:46.600
+Voeg deze toe aan je agent.
+
+00:08:46.800 --> 00:08:48.720
+Er wordt mogelijk gevraagd om een verbinding te maken.
+
+00:08:48.960 --> 00:08:52.620
+Keur deze goed met het account dat eigenaar is van de gewenste groep en het plan in Planner.
+
+00:08:53.100 --> 00:08:56.620
+Er verschijnen drie parameters, groep idee, plan idee en titel.
+
+00:08:56.880 --> 00:09:00.920
+Dit zijn de coördinaten van elke taak in Planner, het wie, het waar en het wat.
+
+00:09:01.180 --> 00:09:05.820
+Standaard probeert de agent deze dynamisch in te vullen met AI, maar dat is niet altijd verstandig.
+
+00:09:05.820 --> 00:09:10.720
+Groeps- en plan-idees veranderen zelden en de agent heeft geen helderziend inzicht in jouw organisatiestructuur.
+
+00:09:10.720 --> 00:09:16.140
+Zet deze twee op aangepaste waarden, selecteer de juiste Microsoft 365 groep en daarna het bijbehorende plan.
+
+00:09:16.340 --> 00:09:22.060
+Dat legt de coördinaten vast, zodat je agent taken maakt waar jij ze wilt en niet in de existentiële leegte van je testomgeving.
+
+00:09:22.300 --> 00:09:26.380
+Laat de titel dynamisch, dat is wat je door de AI wilt laten afhandelen op basis van natuurlijke taal.
+
+00:09:26.540 --> 00:09:28.720
+Maar vergeet het veld met het label beschrijving niet.
+
+00:09:28.920 --> 00:09:32.360
+Het lijkt triviaal, maar speelt een grote rol in hoe het taalmodel redeneert.
+
+00:09:32.520 --> 00:09:36.660
+Het model leest deze beschrijvingen wanneer het bepaalt welke tool past bij een verzoek van de gebruiker.
+
+00:09:36.880 --> 00:09:40.240
+Maak een nieuwe taak in Planner, is technisch correct, maar pijnlijk algemeen.
+
+00:09:40.240 --> 00:09:43.440
+Je kunt de redeneermotor helpen door hem een rijkere aanwijzing te geven.
+
+00:09:43.700 --> 00:09:46.820
+Maak een of meer Planner taken aan op basis van het verzoek van de gebruiker.
+
+00:09:47.060 --> 00:09:49.980
+Vat lange titels samen en vraag niet expliciet om titels.
+
+00:09:50.220 --> 00:09:55.560
+Die ene zin voorkomt dat de agent je blijft bestoken met verzoeken om verduidelijking telkens als je meerdere taken vraagt.
+
+00:09:55.780 --> 00:09:58.400
+Nu kan hij titels direct afleiden uit de verzoektekst.
+
+00:09:58.560 --> 00:10:04.420
+Dus als je zegt, maak drie taken aan, een om ontwerpen te beoordelen, een om prijzen bij te werken en een om de demo voor te bereiden,
+
+00:10:04.420 --> 00:10:10.040
+zal het model die afzonderlijke items ontleden en de actie, taak aanmaken, drie keer uitvoeren, zonder verdere vragen.
+
+00:10:10.200 --> 00:10:14.300
+In dit stadium heeft het filosofische skelet van je agent nu zijn eerste werkende ledemaat.
+
+00:10:14.840 --> 00:10:17.840
+Gefeliciteerd, hij kan sneller werk genereren dan de meeste stagiairs.
+
+00:10:18.040 --> 00:10:19.860
+De volgende stap, taken weergeven.
+
+00:10:20.060 --> 00:10:23.880
+Je denkt misschien dat dit voor de hand ligt, maar het is de onbezongen held van contextbeheer.
+
+00:10:24.080 --> 00:10:27.280
+Zonder de mogelijkheid om bestaande taken weer te geven, werkt het model blind.
+
+00:10:27.480 --> 00:10:29.900
+Hij kan niet controleren wat er al gedaan is of wat er nog open staat.
+
+00:10:29.900 --> 00:10:32.600
+Voeg de actie, taken weergeven, toe vanuit je planner connector.
+
+00:10:32.900 --> 00:10:36.900
+Configureer deze met dezelfde groeps en plan-ID's als je eerder hebt ingesteld, beide als aangepaste waarden.
+
+00:10:37.080 --> 00:10:41.380
+De beschrijving zegt wellicht, geef de taken in het plan weer wat werkt, maar we kunnen dit weer verbeteren.
+
+00:10:41.520 --> 00:10:47.100
+Probeer, haal alle taken op uit het opgegeven planner plan, zodat de agent ze kan raadplegen of valideren in antwoorden.
+
+00:10:47.360 --> 00:10:53.120
+Deze formulering geeft aan dat de actie niet alleen voor menselijke weergave is, maar ook contextuele data voor redenering.
+
+00:10:53.340 --> 00:10:56.640
+Open nu het testvenster, want deze keer is testen de moeite waard.
+
+00:10:56.880 --> 00:10:58.680
+Vraag, welke taken heb ik in mijn plan?
+
+00:10:58.680 --> 00:11:07.960
+Het model roept, taken weergeven, aan, haalt de resultaten op en presenteert ze op natuurlijke wijze, zoiets als, je hebt momenteel taken met de titels X, Y en Z.
+
+00:11:08.600 --> 00:11:10.180
+De schoonheid zit achter de schermen.
+
+00:11:10.340 --> 00:11:13.120
+Die resultaten kunnen nu worden gebruikt voor toekomstige verzoeken.
+
+00:11:13.380 --> 00:11:21.960
+Wanneer je later zegt, zet de deadline voor de review taak op morgen, kijkt het orkestratiemodel terug in de lijst, identificeert het juiste idee en roept de volgende toe aan die we koppelen.
+
+00:11:21.960 --> 00:11:24.820
+Dat brengt ons bij het derde onderdeel, taakbijwerken.
+
+00:11:25.000 --> 00:11:27.980
+De functie die statische records omzet in dynamische voortgang.
+
+00:11:28.180 --> 00:11:30.800
+Voeg de tool voor het bijwerken van taken toe aan je agent.
+
+00:11:31.020 --> 00:11:35.500
+Je ziet opnieuw velden, taak-idee, vervaldatum en een menu met optionele parameters.
+
+00:11:35.860 --> 00:11:37.620
+Het taak-idee moet dynamisch blijven.
+
+00:11:37.840 --> 00:11:40.920
+De AI koppelt de juiste taak aan de naam uit de voorrige lijstactie.
+
+00:11:41.100 --> 00:11:46.980
+Voor de vervaldatum kun je dit ook op dynamisch laten staan, aangezien mensen zelde datums in ISO 8601 formaat uitspreken in alledaagse taal.
+
+00:11:46.980 --> 00:11:51.240
+Gelukkig zet het onderliggende model morgen om in een correct geformateerde tijdsaanduiding.
+
+00:11:51.420 --> 00:11:53.320
+Maar geef het model wel een beschrijvende hint.
+
+00:11:53.520 --> 00:11:57.240
+Het is jammer hoeveel agents falen omdat bouwers documentatievelden negeren.
+
+00:11:57.400 --> 00:12:00.960
+Voeg toe, gebruik dit om de vervaldatum of details van een bestaande taak te wijzigen.
+
+00:12:01.160 --> 00:12:04.480
+Accepteer datums in natuurlijke taal zoals aanstaande vrijdag of morgen.
+
+00:12:04.760 --> 00:12:11.840
+Dat advies vertelt de reden neerlaag wat mogelijk is, waardoor het vermogen om informele gebruikersverzoeken om te zetten in gestructureerde updates verbeterd.
+
+00:12:11.980 --> 00:12:13.320
+Sla het op en test opnieuw.
+
+00:12:13.320 --> 00:12:16.920
+Vraag, zet de vervaldatum voor de design review taak op vrijdag.
+
+00:12:17.060 --> 00:12:20.980
+De eerste keer dat je dit doet, vraagt Copilot Studio om toestemming voor die plannerverbinding.
+
+00:12:21.180 --> 00:12:21.820
+Keur dit goed.
+
+00:12:22.040 --> 00:12:23.740
+Binnen enkele seconden wordt je plan bijgewerkt.
+
+00:12:23.900 --> 00:12:25.260
+De datum komt perfect overeen.
+
+00:12:25.420 --> 00:12:26.420
+Je hoeft er niets te slepen.
+
+00:12:26.640 --> 00:12:31.680
+Probeer nu, voor een kleine demonstratie van AI Multitasking, te dicteren via Windows Plus H of de microfoon in Teams.
+
+00:12:31.980 --> 00:12:35.000
+Zeg, zet al mijn taken die deze week verlopen op aanstaande dinsdag.
+
+00:12:35.000 --> 00:12:40.640
+Het model vermeldt de huidige taken, detecteert welke aan de voorwaarden voldoen en doorloopt vervolgens de bijwerkacties.
+
+00:12:40.860 --> 00:12:42.440
+Geef toe, je bent onder de indruk.
+
+00:12:42.440 --> 00:12:45.820
+Wat voorheen 15 klikken kostte, gebeurt nu met één gesproken zin.
+
+00:12:46.040 --> 00:12:56.200
+Met die drie tools, aanmaken, weergeven en bijwerken, heb je je agent voorzien van volledige CRUD mogelijkheden, minus de D van verwijderen, omdat mensen nog steeds in paniek raken bij onomkeerbare acties.
+
+00:12:56.560 --> 00:13:00.440
+Dit trio dekt bijna elk plannerscenario dat meetbaar tijd bespaart.
+
+00:13:01.120 --> 00:13:02.680
+Dit is de ethische taakverdeling.
+
+00:13:02.980 --> 00:13:05.380
+Jij zorgt voor duidelijkheid, de AI voor precisie.
+
+00:13:05.580 --> 00:13:07.900
+Jij vertelt wat er moet gebeuren, de AI bepaalt hoe het moet.
+
+00:13:08.120 --> 00:13:09.980
+Stop met het micromanager van je eigen software.
+
+00:13:09.980 --> 00:13:15.420
+Wanneer je je bedoeling helder omschrijft, lost het orquestratiemodel de rest op id's invullen, datums formateren, aanroepen, uitvoeren.
+
+00:13:15.600 --> 00:13:17.880
+Wees vaag en het model zal plichtsgetrouw de verkeerde keuze maken.
+
+00:13:18.060 --> 00:13:20.620
+Het belangrijkste is, raak niet geobsedeerd door perfecte logische ketens.
+
+00:13:20.800 --> 00:13:22.520
+Het orquestratiemodel past zich aan.
+
+00:13:22.680 --> 00:13:25.300
+Je programmeert niet in code, je programmeert in verwachtingen.
+
+00:13:25.520 --> 00:13:28.460
+Leer het wat goed gedrag inhoudt via deze duidelijke beschrijvingen.
+
+00:13:28.460 --> 00:13:32.660
+Uiteindelijk zal het je intentie voorspellen als een beleefde, maar licht eigenzinnige collega.
+
+00:13:32.880 --> 00:13:35.460
+En daarmee is de transformatie van je agent voltooid.
+
+00:13:35.640 --> 00:13:36.680
+Het komt nu in actie.
+
+00:13:36.900 --> 00:13:43.980
+Elk toekomstig commando, uitgesproken, getypt of door het kantoor geroepen, doorloopt de logica, vindt de juiste planner tool en voert het zonder moren uit.
+
+00:13:44.140 --> 00:13:46.200
+Het resultaat, minder slepen, meer doen.
+
+00:13:46.420 --> 00:13:50.300
+Nu kunnen we deze digitale assistent uit zijn sandbox halen en in je dagelijkse werk inzetten.
+
+00:13:50.520 --> 00:13:51.700
+Op naar de implementatie.
+
+00:13:51.700 --> 00:13:54.700
+Implementeren in Microsoft 365 Copilot.
+
+00:13:54.860 --> 00:14:00.740
+Nu je agent kan denken en handelen, is het tijd om hem los te laten waar het echte werk gebeurt, in Microsoft 365 Copilot.
+
+00:14:00.920 --> 00:14:05.760
+Het beperken tot Copilot Studio is als een robot leren dweilen en hem vervolgens in een klaslokaal opsluiten.
+
+00:14:05.980 --> 00:14:09.120
+Het nut ervan blijkt pas wanneer hij in je werkelijke omgeving opereert.
+
+00:14:09.280 --> 00:14:12.740
+Teams, Outlook of de Microsoft 365 interface zelf.
+
+00:14:12.980 --> 00:14:14.680
+Dit is waarom implementatie ertoe doet.
+
+00:14:14.860 --> 00:14:16.540
+Copilot Studio is voor ontwikkeling.
+
+00:14:16.780 --> 00:14:19.460
+Microsoft 365 Copilot is voor productie.
+
+00:14:19.460 --> 00:14:22.200
+Daar vinden gesprekken plaats en daar komen verzoeken vandaan.
+
+00:14:22.340 --> 00:14:26.600
+Door je agent daar te integreren, kun je zeggen, maak twee taken aan voor de sprint van volgende week.
+
+00:14:26.740 --> 00:14:29.120
+Direct in een Teams chat, terwijl iedereen meekijkt.
+
+00:14:29.300 --> 00:14:32.580
+Geen aparte tabbladen, geen contextwisselingen, geen nodeloos geklikt.
+
+00:14:32.720 --> 00:14:34.560
+De AI voert het uit terwijl jij doorgaat.
+
+00:14:34.760 --> 00:14:37.280
+Selecteer Publiceren, rechtsboven in Copilot Studio.
+
+00:14:37.540 --> 00:14:38.380
+Je ziet dan kanalen.
+
+00:14:38.620 --> 00:14:40.060
+Dit zijn je implementatie eindpunten.
+
+00:14:40.280 --> 00:14:42.280
+Kies Microsoft 365 of Teams.
+
+00:14:42.480 --> 00:14:45.240
+De eerste keer vraagt het je om te verifiëren en machtigingen goed te keuren.
+
+00:14:45.240 --> 00:14:49.760
+Vrij vertaald, je geeft Microsoft toestemming dat deze agent namens jou in Planner mag werken.
+
+00:14:49.900 --> 00:14:51.700
+Het is een essentiële vertrouwenshanddruk.
+
+00:14:51.880 --> 00:14:53.820
+Weer sta de verleiding om details over te slaan.
+
+00:14:53.960 --> 00:14:58.200
+Corporate Governance Teams zijn er dol op om automatiseringsverzoeken zonder gedocumenteerde machtigingen af te wijzen.
+
+00:14:58.400 --> 00:15:02.720
+Eenmaal gepubliceerd verschijnt je agent als beschikbare Copilot extensie in Microsoft 365.
+
+00:15:03.360 --> 00:15:05.060
+Open Teams en start een nieuwe chat.
+
+00:15:05.300 --> 00:15:08.860
+Roep je Planner agent aan bij naam of selecteer deze in het Copilot paneel.
+
+00:15:09.100 --> 00:15:11.580
+Vanaf hier worden je opdrachten live operaties.
+
+00:15:11.580 --> 00:15:19.720
+Laten we testen, typ of dicteer als je van theater houdt, maak twee taken aan, concept, klantrapport opstellen en backlog, review organiseren.
+
+00:15:20.080 --> 00:15:22.580
+Kijk hoe de AI het verwerkt, beredeert en bevestigt.
+
+00:15:23.340 --> 00:15:26.580
+Als je naar je Planner board gaat, zie je beide taken vrijwel direct verschijnen.
+
+00:15:27.320 --> 00:15:30.680
+Het metagenot van geen enkele kaart te hoeven slepen is moeilijk te overschatten.
+
+00:15:30.900 --> 00:15:32.440
+Test nu het opvragen van lijsten.
+
+00:15:32.700 --> 00:15:35.040
+Vraag, welke taken staan open in mijn groepsplan?
+
+00:15:35.300 --> 00:15:41.060
+Copilot bevraagt Planner via je agent, haalt gegevens op met de lijst tool en maakt er een gespreksantwoord van.
+
+00:15:41.060 --> 00:15:42.460
+Het is niet zomaar tekst.
+
+00:15:42.680 --> 00:15:46.060
+Het is beredeneerde output ondersteund door live API activiteit.
+
+00:15:46.280 --> 00:15:47.880
+Geef het vervolgens een uitdaging.
+
+00:15:48.160 --> 00:15:50.980
+Stel de taak voor de backlog review in op aanstaande woensdag.
+
+00:15:51.140 --> 00:15:55.180
+Het identificeert het juiste record door de titel te matchen met de voorrige lijst aanhoek.
+
+00:15:55.380 --> 00:15:59.080
+Zet aanstaande woensdag om naar de ISO-datum die Planner vereist en voert de update uit.
+
+00:15:59.540 --> 00:16:05.620
+Gefeliciteerd, je hebt zojuist een volledige conversationele transactie uitgevoerd tussen AI, Planner APIs en Teams zonder het chatvenster te verlaten.
+
+00:16:05.820 --> 00:16:08.840
+Dit is het belangrijke mentale model, de reden meer cyclus van Copilot.
+
+00:16:08.840 --> 00:16:12.840
+Elk gebruikersbericht activeert interpretatie, contextherinnering en toolaanroeping.
+
+00:16:13.040 --> 00:16:17.820
+Wanneer je zegt update mijn achterstallige taken, zoekt de orkestratie van Copilot niet simpelweg een regel op.
+
+00:16:17.920 --> 00:16:24.800
+Het bepaalt welke actieketen bij die intentie past, taken vermelden, achterstallige filteren, vervaldatums bijwerken en voert deze opeenvolgend uit.
+
+00:16:25.020 --> 00:16:26.340
+Jij drinkt ondertussen koffie.
+
+00:16:26.540 --> 00:16:30.540
+Je kunt opdrachten ook dicteren via Windows Plus H of het microfoonpictogram in Teams.
+
+00:16:30.780 --> 00:16:33.720
+Spraak is niet slechts een nieuwigheidje, het is toegankelijkheid met karakter.
+
+00:16:33.720 --> 00:16:39.520
+Door te zeggen, markeer mijn openstaande taken voor deze week als aanstaande maandag, pas je natuurlijke zinsbouw toe op gestructureerde automatisering.
+
+00:16:39.720 --> 00:16:44.480
+Copilot interpreteert de toon, analyseert tijdsaanduidingen en zet deze om in deterministische planner data.
+
+00:16:44.760 --> 00:16:46.700
+Voor een ongeoefend oor is het pure magie.
+
+00:16:46.900 --> 00:16:49.800
+Voor jou is het de voldoening van een goed ontworpen reden eerst cyclus.
+
+00:16:50.000 --> 00:16:55.620
+Een technische waarschuwing, de eerste keer dat een tool binnen 365 draait, moet je de connector toestemming opnieuw goedkeuren.
+
+00:16:55.880 --> 00:16:59.980
+Dit is Microsoft's visie op beveiligingsconsistentie, redundant, maar noodzakelijk.
+
+00:16:59.980 --> 00:17:03.660
+Keur het één keer goed en het zal je niet meer storen, tenzij je sessie verloopt.
+
+00:17:03.820 --> 00:17:06.340
+Test nu spraak in combinatie met ketenredenering.
+
+00:17:06.640 --> 00:17:09.840
+Zeg, toon mijn lopende taken en zet ze allemaal op vrijdag.
+
+00:17:13.080 --> 00:17:16.960
+De orkestratie engine verwerkt de voegwoordelijke zinsnede en zet ze allemaal.
+
+00:17:17.380 --> 00:17:22.720
+Concludeert logischerwijs dat er zowel lijst als update acties nodig zijn, roept deze na elkaar aan en ververst de context.
+
+00:17:22.980 --> 00:17:25.000
+Het resultaat verschijnt enkele seconden later.
+
+00:17:25.300 --> 00:17:28.220
+Dat is overigens het punt waarop traditionele automatisering vastloopt.
+
+00:17:28.420 --> 00:17:30.720
+Meerdere acties geactiveerd door één natuurlijke zin.
+
+00:17:30.720 --> 00:17:34.120
+Co-pilot kan dit aan omdat het geen regels volgt, maar erover redeneert.
+
+00:17:34.340 --> 00:17:39.420
+Zodra je de aanmaak, lijst en update flows hebt gevalideerd, kun je met een gerust hart het studiotabblad sluiten.
+
+00:17:39.600 --> 00:17:40.900
+Je agent woont daar niet langer.
+
+00:17:41.080 --> 00:17:44.300
+Het zwerft nu als autonome operator door teams en 365.
+
+00:17:44.960 --> 00:17:47.900
+Vanaf dit punt kan elk teamlid met de juiste rechten het aanroepen.
+
+00:17:48.020 --> 00:17:54.540
+En ja, de eerste keer dat iemand beseft dat ze vroeg drie taken toe kunnen inspreken in plaats van veertien keer te klikken, krijg je de status van een kleine godheid.
+
+00:17:54.720 --> 00:17:56.200
+Je implementatie is voltooid.
+
+00:17:56.360 --> 00:17:58.400
+De digitale werkkracht werkt nu waar jij werkt.
+
+00:17:58.400 --> 00:18:02.020
+Je hebt de monotonie van slepen en neerzetten vervangen door taalgestuurde uitvoering.
+
+00:18:02.200 --> 00:18:06.600
+Laten we bespreken hoe we dit efficiënt, compliant en uitbreidbaar houden voordat de nieuwigheid eraf is.
+
+00:18:07.640 --> 00:18:08.820
+Automatiseringstrategie en beperkingen.
+
+00:18:08.980 --> 00:18:15.720
+Nu je geniet van het succes van volledig werkende automatisering, laten we de pret een beetje drukken door de realiteit, strategie en beperkingen te bespreken.
+
+00:18:15.940 --> 00:18:20.300
+Elk intelligent systeem heeft onderhoud, beheer en af en toe een gesprek over grenzen nodig.
+
+00:18:20.480 --> 00:18:21.720
+Hier is de eerste waarheid.
+
+00:18:21.900 --> 00:18:24.880
+Co-pilot studio vervangt Power Automate niet, het vult het aan.
+
+00:18:24.880 --> 00:18:30.780
+Power Automate is nog steeds de back-end motor voor gestructureerde workflows, het onzichtbare mechanisme dat routine triggers afhandelt.
+
+00:18:30.920 --> 00:18:37.420
+Co-pilot studio is de conversationele front-end, de reden neerschil die rommelige menselijke verzoeken vertaalt naar gestructureerde logica.
+
+00:18:37.880 --> 00:18:39.760
+Gecombineerd vormen ze een gesloten lus.
+
+00:18:39.960 --> 00:18:43.320
+Co-pilot praat met mensen, Power Automate praat met systemen.
+
+00:18:43.540 --> 00:18:45.360
+Samen halen ze jou uit de vergelijking.
+
+00:18:45.580 --> 00:18:47.500
+Gebruik de juiste tool voor de juiste diepgang.
+
+00:18:47.760 --> 00:18:52.360
+Wanneer je een deterministische stroom nodig hebt, zeg, wanneer er een formulierreactie binnenkomt, maak dan een taak aan.
+
+00:18:52.360 --> 00:18:54.140
+Dat is het terrein van Power Automate.
+
+00:18:54.300 --> 00:18:58.960
+Wanneer je interpretatieve flexibiliteit nodig hebt, zoals, vroeg alle taken toe die in de vergadering van vandaag naar voren kwamen.
+
+00:18:59.180 --> 00:19:00.580
+Dat is het domein van Co-pilot.
+
+00:19:00.800 --> 00:19:04.260
+De volwassen automatiseringstrateeg begrijpt synergie boven redundantie.
+
+00:19:04.420 --> 00:19:06.260
+Ten tweede, verfijn je beschrijvingen.
+
+00:19:06.440 --> 00:19:11.160
+Die tekstvelden die je negeerde bij het toevoegen van tools, zijn de prompts die het model leest bij het kiezen van acties.
+
+00:19:11.380 --> 00:19:16.360
+Ze bijwerken met duidelijke intentiezinnen zoals, gebruik deze actie wanneer de gebruiker een datum wil instellen.
+
+00:19:16.600 --> 00:19:18.400
+Verbetert de betrouwbaarheid aanzienlijk.
+
+00:19:18.600 --> 00:19:21.480
+Slechte beschrijvingen zijn de nummer één reden waarom agents fouten maken.
+
+00:19:21.480 --> 00:19:23.000
+Ten derde, beheer governance.
+
+00:19:23.360 --> 00:19:28.780
+Elke verbinding die je agent gebruikt, zoals Planner, Teams of SharePoint, werkt onder jouw Microsoft 365 machtigingen.
+
+00:19:28.920 --> 00:19:29.640
+Respecteer de grenzen.
+
+00:19:29.860 --> 00:19:33.440
+Autoriseer niet zomaar op persoonlijke tenants als het plan bij zakelijke teams hoort.
+
+00:19:33.700 --> 00:19:35.380
+Controleer verbindingen regelmatig.
+
+00:19:35.540 --> 00:19:39.000
+Je toekomstige zelf, belast met beveiligingscompliance, zal je dankbaar zijn.
+
+00:19:39.260 --> 00:19:41.340
+Monitoring is de volgende laag van volwassenheid.
+
+00:19:41.540 --> 00:19:46.140
+Hou in de Analytics-weergave van Co-pilot Studio de aanroepfrequenties, responstijden en tool-aanroepen bij.
+
+00:19:46.140 --> 00:19:50.680
+Als een actie blijft falen, is het waarschijnlijk een verkeerde configuratie van inloggegevens of verlopen machtigingen.
+
+00:19:50.820 --> 00:19:52.940
+Herstellen, opnieuw publiceren, doorgaan.
+
+00:19:53.140 --> 00:19:54.360
+Nu, het leuke gedeelte.
+
+00:19:54.700 --> 00:19:59.100
+Beperkingen, of zoals de marketing van Microsoft liever zegt, gebruiksconsideraties.
+
+00:19:59.320 --> 00:20:03.400
+Het contextvenster van Co-pilot kan ongeveer 3000 woorden aan voor redeneringen.
+
+00:20:03.580 --> 00:20:09.380
+Dat betekent dat als je je volledige projectgeschiedenis in één chat plakt, het begin vergeten is voordat het de samenvatting bereikt.
+
+00:20:09.580 --> 00:20:11.700
+Hou verzoeken beknopt één intentie per keer.
+
+00:20:11.700 --> 00:20:18.380
+Ook leggen teams-omgevingen ongeveer 10 co-pilot-sessies per gebruiker per 24 uur op, tenzij je in een volledige enterprise-tennant zit.
+
+00:20:18.560 --> 00:20:22.260
+Bereik de limiet en je agent weigert beleefd om dienst te doen tot de volgende dag.
+
+00:20:22.440 --> 00:20:23.800
+Beschouw het als gedwongen rust.
+
+00:20:24.040 --> 00:20:25.580
+Robots verdienen ook grenzen.
+
+00:20:25.840 --> 00:20:26.860
+Licenties doen ertoe.
+
+00:20:27.340 --> 00:20:32.440
+Ontwikkelaarstenants missen vaak semantische indexfuncties, wat betekent geen rijke verankering in SharePoint-gegevens.
+
+00:20:33.040 --> 00:20:35.660
+Productieomgevingen ontsluiten die geavanceerde integraties.
+
+00:20:35.900 --> 00:20:36.420
+Vertaling.
+
+00:20:36.740 --> 00:20:39.040
+Prototypes kunnen dommer lijken dan productieagents.
+
+00:20:39.040 --> 00:20:41.180
+Dat is niet jouw schuld, dat is de licentie.
+
+00:20:41.180 --> 00:20:44.940
+Combineer Co-Pilot Studio met Power Automate voor complexe afhankelijkheden.
+
+00:20:45.140 --> 00:20:57.020
+Laat Co-Pilot bijvoorbeeld op een natuurlijke manier context verzamelen, taken toewijzen aan iedereen die bij de vergadering aanwezig was en die data naar een Power Automate Flow sturen die de deelnemers afgaat om individuele planner taken aan te maken.
+
+00:20:57.560 --> 00:21:00.180
+Laat mensen chatten, laat flows de logica verwerken.
+
+00:21:00.420 --> 00:21:01.180
+Best practice.
+
+00:21:01.500 --> 00:21:03.120
+Documenteer je configuraties.
+
+00:21:03.340 --> 00:21:06.320
+Je toekomstige zelf zal vergeten welke groeps idee bij welk plan hoort.
+
+00:21:06.320 --> 00:21:08.860
+Hou een eenvoudige tabel bij een OneNote of SharePoint.
+
+00:21:09.020 --> 00:21:12.900
+Agentnaam, connector type, authenticatie eigenaar, datum van laatste publicatie.
+
+00:21:13.280 --> 00:21:16.240
+Administratie via een spreadsheet voorkomt ironisch genoeg chaos door AI.
+
+00:21:16.420 --> 00:21:18.620
+Een kort microverhoum om het resultaat te illustreren.
+
+00:21:18.780 --> 00:21:22.300
+Een klein product team bouwde hun eigen sprintklok agent volgens deze stappen.
+
+00:21:22.520 --> 00:21:26.800
+Deze handelde routine taken af, plende de week vooruit en stemde dagelijkse deadlines af.
+
+00:21:26.800 --> 00:21:31.020
+Wat voorheen 15 minuten per vergadering kostte, werd teruggebracht tot één mondelingen instructie.
+
+00:21:31.420 --> 00:21:37.060
+Vermenigvuldigd dat met 50 vergaderingen per kwartaal en verrassend genoeg wonnen ze dagen per jaar terug zonder één regelcode te schrijven.
+
+00:21:37.260 --> 00:21:38.460
+Maar temper de verwachtingen.
+
+00:21:38.660 --> 00:21:41.660
+De intelligentie van Copilot wordt begrensd door context en duidelijkheid.
+
+00:21:41.820 --> 00:21:45.400
+Het is briljant in conversie, waarbij vage menselijke bewoordingen worden omgezet in gestructureerde actie.
+
+00:21:45.540 --> 00:21:46.960
+Het is middelmatig in filosofie.
+
+00:21:47.180 --> 00:21:50.300
+Wanneer het aarzelt, is dat een probleem met het promptontwerp, geen machine opstand.
+
+00:21:50.460 --> 00:21:56.060
+Om je strategie samen te vatten, redeneer in Copilot, vooruit in Atomate, monitor in studio en respecteer de licentiegrenzen.
+
+00:21:56.060 --> 00:21:58.740
+Dat kwartet houdt automatisering efficiënt en compliant.
+
+00:21:59.020 --> 00:22:03.660
+Je hebt niet alleen een digitale stagiair gebouwd, maar een raamwerk om repetitief cognitief werk op te schalen.
+
+00:22:03.820 --> 00:22:07.380
+Kortom, laat AI het alledaagse afhandelen, jij richt je op het betekenisvolle.
+
+00:22:07.540 --> 00:22:09.100
+Scherp nu je volgende verzoek aan.
+
+00:22:09.280 --> 00:22:11.280
+Een volledige workflow wacht op orders.
+
+00:22:11.740 --> 00:22:13.740
+Van takenjongleur naar takencommandant.
+
+00:22:13.920 --> 00:22:19.660
+Dus zo voelt vooruitgang taken tot leven spreken in plaats van ze te verslepen als een spreadsheet verslaafde.
+
+00:22:19.820 --> 00:22:22.460
+Je bent van planner-oppasser naar planner-commandant gegaan.
+
+00:22:22.460 --> 00:22:27.720
+Je nieuwe Copilot studio-agent luistert, redeneert en voert uit, terwijl jij op het denkniveau blijft.
+
+00:22:27.860 --> 00:22:30.240
+Het is geen automatisering om de automatisering.
+
+00:22:30.460 --> 00:22:32.480
+Het is delegeren op machinesnelheid.
+
+00:22:32.660 --> 00:22:37.440
+Onthoud dat je niet zomaar een API hebt gekoppeld, je hebt de redeneerlaag gebouwd die menselijke intentie interpreteert.
+
+00:22:37.640 --> 00:22:43.640
+Dat betekent dat elke notitie, elke vage, dat moeten we volgende week doen, nu gestructureerde taken kunnen worden zonder administratieve last.
+
+00:22:43.840 --> 00:22:48.440
+Het verschil tussen een project dat verdringt in handmatige updates en een project dat automatisch up-to-date blijft,
+
+00:22:48.440 --> 00:22:51.320
+is simpelweg of iemand zoals jij de moeite heeft genomen dit op te zetten.
+
+00:22:51.480 --> 00:22:58.120
+In de kern is dit de echte belofte van Microsoft 365 Copilot, niet meer tools, maar slimmere orquestratie ertussen.
+
+00:22:58.320 --> 00:22:59.500
+Planner blijft gewoon planner.
+
+00:22:59.740 --> 00:23:02.520
+Je hebt het simpelweg gepromoveerd van whiteboard naar personeelsbestand.
+
+00:23:02.700 --> 00:23:06.120
+Dus ja, stop met slepen, stop met klikken door menus die je intelligentie beledigen.
+
+00:23:06.300 --> 00:23:08.720
+Je hebt niet voor niets een AI-clerk gebouwd, laat hem werken.
+
+00:23:08.940 --> 00:23:13.260
+Jij zorgt voor beoordelingsvermogen, creativiteit en leiderschap, zaken waar Silicium nog altijd moeite mee heeft.
+
+00:23:13.260 --> 00:23:18.340
+Als dit je zelfs maar 10 minuten of een greintje verstand heeft bespaard, betaal het universum dan terug door je te abonneren.
+
+00:23:18.480 --> 00:23:23.240
+Er komt meer aan Power Platform, Copilot uitbreidingen, de goede soort automatiseringsverslaving.
+
+00:23:23.440 --> 00:23:27.520
+Tik op volgen, schakel meldingen in en laat de volgende upgrade automatisch implementeren.
+
+00:23:27.920 --> 00:23:30.040
+Efficiëntie is een gewoonte, installeer het permanent.

@@ -1,0 +1,1174 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:03.840
+Você senta no computador, digita seu endereço de e-mail, coloca sua senha e pressiona Enter.
+
+00:00:04.340 --> 00:00:06.760
+Há uma breve pausa enquanto o sistema decide se é você mesmo.
+
+00:00:07.400 --> 00:00:09.860
+A maioria das pessoas assume que essa pausa é apenas uma verificação de senha.
+
+00:00:10.180 --> 00:00:11.780
+Se a senha estiver correta, você entra, certo?
+
+00:00:12.240 --> 00:00:12.540
+Não é verdade?
+
+00:00:12.860 --> 00:00:15.120
+Muito mais acontece nos bastidores do que você provavelmente imagina.
+
+00:00:15.580 --> 00:00:18.960
+Quanto você espera, o Microsoft 365 executa uma série de verificações em segundo plano.
+
+00:00:19.240 --> 00:00:22.900
+Ele observa onde você está, qual dispositivo está usando e se o login parece normal ou suspeito.
+
+00:00:23.300 --> 00:00:25.060
+E faz tudo isso antes de permitir a sua entrada.
+
+00:00:25.060 --> 00:00:29.800
+Ao final deste episódio, você entenderá o que é o acesso condicional, como ele funciona a cada login
+
+00:00:29.800 --> 00:00:34.400
+e porque é um dos controles de segurança mais importantes no seu tenant do Microsoft 365.
+
+00:00:35.180 --> 00:00:36.720
+Então, vamos começar com a definição mais simples.
+
+00:00:37.420 --> 00:00:38.700
+O que é de fato o acesso condicional?
+
+00:00:39.660 --> 00:00:40.860
+Aqui está a definição em termos simples.
+
+00:00:41.460 --> 00:00:45.020
+O acesso condicional é um mecanismo de políticas que verifica o contexto antes de permitir o acesso.
+
+00:00:45.640 --> 00:00:47.620
+Ele não olha apenas para a sua senha e diz que está bom o suficiente.
+
+00:00:48.360 --> 00:00:52.060
+Em vez disso, ele faz perguntas extras sobre quem você é e o que acontece ao redor do seu login.
+
+00:00:52.920 --> 00:00:54.100
+Pense nele como segurança de boate.
+
+00:00:54.100 --> 00:00:57.060
+Você mostra sua identidade na porta, se é seu nome de usuário e sim.
+
+00:00:57.500 --> 00:00:59.920
+Mas um bom segurança não apenas olha e faz um gesto para você entrar.
+
+00:01:00.380 --> 00:01:04.840
+Ele verifica seu nome na lista de convidados, observa o que você veste e pode até lembrar se você causou problemas antes.
+
+00:01:05.360 --> 00:01:06.640
+O acesso condicional faz a mesma coisa.
+
+00:01:07.040 --> 00:01:10.560
+Ele verifica sua identidade conforme as regras, vê de onde você vem, checa seu dispositivo
+
+00:01:10.560 --> 00:01:12.980
+e decide se tudo parece correto antes de deixá-lo entrar.
+
+00:01:13.420 --> 00:01:14.260
+Agora um ponto fundamental.
+
+00:01:14.720 --> 00:01:17.120
+O acesso condicional é executado depois que você já digitou sua senha.
+
+00:01:17.400 --> 00:01:19.240
+Ele não é um substituto para autenticação multifator.
+
+00:01:19.660 --> 00:01:20.640
+Uma camada extra sobre ela.
+
+00:01:20.640 --> 00:01:24.240
+Pense nele como o segundo ponto de controle depois de mostrar sua identidade na porta da frente.
+
+00:01:24.460 --> 00:01:25.460
+A lógica é simples, então.
+
+00:01:26.000 --> 00:01:30.100
+Se um usuário tenta acessar um aplicativo em nuvem e atende a certas condições, então aplique esta regra.
+
+00:01:30.580 --> 00:01:35.140
+Por exemplo, se alguém tenta acessar o Outlook fora do escritório, então exige a autenticação multifator.
+
+00:01:36.460 --> 00:01:39.060
+Essa é a estrutura básica por trás de cada política de acesso condicional.
+
+00:01:39.060 --> 00:01:41.380
+Por que as senhas não são mais suficientes?
+
+00:01:41.860 --> 00:01:43.180
+Então por que precisamos desse passo extra?
+
+00:01:43.520 --> 00:01:44.960
+Porque senhas são roubadas todos os dias.
+
+00:01:45.620 --> 00:01:48.920
+Ataques de phishing, violações de dados, pessoas reutilizando a mesma senha em vários sites.
+
+00:01:49.560 --> 00:01:52.420
+Sua senha pode estar comprometida agora mesmo e você nem saberia.
+
+00:01:52.860 --> 00:01:53.920
+Você pode estar pensando, bem, tudo bem.
+
+00:01:54.240 --> 00:01:55.400
+Nós temos a autenticação multifator.
+
+00:01:55.740 --> 00:01:56.480
+Isso nos protege.
+
+00:01:56.900 --> 00:01:59.600
+E você tem razão, a MFA ajuda muito, mas não é uma solução mágica.
+
+00:02:00.100 --> 00:02:02.360
+Imagine que um hacker consiga a senha de um dos seus funcionários.
+
+00:02:02.360 --> 00:02:07.940
+Ele tenta entrar de um país com o qual você nunca negociou usando um dispositivo que você nunca viu antes.
+
+00:02:08.640 --> 00:02:10.580
+O MFA pode detê-lo se disparar uma solicitação.
+
+00:02:11.180 --> 00:02:13.500
+Mas e se o hacker também tiver acesso ao celular desse funcionário?
+
+00:02:14.120 --> 00:02:16.920
+Ou e se ele estiver usando um ataque de phishing que também captura o código do MFA?
+
+00:02:17.520 --> 00:02:19.560
+De repente o MFA sozinho não parece tão infalível assim.
+
+00:02:19.940 --> 00:02:21.040
+E aqui está um exemplo do mundo real.
+
+00:02:21.520 --> 00:02:23.320
+As credenciais de um vendedor vazam na Dark Web.
+
+00:02:24.040 --> 00:02:27.400
+Sem acesso condicional, um invasor pode entrar de qualquer lugar do mundo.
+
+00:02:27.980 --> 00:02:30.600
+Ele pode acessar e-mails, arquivos, dados de clientes, tudo.
+
+00:02:30.600 --> 00:02:32.440
+E você nunca saberia até que fosse tarde demais.
+
+00:02:32.960 --> 00:02:34.000
+O modo antigo era tudo ou nada.
+
+00:02:34.500 --> 00:02:35.580
+Dava uma licença ao usuário.
+
+00:02:35.880 --> 00:02:38.260
+E ele podia entrar de qualquer dispositivo, local, rede.
+
+00:02:38.940 --> 00:02:40.200
+Sem contexto, sem inteligência.
+
+00:02:40.520 --> 00:02:42.140
+Apenas uma verificação de sem acesso total.
+
+00:02:42.460 --> 00:02:43.880
+O acesso condicional muda isso completamente.
+
+00:02:44.480 --> 00:02:45.920
+Ele adiciona contexto a cada login.
+
+00:02:46.480 --> 00:02:50.080
+Ele verifica onde você está, qual dispositivo usa, qual aplicativo tenta abrir.
+
+00:02:50.640 --> 00:02:52.560
+E o nível de risco com base na análise da Microsoft.
+
+00:02:53.320 --> 00:02:56.220
+Ele transforma a decisão simples de sim ou não em um julgamento inteligente em camadas.
+
+00:02:56.980 --> 00:02:59.020
+Os sinais, o que o acesso condicional analisa.
+
+00:02:59.020 --> 00:03:01.520
+Então, o que exatamente o acesso condicional verifica?
+
+00:03:01.840 --> 00:03:04.240
+Vamos analisar os sinais que ele usa para tomar a sua decisão.
+
+00:03:05.000 --> 00:03:06.080
+A identidade é o primeiro sinal.
+
+00:03:06.600 --> 00:03:07.020
+Quem é você?
+
+00:03:07.620 --> 00:03:11.640
+Você é um funcionário comum, um administrador com privilégios elevados ou um convidado externo?
+
+00:03:12.260 --> 00:03:15.300
+O acesso condicional analisa sua conta de usuário e a quais grupos você pertence.
+
+00:03:16.160 --> 00:03:19.540
+Um administrador tentando entrar pode enfrentar regras mais rígidas que um usuário padrão.
+
+00:03:19.880 --> 00:03:22.100
+Um convidado pode ser totalmente bloqueado em certos aplicativos.
+
+00:03:22.600 --> 00:03:24.720
+Sua identidade determina a base do que é permitido.
+
+00:03:25.180 --> 00:03:25.880
+Próxima localização.
+
+00:03:25.880 --> 00:03:27.220
+De onde vem o acesso?
+
+00:03:27.620 --> 00:03:30.340
+Se você está se conectando da rede do escritório, esse é um local confiável.
+
+00:03:31.020 --> 00:03:33.660
+O acesso condicional conhece a faixa de IP da sede da sua empresa.
+
+00:03:34.480 --> 00:03:37.300
+Tentar entrar de uma cafeteria em outro país gera um alerta.
+
+00:03:37.820 --> 00:03:40.700
+Se o sistema nem consegue identificar onde você está, esse é outro alerta.
+
+00:03:41.080 --> 00:03:43.380
+A localização é um sinal poderoso porque é difícil de falsificar.
+
+00:03:43.780 --> 00:03:44.680
+O dispositivo também importa.
+
+00:03:45.080 --> 00:03:46.000
+O que você está usando para entrar?
+
+00:03:46.420 --> 00:03:49.460
+Um laptop da empresa gerenciado pelo Intune em conformidade com suas políticas de segurança
+
+00:03:49.460 --> 00:03:55.740
+ou um celular pessoal sem controle de segurança, o acesso condicional verifica se o dispositivo
+
+00:03:55.740 --> 00:03:58.160
+está registrado, criptografado e atualizado.
+
+00:03:59.200 --> 00:04:01.400
+Um dispositivo não gerenciado pode ser bloqueado ou limitado.
+
+00:04:01.740 --> 00:04:02.620
+O aplicativo também importa.
+
+00:04:02.960 --> 00:04:04.120
+Com o aplicativo cidadão acessado.
+
+00:04:04.660 --> 00:04:07.420
+Outlook, SharePoint, Teams, um aplicativo de negócio personalizado.
+
+00:04:08.220 --> 00:04:10.200
+Nem todos os aplicativos têm os mesmos requisitos de segurança.
+
+00:04:10.200 --> 00:04:15.660
+Um sistema financeiro que lida com dados sensíveis pode exigir controles mais rígidos do que um espaço de colaboração de equipe.
+
+00:04:15.660 --> 00:04:19.180
+O acesso condicional permite definir regras diferentes para aplicativos diferentes.
+
+00:04:19.720 --> 00:04:22.100
+Se você tiver a licença certa, a outra camada é o risco de entrada.
+
+00:04:22.660 --> 00:04:25.480
+A Microsoft usa aprendizado de máquina para pontuar cada login em tempo real.
+
+00:04:25.960 --> 00:04:31.800
+Ele busca padrões suspeitos, viagens impossíveis, onde um usuário se conecta de Nova York e cinco minutos depois de Londres,
+
+00:04:32.000 --> 00:04:35.160
+endereços IP anônimos, credenciais vazadas de violações de dados conhecidas.
+
+00:04:35.800 --> 00:04:38.200
+E o sistema atribui um nível de risco baixo, médio ou alto.
+
+00:04:38.340 --> 00:04:39.840
+E o acesso condicional pode agir sobre isso.
+
+00:04:40.260 --> 00:04:41.260
+Há também o risco do usuário.
+
+00:04:41.600 --> 00:04:42.780
+Isso é diferente do risco de entrada.
+
+00:04:42.780 --> 00:04:44.600
+O risco do usuário analisa a conta em si.
+
+00:04:44.600 --> 00:04:46.580
+A senha deixa o usuário aparecer em alguma violação.
+
+00:04:46.940 --> 00:04:48.560
+Houve atividade em comum ao longo do tempo?
+
+00:04:49.040 --> 00:04:51.400
+Se o sistema detectar que uma conta pode estar comprometida,
+
+00:04:51.740 --> 00:04:54.180
+ele pode bloquear o acesso até que o usuário redefina sua senha.
+
+00:04:54.680 --> 00:04:56.180
+Finalmente, existe o contexto da autenticação.
+
+00:04:56.620 --> 00:05:00.020
+Isso permite anexar requisitos extras de segurança a conteúdos sensíveis específicos.
+
+00:05:00.420 --> 00:05:03.340
+Por exemplo, qualquer pessoa tentando acessar o site do SharePoint de finanças
+
+00:05:03.340 --> 00:05:06.240
+deve usar um dispositivo compatível, um método de MFI resistente a phishing.
+
+00:05:06.780 --> 00:05:09.880
+Isso protege seus dados mais valiosos, sem deixar todo o resto mais lento.
+
+00:05:10.500 --> 00:05:13.740
+Uma vez que esses sinais são coletados, o mecanismo de política decide o que fazer.
+
+00:05:13.740 --> 00:05:14.980
+Vamos ver como isso funciona.
+
+00:05:15.720 --> 00:05:17.740
+O mecanismo de decisão como as políticas funcionam.
+
+00:05:18.240 --> 00:05:20.720
+Toda política de acesso condicional funciona como a regra de si então.
+
+00:05:21.280 --> 00:05:24.060
+Você escolhe os sinais como condições e em seguida decide qual a ação tomar.
+
+00:05:24.440 --> 00:05:25.260
+É basicamente só isso.
+
+00:05:25.720 --> 00:05:27.220
+Tanto há três partes principais de uma política.
+
+00:05:27.660 --> 00:05:28.960
+A primeira parte são as atribuições.
+
+00:05:29.160 --> 00:05:31.720
+A quem a política se aplica, qual aplicativo eles estão tentando acessar
+
+00:05:31.720 --> 00:05:32.920
+e quais condições acionam a regra.
+
+00:05:33.360 --> 00:05:34.880
+A segunda parte são os controles de acesso,
+
+00:05:34.960 --> 00:05:36.540
+o que acontece quando essas condições são atendidas.
+
+00:05:37.180 --> 00:05:38.880
+Você concede acesso, bloqueia,
+
+00:05:39.140 --> 00:05:41.480
+ou exige algo como uma MFA ou um dispositivo compatível.
+
+00:05:41.480 --> 00:05:43.860
+A terceira parte são os controles de sessão,
+
+00:05:43.940 --> 00:05:45.900
+que gerenciam o que acontece após alguém estar conectado.
+
+00:05:46.320 --> 00:05:48.460
+Por exemplo, com que frequência eles precisam se autenticar novamente.
+
+00:05:49.000 --> 00:05:49.940
+Deixe-me dar um exemplo concreto.
+
+00:05:50.480 --> 00:05:53.040
+Se um usuário está no grupo de vendas e está tentando acessar o SharePoint
+
+00:05:53.040 --> 00:05:54.540
+a partir de um dispositivo não gerenciado,
+
+00:05:54.620 --> 00:05:55.440
+então bloqueia o acesso.
+
+00:05:55.940 --> 00:05:56.780
+Essa é uma política completa.
+
+00:05:57.260 --> 00:05:58.840
+Quem qual aplicativo, qual condição, qual a ação.
+
+00:05:59.340 --> 00:06:00.620
+Os controles de concessão são flexíveis.
+
+00:06:01.020 --> 00:06:02.420
+Você pode exigir várias coisas ao mesmo tempo.
+
+00:06:02.920 --> 00:06:04.720
+Digamos que você queira que um usuário conclua a MFA
+
+00:06:04.720 --> 00:06:06.020
+e também use um dispositivo compatível.
+
+00:06:06.340 --> 00:06:07.480
+Ambas as condições devem ser atendidas.
+
+00:06:07.480 --> 00:06:09.300
+Ou você pode dizer que eles precisam de um ou de outro.
+
+00:06:09.720 --> 00:06:11.040
+O sistema permite que você escolha.
+
+00:06:11.100 --> 00:06:12.400
+Para o bloqueio é o controle mais poderoso.
+
+00:06:12.680 --> 00:06:14.200
+Se qualquer política desbloquear, o bloqueio vence.
+
+00:06:14.680 --> 00:06:17.340
+Não há exceções, exceto as exclusões que você definir explicitamente.
+
+00:06:17.740 --> 00:06:18.660
+É por isso que você tem cuidado.
+
+00:06:19.200 --> 00:06:21.260
+Um erro e você pode bloquear toda a sua organização.
+
+00:06:21.960 --> 00:06:23.000
+Antes de ativar uma política,
+
+00:06:23.500 --> 00:06:25.000
+há um recurso crítico que você precisa conhecer.
+
+00:06:25.940 --> 00:06:27.000
+Modo somente relatório.
+
+00:06:27.540 --> 00:06:30.300
+Isso permite ver o que uma política faria antes de aplicar qualquer coisa.
+
+00:06:30.920 --> 00:06:33.140
+Você pode executar uma política em modo de relatório por uma semana,
+
+00:06:33.280 --> 00:06:34.200
+verificar os logs de entrada
+
+00:06:34.200 --> 00:06:36.840
+e ver quantos usuários teriam sido bloqueados ou solicitados os usuários em MFA.
+
+00:06:36.840 --> 00:06:38.960
+É uma maneira segura de testar sem quebrar nada.
+
+00:06:39.580 --> 00:06:40.840
+Agora que você entende o mecanismo,
+
+00:06:41.020 --> 00:06:43.580
+vamos falar sobre as políticas mais comuns que toda empresa deve ter.
+
+00:06:44.600 --> 00:06:46.560
+As três grandes políticas de base para o primeiro dia.
+
+00:06:47.200 --> 00:06:48.520
+Então o que você deve configurar primeiro?
+
+00:06:49.240 --> 00:06:52.580
+Deixe-me passar as três políticas de base que toda empresa deve ter desde o primeiro dia.
+
+00:06:53.180 --> 00:06:54.820
+Não no dia 30 e não após uma auditoria.
+
+00:06:55.920 --> 00:06:57.180
+A política número um é a base.
+
+00:06:57.680 --> 00:06:59.440
+Exigir MFA para todos os usuários.
+
+00:06:59.980 --> 00:07:01.320
+Não apenas administradores, todos.
+
+00:07:01.620 --> 00:07:05.020
+Cada pessoa que entrar no seu tenant precisa provar quem é com o segundo fator.
+
+00:07:05.020 --> 00:07:07.140
+Mas aqui está a parte importante.
+
+00:07:07.260 --> 00:07:08.240
+Nem todo MFA é igual.
+
+00:07:08.840 --> 00:07:10.740
+Você não quer que as pessoas usam códigos por SMS ou JOS.
+
+00:07:11.200 --> 00:07:12.220
+Esses métodos são fracos.
+
+00:07:12.480 --> 00:07:13.400
+Eles podem ser interceptados.
+
+00:07:13.720 --> 00:07:14.680
+O que você quer é algo mais forte.
+
+00:07:15.460 --> 00:07:17.760
+A Microsoft tem algo chamado intensidade de autenticação,
+
+00:07:18.000 --> 00:07:20.320
+que permite escolher exatamente quais métodos são aceitáveis.
+
+00:07:20.960 --> 00:07:22.680
+O aplicativo Microsoft Authenticator,
+
+00:07:22.800 --> 00:07:25.000
+chave de segurança Fido 2, Windows Hello for Business.
+
+00:07:25.120 --> 00:07:25.720
+Esses são os bons.
+
+00:07:25.720 --> 00:07:28.760
+Portanto, ao criar sua política de MFA,
+
+00:07:28.900 --> 00:07:31.180
+não marque apenas a caixa que diz exigir MFA.
+
+00:07:31.780 --> 00:07:32.520
+Seja específico.
+
+00:07:32.840 --> 00:07:34.000
+Escolha apenas os métodos for.
+
+00:07:34.580 --> 00:07:35.420
+Política número dois.
+
+00:07:35.920 --> 00:07:36.940
+Bloquear a autenticação negada.
+
+00:07:37.320 --> 00:07:38.520
+Parece técnico, mas é simples.
+
+00:07:39.140 --> 00:07:42.480
+Existem protocolos antigos que o Microsoft 365 ainda suporta.
+
+00:07:42.560 --> 00:07:45.620
+PopMap, SMTP, versões mais antigas do Exchange ActiveSync.
+
+00:07:46.240 --> 00:07:49.480
+Esses protocolos foram criados antes de pensar em autenticação multifator.
+
+00:07:49.740 --> 00:07:50.640
+E eles não a suportam.
+
+00:07:50.640 --> 00:07:52.360
+Então, se um invasor obtiver uma senha,
+
+00:07:52.420 --> 00:07:53.980
+ele pode usar um desses protocolos antigos
+
+00:07:53.980 --> 00:07:55.820
+para entrar e contornar completamente seu MFA.
+
+00:07:56.400 --> 00:07:57.240
+Essa é uma lacuna enorme.
+
+00:07:57.660 --> 00:07:58.420
+A correção é simples.
+
+00:07:58.920 --> 00:08:00.220
+Crie uma política de acesso condicional,
+
+00:08:00.420 --> 00:08:02.720
+que bloqueie toda a autenticação legada para todos os usuários.
+
+00:08:03.460 --> 00:08:05.660
+A menos que você tenha uma necessidade comercial muito específica
+
+00:08:05.660 --> 00:08:07.600
+para um scanner ou impressora antiga que usa SMTP,
+
+00:08:08.060 --> 00:08:08.580
+desligue isso.
+
+00:08:09.020 --> 00:08:11.400
+É um dos controles de segurança de maior impacto que você pode ativar.
+
+00:08:12.000 --> 00:08:12.720
+Política número três.
+
+00:08:12.820 --> 00:08:14.640
+Exigir dispositivos compatíveis para administrador.
+
+00:08:15.160 --> 00:08:17.180
+Contas de administrador são as joias da coroa do seu tema.
+
+00:08:17.540 --> 00:08:19.540
+Se alguém comprometer uma conta de administrador global,
+
+00:08:19.540 --> 00:08:20.320
+terá acesso a tudo.
+
+00:08:20.760 --> 00:08:23.000
+Portanto, você precisa proteger essas contas mais do que qualquer outra.
+
+00:08:23.720 --> 00:08:26.640
+Esta política determina que qualquer pessoa com uma função de administrador
+
+00:08:26.640 --> 00:08:29.480
+deve usar um dispositivo da empresa que atenda aos seus requisitos de segurança
+
+00:08:29.480 --> 00:08:30.900
+e esteja registrado no gerenciamento,
+
+00:08:31.020 --> 00:08:32.740
+com criptografia como BitLocker ativada,
+
+00:08:32.820 --> 00:08:34.560
+defender em execução e patches atualizados.
+
+00:08:35.340 --> 00:08:37.720
+Se um administrador tentar entrar a partir de um laptop pessoal
+
+00:08:37.720 --> 00:08:39.640
+ou de uma máquina antiga que não atenda a esses padrões,
+
+00:08:39.720 --> 00:08:40.480
+o acesso é bloqueado.
+
+00:08:40.480 --> 00:08:43.640
+É uma maneira simples de garantir que suas contas mais poderosas
+
+00:08:43.640 --> 00:08:44.780
+sejam também as mais protegidas.
+
+00:08:45.320 --> 00:08:47.080
+Antes de prosseguir, preciso falar sobre algo crítico
+
+00:08:47.080 --> 00:08:48.760
+às contas de breakless, acesso e emergência.
+
+00:08:48.760 --> 00:08:50.960
+São contas de administrador de emergência
+
+00:08:50.960 --> 00:08:53.080
+que você mantém fora de suas políticas de acesso condicional.
+
+00:08:53.540 --> 00:08:55.120
+Você deve criar pelo menos duas delas
+
+00:08:55.120 --> 00:08:57.600
+usando senhas longas e complexas e MFR resistente a phishing
+
+00:08:57.600 --> 00:08:59.040
+como uma chave de segurança FIDO2,
+
+00:08:59.760 --> 00:09:01.400
+se armazena as credenciais de forma segura,
+
+00:09:01.480 --> 00:09:02.900
+talvez em um cofre ou armário trancado.
+
+00:09:03.440 --> 00:09:04.180
+O objetivo é simples.
+
+00:09:04.180 --> 00:09:06.360
+Se você se bloquear acidentalmente do seu TENAM
+
+00:09:06.360 --> 00:09:07.280
+com uma política inadequada,
+
+00:09:07.360 --> 00:09:08.860
+poderá usar uma conta de acesso de emergência
+
+00:09:08.860 --> 00:09:09.520
+para entrar novamente.
+
+00:09:10.120 --> 00:09:12.120
+Elas são excluídas de todas as políticas de acesso condicional.
+
+00:09:12.540 --> 00:09:13.020
+Isso é intencional.
+
+00:09:13.580 --> 00:09:14.960
+Sem elas, você corre o risco de ser bloqueado
+
+00:09:14.960 --> 00:09:16.400
+o seu próprio sistema sem nenhuma forma de retomar.
+
+00:09:16.640 --> 00:09:17.920
+Apenas três políticas para o primeiro dia.
+
+00:09:18.200 --> 00:09:20.400
+Porque você deve focar primeiro nos controles de maior impacto.
+
+00:09:20.880 --> 00:09:22.520
+Essas três fecham as maiores lacunas de seguro.
+
+00:09:22.880 --> 00:09:24.940
+MFA impede a maior parte dos roubos de credenciais
+
+00:09:24.940 --> 00:09:26.400
+de bloquear a autenticação legada a fecha-portas.
+
+00:09:26.960 --> 00:09:28.480
+Dispositivos compatíveis para administradores
+
+00:09:28.480 --> 00:09:29.700
+protegem suas contas mais sensíveis.
+
+00:09:30.020 --> 00:09:32.220
+Você pode fazer ajustes mais tarde com políticas mais granulares,
+
+00:09:32.220 --> 00:09:32.860
+mas comece por aqui.
+
+00:09:33.540 --> 00:09:35.400
+Políticas avançadas, risco e personas.
+
+00:09:36.080 --> 00:09:37.300
+Uma vez que o básico esteja definido,
+
+00:09:37.380 --> 00:09:38.960
+você pode adicionar controles mais avançados.
+
+00:09:39.040 --> 00:09:40.580
+É aí que entram as políticas baseadas em risco
+
+00:09:40.580 --> 00:09:41.300
+e as regras baseadas.
+
+00:09:41.800 --> 00:09:43.880
+Políticas de risco de entrada usam o aprendizado de máquina
+
+00:09:43.880 --> 00:09:45.880
+da Microsoft para monitorar cada tentativa de login.
+
+00:09:46.500 --> 00:09:48.580
+Se alguém tentar entrar de um endereço IP anônimo
+
+00:09:48.580 --> 00:09:50.580
+ou se o sistema detectar viagens impossíveis
+
+00:09:50.580 --> 00:09:52.640
+como o login de Nova York seguido de outro de Tóquio
+
+00:09:52.640 --> 00:09:54.380
+10 minutos depois, ele classifica esse login
+
+00:09:54.380 --> 00:09:55.640
+como de alto risco.
+
+00:09:56.480 --> 00:09:58.460
+Você define uma política que determina que se o risco for alto,
+
+00:09:58.560 --> 00:09:59.440
+o acesso deve ser bloqueado
+
+00:09:59.440 --> 00:10:01.460
+ou o acesso bloqueado ao MFA deve ser exigido imediatamente.
+
+00:10:01.460 --> 00:10:03.640
+O porém é que você precisa de uma licença entre a de IP2,
+
+00:10:03.780 --> 00:10:06.000
+mas este é um dos controles mais poderosos que você pode adicionar
+
+00:10:06.000 --> 00:10:07.860
+pois detecta ataques que regras estáticas deixam passar.
+
+00:10:08.280 --> 00:10:10.960
+As políticas de risco do usuário analisam a conta em si ao longo do tempo
+
+00:10:10.960 --> 00:10:12.080
+e não apenas um evento de login.
+
+00:10:12.480 --> 00:10:14.440
+Se a Microsoft detectar que as credenciais de um usuário
+
+00:10:14.440 --> 00:10:16.060
+apareceram em um vazamento de dados conhecido,
+
+00:10:16.120 --> 00:10:17.360
+ela marca esse usuário como de alto risco.
+
+00:10:17.520 --> 00:10:19.340
+Você pode então definir uma política que bloqueia o acesso
+
+00:10:19.340 --> 00:10:20.700
+até que a senha seja redefinida.
+
+00:10:20.880 --> 00:10:22.080
+E sim, isso também requer licença IP2.
+
+00:10:22.560 --> 00:10:24.600
+Juntas, as políticas de risco de entrada e de usuário
+
+00:10:24.600 --> 00:10:26.080
+criam uma camada de segurança dinâmica
+
+00:10:26.080 --> 00:10:27.720
+que se adapta às ameaças à medida que ocorrem.
+
+00:10:27.720 --> 00:10:30.320
+Agora, as políticas baseadas em personas abordam muito diferente.
+
+00:10:30.800 --> 00:10:33.100
+Nem todos na sua organização possuem as mesmas necessidades de seguro.
+
+00:10:33.420 --> 00:10:35.360
+Seus administradores precisam das regras mais rigorosas
+
+00:10:35.360 --> 00:10:37.080
+enquanto prestadores de serviço e funcionários temporários
+
+00:10:37.080 --> 00:10:38.240
+podem precisar de acesso limitado.
+
+00:10:38.360 --> 00:10:40.880
+E convidados de fora da sua empresa precisam de controles totalmente diferentes.
+
+00:10:41.980 --> 00:10:44.520
+As políticas baseadas em personas permitem agrupar usuários por função
+
+00:10:44.520 --> 00:10:45.700
+e aplicar o nível certo de proteção.
+
+00:10:46.120 --> 00:10:46.920
+Este é um exemplo concreto.
+
+00:10:47.440 --> 00:10:50.160
+Prestadores de serviço costumam usar dispositivos próprios que você não gerencia,
+
+00:10:50.300 --> 00:10:52.740
+então não há como saber se eles usam antivírus ou mantêm os patches em dia.
+
+00:10:52.740 --> 00:10:57.360
+Em vez de dar acesso total, você cria uma política que os limita ao acesso apenas pelo navegador,
+
+00:10:57.480 --> 00:10:59.020
+sem aplicativos de desktop ou móveis.
+
+00:10:59.560 --> 00:11:01.260
+Mesmo dentro do navegador, você restringe as ações.
+
+00:11:01.700 --> 00:11:03.100
+Eles podem visualizar e editar arquivos,
+
+00:11:03.200 --> 00:11:05.500
+mas não podem baixá-los ou sincronizá-los em seus próprios dispositivos.
+
+00:11:05.820 --> 00:11:08.400
+Dessa forma, os prestadores de serviço permanecem produtivos
+
+00:11:08.400 --> 00:11:10.260
+sem expor seus dados a riscos desnecessários.
+
+00:11:10.940 --> 00:11:13.300
+Os contextos de autenticação levam essa ideia adiante,
+
+00:11:13.540 --> 00:11:16.600
+protegendo conteúdos específicos dentro de um aplicativo, em vez do aplicativo inteiro.
+
+00:11:17.100 --> 00:11:19.100
+Por exemplo, sua equipe financeira tem um site no SharePoint
+
+00:11:19.100 --> 00:11:20.320
+com dados financeiros confidenciais.
+
+00:11:20.320 --> 00:11:23.220
+Você pode anexar um contexto de autenticação a esse site
+
+00:11:23.220 --> 00:11:26.420
+para que qualquer pessoa que tente acessá-lo precise usar um dispositivo compatível
+
+00:11:26.420 --> 00:11:30.140
+e MFE resistente a phishing, mesmo que já estejam conectados ao Microsoft 305.
+
+00:11:30.720 --> 00:11:33.140
+É um direcionamento preciso para suas informações mais confidenciais.
+
+00:11:33.720 --> 00:11:37.260
+A avaliação de acesso contínuo revoga o acesso em tempo quase real quando algo muda.
+
+00:11:37.980 --> 00:11:41.160
+Se um administrador desativa uma conta ou um dispositivo é reportado como perdido,
+
+00:11:41.280 --> 00:11:43.640
+a sessão termina imediatamente, sem esperar o token expirar.
+
+00:11:44.340 --> 00:11:46.300
+Isso é fundamental para responder a incidentes rapidamente.
+
+00:11:46.740 --> 00:11:50.040
+Tudo isso parece poderoso, mas como você começa de fato sem causar interrupções?
+
+00:11:50.320 --> 00:11:53.620
+Começando os padrões de segurança para as políticas personalizadas.
+
+00:11:54.080 --> 00:11:56.680
+Se você tem um novo locatário, não te está começando zero,
+
+00:11:56.740 --> 00:11:59.680
+porque a Microsoft habilita algo chamado padrões de segurança por padrão.
+
+00:12:01.620 --> 00:12:06.000
+É um conjunto básico de proteções que exige MFA para administradores e bloqueia a autenticação legada.
+
+00:12:06.820 --> 00:12:08.680
+É um ponto de partida decente, mas é limitado.
+
+00:12:09.240 --> 00:12:12.140
+Você não pode personalizá-lo nem direcioná-lo a aplicativos ou usuários específicos.
+
+00:12:12.500 --> 00:12:13.900
+É uma solução única para todos.
+
+00:12:13.900 --> 00:12:17.980
+No momento em que você cria sua primeira política de acesso condicional personalizado,
+
+00:12:18.060 --> 00:12:21.360
+os padrões de segurança são desativados automaticamente, colocando você no controle.
+
+00:12:21.760 --> 00:12:24.260
+Isso é bom, mas também significa que você precisa saber o que está fazendo,
+
+00:12:24.380 --> 00:12:26.120
+pois não pode mais contar com as rodinhas de apoio.
+
+00:12:26.500 --> 00:12:27.620
+Então veja como fazer isso com segurança.
+
+00:12:28.000 --> 00:12:31.980
+Primeiro, comece com um modo apenas relatório para cada nova política e deixe rodar por pelo menos uma semana.
+
+00:12:32.500 --> 00:12:34.880
+Depois, verifique os logs de entrada e veja o que teria acontecido,
+
+00:12:34.980 --> 00:12:37.580
+como quantos usuários teriam sido bloqueados ou solicitados a fornecer MFA.
+
+00:12:37.580 --> 00:12:41.700
+Esses dados informam se sua política está rígida ou flexível demais antes de você aplicá-la.
+
+00:12:42.420 --> 00:12:44.960
+Segundo, use a ferramenta IC no centro de administração do Entra
+
+00:12:44.960 --> 00:12:48.620
+para testar uma política contra um usuário aplicativo e local específicos antes de ativá-la.
+
+00:12:49.340 --> 00:12:52.580
+Você pode simular exatamente o que aconteceria se alguém tentasse entrar de uma cafeteria
+
+00:12:52.580 --> 00:12:54.180
+em outro país usando um dispositivo pessoal.
+
+00:12:54.940 --> 00:12:57.440
+É uma maneira segura de detectar problemas antes que eles se tornem reais.
+
+00:12:58.680 --> 00:12:59.700
+Terceiro, isso é fundamental.
+
+00:12:59.920 --> 00:13:02.320
+Crie suas contas de emergência e break-less antes de implantar qualquer política.
+
+00:13:02.780 --> 00:13:03.680
+Não consigo me faz fazer isso.
+
+00:13:03.860 --> 00:13:07.420
+Se você criar acidentalmente uma política que bloqueie todos os administradores
+
+00:13:07.420 --> 00:13:10.000
+e se não tiver configurado uma conta de emergência excluída de tudo,
+
+00:13:10.120 --> 00:13:11.760
+você perderá o acesso ao seu próprio Tenant.
+
+00:13:12.340 --> 00:13:14.860
+A única forma de recuperar o acesso é ligar para o suporte da Microsoft
+
+00:13:14.860 --> 00:13:16.920
+e provar que você é o dono do domínio, que pode levar dias.
+
+00:13:17.520 --> 00:13:19.160
+Portanto, configure duas contas de emergência,
+
+00:13:19.240 --> 00:13:21.480
+armazenadas com segurança, usando MFA resistente a phishing.
+
+00:13:22.040 --> 00:13:22.800
+Faça isso onde começar.
+
+00:13:23.140 --> 00:13:24.880
+Quarto, implante em fases.
+
+00:13:25.700 --> 00:13:27.860
+Não ative uma política para todos logo no primeiro dia.
+
+00:13:28.620 --> 00:13:30.620
+Comece com um pequeno grupo de teste, talvez a equipe de TI,
+
+00:13:31.060 --> 00:13:32.160
+e deixe rodar por alguns dias.
+
+00:13:32.520 --> 00:13:34.760
+Verifique os logs para ver se alguém foi bloqueado inesperadamente.
+
+00:13:35.280 --> 00:13:36.660
+Em seguida, expanda para um grupo maior,
+
+00:13:36.660 --> 00:13:37.740
+finalmente para todo o usuário.
+
+00:13:38.220 --> 00:13:40.220
+Cada fase oferece a chance de detectar problemas
+
+00:13:40.220 --> 00:13:41.360
+antes que afetem toda a empresa.
+
+00:13:41.940 --> 00:13:43.860
+Monitore os logs de entrada durante todo o processo
+
+00:13:43.860 --> 00:13:45.820
+e se vi bloqueios inesperados, ajuste a política
+
+00:13:45.820 --> 00:13:47.080
+antes de passar para a próxima fase.
+
+00:13:48.060 --> 00:13:48.460
+Recapitulação.
+
+00:13:48.700 --> 00:13:49.800
+Por que isso é importante para o seu negócio?
+
+00:13:50.260 --> 00:13:51.420
+Então, por que tudo isso é importante?
+
+00:13:51.900 --> 00:13:53.480
+O acesso condicional é a segurança na porta
+
+00:13:53.480 --> 00:13:54.740
+que não verifica apenas o seu regime.
+
+00:13:55.260 --> 00:13:55.880
+Ele analisa tudo.
+
+00:13:56.700 --> 00:13:58.240
+Quem você é, de onde está se conectando,
+
+00:13:58.420 --> 00:13:59.540
+qual dispositivo está usando
+
+00:13:59.540 --> 00:14:01.400
+e se sua conta parece ter sido comprometida.
+
+00:14:02.160 --> 00:14:04.380
+Ele transforma a simples verificação de senha de sim ou não
+
+00:14:04.380 --> 00:14:06.560
+em uma decisão inteligente baseada no cenário completo.
+
+00:14:07.180 --> 00:14:09.000
+Sem isso, qualquer pessoa com uma senha roubada
+
+00:14:09.000 --> 00:14:10.840
+pode entrar no seu tenant de qualquer lugar do mundo
+
+00:14:10.840 --> 00:14:12.200
+sem fazer pergunta.
+
+00:14:12.520 --> 00:14:14.500
+E quando você pensa em quantas senhas são roubadas
+
+00:14:14.500 --> 00:14:16.100
+todos os dias, isso é assustador.
+
+00:14:16.760 --> 00:14:18.280
+As três políticas de linha de base, por si só,
+
+00:14:18.340 --> 00:14:18.720
+fecham as mãos.
+
+00:14:18.720 --> 00:14:21.560
+MFA interrompe a maioria dos roubos de credenciais instantaneamente.
+
+00:14:21.900 --> 00:14:24.000
+Bloquear a autenticação legada fecha uma porta dos fundos
+
+00:14:24.000 --> 00:14:24.900
+que os invasores adoram.
+
+00:14:25.400 --> 00:14:27.500
+Exigir dispositivos compatíveis para administradores
+
+00:14:27.500 --> 00:14:28.720
+protege suas contas mais sensíveis.
+
+00:14:29.240 --> 00:14:31.120
+Apenas essas três políticas elevam drasticamente
+
+00:14:31.120 --> 00:14:31.960
+o seu nível de segurança base.
+
+00:14:32.580 --> 00:14:33.820
+E quando estiver pronto para ir além,
+
+00:14:34.120 --> 00:14:36.020
+políticas avançadas oferecem proteção precisa
+
+00:14:36.020 --> 00:14:37.140
+sem prejudicar a produtividade.
+
+00:14:37.820 --> 00:14:40.020
+Controles baseados em risco detectam ataques em tempo real.
+
+00:14:40.020 --> 00:14:42.420
+Regras baseadas em persona tratam usuários diferentes
+
+00:14:42.420 --> 00:14:42.980
+de formas diferentes.
+
+00:14:43.360 --> 00:14:45.320
+Contextos de autenticação protegem seus dados
+
+00:14:45.320 --> 00:14:46.900
+mais sensíveis com precisão cirúrgica.
+
+00:14:47.520 --> 00:14:49.100
+Você pode ser seguro e flexível ao mesmo tempo.
+
+00:14:49.700 --> 00:14:50.480
+Então aqui está o solo de casa.
+
+00:14:50.800 --> 00:14:52.300
+Faça login no seu centro de administração dentro.
+
+00:14:52.680 --> 00:14:53.380
+Vá para o acesso condicional.
+
+00:14:54.040 --> 00:14:55.840
+Verifique se você tem pelo menos essas três políticas
+
+00:14:55.840 --> 00:14:56.480
+de base em vigor.
+
+00:14:56.980 --> 00:14:58.680
+Se não tiver, comece com o modo somente relatório
+
+00:14:58.680 --> 00:14:59.440
+e constrói a partir daí.
+
+00:14:59.820 --> 00:15:01.760
+Não espere por uma auditoria ou uma violação para agir.
+
+00:15:02.340 --> 00:15:04.380
+Se este episódio ajudou você a ver o panorama geral,
+
+00:15:04.700 --> 00:15:06.340
+inscreva-se no Microsoft Knowledge Nuggets
+
+00:15:06.340 --> 00:15:09.020
+para mais explicações simples sobre segurança e identidade.
+
+00:15:09.020 --> 00:15:11.340
+Compartilhe com alguém que está apenas começando
+
+00:15:11.340 --> 00:15:12.880
+sua jornada no Microsoft 365.
+
+00:15:13.320 --> 00:15:14.040
+Eu te agradeço por isso.

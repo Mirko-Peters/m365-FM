@@ -1,0 +1,952 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:05.640
+¿Qué sucede cuando Business Central maneja la mayor parte de su trabajo, pero una parte de su negocio simplemente no termina de encajar?
+
+00:00:06.560 --> 00:00:14.200
+Quizás necesite un proceso de envío especial, su equipo financiero requiere un informe local o su personal debe ingresar los mismos datos en dos sistemas que no se comuniquen entre sí.
+
+00:00:15.040 --> 00:00:16.320
+Business Central ya cubre mucho terreno.
+
+00:00:16.960 --> 00:00:21.540
+Le ayuda a gestionar finanzas, ventas, inventario, proyectos y tareas diarias desde un solo lugar.
+
+00:00:22.420 --> 00:00:23.120
+Pero aquí está el detalle.
+
+00:00:23.740 --> 00:00:25.720
+No hay dos empresas que funcionen exactamente de la misma manera.
+
+00:00:25.720 --> 00:00:26.900
+Ahora, piensa en su teléfono.
+
+00:00:27.380 --> 00:00:29.880
+Viene con llamadas, mensajes, cámara y herramientas básicas.
+
+00:00:30.020 --> 00:00:33.360
+Luego, usted instala las aplicaciones que se adaptan a su vida sin tener que desarmar el teléfono.
+
+00:00:33.920 --> 00:00:35.740
+Las extensiones de Business Central funcionan de manera.
+
+00:00:36.020 --> 00:00:40.740
+Al final de esta cápsula de conocimientos, sabrá qué son, dónde encajan y qué verificar antes de agregar una.
+
+00:00:41.300 --> 00:00:42.840
+Sin embargo, ¿qué es realmente una extensión?
+
+00:00:43.200 --> 00:00:43.740
+¿Qué es exactamente?
+
+00:00:44.360 --> 00:00:53.600
+Una extensión es un paquete adicional para Dynamics 365 Business Central que añade una capacidad que no tiene en su configuración estándar o cambia el funcionamiento de una parte estándar para su empresa.
+
+00:00:53.600 --> 00:01:00.600
+Puede ser algo tan pequeño como añadir un campo obligatorio a la ficha de un cliente para que nadie pueda crearlo sin ingresar una preferencia de entrega.
+
+00:01:01.780 --> 00:01:03.440
+O puede abarcar todo un proceso de negocio.
+
+00:01:03.960 --> 00:01:09.820
+Una extensión de envío podría crear etiquetas de transportista, enviar detalles de paquetes a un servicio de mensajería, recuperar datos de seguimiento,
+
+00:01:09.940 --> 00:01:14.040
+mientras que una extensión bancaria podría importar estados de cuenta y ayudar a conciliarlos con pagos ya registrados.
+
+00:01:14.540 --> 00:01:17.200
+No necesita ser un desarrollador para entender la idea básica.
+
+00:01:17.200 --> 00:01:22.120
+Piensa en Business Central como un edificio de oficinas donde la aplicación estándar le ofrece las habitaciones principales,
+
+00:01:22.200 --> 00:01:24.980
+finanzas, ventas, compras y ventas, compras, inventario, trabajos y más.
+
+00:01:25.100 --> 00:01:28.360
+Está familiarizado con las puertas, paredes, cableadas y servicios compartidos que ya están instalados.
+
+00:01:28.880 --> 00:01:32.360
+Una extensión añade algo alrededor de ese edificio sin tener que derribar su estructura principal.
+
+00:01:32.760 --> 00:01:38.280
+Podría añadir una habitación nueva o colocar una herramienta extra en un escritorio que ya utiliza como un pedido de ventas,
+
+00:01:38.540 --> 00:01:43.200
+una columna en una lista, un diseño distinto para una factura, una factura o una conexión a un servicio externo.
+
+00:01:43.200 --> 00:01:49.680
+Tras bambalinas, una extensión puede añadir campos, páginas, informes, acciones, reglas y lógica de negocio.
+
+00:01:50.080 --> 00:01:53.160
+Esa última frase suena técnica, así que expliquemosla de forma sencilla.
+
+00:01:53.660 --> 00:01:56.580
+La lógica de negocio son las reglas que le indican a Business Central que debe hacer.
+
+00:01:57.080 --> 00:02:01.460
+Por ejemplo, una regla podría evitar que un pedido sea liberado hasta que alguien ingrese un número de orden de compra.
+
+00:02:01.880 --> 00:02:05.520
+Y otra regla podría enviar un documento para su aprobación cuando su monto supere un límite.
+
+00:02:06.340 --> 00:02:10.120
+La extensión maneja esa regla, así que su equipo no tiene que recordarla cada vez.
+
+00:02:10.120 --> 00:02:14.180
+Ahora bien, antes de que las aplicaciones en la nube y las extensiones fueran la norma,
+
+00:02:14.260 --> 00:02:16.780
+las empresas solían cambiar el código original de Business Central directamente.
+
+00:02:17.300 --> 00:02:20.740
+Imaginen que eso es como cambiar las paredes y el cableado real dentro de un edificio o de oficinas.
+
+00:02:21.200 --> 00:02:24.260
+Al principio eso puede resolver un problema, pero cuando Microsoft envía una actualización,
+
+00:02:24.540 --> 00:02:28.520
+ésta espera que el edificio estándar luzca de cierta manera y sus cambios personalizados pueden entrar en conflicto.
+
+00:02:28.840 --> 00:02:32.380
+Así que alguien necesita revisar esos cambios, reparar los conflictos y probar el sistema
+
+00:02:32.380 --> 00:02:34.420
+antes de que la actualización pueda continuar de forma segura.
+
+00:02:34.780 --> 00:02:35.620
+Ese trabajo consume tiempo.
+
+00:02:35.620 --> 00:02:40.340
+Las extensiones evitan gran parte de ese problema porque su código permanece separado del código de la aplicación estándar.
+
+00:02:40.760 --> 00:02:44.320
+Por lo tanto, en lugar de reconstruir el edificio, le añaden un complemento cuidadosamente diciendo
+
+00:02:44.320 --> 00:02:48.620
+Microsoft puede actualizar la aplicación principal mientras la extensión permanece en su propio paquete.
+
+00:02:49.040 --> 00:02:52.620
+Eso no significa que cada actualización no requiera atención en absoluto.
+
+00:02:53.920 --> 00:03:00.020
+Una extensión puede depender de otra y su editor podría necesitar lanzar una versión compatible cuando Business Central cambie.
+
+00:03:00.020 --> 00:03:05.300
+Pero separar la extensión del código estándar aún le da a todos un punto de partida mucho más limpio.
+
+00:03:06.040 --> 00:03:08.860
+Puede pensarlo como mantener una herramienta enchufable en su propio estuche.
+
+00:03:09.500 --> 00:03:13.640
+La herramienta se conecta al taller cuando la necesita, pero no requiere que reconstruya el taller primero.
+
+00:03:13.920 --> 00:03:18.800
+Y, si ya no necesita esa herramienta, puede quitar el complemento en lugar de desmantelar todo el edificio.
+
+00:03:19.440 --> 00:03:22.640
+Esto cambia la conversación de cómo podemos reescribir Business Central para nosotros,
+
+00:03:23.120 --> 00:03:25.240
+a cómo podemos añadir la pieza faltante de forma segura.
+
+00:03:25.240 --> 00:03:29.920
+Eso importa porque el Business Central estándar ya maneja una enorme cantidad de trabajo empresarial normal.
+
+00:03:30.500 --> 00:03:32.600
+Por lo tanto, las extensiones deben llenar un vacío real,
+
+00:03:32.740 --> 00:03:36.700
+no convertirse en una excusa para reconstruir cada pantalla solo porque el sistema antiguo se veía diferente.
+
+00:03:37.020 --> 00:03:39.280
+A veces, la mejor extensión añade un campo y una verificación.
+
+00:03:39.700 --> 00:03:42.660
+A veces, conecta a Business Central a un servicio del que su empresa ya depende.
+
+00:03:43.220 --> 00:03:44.880
+De cualquier manera, el objetivo sigue siendo simple.
+
+00:03:45.240 --> 00:03:48.240
+Mantenga la base estándar estable mientras añade las herramientas que su gente necesita.
+
+00:03:48.520 --> 00:03:50.920
+A continuación, debemos ver quién crea estos complementos,
+
+00:03:50.920 --> 00:03:53.060
+porque no todas las extensiones provienen del mismo lugar.
+
+00:03:53.060 --> 00:03:56.380
+Los tipos principales de extensiones
+
+00:03:56.380 --> 00:03:58.400
+Entonces, ¿de dónde provienen realmente las extensiones?
+
+00:03:59.560 --> 00:04:04.000
+No vienen de un solo lugar y conocer la diferencia le ayuda a elegir la correcta para su negocio.
+
+00:04:04.580 --> 00:04:06.120
+El primer tipo se llama extensión de aplicación.
+
+00:04:06.580 --> 00:04:10.320
+Piensa en ella como un complemento empaquetado que maneja una tarea específica dentro de Business Central.
+
+00:04:10.680 --> 00:04:13.400
+Por ejemplo, una aplicación de envíos puede conectar sus pedidos con un transportista.
+
+00:04:13.640 --> 00:04:16.640
+Una aplicación de pagos puede procesar pagos con tarjeta o enviar detalles a un servicio.
+
+00:04:16.640 --> 00:04:19.800
+Una aplicación de informes puede añadir los reportes que su equipo necesita cada mes.
+
+00:04:19.800 --> 00:04:24.180
+Una extensión de aplicación es como comprar una herramienta lista para usar en una tarea que ya sabe que debe realizar.
+
+00:04:24.880 --> 00:04:29.220
+Usted la instala, la configura para su empresa y sus usuarios ven la nueva función directamente en Business Central.
+
+00:04:30.260 --> 00:04:34.820
+Puede añadir sus propias páginas y campos o colocar opciones dentro de páginas que la gente ya conoce,
+
+00:04:34.960 --> 00:04:37.320
+como pedidos de venta, pedidos de compra o fichas de cliente.
+
+00:04:37.320 --> 00:04:40.460
+Algunas extensiones de aplicaciones provienen de la propia Microsoft.
+
+00:04:40.920 --> 00:04:44.120
+Proporcionan complementos para necesidades que no aplican a todas las empresas o países.
+
+00:04:44.860 --> 00:04:46.760
+Un paquete de informes legales locales es un buen ejemplo.
+
+00:04:47.280 --> 00:04:50.640
+Las normas fiscales, facturas, pagos y documentos oficiales difieren de un lugar a otro.
+
+00:04:51.140 --> 00:04:53.580
+Por lo tanto, un país puede necesitar funciones que otro nunca utiliza.
+
+00:04:54.080 --> 00:04:58.900
+Esa separación mantiene el producto estándar enfocado al tiempo que ofrece a las empresas una forma de cumplir con las normas locales.
+
+00:04:59.240 --> 00:05:00.480
+Luego tenemos las extensiones de SBA.
+
+00:05:00.860 --> 00:05:02.400
+Y SBA significa proveedor de software independiente.
+
+00:05:02.400 --> 00:05:09.180
+Suena como una frase técnica compleja, pero en realidad significa una empresa de software que crea una aplicación para muchos clientes de Business Central.
+
+00:05:09.740 --> 00:05:17.540
+Un ISV podría centrarse en trabajo de almacén, comercio minorista, fabricación, gestión de documentos, enlaces de nómina, facturas electrónicas o informes sectoriales.
+
+00:05:18.400 --> 00:05:23.860
+En lugar de crear la misma función desde cero para cada cliente, crean una aplicación que muchas empresas pueden comprar o suscribir.
+
+00:05:24.740 --> 00:05:28.680
+Estas aplicaciones suelen aparecer en Microsoft AppSource en MercadoLine para aplicaciones empresariales de Microsoft.
+
+00:05:29.200 --> 00:05:31.080
+AppSource es útil cuando su necesidad es común.
+
+00:05:31.080 --> 00:05:36.400
+Quizás muchas empresas quieran conectar Business Central con el mismo servicio de envío, banco o proveedor de pagos.
+
+00:05:36.840 --> 00:05:44.160
+En lugar de pagar a alguien para construir esa conexión, solo para usted puede encontrar una aplicación existente con soporte, notas de configuración y actualizaciones periódicas de su grado.
+
+00:05:44.620 --> 00:05:45.560
+Eso puede ahorrar muchísimo trabajo.
+
+00:05:46.020 --> 00:05:49.200
+Una aplicación de AppSource no es automáticamente la elección correcta solo porque exista.
+
+00:05:49.540 --> 00:05:53.480
+Debe comprobar que se ajuste a su proceso, su país y su versión de Business Central.
+
+00:05:53.480 --> 00:05:59.120
+Una buena aplicación resuelve un problema claro sin obligar a su equipo a cambiar cada parte de su trabajo diario en torno a la aplicación.
+
+00:05:59.800 --> 00:06:02.840
+Siguiente tipo es una extensión por inquilino, a menudo abreviada como PTE.
+
+00:06:03.580 --> 00:06:06.040
+Un inquilino es el entorno propio de Business Central de su empresa.
+
+00:06:06.500 --> 00:06:12.320
+Por lo tanto, una extensión por inquilino es una aplicación creada solo para su empresa, no publicada para que la instalen todos los clientes de Business Central.
+
+00:06:12.320 --> 00:06:16.340
+Imagina un distribuidor de alimentos con una forma muy específica de calcular los gastos de envío.
+
+00:06:16.620 --> 00:06:22.060
+Los precios podrían depender del transporte con temperatura controlada, zonas de entrega, cajas retornables y acuerdos con clientes establecidos durante años.
+
+00:06:22.700 --> 00:06:25.500
+Este proceso es probablemente demasiado inusual para una aplicación de envío estándar.
+
+00:06:26.300 --> 00:06:30.520
+Así que un socio o desarrollador de Business Central puede crear una extensión por inquilino en torno a ese proceso.
+
+00:06:31.140 --> 00:06:35.600
+La aplicación permanece dentro de la configuración de Business Central de esa empresa y puede adaptarse a su forma de trabajar.
+
+00:06:36.240 --> 00:06:41.680
+Puede incluir un enlace único a un sistema antiguo, un proceso de operación especial o una pantalla creada para una tarea exclusiva de ese negocio.
+
+00:06:41.680 --> 00:06:43.820
+Pero personalizado no siempre significa mejor.
+
+00:06:44.260 --> 00:06:47.760
+Una extensión por inquilino ofrece un ajuste preciso, pero alguien tiene que hacerse cargo de ello.
+
+00:06:48.200 --> 00:06:53.700
+Esto significa llevar registros, probar cambios y organizar el soporte cuando su empresa cambia el proceso o Business Central se actualiza.
+
+00:06:54.160 --> 00:06:59.080
+Si otra empresa pudiera usar la misma función, una aplicación ISV existente podría suponer menos trabajo a largo plazo.
+
+00:06:59.460 --> 00:07:00.240
+Entonces, ¿cómo elegir?
+
+00:07:00.580 --> 00:07:02.780
+Piense por la necesidad empresarial, no por el tipo de extensión.
+
+00:07:03.220 --> 00:07:09.000
+Si su necesidad es común, como la importación de extractos bancarios, etiquetas de paquetes, facturas electrónicas o un informe local,
+
+00:07:09.000 --> 00:07:14.120
+busque primero una aplicación de Microsoft o de un ISV, puede encontrar una aplicación madura que ya sea justa.
+
+00:07:14.460 --> 00:07:18.660
+Si la necesidad surge de un proceso exclusivo de su empresa, una extensión por inquilino puede tener más sentido.
+
+00:07:19.080 --> 00:07:21.820
+También existen extensiones sencillas que cubran una regla específica,
+
+00:07:21.980 --> 00:07:25.040
+como requerir ciertos campos antes de que un usuario pueda guardar a un cliente proveedor.
+
+00:07:25.300 --> 00:07:29.080
+Pueden ser pequeñas, pero evitan que la falta de información crea problemas mayores más adelante.
+
+00:07:29.500 --> 00:07:32.180
+Quien creó la aplicación le indica dónde buscar soporte y actualizaciones.
+
+00:07:32.640 --> 00:07:35.260
+Lo que cambia la aplicación le indica lo que sus usuarios notarán cada día.
+
+00:07:35.260 --> 00:07:38.600
+¿Cómo las extensiones cambian su trabajo diario?
+
+00:07:39.680 --> 00:07:41.620
+Entonces, ¿dónde se anota realmente una extensión?
+
+00:07:42.040 --> 00:07:47.400
+Por lo general, anotará en una página que ya usa como una ficha de cliente, un pedido de venta, una ficha de artículo o una factura registrada.
+
+00:07:47.760 --> 00:07:48.960
+A menudo eso es una extensión de página.
+
+00:07:49.400 --> 00:07:51.520
+Cambia la pantalla sin reemplazar la página familiar.
+
+00:07:52.120 --> 00:07:56.960
+Su equipo sigue trabajando un día lo hace, mientras la extensión añade la información o acción que su proceso necesita.
+
+00:07:57.340 --> 00:08:00.220
+Imagine que su equipo de ventas necesita una ventana de entrega para cada cliente.
+
+00:08:00.220 --> 00:08:05.580
+Una extensión de página puede añadir un campo de ventana de entrega a la ficha de cliente y mostrar ese mismo detalle en el pedido de venta.
+
+00:08:06.060 --> 00:08:09.040
+Nadie necesita una hoja de cálculo separada o una nota oculta en un correo electrónico.
+
+00:08:09.240 --> 00:08:12.220
+La persona que introduce el pedido ve la regla de entrega justo donde importa.
+
+00:08:12.580 --> 00:08:13.980
+A veces el cambio es aún más sencillo.
+
+00:08:14.400 --> 00:08:20.660
+Puede ver un nuevo botón que envía un recordatorio de pago, crea una etiqueta de envío, habla un documento vinculado o inicia una solicitud de aprobación.
+
+00:08:21.500 --> 00:08:25.540
+La página sigue pareciéndose a Business Central, pero ahora admite la tarea que su equipo necesita completar.
+
+00:08:25.960 --> 00:08:27.700
+Esto mantiene el trabajo cerca del registro.
+
+00:08:27.700 --> 00:08:36.480
+En lugar de pedir a los usuarios que recuerden cinco pasos herramientas, la extensión puede colocar la siguiente acción junto al cliente de factura, pedido o artículo que ya están viendo.
+
+00:08:37.680 --> 00:08:39.800
+Nada de transferencias suelen significar menos pasos olvidados.
+
+00:08:40.120 --> 00:08:41.360
+Los informes cambian de forma similar.
+
+00:08:41.860 --> 00:08:49.980
+Business Central incluye informes estándar, pero una empresa podría necesitar que su factura muestre un número de referencia especial, texto legal adicional, un logo diferente o información que un cliente espera ver.
+
+00:08:49.980 --> 00:08:55.040
+Una extensión de informe puede añadir esos datos o proporcionar otro diseño dejando intacto el informe original.
+
+00:08:55.500 --> 00:08:56.700
+Piense en una factura de venta.
+
+00:08:57.140 --> 00:09:00.820
+Su equipo financiero puede necesitar un diseño para clientes locales y otro para clientes extranjeros.
+
+00:09:01.240 --> 00:09:05.800
+Primero puede mostrar detalles de impuestos locales, mientras que el segundo requiere una redacción diferente y una referencia adónica.
+
+00:09:06.080 --> 00:09:10.060
+Una extensión de informe puede añadir esos diseños e incluir los campos que cada documento necesite.
+
+00:09:10.060 --> 00:09:16.380
+El informe estándar no desaparece, y eso es importante porque no está reemplazando un informe familiar por algo completamente distinto.
+
+00:09:16.860 --> 00:09:20.020
+Está añadiendo lo que su negocio necesita manteniendo el informe estándar como base.
+
+00:09:20.400 --> 00:09:22.900
+Sus informes no son solo para documentos que envía fuera de la empresa.
+
+00:09:23.280 --> 00:09:31.140
+Una extensión puede añadir columnas a un informe financiero interno, mostrar detalles adicionales de artículos para la planificación de stock o incluir un campo específico de la empresa en un informe de gestión.
+
+00:09:31.360 --> 00:09:35.440
+Si los datos existen en Business Central, el informe puede llevarlos a la vista que el personal utiliza para tomar decisiones.
+
+00:09:35.640 --> 00:09:37.280
+Luego están las extensiones de conjunto de permiso.
+
+00:09:37.280 --> 00:09:41.400
+Los permisos deciden qué puede ver, cambiar, registrar o eliminar cada persona.
+
+00:09:41.880 --> 00:09:45.260
+Para empezar, piénselos como tarjetas de acceso para diferentes salas de su empresa.
+
+00:09:45.860 --> 00:09:48.080
+Un usuario financiero puede necesitar acceso a una nueva pantalla de pagos.
+
+00:09:48.460 --> 00:09:52.360
+Un usuario de almacén puede necesitar acceso a una acción de envío, pero no a los detalles bancarios detrás de ella.
+
+00:09:52.720 --> 00:09:57.620
+Cuando una extensión añade una nueva página o proceso, también puede añadir los permisos que los usuarios necesitan para ese nuevo trabajo.
+
+00:09:58.080 --> 00:09:59.060
+Esto evita un problema común.
+
+00:09:59.620 --> 00:10:04.640
+Si instalar una aplicación, la gente puede ver su nuevo botón, pero no pueden usarlo porque carecen de acceso a los registros subyacentes.
+
+00:10:04.640 --> 00:10:11.000
+Una extensión de conjunto de permisos ayuda a conectar la nueva función con los roles adecuados, de modo que el acceso sigue el trabajo que la gente realmente hace.
+
+00:10:11.620 --> 00:10:13.480
+Usted aún debe decidir quién debe recibir ese acceso.
+
+00:10:14.120 --> 00:10:18.820
+Una extensión puede proporcionar conjuntos de permisos, pero su empresa elige qué personas o grupos deben usarlos.
+
+00:10:19.300 --> 00:10:23.080
+Una nueva herramienta no debería dar silenciosamente a cada usuario más acceso del que requiere su rol.
+
+00:10:23.080 --> 00:10:26.520
+Muchas extensiones también conectan Business Central con otro servicio en línea.
+
+00:10:26.900 --> 00:10:28.000
+No son aplicaciones de integración.
+
+00:10:28.380 --> 00:10:34.240
+Pasan información entre Business Central y un banco, una empresa de envío, un servicio de pago, una tienda en línea u otro sistema empresarial.
+
+00:10:34.860 --> 00:10:37.400
+Piensa en un equipo financiero que recibe extractos bancarios cada día.
+
+00:10:37.980 --> 00:10:44.980
+Sin una conexión, alguien tendría que descargar un archivo del banco, cargarlo manualmente, comparar cada línea bancaria con los pagos y buscar las entradas que no coinciden.
+
+00:10:44.980 --> 00:10:51.620
+Con una extensión bancaria, el estado de cuenta puede ingresar a Business Central y ayudar al equipo a relacionar los pagos entrantes y salientes con los registros existentes.
+
+00:10:52.040 --> 00:10:55.700
+La persona sigue revisando las excepciones, pero las coincidencias rutinarias requieren menos esfuerzo humano.
+
+00:10:55.980 --> 00:10:59.440
+El equipo financiero puede centrarse en las entradas que requieren la investigación de una persona real.
+
+00:10:59.720 --> 00:11:00.980
+Ese es un uso práctico de una extensión.
+
+00:11:01.580 --> 00:11:02.460
+No elimina el juicio humano.
+
+00:11:02.860 --> 00:11:03.940
+Elimina el manejo repetitivo.
+
+00:11:04.280 --> 00:11:05.800
+Las aplicaciones de envío funcionan de manera no es similar.
+
+00:11:05.960 --> 00:11:09.100
+Un pedido de venta puede enviar detalles de la dirección y del paquete a un servicio de transporte.
+
+00:11:09.340 --> 00:11:11.140
+Transportista puede volver una etiqueta y un número de seguimiento.
+
+00:11:11.140 --> 00:11:16.060
+En lugar de copiar la misma dirección en otro sitio web, su equipo inicia el proceso de envío desde el pedido mismo.
+
+00:11:16.480 --> 00:11:18.060
+Puede agregar estas funciones cuando las necesita.
+
+00:11:18.560 --> 00:11:21.920
+Si una empresa deja de usar un transportista, cambia al proveedor de pagos o retira un proceso,
+
+00:11:22.040 --> 00:11:24.040
+es posible que ya no necesite la extensión relacionada.
+
+00:11:24.340 --> 00:11:29.200
+Ese enfoque modular le brinda más control que integrar cada conexión externa en la aplicación estándar.
+
+00:11:29.520 --> 00:11:31.740
+Una así, cada aplicación añadida se convierte en parte de su trabajo.
+
+00:11:31.900 --> 00:11:36.440
+El siguiente paso es revisar una extensión cuidadosamente antes de que se integren los procesos de los que depende su persona.
+
+00:11:37.280 --> 00:11:38.460
+Buscar e instalar aplicaciones.
+
+00:11:39.060 --> 00:11:40.700
+Entonces sabe que un proceso necesita ayuda.
+
+00:11:41.140 --> 00:11:41.520
+¿Dónde busca?
+
+00:11:41.900 --> 00:11:46.280
+La mayoría de las personas comienzan con Microsoft AppSource o la página de administración de extensiones dentro de Business Center.
+
+00:11:46.540 --> 00:11:50.540
+AppSource es el mercado donde puede explorar aplicaciones de Microsoft y otras empresas de software.
+
+00:11:50.900 --> 00:11:55.380
+La administración de extensiones es donde usted ve y gestiona las aplicaciones ya conectadas a su propio entorno de business.
+
+00:11:55.540 --> 00:11:56.020
+Y está la clave.
+
+00:11:56.320 --> 00:11:58.540
+Comience con el problema, no con el nombre de una aplicación.
+
+00:11:58.840 --> 00:12:00.260
+Busque palabras que su equipo ya utiliza.
+
+00:12:00.260 --> 00:12:06.600
+Pruebe con envío, importación bancaria, aprobaciones, facturación electrónica, escaneo de almacén, recordadores de pago o informes locales.
+
+00:12:07.100 --> 00:12:12.000
+Una búsqueda sencilla le da más posibilidades de encontrar varias opciones en lugar de elegir la primera aplicación que alguien mencione.
+
+00:12:12.440 --> 00:12:17.540
+Imagine que su equipo de almacén pasa parte de cada tarde copiando detalles de pedidos en el sitio web del transportista.
+
+00:12:18.040 --> 00:12:19.880
+No comience buscando un proveedor específico.
+
+00:12:20.180 --> 00:12:24.140
+En su lugar, busque al transportista, envío de paquetes, impresión de etiquetas o seguimiento de envíos.
+
+00:12:24.460 --> 00:12:28.120
+Luego, compare las aplicaciones que aparecen con el trabajo real que su equipo necesita completar.
+
+00:12:28.120 --> 00:12:29.700
+Ahora, lea la lista detenidamente.
+
+00:12:30.160 --> 00:12:31.160
+Primero, verifique el editor.
+
+00:12:31.640 --> 00:12:32.380
+¿Quién creó la aplicación?
+
+00:12:32.560 --> 00:12:34.200
+¿Y dónde puede encontrar sus detalles de soporte?
+
+00:12:34.580 --> 00:12:42.680
+Una aplicación puede parecer perfecta en una breve descripción, pero necesita saber quién responderá cuando una etiqueta de envío no se imprima o una actualización cambie un proceso que su equipo usa a diario.
+
+00:12:43.780 --> 00:12:46.340
+A continuación, verifique qué versiones de Business Central admite la aplicación.
+
+00:12:46.580 --> 00:12:51.140
+Su empresa podría usar la versión en línea de Business Central o ejecutar una versión alojada en sus propios servidores.
+
+00:12:51.420 --> 00:12:53.080
+Una aplicación debe ser compatible con su configuración.
+
+00:12:53.080 --> 00:12:58.200
+Revise la descripción de la aplicación y la documentación del editor, en lugar de asumir que toda aplicación funciona en todas partes.
+
+00:12:58.660 --> 00:13:00.180
+El precio también requiere una revisión detallada.
+
+00:13:00.620 --> 00:13:01.900
+Algunas aplicaciones cobran por usuario.
+
+00:13:02.200 --> 00:13:05.480
+Otras cobran por empresa, por transacción o mediante una suscripción mensual.
+
+00:13:05.900 --> 00:13:08.900
+Otras son gratuitas de instalar, pero se conectan a un servicio externo de pago.
+
+00:13:09.420 --> 00:13:13.600
+Un conector bancario, por ejemplo, puede implicar cargos del editor de la aplicación, el banco o de ambos.
+
+00:13:14.120 --> 00:13:16.060
+Si sea gratuita no significa que debo meter las verificaciones.
+
+00:13:16.420 --> 00:13:18.940
+Una aplicación gratuita puede resolver muy bien un problema específico.
+
+00:13:18.940 --> 00:13:22.600
+También puede incluir menos opciones de soporte, menos documentación o un conjunto limitado de funciones.
+
+00:13:23.480 --> 00:13:28.460
+Lea qué incluye la aplicación, qué no incluye y si el editor explica cómo funcionan las actualizaciones y el soporte.
+
+00:13:29.200 --> 00:13:30.820
+Busca documentación antes de realizar la instalación.
+
+00:13:31.160 --> 00:13:37.260
+Una buena documentación debe explicar qué hace la aplicación, qué necesita antes de la configuración, qué páginas de Business Central modifica y cómo interactúan los usuarios con ella.
+
+00:13:37.860 --> 00:13:39.720
+No necesita leerse como un libro de texto.
+
+00:13:40.180 --> 00:13:45.700
+Oh, pero si puede encontrar notas de configuración claras para un proceso de negocio que afecte pedidos, facturas o pagos, deténgase ahí.
+
+00:13:45.700 --> 00:13:45.940
+Ahí.
+
+00:13:47.700 --> 00:13:49.760
+Las reseñas pueden ayudar, pero léalas con cuidado.
+
+00:13:49.760 --> 00:13:55.420
+Una reseña de cinco estrellas de una empresa en otro país puede no decirle si la aplicación funciona con sus normas locales de informes.
+
+00:13:55.840 --> 00:13:58.560
+Una reseña baja puede describir un problema que la editoria ha solucionado.
+
+00:13:59.020 --> 00:14:01.980
+Trate las reseñas como preguntas a investigar, no como una respuesta definitiva.
+
+00:14:02.500 --> 00:14:05.000
+Una vez que reduzca su lista, apruebe la aplicación en entorno de pruebas.
+
+00:14:05.440 --> 00:14:08.300
+Un entorno de pruebas es un espacio independiente de Business Central para la reserva.
+
+00:14:08.660 --> 00:14:15.420
+Ofrece a su equipo un lugar seguro para instalar una aplicación, probar su configuración y ejecutar ejemplos de negocios reales sin modificar los registros de trabajo diario.
+
+00:14:15.420 --> 00:14:16.900
+Delice casos de prueba de la vía.
+
+00:14:17.480 --> 00:14:22.320
+Crea un pedido de muestra con el tipo de cliente, artículo, regla fiscal y método de entrega que suele causar problemas.
+
+00:14:22.800 --> 00:14:24.860
+Pide a las personas que realicen ese trabajo que pruebe la aplicación.
+
+00:14:25.160 --> 00:14:30.740
+Un gerente puede aprobar una aplicación sobre papel, pero quien ingresa los pedidos puede detectar un campo faltante o un campo faltante en cuestión de minutos.
+
+00:14:31.380 --> 00:14:32.420
+Pruebe también los casos difíciles.
+
+00:14:32.960 --> 00:14:34.420
+¿Qué sucede cuando una dirección está incompleta?
+
+00:14:34.700 --> 00:14:35.760
+¿Qué sucede cuando un pago falla?
+
+00:14:36.120 --> 00:14:38.460
+¿Puede un usuario corregir un error sin llamar a un desarrollador?
+
+00:14:38.460 --> 00:14:41.840
+La aplicación genera informe correcto cuando un cliente necesita una copia el próximo mes.
+
+00:14:42.260 --> 00:14:45.040
+Esa pregunta le dirá mucho más que una página de producto bien diseñada.
+
+00:14:45.540 --> 00:14:48.420
+Antes de que la aplicación entre en uso diario, decida a quién se encargará del soporte.
+
+00:14:48.760 --> 00:14:50.980
+Su equipo interno de TI podría gestionar la primera llamada.
+
+00:14:51.380 --> 00:14:53.880
+Su socio de Business Central podría encargarse de la configuración y la reparación.
+
+00:14:54.080 --> 00:14:56.320
+El editor de la aplicación podría gestionar los problemas de su propio grupo.
+
+00:14:56.880 --> 00:15:00.000
+Anote eso junto con el contacto de soporte y el propósito de la aplicación.
+
+00:15:00.700 --> 00:15:02.920
+Una aplicación instalada se convierte en proceso de negocio.
+
+00:15:03.560 --> 00:15:07.480
+Esto significa que las siguientes preguntas involucran la información a la que accede a dónde viaja
+
+00:15:07.480 --> 00:15:10.380
+y qué sucede cuando Business Central o la aplicación cambian.
+
+00:15:11.440 --> 00:15:13.380
+Preguntas sobre seguridad, datos y actualizaciones.
+
+00:15:13.920 --> 00:15:16.340
+Antes de aprobar una extensión, haga una pregunta sencilla.
+
+00:15:16.820 --> 00:15:19.720
+¿Qué información puede ver, cambiar o enviar esta aplicación a otro lugar?
+
+00:15:20.000 --> 00:15:23.760
+Esta pregunta es importante porque una extensión puede integrarse en el mismo trabajo que su equipo realiza
+
+00:15:23.760 --> 00:15:26.180
+con clientes, pedidos, facturas, facturas, pagos y existencia.
+
+00:15:26.460 --> 00:15:28.440
+Algunas aplicaciones solo añaden un campo o un informe.
+
+00:15:28.920 --> 00:15:32.980
+Otras conectan Business Central con un servicio externo e intercambian datos de negocio como parte de su función.
+
+00:15:33.720 --> 00:15:36.920
+No todas las aplicaciones siguen los mismos estándares de prueba, cumplimiento o seguridad
+
+00:15:36.920 --> 00:15:37.800
+que Business Central.
+
+00:15:38.380 --> 00:15:41.000
+Microsoft lo documenta claramente para aplicaciones de otros proveedores.
+
+00:15:41.360 --> 00:15:42.940
+Una aplicación puede contactar con otros servicios.
+
+00:15:43.420 --> 00:15:47.360
+Puede procesar o almacenar datos fuera de su organización o de la región geográfica
+
+00:15:47.360 --> 00:15:49.280
+y el límite de cumplimiento elegidos.
+
+00:15:50.440 --> 00:15:54.340
+Puede compartir datos con otra empresa, incluir funciones con IA o mostrar contenido
+
+00:15:54.340 --> 00:15:56.200
+que no se ajuste a las políticas de su compañía.
+
+00:15:57.060 --> 00:15:59.120
+Así que no trate un botón de instalación como una decisión menor.
+
+00:15:59.520 --> 00:16:01.120
+Aquí hay un ejemplo concreto.
+
+00:16:02.300 --> 00:16:05.820
+Imagina una aplicación que envía datos de facturas a un servicio de documentos externo.
+
+00:16:05.820 --> 00:16:09.640
+Puede necesitar nombres de clientes, direcciones, detalles de artículos, precios, datos fiscales
+
+00:16:09.640 --> 00:16:11.220
+y números de documento para hacer su trabajo.
+
+00:16:11.720 --> 00:16:14.520
+Eso podría encajar perfectamente en su proceso, pero su responsable financiero,
+
+00:16:14.600 --> 00:16:17.600
+equipo de TI, contacto o privacidad deben saber a dónde van esos datos y quién los maneja.
+
+00:16:18.100 --> 00:16:20.860
+Pide al editor que explique la ruta de los datos en un lenguaje sencillo.
+
+00:16:21.080 --> 00:16:22.100
+¿Qué datos salen de Business Central?
+
+00:16:22.660 --> 00:16:23.200
+¿A dónde van?
+
+00:16:23.580 --> 00:16:24.700
+¿Qué país o región los almacenan?
+
+00:16:25.100 --> 00:16:26.700
+¿La aplicación guarda una copia por cuanto entera?
+
+00:16:26.700 --> 00:16:29.140
+¿El editor u otro proveedor de servicios puede acceder a ellos?
+
+00:16:29.540 --> 00:16:32.660
+¿Si la aplicación utiliza IA, ¿qué información llega al servicio de IA?
+
+00:16:32.660 --> 00:16:34.760
+¿Y qué sucede con esa información después?
+
+00:16:35.220 --> 00:16:37.280
+Lea los detalles de privacidad y los términos antes de instalar.
+
+00:16:37.560 --> 00:16:40.760
+No necesita convertirse en abogado, pero sí necesita respuestas claras sobre los datos
+
+00:16:40.760 --> 00:16:41.420
+que maneja su empresa.
+
+00:16:41.940 --> 00:16:45.040
+Si un proveedor no puede explicar qué hace su aplicación con su información,
+
+00:16:45.500 --> 00:16:49.000
+no la incluya en un proceso que maneje registros de clientes o datos financieros.
+
+00:16:50.220 --> 00:16:51.740
+Los permisos requieren el mismo nivel de cuidado.
+
+00:16:52.100 --> 00:16:54.880
+Una aplicación puede necesitar permiso para leer pedidos de venta, crear envíos,
+
+00:16:54.980 --> 00:16:57.320
+registrar pagos o acceder a registros utilizados por una nueva función.
+
+00:16:57.620 --> 00:16:59.360
+Concedale solo el acceso que necesite para el trabajo.
+
+00:16:59.360 --> 00:17:02.440
+Luego verifique que usuarios reciben los conjuntos de permisos de la aplicación,
+
+00:17:03.040 --> 00:17:05.880
+ya que una nueva función útil puede crear un problema de seguridad si llega a personas
+
+00:17:05.880 --> 00:17:06.940
+que no deberían usarla.
+
+00:17:07.480 --> 00:17:09.320
+Mantenga su propio proceso de aprobación involucrada.
+
+00:17:09.860 --> 00:17:12.560
+Departamento puede encontrar una aplicación útil y quiere que funcione inmediato.
+
+00:17:12.940 --> 00:17:14.680
+Cuando la aplicación maneje trabajo confidencial,
+
+00:17:14.900 --> 00:17:18.280
+deje que los responsables de TI, finanzas, seguridad y cumplimiento la revisen primero.
+
+00:17:18.740 --> 00:17:21.980
+Eso puede parecer lento al principio, pero es mejor que descubrir más tarde que los datos
+
+00:17:21.980 --> 00:17:23.680
+de los clientes viajaron a un lugar que nadie aprobó.
+
+00:17:23.900 --> 00:17:25.240
+Las actualizaciones también merecen atención.
+
+00:17:25.240 --> 00:17:29.620
+Las extensiones mantienen el código personalizado separado de la aplicación estándar de Business
+
+00:17:29.620 --> 00:17:32.460
+Central, lo que reduce el tipo de trabajo de reparación que pueden crear los cambios
+
+00:17:32.460 --> 00:17:35.360
+directos de código, pero una extensión aún puede depender de las funciones de Business
+
+00:17:35.360 --> 00:17:37.280
+Central, otra aplicación o un servicio externo.
+
+00:17:37.980 --> 00:17:41.820
+Si una parte cambia, es posible que la conexión necesite para mantener un registro breve de
+
+00:17:41.820 --> 00:17:42.580
+cada extensión instalada.
+
+00:17:43.160 --> 00:17:47.840
+Anote su nombre, editor, propósito, propietario, soporte, contacto, permisos, servicios externos
+
+00:17:47.840 --> 00:17:49.340
+y cualquier otra aplicación de la que dependa.
+
+00:17:49.680 --> 00:17:53.180
+Cuando se acerca una actualización, esa lista le indica qué probar, en lugar de dejar que su
+
+00:17:53.180 --> 00:17:54.920
+equipo adivine qué proceso podría fallar.
+
+00:17:55.300 --> 00:17:55.940
+Menos suele ser mejor.
+
+00:17:56.560 --> 00:17:59.800
+Una larga lista de aplicaciones puede crear funciones superpuestas, propiedad poco clara
+
+00:17:59.800 --> 00:18:00.660
+y más cosas que probar.
+
+00:18:00.900 --> 00:18:02.720
+Conserve una extensión cuando resuelva una necesidad comercial.
+
+00:18:03.400 --> 00:18:06.920
+Elimínelas o retírela cuando esa necesidad desaparezca y documente qué cambios se producen
+
+00:18:06.920 --> 00:18:07.440
+antes de hacerlo.
+
+00:18:07.600 --> 00:18:08.960
+El objetivo no es evitar la extensión.
+
+00:18:09.340 --> 00:18:12.420
+El objetivo es saber exactamente qué hace que esa extensión antes de que se convierta en
+
+00:18:12.420 --> 00:18:13.100
+parte de su empresa.
+
+00:18:13.640 --> 00:18:15.260
+Oye, TM, este es un trabajo diario.
+
+00:18:17.120 --> 00:18:17.520
+Conclusión.
+
+00:18:17.820 --> 00:18:18.920
+Elige el complemento adecuado.
+
+00:18:19.960 --> 00:18:20.800
+Aquí está la regla simple.
+
+00:18:20.800 --> 00:18:24.880
+Una extensión de Business Central debe solucionar un problema específico sin tocar el código
+
+00:18:24.880 --> 00:18:25.380
+principal.
+
+00:18:26.300 --> 00:18:27.860
+Comience con el programa real que enfrenta su equipo.
+
+00:18:28.400 --> 00:18:29.700
+Pruebe el complemento con trabajo real.
+
+00:18:30.120 --> 00:18:32.780
+Verifique quién lo creó y a dónde van sus datos y asegúrese de que alguien le dará
+
+00:18:32.780 --> 00:18:33.880
+soporte después de la instalación.
+
+00:18:34.140 --> 00:18:37.180
+Suscríbase y comparte esta pepita de conocimiento con cualquiera que todavía crea que tiene que
+
+00:18:37.180 --> 00:18:38.880
+aceptar todas las pantallas predeterminadas.

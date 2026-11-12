@@ -1,0 +1,1096 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:04.540
+Excel, de favoriete zelfopgelegde straf van de mensheid, vermomt als productiviteitssoftware.
+
+00:00:04.680 --> 00:00:09.460
+Elk kantoor heeft er wel één, de persoon die nog steeds gelooft dat de beste manier om een informatieaanvraag in te vullen,
+
+00:00:09.720 --> 00:00:14.220
+is door handmatig 50 antwoorden uit een woorddocument te kopiëren en inkeurig omlijnde cellen te plakken.
+
+00:00:14.380 --> 00:00:18.800
+Het is ontroerend om ze bezig te zien, alsof je iemand een e-mail in een stenen tablet ziet bijtelen.
+
+00:00:19.100 --> 00:00:24.740
+De waarheid is dat de meeste professionals informatieaanvragen in Excel nog steeds behandelen alsof het 1999 is.
+
+00:00:25.220 --> 00:00:27.420
+Repetitief, foutgevoelig en pijnlijk handmatig.
+
+00:00:27.420 --> 00:00:30.240
+Elke binnenkomende spreadsheet is weer een ritueel van zwoegen.
+
+00:00:30.400 --> 00:00:35.480
+E-mail openen, bijlagen downloaden, rijen scannen, vloeken, antwoorden cel voor cel kopiëren.
+
+00:00:35.660 --> 00:00:38.420
+Eén typfout, één verkeerde plakactie, één ontbrekende puntkomma.
+
+00:00:38.600 --> 00:00:41.280
+En een hele afdeling is een halve dag bezig de formule de schuld te geven.
+
+00:00:41.520 --> 00:00:43.300
+Stel je nu eens voor dat je dat lot weigert.
+
+00:00:43.540 --> 00:00:46.980
+Stel je voor dat je al die ellende delegeert aan een machine die zich niet verveelt.
+
+00:00:47.300 --> 00:00:49.720
+Geen typfouten maakt en zeker geen koffie nodig heeft.
+
+00:00:49.980 --> 00:00:54.180
+Dat is een autonome agent, software die de cyclus volledig zelfstandig uitvoert.
+
+00:00:54.180 --> 00:01:05.440
+Het leest het Excel bestand, interpreteert de vragen, vindt de antwoorden met behulp van generatieve AI, schrijft die antwoorden terug in hetzelfde bestand en mailt het voltooide meesterwerk rechtstreeks naar de aanvrager.
+
+00:01:05.720 --> 00:01:10.000
+Je bespaart niet alleen tijd, je elimineert het concept van routine werk volledig.
+
+00:01:10.160 --> 00:01:16.920
+We gaan die agent bouwen in Microsoft Copilot Studio en Power Automate, een praktische rebellie tegen de status quo van spreadsheets.
+
+00:01:17.120 --> 00:01:20.840
+Ik noem het een hack omdat het Excel veel verder buigt dan waarvoor het oorspronkelijk bedoeld was.
+
+00:01:20.840 --> 00:01:26.720
+Over 20 minuten heb je een proces dat zichzelf bijwerkt terwijl je van je koffie geniet en nadenkt over hoe achterhaald je bent geworden.
+
+00:01:27.000 --> 00:01:32.080
+Laten we beginnen met het ontleden van het organisme, de anatomie van een blauwdruk voor een autonome agent.
+
+00:01:32.400 --> 00:01:34.940
+Laten we eerst definiëren wat we precies creëren.
+
+00:01:35.460 --> 00:01:40.100
+In Copilot Studio is een autonome agent geen beleefde chatbot die wacht op instructies.
+
+00:01:40.300 --> 00:01:45.580
+Het is een zelfwerkende constructie met drie kerncomponenten, een trigger, logica en orchestratie.
+
+00:01:45.580 --> 00:01:50.660
+De trigger start het proces, bijvoorbeeld een nieuwe e-mail of een bestand dat naar SharePoint wordt geüpload.
+
+00:01:50.780 --> 00:01:53.260
+De logica bepaalt wat er moet gebeuren wanneer dat gebeurt.
+
+00:01:53.440 --> 00:01:58.340
+De orchestratie zorgt ervoor dat de juiste externe tools of flows worden aangeroepen, zodat alles in de juiste volgorde verloopt.
+
+00:01:58.560 --> 00:02:04.360
+Zie het als een lopende band, maar in plaats van fabrieksarbeiders heb je Power Platform componenten die digitale onderdelen aan elkaar doorgeven.
+
+00:02:04.560 --> 00:02:08.620
+Power Automate ontvangt de e-mail, slaat het bestand op en stelt de agent op de hoogte.
+
+00:02:08.780 --> 00:02:13.460
+Copilot Studio leest het spreadsheet, genereert antwoorden met behulp van AI en schrijft deze terug.
+
+00:02:13.460 --> 00:02:17.500
+Ten slotte voegt Power Automate het resultaat weer samen en verstuurt het e-mail antwoord.
+
+00:02:17.660 --> 00:02:19.700
+Drie systemen, één continu denkproces.
+
+00:02:19.920 --> 00:02:21.960
+Nu, dit is waar de meeste mensen in de war raken.
+
+00:02:22.200 --> 00:02:27.260
+Microsoft praat over Copilot alsof het één geheel is, maar er is een cruciaal verschil met de standaard Copilot Studio agent.
+
+00:02:27.460 --> 00:02:29.820
+De normale Copilot wacht tot je ermee communiceert.
+
+00:02:29.980 --> 00:02:31.860
+Een Studio agent heeft geen toezicht nodig.
+
+00:02:32.160 --> 00:02:35.500
+Deze kan zichzelf activeren op basis van door jou gedefinieerde voorwaarden.
+
+00:02:35.700 --> 00:02:40.080
+Het is het verschil tussen een behulpzame stagiair en een medewerker die de afdeling runt terwijl jij slaapt.
+
+00:02:40.280 --> 00:02:42.800
+Waarom een RFE workflow als testomgeving gebruiken?
+
+00:02:42.800 --> 00:02:45.640
+Omdat RFE's een prachtig gestructureerde chaos zijn.
+
+00:02:45.800 --> 00:02:48.240
+Elke regel bevat een vraag en verwacht een antwoord.
+
+00:02:48.420 --> 00:02:50.540
+Het patroon verandert nooit, alleen de inhoud.
+
+00:02:50.780 --> 00:02:54.920
+Dat maakt het een perfect laboratorium voor machine intelligentie, gestructureerd genoeg om te automatiseren,
+
+00:02:55.140 --> 00:02:57.460
+gevarieerd genoeg om het gebruik van generatieve AI te rechtvaardigen.
+
+00:02:57.600 --> 00:02:59.620
+Je weet precies hoe een goede workflow eruit ziet.
+
+00:02:59.820 --> 00:03:02.980
+Elke vraag beantwoord, netjes teruggestuurd, geen emotioneel trauma.
+
+00:03:03.280 --> 00:03:05.800
+Laten we, voordat we dieper ingaan, een schema schetsen.
+
+00:03:05.980 --> 00:03:08.120
+We beginnen met een e-mail met een Excel-bijlage.
+
+00:03:08.360 --> 00:03:10.300
+Die e-mail komt in een gedeelde mailbox terecht.
+
+00:03:10.300 --> 00:03:17.360
+Power Automate detecteert het bestand, controleert of het de juiste indeling heeft en kopieert het vervolgens naar een SharePoint-locatie, zoals een digitale testomgeving.
+
+00:03:17.540 --> 00:03:21.860
+De agent in Copilot Studio ontvangt vervolgens een bericht met de melding welk bestand verwerkt moet worden.
+
+00:03:22.060 --> 00:03:31.720
+De agent opent het bestand, doorloopt de vragen, genereert antwoorden met behulp van de geconfigureerde kennisbank of door zelf de antwoorden te verzamelen en schrijft de antwoorden terug naar de oorspronkelijke tabel.
+
+00:03:31.720 --> 00:03:37.020
+Wanneer de agent klaar is, pakt Power Automate het bestand weer op en e-mailt het naar degene die het verzoek heeft ingediend.
+
+00:03:37.200 --> 00:03:43.240
+De datastroom verloopt dus als volgt, e-mail, SharePoint, Copilot Studio, Power Automate, e-mail antwoord.
+
+00:03:43.480 --> 00:03:45.060
+Dat is de anatomie van autonomie.
+
+00:03:45.240 --> 00:03:48.520
+Triggers initiëren, logica beslist en orchestratie voert uit.
+
+00:03:48.700 --> 00:03:50.540
+Maar autonomie betekent niet alwetendheid.
+
+00:03:50.720 --> 00:03:53.000
+Een agent kan niet improviseren buiten zijn grenzen.
+
+00:03:53.160 --> 00:03:56.300
+Je moet de machtigingen definiëren en de agenten benodigde context geven.
+
+00:03:56.500 --> 00:04:00.480
+Waar het bestand zich bevindt, wat te lezen, waar te schrijven en wanneer om hulp te vragen.
+
+00:04:00.480 --> 00:04:04.660
+Laat je iets daarvan vaag, dan zal de agent beleefd wachten op een mens die nooit komt.
+
+00:04:04.940 --> 00:04:07.580
+Dat is de blauwdruk, begrip voor configuratie.
+
+00:04:07.920 --> 00:04:10.420
+Nu je weet wat de machine moet doen, kunnen we hem gaan voeden.
+
+00:04:10.660 --> 00:04:18.800
+Want de volgende stap is Power Automate leren fungeren als poortwachter, de input filteren en deze met mechanische precisie aan je nieuwe digitale medewerker leveren.
+
+00:04:18.820 --> 00:04:22.820
+En als dat eenmaal is ingesteld, begint het echte plezier de machine zien denken.
+
+00:04:23.120 --> 00:04:25.180
+De machine voeden, inputflow ontwerpen.
+
+00:04:25.380 --> 00:04:28.740
+Elke succesvolle automatisering begint met een bureaucratische handeling.
+
+00:04:28.740 --> 00:04:33.060
+In dit geval gaat het om een e-mail, specifiek een e-mail die binnenkomt in een gedeelde mailbox.
+
+00:04:33.380 --> 00:04:38.160
+Het digitale equivalent van een postvakje waar iedereen zijn dringende verzoeken indumpt en ze vervolgens prompt vergeet.
+
+00:04:38.380 --> 00:04:39.480
+Dat is ons toegangspunt.
+
+00:04:39.640 --> 00:04:44.040
+Het binnenkomende bericht vormt de eerste schakel in de keten en Power Automate staat klaar als poortwachter.
+
+00:04:44.180 --> 00:04:48.440
+Power Automate wacht echter niet zomaar af als een stagiair die elke vijf minuten de inbox controleert.
+
+00:04:48.640 --> 00:04:53.400
+Het is geconfigureerd met een precieze trigger, namelijk wanneer er een nieuwe e-mail binnenkomt in de gedeelde mailbox.
+
+00:04:53.400 --> 00:04:59.040
+Dit is ons eerste automatiseringsprincipe, vertrouw niet op menselijke observatie, maar op voorwaarden.
+
+00:04:59.240 --> 00:05:05.380
+De workflow komt op gang zodra er een bijlage binnenkomt, waardoor het aloude probleem van ik heb die e-mail niet gezien wordt opgelost.
+
+00:05:05.560 --> 00:05:07.020
+De eerste actie is filteren.
+
+00:05:07.200 --> 00:05:11.100
+Je geeft Power Automate de opdracht om alle bijlagen te negeren die geen XLSX bestand zijn.
+
+00:05:11.460 --> 00:05:16.800
+PDF's, screenshots en af en toe een kattenfoto van het team dat het einde van het fiscale jaar viert, worden zonder pardon afgewezen.
+
+00:05:16.800 --> 00:05:21.560
+Zonder deze regel zou je agent proberen een JPEG van een grafiek te interpreteren en daar beleefd genoeg niet in slagen.
+
+00:05:21.760 --> 00:05:24.920
+Filteren bespaart CPU-kracht en je professionele waardigheid.
+
+00:05:25.160 --> 00:05:30.740
+Binnen de workflow luidt de voorwaarde bijna poetisch als de naam van de bijlage eindigt op XLSX.
+
+00:05:30.920 --> 00:05:31.560
+Ga dan verder.
+
+00:05:31.860 --> 00:05:33.820
+Die ene regel scheidt orde van chaos.
+
+00:05:34.080 --> 00:05:38.220
+Want chaos in de wereld van automatisering begint altijd met onverwachte bestandstypen.
+
+00:05:38.460 --> 00:05:42.360
+Zodra het bestand de controle doorstaat, is de volgende uitdaging de validatie van de structuur.
+
+00:05:42.500 --> 00:05:45.460
+Een geldig Excel-bestand moet een naamtabel bevatten en de naam is belangrijk.
+
+00:05:45.460 --> 00:05:48.440
+In ons universum is die naam hardnekkig vastgelegd als tabel 1.
+
+00:05:48.600 --> 00:05:50.020
+Als dat rigide klinkt, prima.
+
+00:05:50.300 --> 00:05:51.840
+Het houdt Power Automate bij zinnen.
+
+00:05:52.100 --> 00:05:56.860
+Zonder tabel is Excel slechts een digitaal whiteboard vol samengevoegde cellen, verborgen kolommen en wanhoop.
+
+00:05:56.960 --> 00:06:05.060
+Een gedefinieerde tabel daarentegen geeft de agent een voorspelbaar schema, kolommen voor vraag, antwoord en alle contextuele gegevens die u definieert.
+
+00:06:05.440 --> 00:06:06.640
+De tabel is het skelet.
+
+00:06:06.920 --> 00:06:08.560
+Zonder dat is er niets om te animeren.
+
+00:06:08.820 --> 00:06:12.600
+Wanneer Power Automate een bestand tegenkomt, bewerkt het dit niet rechtstreeks vanuit de mailbox.
+
+00:06:12.600 --> 00:06:16.980
+Dat zou barbaars zijn. In plaats daarvan maakt het een gecontroleerde kopie in SharePoint.
+
+00:06:17.240 --> 00:06:21.240
+Zie dit als het verplaatsen van het bestand van een drukke openbare straat naar een laboratoriumtafel.
+
+00:06:21.460 --> 00:06:28.380
+SharePoint biedt versiebeheer, consistente URL's en beveiligde toegangstokens, waardoor Copilot Studio veilig met de gegevens kan communiceren.
+
+00:06:28.600 --> 00:06:31.520
+Elke automatisering moet zijn invoer ergens stabiel vastleggen.
+
+00:06:31.740 --> 00:06:34.760
+SharePoint biedt die stabiliteit, verpakt in bedrijfscompliance.
+
+00:06:34.760 --> 00:06:42.600
+Nu het bestand in SharePoint staat, haalt de workflow de bestandsidee op, een unieke identificatiecode waarmee de agent later het exacte bestand kan terugvinden.
+
+00:06:42.840 --> 00:06:48.160
+Daarnaast haalt de workflow de berichtidee op, het adres van de oorspronkelijke e-mail die dit probleem in eerste instantie veroorzaakte.
+
+00:06:48.440 --> 00:06:52.020
+Beide ids dienen als referentiepunten in het aankomende gesprek met de agent.
+
+00:06:52.260 --> 00:06:54.060
+Dit is de basis van metadata-hygiëne.
+
+00:06:54.280 --> 00:06:58.440
+Hou alles bij wat uw systeem binnenkomt, zodat u de cirkel rond kunt maken wanneer het systeem weer uitgaat.
+
+00:06:58.560 --> 00:07:02.640
+U vraagt zich misschien af waarom we zoveel waarde hechten aan onberispelijke NA-aam-evingsconventies.
+
+00:07:02.640 --> 00:07:09.900
+Simpel, als uw bestandsnamen klinken als Final Final RFI V23 Ad Class, spreekt u in feite een robot aan.
+
+00:07:10.120 --> 00:07:12.000
+Machines gedijen bij uniformiteit.
+
+00:07:12.240 --> 00:07:13.280
+Mensen blijkbaar niet.
+
+00:07:13.520 --> 00:07:16.880
+Geef uw bestanden voorspelbare namen en uw agent zal u dankbaar zijn door niet te crashen.
+
+00:07:17.040 --> 00:07:22.000
+Nadat het bestand is gevalideerd en veilig is opgeslagen, stuurt de workflow een precieze prompt naar de Copilot Studio agent.
+
+00:07:22.220 --> 00:07:23.660
+Dit bericht is bewust geformuleerd als
+
+00:07:23.660 --> 00:07:27.060
+Voer een RFI uit op bestand IDX en beantwoord bericht IDGXY.
+
+00:07:27.760 --> 00:07:32.140
+Geen bloemrijke taal, geen passief-agressieve context, gewoon een duidelijke, machineleesbare intentie.
+
+00:07:32.140 --> 00:07:34.660
+Dubbelzinnigheid is de grootste vijand van automatisering.
+
+00:07:34.900 --> 00:07:37.780
+Dit is ook waar het concept van gestructureerde prompting om de hoek komt kijken.
+
+00:07:38.000 --> 00:07:40.760
+Het is niet voldoende om de agent te vertellen, verwerk het bestand.
+
+00:07:40.980 --> 00:07:45.640
+Je moet context, de rijkwijte van het bestand, de verwachte actie en de bestemming voor het antwoord toevoegen.
+
+00:07:45.900 --> 00:07:49.220
+Deze drie elementen vormen de touwkundige basis voor het gedrag van de AI.
+
+00:07:49.500 --> 00:07:52.860
+Zonder deze basis zou de agent iets bewonderenswaardigs maar irrelevants kunnen proberen,
+
+00:07:53.060 --> 00:07:56.000
+zoals het schrijven van beleefde e-mail reacties in plaats van het invullen van cellen.
+
+00:07:56.180 --> 00:07:58.180
+Data-integriteit is hier alles bepalend.
+
+00:07:58.180 --> 00:08:02.980
+Elke automatiseringsliefhebber leert uiteindelijk dat ongestructureerde spreadsheets digitale landmijnen zijn.
+
+00:08:03.160 --> 00:08:07.760
+Het verschil tussen een nette en een rommelige tabel kan bepalen of je processor briljant uitziet of juist mislukt.
+
+00:08:07.880 --> 00:08:09.380
+Power Automate houdt van orde.
+
+00:08:09.640 --> 00:08:13.760
+Rijen zijn records, kolommen zijn variabelen en samengevoegde cellen zijn misdaden tegen de logica.
+
+00:08:14.000 --> 00:08:18.680
+Wanneer je de agent een correct opgemaakte tabel geeft, geef je hem niet alleen data, maar ook inzicht.
+
+00:08:18.860 --> 00:08:22.320
+In dit stadium heeft onze Power Automate Flow 3-mijlpalen bereikt.
+
+00:08:22.540 --> 00:08:24.480
+Detectie, validatie en voorbereiding.
+
+00:08:24.680 --> 00:08:27.100
+De e-mail trigger heeft het binnenkomende bericht opgevangen.
+
+00:08:27.360 --> 00:08:32.700
+Het filter zorgde ervoor dat alleen legitieme Excel-bestanden overbleven en de SharePoint kopieboot een stabiele dataomgeving.
+
+00:08:32.920 --> 00:08:35.560
+Nu heeft de machine alles wat hij nodig heeft om te beginnen met verwerken.
+
+00:08:35.780 --> 00:08:37.980
+Met andere woorden, het is tijd om te beginnen met eten.
+
+00:08:38.120 --> 00:08:40.340
+De voltooide flow geeft het stokje door aan Copilot Studio,
+
+00:08:40.620 --> 00:08:45.580
+dat alle benodigde informatie, best- en slogaties, ids en instructies verpakt en de prompt voor verwerking verzendt.
+
+00:08:45.580 --> 00:08:50.580
+De agent maakt het niet uit hoeveel mensen de inbox vanochtend hebben genegeerd of hoeveel versies van het spreadsheet er bestaan.
+
+00:08:50.760 --> 00:08:55.480
+Hij neemt gewoon de meest recente versie, opent de tabel en begint te redeneren over de vragen die erin staan.
+
+00:08:55.680 --> 00:08:57.300
+En dat brengt ons bij een keerpunt.
+
+00:08:57.480 --> 00:09:01.500
+De machine heeft nu stof tot nadenken, een letterlijke lijst met vragen die wachten op antwoorden.
+
+00:09:01.680 --> 00:09:03.100
+De invoerfase is voltooid.
+
+00:09:03.280 --> 00:09:07.100
+De poorten staan open, de parameters zijn vastgelegd en de chaos is getemd tot een schema.
+
+00:09:07.340 --> 00:09:08.920
+De volgende fase is cognitie.
+
+00:09:08.920 --> 00:09:14.860
+Hoe de agent die rijen leest, interpreteert en één voor één geloofwaardige antwoorden genereert zonder menselijke tussenkomst.
+
+00:09:14.860 --> 00:09:18.260
+Nu we de machine hebben gevoed, is het tijd om te kijken hoe hij het verwerkt.
+
+00:09:18.420 --> 00:09:20.440
+De AI-brein genereert een antwoordlus.
+
+00:09:20.660 --> 00:09:24.280
+Op dit punt ligt het bestand rustig in SharePoint als een patiënt in de triage.
+
+00:09:24.540 --> 00:09:29.620
+Het is nu de beurt aan de Copilot Studio agent om dokter te spelen, elke vraag te diagnosticeren en een antwoord voor te schrijven.
+
+00:09:29.820 --> 00:09:34.440
+Dit is waar intelligentie automatisering vervangt, waar het systeem niet alleen data verplaatst, maar het ook begrijpt.
+
+00:09:34.640 --> 00:09:37.740
+Maak kennis met het RFI-onderwerp, de cognitieve speel van onze agent.
+
+00:09:37.920 --> 00:09:43.220
+Een onderwerp in Copilot Studio is in wezen een blauw druk voor een gesprek, een reeks stappen die de agent uitvoert wanneer deze wordt geactiveerd.
+
+00:09:43.220 --> 00:09:46.520
+Maar in deze context is er geen chatbubbel, geen mens om tevreden te stellen.
+
+00:09:46.680 --> 00:09:51.200
+Het RFI-onderwerp werkt stilzwijgend en voert één vraag tegelijk uit in de benodigde volgeorde.
+
+00:09:51.400 --> 00:09:53.000
+Elke vraag is een kort examen.
+
+00:09:53.180 --> 00:09:56.360
+Elk antwoord is een essay dat is opgesteld door het generatieve brein van de AI.
+
+00:09:56.520 --> 00:10:01.120
+Eerst ontvangt het onderwerp invoerparameters, namelijk de bestandsidee die verwijst naar onze SharePoint-kopie.
+
+00:10:01.120 --> 00:10:04.100
+Vervolgens voert het de lijstrijen uit die aanwezig zijn in een tabelactie.
+
+00:10:04.280 --> 00:10:08.580
+Deze opdracht haalt de volledige tabel op, niet als rijen en kolommen, maar als gestructureerde data.
+
+00:10:08.820 --> 00:10:13.720
+De agent geeft dit door aan een record variabele, zijn interne momentopname van onze Excel-wereld.
+
+00:10:13.940 --> 00:10:18.960
+Binnen dat record bevindt zich een array van alle rijen, handig opgeslagen onder iets als recordwaarde.
+
+00:10:19.220 --> 00:10:21.320
+Dat is de data die de agent gaat verwerken.
+
+00:10:21.500 --> 00:10:23.440
+Hier ontmoeten structuur en logica elkaar.
+
+00:10:23.440 --> 00:10:27.400
+Je instrueert de agent om die array als items in te stellen, de werkverzameling waar hij doorheen zal lopen.
+
+00:10:27.580 --> 00:10:31.140
+Vervolgens onderzoekt de agent, met behulp van een for-each-lus, elke rij in volgorde.
+
+00:10:31.380 --> 00:10:33.700
+Geen overslaan, geen vooringenomenheid, geen klachten.
+
+00:10:33.920 --> 00:10:37.280
+Voor elke rij extra heert hij het vraagveld en selecteert dit voor de volgende fase.
+
+00:10:37.620 --> 00:10:38.060
+Generatie.
+
+00:10:38.300 --> 00:10:41.840
+Deze ontwerpkeuze, waarbij één vraag tegelijk wordt geïsoleerd, is niet willekeurig.
+
+00:10:41.980 --> 00:10:44.340
+Het gaat erom wat die contextverspreiding noemt te voorkomen.
+
+00:10:44.500 --> 00:10:48.200
+In grote taalmodellen leidt het tegelijkertijd invoeren van meerdere prompts tot contaminatie.
+
+00:10:48.200 --> 00:10:50.980
+De context van de ene vraag kan het volgende antwoord beïnvloeden.
+
+00:10:51.140 --> 00:10:53.800
+Door elke prompt te isoleren, bevorderen we mentale hygiëne.
+
+00:10:53.800 --> 00:10:59.200
+De agent vergeet na elke regel, waardoor elk antwoord onbesmet en onbezoedeld is, zonder beïnvloed te worden door de verwarring van de voorgaande vragen.
+
+00:10:59.340 --> 00:11:02.020
+Nu komt het kronkstuk, de nood voor het genereren van antwoorden.
+
+00:11:02.260 --> 00:11:05.540
+Dit is het co-pilot studio-equivalent van een turbo-geladen hersencel.
+
+00:11:05.720 --> 00:11:12.040
+U geeft de vraag tekst, met de instructie om het best mogelijke antwoord te vinden of te synthetiseren op basis van de kennisbronnen van de agent.
+
+00:11:12.240 --> 00:11:13.180
+En de rest doet de agent.
+
+00:11:13.480 --> 00:11:15.360
+De agent praat niet, hij berekent.
+
+00:11:15.580 --> 00:11:17.100
+Dit onderscheid is cruciaal.
+
+00:11:17.360 --> 00:11:20.460
+Autonomie verlangt niet naar conversatie, hij wil gewoon de opdracht voltooien.
+
+00:11:20.600 --> 00:11:24.100
+Om de discipline te bewaren, schakelt u de eigenschap, bericht verzenden, in deze nood uit.
+
+00:11:24.300 --> 00:11:29.220
+Deze schakelaar is verborgen in de geavanceerde instellingen en door hem uit te schakelen wordt de standaard chat-uitvoer stilgezet.
+
+00:11:29.460 --> 00:11:32.840
+Waarom? Omdat u niet wilt dat deze agent een beleefd gesprek met zichzelf voert.
+
+00:11:33.000 --> 00:11:35.400
+Hij is niet bezig zijn gedachten op te schrijven, hij is aan het werk.
+
+00:11:35.600 --> 00:11:38.220
+Alle antwoorden worden in plaats daarvan opgeslagen in een variabele.
+
+00:11:38.440 --> 00:11:41.060
+Meestal iets met een elegante naam zoals AI-reactie.
+
+00:11:41.260 --> 00:11:45.400
+Dit is het notitieboek van de agent met gegenereerde antwoorden in een overzichtelijke, doorzoekbare vorm.
+
+00:11:47.100 --> 00:11:50.100
+Als die antwoord is ingevuld, voert de agent een update-rijopdracht uit.
+
+00:11:50.300 --> 00:11:52.440
+Zie dit als de mechanische armen van de robot.
+
+00:11:52.660 --> 00:11:57.300
+Een arm voegt antwoorden precies in waar ze thuis horen, waarbij elk antwoord wordt gekoppeld aan de oorspronkelijke vraag.
+
+00:11:57.500 --> 00:12:03.120
+De arm gebruikt dezelfde bestands-ID, dezelfde tabelnaam en selecteert de rij op basis van de identificatiecode van de huidige vraag.
+
+00:12:03.320 --> 00:12:07.460
+Binnen enkele seconden begint de voorheen lege antwoordkolom zich te vullen, als een zelfschrijvend rapport.
+
+00:12:07.760 --> 00:12:13.020
+Op dit punt heb je de cognitieve cyclus van de AI bereikt, lezen, redeneren, reageren, vastleggen.
+
+00:12:13.020 --> 00:12:17.700
+Het is niet spannend om naar te kijken, tenzij je natuurlijk de stille kracht van denkende automatisering waardeert.
+
+00:12:17.900 --> 00:12:21.640
+Wat vroeger uren duurde, gebeurt nu sneller dan Excel zijn eigen cellen kan bijwerken.
+
+00:12:21.860 --> 00:12:25.920
+Laten we het nu hebben over kennisverankering, het onzichtbare kompas dat deze antwoorden stuurt.
+
+00:12:26.080 --> 00:12:31.040
+In Copilot Studio heb je twee hoofdopties, informatie van het web gebruiken of een aangepaste kennisbank.
+
+00:12:31.200 --> 00:12:35.260
+De webopsie maakt verbinding via de zoekverankering van Bing, waardoor de agent live data kan ophalen.
+
+00:12:35.260 --> 00:12:40.620
+Dit is een brede, maar vluchtige aanpak. Geweldig voor algemeen onderzoek, maar onacceptabel voor bedrijfs-eigen domeinen.
+
+00:12:40.800 --> 00:12:46.280
+Wanneer vertrouwelijkheid van belang is, schakelt u webgebaseerde gegevensverankering uit en voedt u uw eigen SharePoint of dataverse bronnen.
+
+00:12:46.460 --> 00:12:50.380
+Zo houdt u de agent slim en loyaal. Deze beslissing bepaalt de essentie van uw project.
+
+00:12:50.740 --> 00:12:54.440
+Webgebaseerde gegevensverankering geeft uw agent een encyclopedische kennis, maar weinig beperkingen.
+
+00:12:54.580 --> 00:12:57.420
+Het kan een verouderde blogpost als absolute waarheid presenteren.
+
+00:12:57.600 --> 00:13:01.880
+Een aangepaste kennisbank beperkt het bereik, maar verhoogt de precisie en de naleving van regelgeving.
+
+00:13:01.880 --> 00:13:05.860
+In gereguleerde omgevingen is betrouwbaarheid altijd belangrijker dan creativiteit.
+
+00:13:06.020 --> 00:13:09.080
+Laat uw advocaat rustig slapen, kies voor interne gegevensverankering.
+
+00:13:09.240 --> 00:13:12.900
+Om te controleren of de lus werkt, kunt u het uitvoeringslogboek van Copilot Studio bekijken.
+
+00:13:13.060 --> 00:13:18.660
+U ziet elke iteratie zich ontvouwen, de prompt die wordt verzonden, het generatieve knooppunt dat reageert en de bijgewerkte rij die wordt geschreven.
+
+00:13:18.800 --> 00:13:22.920
+Het is vreemd genoeg bevredigend, alsof u naar een lopende band kijkt die begrip produceert.
+
+00:13:23.080 --> 00:13:30.360
+Elk record beweegt zich van onwetendheid naar verlichting, één vraag, één antwoord, één zucht van verlichting van uw toekomstige zelf die het niet handmatig hoefde te doen.
+
+00:13:30.360 --> 00:13:34.660
+Technisch gezien is dit low-code design, maar conceptueel gezien is het digitale filosofie.
+
+00:13:34.820 --> 00:13:38.380
+Het brein van de agent, voor zover dat bestaat, is er alleen gedurende de lus.
+
+00:13:38.600 --> 00:13:41.300
+Zodra de laatste regel is voltooid, wordt het geheugen gereset.
+
+00:13:41.480 --> 00:13:44.500
+De agent maakt zich geen zorgen over de e-mail van morgen of de fouten van vorige week.
+
+00:13:44.620 --> 00:13:47.300
+Hij voert de taak uit, vergeet het en wacht op de volgende opdracht.
+
+00:13:47.300 --> 00:13:52.680
+In zekere zin is het de perfecte werknemer, onvermoeibaar, gehoorzaam en niet in staat tot kletspraatjes bij de koffieautomaat.
+
+00:13:52.940 --> 00:13:57.360
+Ontwikkelaars vragen zich soms af, kan ik niet gewoon alle vragen in één keer versturen en één gigantisch antwoord krijgen?
+
+00:13:57.360 --> 00:13:59.960
+Dat kan, maar dat is geen autonomie, dat is chaos.
+
+00:14:00.180 --> 00:14:04.240
+Een opgeblazen prompt leidt tot inconsistente opmaak en onzinnige contextuele koppelingen.
+
+00:14:04.400 --> 00:14:05.860
+De lus zorgt voor determinisme.
+
+00:14:06.080 --> 00:14:10.600
+Elke vraag wordt een op zichzelf staande werkeenheid, een microcontract dat de AI moet nakomen.
+
+00:14:10.980 --> 00:14:12.300
+Autonomie houdt van herhaling.
+
+00:14:12.520 --> 00:14:14.400
+Het is voorspelbaar, dat is het ontwerp.
+
+00:14:14.500 --> 00:14:16.880
+Inmiddels verandert het Excel-bestand zelf langzaam.
+
+00:14:17.080 --> 00:14:23.420
+Lege cellen worden gevuld met machinaal gegenereerde zinnen, afkomstig uit de vluchtige wijsheid van Bing of uit uw interne documentatie.
+
+00:14:23.420 --> 00:14:28.540
+Elke update-opdracht vergrendelt de resultaten permanent, een tijdgestempelde automatiseringsactie.
+
+00:14:28.680 --> 00:14:33.780
+Vanuit het perspectief van de gebruiker zal het bestand dat ze leeg verstuurde binnenkort terugkomen met alle vragen netjes beantwoord.
+
+00:14:33.960 --> 00:14:37.860
+Geen handmatig typen, geen tussenliggende concepten, geen per ongeluk antwoord aan allen.
+
+00:14:38.100 --> 00:14:41.320
+Dit is het moment waarop het systeem overgaat van analyse naar uitvoering.
+
+00:14:41.520 --> 00:14:42.680
+De antwoorden zijn er nu.
+
+00:14:42.900 --> 00:14:44.640
+Ze hoeven alleen nog maar te worden verzonden.
+
+00:14:44.860 --> 00:14:50.480
+En dat vereist een herverbinding met Power Automate, dat het bijgewerkte bestand moet ophalen en de retourmail moet opstellen.
+
+00:14:50.480 --> 00:14:54.140
+Maar voordat we de controle teruggeven, laten we even stilstaan bij wat er zojuist is gebeurd.
+
+00:14:54.300 --> 00:14:58.280
+Een trigger zette een proces in gang, data werden prompts, prompts werden prosa en prosa werd weer data.
+
+00:14:58.460 --> 00:15:01.800
+De cirkel is rond en het is allemaal geruisloos gebeurd, zonder dat u er iets aan hoefde te doen.
+
+00:15:02.080 --> 00:15:05.840
+Autonomie is geen magie, het is gewoon zeer goed gedefinieerde logica die doet alsof ze denkt.
+
+00:15:06.140 --> 00:15:09.300
+Vervolgens stopt de machine met rationaliseren en begint te communiceren.
+
+00:15:09.480 --> 00:15:13.760
+Tijd om onze nieuw verlichte spreadsheet een stem te geven en hem namens u te laten antwoorden.
+
+00:15:13.960 --> 00:15:15.860
+Het terugschrijven en antwoordmechanisme.
+
+00:15:15.860 --> 00:15:23.540
+Nu de agent zijn stille studie heeft afgerond, geven we de pen terug aan Power Automate, het onderdeel van het proces dat denkwerk weer in bureaucratie verandert.
+
+00:15:23.720 --> 00:15:30.560
+De taak, het bijgewerkte Excel bestand verzamelen, als bijlage aan een e-mail toevoegen en naar huis sturen alsof een nauwgezet mens het werk al die tijd heeft gedaan.
+
+00:15:30.780 --> 00:15:33.620
+Alleen sneller, schoner en zonder enige existentiële angst.
+
+00:15:33.780 --> 00:15:35.200
+De eerste uitdaging is timing.
+
+00:15:35.460 --> 00:15:38.920
+In automatisering is tijd niet willekeurig, maar een kwestie van mechanische tolerantie.
+
+00:15:39.080 --> 00:15:45.420
+Copilot Studio verwacht dat Power Automate binnen ongeveer 100 seconden reageert, anders gaat het ervan uit dat het proces is mislukt.
+
+00:15:45.420 --> 00:15:48.600
+Dit is Microsoft's beleefde manier om te zeggen, neem de tijd.
+
+00:15:48.780 --> 00:15:52.540
+De reactiestroom moet dus nauwkeurig te werk gaan, volgens een eenvoudig schabloon.
+
+00:15:52.680 --> 00:15:56.020
+Input ontvangen, zolang wachten als nodig is, antwoorden en afsluiten.
+
+00:15:56.280 --> 00:15:59.620
+Dat is waar een kleine maar cruciale truc om de hoek komt kijken, een bewuste vertraging.
+
+00:15:59.820 --> 00:16:05.700
+Excel, ondanks al zijn decennia lange dienst, werkt cloudbestanden ongeveer net zo snel bij als een PowerPoint presentatie laat tijdens een conference call.
+
+00:16:05.860 --> 00:16:07.220
+Je moet het dus even de tijd geven.
+
+00:16:07.420 --> 00:16:13.880
+De meeste frameworks voegen een vertraging van twee minuten toe om te garanderen dat alle door AI geschreven rijen daadwerkelijk in SharePoint worden geregistreerd voordat iemand het bestand ophaalt.
+
+00:16:13.880 --> 00:16:18.420
+Het is geen luiheid, maar synchronisatie. Computers kunnen sneller werken dan de opslag kan bevestigen.
+
+00:16:18.620 --> 00:16:21.740
+Zodra de pauze voorbij is, voert de workflow de nauwkeurige ophaalactie uit.
+
+00:16:21.900 --> 00:16:25.420
+Het gebruikt bestandsinhoud ophalen om de voltooide spreadsheet uit SharePoint te halen.
+
+00:16:25.640 --> 00:16:33.240
+Deze stap leest het volledige binaire pakket, niet alleen de tabel, waardoor wordt gegarandeerd dat wat aan de uitgaande e-mail wordt toegevoegd precies is wat de agent als laatste heeft geschreven.
+
+00:16:33.460 --> 00:16:35.880
+Geen onnodige buffering of halfgevulde cellen.
+
+00:16:35.880 --> 00:16:43.520
+Daarnaast haalt e-mail ophalen V3 metadata op van het oorspronkelijke verzoek, zoals afzender, onderwerp en bericht ideeën.
+
+00:16:43.680 --> 00:16:47.720
+Zonder deze gegevens komt uw antwoord als een verdwaalde drone aan, snel, maar nergens.
+
+00:16:47.920 --> 00:16:54.240
+De daadwerkelijke verzending wordt afgehandeld door e-mail verzenden met bijlagen, waarbij wordt verwezen naar de gearchiveerde bericht ideeën, zodat de conversatie intact blijft.
+
+00:16:54.240 --> 00:17:00.080
+Power Atomate voegt vervolgens het zojuist beantwoorde Excel-bestand weer toe, waardoor de illusie van handmatige correspondentie ontstaat.
+
+00:17:00.180 --> 00:17:02.860
+Het is vreemd genoeg bevrijdend om deze stap te zien voltooien.
+
+00:17:03.040 --> 00:17:10.460
+Het ooit lege werkblad wordt getransformeerd teruggestuurd, met intacte antwoorden, tijdstempels en perfect uitgeleind, alsof je een toets nakijkt waarbij de leerling een algoritme was.
+
+00:17:10.640 --> 00:17:14.180
+Laten we het hebben over fouttolerantie, want niet elk Excel-bestand gedraagt zich zoals het hoort.
+
+00:17:14.380 --> 00:17:16.160
+Misschien is de tabelnaam niet tabel 1.
+
+00:17:16.380 --> 00:17:19.640
+Misschien heeft iemand de koptekstcellen samengevoegd tot een decoratieve muurschildering.
+
+00:17:19.640 --> 00:17:24.160
+Wanneer dit gebeurt, moet de updateflow een gecontroleerde foutmelding geven in plaats van vast te lopen.
+
+00:17:24.380 --> 00:17:26.060
+Voeg een voorwaardelijke controle toe.
+
+00:17:26.220 --> 00:17:29.400
+Als de tabel niet wordt gevonden, stuur dan een beleefde melding met de tekst.
+
+00:17:29.540 --> 00:17:30.960
+RFI-verwerking mislukt.
+
+00:17:31.120 --> 00:17:32.060
+Ongeldige structuur.
+
+00:17:32.240 --> 00:17:38.140
+Het klinkt menselijk en voorkomt 20 paniekerige teams berichten waarin mensen zich afvragen waarom de AI-spoke geen e-mails meer beantwoordt.
+
+00:17:38.300 --> 00:17:40.080
+Prestaties vereisen ook voor uitziendheid.
+
+00:17:40.280 --> 00:17:43.260
+Het afzonderlijk bijwerken van honderden rijen kan een workflow vertragen.
+
+00:17:43.460 --> 00:17:48.520
+De truc is om rijen te bundelen, te verzamelen en in groepen bij te werken, of om parallelle vertakkingen zorgvuldig te gebruiken.
+
+00:17:48.520 --> 00:17:52.660
+Microsoft's eigen optimalisatie-notices waarschuwen dat onbeperkte lussen-latentie veroorzaken.
+
+00:17:52.820 --> 00:17:56.560
+Met andere woorden, automatisering betekent geen roekeloosheid, maar afgemeten efficiëntie.
+
+00:17:56.720 --> 00:17:58.640
+Nu ontvouwt zich de volledige choreografie.
+
+00:17:58.760 --> 00:18:00.740
+Copilot Studio voltooit de cognitie.
+
+00:18:00.900 --> 00:18:06.240
+Power Automate wacht op synchronisatie, haalt de inhoud op, verpakt deze met metadata en verzendt het antwoord.
+
+00:18:06.420 --> 00:18:13.880
+De aanvrager ontvangt een e-mail met de oorspronkelijke bijlage, maar nu gevuld met antwoorden die automatisch zijn gegenereerd, gevalideerd en van een tijdstempel voorzien.
+
+00:18:13.880 --> 00:18:18.140
+Niemand heeft getypt, niemand heeft gewacht en niemand heeft Excel geopend, behalve de geest in de machine.
+
+00:18:18.140 --> 00:18:25.500
+Autonomie heeft officieel output geleverd, maar zoals elke verantwoordelijke volwassene in IT-governance je zal herinneren, zijn autonomie en anarchie geen synonieme.
+
+00:18:25.680 --> 00:18:31.880
+Voordat je je creatie achter je laat, misschien om erover op te scheppen op LinkedIn, moet je de minder glamoureuze grens van toezicht onder ogen zien.
+
+00:18:32.100 --> 00:18:37.020
+Dat brengt ons bij het onderdeel dat elke technoloog graag negeert, schaalbaarheid, governance en de realiteit zelf.
+
+00:18:37.420 --> 00:18:39.600
+Schaalbaarheid, governance en realiteitschecks.
+
+00:18:39.600 --> 00:18:44.200
+Laten we de illusie meteen doorprikken. Je autonome agent is briljant, maar niet almachtig.
+
+00:18:44.340 --> 00:18:48.140
+Hij opereert binnen bepaalde grenzen, met name de sandbox die Microsoft heeft gebouwd.
+
+00:18:48.280 --> 00:18:54.900
+Co-pilot studio agents houden zich aan consumptiequota, API-beperkingen en wat de documentatie zo charmant, grenzen voor verantwoordgedrag, noemt.
+
+00:18:55.000 --> 00:18:58.740
+Kortom, uw agent gaat niet zijn eigen gang omdat de servers van Microsoft dat niet toestaan.
+
+00:18:58.860 --> 00:19:02.980
+Ten eerste, de autonomie grenzen. De agent kan alleen handelen binnen expliciete instructies.
+
+00:19:02.980 --> 00:19:06.640
+Hij zal geen nieuwe processen improviseren, gebruikersfouten corrigeren of zichzelf repliceren.
+
+00:19:06.800 --> 00:19:08.420
+Dat is geen fout, dat is beschaving.
+
+00:19:08.600 --> 00:19:12.940
+U definieert zijn omgeving, SharePoint, paden, tabelschema's, verbindingsrechten en hij houdt zich daaraan.
+
+00:19:13.100 --> 00:19:16.000
+Zie het als een digitale stagiair die opgesloten zit in een goed gelabeld kantoor.
+
+00:19:16.200 --> 00:19:18.480
+Laat de deur openstaan en hij zal niet op onderzoek uitgaan.
+
+00:19:18.600 --> 00:19:20.160
+Hij zal nog steeds wachten op toestemming.
+
+00:19:20.400 --> 00:19:23.080
+Die beperking voorkomt chaos en zorgt voor traceerbaarheid.
+
+00:19:23.280 --> 00:19:24.520
+Dan is er de schaalbaarheid.
+
+00:19:24.680 --> 00:19:27.860
+Excel, hoewel iconisch, is een kwetsbare omgeving voor autonomie.
+
+00:19:27.860 --> 00:19:33.740
+Zodra uw RFI-volumes de paar honderd rijen overschrijden of gelijktijdige gebruikers omvatten, migreert u het datamodel.
+
+00:19:33.980 --> 00:19:38.680
+Dataverse of SharePoint-lijsten transformeren willekeurige bestandsverwerking in goed beheerde data-operaties.
+
+00:19:38.860 --> 00:19:44.040
+Dezelfde Power Automate logica is van toepassing, maar de opslag bekend kreunt niet langer onder gelijktijdige bewerkingen.
+
+00:19:44.160 --> 00:19:45.800
+In wezen was Excel het oefenwiel.
+
+00:19:46.040 --> 00:19:48.680
+Workflows van enterprise-niveau draaien op dataverse.
+
+00:19:48.920 --> 00:19:54.280
+Dan is er nog Governance, Microsoft Purview voor data-classificatie en Entra-agent-ID voor identiteitscontrole.
+
+00:19:54.280 --> 00:20:00.520
+Elke autonome agent moet een digitale badge dragen die aangeeft wie de eigenaar is, wat de agent mag aanraken en wanneer de agent zich voor het laatst correct heeft gedragen.
+
+00:20:00.720 --> 00:20:02.540
+Dit is geen show, dit is verantwoording.
+
+00:20:02.780 --> 00:20:06.340
+In een wereld van steeds meer agent-AI zijn added trails van essentieel belang.
+
+00:20:06.580 --> 00:20:10.680
+Hou ze intact, anders loopt u het risico dat uw automatisering als schaduw-IT wordt bestempeld.
+
+00:20:10.880 --> 00:20:12.400
+Nu, nauwkeurigheid en compliance.
+
+00:20:12.780 --> 00:20:15.760
+De RFI levert misschien antwoorden op, maar wie garandeert de waarheid?
+
+00:20:15.940 --> 00:20:18.660
+De grootste kracht van generatieve AI is welsprekendheid.
+
+00:20:18.820 --> 00:20:20.400
+De grootste zwakte is vertrouwen.
+
+00:20:20.660 --> 00:20:23.140
+Daarom blijft menselijke tussenkomst ononderhandelbaar.
+
+00:20:23.140 --> 00:20:27.060
+Neem periodiek steekproeven van de output en valideer deze aan de hand van de brondocumentatie.
+
+00:20:27.260 --> 00:20:30.560
+Leg deze controles in gereguleerde sectoren vast als bewijs van compliance.
+
+00:20:30.800 --> 00:20:38.060
+Volgens best practices voor nauwkeurigheidstesten vermindert de combinatie van geautomatiseerde benchmarks met handmatige beoordeling het risico op hallucinaties aanzienlijk.
+
+00:20:38.260 --> 00:20:41.740
+Oftewel, laat AI het concept opstellen, maar laat mensen het beoordelen.
+
+00:20:41.940 --> 00:20:44.680
+Pas operationeel de best practices van Power Automate toe.
+
+00:20:44.920 --> 00:20:46.840
+Monitor de uitvoeringsgeschiedenis van workflows.
+
+00:20:47.240 --> 00:20:50.220
+Let op frotteling, archiveer logboeken en blijf het schema verbeteren.
+
+00:20:50.220 --> 00:20:53.340
+Een workflow is geen meubelstuk. Het vereist onderhoud.
+
+00:20:53.520 --> 00:20:59.240
+Microsoft heeft zelfs richtlijnen gepubliceerd waarin het belang van benoemde tabellen, minimale lussen en actieve prestatiemonitoring wordt benadrukt.
+
+00:20:59.460 --> 00:21:05.880
+Negeer je dit, dan zal je autonome agent eindeloos doorgaan met het herhalen van mislukte pogingen, net als Sisyphus die data bergopwaarts probeert te duwen.
+
+00:21:06.020 --> 00:21:07.380
+En denk ten slotte vooruit.
+
+00:21:07.380 --> 00:21:13.080
+Co-Pilot Studio hint al naar multi-agent orkestratie, waarbij agents subtaken delegeren aan andere agents.
+
+00:21:13.340 --> 00:21:18.400
+Stel je voor, de ene bot verzamelt projectdata, een andere vat deze samen en een derde verstuurt het rapport.
+
+00:21:18.680 --> 00:21:22.140
+Dat komt eraan. Je RFI-agent is slechts de leerling van dat ensemble.
+
+00:21:22.380 --> 00:21:26.780
+Maar zonder de governance disciplines die je nu instelt, zullen multi-agent systemen multi-agent chaos worden.
+
+00:21:27.000 --> 00:21:30.120
+Dus, de realiteit is dat autonomie je niet ontslaat van verantwoordelijkheid.
+
+00:21:30.260 --> 00:21:33.800
+Het draagt die over, je hebt arbeid geautomatiseerd, niet de verantwoordelijkheid.
+
+00:21:33.800 --> 00:21:38.680
+De spreadsheet beantwoordt zichzelf nu, ja, maar je blijft verantwoordelijk voor de waarheid, de traceerbaarheid en de toon ervan.
+
+00:21:38.820 --> 00:21:40.520
+En dat is de paradox van vooruitgang.
+
+00:21:40.700 --> 00:21:43.260
+Hoe slimmer je tools, hoe bewuster je ze moet gebruiken.
+
+00:21:43.460 --> 00:21:48.360
+Handhaaf vangrails, documenteer limieten en beschouw je autonome Excel-hack niet als rebellie, maar als verfijning.
+
+00:21:48.700 --> 00:21:51.420
+Beschaving door delegeren, nu draait de machine zichzelf.
+
+00:21:51.600 --> 00:21:53.840
+De enige onbeantwoorde vraag is voor de hand liggend.
+
+00:21:54.000 --> 00:21:57.820
+Als je spreadsheet zelfstandig kan werken, wat ben je dan precies van plan te doen met de extra tijd?
+
+00:21:58.020 --> 00:21:59.980
+De elegantie van luie automatisering.
+
+00:21:59.980 --> 00:22:01.480
+Er is een kunst om minder te doen.
+
+00:22:01.480 --> 00:22:04.260
+Geen onwetendheid, maar efficiëntie vermomt als afstandelijkheid.
+
+00:22:04.400 --> 00:22:06.860
+Wat je zojuist hebt gebouwd, is geen tool, het is een statement.
+
+00:22:07.100 --> 00:22:11.420
+Je hebt een taak die ooit cafeïne, wanhoop en overuren vergde, omgezet in een taak die zichzelf voltooit.
+
+00:22:11.620 --> 00:22:13.820
+Dat is geen luiheid, dat is beschaving die pronkt.
+
+00:22:13.980 --> 00:22:16.400
+De autonome agent automatiseert niet alleen klikken.
+
+00:22:16.580 --> 00:22:18.260
+Het zet aandacht om in architectuur.
+
+00:22:18.480 --> 00:22:23.680
+E-mails worden triggers, spreadsheets worden gesprekken en power automate wordt de koerier die nooit slaapt.
+
+00:22:23.880 --> 00:22:26.580
+Het resultaat is elegant, juist omdat het verdwijnt.
+
+00:22:26.720 --> 00:22:28.080
+Je ziet de machine niet werken.
+
+00:22:28.080 --> 00:22:29.980
+Je ziet alleen de afwezigheid van gedoe.
+
+00:22:29.980 --> 00:22:31.300
+Dus, hier is de echte lee.
+
+00:22:31.740 --> 00:22:33.960
+Automatisering gaat niet over snelheid, maar over reductie.
+
+00:22:34.120 --> 00:22:39.080
+Elke regel die je hebt gedefinieerd, elke workflow die je hebt verbonden, betekent dat er morgen één menselijke beslissing minder nodig is.
+
+00:22:39.260 --> 00:22:46.700
+De agent beantwoordt vragen, stuurt antwoorden en trekt zich geruisloos terug, waardoor u de vrijheid heeft om u te richten op complexere problemen of een welverdientutje te doen.
+
+00:22:46.900 --> 00:22:50.640
+Excel, dat oerhoude symbool van doorzettingsvermogen, leert eindelijk zelf behoud.
+
+00:22:50.820 --> 00:22:54.220
+Hetzelfde programma dat ooit inefficiëntie bestrafte, beloont nu voor uitziendheid.
+
+00:22:54.360 --> 00:22:56.280
+Het leest, het reageert, het maakt het goed.
+
+00:22:56.280 --> 00:22:58.200
+De spreadsheet heeft de verlichting bereikt.
+
+00:22:58.440 --> 00:23:00.780
+Natuurlijk druist deze truc in tegen de verwachtingen.
+
+00:23:01.000 --> 00:23:07.300
+Excel was nooit bedoeld om bewustzijn te bevatten, en toch zien we cellen zichzelf vullen uit plicht in plaats van op instructie.
+
+00:23:07.480 --> 00:23:11.300
+Als dat niet als vooruitgang voelt, voegt u misschien nog steeds handmatig cellen samen.
+
+00:23:11.540 --> 00:23:15.480
+Laat het autonome tijdperk beginnen met nederigheid en een selectievakje met de tekst.
+
+00:23:15.720 --> 00:23:16.640
+Automatisch uitvoeren.
+
+00:23:16.900 --> 00:23:21.940
+Leg uw upgraden pad vast, abonneer u, schakel meldingen in en laat de kennis zichzelf leveren.
+
+00:23:21.940 --> 00:23:25.000
+De volgende generatie workflows zal niet om uw goedkeuring vragen.
+
+00:23:25.200 --> 00:23:26.920
+Ze zullen om uw e-mailadres vragen.
+
+00:23:27.160 --> 00:23:28.860
+Stuur het in en de machine doet de rest.

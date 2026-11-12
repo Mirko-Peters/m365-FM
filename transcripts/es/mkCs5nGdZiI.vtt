@@ -1,0 +1,1987 @@
+WEBVTT
+
+00:00:00.140 --> 00:00:02.320
+Bienvenidos a otro episodio de Microsoft Knowledge Nuggets.
+
+00:00:02.720 --> 00:00:03.220
+Soy Marco Pitti.
+
+00:00:03.660 --> 00:00:05.400
+El tema de hoy es algo que probablemente han escuchado,
+
+00:00:05.540 --> 00:00:06.500
+pero quizá no comprendan.
+
+00:00:06.940 --> 00:00:07.560
+Habilidad de descubrió.
+
+00:00:07.940 --> 00:00:08.780
+Habrán oído el término.
+
+00:00:09.280 --> 00:00:11.180
+Quizás hayan visto un botón con etiqueta habilidades
+
+00:00:11.180 --> 00:00:12.580
+o crear una habilidad en algún menú
+
+00:00:12.580 --> 00:00:14.120
+y hayan pensado qué significa eso en realidad.
+
+00:00:14.880 --> 00:00:17.300
+¿Es un chatbot, una plantilla o algún tipo de automatización?
+
+00:00:17.500 --> 00:00:18.060
+Este es el problema.
+
+00:00:18.400 --> 00:00:20.540
+Microsoft utiliza nombres diferentes para la misma idea,
+
+00:00:20.780 --> 00:00:21.860
+en función del producto que utilicen.
+
+00:00:22.160 --> 00:00:23.620
+En Copilot Chat los llaman agentes,
+
+00:00:23.840 --> 00:00:25.000
+en Copilot los llaman habilidades
+
+00:00:25.000 --> 00:00:26.820
+y en Copilot Studio también los llaman habilidades,
+
+00:00:26.900 --> 00:00:28.680
+pero con un significado ligeramente diferente.
+
+00:00:28.680 --> 00:00:30.880
+Es confuso y sinceramente no debería ser.
+
+00:00:31.400 --> 00:00:33.240
+Al final de este episodio entenderán exactamente
+
+00:00:33.240 --> 00:00:34.400
+qué es una habilidad de copiloto,
+
+00:00:34.820 --> 00:00:37.060
+dónde se encuentra y cómo crear su primera habilidad.
+
+00:00:37.520 --> 00:00:38.680
+Todo en un lenguaje sencillo.
+
+00:00:39.500 --> 00:00:40.980
+¿Qué es realmente una habilidad de copiloto?
+
+00:00:41.520 --> 00:00:43.780
+Vamos a desglosarlo con la definición más simple posible.
+
+00:00:44.400 --> 00:00:46.140
+Una habilidad de Copilot es un conjunto de instrucciones
+
+00:00:46.140 --> 00:00:47.000
+reutilizables para ello.
+
+00:00:47.640 --> 00:00:50.000
+Piensa en ello como escribir la descripción de un puesto temporal.
+
+00:00:50.960 --> 00:00:52.040
+No solo dirías, haz un trabajo.
+
+00:00:52.800 --> 00:00:54.580
+Les indicarías la tarea, el cronograma,
+
+00:00:54.720 --> 00:00:56.560
+el resultado esperado y las reglas que deben seguir.
+
+00:00:57.060 --> 00:00:57.260
+Aquí.
+
+00:00:57.260 --> 00:01:00.640
+Cuando creas una habilidad, le das a Copilot tres cosas.
+
+00:01:01.100 --> 00:01:02.120
+Primero, el nombre de la habilidad.
+
+00:01:02.940 --> 00:01:04.940
+Segundo, una descripción que le indique a Copilot
+
+00:01:04.940 --> 00:01:05.920
+cuándo debe activarla,
+
+00:01:06.040 --> 00:01:07.560
+como esta tarea coincide con esta habilidad.
+
+00:01:09.440 --> 00:01:11.260
+Tercero, la instrucción es en sí el proceso,
+
+00:01:11.620 --> 00:01:13.380
+paso a paso que debe seguir, la IA.
+
+00:01:13.800 --> 00:01:14.480
+Y esta es la parte importante.
+
+00:01:14.940 --> 00:01:17.000
+Una habilidad no es un chatbot con el que te sientas a hablar.
+
+00:01:17.540 --> 00:01:19.280
+Es un especialista que solo se activa cuando necesite.
+
+00:01:19.660 --> 00:01:21.060
+No tienes que encenderlo ni apagar.
+
+00:01:21.700 --> 00:01:22.980
+Copilot analiza lo que le pides,
+
+00:01:23.100 --> 00:01:24.560
+comprueba si hay una habilidad que coincida
+
+00:01:24.560 --> 00:01:26.620
+y la ejecuta automáticamente, si la IA.
+
+00:01:26.940 --> 00:01:28.920
+La mejor analogía que haya dado es una ficha de receta.
+
+00:01:29.560 --> 00:01:31.620
+Tienes los mismos ingredientes y los mismos pasos cada vez
+
+00:01:31.620 --> 00:01:32.720
+y obtienes el mismo resultado.
+
+00:01:33.320 --> 00:01:33.860
+Eso es una habilidad.
+
+00:01:34.620 --> 00:01:35.800
+Escribe las instrucciones una vez
+
+00:01:35.800 --> 00:01:37.700
+y cada vez que Copilot ejecute esa habilidad,
+
+00:01:37.840 --> 00:01:39.280
+obtienes el mismo resultado estructurado,
+
+00:01:39.940 --> 00:01:41.300
+coherente y repetible sin conjeturas.
+
+00:01:42.500 --> 00:01:43.660
+Aquí es donde empieza la confusión.
+
+00:01:43.660 --> 00:01:46.240
+Microsoft ha ubicado las habilidades en tres hogares diferentes.
+
+00:01:47.120 --> 00:01:47.980
+¿Dónde residen las habilidades?
+
+00:01:48.320 --> 00:01:49.740
+Entonces, ¿dónde residen realmente las habilidades?
+
+00:01:50.180 --> 00:01:51.300
+Esa es una pregunta importante
+
+00:01:51.300 --> 00:01:53.660
+porque el hogar que elijas determina cuánto control obtienes
+
+00:01:53.660 --> 00:01:55.020
+y qué tan fácil es la configuración.
+
+00:01:55.680 --> 00:01:57.780
+Copilot te ofrece tres hogares diferentes
+
+00:01:57.780 --> 00:01:59.220
+para crear y administrar habilidades
+
+00:01:59.220 --> 00:02:00.940
+y cada uno tiene un propósito diferente.
+
+00:02:01.520 --> 00:02:03.020
+El primer hogar es el chat de Copilot,
+
+00:02:03.260 --> 00:02:05.280
+específicamente el generador de agentes que contiene.
+
+00:02:05.840 --> 00:02:06.760
+Esta es la forma más fácil.
+
+00:02:07.140 --> 00:02:08.320
+Simplemente describe lo que quieres en sí.
+
+00:02:09.040 --> 00:02:10.800
+Nombre, descripción, instrucciones, todo.
+
+00:02:10.800 --> 00:02:14.360
+Y Copilot crea la habilidad para ti sin código ni markdown.
+
+00:02:14.800 --> 00:02:17.160
+No escribes, no tocas, solo hablas y se crea.
+
+00:02:17.940 --> 00:02:19.320
+El segundo hogar es Copilot Studio,
+
+00:02:19.560 --> 00:02:20.440
+la plataforma de generador
+
+00:02:20.440 --> 00:02:22.160
+para cuando necesitas un control más práctico.
+
+00:02:22.600 --> 00:02:24.560
+Aquí las habilidades residen como archivos MD,
+
+00:02:24.760 --> 00:02:25.840
+que son solo archivos de texto
+
+00:02:25.840 --> 00:02:27.220
+con un formato simple almacenado
+
+00:02:27.220 --> 00:02:28.560
+junto con instrucciones y flujo de trabajo.
+
+00:02:29.200 --> 00:02:30.540
+Puedes abrirlos, editarlos directamente,
+
+00:02:30.720 --> 00:02:32.560
+incluso agregar scripts de Python si es solo tuyo.
+
+00:02:33.200 --> 00:02:35.080
+Es más potente, pero también más complejo.
+
+00:02:35.640 --> 00:02:37.200
+Ahora, el tercer hogar es Copilot Cowork
+
+00:02:37.200 --> 00:02:38.440
+y este funciona de manera un poco diferente.
+
+00:02:38.440 --> 00:02:40.800
+Las habilidades de Cowork también son archivos MD,
+
+00:02:41.020 --> 00:02:42.100
+pero se encuentran en tu OneDrive
+
+00:02:42.100 --> 00:02:43.620
+en una estructura de carpetas específica,
+
+00:02:43.740 --> 00:02:45.260
+documentos, luego Cowork y luego habilidades.
+
+00:02:45.800 --> 00:02:47.320
+Puedes escribir una habilidad en texto sin formato
+
+00:02:47.320 --> 00:02:48.900
+y subirla o usar las herramientas integradas
+
+00:02:48.900 --> 00:02:49.560
+de Cowork para crear.
+
+00:02:50.340 --> 00:02:51.680
+Cowork realiza un control de calidad
+
+00:02:51.680 --> 00:02:52.940
+tras la creación para comprobar
+
+00:02:52.940 --> 00:02:54.560
+si tus instrucciones son lo bastante claras.
+
+00:02:55.140 --> 00:02:55.500
+Aquí está bien.
+
+00:02:56.000 --> 00:02:57.680
+Las tres casas siguen el mismo concepto básico,
+
+00:02:57.980 --> 00:02:59.140
+instrucciones, un disparador
+
+00:02:59.140 --> 00:03:00.060
+y un formato de salida.
+
+00:03:00.880 --> 00:03:01.520
+El paquete cambia,
+
+00:03:01.800 --> 00:03:02.720
+pero la idea sigue siendo la misma.
+
+00:03:03.220 --> 00:03:04.360
+Déjate a una comparación rápida.
+
+00:03:04.680 --> 00:03:06.200
+Copilot Chat es escribir y listo.
+
+00:03:06.880 --> 00:03:08.240
+Sencillo, rápido, sin configuración.
+
+00:03:08.500 --> 00:03:09.800
+Copilot Studio es crear y controlar.
+
+00:03:10.660 --> 00:03:11.740
+La función es más complejidad.
+
+00:03:12.440 --> 00:03:13.780
+Copilot Cowork es como capacitar
+
+00:03:13.780 --> 00:03:14.480
+a un compañero de trabajo
+
+00:03:14.480 --> 00:03:15.260
+para que realice una trea.
+
+00:03:16.220 --> 00:03:17.240
+Describes el proceso una vez
+
+00:03:17.240 --> 00:03:18.900
+y se ejecuta repetidamente en segundo plano.
+
+00:03:20.180 --> 00:03:21.160
+Empecemos por lo más fácil.
+
+00:03:21.600 --> 00:03:23.340
+Crear una habilidad directamente en Copilot Chat.
+
+00:03:24.360 --> 00:03:25.240
+Crea tu primera habilidad,
+
+00:03:25.440 --> 00:03:26.080
+el generador de agente.
+
+00:03:26.580 --> 00:03:27.580
+Entonces estás en Copilot Chat.
+
+00:03:28.100 --> 00:03:29.380
+Lo primero es hallar el generador de agente.
+
+00:03:29.900 --> 00:03:30.880
+Dependiendo de tu interfaz,
+
+00:03:31.000 --> 00:03:32.480
+puedes estar en una pestaña llamada Agentes
+
+00:03:32.480 --> 00:03:33.640
+o en un botón que diga Crear.
+
+00:03:34.020 --> 00:03:34.320
+Crear.
+
+00:03:34.320 --> 00:03:36.660
+A veces Microsoft cambia de lugar las cosas,
+
+00:03:37.180 --> 00:03:38.240
+pero busca la opción que te permite
+
+00:03:38.240 --> 00:03:39.100
+describir lo que quieres.
+
+00:03:39.560 --> 00:03:40.340
+Ese es tu punto de entrar.
+
+00:03:40.780 --> 00:03:42.040
+Deja que te muestre un ejemplo real.
+
+00:03:42.400 --> 00:03:43.600
+Imagina que tomas notas de reuniones y todo.
+
+00:03:43.960 --> 00:03:44.680
+Ya sabes cómo funciona.
+
+00:03:45.000 --> 00:03:46.020
+Viñetas desordenadas,
+
+00:03:46.420 --> 00:03:47.360
+frases a medio terminar,
+
+00:03:47.980 --> 00:03:49.520
+elementos de acción ocultos en párrafos.
+
+00:03:49.980 --> 00:03:51.060
+¿Quieres que Copilot los convierta
+
+00:03:51.060 --> 00:03:52.440
+en resúmenes estructurados y claros?
+
+00:03:53.100 --> 00:03:54.160
+Así que escribes algo como esto.
+
+00:03:54.940 --> 00:03:56.400
+Crea una habilidad de notas de reuniones
+
+00:03:56.400 --> 00:03:57.960
+que tome transcripciones desordenadas
+
+00:03:57.960 --> 00:03:59.440
+y las convierta en resúmenes estructurados
+
+00:03:59.440 --> 00:04:00.800
+con elementos de acción y decisiones.
+
+00:04:00.800 --> 00:04:01.520
+Eso es todo.
+
+00:04:01.780 --> 00:04:02.180
+Una frase.
+
+00:04:02.520 --> 00:04:03.480
+Sin instrucciones que escribí,
+
+00:04:03.700 --> 00:04:04.840
+sin formato de salida que definí.
+
+00:04:05.080 --> 00:04:05.960
+Simplemente describe el trabajo.
+
+00:04:06.280 --> 00:04:07.260
+Copilot toma esa descripción
+
+00:04:07.260 --> 00:04:08.360
+y crea la habilidad para ti.
+
+00:04:08.820 --> 00:04:09.880
+Escribe el nombre y la descripción
+
+00:04:09.880 --> 00:04:10.700
+que se indica a sí misma
+
+00:04:10.700 --> 00:04:11.500
+cuando usar la habilidad
+
+00:04:11.500 --> 00:04:12.780
+y las instrucciones paso a paso.
+
+00:04:13.720 --> 00:04:14.360
+Luego te presenta todo
+
+00:04:14.360 --> 00:04:15.000
+para que lo revises.
+
+00:04:15.880 --> 00:04:16.220
+Lo lees,
+
+00:04:16.300 --> 00:04:17.220
+haces ajustes si quieres
+
+00:04:17.220 --> 00:04:17.820
+y lo pruebas.
+
+00:04:18.480 --> 00:04:19.660
+Este es el proceso en cuatro pasos.
+
+00:04:20.280 --> 00:04:21.020
+Describe lo que quiere.
+
+00:04:21.440 --> 00:04:22.140
+Copilot generará.
+
+00:04:22.720 --> 00:04:23.660
+La revisas y la ajusta.
+
+00:04:23.860 --> 00:04:24.380
+Luego la pruebas
+
+00:04:24.380 --> 00:04:25.120
+con información real.
+
+00:04:25.460 --> 00:04:26.080
+Cuando la pruebes,
+
+00:04:26.160 --> 00:04:26.780
+verás el resultado.
+
+00:04:27.060 --> 00:04:28.000
+Un resumen estructurado
+
+00:04:28.000 --> 00:04:28.880
+que incluye secciones
+
+00:04:28.880 --> 00:04:30.200
+para el título de la reunión,
+
+00:04:30.360 --> 00:04:30.640
+fecha,
+
+00:04:30.960 --> 00:04:31.460
+asistentes,
+
+00:04:31.800 --> 00:04:32.500
+decisiones clave,
+
+00:04:33.020 --> 00:04:33.380
+tareas,
+
+00:04:33.720 --> 00:04:34.480
+temas y preguntas.
+
+00:04:35.380 --> 00:04:36.500
+Todo organizado exactamente
+
+00:04:36.500 --> 00:04:37.260
+como lo pediste.
+
+00:04:37.860 --> 00:04:38.440
+Sin formato,
+
+00:04:38.560 --> 00:04:39.040
+sin markdown
+
+00:04:39.040 --> 00:04:40.540
+y sin código de tu parte.
+
+00:04:41.260 --> 00:04:42.240
+Y aquí tienes información valiosa.
+
+00:04:42.560 --> 00:04:43.440
+No necesitas escribir
+
+00:04:43.440 --> 00:04:44.600
+más solo la línea de código markdown.
+
+00:04:45.220 --> 00:04:46.020
+Ni siquiera necesitas saber
+
+00:04:46.020 --> 00:04:46.840
+que es un archivo markdown.
+
+00:04:47.280 --> 00:04:48.420
+Simplemente describe el trabajo
+
+00:04:48.420 --> 00:04:49.580
+y Copilot se encarga del resto.
+
+00:04:49.900 --> 00:04:50.720
+Es la forma más rápida
+
+00:04:50.720 --> 00:04:51.420
+de crear una habilidad.
+
+00:04:51.620 --> 00:04:52.000
+Y para la mayoría
+
+00:04:52.000 --> 00:04:52.620
+de los principiantes
+
+00:04:52.620 --> 00:04:53.560
+es todo lo que necesitarán.
+
+00:04:54.040 --> 00:04:55.200
+Si necesitas más control,
+
+00:04:55.200 --> 00:04:56.040
+quizá quieras añadir
+
+00:04:56.040 --> 00:04:56.820
+un script de Python
+
+00:04:56.820 --> 00:04:58.280
+o un flujo de trabajo personalizado,
+
+00:04:58.800 --> 00:04:59.580
+ahí es cuando pasas
+
+00:04:59.580 --> 00:05:00.380
+a Copilot Studio.
+
+00:05:01.460 --> 00:05:02.300
+Creación de habilidades
+
+00:05:02.300 --> 00:05:03.000
+en Copilot Studio.
+
+00:05:03.600 --> 00:05:04.100
+Copilot Studio
+
+00:05:04.100 --> 00:05:04.740
+es algo diferente.
+
+00:05:05.720 --> 00:05:06.220
+Está diseñado
+
+00:05:06.220 --> 00:05:06.660
+para personas
+
+00:05:06.660 --> 00:05:07.500
+que quieren profundizar
+
+00:05:07.500 --> 00:05:08.420
+y tiene tres capas
+
+00:05:08.420 --> 00:05:08.960
+que conocer.
+
+00:05:09.580 --> 00:05:10.020
+Las instrucciones
+
+00:05:10.020 --> 00:05:10.580
+siempre están en pie.
+
+00:05:11.040 --> 00:05:11.940
+Definen cómo piensa
+
+00:05:11.940 --> 00:05:12.820
+y responde tu agente,
+
+00:05:12.920 --> 00:05:13.320
+su tono,
+
+00:05:13.460 --> 00:05:13.780
+su rol
+
+00:05:13.780 --> 00:05:14.580
+y su comportamiento
+
+00:05:14.580 --> 00:05:15.560
+predeterminado.
+
+00:05:15.900 --> 00:05:16.360
+Están presentes
+
+00:05:16.360 --> 00:05:17.060
+en cada conversación.
+
+00:05:17.420 --> 00:05:17.800
+Las habilidades
+
+00:05:17.800 --> 00:05:18.780
+se solicitan según demanda.
+
+00:05:19.100 --> 00:05:20.220
+Son conocimientos especializados
+
+00:05:20.220 --> 00:05:21.200
+para tareas específicas
+
+00:05:21.200 --> 00:05:21.740
+y repetibles
+
+00:05:21.740 --> 00:05:22.600
+y solo se activan
+
+00:05:22.600 --> 00:05:23.620
+cuando el disparador coincide.
+
+00:05:23.980 --> 00:05:24.680
+Los flujos de trabajo
+
+00:05:24.680 --> 00:05:25.760
+son procesos paso a paso
+
+00:05:25.760 --> 00:05:26.420
+con aprobaciones
+
+00:05:26.420 --> 00:05:26.960
+y condiciones.
+
+00:05:27.440 --> 00:05:28.360
+Si necesitan un resultado
+
+00:05:28.360 --> 00:05:28.900
+garantizado
+
+00:05:28.900 --> 00:05:29.900
+como enviar a algún gerente
+
+00:05:29.900 --> 00:05:30.500
+para su aprobación
+
+00:05:30.500 --> 00:05:31.120
+antes de enviarlo,
+
+00:05:31.260 --> 00:05:32.080
+eso es un flujo de trabajo.
+
+00:05:32.640 --> 00:05:33.460
+Las habilidades en estudio
+
+00:05:33.460 --> 00:05:33.940
+se empaquetan
+
+00:05:33.940 --> 00:05:34.660
+como archivos MD
+
+00:05:34.660 --> 00:05:35.460
+o archivos Markdown,
+
+00:05:35.680 --> 00:05:36.700
+pero son más que solo texto.
+
+00:05:37.260 --> 00:05:38.160
+Una habilidad puede incluir
+
+00:05:38.160 --> 00:05:38.540
+scripts,
+
+00:05:38.700 --> 00:05:39.600
+plantillas y ejemplos
+
+00:05:39.600 --> 00:05:40.220
+todo agrupado.
+
+00:05:40.740 --> 00:05:41.220
+Puedes adjuntar
+
+00:05:41.220 --> 00:05:41.900
+un script de Python
+
+00:05:41.900 --> 00:05:42.620
+para cálculos,
+
+00:05:43.260 --> 00:05:43.960
+una plantilla de Word
+
+00:05:43.960 --> 00:05:44.580
+para resultados
+
+00:05:44.580 --> 00:05:45.620
+y documentos de referencia,
+
+00:05:46.060 --> 00:05:46.860
+todo dentro de un paquete.
+
+00:05:47.360 --> 00:05:48.020
+Esta es la anatomía
+
+00:05:48.020 --> 00:05:49.100
+de un archivo MD de habilidad.
+
+00:05:49.580 --> 00:05:50.320
+En la parte superior
+
+00:05:50.320 --> 00:05:50.840
+está el nombre,
+
+00:05:50.920 --> 00:05:51.880
+algo claro y específico
+
+00:05:51.880 --> 00:05:52.960
+como calculadora de gastos.
+
+00:05:53.780 --> 00:05:53.960
+Luego,
+
+00:05:54.040 --> 00:05:54.800
+una descripción que indica
+
+00:05:54.800 --> 00:05:55.580
+cuándo debe activarse
+
+00:05:55.580 --> 00:05:56.000
+esta habilidad.
+
+00:05:56.920 --> 00:05:57.720
+Usala cuando el usuario
+
+00:05:57.720 --> 00:05:58.520
+necesite calcular
+
+00:05:58.520 --> 00:05:59.460
+los gastos totales
+
+00:05:59.460 --> 00:06:00.080
+de los recibos.
+
+00:06:01.340 --> 00:06:01.480
+Luego,
+
+00:06:01.560 --> 00:06:02.640
+una sección para cuándo usarla
+
+00:06:02.640 --> 00:06:03.620
+y otra para cuándo no usarla.
+
+00:06:04.100 --> 00:06:04.940
+Esto evita que la habilidad
+
+00:06:04.940 --> 00:06:06.200
+se active en el contexto incorrecto.
+
+00:06:06.640 --> 00:06:07.000
+A continuación,
+
+00:06:07.060 --> 00:06:07.680
+las instrucciones paso.
+
+00:06:07.940 --> 00:06:08.960
+Y tienes un ejemplo real.
+
+00:06:09.420 --> 00:06:10.040
+Supongamos que quieres
+
+00:06:10.040 --> 00:06:10.900
+una habilidad que ejecute
+
+00:06:10.900 --> 00:06:11.640
+un script de Python
+
+00:06:11.640 --> 00:06:13.480
+para calcular gastos de recibos.
+
+00:06:14.180 --> 00:06:14.920
+En Copilot Studio
+
+00:06:14.920 --> 00:06:15.900
+creas el archivo MD
+
+00:06:15.900 --> 00:06:16.580
+de la habilidad
+
+00:06:16.580 --> 00:06:17.140
+y empaquetas
+
+00:06:17.140 --> 00:06:17.900
+el script de Python
+
+00:06:17.900 --> 00:06:18.520
+junto a él.
+
+00:06:19.200 --> 00:06:20.040
+Cuando la habilidad se activa,
+
+00:06:20.100 --> 00:06:20.740
+ejecuta el script,
+
+00:06:20.740 --> 00:06:21.500
+procesa los datos
+
+00:06:21.500 --> 00:06:22.300
+y devuelve el resultado.
+
+00:06:23.020 --> 00:06:23.780
+La habilidad y el código
+
+00:06:23.780 --> 00:06:24.440
+viajan juntos.
+
+00:06:25.160 --> 00:06:25.780
+Usa las habilidades
+
+00:06:25.780 --> 00:06:26.920
+para la experiencia repetible,
+
+00:06:27.160 --> 00:06:27.820
+tareas en las que la guía
+
+00:06:27.820 --> 00:06:29.140
+necesita pensar y adaptarse.
+
+00:06:29.600 --> 00:06:30.440
+Usa flujos de trabajo
+
+00:06:30.440 --> 00:06:30.940
+para orden
+
+00:06:30.940 --> 00:06:31.860
+y aprobaciones strict,
+
+00:06:32.500 --> 00:06:33.080
+tareas en las que
+
+00:06:33.080 --> 00:06:34.360
+no puedes permitirte variaciones.
+
+00:06:35.260 --> 00:06:36.200
+Las habilidades son flexibles.
+
+00:06:36.260 --> 00:06:36.840
+Los flujos de trabajo
+
+00:06:36.840 --> 00:06:37.320
+son rígidos.
+
+00:06:37.540 --> 00:06:38.380
+Elige la herramienta adecuada.
+
+00:06:38.620 --> 00:06:39.280
+Y hay un lugar más
+
+00:06:39.280 --> 00:06:40.480
+donde residen las habilidades
+
+00:06:40.480 --> 00:06:41.640
+dentro de Copilot Cowork
+
+00:06:41.640 --> 00:06:42.580
+y es diferente.
+
+00:06:43.340 --> 00:06:44.200
+Creación de habilidades
+
+00:06:44.200 --> 00:06:45.100
+en Copilot Cowork.
+
+00:06:45.420 --> 00:06:46.160
+Las habilidades de Cowork
+
+00:06:46.160 --> 00:06:47.100
+residen en un lugar distinto
+
+00:06:47.100 --> 00:06:47.720
+al que podrías ver.
+
+00:06:47.940 --> 00:06:49.360
+Se almacenan como archivos MD
+
+00:06:49.360 --> 00:06:50.220
+en tu OneDrive
+
+00:06:50.220 --> 00:06:50.860
+en documentos,
+
+00:06:50.920 --> 00:06:51.620
+luego en una carpeta
+
+00:06:51.620 --> 00:06:52.240
+llamada Cowork
+
+00:06:52.240 --> 00:06:52.840
+y dentro de esta
+
+00:06:52.840 --> 00:06:53.820
+una carpeta llamada
+
+00:06:53.820 --> 00:06:54.560
+Habilidades.
+
+00:06:55.440 --> 00:06:56.160
+Ahí es donde residen
+
+00:06:56.160 --> 00:06:57.460
+todas tus habilidades personalizadas
+
+00:06:57.460 --> 00:06:58.520
+y puedes abrir esa carpeta
+
+00:06:58.520 --> 00:06:59.220
+para ver cada habilidad
+
+00:06:59.220 --> 00:07:00.280
+allí como textos informados.
+
+00:07:00.720 --> 00:07:01.200
+Hay dos formas
+
+00:07:01.200 --> 00:07:01.820
+de crear una habilidad
+
+00:07:01.820 --> 00:07:02.200
+en Cowork.
+
+00:07:02.640 --> 00:07:03.300
+Puedes escribirla
+
+00:07:03.300 --> 00:07:04.020
+en textos informados
+
+00:07:04.020 --> 00:07:04.780
+y subirla directamente
+
+00:07:04.780 --> 00:07:05.640
+a esa carpeta de habilidades.
+
+00:07:05.960 --> 00:07:06.640
+O puedes usar la herramienta
+
+00:07:06.640 --> 00:07:07.120
+de gestión de habilidades
+
+00:07:07.120 --> 00:07:07.780
+e integrar a Cowork
+
+00:07:07.780 --> 00:07:08.780
+dentro de la interfaz de chat.
+
+00:07:10.020 --> 00:07:10.780
+Describes lo que quieres
+
+00:07:10.780 --> 00:07:11.960
+Cowork crea el archivo MD
+
+00:07:11.960 --> 00:07:12.560
+y lo guarda
+
+00:07:12.560 --> 00:07:13.880
+en esa carpeta automáticamente.
+
+00:07:14.900 --> 00:07:15.880
+Después de crear una habilidad,
+
+00:07:16.220 --> 00:07:16.780
+Cowork ejecuta
+
+00:07:16.780 --> 00:07:17.380
+un control de calidad.
+
+00:07:17.380 --> 00:07:18.220
+Prueba la cobertura
+
+00:07:18.220 --> 00:07:18.880
+de los activadores.
+
+00:07:19.100 --> 00:07:19.980
+Si tu habilidad se activa
+
+00:07:19.980 --> 00:07:20.520
+cuando debería.
+
+00:07:21.020 --> 00:07:21.560
+Prueba la claridad
+
+00:07:21.560 --> 00:07:22.180
+de las instrucciones
+
+00:07:22.180 --> 00:07:22.740
+si tus pasos
+
+00:07:22.740 --> 00:07:23.920
+son lo suficientemente específicos.
+
+00:07:24.260 --> 00:07:24.820
+Prueba la solidez
+
+00:07:24.820 --> 00:07:25.420
+si la habilidad
+
+00:07:25.420 --> 00:07:27.040
+puede gestionar casos extremos.
+
+00:07:27.520 --> 00:07:28.280
+Obtienes un informe
+
+00:07:28.280 --> 00:07:28.820
+con el resultado.
+
+00:07:29.240 --> 00:07:29.900
+Si algo es débil,
+
+00:07:30.020 --> 00:07:30.760
+sabes dónde mejorar.
+
+00:07:31.100 --> 00:07:31.940
+Aquí tienes un ejemplo real.
+
+00:07:32.240 --> 00:07:32.700
+Imagina que eres
+
+00:07:32.700 --> 00:07:33.500
+un agente inmobiliario.
+
+00:07:33.760 --> 00:07:34.400
+Tras cada llamada
+
+00:07:34.400 --> 00:07:35.460
+de evaluación con un comprador,
+
+00:07:35.740 --> 00:07:36.640
+debes pasar tus notas
+
+00:07:36.640 --> 00:07:37.680
+a un resumen estructurado.
+
+00:07:38.560 --> 00:07:39.280
+Rango de presupuesto,
+
+00:07:39.420 --> 00:07:40.200
+elementos imprescindibles,
+
+00:07:40.300 --> 00:07:41.000
+factores decisivos,
+
+00:07:41.140 --> 00:07:41.660
+pasos siguientes.
+
+00:07:42.300 --> 00:07:43.220
+Haces esto cada vez.
+
+00:07:43.920 --> 00:07:44.720
+Si creas una habilidad
+
+00:07:44.720 --> 00:07:45.500
+llamada asistente
+
+00:07:45.500 --> 00:07:46.300
+de perfil de comprador,
+
+00:07:47.120 --> 00:07:47.700
+le haces unas frases
+
+00:07:47.700 --> 00:07:48.220
+de activación
+
+00:07:48.220 --> 00:07:49.080
+como crear un perfil
+
+00:07:49.080 --> 00:07:49.600
+del comprador
+
+00:07:49.600 --> 00:07:50.540
+o resumir la llamada
+
+00:07:50.540 --> 00:07:51.660
+del cliente.
+
+00:07:51.820 --> 00:07:52.340
+Le pides que lea
+
+00:07:52.340 --> 00:07:52.900
+la transcripción,
+
+00:07:53.140 --> 00:07:53.980
+extraiga información clave
+
+00:07:53.980 --> 00:07:54.860
+y rellene una plantilla.
+
+00:07:55.520 --> 00:07:56.480
+Adjuntas tu plantilla real
+
+00:07:56.480 --> 00:07:56.920
+de una página
+
+00:07:56.920 --> 00:07:57.660
+para que el resultado
+
+00:07:57.660 --> 00:07:58.560
+coincida exactamente
+
+00:07:58.560 --> 00:07:59.380
+con lo que necesite.
+
+00:07:59.860 --> 00:08:00.560
+Luego la apruebas
+
+00:08:00.560 --> 00:08:01.320
+que habías una transcripción
+
+00:08:01.320 --> 00:08:01.740
+de la llamada
+
+00:08:01.740 --> 00:08:02.420
+y dices ejecuta
+
+00:08:02.420 --> 00:08:02.760
+el asistente
+
+00:08:02.760 --> 00:08:03.520
+de perfil del comprador.
+
+00:08:04.280 --> 00:08:05.500
+Cowork activa la habilidad,
+
+00:08:05.860 --> 00:08:06.620
+lee la transcripción
+
+00:08:06.620 --> 00:08:07.660
+y genera un resumen
+
+00:08:07.660 --> 00:08:08.120
+en el chat.
+
+00:08:08.640 --> 00:08:09.100
+Luego le pides
+
+00:08:09.100 --> 00:08:10.180
+que prepare el documento de web.
+
+00:08:10.820 --> 00:08:11.520
+Extrae tu plantilla,
+
+00:08:14.720 --> 00:08:15.560
+pasos siguientes
+
+00:08:15.560 --> 00:08:16.260
+y te entrega
+
+00:08:16.260 --> 00:08:17.080
+un documento terminado.
+
+00:08:17.560 --> 00:08:18.660
+El mismo formato cada vez,
+
+00:08:18.960 --> 00:08:19.600
+sin formato manual
+
+00:08:19.600 --> 00:08:20.320
+ni copiar y pegar.
+
+00:08:20.880 --> 00:08:21.680
+Esas habilidades de Cowork
+
+00:08:21.680 --> 00:08:22.340
+sirven para delegar
+
+00:08:22.340 --> 00:08:22.940
+en segundo plano.
+
+00:08:23.240 --> 00:08:23.780
+No estás sentado
+
+00:08:23.780 --> 00:08:24.600
+chateando con la IA.
+
+00:08:25.020 --> 00:08:26.080
+Describes el proceso una vez,
+
+00:08:26.180 --> 00:08:26.920
+adjuntas las plantillas,
+
+00:08:27.060 --> 00:08:27.720
+defines las reglas
+
+00:08:27.720 --> 00:08:28.320
+y luego Cowork
+
+00:08:28.320 --> 00:08:29.320
+lo ejecuta repetidamente.
+
+00:08:29.760 --> 00:08:30.360
+Simplemente introduce
+
+00:08:30.360 --> 00:08:30.760
+las entradas
+
+00:08:30.760 --> 00:08:31.460
+y obtiene el resultado.
+
+00:08:31.880 --> 00:08:32.600
+Esas mismas reglas
+
+00:08:32.600 --> 00:08:33.440
+se aplican tanto
+
+00:08:33.440 --> 00:08:34.100
+si estás en estudio
+
+00:08:34.100 --> 00:08:34.620
+como en Cowork.
+
+00:08:35.100 --> 00:08:35.680
+¿Qué hace que una habilidad
+
+00:08:35.680 --> 00:08:35.980
+sea buena?
+
+00:08:36.340 --> 00:08:37.040
+Empezamos con el nombre
+
+00:08:37.040 --> 00:08:37.560
+de tu habilidad.
+
+00:08:38.380 --> 00:08:39.020
+Debe ser legible
+
+00:08:39.020 --> 00:08:39.800
+para dos públicos
+
+00:08:39.800 --> 00:08:40.780
+completamente diferentes,
+
+00:08:40.960 --> 00:08:41.760
+humanos, EIA.
+
+00:08:41.760 --> 00:08:43.400
+Sus humanos necesitan ver
+
+00:08:43.400 --> 00:08:44.060
+lo que hace la habilidad
+
+00:08:44.060 --> 00:08:44.540
+de un vistazo.
+
+00:08:45.040 --> 00:08:45.580
+La IA debe hallar
+
+00:08:45.580 --> 00:08:46.400
+la destreza adecuada
+
+00:08:46.400 --> 00:08:47.400
+al coincidir una tarea.
+
+00:08:48.100 --> 00:08:48.480
+Por lo tanto,
+
+00:08:48.560 --> 00:08:48.940
+elija nombres
+
+00:08:48.940 --> 00:08:49.840
+descriptivos precisos.
+
+00:08:50.380 --> 00:08:51.160
+El resumidor de notas
+
+00:08:51.160 --> 00:08:51.520
+de reuniones
+
+00:08:51.520 --> 00:08:52.520
+supera siempre al escriba.
+
+00:08:53.560 --> 00:08:54.360
+El asistente de perfil
+
+00:08:54.360 --> 00:08:54.800
+de comprador
+
+00:08:54.800 --> 00:08:55.720
+supera al de cliente.
+
+00:08:56.800 --> 00:08:57.640
+Los nombres ingeniosos
+
+00:08:57.640 --> 00:08:58.060
+solo confunden
+
+00:08:58.060 --> 00:08:58.580
+a todos los recursos.
+
+00:08:58.940 --> 00:08:59.460
+A continuación,
+
+00:08:59.560 --> 00:09:00.020
+frases encargan.
+
+00:09:00.280 --> 00:09:01.080
+Así es como Copilot
+
+00:09:01.080 --> 00:09:02.260
+sabe cuándo activar su habilidad.
+
+00:09:02.680 --> 00:09:03.480
+Sea específico al respecto.
+
+00:09:03.820 --> 00:09:04.100
+No diga,
+
+00:09:04.180 --> 00:09:05.180
+utilice esto para reuniones.
+
+00:09:05.660 --> 00:09:05.820
+Diga,
+
+00:09:05.920 --> 00:09:06.940
+utilice esto cuando un usuario
+
+00:09:06.940 --> 00:09:07.700
+cargue una transcripción
+
+00:09:07.700 --> 00:09:08.080
+de la reunión
+
+00:09:08.080 --> 00:09:08.900
+y solicite un resumen.
+
+00:09:09.440 --> 00:09:10.280
+Cuanto más específico
+
+00:09:10.280 --> 00:09:11.140
+sea su desencadenante,
+
+00:09:11.240 --> 00:09:11.820
+menos probable será
+
+00:09:11.820 --> 00:09:12.240
+que la habilidad
+
+00:09:12.240 --> 00:09:12.980
+se active en el contexto
+
+00:09:12.980 --> 00:09:13.320
+incórdico.
+
+00:09:13.700 --> 00:09:14.180
+Si una habilidad
+
+00:09:14.180 --> 00:09:15.320
+se activa cuando no debería,
+
+00:09:15.400 --> 00:09:16.120
+el resultado se vuelve
+
+00:09:16.120 --> 00:09:16.860
+inútil muy rápido.
+
+00:09:17.280 --> 00:09:17.700
+Ahora hablemos
+
+00:09:17.700 --> 00:09:18.300
+de las instrucciones.
+
+00:09:18.960 --> 00:09:19.520
+Todo lo que la mayoría
+
+00:09:19.520 --> 00:09:20.120
+de la gente hace mal.
+
+00:09:20.460 --> 00:09:21.040
+Las habilidades se llaman
+
+00:09:21.040 --> 00:09:21.480
+a demanda.
+
+00:09:21.780 --> 00:09:22.460
+No siempre están activas.
+
+00:09:22.880 --> 00:09:23.460
+Cada vez que la habilidad
+
+00:09:23.460 --> 00:09:24.020
+se ejecuta,
+
+00:09:24.280 --> 00:09:25.360
+consume procesamiento y EIA.
+
+00:09:25.740 --> 00:09:26.060
+Por lo tanto,
+
+00:09:26.140 --> 00:09:26.820
+mantiene sus instrucciones
+
+00:09:26.820 --> 00:09:27.580
+breves y centrales.
+
+00:09:28.100 --> 00:09:29.240
+No incluye a toda la política
+
+00:09:29.240 --> 00:09:30.040
+de su empresa allí.
+
+00:09:30.680 --> 00:09:31.620
+Solo los pasos necesarios
+
+00:09:31.620 --> 00:09:32.620
+para esa tarea específica.
+
+00:09:33.200 --> 00:09:34.040
+Las instrucciones cortas
+
+00:09:34.040 --> 00:09:34.780
+implican una ejecución
+
+00:09:34.780 --> 00:09:35.240
+más rápida
+
+00:09:35.240 --> 00:09:36.160
+y un menor consumo general.
+
+00:09:36.940 --> 00:09:37.540
+El formato de salida
+
+00:09:37.540 --> 00:09:38.100
+también es importante.
+
+00:09:38.580 --> 00:09:39.100
+Debes indicarle
+
+00:09:39.100 --> 00:09:39.460
+a la habilidad
+
+00:09:39.460 --> 00:09:39.920
+exactamente
+
+00:09:39.920 --> 00:09:40.860
+cómo estructurar su salida.
+
+00:09:41.120 --> 00:09:41.660
+Dame un resumen
+
+00:09:41.660 --> 00:09:42.440
+con estas secciones.
+
+00:09:42.620 --> 00:09:43.360
+Título de la reunión,
+
+00:09:43.540 --> 00:09:44.100
+fecha asistente,
+
+00:09:44.220 --> 00:09:44.780
+decisión clave,
+
+00:09:44.860 --> 00:09:45.460
+elementos de acción,
+
+00:09:45.580 --> 00:09:46.260
+preguntas abiertas.
+
+00:09:46.500 --> 00:09:47.440
+Si tienes una plantilla,
+
+00:09:47.700 --> 00:09:48.420
+un documento de Word,
+
+00:09:48.480 --> 00:09:49.100
+un archivo de Excel,
+
+00:09:49.220 --> 00:09:49.580
+incluyelo.
+
+00:09:49.900 --> 00:09:50.520
+La habilidad puede usar
+
+00:09:50.520 --> 00:09:51.700
+esa plantilla como referencia
+
+00:09:51.700 --> 00:09:52.540
+y coincidir exactamente
+
+00:09:52.540 --> 00:09:53.560
+con tu formato existente.
+
+00:09:54.080 --> 00:09:54.860
+Las buenas habilidades
+
+00:09:54.860 --> 00:09:55.940
+se diferencian de las malas
+
+00:09:55.940 --> 00:09:57.000
+mediante reglas y excepción.
+
+00:09:57.340 --> 00:09:58.240
+Piense en los casos extremos.
+
+00:09:58.740 --> 00:09:59.140
+Marca siempre
+
+00:09:59.140 --> 00:09:59.960
+los elementos poco graves.
+
+00:09:59.960 --> 00:10:00.920
+Nunca elimines
+
+00:10:00.920 --> 00:10:01.660
+los nombres de las personas.
+
+00:10:02.380 --> 00:10:02.980
+Si la transcripción
+
+00:10:02.980 --> 00:10:03.680
+es demasiado corta,
+
+00:10:03.760 --> 00:10:04.340
+solicita más información.
+
+00:10:04.800 --> 00:10:05.540
+Estas reglas evitan
+
+00:10:05.540 --> 00:10:06.040
+que la habilidad
+
+00:10:06.040 --> 00:10:07.000
+haga su posición en esa reunión.
+
+00:10:07.320 --> 00:10:08.160
+Actúan como barandillas
+
+00:10:08.160 --> 00:10:08.580
+que mantienen
+
+00:10:08.580 --> 00:10:09.500
+la fiabilidad de la salida.
+
+00:10:10.180 --> 00:10:10.860
+Evita la ambigüedad
+
+00:10:10.860 --> 00:10:11.440
+a toda costa.
+
+00:10:11.920 --> 00:10:12.760
+No crees dos habilidades
+
+00:10:12.760 --> 00:10:13.620
+con nombres similares
+
+00:10:13.620 --> 00:10:14.660
+o activadores superpuestos.
+
+00:10:15.360 --> 00:10:16.180
+Si tienes una habilidad
+
+00:10:16.180 --> 00:10:17.120
+de notas de la reunión
+
+00:10:17.120 --> 00:10:17.880
+y una habilidad de resumen
+
+00:10:17.880 --> 00:10:18.340
+de la reunión
+
+00:10:18.340 --> 00:10:19.240
+una al lado de la otra,
+
+00:10:19.600 --> 00:10:20.300
+Copilot no sabrá
+
+00:10:20.300 --> 00:10:20.860
+cuál usar.
+
+00:10:21.580 --> 00:10:22.340
+Ahí adivinará
+
+00:10:22.340 --> 00:10:23.220
+y a veces se equivocará.
+
+00:10:23.720 --> 00:10:24.340
+Si dos habilidades
+
+00:10:24.340 --> 00:10:24.960
+se superponen,
+
+00:10:25.060 --> 00:10:25.660
+combínalas en una.
+
+00:10:26.100 --> 00:10:26.500
+Mantén limpia
+
+00:10:26.500 --> 00:10:27.260
+tu biblioteca de habilidad.
+
+00:10:27.680 --> 00:10:28.100
+Y por último,
+
+00:10:28.200 --> 00:10:28.540
+prueba de itera.
+
+00:10:28.980 --> 00:10:29.620
+Procesa la entrada
+
+00:10:29.620 --> 00:10:30.380
+de muestra en tu habilidad.
+
+00:10:30.640 --> 00:10:31.220
+Comprueba el resultado.
+
+00:10:31.620 --> 00:10:32.500
+¿Coincide con lo que esperabas?
+
+00:10:32.960 --> 00:10:33.400
+Si no,
+
+00:10:33.460 --> 00:10:34.240
+ajusta las instrucciones.
+
+00:10:34.720 --> 00:10:35.160
+Añada un horario.
+
+00:10:35.580 --> 00:10:36.560
+Aclara el desencadenante
+
+00:10:36.560 --> 00:10:37.180
+y vuelve a probar.
+
+00:10:37.600 --> 00:10:38.440
+Las habilidades mejoran
+
+00:10:38.440 --> 00:10:39.220
+a través de la iteración,
+
+00:10:39.320 --> 00:10:40.140
+no porque sean perfectas
+
+00:10:40.140 --> 00:10:40.900
+en el primer intento.
+
+00:10:41.660 --> 00:10:41.840
+Así,
+
+00:10:41.920 --> 00:10:42.300
+las habilidades
+
+00:10:42.300 --> 00:10:43.580
+son los trabajadores especializados,
+
+00:10:43.720 --> 00:10:44.260
+las instrucciones,
+
+00:10:44.360 --> 00:10:45.100
+la política de fondo
+
+00:10:45.100 --> 00:10:45.820
+y los flujos,
+
+00:10:45.960 --> 00:10:46.840
+procesos estrictos.
+
+00:10:47.260 --> 00:10:47.840
+¿Cómo encajan?
+
+00:10:48.940 --> 00:10:49.540
+Panorama general.
+
+00:10:50.220 --> 00:10:51.240
+Habilidad frente a instrucciones
+
+00:10:51.240 --> 00:10:52.120
+frente a flujos de trabajo.
+
+00:10:52.780 --> 00:10:53.020
+Muy bien,
+
+00:10:53.060 --> 00:10:53.980
+vamos a unirlo todo ahora
+
+00:10:53.980 --> 00:10:54.580
+porque aquí es donde
+
+00:10:54.580 --> 00:10:55.560
+la gente se confunde.
+
+00:10:56.280 --> 00:10:56.600
+Instrucciones,
+
+00:10:56.840 --> 00:10:57.960
+habilidades y flujos de trabajo
+
+00:10:57.960 --> 00:10:58.940
+no son ideas rivales.
+
+00:10:59.660 --> 00:11:00.180
+Son tres capas
+
+00:11:00.180 --> 00:11:00.820
+que funcionan juntos
+
+00:11:00.820 --> 00:11:02.160
+y cada una se encarga
+
+00:11:02.160 --> 00:11:02.780
+de una parte diferente
+
+00:11:02.780 --> 00:11:03.120
+del trabajo.
+
+00:11:03.480 --> 00:11:04.500
+Las instrucciones siempre están aquí.
+
+00:11:04.860 --> 00:11:05.460
+Dan forma en la forma
+
+00:11:05.460 --> 00:11:06.540
+en que tu gente piense y responde.
+
+00:11:07.060 --> 00:11:07.440
+Tono, rol,
+
+00:11:07.480 --> 00:11:08.160
+valores predeterminados,
+
+00:11:08.240 --> 00:11:08.860
+esas son las instrucciones.
+
+00:11:09.320 --> 00:11:09.720
+Piensa en ello
+
+00:11:09.720 --> 00:11:10.420
+como la personalidad
+
+00:11:10.420 --> 00:11:11.180
+y las reglas básicas.
+
+00:11:12.180 --> 00:11:12.840
+Sé servicio al uso
+
+00:11:12.840 --> 00:11:13.660
+de un lenguaje sencillo,
+
+00:11:13.740 --> 00:11:14.460
+nunca inventes hechos.
+
+00:11:15.420 --> 00:11:16.480
+Eso se ejecuta en segundo plano
+
+00:11:16.480 --> 00:11:17.100
+en cada interacción
+
+00:11:17.100 --> 00:11:17.800
+tanto si una habilidad
+
+00:11:17.800 --> 00:11:18.600
+está activa como si no.
+
+00:11:18.880 --> 00:11:19.280
+Las habilidades
+
+00:11:19.280 --> 00:11:19.740
+se empaquetan
+
+00:11:19.740 --> 00:11:20.680
+conocimientos especializados.
+
+00:11:21.800 --> 00:11:22.580
+Se les llama demanda
+
+00:11:22.580 --> 00:11:23.620
+para tareas específicas
+
+00:11:23.620 --> 00:11:24.140
+irrepetibles.
+
+00:11:25.000 --> 00:11:25.540
+Las instrucciones
+
+00:11:25.540 --> 00:11:26.200
+dicen ser útil.
+
+00:11:27.040 --> 00:11:27.700
+Una habilidad dice
+
+00:11:27.700 --> 00:11:28.340
+cuando alguien suba
+
+00:11:28.340 --> 00:11:28.940
+una transcripción
+
+00:11:28.940 --> 00:11:29.440
+de una reunión,
+
+00:11:29.600 --> 00:11:30.280
+sigue esta serie exacta
+
+00:11:30.280 --> 00:11:30.700
+de pasos.
+
+00:11:31.340 --> 00:11:31.780
+Las instrucciones
+
+00:11:31.780 --> 00:11:32.500
+son la política,
+
+00:11:32.900 --> 00:11:33.720
+las realidades son el manual,
+
+00:11:34.020 --> 00:11:34.660
+los flujos de trabajo
+
+00:11:34.660 --> 00:11:35.860
+imponen procesos deterministas.
+
+00:11:36.280 --> 00:11:37.100
+Este es el estricto.
+
+00:11:37.460 --> 00:11:37.840
+Aprobaciones,
+
+00:11:37.980 --> 00:11:38.260
+condiciones,
+
+00:11:38.420 --> 00:11:39.280
+resultados garantizados.
+
+00:11:39.680 --> 00:11:40.800
+Si necesitas que algo suceda
+
+00:11:40.800 --> 00:11:41.720
+en un orden específico
+
+00:11:41.720 --> 00:11:42.580
+cada vez como el paso 1
+
+00:11:42.580 --> 00:11:43.140
+extraer datos,
+
+00:11:43.260 --> 00:11:44.400
+el paso 2 enviar al gerente,
+
+00:11:44.520 --> 00:11:45.880
+el paso 3 esperar la aprobación
+
+00:11:45.880 --> 00:11:46.480
+antes de enviar,
+
+00:11:46.580 --> 00:11:47.480
+eso es un flujo de trabajo.
+
+00:11:47.480 --> 00:11:49.000
+Sin variaciones,
+
+00:11:49.300 --> 00:11:50.400
+sin improvisación de la IA,
+
+00:11:50.580 --> 00:11:51.940
+solo ejecución.
+
+00:11:52.600 --> 00:11:53.140
+Este es un ejemplo
+
+00:11:53.140 --> 00:11:53.600
+del mundo real.
+
+00:11:54.000 --> 00:11:54.500
+Creas un agente
+
+00:11:54.500 --> 00:11:54.940
+para tu equipo.
+
+00:11:55.700 --> 00:11:56.320
+Las instrucciones
+
+00:11:56.320 --> 00:11:57.140
+marcan la pauta,
+
+00:11:57.340 --> 00:11:57.560
+útiles,
+
+00:11:57.680 --> 00:11:58.580
+profesionales y concisas.
+
+00:11:59.080 --> 00:11:59.380
+Una habilidad
+
+00:11:59.380 --> 00:12:00.020
+gestiona las notas
+
+00:12:00.020 --> 00:12:00.400
+de la rueda.
+
+00:12:00.900 --> 00:12:01.520
+Toma transcripciones
+
+00:12:01.520 --> 00:12:02.100
+desordenadas
+
+00:12:02.100 --> 00:12:03.060
+y produce resumidas limpias.
+
+00:12:03.540 --> 00:12:04.160
+Y un flujo de trabajo
+
+00:12:04.160 --> 00:12:04.820
+envía ese resumen
+
+00:12:04.820 --> 00:12:05.520
+al líder del equipo
+
+00:12:05.520 --> 00:12:06.260
+para su aprobación
+
+00:12:06.260 --> 00:12:07.060
+antes de guardarlo.
+
+00:12:07.620 --> 00:12:08.200
+Las instrucciones
+
+00:12:08.200 --> 00:12:09.180
+moldean el comportamiento,
+
+00:12:09.280 --> 00:12:10.140
+las habilidades ejecutan
+
+00:12:10.140 --> 00:12:10.540
+el trabajo
+
+00:12:10.540 --> 00:12:10.960
+y los flujos
+
+00:12:10.960 --> 00:12:11.600
+imponen el proceso.
+
+00:12:12.200 --> 00:12:12.500
+Ahora bien,
+
+00:12:12.580 --> 00:12:13.200
+esto es lo que te importa
+
+00:12:13.200 --> 00:12:13.860
+como principiante.
+
+00:12:14.260 --> 00:12:14.600
+Las personas
+
+00:12:14.600 --> 00:12:15.280
+solo necesitan la IA.
+
+00:12:15.880 --> 00:12:16.540
+Las instrucciones
+
+00:12:16.540 --> 00:12:17.160
+vienen integradas
+
+00:12:17.160 --> 00:12:17.760
+con cualquier agente
+
+00:12:17.760 --> 00:12:18.080
+que cree.

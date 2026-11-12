@@ -1,0 +1,856 @@
+WEBVTT
+
+00:00:00.180 --> 00:00:07.480
+Gotowi na 10 dni z Microsoft 365, Kopilotem, iAzure i ludźmi kształtującymi przyszłość pracy?
+
+00:00:07.760 --> 00:00:12.560
+W styczniu powraca M365Con i tym razem robimy to z większym rozmachem.
+
+00:00:12.880 --> 00:00:18.460
+Dołącz do nas na sesje na żywo, pokazy praktyczne i wiedzę od MVP oraz ekspertów z całego świata.
+
+00:00:18.760 --> 00:00:21.740
+Żadnych ogólnych slajdów, żadnego zbędnego żargonu.
+
+00:00:22.340 --> 00:00:28.860
+Zajmiemy się realnymi wyzwaniami, Kopilot Studio, agentami, iFabrik, bezpieczeństwem, ładem i automatyzacją.
+
+00:00:28.860 --> 00:00:35.160
+Niezależnie od tego, czy jesteś informatykiem, programistą, czy liderem biznesowym, przygotowaliśmy sesję dla Ciebie.
+
+00:00:35.360 --> 00:00:40.580
+Podczas 10 pełnych dni odkryjesz nowe technologie i nawiążesz kontakty z globalną społecznością.
+
+00:00:40.860 --> 00:00:44.620
+Oglądaj na żywo i zabierz praktyczne wnioski do swojej organizacji.
+
+00:00:44.620 --> 00:00:51.160
+Styczeń 2027 roku, 10 dni, jedna społeczność Microsoft. Rejestracja jest już otwarta.
+
+00:00:52.960 --> 00:00:54.920
+Zarezerwuj swoje miejsce już dziś.
+
+00:00:54.920 --> 00:00:59.080
+Adres to m365.con.net
+
+00:00:59.080 --> 00:01:04.620
+Dołącz na m365.net. Widzimy się na żywo w styczniu.
+
+00:01:04.820 --> 00:01:07.420
+Witajcie w kolejnym odcinku Microsoft Knowledge Nugget.
+
+00:01:07.640 --> 00:01:08.840
+Nazywam się Mirko Peters.
+
+00:01:09.080 --> 00:01:12.980
+Dzisiejszy temat to coś, z czym mierzy się każdy, kto uczy się data science lub uczenia maszynowego.
+
+00:01:13.180 --> 00:01:17.540
+Obejrzałeś kilka tutoriali, znasz podstawy, ale jest jedna rzecz, która ciągle Cię zatrzymuje.
+
+00:01:17.740 --> 00:01:19.800
+Nie masz żadnych ciekawych danych do ćwiczeń.
+
+00:01:19.800 --> 00:01:23.180
+Zaczynasz szukać publicznych zbiorów danych i wtedy zaczynają się schody.
+
+00:01:23.460 --> 00:01:28.920
+Znajdujesz rządową stronę z danymi pogodowymi, co jest świetne, ale pliki są w dziwnym formacie, którego nigdy nie widziałeś.
+
+00:01:29.100 --> 00:01:31.880
+Nazwy kolumn nie mają sensu, a połowa wartości brakuje.
+
+00:01:32.120 --> 00:01:37.000
+Spędzasz godziny na próbach otwarcia tego, a kiedy w końcu oczyścisz dane na tyle, by ich użyć, tracisz cały zapał.
+
+00:01:37.000 --> 00:01:39.160
+Przechodziłem przez to i jest to frustrujące.
+
+00:01:39.380 --> 00:01:41.700
+Dzisiejszy odcinek całkowicie usuwa tę barierę.
+
+00:01:41.860 --> 00:01:50.160
+Pod koniec odcinka dowiesz się, czym jest Azure Open Datasets i jak w kilka minut pobrać darmowe, gotowe do użycia dane, bez żadnego skrobania, czyszczenia czy bólu głowy.
+
+00:01:50.520 --> 00:01:51.040
+Zaczynajmy.
+
+00:01:51.200 --> 00:01:53.520
+Czym właściwie jest Azure Open Datasets?
+
+00:01:53.740 --> 00:01:56.080
+Więc czym dokładnie jest Azure Open Datasets?
+
+00:01:56.240 --> 00:01:57.600
+Oto najprostsza definicja.
+
+00:01:57.760 --> 00:02:01.920
+To darmowa biblioteka publicznych zbiorów danych, które Microsoft już oczyścił i udostępnił w Azure.
+
+00:02:01.920 --> 00:02:11.340
+Pomyśl o tym jak o bibliotece, w której ktoś już sprawdził każdą książkę pod kątem podartych stron, naprawił błędy w pisowni i poukładał wszystko alfabetycznie, więc po prostu wchodzisz i bierzesz to, czego potrzebujesz.
+
+00:02:11.460 --> 00:02:12.160
+To jest ważne.
+
+00:02:12.360 --> 00:02:16.060
+To nie jest oddzielna płatna usługa, do której musisz się zapisywać, ani żaden dodatek premium.
+
+00:02:16.280 --> 00:02:18.860
+To po prostu dane w pamięci Azure, do których masz dostęp.
+
+00:02:19.040 --> 00:02:19.560
+To wszystko.
+
+00:02:19.560 --> 00:02:32.800
+Firma Microsoft pobrała publiczne zbiory danych z instytucji takich jak NOAA, amerykańskie biuro spisu ludności oraz władze miejskie, wykonując całą ciężką pracę związaną z ujednolicaniem schematów, usuwaniem niespójności i konfigurowaniem harmonogramów odświeżania, aby dane były aktualne.
+
+00:02:32.960 --> 00:02:34.980
+Porównajmy to ze starym sposobem pracy.
+
+00:02:34.980 --> 00:02:46.220
+Znajdowałeś zbiór danych na rządowej stronie, pobierałeś plik zip pełen plików CSV, każdy w innym formacie, otwierałeś je i znajdowałeś brakujące wartości, dziwne formaty dat oraz kolumny, które nie pasowały do siebie między plikami.
+
+00:02:46.400 --> 00:02:53.340
+Potem spędzałeś godziny, czasem dni, pisząc kod, aby to wszystko uporządkować, a kiedy kończyłeś, nie miałeś nawet pewności, czy zrobiłeś to dobrze.
+
+00:02:53.620 --> 00:02:55.300
+Microsoft zajmuje się tym wszystkim.
+
+00:02:55.620 --> 00:03:02.820
+Normalizują dane do spójnych schematów, naprawiają luki i przechowują je w formacie parkekolumnowym, formacie zapisu, który sprawia, że zapytania są błyskawiczne.
+
+00:03:02.820 --> 00:03:08.300
+Jeśli kiedykolwiek próbowałeś przeszukiwać ogromny plik CSV i czekałeś w nieskończoność na jego załadowanie, docenisz to, co robi parkę.
+
+00:03:08.480 --> 00:03:12.740
+Jest zoptymalizowany pod kątem analityki, więc zapytania działają znacznie szybciej niż w przypadku zwykłych plików tekstowych.
+
+00:03:12.880 --> 00:03:13.760
+Oto kluczowy punkt.
+
+00:03:14.020 --> 00:03:16.920
+Same dane są darmowe, a Microsoft zawsze płaci za ich przechowywanie.
+
+00:03:17.100 --> 00:03:20.200
+Płacisz tylko za moc obliczeniową, jeśli przetwarzasz dane, o czym porozmawiamy później.
+
+00:03:20.400 --> 00:03:23.040
+Ale dane znajdujące się w magazynie Azure nie kosztują Cię nic.
+
+00:03:23.200 --> 00:03:24.940
+Podam analogię, aby to zobrazować.
+
+00:03:25.160 --> 00:03:27.540
+Wyobraź sobie, że wprowadzasz się do nowego biurowca.
+
+00:03:27.540 --> 00:03:34.860
+Starym sposobem dostałbyś stos drewna, płyt gipsowych, okablowanie i armaturę i musiałbyś sam zbudować każde pomieszczenie od podstaw.
+
+00:03:35.060 --> 00:03:37.580
+Tak właśnie wygląda praca z surowymi danymi publicznymi.
+
+00:03:37.820 --> 00:03:40.200
+Azure Open Datasets to przeciwieństwo tego podejścia.
+
+00:03:40.360 --> 00:03:42.840
+To gotowe pomieszczenia z danymi, do których możesz po prostu wejść.
+
+00:03:43.020 --> 00:03:46.900
+Pokój z pogodą jest już umeblowany, a pokój ze spisem ludności ma wszystko oznaczone i uporządkowane.
+
+00:03:47.140 --> 00:03:48.420
+Nie musisz niczego składać.
+
+00:03:48.540 --> 00:03:50.260
+Po prostu wchodzisz i zaczynasz pracę.
+
+00:03:50.420 --> 00:03:52.340
+Problem, który rozwiązują Open Datasets.
+
+00:03:52.580 --> 00:03:54.060
+Dlaczego więc Microsoft to zbudował?
+
+00:03:54.280 --> 00:03:55.660
+Jaki problem próbowali rozwiązać?
+
+00:03:55.660 --> 00:03:56.760
+Przeanalizujmy to.
+
+00:03:56.940 --> 00:03:58.380
+Odkrywanie danych to pierwszy problem.
+
+00:03:58.580 --> 00:04:01.220
+Potrzebujesz wiarygodnych danych publicznych, ale ich znalezienie zajmuje czas.
+
+00:04:01.420 --> 00:04:04.960
+Istnieją setki rządowych stron internetowych, repozytoriów akademickich i portali z danymi.
+
+00:04:05.140 --> 00:04:10.920
+Niektóre są dobrze utrzymane, inne porzucone, a jeszcze inne wymagają wypełniania formularzy lub akceptacji licencji, zanim będziesz mógł cokolwiek pobrać.
+
+00:04:11.120 --> 00:04:14.560
+Samo znalezienie czystego, użytecznego zbioru danych może pochłonąć dni poszukiwań.
+
+00:04:14.680 --> 00:04:16.580
+Potem pojawia się problem przygotowania danych.
+
+00:04:16.860 --> 00:04:20.080
+Surowe dane ze źródeł rządowych są niechlujne, niespójne i pełne luk.
+
+00:04:20.080 --> 00:04:21.980
+Weźmy na przykład dane pogodowe NOAA.
+
+00:04:22.140 --> 00:04:26.740
+Pochodzą one z tysięcy stacji pogodowych na całym świecie, z których każda raportuje w nieco innym formacie.
+
+00:04:26.940 --> 00:04:32.800
+Niektóre stacje podają temperaturę w stopniach Celsjusza, inne w Fahrenheitach, jedne rejestrują opady, inne nie, a jeszcze inne mają lata czystych danych,
+
+00:04:32.940 --> 00:04:35.920
+podczas gdy w innych występują ogromne luki spowodowane awariami czujników.
+
+00:04:36.120 --> 00:04:38.060
+Ręczne porządkowanie tego to straszna praca.
+
+00:04:38.320 --> 00:04:39.360
+Skala to kolejny problem.
+
+00:04:39.640 --> 00:04:41.340
+Niektóre z tych zbiorów danych są ogromne.
+
+00:04:41.560 --> 00:04:43.080
+Dane pogodowe obejmują dziesięciolecia.
+
+00:04:43.320 --> 00:04:45.740
+Dane o taksówkach w Nowym Jorku zawierają setki milionów kursów.
+
+00:04:45.740 --> 00:04:47.740
+Obrazowanie satelitarne zajmuje petabajty.
+
+00:04:47.920 --> 00:04:51.360
+Przenoszenie tak dużej ilości danych do środowiska obliczeniowego jest wolne i kosztowne.
+
+00:04:51.580 --> 00:04:54.360
+Jeśli uruchamiasz model uczenia maszynowego na maszynie wirtualnej w chmurze,
+
+00:04:54.460 --> 00:04:57.220
+nie chcesz spędzać godzin na pobieraniu danych, zanim w ogóle zaczniesz trening.
+
+00:04:57.400 --> 00:04:59.400
+I wreszcie odtwarzalność ma znaczenie.
+
+00:04:59.640 --> 00:05:02.360
+Kiedy prowadzisz eksperymenty, potrzebujesz spójnych danych.
+
+00:05:02.620 --> 00:05:06.940
+Jeśli pobierzesz zbiór danych dzisiaj, a Twój kolega pobierze go w przyszłym tygodniu, potrzebujecie tego samego.
+
+00:05:07.240 --> 00:05:10.440
+Wyselekcjonowane, udokumentowane zbiory danych sprawiają, że eksperymenty są powtarzalne.
+
+00:05:10.440 --> 00:05:14.740
+Możesz opublikować swoje wyniki, a ktoś inny może je zweryfikować, używając dokładnie tych samych danych.
+
+00:05:14.880 --> 00:05:16.100
+Teraz obalmy pewien mit.
+
+00:05:16.280 --> 00:05:18.800
+Większość ludzi myśli, że uczenie maszynowe to tylko algorytmy,
+
+00:05:18.900 --> 00:05:22.340
+ale prawdziwym wnioskiem Microsoftu jest to, że na większość problemów uczenia maszynowego
+
+00:05:22.340 --> 00:05:26.140
+wpływają czynniki świata rzeczywistego, pogoda, święta, demografia, warunki ekonomiczne.
+
+00:05:26.280 --> 00:05:30.820
+Jeśli próbujesz przewidzieć sprzedaż, wiedza o tym, czy jest święto, czy deszczowy wtorek, robi ogromną różnicę.
+
+00:05:31.000 --> 00:05:34.140
+Jeśli przewidujesz zużycie energii, temperatura i pora dnia mają znaczenie.
+
+00:05:34.140 --> 00:05:37.600
+Jeśli modelujesz ryzyko ubezpieczeniowe, demografia okolicy jest kluczowa.
+
+00:05:37.800 --> 00:05:40.620
+Bez tych zewnętrznych sygnałów Twojemu modelowi brakuje kontekstu.
+
+00:05:40.740 --> 00:05:43.820
+To tak, jakby próbować przewidzieć natężenie ruchu bez znajomości pory dnia.
+
+00:05:44.100 --> 00:05:46.760
+Możesz trafić na pewne wzorce, ale umknie Ci szerszy obraz.
+
+00:05:46.880 --> 00:05:49.000
+I to jest sedno problemu czasu dostępu do danych.
+
+00:05:49.260 --> 00:05:51.820
+Może to zająć tygodnie pracy, aby uzyskać użyteczne dane.
+
+00:05:52.020 --> 00:05:54.620
+Tygodnie wyszukiwania, pobierania, czyszczenia i weryfikowania.
+
+00:05:54.880 --> 00:05:57.800
+Zanim dane będą gotowe, pytanie biznesowe mogło się już zmienić.
+
+00:05:57.980 --> 00:06:01.080
+Azure Open Datasets skraca ten harmonogram z tygodni do minut.
+
+00:06:01.080 --> 00:06:03.560
+Co znajduje się w katalogu? Pogoda i święta.
+
+00:06:03.760 --> 00:06:06.020
+Zajrzyjmy do tego, co faktycznie znajduje się w tym katalogu.
+
+00:06:06.140 --> 00:06:09.140
+Pierwszym zbiorem danych, który prawie każdy uważa za użyteczny, są dane pogodowe.
+
+00:06:09.340 --> 00:06:11.520
+Microsoft udostępnia zbiór danych pogodowych NOAA.
+
+00:06:11.720 --> 00:06:15.520
+Daje on dostęp do odczytów historycznych i niemal w czasie rzeczywistym ze stacji pogodowych na całym świecie.
+
+00:06:15.740 --> 00:06:18.920
+Mówimy o temperaturze, opadach, prędkości wiatru, ciśnieniu atmosferycznym.
+
+00:06:19.140 --> 00:06:22.980
+Rodzaj danych, które wpływają na wszystko od tego, co ludzie kupują, po to, ile energii zużywają.
+
+00:06:23.180 --> 00:06:25.900
+Obejmuje on dziesięciolecia danych i jest regularnie aktualizowany.
+
+00:06:25.900 --> 00:06:30.960
+Jeśli więc chcesz sprawdzić wzorce pogodowe z lat 90. lub pobrać odczyty z zeszłego tygodnia, wszystko tam jest.
+
+00:06:31.160 --> 00:06:33.640
+Dane pogodowe są świetne, ale jest pewien szczegół.
+
+00:06:33.840 --> 00:06:35.980
+Istnieje inny zestaw danych, który idealnie do nich pasuje.
+
+00:06:36.180 --> 00:06:36.980
+Święta państwowe.
+
+00:06:37.160 --> 00:06:41.780
+Microsoft posiada zestaw danych o świętach dla 38 krajów od 1970 roku aż do 2099 roku.
+
+00:06:42.000 --> 00:06:44.980
+Możesz więc spoglądać wstecz na analizy historyczne lub w przód, aby planować.
+
+00:06:45.200 --> 00:06:48.340
+Dostarcza on oznaczenia świąt dla konkretnych krajów w wybranym zakresie dat.
+
+00:06:48.500 --> 00:06:51.280
+Musisz wiedzieć, czy dany wtorek jest świętem państwowym w Japonii?
+
+00:06:51.380 --> 00:06:52.000
+To tam jest.
+
+00:06:52.000 --> 00:06:55.340
+Chcesz sprawdzić, czy ten poniedziałek w sierpniu to dzień wolny od pracy w Wielkiej Brytanii?
+
+00:06:55.500 --> 00:06:56.760
+Jedno zapytanie i gotowe.
+
+00:06:57.000 --> 00:06:59.240
+Dlaczego te dwa zestawy danych są tak potężne razem?
+
+00:06:59.420 --> 00:07:02.260
+Pogoda i święta znacząco poprawiają prognozy szeregów czasowych.
+
+00:07:02.460 --> 00:07:04.000
+Pomyśl o prognozowaniu sprzedaży detalicznej.
+
+00:07:04.740 --> 00:07:07.680
+Jeśli próbujesz przewidzieć, ile sztuk produktu sprzedaż w przyszłym tygodniu,
+
+00:07:07.760 --> 00:07:12.100
+wiedza o tym, że wypada święto i będzie padać, może zmniejszyć błąd prognozy o dwucyfrową wartość.
+
+00:07:12.220 --> 00:07:13.420
+To nie jest mała poprawa.
+
+00:07:13.420 --> 00:07:19.240
+To różnica między posiadaniem zbyt dużych zapasów w magazynie, a wyprzedaniem towaru, który najlepiej się sprzedaje.
+
+00:07:19.420 --> 00:07:20.100
+I w tym rzecz.
+
+00:07:20.320 --> 00:07:22.720
+Większość firm nie posiada tych danych wewnętrznie.
+
+00:07:22.960 --> 00:07:28.660
+Mają swoje dane sprzedażowe, jasne, ale nie mają czystego, wiarygodnego źródła historii pogody ani kalendarzy świąt.
+
+00:07:28.760 --> 00:07:33.100
+Więc albo tworzą je sami, co zabiera czas, albo rezygnują z nich, co pogarsza ich prognozy.
+
+00:07:33.280 --> 00:07:36.500
+Azure Open Datasets daje im ten brakujący element natychmiast.
+
+00:07:36.500 --> 00:07:38.760
+Ale pogoda i święta to dopiero początek.
+
+00:07:38.900 --> 00:07:40.220
+Co znajduje się w katalogu?
+
+00:07:40.400 --> 00:07:43.340
+Spisy ludności, dane demograficzne i społeczno-ekonomiczne.
+
+00:07:43.520 --> 00:07:47.020
+Kolejna kategoria ma znaczenie, jeśli budujesz modele przewidujące coś o ludziach.
+
+00:07:47.120 --> 00:07:49.000
+To spis powszechny i dane demograficzne.
+
+00:07:49.220 --> 00:07:54.980
+Microsoft udostępnia dane ze spisu ludności USA obejmujące populacje, dochody, poziomy wykształcenia i rozkład wieku.
+
+00:07:55.240 --> 00:07:59.640
+Są one dostępne na różnych poziomach geograficznych, stan, hrabstwo, a nawet rejon spisowy.
+
+00:07:59.640 --> 00:08:06.200
+Możesz więc pobrać medianę dochodu gospodarstwa domowego dla konkretnej dzielnicy lub podział populacji według grup wiekowych dla całego stanu.
+
+00:08:06.380 --> 00:08:13.020
+Dostępny jest także zestaw danych statystycznych o sile roboczej w USA, który podaje wskaźniki zatrudnienia, aktywność zawodową i podział na branżę.
+
+00:08:13.220 --> 00:08:18.820
+Możesz zobaczyć, ile osób pracuje w przemyśle, a ile w usługach w danym regionie lub jak zmieniało się bezrobocie w czasie.
+
+00:08:19.140 --> 00:08:20.860
+Dlaczego to ważne dla początkujących?
+
+00:08:21.040 --> 00:08:25.600
+Ponieważ jeśli chcesz zbudować model przewidujący coś o ludziach, jest to idealne miejsce, aby zacząć.
+
+00:08:25.600 --> 00:08:26.800
+Oto prawdziwy przykład.
+
+00:08:27.020 --> 00:08:29.820
+Wyobraź sobie, że budujesz model dla firmy ubezpieczeniowej.
+
+00:08:30.040 --> 00:08:35.560
+Masz dane o roszczeniach, wiek, kwoty, ale Twój model nie jest dokładny, bo brakuje Ci kontekstu, gdzie Ci ludzie mieszkają.
+
+00:08:35.860 --> 00:08:39.380
+Wzbogacasz więc te dane o statystyki spisowe dotyczące dochodów i edukacji.
+
+00:08:39.620 --> 00:08:42.160
+Nagle model dostrzega wzorce, które wcześniej przeoczył.
+
+00:08:42.340 --> 00:08:47.200
+Osoby z obszarów o niższych dochodach składają inne wnioski, a wyższy poziom wykształcenia zmienia profil ryzyka.
+
+00:08:47.500 --> 00:08:50.420
+Model staje się lepszy, ponieważ ma więcej informacji o świecie rzeczywistym.
+
+00:08:50.420 --> 00:08:53.540
+Właśnie to czyni otwarte zbiory danych Azure tak wartościowymi dla początkujących.
+
+00:08:53.680 --> 00:08:56.620
+Nie musisz być inżynierem danych, aby pobrać dane spisowe do swojego projektu.
+
+00:08:56.800 --> 00:08:58.300
+Są już czyste i gotowe do użycia.
+
+00:08:58.480 --> 00:09:02.020
+Połącz je z własnymi danymi, a Twoja analiza zyska głębie, której wcześniej nie miała.
+
+00:09:02.160 --> 00:09:03.360
+Co znajduje się w katalogu?
+
+00:09:03.600 --> 00:09:06.060
+Mobilność, bezpieczeństwo publiczne i opieka zdrowotna.
+
+00:09:06.220 --> 00:09:09.880
+Klasycznym ulubieńcem początkujących jest zbiór danych o przejazdach taksówkami w Nowym Jorku.
+
+00:09:10.040 --> 00:09:15.320
+To jeden z najbardziej znanych publicznych zbiorów danych, miliony rekordów przejazdów z czasem, lokalizacją i kosztami.
+
+00:09:15.320 --> 00:09:21.440
+Każdy przejazd żółtej taksówki w Nowym Jorku generuje rekord, gdzie wsiadł pasażer, gdzie wysiadł ile to kosztowało i ile trwało.
+
+00:09:21.560 --> 00:09:23.600
+To świetny zbiór danych do nauki analizy danych.
+
+00:09:23.820 --> 00:09:25.240
+Dlaczego początkujący go uwielbiają?
+
+00:09:25.360 --> 00:09:27.040
+Ponieważ jest interesujący i wizualny.
+
+00:09:27.220 --> 00:09:30.280
+Załaduj go do Power B i zacznij tworzyć mapy miejsc, do których ludzie podróżują najczęściej.
+
+00:09:30.440 --> 00:09:32.120
+Zobacz, jak zmieniają się opłaty w ciągu dnia.
+
+00:09:32.360 --> 00:09:39.220
+Dostrzegaj wzorce, które dzielnice stają się zatłoczone w godzinach szczytu, które lotniska generują najwięcej przejazdów, jak pogoda wpływa na liczbę przejazdów.
+
+00:09:39.220 --> 00:09:42.640
+Opowiada historię, więc nauka przypomina rozwiązywanie zagadki, a nie odrabianie lekcji.
+
+00:09:42.780 --> 00:09:44.880
+Kolejne są dane dotyczące bezpieczeństwa publicznego.
+
+00:09:45.040 --> 00:09:49.780
+Microsoft udostępnia dane o bezpieczeństwie w San Francisco, które rejestrują incydenty z podaniem rodzaju miejsca i czasu.
+
+00:09:50.000 --> 00:09:52.920
+Znowu idealne dla początkujących, ponieważ dane są od razu zrozumiałe.
+
+00:09:53.060 --> 00:09:55.840
+Twórz mapy zagrożeń, analizuj wzorce przestępczości według pory dnia.
+
+00:09:56.040 --> 00:09:58.920
+Pokazuje to, jak otwarte dane wspierają rzeczywiste projekty obywatelskie.
+
+00:09:59.060 --> 00:10:02.380
+Planiści, miejsca i policja wykorzystują to, aby decydować, gdzie rozmieścić zasoby.
+
+00:10:02.600 --> 00:10:04.760
+Jest też jezioro danych dotyczące COVID-19.
+
+00:10:04.760 --> 00:10:06.460
+To nie tylko jeden zbiór danych.
+
+00:10:06.700 --> 00:10:11.220
+Łączy wiele źródeł wyniki pacjentów, testy, pojemność szpitali, politykę, mobilność.
+
+00:10:11.400 --> 00:10:16.380
+Podczas pandemii naukowcy używali go do śledzenia wirusa, modelowania rozprzestrzeniania się i oceny interwencji.
+
+00:10:16.540 --> 00:10:20.220
+To pokazuje, jak otwarte zbiory danych mogą mieć realny wpływ, gdy są dostępne.
+
+00:10:20.380 --> 00:10:24.620
+Te trzy zbiory danych taksówki, bezpieczeństwo publiczne i COVID-19 mają coś wspólnego.
+
+00:10:24.860 --> 00:10:25.880
+Nie są abstrakcyjne.
+
+00:10:26.080 --> 00:10:27.940
+Nie musisz być ekspertem, aby je zrozumieć.
+
+00:10:28.140 --> 00:10:30.320
+Dane dotyczą prawdziwych ludzi, miejsc i wydarzeń.
+
+00:10:30.560 --> 00:10:32.120
+Dzięki temu nauka jest łatwiejsza.
+
+00:10:32.120 --> 00:10:35.240
+Istnieją również wzorcowe zbiory danych dla osób uczących się ML.
+
+00:10:35.440 --> 00:10:36.700
+Co znajduje się w katalogu?
+
+00:10:36.880 --> 00:10:38.280
+Wzorcowe zbiory danych ML.
+
+00:10:38.520 --> 00:10:41.360
+Masz więc wszystkie te dane ze świata rzeczywistego z poprzedniej sekcji.
+
+00:10:41.580 --> 00:10:46.180
+A co jeśli korzystasz z samouczka i potrzebujesz po prostu czystego, prostego zbioru danych, aby przećwiczyć konkretną technikę?
+
+00:10:46.320 --> 00:10:48.440
+Azure Open Datasets również przychodzi z pomocą.
+
+00:10:48.580 --> 00:10:50.140
+Potraktuj to jak skrzynkę z narzędziami.
+
+00:10:50.380 --> 00:10:53.760
+Masz elektronarzędzia do dużych zadań, ale czasami wystarczy zwykły młotek, by nauczyć się podstaw.
+
+00:10:54.000 --> 00:10:56.180
+Właśnie do tego służą te wzorcowe zbiory danych.
+
+00:10:56.180 --> 00:11:00.140
+Weźmy zbiór danych o cukrzycy z 442 próbkami i 10 cechami.
+
+00:11:00.300 --> 00:11:08.220
+To klasyczny problem regresji, który często pojawia się w podręcznikach i samouczkach, dostępny bezpośrednio w Azure Open Datasets i gotowy do załadowania do Azure ML.
+
+00:11:08.440 --> 00:11:12.240
+Jeśli uczysz się zautomatyzowanego uczenia maszynowego, to świetny zbiór danych na początek.
+
+00:11:12.440 --> 00:11:16.500
+Wystarczająco mały, by szybko iterować, ale wystarczająco realistyczny, by nauczyć się przepływu pracy.
+
+00:11:16.760 --> 00:11:22.420
+Jest też zbiór danych Microsoft News, w skrócie Mind, przeznaczony dla osób zainteresowanych systemami rekomendacyjnymi.
+
+00:11:22.420 --> 00:11:27.140
+To szeroko zakrojony wzorzec zawierający interakcje użytkowników, treść wiadomości i metadane.
+
+00:11:27.340 --> 00:11:33.340
+Jeśli chcesz zbudować silnik rekomendacji wiadomości, taki, który napędza sekcję polecanych artykułów na stronach informacyjnych.
+
+00:11:33.460 --> 00:11:35.460
+To zbiór danych, na którym warto poćwiczyć.
+
+00:11:35.600 --> 00:11:38.580
+To ten sam rodzaj danych, z którego korzystają rzeczywiste systemy rekomendacyjne.
+
+00:11:38.720 --> 00:11:43.360
+Jest nawet symulowany zbiór danych sprzedaży soku pomarańczowego, stworzony specjalnie, by pokazać skalowalność Azure ML.
+
+00:11:43.620 --> 00:11:50.340
+Możesz trenować tysiące modeli jednocześnie na tych danych, co jest świetnym sposobem na zrozumienie przetwarzania równoległego i dostrajania hiperparametrów.
+
+00:11:50.340 --> 00:11:56.460
+Oto w czym rzecz. Jeśli korzystasz z samouczka Azure ML i potrzebujesz danych, prawdopodobnie znajdują się one już w tym katalogu.
+
+00:11:56.660 --> 00:12:06.520
+Firma Microsoft zadbała o to, aby zbiory danych używane w dokumentacji i ścieżkach szkoleniowych były dostępne poprzez Open Datasets, więc nie musisz szukać konkretnego pliku użytego w samouczku.
+
+00:12:06.760 --> 00:12:07.860
+Jest już na miejscu.
+
+00:12:08.060 --> 00:12:12.320
+Jednak posiadanie świetnego katalogu jest bezużyteczne, jeśli nie możesz faktycznie pobrać danych.
+
+00:12:12.320 --> 00:12:16.680
+Jak uzyskać dostęp do otwartych zbiorów danych? Python, Power BI i Azure ML.
+
+00:12:16.920 --> 00:12:21.780
+Widziałeś już, co jest w katalogu, ale teraz najważniejsze pytanie brzmi, jak faktycznie zdobyć te dane?
+
+00:12:22.000 --> 00:12:27.640
+Odpowiedź zależy od używanego narzędzia, ale istnieje wiele ścieżek, a niektóre z nich nie wymagają nawet konta Azure.
+
+00:12:28.140 --> 00:12:28.880
+Przeanalizujmy to.
+
+00:12:29.120 --> 00:12:30.420
+Najprostsza opcja – Python.
+
+00:12:30.640 --> 00:12:33.300
+Z dowolnego środowiska Python, bez potrzeby posiadania konta Azure.
+
+00:12:33.500 --> 00:12:36.660
+Microsoft udostępnia pakiet Pythona o nazwie Azure ML Open Datasets.
+
+00:12:36.660 --> 00:12:40.520
+Instalujesz go przez PIP, a następnie importujesz dowolny zbiór danych bezpośrednio.
+
+00:12:40.720 --> 00:12:44.080
+Na przykład from Azure ML Open Datasets Import Know A Weather.
+
+00:12:45.380 --> 00:12:49.060
+Określasz datę początkową i końcową, a pakiet zajmuje się resztą.
+
+00:12:49.260 --> 00:12:54.760
+Pobiera odpowiednie pliki z usługi Azure Storage, przetwarza je i zwraca gotową ramkę danych Pandes DataFrame.
+
+00:12:54.920 --> 00:12:55.460
+To wszystko.
+
+00:12:55.720 --> 00:12:59.200
+Trzy linijki kodu i masz dziesięciolecia danych pogodowych gotowych do analizy.
+
+00:12:59.200 --> 00:13:03.600
+Działa to w Jupyter Notebook, PowerS Code i każdym środowisku Python, które preferujesz.
+
+00:13:03.780 --> 00:13:06.520
+W Azure Machine Learning proces jest jeszcze prostszy.
+
+00:13:06.740 --> 00:13:12.400
+Otwierasz swój obszar roboczy, przechodzisz do sekcji danych, klikasz utwórz i wybierasz z otwartych zbiorów danych Azure.
+
+00:13:12.640 --> 00:13:15.460
+Pojawia się katalog pokazujący wszystko, co jest dostępne.
+
+00:13:15.640 --> 00:13:21.500
+Przeglądasz go, wybierasz potrzebny zbiór danych, filtrujesz według zakresu dat lub obszaru geograficznego i rejestrujesz w swoim obszarze roboczym.
+
+00:13:21.500 --> 00:13:29.680
+Po rejestracji Azure ML automatycznie generuje fragment kodu, którego możesz użyć w dowolnym potoku lub eksperymencie, więc nie musisz pamiętać ścieżek przechowywania ani składni importu.
+
+00:13:29.840 --> 00:13:31.420
+Wszystko jest obsługiwane za Ciebie.
+
+00:13:31.600 --> 00:13:32.420
+A co z Power BI?
+
+00:13:32.600 --> 00:13:35.160
+Tu robi się ciekawie dla analityków, którzy nie piszą kodu.
+
+00:13:36.660 --> 00:13:41.880
+Ta op storage w Power BI i wskazać publiczne adresy URL przechowywania, które Microsoft udokumentował dla każdego zbioru danych.
+
+00:13:42.080 --> 00:13:50.440
+Jeśli więc chcesz pobrać dane taksówek z Nowego Jorku do pulpitu nawigacyjnego, znajdź adres URL na stronie przeglądu zbiorów danych, wklej go do Power BI i zacznij tworzyć wizualizację.
+
+00:13:50.440 --> 00:13:57.760
+Dane pogodowe, przejazdy taksówkami, incydenty dotyczące bezpieczeństwa publicznego, wszystko dostępne bezpośrednio w raportach bezpośredniej inżynierii danych.
+
+00:13:58.000 --> 00:13:59.980
+Dla fanów SQL jest Azure Synapse.
+
+00:14:00.220 --> 00:14:04.700
+Możesz odpytywać otwarte zbiory danych używając funkcji OPE, NRO, WS, ET względem publicznych ścieżek Bloba.
+
+00:14:04.700 --> 00:14:08.780
+To SQL bezserwerowy, co oznacza, że nie musisz wcześniej przydzielać żadnej pamięci masowej.
+
+00:14:08.940 --> 00:14:12.720
+Po prostu piszesz zapytanie, a Synapse odczytuje dane bezpośrednio z miejsca, w którym się znajdują.
+
+00:14:12.920 --> 00:14:16.500
+Chcesz wiedzieć, ile przejazdów taksówkami odbyło się w Boże Narodzenie 2019 roku?
+
+00:14:16.680 --> 00:14:19.760
+Piszesz jedno zapytanie SQL i masz odpowiedź w kilka sekund.
+
+00:14:19.920 --> 00:14:29.580
+A jeśli używasz Azure Databricks, ten sam zestaw SDK dla Pythona działa w notatnikach Databricks, ale możesz użyć ramek danych Spark zamiast Pandes, co ma znaczenie przy większych zbiorach danych.
+
+00:14:29.580 --> 00:14:35.120
+Dane taksówek z Nowego Jorku mają miliony rekordów. Pandes sobie z tym poradzi, ale Spark radzi sobie lepiej.
+
+00:14:35.320 --> 00:14:38.480
+Ten sam import, ta sama składnia, tylko ze Sparkiem wewnątrz.
+
+00:14:38.620 --> 00:14:40.660
+Oto wspólny mianownik wszystkich tych metod.
+
+00:14:40.840 --> 00:14:45.240
+Microsoft publikuje adresy URL konta magazynu dla każdego zbioru danych, a te adresy są publiczne.
+
+00:14:45.440 --> 00:14:47.580
+Każdy może uzyskać do nich dostęp z dowolnego narzędzia.
+
+00:14:47.800 --> 00:14:50.780
+Zestaw SDK Azure Open Datasets to tylko dodatkowa warstwa wygody.
+
+00:14:51.040 --> 00:14:55.320
+Jeśli chcesz, możesz napisać własny kod do odczytu surowych plików w parkę bezpośrednio z tych adresów URL.
+
+00:14:55.320 --> 00:14:59.380
+SDK po prostu to ułatwia, zajmując się filtrowaniem dat i konwersją za Ciebie.
+
+00:14:59.540 --> 00:15:01.920
+Pytanie o koszty. Czy to naprawdę jest darmowe?
+
+00:15:02.080 --> 00:15:04.780
+To pytanie zadaje sobie każdy. Czy to naprawdę darmowe?
+
+00:15:04.920 --> 00:15:06.700
+Krótka odpowiedź brzmi tak, ale i nie.
+
+00:15:06.880 --> 00:15:08.500
+Oto dlaczego odpowiedź nie jest jednoznaczna.
+
+00:15:08.720 --> 00:15:10.340
+Właściwie same dane są całkowicie darmowe.
+
+00:15:10.560 --> 00:15:12.300
+Microsoft zawsze płaci za ich przechowywanie.
+
+00:15:12.460 --> 00:15:14.460
+To nie jest promocja ani oferta ograniczona czasowo.
+
+00:15:14.680 --> 00:15:16.340
+Jest to wpisane w projekt tej usługi.
+
+00:15:16.540 --> 00:15:20.400
+Oni je hostują, oni płacą rachunki, a Ty korzystasz z nich, nie wydając ani grosza na same dane.
+
+00:15:20.560 --> 00:15:21.940
+Ale tutaj pojawiają się koszty.
+
+00:15:21.940 --> 00:15:27.180
+Płacisz za obliczenia. Oznacza to, że jeśli uruchomisz maszynę wirtualną do przetworzenia danych, płacisz za tę maszynę.
+
+00:15:27.320 --> 00:15:30.680
+Klastry Databricks analizujące miliony przejazdów taksówek płacisz za ten klaster.
+
+00:15:30.880 --> 00:15:34.340
+Jeśli używasz bezserwerowego SQL w Synapse, płacisz za uruchomione zapytania.
+
+00:15:34.520 --> 00:15:37.800
+To standardowe koszty w Azure. Nie dotyczą one wyłącznie otwartych zbiorów danych.
+
+00:15:38.000 --> 00:15:39.780
+Następnie mamy transfer wyjściowy, czyli egress.
+
+00:15:39.920 --> 00:15:40.920
+To może Cię zaskoczyć.
+
+00:15:41.160 --> 00:15:45.960
+Jeśli przenosisz dane między regionami Azure lub całkowicie poza Azure, płacisz za transfer danych.
+
+00:15:46.180 --> 00:15:49.080
+Typowe ceny to około 8 do 9 centów za gigabyte.
+
+00:15:49.080 --> 00:15:54.080
+Nie brzmi to jak dużo, dopóki nie przesyłasz terabajtów, a niektóre z tych zbiorów danych są ogromne.
+
+00:15:54.280 --> 00:15:57.300
+Same dane pogodowe obejmują dziesięciolecia i wiele stacji meteorologicznych.
+
+00:15:57.440 --> 00:15:59.860
+Pobieranie tego wszystkiego z innego regionu szybko podnosi koszty.
+
+00:16:00.060 --> 00:16:02.000
+Istnieje również koszt własnego przechowywania danych.
+
+00:16:02.220 --> 00:16:05.640
+Może kopiujesz dane na własne konta pamięci, bo chcesz zachować migawkę lub je przekształcić.
+
+00:16:05.820 --> 00:16:08.240
+Płacisz za to przechowywanie według standardowych stawek Azure.
+
+00:16:08.480 --> 00:16:10.220
+Microsoft jest w tej kwestii przejrzysty.
+
+00:16:10.460 --> 00:16:13.820
+Jeśli zbiór danych wiąże się z opłatami za transfer, znajdziesz taką informację na stronie przeglądu.
+
+00:16:13.820 --> 00:16:15.340
+Żadnych niespodziewanych rachunków.
+
+00:16:15.540 --> 00:16:18.260
+Musisz jednak sprawdzić to przed pobraniem dużych ilości danych między regionami.
+
+00:16:18.420 --> 00:16:20.160
+Oto kluczowa wskazówka dla początkujących.
+
+00:16:20.320 --> 00:16:22.540
+Trzymaj swoje obliczenia w tym samym regionie, co zbiór danych.
+
+00:16:22.720 --> 00:16:25.000
+Każdy zbiór danych ma określony region, w którym jest hostowany.
+
+00:16:25.220 --> 00:16:29.020
+Jeśli Twoja maszyna wirtualna lub cluster Databricks są w tym samym regionie, całkowicie unikasz opłat za transfer.
+
+00:16:29.240 --> 00:16:32.260
+Dane pozostają lokalne, zapytania są szybsze, a Twój rachunek pozostaje niski.
+
+00:16:32.440 --> 00:16:34.920
+Przyjrzyjmy się dwóm realnym scenariuszom, aby to zobrazować.
+
+00:16:35.140 --> 00:16:35.720
+Scenariusz pierwszy.
+
+00:16:35.720 --> 00:16:39.520
+Jesteś początkującym użytkownikiem, który pobiera małą próbkę danych pogodowych do pulpitu nawigacyjnego Power BI.
+
+00:16:39.640 --> 00:16:41.220
+Kilka tysięcy wierszy, może kilka megabajtów.
+
+00:16:41.380 --> 00:16:44.000
+Twój koszt obliczeń wynosi zero, ponieważ Power BI zajmuje się tym za Ciebie.
+
+00:16:44.160 --> 00:16:46.380
+Twój koszt transferu wynosi zero, ponieważ nie przesyłasz zbyt wiele danych.
+
+00:16:46.520 --> 00:16:47.700
+To nie kosztuje Cię nic poza tym.

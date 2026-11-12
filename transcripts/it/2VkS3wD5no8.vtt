@@ -1,0 +1,1507 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:04.040
+Cos'è una rete virtuale azzurra? La maggior parte delle persone sente questo termine e pensa sia
+
+00:00:04.040 --> 00:00:07.520
+solo un'impostazione da attivare quando si distribuisce. Una macchina virtuale è qualcosa
+
+00:00:07.520 --> 00:00:11.880
+da spuntare e dimenticare, ma la verità è un'altra. Una rete virtuale azzurra non è solo un'impostazione,
+
+00:00:12.480 --> 00:00:16.620
+è il fondamento di tutto ciò che costruisci in azzurra. Ogni macchina virtuale, ogni database,
+
+00:00:16.740 --> 00:00:20.920
+ogni servizio app, ogni funzione che distribuisci risiedono tutti al suo interno. Se non capisci
+
+00:00:20.920 --> 00:00:25.100
+come funziona, non stai procedendo alla cieca. Alla fine di questo episodio capirai cosa sia
+
+00:00:25.100 --> 00:00:29.520
+realmente una v-net, come funzioni e perché ogni singola risorsa che distribuisci dipende da essa.
+
+00:00:30.000 --> 00:00:33.400
+Tratteremo cos'è una v-net, come funzionano gli indirizzi IP, le subnet, la sicurezza e il
+
+00:00:33.400 --> 00:00:38.300
+routing e come connette le v-net tra loro. Prendi il tuo caffè e iniziamo. Cos'è una v-net? La
+
+00:00:38.300 --> 00:00:43.720
+rete cloud privata. Partiamo dalla definizione più semplice. Una rete virtuale azzurra o v-net in
+
+00:00:43.720 --> 00:00:49.220
+breve è la tua rete privata all'interno di azzurra. Tensala come un edificio privato. Solo le persone
+
+00:00:49.220 --> 00:00:53.000
+che autorizzi possono entrare. Controlli chi entra dalla porta, chi arriva a quale piano e chi resta
+
+00:00:53.000 --> 00:00:57.760
+completamente fuori. Prima dell'esistenza delle v-net le cose erano diverse. Distribuisci una macchina
+
+00:00:57.760 --> 00:01:01.500
+virtuale nel cloud ed era praticamente esposta a internet per impostazione predefinita. Nessuna
+
+00:01:01.500 --> 00:01:05.220
+rete privata attorno ad essa. Chiunque conoscesse gli indirizzi IP poteva provare a connette. Era un
+
+00:01:05.220 --> 00:01:09.620
+incubo per la sicurezza. Cos'è cambiato? Azzurra ti ha dato la possibilità di creare spazi di rete
+
+00:01:09.620 --> 00:01:14.040
+privati isolati. Definisci un confine. Decidi cosa inserire al suo interno. Nulla al di fuori di quel
+
+00:01:14.040 --> 00:01:17.800
+confine può entrare a meno che tu non lo permetta esplicitamente. Una cosa da sapere subito è che la
+
+00:01:17.800 --> 00:01:21.780
+tua v-net vive in una specifica area geografica di Azzurra. Non è globale. Crea una v-net in Europa
+
+00:01:21.780 --> 00:01:26.140
+occidentale e lì rimane. Le risorse in un'altra area non possono semplicemente inserirsi. Avrebbero
+
+00:01:27.760 --> 00:01:31.500
+connetterli in seguito. Quando crea una v-net definisci tu stesso lo spazio degli indirizzi IP.
+
+00:01:31.860 --> 00:01:35.100
+Azzurra non lo sceglie per te. Decidi tu l'intervallo di indirizzi IP che le tue risorse
+
+00:01:35.100 --> 00:01:38.500
+utilizzeranno. È una grande responsabilità e parleremo di come farlo correttamente nella
+
+00:01:38.500 --> 00:01:43.720
+prossima sezione. Ecco il punto chiave. Le v-net sono le fondamenta. Ogni macchina virtuale,
+
+00:01:43.820 --> 00:01:49.600
+ogni database, ogni funzione Azure che distribuisci risiede al loro interno. Senza una v-net le tue
+
+00:01:49.600 --> 00:01:53.780
+risorse non hanno alcun contesto di rete privata. Fluttuano semplicemente nel cloud senza confini,
+
+00:01:53.880 --> 00:01:57.660
+isolamento o sicurezza. Quindi cosa significa questo per te? Se stai creando qualcosa
+
+00:01:57.660 --> 00:02:02.300
+in Azure parti prima da una v-net, non dopo aver distribuito le tue risorse, prima? La
+
+00:02:02.300 --> 00:02:05.580
+tua v-net è il terreno su cui stai costruendo. Non costruiresti una casa senza aver prima
+
+00:02:05.580 --> 00:02:09.160
+comprato il terreno, giusto? Stessa idea. Indirizzamento IP e CDR è scegliere il proprio
+
+00:02:09.160 --> 00:02:14.020
+spazio di indirizzamento. Quindi tuffiamoci. Quando crea una v-net la prima grande decisione
+
+00:02:14.020 --> 00:02:19.120
+è scegliere un intervallo IP. Lo fai usando la notazione CDR. CDR sta per Classless Interdomain
+
+00:02:19.120 --> 00:02:24.140
+Routing, ma in realtà significa solo dire ho bisogno di questo numero di indirizzi IP. Perché
+
+00:02:24.140 --> 00:02:28.160
+è importante? Perché l'intervallo che scegli determina quante risorse puoi inserire nella
+
+00:02:28.160 --> 00:02:34.640
+tua rete virtuale. Ecco come funziona. Il CDR usa una barra o numero come 16 o 24. Quel
+
+00:02:34.640 --> 00:02:38.740
+numero ti indica la dimensione dello spazio di indirizzamento. Un 16 ti offre circa 65
+
+00:02:38.740 --> 00:02:44.080
+mila indirizzi IP. Sono molti. Un 24 te ne offre circa 250 e che è perfetto per un piccolo
+
+00:02:44.080 --> 00:02:48.560
+team o un singolo livello applicativo. Quindi quando progetti la tua v-net devi pensare a quante
+
+00:02:48.560 --> 00:02:53.360
+risorse avrai e come vuoi raggrupparle. Ora non puoi scegliere un intervallo IP qualsiasi.
+
+00:02:53.880 --> 00:02:59.660
+Azure segue lo standard RFC 1918 che riserva intervalli IP privati per le reti interne. Hai
+
+00:02:59.660 --> 00:03:04.720
+tre opzioni. L'intervallo 10.x.x o grande ti offre molto spazio per crescere. L'intervallo
+
+00:03:04.720 --> 00:03:11.520
+172.x.x è un po' più piccolo ma comunque utile. L'intervallo 192.68.x.x è quello che
+
+00:03:11.520 --> 00:03:15.000
+probabilmente hai a casa sul tuo router. Ecco il punto. Lo spazio di indirizzamento della tua
+
+00:03:15.000 --> 00:03:18.320
+v-net non può sovrapporsi a nessun'altra rete a cui intendi connetterti. Questo è un
+
+00:03:18.320 --> 00:03:22.020
+errore comune. Molti scelgono un intervallo che sembra familiare solo per scoprire poi che
+
+00:03:22.020 --> 00:03:27.720
+entra in conflitto con la rete aziendale. Quindi se la rete del tuo ufficio usa 10.0.0.0.0.0.16
+
+00:03:27.720 --> 00:03:31.600
+non usare lo stesso intervallo in Azure. Se provi a collegarle in seguito entreranno in
+
+00:03:31.600 --> 00:03:34.840
+conflitto e il traffico non saprà dove andare. Lascia che ti faccio un esempio concreto.
+
+00:03:35.200 --> 00:03:39.860
+Immagina di creare una configurazione ibrida dove Azure si connette al tuo data center locale
+
+00:03:39.860 --> 00:03:46.840
+che usa 10.0.0.0.0.0.0.0.16. Se crei una v-net con lo stesso intervallo avrai due reti che si
+
+00:03:46.840 --> 00:03:51.780
+contendono gli stessi IP. Pensaci bene. Due reti che usano lo stesso intervallo IP non possono
+
+00:03:51.780 --> 00:03:56.380
+comunicare correttamente. È come due case con lo stesso indirizzo. La posta si confonde. È un
+
+00:03:56.380 --> 00:03:59.780
+problema che non vorrai dover risolvere a posteriori. Quindi pianifica in anticipo e scegli un
+
+00:03:59.780 --> 00:04:03.320
+intervallo. D'acqua un consiglio per la pianificazione. Scegli un intervallo più grande di quello che pensi
+
+00:04:03.320 --> 00:04:06.980
+ti serve. Potresti pensare di aver bisogno solo di una 24 ore man mano che la tua applicazione
+
+00:04:06.980 --> 00:04:36.980
+cresce vorrai avere una 16.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0
+
+00:04:36.980 --> 00:04:39.200
+ed è, non puoi semplicemente scaricare tutto
+
+00:04:39.200 --> 00:04:41.080
+all'unico grande. È qui che entri in gioco le subnets
+
+00:04:41.080 --> 00:04:43.420
+le subnets sono uno dei blocchi costitutivi fondamentali
+
+00:04:43.420 --> 00:04:45.160
+della tua v-net. Ti permettono di organizzare
+
+00:04:45.160 --> 00:04:47.140
+e proteggere le tue risorse. Una subnet
+
+00:04:47.140 --> 00:04:48.940
+è una sezione più piccola dello spazio indirizzi
+
+00:04:48.940 --> 00:04:51.300
+della tua v-net. Se la tua v-net è l'edificio
+
+00:04:51.300 --> 00:04:52.820
+le subnets sono le singole stanze
+
+00:04:52.820 --> 00:04:54.900
+non metteressi la sala server, la reception
+
+00:04:54.900 --> 00:04:57.080
+e la pausa a caffè tutta nello stesso spazio aperto, giusto?
+
+00:04:57.660 --> 00:04:58.980
+Stasi da qui. È un concetto
+
+00:04:58.980 --> 00:05:01.000
+semplice ma fa un'enorme differenza nel modo in cui
+
+00:05:01.000 --> 00:05:03.000
+gestisci la tua rete. Risorse diverse vanno
+
+00:05:03.000 --> 00:05:05.060
+in subnets diverse. I tuoi server web vanno
+
+00:05:05.060 --> 00:05:07.060
+in una subnet, i tuoi database in un'altra
+
+00:05:07.060 --> 00:05:09.060
+e la logica dell'applicazione è una terza.
+
+00:05:09.780 --> 00:05:11.040
+Due ragioni. Sicurezza e
+
+00:05:11.040 --> 00:05:13.240
+organizzazione. Parliamo prima della sicurezza
+
+00:05:13.240 --> 00:05:14.700
+perché di solito è la più importante.
+
+00:05:15.260 --> 00:05:17.040
+Prima la sicurezza. Se qualcuno entra
+
+00:05:17.040 --> 00:05:19.180
+nel tuo server web non vuoi che abbia accesso diretto
+
+00:05:19.180 --> 00:05:21.200
+al tuo database. Le subnets separate
+
+00:05:21.200 --> 00:05:23.060
+creano una barriera naturale. L'attaccante
+
+00:05:23.060 --> 00:05:25.120
+dovrebbe attraversare quel confine e tu puoi controllare
+
+00:05:25.120 --> 00:05:27.080
+esattamente cosa passa. Puoi anche usare i gruppi
+
+00:05:27.080 --> 00:05:29.160
+di sicurezza di rete per controllare il traffico tra le subnets.
+
+00:05:29.680 --> 00:05:30.960
+È un argomento per un altro video
+
+00:05:30.960 --> 00:05:33.120
+ma vale la pena sapere che le subnets sono la base
+
+00:05:33.120 --> 00:05:33.960
+per tale sicurezza.
+
+00:05:34.900 --> 00:05:37.020
+Poi l'organizzazione. Quando tutto ha il suo posto
+
+00:05:37.020 --> 00:05:38.280
+gestirlo è più facile.
+
+00:05:38.920 --> 00:05:41.220
+Sai quale subnet contiene le tue risorse front-end
+
+00:05:41.220 --> 00:05:42.760
+e quale contiene i tuoi dati back-end?
+
+00:05:43.480 --> 00:05:45.220
+Puoi applicare policy e regola all'intera subnet
+
+00:05:45.220 --> 00:05:46.760
+in una volta sola invece di configurare
+
+00:05:46.760 --> 00:05:48.160
+ogni risorsa singolarmente.
+
+00:05:49.080 --> 00:05:50.560
+Ciò fa risparmiare tempo e riduce gli errori.
+
+00:05:51.120 --> 00:05:52.860
+Ecco un dettaglio che coglie le persone in sorpresa.
+
+00:05:53.480 --> 00:05:54.920
+Azure riserva 5 indirizzi IP
+
+00:05:54.920 --> 00:05:56.720
+in ogni subnet per i propri scopi interni
+
+00:05:56.720 --> 00:05:59.060
+come il routing e il DNS. Quindi se crei
+
+00:05:59.060 --> 00:06:01.940
+una subnet con un range 24 che ti dà 256 indirizzi
+
+00:06:01.940 --> 00:06:04.400
+in realtà ne ottieni solo 251 utilizzabili.
+
+00:06:04.740 --> 00:06:05.480
+Un trabocchetto comune.
+
+00:06:05.840 --> 00:06:07.980
+Pianifichi per 256 ma ne ottieni solo 200.
+
+00:06:08.280 --> 00:06:09.400
+Aggiungi sempre un po' di margine
+
+00:06:09.400 --> 00:06:10.340
+quando dimensioni le tue sub.
+
+00:06:10.800 --> 00:06:12.220
+La buona notizia è che puoi aggiungere subnet
+
+00:06:12.220 --> 00:06:13.120
+dopo aver creato la vine
+
+00:06:13.120 --> 00:06:15.880
+non sei vincolato a quelle impostate durante la creazione.
+
+00:06:16.480 --> 00:06:17.860
+Quindi se ti rendi conto di aver bisogno
+
+00:06:17.860 --> 00:06:19.540
+una subnet separata per strumenti di gestione
+
+00:06:19.540 --> 00:06:20.900
+e monitoraggio aggiungila dopo.
+
+00:06:21.420 --> 00:06:21.900
+Nessun problema.
+
+00:06:22.260 --> 00:06:24.100
+Tuttavia è sempre meglio pianificare in anticipo.
+
+00:06:24.540 --> 00:06:26.080
+Aggiungere subnet in seguito è possibile
+
+00:06:26.080 --> 00:06:27.540
+ma potresti dover spostare le risorse
+
+00:06:27.540 --> 00:06:28.560
+il che può causare interruzioni.
+
+00:06:29.060 --> 00:06:29.880
+Ecco invece la best practice.
+
+00:06:30.380 --> 00:06:31.880
+Usa subnet separate per i diversi livelli
+
+00:06:31.880 --> 00:06:33.140
+della tua applicazione fin dall'inizio.
+
+00:06:33.460 --> 00:06:34.680
+Rifletti sull'architettura applicazione.
+
+00:06:35.960 --> 00:06:37.680
+Di solito hai un livello front-end
+
+00:06:37.680 --> 00:06:38.740
+che gestisce le richieste
+
+00:06:38.740 --> 00:06:40.660
+e un livello back-end per la logica aziendale
+
+00:06:40.660 --> 00:06:41.680
+e un livello dati.
+
+00:06:42.860 --> 00:06:44.240
+Ognuno di questi dovrebbe avere la propria soluzione.
+
+00:06:44.600 --> 00:06:45.980
+Non aspettare di essere in produzione
+
+00:06:45.980 --> 00:06:47.360
+per capire che devi separare le cose.
+
+00:06:47.360 --> 00:06:48.440
+È molto più difficile
+
+00:06:48.440 --> 00:06:49.880
+quando le risorse sono già distribuite.
+
+00:06:50.240 --> 00:06:51.280
+Cosa significa questo per te?
+
+00:06:51.460 --> 00:06:52.720
+Le subnet servono a mantenere
+
+00:06:52.720 --> 00:06:53.940
+la rete organizzata e sicura.
+
+00:06:53.940 --> 00:06:55.300
+Sono come le stanze dei tuoi wifi.
+
+00:06:55.640 --> 00:06:56.500
+Pianificali in anticipo
+
+00:06:56.500 --> 00:06:57.580
+dai ogni livello dell'applicazione
+
+00:06:57.580 --> 00:06:58.220
+e il suo spazio.
+
+00:06:58.580 --> 00:07:00.160
+È così che mantieni la rete pulita e sicura.
+
+00:07:01.200 --> 00:07:02.340
+IP pubblici contro privati.
+
+00:07:02.740 --> 00:07:03.340
+Chi può vedere cosa?
+
+00:07:03.720 --> 00:07:04.820
+Parliamo di indirizzi IP
+
+00:07:04.820 --> 00:07:07.140
+perché non tutti gli indirizzi IP sono uguali.
+
+00:07:07.500 --> 00:07:09.020
+Quando distribuisci una risorsa in una v-net
+
+00:07:09.020 --> 00:07:11.040
+questa riceve un indirizzo IP privato di default.
+
+00:07:11.760 --> 00:07:13.160
+È l'indirizzo che usa per comunicare
+
+00:07:13.160 --> 00:07:14.880
+con le altre risorse all'interno della v-net.
+
+00:07:15.200 --> 00:07:16.840
+Pensalo come un interno telefonico aziendale.
+
+00:07:17.260 --> 00:07:18.820
+Solo chi è nell'edificio può raggiungerlo?
+
+00:07:19.200 --> 00:07:20.320
+Gli IP privati sono accessibili
+
+00:07:20.320 --> 00:07:21.520
+solo dall'interno della v-net
+
+00:07:21.520 --> 00:07:22.900
+o da reti ad essa connesse.
+
+00:07:23.540 --> 00:07:24.800
+Se sei a casa col tuo portatile
+
+00:07:24.800 --> 00:07:26.700
+non puoi raggiungere un IP privato in Azure
+
+00:07:26.700 --> 00:07:27.940
+né su internet.
+
+00:07:28.540 --> 00:07:29.640
+È all'interno della tua rete privata.
+
+00:07:30.360 --> 00:07:32.340
+Quindi come rendi una risorsa raggiungibile da internet?
+
+00:07:32.800 --> 00:07:34.020
+Le assegni un indirizzo IP pubblico.
+
+00:07:34.240 --> 00:07:35.760
+È l'indirizzo visibile al mondo esterno
+
+00:07:35.760 --> 00:07:37.940
+come avere un numero di telefono pubblico
+
+00:07:37.940 --> 00:07:38.940
+invece di un interno.
+
+00:07:39.340 --> 00:07:40.220
+Ecco il punto fondamentale.
+
+00:07:40.580 --> 00:07:41.620
+Gli IP pubblici sono facoltati.
+
+00:07:42.000 --> 00:07:43.100
+Li assegni esplicitamente
+
+00:07:43.100 --> 00:07:45.300
+perché Azure non dà mai IP pubblici alle risorse
+
+00:07:45.300 --> 00:07:46.380
+a meno che tu non lo chieda.
+
+00:07:46.920 --> 00:07:47.720
+È una scelta progettuale.
+
+00:07:47.960 --> 00:07:49.200
+Il default dovrebbe essere privato
+
+00:07:49.200 --> 00:07:50.520
+e il pubblico una scelta deliberata.
+
+00:07:50.520 --> 00:07:52.460
+È qui che molti principianti fanno un errore.
+
+00:07:52.820 --> 00:07:54.020
+Danno IP pubblici a tutto.
+
+00:07:54.740 --> 00:07:56.280
+Il loro server web, il database e l'API backend
+
+00:07:56.280 --> 00:07:57.140
+ne ricevono tutti uno.
+
+00:07:57.640 --> 00:07:58.180
+È un rischio per sé.
+
+00:07:58.800 --> 00:08:01.140
+Il tuo database non deve essere raggiungibile da internet
+
+00:08:01.140 --> 00:08:02.600
+e nemmeno la tua API backend.
+
+00:08:03.360 --> 00:08:04.360
+Solo le risorse frontend
+
+00:08:04.360 --> 00:08:06.060
+con cui gli utenti interagiscono direttamente
+
+00:08:06.060 --> 00:08:07.160
+dovrebbero avere IP pubblici.
+
+00:08:07.600 --> 00:08:09.500
+Gli IP pubblici sono disponibili in due versioni
+
+00:08:09.500 --> 00:08:10.380
+statici e dinamici.
+
+00:08:10.840 --> 00:08:12.560
+Un IP pubblico statico rimane invariato
+
+00:08:12.560 --> 00:08:14.080
+anche se arresti e riavvii la risorsa.
+
+00:08:14.480 --> 00:08:15.760
+Un IP pubblico dinamico può cambiare.
+
+00:08:16.160 --> 00:08:17.760
+Se stai eseguendo un'applicazione in produzione
+
+00:08:17.760 --> 00:08:19.180
+probabilmente ti servono IP statici
+
+00:08:19.180 --> 00:08:20.500
+affinché gli utenti trovino sempre.
+
+00:08:20.960 --> 00:08:22.040
+Se stai solo facendo dei test
+
+00:08:22.040 --> 00:08:23.540
+quelli dinamici possono andare bene.
+
+00:08:23.760 --> 00:08:25.540
+Puoi anche usare il cosiddetto prefisso IP pubblico
+
+00:08:25.540 --> 00:08:27.400
+che ti permette di riservare un blocco di indirizzi.
+
+00:08:28.460 --> 00:08:29.720
+Invece di crearli uno alla volta
+
+00:08:29.720 --> 00:08:30.740
+riservi un intervallo
+
+00:08:30.740 --> 00:08:32.980
+e poi assegni i singoli indirizzi da quello.
+
+00:08:34.120 --> 00:08:36.100
+Utile se sai che ti serviranno più IP pubblici
+
+00:08:36.100 --> 00:08:36.900
+per un progetto.
+
+00:08:37.480 --> 00:08:38.840
+Che cosa significa questo per te?
+
+00:08:39.180 --> 00:08:40.560
+Gli privati sono impostazioni predefinite.
+
+00:08:40.800 --> 00:08:42.420
+Sono come il numero di un interno telefonico.
+
+00:08:42.620 --> 00:08:44.060
+Gli IP pubblici sono una scelta deliberata
+
+00:08:44.060 --> 00:08:45.120
+da fare solo quando serve
+
+00:08:45.120 --> 00:08:46.600
+che qualcosa sia raggiungibile dall'esterno.
+
+00:08:46.720 --> 00:08:47.500
+E quando servono
+
+00:08:47.500 --> 00:08:49.660
+valuta se ti serve statico o dinamico
+
+00:08:49.660 --> 00:08:50.900
+e se un prefisso ha senso
+
+00:08:50.900 --> 00:08:52.900
+gruppi di sicurezza di rete
+
+00:08:52.900 --> 00:08:53.680
+per il controllo del traffico.
+
+00:08:54.140 --> 00:08:55.500
+Quindi hai configurato la tua v-net
+
+00:08:55.500 --> 00:08:56.080
+le sub-net
+
+00:08:56.080 --> 00:08:57.060
+e gli indirizzi IP.
+
+00:08:57.600 --> 00:08:58.820
+Ma come controlli effettivamente
+
+00:08:58.820 --> 00:09:00.260
+il traffico in entrata e in uscita?
+
+00:09:00.760 --> 00:09:01.360
+Qui che entrano in gioco
+
+00:09:01.360 --> 00:09:02.340
+i gruppi di sicurezza di rete.
+
+00:09:02.980 --> 00:09:03.920
+Un NSG, il guardiano
+
+00:09:03.920 --> 00:09:04.880
+che controlla il traffico
+
+00:09:04.880 --> 00:09:06.300
+che entra ed esce dalle tue risorse?
+
+00:09:07.240 --> 00:09:08.200
+Immaginalo come butta fuori
+
+00:09:08.200 --> 00:09:09.060
+all'ingresso di un locale.
+
+00:09:09.200 --> 00:09:10.040
+Controlla i documenti
+
+00:09:10.040 --> 00:09:11.200
+guarda la lista degli ospiti
+
+00:09:11.200 --> 00:09:12.720
+e respinge chi non dovrebbe entrare.
+
+00:09:13.500 --> 00:09:14.380
+Ogni flusso di traffico
+
+00:09:14.380 --> 00:09:15.220
+che tenta di raggiungere
+
+00:09:15.220 --> 00:09:15.800
+la tua risorsa
+
+00:09:15.800 --> 00:09:17.360
+deve prima passare da questo butta fuori.
+
+00:09:17.920 --> 00:09:19.340
+Gli NSG funzionano tramite regola.
+
+00:09:19.860 --> 00:09:20.800
+Ogni regola consente
+
+00:09:20.800 --> 00:09:21.540
+o nega il traffico
+
+00:09:21.540 --> 00:09:23.040
+basandosi su quattro elementi
+
+00:09:23.040 --> 00:09:24.080
+IP sorgente
+
+00:09:24.080 --> 00:09:25.120
+IP destinazione
+
+00:09:25.120 --> 00:09:25.820
+numero di porta
+
+00:09:25.820 --> 00:09:26.760
+e protocollo.
+
+00:09:27.500 --> 00:09:28.440
+Puoi ad esempio consentire
+
+00:09:28.440 --> 00:09:29.860
+il traffico dal tuo IP aziendale
+
+00:09:29.860 --> 00:09:31.220
+sulla porta 4443
+
+00:09:31.220 --> 00:09:33.180
+o negare tutto il traffico
+
+00:09:33.180 --> 00:09:34.460
+da internet sulla porta 22.
+
+00:09:34.880 --> 00:09:35.600
+Questo è il tipo di controllo.
+
+00:09:35.800 --> 00:09:36.860
+Ora ecco una funzionalità
+
+00:09:36.860 --> 00:09:37.320
+molto potente.
+
+00:09:37.580 --> 00:09:38.640
+Puoi collegare un NSG
+
+00:09:38.640 --> 00:09:39.380
+a una subnet
+
+00:09:39.380 --> 00:09:39.900
+o direttamente
+
+00:09:39.900 --> 00:09:40.720
+all'interfaccia di rete
+
+00:09:40.720 --> 00:09:41.500
+di una singola VM.
+
+00:09:42.180 --> 00:09:43.340
+Se lo colleghi a una subnet
+
+00:09:43.340 --> 00:09:44.720
+quell'NSG si applica
+
+00:09:44.720 --> 00:09:45.580
+a tutto ciò che contiene.
+
+00:09:45.920 --> 00:09:46.300
+Ogni VM
+
+00:09:46.300 --> 00:09:46.900
+ogni database
+
+00:09:46.900 --> 00:09:47.460
+ogni risorsa
+
+00:09:47.460 --> 00:09:48.720
+è una policy generale.
+
+00:09:49.140 --> 00:09:49.600
+Se lo colleghi
+
+00:09:49.600 --> 00:09:50.440
+all'interfaccia di rete
+
+00:09:50.440 --> 00:09:51.460
+di una VM specifica
+
+00:09:51.460 --> 00:09:52.700
+si applica solo a quella macchina.
+
+00:09:53.820 --> 00:09:54.760
+Puoi persino fare entrambe le cose.
+
+00:09:55.240 --> 00:09:56.640
+Un NSG a livello di subnet
+
+00:09:56.640 --> 00:09:57.380
+per regole ampie
+
+00:09:57.380 --> 00:09:58.540
+e uno a livello di scheda di rete
+
+00:09:58.540 --> 00:09:59.320
+per le eccezioni.
+
+00:10:00.240 --> 00:10:01.040
+Le regole predefinite
+
+00:10:01.040 --> 00:10:01.600
+create da Azure
+
+00:10:01.600 --> 00:10:02.480
+sono piuttosto sensate.
+
+00:10:02.860 --> 00:10:03.880
+Consentono tutto il traffico
+
+00:10:03.880 --> 00:10:04.780
+all'interno della vinetta
+
+00:10:04.780 --> 00:10:05.680
+finché le tue risorse
+
+00:10:05.680 --> 00:10:07.280
+possono comunicare tra loro
+
+00:10:07.280 --> 00:10:08.340
+e bloccano tutto il traffico
+
+00:10:08.340 --> 00:10:08.780
+da internet
+
+00:10:08.780 --> 00:10:09.920
+impedendo a chiunque dall'esterno
+
+00:10:09.920 --> 00:10:10.840
+di raggiungere le tue risorse
+
+00:10:10.840 --> 00:10:11.780
+a meno che tu non lo consente
+
+00:10:11.780 --> 00:10:12.240
+esplicitamente.
+
+00:10:12.380 --> 00:10:13.180
+È un buon punto di partenza.
+
+00:10:13.640 --> 00:10:14.460
+Lascia che ti faccia un esempio
+
+00:10:14.460 --> 00:10:14.760
+comune.
+
+00:10:14.960 --> 00:10:15.980
+Supponiamo che tu stia gestendo
+
+00:10:15.980 --> 00:10:16.920
+una macchina virtuale Linux
+
+00:10:16.920 --> 00:10:18.060
+e che tu debba accedervi via SSH.
+
+00:10:18.340 --> 00:10:19.500
+Creeresti una regola NSG
+
+00:10:19.500 --> 00:10:20.320
+che consenta il traffico
+
+00:10:20.320 --> 00:10:21.440
+in entrata sulla porta 22
+
+00:10:21.440 --> 00:10:22.200
+ma non vuoi consentire
+
+00:10:22.200 --> 00:10:23.600
+l'accesso SSH da ovunque.
+
+00:10:23.740 --> 00:10:24.580
+Sarebbe cercarsi di guai.
+
+00:10:24.960 --> 00:10:25.540
+Quindi lo limiti
+
+00:10:25.540 --> 00:10:26.320
+al tuo indirizzo IP
+
+00:10:26.320 --> 00:10:28.040
+così solo tu puoi accedere via SSH
+
+00:10:28.040 --> 00:10:28.540
+e tutti gli altri
+
+00:10:28.540 --> 00:10:29.380
+vengono bloccati.
+
+00:10:30.220 --> 00:10:31.040
+Stessa idea per l'IP
+
+00:10:31.040 --> 00:10:32.220
+sulla porta 3.89
+
+00:10:32.220 --> 00:10:33.220
+per le macchine Windows.
+
+00:10:33.600 --> 00:10:34.620
+Cosa significa questo per te?
+
+00:10:34.860 --> 00:10:36.360
+Gli NSG sono la prima linea di difesa
+
+00:10:36.360 --> 00:10:37.040
+e la parte migliore
+
+00:10:37.040 --> 00:10:37.800
+è che sono gratuiti.
+
+00:10:38.320 --> 00:10:39.320
+Non ci sono costi aggiuntivi
+
+00:10:39.320 --> 00:10:39.820
+per usarli
+
+00:10:39.820 --> 00:10:40.540
+quindi non ci sono scuse
+
+00:10:40.540 --> 00:10:41.200
+per non configurare.
+
+00:10:41.540 --> 00:10:42.720
+Ogni subnet e ogni risorsa
+
+00:10:42.720 --> 00:10:44.100
+dovrebbe avere un NSG associato.
+
+00:10:44.440 --> 00:10:45.360
+Inizia negando tutto
+
+00:10:45.360 --> 00:10:46.620
+e apri solo ciò che ti serve.
+
+00:10:47.340 --> 00:10:47.980
+Tabelle di routing
+
+00:10:47.980 --> 00:10:48.660
+e stradamento
+
+00:10:48.660 --> 00:10:49.400
+per dirigere i trappi.
+
+00:10:49.760 --> 00:10:50.760
+Ora parliamo di routing
+
+00:10:50.760 --> 00:10:52.020
+perché una volta deciso
+
+00:10:52.020 --> 00:10:53.140
+quale traffico è consentito
+
+00:10:53.140 --> 00:10:53.900
+devi decidere
+
+00:10:53.900 --> 00:10:54.780
+dove deve andare effettivamente.
+
+00:10:55.220 --> 00:10:55.700
+Ecco il punto
+
+00:10:55.700 --> 00:10:56.820
+Azure crea automaticamente
+
+00:10:56.820 --> 00:10:57.500
+route di sistema
+
+00:10:57.500 --> 00:10:58.240
+per ogni subnet.
+
+00:10:58.760 --> 00:10:59.500
+Non devi fare nulla.
+
+00:11:00.160 --> 00:11:01.220
+Immaginalo come un navigatore
+
+00:11:01.220 --> 00:11:02.160
+predefinito che conosce
+
+00:11:02.160 --> 00:11:02.940
+le strade principali.
+
+00:11:03.380 --> 00:11:04.640
+Traffico all'interno della vnet
+
+00:11:04.640 --> 00:11:05.540
+verso vnet peered
+
+00:11:05.540 --> 00:11:06.580
+verso internet.
+
+00:11:07.500 --> 00:11:08.560
+Funziona tutto immediatamente
+
+00:11:08.560 --> 00:11:10.300
+ma a volte il navigatore predefinito
+
+00:11:10.300 --> 00:11:11.400
+non ti porta dove vuoi andare.
+
+00:11:11.980 --> 00:11:13.040
+E' qui che ti servono le route
+
+00:11:13.040 --> 00:11:14.240
+definite dall'utente UDR.
+
+00:11:14.680 --> 00:11:15.280
+Queste ti permettono
+
+00:11:15.280 --> 00:11:15.940
+di ignorare le route
+
+00:11:15.940 --> 00:11:16.720
+di sistema di Azure
+
+00:11:16.720 --> 00:11:17.540
+e di prendere il controllo
+
+00:11:17.540 --> 00:11:18.620
+del percorso del traffico.
+
+00:11:18.700 --> 00:11:19.200
+Come funziona?
+
+00:11:19.540 --> 00:11:20.220
+Crea una tabella di routing.
+
+00:11:20.640 --> 00:11:21.740
+Aggiungi le tue route personalizzate.
+
+00:11:22.100 --> 00:11:23.260
+Poi associ quella tabella di routing
+
+00:11:23.260 --> 00:11:23.800
+a una subnet.
+
+00:11:24.200 --> 00:11:24.960
+Da quel momento in poi
+
+00:11:24.960 --> 00:11:26.200
+il traffico che lascia quella subnet
+
+00:11:26.200 --> 00:11:26.920
+seguirà le tue regole
+
+00:11:26.920 --> 00:11:27.860
+invece di quelle predefinite.
+
+00:11:27.860 --> 00:11:29.380
+Lascia che ti faccia un esempio concreto.
+
+00:11:29.740 --> 00:11:30.420
+Supponiamo che tu voglia
+
+00:11:30.420 --> 00:11:31.320
+che tutto il traffico internet
+
+00:11:31.320 --> 00:11:31.820
+dalla tua vnet
+
+00:11:31.820 --> 00:11:33.040
+passi prima attraverso un firewall.
+
+00:11:33.440 --> 00:11:34.300
+Magari devi spezionarlo,
+
+00:11:34.400 --> 00:11:34.980
+registrarlo
+
+00:11:34.980 --> 00:11:36.100
+o bloccare i siti malevoli.
+
+00:11:36.660 --> 00:11:37.720
+La route di sistema predefinita
+
+00:11:37.720 --> 00:11:39.080
+invia il traffico internet all'esterno.
+
+00:11:39.500 --> 00:11:40.280
+Non è quello che vuoi
+
+00:11:40.280 --> 00:11:41.180
+quindi crea una route
+
+00:11:41.180 --> 00:11:42.520
+che dice che qualsiasi traffico
+
+00:11:42.520 --> 00:11:44.460
+diretto a 0.0.0.0
+
+00:11:44.460 --> 00:11:46.000
+ovvero ovunque su internet
+
+00:11:46.000 --> 00:11:47.580
+deve passare invece dal firewall.
+
+00:11:48.520 --> 00:11:49.480
+Questa è una route definita da lui.
+
+00:11:49.820 --> 00:11:50.500
+Le tabelle di routing
+
+00:11:50.500 --> 00:11:52.000
+usano un concetto chiamato next app.
+
+00:11:52.220 --> 00:11:53.060
+E' la destinazione verso cui
+
+00:11:53.060 --> 00:11:54.340
+il traffico viene inviato successivamente.
+
+00:11:54.740 --> 00:11:55.340
+Hai alcune opzioni.
+
+00:11:55.340 --> 00:11:57.060
+Puoi inviarlo a un appliance virtuale
+
+00:11:57.060 --> 00:11:57.640
+come un firewall.
+
+00:11:58.400 --> 00:11:59.160
+Puoi inviarlo a un gateway
+
+00:11:59.160 --> 00:12:00.020
+di rete virtuale
+
+00:12:00.020 --> 00:12:00.580
+che è il modo in cui
+
+00:12:00.580 --> 00:12:02.080
+ti connetti alle reti on-premise.
+
+00:12:02.880 --> 00:12:04.180
+Puoi inviarlo direttamente a internet
+
+00:12:04.180 --> 00:12:05.760
+oppure puoi non inviarlo a nessuno
+
+00:12:05.760 --> 00:12:07.480
+che sostanzialmente elimina il traffico.
+
+00:12:08.340 --> 00:12:09.400
+La cosa fondamentale da capire
+
+00:12:09.400 --> 00:12:10.160
+è che il routing è il modo
+
+00:12:10.160 --> 00:12:11.340
+in cui controlli il percorso
+
+00:12:11.340 --> 00:12:12.820
+che il traffico segue nella tua rete.
+
+00:12:13.660 --> 00:12:14.240
+Le route di sistema
+
+00:12:14.240 --> 00:12:15.660
+sono una buona impostazione predefinita
+
+00:12:15.660 --> 00:12:16.980
+ma non sempre adatte alla tua situazione.
+
+00:12:17.320 --> 00:12:18.500
+Se devi far passare il traffico
+
+00:12:18.500 --> 00:12:19.700
+attraverso un punto di ispezione
+
+00:12:19.700 --> 00:12:20.780
+verso un gateway specifico
+
+00:12:20.780 --> 00:12:21.720
+o bloccarlo completamente
+
+00:12:21.720 --> 00:12:23.120
+ti serve un route definita dall'utente.
+
+00:12:23.500 --> 00:12:24.560
+Cosa significa questo per te?
+
+00:12:25.340 --> 00:12:26.860
+Il modo in cui dici al traffico dove andare.
+
+00:12:26.980 --> 00:12:27.960
+Hai il potere di sovrascrivere
+
+00:12:27.960 --> 00:12:29.320
+le impostazioni predefinite di Azure
+
+00:12:29.320 --> 00:12:29.880
+quando ne bisogna.
+
+00:12:30.320 --> 00:12:31.540
+Inizia con le route di sistema
+
+00:12:31.540 --> 00:12:32.500
+comprendi cosa fanno
+
+00:12:32.500 --> 00:12:34.220
+e poi aggiungi route personalizzate
+
+00:12:34.220 --> 00:12:35.580
+quando la tua architettura lo richiede.
+
+00:12:36.520 --> 00:12:37.140
+Vinet Peering
+
+00:12:37.140 --> 00:12:38.020
+Connettere le reti
+
+00:12:38.020 --> 00:12:40.300
+Finora abbiamo parlato di una singola vanette
+
+00:12:40.300 --> 00:12:41.660
+un edificio o una rete privata
+
+00:12:41.660 --> 00:12:43.580
+ma cosa succede quando hai più vinette?
+
+00:12:44.040 --> 00:12:45.760
+Magari ne hai una per il tuo ambiente di produzione
+
+00:12:45.760 --> 00:12:46.580
+e un'altra per i test
+
+00:12:46.580 --> 00:12:47.840
+oppure stai eseguendo applicazioni
+
+00:12:47.840 --> 00:12:49.580
+in diverse regioni Azure.
+
+00:12:50.060 --> 00:12:51.000
+Per impostazione predefinita
+
+00:12:51.000 --> 00:12:52.040
+queste vinette sono come da me
+
+00:12:52.040 --> 00:12:53.580
+non possono comunicare tra le loro.
+
+00:12:53.700 --> 00:12:54.720
+Sono come edifici separati
+
+00:12:54.720 --> 00:12:55.620
+senza strade tra loro
+
+00:12:55.620 --> 00:12:56.980
+e qui che entra in gioco il vinette Peering
+
+00:12:56.980 --> 00:12:58.720
+ti consente di riconnettere due vinette
+
+00:12:58.720 --> 00:12:59.320
+privatamente
+
+00:12:59.320 --> 00:13:00.120
+intendo privatamente
+
+00:13:00.120 --> 00:13:01.800
+il traffico tra vinette e peering
+
+00:13:01.800 --> 00:13:03.540
+rimane sulla rete backbone di Microsoft
+
+00:13:03.540 --> 00:13:05.480
+non tocca mai la rete internet pubblica
+
+00:13:05.480 --> 00:13:06.700
+ciò significa bassa latenza
+
+00:13:06.700 --> 00:13:07.700
+larghezza di bande elevate
+
+00:13:07.700 --> 00:13:08.940
+nessuna esposizione a minaccia esterna.
+
+00:13:09.240 --> 00:13:10.560
+Ecco qualcosa che sorprende le persone
+
+00:13:10.560 --> 00:13:12.900
+Peering funziona anche tra le regioni
+
+00:13:12.900 --> 00:13:13.980
+questo è chiamato peering globale
+
+00:13:13.980 --> 00:13:15.860
+puoi avere una vinette in Europa occidentale
+
+00:13:15.860 --> 00:13:16.280
+in peering
+
+00:13:16.280 --> 00:13:17.920
+con una vinette nel sud-est asiatico
+
+00:13:17.920 --> 00:13:18.740
+e il traffico tra loro
+
+00:13:18.740 --> 00:13:20.200
+rimane sulla rete privata di Microsoft
+
+00:13:20.200 --> 00:13:21.400
+nessun gateway VPN
+
+00:13:21.400 --> 00:13:22.100
+nessun è più pubblico
+
+00:13:22.100 --> 00:13:23.340
+sono una connessione privata diretta
+
+00:13:23.340 --> 00:13:25.440
+ma c'è una regola che non puoi assolutamente infrangere
+
+00:13:25.440 --> 00:13:26.580
+le vinette in peering
+
+00:13:26.580 --> 00:13:28.380
+devono avere spazi in indirizzi non sovrapposti
+
+00:13:28.380 --> 00:13:29.380
+se entrambi le vinette
+
+00:13:29.380 --> 00:13:30.580
+tentano di utilizzare l'intervallo
+
+00:13:30.580 --> 00:13:32.920
+10.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.6
+
+00:13:32.920 --> 00:13:34.080
+non possono essere messe in P
+
+00:13:34.080 --> 00:13:34.900
+gli indirizzi P
+
+00:13:34.900 --> 00:13:35.840
+andrebbero in conflitto
+
+00:13:35.840 --> 00:13:36.760
+e Azure non saprebbe
+
+00:13:36.760 --> 00:13:38.160
+a quale rete appartiene un pacchetto
+
+00:13:38.160 --> 00:13:39.860
+quindi ricordi quel consiglio
+
+00:13:39.860 --> 00:13:40.580
+sulla pianificazione
+
+00:13:40.580 --> 00:13:41.360
+di scegliere attentamente
+
+00:13:41.360 --> 00:13:42.380
+il tuo spazio di indirizzamento
+
+00:13:42.380 --> 00:13:43.300
+è per questo motivo
+
+00:13:43.300 --> 00:13:45.080
+se pensi di poter mettere in peering
+
+00:13:45.080 --> 00:13:45.880
+le vinette in futuro
+
+00:13:45.880 --> 00:13:49.460
+assicurati che i loro intervalli non si sovrappongano fin da lì. Ora ecco un dettaglio che mette in
+
+00:13:49.460 --> 00:13:53.520
+difficoltà le persone. Peering non è transitivo. Cosa significa? Supponiamo che la vignetta A sia
+
+00:13:53.520 --> 00:13:57.260
+un peering con la vignette B e la vignette B con la vignette C. La vignetta A non raggiunge
+
+00:13:57.260 --> 00:14:01.460
+automaticamente la vignette C attraverso B. Non sono connessa. Ogni peering è un collegamento
+
+00:14:01.460 --> 00:14:05.600
+diretto tra esattamente due vignette. Se vuoi che A comunichi con C serve un peering separato tra A e
+
+00:14:05.600 --> 00:14:09.200
+C, quindi come gestisci questo aspetto su larga scala. Si utilizza un'architettura hub and spoke.
+
+00:14:09.200 --> 00:14:13.420
+Una vignette centrale, l'hub, è connessa tramite peering con molte altre vignette di spook. L'hub può
+
+00:14:13.420 --> 00:14:17.860
+contenere servizi condivisi come un firewall, un gateway VPN o strumenti di monitoraggio. Gli spook
+
+00:14:17.860 --> 00:14:21.440
+contengono i tuoi carichi di lavoro individuali. Ogni spook si collega direttamente al l'hub, ma gli
+
+00:14:21.440 --> 00:14:25.160
+spook non si collegano tra loro. Se uno spook deve raggiungere un altro spook, il traffico passa
+
+00:14:25.160 --> 00:14:29.580
+attraverso l'hub. Ciò mantiene l'ordine e offre un punto centrale per applicare le policy di sicurezza.
+
+00:14:30.160 --> 00:14:33.880
+Cosa significa questo per te? Il peering è il modo in cui costruisci reti che coprano più vignette
+
+00:14:33.880 --> 00:14:38.160
+regioni. È il ponte tra i tuoi edifici. Pianifica i tuoi spazi di indirizzamento in modo che non si
+
+00:14:38.160 --> 00:14:42.400
+sovrapponga. Ricorda che il peering non è transitivo e considera un design hub and spoke quando inizia
+
+00:14:42.400 --> 00:14:47.020
+a crescere oltre una singola vignette. Come si collega tutto il quadro generale. Quindi facciamo
+
+00:14:47.020 --> 00:14:50.040
+un passo indietro e vediamo come questi pezzi si incastrano davanti. È lì che risiede il vero
+
+00:14:50.040 --> 00:14:54.200
+potenziale. Inizi con Ovenet e il tuo spazio privato in azzurro. Pensalo come il tuo terreno.
+
+00:14:54.440 --> 00:14:58.900
+All'interno di quel terreno crei le subnets. Queste sono le tue stanze. Una per i server web, una per i database,
+
+00:14:58.900 --> 00:15:03.180
+una per gli strumenti di gestione. Ogni subnet ottiene il proprio blocco di indirizzi ricavato
+
+00:15:03.180 --> 00:15:07.000
+dallo spazio di indirizzamento. Poi aggiungi la sicurezza. I gruppi di sicurezza di rete si
+
+00:15:07.000 --> 00:15:11.420
+collegano alle tue subnet. Controllano quale traffico è consentito l'entrata e l'uscita. La tua subnet
+
+00:15:11.420 --> 00:15:16.360
+web consente il traffico da internet sulla porta 4.3. La tua subnet database consente solo il traffico
+
+00:15:16.360 --> 00:15:20.540
+dalla subnet web sulla porta 14.3. Il butta fuori ogni porta se esattamente chi può entrare.
+
+00:15:21.080 --> 00:15:24.620
+Successivamente imposti routing. Forse vuoi che tutto il traffico internet in uscita passi attraverso
+
+00:15:24.620 --> 00:15:28.720
+un firewall per l'ispezione. Crei una tabella di routing, aggiungi una route personalizzata e la
+
+00:15:28.720 --> 00:15:32.100
+colleghi alle tue subnet. Ora il traffico segue il percorso che hai progettato invece di quello
+
+00:15:32.100 --> 00:15:36.980
+predefinito di Azure. E infine colleghi tutto insieme. Colleghi la tua vnet tramite peering
+
+00:15:36.980 --> 00:15:40.760
+con altre vnet, magari una vnet hub che ospita il tuo firewall e i servizi condiviti. Ora la tua
+
+00:15:40.760 --> 00:15:46.100
+applicazione copre più reti ma funziona come un unico sistema connesso. Ecco il momento
+
+00:15:46.100 --> 00:15:49.960
+della rivelazione. Nessuno di questi pezzi funziona esattamente. Una vnet senza subnet è solo
+
+00:15:49.960 --> 00:15:54.200
+spazio vuoto. Le subnet e NSG sono completamente aperte. Routing senza una progettazione chiara in via
+
+00:15:54.200 --> 00:15:58.640
+di traffico nel posto sbagliato. Il peering senza pianificazione crea conflitti di indirizzo. Sono un sistema.
+
+00:15:58.720 --> 00:16:02.800
+Ogni pezzo dipende dagli altri. Lascia che ti faccia un esempio concreto. Immagina un'applicazione
+
+00:16:02.800 --> 00:16:06.680
+web. I tuoi server web si trovano in una subnet pubblica con un NSG che consente il traffico
+
+00:16:06.680 --> 00:16:11.140
+HTTPS da internet. I tuoi server applicativi si trovano in una subnet privata che accetta solo
+
+00:16:11.140 --> 00:16:15.240
+traffico dalla subnet web. Il tuo database si trova in un'altra subnet privata che accetta
+
+00:16:15.240 --> 00:16:19.240
+traffico solo dalla subnet dell'applicazione. Una tabella di routing forza tutto il traffico
+
+00:16:19.240 --> 00:16:23.640
+in uscita attraverso un firewall nella vnet hub per il login e l'ispezione. E l'intero sistema è in peering
+
+00:16:23.640 --> 00:16:27.300
+con la tua rete aziendale così il tuo team interno può gestirlo. Questo è il vero valore,
+
+00:16:27.300 --> 00:16:31.080
+non una singola funzionalità. È il modo in cui lavorano tutti insieme. 20 anni fa avresti
+
+00:16:31.080 --> 00:16:35.100
+comprato server separati, configurato router fisici e gestito firewall per ogni dispositivo
+
+00:16:35.100 --> 00:16:39.540
+per ogni dispositivo. Era tutto manuale, lento e costoso. Azure ti offre tutto questo come
+
+00:16:39.540 --> 00:16:44.580
+servizio. Lo definisci con pochi clic o uno script e funziona semplicemente. Cosa significa
+
+00:16:44.580 --> 00:16:48.300
+questo per te? Una volta hai capito come questi pezzi si incastrano, la rete azzurra diventa
+
+00:16:48.300 --> 00:16:53.140
+prevedibile. Non stai tirando in due nè, stai progettando. Quando qualcosa si rompe sai esattamente
+
+00:16:53.140 --> 00:16:57.140
+dove guardare perché capisci il sistema? Ecco cosa voglio che tu porti a casa da questo
+
+00:16:57.140 --> 00:17:01.940
+episodio. Primo, il passo più importante che puoi fare. Crea una vnet con uno spazio indirizzi
+
+00:17:01.940 --> 00:17:05.360
+ben pianificato prima di distribuire qualsiasi cosa. Quella singola decisione influenza tutto
+
+00:17:05.360 --> 00:17:08.940
+ciò che viene dopo. Secondo, usa le subnet per separare i livelli della tua applicazione.
+
+00:17:09.420 --> 00:17:13.680
+Web server, app server, database, dai a ognuno il proprio spazio. E terzo, inizia con gli NSG.
+
+00:17:14.100 --> 00:17:18.260
+Sono gratuiti, sono potenti e migliorano drasticamente la tua sicurezza fin dal primo giorno.
+
+00:17:18.260 --> 00:17:22.640
+La tua vnet è la base di tutto ciò che costruisci in azzurra. Te la configuri bene e tutto il resto
+
+00:17:22.640 --> 00:17:26.840
+diventa più facile. Se sbagli passerai tutto il tempo a combattere con la tua rete. Iscriviti
+
+00:17:26.840 --> 00:17:30.100
+sulla tua piattaforma podcast preferita e condividi questo episodio con chi sta iniziando il suo
+
+00:17:30.100 --> 00:17:34.120
+percorso in azzurra. Lascia un commento se qualcosa ti è stato utile. Ci vediamo nel prossimo episodio.

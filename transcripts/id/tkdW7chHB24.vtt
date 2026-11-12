@@ -1,0 +1,2575 @@
+WEBVTT
+
+00:00:00.340 --> 00:00:06.880
+Siap untuk 10 hari pembahasan Microsoft 365, Copilot AI, Azure, dan para penggerak masa depan dunia kerja.
+
+00:00:07.880 --> 00:00:12.000
+Januari ini, M365 Con kembali hadir dan kami akan tampil lebih besar.
+
+00:00:12.760 --> 00:00:18.300
+Bergabunglah dalam sesi langsung demo dunia nyata dan pengetahuan praktis dari MVP serta pakar industri di seluruh dunia.
+
+00:00:18.860 --> 00:00:21.160
+Tanpa slide umum, tanpa jargon yang membosankan.
+
+00:00:21.940 --> 00:00:28.740
+Kami akan membahas tantangan nyata Copilot Studio, agen AI, fabrik, keamanan, tata kelola, dan otomatisasi.
+
+00:00:28.740 --> 00:00:34.440
+Baik Anda seorang profesional TI, pengembang, atau pemimpin bisnis, ada sesi yang dirancang khusus untuk Anda.
+
+00:00:35.440 --> 00:00:39.920
+Selama 10 hari penuh, Anda bisa menjelajahi berbagai teknologi dan terhubung dengan komunitas global.
+
+00:00:40.840 --> 00:00:44.260
+Tonton langsung dan bawa wawasan praktis kembali ke organisasi Anda.
+
+00:00:45.100 --> 00:00:48.880
+Januari 2020, 10 hari, satu komunitas Microsoft.
+
+00:00:49.360 --> 00:00:50.500
+Pendaftaran sudah dibuka sekarang.
+
+00:00:51.820 --> 00:00:55.360
+Kunjungi M365 Con.net dan amankan tempat Anda hari ini.
+
+00:00:55.360 --> 00:00:58.360
+Itu di M365 Con.net.
+
+00:00:58.740 --> 00:01:04.720
+Bergabunglah sekarang di M365 Con.net dan sampai jumpa langsung di bulan Januari.
+
+00:01:05.240 --> 00:01:08.880
+Pernah merasa bahwa menerapkan solusi power platform seperti maju satu langkah menurut dua langkah?
+
+00:01:09.620 --> 00:01:16.040
+Jika Anda lelah melihat perubahan data first Anda rusak di QA atau ketergantungannya mengacaukan penyebaran Anda, video ini tepat untuk Anda.
+
+00:01:16.040 --> 00:01:23.780
+Hari ini kami akan membedah alur Azure DevOps komponen demi komponen agar penyebaran Anda berjalan mulus bukan untung-untungan.
+
+00:01:24.700 --> 00:01:27.520
+Penasaran bagaimana cara kerja rollback yang sebenarnya saat otomatisasi menjadi unik?
+
+00:01:28.020 --> 00:01:29.640
+Mari kita umkap apa yang tidak pernah diberitahu dari dokumentasi.
+
+00:01:30.400 --> 00:01:34.080
+Penyebaran manual versus alur otomatis disitulah rasa sakit yang sebenarnya dimulai.
+
+00:01:34.800 --> 00:01:37.960
+Jika Anda bekerja dengan power platform, Anda mungkin pernah mengalami momen itu.
+
+00:01:39.280 --> 00:01:46.500
+Berjam-jam mengutak-atik aplikasi model driven, menyempurnakan alur power automate, menyesuaikan peran keamanan dengan cermat, semuanya masuk daftar, periksa.
+
+00:01:47.300 --> 00:01:52.860
+Anda telah meriksa ulang setiap kolom, mengeklik ekspor solusi, mengunggah file zip, dan berharap yang terbaik saat QA mendapatkan build baru.
+
+00:01:52.860 --> 00:01:59.120
+Kemudian, tepat saat semua orang bersiap untuk demo atau peluncuran, eh, ada sesuatu yang gagal, ada sesuatu yang gagal.
+
+00:01:59.820 --> 00:02:08.060
+Tabel tidak muncul, alur terpicu di lingkungan yang salah, atau lebih buruk lagi, impor gagal dengan salah satu kode kesalahan samar yang hanya berarti ada sesuatu yang tidak sinkron.
+
+00:02:10.500 --> 00:02:11.480
+Pro yang tiba-tiba terasa, nih.
+
+00:02:12.040 --> 00:02:17.440
+Rasa cemas yang familiar mulai muncul, dan Anda kembali harus melacak apa yang gagal, di mana, dan mengapa.
+
+00:02:17.820 --> 00:02:21.520
+Ini adalah kenyataan sehari-hari bagi tim yang mengandalkan penyebaran manual di power platform.
+
+00:02:21.520 --> 00:02:31.920
+Anda harus berjibaku mengekspor solusi ke desktop, memindahkan file zip antar lingkungan, terkadang menggunakan lembar Excel lama atau obrolan Teams untuk mencatat apa yang dipindahkan dan kapan.
+
+00:02:32.160 --> 00:02:38.220
+Jika Anda melewatkan kustomisasi, mungkin tabel baru atau referensi koneksi untuk alur, penyebaran Anda baru setengah jalan tapi sudah benar rusak.
+
+00:02:38.420 --> 00:02:39.060
+Tapi sudah benar rusak.
+
+00:02:39.480 --> 00:02:42.600
+Klasik berhasil di dev, tapi QA tidak tahu apa yang baru saja Anda kirimkan.
+
+00:02:43.300 --> 00:02:48.800
+Kini semua orang di Slack atau Teams mencoba mencari tahu apa yang kurang atau siapa yang terakhir mengekspor versi asli aplikasi tersebut.
+
+00:02:48.800 --> 00:02:52.480
+Penerapan manual ternyata lebih rapuh dan licik daripada yang diperkirakan TIT.
+
+00:02:52.860 --> 00:02:54.240
+Ini bukan sekadar tentang langkah yang terakhir.
+
+00:02:54.780 --> 00:02:59.420
+Anda berurusan dengan lingkungan yang perlahan bergeser dari keselarasan selama berminggu-minggu perubahan.
+
+00:03:00.700 --> 00:03:04.560
+Dev mendapatkan konektor atau izin baru, tetapi tidak ada yang mencatatnya untuk penerapan berikutnya.
+
+00:03:05.180 --> 00:03:08.020
+Mungkin seseorang mengubah detail pemicu alur, tetapi hanya di dev.
+
+00:03:08.580 --> 00:03:11.500
+Saat tiba di produksi, terjadi tambal sulam konfigurasi yang bergeser.
+
+00:03:11.500 --> 00:03:15.640
+Bahkan jika Anda mencoba mendokumentasikan segalanya, kesalahan manusia akan selalu menemukan celah.
+
+00:03:16.240 --> 00:03:21.920
+Satu perubahan larut malam setelah rapat, peran keamanan yang terlewat, atau variable lingkungan yang dipindahkan secara manual,
+
+00:03:22.140 --> 00:03:29.600
+tiba-tiba Anda mengejar masalah yang tidak jelas dua hari lalu, namun kini menghambat adopsi pengguna atau merusak data dalam integrasi penting.
+
+00:03:30.620 --> 00:03:32.440
+Berikut adalah cerita yang mungkin terdengar familiar bagi Anda.
+
+00:03:32.440 --> 00:03:40.480
+Alur power automate yang sangat penting bagi bisnis berjalan lancar di dev memindahkan baris antar tabel data first menggunakan beberapa referensi koneksi baru.
+
+00:03:41.940 --> 00:03:44.340
+Ekspor ke QI import terlihat baik saja tetapi tidak yang terkicu.
+
+00:03:45.540 --> 00:03:51.520
+Setelah berjam-jam meriksa log dan izin kembali, seseorang menyadari lingkungan QI tidak pernah memiliki referensi koneksi yang tepat.
+
+00:03:52.780 --> 00:03:55.300
+Tidak ada peringatan di UI, tidak ada yang ditandai pada langkah impor.
+
+00:03:55.600 --> 00:04:02.420
+Hal ini memerlukan pemeriksaan mendalam kelapisan solusi, dan dependensi komponen sementara itu, bisnis mengalami proses yang rusak.
+
+00:04:02.440 --> 00:04:03.380
+Selama hampir seminggu.
+
+00:04:04.640 --> 00:04:09.540
+Microsoft secara terbuka mengakui kendala ini dalam dokumentasi mereka, yang terasa cukup melegakan, terasa cukup melegakan.
+
+00:04:09.880 --> 00:04:16.880
+Bahkan, administrator berpengalaman, mereka yang sangat ahli dalam data first bisa kehilangan jejak dependensi tersembunyi, atau perbedaan lingkungan yang tipis.
+
+00:04:17.820 --> 00:04:21.640
+Hal hampir tidak disebutkan dalam dokumentasi justru seringkali menjadi penyebab gagalnya peluncuran.
+
+00:04:22.480 --> 00:04:23.400
+Ini bukan kesalahan pemula.
+
+00:04:24.000 --> 00:04:28.620
+Ini adalah dampak dari platform yang fleksibel, namun diam-diam penuh dengan tautan silang dan dependensi.
+
+00:04:28.620 --> 00:04:33.840
+Ketika Anda mengandalkan ingatan orang untuk setiap pengaturan, hanya masalah waktu sebelum sesuatu terlewat.
+
+00:04:34.520 --> 00:04:35.720
+Jadi, solusi utamanya adalah otomatisasi.
+
+00:04:36.360 --> 00:04:39.200
+Azure DevOps hadir untuk mengatasi masalah ini, berjanji.
+
+00:04:39.740 --> 00:04:46.620
+Mengubah langkah manual yang kerawan kesalahan menjadi alur kerja yang dapat diulang, dilacak, dan diharapkan sangat tangguh.
+
+00:04:47.560 --> 00:04:48.880
+Bagasan ini terlihat bagus di atas kertas.
+
+00:04:48.880 --> 00:04:53.380
+Anda menghubungkan pipeline, memasukkan power platform Anda, dan membiarkannya menangani pekerjaan berat.
+
+00:04:54.180 --> 00:04:59.720
+Solusi diekspor, diimpor, dependensi diperiksa, dan jika ada kegagalan, Anda langsung mengetahuinya.
+
+00:05:00.240 --> 00:05:01.780
+Anda mendapatkan log dengan setempel waktu yang lain.
+
+00:05:02.140 --> 00:05:04.780
+Tidak perlu lagi bertanya-tanya apakah alis atau bubuk yang memiliki saran yang terburuk.
+
+00:05:05.300 --> 00:05:08.640
+Jika dilakukan dengan benar, setiap penerapan memiliki versi dan dapat dilajak kembali ke sumbernya.
+
+00:05:09.400 --> 00:05:11.660
+Tidak ada lagi permainan tembak-tembakan dependensi atau kejutan gerai.
+
+00:05:12.060 --> 00:05:14.660
+Dan inilah angka yang disukai semua orang untuk dibagikan dalam persenjasaan.
+
+00:05:14.660 --> 00:05:20.360
+Tim yang beralih dari proses manual ke alur kerja otomatis mendapatkan siklus upan balik yang tidak hanya lebih cepat,
+
+00:05:20.480 --> 00:05:23.260
+tetapi benar-benar mencegah sebagian besar kegagalan penerapan.
+
+00:05:24.100 --> 00:05:26.540
+Terus saja, kesalahan masih bisa terjadi, namun dapat deteksi lebih awal.
+
+00:05:26.680 --> 00:05:29.280
+Sehingga Anda tidak perlu menghabiskan waktu berjam-jam untuk mencari tahu apa yang salah.
+
+00:05:29.680 --> 00:05:31.140
+Terpending lagi, Anda mendapatkan kemampuan audit.
+
+00:05:31.580 --> 00:05:34.720
+Anda dapat melacak setiap penerapan, mengetahui dengan tepat siapa yang merilis apa,
+
+00:05:35.080 --> 00:05:37.240
+dan menentukan di mana dan bagaimana sesuatu gagal.
+
+00:05:38.000 --> 00:05:40.220
+Namun kenyataannya ini tentang kepercayaan, bukan sekadar kecepatan.
+
+00:05:40.640 --> 00:05:43.020
+Jika tim Anda tidak bisa mempercayai proses penerapan,
+
+00:05:43.020 --> 00:05:44.920
+jika setiap rilis terasa seperti melempar dadu,
+
+00:05:45.100 --> 00:05:46.940
+maka setiap fitur hebat yang Anda buat beradam risiko,
+
+00:05:47.160 --> 00:05:48.620
+pemangku kepentingan menjadi ragu untuk melakukan.
+
+00:05:49.060 --> 00:05:51.460
+Pengguna merasa frustrasi karena gangguan atau fitur yang hilang.
+
+00:05:51.800 --> 00:05:56.940
+Janji inovasi low-code yang cepat akan sia-sia jika tahap akhir penerapan tetap tidak dapat diandalkan.
+
+00:05:58.000 --> 00:06:02.180
+Otomatisasi bukan hanya soal menghemat waktu atau mengesankan pimpinan dengan beralih ke DevOps.
+
+00:06:03.520 --> 00:06:06.460
+Ini adalah satu-satunya cara realistis untuk menghadirkan solusi power platform
+
+00:06:06.460 --> 00:06:09.140
+yang bekerja dengan cara yang sama setiap saat di setiap lingkungan.
+
+00:06:09.680 --> 00:06:12.680
+Jadi dengan alur kerja otomatis, Anda mendapatkan prediktabilitas.
+
+00:06:13.020 --> 00:06:16.540
+Anda mendapatkan catatan andal dari setiap dependensi penerapan dan langkah yang diambil.
+
+00:06:17.580 --> 00:06:20.420
+CIPersidi yang sesungguhnya untuk power platform menjadi mungkin,
+
+00:06:20.920 --> 00:06:24.100
+dan pemecahan masalah menjadi perkara lock bukan sekadar menebak-nebak.
+
+00:06:24.980 --> 00:06:26.440
+Tentu saja semua ini tidak terjadi secara jep.
+
+00:06:26.440 --> 00:06:30.120
+Otomatisasi hanya sekuat tautan antara alur kerja dan lingkungan Anda.
+
+00:06:30.120 --> 00:06:32.860
+Di situlah hal-hal masih bisa menjadi kacau.
+
+00:06:33.900 --> 00:06:39.140
+Jadi, selanjutnya mari kita bahas cara menghubungkan Azure DevOps ke power platform Anda
+
+00:06:39.140 --> 00:06:42.580
+dengan cara yang stabil, aman, dan tidak rusak pada jam 3 pagi.
+
+00:06:43.860 --> 00:06:47.060
+Berkatnya, koneksi layanan dan kumpulan agen tidak akan rusak.
+
+00:06:47.060 --> 00:06:50.900
+Jika Anda pernah mencoba menghubungkan Azure DevOps ke power platform
+
+00:06:50.900 --> 00:06:53.420
+dan melihat alur kerja langsung memunculkan kesalahan izin,
+
+00:06:53.780 --> 00:06:56.800
+atau berhenti merespons terlalu lama, Anda tidak sendirian.
+
+00:06:57.080 --> 00:06:57.920
+Anda tidak sendirian.
+
+00:06:58.620 --> 00:07:00.900
+Hampir setiap tim mengalami kendala ini di suatu titik.
+
+00:07:01.620 --> 00:07:03.240
+Alur kerja Anda mungkin dirancang dan sangat indah.
+
+00:07:03.800 --> 00:07:05.020
+Ya malah Anda mungkin sempurna,
+
+00:07:05.320 --> 00:07:07.520
+tetapi satu koneksi layanan yang salah konfigurasi
+
+00:07:07.520 --> 00:07:09.600
+atau pengaturan agen yang hilang akan membuat Anda
+
+00:07:09.600 --> 00:07:11.800
+berhadapan dengan kesalahan autentikasi
+
+00:07:11.800 --> 00:07:13.480
+atau bingung mengapa tidak ada yang berjalan.
+
+00:07:14.260 --> 00:07:17.160
+Kenyataannya, penerapan power platform berhasil atau gagal
+
+00:07:17.160 --> 00:07:18.860
+bergantung pada apa yang terjadi di balik layar
+
+00:07:18.860 --> 00:07:20.260
+yang saya sebut sebagai pipa tak terlihat.
+
+00:07:21.560 --> 00:07:23.100
+Kita berbicara tentang koneksi layanan,
+
+00:07:23.460 --> 00:07:24.900
+alur autentikasi, kumpulan agen,
+
+00:07:24.980 --> 00:07:27.000
+dan pengaturan kecil yang diam-diam menyatukan segalanya
+
+00:07:27.000 --> 00:07:28.300
+atau justru merusak hari Anda.
+
+00:07:29.580 --> 00:07:31.560
+Jujur saja, konsep ini terasa sangat sederhana.
+
+00:07:33.220 --> 00:07:35.180
+Anda membuat koneksi layanan di Azure DevOps
+
+00:07:35.180 --> 00:07:36.340
+memberikan kredensial,
+
+00:07:36.660 --> 00:07:37.880
+mengarahkannya ke lingkungan Anda,
+
+00:07:37.880 --> 00:07:39.940
+dan kembali membangun alur kerja Anda.
+
+00:07:41.100 --> 00:07:42.320
+Namun di balik itu semua,
+
+00:07:42.460 --> 00:07:43.700
+terdapat jaringan izin, token,
+
+00:07:43.840 --> 00:07:45.120
+dan jabat tangan API yang kompleks.
+
+00:07:46.040 --> 00:07:46.700
+Lewatkan satu,
+
+00:07:46.960 --> 00:07:48.820
+dan Anda mungkin tidak hanya merusak alur kerja Anda,
+
+00:07:48.980 --> 00:07:50.620
+tetapi berpotensi mengganggu integrasi
+
+00:07:50.620 --> 00:07:52.860
+bagi siapapun yang menggunakan prinsipal layanan yang sama.
+
+00:07:53.820 --> 00:07:54.620
+Ini bukan sekadar teori.
+
+00:07:55.200 --> 00:07:56.960
+Saya pernah melihat tim bekerja dengan sempurna
+
+00:07:56.960 --> 00:07:57.860
+selama berbulan-bulan,
+
+00:07:58.000 --> 00:08:00.540
+namun gagal saat menjalankan satu penerapan saja.
+
+00:08:01.480 --> 00:08:03.460
+Penyebabnya selalu detail di balik layar,
+
+00:08:03.600 --> 00:08:04.760
+seperti secret yang kendaluarsa,
+
+00:08:04.760 --> 00:08:06.600
+peran yang hilang dari akun layanan
+
+00:08:06.600 --> 00:08:09.700
+atau lingkup izin yang berubah di Azure Active Directory.
+
+00:08:11.300 --> 00:08:12.440
+Skenario terburuknya,
+
+00:08:12.660 --> 00:08:14.880
+Anda bisa saja terkunci dari lingkungan kerja Anda sendiri
+
+00:08:14.880 --> 00:08:16.980
+jika terlalu agresif dalam memberikan tugas peran.
+
+00:08:18.000 --> 00:08:18.640
+Layankan pengaturan.
+
+00:08:19.220 --> 00:08:20.560
+Anda akhirnya mendapat persetujuan
+
+00:08:20.560 --> 00:08:21.980
+untuk menggunakan prinsipal layanan
+
+00:08:21.980 --> 00:08:22.940
+bagi alur kerja Anda
+
+00:08:22.940 --> 00:08:25.020
+demi keamanan nyata dan pemisahan tugas.
+
+00:08:25.020 --> 00:08:26.900
+Teorinya masuk akal.
+
+00:08:27.240 --> 00:08:28.960
+Anda punya satu identitas untuk setiap lingkungan
+
+00:08:28.960 --> 00:08:30.040
+dan semuanya seharusnya berjalan saja.
+
+00:08:30.500 --> 00:08:31.420
+Namun tibalah hari penerapan.
+
+00:08:31.940 --> 00:08:33.080
+Anda menjalankan alur kerja
+
+00:08:33.080 --> 00:08:35.180
+dan langsung gagal di langkah autentikasi pertama.
+
+00:08:35.700 --> 00:08:36.880
+Pesan kesalannya sangat tidak jelas.
+
+00:08:37.340 --> 00:08:38.120
+Anda memberiksa log
+
+00:08:38.120 --> 00:08:39.600
+dan mendapati bahwa Anda melewatkan
+
+00:08:39.600 --> 00:08:41.540
+satu tugas peran dataverse yang kecil.
+
+00:08:42.140 --> 00:08:43.060
+Satu kotak centang saja
+
+00:08:43.060 --> 00:08:44.900
+dan agen Anda tidak bisa mengakses lingkungan tersebut.
+
+00:08:44.900 --> 00:08:46.880
+Tentu saja, log tidak menyebutkan masyarakat.
+
+00:08:47.580 --> 00:08:49.720
+Log hanya memberikan pesan umum tidak diizinkan
+
+00:08:49.720 --> 00:08:51.540
+sehingga Anda pun mengutaatik portal Azure
+
+00:08:51.540 --> 00:08:52.660
+pada jam 11 malam,
+
+00:08:53.100 --> 00:08:53.860
+mengganti izin
+
+00:08:53.860 --> 00:08:56.080
+dan berharap tidak merusak hal lainnya.
+
+00:08:57.140 --> 00:08:58.320
+Ini sangat membuat frustrasi
+
+00:08:58.320 --> 00:09:00.200
+namun sebenarnya bisa dihindari.
+
+00:09:00.980 --> 00:09:01.600
+Ada pola di sini.
+
+00:09:02.300 --> 00:09:03.260
+Satu izin yang terlewat
+
+00:09:03.260 --> 00:09:04.720
+atau pengaturan yang tidak standar
+
+00:09:04.720 --> 00:09:05.860
+bisa menghambat semuanya.
+
+00:09:07.000 --> 00:09:08.480
+Itulah mengapa praktik terbaiknya adalah
+
+00:09:08.480 --> 00:09:10.020
+menggunakan prinsipal layanan khusus.
+
+00:09:10.780 --> 00:09:11.720
+Dan inilah poin utamanya.
+
+00:09:12.500 --> 00:09:13.620
+Jangan hanya memberikan hak admin
+
+00:09:13.620 --> 00:09:15.000
+dimanapun hanya demi kemudahan.
+
+00:09:16.020 --> 00:09:17.660
+Berikan hanya peran dataverse minimal
+
+00:09:17.660 --> 00:09:19.020
+yang diperlukan untuk lingkungan
+
+00:09:19.020 --> 00:09:20.060
+dan tugas spesifiknya.
+
+00:09:21.220 --> 00:09:22.020
+Mungkin terdengar berlebihan
+
+00:09:22.020 --> 00:09:23.040
+jika Anda baru di DevOps
+
+00:09:23.040 --> 00:09:24.020
+tapi di dunia nyata
+
+00:09:24.020 --> 00:09:25.460
+ini mencegah seseorang menghapus
+
+00:09:25.460 --> 00:09:27.060
+atau merusak data secara tidak sengaja
+
+00:09:27.060 --> 00:09:28.780
+karena prinsipal layanan yang terlalu kuat
+
+00:09:28.780 --> 00:09:29.900
+memiliki akses ke mana-mana.
+
+00:09:31.040 --> 00:09:32.340
+Ini juga membuat penggantian kunci
+
+00:09:32.340 --> 00:09:33.580
+atau secret menjadi lebih rapi.
+
+00:09:34.620 --> 00:09:36.360
+Jika Anda perlu mencabut koneksi dari QA
+
+00:09:36.360 --> 00:09:38.220
+Anda tidak berisiko merusak lingkungan produksi.
+
+00:09:39.280 --> 00:09:40.700
+Tim yang menerapkan pemisahan ini
+
+00:09:40.700 --> 00:09:41.920
+jarang mengalami kebanikan
+
+00:09:41.920 --> 00:09:43.560
+saat semua lingkungan tumbang.
+
+00:09:43.620 --> 00:09:46.700
+Sekarang mari kita bicara soal kumpulan agen
+
+00:09:46.700 --> 00:09:47.440
+karena anehnya
+
+00:09:47.440 --> 00:09:49.340
+mereka sering dianggap sebagai pelengkap saja.
+
+00:09:50.760 --> 00:09:51.940
+Anda memiliki dua opsi utama
+
+00:09:51.940 --> 00:09:53.140
+agen yang di hosting Microsoft
+
+00:09:53.140 --> 00:09:54.460
+dan agen yang di hosting sendiri.
+
+00:09:55.480 --> 00:09:56.820
+Kebanyakan orang memilih apapun
+
+00:09:56.820 --> 00:09:57.680
+yang menjadi bawaan
+
+00:09:57.680 --> 00:09:59.040
+di proyek Azure DevOps mereka
+
+00:09:59.040 --> 00:10:00.900
+dan berharap semuanya berjalan lancar.
+
+00:10:02.400 --> 00:10:04.000
+Untuk tugas .NET atau web dasar
+
+00:10:04.000 --> 00:10:05.540
+cara ini biasanya berhasil.
+
+00:10:06.300 --> 00:10:07.160
+Namun dengan Power Platform
+
+00:10:07.160 --> 00:10:08.460
+Anda pada akhirnya akan menemui kenala
+
+00:10:08.460 --> 00:10:10.220
+agen yang di hosting Microsoft
+
+00:10:10.220 --> 00:10:11.720
+sangat bagus untuk tugas build dasar.
+
+00:10:11.720 --> 00:10:13.440
+Tetapi karena disediakan secara dinamis
+
+00:10:13.440 --> 00:10:14.320
+dan digunakan bersama
+
+00:10:14.320 --> 00:10:15.440
+Anda tidak bisa menjamin
+
+00:10:15.440 --> 00:10:16.740
+semua prasyarat tersedia.
+
+00:10:17.740 --> 00:10:19.880
+Seperti versi spesifik alat build power platform
+
+00:10:19.880 --> 00:10:21.240
+atau modul power cell custom
+
+00:10:21.240 --> 00:10:23.600
+yang Anda perlukan untuk tugas solusi yang lebih kompleks.
+
+00:10:24.880 --> 00:10:25.480
+Ditambah lagi
+
+00:10:25.480 --> 00:10:26.900
+jika Anda membutuhkan perangkat lunak
+
+00:10:26.900 --> 00:10:27.800
+atau integrasi custom
+
+00:10:27.800 --> 00:10:29.040
+apapun yang tidak dicitra standar
+
+00:10:29.040 --> 00:10:29.860
+Anda akan kesulitan.
+
+00:10:30.300 --> 00:10:31.020
+Dan semoga beruntung
+
+00:10:31.020 --> 00:10:32.300
+dalam memecahkan masalah kegagalan
+
+00:10:32.300 --> 00:10:33.640
+terisolasi di lingkungan yang bukan milikan.
+
+00:10:34.260 --> 00:10:35.000
+Agen yang di host sendiri
+
+00:10:35.000 --> 00:10:36.540
+memberi Anda kenali penuh atas lingkungan
+
+00:10:36.540 --> 00:10:38.180
+yang bisa menjadi anugerah sekaling kutukan.
+
+00:10:38.180 --> 00:10:42.000
+Di satu sisi Anda dapat menginstal terlebih dahulu
+
+00:10:42.000 --> 00:10:43.300
+alat build SDK script
+
+00:10:43.300 --> 00:10:45.420
+apapun yang diputuhkan proyek Anda.
+
+00:10:46.580 --> 00:10:48.220
+Jika Anda memiliki konektor unik
+
+00:10:48.220 --> 00:10:49.580
+atau sekumpulan dependensi yang stabil
+
+00:10:49.580 --> 00:10:51.000
+ini dapat menghemat banyak waktu.
+
+00:10:51.760 --> 00:10:52.360
+Di sisi lain
+
+00:10:52.360 --> 00:10:53.280
+Anda bertanggung jawab
+
+00:10:53.280 --> 00:10:54.380
+penuh atas membaru mesin
+
+00:10:54.380 --> 00:10:54.920
+penambalan
+
+00:10:54.920 --> 00:10:56.100
+dan menjaga agar agen
+
+00:10:56.100 --> 00:10:57.200
+tetap berjalan.
+
+00:10:58.020 --> 00:10:58.320
+Namun
+
+00:10:58.320 --> 00:10:59.760
+banyak tim lebih memilih cara ini
+
+00:10:59.760 --> 00:11:01.500
+terutama jika pekerjaan power platform
+
+00:11:01.500 --> 00:11:02.340
+mereka mencakup
+
+00:11:02.340 --> 00:11:03.480
+banyak langkah build custom
+
+00:11:03.480 --> 00:11:04.160
+atau integrasi
+
+00:11:04.160 --> 00:11:05.040
+yang tidak cocok
+
+00:11:05.040 --> 00:11:06.380
+dengan citra bersama Microsoft.
+
+00:11:06.380 --> 00:11:08.580
+Satu tips yang sering terawatkan
+
+00:11:08.580 --> 00:11:09.600
+selalu lakukan uji coba.
+
+00:11:09.900 --> 00:11:10.820
+Uji koneksi lain Anda
+
+00:11:10.820 --> 00:11:12.000
+dan lakukan ekspor percobaan
+
+00:11:12.000 --> 00:11:13.060
+sebelum Anda memasukkan sesuatu
+
+00:11:13.060 --> 00:11:14.400
+yang penting melalui pipeline Anda.
+
+00:11:14.860 --> 00:11:15.760
+Hanya karena pipeline Anda
+
+00:11:15.760 --> 00:11:16.500
+menyatakan terhubung
+
+00:11:16.500 --> 00:11:17.800
+bukan berarti pipeline tersebut
+
+00:11:17.800 --> 00:11:19.080
+memiliki tingkat akses yang tepat
+
+00:11:19.080 --> 00:11:19.880
+untuk setiap operasi
+
+00:11:19.880 --> 00:11:20.680
+yang ingin Anda lakukan.
+
+00:11:21.220 --> 00:11:22.280
+Ekspor uji coba itu adalah
+
+00:11:22.280 --> 00:11:22.960
+jaring pengaman Anda.
+
+00:11:23.380 --> 00:11:24.500
+Anda akan menemukan celah izin,
+
+00:11:24.620 --> 00:11:25.140
+masalah peran
+
+00:11:25.140 --> 00:11:26.540
+dan bahkan keanehan jaringan dasar
+
+00:11:26.540 --> 00:11:27.320
+sebelum Anda terjebak
+
+00:11:27.320 --> 00:11:28.440
+dalam penerapan produksi.
+
+00:11:29.220 --> 00:11:30.260
+Lebih baik mengetahuinya sekarang
+
+00:11:30.260 --> 00:11:31.260
+daripada saat Anda berpacu
+
+00:11:31.260 --> 00:11:32.160
+dengan jendela peluncuran.
+
+00:11:32.160 --> 00:11:33.660
+Jadi yang benar-benar Anda inginkan
+
+00:11:33.660 --> 00:11:34.780
+adalah keandalan tanpa kejutan.
+
+00:11:35.300 --> 00:11:36.360
+Koneksi layanan yang tahan lama
+
+00:11:36.360 --> 00:11:37.280
+dan kumpulan agen
+
+00:11:37.280 --> 00:11:37.980
+adalah fondasi
+
+00:11:37.980 --> 00:11:39.520
+untuk semua yang terjadi setelahnya.
+
+00:11:40.640 --> 00:11:41.300
+Jika ini salah,
+
+00:11:41.480 --> 00:11:42.440
+tidak masalah seberapa rapi
+
+00:11:42.440 --> 00:11:42.900
+yang melal Anda
+
+00:11:42.900 --> 00:11:44.100
+atau seberapa canggih
+
+00:11:44.100 --> 00:11:44.900
+tugas pipeline Anda
+
+00:11:44.900 --> 00:11:45.840
+semuanya akan gagal
+
+00:11:45.840 --> 00:11:46.580
+karena dasarnya
+
+00:11:46.580 --> 00:11:47.960
+tidak terhubung dengan benar.
+
+00:11:49.380 --> 00:11:50.320
+Setelah Anda menguasai
+
+00:11:50.320 --> 00:11:51.600
+infrastruktur tak terlihat ini,
+
+00:11:51.760 --> 00:11:52.580
+sisa proses pipeline
+
+00:11:52.580 --> 00:11:53.760
+akan berjalan dengan jauh
+
+00:11:53.760 --> 00:11:54.580
+lebih sedikit drama
+
+00:11:54.580 --> 00:11:55.820
+dan lebih dapat diprediksi.
+
+00:11:56.800 --> 00:11:57.600
+Sakit kepala beralih
+
+00:11:57.600 --> 00:11:58.540
+dari mengapa pipeline saya
+
+00:11:58.540 --> 00:11:59.360
+tidak pernah dimulai menjadi.
+
+00:11:59.840 --> 00:12:00.520
+Bagaimana cara membuat
+
+00:12:00.520 --> 00:12:01.420
+pipeline saya lebih cerdas?
+
+00:12:01.420 --> 00:12:02.520
+Yang merupakan masalah
+
+00:12:02.520 --> 00:12:03.280
+yang jauh lebih menenangkan
+
+00:12:03.280 --> 00:12:03.860
+untuk dipecahkan.
+
+00:12:04.180 --> 00:12:05.120
+Dengan koneksi yang stabil
+
+00:12:05.120 --> 00:12:05.800
+dan agen Anda
+
+00:12:05.800 --> 00:12:06.740
+yang berjalan dengan andal,
+
+00:12:06.880 --> 00:12:07.820
+Anda baru saja melewati
+
+00:12:07.820 --> 00:12:08.840
+rintangan nyata yang pertama.
+
+00:12:09.440 --> 00:12:10.580
+Namun infrastruktur yang solid
+
+00:12:10.580 --> 00:12:11.120
+tidak menjamin
+
+00:12:11.120 --> 00:12:12.380
+akan menangkap masalah solusi
+
+00:12:12.380 --> 00:12:13.200
+sebelum mencapai produksi.
+
+00:12:13.900 --> 00:12:14.420
+Selanjutnya,
+
+00:12:14.580 --> 00:12:15.100
+mari kita selami
+
+00:12:15.100 --> 00:12:15.920
+bagaimana pemeriksaan
+
+00:12:15.920 --> 00:12:16.820
+dan validasi otomatis
+
+00:12:16.820 --> 00:12:17.720
+melindungi lingkungan Anda
+
+00:12:17.720 --> 00:12:18.520
+dari kesalahan diam
+
+00:12:18.520 --> 00:12:19.260
+sebelum menyebar.
+
+00:12:20.540 --> 00:12:21.780
+Agar pembatas otomatis
+
+00:12:21.780 --> 00:12:22.900
+pemeriksaan dependensi
+
+00:12:22.900 --> 00:12:24.300
+dan validasi prapenyebaran.
+
+00:12:25.120 --> 00:12:26.060
+Jika Anda pernah melihat
+
+00:12:26.060 --> 00:12:27.240
+penerapan power platform
+
+00:12:27.240 --> 00:12:28.140
+lulus di dev
+
+00:12:28.140 --> 00:12:29.740
+melalui proses DQA
+
+00:12:31.420 --> 00:12:32.220
+mendarat di produksi,
+
+00:12:32.400 --> 00:12:33.000
+Anda tahu ke mana
+
+00:12:33.000 --> 00:12:33.820
+arah pembicaraan.
+
+00:12:34.080 --> 00:12:34.320
+Ini
+
+00:12:34.320 --> 00:12:36.200
+masalah hampir tidak pernah
+
+00:12:36.200 --> 00:12:37.440
+menguamkan diri mereka sebelumnya.
+
+00:12:38.480 --> 00:12:39.040
+Sebaliknya,
+
+00:12:39.260 --> 00:12:40.180
+Anda justru mendapatkan
+
+00:12:40.180 --> 00:12:41.320
+dependensi yang tersembunyi
+
+00:12:41.320 --> 00:12:42.920
+yang berada dua atau tiga klik
+
+00:12:42.920 --> 00:12:43.860
+di dalam canvas app
+
+00:12:43.860 --> 00:12:44.540
+atau terkubur
+
+00:12:44.540 --> 00:12:45.440
+di dalam subalur
+
+00:12:45.440 --> 00:12:46.500
+model driven app.
+
+00:12:47.540 --> 00:12:48.440
+Bagi lingkungan pengembang,
+
+00:12:48.600 --> 00:12:49.380
+semuanya tampak baik.
+
+00:12:49.720 --> 00:12:50.440
+Tetapi di produksi,
+
+00:12:50.700 --> 00:12:51.620
+dengan konektornya sendiri,
+
+00:12:51.800 --> 00:12:53.000
+pengguna dengan lisensi berbeda
+
+00:12:53.000 --> 00:12:53.800
+atau sedikit perbedaan
+
+00:12:53.800 --> 00:12:55.000
+peran keamanan data first.
+
+00:12:55.720 --> 00:12:56.860
+Kelembangan sistem segera terlihat.
+
+00:12:57.680 --> 00:12:58.520
+Sekarang suara jadi panik.
+
+00:12:58.940 --> 00:12:59.860
+Terkadang satu-satunya peringatan
+
+00:12:59.860 --> 00:13:00.800
+yang Anda terima hanyalah pengguna
+
+00:13:00.800 --> 00:13:01.100
+yang berkata,
+
+00:13:01.160 --> 00:13:02.080
+hey, dat ini tidak diperbarui.
+
+00:13:02.520 --> 00:13:03.260
+Atau tiga dukungan
+
+00:13:03.260 --> 00:13:03.820
+dengan stack trace
+
+00:13:03.820 --> 00:13:05.080
+yang tidak memberikan informasi apa-apa.
+
+00:13:05.940 --> 00:13:06.700
+Apa masalah berdasarnya?
+
+00:13:07.100 --> 00:13:07.820
+Tidak ada yang memeriksa
+
+00:13:07.820 --> 00:13:09.080
+apakah semua bagian yang bergerak
+
+00:13:09.080 --> 00:13:10.420
+benar-benar selamat saat dipindahkan.
+
+00:13:10.980 --> 00:13:11.560
+Inilah sebabnya
+
+00:13:11.560 --> 00:13:12.660
+pemeriksaan dependensi
+
+00:13:12.660 --> 00:13:13.880
+dan validasi perpenyebaran
+
+00:13:13.880 --> 00:13:15.120
+bukan sekadar fitur tambahan.
+
+00:13:15.740 --> 00:13:16.520
+Itu adalah sistem kekembangan
+
+00:13:16.520 --> 00:13:17.100
+bagi pahaman Anda.
+
+00:13:17.800 --> 00:13:18.920
+Anggap saja mereka sebagai pihak
+
+00:13:18.920 --> 00:13:19.760
+yang berjalan lebih dulu
+
+00:13:19.760 --> 00:13:20.440
+sebelum penyebaran,
+
+00:13:20.540 --> 00:13:21.540
+nyalakan sender ke semua sudut
+
+00:13:21.540 --> 00:13:22.680
+tempat masalah suka bersembunyi.
+
+00:13:23.960 --> 00:13:24.940
+Pelindung otomatis ini
+
+00:13:24.940 --> 00:13:25.600
+menangkap hal-hal
+
+00:13:25.600 --> 00:13:26.700
+seperti chart flow yang hilang,
+
+00:13:26.800 --> 00:13:27.520
+referensi koneksi
+
+00:13:27.520 --> 00:13:28.380
+yang tidak ada
+
+00:13:28.380 --> 00:13:29.480
+atau komponen unmanaged
+
+00:13:29.480 --> 00:13:30.620
+yang tidak pernah ditambahkan
+
+00:13:30.620 --> 00:13:31.460
+ke ekspor Anda.
+
+00:13:32.500 --> 00:13:33.580
+Tanpa pemeriksaan ini,
+
+00:13:33.720 --> 00:13:34.280
+setiap penyebaran
+
+00:13:34.280 --> 00:13:35.160
+adalah sebuah pertaruhan.
+
+00:13:35.760 --> 00:13:36.400
+Anda hanya berharap
+
+00:13:36.400 --> 00:13:37.440
+sistem di bawah aplikasi Anda
+
+00:13:37.440 --> 00:13:38.660
+terlihat sama di setiap lingkungan
+
+00:13:38.660 --> 00:13:39.780
+dan Anda baru tahu
+
+00:13:39.780 --> 00:13:40.620
+jika itu tidak terjadi
+
+00:13:40.620 --> 00:13:41.480
+setelah laporan Insiden
+
+00:13:41.480 --> 00:13:42.500
+masuk ke kotak masuk Anda.
+
+00:13:43.020 --> 00:13:43.540
+Saya telah melihat
+
+00:13:43.540 --> 00:13:44.300
+kejadian ini lebih sering
+
+00:13:44.300 --> 00:13:44.880
+daripada yang Insiden.
+
+00:13:45.500 --> 00:13:46.580
+Satu proyek mengalami
+
+00:13:46.580 --> 00:13:47.380
+mimpi buruk berulang
+
+00:13:47.380 --> 00:13:48.740
+yakni alur power automate
+
+00:13:48.740 --> 00:13:49.560
+yang berfungsi sempurna
+
+00:13:49.560 --> 00:13:50.360
+di setiap uji coba
+
+00:13:54.940 --> 00:13:55.840
+ternyata perbaikan cepat
+
+00:13:55.840 --> 00:13:56.540
+memiliki chart flow
+
+00:13:56.540 --> 00:13:57.300
+sebagai dependensi
+
+00:13:57.300 --> 00:13:58.000
+dan proses ekspor
+
+00:13:58.000 --> 00:13:58.940
+tidak mendeteksi bahwa
+
+00:13:58.940 --> 00:13:59.600
+chart flow tersebut
+
+00:13:59.600 --> 00:14:00.480
+berada di luar solusi
+
+00:14:00.480 --> 00:14:01.500
+terkelola manager solution.
+
+00:14:02.560 --> 00:14:03.600
+Ketika chart flow itu
+
+00:14:03.600 --> 00:14:04.900
+gagal muncul di QA
+
+00:14:04.900 --> 00:14:06.440
+dan produksi logika utamanya
+
+00:14:06.440 --> 00:14:08.020
+gagal secara diam-diam.
+
+00:14:08.980 --> 00:14:09.700
+Tanpa kesalahan,
+
+00:14:09.760 --> 00:14:10.320
+tanpa peringatan,
+
+00:14:10.520 --> 00:14:11.240
+proses hanya berhenti
+
+00:14:11.240 --> 00:14:11.860
+secara senyap
+
+00:14:11.860 --> 00:14:12.620
+dan pengguna bingung
+
+00:14:12.620 --> 00:14:13.540
+mengapa tugas mereka
+
+00:14:13.540 --> 00:14:14.880
+tiba-tiba terhenti.
+
+00:14:15.620 --> 00:14:16.440
+Kami baru menyadarinya
+
+00:14:16.440 --> 00:14:17.280
+setelah cukup banyak pengguna
+
+00:14:17.280 --> 00:14:18.500
+melaporkan pembaruan yang hilang
+
+00:14:18.500 --> 00:14:19.400
+hingga akhirnya
+
+00:14:19.400 --> 00:14:19.980
+seseorang menemukan
+
+00:14:19.980 --> 00:14:20.720
+tautan yang terlewat.
+
+00:14:21.400 --> 00:14:21.820
+Saat itu,
+
+00:14:24.940 --> 00:14:25.680
+pemeriksaan manual.
+
+00:14:26.800 --> 00:14:28.060
+Satu dependensi yang terabaikan
+
+00:14:28.060 --> 00:14:29.200
+menyebabkan kekacauan
+
+00:14:29.200 --> 00:14:30.340
+yang seharusnya bisa ditandai
+
+00:14:30.340 --> 00:14:31.300
+dengan pelindung yang tepat.
+
+00:14:32.100 --> 00:14:32.940
+Yang paling mengejutkan adalah
+
+00:14:32.940 --> 00:14:33.480
+peta pemudahannya
+
+00:14:33.480 --> 00:14:34.220
+hal ini dicegaskan.
+
+00:14:34.640 --> 00:14:35.840
+Alat seperti solution checker
+
+00:14:35.840 --> 00:14:36.540
+di power platform
+
+00:14:36.540 --> 00:14:37.280
+memungkinkan Anda
+
+00:14:37.280 --> 00:14:38.420
+mengatur pemindahan otomatis
+
+00:14:38.420 --> 00:14:39.320
+sebagai langkah pipeline
+
+00:14:39.320 --> 00:14:40.700
+memberikan peringatan awal
+
+00:14:40.700 --> 00:14:41.920
+tentang masalah
+
+00:14:41.920 --> 00:14:42.840
+pelapisan solusi
+
+00:14:42.840 --> 00:14:43.740
+dependensi
+
+00:14:43.740 --> 00:14:44.420
+yang hilang
+
+00:14:44.420 --> 00:14:45.440
+kinerja aplikasi
+
+00:14:45.440 --> 00:14:46.020
+hingga
+
+00:14:46.020 --> 00:14:47.560
+rekomendasi keamanan.
+
+00:14:49.220 --> 00:14:50.300
+Alat build power platform
+
+00:14:50.300 --> 00:14:51.460
+untuk Azure DevOps
+
+00:14:51.460 --> 00:14:52.240
+membuat hal ini
+
+00:14:52.240 --> 00:14:53.100
+semakin mendekati
+
+00:14:53.100 --> 00:14:54.660
+realitas CI per CD
+
+00:14:54.660 --> 00:14:56.860
+dengan langkah pipeline yang tepat
+
+00:14:56.860 --> 00:14:57.940
+Anda melakukan jauh lebih banyak
+
+00:14:57.940 --> 00:14:58.780
+daripada sekadar impor.
+
+00:14:59.520 --> 00:15:00.620
+Anda menjalankan
+
+00:15:00.620 --> 00:15:01.440
+pemeriksaan validasi
+
+00:15:01.440 --> 00:15:02.360
+terhadap solusi tersebut
+
+00:15:02.360 --> 00:15:03.180
+sekaligus koneksinya
+
+00:15:03.180 --> 00:15:04.080
+ke lingkungan target.
+
+00:15:05.300 --> 00:15:06.280
+Jika Anda memiliki
+
+00:15:06.280 --> 00:15:07.200
+kebutuhan tambahan
+
+00:15:07.200 --> 00:15:08.160
+script power shell custom
+
+00:15:08.160 --> 00:15:08.940
+memungkinkan Anda
+
+00:15:08.940 --> 00:15:10.260
+melangkah lebih jauh
+
+00:15:10.260 --> 00:15:11.640
+memindai variabel lingkungan
+
+00:15:11.640 --> 00:15:12.560
+yang diperlukan
+
+00:15:12.560 --> 00:15:13.700
+memvalidasi koneksi
+
+00:15:13.700 --> 00:15:14.420
+API premium
+
+00:15:14.420 --> 00:15:15.980
+atau memeriksa lingkup izin
+
+00:15:15.980 --> 00:15:16.640
+pada alur
+
+00:15:16.640 --> 00:15:18.020
+yang terintegrasi
+
+00:15:18.020 --> 00:15:18.460
+dengan
+
+00:15:18.460 --> 00:15:19.240
+AD.
+
+00:15:20.640 --> 00:15:21.420
+Hal yang menarik adalah
+
+00:15:21.420 --> 00:15:22.340
+seberapa banyak yang dapat
+
+00:15:22.340 --> 00:15:23.160
+ditangkap oleh sistem
+
+00:15:23.160 --> 00:15:23.940
+pengaman otomatis ini
+
+00:15:23.940 --> 00:15:24.800
+dibandingkan metode lama
+
+00:15:24.800 --> 00:15:25.400
+yaitu ekspor
+
+00:15:25.400 --> 00:15:26.320
+lalu berharap yang terbaik.
+
+00:15:26.680 --> 00:15:27.320
+Studi komunitas
+
+00:15:27.320 --> 00:15:28.340
+mengatakan pemeriksaan ini
+
+00:15:28.340 --> 00:15:29.020
+menandai hingga
+
+00:15:29.020 --> 00:15:29.960
+70% masalah
+
+00:15:29.960 --> 00:15:31.220
+sebelum peluncuran dilakukan.
+
+00:15:31.680 --> 00:15:32.080
+Dilakukan.
+
+00:15:32.420 --> 00:15:32.960
+Itu berarti
+
+00:15:32.960 --> 00:15:33.680
+lebih sedikit panggilan
+
+00:15:33.680 --> 00:15:34.500
+di luar jam kerja
+
+00:15:34.500 --> 00:15:35.460
+lebih sedikit sprint
+
+00:15:35.460 --> 00:15:36.160
+perbaikan untuk
+
+00:15:36.160 --> 00:15:37.080
+mengatasi kerusakan
+
+00:15:37.080 --> 00:15:38.820
+dan jauh lebih sedikit
+
+00:15:38.820 --> 00:15:39.420
+rapat canggung
+
+00:15:39.420 --> 00:15:40.240
+untuk menjelaskan
+
+00:15:40.240 --> 00:15:41.260
+kepada pimpinan
+
+00:15:41.260 --> 00:15:42.560
+mengapa peluncuran gagal.
+
+00:15:42.980 --> 00:15:43.160
+Gal.
+
+00:15:43.900 --> 00:15:44.860
+Riset dan studi kasus
+
+00:15:44.860 --> 00:15:45.440
+Microsoft sendiri
+
+00:15:45.440 --> 00:15:46.140
+mendukung hal ini.
+
+00:15:46.760 --> 00:15:47.460
+Tim yang menjalankan
+
+00:15:47.460 --> 00:15:48.380
+validasi perpenyebaran
+
+00:15:48.380 --> 00:15:48.920
+sebagai aturan
+
+00:15:48.920 --> 00:15:49.900
+melihat penurunan drastis
+
+00:15:53.160 --> 00:15:54.140
+yang tercatat sebagai insiden.
+
+00:15:54.760 --> 00:15:55.600
+Langkah pipa yang solid
+
+00:15:55.600 --> 00:15:56.540
+untuk ini sangat mudah
+
+00:15:56.540 --> 00:15:57.320
+namun efektif.
+
+00:15:58.640 --> 00:15:59.460
+Ekspor solusi Anda
+
+00:15:59.460 --> 00:15:59.940
+dari sumber
+
+00:15:59.940 --> 00:16:01.040
+tetapi sebelum pertimbangkan
+
+00:16:01.040 --> 00:16:01.740
+untuk mengimpornya
+
+00:16:01.740 --> 00:16:02.540
+ke lingkungan target
+
+00:16:02.540 --> 00:16:03.520
+jalankan urutan
+
+00:16:03.520 --> 00:16:04.060
+yang menjalankan
+
+00:16:04.060 --> 00:16:04.840
+pemeriksa solusi
+
+00:16:04.840 --> 00:16:05.900
+dan pengujian custom
+
+00:16:05.900 --> 00:16:06.980
+yang telah Anda tambahkan.
+
+00:16:08.260 --> 00:16:08.660
+Jangan berhenti
+
+00:16:08.660 --> 00:16:09.280
+hanya pada tabu.
+
+00:16:09.880 --> 00:16:10.500
+Jalankan query
+
+00:16:10.500 --> 00:16:11.600
+terhadap data first produksi
+
+00:16:11.600 --> 00:16:12.560
+untuk memastikan entitas
+
+00:16:12.560 --> 00:16:13.280
+yang akan Anda timpa
+
+00:16:13.280 --> 00:16:14.540
+tidak memiliki perbedaan skema
+
+00:16:14.540 --> 00:16:15.420
+yang akan menyebabkan
+
+00:16:15.420 --> 00:16:16.140
+kesalahan senyap.
+
+00:16:17.340 --> 00:16:18.340
+Validasi referensi koneksi.
+
+00:16:18.740 --> 00:16:19.280
+Jangan berasumsi
+
+00:16:19.280 --> 00:16:19.920
+bahwa semua orang
+
+00:16:19.920 --> 00:16:20.800
+yang memiliki izin di dev
+
+00:16:20.800 --> 00:16:21.300
+atau QA
+
+00:16:21.300 --> 00:16:21.980
+akan memiliki peran
+
+00:16:21.980 --> 00:16:22.700
+yang sama di prod.
+
+00:16:23.620 --> 00:16:24.600
+Memiliki langkah-langkah ini
+
+00:16:24.600 --> 00:16:25.620
+dalam pipa berarti skrip
+
+00:16:25.620 --> 00:16:26.580
+akan gagal lebih awal
+
+00:16:26.580 --> 00:16:27.400
+jika ada yang hilang
+
+00:16:27.400 --> 00:16:28.480
+dan Anda mendapatkan
+
+00:16:28.480 --> 00:16:28.980
+log berguna
+
+00:16:28.980 --> 00:16:29.580
+yang memberi tahu
+
+00:16:29.580 --> 00:16:30.360
+di mana celahnya.
+
+00:16:31.400 --> 00:16:32.260
+Pemeriksaan otomatis ini
+
+00:16:32.260 --> 00:16:32.980
+adalah perbedaan
+
+00:16:32.980 --> 00:16:33.820
+antara menghabiskan
+
+00:16:33.820 --> 00:16:34.240
+hari Anda
+
+00:16:34.240 --> 00:16:35.240
+membangun fitur berguna
+
+00:16:35.240 --> 00:16:36.600
+dan menghabiskan malam Anda
+
+00:16:36.600 --> 00:16:37.580
+memperbaiki penyebaran
+
+00:16:37.580 --> 00:16:38.020
+yang rusak.
+
+00:16:39.560 --> 00:16:40.120
+Pemeriksaan ini
+
+00:16:40.120 --> 00:16:40.920
+tidak hanya menjaga
+
+00:16:40.920 --> 00:16:41.840
+stabilitas lingkungan
+
+00:16:41.840 --> 00:16:42.760
+tetapi juga memberi
+
+00:16:42.760 --> 00:16:43.760
+seluruh tim keyakinan
+
+00:16:43.760 --> 00:16:44.560
+bahwa perubahan
+
+00:16:44.560 --> 00:16:45.380
+yang melalui pipa
+
+00:16:45.380 --> 00:16:46.240
+tidak melewatkan
+
+00:16:46.240 --> 00:16:47.080
+langkah penting
+
+00:16:47.080 --> 00:16:47.900
+atau dependensi
+
+00:16:47.900 --> 00:16:48.640
+menit terakhir.
+
+00:16:49.880 --> 00:16:50.380
+Hal ini mengubah
+
+00:16:50.380 --> 00:16:50.940
+hari penyebaran
+
+00:16:50.940 --> 00:16:51.940
+dari sesuatu yang rutin
+
+00:16:51.940 --> 00:16:53.400
+jadi sesuatu yang rutin.
+
+00:16:53.400 --> 00:16:54.220
+Jika seorang bertanya
+
+00:16:54.220 --> 00:16:54.840
+apakah penyebaran
+
+00:16:54.840 --> 00:16:55.380
+sudah selesai?
+
+00:16:56.180 --> 00:16:56.880
+Anda dapat menjawab
+
+00:16:56.880 --> 00:16:57.640
+dengan lebih dari sekadar
+
+00:16:57.640 --> 00:16:58.300
+sepertinya begitu
+
+00:16:58.300 --> 00:16:58.900
+karena Anda memiliki
+
+00:16:58.900 --> 00:16:59.480
+sistem pengaman
+
+00:16:59.480 --> 00:17:00.160
+yang membuktikannya.
+
+00:17:00.900 --> 00:17:01.700
+Mudah untuk mengabaikan
+
+00:17:01.700 --> 00:17:02.300
+pemeriksaan
+
+00:17:02.300 --> 00:17:02.820
+perapenyebaran
+
+00:17:02.820 --> 00:17:03.760
+sebagai formalitas
+
+00:17:03.760 --> 00:17:04.700
+tetapi di dunia
+
+00:17:04.700 --> 00:17:05.360
+power platform
+
+00:17:05.360 --> 00:17:06.180
+hal ini
+
+00:17:06.180 --> 00:17:07.300
+menghemat lebih banyak
+
+00:17:07.300 --> 00:17:08.560
+waktu dan reputasi
+
+00:17:08.560 --> 00:17:09.800
+daripada otomatisasi
+
+00:17:09.800 --> 00:17:10.480
+lainnya.
+
+00:17:11.840 --> 00:17:12.140
+Alih-alih
+
+00:17:12.140 --> 00:17:12.700
+bekerja mundur
+
+00:17:12.700 --> 00:17:13.780
+dari pemandaman dan keluhan
+
+00:17:13.780 --> 00:17:14.660
+Anda mendapatkan
+
+00:17:14.660 --> 00:17:15.660
+peringatan proaktif
+
+00:17:15.660 --> 00:17:16.980
+gini dapat ditindaklanjuti
+
+00:17:16.980 --> 00:17:18.360
+dan terikat langsung
+
+00:17:18.360 --> 00:17:19.520
+pada komponen.
+
+00:17:20.460 --> 00:17:21.060
+Anggaplah ini bukan
+
+00:17:21.060 --> 00:17:21.780
+sebagai jaring pengaman
+
+00:17:21.780 --> 00:17:22.280
+melainkan sebagai
+
+00:17:22.280 --> 00:17:22.800
+sistem radar.
+
+00:17:23.640 --> 00:17:24.360
+Tentu saja bahkan
+
+00:17:24.360 --> 00:17:25.280
+dengan sistem pengaman terbaik
+
+00:17:25.280 --> 00:17:25.920
+hal-hal bisa saja
+
+00:17:25.920 --> 00:17:26.760
+tetap menjadi kacau.
+
+00:17:27.460 --> 00:17:28.240
+Tidak ada yang anti peluru
+
+00:17:28.240 --> 00:17:28.920
+dan setiap tim
+
+00:17:28.920 --> 00:17:29.580
+memerlukan cara
+
+00:17:29.580 --> 00:17:30.300
+untuk membatalkan
+
+00:17:30.300 --> 00:17:31.160
+perubahan saat ada
+
+00:17:31.160 --> 00:17:32.180
+sesuatu yang lolos.
+
+00:17:32.960 --> 00:17:34.080
+Jadi, mari kita bahas
+
+00:17:34.080 --> 00:17:34.880
+seperti apa rencana
+
+00:17:34.880 --> 00:17:35.400
+pemulihan
+
+00:17:35.400 --> 00:17:36.380
+dan cadangan yang nyata
+
+00:17:36.380 --> 00:17:37.220
+untuk power platform
+
+00:17:37.220 --> 00:17:37.960
+di luar sekadar
+
+00:17:37.960 --> 00:17:39.020
+berharap tombol undo
+
+00:17:39.020 --> 00:17:39.740
+berfungsi.
+
+00:17:41.220 --> 00:17:42.120
+Saat terjadi kerusakan
+
+00:17:42.120 --> 00:17:43.200
+membangun strategi
+
+00:17:43.200 --> 00:17:44.420
+pemulihan dan cadangan yang nyata.
+
+00:17:44.420 --> 00:17:46.100
+Mari kita bahas
+
+00:17:46.100 --> 00:17:46.900
+apa arti rollback
+
+00:17:46.900 --> 00:17:47.400
+yang sebenarnya
+
+00:17:47.400 --> 00:17:48.300
+bagi power platform
+
+00:17:48.300 --> 00:17:49.740
+karena mudah untuk berasumsi
+
+00:17:49.740 --> 00:17:50.900
+ada tombol undo besar
+
+00:17:50.900 --> 00:17:52.180
+yang siap menyelamatkan Anda
+
+00:17:52.180 --> 00:17:54.020
+saat penerapan gagal total.
+
+00:17:55.500 --> 00:17:55.820
+Namun,
+
+00:17:56.020 --> 00:17:57.000
+tidak seperti proyek kekode
+
+00:17:57.000 --> 00:17:57.680
+di mana rollback
+
+00:17:57.680 --> 00:17:58.500
+hanyalah git reset
+
+00:17:58.500 --> 00:17:59.860
+atau penerapan ulang paket.
+
+00:18:00.220 --> 00:18:00.960
+Dunia power platform
+
+00:18:00.960 --> 00:18:02.340
+jauh lebih tidak kenal ampun.
+
+00:18:02.980 --> 00:18:03.880
+Tidak ada opsi penerapan
+
+00:18:03.880 --> 00:18:04.220
+kembali,
+
+00:18:04.340 --> 00:18:05.000
+revert bawaan.
+
+00:18:06.360 --> 00:18:07.320
+Setelah import terjadi,
+
+00:18:07.560 --> 00:18:08.260
+perubahan tertanam
+
+00:18:08.260 --> 00:18:09.040
+ke dalam lingkungan,
+
+00:18:09.180 --> 00:18:10.280
+tabel mungkin diperbarui,
+
+00:18:10.480 --> 00:18:11.560
+versi komponen berubah,
+
+00:18:11.740 --> 00:18:12.540
+dan relasi data
+
+00:18:12.540 --> 00:18:13.960
+bisa berubah secara
+
+00:18:13.960 --> 00:18:14.760
+diam-diam.
+
+00:18:15.900 --> 00:18:16.780
+Jika terjadi kegagalan
+
+00:18:16.780 --> 00:18:17.300
+saat impor,
+
+00:18:17.460 --> 00:18:18.620
+hasilnya bisa berupa solusi
+
+00:18:18.620 --> 00:18:19.360
+yang hanya terpasang
+
+00:18:19.360 --> 00:18:21.100
+sebagian integrasi yang rusak
+
+00:18:21.100 --> 00:18:22.160
+atau pengguna yang terkunci
+
+00:18:22.160 --> 00:18:24.000
+dari aplikasi yang mereka andalkan.
+
+00:18:24.900 --> 00:18:25.980
+Risikonya jarang terlihat jelas
+
+00:18:25.980 --> 00:18:26.880
+sampai semuanya terjadi
+
+00:18:26.880 --> 00:18:27.400
+dan saat itu
+
+00:18:27.400 --> 00:18:28.600
+perbaikannya membutuhkan kecermatan.
+
+00:18:28.600 --> 00:18:30.420
+Kenyataan pahitnya adalah
+
+00:18:30.420 --> 00:18:31.020
+impor yang gagal
+
+00:18:31.020 --> 00:18:31.680
+membuat lingkungan Anda
+
+00:18:31.680 --> 00:18:32.980
+berada dalam semacam ketidakpastian.
+
+00:18:34.020 --> 00:18:35.280
+Beberapa komponen mungkin meningkat,
+
+00:18:35.540 --> 00:18:36.060
+yang lain tetap
+
+00:18:36.060 --> 00:18:36.720
+pada versi lama
+
+00:18:36.720 --> 00:18:37.900
+dan koneksi atau peran
+
+00:18:37.900 --> 00:18:39.360
+bisa berada dalam status
+
+00:18:39.360 --> 00:18:40.340
+yang tidak terdefinisi.
+
+00:18:41.520 --> 00:18:42.300
+Konfigurasi menjadi
+
+00:18:42.300 --> 00:18:43.400
+tidak sinkron dengan cepat
+
+00:18:43.400 --> 00:18:44.440
+dan Anda terjebak
+
+00:18:44.440 --> 00:18:45.300
+dengan sistem yang tidak
+
+00:18:45.300 --> 00:18:46.140
+sesuai dengan rencana
+
+00:18:46.140 --> 00:18:46.980
+awal siapapun.
+
+00:18:47.860 --> 00:18:48.300
+Apa yang terlihat
+
+00:18:48.300 --> 00:18:49.160
+seperti perubahan kecil
+
+00:18:49.160 --> 00:18:50.300
+dalam solusi terkelola
+
+00:18:50.300 --> 00:18:51.060
+dapat melumpuhkan
+
+00:18:51.060 --> 00:18:52.340
+seluruh proses bisnis di hilir.
+
+00:18:53.440 --> 00:18:54.140
+Disinilah sebagian
+
+00:18:54.140 --> 00:18:54.880
+besaran yang terjebak.
+
+00:18:55.480 --> 00:18:56.140
+Ada anggapan bahwa
+
+00:18:56.140 --> 00:18:57.460
+Anda bisa menjalankannya kembali
+
+00:18:57.460 --> 00:18:58.480
+atau membatalkan langkah
+
+00:18:58.480 --> 00:18:59.760
+saat dalam prakteknya
+
+00:18:59.760 --> 00:19:00.480
+Anda berurusan
+
+00:19:00.480 --> 00:19:01.560
+dengan aplikasi langsung
+
+00:19:01.560 --> 00:19:02.120
+yang diandalkan
+
+00:19:02.120 --> 00:19:03.180
+pengguna untuk bekerja.
+
+00:19:04.340 --> 00:19:04.720
+Sekarang,
+
+00:19:04.900 --> 00:19:05.460
+bayangkan resikonya
+
+00:19:05.460 --> 00:19:06.080
+dengan contoh nyata.
+
+00:19:07.180 --> 00:19:08.440
+Satu perusahaan keuangan besar
+
+00:19:08.440 --> 00:19:09.480
+memiliki fitur baru
+
+00:19:09.480 --> 00:19:10.140
+yang antre untuk
+
+00:19:10.140 --> 00:19:11.280
+portal power apps mereka,
+
+00:19:11.540 --> 00:19:12.300
+beberapa penyesuaian
+
+00:19:12.300 --> 00:19:12.880
+alur kerja,
+
+00:19:13.060 --> 00:19:13.760
+beberapa dashboard
+
+00:19:13.760 --> 00:19:14.580
+baru yang menarik,
+
+00:19:14.760 --> 00:19:15.520
+dan tabel data
+
+00:19:15.520 --> 00:19:17.020
+yang dikonfigurasi ulap.
+
+00:19:18.160 --> 00:19:18.780
+Perubahan tersebut
+
+00:19:18.780 --> 00:19:19.720
+lolos melalui QA,
+
+00:19:19.940 --> 00:19:20.760
+jadi mereka menyetuju
+
+00:19:20.760 --> 00:19:21.500
+impor ke produksi
+
+00:19:21.500 --> 00:19:22.200
+pada Jumat sore
+
+00:19:22.200 --> 00:19:23.320
+dengan harapan semuanya lancar
+
+00:19:23.320 --> 00:19:24.000
+sebelum tegat waktu
+
+00:19:24.000 --> 00:19:24.840
+pelaporan hari Senin.
+
+00:19:24.840 --> 00:19:26.920
+Impor mengalami kesalahan
+
+00:19:26.920 --> 00:19:27.420
+di tengah jalan.
+
+00:19:28.280 --> 00:19:28.980
+Hasil akhirnya,
+
+00:19:29.100 --> 00:19:29.760
+pengguna yang masuk pada
+
+00:19:29.760 --> 00:19:30.260
+Senin pagi
+
+00:19:30.260 --> 00:19:31.260
+menemukan dashboard rusak,
+
+00:19:31.360 --> 00:19:32.260
+otomatisasi gagal,
+
+00:19:32.380 --> 00:19:33.200
+dan beberapa aplikasi
+
+00:19:33.200 --> 00:19:34.340
+kanvas yang tidak dapat dimuat.
+
+00:19:36.100 --> 00:19:36.760
+Lebih buruk lagi,
+
+00:19:36.860 --> 00:19:38.000
+cadangan lingkungan penuh terakhir
+
+00:19:38.000 --> 00:19:38.820
+mereka sudah berusia
+
+00:19:38.820 --> 00:19:39.420
+berminggu-minggu,
+
+00:19:39.660 --> 00:19:40.220
+dan mereka belum
+
+00:19:40.220 --> 00:19:41.020
+mengekspor versi
+
+00:19:41.020 --> 00:19:41.680
+solusi terbaru
+
+00:19:41.680 --> 00:19:42.240
+setelah perubahan
+
+00:19:42.240 --> 00:19:43.380
+pengembangan menit terakhir.
+
+00:19:44.660 --> 00:19:45.960
+Opsi pemulihan terbatas,
+
+00:19:46.080 --> 00:19:46.880
+dan bisnis kehilangan
+
+00:19:46.880 --> 00:19:48.020
+pekerjaan satu hari penuh
+
+00:19:48.020 --> 00:19:48.700
+sementara admin
+
+00:19:48.700 --> 00:19:49.340
+menyusun kembali
+
+00:19:49.340 --> 00:19:50.160
+lingkungan tersebut.
+
+00:19:50.840 --> 00:19:51.560
+Tidak ada satu langkah pun
+
+00:19:51.560 --> 00:19:52.040
+yang menyebabkan
+
+00:19:52.040 --> 00:19:52.700
+bencana tersebut.
+
+00:19:53.120 --> 00:19:54.020
+Itu adalah jendela cadangan
+
+00:19:54.020 --> 00:19:54.500
+yang terlewat
+
+00:19:54.500 --> 00:19:55.920
+keyakinan pada perbaikan cepat
+
+00:19:55.920 --> 00:19:57.000
+dan kurangnya perencanaan
+
+00:19:57.000 --> 00:19:57.940
+rollback yang fleksibel
+
+00:19:57.940 --> 00:19:59.040
+yang membuat mereka rentan.
+
+00:19:59.560 --> 00:19:59.780
+Jadi,
+
+00:20:00.060 --> 00:20:00.520
+apa yang sebenarnya
+
+00:20:00.520 --> 00:20:01.100
+bisa Anda lakukan
+
+00:20:01.100 --> 00:20:02.260
+agar tidak pastikan rollback
+
+00:20:02.260 --> 00:20:03.240
+dalam ketidakpastian rollback?
+
+00:20:04.180 --> 00:20:04.840
+Lapisan pertama
+
+00:20:04.840 --> 00:20:05.620
+dan yang paling andal
+
+00:20:05.620 --> 00:20:06.760
+adalah mengotomatiskan
+
+00:20:06.760 --> 00:20:07.520
+ekspor solusi
+
+00:20:07.520 --> 00:20:08.480
+di setiap tahap.
+
+00:20:09.900 --> 00:20:10.680
+Daripada mempercayai
+
+00:20:10.680 --> 00:20:11.280
+versi terbaru
+
+00:20:11.280 --> 00:20:12.160
+di folder pengembangan,
+
+00:20:12.300 --> 00:20:12.920
+pipeline Anda
+
+00:20:12.920 --> 00:20:13.920
+harus secara otomatis
+
+00:20:13.920 --> 00:20:14.760
+mengekspor solusi
+
+00:20:14.760 --> 00:20:15.620
+ke lokasi yang aman,
+
+00:20:15.760 --> 00:20:16.420
+idealnya ke dalam
+
+00:20:16.420 --> 00:20:17.460
+kontrol sumber.
+
+00:20:18.360 --> 00:20:18.840
+Dengan begitu,
+
+00:20:18.980 --> 00:20:19.460
+setiap rilis,
+
+00:20:19.580 --> 00:20:20.140
+baik yang berhasil
+
+00:20:22.040 --> 00:20:23.720
+jika penyebaran hari ini
+
+00:20:23.720 --> 00:20:24.200
+bermasalah,
+
+00:20:24.420 --> 00:20:25.140
+Anda tidak terjebak
+
+00:20:25.140 --> 00:20:25.980
+dengan apapun yang ada
+
+00:20:25.980 --> 00:20:26.540
+di desktop-an.
+
+00:20:27.220 --> 00:20:27.940
+Anda selalu memiliki
+
+00:20:27.940 --> 00:20:28.780
+akses ke paket terakhir
+
+00:20:28.780 --> 00:20:29.560
+yang diketahui berfungsi
+
+00:20:29.560 --> 00:20:29.880
+dinambai.
+
+00:20:30.580 --> 00:20:31.340
+Cadangan lingkungan harian
+
+00:20:31.340 --> 00:20:32.660
+adalah langkah praktis lainnya,
+
+00:20:32.800 --> 00:20:33.600
+bahkan jika Anda pikir
+
+00:20:33.600 --> 00:20:34.260
+Anda tidak akan pernah
+
+00:20:34.260 --> 00:20:34.740
+membutuhkannya.
+
+00:20:35.700 --> 00:20:36.680
+Microsoft memang menawarkan
+
+00:20:36.680 --> 00:20:37.860
+fitur pencadangan lingkungan penuh
+
+00:20:37.860 --> 00:20:39.020
+terutama untuk lingkungan dataverse,
+
+00:20:39.120 --> 00:20:40.020
+tetapi Anda akan terkejut
+
+00:20:40.020 --> 00:20:40.740
+betapa banyak tim
+
+00:20:40.740 --> 00:20:41.320
+yang tidak benar-benar
+
+00:20:41.320 --> 00:20:42.440
+mengotomatiskan penggunaannya.
+
+00:20:43.420 --> 00:20:44.340
+Panduan resminya jelas,
+
+00:20:44.540 --> 00:20:45.500
+selalu jalankan pencadangan
+
+00:20:45.500 --> 00:20:46.100
+lingkungan lengkap
+
+00:20:46.100 --> 00:20:47.140
+sebelum menyentuh produksi.
+
+00:20:52.040 --> 00:20:53.920
+Itu hanya akan berhasil
+
+00:20:53.920 --> 00:20:55.360
+sampai saatnya tidak berfungsi lagi.
+
+00:20:56.260 --> 00:20:57.260
+Menyiapkan cadangan harian
+
+00:20:57.260 --> 00:20:58.020
+atau prapenyebaran
+
+00:20:58.020 --> 00:20:58.860
+berarti Anda memiliki
+
+00:20:58.860 --> 00:21:00.040
+potret penuh untuk dipulihkan
+
+00:21:00.040 --> 00:21:01.080
+jika terjadi masalah besar.
+
+00:21:01.800 --> 00:21:02.520
+Jika dipasangkan
+
+00:21:02.520 --> 00:21:03.720
+dengan ekspor tingkat solusi,
+
+00:21:03.900 --> 00:21:04.800
+Anda dapat memutuskan
+
+00:21:04.800 --> 00:21:05.700
+apakah akan memulihkan
+
+00:21:05.700 --> 00:21:06.420
+seluruh lingkungan
+
+00:21:06.420 --> 00:21:07.280
+atau hanya memutar
+
+00:21:07.280 --> 00:21:08.580
+kembali satu solusi
+
+00:21:08.580 --> 00:21:10.480
+tergantung pada skala masalahnya.
+
+00:21:11.400 --> 00:21:12.320
+Membuat versi file solusi
+
+00:21:12.320 --> 00:21:13.040
+dalam kontrol sumber
+
+00:21:13.040 --> 00:21:14.020
+mungkin terdengar mendasar,
+
+00:21:14.120 --> 00:21:15.000
+tetapi sangat membantu.
+
+00:21:15.700 --> 00:21:16.880
+Melacak setiap zip yang diekspor
+
+00:21:16.880 --> 00:21:17.900
+dengan rewrite commit,
+
+00:21:18.000 --> 00:21:18.700
+penamaan cabang,
+
+00:21:18.820 --> 00:21:19.640
+dan permintaan tarik
+
+00:21:19.640 --> 00:21:20.800
+membawa penyebaran
+
+00:21:20.800 --> 00:21:21.980
+power platform lebih dekat
+
+00:21:21.980 --> 00:21:23.420
+te-siklus hidup aplikasi klasik.
+
+00:21:24.400 --> 00:21:25.120
+Anda mendapatkan jejak
+
+00:21:25.120 --> 00:21:25.480
+audio lengkap
+
+00:21:25.480 --> 00:21:26.540
+tentang apa yang berubah kapan.
+
+00:21:27.540 --> 00:21:28.540
+Jika pemulihan menjadi perlu,
+
+00:21:28.700 --> 00:21:29.780
+Anda tidak perlu terburu-buru.
+
+00:21:30.300 --> 00:21:31.140
+Cukup sebarkan kembali
+
+00:21:31.140 --> 00:21:32.100
+build sukses yang sebelumnya.
+
+00:21:32.640 --> 00:21:33.620
+Ini bukan yang segera kenyamanan.
+
+00:21:34.060 --> 00:21:35.060
+Ini adalah salah satu cara
+
+00:21:35.060 --> 00:21:36.320
+paling andal untuk memulihkan
+
+00:21:36.320 --> 00:21:37.360
+perubahan penting bisnis
+
+00:21:37.360 --> 00:21:38.520
+tanpa dampak tambahan.
+
+00:21:39.420 --> 00:21:40.260
+Ketika tiba waktunya
+
+00:21:40.260 --> 00:21:41.640
+untuk melakukan pemulihan nyata,
+
+00:21:42.160 --> 00:21:43.260
+file solusi yang diekspor
+
+00:21:43.260 --> 00:21:44.280
+adalah penyelamat Anda.
+
+00:21:44.920 --> 00:21:45.680
+Mulai dengan memulihkan
+
+00:21:45.680 --> 00:21:46.680
+versi solusi sebelumnya
+
+00:21:46.680 --> 00:21:47.800
+yang sudah Anda validasi
+
+00:21:47.800 --> 00:21:48.960
+di lingkungan yang lebih rendah.
+
+00:21:49.380 --> 00:21:49.700
+Mendah.
+
+00:21:50.540 --> 00:21:51.580
+Memutar kembali ke kondisi
+
+00:21:51.980 --> 00:21:52.860
+sebaik itu akan mengatur
+
+00:21:52.860 --> 00:21:53.500
+ulang komponen,
+
+00:21:53.680 --> 00:21:54.660
+alur, dan kustomisasi
+
+00:21:54.660 --> 00:21:55.180
+terkait Anda.
+
+00:21:55.640 --> 00:21:56.520
+Anda tidak akan mendapatkan
+
+00:21:56.520 --> 00:21:57.340
+mesin waktu yang sempurna.
+
+00:21:57.660 --> 00:21:59.100
+Catatan atau data transaksional
+
+00:21:59.100 --> 00:22:00.380
+yang diubah sejak penyebaran terakhir
+
+00:22:00.380 --> 00:22:01.260
+mungkin masih berisiko,
+
+00:22:01.380 --> 00:22:01.980
+tetapi Anda dapat
+
+00:22:01.980 --> 00:22:02.920
+membalikan aplikasi
+
+00:22:02.920 --> 00:22:04.080
+ke konfigurasi yang berfungsi
+
+00:22:04.080 --> 00:22:05.360
+seringkali dalam waktu satu jam.
+
+00:22:06.480 --> 00:22:07.640
+Untuk masalah yang lebih parah,
+
+00:22:07.780 --> 00:22:08.500
+entitas yang rusak,
+
+00:22:08.620 --> 00:22:09.340
+hubungan yang hilang,
+
+00:22:09.460 --> 00:22:10.660
+atau masalah integrasi data,
+
+00:22:10.880 --> 00:22:12.600
+Anda mungkin harus menggunakan
+
+00:22:12.600 --> 00:22:13.720
+cadangan tingkat lingkungan itu
+
+00:22:13.720 --> 00:22:14.800
+atau memotong pemulihan
+
+00:22:14.800 --> 00:22:15.940
+tabel individu tergantung
+
+00:22:15.940 --> 00:22:16.900
+pada apa yang tersedia.
+
+00:22:18.360 --> 00:22:19.420
+Satu pelajaran yang dipetik
+
+00:22:19.420 --> 00:22:20.160
+dengan susah payah.
+
+00:22:20.340 --> 00:22:21.180
+Jangan pernah berasumsi
+
+00:22:21.180 --> 00:22:22.320
+rencana pemulihan Anda kuat
+
+00:22:22.320 --> 00:22:23.460
+kecuali Anda telah mengujinya
+
+00:22:23.460 --> 00:22:23.960
+di sandbox.
+
+00:22:24.820 --> 00:22:25.880
+Perbedaan antara proses
+
+00:22:25.880 --> 00:22:27.120
+pemulihan teoretis dan nyata
+
+00:22:27.120 --> 00:22:27.820
+sangat besar.
+
+00:22:29.400 --> 00:22:30.140
+Tanpa pengujian,
+
+00:22:30.260 --> 00:22:31.160
+Anda berisi kememulihkan
+
+00:22:31.160 --> 00:22:32.160
+dependensi yang tidak lengkap
+
+00:22:32.160 --> 00:22:33.240
+atau mengalami konflik impor
+
+00:22:33.240 --> 00:22:34.140
+yang tidak antisipasi.
+
+00:22:34.760 --> 00:22:35.640
+Pelatih pemulihan Anda adalah
+
+00:22:35.640 --> 00:22:36.480
+selamat menikmati.
+
+00:22:36.480 --> 00:22:37.480
+Selamat menikmati.

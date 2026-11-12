@@ -1,0 +1,1225 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:01.240
+La industria nos vendió un mito.
+
+00:00:01.780 --> 00:00:04.560
+Nos dijeron que los embeddings serán la solución definitiva para la inteligencia empresarial.
+
+00:00:05.140 --> 00:00:10.560
+Construiste la base de datos vectorial, ingeriste los documentos, gastaste el presupuesto y, aun así, las alucinaciones no han cesado.
+
+00:00:11.060 --> 00:00:14.140
+En realidad, la similitud matemática no es lo mismo que la relevancia comercial.
+
+00:00:14.960 --> 00:00:16.220
+Caímos en la trampa del Top K.
+
+00:00:16.760 --> 00:00:20.580
+Es ese momento donde tu copiloto recupera el punto de datos más similar en el espacio de alta dimensión,
+
+00:00:20.680 --> 00:00:26.800
+pero ese dato resulta ser 100% incorrecto para la tarea específica, porque en 2026 la proximidad es un sustituto barato de la verdad.
+
+00:00:26.800 --> 00:00:31.800
+Si tu proyecto Rack está estancado en la fase piloto, no es porque la IA sea tonta.
+
+00:00:32.500 --> 00:00:34.860
+Es porque tu estrategia de recuperación está construida sobre una ilusión.
+
+00:00:35.360 --> 00:00:37.280
+Es el fallo estructural de los modelos puramente vectorial.
+
+00:00:38.080 --> 00:00:42.060
+La búsqueda vectorial es una capa básica en la arquitectura de un sistema de IA moderno.
+
+00:00:42.760 --> 00:00:45.980
+Es el sótano de la pila, el álactico, pero lo hemos tratado como si fuera el cerebro.
+
+00:00:46.960 --> 00:00:50.660
+El defecto fundamental de los embeddings de alta dimensión es que son difusos por diseño.
+
+00:00:51.580 --> 00:00:52.980
+Representan conceptos como coordenado.
+
+00:00:53.560 --> 00:00:56.140
+Eso funciona de maravilla cuando buscas impresiones o temas generales.
+
+00:00:56.140 --> 00:00:58.080
+Pero el trabajo no ocurre en el mundo de las impresiones.
+
+00:00:58.520 --> 00:00:59.860
+El trabajo ocurre en el mundo de los detalles.
+
+00:01:00.140 --> 00:01:01.840
+Aquí es donde el modelo puramente vectorial fracasa.
+
+00:01:02.140 --> 00:01:03.720
+Los vectores tienen problemas con los términos exactos.
+
+00:01:03.820 --> 00:01:08.180
+Piensa en códigos de producto, SKUs, terminología legal, nombres clave, proyectos internos.
+
+00:01:08.800 --> 00:01:13.720
+Para un modelo vectorial, proyecto Phoenix y proyecto Firebird podrían parecer matemáticamente idénticos
+
+00:01:13.720 --> 00:01:15.140
+porque comparten un clúster semántico,
+
+00:01:15.480 --> 00:01:18.260
+pero para tu equipo financiero representan dos presupuestos totalmente diferentes.
+
+00:01:19.020 --> 00:01:20.980
+Cuando dependes únicamente de embeddings densos,
+
+00:01:21.100 --> 00:01:23.560
+esencialmente le pides a la IA que adivine basándose en la vecindad.
+
+00:01:23.560 --> 00:01:24.640
+El resultado.
+
+00:01:24.800 --> 00:01:26.680
+Una tasa de error del 27% de los resultados negos.
+
+00:01:27.160 --> 00:01:28.240
+Eso no es solo una métrica técnica.
+
+00:01:28.780 --> 00:01:33.100
+Esa tasa de error se traduce en 1.8 horas de tiempo de los empleados desperdiciadas cada semana.
+
+00:01:34.120 --> 00:01:36.060
+¿La gente no está usando el copiloto para trabajar más rápido?
+
+00:01:36.520 --> 00:01:39.660
+¿Lo están usando para generar borradores que lo deben pasar dos horas verificando
+
+00:01:39.660 --> 00:01:41.620
+porque el conjunto de recuperación era ruidoso?
+
+00:01:41.620 --> 00:01:44.560
+Tenemos una crisis de precisión y no es un problema de los LLM.
+
+00:01:44.920 --> 00:01:49.220
+No puedes arreglar esto cambiando de GPT-4 a GPT-5 o pasando a una ventana de contexto más grande.
+
+00:01:49.780 --> 00:01:51.140
+Es un problema de ingeniería de recuperación.
+
+00:01:51.660 --> 00:01:52.560
+Hicimos una suposición enorme.
+
+00:01:52.900 --> 00:01:54.400
+Asumimos que las matemáticas manejan contexto.
+
+00:01:54.700 --> 00:01:57.300
+Pensamos que si convertíamos cada documento en una lista de números,
+
+00:01:57.900 --> 00:02:00.220
+las relaciones surgirían, pero el contexto es estructural.
+
+00:02:00.920 --> 00:02:01.900
+No es solo probabilístico.
+
+00:02:02.560 --> 00:02:05.560
+En un entorno empresarial, el significado de un documento no está solo en las palabras,
+
+00:02:05.560 --> 00:02:10.740
+está en los metadatos, en los permisos, en el versionado específico que un modelo vectorial ignora por completo.
+
+00:02:11.660 --> 00:02:14.180
+Cuando buscas la última política de viajes, una búsqueda vectorial,
+
+00:02:14.260 --> 00:02:16.720
+encuentras la que suena más parecida a una política de viajes.
+
+00:02:17.220 --> 00:02:19.440
+No encuentras necesariamente la que fue aprobada ayer.
+
+00:02:20.140 --> 00:02:21.020
+Encuentras la más similar.
+
+00:02:22.020 --> 00:02:25.260
+Y si la más similar es la versión de 2022 porque tiene un texto más descriptivo,
+
+00:02:25.440 --> 00:02:26.640
+eso es lo que recibe tu LLM.
+
+00:02:27.220 --> 00:02:29.720
+Entonces la IA le dice a tu empleado que puede reservar clase ejecutiva,
+
+00:02:29.820 --> 00:02:31.560
+aunque la nueva política dice solo clase turista.
+
+00:02:31.940 --> 00:02:33.920
+Eso es una alucinación causada por una mala base de datos.
+
+00:02:34.220 --> 00:02:36.980
+El modelo no mintió, solo resumió un montón de números equivocados.
+
+00:02:37.480 --> 00:02:40.180
+Esto es lo que sucede cuando usas un modelo diseñado para el descubrimiento
+
+00:02:40.180 --> 00:02:41.480
+e intentes usarlo para la precisión.
+
+00:02:42.020 --> 00:02:44.660
+La búsqueda vectorial es excelente para encontrar la aguja en el pajar
+
+00:02:44.660 --> 00:02:46.040
+si no te importa qué aguja obtienes.
+
+00:02:46.380 --> 00:02:48.060
+Pero en la empresa solo hay una aguja correcta.
+
+00:02:48.700 --> 00:02:49.660
+Las otras nueve son pasivos.
+
+00:02:50.340 --> 00:02:52.740
+Hemos llegado al límite de lo que la pura similitud puede hacer por nosotros.
+
+00:02:53.100 --> 00:02:57.300
+Si queremos alcanzar ese umbral de precisión del 0.9% que requieren las industrias reguladas,
+
+00:02:57.520 --> 00:02:59.720
+debemos dejar de tratar la recuperación como un problema matemático
+
+00:02:59.720 --> 00:03:01.320
+y empezar a tratarla como un problema editorial.
+
+00:03:02.420 --> 00:03:05.320
+Debemos superar la idea de que lo suficientemente cerca es aceptable
+
+00:03:05.320 --> 00:03:07.820
+para un sistema que se supone de guiar la toma de decisiones ejecutivas.
+
+00:03:07.820 --> 00:03:10.820
+¿Por qué ahora mismo los resultados top K que alimentas a tu copiloto
+
+00:03:10.820 --> 00:03:13.220
+son solo una colección de ruido relacionado matemáticamente?
+
+00:03:13.940 --> 00:03:17.020
+Le estás pidiendo un motor de razonamiento de construir una casa sobre cimiento de arena.
+
+00:03:17.420 --> 00:03:19.040
+Y luego nos preguntamos por qué el techo tiene útero.
+
+00:03:19.240 --> 00:03:24.160
+El cambio de 2025 a 2026 es la comprensión de que los embeddings son solo el punto de partida.
+
+00:03:24.760 --> 00:03:25.720
+Son el montón de tal vez.
+
+00:03:26.200 --> 00:03:28.520
+Para llegar al montón de sí necesitamos un tipo diferente de lógica.
+
+00:03:28.860 --> 00:03:31.760
+Necesitamos reintroducir las mismas cosas que pensamos que los embeddings reemplazarían.
+
+00:03:32.100 --> 00:03:32.900
+Necesitamos estructura.
+
+00:03:32.980 --> 00:03:33.900
+Necesitamos anclas lexicas.
+
+00:03:33.900 --> 00:03:37.320
+Y lo más importante, necesitamos un supervisor que sepa la diferencia
+
+00:03:37.320 --> 00:03:39.040
+entre una respuesta similar y una correcta.
+
+00:03:39.760 --> 00:03:42.040
+Sin eso, tu proyecto RAC no es una herramienta de inteligencia.
+
+00:03:42.180 --> 00:03:44.700
+Es solo una forma muy cara y muy rápida de estar equivocado.
+
+00:03:46.020 --> 00:03:47.380
+Pero aquí es donde el modelo falla.
+
+00:03:47.760 --> 00:03:49.600
+Porque la similitud es un sustituto barato de la verdad.
+
+00:03:50.680 --> 00:03:52.360
+El vecindario es un lugar peligroso para vivir.
+
+00:03:53.020 --> 00:03:54.980
+Hemos confiado demasiado tiempo en estos grupos densos.
+
+00:03:54.980 --> 00:03:58.240
+Asumiendo que si dos cosas están cerca en un espacio vectorial deben estar relacionadas
+
+00:03:58.240 --> 00:03:59.740
+en un sentido comercial, pero no es así.
+
+00:04:00.820 --> 00:04:03.100
+Similitud es solo un reflejo de los patrones de uso de las palabras.
+
+00:04:03.420 --> 00:04:04.820
+Es un sustituto barato de la verdad.
+
+00:04:05.160 --> 00:04:09.100
+Y en 2026 el modelo falla porque dejamos de buscar cosas relacionadas y comenzamos a necesitar
+
+00:04:09.100 --> 00:04:09.940
+cosas verificadas.
+
+00:04:10.620 --> 00:04:13.360
+Cuando pasas de un piloto a un entorno de producción, lo que está en juego cambia.
+
+00:04:13.740 --> 00:04:14.700
+El sustituto ahí no es suficiente.
+
+00:04:15.420 --> 00:04:18.520
+Necesitas algo que ancle la IA al lenguaje real de tu organización.
+
+00:04:19.480 --> 00:04:22.920
+Necesitas la precisión que descartamos accidentalmente al apostar todo por los embeddings.
+
+00:04:22.920 --> 00:04:24.440
+El estándar híbrido.
+
+00:04:24.640 --> 00:04:26.280
+¿Por qué BM25 sigue siendo importante?
+
+00:04:26.680 --> 00:04:30.260
+Si observas la línea base de producción para 2026, el panorama ha cambiado.
+
+00:04:30.640 --> 00:04:32.660
+Ya no estamos hablando de almacenes vectoriales experimentales.
+
+00:04:32.880 --> 00:04:34.100
+Estamos hablando del estándar híbrido.
+
+00:04:34.680 --> 00:04:35.300
+Los datos son raros.
+
+00:04:35.940 --> 00:04:39.860
+El 72% de los sistemas RAC empresariales exitosos han abandonado la recuperación puramente
+
+00:04:39.860 --> 00:04:40.240
+vectorial.
+
+00:04:40.720 --> 00:04:43.800
+Han implementado un sistema de doble vía que combina el significado de los vectores con
+
+00:04:43.800 --> 00:04:45.460
+la precisión de la búsqueda por palabras clave.
+
+00:04:46.200 --> 00:04:48.140
+Específicamente han rescatado el algoritmo BM25.
+
+00:04:48.900 --> 00:04:52.740
+Para quienes no llevan 20 años en ingeniería de búsqueda, BM25 es el método clásico
+
+00:04:52.740 --> 00:04:53.800
+de recuperación dispersa.
+
+00:04:54.140 --> 00:04:56.080
+Es la lógica que busca coincidencias exactas de palabras.
+
+00:04:56.360 --> 00:04:59.840
+Es el método antiguo que creíamos que los embeddings eliminarían, pero resulta que
+
+00:04:59.840 --> 00:05:01.620
+es lo único que mantiene honesto al método nuevo.
+
+00:05:02.140 --> 00:05:03.980
+Cuando combinas ambos, sucede algo interesante.
+
+00:05:04.500 --> 00:05:07.300
+Obtienes una mejora del 17% de la recuperación en todo tu conjunto de datos.
+
+00:05:07.640 --> 00:05:11.640
+Ese 17% es la diferencia entre que un empleado encuentre la respuesta en 10 segundos o se rinda
+
+00:05:11.640 --> 00:05:13.100
+tras tres intentos fallidos.
+
+00:05:14.120 --> 00:05:17.760
+Piensa en lo que sucede cuando dejas de ignorar las palabras específicas que tus usuarios escriben
+
+00:05:17.760 --> 00:05:18.100
+realmente.
+
+00:05:19.100 --> 00:05:24.400
+En un sistema puramente vectorial, si un usuario escribe formulario 10K 2025, el modelo podría
+
+00:05:24.400 --> 00:05:27.760
+priorizar un artículo general sobre los reportes financieros porque el contexto es similar,
+
+00:05:27.920 --> 00:05:31.900
+pero con BM25, el sistema detecta esa cadena específica de 10K y 2025.
+
+00:05:33.400 --> 00:05:36.380
+Reconoce que no son solo conceptos, son anclas léxica.
+
+00:05:36.940 --> 00:05:40.500
+La recuperación híbrida permite que el sistema diga, sé que te interesan los reportes financieros,
+
+00:05:40.580 --> 00:05:42.900
+pero también veo que pediste específicamente este documento.
+
+00:05:42.900 --> 00:05:45.700
+Resuelve el problema de las consultas fuera de dominio.
+
+00:05:46.480 --> 00:05:49.160
+Este es el mayor obstáculo para cualquier modelo de embedding preentrenado.
+
+00:05:49.480 --> 00:05:52.660
+Tu modelo vectorial probablemente fue entrenado con un corpus general de texto de internet.
+
+00:05:53.160 --> 00:05:56.840
+Sabe que es un contrato, pero no conoce la jerga específica de tu industria.
+
+00:05:57.600 --> 00:06:00.560
+No entiende las siglas propietarias que usa tu departamento de ingeniería.
+
+00:06:01.340 --> 00:06:04.200
+No ha visto la tecografía interna que usa tu equipo de logística para describir retrasos
+
+00:06:04.200 --> 00:06:04.640
+en envíos.
+
+00:06:05.260 --> 00:06:07.440
+Para un modelo de embedding general, esas palabras son ruido.
+
+00:06:07.740 --> 00:06:08.540
+Están fuera de dominio.
+
+00:06:09.100 --> 00:06:11.540
+Pero para BM25, esas palabras son señales.
+
+00:06:11.540 --> 00:06:15.280
+Al ejecutar una búsqueda por palabras clave junto con la vectorial, creas una red de
+
+00:06:15.280 --> 00:06:15.620
+seguridad.
+
+00:06:16.800 --> 00:06:20.080
+Aseguras que si un usuario escribe un término específico que el modelo de embedding no
+
+00:06:20.080 --> 00:06:23.340
+entiende, el sistema puede encontrar el documento basándose en el texto literal.
+
+00:06:24.440 --> 00:06:26.880
+Si es como alcanzas el umbral de precisión del 0.8.
+
+00:06:27.220 --> 00:06:30.460
+En 2025 nos conformamos con que la AIA tuviera la razón la mayor parte del tiempo.
+
+00:06:30.820 --> 00:06:33.660
+En 2026 una precisión del 80% es el mismo indispensable.
+
+00:06:34.220 --> 00:06:35.700
+Sistema híbrido es el primer paso hacia Asamet.
+
+00:06:35.700 --> 00:06:37.260
+¿Se trata de anclar la AIA en la realidad?
+
+00:06:37.700 --> 00:06:38.980
+Piénselo como un sistema de dobrificación.
+
+00:06:39.320 --> 00:06:40.540
+La ruta vectorial gestionación.
+
+00:06:40.540 --> 00:06:41.860
+¿Qué es lo que intentan hacer?
+
+00:06:42.320 --> 00:06:43.700
+La ruta palabras clave gestionados.
+
+00:06:43.980 --> 00:06:45.560
+¿Qué fue lo que dijeron realmente?
+
+00:06:46.640 --> 00:06:49.880
+Cuando ambas rutas coinciden en un documento, tiene un candidato de alta confianza.
+
+00:06:50.440 --> 00:06:52.820
+Cuando discrepan es una señal de que necesita más procesamiento.
+
+00:06:53.180 --> 00:06:55.380
+Pero incluso con este enfoque híbrido aún tenemos un problema.
+
+00:06:55.840 --> 00:06:56.820
+Mejorado el grupo de posibles resultados.
+
+00:06:57.180 --> 00:06:59.780
+Ha pasado un 78% o 91% de recuperación.
+
+00:07:00.340 --> 00:07:01.480
+Encuentra más cosas acertadas.
+
+00:07:01.760 --> 00:07:03.980
+Pero sigue entregando al LM una pila de candidatos.
+
+00:07:03.980 --> 00:07:08.680
+Si alguna vez se ha visto un conjunto de recuperación, sabe que los 10 mejores resultados suelen ser un desastre.
+
+00:07:08.940 --> 00:07:10.780
+Podría tener la respuesta perfecta en la cuarta posición.
+
+00:07:11.560 --> 00:07:15.720
+Pero en la primera posición, tiene un documento que simplemente repite la palabra clave 20 veces.
+
+00:07:16.560 --> 00:07:20.020
+O tiene un documento que es matemáticamente similar pero totalmente irrelevante para el año actual.
+
+00:07:20.600 --> 00:07:22.520
+La búsqueda híbrida le da las piezas del rompecabezas.
+
+00:07:22.780 --> 00:07:24.180
+No es elementarme el rompecabezas.
+
+00:07:25.040 --> 00:07:29.240
+Asumimos que si le diéramos al LM, los 5 mejores resultados serían lo suficiente inteligente para elegir el correcto.
+
+00:07:29.560 --> 00:07:31.900
+Pero los LM son susceptibles a documentos distractores.
+
+00:07:32.880 --> 00:07:36.380
+Si el primer resultado es un documento muy largo y que suena muy seguro pero es incorrecto,
+
+00:07:36.820 --> 00:07:41.000
+el LM suele priorizar esa información sobre la respuesta corta y correcta en la tercera posición.
+
+00:07:41.820 --> 00:07:43.460
+Este es el fenómeno de perdido en el medio.
+
+00:07:43.980 --> 00:07:46.160
+El orden de la información determina la calidad de la respuesta.
+
+00:07:46.620 --> 00:07:49.420
+Por lo tanto, aunque la búsqueda de híbrida es la base, no es la respuesta final.
+
+00:07:49.780 --> 00:07:50.740
+Es el sistema de filtrado.
+
+00:07:51.320 --> 00:07:52.980
+Le lleva de un millón de documentos a 50.
+
+00:07:52.980 --> 00:07:57.040
+Pero 50 documentos siguen siendo demasiado ruido para una decisión empresarial de alto red.
+
+00:07:57.600 --> 00:07:59.280
+Sigue mirando simplemente una pila de candidatos.
+
+00:07:59.840 --> 00:08:01.620
+Ha avanzado pero no ha cerrado la brecha.
+
+00:08:02.360 --> 00:08:05.520
+Para lograr realmente la precisión de 0.9 que requieren la salud y las finanzas,
+
+00:08:05.620 --> 00:08:06.980
+no puede detenerse en la recuperación.
+
+00:08:07.780 --> 00:08:10.920
+Necesita añadir una capa de razonamiento antes de que los datos toquen el LLM.
+
+00:08:11.540 --> 00:08:15.560
+Necesita un supervisor que pueda ver a esos 50 candidatos y clasificarlos basándose en lógica real,
+
+00:08:15.660 --> 00:08:16.880
+no solo en frecuencia o coordenadas.
+
+00:08:17.440 --> 00:08:20.560
+Porque ahora mismo, incluso con la búsqueda híbrida, su copiloto sigue adivinando.
+
+00:08:20.560 --> 00:08:23.500
+Solo está haciendo una suposición mucho más informada que antes.
+
+00:08:23.800 --> 00:08:24.880
+Hemos resuelto el problema de encontrar.
+
+00:08:25.300 --> 00:08:26.780
+Ahora debemos resolver el problema de clasificar.
+
+00:08:27.200 --> 00:08:29.480
+Y eso requiere una capa arquitectónica completamente diferente.
+
+00:08:30.280 --> 00:08:33.100
+Incluso con la búsqueda híbrida, solo estás viendo un montón de candidatos.
+
+00:08:33.420 --> 00:08:34.120
+Necesitas un supervisor.
+
+00:08:34.120 --> 00:08:37.940
+El problema con el modelo híbrido es que carece de opinión.
+
+00:08:38.600 --> 00:08:42.800
+Genera una lista basada en dos sistemas de puntuación distintos que no hablan el mismo idioma.
+
+00:08:43.320 --> 00:08:47.200
+Estás fusionando coordenadas de un espacio vectorial con puntuaciones de frecuencia de un índice de palabras clave.
+
+00:08:47.700 --> 00:08:52.820
+El resultado es una lista combinada de los 50 mejores, que es técnicamente mejor, pero sigue sin estar validada.
+
+00:08:53.280 --> 00:08:56.220
+Es como si una agencia de contratación te enviara 50 currículos sin leerlos realmente.
+
+00:08:56.760 --> 00:09:01.000
+Filtraron por palabras clave y experiencia general, pero no verificaron si la persona puede hacer el trabajo.
+
+00:09:01.000 --> 00:09:03.880
+En la arquitectura RAC, el LM es tu gerente de contratación.
+
+00:09:04.280 --> 00:09:08.480
+Si la edad de gerente 50 currículos se va a sentir abrumado, echará un vistazo a los tres primeros,
+
+00:09:08.600 --> 00:09:11.160
+se distraerá con una mentira bien formateada y hará una mala contratación.
+
+00:09:11.560 --> 00:09:14.320
+Para solucionar esto, debemos dejar de tratar la búsqueda como un proceso de un solo.
+
+00:09:14.800 --> 00:09:17.600
+Necesitamos introducir una capa secundaria que actúe como filtro de control.
+
+00:09:18.100 --> 00:09:19.920
+Porque ahora mismo no estás proporcionando una respuesta.
+
+00:09:20.220 --> 00:09:21.380
+Estás proporcionando una tarea escolar.
+
+00:09:21.760 --> 00:09:23.260
+Y tu día no está diseñada para hacer tareas.
+
+00:09:23.620 --> 00:09:24.580
+Está diseñada para razonar.
+
+00:09:24.700 --> 00:09:27.500
+Si quieres que razone correctamente, debes darle el punto de parte adecuado.
+
+00:09:27.500 --> 00:09:32.660
+Necesitas un supervisor que pueda revisar los 50 mejores candidatos y decidir cuál contiene realmente la verdad.
+
+00:09:33.540 --> 00:09:35.400
+Clasificación semántica, el filtro final hacia la verdad.
+
+00:09:36.060 --> 00:09:38.020
+Aquí es donde introducimos el reclasificador L2.
+
+00:09:38.640 --> 00:09:41.760
+En la arquitectura de 2026, esta es la capa secundaria y negociable.
+
+00:09:42.460 --> 00:09:44.160
+Actúa como el editor de tus resultados de búsqueda.
+
+00:09:44.720 --> 00:09:46.400
+Piensa en el flujo de trabajo que hemos construido hasta hoy.
+
+00:09:47.200 --> 00:09:48.180
+Primero, la búsqueda híbrida.
+
+00:09:48.280 --> 00:09:49.580
+Recupera un conjunto amplio de candidatos.
+
+00:09:49.900 --> 00:09:50.760
+Es rápida, eficiente.
+
+00:09:51.000 --> 00:09:53.620
+Escanea millones de documentos en milisegundos, pero también es superficial.
+
+00:09:53.620 --> 00:09:55.820
+El reclasificador al contrario.
+
+00:09:56.520 --> 00:09:57.760
+No observa millones de documentos.
+
+00:09:58.200 --> 00:09:59.340
+Solo mira los 50 mejores.
+
+00:09:59.840 --> 00:10:02.620
+Pero lo hace con un nivel de profundidad que la capa inicial nunca alcanzaría.
+
+00:10:04.300 --> 00:10:07.640
+Específicamente en el ecosistema de Microsoft, hablamos de modelos derivados de Bing.
+
+00:10:08.240 --> 00:10:09.700
+Estos son transformadores de tensión cruzada.
+
+00:10:10.680 --> 00:10:14.420
+A diferencia de la búsqueda vectorial inicial, que compara una consulta con un embedding precomputado,
+
+00:10:14.680 --> 00:10:17.540
+el reclasificador analiza la consulta y el documento al mismo tiempo.
+
+00:10:18.740 --> 00:10:21.180
+Realiza la comparación semántica profunda del texto real.
+
+00:10:21.180 --> 00:10:24.120
+Ya no solo mira coordenadas en un espacio de alta dimensión.
+
+00:10:25.080 --> 00:10:29.760
+Está realizando un razonamiento profundo para entender si el documento contiene realmente la respuesta de la pregunta formulada.
+
+00:10:30.460 --> 00:10:33.640
+Aquí es donde debemos entrar en juego a la puntuación del reclasificador de búsqueda de anuncios.
+
+00:10:35.100 --> 00:10:38.300
+Esta puntuación es distinta a los puntajes de similitud que ves en la primera capa.
+
+00:10:38.680 --> 00:10:41.420
+Un puntaje de similitud te dice, este documento es matemáticamente cercano.
+
+00:10:42.100 --> 00:10:45.420
+El puntaje del rebranque te dice, este documento es relevante a la intención del usuario.
+
+00:10:45.900 --> 00:10:47.420
+Cambia el objetivo de, ¿es esto cercano?
+
+00:10:48.020 --> 00:10:48.960
+A responde esto a la pregunta.
+
+00:10:48.960 --> 00:10:52.700
+Esta distinción es la única forma de sobrevivir en industrias reguladas.
+
+00:10:53.220 --> 00:10:56.660
+Si trabajas en finanzas, salud o legal, una precisión de 0.8 es un fracaso.
+
+00:10:57.100 --> 00:10:58.400
+Necesitas 0.9 o más.
+
+00:10:58.780 --> 00:11:02.840
+No puedes alcanzar ese nivel de precisión con un proceso de recuperación de una sola etapa, de una sola etapa.
+
+00:11:03.380 --> 00:11:06.840
+El rebranque es lo que te permite pasar de estar mayormente correcto a un nivel empresarial.
+
+00:11:08.280 --> 00:11:11.100
+Resuelve el modo de fallo más común en raje del problema del orden incorrecto.
+
+00:11:11.100 --> 00:11:19.480
+En una búsqueda estándar, la respuesta perfecta podría estar en la octava posición, pero como no tenía la densidad de palabras clave adecuada o la incrustación era algo imprecisa, no llegó a la cima.
+
+00:11:20.140 --> 00:11:23.060
+El LM, al ser perezoso, se enfoca en los primeros tres resultados.
+
+00:11:23.700 --> 00:11:27.780
+Pasa por alto la verdad en la octava posición y genera una alucinación basada en el ruido de la primera posición.
+
+00:11:27.780 --> 00:11:29.340
+El rebranque detiene esto.
+
+00:11:29.960 --> 00:11:32.680
+Toma esa respuesta perfecta en la octava posición y la asciende a la primera.
+
+00:11:33.420 --> 00:11:39.240
+Identifica que, aunque el primer documento tiene más palabras clave, el octavo tiene la sustancia semántica real necesaria para satisfacer la consulta.
+
+00:11:39.980 --> 00:11:44.080
+Este cambio de recuperación a clasificación es el cambio arquitectónico más importante que puedes hacer este año.
+
+00:11:44.840 --> 00:11:47.440
+Debemos dejar de obsesionarnos con cuánta información podemos encontrar.
+
+00:11:48.280 --> 00:11:53.780
+Debemos empezar a obsesionarnos con el orden en que se presenta esa información, porque el orden es más importante que la cantidad.
+
+00:11:54.440 --> 00:11:57.760
+Si la respuesta correcta está al final de la pila, es como si no existiera.
+
+00:11:58.580 --> 00:12:00.680
+El rebranque asegura que la verdad siempre está en la cima.
+
+00:12:01.260 --> 00:12:02.820
+Pero esto no se trata solo de mover documentos.
+
+00:12:03.320 --> 00:12:05.940
+La capa L2 también proporciona subtítulos y resultados semánticos.
+
+00:12:06.660 --> 00:12:10.640
+Identifica las oraciones literales específicas dentro del documento, que son más relevantes.
+
+00:12:11.520 --> 00:12:13.020
+Esto le da al LM un acordeo en goya de esto.
+
+00:12:13.260 --> 00:12:21.220
+En lugar de pedirle al modelo que lea un PDF de 10 páginas y encuentre la aguja, el rebranque señala directamente la aguja y dice, lee estas tres oraciones específicamente.
+
+00:12:22.100 --> 00:12:24.180
+Esto reduce la carga cognitiva en el LM.
+
+00:12:24.180 --> 00:12:28.980
+Dime, minimiza el riesgo de que el modelo se distraiga con contexto irrelevante en otras partes del documento.
+
+00:12:29.240 --> 00:12:32.100
+Es la diferencia entre darle a alguien un libro o darle un párrafo resaltado.
+
+00:12:32.740 --> 00:12:35.200
+¿Cuál crees que conduce a una respuesta más rápida y precisa?
+
+00:12:35.860 --> 00:12:38.080
+En 2026, así es como resolvíamos la brecha de confianza.
+
+00:12:38.580 --> 00:12:43.480
+Los usuarios dejan de confiar en Copilot cuando les da tres respuestas mediocres y pierde la respuesta definitiva.
+
+00:12:43.480 --> 00:12:47.820
+El rebranque es la herramienta que asegura que la respuesta definitiva sea siempre lo primero que ve el usuario.
+
+00:12:48.320 --> 00:12:49.620
+Actúa como el filtro final de la verdad.
+
+00:12:50.280 --> 00:12:52.800
+Cierra la brecha entre los datos brutos y la inteligencia accionable.
+
+00:12:53.460 --> 00:12:55.280
+Sin embargo, debemos ser honestos sobre las compensaciones.
+
+00:12:55.860 --> 00:12:57.240
+Este nivel de precisión no es gratuito.
+
+00:12:58.040 --> 00:13:02.740
+Cuando pasas de una búsqueda matemática simple a un clasificador basado en razonamiento, la economía de tu sistema cambia.
+
+00:13:03.140 --> 00:13:03.800
+Se haceña de cómputo.
+
+00:13:04.140 --> 00:13:04.980
+Se haceña de latencia.
+
+00:13:04.980 --> 00:13:08.780
+Y en un entorno en la nube como Azure, estás añadiendo costos directos.
+
+00:13:09.380 --> 00:13:15.080
+Si no gestionas esta capa correctamente, la precisión que ganas será borrada por la factura de infraestructura que recibas a fin de mes.
+
+00:13:15.900 --> 00:13:24.040
+Necesitamos entender la economía de la precisión, porque en la empresa una respuesta perfecta que cuesta 10 dólares generar suele ser menos valiosa que una respuesta suficientemente buena que cuesta 10 centavos.
+
+00:13:25.100 --> 00:13:30.420
+El desafío de 2026 es equilibrar la necesidad de una precisión de 0.9 con la realidad de un presupuesto limitado.
+
+00:13:31.140 --> 00:13:35.480
+Necesitas al supervisor, pero también debes asegurarte de que el supervisor no sea la persona más cara del edificio.
+
+00:13:36.120 --> 00:13:37.540
+Pero esta precisión tiene un costo.
+
+00:13:37.840 --> 00:13:40.520
+Y si no gestionar la infraestructura, el retorno de inversión desaparece.
+
+00:13:41.520 --> 00:13:47.740
+El cambio hacia una arquitectura de recuperación multietapa crea una tensión fundamental entre la calidad de la respuesta y la sostenibilidad del presupuesto.
+
+00:13:48.500 --> 00:13:54.840
+Hemos llegado a un punto donde la posibilidad técnica de una precisión de 0.9 es real, pero la viabilidad financiera suele ignorarse.
+
+00:13:55.200 --> 00:13:58.320
+Los inicios de RAC nos enfocábamos en probar que el concepto funcionaba.
+
+00:13:58.320 --> 00:14:01.240
+No nos importaba el costo por consulta porque los volúmenes eran bajos.
+
+00:14:01.620 --> 00:14:04.680
+Pero a medida que escalas de 10 usuarios a 10.000, las matemáticas cambian.
+
+00:14:05.480 --> 00:14:10.600
+La capa secundaria de razonamiento que hace que el sistema sea confiable es también la capa que puede hacerlo prohibitivamente costoso.
+
+00:14:11.080 --> 00:14:16.820
+Porque en la empresa la precisión es un artículo de lujo y si no has diseñado tu infraestructura para soportar el peso de ese lujo,
+
+00:14:16.940 --> 00:14:22.080
+tu proyecto consumirá su propio retorno de inversión antes de ofrecer un solo dólar de valor medible.
+
+00:14:22.080 --> 00:14:31.400
+La realidad del nivel estándar en Azure AI Search es que la clasificación semántica es un juego de pago.
+
+00:14:31.960 --> 00:14:34.900
+No puedes simplemente activar un interruptor y esperar que tu presupuesto existente se muere.
+
+00:14:35.460 --> 00:14:38.740
+Cuando habilitas la funcionalidad de puntaje del ranker en la búsqueda de aplicaciones,
+
+00:14:38.880 --> 00:14:43.080
+pasas del mundo de costos fijos de las unidades de búsqueda básicas a un mundo de facturación variable por tiempo de consulta.
+
+00:14:44.080 --> 00:14:44.760
+Veamos los números.
+
+00:14:45.300 --> 00:14:49.100
+Para un volumen moderado de consultas, digamos 50 mil búsquedas al mes en un conjunto de datos de 20 gigas,
+
+00:14:49.320 --> 00:14:51.840
+estarás viendo un gasto mensual de entre 300 y 800 dólares.
+
+00:14:52.860 --> 00:14:54.840
+Esto podría parecer manejable para un solo departamento,
+
+00:14:55.000 --> 00:14:56.760
+pero al considerar que esto es solo la capa de búsqueda
+
+00:14:56.760 --> 00:15:00.200
+y que aún debes pagar por los tokens del LLM y la generación de embeddings,
+
+00:15:00.560 --> 00:15:02.420
+el costo total de propiedad comienza a dispararse.
+
+00:15:03.220 --> 00:15:05.220
+Hemos visto organizaciones lanzar un piloto de copiloto,
+
+00:15:05.220 --> 00:15:07.420
+ver un éxito masivo en la satisfacción del usuario
+
+00:15:07.420 --> 00:15:10.880
+y luego detenerlo de inmediato cuando llega la primera factura a gran escala.
+
+00:15:10.880 --> 00:15:14.720
+Estaban tan enfocados en el rendimiento que olvidaron revisar el precio de ese rendimiento.
+
+00:15:15.520 --> 00:15:19.320
+Esta es la razón principal por la que los proyectos URAC mueren en la transición del laboratorio a la producción.
+
+00:15:19.780 --> 00:15:22.000
+El costo de tener la razón es más alto que el costo de estar equivocado.
+
+00:15:22.440 --> 00:15:23.420
+Entonces, ¿cómo resolvemos esto?
+
+00:15:23.620 --> 00:15:26.300
+¿Cómo mantenemos la precisión sin llevar al departamento de TI a la banca rota?
+
+00:15:26.640 --> 00:15:28.280
+La respuesta reside en el almacenamiento en caché semántico.
+
+00:15:28.500 --> 00:15:31.880
+En 2026, el almacenamiento en caché semántico es el salvador del retorno de inversión para el LLM.
+
+00:15:32.240 --> 00:15:33.560
+Y este es el problema que estamos resolviendo.
+
+00:15:34.320 --> 00:15:37.200
+Los empleados suelen hacer las mismas preguntas de formas ligeramente diferentes.
+
+00:15:37.780 --> 00:15:38.280
+¿Cuál es la vacación?
+
+00:15:38.280 --> 00:15:40.880
+¿Puedes mostrarme las reglas para el tiempo libre?
+
+00:15:41.640 --> 00:15:42.880
+¿Cuántos días de vacaciones tengo?
+
+00:15:43.140 --> 00:15:46.340
+En una tubería de RAG estándar, cada una de esas preguntas activa una recuperación completa,
+
+00:15:46.400 --> 00:15:48.460
+una reclasificación semántica, una reclasificación semántica y una.
+
+00:15:48.540 --> 00:15:50.320
+Estás pagando por la misma respuesta tres veces.
+
+00:15:50.660 --> 00:15:52.120
+El almacenamiento en caché semántico de TI a TI a TI.
+
+00:15:52.460 --> 00:15:56.580
+Utiliza un modelo de embedding ligero para identificar que esas tres preguntas comparten la misma intención.
+
+00:15:56.860 --> 00:15:57.280
+La misma intención.
+
+00:15:57.380 --> 00:15:59.300
+En lugar de volver al costoso motor de razonamiento,
+
+00:15:59.440 --> 00:16:02.000
+el sistema extrae la respuesta verificada de un caché de alta velocidad.
+
+00:16:02.460 --> 00:16:05.520
+Esto puede reducir tus llamadas al LLM entre un 60% y un 80%.
+
+00:16:05.520 --> 00:16:08.000
+Y la transformación de la experiencia del usuario es aún más dramática.
+
+00:16:08.500 --> 00:16:12.540
+Pasas de una espera de tres segundos para una inferencia en vivo de GPT-4 a un acirto de caché en menos de 50 mil segundos.
+
+00:16:13.100 --> 00:16:14.760
+Eso es una mejora de velocidad de 250 veces.
+
+00:16:15.060 --> 00:16:16.940
+De repente el copiloto se siente instantáneo.
+
+00:16:17.700 --> 00:16:22.180
+Pasa de ser una herramienta lenta que la gente tolera a un asistente receptivo que la gente realmente disfruta usar.
+
+00:16:22.920 --> 00:16:24.520
+Pero el almacenamiento en caché es solo la mitad de la batalla.
+
+00:16:24.520 --> 00:16:26.200
+La otra mitad es la habilitación selectiva.
+
+00:16:26.800 --> 00:16:31.300
+Uno de los mayores errores que cometen los arquitectos es aplicar clasificación semántica a cada consulta.
+
+00:16:31.780 --> 00:16:35.000
+No necesitas un transformador de razonamiento profundo para encontrar un documento titulado
+
+00:16:35.000 --> 00:16:36.640
+Plantilla de Informe de Gastos 2025.
+
+00:16:37.180 --> 00:16:39.380
+Una búsqueda básica por palabra clave más que suficiente para eso.
+
+00:16:39.600 --> 00:16:42.920
+La estrategia para 2026 es mantener los aciertos simples en la capa económica.
+
+00:16:43.060 --> 00:16:47.820
+Solo deberías activar el clasificador de nivel 2 en consultas complejas de lenguaje natural donde la intención sea ambigua.
+
+00:16:48.240 --> 00:16:50.440
+Al implementar una puerta lógica al frente de tu tubería,
+
+00:16:50.440 --> 00:16:54.200
+puedes reservar tu presupuesto para las consultas que realmente necesitan precisión adicional.
+
+00:16:54.760 --> 00:16:55.880
+Piénsalo como un sistema de triaje.
+
+00:16:56.360 --> 00:16:58.840
+La capa económica maneja el 70% de la solicitud de rutina.
+
+00:16:59.240 --> 00:17:02.980
+La costosa capa semántica maneja el 30% que realmente genera valor empresarial.
+
+00:17:03.480 --> 00:17:04.660
+Así es como equilibras el presupuesto.
+
+00:17:05.060 --> 00:17:07.640
+Te aseguras de que el costo de la búsqueda no supera el valor de la respuesta.
+
+00:17:08.300 --> 00:17:12.180
+Si una consulta vale 10 centavos en productividad, no gastes un dólar en cómputo para resolverlo.
+
+00:17:12.600 --> 00:17:14.840
+También debemos considerar la categorización de los datos en sí.
+
+00:17:15.240 --> 00:17:17.180
+No todos los documentos requieren una precisión de 0.1.
+
+00:17:17.360 --> 00:17:20.340
+El menú de tu cafetería interna no necesita un reclasificador tipo BINC.
+
+00:17:20.660 --> 00:17:22.300
+Pero tus documentos de cumplimiento normativo sí.
+
+00:17:22.900 --> 00:17:27.020
+Al particionar tus índices de búsqueda y aplicar diferentes estrategias de clasificación a cada uno,
+
+00:17:27.240 --> 00:17:29.980
+puedes optimizar tu gasto según la importancia de la información.
+
+00:17:31.300 --> 00:17:32.980
+A esto lo llamamos recuperación basada en el valor.
+
+00:17:33.500 --> 00:17:35.800
+Es comprender que la precisión no es una elección binaria.
+
+00:17:36.600 --> 00:17:37.440
+Es una escala variable.
+
+00:17:38.140 --> 00:17:42.220
+Y como arquitecto, tu trabajo es mover ese control según las necesidades específicas de la unidad de negocio.
+
+00:17:42.440 --> 00:17:45.080
+El objetivo no es construir el sistema más preciso posible.
+
+00:17:45.460 --> 00:17:49.020
+El objetivo es construir el sistema más preciso que la empresa realmente pueda permitirse operar.
+
+00:17:49.020 --> 00:17:53.280
+Porque una idea perfecta que es demasiado cara de usar es solo un pizapapeles muy sofisticado.
+
+00:17:54.080 --> 00:17:57.180
+En 2026, los ganadores no serán los que tengan los benchmarks más altos.
+
+00:17:57.680 --> 00:18:03.080
+Serán los que descubrieron cómo ofrecer un 0.85% a un costo que escala linealmente con su crecimiento.
+
+00:18:03.900 --> 00:18:07.020
+Son aquellos que trataron la infraestructura como una restricción, no como algo secundario.
+
+00:18:07.020 --> 00:18:10.100
+Gestionar el costo es el lado técnico de la ecuación.
+
+00:18:10.640 --> 00:18:13.240
+Pero incluso si logras que la economía sea correcta, aún tienes un problema humano.
+
+00:18:13.620 --> 00:18:18.300
+Debes abordar la brecha entre las licencias que has comprado y la confianza real que tus usuarios tienen en el sistema.
+
+00:18:18.680 --> 00:18:21.380
+Porque si no confían en la respuesta, no importa cuánto costó generar.
+
+00:18:21.940 --> 00:18:23.460
+Simplemente volverán a buscar de la manera antes.
+
+00:18:23.820 --> 00:18:25.280
+Y eso nos lleva a la brecha de gobernanza.
+
+00:18:25.820 --> 00:18:27.780
+Porque la confianza no se trata solo de precisión técnica.
+
+00:18:28.220 --> 00:18:29.820
+Se trata del marco que rodea esa precisión.
+
+00:18:29.820 --> 00:18:34.300
+Se trata de saber que la IA no solo tiene razón, sino que tiene permiso para tenerla en primer lugar.
+
+00:18:35.560 --> 00:18:37.100
+Gestionar el costo es el lado técnico.
+
+00:18:37.260 --> 00:18:39.340
+Pero el lado ejecutivo se trata de la brecha de gobernanza.
+
+00:18:40.260 --> 00:18:42.760
+Optimizar tu infraestructura solo resuelve una parte de la ecuación.
+
+00:18:43.360 --> 00:18:45.760
+Puedes construir el motor de precisión más eficiente del mundo.
+
+00:18:46.060 --> 00:18:50.360
+Pero si tu equipo de liderazgo teme lo que pueda revelar, el proyecto nunca saldrá del entorno de pruebas.
+
+00:18:51.080 --> 00:18:55.040
+Hemos llegado a un punto donde el cuello de Oteya no es el presupuesto de cómputo ni la latencia del reglasificador.
+
+00:18:55.040 --> 00:19:00.980
+La fricción real es la brecha entre las licencias asignadas y la autoridad real que tiene la IA para operar.
+
+00:19:02.000 --> 00:19:02.800
+La brecha de gobernanza.
+
+00:19:02.960 --> 00:19:04.180
+¿Por qué las políticas están limitando el uso?
+
+00:19:04.940 --> 00:19:07.680
+Actualmente tenemos 15 millones de licencias pagas en el ecosistema.
+
+00:19:08.060 --> 00:19:11.880
+Sin embargo, la tasa de adopción en lugar de trabajo sigue estancada en un sorprendente 35%.
+
+00:19:11.880 --> 00:19:15.920
+Esto significa que dos de cada tres usuarios con licencia básicamente ignoran la herramienta.
+
+00:19:16.360 --> 00:19:18.120
+Dejan de usarla después de la tercera alucinación.
+
+00:19:18.580 --> 00:19:19.560
+La confianza es frágil.
+
+00:19:19.560 --> 00:19:23.340
+Y una mala recuperación de datos la destruye más rápido de lo que cualquier capacitación puede construir.
+
+00:19:23.340 --> 00:19:25.960
+La gobernanza no es solo un documento.
+
+00:19:26.200 --> 00:19:27.020
+Es un control técnico.
+
+00:19:28.180 --> 00:19:30.400
+Sin él, su proyecto de REC morirá en la semana 12.
+
+00:19:31.060 --> 00:19:32.780
+Entonces, ¿cómo se ve el nuevo modelo en la práctica?
+
+00:19:33.140 --> 00:19:34.520
+Es un avance hacia agentes gobernados.
+
+00:19:35.520 --> 00:19:37.200
+La era del cuadro de chat está terminando.
+
+00:19:37.840 --> 00:19:41.760
+Nos alejamos de un mundo donde se hace una pregunta y se espera que la matemática encuentre un documento.
+
+00:19:42.300 --> 00:19:43.620
+El nuevo modelo se trata de delegación.
+
+00:19:43.980 --> 00:19:48.340
+Se trata de pasar de un sistema que solo recupera datos a uno que razona sobre el proceso de búsqueda en sí.
+
+00:19:48.340 --> 00:19:50.900
+Estamos entrando en la era del agente gobernado.
+
+00:19:51.700 --> 00:19:56.280
+Un sistema que no solo busca información, sino que comprende las reglas de la casa antes de arrancar el motor.
+
+00:19:57.300 --> 00:19:58.680
+La hoja de ruta para 2026.
+
+00:19:58.860 --> 00:19:59.920
+De la recuperación al razonamiento.
+
+00:20:00.520 --> 00:20:04.700
+Si quiere seguir siendo relevante en los próximos 24 meses, su hoja de ruta debe girar hacia el raja agéntico.
+
+00:20:05.120 --> 00:20:06.080
+Esta es la próxima frontera.
+
+00:20:06.360 --> 00:20:09.580
+En una configuración estándar, el sistema toma su consulta y realiza una única búsqueda.
+
+00:20:09.580 --> 00:20:12.040
+En una configuración agéntica, la IA planifica la búsqueda.
+
+00:20:12.300 --> 00:20:18.220
+Analiza su solicitud y decide si necesita acceder a la almacén vectorial, consultar una base de datos SQL o revisar una API en tiempo real.
+
+00:20:18.700 --> 00:20:20.740
+La zona a través de los pasos necesarios para encontrar la búsqueda.
+
+00:20:21.060 --> 00:20:22.940
+Aquí es donde el RAG basado en grafos se convierte en el estándar.
+
+00:20:23.280 --> 00:20:28.060
+Para entornos críticos donde necesita una ventana de verificación, no puede depender de fragmentos de documentos planos.
+
+00:20:29.140 --> 00:20:33.240
+Necesita un grafo de conocimiento que mapee las relaciones entre entidades, personas, proyectos y políticas.
+
+00:20:33.240 --> 00:20:42.980
+Esto permite a la IA entender que cuando pregunta por el presupuesto del ingeniero principal, debe encontrar a la persona, luego el proyecto que dirige y después el libro contable asociado a ese proyecto.
+
+00:20:43.880 --> 00:20:47.120
+Es una cadena de razonamiento de múltiples saltos que la búsqueda de vectorial plana simplemente no puede darse.
+
+00:20:47.580 --> 00:20:48.740
+Pero aquí está la dura verdad.
+
+00:20:49.200 --> 00:20:52.140
+Su IA está limitada por sus metadatos, no por su número de licencias.
+
+00:20:52.960 --> 00:21:00.320
+Si sus sitios de SharePoint son un cementerio de documento 1.docx y final v2 realmente final.vdf, ningún razonamiento agéntico lo salvará.
+
+00:21:00.320 --> 00:21:04.500
+Preparar los cimientos de sus datos es la única forma de evitar el rezago competitivo que se va a decir.
+
+00:21:04.960 --> 00:21:13.940
+Las organizaciones que esperen para arreglar su capa de recuperación se verán estancadas con una tasa de adopción del 35% mientras sus competidores automatizan flujos de trabajo completos.
+
+00:21:14.560 --> 00:21:19.020
+Estamos pasando de la búsqueda vectorial como herramienta a la estrategia semántica como competencia empresarial central.
+
+00:21:20.180 --> 00:21:22.400
+Su transformación comienza con una auditoría de recuperación.
+
+00:21:22.860 --> 00:21:26.620
+Deja de medir qué tan rápido responde la IA y empieza a medir qué tan seguido tiene realmente la razón.
+
+00:21:26.620 --> 00:21:35.880
+También, identifica el 10% de tus casos de uso más complejos, aquellos, donde la precisión es un requisito y no una sugerencia, e implementa el reordenador L2 en esos procesos hoy mismo.
+
+00:21:36.680 --> 00:21:41.760
+Si este cambio de modelo modificó tu forma de pensar sobre la arquitectura, sígueme en Mirko Peters en LinkedIn para profundizar más.
+
+00:21:42.380 --> 00:21:45.940
+Si esto te ayuda a diagnosticar por qué tu proyecto Rack está fallando actualmente, deja una reseña.
+
+00:21:46.660 --> 00:21:50.040
+Ayuda a que este podcast llegue a los arquitectos que aún están atrapados en la trampa del Top K.
+
+00:21:50.040 --> 00:21:55.820
+Tu siguiente paso es consultar nuestro análisis detallado sobre flujos de trabajo de agentes para ver exactamente hacia dónde se dirige esta precisión.

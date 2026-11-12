@@ -1,0 +1,1081 @@
+WEBVTT
+
+00:00:00.040 --> 00:00:03.740
+Benvenuti a un altro episodio delle Microsoft Knowledge Nuggets qui su M365FM.
+
+00:00:04.140 --> 00:00:05.260
+Sono il vostro host Mirko Peters.
+
+00:00:05.640 --> 00:00:08.180
+Avete distribuito risorse Azure cliccando qua e là nel portale.
+
+00:00:08.620 --> 00:00:09.960
+Funziona bene finché non smette di farlo.
+
+00:00:10.240 --> 00:00:12.880
+Poi dovete rifarlo, ma non ricordate esattamente cosa avete scelto.
+
+00:00:13.300 --> 00:00:15.780
+Dovete passare a un collega e lui non riesce a seguire i vostri passaggi.
+
+00:00:16.220 --> 00:00:17.920
+Controllo di versione. Non ce ne lo da sottoporre.
+
+00:00:18.340 --> 00:00:19.700
+E questo è il problema che risolveremo oggi.
+
+00:00:20.200 --> 00:00:23.260
+Alla fine di questo episodio capirete cos'è l'infrastruttura come codice,
+
+00:00:23.340 --> 00:00:27.260
+perché esiste BCHAP e come rende le distribuzioni Azure più semplici e affidabili.
+
+00:00:27.780 --> 00:00:29.460
+Inizieremo dal problema, poi la soluzione.
+
+00:00:29.460 --> 00:00:31.420
+e infine un esempio pratico che potete seguire.
+
+00:00:31.760 --> 00:00:33.260
+Prendete il vostro caffè e iniziamo.
+
+00:00:34.200 --> 00:00:35.000
+Problema del portale.
+
+00:00:35.340 --> 00:00:36.980
+La trappola del clic che distribuisci sembra vedo.
+
+00:00:37.420 --> 00:00:39.660
+Accedete e compilate un modulo, premete Crea, avete finito.
+
+00:00:40.120 --> 00:00:43.780
+Ma cosa succede quando dovete rifarlo con le stesse impostazioni, regione e convenzioni di denominazione?
+
+00:00:44.120 --> 00:00:47.440
+Dovete ricordare ogni singola cosa che avete scelto ed è lì che le cose vanno a rotoli.
+
+00:00:47.900 --> 00:00:52.400
+La distribuzione manuale significa risultati incoerenti, errore umano e nessuna traccia di audit.
+
+00:00:52.900 --> 00:00:53.880
+Ecco un esempio reale.
+
+00:00:54.440 --> 00:00:57.160
+Qualcuno nel vostro team crea una risorsa con impostazioni leggermente diverse.
+
+00:00:57.380 --> 00:00:59.060
+Ora avete due ambienti che non corrispondono.
+
+00:00:59.460 --> 00:01:00.520
+Uno funziona, l'altro no.
+
+00:01:00.680 --> 00:01:01.920
+E buona fortuna capire il perché.
+
+00:01:02.820 --> 00:01:04.120
+Poi c'è il problema della documentazione.
+
+00:01:04.940 --> 00:01:10.340
+Infrastruttura come documento Word, o peggio, un video YouTube registrato sei mesi fa quando il portale era completamente diverso.
+
+00:01:10.880 --> 00:01:13.120
+Le funzionalità si spostano, i menu cambiano, appaiono nuove opzioni.
+
+00:01:13.520 --> 00:01:18.080
+Mi sono seduto con un product manager del team del portale Azure e ha detto che rilasciano nuove funzionalità due volte al giorno.
+
+00:01:18.280 --> 00:01:18.860
+Due volte al giorno.
+
+00:01:18.860 --> 00:01:21.560
+Il vostro documento Word è obsoleto prima ancora che avete finito di scrivere.
+
+00:01:21.780 --> 00:01:22.260
+Punto è questo.
+
+00:01:22.620 --> 00:01:23.960
+Cliccare qua la va bene per imparare.
+
+00:01:24.260 --> 00:01:25.040
+Non va bene per adozione.
+
+00:01:25.460 --> 00:01:26.320
+Quindi, qual è l'alternativa?
+
+00:01:26.740 --> 00:01:29.700
+Escrivete un file che descrive ciò che volete, poi dite da azzurro di costruirlo.
+
+00:01:30.460 --> 00:01:31.740
+Cos'è l'infrastruttura come codice?
+
+00:01:32.520 --> 00:01:36.660
+Infrastruttura come codice significa gestire la configurazione cloud con il codice invece di cliccare su un portale web.
+
+00:01:36.660 --> 00:01:37.900
+Ecco l'idea centrale.
+
+00:01:38.340 --> 00:01:40.680
+Escrivete un file che descrive la vostra infrastruttura.
+
+00:01:41.000 --> 00:01:42.540
+Quel file vive nel vostro repository.
+
+00:01:42.780 --> 00:01:47.740
+Potete controllarne la versione, revisionarlo in una pull request e eseguirlo domani per ottenere lo stesso risultato.
+
+00:01:48.160 --> 00:01:49.780
+C'è un termine chiave qui, dichiarativo.
+
+00:01:50.240 --> 00:01:52.700
+Significa che descrivete ciò che volete, non come costruirlo.
+
+00:01:53.420 --> 00:01:57.900
+Non dite ad Azure di creare prima un gruppo di risorse, poi aggiungere un account di archiviazione e poi configurare la rete.
+
+00:01:58.660 --> 00:02:02.560
+Invece tu dici voglio un gruppo di risorse con un account di archiviazione e una rete configurata in questo modo.
+
+00:02:02.980 --> 00:02:03.980
+E Azure stabilisce l'ordine.
+
+00:02:04.460 --> 00:02:05.940
+Risultato è qualcosa chiamato idempotenza.
+
+00:02:05.940 --> 00:02:08.880
+Eseguilo una volta, eseguilo cento volte e otterrai lo stesso risultato.
+
+00:02:09.060 --> 00:02:09.600
+Questa è la potenza.
+
+00:02:09.920 --> 00:02:11.840
+Pensalo come un progetto rispetto a costruire a mano.
+
+00:02:12.260 --> 00:02:14.900
+Un progetto è ripetibile, condivisibile e revisionabile.
+
+00:02:15.240 --> 00:02:17.540
+Passalo a qualcun altro e costruiranno esattamente la stessa cosa.
+
+00:02:18.100 --> 00:02:19.100
+Diversi strumenti fanno questo.
+
+00:02:19.460 --> 00:02:21.660
+Modelli ARM, Bicep, Terraform, Plumi.
+
+00:02:22.220 --> 00:02:23.980
+Implementano tutti lo stesso concetto in modi diversi.
+
+00:02:24.360 --> 00:02:25.320
+Questa è una distinzione importante.
+
+00:02:25.800 --> 00:02:27.220
+L'infrastruttura come codice è il concetto.
+
+00:02:27.660 --> 00:02:29.320
+Bicep è solo uno strumento che lo implementa.
+
+00:02:29.940 --> 00:02:30.360
+Ma ecco il punto.
+
+00:02:30.780 --> 00:02:33.300
+Azure ha avuto un linguaggio di hash per anni chiamato modelli ARM.
+
+00:02:33.300 --> 00:02:37.160
+E c'è un motivo per cui Microsoft ne ha costruito un nuovo problema dei modelli ARM.
+
+00:02:37.600 --> 00:02:39.620
+I modelli ARM sono il formato IHC original di Azure.
+
+00:02:40.080 --> 00:02:40.840
+Sono file JSON.
+
+00:02:41.340 --> 00:02:42.200
+E hanno molti pregi.
+
+00:02:42.760 --> 00:02:44.560
+Copertura completa di ogni risorsa Azure.
+
+00:02:44.860 --> 00:02:47.240
+E lo stesso motore di distribuzione usato internamente.
+
+00:02:47.240 --> 00:02:50.940
+Se puoi crearlo nel portale puoi definirlo in un modello ARM.
+
+00:02:51.540 --> 00:02:52.000
+Il quale è il problema?
+
+00:02:52.420 --> 00:02:54.900
+Il JSON è ottimo per le macchine ma terribile per gli esseri umani.
+
+00:02:55.360 --> 00:02:56.240
+Lascio che ti mostri cosa in te.
+
+00:02:56.660 --> 00:02:59.240
+Un account di archiviazione in un modello ARM richiede circa 20 righe di codice.
+
+00:02:59.800 --> 00:03:01.740
+Lo stesso account in Bicep circa 10 righe.
+
+00:03:02.200 --> 00:03:03.660
+La versione JSON è circa il doppio.
+
+00:03:04.320 --> 00:03:05.200
+Queste sono le resource 7.
+
+00:03:05.780 --> 00:03:09.740
+Immagina una distribuzione completa con rete, elaborazione, database e regole di sicurezza.
+
+00:03:10.380 --> 00:03:12.200
+Il modello ARM diventa un muro di testo.
+
+00:03:12.840 --> 00:03:14.160
+I punti critici comuni sono prevedibili.
+
+00:03:14.860 --> 00:03:20.120
+Virgole mancanti, parentesi non corrispondenti, annidamenti prolissi che rendono difficile capire dove finisce una risorsa e ne inizia un'altra.
+
+00:03:20.740 --> 00:03:24.100
+Passi più tempo a combattere con la sintasi JSON che a definire effettivamente la tua infrastruttura.
+
+00:03:24.740 --> 00:03:25.840
+E poi ci sono le dipendenze.
+
+00:03:26.280 --> 00:03:28.500
+In ARM devi dichiarare manualmente depends on.
+
+00:03:28.880 --> 00:03:32.840
+Se la risorsa A ha bisogno che la risorsa B esista prima, devi scriverlo esplicitamente.
+
+00:03:33.720 --> 00:03:35.420
+Se ne dimentichi una la distribuzione fallisce.
+
+00:03:35.880 --> 00:03:37.240
+Buona fortuna a capire quale hai dimenticato.
+
+00:03:37.240 --> 00:03:41.100
+Se hai mai provato a scrivere un file JSON da 200 righe a mano, non è divertente.
+
+00:03:41.520 --> 00:03:42.360
+Nemmeno un po'.
+
+00:03:42.360 --> 00:03:43.540
+La curva di apprendimento è ripida.
+
+00:03:43.900 --> 00:03:45.940
+I nuovi membri del team faticano a capire i modelli ARM.
+
+00:03:46.560 --> 00:03:47.680
+La barriera all'ingresso è alta.
+
+00:03:48.200 --> 00:03:49.080
+Cosa succede nella pratica?
+
+00:03:49.420 --> 00:03:52.140
+Molti team finiscono con una sola persona che conosce il modello ARM.
+
+00:03:52.500 --> 00:03:54.100
+Quella persona diventa un singolo punto di guasto.
+
+00:03:54.520 --> 00:03:58.460
+È l'unico che può modificare la distribuzione e l'unico che può eseguire il debug quando qualcosa si rompe.
+
+00:04:00.140 --> 00:04:03.540
+Microsoft ha ascoltato il feedback e ha creato ByteShap proprio per risolvere questi problemi.
+
+00:04:04.000 --> 00:04:04.820
+Cos'è Bichap?
+
+00:04:05.480 --> 00:04:06.640
+Quindi cos'è esattamente Bichap?
+
+00:04:06.640 --> 00:04:10.720
+È un linguaggio progettato per distribuire risorse Azure e nel suo cuore è un transpiler.
+
+00:04:11.560 --> 00:04:13.820
+Scrive in Bichap e viene compilato in JSON ARM.
+
+00:04:14.600 --> 00:04:16.620
+Lo stesso motore sottostante ma molto più pulito per scrivere.
+
+00:04:17.060 --> 00:04:19.220
+E il nome Bichap è in realtà ARM scritto al contrario.
+
+00:04:19.360 --> 00:04:19.640
+Bichap.
+
+00:04:20.840 --> 00:04:22.160
+Un piccolo scherzo interno di Microsoft.
+
+00:04:22.660 --> 00:04:24.200
+Ma una volta che lo vedi in azione ha senso.
+
+00:04:24.560 --> 00:04:26.420
+Bichap si trova sopra ARM invece di sostituirlo.
+
+00:04:26.820 --> 00:04:28.660
+Ottieni la stessa potenza con una sintesi più semplice.
+
+00:04:29.020 --> 00:04:30.880
+Bichap non sostituisce ARM e ci costruisce sopra.
+
+00:04:31.460 --> 00:04:33.260
+Tu ciò che puoi fare con ARM puoi farlo con Bichap.
+
+00:04:33.260 --> 00:04:36.800
+Ogni tipo di risorso, ogni versione API, ogni opzione di configurazione è lì.
+
+00:04:37.220 --> 00:04:38.700
+L'unica differenza è il modo in cui lo scrivo.
+
+00:04:39.100 --> 00:04:40.140
+La sintesi è molto più pulita.
+
+00:04:40.560 --> 00:04:43.980
+Niente virgolette intorno ai nomi delle proprietà, niente virgolette delle proprietà, niente parentesi da gestire.
+
+00:04:44.120 --> 00:04:44.940
+È semplicemente più facile.
+
+00:04:45.300 --> 00:04:46.680
+Confronta le due versioni fianco a fianco.
+
+00:04:46.680 --> 00:04:49.820
+La versione JSON ARM è di un account di archiviazione pieno di rumore.
+
+00:04:50.040 --> 00:04:52.020
+Virgolette virgole, parentesi, annidamento.
+
+00:04:52.740 --> 00:04:55.280
+La versione Bichap ha le stesse informazioni, ma è leggibile.
+
+00:04:55.900 --> 00:05:00.500
+Puoi guardarla e capire immediatamente cosa sta facendo senza dover passare attraverso strati di sintassi JSON.
+
+00:05:01.460 --> 00:05:03.780
+Un grande miglioramento è l'inferenza automatica delle dipendenze.
+
+00:05:04.140 --> 00:05:06.020
+In ARM devi dichiarare manualmente DependZone.
+
+00:05:07.020 --> 00:05:12.060
+Ma in Bichap, se la risorsa A fa riferimento alla risorsa B, il sistema rileva la dipendenza automaticamente.
+
+00:05:12.600 --> 00:05:13.480
+Non hai bisogno di scriverla.
+
+00:05:13.840 --> 00:05:14.420
+Funzione e basta.
+
+00:05:14.420 --> 00:05:16.340
+E questo da solo fa risparmiare ore di debug.
+
+00:05:16.780 --> 00:05:18.060
+I moduli sono un'altra tasa importante.
+
+00:05:18.500 --> 00:05:22.480
+Puoi dividere la tua infrastruttura in pezzi più piccoli e riutilizzabili e condividerli tra i progetti.
+
+00:05:23.300 --> 00:05:25.720
+Un team crea un modulo di rete e un altro team lo utilizza.
+
+00:05:26.340 --> 00:05:28.020
+Non c'è bisogno di reinventare la ruota ogni volta.
+
+00:05:28.420 --> 00:05:31.980
+Parametri e variabili ti permettono di definire i tuoi input una volta e riutilizzarli ovunque.
+
+00:05:32.680 --> 00:05:34.880
+Niente più ricerche e sostituzioni di valori codificati.
+
+00:05:35.380 --> 00:05:40.220
+E l'interpolazione delle stringhe significa che puoi scrivere prefisso archiviazione invece di complesse funzioni di concatenazione.
+
+00:05:40.640 --> 00:05:42.980
+Gli strumenti sono un altro motivo per cui è piacevole lavorare con Bichap.
+
+00:05:42.980 --> 00:05:47.900
+L'estensione di VS Code ti offre IntelliSense, evidenziazione della sintassi e controllo degli errori in tempo reale.
+
+00:05:48.400 --> 00:05:50.800
+Onestamente è una delle migliori estensioni di linguaggio in VS Code.
+
+00:05:51.140 --> 00:05:53.340
+Inizia a scrivere e ti suggerisce cosa avviene dopo.
+
+00:05:53.820 --> 00:05:55.320
+Se fai un errore te lo dici immediatamente.
+
+00:05:55.860 --> 00:05:58.860
+Niente più attese per il fallimento di un deployment prima di scoprire che ti sei dimenticato una via.
+
+00:05:59.420 --> 00:06:01.340
+Quindi come appare effettivamente tutto questo alla pratica?
+
+00:06:01.420 --> 00:06:02.900
+Vediamo come Bichap differisce da ARM.
+
+00:06:03.620 --> 00:06:05.460
+Bichap contro ARM cosa cambia realmente?
+
+00:06:05.460 --> 00:06:09.340
+Parliamo di ciò che cambia concretamente quando si scrive in Bichap invece che in ARM.json.
+
+00:06:09.820 --> 00:06:11.260
+La dimensione del file è una differenza evidente.
+
+00:06:11.700 --> 00:06:14.900
+I file Bichap sono circa la metà rispetto ai modelli ARM equivalenti.
+
+00:06:15.580 --> 00:06:16.360
+Non è un'esagerazione.
+
+00:06:16.860 --> 00:06:19.020
+Rimuovi virgolette virgolette parentesi e boilerplate.
+
+00:06:19.220 --> 00:06:21.000
+Resta solo la definizione dell'infrastruttura.
+
+00:06:21.680 --> 00:06:22.780
+Metà del codice stessa il tante.
+
+00:06:23.240 --> 00:06:24.540
+La leggibilità ne guadagna naturalmente.
+
+00:06:24.540 --> 00:06:27.440
+Meno righe, struttura più pulita e comprensione immediata.
+
+00:06:28.120 --> 00:06:31.000
+Quando apri un file Bichap puoi scansionarlo e capire cosa viene distribuito.
+
+00:06:31.660 --> 00:06:35.940
+Con ARM.json devi attraversare strati di annidamento prima di trovare la configurazione delle risorse.
+
+00:06:36.280 --> 00:06:37.960
+Le dipendenze fanno risparmiare un sacco di tempo.
+
+00:06:38.480 --> 00:06:40.140
+In ARM devi dichiarare manualmente il depend zone.
+
+00:06:40.680 --> 00:06:41.960
+Se ne dimentichi una la distribuzione fa lì.
+
+00:06:42.560 --> 00:06:46.560
+In Bichap, se la risorsa A fa riferimento alla risorsa B il sistema gestisce tutto automaticamente.
+
+00:06:47.420 --> 00:06:49.360
+Aggiunge la dipendenza quando compila in ARM.json.
+
+00:06:49.860 --> 00:06:51.280
+Non devi pensarci, funziona e basta.
+
+00:06:51.880 --> 00:06:53.420
+E questo da solo far risparmiare ore di debugging.
+
+00:06:53.420 --> 00:06:55.400
+I moduli sono un'altra grande differenza.
+
+00:06:55.700 --> 00:06:57.840
+ARM aveva i modelli e i dati, ma erano complessi da gestire.
+
+00:06:58.700 --> 00:07:00.780
+File separati, collegamenti complessi, edifici da versionare.
+
+00:07:01.160 --> 00:07:04.140
+Bichap ha i moduli, che sono più puliti, versionabili e riutilizzabili.
+
+00:07:05.260 --> 00:07:08.540
+Definisci il modulo una volta, lo pubblichi sul registro e lo richiami ovunque.
+
+00:07:09.360 --> 00:07:11.180
+Stesso modulo, stessa configurazione ogni volta.
+
+00:07:11.760 --> 00:07:13.200
+Il processo di distribuzione in sé è identico.
+
+00:07:13.720 --> 00:07:16.620
+Bichap compila in ARM.json, poi Azure Resource Manager lo distribuisce.
+
+00:07:17.180 --> 00:07:18.300
+Stesso motore, stessa pipeline.
+
+00:07:18.680 --> 00:07:21.840
+Non devi cambiare il tuo processo di distribuzione, solo il modo in cui scrivi i template.
+
+00:07:21.840 --> 00:07:26.240
+Whatif è una funzione che ARM tecnicamente possiede, ma Bichap la rende molto più accessibile.
+
+00:07:27.120 --> 00:07:31.360
+Puoi visualizzare le modifiche prima di distribuire e vedere esattamente cosa verrà creato, modificato o eliminato.
+
+00:07:31.880 --> 00:07:33.580
+Nessuna sorpresa, nessuna cancellazione accidentale.
+
+00:07:33.960 --> 00:07:36.800
+Esegui Whatif, controlli l'output e se è corretto procedi con la distribuzione.
+
+00:07:37.040 --> 00:07:39.020
+La curva di apprendimento è un aspetto in cui Bichap eccelle.
+
+00:07:39.400 --> 00:07:41.300
+ARM.json da per scontato che tu sappia cosa stai facendo.
+
+00:07:41.560 --> 00:07:43.120
+È progettato per le macchine, non per gli esseri umani.
+
+00:07:43.500 --> 00:07:44.820
+Bichap è pensato per i principianti.
+
+00:07:45.060 --> 00:07:46.620
+Si intassi intuitiva ai strumenti che ti guidano.
+
+00:07:46.620 --> 00:07:49.420
+Puoi impararli un pomeriggio ed essere produttivo entro la fine della settimana.
+
+00:07:49.840 --> 00:07:52.360
+Microsoft ha reso Bichap l'esperienza di scrittura raccomandata.
+
+00:07:52.760 --> 00:07:54.880
+Tre nuove funzionalità e miglioramenti puntano prima su Bichap.
+
+00:07:55.420 --> 00:07:59.300
+I template ARM funzionano ancora e non spariranno, ma probabilmente non dovresti scriverne di nuovi.
+
+00:07:59.840 --> 00:08:02.200
+Se stai iniziando un nuovo progetto oggi, Bichap è la scelta giusta.
+
+00:08:02.720 --> 00:08:04.840
+Tre righe di Bichap per distribuire un gruppo di risorse.
+
+00:08:05.420 --> 00:08:05.940
+Solo tre righe.
+
+00:08:06.240 --> 00:08:08.080
+L'equivalente in ARM.json è di circa 15 righe.
+
+00:08:08.560 --> 00:08:12.160
+Stesso risultato, stesso deployment, ma uno è leggibile e l'altro è solo rumore.
+
+00:08:12.160 --> 00:08:14.340
+Ora potresti chiederti, è Terraform?
+
+00:08:14.740 --> 00:08:16.060
+Dovrei imparare Bichap o Terraform.
+
+00:08:16.520 --> 00:08:18.460
+Bichap contro Terraform, quale dovresti usare?
+
+00:08:19.800 --> 00:08:21.400
+Bentornati su Microsoft Knowledge Nugget.
+
+00:08:21.780 --> 00:08:24.620
+Sono Mirko Peters e oggi affrontiamo una domanda che continua a tornare.
+
+00:08:24.840 --> 00:08:25.580
+Bichap o Terraform?
+
+00:08:26.140 --> 00:08:26.660
+Analizziamolo.
+
+00:08:27.020 --> 00:08:28.380
+Terraform funziona su più cloud.
+
+00:08:28.740 --> 00:08:31.840
+Puoi usarlo per Azure, AWS, GCP o persino tutti e tre insieme.
+
+00:08:32.320 --> 00:08:34.440
+Bichap d'altra parte è creato esclusivamente per Azure.
+
+00:08:34.860 --> 00:08:36.540
+Questa differenza fondamentale influenza tutto il resto.
+
+00:08:36.740 --> 00:08:39.800
+Ora se lavori su più cloud, Terraform è la scelta giusta.
+
+00:08:39.800 --> 00:08:44.660
+Impari un linguaggio, uno strumento, un flusso di lavoro e funziona ovunque.
+
+00:08:45.480 --> 00:08:48.200
+Ma se usi principalmente Azure, Bichap ha dei veri vantaggi.
+
+00:08:49.000 --> 00:08:49.680
+Ecco il primo.
+
+00:08:50.240 --> 00:08:51.240
+Nessun fa il listato da gestire.
+
+00:08:51.920 --> 00:08:55.560
+Terraform mantiene un file listato che traccia ciò che distribuisce ed è critico.
+
+00:08:56.220 --> 00:08:58.700
+Se si corrompe o non è sincronizzato, hai un serio problema.
+
+00:08:59.340 --> 00:09:01.880
+Devi archiviarlo in sicurezza, farne il backup e gestirne l'accesso.
+
+00:09:02.540 --> 00:09:07.200
+ViceApp comunica direttamente con Azure Resource Manager, verificando cosa c'è già e rilevando le differenze.
+
+00:09:07.200 --> 00:09:10.860
+Nessun file listato significa niente problemi di sincronizzazione e rischi di corruzione.
+
+00:09:11.400 --> 00:09:12.820
+Secondo vantaggio, supporto del giorno C.
+
+00:09:13.400 --> 00:09:17.540
+Quando Microsoft rilascia una nuova funzionalità di Azure, Bichap la supporta immediatamente lo stesso giorno.
+
+00:09:18.360 --> 00:09:22.200
+Terraform deve attendere l'aggiornamento del provider, che a volte è veloce, altre richiede settimane.
+
+00:09:22.980 --> 00:09:25.800
+Se devi usare subito una nuova funzionalità, Bichap è l'unica opzione.
+
+00:09:26.680 --> 00:09:27.940
+Terzo è creato dal team di Azure.
+
+00:09:27.940 --> 00:09:32.940
+Gli strumenti, gli interi sensi, i messaggi di errore, tutto è progettato su come funziona davvero Azure.
+
+00:09:33.540 --> 00:09:36.940
+Quando scrivi in Bichap, usi un linguaggio che comprende le risorse Azure relativamente.
+
+00:09:38.400 --> 00:09:41.880
+Sa quali proprietà sono richieste, quali valori sono validi e quali dipendenze esistono.
+
+00:09:42.240 --> 00:09:45.000
+Quella profonda integrazione è difficile da replicare con un strumento di terza valore.
+
+00:09:45.340 --> 00:09:45.940
+Puoi anche usarli entrambi.
+
+00:09:46.740 --> 00:09:50.920
+Molte organizzazioni usano Bicep per la piattaforma e la landing zone e Terraform per carichi in multicloud.
+
+00:09:51.560 --> 00:09:52.520
+Non si escludono a vicenda.
+
+00:09:53.080 --> 00:09:54.660
+Puoi scegliere lo strumento giusto per ogni lavoro.
+
+00:09:54.660 --> 00:09:56.420
+La risposta onesta è questa.
+
+00:09:56.620 --> 00:09:59.340
+Per imparare Azure nello specifico, Bicep ha meno componenti da gestire.
+
+00:09:59.740 --> 00:10:01.200
+È un percorso più semplice quando si inizia.
+
+00:10:01.580 --> 00:10:04.380
+Non devi imparare nulla su file di stato, provider o configurazioni di backend.
+
+00:10:04.860 --> 00:10:07.600
+Installi Azure CLI, apri WS Code e inizia a scrivere.
+
+00:10:08.200 --> 00:10:08.620
+Basta teoria.
+
+00:10:09.260 --> 00:10:11.040
+Parliamo di ciò che ti serve davvero per iniziare.
+
+00:10:12.120 --> 00:10:12.560
+Iniziare.
+
+00:10:12.920 --> 00:10:13.840
+Ciò di cui hai veramente bisogno.
+
+00:10:14.140 --> 00:10:15.480
+Ti servono due cose per iniziare.
+
+00:10:15.840 --> 00:10:18.360
+Azure CLI e l'estensione Bicep per WS Code.
+
+00:10:18.840 --> 00:10:19.240
+Tutto qui.
+
+00:10:19.580 --> 00:10:21.260
+Nessuna CLI Bicep separata da installare.
+
+00:10:21.260 --> 00:10:22.580
+Nessun strumento extra da configurare.
+
+00:10:22.720 --> 00:10:24.360
+Azure CLI include Bicep integrato.
+
+00:10:24.660 --> 00:10:26.260
+Installare Azure CLI è piuttosto semplice.
+
+00:10:26.680 --> 00:10:27.520
+Vai su Microsoft Docs.
+
+00:10:27.880 --> 00:10:29.800
+Trova la pagina installazione per il tuo sistema operativo.
+
+00:10:30.600 --> 00:10:31.920
+Se sei su Mac basta un comando.
+
+00:10:32.500 --> 00:10:33.640
+Bru installa Azure CLI.
+
+00:10:34.220 --> 00:10:35.760
+Su Windows c'è un programma di installazione M6.
+
+00:10:36.180 --> 00:10:37.060
+Scarica la B e l'ho fatto.
+
+00:10:37.520 --> 00:10:39.380
+Funziona anche su Linux tramite il tuo gestore pacchetto.
+
+00:10:39.680 --> 00:10:43.000
+Una volta installato, esegui AZ version per confermare che tutto funzioni.
+
+00:10:43.640 --> 00:10:46.460
+Dovresti vedere elencate sia la versione di Azure CLI che quella di Bicep.
+
+00:10:46.460 --> 00:10:50.680
+Ora apri WS Code, vai nel pannello di estensione a sinistra e cerca Bicep.
+
+00:10:51.620 --> 00:10:54.420
+Installa quella di Microsoft, non è di terze parti, quella ufficiale.
+
+00:10:55.040 --> 00:10:56.300
+Hai davvero bisogno di questa estensione?
+
+00:10:56.600 --> 00:11:00.520
+Ti offre IntelliSense che suggerisce le proprietà delle risorse mentre scrivi, evidenzia la sintassi
+
+00:11:00.520 --> 00:11:03.560
+per individuare errori a colpo d'occhio e controlla gli sbagli in tempo reale.
+
+00:11:03.980 --> 00:11:07.400
+Vedrai linee ondulate rosse sotto tutto ciò che è sbagliato prima ancora di provare a distribuire.
+
+00:11:07.880 --> 00:11:10.200
+Onestamente, è una delle migliori estensioni di linguaggio in WS Code
+
+00:11:10.200 --> 00:11:12.680
+e una parte importante del motivo per cui Bicep è così piacevole da usare.
+
+00:11:13.100 --> 00:11:15.320
+Ora, crea un nuovo file e chiamano main.bicep.
+
+00:11:15.620 --> 00:11:18.260
+Quell'estensione Bicep dice a WS Code di attivare l'estensione.
+
+00:11:18.640 --> 00:11:20.240
+Senza di essa stai solo scrivendo testo semo.
+
+00:11:20.640 --> 00:11:22.580
+Con essa ottieni l'esperienza completa degli strumenti.
+
+00:11:22.980 --> 00:11:23.680
+Ecco un esempio rapido.
+
+00:11:24.040 --> 00:11:25.920
+Una distribuzione di gruppo di risorse in tre righe di code.
+
+00:11:26.360 --> 00:11:28.740
+Prima imposti l'ambito di destinazione su subscription,
+
+00:11:28.960 --> 00:11:32.000
+poi definisci la risorsa, un gruppo di risorse con un nome e una posizione.
+
+00:11:32.400 --> 00:11:33.140
+Tu qui tre righe.
+
+00:11:33.720 --> 00:11:35.240
+Confrontalo con l'equivalente ARM JSON
+
+00:11:35.240 --> 00:11:37.520
+che conta circa 15 righe di parentesi, virgolette.
+
+00:11:38.180 --> 00:11:40.040
+Per distribuirlo, usi l'interfaccia Azure CLA.
+
+00:11:40.660 --> 00:11:42.660
+Poiché stai distribuendo all'ambito della sottoscrizione,
+
+00:11:42.780 --> 00:11:44.520
+il comando è a Z da Deployment Subcreate.
+
+00:11:45.200 --> 00:11:48.360
+Passi una posizione per i metadati di distribuzione e punti al tuo file Bicep.
+
+00:11:48.760 --> 00:11:51.300
+Questo è il metodo da righe di comando, ma esiste anche un'esperienza guidata.
+
+00:11:51.680 --> 00:11:55.040
+In WS Code, fai clic destro sul file Byicep e seleziona Deploy Byicep File.
+
+00:11:55.580 --> 00:11:56.740
+Ti guida attraverso l'intero processo.
+
+00:11:57.060 --> 00:12:00.240
+Ti chiede un nome per la distribuzione, di selezionare la sottoscrizione,
+
+00:12:00.560 --> 00:12:03.960
+di creare o selezionare un gruppo di risorse e se hai un file di parametri.
+
+00:12:03.960 --> 00:12:05.880
+E il sistema esegue l'esecuzione.
+
+00:12:06.380 --> 00:12:07.820
+Il risultato appare nel tuo portale azzurro.
+
+00:12:08.080 --> 00:12:10.820
+È come cliccare nel portale, ma ora hai un file che puoi riutilizzare.
+
+00:12:11.180 --> 00:12:14.400
+Puoi confermarlo nel tuo repository, condividerlo con il tuo team ed eseguirlo di nuovo.
+
+00:12:14.860 --> 00:12:15.780
+Ed ecco la parte magica.
+
+00:12:16.380 --> 00:12:18.600
+Esegui di nuovo lo stesso Deployment e guarda cosa succede.
+
+00:12:19.760 --> 00:12:20.840
+Potere delle impotenze.
+
+00:12:21.280 --> 00:12:22.640
+Ecco il punto riguardo ad eseguire i Deployment.
+
+00:12:23.040 --> 00:12:25.300
+Vuoi poterli eseguire più e più volte senza rompere nulla?
+
+00:12:25.680 --> 00:12:27.120
+Questo è esattamente ciò che ti offre le impotenze.
+
+00:12:27.500 --> 00:12:30.080
+La prima volta che esegui il file Bicep crea il gruppo di risorse,
+
+00:12:30.080 --> 00:12:32.420
+ma la seconda volta non succede nulla.
+
+00:12:32.420 --> 00:12:34.340
+Nessun errore, nessun duplicato, niente.
+
+00:12:35.180 --> 00:12:39.080
+Bicep controlla cosa c'è già in Azure, lo confronta con ciò che è richiesto e dice che non c'è nulla da cambiare.
+
+00:12:39.540 --> 00:12:43.640
+Non ha provato a creare un nuovo gruppo di risorse e non ha restituito errori dicendo che ne esiste già uno.
+
+00:12:44.220 --> 00:12:46.980
+Ha semplicemente confermato che lo stato attuale corrisponde allo stato desiderato.
+
+00:12:47.280 --> 00:12:49.500
+Pensalo come eseguire giz status sul repository pulito.
+
+00:12:49.940 --> 00:12:50.540
+Non c'è nulla da fare.
+
+00:12:51.060 --> 00:12:52.600
+Tutto è già esattamente come dovrebbe essere.
+
+00:12:53.060 --> 00:12:54.780
+Questo è il potere dell'infrastruttura come codice.
+
+00:12:54.880 --> 00:12:58.580
+Puoi eseguire il tuo Deployment ripetutamente e ottenere lo stesso risultato ogni singola volta.
+
+00:12:59.180 --> 00:13:00.400
+Nessuna sorpresa, nessuna deriva.
+
+00:13:00.400 --> 00:13:02.840
+Sai esattamente cosa hai distribuito perché il file lo dice.
+
+00:13:03.440 --> 00:13:04.920
+Il file diventa la tua unica fonte di verità.
+
+00:13:05.960 --> 00:13:08.060
+Non devi mai chiederti se hai ricordato un'impostazione.
+
+00:13:08.360 --> 00:13:12.320
+Affrontare il problema funziona sul mio PC o cercare nel portale azzurro se qualcuno ha cambiato qualcosa.
+
+00:13:13.400 --> 00:13:14.680
+Il file ti dice cosa c'è lì.
+
+00:13:15.080 --> 00:13:17.380
+Se vuoi cambiare qualcosa, modifichi il file e li distribuisci.
+
+00:13:17.820 --> 00:13:21.660
+Se vuoi verificare, esegui di nuovo il Deployment e confermerà che tutto corrisponde.
+
+00:13:22.220 --> 00:13:24.060
+È così che costruisci fiducia nella tua infrastruttura.
+
+00:13:24.700 --> 00:13:25.740
+Il file è la fonte di verità.
+
+00:13:25.740 --> 00:13:30.460
+Non la tua memoria, non un documento Word, non un video di YouTube di sei mesi fa, il file.
+
+00:13:31.300 --> 00:13:33.620
+Quindi dove si inserisce Bicep nel quadro generale di Azure?
+
+00:13:34.180 --> 00:13:36.100
+Quadro generale dove si inserisce Bicep.
+
+00:13:36.840 --> 00:13:39.200
+Bicep vive all'interno dell'ecosistema di Azure Resource Manager.
+
+00:13:39.660 --> 00:13:40.640
+Non è uno strumento separato.
+
+00:13:41.080 --> 00:13:44.520
+Molti pensano che lo sia, ma in realtà è solo un modo migliore per scrivere modelli ARM.
+
+00:13:44.520 --> 00:13:48.460
+Sotto il cofano è ancora ARM, lo stesso motore di deployment, la stessa API e tutto quanto.
+
+00:13:48.980 --> 00:13:50.180
+L'unica differenza è come lo scrivi.
+
+00:13:50.660 --> 00:13:54.380
+E poiché Bicep compila in ARM, tutto ciò che funziona con ARM funziona con Bicep.
+
+00:13:55.160 --> 00:13:57.280
+Azure Policy applica la conformità ai tuoi deployment.
+
+00:13:57.900 --> 00:13:59.440
+Airbag controlla chi può distribuire cosa.
+
+00:13:59.940 --> 00:14:02.020
+Cost Management tiene traccia della spesa sulle tue risorse.
+
+00:14:02.380 --> 00:14:05.840
+Azure DevOps e GitHub Actions distribuiscono i tuoi file bicep tramite pipeline.
+
+00:14:06.300 --> 00:14:09.040
+Tutto funziona perfettamente perché Bicep produce JSON ARM Stunner.
+
+00:14:09.500 --> 00:14:10.740
+Non perdi nulla passando a questo.
+
+00:14:11.240 --> 00:14:12.220
+Anzi, guadagni chiarezza.
+
+00:14:12.220 --> 00:14:15.080
+Microsoft ha costruito un intero ecosistema attorno a Bicep.
+
+00:14:15.600 --> 00:14:20.840
+Azure Verified Modules, o AVM, è una libreria curata di moduli Bicep e Terraform che seguono le migliori pratiche.
+
+00:14:21.320 --> 00:14:22.580
+Non devi scrivere tutto da zero.
+
+00:14:23.220 --> 00:14:27.840
+Puoi usare moduli predefiniti per modelli comuni come reti virtuali, account di archiviazione e servizi app.
+
+00:14:28.800 --> 00:14:31.500
+Sono testati, mantenuti e allineati al well-architected framework.
+
+00:14:32.160 --> 00:14:36.780
+Il Cloud Adoption Framework include implementazioni di riferimento Bicep per architetture aziendali standardizzate.
+
+00:14:37.320 --> 00:14:39.920
+Se stai costruendo una landing zone, esiste un modello Bicep apposta.
+
+00:14:39.920 --> 00:14:43.360
+Gli stack di distribuzione offrono la gestione del ciclo di vita per gruppi di risorse.
+
+00:14:43.940 --> 00:14:48.380
+Puoi distribuire uno stack e se rimuovi una risorsa dal tuo file Bicep lo stack puoi eliminarla per te.
+
+00:14:49.260 --> 00:14:50.860
+Oppure proteggerla da eliminazioni accidente.
+
+00:14:51.340 --> 00:14:51.820
+Decidi tu.
+
+00:14:52.260 --> 00:14:57.040
+L'ecosistema continua a crescere con più moduli, strumenti migliori e una maggiore integrazione con l'EI GitHub Copilot.
+
+00:14:57.700 --> 00:15:01.840
+Puoi descrivere ciò che vuoi in un linguaggio semplice e Copilot genera il codice Bicep per te.
+
+00:15:01.840 --> 00:15:06.360
+Microsoft continua a investire in Bicep come principale esperienza di authoring per Azure.
+
+00:15:06.900 --> 00:15:08.720
+Quindi nuove funzionalità si rivolgono prima a Bicep.
+
+00:15:09.120 --> 00:15:11.920
+I modelli ARM funzionano ancora, ma l'innovazione sta avvenendo in Bicep.
+
+00:15:12.280 --> 00:15:13.060
+Ecco il punto fondamentale.
+
+00:15:13.300 --> 00:15:17.160
+Se lavori in Azure, Bicep è il passo naturale successivo dopo i click nel portale.
+
+00:15:17.720 --> 00:15:19.940
+Non devi imparare Terraform a padroneggiare il JSON di ARC.
+
+00:15:19.940 --> 00:15:26.040
+Installi due cose, scrivi poche righe di codice e distribuisci un'infrastruttura ripetibile, controllata, tramite versione affidabile.
+
+00:15:26.720 --> 00:15:28.800
+Lascia che ti proponga qualcosa di pratico che puoi fare oggi.
+
+00:15:29.380 --> 00:15:30.920
+Ora sai cos'è l'infrastruttura come codice?
+
+00:15:31.040 --> 00:15:34.120
+Perché esiste Bicep e come semplifica le distribuzioni in Azure?
+
+00:15:34.440 --> 00:15:35.280
+Ecco il concetto principale.
+
+00:15:35.680 --> 00:15:37.360
+Bicep non è un sistema di distribuzione diverso.
+
+00:15:37.360 --> 00:15:40.860
+Da un modo migliore per scrivere gli stessi modelli ARM che scriveresti comunque,
+
+00:15:41.080 --> 00:15:43.620
+usando lo stesso motore e Azure Resource Manager sotto il cofano,
+
+00:15:43.700 --> 00:15:46.100
+ma in un linguaggio che gli umani possono davvero leggere e scrivere.
+
+00:15:46.740 --> 00:15:47.560
+Ecco una sfida per te.
+
+00:15:47.560 --> 00:15:51.460
+Crea un file main.bicep, distribuisci un gruppo di risorse ed esegui la distribuzione due volte.
+
+00:15:51.760 --> 00:15:52.880
+Guarda come funziona entrambe le volte.
+
+00:15:53.280 --> 00:15:56.580
+La prima volta crea la risorsa, la seconda volta conferma che nulla è cambiato.
+
+00:15:57.240 --> 00:16:01.040
+È il momento in cui scatta la scintilla, quando capisci che non tornerai mai più a cliccare nel portale.
+
+00:16:01.560 --> 00:16:02.200
+Questa è la base.
+
+00:16:02.940 --> 00:16:07.480
+Da qui puoi aggiungere account di archiviazione, reti virtuali, servizi app, usando lo stesso schema.
+
+00:16:08.440 --> 00:16:10.180
+Scrivi un file, distribuisci lo eseguilo di nuovo.
+
+00:16:10.600 --> 00:16:13.620
+Quel file diventa la tua fonte di verità e tutto il resto deriva da esso.
+
+00:16:14.140 --> 00:16:17.360
+Se l'hai trovato utile, condividilo con qualcuno che sta ancora cliccando nel portale.
+
+00:16:17.560 --> 00:16:18.580
+Ti ringrazierà.
+
+00:16:18.940 --> 00:16:20.840
+Iscriviti sulla tua piattaforma podcast preferita.
+
+00:16:20.960 --> 00:16:25.000
+Nel prossimo episodio approfondiremo Bicep distribuendo risorse reali con proprietà reali.

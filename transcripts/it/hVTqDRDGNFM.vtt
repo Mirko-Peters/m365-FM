@@ -1,0 +1,925 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:04.160
+Ciao a tutti e benvenuti a un altro episodio delle Microsoft Knowledge Nuggets qui su M365.
+
+00:00:04.240 --> 00:00:05.860
+FM, sono il vostro conduttore Mirko Peter.
+
+00:00:06.140 --> 00:00:08.880
+Oggi affronteremo qualcosa di cui chiunque lavori con l'IA ha sentito parlare,
+
+00:00:08.960 --> 00:00:10.860
+ma che quasi nessuno sa spiegare in modo semplice.
+
+00:00:11.660 --> 00:00:13.560
+Si tratta del Model Context Protocol o MCP.
+
+00:00:14.720 --> 00:00:18.020
+Siete su Teams e ponete al vostro assistente IA una domanda semplice come
+
+00:00:18.020 --> 00:00:19.780
+Qual è lo stato del progetto Johnson?
+
+00:00:20.160 --> 00:00:22.340
+E lui risponde, mi dispiace, non posso accedere a queste informazioni.
+
+00:00:22.940 --> 00:00:23.580
+Vi sono familiare.
+
+00:00:24.080 --> 00:00:27.000
+L'IA è intelligente, il modello è potente, ma non riesce a vedere i vostri dati.
+
+00:00:27.000 --> 00:00:30.200
+E' disconnesso dai sistemi in cui risiede il vostro lavoro vero e proprio.
+
+00:00:30.720 --> 00:00:32.420
+E questo è il problema principale che l'MCP risolve.
+
+00:00:32.860 --> 00:00:35.460
+Alla fine di questo episodio capirete cosa sia realmente l'MCP,
+
+00:00:35.740 --> 00:00:40.040
+perché è importante per chiunque usi Microsoft 365 e come sta cambiando ciò che l'IA può fare per voi.
+
+00:00:40.760 --> 00:00:42.080
+Analizzeremo la questione passo dopo passo.
+
+00:00:42.560 --> 00:00:45.760
+Il problema, la soluzione, come funziona e cosa significa all'interno di Microsoft.
+
+00:00:46.240 --> 00:00:49.100
+Quindi iniziamo dal problema, perché probabilmente l'avete vissuto in prima persona.
+
+00:00:50.760 --> 00:00:51.160
+Problema.
+
+00:00:51.660 --> 00:00:53.740
+Ogni strumento di IA doveva essere costruito su MISP.
+
+00:00:53.740 --> 00:00:57.880
+Prima dell'esistenza dell'MCP, se volevate che un assistente IA facesse qualcosa di utile,
+
+00:00:58.000 --> 00:01:01.560
+come controllare il calendario, recuperare un file da SharePoint o cercare un record cliente in Dynamics,
+
+00:01:01.640 --> 00:01:03.920
+dovevate scrivere codice personalizzato per ciascuna operazione.
+
+00:01:04.720 --> 00:01:07.720
+Ogni singola connessione, ogni singola fonte di dati, codice separato.
+
+00:01:08.140 --> 00:01:08.660
+Il punto è questo.
+
+00:01:09.040 --> 00:01:10.740
+Ogni sistema parla il proprio linguaggio API.
+
+00:01:11.380 --> 00:01:15.460
+Il vostro calendario usa un formato, SharePoint ne usa un altro, Dynamics ne usa ancora un altro.
+
+00:01:16.320 --> 00:01:19.860
+Ha autenticazioni diverse, regole diverse, modi diversi di richiedere dati e riceverli.
+
+00:01:19.860 --> 00:01:24.100
+Quindi, se volevate che la vostra IA comunicasse con tre sistemi, dovete costruire tre connettori personalizzati.
+
+00:01:24.260 --> 00:01:25.060
+Pensatene in questo modo.
+
+00:01:25.300 --> 00:01:27.860
+Immaginate di essere nel vostro soggiorno con una TV, uno stereo e luci intelligenti.
+
+00:01:29.020 --> 00:01:32.860
+Ognuno ha il proprio telecomando e nessuno di questi telecomandi funziona con un altro dispositivo.
+
+00:01:33.360 --> 00:01:37.360
+Vi serve il telecomando della TV per la TV, quello dello stereo per lo stereo, un'app separata per le luci.
+
+00:01:37.360 --> 00:01:40.380
+Ecco come appariva lo sviluppo dell'IA prima dell'MCP.
+
+00:01:41.100 --> 00:01:43.300
+Ogni strumento necessitava della propria integrazione personalizzata.
+
+00:01:43.840 --> 00:01:45.540
+Per gli utenti Microsoft questo tocca da vicino.
+
+00:01:45.920 --> 00:01:48.160
+Pensate a cosa vuole fare Copilot quando gli ponete una domanda.
+
+00:01:48.800 --> 00:01:50.560
+Potrebbe controllare il vostro calendario Exchange?
+
+00:01:50.820 --> 00:01:54.640
+Per le riunioni, leggere le mere recenti di un cliente specifico, cercare un record client in Dynamics.
+
+00:01:55.040 --> 00:01:59.600
+Si tratta di tre connessioni API diverse, tre integrazioni separate, ognuna delle quali richiede lavoro di sviluppo personalizzato.
+
+00:01:59.740 --> 00:02:00.280
+Il risultato.
+
+00:02:00.620 --> 00:02:02.740
+La maggior parte degli strumenti di IA ha scelto la strada più facile.
+
+00:02:02.740 --> 00:02:06.500
+Chiedevi qualcosa sul tuo lavoro e l'IA rispondeva, non posso accedere a quei dati.
+
+00:02:06.720 --> 00:02:08.520
+Oppure devi prima configurare una connessione.
+
+00:02:09.020 --> 00:02:12.980
+Una vera integrazione richiedeva costosi sviluppi personalizzati che la maggior parte delle aziende non raggiungeva.
+
+00:02:13.500 --> 00:02:14.380
+Ecco il punto fondamentale.
+
+00:02:14.800 --> 00:02:17.220
+Il modello linguistico di grandi dimensioni in sé è incredibilmente potente.
+
+00:02:17.520 --> 00:02:21.960
+Sa ragionare, riassumere, generare e analizzare, ma senza accesso ai tuoi dati reali, è cieco.
+
+00:02:22.320 --> 00:02:22.720
+È cieco.
+
+00:02:22.720 --> 00:02:26.220
+È come avere l'assistente più intelligente al mondo chiuso in una stanza senza finestre.
+
+00:02:26.320 --> 00:02:29.100
+Può pensare brillantemente, ma non può aiutarti nulla di concreto.
+
+00:02:30.460 --> 00:02:31.040
+La soluzione.
+
+00:02:31.100 --> 00:02:32.220
+L'MCP come conneversale.
+
+00:02:32.740 --> 00:02:34.580
+Quindi cosa succederebbe se esistesse una versione diversa?
+
+00:02:34.920 --> 00:02:39.780
+Un modo standard per connettere qualsiasi A a qualsiasi fonte dati senza scrivere codice personalizzato per ogni collegamento.
+
+00:02:40.400 --> 00:02:42.820
+Il fatto è che è esattamente ciò che fa il Model Context Protocol.
+
+00:02:43.020 --> 00:02:43.660
+In breve MCP.
+
+00:02:44.500 --> 00:02:48.380
+Anthropic, l'azienda dietro Cloud, l'ha introdotta a fine 2024 e ha preso piede rapidamente.
+
+00:02:49.280 --> 00:02:54.600
+L'MCP è uno standard aperto che definisce un modo coerente per le applicazioni IA di comunicare con strumenti e fonti dati.
+
+00:02:55.260 --> 00:02:56.180
+Pensalo come l'USB-C.
+
+00:02:56.580 --> 00:02:59.780
+Prima dell'USB-C ogni dispositivo richiedeva il suo cavo speciale.
+
+00:02:59.780 --> 00:03:03.140
+Il telefono ne usava uno, il portatile un altro, le cuffie un terzo.
+
+00:03:03.640 --> 00:03:05.440
+Aveva un cassetto pieno di cavi e non riuscivi mai a troverlo.
+
+00:03:05.660 --> 00:03:08.960
+Poi è arrivato l'USB-C, un cavo, uno standard e tutto funziona semplicemente.
+
+00:03:09.400 --> 00:03:11.140
+L'MCP fa la stessa cosa per le connessioni A.
+
+00:03:11.440 --> 00:03:16.120
+Un unico protocollo funziona per database, file system, API web e sì, anche per i servizi Microsoft.
+
+00:03:16.120 --> 00:03:23.340
+Invece di creare connettori su misura per ogni fonte dati, costruisci un server MCP e qualsiasi applicazione IA compatibile può usarlo.
+
+00:03:24.200 --> 00:03:25.060
+L'adozione è stata rapida.
+
+00:03:25.720 --> 00:03:31.600
+In pochi mesi sono apparsi migliaia di server MCP predefiniti per Google Drive, GitHub, Slack e database come PostgreSQL e Squite.
+
+00:03:33.020 --> 00:03:35.340
+E per gli utenti Microsoft qui la cosa si fa davvero interessante.
+
+00:03:35.340 --> 00:03:41.620
+I tuoi strumenti IA ora possono connettersi a SharePoint, Exchange, Dynamics e Power Platform, tutti tramite la stessa interfaccia standard.
+
+00:03:42.200 --> 00:03:44.300
+In sintesi non devi più creare connessioni personalizzate.
+
+00:03:44.740 --> 00:03:48.000
+Ti colleghi all'MCP, un protocollo, qualsiasi fonte dati, qualsiasi applicazione IA.
+
+00:03:48.420 --> 00:03:49.140
+E questa è la magia.
+
+00:03:49.900 --> 00:03:51.520
+L'architettura host, client e server.
+
+00:03:51.980 --> 00:03:53.540
+Quindi come funziona davvero dietro le quinte?
+
+00:03:54.060 --> 00:03:54.720
+Lascia che te lo spieghi.
+
+00:03:55.200 --> 00:03:58.580
+L'MCP usa una semplice configurazione in tre parti, host, client e server.
+
+00:03:59.440 --> 00:04:01.780
+Una volta compresi questi tre elementi tutto diventa chiaro.
+
+00:04:02.000 --> 00:04:04.300
+L'host e l'applicazione IA che stai effettivamente usando?
+
+00:04:04.300 --> 00:04:09.460
+Potrebbe essere co-pilot in Microsoft 365, cloud desktop o un agente personalizzato che hai creato tu stesso.
+
+00:04:10.140 --> 00:04:11.340
+L'host è dove poni la tua domanda.
+
+00:04:11.920 --> 00:04:12.900
+È la parte rivolta all'utente.
+
+00:04:13.520 --> 00:04:16.260
+All'interno di quell'host vive qualcosa chiamato client MCP.
+
+00:04:16.700 --> 00:04:18.400
+Questa è la parte che parla il protocollo MCP.
+
+00:04:18.960 --> 00:04:23.240
+Non lo vedi né ci interagisci direttamente, ma è il traduttore, l'elemento che sa come parlare ai server MCP.
+
+00:04:23.720 --> 00:04:24.420
+Poi c'è il server.
+
+00:04:25.240 --> 00:04:30.140
+Il server MCP è un programma leggero che si interpone tra la tua applicazione IA e la tua fonte dati reale.
+
+00:04:31.060 --> 00:04:33.060
+Espone strumenti e risorse che l'IA può utilizzare.
+
+00:04:33.060 --> 00:04:36.860
+Il server sa come raggiungere il tuo sito SharePoint, la tua casa l'exchange o il tuo database Dynamics.
+
+00:04:37.480 --> 00:04:39.040
+L'IA non ha bisogno di conoscere nessuno di questi dettagli.
+
+00:04:39.560 --> 00:04:40.500
+Parla semplicemente con il server.
+
+00:04:40.840 --> 00:04:41.840
+Ecco come influiscono i dati.
+
+00:04:42.500 --> 00:04:46.240
+Quando pone una domanda alla tua IA, la richiesta passa dall'host al client MCP.
+
+00:04:46.720 --> 00:04:49.100
+Il client invia un messaggio tramite il protocollo MCP al server.
+
+00:04:49.700 --> 00:04:52.880
+Il server ha cellato a fonte dati, recupera ciò di cui hai bisogno e lo rimanda indietro.
+
+00:04:53.420 --> 00:04:55.840
+Dall'host al client al protocollo al server fino ai tuoi dati.
+
+00:04:55.840 --> 00:04:57.700
+Pulito, semplice e standardizzato.
+
+00:04:58.080 --> 00:04:59.000
+Immaginalo come un ristorante.
+
+00:04:59.320 --> 00:05:00.560
+L'host è seduto al tavolo.
+
+00:05:01.040 --> 00:05:03.940
+Il client MCP è il cameriere che prende l'ordine e lo porta in cucina.
+
+00:05:04.380 --> 00:05:06.000
+E il server MCP è la cucina stessa.
+
+00:05:06.440 --> 00:05:07.900
+Non hai bisogno di sapere come funziona la cucina.
+
+00:05:08.520 --> 00:05:10.720
+Dici solo al cameriere cosa vuoi e il cibo arriva.
+
+00:05:11.280 --> 00:05:13.680
+Un host può connettersi a più server contemporaneamente.
+
+00:05:13.680 --> 00:05:17.160
+Quindi la tua IA in Teams può raggiungere i tuoi documenti SharePoint,
+
+00:05:17.360 --> 00:05:20.240
+il tuo calendario exchange e i tuoi record dynamics in un'unica conversazione.
+
+00:05:20.900 --> 00:05:24.340
+La comunicazione tra client e server utilizza qualcosa chiamato JSON-RPC.
+
+00:05:25.260 --> 00:05:28.020
+Solo un modo leggero e standardizzato per inviare messaggi avanti indietro.
+
+00:05:28.400 --> 00:05:30.380
+Nessun carico pesante, nessun cablaggio personalizzato.
+
+00:05:31.000 --> 00:05:32.360
+Cosa contengono i server MCP?
+
+00:05:32.920 --> 00:05:34.420
+Strumenti, risorse e prompt.
+
+00:05:35.100 --> 00:05:38.000
+Quindi cosa dà effettivamente un server MCP all'IA quando si connettono?
+
+00:05:38.380 --> 00:05:38.840
+Tre cose.
+
+00:05:39.140 --> 00:05:41.120
+Strumenti, risorse e modelli di prompt.
+
+00:05:41.120 --> 00:05:45.280
+Pensali come il kit di attrezzi a cui l'IA attinge quando deve portare a termine qualcosa.
+
+00:05:45.780 --> 00:05:46.900
+Analizziamolo in parole semplici.
+
+00:05:47.340 --> 00:05:48.100
+Primo gli strumenti.
+
+00:05:48.360 --> 00:05:50.080
+Gli strumenti sono azioni che l'IA può intraprendere,
+
+00:05:50.160 --> 00:05:51.800
+che cambiano effettivamente le cose nel mondo reale.
+
+00:05:52.120 --> 00:05:55.500
+Uno strumento potrebbe cercare un database, inviare un email o creare un documento.
+
+00:05:55.980 --> 00:05:58.040
+Ogni volta che l'IA richiama uno strumento succede qualcosa.
+
+00:05:58.660 --> 00:06:01.940
+Un file viene salvato, un messaggio viene inviato, un record viene aggiornato.
+
+00:06:02.380 --> 00:06:03.600
+Gli strumenti sono i verbi del sistema.
+
+00:06:03.900 --> 00:06:04.820
+Sono ciò che fa cadere le cose.
+
+00:06:05.120 --> 00:06:05.620
+Ora risorse.
+
+00:06:05.620 --> 00:06:08.380
+Le risorse sono informazioni di sola lettura che l'IA può consultare.
+
+00:06:08.380 --> 00:06:10.960
+Una risorsa può essere un elenco clienti di Dynamics,
+
+00:06:11.200 --> 00:06:13.880
+un documento di policy in SharePoint o le note di una riunione su Teams.
+
+00:06:14.580 --> 00:06:16.320
+L'IA può leggerle, analizzarle e consultarli,
+
+00:06:16.380 --> 00:06:18.660
+ma non può modificarle direttamente tramite una risorsa.
+
+00:06:19.180 --> 00:06:22.020
+Forniscono semplicemente l'IA il contesto necessario per lavorare in modo più intelligente.
+
+00:06:22.280 --> 00:06:23.140
+Qui ci sono i prompt template?
+
+00:06:23.800 --> 00:06:26.060
+Si tratta di istruzioni predefinite che fanno risparmiare tempo.
+
+00:06:26.800 --> 00:06:28.560
+Invece di creare il prompt perfetto ogni volta,
+
+00:06:28.640 --> 00:06:30.900
+il server te ne fornisce uno già ottimizzato.
+
+00:06:31.140 --> 00:06:34.440
+Ad esempio, un server MCP per SharePoint potrebbe includere un template
+
+00:06:34.440 --> 00:06:35.780
+per riassumere il contenuto di una cartella.
+
+00:06:36.260 --> 00:06:37.460
+Basta dire, riassumi questa cartella.
+
+00:06:37.460 --> 00:06:39.220
+E il template si occupa del resto.
+
+00:06:39.900 --> 00:06:42.780
+È come avere una scorciatoria specializzata per le cose che fai ripetutamente.
+
+00:06:43.600 --> 00:06:45.180
+Ecco un esempio concreto per unire i pezzi.
+
+00:06:45.680 --> 00:06:47.380
+Immagina un server MCP per SharePoint.
+
+00:06:47.840 --> 00:06:49.560
+Offre uno strumento chiamato cerca documenti
+
+00:06:49.560 --> 00:06:51.180
+che trova i file tramite parola chiave.
+
+00:06:51.440 --> 00:06:53.140
+Offre una risorsa chiamata elenco siti
+
+00:06:53.140 --> 00:06:56.380
+e fornisce accesso in sola lettura a tutti i siti SharePoint disponibili.
+
+00:06:57.180 --> 00:07:00.100
+Include un prompt template chiamato riassumi contenuti cartella
+
+00:07:00.100 --> 00:07:02.380
+che indica l'IA come presentare un riepilogo chiaro.
+
+00:07:02.380 --> 00:07:06.560
+Tutto ciò che serve all'IA per aiutarti con SharePoint si trova lì in un unico posto.
+
+00:07:07.120 --> 00:07:08.000
+Ora, ecco la parte interessante.
+
+00:07:08.440 --> 00:07:11.100
+L'IA scopre tutto questo automaticamente quando si connette al server.
+
+00:07:11.860 --> 00:07:13.060
+Nessuna programmazione richiesta.
+
+00:07:13.540 --> 00:07:15.080
+Il server praticamente si presenta da solo.
+
+00:07:15.720 --> 00:07:18.340
+Ecco i miei strumenti, le mie risorse, i miei prompt template.
+
+00:07:18.340 --> 00:07:21.120
+E' l'IA capisce come usarli.
+
+00:07:21.400 --> 00:07:22.560
+E' questo che rende MCP potente.
+
+00:07:23.020 --> 00:07:25.760
+Il server dice a l'IA cosa è possibile fare e l'IA gestisce il resto.
+
+00:07:26.140 --> 00:07:27.120
+E' un sistema autodescrittivo.
+
+00:07:27.620 --> 00:07:31.340
+Queste tre categorie lavorano insieme affinché l'IA abbia un quadro completo di ciò che può fare.
+
+00:07:32.300 --> 00:07:34.120
+MCP incontra ciò che Microsoft offre già.
+
+00:07:34.660 --> 00:07:36.160
+Quindi portiamo tutto questo al mondo Microsoft.
+
+00:07:36.620 --> 00:07:39.880
+E' qui che le cose diventano concrete per chiunque utilizzi Microsoft 365 e Azure.
+
+00:07:40.380 --> 00:07:41.540
+Sfattiamo subito un mito comune.
+
+00:07:42.000 --> 00:07:44.560
+Alcuni pensano che MCP sia solo un esperimento secondario per Microsoft.
+
+00:07:45.400 --> 00:07:46.320
+E' una direzione strategica.
+
+00:07:46.320 --> 00:07:49.140
+Si può vedere chiaramente in Azure AI Agent Service.
+
+00:07:49.820 --> 00:07:54.760
+Se stai creando agenti A personalizzati su Azure, ora puoi aggiungere server MCP remoti direttamente da Azure AI Foundry.
+
+00:07:55.640 --> 00:07:59.340
+Configura un'etichetta per il server, un URL ed eventuali intestazioni di autenticazione.
+
+00:07:59.620 --> 00:08:01.680
+E il tuo agente può iniziare a chiamare gli strumenti di quel server.
+
+00:08:02.140 --> 00:08:04.860
+La documentazione ufficiale di Microsoft la definisce un'integrazione di primo di poi.
+
+00:08:05.160 --> 00:08:06.460
+Non è il linguaggio usato per i progetti secondo.
+
+00:08:06.720 --> 00:08:07.700
+La questione va oltre a Zoom.
+
+00:08:08.120 --> 00:08:11.600
+Microsoft ha pubblicato riferimenti ufficiali di server MCP per la Power Platform,
+
+00:08:11.720 --> 00:08:14.260
+inclusi Power Automate, Power Apps e persino Process Mining.
+
+00:08:14.600 --> 00:08:15.780
+Non si tratti della community.
+
+00:08:16.320 --> 00:08:17.320
+Vengono direttamente da Microsoft.
+
+00:08:17.780 --> 00:08:19.180
+Prendi il server MCP di Power Apps.
+
+00:08:19.620 --> 00:08:21.580
+Include uno strumento chiamato Invoke Data Entry.
+
+00:08:21.960 --> 00:08:22.980
+Ecco cosa significa in pratica.
+
+00:08:23.820 --> 00:08:27.880
+Nea può prendere input non strutturati come un email, un messaggio di chat o un documento scansionato
+
+00:08:27.880 --> 00:08:30.200
+e trasformarli in un record strutturato in Dataverse.
+
+00:08:30.920 --> 00:08:32.720
+L'IA propone il record e tu lo approvi.
+
+00:08:32.980 --> 00:08:34.320
+L'elemento umano è integrato direttamente al menu.
+
+00:08:34.320 --> 00:08:37.080
+Il server MCP di Power Automate spinge questo concetto ancora a uno.
+
+00:08:37.220 --> 00:08:39.120
+Descrivi un flusso di lavoro in un linguaggio semplice.
+
+00:08:39.360 --> 00:08:44.520
+Qualcosa come quando arriva una nuova email con urgente nell'oggetto, crea un'attività in planner e avvisa il mio manager.
+
+00:08:45.320 --> 00:08:46.500
+L'IA costruisce quel flusso per te.
+
+00:08:46.940 --> 00:08:48.160
+Nessun trascinamento di connettore.
+
+00:08:48.580 --> 00:08:49.420
+Nessuna ricerca di trigger.
+
+00:08:49.960 --> 00:08:53.460
+Descrivi solo ciò che vuoi e il server MCP lo traduce in un'automazione reale.
+
+00:08:54.160 --> 00:08:57.420
+Microsoft ha anche mostrato server MCP per i contenuti di Microsoft Learn.
+
+00:08:57.420 --> 00:09:02.120
+Immagina un agente IA che interroga l'intera libreria di documentazione Microsoft come risorsa.
+
+00:09:03.040 --> 00:09:08.520
+Non tramite scraping di pagine web, ma attraverso un server MCP strutturato che espone la documentazione come dati strutturati.
+
+00:09:09.040 --> 00:09:09.860
+Funziona già oggi.
+
+00:09:10.340 --> 00:09:12.120
+Questa è la direzione in cui stanno muovendo i tuoi strumenti Microsoft.
+
+00:09:12.620 --> 00:09:14.700
+Stanno diventando accessibili tramite MCP per progettazione.
+
+00:09:15.060 --> 00:09:16.180
+La piattaforma si sta aprendo.
+
+00:09:16.480 --> 00:09:20.000
+Così facendo, la tua esperienza con Microsoft 365 diventerà sempre più intelligente.
+
+00:09:20.000 --> 00:09:22.940
+L'integrazione sta avvenendo ora ed è costruita fin dalle fondamenti.
+
+00:09:23.220 --> 00:09:24.660
+MCP non è solo per gli sviluppatori.
+
+00:09:24.660 --> 00:09:29.800
+È per chiunque utilizzi Microsoft 365 e voglia che la propria IA lavori in modo fluido con i propri dati.
+
+00:09:31.000 --> 00:09:31.880
+Uno scenario reale.
+
+00:09:32.160 --> 00:09:33.600
+L'IA che finalmente funziona.
+
+00:09:34.260 --> 00:09:35.760
+Quindi come appare tutto ciò in pratica?
+
+00:09:36.400 --> 00:09:37.740
+Lascia che ti mostri un esempio reale.
+
+00:09:38.160 --> 00:09:40.420
+Ti trovi in Microsoft Teams e scrivi questo in Copilot.
+
+00:09:41.300 --> 00:09:44.260
+Qual è lo stato del progetto ACME e chi è in ritardo con le proprie attività?
+
+00:09:44.940 --> 00:09:45.400
+Premi invio.
+
+00:09:46.980 --> 00:09:50.180
+Ora, dietro le quinte succede qualcosa di diverso rispetto a un anno fa.
+
+00:09:50.800 --> 00:09:54.360
+Il tuo assistente IA si connette a un server MCP collegato a Project Online o Planner.
+
+00:09:55.240 --> 00:10:02.260
+Quel server dichiara gli strumenti che può usare come elencare l'attività, ottenere lo stato dell'attività, controllare le assegnazioni e ottenere la timeline del progetto.
+
+00:10:03.660 --> 00:10:05.220
+IA non ha bisogno di essere guidata qui.
+
+00:10:05.920 --> 00:10:09.640
+Scopre quegli strumenti automaticamente perché il server dice letteralmente ecco cosa posso fare.
+
+00:10:10.320 --> 00:10:12.000
+IA risponde ottimo, lo userò.
+
+00:10:12.880 --> 00:10:15.200
+Nessuno deve dire ehi guarda prima questo endpoint API.
+
+00:10:15.740 --> 00:10:16.440
+Semplicemente funziona.
+
+00:10:16.440 --> 00:10:22.000
+Quindi, IA chiama lo strumento di elenco attività, poi ottiene lo stato per ogni attività, quindi controlla le assegnazioni.
+
+00:10:23.120 --> 00:10:26.420
+Il server MCP gestisce tutta l'autenticazione e il recupero dei dati dietro le quinte.
+
+00:10:26.960 --> 00:10:29.100
+Pochi secondi dopo, IA torna con una risposta chiara.
+
+00:10:29.860 --> 00:10:31.000
+Progetto ACME in linea con i tempi.
+
+00:10:31.000 --> 00:10:33.620
+Ci sono tre attività in ritardo, tutte assegnate a Sara.
+
+00:10:34.040 --> 00:10:35.140
+Vuoi che le mandi un promemoria?
+
+00:10:36.500 --> 00:10:37.320
+Ecco cosa importante.
+
+00:10:37.880 --> 00:10:40.000
+Non è stato scritto alcun codice personalizzato per questa richiesta.
+
+00:10:40.440 --> 00:10:44.080
+Nessuno sviluppatore ha dedicato due settimane a creare un connettore tra Copilot e Project Online.
+
+00:10:44.500 --> 00:10:46.300
+Il server MCP ha gestito l'intera integrazione.
+
+00:10:46.800 --> 00:10:50.340
+Un solo server, un protocollo standard e l'IA sapeva esattamente come usarlo.
+
+00:10:50.780 --> 00:10:51.700
+Ora facciamo un passo avanti.
+
+00:10:52.160 --> 00:10:53.900
+Dopo aver ottenuto lo stato del progetto chiedi
+
+00:10:53.900 --> 00:10:58.820
+Controlla il mio calendario per una riunione con Sara domani e ridige un aggiornamento di stato basato su ciò che sta accadendo.
+
+00:10:58.820 --> 00:11:02.700
+L'IA utilizza un server MCP di Exchange per controllare il tuo calendario.
+
+00:11:03.040 --> 00:11:07.660
+Cerca le email correlate tramite lo stesso server e poi chiama un server MCP di Word per ridigere l'aggiornamento.
+
+00:11:08.160 --> 00:11:11.200
+Una sola conversazione, molteplici origini dati, zero sviluppo personalizzato.
+
+00:11:11.600 --> 00:11:12.900
+Questo è il momento chiave con MCP.
+
+00:11:14.060 --> 00:11:16.620
+Rende l'IA utile all'interno del tuo reale ambiente di lavoro.
+
+00:11:17.140 --> 00:11:19.880
+Non solo un chatbot generico che può rispondere solo a domande ampie,
+
+00:11:19.880 --> 00:11:24.960
+ma un assistente che vede i tuoi dati, comprende il tuo contesto e agisce tutto attraverso un unico semplice standard.
+
+00:11:26.480 --> 00:11:28.020
+Sicurezza, mantenere i tuoi dati al sicuro.
+
+00:11:28.020 --> 00:11:30.360
+Tutta questa flessibilità solleva una grande domanda.
+
+00:11:30.920 --> 00:11:36.500
+Se la tua IA può improvvisamente accedere a SharePoint, Exchange e Dynamics tramite MCP, come mantieni quei dati al sicuro?
+
+00:11:37.380 --> 00:11:38.180
+Ecco le risposte a breve.
+
+00:11:38.560 --> 00:11:40.040
+MCP è sicuro tanto quanto lo rendi tu.
+
+00:11:40.480 --> 00:11:42.840
+Il protocollo non aggira le tue misure di sicurezza esistenti.
+
+00:11:43.340 --> 00:11:43.920
+Funziona insieme a me.
+
+00:11:44.240 --> 00:11:49.480
+MCP supporta OAuth 2.1, lo stesso standard di autenticazione del settore che protegge il tuo accesso Microsoft.
+
+00:11:49.940 --> 00:11:55.720
+Quando un server MCP richiede l'autenticazione, il tuo client EA deve dimostrare di essere autorizzato prima di poter accedere a qualsiasi dato.
+
+00:11:55.720 --> 00:11:59.480
+Il servizio può utilizzare intestazioni di autenticazione, chiave API o accesso base a tutto.
+
+00:12:00.020 --> 00:12:01.920
+Gli stessi schemi che già usi per proteggere le API.
+
+00:12:02.420 --> 00:12:04.680
+Ma c'è un livello aggiuntivo che conta davvero per l'uso aziendale?
+
+00:12:05.500 --> 00:12:10.500
+L'IA deve chiedere il permesso prima di poter effettivamente eseguire una ricerca, inviare un messaggio o modificare un record.
+
+00:12:11.060 --> 00:12:11.600
+Lo chiede a te.
+
+00:12:12.100 --> 00:12:13.860
+Vedi la richiesta direttamente nella tua interfaccia digital.
+
+00:12:13.860 --> 00:12:16.760
+Esamini cosa farà lo strumento, lo approvi o lo rifiuti.
+
+00:12:17.180 --> 00:12:19.600
+Ciò significa che nessuno strumento viene invocato senza il tuo consenso.
+
+00:12:19.880 --> 00:12:23.460
+La tua IA può suggerire azioni, ma non può eseguirle senza che tu dica di sì.
+
+00:12:23.960 --> 00:12:25.020
+Questa è un'ottima rete di sicurezza.
+
+00:12:25.260 --> 00:12:26.320
+Una cosa a cui prestare attenzione.
+
+00:12:26.700 --> 00:12:30.240
+Sono disponibili migliaia di server MCP pubblici e non tutti sono affidabili.
+
+00:12:30.740 --> 00:12:32.840
+Esistono registri pubblici in cui chiunque può pubblicare un server.
+
+00:12:33.320 --> 00:12:34.400
+Alcuni sono eccellenti, altri no.
+
+00:12:35.080 --> 00:12:37.220
+È tua responsabilità utilizzare solo server di cui ti fidi.
+
+00:12:37.860 --> 00:12:39.460
+Negli ambienti Microsoft hai un vantaggio.
+
+00:12:39.460 --> 00:12:44.520
+I tuoi server MCP possono utilizzare gli stessi controlli di identità e accesso dei tuoi servizi Microsoft esistenti.
+
+00:12:45.040 --> 00:12:49.500
+Se un utente non ha l'autorizzazione per leggere una raccolta documenti di SharePoint, un server MCP non può aggirarlo.
+
+00:12:50.020 --> 00:12:54.200
+Il server eredita gli stessi limiti, la stessa autenticazione, le stesse policy, la stessa governance.
+
+00:12:55.100 --> 00:12:57.020
+Iniziare la tua prima esperienza con MCP.
+
+00:12:57.600 --> 00:12:59.240
+Quindi sei convinto e vuoi provare tu stesso.
+
+00:12:59.660 --> 00:13:00.380
+Da dove iniziare?
+
+00:13:00.700 --> 00:13:02.920
+In modo più semplice è scegliere un host compatibile con MCP.
+
+00:13:03.260 --> 00:13:06.340
+Cloud Desktop ha il supporto a MCP integrato e anche GitHub Copilot funziona.
+
+00:13:06.820 --> 00:13:09.260
+Entrambi ti permettono di collegare i server quasi senza configurazione.
+
+00:13:09.700 --> 00:13:11.480
+Successivamente dai un'occhiata ai registri MCP.
+
+00:13:11.880 --> 00:13:18.080
+Esistono migliaia di server predefiniti per servizi come Google Drive, Slack, Database, File System e sia anche per i servizi Microsoft.
+
+00:13:18.560 --> 00:13:23.020
+Se sei un utente Microsoft inizia con i riferimenti del server MCP di Microsoft per Power Platform.
+
+00:13:23.440 --> 00:13:24.320
+La configurazione è semplice.
+
+00:13:24.620 --> 00:13:27.080
+La maggior parte degli host utilizza un file JSON in cui elenchi i tuoi server.
+
+00:13:27.640 --> 00:13:32.620
+Dai a ciascuno un nome, fornisci il comando o l'URL per raggiungerlo e configuri le credenziali di autenticazione.
+
+00:13:33.140 --> 00:13:34.720
+Tutto qui l'host gestisce il REST.
+
+00:13:34.780 --> 00:13:39.400
+Non è richiesta alcuna programmazione per l'uso di base, quindi non devi essere uno sviluppatore né scrivere codice di integrazione.
+
+00:13:39.720 --> 00:13:43.580
+Configura semplicemente un file JSON e improvvisamente la tua IA può accedere a dati che prima non poteva toccare.
+
+00:13:44.020 --> 00:13:47.640
+Il file JSON è come un file di configurazione che dice al tuo host a quali server connettersi.
+
+00:13:48.260 --> 00:13:50.580
+Pensa a MCP come un traduttore universale per la tua IA.
+
+00:13:51.080 --> 00:13:54.500
+Invece di imparare una lingua diversa per ogni servizio, parla a un unico protocollo.
+
+00:13:55.180 --> 00:13:59.280
+Inizia in piccolo collegando una fonte di dati come il tuo calendario tramite un server MCP di Exchange,
+
+00:13:59.380 --> 00:14:02.940
+quindi pone la tua IA una domanda sui tuoi impegni e osserva come scopri gli strumenti disponibili.
+
+00:14:03.640 --> 00:14:08.540
+Prova l'approvazione Human in the Loop, che significa che puoi approvare ogni azione prima che l'IA la esegua.
+
+00:14:09.220 --> 00:14:10.020
+Questo ti mantiene al comando.
+
+00:14:10.440 --> 00:14:12.760
+Assicurati di comprendere il modello di sicurezza prima di espanderti.
+
+00:14:13.140 --> 00:14:16.920
+Una volta che ti senti a tuo agio, espanditi aggiungendo un altro server per la tua raccolta documenti,
+
+00:14:17.000 --> 00:14:18.380
+poi per il tuo sistema di gestione attività.
+
+00:14:18.740 --> 00:14:22.000
+Ogni server aggiunge nuove funzionalità e ognuno segue lo stesso protocollo.
+
+00:14:22.500 --> 00:14:26.380
+Se vuoi creare il tuo server MCP, magari per esporre un'applicazione aziendale personalizzata,
+
+00:14:26.440 --> 00:14:29.720
+un database interno, le Azure Functions di Microsoft funzionano benissimo come back-end.
+
+00:14:30.080 --> 00:14:34.800
+Avvolgi la tua API, origine e dati esistenti, in un server MCP con poche righe di codice, con poche righe di codice.
+
+00:14:35.020 --> 00:14:35.720
+Il modello è semplice.
+
+00:14:36.260 --> 00:14:40.400
+Esponi gli strumenti come funzioni, esponi i dati come risorse e lascia che il protocollo gestisca il resto.
+
+00:14:41.300 --> 00:14:44.060
+È un modo diretto per dare alla tua IA accesso alle tue fonti di dati.
+
+00:14:45.140 --> 00:14:46.460
+Quindi questo è il model Context Protocol.
+
+00:14:46.460 --> 00:14:50.120
+Uno standard che finalmente permette agli strumenti di IA di raggiungere i tuoi dati reali.
+
+00:14:50.320 --> 00:14:52.880
+I tuoi file SharePoint, il tuo calendario Exchange, il tuo record Dynamics.
+
+00:14:53.320 --> 00:14:55.960
+Prima di MCP dovevi creare connessioni personalizzate per ogni sistema.
+
+00:14:56.720 --> 00:14:59.280
+Ora ti colleghi a un unico protocollo e la tua IA può dialogare con tutti.
+
+00:14:59.820 --> 00:15:02.080
+L'IA diventa utile all'interno del tuo real ambiente di lavoro.
+
+00:15:02.680 --> 00:15:05.060
+Non è solo una comodità, cambia il modo in cui lavori con l'IA.
+
+00:15:05.720 --> 00:15:09.840
+Inizia con un server MCP, collega una singola fonte dati e vedi tu stesso la differenza.
+
+00:15:10.320 --> 00:15:14.720
+Se l'hai trovato utile, condividilo con un collega che ha difficoltà con un IA che non accede ai suoi dati.
+
+00:15:14.720 --> 00:15:16.980
+Iscriviti per altre pillole di conoscenza come questa.
+
+00:15:17.220 --> 00:15:19.120
+Sono Mirko Peters e ci vediamo nel prossimo episodio.

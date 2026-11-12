@@ -1,0 +1,1843 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:04.920
+Perché il tuo piano di business continuity per M365 fallisce senza un'architettura di backup isolata?
+
+00:00:06.160 --> 00:00:10.360
+Affidarsi al versionamento nativo di Microsoft 365 crea una pericolosa illusione di sicurezza,
+
+00:00:10.440 --> 00:00:13.700
+poiché la corruzione sincronizzata si propaga istantaneamente su ogni nodo ridondante.
+
+00:00:14.080 --> 00:00:19.820
+Dobbiamo progettare volt di backup immutabili e ergaped che esistono interamente al di fuori del perimetro d'identità dei tenant di produzione.
+
+00:00:20.660 --> 00:00:25.640
+Senza questo isolamento fisico e logico, il ransomware incenerirà sistematicamente l'intero patrimonio digitale.
+
+00:00:25.640 --> 00:00:34.730
+La maggior parte dei leader IT dorme su una bomba a orologeria perché confida nel versionamento nativo di Microsoft 365 per salvarsi.
+
+00:00:35.150 --> 00:00:37.410
+In realtà quella sincronizzazione è una trappola mortale.
+
+00:00:37.970 --> 00:00:41.270
+Quando colpisce il ransomware, la corruzione si propaga istantaneamente a ogni nodo.
+
+00:00:41.270 --> 00:00:45.230
+Se il tuo backup non si trova dietro un volter gap, l'intero patrimonio è già perduto.
+
+00:00:45.950 --> 00:00:49.570
+L'avvertimento dell'esperto architetto mostra l'illusione della ridondanza nativa,
+
+00:00:49.850 --> 00:00:53.270
+chiarisce il pericoloso malinteso tra alta disponibilità e vero backup dei dati.
+
+00:00:53.270 --> 00:00:59.790
+Spiega come la sincronizzazione istantanea causi la propagazione di ransomware e corruzione dei file su tutti i nodi in tempo reale.
+
+00:01:00.350 --> 00:01:06.170
+Metti in luce il panorama delle minacce del 2026, dove il malware automatizzato sfrutta il versionamento nativo per sovrascrivere la cronologia.
+
+00:01:06.610 --> 00:01:07.630
+La trappola dell'identità singola.
+
+00:01:08.750 --> 00:01:09.810
+Miniatura, mostra altri titoli.
+
+00:01:10.290 --> 00:01:12.510
+Mostra altro il backup di M365 non è sufficiente.
+
+00:01:12.910 --> 00:01:14.450
+Il caso dell'architettura a volte isolati.
+
+00:01:14.810 --> 00:01:19.450
+Perché il tuo piano di business continuiti per M365 fallirà quando ne avrai più bisogno.
+
+00:01:19.450 --> 00:01:21.230
+L'importanza dell'air gap.
+
+00:01:21.450 --> 00:01:26.430
+Proteggere Microsoft 365 dalla persistenza del ransomware, oltre la georidondanza.
+
+00:01:27.190 --> 00:01:30.530
+Perché il disaster recovery di M365 richiede volti isolati.
+
+00:01:31.210 --> 00:01:32.470
+Meccaniche della corruzione istantanea.
+
+00:01:32.630 --> 00:01:35.410
+La trappola della sincronizzazione è una scelta di design che è diventata lato vulnerabilità.
+
+00:01:35.570 --> 00:01:38.810
+In un mondo cloud native diamo priorità alla replica in tempo reale.
+
+00:01:39.450 --> 00:01:41.690
+Vogliamo che ogni modifica sia ovunque istantaneamente,
+
+00:01:41.830 --> 00:01:44.230
+ma in una crisi quella velocità è nemica del repristino.
+
+00:01:45.030 --> 00:01:47.550
+Dobbiamo distinguere tra guasto meccanico e guasto logico.
+
+00:01:47.550 --> 00:01:49.630
+La ridondanza risolve i problemi arlo.
+
+00:01:49.950 --> 00:01:52.290
+Se un server in un data center di Dublino si fonda non te ne accorgi nemmeno.
+
+00:01:52.570 --> 00:01:53.450
+Sistema esegue il failover.
+
+00:01:53.810 --> 00:01:56.810
+Questa è resilienza meccanica, ma la ridondanza ignora l'intento malevole.
+
+00:01:57.190 --> 00:01:59.750
+Non può distinguere tra un utente legittimo che modifica un documento
+
+00:01:59.750 --> 00:02:02.710
+o uno script ransomware che distrugge sistematicamente una libreria di file.
+
+00:02:03.230 --> 00:02:05.010
+Guarda l'attacco della cinquecesima versione.
+
+00:02:05.070 --> 00:02:06.110
+Non è più solo teorico.
+
+00:02:06.690 --> 00:02:09.850
+La ricerca ha confermato che gli script automatizzati di ransomware as a service
+
+00:02:09.850 --> 00:02:13.150
+possono bypassare la rete di sicurezza delle 500 versioni in pochi minuti.
+
+00:02:13.150 --> 00:02:17.310
+La maggior parte dei amministratori pensano che sia una copia separata dei dati.
+
+00:02:17.670 --> 00:02:17.950
+Non lo è.
+
+00:02:18.370 --> 00:02:19.810
+Il versionamento è solo un attributo del file.
+
+00:02:20.110 --> 00:02:22.150
+È un pezzo di metadati memorizzato insieme al file.
+
+00:02:22.790 --> 00:02:24.750
+E poiché è un attributo può essere manipolato.
+
+00:02:25.270 --> 00:02:28.210
+Un attaccante con le giuste autorizzazioni non ha nemmeno bisogno di criptografare i tuoi file.
+
+00:02:28.470 --> 00:02:29.370
+Gli basta modificarli.
+
+00:02:29.670 --> 00:02:32.170
+Se uno script esegue 501 modifiche sequenziali,
+
+00:02:32.410 --> 00:02:34.630
+riempie il limite di 500 versioni con dati spazzatura.
+
+00:02:35.110 --> 00:02:38.150
+La versione originale pulita viene espulsa dallo stack deliminata per sempre.
+
+00:02:38.450 --> 00:02:39.730
+Questo è il wipeout da 10 minuti.
+
+00:02:39.730 --> 00:02:41.490
+Usando le api di Microsoft Graph,
+
+00:02:41.570 --> 00:02:44.950
+un attacco automatizzato può cancellare la cronologia delle versioni di 10.000 file
+
+00:02:44.950 --> 00:02:47.290
+in meno tempo di quanto serva per finire una tazza di caffè.
+
+00:02:47.470 --> 00:02:48.350
+La velocità è sparito di team.
+
+00:02:48.710 --> 00:02:50.070
+Non state combattendo contro un essere umano.
+
+00:02:50.390 --> 00:02:52.350
+State combattendo contro un'automazione basata su API
+
+00:02:52.350 --> 00:02:53.470
+che si muove alla velocità del cloud.
+
+00:02:53.670 --> 00:02:56.530
+Mentre il vostro team SOC sta ancora cercando di gestire il primo avviso,
+
+00:02:56.650 --> 00:03:00.070
+lo script ha già incenerito i punti di ripristino dei vostri CD SharePoint più critici.
+
+00:03:00.890 --> 00:03:03.050
+Si propaga tra le cartelle di OneDrive come un cendio boschi.
+
+00:03:03.490 --> 00:03:05.250
+E non contate sul cestino per salvarvi.
+
+00:03:05.730 --> 00:03:07.390
+Fornisce un falso senso di sicurezza.
+
+00:03:07.390 --> 00:03:11.370
+In un compromesso a livello di tenant, la prima cosa che fa un attaccante è colpire i ruoli privilegiati.
+
+00:03:11.890 --> 00:03:13.850
+Una volta ottenuto il ruolo di amministratore globale
+
+00:03:13.850 --> 00:03:15.810
+o anche solo di amministratore di una raccolta siti,
+
+00:03:15.990 --> 00:03:17.930
+possono svuotare il cestino con un singolo comando.
+
+00:03:18.430 --> 00:03:20.750
+O peggio, usano flussi di lavoro di eliminazione definitiva
+
+00:03:20.750 --> 00:03:22.110
+che bypassano completamente il cestino.
+
+00:03:23.370 --> 00:03:26.230
+Microsoft ha introdotto di recente flussi di lavoro di pulizia prioritaria
+
+00:03:26.230 --> 00:03:28.970
+che consentono la rimozione permanente dei dati per gestire archiviazione.
+
+00:03:28.970 --> 00:03:31.290
+Nelle mani di un malintenzionato, queste sono armi?
+
+00:03:32.090 --> 00:03:32.630
+Non sono bug.
+
+00:03:33.130 --> 00:03:35.090
+Sono funzionalità della piattaforma usate contro di voi.
+
+00:03:35.610 --> 00:03:38.550
+State operando con il presupposto che la piattaforma sia un osservatore neutrale?
+
+00:03:39.510 --> 00:03:41.370
+La piattaforma ha un motore ad alta velocità produttività.
+
+00:03:41.870 --> 00:03:45.310
+Se l'alimentate con un disastro, lo distribuirà a ogni endpoint e a ogni replica
+
+00:03:45.310 --> 00:03:48.130
+nella vostra organizzazione prima ancora che riusciate a raggiungere l'interruttore.
+
+00:03:48.770 --> 00:03:51.990
+Al motore di sincronizzazione non importa se i dati che sposta sono report trimestrale
+
+00:03:51.990 --> 00:03:52.850
+o una richiesta di riscatto.
+
+00:03:53.050 --> 00:03:53.730
+Sposta solo bit.
+
+00:03:54.030 --> 00:03:55.030
+Svolge il suo lavoro alla perfezione.
+
+00:03:55.230 --> 00:03:56.050
+È proprio questo il problema.
+
+00:03:56.050 --> 00:03:57.690
+Ecco perché il modello attuale è rotto.
+
+00:03:58.110 --> 00:04:01.330
+Abbiamo costruito un sistema in cui il backup è fisicamente e logicamente legato all'ambiente
+
+00:04:01.330 --> 00:04:01.990
+di produzione.
+
+00:04:02.570 --> 00:04:03.790
+Condividono le stesse infrastrutture.
+
+00:04:04.170 --> 00:04:05.090
+Condividono le stesse API.
+
+00:04:05.670 --> 00:04:08.110
+E cosa più importante, condividono lo stesso perimetro di identità.
+
+00:04:08.550 --> 00:04:11.590
+La velocità dell'attacco è un problema enorme, ma gestibile se avete le chiavi di una stanza
+
+00:04:11.590 --> 00:04:12.090
+separata.
+
+00:04:12.570 --> 00:04:14.150
+Se riuscite a restare l'emorragia potete recuperarla.
+
+00:04:14.650 --> 00:04:18.310
+Ma il vero problema, quello che uccide davvero l'azienda, è dove abbiamo messo quelle chiavi.
+
+00:04:18.810 --> 00:04:20.750
+Le abbiamo messe nella stessa tasca dei dati di produzione.
+
+00:04:21.630 --> 00:04:22.730
+La trappola dell'identità singola.
+
+00:04:22.730 --> 00:04:26.810
+La trappola dell'identità singola è il difetto strutturale che trasforma un incidente locale
+
+00:04:26.810 --> 00:04:28.050
+in un disastro aziendale totale.
+
+00:04:28.570 --> 00:04:31.090
+Parliamo del cloud come di un sistema distribuito e resiliente.
+
+00:04:31.810 --> 00:04:36.550
+Ma per la maggior parte di voi, l'intera organizzazione è appesa a un singolo filo chiamato Microsoft
+
+00:04:36.550 --> 00:04:37.090
+Entry ID.
+
+00:04:37.950 --> 00:04:39.410
+Questo è il perimetro di identità condiviso.
+
+00:04:39.950 --> 00:04:41.810
+È l'unico confine di fiducia che governa tutto.
+
+00:04:42.510 --> 00:04:46.410
+La tua email, i tuoi file, il tuo sistema ERP e, aspetto cruciale, i tuoi backup.
+
+00:04:46.410 --> 00:04:50.470
+Se utilizzi la soluzione di backup che sia autentica sul tuo tenant di produzione, non hai un backup.
+
+00:04:51.370 --> 00:04:52.210
+Hai uno specchio.
+
+00:04:52.570 --> 00:04:54.170
+Rifletti sulle meccaniche di tale relazione.
+
+00:04:54.590 --> 00:04:57.290
+Hai costruito un cavo ma usi lo stesso badge che apre la porta d'ingresso.
+
+00:04:57.750 --> 00:05:00.450
+Nel tradizionale mondo on-premises avevamo una separazione fisica.
+
+00:05:00.890 --> 00:05:04.030
+Avevi un nastro, mettevi su un camion e portavi quel camion in un altro edificio.
+
+00:05:04.390 --> 00:05:05.310
+Questa è un ergap reale.
+
+00:05:05.670 --> 00:05:08.310
+Ma nel cloud abbiamo scambiato la distanza fisica con la comodità logica.
+
+00:05:08.690 --> 00:05:10.050
+Abbiamo consolidato la nostra identità.
+
+00:05:10.310 --> 00:05:11.590
+Analizziamo il raggio d'azione dell'esplosione.
+
+00:05:11.590 --> 00:05:16.650
+Se un singolo account di amministratore globale viene compromesso, se un token out d'alto privilegio viene rubato,
+
+00:05:16.770 --> 00:05:19.750
+quell'identità ha l'autorità per accedere e toccare ogni risorsa che possiedi.
+
+00:05:20.330 --> 00:05:22.190
+Non importa se hai dichiettato il tuo backup commutabile.
+
+00:05:23.030 --> 00:05:26.430
+Se l'identità usata per gestire tale immutabilità è la stessa appena hackerata,
+
+00:05:26.510 --> 00:05:29.110
+l'attaccante effettua semplicemente il login e disattiva la protezione.
+
+00:05:29.590 --> 00:05:31.730
+Stiamo vedendo questo scenario con la realtà dei consensi.
+
+00:05:32.190 --> 00:05:34.070
+Gli attaccanti non cercano più solo la tua password.
+
+00:05:34.570 --> 00:05:35.410
+Vogliono il tuo consenso.
+
+00:05:35.790 --> 00:05:39.330
+Usano registrazioni di app legittime per ingannare gli utenti e farsi concedere ampi permessi.
+
+00:05:39.330 --> 00:05:41.990
+Una volta autorizzata, l'app possiede un token persistente.
+
+00:05:42.430 --> 00:05:42.790
+Resta te.
+
+00:05:43.210 --> 00:05:44.790
+Vive al di fuori dei tuoi requisiti MFA.
+
+00:05:45.230 --> 00:05:46.330
+Non importa se cambi la password.
+
+00:05:46.810 --> 00:05:48.830
+Ha una linea diretta ai tuoi dati tramite la graffa API.
+
+00:05:49.630 --> 00:05:53.810
+E poiché spesso concediamo a queste app l'accesso in lettura e scrittura per semplificare i flussi di lavoro,
+
+00:05:54.070 --> 00:05:57.970
+stiamo di fatto dando uno script automatizzato il permesso di modificare i nostri backup in tempo reale.
+
+00:05:58.870 --> 00:06:02.070
+Ecco perché il 40% dei fallimenti dei backup immutabili non è di Naturatec.
+
+00:06:02.330 --> 00:06:04.730
+Non sono causati da un bug nel codice o da un guasto al disco.
+
+00:06:05.270 --> 00:06:06.650
+Sono errate configurazioni di identità.
+
+00:06:06.650 --> 00:06:09.670
+Succede perché diamo per scontato che il cavo sia un luogo separato.
+
+00:06:10.170 --> 00:06:12.870
+Ma in un'architettura tenant singolo non esiste un luogo separato.
+
+00:06:13.330 --> 00:06:14.670
+C'è un solo confine di attendibilità.
+
+00:06:15.270 --> 00:06:18.650
+Se isoli i tuoi dati in una cartella diversa all'interno dello stesso tenant entra,
+
+00:06:18.930 --> 00:06:21.210
+stai solo spostando i soldi dalla tasca sinistra alla destra,
+
+00:06:21.390 --> 00:06:23.630
+mentre il ladro ti tiene bloccate entrambe le braccia.
+
+00:06:24.430 --> 00:06:27.470
+L'illusione del cavo interno è il mito più pericoloso dell'IT moderno.
+
+00:06:28.110 --> 00:06:31.290
+La separazione logica è impossibile all'interno di un unico confine di attendibilità.
+
+00:06:31.290 --> 00:06:34.730
+Se la stessa identità root può vedere sia i dati di produzione che quelli di ripristino,
+
+00:06:34.790 --> 00:06:35.830
+l'isolamento è una menzogna,
+
+00:06:36.610 --> 00:06:38.330
+la vera resilienza richiede una rottura in quella catà.
+
+00:06:38.690 --> 00:06:42.790
+Richiede un'architettura in cui l'identità che gestisce il backup non abbia alcun rapporto a nessuno
+
+00:06:42.790 --> 00:06:44.990
+con l'identità che gestisce l'ambiente di produzione.
+
+00:06:45.630 --> 00:06:47.870
+Senza quella separazione non state costruendo una rete di sicurezza.
+
+00:06:48.110 --> 00:06:50.530
+State solo costruendo una versione più costosa del disastro.
+
+00:06:51.430 --> 00:06:53.970
+Questa sovrapposizione di identità crea un vuoto legale e normativo
+
+00:06:53.970 --> 00:06:55.930
+a cui la maggior parte delle aziende non è preparata.
+
+00:06:56.410 --> 00:06:59.690
+Avete essenzialmente costruito una casa dove ogni porta viene aperta dalla stessa chiave universitaria.
+
+00:06:59.690 --> 00:07:03.170
+Quando quella chiave viene rubata, il cavo è solo un'altra stanza da esplorare per il ladro.
+
+00:07:03.410 --> 00:07:04.330
+È qui che il modello si roma.
+
+00:07:04.710 --> 00:07:05.070
+Navigate.
+
+00:07:05.550 --> 00:07:05.910
+Cercate.
+
+00:07:06.250 --> 00:07:07.150
+Presumete di essere assicuri.
+
+00:07:07.410 --> 00:07:08.410
+Ma il presupposto è errato.
+
+00:07:08.870 --> 00:07:10.170
+Il lavoro non inizia con la navigazione.
+
+00:07:10.530 --> 00:07:11.430
+Inizia con il contesto.
+
+00:07:11.730 --> 00:07:12.310
+Il contesto come?
+
+00:07:12.750 --> 00:07:14.470
+Il divario di responsabilità normativa è legale.
+
+00:07:14.870 --> 00:07:17.590
+Questa sovrapposizione di identità non crea solo una vulnerabilità tecnica.
+
+00:07:18.150 --> 00:07:19.210
+Apre un enorme abisso legale.
+
+00:07:19.790 --> 00:07:21.090
+Se operate nel settore finanziario,
+
+00:07:21.210 --> 00:07:23.970
+probabilmente conoscete la regola 17-Pi4 della SEC
+
+00:07:23.970 --> 00:07:26.310
+e lo standard di riferimento platenuta di registro.
+
+00:07:26.310 --> 00:07:30.390
+La SEC impone che i vostri dati siano conservati in un formato non riscrivibile, non cancellabile.
+
+00:07:30.950 --> 00:07:32.910
+Ma ecco la parte che la maggior parte degli architetti trascura.
+
+00:07:33.530 --> 00:07:35.490
+Alla SEC non importa solo che i dati siano bloccati.
+
+00:07:35.950 --> 00:07:37.450
+Si preoccupano di chi detiene il piede di porto.
+
+00:07:38.130 --> 00:07:41.250
+La regola 17-M4, IF, richiede una terza parte designata o di 3-Pi.
+
+00:07:41.730 --> 00:07:45.170
+Si tratta di un'entità indipendente che ha la capacità tecnica di fornire i vostri registri
+
+00:07:45.170 --> 00:07:47.970
+all'autorità di regolamentazione se la vostra azienda non è in grado, non vuole farlo.
+
+00:07:48.470 --> 00:07:49.750
+Microsoft è molto chiara su questo punto.
+
+00:07:50.130 --> 00:07:51.110
+Forniscono infrastruttura.
+
+00:07:51.110 --> 00:07:53.890
+Forniscono gli strumenti di Parvio, ma non sono il vostro di 3-Pi.
+
+00:07:54.210 --> 00:07:56.090
+Non firmeranno quella lettera di attestazione per voi.
+
+00:07:56.270 --> 00:07:58.950
+Non forniranno l'accesso diretto alla SEC richiesto dalla legge.
+
+00:07:59.570 --> 00:08:03.830
+Quando un regolatore bussa la porta e voi indicate la vostra policy di conservazione nativa di M365,
+
+00:08:03.930 --> 00:08:05.590
+non state mostrandolo una soluzione di conformità.
+
+00:08:05.970 --> 00:08:07.210
+State mostrandolo una confessione.
+
+00:08:07.470 --> 00:08:11.570
+State ammettendo di aver centralizzato il rischio in un modo che viola lo spirito e la lettera della legge.
+
+00:08:11.570 --> 00:08:16.470
+Senza un cavo isolato e indipendente state essenzialmente dicendo alla SEC che i vostri dati sono al sicuro
+
+00:08:16.470 --> 00:08:18.590
+solo quanto la password del vostro amministratore globale.
+
+00:08:18.890 --> 00:08:21.290
+Questo è un punto di partenza improponibile in un audit del 2023.
+
+00:08:21.550 --> 00:08:24.570
+Dobbiamo guardare il modello di responsabilità condivisa attraverso le lenti di una...
+
+00:08:24.570 --> 00:08:26.170
+Microsoft è responsabile per il SaaS.
+
+00:08:26.650 --> 00:08:27.890
+Garantiscono che il servizio sia disponibile.
+
+00:08:28.390 --> 00:08:29.850
+Garantiscono che i pulsanti funzionino.
+
+00:08:29.970 --> 00:08:31.210
+Ma voi siete responsabili per i dati.
+
+00:08:31.950 --> 00:08:35.750
+Se un attaccante usa un'app illegittima per cancellare il vostro tenant, Microsoft non ha fallito.
+
+00:08:36.510 --> 00:08:38.250
+Il loro sistema ha funzionato esattamente come programma.
+
+00:08:38.250 --> 00:08:41.250
+Ha elaborato una richiesta autenticata valida per eliminare i dati.
+
+00:08:41.570 --> 00:08:43.870
+Dire che l'ha fatto un motore di sincronizzazione non è difesa.
+
+00:08:44.290 --> 00:08:45.390
+È un'ammissione di negligenza.
+
+00:08:45.770 --> 00:08:46.770
+Voi avete scelto l'architettura.
+
+00:08:47.010 --> 00:08:50.890
+Voi avete scelto di mantenere le chiavi di ripristino allo stesso perimetro di fiducia della minaccia di produzione.
+
+00:08:51.450 --> 00:08:53.550
+Il panorama legale sta cambiando rapidamente sotto i nostri piedi.
+
+00:08:54.150 --> 00:08:56.510
+Guardate l'implementazione di NIST2 ed ora in Europa.
+
+00:08:57.110 --> 00:08:59.990
+Ci stiamo allontanando dalle multe aziendali verso la responsabilità personale.
+
+00:09:00.390 --> 00:09:01.490
+Con questi quadri normativi,
+
+00:09:01.590 --> 00:09:05.830
+ciso membri dei consigli di amministrazione possono essere ritenuti personalmente responsabili per negligenza nel ripristino.
+
+00:09:06.370 --> 00:09:08.590
+NIST, se si verifica un'interruzione grave,
+
+00:09:08.590 --> 00:09:12.530
+l'indagine rivela che i backup erano memorizzati nello stesso tenant dei dati di produzione,
+
+00:09:13.070 --> 00:09:15.890
+consentendo al ransomware di passare da uno all'altro e distruggerli entrambi,
+
+00:09:15.990 --> 00:09:17.430
+non è solo una brutta giornata in ufficio.
+
+00:09:18.110 --> 00:09:19.390
+È una violazione del dovere fiduciario.
+
+00:09:20.010 --> 00:09:21.950
+Non avete implementato una resilienza all'avanguardia.
+
+00:09:22.490 --> 00:09:24.730
+E nel 2026 l'avanguardia significa isolamento.
+
+00:09:25.470 --> 00:09:26.610
+Poi c'è il killer silenzioso,
+
+00:09:27.130 --> 00:09:28.110
+la deriva della configurazione.
+
+00:09:28.110 --> 00:09:31.090
+Gli strumenti nativi spesso falliscono gli auditi 17 a 4
+
+00:09:31.090 --> 00:09:34.530
+perché mancano di rapista di controllo a prova di manomissione esterna al ciclo di produzione.
+
+00:09:35.050 --> 00:09:37.270
+Se un amministratore modifica oggi una policy di conservazione,
+
+00:09:37.510 --> 00:09:39.190
+tale modifica viene registrata nello stesso sistema.
+
+00:09:39.690 --> 00:09:41.190
+Se un attaccante compromette quel sistema,
+
+00:09:41.410 --> 00:09:43.050
+può eliminare i log delle proprie modifiche.
+
+00:09:43.770 --> 00:09:44.970
+Si perde la catena di custodia,
+
+00:09:45.110 --> 00:09:47.130
+si perde la capacità di dimostrare a un ente regolatore
+
+00:09:47.130 --> 00:09:49.250
+che i dati visualizzati sono autentici e inalterati.
+
+00:09:49.730 --> 00:09:51.610
+Uno strumento nativo ha un sistema autoregolamentato
+
+00:09:51.610 --> 00:09:53.950
+e gli enti regolatori detestano i sistemi autoregolamentati.
+
+00:09:53.950 --> 00:09:56.590
+Infine, dobbiamo smetterla di fingere che l'alta disponibilità
+
+00:09:56.590 --> 00:09:58.890
+soddisfi la definizione legale di storage immutabile.
+
+00:09:59.490 --> 00:09:59.990
+Sono l'opposto.
+
+00:10:00.430 --> 00:10:02.690
+L'alta disponibilità riguarda il cambiamento fluido e costante.
+
+00:10:03.190 --> 00:10:05.770
+L'immutabilità riguarda una verità congelata e immutabile.
+
+00:10:06.270 --> 00:10:08.390
+Cercare di usare l'una per ottenere l'altra è un errore di categoria.
+
+00:10:09.150 --> 00:10:11.610
+Se gli strumenti nativi non possono soddisfare i requisiti legali
+
+00:10:11.610 --> 00:10:13.910
+né quelli tecnici, dobbiamo guardare l'economia dell'alternativa.
+
+00:10:14.710 --> 00:10:15.590
+Perché per molti di voi,
+
+00:10:15.590 --> 00:10:17.310
+il costo di sbagliare è in realtà più alto
+
+00:10:17.310 --> 00:10:18.810
+del costo di fare le cose nel modo giusto.
+
+00:10:19.790 --> 00:10:22.090
+Il TCO di un'architettura nativa rispetto a una isolata.
+
+00:10:22.090 --> 00:10:24.230
+Molti architetti presumono che quella nativa
+
+00:10:24.230 --> 00:10:25.490
+sia più economica perché integrata.
+
+00:10:26.050 --> 00:10:27.090
+Vedono il modello pay-as-you-go
+
+00:10:27.090 --> 00:10:28.630
+e pensano che si adatti alle loro esigenze,
+
+00:10:28.710 --> 00:10:30.710
+ma la realtà è la tassa sull'espansione dello storage.
+
+00:10:31.550 --> 00:10:34.270
+Microsoft vi addebita a 15 centesimi per gigabyte al mese.
+
+00:10:34.810 --> 00:10:36.770
+Sembra poco finché non vi rendete conto di cosa state pagando.
+
+00:10:37.210 --> 00:10:38.810
+Non pagate solo per i file attivi,
+
+00:10:38.950 --> 00:10:41.050
+pagate per ogni versione, ogni elemento eliminato
+
+00:10:41.050 --> 00:10:43.890
+e ogni scarto presente nelle vostre librerie di conservazione.
+
+00:10:43.890 --> 00:10:45.670
+È un piccolo cieco economico.
+
+00:10:46.190 --> 00:10:47.370
+State essenzialmente pagando un premio
+
+00:10:47.370 --> 00:10:48.890
+per archiviare i vostri rifiuti digitali.
+
+00:10:49.450 --> 00:10:50.450
+Man mano che i dati crescono,
+
+00:10:50.610 --> 00:10:52.010
+questo conto diventa un treno in corsa
+
+00:10:52.010 --> 00:10:53.390
+che il vostro budget può fermare.
+
+00:10:54.150 --> 00:10:55.890
+Confrontatelo con l'architettura di un volto isolato.
+
+00:10:56.330 --> 00:10:58.390
+Se spostate quei dati verso un fornitore di object storage
+
+00:10:58.390 --> 00:10:59.530
+specializzato come Wasabi,
+
+00:10:59.630 --> 00:11:00.950
+il prezzo scende a meno di un centesimo,
+
+00:11:01.070 --> 00:11:02.770
+precisamente 0,0068.
+
+00:11:03.330 --> 00:11:05.050
+Si tratta di una differenza di 22 volte
+
+00:11:05.050 --> 00:11:06.170
+nei costi di storage grezzo.
+
+00:11:06.570 --> 00:11:07.430
+Riflettete su questo divario.
+
+00:11:08.070 --> 00:11:09.250
+Stai pagando il 2000% più
+
+00:11:09.250 --> 00:11:11.050
+per un bucket di archiviazione meno sicuro
+
+00:11:11.050 --> 00:11:13.230
+perché legato alla tua identità di produzione
+
+00:11:13.230 --> 00:11:14.610
+non ha alcun senso.
+
+00:11:14.930 --> 00:11:17.050
+Stai pagando per la comodità di restare nel sistema
+
+00:11:17.050 --> 00:11:18.970
+ma la scatola è d'oro e ha una porta a vetri.
+
+00:11:18.970 --> 00:11:21.490
+Esaminiamo i numeri per un'organizzazione di 10.000 utenti.
+
+00:11:22.130 --> 00:11:23.850
+Sull'arga scala probabilmente stai gestendo
+
+00:11:23.850 --> 00:11:25.330
+due petabyte di dati protetti
+
+00:11:25.330 --> 00:11:26.990
+considerando repliche e versioni.
+
+00:11:27.950 --> 00:11:30.370
+Con il modello di backup nativo di Microsoft 365
+
+00:11:30.370 --> 00:11:33.130
+quei due petabyte costano 300.000 dollari l'anno
+
+00:11:33.130 --> 00:11:34.430
+solo in addebiti Azure.
+
+00:11:35.430 --> 00:11:36.890
+Sono 300.000 dollari
+
+00:11:36.890 --> 00:11:39.050
+per una soluzione priva di supporto completo
+
+00:11:39.050 --> 00:11:39.990
+per Microsoft Teams
+
+00:11:39.990 --> 00:11:41.870
+con un ripristino granulare limitato
+
+00:11:41.870 --> 00:11:43.010
+che tiene la rete di sicurezza
+
+00:11:43.010 --> 00:11:44.810
+nello stesso edificio in fiamme dei tuoi dati.
+
+00:11:44.810 --> 00:11:47.830
+Ora confrontalo con un'architettura a volte isolato
+
+00:11:47.830 --> 00:11:49.110
+che usa software di terze parti
+
+00:11:49.110 --> 00:11:50.770
+e storage a basso costo.
+
+00:11:50.770 --> 00:11:52.510
+Anche considerando i costi di licenza
+
+00:11:52.510 --> 00:11:54.450
+per strumenti premium come Veeam o Druva
+
+00:11:54.450 --> 00:11:55.990
+la componente di archiviazione
+
+00:11:55.990 --> 00:11:57.350
+con un provider come Wasabi
+
+00:11:57.350 --> 00:12:00.050
+a 0,0068 dollari per gigabyte
+
+00:12:00.050 --> 00:12:02.670
+scende da 25.000 a circa 13.000 dollari al mese.
+
+00:12:03.530 --> 00:12:04.590
+Su un orizzonte di 5 anni
+
+00:12:04.590 --> 00:12:06.470
+la differenza nel costo totale di proprietà
+
+00:12:06.470 --> 00:12:07.250
+per una media impresa
+
+00:12:07.250 --> 00:12:08.730
+può superare in milioni di dollari.
+
+00:12:09.590 --> 00:12:10.590
+Stai pagando una tassa enorme
+
+00:12:10.590 --> 00:12:12.130
+sulla semplicità per strumenti nativi
+
+00:12:12.130 --> 00:12:14.290
+che in realtà aumentano il tuo profilo di rischio.
+
+00:12:15.130 --> 00:12:16.530
+Modello nativo si basa sul consumo
+
+00:12:16.530 --> 00:12:17.910
+il che significa che premia l'inefficienza.
+
+00:12:18.490 --> 00:12:20.090
+Più dati inutili hai nella cronologia
+
+00:12:20.090 --> 00:12:21.290
+delle versioni nei cestimi
+
+00:12:21.290 --> 00:12:22.830
+più Microsoft guadagna.
+
+00:12:23.850 --> 00:12:26.010
+Un'architettura isolata ribalta la situazione.
+
+00:12:26.450 --> 00:12:27.950
+Ti permette di filtrare il rumore digitale
+
+00:12:27.950 --> 00:12:29.110
+salvare solo ciò che conta
+
+00:12:29.110 --> 00:12:30.210
+e archiviarlo in un volto
+
+00:12:30.210 --> 00:12:31.510
+che costa 20 volte meno.
+
+00:12:32.270 --> 00:12:33.070
+Non stai solo costruendo
+
+00:12:33.070 --> 00:12:34.070
+un sistema più resiliente
+
+00:12:34.070 --> 00:12:36.050
+stai bloccando un'enorme perdita
+
+00:12:36.050 --> 00:12:37.430
+invisibile nel tuo budget IT.
+
+00:12:38.250 --> 00:12:39.890
+Progettando il volto di backup isolato
+
+00:12:39.890 --> 00:12:41.350
+il costo è il punto di partenza
+
+00:12:41.350 --> 00:12:42.310
+ma costruire il volt
+
+00:12:42.310 --> 00:12:44.210
+non serve a risparmiare spiccioli
+
+00:12:44.210 --> 00:12:44.890
+sullo storage.
+
+00:12:45.450 --> 00:12:46.830
+Si tratta di un cambiamento fondamentale
+
+00:12:46.830 --> 00:12:47.530
+in modo in cui definiamo
+
+00:12:47.530 --> 00:12:48.310
+una zona di sicurezza.
+
+00:12:48.650 --> 00:12:49.510
+Per anni ci siamo affidati
+
+00:12:49.510 --> 00:12:50.470
+al sistema air gap fisico.
+
+00:12:50.890 --> 00:12:51.650
+Ricordi la procedura.
+
+00:12:51.970 --> 00:12:52.710
+Scrivivi sul nastro.
+
+00:12:53.050 --> 00:12:53.710
+Mettevi quel nastro
+
+00:12:53.710 --> 00:12:54.590
+in una scatola schermata.
+
+00:12:55.050 --> 00:12:55.930
+Mandevi in una miniera di sale.
+
+00:12:56.270 --> 00:12:57.170
+Era la difesa definitiva
+
+00:12:57.170 --> 00:12:58.070
+perché un hacker in Russia
+
+00:12:58.070 --> 00:12:58.930
+non poteva raggiungere
+
+00:12:58.930 --> 00:13:00.110
+una miniera fisica in Kansas.
+
+00:13:00.590 --> 00:13:01.690
+Ma in un mondo cloud native
+
+00:13:01.690 --> 00:13:02.630
+quel modello è morto.
+
+00:13:02.950 --> 00:13:04.230
+Dobbiamo passare al sistema air gap logico.
+
+00:13:04.770 --> 00:13:05.590
+Non è una questione di distanza.
+
+00:13:05.590 --> 00:13:07.410
+È una questione di assoluta separazione
+
+00:13:07.410 --> 00:13:07.990
+del controllo.
+
+00:13:08.390 --> 00:13:09.530
+Il fondamento di questa architettura
+
+00:13:09.530 --> 00:13:10.890
+è il perimetro basato sull'identità
+
+00:13:10.890 --> 00:13:12.170
+da non puoi costruire un volto
+
+00:13:12.170 --> 00:13:13.210
+all'interno del tuo ambiente di produzione.
+
+00:13:13.570 --> 00:13:14.250
+Devi creare un tenant
+
+00:13:14.250 --> 00:13:15.130
+entro al secondario
+
+00:13:15.130 --> 00:13:16.150
+completamente isolato.
+
+00:13:16.870 --> 00:13:17.650
+Questo tenant esiste
+
+00:13:17.650 --> 00:13:18.430
+per un solo scopo
+
+00:13:18.430 --> 00:13:19.490
+le operazioni di ripristino.
+
+00:13:19.830 --> 00:13:20.970
+Non ha alcun rapporto di fiducia
+
+00:13:20.970 --> 00:13:21.850
+con il tuo dominio primario.
+
+00:13:22.230 --> 00:13:23.090
+Non esiste alcuna federazione.
+
+00:13:23.450 --> 00:13:24.690
+Non c'è sincronizzazione degli utenti.
+
+00:13:25.310 --> 00:13:26.390
+Se il tuo tenant di produzione
+
+00:13:26.390 --> 00:13:27.270
+è bersaglio di un attacco
+
+00:13:27.270 --> 00:13:28.090
+di terra bruciata
+
+00:13:28.090 --> 00:13:29.410
+il tenant secondario
+
+00:13:29.410 --> 00:13:30.310
+rimane invisibile.
+
+00:13:30.890 --> 00:13:31.890
+È un fantasma nella macchina.
+
+00:13:32.470 --> 00:13:33.850
+Non conosci le tue passi di produzione
+
+00:13:35.590 --> 00:13:36.150
+all'accountly.
+
+00:13:36.570 --> 00:13:37.770
+All'interno di questo tenant isolato
+
+00:13:37.770 --> 00:13:38.770
+applichiamo il principio warm
+
+00:13:38.770 --> 00:13:39.530
+scrivere una volta
+
+00:13:39.530 --> 00:13:40.290
+leggere molte volte.
+
+00:13:40.850 --> 00:13:41.830
+Questa è l'applicazione tecnica
+
+00:13:41.830 --> 00:13:42.490
+dell'inutabilità.
+
+00:13:43.190 --> 00:13:44.010
+Non ci limitiamo a spuntare
+
+00:13:44.010 --> 00:13:45.070
+una casella in numero di policy.
+
+00:13:45.370 --> 00:13:46.350
+Implementiamo blocchi del volto
+
+00:13:46.350 --> 00:13:47.150
+a livello di archiviazione.
+
+00:13:47.730 --> 00:13:48.710
+Questi blocchi sono regolati
+
+00:13:48.710 --> 00:13:49.190
+da un orologio
+
+00:13:49.190 --> 00:13:49.790
+non una persona.
+
+00:13:50.290 --> 00:13:51.930
+Una volta scritto un punto di ripristino
+
+00:13:51.930 --> 00:13:52.770
+e attivato il blocco
+
+00:13:52.770 --> 00:13:54.530
+diventa un record permanente.
+
+00:13:55.330 --> 00:13:56.390
+Nemmeno un amministratore globale
+
+00:13:56.390 --> 00:13:57.250
+nel tenant di backup
+
+00:13:57.250 --> 00:13:57.930
+può ignorarlo.
+
+00:13:58.510 --> 00:13:59.810
+Se un attaccante riesce a violare
+
+00:13:59.810 --> 00:14:00.950
+il tuo perimetro secondario
+
+00:14:00.950 --> 00:14:01.750
+si ritrova davanti
+
+00:14:01.750 --> 00:14:02.630
+a una montagna di dati
+
+00:14:02.630 --> 00:14:03.150
+che può vedere
+
+00:14:03.150 --> 00:14:03.990
+ma non toccare,
+
+00:14:04.130 --> 00:14:05.350
+modificare o eliminare.
+
+00:14:06.010 --> 00:14:07.150
+Ma la tecnologia da sola non basta.
+
+00:14:07.650 --> 00:14:08.670
+Abbiamo bisogno di un custode umano.
+
+00:14:09.030 --> 00:14:09.430
+Questo è un modale
+
+00:14:09.430 --> 00:14:10.430
+di approvazione a quattro occhi.
+
+00:14:10.690 --> 00:14:11.770
+Nel tuo ambiente di produzione
+
+00:14:11.770 --> 00:14:12.910
+diamo priorità all'agilità.
+
+00:14:13.310 --> 00:14:13.830
+Vogliamo che le cose
+
+00:14:13.830 --> 00:14:14.510
+accadano velocemente.
+
+00:14:14.830 --> 00:14:15.570
+Nel volto di backup
+
+00:14:15.570 --> 00:14:16.490
+diamo priorità all'attrito.
+
+00:14:17.050 --> 00:14:18.150
+Ogni operazione distruttiva
+
+00:14:18.150 --> 00:14:18.770
+come modificare
+
+00:14:18.770 --> 00:14:19.850
+una policy di conservazione
+
+00:14:19.850 --> 00:14:20.950
+o tentare di eliminare un volto
+
+00:14:20.950 --> 00:14:21.510
+deve richiedere
+
+00:14:21.510 --> 00:14:23.130
+un'autorizzazione multipartitica.
+
+00:14:24.030 --> 00:14:24.790
+Questa autorizzazione
+
+00:14:24.790 --> 00:14:25.270
+deve avvenire
+
+00:14:25.270 --> 00:14:26.450
+al di fuori del ciclo di produzione.
+
+00:14:26.710 --> 00:14:27.930
+Richiede due persone distinte
+
+00:14:27.930 --> 00:14:29.550
+che utilizzano due dispositivi separati
+
+00:14:29.550 --> 00:14:31.070
+autenticandosi su due sistemi di Steam.
+
+00:14:31.470 --> 00:14:32.730
+Stai rallentando intenzionalmente
+
+00:14:32.730 --> 00:14:33.150
+il sistema
+
+00:14:33.150 --> 00:14:34.470
+per evitare che un singolo utente
+
+00:14:34.470 --> 00:14:35.070
+compromesso
+
+00:14:35.070 --> 00:14:36.890
+diventi un singolo punto di fallimento.
+
+00:14:37.430 --> 00:14:38.890
+Ciò ci porta alla separazione critica
+
+00:14:38.890 --> 00:14:40.330
+tra Data Plane e Control Plane.
+
+00:14:40.990 --> 00:14:41.850
+Il tuo motore di backup
+
+00:14:41.850 --> 00:14:43.550
+e software che sposta effettivamente i bit
+
+00:14:43.550 --> 00:14:44.730
+non dovrebbe mai vedere
+
+00:14:44.730 --> 00:14:46.230
+o conoscere le tue credenziali di produzione.
+
+00:14:46.830 --> 00:14:47.450
+Dovrebbe operare
+
+00:14:47.450 --> 00:14:48.810
+utilizzando identità gestite
+
+00:14:48.810 --> 00:14:50.250
+o entità di servizio limitate
+
+00:14:50.250 --> 00:14:51.290
+che abbiano solo il permesso
+
+00:14:51.290 --> 00:14:52.130
+di leggere i dati.
+
+00:14:53.070 --> 00:14:53.950
+Il Control Plane
+
+00:14:53.950 --> 00:14:55.350
+che gestisce la pianificazione
+
+00:14:55.350 --> 00:14:55.910
+e la logica
+
+00:14:55.910 --> 00:14:57.190
+risiede nel volto isolato.
+
+00:14:57.830 --> 00:14:58.350
+Il Data Plane
+
+00:14:58.350 --> 00:14:59.330
+che gestisce il trasporto
+
+00:14:59.330 --> 00:15:00.550
+si trova in una posizione intermedia.
+
+00:15:01.070 --> 00:15:01.830
+Ciò garantisce che
+
+00:15:01.830 --> 00:15:02.910
+anche se il software di backup
+
+00:15:02.910 --> 00:15:04.110
+stesso venisse sfruttato
+
+00:15:04.110 --> 00:15:05.510
+l'attaccante non possa passare
+
+00:15:05.510 --> 00:15:06.310
+dal server di backup
+
+00:15:06.310 --> 00:15:07.770
+al cuore dei tuoi segreti di produzione.
+
+00:15:08.510 --> 00:15:09.350
+Infine devi progettare
+
+00:15:09.350 --> 00:15:10.230
+per il ripristino un room.
+
+00:15:11.010 --> 00:15:11.650
+Quando vieni colpito
+
+00:15:11.650 --> 00:15:12.350
+da un ransomware
+
+00:15:12.350 --> 00:15:13.290
+il tuo ambiente di produzione
+
+00:15:13.290 --> 00:15:14.170
+è una scena del crimine.
+
+00:15:14.650 --> 00:15:15.370
+È contaminato.
+
+00:15:15.790 --> 00:15:16.490
+Non puoi semplicemente
+
+00:15:16.490 --> 00:15:17.410
+ripristinare i tuoi dati
+
+00:15:17.410 --> 00:15:18.170
+nel tenant infetto
+
+00:15:18.170 --> 00:15:18.950
+e sperare per il meglio.
+
+00:15:19.570 --> 00:15:20.390
+Il tuo volto isolato
+
+00:15:20.390 --> 00:15:21.490
+deve supportare il ripristino
+
+00:15:21.490 --> 00:15:22.510
+in una sandbox forense.
+
+00:15:23.510 --> 00:15:24.270
+Questa è una clean room
+
+00:15:24.270 --> 00:15:25.430
+dove puoi scansionare i dati
+
+00:15:25.430 --> 00:15:26.710
+alla ricerca di malware dormiente
+
+00:15:26.710 --> 00:15:28.090
+è verificare l'integrità dei file
+
+00:15:28.090 --> 00:15:29.610
+e ricostruire i tuoi servizi principali
+
+00:15:29.610 --> 00:15:30.890
+prima di riconnetterti a internet.
+
+00:15:31.510 --> 00:15:32.830
+Non stai solo ripristinando dati
+
+00:15:32.830 --> 00:15:33.870
+stai ripristinando la fiducia.
+
+00:15:34.370 --> 00:15:35.090
+Fornisce all'azienda
+
+00:15:35.090 --> 00:15:36.050
+un punto di partenza
+
+00:15:36.050 --> 00:15:37.270
+verificato e pulito.
+
+00:15:37.930 --> 00:15:38.690
+Costruire il vault
+
+00:15:38.690 --> 00:15:39.510
+è il primo passo
+
+00:15:39.510 --> 00:15:40.550
+verso quella resilienza.
+
+00:15:40.870 --> 00:15:41.710
+Ma il passaggio finale
+
+00:15:41.710 --> 00:15:42.470
+il più importante
+
+00:15:42.470 --> 00:15:43.290
+è garantire
+
+00:15:43.290 --> 00:15:44.190
+che l'identità stessa
+
+00:15:44.190 --> 00:15:44.890
+sia isolata.
+
+00:15:45.970 --> 00:15:46.770
+Perimetro di identità
+
+00:15:46.770 --> 00:15:47.410
+zero trust
+
+00:15:47.410 --> 00:15:48.570
+dobbiamo applicare
+
+00:15:48.570 --> 00:15:49.230
+il principio del
+
+00:15:49.230 --> 00:15:49.970
+non fidarsi mai
+
+00:15:49.970 --> 00:15:50.830
+verificare sempre
+
+00:15:50.830 --> 00:15:51.910
+ai canali che trasportano
+
+00:15:51.910 --> 00:15:52.970
+i tuoi dati di ripristino.
+
+00:15:53.410 --> 00:15:53.930
+Nella maggior parte
+
+00:15:53.930 --> 00:15:54.710
+degli ambienti M365
+
+00:15:54.710 --> 00:15:55.270
+M365
+
+00:15:55.270 --> 00:15:56.410
+l'account del servizio di backup
+
+00:15:56.410 --> 00:15:57.330
+è un passeggero silenzioso
+
+00:15:57.330 --> 00:15:58.650
+sul boss dell'identità di produzione.
+
+00:15:58.890 --> 00:15:59.470
+È sincronizzato
+
+00:15:59.470 --> 00:15:59.930
+è federato
+
+00:15:59.930 --> 00:16:00.470
+ed è visibile.
+
+00:16:00.870 --> 00:16:01.710
+Questo è un errore enorme.
+
+00:16:02.250 --> 00:16:03.410
+Per ottenere un vero isolamento
+
+00:16:03.410 --> 00:16:04.030
+i tuoi account
+
+00:16:04.030 --> 00:16:04.890
+di servizio di backup
+
+00:16:04.890 --> 00:16:05.670
+devono essere esclusi
+
+00:16:05.670 --> 00:16:06.870
+dalla sincronizzazione di produzione.
+
+00:16:07.250 --> 00:16:07.990
+Non dovrebbero esistere
+
+00:16:07.990 --> 00:16:08.610
+nella tua directory
+
+00:16:08.610 --> 00:16:09.290
+in principale.
+
+00:16:09.930 --> 00:16:10.650
+Non dovrebbero far parte
+
+00:16:10.650 --> 00:16:11.530
+della tua fiducia federata.
+
+00:16:12.050 --> 00:16:12.610
+Se un attaccante
+
+00:16:12.610 --> 00:16:13.790
+esegue uno script di discovery
+
+00:16:13.790 --> 00:16:14.490
+contro il tuo tenant
+
+00:16:14.490 --> 00:16:15.150
+di produzione
+
+00:16:15.150 --> 00:16:16.210
+non dovrebbe trovare nulla
+
+00:16:16.210 --> 00:16:16.810
+che indichi il vault.
+
+00:16:17.310 --> 00:16:18.110
+L'infrastruttura di backup
+
+00:16:18.110 --> 00:16:18.870
+deve essere invisibile
+
+00:16:18.870 --> 00:16:19.930
+o che il vantaggio
+
+00:16:19.930 --> 00:16:20.770
+dell'identità gestita
+
+00:16:20.770 --> 00:16:21.910
+diventa il tuo miglior alleato.
+
+00:16:22.390 --> 00:16:22.930
+Dobbiamo smettere
+
+00:16:22.930 --> 00:16:23.490
+di usare segreti
+
+00:16:23.490 --> 00:16:24.070
+a lunga durata
+
+00:16:24.070 --> 00:16:25.330
+e service principal tradizionali
+
+00:16:25.330 --> 00:16:25.750
+che richiedono
+
+00:16:25.750 --> 00:16:26.490
+la rotazione manuale
+
+00:16:26.490 --> 00:16:27.010
+delle password.
+
+00:16:27.610 --> 00:16:28.690
+Sono solo bersagli statici
+
+00:16:28.690 --> 00:16:29.410
+per un attaccante.
+
+00:16:30.130 --> 00:16:31.310
+Utilizzando l'identità gestita
+
+00:16:31.310 --> 00:16:32.090
+all'interno di Azure
+
+00:16:32.090 --> 00:16:32.870
+elimini il rischio
+
+00:16:32.870 --> 00:16:33.510
+che una credenziale
+
+00:16:33.510 --> 00:16:34.170
+venga divulgata
+
+00:16:34.170 --> 00:16:34.570
+o estratta
+
+00:16:34.570 --> 00:16:35.750
+da un file di configurazione.
+
+00:16:36.370 --> 00:16:37.190
+L'identità è legata
+
+00:16:37.190 --> 00:16:38.010
+alla risorsa stessa.
+
+00:16:38.470 --> 00:16:39.010
+Esiste solo quando
+
+00:16:39.010 --> 00:16:39.730
+il processo di backup
+
+00:16:39.730 --> 00:16:40.310
+in esecuzione
+
+00:16:40.310 --> 00:16:40.690
+svanisce
+
+00:16:40.690 --> 00:16:41.250
+quando l'attività
+
+00:16:41.250 --> 00:16:41.890
+è completata.
+
+00:16:42.910 --> 00:16:43.450
+Stai riducendo
+
+00:16:43.450 --> 00:16:44.350
+la finestra di opportunità
+
+00:16:44.350 --> 00:16:45.270
+da 24 ore al giorno
+
+00:16:45.270 --> 00:16:46.290
+ai 30 minuti necessari
+
+00:16:46.290 --> 00:16:46.690
+per eseguire
+
+00:16:46.690 --> 00:16:47.710
+una sincronizzazione delta.
+
+00:16:48.290 --> 00:16:49.030
+Dobbiamo andare più a fondo.
+
+00:16:49.410 --> 00:16:49.830
+Dobbiamo nascondere
+
+00:16:49.830 --> 00:16:50.530
+il vault completamente
+
+00:16:50.530 --> 00:16:51.390
+da internet pubblico.
+
+00:16:51.790 --> 00:16:52.130
+Questo è il ruolo
+
+00:16:52.130 --> 00:16:52.770
+dello ZTNA
+
+00:16:52.770 --> 00:16:54.150
+o Zero Trust Network Access.
+
+00:16:54.910 --> 00:16:55.810
+Il tuo storage di backup
+
+00:16:55.810 --> 00:16:56.430
+non dovrebbe avere
+
+00:16:56.430 --> 00:16:57.170
+un indirizzo IPv.
+
+00:16:57.630 --> 00:16:58.730
+Non dovrebbe essere raggiungibile
+
+00:16:58.730 --> 00:16:59.810
+tramite un URL standard
+
+00:16:59.810 --> 00:17:00.510
+che può essere oggetto
+
+00:17:00.510 --> 00:17:01.170
+di brutte forze
+
+00:17:01.170 --> 00:17:02.050
+o di un attacco di DOS.
+
+00:17:02.610 --> 00:17:03.910
+Implementando un gateway ZNA
+
+00:17:03.910 --> 00:17:04.710
+ti assicuri che solo
+
+00:17:04.710 --> 00:17:06.030
+i dispositivi sani verificati
+
+00:17:06.030 --> 00:17:06.750
+situati all'interno
+
+00:17:06.750 --> 00:17:08.110
+del tuo tenente di ripristino isolato
+
+00:17:08.110 --> 00:17:08.590
+possano vedere
+
+00:17:08.590 --> 00:17:09.690
+l'esistenza dello storage.
+
+00:17:10.670 --> 00:17:11.590
+Essenzialmente stai eliminando
+
+00:17:11.590 --> 00:17:12.230
+i tuoi dati dalle map.
+
+00:17:12.610 --> 00:17:13.530
+Infine devi monitorare
+
+00:17:13.530 --> 00:17:14.510
+l'uso anomalo dei token.
+
+00:17:15.150 --> 00:17:16.050
+Questo è lo strato proattivo
+
+00:17:16.050 --> 00:17:16.630
+del perimetro.
+
+00:17:17.270 --> 00:17:17.770
+Inviando i log
+
+00:17:17.770 --> 00:17:18.610
+dell'identità di backup
+
+00:17:18.610 --> 00:17:19.770
+a una piattaforma XDR
+
+00:17:19.770 --> 00:17:20.830
+puoi impostare trigger
+
+00:17:20.830 --> 00:17:21.610
+per comportamenti
+
+00:17:21.610 --> 00:17:22.130
+che sembrano quelli
+
+00:17:22.130 --> 00:17:22.750
+di un attaccante.
+
+00:17:23.430 --> 00:17:24.390
+Se un'identità di backup
+
+00:17:24.390 --> 00:17:25.270
+tenta improvvisamente
+
+00:17:25.270 --> 00:17:26.590
+di accedere a una casella di posta
+
+00:17:26.590 --> 00:17:27.550
+che non ha mai toccato prima
+
+00:17:27.550 --> 00:17:28.630
+o se richiede un token
+
+00:17:28.630 --> 00:17:30.190
+da una posizione geografica insolita
+
+00:17:30.190 --> 00:17:31.290
+il sistema deve revocare
+
+00:17:31.290 --> 00:17:32.610
+automaticamente tutte le sessioni.
+
+00:17:33.570 --> 00:17:34.450
+Non stai solo monitorando
+
+00:17:34.450 --> 00:17:35.190
+i login falliti
+
+00:17:35.190 --> 00:17:36.790
+stai monitorando i login riusciti
+
+00:17:36.790 --> 00:17:37.610
+che non hanno senso.
+
+00:17:37.610 --> 00:17:38.950
+L'obiettivo è un sistema
+
+00:17:38.950 --> 00:17:40.070
+di backup che sia un fantasma.
+
+00:17:40.570 --> 00:17:41.390
+Svolge il suo dovere
+
+00:17:41.390 --> 00:17:42.130
+sposta i dati
+
+00:17:42.130 --> 00:17:43.110
+e poi svanisce di nuovo
+
+00:17:43.110 --> 00:17:43.730
+nell'ombra.
+
+00:17:44.730 --> 00:17:45.230
+Il passaggio
+
+00:17:45.230 --> 00:17:45.910
+dalla ridondanza
+
+00:17:45.910 --> 00:17:46.490
+alla resilienza
+
+00:17:46.490 --> 00:17:47.150
+non è un semplice
+
+00:17:47.150 --> 00:17:48.190
+aggiornamento tecnico.
+
+00:17:48.270 --> 00:17:49.090
+È una strategia di sopravvio.
+
+00:17:49.550 --> 00:17:50.070
+State passando
+
+00:17:50.070 --> 00:17:50.570
+da un modello
+
+00:17:50.570 --> 00:17:51.530
+che spera per il meglio
+
+00:17:51.530 --> 00:17:52.850
+a uno progettato
+
+00:17:52.850 --> 00:17:53.570
+per il peggio.
+
+00:17:53.950 --> 00:17:54.390
+La vostra sfida
+
+00:17:54.390 --> 00:17:55.270
+questa settimana è semplice.
+
+00:17:55.810 --> 00:17:56.510
+Verificate il vostro
+
+00:17:56.510 --> 00:17:57.010
+raggio d'impatto.
+
+00:17:57.550 --> 00:17:58.330
+Identificate ogni chiave
+
+00:17:58.330 --> 00:17:59.230
+del vostro volti backup
+
+00:17:59.230 --> 00:18:00.090
+e controllate se
+
+00:18:00.090 --> 00:18:01.050
+nella tasca di produzione.
+
+00:18:01.690 --> 00:18:02.030
+Se lo è
+
+00:18:02.030 --> 00:18:03.070
+siete una sola violazione
+
+00:18:03.070 --> 00:18:04.230
+dal fallimento totale.
+
+00:18:04.230 --> 00:18:05.530
+Collegatevi con me
+
+00:18:05.530 --> 00:18:05.950
+su LinkedIn
+
+00:18:05.950 --> 00:18:06.970
+per discutere degli standard
+
+00:18:06.970 --> 00:18:07.990
+per i volti del 2026.
+
+00:18:08.390 --> 00:18:10.090
+Iscrivetevi a M365FM
+
+00:18:10.090 --> 00:18:10.810
+per gli approfondimenti
+
+00:18:10.810 --> 00:18:11.390
+che il vostro consiglio
+
+00:18:11.390 --> 00:18:11.850
+dell'ascoltà.
+
+00:18:12.090 --> 00:18:12.790
+Smettete di navigare
+
+00:18:12.790 --> 00:18:13.350
+e iniziate a costruire.

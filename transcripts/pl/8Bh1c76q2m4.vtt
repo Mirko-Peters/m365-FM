@@ -1,0 +1,661 @@
+WEBVTT
+
+00:00:00.300 --> 00:00:04.160
+Dzisiaj porozmawiamy o czymś, o czym niemal każdy słyszał, ale nikt nie potrafi wyjaśnić Kubernetes.
+
+00:00:04.460 --> 00:00:08.340
+To mylące, ponieważ rozwiązuje problem, którego większość ludzi nie dostrzega, dopóki się z nim nie zderzy.
+
+00:00:08.540 --> 00:00:11.880
+Wszyscy wiedzą, że to ważne, ale zapytaj, co to robi, a zobaczysz tylko puste spojrzenie.
+
+00:00:12.060 --> 00:00:15.820
+To nie jest zamiennik Dockera ani system operacyjny w chmurze, choć ludzie często tak zgadują.
+
+00:00:16.040 --> 00:00:20.480
+To zamieszanie jest zrozumiałe, bo Kubernetes rozwiązuje problem, o którym nie wiesz, póki go nie napotkasz.
+
+00:00:20.640 --> 00:00:24.720
+To narzędzie, które staje się niezbędne, gdy masz do zarządzania więcej niż garstkę kontenerów.
+
+00:00:24.720 --> 00:00:34.640
+Pod koniec tego odcinka zrozumiesz, czym właściwie jest Kubernetes, jak współpracuje z kontenerami i dlaczego Azure Kubernetes Service czyni go praktycznym dla zespołów, które nie chcą budować wszystkiego od zera.
+
+00:00:34.840 --> 00:00:36.160
+Chwyć kawę i zaczynajmy.
+
+00:00:36.340 --> 00:00:38.060
+Problem sprzed ery kontenerów.
+
+00:00:38.220 --> 00:00:39.480
+Wróćmy do samego problemu.
+
+00:00:39.640 --> 00:00:41.880
+Wyobraź sobie firmę programistyczną sprzed 10 lat.
+
+00:00:42.080 --> 00:00:46.560
+Masz kilka aplikacji do uruchomienia, więc kupujesz serwery, instalujesz systemy operacyjne i wszystko wdrażasz ręcznie.
+
+00:00:46.780 --> 00:00:50.040
+Każda aplikacja dostaje własną maszynę i nie możesz dzielić zasobów między nimi.
+
+00:00:50.040 --> 00:00:54.760
+Jeśli jedna aplikacja potrzebuje dużo pamięci, a inna prawie wcale obie i tak dostają własny serwer.
+
+00:00:55.120 --> 00:00:56.340
+Marnotrawstwo było ogromne.
+
+00:00:56.560 --> 00:01:02.440
+Serwery działały może na 20% wydajności, ale nie można było ich skonsolidować, bo aplikacje kłóciłyby się o zależności.
+
+00:01:02.640 --> 00:01:09.180
+Kończyłeś z pokojem pełnym serwerów, z których każdy prawie nie pracował, zużywał prąd i wymagał chłodzenia, a wszystkie potrzebowały ciągłej konserwacji.
+
+00:01:09.420 --> 00:01:12.460
+Jedna aplikacja potrzebuje Pythona 3.7, inna Pythona 3.8.
+
+00:01:12.720 --> 00:01:14.860
+Jedna wymaga starszej biblioteki, inna najnowszej.
+
+00:01:14.860 --> 00:01:20.380
+Nie możesz ich uruchomić na tej samej maszynie bez popsucia czegoś, więc kupujesz kolejne serwery i płacisz za sprzęt, który głównie stoi bezczynnie.
+
+00:01:20.560 --> 00:01:30.540
+Maszyny wirtualne pomogły trochę, pozwalając podzielić serwer fizyczny na mniejsze kawałki, z których każdy uruchamiał własny system, ale każda maszyna wirtualna jest ciężka, zawiera pełne os, zajmuje miejsce na dysku, pamięć i uruchamia się minuty.
+
+00:01:30.740 --> 00:01:33.800
+Do tego każdą trzeba było skonfigurować osobno, co było ogromem pracy.
+
+00:01:33.800 --> 00:01:38.520
+Wciąż zarządzasz wszystkimi tymi systemami operacyjnymi, łatając je, aktualizując i zabezpieczając.
+
+00:01:38.740 --> 00:01:47.980
+Zespoły potrzebowały czegoś lżejszego i przenośnego, sposobu na spakowanie aplikacji ze wszystkim, czego potrzebuje do działania, bez narzutu pełnej maszyny wirtualnej, co można łatwo przenosić między serwerami.
+
+00:01:48.180 --> 00:01:49.860
+Wtedy właśnie pojawiły się kontenery.
+
+00:01:50.080 --> 00:01:51.480
+Czym właściwie są kontenery?
+
+00:01:51.660 --> 00:01:55.940
+Kontener to mała paczka, która zawiera Twoją aplikację i wszystko, co jest jej potrzebne do uruchomienia.
+
+00:01:56.160 --> 00:02:00.760
+Oznacza to, że kod środowisko uruchomieniowe, biblioteki i pliki konfiguracyjne są zgrupowane w jedną całość.
+
+00:02:00.760 --> 00:02:03.500
+Pomyśl o tym, jak o kontenerze transportowym dla oprogramowania.
+
+00:02:03.680 --> 00:02:08.360
+Kontener transportowy może trafić na ciężarówkę, pociąg lub statek, a sam kontener pozostaje taki sam.
+
+00:02:08.540 --> 00:02:10.800
+Twój kontener oprogramowania działa w ten sam sposób.
+
+00:02:11.060 --> 00:02:15.460
+Budujesz go raz, a działa tak samo na Twoim laptopie, serwerze testowym i w środowisku produkcyjnym.
+
+00:02:15.640 --> 00:02:19.200
+Kluczowa różnica między kontenerami a maszynami wirtualnymi polega na ich wydajności.
+
+00:02:19.460 --> 00:02:24.800
+Maszyna wirtualna uruchamia własny, pełny system operacyjny, więc każda VM ma własne jądro, pliki systemowe i wszystko inne.
+
+00:02:24.980 --> 00:02:27.360
+Kontener współdzieli system operacyjny gospodarza.
+
+00:02:27.360 --> 00:02:30.200
+To po prostu proces z własnym, odizolowanym widokiem na świat.
+
+00:02:30.200 --> 00:02:33.260
+Oznacza to, że kontenery uruchamiają się w sekundy, a nie minuty.
+
+00:02:33.520 --> 00:02:36.740
+Zużywają mniej pamięci i możesz upakować ich więcej na jednej maszynie.
+
+00:02:36.960 --> 00:02:42.460
+Docker spopularyzował kontenery, dając programistom prosty sposób na ich budowanie i uruchamianie za pomocą jednego polecenia.
+
+00:02:42.680 --> 00:02:45.180
+Nagle problem u mnie działa, zaczął znikać.
+
+00:02:45.400 --> 00:02:49.560
+Jeśli Twoja aplikacja działa w kontenerze na laptopie, będzie działać tak samo na serwerze.
+
+00:02:49.800 --> 00:02:54.420
+Środowisko jest wszędzie spójne, jednak kontenery rozwiązują jeden problem, tworząc kolejny.
+
+00:02:54.580 --> 00:02:57.300
+Przy kilku kontenerach ręczne zarządzanie sprawdza się dobrze.
+
+00:02:57.300 --> 00:02:59.960
+Możesz je sam uruchamiać, zatrzymywać i śledzić.
+
+00:03:00.120 --> 00:03:01.840
+Ale co się dzieje, gdy masz ich setki?
+
+00:03:02.060 --> 00:03:08.280
+Musisz zdecydować, który serwer uruchamia, który kontener, restartować te, które zawiodły, łączyć je ze sobą i skalować w górę przy skokach ruchu.
+
+00:03:08.400 --> 00:03:11.000
+To nowe wyzwanie i właśnie tutaj pojawia się Kubernetes.
+
+00:03:11.360 --> 00:03:12.500
+Problem orkiestracji.
+
+00:03:12.740 --> 00:03:17.120
+Masz więc działające kontenery, pakujesz aplikację, działa ona wszędzie tak samo i życie jest piękne.
+
+00:03:17.260 --> 00:03:18.340
+Ale tylko przez chwilę.
+
+00:03:18.540 --> 00:03:21.400
+Mając 10 lub 20 kontenerów, możesz zarządzać wszystkim ręcznie.
+
+00:03:21.400 --> 00:03:26.580
+Wiesz, który serwer uruchamia, który kontener, możesz zrestartować coś, jeśli się zawiesi i wprowadzić drobne poprawki tu i ówdzie.
+
+00:03:26.720 --> 00:03:29.640
+To jest do ogarnięcia, ale potem Twoja aplikacja rośnie.
+
+00:03:29.880 --> 00:03:34.440
+Przechodzisz na mikrousługi, więc zamiast jednej wielkiej aplikacji masz 20 mniejszych.
+
+00:03:34.640 --> 00:03:38.820
+Każda wymaga wielu kopii dla niezawodności i teraz patrzysz na 200 kontenerów.
+
+00:03:39.000 --> 00:03:40.760
+Ręczne zarządzanie już nie wystarcza.
+
+00:03:41.020 --> 00:03:46.400
+Musisz decydować, który serwer uruchamia dany kontener, restartować je po awarii i łączyć, by mogły się komunikować.
+
+00:03:46.400 --> 00:03:53.280
+Musisz też skalować w górę, gdy rośnie ruch, na przykład, podczas wyprzedaży lub premiery produktu i skalować w dół, gdy sytuacja się uspokaja.
+
+00:03:53.520 --> 00:04:00.740
+Musisz też wdrażać aktualizację bez przestojów, co oznacza wymianę starych kontenerów na nowe, jeden po drugim, ostrożnie i bez psucia czegokolwiek.
+
+00:04:00.920 --> 00:04:04.080
+To są problemy orkiestracji i właśnie po to stworzono Kubernetes.
+
+00:04:04.440 --> 00:04:09.900
+Kubernetes to platforma open source, która automatyzuje wdrażanie, skalowanie i zarządzanie skonteneryzowanymi aplikacjami.
+
+00:04:10.080 --> 00:04:12.900
+Pomyśl o nim jak o systemie operacyjnym dla Twojego centrum danych.
+
+00:04:12.900 --> 00:04:20.380
+Tak jak Windows lub Linux zarządza zasobami pojedynczego komputera, takimi jak procesor, pamięć czy dysk, Kubernetes zarządza zasobami wszystkich Twoich serwerów.
+
+00:04:20.520 --> 00:04:23.920
+Traktuje on wszystkie Twoje maszyny jak jedną wielką pulę mocy obliczeniowej.
+
+00:04:24.200 --> 00:04:29.360
+Mówisz mu, co chcesz uruchomić, a on ustala, gdzie to umieścić, jak utrzymać działanie i jak połączyć to z resztą.
+
+00:04:29.560 --> 00:04:32.060
+Podstawowe koncepcje – pody, węzły i klastry.
+
+00:04:32.260 --> 00:04:34.500
+Przyjrzyjmy się, jak Kubernetes działa w praktyce.
+
+00:04:34.740 --> 00:04:37.000
+Najmniejsza jednostka w Kubernetesie nazywa się podem.
+
+00:04:37.000 --> 00:04:38.960
+Pod zawiera jeden lub więcej kontenerów.
+
+00:04:38.960 --> 00:04:43.360
+Kontenery wewnątrz tego samego poda współdzielą pamięć i sieć, dzięki czemu mogą komunikować się przez localhost.
+
+00:04:43.560 --> 00:04:46.060
+Możesz myśleć o podzie jako o pojedynczej jednostce wdrożeniowej.
+
+00:04:46.260 --> 00:04:48.520
+W Kubernetesie nie wdraża się kontenerów bezpośrednio.
+
+00:04:48.720 --> 00:04:49.460
+Wdraża się pody.
+
+00:04:49.660 --> 00:04:52.000
+Pody nie działają same, uruchamiane są na węzłach.
+
+00:04:52.200 --> 00:04:55.940
+Węzeł to serwer fizyczny lub wirtualny, będący częścią Twojego klastra Kubernetes.
+
+00:04:56.280 --> 00:05:00.520
+Każdy węzeł uruchamia oprogramowanie potrzebne do działania podów oraz kilka innych elementów, o których wspomnimy za chwilę.
+
+00:05:00.520 --> 00:05:03.980
+Klaster to zbiór wszystkich węzłów zarządzanych jako jeden zintegrowany system.
+
+00:05:03.980 --> 00:05:09.160
+Mówiąc prościej, pod to Twoja aplikacja węzeł to miejsce, gdzie ona działa, a klaster to całe środowisko.
+
+00:05:09.360 --> 00:05:10.360
+Pody są efemeryczne.
+
+00:05:10.620 --> 00:05:12.640
+Mogą być tworzone, niszczone lub przenoszone w dowolnym momencie.
+
+00:05:12.840 --> 00:05:13.980
+Tak zostało to zaprojektowane.
+
+00:05:14.200 --> 00:05:16.420
+Jeśli węzeł ulegnie awarii, Kubernetes przenosi pody na inny.
+
+00:05:16.560 --> 00:05:20.820
+W celu zwiększenia skali tworzy nowe pody, a gdy pod ulegnie awarii, jest automatycznie zastępowany.
+
+00:05:21.020 --> 00:05:22.880
+Cały system traktuje pody jako tymczasowe.
+
+00:05:23.100 --> 00:05:25.920
+Skoro jednak pody ciągle powstają i znikają, potrzebujesz sposobu, by się z nimi komunikować.
+
+00:05:25.920 --> 00:05:28.680
+Zamiast rozmawiać z podem bezpośrednio, komunikujesz się z serwisem.
+
+00:05:28.880 --> 00:05:32.980
+Serwis zapewnia stabilny adres sieciowy, który kieruje ruch do odpowiednich podów, nawet gdy te się zmieniają.
+
+00:05:33.200 --> 00:05:34.140
+Wyobraź sobie hotel.
+
+00:05:34.400 --> 00:05:36.160
+Numer telefonu do hotelu to właśnie serwis.
+
+00:05:36.360 --> 00:05:39.180
+Goście w pokojach ciągle się zmieniają, ale numer telefonu pozostaje ten sam.
+
+00:05:39.380 --> 00:05:42.140
+Dzwonisz do recepcji, a oni przekierowują Twoją rozmowę do właściwego pokoju.
+
+00:05:42.340 --> 00:05:44.220
+Dokładnie tak działa serwis w Kubernetesie.
+
+00:05:44.440 --> 00:05:48.980
+Daje Ci stały adres, który zawsze wskazuje na pody aktualnie obsługujące Twoją aplikację.
+
+00:05:49.180 --> 00:05:51.220
+Control Plane, czyli mózg klastra.
+
+00:05:51.220 --> 00:05:53.180
+Mamy więc pody, węzły i klaster.
+
+00:05:53.340 --> 00:05:55.900
+Pytanie brzmi, kto decyduje o tym, co i gdzie jest uruchamiane?
+
+00:05:56.060 --> 00:05:57.420
+To zadanie dla Control Plane'a.
+
+00:05:57.600 --> 00:06:00.460
+Każdy klaster Kubernetes go posiada i jest on mózgiem całej operacji.
+
+00:06:00.660 --> 00:06:02.340
+Wszystkie decyzje zapadają właśnie tutaj.
+
+00:06:02.520 --> 00:06:04.260
+Płaszczyzna sterowania ma kilka komponentów.
+
+00:06:04.440 --> 00:06:07.460
+Pierwszym z nich jest serwer API, który stanowi główne wejście do Twojego klastra.
+
+00:06:07.660 --> 00:06:13.460
+Każde polecenie wysyłane do Kubernetes, czy to zwiersza poleceń pulpitu nawigacyjnego, czy automatycznego skryptu, przechodzi przez serwer API.
+
+00:06:13.640 --> 00:06:18.860
+Uwierzytelnia on Twoje żądanie, sprawdza, czy masz uprawnienia do wykonania danej czynności, a następnie przekazuje je w odpowiednie miejsce.
+
+00:06:18.860 --> 00:06:22.400
+Nic w Kubernetes nie dzieje się bez wcześniejszego przejścia przez serwer API.
+
+00:06:22.400 --> 00:06:26.200
+Kolejnym jest scheduler, który decyduje, który węzeł uruchomi poszczególne pody.
+
+00:06:26.460 --> 00:06:35.220
+Gdy mówisz, chce, aby ta aplikacja działała, scheduler analizuje dostępne węzły, sprawdza zasoby, takie jak procesor, pamięć i miejsce na dysku, a następnie wybiera najlepszy z nich.
+
+00:06:35.380 --> 00:06:38.620
+To jak kierownik hotelu przydzielający pokoje zgodnie z potrzebami gości.
+
+00:06:38.880 --> 00:06:43.980
+Gość z dużą ilością bagażu dostaje większy pokój, podczas gdy lekka aplikacja otrzymuje mniejszy węzeł z wolnymi zasobami.
+
+00:06:43.980 --> 00:06:45.820
+Następnie mamy menedżer kontrolerów.
+
+00:06:45.940 --> 00:06:49.680
+Ten komponent monitoruje klaster i dba o to, by stan faktyczny był zgodny z deklaracją.
+
+00:06:49.880 --> 00:06:52.700
+Powiedziałeś, że chcesz uruchomić trzy kopie swojej aplikacji internetowej.
+
+00:06:52.920 --> 00:06:55.700
+Menedżer kontrolerów sprawdza, czy rzeczywiście działają trzy kopie.
+
+00:06:55.900 --> 00:06:58.820
+Jeśli jedna ulegnie awarii, zauważa to i uruchamia zastępczą.
+
+00:06:58.820 --> 00:07:01.540
+Jeśli ktoś przypadkowo usunie, poda, tworzy nowy.
+
+00:07:01.660 --> 00:07:04.320
+To komponent, który dba o poprawność działania klastra.
+
+00:07:04.480 --> 00:07:07.200
+I na koniec mamy ETT, czyli bazę danych klastra.
+
+00:07:07.400 --> 00:07:11.160
+Przechowuje ona wszystko, co działa, gdzie działa i jak jest skonfigurowane.
+
+00:07:11.340 --> 00:07:13.300
+To źródło prawdy dla całego klastra.
+
+00:07:13.300 --> 00:07:18.980
+Jeśli serwer API to główne wejście, to ETT jest szafką na dokumenty w biurze, gdzie trzymane są wszystkie zapisy.
+
+00:07:19.160 --> 00:07:23.640
+Piękno tego projektu polega na tym, że opisujesz, czego chcesz, a Kubernetes sam zajmuje się realizacją.
+
+00:07:23.860 --> 00:07:27.280
+Nie mówisz mu, jak ma coś zrobić, mówisz tylko, jak ma wyglądać rezultat końcowy.
+
+00:07:27.460 --> 00:07:31.040
+To model deklaratywny i jest on podstawą wszystkiego, co robi Kubernetes.
+
+00:07:31.520 --> 00:07:33.860
+Obciążenia, wdrożenia, usługi i skalowanie.
+
+00:07:34.180 --> 00:07:37.080
+Porozmawiajmy więc o tym, jak faktycznie uruchamiać aplikację w Kubernetes.
+
+00:07:37.420 --> 00:07:39.040
+Nie będziesz tworzyć podów bezpośrednio.
+
+00:07:39.240 --> 00:07:42.120
+Zamiast tego użyjesz obiektu wyższego poziomu, zwanego wdrożeniem deployment.
+
+00:07:42.120 --> 00:07:49.720
+Pomyśl o wdrożeniu jak o menedżerze, który mówi Kubernetesowi, ile kopii poda uruchomić, którego obrazu kontenera użyć i jak je aktualizować, gdy pojawi się nowa wersja.
+
+00:07:49.900 --> 00:07:52.420
+To standardowy sposób uruchamiania aplikacji bez stanowych.
+
+00:07:52.640 --> 00:07:57.600
+Gdy aktualizujesz wdrożenie, np. wysyłasz nową wersję swojej aplikacji, Kubernetes wykonuje aktualizację kroczącą rolling update.
+
+00:07:57.800 --> 00:08:01.120
+Zastępuje pody jeden po drugim, upewniając się, że przynajmniej jedna kopia zawsze działa.
+
+00:08:01.340 --> 00:08:04.280
+Oznacza to brak przestojów i nagłych przerw dla Twoich użytkowników.
+
+00:08:04.280 --> 00:08:08.620
+A jeśli coś pójdzie nie tak z nową wersją, możesz przywrócić poprzednią za pomocą jednego polecenia.
+
+00:08:08.780 --> 00:08:10.320
+To potężna siatka bezpieczeństwa.
+
+00:08:10.500 --> 00:08:12.200
+Twoje pody muszą jednak być osiągalne.
+
+00:08:12.380 --> 00:08:14.200
+Tutaj z pomocą przychodzą serwisy, services.
+
+00:08:14.520 --> 00:08:17.940
+Serwis zapewnia stabilny adres sieciowy, który kieruje ruch do odpowiednich podów.
+
+00:08:18.140 --> 00:08:22.360
+Może on również udostępnić te pody innym częściom aplikacji lub światu zewnętrznemu.
+
+00:08:22.620 --> 00:08:29.280
+Serwis może być wewnętrzny, dostępny tylko wewnątrz klastra lub zewnętrzny, z publicznym adresem IP dostępnym z internetu.
+
+00:08:29.280 --> 00:08:30.740
+A teraz kwestia skalowania.
+
+00:08:30.960 --> 00:08:34.720
+Kubernetes potrafi automatycznie zwiększać i zmniejszać aplikację w zależności od zapotrzebowania.
+
+00:08:34.920 --> 00:08:42.060
+Ustawiasz cel, na przykład 70% użycia procesora, a Kubernetes dodaje pody, gdy zużycie przekroczy ten próg i usuwa je, gdy spadnie.
+
+00:08:42.240 --> 00:08:46.200
+Twoja aplikacja skaluje się w górę podczas wzrostu ruchu i w dół, gdy sytuacja się uspokaja.
+
+00:08:46.440 --> 00:08:48.060
+Bez konieczności ręcznej interwencji.
+
+00:08:48.300 --> 00:08:50.180
+Jednak cała ta moc wiąże się ze złożonością.
+
+00:08:50.380 --> 00:08:55.720
+Uruchamianie własnego klastra Kubernetes oznacza, że odpowiadasz za płaszczyznę sterowania, aktualizację, poprawki bezpieczeństwa i kopie zapasowe.
+
+00:08:55.720 --> 00:09:00.200
+Potrzebujesz głębokiej wiedzy, aby obsługiwać awarię węzłów, konfigurację sieci i skalowanie klastra.
+
+00:09:00.400 --> 00:09:03.800
+Wiele zespołów spędza więcej czasu na zarządzaniu klastrem niż na budowaniu aplikacji.
+
+00:09:03.980 --> 00:09:05.600
+I tutaj wchodzi zarządzany Kubernetes.
+
+00:09:05.900 --> 00:09:08.560
+Kubernetes zarządzany samodzielnie kontra zarządzany przez dostawcę.
+
+00:09:08.720 --> 00:09:11.480
+Porozmawiajmy więc o realiach samodzielnego prowadzenia Kubernetesa.
+
+00:09:11.640 --> 00:09:17.540
+Kiedy tworzysz własny klaster, odpowiadasz za wszystko, płaszczyznę sterowania, aktualizację, poprawki bezpieczeństwa i kopie zapasowe etcd.
+
+00:09:17.740 --> 00:09:20.120
+Jeśli serwer API przestanie działać, to twój problem.
+
+00:09:20.120 --> 00:09:24.200
+Jeśli w używanej wersji zostanie wykryta luka w zabezpieczeniach, musisz ją załatać.
+
+00:09:24.320 --> 00:09:27.640
+Jeśli baza etcd ulegnie uszkodzeniu, musisz ją odtworzyć z kopii zapasowej.
+
+00:09:27.820 --> 00:09:29.600
+Wszystko to wymaga specjalistycznej wiedzy.
+
+00:09:29.840 --> 00:09:34.740
+Musisz rozumieć, jak zawodzą węzły, jak działa sieć na poziomie klastra i jak skalować zasoby, by ich nie uszkodzić.
+
+00:09:34.840 --> 00:09:36.780
+Oto coś, co zaskakuje wiele zespołów.
+
+00:09:36.980 --> 00:09:41.980
+Wiele organizacji poświęca więcej czasu na zarządzanie klastrem Kubernetes niż na tworzenie aplikacji, które na nim działają.
+
+00:09:42.200 --> 00:09:46.200
+Ciągle zmagają się z aktualizacjami, rozwiązywaniem problemów sieciowych i awariami węzłów.
+
+00:09:46.200 --> 00:09:50.800
+Klaster staje się pracą na pełen etat. To nie był powód, dla którego na początku wybraliście Kubernetesa.
+
+00:09:50.980 --> 00:09:53.260
+Właśnie tutaj z pomocą przychodzą zarządzane usługi Kubernetes.
+
+00:09:53.520 --> 00:09:57.660
+Usługi takie jak Azure Kubernetes Service, czyli AKS, zajmują się płaszczyzną sterowania za ciebie.
+
+00:09:57.820 --> 00:10:01.820
+Azure zarządza serwerem API, bazą AD, harmonogramem, scheduler oraz menedżerem kontrolerów.
+
+00:10:01.980 --> 00:10:04.560
+Nie musisz martwić się o ich aktualizowanie ani dbanie o to, by działały.
+
+00:10:04.720 --> 00:10:08.240
+Płacisz tylko za węzły robocze, czyli maszyny wirtualne, na których faktycznie działają twoje obciążenia.
+
+00:10:08.500 --> 00:10:10.160
+Sam płaszczyzna sterowania jest darmowa.
+
+00:10:10.160 --> 00:10:11.960
+To diametralnie zmienia sytuację.
+
+00:10:11.960 --> 00:10:17.440
+Zamiast poświęcać czas na utrzymanie klastra, twój zespół może skupić się na tym, co naprawdę ważne, tworzonych aplikacjach.
+
+00:10:17.640 --> 00:10:21.720
+Dla większości zespołów, zwłaszcza tych na początku drogi, zarządzany Kubernetes jest właściwym wyborem.
+
+00:10:21.920 --> 00:10:24.780
+Otrzymujesz pełną moc Kubernetesa bez narzutu operacyjnego.
+
+00:10:25.000 --> 00:10:27.600
+AKS, czyli Kubernetes w prostym wydaniu na platformie Azure.
+
+00:10:27.820 --> 00:10:29.340
+Czym więc dokładnie jest AKS?
+
+00:10:29.480 --> 00:10:34.140
+To zarządzana usługa Kubernetes na Azure, dająca ci w pełni funkcjonalny klaster bez budowania go od podstaw.
+
+00:10:34.340 --> 00:10:39.080
+Płaszczyzna sterowania jest darmowa, jak wspomnieliśmy, więc płacisz tylko za maszyny wirtualne obsługujące twoje obciążenia.
+
+00:10:39.080 --> 00:10:43.400
+Oznacza to, że możesz zacząć od małej skali, płacić niewiele i zwiększać zasoby wraz z rozwojem potrzeb.
+
+00:10:43.600 --> 00:10:45.680
+Azure bierze na siebie całą ciężką pracę.
+
+00:10:45.940 --> 00:10:49.760
+Aktualizacje, poprawki i monitorowanie stanu płaszczyzny sterowania są w pełni obsługiwane.
+
+00:10:49.960 --> 00:10:53.860
+Nie potrzebujesz dedykowanego zespołu ekspertów od Kubernetesa, aby utrzymać wszystko w działaniu.
+
+00:10:54.020 --> 00:10:59.340
+A ponieważ AKS jest częścią ekosystemu Azure, integruje się z narzędziami, których prawdopodobnie już używasz.
+
+00:10:59.460 --> 00:11:05.140
+Azure Active Directory do uwierzytelniania Azure Monitor do logów i metryk oraz Azure Policy do zarządzania z godnością.
+
+00:11:05.140 --> 00:11:09.780
+Wszystkie współpracują ze sobą od razu po skonfigurowaniu, bez konieczności łączenia osobnych elementów.
+
+00:11:09.900 --> 00:11:14.180
+Konfiguracja potoków CI, CD za pomocą GitHub Actions lub Azure DevOps zajmuje zaledwie minuty.
+
+00:11:14.440 --> 00:11:17.960
+Wypchnij zmianę do repozytorium, a system automatycznie zbuduje nowy obraz kontenera,
+
+00:11:18.100 --> 00:11:21.340
+prześle go do Azure Container, registry i zaktualizuje wdrożenie w AKS.
+
+00:11:21.540 --> 00:11:24.220
+Bez ręcznych kroków, bez logowania przez SSH na serwery.
+
+00:11:24.380 --> 00:11:25.640
+Wszystko jest zautomatyzowane.
+
+00:11:25.900 --> 00:11:28.920
+Dla początkujących dostępny jest tryb automatyczny AKS zaprojektowany dla zespołów,
+
+00:11:29.000 --> 00:11:31.480
+które nie chcą podejmować każdej decyzji dotyczącej konfiguracji klastra.
+
+00:11:31.480 --> 00:11:35.560
+Zapewnia gotowe do użycia ustawienia domyślne dla skalowania, w sieci, bezpieczeństwa i aktualizacji.
+
+00:11:35.720 --> 00:11:38.160
+Nie musisz być ekspertem od Kubernetesa, aby zacząć.
+
+00:11:38.300 --> 00:11:41.080
+Wystarczy opisać swoją aplikację, a AKS zajmie się resztą.
+
+00:11:41.320 --> 00:11:44.800
+Jedno polecenie tworzy klaster, jeden plik manifestu uruchamia twoją aplikację.
+
+00:11:45.020 --> 00:11:48.140
+Umiejętności zdobyte w AKS przenoszą się na każde inne środowisko Kubernetes,
+
+00:11:48.320 --> 00:11:49.920
+ponieważ pod spodem to standardowy Kubernetes.
+
+00:11:50.240 --> 00:11:53.360
+Nie uczysz się systemu własnościowego, lecz prawdziwego rozwiązania,
+
+00:11:53.500 --> 00:11:55.740
+gdzie Azure obsługuje złożoność operacyjną.
+
+00:11:56.000 --> 00:11:57.880
+Masz już więc pełny obraz sytuacji.
+
+00:11:57.880 --> 00:12:01.200
+Kontenery pakują aplikacje tak, aby działały spójnie wszędzie,
+
+00:12:01.320 --> 00:12:03.560
+a Kubernetes orkiestruje je na dużą skalę,
+
+00:12:03.660 --> 00:12:06.940
+automatycznie zarządzając wdrażaniem, skalowaniem i odzyskiwaniem.
+
+00:12:07.180 --> 00:12:09.220
+AKS czyni tę orkiestrację łatwą w zarządzaniu,
+
+00:12:09.320 --> 00:12:11.020
+przejmując opiekę nad płaszczyzną sterowania
+
+00:12:11.020 --> 00:12:13.340
+i integrując się z narzędziami Azure, które już znasz.
+
+00:12:13.520 --> 00:12:14.460
+Główny wniosek jest taki.
+
+00:12:14.540 --> 00:12:16.660
+Kubernetes nie jest tylko dla wielkich firm technologicznych
+
+00:12:16.660 --> 00:12:18.040
+z ogromnymi zespołami inżynierskimi.
+
+00:12:18.260 --> 00:12:20.060
+Dzięki usługom zarządzanym, takim jak AKS,
+
+00:12:20.140 --> 00:12:21.580
+jest dostępny dla każdego zespołu.
+
+00:12:21.720 --> 00:12:23.920
+Twoje zadanie domowe na ten tydzień jest proste.
+
+00:12:23.920 --> 00:12:26.880
+Załóż darmowe konto Azure, uruchom klaster AKS
+
+00:12:26.880 --> 00:12:28.360
+i wdroż prostą aplikację.
+
+00:12:28.620 --> 00:12:30.040
+Zajmie to kilka minut i zobaczysz,
+
+00:12:30.140 --> 00:12:31.700
+jak bardzo rozwinęła się ta platforma.
+
+00:12:31.880 --> 00:12:33.140
+Gotowy, by wejść głębiej?
+
+00:12:33.280 --> 00:12:34.660
+W następnym odcinku pokażemy,
+
+00:12:34.800 --> 00:12:36.380
+jak zbudować pierwszy obraz kontenera
+
+00:12:36.380 --> 00:12:38.320
+i przesłać go do Azure Container Registry.
+
+00:12:38.560 --> 00:12:40.800
+Zasubskrybuj na swojej ulubionej platformie podcastowej
+
+00:12:40.800 --> 00:12:41.880
+i udostępnij to komuś,
+
+00:12:41.960 --> 00:12:43.940
+kto dopiero zaczyna swoją przygodę z Kubernetesem.

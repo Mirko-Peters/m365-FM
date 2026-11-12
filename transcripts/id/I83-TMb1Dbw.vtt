@@ -1,0 +1,727 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:05.740
+Selamat datang di episode lain dari potongan pengetahuan Microsoft di sini di M35FMM, saya pemandu acara Nambil.
+
+00:00:06.200 --> 00:00:09.800
+Topik hari ini adalah topik yang hampir semua orang pernah dengar, tetapi hanya sedikit yang bisa menjelaskan.
+
+00:00:10.120 --> 00:00:11.300
+Copilot untuk Microsoft Fabric.
+
+00:00:11.700 --> 00:00:15.300
+Anda mendengar kata Copilot di mana-mana akhir-akhir ini, di Word, di Teams, di GitHub, di Windows.
+
+00:00:15.720 --> 00:00:19.400
+Jadi, serasa seorang menyebut Copilot untuk Fabric, Anda mungkin berpikir hal yang sama, hanya aplikasi yang berbeda.
+
+00:00:20.200 --> 00:00:26.700
+Di akhir episode ini, Anda akan tahu persis apa itu, di mana ia bekerja, dan mengapa itu penting, bahkan jika Anda belum pernah menulis satu baris SQL pun.
+
+00:00:26.700 --> 00:00:28.320
+Bingungan tentang Copilot.
+
+00:00:28.740 --> 00:00:33.620
+Begini masalahnya, Microsoft memiliki banyak Copilot, dan kebanyakan orang menyamaratakannya, padahal semuanya sama sekali tidak sama.
+
+00:00:34.040 --> 00:00:39.680
+Microsoft 365 Copilot membantu Anda menulis dokumen di Word, meringkas email di Outlook, dan mencatat di Teams.
+
+00:00:40.420 --> 00:00:43.000
+GitHub Copilot menyarankan kode saat Anda bekerja di VS Code.
+
+00:00:43.600 --> 00:00:48.820
+Ini untuk pengembang perangkat lunak yang membangun aplikasi, lalu ada Copilot di Fabric, yang saat itu benar-benar berbeda.
+
+00:00:48.820 --> 00:00:51.880
+Ini bekerja secara khusus pada data dan analitik di dalam Microsoft Fabric.
+
+00:00:52.240 --> 00:00:52.920
+Bayangkan seperti ini.
+
+00:00:53.120 --> 00:00:54.780
+Bayangkan sebuah perusahaan dengan tiga spesialis.
+
+00:00:54.780 --> 00:01:02.080
+Satu menulis laporan untuk tim eksekutif, satu membangun produk perangkat lunak, dan satu menangani semua data perusahaan, membersihkannya, mengquerinya, dan membersihkannya, mengquerinya.
+
+00:01:02.220 --> 00:01:04.980
+Mereka semua orang pintar, tetapi mereka melakukan pekerjaan yang sangat berbeda.
+
+00:01:05.300 --> 00:01:06.720
+Begitulah cara kerja Copilot Microsoft.
+
+00:01:07.280 --> 00:01:13.060
+M365 Copilot adalah penulis laporan Anda, GitHub Copilot adalah pembuat perangkat lunak Anda, dan Fabric Copilot adalah spesialis data Anda.
+
+00:01:13.540 --> 00:01:16.280
+Jadi sekarang setelah kita tahu apa itu, mari kita bicara tentang apa sebenarnya itu.
+
+00:01:17.620 --> 00:01:19.060
+Apa sebenarnya Copilot untuk Fabric itu?
+
+00:01:19.600 --> 00:01:20.900
+Selamat datang di Botongan Pengetahuan Mega.
+
+00:01:21.240 --> 00:01:22.860
+Saya Mirko Peters dari M365 FM.
+
+00:01:22.860 --> 00:01:26.840
+Topik hari ini adalah sesuatu yang pernah didengar banyak orang, tetapi hanya sedikit yang benar-benar-benar.
+
+00:01:27.160 --> 00:01:27.900
+Copilot untuk Fabric.
+
+00:01:28.280 --> 00:01:28.960
+Jadi apa sebenarnya itu?
+
+00:01:29.280 --> 00:01:30.380
+Berikut ada definisi paling serenang.
+
+00:01:30.720 --> 00:01:34.180
+Copilot untuk Fabric adalah asisten AI yang dibangun langsung ke dalam Microsoft Fabric.
+
+00:01:34.520 --> 00:01:39.220
+Anda mengetik apa yang Anda butuhkan dalam bahasa yang sederhana, dan ia menulis kodenya, membuat querinya, atau membuat laporannya untuk Anda.
+
+00:01:39.560 --> 00:01:41.960
+Ia menggunakan model bahasa besar dari Azure Open AI.
+
+00:01:42.480 --> 00:01:43.140
+Namun inilah yang penting.
+
+00:01:43.820 --> 00:01:46.820
+Ia memahami skema, tabel, dan data spesifik Anda.
+
+00:01:47.520 --> 00:01:50.680
+Jadi saat Anda mengetik, tampilkan total penjualan menurut wilayah untuk kuartal.
+
+00:01:50.680 --> 00:01:54.180
+Ia sudah tahu tabel mana yang harus dilihat dan cara menulis query tersebut.
+
+00:01:54.680 --> 00:01:59.140
+Bayangkan seperti memiliki analis data junior yang bekerja sangat cepat, tetapi membutuhkan Anda untuk memeriksa pekerjaan.
+
+00:01:59.360 --> 00:02:02.880
+Anda memberi mereka instruksi, dan beberapa detik kemudian mereka menghasilkan sesuatu yang berkata.
+
+00:02:02.920 --> 00:02:07.100
+Terkadang mereka mungkin salah menafsirkan permintaan Anda atau menulis kode yang berfungsi dan berfungsi namun tidak efisien.
+
+00:02:07.260 --> 00:02:10.660
+Itulah sebabnya Anda harus selalu meninjau hasilnya sebelum menjalankannya di lingkungan produksi.
+
+00:02:10.960 --> 00:02:11.960
+Manfaat sebenarnya sangatlah jelas.
+
+00:02:12.400 --> 00:02:15.000
+Anda tidak perlu menguasai SQL, DAX, atau PISPAC untuk memulai.
+
+00:02:15.000 --> 00:02:19.180
+Jika Anda memahami data Anda dan bisa mendeskripsikan kebutuhan Anda, Copilot akan membantu Anda mencapai.
+
+00:02:19.900 --> 00:02:21.820
+Jadi, di mana tepatnya alat ini muncul di dalam fabrik?
+
+00:02:22.980 --> 00:02:25.600
+Tempatnya, data factory dan data engineering.
+
+00:02:26.200 --> 00:02:28.320
+Copilot disematkan di berbagai beban kerja fabrik.
+
+00:02:28.840 --> 00:02:30.360
+Ini bukan alat terpisah yang harus Anda buka secara khusus.
+
+00:02:30.820 --> 00:02:32.400
+Alat ini ada tepat di tempat Anda bekerja saat ini.
+
+00:02:32.980 --> 00:02:33.680
+Mulai dengan data factory.
+
+00:02:34.520 --> 00:02:37.160
+Di sinilah Anda membangun alur kerja untuk memindahkan dan mengubah data.
+
+00:02:37.780 --> 00:02:42.400
+Alih-alih menyeret aktivitas ke kanvas dan memonfigurasinya satu per satu, Anda cukup mendeskripsikan kebutuhan Anda.
+
+00:02:42.400 --> 00:02:45.660
+Misalnya, gabungkan kedua tabel ini dan hapus nilai 0.
+
+00:02:46.520 --> 00:02:48.580
+Copilot membuat langkah-langkah power query untuk Anda.
+
+00:02:49.300 --> 00:02:52.860
+Ia membuat penggabungan, filter, dan perubahan tipe data semua dari satu kalimat saja.
+
+00:02:53.800 --> 00:02:54.800
+Anda tak meninjau hasilnya.
+
+00:02:55.120 --> 00:02:56.520
+Namun pekerjaan yang repetitif sudah tertangani.
+
+00:02:56.940 --> 00:02:59.040
+Kemudian ada data engineering, khususnya notebook fabric.
+
+00:02:59.600 --> 00:03:03.680
+Di sinilah Anda menulis kode PISPAC untuk memuat, membersihkan, dan mengubah data dalam skala besar.
+
+00:03:04.140 --> 00:03:08.660
+Jika Anda baru mengenal, syntax spark, menulis transformasi sederhana saja, bisa terasa seperti mempelajari bahasa baru.
+
+00:03:09.020 --> 00:03:09.920
+Copilot mengubah hal itu.
+
+00:03:10.400 --> 00:03:11.500
+Anda mendeskripsikan logikanya.
+
+00:03:11.500 --> 00:03:15.400
+Muot CSV ini dari lake house, filter pesan yang dibatalkan, dan kelompokkan berdasarkan wilayah.
+
+00:03:16.080 --> 00:03:17.380
+Dan ia menghasilkan kodopai spark-nya.
+
+00:03:17.820 --> 00:03:19.720
+Anda dapat menjalankannya, mengubahnya, dan belajar.
+
+00:03:20.180 --> 00:03:21.560
+Ini adalah sesuatu yang banyak orang tidak sadar.
+
+00:03:22.160 --> 00:03:23.620
+Copilot juga bisa menjelaskan kode yang sudah ada.
+
+00:03:24.540 --> 00:03:27.480
+Membuka notebook buatan orang lain dan bingung apa fungsi cell tertentu.
+
+00:03:28.100 --> 00:03:29.880
+Tanyakan saja, apa fungsi transformasi ini?
+
+00:03:30.620 --> 00:03:32.980
+Copilot membaca kode tersebut dan meringkasnya dalam bahasa sederhana.
+
+00:03:33.400 --> 00:03:34.320
+Hal yang sama beraku untuk pipeline.
+
+00:03:34.660 --> 00:03:38.900
+Minta ia meringkas pipeline yang kompleks dan ia akan memberi tahu fungsi setiap langkah dan urutannya.
+
+00:03:39.360 --> 00:03:40.380
+Namun itu baru setengah ada ceritanya.
+
+00:03:40.380 --> 00:03:42.500
+Copilot juga tersedia di tempat Anda mengonsumsi data.
+
+00:03:43.560 --> 00:03:45.280
+Tempatnya, data warehouse dan power BI.
+
+00:03:46.020 --> 00:03:48.540
+Jadi, di mana sebenarnya copilot berada di dalam Microsoft 3.
+
+00:03:48.780 --> 00:03:50.900
+Dua tempat utama, yaitu data warehouse dan power BI.
+
+00:03:51.340 --> 00:03:52.320
+Mari mengalir dengan data warehouse.
+
+00:03:52.860 --> 00:03:55.120
+Di sini Anda bisa meminta QR SKL menggunakan bahasa yang sederhana.
+
+00:03:55.300 --> 00:03:57.580
+Ketik tampilkan total penjualan berdasarkan produk untuk kuartal track.
+
+00:03:58.080 --> 00:03:59.840
+Dan copilot menghasilkan SKL tersebut untuk Anda.
+
+00:04:00.840 --> 00:04:03.400
+Tidak perlu menghafal sintaks rubai atau where yang tepat.
+
+00:04:03.820 --> 00:04:06.340
+Anda cukup mendeskripsikan keinginan Anda dan copilot yang melihat.
+
+00:04:06.760 --> 00:04:10.180
+Masalahnya, banyak orang sangat memahami data mereka tetapi mereka tidak menulis SKL setiap hari.
+
+00:04:10.380 --> 00:04:11.740
+Anda tahu pertanyaan bisnisnya.
+
+00:04:12.040 --> 00:04:16.180
+Anda tahu tabel mana yang menyimpan jawabannya, tetapi mengubahnya menjadi query yang benar dan efisien membutuhkan waktu.
+
+00:04:16.440 --> 00:04:17.660
+Copilot menghilangkan hambatan tersebut.
+
+00:04:17.980 --> 00:04:20.520
+Lada power BI, kebanyakan menghabiskan waktu mereka di sini.
+
+00:04:21.080 --> 00:04:23.020
+Copilot membantu Anda membangun laporan dari awal.
+
+00:04:23.580 --> 00:04:24.340
+Jelaskan apa yang Anda ingin.
+
+00:04:24.880 --> 00:04:27.820
+Buat laporan yang menampilkan pendapatan per bulan dengan grafik batang.
+
+00:04:28.580 --> 00:04:32.880
+Copilot menyarankan visual yang tepat menatanya dan menulis ukuran aks di balik layar.
+
+00:04:33.400 --> 00:04:34.620
+Ia juga bisa meringkas dasper untungan.
+
+00:04:35.240 --> 00:04:38.820
+Bayangkan Anda membuka laporan dengan 20 visual dan Anda punya 5 menit untuk mempresentasikan.
+
+00:04:38.820 --> 00:04:43.740
+Minta copilot untuk meringkasnya dan ia akan memberikan istisar tren dan angka utama dalam bahasa yang mudah dimengerti.
+
+00:04:44.120 --> 00:04:46.040
+Copilot juga bisa menjelaskan cara kerja sebuah ukuran.
+
+00:04:46.540 --> 00:04:48.080
+Melihat angka dan tidak yakin bagaimana cara mendapatkan.
+
+00:04:48.420 --> 00:04:48.960
+Tanyakan saja.
+
+00:04:49.300 --> 00:04:51.000
+Copilot membaca daaks dan memberitahu wungsinya.
+
+00:04:51.340 --> 00:04:55.840
+Artinya pengguna bisnis dapat mengajukan pertanyaan dalam bahasa sehari-hari dan mendapatkan jawaban tanpa menunggu tim data.
+
+00:04:56.200 --> 00:04:57.300
+Mari kita lihat beberapa contoh nyata.
+
+00:04:57.840 --> 00:04:58.860
+Disinilah semuanya menyatu.
+
+00:04:59.860 --> 00:05:01.640
+Contoh nyata bagaimana cara kerjanya dalam praktik.
+
+00:05:02.320 --> 00:05:05.060
+Bayangkan sebuah perusahaan retail yang menjual secara daring dan ditokong.
+
+00:05:05.060 --> 00:05:07.460
+Data penjualan mereka berasal dari beberapa sumber pilihan.
+
+00:05:07.980 --> 00:05:12.900
+Catatan transaksi dari sistem POS, data pelanggan, dari CRM, dan log inventaris dari gudang.
+
+00:05:13.480 --> 00:05:14.780
+Data bisnis umum yang perlu dianalisis.
+
+00:05:15.420 --> 00:05:17.000
+Sekarang bayangkan tiga orang berbeda dalam tim.
+
+00:05:17.420 --> 00:05:19.640
+Masih-masih menggunakan copilot dengan cara yang mulai dari insiniodat.
+
+00:05:20.220 --> 00:05:22.160
+Tugas mereka adalah menyiapkan data mentah untuk dianalisis.
+
+00:05:22.660 --> 00:05:27.040
+Mereka membuka buku catatan fabrik dan mengetik sesuatu seperti muat CSV penjualan dari lake house,
+
+00:05:27.280 --> 00:05:29.440
+saring baris di mana jenis transaksinya adalah pengembalian,
+
+00:05:29.860 --> 00:05:32.600
+lalu kelompokan berdasarkan wilayah dan hitung total pendapatan untuk setiap grup.
+
+00:05:32.600 --> 00:05:35.740
+Copilot menghasilkan kode payspark dalam hitungan detik.
+
+00:05:36.240 --> 00:05:38.460
+Insinyur meninjaunya, menjalankannya, dan melanjutkan tugas.
+
+00:05:38.740 --> 00:05:40.600
+Apa yang dimiliki memakan waktu dua menit sekarang hanya butuh dua menit.
+
+00:05:41.000 --> 00:05:41.480
+Analis bisnis.
+
+00:05:42.160 --> 00:05:43.960
+Mereka membutuhkan laporan untuk rapat penjualan minggu.
+
+00:05:44.360 --> 00:05:47.060
+Mereka membuka power BI terhubung ke data yang telah dibersihkan
+
+00:05:47.060 --> 00:05:50.280
+dan meminta copilot untuk membuat laporan yang menampilkan pendapatan per bulan
+
+00:05:50.280 --> 00:05:52.340
+dengan grafik batang dan menambahkan garis untuk target.
+
+00:05:52.660 --> 00:05:55.060
+Copilot membangun tata letak, memilih visual yang tepat,
+
+00:05:55.180 --> 00:05:56.920
+dan menulis ukuran dax untuk perbandingan target.
+
+00:05:57.560 --> 00:05:59.560
+Analis menyesuaikan warna, mengatur tata letak,
+
+00:05:59.560 --> 00:06:01.860
+dan memiliki laporan yang rapi dalam hitungan menit, bukan jam.
+
+00:06:02.140 --> 00:06:04.680
+Terakhir, ada seseorang yang tahu SKL tetapi bukan ahli basis data.
+
+00:06:05.100 --> 00:06:07.340
+Mereka perlu menambahkan kolom margin laba ke tabel yang sudah ada.
+
+00:06:07.780 --> 00:06:09.960
+Mereka membuka gudang data dan mengetik tambahkan kolom
+
+00:06:09.960 --> 00:06:11.860
+untuk margin laba ke tabel penjualan yang dihitung
+
+00:06:11.860 --> 00:06:15.420
+sebagai pendapatan dikurangi biaya dibagi pendapatan yang diformat sebagai persentase.
+
+00:06:16.360 --> 00:06:18.080
+Copilot menulis pernyataan alter table tersebut.
+
+00:06:18.420 --> 00:06:20.800
+Mungkudah menjalankannya, memverifikasi angkanya, lalu melanjutkannya.
+
+00:06:21.260 --> 00:06:22.720
+Masalahnya, copilot tidaklah sempurna.
+
+00:06:23.260 --> 00:06:24.560
+Terkadang ia salah menafsirkan maksudnya.
+
+00:06:24.980 --> 00:06:26.700
+Terkadang kodenya berfungsi namun tidak optimal.
+
+00:06:26.700 --> 00:06:28.300
+Terkadang ia punya visual yang sangat.
+
+00:06:28.800 --> 00:06:31.280
+Anda harus selalu memeriksa hasilnya sebelum menggunakannya dalam produksi.
+
+00:06:32.220 --> 00:06:34.160
+Namun untuk memulai membuat perwarupa dan belajar,
+
+00:06:34.320 --> 00:06:36.300
+rasanya seperti memiliki pabrik templat di ujung jari Anda.
+
+00:06:36.600 --> 00:06:39.080
+Anda menjelaskan apa yang diinginkan dan mendapatkan rapat tamu yang berfungsi
+
+00:06:39.080 --> 00:06:39.800
+lalu Anda menggunakan.
+
+00:06:40.180 --> 00:06:42.100
+Jadi apa yang sebenarnya Anda perlukan untuk mulai menggunakan ini?
+
+00:06:42.620 --> 00:06:43.580
+Apa yang Anda perlukan untuk menggunakan ini?
+
+00:06:43.800 --> 00:06:45.500
+Jadi apa yang sebenarnya Anda perlukan untuk menggunakan copilot?
+
+00:06:46.100 --> 00:06:47.580
+Persyaratannya lebih sederhana dari yang Anda bayangkan.
+
+00:06:47.940 --> 00:06:49.860
+Pertama, Anda memerlukan kapasitas pabrik berbayar,
+
+00:06:50.080 --> 00:06:51.540
+khususnya SKU F2 atau yang lebih tinggi.
+
+00:06:51.540 --> 00:06:54.780
+Jika Anda menggunakan kapasitas uji coba atau memiliki power BI Premium,
+
+00:06:54.920 --> 00:06:56.120
+Anda mungkin sudah memiliki akses.
+
+00:06:56.840 --> 00:06:58.360
+Periksa saja pengaturan tenan Anda untuk memastikan.
+
+00:06:58.860 --> 00:07:02.120
+Dan kedua, admin fabrik Anda perlu mengaktifkan copilot di pengaturan tenan.
+
+00:07:02.780 --> 00:07:04.140
+Fitur ini tidak aktif secara default di sesi.
+
+00:07:04.720 --> 00:07:06.780
+Beberapa admin lebih suka meluncurkannya secara bertahap,
+
+00:07:07.000 --> 00:07:08.760
+mengujinya dengan kelompok percontohan terlebih dahulu,
+
+00:07:08.920 --> 00:07:09.880
+lalu mengaktifkannya secara load.
+
+00:07:10.080 --> 00:07:12.420
+Jadi jika Anda membuka fabrik dan tidak melihat ikon copilot,
+
+00:07:12.560 --> 00:07:13.300
+mungkin itulah alasannya.
+
+00:07:13.720 --> 00:07:15.160
+Langkah terbaik Anda adalah berbicara dengan Anda.
+
+00:07:15.580 --> 00:07:16.280
+Kabar baiknya,
+
+00:07:16.680 --> 00:07:19.320
+tidak ada biaya lisensi tambahan di luar kapasitas fabrik Anda.
+
+00:07:19.320 --> 00:07:23.960
+Anda tidak perlu membeli langganan terpisah atau mendaftar untuk layanan lain.
+
+00:07:24.760 --> 00:07:26.840
+Jika Anda memiliki fabrik, Anda memiliki copilot selama admin,
+
+00:07:26.940 --> 00:07:28.180
+Anda telah menyalahkan tombolnya.
+
+00:07:28.940 --> 00:07:31.720
+Setelah diaktifkan, Anda akan melihat ikon copilot di buban kerja yang didukung.
+
+00:07:32.040 --> 00:07:34.660
+Klik ikon tersebut, dan panel akan terbuka untuk Anda mengetik prompt on.
+
+00:07:35.500 --> 00:07:36.720
+Hanya itu saja yang perlu dilakukan.
+
+00:07:37.320 --> 00:07:39.980
+Tidak ada konfigurasi, tidak ada pengaturan, tidak ada data pelatihan yang perlu disiapkan.
+
+00:07:40.500 --> 00:07:42.700
+Anda cukup mulai mengetik, dan copilot mulai membantu.
+
+00:07:43.200 --> 00:07:44.260
+Namun ada satu batasan penting.
+
+00:07:44.780 --> 00:07:46.880
+Copilot hanya bekerja dengan data yang sudah bisa Anda akses.
+
+00:07:47.580 --> 00:07:49.220
+Fitur ini menghormati izin yang sudah Anda memiliki.
+
+00:07:49.740 --> 00:07:52.840
+Jika Anda tidak dapat melihat tabel di gudang data, copilot juga tidak bisa melihatnya.
+
+00:07:53.420 --> 00:07:57.020
+Jika Anda tidak memiliki akses ke model semantik, copilot tidak akan membuat query untuk model tersebut.
+
+00:07:57.740 --> 00:07:58.600
+Dan itu sebenarnya hal yang baik.
+
+00:07:59.240 --> 00:08:01.560
+Artinya, copilot tidak melewati kontrol keamanan Anda.
+
+00:08:02.100 --> 00:08:04.020
+Fitur ini bekerja dalam batasan yang telah Anda tetapkan.
+
+00:08:04.360 --> 00:08:06.340
+Jadi, mengapa hal ini penting jika Anda baru mengenalisis data?
+
+00:08:07.340 --> 00:08:08.260
+Mengapa pemula harus duduk?
+
+00:08:08.760 --> 00:08:12.260
+Hambatan terbesar dalam bekerja dengan data bukanlah tentang kecerdasan atau pengetahuan bisnis.
+
+00:08:12.820 --> 00:08:15.520
+Hambatan tersebut selalu tentang keterampilan teknis, SQL, Python, DAT.
+
+00:08:15.520 --> 00:08:17.020
+Semua yang membutuhkan waktu untuk di belajar.
+
+00:08:17.420 --> 00:08:20.020
+Berbulan-bulan, terkadang bertahun-tahun sebelum Anda benar-benar produk.
+
+00:08:20.700 --> 00:08:23.840
+Dan bagi seseorang yang pekerjaan utamanya bukan rekayasa data, waktu itu memang tidak ada.
+
+00:08:24.360 --> 00:08:26.980
+Anda harus membuat laporan, menjawab pertanyaan, dan mengambil keputusan.
+
+00:08:27.400 --> 00:08:29.720
+Belajar menulis fungsi window yang sempurna tidak ada dalam daftar itu.
+
+00:08:30.160 --> 00:08:31.900
+Copilot menurunkan hambatan tersebut secara rastis.
+
+00:08:32.320 --> 00:08:35.520
+Anda bisa menjelaskan keinginan Anda dalam bahasa sederhana dan mendapatkan kode yang berfungsi.
+
+00:08:35.520 --> 00:08:39.480
+Tidak selalu kode yang sempurna, tapi kode yang berfungsi untuk dijalankan, diperiksa, dan dipelajari.
+
+00:08:39.960 --> 00:08:41.240
+Hal itu mengubah dinamikanya sepuluh.
+
+00:08:41.520 --> 00:08:47.400
+Dalam prakteknya, anggota tim non-teknis bisa mulai menjelajahi data, membuat laporan, dan bertanya tanpa harus menunggu tim TI.
+
+00:08:48.280 --> 00:08:53.060
+Orang di bagian pemasaran yang perlu memahami performa kampanye tidak perlu lagi mengirim tiket dan menunggu tiga hari.
+
+00:08:54.700 --> 00:08:55.480
+Mereka membuka fabrik.
+
+00:08:57.020 --> 00:09:00.620
+Pimpinan operasional yang ingin melacak tren inventaris tidak perlu belajar payspark.
+
+00:09:01.220 --> 00:09:02.000
+Mereka hanya perlu bertanya.
+
+00:09:02.000 --> 00:09:05.280
+Untuk analitik swalayan, ini adalah perubahan yang mengubah cara kerja tim.
+
+00:09:06.120 --> 00:09:06.760
+Namun ada syarat.
+
+00:09:07.260 --> 00:09:09.860
+Ini hanya berfungsi dengan baik jika data dasarnya terorganisir dengan rap.
+
+00:09:10.500 --> 00:09:15.620
+Jika data Anda berantakan, tabel tidak dinamai dengan jelas, dan relasi tidak ditentukan, kopilot akan kesulitan.
+
+00:09:16.480 --> 00:09:17.660
+Prinsip sampai masuk sampai kelotok.
+
+00:09:18.100 --> 00:09:20.180
+Kecadelasan buatan hanya sebaik fondasi tempat ia dibangun.
+
+00:09:20.700 --> 00:09:23.320
+Pemula tetap harus memahami apa yang mereka tanyakan dan memvalidasi hasil.
+
+00:09:23.600 --> 00:09:28.420
+Kopilot bisa menulis query yang terlihat benar, tapi memberikan jawaban salah karena pertanyaan Anda yang salah.
+
+00:09:29.040 --> 00:09:31.920
+Ia bisa membuat laporan yang tampak indah, tapi menggunakan ukuran yang keliru.
+
+00:09:32.420 --> 00:09:34.860
+Alat ini mempercepat pekerjaan Anda, tapi tidak menggantikan penilaian.
+
+00:09:35.220 --> 00:09:36.060
+Pikirkan seperti ini.
+
+00:09:36.640 --> 00:09:40.060
+Kopilot adalah alat yang mempercepat pembelajaran, bukan pengganti pemahaman.
+
+00:09:40.720 --> 00:09:43.780
+Anda tetap perlu tahu apa itu join, apa fungsi measure, dan apa arti filter.
+
+00:09:44.680 --> 00:09:49.400
+Namun daripada menghabiskan, waktu berminggu-minggu menghafal sintaks Anda bisa menggunakannya untuk memahami konsep.
+
+00:09:49.660 --> 00:09:52.800
+Anda melihat kode yang ditulis kopilot, membacanya, menyesuaikannya, lalu beli.
+
+00:09:53.160 --> 00:09:56.040
+Ini seperti memiliki tutor yang menuliskan jawabannya terlebih dahulu lalu menjelaskannya.
+
+00:09:56.460 --> 00:09:58.620
+Dan seiring waktu, Anda mulai mengenali polanya.
+
+00:09:59.220 --> 00:10:01.500
+Sintaks joinnya itu saja, apa yang sebenarnya dilakukan sebuah filter.
+
+00:10:02.080 --> 00:10:04.660
+Membangun keterampilan tanpa rasa frustrasi karena menantap layar kosong.
+
+00:10:05.180 --> 00:10:06.660
+Namun ada satu hal lagi yang perlu diingat.
+
+00:10:07.500 --> 00:10:08.380
+Run manusia tetap penting.
+
+00:10:09.040 --> 00:10:11.660
+Kenyataannya, kopilot memang hebat tapi tidak sempurna.
+
+00:10:12.240 --> 00:10:16.340
+Ia bisa salah menafsirkan maksud Anda, membuat kode yang secara teknis berfungsi tapi lambat,
+
+00:10:16.560 --> 00:10:20.100
+atau menulis query DAX yang mengambil angka salah karena tabelnya keliru.
+
+00:10:20.940 --> 00:10:22.160
+Dan ini bukan sekadar gangguan yang jarang terjadi.
+
+00:10:22.160 --> 00:10:27.140
+Seringkali terjadi bahwa Anda harus memperlakukan semua hasil dari kopilot sebagai draft awal, bukan jawaban akhir.
+
+00:10:27.140 --> 00:10:32.060
+Jadi tugas Anda adalah memeriksa SKL, menguji DAX, dan memvalidasi setiap langkah pipeline sebelum ditayangkan.
+
+00:10:32.420 --> 00:10:34.320
+Ini bukan tentang ketidakpercayaan, ini tentang tanggung jawab.
+
+00:10:35.040 --> 00:10:38.720
+Jika laporan menampilkan angka yang salah, bisnis tidak peduli bahwa kopilot yang menulis ukuran tersebut.
+
+00:10:39.100 --> 00:10:40.160
+Mereka peduli bahwa Anda menyetujui.
+
+00:10:40.160 --> 00:10:43.500
+Anggaplah kopilot sebagai asisten pintar, bukan pekerja otonom.
+
+00:10:44.240 --> 00:10:49.760
+Ia menangani hal-hal membosankan, query boilerplate, skrip berulang, titik awal, yang jauh lebih baik daripada halaman kosong.
+
+00:10:50.420 --> 00:10:51.660
+Namun Anda tetaplah yang memegang kendali.
+
+00:10:52.240 --> 00:10:55.700
+Anda yang memutuskan apa yang benar, apa yang masuk ke produksi, dan apa yang sebenarnya dilakukan bisnis.
+
+00:10:56.000 --> 00:10:57.280
+Lentak kelola tidak hilang begitu, Seth.
+
+00:10:57.660 --> 00:11:00.640
+Kualitas data, kontrol akses, kepatuhan, itu semua masih menjadi tanggung jawab Anda.
+
+00:11:01.020 --> 00:11:03.860
+Kopilot tidak membersihkan data Anda, atau menegakkan kebijakan keamanan.
+
+00:11:04.120 --> 00:11:09.460
+Ia bekerja sesuai izin yang telah Anda tetapkan, tetapi tidak akan memperbaiki model data yang rusak atau struktur akses yang buruk.
+
+00:11:10.160 --> 00:11:13.060
+Fondasi tersebut harus kokos sebelum kopilot dapat memberikan nilai nyata.
+
+00:11:13.780 --> 00:11:15.660
+Bagi profesional TI, sebenarnya ada sisi positifnya di sini.
+
+00:11:16.480 --> 00:11:20.700
+Kopilot menangani pekerjaan rutin, laporan standar, query dasar, dan pipeline harian.
+
+00:11:21.460 --> 00:11:23.360
+Itu membebaskan Anda untuk hal-hal yang lebih sulit.
+
+00:11:23.680 --> 00:11:27.120
+Penyetelan performa, arsitektur data, pemodelan kompleks, pekerjaan yang benar-benar berdampak.
+
+00:11:27.780 --> 00:11:29.960
+Dan karena pengguna bisnis bisa menjawab pertanyaan dasar mereka sendiri,
+
+00:11:30.180 --> 00:11:33.560
+tim Anda pendapatkan lebih sedikit permintaan rutin, lebih banyak waktu untuk analisis yang berarti.
+
+00:11:34.180 --> 00:11:35.020
+Jadi inilah kesimpulannya.
+
+00:11:35.460 --> 00:11:39.260
+Kopilot for Fabric adalah asisten AI yang mengubah bahasa sehari-hari menjadi pekerjaan data.
+
+00:11:39.260 --> 00:11:43.440
+Pipeline, query, laporan, Anda deskripsikan apa yang dibutuhkan dan kopilot menulis kodenya.
+
+00:11:43.960 --> 00:11:48.360
+Ya bukan sihir, ini adalah alat-alat yang membantu pemula untuk memulai dan para ahli bekerja lebih cepat.
+
+00:11:48.640 --> 00:11:51.860
+Jika Anda baru mengenal Fabric, Kopilot adalah teman terbaik yang tidak Anda sadari keberadaan.
+
+00:11:52.080 --> 00:11:56.680
+Berlanggananlah di platform podcast favorit Anda dan bagikan episode ini kepada siapapun yang mencoba memahami Microsoft Fabric.
+
+00:11:56.680 --> 00:12:26.660
+Terima kasih telah menonton!

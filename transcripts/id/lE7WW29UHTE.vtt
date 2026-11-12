@@ -1,0 +1,1303 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:04.040
+Jadi apa sebenarnya yang berubah ketika sebuah perusahaan beralih dari satu chatbot AI ke puluhan alat AI?
+
+00:00:04.440 --> 00:00:05.400
+Awalnya terasa sederhana.
+
+00:00:06.340 --> 00:00:08.420
+Satu tim menambahkan chatbot untuk dukungan pelanggan.
+
+00:00:09.140 --> 00:00:13.480
+Tim lain menggunakan AI untuk mencari dokumen perusahaan dan catatan rapat tertulis secara otomatis.
+
+00:00:14.420 --> 00:00:18.160
+Alur kerja dapat membaca email, mengambil permintaan, dan mengirimkannya ke sistem yang tepat.
+
+00:00:18.480 --> 00:00:23.760
+Tak lama kemudian, perusahaan memiliki beberapa model, agen yang bisa bertindak, dan alat yang menjangkau data bisnis.
+
+00:00:23.760 --> 00:00:29.760
+Setiap tim sering terhubung langsung ke penyedia AI yang berbeda dengan kunci, batas, dan aturan keamanannya sendiri.
+
+00:00:30.140 --> 00:00:31.740
+Lah, biaya menjadi sulit dilacak.
+
+00:00:32.300 --> 00:00:33.540
+Sebuah kunci bisa berakhir di tempat yang salah.
+
+00:00:33.980 --> 00:00:37.460
+Dan saat agen memanggil alat, mungkin tidak ada satu puncatan jelas tentang apa yang coba dilakukan.
+
+00:00:37.980 --> 00:00:39.700
+Di sinilah Microsoft AI Gateway berperan.
+
+00:00:40.200 --> 00:00:45.640
+Di akhir episode ini, Anda akan memahami apa itu, bagaimana blok pembangun yang menyatu, dan kapan saatnya mulai masuk akal bagi bisnis Anda.
+
+00:00:46.220 --> 00:00:48.620
+Anggaplah ini seperti gedung perkantoran dengan banyak pintu samping.
+
+00:00:48.800 --> 00:00:52.500
+Anda bisa membiarkan setiap pintu terbuka dan berharap orang menggunakannya dengan benar,
+
+00:00:52.500 --> 00:00:54.980
+atau Anda bisa mengarahkan semua orang melalui satu pintu masuk yang terkelu.
+
+00:00:55.420 --> 00:00:56.420
+Satu pintu depan untuk AI.
+
+00:00:56.960 --> 00:01:02.660
+Microsoft AI Gateway adalah sekumpulan fitur manajemen api azure yang memberikan satu titik kendali untuk lalu lintas AI Anda.
+
+00:01:03.180 --> 00:01:04.180
+Mari kita berdalam bahasa yang sederhana.
+
+00:01:04.860 --> 00:01:07.340
+Layankan pengaturan AI perusahaan Anda seperti gedung perkantoran modern.
+
+00:01:07.780 --> 00:01:10.140
+Model AI adalah ruangan tempat pemikiran terjadi.
+
+00:01:10.600 --> 00:01:14.620
+Agen Anda adalah pekerja yang bergerak di dalam gedung, memutuskan tugas resmiman yang harus dilakukan berikut.
+
+00:01:14.620 --> 00:01:20.280
+Alat adalah pintu layanan yang menuju ke tempat seperti SDM, keuangan, catatan pelanggan, dan file internal.
+
+00:01:20.280 --> 00:01:23.960
+AI Gateway adalah meja resepsionis dan meja keamanan di bagian depan.
+
+00:01:24.960 --> 00:01:30.040
+Ia memeriksa siapa yang datang, menerapkan aturan, dan mencetak kemana permintaan pergi sebelum mencapai bagian gedung lainnya.
+
+00:01:31.100 --> 00:01:32.580
+Sebuah permintaan mengikuti jalur yang sederhana.
+
+00:01:33.080 --> 00:01:35.980
+Sebuah aplikasi, kopilot, atau agen mengirimkan permintaan ke Gateway.
+
+00:01:36.760 --> 00:01:39.020
+Gateway memeriksa aturan yang berlaku bagi pemanggil tersebut,
+
+00:01:39.020 --> 00:01:43.000
+lalu mengirimkannya ke model, alat, agen, atau API bisnis yang disetujui.
+
+00:01:43.980 --> 00:01:47.580
+Dan saat respons kembali, ia melewati Gateway lagi sebelum mencapai pengguna.
+
+00:01:47.580 --> 00:01:52.700
+Satu jalur itu memberi bisnis tempat untuk mengelola akses, batas, pemeriksaan keamanan,
+
+00:01:52.780 --> 00:01:55.780
+dan pencatatan tanpa harus membangun kendali tersebut ke dalam setiap aplikasi.
+
+00:01:56.560 --> 00:01:59.020
+Ini juga memisahkan dua pekerjaan yang seringkali tercampur.
+
+00:01:59.600 --> 00:02:02.240
+Tim aplikasi dapat fokus pada pengalaman yang sebenarnya digunakan orang.
+
+00:02:02.860 --> 00:02:06.600
+Mereka membangun asisten dukungan, layar pencarian dokumen, atau alur kerja yang menghemat waktu.
+
+00:02:07.160 --> 00:02:10.300
+Sementara itu, tim platform mengelola aturan bersama di balik layar,
+
+00:02:10.440 --> 00:02:14.060
+memutuskan layanan mana yang disetujui, identitas mana yang dapat menggunakannya,
+
+00:02:14.060 --> 00:02:17.240
+seberapa besar trafik yang boleh dikirimkan sebuah proyek, dan apa saja yang dicatat.
+
+00:02:17.560 --> 00:02:20.600
+Anda tentu tidak ingin setiap tim menciptakan rencana keamanan baru untuk setiap jadwal.
+
+00:02:20.880 --> 00:02:23.840
+Microsoft iGateway dapat ditempatkan di depan berbagai jenis trafik AI.
+
+00:02:24.320 --> 00:02:28.240
+Gateway ini dapat mengelola panggilan ke model AI dan panggilan alat protokol konteks model MCP.
+
+00:02:28.920 --> 00:02:31.760
+Gateway ini juga dapat mengelola trafik agen-agen A2A,
+
+00:02:32.180 --> 00:02:34.100
+dan API bisnis yang sudah digunakan perusahaan Anda,
+
+00:02:34.300 --> 00:02:38.360
+seperti API untuk memeriksa pesanan, membaca kebijakan SDM, atau membuka tiket dukungan.
+
+00:02:39.020 --> 00:02:43.540
+Bagian terakhir ini penting karena sebagian besar perusahaan tidak perlu membuang sistem yang ada untuk menggunakan AI.
+
+00:02:44.280 --> 00:02:47.420
+Mereka hanya memerlukan cara yang aman bagi AI untuk bekerja dengan sistem tersebut,
+
+00:02:47.520 --> 00:02:49.460
+dan Gateway membantu menekan kendali di sekitar koneksi itu.
+
+00:02:50.180 --> 00:02:51.860
+Sekarang Microsoft iGateway bukanlah sebuah muda.
+
+00:02:52.300 --> 00:02:53.300
+Ia tidak menulis jawaban sendiri.
+
+00:02:53.700 --> 00:02:54.800
+Ia juga bukan alat membuat agen.
+
+00:02:55.060 --> 00:02:58.500
+Anda tidak menggunakannya untuk merancang asisten SDM atau mengajari agen keuangan apa yang harus dilakukan.
+
+00:02:58.740 --> 00:03:02.800
+Dan ia tidak menggantikan Microsoft Foundry tempat tim dapat membangun, menguji, dan mengelola proyek AI.
+
+00:03:03.340 --> 00:03:04.780
+Sebaliknya, ia berada di tengah-tengah.
+
+00:03:05.420 --> 00:03:07.860
+Foundry dapat membantu Anda bekerja dengan model dan agen AI,
+
+00:03:08.000 --> 00:03:12.720
+sementara Azure API Management AI Gateway membantu mengontrol trafik yang dihasilkan model agen dan alat tersebut.
+
+00:03:13.580 --> 00:03:16.820
+Anda mungkin sudah mengenal Azure API Management sebagai cara untuk mengelola API biasa.
+
+00:03:17.660 --> 00:03:21.700
+API hanyalah cara bagi satu perangkat lunak untuk meminta sesuatu dari perangkat lunak lain.
+
+00:03:22.380 --> 00:03:24.480
+AI Gateway memperluas gagasan yang sama untuk pekerjaan AI.
+
+00:03:25.020 --> 00:03:26.480
+Karena permintaan AI memunculkan pertanyaan,
+
+00:03:26.880 --> 00:03:27.820
+siapa yang menggunakan model mana?
+
+00:03:28.140 --> 00:03:29.360
+Berapa banyak token yang dikonsumsinya?
+
+00:03:29.720 --> 00:03:30.800
+Bisa kakin ini membangun alat?
+
+00:03:30.800 --> 00:03:32.900
+Arus Caprom ini mencapai model tersebut sama sekali.
+
+00:03:33.340 --> 00:03:36.240
+Menempatkan Gateway di tengah memberi Anda satu tempat untuk menjawab pertanyaan tersebut.
+
+00:03:36.920 --> 00:03:40.940
+Dan titik tekanan pertama muncul ketika setiap aplikasi mulai memilih titik akhir modelnya sendiri.
+
+00:03:42.040 --> 00:03:43.500
+Satu titik akhir, banyak model.
+
+00:03:44.220 --> 00:03:47.120
+Ketika aplikasi Anda terhubung langsung ke titik akhir model tunggal,
+
+00:03:47.380 --> 00:03:49.540
+pilihan tersebut akan tertanam ke dalam kode itu sendiri.
+
+00:03:50.400 --> 00:03:52.140
+Seringkali, kode terikat pada satu penyedia,
+
+00:03:52.340 --> 00:03:55.340
+satu penyebaran spesifik, satu wilayah Azure, dan serangkaian batasan tetap.
+
+00:03:55.920 --> 00:03:58.020
+Itu berjalan lancar saat proyek masih kecil,
+
+00:03:58.020 --> 00:04:01.040
+tetapi bayangkan sistem pendukung Anda berjalan pada satu model di satu wilayah.
+
+00:04:01.320 --> 00:04:03.820
+Beberapa bulan kemudian, model itu mencapai kapasitasnya,
+
+00:04:03.920 --> 00:04:05.600
+model yang lebih baik muncul dengan harga lebih murah,
+
+00:04:05.700 --> 00:04:07.140
+atau bisnis Anda perlu pindah ke wilayah lain.
+
+00:04:07.680 --> 00:04:10.600
+Tanpa lapisan bersama, setiap tim aplikasi harus mengubah kode mereka,
+
+00:04:10.840 --> 00:04:12.720
+menguncinya lagi, dan meluncurkan pembaruan.
+
+00:04:13.300 --> 00:04:14.860
+Hal itu membuat perubahan menjadi lambat antak.
+
+00:04:15.240 --> 00:04:18.260
+Microsoft AI Gateway memberikan pintu depan yang stabil untuk aplikasi Anda.
+
+00:04:18.620 --> 00:04:19.960
+Aplikasi mengirim permintaan ke sana,
+
+00:04:20.120 --> 00:04:23.320
+dan pilihan model dapat berubah di balik layar tanpa Anda perlu menyentuh aplikasi tersebut.
+
+00:04:23.320 --> 00:04:24.780
+Anggaplah ini seperti nomor telepon perusahaan.
+
+00:04:25.140 --> 00:04:28.560
+Pelanggan menghubungi satu nomor meskipun panggilan diteruskan ke tim atau kantor yang berbeda.
+
+00:04:29.140 --> 00:04:30.600
+Anda tidak perlu tahu bagaimana panggilan itu ditanggap.
+
+00:04:30.940 --> 00:04:33.860
+Dengan AI Gateway, aplikasi Anda memanggil satu titik akhir yang disetujui,
+
+00:04:33.980 --> 00:04:34.980
+dan di balik titik akhir tersebut,
+
+00:04:35.080 --> 00:04:37.300
+Gateway mengirimkan permintaan ke model yang sesuai dengan tugasnya.
+
+00:04:37.900 --> 00:04:41.040
+Microsoft juga memiliki pendekatan yang lebih baru yang disebut Unified Model API.
+
+00:04:41.900 --> 00:04:45.320
+Sederhananya, ini memungkinkan aplikasi menggunakan cara bergaya OpenAI
+
+00:04:45.320 --> 00:04:46.520
+untuk membuat permintaan,
+
+00:04:46.660 --> 00:04:50.520
+sementara Gateway dapat menghubungkan permintaan tersebut ke berbagai penyedia model di balik layar.
+
+00:04:50.520 --> 00:04:54.140
+Jadi, aplikasi Anda mengirim satu jenis permintaan yang familiar,
+
+00:04:54.420 --> 00:04:56.200
+dan Gateway menangani semua detail penyedia.
+
+00:04:57.060 --> 00:04:58.320
+Tergantung pada pengaturan Anda,
+
+00:04:58.480 --> 00:05:02.100
+permintaan tersebut dapat masuk ke penyebaran Azure OpenAI model di Microsoft Foundry,
+
+00:05:02.260 --> 00:05:04.280
+Antropic, Google Gemini, atau Amazon Bedrock.
+
+00:05:04.980 --> 00:05:06.420
+Terutam mengikuti aturan yang Anda tetapkan,
+
+00:05:06.480 --> 00:05:08.680
+bukan pilihan yang dikodekan secara permanen di dalam setiap aplikasi.
+
+00:05:09.100 --> 00:05:13.040
+Hal itu memberi ruang bagi tim platform untuk melakukan perubahan tanpa mengganggu pengguna aplikasi.
+
+00:05:13.420 --> 00:05:16.200
+Katakanlah perusahaan Anda menjalankan asisten AI untuk dukungan pelanggan.
+
+00:05:16.660 --> 00:05:17.640
+Sebagian besar pertandaan sedana.
+
+00:05:18.160 --> 00:05:18.820
+Di mana pesanan saya?
+
+00:05:18.820 --> 00:05:20.600
+Bagaimana cara pengatasan desain?
+
+00:05:21.040 --> 00:05:25.260
+Pertanyaan tersebut dapat dijawab oleh model yang lebih kecil dan lebih murah dengan cepat tanpa pengeluaran berikut.
+
+00:05:25.380 --> 00:05:29.580
+Kemudian, seorang pelanggan mengirim pertanyaan panjang dan tidak biasa yang memerlukan penalaran cermat atau pengetahuan.
+
+00:05:29.900 --> 00:05:32.280
+Gateway mengarahkan jenis permintaan tersebut ke model yang lebih kuat.
+
+00:05:32.700 --> 00:05:35.000
+Aplikasi dukungan tetap mengirim permintaan dengan cara yang sama,
+
+00:05:35.160 --> 00:05:37.880
+sehingga tim Anda tidak perlu tahu model mana yang menangani pertanyaan tersebut,
+
+00:05:38.000 --> 00:05:40.640
+dan pengembangan Anda tidak perlu menyambungkan koneksi terpisah untuk setiap opsi.
+
+00:05:42.300 --> 00:05:43.160
+Bagaimana dengan kapasitas?
+
+00:05:43.640 --> 00:05:45.000
+Titik akhir model AI memiliki batasan.
+
+00:05:45.000 --> 00:05:48.120
+Mereka hanya dapat menangani sejumlah lalu lintas tertentu dalam satu periode waktu.
+
+00:05:48.500 --> 00:05:50.380
+Jika setiap permintaan masuk ke satu penyebaran,
+
+00:05:50.440 --> 00:05:53.400
+satu jam sibuk saja dapat memperlambat atau memblokir seluruh pengalaman pengguna.
+
+00:05:53.700 --> 00:05:56.580
+Gateway dapat menyebarkan lalu lintas ke beberapa penyebaran yang disetujui,
+
+00:05:56.800 --> 00:06:00.960
+mengarahkan ke wilayah lain saat satu wilayah penuh atau menggunakan rute cadangan jika titik akhir mati.
+
+00:06:01.380 --> 00:06:03.280
+Itu tidak berarti permintaan harus berpindah-pindah secara ini.
+
+00:06:03.600 --> 00:06:04.660
+Anda tetap yang menetapkan rute.
+
+00:06:04.860 --> 00:06:08.800
+Misalnya, lalu lintas yang menghadap pelanggan diprioritaskan pada model utama
+
+00:06:08.800 --> 00:06:10.980
+sementara pengujian internal menggunakan jalur berbeda,
+
+00:06:10.980 --> 00:06:14.680
+atau satu wilayah menangani pengguna lokal sementara yang lain bertindak sebagai cadangan.
+
+00:06:15.860 --> 00:06:16.760
+Poinnya sederhana.
+
+00:06:17.440 --> 00:06:20.000
+Aplikasi Anda terhubung ke satu pintu depan yang terkontrol
+
+00:06:20.000 --> 00:06:24.080
+dan di baliknya platform dapat menyesuaikan model, wilayah, atau penyedia dengan gangguan minimal.
+
+00:06:24.720 --> 00:06:26.160
+Hal ini pernah karena AI berkembang dengan cepat.
+
+00:06:26.620 --> 00:06:28.980
+Model yang berfungsi hari ini mungkin bukan pilihan terbaik di bulan depan.
+
+00:06:29.380 --> 00:06:31.460
+Jika setiap aplikasi terhubung langsung ke penyediaannya,
+
+00:06:31.460 --> 00:06:33.280
+mengganti model akan menjadi proyek bagi setiap tim.
+
+00:06:33.740 --> 00:06:36.500
+Dengan gateway keputusan mengenai model berada di satu tempat yang sama.
+
+00:06:37.260 --> 00:06:39.160
+Sedikit catatan tentang API model terpadu.
+
+00:06:39.160 --> 00:06:41.500
+Microsoft mendaftarkannya sebagai perhatian cukup.
+
+00:06:42.300 --> 00:06:45.440
+Fitur perhatian jauh bisa berubah dan mungkin belum siap untuk semua kasus penggunaan produksi.
+
+00:06:45.960 --> 00:06:48.040
+Namun pola yang lebih besar tidak bergantung pada satu fitur itu.
+
+00:06:48.640 --> 00:06:51.480
+Karena manajemen API Anda sudah bisa berada di depan titik akhir model,
+
+00:06:51.700 --> 00:06:52.640
+menerapkan aturan perutian,
+
+00:06:53.040 --> 00:06:54.680
+dan membantu Anda mengelola lebih dari satu backend.
+
+00:06:55.300 --> 00:06:59.140
+API model terpadu bertujuan untuk mempermudah pengalaman lintas penyedia bagi aplikasi.
+
+00:06:59.820 --> 00:07:03.180
+Memilih model yang tepat hanya separuh pekerjaan karena model bisa menjawab pertanyaan,
+
+00:07:03.280 --> 00:07:07.300
+tetapi agen bisa memutuskan untuk melakukan tindakan yang menjangkau sistem perusahaan yang nyata.
+
+00:07:07.300 --> 00:07:09.360
+Mengatur agen dan alat
+
+00:07:09.360 --> 00:07:12.620
+Agen membawa AI lebih jauh daripada sekadar menjawab pertanyaan.
+
+00:07:13.040 --> 00:07:14.780
+Ini adalah perangkat menaka yang dapat melihat tugas,
+
+00:07:14.900 --> 00:07:16.000
+memilih dari opsi yang disetujui,
+
+00:07:16.240 --> 00:07:18.060
+dan memanggil alat atau layanan untuk menyelesaikan pekerjaan.
+
+00:07:18.560 --> 00:07:20.180
+Agen SDM mungkin mencari kebijakan cuti,
+
+00:07:20.280 --> 00:07:21.760
+agen dukungan mungkin memeriksa pesanan,
+
+00:07:21.920 --> 00:07:24.120
+dan agen keuangan mungkin menyiapkan permintaan pembayaran.
+
+00:07:24.880 --> 00:07:25.940
+Pemampuan itu bermanfaat,
+
+00:07:26.220 --> 00:07:27.700
+tetapi juga mengubah profil risiko.
+
+00:07:27.980 --> 00:07:29.940
+Jawaban yang salah dari model mungkin membingungkan seseorang,
+
+00:07:29.940 --> 00:07:32.360
+tetapi agen yang menggunakan alat yang salah dapat mengekspos data,
+
+00:07:32.500 --> 00:07:33.100
+mengubah catatan,
+
+00:07:33.260 --> 00:07:33.920
+atau mengekspos data,
+
+00:07:33.920 --> 00:07:35.920
+atau memicu proses yang seharusnya tidak boleh disentuh.
+
+00:07:36.060 --> 00:07:37.660
+Inilah sebabnya alat membutuhkan aturannya sendiri.
+
+00:07:38.160 --> 00:07:40.560
+Anda akan mendengar istilah MCP atau protokol konteks model.
+
+00:07:41.140 --> 00:07:42.920
+Anggap saja ini sebagai bentuk konektor standar
+
+00:07:42.920 --> 00:07:44.880
+yang memberikan agen cara yang dikenal untuk menemukan
+
+00:07:44.880 --> 00:07:46.060
+dan menggunakan alat perusahaan
+
+00:07:46.060 --> 00:07:48.080
+seperti layan pencarian dokumen atau api pencarian pesanan.
+
+00:07:48.600 --> 00:07:49.920
+Alih-alih membangun koneksi yang berbeda
+
+00:07:49.920 --> 00:07:51.580
+untuk setiap agen dan setiap sistem MCP
+
+00:07:51.580 --> 00:07:52.860
+memberikan pola umum bagi tim.
+
+00:07:53.500 --> 00:07:54.420
+Lalu ada A2A,
+
+00:07:54.420 --> 00:07:55.400
+agen ke agen,
+
+00:07:55.620 --> 00:07:57.900
+cara standar bagi satu agen untuk menghubungi agen lainnya.
+
+00:07:58.200 --> 00:07:58.780
+Sebagai contoh,
+
+00:07:58.940 --> 00:08:00.380
+agen dukungan meminta detail pengiriman
+
+00:08:00.380 --> 00:08:01.280
+kepada agen pengiriman
+
+00:08:01.280 --> 00:08:03.200
+alih-alih mencoba menghami sistem pengiriman itu sendiri.
+
+00:08:03.640 --> 00:08:04.940
+Itu terdengar rapi di atas kertas,
+
+00:08:05.060 --> 00:08:06.260
+tetapi rantai agen menjadi rumit
+
+00:08:06.260 --> 00:08:08.380
+ketika setiap koneksi memiliki aturan akses yang berbeda,
+
+00:08:08.500 --> 00:08:09.300
+kredensial tersembunyi,
+
+00:08:09.400 --> 00:08:10.400
+dan alat yang tidak diketahui.
+
+00:08:11.000 --> 00:08:13.120
+Bayangkan agen keuangan yang menjawab pertanyaan faktur.
+
+00:08:13.580 --> 00:08:15.040
+Agen tersebut seharusnya hanya menggunakan
+
+00:08:15.040 --> 00:08:16.460
+alat pencarian faktur yang disetujui,
+
+00:08:16.580 --> 00:08:18.520
+tetapi seseorang memberinya akses luas ke sistem keuangan
+
+00:08:18.520 --> 00:08:20.440
+karena lebih cepat daripada menentukan alat yang terbatas.
+
+00:08:20.900 --> 00:08:23.320
+Seorang pengguna mengirimkan perintah yang tampak tidak berbahaya,
+
+00:08:28.780 --> 00:08:30.360
+agen tersebut mungkin meminta data yang tidak perlu
+
+00:08:30.360 --> 00:08:33.000
+atau memulai alur kerja yang seharusnya memerlukan persetujuan menutupi.
+
+00:08:33.000 --> 00:08:33.920
+Agen tersebut tidak berbahaya.
+
+00:08:34.420 --> 00:08:36.560
+Agen tersebut hanya memiliki terlalu banyak kebebasan saat menangani.
+
+00:08:37.020 --> 00:08:39.440
+Microsoft AI Gateway memungkinkan Anda menempatkan kontrol
+
+00:08:39.440 --> 00:08:41.620
+di depan server MCP dan API bisnis.
+
+00:08:42.380 --> 00:08:44.600
+Alih-alih jalur langsung dari aplikasi AI ke basis data,
+
+00:08:44.940 --> 00:08:46.460
+Anda mengekspos alat kecil yang terkontrol
+
+00:08:46.460 --> 00:08:47.640
+untuk satu pekerjaan spesifik.
+
+00:08:48.160 --> 00:08:49.280
+Sebagai contoh, agen bertanya,
+
+00:08:49.460 --> 00:08:50.540
+periksa status pesanan ini.
+
+00:08:51.320 --> 00:08:52.980
+Alat tersebut hanya mengembalikan statusnya,
+
+00:08:52.980 --> 00:08:55.040
+bukan semua pesanan atau catatan pelanggan lengkap.
+
+00:08:55.340 --> 00:08:56.380
+Ini adalah tugas yang terbatas,
+
+00:08:56.380 --> 00:08:58.740
+dan Gateway memperiksa siapa yang meminta sebelum mengizinkan pointers.
+
+00:08:59.260 --> 00:09:00.760
+Identitas berada di pusat pengaturan ini.
+
+00:09:01.460 --> 00:09:02.720
+Dengan Microsoft Enter ID,
+
+00:09:02.940 --> 00:09:04.580
+aplikasi masuk melalui identitas terkelola
+
+00:09:04.580 --> 00:09:05.880
+alih-alih berbagi kunci penyedia.
+
+00:09:06.640 --> 00:09:08.500
+Identitas terkelola membuktikan siapa dirinya
+
+00:09:08.500 --> 00:09:10.640
+tanpa pengembang harus menyalin rahasia ke dalam kode.
+
+00:09:11.400 --> 00:09:12.860
+Setiap agen harus memiliki identitasnya sendiri.
+
+00:09:13.280 --> 00:09:15.520
+Dengan begitu, Anda dapat melihat agen mana yang memanggil alat,
+
+00:09:15.620 --> 00:09:17.560
+mencabut akses untuk satu agen tanpa mengganggu yang lain
+
+00:09:17.560 --> 00:09:18.620
+dan menerapkan aturan yang berbeda.
+
+00:09:18.620 --> 00:09:20.920
+Agen HR tidak boleh mewarisi izin agen keuangan
+
+00:09:20.920 --> 00:09:22.500
+hanya karena keduanya menggunakan AI.
+
+00:09:23.140 --> 00:09:24.100
+Ini mengikuti prinsip zeroter.
+
+00:09:24.100 --> 00:09:25.540
+Periksa setiap permintaan,
+
+00:09:25.800 --> 00:09:27.640
+berikan akses hanya yang diperlukan untuk tugas saat ini,
+
+00:09:27.840 --> 00:09:29.980
+dan anggap setiap prompt atau respons alat bisa saja tidak aman.
+
+00:09:30.420 --> 00:09:33.520
+Dalam prakteknya, agen mendapatkan izin untuk satu alat dan tindakan tertentu.
+
+00:09:33.880 --> 00:09:35.040
+Agen bisa membaca saldo cuti,
+
+00:09:35.160 --> 00:09:36.460
+tetapi tidak bisa mengunduh file pengajian.
+
+00:09:36.820 --> 00:09:38.160
+Agen bisa membuat draft tiket dukungan,
+
+00:09:38.240 --> 00:09:39.280
+tetapi tidak bisa menutup kasus.
+
+00:09:39.780 --> 00:09:42.020
+Gateway juga menerapkan pemeriksaan keamanan pada prompt
+
+00:09:42.020 --> 00:09:42.920
+dan lalu lintas alat.
+
+00:09:43.340 --> 00:09:44.820
+Jika permintaan berisi konten berbahaya
+
+00:09:44.820 --> 00:09:46.320
+atau data yang tidak boleh keluar dari sistem,
+
+00:09:46.500 --> 00:09:48.380
+kebijakan akan menghentikannya sebelum mencapai backend.
+
+00:09:48.880 --> 00:09:50.160
+Tidak ada filter yang menangkap segalanya,
+
+00:09:50.160 --> 00:09:52.480
+tetapi meriksa lalu lintas di titik bersama jauh lebih aman
+
+00:09:52.480 --> 00:09:54.740
+daripada berharap setiap pembuat agen menambahkan perlindungan yang sama.
+
+00:09:55.380 --> 00:09:57.140
+Anda juga memerlukan katalog alat yang disetuju.
+
+00:09:57.480 --> 00:10:00.480
+API Center bertindak sebagai katalog pribadi untuk API dan layanan MCP,
+
+00:10:00.620 --> 00:10:02.800
+sehingga tim menemukan alat yang tepat tanpa mencari dokumen lama
+
+00:10:02.800 --> 00:10:05.420
+atau mencari dokumen lama atau menyalin alamat web yang belum terverifikasi.
+
+00:10:05.560 --> 00:10:08.260
+Itu membantu mengubah keputusan alat mana yang boleh digunakan agen saya
+
+00:10:08.260 --> 00:10:09.620
+menjadi keputusan bisnis yang terkontrol.
+
+00:10:09.920 --> 00:10:11.300
+Kontrol keamanan melindungi jalur,
+
+00:10:11.400 --> 00:10:12.800
+tetapi juga menciptakan pertanyaan baru.
+
+00:10:13.160 --> 00:10:14.420
+Tim mana yang menggunakan jalur tersebut,
+
+00:10:14.420 --> 00:10:16.520
+dan seberapa banyak penggunaan AI yang mereka hasilkan.
+
+00:10:17.640 --> 00:10:19.200
+Biaya token batas dan visibilitas.
+
+00:10:19.840 --> 00:10:22.200
+Biaya AI bekerja berbeda dari lisensi perangkat lunak biasa.
+
+00:10:22.580 --> 00:10:23.600
+Menteran berjalan berdasarkan tuh.
+
+00:10:23.880 --> 00:10:24.340
+Apa itu token?
+
+00:10:24.660 --> 00:10:25.700
+Itu adalah potongan kecil tag.
+
+00:10:26.020 --> 00:10:27.380
+Satu kata pendek mungkin menggunakan satu tuh.
+
+00:10:27.680 --> 00:10:28.900
+Kata yang lebih panjang menggunakan lebih banyak.
+
+00:10:29.140 --> 00:10:30.380
+Model menghitung semua yang Anda kirimkan.
+
+00:10:30.800 --> 00:10:32.720
+Pertanyaan Anda, instruksi yang Anda tambahkan,
+
+00:10:32.960 --> 00:10:34.080
+dokumen apapun yang Anda lampirkan,
+
+00:10:34.140 --> 00:10:34.880
+dan menjauh berikannya kembali.
+
+00:10:35.160 --> 00:10:36.940
+Jadi, pertanyaan sederhana menggunakan sangat sedikit,
+
+00:10:37.040 --> 00:10:38.520
+tetapi agennya membaca dokumen kebijakan panjang,
+
+00:10:38.520 --> 00:10:39.580
+mengajukan pertanyaan tindak lanjut,
+
+00:10:39.580 --> 00:10:40.020
+memanggil alat,
+
+00:10:40.080 --> 00:10:42.160
+dan kemudian membuat jawaban terperinci dapat menggunakan jauh lebih banyak terperinci,
+
+00:10:42.260 --> 00:10:42.900
+dapat menggunakan jauh lebih banyak terperinci,
+
+00:10:42.980 --> 00:10:44.280
+dapat menggunakan jauh lebih banyak terperinci.
+
+00:10:44.400 --> 00:10:46.120
+Anda mungkin pernah melihat ini pada transkrip rapat.
+
+00:10:46.400 --> 00:10:47.440
+Anda melihat beberapa nama catat.
+
+00:10:48.020 --> 00:10:50.180
+Sistem AI juga memproses instruksi sistemnya,
+
+00:10:50.340 --> 00:10:51.760
+transkrip, data perusahaan yang diambil,
+
+00:10:51.860 --> 00:10:52.300
+hasil alat,
+
+00:10:52.620 --> 00:10:53.620
+dan respons akhir.
+
+00:10:54.320 --> 00:10:55.320
+Setiap bagian menambah pengguna.
+
+00:10:56.000 --> 00:10:59.220
+Itulah mengapa satu agen yang sibuk dapat menghabiskan batas model bersama dengan sangat cepat.
+
+00:10:59.580 --> 00:11:02.620
+Bayangkan sebuah tim yang menguji asisten pewasaran baru pada hari Jumat sore.
+
+00:11:02.920 --> 00:11:05.120
+Seseorang memberinya sekumpulan besar file kampanye
+
+00:11:05.120 --> 00:11:06.480
+dan memintanya untuk membandingkan,
+
+00:11:06.580 --> 00:11:07.060
+menulis ulang,
+
+00:11:07.140 --> 00:11:08.220
+dan meringkasnya secara berulang.
+
+00:11:08.540 --> 00:11:08.980
+Sementara itu,
+
+00:11:09.200 --> 00:11:11.140
+dukungan pelanggan bergantung pada kapasitas model yang sama
+
+00:11:11.140 --> 00:11:12.620
+bagi orang-orang yang mencoba mendapatkan bantung.
+
+00:11:12.860 --> 00:11:15.320
+Jika beban kerja pengujian menggunakan kuota bersama,
+
+00:11:15.440 --> 00:11:17.840
+asisten dukungan mungkin melambat atau gagal saat pelanggan membutuhkannya.
+
+00:11:18.340 --> 00:11:20.200
+Masalahnya bukan sekadar perusahaan mengeluarkan uang.
+
+00:11:20.700 --> 00:11:23.160
+Beban kerja yang salah mengambil kapasitas dari beban kerja yang penting.
+
+00:11:23.600 --> 00:11:27.160
+Gerbang AI pengelolaan API Azure dapat menerapkan batas sebelum hal itu terjadi.
+
+00:11:28.040 --> 00:11:29.420
+Anda dapat menetapkan batas permintaan,
+
+00:11:29.420 --> 00:11:30.000
+batas token,
+
+00:11:30.580 --> 00:11:31.700
+dan kuota untuk aplikasi,
+
+00:11:32.060 --> 00:11:32.200
+tim,
+
+00:11:32.200 --> 00:11:32.680
+proyek,
+
+00:11:32.840 --> 00:11:33.360
+atau konsumen.
+
+00:11:34.000 --> 00:11:35.520
+Kuota dapat mencakup jendela singkat,
+
+00:11:35.760 --> 00:11:36.320
+token per menit,
+
+00:11:36.520 --> 00:11:39.000
+atau periode yang lebih lama seperti jatah harian atau bulanan.
+
+00:11:39.940 --> 00:11:41.520
+Hal itu memberikan batasan pada sebuah beban kerja.
+
+00:11:41.700 --> 00:11:44.240
+Asisten pemasaran dapat memiliki anggaran yang sesuai dengan tujuannya.
+
+00:11:44.700 --> 00:11:47.480
+Dukungan pelanggan dapat memiliki jatah sendiri dan prioritas yang lebih tinggi.
+
+00:11:48.100 --> 00:11:50.040
+Ketika asisten pemasaran mencapai batasnya,
+
+00:11:50.140 --> 00:11:52.160
+gerbang dapat menolak atau memperlambat permintaan berikut.
+
+00:11:52.580 --> 00:11:55.660
+Dukungan pelanggan tetap berjalan karena satu proyek pengujian tidak dapat menggunakan sedia.
+
+00:11:56.040 --> 00:11:58.340
+Hal ini juga mengubah diskusi mengenai biaya bulanan.
+
+00:11:58.840 --> 00:11:59.660
+Tanda tampilan bersama,
+
+00:11:59.660 --> 00:12:02.240
+tim keuangan mungkin menerima satu tagian yang besar dan bertanya,
+
+00:12:02.380 --> 00:12:03.360
+siapa yang menggunakan semua ini?
+
+00:12:04.240 --> 00:12:08.140
+Jawabannya bisa sulit ditemukan ketika tim terhubung langsung ke layanan yang berbeda dengan kunci bersama.
+
+00:12:08.760 --> 00:12:09.840
+Gerbang dapat merekam pemanggil,
+
+00:12:10.040 --> 00:12:10.280
+model,
+
+00:12:10.520 --> 00:12:11.200
+penggunaan token,
+
+00:12:11.340 --> 00:12:11.980
+status respons,
+
+00:12:12.100 --> 00:12:13.820
+dan panggilan alat yang terkait dengan permintaan.
+
+00:12:14.340 --> 00:12:15.700
+Hal itu memberikan jejak yang lebih jelas.
+
+00:12:15.960 --> 00:12:19.140
+Anda dapat melihat apakah pengeluaran tersebut berasal dari asisten HR,
+
+00:12:19.340 --> 00:12:20.580
+lingkungan pengujian pengembang,
+
+00:12:20.720 --> 00:12:21.840
+chatbot yang menghadap pelanggan,
+
+00:12:21.840 --> 00:12:24.480
+atau agen yang terus mencoba lagi setelah kesalahan.
+
+00:12:25.060 --> 00:12:26.600
+Anda juga dapat melihat pola yang tidak biasa,
+
+00:12:26.600 --> 00:12:29.000
+seperti satu aplikasi mengirimkan perintah yang jauh lebih besar dari biasa.
+
+00:12:29.440 --> 00:12:31.100
+Jika tim Anda memulai di Microsoft Foundry,
+
+00:12:31.200 --> 00:12:32.840
+gerbang juga dapat terhubung ke pekerjaan tersebut.
+
+00:12:33.300 --> 00:12:35.540
+Proyek Foundry dapat menggunakan batas token tingkat proyek,
+
+00:12:35.620 --> 00:12:37.680
+sementara gerbang menerapkan aturan lalu lintas di sekitar.
+
+00:12:37.920 --> 00:12:40.400
+Hal itu memberikan titik awal yang lebih sederhana bagi pembuat AI,
+
+00:12:40.520 --> 00:12:43.420
+sementara tim platform tetap memiliki tempat bersama untuk mengolah batas dan pemantauan.
+
+00:12:43.980 --> 00:12:45.980
+Ada juga fitur berguna yang disebut penembolokan semantik.
+
+00:12:46.520 --> 00:12:47.640
+Katakanlah satu karyawan bertanya,
+
+00:12:47.640 --> 00:12:49.480
+di mana saya bisa menemukan kebijakan perjalanan.
+
+00:12:49.980 --> 00:12:51.540
+Beberapa detik kemudian karyawan lain bertanya,
+
+00:12:51.860 --> 00:12:53.200
+di mana kebijakan kita untuk perjalanan bisnis?
+
+00:12:54.080 --> 00:12:55.800
+Kata-katanya mungkin berbeda,
+
+00:12:55.920 --> 00:12:59.100
+namun maknanya bisa cukup mirip sehingga Gateway dapat menggunakan kembali jawaban sebelumnya
+
+00:12:59.100 --> 00:13:00.040
+daripada memanggil model lagi.
+
+00:13:00.580 --> 00:13:02.300
+Hal itu dapat menekan biaya dan mempercepat resmi.
+
+00:13:02.540 --> 00:13:04.640
+Cara ini yang cocok untuk pertanyaan di mana pemilik ulama sukat.
+
+00:13:05.000 --> 00:13:07.000
+Anda tidak akan menyimpan dalam cese permintaan
+
+00:13:07.000 --> 00:13:08.940
+tentang saldo cuti seseorang atau status pesanan
+
+00:13:08.940 --> 00:13:10.140
+karena jawaban tersebut bisa berubah.
+
+00:13:10.300 --> 00:13:11.860
+Perutuan juga dapat membantu efisiensi biayanya.
+
+00:13:11.860 --> 00:13:15.020
+Perusahaan dapat mengirim pekerjaan yang sesuai ke model berpiaya rendah
+
+00:13:15.020 --> 00:13:17.840
+menggunakan kapasitas yang sudah dipesan sebelum membayar penggunaan ekstra
+
+00:13:17.840 --> 00:13:20.120
+dan beralih ke jalur cadangan saat limit tercapai.
+
+00:13:20.880 --> 00:13:22.860
+Meski begitu, Gateway tidak menghilangkan kebutuhan kembali milik.
+
+00:13:23.700 --> 00:13:24.520
+Tim membutuhkan anggaran.
+
+00:13:24.800 --> 00:13:26.100
+Seseorang perlu meninjau jawaban model.
+
+00:13:26.540 --> 00:13:29.400
+Seseorang perlu memutuskan apakah suatu agen sebaiknya dibuat atau dipilih.
+
+00:13:29.480 --> 00:13:32.440
+Gateway menyediakan pengukur, pagar pembatas, dan catatan lalu lintas begini.
+
+00:13:32.860 --> 00:13:34.320
+Gateway tidak membuat keputusan bisnis yang sunturan.
+
+00:13:34.760 --> 00:13:36.740
+Setelah Anda dapat melihat dan mengendalikan lalu lintas,
+
+00:13:36.740 --> 00:13:39.320
+seluruh pengaturan menjadi lebih mudah dibayangkan melalui contoh seri hari.
+
+00:13:39.860 --> 00:13:40.920
+Perjalanan permintaannya sederhana.
+
+00:13:41.340 --> 00:13:43.000
+Bayangkan seorang asisten SDM di dalam perusahaan.
+
+00:13:43.520 --> 00:13:44.520
+Seorang karyawan bertanya,
+
+00:13:44.700 --> 00:13:47.720
+berapa hal cuti melahirkan yang bisa saya ambil dan bisakah Anda memulai permintaan saya?
+
+00:13:48.060 --> 00:13:50.940
+Tujuannya sederhana, memberikan jawaban yang cepat dan berguna kepada karyawan,
+
+00:13:51.100 --> 00:13:52.400
+lalu membantu langkah selanjutnya yang disetuju.
+
+00:13:52.740 --> 00:13:55.140
+Namun, asisten SDM tidak boleh memberikan data penggajian,
+
+00:13:55.240 --> 00:13:56.240
+membuka semua file SDM,
+
+00:13:56.320 --> 00:13:58.080
+atau menyimpan kunci penyedia model di dalam kodenya.
+
+00:13:58.640 --> 00:13:59.940
+Permintaan dimulai saat karyawan masuk,
+
+00:14:00.580 --> 00:14:02.880
+Sebelum asisten mengirim apapun ke model atau alat,
+
+00:14:02.980 --> 00:14:03.240
+Gateway,
+
+00:14:03.240 --> 00:14:04.640
+meriksa siapa karyawan tersebut,
+
+00:14:04.900 --> 00:14:06.740
+apakah mereka boleh menggunakan asisten SDM,
+
+00:14:06.900 --> 00:14:08.420
+dan batasan apa yang berlaku untuk aplikasi itu.
+
+00:14:08.860 --> 00:14:10.860
+Karyawan hanya melihat satu jenilah obrolan sederhana,
+
+00:14:11.000 --> 00:14:12.560
+sementara pemeriksaan ini terjadi belak-belak.
+
+00:14:12.780 --> 00:14:14.120
+Selanjutnya, asisten memerlukan jawaban.
+
+00:14:14.620 --> 00:14:18.000
+Pertanyaan kebijakan dasar dapat diarahkan ke endpoint model yang disetuju perusahaan.
+
+00:14:18.560 --> 00:14:21.260
+Jika endpoint tersebut sibuk atau mencapai batas yang ditetapkan,
+
+00:14:21.560 --> 00:14:24.420
+Gateway dapat mengikuti rute cadangan yang telah disetujui perusahaan.
+
+00:14:25.400 --> 00:14:28.260
+Karyawan tetap mendapatkan jawaban melalui asisten SDM yang sama,
+
+00:14:28.420 --> 00:14:31.120
+alih-alih melihat error karena penyebaran model tertentu sedang sibuk.
+
+00:14:31.120 --> 00:14:33.540
+Kemudian karyawan meminta untuk memulai permintaan cuti.
+
+00:14:33.920 --> 00:14:35.760
+Pada titik ini, agen memerlukan lebih dari sekadarmu.
+
+00:14:36.320 --> 00:14:39.580
+Agen memerlukan alat yang dapat memeriksa detail karyawan dan membuat permintaan yang tepat.
+
+00:14:40.080 --> 00:14:43.280
+Agen meminta untuk menggunakan alat MCP yang disetujui untuk pengolahan cuti.
+
+00:14:43.840 --> 00:14:45.140
+Gateway juga meriksa permintaan tersebut.
+
+00:14:45.520 --> 00:14:47.140
+Bisakah agen SDM ini memanggil alat tersebut?
+
+00:14:47.600 --> 00:14:49.820
+Apakah karyawan ini diizinkan untuk memulai jenis permintaan ini?
+
+00:14:50.260 --> 00:14:52.560
+Apakah tindakan tersebut sesuai dengan izin yang diberikan kepada agen?
+
+00:14:53.020 --> 00:14:54.720
+Barulah setelah itu alat tersebut menerima panggil.
+
+00:14:54.720 --> 00:14:57.520
+Alat tersebut tidak mengembalikan daftar catatan karyawan yang sangat besar.
+
+00:15:01.120 --> 00:15:05.040
+Karyawan, kebijakan yang berlaku, dan konfirmasi bahwa permintaan telah dibuat sebagai draft.
+
+00:15:05.920 --> 00:15:07.320
+Respon yang terbatas itu penting.
+
+00:15:07.440 --> 00:15:09.120
+Agen memiliki cukup informasi untuk membantu,
+
+00:15:09.220 --> 00:15:12.660
+tetapi tidak mendapatkan akses luas hanya karena mereakses luas, hanya karena mengajukan pertanyaan lupa.
+
+00:15:12.860 --> 00:15:15.940
+Sekarang, bayangkan karyawan menempelkan teks dari dokumen luar ke dalam obrolan.
+
+00:15:16.440 --> 00:15:21.180
+Teks tersebut berisi instruksi yang mencoba menipu asisten agar mengabaikan aturannya atau meminta informasi rahasia.
+
+00:15:21.720 --> 00:15:26.660
+Gateway dapat menerapkan pemeriksaan keamalan sebelum perintah mencapai model atau sebelum alat menerima permintaan.
+
+00:15:27.020 --> 00:15:28.960
+Jika permintaan melanggar aturan, proses dapat dihentikan di sana.
+
+00:15:28.960 --> 00:15:32.380
+Pemeriksaan serupa dapat meninjau respon sebelum mencapai karyawan.
+
+00:15:33.260 --> 00:15:35.480
+Tidak semua masalah berasal dari perintah yang buruk.
+
+00:15:36.000 --> 00:15:39.680
+Model mungkin menghasilkan respon yang menyertakan informasi yang seharusnya tidak dikembalikan.
+
+00:15:40.240 --> 00:15:43.580
+IT-Control bersama memberikan perusahaan tepat untuk mengeriksa jalur tersebut dan mendek lanjutinya.
+
+00:15:43.900 --> 00:15:45.540
+Sementara itu permintaan tersebut membuat catatan.
+
+00:15:45.880 --> 00:15:48.700
+Perusahaan dapat menautkan token yang digunakan ke proyek asisten SDM.
+
+00:15:49.000 --> 00:15:52.600
+Perusahaan dapat melihat model mana yang menangani pertanyaan apakah pemangkilan alat berhasil,
+
+00:15:52.720 --> 00:15:54.600
+apakah permintaan diblokir, dan berapa lama prosesnya.
+
+00:15:54.600 --> 00:15:56.760
+Hal itu membuat dukungan dan peninjauan menjadi jauh lebih.
+
+00:15:56.760 --> 00:16:00.500
+Jika tim SDM melaporkan bahwa karyawan tidak dapat membuat permintaan cuti,
+
+00:16:00.740 --> 00:16:02.800
+tim operasional dapat mencari pemangkilan alat yang gagal.
+
+00:16:03.460 --> 00:16:05.180
+Jika aturan keamanan melokir pertanyaan yang valid,
+
+00:16:05.340 --> 00:16:07.080
+mereka dapat melihat polanya dan meningkatkan kebijakan.
+
+00:16:07.460 --> 00:16:10.760
+Jika satu agen tiba-tiba menggunakan kapasitas AI jauh lebih banyak dari biasanya,
+
+00:16:10.880 --> 00:16:11.760
+perubahan itu menjadi terlik.
+
+00:16:12.320 --> 00:16:15.120
+Dan jika perusahaan memperbarui aturan seperti mewajibkan pemeriksaan tambahan
+
+00:16:15.120 --> 00:16:16.360
+sebelum permintaan cuti tertentu,
+
+00:16:16.540 --> 00:16:18.340
+mereka dapat memperbarui kebijakan gateway sekali saja.
+
+00:16:19.140 --> 00:16:22.100
+Perusahaan tidak perlu menunggu pembaruan kode terpisah di setiap aplikasi SDM chat,
+
+00:16:22.100 --> 00:16:24.360
+poten alur kerja yang menggunakan jalur terkontrol yang sama.
+
+00:16:25.260 --> 00:16:28.560
+Pola permintaan yang sama tetap berfungsi saat perusahaan menambahkan model lain,
+
+00:16:29.000 --> 00:16:30.920
+wilayah baru, alat internal lainnya,
+
+00:16:31.160 --> 00:16:33.700
+atau agen lain yang menangani tugas SDM terkait.
+
+00:16:34.300 --> 00:16:35.020
+Namun mulai yang kecil,
+
+00:16:35.460 --> 00:16:38.740
+gateway menjadi berguna ketika lalu lintas AI mulai menjadi lalu lintas bersama.
+
+00:16:39.100 --> 00:16:39.800
+Dari mana harus mulai?
+
+00:16:40.200 --> 00:16:41.320
+Jadi di mana Anda sebenarnya mau mulai?
+
+00:16:42.300 --> 00:16:44.280
+Mulailah dengan memilih satu beban kerja nyata.
+
+00:16:44.620 --> 00:16:46.420
+Mungkin asisten dukungan yang sudah memanggil model,
+
+00:16:46.420 --> 00:16:49.960
+atau agen yang direncanakan tim Anda untuk SDM keuangan atau pencarian dokumen internal.
+
+00:16:50.460 --> 00:16:52.680
+Jangan mencoba menangani setiap model dan setiap alat sekali.
+
+00:16:53.120 --> 00:16:54.420
+Adalah, jangan lintas menunjuk kekacauan.
+
+00:16:54.700 --> 00:16:56.980
+Alih-alih memberikan kunci penyedia langsung ke setiap aplikasi,
+
+00:16:57.280 --> 00:17:01.080
+letakkan titik akhir model beban kerja itu di balik gateway AI manajemen API Azure.
+
+00:17:01.600 --> 00:17:04.260
+Anggap ini sebagai satu titik pemeriksaan keamanan untuk trafik Ayan.
+
+00:17:04.640 --> 00:17:05.360
+Lo tetapkan dasarnya.
+
+00:17:05.720 --> 00:17:07.180
+Tunjuk pemilik yang jelas untuk beban kerja itu.
+
+00:17:07.520 --> 00:17:08.660
+Gunakan akses berbasis entra,
+
+00:17:08.840 --> 00:17:10.920
+agar hanya orang atau layanan yang tepat yang bisa mencapainya.
+
+00:17:11.320 --> 00:17:12.960
+Tetapkan batas token yang sesuai dengan tugas,
+
+00:17:13.200 --> 00:17:14.000
+tidak lebih, tidak akurat.
+
+00:17:14.000 --> 00:17:15.820
+Aktifkan pencatatan log agar Anda permintaan.
+
+00:17:16.080 --> 00:17:18.580
+Tambahkan satu aturan common konten yang bisa diuji dan ditinjau tim.
+
+00:17:18.860 --> 00:17:19.520
+Mulai dengan sederhana.
+
+00:17:19.940 --> 00:17:21.760
+Setelah jalur model dan batas akses berfungsi,
+
+00:17:21.900 --> 00:17:24.100
+tambahkan alat MCP yang disetujui satu per satu.
+
+00:17:24.720 --> 00:17:26.300
+Setiap alat harus memiliki tugas yang spesifik
+
+00:17:26.300 --> 00:17:27.980
+dan alasan yang jelas bagi agen untuk menggunakan.
+
+00:17:28.320 --> 00:17:29.360
+Jangan ada tambahan yang tidak perlu.
+
+00:17:30.180 --> 00:17:32.360
+Dari sana Anda berkembang dari satu beban kerja terkendali
+
+00:17:32.360 --> 00:17:33.940
+menjadi model alat dan agen bersama.
+
+00:17:34.560 --> 00:17:35.820
+Tanpa titik kontrol awal itu,
+
+00:17:36.020 --> 00:17:38.420
+setiap aplikasi AI baru menciptakan jalur tak terkelola
+
+00:17:38.420 --> 00:17:40.660
+ke data perusahaan dan tambahan biaya pada tagihan AI.
+
+00:17:40.660 --> 00:17:42.620
+Untuk wawasan berikutnya,
+
+00:17:42.760 --> 00:17:44.680
+simak Azure API Management Simply Explain
+
+00:17:44.680 --> 00:17:47.480
+yang menjadi dasar pembangunan Microsoft AI Gateway.

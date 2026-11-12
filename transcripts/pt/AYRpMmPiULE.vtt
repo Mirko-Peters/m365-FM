@@ -1,0 +1,973 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:04.100
+Olá a todos e bem-vindos a mais um episódio do Microsoft Knowledge Nuggets aqui na M305FM.
+
+00:00:04.620 --> 00:00:05.900
+Eu sou o seu apresentador do MilCupi.
+
+00:00:06.200 --> 00:00:09.780
+O tópico de hoje é algo que quase todo mundo já ouviu falar, mas poucas pessoas entendem de verdade.
+
+00:00:09.900 --> 00:00:10.420
+Agentes de IA.
+
+00:00:10.920 --> 00:00:14.540
+Exatamente um agente de IA e você realmente precisa ser um desenvolvedor para criar um um?
+
+00:00:15.140 --> 00:00:19.780
+Essas são perguntas justas, especialmente quando você ouve termos como agente declarativo e orquestração sendo usados por aí.
+
+00:00:20.580 --> 00:00:22.220
+Aqui está a resposta curta. Não, você não precisa programa.
+
+00:00:22.660 --> 00:00:25.800
+Ao final deste episódio, você entenderá o que é o Microsoft Agent Builder,
+
+00:00:25.860 --> 00:00:29.380
+como ele funciona e exatamente quando usá-lo em vez do Copilot Studio ou do iFoundry.
+
+00:00:29.380 --> 00:00:30.900
+Pegue seu café e vamos começar.
+
+00:00:31.880 --> 00:00:33.140
+O que o Agent Builder realmente é?
+
+00:00:33.780 --> 00:00:38.520
+O Microsoft Agent Builder é uma ferramenta sem código que vive dentro do Microsoft 365 Copilot.
+
+00:00:39.040 --> 00:00:41.640
+Ele permite que você crie o que a Microsoft chama de agentes declarativos.
+
+00:00:42.240 --> 00:00:46.240
+Em termos simples, isso significa que você projeta um assistente de IA pessoal apenas descrevendo o que deseja.
+
+00:00:46.300 --> 00:00:48.340
+Você não escreve código, você escreve código, você escreve frase.
+
+00:00:48.540 --> 00:00:49.480
+Então, como ele realmente funciona?
+
+00:00:50.080 --> 00:00:54.500
+Abra o Copilot no seu navegador, olhe para a barra lateral à esquerda e você verá uma seção chamada Agentes.
+
+00:00:55.280 --> 00:00:58.560
+Clique em Novo Agente e você verá duas guias no topo de escrever e configurar.
+
+00:00:59.380 --> 00:01:00.740
+A guia de escrever é a mágica.
+
+00:01:01.320 --> 00:01:05.040
+Você digita algo como, preciso de um agente que ajude a integrar novos membros da equipe.
+
+00:01:05.240 --> 00:01:10.240
+E o Copilot cria o agente para você, gerando um nome, descrição, instruções e até sugestões de prompts.
+
+00:01:11.240 --> 00:01:11.980
+Você fala, ele cria.
+
+00:01:12.580 --> 00:01:18.300
+A guia configurar serve para fazer ajustes manuais, alterar o nome, enviar um ícone, reescrever as instruções e adicionar fontes de conhecimento.
+
+00:01:18.300 --> 00:01:22.140
+A maioria das pessoas começa com descrever e depois muda para configurar para refinar as coisas.
+
+00:01:22.840 --> 00:01:24.180
+Pense no descrever como caminho rápido.
+
+00:01:24.740 --> 00:01:27.140
+Você apenas diz o que precisa e o agente aparece em segundos.
+
+00:01:27.740 --> 00:01:30.980
+Configurar é para o ajuste fino, como reorganizar os móveis depois que o cômodo está pronto.
+
+00:01:31.700 --> 00:01:34.420
+Mas aqui está o detalhe, o Agent Builder não é um site separado.
+
+00:01:35.120 --> 00:01:37.900
+Você não precisa ir para copilotstudio.microsoft.com ou qualquer outro portal.
+
+00:01:38.540 --> 00:01:42.940
+Ele vive dentro da barra lateral do Copilot no mesmo lugar onde você conversa com o Copilot todos os dias e isso é proposital.
+
+00:01:42.940 --> 00:01:47.620
+A Microsoft quer que isso pareça uma extensão natural do seu fluxo de trabalho, não uma ferramenta separada que você precisa aprender.
+
+00:01:48.220 --> 00:01:51.620
+A maioria dos usuários nunca percebe a complexidade nos bastidores, mas essa é a beleza disso.
+
+00:01:52.060 --> 00:01:53.160
+Pense nisso como um prédio comercial.
+
+00:01:53.580 --> 00:01:56.260
+Imagine que você trabalha em um grande prédio com salas para diferentes finalidades.
+
+00:01:56.400 --> 00:01:58.040
+Salas de reunião, depósitos, salas de descanso.
+
+00:01:58.640 --> 00:02:03.760
+Antigamente, se você precisasse de uma nova sala, teria que contratar um arquiteto, fazer planos, obter licenças e esperar semanas pela construção.
+
+00:02:04.240 --> 00:02:06.040
+Era assim que parecia criar um agente de IA.
+
+00:02:06.620 --> 00:02:07.800
+O consultor de agentes é o oposto.
+
+00:02:07.980 --> 00:02:10.020
+É como chegar para o administrador do prédio e dizer
+
+00:02:10.020 --> 00:02:13.060
+Preciso de uma sala pequena no terceiro andar com um quadro branco e boa iluminação.
+
+00:02:13.660 --> 00:02:14.680
+O administrador diz, entendido.
+
+00:02:15.120 --> 00:02:15.880
+E fica pronto em minutos.
+
+00:02:16.280 --> 00:02:17.720
+Você não projeta a hidráulica nem a fiação.
+
+00:02:18.180 --> 00:02:20.920
+Você apenas descreve a sala que precisa e o prédio cuida do resto.
+
+00:02:21.560 --> 00:02:22.200
+Essa é a ideia central.
+
+00:02:22.780 --> 00:02:27.580
+O construtor de agentes pega a sua descrição e a transforma em um agente funcional, cuidando de toda a parte técnica nos bastidores.
+
+00:02:28.660 --> 00:02:30.820
+Modelo de IA, fundamentação, as permissões.
+
+00:02:31.460 --> 00:02:32.600
+Você apenas diz a ele o que deseja.
+
+00:02:33.400 --> 00:02:34.720
+O fluxo de criação passo a passo.
+
+00:02:35.480 --> 00:02:36.780
+Então, como isso funciona na prática?
+
+00:02:37.400 --> 00:02:38.180
+Vamos ver como funciona.
+
+00:02:38.300 --> 00:02:39.820
+Você começa a barra lateral do Copilot.
+
+00:02:40.320 --> 00:02:43.100
+Clique em novo agente e você verá duas abas, descrever e configurar.
+
+00:02:43.680 --> 00:02:45.220
+A maioria das pessoas acessa a aba de escrever.
+
+00:02:45.640 --> 00:02:46.520
+É onde a mágica acontece.
+
+00:02:47.000 --> 00:02:48.440
+Na aba de escrever você digita o que precisa.
+
+00:02:49.160 --> 00:02:52.320
+Algo como, preciso de um agente que ajude a integrar novos membros da equipe.
+
+00:02:52.820 --> 00:02:54.280
+Clique em enviar e o Copilot começa a trabalhar.
+
+00:02:54.700 --> 00:03:01.280
+Ele pensa por alguns segundos e retorna com o agente completo, incluindo nome, descrição, instruções e sugestões de prontos para os usuários clicarem e começar a conversar.
+
+00:03:01.820 --> 00:03:03.740
+Tudo é gerado a partir daquela única frase que você ditou.
+
+00:03:04.060 --> 00:03:07.480
+Você pode aceitá-lo como está ou mudar para configurar e ajustar as coisas manualmente.
+
+00:03:07.960 --> 00:03:09.540
+A aba configurar é onde você coloca a mão na massa.
+
+00:03:09.540 --> 00:03:13.200
+Você pode alterar o nome do agente, fazer upload de um ícone personalizado ou reescrever a descrição.
+
+00:03:13.620 --> 00:03:15.520
+O campo de instruções é a parte mais importante.
+
+00:03:16.200 --> 00:03:17.880
+É aqui que você diz ao agente como se comportar.
+
+00:03:18.460 --> 00:03:19.960
+Escreva algo como você é um assistente de RH.
+
+00:03:20.460 --> 00:03:22.320
+Pondo as perguntas apenas usando os documentos fornecidos.
+
+00:03:22.320 --> 00:03:25.760
+Se você não souber a resposta, peça ao usuário para entrar em contato diretamente com o RH.
+
+00:03:26.820 --> 00:03:28.420
+Essa é sua instrução e o agente a segue.
+
+00:03:29.120 --> 00:03:30.240
+Depois há a sessão de conhecimento.
+
+00:03:30.660 --> 00:03:32.400
+É aqui que você conecta o agente a dados reais.
+
+00:03:33.300 --> 00:03:36.160
+Sem fonte de conhecimento, o agente é apenas um chatbot com personalidade.
+
+00:03:36.840 --> 00:03:38.060
+Ele não sabe nada sobre sua empresa.
+
+00:03:38.060 --> 00:03:47.360
+Então você adiciona fontes, sites do SharePoint, arquivos específicos do OneDrive, documentos enviados do seu computador, URLs públicas, chats do Teams ou e-mails do Outlook.
+
+00:03:48.180 --> 00:03:51.260
+O agente lê essas fontes e responde a perguntas com base no que encontra.
+
+00:03:52.480 --> 00:03:54.540
+Abaixo disso há uma sessão de recursos com chave seletora.
+
+00:03:55.040 --> 00:03:58.200
+Você pode permitir que o agente gere documentos, escreva código ou crie imagens.
+
+00:03:58.800 --> 00:04:01.760
+Ative-se se quiser que o agente produza documentos do Word ou slides do PowerPoint.
+
+00:04:02.260 --> 00:04:04.240
+Elas vêm desativadas por padrão, mas são fáceis de habilitar.
+
+00:04:04.240 --> 00:04:08.640
+Depois há os promptes sugeridos, perguntas pré-escritas que aparecem quando alguém abre o agente.
+
+00:04:09.180 --> 00:04:11.540
+Coisas como quais são os passos para a documentação de novos contratados.
+
+00:04:12.000 --> 00:04:13.300
+Ou encontre o documento da política de viagem.
+
+00:04:13.780 --> 00:04:16.780
+Você pode escrever os seus próprios ou deixar que o Copilot sugere com base na sua descrição.
+
+00:04:17.200 --> 00:04:19.020
+Quando tudo estiver pronto, clique em criar.
+
+00:04:19.620 --> 00:04:25.340
+O agente aparece na sua barra lateral do Copilot junto com outros agentes que você criou ou instalou e você pode começar a conversar com ele imediatamente.
+
+00:04:25.940 --> 00:04:29.920
+Se precisar mudar algo mais tarde, basta clicar nos três pontos ao lado do agente e escolher editar.
+
+00:04:30.380 --> 00:04:33.200
+Isso abre a guia de configuração novamente e você pode ajustar qualquer coisa.
+
+00:04:33.200 --> 00:04:35.180
+Instruções, fontes de conhecimento e prompts.
+
+00:04:35.920 --> 00:04:37.860
+E as mudanças entram em vigor imediatamente.
+
+00:04:39.040 --> 00:04:40.800
+De onde vem a inteligência, fonte de conhecimento?
+
+00:04:41.560 --> 00:04:44.500
+Agora você tem um agente funcional, mas de onde vem sua inteligência de fato?
+
+00:04:45.260 --> 00:04:45.580
+Ponto.
+
+00:04:45.860 --> 00:04:47.340
+É que o agente não sabe nada por padrão.
+
+00:04:47.960 --> 00:04:49.340
+É como um novo funcionário em seu primeiro dia.
+
+00:04:49.900 --> 00:04:53.500
+Eles podem ser inteligentes, mas não conhecem as políticas da sua empresa, seus produtos ou seus clientes.
+
+00:04:54.160 --> 00:04:58.120
+Eles precisam de materiais de treinamento e para um agente esses materiais são chamados de fontes de conhecimento.
+
+00:04:58.600 --> 00:05:02.120
+Sem dados de fundamentação, seu agente é apenas um chatbot genérico com personalidade.
+
+00:05:02.120 --> 00:05:06.020
+Ele pode manter uma conversa, mas não saberá nada específico sobre o seu negócio.
+
+00:05:06.660 --> 00:05:09.800
+É por isso que a sessão de conhecimento é a parte mais importante da criação de um agente.
+
+00:05:10.420 --> 00:05:12.160
+Você tem vários tipos de fontes que pode conectar.
+
+00:05:12.720 --> 00:05:14.000
+Sites do SharePoint são os mais comuns.
+
+00:05:14.380 --> 00:05:16.220
+Pense neles como as bibliotecas de documentos da sua empresa.
+
+00:05:16.700 --> 00:05:20.420
+Arquivos do OneDrive também funcionam se você tiver um documento específico armazenado na sua nuvem pessoal.
+
+00:05:20.880 --> 00:05:22.720
+Você pode carregar arquivos diretamente do seu computador.
+
+00:05:22.720 --> 00:05:27.460
+PDFs, documentos do Word, PowerPoints, planilhas do Excel, URLs públicas são outra opção.
+
+00:05:27.580 --> 00:05:30.760
+Assim você pode direcionar o agente para o site da sua empresa ou uma base de conhecimento pública.
+
+00:05:31.360 --> 00:05:35.120
+E se você tiver uma licença do Copilot, também pode conectar chats do Teams e e-mails do Outlook.
+
+00:05:35.660 --> 00:05:37.120
+Agora, há uma opção que importa muito.
+
+00:05:37.220 --> 00:05:38.720
+Usar apenas fontes especificadas.
+
+00:05:39.680 --> 00:05:42.920
+E o agente responderá apenas com base nos documentos de site que você forneceu.
+
+00:05:43.700 --> 00:05:46.140
+Ele não usará o conhecimento geral do modelo de IA para inventar coisas.
+
+00:05:46.480 --> 00:05:48.140
+Essa é a sua melhor defesa contra alucinações.
+
+00:05:48.140 --> 00:05:52.580
+Se você está criando um agente de RH que responde com base no manual do funcionário, você deve ativar isso,
+
+00:05:52.640 --> 00:05:55.120
+pois não quer que o agente invente uma política que não existe.
+
+00:05:55.940 --> 00:05:57.100
+Há limites a serem considerados.
+
+00:05:57.540 --> 00:06:01.780
+A Microsoft diz que arquivos individuais podem ter até 512 MB para a maioria dos tipos de documento,
+
+00:06:01.840 --> 00:06:03.560
+com arquivos do Excel limitados a 30 MB.
+
+00:06:04.120 --> 00:06:08.800
+Em termos práticos, você pode usar cerca de 100 arquivos do SharePoint por agente e cerca de 50 arquivos do OnDrive.
+
+00:06:09.420 --> 00:06:12.140
+Esses não são limites rígidos e imutáveis, mas são boas diretrizes para o planilha.
+
+00:06:13.700 --> 00:06:15.440
+Aqui está a parte que surpreende a maioria das pessoas.
+
+00:06:15.440 --> 00:06:18.820
+O agente respeita as suas permissões existentes do Microsoft 375.
+
+00:06:19.240 --> 00:06:20.120
+Ele não obtém acesso especial.
+
+00:06:20.540 --> 00:06:23.340
+Se você adicionar um site do SharePoint como fonte de conhecimento,
+
+00:06:23.500 --> 00:06:27.220
+o agente só poderá retornar informações que a pessoa que faz a pergunta já tem permissão para ver.
+
+00:06:27.980 --> 00:06:31.120
+Portanto, se um usuário normalmente não pode visualizar um documento específico no SharePoint,
+
+00:06:31.220 --> 00:06:32.480
+o agente também não mostrará ele.
+
+00:06:32.940 --> 00:06:35.260
+Isso é segurança integrada e funciona automaticamente.
+
+00:06:36.920 --> 00:06:37.720
+O atalho de modelo.
+
+00:06:38.180 --> 00:06:39.820
+Bem-vindos de volta ao Microsoft Knowledge Nugget.
+
+00:06:40.060 --> 00:06:40.720
+Eu sou o Mico Peters.
+
+00:06:41.280 --> 00:06:44.020
+Mas e se você quiser construir algo mais rápido do que começar do zero?
+
+00:06:44.020 --> 00:06:45.360
+É aí que os modelos entram.
+
+00:06:45.760 --> 00:06:48.400
+A Microsoft agora promove fortemente a criação baseada em modelos.
+
+00:06:48.840 --> 00:06:50.760
+Em vez de ficar encarando uma aba de descrição em branco,
+
+00:06:50.860 --> 00:06:53.700
+você escolhe entre agentes pré-configurados projetados para cenários comuns.
+
+00:06:54.100 --> 00:06:56.620
+O Carry Coach ajuda as pessoas a navegarem pelo desenvolvimento profissional.
+
+00:06:56.980 --> 00:06:58.800
+O Research pesquisa profundamente em múltiplas fontes.
+
+00:06:59.260 --> 00:07:00.780
+O Analyst foca em dados e planilhas.
+
+00:07:01.380 --> 00:07:04.020
+E existem também aqueles específicos para o setor dependendo da sua organização.
+
+00:07:04.540 --> 00:07:06.020
+A Microsoft continua adicionando mais ao Lua.
+
+00:07:06.400 --> 00:07:07.360
+Fluxo de trabalho é simples.
+
+00:07:07.760 --> 00:07:09.380
+Escolha um modelo próximo ao que você precisa.
+
+00:07:09.540 --> 00:07:10.380
+Em seguida, personalize.
+
+00:07:10.380 --> 00:07:12.680
+Substitua pelas suas próprias fontes de conhecimento.
+
+00:07:12.780 --> 00:07:14.640
+Ajuste as instruções e os prompts sugeridos.
+
+00:07:15.280 --> 00:07:19.520
+O modelo oferece uma estrutura inicial sólida, mas o valor real vem dos dados que você conecta.
+
+00:07:19.960 --> 00:07:20.820
+Pense nisso como cozinhar.
+
+00:07:21.100 --> 00:07:23.660
+Começar com uma receita é muito mais fácil do que inventar um prato do zero.
+
+00:07:24.340 --> 00:07:27.800
+A receita lhe dá as proporções, as técnicas e a ordem das operações.
+
+00:07:28.440 --> 00:07:30.080
+E ainda precisa adicionar seus próprios ingredientes?
+
+00:07:30.140 --> 00:07:30.880
+E esses são os dados da sua empresa.
+
+00:07:30.880 --> 00:07:33.100
+Mas você não precisa descobrir a estrutura por conta própria.
+
+00:07:33.580 --> 00:07:36.600
+Os modelos são ótimos para usuários de negócios que desejam rapidez sem complexidade.
+
+00:07:37.220 --> 00:07:40.460
+Se você não é um desenvolvedor e não quer aprender engenharia de prompt, o modelo lhe
+
+00:07:40.460 --> 00:07:41.960
+dá um agente funcional em minutos.
+
+00:07:42.740 --> 00:07:46.180
+Você só precisa saber o que quer que o agente faça e onde as informações relevantes residem.
+
+00:07:46.860 --> 00:07:49.380
+Apenas lembre-se, o modelo é um ponto de partida, não um produto final.
+
+00:07:50.100 --> 00:07:53.100
+O agente é tão útil quanto as fontes de conhecimento que você conecta a ele.
+
+00:07:53.100 --> 00:07:57.160
+O modelo de coach de carreira sem dados da empresa anexados é apenas um bot genérico
+
+00:07:57.160 --> 00:07:58.020
+de conselhos de carreira.
+
+00:07:58.020 --> 00:08:01.180
+Conecte-o aos seus documentos de treinamento internos e vagas de emprego.
+
+00:08:01.260 --> 00:08:03.880
+E, de repente, ele se torna uma ferramenta que realmente ajuda seus funcionários.
+
+00:08:04.980 --> 00:08:08.280
+O espectro, Agent Builder versus Copilot Studio versus AI Foundry.
+
+00:08:08.940 --> 00:08:10.540
+Agora, aqui está a pergunta que todos fazem.
+
+00:08:10.940 --> 00:08:14.200
+Quando você deve usar o Agent Builder versus as outras ferramentas que a Microsoft oferece?
+
+00:08:14.720 --> 00:08:17.620
+Porque a Microsoft lhe dá três maneiras de construir agentes e elas não são a mesma coisa.
+
+00:08:18.000 --> 00:08:18.920
+Pense nisso como espectro.
+
+00:08:18.920 --> 00:08:22.340
+De um lado você tem o Agent Builder, a opção mais simples, rápida e acessível.
+
+00:08:23.020 --> 00:08:26.220
+No meio, Copilot Studio, com mais potência, mais complexidade e mais controle.
+
+00:08:26.220 --> 00:08:29.960
+E, na outra ponta, o AI Foundry é a plataforma de desenvolvimento completa, onde você pode
+
+00:08:29.960 --> 00:08:31.660
+fazer quase tudo, mas é melhor saber o que está fazendo.
+
+00:08:32.280 --> 00:08:33.120
+Comece com o Agent Builder.
+
+00:08:33.640 --> 00:08:37.120
+Ele serve para assistentes internos de perguntas e respostas baseados em conteúdo do Microsoft
+
+00:08:37.120 --> 00:08:37.700
+301.
+
+00:08:37.960 --> 00:08:38.760
+Não requer programação.
+
+00:08:39.240 --> 00:08:41.720
+Você descreve o que quer, conecta algumas fontes de conhecimento e pronto.
+
+00:08:42.260 --> 00:08:43.080
+Mas existem compensações.
+
+00:08:43.520 --> 00:08:45.920
+Os agentes do Agent Builder permanecem dentro da sua organização.
+
+00:08:46.240 --> 00:08:47.740
+Você não pode colocá-los em um site público.
+
+00:08:48.140 --> 00:08:49.940
+Você não pode conectá-los ao Salesforce Now.
+
+00:08:50.560 --> 00:08:53.000
+Eles respondem a perguntas dos seus sites e documentos do SharePoint.
+
+00:08:53.140 --> 00:08:53.740
+É basicamente isso.
+
+00:08:53.740 --> 00:08:55.880
+Se é só isso que você precisa, o Agent Builder é perfeito.
+
+00:08:56.280 --> 00:08:57.360
+O Pilot Studio é o próximo nível.
+
+00:08:58.000 --> 00:09:00.460
+Esta é uma plataforma low-code para agentes de nível empresarial.
+
+00:09:00.940 --> 00:09:04.440
+Ele suporta fluxo de trabalho e processos reais com várias etapas, ramificações e lógica
+
+00:09:04.440 --> 00:09:04.740
+condicional.
+
+00:09:05.440 --> 00:09:09.040
+Possui conectores para sistemas externos como Salesforce, Dataverse e centenas de outros
+
+00:09:09.040 --> 00:09:09.480
+serviços.
+
+00:09:10.240 --> 00:09:13.440
+Você pode publicar agentes em sites, times Slack e até em aplicativos personalizados.
+
+00:09:13.860 --> 00:09:15.260
+Mas com esse poder vem a complexidade.
+
+00:09:15.700 --> 00:09:16.460
+Você precisa de licenciamento.
+
+00:09:16.780 --> 00:09:17.520
+Você precisa de governança.
+
+00:09:17.820 --> 00:09:19.320
+Seu departamento de tapes está envolvido.
+
+00:09:19.320 --> 00:09:21.820
+Não é algo que um usuário de negócio configura em 5 minutos.
+
+00:09:22.360 --> 00:09:24.220
+O AI Foundry está na outra ponta do espectro.
+
+00:09:24.580 --> 00:09:26.900
+Esta é a plataforma profissional de desenvolvimento de A da Microsoft.
+
+00:09:27.300 --> 00:09:28.340
+Apenas para desenvolver os profissionais.
+
+00:09:28.720 --> 00:09:30.560
+Você pode escolher entre milhares de modelos de A.
+
+00:09:30.820 --> 00:09:33.840
+Não apenas a Microsoft, mas Cloddy, Grock e até modelos especializados em saúde.
+
+00:09:34.260 --> 00:09:37.200
+Você pode ajustá-los, personalizá-los e criar soluções totalmente customizadas.
+
+00:09:37.740 --> 00:09:40.080
+Mas para a maioria dos usuários de negócio, o AI Foundry exagia.
+
+00:09:40.460 --> 00:09:42.980
+Se você está se perguntando, devo usar o Agent Builder ou o AI Foundry?
+
+00:09:43.380 --> 00:09:44.900
+A resposta é o Agent Builder.
+
+00:09:45.300 --> 00:09:47.440
+Então quando você muda do Agent Builder para o Copilot Studio?
+
+00:09:47.440 --> 00:09:48.800
+Por três motivos, príncipe.
+
+00:09:49.040 --> 00:09:50.980
+Primeiro motivo, você precisa de um agente voltado para o público-star.
+
+00:09:51.320 --> 00:09:53.540
+Os agentes do Agent Builder só funcionam na sua organização.
+
+00:09:53.900 --> 00:09:57.360
+Se você quer um robô de atendimento ao cliente no seu site público, você precisa do Copilot Studio.
+
+00:09:58.040 --> 00:10:00.140
+Segundo motivo, você precisa de fontes de dados exóticas.
+
+00:10:00.980 --> 00:10:05.180
+O Agent Builder se conecta ao SharePoint, OneDrive, conteúdo da web e dados do Microsoft 365.
+
+00:10:05.900 --> 00:10:11.000
+Mas se você precisa extrair dados de um banco SQL, Salesforce ou um servidor MCP, você precisa do Copilot Studio.
+
+00:10:11.920 --> 00:10:13.520
+Terceiro motivo, você precisa de ações de agenda.
+
+00:10:13.980 --> 00:10:16.660
+Isso significa que o agente não apenas responde a perguntas, ele realiza tarefas.
+
+00:10:16.660 --> 00:10:20.380
+Ele cria tickets, envia e-mails, atualiza registros e aciona fluxo de trabalho.
+
+00:10:20.880 --> 00:10:21.720
+O Agent Builder não pode fazer.
+
+00:10:22.160 --> 00:10:23.080
+O Copilot Studio pode.
+
+00:10:23.680 --> 00:10:25.140
+E isso é uma maneira prática de pensar sobre isso.
+
+00:10:25.360 --> 00:10:30.040
+Um bot de perguntas frequentes de RH que responde a dúvidas do seu manual do colaborador e território do Agent Builder.
+
+00:10:30.480 --> 00:10:36.240
+Um agente de suporte que lê um pedido, cria um chamado no serve sinal, roteia para a equipe certa e envia um e-mail de confirmação.
+
+00:10:36.320 --> 00:10:37.580
+É Copilot Studio.
+
+00:10:37.580 --> 00:10:45.480
+Um assistente diagnóstico médico que usa modelos especializados de saúde e precisa cumprir regulamentações rígidas é AI Foundry.
+
+00:10:46.000 --> 00:10:46.800
+A conclusão é simples.
+
+00:10:47.140 --> 00:10:47.940
+Comece com o Agent Builder.
+
+00:10:48.480 --> 00:10:53.180
+Ele é gratuito com sua licença do Copilot, leva minutos para configurar e lida com um número surpreendente de casos de uso.
+
+00:10:53.180 --> 00:10:58.460
+Só suba de nível quando encontrar um limite, quando precisar de acesso externo, fontes de dados diferentes ou ações reais.
+
+00:10:59.200 --> 00:11:00.900
+A maioria das pessoas nunca precisará deixar o Agent Builder.
+
+00:11:01.700 --> 00:11:04.100
+Os limites claros, o que o Agent Builder não pode fazer.
+
+00:11:04.660 --> 00:11:05.940
+Mas o Agent Builder tem sim limitações.
+
+00:11:06.440 --> 00:11:11.320
+Vamos falar sobre onde ele para, porque saber quando uma ferramenta não é ideal para o trabalho é tão importante quanto saber quando ela é.
+
+00:11:12.060 --> 00:11:14.580
+Um limite importante é se os agentes permanecem dentro do Copilot.
+
+00:11:15.120 --> 00:11:18.520
+Você abre o Copilot no seu navegador, vê seu agente na barra lateral e conversa com ele por lá.
+
+00:11:19.100 --> 00:11:21.660
+Mas você não pode trazê-lo para uma conversa no Teams ou adicioná-lo a um canal.
+
+00:11:21.660 --> 00:11:25.660
+Se você precisa de um agente que viva dentro do Teams, o Agent Builder já não te atende.
+
+00:11:26.300 --> 00:11:28.880
+Outro limite, nada de agentes voltados para o público externo.
+
+00:11:29.740 --> 00:11:32.680
+Tudo que você cria no Agent Builder permanece interno à sua organização.
+
+00:11:33.480 --> 00:11:36.980
+Você pode compartilhar agentes com colegas, mas não pode colocá-los em seu site público,
+
+00:11:37.500 --> 00:11:40.900
+incorporá-los em um portal de clientes ou permitir que alguém de fora da empresa os use.
+
+00:11:41.640 --> 00:11:45.380
+Se seu objetivo é um bot de atendimento ao cliente e sua página inicial, você precisa do Copilot Studio.
+
+00:11:45.840 --> 00:11:46.660
+Depois há complexidade.
+
+00:11:47.180 --> 00:11:49.880
+O Agent Builder foi projetado para perguntas e respostas no protocolo.
+
+00:11:49.880 --> 00:11:53.660
+Não há lógica de ramificação, etapas condicionais ou sequências de se isso, então aquilo.
+
+00:11:54.520 --> 00:11:57.940
+Você não pode conectá-lo ao Power Automate para disparar ações quando alguém faz uma pergunta.
+
+00:11:58.540 --> 00:12:00.100
+A gente responde a perguntas e é só isso.
+
+00:12:00.540 --> 00:12:03.680
+Se você precisa de um processo de várias etapas, como um agente que lê um pedido,
+
+00:12:04.000 --> 00:12:08.600
+verifica o estoque, cria uma ordem, envia uma confirmação, o Agent Builder, não fará isso.
+
+00:12:09.480 --> 00:12:11.160
+Conexões externas também estão fora de quantitação.
+
+00:12:11.160 --> 00:12:15.620
+Você não pode conectar o Agent Builder ao Salesforce, ServiceNow ou qualquer outro sistema de terceiros.
+
+00:12:16.300 --> 00:12:20.800
+Ele funciona com o conteúdo do Microsoft 365, SharePoint, OneDrive, Teams e e-mail quanto do público da web.
+
+00:12:21.200 --> 00:12:21.940
+Essa é a lista completa.
+
+00:12:22.420 --> 00:12:25.980
+Se o seu agente precisa extrair dados de um CRM ou atualizar um registro em um banco de dados externo,
+
+00:12:26.060 --> 00:12:28.140
+você precisa de outra ferramenta, você precisa de outra ferramenta.
+
+00:12:28.300 --> 00:12:29.760
+Recursos de conformidade também estão faltando.
+
+00:12:30.080 --> 00:12:33.340
+O Agent Builder não oferece suporte a lockbox ou chaves gerenciadas pelo cliente.
+
+00:12:33.420 --> 00:12:36.660
+Aqueles controles que permitem às organizações gerenciar chaves de criptografia
+
+00:12:36.660 --> 00:12:39.580
+ou exigir aprovação explícita antes que engenheiros da Microsoft acessem os dados.
+
+00:12:39.580 --> 00:12:43.140
+Se você trabalha em um setor altamente regulamentado onde isso é obrigatório,
+
+00:12:43.220 --> 00:12:44.660
+o Agent Builder não é a escolha certa.
+
+00:12:45.340 --> 00:12:47.860
+Está uma armadilha de licenciamento que pega as pessoas durante os testes.
+
+00:12:48.440 --> 00:12:51.580
+A base no SharePoint exige uma licença adequada do Microsoft 365 Copilot.
+
+00:12:52.120 --> 00:12:55.540
+Você não pode criar um agente que leia do SharePoint em um tenente exclusivo para desenvolvedores
+
+00:12:55.540 --> 00:12:56.500
+ou em uma conta de avaliação.
+
+00:12:56.980 --> 00:12:59.820
+O agente funcionará, mas não conseguirá acessar seus dados do SharePoint.
+
+00:13:00.380 --> 00:13:01.920
+E, finalmente, limites práticos de fontes.
+
+00:13:02.460 --> 00:13:05.100
+Por agente, você está considerando cerca de 100 arquivos do SharePoint,
+
+00:13:05.100 --> 00:13:08.900
+50 arquivos do OneDrive, 20 documentos carregados, 4 URLs públicas
+
+00:13:08.900 --> 00:13:10.000
+e 5 chats do Teams.
+
+00:13:10.700 --> 00:13:12.960
+Esses não são limites rígidos da Microsoft escritos em pedra,
+
+00:13:13.000 --> 00:13:14.500
+mas são o que a comunidade relata constantemente.
+
+00:13:14.980 --> 00:13:17.500
+Se o seu agente precisar pesquisar em centenas de documentos,
+
+00:13:17.580 --> 00:13:18.400
+você atingirá um teto.
+
+00:13:18.820 --> 00:13:19.840
+Então, aqui está a verdade honesta.
+
+00:13:20.100 --> 00:13:22.420
+Se você precisa de qualquer uma dessas coisas, o Agent Builder já não atende as suas necessidades.
+
+00:13:22.620 --> 00:13:23.300
+Isso é um fracasso.
+
+00:13:23.640 --> 00:13:26.320
+O Agent Builder foi feito para um trabalho específico, e ele faz esse trabalho bem.
+
+00:13:26.700 --> 00:13:28.480
+Mas quando suas necessidades se tornam mais complexas,
+
+00:13:28.540 --> 00:13:29.760
+é hora de olhar para o Copilot Studio.
+
+00:13:31.180 --> 00:13:32.740
+Segurança e governança, versão simples.
+
+00:13:33.180 --> 00:13:35.140
+Então, como a segurança funciona com o Agent Builder?
+
+00:13:35.540 --> 00:13:36.540
+E aqui está a versão simples.
+
+00:13:36.540 --> 00:13:40.100
+O Agent Builder respeita suas permissões existentes no Microsoft 365.
+
+00:13:40.420 --> 00:13:41.080
+Esse é o ponto principal.
+
+00:13:41.460 --> 00:13:43.960
+Ao adicionar um site do SharePoint como fonte de conhecimento,
+
+00:13:44.040 --> 00:13:45.240
+o agente não ganha acesso especial.
+
+00:13:45.740 --> 00:13:48.780
+Ele só pode retornar informações que a pessoa que faz a pergunta já tem permissão para ver.
+
+00:13:49.500 --> 00:13:52.100
+Se um usuário não pode visualizar um documento específico no SharePoint,
+
+00:13:52.260 --> 00:13:53.780
+o agente também não o mostrará para ele.
+
+00:13:54.240 --> 00:13:55.840
+As permissões são herdadas automaticamente.
+
+00:13:56.180 --> 00:13:58.300
+Isso é integrado e funciona sem qualquer configuração extra,
+
+00:13:58.820 --> 00:14:01.380
+tendo que você definir regras de acesso e acesso separadas para seus agentes.
+
+00:14:01.760 --> 00:14:04.080
+Eles seguem as mesmas regras que sua organização já possui.
+
+00:14:04.080 --> 00:14:08.060
+O botão de alternância e usar apenas fontes especificadas é muito útil.
+
+00:14:08.680 --> 00:14:12.540
+E o agente responderá apenas a partir dos documentos e sites que você fornecer explicitamente.
+
+00:14:13.360 --> 00:14:15.180
+Ele ignora o conhecimento geral do modelo de IA.
+
+00:14:15.680 --> 00:14:17.580
+Esta é sua principal defesa contra alucinações.
+
+00:14:18.400 --> 00:14:21.800
+O agente não pode inventar uma política se for forçado a usar apenas o manual do funcionário.
+
+00:14:22.500 --> 00:14:24.360
+Simples e eficaz, e nós sempre recomendamos.
+
+00:14:25.180 --> 00:14:26.000
+Uma coisa a observar.
+
+00:14:26.160 --> 00:14:28.880
+As políticas de nível de TENA podem substituir o que você vê na interface.
+
+00:14:28.880 --> 00:14:31.840
+Se o seu administrador de TI desativou a pesquisa na web,
+
+00:14:31.900 --> 00:14:33.480
+no copado é que por meio de uma política de TENA,
+
+00:14:33.540 --> 00:14:36.540
+o botão de alternância de conteúdo da web no Agent Builder pode ainda aparecer ativado,
+
+00:14:36.580 --> 00:14:37.060
+mas não funcionará.
+
+00:14:37.260 --> 00:14:37.980
+A política prevalece.
+
+00:14:38.280 --> 00:14:41.420
+Então, se você está criando um agente e se perguntando por que o conteúdo da web não funciona,
+
+00:14:41.620 --> 00:14:42.820
+verifique com o seu administrador primeiro.
+
+00:14:43.480 --> 00:14:46.200
+Você não precisa se tornar um especialista em segurança para usar o Agent Builder.
+
+00:14:46.740 --> 00:14:49.160
+Apenas entenda que o agente erra as regras da sua organização.
+
+00:14:49.800 --> 00:14:52.220
+Ele não cria novas permissões nem ignora as já existentes.
+
+00:14:52.220 --> 00:14:55.300
+Se seus dados estão seguros no SharePoint, eles estão seguros no seu agente.
+
+00:14:55.680 --> 00:15:00.080
+Para organizações que precisam de mais monitoramento, gestão de ciclo de vida, controle de identidade,
+
+00:15:00.480 --> 00:15:02.260
+existe uma ferramenta chamada Agent Precising.
+
+00:15:02.740 --> 00:15:04.980
+É a camada de governança da Microsoft para agentes de IA,
+
+00:15:05.360 --> 00:15:07.360
+mas esse é um tópico separado para um episódio futuro.
+
+00:15:07.780 --> 00:15:10.200
+Para a maioria das pessoas que usam o Agent Builder, segurança integrada o suficiente.
+
+00:15:11.160 --> 00:15:13.280
+Então, esse é o Microsoft Agent Builder, linguagem simples.
+
+00:15:13.960 --> 00:15:17.360
+A maneira mais fácil de criar um assistente de IA útil para sua equipe sem escrever nenhum código.
+
+00:15:18.040 --> 00:15:19.200
+Aqui está a sua tarefa dessa semana.
+
+00:15:19.200 --> 00:15:22.560
+Abra o Copilot, clique em Novo Agente, comece pela aba Descrever,
+
+00:15:22.840 --> 00:15:26.220
+escolha o modelo ou descreva o que precisa, conecte um site do SharePoint e teste.
+
+00:15:27.020 --> 00:15:28.740
+Você terá um agente funcional em menos de 10 minutos.
+
+00:15:29.260 --> 00:15:32.040
+Se isso ajudou, inscreva-se na sua plataforma de podcast favorita
+
+00:15:32.040 --> 00:15:34.180
+e compartilhe com alguém que está começando sua jornada em IA.
+
+00:15:34.920 --> 00:15:36.980
+Eu sou Mirko Peters e vejo você no próximo episódio.

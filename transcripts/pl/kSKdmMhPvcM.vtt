@@ -1,0 +1,814 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:04.280
+Czy masz czasem wrażenie, że Twoje rozmowy z Microsoft 365 Bihat jedynie ślizgają się po powierzchni?
+
+00:00:04.400 --> 00:00:09.440
+Prosisz narzędzie o pomoc w podjęciu ważnych decyzji, ale nie ma ono dostępu do Twoich prywatnych danych ani kluczowych aplikacji.
+
+00:00:09.620 --> 00:00:11.000
+Ta luka wcale nie jest mała.
+
+00:00:11.160 --> 00:00:15.860
+To różnica między ogólnikowymi odpowiedziami a wnioskami osadzonymi w kontekście Twojego biznesu.
+
+00:00:16.020 --> 00:00:18.400
+W tym podcaście pokażę Ci, jak wypełnić tę lukę.
+
+00:00:18.620 --> 00:00:24.660
+Dowiesz się, jak wybrać odpowiednie systemy do połączenia, jak zbudować łącznik Copilot i jak zabezpieczyć go przy użyciu Teams Toolkit.
+
+00:00:24.660 --> 00:00:30.980
+To materiał dla twórców i deweloperów, którzy znają Microsoft 365 i chcą, by Bihat współpracował z ich głównymi aplikacjami.
+
+00:00:31.200 --> 00:00:36.000
+Zanim naprawimy ten problem, musimy porozmawiać o tym, dlaczego Bihat tak często sprawia wrażenie ślepego.
+
+00:00:36.220 --> 00:00:38.220
+Dlaczego Bihat wydaje się częściowo ślepy?
+
+00:00:38.460 --> 00:00:44.180
+Większość osób przychodzi do Bihat oczekując, że zadziała on jak doświadczony strateg, gotowy z odpowiedziami osadzonymi w realiach ich firmy.
+
+00:00:44.400 --> 00:00:46.980
+Jednak powód, dla którego tak często rozczarowuje, jest prosty.
+
+00:00:47.120 --> 00:00:48.680
+Nie widzi pełnego obrazu sytuacji.
+
+00:00:48.880 --> 00:00:53.480
+W standardowej konfiguracji radzi sobie nieźle z informacjami, które już posiada Microsoft 365.
+
+00:00:53.480 --> 00:00:58.260
+W wiadomości Outlook, czaty Teams, pliki OnDrive, biblioteki SharePoint.
+
+00:00:58.440 --> 00:01:02.160
+Problem pojawia się, gdy użytkownicy pytają o dane znajdujące się gdzie indziej.
+
+00:01:02.420 --> 00:01:08.200
+System CRM obsługujący sprzedaż ERP śledzący zapasy i faktury, czy narzędzie projektowe monitorujące terminy.
+
+00:01:08.440 --> 00:01:14.300
+Gdy Bihat nie może sięgnąć do tych systemów, zaczyna udzielać połowicznych odpowiedzi, które bardziej przypominają zgadywanie niż wskazówki.
+
+00:01:14.540 --> 00:01:15.620
+Weźmy powszechny przykład.
+
+00:01:15.840 --> 00:01:20.200
+Kierownik sprzedaży rozpoczyna poniedziałkowe spotkanie, pytając Bihat o bieżący portfel zleceń.
+
+00:01:20.200 --> 00:01:25.540
+Jasne, Bihat wyciągnie informacje z ostatnich wątków mailowych, dokumentów ofertowych, a może nawet notatek ze spotkań.
+
+00:01:25.680 --> 00:01:28.480
+Lecz bez dostępu do CRM te liczby są niekompletne.
+
+00:01:28.700 --> 00:01:35.440
+Zamiast wiarygodnej prognozy odpowiedź jest niejasna, zawiera mało konkretnych danych i jest niemal bezużyteczna przy ważnych decyzjach.
+
+00:01:35.580 --> 00:01:38.620
+To, co miało być szybkim wnioskiem, staje się dodatkową pracą.
+
+00:01:38.840 --> 00:01:43.540
+Menedżer musi teraz otworzyć kolejny system, pobrać prawdziwe liczby i wyjaśnić zespołowi braki.
+
+00:01:43.540 --> 00:01:48.200
+W jednej chwili zaufanie do narzędzia spada. Ten schemat powtarza się w innych działach.
+
+00:01:48.400 --> 00:01:54.160
+Dyrektor finansowy pyta o sumę zaległych faktur, ale bez wglądów w ERP Bihat generuje pusty raport.
+
+00:01:54.320 --> 00:01:59.620
+Kierownik projektu pyta o terminy realizacji, ale bez dostępu do systemu śledzenia Bihat rozkłada ręce.
+
+00:01:59.840 --> 00:02:05.300
+Każdy scenariusz kończy się tak samo skakaniem między Bihat, a właściwym systemem i ręcznym uzupełnianiem brakujących elementów.
+
+00:02:05.500 --> 00:02:09.360
+Zadaj sobie pytanie, gdyby Twój zespół musiał sprawdzać każdą odpowiedź Bihat w innym narzędziu,
+
+00:02:09.360 --> 00:02:14.280
+czy nadal używaliby go jako pierwszego punktu kontaktu? To jest koszt w praktyce, ciągłe przełączanie kontekstu.
+
+00:02:14.440 --> 00:02:19.360
+Pracownicy wchodzą i wychodzą z Bihat, kopiując liczby do wątku, wklejając zrzuty ekranu z pulpitów nawigacyjnych
+
+00:02:19.360 --> 00:02:21.800
+lub odtwarzając analizy, które powinny być automatyczne.
+
+00:02:22.020 --> 00:02:27.160
+Zamiast usprawnionego przepływu pracy opartego na AI doświadczenie, to cofa się do ręcznego, łatania, dziur.
+
+00:02:27.320 --> 00:02:32.560
+Z czasem ludzie przestają zawracać sobie głowę pytaniem go o rzeczy, które naprawdę mają znaczenie, zwłaszcza gdy stawka jest wysoka.
+
+00:02:32.560 --> 00:02:37.240
+Wracają do starych nawyków pobierania plików, tabel przestawnych czy szukania danych w wielu różnych aplikacjach.
+
+00:02:37.420 --> 00:02:41.320
+Ostatecznie Bihat zostaje sprowadzony do zadań powierzchownych nie dlatego, że jego algorytmy są słabe,
+
+00:02:41.440 --> 00:02:44.400
+ale dlatego, że nie łączy się z miejscami, w których znajdują się prawdziwe odpowiedzi.
+
+00:02:44.680 --> 00:02:46.080
+Kierownictwo widzi tego efekty.
+
+00:02:46.300 --> 00:02:50.260
+Kiedy adopcja rozwiązania jest nierówna, zadają sobie pytanie, czy wdrożenie było tego warte.
+
+00:02:50.540 --> 00:02:54.880
+Dział IT przyjmuje skargi, które nie wskazują na błędy w platformie, lecz na luki w jej zasięgu.
+
+00:02:54.880 --> 00:03:00.240
+Pracownicy, wdrożeni z myślą o inteligentniejszym kopilocie, zaczynają traktować go jak ograniczony hotbot.
+
+00:03:00.380 --> 00:03:04.800
+Ta rozbieżność między oczekiwaniami a rzeczywistością prowadzi do powolnej erozji zaufania.
+
+00:03:05.060 --> 00:03:11.860
+Gdy zaufanie słabnie, tempo pracy maleje, a gdy wyniki produktywności nie spełniają szumnych zapowiedzi, wsparcie organizacyjne słabnie.
+
+00:03:12.060 --> 00:03:15.380
+Prawda jest taka, że nic z tego nie dzieje się dlatego, że Bihatowi brakuje inteligencji.
+
+00:03:15.620 --> 00:03:17.500
+Dzieje się tak, ponieważ brakuje mu wglądu w dane.
+
+00:03:17.760 --> 00:03:21.580
+Model pracuje na tym, co ma, ale mając tylko połowę danych wejściowych, generuje połowiczne wyniki.
+
+00:03:21.580 --> 00:03:24.060
+Dobra wiadomość jest taka, że tę lukę można naprawić.
+
+00:03:24.260 --> 00:03:28.040
+Dzięki odpowiedniemu podejściu możesz zapewnić Bihatowi kontrolowany dostęp do kluczowych systemów.
+
+00:03:28.220 --> 00:03:33.460
+Dzięki temu odpowiedzi stają się konkretne, a nie ogólne, a proces podejmowania decyzji przyspiesza, zamiast zwalniać.
+
+00:03:33.540 --> 00:03:40.200
+To prowadzi do ważniejszego pytania, co odróżnia narzędzie, które wydaje się pomocne, od takiego, które rzeczywiście przynosi biznesowe rezultaty.
+
+00:03:40.440 --> 00:03:42.640
+Różnica między asystentem a kopilotem.
+
+00:03:42.840 --> 00:03:49.280
+Tym, co sprawia, że Bihat wydaje się ograniczony dla wielu zespołów, jest to, że w swojej istocie nadal działa bardziej jak asystent niż kopilot.
+
+00:03:49.280 --> 00:03:55.680
+Samodzielnie świetnie radzi sobie z odpowiadaniem na pytania, podsumowywaniem e-maili i wyciąganiem szybkich notatek ze środowiska Microsoft 365.
+
+00:03:56.200 --> 00:03:59.780
+Jednak to zadania powierzchowne oparte tylko na tym, co jest już dostępne na widoku.
+
+00:04:00.000 --> 00:04:04.140
+Asystent dostarcza komentarza, kopilot pracuje u Twojego boku, kształtując realne decyzje,
+
+00:04:04.240 --> 00:04:09.100
+a jedynym sposobem na te zmiany jest zapewnienie narzędziu kontrolowanego dostępu do Twoich systemów ewidencyjnych,
+
+00:04:09.100 --> 00:04:12.120
+danych i procesów, które definiują sposób działania Twojej firmy.
+
+00:04:12.280 --> 00:04:15.720
+To kluczowe rozróżnienie, które większość organizacji pomija przy wdrożeniu.
+
+00:04:15.920 --> 00:04:19.080
+Oczekują, że Bihat dostarczy głębokich spostrzeżeń od razu po uruchomieniu,
+
+00:04:19.180 --> 00:04:21.740
+ale same podsumowania konwersacyjne nie czynią z niego kopilota.
+
+00:04:21.980 --> 00:04:26.280
+Bez konektorów zasilających go informacjami z Twojego systemu CRM, ERP czy aplikacji niestandardowych
+
+00:04:26.280 --> 00:04:28.080
+jest to w zasadzie tylko zaawansowany notatnik.
+
+00:04:28.280 --> 00:04:32.160
+Dzięki tym powiązaniom zaczyna się wydawać, że narzędzie to naprawdę uczestniczy w procesie decyzyjnym,
+
+00:04:32.160 --> 00:04:35.660
+odzwierciedlając rzeczywiste liczby bieżące, zatwierdzenia lub precyzyjne harmonogramy,
+
+00:04:35.660 --> 00:04:37.940
+zamiast tylko przeformułowywać to, co już jest widoczne.
+
+00:04:38.100 --> 00:04:42.840
+Oto prosty model myślowy, którego możesz użyć, aby ocenić, czy masz do czynienia z asystentem czy z kopilotem.
+
+00:04:42.980 --> 00:04:45.880
+Po pierwsze, czy sztuczna inteligencja ma dostęp do systemów operacyjnych miejsc,
+
+00:04:46.000 --> 00:04:49.500
+w których faktycznie znajdują się kluczowe dane, a nie tylko do łańcuchów wiadomości, e-mail czy plików.
+
+00:04:49.620 --> 00:04:53.560
+Po drugie, czy przestrzega uprawnień opartych na rolach, tak aby zwracane informacje były bezpieczne
+
+00:04:53.560 --> 00:04:55.400
+i dostosowane do osoby, która z nich korzysta.
+
+00:04:55.400 --> 00:04:59.060
+Po trzecie, czy potrafi realnie wpływać na wyniki, co oznacza, że jej odpowiedzi rozwiązują zadania
+
+00:04:59.060 --> 00:05:02.140
+lub przyspieszają punkty decyzyjne, zamiast odsyłać Cię gdzie indziej w celu potwierdzenia?
+
+00:05:02.340 --> 00:05:05.780
+Jeśli możesz odhaczyć wszystkie trzy punkty, oznacza to, że korzystasz z możliwości kopilota.
+
+00:05:06.000 --> 00:05:08.160
+Jeśli nie, wciąż znajdujesz się na poziomie asystenta.
+
+00:05:08.360 --> 00:05:10.960
+Prawdziwe przykłady sprawiają, że to rozróżnienie staje się wyraźniejsze.
+
+00:05:11.200 --> 00:05:14.000
+Wyobraź sobie zespół finansowy pytający bichat o trendy wydatków.
+
+00:05:14.240 --> 00:05:17.160
+Jako asystent przeszukuje załączniki e-maili i udostępnione foldery,
+
+00:05:17.160 --> 00:05:19.100
+aby stworzyć ogólny obraz kosztów podróży.
+
+00:05:19.240 --> 00:05:20.620
+To przydatne, ale niepełne.
+
+00:05:20.820 --> 00:05:24.380
+Jako kopilot z łącznikami do aplikacji do zarządzania wydatkami lub księgi głównej
+
+00:05:24.380 --> 00:05:28.600
+dostarcza dokładną prognozę, a nawet sygnalizuje nadchodzące odchylenia w przepływach pieniężnych.
+
+00:05:28.760 --> 00:05:30.380
+Ta sama zmiana dotyczy sprzedaży.
+
+00:05:30.640 --> 00:05:35.600
+Zamiast podsumowywać szkice ofert, prawdziwy kopilot pobiera rzeczywiste liczby z lejka sprzedaży w CRM
+
+00:05:35.600 --> 00:05:37.460
+i pokazuje, gdzie transakcje utykają.
+
+00:05:37.460 --> 00:05:41.740
+Jedna wersja oszczędza kilka kliknięć, druga zmienia sposób podejmowania decyzji.
+
+00:05:41.960 --> 00:05:43.840
+Warto również wyjaśnić kwestie wdrożenia.
+
+00:05:44.120 --> 00:05:46.220
+Zespoły nie muszą wybierać tylko jednego podejścia.
+
+00:05:46.220 --> 00:05:49.380
+Łączniki obejmują spektrum rozwiązań typu no-code, low-code i pro-code.
+
+00:05:49.560 --> 00:05:52.560
+Analityk biznesowy często może podłączyć łącznik do popularnej aplikacji SAS
+
+00:05:52.560 --> 00:05:53.800
+bez pisania prawie żadnego kodu.
+
+00:05:53.980 --> 00:05:56.500
+Programista może pójść dalej i rozszerzyć niestandardową logikę
+
+00:05:56.500 --> 00:05:58.760
+za pomocą zestawu narzędzi Teams lub interfejsów API.
+
+00:05:59.020 --> 00:06:02.980
+Właściwa droga zależy od Waszych wewnętrznych umiejętności i tolerancji na złożoność,
+
+00:06:02.980 --> 00:06:05.640
+a nie od ogólnego stwierdzenia, że jedno jest łatwiejsze.
+
+00:06:05.860 --> 00:06:08.020
+Sedno polega na tym, że istnieje droga naprzód,
+
+00:06:08.140 --> 00:06:10.680
+niezależnie od poziomu zaawansowania technicznego zespołu.
+
+00:06:10.880 --> 00:06:12.780
+Tym, co często hamuje postęp, jest założenie,
+
+00:06:16.220 --> 00:06:24.020
+nie ma wglądu w rejestry transakcji, katalogi produktów ani przepływy pracy zatwierdzania.
+
+00:06:24.260 --> 00:06:26.200
+W rezultacie powraca do ogólnych odpowiedzi,
+
+00:06:26.340 --> 00:06:29.640
+mimo że inteligencja pozwalająca analizować te dane już tam jest i czeka.
+
+00:06:29.860 --> 00:06:32.960
+Zbudowanie tego mostu jest tym, co odblokowuje wyższy poziom wartości.
+
+00:06:32.960 --> 00:06:35.900
+A kiedy już dokonasz tej zmiany, codzienne doświadczenia zmieniają się.
+
+00:06:36.080 --> 00:06:38.740
+Użytkownicy nie przeskakują między Bichatem a innymi aplikacjami tylko po to,
+
+00:06:38.820 --> 00:06:40.520
+by uzupełnić to, czego narzędzie nie mogło dostarczyć.
+
+00:06:40.680 --> 00:06:43.380
+Otrzymują to, czego potrzebują bezpośrednio w trakcie prowadzonej rozmowy.
+
+00:06:43.600 --> 00:06:45.620
+Z czasem buduje to pewność siebie i zaufanie.
+
+00:06:45.620 --> 00:06:47.080
+Pytania stają się głębsze.
+
+00:06:47.280 --> 00:06:49.980
+Wskaźniki adopcji rosną, bo ludzie traktują Bichat jako system,
+
+00:06:50.060 --> 00:06:52.500
+na którym mogą polegać, a nie tylko jako wygodne narzędzie.
+
+00:06:52.700 --> 00:06:56.360
+Kierownictwo również odczuwa różnicę, ponieważ zespoły szybciej podejmują decyzje,
+
+00:06:56.480 --> 00:06:58.400
+mając pod ręką jasne i wiarygodne dane.
+
+00:06:58.680 --> 00:07:03.200
+Różnica między asystentem a kopilotem nie polega więc na stylu, lecz na integracji.
+
+00:07:03.500 --> 00:07:05.360
+Asystenci powtarzają to, co widzą.
+
+00:07:05.560 --> 00:07:09.360
+Kopiloty łączą się z tym, co najważniejsze i pomagają w oparciu o to działać.
+
+00:07:09.540 --> 00:07:13.520
+Dostrzeżenie tego kontrastu jest kluczowe, ponieważ kolejna decyzja określi,
+
+00:07:13.520 --> 00:07:18.540
+czy nadal używasz Bichata w trybie asystenta, czy zaczynasz pozwalać mu działać jako prawdziwy kopilot.
+
+00:07:18.760 --> 00:07:21.120
+Zaczyna się to od jednego praktycznego kroku decyzji,
+
+00:07:21.240 --> 00:07:25.540
+które systemy warto podłączyć w pierwszej kolejności i znalezienia odpowiednich punktów integracji.
+
+00:07:25.780 --> 00:07:28.960
+Jeśli chodzi o uzyskanie realnych wyników z Bichata, pytanie nie brzmi,
+
+00:07:29.120 --> 00:07:32.960
+co mogę podłączyć, ale które połączenia zmienią sposób pracy moich zespołów.
+
+00:07:33.120 --> 00:07:38.280
+Ekosystem Microsoftu jest otwarty, dając możliwość połączenia dziesiątek aplikacji i źródeł danych.
+
+00:07:38.280 --> 00:07:41.880
+Żaden zespół nie ma jednak czasu ani zasobów, by połączyć wszystko naraz.
+
+00:07:42.080 --> 00:07:46.660
+Dlatego najmądrzej jest skupić się wyłącznie na integracjach, które szybko przyniosą widoczne efekty.
+
+00:07:46.900 --> 00:07:49.420
+Jeśli zrobisz to dobrze, zaufanie do Bichata wzrośnie.
+
+00:07:49.640 --> 00:07:51.980
+Jeśli zrobisz to źle, adopcja utknie w martwym punkcie.
+
+00:07:52.200 --> 00:07:55.180
+Najczęstszym błędem jest zaczynanie od łatwych zwycięstw, które nie mają znaczenia.
+
+00:07:55.380 --> 00:07:58.960
+Podłączenie mało istotnego źródła danych wydaje się produktywne, bo pokazuje, że coś działa.
+
+00:07:59.200 --> 00:08:02.700
+Jednak integracje o niskiej wartości nie rozwiązują rzeczywistych problemów użytkowników.
+
+00:08:02.700 --> 00:08:07.420
+W rezultacie procesy pracy pozostają rozdrobnione, a pracownicy uznają narzędzie za ciekawostkę, a nie konieczność.
+
+00:08:07.580 --> 00:08:09.020
+Nie potrzebujesz sukcesów na pokaz.
+
+00:08:09.220 --> 00:08:12.580
+Potrzebujesz sukcesów operacyjnych, jak przy instalacji elektrycznej w domu.
+
+00:08:12.780 --> 00:08:17.000
+Pierwsze gniazdka, które wybierzesz, zdecydują, czy najważniejsze pokoje będą użyteczne, czy pozostaną ciemne.
+
+00:08:17.160 --> 00:08:18.720
+Jak więc skupić się na tym, co ważne?
+
+00:08:19.000 --> 00:08:21.820
+Jednym ze sposobów jest zastosowanie prostego filtra trzech pytań.
+
+00:08:21.940 --> 00:08:24.460
+Po pierwsze, jak często te dane są potrzebne w codziennej pracy?
+
+00:08:24.660 --> 00:08:27.780
+Po drugie, czy połączenie to eliminuje uciążliwe przełączanie kontekstu?
+
+00:08:27.780 --> 00:08:30.740
+Te chwile, gdy ludzie opuszczają bichata, by przeszukiwać inny system?
+
+00:08:30.960 --> 00:08:33.140
+Po trzecie, jakie jest ryzyko udostępnienia danych?
+
+00:08:33.300 --> 00:08:37.100
+Czy dane są na tyle wrażliwe, że integracja wymaga dodatkowego nadzoru przed rozpoczęciem?
+
+00:08:37.220 --> 00:08:42.880
+Jeśli uzyskasz konkretne odpowiedzi dotyczące częstotliwości i uciążliwości oraz akceptowalne odpowiedzi dotyczące ryzyka, znalazłeś idealnego kandydata.
+
+00:08:43.040 --> 00:08:45.680
+Nie potrzebujesz żmudnej analizy, by wiedzieć, od czego zacząć.
+
+00:08:45.800 --> 00:08:48.840
+Przeprowadź 60-sekundowe ćwiczenie z dowolnym interesariuszem.
+
+00:08:49.020 --> 00:08:51.980
+Zapytaj, kiedy bichat przestaje wystarczać, gdzie udajesz się dalej?
+
+00:08:51.980 --> 00:08:59.580
+Odpowiedzi, czy to z katalogu produktów, narzędzia projektowego, czy współdzielonej biblioteki dokumentów, wskażą na niedoskonałości, o których wszyscy już wiedzą.
+
+00:08:59.760 --> 00:09:06.240
+Te przełomowe momenty to idealny punkt wyjścia, ponieważ ich integracja eliminuje ciągłe przerwy i buduje zaufanie do platformy.
+
+00:09:06.460 --> 00:09:09.980
+Jednym z wyraźnych wczesnych sukcesów jest skupienie się na częstych i istotnych zapytaniach.
+
+00:09:09.980 --> 00:09:16.760
+Na przykład, zamiast sprawdzać harmonogramy projektów w oddzielnym narzędziu, zespoły mogą bezpośrednio zapytać czat biznesowy o najnowszy status.
+
+00:09:16.980 --> 00:09:23.100
+To rodzaj interakcji powtarzanej codziennie, gdzie wyeliminowanie przełączania kontekstów przynosi natychmiastowy efekt kumulacji.
+
+00:09:23.300 --> 00:09:29.740
+Porównaj to z raportem generowanym raz w miesiącu, a zrozumiesz, dlaczego priorytetyzacja według częstotliwości i trudności w pracy to mądrzejsza strategia.
+
+00:09:29.960 --> 00:09:33.660
+Równie ważne jest unikanie tworzenia integracji tylko dlatego, że są technicznie możliwe.
+
+00:09:33.660 --> 00:09:38.160
+Prawie każdy system można w jakiś sposób połączyć, ale nie każde połączenie zmienia sposób działania.
+
+00:09:38.160 --> 00:09:43.060
+Właściwe integracje to te, które bezpośrednio usprawniają kluczowe punkty decyzyjne o dużym natężeniu.
+
+00:09:43.260 --> 00:09:53.040
+Gdy czat biznesowy może w czasie rzeczywistym wyświetlać dane, prognozy, zaktualizowane kamienie milowe projektu czy statusy, przestaje być asystentem, a staje się zaufanym elementem procesu.
+
+00:09:53.220 --> 00:09:57.040
+Dlatego mapowanie punktów integracji to coś więcej niż tylko techniczne planowanie.
+
+00:09:57.040 --> 00:10:01.560
+Chodzi o kształtowanie postrzegania. Pracowników nie obchodzi, czy łącznik był łatwy do zbudowania.
+
+00:10:01.760 --> 00:10:05.840
+Obchodzi ich to, że czat biznesowy w końcu dostarcza przydatnych odpowiedzi bez przerywania rozmowy.
+
+00:10:05.840 --> 00:10:10.740
+A kiedy widzą, że niezawodnie obsługuje zapytania, wracają do niego, co sprawia, że adopcja narzędzia rośnie.
+
+00:10:10.940 --> 00:10:14.220
+Oczywiście priorytetyzacja nie oznacza ignorowania długoterminowych możliwości.
+
+00:10:14.480 --> 00:10:19.660
+Systemy o niższej częstotliwości wykorzystania mogą być warte połączenia później, gdy cele o wysokiej wartości potwierdzą użyteczność bichatu.
+
+00:10:19.800 --> 00:10:23.040
+Ale na początku najważniejsze jest wyeliminowanie największych źródeł tarcia.
+
+00:10:23.200 --> 00:10:29.320
+To sygnał dla pracowników i kierownictwa, że wdrożenie działa i że integrowanie kolejnych systemów jest warte czasu i wysiłku.
+
+00:10:29.320 --> 00:10:33.300
+Zatem prawdziwym filtrem nie jest techniczna możliwość, lecz wpływ.
+
+00:10:33.500 --> 00:10:40.060
+Które integracje wdrożone teraz dadzą bichatowi moc dostarczania jasnych, rzetelnych odpowiedzi dokładnie w momencie podejmowania decyzji?
+
+00:10:40.300 --> 00:10:44.240
+Zidentyfikuj je, a położysz fundament pod przekształcenie codziennych interakcji.
+
+00:10:44.500 --> 00:10:50.260
+Gdy już wiesz, gdzie leżą te możliwości, kolejnym krokiem jest zrozumienie mechanizmu, który umożliwia integrację.
+
+00:10:50.540 --> 00:10:52.360
+Czym naprawdę są konektory Copilot?
+
+00:10:52.360 --> 00:10:59.400
+Konektory Copilot to element, który zmienia bichat z powierzchownego asystenta w narzędzie faktycznie przydatne w codziennym podejmowaniu decyzji.
+
+00:10:59.620 --> 00:11:05.560
+W swojej istocie konektor to kontrolowana integracja, która pozwala bichatowi odpytywać systemy źródłowe i zwracać ograniczony zakresem odpowiedzi.
+
+00:11:05.760 --> 00:11:10.880
+Taka jest jego rola tworzenie zarządzanego mostu między sztuczną inteligencją, a zaufanymi źródłami danych w Twojej firmie.
+
+00:11:11.100 --> 00:11:12.700
+Warto pamiętać o dwóch faktach.
+
+00:11:12.700 --> 00:11:20.980
+Łączniki nie zmieniają samego modelu, lecz dostarczają mu kontekstu i mogą być tworzone w szerokim zakresie od rozwiązań bez kodowania po zaawansowane implementacje programistyczne.
+
+00:11:20.980 --> 00:11:27.840
+Pomyśl, jak obecnie wyglądają Twoje dane są rozproszone w bibliotekach dokumentów, ustrukturyzowanych bazach, systemach chmurowych i specjalistycznych aplikacjach.
+
+00:11:28.060 --> 00:11:31.020
+Bichat nie posiada naturalnego dostępu do tych wszystkich środowisk.
+
+00:11:31.220 --> 00:11:34.740
+Łącznik otwiera te drzwi, robiąc to jednak w sposób bezpieczny i kontrolowany.
+
+00:11:34.980 --> 00:11:46.940
+Gdy zadajesz pytanie w Bichat, łącznik decyduje, dokąd skierować zapytanie, czy chodzi o aktualne wyniki sprzedaży w CRM, faktury w systemie ERP, czy aktywne projekty w narzędziu planistycznym, a następnie zwraca dokładnie te informacje, których potrzebujesz.
+
+00:11:46.940 --> 00:11:52.960
+Różnica jest widoczna. Bez łącznika Bichat dostarcza przybliżone dane pobrane ze wzmianek w czatach lub dokumentach.
+
+00:11:53.180 --> 00:11:58.420
+Z łącznikiem otrzymujesz aktualne, wiarygodne dane, które odzwierciedlają stan faktyczny w systemie źródłowym w czasie rzeczywistym.
+
+00:11:58.580 --> 00:12:03.120
+Powszechnym błędem jest przekonanie, że łączniki są tylko dla programistów piszących setki linii kodu.
+
+00:12:03.440 --> 00:12:05.040
+Rzeczywistość jest bardziej wyważona.
+
+00:12:05.260 --> 00:12:09.800
+W prostych przypadkach użytkownicy biznesowi mogą konfigurować integrację za pomocą opcji no-code i low-code.
+
+00:12:09.800 --> 00:12:15.180
+W złożonych scenariuszach lub przy wysokich wymaganiach dotyczących zarządzania do gry wkraczają programiści z bardziej zaawansowanymi rozwiązaniami.
+
+00:12:15.340 --> 00:12:16.600
+Obie te role są istotne.
+
+00:12:16.760 --> 00:12:18.660
+W tym miejscu pojawia się Copilot Studio.
+
+00:12:18.880 --> 00:12:26.640
+To środowisko zaprojektowane do rozszerzania Microsoft Copilot o niestandardowych agentów, akcje i integracje, dając zespołom możliwość projektowania rozwiązań, których faktycznie potrzebują.
+
+00:12:26.880 --> 00:12:30.740
+Dla scenariuszy wymagających rozbudowanych wtyczek API wspierany jest także Teams Toolkit.
+
+00:12:30.900 --> 00:12:38.620
+Programiści mogą użyć go do udostępnienia bezpiecznych interfejsów API, które przesyłają dane z własnych aplikacji bezpośrednio do Bichat przy zachowaniu odpowiednich uprawnień.
+
+00:12:38.620 --> 00:12:48.140
+Ta elastyczność oznacza, że integracje mogą skalować się wraz z poziomem umiejętności i złożonością, ale przypomina też, że niektóre z nich wymagają dużego zaangażowania programistów i właściwego nadzoru.
+
+00:12:48.480 --> 00:12:52.940
+Równie ważne jest wyjaśnienie, w jaki sposób łączniki współpracują z wbudowaną inteligencją Bichat.
+
+00:12:53.120 --> 00:12:56.080
+Nie zastępują one sztucznej inteligencji, która generuje odpowiedzi.
+
+00:12:56.240 --> 00:12:59.040
+Po prostu ulepszają one zasoby, na których pracuje AI.
+
+00:12:59.300 --> 00:13:01.800
+Wyobraź sobie pytanie o otwarte zamówienia zakupu.
+
+00:13:02.000 --> 00:13:06.860
+Bez łącznika Bichat zbiera rozproszone wzmianki z e-maili lub spotkań i formułuje ogólną odpowiedź.
+
+00:13:06.860 --> 00:13:13.560
+Dodaj łącznik, a Bichat odpyta system ERP, pobierze dokładne liczby i statusy, a następnie zaprezentuje je w naturalnym języku.
+
+00:13:13.800 --> 00:13:17.020
+Głównym motorem pozostaje model, ale dokładność pochodzi z łącznika.
+
+00:13:17.260 --> 00:13:21.080
+Siła tego rozwiązania polega na tym, że nie ogranicza się ono tylko do systemów Microsoftu.
+
+00:13:21.240 --> 00:13:29.060
+Owszem, możesz łączyć się z usługami w ramach 365, ale równie łatwo możesz podłączyć platformy HR, narzędzia logistyczne czy niestandardowe bazy danych, od których zależy Twój biznes.
+
+00:13:29.060 --> 00:13:32.660
+Kluczowe jest to, że każda z tych operacji odbywa się za pośrednictwem łącznika.
+
+00:13:32.900 --> 00:13:35.180
+Bichat nie pobiera danych w sposób niekontrolowany w tle.
+
+00:13:35.360 --> 00:13:39.280
+Kieruje pytania w sposób zarządzany, respektując uprawnienia i zwracając zawężone, konkretne wyniki.
+
+00:13:39.540 --> 00:13:42.200
+W ten sposób zachowuje kontrolę, pozostając użytecznym narzędziem.
+
+00:13:42.340 --> 00:13:47.360
+Innym aspektem, który czasem umyka, jest to, że konektory dotyczą dopasowania biznesowego w takim samym stopniu co technologii.
+
+00:13:47.520 --> 00:13:51.980
+Konfiguracja wymusza rozmowy między zespołami IT a biznesem na temat tego, które pytania faktycznie mają znaczenie.
+
+00:13:51.980 --> 00:13:54.400
+Czy menedżerowie potrzebują aktualizacji sprzedaży na żywo?
+
+00:13:54.540 --> 00:13:57.000
+Czy szefowie finansów potrzebują wglądu w nieopłacone faktury?
+
+00:13:57.160 --> 00:14:00.260
+Czy zespoły projektowe potrzebują kamieni milowych przed oczami podczas spotkań?
+
+00:14:00.360 --> 00:14:03.420
+Konektory pozwalają skupić się na tych priorytetach i je urzeczywistnić.
+
+00:14:03.500 --> 00:14:05.040
+To jedna z ich ukrytych wartości.
+
+00:14:05.280 --> 00:14:09.240
+Nie chodzi tylko o łączenie systemów, ale o wskazanie, które procesy warto wspierać.
+
+00:14:09.380 --> 00:14:11.760
+W tym momencie rola konektora powinna być jasna.
+
+00:14:11.920 --> 00:14:14.680
+To nie jest niszowy dodatek ani projekt deweloperski.
+
+00:14:14.860 --> 00:14:20.600
+To mechanizm, który zmienia biszek z zestawu sprytnych podsumowań w zaufanego asystenta z dostępem do dokładnych danych.
+
+00:14:20.600 --> 00:14:25.320
+Bez nich adopcja kuleje, ponieważ narzędzie nie odpowiada na pytania, które ludzi naprawdę interesują.
+
+00:14:25.600 --> 00:14:32.940
+Z nimi narzędzie wchodzi w nową rolę, stając się na tyle wiarygodnym, by używać go przed innymi w procesie decyzyjnym, zgodnie z działaniem firmy.
+
+00:14:33.100 --> 00:14:36.240
+Kolejnym naturalnym krokiem jest przejście od teorii do praktyki.
+
+00:14:36.480 --> 00:14:41.920
+Zrozumienie, czym są konektory, jest ważne, ale ich wartość tkwi w zbudowaniu jednego z nich i właściwym zabezpieczeniu.
+
+00:14:42.180 --> 00:14:44.560
+Budowanie i zabezpieczanie Twojego pierwszego konektora.
+
+00:14:44.760 --> 00:14:50.420
+Budowanie i zabezpieczanie pierwszego konektora to w mniejszym stopniu kwestia umiejętności kodowania, a w większym dyscyplinie w projektowaniu dostępu.
+
+00:14:50.420 --> 00:14:58.040
+Owszem, wymaga to programowania, ale kluczowe jest zdecydowanie, co Biszek ma widzieć, jak wąsko zdefiniować zakres i jak ściśle egzekwować uprawnienia.
+
+00:14:58.260 --> 00:15:05.120
+Jeśli ramy nie zostaną zaplanowane od początku, ryzykujesz wyciek wrażliwych danych lub stworzenie czegoś tak zablokowanego, że nikomu nie pomoże.
+
+00:15:05.500 --> 00:15:09.420
+Bezpieczeństwo nie jest tu warstwą dodawaną później. To fundament, na którym budujesz.
+
+00:15:09.660 --> 00:15:12.680
+Głównym narzędziem, od którego zaczyna większość zespołów, jest Teams Toolkit.
+
+00:15:12.900 --> 00:15:18.880
+Dostarcza on narzędzia i szablony, które przyspieszają tworzenie wtyczek API dla kopilota oraz integrację z zasobami Azure.
+
+00:15:19.080 --> 00:15:23.380
+Pozwala szybko ruszyć z techniczną stroną, ale nie podejmuje za Ciebie decyzji projektowych.
+
+00:15:23.380 --> 00:15:30.300
+Nadal musisz zdefiniować właściwe punkty wejścia, dopasować je do potrzeb biznesowych i zadbać, by każde wywołanie było ściśle ograniczone.
+
+00:15:30.500 --> 00:15:38.000
+Kuszące jest pośpieszne stworzenie wersji demonstracyjnej, by pokazać dane na żywo tylko po to, by odkryć, że ujawnia ona więcej informacji niż zakładano.
+
+00:15:38.180 --> 00:15:43.760
+Takie szybkie sukcesy wyglądają atrakcyjnie, ale jeśli w procesie zacierają się granice ról, tworzysz problem zamiast rozwiązania.
+
+00:15:44.000 --> 00:15:46.980
+Lepszym podejściem jest traktowanie budowy jako ustrukturyzowanego procesu.
+
+00:15:47.140 --> 00:15:49.920
+Oto sześciopunktowa lista kontrolna, która pozwoli utrzymać proces w ryzach.
+
+00:15:49.920 --> 00:15:52.440
+Krok pierwszy – zdefiniuj przypadek użycia prostym językiem.
+
+00:15:52.440 --> 00:15:55.540
+Jakie jest właściwe pytanie biznesowe, na które Biszek ma odpowiedzieć?
+
+00:15:55.740 --> 00:15:59.180
+Krok drugi – określ dokładne zapytania i minimalny niezbędny zestaw danych.
+
+00:15:59.400 --> 00:16:02.060
+Nie udostępniaj wszystkiego, jeśli liczy się tylko kilka pól.
+
+00:16:02.240 --> 00:16:06.980
+Krok trzeci – zaprojektuj interfejs łącznika, wybierając, które pola będą dostępne, a które wykluczone.
+
+00:16:07.200 --> 00:16:14.500
+Krok czwarty – wdroż uwierzytelnianie i zakresy za pomocą kontroli dostępu opartej na tożsamości, aby egzekwować, kto może o co pytać i kto widzi wyniki.
+
+00:16:14.500 --> 00:16:21.500
+Krok piąty – przetestuj rozwiązanie wspólnie z działem IT i właścicielami biznesowymi, najlepiej z małą grupą użytkowników wykonujących rzeczywiste zapytania,
+
+00:16:21.500 --> 00:16:24.160
+aby potwierdzić poprawność uprawnień i przydatność wyników.
+
+00:16:24.300 --> 00:16:30.060
+Krok szósty – wdroż system z monitoringiem i nadzorem, aby śledzić użycie i wprowadzać korekty, jeśli coś wykracza poza zakres.
+
+00:16:30.260 --> 00:16:34.760
+Jeśli przeczytasz to na głos, zobaczysz, że to gotowy scenariusz projektowania każdej bezpiecznej integracji.
+
+00:16:35.000 --> 00:16:37.280
+Aby to zobrazować, rozważmy hipotetyczny przykład.
+
+00:16:37.560 --> 00:16:41.000
+Załóżmy, że Twój zespół chce, aby Bichat podsumował stan lejka sprzedaży w CRM.
+
+00:16:41.000 --> 00:16:44.980
+Prośba brzmi prosto – pobierz wielkość nadchodzących transakcji, ich etapy i właścicieli.
+
+00:16:45.200 --> 00:16:50.520
+Jednak surowe rekordy CRM zawierają też dowolne notatki przedstawicieli, które często zawierają poufne dane klientów.
+
+00:16:50.700 --> 00:16:57.900
+W tym scenariuszu łącznik powinien udostępniać tylko ustrukturyzowane pola, etap, wartość i właściciela, wyraźnie wykluczając niestrukturalne notatki.
+
+00:16:58.120 --> 00:17:01.320
+Jeśli połączysz łącznik ze wszystkim, narazisz dane na nadmierną ekspozycję.
+
+00:17:01.320 --> 00:17:07.960
+Jeśli ściśle określisz zakres, uzyskasz wgląd, którego potrzebują menedżerowie bez ujawniania informacji naruszających prywatność lub zgodność z przepisami.
+
+00:17:07.960 --> 00:17:10.700
+To nie tylko zabezpieczenie techniczne, to zasada projektowa.
+
+00:17:10.920 --> 00:17:13.960
+Uwierzytelnianie sprawia, że egzekwowanie zakresu staje się rzeczywistością.
+
+00:17:14.180 --> 00:17:18.440
+Silne zarządzanie tożsamością i dostępem gwarantuje, że użytkownik widzi tylko to, do czego i tak ma prawo.
+
+00:17:18.600 --> 00:17:21.620
+Kontrola oparta na rolach przenosi zasady biznesowe do łącznika.
+
+00:17:21.880 --> 00:17:27.060
+Regionalny kierownik sprzedaży może przeglądać lejek dla swojego terytorium, ale nie pobierze danych z innych regionów.
+
+00:17:27.320 --> 00:17:31.300
+Uwierzytelnione wywołanie weryfikuje tożsamość i uprawnienia przed wyświetleniem rekordu.
+
+00:17:31.300 --> 00:17:37.820
+To nie są opcjonalne mechanizmy, lecz niezbędne kroki, aby zachować istniejące granice i powstrzymać wyciek wrażliwych danych do czatu.
+
+00:17:38.060 --> 00:17:41.300
+Błędem jest również pozostawienie tego procesu w rękach tylko jednej grupy.
+
+00:17:41.500 --> 00:17:46.920
+Dział IT zna architekturę systemu, ale właściciele biznesowi wiedzą, które dane są kluczowe, a których nie wolno ujawniać.
+
+00:17:47.040 --> 00:17:52.460
+Pominięcie jednej ze stron prowadzi do braku równowagi, rozwiązanie będzie zbyt restrykcyjne lub zbyt otwarte, by było bezpieczne.
+
+00:17:52.760 --> 00:17:55.800
+Uwzględnienie obu perspektyw od początku pozwala uniknąć tej pułapki.
+
+00:17:55.800 --> 00:17:59.900
+Podczas testów upewnij się, że rzeczywistymi zapytaniami posługują się prawdziwi użytkownicy.
+
+00:18:00.140 --> 00:18:05.460
+W ten sposób potwierdzisz, że wyniki są dokładne i mają odpowiedni zakres, zanim udostępnisz narzędzie szerszej grupie.
+
+00:18:05.640 --> 00:18:10.900
+Patrząc szerzej, budowa łącznika to mniej sprytne sztuczki programistyczne, a bardziej stosowanie dyscypliny.
+
+00:18:11.100 --> 00:18:18.560
+Określ dokładnie problem do rozwiązania, daj bichatowi tylko niezbędny dostęp i egzekwuj te same uprawnienia, którym Twoja firma już ufa.
+
+00:18:18.560 --> 00:18:26.520
+To połączenie kontrola zakresu, uwierzytelnianie i wspólne testy stanowi różnicę między efektownym demo, a niezawodnym narzędziem biznesowym.
+
+00:18:26.760 --> 00:18:29.560
+Kiedy te podstawy są na swoim miejscu, Biskits zyskuje wiarygodność.
+
+00:18:30.420 --> 00:18:34.820
+Przestaje być traktowany jak ciekawy eksperyment i zaczyna być wykorzystywany w rzeczywistych procesach pracy.
+
+00:18:35.040 --> 00:18:41.700
+Prawdziwą korzyścią nie jest to, że system technicznie potrafi udzielać odpowiedzi, ale to, że są one konkretne, bezpieczne i wiarygodne.
+
+00:18:41.700 --> 00:18:48.080
+Mając takie fundamenty jesteś gotowy, by spojrzeć szerzej na to, co to wszystko faktycznie wnosi do Twojej organizacji.
+
+00:18:48.280 --> 00:18:50.800
+Kluczowy wniosek nie dotyczy teorii, lecz działania.
+
+00:18:51.060 --> 00:18:59.380
+Najważniejszym kolejnym krokiem jest wybierz jeden często powtarzany proces, określ dokładne pola, których Biskits potrzebuje od tego systemu, a następnie zbuduj dla niego ograniczony łącznik.
+
+00:18:59.600 --> 00:19:04.020
+Zacznij od małych kroków, potwierdź wartość, a zyskasz fundament, któremu Twój zespół może zaufać i na którym może budować dalej.
+
+00:19:04.220 --> 00:19:06.660
+Chciałbym usłyszeć od Ciebie, jaki system podłączyłbyś jako pierwszy?
+
+00:19:06.860 --> 00:19:09.600
+CRM, ERP, katalog produktów czy system do zarządzania projektami?
+
+00:19:09.600 --> 00:19:16.200
+Daj znać w komentarzach, a jeśli chcesz zobaczyć więcej przewodników krok po kroku dotyczących budowania i zabezpieczania łączników, koniecznie zasubskrybuj.

@@ -1,0 +1,1531 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:03.140
+Anda pasti pernah mendengar Kubernetes dan AKS disebut-sebutan percakapan soal.
+
+00:00:03.520 --> 00:00:08.340
+Mungkin Anda mengangguk saja, tapi sejujurnya apa arti sebenarnya bagi mereka yang menjalankan aplikasi di cloud?
+
+00:00:09.000 --> 00:00:12.800
+Kontainer mengubah cara kita membangun perangkat lunak karena sifatnya yang ringan, portable, dan konsisten.
+
+00:00:13.320 --> 00:00:15.600
+Masalahnya, mengelolanya secara menor akan cepat menjadi berantakan.
+
+00:00:16.000 --> 00:00:17.680
+Segelintir kontainer mungkin bisa Anda tangani.
+
+00:00:17.840 --> 00:00:24.560
+Namun jika jumlahnya puluhan atau ratusan, Anda akan menghabiskan waktu untuk penskalaan, pembaruan, dan menangani kegagalan alih-alih membangun produk Anda sendiri.
+
+00:00:24.560 --> 00:00:29.840
+Di akhir episode ini, Anda akan memahami empat hal besar yang ditangani Azure Kubernetes Service untuk Anda.
+
+00:00:30.000 --> 00:00:32.320
+Kontrol Plane, Node, Jaringan, dan Keamanan.
+
+00:00:32.980 --> 00:00:34.480
+Kami juga akan menguraikan berapa biaya sebenarnya.
+
+00:00:35.060 --> 00:00:36.880
+Tanpa bualan pemasaran, langsung pada intinya.
+
+00:00:37.900 --> 00:00:39.800
+Masalah kontainer, mengapa kita butuh AKS?
+
+00:00:40.300 --> 00:00:42.280
+Kontainer populer karena mereka mecahkan masalah nyata.
+
+00:00:42.920 --> 00:00:46.080
+Sebuah paket yang menggabungkan kode aplikasi, pustaka rantai, dan konfigurasi Anda.
+
+00:00:46.780 --> 00:00:50.040
+Kontainer berjalan sama di laptop Anda, di server uji, atau dalam produksi.
+
+00:00:50.580 --> 00:00:52.080
+Tidak ada lagi masalah berhasil di komputer saya.
+
+00:00:52.880 --> 00:00:54.940
+Menjalankan segelintir kontainer tidaklah masalah.
+
+00:00:55.540 --> 00:00:58.360
+Anda memulainya secara manual, memeriksa lock, dan memulai ulang saat aplikasi.
+
+00:00:58.360 --> 00:01:03.620
+Namun saat jumlahnya puluhan atau ratusan yang tersebar di banyak server, Anda akan menemui masalah baru.
+
+00:01:04.280 --> 00:01:07.880
+Anda harus memutuskan kemana setiap kontainer ditempatkan, server mana yang menerima kontainer tersebut,
+
+00:01:07.940 --> 00:01:09.400
+dan bagaimana mereka saling menemukan berarti jaring.
+
+00:01:09.840 --> 00:01:11.980
+Apa yang terjadi jika salah satunya macet pukul 3 pagi?
+
+00:01:12.480 --> 00:01:16.400
+Dan bagaimana menangani lonjakan trafik yang membutuhkan 50 salinan aplikasi tambahan dalam 30 detik?
+
+00:01:16.980 --> 00:01:20.040
+Kubernetes adalah platform sumber terbuka yang dirancang khusus untuk masalahnya.
+
+00:01:20.420 --> 00:01:22.140
+Platform ini menjadwalkan kontainer ke server,
+
+00:01:22.140 --> 00:01:25.440
+melakukan penskalaan, memeriksa kesehatan, dan mengarahkan trafik di antara kontainer.
+
+00:01:25.440 --> 00:01:28.240
+Ini adalah standar industri untuk orkestrasi kontainer.
+
+00:01:28.820 --> 00:01:31.540
+Namun Kubernetes memecahkan suatu masalah dan menciptakan masalah lain.
+
+00:01:32.260 --> 00:01:33.320
+Menjalankan sendiri sangat rumit.
+
+00:01:33.840 --> 00:01:35.780
+Anda harus menyiapkan dan memelihara kontrol plan,
+
+00:01:36.040 --> 00:01:37.860
+otak dari kluster, mengelola not pekerja,
+
+00:01:38.060 --> 00:01:41.680
+menerapkan patch keamanan, meningkatkan versi, dan mencadangkan versi, dan mencadangkan versi.
+
+00:01:41.900 --> 00:01:44.040
+Itu adalah pekerjaan penuh waktu bagi mereka yang ahli di bidang.
+
+00:01:44.420 --> 00:01:46.680
+Layanan terkelola seperti Azure Kubernetes Service,
+
+00:01:46.940 --> 00:01:48.820
+meringankan beban operasional tersebut dari pungdek Anda.
+
+00:01:49.360 --> 00:01:52.760
+Microsoft menjalankan kontrol plan untuk Anda dan menangani peningkatan patch serta pencadangan.
+
+00:01:53.140 --> 00:01:54.380
+Anda cukup fokus pada aplikasi Anda.
+
+00:01:54.380 --> 00:01:56.220
+Jadi apa sebenarnya yang dilakukan AKS untuk Anda?
+
+00:01:56.620 --> 00:01:58.980
+Mari kita mulai dengan bagian terbesar, yaitu kontrol plan.
+
+00:01:59.680 --> 00:02:01.080
+Apa itu Azure Kubernetes Service?
+
+00:02:01.980 --> 00:02:03.960
+AKS adalah versi Kubernetes terkeluar dari Microsoft,
+
+00:02:04.140 --> 00:02:05.380
+simple dan mudah dipahami.
+
+00:02:05.920 --> 00:02:08.120
+Anda mendapatkan kluster Kubernetes yang berfungsi penuh
+
+00:02:08.120 --> 00:02:10.780
+tanpa harus menyiapkan atau memelihara infrastruktur dasarnya.
+
+00:02:11.260 --> 00:02:12.800
+Microsoft menjalankan kontrol plan untuk Anda
+
+00:02:12.800 --> 00:02:14.980
+dan Anda fokus pada penerapan serta menjalankan aplikasi Anda.
+
+00:02:15.480 --> 00:02:18.060
+Bayangkan ini seperti menyewa apartemen dibandingkan membangun sebuah room.
+
+00:02:18.780 --> 00:02:20.880
+Saat Anda membangun rumah, Anda bertanggung jawab atas segalanya,
+
+00:02:20.880 --> 00:02:22.380
+fondasi pipa, listrik, atap.
+
+00:02:22.680 --> 00:02:24.260
+Saat Anda menyewa pemilik properti menanganisme,
+
+00:02:24.560 --> 00:02:25.660
+Anda tinggal masuk dan melikorasinya.
+
+00:02:25.960 --> 00:02:27.060
+AKS adalah pemilik properti.
+
+00:02:27.440 --> 00:02:30.180
+Microsoft menangani fondasi, kontrol plan, jaringan,
+
+00:02:30.260 --> 00:02:31.720
+pembaruan keamanan, dan peningkatan versi.
+
+00:02:32.040 --> 00:02:34.160
+Anda membawa perabotnya aplikasi dalam kontainer,
+
+00:02:34.240 --> 00:02:35.640
+konfigurasi, dan jalur penerapan Anda.
+
+00:02:36.120 --> 00:02:38.260
+Namun, AKS bukan sekadar kluster Kubernetes yang berdiri sendiri.
+
+00:02:38.620 --> 00:02:40.480
+Layalan ini bekerja erat dengan seluruh platformnya.
+
+00:02:41.040 --> 00:02:43.880
+Entra ID menangani autentikasi pengguna dan kontrol akses.
+
+00:02:44.480 --> 00:02:47.460
+Azure Monitor mengumpulkan log dan metrik dari kluster serta aplikasi Anda.
+
+00:02:47.660 --> 00:02:50.460
+Azure Policy memungkinkan Anda menerapkan aturan di semua kluster,
+
+00:02:50.460 --> 00:02:53.100
+seperti tidak ada kontainer yang berjalan sebagai root atau semua image
+
+00:02:53.100 --> 00:02:54.780
+harus berasal dari registri yang disetujui.
+
+00:02:55.720 --> 00:02:59.600
+Inilah yang membuat AKS lebih dari sekadar Kubernetes yang berjalan di VM Azure.
+
+00:02:59.600 --> 00:03:02.680
+Sekarang, Anda masih perlu mengetahui konsep dasar Kubernetes,
+
+00:03:03.000 --> 00:03:04.300
+port deployment, dan services.
+
+00:03:05.220 --> 00:03:06.100
+Itulah pengetahuan yang Anda bawa.
+
+00:03:06.400 --> 00:03:07.480
+AKS tidak menggantikan hal itu.
+
+00:03:07.940 --> 00:03:10.840
+Namun, AKS menghapus beban operasional dalam menjaga kesehatan kluster.
+
+00:03:11.560 --> 00:03:13.360
+Anda tidak perlu khawatir kontrol plan akan mati.
+
+00:03:13.760 --> 00:03:15.580
+Anda tidak perlu meningkatkan versi Kubernetes secara manual.
+
+00:03:15.960 --> 00:03:18.560
+Anda tidak perlu mencadangkan ATCD basis data konfigurasi kelas.
+
+00:03:19.020 --> 00:03:20.040
+Microsoft menangani semua ini.
+
+00:03:20.400 --> 00:03:22.800
+Jadi, mari kita buka tabir dari otak tersebut, yaitu kontrol plan.
+
+00:03:23.360 --> 00:03:24.840
+Kontrol plan otak yang dikelola Microsoft.
+
+00:03:25.720 --> 00:03:26.980
+Apa sebenarnya isi dalam kontrol plan itu?
+
+00:03:27.480 --> 00:03:28.260
+Empat komponen utama.
+
+00:03:28.260 --> 00:03:33.760
+API server adalah pintu depannya setiap perintah permintaan dan interaksi dengan kluster Anda melewatinya.
+
+00:03:34.300 --> 00:03:36.560
+Scheduler memutuskan node mana yang menjalankan setiap pod baru.
+
+00:03:36.980 --> 00:03:40.980
+Kontrol manager memantau status kluster dan memastikan kenyataan sesuai dengan yang Anda minta.
+
+00:03:41.760 --> 00:03:43.640
+Dan ATCD menyimpan semua data konfigurasi.
+
+00:03:44.000 --> 00:03:45.240
+Tayangkan ini sebagai memori kluster Anda.
+
+00:03:45.660 --> 00:03:48.460
+Jika ATCD rusak atau hilang, Anda kehilangan kluster tersebut.
+
+00:03:49.000 --> 00:03:51.420
+Jika Anda mengantur Kubernetes sendiri, Anda bertanggung jawab atas semua ini.
+
+00:03:51.860 --> 00:03:53.800
+Anda menambah API server saat kerentanan muncul.
+
+00:03:54.240 --> 00:03:55.400
+Anda mencadangkan ATCD server.
+
+00:03:55.400 --> 00:03:58.440
+Anda menangani kegagalan perangkat keras pada mesin yang menjalankan komponen ini.
+
+00:03:58.740 --> 00:03:59.460
+Itu pekerjaan yang berat.
+
+00:03:59.840 --> 00:04:01.520
+Dengan AKS, Microsoft meringankan beban Anda.
+
+00:04:01.940 --> 00:04:04.160
+Mereka menjalankan kontrol plan di infrastruktur mereka sendiri.
+
+00:04:04.520 --> 00:04:05.800
+Mereka menambah, mencadangkan demaman.
+
+00:04:06.300 --> 00:04:07.580
+Anda tidak pernah melihat mesin yang melasari.
+
+00:04:07.840 --> 00:04:10.120
+Anda hanya berinteraksi dengan endpoint API server.
+
+00:04:10.320 --> 00:04:11.900
+Dan sisanya terjadi di balik layar.
+
+00:04:12.560 --> 00:04:13.860
+Namun, tidak semua kontrol plan itu sama.
+
+00:04:14.940 --> 00:04:16.160
+AKS menawarkan tiga tingkatan.
+
+00:04:16.300 --> 00:04:17.320
+Free, standard, dan premium.
+
+00:04:17.320 --> 00:04:21.480
+Tingkat gratis memberi Anda bidang kendali tanpa biaya tambahan, tanpa SLA pada server API.
+
+00:04:22.280 --> 00:04:24.820
+Ini cocok untuk lingkungan pembelajaran, pengembangan, atau pengujian,
+
+00:04:24.940 --> 00:04:26.700
+di mana beberapa menit waktu nanti tidak menjadi masalah.
+
+00:04:27.100 --> 00:04:28.820
+Untuk beban kerja produksi, Anda mungkin menginginkan lebih.
+
+00:04:29.500 --> 00:04:32.180
+Tingkat standar berbiaya sekitar 70 data per bulan untuk setiap kluster.
+
+00:04:32.680 --> 00:04:37.980
+Itu memberi Anda SLA 995% pada server API saat Anda menggunakan zona ketersediaan.
+
+00:04:37.980 --> 00:04:41.080
+Jika bidang kendali tidak berfungsi, Microsoft akan memberikan kredit kembali.
+
+00:04:41.500 --> 00:04:42.940
+Ini adalah pindah default untuk sebagian besar kluster.
+
+00:04:43.560 --> 00:04:46.360
+Tingkat premium berharga sekitar Rp400.2 per bulan,
+
+00:04:46.860 --> 00:04:49.900
+Anda mendapatkan semua yang ada di standar ditambah dukungan jangka panjang untuk versi Kubernetes.
+
+00:04:50.700 --> 00:04:52.300
+Jika Anda menjalankan beban kerja teratur,
+
+00:04:52.560 --> 00:04:55.560
+yang harus tetap menggunakan versi tertentu selama berbulan-bulan atau bertahun-tahun,
+
+00:04:55.660 --> 00:04:56.640
+disitulah premium masuk akal.
+
+00:04:57.180 --> 00:04:58.280
+Namun, ilah poin kuncinya.
+
+00:04:58.460 --> 00:05:00.420
+Anda sebenarnya tidak membayar untuk bidang kendali itu sendiri.
+
+00:05:00.920 --> 00:05:01.980
+Tingkat gratis benar-benar gratis.
+
+00:05:02.360 --> 00:05:05.480
+Tanda dan premium adalah biaya untuk SLA dan dukungan jangka panjang,
+
+00:05:05.480 --> 00:05:06.700
+bukan untuk sumber daya bidang kendali.
+
+00:05:07.140 --> 00:05:09.920
+Yang Anda bayar adalah node pekerja, VM yang menjalankan kontainer Anda.
+
+00:05:10.380 --> 00:05:12.980
+Biaya tersebut ditagihkan secara terpisah dengan tarif VM Azure standar.
+
+00:05:13.300 --> 00:05:13.960
+Pikirkan dengan cara ini.
+
+00:05:14.460 --> 00:05:15.540
+Bidang kendali adalah otaknya.
+
+00:05:15.920 --> 00:05:17.000
+Microsoft mengelolanya untuk Anda.
+
+00:05:17.420 --> 00:05:19.760
+Anda memilih tingkat layanan berdasarkan kebutuhan keandalan Anda.
+
+00:05:20.160 --> 00:05:22.860
+Namun, pekerjaan nyata untuk menjalankan aplikasi Anda terjadi pada node.
+
+00:05:23.240 --> 00:05:25.740
+Node pekerja itulah tempat aplikasi Anda benar berjalan.
+
+00:05:26.280 --> 00:05:27.240
+Mari kita bicara tentang lagi.
+
+00:05:27.700 --> 00:05:28.800
+Node pekerja yang Anda bayar.
+
+00:05:29.520 --> 00:05:31.840
+Node adalah mesin virtual Azure sederhana dan lugas.
+
+00:05:32.260 --> 00:05:33.960
+VM Azure standar yang menampung pot Anda,
+
+00:05:33.960 --> 00:05:37.260
+yang merupakan unit terkecil di Kubernetes yang menjalankan satu atau lebih kontainer.
+
+00:05:37.740 --> 00:05:39.020
+Anda memilih ukuran dan jumlahnya.
+
+00:05:39.360 --> 00:05:42.980
+Jadi, jika Anda menginginkan D2S dan Cursion 3 dengan 2 VCPU dan RAM 8GB,
+
+00:05:43.080 --> 00:05:43.580
+Anda bisa melakukan.
+
+00:05:43.860 --> 00:05:48.740
+Perlu E32 yang dioptimalkan untuk memori dengan 32 VCPU dan 256GB itu juga bisa.
+
+00:05:49.500 --> 00:05:51.680
+Sekarang Anda tidak bisa begitu saja menyatukan VM seri acak.
+
+00:05:52.220 --> 00:05:53.960
+AKS mengatur mereka ke dalam kumpulan node.
+
+00:05:54.660 --> 00:05:57.820
+Kumpulan node adalah sekelompok VM identik dengan ukuran dan konfigurasi yang sama.
+
+00:05:58.480 --> 00:06:00.200
+Anda dapat memiliki beberapa kumpulan node dalam satu cluster.
+
+00:06:00.200 --> 00:06:03.280
+Satu kumpulan dengan VM seri D tujuan umum untuk front end web Anda,
+
+00:06:03.420 --> 00:06:06.220
+yang lain dengan VM seri E yang dioptimalkan memori untuk basis data Anda,
+
+00:06:06.320 --> 00:06:08.960
+dan yang ketiga dengan VM berkemampuan GPU untuk beban kerja pembelajaran nasib.
+
+00:06:09.060 --> 00:06:10.460
+Setiap kumpulan berskala sederhana independen.
+
+00:06:11.060 --> 00:06:12.120
+Dan berskala itu otomatis.
+
+00:06:12.680 --> 00:06:14.260
+Benskala otomatis cluster memantuk pot Anda.
+
+00:06:14.920 --> 00:06:17.860
+Ketika mereka membutuhkan lebih banyak sumber daya daripada yang dapat disediakan node saat ini,
+
+00:06:17.940 --> 00:06:18.380
+ia menambahkan.
+
+00:06:18.680 --> 00:06:21.460
+Dan ketika lalu lintas turun dan beban sebagian besar tidak aktif, ia menghapus.
+
+00:06:21.880 --> 00:06:25.420
+Anda menetapkan ukuran minimum dan maksimum untuk setiap kumpulan dan AKS menengahkan isi site.
+
+00:06:25.420 --> 00:06:27.100
+Di sini Anda benar-benar bisa menghemat uang.
+
+00:06:27.700 --> 00:06:30.340
+Anda tidak perlu membayar kapasitas yang menganggur di luar jam sibuk.
+
+00:06:31.020 --> 00:06:32.920
+Peningkatan node adalah hal lain yang ditangani AKS.
+
+00:06:33.440 --> 00:06:36.640
+Saat patch keamanan OS baru keluar, AKS dapat menerapkannya ke node Anda.
+
+00:06:37.180 --> 00:06:40.420
+Dan saat versi Kubernetes baru dirilis, AKS dapat meningkatkan cluster Anda.
+
+00:06:40.920 --> 00:06:41.700
+Anda yang mendirikan jadwal.
+
+00:06:42.060 --> 00:06:44.060
+Anda yang memutuskan kapan peringkatan terjadi, bukan Microsoft.
+
+00:06:44.520 --> 00:06:48.760
+Pekerjaan teknis mengosongkan pot, memperbarui node, dan mengaktifkannya kembali dilakukan untuk Anda.
+
+00:06:49.820 --> 00:06:50.380
+Arame biaya.
+
+00:06:50.880 --> 00:06:53.020
+Anda membayar tarif VM Azure standar untuk node-an.
+
+00:06:53.020 --> 00:06:57.820
+D2 SV3 di ISUS biayanya sekitar 70 per bulan dan VM yang lebih besar tentu lebih mahal.
+
+00:06:58.560 --> 00:07:00.280
+Namun, ada cara untuk menurunkannya secara signifikan.
+
+00:07:00.840 --> 00:07:03.760
+Reserved Instance memungkinkan Anda berkomitmen selama 1 atau 3 tahun
+
+00:07:03.760 --> 00:07:07.020
+untuk mendapatkan diskon hemat hingga 72% dibanding harga bayar sesuai penggunaan.
+
+00:07:07.320 --> 00:07:09.120
+Jika Anda mengetahui kapasitas dasar Anda,
+
+00:07:09.260 --> 00:07:12.080
+yakni node yang harus selalu berjalan, memesannya sangatlah masuk akal.
+
+00:07:12.560 --> 00:07:15.760
+Spot VM bahkan lebih murah diskon hingga 90% dari harga bayar sesuai penggunaan.
+
+00:07:16.120 --> 00:07:16.840
+Namun, inilah risikonya.
+
+00:07:17.020 --> 00:07:20.060
+Azure dapat mengambil kembali kapasitas tersebut kapan saja
+
+00:07:20.060 --> 00:07:22.600
+dengan memberi pemberitahuan 30 detik sebelum penghentian.
+
+00:07:23.380 --> 00:07:25.920
+Ini cocok untuk pekerjaan batch pipeline CIPCD
+
+00:07:25.920 --> 00:07:27.980
+atau beban kerja stateless yang tahan gangguan,
+
+00:07:28.220 --> 00:07:29.840
+tapi kurang baik untuk API produksi.
+
+00:07:30.700 --> 00:07:34.200
+Jadi, Anda membayar pekerja memilih ukuran jumlah dan model harga,
+
+00:07:34.380 --> 00:07:37.080
+sementara AKS mengelola pool, penskalaan, dan pembaruan.
+
+00:07:37.740 --> 00:07:39.240
+Node dan pod Anda harus saling berkomunikasi.
+
+00:07:39.940 --> 00:07:41.020
+Dan disitulah peran jaringan.
+
+00:07:41.980 --> 00:07:43.700
+Jaringan bagaimana pod saling berkomunikasi.
+
+00:07:44.240 --> 00:07:46.080
+Setiap pod di kluster Anda memerlukan alamat IP,
+
+00:07:46.080 --> 00:07:47.720
+tetapi pod selalu datang dan pergi.
+
+00:07:48.340 --> 00:07:50.020
+Mereka bisa mengalami crash melakukan penskalaan.
+
+00:07:50.020 --> 00:07:53.180
+Jadi, Anda butuh sistem yang memberikan IP secara dinamis
+
+00:07:53.180 --> 00:07:54.620
+dan memastikan pod bisa saling terhubung.
+
+00:07:55.100 --> 00:07:56.600
+Itulah fungsi dari Content Networking Interface.
+
+00:07:57.440 --> 00:07:59.660
+Azure CNA adalah implementasi dari Microsoft yang mengelola
+
+00:07:59.660 --> 00:08:02.760
+bagaimana pod mendapatkan alamat dan aliran lalu rintas antar pod.
+
+00:08:02.760 --> 00:08:04.980
+Ada dua model jaringan utama yang bisa Anda pilih.
+
+00:08:05.640 --> 00:08:08.300
+Overlay Networking memberikan pod IP dari rentang alamat terpisah
+
+00:08:08.300 --> 00:08:10.360
+yang bukan bagian dari virtual network Anda.
+
+00:08:10.800 --> 00:08:12.020
+Ini adalah opsi yang lebih mudah disekalat.
+
+00:08:12.500 --> 00:08:15.800
+Anda bisa memiliki hingga 5.000 node dan 1.4 juta pod dalam satu kluster.
+
+00:08:16.500 --> 00:08:18.400
+Karena IP pod terisolasi dari VNet Anda,
+
+00:08:18.560 --> 00:08:21.640
+Anda bisa menggunakan kembali ruang alamat yang sama di banyak kluster tanpa konflik.
+
+00:08:22.720 --> 00:08:25.660
+Kekurangannya adalah pod tidak dapat diakses langsung dari luar kluster.
+
+00:08:26.400 --> 00:08:29.220
+Lalu lintas yang keluar dari pod akan diterjemahkan ke alamat IP node.
+
+00:08:29.220 --> 00:08:31.680
+Opsi lainnya adalah Flat Networking,
+
+00:08:31.800 --> 00:08:33.980
+di mana pod mendapatkan IP langsung dari rentang VNet Anda.
+
+00:08:34.500 --> 00:08:37.060
+Sistem eksternal dapat menjangkau pod secara langsung jika diperlukan.
+
+00:08:37.420 --> 00:08:40.120
+Namun kekurangannya adalah Anda menghabiskan alamat IP dari VNet Anda,
+
+00:08:40.460 --> 00:08:42.320
+yang bisa cepat habis jika Anda memiliki banyak pod.
+
+00:08:42.900 --> 00:08:44.680
+Anda perlu menencanakan ukuran subnet Anda dengan cerong.
+
+00:08:45.260 --> 00:08:47.020
+Sekarang mari kita bahas lintas yang keluar dari kluster tanip.
+
+00:08:47.440 --> 00:08:49.220
+Saat pod perlu menjangkau sesuatu di internet,
+
+00:08:49.220 --> 00:08:52.620
+IP eksternal, basis data, atau layanan pihak ketiga lalu lintas tersebut
+
+00:08:52.620 --> 00:08:54.060
+harus melalui suatu perantara.
+
+00:08:54.740 --> 00:08:57.600
+Secara default, AKS menggunakan penyeimbang beban Azure untuk koneksi keluar
+
+00:08:57.600 --> 00:08:59.500
+dan berfungsi dengan baik untuk sebagian besar bekerja.
+
+00:08:59.960 --> 00:09:02.180
+Namun, jika aplikasi Anda membuat banyak koneksi keluar,
+
+00:09:02.600 --> 00:09:04.780
+Anda mungkin mengalami masalah yang disebut kehabisan portsnet.
+
+00:09:05.380 --> 00:09:08.500
+Setiap node mendapatkan jumlah port translasi alamat jaringan sumber yang tetap,
+
+00:09:09.240 --> 00:09:11.000
+dan saat habis, koneksi baru akan gagal.
+
+00:09:11.420 --> 00:09:12.880
+Solusinya adalah Azure Net Gateway,
+
+00:09:13.120 --> 00:09:15.680
+yang menangani jumlah koneksi tinggi dengan jauh lebih baik.
+
+00:09:15.940 --> 00:09:19.080
+Untuk mengekspos aplikasi Anda ke internet, ada dua pendekatan utama.
+
+00:09:19.840 --> 00:09:22.420
+Untuk aplikasi yang berkomunikasi melalui TCP atau UDP,
+
+00:09:22.640 --> 00:09:24.740
+seperti server game, basis data, atau protokol khusus,
+
+00:09:24.880 --> 00:09:26.740
+Anda menggunakan layanan penyeimbang beban.
+
+00:09:26.740 --> 00:09:30.000
+Ini memberikan aplikasi Anda IP publik dan meneruskan lalu lintas di lapisan.
+
+00:09:30.260 --> 00:09:32.920
+Untuk aplikasi web yang menggunakan HTTP atau HTTPS,
+
+00:09:33.040 --> 00:09:34.160
+Anda memerlukan English Controller.
+
+00:09:34.680 --> 00:09:35.620
+Ini bekerja di lapisan 7.
+
+00:09:36.040 --> 00:09:38.120
+Ini memahami URL jalur dan nama host.
+
+00:09:38.960 --> 00:09:40.840
+Anda dapat merutekan lalu lintas kelayanan berbeda
+
+00:09:40.840 --> 00:09:42.540
+berdasarkan nama domain atau jalur URL.
+
+00:09:42.840 --> 00:09:44.900
+Dan satu IP publik dapat melayani puluhan aplikasi.
+
+00:09:45.880 --> 00:09:47.320
+AKS mendukung opsi inggris terkelola
+
+00:09:47.320 --> 00:09:48.940
+seperti application gateway untuk kontainer,
+
+00:09:49.060 --> 00:09:51.880
+atau Anda dapat menjalankan milik Anda sendiri seperti NJINX.
+
+00:09:52.340 --> 00:09:53.940
+Satu kesalahan yang sering dilakukan orang adalah
+
+00:09:53.940 --> 00:09:55.600
+membuat cluster AKS dengan terlalu kecil.
+
+00:09:55.600 --> 00:09:57.400
+Mungkin subnet per 28,
+
+00:09:57.780 --> 00:09:58.500
+total 11 IP.
+
+00:09:59.140 --> 00:10:00.660
+Itu berhasil untuk cluster uji kecil,
+
+00:10:00.740 --> 00:10:02.060
+tetapi AKS mencadangkan IP per node.
+
+00:10:02.520 --> 00:10:04.940
+Cluster 3 node dengan pergulapan mungkin baik-baik saja hari ini,
+
+00:10:05.040 --> 00:10:06.320
+tetapi bulan depan Anda menambah netpool,
+
+00:10:06.540 --> 00:10:07.200
+lalu lintas Anda tumbuh,
+
+00:10:07.260 --> 00:10:08.560
+dan tiba-tiba Anda tidak bisa melakukan bank account.
+
+00:10:08.820 --> 00:10:11.480
+Dan Anda tidak dapat mengubah CIDR subnet setelah cluster dibuat.
+
+00:10:12.120 --> 00:10:13.360
+Anda harus membangun ulang cluster,
+
+00:10:13.500 --> 00:10:15.340
+atau membuat netpool baru di subnet yang berbeda
+
+00:10:15.340 --> 00:10:16.700
+dan memigrasikan beban kerja Anda.
+
+00:10:16.700 --> 00:10:19.920
+Rencanakan ukuran subnet Anda untuk pertemuan sejak hari pertama.
+
+00:10:20.320 --> 00:10:22.100
+Setelah aplikasi Anda berjalan dan dapat diakses,
+
+00:10:22.180 --> 00:10:22.920
+Anda perlu menguncinya.
+
+00:10:23.760 --> 00:10:24.200
+Keamanan.
+
+00:10:24.640 --> 00:10:27.160
+Jadi bagaimana sebenarnya cara kerja keamanan di AKS?
+
+00:10:27.480 --> 00:10:29.800
+Anggaplah itu seperti gedung dengan berbagai lapisan perlindungan.
+
+00:10:30.140 --> 00:10:31.900
+Lapisan pertama adalah identitas dan akses.
+
+00:10:32.440 --> 00:10:33.160
+Siapa yang bisa melewati pintu?
+
+00:10:33.600 --> 00:10:35.400
+Anda menghubungkan cluster Anda ke Entra ID,
+
+00:10:35.600 --> 00:10:37.180
+yang merupakan layanan identitas Microsoft.
+
+00:10:37.700 --> 00:10:39.460
+Dulu ini disebut Azure Active Directory.
+
+00:10:40.520 --> 00:10:42.920
+Tim Anda masuk menggunakan kredensial kerja mereka yang biasa,
+
+00:10:42.920 --> 00:10:43.940
+tidak perlu akun terpisah.
+
+00:10:44.300 --> 00:10:45.120
+Lalu sebagai tambahannya,
+
+00:10:45.260 --> 00:10:46.480
+Anda menambahkan Kubernetes RBAC,
+
+00:10:46.620 --> 00:10:47.740
+yaitu kontrol akses berbasis peran.
+
+00:10:47.940 --> 00:10:49.260
+Ini menentukan siapa yang bisa melihat apa,
+
+00:10:49.420 --> 00:10:50.260
+siapa yang bisa mendeploy pod,
+
+00:10:50.360 --> 00:10:51.320
+siapa yang bisa menghapus sumber data.
+
+00:10:51.980 --> 00:10:54.600
+Pengembang mungkin hanya mendapatkan akses ke namespace mereka sendiri,
+
+00:10:55.080 --> 00:10:57.160
+sementara operator memiliki akses baca seluruh cluster,
+
+00:10:57.400 --> 00:10:58.740
+dan admin mendapatkan kontrol penuh.
+
+00:10:59.080 --> 00:11:01.140
+Anda dapat memutarkan grup Entra langsung ke peran Kubernetes,
+
+00:11:01.380 --> 00:11:02.920
+jadi saat seseorang bergabung atau keluar tim,
+
+00:11:03.000 --> 00:11:03.960
+Anda cukup memperbarui grup Entra,
+
+00:11:04.040 --> 00:11:04.960
+cukup memperbarui grup Entra,
+
+00:11:04.960 --> 00:11:06.340
+dan izin akan mengikuti secara otomatis.
+
+00:11:06.340 --> 00:11:09.000
+Ini seperti meja resepsionis yang menangani akses untuk seluruh gedung.
+
+00:11:09.520 --> 00:11:10.700
+Keamanan jaringan adalah lapisan kedua.
+
+00:11:11.180 --> 00:11:11.840
+Secara default,
+
+00:11:12.000 --> 00:11:14.800
+server API cluster AKS Anda dapat diakses melalui internet publik,
+
+00:11:14.960 --> 00:11:17.180
+dan meskipun Anda bisa membatasinya ke rentang IP tertentu,
+
+00:11:17.280 --> 00:11:18.240
+endpoint-nya tetap terexpos.
+
+00:11:18.840 --> 00:11:19.920
+Untuk beban kerja produksi,
+
+00:11:20.060 --> 00:11:21.460
+Anda sebaiknya menggunakan cluster pribadi.
+
+00:11:22.260 --> 00:11:22.720
+Dengan begitu,
+
+00:11:22.880 --> 00:11:24.880
+server API mendapatkan IP internal dari VNet Anda,
+
+00:11:25.260 --> 00:11:27.040
+yang hanya bisa diakses melalui Azure Private Link
+
+00:11:27.040 --> 00:11:28.320
+tanpa parang publik sama sekali.
+
+00:11:28.900 --> 00:11:31.180
+Siapapun yang mengelola cluster harus terhubung ke jaringan Anda,
+
+00:11:31.340 --> 00:11:34.120
+baik melalui VPN Express Route atau Jumbox di dalam VNet.
+
+00:11:34.120 --> 00:11:36.360
+Lalu kita masuk ke keamanan pod,
+
+00:11:36.460 --> 00:11:38.460
+di mana sebagian besar kerentaran kontainer terjadi.
+
+00:11:38.920 --> 00:11:39.540
+Aturan nomor satu,
+
+00:11:39.680 --> 00:11:40.880
+jangan jalankan kontainer sebagai root.
+
+00:11:41.240 --> 00:11:43.720
+Jika kontainer berjalan sebagai root dan penyerang masuk,
+
+00:11:43.840 --> 00:11:45.020
+mereka memiliki akses root pada host.
+
+00:11:45.440 --> 00:11:46.980
+Begitu juga dengan eskalasi hak istimewa.
+
+00:11:47.120 --> 00:11:47.720
+Nonaktifkan itu.
+
+00:11:48.140 --> 00:11:49.540
+Gunakan Azure Policy untuk Kubernetes
+
+00:11:49.540 --> 00:11:51.080
+guna menerapkan aturan ini secara otomatis.
+
+00:11:51.540 --> 00:11:54.060
+Anda bisa menetapkan bahwa tidak ada kontainer di namespace ini
+
+00:11:54.060 --> 00:11:55.340
+yang boleh berjalan sebagai root,
+
+00:11:55.340 --> 00:11:57.020
+dan kebijakan akan memblokir deployment apapun
+
+00:11:57.020 --> 00:11:58.280
+yang melanggar aturan itu sebelum mencapain.
+
+00:11:58.360 --> 00:11:59.640
+Rahasia secret adalah hal penting berikut.
+
+00:12:00.040 --> 00:12:01.820
+Jangan pernah menyimpan kata sandi kunci API
+
+00:12:01.820 --> 00:12:04.380
+atau string koneksi di dalam kode atau image kontainer Anda.
+
+00:12:05.040 --> 00:12:05.940
+Orang sering melakukannya.
+
+00:12:06.420 --> 00:12:09.020
+Mereka melakukan hard code kata sandi database di file konfigurasi,
+
+00:12:09.600 --> 00:12:10.240
+membangun image,
+
+00:12:10.480 --> 00:12:11.260
+mendorongnya keregistri,
+
+00:12:11.420 --> 00:12:13.060
+dan kata sandi itu kini tertanam selamanya.
+
+00:12:13.680 --> 00:12:15.640
+Siapapun yang memiliki akses keregistri tersebut bisa meng-stab.
+
+00:12:15.900 --> 00:12:17.260
+Sebagai gantinya, gunakan Azure Giveout.
+
+00:12:17.660 --> 00:12:18.600
+Simpan rahasia Anda di sana
+
+00:12:18.600 --> 00:12:21.300
+dan biarkan pod Anda mengaksesnya melalui driver CSS Secret Store.
+
+00:12:21.540 --> 00:12:22.980
+Pod memohon rahasia tersebut
+
+00:12:22.980 --> 00:12:25.140
+sebagai volume atau variable lingkungan saat runtime,
+
+00:12:25.320 --> 00:12:27.480
+dan rahasia tidak pernah menyentuh image atau kode sumber Anda.
+
+00:12:28.140 --> 00:12:28.980
+Terakhir, pementauan.
+
+00:12:28.980 --> 00:12:30.960
+Microsoft Defender for Containers
+
+00:12:30.960 --> 00:12:32.500
+memitai image kontainer Anda
+
+00:12:32.500 --> 00:12:33.920
+untuk mencari kerentanan yang diketahui
+
+00:12:33.920 --> 00:12:34.800
+dan memantau kluster Anda
+
+00:12:34.800 --> 00:12:35.880
+dari aktivitas mencurigakan,
+
+00:12:36.100 --> 00:12:37.320
+upaya eskalasi hak istimewa,
+
+00:12:37.480 --> 00:12:38.500
+koneksi jaringan yang tidak biasa,
+
+00:12:38.600 --> 00:12:39.780
+hingga beban kerja kripto-mining.
+
+00:12:40.440 --> 00:12:41.660
+Ini bukan alat pasang Anda lupakan,
+
+00:12:41.760 --> 00:12:44.080
+tetapi alat ini menangkap hal-hal yang mungkin Anda lewatkan sendiri.
+
+00:12:44.580 --> 00:12:46.120
+Bahkan dengan semua itu, hal-hal bisa saja salah.
+
+00:12:46.720 --> 00:12:48.140
+Jadi mari kita lihat kesalahan yang paling umum terjadi.
+
+00:12:48.860 --> 00:12:50.060
+Kesalahan umum apa yang biasanya salah?
+
+00:12:50.580 --> 00:12:51.440
+Apa yang paling sering menjebak orang?
+
+00:12:51.960 --> 00:12:53.180
+Mari kita bahas tersangka utamanya.
+
+00:12:53.520 --> 00:12:54.740
+Pertama adalah batas kuota Azure.
+
+00:12:54.740 --> 00:12:57.440
+Langganan Azure Anda memiliki batasan jumlah VCPU
+
+00:12:57.440 --> 00:12:58.840
+yang bisa digunakan di wilayah tertentu.
+
+00:12:59.200 --> 00:13:00.260
+Begitu pula dengan IP pabrik,
+
+00:13:00.660 --> 00:13:02.360
+penyeimbang beban, dan sumber daya lainnya.
+
+00:13:02.760 --> 00:13:03.900
+Saat Anda membuat kluster AKS,
+
+00:13:04.020 --> 00:13:05.360
+hal itu akan memakan sebagian kuota tersebut.
+
+00:13:05.620 --> 00:13:06.600
+Jika Anda mencapai batasnya,
+
+00:13:06.680 --> 00:13:07.720
+pembuatan kluster akan gagal
+
+00:13:07.720 --> 00:13:09.020
+atau penskalaan akan berhenti berfungsi.
+
+00:13:09.300 --> 00:13:11.480
+Solusinya mudah, mintalah penambahan kuota
+
+00:13:11.480 --> 00:13:12.800
+melalui portal Azure.
+
+00:13:13.380 --> 00:13:14.860
+Namun lakukanlah sebelum Anda membutuhkan
+
+00:13:14.860 --> 00:13:16.400
+yang bukan sepenerapan macet pada jam 2 pagi.
+
+00:13:16.660 --> 00:13:18.260
+Berikutnya adalah penentuan ukuran subnet,
+
+00:13:18.260 --> 00:13:20.660
+dan ini merepotkan karena Anda tidak bisa memperbaikinya setelah faktor.
+
+00:13:20.660 --> 00:13:22.680
+AKS mencadangkan alamat IP per node,
+
+00:13:22.800 --> 00:13:25.260
+dan setiap node memerlukan sejumlah IP untuk pod.
+
+00:13:26.020 --> 00:13:27.340
+Jika subnet Anda terlalu kecil,
+
+00:13:27.420 --> 00:13:28.540
+Anda akan kehabisan alamat,
+
+00:13:28.640 --> 00:13:31.060
+dan Anda tidak dapat memperluas subnet setelah kluster dibuat.
+
+00:13:31.640 --> 00:13:32.520
+Rencanakan untuk penemuan.
+
+00:13:32.840 --> 00:13:34.500
+Jika Anda merasa membutuhkan 10 node hari ini,
+
+00:13:34.600 --> 00:13:35.880
+sediakan IP yang cukup untuk 50.
+
+00:13:36.200 --> 00:13:39.540
+Subnet Perse-Dow 4 memberi Anda 251 IP yang dapat digunakan,
+
+00:13:39.700 --> 00:13:41.340
+yang merupakan titik awal yang baik untuk sebagian besar.
+
+00:13:41.700 --> 00:13:44.100
+Image pullback off mungkin adalah kesalahan pod paling umum
+
+00:13:44.100 --> 00:13:44.840
+yang akan Anda temui.
+
+00:13:45.420 --> 00:13:47.720
+Pod Anda mencoba menarik gambar kontainer, dan gagal.
+
+00:13:48.360 --> 00:13:49.760
+Biasanya ini adalah masalah autentikasi.
+
+00:13:49.760 --> 00:13:51.700
+Kluster Anda tidak dapat mengakses registri konten.
+
+00:13:52.020 --> 00:13:54.340
+Mungkin Anda menggunakan registri privat tanpa kredensial,
+
+00:13:54.420 --> 00:13:55.780
+atau kredensialnya sudah ke dalam luar sah.
+
+00:13:56.120 --> 00:13:57.420
+Periksa rahasia penarikan gambar,
+
+00:13:57.520 --> 00:13:58.480
+image pull secrets Anda,
+
+00:13:58.620 --> 00:14:00.360
+pastikan akun layanan memiliki akses ke registri,
+
+00:14:00.440 --> 00:14:01.320
+dan verifikasi nama gambar.
+
+00:14:01.620 --> 00:14:02.760
+Jarang sekali merupakan pod Kubernetes.
+
+00:14:03.140 --> 00:14:04.560
+Reslue back off adalah hal lain yang sering terlihat.
+
+00:14:04.960 --> 00:14:06.980
+Pod Anda dimulai berjalan selama beberapa detik,
+
+00:14:07.080 --> 00:14:08.400
+macet dimulai ulang, lalu macet lagi.
+
+00:14:09.080 --> 00:14:11.140
+Insting alami adalah menyalakan Kubernetes tapi jatuh.
+
+00:14:11.560 --> 00:14:14.000
+9 dari 10 kali masalahnya ada pada aplikasi Anda,
+
+00:14:14.140 --> 00:14:15.720
+variable lingkungan yang salah dikonfigurasi,
+
+00:14:15.840 --> 00:14:16.580
+dependensi yang hilang,
+
+00:14:16.580 --> 00:14:18.820
+atau string koneksi basis data yang mengarah ke server yang salah.
+
+00:14:19.280 --> 00:14:20.520
+Periksa lock pod dengan go back to lock.
+
+00:14:21.240 --> 00:14:22.580
+Persam kesalahannya biasanya ada di sana.
+
+00:14:23.020 --> 00:14:24.080
+Lalu ada kehabisan koneksi keluar,
+
+00:14:24.180 --> 00:14:24.840
+atau bukan connection next.
+
+00:14:25.200 --> 00:14:27.660
+Aplikasi Anda membuat banyak koneksi ke layanan eksternal,
+
+00:14:27.840 --> 00:14:30.060
+API, basis data, dan alat pihak ketiga.
+
+00:14:30.740 --> 00:14:32.340
+Setiap koneksi menggunakan pod SNAP,
+
+00:14:32.760 --> 00:14:34.920
+dan setiap node memiliki jumlah pod terbatas tersebut.
+
+00:14:35.440 --> 00:14:37.400
+Saat habis koneksi baru akan gagal secara diam-diam.
+
+00:14:37.740 --> 00:14:38.760
+Aplikasi Anda tampak sehat,
+
+00:14:38.860 --> 00:14:40.460
+tetapi tidak dapat menjangkau apapun di luar khas.
+
+00:14:40.460 --> 00:14:42.520
+Solusinya adalah beralih ke Azure Net Gateway
+
+00:14:42.520 --> 00:14:44.260
+yang menangani jumlah koneksi tinggi jauh lebih baik
+
+00:14:44.260 --> 00:14:45.380
+daripada penyeimbang beban standar
+
+00:14:45.380 --> 00:14:46.720
+atau gunakan ukuran node yang lebih besar
+
+00:14:46.720 --> 00:14:47.880
+yang mendapatkan ukuran node yang lebih besar
+
+00:14:47.880 --> 00:14:49.260
+yang mendapatkan lebih banyak pod SNAP per node.
+
+00:14:49.660 --> 00:14:51.120
+Semua komponen ini memiliki harga,
+
+00:14:51.260 --> 00:14:53.040
+jadi mari kita beda apa yang sebenarnya akan Anda bayar.
+
+00:14:53.620 --> 00:14:54.380
+Biar dan penetapan harga.
+
+00:14:54.840 --> 00:14:55.940
+Jadi berapakah sebenarnya biaya, guys?
+
+00:14:56.340 --> 00:14:56.960
+Mari kita berjelas.
+
+00:14:57.320 --> 00:14:59.660
+Sebagian besar tagihan Anda berasal dari VM node pekerja,
+
+00:15:00.000 --> 00:15:01.820
+komputasi, penyimpanan, dan jaringan.
+
+00:15:02.060 --> 00:15:03.080
+Di situlah pengeluaran terbesaran.
+
+00:15:03.080 --> 00:15:06.860
+Satu node, dua SV3 di ISUS berbiaya sekitar 70 loss per bulan.
+
+00:15:07.520 --> 00:15:08.620
+Lima node, 350.
+
+00:15:09.160 --> 00:15:10.480
+Sepuluh node, 700.
+
+00:15:11.220 --> 00:15:12.700
+Biaya VM tersebut akan berdanggang cepat.
+
+00:15:13.160 --> 00:15:14.520
+Kontrol plan memiliki tiga tingkat harga.
+
+00:15:15.200 --> 00:15:17.380
+Versi gratis memberikan kontrol plan tanpa biaya tambahan,
+
+00:15:17.540 --> 00:15:18.080
+namun tanpa SLA.
+
+00:15:18.720 --> 00:15:21.460
+Versi standar sekitar 72 per bulan per kluster
+
+00:15:21.460 --> 00:15:24.980
+dengan SLA 990-99% pada API server.
+
+00:15:25.800 --> 00:15:28.240
+Versi premium sekitar 4,2 per bulan
+
+00:15:28.240 --> 00:15:29.820
+dan menambahkan dukungan jangka panjang
+
+00:15:29.820 --> 00:15:30.780
+untuk versi Kubernetes.
+
+00:15:30.780 --> 00:15:33.260
+Untuk sebagian besar beban kerja produksi standar
+
+00:15:33.260 --> 00:15:33.840
+dan pilihan tepat,
+
+00:15:34.140 --> 00:15:35.900
+tetapi Anda bisa menekan biaya VM tersebut.
+
+00:15:36.420 --> 00:15:38.180
+Reserved Instance memungkinkan Anda berkomitmen
+
+00:15:38.180 --> 00:15:39.340
+selama satu atau tiga tahun
+
+00:15:39.340 --> 00:15:41.280
+hemat hingga 70% dibanding PSU Go.
+
+00:15:41.840 --> 00:15:43.400
+Jika Anda tahu kapasitas dasar Anda,
+
+00:15:43.620 --> 00:15:44.760
+node yang selalu perlu berjalan,
+
+00:15:45.040 --> 00:15:46.440
+memesannya adalah langkah logis.
+
+00:15:46.920 --> 00:15:48.640
+Rencana penghematan Azure bekerja serupa,
+
+00:15:49.000 --> 00:15:50.400
+namun memberi lebih banyak fleksibilitas
+
+00:15:50.400 --> 00:15:51.240
+di berbagai keluarga VM.
+
+00:15:51.600 --> 00:15:53.400
+Anda berkomitmen pada pengeluaran per jam tertentu
+
+00:15:53.400 --> 00:15:54.900
+dan Azure menerapkan diskon secara otomatis.
+
+00:15:55.260 --> 00:15:57.020
+Penghematan mencapai hingga 65%.
+
+00:15:57.020 --> 00:15:58.440
+Spot VM adalah opsi termurah,
+
+00:15:58.580 --> 00:15:59.660
+diskon hingga 90%,
+
+00:15:59.660 --> 00:16:00.540
+tetapi ada syaratnya.
+
+00:16:00.820 --> 00:16:02.700
+Azure dapat mengambil kembali kapasitas itu kapan saja.
+
+00:16:03.220 --> 00:16:04.000
+Node Anda akan dikeluarkan,
+
+00:16:04.100 --> 00:16:04.880
+port Anda akan dijadwalkan.
+
+00:16:05.900 --> 00:16:07.500
+Itu cocok untuk pekerjaan batch,
+
+00:16:07.700 --> 00:16:08.620
+runner CIF stateless.
+
+00:16:09.640 --> 00:16:11.040
+Tidak terlalu cocok untuk API produksi Anda.
+
+00:16:11.640 --> 00:16:13.080
+Optimalisasi biaya bukan hanya soal diskon.
+
+00:16:13.660 --> 00:16:14.600
+Sesuaikan ukuran notepad.
+
+00:16:14.880 --> 00:16:16.080
+Jangan menyediakan VM 16 core
+
+00:16:16.080 --> 00:16:17.340
+jika port Anda hanya menggunakan dua.
+
+00:16:17.780 --> 00:16:18.900
+Gunakan cluster autoscaler
+
+00:16:18.900 --> 00:16:19.920
+agar Anda tidak membayar node
+
+00:16:19.920 --> 00:16:21.400
+yang menganggur saat lalu lintas rendah.
+
+00:16:21.900 --> 00:16:23.060
+Untuk beban kerja CPU rendah,
+
+00:16:23.200 --> 00:16:24.180
+pertimbangkan VM B-series.
+
+00:16:24.720 --> 00:16:25.620
+Seri ini bersifat berstabil
+
+00:16:25.620 --> 00:16:26.980
+dan jauh lebih murah daripada di series.
+
+00:16:26.980 --> 00:16:29.100
+Jangan lupakan penyimpanan dan transfer data juga.
+
+00:16:29.540 --> 00:16:30.680
+Persisten volume menambah biaya.
+
+00:16:31.220 --> 00:16:32.460
+Azure disk cepat, tetapi mahal.
+
+00:16:33.040 --> 00:16:34.720
+Azure files lebih murah, tetapi lebih lambat.
+
+00:16:35.240 --> 00:16:36.480
+Pilih berdasarkan kebutuhan performa
+
+00:16:36.480 --> 00:16:37.080
+beban kerja Anda.
+
+00:16:38.080 --> 00:16:40.100
+Data egress lalu lintas yang keluar dari Azure
+
+00:16:40.100 --> 00:16:40.980
+juga memakan biaya.
+
+00:16:41.500 --> 00:16:43.360
+Jaga lalu lintas Anda tetap dalam mili yang sama jika mungkin.
+
+00:16:43.820 --> 00:16:45.280
+Jadi kapan sebenarnya AKS masuk akal digunakan?
+
+00:16:45.760 --> 00:16:46.800
+Mari kita bahas pandunian nyata.
+
+00:16:47.600 --> 00:16:48.600
+Apa Anda harus menggunakan AKS?
+
+00:16:48.980 --> 00:16:50.880
+AKS unggul dengan arsitektur layanan mikro.
+
+00:16:51.280 --> 00:16:52.720
+Anda memiliki beberapa layanan independen
+
+00:16:52.720 --> 00:16:54.100
+yang perlu disekalakan secara terpisah.
+
+00:16:54.100 --> 00:16:56.680
+Front end mungkin butuh 10 replika saat jam sibuk
+
+00:16:56.680 --> 00:16:58.040
+sementara back end hanya butuh 3.
+
+00:16:58.780 --> 00:17:00.200
+AKS menangani hal itu secara alami.
+
+00:17:00.860 --> 00:17:02.540
+Setiap layanan berskala secara independen
+
+00:17:02.540 --> 00:17:03.740
+berdasarkan lalu lintasnya sendiri.
+
+00:17:04.240 --> 00:17:05.900
+Ketersediaan tinggi adalah halasan kuat lainnya.
+
+00:17:06.360 --> 00:17:08.240
+AKS mendistribusikan port Anda ke beberapa node.
+
+00:17:08.780 --> 00:17:09.740
+Jika sebuah node gagal,
+
+00:17:09.840 --> 00:17:11.180
+port dijadwalkan ulang ke node yang sehat.
+
+00:17:11.600 --> 00:17:13.020
+Jika Anda menggunakan zona ketersediaan,
+
+00:17:13.080 --> 00:17:13.880
+kluster Anda bisa bertahan
+
+00:17:13.880 --> 00:17:15.080
+meskipun seluruh pusat data mati.
+
+00:17:15.820 --> 00:17:18.180
+Untuk aplikasi yang harus aktif 247 itu sangat berharga.
+
+00:17:18.180 --> 00:17:21.100
+Integrasi CI Presidi adalah tempat AKS benar-benar berikan hati.
+
+00:17:21.520 --> 00:17:22.700
+Anda membuat image kontainer,
+
+00:17:22.880 --> 00:17:23.940
+mendorongnya ke registri,
+
+00:17:24.140 --> 00:17:26.580
+dan AKS menerapkan versi baru dengan pembaruan berkelanjutan.
+
+00:17:27.220 --> 00:17:27.700
+Apa waktu nanti?
+
+00:17:28.080 --> 00:17:29.340
+Jika terdiri kesalahan, Anda tinggal ke tempat.
+
+00:17:29.860 --> 00:17:31.180
+Tidak perlu SSH manual ke server,
+
+00:17:31.320 --> 00:17:32.240
+tidak perlu copy paste file,
+
+00:17:32.580 --> 00:17:33.480
+pipeline menangani semuanya.
+
+00:17:34.000 --> 00:17:35.640
+Namun AKS tidak selalu menjadi jawaban yang terlalu.
+
+00:17:35.900 --> 00:17:38.440
+Jika Anda memiliki aplikasi monolitik sederhana di satu VM,
+
+00:17:38.560 --> 00:17:40.900
+AKS justru menambah kompleksitas tanpa banyak manfaat.
+
+00:17:41.440 --> 00:17:44.180
+Anda hanya akan mengelola Kubernetes demi kepentingan penggunaannya saja.
+
+00:17:44.180 --> 00:17:48.420
+Terkadang VM dan layanan aplikasi atau bahkan Azure Functions adalah pilihan yang lebih sederhana dan murah.
+
+00:17:48.720 --> 00:17:50.300
+Jika Anda baru memulai, gunakan tingkat gratis.
+
+00:17:50.620 --> 00:17:53.800
+Buat kluster, terapkan aplikasi uji rusak sesuatu, perbaiki kembali.
+
+00:17:54.140 --> 00:17:55.980
+Pelajari konsepnya tanpa perlu mengkhawatirkan biaya.
+
+00:17:56.320 --> 00:17:57.940
+Saat Anda siap untuk produksi, pindahlah ke standar.
+
+00:17:58.380 --> 00:17:59.120
+Mari kita rangkum semuanya.
+
+00:17:59.980 --> 00:18:00.940
+Ginilah yang perlu Anda ingat.
+
+00:18:01.300 --> 00:18:02.600
+AKS menangani empat hal besar.
+
+00:18:03.160 --> 00:18:05.740
+Microsoft mengelola control plan, yaitu otak dari kluster tersebut.
+
+00:18:06.180 --> 00:18:07.540
+Anda memilih ukuran dan jumlah node,
+
+00:18:07.800 --> 00:18:08.640
+yaitu VM pekerja,
+
+00:18:08.840 --> 00:18:10.560
+dan AKS menangani pool serta pen skalaannya.
+
+00:18:10.560 --> 00:18:17.160
+Untuk jaringan, pot berkomunikasi satu sama lain dan dunia luar melalui Azure CNI dan AKS berintegrasi dengannya agar semuanya berfungsi.
+
+00:18:17.620 --> 00:18:18.720
+Alat ke mana sudah terpasang di dalam?
+
+00:18:19.180 --> 00:18:21.380
+Identitas, isolasi jaringan, penguatan pot.
+
+00:18:22.180 --> 00:18:25.060
+Anda hanya membayar untuk komputasi, node penyimpanan, dan jaringan.
+
+00:18:25.620 --> 00:18:27.140
+Control plan itu sendiri gratis pada tingkat terat.
+
+00:18:27.460 --> 00:18:31.380
+Anda hanya memerlukan standar atau premium jika menginginkan SL atau dukungan jangka panjang.
+
+00:18:31.980 --> 00:18:32.780
+Langkah Anda selanjutnya,
+
+00:18:33.100 --> 00:18:34.920
+buat kluster AKS gratis di portal Azure.
+
+00:18:35.380 --> 00:18:36.760
+Terapkan aplikasi uji sederhana,
+
+00:18:37.000 --> 00:18:38.660
+NJNX atau container Hello World.
+
+00:18:38.660 --> 00:18:40.560
+Lihat cara kerjanya rusak lalu perbaiki.
+
+00:18:40.940 --> 00:18:42.760
+Pengalaman langsung itu mengalahkan tutorial apapun.
+
+00:18:43.340 --> 00:18:44.300
+Jika episode ini mantu,
+
+00:18:44.440 --> 00:18:46.540
+subscribe untuk penjelasan Azure yang lebih mudah dipahami
+
+00:18:46.540 --> 00:18:49.080
+dan bagikan kepada seseorang yang memulai perjalanan cloud mereka.
+
+00:18:49.440 --> 00:18:50.320
+Mereka berterima kasih nanti.

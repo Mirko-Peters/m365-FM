@@ -1,0 +1,799 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:03.820
+Siadasz do komputera, wpisujesz adres e-mail, podajesz hasło i naciskasz Enter.
+
+00:00:03.980 --> 00:00:07.100
+Pojawia się ta krótka pauza, podczas której system sprawdza, czy to naprawdę Ty.
+
+00:00:07.260 --> 00:00:10.020
+Większość osób zakłada, że ta pauza to tylko weryfikacja hasła.
+
+00:00:10.220 --> 00:00:11.920
+Jeśli hasło się zgadza, wchodzisz, prawda?
+
+00:00:12.200 --> 00:00:15.680
+Właściwie nie. Za kulisami dzieje się znacznie więcej niż prawdopodobnie przypuszczasz.
+
+00:00:15.840 --> 00:00:19.080
+Podczas gdy czekasz, Microsoft 365 wykonuje w tle serię sprawdzeń.
+
+00:00:19.300 --> 00:00:23.360
+System analizuje Twoją lokalizację, używane urządzenie oraz to, czy logowanie wydaje się typowe czy podejrzane.
+
+00:00:23.600 --> 00:00:25.520
+Robi to wszystko, zanim wpuści Cię do środka.
+
+00:00:25.520 --> 00:00:29.860
+Pod koniec tego odcinka zrozumiesz, czym jest dostęp warunkowy, jak działa przy każdym logowaniu
+
+00:00:29.860 --> 00:00:34.520
+i dlaczego jest jedną z najważniejszych kontroli bezpieczeństwa w Twoim środowisku Microsoft 365.
+
+00:00:35.120 --> 00:00:37.180
+Zacznijmy więc od najprostszej definicji.
+
+00:00:37.360 --> 00:00:39.260
+Czym właściwie jest dostęp warunkowy?
+
+00:00:39.420 --> 00:00:41.140
+Oto definicja prostymi słowami.
+
+00:00:41.360 --> 00:00:45.280
+Dostęp warunkowy to silnik polityk, który sprawdza kontekst, zanim udzieli komuś dostępu.
+
+00:00:45.420 --> 00:00:48.220
+Nie ogranicza się tylko do sprawdzenia hasła i uznania, że to wystarczy.
+
+00:00:48.440 --> 00:00:52.300
+Zamiast tego zadaję dodatkowe pytania o to, kim jesteś i co dzieje się podczas Twojego logowania.
+
+00:00:52.480 --> 00:00:54.480
+Pomyśl o nim jak o ochroniarzu w klubie nocnym.
+
+00:00:54.480 --> 00:00:57.420
+Pokazujesz dowód przy wejściu, to Twoja nazwa użytkownika i hasło.
+
+00:00:57.580 --> 00:01:00.340
+Ale dobry ochroniarz nie tylko rzuca na niego okiem i pozwala Ci przejść.
+
+00:01:00.580 --> 00:01:05.180
+Sprawdza Twoje nazwisko na liście gości, patrzy, jak jesteś ubrany, a może nawet pamięta, czy sprawiałeś kiedyś kłopoty.
+
+00:01:05.420 --> 00:01:06.900
+Dostęp warunkowy działa tak samo.
+
+00:01:07.140 --> 00:01:13.220
+Weryfikuje Twoją tożsamość zgodnie z regułami, sprawdza, skąd pochodzisz, weryfikuje urządzenie i decyduje, czy wszystko jest w porządku, zanim Cię wpuści.
+
+00:01:13.380 --> 00:01:14.320
+Oto kluczowy punkt.
+
+00:01:14.560 --> 00:01:17.160
+Dostęp warunkowy uruchamia się, gdy już wpiszesz swoje hasło.
+
+00:01:17.160 --> 00:01:19.420
+Nie zastępuje on uwierzytelniania wieloskładnikowego.
+
+00:01:19.580 --> 00:01:21.120
+To dodatkowa warstwa zabezpieczeń.
+
+00:01:21.220 --> 00:01:24.320
+Pomyśl o nim jak o drugim punkcie kontrolnym po okazaniu dowodu przy drzwiach wejściowych.
+
+00:01:24.540 --> 00:01:25.920
+Logika jest prosta, jeśli to.
+
+00:01:26.120 --> 00:01:30.680
+Jeśli użytkownik próbuje uzyskać dostęp do aplikacji w chmurze i spełnia określone warunki, to wymuś te regułę.
+
+00:01:30.840 --> 00:01:36.000
+Na przykład, jeśli ktoś próbuje uzyskać dostęp do Outlooka spoza biura, wymagaj uwierzytelniania wieloskładnikowego.
+
+00:01:36.160 --> 00:01:39.500
+To podstawowa struktura stojąca za każdą polityką dostępu warunkowego.
+
+00:01:39.780 --> 00:01:41.400
+Dlaczego hasła już nie wystarczają?
+
+00:01:41.400 --> 00:01:43.600
+Dlaczego więc potrzebujemy tego dodatkowego kroku?
+
+00:01:43.720 --> 00:01:45.540
+Ponieważ hasła są kradzione każdego dnia.
+
+00:01:45.780 --> 00:01:49.260
+Ataki phishingowe, wycieki danych, ponowne używanie tego samego hasła w wielu serwisach.
+
+00:01:49.420 --> 00:01:52.360
+Twoje hasło może być teraz skompromitowane, a ty nawet byś o tym nie wiedział.
+
+00:01:52.580 --> 00:01:54.120
+Możesz pomyśleć, cóż, to w porządku.
+
+00:01:54.320 --> 00:01:55.900
+Mamy uwierzytelnianie wieloskładnikowe.
+
+00:01:56.060 --> 00:01:56.800
+To nas chroni.
+
+00:01:56.980 --> 00:02:00.040
+Masz rację, MFA bardzo pomaga, ale to nie jest magiczne rozwiązanie.
+
+00:02:00.260 --> 00:02:03.300
+Wyobraź sobie, że haker zdobywa hasło jednego z twoich pracowników.
+
+00:02:03.300 --> 00:02:08.400
+Próbuje zalogować się z kraju, z którym nigdy nie współpracowałeś, używając urządzenia, którego nigdy wcześniej nie widziałeś.
+
+00:02:08.520 --> 00:02:10.820
+MFA może ich powstrzymać, jeśli wywoła monit.
+
+00:02:11.020 --> 00:02:13.740
+Ale co, jeśli haker ma również dostęp do telefonu tego pracownika?
+
+00:02:13.920 --> 00:02:17.220
+Albo co, jeśli używa ataku phishingowego, który przechwytuje również kod MFA?
+
+00:02:17.420 --> 00:02:19.880
+Nagle MFA samo w sobie nie wydaje się już tak niezawodne.
+
+00:02:20.040 --> 00:02:21.340
+Oto przykład z życia wzięty.
+
+00:02:21.580 --> 00:02:23.840
+Dane logowania handlowca wyciekają do dark webu.
+
+00:02:24.000 --> 00:02:27.540
+Bez dostępu warunkowego atakujący może zalogować się z dowolnego miejsca na świecie.
+
+00:02:27.760 --> 00:02:30.520
+Może uzyskać dostęp do poczty plików, danych klientów, wszystkiego.
+
+00:02:30.520 --> 00:02:32.680
+A ty nigdy byś się nie dowiedział, dopóki nie byłoby za późno.
+
+00:02:32.860 --> 00:02:34.800
+Stare podejście polegało na zasadzie wszystko albo nic.
+
+00:02:34.980 --> 00:02:38.900
+Dawałeś użytkownikowi licencję i mógł logować się z każdego urządzenia, każdej lokalizacji i każdej sieci.
+
+00:02:39.120 --> 00:02:42.300
+Bez kontekstu, bez analizy, tylko sprawdzenie hasła i pełny dostęp.
+
+00:02:42.540 --> 00:02:44.360
+Dostęp warunkowy zmienia to całkowicie.
+
+00:02:44.620 --> 00:02:46.380
+Dodaje kontekst do każdego logowania.
+
+00:02:46.680 --> 00:02:50.100
+Sprawdza, gdzie jesteś, jakiego urządzenia używasz, jaką aplikację chcesz otworzyć
+
+00:02:50.100 --> 00:02:53.040
+i jak ryzykowne wygląda logowanie w oparciu o analizę Microsoftu.
+
+00:02:53.260 --> 00:02:56.800
+Zmienia prostą decyzję, tak lub nie, w inteligentną, wielowarstwową ocenę.
+
+00:03:00.520 --> 00:03:04.720
+Sprawdza dostęp warunkowy? Rozbijmy to na sygnały, których używa do podjęcia decyzji.
+
+00:03:04.980 --> 00:03:06.540
+Tożsamość to pierwszy sygnał.
+
+00:03:06.680 --> 00:03:12.020
+Kim jesteś? Czy jesteś zwykłym pracownikiem, administratorem z podwyższonymi uprawnieniami, czy gościem z zewnątrz firmy?
+
+00:03:12.240 --> 00:03:15.620
+Dostęp warunkowy sprawdza Twoje konto użytkownika i grupy, do których należysz.
+
+00:03:15.780 --> 00:03:19.520
+Administrator próbujący się zalogować może napotkać bardziej rygorystyczne zasady niż standardowy użytkownik.
+
+00:03:19.520 --> 00:03:22.280
+Gość może mieć całkowicie zablokowany dostęp do niektórych aplikacji.
+
+00:03:22.460 --> 00:03:24.880
+Twoja tożsamość określa punkt wyjścia tego, co jest dozwolone.
+
+00:03:25.120 --> 00:03:26.420
+Lokalizacja jest następna.
+
+00:03:26.420 --> 00:03:30.900
+Skąd pochodzi logowanie? Jeśli łączysz się z sieci biurowej, jest to zaufana lokalizacja.
+
+00:03:31.140 --> 00:03:34.260
+Dostęp warunkowy zna zakres adresów IP centrali Twojej firmy.
+
+00:03:34.480 --> 00:03:37.220
+Logowanie z kawiarni w innym kraju zapala czerwoną lampkę.
+
+00:03:37.460 --> 00:03:40.800
+Jeśli system nawet nie potrafi określić, gdzie jesteś, to kolejny sygnał ostrzegawczy.
+
+00:03:41.020 --> 00:03:43.520
+Lokalizacja to potężny sygnał, ponieważ trudno go sfałszować.
+
+00:03:43.720 --> 00:03:45.020
+Urządzenie również ma znaczenie.
+
+00:03:45.260 --> 00:03:46.340
+Czego używasz do logowania?
+
+00:03:46.580 --> 00:03:50.140
+Laptopa firmowego zarządzanego przez Intune i zgodnego z Twoimi politykami bezpieczeństwa?
+
+00:03:50.260 --> 00:03:52.980
+Czy może prywatnego telefonu bez żadnych kontroli bezpieczeństwa?
+
+00:03:52.980 --> 00:03:58.640
+Dostęp warunkowy sprawdzi, czy urządzenie jest zarejestrowane w zarządzaniu, ma włączone szyfrowanie i aktualne poprawki zabezpieczeń.
+
+00:03:58.780 --> 00:04:01.200
+Niezarządzane urządzenie może zostać zablokowane lub ograniczone.
+
+00:04:01.460 --> 00:04:02.900
+Znaczenie ma również sama aplikacja.
+
+00:04:03.120 --> 00:04:04.880
+Do jakiej aplikacji próbujesz uzyskać dostęp?
+
+00:04:05.080 --> 00:04:07.860
+Outlook, SharePoint, Teams czy może własna aplikacja biznesowa?
+
+00:04:08.040 --> 00:04:10.720
+Nie wszystkie aplikacje mają takie same wymogi bezpieczeństwa.
+
+00:04:10.980 --> 00:04:15.820
+System finansowy z danymi wrażliwymi może wymagać surowszej kontroli niż przestrzeń do współpracy zespołowej.
+
+00:04:16.060 --> 00:04:19.180
+Dostęp warunkowy pozwala ustalać różne reguły dla różnych aplikacji.
+
+00:04:19.180 --> 00:04:22.540
+Jeśli posiadasz odpowiednią licencję, dochodzi kolejna warstwa – ryzyko logowania.
+
+00:04:22.740 --> 00:04:26.300
+Microsoft wykorzystuje uczenie maszynowe do oceniania każdego logowania w czasie rzeczywistym.
+
+00:04:26.500 --> 00:04:35.140
+Wyszukuje podejrzane wzorce, niemożliwe podróże, gdy użytkownik loguje się z Nowego Jorku, a 5 minut później z Londynu, anonimowe adresy IP czy wyciekłe dane uwierzytelniające.
+
+00:04:35.380 --> 00:04:39.680
+System przypisuje poziom ryzyka niski, średni lub wysoki, a dostęp warunkowy może na to zareagować.
+
+00:04:39.880 --> 00:04:41.420
+Istnieje również ryzyko użytkownika.
+
+00:04:41.660 --> 00:04:42.920
+Różni się to od ryzyka logowania.
+
+00:04:42.920 --> 00:04:44.840
+Ryzyko użytkownika dotyczy samego konta.
+
+00:04:44.960 --> 00:04:47.080
+Czy hasło tego użytkownika pojawiło się w wycieku danych?
+
+00:04:47.240 --> 00:04:49.160
+Czy z czasem wystąpiła nietypowa aktywność?
+
+00:04:49.320 --> 00:04:54.380
+Jeśli system wykryje, że konto może być przejęte, może zablokować dostęp do czasu zmiany hasła przez użytkownika.
+
+00:04:54.580 --> 00:04:55.920
+Na koniec mamy kontekst uwierzytelniania.
+
+00:04:56.680 --> 00:05:00.280
+Pozwala on przypisać dodatkowe wymogi bezpieczeństwa do konkretnych, wrażliwych treści.
+
+00:05:00.500 --> 00:05:06.880
+Na przykład każdy, kto próbuje uzyskać dostęp do finansowej witryny SharePoint, musi korzystać ze zgodnego urządzenia i metody MFA odpornej na phishing.
+
+00:05:07.080 --> 00:05:09.980
+Chroni to najcenniejsze dane bez spowalniania całej reszty.
+
+00:05:09.980 --> 00:05:14.080
+Gdy sygnały te zostaną zebrane, silnik zasad podejmuje decyzję o dalszym działaniu.
+
+00:05:14.300 --> 00:05:15.380
+Zobaczmy, jak to działa.
+
+00:05:15.640 --> 00:05:17.920
+Silnik decyzyjny, czyli jak działają zasady.
+
+00:05:18.120 --> 00:05:24.360
+Każda zasada dostępu warunkowego działa jak reguła, jeśli to wybierasz sygnały jako warunki, a następnie decydujesz, jakie podjąć działanie.
+
+00:05:24.500 --> 00:05:25.400
+To w zasadzie wszystko.
+
+00:05:25.700 --> 00:05:27.720
+Zasada składa się więc z trzech głównych części.
+
+00:05:28.000 --> 00:05:33.220
+Pierwszą częścią są przypisania, kogo dotyczy zasada, do jakiej aplikacji próbują dotrzeć i jakie warunki uruchamiają regułę.
+
+00:05:33.440 --> 00:05:37.060
+Druga część to kontrola dostępu, co dzieje się, gdy te warunki zostaną spełnione.
+
+00:05:37.060 --> 00:05:41.760
+Czy przyznajesz dostęp, blokujesz go, czy wymagasz czegoś takiego jak MFA lub zgodne urządzenie?
+
+00:05:41.900 --> 00:05:46.140
+Trzecią częścią są kontrole sesji, które zarządzają tym, co dzieje się po zalogowaniu użytkownika.
+
+00:05:46.360 --> 00:05:48.860
+Na przykład, jak często musi ponownie się uwierzytelnić.
+
+00:05:48.980 --> 00:05:50.140
+Podam konkretny przykład.
+
+00:05:50.380 --> 00:05:55.580
+Jeśli użytkownik należy do grupy sprzedażowej i próbuje uzyskać dostęp do Sherpunta z niezarządzanego urządzenia, zablokuj dostęp.
+
+00:05:55.800 --> 00:05:56.760
+To kompletna zasada.
+
+00:05:56.980 --> 00:05:59.060
+Kto, jaka aplikacja, jaki warunek, jakie działanie.
+
+00:05:59.220 --> 00:06:01.000
+Kontrole przyznawania dostępu są elastyczne.
+
+00:06:01.240 --> 00:06:02.720
+Możesz wymagać kilku rzeczy jednocześnie.
+
+00:06:02.720 --> 00:06:05.960
+Załóżmy, że chcesz, aby użytkownik przeszedł MFA i korzystał ze zgodnego urządzenia.
+
+00:06:06.100 --> 00:06:07.560
+Oba warunki muszą zostać spełnione.
+
+00:06:07.760 --> 00:06:09.580
+Albo możesz powiedzieć, że potrzebują jednego lub drugiego.
+
+00:06:09.800 --> 00:06:10.880
+System pozwala Ci wybrać.
+
+00:06:11.040 --> 00:06:12.740
+Blokada jest najsilniejszym mechanizmem kontroli.
+
+00:06:12.920 --> 00:06:14.920
+Jeśli jakakolwiek zasada nakazuje blokadę, blokada wygrywa.
+
+00:06:15.100 --> 00:06:17.460
+Nie ma wyjątków poza wykluczeniami, które sam ustawisz.
+
+00:06:17.640 --> 00:06:19.220
+Dlatego musisz zachować ostrożność.
+
+00:06:19.460 --> 00:06:22.120
+Jeden błąd i możesz zablokować całą swoją organizację.
+
+00:06:22.380 --> 00:06:25.520
+Zanim włączysz zasadę, musisz poznać pewną kluczową funkcję.
+
+00:06:25.720 --> 00:06:27.060
+Tryb tylko do raportowania.
+
+00:06:27.060 --> 00:06:30.700
+Pozwala on sprawdzić działanie zasady, zanim zacznie ona cokolwiek wymuszać.
+
+00:06:30.860 --> 00:06:32.780
+Możesz uruchomić zasadę w trybie raportowania na tydzień,
+
+00:06:32.880 --> 00:06:36.940
+sprawdzić logi logowań i zobaczyć, ilu użytkowników zostałoby zablokowanych lub poproszonych o MFA.
+
+00:06:37.100 --> 00:06:39.580
+To bezpieczny sposób na testowanie bez psucia czegokolwiek.
+
+00:06:39.820 --> 00:06:44.140
+Skoro rozumiesz już mechanizm, porozmawiajmy o najczęstszych zasadach, które powinna mieć każda firma.
+
+00:06:44.360 --> 00:06:45.040
+Wielka trójka.
+
+00:06:45.180 --> 00:06:46.820
+Podstawowe zasady na pierwszy dzień.
+
+00:06:47.040 --> 00:06:49.080
+Od czego więc powinieneś zacząć konfigurację?
+
+00:06:49.260 --> 00:06:53.120
+Podam Ci trzy podstawowe zasady, które każda firma powinna mieć od pierwszego dnia.
+
+00:06:53.340 --> 00:06:55.280
+Nie od 30 dnia i nie po audycie.
+
+00:06:55.280 --> 00:06:59.620
+Zasada numer jeden to fundament wymagaj MFA dla wszystkich użytkowników.
+
+00:06:59.800 --> 00:07:01.640
+Nie tylko dla administratorów, dla wszystkich.
+
+00:07:01.880 --> 00:07:05.560
+Każda osoba logująca się do Twojego tenanta musi potwierdzić swoją tożsamość drugim czynnikiem.
+
+00:07:05.740 --> 00:07:08.480
+Ale oto ważna kwestia, nie każde MFA jest tak samo bezpieczne.
+
+00:07:08.680 --> 00:07:11.160
+Nie chcesz, aby ludzie używali kodów SMS lub połączeń głosowych.
+
+00:07:11.320 --> 00:07:15.160
+Te metody są słabe, można je przechwycić, potrzebujesz czegoś silniejszego.
+
+00:07:15.400 --> 00:07:21.000
+Microsoft oferuje tak zwany siłę uwierzytelniania, która pozwala wybrać dokładnie te metody, które są akceptowalne.
+
+00:07:21.000 --> 00:07:27.080
+Aplikacja Microsoft Authenticator, klucze bezpieczeństwa FIDO2, Windows Hello dla firm to są te właściwe.
+
+00:07:27.280 --> 00:07:31.360
+Więc tworząc zasadę MFA, nie zaznaczaj tylko pola wymagaj MFA.
+
+00:07:31.700 --> 00:07:34.160
+Bądź precyzyjny, wybierz tylko silne metody.
+
+00:07:34.440 --> 00:07:37.180
+Zasada numer dwa, blokuj starsze metody uwierzytelniania.
+
+00:07:37.400 --> 00:07:39.100
+Brzmi technicznie, ale jest proste.
+
+00:07:39.280 --> 00:07:46.060
+Istnieją stare protokoły, które Microsoft 365 nadal obsługuje Pop, IMAP, SMTP, starsze wersje Exchange ActiveSync.
+
+00:07:46.060 --> 00:07:50.720
+Te protokoły powstały, zanim ktokolwiek pomyślał o uwierzytelnianiu wieloskładnikowym i go nie obsługują.
+
+00:07:50.920 --> 00:07:56.320
+Jeśli więc atakujący zdobędzie hasło, może użyć jednego z tych starych protokołów, aby się zalogować i całkowicie ominąć twoje MFA.
+
+00:07:56.480 --> 00:07:57.300
+To ogromna luka.
+
+00:07:57.620 --> 00:07:58.820
+Rozwiązanie jest proste.
+
+00:07:59.000 --> 00:08:03.380
+Stwórz zasadę dostępu warunkowego, która blokuje wszelkie starsze uwierzytelnianie dla wszystkich użytkowników.
+
+00:08:03.520 --> 00:08:08.500
+Chyba, że masz bardzo konkretną potrzebę biznesową, jak stary skaner lub drukarka używająca SMTP, wyłącz to.
+
+00:08:08.660 --> 00:08:11.740
+To jedna z najbardziej wpływowych kontroli bezpieczeństwa, jakie możesz włączyć.
+
+00:08:11.940 --> 00:08:12.740
+Zasada numer trzy.
+
+00:08:12.740 --> 00:08:14.880
+Wymagaj zgodnych urządzeń dla administratorów.
+
+00:08:14.980 --> 00:08:17.420
+Konta administratorów to klejnoty koronne twojego tenanta.
+
+00:08:17.640 --> 00:08:20.780
+Jeśli ktoś przejmie konto administratora globalnego, uzyskuje dostęp do wszystkiego.
+
+00:08:20.980 --> 00:08:23.860
+Dlatego musisz zabezpieczyć te konta mocniej niż jakiekolwiek inne.
+
+00:08:24.040 --> 00:08:34.740
+Ta zasada mówi, że każdy z rolą administratora musi używać urządzenia firmowego spełniającego wymogi bezpieczeństwa zarejestrowanego w zarządzaniu z włączonym szyfrowaniem typu BitLocker, działającym Defenderem i aktualnymi poprawkami.
+
+00:08:34.980 --> 00:08:40.900
+Jeśli administrator spróbuje zalogować się z prywatnego laptopa lub starej maszyny, która nie spełnia tych standardów, dostęp zostanie zablokowany.
+
+00:08:40.900 --> 00:08:45.180
+To prosty sposób, aby upewnić się, że twoje najpotężniejsze konta są również najlepiej chronione.
+
+00:08:45.420 --> 00:08:49.140
+Zanim przejdę dalej, muszę wspomnieć o czymś krytycznym kontach typu BreakGlass.
+
+00:08:49.360 --> 00:08:53.160
+Są to awaryjne konta administratora, które trzymasz poza zasadami dostępu warunkowego.
+
+00:08:53.380 --> 00:08:59.720
+Tworzysz co najmniej dwa takie konta, używając długich, złożonych haseł oraz odpornego na phishing uwierzytelniania MFA, na przykład klucza bezpieczeństwa FIDO2.
+
+00:08:59.720 --> 00:09:03.340
+Przechowujesz poświadczenia w bezpiecznym miejscu, może w sejfie lub zamkniętej szafce.
+
+00:09:03.540 --> 00:09:04.420
+Cel jest prosty.
+
+00:09:04.620 --> 00:09:09.620
+Jeśli przez pomyłkę zablokujesz sobie dostęp do dzierżawy niewłaściwą zasadą, możesz użyć konta BreakGlass, aby odzyskać dostęp.
+
+00:09:09.900 --> 00:09:12.200
+Są one wykluczone z każdej zasady dostępu warunkowego.
+
+00:09:12.400 --> 00:09:13.360
+To zamierzone działanie.
+
+00:09:13.580 --> 00:09:16.420
+Bez nich ryzykujesz utratę dostępu do własnego systemu bez możliwości powrotu.
+
+00:09:16.580 --> 00:09:18.140
+Dlaczego tylko trzy zasady na pierwszy dzień?
+
+00:09:18.280 --> 00:09:20.700
+Ponieważ chcesz najpierw skupić się na kontrolach o największym wpływie.
+
+00:09:20.840 --> 00:09:23.020
+Te trzy zasady zamykają największe luki w zabezpieczeniach.
+
+00:09:23.020 --> 00:09:26.680
+MFA powstrzymuje większość kradzieży danych logowania, a blokada starego uwierzytelniania zamyka tylną furtkę.
+
+00:09:26.860 --> 00:09:29.920
+Zgodne z wymogami urządzenia dla administratorów chronią Twoje najbardziej wrażliwe konta.
+
+00:09:30.100 --> 00:09:33.420
+Możesz wprowadzić poprawki później za pomocą bardziej szczegółowych zasad, ale zacznij od tego.
+
+00:09:33.700 --> 00:09:35.580
+Zaawansowane zasady, ryzyko i persony.
+
+00:09:35.760 --> 00:09:38.860
+Gdy podstawy są już na miejscu, możesz dodać bardziej zaawansowane mechanizmy kontroli.
+
+00:09:39.040 --> 00:09:41.900
+W tym miejscu wchodzą zasady oparte na ryzyku i reguły oparte na personach.
+
+00:09:42.080 --> 00:09:46.660
+Zasady ryzyka logowania wykorzystują uczenie maszynowe firmy Microsoft do obserwowania każdej próby logowania w czasie rzeczywistym.
+
+00:09:46.660 --> 00:09:56.360
+Jeśli ktoś próbuje zalogować się z anonimowego adresu IP lub system wykryje niemożliwą podróż, na przykład logowanie z Nowego Jorku, a potem z Tokio 10 minut później, oznacza takie logowanie jako wysokiego ryzyka.
+
+00:09:56.620 --> 00:10:01.300
+Następnie możesz ustawić zasadę, która mówi, jeśli ryzyko jest wysokie, zablokuj dostęp lub wymuś natychmiastowe MFA.
+
+00:10:01.500 --> 00:10:07.980
+Haczyk polega na tym, że potrzebujesz licencji Entra IDP2, ale jest to jedna z najpotężniejszych kontroli, jakie możesz dodać, ponieważ wykrywa ataki, które statyczne reguły pomijają.
+
+00:10:08.220 --> 00:10:12.200
+Zasady ryzyka użytkownika przyglądają się samemu kontu w czasie, a nie tylko jednemu zdarzeniu logowania.
+
+00:10:12.200 --> 00:10:20.560
+Jeśli Microsoft wykryje, że poświadczenia użytkownika pojawiły się w znanym wycieku danych oznacza tego użytkownika jako wysokiego ryzyka, możesz wtedy ustawić zasadę, która blokuje dostęp do momentu zresetowania hasła.
+
+00:10:20.720 --> 00:10:22.500
+I tak, to również wymaga licencji P2.
+
+00:10:22.740 --> 00:10:27.780
+Zasady dotyczące ryzyka logowania i ryzyka użytkownika tworzą razem dynamiczną warstwę zabezpieczeń, która reaguje na zagrożenia w czasie rzeczywistym.
+
+00:10:27.960 --> 00:10:30.620
+Zasady oparte na personach rozwiązują natomiast zupełnie inny problem.
+
+00:10:30.820 --> 00:10:33.580
+Nie każdy w Twojej organizacji ma takie same potrzeby w zakresie bezpieczeństwa.
+
+00:10:33.580 --> 00:10:41.440
+Administratorzy wymagają najostrzejszych reguł, podczas gdy wykonawcy i personel tymczasowy mogą potrzebować ograniczonego dostępu, a goście spoza firmy potrzebują zupełnie innych mechanizmów kontroli.
+
+00:10:41.640 --> 00:10:46.040
+Zasady oparte na personach pozwalają grupować użytkowników według ról i stosować odpowiedni poziom ochrony.
+
+00:10:46.160 --> 00:10:47.220
+Oto konkretny przykład.
+
+00:10:47.480 --> 00:10:53.260
+Wykonawcy często używają własnych, niezarządzanych urządzeń, więc nie wiesz, czy mają antywirusa lub zainstalowane aktualizacje.
+
+00:10:53.500 --> 00:10:59.100
+Zamiast dawać im pełny dostęp, tworzysz zasadę ograniczającą ich do korzystania tylko z przeglądarki, bez aplikacji stacjonarnych czy mobilnych.
+
+00:10:59.100 --> 00:11:05.940
+Nawet w samej przeglądarce możesz ograniczyć dostępne działania. Mogą oni przeglądać i edytować pliki, ale nie mogą ich pobierać ani synchronizować ze swoim urządzeniem.
+
+00:11:06.160 --> 00:11:10.680
+Dzięki temu wykonawcy zachowują produktywność, nie narażając Twoich danych na niepotrzebne ryzyko.
+
+00:11:10.860 --> 00:11:16.700
+Konteksty uwierzytelniania rozwijają te idee, chroniąc konkretne treści wewnątrz aplikacji zamiast całej aplikacji.
+
+00:11:16.920 --> 00:11:20.800
+Na przykład zespół finansowy posiada witrynę SharePoint z wrażliwymi danymi finansowymi.
+
+00:11:20.800 --> 00:11:30.240
+Możesz przypisać kontekst uwierzytelniania do tej witryny, aby każdy użytkownik musiał korzystać ze zgodnego urządzenia i odpornego na phishing uwierzytelniania wieloskładnikowego, nawet jeśli jest już zalogowany do Microsoft 365.
+
+00:11:30.720 --> 00:11:33.380
+To precyzyjne celowanie w najbardziej wrażliwe informacje.
+
+00:11:33.600 --> 00:11:37.580
+Ciągła ocena dostępu cofa uprawnienia niemal w czasie rzeczywistym, gdy nastąpi jakaś zmiana.
+
+00:11:37.840 --> 00:11:44.080
+Jeśli administrator wyłączy konto lub urządzenie, zostanie zgłoszone jako zgubione, sesja kończy się natychmiast, bez czekania na wygaśnięcie tokena.
+
+00:11:44.260 --> 00:11:46.740
+Jest to kluczowe dla szybkiego reagowania na incydenty.
+
+00:11:46.740 --> 00:11:50.320
+Wszystko to brzmi potężnie, ale jak zacząć, żeby niczego nie zepsuć?
+
+00:11:50.500 --> 00:11:54.100
+Rozpoczęcie drogi od domyślnych ustawień zabezpieczeń do zasad niestandardowych.
+
+00:11:54.300 --> 00:11:59.160
+Jeśli masz zupełnie nowego dzierżawcę, nie zaczynasz od zera, ponieważ firma Microsoft domyślnie włącza tak zwany.
+
+00:11:59.320 --> 00:12:01.040
+Ustawienia domyślne zabezpieczeń
+
+00:12:01.040 --> 00:12:06.620
+To podstawowy zestaw zabezpieczeń, który wymaga uwierzytelniania wieloskładnikowego dla administratorów i blokuje starsze metody uwierzytelniania.
+
+00:12:06.760 --> 00:12:08.800
+To dobry punkt wyjścia, ale jest ograniczony.
+
+00:12:09.000 --> 00:12:12.360
+Nie możesz go dostosowywać ani kierować zasad do konkretnych aplikacji lub użytkowników.
+
+00:12:12.360 --> 00:12:14.820
+To rozwiązanie uniwersalne, jednakowe dla wszystkich.
+
+00:12:14.820 --> 00:12:21.400
+W momencie utworzenia pierwszej niestandardowej zasady dostępu warunkowego, ustawienia domyślne wyłączają się automatycznie, dając Ci pełną kontrolę.
+
+00:12:21.500 --> 00:12:25.820
+To dobrze, ale oznacza również, że musisz wiedzieć, co robisz, ponieważ nie możesz już polegać na automatycznych zabezpieczeniach.
+
+00:12:26.480 --> 00:12:27.820
+Oto jak zrobić to bezpiecznie.
+
+00:12:28.080 --> 00:12:32.440
+Najpierw włącz tryb, tylko raportowanie dla każdej nowej zasady i pozwól jej działać przez co najmniej tydzień.
+
+00:12:32.480 --> 00:12:37.920
+Następnie sprawdź dzienniki logowań, aby zobaczyć, co by się wydarzyło na przykład ilu użytkowników zostałoby zablokowanych lub poproszonych o uwierzytelnianie wieloskładnikowe.
+
+00:12:37.920 --> 00:12:42.180
+Te dane powiedzą Ci, czy Twoja zasada jest zbyt restrykcyjna, czy zbyt luźna, zanim ją wdrożysz.
+
+00:12:42.320 --> 00:12:49.080
+Po drugie, użyj narzędzia, co jeśli w centrum administracyjnym entra, aby przetestować zasadę dla konkretnego użytkownika, aplikacji i lokalizacji przed jej aktywacją.
+
+00:12:49.320 --> 00:12:54.720
+Możesz dokładnie zasymulować, co by się stało, gdyby ktoś spróbował zalogować się z kawiarni w innym kraju, używając urządzenia osobistego.
+
+00:12:54.880 --> 00:12:57.980
+To bezpieczny sposób na wyłapanie problemów, zanim staną się rzeczywiste.
+
+00:12:57.980 --> 00:13:02.500
+Po trzecie, co jest kluczowe, stwórz konta awaryjne typu Break Blast, zanim wdrożysz jakiekolwiek zasady.
+
+00:13:02.680 --> 00:13:04.400
+Nie mogę tego wystarczająco podkreślić.
+
+00:13:04.560 --> 00:13:12.040
+Jeśli przypadkowo utworzysz zasadę blokującą wszystkich administratorów, a nie skonfigurujesz konta awaryjnego wyłączonego z wszelkich restrykcji, zablokujesz sobie dostęp do własnego dzierżawcy.
+
+00:13:12.260 --> 00:13:17.140
+Jedyną drogą powrotną jest kontakt z pomocą techniczną Microsoft i udowodnienie własności domeny, co może potrwać kilka dni.
+
+00:13:17.360 --> 00:13:21.900
+Dlatego skonfiguruj dwa konta awaryjne, przechowywane bezpiecznie z wykorzystaniem odpornego na phishing uwierzytelniania MFA.
+
+00:13:22.180 --> 00:13:23.420
+Zrób to, zanim zaczniesz.
+
+00:13:23.420 --> 00:13:25.200
+Po czwarte, wdrażaj etapami.
+
+00:13:25.520 --> 00:13:27.920
+Nie włączaj zasady dla wszystkich pierwszego dnia.
+
+00:13:28.180 --> 00:13:32.100
+Zacznij od małej grupy testowej, może zespołu IT i pozwól jej działać przez kilka dni.
+
+00:13:32.340 --> 00:13:35.060
+Sprawdzaj logi, aby zobaczyć, czy ktoś został nieoczekiwanie zablokowany.
+
+00:13:35.300 --> 00:13:38.320
+Następnie rozszerz działanie na większą grupę, a na końcu na wszystkich użytkowników.
+
+00:13:38.480 --> 00:13:41.780
+Każdy etap daje szansę na wykrycie problemów, zanim dotkną całą firmę.
+
+00:13:41.980 --> 00:13:47.340
+Monitoruj logi logowania przez cały czas i jeśli zobaczysz nieoczekiwane blokady, dostosuj zasadę przed przejściem do kolejnego etapu.
+
+00:13:47.680 --> 00:13:48.200
+Podsumowanie.
+
+00:13:48.460 --> 00:13:50.160
+Dlaczego ma to znaczenie dla Twojej firmy?
+
+00:13:50.160 --> 00:13:52.060
+Więc dlaczego to wszystko jest takie ważne?
+
+00:13:52.320 --> 00:13:55.320
+Dostęp warunkowy to bramkarz, który nie tylko sprawdza Twój dowód.
+
+00:13:55.560 --> 00:13:56.400
+Sprawdza wszystko.
+
+00:13:56.640 --> 00:14:01.640
+Kim jesteś, skąd się łączysz, jakiego urządzenia używasz i czy Twoje konto nie zostało przejęte.
+
+00:14:01.860 --> 00:14:06.760
+Zmienia proste sprawdzenie hasła typu tak lub nie w inteligentną decyzję opartą na pełnym obrazie sytuacji.
+
+00:14:07.000 --> 00:14:11.180
+Bez tego każdy ze skradzionym hasłem może wejść do Twojego dzierżawcy z dowolnego miejsca na świecie.
+
+00:14:11.420 --> 00:14:12.420
+Bez zadawania pytań.
+
+00:14:12.560 --> 00:14:16.440
+A gdy pomyślisz o tym, ile haseł jest skradzionych każdego dnia, jest to przerażająca myśl.
+
+00:14:16.640 --> 00:14:19.040
+Już same trzy podstawowe zasady wypełniają największe luki.
+
+00:14:19.040 --> 00:14:21.880
+MFA skutecznie powstrzymuje większość kradzieży danych uwierzytelniających.
+
+00:14:22.040 --> 00:14:25.360
+Blokowanie starszych metod uwierzytelniania zamyka tylną furtkę, którą uwielbiają atakujący.
+
+00:14:25.540 --> 00:14:29.060
+Wymaganie zgodności urządzeń dla administratorów chroni Twoje najbardziej wrażliwe kąta.
+
+00:14:29.240 --> 00:14:32.420
+Już tylko te trzy zasady znacząco podnoszą poziom Twojego bezpieczeństwa.
+
+00:14:32.600 --> 00:14:37.340
+A kiedy będziesz gotowy pójść dalej, zaawansowane zasady zapewnią precyzyjną ochronę bez ograniczenia produktywności.
+
+00:14:37.560 --> 00:14:40.200
+Mechanizmy oparte na ryzyku wyłapują ataki w czasie rzeczywistym.
+
+00:14:40.400 --> 00:14:43.320
+Reguły oparte na rolach traktują różnych użytkowników w zróżnicowany sposób.
+
+00:14:43.320 --> 00:14:46.960
+Konteksty uwierzytelniania chronią najbardziej wrażliwe dane z chirurgiczną precyzją.
+
+00:14:47.200 --> 00:14:49.220
+Możesz być jednocześnie bezpieczny i elastyczny.
+
+00:14:49.380 --> 00:14:50.520
+Oto Twoje zadanie domowe.
+
+00:14:50.740 --> 00:14:52.560
+Zaloguj się do Centrum Administracyjnego Entra.
+
+00:14:52.740 --> 00:14:54.060
+Przejdź do dostępu warunkowego.
+
+00:14:54.340 --> 00:14:56.920
+Sprawdź, czy masz wdrożone co najmniej te trzy zasady podstawowe.
+
+00:14:57.120 --> 00:14:59.620
+Jeśli nie, zacznij od trybu raportowania i rozwijaj go dalej.
+
+00:14:59.820 --> 00:15:02.500
+Nie czekaj na audyt lub naruszenie bezpieczeństwa, aby podjąć działanie.
+
+00:15:02.700 --> 00:15:06.320
+Jeśli ten odcinek pomógł Ci zrozumieć całość, zasubskrybuj Microsoft Knowledge Nugget,
+
+00:15:06.420 --> 00:15:09.180
+aby poznać więcej wyjaśnień dotyczących bezpieczeństwa i tożsamości.
+
+00:15:09.180 --> 00:15:12.640
+Udostępnij go komuś, kto dopiero zaczyna swoją przygodę z Microsoft 365.
+
+00:15:13.100 --> 00:15:14.180
+Będzie Ci za to wdzięczny.

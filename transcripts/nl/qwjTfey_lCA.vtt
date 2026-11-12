@@ -1,0 +1,940 @@
+WEBVTT
+
+00:00:00.140 --> 00:00:07.520
+Klaar voor 10 dagen Microsoft 365, Copilot, AI, Azure en de mensen die de toekomst van werk vormgeven?
+
+00:00:07.880 --> 00:00:12.460
+Deze januari is M365, kom terug en we pakken groter uit.
+
+00:00:12.800 --> 00:00:18.560
+Doe mee voor live sessies, praktijkdemos en praktische kennis van MVP's en experts uit de hele wereld.
+
+00:00:18.780 --> 00:00:21.640
+Geen algemene sliedes, geen eindeloze modewoorden.
+
+00:00:21.640 --> 00:00:29.140
+We pakken de echte uitdagingen aan Copilot Studio, AI Agents, Fabric, Beveiliging, Governance en Automatisering.
+
+00:00:29.140 --> 00:00:35.080
+Of je nu IT-professional, ontwikkelaar of bedrijfsleider bent, er zijn sessies speciaal voor jou ontworpen.
+
+00:00:35.300 --> 00:00:40.500
+Met 10 volledige dagen kun je diverse technologieën verkennen en in contact komen met een wereldwijde community.
+
+00:00:40.920 --> 00:00:44.580
+Kijk live mee en neem praktische inzichten mee terug naar je organisatie.
+
+00:00:44.900 --> 00:00:49.140
+Januari 2027, 10 dagen, 1 Microsoft Community.
+
+00:00:49.420 --> 00:00:51.160
+De registratie is nu geopend.
+
+00:00:52.880 --> 00:00:54.520
+Claim vandaag nog je plek.
+
+00:00:56.710 --> 00:00:58.970
+Dat is m365com.net
+
+00:00:58.970 --> 00:01:04.550
+Meld je nu aan op m365com.net en we zien je live in januari.
+
+00:01:04.770 --> 00:01:07.530
+Welkom bij een nieuwe aflevering van Microsoft Knowledge Nuggets.
+
+00:01:07.730 --> 00:01:08.770
+Ik ben Mirko Peters.
+
+00:01:09.030 --> 00:01:12.910
+Het onderwerp van vandaag is iets waar bijna iedereen die data science of machine learning leert tegenaan loopt.
+
+00:01:13.070 --> 00:01:17.550
+Je hebt een paar tutorials bekeken, je beheerst de basis, maar er is één ding dat je steeds weer blokkeert.
+
+00:01:17.710 --> 00:01:19.930
+Je hebt geen interessante data om mee te oefenen.
+
+00:01:20.110 --> 00:01:23.230
+Je begint te zoeken naar publieke datasets en dan begint de ellende.
+
+00:01:23.230 --> 00:01:28.790
+Je vindt een overheidswebsite met weerdata, wat geweldig is, maar de bestanden hebben een vreemd formaat dat je nog nooit hebt gezien.
+
+00:01:28.970 --> 00:01:31.810
+De kolomnamen slaan nergens op en de helft van de waarden ontbreekt.
+
+00:01:31.970 --> 00:01:37.130
+Je bent uren kwijt aan alleen al het openen van het bestand en tegen de tijd dat je het genoeg hebt opgeschoond om te gebruiken, is de lol eraf.
+
+00:01:37.230 --> 00:01:39.110
+Ik ken dat gevoel en het is frustrerend.
+
+00:01:39.290 --> 00:01:41.770
+De aflevering van vandaag neemt die barrière volledig weg.
+
+00:01:41.990 --> 00:01:50.070
+Aan het einde van deze aflevering weet je wat Azure Open Datasets is en hoe je binnen enkele minuten gratis gebruiksklare data pakt zonder scraping, opschonen of gedoe.
+
+00:01:50.290 --> 00:01:53.610
+Laten we beginnen wat Azure Open Datasets eigenlijk is.
+
+00:01:53.810 --> 00:01:55.910
+Dus, wat is Azure Open Datasets precies?
+
+00:01:56.110 --> 00:01:57.650
+Hier is de simpelste definitie.
+
+00:01:57.810 --> 00:02:01.970
+Het is een gratis bibliotheek van publieke datasets die Microsoft al heeft opgeschoond en gehost op Azure.
+
+00:02:02.230 --> 00:02:08.610
+Zie het als een bibliotheek waar iemand anders elk boek al heeft gecontroleerd op gescheurde pagina's, spelfouten heeft hersteld en alles alfabetisch heeft gezet,
+
+00:02:08.810 --> 00:02:11.210
+zodat je alleen nog naar binnen hoeft te lopen en te pakken wat je nodig hebt.
+
+00:02:11.370 --> 00:02:12.230
+Nu is dit belangrijk.
+
+00:02:12.230 --> 00:02:16.090
+Het is geen aparte betaalde service waarvoor je je moet aanmelden of een premium add-on.
+
+00:02:16.250 --> 00:02:18.810
+Het is gewoon data in Azure-opslag die je kunt benaderen.
+
+00:02:18.810 --> 00:02:19.710
+Dat is alles.
+
+00:02:19.950 --> 00:02:28.410
+Microsoft heeft openbare datasets van instanties zoals de NOAA, het Amerikaanse censusbureau en lokale overheden genomen en al het zware werk verricht om de schema's te normaliseren,
+
+00:02:28.670 --> 00:02:32.770
+inconsistenties op te lossen en verversingsschema's in te stellen zodat de data actueel blijft.
+
+00:02:32.930 --> 00:02:35.090
+Vergelijk dat eens met de oude manier van werken.
+
+00:02:35.290 --> 00:02:40.970
+Je vond een dataset op een overheidswebsite, downloaden een zipbestandvol CSV bestanden met elk een ander formaat,
+
+00:02:41.230 --> 00:02:46.110
+openden ze en trof ontbrekende waarden, vreemde datumnotaties en kolommen die niet overeen kwamen tussen bestanden aan.
+
+00:02:46.110 --> 00:02:50.210
+Vervolgens was je uren, soms dagen, bezig met het schrijven van code om de boel op te schonen.
+
+00:02:50.210 --> 00:02:53.430
+En tegen de tijd dat je klaar was, wist je niet eens zeker of je het wel goed had gedaan.
+
+00:02:53.770 --> 00:02:55.390
+Microsoft regelt dat allemaal voor je.
+
+00:02:55.590 --> 00:03:00.210
+Ze normaliseren de data naar consistente schema's, dichten de hiëten en slaan het op in parquetformaat,
+
+00:03:00.390 --> 00:03:02.850
+een kolomgericht opslagformaat dat queries razendsnel maakt.
+
+00:03:02.990 --> 00:03:07.090
+Als je ooit geprobeerd hebt een gigantisch CSV bestand te bevragen en eeuwen hebt moeten wachten tot het geladen was,
+
+00:03:07.210 --> 00:03:08.370
+dan zul je waarderen wat parquet doet.
+
+00:03:08.530 --> 00:03:12.470
+Het is geoptimaliseerd voor analytics, dus je queries draaien veel sneller dan bij gewone tekstbestanden.
+
+00:03:12.470 --> 00:03:17.050
+Dit is het belangrijkste punt. De data zelf is gratis en Microsoft betaalt altijd voor de opslag.
+
+00:03:17.190 --> 00:03:20.170
+Je betaalt alleen voor de rekenkracht als je het verwerkt, en daar hebben we het later over.
+
+00:03:20.350 --> 00:03:22.830
+Maar de data die in Azure-opslag staat, kost je helemaal niets.
+
+00:03:22.990 --> 00:03:25.130
+Ik zal je een analogie geven om dit concreet te maken.
+
+00:03:25.390 --> 00:03:27.590
+Stel je voor dat je naar een nieuw kantoorpand verhuist.
+
+00:03:27.790 --> 00:03:32.310
+Op de oude manier zou je een stapel hout, gipsplaten, bedrading en sanitair krijgen
+
+00:03:32.310 --> 00:03:34.890
+en zou je elke kamer zelf vanaf nul moeten opbouwen.
+
+00:03:35.130 --> 00:03:37.570
+Dat is hoe werken met onbewerkte openbare data voelt.
+
+00:03:37.770 --> 00:03:40.190
+Azure Open Datasets is precies het tegenovergestelde.
+
+00:03:40.190 --> 00:03:42.910
+Dit zijn kant-en-klare ruimtes vol data waar je zo naar binnen stapt.
+
+00:03:43.090 --> 00:03:46.670
+De weerkamer is al ingericht, de census-kamer heeft alles gelabeld en georganiseerd.
+
+00:03:46.810 --> 00:03:50.490
+Je hoeft zelf niets in elkaar te zetten. Je stapt gewoon naar binnen en kunt direct aan de slag.
+
+00:03:50.610 --> 00:03:52.330
+Het probleem dat Open Datasets oplost.
+
+00:03:52.530 --> 00:03:55.730
+Dus, waarom heeft Microsoft dit gebouwd? Welk probleem probeerden ze hiermee op te lossen?
+
+00:03:55.850 --> 00:03:56.990
+Laten we dat eens uitsplitsen.
+
+00:03:57.270 --> 00:04:01.310
+Vindbaarheid is het eerste probleem. Je hebt betrouwbare openbare data nodig, maar het vinden ervan kost tijd.
+
+00:04:01.470 --> 00:04:04.870
+Er zijn honderden overheidswebsites, academische archieven en dataportaalsites.
+
+00:04:05.150 --> 00:04:07.350
+Sommigen worden goed onderhouden, anderen zijn verwaarloosd.
+
+00:04:07.350 --> 00:04:10.930
+En bij sommigen moet je formulieren invullen of akkoord gaan met licenties voordat je iets kunt downloaden.
+
+00:04:11.090 --> 00:04:14.590
+Alleen al het vinden van een schone, bruikbare dataset kan dagen aan zoekwerk kosten.
+
+00:04:14.850 --> 00:04:16.410
+Dan is er nog het voorbereidingsprobleem.
+
+00:04:16.690 --> 00:04:20.330
+Onbewerkte data van overheidsbronnen is rommelig, inconsistent en vol hiëten.
+
+00:04:20.550 --> 00:04:21.850
+Neem de weerdata van de NOAA.
+
+00:04:22.030 --> 00:04:26.710
+Het is afkomstig van duizenden weerstations over de hele wereld die elk in iets andere formats rapporteren.
+
+00:04:26.930 --> 00:04:30.070
+Sommige stations rapporteren de temperatuur in Celsius, anderen in Fahrenheit.
+
+00:04:30.430 --> 00:04:32.030
+Sommigen registreren neerslag, anderen niet.
+
+00:04:32.030 --> 00:04:36.030
+En sommigen hebben jaren aan schone gegevens, terwijl andere enorme gaten hebben waar de sensor kapot was.
+
+00:04:36.230 --> 00:04:38.030
+Dat met de hand opschonen is ellendig werk.
+
+00:04:38.270 --> 00:04:39.450
+Schaal is een ander probleem.
+
+00:04:39.690 --> 00:04:41.290
+Sommige van deze datasets zijn enorm.
+
+00:04:41.490 --> 00:04:43.150
+De weergegevens beslaan tientallen jaren.
+
+00:04:43.350 --> 00:04:45.690
+De NYC-taxi-gegevens bevatten honderden miljoenen ritten.
+
+00:04:45.870 --> 00:04:47.730
+De satellietbeelden beslaan petabytes.
+
+00:04:48.070 --> 00:04:51.070
+Zoveel data naar je rekenomgeving verplaatsen is traag en kostbaar.
+
+00:04:51.270 --> 00:04:57.030
+Als je een machine-learning model op een Cloud-WM draait, wil je geen uren besteden aan het downloaden van gegevens voordat je überhaupt kunt beginnen met trainen.
+
+00:04:57.030 --> 00:04:59.390
+En tot slot, reproduceerbaarheid is belangrijk.
+
+00:04:59.590 --> 00:05:02.690
+Wanneer je experimenten uitvoert, moeten je gegevens consistent zijn.
+
+00:05:02.870 --> 00:05:07.070
+Als jij vandaag een dataset download en je collega download deze volgende week, heb je hetzelfde nodig.
+
+00:05:07.450 --> 00:05:10.350
+Gecureerde, gedocumenteerde datasets maken experimenten herhaalbaar.
+
+00:05:10.530 --> 00:05:14.450
+Je kunt je resultaten publiceren en iemand anders kan ze verifiëren met exact dezelfde gegevens.
+
+00:05:14.670 --> 00:05:16.310
+Laten we nu een mythe uit de wereld helpen.
+
+00:05:16.510 --> 00:05:19.030
+De meeste mensen denken dat machine-learning alleen over het algoritme gaat,
+
+00:05:19.170 --> 00:05:23.390
+maar het echte inzicht van Microsoft is dat de meeste machine-learning problemen worden beïnvloed door factoren uit de echte wereld.
+
+00:05:23.390 --> 00:05:26.130
+Weer, feestdagen, demografie, economische omstandigheden.
+
+00:05:26.130 --> 00:05:30.730
+Als je probeert de verkoop te voorspellen, maakt het een enorm verschil of het een feestdag is of een regenachtige dinsdag.
+
+00:05:30.870 --> 00:05:34.170
+Als je het energieverbruik voorspelt, zijn de temperatuur en het tijdstip van de dag van belang.
+
+00:05:34.350 --> 00:05:37.810
+Als je verzekeringsrisico's modelleert, zijn demografische gegevens van de buurt cruciaal.
+
+00:05:38.010 --> 00:05:40.330
+Zonder deze externe signalen mist je model context.
+
+00:05:40.590 --> 00:05:43.930
+Het is alsof je verkeerspatronen probeert te voorspellen zonder te weten hoe laat het is.
+
+00:05:44.090 --> 00:05:46.730
+Je krijgt misschien wat patronen goed, maar je mist het grote geheel.
+
+00:05:46.930 --> 00:05:48.910
+En dat is de kern van het time-to-data-probleem.
+
+00:05:49.110 --> 00:05:51.870
+Het kan weken werk kosten om alleen al bruikbare data te krijgen.
+
+00:05:52.110 --> 00:05:54.630
+Weken van zoeken, downloaden, opschonen en valideren.
+
+00:05:54.630 --> 00:05:57.950
+Tegen de tijd dat de data klaar is, is de zakelijke vraag misschien veranderd.
+
+00:05:58.030 --> 00:06:01.030
+Azure Open Datasets verkoort die tijdlijn van weken naar minuten.
+
+00:06:01.230 --> 00:06:02.470
+Wat zit er in de katalogus?
+
+00:06:02.710 --> 00:06:03.670
+Weer- en feestdagen.
+
+00:06:03.890 --> 00:06:06.150
+Laten we induiken wat er daadwerkelijk in deze katalogus zit.
+
+00:06:06.290 --> 00:06:09.230
+De eerste dataset die bijna iedereen nuttig vindt, zijn weergegevens.
+
+00:06:09.490 --> 00:06:11.370
+Microsoft host de NOAA Weerdataset.
+
+00:06:11.590 --> 00:06:15.330
+Deze geeft je historische en bijna real-time metingen van weerstations over de hele wereld.
+
+00:06:15.490 --> 00:06:18.990
+We hebben het over temperatuur, neerslag, windsnelheid, barometrische druk.
+
+00:06:19.130 --> 00:06:22.830
+Het soort gegevens dat alles beïnvloedt van wat mensen kopen tot hoeveel energie ze verbruiken.
+
+00:06:22.830 --> 00:06:26.050
+En het beslaat tientallen jaren aan gegevens die regelmatig worden bijgewerkt.
+
+00:06:26.170 --> 00:06:31.050
+Dus als je weerpatronen uit de jaren negentig wilt bekijken of de gegevens van vorige week wilt ophalen, het staat er allemaal in.
+
+00:06:31.190 --> 00:06:32.810
+Nu is Weerdata natuurlijk geweldig.
+
+00:06:32.930 --> 00:06:33.710
+Maar hier komt het.
+
+00:06:33.830 --> 00:06:35.950
+Er is nog een dataset die er perfect bij aansluit.
+
+00:06:36.330 --> 00:06:36.730
+Feestdagen.
+
+00:06:36.930 --> 00:06:41.470
+Microsoft heeft een dataset met feestdagen voor 38 landen, van 1970 tot en met 2099.
+
+00:06:41.850 --> 00:06:44.950
+Je kunt dus terugkijken voor historische analyses of vooruitkijken voor je planning.
+
+00:06:45.170 --> 00:06:47.830
+Het geeft je landspecifieke feestdagmarkeringen voor elk datenbereik.
+
+00:06:48.570 --> 00:06:51.130
+Wil je weten of een bepaalde dinsdag een feestdag is in Japan?
+
+00:06:51.390 --> 00:06:52.130
+Dat staat erin.
+
+00:06:52.130 --> 00:06:55.270
+Wil je controleren of die maandag in augustus een vrije dag is in het VK?
+
+00:06:55.430 --> 00:06:56.790
+Eén zoekopdracht en je hebt het.
+
+00:06:56.970 --> 00:06:59.270
+Waarom zijn deze twee datasets samen zo krachtig?
+
+00:06:59.450 --> 00:07:02.250
+Weer- en feestdagen verbeteren tijdreeksvoorspellingen aanzienlijk.
+
+00:07:02.490 --> 00:07:04.610
+Denk aan het voorspellen van de detailhandelsverkoop.
+
+00:07:04.730 --> 00:07:07.890
+Als je probeert te voorspellen hoeveel stuks van een product je volgende week verkoopt,
+
+00:07:08.030 --> 00:07:11.950
+kan weten dat het een feestdag is en dat het gaat regenen je voorspellingsfout met dubbele cijfers verkleinen.
+
+00:07:12.170 --> 00:07:13.130
+Dat is geen kleine verbetering.
+
+00:07:13.930 --> 00:07:18.770
+Dat is het verschil tussen teveel voorraad in een magazijn hebben en een tekort aan je best verkochte product.
+
+00:07:18.990 --> 00:07:19.950
+En dit is het punt.
+
+00:07:19.950 --> 00:07:22.950
+De meeste bedrijven hebben deze data niet intern beschikbaar.
+
+00:07:23.150 --> 00:07:28.610
+Ze hebben hun verkoopgegevens, natuurlijk, maar ze hebben geen schone, betrouwbare bron voor weerhistorie of vakantiekalenders.
+
+00:07:28.850 --> 00:07:33.190
+Dus ofwel bouwen ze het zelf, wat tijd kost, of ze doen het zonder, wat hun voorspellingen schaadt.
+
+00:07:33.350 --> 00:07:36.390
+Azure Open Datasets geeft hen dat ontbrekende stukje direct.
+
+00:07:36.590 --> 00:07:38.510
+Maar weer- en feestdagen zijn nog maar het begin.
+
+00:07:38.750 --> 00:07:40.270
+Wat zit er nog meer in de catalogus?
+
+00:07:40.730 --> 00:07:43.330
+Volkstellingen, demografische en sociaal-economische gegevens.
+
+00:07:43.330 --> 00:07:46.870
+De volgende categorie is belangrijk als je modellen bouwt die iets over mensen voorspellen.
+
+00:07:47.030 --> 00:07:49.130
+Het gaat om census- en demografische gegevens.
+
+00:07:49.390 --> 00:07:54.330
+Microsoft host Amerikaanse censusgegevens over bevolking, inkomen, opleidingsniveaus en leeftijdsverdeling.
+
+00:07:55.090 --> 00:07:59.750
+En het is beschikbaar op verschillende geografische niveaus, van staat en provincie tot aan censusdistricten.
+
+00:07:59.910 --> 00:08:06.030
+Je kunt dus het mediane huishoudinkomen voor een specifieke buurt opvragen of de bevolkingsverdeling per leeftijdsgroep voor een hele staat.
+
+00:08:06.030 --> 00:08:12.830
+En er is ook de dataset met Amerikaanse arbeidsmarktstatistieken die je werkgelegenheidscijfers, deelname aan de beroepsbevolking en uitsplitsingen per sector geeft.
+
+00:08:12.990 --> 00:08:19.190
+Je kunt zien hoeveel mensen in de productie werken ten opzichte van de dienstensector in een regio of hoe de werkloosheid in de loop van de tijd is veranderd.
+
+00:08:19.330 --> 00:08:20.810
+Waarom is dit belangrijk voor beginners?
+
+00:08:21.090 --> 00:08:25.410
+Omdat als je een model wilt bouwen dat iets over mensen voorspelt, dit de perfecte plek is om te beginnen.
+
+00:08:25.630 --> 00:08:26.810
+Hier is een echt voorbeeld.
+
+00:08:27.090 --> 00:08:29.690
+Stel je voor dat je een model bouwt voor een verzekeringsmaatschappij.
+
+00:08:29.870 --> 00:08:35.650
+Je hebt claimgegevens, leeftijden en bedragen, maar je model is niet nauwkeurig omdat je context mist over waar deze mensen wonen.
+
+00:08:35.650 --> 00:08:39.490
+Dus, je verrijkt die data met inkomens- en onderwijsstatistieken uit de volkstelling.
+
+00:08:39.690 --> 00:08:42.070
+Plotseling ziet het model patronen die het voorheen miste.
+
+00:08:42.250 --> 00:08:47.290
+Mensen in gebieden met een lager inkomen dienen andere claims in en een hoger opleidingsniveau verandert risicoprofielen.
+
+00:08:47.490 --> 00:08:50.530
+Het model wordt beter omdat het meer informatie heeft over de echte wereld.
+
+00:08:50.750 --> 00:08:53.270
+Dat is wat Azure Open Datasets waardevol maakt voor beginners.
+
+00:08:53.550 --> 00:08:56.550
+Je hoeft geen data engineer te zijn om census data in je project te importeren.
+
+00:08:56.690 --> 00:08:58.490
+Het is al opgeschoond en klaar voor gebruik.
+
+00:08:58.630 --> 00:09:01.910
+Koppel het aan je eigen data en je analyse krijgt een diepgang die het daarvoor niet had.
+
+00:09:01.910 --> 00:09:03.350
+Wat staat er in de katalogus?
+
+00:09:03.350 --> 00:09:06.150
+Mobiliteit, openbare veiligheid en gezondheidszorg.
+
+00:09:06.310 --> 00:09:09.650
+De klassieke favoriet voor beginners is de NYC Taxi Rit Dataset.
+
+00:09:09.790 --> 00:09:11.970
+Het is een van de bekendste openbare datasets die er zijn.
+
+00:09:12.190 --> 00:09:15.370
+Miljoenen rietgegevens met ophaal- en afzetmomenten, locaties en tarieven.
+
+00:09:15.570 --> 00:09:18.190
+Elke rit met een gele taxi in New York genereert een record.
+
+00:09:18.450 --> 00:09:21.430
+Waar ze instapten, waar ze uitstapten, wat het kostte, hoe lang het duurde.
+
+00:09:21.570 --> 00:09:23.850
+Het is een geweldige dataset om data-analyse te leren.
+
+00:09:24.070 --> 00:09:25.410
+Waarom zijn beginners er zo dol op?
+
+00:09:25.450 --> 00:09:27.050
+Omdat het interessant en visueel is.
+
+00:09:27.050 --> 00:09:30.190
+Laat het in power be en begin kaarten te maken van waar mensen het meest reizen.
+
+00:09:30.410 --> 00:09:32.270
+Zie hoe tarieven gedurende de dag veranderen.
+
+00:09:32.270 --> 00:09:33.270
+Ontdek patronen.
+
+00:09:33.470 --> 00:09:35.210
+Welke wijken zijn druk tijdens het spitsuur?
+
+00:09:35.410 --> 00:09:37.230
+Welke luchthavens genereren de meeste ritten?
+
+00:09:37.410 --> 00:09:39.070
+Hoe het weer het aantal ritten beïnvloedt?
+
+00:09:39.150 --> 00:09:42.710
+Het vertelt een verhaal, dus leren voelt als een puzzel oplossen, niet als huiswerk maken.
+
+00:09:42.890 --> 00:09:44.670
+Openbare veiligheidsdata is de volgende.
+
+00:09:44.910 --> 00:09:49.830
+Microsoft hoost de veiligheidsdata van San Francisco, die misdaadincidenten vastlegt met type, locatie en tijdstempel.
+
+00:09:50.010 --> 00:09:52.850
+Wederom perfect voor beginners omdat de data direct betekenisvol is.
+
+00:09:53.070 --> 00:09:55.970
+Bouw hotspot kaarten, analyseer misdaadpatronen op tijdstip van de dag.
+
+00:09:55.970 --> 00:09:58.970
+Het laat zien hoe open data echte maatschappelijke projecten ondersteunt.
+
+00:09:58.970 --> 00:10:02.550
+Stadsplanners en de politie gebruiken dit om te beslissen waar middelen moeten worden ingezet.
+
+00:10:02.730 --> 00:10:04.570
+Dan is er nog het COVID-19-data meer.
+
+00:10:04.770 --> 00:10:06.150
+Het is niet slechts één dataset.
+
+00:10:06.450 --> 00:10:11.330
+Het combineert meerdere bronnen, patiëntresultaten, testen, ziekenhuiscapaciteit, beleid en mobiliteit.
+
+00:10:11.570 --> 00:10:16.510
+Tijdens de pandemie gebruikt een onderzoekers het om het virus te volgen, de verspreiding te modelleren en interventies te evalueren.
+
+00:10:16.710 --> 00:10:20.070
+Dat laat zien hoe open datasets een echte impact kunnen hebben wanneer ze toegankelijk zijn.
+
+00:10:20.070 --> 00:10:24.750
+Deze drie datasets, taxiritten, openbare veiligheid en COVID-19 hebben iets belangrijks gemeen.
+
+00:10:24.930 --> 00:10:25.850
+Ze zijn niet abstract.
+
+00:10:26.050 --> 00:10:27.850
+Je hoeft geen expert te zijn om ze te begrijpen.
+
+00:10:28.050 --> 00:10:30.550
+De data gaat over echte mensen, plaatsen en gebeurtenissen.
+
+00:10:30.790 --> 00:10:32.030
+Dat maakt het leren makkelijker.
+
+00:10:32.230 --> 00:10:35.210
+Er zijn ook benchmark datasets voor mensen die specifiek ML leren.
+
+00:10:35.450 --> 00:10:36.710
+Wat staat er in de catalogus?
+
+00:10:36.970 --> 00:10:38.170
+Benchmark ML datasets.
+
+00:10:38.550 --> 00:10:41.270
+Dus, je hebt al deze real world data uit het voorrige gedeelte.
+
+00:10:41.270 --> 00:10:46.190
+Maar wat als je een tutorial volgt en je hebt gewoon een schone, eenvoudige dataset nodig om een specifieke techniek te oefenen?
+
+00:10:46.330 --> 00:10:48.550
+Ook daarvoor biedt Azure open datasets uitkomst.
+
+00:10:48.710 --> 00:10:49.970
+Zie het als een gereedschapskist.
+
+00:10:50.070 --> 00:10:53.910
+Je hebt je elektrisch gereedschap voor grote klussen, maar soms heb je gewoon een simpele hamer nodig om de basis te leren.
+
+00:10:54.110 --> 00:10:56.170
+Daar zijn deze benchmark datasets voor bedoeld.
+
+00:10:56.370 --> 00:11:00.190
+Neem de diabetes dataset met 442 samples en 10 kenmerken.
+
+00:11:00.410 --> 00:11:04.130
+Het is een klassiek regressieprobleem dat je voortdurend in leerboeken en tutorials ziet.
+
+00:11:04.350 --> 00:11:06.690
+En het is direct beschikbaar in Azure open datasets.
+
+00:11:06.950 --> 00:11:08.450
+Klaar om in Azure ML te laden.
+
+00:11:08.450 --> 00:11:12.330
+Als je automated ML leert, is dit een geweldige dataset om mee te beginnen.
+
+00:11:12.530 --> 00:11:16.150
+Klein genoeg om snel te itereren, maar echt genoeg om je de workflow te leren.
+
+00:11:16.410 --> 00:11:19.950
+Dan is er de Microsoft News dataset, kortweg MIND genoemd.
+
+00:11:20.070 --> 00:11:22.510
+Voor mensen die geïnteresseerd zijn in aanbevelingssystemen.
+
+00:11:22.670 --> 00:11:26.810
+Het is een grootschalige benchmark met gebruikersinteracties, nieuwsinhoud en metadata.
+
+00:11:27.230 --> 00:11:33.430
+Als je een aanbevelingsmachine voor nieuws wilt bouwen, het soort systeem dat de aanbevolen voor jou, sexy op nieuwswebsites aanstuurt.
+
+00:11:33.630 --> 00:11:35.370
+Dan is dit de dataset om mee te oefenen.
+
+00:11:35.370 --> 00:11:43.350
+Het is hetzelfde soort data dat echte aanbevelingssystemen gebruiken en er is zelfs een gesimuleerde OJ-verkoopdataset die specifiek is gebouwd om te laten zien hoe Azure ML schaalt.
+
+00:11:43.490 --> 00:11:50.070
+Je kunt duizenden modellen tegelijk op deze data trainen, wat een uitstekende manier is om parallelle verwerking en hyperparameter tuning te begrijpen.
+
+00:11:50.250 --> 00:11:51.190
+Hier komt het op neer.
+
+00:11:51.190 --> 00:11:56.410
+Als je een Azure ML tutorial volgt en je hebt data nodig, dan staat die waarschijnlijk al in deze catalogus.
+
+00:11:56.650 --> 00:12:03.270
+Microsoft heeft ervoor gezorgd dat de datasets die in hun documentatie en leertrajecten worden gebruikt, beschikbaar zijn via open datasets,
+
+00:12:03.590 --> 00:12:06.690
+zodat je niet hoeft te zoeken naar het exacte bestand dat de tutorial gebruikt.
+
+00:12:06.850 --> 00:12:07.690
+Het staat er al.
+
+00:12:08.110 --> 00:12:12.210
+Maar een geweldige catalogus is nutteloos als je de data niet daadwerkelijk kunt verkrijgen.
+
+00:12:12.350 --> 00:12:16.610
+Hoe krijg je toegang tot open datasets, Python, Power BI en Azure ML?
+
+00:12:16.610 --> 00:12:21.970
+Je hebt nu gezien wat er in de catalogus staat, maar de echte vraag is nu, hoe krijg je deze data daadwerkelijk in handen?
+
+00:12:22.110 --> 00:12:27.430
+Het antwoord hangt af van welke tool je gebruikt, maar er zijn meerdere wegen en sommigen vereisen niet eens een Azure account.
+
+00:12:27.670 --> 00:12:28.890
+Laten we het op een rij zetten.
+
+00:12:29.070 --> 00:12:30.490
+De eenvoudigste optie, Python.
+
+00:12:30.750 --> 00:12:33.210
+Vanuit elke Python-omgeving geen Azure account nodig.
+
+00:12:33.450 --> 00:12:36.770
+Microsoft publiceert een Python-pakket genaamd Azure ML Open Datasets.
+
+00:12:36.950 --> 00:12:40.150
+Je installeert het met PIP en importeert vervolgens direct elke dataset.
+
+00:12:40.530 --> 00:12:44.430
+Bijvoorbeeld, from Azure ML Open Datasets Import NOAA Weather.
+
+00:12:44.430 --> 00:12:49.130
+Je specificeert een startdatum en een einddatum en het pakket regelt de rest.
+
+00:12:49.350 --> 00:12:54.610
+Het download de relevante bestanden uit Azure Storage, verwerkt ze en geeft je een Pandas DataFrame terug.
+
+00:12:54.850 --> 00:12:55.550
+Dat is alles.
+
+00:12:55.810 --> 00:12:59.010
+Drie regels code en je hebt tientallen jaren aan weerdata klaar voor analyse.
+
+00:12:59.310 --> 00:13:03.730
+Dit werkt vanuit Jupyter Notebook, VS Code of elke andere Python-omgeving die je prettig vindt.
+
+00:13:03.890 --> 00:13:06.590
+Binnen Azure Machine Learning verloopt het proces nog soepeler.
+
+00:13:06.590 --> 00:13:12.530
+Je opent je werkruimte, gaat naar de sectiegegevens, klikt op maken en kiest vervolgens uit Azure Open Datasets.
+
+00:13:12.530 --> 00:13:15.410
+Er verschijnt een catalogus met alles wat beschikbaar is.
+
+00:13:15.570 --> 00:13:21.450
+Je bladert er doorheen, kiest de dataset die je wilt, filtert deze op datenbereik of geografisch gebied en registreert deze in je werkruimte.
+
+00:13:21.650 --> 00:13:27.130
+Zodra deze geregistreerd is, genereert Azure ML automatisch een codefragment dat je in elke pipeline of elk experiment kunt gebruiken,
+
+00:13:27.290 --> 00:13:29.630
+dus je hoeft de opslagpaden of import syntaxes niet te onthouden.
+
+00:13:29.790 --> 00:13:31.250
+Het wordt allemaal voor je geregeld.
+
+00:13:31.450 --> 00:13:32.470
+Hoe zit het met Power BI?
+
+00:13:32.670 --> 00:13:35.330
+Dit is waar het interessant wordt voor analisten die geen code schrijven.
+
+00:13:35.510 --> 00:13:41.870
+Je kunt de Azure Blob Storage Connector in Power BI gebruiken en deze verwijzen naar de openbare opslag URL's die Microsoft voor elke dataset documenteert.
+
+00:13:41.870 --> 00:13:47.410
+Dus als je NYC taxi gegevens in een dashboard wilt laden, zoek je de opslag URL op de overzichtspagina van de datasets,
+
+00:13:47.590 --> 00:13:50.510
+vroeg je deze toe aan Power BI en begin je met het bouwen van visualisaties.
+
+00:13:50.730 --> 00:13:54.150
+Weerdata, taxiritten, incidenten op het gebied van openbare veiligheid,
+
+00:13:54.370 --> 00:13:57.610
+alles is direct beschikbaar in je rapporten zonder tussenliggende data engineering.
+
+00:13:57.870 --> 00:14:00.310
+Voor de SQL gebruikers is er Azure Synapse.
+
+00:14:00.510 --> 00:14:04.750
+Je kunt open datasets bevragen met de openrauzend functie op de openbare blob paden.
+
+00:14:04.950 --> 00:14:08.790
+Dit is serverloze SQL, wat betekent dat je vooraf geen opslag hoeft in te stellen.
+
+00:14:08.790 --> 00:14:12.470
+Je schrijft gewoon een query en Synapse leest de data direct vanaf de bron.
+
+00:14:12.670 --> 00:14:16.210
+Wil je weten hoeveel taxiritten er plaatsvonden op eerste kerstdag in 2019?
+
+00:14:16.510 --> 00:14:19.850
+Je schrijft 1 SQL query en je hebt binnen enkele seconden je antwoord.
+
+00:14:20.010 --> 00:14:24.630
+En als je Azure Databricks gebruikt, werkt dezelfde Python SDK in Databricks Notebooks,
+
+00:14:24.790 --> 00:14:29.570
+maar kun je Spark dataframes gebruiken in plaats van Pandas, wat belangrijk is bij grotere datasets.
+
+00:14:30.010 --> 00:14:32.470
+De NYC taxidata bevat miljoenen records.
+
+00:14:32.650 --> 00:14:34.790
+Pandas kan dat aan, maar Spark kan het beter.
+
+00:14:35.090 --> 00:14:38.590
+Zelfde import, zelfde syntaxes, alleen met Spark onder de motorkap.
+
+00:14:38.750 --> 00:14:40.610
+Dit is de rode draad door al deze methoden.
+
+00:14:40.790 --> 00:14:45.290
+Microsoft publiceert de opslagaccount URL's voor elke dataset en die URL's zijn openbaar.
+
+00:14:45.490 --> 00:14:47.550
+Iedereen heeft er toegang toe vanuit elk gewenst hulpmiddel.
+
+00:14:47.730 --> 00:14:50.870
+De Azure Open Datasets SDK is slechts een handige laag daarbovenop.
+
+00:14:50.970 --> 00:14:55.310
+Als je zou willen, kun je je eigen code schrijven om de ruwe parquetbestanden direct vanaf die opslag URL's te lezen.
+
+00:14:55.490 --> 00:14:59.370
+De SDK maakt het alleen makkelijker door het filteren op datum en de conversie voor je te regelen.
+
+00:14:59.370 --> 00:15:00.630
+De vraag over de kosten.
+
+00:15:00.870 --> 00:15:01.870
+Is het echt gratis?
+
+00:15:02.070 --> 00:15:03.630
+Dit is de vraag die iedereen stelt.
+
+00:15:03.810 --> 00:15:04.770
+Is het echt gratis?
+
+00:15:04.930 --> 00:15:06.770
+Het korte antwoord is ja en ook nee.
+
+00:15:06.930 --> 00:15:08.370
+Hier is waarom het beide kanten op gaat.
+
+00:15:08.570 --> 00:15:10.350
+Eigenlijk is de data zelf volledig gratis.
+
+00:15:10.650 --> 00:15:12.370
+Microsoft betaalt altijd voor de opslag.
+
+00:15:12.510 --> 00:15:14.290
+Het is geen promotie of een tijdelijk aanbod.
+
+00:15:14.470 --> 00:15:16.310
+Het is ingebakken in het ontwerp van de dienst.
+
+00:15:16.490 --> 00:15:16.970
+Zij hosten het.
+
+00:15:17.070 --> 00:15:17.850
+Zij betalen de rekening.
+
+00:15:18.010 --> 00:15:20.350
+En jij hebt er toegang toe zonder een cent aan de data zelf uit te geven.
+
+00:15:20.550 --> 00:15:21.490
+Maar hier komen de kosten.
+
+00:15:21.670 --> 00:15:21.930
+Kijken.
+
+00:15:22.110 --> 00:15:23.290
+Je betaalt voor rekenkracht.
+
+00:15:23.290 --> 00:15:27.190
+Dat betekent dat als je een virtuele machine opstart om de data te verwerken, je voor die VM betaalt.
+
+00:15:27.350 --> 00:15:30.710
+Voor een Databricks cluster dat miljoenen taxiritten analyseert, betaal je voor dat cluster.
+
+00:15:30.910 --> 00:15:34.290
+Als je Synapse Serverless SQL gebruikt, betaal je voor de queries die je uitvoert.
+
+00:15:34.510 --> 00:15:35.870
+Dit zijn standaard Azure kosten.
+
+00:15:36.130 --> 00:15:37.670
+Ze zijn niet specifiek voor open datasets.
+
+00:15:37.990 --> 00:15:39.510
+Dan is er nog het uitgaand dataverkeer.
+
+00:15:39.670 --> 00:15:40.990
+Dit kan je onverwacht overkomen.
+
+00:15:41.190 --> 00:15:46.050
+Als je data verplaatst tussen Azure regio's of volledig uit Azure haalt, betaal je kosten voor uitgaand verkeer.
+
+00:15:46.210 --> 00:15:49.150
+De typische prijs is ongeveer 8 tot 9 cent per gigabyte.
+
+00:15:49.390 --> 00:15:52.070
+Dat klinkt niet als veel, totdat je terabytes gaat verplaatsen.
+
+00:15:52.070 --> 00:15:54.210
+En sommige van deze datasets zijn enorm.
+
+00:15:54.450 --> 00:15:57.270
+De weerdata alleen al beslaat decennia en meerdere weerstations.
+
+00:15:57.490 --> 00:15:59.870
+Alles uitlezen vanuit een andere regio loopt snel op.
+
+00:16:00.010 --> 00:16:01.670
+Er zijn ook kosten voor je eigen opslag.
+
+00:16:01.810 --> 00:16:05.830
+Misschien kopieer je data naar je eigen opslagaccounts omdat je een snapshot wilt bewaren of de data wilt transformeren.
+
+00:16:05.970 --> 00:16:08.310
+Je betaalt voor die opslag tegen standaard Azure tarieven.
+
+00:16:08.530 --> 00:16:10.110
+Microsoft is hier transparant over.
+
+00:16:10.310 --> 00:16:13.790
+Als een dataset kosten voor uitgaand verkeer heeft, staat dit gedocumenteerd op de overzichtspagina.
+
+00:16:13.990 --> 00:16:15.230
+Geen verrassingen op de factuur.
+
+00:16:15.430 --> 00:16:18.390
+Maar je moet het controleren voordat je grote hoeveelheden data tussen regio's verplaatst.
+
+00:16:18.510 --> 00:16:20.070
+Hier is de belangrijkste tip voor beginners.
+
+00:16:20.070 --> 00:16:22.430
+Hou je rekenkracht in dezelfde regio als de dataset.
+
+00:16:22.590 --> 00:16:24.990
+Elke dataset heeft een specifieke regio waar deze wordt gehost.
+
+00:16:25.150 --> 00:16:29.090
+Als je VM of Databricks cluster zich in diezelfde regio bevindt, vermijd je volledig kosten voor uitgaand verkeer.
+
+00:16:29.230 --> 00:16:32.250
+De data blijft lokaal, de queries zijn sneller en je factuur blijft laag.
+
+00:16:32.390 --> 00:16:35.030
+Laten we twee echte scenario's bekijken om dit concreet te maken.
+
+00:16:35.250 --> 00:16:35.810
+Scenario 1.
+
+00:16:35.930 --> 00:16:39.010
+Je bent een beginner die een kleine steekproef van Weerdata naar een Powerbee dashboard haalt.
+
+00:16:39.170 --> 00:16:41.190
+Een paar duizend rijen, misschien een paar megabytes.
+
+00:16:41.410 --> 00:16:43.990
+Je kosten voor rekenkracht zijn nul omdat Powerbee dat afhandelt.
+
+00:16:44.130 --> 00:16:46.370
+Je kosten voor uitgaand verkeer zijn nul omdat je weinig verplaatst.
+
+00:16:46.370 --> 00:16:47.690
+Dit kost je niets behalve.

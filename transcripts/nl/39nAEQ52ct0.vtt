@@ -1,0 +1,1033 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:03.600
+Je hebt Kubernetes en Axe vast wel eens voorbij horen komen in cloudgesprekken.
+
+00:00:03.760 --> 00:00:08.420
+Misschien knikte je instemmend, maar wat betekenen ze eigenlijk voor iemand die applicaties in de cloud draait?
+
+00:00:08.640 --> 00:00:13.220
+Containers hebben de manier waarop we software bouwen veranderd, omdat ze lichtgewicht, draagbaar en consistent zijn.
+
+00:00:13.400 --> 00:00:16.240
+Het probleem is dat ze handmatig beheren als snel een puinhoop wordt.
+
+00:00:16.420 --> 00:00:24.640
+Een handje vol containers kun je aan, maar bij tientallen of honderden ben je alleen maar bezig met schalen, updates en storingen, in plaats van aan je eigen product te bouwen.
+
+00:00:24.640 --> 00:00:32.520
+Aan het eind van deze aflevering begrijp je de vier belangrijkste zaken die Azure Kubernetes Service voor je regelt, het control plane, de nodes, het netwerk en de beveiliging.
+
+00:00:32.680 --> 00:00:37.560
+We zullen ook uitleggen wat het daadwerkelijk kost. Geen marketingpraatjes, gewoon in begrijpelijke taal.
+
+00:00:37.700 --> 00:00:39.900
+Het containerprobleem waarom we Axe nodig hebben.
+
+00:00:40.100 --> 00:00:42.820
+Containers zijn populair geworden omdat ze een echt pijnpunt oplossen.
+
+00:00:43.000 --> 00:00:46.840
+Een pakket dat je applicatiecode, runtime, bibliotheken en configuratie bundelt.
+
+00:00:47.020 --> 00:00:50.380
+Het draait hetzelfde op je laptop, op een testserver of in productie.
+
+00:00:50.580 --> 00:00:52.760
+Geen het werkt op mijn machine, problemen meer.
+
+00:00:52.760 --> 00:00:55.140
+Een handje vol containers draaien werkt prima.
+
+00:00:55.400 --> 00:00:58.620
+Je start ze handmatig, check de logs en herstart ze als ze crashen.
+
+00:00:58.740 --> 00:01:04.280
+Maar zodra je er tientallen of honderden hebt verspreid over meerdere servers, loop je tegen een heel nieuw soort problemen aan.
+
+00:01:04.400 --> 00:01:09.660
+Je moet bepalen waar elke container heen gaat, welke server welke container krijgt en hoe ze elkaar vinden via het netwerk.
+
+00:01:09.840 --> 00:01:12.140
+Wat gebeurt er als er eentje crashen om drie uur ochtends?
+
+00:01:12.340 --> 00:01:16.620
+En hoe ga je om met een verkeerspiek die vijftig extra kopieën van je app vereist binnen dertig seconden?
+
+00:01:16.800 --> 00:01:20.420
+Kubernetes is een open source platform dat precies voor deze problemen is ontworpen.
+
+00:01:20.420 --> 00:01:25.800
+Het plant containers op servers, schaalt ze op en neer, controleert hun gezondheid en routeert verkeer tussen ze.
+
+00:01:25.960 --> 00:01:28.780
+Het is de industrie standaard voor containerorchestratie.
+
+00:01:28.960 --> 00:01:31.780
+Maar Kubernetes lost het ene probleem op en creëert het andere.
+
+00:01:32.020 --> 00:01:33.520
+Het zelf draaien is complex.
+
+00:01:33.800 --> 00:01:41.660
+Je moet een control plane opzetten en onderhouden, het brein van het cluster, worker nodes beheren, beveiligingspatches toepassen, versies upgraden en configuratiegegevens backuppen.
+
+00:01:41.820 --> 00:01:44.480
+Dat is een fulltime baan voor iemand die weet waar hij mee bezig is.
+
+00:01:44.700 --> 00:01:48.960
+Beheer de diensten zoals Azure Kubernetes service nemen die operationele last van je schouders.
+
+00:01:48.960 --> 00:01:52.920
+Microsoft draait het control plane voor je en regelt de upgrades, patches en backups.
+
+00:01:53.180 --> 00:01:54.840
+Jij focust je op je applicaties.
+
+00:01:55.040 --> 00:01:56.500
+Dus, wat doet Axe precies voor je?
+
+00:01:56.700 --> 00:01:59.660
+Laten we beginnen met het grootste onderdeel, het control plane.
+
+00:01:59.900 --> 00:02:01.560
+Wat is Azure Kubernetes service?
+
+00:02:01.940 --> 00:02:05.220
+Axe is simpelweg de beheerde versie van Kubernetes van Microsoft.
+
+00:02:05.580 --> 00:02:10.940
+Je krijgt een volledig functioneel Kubernetes cluster zonder dat je de onderliggende infrastructuur hoeft op te zetten of te onderhouden.
+
+00:02:11.180 --> 00:02:15.460
+Microsoft beheert het control plane voor je, zodat jij je kunt richten op het implementeren en draaien van je applicaties.
+
+00:02:15.680 --> 00:02:18.300
+Zie het als het verschil tussen een appartement huren en een huis bouwen.
+
+00:02:18.300 --> 00:02:22.400
+Als je een huis bouwt, ben je verantwoordelijk voor alles, het fundament, leidingwerk, elektra, het dak.
+
+00:02:22.600 --> 00:02:24.460
+Wanneer je huurt, regelt de verhuurder dat allemaal.
+
+00:02:24.680 --> 00:02:26.100
+Je trekt er gewoon in en richt het in.
+
+00:02:26.300 --> 00:02:27.220
+Axe is de verhuurder.
+
+00:02:27.440 --> 00:02:31.740
+Microsoft regelt het fundament, het control plane, netwerken, beveiligingspatches en upgrades.
+
+00:02:32.000 --> 00:02:35.820
+Jij brengt de inrichting, je gecontaineriseerde applicaties, configuraties en deployment pipelines.
+
+00:02:36.060 --> 00:02:38.500
+Maar Axe is niet zomaar een op zichzelf staand Kubernetes cluster.
+
+00:02:38.680 --> 00:02:40.940
+Het werkt nauw samen met de rest van het Azure platform.
+
+00:02:41.200 --> 00:02:44.320
+Entra ID regelt gebruikersauthenticatie en toegangscontrole.
+
+00:02:44.320 --> 00:02:48.060
+Azure Monitor verzamelt logs en statistieken van je cluster en je applicaties.
+
+00:02:48.060 --> 00:02:55.500
+Met Azure Policy dwing je regels af in al je clusters, zoals het verbieden van containers als root of eisen dat images uit een goedgekeurd register komen.
+
+00:02:56.180 --> 00:02:59.660
+Dit maakt Axe meer dan alleen Kubernetes dat op Azure VM's draait.
+
+00:03:00.000 --> 00:03:04.600
+Natuurlijk moet je nog steeds de basisconcepten van Kubernetes kennen, pods, deployments en services.
+
+00:03:04.960 --> 00:03:07.580
+Dat is de kennis die jij meebrengt, Axe vervangt die niet.
+
+00:03:07.740 --> 00:03:11.160
+Maar wat het wel wegneemt, is de operationele overhead om het cluster gezond te houden.
+
+00:03:11.160 --> 00:03:13.600
+Je hoeft je geen zorgen te maken dat het control plane uitvalt.
+
+00:03:13.760 --> 00:03:15.820
+Je hoeft Kubernetes-versies niet handmatig te upgraden.
+
+00:03:15.940 --> 00:03:18.760
+Je hoeft geen backups te maken van ETCD, de configuratiedatabies van het cluster.
+
+00:03:19.100 --> 00:03:20.300
+Microsoft regelt dat allemaal.
+
+00:03:20.580 --> 00:03:23.260
+Laten we dus eens kijken wat er achter de schermen gebeurt bij dat brein, het control plane.
+
+00:03:23.420 --> 00:03:25.620
+Het control plane, het brein dat Microsoft beheert.
+
+00:03:25.820 --> 00:03:27.400
+Wat zit er precies in dat control plane?
+
+00:03:27.600 --> 00:03:28.900
+Vier hoofdcomponenten.
+
+00:03:29.020 --> 00:03:30.780
+De API-server is de voordeur.
+
+00:03:31.000 --> 00:03:34.080
+Elk commando, verzoek en interactie met je cluster verloopt via deze server.
+
+00:03:34.300 --> 00:03:36.980
+De scheduler bepaalt op welke nood elke nieuwe pad wordt uitgevoerd.
+
+00:03:37.140 --> 00:03:41.420
+De controller-manager bewaakt de cluster-status en zorgt dat de realiteit overeenkomt met wat jij hebt gevraagd.
+
+00:03:41.500 --> 00:03:44.000
+En ETCD slaat alle configuratiegegevens op.
+
+00:03:44.160 --> 00:03:45.520
+Zie het als het geheugen van je cluster.
+
+00:03:45.720 --> 00:03:48.820
+Als ETCD beschadigd raakt of verloren gaat, ben je het cluster kwijt.
+
+00:03:48.920 --> 00:03:51.580
+Als je zelf Kubernetes opzet, ben je voor dit alles verantwoordelijk.
+
+00:03:51.760 --> 00:03:54.080
+Jij patcht de API-server wanneer er kwetsbaarheden verschijnen.
+
+00:03:54.080 --> 00:03:56.000
+Jij maakt regelmatig backups van ETCD.
+
+00:03:56.160 --> 00:03:58.840
+Jij vandt hardware-storingen op de machines die deze componenten draaien op.
+
+00:03:58.980 --> 00:03:59.760
+Dat is veel werk.
+
+00:03:59.960 --> 00:04:01.660
+Met Axe neemt Microsoft dat van je over.
+
+00:04:01.660 --> 00:04:04.140
+Zij draaien het controlplane op hun eigen infrastructuur.
+
+00:04:04.340 --> 00:04:06.500
+Zij patchen het, maken er backups van en monitoren het.
+
+00:04:06.600 --> 00:04:08.160
+Je ziet de onderliggende machines nooit.
+
+00:04:08.380 --> 00:04:10.920
+Je communiceert alleen met het API-server-eindpunt.
+
+00:04:11.140 --> 00:04:12.460
+De rest gebeurt achter de schermen.
+
+00:04:12.580 --> 00:04:14.620
+Maar niet alle controlplanes zijn hetzelfde.
+
+00:04:14.800 --> 00:04:17.320
+Axe biedt drie niveaus, free, standard en premium.
+
+00:04:17.580 --> 00:04:22.180
+De gratis laag biedt je het controlepaneel zonder extra kosten, zonder sla op de API-server.
+
+00:04:22.420 --> 00:04:26.760
+Dit is prima voor leer, ontwikkel- of testomgevingen waar een paar minuten uitvaltijd geen kwaad kan.
+
+00:04:26.940 --> 00:04:29.240
+Maar voor productieworkloads wil je waarschijnlijk meer.
+
+00:04:29.240 --> 00:04:32.700
+De standaard laag kost ongeveer 72 dollar per maand per cluster.
+
+00:04:32.900 --> 00:04:38.240
+Dit geeft je een sla van 99,95% op de API-server bij gebruik van beschikbaarheidszones.
+
+00:04:38.500 --> 00:04:41.240
+Als het controlepaneel uitvalt, crediteert Microsoft je.
+
+00:04:41.380 --> 00:04:43.660
+Het is de standaard keuze voor de meeste productieclusters.
+
+00:04:43.900 --> 00:04:46.900
+De premium laag kost ongeveer 432 dollar per maand.
+
+00:04:47.080 --> 00:04:50.640
+Je krijgt alles van standaard plus lange termijn ondersteuning voor Kubernetes-versies.
+
+00:04:50.840 --> 00:04:56.520
+Als je een gereguleerde workload draait die maanden of jaren op een specifieke versie moet blijven, dan is premium logisch.
+
+00:04:56.520 --> 00:05:00.700
+Dit is echter het belangrijkste punt. Je betaalt eigenlijk niet voor het controlepaneel zelf.
+
+00:05:00.900 --> 00:05:02.480
+De gratis laag is echt gratis.
+
+00:05:02.700 --> 00:05:06.520
+Standaard en premium zijn vergoedingen voor de sla- en lange termijn ondersteuning, niet voor de resources van het controlepaneel.
+
+00:05:07.200 --> 00:05:10.020
+Waar je wel voor betaald zijn de worker nodes, de VM's die je containers draaien.
+
+00:05:10.160 --> 00:05:12.900
+Die worden afzonderlijk gefactureerd tegen standaard Azure VM-tarieven.
+
+00:05:13.060 --> 00:05:14.340
+Dus, bekijk het op deze manier.
+
+00:05:14.520 --> 00:05:15.980
+Het controlepaneel is het brein.
+
+00:05:16.340 --> 00:05:17.500
+Microsoft beheert dit voor je.
+
+00:05:17.660 --> 00:05:19.520
+Je kiest de service laag op basis van je betrouwbaarheidsbehoeften.
+
+00:05:20.320 --> 00:05:23.320
+Maar het echte werk van het draaien van je applicaties gebeurt op de worker nodes.
+
+00:05:23.320 --> 00:05:26.080
+Op die worker nodes draaien je applicaties daadwerkelijk.
+
+00:05:26.300 --> 00:05:27.380
+Laten we het daarover hebben.
+
+00:05:27.600 --> 00:05:29.420
+De nodes, de workers waarvoor je betaalt.
+
+00:05:29.620 --> 00:05:32.360
+Nodes zijn Azure Virtual Machines, simpel en duidelijk.
+
+00:05:32.600 --> 00:05:37.560
+Standaard Azure VM's die je pads hosten, de kleinste eenheid in Kubernetes die een of meer containers draait.
+
+00:05:37.720 --> 00:05:39.060
+Je kiest de grootte en het aantal.
+
+00:05:39.300 --> 00:05:43.760
+Dus, als je een D2S-liggend streepje V3 wilt met 2 vcpu's en 8 GB aan RAM, dan kan dat.
+
+00:05:43.900 --> 00:05:49.500
+Heb je een geheugen geoptimaliseerde E32 nodig met 32 vcpu's en 256 GB, dan werkt dat ook.
+
+00:05:49.640 --> 00:05:52.180
+Nu, je gooit niet zomaar willekeurige VM's bij elkaar.
+
+00:05:52.180 --> 00:05:54.100
+Axe organiseert ze in node polls.
+
+00:05:54.360 --> 00:05:58.240
+Een node poll is een groep identieke VM's met dezelfde grootte en configuratie.
+
+00:05:58.420 --> 00:06:00.560
+Je kunt meerdere node polls in één cluster hebben.
+
+00:06:00.740 --> 00:06:03.200
+Een poll met algemene D-serie VM's voor je webfront en...
+
+00:06:03.200 --> 00:06:06.280
+...een andere met geheugen geoptimaliseerde E-serie VM's voor je database...
+
+00:06:06.280 --> 00:06:08.900
+...en een derde met gpu-enabled VM's voor machine learning workloads.
+
+00:06:09.140 --> 00:06:10.600
+Elke poll schaalt onafhankelijk.
+
+00:06:10.840 --> 00:06:12.420
+En die schaling is automatisch.
+
+00:06:12.620 --> 00:06:14.640
+De cluster Autoscaler bewaakt je pads.
+
+00:06:14.880 --> 00:06:18.460
+Wanneer ze meer resources nodig hebben dan de huidige nodes kunnen bieden, voegt hij nieuwe nodes toe.
+
+00:06:18.460 --> 00:06:22.060
+En wanneer het verkeer afneemt en de belasting grotendeels inactief is, verwijdert hij ze.
+
+00:06:22.260 --> 00:06:25.820
+Jij stelt de minimum en maximum grootte voor elke poll in en Axe regelt de rest.
+
+00:06:26.060 --> 00:06:27.600
+Dit is waar je echt geld bespaart.
+
+00:06:27.780 --> 00:06:30.500
+Je betaalt niet voor onbenutte capaciteit tijdens daluren.
+
+00:06:30.740 --> 00:06:33.140
+Node upgrades zijn iets anders wat Axe afhandelt.
+
+00:06:33.360 --> 00:06:37.080
+Wanneer er een nieuwe OS-beveiligingspatch uitkomt, kan Axe deze op je nodes toepassen.
+
+00:06:37.260 --> 00:06:40.720
+En wanneer er een nieuwe Kubernetes-versie uitkomt, kan Axe je cluster upgraden.
+
+00:06:40.920 --> 00:06:41.880
+Jij bepaalt het schema.
+
+00:06:42.200 --> 00:06:44.700
+Jij beslist wanneer upgrades plaatsvinden, niet Microsoft.
+
+00:06:44.700 --> 00:06:49.440
+Het eigenlijke werk van pads drainen, nodes updaten en ze weer online brengen wordt voor je gedaan.
+
+00:06:49.680 --> 00:06:50.520
+Nu, de kosten.
+
+00:06:50.760 --> 00:06:53.300
+Je betaalt standaard Azure VM-tarieven voor je nodes.
+
+00:06:53.500 --> 00:06:58.300
+Een D2S V3 in East US kost ongeveer 70 dollar per maand en een grotere VM kost meer.
+
+00:06:58.480 --> 00:07:00.780
+Maar er zijn manieren om die kosten aanzienlijk te verlagen.
+
+00:07:01.220 --> 00:07:07.200
+Gereserveerde instanties laten je vastleggen voor 1 of 3 jaar in ruil voor korting, tot wel 72% goedkoper dan Pay As You Go.
+
+00:07:07.200 --> 00:07:11.920
+Als je je basiscapaciteit kent, de nodes die altijd moeten draaien, is reserveren erg zinvol.
+
+00:07:12.120 --> 00:07:16.020
+Spot VM's zijn nog goedkoper, tot 90% korting op Pay As You Go-tarieven.
+
+00:07:16.180 --> 00:07:17.820
+Maar dit is het addertje onder het gras.
+
+00:07:18.020 --> 00:07:22.920
+Azure kan die capaciteit op elk moment terugvorderen met 30 seconden melding voor verwijdering.
+
+00:07:23.180 --> 00:07:30.700
+Dat is prima voor batch taken, CI, CD pipelines of stateless workloads die interrupties aankunnen, maar niet ideaal voor je klantgerichte productie-API.
+
+00:07:30.700 --> 00:07:37.240
+Dus, je betaalt voor de workers, kiest de grootte, het aantal en het prijsmodel, terwijl acceptables, schaling en upgrades beheert.
+
+00:07:37.400 --> 00:07:39.600
+Je nodes en pods moeten met elkaar kunnen communiceren.
+
+00:07:39.780 --> 00:07:41.820
+En dat is waar netwerken om de hoek komt kijken.
+
+00:07:42.200 --> 00:07:43.960
+Netwerken, hoe pods met elkaar praten.
+
+00:07:44.180 --> 00:07:48.060
+Elke pod in je cluster heeft een IP-adres nodig, maar pods komen en gaan constant.
+
+00:07:48.300 --> 00:07:50.600
+Ze crashen, ze schalen op, ze worden vervangen.
+
+00:07:50.780 --> 00:07:54.860
+Dus heb je een systeem nodig dat dynamisch IP's uitdeelt en zorgt dat pods elkaar kunnen bereiken.
+
+00:07:55.100 --> 00:07:57.280
+Dat is wat de container networking interface doet.
+
+00:07:57.280 --> 00:08:02.960
+Azure CNI is de implementatie van Microsoft en beheert hoe pods adressen krijgen en hoe verkeer tussen ze stroomt.
+
+00:08:03.060 --> 00:08:05.540
+Er zijn twee hoofdnetwerkmodellen waaruit je kunt kiezen.
+
+00:08:05.740 --> 00:08:10.700
+Overleen netwerken geven pods IP's uit een apart adresbereik dat geen deel uitmaakt van je virtuele netwerk.
+
+00:08:10.940 --> 00:08:12.500
+Dit is de meer schaalbare optie.
+
+00:08:12.700 --> 00:08:16.440
+Je kunt tot 5000 nodes en een kwart miljoen pods in één cluster hebben.
+
+00:08:16.660 --> 00:08:22.580
+Omdat pod IP's gescheiden zijn van je VNet, kun je dezelfde adresruimte hergebruiken in meerdere clusters zonder conflicten.
+
+00:08:22.740 --> 00:08:26.240
+De keerzijde is dat pods niet direct van buiten het cluster toegankelijk zijn.
+
+00:08:26.240 --> 00:08:29.920
+Verkeer dat een pod verlaat, wordt vertaald naar het IP-adres van de node.
+
+00:08:30.080 --> 00:08:34.400
+De andere optie is flat networking waarbij pods IP's direct uit je VNet bereik krijgen.
+
+00:08:34.680 --> 00:08:42.480
+Externe systemen kunnen indien nodig direct pods bereiken, maar het nadeel is dat je IP-adressen verbruikt uit je VNet die snel op kunnen raken als je veel pods hebt.
+
+00:08:42.660 --> 00:08:44.860
+Je moet de grootte van je subnets zorgvuldig plannen.
+
+00:08:45.140 --> 00:08:47.540
+Laten we het nu hebben over verkeer dat je cluster verlaat.
+
+00:08:47.540 --> 00:08:54.380
+Wanneer een pod iets op internet moet bereiken, zoals een externe API, database of externe service, moet dat verkeer ergens doorheen.
+
+00:08:54.620 --> 00:08:59.820
+Standaard gebruikt Axe een Azure Load Balancer voor uitgaande verbindingen, wat voor de meeste workloads prima werkt.
+
+00:08:59.980 --> 00:09:05.100
+Maar als je applicaties veel uitgaande verbindingen maken, kun je tegen SNAT-poortuitputting aanlopen.
+
+00:09:05.320 --> 00:09:11.380
+Elke node krijgt een vast aantal Source Network Address Translation-poorten en als die opraken, mislukken nieuwe verbindingen.
+
+00:09:11.380 --> 00:09:15.940
+De oplossing is Azure Not Gateway, die veel beter omgaat met grote aantallen verbindingen.
+
+00:09:16.060 --> 00:09:19.660
+Voor het blootstellen van je applicaties aan het internet zijn er twee hoofdbenaderingen.
+
+00:09:19.840 --> 00:09:26.980
+Voor applicaties die communiceren via TCP of UDP, zoals gamesurvers, databases of aangepaste protocollen, gebruik je een Load Balancer Service.
+
+00:09:27.260 --> 00:09:30.200
+Deze geeft je app een publiek IP-adres en stuurt verkeer door op laag 4.
+
+00:09:30.380 --> 00:09:34.500
+Voor webapplicaties die HTTP of HTTPS gebruiken, wil je een Ingress Controller.
+
+00:09:34.780 --> 00:09:36.000
+Deze werkt op laag 7.
+
+00:09:36.300 --> 00:09:38.740
+Deze begrijpt URL's, paden en hostnamen.
+
+00:09:38.740 --> 00:09:45.620
+Je kunt verkeer naar verschillende services routeren op basis van de domeinnaam of het URL-pad en één publiek IP kan tientallen applicaties bedienen.
+
+00:09:45.820 --> 00:09:52.000
+Axe ondersteunt beheerde Ingress opties zoals Application Gateway voor containers of je kunt je eigen oplossing zoals een GINX draaien.
+
+00:09:52.160 --> 00:09:56.020
+Een fout die mensen vaak maken, is het aanmaken van hun Axe-cluster met een te klein subnet.
+
+00:09:56.200 --> 00:09:59.120
+Misschien een 28 subnet, in totaal 16 IP's.
+
+00:09:59.320 --> 00:10:02.520
+Dat werkt voor een klein testcluster, maar Axe reserveert IP's per node.
+
+00:10:02.640 --> 00:10:08.480
+Een cluster met drie nodes en een 28 is vandaag misschien prima, maar als je volgende maand een nodepool toevoegt en je verkeer groeit, kun je plotseling niet meer schalen.
+
+00:10:08.480 --> 00:10:12.140
+En je kunt de CIDR van het subnet niet meer wijzigen nadat het cluster is aangemaakt.
+
+00:10:12.280 --> 00:10:17.400
+Je zou het cluster opnieuw moeten opbouwen of een nieuwe nodepool op een ander subnet moeten aanmaken en je workloads moeten migreren.
+
+00:10:17.580 --> 00:10:20.100
+Plan de grootte van je subnets vanaf dag 1 voor groei.
+
+00:10:20.340 --> 00:10:23.380
+Zodra je app draait en bereikbaar is, moet je deze beveiligen.
+
+00:10:23.880 --> 00:10:24.280
+Beveiliging.
+
+00:10:24.500 --> 00:10:25.400
+Wie krijgt er toegang?
+
+00:10:25.600 --> 00:10:27.540
+Dus, hoe werkt beveiliging eigenlijk in Axe?
+
+00:10:27.720 --> 00:10:29.940
+Zie het als een gebouw met meerdere beveiligingslagen.
+
+00:10:30.180 --> 00:10:32.260
+De eerste laag is identiteit en toegang.
+
+00:10:32.440 --> 00:10:33.600
+Wie mag er door de deur naar binnen?
+
+00:10:33.600 --> 00:10:37.420
+Je koppelt je cluster aan en tra ID, de identiteitsservice van Microsoft.
+
+00:10:37.420 --> 00:10:40.000
+Dit heette voorheen Azure Active Directory.
+
+00:10:40.260 --> 00:10:43.900
+Je team logt in met hun normale werkgegevens, aparte accounts zijn niet nodig.
+
+00:10:44.140 --> 00:10:48.000
+Daarbovenop voeg je Kubernetes RBAC toe, oftewel op rollen gebaseerd toegangsbeheer.
+
+00:10:48.200 --> 00:10:51.880
+Dit bepaalt wie wat kan zien, wie PADS kan implementeren en wie resources kan verwijderen.
+
+00:10:52.000 --> 00:10:54.900
+Een ontwikkelaar krijgt misschien alleen toegang tot de eigen namespace,
+
+00:10:55.140 --> 00:10:59.040
+terwijl een operator clusterbrede leestoegang heeft en een beheerder volledige controle krijgt.
+
+00:10:59.200 --> 00:11:01.800
+Je kunt entra groepen direct koppelen aan Kubernetes rollen,
+
+00:11:01.800 --> 00:11:06.100
+dus wanneer iemand bij het team komt of vertrekt, werk je de entra groep bij een volgende rechten automatisch.
+
+00:11:06.280 --> 00:11:09.100
+Het is de receptiebalie die de toegang voor het hele gebouw regelt.
+
+00:11:09.880 --> 00:11:11.240
+Netwerkbeveiliging is de tweede laag.
+
+00:11:11.420 --> 00:11:14.740
+Standaard is de API-server van je AX-cluster toegankelijk via het openbare internet,
+
+00:11:15.020 --> 00:11:18.700
+en hoewel je dit kunt beperken tot specifieke IP bereiken, blijft het eindpunt blootgesteld.
+
+00:11:18.900 --> 00:11:21.840
+Voor productieworkloads wil je in plaats daarvan een privaat cluster.
+
+00:11:21.840 --> 00:11:25.280
+Op die manier krijgt de API-server een intern IP-adres van je VNET,
+
+00:11:25.460 --> 00:11:28.820
+alleen toegankelijk via Azure Private Link, zonder enige openbare blootstelling.
+
+00:11:28.820 --> 00:11:31.580
+Iedereen die het cluster beheert, moet verbonden zijn met je netwerk,
+
+00:11:31.780 --> 00:11:34.780
+via een VPN, express route of een jumbux binnen het VNET.
+
+00:11:34.960 --> 00:11:38.680
+Dan komen we bij padbeveiliging, waar de meeste kwetsbaarheden in containers optreden.
+
+00:11:38.820 --> 00:11:41.280
+De belangrijkste regel, draai containers nooit als root.
+
+00:11:41.460 --> 00:11:45.100
+Als een container als root draait en een aanvaller breekt in, hebben ze root toegang op de host.
+
+00:11:45.340 --> 00:11:48.080
+Hetzelfde geldt voor privilege-escalatie, schakel dit uit.
+
+00:11:48.280 --> 00:11:51.600
+Gebruik Azure Policy voor Kubernetes om deze regels automatisch af te dwingen.
+
+00:11:51.740 --> 00:11:54.740
+Je kunt instellen dat geen enkele container in deze namespace als root mag draaien,
+
+00:11:54.880 --> 00:11:58.140
+en het beleid blokkeert elke implementatie die die regels schendt voordat deze een nood bereikt.
+
+00:11:58.140 --> 00:12:00.000
+Geheimen zijn het volgende grote punt.
+
+00:12:00.260 --> 00:12:04.800
+Sla nooit wachtwoorden, API-sleutels of verbindingsreeksen op in je code- of container-images.
+
+00:12:05.080 --> 00:12:09.100
+Mensen doen het constant, ze hardcoden een database-wachtwoord in een configuratiebestand,
+
+00:12:09.300 --> 00:12:13.180
+bouwen de image, push je deze naar een register, en dat wachtwoord is voor altijd ingebed.
+
+00:12:13.360 --> 00:12:15.680
+Iedereen met toegang tot het register kan het extraheren.
+
+00:12:15.860 --> 00:12:17.760
+Gebruik in plaats daarvan Azure Key Vault.
+
+00:12:17.980 --> 00:12:21.860
+Sla je geheimen daarop en laat je pad ze benaderen via de Secret Store CSI Driver.
+
+00:12:22.100 --> 00:12:25.460
+De pad koppelt het geheim als volume- of omgevingsvariabelen tijdens runtime,
+
+00:12:25.460 --> 00:12:27.980
+en het geheim raakt nooit je image- of broncode aan.
+
+00:12:28.100 --> 00:12:29.260
+Tot slot, monitoring.
+
+00:12:29.600 --> 00:12:33.420
+Microsoft Defender 4 Containers scant je container-images op bekende kwetsbaarheden
+
+00:12:33.420 --> 00:12:37.300
+en bewaakt je cluster op verdachte activiteiten, pogingen tot privilege-escalatie,
+
+00:12:37.520 --> 00:12:39.980
+ongebruikelijke netwerkverbindingen en crypto-mining workloads.
+
+00:12:40.200 --> 00:12:44.160
+Het is geen tool die je zomaar instelt en vergeet, maar het detecteert zaken die je zelf mogelijk mist.
+
+00:12:44.380 --> 00:12:46.280
+Zelfs met dit alles kan er nog steeds iets misgaan.
+
+00:12:46.440 --> 00:12:48.460
+Laten we daarom kijken naar de meest voorkomende valkuilen.
+
+00:12:48.660 --> 00:12:50.360
+Veel voorkomende valkuilen, wat gaat er mis?
+
+00:12:50.360 --> 00:12:51.900
+Waar struikelen mensen het vaakst over?
+
+00:12:52.080 --> 00:12:53.860
+Laten we de gebruikelijke verdachten eens langslopen.
+
+00:12:54.000 --> 00:12:55.520
+Eerst hebben we de Azure quota-limieten.
+
+00:12:55.680 --> 00:12:59.320
+Je Azure-abonnement heeft limieten voor het aantal vcpu's dat je in een regio kunt gebruiken,
+
+00:12:59.500 --> 00:13:02.380
+en hetzelfde geldt voor publieke IP's, loadbalancers en andere resources.
+
+00:13:02.700 --> 00:13:05.600
+Wanneer je een AX-cluster aanmaakt, verbruikt dit een deel van dat quotum.
+
+00:13:05.760 --> 00:13:09.160
+Als je de limiet bereikt, mislukt het aanmaken van het cluster of stopt het schalen.
+
+00:13:09.360 --> 00:13:13.180
+De oplossing is eenvoudig, vraag een quotumverhoging aan via de Azure portal.
+
+00:13:13.480 --> 00:13:16.960
+Doe dit echter voordat je het nodig hebt, niet wanneer een deployment om twee uur vastloopt.
+
+00:13:16.960 --> 00:13:20.980
+Het volgende punt is subnetgrote, en dit is pijnlijk omdat je het achteraf niet kunt herstellen.
+
+00:13:21.180 --> 00:13:25.860
+AX reserveert IP-adressen per noot, en elke noot heeft een bepaald aantal IP's nodig voor pads.
+
+00:13:26.060 --> 00:13:31.460
+Als je subnet te klein is, raak je door de adressen heen en kun je een subnet niet meer uitbreiden nadat het cluster is aangemaakt.
+
+00:13:31.600 --> 00:13:32.520
+Plan dus voor groei.
+
+00:13:32.680 --> 00:13:36.280
+Als je denkt dat je vandaag 10 noots nodig hebt, reserveer dan genoeg IP's voor 50 noots.
+
+00:13:36.440 --> 00:13:41.520
+Een 24-subnet geeft je 251 bruikbare IP's, wat voor de meeste clusters een goed startpunt is.
+
+00:13:41.680 --> 00:13:45.140
+Image-spool-back-off is waarschijnlijk de meest voorkomende padfout die je zult zien.
+
+00:13:45.140 --> 00:13:47.980
+Je pad probeert een container-image op te halen en dat mislukt.
+
+00:13:48.140 --> 00:13:50.020
+Meestal is het een authenticatie-probleem.
+
+00:13:50.180 --> 00:13:52.300
+Je cluster heeft geen toegang tot het container-register.
+
+00:13:52.500 --> 00:13:56.060
+Misschien gebruik je een privaat register zonder inloggegevens of zijn de gegevens verlopen.
+
+00:13:56.300 --> 00:14:01.220
+Controleer je image-spool-secrets, zorg dat het service-account toegang heeft tot het register en verifieer of de imagenaam correct is.
+
+00:14:01.380 --> 00:14:02.880
+Het is zelden een Kubernetes-bug.
+
+00:14:03.040 --> 00:14:05.200
+Crash-loop-back-off is een andere veelvoorkomende fout.
+
+00:14:05.400 --> 00:14:08.540
+Je pad start, draait een paar seconden, crash, herstart en crash weer.
+
+00:14:08.700 --> 00:14:11.720
+De natuurlijke reactie is om Kubernetes de schuld te geven, maar doe dat niet.
+
+00:14:11.720 --> 00:14:18.900
+9 van de 10 keer ligt het aan je applicatie een verkeerd geconfigureerde omgevingsvariabelen, een ontbrekende dependency of een database-connection-string die naar de verkeerde server wijst.
+
+00:14:19.160 --> 00:14:20.880
+Controleer de pad logs met kubekt logs.
+
+00:14:21.120 --> 00:14:23.040
+De foutmelding staat daar meestal direct in.
+
+00:14:23.180 --> 00:14:25.500
+En dan is er nog de uitputting van uitgaande verbindingen.
+
+00:14:25.640 --> 00:14:30.540
+Je applicaties maken veel verbindingen met externe services, APIs, databases en tools van derde.
+
+00:14:30.680 --> 00:14:34.920
+Elke verbinding gebruikt een SNAT-poort en elke node heeft een beperkt aantal van die poorten.
+
+00:14:35.160 --> 00:14:37.880
+Wanneer deze op zijn, mislukken nieuwe verbindingen geruisloos.
+
+00:14:38.040 --> 00:14:40.740
+Je app ziet er gezond uit, maar kan niets buiten het cluster bereiken.
+
+00:14:40.740 --> 00:14:49.280
+De oplossing is overstappen op Azure Not Gateway, die veel beter omgaat met hoge aantallen verbindingen dan de standaard load balancer of grotere node-formaten gebruiken met meer SNAT-poorten per node.
+
+00:14:49.380 --> 00:14:53.300
+Al deze onderdelen hebben een prijskaartje, dus laten we kijken wat je daadwerkelijk gaat betalen.
+
+00:14:53.460 --> 00:14:54.500
+Kosten en prijzen.
+
+00:14:54.720 --> 00:14:56.040
+Dus, wat kostaks nu echt?
+
+00:14:56.280 --> 00:14:57.260
+Laten we duidelijk zijn.
+
+00:14:57.480 --> 00:15:01.800
+Het grootste deel van uw factuur komt van de worker node-VMs, de rekenkracht, opslag en netwerken.
+
+00:15:02.000 --> 00:15:03.480
+Dat is waar het echte geld naartoe gaat.
+
+00:15:03.640 --> 00:15:07.360
+Een D2AS V3 node in East US kost ongeveer 70 dollar per maand.
+
+00:15:07.360 --> 00:15:10.760
+5 nodes 350 dollar, 10 nodes 700.
+
+00:15:11.180 --> 00:15:12.760
+Die VM-kosten lopen snel op.
+
+00:15:12.920 --> 00:15:15.300
+Het controlepaneel heeft drie prijskategorieën.
+
+00:15:15.460 --> 00:15:18.620
+Free geeft u het controlepaneel zonder extra kosten, maar zonder sla.
+
+00:15:18.840 --> 00:15:25.680
+Standard kost ongeveer 72 dollar per maand per cluster met een 99,95% sla op de API-server.
+
+00:15:25.860 --> 00:15:31.420
+Premium is ongeveer 432 dollar per maand en voegt ondersteuning op lange termijn toe voor Kubernetes-versies.
+
+00:15:31.640 --> 00:15:35.940
+Voor de meeste productie workloads is Standard ideaal, maar u kunt die VM-kosten verlagen.
+
+00:15:35.940 --> 00:15:41.880
+Gereserveerde instanties laten u vastleggen voor één of drie jaar, met een besparing tot 72% vergeleken met betalen naar gebruik.
+
+00:15:41.980 --> 00:15:46.660
+Als u uw basiscapaciteit kent, de nodes die altijd moeten draaien, is reserveren een logische keuze.
+
+00:15:46.860 --> 00:15:51.340
+Azure-besparingsplannen werken vergelijkbaar, maar bieden meer flexibiliteit tussen verschillende VM-families.
+
+00:15:51.520 --> 00:15:54.940
+U legt zich vast op een bepaald uurlijks bedrag en Azure past de korting automatisch toe.
+
+00:15:55.220 --> 00:15:57.160
+Besparingen lopen op tot 65%.
+
+00:15:57.160 --> 00:16:00.720
+Spot-VMs zijn de goedkoopste optie, tot 90% korting, maar er zit een addertje onder het gras.
+
+00:16:00.720 --> 00:16:03.120
+Azure kan die capaciteit op elk moment terugvorderen.
+
+00:16:03.240 --> 00:16:05.560
+Uw nodes worden verwijderd, uw pads worden opnieuw geplant.
+
+00:16:05.560 --> 00:16:09.380
+Dat werkt prima voor batchtaken, CI, CD-runners of stateless workloads.
+
+00:16:09.620 --> 00:16:11.080
+Minder voor uw productie-API.
+
+00:16:11.740 --> 00:16:13.360
+Kostenoptimalisatie gaat niet alleen over kortingen.
+
+00:16:13.580 --> 00:16:14.920
+Kies de juiste grootte voor uw nodes.
+
+00:16:15.140 --> 00:16:18.020
+Provisioneer geen VM met 16 cores als uw pads er slechts twee gebruiken.
+
+00:16:18.200 --> 00:16:21.640
+Gebruik de cluster Autoscaler, zodat u niet betaalt voor inactieve nodes bij weinig verkeer.
+
+00:16:21.840 --> 00:16:24.460
+Overweeg voor lichte CPU-workloads B-serie VM's.
+
+00:16:24.620 --> 00:16:27.220
+Ze zijn burst-able en aanzienlijk goedkoper dan de D-serie.
+
+00:16:27.400 --> 00:16:29.300
+Vergeet ook opslag en datatransfer niet.
+
+00:16:29.560 --> 00:16:31.220
+Permanente volumes verhogen de kosten.
+
+00:16:31.460 --> 00:16:32.940
+Azure Disk is snel, maar duur.
+
+00:16:33.120 --> 00:16:35.140
+Azure Files is goedkoper, maar langzamer.
+
+00:16:35.140 --> 00:16:37.840
+Kies op basis van de prestatiebehoeften van uw workload.
+
+00:16:38.080 --> 00:16:41.020
+Data-agres, verkeer dat Azure verlaat, kost ook geld.
+
+00:16:41.240 --> 00:16:43.640
+Hou uw verkeer indien mogelijk binnen dezelfde regio.
+
+00:16:43.860 --> 00:16:45.500
+Dus, wanneer is AX eigenlijk zinvol?
+
+00:16:45.700 --> 00:16:47.460
+Laten we praten over praktijkadvies.
+
+00:16:47.680 --> 00:16:48.860
+Wanneer moet u AX gebruiken?
+
+00:16:48.980 --> 00:16:51.280
+AX blinkt uit bij een microservices-architectuur.
+
+00:16:51.460 --> 00:16:54.320
+U heeft meerdere onafhankelijke services die afzonderlijk moeten schalen.
+
+00:16:54.520 --> 00:16:58.720
+De frontend heeft misschien tien replica's nodig tijdens piekuren, terwijl de backender maar drie nodig heeft.
+
+00:16:58.880 --> 00:17:00.580
+AX regelt dat op natuurlijke wijze.
+
+00:17:00.800 --> 00:17:03.760
+Elke service schaalt onafhankelijk op basis van het eigen verkeer.
+
+00:17:03.760 --> 00:17:06.240
+Hoge beschikbaarheid is een ander sterk argument.
+
+00:17:06.500 --> 00:17:08.400
+AX verdeelt uw pods over meerdere nodes.
+
+00:17:08.620 --> 00:17:11.440
+Als een node uitvalt, worden de pods opnieuw geplant op gezonde nodes.
+
+00:17:11.640 --> 00:17:15.360
+Als u beschikbaarheidszones gebruikt, kan uw cluster overleven als een heel datacenter uitvalt.
+
+00:17:15.560 --> 00:17:18.600
+Voor applicaties die 24 zevende in de lucht moeten zijn, is dat waardevol.
+
+00:17:18.840 --> 00:17:21.580
+C, CD-integratie is waar AX echt zijn waarde bewijst.
+
+00:17:21.740 --> 00:17:26.680
+Je bouwt je container-image, pust deze naar een registry en AX implementeert de nieuwe versie met een rolling-update.
+
+00:17:26.880 --> 00:17:27.440
+Geen downtime.
+
+00:17:27.440 --> 00:17:29.720
+Als er iets misgaat, draai je de wijziging terug.
+
+00:17:29.880 --> 00:17:32.680
+Geen handmatige SSH naar servers, geen gekopieer en geplak van bestanden.
+
+00:17:32.820 --> 00:17:34.140
+De pipeline regelt alles.
+
+00:17:34.360 --> 00:17:36.060
+Maar AX is niet altijd het juiste antwoord.
+
+00:17:36.220 --> 00:17:41.780
+Als je een simpele monolithische applicatie hebt die op één VM draait, voegt AX complexiteit toe zonder veel voordeel.
+
+00:17:41.900 --> 00:17:44.140
+Je zou Kubernetes beheren puur om het beheren.
+
+00:17:44.340 --> 00:17:48.420
+Soms is een VM, app-service of zelfs Azure Functions de simpelere, goedkopere keuze.
+
+00:17:48.600 --> 00:17:50.660
+Als je net begint, gebruik dan de gratis laag.
+
+00:17:50.820 --> 00:17:53.880
+Maak een cluster, implementeer een test-applicatie, maak dingen kapot en herstel ze.
+
+00:17:53.880 --> 00:17:55.980
+Leer de concepten zonder je zorgen te maken over de kosten.
+
+00:17:56.220 --> 00:17:58.260
+Wanneer je klaar bent voor productie, stap je over naar Stender.
+
+00:17:58.440 --> 00:17:59.700
+Laten we alles op een rij zetten.
+
+00:17:59.940 --> 00:18:01.200
+Dus, dit is wat je moet onthouden.
+
+00:18:01.360 --> 00:18:03.380
+AX neemt vier belangrijke zaken voor zijn rekening.
+
+00:18:03.620 --> 00:18:06.340
+Microsoft beheert het control plane, dat is het brein van het cluster.
+
+00:18:06.580 --> 00:18:09.220
+Jij kiest de grote en het aantal nodes, de worker VM's.
+
+00:18:09.340 --> 00:18:10.760
+En AX beheert de pols en schaling.
+
+00:18:11.020 --> 00:18:14.920
+Voor netwerken communiceren PADS met elkaar en de buitenwereld via Azure CNI.
+
+00:18:15.120 --> 00:18:17.240
+En AX integreert hiermee om alles werkend te krijgen.
+
+00:18:17.920 --> 00:18:19.120
+Beveiligingsstools zijn ingebouwd.
+
+00:18:19.500 --> 00:18:21.940
+Identiteit, netwerkisolatie, padhardening.
+
+00:18:21.940 --> 00:18:25.140
+Je betaalt alleen voor de compute, nodes, opslag en netwerken.
+
+00:18:25.280 --> 00:18:27.880
+Het control plane zelf is gratis in de gratis laag.
+
+00:18:28.000 --> 00:18:31.700
+Je hebt alleen standaard of premium nodig als je een sla- of langdurige ondersteuning wilt.
+
+00:18:31.880 --> 00:18:34.880
+Je volgende stap, maak een gratis AX-cluster aan in de Azure portal.
+
+00:18:35.260 --> 00:18:38.780
+Implementeer een simpele testapplicatie, NGINX of een Hello World container.
+
+00:18:39.000 --> 00:18:40.920
+Kijk hoe het werkt, maak het kapot en herstel het.
+
+00:18:41.060 --> 00:18:43.540
+Die praktijkervaring is beter dan welke tutorial dan ook.
+
+00:18:43.680 --> 00:18:47.380
+Als deze aflevering hielp, abonneer je dan voor meer duidelijke uitleg over Azure...
+
+00:18:47.380 --> 00:18:49.160
+...en deel het met iemand die aan zijn cloudreis begint.
+
+00:18:49.160 --> 00:18:50.600
+Ze zullen je later bedanken.

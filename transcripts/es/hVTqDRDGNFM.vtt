@@ -1,0 +1,928 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:03.940
+Hola a todos y bienvenidos a otro episodio de Píldoras de Conocimiento de Microsoft aquí en M365.
+
+00:00:04.260 --> 00:00:05.700
+FM suizo anfitrión Mirko Peters.
+
+00:00:06.040 --> 00:00:08.860
+Hoy abordaremos algo de lo que todos los que crean con IA han oído hablar,
+
+00:00:08.960 --> 00:00:11.280
+pero que casi nadie puede explicar en lenguaje sencillo.
+
+00:00:11.620 --> 00:00:13.360
+Es el protocolo de contexto de modelo OMSP.
+
+00:00:14.700 --> 00:00:17.860
+Están en Teams y le hacen a su asistente de IA una pregunta simple como
+
+00:00:17.860 --> 00:00:19.580
+¿Cuál es el estado del proyecto Johnson?
+
+00:00:20.200 --> 00:00:22.040
+Responde, lo siento, no puedo exceder a esa información.
+
+00:00:22.960 --> 00:00:23.520
+¿Le suena familiar?
+
+00:00:23.980 --> 00:00:27.040
+La IA es inteligente, el modelo es potente, pero no puede ver sus datos.
+
+00:00:27.040 --> 00:00:30.200
+¿Está desconectada de los sistemas donde reside su trabajo real?
+
+00:00:30.620 --> 00:00:32.360
+Ese es el problema central que resuelve MSP.
+
+00:00:32.760 --> 00:00:35.140
+Al final de este episodio entenderán qué es realmente MSP,
+
+00:00:35.240 --> 00:00:37.640
+por qué es importante para cualquiera que use Microsoft 365
+
+00:00:37.640 --> 00:00:39.980
+y cómo está cambiando lo que la IA puede hacer por ustedes.
+
+00:00:40.720 --> 00:00:41.860
+Dividiremos esto en bloque fundamental.
+
+00:00:42.560 --> 00:00:45.780
+El problema es la solución, cómo funciona y lo que significa dentro de Microsoft.
+
+00:00:46.360 --> 00:00:49.080
+Así que empecemos con el problema, porque probablemente ustedes mismos lo han sentido.
+
+00:00:50.420 --> 00:00:51.100
+El problema.
+
+00:00:51.660 --> 00:00:53.640
+Cada herramienta de IA tenía que ser construida a medida.
+
+00:00:53.640 --> 00:00:57.400
+Antes de que existiera MSP, si querían que un asistente de IA hiciera algo útil,
+
+00:00:57.500 --> 00:00:59.780
+consultar su calendario, extraer un archivo de SharePoint,
+
+00:00:59.880 --> 00:01:01.440
+buscar un registro de cliente en Dynamics,
+
+00:01:01.520 --> 00:01:04.060
+tenían que escribir código personalizado para cada uno.
+
+00:01:04.800 --> 00:01:07.540
+Cada conexión, cada fuente de datos, código separado.
+
+00:01:08.080 --> 00:01:08.680
+Aquí está el detalle.
+
+00:01:09.060 --> 00:01:10.940
+Cada sistema habla su propio lenguaje de API.
+
+00:01:11.400 --> 00:01:15.380
+Su calendario usa un formato, SharePoint usa otro, Dynamics usa otro más.
+
+00:01:16.200 --> 00:01:20.220
+Diferentes autenticaciones, diferentes reglas, diferentes formas de solicitar datos y recibirlos.
+
+00:01:20.220 --> 00:01:23.840
+Si querían que su guía hablara con tres sistemas, debían crear tres conectores personalizados.
+
+00:01:24.240 --> 00:01:24.920
+Piénsenlo de esta manera.
+
+00:01:25.320 --> 00:01:28.300
+Imaginen que están en su sala con un televisor, un equipo de sonido y luces inteligentes.
+
+00:01:28.980 --> 00:01:30.620
+Cada uno viene con su propio control remoto.
+
+00:01:31.080 --> 00:01:32.960
+Y ninguno de sus controles funciona con otro dispositivo.
+
+00:01:33.340 --> 00:01:35.020
+Necesitan el control de televisor para el televisor,
+
+00:01:35.280 --> 00:01:37.680
+el de sonido para el sonido y una aplicación separada para las luces.
+
+00:01:38.520 --> 00:01:40.540
+Así era el desarrollo de IA, antes de MSP.
+
+00:01:41.180 --> 00:01:43.280
+Cada herramienta necesitaba su propia integración personalizada.
+
+00:01:43.700 --> 00:01:45.240
+Pero a los usuarios de Microsoft esto les toca decir.
+
+00:01:45.240 --> 00:01:48.260
+Piensen en lo que Copilot quiere hacer cuando le hacen una pregunta.
+
+00:01:48.820 --> 00:01:51.320
+Podría revisar su calendario de Exchange para ver reuniones,
+
+00:01:51.440 --> 00:01:54.520
+leer correos recientes de un cliente específico o buscar un registro de cliente en Dynamics.
+
+00:01:54.980 --> 00:01:56.800
+Eso significa tres conexiones API diferentes,
+
+00:01:56.920 --> 00:01:59.600
+tres integraciones separadas, cada una requiriendo trabajo de desarrollo personalizado.
+
+00:01:59.840 --> 00:02:00.140
+El resultado.
+
+00:02:00.640 --> 00:02:02.820
+La mayoría de las herramientas de IA tomaron camino fácil y un genérico.
+
+00:02:03.080 --> 00:02:06.340
+Si haces una pregunta sobre tu propio trabajo y la IA decía no puedo acceder a sus datos,
+
+00:02:06.700 --> 00:02:08.580
+o necesito que configures una conexión primero.
+
+00:02:09.080 --> 00:02:11.160
+La integración real supone un costoso desarrollo a medida,
+
+00:02:11.280 --> 00:02:12.840
+y la mayoría de las organizaciones nunca lo logran.
+
+00:02:13.480 --> 00:02:14.340
+Ahora esta es la pieza clara.
+
+00:02:14.340 --> 00:02:17.180
+El modelo de lenguaje grande en sí mismo es increíblemente potente.
+
+00:02:17.560 --> 00:02:19.660
+Puedes razonar, resumir, generar y analizar,
+
+00:02:19.800 --> 00:02:22.400
+pero sin acceso a tus datos reales está a ciegas.
+
+00:02:22.880 --> 00:02:26.600
+Es como tener al asistente más inteligente del mundo encerrado en una habitación sin ventanas.
+
+00:02:27.040 --> 00:02:29.380
+Pueden pensar brillantemente, pero no pueden ayudarte con nada real.
+
+00:02:30.500 --> 00:02:32.220
+La solución. MSP como el conector universal.
+
+00:02:32.780 --> 00:02:34.380
+Entonces, ¿qué pasaría si existiera un conector universal?
+
+00:02:34.880 --> 00:02:37.760
+Una forma estándar de conectar cualquier IA a cualquier fuente de datos,
+
+00:02:37.940 --> 00:02:39.880
+sin escribir código personalizado para cada conexión.
+
+00:02:40.320 --> 00:02:40.940
+Aquí está la clave.
+
+00:02:40.940 --> 00:02:43.880
+Eso es exactamente lo que es el protocolo de contexto de modelo MSP para breve.
+
+00:02:44.420 --> 00:02:48.540
+Antropic, la empresa detrás de Cloud, lo introdujo a finales de 2024 y se popularizó rápidamente.
+
+00:02:49.200 --> 00:02:54.680
+MSP es un estándar abierto que define una forma consistente para que las aplicaciones de IA se comuniquen con herramientas y fuentes de datos.
+
+00:02:55.360 --> 00:02:57.260
+Piénsalo como el USB-C antes del USB-C.
+
+00:02:57.480 --> 00:02:59.720
+Cada dispositivo necesitaba su propio cable especial.
+
+00:03:00.280 --> 00:03:03.360
+Tu teléfono usaba un tipo, tu computadora portátil, otro y tus auriculares un intercepto.
+
+00:03:03.660 --> 00:03:05.560
+Tenías un cajón lleno de cables y nunca podías encontrarlo.
+
+00:03:05.900 --> 00:03:09.080
+Luego llegó el USB-C, un cable, un estándar y todo simplemente funciona.
+
+00:03:09.500 --> 00:03:11.340
+MSP hace lo mismo para las conexiones de...
+
+00:03:11.340 --> 00:03:16.240
+Un protocolo que funciona para bases de datos, sistemas de archivos, API web y sí, incluso servicios de Microsoft.
+
+00:03:16.960 --> 00:03:23.620
+En lugar de crear conectores personalizados para cada fuente de datos, creas un servidor MSP y cualquier aplicación de IA compatible puede usarlo.
+
+00:03:24.140 --> 00:03:25.100
+La adopción ocurrió rápidamente.
+
+00:03:25.100 --> 00:03:31.480
+En cuestión de meses, aparecieron miles de servidores MSP preconfigurados para Google Drive, GitHub, Slack y bases de datos como PostgreSQL y SQLite.
+
+00:03:32.680 --> 00:03:35.400
+Y para los usuarios de Microsoft, aquí es donde se pone realmente interesante.
+
+00:03:36.080 --> 00:03:41.640
+Tus herramientas de IA ahora pueden conectarse a SharePoint, Exchange, Dynamics y Power Platform, todo a través de la misma interfaz estándar.
+
+00:03:42.260 --> 00:03:44.300
+En resumen, ya no tienes que crear conexiones personalizadas.
+
+00:03:44.740 --> 00:03:48.120
+Te conectas a MSP, un protocolo, cualquier fuente de datos, cualquier aplicación de IA.
+
+00:03:48.440 --> 00:03:49.240
+Esa es la magia de esto.
+
+00:03:49.940 --> 00:03:51.400
+La arquitectura, host, cliente y servidor.
+
+00:03:51.920 --> 00:03:53.700
+Entonces, ¿cómo funciona esto realmente detrás de ese?
+
+00:03:54.000 --> 00:03:54.800
+Permítame desglosar.
+
+00:03:55.300 --> 00:03:58.540
+MSP utiliza una configuración sencilla de tres partes, host, cliente y servidor.
+
+00:03:59.380 --> 00:04:01.700
+Una vez que entiendes esas tres piezas, todo cobra sentido.
+
+00:04:02.300 --> 00:04:04.280
+El host es la aplicación de IA que estás utilizando realmente.
+
+00:04:05.020 --> 00:04:09.420
+Eso podría ser copiar de Microsoft 365, Cloud Desktop o un agente personalizado que tú mismo creaste.
+
+00:04:10.080 --> 00:04:11.540
+El host es donde planteas tu premio.
+
+00:04:11.920 --> 00:04:12.880
+Es la parte orientada al usuario.
+
+00:04:13.560 --> 00:04:16.160
+Dentro de ese host vive algo llamado cliente MSP.
+
+00:04:16.680 --> 00:04:18.360
+Esta es la parte que habla el protocolo MSP.
+
+00:04:18.860 --> 00:04:22.780
+No lo ves ni interactúas directamente, pero es el traductor, la pieza que sabe hablar con los servidores MSP.
+
+00:04:23.480 --> 00:04:24.700
+Luego tienes el servidor.
+
+00:04:25.140 --> 00:04:30.040
+El servidor MSP es un programa ligero que se sitúa entre tu aplicación de IA y tu fuente de datos real.
+
+00:04:30.880 --> 00:04:32.980
+Expone herramientas y recursos que la IA puede utilizar.
+
+00:04:33.440 --> 00:04:36.880
+El servidor sabe cómo llegar a tu sitio SharePoint, a tu buzón de exchange o a tu base de datos Dynamics.
+
+00:04:37.420 --> 00:04:39.100
+La IA no necesita conocer ninguno de esos detalles.
+
+00:04:39.660 --> 00:04:40.260
+Simplemente se ve mejor.
+
+00:04:40.800 --> 00:04:41.640
+Así es como fluyen los datos.
+
+00:04:41.640 --> 00:04:46.140
+Cuando le haces una pregunta a tu IA, la solicitud va del host al cliente MSP.
+
+00:04:46.580 --> 00:04:49.180
+El cliente envía un mensaje a través del protocolo MSP al servidor.
+
+00:04:49.720 --> 00:04:52.780
+El servidor accede a tu fuente de datos, obtiene lo que necesitas y lo envía de vuelta.
+
+00:04:53.460 --> 00:04:55.680
+Del host al cliente, al protocolo, al servidor y a tus datos.
+
+00:04:56.200 --> 00:04:57.560
+Limpio, sencillo y estandarizado.
+
+00:04:58.040 --> 00:04:58.860
+Piénsalo como un restaurante.
+
+00:04:59.420 --> 00:05:00.520
+El host eres tú sentado en la mesa.
+
+00:05:01.060 --> 00:05:03.940
+El cliente MSP es el mesero que toma tu pedido y lo lleva a la cocina.
+
+00:05:04.300 --> 00:05:05.980
+Y el servidor MSP es la cocina misma.
+
+00:05:06.480 --> 00:05:07.960
+No necesitas saber cómo funciona la cocina.
+
+00:05:08.540 --> 00:05:10.800
+Solo le dices al mesero lo que quieres y la comida aparece.
+
+00:05:11.260 --> 00:05:13.720
+Un host puede conectarse a múltiples servidores al mismo tiempo.
+
+00:05:14.320 --> 00:05:16.820
+Tu IA en Teams podría acceder a tus documentos de SharePoint,
+
+00:05:17.200 --> 00:05:20.280
+tu calendario de Exchange y tus registros de Dynamics en una sola conversación.
+
+00:05:20.920 --> 00:05:24.400
+La comunicación entre cliente y servidor utiliza algo llamado JSON-RPC.
+
+00:05:25.300 --> 00:05:27.980
+Solo una forma ligera y estandarizada a enviar mensajes de un lado a otro.
+
+00:05:28.400 --> 00:05:30.420
+Sin sobrecarga pesada, sin conexiones personalizadas.
+
+00:05:31.000 --> 00:05:32.420
+¿Qué contienen los servidores MSP?
+
+00:05:33.040 --> 00:05:34.400
+Herramientas, recursos y prompts.
+
+00:05:34.400 --> 00:05:38.040
+Entonces, ¿qué le da realmente un servidor MSP a la IA cuando se conecta?
+
+00:05:38.380 --> 00:05:38.960
+Tres cosas.
+
+00:05:39.360 --> 00:05:41.240
+Herramientas, recursos y plantillas de prompts.
+
+00:05:41.640 --> 00:05:44.780
+Piénsalos como el kit de herramientas al que recurre a la IA cuando necesita hacer algo.
+
+00:05:45.740 --> 00:05:46.880
+Analicemos el lenguaje sencillo.
+
+00:05:47.300 --> 00:05:48.120
+Primero, las herramientas.
+
+00:05:48.420 --> 00:05:51.620
+Las herramientas son acciones que la IA puede realizar y que cambian cosas en el mundo real.
+
+00:05:52.120 --> 00:05:55.600
+Una herramienta puede buscar en una base de datos, enviar un correo electrónico o crear un documento.
+
+00:05:55.980 --> 00:05:58.100
+Cada vez que la IA invoca una herramienta, algo sucede.
+
+00:05:58.780 --> 00:06:01.800
+Se guarda un archivo, se envía un mensaje, se actualiza un registro.
+
+00:06:02.320 --> 00:06:03.500
+Las herramientas son los veros del sistema.
+
+00:06:03.500 --> 00:06:04.840
+Son las que hacen que las cosas sucedan.
+
+00:06:05.160 --> 00:06:05.680
+Ahora, los recursos.
+
+00:06:05.980 --> 00:06:08.460
+Los recursos son información de solo lectura que la IA puede consultar.
+
+00:06:08.660 --> 00:06:13.740
+Un recurso podría ser una lista de clientes de Dynamics, un documento, políticas en SharePoint o notas de reuniones, de Teams.
+
+00:06:14.540 --> 00:06:18.740
+La IA puede leerlos, analizarlos y referenciarlos, pero no puede modificarlos directamente a través de un recurso.
+
+00:06:19.100 --> 00:06:22.200
+Simplemente le proporcionan a la IA el contexto necesario para trabajar de forma más inteligente.
+
+00:06:22.300 --> 00:06:23.360
+Luego tienes las plantillas de prompt.
+
+00:06:23.840 --> 00:06:25.960
+Son instrucciones preconfiguradas que te ahorran tiempo.
+
+00:06:25.960 --> 00:06:30.960
+En lugar de crear el prompt perfecto cada vez, el servidor te entrega uno que ya está optimizado.
+
+00:06:31.520 --> 00:06:35.860
+Por ejemplo, un servidor MCP de SharePoint podría incluir una plantilla para resumir el contenido de una carpeta.
+
+00:06:36.280 --> 00:06:39.100
+Solo dices resume esta carpeta y la plantilla se encarga del resto.
+
+00:06:39.860 --> 00:06:43.020
+Es como tener un atajo especializado para las cosas que haces una y otra vez.
+
+00:06:43.620 --> 00:06:45.260
+Aquí tienes un ejemplo concreto para unirlo todo.
+
+00:06:45.260 --> 00:06:47.400
+Imagina un servidor MCP de SharePoint.
+
+00:06:47.840 --> 00:06:50.960
+Ofrece una herramienta llamada a buscar documentos que localiza archivos por palabras clave.
+
+00:06:51.440 --> 00:06:56.480
+Ofrece un recurso llamado Lister Sitios, que da acceso de solo lectura a todos los sitios de SharePoint disponibles.
+
+00:06:57.180 --> 00:07:02.220
+E incluye una plantilla de prompt llamada Resumir contenido de carpeta que le indica a la IA cómo presentar un resumen claro.
+
+00:07:03.020 --> 00:07:06.540
+Todo lo que la IA necesita para ayudarte con SharePoint está justo ahí, en un solo lugar.
+
+00:07:07.060 --> 00:07:08.140
+Ahora, aquí viene la parte interesante.
+
+00:07:08.500 --> 00:07:11.280
+La IA descubre todo esto automáticamente al conectarse al servidor.
+
+00:07:11.480 --> 00:07:13.080
+No se requiere programación previa.
+
+00:07:13.540 --> 00:07:15.100
+El servidor básicamente se presenta a sí mismo.
+
+00:07:15.700 --> 00:07:18.480
+Y está en mis herramientas, mis recursos y mis plantillas de prompt.
+
+00:07:19.420 --> 00:07:20.860
+Y la IA descubre cómo utilizarlo.
+
+00:07:21.400 --> 00:07:22.560
+Eso es lo que hace que MSP sea potente.
+
+00:07:22.980 --> 00:07:25.820
+El servidor le dice a la IA lo que es posible y la IA se encarga del resto.
+
+00:07:26.140 --> 00:07:27.240
+Es un sistema que se describe a sí mismo.
+
+00:07:27.620 --> 00:07:31.420
+Estas tres categorías trabajan juntas para que la IA tenga una visión completa de lo que puede hacer.
+
+00:07:32.320 --> 00:07:34.100
+MCP se encuentra con lo que Microsoft ya tiene.
+
+00:07:34.660 --> 00:07:36.140
+Así que llevamos esto al mundo de Microsoft.
+
+00:07:36.620 --> 00:07:39.760
+Aquí es donde se vuelve real para cualquiera que use Microsoft 365 o Azure.
+
+00:07:40.340 --> 00:07:41.440
+Aclaramos un mito común a mí.
+
+00:07:41.880 --> 00:07:44.660
+¿Alguna persona piensa que MSP es solo un experimento secundario para Microsoft?
+
+00:07:45.380 --> 00:07:46.180
+Es una estratégica.
+
+00:07:46.620 --> 00:07:49.160
+Puedes verlo claramente en el servicio de agentes de IA de Azure.
+
+00:07:49.540 --> 00:07:55.120
+Si estás creando agentes de IA personalizados en Azure, ahora puedes añadir servidores MSP remotos directamente desde Azure AI Foundry.
+
+00:07:55.720 --> 00:07:59.400
+Configuras una etiqueta de servidor, una URL y encabezados de autenticación opcionales.
+
+00:07:59.540 --> 00:08:01.600
+Y tu agente puede empezar a llamar herramientas de ese servidor.
+
+00:08:01.600 --> 00:08:04.720
+La propia documentación de Microsoft lo denomina integración de primer nivel.
+
+00:08:05.180 --> 00:08:07.660
+Este no es el lenguaje de un proyecto secundario, pero va más allá de solo Azure.
+
+00:08:08.120 --> 00:08:14.380
+Microsoft ha publicado referencias oficiales de servidores MSP para Power Platform, incluyendo Power Automate, Power Apps e incluso Process Mining.
+
+00:08:14.860 --> 00:08:15.920
+Estos no son proyectos de la comunidad.
+
+00:08:16.240 --> 00:08:17.260
+Provienen directamente de Microsoft.
+
+00:08:17.860 --> 00:08:19.280
+Tomamos el servidor MSP de PowerApp.
+
+00:08:19.680 --> 00:08:21.540
+Incluye una herramienta llamada Invoke Data Entry.
+
+00:08:21.960 --> 00:08:22.940
+Es lo que significa en la práctica.
+
+00:08:22.940 --> 00:08:30.320
+Una IA puede tomar información no estructurada, como un correo, un chat o un documento escaneado, y convertirla en un registro estructurado en Dataverse.
+
+00:08:31.000 --> 00:08:32.720
+La IA propone el registro y tú lo apruebas.
+
+00:08:33.080 --> 00:08:34.340
+Actor Humano está integrado desde el inicio.
+
+00:08:34.580 --> 00:08:36.740
+El servidor MSP de Power Automate lleva esto aún más lejos.
+
+00:08:37.160 --> 00:08:38.780
+Describes un flujo de trabajo en lenguajes en sí.
+
+00:08:39.420 --> 00:08:44.460
+Algo como, cuando llegue un correo nuevo con la palabra urgente en el asunto, crea una tarea en Planner y avísale a mi jefe.
+
+00:08:45.040 --> 00:08:49.260
+La IA crea ese flujo por ti, sin arrastrar ni soltar conector, sin buscar activadores.
+
+00:08:49.260 --> 00:08:53.500
+Solo describe lo que quieres y el servidor MSP lo traduce en una automatización real.
+
+00:08:54.140 --> 00:08:57.360
+Microsoft también ha mostrado servidores MSP para el contenido de Microsoft Learn.
+
+00:08:57.840 --> 00:09:02.140
+Imagina a un agente de IA que consulta toda la biblioteca de documentación de Microsoft como recurso,
+
+00:09:02.940 --> 00:09:08.260
+no mediante el rastreo de páginas web, sino a través de un servidor MSP estructurado, que expone la documentación como datos organizados.
+
+00:09:09.060 --> 00:09:10.000
+Eso ya está funcionando hoy.
+
+00:09:10.340 --> 00:09:12.180
+Esta es la dirección hacia la que se dirigen tus herramientas Microsoft.
+
+00:09:12.600 --> 00:09:14.580
+Se están volviendo accesibles a MSP por diseño.
+
+00:09:15.100 --> 00:09:16.160
+La plataforma se está abriendo.
+
+00:09:16.160 --> 00:09:19.940
+Y al hacerlo, tu experiencia con Microsoft 365 será aún más inteligente.
+
+00:09:20.540 --> 00:09:22.660
+La integración está ocurriendo ahora y está incorporada en la base.
+
+00:09:23.220 --> 00:09:24.400
+MSP no es solo para desarrolladores.
+
+00:09:25.080 --> 00:09:29.460
+Es para cualquiera que use Microsoft 365 y quiera que su IA trabaje sin problemas con sus datos.
+
+00:09:30.980 --> 00:09:31.640
+Un escenario real.
+
+00:09:32.140 --> 00:09:33.600
+La IA que finalmente funciona.
+
+00:09:34.200 --> 00:09:35.940
+Entonces, ¿cómo se ve esto realmente en la práctica?
+
+00:09:36.360 --> 00:09:37.660
+Permíteme mostrarte un ejemplo real.
+
+00:09:38.200 --> 00:09:40.300
+Estás en Microsoft Teams y escribes esto en Copilot.
+
+00:09:40.980 --> 00:09:42.940
+¿Cuál es el estado del proyecto ACME y quién?
+
+00:09:43.220 --> 00:09:44.320
+Tiene retraso en sus tareas.
+
+00:09:44.320 --> 00:09:45.500
+Presiona ACME.
+
+00:09:47.000 --> 00:09:50.200
+Ahora, detrás de escena, sucede algo distinto a lo que habría pasado hace un año.
+
+00:09:50.720 --> 00:09:54.520
+Tu asistente de IA se conecta a un servidor MSP vinculado a Project Online o Planner.
+
+00:09:55.240 --> 00:10:02.360
+Ese servidor anuncia las herramientas que puede usar, como listar tareas, obtener el estado de las tareas, verificar asignaciones y obtener el cronograma del proyecto.
+
+00:10:02.360 --> 00:10:05.220
+La IA no necesita que la guíen aquí.
+
+00:10:05.840 --> 00:10:09.840
+Descubre esas herramientas automáticamente porque el servidor literalmente dice, esto es lo que puedo hacer.
+
+00:10:10.300 --> 00:10:12.120
+Y la IA responde, genial, usaré eso.
+
+00:10:12.760 --> 00:10:15.260
+Nadie tiene que decir, oye, primero revisa este punto de conexión de la API.
+
+00:10:15.720 --> 00:10:16.300
+Simplemente funciona.
+
+00:10:16.300 --> 00:10:22.120
+Así que, la IA llama a la herramienta de listar tareas, luego obtiene el estado de cada tarea y finalmente verifica las asignaciones.
+
+00:10:23.160 --> 00:10:26.440
+El servidor MSP maneja toda la autenticación y la obtención de datos detrás de SEM.
+
+00:10:26.920 --> 00:10:29.300
+Unos segundos después, la IA regresa con una respuesta clara.
+
+00:10:29.740 --> 00:10:30.820
+El proyecto ACME va por Wink.
+
+00:10:30.820 --> 00:10:33.660
+Hay tres tareas vencidas, todas asignadas a SEM.
+
+00:10:33.960 --> 00:10:35.120
+¿Quieres que le envíe un recordatorio?
+
+00:10:36.480 --> 00:10:37.280
+Aquí está lo importante.
+
+00:10:37.940 --> 00:10:39.820
+No se escribió código personalizado para esta consulta.
+
+00:10:40.440 --> 00:10:43.960
+Ningún desarrollador pasó dos semanas creando un conector entre Copilot y Project Online.
+
+00:10:44.480 --> 00:10:46.300
+El servidor MSP se encargó de toda la integración.
+
+00:10:46.800 --> 00:10:50.100
+Un servidor, un protocolo estándar y la IA supo exactamente cómo usarlo.
+
+00:10:50.780 --> 00:10:51.780
+Ahora, vayamos un paso más allá.
+
+00:10:52.160 --> 00:10:53.820
+Después de obtener el estado del proyecto, preguntas.
+
+00:10:54.460 --> 00:10:58.680
+Revisa mi calendario para una reunión con Sara mañana y redacta una actualización de estado basada en lo que sucede.
+
+00:10:58.680 --> 00:11:02.480
+La IA usa un servidor MSP de Exchange para revisar tu calendario.
+
+00:11:02.620 --> 00:11:07.560
+Busca correos relacionados a través del mismo servidor y luego llama a un servidor MCP de Word para redactar la actualización.
+
+00:11:08.160 --> 00:11:11.060
+Una conversación, múltiples fuentes de datos, cero desarrollo personalizado.
+
+00:11:11.540 --> 00:11:12.960
+Ese es el momento de revelación con MCP.
+
+00:11:13.360 --> 00:11:16.520
+Hace que la IA sea útil dentro de tu entorno de trabajo real.
+
+00:11:16.820 --> 00:11:19.700
+No solo un chatbot genérico que solo puede responder preguntas generales,
+
+00:11:20.000 --> 00:11:23.100
+sino un asistente que ve tus datos, comprende tu contexto y actúa.
+
+00:11:23.400 --> 00:11:24.980
+Todo a través de un estándar simple.
+
+00:11:26.400 --> 00:11:28.020
+Seguridad manteniendo tus datos a salvo.
+
+00:11:28.020 --> 00:11:30.240
+Tanta flexibilidad plantea una gran pregunta.
+
+00:11:30.800 --> 00:11:34.840
+Si tu IA puede acceder repentinamente a SharePoint, Exchange y Dynamics a través de MCP,
+
+00:11:35.340 --> 00:11:36.720
+¿cómo mantienes esos datos seguros?
+
+00:11:37.320 --> 00:11:38.260
+Esta es la respuesta corta.
+
+00:11:38.580 --> 00:11:39.780
+¿MSP es tan seguro como tú lo hagas?
+
+00:11:40.440 --> 00:11:42.800
+El protocolo no evita tus medidas de seguridad existentes.
+
+00:11:43.380 --> 00:11:43.860
+Trabaja con él.
+
+00:11:44.240 --> 00:11:46.260
+MCP es compatible con OAuth 2.1,
+
+00:11:46.620 --> 00:11:49.560
+el mismo estándar de autenticación de la industria que protege tu inicio de sesión de Microsoft.
+
+00:11:50.060 --> 00:11:51.980
+Cuando un servidor MCP requiere autenticación,
+
+00:11:51.980 --> 00:11:55.580
+tu cliente de IA debe demostrar que está autorizado antes de poder acceder a cualquier dato.
+
+00:11:55.580 --> 00:11:59.520
+El servicio puede usar encabezados de autenticación, claves API o acceso basado en tokens.
+
+00:12:00.040 --> 00:12:02.100
+Los mismos patrones que ya usas para proteger la SAP.
+
+00:12:02.400 --> 00:12:04.880
+Pero hay una capa adicional que realmente importa para el uso empresarial.
+
+00:12:05.780 --> 00:12:08.420
+La IA debe pedir permiso primero antes de poder ejecutar una búsqueda,
+
+00:12:08.640 --> 00:12:10.380
+enviar un mensaje o modificar un registro.
+
+00:12:11.080 --> 00:12:11.620
+Te lo pide a ti.
+
+00:12:12.160 --> 00:12:13.800
+Ve la solicitud directamente en tu interfaz de chat.
+
+00:12:13.800 --> 00:12:16.780
+Revisas lo que hará la herramienta y lo apruebas o deniegas.
+
+00:12:17.200 --> 00:12:19.820
+Eso significa que ninguna herramienta se invoca sin tu consentimiento explícito.
+
+00:12:20.300 --> 00:12:23.320
+Tu IA puede sugerir acciones, pero no puede ejecutarlas sin que tú digas que sí.
+
+00:12:23.980 --> 00:12:24.920
+Esa es una buena red de sube.
+
+00:12:25.300 --> 00:12:26.140
+Una cosa a tener en cuenta.
+
+00:12:26.640 --> 00:12:30.080
+Hay miles de servidores MCP públicos disponibles, y no todos son confiables.
+
+00:12:30.760 --> 00:12:32.820
+Existen registros públicos donde cualquiera puede publicar un servicio.
+
+00:12:33.300 --> 00:12:34.340
+Algunos son excelentes, otros no.
+
+00:12:34.740 --> 00:12:37.260
+Es tu responsabilidad usar servidores en los que confíen.
+
+00:12:37.840 --> 00:12:39.340
+En los entornos de Microsoft tienes una ventaja.
+
+00:12:39.340 --> 00:12:44.540
+Tus servidores MCP pueden usar los mismos controles de identidad y acceso que tus servicios de Microsoft existen.
+
+00:12:45.100 --> 00:12:47.780
+Si un usuario no tiene permiso para leer una biblioteca de documentos de SharePoint,
+
+00:12:47.920 --> 00:12:49.380
+un servidor MCP no puede evitarlo.
+
+00:12:50.020 --> 00:12:54.360
+El servidor haría los mismos límites, la misma autenticación, las mismas políticas y la misma gobernanza.
+
+00:12:55.060 --> 00:12:57.040
+Comenzando, tu primera experiencia con MCP.
+
+00:12:57.620 --> 00:12:59.400
+Sí que estás convencido y quieres probarlo tú mismo.
+
+00:12:59.640 --> 00:13:00.260
+¿Por dónde empezar?
+
+00:13:00.680 --> 00:13:03.000
+La forma más fácil es elegir un host compatible con MCP.
+
+00:13:03.240 --> 00:13:06.460
+Cloud Desktop tiene soporte integrado para MCP y GitHub Copilot también funciona.
+
+00:13:06.800 --> 00:13:09.180
+Ambos te permiten conectar servidores casi sin configuración.
+
+00:13:09.540 --> 00:13:11.600
+A continuación, consulta los registros públicos de MSP.
+
+00:13:11.960 --> 00:13:18.300
+Hay miles de servidores preconfigurados para servicios como Google Drive, Slack, bases de datos, sistemas de archivos, sistemas de archivos y sí servicios de Microsoft también.
+
+00:13:18.660 --> 00:13:23.100
+Si eres usuario de Microsoft, empieza con las referencias de servidor MCP de Microsoft para Power Platform.
+
+00:13:23.500 --> 00:13:24.200
+La configuración es sí.
+
+00:13:24.600 --> 00:13:27.080
+La mayoría de los hosts usan un archivo JSON donde numeras tu servidor.
+
+00:13:27.580 --> 00:13:32.680
+Le das un nombre a cada uno, proporcionas el comando URL para acceder y configuras las credenciales de autenticación.
+
+00:13:33.080 --> 00:13:34.600
+Eso es todo y el host encarga el resto.
+
+00:13:35.100 --> 00:13:39.420
+No se requiere programación para el uso básico, así que no necesitas ser desarrollador ni escribir código de integración.
+
+00:13:39.760 --> 00:13:43.540
+Solo configura un archivo JSON y de repente tu ya puede acceder a datos que antes no podía tocar.
+
+00:13:44.040 --> 00:13:47.580
+El archivo JSON es como un archivo de configuración que le dice a tu host a qué servidores conectarse.
+
+00:13:48.240 --> 00:13:50.480
+Piensa en MSP como un traductor universal para tu ya.
+
+00:13:51.060 --> 00:13:54.560
+En lugar de aprender un lenguaje diferente para cada servicio, habla un solo protocolo.
+
+00:13:54.560 --> 00:13:59.320
+Empieza poco a poco conectando una fuente de datos como tu calendario a través de un servidor MSP de Exchange.
+
+00:13:59.580 --> 00:14:02.940
+Luego hazle a tu ya una pregunta sobre tu agenda y observa cómo descubre las herramientas disponibles.
+
+00:14:03.620 --> 00:14:08.520
+Prueba la aprobación humana en el proceso, lo que significa que puedes autorizar cada acción antes de que la IALA ejecute.
+
+00:14:09.140 --> 00:14:10.020
+Eso te mantiene bajo control.
+
+00:14:10.480 --> 00:14:12.820
+Asegúrate de entender el modelo de seguridad antes de ampliarlo.
+
+00:14:13.160 --> 00:14:16.700
+Una vez que te sientas cómodo, amplía agregando otro servidor para tu biblioteca de documentos.
+
+00:14:16.840 --> 00:14:18.300
+Y luego tu sistema de gestión de tareas.
+
+00:14:18.720 --> 00:14:22.100
+Cada servidor añade nuevas capacidades y cada uno sigue el mismo protocolo.
+
+00:14:22.100 --> 00:14:29.700
+Si quieres crear tu propio servidor MSP, tal vez para exponer una aplicación empresarial personalizada o una base de datos interna, Azure Functions de Microsoft funciona muy bien como backend.
+
+00:14:30.300 --> 00:14:34.480
+Envuelves tu API o fuente de datos existente en un servidor MSP con solo unas pocas líneas de código.
+
+00:14:35.000 --> 00:14:35.620
+Patrón es simple.
+
+00:14:36.260 --> 00:14:37.500
+Expone herramientas como funciones.
+
+00:14:37.760 --> 00:14:40.480
+Expone datos como recursos y deja que el protocolo maneje el resto.
+
+00:14:41.260 --> 00:14:44.180
+Es una forma directa de darle a tu IALA acceso a tus propias fuentes de datos.
+
+00:14:45.160 --> 00:14:46.440
+Eso es el protocolo de contexto del modelo.
+
+00:14:47.040 --> 00:14:50.260
+Un estándar que finalmente permite que las herramientas de IALA lleguen a tus datos reales.
+
+00:14:50.260 --> 00:14:53.020
+Tus archivos de SharePoint, tu calendario de Exchange, tus registros de Dynamics.
+
+00:14:53.320 --> 00:14:55.920
+Antes de MSP, tienes que crear conexiones personalizadas para cada sistema.
+
+00:14:56.740 --> 00:14:59.280
+Ahora te conectas a un protocolo y tu IALA puede comunicarse con todos ellos.
+
+00:14:59.740 --> 00:15:02.160
+La IALA se vuelve útil dentro de tu entorno de trabajo real.
+
+00:15:02.720 --> 00:15:03.800
+Esto no es solo una conveniencia.
+
+00:15:04.000 --> 00:15:05.660
+Cambia la forma en que trabajas con la IALA.
+
+00:15:05.740 --> 00:15:07.060
+Empieza con un servidor MSP.
+
+00:15:07.300 --> 00:15:09.780
+Conecta una única fuente de datos y comprueba la diferencia por ti mismo.
+
+00:15:10.580 --> 00:15:14.780
+Si esto te resultó útil, compártelo con un colega que tenga problemas con una IALA que no puede acceder a sus datos.
+
+00:15:14.780 --> 00:15:16.980
+Suscríbete para más píldoras de conocimiento como esta.
+
+00:15:17.180 --> 00:15:19.200
+Soy Mirko Peters y nos vemos en el próximo episodio.

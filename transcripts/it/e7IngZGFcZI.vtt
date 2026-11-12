@@ -1,0 +1,880 @@
+WEBVTT
+
+00:00:00.130 --> 00:00:05.490
+Cosa succede quando Business Central gestisce gran parte del tuo lavoro ma una parte della tua attività non si adatta perfettamente?
+
+00:00:06.470 --> 00:00:14.370
+Forse ti serve un processo di spedizione speciale o il team finanziario richiede un report locale oppure il personale continua a inserire gli stessi dati in due sistemi che non comunicano tra loro.
+
+00:00:15.090 --> 00:00:21.250
+Business Central copre già molto, ti aiuta a gestire finanza, vendite, magazzino, progetti e lavoro quotidiano da un'unica posizione.
+
+00:00:22.330 --> 00:00:25.850
+Ma ecco il punto, non esistono due aziende che lavorano esattamente nello stesso modo.
+
+00:00:25.850 --> 00:00:33.190
+Pensa al tuo telefono. Arriva con chiamate, messaggi, fotocamere e strumenti di base, poi installi le app adatte alla tua vita senza dover smontare il telefono.
+
+00:00:33.910 --> 00:00:40.810
+Le estensioni di Business Central funzionano allo stesso modo. Alla fine di questo breve approfondimento saprai cosa sono, dove si collocano e cosa controllare prima di aggiungerne una.
+
+00:00:41.430 --> 00:00:43.730
+Cosa sia effettivamente un'estensione però cos'è esattamente?
+
+00:00:44.170 --> 00:00:53.930
+Un'estensione è un pacchetto per Dynamics 365 e Business Central che aggiunge una funzionalità non presente nella configurazione standard o modifica il funzionamento di una parte standard per la tua azienda.
+
+00:00:53.930 --> 00:01:00.850
+Può essere semplice come aggiungere un campo obbligatorio a una scheda cliente, così nessuno può crearne uno senza inserire una preferenza di consegna.
+
+00:01:01.730 --> 00:01:03.610
+Oppure può coprire l'intero processo aziendale.
+
+00:01:03.950 --> 00:01:10.410
+Un'estensione per le spedizioni può creare etichette, inviare dettagli del pacco a un corriere e recuperare dati di tracciamento,
+
+00:01:10.490 --> 00:01:13.950
+mentre una bancaria può importare strati conto e riconciliarli con i pagamenti registrati.
+
+00:01:14.490 --> 00:01:17.030
+Non devi essere uno sviluppatore per comprenderne il concetto di base.
+
+00:01:17.030 --> 00:01:24.570
+Immagina Business Central come un edificio per uffici in cui l'app standard ti fornisce le stanze principali, finanza, vendite, acquisti, magazzino, progetti e altro.
+
+00:01:25.110 --> 00:01:28.010
+Con porte, pareti, impianti e servizi condivisi già al loro posto?
+
+00:01:28.870 --> 00:01:32.490
+Un'estensione aggiunge qualcosa attorno a quell'edificio senza dover demolire la sua struttura principale.
+
+00:01:32.490 --> 00:01:42.490
+Può aggiungere una nuova stanza o uno strumento extra su una scrivania che usi già, aggiungendo un pulsante a un ordine di vendita, una colonna o un elenco, un layout diverso per una fattura o una connessione a un servizio esterno.
+
+00:01:42.490 --> 00:01:49.690
+Dietro le quinte, un'estensione può aggiungere campi, pagine, reportazioni, regole e logica aziendale.
+
+00:01:50.130 --> 00:01:53.250
+Quest'ultima espressione suona tecnica, quindi spieghiamola in parole semplici.
+
+00:01:53.650 --> 00:01:56.590
+La logica aziendale indica le regole che dicono a Business Central cosa fare.
+
+00:01:56.730 --> 00:02:01.590
+Ad esempio, una regola potrebbe impedire il rilascio di un ordine finché qualcuno non inserisce un numero di ordine di acquisto.
+
+00:02:01.950 --> 00:02:05.390
+Un'altra regola potrebbe inviare un documento per l'approvazione quando l'importo supera un limite.
+
+00:02:06.310 --> 00:02:10.110
+L'estensione gestisce questa regola, così il tuo team non deve ricordarsene ogni volta.
+
+00:02:10.110 --> 00:02:16.950
+In passato, prima che le app cloud e le estensioni diventassero la norma, le aziende modificavano spesso direttamente il codice originale di Business Central.
+
+00:02:17.190 --> 00:02:20.690
+Immagina che ciò significhi cambiare i muri e i cablaggi effettivi all'interno dell'edificio dell'ufficio.
+
+00:02:20.910 --> 00:02:26.250
+All'inizio questo può risolvere un problema, ma quando Microsoft invia un aggiornamento, questo si aspetta che l'edificio standard abbia un certo aspetto.
+
+00:02:26.510 --> 00:02:28.830
+Le tue modifiche personalizzate, postanalizzate possono andare in conflitto.
+
+00:02:28.950 --> 00:02:34.330
+Quindi qualcuno deve controllare tali modifiche, riparare i conflitti e testare il sistema prima che l'aggiornamento possa procedere in sicurezza.
+
+00:02:34.730 --> 00:02:35.550
+Quel lavoro richiede tempo.
+
+00:02:35.550 --> 00:02:40.590
+Le estensioni evitano gran parte di questo problema perché il loro codice rimane separato da quello dell'applicazione standard.
+
+00:02:40.810 --> 00:02:44.150
+Quindi invece di riscrivere l'edificio, vi si aggiunge un componente realizzato con cura.
+
+00:02:44.530 --> 00:02:48.730
+Microsoft può aggiornare l'applicazione principale, mentre l'estensione rimane nel suo pacchetto separato.
+
+00:02:49.050 --> 00:02:52.550
+Ciò non significa che ogni aggiornamento non richieda alcuna attenzione.
+
+00:02:53.930 --> 00:02:59.950
+Un'estensione può dipendere da un'altra e il suo editore potrebbe dover rilasciare una versione compatibile quando Business Central cambia.
+
+00:02:59.950 --> 00:03:05.470
+Ma separare l'estensione dal codice standard offre comunque a tutti un punto di partenza molto più pulito.
+
+00:03:06.030 --> 00:03:08.830
+Puoi immaginarlo come tenere un utensile plug-in nella sua custodia.
+
+00:03:09.730 --> 00:03:14.510
+L'utensile si collega al laboratorio quando ne hai bisogno ma non richiede di ricostruire prima il laboratorio.
+
+00:03:14.750 --> 00:03:18.570
+E se non ti serve più, puoi rimuoverlo senza smontare l'intero edificio.
+
+00:03:19.430 --> 00:03:22.690
+Questo cambia la prospettiva da come possiamo riscrivere Business Central per noi
+
+00:03:22.690 --> 00:03:25.230
+Ah, come possiamo aggiungere il pezzo mancante in sicurezza.
+
+00:03:25.830 --> 00:03:29.990
+Ciò è importante perché Business Central standard gestisce già una grande quantità di lavoro aziendale normale.
+
+00:03:30.490 --> 00:03:36.570
+Quindi le estensioni dovrebbero colmare, non alcuna reale, non diventare una scusa per ricostruire ogni schermata solo perché il vecchio sistema appariva diverso.
+
+00:03:37.010 --> 00:03:39.390
+A volte l'estensione migliore aggiunge solo un campo a un controllo.
+
+00:03:39.710 --> 00:03:42.670
+A volte collega Business Central a un servizio da cui la tua azienda dipende già.
+
+00:03:42.850 --> 00:03:44.770
+In ogni caso l'obiettivo rimane semplice.
+
+00:03:45.190 --> 00:03:48.210
+Mantenere stabile la base standard aggiungendo gli strumenti di cui le tue persone no.
+
+00:03:48.750 --> 00:03:52.670
+Successivamente dobbiamo guardare a chi crea questi componenti perché non ogni estensione proviene dallo stesso prodotto.
+
+00:03:52.690 --> 00:03:56.410
+I principali tipi di estensioni.
+
+00:03:56.770 --> 00:03:58.370
+Quindi da dove vengono effettivamente le estensioni?
+
+00:03:59.730 --> 00:04:03.950
+Non provengono da un solo posto e conoscere la differenza ti aiuta a scegliere quella giusta per la tua attività.
+
+00:04:04.610 --> 00:04:06.090
+Il primo tipo è chiamato estensione app.
+
+00:04:06.530 --> 00:04:10.510
+Pensala come un componente aggiuntivo preconfezionato che gestisce un lavoro specifico all'interno di Business Central.
+
+00:04:10.510 --> 00:04:13.290
+Ad esempio un'app di spedizione può collegare i tuoi ordini in un corriere.
+
+00:04:13.690 --> 00:04:16.630
+Un'app di pagamento può accettare pagamenti con carta o un servizio di pagamento.
+
+00:04:16.930 --> 00:04:19.750
+Un'app di reportistica può aggiungere i reporti cui il tuo team ha bisogno ogni mese.
+
+00:04:19.750 --> 00:04:24.290
+Un'estensione dell'app è come acquistare uno strumento pronto all'uso per un lavoro che sai già di dover svolgere.
+
+00:04:24.810 --> 00:04:29.350
+La installi, la configuri per la tua azienda e i tuoi utenti vedono la nuova funzione direttamente in Business Central.
+
+00:04:30.410 --> 00:04:36.750
+Potrebbe aggiungere pagine, campi propri o inserire opzioni in pagine già note come ordini di vendita, ordini di acquisto, schede cliente.
+
+00:04:36.750 --> 00:04:40.410
+Alcune estensioni di app provengono direttamente da Microsoft.
+
+00:04:40.810 --> 00:04:44.210
+Forniscono componenti aggiuntivi per esigenze che non riguardano ogni azienda o ogni paese.
+
+00:04:44.750 --> 00:04:46.890
+Un pacchetto di reportistica alle locale e locale neomonesi.
+
+00:04:47.250 --> 00:04:50.730
+Norme fiscali, fatture, pagamenti e documenti ufficiali differiscono da un luogo all'altro.
+
+00:04:51.190 --> 00:04:53.610
+Quindi il paese potrebbe aver bisogno di funzioni che un altro non usa mai.
+
+00:04:54.090 --> 00:04:58.930
+Questa separazione mantiene il prodotto standard focalizzato, offrendo comunque alle aziende un modo per rispettare le norme locali.
+
+00:04:59.290 --> 00:05:00.390
+Ma abbiamo le estensioni ISV.
+
+00:05:00.390 --> 00:05:02.510
+ISV sta per fornitori di software indipendenti.
+
+00:05:02.990 --> 00:05:08.770
+Sembra una frase tecnica importante, ma significa semplicemente una società di software che crea un'app per molti clienti di Business Central.
+
+00:05:09.710 --> 00:05:17.570
+Un ISV potrebbe concentrarsi su magazzino, vendita al dettaglio, produzione, gestione di documenti, collegamenti paghe, fatture elettroniche o reportistica di settore.
+
+00:05:18.330 --> 00:05:23.890
+Invece di creare la stessa funzione da zero per ogni cliente, creano un'app che molte aziende possono acquistare o sottoscrivere.
+
+00:05:24.390 --> 00:05:28.810
+Queste app compaiono solitamente in Microsoft AppSource e Marketplace Online per le app aziendali Microsoft.
+
+00:05:28.810 --> 00:05:31.150
+AppSource è utile quando la tua esigenza è comune.
+
+00:05:31.650 --> 00:05:36.530
+Forse molte aziende vogliono connettere Business Central allo stesso servizio di spedizione, banca o fornitore di pagamento.
+
+00:05:36.890 --> 00:05:44.150
+Invece di pagare qualcuno per creare quella connessione, solo per te potresti trovare un'app esistente con supporto, note di configurazione e aggiornamenti regolari da chi l'ha creata.
+
+00:05:44.530 --> 00:05:45.650
+Questo può risparmiare un sacco di lavoro.
+
+00:05:45.990 --> 00:05:49.170
+Tuttavia, un'app di AppSource non è automaticamente la scelta giusta solo perché esiste.
+
+00:05:49.270 --> 00:05:53.490
+Devi verificare che si è dati al tuo processo, al tuo paese e alla tua versione di Business Central.
+
+00:05:53.490 --> 00:05:59.050
+Una buona app risolve un problema chiaro senza costringere il tuo team a cambiare ogni parte del loro lavoro quotidiano attorno all'app.
+
+00:05:59.710 --> 00:06:02.650
+Il prossimo tipo è un'estensione per tenant, spesso abbreviata in PTE.
+
+00:06:03.770 --> 00:06:06.010
+Un tenant è il tuo ambiente Business Central aziendale.
+
+00:06:06.470 --> 00:06:12.010
+Quindi un'estensione per tenant è un'app creata solo per la tua azienda, non pubblicata, affinché ogni cliente di Business Central la installi.
+
+00:06:12.470 --> 00:06:16.290
+Magina un distributore alimentare con un modo molto specifico di calcolare le spese di consegna.
+
+00:06:16.590 --> 00:06:22.150
+I prezzi potrebbero dipendere da trasporto a temperatura controllata, zone di consegna, casse restituibili e accordi con i clienti costruiti negli anni.
+
+00:06:22.150 --> 00:06:25.470
+Quel processo è probabilmente troppo insolito per un'app di spedizione standard.
+
+00:06:26.170 --> 00:06:30.710
+Quindi un partner o uno sviluppatore di Business Central può creare un'estensione per tenant specifica per quel processo.
+
+00:06:31.210 --> 00:06:35.930
+L'app rimane all'interno della configurazione Business Central dell'azienda e può adattarsi al suo modo di lavorare.
+
+00:06:36.330 --> 00:06:41.870
+Può includere un collegamento unico a un vecchio sistema, uno speciale processo di approvazione o una schermata creata per un lavoro svolto solo da quell'azienda.
+
+00:06:42.270 --> 00:06:43.970
+Ma personalizzato non significa sempre migliore.
+
+00:06:44.290 --> 00:06:46.230
+Un'estensione per tenant offre una soluzione su misura.
+
+00:06:46.710 --> 00:06:47.750
+Tuttavia qualcuno deve occupare.
+
+00:06:47.750 --> 00:06:53.610
+Ciò significa tenere note, testare le modifiche e organizzare il supporto quando l'azienda cambia processo o Business Central viene aggiornato.
+
+00:06:54.190 --> 00:06:59.110
+Se un'altra azienda potesse utilizzare la stessa funzione, un'app ISV esistente potrebbe richiedere meno lavoro a lungo termine.
+
+00:06:59.470 --> 00:07:00.210
+Quindi come scegli?
+
+00:07:00.610 --> 00:07:02.650
+Parti dall'esigenza aziendale e non dal tipo di estensione.
+
+00:07:03.350 --> 00:07:11.810
+Se l'esigenza è comune come l'importazione di estratti conto, etichette per pacchi, fatture elettroniche o un report locale, cerca prima un'app Microsoft ISV.
+
+00:07:12.310 --> 00:07:14.010
+Potresti trovare un'app già pronta e da dare necessità.
+
+00:07:14.010 --> 00:07:18.970
+Se l'esigenza deriva da un processo unico per la tua azienda, un'estensione per tenant potrebbe avere più senso.
+
+00:07:19.150 --> 00:07:25.210
+Esistono anche semplici estensioni che coprono una regola ristretta, come richiedere determinati campi prima che un utente possa salvare un cliente o un fornitore.
+
+00:07:25.330 --> 00:07:29.070
+Possono essere piccole ma impediscono che informazioni mancanti creino problemi maggiori in futuro.
+
+00:07:29.550 --> 00:07:31.930
+Chi ha creato l'app ti indica dove cercare supporto e aggiornamenti.
+
+00:07:32.670 --> 00:07:35.190
+Ciò che l'app modifica ti dice cosa noteranno i tuoi utenti ogni giorno.
+
+00:07:36.470 --> 00:07:38.530
+Come le estensioni cambiano il tuo lavoro quotidiano?
+
+00:07:39.790 --> 00:07:41.810
+Allora, dove si nota effettivamente un'estensione?
+
+00:07:41.810 --> 00:07:47.410
+Di solito la noti su una pagina che già usi come una scheda cliente, un ordine di vendita, una scheda articolo o una fattura registrata.
+
+00:07:47.770 --> 00:07:49.130
+Spesso si tratta di un'estensione di pagina.
+
+00:07:49.430 --> 00:07:51.610
+Cambia la schermata senza sostituire la pagina familiare.
+
+00:07:52.090 --> 00:07:57.010
+Il tuo team continua a lavorare dove lavora già, mentre l'estensione aggiunge le informazioni o l'azione di cui il processo ha bisogno.
+
+00:07:57.470 --> 00:08:00.450
+Immagina che il tuo team di vendita abbia bisogno di una finestra di consegna per ogni cliente.
+
+00:08:00.510 --> 00:08:05.730
+Un'estensione di pagina può aggiungere un campo per la finestra di consegna alla scheda cliente e mostrare quel dettaglio nell'ordine di vendita.
+
+00:08:06.170 --> 00:08:09.030
+Nessuno ha bisogno di un foglio di calcolo separato o di una nota nascosta in un'unità.
+
+00:08:09.030 --> 00:08:12.030
+La persona che inserisce l'ordine vede la regola di consegna proprio dove serve.
+
+00:08:12.530 --> 00:08:13.970
+A volte la modifica è ancora più semplice.
+
+00:08:14.430 --> 00:08:20.810
+Potresti vedere un nuovo pulsante che invia un sollecito di pagamento, crea un'etichetta di spedizione, apre un documento collegato o avvia una richiesta di approvazione.
+
+00:08:21.550 --> 00:08:25.450
+La pagina sembra ancora quella di Business Central, ma ora supporta il lavoro che il tuo team deve completare.
+
+00:08:25.950 --> 00:08:27.230
+Questo mantiene il lavoro vicino al re.
+
+00:08:27.530 --> 00:08:36.730
+Invece di chiedere agli utenti di ricordare 5 passaggi su strumenti diversi, l'estensione può posizionare l'azione successiva accanto al cliente, alla fattura, all'ordine o all'articolo che stanno già visualizzando.
+
+00:08:36.730 --> 00:08:39.810
+Meno passaggi intermedi solitamente significano errori.
+
+00:08:40.110 --> 00:08:41.310
+I report cambiano in modo simile.
+
+00:08:41.890 --> 00:08:50.030
+Business Central include un report standard, ma un'azienda potrebbe aver bisogno che la propria fattura mostri un numero di riferimento speciale, testo, legale, aggiuntivo, un logo diverso e informazioni che un cliente si aspetta di vedere.
+
+00:08:50.670 --> 00:08:55.110
+Un'estensione per report può aggiungere tali dati o fornire un altro layout lasciando intatto il report originale.
+
+00:08:55.370 --> 00:08:56.650
+Pensiamo a una fattura di vendita.
+
+00:08:57.070 --> 00:09:00.770
+Il tuo team finanziario potrebbe aver bisogno di un layout per i clienti locali e di un altro per quelli esteri.
+
+00:09:01.190 --> 00:09:05.790
+Primo potrebbe mostrare dettagli fiscali locali, mentre il secondo richiede una formulazione diversa e un riferimento doganano.
+
+00:09:05.790 --> 00:09:10.210
+Un'estensione per report può aggiungere tali layout e inserire i campi necessari per ciascun documento.
+
+00:09:10.370 --> 00:09:12.050
+Il report standard non scompare.
+
+00:09:12.630 --> 00:09:16.370
+Questo è importante perché non stai sostituendo un report familiare con qualcosa di completamente separato.
+
+00:09:16.870 --> 00:09:20.070
+Stai aggiungendo ciò di cui la tua azienda ha bisogno, mantenendo il report standard come base.
+
+00:09:20.410 --> 00:09:22.910
+Il report non solo per i documenti inviati all'esterno dell'azienda.
+
+00:09:23.290 --> 00:09:30.950
+Un'estensione può aggiungere colonna a un report finanziario interno, mostrare dettagli extra sugli articoli per la pianificazione delle scorte o includere un campo specifico dell'azienda in un report di gestione.
+
+00:09:31.350 --> 00:09:35.350
+Se i dati esistono in Business Central, il report può portarli nella visualizzazione che le persone usano per prendere decisioni.
+
+00:09:35.350 --> 00:09:37.310
+Poi ci sono le estensioni per i set di autorizzazione.
+
+00:09:37.610 --> 00:09:41.470
+Le autorizzazioni decidono cosa ogni persona può vedere, modificare, registrare e eliminare.
+
+00:09:41.870 --> 00:09:45.350
+Per un principiante, pensale come a badge di accesso per diverse stanze della tua azienda.
+
+00:09:45.830 --> 00:09:48.290
+Un utente della finanziaria potrebbe aver bisogno di accedere a una nuova schermata di pagina.
+
+00:09:48.510 --> 00:09:52.530
+Un utente del magazzino potrebbe aver bisogno di accedere a un'azione di spedizione ma non ai dettagli bancari sottostanti.
+
+00:09:52.670 --> 00:09:57.890
+Quando un'estensione aggiunge una nuova pagina o un processo, può anche aggiungere le autorizzazioni necessarie e necessarie ai utenti per quel lavoro.
+
+00:09:57.890 --> 00:09:59.150
+Questo evita un problema comune.
+
+00:09:59.550 --> 00:10:04.850
+Un'app viene installata, le persone vedono il suo nuovo pulsante, ma non possono usarlo perché mancano gli accessi a record sottostanti.
+
+00:10:05.330 --> 00:10:11.050
+Un'estensione per set di autorizzazioni aiuta a collegare la nuova funzione ai ruoli corretti, così l'accesso segue il lavoro che le persone svolgono realmente.
+
+00:10:11.510 --> 00:10:13.590
+Devi comunque decidere tu chi debba ricevere tale accesso.
+
+00:10:14.050 --> 00:10:18.870
+Un'estensione può fornire set di autorizzazioni, ma la tua azienda sceglie quali persone o gruppi debbano usarli.
+
+00:10:19.330 --> 00:10:23.250
+Un nuovo strumento dovrebbe concedere silenziosamente a ogni utente più accesso di quanto il suo ruolo richieda.
+
+00:10:23.250 --> 00:10:26.490
+Molte estensioni collegano anche Business Central a un altro servizio online.
+
+00:10:26.850 --> 00:10:27.970
+Queste sono app di integrazione.
+
+00:10:28.350 --> 00:10:34.390
+Trasmettono informazioni tra Business Central e una banca, una compagnia di spedizioni, un servizio di pagamento, un negozio online o un altro sistema aziendale.
+
+00:10:34.870 --> 00:10:37.410
+Prendi un team finanziario che riceve estratti i conto bancari ogni giorno.
+
+00:10:37.930 --> 00:10:45.210
+Senza una connessione, qualcuno potrebbe dover scaricare un file dalla banca, caricarlo manualmente, confrontare ogni riga bancaria con i pagamenti e ricercare le voci che non corrispondono.
+
+00:10:45.570 --> 00:10:51.690
+Con un'estensione bancaria, l'estratto conto può confluire in Business Central e aiutare il team ad abbinare i pagamenti in entrata e in uscita ai record già esistenti.
+
+00:10:51.690 --> 00:10:55.690
+La persona continua a controllare le eccezioni, ma gli abbinamenti di routine richiedono meno lavoro manuale.
+
+00:10:55.890 --> 00:10:59.570
+Il team finanziario può concentrarsi sulle voci che richiedono l'intervento di una persona reale per l'indagine.
+
+00:10:59.730 --> 00:11:01.170
+Questo è un uso pratico di un'estensione.
+
+00:11:01.510 --> 00:11:02.670
+Non elimina il giudizio umano.
+
+00:11:02.770 --> 00:11:03.830
+Elimina la gestione ripetitiva.
+
+00:11:04.270 --> 00:11:05.670
+L'app di spedizione funziona più o meno lo stesso.
+
+00:11:06.030 --> 00:11:09.170
+Un ordine di vendita può inviare i dettagli dell'indirizzo e del pacco a un servizio di corriere.
+
+00:11:09.290 --> 00:11:11.210
+Corriere può restituire un'etichetta o un numero di tracciamento.
+
+00:11:11.210 --> 00:11:16.230
+Invece di copiare lo stesso indirizzo su un altro sito web, il tuo team avvia l'operazione di spedizione direttamente dall'ordine.
+
+00:11:16.550 --> 00:11:18.090
+Puoi aggiungere queste funzioni quando ne hai bisogno.
+
+00:11:18.450 --> 00:11:24.130
+Se un'azienda smette di utilizzare un corriere, cambia fornitore di pagamenti o dismette un processo, potrebbe non avere più bisogno dell'estensione correlata.
+
+00:11:24.350 --> 00:11:29.190
+Questo approccio modulare ti offre un controllo maggiore rispetto all'integrazione di ogni connessione esterna nell'applicazione standard.
+
+00:11:29.490 --> 00:11:31.770
+Tuttavia, ogni app aggiunta diventa parte del tuo lavoro quotidiano.
+
+00:11:31.770 --> 00:11:36.430
+Il passo successivo è verificare attentamente un'estensione prima che entri nei processi su cui il tuo personale fa affidamento.
+
+00:11:37.210 --> 00:11:38.370
+Trovare e installare le app.
+
+00:11:39.250 --> 00:11:40.730
+Quindi sai che un processo ha bisogno di aiuto.
+
+00:11:41.150 --> 00:11:41.630
+Dove guardi?
+
+00:11:42.050 --> 00:11:46.410
+La maggior parte delle persone inizia da Microsoft AppSource o dalla pagina di gestione dell'estensione e dell'estensione in senso.
+
+00:11:46.530 --> 00:11:50.710
+AppSource è il marketplace dove puoi esplorare le app di Microsoft e di altre aziende di software.
+
+00:11:51.010 --> 00:11:55.250
+La gestione delle estensioni è il luogo in cui visualizzi e gestisci le app già collegate al tuo ambiente Business Center.
+
+00:11:55.470 --> 00:11:56.030
+Ecco il punto che ha.
+
+00:11:56.350 --> 00:11:58.370
+Inizierò dal problema, non dal nome di un'app.
+
+00:11:58.750 --> 00:12:00.310
+Cerca le parole che il tuo team utilizza già.
+
+00:12:00.310 --> 00:12:06.650
+Prova con spedizione, importazione bancaria, approvazioni, fatturazione elettronica, scansione di magazzino, solleci di pagamento e report locali.
+
+00:12:07.090 --> 00:12:12.050
+Una ricerca semplice ti offre maggiori possibilità di trovare diverse opzioni anziché scegliere la prima app che qualcuno ti suggerisce.
+
+00:12:12.430 --> 00:12:17.450
+Immagina che il tuo team di magazzino trascorra parte di ogni pomeriggio a copiare i dettagli degli ordini sul sito web di un corriere.
+
+00:12:17.970 --> 00:12:19.870
+Non iniziare cercando un fornitore specifico.
+
+00:12:20.190 --> 00:12:24.190
+Cerca invece il corriere, la spedizione di pacchi, la stampa di etichetto e il tracciamento delle spedizioni.
+
+00:12:24.510 --> 00:12:27.990
+Quindi confronta le app che appaiono con il lavoro effettivo che il tuo team deve completare.
+
+00:12:28.450 --> 00:12:29.750
+Ora legge attentamente la descrizione.
+
+00:12:29.750 --> 00:12:31.330
+Per prima cosa controlla l'editore.
+
+00:12:31.670 --> 00:12:32.270
+Chi ha creato l'app?
+
+00:12:32.570 --> 00:12:34.270
+E dove puoi trovare i dettagli del loro supporto?
+
+00:12:34.630 --> 00:12:39.810
+Un'app può sembrare perfetta in una breve descrizione ma devi sapere chi risponderà quando un'etichetta di spedizione non viene stampata.
+
+00:12:40.250 --> 00:12:42.770
+Un aggiornamento modifica un processo che il tuo team usa ogni giorno.
+
+00:12:43.990 --> 00:12:46.350
+Successivamente controlla quali versioni di Business Central supporta.
+
+00:12:46.570 --> 00:12:51.170
+La tua azienda potrebbe utilizzare la versione online di Business Central oppure una versione installata sui propri server.
+
+00:12:51.410 --> 00:12:52.930
+Un'app deve supportare la tua configurazione.
+
+00:12:53.310 --> 00:12:58.550
+Controlla la descrizione dell'app e la documentazione del publisher invece di dare per scontato che ogni app funzioni ovunque.
+
+00:12:58.550 --> 00:13:00.110
+Anche i prezzi richiedono un'attenzione particolare.
+
+00:13:00.570 --> 00:13:01.930
+Alcune app prevedono un costo per utente.
+
+00:13:02.230 --> 00:13:05.490
+Alcune addebitano per azienda, per transazione o tramite un abbonamento mensile.
+
+00:13:05.890 --> 00:13:09.050
+Altre sono gratuite da installare ma si collegano a un servizio esterno a pagamento.
+
+00:13:09.410 --> 00:13:13.730
+Un connettore bancario, ad esempio, potrebbe comportare costi da parte del publisher dell'app della banca di entrambi.
+
+00:13:13.730 --> 00:13:15.950
+Gratuito non significa evitare i controlli.
+
+00:13:16.410 --> 00:13:18.910
+Un'app gratuita può risolvere molto bene un problema specifico.
+
+00:13:19.030 --> 00:13:22.670
+Può anche essere accompagnata da meno opzioni di supporto, meno documentazione e un sete di funzionalità limitato.
+
+00:13:23.630 --> 00:13:28.430
+Leggi cosa include l'app, cosa non include e se il publisher spiega come funzionano gli aggiornamenti e il supporto.
+
+00:13:29.250 --> 00:13:30.670
+Cerca la documentazione prima di installare.
+
+00:13:31.170 --> 00:13:34.370
+Una buona documentazione dovrebbe spiegare cosa fa l'app, cosa serve prima dell'installazione,
+
+00:13:34.470 --> 00:13:37.090
+quali pagine di Business Central la modifica e come interagiscono gli utenti.
+
+00:13:37.090 --> 00:13:39.850
+Non deve essere necessariamente simile a un libro di test.
+
+00:13:40.470 --> 00:13:46.830
+Tuttavia, se riesci a trovare note di configurazione chiare per un processo aziendale che riguarda ordini, fatture o pagamenti, fermati a leggere.
+
+00:13:48.010 --> 00:13:49.890
+Le recensioni possono aiutare, ma leggile con attenzione.
+
+00:13:50.210 --> 00:13:55.230
+Una recensione a 5 stelle di un'azienda in un altro paese potrebbe non indicare se l'app funziona con le tue normative locali.
+
+00:13:55.750 --> 00:13:58.650
+Una recensione negativa potrebbe descrivere un problema che il publisher già risponde.
+
+00:13:58.970 --> 00:14:02.050
+Tratta le recensioni come domande da approfondire, non come una risposta definitiva.
+
+00:14:02.530 --> 00:14:04.990
+Una volta ristretta la scelta, prova l'app in un ambiente sandbox.
+
+00:14:04.990 --> 00:14:08.150
+Una sandbox è un ambiente Business Central separato per i test.
+
+00:14:08.530 --> 00:14:15.490
+Offre al tuo team uno spazio sicuro per installare un'app, provare la configurazione ed eseguire esempi aziendali reali senza modificare i record necessari al lavoro quotidiano.
+
+00:14:15.970 --> 00:14:17.330
+Usa casi di test reali.
+
+00:14:17.490 --> 00:14:22.410
+Crea un ordine di prova con un tipo di cliente, articolo, regola fiscale e metodo di consegna che solitamente causano problemi.
+
+00:14:22.810 --> 00:14:24.790
+Chiede alle persone che svolgono quel lavoro di provare l'app.
+
+00:14:24.890 --> 00:14:30.910
+Un manager può approvare un'app sulla carta, ma chi inserisce gli ordini può notare un campo mancante o un passaggio extra in pochi minuti.
+
+00:14:31.390 --> 00:14:32.470
+Testa anche i casi complessi.
+
+00:14:32.910 --> 00:14:34.430
+Cosa succede quando un indirizzo è incompleto?
+
+00:14:34.430 --> 00:14:35.890
+Cosa succede quando un pagamento fallisce?
+
+00:14:36.190 --> 00:14:38.490
+Un utente può correggere un errore senza chiamare uno sviluppatore?
+
+00:14:38.890 --> 00:14:42.170
+L'app genera il report corretto quando un cliente ne richiede una copia al mese successivo.
+
+00:14:42.290 --> 00:14:45.110
+Queste domande dicono molto più di una pagina di prodotto ben curata.
+
+00:14:45.550 --> 00:14:48.470
+Prima che l'app entri nell'uso quotidiano decidi chi si occuperà del supporto.
+
+00:14:48.750 --> 00:14:50.830
+Tuo team IT interno potrebbe gestire la prima richiesta?
+
+00:14:51.410 --> 00:14:53.790
+Tuo partner Business Central potrebbe occuparsi di configurazione corretta?
+
+00:14:54.010 --> 00:14:56.250
+L'editore dell'app potrebbe gestire i problemi nel proprio codice?
+
+00:14:56.810 --> 00:14:59.630
+Tegnalo insieme al contatto di supporto e allo scopo dell'app.
+
+00:15:00.630 --> 00:15:02.970
+Un'app installata diventa parte di un processo aziendale.
+
+00:15:02.970 --> 00:15:07.390
+Ciò significa che le domande successive riguardano le informazioni a cui puoi accedere,
+
+00:15:07.570 --> 00:15:10.610
+dove viaggiano e cosa succede quando Business Central o l'app cambiano.
+
+00:15:11.550 --> 00:15:13.330
+Domande su sicurezza, dati e aggiornamenti.
+
+00:15:13.970 --> 00:15:16.330
+Prima di approvare un'estensione pone una domanda semplice.
+
+00:15:16.890 --> 00:15:19.590
+Quali informazioni puoi vedere, modificare e inviare altrove questa app?
+
+00:15:19.990 --> 00:15:22.730
+Questa domanda è importante perché un'estensione può inserirsi nel lavoro
+
+00:15:22.730 --> 00:15:25.730
+che il tuo team svolge per clienti, ordini, fatture e pagamenti in magazzino.
+
+00:15:25.730 --> 00:15:28.350
+Alcune app aggiungono solo un campo o un report.
+
+00:15:28.910 --> 00:15:32.950
+Altre collegano Business Central a un servizio esterno e scambiano dati aziendali come parte del lavoro.
+
+00:15:33.830 --> 00:15:37.790
+Non tutte le app seguono gli stessi standard di test, conformità o sicurezza di Business Central.
+
+00:15:38.390 --> 00:15:41.030
+Documentazione Microsoft lo chiarisce per le app di altri fornitori.
+
+00:15:41.330 --> 00:15:43.030
+Un'app potrebbe contattare altri servizi online.
+
+00:15:43.570 --> 00:15:46.530
+Potrebbe elaborare o archiviare dati al di fuori della tua organizzazione
+
+00:15:46.530 --> 00:15:49.270
+o della regione geografica e dei confini di conformità scelti.
+
+00:15:49.270 --> 00:15:53.430
+Potrebbe condividere dati con un'altra azienda, includere funzioni basate sull'IA
+
+00:15:53.430 --> 00:15:56.410
+o mostrare contenuti non conformi alle polisi aziendali.
+
+00:15:56.910 --> 00:15:59.170
+Quindi non considerare l'installazione come una scelta di poco con.
+
+00:15:59.450 --> 00:16:00.930
+Ecco un esempio concreto.
+
+00:16:02.270 --> 00:16:05.730
+Immagina un'app che invia dati di fatturazione a un servizio di documenti esterno.
+
+00:16:06.170 --> 00:16:11.330
+Potrebbe aver bisogno di nomi dei clienti, indirizzi, dettagli degli articoli, prezzi, dati fiscali e numeri di documento per svolgere il suo lavoro.
+
+00:16:11.670 --> 00:16:15.630
+Potrebbe adattarsi perfettamente al tuo processo ma responsabile finanziario ultimato e responsabile della privacy
+
+00:16:15.630 --> 00:16:17.910
+dovrebbero sapere della privacy dove finiscono quei dati e chi li gestisce.
+
+00:16:17.910 --> 00:16:20.710
+Chiedi all'editore di spiegare il percorso dei dati in modo chiaro.
+
+00:16:21.130 --> 00:16:22.270
+Quali dati lasciano Business Central?
+
+00:16:22.710 --> 00:16:23.190
+Dove vanno?
+
+00:16:23.610 --> 00:16:24.730
+Quale paese o regione le archivia?
+
+00:16:25.370 --> 00:16:26.750
+L'app ne conserva una copia per quanto tempo.
+
+00:16:27.030 --> 00:16:29.250
+L'editore o un altro fornitore di servizi può accedervi?
+
+00:16:29.630 --> 00:16:32.730
+Te l'app utilizza l'IA, quali informazioni raggiungono il servizio di IA?
+
+00:16:33.070 --> 00:16:34.630
+E cosa succede a quelle informazioni dopo?
+
+00:16:35.210 --> 00:16:37.290
+Leggi i dettagli sulla privacy e i termini prima di installare.
+
+00:16:37.290 --> 00:16:41.350
+Non devi diventare un avvocato ma ti servono risposte chiare per i dati che la tua azienda gestisce.
+
+00:16:41.950 --> 00:16:45.210
+Se un fornitore non sa spiegare cosa fa la sua app con le tue informazioni
+
+00:16:45.210 --> 00:16:49.010
+non inserire quell'app in un processo che gestisce record dei clienti o dati finanziari?
+
+00:16:50.070 --> 00:16:51.710
+Le autorizzazioni richiedono lo stesso di attenzione.
+
+00:16:52.010 --> 00:16:54.590
+Un'app potrebbe aver bisogno dell'autorizzazione per leggere ordini di vendita,
+
+00:16:54.690 --> 00:16:57.570
+creare spedizioni, registrare pagamenti e accedere ai record utilizzati da una nuova funzione.
+
+00:16:57.690 --> 00:16:59.490
+Concedere solo l'accesso necessario per il suo lavoro.
+
+00:16:59.810 --> 00:17:03.510
+Poi verifica quali utenti ricevono i permessi dell'app perché una nuova funzione utile
+
+00:17:03.510 --> 00:17:06.590
+può creare problemi di sicurezza se raggiunge chi non dovrebbe usarla.
+
+00:17:07.570 --> 00:17:09.250
+Mantieni attivo il tuo processo di approvazione.
+
+00:17:09.710 --> 00:17:12.330
+Un reparto potrebbe trovare un'app utile e volerla subito in funzione.
+
+00:17:12.330 --> 00:17:16.670
+Quando l'app gestisce dati sensibili lascia che IT, finanza, sicurezza e conformità
+
+00:17:16.670 --> 00:17:19.850
+l'esaminino per primi può sembrare lento all'inizio,
+
+00:17:20.270 --> 00:17:23.510
+ma è meglio che scoprire dopo che i dati dei clienti sono finiti dove nessuno aveva provato.
+
+00:17:23.910 --> 00:17:24.930
+Anche gli aggiornamenti meritano.
+
+00:17:25.710 --> 00:17:30.410
+Le estensioni separano il codice personalizzato dall'applicazione standard di Business Central
+
+00:17:30.410 --> 00:17:32.350
+riducendo le riparazioni necessarie,
+
+00:17:32.710 --> 00:17:37.230
+ma possono comunque dipendere da funzioni di Business Central, altre app o servizi estermi.
+
+00:17:38.050 --> 00:17:40.570
+Se una parte cambia la connessione potrebbe dover essere testata.
+
+00:17:40.570 --> 00:17:42.570
+Tieni un breve registro per ogni estensione installata.
+
+00:17:43.150 --> 00:17:49.190
+Annota nome, editore, scopo, proprietario, supporto, contatti, permessi, servizi esterni e ogni altra app da cui dipende.
+
+00:17:49.710 --> 00:17:50.970
+Quando si avvicina un aggiornamento,
+
+00:17:51.130 --> 00:17:55.010
+quell'elenco ti dice cosa testare, evitando che il tuo team debba indovinare cosa potrebbe rompersi.
+
+00:17:55.370 --> 00:17:56.090
+Spesso meno meglio.
+
+00:17:56.490 --> 00:18:00.650
+Un lungo elenco di app può creare funzioni sovrapposte, proprietà poco chiare, più elementi da testare.
+
+00:18:00.970 --> 00:18:02.910
+Mantieni un'estensione quando risolvi un'esigenza aziendale.
+
+00:18:02.910 --> 00:18:05.650
+Rimuovila o ritirala quando tale esigenza scompare.
+
+00:18:05.750 --> 00:18:07.370
+Documenta i cambiamenti prima di procedere.
+
+00:18:07.590 --> 00:18:09.050
+L'obiettivo non è evitare l'estensione.
+
+00:18:09.310 --> 00:18:13.050
+L'obiettivo è sapere esattamente cosa fa ogni estensione prima che entri a far parte della tua azienda.
+
+00:18:13.690 --> 00:18:15.250
+ATM, questo è il lavoro quotidiano.
+
+00:18:17.030 --> 00:18:17.470
+Conclusione.
+
+00:18:17.610 --> 00:18:18.830
+Scegli il componente aggiuntivo giusto.
+
+00:18:19.690 --> 00:18:20.850
+Con la regola semplice.
+
+00:18:21.290 --> 00:18:25.570
+Un'estensione di Business Central deve risolvere un problema specifico senza toccare il codice principale.
+
+00:18:26.250 --> 00:18:27.950
+Parti dal problema reale che il tuo team ha da affrontare.
+
+00:18:28.330 --> 00:18:29.950
+Testa il componente aggiuntivo con attività reale.
+
+00:18:29.950 --> 00:18:33.810
+Controlla chi l'ha creato dove vanno i tuoi dati assicurati che qualcuno offra supporto dopo l'installazione.
+
+00:18:34.190 --> 00:18:38.690
+Iscriviti e condividi questa pillola di saggezza con chi crede ancora di dover accettare ogni schermata predefinita.

@@ -1,0 +1,1672 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:02.840
+Imagine a seguinte situação, seu chefe pede pra você experimentar o Copilot Studio.
+
+00:00:03.180 --> 00:00:04.740
+Você acha que tá criando um chatbot educado.
+
+00:00:05.140 --> 00:00:09.200
+Dez minutos depois e não tá apenas conversando, tá reservando um cruzeiro e tentando usar o cartão da empresa pra pedir pizza.
+
+00:00:09.700 --> 00:00:12.820
+Essa é a verdadeira diferença entre um copilot que sugere e um agente que age.
+
+00:00:13.640 --> 00:00:17.760
+Nos próximos 15 minutos, você verá como os agentes cruzam essa linha onde a memória deles realmente reside
+
+00:00:17.760 --> 00:00:20.680
+e as três primeiras verificações de governança pra manter seu tenente seguro.
+
+00:00:21.440 --> 00:00:25.700
+Siga o M365 Show, para transmissões ao vivo de MVPs que vão além dos slides de marketing.
+
+00:00:26.060 --> 00:00:29.940
+E se um chatbot já consegue pedir o almoço, espere até que comece a gerenciar a agenda das pessoas.
+
+00:00:30.000 --> 00:00:33.100
+De estagiários inteligentes a funcionários de pleno direito.
+
+00:00:33.400 --> 00:00:34.600
+Agora é aqui que as coisas ficam interessantes.
+
+00:00:35.020 --> 00:00:36.900
+Salto de estagiário inteligente pra funcionário pleno.
+
+00:00:37.780 --> 00:00:40.480
+Essa é a mudança fundamental de copilotos pra agentes autônomos.
+
+00:00:40.920 --> 00:00:41.920
+Não é apenas semântica.
+
+00:00:42.920 --> 00:00:47.620
+Um copiloto é como um estagiário, dizemos o que fazer, ele redige o conteúdo, faz uma sugestão e nós aprovamos.
+
+00:00:48.180 --> 00:00:49.300
+Controle permanece em nossas mãos.
+
+00:00:49.640 --> 00:00:52.720
+Um agente autônomo, no entanto, age como um funcionário com iniciativa real.
+
+00:00:52.780 --> 00:00:57.800
+Ele não apenas sugere ideias, ele executa fluxo de trabalho e toma ações com o sem pedir permissão e reporta o resultado depois.
+
+00:00:57.800 --> 00:01:00.580
+O detalhe é que os administradores podem configurar esse comportamento.
+
+00:01:01.100 --> 00:01:07.100
+Você pode decidir se um agente exige sua aprovação antes de enviar um e-mail, reservar uma viagem ou atualizar dados, se ele age totalmente por conta própria.
+
+00:01:08.540 --> 00:01:12.380
+Essa única chave de alternância é a linha entre um assistente de apoio e um operador independente.
+
+00:01:13.240 --> 00:01:15.560
+Veja o Microsoft Copilot no Teams como exemplo claro.
+
+00:01:15.960 --> 00:01:18.820
+Quando você digita uma resposta, ele sugere uma frase melhor e seu modo estagiário.
+
+00:01:19.140 --> 00:01:20.180
+É você que ainda clica em enviar.
+
+00:01:20.180 --> 00:01:25.140
+Mas mude o contexto para uma configuração autônoma com permissões e, de repente, ele para de sugerir.
+
+00:01:25.760 --> 00:01:30.940
+Ele reserva reuniões, agenda acompanhamentos e envia e-mails para o cliente diretamente sem que você precise vigiá-lo.
+
+00:01:31.640 --> 00:01:36.500
+O mesmo aplicativo, a mesma interface, mas um comportamento completamente diferente dependendo de você ter permitido a ação ou apenas sugestão.
+
+00:01:37.220 --> 00:01:38.700
+É por isso que os administradores precisam prestar-lhe.
+
+00:01:39.260 --> 00:01:43.540
+O fator divisor que muitas vezes empurra um estagiário para o território de funcionário é a memória.
+
+00:01:43.540 --> 00:01:50.440
+Com Copilotos, o contexto geralmente dura alguns prompts, de curto prazo e desaparece assim que a sessão termina.
+
+00:01:51.080 --> 00:01:52.320
+Com agentes, a memória é diferente.
+
+00:01:52.760 --> 00:01:56.740
+Eles retém o histórico de conversas, armazenam IDs e referenciam ações passadas para entrar novas.
+
+00:01:57.200 --> 00:02:04.300
+De fato, nas próprias implementações de exemplo da Microsoft, os agentes armazenam IDs e sessão histórico de conversas para que possam recordar interações entre tarefas.
+
+00:02:05.340 --> 00:02:08.820
+Isso significa que o bot que atendeu um chamado de serviço ontem e se lembrará disso hoje,
+
+00:02:09.180 --> 00:02:13.500
+registrará o acompanhamento e agendará outro contato amanhã, sem que você precise inserir os detalhes novamente.
+
+00:02:14.400 --> 00:02:15.920
+De repente, você não está mais revisando, Rosco.
+
+00:02:16.160 --> 00:02:19.480
+Você está gerenciando uma máquina que lembra e trabalha como um funcionário júnior.
+
+00:02:20.040 --> 00:02:22.780
+Cosmos DB é espinha dorsal aqui, pois é onde essa memória geralmente reside.
+
+00:02:23.700 --> 00:02:25.000
+Sem ele, é como um peixinho dourado.
+
+00:02:25.580 --> 00:02:26.520
+Ela esquece tudo após um minuto.
+
+00:02:27.280 --> 00:02:32.140
+Com ele, os agentes se comportam como membros da equipe, que nunca esquecem uma reclamação de cliente ou um prazo de relatório.
+
+00:02:32.780 --> 00:02:35.380
+E essa persistência não é apenas poderosa, ela é potencialmente problemática.
+
+00:02:36.340 --> 00:02:40.200
+Assim que um agente tem memória e permissões, e assim que os administradores ampliam seu escopo,
+
+00:02:40.200 --> 00:02:43.260
+você basicamente contratou um funcionário digital, que não se cansa,
+
+00:02:43.540 --> 00:02:47.420
+não pede férias e não espera necessariamente por aprovação antes de seguir em frente.
+
+00:02:48.120 --> 00:02:52.020
+É também aí que os administradores precisam abandonar a ideia de que a IA pensa de forma humana.
+
+00:02:52.720 --> 00:02:54.540
+Ela não raciocina nem pondera o contexto como nós.
+
+00:02:55.200 --> 00:02:59.900
+Ela faz executar sequências, planejar e acionar ferramentas com base em dados, memória e permissões disponíveis.
+
+00:02:59.900 --> 00:03:02.780
+Se tiver acesso ao cartão de crédito, ela pode processar o fluxo de pagamento.
+
+00:03:03.320 --> 00:03:05.180
+Se tiver direitos de calendário, ela pode agendar reuniões.
+
+00:03:05.840 --> 00:03:06.400
+Não tá tramando.
+
+00:03:06.740 --> 00:03:10.840
+Ela apenas segue cadeias de lógica e execução enraizadas em como foi construída e no que foi entregue.
+
+00:03:10.840 --> 00:03:13.880
+Portanto, o problema não é a IA ser inteligente no sentido humano,
+
+00:03:13.960 --> 00:03:16.600
+mas estabelecemos as diretrizes corretas antes de lidar as chaves.
+
+00:03:17.720 --> 00:03:19.400
+E sim, é fácil projetar histórias de terror.
+
+00:03:19.940 --> 00:03:21.580
+Um linha tem a intenção de dizer o bot pra pedir pizza.
+
+00:03:22.060 --> 00:03:25.860
+Mas se o escopo for muito amplo e a execução do plano conectar resolver problema rapidamente
+
+00:03:25.860 --> 00:03:30.420
+a pedir comida pra equipe, bem, você de repente terá 20 pizzas de peperoni no cartão da empresa.
+
+00:03:31.420 --> 00:03:34.500
+Isso não é o bot sendo esperto, é um escopo mal definido encontrando uma automação confiante.
+
+00:03:34.500 --> 00:03:38.760
+E quando você começa a pensar nelas como funcionárias plenas e não como estagiários fofos,
+
+00:03:38.820 --> 00:03:40.460
+os desafios de auditoria ficam mais evidentes.
+
+00:03:40.880 --> 00:03:41.720
+A realidade é esta.
+
+00:03:42.060 --> 00:03:45.880
+Ao ativar agentes autônomos, você não está testando apenas mais um recurso de produtividade.
+
+00:03:46.540 --> 00:03:49.940
+Você tá delegando o poder operacional real pra um software que não para pra pausas,
+
+00:03:50.100 --> 00:03:53.300
+não espera por aprovações a menos que você force e não esquece o que fez ontem.
+
+00:03:54.520 --> 00:03:56.360
+Isso pode tornar os ambientes mais eficientes,
+
+00:03:56.520 --> 00:03:59.520
+mas também aumenta o risco se as permissões e a governança forem descuidadas,
+
+00:03:59.640 --> 00:04:00.720
+o que leva à pergunta natural.
+
+00:04:00.720 --> 00:04:02.820
+Se a IA está agindo como um membro da equipe,
+
+00:04:02.820 --> 00:04:05.720
+qual é a caixa de ferramentas real que cria essas novas contratações
+
+00:04:05.720 --> 00:04:09.120
+e como garantimos que não perderemos o controle quando começarem a rodar.
+
+00:04:10.460 --> 00:04:12.840
+A caixa de ferramentas Azure AI Foundry Copilot Studio.
+
+00:04:13.600 --> 00:04:14.820
+Microsoft vende isso com mágica.
+
+00:04:15.600 --> 00:04:16.980
+Lance agentes autônomos em minutos.
+
+00:04:17.940 --> 00:04:20.060
+Na prática, parece menos com feitiçaria
+
+00:04:20.060 --> 00:04:23.180
+e mais com consertar um carro enquanto ele corre pela rodovia.
+
+00:04:24.240 --> 00:04:26.000
+Os slides mostram tudo limpo e organizado.
+
+00:04:26.960 --> 00:04:29.520
+Dentro de um tenant, você gerencia modelos, equilibra permissões
+
+00:04:29.520 --> 00:04:32.640
+e conecta componentes até que pareça uma mistura de TI com uma convenção de polvos.
+
+00:04:33.700 --> 00:04:36.740
+Então, vamos remover a névoa do marketing e falar em termos reais de administração.
+
+00:04:37.700 --> 00:04:39.840
+O Azure AI Foundry é apresentado como chão de fábrica.
+
+00:04:40.680 --> 00:04:43.280
+Uma camada de integração onde você conecta modelos de linguagem,
+
+00:04:43.380 --> 00:04:45.380
+APIs e os sistemas corporativos que já possui.
+
+00:04:46.320 --> 00:04:50.160
+Registros de clientes, bibliotecas do SharePoint, dados de CRM ou APIs personalizadas
+
+00:04:50.160 --> 00:04:54.260
+podem ser conectados, unidos e consolidados em algo que você realmente pode executar em produção.
+
+00:04:54.260 --> 00:04:56.820
+Em sua essência, a promessa é simples.
+
+00:04:57.640 --> 00:05:00.480
+DIA é uma forma estruturada de entender e agir sobre seus dados
+
+00:05:00.480 --> 00:05:03.100
+sem vez de enviar prompts desestruturados esperando coerência.
+
+00:05:04.180 --> 00:05:06.340
+Sem isso, você tem um cantor de karaokê sem letra.
+
+00:05:06.980 --> 00:05:08.420
+Com isso, você tem pelo menos uma banda funcionando.
+
+00:05:08.420 --> 00:05:10.580
+Agora, vale a pena pausar sobre causa da nomenclatura.
+
+00:05:11.300 --> 00:05:13.720
+A Microsoft muda o nome de ferramentas como se fosse um esporte,
+
+00:05:13.840 --> 00:05:15.900
+por isso muitos de nós confundimos o Foundry com o Fabric.
+
+00:05:16.320 --> 00:05:16.940
+Eles não são a mesma coisa.
+
+00:05:17.340 --> 00:05:19.980
+O Foundry é posicionado como um lugar para construir e integrar agentes.
+
+00:05:20.940 --> 00:05:22.480
+O Fabric é mais uma suite de análise.
+
+00:05:22.480 --> 00:05:25.960
+Se você estiver tomando decisões de licenciamento ou arquitetura, porém,
+
+00:05:26.020 --> 00:05:27.160
+não confie nos textos de marketing.
+
+00:05:27.800 --> 00:05:29.560
+Verifique primeiro a documentação do fornecedor,
+
+00:05:29.640 --> 00:05:32.500
+porque os rótulos mudam mais rápido que o humor do seu CFL durante a temporada de orçamento.
+
+00:05:33.080 --> 00:05:35.100
+Empilhado sobre isso, você tem o Microsoft Copilot Studio.
+
+00:05:36.120 --> 00:05:40.860
+Este vive dentro da Power Platform e funciona bem com Power Automate, Power Apps e AI Builder.
+
+00:05:41.040 --> 00:05:44.440
+É o front-end low-code onde usuários de negócios e administradores
+
+00:05:44.440 --> 00:05:48.780
+podem criar, configurar e publicar Copilot sem abrir o Visual Studio S3 da manhã.
+
+00:05:48.780 --> 00:05:52.740
+Então, pense em modelos pré-construídos, conectores de dados e fluxos de trabalho
+
+00:05:52.740 --> 00:05:56.900
+que se integram diretamente à pilha Microsoft Teams, SharePoint e Dynamics 365.
+
+00:05:57.920 --> 00:05:59.200
+A vantagem prática aqui é a velocidade.
+
+00:06:00.300 --> 00:06:02.200
+Você pode projetar um bot de fluxo de trabalho,
+
+00:06:02.340 --> 00:06:05.360
+conectá-lo a dados corporativos e colocá-lo em produção com muito pouco código.
+
+00:06:06.180 --> 00:06:09.880
+Simplificando, o estúdio lhe dá a capacidade de rascunhar e implantar Copilots e agentes rapidamente
+
+00:06:09.880 --> 00:06:12.000
+e conectá-los aos aplicativos que seu pessoal já usa.
+
+00:06:13.000 --> 00:06:14.480
+Imagine um bot reserva de viagens no tipo.
+
+00:06:15.180 --> 00:06:17.740
+Um funcionário digita, reserve um voo para Chicago na próxima semana.
+
+00:06:17.740 --> 00:06:21.060
+Em vez de retornar o rascunho estático, Copilot envia essa solicitação
+
+00:06:21.060 --> 00:06:23.460
+para os registros de viagem do Dynamics e registra a reserva.
+
+00:06:24.700 --> 00:06:26.040
+Os usuários veem uma conversa.
+
+00:06:26.420 --> 00:06:29.980
+Por trás das cenas, ele executa etapas de fluxo de trabalho que as operações normalmente seriam manualmente.
+
+00:06:30.380 --> 00:06:34.120
+É aí que um bot deixa de parecer um truque e começa a substituir o trabalho administrativo real.
+
+00:06:35.140 --> 00:06:37.940
+E é aqui que o Cosmos DB silenciosamente evita que tudo desmorone.
+
+00:06:38.560 --> 00:06:42.300
+Nos próprios exemplos de agentes da Microsoft, o Cosmos DB atua com a memória unificada,
+
+00:06:42.500 --> 00:06:45.920
+armazenando não apenas o histórico de conversas, mas também embeddings e o contexto do fluxo de trabalho.
+
+00:06:45.920 --> 00:06:49.300
+Com latência de um dígito em milissegundos e escalabilidade global,
+
+00:06:49.400 --> 00:06:51.760
+ele mantém os agentes rápidos e consistentes entre as sessões.
+
+00:06:52.500 --> 00:06:54.900
+Sem isso, os copilotos esquecem tudo, como peixes entre um comando.
+
+00:06:55.480 --> 00:06:59.200
+Com isso, eles podem retomar conversas dias depois, lembrar IDs, revisitar planos anteriores
+
+00:06:59.200 --> 00:07:02.240
+e agir mais como colegas de equipe persistentes do que parceiros de chat temporais.
+
+00:07:02.240 --> 00:07:04.540
+É a cola técnica que faz a memória fixar.
+
+00:07:04.980 --> 00:07:06.040
+Não se acomode demais, no entanto.
+
+00:07:06.420 --> 00:07:10.240
+O estúdio reduz a barreira da programação, claro, mas transfere todo o trabalho para a integração e a governança.
+
+00:07:11.000 --> 00:07:15.100
+Em vez de depurar JSON ou Python, você estará depurando porque um agente com o conector errado
+
+00:07:15.100 --> 00:07:18.720
+arquivou um registro incorretamente ou agendou reuniões sem verificar as permissões.
+
+00:07:19.460 --> 00:07:21.600
+A complexidade não desaparece, ela apenas muda de forma.
+
+00:07:22.340 --> 00:07:25.220
+Os administradores precisam definir o escopo dos conectores com cuidado,
+
+00:07:25.340 --> 00:07:28.340
+decidir onde os dados ficam e colocar portais de aprovação e operações sensíveis.
+
+00:07:28.340 --> 00:07:32.720
+Caso contrário, a conveniência do low-code se torna uma multiplicação de erros que ninguém autorizou,
+
+00:07:32.820 --> 00:07:33.480
+que ninguém autorizou.
+
+00:07:33.940 --> 00:07:35.620
+A recompensa faz com que a dor de cabeça valha.
+
+00:07:36.100 --> 00:07:38.840
+O Foundry fornece a estrutura de bastidores, o estúdio entrega a interface
+
+00:07:38.840 --> 00:07:41.420
+e o Cosmos DB garante que a memória é dura o suficiente para ser útil.
+
+00:07:42.040 --> 00:07:43.200
+Juntos eles reduzem os cronogramas.
+
+00:07:43.900 --> 00:07:47.080
+Uma prova de conceito de um agente pode ser montada em dias, em vez de meses,
+
+00:07:47.380 --> 00:07:49.580
+e depois aprimorada para a produção assim que mostrar valor.
+
+00:07:51.280 --> 00:07:53.680
+Protótipos mais rápidos significam feedback mais rápido
+
+00:07:53.680 --> 00:07:56.020
+e isso é uma grande mudança no ciclo tradicional de TI,
+
+00:07:56.020 --> 00:07:59.060
+onde uma ideia vivia em slides por um ano antes de ser testada.
+
+00:08:00.060 --> 00:08:02.020
+As letras miúdas são risco e responsabilidade.
+
+00:08:02.580 --> 00:08:05.320
+No momento em que um agente lembra e age ao longo de vários dias,
+
+00:08:05.440 --> 00:08:08.020
+você inserir um colega digital no seu fluxo que move dados,
+
+00:08:08.440 --> 00:08:12.240
+abre registros e nunca pede confirmação se você não definir os limites.
+
+00:08:13.420 --> 00:08:15.600
+Respeite o armazenamento de memória, respeite os conectores
+
+00:08:15.600 --> 00:08:17.420
+e para sua própria sanidade, respeite as confianças.
+
+00:08:17.920 --> 00:08:19.720
+Trate essas ferramentas como facas afiadas,
+
+00:08:19.800 --> 00:08:22.560
+não que são perigosas por si só, mas porque sem controle elas cortam fundo.
+
+00:08:22.560 --> 00:08:25.160
+E quando você começa a olhar além da caixa de ferramentas,
+
+00:08:25.200 --> 00:08:27.260
+verá que a Microsoft não está parando no CRI você mesmo.
+
+00:08:27.940 --> 00:08:31.520
+Eles já estão lançando agentes copilot prontos no SharePoint, Dynamics e outros
+
+00:08:31.520 --> 00:08:35.400
+com demonstrações que fazem parecer que todo suporte técnico foi automatizado da noite para o dia.
+
+00:08:36.360 --> 00:08:39.720
+Mas se esses bots polidos de demonstração conseguem sobreviver à bagunça de um tenant,
+
+00:08:39.860 --> 00:08:41.480
+essa é a próxima coisa que precisamos esvender.
+
+00:08:42.760 --> 00:08:44.400
+Agentes copilot pré-construídos.
+
+00:08:44.720 --> 00:08:48.220
+Prontos ou não, a Microsoft já está enchendo as prateleiras com agentes copilot prontos
+
+00:08:48.220 --> 00:08:49.500
+para você ativar dentro do seu tenant.
+
+00:08:49.500 --> 00:08:52.400
+Isso inclui o agente facilitador no Teams,
+
+00:08:52.780 --> 00:08:54.660
+que cria resumos de reuniões em tempo real,
+
+00:08:54.920 --> 00:08:57.340
+o agente intérprete que traduz conversas em nove idiomas,
+
+00:08:57.580 --> 00:09:00.800
+bots de autoatendimento para funcionários lidarem com dúvidas de RH e TI,
+
+00:09:01.060 --> 00:09:04.440
+copilots de gerenciamento de projetos que acompanham planos e cobram prazos,
+
+00:09:04.560 --> 00:09:09.060
+e um conjunto crescente de copilots do Dynamics 365 para vendas, cadeia de suprimentos ao cliente.
+
+00:09:10.260 --> 00:09:11.860
+No papel eles parecem um banquete de automação.
+
+00:09:12.520 --> 00:09:16.300
+A verdadeira questão é, quais deles realmente economizam seu tempo e quais apenas adicionam mais ruído?
+
+00:09:16.720 --> 00:09:18.360
+As demonstrações e conferências fazem perfeita.
+
+00:09:18.360 --> 00:09:21.500
+Você virar um agente do SharePoint e encontrar documentos instantaneamente,
+
+00:09:21.640 --> 00:09:24.420
+ou um agente de vendas do Dynamics e preparar respostas perfeitas para leads.
+
+00:09:25.180 --> 00:09:26.240
+A realidade no dia a dia é mista.
+
+00:09:26.860 --> 00:09:29.380
+Alguns fazem exatamente o que prometem, outros falham de formas feias.
+
+00:09:29.880 --> 00:09:32.900
+Mas dando crédito a Microsoft, os dados de adoção inicial não são apenas conversa feia.
+
+00:09:33.220 --> 00:09:35.780
+Uma organização de vendas testando um agente de vendas pré-construído
+
+00:09:35.780 --> 00:09:38.860
+relata um aumento de 9,4% na receita por venda, receita por venda.
+
+00:09:39.060 --> 00:09:39.540
+Isso não é trivial.
+
+00:09:40.100 --> 00:09:43.340
+Ainda assim, esses números vêm de pilotos controlados, não de ambientes de produção complexos,
+
+00:09:43.340 --> 00:09:45.920
+então trate-os como resultado de testes interessantes, não como verdade de observação.
+
+00:09:45.920 --> 00:09:47.420
+Vamos analisar agente por agente.
+
+00:09:48.040 --> 00:09:49.380
+O facilitador é uma das vitórias mais fáceis.
+
+00:09:49.820 --> 00:09:52.840
+Em vez de deixar que administradores ou gerentes sonham 10 tópicos de chat,
+
+00:09:53.380 --> 00:09:55.580
+ele compila as notas da reunião em um resumo digerível.
+
+00:09:56.060 --> 00:09:59.580
+Isso é útil, especialmente quando quadros de planejamento, arquivos e registros de chat estão espalhados.
+
+00:09:59.920 --> 00:10:01.200
+O risco surge quando ele extrapola.
+
+00:10:02.040 --> 00:10:06.680
+Itens de ação alucinados que ninguém concordou podem desencadear politicagem ou momentos constrangedores desses.
+
+00:10:07.340 --> 00:10:07.880
+Quem prometeu?
+
+00:10:08.100 --> 00:10:09.880
+Acompanhe esses falsos positivos durante seu piloto.
+
+00:10:09.880 --> 00:10:14.200
+Ao registrar exemplos, você pode ajustar a frase do prompt ou restringir o escopo antes de expandir.
+
+00:10:14.880 --> 00:10:19.200
+O intérprete parece um item de vitrine, traduzindo conversas ao vivo em reuniões ou chats do Teams.
+
+00:10:19.800 --> 00:10:20.660
+Quando funciona é elegante.
+
+00:10:21.240 --> 00:10:24.620
+Equipes globais podem falar naturalmente e os participantes recebem até tradução de voz simulada.
+
+00:10:25.160 --> 00:10:26.420
+Mas é aqui que o risco dispara.
+
+00:10:26.660 --> 00:10:28.700
+Erros de tradução em chat casuais são irritantes.
+
+00:10:29.420 --> 00:10:32.720
+Em cenários com muita conformidade, contratos, clausas de políticas ou linguagem regulatória,
+
+00:10:33.040 --> 00:10:35.740
+reescreva uma frase incorretamente e pode passar de uma falha para um risco jurídico.
+
+00:10:35.740 --> 00:10:39.560
+Já ouvi acertar conversas em alemão, espanhol e japonês se depois falhar,
+
+00:10:39.740 --> 00:10:42.180
+em um aviso legal de forma tão ruim que parecia sarcástico.
+
+00:10:43.180 --> 00:10:44.760
+Se o tom é errado escapar em um chat com o cliente,
+
+00:10:44.820 --> 00:10:47.300
+o controle de danos consumirá qualquer tempo que o agente economizou.
+
+00:10:47.960 --> 00:10:51.360
+Novamente, registre cada falha e verifique se os padrões de erro correspondem a certos tipos de conteúdo.
+
+00:10:52.120 --> 00:10:54.420
+Os agentes de alto atendimento para funcionários são a aposta mais segurando.
+
+00:10:54.860 --> 00:10:59.000
+Eles vivem no chat de negócios do Microsoft 365 e respondem a perguntas frequentes de RH,
+
+00:10:59.000 --> 00:11:01.660
+datas de pagamento, saldos de férias e guias de redefinição de TI.
+
+00:11:02.280 --> 00:11:04.240
+Esses fluxos de trabalho são chatos e previsíveis,
+
+00:11:04.240 --> 00:11:06.160
+e é exatamente por isso que são ótimos os primeiros pilotos.
+
+00:11:06.800 --> 00:11:09.860
+Comece com RH ou redefinição de senhas, pois esses sistemas são bem definidos.
+
+00:11:10.320 --> 00:11:11.360
+Se quebrar, o impacto é mínimo.
+
+00:11:12.020 --> 00:11:15.320
+Se funcionar, você eliminou dezenas de tickets de baixo valor que seu helpdesk nem quer mesmo.
+
+00:11:15.940 --> 00:11:17.440
+Copilotos de gestão de projetos ficam no meio tempo.
+
+00:11:17.940 --> 00:11:20.940
+Eles criam listas de tarefas, agendam lembretes e atribuem trabalhos à equipe.
+
+00:11:21.640 --> 00:11:25.520
+Em projetos de baixa complexidade, como campanhas recorrentes ou retrospectivas de sprint,
+
+00:11:25.640 --> 00:11:26.400
+eles economizam tempo.
+
+00:11:27.040 --> 00:11:30.680
+Mas sem um escopo cuidadoso, eles alterarão prazos ou atribuirão o responsável errado.
+
+00:11:31.020 --> 00:11:32.920
+Pense nisso como dar duas doses de café para surgir.
+
+00:11:32.920 --> 00:11:36.700
+Ele se moverá mais rápido, mas não necessariamente na direção certa, a menos que esteja observado.
+
+00:11:37.160 --> 00:11:40.420
+Agentes do Dynamics 365 são arrojados, mas nem sempre prontos por horário nobre.
+
+00:11:40.720 --> 00:11:43.320
+Um agente de gestão de fornecedores pode rastrear pedidos e sinalizar atrás.
+
+00:11:43.640 --> 00:11:46.420
+Um agente de qualificação de vendas pode destacar seus leads de maior valor.
+
+00:11:47.020 --> 00:11:49.360
+E um agente de intenção do cliente intervém durante tickets de serviço.
+
+00:11:50.140 --> 00:11:52.180
+É aqui que o maior benefício e o maior risco colidem.
+
+00:11:53.180 --> 00:11:54.960
+Fechar tickets de serviço de baixa complexidade funciona.
+
+00:11:55.580 --> 00:11:57.900
+Soltá-los em caso de escalonamento é como pedir a um temporário
+
+00:11:57.900 --> 00:11:59.560
+pra fazer sua apresentação pra diretoria.
+
+00:12:00.360 --> 00:12:01.320
+Muita velocidade e pouco julga.
+
+00:12:01.320 --> 00:12:02.340
+Então qual é a lição?
+
+00:12:02.840 --> 00:12:05.140
+Nem todos os agentes pré-construídos estão prontos pra empresa ainda.
+
+00:12:05.360 --> 00:12:06.180
+A regra geral é simples.
+
+00:12:06.780 --> 00:12:08.000
+Testes previsíveis primeiro.
+
+00:12:08.720 --> 00:12:11.360
+RH, autoatendimento de TI ou lembretes de projetos rotinê.
+
+00:12:12.140 --> 00:12:14.660
+Documente falsos positivos e erros de tradução durante o teste
+
+00:12:14.660 --> 00:12:16.760
+pra ajustar conectores ou escopo antes de escalar.
+
+00:12:17.560 --> 00:12:17.640
+É.
+
+00:12:18.500 --> 00:12:20.320
+Deixe os copilotos voltados ao cliente pra depois,
+
+00:12:20.400 --> 00:12:23.000
+a menos que você goste de pedir desculpas em seis idiomas ao mesmo tempo.
+
+00:12:23.240 --> 00:12:24.180
+O que leva ao problema real.
+
+00:12:24.700 --> 00:12:27.940
+Esses agentes só são seguros e úteis quando você lhes dá as faixas certas pra dirigir.
+
+00:12:27.940 --> 00:12:32.600
+Com os controles errados, o mesmo bot que salva tickets também pode criar uma dor de cabeça de conformidade.
+
+00:12:33.400 --> 00:12:35.800
+E é por isso que a próxima parte não é sobre recursos, é sobre governança.
+
+00:12:36.460 --> 00:12:40.040
+Porque sem limites rígidos, até os bons copilotos podem sair dos trilhos rapidamente.
+
+00:12:41.840 --> 00:12:42.580
+E é responsável?
+
+00:12:42.680 --> 00:12:43.380
+Ou você usa controles?
+
+00:12:43.420 --> 00:12:43.840
+Ou fracassa?
+
+00:12:43.840 --> 00:12:45.700
+É aí que entra IA responsável.
+
+00:12:45.820 --> 00:12:47.800
+Porque assim que esses sistemas começam a agir como funcionários,
+
+00:12:47.880 --> 00:12:51.160
+seu trabalho muda de criar bots legais pra garantir que eles não saiam do controle.
+
+00:12:52.540 --> 00:12:55.680
+IA responsável é menos sobre pôsteres de ética brilhantes na parede
+
+00:12:55.680 --> 00:12:58.480
+e mais sobre controles que evitam o pesadelo de uma auditoria
+
+00:12:58.480 --> 00:13:00.340
+enquanto entregam a eficiência prometida.
+
+00:13:01.020 --> 00:13:01.840
+Aqui está a dura realidade.
+
+00:13:02.300 --> 00:13:05.920
+Se você não puder explicar o que um agente fez, quando fez e quais dados tocou,
+
+00:13:06.240 --> 00:13:08.440
+as chamadas de reclamação não irão pra Microsoft, irão pra você.
+
+00:13:08.440 --> 00:13:12.300
+IA responsável é sobre confiança, auditabilidade e sobrevivência.
+
+00:13:12.860 --> 00:13:15.520
+Você quer a velocidade do agente, mas também visibilidade total
+
+00:13:15.520 --> 00:13:17.080
+pra que cada ação seja rastreável.
+
+00:13:17.680 --> 00:13:19.580
+Caso contrário, um fluxo de trabalho simplificado
+
+00:13:19.580 --> 00:13:21.660
+significa apenas erros mais rápidos com um hard impacto maior.
+
+00:13:22.380 --> 00:13:24.720
+A troca é produtividade de um lado e risco do outro.
+
+00:13:25.600 --> 00:13:28.040
+Claro, os agentes podem economizar horas em agendamentos,
+
+00:13:28.140 --> 00:13:29.640
+triagem de tickets ou extração de dados,
+
+00:13:29.720 --> 00:13:32.720
+mas o mesmo agente também pode expor dados de folha de pagamento em um chat ou e-mail
+
+00:13:32.720 --> 00:13:35.220
+ou em um grupo de distribuição confidencial, sem perguntar antes.
+
+00:13:36.080 --> 00:13:37.820
+E uma vez que os usuários perdem a confiança,
+
+00:13:37.820 --> 00:13:39.760
+se o sistema revelar dos privados apenas uma vez,
+
+00:13:39.860 --> 00:13:42.380
+você passará o resto do trimestre implorando pra que eles tentem usar novamente.
+
+00:13:42.740 --> 00:13:45.360
+A Microsoft pode vender a mágica, mas você ficará preso explicando os prejuízos.
+
+00:13:45.740 --> 00:13:46.680
+Agora, como resolvermos isso?
+
+00:13:47.120 --> 00:13:49.700
+Três proteções são inegociáveis se você quer autonomia sem calça.
+
+00:13:50.300 --> 00:13:52.660
+Primeiro, acesso baseado em função e permissões de escopo
+
+00:13:52.660 --> 00:13:54.100
+vinculadas à própria identidade do agente.
+
+00:13:54.520 --> 00:13:56.860
+Não permita que os agentes herdem poderes semelhantes ao agente do orgulho.
+
+00:13:57.260 --> 00:13:58.900
+Trate-os com contas de serviço intencionais.
+
+00:13:59.540 --> 00:14:01.300
+Defina o que o bot pode acessar e nada além disso.
+
+00:14:02.560 --> 00:14:04.760
+Segundo, classificação e aplicação de políticas de dados,
+
+00:14:04.960 --> 00:14:05.920
+normalmente com Azure Purview.
+
+00:14:05.920 --> 00:14:08.980
+É assim que você impede que os agentes enviem folhas de pagamento confidenciais
+
+00:14:08.980 --> 00:14:09.840
+para sites de equipes PUL.
+
+00:14:10.560 --> 00:14:12.560
+A classificação e os rótulos de sensibilidade
+
+00:14:12.560 --> 00:14:15.500
+fazem a diferença entre um pequeno contratempo e uma falha de conformidade.
+
+00:14:16.560 --> 00:14:18.860
+Terceiro, registro obrigatório e memória baseada em sessão.
+
+00:14:19.380 --> 00:14:22.120
+Isso lhe dá um registro rastreável do que o agente viu e por que ele agiu.
+
+00:14:23.420 --> 00:14:25.980
+Sem uma trilha de auditoria, você estará explicando aos reguladores
+
+00:14:25.980 --> 00:14:28.440
+se nós não sabemos o que não ajuda em nada na sua carreira.
+
+00:14:29.160 --> 00:14:30.060
+Aqui está a outra lava, meu clito.
+
+00:14:30.060 --> 00:14:33.500
+Se um agente age com ou sem aprovação humana, a decisão é sua.
+
+00:14:34.180 --> 00:14:34.800
+Seu configurável.
+
+00:14:35.240 --> 00:14:38.400
+Se for financeiro, RH ou qualquer tarefa que grave em registros principais
+
+00:14:38.400 --> 00:14:39.940
+exija sempre a aprovação por padrão.
+
+00:14:40.820 --> 00:14:42.480
+O clique para prosseguir deve ser integrado,
+
+00:14:42.640 --> 00:14:45.280
+a menos que você queira bot editando a folha de pagamento às 2 da manhã.
+
+00:14:45.840 --> 00:14:48.660
+Se forem itens de baixo risco, como exibir documentos ou resumir reuniões,
+
+00:14:49.020 --> 00:14:50.240
+a autonomia pode ser aceitada.
+
+00:14:50.500 --> 00:14:52.980
+Mas você decide de antemão em qual categoria a tarefa se encaixa
+
+00:14:52.980 --> 00:14:54.480
+e configura as aprovações de acordo.
+
+00:14:54.480 --> 00:14:57.000
+O gerenciamento de memória também não recebe ação suficiente.
+
+00:14:57.000 --> 00:15:00.100
+Sem idis de sessão estruturadas e armazenamento por agente,
+
+00:15:00.200 --> 00:15:01.860
+seu bot agirá como um peixinho esquecido
+
+00:15:01.860 --> 00:15:04.040
+ou se tornará uma caixa preta com recordação obscura.
+
+00:15:04.740 --> 00:15:06.400
+O exemplo do agente de reserva de viagens
+
+00:15:06.400 --> 00:15:09.060
+mostrou como a Microsoft armazena idis de conversação e de sessão
+
+00:15:09.060 --> 00:15:11.240
+para que você possa repetir ações e apagá-las se necessário.
+
+00:15:12.140 --> 00:15:12.980
+Isso é higiene de memória.
+
+00:15:13.620 --> 00:15:16.240
+Como administrador, exige escopo por agente e por sessão
+
+00:15:16.240 --> 00:15:18.360
+para que um único agente não carregue um contexto que não deveria.
+
+00:15:18.980 --> 00:15:22.080
+E exija sempre a capacidade de limpar a memória de objetos específicos
+
+00:15:22.080 --> 00:15:23.740
+se a conformidade aparecer com perguntas.
+
+00:15:24.180 --> 00:15:26.340
+Pense na governança como graz de proteção em estrada de mandú.
+
+00:15:26.340 --> 00:15:27.980
+Ninguém as coloca para estragar a viagem.
+
+00:15:28.580 --> 00:15:31.080
+Elas estão lá para que o momento de distração não faça você sair da pista.
+
+00:15:31.560 --> 00:15:33.700
+Na prática, acesso baseado em função, permissões de escopo,
+
+00:15:33.800 --> 00:15:36.160
+classificação de dados e registro de logs não são para tirar de versão.
+
+00:15:36.560 --> 00:15:37.160
+Eles são sensíveis.
+
+00:15:37.560 --> 00:15:39.740
+Eles mantêm seu TNA funcionando quando o inesperado acontece.
+
+00:15:40.160 --> 00:15:41.140
+Vamos colocar isso em prática.
+
+00:15:42.000 --> 00:15:43.140
+Antes de ativar a autonomia,
+
+00:15:43.720 --> 00:15:45.500
+garanta o airbag para identidade de agente,
+
+00:15:45.840 --> 00:15:48.200
+aplique rótulos de sensibilidade a todas as fontes de dados,
+
+00:15:48.380 --> 00:15:49.840
+habilite trilhas de auditoria completas
+
+00:15:49.840 --> 00:15:51.820
+e exija fluxo de aprovação para operações de escrita.
+
+00:15:52.180 --> 00:15:53.720
+Essa é sua lista de verificação prévia.
+
+00:15:53.720 --> 00:15:56.460
+Pule um item e você estará pedindo pela versão de TI para dados dos bots.
+
+00:15:56.900 --> 00:15:58.340
+Veja novamente aquele sistema de agendamento.
+
+00:15:58.620 --> 00:15:59.740
+Se estiver muito solto,
+
+00:15:59.800 --> 00:16:02.040
+ele envia uma lista de convidados confidencial para todos os participantes
+
+00:16:02.040 --> 00:16:03.100
+como se estivesse lhe fazendo um favor.
+
+00:16:03.620 --> 00:16:04.780
+Com a governança ajustada,
+
+00:16:04.980 --> 00:16:06.580
+ele verifica os rótulos de sensibilidade,
+
+00:16:06.680 --> 00:16:08.040
+respeita a distribuição por escopo
+
+00:16:08.040 --> 00:16:09.520
+e evita a exposição de dados.
+
+00:16:10.480 --> 00:16:11.600
+Mesma ferramenta, dois resultados.
+
+00:16:12.000 --> 00:16:14.180
+Não é um aumento de produtividade que seu CEO vai ostentar.
+
+00:16:14.740 --> 00:16:16.140
+O outro faz-se ser arrastado para uma reunião
+
+00:16:16.140 --> 00:16:17.600
+com o departamento jurídico no Viva Voz.
+
+00:16:17.720 --> 00:16:19.560
+E a responsável não é burocracia,
+
+00:16:19.660 --> 00:16:20.720
+é equipamento de sobrevivência.
+
+00:16:20.720 --> 00:16:22.840
+Com diretrizes de segurança,
+
+00:16:22.980 --> 00:16:24.540
+os agentes se tornam colegas de equipe confiáveis
+
+00:16:24.540 --> 00:16:26.060
+que operam rapidamente e registram cada um.
+
+00:16:26.400 --> 00:16:28.600
+Sem diretrizes, eles são crianças com ferramentas elétricas.
+
+00:16:29.520 --> 00:16:31.540
+Sua decisão determina qual versão chega à produção.
+
+00:16:32.100 --> 00:16:33.720
+E isso não é apenas sobre os Copilot de hoje.
+
+00:16:34.120 --> 00:16:36.080
+A próxima onda de agentes já está no horizonte.
+
+00:16:36.340 --> 00:16:37.580
+Eles não vão apenas redigir e-mails,
+
+00:16:37.680 --> 00:16:39.240
+vão clicar em botões e controlar interfaces.
+
+00:16:39.820 --> 00:16:41.000
+Isso eleva ainda mais o nível de risco.
+
+00:16:41.600 --> 00:16:42.440
+De bots low-code,
+
+00:16:42.800 --> 00:16:44.040
+agentes com tecnologia magma.
+
+00:16:44.040 --> 00:16:47.180
+O Copilot Studio de hoje ainda parece escrever macros no Excel útil,
+
+00:16:47.260 --> 00:16:50.740
+mas deselegante para os agentes com magma de amanhã.
+
+00:16:51.660 --> 00:16:53.120
+Pense menos em um assistente de macros
+
+00:16:53.120 --> 00:16:55.080
+e mais em um colega júnior que monitora painéis,
+
+00:16:55.180 --> 00:16:57.360
+navega por telas e executa fluxos de trabalho completos
+
+00:16:57.360 --> 00:16:59.140
+antes mesmo de você terminar seu primeiro café.
+
+00:17:00.520 --> 00:17:01.920
+Essa é a mudança que está por...
+
+00:17:01.920 --> 00:17:03.920
+O Copilot Studio são rodinhas de treinamento,
+
+00:17:04.040 --> 00:17:05.620
+o magma é o motor que transforma a bicicleta
+
+00:17:05.620 --> 00:17:07.740
+em algo mais próximo de uma moto de trilha com nitro.
+
+00:17:08.780 --> 00:17:10.240
+Aqui está o que realmente torna o magma diferente.
+
+00:17:10.240 --> 00:17:12.300
+Ele não se limita a prompt de texto.
+
+00:17:12.380 --> 00:17:14.280
+É um modelo VLA, visão, linguagem e ação.
+
+00:17:14.740 --> 00:17:15.940
+Multimodal que processa imagens,
+
+00:17:16.060 --> 00:17:17.460
+vídeo, layouts de tela e movimento,
+
+00:17:17.640 --> 00:17:19.780
+tudo sobreposto a um modelo de linguagem.
+
+00:17:21.300 --> 00:17:23.140
+Técnicas como Set of Marks ou M,
+
+00:17:23.300 --> 00:17:24.900
+onde elementos interativos como botões
+
+00:17:24.900 --> 00:17:26.140
+recebem rótulos numéricos,
+
+00:17:26.260 --> 00:17:27.240
+e Trace of Marks Pond,
+
+00:17:27.620 --> 00:17:29.580
+que rastreia objetos movendo-se ao longo do tempo,
+
+00:17:29.920 --> 00:17:32.000
+permitem que ele conecte o que vê com o que pode fazer.
+
+00:17:33.060 --> 00:17:35.160
+Isso significa que o magma não apenas lê sentenças,
+
+00:17:35.260 --> 00:17:36.360
+ele observa fluxos de UI,
+
+00:17:36.500 --> 00:17:37.400
+reconhece padrões como
+
+00:17:37.400 --> 00:17:39.020
+este botão leva à aprovação
+
+00:17:39.020 --> 00:17:40.420
+e aprende como agir.
+
+00:17:41.000 --> 00:17:42.620
+Não se trata apenas de pequenos experimentos.
+
+00:17:43.040 --> 00:17:45.640
+Ele foi treinado com cerca de 39 milhões de amostras multimodais,
+
+00:17:45.760 --> 00:17:47.060
+abrangendo capturas de tela de UI,
+
+00:17:47.240 --> 00:17:48.620
+trajetórias robóticas e dados de vídeo.
+
+00:17:49.360 --> 00:17:50.080
+É por isso que,
+
+00:17:50.340 --> 00:17:52.820
+ao contrário do escopo exclusivo de texto do Copilot Studio,
+
+00:17:53.200 --> 00:17:54.360
+o manual do magma se estende
+
+00:17:54.360 --> 00:17:55.260
+desde tocar em botão
+
+00:17:55.260 --> 00:17:56.680
+e gerenciar fluxo de navegação
+
+00:17:56.680 --> 00:17:58.200
+até mimetizar uma ação robótica
+
+00:17:58.200 --> 00:17:59.480
+que ele viu durante o treinamento.
+
+00:18:00.020 --> 00:18:00.900
+Essa mudança é importante.
+
+00:18:01.280 --> 00:18:03.340
+Os copilots hoje vivem na faixa de rascunho.
+
+00:18:03.680 --> 00:18:05.060
+E-mails, resumos, consultas,
+
+00:18:05.060 --> 00:18:07.060
+talvez dando leves toques e uma lista de tarefas.
+
+00:18:07.060 --> 00:18:09.280
+O magma opera na camada execução.
+
+00:18:09.760 --> 00:18:11.420
+Em vez de sugerir um rascunho no Outlook,
+
+00:18:11.580 --> 00:18:12.580
+agentes de nível magma
+
+00:18:12.580 --> 00:18:15.040
+podem reconhecer o botão de envio na interface e pressioná-lo.
+
+00:18:15.460 --> 00:18:17.460
+Em vez de apresentar um ponto de dados no Power BI,
+
+00:18:17.600 --> 00:18:18.540
+eles podem rolar o painel,
+
+00:18:18.620 --> 00:18:20.440
+isolar um gráfico e incluí-lo em um plano de ação
+
+00:18:20.440 --> 00:18:21.600
+para a liderança financeira.
+
+00:18:22.260 --> 00:18:24.160
+Pense na interação com a interface como uma linha divisória.
+
+00:18:24.740 --> 00:18:26.720
+Tudo antes do magma conseguir apenas redigir e propor.
+
+00:18:27.380 --> 00:18:28.840
+Tudo após o magma pode redigir,
+
+00:18:28.940 --> 00:18:30.320
+decidir e literalmente clicar.
+
+00:18:31.060 --> 00:18:32.880
+Ao cruzar a fronteira da automação por clique,
+
+00:18:32.880 --> 00:18:35.240
+suas diretrizes de segurança não podem mais parar no acesso aos dados.
+
+00:18:35.240 --> 00:18:38.240
+Elas também precisam abranger ações na interface
+
+00:18:38.240 --> 00:18:39.920
+para que um agente não comece a vagar por menus
+
+00:18:39.920 --> 00:18:41.200
+que você nunca quis que ele tocasse.
+
+00:18:41.900 --> 00:18:42.520
+Imagine um cenário.
+
+00:18:43.000 --> 00:18:44.700
+O agente está conectado ao seu painel financeiro.
+
+00:18:45.460 --> 00:18:45.960
+A receita cai.
+
+00:18:46.640 --> 00:18:47.620
+Em vez de apenas sinalizar,
+
+00:18:47.700 --> 00:18:48.820
+talvez você queira alertar a liderança.
+
+00:18:49.340 --> 00:18:51.560
+Ele dispara uma publicação no canal de finanças do Teams,
+
+00:18:51.680 --> 00:18:52.740
+anexa um rascunho de relatório
+
+00:18:52.740 --> 00:18:54.080
+e atualiza os registros do CRM
+
+00:18:54.080 --> 00:18:55.580
+para preparar ofertas aos clientes em risco.
+
+00:18:56.140 --> 00:18:57.220
+Você aprovou esse fluxo de trabalho?
+
+00:18:57.620 --> 00:18:58.040
+Talvez não,
+
+00:18:58.340 --> 00:18:59.600
+mas a autonomia em nível de interface
+
+00:18:59.600 --> 00:19:01.860
+significa que o agente não precisa de uma P de composição de e-mail.
+
+00:19:01.860 --> 00:19:05.220
+Ele observou como os painéis e os fluxos de retenção funcionam
+
+00:19:05.220 --> 00:19:07.180
+e construiu a sequência de cliques por conta própria.
+
+00:19:08.180 --> 00:19:10.400
+O tempo que você economiza traz uma nova sobrecarga
+
+00:19:10.400 --> 00:19:11.760
+ao ditar quais etapas o agente seguiu
+
+00:19:11.760 --> 00:19:13.400
+e verificar se elas estavam alinhadas com sua política.
+
+00:19:14.220 --> 00:19:16.440
+A estrutura técnica explica por que ele consegue realizar isso.
+
+00:19:17.240 --> 00:19:19.820
+Magma é baseado em um modelo CompNext XL para visão
+
+00:19:19.820 --> 00:19:22.040
+e um modelo Lhama 3.8b para linguagem.
+
+00:19:22.820 --> 00:19:25.520
+Ele processa texto, frames e ações com um contexto compartilhado.
+
+00:19:25.520 --> 00:19:28.740
+Assim, M2M fornece uma forma estruturada
+
+00:19:28.740 --> 00:19:29.960
+de transmitir etapas visuais
+
+00:19:29.960 --> 00:19:31.480
+identificando botões, rastreando objetos
+
+00:19:31.480 --> 00:19:33.420
+e encadeando fluxos de várias etapas.
+
+00:19:34.260 --> 00:19:35.300
+E é por isso que em testes
+
+00:19:35.300 --> 00:19:36.560
+o Magma supermodeu os anteriores
+
+00:19:36.560 --> 00:19:38.220
+tanto na precisão de navegação de interface
+
+00:19:38.220 --> 00:19:39.680
+quanto em tarefas de controle robótico.
+
+00:19:40.140 --> 00:19:41.420
+Ele não resolve apenas um tipo de problema.
+
+00:19:41.840 --> 00:19:43.500
+Ele é treinado para generalizar etapas
+
+00:19:43.500 --> 00:19:44.320
+em múltiplos ambientes,
+
+00:19:44.480 --> 00:19:45.860
+seja manipulando um braço robótico
+
+00:19:45.860 --> 00:19:46.760
+ou clicando pelo SAP.
+
+00:19:47.480 --> 00:19:48.200
+Para administradores,
+
+00:19:48.280 --> 00:19:49.320
+isso significa que não se trata apenas
+
+00:19:49.320 --> 00:19:50.220
+de uma atualização de chat.
+
+00:19:50.940 --> 00:19:51.940
+É a primeira onda de bots
+
+00:19:51.940 --> 00:19:53.820
+tratando seu tenente como um ambiente operacional
+
+00:19:53.820 --> 00:19:55.220
+que eles podem navegar à vontade.
+
+00:19:56.040 --> 00:19:56.880
+Não surpreende, então,
+
+00:19:56.940 --> 00:19:57.980
+que frameworks de orquestração
+
+00:19:57.980 --> 00:19:59.080
+como AutoGen, Langchain
+
+00:19:59.080 --> 00:19:59.980
+ou Assistant's API
+
+00:19:59.980 --> 00:20:01.700
+estejam sendo mencionados com mais frequência.
+
+00:20:02.520 --> 00:20:03.540
+É como os desenvolvedores
+
+00:20:03.540 --> 00:20:04.880
+encadeiam múltiplos agentes.
+
+00:20:05.140 --> 00:20:05.780
+Um planejando,
+
+00:20:05.960 --> 00:20:06.640
+outro executando
+
+00:20:06.640 --> 00:20:07.360
+e outro validando.
+
+00:20:08.340 --> 00:20:09.320
+Administradores não precisam aprender
+
+00:20:09.320 --> 00:20:10.340
+esses kits de ferramentas hoje,
+
+00:20:10.400 --> 00:20:11.100
+mas devem ficar atentos aí.
+
+00:20:11.980 --> 00:20:12.700
+Eles são o encanamento
+
+00:20:12.700 --> 00:20:13.680
+que transforma um agente Magma
+
+00:20:13.680 --> 00:20:14.520
+em uma equipe de agentes
+
+00:20:14.520 --> 00:20:15.960
+operando em tarefas compartilhadas.
+
+00:20:17.320 --> 00:20:18.560
+E se a orquestração estiver rodando
+
+00:20:18.560 --> 00:20:19.180
+no seu tenente,
+
+00:20:19.400 --> 00:20:20.860
+é melhor saber quais agentes estão no comando
+
+00:20:20.860 --> 00:20:22.180
+e quais diretrizes cada um segue.
+
+00:20:23.100 --> 00:20:23.800
+Aqui está a arma de
+
+00:20:23.800 --> 00:20:24.980
+Menos cliques para você
+
+00:20:24.980 --> 00:20:25.940
+não significa menos risco.
+
+00:20:26.640 --> 00:20:27.880
+Quando os agentes começam a lidar
+
+00:20:27.880 --> 00:20:29.020
+com tarefas de interface,
+
+00:20:29.160 --> 00:20:30.220
+configurações incorretas
+
+00:20:30.220 --> 00:20:31.340
+não apenas expõem dados,
+
+00:20:31.480 --> 00:20:32.700
+elas arriscam a execução direta
+
+00:20:32.700 --> 00:20:33.740
+de fluxos de trabalho.
+
+00:20:35.160 --> 00:20:36.460
+Se a governança não se expandir
+
+00:20:36.460 --> 00:20:37.680
+para cobrir não só quais dados
+
+00:20:37.680 --> 00:20:38.360
+os agentes veem,
+
+00:20:38.420 --> 00:20:39.900
+mas quais ações tomam na interface,
+
+00:20:40.000 --> 00:20:40.920
+o primeiro erro pode ser
+
+00:20:40.920 --> 00:20:41.640
+em cascata.
+
+00:20:43.020 --> 00:20:44.540
+Reatribuir tarefas incorretamente,
+
+00:20:45.180 --> 00:20:46.220
+aprovar despesas indevidas
+
+00:20:46.220 --> 00:20:47.040
+ou encaminhar erroneamente
+
+00:20:47.040 --> 00:20:48.300
+a comunicações de clientes.
+
+00:20:49.460 --> 00:20:50.600
+Quanto mais rápido a gente age,
+
+00:20:50.900 --> 00:20:52.160
+mais rápido esses erros se propagam.
+
+00:20:52.160 --> 00:20:53.840
+Portanto, o caminho a seguir é claro,
+
+00:20:54.040 --> 00:20:54.980
+ainda que seja complexo.
+
+00:20:55.680 --> 00:20:57.300
+Hoje, temos copilots em estúdio,
+
+00:20:57.480 --> 00:20:58.280
+limitados e isolados,
+
+00:20:58.340 --> 00:20:59.300
+onde você monitora fluxos
+
+00:20:59.300 --> 00:21:00.240
+e restringe permissões.
+
+00:21:00.900 --> 00:21:02.380
+Amanhã, uma força magnética,
+
+00:21:02.480 --> 00:21:03.600
+multimodal e pronta para agir,
+
+00:21:03.700 --> 00:21:04.340
+executando manuais
+
+00:21:04.340 --> 00:21:05.440
+que você não programou manualmente.
+
+00:21:06.120 --> 00:21:07.700
+Entre eles está a sua estratégia de governança.
+
+00:21:08.040 --> 00:21:09.220
+E se você acha que as proteções de hoje
+
+00:21:09.220 --> 00:21:09.920
+impedem erros,
+
+00:21:10.220 --> 00:21:11.340
+a era das ações via interfaces
+
+00:21:11.340 --> 00:21:12.520
+dirá barreiras mais robustas
+
+00:21:12.520 --> 00:21:13.520
+e controles mais rígidos.
+
+00:21:13.980 --> 00:21:15.260
+Porque, no final das contas,
+
+00:21:15.340 --> 00:21:16.480
+esses agentes não são apenas
+
+00:21:16.480 --> 00:21:17.660
+chatbots mais inteligentes.
+
+00:21:17.660 --> 00:21:19.140
+Se eles se comportarão como colegas
+
+00:21:19.140 --> 00:21:20.640
+que não precisam de login,
+
+00:21:20.820 --> 00:21:22.480
+treinamento ou permissão prévia.
+
+00:21:24.020 --> 00:21:25.560
+E se esse futuro será uma vitória
+
+00:21:25.560 --> 00:21:26.140
+ou um pesadelo,
+
+00:21:26.260 --> 00:21:26.920
+depende inteiramente
+
+00:21:26.920 --> 00:21:28.480
+de quão rígidas são suas proteções
+
+00:21:28.480 --> 00:21:30.160
+ao ligar o sistema pela primeira vez.
+
+00:21:31.280 --> 00:21:32.040
+Então, aqui está o resumo
+
+00:21:32.040 --> 00:21:32.740
+para os administradores.
+
+00:21:33.320 --> 00:21:34.180
+Os agentes com o pilot
+
+00:21:34.180 --> 00:21:35.080
+já estão chegando
+
+00:21:35.080 --> 00:21:37.240
+e a diferença entre um auxiliar útil
+
+00:21:37.240 --> 00:21:38.240
+e uma grande bagunça
+
+00:21:38.240 --> 00:21:40.160
+depende de como você os implementa.
+
+00:21:40.160 --> 00:21:41.880
+Antenha a simplicidade
+
+00:21:41.880 --> 00:21:42.480
+com três passos.
+
+00:21:42.780 --> 00:21:43.740
+Primeiro, pilote apenas
+
+00:21:43.740 --> 00:21:44.560
+agentes previsíveis
+
+00:21:44.560 --> 00:21:45.300
+e de baixo risco
+
+00:21:45.300 --> 00:21:46.720
+como autoatendimento de RH ou TI
+
+00:21:46.720 --> 00:21:47.900
+antes de tocar em cenários
+
+00:21:47.900 --> 00:21:48.760
+voltados ao cliente.
+
+00:21:49.520 --> 00:21:50.660
+Segundo, bloqueie permissões
+
+00:21:50.660 --> 00:21:51.700
+e exige aprovação humana
+
+00:21:51.700 --> 00:21:52.180
+para qualquer coisa
+
+00:21:52.180 --> 00:21:53.260
+que grave dados em seus sistemas.
+
+00:21:54.400 --> 00:21:55.200
+Terceiro, implemente
+
+00:21:55.200 --> 00:21:56.180
+registro de memória e auditoria
+
+00:21:56.180 --> 00:21:57.200
+para rastrear cada sessão
+
+00:21:57.200 --> 00:21:57.740
+e limpar o estado
+
+00:21:57.740 --> 00:21:58.480
+sempre que necessário.
+
+00:21:59.040 --> 00:22:00.160
+O pilot se economiza um tempo,
+
+00:22:00.240 --> 00:22:00.840
+mas é melhor que a TI
+
+00:22:00.840 --> 00:22:02.000
+mantenha as chaves do carro da empresa.
+
+00:22:02.520 --> 00:22:03.100
+Faça o básico,
+
+00:22:03.180 --> 00:22:04.220
+delimite a audite de pilotes
+
+00:22:04.220 --> 00:22:04.980
+e os agentes se tornarão
+
+00:22:04.980 --> 00:22:05.780
+auxiliares confiáveis
+
+00:22:05.780 --> 00:22:06.700
+não fonte de dor de cabeça.
+
+00:22:06.700 --> 00:22:08.020
+Inscreva-se na newsletter
+
+00:22:08.020 --> 00:22:09.680
+do M365 Show
+
+00:22:09.680 --> 00:22:11.000
+para mais manuais diretos ao ponto
+
+00:22:11.000 --> 00:22:12.700
+e siga a página do M365 Show
+
+00:22:12.700 --> 00:22:13.100
+no LinkedIn
+
+00:22:13.100 --> 00:22:14.180
+para lives com MVPs
+
+00:22:14.180 --> 00:22:14.820
+que já quebraram
+
+00:22:14.820 --> 00:22:16.240
+e consertaram tudo isso antes.

@@ -1,0 +1,973 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:03.920
+Hallo zusammen und herzlich willkommen zu einer weiteren Folge von Microsoft Knowledge Nuggets hier auf M355.
+
+00:00:04.200 --> 00:00:05.580
+FM, ich bin Ihr Gastgeber Mirko Peters.
+
+00:00:06.040 --> 00:00:10.940
+Heute befassen wir uns mit etwas, von dem jeder, der mit KI arbeitet, schon gehört hat, das aber kaum jemand einfach erklären kann.
+
+00:00:11.580 --> 00:00:13.400
+Es ist das Model Context Protocol, kurz MCP.
+
+00:00:13.760 --> 00:00:14.380
+Stellen Sie sich folgendes.
+
+00:00:14.640 --> 00:00:19.820
+Sie sind in Teams und stellen Ihrem KI-Assistenten eine einfache Frage wie, wie ist der Status des Johnson-Projekts?
+
+00:00:20.140 --> 00:00:22.300
+Und er antwortet, es tut mir leid, ich kann auf diese Information nicht zugreifen.
+
+00:00:22.940 --> 00:00:23.580
+Und Ihnen das bekannt vor.
+
+00:00:23.880 --> 00:00:27.160
+Die KI ist intelligent, das Modell leistungsstark, aber es kann Ihre Daten nicht sehen.
+
+00:00:27.160 --> 00:00:30.220
+Es ist von den Systemen getrennt, in denen Ihre eigentliche Arbeit stattfindet.
+
+00:00:30.620 --> 00:00:32.340
+Das ist das Kernproblem, das MCP löst.
+
+00:00:32.800 --> 00:00:40.200
+Am Ende dieser Folge werden Sie verstehen, was MCP eigentlich ist, warum es für jeden Microsoft 365 Nutzer wichtig ist und wie es verändert, was KI für Sie tun kann.
+
+00:00:40.740 --> 00:00:41.880
+Wir gliedern das Ganze in Bausteine.
+
+00:00:42.540 --> 00:00:45.600
+Das Problem, die Lösung, die Funktionsweise und die Bedeutung für Microsoft.
+
+00:00:46.260 --> 00:00:49.100
+Beginnen wir also mit dem Problem, denn Sie haben es wahrscheinlich selbst schon erlebt.
+
+00:00:50.440 --> 00:00:51.140
+Das Problem.
+
+00:00:51.760 --> 00:00:53.540
+Jedes KI-Tool musste maßgeschneidert werden.
+
+00:00:53.540 --> 00:01:03.680
+Vor MCP mussten Sie für jede nützliche Aufgabe Ihres KI-Assistenten, etwa den Kalender prüfen, eine Datei aus SharePoint abrufen oder einen Kundendatensatz in Dynamics suchen, eigenen Codes schreiben.
+
+00:01:04.800 --> 00:01:07.460
+Jede einzelne Verbindung, jede einzelne Datenquelle, separater Code.
+
+00:01:08.100 --> 00:01:08.580
+Hier liegt das Problem.
+
+00:01:09.040 --> 00:01:10.880
+Jedes System spricht seine eigene API-Sprache.
+
+00:01:11.400 --> 00:01:15.540
+Ihr Kalender nutzt ein Format, SharePoint, ein anderes und Dynamics wieder ein ganz anderes zu...
+
+00:01:15.540 --> 00:01:20.080
+unterschiedliche Authentifizierung, unterschiedliche Regeln, unterschiedliche Arten, Daten abzufragen und zu erhalten.
+
+00:01:20.460 --> 00:01:24.000
+Wenn Ihre KI mit drei Systemen kommunizieren sollte, mussten Sie drei benutzerdefinierte Konnektoren bauen.
+
+00:01:24.240 --> 00:01:25.000
+Betrachten Sie es einmal so.
+
+00:01:25.340 --> 00:01:28.560
+Stellen Sie sich vor, Sie sind in Ihrem Wohnzimmer mit einem Fernseher, einer Stereoanlage und einer Intelligenz.
+
+00:01:28.920 --> 00:01:32.880
+Jedes Gerät hat seine eigene Fernbedienung und keine dieser Fernbedienungen funktioniert mit einem Gerät.
+
+00:01:33.280 --> 00:01:37.700
+Sie brauchen die TV-Fernbedienung für den Fernseher, die Stereo-Fernbedienung für die Anlage und eine separate App für die Beleuchtung.
+
+00:01:38.200 --> 00:01:40.360
+So sah die KI-Entwicklung vor MCP aus.
+
+00:01:41.140 --> 00:01:43.080
+Jedes Tool benötigte eine eigene spezifische Integration.
+
+00:01:43.760 --> 00:01:45.360
+Für Microsoft-Nutzer trifft dies einen Wundenpunkt.
+
+00:01:45.820 --> 00:01:48.300
+Denken Sie daran, was Co-Pilot alles tun muss, wenn Sie ihm eine Frage stellen.
+
+00:01:48.980 --> 00:01:54.340
+Er muss eventuell Ihren Exchange-Kalender nach Termin durchsuchen, E-Mails eines bestimmten Kunden lesen oder einen Datensatz in Dynamics nachschlagen.
+
+00:01:55.000 --> 00:01:59.200
+Das sind drei verschiedene IPA-Verbindungen, drei separate Integrationen, die jeweils eigene Entwicklungsarbeit erfordern.
+
+00:01:59.640 --> 00:02:00.100
+Das Ergebnis?
+
+00:02:00.540 --> 00:02:02.740
+Die meisten KI-Tools wählten den einfachen Weg und blieben genährt.
+
+00:02:03.040 --> 00:02:06.580
+Sie stellten eine Frage zu Ihrer Arbeit und die KI antwortete, ich kann auf diese Daten nicht zugreifen.
+
+00:02:06.580 --> 00:02:08.360
+Oder ich muss erst eine Verbindung konfigurieren.
+
+00:02:09.120 --> 00:02:12.660
+Echte Integration bedeutete teure Eigenentwicklung und die meisten Organisationen schafften das nie.
+
+00:02:13.500 --> 00:02:14.340
+Nun zum entscheidenden Punkt.
+
+00:02:14.340 --> 00:02:16.960
+Das große Sprachmodell an sich ist unglaublich leistungsfähig.
+
+00:02:17.560 --> 00:02:22.300
+Es kann Schlussfolgern, zusammenfassen, generieren und analysieren, aber ohne Zugriff auf Ihre tatsächlichen Daten ist es blind.
+
+00:02:22.960 --> 00:02:26.760
+Es ist, als hätte man den intelligentesten Assistenten der Welt in einem fensterlosen Raum eingeschlossen.
+
+00:02:26.760 --> 00:02:29.080
+Er kann brillant denken, aber bei nichts Konkretem helfen.
+
+00:02:30.480 --> 00:02:32.100
+Die Lösung? MCP als universeller Stecker?
+
+00:02:32.820 --> 00:02:34.180
+Was also, wenn es einen universellen Stecker gäbe?
+
+00:02:34.920 --> 00:02:39.580
+Ein Standardweg, um jede KI mit jeder Datenquelle zu verbinden, ohne für jede Verbindung eigenen Code zu schreiben?
+
+00:02:40.240 --> 00:02:42.820
+Genau das ist es, was das Model-Context-Protokoll tut, kurz MCP.
+
+00:02:43.380 --> 00:02:43.940
+Kurz MCP.
+
+00:02:43.940 --> 00:02:48.540
+Anthropic, das Unternehmen hinter Cloud, führte es Ende 2024 ein und es verbreitete sich schnell.
+
+00:02:49.160 --> 00:02:54.640
+MCP ist ein offener Standard, der eine einheitliche Art definiert, wie KI-Anwendungen mit Tools und Datenquellen kommunizieren.
+
+00:02:55.180 --> 00:02:56.060
+Denken Sie an USB-C.
+
+00:02:56.640 --> 00:02:59.540
+Vor USB-C brauchte jedes Gerät sein eigenes spezielles Kabel.
+
+00:03:00.280 --> 00:03:03.300
+Ihr Telefon nutzte eine Art, Ihr Laptop eine andere und Ihre Kopfhörer eine dritte.
+
+00:03:03.300 --> 00:03:05.640
+Man hatte eine Schublade voller Kabel und fand nie das Richtige.
+
+00:03:05.940 --> 00:03:08.880
+Dann kam USB-C, ein Kabel, ein Standard und alles funktioniert einfach.
+
+00:03:09.460 --> 00:03:10.820
+MCP bewirkt das gleiche Verbindungen.
+
+00:03:11.340 --> 00:03:16.280
+Ein Protokoll funktioniert für Datenbanken, Dateisysteme, Web-APIs und ja sogar für Microsoft-Dienste.
+
+00:03:17.000 --> 00:03:23.240
+Statt für jede Datenquelle eigene Konnektoren zu bauen, erstellen Sie einen MCP-Server, den jede kompatible KI-Anwendung nutzen kann.
+
+00:03:24.180 --> 00:03:25.100
+Die Verbreitung geschah schnell.
+
+00:03:25.860 --> 00:03:31.500
+Innerhalb weniger Monate entstanden tausende vorgefertigte MCP-Server für Google Drive, GitHub, Slack und Datenbanken wie PostgreSQL und SQLite.
+
+00:03:31.500 --> 00:03:35.240
+Und für Microsoft-Nutzer wird es jetzt richtig interessant.
+
+00:03:35.980 --> 00:03:39.860
+Ihre KI-Tools können sich nun mit SharePoint, Exchange, Dynamics und der Power-Plattform verbinden.
+
+00:03:40.220 --> 00:03:41.660
+Alles über dieselbe Standardschnittstelle.
+
+00:03:42.160 --> 00:03:44.280
+Das Fazit, Sie müssen keine individuellen Verbindungen mehr bauen.
+
+00:03:44.720 --> 00:03:48.320
+Sie verbinden sich mit MCP, ein Protokoll, jede Datenquelle, jede KI-Anwendung.
+
+00:03:48.440 --> 00:03:49.220
+Das ist die Magie dabei.
+
+00:03:49.900 --> 00:03:51.500
+Die Architektur Host, Client und Server.
+
+00:03:51.980 --> 00:03:53.580
+Wie funktioniert das Ganze also hinter den Kulissen?
+
+00:03:54.020 --> 00:03:54.720
+Lassen Sie mich das auflösen.
+
+00:03:55.200 --> 00:03:57.220
+MCP verwendet ein einfaches dreitelliges Setup.
+
+00:03:57.320 --> 00:03:58.400
+Host, Client und Server.
+
+00:03:58.400 --> 00:04:01.640
+Sobald man diese drei Teile versteht, macht es sofort Klick.
+
+00:04:02.320 --> 00:04:04.360
+Der Host ist die KI-Anwendung, die Sie tatsächlich verwenden.
+
+00:04:05.200 --> 00:04:09.120
+Das könnte Copilot in Microsoft-Treffen für den Firmensektor oder ein von Ihnen selbst gebauter Agent sein.
+
+00:04:09.920 --> 00:04:11.460
+Der Host ist der Ort, an dem Sie Ihre Frage stellen.
+
+00:04:11.820 --> 00:04:13.100
+Er ist der Teil, der dem Benutzer zugewandt ist.
+
+00:04:13.520 --> 00:04:16.280
+Innerhalb dieses Hosts befindet sich der sogenannte MCP-Client.
+
+00:04:16.700 --> 00:04:18.400
+Dies ist der Teil, der das MCP-Protokoll spricht.
+
+00:04:18.920 --> 00:04:23.300
+Sie sehen ihn nicht und interagieren nicht direkt mit ihm, aber er ist der Übersetzer, der mit MCP-Servern kommunizieren kann.
+
+00:04:23.760 --> 00:04:24.620
+Dann gibt es noch den Server.
+
+00:04:24.620 --> 00:04:30.180
+Der MCP-Server ist ein leichtgewichtiges Programm, das zwischen Ihrer KI-Anwendung und Ihrer eigentlichen Datenquelle sitzt.
+
+00:04:30.760 --> 00:04:33.080
+Er stellt Werkzeuge und Ressourcen bereit, die die KI nutzen kann.
+
+00:04:33.460 --> 00:04:36.920
+Der Server weiß, wer Ihre SharePoint-Seite, Ihr Exchange-Postfach oder Ihre Dynamics-Datenbank erreicht.
+
+00:04:37.400 --> 00:04:39.020
+Die KI muss keine dieser Details kennen.
+
+00:04:39.560 --> 00:04:40.380
+Sie spricht einfach nur mit dem Server.
+
+00:04:40.800 --> 00:04:41.860
+So sieht der Datenfluss aus.
+
+00:04:41.860 --> 00:04:46.160
+Wenn Sie Ihrer KI eine Frage stellen, geht die Anfrage vom Host an den MCP-Client.
+
+00:04:46.680 --> 00:04:49.220
+Der Client sendet eine Nachricht über das MCP-Protokoll an den Server.
+
+00:04:49.680 --> 00:04:52.880
+Der Server greift auf Ihre Datenquelle zu, ruft ab, was Sie benötigen und sendet es zurück.
+
+00:04:53.380 --> 00:04:55.680
+Vom Host zum Client, über das Protokoll zum Server und zu Ihren Daten.
+
+00:04:56.160 --> 00:04:57.600
+Sauber, einfach und standardisiert.
+
+00:04:57.980 --> 00:04:59.000
+Dähen Sie sich wie ein Restaurant vor.
+
+00:04:59.320 --> 00:05:00.540
+Der Host sendet Sie, wie Sie am Tisch sitzen.
+
+00:05:01.060 --> 00:05:04.060
+Der MCP-Client ist der Kellner, der Ihre Bestellung aufnimmt und in die Küche bringt.
+
+00:05:04.400 --> 00:05:05.860
+Und der MCP-Server ist die Küche selbst.
+
+00:05:06.100 --> 00:05:07.760
+Sie müssen nicht wissen, wie die Küche funktioniert.
+
+00:05:08.440 --> 00:05:10.720
+Sie sagen dem Kellner einfach, was Sie möchten und das Essen erscheint.
+
+00:05:10.720 --> 00:05:13.620
+Ein Host kann sich mit mehreren Servern gleichzeitig verbinden.
+
+00:05:14.460 --> 00:05:18.500
+So könnte Ihre KI in Teams auf SharePoint-Dokumente, Ihren Exchange-Kalender und Ihre Dynamics-Datensätze
+
+00:05:18.500 --> 00:05:20.080
+in einer einzigen Unterhaltung zugreifen.
+
+00:05:20.900 --> 00:05:23.700
+Die Kommunikation zwischen Client und Server verwendet JSON-RPC.
+
+00:05:24.920 --> 00:05:27.860
+Einfach eine leichtgewichtige, standardisierte Art, Nachrichten hin und her zu sehen.
+
+00:05:28.340 --> 00:05:30.300
+Kein hoher Overhead, keine benutzerdefinierte Vergabelung.
+
+00:05:31.000 --> 00:05:32.160
+Was MCP-Server enthalten?
+
+00:05:32.740 --> 00:05:34.400
+Werkzeuge, Ressourcen und Prompts.
+
+00:05:35.120 --> 00:05:37.740
+Was gibt ein MCP-Server der KI also, wenn Sie sich verbinden?
+
+00:05:38.160 --> 00:05:38.840
+Drei Dinge.
+
+00:05:38.840 --> 00:05:41.040
+Werkzeuge, Ressourcen und Prompt-Vorlagen.
+
+00:05:41.600 --> 00:05:44.820
+Betrachten Sie sie als Werkzeugkasten, auf den die KI zugreift, wenn sie etwas erledigen
+
+00:05:44.820 --> 00:05:45.040
+muss.
+
+00:05:45.520 --> 00:05:47.000
+Lassen Sie uns das einfach und verständlich aufschlüsseln.
+
+00:05:47.380 --> 00:05:48.060
+Erstens Werkzeuge.
+
+00:05:48.420 --> 00:05:51.400
+Werkzeuge sind Aktionen, die die KI ausführen kann und die tatsächlich Dinge in der realen
+
+00:05:51.400 --> 00:05:51.760
+Welt verändern.
+
+00:05:52.120 --> 00:05:55.500
+Ein Werkzeug könnte eine Datenbank durchsuchen, eine E-Mail versenden oder ein Dokument erstellen.
+
+00:05:55.960 --> 00:05:58.100
+Jedes Mal, wenn die KI ein Werkzeug aufruft, passiert etwas.
+
+00:05:58.600 --> 00:06:01.800
+Eine Datei wird gespeichert, eine Nachricht gesendet, ein Datensatz aktualisiert.
+
+00:06:02.300 --> 00:06:03.420
+Werkzeuge sind die Wärme des Systems.
+
+00:06:03.800 --> 00:06:04.780
+Sie sind das, was Dinge gegangen sind.
+
+00:06:04.780 --> 00:06:05.760
+Nun zu den Ressourcen.
+
+00:06:05.760 --> 00:06:08.400
+Ressourcen sind schreibgeschützte Informationen, die die KI ansehen kann.
+
+00:06:08.700 --> 00:06:12.480
+Eine Ressource könnte eine Kundenliste aus Dynamics sein, Richtliniendokument in SharePoint
+
+00:06:12.480 --> 00:06:14.140
+oder Besprechungsnotizen aus Teams sein.
+
+00:06:14.540 --> 00:06:18.300
+Die KI kann sie lesen, analysieren und referenzieren, aber sie kann sie nicht direkt über eine Ressource
+
+00:06:18.300 --> 00:06:18.640
+ändern.
+
+00:06:19.180 --> 00:06:21.920
+Sie geben der KI lediglich den Kontext, den sie für intelligenteres Arbeiten will.
+
+00:06:22.160 --> 00:06:23.220
+Dann gibt es noch Promptvorlagen.
+
+00:06:23.840 --> 00:06:26.060
+Dies sind vorgefertigte Anweisungen, die Ihnen Zeit sparen.
+
+00:06:26.060 --> 00:06:30.600
+Anstatt jedes Mal den perfekten Prompt zu erstellen, liefert Ihnen der Server ein, der bereits optimiert
+
+00:06:30.600 --> 00:06:30.840
+ist.
+
+00:06:31.500 --> 00:06:35.320
+Ein SharePoint-MCP-Server könnte beispielsweise eine Vorlage zum Zusammenfassen von Ordnerinhalten
+
+00:06:35.320 --> 00:06:35.640
+enthalten.
+
+00:06:36.240 --> 00:06:39.220
+Sie sagen einfach, fasse diesen Ordner zusammen und die Vorlage erledigt den Rest.
+
+00:06:39.820 --> 00:06:42.660
+Es ist, als hätte man eine spezielle Verknüpfung für Dinge, die man immer wieder tut.
+
+00:06:43.220 --> 00:06:45.320
+Hier ist ein konkretes Beispiel, um das Ganze zu verdeutlichen.
+
+00:06:45.620 --> 00:06:47.420
+Stellen Sie sich einen SharePoint-MCP-Server vor.
+
+00:06:47.800 --> 00:06:51.060
+Er bietet ein Tool namens Dokumente durchsuchen, das Dateien anhand von Schlüsselwörtern findet.
+
+00:06:51.060 --> 00:06:55.320
+Er bietet eine Ressource namens Websites auflisten, die schreibgeschützten Zugriff auf alle verfügbaren
+
+00:06:55.320 --> 00:06:56.420
+SharePoint-Websites ermöglicht.
+
+00:06:56.960 --> 00:07:00.860
+Und er enthält eine Promptvorlage namens Ordnerinhalt zusammenfassen, die der KI genau vorgibt, wie
+
+00:07:00.860 --> 00:07:02.520
+sie eine saubere Zusammenfassung präsentiert.
+
+00:07:03.060 --> 00:07:06.540
+Alles, was die KI benötigt, um Sie bei SharePoint zu unterstützen, ist dort an einem Ort zu finden.
+
+00:07:07.060 --> 00:07:07.940
+Nun zum interessanten Teil.
+
+00:07:08.340 --> 00:07:11.240
+Die KI entdeckt all dies automatisch, wenn sie eine Verbindung zum Server herstellt.
+
+00:07:11.820 --> 00:07:13.040
+Keine Vorprogrammierung erforderlich.
+
+00:07:13.480 --> 00:07:14.980
+Der Server stellt sich im Grunde selbst vor.
+
+00:07:15.680 --> 00:07:18.300
+Hier sind meine Tools, meine Ressourcen, meine Promptvorlagen.
+
+00:07:18.300 --> 00:07:21.040
+Und die KI findet selbst heraus, wie sie diese verwenden.
+
+00:07:21.380 --> 00:07:22.560
+Das macht MCP so leistungsfähig?
+
+00:07:22.980 --> 00:07:25.720
+Der Server teilt der KI mit, was möglich ist, und die KI erledigt den Rest.
+
+00:07:26.120 --> 00:07:27.280
+Es ist ein selbstbeschreibendes System.
+
+00:07:27.620 --> 00:07:31.420
+Diese drei Kategorien arbeiten zusammen, damit die KI ein vollständiges Bild ihrer Möglichkeiten hat.
+
+00:07:32.300 --> 00:07:34.040
+MCP trifft auf Microsoft, woher das vorhanden ist.
+
+00:07:34.700 --> 00:07:36.160
+Bringen wir das also in die Microsoft-Welt.
+
+00:07:36.620 --> 00:07:39.640
+Hier wird es für jeden, der Microsoft 365 oder Azure nutzt, konkret.
+
+00:07:40.160 --> 00:07:41.660
+Lassen Sie uns gleich mit einem verbreiteten Mythos auf.
+
+00:07:41.980 --> 00:07:44.520
+Manche Leute denken, MCP sei nur an dem Experiment von Microsoft.
+
+00:07:44.900 --> 00:07:46.560
+Es ist eine strategische Ausrichtung.
+
+00:07:46.560 --> 00:07:48.940
+Das sieht man deutlich am Azure AI Agent Service.
+
+00:07:49.500 --> 00:07:55.060
+Wenn Sie benutzerdefinierte KI-Agenten in Azure erstellen, können Sie jetzt Remote MCP-Server direkt aus Azure AI Foundry hinzufügen hinzufügen.
+
+00:07:55.560 --> 00:07:59.120
+Sie konfigurieren eine Serverbezeichnung, eine URL und optionale Authentifizierungsheader.
+
+00:07:59.480 --> 00:08:01.700
+Und Ihr Agent kann beginnen, Tools von diesem Server aufzurufen.
+
+00:08:02.180 --> 00:08:05.020
+Microsofts eigene Dokumentation bezeichnet es als eine Integration erster Klasse.
+
+00:08:05.220 --> 00:08:06.400
+Das ist nicht die Sprache eines Nebenprojekts.
+
+00:08:06.700 --> 00:08:07.680
+Aber es geht tiefer als nur Azure.
+
+00:08:08.100 --> 00:08:11.520
+Microsoft hat offizielle MCP-Server-Referenzen für die Power-Plattform veröffentlicht,
+
+00:08:11.820 --> 00:08:14.400
+darunter Power Automate, Power Apps und sogar Process Mining.
+
+00:08:14.400 --> 00:08:17.280
+Dies sind keine Community-Projekte. Sie stammen direkt von Microsoft.
+
+00:08:17.740 --> 00:08:19.140
+Nehmen wir den Power Apps MCP-Server.
+
+00:08:19.540 --> 00:08:21.480
+Es enthält ein Tool namens Invoke Data Entry.
+
+00:08:21.960 --> 00:08:22.980
+Hier ist, was das in der Praxis bedeutet.
+
+00:08:23.740 --> 00:08:27.840
+Eine KI kann unstrukturierte Eingaben wie eine E-Mail, eine Chatnachricht oder ein gescanntes Dokument nehmen
+
+00:08:27.840 --> 00:08:30.340
+und daraus einen strukturierten Datensatz in Dataverse erstellen.
+
+00:08:30.760 --> 00:08:32.700
+Die KI schlägt den Datensatz vor und Sie genehmigen ihn.
+
+00:08:33.020 --> 00:08:34.260
+Der Mensch ist direkt in den Prozess eingebunden.
+
+00:08:34.640 --> 00:08:36.700
+Der Power Automate MCP-Server geht noch einen Schritt weiter.
+
+00:08:37.140 --> 00:08:38.780
+Sie beschreiben einen Workflow in einfacher Sprache.
+
+00:08:38.780 --> 00:08:44.580
+Zum Beispiel, wenn eine neue E-Mail mit dringend im Betreff eingeht, erstelle eine Aufgabe im Planer und benachrichtige meinen Manager.
+
+00:08:45.200 --> 00:08:46.500
+Die KI erstellt diesen Ablauf für Sie.
+
+00:08:46.960 --> 00:08:48.240
+Kein Ziehen und Ablegen vom Connector.
+
+00:08:48.560 --> 00:08:49.360
+Kein Suchen nach Triggern.
+
+00:08:49.900 --> 00:08:53.500
+Beschreiben Sie einfach, was Sie möchten und der MCP-Server übersetzt es in eine tatsächliche Automatisierung.
+
+00:08:54.280 --> 00:08:57.160
+Microsoft hat auch MCP-Server für Microsoft Learn-Inhalte gezeigt.
+
+00:08:57.880 --> 00:09:02.280
+Stellen Sie sich einen KI-Agenten vor, der die gesamte Microsoft-Dokumentationsbibliothek als Ressource abfragt.
+
+00:09:02.280 --> 00:09:08.520
+Nicht durch das Durchsuchen von Webseiten, sondern über einen strukturierten MCP-Server, der Dokumentation als strukturierte Daten bereitstellt.
+
+00:09:08.940 --> 00:09:10.020
+Das funktioniert heute bereits.
+
+00:09:10.320 --> 00:09:12.120
+Das ist die Richtung, in die sich Ihre Microsoft-Tools bewegen.
+
+00:09:12.620 --> 00:09:14.400
+Sie werden von Grund auf MCP zugänglich.
+
+00:09:15.200 --> 00:09:16.200
+Die Plattform öffnet sich.
+
+00:09:16.640 --> 00:09:19.780
+Und dadurch wird Ihre Microsoft 365-Erfahrung immer intelligenter.
+
+00:09:20.300 --> 00:09:22.760
+Die Integration findet gerade statt und ist fest in der Grundlage verankert.
+
+00:09:23.220 --> 00:09:24.500
+MCP ist nicht nur für Entwickler gedacht.
+
+00:09:24.760 --> 00:09:29.340
+Es ist für jeden, der Microsoft 365 nutzen möchte, dass seine KI nahtlos mit seinen Daten arbeitet.
+
+00:09:30.680 --> 00:09:31.640
+Ein echtes Szenario.
+
+00:09:31.640 --> 00:09:33.400
+Die KI, die endlich funktioniert.
+
+00:09:34.240 --> 00:09:35.660
+Wie sieht das also in der Praxis aus?
+
+00:09:36.300 --> 00:09:37.640
+Lassen Sie mich ein echtes Beispiel durchgehen.
+
+00:09:38.100 --> 00:09:40.580
+Sie sitzen in Microsoft Teams und geben diesen Co-Pilot ein.
+
+00:09:41.240 --> 00:09:44.140
+Wie ist der Status des ACMO-Projekts und wer legt mit seinen Aufgaben zurück?
+
+00:09:44.800 --> 00:09:45.600
+Wir drücken die Eingabetast.
+
+00:09:46.980 --> 00:09:50.100
+Hinter den Kulissen passiert jetzt etwas anderes als noch vor einem Jahr.
+
+00:09:50.760 --> 00:09:54.500
+Ihr KI-Assistent verbindet sich mit einem MCP-Server, der mit Project Online oder Planner verknüpft ist.
+
+00:09:55.240 --> 00:09:57.820
+Dieser Server kündigt die Tools an, die er verwenden kann, wie zum
+
+00:09:57.820 --> 00:10:02.580
+B. Aufgaben auflisten, Aufgabenstatus abrufen, Zuweisungen prüfen und Projektzeitplan abrufen.
+
+00:10:02.580 --> 00:10:05.100
+Die KI braucht hier keine Anleitung.
+
+00:10:05.800 --> 00:10:09.640
+Sie entdeckt diese Tools automatisch, weil der Server buchstäblich sagt, hier ist, was ich tun kann, no.
+
+00:10:10.240 --> 00:10:12.180
+Und die KI antwortet großartig, das werde ich verwenden.
+
+00:10:12.740 --> 00:10:15.200
+Niemand muss sagen, hey, schau dir zuerst diesen API-Endpunkt an.
+
+00:10:15.700 --> 00:10:16.380
+Das funktioniert einfach.
+
+00:10:16.380 --> 00:10:22.120
+Also ruft die KI das Tool zum Auflisten der Aufgaben auf, dann den Status für jede Aufgabe und anschließend die Zuweisungen.
+
+00:10:23.100 --> 00:10:26.300
+Der MCP-Server erledigt die gesamte Authentifizierung und Datenabfrage im Hintergrund.
+
+00:10:26.860 --> 00:10:29.380
+Ein paar Sekunden später meldet sich die KI mit einer sauberen Antwort zurück.
+
+00:10:29.760 --> 00:10:30.860
+Das ACMO-Projekt liegt voll im Plan.
+
+00:10:31.300 --> 00:10:33.480
+Drei Aufgaben sind überfällig und alle Sarah zugewiesen.
+
+00:10:34.040 --> 00:10:35.260
+Soll ich sie für dich daran erinnern?
+
+00:10:36.540 --> 00:10:37.300
+Hier ist das Wichtige.
+
+00:10:37.760 --> 00:10:39.800
+Für diese Abfrage wurde kein benutzerdefinierter Code geschrieben.
+
+00:10:40.180 --> 00:10:44.000
+Kein Entwickler hat zwei Wochen damit verbracht, eine Verbindung zwischen Copilot und Project Online zu bauen.
+
+00:10:44.000 --> 00:10:46.380
+Der MCP-Server hat die gesamte Integration übernommen.
+
+00:10:46.760 --> 00:10:50.040
+Ein Server, ein Standardprotokoll und die KI wusste genau, wie sie es nutzen kann.
+
+00:10:50.740 --> 00:10:51.740
+Lass uns nun einen Schritt weitergehen.
+
+00:10:52.140 --> 00:10:54.020
+Nachdem du den Projektstatus erhalten hast, fragst du,
+
+00:10:54.300 --> 00:10:58.560
+prüfe meinen Kalender auf ein Meeting mit Sarah morgen und entwürfe ein Status-Update basierend auf den aktuellen Ereignissen.
+
+00:10:59.480 --> 00:11:02.300
+Die KI nutzt einen Exchange-MCP-Server, um deinen Kalender zu prüfen,
+
+00:11:02.420 --> 00:11:07.240
+durchsucht über denselben Server zugehörige E-Mails und ruft dann einen Word-MCP-Server auf, um das Update zu entwerfen.
+
+00:11:08.080 --> 00:11:11.020
+Ein Gespräch, mehrere Datenquellen, null individuelle Entwicklung.
+
+00:11:11.500 --> 00:11:12.920
+Das ist der Aha-Moment bei MCP.
+
+00:11:12.920 --> 00:11:15.740
+Es macht die KI in deiner tatsächlichen Arbeitsumgebung nützlich,
+
+00:11:15.860 --> 00:11:18.600
+nicht nur als generischer Chatbot, der nur allgemeine Fragen beantworten kann,
+
+00:11:18.880 --> 00:11:23.160
+sondern als Assistent, der deine Daten sieht, deinen Kontext versteht und Maßnahmen ergreift.
+
+00:11:23.260 --> 00:11:24.620
+Alles über einen einfachen Standard.
+
+00:11:25.040 --> 00:11:25.960
+Alles über einen einfachen Standard.
+
+00:11:26.460 --> 00:11:27.820
+Sicherheit, um deine Daten zu schützen.
+
+00:11:28.560 --> 00:11:30.320
+All diese Flexibilität wirft eine große Frage auf.
+
+00:11:31.060 --> 00:11:34.760
+Wenn deine KI plötzlich über MCP auf SharePoint, Exchange und Dynamics zugreifen kann,
+
+00:11:34.900 --> 00:11:36.140
+wie hältst du diese Daten dann sicher?
+
+00:11:37.120 --> 00:11:38.080
+Lies die kurze Antwort.
+
+00:11:38.520 --> 00:11:39.720
+MCP ist so sicher, wie du es machst?
+
+00:11:40.220 --> 00:11:42.760
+Das Protokoll umgeht nicht deine bestehenden Sicherheitsmaßnahmen.
+
+00:11:42.920 --> 00:11:44.100
+Es arbeitet mit ihnen zusammen.
+
+00:11:44.280 --> 00:11:48.260
+MCP unterstützt OAuth 2.1, denselben Industriestandard für die Authentifizierung,
+
+00:11:48.340 --> 00:11:49.520
+der auch dein Microsoft-Login schützt.
+
+00:11:49.980 --> 00:11:52.200
+Wenn ein MCP-Server eine Authentifizierung erfordert,
+
+00:11:52.420 --> 00:11:55.600
+muss dein KI-Client beweisen, dass er autorisiert ist, bevor er auf Daten zugreifen kann.
+
+00:11:56.200 --> 00:11:59.560
+Dienste können Authentifizierungsheader, API-Schlüssel oder tokenbasierten Zugriff verwenden.
+
+00:11:59.920 --> 00:12:02.100
+Dieselben Muster, die du bereits zur Absicherung von APIs nutzt.
+
+00:12:02.400 --> 00:12:04.980
+Aber es gibt eine zusätzliche Ebene, die für den Unternehmenseinsatz wirklich wichtig ist.
+
+00:12:05.500 --> 00:12:08.500
+Die KI muss erst um Erlaubnis bitten, bevor sie tatsächlich eine Suche durchführen,
+
+00:12:08.500 --> 00:12:10.660
+eine Nachricht senden oder einen Datensatz ändern kann.
+
+00:12:11.060 --> 00:12:11.620
+Sie fragt dich.
+
+00:12:12.060 --> 00:12:13.680
+Du siehst die Anfrage direkt in deiner Chat-Oberfläche.
+
+00:12:14.100 --> 00:12:16.760
+Du prüft, was das Tool tun wird und genehmigst oder lehnst es ab.
+
+00:12:17.160 --> 00:12:19.880
+Das bedeutet, dass kein Tool ohne deine ausdrückliche Zustimmung aufgerufen wird.
+
+00:12:20.200 --> 00:12:23.440
+Deine KI kann Aktionen vorschlagen, aber sie kann sie nicht ohne dein Ja ausführen.
+
+00:12:24.000 --> 00:12:24.980
+Das ist ein gutes Sicherheitsnetz.
+
+00:12:25.260 --> 00:12:26.220
+Eine Sache, auf die man achten soll.
+
+00:12:26.560 --> 00:12:30.380
+Tausende öffentliche MCP-Server sind verfügbar und nicht alle davon sind vertrauenswürdig.
+
+00:12:30.700 --> 00:12:32.820
+Es gibt öffentliche Verzeichnisse, in denen jeder einen Server veröffentlichen kann.
+
+00:12:33.320 --> 00:12:34.300
+Einige sind exzellent, andere nicht.
+
+00:12:34.300 --> 00:12:37.260
+Es liegt in deiner Verantwortung, nur Server zu verwenden, denen du vertraust.
+
+00:12:37.840 --> 00:12:39.440
+In Microsoft-Umgebungen hast du einen Vorteil.
+
+00:12:40.080 --> 00:12:42.860
+Deine MCP-Server können dieselben Identitäts- und Zugriffssteuerungen nutzen,
+
+00:12:42.960 --> 00:12:44.360
+wie deine bestehenden Microsoft-Dienste.
+
+00:12:45.040 --> 00:12:47.880
+Wenn ein Benutzer keine Berechtigung zum Lesen einer SharePoint-Dokument-Bibliothek hat,
+
+00:12:47.940 --> 00:12:49.320
+kann ein MCP-Server dies nicht umgehen.
+
+00:12:50.000 --> 00:12:52.280
+Der Server erbt dieselben Grenzen, dieselbe Authentifizierung,
+
+00:12:52.380 --> 00:12:54.080
+dieselben Richtlinien und dieselbe Governance.
+
+00:12:54.980 --> 00:12:57.040
+Der Einstieg in ihre erste MCP-Erfahrung.
+
+00:12:57.600 --> 00:12:59.400
+Sie sind also überzeugt und möchten es selbst ausprobieren.
+
+00:12:59.680 --> 00:13:00.320
+Wo fangen Sie an?
+
+00:13:00.320 --> 00:13:02.920
+Am einfachsten ist es, einen MCP-kompatiblen Host zu wählen.
+
+00:13:02.920 --> 00:13:05.140
+Cloud Desktop bietet integrierte MCP-Unterstützung.
+
+00:13:05.220 --> 00:13:06.460
+GitHub Copilot funktioniert ebenfalls.
+
+00:13:07.040 --> 00:13:09.100
+Bei beiden lassen sich Server fast ohne Einrichtung einbinden.
+
+00:13:09.500 --> 00:13:11.580
+Sehen Sie sich als nächstes die öffentlichen MCP-Verzeichnungsarten.
+
+00:13:12.020 --> 00:13:15.400
+Es gibt tausende vorgefertigte Server für Dienste wie Google Drive, Slack, Datenbanken,
+
+00:13:15.680 --> 00:13:17.760
+Dateisysteme und ja auch Microsoft-Dienste.
+
+00:13:18.540 --> 00:13:21.820
+Wenn Sie Microsoft-Nutzer sind, beginnen Sie mit den MCP-Server-Referenzen von Microsoft
+
+00:13:21.820 --> 00:13:22.780
+für die Power-Plattform.
+
+00:13:23.360 --> 00:13:24.180
+Die Einrichtung ist einfach.
+
+00:13:24.600 --> 00:13:27.200
+Die meisten Hosts verwenden eine JSON-Datei, in der Sie Ihre Server auflisten.
+
+00:13:27.200 --> 00:13:30.580
+Sie geben jedem einen Namen, den Befehl oder die URL zum Aufrufen
+
+00:13:30.580 --> 00:13:32.640
+und konfigurieren die Authentifizierungsdaten.
+
+00:13:33.080 --> 00:13:34.540
+Das ist alles, den Rest erledigt, der Host.
+
+00:13:35.020 --> 00:13:37.340
+Für die grundlegende Nutzung ist keine Programmierung erforderlich,
+
+00:13:37.400 --> 00:13:39.460
+Sie müssen also kein Entwickler sein oder Indikationscode schreiben.
+
+00:13:39.700 --> 00:13:42.900
+Konfigurieren Sie einfach eine JSON-Datei und plötzlich kann Ihre KI auf Daten zugreifen,
+
+00:13:42.960 --> 00:13:43.720
+die zuvor verschossen war.
+
+00:13:44.000 --> 00:13:46.780
+Die JSON-Datei fungiert als Konfigurationsdatei, die Ihrem Host mitteilt,
+
+00:13:46.820 --> 00:13:47.780
+mit welchen Servern er sich verbindet.
+
+00:13:48.220 --> 00:13:50.640
+Betrachten Sie MCP als einen universellen Übersetzer für Ihre KI.
+
+00:13:51.120 --> 00:13:54.380
+Anstatt für jeden Dienst eine neue Sprache zu lernen, spricht sie ein einziges Protokoll.
+
+00:13:55.080 --> 00:13:57.120
+Beginnen Sie klein mit der Anbindung einer Datenquelle,
+
+00:13:57.280 --> 00:13:59.360
+wie Ihrem Kalender über einen Exchange-MCP-Server.
+
+00:13:59.360 --> 00:14:01.640
+Stellen Sie Ihrer KI eine Frage zu Ihrem Zeitplan und beobachten Sie,
+
+00:14:01.720 --> 00:14:02.840
+wie sie die verfügbaren Tools erkennt.
+
+00:14:03.740 --> 00:14:07.020
+Testen Sie die Human-in-the-Loop-Freigabe, bei der Sie jede Aktion genehmigen,
+
+00:14:07.140 --> 00:14:08.300
+bevor die KI sie ausführt.
+
+00:14:09.100 --> 00:14:10.020
+Damit behalten Sie die Kontrolle.
+
+00:14:10.360 --> 00:14:11.920
+Stellen Sie sicher, dass Sie das Sicherheitsmodell verstehen,
+
+00:14:12.020 --> 00:14:12.860
+bevor Sie die Nutzung auswalten.
+
+00:14:13.220 --> 00:14:16.040
+Wenn Sie sich sicher fühlen, erweitern Sie das System um einen weiteren Server
+
+00:14:16.040 --> 00:14:18.420
+für Ihre Dokumentbibliothek und dann für Ihr Aufgabenverwaltungssystem.
+
+00:14:18.420 --> 00:14:21.840
+Jeder Server fügt neue Funktionen hinzu und folgt demselben Protokoll.
+
+00:14:22.580 --> 00:14:24.600
+Wenn Sie Ihren eigenen MCP-Server erstellen möchten,
+
+00:14:24.700 --> 00:14:27.840
+etwa um eine benutzerdefinierte Geschäftsanwendung oder eine interne Datenbank bereitzustellen,
+
+00:14:27.920 --> 00:14:29.860
+eignen sich Azure Functions von Microsoft hervorragend als Backend.
+
+00:14:30.220 --> 00:14:34.380
+Sie verpacken Ihre bestehende IPI oder Datenquelle mit nur wenigen Zeilen Code in einen MCP-Server.
+
+00:14:35.000 --> 00:14:35.640
+Das muss das einfach.
+
+00:14:36.240 --> 00:14:38.800
+Stellen Sie Tools als Funktion und Daten als Ressourcen bereit
+
+00:14:38.800 --> 00:14:40.540
+und lassen Sie das Protokoll den Rest erledigen.
+
+00:14:40.800 --> 00:14:44.420
+Es ist ein unkomplizierter Weg, Ihrer KI-Zugriff auf Ihre eigenen Datenquellen zu gewähren.
+
+00:14:45.100 --> 00:14:46.500
+Das ist also das Model-Context-Protokoll.
+
+00:14:46.500 --> 00:14:49.820
+Ein Standard, der es KI-Tools endlich ermöglicht, auf Ihre echten Daten zuzugreifen.
+
+00:14:50.380 --> 00:14:52.800
+Ihre SharePoint-Dateien, Ihr Exchange-Kalender, Ihre Dynamics-Datensätze.
+
+00:14:53.340 --> 00:14:55.720
+Vor MCP musstet Ihr für jedes System eigene Verbindungen bauen.
+
+00:14:56.720 --> 00:14:59.220
+Jetzt nutzt Ihr ein Protokoll und Eure KI kann mit allen kommunizieren.
+
+00:14:59.860 --> 00:15:01.880
+Die KI wird direkt in Eurem Arbeitsumfeld nützlich.
+
+00:15:02.700 --> 00:15:05.020
+Das ist nicht nur bequem, es verändert Eure Arbeitsweise mit KI.
+
+00:15:05.720 --> 00:15:09.700
+Startet mit einem MCP-Server, verbindet eine Datenquelle und seht selbst den Unterschied.
+
+00:15:10.660 --> 00:15:14.540
+Wenn Euch das geholfen hat, teilt es mit Kollegen, deren KI keinen Zugriff auf ihre Daten hat.
+
+00:15:14.540 --> 00:15:16.660
+Abonniert für weitere Wissenshäppchen wie dieses.
+
+00:15:17.080 --> 00:15:18.960
+Ich bin Mirko Peters und wir sehen uns in der nächsten Folge.

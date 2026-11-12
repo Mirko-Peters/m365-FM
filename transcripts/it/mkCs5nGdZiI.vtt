@@ -1,0 +1,1150 @@
+WEBVTT
+
+00:00:00.200 --> 00:00:03.340
+Benvenuti a un altro episodio di Microsoft Knowledge Nuggets, sono Marco Peters.
+
+00:00:03.640 --> 00:00:06.840
+L'argomento di oggi è uno di cui avrete probabilmente sentito parlare, ma che forse non comprendete.
+
+00:00:06.960 --> 00:00:08.800
+Le competenze di Copilot. Avete sentito questo tema.
+
+00:00:09.220 --> 00:00:12.740
+Forse avete visto un pulsante con l'etichetta competenze, o crea una competenza in qualche meno,
+
+00:00:12.820 --> 00:00:14.340
+e vi siete chiesti cosa significa realmente.
+
+00:00:14.940 --> 00:00:16.980
+È un chatbot, è un modello, è una sorta di automazione?
+
+00:00:17.520 --> 00:00:18.060
+Ecco il problema.
+
+00:00:18.400 --> 00:00:21.600
+Microsoft usa nomi diversi per la stessa idea a seconda del prodotto che si utilizza.
+
+00:00:22.160 --> 00:00:24.800
+In Copilot Chat richiamano agenti, in Cowork richiamano competenze,
+
+00:00:24.840 --> 00:00:28.720
+in Copilot Studio richiamano sempre competenze, ma con un significato leggermente diverso.
+
+00:00:28.720 --> 00:00:30.980
+È fonte di confusione, onestamente non dovrebbe essere.
+
+00:00:31.500 --> 00:00:34.660
+Alla fine di questo episodio capirete esattamente cos'è una competenza di Copilot,
+
+00:00:34.840 --> 00:00:38.580
+dove si trova, e come crearne una, il tutto, in modo semplice e chiaro.
+
+00:00:39.480 --> 00:00:41.140
+Cos'è effettivamente una competenza di Copilot?
+
+00:00:41.920 --> 00:00:43.720
+Analizziamolo con la definizione più semplice possibile.
+
+00:00:44.420 --> 00:00:47.040
+Una competenza di Copilot è un set di istruzioni riutilizzabile per lì.
+
+00:00:47.660 --> 00:00:50.140
+Immaginatelo come scrive una descrizione del lavoro per un lavoratore temporale.
+
+00:00:50.720 --> 00:00:52.100
+Non direste semplicemente, fai un po' di lavoro.
+
+00:00:52.860 --> 00:00:56.460
+Piegheresti il compito, la tempistica, il risultato atteso e le regole da seguire?
+
+00:00:57.000 --> 00:00:57.620
+Lo stesso vorrei qui.
+
+00:00:57.620 --> 00:01:00.440
+Quando ho creato una competenza, date a Copilot tre cose.
+
+00:01:01.060 --> 00:01:02.220
+Primo, il nome della competenza.
+
+00:01:02.860 --> 00:01:07.720
+Secondo, una descrizione che dice Copilot quando attivarla, ovvero questo compito, corrisponde a questa competenza.
+
+00:01:09.340 --> 00:01:13.400
+Terzo, le istruzioni vere e proprie, il processo passo dopo passo che l'IA deve seguire.
+
+00:01:13.820 --> 00:01:14.680
+Ecco la parte importante.
+
+00:01:14.900 --> 00:01:17.120
+Una competenza non è un chatbot con cui ci si sieda a parlare.
+
+00:01:17.600 --> 00:01:19.400
+È uno specialista che si attiva solo quando necessario.
+
+00:01:19.840 --> 00:01:21.060
+Non dovete accenderlo o spegnerlo.
+
+00:01:21.060 --> 00:01:26.580
+Copilot osserva ciò che chiedete e verifica se esiste una competenza corrispondente ed esegue automaticamente se c'è una corrispondenza.
+
+00:01:27.220 --> 00:01:29.040
+La migliore analogia che ho trovato è quella di una scheda ricetta.
+
+00:01:29.500 --> 00:01:32.720
+Avete gli stessi ingredienti, gli stessi passaggi ogni volta e ottenete lo stesso risultato.
+
+00:01:33.280 --> 00:01:34.000
+Questa è una competenza.
+
+00:01:34.000 --> 00:01:41.000
+Ascrivete le istruzioni una volta e ogni volta che Copilot esegue quella competenza ottenete lo stesso output strutturato, coerente, ripetibile e senza incertezze.
+
+00:01:42.480 --> 00:01:43.540
+Ecco dove inizia la confusione.
+
+00:01:44.220 --> 00:01:47.000
+Microsoft ha collocato le competenze in tre luoghi diversi.
+
+00:01:47.060 --> 00:01:47.980
+Dove vivono le competenze?
+
+00:01:48.340 --> 00:01:49.820
+Quindi dove vivono effettivamente le competenze?
+
+00:01:50.240 --> 00:01:54.900
+È una domanda importante perché il luogo che scegliete determina quanto controllo avrete e quanto sarà facile la configurazione.
+
+00:01:55.700 --> 00:02:00.940
+Copilot vi offre tre luoghi diversi per creare e gestire le competenze e ognuno ha uno scopo diverso.
+
+00:02:00.940 --> 00:02:05.140
+Il primo luogo è Copilot Chat, nello specifico il generatore di agenti al suo interno.
+
+00:02:05.580 --> 00:02:06.800
+Questa è la vostra strada più semplice.
+
+00:02:07.060 --> 00:02:08.860
+Descrivete semplicemente ciò che volete in modo chiaro di dire.
+
+00:02:09.220 --> 00:02:11.040
+Nome, descrizioni, istruzioni, tutto quanto.
+
+00:02:11.620 --> 00:02:14.180
+Copilot crea skill per te, senza codice e senza markdown.
+
+00:02:14.800 --> 00:02:17.020
+Non scrivi, non tocchi nulla, parli soltanto e lui crea.
+
+00:02:18.020 --> 00:02:21.980
+La seconda casa è Copilot Studio, la piattaforma per chi desidera un controllo più diretto.
+
+00:02:22.700 --> 00:02:28.180
+Qui le skill sono file MD, ovvero file di testo con formatazione semplice che contengono istruzioni e flussi di lavoro.
+
+00:02:28.180 --> 00:02:32.620
+Puoi aprirli e modificarli direttamente e persino aggiungere script Python, se ti interessa.
+
+00:02:33.240 --> 00:02:35.240
+È più potente ma richiede anche un maggiore coinvolgimento.
+
+00:02:35.580 --> 00:02:38.440
+Ora, la terza casa è Copilot Cowork, che funziona in modo un po' diverso.
+
+00:02:39.100 --> 00:02:45.320
+Anche le skill Cowork sono file MD, ma risiedono nel tuo OneDrive all'interno di una specifica struttura di cartello, documenti, poi Cowork, poi Skill.
+
+00:02:45.760 --> 00:02:49.620
+Puoi scrivere una skill in testo semplice e caricarla, oppure usare gli strumenti integrati di Cowork per creare uno.
+
+00:02:50.340 --> 00:02:54.840
+Cowork esegue persino un controllo di qualità dopo la creazione, per verificare se le tue istruzioni sono abbastanza chiare.
+
+00:02:54.840 --> 00:03:00.180
+Ecco il punto. Tutte e tre le case seguono lo stesso concetto fondamentale. Istruzioni, un trigger e un formato di output.
+
+00:03:00.780 --> 00:03:04.380
+Il contenitore cambia, ma l'idea rimane la stessa. Lascia che ti faccia un rapido confronto.
+
+00:03:04.700 --> 00:03:08.200
+Copilot Chat significa descrivere partito. Semplice, veloce, nessuna configurazione.
+
+00:03:08.480 --> 00:03:11.860
+Copilot Studio significa creare e controllare. Più funzionalità, più complessità.
+
+00:03:12.400 --> 00:03:15.220
+E Copilot Cowork è come formare un collega affinché gestisca un compito al posto.
+
+00:03:15.660 --> 00:03:18.960
+Descrivi il processo una sola volta e lui lo esegue ripetutamente dietro alle quinte.
+
+00:03:18.960 --> 00:03:23.360
+Iniziamo con la più semplice. Creare una skill direttamente all'interno di Copilot Chat.
+
+00:03:24.200 --> 00:03:27.620
+Creare la tua prima skill, generatore di agenti. Quindi sei in Copilot Chat.
+
+00:03:28.140 --> 00:03:29.300
+La prima cosa da trovare è il genere tu.
+
+00:03:29.960 --> 00:03:34.240
+Secondo della tua interfaccia potrebbe trovarsi sotto una scheda chiamata agenti o un pulsante con scritto Crea.
+
+00:03:34.940 --> 00:03:39.140
+Microsoft sposta le cose a volte, ma cerca l'opzione che ti permetti di descrivere ciò che desideri.
+
+00:03:39.500 --> 00:03:42.100
+Quello è il tuo punto di accesso. Lascia che ti guidi attraverso un esempio qui.
+
+00:03:42.100 --> 00:03:44.640
+Mettiamo che tu prendi appunti durante l'unione. Sai come funziona?
+
+00:03:44.980 --> 00:03:49.160
+Punti elenco disordinati. Frasi a metà, elementi d'azione, sepolti nei paragrafi.
+
+00:03:50.000 --> 00:03:52.460
+Vuoi che Copilot li trasformi in riepiloghi puliti e strutturati?
+
+00:03:53.100 --> 00:03:54.160
+Quindi scrivi qualcosa del genere.
+
+00:03:54.960 --> 00:03:57.740
+Crea una skill per gli appunti delle riunioni che prenda trascrizioni disordinate
+
+00:03:57.740 --> 00:04:00.840
+e le trasformi in riepiloghi strutturati con elementi d'azione e decisioni.
+
+00:04:01.600 --> 00:04:04.800
+Una sola frase. Nessuna istruzione da scrivere. Nessun formato di output da definire.
+
+00:04:05.100 --> 00:04:08.400
+Devi solo descrivere il compito. Copilot prende quella descrizione e crea la skill per te.
+
+00:04:08.400 --> 00:04:13.080
+Scrive il nome e la descrizione che gli indica quando utilizzare la skill e le istruzioni passo dopo passo.
+
+00:04:13.700 --> 00:04:15.100
+Poi ti presenta tutto per una revisione.
+
+00:04:15.700 --> 00:04:17.940
+Tu leggi, apporti modifiche se vuoi e lo testi.
+
+00:04:18.420 --> 00:04:19.620
+Ecco il processo in quattro passaggi.
+
+00:04:20.060 --> 00:04:21.060
+Tu descrivi ciò che desideri.
+
+00:04:21.340 --> 00:04:22.420
+Copilot genera competenza.
+
+00:04:22.740 --> 00:04:23.740
+Tu la revisione e la corregge.
+
+00:04:23.920 --> 00:04:25.180
+Poi la testi con input reali.
+
+00:04:25.500 --> 00:04:26.740
+Quando testi vedrai il risultato.
+
+00:04:27.120 --> 00:04:29.980
+Un riepilogo strutturato con sezioni per titolo della riunione.
+
+00:04:30.320 --> 00:04:34.740
+Data, partecipanti, decisioni chiave, azioni, argomenti e domande aperte.
+
+00:04:35.140 --> 00:04:38.080
+Tutto organizzato esattamente come richiesto senza formattazione,
+
+00:04:38.080 --> 00:04:40.280
+senza markdown e senza codice da parte tua.
+
+00:04:41.180 --> 00:04:42.300
+Ed ecco la chicca di conoscenza.
+
+00:04:42.520 --> 00:04:44.580
+Non devi scrivere una sola riga di codice o di markdown.
+
+00:04:45.120 --> 00:04:46.760
+Non devi nemmeno sapere cos'è un file markdown.
+
+00:04:47.160 --> 00:04:48.400
+Tu descrivi semplicemente il lavoro.
+
+00:04:48.500 --> 00:04:49.480
+Copilot gestisce il resto.
+
+00:04:49.900 --> 00:04:51.520
+Il modo più veloce per creare una competenza.
+
+00:04:51.680 --> 00:04:53.620
+La maggior parte dei principianti è tutto ciò di cui avrai bisogno.
+
+00:04:53.920 --> 00:04:55.340
+Ora, se hai bisogno di maggiore controllo,
+
+00:04:55.560 --> 00:04:58.400
+magari vuoi aggiungere uno script python o un flusso di lavoro personalizzato,
+
+00:04:58.800 --> 00:05:00.280
+è l'ora che passi a Copilot Studio.
+
+00:05:01.640 --> 00:05:03.120
+Creazione di competenze in Copilot Studio.
+
+00:05:03.540 --> 00:05:04.920
+Copilot Studio è tutta un'altra cosa.
+
+00:05:04.920 --> 00:05:09.020
+È creato per chi vuole entrare nel dettaglio e ha tre livelli da conoscere.
+
+00:05:09.620 --> 00:05:12.880
+Le istruzioni sono sempre modellano come il tuo agente pensa e risponde,
+
+00:05:13.160 --> 00:05:15.320
+tono, ruolo e comportamento predefinito.
+
+00:05:15.840 --> 00:05:17.100
+Eseguono il lavoro dietro ogni conversazione.
+
+00:05:17.480 --> 00:05:18.900
+Le competenze vengono richiamate su richiesta.
+
+00:05:19.140 --> 00:05:21.540
+Sono conoscenze esperte per attività specifiche e ripetibili,
+
+00:05:21.780 --> 00:05:23.560
+che si attivano solo quando il trigger corrisponde.
+
+00:05:24.020 --> 00:05:26.960
+Flussi di lavoro sono processi passo dopo passo con approvazioni e condizioni.
+
+00:05:27.460 --> 00:05:28.880
+Se hai bisogno di un risultato garantito,
+
+00:05:28.980 --> 00:05:31.200
+come inviare qualcosa a un manager per l'approvazione prima dell'invio,
+
+00:05:31.200 --> 00:05:32.040
+quello è un flusso di lavoro.
+
+00:05:32.640 --> 00:05:35.260
+Le competenze in studio sono pacchettizzate come file md o markdown,
+
+00:05:35.380 --> 00:05:36.480
+ma sono più che semplice testo.
+
+00:05:37.220 --> 00:05:39.280
+Una competenza può includere script, modelli ed esempi,
+
+00:05:39.360 --> 00:05:40.220
+tutti raggruppati insieme.
+
+00:05:40.760 --> 00:05:42.420
+Puoi legare uno script python per i calcoli,
+
+00:05:42.520 --> 00:05:45.200
+un modello word per l'output e documenti di riferimento,
+
+00:05:45.300 --> 00:05:46.800
+tutto in un unico pacchetto.
+
+00:05:47.360 --> 00:05:49.100
+Ecco l'anatomia di un file md di una competenza.
+
+00:05:49.640 --> 00:05:52.660
+In alto c'è il nome, qualcosa di chiaro e specifico come calcolatore spese.
+
+00:05:53.200 --> 00:05:55.980
+Può una descrizione che indica quando questa competenza deve attivarsi.
+
+00:05:56.800 --> 00:06:00.140
+Usala quando un utente deve calcolare le spese totali dai dati delle ricevute.
+
+00:06:00.140 --> 00:06:03.580
+Poi una sezione per quando usarla e un'altra per quando non usa.
+
+00:06:03.980 --> 00:06:06.340
+Questo impedisce alla competenza di attivarsi nel contesto sbagliato.
+
+00:06:06.720 --> 00:06:07.880
+Infine le istruzioni passo dopo passo.
+
+00:06:08.080 --> 00:06:09.020
+Ecco un esempio reale.
+
+00:06:09.380 --> 00:06:11.760
+Supponiamo che tu voglia una competenza che esegua uno script python
+
+00:06:11.760 --> 00:06:13.600
+per calcolare le spese dalle ricevute caricate.
+
+00:06:14.280 --> 00:06:16.360
+In Copilot Studio crei il file md della competenza
+
+00:06:16.360 --> 00:06:18.400
+e pacchettizzi lo script python insieme ad esso.
+
+00:06:19.160 --> 00:06:20.840
+Quando la competenza si attiva, esegui lo script,
+
+00:06:20.980 --> 00:06:22.500
+elabori i dati e restituisci il risultato.
+
+00:06:23.000 --> 00:06:24.460
+La competenza e il codice viaggiano insieme.
+
+00:06:24.800 --> 00:06:26.820
+Usa le skills per competenze ripetibili,
+
+00:06:27.020 --> 00:06:28.940
+attività in cui l'IA deve pensare e adattarsi.
+
+00:06:28.940 --> 00:06:31.880
+Usa il workflow per un ordine rigoroso e per le approvazioni.
+
+00:06:32.480 --> 00:06:34.320
+Attività in cui non puoi permetterti variazioni.
+
+00:06:35.180 --> 00:06:37.160
+Le skills sono flessibili, i workflows sono rigidi.
+
+00:06:37.520 --> 00:06:38.300
+Scegli lo strumento giusto.
+
+00:06:38.580 --> 00:06:40.320
+C'è un altro posto in cui risiedono le skills
+
+00:06:40.320 --> 00:06:42.720
+all'interno di Copilot Cowork ed è un'esperienza diversa.
+
+00:06:43.360 --> 00:06:44.940
+Creazione di skills in Copilot Cowork.
+
+00:06:45.420 --> 00:06:46.960
+Le skills di Cowork si trovano in un posto diverso
+
+00:06:46.960 --> 00:06:47.820
+da quello che potresti aspettare.
+
+00:06:48.000 --> 00:06:50.220
+Sono archiviate come file md nel tuo one drive,
+
+00:06:50.500 --> 00:06:52.620
+in documenti, poi in una cartella chiamata Cowork
+
+00:06:52.620 --> 00:06:54.660
+e al suo interno una cartella chiamata skills.
+
+00:06:55.440 --> 00:06:57.600
+È lì che risiedono tutte le tue skills personalizzate
+
+00:06:57.600 --> 00:06:59.560
+e puoi aprire quella cartella per vedere ogni skill presente
+
+00:06:59.560 --> 00:07:00.360
+come testo semplice.
+
+00:07:00.780 --> 00:07:02.440
+Ci sono due modi per creare una skill in Cowork.
+
+00:07:02.780 --> 00:07:03.720
+Puoi scriverla in testo semplice
+
+00:07:03.720 --> 00:07:05.560
+e caricarla direttamente nella cartella delle skills
+
+00:07:05.560 --> 00:07:08.080
+oppure usare lo strumento di gestione integrato di Cowork
+
+00:07:08.080 --> 00:07:09.020
+nell'interfaccia di chat.
+
+00:07:10.000 --> 00:07:12.080
+Descrivi ciò che vuoi, Cowork crea il file md
+
+00:07:12.080 --> 00:07:14.040
+e lo salva automaticamente in quella cartella.
+
+00:07:14.040 --> 00:07:17.220
+Dopo aver creato una skill, Cowork esegue un controllo di qualità.
+
+00:07:17.600 --> 00:07:18.720
+Testa la copertura dei trigger
+
+00:07:18.720 --> 00:07:20.680
+verificando se la tua skill si attiva quando dovrebbe.
+
+00:07:20.940 --> 00:07:22.180
+Testa la chiarezza delle istruzioni
+
+00:07:22.180 --> 00:07:23.940
+verificando se i tuoi passaggi sono abbastanza speciali.
+
+00:07:24.120 --> 00:07:25.180
+E testa la robustezza
+
+00:07:25.180 --> 00:07:27.240
+verificando se la skill può gestire casi limiti.
+
+00:07:27.540 --> 00:07:28.780
+Ricevi un report con i risultati.
+
+00:07:29.180 --> 00:07:30.600
+Se qualcosa è debole sai dove è migliore.
+
+00:07:31.080 --> 00:07:31.940
+Ecco un esempio reale.
+
+00:07:32.220 --> 00:07:33.360
+Mettiamo che tu sia un agente immobile.
+
+00:07:33.860 --> 00:07:35.640
+Dopo ogni chiamata esplorativa con un acquirente
+
+00:07:35.640 --> 00:07:37.700
+devi trasformare i tuoi appunti in una scheda strutturata.
+
+00:07:38.600 --> 00:07:40.160
+Fascia di budget, requisiti essenziali,
+
+00:07:40.160 --> 00:07:41.700
+fattori decisivi, passi successivi.
+
+00:07:41.700 --> 00:07:43.260
+Lo fai ogni singola volta.
+
+00:07:43.860 --> 00:07:46.160
+Quindi crei una skill chiamata assistente profilo acquirente.
+
+00:07:47.060 --> 00:07:49.100
+Le frasi trigger come crea un profilo acquirente
+
+00:07:49.100 --> 00:07:50.880
+o riassumi chiamata cliente.
+
+00:07:51.740 --> 00:07:52.960
+Le dici di leggere la trascrizione
+
+00:07:52.960 --> 00:07:54.860
+e estrarre le informazioni chiave e compilare un modello.
+
+00:07:55.480 --> 00:07:56.860
+Alleghi il tuo modello di scheda reale
+
+00:07:56.860 --> 00:07:59.380
+così l'output corrisponde esattamente a ciò di cui hai bisogno.
+
+00:07:59.840 --> 00:08:01.840
+Poi la testi, carichi la trascrizione di una chiamata
+
+00:08:01.840 --> 00:08:03.500
+e dice esegui assistente profilo acquirente.
+
+00:08:04.300 --> 00:08:05.320
+Cowork attiva la skill,
+
+00:08:05.700 --> 00:08:08.080
+legge la trascrizione e produce un riassunto in chat.
+
+00:08:08.280 --> 00:08:10.160
+Poi le chiedi di preparare il documento Word.
+
+00:08:10.160 --> 00:08:13.400
+Recupera il tuo modello, ogni sezione, budget, requisiti,
+
+00:08:13.500 --> 00:08:15.060
+fattori decisivi, passi successivi
+
+00:08:15.060 --> 00:08:16.880
+e ti consegni un documento finito.
+
+00:08:17.600 --> 00:08:18.680
+Sempre lo stesso formato,
+
+00:08:18.940 --> 00:08:20.420
+senza formatazione manuale o copy and call.
+
+00:08:20.880 --> 00:08:22.920
+Le skills di Cowork sono progettate per la Delegant Back.
+
+00:08:23.180 --> 00:08:24.480
+Non devi stare lì a chattare con l'IA.
+
+00:08:25.060 --> 00:08:26.020
+Descrivi il processo una volta,
+
+00:08:26.180 --> 00:08:27.520
+alleghi i modelli, definisci le regole
+
+00:08:27.520 --> 00:08:29.260
+e poi Cowork lo esegue ripetutamente.
+
+00:08:29.800 --> 00:08:31.280
+Inserisci solo gli input e ottieni gli output.
+
+00:08:31.780 --> 00:08:33.500
+Queste regole si applicano sia che tu sia in studio
+
+00:08:33.500 --> 00:08:34.160
+o in Cowork.
+
+00:08:34.820 --> 00:08:35.980
+Cosa rende valida una skill?
+
+00:08:36.300 --> 00:08:37.540
+Iniziamo proprio dal nome della tua skill.
+
+00:08:38.260 --> 00:08:39.120
+Deve essere leggibile
+
+00:08:39.120 --> 00:08:41.060
+da due pubblici completamente diversi.
+
+00:08:41.400 --> 00:08:41.840
+Umani e IA.
+
+00:08:42.420 --> 00:08:44.240
+Gli umani devono capire subito cosa fa la skill.
+
+00:08:44.980 --> 00:08:46.120
+L'IA deve trovare la skill giusta
+
+00:08:46.120 --> 00:08:47.380
+quando un compito corrisponde.
+
+00:08:48.080 --> 00:08:49.700
+Quindi scegli nomi precisi e descrittivi.
+
+00:08:50.380 --> 00:08:51.520
+Riassunto note, riunione, batte,
+
+00:08:51.600 --> 00:08:52.560
+prendi appunti ogni volta.
+
+00:08:53.480 --> 00:08:54.360
+Assistente profilo acquirente
+
+00:08:54.360 --> 00:08:55.940
+funziona meglio di aiutante e clienti.
+
+00:08:56.820 --> 00:08:57.600
+I nomi troppo ingegniosi
+
+00:08:57.600 --> 00:08:58.460
+finiscono solo per confondere.
+
+00:08:58.780 --> 00:08:59.960
+Passiamo alle frasi di attivazione.
+
+00:09:00.340 --> 00:09:02.200
+È così che Copilot sa quando attivare la tua skill.
+
+00:09:02.200 --> 00:09:03.580
+Si specifico al riguardo.
+
+00:09:03.780 --> 00:09:05.080
+Non dire usa questo per le riunioni.
+
+00:09:05.700 --> 00:09:06.820
+Di usa questo quando un utente
+
+00:09:06.820 --> 00:09:08.080
+carica una trascrizione di riunione
+
+00:09:08.080 --> 00:09:08.900
+e chiede un riassunto.
+
+00:09:09.480 --> 00:09:10.560
+Più il trigger è specifico
+
+00:09:10.560 --> 00:09:11.780
+meno è probabile che la skill
+
+00:09:11.780 --> 00:09:13.080
+si attivi nel contesto sbagliato.
+
+00:09:13.680 --> 00:09:15.180
+E se una skill parte quando non dovrebbe
+
+00:09:15.180 --> 00:09:16.680
+l'output diventa subito inutile.
+
+00:09:17.240 --> 00:09:18.400
+Ora parliamo delle istruzioni.
+
+00:09:18.960 --> 00:09:19.980
+Ecco l'errore che fanno quasi tutti.
+
+00:09:20.380 --> 00:09:21.500
+Le skill vengono richiamate su richiesta.
+
+00:09:21.740 --> 00:09:22.520
+Non sono sempre attive.
+
+00:09:22.880 --> 00:09:24.100
+Ogni volta che la skill viene eseguita
+
+00:09:24.100 --> 00:09:25.480
+consuma capacità di elaborazione degli A.
+
+00:09:25.720 --> 00:09:27.360
+Quindi mantieni le istruzioni brevi e mirate.
+
+00:09:28.120 --> 00:09:30.080
+Non inserirci dentro l'intera policy aziendale.
+
+00:09:30.080 --> 00:09:32.460
+Solo i passaggi necessari per quello specifico.
+
+00:09:33.200 --> 00:09:34.280
+Istruzioni brevi significano
+
+00:09:34.280 --> 00:09:36.220
+esecuzioni più rapide e minor consumo complessivo.
+
+00:09:36.920 --> 00:09:38.100
+Anche formato dall'output in pool.
+
+00:09:38.620 --> 00:09:39.620
+Devi dire alla skill esattamente
+
+00:09:39.620 --> 00:09:40.640
+come strutturare il suo output.
+
+00:09:41.080 --> 00:09:42.320
+Dammi un riassunto con queste sezioni.
+
+00:09:42.700 --> 00:09:44.160
+Titolo, riunione, data, partecipanti,
+
+00:09:44.240 --> 00:09:45.580
+decisioni chiave, azioni da intraprendere,
+
+00:09:45.640 --> 00:09:46.140
+domande aperte.
+
+00:09:46.580 --> 00:09:48.360
+Se hai un modello, un documento Word
+
+00:09:48.360 --> 00:09:49.540
+o un file Excel, includilo.
+
+00:09:49.980 --> 00:09:51.060
+La skill può usare quel modello
+
+00:09:51.060 --> 00:09:51.720
+come riferimento
+
+00:09:51.720 --> 00:09:53.320
+o rispettare esattamente il tuo formato.
+
+00:09:54.120 --> 00:09:54.920
+Regole ed eccezioni
+
+00:09:54.920 --> 00:09:56.220
+sono ciò che distingue le buone skill
+
+00:09:56.220 --> 00:09:56.880
+da quelle cattive.
+
+00:09:57.360 --> 00:09:58.200
+Pensa ai casi limite.
+
+00:09:58.780 --> 00:10:00.000
+Segnala sempre elementi poco chiari.
+
+00:10:00.480 --> 00:10:01.580
+Non rimuovere mai i nomi delle persone.
+
+00:10:02.440 --> 00:10:03.460
+Se la trascrizione è troppo breve,
+
+00:10:03.560 --> 00:10:04.180
+chiedi più input.
+
+00:10:04.720 --> 00:10:05.840
+Queste regole impediscono alla skill
+
+00:10:05.840 --> 00:10:06.920
+di fare supposizioni errate.
+
+00:10:07.320 --> 00:10:08.200
+Agiscono come barriere
+
+00:10:08.200 --> 00:10:09.500
+che mantengono l'output affidabile.
+
+00:10:10.180 --> 00:10:11.520
+Evita l'ambiguità a ogni costo.
+
+00:10:11.980 --> 00:10:12.880
+Non creare due skill
+
+00:10:12.880 --> 00:10:13.580
+con nomi simili
+
+00:10:13.580 --> 00:10:14.720
+o trigger sovrapposti.
+
+00:10:15.380 --> 00:10:16.000
+Se hai una skill
+
+00:10:16.000 --> 00:10:16.940
+per le note di riunione
+
+00:10:16.940 --> 00:10:18.160
+e una per il riassunto riunione,
+
+00:10:18.240 --> 00:10:19.140
+Copilot non saprà
+
+00:10:19.140 --> 00:10:20.240
+quale usare.
+
+00:10:21.360 --> 00:10:22.540
+Lì approverà a indovinare,
+
+00:10:22.600 --> 00:10:23.300
+a volte sbaglierà.
+
+00:10:23.760 --> 00:10:24.920
+Se due skill si sovrappongono,
+
+00:10:25.020 --> 00:10:25.720
+uniscile in una sola.
+
+00:10:26.140 --> 00:10:26.620
+Mantieni pulita
+
+00:10:26.620 --> 00:10:27.260
+la tua libri di skill.
+
+00:10:27.560 --> 00:10:28.560
+E infine, testa e itera.
+
+00:10:28.960 --> 00:10:29.560
+Esegui degli input
+
+00:10:29.560 --> 00:10:30.300
+di prova con la tua skill.
+
+00:10:30.540 --> 00:10:31.320
+Controlla l'output.
+
+00:10:31.640 --> 00:10:32.660
+Corrisponde a ciò che ti aspettavi.
+
+00:10:33.080 --> 00:10:33.620
+Caso contrario,
+
+00:10:33.700 --> 00:10:34.460
+perfezione dell'istruzione.
+
+00:10:34.780 --> 00:10:35.260
+Ingegna regola.
+
+00:10:35.600 --> 00:10:36.180
+Chiarisci il trigger,
+
+00:10:36.300 --> 00:10:37.060
+poi testa di nuovo.
+
+00:10:37.620 --> 00:10:38.360
+Le skill migliorano
+
+00:10:38.360 --> 00:10:39.280
+attraverso l'iterazione,
+
+00:10:39.400 --> 00:10:40.280
+non cercando la perfezione
+
+00:10:40.280 --> 00:10:40.800
+al primo colpo.
+
+00:10:40.800 --> 00:10:42.240
+Dunque, le abilità
+
+00:10:42.240 --> 00:10:43.440
+sono gli operatori specializzati,
+
+00:10:43.520 --> 00:10:44.060
+le istruzioni sono
+
+00:10:44.060 --> 00:10:44.840
+la politica di base,
+
+00:10:44.940 --> 00:10:45.480
+i flussi di lavoro
+
+00:10:45.480 --> 00:10:46.700
+sono i processi rigorosi.
+
+00:10:47.220 --> 00:10:48.180
+Come si integrano tra loro?
+
+00:10:48.940 --> 00:10:49.520
+Quadro generale.
+
+00:10:50.200 --> 00:10:51.180
+Abilità contro istruzioni,
+
+00:10:51.280 --> 00:10:52.060
+contro flussi di lavoro.
+
+00:10:52.800 --> 00:10:53.820
+Bene, mettiamo tutto insieme
+
+00:10:53.820 --> 00:10:54.580
+perché qui la gente
+
+00:10:54.580 --> 00:10:55.600
+solitamente si confonde.
+
+00:10:56.160 --> 00:10:56.960
+Istruzioni, abilità
+
+00:10:56.960 --> 00:10:57.620
+e flussi di lavoro
+
+00:10:57.620 --> 00:10:58.760
+non sono idee in competizione.
+
+00:10:59.620 --> 00:11:00.200
+Sono tre livelli
+
+00:11:00.200 --> 00:11:00.880
+che lavorano insieme.
+
+00:11:01.480 --> 00:11:02.040
+Ognuno gestisce
+
+00:11:02.040 --> 00:11:03.080
+una parte diversa del lavoro.
+
+00:11:03.540 --> 00:11:04.380
+Le istruzioni si auserano.
+
+00:11:04.800 --> 00:11:05.300
+Modella il modo
+
+00:11:05.300 --> 00:11:05.800
+in cui il tuo agente
+
+00:11:05.800 --> 00:11:06.500
+pensa e risponde.
+
+00:11:07.020 --> 00:11:07.480
+Tono, ruolo,
+
+00:11:07.560 --> 00:11:08.360
+impostazioni predefinite,
+
+00:11:08.360 --> 00:11:08.940
+queste sono le istruzioni.
+
+00:11:09.300 --> 00:11:10.360
+Pensale come la personalità
+
+00:11:10.360 --> 00:11:11.120
+e le regole di base.
+
+00:11:12.300 --> 00:11:12.640
+Si utile
+
+00:11:12.640 --> 00:11:13.580
+usa un linguaggio semplice
+
+00:11:13.580 --> 00:11:14.500
+e non inventare mai fatti.
+
+00:11:15.360 --> 00:11:16.180
+Funzionano in sottofondo
+
+00:11:16.180 --> 00:11:16.880
+in ogni interazione
+
+00:11:16.880 --> 00:11:17.720
+indipendentemente dal fatto
+
+00:11:17.720 --> 00:11:18.620
+che un'abilità si attiva o meno.
+
+00:11:18.960 --> 00:11:19.600
+Le abilità racchiudono
+
+00:11:19.600 --> 00:11:20.640
+competenze riutilizzabili.
+
+00:11:21.740 --> 00:11:22.320
+Vengono richiamate
+
+00:11:22.320 --> 00:11:22.760
+su richiesta
+
+00:11:22.760 --> 00:11:23.700
+per compiti specifici
+
+00:11:23.700 --> 00:11:24.180
+e ripetibili.
+
+00:11:25.040 --> 00:11:25.700
+Le istruzioni dicono
+
+00:11:25.700 --> 00:11:26.140
+si utile.
+
+00:11:26.960 --> 00:11:27.560
+Un'abilità dice
+
+00:11:27.560 --> 00:11:28.460
+quando qualcuno carica
+
+00:11:28.460 --> 00:11:29.520
+la trascrizione di una riunione
+
+00:11:29.520 --> 00:11:30.880
+esegui questa precisa serie di passaggi.
+
+00:11:31.360 --> 00:11:32.000
+Le istruzioni sono
+
+00:11:32.000 --> 00:11:32.560
+la politica,
+
+00:11:32.880 --> 00:11:33.820
+le abilità sono il manuale,
+
+00:11:33.820 --> 00:11:34.460
+i flussi di lavoro
+
+00:11:34.460 --> 00:11:35.940
+impongono processi deterministici.
+
+00:11:36.160 --> 00:11:36.980
+Questo è quello rigoroso.
+
+00:11:37.560 --> 00:11:38.420
+Approvazioni, condizioni,
+
+00:11:38.520 --> 00:11:39.200
+risultati garantiti.
+
+00:11:39.680 --> 00:11:40.100
+Se hai bisogno
+
+00:11:40.100 --> 00:11:40.800
+che qualcosa accada
+
+00:11:40.800 --> 00:11:41.640
+in ordine specifico
+
+00:11:41.640 --> 00:11:42.040
+ogni volta,
+
+00:11:42.140 --> 00:11:42.680
+come primo passo
+
+00:11:42.680 --> 00:11:43.240
+estrarre dati,
+
+00:11:43.340 --> 00:11:44.420
+secondo passo inviare al manager,
+
+00:11:44.600 --> 00:11:45.420
+terzo passo attendere
+
+00:11:45.420 --> 00:11:46.480
+l'approvazione prima dell'invio,
+
+00:11:46.580 --> 00:11:47.420
+quello è un flusso di lavoro.
+
+00:11:48.220 --> 00:11:49.120
+Nessuna variazione,
+
+00:11:49.280 --> 00:11:50.180
+nessuna improvvisazione
+
+00:11:50.180 --> 00:11:50.520
+dell'IA,
+
+00:11:50.700 --> 00:11:51.600
+solo esecuzione.
+
+00:11:52.580 --> 00:11:53.540
+Ecco un esempio concreto.
+
+00:11:53.940 --> 00:11:54.560
+Costruisci un agente
+
+00:11:54.560 --> 00:11:55.040
+per il tuo team?
+
+00:11:55.760 --> 00:11:57.200
+Le istruzioni impostano il tono,
+
+00:11:57.340 --> 00:11:58.660
+utile, professionale e conciso.
+
+00:11:59.060 --> 00:11:59.800
+Un'abilità gestisce
+
+00:11:59.800 --> 00:12:00.460
+le note della riunione.
+
+00:12:00.460 --> 00:12:01.980
+prende trascrizioni disordinate
+
+00:12:01.980 --> 00:12:03.100
+e produce riassunti puliti.
+
+00:12:03.520 --> 00:12:04.160
+Un flusso di lavoro
+
+00:12:04.160 --> 00:12:05.000
+installa da quel riassunto
+
+00:12:05.000 --> 00:12:05.540
+al team leader
+
+00:12:05.540 --> 00:12:06.160
+per l'approvazione
+
+00:12:06.160 --> 00:12:07.140
+prima che venga salvato.
+
+00:12:07.660 --> 00:12:08.440
+Le istruzioni modellano
+
+00:12:08.440 --> 00:12:09.120
+il comportamento,
+
+00:12:09.200 --> 00:12:10.180
+le abilità svolgono il lavoro
+
+00:12:10.180 --> 00:12:10.820
+e i flussi di lavoro
+
+00:12:10.820 --> 00:12:11.600
+impongono il processo.
+
+00:12:12.260 --> 00:12:13.020
+Ora ecco cosa conta
+
+00:12:13.020 --> 00:12:13.940
+per te come principiante.
+
+00:12:14.260 --> 00:12:14.680
+La maggior parte
+
+00:12:14.680 --> 00:12:15.020
+delle persone
+
+00:12:15.020 --> 00:12:15.520
+ha bisogno di solito.
+
+00:12:15.940 --> 00:12:16.980
+Le istruzioni sono integrate
+
+00:12:16.980 --> 00:12:18.140
+in qualsiasi agente che crei.

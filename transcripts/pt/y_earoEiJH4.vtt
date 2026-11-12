@@ -1,0 +1,1384 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:02.360
+Todo mundo jura que sua empresa é orientada a dados.
+
+00:00:02.560 --> 00:00:05.040
+Aí abrem o SQL Management Studio e travam.
+
+00:00:05.180 --> 00:00:07.520
+O painel poderia muito bem começar a falar Klingon.
+
+00:00:07.720 --> 00:00:11.100
+Toda iniciativa de negócios desmorona quando alguém percebe que os dados estão presos
+
+00:00:11.100 --> 00:00:13.360
+atrás de uma muralha de ponto e vírgula e colchetes.
+
+00:00:13.540 --> 00:00:15.200
+Você provavelmente já viu isso.
+
+00:00:15.420 --> 00:00:19.700
+Oceanos de dados, sabe, registros de vendas, telemetria, logs de transações, mas com
+
+00:00:19.700 --> 00:00:21.520
+o acesso bloqueado por quem decorou a sintaxe.
+
+00:00:21.640 --> 00:00:24.900
+O SQL, aquele velho burocrata orgulhoso, preside os arquivos.
+
+00:00:25.100 --> 00:00:27.940
+Preciso, eficiente e totalmente alérgico ao português claro.
+
+00:00:27.940 --> 00:00:31.420
+Você deve se curvar a sua gramática, pontuar seus comandos e terminar cada pensamento
+
+00:00:31.420 --> 00:00:34.140
+com um ponto e vírgula ou enfrentar a execução por erro de sintaxe.
+
+00:00:34.220 --> 00:00:37.060
+Enquanto isso, o diretor de vendas médio só quer uma resposta.
+
+00:00:37.260 --> 00:00:39.000
+Qual foi nossa receita por trimestre?
+
+00:00:39.220 --> 00:00:43.680
+Em vez disso, mandam abrir um chamado, esperar três dias e receber um CSV que não abre porque
+
+00:00:43.680 --> 00:00:44.920
+tem 400 megabytes.
+
+00:00:45.140 --> 00:00:46.040
+É um absurdo.
+
+00:00:46.220 --> 00:00:48.840
+Você pode pedir um carro com sua voz, mas não pode perguntar ao seu próprio sistema
+
+00:00:48.840 --> 00:00:50.120
+quanto dinheiro ganhou sem um intérprete.
+
+00:00:50.260 --> 00:00:51.680
+Então, aqui está o escândalo.
+
+00:00:51.820 --> 00:00:54.100
+O gargalo na análise de negócios não são os dados.
+
+00:00:54.320 --> 00:00:55.100
+É o idioma.
+
+00:00:55.100 --> 00:00:59.440
+O custo de tradução para converter a curiosidade humana em comandos SQL continua consumindo
+
+00:00:59.440 --> 00:01:00.560
+orçamentos no mundo todo.
+
+00:01:00.720 --> 00:01:05.460
+Cada analista extra, cada relatório atrasado, atrito linguístico disfarçado de complexidade.
+
+00:01:05.800 --> 00:01:09.620
+Apresentamos o Copiló Studio, o middleware linguístico que você não sabia que precisava.
+
+00:01:09.800 --> 00:01:14.380
+Ele fica educadamente entre você e o Microsoft Fabric, ouve sua pergunta de negócios mal formulada
+
+00:01:14.380 --> 00:01:16.260
+e a traduz em uma lógica de dados perfeita.
+
+00:01:16.400 --> 00:01:20.240
+Ele remove o ruído, mantém a intenção e, o mais importante, permite que você fale como
+
+00:01:20.240 --> 00:01:20.980
+um humano novamente.
+
+00:01:20.980 --> 00:01:24.360
+Em breve, você consultará petabytes com o inglês da escola, sem certificações, sem
+
+00:01:24.360 --> 00:01:25.260
+comandos, select from.
+
+00:01:25.440 --> 00:01:28.400
+Você perguntará, mostre-me os cinco principais produtos do último trimestre por lucro.
+
+00:01:28.500 --> 00:01:32.640
+E o Fabric responderá, instantaneamente, em frases, não em planilhas.
+
+00:01:32.800 --> 00:01:36.060
+Antes de começar a comemorar o desemprego iminente de metade do departamento de análise,
+
+00:01:36.280 --> 00:01:37.880
+vamos dissecar como essa engenhoca funciona.
+
+00:01:38.040 --> 00:01:41.320
+Porque se você acha que o Copiló Studio é apenas mais um chatbot colado em cima de
+
+00:01:41.320 --> 00:01:43.460
+um banco de dados, você está tragicamente enganado.
+
+00:01:43.580 --> 00:01:45.540
+O que o Copiló Studio realmente faz?
+
+00:01:45.700 --> 00:01:47.980
+Vamos acabar com o equívoco mais preguiçoso primeiro.
+
+00:01:47.980 --> 00:01:50.220
+O Copiló Studio não é apenas um chatbot.
+
+00:01:50.440 --> 00:01:52.920
+Isso é como chamar a internet de um monte de caixas de texto.
+
+00:01:53.140 --> 00:01:54.040
+O que ele realmente é?
+
+00:01:54.220 --> 00:01:55.780
+Um mecanismo de tradução de intenções.
+
+00:01:55.980 --> 00:01:58.820
+Você fala em lógica de negócios, ele fala Fabric fluentemente.
+
+00:01:59.020 --> 00:02:02.320
+Aqui está o que acontece por trás das cenas, sem o drama desnecessário.
+
+00:02:02.480 --> 00:02:04.980
+Primeiro passo, análise de linguagem natural.
+
+00:02:05.180 --> 00:02:08.760
+O Copiló Studio pega sua frase e a desconstrói em significado.
+
+00:02:09.020 --> 00:02:13.280
+Verbos como obter, substantivos como vendas, referências como último trimestre.
+
+00:02:13.540 --> 00:02:15.740
+Segundo passo, mapeamento semântico.
+
+00:02:15.740 --> 00:02:19.240
+Ele descobre onde esses conceitos vivem dentro do seu modelo de dados no Fabric.
+
+00:02:19.480 --> 00:02:21.420
+Vendas mapeiam para uma tabela de fatos.
+
+00:02:21.620 --> 00:02:23.620
+O último trimestre resolve-se em um filtro de data.
+
+00:02:23.840 --> 00:02:25.640
+Passo 3, chamada de dados do Fabric.
+
+00:02:25.820 --> 00:02:27.900
+Ele escreve, executa e recupera o resultado.
+
+00:02:28.160 --> 00:02:30.380
+Obediência garantida, sem SQL visível.
+
+00:02:30.600 --> 00:02:33.480
+Se SQL é código Morse, o Copiló Studio é voz sobre IP.
+
+00:02:33.660 --> 00:02:35.140
+O mesmo sinal, a mesma fidelidade.
+
+00:02:35.340 --> 00:02:37.960
+Mas você não precisa decorar padrões de ponto e traço para dizer olá.
+
+00:02:38.100 --> 00:02:39.680
+Ele humaniza o protocolo.
+
+00:02:39.800 --> 00:02:43.980
+A máquina ainda processa comandos estruturados, apenas ocultos sob sua frase casual.
+
+00:02:43.980 --> 00:02:48.020
+E ele não esquece, pergunte, mostre o desempenho da loja no segundo trimestre.
+
+00:02:48.220 --> 00:02:50.380
+Depois continue com, divida isso por região.
+
+00:02:50.600 --> 00:02:52.240
+Ele lembra ao que isso se refere.
+
+00:02:52.520 --> 00:02:55.460
+O contexto conversacional é seu recurso mais subestimado.
+
+00:02:55.700 --> 00:03:00.000
+Você pode ter um diálogo real com seus dados sem precisar repetir todo o histórico da consulta
+
+00:03:00.000 --> 00:03:00.340
+sempre.
+
+00:03:00.560 --> 00:03:04.440
+O modelo constrói um pequeno fio semântico, o que os engenheiros da Microsoft chamam de
+
+00:03:04.440 --> 00:03:06.620
+árvore de contexto, e o repassa para continuidade.
+
+00:03:06.800 --> 00:03:09.480
+Esse fio então se conecta a um agente de dados do Fabric.
+
+00:03:09.680 --> 00:03:12.020
+Pense no agente como um mordomo disciplinado.
+
+00:03:12.020 --> 00:03:17.000
+Ele gerencia solicitações, impõe governança e garante que você nunca entre em salas restritas.
+
+00:03:17.180 --> 00:03:19.240
+O Copilou Estúdio não armazena seus dados.
+
+00:03:19.500 --> 00:03:22.480
+Ele pede acesso emprestado educadamente através de canais autenticados.
+
+00:03:22.700 --> 00:03:25.600
+Cada interação respeita as políticas de segurança do Fabric, o mesmo acesso baseado
+
+00:03:25.600 --> 00:03:27.380
+em função, a mesma prevenção contra perda de dados.
+
+00:03:27.600 --> 00:03:31.380
+Nem mesmo seu estagiário curioso conseguiria convencê-lo a revelar números de vendas executivos
+
+00:03:31.380 --> 00:03:32.840
+se as permissões dele não permitirem.
+
+00:03:32.960 --> 00:03:34.600
+Essa obediência é integrada.
+
+00:03:34.840 --> 00:03:39.240
+A genialidade do design é que o Copilou Estúdio herda a governança do Fabric em vez de tentar
+
+00:03:39.240 --> 00:03:39.900
+reinventá-la.
+
+00:03:40.140 --> 00:03:42.100
+Você obtém conveniência sem caos.
+
+00:03:42.260 --> 00:03:43.620
+Então, hierarquia simplificada.
+
+00:03:43.900 --> 00:03:48.280
+Você, Copilou Estúdio, agente de dados Fabric, o armazém, uma resposta, preferencialmente
+
+00:03:48.280 --> 00:03:50.560
+formatada em algo mais legível que uma tabela de mil linhas.
+
+00:03:50.740 --> 00:03:54.200
+E se você estiver pensando, essa cadeia de comando não deixa as coisas mais lentas?
+
+00:03:54.360 --> 00:03:57.060
+Não, porque o Fabric não está buscando o banco de dados inteiro.
+
+00:03:57.240 --> 00:04:00.400
+Ele está executando uma consulta delimitada interpretada a partir da sua frase.
+
+00:04:00.400 --> 00:04:02.300
+A precisão permanece intacta.
+
+00:04:02.460 --> 00:04:05.520
+O que o Copilou Estúdio adiciona não é mágica, é eficiência de tradução.
+
+00:04:05.740 --> 00:04:08.620
+Ele substitui a disciplina de sintaxe pela liberdade de conversação.
+
+00:04:08.620 --> 00:04:11.060
+Você foca no significado, ele impõe a estrutura.
+
+00:04:11.200 --> 00:04:13.540
+Essa é a troca que deveríamos ter feito há décadas.
+
+00:04:13.720 --> 00:04:17.720
+E agora que nosso tradutor é fluente, é hora de conectá-lo a algo que valha a pena
+
+00:04:17.720 --> 00:04:18.260
+traduzir.
+
+00:04:18.360 --> 00:04:22.460
+Um banco de dados real que respeita regulamentações e ocasionalmente lhe diz não.
+
+00:04:22.840 --> 00:04:24.980
+Conectando o Copilou Estúdio ao Fabric.
+
+00:04:25.220 --> 00:04:28.440
+Agora vem a parte que geralmente separa entusiastas de profissionais.
+
+00:04:28.740 --> 00:04:32.960
+Conectar o Copilou Estúdio ao Fabric sem acidentalmente conceder ao estagiário acesso à
+
+00:04:32.960 --> 00:04:33.720
+folha de pagamento.
+
+00:04:34.300 --> 00:04:36.440
+Conceptualmente, essa conexão é elegante.
+
+00:04:36.440 --> 00:04:40.220
+Na prática, é um aperto de mão burocrático entre dois sistemas profundamente cautelosos.
+
+00:04:40.400 --> 00:04:42.160
+Comece com um agente de dados do Fabric.
+
+00:04:42.340 --> 00:04:43.320
+Esse é o seu portal.
+
+00:04:43.560 --> 00:04:44.080
+Publique-o.
+
+00:04:44.260 --> 00:04:47.120
+Não deixe, sob nenhuma circunstância, o projeto definhando no modo rascunho.
+
+00:04:47.240 --> 00:04:50.260
+O modo rascunho serve apenas para testar se ele consegue responder sussurrando.
+
+00:04:50.460 --> 00:04:53.460
+O modo publicar é o que permite que ele realmente fale com o mundo exterior.
+
+00:04:53.700 --> 00:04:56.820
+Imagine um bibliotecário praticando sua pronúncia a portas fechadas em comparação
+
+00:04:56.820 --> 00:04:58.640
+com um que está no balcão esperando por perguntas.
+
+00:04:58.780 --> 00:04:59.800
+Você quer o segundo.
+
+00:05:00.100 --> 00:05:01.760
+Rascunhos sussurram para si mesmos.
+
+00:05:02.020 --> 00:05:04.060
+Agentes publicados conversam com todos os outros.
+
+00:05:04.060 --> 00:05:05.860
+Em seguida, escolha um ambiente.
+
+00:05:06.060 --> 00:05:09.820
+Cada ambiente do Copilot Studio, Dev, QA, produção, é seu próprio pequeno universo,
+
+00:05:10.020 --> 00:05:11.440
+com permissões e credenciais separadas.
+
+00:05:11.660 --> 00:05:12.720
+Não revire os olhos.
+
+00:05:13.040 --> 00:05:15.060
+Isso é governança, não trabalho extra.
+
+00:05:15.240 --> 00:05:17.360
+O ambiente de Dev pode quebrar coisas silenciosamente.
+
+00:05:17.560 --> 00:05:20.900
+O de QA confirma que ninguém incendiou as cortinas, e a produção é onde os executivos
+
+00:05:20.900 --> 00:05:22.400
+acabarão clicando em pânico no Teams.
+
+00:05:22.560 --> 00:05:27.020
+Conectar todos pelo mesmo conduite seria o equivalente em dados a uma escova de dentes compartilhada.
+
+00:05:27.240 --> 00:05:28.420
+Mantenha a separação.
+
+00:05:28.680 --> 00:05:31.340
+Assim que o ambiente estiver pronto, vincule as credenciais.
+
+00:05:31.340 --> 00:05:34.860
+O Copilot Studio pode se autenticar de duas formas principais, usando sua própria conta
+
+00:05:34.860 --> 00:05:37.620
+durante o teste ou passando as credenciais do usuário final em tempo de execução.
+
+00:05:37.780 --> 00:05:39.400
+Prefira sempre a segunda opção.
+
+00:05:39.600 --> 00:05:42.720
+Quando você permite que a autenticação flua através da identidade do usuário, o
+
+00:05:42.720 --> 00:05:45.120
+Fabric aplica sua segurança em nível de função automaticamente.
+
+00:05:45.300 --> 00:05:49.120
+Isso significa que, quando a Linda, do marketing, perguntar sobre a receita trimestral, ela verá
+
+00:05:49.120 --> 00:05:50.280
+apenas os números da região dela.
+
+00:05:50.500 --> 00:05:52.480
+Não há previsão global que a faria questionar o bônus dela.
+
+00:05:52.620 --> 00:05:55.100
+O assistente de conexão cuida do trabalho pesado.
+
+00:05:55.340 --> 00:06:00.180
+Ele cria um handshake de app seguro, valida o acesso ao Fabric e vincula o agente ao seu copiloto.
+
+00:06:00.180 --> 00:06:04.580
+Uma vez concluído, o Copilot Studio torna-se multilingue no único idioma que importa.
+
+00:06:04.940 --> 00:06:05.940
+Metadados do Fabric.
+
+00:06:06.160 --> 00:06:09.900
+A partir daí, qualquer prompting em linguagem natural que você enviar passa por esse agente,
+
+00:06:10.160 --> 00:06:14.140
+converte-se em uma chamada legítima de dados do Fabric e recupera resultados moldados pela
+
+00:06:14.140 --> 00:06:17.280
+governança que seu administrador configurou arduamente no último trimestre.
+
+00:06:17.440 --> 00:06:18.620
+Agora falamos de canais.
+
+00:06:18.880 --> 00:06:23.100
+Porque assim que seu copiloto estiver operante, você pode publicá-lo onde quer que haja conversas
+
+00:06:23.100 --> 00:06:23.600
+educadas.
+
+00:06:23.820 --> 00:06:27.660
+Microsoft Teams, SharePoint ou até mesmo incorporado dentro de um portal web.
+
+00:06:27.660 --> 00:06:32.160
+Cada canal se comporta como um círculo social diferente, a mesma pessoa, com o tom ajustado.
+
+00:06:32.300 --> 00:06:35.480
+Uma implementação no Teams é ótima para trocas rápidas sobre análise de dados.
+
+00:06:35.740 --> 00:06:37.060
+Mostre-me as vendas de hoje.
+
+00:06:37.300 --> 00:06:41.260
+O SharePoint oferece consultas formais de diretoria, e o webchat é seu FAQ voltado ao
+
+00:06:41.260 --> 00:06:43.580
+cliente que, por acaso, tem acesso a dados reais.
+
+00:06:43.780 --> 00:06:45.760
+O agente não se importa de onde é chamado.
+
+00:06:46.060 --> 00:06:48.300
+Desde que esteja autonticado, ele executa.
+
+00:06:48.480 --> 00:06:50.480
+Sim, o usuário ainda precisará fazer login.
+
+00:06:50.680 --> 00:06:54.300
+Toda apresentação sobre consultoria de IA chega eventualmente a esse momento de decepção
+
+00:06:54.300 --> 00:06:54.700
+humana.
+
+00:06:54.700 --> 00:06:56.860
+A Microsoft não está fazendo feitiçaria.
+
+00:06:57.060 --> 00:07:00.200
+Ela não pode responder perguntas para pessoas que se recusam a se autenticar.
+
+00:07:00.340 --> 00:07:03.900
+O reinício da civilização após cada atualização é irritante, mas necessário.
+
+00:07:04.060 --> 00:07:07.560
+Quando você conecta credenciais e canais de ambiente, o que você construiu é essencialmente
+
+00:07:07.560 --> 00:07:09.080
+um sistema de encanamento para a linguagem.
+
+00:07:09.240 --> 00:07:13.020
+Perguntas fluem para dentro, consultas estruturadas fluem para fora, respostas governadas retornam.
+
+00:07:13.140 --> 00:07:15.740
+É uma conversa de dados por meio de pipelines certificados.
+
+00:07:15.920 --> 00:07:19.600
+Com todo esse encanamento concluído, podemos parar de admirar os canos e começar a admirar
+
+00:07:19.600 --> 00:07:19.900
+a água.
+
+00:07:19.900 --> 00:07:22.720
+Por que o próximo salto não é técnico, é conversacional?
+
+00:07:22.920 --> 00:07:26.060
+Como é, na verdade, um diálogo inteligente com um depósito de dados?
+
+00:07:26.340 --> 00:07:27.180
+Vamos descobrir.
+
+00:07:27.620 --> 00:07:29.240
+Inteligência conversacional em ação.
+
+00:07:29.520 --> 00:07:30.780
+Finalmente, a parte divertida.
+
+00:07:31.020 --> 00:07:31.860
+Fazer o Febrik responder.
+
+00:07:32.040 --> 00:07:34.740
+A maioria das pessoas espera que o Copiló Estúdio se comporte como um gênio.
+
+00:07:34.920 --> 00:07:37.320
+Uma pergunta, uma resposta, e depois volta para a lâmpada.
+
+00:07:37.500 --> 00:07:40.560
+Em vez disso, ele se comporta mais como um analista paciente que lembra de tudo o que
+
+00:07:40.560 --> 00:07:42.380
+você disse e conecta os pontos silenciosamente.
+
+00:07:42.580 --> 00:07:43.400
+Imagine perguntar.
+
+00:07:43.640 --> 00:07:45.640
+Quais foram nossos cinco principais dias de viagem?
+
+00:07:45.640 --> 00:07:49.460
+O sistema consulta o Febrik, classifica pelo total de viagens e apresenta os vencedores,
+
+00:07:49.640 --> 00:07:51.560
+com 1º de novembro de 2013 entre eles.
+
+00:07:51.700 --> 00:07:52.420
+Você continua.
+
+00:07:52.780 --> 00:07:53.580
+Por que esses dias?
+
+00:07:53.780 --> 00:07:55.840
+Agora, o Copiló não entra em pânico.
+
+00:07:56.020 --> 00:08:00.180
+Ele mantém a métrica original, reconhece o porquê como uma investigação causal e
+
+00:08:00.180 --> 00:08:01.580
+busca fatores correlacionados.
+
+00:08:01.760 --> 00:08:04.860
+Quando sua próxima mensagem diz, mostre a temperatura também, ele já entende que você
+
+00:08:04.860 --> 00:08:07.760
+se refere aos mesmos dias, ao mesmo conjunto de dados, em um contexto expandido.
+
+00:08:07.880 --> 00:08:12.000
+A conversa se torna um modelo iterativo de pensamento, não buscas isoladas, mas um fio condutor
+
+00:08:12.000 --> 00:08:13.080
+de raciocínio em evolução.
+
+00:08:13.080 --> 00:08:16.840
+Por baixo dos panos, ele constrói o que os engenheiros da Microsoft chamam carinhosamente
+
+00:08:16.840 --> 00:08:17.760
+de árvores de contexto.
+
+00:08:17.920 --> 00:08:21.500
+Cada ramo representa uma pergunta, um filtro ou um atributo que você adicionou.
+
+00:08:21.640 --> 00:08:24.240
+O tronco é o seu tópico principal, viagens por dia.
+
+00:08:24.400 --> 00:08:27.720
+As folhas são modificadores, clima, distrito, tipo de tarifa.
+
+00:08:27.900 --> 00:08:29.840
+Ele não refaz a consulta do zero a cada vez.
+
+00:08:30.160 --> 00:08:34.100
+Ele refina um modelo semântico interno, passando tokens estruturados de volta ao agente
+
+00:08:34.100 --> 00:08:35.580
+de dados do Febrik para execução.
+
+00:08:35.740 --> 00:08:39.380
+O resultado parece menos com navegar em um banco de dados e mais com debater com ele.
+
+00:08:39.560 --> 00:08:40.260
+Aqui está o truque.
+
+00:08:40.260 --> 00:08:43.820
+Como os agentes do Febrik obedecem ao mesmo envelope de segurança, a conversa permanece
+
+00:08:43.820 --> 00:08:44.260
+legítima.
+
+00:08:44.400 --> 00:08:47.680
+O Copilou Studio pode raciocinar sobre dados que não tem permissão para exibir.
+
+00:08:47.820 --> 00:08:51.140
+Peça os bônus dos executivos por trimestre, e ele responderá com uma recusa perfeitamente
+
+00:08:51.140 --> 00:08:53.660
+educada, acompanhada de uma explicação da política de governança.
+
+00:08:53.820 --> 00:08:55.940
+Esse é o tipo de educação que o SQL nunca teve.
+
+00:08:56.180 --> 00:08:58.260
+Antigamente, ele apenas lançava um erro e ficava indisponível.
+
+00:08:58.420 --> 00:09:00.860
+Quando ele responde, o que você recebe não é apenas um texto sem formatação.
+
+00:09:01.000 --> 00:09:04.280
+Ele pode apresentar resumos estruturados, tabelas, comparações em lista, até mesmo saídas
+
+00:09:04.280 --> 00:09:06.260
+no estilo de mapa de calor, dependendo de como você o instruir.
+
+00:09:06.260 --> 00:09:10.420
+Diga, liste os resultados como uma tabela que eu possa copiar para o Excel, e a formatação
+
+00:09:10.420 --> 00:09:11.540
+se ajusta instantaneamente.
+
+00:09:11.720 --> 00:09:15.520
+Contexto, memória e formatação de resposta criam o que a Microsoft chama de inteligência
+
+00:09:15.520 --> 00:09:16.100
+conversacional.
+
+00:09:16.400 --> 00:09:18.860
+A habilidade de adaptar não apenas o que dizer, mas como dizer.
+
+00:09:19.020 --> 00:09:22.460
+Como esse conjunto de recursos ainda está em versão prévia, ele ocasionalmente esquece
+
+00:09:22.460 --> 00:09:23.120
+as boas maneiras.
+
+00:09:23.320 --> 00:09:26.560
+Você pode receber a fonte de dados errada ou uma explicação excessivamente confiante
+
+00:09:26.560 --> 00:09:27.800
+vinda da web em vez do Febrik.
+
+00:09:27.980 --> 00:09:31.260
+Trate esses momentos como fases de criança pequena, não como falhas fatais.
+
+00:09:31.260 --> 00:09:34.600
+A precisão melhora conforme você define limites no seu prompt de sistema.
+
+00:09:34.820 --> 00:09:35.040
+Como?
+
+00:09:35.280 --> 00:09:36.240
+Use apenas o Febrik.
+
+00:09:36.440 --> 00:09:40.280
+Em outras palavras, a IA conversacional se comporta bem quando você a orienta adequadamente.
+
+00:09:40.500 --> 00:09:44.160
+Para quem sente falta da transparência do SQL, calma, você ainda pode ver a lógica.
+
+00:09:44.340 --> 00:09:47.360
+A visualização de rastreamento do Copilou Studio exibe o caminho de raciocínio, o que
+
+00:09:47.360 --> 00:09:50.360
+foi interpretado, qual agente de dados foi chamado e como a resposta foi ajustada.
+
+00:09:50.500 --> 00:09:52.840
+Pense nisso como um analisador de consultas para humanos.
+
+00:09:53.120 --> 00:09:55.180
+Você observa a cadeia de pensamento da IA.
+
+00:09:55.380 --> 00:09:59.260
+Linguagem natural, mapa semântico, consulta ao Febrik, saída governada.
+
+00:09:59.260 --> 00:10:03.040
+Quando um resultado parece estranho, o rastreador indica exatamente qual ramificação na árvore
+
+00:10:03.040 --> 00:10:04.320
+de conversação causou a confusão.
+
+00:10:04.520 --> 00:10:06.920
+Nunca foi tão fácil satisfazer a curiosidade ao depurar.
+
+00:10:07.160 --> 00:10:09.600
+Outro elemento de design subestimado é o feedback.
+
+00:10:09.840 --> 00:10:13.720
+Cada vez que você reformula ou corrige, não, eu quis dizer 2014, não 2013.
+
+00:10:14.040 --> 00:10:16.540
+Esse esclarecimento alimenta o modelo local do seu estilo de conversa.
+
+00:10:16.680 --> 00:10:19.760
+Não é um aprendizado global, é algo limitado à sessão e ao contexto.
+
+00:10:20.020 --> 00:10:23.140
+Dentro desse chat, suas particularidades linguísticas se tornam dados de treinamento.
+
+00:10:23.320 --> 00:10:26.860
+A IA fica mais rápida, precisa e surpreendentemente boa em espelhar seu modo de falar.
+
+00:10:26.860 --> 00:10:30.440
+Você se torna seu próprio conjunto de dados de ajuste, sem escrever uma única linha de
+
+00:10:30.440 --> 00:10:30.700
+código.
+
+00:10:30.900 --> 00:10:32.020
+Quer um cenário concreto?
+
+00:10:32.260 --> 00:10:35.020
+Dois gerentes de vendas abrem o Teams durante uma reunião de segunda-feira.
+
+00:10:35.200 --> 00:10:36.820
+Um pergunta ao copilô vinculado ao Febrik.
+
+00:10:37.100 --> 00:10:39.380
+Mostre os produtos mais vendidos no segundo trimestre por região.
+
+00:10:39.560 --> 00:10:42.060
+Enquanto o gráfico aparece, o segundo gerente responde.
+
+00:10:42.280 --> 00:10:44.380
+Qual região cresceu mais rápido trimestre a trimestre?
+
+00:10:44.560 --> 00:10:48.640
+O copilô lembra da estrutura da primeira tabela, calcula a diferença e responde a ambos
+
+00:10:48.640 --> 00:10:50.280
+mantendo a continuidade do contexto.
+
+00:10:50.480 --> 00:10:55.040
+Em segundos, eles estão analisando a variação de desempenho sem invocar nenhuma procídura armazenada.
+
+00:10:55.040 --> 00:10:59.980
+E se alguém errar o período e digitar 2027, o copilô simplesmente retorna zero registros
+
+00:10:59.980 --> 00:11:03.960
+encontrados em vez de exibir aquele erro de stack trace passivo-agressivo do SQL.
+
+00:11:04.320 --> 00:11:06.800
+Curiosidade como código, que conceito interessante.
+
+00:11:07.040 --> 00:11:11.300
+Esse design iterativo e com memória transforma a análise em ciclos de conversação, em vez
+
+00:11:11.300 --> 00:11:12.400
+de interrogações únicas.
+
+00:11:12.600 --> 00:11:16.240
+Cada pergunta torna-se resultado e entrada, transformando usuários de meros consumidores
+
+00:11:16.240 --> 00:11:18.520
+de dashboards em participantes do raciocínio de dados.
+
+00:11:18.700 --> 00:11:21.840
+O verdadeiro poder da ferramenta não é a automação, é o engajamento.
+
+00:11:21.840 --> 00:11:24.700
+A essa altura, a pergunta deixa de ser, posso acessar os dados?
+
+00:11:24.960 --> 00:11:26.160
+Você claramente pode.
+
+00:11:26.380 --> 00:11:29.340
+A pergunta passa a ser, o que posso fazer a conversa realizar a seguir?
+
+00:11:29.480 --> 00:11:32.860
+Porque uma vez que seu sistema de análise ouve, lembra e esclarece, você não está mais
+
+00:11:32.860 --> 00:11:34.480
+fazendo consultas, você está colaborando.
+
+00:11:34.600 --> 00:11:36.440
+Por que isso muda o trabalho do analista?
+
+00:11:36.680 --> 00:11:39.820
+Vamos abordar o pânico que se espalha silenciosamente pelos departamentos de análise.
+
+00:11:40.020 --> 00:11:42.840
+Se o copilô pode conversar com os dados, para que precisamos de analistas?
+
+00:11:43.280 --> 00:11:43.680
+Relaxe.
+
+00:11:43.860 --> 00:11:47.120
+Analistas não estão sendo extintos, eles estão sendo promovidos para fora das trincheiras.
+
+00:11:47.120 --> 00:11:50.940
+Historicamente, analistas funcionavam como tradutores, humanos que conhecem inglês e
+
+00:11:50.940 --> 00:11:55.180
+SQL, pagos para converter, porque a receita caiu, em declarações complexas que ninguém
+
+00:11:55.180 --> 00:11:55.860
+mais entende.
+
+00:11:56.100 --> 00:11:58.700
+Esse custo de tradução consumia metade de suas agendas.
+
+00:11:58.940 --> 00:12:01.620
+Com a consulta conversacional, a máquina cuida da gramática.
+
+00:12:01.820 --> 00:12:04.060
+O analista fica livre para cuidar do significado.
+
+00:12:04.260 --> 00:12:06.360
+Este é o coração da democratização de dados.
+
+00:12:06.600 --> 00:12:09.380
+A IA remove o controle de acesso, mas preserva a governança.
+
+00:12:09.380 --> 00:12:13.120
+O Copilô Estúdio não entrega a todos passes de bastidores para bancos de dados de produção.
+
+00:12:13.360 --> 00:12:16.600
+Ele entrega microfones filtrados conectados através da segurança do fábric.
+
+00:12:16.600 --> 00:12:19.580
+A política permanece intacta, mas a curiosidade ganha escala.
+
+00:12:19.740 --> 00:12:23.220
+Quando todos podem fazer perguntas informadas com segurança, analistas deixam de ser funcionários
+
+00:12:23.220 --> 00:12:24.200
+e começam a ser maestros.
+
+00:12:24.380 --> 00:12:27.180
+Eles orquestram a lógica, a semântica e o controle de qualidade.
+
+00:12:27.440 --> 00:12:28.700
+Imagine uma orquestra.
+
+00:12:28.920 --> 00:12:32.220
+Dezenas de usuários de negócios tocando seus departamentos como instrumentos, vendas,
+
+00:12:32.440 --> 00:12:33.260
+finanças, RH.
+
+00:12:33.460 --> 00:12:35.800
+O analista não precisa mais trabalhar exaustivamente em tickets chamados.
+
+00:12:35.940 --> 00:12:37.320
+Por favor, crie um relatório no Excel.
+
+00:12:37.320 --> 00:12:39.240
+Em vez disso, eles definem o ritmo.
+
+00:12:39.400 --> 00:12:43.220
+Eles projetam como as perguntas são resolvidas, garantem que as definições correspondam às métricas
+
+00:12:43.220 --> 00:12:46.360
+corporativas e ajustam prômpites para que o Copilô interprete margem e lucro
+
+00:12:46.360 --> 00:12:46.860
+corretamente.
+
+00:12:47.080 --> 00:12:49.700
+Menos digitação de comandos, mais formatação de conversas.
+
+00:12:49.900 --> 00:12:51.840
+Existe um milagre de escalabilidade aqui.
+
+00:12:52.060 --> 00:12:55.780
+Um analista qualificado refina um agente do Copilô uma vez, definindo relacionamentos
+
+00:12:55.780 --> 00:12:57.620
+de entidades, sinônimos e exclusões.
+
+00:12:57.860 --> 00:13:01.240
+Centenas de funcionários não técnicos ganham então autonomia instantânea sem violar a
+
+00:13:01.240 --> 00:13:01.760
+conformidade.
+
+00:13:01.960 --> 00:13:03.560
+Isso é alavancagem exponencial.
+
+00:13:03.560 --> 00:13:07.200
+O analista se torna um multiplicador de infraestrutura, em vez de um gargalo.
+
+00:13:07.300 --> 00:13:08.840
+A economia sustenta isso.
+
+00:13:09.060 --> 00:13:13.100
+Pesquisas sobre a democratização impulsionada por IA estimam até 15 trilhões de dólares em
+
+00:13:13.100 --> 00:13:15.060
+desbloqueio de produtividade global potencial.
+
+00:13:15.320 --> 00:13:18.880
+Um número grande demais para compreender além de um montante enorme do PIB.
+
+00:13:19.100 --> 00:13:21.140
+Esse valor não emerge de novos dados.
+
+00:13:21.480 --> 00:13:25.220
+Ele emerge de dados existentes que finalmente se tornam utilizáveis por humanos comuns.
+
+00:13:25.340 --> 00:13:28.420
+Toda vez que um gerente de vendas obtém um insight por conta própria em vez de abrir
+
+00:13:28.420 --> 00:13:30.840
+um ticket, uma planilha em algum lugar respira aliviada.
+
+00:13:31.000 --> 00:13:33.060
+Compare isso com pilhas de bilegadas.
+
+00:13:33.280 --> 00:13:38.960
+O Tableau, por exemplo, é um virtuoso excelente, denso, preditivo, mas caro e isolado.
+
+00:13:38.960 --> 00:13:42.420
+É ótimo em performance solo, mas ruim em coordenação de conjunto.
+
+00:13:42.620 --> 00:13:46.180
+A vantagem do Copilou Studio é a integração ao ecossistema e a acessibilidade.
+
+00:13:46.400 --> 00:13:51.900
+Ele casa o diálogo generativo com o DNA colaborativo do Microsoft 365, Teams, SharePoint, Outlook,
+
+00:13:52.080 --> 00:13:53.860
+os lugares onde os negócios realmente acontecem.
+
+00:13:53.940 --> 00:13:57.860
+Em vez de exportar visuais, você faz perguntas diretas dentro do próprio fluxo de trabalho.
+
+00:13:58.020 --> 00:14:00.680
+E sim, a governança continua sendo a força civilizadora.
+
+00:14:00.860 --> 00:14:04.100
+O Copilou obedece ao modelo de segurança centralizado do fabric ao pé da letra.
+
+00:14:04.260 --> 00:14:06.980
+Cada consulta é roteada através de canais autenticados.
+
+00:14:06.980 --> 00:14:09.700
+Todo resultado herda o rastreamento de linhagem.
+
+00:14:10.260 --> 00:14:12.400
+Democratização sem disciplina é anarquia.
+
+00:14:12.600 --> 00:14:16.580
+A arquitetura da Microsoft garante democracia com burocracia inclusa.
+
+00:14:16.780 --> 00:14:20.080
+Analistas ainda definem políticas, classificam dados e auditam logs.
+
+00:14:20.320 --> 00:14:23.340
+A IA só pode falar livremente dentro das cercas que os analistas constroem.
+
+00:14:23.520 --> 00:14:26.160
+Então não, o Copilou Studio não substitui os analistas.
+
+00:14:26.400 --> 00:14:27.260
+Ele os amplia.
+
+00:14:27.480 --> 00:14:31.460
+Ele os emancipa do trabalho árduo da sintaxe e eleva seu foco para o design de modelos,
+
+00:14:31.700 --> 00:14:33.360
+precisão semântica e gestão ética.
+
+00:14:33.500 --> 00:14:36.280
+Eles deixam de ser escravos de consultas para se tornarem arquitetos de linguagem.
+
+00:14:36.280 --> 00:14:39.200
+Quanto melhor eles treinam o agente, mais inteligente a organização parece.
+
+00:14:39.400 --> 00:14:41.920
+O analista do futuro é metade linguista, metade guardião.
+
+00:14:42.100 --> 00:14:45.740
+Eles curarão vocabulários, moldarão ciclos de feedback e depurarão a lógica em conversas,
+
+00:14:45.860 --> 00:14:46.560
+em vez de códigos.
+
+00:14:46.780 --> 00:14:50.880
+Sua entrega deixa de ser a produção de relatórios e passa a ser perguntas respondidas com segurança.
+
+00:14:51.100 --> 00:14:53.780
+Isso muda fundamentalmente a velocidade organizacional.
+
+00:14:54.020 --> 00:14:55.900
+As decisões param de esperar por tradução.
+
+00:14:56.180 --> 00:14:58.040
+As discussões acontecem sob demanda.
+
+00:14:58.180 --> 00:15:01.980
+Os analistas permanecem como guardiões da verdade, mas a verdade se torna conversacional.
+
+00:15:02.200 --> 00:15:05.340
+Em resumo, eles não perdem relevância, eles ganham onipresença.
+
+00:15:05.340 --> 00:15:09.580
+Agora, enquanto os analistas evoluem para maestros, o restante da empresa também tem
+
+00:15:09.580 --> 00:15:10.240
+lição de casa.
+
+00:15:10.560 --> 00:15:13.320
+Aprender a falar dados sem acidentalmente evocar absurdos.
+
+00:15:13.440 --> 00:15:16.940
+Isso exige cultura, não código, o que nos leva direto ao próximo ponto.
+
+00:15:17.280 --> 00:15:20.420
+Como é, de fato, uma organização com alfabetização em dados.
+
+00:15:20.680 --> 00:15:23.340
+Construindo uma organização alfabetizada em dados.
+
+00:15:23.600 --> 00:15:25.280
+A tecnologia nunca é o gargalo.
+
+00:15:25.420 --> 00:15:26.160
+As pessoas são.
+
+00:15:26.360 --> 00:15:29.580
+Você pode implementar o Copilou Studio em todos os espaços de trabalho, mas ainda
+
+00:15:29.580 --> 00:15:32.000
+verá funcionários digitando, mostre-me as coisas do dinheiro.
+
+00:15:32.000 --> 00:15:34.440
+E se perguntando por que nada útil retorna.
+
+00:15:34.840 --> 00:15:38.820
+Alfabetização em dados, a habilidade de fazer perguntas precisas, é a fronteira final
+
+00:15:38.820 --> 00:15:40.200
+da automação da inteligência.
+
+00:15:40.360 --> 00:15:43.700
+A verdadeira democracia de dados não depende de todos se tornarem especialistas em SQL,
+
+00:15:43.980 --> 00:15:45.840
+mas de todos se tornarem questionadores articulados.
+
+00:15:45.980 --> 00:15:49.360
+O febre que com o Copilou Studio só funciona se os humanos souberem o que perguntar.
+
+00:15:49.480 --> 00:15:52.420
+Portanto, a primeira mudança cultural é a curiosidade com precisão.
+
+00:15:52.620 --> 00:15:56.040
+Ensine aos usuários que, vendas por região no último trimestre, funciona porque cada substantivo
+
+00:15:56.040 --> 00:15:57.460
+e período de tempo ancora o significado.
+
+00:15:57.800 --> 00:15:59.980
+Ambiguidade inane ainda produz respostas inanes.
+
+00:15:59.980 --> 00:16:01.160
+Comece pequeno.
+
+00:16:01.400 --> 00:16:04.900
+Escolha domínios de alto impacto, vendas, finanças, operações, onde as métricas são
+
+00:16:04.900 --> 00:16:06.280
+claras e exigem visibilidade constante.
+
+00:16:06.460 --> 00:16:08.500
+Eles oferecem prova imediata de ROI.
+
+00:16:08.760 --> 00:16:12.000
+Um diretor de vendas obtendo respostas em segundos se torna um anúncio ambulante para
+
+00:16:12.000 --> 00:16:12.380
+adoção.
+
+00:16:12.640 --> 00:16:15.220
+Histórias de sucesso se espalham mais rápido que sessões de treinamento.
+
+00:16:15.460 --> 00:16:17.980
+Enquanto isso, a governança permanece rigorosa no núcleo.
+
+00:16:18.080 --> 00:16:20.040
+Os administradores mantêm as rédeas.
+
+00:16:20.180 --> 00:16:23.700
+O Copilou pode responder, mas o febre que dita o que ele tem permissão para dizer.
+
+00:16:23.700 --> 00:16:25.740
+Essa é a genialidade da sua integração.
+
+00:16:26.000 --> 00:16:28.120
+Limites de privilégio incorporados na conversa.
+
+00:16:28.120 --> 00:16:30.700
+Os administradores podem dormir tranquilos à noite enquanto os funcionários fazem
+
+00:16:30.700 --> 00:16:31.920
+karaokê de dados durante o dia.
+
+00:16:32.080 --> 00:16:35.260
+A linhagem automatizada do febre que garante que toda conversa deixe rastros.
+
+00:16:35.440 --> 00:16:37.780
+Cada consulta se torna parte da trilha de auditoria.
+
+00:16:37.960 --> 00:16:39.720
+Quem perguntou o quê, quando e por quê?
+
+00:16:40.020 --> 00:16:43.200
+Antigamente, as perguntas verbais desapareciam nas atas das reuniões.
+
+00:16:43.460 --> 00:16:45.540
+Agora, são interações com controle de versão.
+
+00:16:45.720 --> 00:16:47.680
+Os departamentos de compliance comemoram.
+
+00:16:47.880 --> 00:16:50.460
+Há uma responsabilidade integrada à própria curiosidade.
+
+00:16:50.460 --> 00:16:54.460
+No entanto, com um grande poder generativo vem um potencial espetacular para bobagens.
+
+00:16:54.460 --> 00:16:59.160
+A alucinação, a invenção confiante de fatos pela IA, continua sendo o conto de terror corporativo.
+
+00:16:59.360 --> 00:17:01.760
+Preveni-la não é algo místico, é processual.
+
+00:17:01.980 --> 00:17:05.920
+Defina prompites de sistema claros instruindo o Copilou a permanecer dentro dos dados do Fabric.
+
+00:17:06.160 --> 00:17:09.060
+Desative fontes externas da web para conjuntos de dados críticos.
+
+00:17:09.260 --> 00:17:12.080
+Crie tópicos de fallback que lidem com perguntas absurdas gentilmente com
+
+00:17:12.080 --> 00:17:14.180
+Essa solicitação está fora do meu escopo de dados.
+
+00:17:14.380 --> 00:17:17.600
+Um, não, educado preserva a confiança melhor do que uma mentira confiante.
+
+00:17:17.600 --> 00:17:21.180
+Pense nesse ambiente como uma caixa de areia segura para humanos curiosos.
+
+00:17:21.180 --> 00:17:25.680
+Lá dentro, a experimentação é incentivada, pois os limites impedem que a estupidez ultrapasse
+
+00:17:25.680 --> 00:17:26.200
+a contenção.
+
+00:17:26.360 --> 00:17:30.140
+Os usuários podem formular hipóteses livremente, os analistas podem monitorar como as perguntas
+
+00:17:30.140 --> 00:17:33.540
+evoluem e a liderança pode observar tendências de consulta sobre o que a empresa realmente
+
+00:17:33.540 --> 00:17:35.120
+quer saber, mas nunca pensou em medir.
+
+00:17:35.220 --> 00:17:38.180
+A curiosidade torna-se uma moeda visível e quantificável.
+
+00:17:38.400 --> 00:17:40.860
+Construir essa cultura exige o apoio da liderança.
+
+00:17:41.080 --> 00:17:45.040
+Quando os executivos usam o Copilou pessoalmente, perguntando oficialmente, quais foram os fatores
+
+00:17:45.040 --> 00:17:46.020
+de charme do mês passado?
+
+00:17:46.160 --> 00:17:47.820
+Isso sinaliza legitimidade.
+
+00:17:47.820 --> 00:17:52.060
+Nada cultiva a alfabetização mais rápido do que ver o chefe digitar frases completas.
+
+00:17:52.180 --> 00:17:56.020
+O objetivo não é ensinar estatística a todos, é ensiná-los a conversar de forma inteligente
+
+00:17:56.020 --> 00:17:56.480
+com os dados.
+
+00:17:56.680 --> 00:17:58.340
+Com o tempo, padrões surgem.
+
+00:17:58.460 --> 00:18:00.360
+Os departamentos desenvolvem dialetos.
+
+00:18:00.640 --> 00:18:04.860
+Finanças perguntam sobre variação, marketing sobre engajamento, RH sobre tempo de casa.
+
+00:18:05.080 --> 00:18:08.760
+Analistas curam esses dialetos em glossários, alimentando a compreensão do Copilou.
+
+00:18:08.920 --> 00:18:12.360
+A organização adquire gradualmente uma linguagem coletiva de consulta.
+
+00:18:12.540 --> 00:18:15.900
+Isso é alfabetização, não números memorizados, mas significado compartilhado.
+
+00:18:15.900 --> 00:18:16.580
+E a ironia.
+
+00:18:16.880 --> 00:18:20.420
+Uma vez que os usuários conseguem formular perguntas claras, eles começam a se importar
+
+00:18:20.420 --> 00:18:21.360
+com a qualidade dos dados.
+
+00:18:21.580 --> 00:18:26.660
+Quando alguém pergunta o tempo médio de entrega na emia e a resposta parece absurda, o instinto
+
+00:18:26.660 --> 00:18:29.080
+muda de culpar a ti para investigar o pipeline.
+
+00:18:29.340 --> 00:18:31.600
+A curiosidade gera responsabilidade.
+
+00:18:31.860 --> 00:18:35.140
+Uma cultura alfabetizada fiscaliza sua própria higiene de dados porque dados ruins
+
+00:18:35.140 --> 00:18:36.440
+envergonham a todos igualmente.
+
+00:18:36.800 --> 00:18:39.940
+Eventualmente, as conversas com o Copilou tornam-se rotineiras, não notáveis.
+
+00:18:40.140 --> 00:18:41.780
+Os relatórios se enviam sozinhos.
+
+00:18:42.020 --> 00:18:43.760
+Os insights chegam como respostas.
+
+00:18:43.760 --> 00:18:46.040
+Ei, Copilou, resuma as exceções de ontem.
+
+00:18:46.200 --> 00:18:48.640
+E, até a próxima reunião, a pauta se escreve sozinha.
+
+00:18:48.780 --> 00:18:50.580
+A automação torna-se invisível.
+
+00:18:50.820 --> 00:18:54.860
+Nesse estágio, a única lacuna de habilidade restante é a curiosidade e, talvez, a capacidade
+
+00:18:54.860 --> 00:18:56.080
+de digitar frases completas.
+
+00:18:56.220 --> 00:18:58.180
+Todos os outros sabem falar a língua dos dados.
+
+00:18:58.440 --> 00:19:01.000
+Apenas os voluntariamente ignorantes permanecerá mudos.
+
+00:19:01.180 --> 00:19:04.660
+Em essência, Febre que mais Copilou e Estúdio criam uma organização que não apenas
+
+00:19:04.660 --> 00:19:06.660
+armazena conhecimento, mas dialoga com ele.
+
+00:19:06.860 --> 00:19:10.980
+Analistas conduzem, funcionários questionam, o sistema responde e cada troca deixa a empresa
+
+00:19:10.980 --> 00:19:12.560
+um pouco mais inteligente do que antes.
+
+00:19:12.720 --> 00:19:16.040
+É assim que a alfabetização se parece quando seu banco de dados finalmente ouve.
+
+00:19:16.200 --> 00:19:17.620
+O fim dos pontos e vírgulas.
+
+00:19:17.900 --> 00:19:21.160
+Começamos com uma barreira linguística disfarçada de habilidade técnica.
+
+00:19:21.420 --> 00:19:26.300
+Colunas, junções e filtros, rituais que transformam a curiosidade em ansiedade por sintaxe.
+
+00:19:26.420 --> 00:19:30.460
+Mas com o Copilou Estúdio falando Febre que fluentemente em seu nome, a barreira linguística
+
+00:19:30.460 --> 00:19:31.480
+finalmente desmorona.
+
+00:19:31.660 --> 00:19:35.240
+Você não traduz mais pensamentos em pontos e vírgulas, você os traduz em frases.
+
+00:19:35.460 --> 00:19:37.780
+Essa mudança não é cosmética, é cognitiva.
+
+00:19:37.780 --> 00:19:40.780
+A humanidade criou linguagens de consulta para ensinar precisão às máquinas.
+
+00:19:40.920 --> 00:19:43.620
+Agora, as máquinas aprenderam inglês o suficiente para nos encontrar no meio do caminho.
+
+00:19:43.760 --> 00:19:44.820
+O eixo se inverte.
+
+00:19:45.060 --> 00:19:48.100
+Em vez de você aprender a gramática do banco de dados, o sistema aprende sua intenção.
+
+00:19:48.280 --> 00:19:51.540
+Consultar por conversa, e não por encantamento, transforma o trabalho com dados de código
+
+00:19:51.540 --> 00:19:51.980
+em diálogo.
+
+00:19:52.140 --> 00:19:53.980
+E esse diálogo permanece disciplinado.
+
+00:19:54.160 --> 00:19:57.400
+A governança do Febre que mantém cada resposta atrelada à realidade baseada em funções.
+
+00:19:57.600 --> 00:19:59.600
+Você ganha liberdade sem abrir mão do controle.
+
+00:19:59.820 --> 00:20:01.960
+O acesso por linguagem natural não dilui o rigor.
+
+00:20:02.160 --> 00:20:05.640
+Ele o apresenta elegantemente por trás de frases educadas e contexto autonticado.
+
+00:20:05.640 --> 00:20:08.600
+A máquina ainda verifica sua identificação antes de entregar a verdade.
+
+00:20:08.780 --> 00:20:09.660
+A ironia é notável.
+
+00:20:10.040 --> 00:20:11.460
+Democratização através de restrição.
+
+00:20:11.620 --> 00:20:15.160
+As mesmas barreiras que antes retardavam a análise agora a protegem do caos, permitindo
+
+00:20:15.160 --> 00:20:16.640
+que a curiosidade escale com segurança.
+
+00:20:16.860 --> 00:20:20.980
+Analistas conduzem, funcionários conversam e insights circulam como oxigênio em vez de
+
+00:20:20.980 --> 00:20:21.440
+papelada.
+
+00:20:21.580 --> 00:20:24.500
+A organização para de solicitar dados e começa a falar dados.
+
+00:20:24.740 --> 00:20:26.500
+Então, aqui está a lição principal.
+
+00:20:26.660 --> 00:20:28.860
+O Copiló Estúdio não torna o SQL obsoleto.
+
+00:20:29.060 --> 00:20:30.940
+Ele aposenta o SQL da fala cotidiana.
+
+00:20:30.940 --> 00:20:34.660
+O futuro da inteligência de negócios pertence a pessoas que sabem fazer perguntas inteligentes,
+
+00:20:34.860 --> 00:20:36.260
+não aquelas que pontuam com precisão.
+
+00:20:36.460 --> 00:20:37.820
+Seu experimento é simples.
+
+00:20:38.080 --> 00:20:40.980
+Implante um agente de teste, conecte-o ao Fabric e digite uma pergunta proibida que
+
+00:20:40.980 --> 00:20:42.680
+você jamais arriscaria em um relatório de diretoria.
+
+00:20:42.880 --> 00:20:45.580
+Sem scripts, sem joins, apenas pensamento expresso claramente.
+
+00:20:45.780 --> 00:20:46.660
+Observe-o responder.
+
+00:20:46.960 --> 00:20:49.620
+Se isso não parece progresso, é porque você tem nostalgia de pontos e vírgulas.

@@ -1,0 +1,2389 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:01.520
+Vous mettez encore à jour manuellement du genre vérité.
+
+00:00:01.880 --> 00:00:03.840
+Ce n'est pas de l'artisanat, c'est de la pénitence non rémunérée.
+
+00:00:04.140 --> 00:00:07.720
+La modernisation manuelle est un mode d'échec lent, sujet aux erreurs et perpétuellement en retard.
+
+00:00:08.060 --> 00:00:09.140
+Vérité ?
+
+00:00:09.140 --> 00:00:11.460
+Les agents IA gèrent désormais les tâches ingrates, preuves à l'appui.
+
+00:00:12.400 --> 00:00:13.420
+Voici ce que vous y gagnez réellement.
+
+00:00:13.700 --> 00:00:16.600
+Du temps, la fin des CVE et des factures cloud qui cessent de s'envoler.
+
+00:00:17.360 --> 00:00:20.280
+Nous allons étudier une étude de cas, des benchmarks de stack, des résultats
+
+00:00:20.280 --> 00:00:22.560
+et une piste d'audit complète pour assurer la gouvernance.
+
+00:00:23.340 --> 00:00:25.500
+Il y a une métrique qui a embarrassé la finance et ravi la sécurité.
+
+00:00:26.100 --> 00:00:26.580
+Restez pour voir ça.
+
+00:00:26.580 --> 00:00:29.840
+Voici ce qui arrive quand vous laissez Copilot piloter la modernisation de vos applications.
+
+00:00:30.820 --> 00:00:33.400
+Le contexte, la stack héritée et le mandat de modernisation.
+
+00:00:34.020 --> 00:00:37.740
+Commençons par la base, une application Spring de l'air Java 8 MVC classique
+
+00:00:37.740 --> 00:00:42.640
+avec quelques tâches planifiées, construites avec Maven et tournant sur AWS, AWS.
+
+00:00:43.700 --> 00:00:46.560
+Gouvernance conservatrice, à l'air bruyante, tout le monde jure que l'app est stable
+
+00:00:46.560 --> 00:00:48.160
+alors que PageRDuty dit le contraire.
+
+00:00:48.900 --> 00:00:51.660
+La stack dérive, les POM par an ont été forkés il y a des années,
+
+00:00:51.660 --> 00:00:54.000
+les versions de dépendance sont épinglées comme des insectes
+
+00:00:54.000 --> 00:00:56.420
+et un pipeline CI qui ne passe que si l'on prie.
+
+00:00:57.060 --> 00:00:58.100
+Comportement utilisateur classique.
+
+00:00:58.740 --> 00:01:00.980
+Ignorer les badges rouges, faire taire le scanner et prier
+
+00:01:00.980 --> 00:01:03.100
+pour que le prochain sprint inclue la dette technique.
+
+00:01:04.140 --> 00:01:05.080
+Spoiler, ça n'arrive jamais.
+
+00:01:05.940 --> 00:01:06.700
+Inventaire des problèmes.
+
+00:01:07.400 --> 00:01:09.240
+La dérive des versions signifie que les bibliothèques modernes
+
+00:01:09.240 --> 00:01:10.440
+ne se résolvent pas sans exclusion.
+
+00:01:11.120 --> 00:01:11.940
+L'enfer des dépendances.
+
+00:01:12.380 --> 00:01:14.180
+La roulette transitive, ou une mise à jour de log
+
+00:01:14.180 --> 00:01:15.700
+fait exploser votre client HTTP.
+
+00:01:15.700 --> 00:01:19.760
+Les CVE n'ont corrigé et attendent poliment un kit d'exploitation.
+
+00:01:20.100 --> 00:01:22.460
+Gaspillage de ressources, autoscaling qui ne réduit jamais.
+
+00:01:22.660 --> 00:01:25.740
+Instance à 8% des CPU pendant que la finance finance un chauffage d'appoint.
+
+00:01:26.100 --> 00:01:26.240
+Point.
+
+00:01:26.980 --> 00:01:30.300
+Ajouter des configs fragiles, des variables d'environnement dans les données utilisateurs,
+
+00:01:30.660 --> 00:01:33.780
+des écritures sur disque avec état et des secrets stockés là où ils ne devraient pas être.
+
+00:01:34.260 --> 00:01:35.140
+Contraintes ?
+
+00:01:35.140 --> 00:01:36.020
+Ceci est uniquement audio.
+
+00:01:36.440 --> 00:01:38.440
+Pas d'héroïsme de façade, pas de basculement d'onglet.
+
+00:01:38.580 --> 00:01:39.180
+Vers stack overflow.
+
+00:01:39.180 --> 00:01:44.300
+Nous nous basons sur des artefacts reproductibles, des rapports, des divs de comit et des sorties
+
+00:01:44.300 --> 00:01:46.920
+de scannées car deviner n'est pas une stratégie et qu'est sa marche sur ma machine-preuve.
+
+00:01:47.540 --> 00:01:49.040
+Pourquoi Java 21 ?
+
+00:01:49.040 --> 00:01:51.940
+Les threads virtuels transforment la concurrence d'une ressource rare, elle devient une commodité.
+
+00:01:52.740 --> 00:01:54.920
+Des milliers de threads légers avec un surcoût minimal.
+
+00:01:55.460 --> 00:01:57.560
+Le débit augmente, la latence de queue diminue.
+
+00:01:58.180 --> 00:02:01.640
+Amélioration du garbage collector, les raffinements de G1 et ZGC réduisent les temps de pause.
+
+00:02:02.740 --> 00:02:06.340
+L'API pour les fonctions et la mémoire étrangère est stable, ce qui compte si vous appelez du code natif
+
+00:02:06.340 --> 00:02:07.400
+ou gérez des buffers or IP.
+
+00:02:07.400 --> 00:02:11.220
+Effet net et des gains mesurables en performance et maintenabilité.
+
+00:02:11.680 --> 00:02:14.160
+La plupart des gens pensent que la mise à jour est cosmétique, c'est faux !
+
+00:02:14.160 --> 00:02:16.300
+Vous obtenez une concurrence moins coûteuse et moins de blocage,
+
+00:02:16.480 --> 00:02:18.260
+directement visible dans les graphiques de niveau de service.
+
+00:02:19.000 --> 00:02:22.840
+Périmètre de migration, sortir d'AWS, entrer sur Azure, s'aligner sur les standards d'entreprise,
+
+00:02:22.960 --> 00:02:25.800
+consolider la facturation et s'intégrer à la plateforme où résident déjà votre identité,
+
+00:02:25.920 --> 00:02:27.220
+vos politiques et votre observabilité.
+
+00:02:27.960 --> 00:02:31.480
+Nous ciblerons Azure App Service ou Azure Spring App selon le profil de la charge de travail.
+
+00:02:32.300 --> 00:02:33.620
+Application simple, App Service suffit.
+
+00:02:34.840 --> 00:02:37.100
+Microservices lourds sous Spring, avec scalabilité complexe.
+
+00:02:37.100 --> 00:02:38.220
+Pensez à Azure Spring Apps.
+
+00:02:39.180 --> 00:02:41.160
+Pour les données, la directive est Azure SQL Database.
+
+00:02:41.940 --> 00:02:44.700
+Oui, vous pouvez garder PostgreSQL sur Azure, mais l'entreprise veut consolider,
+
+00:02:44.800 --> 00:02:46.620
+donc nous tracerons la voie et montrerons les compromis.
+
+00:02:47.560 --> 00:02:48.500
+Position sur la gouvernance.
+
+00:02:49.320 --> 00:02:50.680
+Chaque action finit dans Git.
+
+00:02:51.740 --> 00:02:53.280
+Diffable, réversible, attribuable.
+
+00:02:54.000 --> 00:02:56.640
+L'agent génère un plan, ouvre des tickets et propose des commits.
+
+00:02:56.640 --> 00:02:58.840
+Vous approuvez et résout les builds.
+
+00:02:58.920 --> 00:03:02.040
+Corrige les dépendances, applique des transformations de code via des recettes connues,
+
+00:03:02.320 --> 00:03:05.240
+régénère le S-Bohem et relance les scanners.
+
+00:03:06.120 --> 00:03:07.820
+Si quelque chose échoue, il boucle.
+
+00:03:08.320 --> 00:03:09.460
+Fini le pèlerinage Alt-Tab.
+
+00:03:10.040 --> 00:03:12.460
+Et quand il ne peut pas avancer, il demande une intervention et documente pourquoi.
+
+00:03:12.940 --> 00:03:13.860
+Voyez la différence ?
+
+00:03:13.860 --> 00:03:15.720
+Le travail devient auditable au lieu d'anecdotique.
+
+00:03:16.200 --> 00:03:18.180
+Avant de laisser un agent touché à quoi que ce soit vous évaluer.
+
+00:03:18.180 --> 00:03:23.560
+Inventaire automatisé des modules, dépendance, plugin de build et config d'exécution.
+
+00:03:24.560 --> 00:03:27.280
+Résultat classé par risque avec référence aux avis et à la documentation.
+
+00:03:28.340 --> 00:03:31.200
+Indicateur de préparation au cloud pour les liaisons de services variables d'environnement
+
+00:03:31.200 --> 00:03:33.720
+et pièges avec état qui rompent lors du cycle de vie des conteneurs.
+
+00:03:34.560 --> 00:03:37.560
+Base de coût, heure de calcul, taux d'inactivité et modèle de sortie réseau
+
+00:03:37.560 --> 00:03:39.120
+que la finance fin d'ignorer jusqu'à la fin du mois.
+
+00:03:40.100 --> 00:03:41.920
+Vous dites peut-être, nous pouvons trier cela à la main.
+
+00:03:42.440 --> 00:03:44.560
+Fascinant, et vous vous étonnez encore que l'app plante.
+
+00:03:46.160 --> 00:03:48.020
+L'utilisateur moyen rate les problèmes de fond.
+
+00:03:48.560 --> 00:03:50.680
+Les API obsolètes au cœur du planificateur,
+
+00:03:50.840 --> 00:03:53.240
+un pont de journalisation masquant des conflits de classe
+
+00:03:53.240 --> 00:03:55.080
+ou cette bibliothèque bloquante.
+
+00:03:56.500 --> 00:03:58.320
+L'agent ne les rate pas, car il ne s'ennuie jamais.
+
+00:03:58.820 --> 00:04:00.820
+Donc, le mandat de modernisation est simple et définitif.
+
+00:04:01.640 --> 00:04:03.380
+Passer à Java 21, éliminer les CVE,
+
+00:04:03.540 --> 00:04:06.660
+conteneuriser, migrer vers Azure via CICD avec déploiement contrôlé,
+
+00:04:07.000 --> 00:04:08.900
+imposer les politiques via approbation équivalente
+
+00:04:08.900 --> 00:04:11.960
+et réduiser les coûts sans sacrifier la fiabilité.
+
+00:04:12.960 --> 00:04:15.440
+Tous les changements sont tracés par des commits avec justification.
+
+00:04:15.960 --> 00:04:16.500
+Pas de boîte noire.
+
+00:04:16.500 --> 00:04:18.520
+Pas de commis de héros à 2h du matin.
+
+00:04:19.160 --> 00:04:21.360
+L'évaluation d'abord, car deviner n'est pas une stratégie.
+
+00:04:21.460 --> 00:04:22.560
+Puis, on exécute.
+
+00:04:23.380 --> 00:04:23.700
+Évaluation.
+
+00:04:24.280 --> 00:04:26.220
+L'IA expose la dette technique avec preuve à l'appui.
+
+00:04:26.960 --> 00:04:28.460
+Voici ce qui se passe réellement quand vous appuyez sur EV.
+
+00:04:28.460 --> 00:04:30.040
+L'agent ne scanne pas.
+
+00:04:30.540 --> 00:04:31.040
+Il inventorie.
+
+00:04:32.200 --> 00:04:37.420
+Code, fichier de build, plugin, dépendance transitive, éléments Docker, variable d'environnement,
+
+00:04:37.580 --> 00:04:38.340
+script de démarrage.
+
+00:04:38.680 --> 00:04:41.020
+Même ce vieux rappeur Shell copié en 2017.
+
+00:04:42.400 --> 00:04:45.880
+Il construit un graphe de dépendance, la note avec les données CVE et classe les risques.
+
+00:04:46.320 --> 00:04:46.780
+Pas au feeling.
+
+00:04:47.200 --> 00:04:49.680
+C'est vérité, exploitabilité, accessibilité, accessibility.
+
+00:04:50.400 --> 00:04:52.360
+C'est le registre Windows de la réalité de votre application.
+
+00:04:53.140 --> 00:04:55.040
+Pas juste une liste, votre structure dorsale mise à nu.
+
+00:04:55.760 --> 00:04:56.280
+La vérité.
+
+00:04:56.580 --> 00:04:57.900
+La plupart des gens pensent connaître leur stack.
+
+00:04:58.300 --> 00:04:58.900
+Ils ne la connaissent pas.
+
+00:04:59.200 --> 00:05:02.640
+L'agent trouve le POM par enforké avec une version figée qui bloque tous les correctifs
+
+00:05:02.640 --> 00:05:03.040
+en aval.
+
+00:05:03.520 --> 00:05:07.040
+Il signale les points SLF4I en double qui se chevauchent comme des colocataires en conflit.
+
+00:05:07.620 --> 00:05:11.420
+Il détecte le conteneur de servlet discrètement obsolète de 3 versions car votre CI ne teste
+
+00:05:11.420 --> 00:05:12.480
+que le scénario idéal.
+
+00:05:12.480 --> 00:05:16.140
+Et oui, cartographie les API obsolètes que vous utilisez depuis des années parce que
+
+00:05:16.140 --> 00:05:18.120
+personne ne voulait toucher au planificateur de tâches.
+
+00:05:18.940 --> 00:05:20.160
+Spoiler, vous allez y toucher maintenant.
+
+00:05:20.580 --> 00:05:21.100
+Ensuite les CVE.
+
+00:05:21.500 --> 00:05:24.300
+Analyse de la sévérité, bibliothèque affectée et référence aux avis de sécurité.
+
+00:05:24.640 --> 00:05:25.640
+Des liens directs, pas des rhumains.
+
+00:05:25.960 --> 00:05:28.520
+Les vulnérabilités critiques et élevées sont prioritaires, mais identifiez aussi
+
+00:05:28.520 --> 00:05:30.740
+si les chemins de code vulnérables sont accessibles par votre application.
+
+00:05:31.580 --> 00:05:32.400
+L'accessibilité compte.
+
+00:05:33.220 --> 00:05:36.560
+Si une bibliothèque transitive a un problème, mais que votre code n'appelle jamais la classe
+
+00:05:36.560 --> 00:05:38.240
+vulnérable, elle est signalée.
+
+00:05:38.580 --> 00:05:40.980
+Mais l'agent priorise les correctifs réduisant les risques réels.
+
+00:05:40.980 --> 00:05:43.060
+Vous obtenez les options de remédiation.
+
+00:05:43.500 --> 00:05:44.240
+Mettre à jour les versions.
+
+00:05:44.420 --> 00:05:45.180
+Ajouter des exclusions.
+
+00:05:45.320 --> 00:05:46.520
+Vous remplacez complètement les artefacts.
+
+00:05:46.860 --> 00:05:47.800
+C'est un menu, pas un mystère.
+
+00:05:48.180 --> 00:05:50.040
+La préparation et la mise à niveau est justifiée par des...
+
+00:05:50.040 --> 00:05:52.780
+Java 21 exige que vous cessiez de faire comme si nous étions en 2009.
+
+00:05:53.700 --> 00:05:56.640
+L'agent exécute des recettes Open Rewrite sur votre base de code en mode simulation,
+
+00:05:57.020 --> 00:06:00.420
+montrant précisément quelles API sont obsolètes, quels imports changés, et où se cachent
+
+00:06:00.420 --> 00:06:01.360
+les changements de comportement.
+
+00:06:02.180 --> 00:06:06.100
+Il souligne les accès réflexifs illégaux, les bizarreries de JUC et les petites mines prêtes
+
+00:06:06.100 --> 00:06:07.560
+à exploser dans la configuration XML.
+
+00:06:08.260 --> 00:06:10.960
+Il note les frameworks prêts, les versions de Spring, la compatibilité des plus,
+
+00:06:10.980 --> 00:06:13.420
+les plugins et ceux qui nécessitent une adaptation, pas de blabla.
+
+00:06:14.100 --> 00:06:16.640
+Chaque changement proposé renvoie vers la documentation et les notes de migration.
+
+00:06:17.220 --> 00:06:19.700
+La préparation au cloud est l'endroit où les caractéristiques de votre infrastructure
+
+00:06:19.700 --> 00:06:20.280
+sont cataloguées.
+
+00:06:20.920 --> 00:06:24.220
+L'agent identifie les pièges liés à l'état, comme l'écriture de fichiers temporaires
+
+00:06:24.220 --> 00:06:28.240
+sur le disque local, le cache de cession en mémoire entre les instances, ou le stockage
+
+00:06:28.240 --> 00:06:31.480
+de secrets dans un fichier texte dans opt.
+
+00:06:32.440 --> 00:06:36.140
+Il signale l'utilisation de variables d'environnement basées sur des modèles de métadonnées EC2.
+
+00:06:36.140 --> 00:06:39.700
+Il pointe les liaisons de service pour les files d'attente rédits et les bases de données
+
+00:06:39.700 --> 00:06:41.020
+qui ne survivront pas au cycle de vie des contenants.
+
+00:06:41.500 --> 00:06:43.240
+Puis il propose des liaisons à la manière d'Azure.
+
+00:06:43.920 --> 00:06:47.280
+Les chaînes de connexion passent à la configuration qui volte pour les secrets, identité gérée
+
+00:06:47.280 --> 00:06:48.000
+pour l'authentification.
+
+00:06:48.420 --> 00:06:49.160
+Vous savez comme des adultes.
+
+00:06:49.480 --> 00:06:51.580
+Passons maintenant aux chocs financiers, les bases de...
+
+00:06:51.580 --> 00:06:55.060
+L'agent extrait les heures de calcul, les tailles d'instances, les modèles de mise à l'échelle
+
+00:06:55.060 --> 00:06:57.060
+et les taux d'inactivité depuis la télémétrie et l'infrastructure.
+
+00:06:58.120 --> 00:07:00.460
+Il estime les coûts de sortie de données, basés sur les modèles sortants.
+
+00:07:01.140 --> 00:07:04.100
+Oui, ce job par l'eau bruyant qui transfère des données entre régions chaque nuit à
+
+00:07:04.100 --> 00:07:04.720
+droit à sa ligne.
+
+00:07:05.080 --> 00:07:05.600
+À droit à sa ligne.
+
+00:07:06.040 --> 00:07:09.180
+Il traduit tout cela en un chiffre mensuel qui se moque, de vos anecdotes.
+
+00:07:09.960 --> 00:07:12.060
+C'est le chiffre qui a embarrassé la finance et ravit la sécurité.
+
+00:07:13.020 --> 00:07:16.180
+Parce qu'éliminer les CVE tout en réduisant les dépenses est la seule religion que partagent
+
+00:07:16.180 --> 00:07:16.760
+ces deux équipes.
+
+00:07:17.340 --> 00:07:18.480
+Des preuves où ça n'existe pas.
+
+00:07:18.480 --> 00:07:22.780
+L'agent génère un fichier de plan avec des sections, les étapes de remédiation
+
+00:07:22.780 --> 00:07:26.160
+CVE, les recettes de mise à niveau Java, les changements de build, les transformations
+
+00:07:26.160 --> 00:07:28.780
+de code, la compteurisation et les mappages de cibles cloud.
+
+00:07:30.220 --> 00:07:33.160
+Il ouvre des tickets par flux de travail, identifie les responsables si vous le souhaitez
+
+00:07:33.160 --> 00:07:34.700
+et prépare les commis dans une branche séparée.
+
+00:07:35.500 --> 00:07:37.480
+Des diffs propres et réduits avec les justifications dans les messages.
+
+00:07:38.200 --> 00:07:39.600
+SBOM généré, signé et versionné.
+
+00:07:40.120 --> 00:07:41.820
+Sortie du scanner de vulnérabilité jointe.
+
+00:07:42.020 --> 00:07:43.160
+C'est prêt pour l'audit et la première étape.
+
+00:07:43.640 --> 00:07:45.360
+Vous voulez la traçabilité ?
+
+00:07:45.360 --> 00:07:47.520
+Chaque constat est lié à un avis ou à un document de référence.
+
+00:07:47.520 --> 00:07:48.660
+Entrée NVD
+
+00:07:48.660 --> 00:07:50.040
+Note de version de projet
+
+00:07:50.040 --> 00:07:51.380
+Documentation Open Rewrite
+
+00:07:51.380 --> 00:07:52.520
+Guide de migration Azure
+
+00:07:52.520 --> 00:07:56.720
+Lorsqu'il suggère de remplacer une bibliothèque, il cite les matrices de compatibilité.
+
+00:07:57.260 --> 00:08:00.300
+Lorsqu'il recommande de déplacer un secret, il pointe vers les conseils de la plateforme
+
+00:08:00.300 --> 00:08:01.720
+sur Key Vault et les identités gérées.
+
+00:08:02.540 --> 00:08:06.760
+Ce n'est pas juste parce que l'IA le dit, c'est parce que cette norme précise, l'exige, l'exige.
+
+00:08:07.320 --> 00:08:08.200
+Le contrôle reste humain.
+
+00:08:08.720 --> 00:08:10.320
+Le plan est dans Git en attente d'approbation.
+
+00:08:10.320 --> 00:08:14.820
+Vous pouvez ajuster les priorités, rejeter une stratégie de remédiation ou demander un service
+
+00:08:14.820 --> 00:08:18.340
+cible différent Azure App Service plutôt qu'Azure Spring Apps avec les compromis clairement
+
+00:08:18.340 --> 00:08:18.760
+listés.
+
+00:08:20.100 --> 00:08:23.780
+L'agent s'adapte, relance l'évaluation des écarts et met à jour les artefacts.
+
+00:08:24.300 --> 00:08:24.780
+Sans rancune.
+
+00:08:25.340 --> 00:08:26.980
+Une fois les preuves sous les yeux, la posture change.
+
+00:08:27.420 --> 00:08:30.580
+Vous arrêtez de débattre de l'utilité de la modernisation pour commencer à planifier
+
+00:08:30.580 --> 00:08:31.100
+le travail.
+
+00:08:31.800 --> 00:08:34.440
+Et oui, l'utilisateur lambda essaiera toujours de livrer une fonctionnalité en priorité.
+
+00:08:35.140 --> 00:08:35.500
+Fascinant.
+
+00:08:35.500 --> 00:08:38.360
+Pendant ce temps, l'agent a déjà tracé le chemin le plus court vers un environnement
+
+00:08:38.360 --> 00:08:40.180
+d'exécution sécurisé, conforme et moins coûteux.
+
+00:08:40.480 --> 00:08:42.760
+Approuvez le plan, puis regardez-le faire le travail que vous ne cessez de reporter.
+
+00:08:43.640 --> 00:08:46.480
+Mise un niveau automatisé Java 8 vers Java 21, sans le moindre drame.
+
+00:08:46.820 --> 00:08:47.100
+Drame.
+
+00:08:47.800 --> 00:08:49.740
+Plan approuvé, l'agent arrête de parler et passe à l'action.
+
+00:08:50.800 --> 00:08:51.960
+La boucle est simple et impitoyable.
+
+00:08:52.500 --> 00:08:54.240
+Appliquer la recette, construire, tester, corriger.
+
+00:08:54.780 --> 00:08:55.740
+Répéter jusqu'à obtenir le feu.
+
+00:08:56.140 --> 00:08:59.400
+Pas d'explosion de dépôt, pas d'archéologie sur les forums, pas de tentative de réinstallation
+
+00:08:59.400 --> 00:08:59.700
+propre.
+
+00:09:00.440 --> 00:09:04.900
+Il utilise des recettes Open Rewrite pour réécrire les API, des Meven Enforcer pour normaliser les versions
+
+00:09:04.900 --> 00:09:08.420
+et une suite de tests d'intégration pour prouver qu'il n'a rien cassé.
+
+00:09:09.320 --> 00:09:10.840
+Quand une construction échoue, il ne panique pas.
+
+00:09:11.260 --> 00:09:14.140
+Il segmente l'échec, propose un changement ciblé et relance.
+
+00:09:14.800 --> 00:09:15.940
+La discipline à la vitesse de la machine.
+
+00:09:16.420 --> 00:09:18.900
+Les mises à jour des dépendances sont le domaine où les humains créent habituellement le chaos.
+
+00:09:19.520 --> 00:09:20.400
+Place à l'alignement BOM.
+
+00:09:20.940 --> 00:09:24.360
+L'agent adopte la nomenclature officielle pour Spring et les écosystèmes liés,
+
+00:09:24.540 --> 00:09:28.260
+centralise les versions et supprime la dispersion des versions dans les POM enfants.
+
+00:09:29.160 --> 00:09:31.340
+Il restreint les plages de version à des contraintes exactes ou gérées.
+
+00:09:31.340 --> 00:09:33.620
+Pour éviter la roulette transitive, supprime les exclusions redondantes
+
+00:09:33.620 --> 00:09:37.240
+et ajoute l'exclusion cruciale en cas de conflit entre deux back-ends de journalisation.
+
+00:09:38.340 --> 00:09:39.180
+Résultat ?
+
+00:09:39.180 --> 00:09:42.040
+Moins de surprises, moins de conflits de jarres, moins d'alertes nocturnes, voyez la stabilité.
+
+00:09:43.120 --> 00:09:43.680
+Maintenant le code.
+
+00:09:44.180 --> 00:09:46.760
+Java 21 signifie que vos anciennes API ont besoin d'une surveillance adaptée.
+
+00:09:47.320 --> 00:09:50.060
+L'agent remplace les classes et méthodes obsolètes par des équivalents supportés,
+
+00:09:50.180 --> 00:09:53.500
+met à jour les imports et ajuste les signatures de méthodes selon l'évolution de la plateforme.
+
+00:09:54.760 --> 00:09:56.500
+Il propose des refactorisations optionnelles,
+
+00:09:56.700 --> 00:09:58.100
+l'utilisation de records et de patterns,
+
+00:09:58.100 --> 00:10:01.800
+ainsi que des collections séquencées via un indicateur de fonctionnalité pour minimiser les diff.
+
+00:10:01.800 --> 00:10:04.220
+Il résout aussi les accès réflexifs illégaux,
+
+00:10:04.360 --> 00:10:07.220
+en les remplaçant par des alternatives supportées par le SBI ou le JDK,
+
+00:10:07.320 --> 00:10:11.060
+puis anote le commit avec une brève justification et des liens vers les notes de migration.
+
+00:10:11.900 --> 00:10:13.200
+Ce n'est pas juste un correctif, c'est une preuve.
+
+00:10:13.960 --> 00:10:16.700
+La correction de sécurité n'est pas un ajout de dernière minute, elle est intégrée.
+
+00:10:17.480 --> 00:10:18.760
+À mesure que les dépendances évoluent,
+
+00:10:18.920 --> 00:10:20.160
+l'agent vérifie à nouveau les CVE,
+
+00:10:20.380 --> 00:10:21.900
+boucle sur les résultats résiduels et régénère,
+
+00:10:22.240 --> 00:10:25.480
+la nomenclature logicielle S-Bomb ou que vos scanners voient la réalité actuelle et non un souvenir.
+
+00:10:26.000 --> 00:10:29.340
+Eh oui, il exécute le scanner de vulnérabilité et bloque la build en cas de régression.
+
+00:10:30.020 --> 00:10:30.860
+Vous avez dit que c'était strict.
+
+00:10:30.860 --> 00:10:31.580
+Exact.
+
+00:10:31.980 --> 00:10:34.160
+Sécurité appelle ça le professionnalisme minimum viable.
+
+00:10:34.640 --> 00:10:38.440
+Parlons des tests, car l'utilisateur moyen adore dire « ça compile, ça compile ».
+
+00:10:38.440 --> 00:10:39.380
+Comme si c'était un exploit.
+
+00:10:39.900 --> 00:10:42.040
+L'agent exécute vos tests unitaires, vos tests d'intégration,
+
+00:10:42.140 --> 00:10:44.820
+et si vous les avez configurés, vos tests de contrat sur des services factices.
+
+00:10:45.480 --> 00:10:46.220
+Si les tests sont fragiles,
+
+00:10:46.300 --> 00:10:48.800
+il crée des tickets avec un résultat d'échec précis et des correctifs recommandés.
+
+00:10:49.660 --> 00:10:51.400
+Si un test instable bloque la progression,
+
+00:10:51.600 --> 00:10:53.320
+il propose de le mettre en quarantaine avec un tag,
+
+00:10:53.600 --> 00:10:55.720
+documente le risque et poursuit sur les zones non risquées,
+
+00:10:56.340 --> 00:10:57.420
+de l'élan sans déni.
+
+00:10:58.680 --> 00:10:59.380
+Passons au benchmark.
+
+00:10:59.380 --> 00:11:01.560
+Une fois la mise à niveau stabilisée,
+
+00:11:01.700 --> 00:11:03.540
+l'agent exécute des tests ciblés de débit et de latence
+
+00:11:03.540 --> 00:11:05.320
+sur les mêmes charges de travail que la base de référence.
+
+00:11:06.320 --> 00:11:08.680
+L'impact est là où Java 21 justifie son existence.
+
+00:11:09.440 --> 00:11:12.420
+Plus de requêtes simultanées pour le même budget CPU grâce aux trades virtuels,
+
+00:11:12.620 --> 00:11:14.760
+une latence de queue plus faible grâce aux améliorations du GC,
+
+00:11:15.020 --> 00:11:16.600
+et moins de pénalités de changement de contexte.
+
+00:11:17.100 --> 00:11:19.120
+Pas besoin d'adorer les benchmarks pour comprendre des graphiques
+
+00:11:19.120 --> 00:11:20.180
+qui penchent dans la bonne direction.
+
+00:11:20.980 --> 00:11:23.540
+Le rapport précise quelles améliorations proviennent des trades virtuels
+
+00:11:23.540 --> 00:11:24.420
+ou des réglages du GC,
+
+00:11:24.420 --> 00:11:26.480
+afin que vous puissiez créditer la bonne fonctionnalité
+
+00:11:26.480 --> 00:11:30.220
+quand la finance demande pourquoi les machines sont soudainement moins inactives.
+
+00:11:30.520 --> 00:11:31.540
+L'hygiène des builds est importante.
+
+00:11:32.680 --> 00:11:34.060
+L'agent normalise les wrappers Maven,
+
+00:11:34.220 --> 00:11:36.440
+fixe la chaîne d'outils sur une distribution Java 21
+
+00:11:36.440 --> 00:11:37.320
+que vous contrôlez réellement
+
+00:11:37.320 --> 00:11:39.080
+et supprime les plugins obsolètes
+
+00:11:39.080 --> 00:11:40.740
+qui ne servent qu'à ralentir les builds.
+
+00:11:42.360 --> 00:11:43.960
+Ils standardisent les trapeaux du compilateur,
+
+00:11:44.120 --> 00:11:46.160
+transforment les avertissements en erreurs pour les modules approuvés
+
+00:11:46.160 --> 00:11:48.820
+et ajoutent une analyse statique là où le signal est fort.
+
+00:11:49.480 --> 00:11:50.400
+L'objectif n'est pas la perfection.
+
+00:11:50.860 --> 00:11:52.640
+L'objectif est la répétabilité et la banalité,
+
+00:11:52.820 --> 00:11:53.980
+le standard absolu pour les builds.
+
+00:11:54.780 --> 00:11:56.380
+C'est ici que les heures économisées apparaissent.
+
+00:11:57.300 --> 00:11:58.460
+Historiquement, ce genre de mise à niveau
+
+00:11:58.460 --> 00:12:00.460
+consomme des semaines de travail d'ingénieurs seniors
+
+00:12:00.460 --> 00:12:01.740
+à traquer des conflits transitifs,
+
+00:12:01.880 --> 00:12:03.320
+résoudre des échecs de plugins obscurs
+
+00:12:03.320 --> 00:12:04.360
+et gérer des tests instables.
+
+00:12:05.580 --> 00:12:06.840
+L'agent compresse cela en quelques jours,
+
+00:12:07.200 --> 00:12:07.700
+non par magie,
+
+00:12:07.760 --> 00:12:08.680
+mais parce qu'il ne se fatigue pas,
+
+00:12:08.760 --> 00:12:09.620
+ne se laisse pas distraire
+
+00:12:09.620 --> 00:12:11.400
+et n'invente pas de tâches inutiles.
+
+00:12:12.200 --> 00:12:14.080
+Vos humains consacrent leur temps à examiner les diffs
+
+00:12:14.080 --> 00:12:14.920
+et à prendre des décisions
+
+00:12:14.920 --> 00:12:16.820
+pas à deviner des numéros de version, pas à...
+
+00:12:16.820 --> 00:12:18.400
+Et lorsque la boue converge,
+
+00:12:18.560 --> 00:12:19.360
+que la recette est appliquée,
+
+00:12:19.480 --> 00:12:20.680
+les builds au vert, les tests réussis
+
+00:12:20.680 --> 00:12:21.680
+et le scanner silencieux,
+
+00:12:21.720 --> 00:12:22.480
+vous obtenez une branche propre
+
+00:12:22.480 --> 00:12:23.820
+avec des commits petits et bien étiquetés.
+
+00:12:24.580 --> 00:12:25.820
+Chaque message précise le changement,
+
+00:12:25.960 --> 00:12:27.040
+sa raison d'être et sa source.
+
+00:12:27.460 --> 00:12:28.420
+Les retours en arrière sont évidents.
+
+00:12:28.720 --> 00:12:29.600
+Les approbations sont rapides.
+
+00:12:29.780 --> 00:12:30.560
+Les auditeurs peuvent les lire
+
+00:12:30.560 --> 00:12:31.240
+sans avoir à vous appeler.
+
+00:12:31.680 --> 00:12:33.020
+De plus, votre pagère reste silencieux,
+
+00:12:33.080 --> 00:12:34.240
+ce qui prouve que la modernisation a eu lieu
+
+00:12:34.240 --> 00:12:35.340
+et non une simple simulation.
+
+00:12:36.060 --> 00:12:37.120
+Runtime moderne sécurisé.
+
+00:12:37.380 --> 00:12:38.220
+L'application est plus rapide,
+
+00:12:38.220 --> 00:12:39.260
+plus sûre et franchement plus mature.
+
+00:12:39.600 --> 00:12:40.400
+Maintenant, la facture cloud
+
+00:12:40.400 --> 00:12:41.740
+et la topologie ont besoin d'être révisées.
+
+00:12:41.740 --> 00:12:43.960
+Migration cloud, départ WS,
+
+00:12:44.020 --> 00:12:45.660
+arrivé sur Azure avec pipelines et politiques.
+
+00:12:46.280 --> 00:12:47.940
+Tout change lorsque l'environnement d'exécution est sain.
+
+00:12:48.300 --> 00:12:49.240
+Maintenant, nous déplaçons les meubles.
+
+00:12:49.760 --> 00:12:50.720
+Architecture cible d'abord,
+
+00:12:50.880 --> 00:12:51.800
+car une migration hasardeuse
+
+00:12:51.800 --> 00:12:52.560
+crée des pannes imprévisibles.
+
+00:12:53.220 --> 00:12:54.580
+Pour une application Spring MVC unique
+
+00:12:54.580 --> 00:12:55.860
+qui ne cherche pas à imiter un service mesh,
+
+00:12:55.940 --> 00:12:57.800
+Azure App Service est le chemin le plus efficace.
+
+00:12:58.620 --> 00:12:59.240
+Déploiement simple,
+
+00:12:59.340 --> 00:13:00.100
+mise à l'échelle intégrée
+
+00:13:00.100 --> 00:13:01.180
+et pas de Kubernetes surprise.
+
+00:13:01.740 --> 00:13:03.200
+Si vous avez plusieurs microservices Spring,
+
+00:13:03.200 --> 00:13:04.280
+de la découverte de services
+
+00:13:04.280 --> 00:13:05.320
+et des changements de configuration,
+
+00:13:05.620 --> 00:13:06.700
+Azure Spring App se rentabilise
+
+00:13:06.700 --> 00:13:07.740
+avec des composants Spring gérés
+
+00:13:07.740 --> 00:13:09.240
+et du déploiement bleu slash vert natif.
+
+00:13:09.780 --> 00:13:10.580
+L'agent ne devine pas.
+
+00:13:10.580 --> 00:13:11.640
+Il évalue la charge de travail
+
+00:13:11.640 --> 00:13:12.960
+selon les fonctionnalités, l'état et le trafic,
+
+00:13:13.040 --> 00:13:13.740
+puis recommande une solution
+
+00:13:13.740 --> 00:13:15.080
+avec des compromis et des notes sur les coûts.
+
+00:13:15.480 --> 00:13:15.960
+Vous approuvez.
+
+00:13:16.220 --> 00:13:16.520
+Procède.
+
+00:13:16.820 --> 00:13:17.400
+Les données suivent,
+
+00:13:17.520 --> 00:13:18.380
+et c'est là que les professionnels
+
+00:13:18.380 --> 00:13:19.360
+se distinguent des amateurs.
+
+00:13:19.860 --> 00:13:21.320
+La directive est Azure SQL Database.
+
+00:13:21.560 --> 00:13:23.220
+Oui, j'ai entendu votre nostalgie pour PostgreSQL.
+
+00:13:23.660 --> 00:13:24.620
+La gouvernance veut une consolidation,
+
+00:13:24.780 --> 00:13:26.080
+l'identité veut une authentification gérée
+
+00:13:26.080 --> 00:13:27.220
+et la finance veut une facture unique.
+
+00:13:28.080 --> 00:13:29.540
+L'agent inventori l'utilisation JDBC,
+
+00:13:29.640 --> 00:13:30.320
+les poules de connexion
+
+00:13:30.320 --> 00:13:31.280
+et les hypothèses des drivers.
+
+00:13:32.080 --> 00:13:33.140
+Il remplace le driver,
+
+00:13:33.460 --> 00:13:34.780
+met à jour l'URL JDBC,
+
+00:13:35.100 --> 00:13:36.080
+ajoute une logique de réessai
+
+00:13:36.080 --> 00:13:37.080
+pour les erreurs transitoires
+
+00:13:37.080 --> 00:13:38.940
+et traite les différences NCSQL,
+
+00:13:39.140 --> 00:13:40.660
+là où vous aviez écrit des requêtes spécifiques.
+
+00:13:41.680 --> 00:13:43.080
+Si la friction de migration est élevée,
+
+00:13:43.180 --> 00:13:44.880
+il propose une zone d'atterrissage intermédiaire
+
+00:13:44.880 --> 00:13:46.440
+sur Azure Database for PostgreSQL
+
+00:13:46.440 --> 00:13:48.260
+avec un plan de basculement futur
+
+00:13:48.260 --> 00:13:50.280
+et des délais clairement définis.
+
+00:13:51.060 --> 00:13:53.080
+Des options avec des preuves à l'appui ?
+
+00:13:53.080 --> 00:13:54.900
+La conteneurisation n'est pas un trait de caractère,
+
+00:13:55.520 --> 00:13:56.580
+c'est un outil de répétabilité.
+
+00:13:57.240 --> 00:13:58.280
+L'agent génère un fichier Docker
+
+00:13:58.280 --> 00:13:59.240
+qui construit réellement une image
+
+00:13:59.240 --> 00:14:00.300
+de base minimale multi-étapes,
+
+00:14:00.360 --> 00:14:01.180
+un utilisateur non-root
+
+00:14:01.180 --> 00:14:02.100
+et des vérifications d'état.
+
+00:14:02.100 --> 00:14:04.160
+Il intègre des drapeaux JVM
+
+00:14:04.160 --> 00:14:05.240
+alignés sur Java 21
+
+00:14:05.240 --> 00:14:06.200
+et votre budget mémoire,
+
+00:14:06.300 --> 00:14:07.120
+pas une copie aléatoire
+
+00:14:07.120 --> 00:14:07.860
+trouvée sur un blog.
+
+00:14:08.860 --> 00:14:09.960
+Ensuite, il émet l'infrastructure
+
+00:14:09.960 --> 00:14:10.660
+sous forme de code,
+
+00:14:10.800 --> 00:14:11.740
+bicep ou modèle ARM
+
+00:14:11.740 --> 00:14:12.960
+pour provisionner App Service
+
+00:14:12.960 --> 00:14:13.720
+ou Azure Spring Apps,
+
+00:14:13.860 --> 00:14:14.620
+les plans App Service
+
+00:14:14.620 --> 00:14:15.900
+qui voltent les identités
+
+00:14:15.900 --> 00:14:16.640
+et le réseau.
+
+00:14:17.700 --> 00:14:19.140
+Une définition d'environnement par étape,
+
+00:14:19.460 --> 00:14:20.660
+dev, test, prod,
+
+00:14:21.100 --> 00:14:22.240
+même structure, taille différente.
+
+00:14:22.800 --> 00:14:23.480
+Moins de pannes surprise
+
+00:14:23.480 --> 00:14:24.920
+car la machine a cessé d'improviser.
+
+00:14:25.720 --> 00:14:26.840
+CICD est là où le mythe du hack
+
+00:14:26.840 --> 00:14:28.080
+en déplora plus tard vient mourir.
+
+00:14:28.640 --> 00:14:29.720
+Place à GitHub Actions,
+
+00:14:30.400 --> 00:14:31.380
+l'agent structure des workflows
+
+00:14:31.380 --> 00:14:32.560
+qui compile avec la chaîne d'outils
+
+00:14:32.560 --> 00:14:33.680
+Java 21 figés,
+
+00:14:33.940 --> 00:14:35.100
+exécute des tests et des scanners,
+
+00:14:35.340 --> 00:14:36.140
+construisent et scannent
+
+00:14:36.140 --> 00:14:36.980
+des images de conteneurs
+
+00:14:36.980 --> 00:14:37.540
+puis déploient
+
+00:14:37.540 --> 00:14:38.360
+via des environnements
+
+00:14:38.360 --> 00:14:39.480
+nécessitant des approbations.
+
+00:14:40.220 --> 00:14:40.800
+Les retours en arrière
+
+00:14:40.800 --> 00:14:41.240
+sont un bouton,
+
+00:14:41.320 --> 00:14:42.100
+pas une serve de spiritisme.
+
+00:14:42.520 --> 00:14:43.320
+Tag d'image précédent,
+
+00:14:43.460 --> 00:14:44.060
+slot précédent,
+
+00:14:44.360 --> 00:14:44.940
+modèle précédent.
+
+00:14:45.440 --> 00:14:46.460
+Il leur caisse des tests de fumée
+
+00:14:46.460 --> 00:14:46.960
+après déploiement
+
+00:14:46.960 --> 00:14:47.680
+et conditionne la promotion
+
+00:14:47.680 --> 00:14:48.140
+à leur réussite.
+
+00:14:48.800 --> 00:14:49.600
+Vous ne comptez pas sur la chance
+
+00:14:49.600 --> 00:14:50.520
+pour que la prod ressemble au test,
+
+00:14:50.580 --> 00:14:51.260
+le pipeline l'impose.
+
+00:14:52.060 --> 00:14:52.720
+Les secrets ne sont pas
+
+00:14:52.720 --> 00:14:53.520
+des variables d'environnement
+
+00:14:53.520 --> 00:14:54.180
+en texte clair,
+
+00:14:54.340 --> 00:14:55.140
+ils résident dans qui volent.
+
+00:14:55.540 --> 00:14:56.620
+L'agent provisionne les coffres,
+
+00:14:56.620 --> 00:14:57.520
+crée les références
+
+00:14:57.520 --> 00:14:58.440
+et fait passer l'application
+
+00:14:58.440 --> 00:14:59.260
+en identité managée.
+
+00:15:00.100 --> 00:15:01.360
+Cela signifie pas de clé intégrée,
+
+00:15:01.600 --> 00:15:01.960
+pas de commis
+
+00:15:01.960 --> 00:15:03.100
+de configuration accidentelle
+
+00:15:03.100 --> 00:15:04.220
+et pas de rotation nocturne
+
+00:15:04.220 --> 00:15:04.760
+parce que quelqu'un
+
+00:15:04.760 --> 00:15:05.660
+a divulgué des identifiants
+
+00:15:05.660 --> 00:15:06.460
+dans une capture d'écran.
+
+00:15:06.920 --> 00:15:07.580
+Il ajoute également
+
+00:15:07.580 --> 00:15:08.480
+des approbations.
+
+00:15:09.040 --> 00:15:09.320
+Conditionnelle,
+
+00:15:09.520 --> 00:15:10.240
+les revues de sécurité
+
+00:15:10.240 --> 00:15:11.560
+surviennent quand la S-bomb change,
+
+00:15:11.700 --> 00:15:12.240
+les revues de coût
+
+00:15:12.240 --> 00:15:13.080
+quand les plans augmentent
+
+00:15:13.080 --> 00:15:13.860
+et le mode dégradé
+
+00:15:13.860 --> 00:15:15.320
+est verrouillé en cas de dérogation.
+
+00:15:16.360 --> 00:15:17.280
+Des garde-fous sans friction,
+
+00:15:17.400 --> 00:15:18.480
+les responsables gardent des traces.
+
+00:15:19.260 --> 00:15:19.900
+La réduction des coûts
+
+00:15:19.900 --> 00:15:20.560
+n'est pas une prière,
+
+00:15:20.680 --> 00:15:21.220
+c'est de l'architecture
+
+00:15:21.220 --> 00:15:21.980
+couplée à une politique.
+
+00:15:26.620 --> 00:15:27.140
+Pour le non-production,
+
+00:15:27.320 --> 00:15:28.380
+il recommande le passage à zéro
+
+00:15:28.380 --> 00:15:29.660
+ou des options de type consommation
+
+00:15:29.660 --> 00:15:30.420
+lorsque c'est possible.
+
+00:15:31.260 --> 00:15:31.780
+Pour la production,
+
+00:15:31.920 --> 00:15:32.400
+il définit des règles
+
+00:15:32.400 --> 00:15:33.180
+d'autoscaling basées
+
+00:15:33.180 --> 00:15:33.940
+sur des signaux réels,
+
+00:15:34.420 --> 00:15:35.220
+requêtes par seconde,
+
+00:15:35.360 --> 00:15:36.500
+CPU, profondeur de fail
+
+00:15:36.500 --> 00:15:38.280
+et plafonne le nombre d'instances
+
+00:15:38.280 --> 00:15:39.020
+avec un processus
+
+00:15:39.020 --> 00:15:39.960
+d'exception documenté.
+
+00:15:40.980 --> 00:15:41.720
+L'entrée est optimisée
+
+00:15:41.720 --> 00:15:42.740
+en colocalisant les services
+
+00:15:42.740 --> 00:15:43.400
+et en redirigeant
+
+00:15:43.400 --> 00:15:44.440
+les tâches nocturnes bavardes
+
+00:15:44.440 --> 00:15:45.940
+vers des chemins intra-régionaux.
+
+00:15:46.680 --> 00:15:47.700
+L'estimation avant et après
+
+00:15:47.700 --> 00:15:48.460
+atterrit dans le dépôt.
+
+00:15:49.500 --> 00:15:50.020
+Heure d'instance,
+
+00:15:50.120 --> 00:15:50.780
+niveau de stockage,
+
+00:15:50.880 --> 00:15:51.920
+transfert de données.
+
+00:15:52.480 --> 00:15:53.420
+La finance comprend les chiffres,
+
+00:15:53.420 --> 00:15:54.060
+donnez-leur des chiffres.
+
+00:15:54.840 --> 00:15:55.660
+Le réseau et la fiabilité
+
+00:15:55.660 --> 00:15:56.180
+ne sont pas non plus
+
+00:15:56.180 --> 00:15:56.880
+des réflexions après coup.
+
+00:15:57.220 --> 00:15:57.720
+Les modèles ajoutent
+
+00:15:57.720 --> 00:15:58.340
+des sondes de santé,
+
+00:15:58.440 --> 00:15:59.460
+des vérifications de préparation
+
+00:15:59.460 --> 00:16:00.260
+et le drainage des connexions
+
+00:16:00.260 --> 00:16:00.960
+pour que vos utilisateurs
+
+00:16:00.960 --> 00:16:01.820
+ne remarquent plus le déploiement.
+
+00:16:02.420 --> 00:16:03.480
+Si la conformité exige
+
+00:16:03.480 --> 00:16:04.580
+des points de terminaison privés,
+
+00:16:04.780 --> 00:16:05.240
+il les configure,
+
+00:16:05.420 --> 00:16:06.040
+achemine le trafic
+
+00:16:06.040 --> 00:16:06.880
+via Application Gateway
+
+00:16:06.880 --> 00:16:07.400
+ou Front Door
+
+00:16:07.400 --> 00:16:08.540
+et règle des politiques simples
+
+00:16:08.540 --> 00:16:09.560
+que vous pouvez vraiment lire.
+
+00:16:10.500 --> 00:16:11.300
+Les journaux sont acheminés
+
+00:16:11.300 --> 00:16:11.920
+vers Azure Monitor
+
+00:16:11.920 --> 00:16:12.840
+avec des champs structurés.
+
+00:16:13.740 --> 00:16:14.760
+Tableau de bord préconfiguré.
+
+00:16:15.140 --> 00:16:15.460
+Latence,
+
+00:16:15.580 --> 00:16:15.980
+taux d'erreur,
+
+00:16:16.080 --> 00:16:16.460
+saturation,
+
+00:16:16.940 --> 00:16:17.760
+la visibilité ennuieuse
+
+00:16:17.760 --> 00:16:18.240
+et l'objectif.
+
+00:16:18.620 --> 00:16:19.080
+Le basculement
+
+00:16:19.080 --> 00:16:19.580
+suit un script
+
+00:16:19.580 --> 00:16:20.060
+par une intuition.
+
+00:16:20.520 --> 00:16:21.400
+L'agent prépare l'environnement,
+
+00:16:21.500 --> 00:16:22.340
+déploie sur un nouveau slot
+
+00:16:22.340 --> 00:16:22.760
+ou instance,
+
+00:16:22.820 --> 00:16:24.020
+le préchauffe avec du trafic synthétique
+
+00:16:24.020 --> 00:16:25.000
+et exécute des vérifications
+
+00:16:25.000 --> 00:16:25.420
+de contrat.
+
+00:16:26.360 --> 00:16:26.660
+Ensuite,
+
+00:16:26.720 --> 00:16:27.180
+une bascule,
+
+00:16:27.420 --> 00:16:28.380
+des TTLDN s'ajustent
+
+00:16:28.380 --> 00:16:28.840
+si nécessaire,
+
+00:16:28.980 --> 00:16:29.560
+un échange de slot
+
+00:16:29.560 --> 00:16:30.060
+pour App Service
+
+00:16:30.060 --> 00:16:31.060
+ou une répartition de trafic
+
+00:16:31.060 --> 00:16:31.540
+pour Spring Apps.
+
+00:16:32.320 --> 00:16:33.120
+Le plan de retour en arrière
+
+00:16:33.120 --> 00:16:33.560
+reste armé
+
+00:16:33.560 --> 00:16:34.720
+jusqu'à ce que le trafic utilisateur
+
+00:16:34.720 --> 00:16:35.320
+confirme le succès.
+
+00:16:35.860 --> 00:16:36.520
+Le rapport mentionne
+
+00:16:36.520 --> 00:16:37.360
+les fenêtres d'impact
+
+00:16:37.360 --> 00:16:37.960
+qui a approuvé
+
+00:16:37.960 --> 00:16:38.700
+quoi et où se trouve
+
+00:16:38.700 --> 00:16:39.360
+l'issue de secours.
+
+00:16:39.980 --> 00:16:40.680
+C'est ainsi que vous évitez
+
+00:16:40.680 --> 00:16:41.280
+les légendes urbaines
+
+00:16:41.280 --> 00:16:41.840
+de 2h du matin.
+
+00:16:42.120 --> 00:16:42.920
+L'intégration des politiques
+
+00:16:42.920 --> 00:16:43.920
+assure la cohérence de l'ensemble.
+
+00:16:44.620 --> 00:16:45.440
+Approbation pour les changements
+
+00:16:45.440 --> 00:16:46.260
+sensibles à la sécurité,
+
+00:16:46.420 --> 00:16:47.120
+vérification de coût
+
+00:16:47.120 --> 00:16:47.880
+pour les mises à niveau de plan
+
+00:16:47.880 --> 00:16:48.920
+et attestation de conformité
+
+00:16:48.920 --> 00:16:49.580
+intégrée au workflow.
+
+00:16:50.540 --> 00:16:51.300
+Chaque action est consignée
+
+00:16:51.300 --> 00:16:51.560
+dans Guide
+
+00:16:51.560 --> 00:16:52.200
+avec sa justification.
+
+00:16:52.700 --> 00:16:53.620
+Les auditeurs voient l'intention,
+
+00:16:53.720 --> 00:16:54.740
+le changement et la vérification.
+
+00:16:55.340 --> 00:16:55.920
+Pas de boîte noire,
+
+00:16:56.120 --> 00:16:57.280
+juste une chorégraphie disciplinée
+
+00:16:57.280 --> 00:16:58.000
+où l'agent effectue
+
+00:16:58.000 --> 00:16:58.680
+le travail difficile
+
+00:16:58.680 --> 00:16:59.760
+et où vous gardez les commandes.
+
+00:17:00.500 --> 00:17:00.860
+Résultat,
+
+00:17:00.980 --> 00:17:01.880
+AWS dehors,
+
+00:17:02.020 --> 00:17:02.540
+Azure dedans,
+
+00:17:02.680 --> 00:17:03.680
+pipelines opérationnelles,
+
+00:17:03.780 --> 00:17:04.400
+politiques appliquées
+
+00:17:04.400 --> 00:17:05.180
+et une facture cloud
+
+00:17:05.180 --> 00:17:05.860
+qui semble enfin jouer
+
+00:17:05.860 --> 00:17:06.440
+en votre faveur.
+
+00:17:06.960 --> 00:17:07.440
+Je vous en prie.
+
+00:17:08.080 --> 00:17:08.940
+Résultats et repères.
+
+00:17:09.300 --> 00:17:09.520
+Temps,
+
+00:17:09.720 --> 00:17:10.100
+CVE,
+
+00:17:10.880 --> 00:17:11.120
+coût
+
+00:17:11.120 --> 00:17:11.900
+et heure.
+
+00:17:12.380 --> 00:17:13.260
+Parlons résultats concrets,
+
+00:17:13.340 --> 00:17:13.720
+pas d'impression.
+
+00:17:14.260 --> 00:17:15.080
+Commençons par le calendrier.
+
+00:17:15.460 --> 00:17:16.300
+La séquence de mise à niveau
+
+00:17:16.300 --> 00:17:16.720
+et de migration
+
+00:17:16.720 --> 00:17:18.100
+qui engloutissait historiquement
+
+00:17:18.100 --> 00:17:18.540
+un trimestre
+
+00:17:18.540 --> 00:17:19.040
+est passée de moins
+
+00:17:19.040 --> 00:17:19.460
+à quelques jours.
+
+00:17:20.420 --> 00:17:20.980
+Heure d'évaluation
+
+00:17:20.980 --> 00:17:21.840
+et de planification,
+
+00:17:22.060 --> 00:17:23.000
+mise à niveau Java 21
+
+00:17:23.000 --> 00:17:23.820
+en quelques jours ouvrés,
+
+00:17:23.920 --> 00:17:24.740
+préparation de la migration
+
+00:17:24.740 --> 00:17:25.460
+cloud et peclin
+
+00:17:25.460 --> 00:17:26.360
+au sein du même sprint.
+
+00:17:27.340 --> 00:17:27.940
+Effet de calendrier.
+
+00:17:28.160 --> 00:17:28.660
+Les fonctionnalités
+
+00:17:28.660 --> 00:17:29.240
+ne font plus la queue
+
+00:17:29.240 --> 00:17:29.860
+derrière la saison
+
+00:17:29.860 --> 00:17:30.400
+des mises à niveau
+
+00:17:30.400 --> 00:17:31.200
+car il n'y a plus de saison,
+
+00:17:31.300 --> 00:17:32.060
+juste une automatisation
+
+00:17:32.060 --> 00:17:33.020
+disciplinée en continu.
+
+00:17:33.960 --> 00:17:34.720
+Passons à la sécurité,
+
+00:17:34.820 --> 00:17:35.660
+les CVE ne se soucient pas
+
+00:17:35.660 --> 00:17:36.320
+de votre feuille de route.
+
+00:17:36.720 --> 00:17:37.380
+L'agent a fait passer
+
+00:17:37.380 --> 00:17:38.720
+les vulnérabilités critiques élevées
+
+00:17:38.720 --> 00:17:39.840
+de cas présents et exploitables
+
+00:17:39.840 --> 00:17:40.540
+qu'un réseau lupum
+
+00:17:40.540 --> 00:17:41.680
+a régénéré la SBOAM
+
+00:17:41.680 --> 00:17:42.300
+et produit des rapports
+
+00:17:42.300 --> 00:17:43.520
+d'analyse conformes à la réalité.
+
+00:17:44.660 --> 00:17:45.380
+Les éléments résiduels
+
+00:17:45.380 --> 00:17:45.960
+moyens et faibles
+
+00:17:45.960 --> 00:17:46.680
+ont été documentés
+
+00:17:46.680 --> 00:17:47.780
+avec des notes d'accessibilité
+
+00:17:47.780 --> 00:17:48.920
+et des délais de remédiation
+
+00:17:48.920 --> 00:17:49.740
+et des délais de remédiation.
+
+00:17:49.940 --> 00:17:50.500
+Le point crucial,
+
+00:17:50.860 --> 00:17:51.860
+la tendance des risques baissent
+
+00:17:51.860 --> 00:17:52.420
+et reste basse
+
+00:17:52.420 --> 00:17:53.300
+car le pipeline au scan
+
+00:17:53.300 --> 00:17:54.100
+à chaque changement.
+
+00:17:54.760 --> 00:17:55.400
+La réduction des coûts
+
+00:17:55.400 --> 00:17:55.780
+apparaît là
+
+00:17:55.780 --> 00:17:56.760
+où la finance regarde réellement.
+
+00:17:56.760 --> 00:17:58.180
+Heure de calcul ajustée
+
+00:17:58.180 --> 00:17:58.880
+à la charge réelle,
+
+00:17:59.160 --> 00:18:00.060
+environnement hors production
+
+00:18:00.060 --> 00:18:00.960
+configuré pour atteindre
+
+00:18:00.960 --> 00:18:01.700
+zéro si possible
+
+00:18:01.700 --> 00:18:03.180
+et égresses réduits
+
+00:18:03.180 --> 00:18:03.920
+par colocalisation
+
+00:18:03.920 --> 00:18:04.740
+des services bavards.
+
+00:18:06.020 --> 00:18:06.260
+Avant,
+
+00:18:06.700 --> 00:18:07.420
+des instances tournant
+
+00:18:07.420 --> 00:18:08.640
+au ralenti à un chiffre de CPU,
+
+00:18:09.040 --> 00:18:09.660
+des frais de transfert
+
+00:18:09.660 --> 00:18:10.840
+explosant sur les jobs nocturnes
+
+00:18:10.840 --> 00:18:11.560
+et du stockage
+
+00:18:11.560 --> 00:18:12.800
+gardant des données inutiles.
+
+00:18:14.040 --> 00:18:14.320
+Après,
+
+00:18:14.560 --> 00:18:15.340
+nombre d'instances alignées
+
+00:18:15.340 --> 00:18:16.140
+sur les courbes de demande,
+
+00:18:16.520 --> 00:18:17.420
+job batch intra-régionaux
+
+00:18:17.420 --> 00:18:18.240
+et niveau de stockage
+
+00:18:18.240 --> 00:18:19.020
+adapté aux accès.
+
+00:18:19.880 --> 00:18:21.060
+Le chiffre qui a embarrassé
+
+00:18:21.060 --> 00:18:22.180
+la finance et ravi la sécurité,
+
+00:18:22.320 --> 00:18:23.440
+le coût mensuel total a chuté
+
+00:18:23.440 --> 00:18:24.480
+tandis que le nombre de CVE
+
+00:18:24.480 --> 00:18:25.280
+diminuait.
+
+00:18:25.800 --> 00:18:26.200
+Moins de dollars,
+
+00:18:26.200 --> 00:18:26.960
+moins de vulnérabilité.
+
+00:18:27.660 --> 00:18:28.620
+Les deux courbes ont baissé ensemble.
+
+00:18:29.280 --> 00:18:30.040
+Ce n'est jamais un hasard.
+
+00:18:30.600 --> 00:18:31.240
+Les heures de développement
+
+00:18:31.240 --> 00:18:32.320
+récupérées ne sont pas théoriques.
+
+00:18:32.780 --> 00:18:33.360
+Les ingénieurs seniors
+
+00:18:33.360 --> 00:18:34.040
+ne perdent plus leur temps
+
+00:18:34.040 --> 00:18:34.740
+à gérer la roulette russe
+
+00:18:34.740 --> 00:18:35.160
+des dépendances
+
+00:18:35.160 --> 00:18:35.760
+et des builds fragiles.
+
+00:18:36.300 --> 00:18:36.840
+La boucle de l'agent,
+
+00:18:37.020 --> 00:18:38.440
+appliquer, construire, tester, patcher,
+
+00:18:38.580 --> 00:18:39.180
+remplace la partie
+
+00:18:39.180 --> 00:18:39.820
+la moins créative
+
+00:18:39.820 --> 00:18:40.480
+de leur travail.
+
+00:18:41.240 --> 00:18:42.140
+Ces heures sont réinvesties
+
+00:18:42.140 --> 00:18:43.220
+dans l'optimisation des performances,
+
+00:18:43.360 --> 00:18:44.480
+l'amélioration des points de terminaison,
+
+00:18:44.580 --> 00:18:45.840
+la suppression de fonctionnalités mortes
+
+00:18:45.840 --> 00:18:47.200
+et l'observabilité morte
+
+00:18:47.200 --> 00:18:47.820
+et l'observabilité.
+
+00:18:48.300 --> 00:18:49.100
+A l'échelle du portefeuille,
+
+00:18:49.160 --> 00:18:49.900
+le modèle se démultiplie.
+
+00:18:49.900 --> 00:18:51.400
+Une fois votre playbook dans Git,
+
+00:18:51.540 --> 00:18:52.660
+les autres applications l'adoptent
+
+00:18:52.660 --> 00:18:53.720
+et la taxe de mise à niveau 16
+
+00:18:53.720 --> 00:18:54.300
+de s'accumuler.
+
+00:18:54.920 --> 00:18:56.160
+Le signal de fiabilité s'améliore
+
+00:18:56.160 --> 00:18:56.980
+car le pipeline impose
+
+00:18:56.980 --> 00:18:57.800
+une rigueur professionnelle.
+
+00:18:58.660 --> 00:18:59.900
+Les taux de succès des builds augmentent,
+
+00:19:00.120 --> 00:19:00.980
+les taux de réussite des tests
+
+00:19:00.980 --> 00:19:02.080
+se stabilisent après quarantaine
+
+00:19:02.080 --> 00:19:03.200
+et les tests de rollback
+
+00:19:03.200 --> 00:19:04.200
+deviennent un simple bouton
+
+00:19:04.200 --> 00:19:04.940
+plutôt qu'un rituel.
+
+00:19:05.420 --> 00:19:06.340
+La fréquence de déploiement
+
+00:19:06.340 --> 00:19:07.240
+augmente sans pénalité
+
+00:19:07.240 --> 00:19:07.880
+sur le taux d'erreur
+
+00:19:07.880 --> 00:19:08.500
+car la configuration
+
+00:19:08.500 --> 00:19:09.320
+des environnements dev,
+
+00:19:09.400 --> 00:19:09.900
+test et prod
+
+00:19:09.900 --> 00:19:10.720
+ne dérive plus.
+
+00:19:11.140 --> 00:19:12.160
+La confiance devient une métrique
+
+00:19:12.160 --> 00:19:12.680
+par un discours.
+
+00:19:13.120 --> 00:19:13.860
+La transparence assure
+
+00:19:13.860 --> 00:19:14.500
+la cohésion de l'ensemble.
+
+00:19:14.900 --> 00:19:15.340
+Chaque changement
+
+00:19:15.340 --> 00:19:16.400
+est un petit commis révisable
+
+00:19:16.400 --> 00:19:17.800
+avec justification et référence.
+
+00:19:18.260 --> 00:19:18.840
+Les rapports vivent
+
+00:19:18.840 --> 00:19:19.400
+aux côtés du code.
+
+00:19:19.960 --> 00:19:20.600
+Les auditeurs obtiennent
+
+00:19:20.600 --> 00:19:21.000
+leurs réponses
+
+00:19:21.000 --> 00:19:21.700
+sans avoir à solliciter
+
+00:19:21.700 --> 00:19:22.120
+les ingénieurs.
+
+00:19:22.380 --> 00:19:23.220
+La direction voit les coûts,
+
+00:19:23.380 --> 00:19:23.720
+les risques
+
+00:19:23.720 --> 00:19:24.420
+et la vélocité
+
+00:19:24.420 --> 00:19:25.140
+sur un seul écran.
+
+00:19:25.740 --> 00:19:26.660
+Et le pagé ?
+
+00:19:26.660 --> 00:19:27.460
+C'est encore calme.
+
+00:19:28.440 --> 00:19:29.020
+Les chiffres comptent,
+
+00:19:29.080 --> 00:19:29.640
+vous les obtenez donc
+
+00:19:29.640 --> 00:19:30.560
+avec des justificatifs.
+
+00:19:31.820 --> 00:19:32.140
+Gouvernance,
+
+00:19:32.260 --> 00:19:32.700
+piste d'audit
+
+00:19:32.700 --> 00:19:33.500
+et transparence du modèle.
+
+00:19:33.900 --> 00:19:34.460
+Pas de boîte noire.
+
+00:19:35.120 --> 00:19:36.220
+La traçabilité est la base.
+
+00:19:36.640 --> 00:19:37.100
+Pas une option.
+
+00:19:37.780 --> 00:19:38.820
+Chaque action finit dans Git
+
+00:19:38.820 --> 00:19:39.920
+avec une raison et un lien
+
+00:19:39.920 --> 00:19:40.780
+vers un avis,
+
+00:19:40.940 --> 00:19:41.360
+une recette
+
+00:19:41.360 --> 00:19:42.560
+ou une note de migration.
+
+00:19:42.560 --> 00:19:43.760
+Vous n'approuvez pas
+
+00:19:43.760 --> 00:19:44.380
+de la magie IA,
+
+00:19:44.540 --> 00:19:45.360
+vous approuvez des changements
+
+00:19:45.360 --> 00:19:46.140
+documentés précis.
+
+00:19:46.540 --> 00:19:47.740
+Ah, le retour arrière
+
+00:19:47.740 --> 00:19:48.340
+est un mécamé-git,
+
+00:19:48.440 --> 00:19:49.080
+pas une cellule de crise.
+
+00:19:49.380 --> 00:19:50.600
+L'explicabilité n'est pas optionnelle.
+
+00:19:51.340 --> 00:19:52.060
+L'agent joint des notes
+
+00:19:52.060 --> 00:19:53.300
+explicatives à chaque correctif.
+
+00:19:54.120 --> 00:19:54.940
+Quelle CVE ?
+
+00:19:54.940 --> 00:19:56.180
+Quelle dépréciation d'API ?
+
+00:19:56.180 --> 00:19:57.000
+Quelle directive ?
+
+00:19:57.000 --> 00:19:58.100
+Azure ?
+
+00:19:58.100 --> 00:19:58.760
+Les sorties du modèle
+
+00:19:58.760 --> 00:19:59.580
+correspondent aux normes
+
+00:19:59.580 --> 00:20:00.260
+que vous connaissez déjà.
+
+00:20:00.540 --> 00:20:01.460
+Si une suggestion dévie,
+
+00:20:01.560 --> 00:20:02.220
+elle signale l'écart
+
+00:20:02.220 --> 00:20:03.420
+et attend une intervention humaine,
+
+00:20:03.920 --> 00:20:04.980
+le contrôle reste où il doit être.
+
+00:20:05.400 --> 00:20:06.320
+Les contrôles sont superposés,
+
+00:20:06.400 --> 00:20:07.180
+pas uniquement démonstratifs.
+
+00:20:07.540 --> 00:20:08.340
+Point de contrôle humain
+
+00:20:08.340 --> 00:20:09.480
+lors de l'approbation du plan,
+
+00:20:09.660 --> 00:20:10.560
+des changements sensibles
+
+00:20:10.560 --> 00:20:11.780
+et de la promotion d'environnement.
+
+00:20:12.960 --> 00:20:13.780
+Des portes conditionnelles
+
+00:20:13.780 --> 00:20:14.260
+se déclenchent
+
+00:20:14.260 --> 00:20:15.060
+si les DELTA S-BOM
+
+00:20:15.060 --> 00:20:15.680
+sont importants,
+
+00:20:15.720 --> 00:20:16.400
+les coûts en hausse
+
+00:20:16.400 --> 00:20:17.680
+ou le réseau modifiés.
+
+00:20:18.560 --> 00:20:19.820
+La procédure d'urgence existe,
+
+00:20:19.940 --> 00:20:20.440
+est enregistrée
+
+00:20:20.440 --> 00:20:21.560
+et auditée a posteriori.
+
+00:20:22.080 --> 00:20:22.860
+Les adultes signent,
+
+00:20:22.960 --> 00:20:23.700
+les systèmes mémorisent.
+
+00:20:24.120 --> 00:20:24.920
+Le reporting est visible
+
+00:20:24.920 --> 00:20:25.280
+et ennuyeux,
+
+00:20:25.340 --> 00:20:25.900
+exactement comme il faut.
+
+00:20:26.520 --> 00:20:27.440
+Les tableaux de bord Power BI
+
+00:20:27.440 --> 00:20:28.400
+extraient les données de Git,
+
+00:20:28.560 --> 00:20:29.540
+des scanners et des pipelines.
+
+00:20:30.140 --> 00:20:30.620
+Tant gagné,
+
+00:20:30.880 --> 00:20:31.620
+tendance des CVE,
+
+00:20:31.780 --> 00:20:32.200
+courbe de coût,
+
+00:20:32.280 --> 00:20:32.960
+santé des déploiements.
+
+00:20:33.440 --> 00:20:34.420
+Pouvés filtrés par dépôt,
+
+00:20:34.420 --> 00:20:35.460
+équipe ou environnement.
+
+00:20:35.900 --> 00:20:36.300
+Cela signifie
+
+00:20:36.300 --> 00:20:36.960
+que les revues de gouvernance
+
+00:20:36.960 --> 00:20:37.580
+reposent sur des faits,
+
+00:20:37.640 --> 00:20:38.260
+pas sur des suppositions.
+
+00:20:38.700 --> 00:20:39.880
+La conformité est reproductible
+
+00:20:39.880 --> 00:20:40.400
+car les preuves
+
+00:20:40.400 --> 00:20:41.360
+s'assemblent automatiquement.
+
+00:20:42.340 --> 00:20:43.240
+L'historique des commits,
+
+00:20:43.360 --> 00:20:43.840
+les S-BOM,
+
+00:20:43.960 --> 00:20:44.880
+les résultats de scan,
+
+00:20:45.120 --> 00:20:46.140
+les logs et approbations
+
+00:20:46.140 --> 00:20:47.000
+forment des artefacts
+
+00:20:47.000 --> 00:20:48.020
+d'audit alignés.
+
+00:20:48.860 --> 00:20:49.460
+Vous relancez le plan
+
+00:20:49.460 --> 00:20:50.240
+au trimestre suivant
+
+00:20:50.240 --> 00:20:51.320
+et le résultat concorde
+
+00:20:51.320 --> 00:20:52.640
+car le processus est identique.
+
+00:20:53.400 --> 00:20:54.440
+Alors devez-vous encore corriger
+
+00:20:54.440 --> 00:20:55.960
+du Java hérité à la main ?
+
+00:20:55.960 --> 00:20:56.480
+Non, évidemment.
+
+00:20:57.220 --> 00:20:58.020
+Voici ce qu'il faut retenir.
+
+00:20:58.360 --> 00:20:59.220
+La modernisation manuelle
+
+00:20:59.220 --> 00:20:59.880
+est un gaspillage.
+
+00:21:00.440 --> 00:21:01.780
+L'automatisation auditée par agent
+
+00:21:01.780 --> 00:21:02.620
+est la nouvelle norme
+
+00:21:02.620 --> 00:21:03.140
+pour la vitesse,
+
+00:21:03.320 --> 00:21:04.400
+la sécurité et les coûts.
+
+00:21:05.420 --> 00:21:06.580
+Si cela vous a fait gagner du temps,
+
+00:21:06.780 --> 00:21:07.400
+soyez efficace,
+
+00:21:07.600 --> 00:21:08.000
+abonnez-vous.
+
+00:21:09.000 --> 00:21:09.360
+Ensuite,
+
+00:21:09.520 --> 00:21:10.560
+je connecterai Power BI
+
+00:21:10.560 --> 00:21:11.780
+et les déclencheurs de pipeline
+
+00:21:11.780 --> 00:21:12.780
+pour que vos rapports
+
+00:21:12.780 --> 00:21:14.500
+et déploiements soient autonomes.
+
+00:21:15.640 --> 00:21:16.500
+Activez les notifications
+
+00:21:16.500 --> 00:21:17.600
+et arrêtez d'apprendre par les pannes.

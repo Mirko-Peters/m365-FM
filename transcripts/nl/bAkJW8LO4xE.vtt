@@ -1,0 +1,760 @@
+WEBVTT
+
+00:00:00.140 --> 00:00:07.540
+Klaar voor 10 dagen Microsoft 365, Copilot, AI, Azure en de mensen die de toekomst van werk vormgeven?
+
+00:00:07.880 --> 00:00:12.420
+Deze januari is M365, kom terug en we pakken groter uit.
+
+00:00:12.680 --> 00:00:18.440
+Doe mee met live-sessies, praktijkdemos en praktische kennis van MVP's en experts van over de hele wereld.
+
+00:00:18.660 --> 00:00:21.840
+Geen algemene presentaties, geen eindeloze modewoorden.
+
+00:00:21.840 --> 00:00:29.160
+We pakken de echte uitdagingen aan Copilot Studio, AI Agents, Fabric, Beveiliging, Governance en Automatisering.
+
+00:00:29.160 --> 00:00:34.920
+Of je nu een IT-professional, ontwikkelaar of businessleader bent, er zijn sessies speciaal voor jou.
+
+00:00:35.300 --> 00:00:40.420
+Met 10 volle dagen kun je meerdere technologieën verkennen en verbinding maken met een wereldwijde community.
+
+00:00:40.920 --> 00:00:44.500
+Kijk live en neem praktische inzichten mee terug naar je organisatie.
+
+00:00:44.880 --> 00:00:49.140
+Januari 2027, 10 dagen, 1 Microsoft Community.
+
+00:00:49.420 --> 00:00:51.160
+De registratie is nu geopend.
+
+00:00:51.860 --> 00:00:55.920
+Ga naar m365.com.net en verzeker je vandaag nog van een plek.
+
+00:00:56.660 --> 00:00:58.920
+Dat is m365.com.net.
+
+00:00:59.160 --> 00:01:04.700
+Schrijf je nu in op m365.com.net en we zien je live in januari.
+
+00:01:04.920 --> 00:01:07.860
+Het onderwerp van vandaag is iets waar de meeste mensen nog nooit van gehoord hebben,
+
+00:01:08.040 --> 00:01:12.300
+maar het is een van de krachtigste tools om op grote schaal Microsoft 365 data op te halen.
+
+00:01:12.480 --> 00:01:14.440
+Het heet Microsoft Graph Data Connect.
+
+00:01:14.680 --> 00:01:15.340
+Dit is het punt.
+
+00:01:15.540 --> 00:01:19.740
+Je hebt waarschijnlijk geprobeerd data uit SharePoint of Teams te halen met de reguliere Graph API.
+
+00:01:20.020 --> 00:01:24.740
+Dat werkt prima voor een paar items, maar als je miljoenen records nodig hebt, krijg je te maken met throttling en paginering.
+
+00:01:24.740 --> 00:01:30.320
+Je krijgt te maken met snelheidslimieten, HTTP 429 fouten en je bent uiteindelijk meer tijd kwijt aan het beheren van nieuwe pogingen dan aan het eigenlijke werk.
+
+00:01:30.460 --> 00:01:32.420
+Graph Data Connect laat je dat allemaal overslaan.
+
+00:01:32.580 --> 00:01:36.140
+Een enkel verzoek kan terabytes aan data verplaatsen naar Azure of Microsoft Fabric.
+
+00:01:36.340 --> 00:01:38.120
+Geen paginering, geen throttling.
+
+00:01:38.320 --> 00:01:43.680
+Aan het einde van deze aflevering weet je precies wat het is, hoe het verschilt van de reguliere Graph APIs en wanneer je het moet gebruiken.
+
+00:01:43.680 --> 00:01:46.380
+Het schaalprobleem met M365 data.
+
+00:01:46.600 --> 00:01:50.900
+Laten we dus eens kijken waarom reguliere API aanroepen niet volstaan als je grote analyses doet.
+
+00:01:51.080 --> 00:01:58.540
+Elke dag genereert Microsoft 365 miljarden interacties, verstuurde e-mails, geplaatste teamsberichten, geüploade bestanden, geplande vergaderingen.
+
+00:01:58.680 --> 00:02:00.220
+Dat is data die in je omgeving zit.
+
+00:02:00.400 --> 00:02:05.260
+Als je die wilt analyseren, bijvoorbeeld om samenwerkingspatronen tussen afdelingen te begrijpen, moet je die eruit zien te krijgen.
+
+00:02:05.540 --> 00:02:06.480
+Daar begint de ellende.
+
+00:02:06.680 --> 00:02:09.260
+De standaard Graph API is gebouwd voor real-time toegang.
+
+00:02:09.420 --> 00:02:12.040
+Je vraagt om de berichten van een gebruiker en krijgt de laatste 20 te zien.
+
+00:02:12.040 --> 00:02:14.440
+Vraag je om de volgende 20, dan moet je pagineren.
+
+00:02:14.540 --> 00:02:20.280
+Als je te snel vraagt, wordt je vertraagd met HTTP 429 fouten en moet je gas terugnemen, wachten en het opnieuw proberen.
+
+00:02:20.380 --> 00:02:21.760
+Op kleine schaal werkt dat prima.
+
+00:02:22.020 --> 00:02:25.840
+Maar stel je voor dat je elke SharePoint site in een bedrijf met 10.000 gebruikers wilt analyseren.
+
+00:02:26.060 --> 00:02:29.960
+Zelfs met batchverwerking zou het uren of dagen duren en zou je constant tegen snelheidslimieten aanlopen.
+
+00:02:30.160 --> 00:02:32.760
+Als je dit regelmatig moet doen, is het simpelweg niet vol te houden.
+
+00:02:32.940 --> 00:02:34.800
+Dit is waarom Graph Data Connect bestaat.
+
+00:02:34.960 --> 00:02:36.660
+Het is geen vervanging voor de Graph API.
+
+00:02:36.920 --> 00:02:39.220
+Het is een compleet ander hulpmiddel voor een andere taak.
+
+00:02:39.220 --> 00:02:45.780
+De Graph API regelt real-time toegang tot kleine hoeveelheden data, terwijl Data Connect is gebouwd voor bulk extractie op massale schaal.
+
+00:02:46.000 --> 00:02:47.940
+Wat Graph Data Connect daadwerkelijk is.
+
+00:02:48.140 --> 00:02:49.600
+Dus, wat is Graph Data Connect?
+
+00:02:49.800 --> 00:02:52.080
+Laten we eerst een veel voorkomend misverstand ophelderen.
+
+00:02:52.240 --> 00:02:55.600
+Microsoft Graph is de toegangspoort tot alle Microsoft 365 data.
+
+00:02:55.800 --> 00:02:59.660
+Het omvat gebruikers, berichten, bestanden, agendas, teams en beveiligingssignalen.
+
+00:02:59.840 --> 00:03:04.660
+Het is het centrale eindpunt voor alles, maar er zijn drie verschillende manieren om met die data te werken en mensen halen die vaak door elkaar.
+
+00:03:04.840 --> 00:03:06.340
+Als eerste is er de Graph API.
+
+00:03:06.640 --> 00:03:08.380
+Dat is het real-time request-response model.
+
+00:03:08.380 --> 00:03:11.520
+Je vraagt om de mailbox van één gebruiker en je krijgt deze direct terug.
+
+00:03:11.660 --> 00:03:15.340
+Het is geweldig voor het bouwen van apps en kleine zoekopdrachten, maar het is niet gebouwd voor schaalbaarheid.
+
+00:03:15.500 --> 00:03:16.700
+Dan hebben we Graph Connectors.
+
+00:03:16.920 --> 00:03:20.260
+Deze brengen externe data in Microsoft 365 voor zoekfuncties en copilot.
+
+00:03:20.460 --> 00:03:22.020
+Het is ingestie, geen extractie.
+
+00:03:22.180 --> 00:03:23.820
+Je haalt data naar binnen, niet naar buiten.
+
+00:03:24.020 --> 00:03:25.720
+En tot slot is er Graph Data Connect.
+
+00:03:25.960 --> 00:03:27.000
+Dit is bulk extractie.
+
+00:03:27.160 --> 00:03:31.160
+Het haalt enorme datasets uit Microsoft 365 naar je eigen analyseomgeving.
+
+00:03:31.380 --> 00:03:32.940
+Dat is degene waar we het vandaag over hebben.
+
+00:03:33.160 --> 00:03:34.060
+Zie het op deze manier.
+
+00:03:34.060 --> 00:03:37.540
+De Graph API gebruiken is alsof je een bibliothekaris telkens om één boek vraagt.
+
+00:03:37.680 --> 00:03:41.920
+Je loopt naar de balie, vraagt om een boek, ze geven het aan je, en dan loop je terug en vraag je om een ander.
+
+00:03:42.100 --> 00:03:43.600
+Het werkt, maar het is traag.
+
+00:03:43.740 --> 00:03:47.060
+Graph Data Connect is alsof je zegt, ik wil een kopie van elk boek in deze sectie.
+
+00:03:47.220 --> 00:03:49.260
+En ze op een pallet bij je kantoor laat afleveren.
+
+00:03:49.380 --> 00:03:51.600
+Eén verzoek, één levering, alles wat je nodig hebt.
+
+00:03:51.760 --> 00:03:52.860
+Dus, hoe werkt het eigenlijk?
+
+00:03:53.080 --> 00:03:56.160
+Je maakt een geplande pijplijn waarin je definieert welke data je wilt hebben.
+
+00:03:56.400 --> 00:03:58.880
+SharePoint sites, Teams chats, Exchange mailboxen.
+
+00:03:58.880 --> 00:04:02.340
+En je stelt een bestemming in, zoals een Azure Storage Account of Fabric Lakehouse.
+
+00:04:02.580 --> 00:04:06.160
+Vervolgens levert Microsoft die data als parquet bestanden direct in jouw opslag.
+
+00:04:06.300 --> 00:04:09.780
+Geen paginering, geen frottling, gewoon één kopieeropdracht en klaar.
+
+00:04:09.900 --> 00:04:13.460
+De data komt aan in Delta Parquet Formaat, wat efficiënt is en klaar voor analyse.
+
+00:04:13.700 --> 00:04:17.860
+Je kunt het bevragen met SQL, Power BI rapporten bouwen of machine learning modellen draaien.
+
+00:04:18.080 --> 00:04:20.400
+Dat komt allemaal uit één enkele extractiepijplijn.
+
+00:04:20.620 --> 00:04:21.820
+Dus, dat is het kernidee.
+
+00:04:22.040 --> 00:04:27.920
+Graph Data Connect is bedoeld voor wanneer u uw volledige M365 data voorraad wilt analyseren, en niet slechts een klein deel.
+
+00:04:27.920 --> 00:04:33.800
+Vervolgens bespreken we het beveiligingsmodel dat uw gevoelige gegevens veilig houdt, de beveiligings- en governancelaag.
+
+00:04:33.940 --> 00:04:38.160
+Nu denkt u misschien, kan ik zomaar ieders e-mails in een opslagaccount dumpen en doen wat ik wil.
+
+00:04:38.320 --> 00:04:41.260
+Het antwoord is nee, en dit is waarom dat eigenlijk een goede zaak is.
+
+00:04:41.440 --> 00:04:45.260
+Omdat Graph Data Connect gevoelige gegevens zoals e-mails, teamsberichten en bestanden verwerkt,
+
+00:04:45.400 --> 00:04:48.020
+is het beveiligingsmodel veel strikter dan dat van de normale Graph API.
+
+00:04:48.240 --> 00:04:49.440
+En dat is een bewuste keuze.
+
+00:04:49.440 --> 00:04:52.160
+U wilt geen tool die zo krachtig is zonder de juiste voorzorgsmaatregelen.
+
+00:04:52.300 --> 00:04:54.780
+Ten eerste is er expliciete toestemming van de beheerder vereist.
+
+00:04:54.780 --> 00:04:59.100
+Een beheerder moet elke toepassing goedkeuren en precies definiëren tot welke datasets deze toegang heeft.
+
+00:04:59.260 --> 00:05:00.440
+En dan bedoel ik ook precies.
+
+00:05:00.600 --> 00:05:02.240
+U kunt dit beperken tot op eigenschapsniveau.
+
+00:05:02.420 --> 00:05:04.140
+Wilt u alleen site-URL's, maar niet de site-eigenaar?
+
+00:05:04.260 --> 00:05:05.100
+Dat kunt u instellen.
+
+00:05:05.320 --> 00:05:07.320
+Wilt u alleen tijdstempels van berichten, maar niet de inhoud van de berichten?
+
+00:05:07.500 --> 00:05:08.580
+Dat kunt u ook instellen.
+
+00:05:08.800 --> 00:05:11.340
+Dit is veel gedetailleerder dan de standaard Graph API-machtigingen,
+
+00:05:11.520 --> 00:05:13.620
+die meestal alles of niets zijn voor een bepaald resource-type.
+
+00:05:13.620 --> 00:05:16.700
+Ten tweede worden de gegevens standaard versleuteld tijdens het transport.
+
+00:05:16.940 --> 00:05:18.980
+Microsoft levert ze al versleuteld aan uw opslag,
+
+00:05:18.980 --> 00:05:23.200
+en als u nog meer controle wilt, kunt u uw eigen versleutelingssleutels meenemen via Azure Key Vault.
+
+00:05:23.400 --> 00:05:24.280
+Dit is hoe het werkt.
+
+00:05:24.460 --> 00:05:27.220
+Uw gegevens worden versleuteld met een sleutel die alleen u in bezit heeft.
+
+00:05:27.480 --> 00:05:30.660
+Microsoft slaat de versleutelde versie van die sleutel op, maar kan deze niet ontsleutelen.
+
+00:05:30.860 --> 00:05:33.740
+Alleen uw toepassing die uw privé-sleutel gebruikt, kan de gegevens ontgrendelen.
+
+00:05:33.960 --> 00:05:36.960
+Dit betekent dat zelfs Microsoft uw gegevens niet kan lezen tijdens de levering.
+
+00:05:36.960 --> 00:05:39.620
+Ten derde is er identiteitsoverstijging, opfuscatie.
+
+00:05:39.820 --> 00:05:42.920
+Echte gebruikers-idees, zoals e-mailadressen en user-principle names,
+
+00:05:43.100 --> 00:05:44.760
+worden vervangen door niet-omkeerbare tokens.
+
+00:05:44.760 --> 00:05:49.760
+Zo kunt u nog steeds trends analyseren, zoals hoeveel gebruikers het bestand openen of welke afdeling het meest communiceert,
+
+00:05:49.880 --> 00:05:52.080
+maar u kunt die gegevens niet herleiden naar een specifieke persoon.
+
+00:05:52.260 --> 00:05:55.980
+Dit is cruciaal voor privacy-compliance, vooral met regelgeving zoals de AVG.
+
+00:05:56.180 --> 00:06:00.660
+Ten vierde wordt elke pipeline run gelogd, wat een volledig audit-spoor creëert dat laat zien wie wat heeft goedgekeurd,
+
+00:06:00.900 --> 00:06:04.880
+wanneer gegevens zijn geëxtraheerd, welke datasets zijn gebruikt en hoeveel gegevens er zijn overgedragen.
+
+00:06:05.040 --> 00:06:09.060
+Als een auditor vraagt, wie heeft deze gegevens geopend en waarom, dan heeft u het antwoord.
+
+00:06:09.060 --> 00:06:14.640
+Deze beveiligingslaag maakt Data Connect veilig voor gereguleerde sectoren zoals de gezondheidszorg, financiën en de overheid.
+
+00:06:14.800 --> 00:06:17.480
+U krijgt de kracht van analyses zonder de kopzorgen over compliance.
+
+00:06:17.700 --> 00:06:20.520
+De gegevens verlaten nooit uw controle en elke stap wordt bijgehouden.
+
+00:06:20.720 --> 00:06:22.240
+Waar kunnen de gegevens naartoe? Xander.
+
+00:06:22.460 --> 00:06:25.840
+Dus, zodra de gegevens Microsoft 365 verlaten, waar komen ze dan eigenlijk terecht?
+
+00:06:26.140 --> 00:06:30.340
+Oorspronkelijk kon Graph Data Connect gegevens alleen naar Azure Synapse of Azure Data Lake Storage sturen.
+
+00:06:30.580 --> 00:06:33.540
+Dat werkte prima als je een data engineer was die in die tools werkte.
+
+00:06:33.740 --> 00:06:37.200
+Maar voor een business-analyst of een beginner was het niet bepaald gebruiksvriendelijk.
+
+00:06:37.200 --> 00:06:38.960
+Vandaag de dag is dat veranderd.
+
+00:06:39.140 --> 00:06:43.780
+Data Connect werkt nu direct met Microsoft Fabric en je kunt een Fabric Lakehouse als bestemming kiezen.
+
+00:06:43.980 --> 00:06:48.500
+De gegevens verschijnen als Delta Parquet bestanden, klaar voor analyse zonder extra configuratie.
+
+00:06:48.680 --> 00:06:52.860
+Als je Fabric al gebruikt, is dit de eenvoudigste weg, maar je zit niet vast aan alleen Fabric.
+
+00:06:53.020 --> 00:06:57.360
+Je kunt ook Azure Data Factory Pipelines gebruiken om de extractie te beheren, deze s'nachts in te plannen,
+
+00:06:57.560 --> 00:06:59.960
+zodat je analyseomgeving altijd over verse gegevens beschikt.
+
+00:06:59.960 --> 00:07:04.440
+Je kunt het koppelen aan Azure Blob Storage, Azure Data Lake of elke andere compatibele bestemming.
+
+00:07:04.440 --> 00:07:07.240
+Maar het punt is, je zit niet vast aan één specifieke bestemming.
+
+00:07:07.440 --> 00:07:11.440
+Je opties omvatten Azure, Fabric en zelfs externe platforms via aangepaste pipelines.
+
+00:07:11.720 --> 00:07:13.580
+Zodra de data binnen is, is deze van jou.
+
+00:07:13.780 --> 00:07:15.680
+Jij bepaalt waar het heen gaat en wat er mee gebeurt.
+
+00:07:15.880 --> 00:07:17.800
+Die flexibiliteit maakt het juist zo waardevol.
+
+00:07:18.000 --> 00:07:24.020
+Je kunt M365 data combineren met gegevens uit andere systemen, zoals je CRM, ERP of Our platform,
+
+00:07:24.220 --> 00:07:26.100
+om een compleet beeld van je hele bedrijf te vormen.
+
+00:07:26.320 --> 00:07:29.580
+Dat is iets wat je simpelweg niet kunt doen met alleen de reguliere Graph API.
+
+00:07:29.800 --> 00:07:31.920
+Hoe het zich verhoudt tot andere extractietools.
+
+00:07:31.920 --> 00:07:35.600
+Misschien denk je, kan ik niet gewoon Power Automate of een aangepast script gebruiken?
+
+00:07:35.780 --> 00:07:38.540
+Laten we bespreken wanneer elke tool wel en niet geschikt is.
+
+00:07:38.700 --> 00:07:41.960
+Power Automate is geweldig voor real-time automatisering op kleine schaal.
+
+00:07:42.140 --> 00:07:45.380
+Je start een flow zodra een bestand wordt toegevoegd en er wordt een melding verstuurd.
+
+00:07:45.600 --> 00:07:49.040
+Dat werkt, maar het punt is, Power Automate verwerkt kilobytes, geen terabytes.
+
+00:07:49.280 --> 00:07:51.100
+Het heeft geen patroon voor bulk extractie.
+
+00:07:51.300 --> 00:07:57.060
+Als je probeert miljoenen records via een flow te halen, treedt er een time-out op, bereik je API-limieten of valt het geruisloos.
+
+00:07:57.060 --> 00:07:58.980
+Het is de verkeerde tool voor deze taak.
+
+00:07:58.980 --> 00:08:01.700
+Aangepaste Graph API-scripts zijn prima voor kleine datasets.
+
+00:08:01.900 --> 00:08:05.100
+Je schrijft een PowerShell-script, doorloopt de pagina's en haalt je gegevens op.
+
+00:08:05.160 --> 00:08:09.120
+Maar paginering en throttling-limieten maken het onpraktisch voor volledige tenant-analyses,
+
+00:08:09.300 --> 00:08:12.100
+omdat je zelf-retreats, batching en snelheidslimieten moet beheren.
+
+00:08:12.240 --> 00:08:15.920
+En als je script uren draait en halverwege faalt, succes met het debuggen daarvan.
+
+00:08:16.100 --> 00:08:20.580
+Azure Data Factory heeft meer dan 90 connectoren en is een solide keuze voor het beheren van ETL-pipelines,
+
+00:08:20.760 --> 00:08:24.000
+maar ADF zelf verbindt niet op grote schaal direct met M365 data.
+
+00:08:24.000 --> 00:08:27.280
+Het heeft een bron-connector nodig en daar vult Data Connect het gat op.
+
+00:08:27.400 --> 00:08:30.160
+ADF wordt de beheerder en Data Connect wordt de gegevensbron.
+
+00:08:30.340 --> 00:08:33.840
+Graph Data Connect is specifiek gebouwd voor bulk M365 data.
+
+00:08:34.060 --> 00:08:36.100
+Een pipeline kan miljoenen records extraheren.
+
+00:08:36.260 --> 00:08:37.540
+De keerzijde is latentie.
+
+00:08:37.720 --> 00:08:41.260
+Elke pipeline-run heeft ongeveer 45 minuten opstarttijd voordat de dataverplaatsing begint.
+
+00:08:41.420 --> 00:08:45.860
+Het is dus niet bedoeld voor real-time dashboards, maar voor geplande grootschalige analyses die dagelijks of wekelijks draaien.
+
+00:08:46.060 --> 00:08:46.860
+Zie het als volgt.
+
+00:08:47.000 --> 00:08:50.340
+Power Automate is real-time, verwerkt kleine datasets en is low-code.
+
+00:08:50.340 --> 00:08:54.460
+De Graph API is real-time, verwerkt middelgrote datasets en vereist een ontwikkelaar.
+
+00:08:54.640 --> 00:08:58.560
+Graph Data Connect is geplant, verwerkt enorme hoeveelheden data en vereist admin toestemming.
+
+00:08:58.780 --> 00:09:00.960
+Dat zijn drie verschillende tools voor drie verschillende taken.
+
+00:09:01.180 --> 00:09:03.480
+Heb je een real-time melding nodig wanneer een bestand wijzigt?
+
+00:09:03.700 --> 00:09:04.980
+Gebruik Power Automate.
+
+00:09:05.180 --> 00:09:08.400
+Moet je elke nacht gebruikspatronen analyseren over al je SharePoint sites?
+
+00:09:08.660 --> 00:09:10.040
+Gebruik Graph Data Connect.
+
+00:09:10.280 --> 00:09:13.220
+Probeer niet één tool iets te laten doen waarvoor het niet is gebouwd.
+
+00:09:13.980 --> 00:09:14.420
+Praktijkvoorbeelden.
+
+00:09:14.660 --> 00:09:16.620
+Dus, wat kun je nu eigenlijk met al deze data?
+
+00:09:16.800 --> 00:09:18.600
+Ik geef je een paar concrete voorbeelden.
+
+00:09:18.600 --> 00:09:20.540
+Als eerste, Security Analytics.
+
+00:09:20.780 --> 00:09:28.060
+Je kunt audit logs en activiteitsgegevens uit Exchange en SharePoint halen en anomaliedetectie uitvoeren om gecompromiteerde accounts of vreemde toegangspatronen te spotten.
+
+00:09:28.220 --> 00:09:32.340
+Als een medewerker plotseling duizenden bestanden downloadt om twee uur, dan wil je dat weten.
+
+00:09:32.600 --> 00:09:35.500
+Data Connect geeft je de ruwe data om dat soort detectie op te bouwen.
+
+00:09:36.320 --> 00:09:37.920
+Samenwerkingsinzichten is een andere belangrijke.
+
+00:09:38.160 --> 00:09:42.180
+Door teams berichten en vergadergegevens te analyseren, zie je hoe teams echt samenwerken.
+
+00:09:42.400 --> 00:09:44.280
+Welke afdelingen spreken elkaar het meest?
+
+00:09:44.500 --> 00:09:46.120
+Waar zitten de knelpunten in je workflow?
+
+00:09:46.120 --> 00:09:52.360
+Je kunt vragen beantwoorden als werken cross-functionele teams echt samen of zitten ze alleen maar in vergaderingen, zonder te hoeven gissen.
+
+00:09:52.600 --> 00:09:54.200
+Dan is er contentbeheer op schaal.
+
+00:09:54.380 --> 00:09:59.480
+Je kunt metadata ophalen uit miljoenen SharePoint bestanden, verouderde content vinden die jaren niet is aangeraakt.
+
+00:09:59.660 --> 00:10:04.220
+Dubbele bestanden identificeren die opslagruimte innemen en documenten met gevoelige labels markeren die daar niet horen.
+
+00:10:04.460 --> 00:10:08.540
+Dat soort datahygiëne is handmatig onmogelijk, maar met Data Connect is het eenvoudig.
+
+00:10:08.540 --> 00:10:10.800
+Werknemerservaring is een groeiende use case.
+
+00:10:11.000 --> 00:10:16.520
+Combineer Viva Insights data met ouder data om vragen te beantwoorden als zijn teams met frequente vergaderingen meer of minder productief.
+
+00:10:16.640 --> 00:10:18.340
+De sleutel is identiteitsversluiering.
+
+00:10:18.500 --> 00:10:21.500
+Je kunt patronen analyseren zonder individuele identiteiten bloot te leggen.
+
+00:10:21.680 --> 00:10:23.540
+Zo krijg je inzicht zonder privacy risico.
+
+00:10:23.780 --> 00:10:26.260
+En hier is er een die echt belangrijk wordt, copilot gereedheid.
+
+00:10:26.500 --> 00:10:29.620
+Voordat je Microsoft Copilot uitrolt, moet je je data estate begrijpen.
+
+00:10:29.620 --> 00:10:33.520
+Waar staat je data? Hoe is het georganiseerd? Welke rechten zijn er ingesteld?
+
+00:10:33.720 --> 00:10:35.680
+Data Connect kan je die inventarisatie geven.
+
+00:10:35.860 --> 00:10:40.640
+Je kunt zien welke sites de ruime machtigingen hebben, welke bestanden verweest zijn en waar gevoelige data mogelijk is blootgesteld.
+
+00:10:40.880 --> 00:10:43.980
+Zonder dat fundament zou copilot dingen kunnen tonen die je liever niet ziet.
+
+00:10:44.140 --> 00:10:45.480
+Hier is een concreet voorbeeld.
+
+00:10:45.680 --> 00:10:51.400
+De Polytechnische Universiteit van Milaan gebruikte Data Connect om het werknemerssentiment op grote schaal te analyseren bij duizenden gebruikers.
+
+00:10:51.580 --> 00:10:55.080
+Ze kregen objectieve, gedetailleerde gegevens die ze op geen enkele andere manier hadden kunnen verkrijgen.
+
+00:10:55.260 --> 00:10:58.840
+Geen enquêtes, geen vooroordelen, alleen echte gedragsdata over hoe mensen daadwerkelijk werken.
+
+00:10:58.840 --> 00:11:02.340
+Dat is de kracht van deze tool. Een eenvoudige uitleg van de installatie.
+
+00:11:02.540 --> 00:11:05.980
+Dit klinkt misschien ingewikkeld, maar de feitelijke installatie is verrassend eenvoudig.
+
+00:11:06.120 --> 00:11:07.320
+Ik zal je er doorheen leiden.
+
+00:11:07.580 --> 00:11:11.280
+Schakel eerst Graph Data Connect in via het Microsoft 365 beheerscentrum.
+
+00:11:11.500 --> 00:11:14.680
+Ga naar de organisatie instellingen, zoek de Data Connect schakelaar en zet deze aan.
+
+00:11:14.860 --> 00:11:19.080
+Selecteer vervolgens welke datasets je beschikbaar wilt maken, zoals SharePoint, OneDrive, Exchange of Teams.
+
+00:11:19.280 --> 00:11:20.740
+Je kunt later altijd meer toevoegen.
+
+00:11:20.960 --> 00:11:23.940
+Ten tweede, maak een app registratie aan in Microsoft Entra ID.
+
+00:11:24.240 --> 00:11:28.420
+Dit is de identiteit van je applicatie. Zie het als een legitimatiebewijs voor de pijplijn.
+
+00:11:28.420 --> 00:11:30.980
+Noteer de app ID en genereer een clientgeheim.
+
+00:11:31.200 --> 00:11:34.980
+Bewaar dat geheim op een veilige plek. Je hebt het nodig wanneer je de verbinding instelt.
+
+00:11:35.180 --> 00:11:38.500
+Ten derde, maak een Graph Data Connect applicatie aan in de Azure Portal.
+
+00:11:38.720 --> 00:11:42.120
+Koppel deze aan de app registratie die je zojuist hebt gemaakt en kies daarna je bestemming.
+
+00:11:42.320 --> 00:11:44.980
+Voor de meeste beginners is een Fabric Lakehouse de makkelijkste optie.
+
+00:11:45.180 --> 00:11:48.960
+Geen extra opslagaccounts om te beheren, geen complexe configuratie, gewoon instellen en gaan.
+
+00:11:49.120 --> 00:11:50.820
+Ten vierde, dit is de Governance Port.
+
+00:11:50.820 --> 00:11:54.900
+Ga terug naar het Microsoft 365 Beheercentrum en keur de applicatie goed.
+
+00:11:55.040 --> 00:12:01.900
+Een beheerder controleert de gevraagde datasets en machtigingen, welke data wordt benaderd en welke kolommen zijn inbegrepen, en geeft daarna toestemming.
+
+00:12:02.140 --> 00:12:05.240
+Deze stap zorgt ervoor dat niets gebeurt zonder expliciete goedkeuring.
+
+00:12:05.440 --> 00:12:08.500
+Ten vijfde, bouw een pijplijn in Fabric of Azure Data Factory.
+
+00:12:08.780 --> 00:12:11.980
+Gebruik de kopieeractiviteit met de Microsoft 365 bron.
+
+00:12:12.220 --> 00:12:13.220
+Selecteer je dataset.
+
+00:12:13.560 --> 00:12:15.220
+Bijvoorbeeld SharePoint Sites Basic.
+
+00:12:15.460 --> 00:12:17.740
+Configureer een datenbereik als je alleen recente gegevens wilt.
+
+00:12:17.740 --> 00:12:20.380
+Wijs het toe aan je lakehouse. Dat is het meeste werk al gedaan.
+
+00:12:20.580 --> 00:12:21.960
+Ten zesde, voer de pijplijn uit.
+
+00:12:22.120 --> 00:12:23.000
+Hier moet je even wachten.
+
+00:12:23.220 --> 00:12:26.680
+Er is ongeveer 45 minuten aan voorbereidingsdijd nodig terwijl Microsoft je gegevens gereed maakt.
+
+00:12:26.900 --> 00:12:30.140
+Daarnaast stroomt de data binnen als delta parquet bestanden, en dat is alles.
+
+00:12:30.400 --> 00:12:35.740
+Vanaf dat punt kun je de data bevragen met SQL, Power BI rapporten bouwen of machine learning modellen draaien.
+
+00:12:35.880 --> 00:12:36.720
+Alles binnen Fabric.
+
+00:12:37.180 --> 00:12:37.740
+Beperkingen en aandachtspunten.
+
+00:12:38.680 --> 00:12:42.360
+Voordat je aan de slag gaat met de installatie, neem ik nog een paar zaken met je door om rekening mee te houden.
+
+00:12:42.520 --> 00:12:43.660
+Ten eerste, latentie.
+
+00:12:43.660 --> 00:12:47.440
+Die 45 minuten vertraging is reëel, dus Data Connect is niet geschikt voor real-time dashboards.
+
+00:12:47.620 --> 00:12:50.640
+Als je gegevens om de paar minuten wilt zien, bijwerken, is dit niet de tool voor jou.
+
+00:12:50.820 --> 00:12:53.780
+Het is ontworpen voor nachtelijke of wekelijkse analyses, dus plan daarop.
+
+00:12:54.020 --> 00:12:55.280
+Vervolgens, toegang tussen tenants.
+
+00:12:55.480 --> 00:12:58.440
+Je kunt geen gegevens ophalen naar een andere Microsoft 365 tenant.
+
+00:12:58.640 --> 00:13:00.820
+De gegevens blijven binnen de grenzen van jouw organisatie.
+
+00:13:00.980 --> 00:13:04.460
+Als consultant die meerdere tenants beheert, heb je voor elk afzonderlijke pijplijnen nodig.
+
+00:13:04.660 --> 00:13:07.240
+De beschikbaarheid van datasets is iets anders om in de gaten te houden.
+
+00:13:07.460 --> 00:13:10.300
+Niet alle M365 gegevens zijn beschikbaar via Data Connect.
+
+00:13:10.300 --> 00:13:15.280
+De basisdatasets beslaan SharePoint, Exchange, Teams en Groups, maar sommige geavanceerde eigenschappen kunnen ontbreken.
+
+00:13:15.520 --> 00:13:18.480
+Controleer de documentatie voordat je je vastlegt op een specifieke analyse.
+
+00:13:18.740 --> 00:13:19.500
+Nu, de kosten.
+
+00:13:19.780 --> 00:13:22.020
+Data Connect hanteert prijzen op basis van verbruik.
+
+00:13:22.140 --> 00:13:23.600
+Je betaalt per opgehaald object.
+
+00:13:23.820 --> 00:13:28.560
+Voor een kleine tenant is dat verwaarloosbaar, maar voor een tenant met 100.000 gebruikers en miljoenen bestanden loopt het snel op.
+
+00:13:28.720 --> 00:13:31.320
+Begroot die overeenkomstig en test eerst met een kleine dataset.
+
+00:13:31.540 --> 00:13:33.420
+Het goedkeuringsproces is ook belangrijk.
+
+00:13:33.720 --> 00:13:36.180
+Elke applicatie heeft expliciete toestemming van de beheerder nodig,
+
+00:13:36.180 --> 00:13:39.380
+en als je datasets wijzigt of nieuwe kolommen toevoegt, moet je opnieuw goedkeuren.
+
+00:13:39.380 --> 00:13:42.860
+Verwerk dit in je workflow zodat je niet voor verrassingen komt te staan wanneer een pijplijn.

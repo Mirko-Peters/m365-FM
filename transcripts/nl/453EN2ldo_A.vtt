@@ -1,0 +1,919 @@
+WEBVTT
+
+00:00:00.210 --> 00:00:07.570
+Klaar voor 10 dagen vol Microsoft 365, Copilot, AI, Azure en de mensen die de toekomst van werk vormgeven.
+
+00:00:07.970 --> 00:00:12.310
+In januari is M365, kom terug en we pakken het groter aan.
+
+00:00:12.610 --> 00:00:18.630
+Doe mee aan live-sessies, praktijkdemonstraties en praktische kennis van MVP's en experts uit de hele wereld.
+
+00:00:18.830 --> 00:00:21.110
+Geen generieke slieders, geen eindeloze modewoorden.
+
+00:00:22.010 --> 00:00:29.110
+We pakken de echte uitdagingen aan Copilot Studio, AI Agents, Fabric, Beveiliging, Governance en Automatisering.
+
+00:00:29.110 --> 00:00:34.990
+Of je nu een IT-professional, ontwikkelaar of bedrijfsleider bent, er zijn sessies speciaal voor jou.
+
+00:00:35.210 --> 00:00:40.610
+Gedurende 10 volle dagen kun je verschillende technologieën verkennen en in contact komen met een wereldwijde community.
+
+00:00:40.890 --> 00:00:44.530
+Kijk live mee en neem praktische inzichten mee terug naar je organisatie.
+
+00:00:44.910 --> 00:00:49.150
+Januari 2027, 10 dagen, 1 Microsoft Community.
+
+00:00:49.730 --> 00:00:51.210
+Registratie is nu geopend.
+
+00:00:51.930 --> 00:00:55.810
+Ga naar M365.com.net en verzeker je plek vandaag nog.
+
+00:00:56.670 --> 00:00:58.930
+Dat is M365.com.net.
+
+00:01:00.110 --> 00:01:04.530
+Meld je nu aan op M365.com.net en we zien je live in januari.
+
+00:01:04.790 --> 00:01:07.610
+Welkom bij een nieuwe aflevering van Microsoft Knowledge Nuggets.
+
+00:01:07.810 --> 00:01:09.430
+Ik ben Milko Peters, uw gastheer.
+
+00:01:09.610 --> 00:01:11.770
+Het onderwerp van vandaag, Azure Traffic Manager.
+
+00:01:12.050 --> 00:01:15.330
+Stel je voor dat je een webapplicatie hebt gebouwd die mensen over de hele wereld willen gebruiken.
+
+00:01:15.530 --> 00:01:19.650
+Gebruikers in Tokio, Londen, Sao Paulo, ze proberen allemaal tegelijkertijd je applicatie te bereiken.
+
+00:01:19.850 --> 00:01:20.850
+Maar hier is het probleem.
+
+00:01:21.050 --> 00:01:24.810
+Al die gebruikers maken verbinding met een server in één regio, laten we zeggen Virginia.
+
+00:01:24.810 --> 00:01:30.710
+De gebruiker in Tokio wacht meer dan 200 milliseconden per aanvraag en de gebruiker in Sao Paulo heeft een nog slechtere ervaring.
+
+00:01:30.930 --> 00:01:36.810
+En als dat datacenter in Virginia uitvalt, een stroomstoring, een netwerkonderbreking, iets onverwachts, dan is je hele applicatie offline.
+
+00:01:37.030 --> 00:01:40.610
+Elke gebruiker, waar dan ook, dat is een single point of failure en dat is een groot probleem.
+
+00:01:40.750 --> 00:01:44.890
+Wat als je elke gebruiker automatisch naar de dichtstbijzijnde, snelste en meest betrouwbare server zou kunnen routeren?
+
+00:01:45.090 --> 00:01:47.870
+Wat als een gebruiker in Tokio bediend zou worden door een datacenter in Japan?
+
+00:01:48.090 --> 00:01:50.070
+Een gebruiker in Londen door een datacenter in Ierland?
+
+00:01:50.070 --> 00:01:54.450
+En als één regio uitvalt, zou het verkeer dan automatisch ergens anders naartoe worden verplaatst zonder dat je iets hoeft te doen.
+
+00:01:54.630 --> 00:01:57.850
+Dat is precies wat Azure Traffic Manager doet, en wel op DNS-niveau.
+
+00:01:58.050 --> 00:02:00.110
+Dat betekent dat het eenvoudiger is dan je denkt.
+
+00:02:00.330 --> 00:02:06.390
+Aan het einde van deze aflevering begrijp je wat Traffic Manager precies is, hoe de zes routeringsmethoden werken en wanneer je welke methode moet gebruiken.
+
+00:02:06.510 --> 00:02:08.050
+Pak een kop koffie en laten we beginnen.
+
+00:02:08.310 --> 00:02:10.390
+Waarom wereldwijde verkeersroutering belangrijk is?
+
+00:02:10.590 --> 00:02:11.930
+Laten we het eens nader bekijken.
+
+00:02:12.130 --> 00:02:17.050
+De meeste mensen horen loadbalancing en denken aan één server die verkeer verdeelt over een paar machines in één datacenter.
+
+00:02:17.050 --> 00:02:20.290
+Dat is Azure Load Balancer, en dat werkt prima voor één regio.
+
+00:02:20.470 --> 00:02:23.130
+Maar wat gebeurt er als je gebruikers over continenten verspreid zijn?
+
+00:02:23.310 --> 00:02:27.690
+Een gebruiker in Japan die een server in Virginia probeert te bereiken, krijgt nooit een snelle reactie.
+
+00:02:27.870 --> 00:02:30.710
+De natuurkundige wetten van het internet laten dat gewoon niet toe.
+
+00:02:30.930 --> 00:02:34.530
+Licht reist met een vaste snelheid en elke netwerk opvoegt vertraging toe.
+
+00:02:34.730 --> 00:02:37.490
+Dat kun je niet oplossen met betere code of een snellere service.
+
+00:02:37.770 --> 00:02:39.870
+Het punt is, trage apps verliezen gebruikers.
+
+00:02:40.050 --> 00:02:43.450
+Een vertraging van één seconde zorgt voor een daling van 7% in conversies,
+
+00:02:43.630 --> 00:02:46.630
+en een regionale storing vertraagt niet alleen de boel, maar legt je hele app plat.
+
+00:02:46.630 --> 00:02:50.730
+Je gebruikers kunnen je niet bereiken, je inkomsten vallen weg en je reputatie loopt schade op.
+
+00:02:50.870 --> 00:02:56.630
+Twintig jaar geleden was de oude aanpak om in elke regio servers te bouwen en gebruikers handmatig naar de juiste server te leiden.
+
+00:02:56.810 --> 00:03:03.290
+Je moest handmatig DNS-records bijwerken, spreadsheets bijhouden van welke gebruikers waar naartoe gingen en hopen dat je geen fout maakte tijdens een failover.
+
+00:03:03.490 --> 00:03:07.510
+Die aanpak is onpraktisch en kwetsbaar omdat hij niet schaalbaar is en onder druk bezwijkt.
+
+00:03:07.730 --> 00:03:13.450
+De nieuwe aanpak is een enkele DNS-gebaseerde verkeersmanager die per gebruiker en per verzoek het beste eindpunt selecteert.
+
+00:03:13.790 --> 00:03:16.390
+Handmatige updates of kwetsbare spreadsheets zijn niet nodig.
+
+00:03:16.570 --> 00:03:21.770
+In plaats daarvan kijkt het systeem naar de locatie van de gebruiker, controleert welke eindpunten operationeel zijn en retourneert het beste eindpunt.
+
+00:03:21.970 --> 00:03:29.890
+Zie het als een wereldwijd luchtverkeersleidingssysteem waarbij elk datacenter een luchthaven is en Traffic Manager de verkeerstoren die elke gebruiker naar de dichtstbijzijnde beschikbare server leidt.
+
+00:03:29.970 --> 00:03:31.990
+Dat is waar Traffic Manager om de hoek komt kijken.
+
+00:03:32.250 --> 00:03:34.910
+Laten we het eens hebben over wat Traffic Manager nu eigenlijk is.
+
+00:03:35.110 --> 00:03:36.770
+Hier is de eenvoudigste definitie.
+
+00:03:36.910 --> 00:03:40.750
+Traffic Manager is een op DNS gebaseerde load balancer die op wereldwijde schaal opereert.
+
+00:03:40.750 --> 00:03:44.610
+Zie het als een slimme receptiebalie bij de ingang van een wereldwijd kantoorgebouw.
+
+00:03:44.690 --> 00:03:48.350
+Wanneer je binnenkomt neemt de receptioniste je telefoontjes niet aan en verwerkt ze je papierwerk niet.
+
+00:03:48.530 --> 00:03:50.230
+Ze wijzen je gewoon de weg naar de juiste verdieping.
+
+00:03:50.450 --> 00:03:51.970
+Dat is alles wat Traffic Manager doet.
+
+00:03:52.130 --> 00:03:53.890
+Het verwijst gebruikers naar de juiste server.
+
+00:03:54.130 --> 00:03:55.510
+Hier is het belangrijkste verschil.
+
+00:03:55.710 --> 00:03:58.090
+Traffic Manager ziet nooit je daadwerkelijke verkeer.
+
+00:03:58.270 --> 00:04:01.750
+Het proxy hetgeen verzoeken inspecteert geen pakketten en cachet geen content.
+
+00:04:02.030 --> 00:04:05.770
+Wanneer een gebruiker je domeinnaam in zijn browser typt wordt er een DNS query verzonden.
+
+00:04:05.770 --> 00:04:13.190
+Traffic Manager beantwoordt die query met het IP-adres van het beste eindpunt, het dichtstbijzijnde, het gezondste, het eindpunt dat je als prioriteit hebt geconfigureerd.
+
+00:04:13.370 --> 00:04:17.890
+Vervolgens maakt de gebruiker rechtstreeks verbinding met dat eindpunt en treedt Traffic Manager volledig buitenspel.
+
+00:04:18.130 --> 00:04:23.870
+Dat betekent dat het geen vertraging toevoegt aan uw verkeerspad omdat het zich niet midden in de gegevensstroom bevindt en de boel dus niet kan vertragen.
+
+00:04:24.050 --> 00:04:30.410
+Het werkt ook met elk internetgericht eindpunt, Azure services, servers in een andere cloud en zelfs uw eigen datacenter op locatie.
+
+00:04:30.410 --> 00:04:35.370
+Zolang het eindpunt een openbaar IP-adres of een domeinnaam heeft, kan Traffic Manager ernaartoe routeren.
+
+00:04:35.530 --> 00:04:39.190
+En omdat het een wereldwijde service is, is het bestand tegen regionale storingen.
+
+00:04:39.330 --> 00:04:45.130
+Als een hele Azure-regio uitvalt, blijft Traffic Manager gewoon draaien en routeert het gebruikers naar werkende eindpunten elders.
+
+00:04:45.410 --> 00:04:47.950
+Maar hoe weet Traffic Manager welke eindpunten gezond zijn?
+
+00:04:48.150 --> 00:04:54.410
+Standaard controleert het ze elke 30 seconden door een HTTP- of HTTPS-verzoek naar een specifiek pad op elk eindpunt te sturen.
+
+00:04:54.570 --> 00:04:58.790
+Als het eindpunt binnen een bepaalde tijd reageert met een statuscode van niveau 200, is het gezond.
+
+00:04:58.790 --> 00:05:04.750
+Als het meerdere keren achter elkaar niet reageert, markeert Traffic Manager het als het verslechtert en stopt het met het doorsturen van gebruikers ernaartoe.
+
+00:05:04.910 --> 00:05:09.110
+Wanneer het eindpunt herstelt, detecteert Traffic Manager dat ook en neemt het het weer in gebruik.
+
+00:05:09.310 --> 00:05:12.350
+Deze gezondheidsmonitoring maakt automatische failover mogelijk.
+
+00:05:12.590 --> 00:05:17.450
+Laten we nu eens kijken naar de verschillende manieren waarop Traffic Manager bepaalt naar welk eindpunt gebruikers worden doorgestuurd.
+
+00:05:17.650 --> 00:05:20.010
+Dat is waar de routeringsmethoden om de hoek komen kijken.
+
+00:05:20.970 --> 00:05:22.970
+Prioriteitsroutering, noodherstel vereenvoudigd.
+
+00:05:23.630 --> 00:05:25.770
+Prioriteitsroutering is de eenvoudigste methode om te begrijpen.
+
+00:05:25.770 --> 00:05:28.170
+Je rangschikt je eindpunten van 1 tot het aantal dat je hebt.
+
+00:05:28.170 --> 00:05:30.870
+Dat is alles. Al het verkeer gaat naar prioriteit 1.
+
+00:05:31.030 --> 00:05:34.790
+Als dat eindpunt uitvalt, verschuift het verkeer naar prioriteit 2, dan 3, enzovoort.
+
+00:05:34.950 --> 00:05:36.810
+Het is een actieve passieve configuratie.
+
+00:05:37.030 --> 00:05:39.990
+Eén eindpunt handelt alles af, de anderen staan klaar om het over te nemen.
+
+00:05:40.170 --> 00:05:41.370
+Hier is een praktijkvoorbeeld.
+
+00:05:41.770 --> 00:05:45.630
+Stel dat je primaire servers in Oost-Amerika staan en je een backup hebt in West-Europa.
+
+00:05:45.790 --> 00:05:49.210
+Je stelt Oost-Amerika in als prioriteit 1 in West-Europa als prioriteit 2.
+
+00:05:49.490 --> 00:05:51.930
+Normaal gesproken gaat elke gebruiker naar Oost-Amerika.
+
+00:05:51.930 --> 00:05:55.590
+Maar wanneer Oost-Amerika uitvalt, bijvoorbeeld door een stroomstoring of een netwerkprobleem,
+
+00:05:55.710 --> 00:05:57.750
+detecteert Traffic Manager dit binnen enkele seconden.
+
+00:05:57.830 --> 00:06:01.250
+Het stopt met het doorsturen van nieuwe gebruikers naar Oost-Amerika en begint ze in plaats daarvan
+
+00:06:01.250 --> 00:06:02.250
+door te sturen naar West-Europa.
+
+00:06:02.390 --> 00:06:05.250
+Je app blijft online en je gebruikers merken er misschien niets van.
+
+00:06:05.410 --> 00:06:06.730
+Er is hier een belangrijk detail.
+
+00:06:06.990 --> 00:06:08.990
+Bestaande gebruikers behouden hun huidige verbinding.
+
+00:06:09.270 --> 00:06:12.090
+DNS-gebaseerde routering is alleen van invloed op nieuwe DNS-zoekopdrachten.
+
+00:06:12.270 --> 00:06:15.510
+Dus als iemand uw app al heeft geladen en een actieve sessie heeft, blijft die sessie verbonden
+
+00:06:15.510 --> 00:06:18.270
+met het oorspronkelijke eindpunt totdat deze eindigt of de DNS-cash verloopt.
+
+00:06:18.270 --> 00:06:20.950
+Daarom is het belangrijk om uw DNS-TTL laag in te stellen.
+
+00:06:21.150 --> 00:06:22.970
+30 tot 60 seconden is ideaal.
+
+00:06:23.150 --> 00:06:26.590
+Een lage TTL betekent dat DNS-resolvers vaker controleren op updates.
+
+00:06:26.830 --> 00:06:30.210
+Wanneer Traffic Manager dus van eindpunt wisselt, wordt de wijziging sneller doorgegeven.
+
+00:06:30.370 --> 00:06:33.050
+Een veelgemaakte fout is het vergeten om de failover te testen.
+
+00:06:33.190 --> 00:06:37.590
+U stelt prioriteitsroutering in, u implementeert uw back-up-regio en gaat er vervolgens vanuit dat het werkt.
+
+00:06:37.750 --> 00:06:40.850
+Maar let op, uw back-up-regio moet de volledige belasting aankunnen.
+
+00:06:41.030 --> 00:06:45.270
+Als uw primaire regio een miljoen gebruikers per dag verwerkt en uw back-up-regio slechts 100.000
+
+00:06:45.270 --> 00:06:50.330
+Met gebruikers tijdens normale omstandigheden kan die back-up-regio uitvallen wanneer al dat verkeer er plotseling naartoe verschuift.
+
+00:06:50.530 --> 00:06:53.990
+Test uw failover, simuleer een daadwerkelijke storing en kijk wat er gebeurt.
+
+00:06:54.190 --> 00:06:56.010
+Dat is de enige manier om te weten of het werkt.
+
+00:06:56.290 --> 00:06:58.990
+Prioriteit zorgt ervoor dat uw app blijft functioneren tijdens storingen.
+
+00:06:59.130 --> 00:07:00.750
+Maar hoe zit het met snelheid voor iedereen?
+
+00:07:01.630 --> 00:07:02.030
+Prestatieroutering.
+
+00:07:02.410 --> 00:07:03.510
+Snelheid boven alles.
+
+00:07:04.150 --> 00:07:06.190
+Prestatieroutering werkt anders dan prioriteitsroutering.
+
+00:07:06.190 --> 00:07:11.830
+In plaats van te zeggen, gebruik altijd eerst dit eindpunt, zegt het, stuur elke gebruiker naar het eindpunt dat hen de snelste verbinding biedt.
+
+00:07:11.890 --> 00:07:14.330
+Dus een gebruiker in Tokio wordt doorgestuurd naar een server in Japan.
+
+00:07:14.550 --> 00:07:16.510
+Een gebruiker in Londen wordt doorgestuurd naar Ierland.
+
+00:07:16.650 --> 00:07:18.890
+Een gebruiker in Sao Paulo wordt doorgestuurd naar Brazilië.
+
+00:07:19.050 --> 00:07:22.230
+Elke gebruiker krijgt de snelst mogelijke ervaring, ongeacht waar ze zich bevinden.
+
+00:07:22.390 --> 00:07:24.810
+Hoe weet Traffic Manager welk eindpunt het snelst is?
+
+00:07:25.030 --> 00:07:27.490
+Het gebruikt een zogenaamde internet-latentietabel.
+
+00:07:27.750 --> 00:07:29.530
+Zie het als een kaart die Azure bijhoudt.
+
+00:07:29.690 --> 00:07:34.590
+Deze tabel registreert de werkelijke netwerklatentie tussen verschillende delen van de wereld en elke Azure-regio.
+
+00:07:34.590 --> 00:07:40.310
+Wanneer een DNS-query binnenkomt, controleert Traffic Manager waar de DNS-resolver van de gebruiker zich bevindt,
+
+00:07:40.410 --> 00:07:44.510
+raadpleegt de latentietabel en retourneert het eindpunt dat die gebruiker de laagste latentie biedt.
+
+00:07:44.570 --> 00:07:46.430
+En nu komt iets dat je misschien zal verbazen.
+
+00:07:46.590 --> 00:07:48.370
+Het is niet gebaseerd op fysieke afstand.
+
+00:07:48.570 --> 00:07:53.030
+Een gebruiker in India kan in werkelijkheid een lagere latentie ervaren naar Oost-VS dan naar Zuidoost-Azië,
+
+00:07:53.170 --> 00:07:56.690
+afhankelijk van hoe de onderzeese kabels en internetknoppunten het verkeer op dat moment routeren.
+
+00:07:56.850 --> 00:08:01.070
+De latentietabel geeft de werkelijke netwerkomstandigheden weer, niet alleen de hemelsbrede afstand.
+
+00:08:01.070 --> 00:08:04.630
+Het dichtstbijzijnde eindpunt is dus niet altijd het geografisch dichtstbijzijnde.
+
+00:08:05.150 --> 00:08:09.790
+Prestatiegerichte routering is zeer geschikt voor wereldwijde applicaties waarbij de gebruikerservaring afhangt van snelheid.
+
+00:08:09.990 --> 00:08:13.190
+Denk aan e-commerce websites, video-streaming, real-time samenwerkingstools, kortom,
+
+00:08:13.330 --> 00:08:15.210
+alles waarbij een trage reactie een verloren gebruiker betekent.
+
+00:08:15.330 --> 00:08:16.710
+Maar er is een addertje onder het gras.
+
+00:08:16.910 --> 00:08:19.970
+Er wordt geen rekening gehouden met de belasting die elk eindpunt al te verwerken heeft.
+
+00:08:20.170 --> 00:08:24.410
+Als uw regio Oost-VS op 95% capaciteit draait en uw regio West-Europa op 20%,
+
+00:08:24.410 --> 00:08:28.290
+kan prestatiegerichte routering nieuwe gebruikers nog steeds naar Oost-VS sturen omdat dat de laagste latentie voor hen is.
+
+00:08:28.290 --> 00:08:30.490
+Er wordt geen rekening gehouden met de serverbelasting.
+
+00:08:30.750 --> 00:08:34.930
+Daarom combineert uw prestatiegerichte routering doorgaans met andere loadbalancers binnen elke regio,
+
+00:08:35.090 --> 00:08:37.130
+zoals Azure Load Balancer of Application Gateway,
+
+00:08:37.330 --> 00:08:41.310
+om de daadwerkelijke verkeersverdeling over uw servers te regelen zodra de gebruiker de juiste regio bereikt.
+
+00:08:41.770 --> 00:08:44.210
+Prestatiegerichte routering optimaliseert voor snelheid.
+
+00:08:44.430 --> 00:08:47.390
+Maar wat als u wilt bepalen hoeveel verkeer elk eindpunt krijgt?
+
+00:08:47.590 --> 00:08:50.790
+Gewogen en geografische routering, controle en compliance.
+
+00:08:51.350 --> 00:08:53.250
+Prestatiegerichte routering draait om snelheid.
+
+00:08:53.430 --> 00:08:56.370
+Maar wat als u precies wilt bepalen hoeveel verkeer elk eindpunt krijgt?
+
+00:08:56.370 --> 00:08:59.370
+Of gebruikers wilt routeren op basis van hun locatie in de wereld?
+
+00:08:59.530 --> 00:09:01.930
+Dat is waar gewogen en geografische routering van pas komen.
+
+00:09:02.130 --> 00:09:03.750
+Laten we beginnen met gewogen routering.
+
+00:09:04.010 --> 00:09:05.570
+Dit is precies wat de naam al zegt.
+
+00:09:05.730 --> 00:09:08.970
+U kent een gewicht toe aan elk eindpunt, een getal tussen 1 en 1000.
+
+00:09:09.690 --> 00:09:13.150
+Traffic Manager verdeelt het verkeer vervolgens proportioneel op basis van die gewichten.
+
+00:09:13.370 --> 00:09:17.650
+Dus, als u eindpunt A hebt met een gewicht van 80 en eindpunt B met een gewicht van 20,
+
+00:09:17.890 --> 00:09:22.470
+wordt ongeveer 80% van uw gebruikers naar A gestuurd en 20% naar B simpele wiskunde.
+
+00:09:22.730 --> 00:09:23.830
+Waarom zou u dat willen doen?
+
+00:09:24.070 --> 00:09:25.350
+Denk aan een Canary Release.
+
+00:09:25.350 --> 00:09:28.790
+U hebt een nieuwe versie van uw app gebouwd en u wilt deze testen met echte gebruikers
+
+00:09:28.790 --> 00:09:30.470
+voordat u deze voor iedereen beschikbaar stelt.
+
+00:09:30.630 --> 00:09:34.110
+Je configureert een tweede endpoint met een nieuwe versie, geeft deze een gewicht van 5
+
+00:09:34.110 --> 00:09:36.350
+in je huidige productie, een endpoint een gewicht van 95.
+
+00:09:36.750 --> 00:09:38.890
+5% van je gebruikers gebruikt de nieuwe versie.
+
+00:09:39.030 --> 00:09:42.750
+Je controleert op fouten, monitort de prestaties en als alles er goed uitziet, verhoog je geleidelijk
+
+00:09:42.750 --> 00:09:47.050
+het gewicht van de nieuwe versie, bijvoorbeeld met 20% volgende week, dan 50%, dan 100%.
+
+00:09:47.050 --> 00:09:50.370
+Als er iets misgaat, zet je het gewicht terug naar nul en is het probleem opgelost.
+
+00:09:50.570 --> 00:09:54.110
+Geen grote implementatie, geen terugdraaien van een defector release voor al je gebruikers.
+
+00:09:54.390 --> 00:09:56.330
+Hetzelfde principe geldt voor A, B, testen.
+
+00:09:56.450 --> 00:09:58.710
+Je wilt zien of een nieuwe functie de betrokkenheid verbetert.
+
+00:09:58.910 --> 00:10:01.850
+Stuur de helft van je gebruikers naar versie A en de andere helft naar versie B met gelijke
+
+00:10:01.850 --> 00:10:02.150
+gewichten.
+
+00:10:02.390 --> 00:10:03.490
+Vergelijk de resultaten.
+
+00:10:03.750 --> 00:10:06.150
+Of, je migreert gebruikers van de ene regio naar de andere.
+
+00:10:06.390 --> 00:10:09.690
+Verschuif het gewicht geleidelijk van de oude regio naar de nieuwe regio over een paar
+
+00:10:09.690 --> 00:10:09.970
+weken.
+
+00:10:10.170 --> 00:10:13.350
+Het is echter belangrijk om te begrijpen dat gewogen routing geen round robin is.
+
+00:10:13.530 --> 00:10:16.070
+Het wisselt niet tussen endpoints, één verzoek per keer.
+
+00:10:16.250 --> 00:10:17.670
+Het is een statistische verdeling.
+
+00:10:17.670 --> 00:10:21.150
+Bij een groot aantal verzoeken wordt het verkeer verdeeld op basis van je gewichten.
+
+00:10:21.350 --> 00:10:25.370
+Maar een enkele gebruiker die meerdere verzoeken indient, kan steeds hetzelfde eindpunt bereiken
+
+00:10:25.370 --> 00:10:27.950
+omdat de DNS resolver het resultaat in de cache opslaat.
+
+00:10:28.130 --> 00:10:31.930
+Zie je het dus niet als perfecte load balancing, maar als het beheersen van de algehele verhouding
+
+00:10:31.930 --> 00:10:32.970
+van het verkeer over tijd.
+
+00:10:33.230 --> 00:10:35.110
+Laten we het nu hebben over geografische routing.
+
+00:10:35.430 --> 00:10:39.390
+Deze routeert gebruikers op basis van de herkomst van hun DNS query, land, continent
+
+00:10:39.390 --> 00:10:40.570
+of een specifieke regio.
+
+00:10:40.570 --> 00:10:43.930
+Een gebruiker in Duitsland wordt bijvoorbeeld naar je eindpunt in Frankfurt gestuurd.
+
+00:10:44.070 --> 00:10:47.070
+Een gebruiker in Brazilië wordt naar je eindpunt in Sao Paulo gestuurd.
+
+00:10:47.310 --> 00:10:48.330
+Dat is het detailniveau.
+
+00:10:48.550 --> 00:10:49.610
+Waarom zou je dit gebruiken?
+
+00:10:49.770 --> 00:10:51.510
+Data-soevereiniteit is een belangrijke reden.
+
+00:10:51.750 --> 00:10:54.750
+Regelgeving van de Europese Unie kan vereisen dat gebruikersgegevens binnen Europa blijven.
+
+00:10:54.890 --> 00:10:57.370
+Met geografische routing kun je dit op DNS-niveau afdwingen.
+
+00:10:57.490 --> 00:11:01.150
+Een gebruiker uit Frankrijk zoekt je domein op en de verkeersmanager retourneert het IP-adres
+
+00:11:01.150 --> 00:11:02.210
+van je Europese eindpunt.
+
+00:11:02.390 --> 00:11:04.190
+Hun gegevens verlaten het kantenend nooit.
+
+00:11:04.470 --> 00:11:06.150
+Hetzelfde geldt voor gelokaliseerde content.
+
+00:11:06.150 --> 00:11:10.230
+Als je wilt dat gebruikers in Japan een Japanstalige versie van je website zien, stuurt geografische
+
+00:11:10.230 --> 00:11:12.190
+routing ze naar het eindpunt dat die content aanbiedt.
+
+00:11:12.250 --> 00:11:14.110
+Er is één belangrijke regel die u moet kennen.
+
+00:11:14.330 --> 00:11:17.290
+Elke geografische regio moet aan precies één eindpunt worden gekoppeld.
+
+00:11:17.430 --> 00:11:19.870
+U kunt een enkel land niet over twee eindpunten verdelen.
+
+00:11:20.050 --> 00:11:24.010
+Dus als u gebruikers in Duitsland hebt en u wilt dat 50% naar Frankvoort en 50% naar Berlijn
+
+00:11:24.010 --> 00:11:26.070
+gaat, kunt u dat niet doen met alleen geografische routering.
+
+00:11:26.250 --> 00:11:28.330
+U moet in plaats daarvan een genest profiel gebruiken.
+
+00:11:28.530 --> 00:11:30.670
+Geneste profielen zijn precies wat de naam al zegt.
+
+00:11:30.830 --> 00:11:33.190
+U plaatst het ene Traffic Manager profiel in het andere.
+
+00:11:33.190 --> 00:11:36.330
+Op het hoogste niveau gebruikt u geografische routering om Europese gebruikers naar het
+
+00:11:36.330 --> 00:11:39.330
+ene profiel te sturen, Noord-Amerikaanse gebruikers naar een ander, enzovoort.
+
+00:11:39.470 --> 00:11:42.630
+Vervolgens gebruikt u binnen elk van die profielen gewogen routering om het verkeer te verdelen
+
+00:11:42.630 --> 00:11:43.950
+over de eindpunten binnen die regio.
+
+00:11:44.210 --> 00:11:47.450
+Geografische routering bovenaan voor naleving, gewogen routering daarbinnen voor controle.
+
+00:11:47.650 --> 00:11:49.030
+Het is een krachtige combinatie.
+
+00:11:49.230 --> 00:11:51.850
+Twee andere routeringsmethoden behandelen meer specifieke scenario's.
+
+00:11:52.010 --> 00:11:53.050
+Laten we die eens bekijken.
+
+00:11:53.390 --> 00:11:56.170
+Multivalue routing en subnet routing voor vijmazige controle.
+
+00:11:56.630 --> 00:11:58.810
+Multivalue routing is een simpele maar nuttige truc.
+
+00:11:58.810 --> 00:12:02.950
+In plaats van slechts één eindpunt in het DNS-antwoord terug te geven, stuurt Traffic
+
+00:12:02.950 --> 00:12:05.350
+Manager meerdere geldige IP-adressen tegelijk terug.
+
+00:12:05.530 --> 00:12:08.750
+Je browser of app kiest de eerste optie uit de lijst, waardoor de belasting wordt verdeeld
+
+00:12:08.750 --> 00:12:11.330
+zonder dat de verkeersmanager voor elk verzoek een beslissing hoeft te nemen.
+
+00:12:11.470 --> 00:12:12.970
+Maar er is een addertje onder het gras.
+
+00:12:13.370 --> 00:12:17.950
+Multivalue werkt alleen met IPv4 en IPv6 eindpunten, dus je kunt het niet gebruiken met
+
+00:12:17.950 --> 00:12:22.310
+app-services, cloud-services of eindpunten die een domeinnaam in plaats van een IP-adres gebruiken.
+
+00:12:22.450 --> 00:12:24.470
+Het is puur voor IP-gebaseerde eindpunten.
+
+00:12:24.470 --> 00:12:27.790
+Wanneer je die hebt, maakt het het systeem echter veerkrachtiger, want als één IP-adres
+
+00:12:27.790 --> 00:12:31.150
+uitvalt, kan de client een ander IP-adres uit de lijst proberen zonder een nieuwe DNS-loop-up
+
+00:12:31.150 --> 00:12:31.610
+uit te voeren.
+
+00:12:31.790 --> 00:12:34.210
+Dat betekent een snellere failover aan de client-zijde.
+
+00:12:34.430 --> 00:12:37.330
+Subnet routing is nog specifieker, maar krachtig wanneer je het nodig hebt.
+
+00:12:37.490 --> 00:12:41.370
+Het routeert gebruikers op basis van het bron-IP-subnet waar hun DNS-query vandaan komt.
+
+00:12:41.550 --> 00:12:45.290
+Je kunt bijvoorbeeld het IP-bereik van je kantoor koppelen aan een staging-eindpunt, terwijl
+
+00:12:45.290 --> 00:12:46.830
+alle anderen de productieversie krijgen.
+
+00:12:47.030 --> 00:12:51.970
+Of je kunt gebruikers van een specifiek VPN-subnet routeren naar een dedicated bekend voor testen.
+
+00:12:51.970 --> 00:12:56.250
+Stel je een intern testscenario voor waarbij je ontwikkelteam vanuit kantoor werkt.
+
+00:12:56.390 --> 00:13:01.570
+Hun DNS-queries komen van uw bedrijfs-IP-adresbereik en u koppelt dat bereik aan een testomgeving
+
+00:13:01.570 --> 00:13:03.210
+waar ze de nieuwste versie kunnen testen.
+
+00:13:03.390 --> 00:13:05.570
+Iedereen op internet krijgt de productieversie.
+
+00:13:05.770 --> 00:13:10.350
+Geen speciale URL's, geen VPN-configuraties, gewoon transparante routering op basis van de
+
+00:13:10.350 --> 00:13:11.190
+herkomst van het verzoek.
+
+00:13:11.410 --> 00:13:12.570
+Beide methoden zijn niche.
+
+00:13:12.790 --> 00:13:16.630
+De meeste mensen gebruiken prioriteit, prestaties, gewogen of geografische routering voor hun
+
+00:13:16.630 --> 00:13:17.590
+belangrijkste verkeersbeheer.
+
+00:13:17.590 --> 00:13:21.070
+Maar multivalue en subnet zijn er wanneer u ze nodig hebt en losse problemen op die de
+
+00:13:21.070 --> 00:13:22.330
+andere methoden niet kunnen oplossen.
+
+00:13:23.050 --> 00:13:24.670
+Gezondheidsmonitoring en veel over in de praktijk.
+
+00:13:24.850 --> 00:13:28.590
+Al deze routeringsmethoden zijn afhankelijk van één ding, weten welke eindpunten daadwerkelijk
+
+00:13:28.590 --> 00:13:29.090
+gezond zijn.
+
+00:13:29.290 --> 00:13:31.510
+Verkeer routeren naar een defecte server helpt niemand.
+
+00:13:31.850 --> 00:13:34.890
+Laten we het daarom hebben over hoe gezondheidsmonitoring in de praktijk werkt.
+
+00:13:35.050 --> 00:13:38.910
+Traffic Manager stuurt standaard elke 30 seconden een gezondheidsprobe naar elk eindpunt.
+
+00:13:39.150 --> 00:13:43.370
+Deze probe is een HTTP of HTTPS-verzoek naar een specifiek pad op uw eindpunt.
+
+00:13:43.370 --> 00:13:48.250
+Er wordt een reactie verwacht met een statuscode tussen 200 en 299 binnen een bepaalde time-out
+
+00:13:48.250 --> 00:13:48.650
+periode.
+
+00:13:48.830 --> 00:13:51.190
+Als het eindpunt correct reageert, is het gezond.
+
+00:13:51.370 --> 00:13:53.570
+Als dat niet lukt, probeert Traffic Manager het opnieuw.
+
+00:13:53.770 --> 00:13:57.790
+Na een instelbaar aantal fouten, standaard 3, markeert Traffic Manager dat eindpunt als
+
+00:13:57.790 --> 00:14:01.550
+verslechtert en sluit het uit van de routering totdat het de gezondheidscontroles weer doorstaat.
+
+00:14:01.710 --> 00:14:04.050
+U kunt het meetinterval en de time-out configureren.
+
+00:14:04.290 --> 00:14:06.450
+Snellere metingen betekenen een snellere failover.
+
+00:14:06.690 --> 00:14:11.410
+Als u het interval instelt op 10 seconden in plaats van 30, detecteert Traffic Manager fouten
+
+00:14:11.410 --> 00:14:12.990
+eerder en leidt het verkeer sneller om.
+
+00:14:12.990 --> 00:14:17.090
+Snellere metingen belasten uw eindpunten echter meer omdat elke meting een verzoek is dat
+
+00:14:17.090 --> 00:14:18.130
+uw server moet verwerken.
+
+00:14:18.330 --> 00:14:22.290
+Dus als u duizenden eindpunten hebt en u meet elke 10 seconden, lopen de verzoeken snel op.
+
+00:14:22.390 --> 00:14:24.610
+U moet dus een balans vinden tussen snelheid en overhead.
+
+00:14:24.810 --> 00:14:28.590
+De werkelijke impact van een goede configuratie van de gezondheidscontroles is het verschil tussen
+
+00:14:28.590 --> 00:14:31.430
+een naadloze failover en een vals alarm dat uw routering verstoort.
+
+00:14:31.590 --> 00:14:35.090
+Als uw meting te gevoelig is, kunt u een eindpunt als verslechterd, markeren terwijl het
+
+00:14:35.090 --> 00:14:36.610
+in werkelijkheid prima functioneert.
+
+00:14:36.750 --> 00:14:41.350
+Een tijdelijke piek in latentie, een korte netwerkstoring, een trage database query, al deze dingen kunnen
+
+00:14:41.350 --> 00:14:43.190
+een vals positief resultaat veroorzaken.
+
+00:14:43.430 --> 00:14:46.990
+Wanneer Traffic Manager stopt met het doorsturen van gebruikers naar dat eindpunt, heb je een
+
+00:14:46.990 --> 00:14:48.350
+storing gecreëerd die niet nodig was.
+
+00:14:48.530 --> 00:14:50.130
+Hier is een veel voorkomende valkuil.
+
+00:14:50.350 --> 00:14:54.170
+Mensen stellen het probepad in op de root van hun applicatie, gewoon een schuine streep.
+
+00:14:54.330 --> 00:14:58.090
+Dat is prima voor een eenvoudige helpcheck, maar niet ideaal omdat de rood pagina traag
+
+00:14:58.090 --> 00:15:02.350
+kan laden als deze een volledige pagina met database queries, afbeeldingen en javascript
+
+00:15:02.350 --> 00:15:02.910
+weergeeft.
+
+00:15:02.910 --> 00:15:06.810
+Een betere aanpak is om een speciaal helpcheck eindpunt te creëren, iets lichtgewichts.
+
+00:15:06.990 --> 00:15:11.090
+Een eenvoudig eindpunt dat snel een 200 statuscode retourneert en bevestigt dat de applicatie
+
+00:15:11.090 --> 00:15:11.410
+draait.
+
+00:15:11.570 --> 00:15:14.630
+Geen database queries, geen zware processen, alleen een heartbeat.
+
+00:15:14.910 --> 00:15:18.550
+Op die manier zijn je probes snel, betrouwbaar en is de kans kleiner dat ze valse alarmen
+
+00:15:18.550 --> 00:15:19.090
+veroorzaken.
+
+00:15:19.330 --> 00:15:23.090
+Laten we tot slot kijken wanneer je Traffic Manager wel moet gebruiken in plaats van andere
+
+00:15:23.090 --> 00:15:23.510
+opties.
+
+00:15:23.810 --> 00:15:25.250
+Conclusie en beslissingsgids.
+
+00:15:25.510 --> 00:15:27.070
+Dus, hier is een korte samenvatting.
+
+00:15:27.250 --> 00:15:31.290
+Traffic Manager is een op DNS gebaseerde globale traffic director met zes routeringsmethode.
+
+00:15:31.290 --> 00:15:32.970
+Het beheert je verkeer niet zelf.
+
+00:15:33.210 --> 00:15:36.750
+Het stuurt gebruikers simpelweg naar de juiste plek op basis van de gekozen methode.
+
+00:15:37.410 --> 00:15:38.850
+Prioriteitsroutering is voor noodherstel.
+
+00:15:39.030 --> 00:15:42.450
+Het zorgt ervoor dat uw app blijft werken, zelfs als een hele regio uitvalt.
+
+00:15:43.150 --> 00:15:44.670
+Prestatieroutering draait om snelheid.
+
+00:15:44.870 --> 00:15:48.050
+Het stuurt elke gebruiker naar het eindpunt met de laagste latentie.
+
+00:15:48.230 --> 00:15:52.690
+Gewogen routering maakt gecontroleerde uithol mogelijk, zoals Canary Releases of A-B-testen.
+
+00:15:52.990 --> 00:15:55.410
+Geografische routering zorgt voor naleving van regelgeving.
+
+00:15:55.570 --> 00:15:58.930
+U bewaart gegevens in de juiste regio, afhankelijk van waar uw gebruikers zich bevinden.
+
+00:15:58.930 --> 00:16:02.650
+Multi-value is voor eenvoudige distributie op IP-niveau over meerdere adressen.
+
+00:16:02.810 --> 00:16:06.530
+En subnet-routering routeert op basis van het bron-IP-adres van de DNS-query.
+
+00:16:06.750 --> 00:16:09.490
+Laten we het nu hebben over de plaats van Traffic Manager in een echte architectuur.
+
+00:16:09.710 --> 00:16:10.510
+Denk er eens over na.
+
+00:16:10.510 --> 00:16:17.650
+Laten we het nu hebben over een paar jaar.
+
+00:16:17.830 --> 00:16:19.290
+Ja.

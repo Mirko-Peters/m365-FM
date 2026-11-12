@@ -1,0 +1,928 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:03.640
+Je hebt de verkoop gedaan, je hebt de factuur verstuurd, maar wanneer staat het geld daadwerkelijk op je rekening?
+
+00:00:03.760 --> 00:00:05.100
+En wat gebeurt er als dat niet gebeurt?
+
+00:00:05.320 --> 00:00:09.300
+Welkom bij een nieuwe aflevering van Microsoft Knowledge Nuggets op M365FM.
+
+00:00:09.440 --> 00:00:10.440
+Ik ben Marco Peters.
+
+00:00:10.720 --> 00:00:14.560
+Vandaag leggen we Dynamics 365 debiteurenbeheer uit in begrijpelijke taal.
+
+00:00:14.760 --> 00:00:19.000
+Aan het eind van deze aflevering volg je het saldo van één klant, van de verkoop tot aan de betaling,
+
+00:00:19.300 --> 00:00:21.420
+en zie je wat het bedrijf doet als die betaling te laat is.
+
+00:00:21.640 --> 00:00:23.340
+Dit is de eenvoudigste definitie.
+
+00:00:24.080 --> 00:00:28.360
+Debiteurenbeheer houdt het geld bij dat klanten je verschuldigd zijn, samen met de betalingen die binnenkomen.
+
+00:00:28.360 --> 00:00:31.280
+Zie het als een archiefkast voor het geld binnen je bedrijf.
+
+00:00:31.500 --> 00:00:32.760
+Elke klant krijgt een map.
+
+00:00:33.000 --> 00:00:37.260
+Die map bevat een facturen, betalingen, vervaldata en eventueel opvolgingswerk.
+
+00:00:37.440 --> 00:00:40.820
+Een spreadsheet kan die zaken wel vermelden, maar het kan niet betrouwbaar een nieuwe verkoop,
+
+00:00:40.960 --> 00:00:45.020
+een afgesproken vervaldatum, een bankbetaling en een kredietbeslissing koppelen in het hele bedrijf.
+
+00:00:45.200 --> 00:00:47.660
+Dynamics 365 Finance kan dat wel.
+
+00:00:47.900 --> 00:00:50.440
+Laten we dus bij het begin beginnen, de klantrekening.
+
+00:00:50.820 --> 00:00:54.140
+1. De klantrekening, het startpunt voor elke factuur.
+
+00:00:54.920 --> 00:00:58.180
+Stel je voor dat je werkt met een klant genaamd Northwind Equipment.
+
+00:00:58.180 --> 00:01:03.180
+Voordat zij een bestelling kunnen plaatsen, heeft Dynamics 365 meer nodig dan alleen een naam en telefoonnummer.
+
+00:01:03.380 --> 00:01:06.280
+Het heeft de financiële regels nodig voor het zaken doen met Northwind.
+
+00:01:06.500 --> 00:01:09.500
+De klantrekening is die gelabelde map in onze archiefkast.
+
+00:01:09.700 --> 00:01:15.020
+Het bevat alle details die Dynamics 365 vertellen wie de klant is, waar facturen naartoe moeten,
+
+00:01:15.240 --> 00:01:18.640
+hoe ze normaal betalen en hoeveel krediet het bedrijf bereid is te verlenen.
+
+00:01:18.820 --> 00:01:22.280
+Dat klinkt misschien als een basisinstelling, maar het voorkomt veel verwarring achteraf.
+
+00:01:22.460 --> 00:01:25.000
+De rekening slaat bijvoorbeeld het factuuradres van de klant op.
+
+00:01:25.180 --> 00:01:26.880
+Dat is vaak anders dan het afleveradres.
+
+00:01:26.880 --> 00:01:30.360
+De apparatuur wordt misschien naar een fabriek verzonden, terwijl facturen naar de financiële afdeling gaan.
+
+00:01:30.520 --> 00:01:32.020
+Het bevat ook betalingsvoorwaarden.
+
+00:01:32.520 --> 00:01:35.540
+Betalingsvoorwaarden beantwoorden een eenvoudige vraag, hoe lang heeft deze klant om te betalen?
+
+00:01:35.720 --> 00:01:37.460
+Northwind betaalt misschien binnen 30 dagen.
+
+00:01:37.660 --> 00:01:39.120
+Een andere klant betaalt vooraf.
+
+00:01:39.260 --> 00:01:41.260
+Een grotere klant zou 60 dagen kunnen bedingen.
+
+00:01:41.500 --> 00:01:45.960
+Zodra die voorwaarden op de rekening staan, berekent Dynamics 365 de vervaldatum automatisch.
+
+00:01:46.160 --> 00:01:48.740
+Niemand hoeft een e-mailreeks door te spitten of te raden of netto 30,
+
+00:01:48.880 --> 00:01:50.880
+betekent vanaf de besteldatum, leverdatum of factuurdatum.
+
+00:01:50.880 --> 00:01:52.760
+Het systeem weet het gewoon.
+
+00:01:52.960 --> 00:01:53.820
+Hier komt het punt.
+
+00:01:54.020 --> 00:01:56.560
+De klantrekening bevat ook de gebruikelijke betalingsmethode.
+
+00:01:56.740 --> 00:01:59.900
+Als Northwind per bankoverschrijving betaalt en een andere klant per creditcard,
+
+00:02:00.080 --> 00:02:02.160
+volgt het financiële team het juiste proces bij betaling.
+
+00:02:02.400 --> 00:02:04.700
+Ze hoeven niet elke klant als een uniek geval te behandelen.
+
+00:02:04.920 --> 00:02:06.220
+Dan is er nog de kredietlimiet.
+
+00:02:06.360 --> 00:02:10.480
+Een kredietlimiet is het maximale bedrag dat een bedrijf een klant op enig moment schuldig mag zijn.
+
+00:02:10.720 --> 00:02:12.740
+Zie het als de receptie in een kantoorgebouw.
+
+00:02:12.880 --> 00:02:15.760
+De receptionist controleert of iemand naar een andere verdieping mag,
+
+00:02:15.760 --> 00:02:18.700
+Niet of de bezoeker aardig is, maar of de regels hen doorlaten.
+
+00:02:19.000 --> 00:02:19.880
+Hetzelfde geldt hier.
+
+00:02:20.080 --> 00:02:22.880
+De kredietlimiet geeft verkoop en financiën een duidelijke grens.
+
+00:02:23.080 --> 00:02:26.040
+Northwind is misschien een sterke klant, maar als ze al een groot bedrag schuldig zijn,
+
+00:02:26.240 --> 00:02:28.660
+moet het bedrijf even pauseren voordat ze weer een grote bestelling aannemen.
+
+00:02:28.860 --> 00:02:32.980
+Op de achtergrond kan Dynamics 365 ook gebruik maken van klantgroepen en boekingsprofielen.
+
+00:02:33.200 --> 00:02:34.540
+Laat je door die namen niet afschrikken.
+
+00:02:34.700 --> 00:02:37.580
+Een klantgroep is simpelweg een manier om soortgelijke klanten samen te voegen.
+
+00:02:37.980 --> 00:02:40.020
+Detaillhandel in de ene groep, groothandel in de andere.
+
+00:02:40.200 --> 00:02:43.120
+Op die manier kan het bedrijf gedeelde regels toepassen waar dat zinvol is.
+
+00:02:45.760 --> 00:02:49.780
+Dynamics 365 vertelt welke financiële rekeningen de schuld moeten registreren wanneer er een factuur binnenkomt.
+
+00:02:49.900 --> 00:02:52.600
+Als verkoper of klant zul je dat werk normaal gesproken niet zien.
+
+00:02:52.800 --> 00:02:56.840
+Maar de afdeling financiën is ervan afhankelijk omdat elk bedrag in de boeken op de juiste plek moet staan.
+
+00:02:57.020 --> 00:02:58.340
+En hier ligt de echte kracht.
+
+00:02:58.540 --> 00:03:01.540
+De klantrekening verbindt de verkoopkant met de financiële kant.
+
+00:03:01.760 --> 00:03:06.100
+Een verkoper kan een order maken voor Northwind en financiën hoeft die informatie later niet opnieuw in te voeren.
+
+00:03:06.320 --> 00:03:09.520
+Zij zien de klant, betalingsvoorwaarden, kredietstatus en het verschuldigde bedrag.
+
+00:03:09.700 --> 00:03:11.160
+Alles wordt automatisch gekoppeld.
+
+00:03:11.160 --> 00:03:13.860
+Dat is het verschil tussen een contactenlijst en een klantrekening.
+
+00:03:13.860 --> 00:03:15.860
+Een contactenlijst helpt je om iemand te bellen.
+
+00:03:15.980 --> 00:03:21.260
+Een klantrekening legt de financiële relatie vast, inclusief de regels die bepalen wat er gebeurt bij een verkoop.
+
+00:03:21.400 --> 00:03:27.080
+Zodra Northwind iets koopt, moet Dynamics 365 die verkoop omzetten in een officieel betalingsverzoek.
+
+00:03:27.900 --> 00:03:31.960
+2. Het maken van de factuur, een verkoop omzetten in openstaande schuld.
+
+00:03:32.260 --> 00:03:34.400
+Wat is dan het verschil tussen een order en een factuur?
+
+00:03:34.560 --> 00:03:37.920
+Een order geeft aan wat de klant wil, een factuur geeft aan wat ze moeten betalen.
+
+00:03:37.920 --> 00:03:41.880
+Het zit zo. Een factuur creëert een openstaand saldo op de klantrekening.
+
+00:03:42.060 --> 00:03:46.420
+Zodra deze is geboekt, declareer je ze formeel en kan de debiteurenadministratie bijhouden wat er nog openstaat.
+
+00:03:46.600 --> 00:03:48.400
+Laten we teruggaan naar Northwind Equipment.
+
+00:03:48.620 --> 00:03:50.060
+Zij bestelt de 10 stuks apparatuur.
+
+00:03:50.220 --> 00:03:51.480
+Je verkooptien legt de order vast.
+
+00:03:51.660 --> 00:03:53.480
+Het magazijn maakt de artikelen klaar en je verstuurt ze.
+
+00:03:53.760 --> 00:03:54.820
+Northwind heeft nu de spullen.
+
+00:03:55.040 --> 00:03:59.380
+Op dat moment heb je een duidelijk overzicht nodig van wat ze kochten, wat het kost en wanneer de betaling uiterlijk moet plaatsvinden.
+
+00:03:59.620 --> 00:04:01.120
+Dat overzicht is de klantfactuur.
+
+00:04:01.320 --> 00:04:05.200
+De meeste facturen in Dynamics 365 finance komen rechtstreeks voort uit een verkooporder.
+
+00:04:05.200 --> 00:04:07.800
+Dit houdt de factuur gekoppeld aan de oorspronkelijke verkoop.
+
+00:04:07.880 --> 00:04:11.920
+De artikelen van de klant, prijzen, aantallen en alle afgesproken regels staan al in het systeem.
+
+00:04:12.060 --> 00:04:15.660
+U hoeft die gegevens niet door iemand opnieuw te laten invoeren in een apart facturatiesysteem.
+
+00:04:15.840 --> 00:04:21.060
+Zodra de goederen worden verzonden of een dienst een mijlpaal bereikt waarop gefactureerd moet worden, maakt u de factuur vanuit die verkooporder.
+
+00:04:21.220 --> 00:04:23.500
+De exacte timing hangt af van hoe uw bedrijf werkt.
+
+00:04:23.720 --> 00:04:27.180
+Sommige bedrijven factureren bij verzending, anderen nadat een fase van het werk is afgerond.
+
+00:04:27.320 --> 00:04:30.320
+Een adviesbureau factureert wellicht na het voltooien van een mijlpaal.
+
+00:04:30.620 --> 00:04:34.140
+Dynamics 365 volgt het proces dat u al heeft ingesteld.
+
+00:04:34.140 --> 00:04:36.200
+Wellicht hoort u de term pakboonfactuur.
+
+00:04:36.400 --> 00:04:40.520
+Een pakbon bevestigt wat fysiek het magazijn heeft verlaten en de leveringsfase heeft bereikt.
+
+00:04:40.760 --> 00:04:45.940
+Wanneer uw bedrijf factureert op basis van wat daadwerkelijk is verzonden, kan de factuur die bevestigt de leveringsgegevens gebruiken.
+
+00:04:46.160 --> 00:04:47.820
+Dit voorkomt een veel voorkomend probleem.
+
+00:04:48.000 --> 00:04:51.700
+Stel, er is een order voor tien eenheden, maar er zijn er vandaag slechts acht verzonden omdat twee nog op voorraad wachten.
+
+00:04:51.900 --> 00:04:55.220
+Als u factureert op basis van de pakbon, factureert u alleen de acht verzonden eenheden.
+
+00:04:55.220 --> 00:04:58.240
+U brengt Northwind niet alle tien in rekening voordat ze deze hebben ontvangen.
+
+00:04:58.400 --> 00:05:02.460
+De order is nog steeds van belang, maar de bevestigde levering bepaalt wat op deze factuur thuis hoort.
+
+00:05:02.460 --> 00:05:04.640
+Maar niet elke factuur begint met een verkooporder.
+
+00:05:04.880 --> 00:05:08.080
+Soms moet u een eenmalige kostenpost factureren waarbij geen verzending komt kijken.
+
+00:05:08.320 --> 00:05:10.580
+Misschien vraagt Northwind om een speciale trainingssessie.
+
+00:05:10.740 --> 00:05:14.480
+Misschien is er een servicevergoeding, projectkosten of een correctie die een eigen factuur vereist.
+
+00:05:14.680 --> 00:05:18.420
+Voor die gevallen ondersteunt Dynamics 365 Finance een vrije tekstfactuur.
+
+00:05:18.640 --> 00:05:20.740
+Vrije tekst betekent niet willekeurig of informeel.
+
+00:05:20.920 --> 00:05:23.400
+Het betekent dat de factuur niet aan een verkooporder is gekoppeld.
+
+00:05:23.400 --> 00:05:27.780
+U voert de klant, de kostenpost, het bedrag, belastinggegevens waar nodig en de betalingsinformatie in.
+
+00:05:27.900 --> 00:05:30.680
+Eenmaal geboekt wordt het een normaal openstaand bedrag op de klantrekening.
+
+00:05:30.680 --> 00:05:32.600
+De klant ontvangt nog steeds een correcte factuur.
+
+00:05:32.800 --> 00:05:34.600
+Financiën ziet nog steeds een openstaand saldo.
+
+00:05:34.760 --> 00:05:35.960
+Hoe zit het met terugkerend werk?
+
+00:05:36.220 --> 00:05:39.080
+Stel dat Northwind een maandelijkse vergoeding betaalt voor onderhoud van apparatuur.
+
+00:05:39.260 --> 00:05:42.840
+Elke maand handmatig dezelfde factuur maken kost tijd en leidt tot kleine foutjes.
+
+00:05:43.600 --> 00:05:46.680
+Abonnementsfacturering gebruikt factureringsschema's om herhaalde kosten te verwerken.
+
+00:05:46.840 --> 00:05:48.960
+U stelt de overeenkomst en de factureringsfrequentie in,
+
+00:05:48.960 --> 00:05:53.140
+waarna Dynamics 365 facturen kan aanmaken zodra elke factuurperiode aanbreekt.
+
+00:05:53.280 --> 00:05:56.180
+Dat geeft u een herhaalbaar manier om terugkerende diensten te factureren
+
+00:05:56.180 --> 00:05:58.960
+en de klant krijgt facturen op basis van het overeengekomen schema.
+
+00:05:59.220 --> 00:06:01.540
+Boeken is het moment waarop de verkoopstatus verandert.
+
+00:06:01.740 --> 00:06:05.180
+Het registreert het bedrag op de klantrekening van Northwind als verschuldigd geld.
+
+00:06:05.380 --> 00:06:08.240
+Het stuurt het bedrag ook naar de financiële administratie van het bedrijf,
+
+00:06:08.400 --> 00:06:11.160
+waar u kunt zien dat een verkoop is gefactureerd en de betaling nog open staat.
+
+00:06:11.340 --> 00:06:14.080
+De factuur is niet langer een concept dat zomaar door iemand kan worden gewijzigd.
+
+00:06:14.080 --> 00:06:16.160
+Het maakt nu deel uit van de financiële administratie.
+
+00:06:16.320 --> 00:06:17.440
+Laten we het concreet maken.
+
+00:06:17.660 --> 00:06:19.940
+Northwind bestelt apparatuur ter waarde van 10.000 dollar.
+
+00:06:19.940 --> 00:06:23.220
+Er worden eerst acht eenheden verzonden, dus u boekt een factuur voor die acht eenheden.
+
+00:06:23.360 --> 00:06:25.940
+De factuur toont het bedrag, de vervaldatum en de betalingsinstructies.
+
+00:06:26.700 --> 00:06:31.800
+Northwind ontvangt de factuur en Dynamics 365 registreert hetzelfde bedrag als openstaand op hun rekening.
+
+00:06:32.020 --> 00:06:36.160
+Dat gedeelde record houdt verkoop, magazijnmedewerkers en financiën gefocust op dezelfde transactie.
+
+00:06:36.160 --> 00:06:40.280
+Geen ruzies meer over verschillende versies in verschillende bestanden, maar een factuur vraagt alleen om geld.
+
+00:06:40.480 --> 00:06:44.520
+De volgende taak is het herkennen van de betaling wanneer deze binnenkomt en deze koppelen aan het juiste openstaande saldo.
+
+00:06:44.700 --> 00:06:46.540
+2.3. Betalingen ontvangen en matchen.
+
+00:06:46.720 --> 00:06:48.040
+De juiste factuur afsluiten.
+
+00:06:48.040 --> 00:06:49.860
+Een betaling die binnenkomt klinkt simpel.
+
+00:06:50.020 --> 00:06:52.100
+Het banksaldo stijgt, dus de klus is geklaard?
+
+00:06:52.300 --> 00:06:53.140
+Toch, niet helemaal.
+
+00:06:53.560 --> 00:06:55.460
+Financiën moet nog twee vragen beantwoorden.
+
+00:06:55.700 --> 00:06:59.360
+Wie heeft het geld gestuurd en welke openstaande factuur of facturen moet dat geld voldoen?
+
+00:06:59.560 --> 00:07:01.780
+Denk aan Northwind die de apparatuurfactuur betaalt.
+
+00:07:01.780 --> 00:07:05.500
+De bank toont mogelijk een betaling met een korte referentie, een bedrag en een datum.
+
+00:07:05.640 --> 00:07:11.840
+Zonder die betaling te matchen met het openstaande saldo van Northwind, kan het systeem geld op de bank tonen terwijl het ook toont dat Northwind het geld nog verschuldigd is.
+
+00:07:12.020 --> 00:07:13.460
+Die gegevens moeten samenkomen.
+
+00:07:13.460 --> 00:07:18.060
+Dynamics 365 Finance verwerkt verschillende manieren waarop klanten kunnen betalen.
+
+00:07:18.240 --> 00:07:25.100
+U ontvangt mogelijk contant geld, check, credit card, betalingen, bankoverschrijvingen of wissels die formele betalingsdocumenten zijn die in sommige bedrijfsprocessen worden gebruikt.
+
+00:07:25.260 --> 00:07:28.100
+Elke methode volgt zijn eigen route naar de financiële administratie.
+
+00:07:28.240 --> 00:07:30.460
+Een bankoverschrijving kan verschijnen op een bankafschrift.
+
+00:07:30.620 --> 00:07:33.180
+Een check moet mogelijk worden geregistreerd voordat de bank deze verwerkt.
+
+00:07:33.320 --> 00:07:35.640
+Een kaartbetaling kan binnenkomen via een betalingsservice.
+
+00:07:35.920 --> 00:07:40.440
+Dynamics 365 biedt Financiën een plek om betalingsgegevens te registreren bij de juiste klantrekening.
+
+00:07:40.440 --> 00:07:42.580
+Die plek is vaak het journaal voor klantbetalingen.
+
+00:07:42.680 --> 00:07:49.320
+Een journaal klinkt als een papieren grootboek, maar binnen Dynamics 365 is het simpelweg een gecontroleerde plek om betalingen in te voeren en te controleren voordat ze worden geboekt.
+
+00:07:49.560 --> 00:07:55.380
+Financiën registreert de klant, het bedrag, de betaalmethode, de bankrekening en eventuele referentie die bij de betaling hoorde.
+
+00:07:55.600 --> 00:07:58.420
+Dan is er een woord dat vaak moeilijker klinkt dan het is, vereffening.
+
+00:07:58.760 --> 00:08:01.720
+Vereffening betekent een betaling matchen aan de factuur die het voldoet.
+
+00:08:01.920 --> 00:08:04.580
+Northwind betaalt het exacte bedrag van de apparatuurfactuur.
+
+00:08:04.800 --> 00:08:08.220
+Financiën selecteert de betaling en de openstaande factuur en vereffend deze vervolgens samen.
+
+00:08:08.220 --> 00:08:10.900
+Eenmaal geboekt, verschijnt de factuur niet langer als onbetaald.
+
+00:08:11.060 --> 00:08:12.580
+De betaling heeft deze afgesloten.
+
+00:08:12.780 --> 00:08:14.840
+Het klantzaldo daalt met hetzelfde bedrag.
+
+00:08:15.060 --> 00:08:20.620
+Dit is belangrijk omdat een betaling zonder vereffening een openstaande factuur op de rekening kan laten staan, ook al heeft u het geld al ontvangen.
+
+00:08:20.820 --> 00:08:25.560
+Dat zorgt voor slechte rapportages, onnodige follow-up en ongemakkelijke telefoontjes naar klanten die al hebben betaald.
+
+00:08:25.760 --> 00:08:27.660
+Soms dekt de betaling niet de gehele factuur.
+
+00:08:27.920 --> 00:08:31.440
+Misschien betaalt Northwind nu een deel van het bedrag en spreken ze af de rest later te betalen.
+
+00:08:31.680 --> 00:08:36.320
+Dynamics 365 kan het ontvangen bedrag verrekenen met de factuur, terwijl het openstaande deel open blijft staan.
+
+00:08:36.320 --> 00:08:39.000
+De factuur verdwijnt niet zomaar omdat er wat geld binnenkomt.
+
+00:08:39.100 --> 00:08:41.460
+De financiële afdeling kan precies zien wat er nog openstaat.
+
+00:08:41.620 --> 00:08:47.360
+Dat is veel beter dan per ongeluk een factuur als volledig betaald markeren en dan proberen het missende bedrag te onthouden in een notitie of apart spreadsheet.
+
+00:08:47.600 --> 00:08:50.360
+Voor veel bedrijven komen bankbetalingen in grote aantallen binnen.
+
+00:08:50.620 --> 00:08:58.720
+Handmatig elke overboeking en elke openstaande factuur nakijken kost tijd, vooral als klanten meerdere facturen tegelijk betalen of een onduidelijke referentie typen.
+
+00:08:59.020 --> 00:09:02.900
+Dynamics 365 heeft een betalingsafletteringsjournaal voor dit werk.
+
+00:09:02.900 --> 00:09:08.940
+Een team kan bankafschriften importeren en gebruiken om inkomende bankbetalingen te koppelen aan openstaande klantfacturen.
+
+00:09:09.860 --> 00:09:15.040
+Betalingsreferenties, bedragen, klantgegevens en afletterregels helpen het systeem voorstellen waar de betaling bij hoort.
+
+00:09:15.200 --> 00:09:17.780
+Je controleert het resultaat nog steeds, dat deel is belangrijk.
+
+00:09:18.320 --> 00:09:24.220
+Automatisering vermindert het zoekwerk, maar de financiële afdeling blijft verantwoordelijk voor het zorgen dat een betaling de juiste factuur aflettert.
+
+00:09:24.360 --> 00:09:29.260
+Als een klant één betaling stuurt voor meerdere facturen, kan de verwerker die betaling over die facturen verdelen.
+
+00:09:29.260 --> 00:09:33.240
+Als een referentie naar het verkeerde document wijst, kunnen ze dit corrigeren voordat het wordt geboekt.
+
+00:09:33.400 --> 00:09:39.500
+Het doel is niet om menselijk oordeel te verwijderen, maar om te voorkomen dat mensen hun dag besteden aan het zoeken in bankbestanden en factuurlijsten.
+
+00:09:39.740 --> 00:09:43.400
+Stel je nu voor dat Nordwind actief is in verschillende bedrijven binnen dezelfde groep.
+
+00:09:43.500 --> 00:09:48.660
+Een rechtspersoon verkoopt misschien de apparatuur, terwijl een centrale financiële entiteit betalingen ontvangt voor de hele groep.
+
+00:09:48.820 --> 00:09:52.520
+Dynamics 365 ondersteunt gecentraliseerde betalingen voor die situatie.
+
+00:09:52.720 --> 00:09:55.820
+Een betaling kan in de ene rechtspersoon worden vastgelegd namens een andere.
+
+00:09:55.820 --> 00:10:01.360
+Het bedrijf hoeft niet te doen alsof het geld eerst bij het verkopende bedrijf binnenkwam of het proces buiten het systeem te beheren.
+
+00:10:01.480 --> 00:10:05.420
+De administratie kan laten zien waar de betaling binnenkwam en welke klantenschuld deze voldoet.
+
+00:10:05.620 --> 00:10:10.540
+Dat houdt de gedeelde financiële administratie schoner, vooral wanneer meerdere bedrijven één centraal cashteam gebruiken.
+
+00:10:10.720 --> 00:10:14.120
+Het volledige betalingsproces is dus meer dan alleen geld bij de bank registreren.
+
+00:10:14.360 --> 00:10:21.940
+Dynamics 365 koppelt de klant, de betaling en de factuur totdat het openstaande saldo is voldaan of totdat het restbedrag aangeeft dat er nog betaald moet worden.
+
+00:10:22.160 --> 00:10:23.840
+Dat verwerkt de betaling van vandaag.
+
+00:10:23.840 --> 00:10:26.240
+De volgende vraag komt voor de volgende verkoop.
+
+00:10:26.360 --> 00:10:29.040
+Moet het bedrijf toestaan dat een klant nog meer schulden aangaat?
+
+00:10:29.720 --> 00:10:31.100
+4. Kredietbeheer.
+
+00:10:31.360 --> 00:10:32.920
+Beslissen wanneer je blijft verkopen.
+
+00:10:33.300 --> 00:10:35.980
+Je ontvangt dus een betaling en die vereffend een oud saldo.
+
+00:10:36.220 --> 00:10:37.400
+Vrij eenvoudig, toch?
+
+00:10:37.560 --> 00:10:40.620
+Maar dit is wat kredietbeheer vraagt voordat de volgende order doorgaat.
+
+00:10:40.740 --> 00:10:43.140
+Hoeveel extra risico is jouw bedrijf bereid te nemen?
+
+00:10:43.360 --> 00:10:44.820
+Denk aan de receptie van een hotel.
+
+00:10:45.040 --> 00:10:50.720
+Een gast wil nog een nacht blijven, dus het personeel controleert de boeking, de betalingsstatus en de regels voordat ze een nieuwe kamer pas overhandigen.
+
+00:10:50.720 --> 00:10:53.500
+Dat is precies wat kredietbeheer doet voor een verkooporder.
+
+00:10:53.500 --> 00:10:57.120
+Het oordeelt niet of Nordwind Equipment over het algemeen een goede klant is.
+
+00:10:57.280 --> 00:11:01.160
+Het toetst simpelweg hun huidige financiële positie aan de regels die uw bedrijf heeft opgesteld.
+
+00:11:01.340 --> 00:11:02.980
+Een van die regels is de kredietlimiet.
+
+00:11:03.140 --> 00:11:06.600
+Een kredietlimiet is het maximale bedrag dat een klant op enig moment verschuldigd kan zijn.
+
+00:11:06.780 --> 00:11:12.900
+Dus, als Nordwind een limiet heeft van 50.000 dollar en al 45.000 dollar schuldig is, vereist een nieuwe order van 20.000 dollar aandacht.
+
+00:11:13.080 --> 00:11:17.060
+De klant kan de order nog steeds plaatsen, maar uw bedrijf mag die beslissing niet onopgemerkt laten passeren.
+
+00:11:17.280 --> 00:11:20.180
+Dynamics 365 kan meer dan één cijfer controleren.
+
+00:11:20.180 --> 00:11:26.120
+Het kijkt naar openstaande facturen, hoe lang deze al zijn vervallen, de waarde van de nieuwe verkooporder en het krediet dat de klant nog heeft.
+
+00:11:26.280 --> 00:11:32.800
+Een klant die op tijd betaalt, heeft misschien ruimte voor meer krediet, terwijl een andere klant onder zijn limiet kan zitten maar een factuur heeft die ernstig te laat is.
+
+00:11:33.000 --> 00:11:34.460
+Dat zijn verschillende risico's.
+
+00:11:34.680 --> 00:11:42.500
+Wanneer een regel wordt geactiveerd, kan Dynamics 365 de verkooporder op kredietstop zetten, waardoor de order wordt gepauzeerd voordat u meer goederen verzendt of meer onbetaald werk aanneemt.
+
+00:11:42.680 --> 00:11:48.580
+Sales kan de stop zien, finance kan de reden zien en niemand ontdekt het probleem pas nadat het magazijn alweer een levering heeft verstuurd.
+
+00:11:48.580 --> 00:11:51.600
+Een kredietstop betekent niet dat de order voor altijd is afgewezen.
+
+00:11:51.760 --> 00:11:53.640
+Het betekent dat iemand het moet beoordelen.
+
+00:11:53.860 --> 00:12:03.440
+Misschien heeft Nordwind bewijs gestuurd dat de betaling onderweg is of weet een financieel manager dat de vervallen factuur te maken heeft met een facturatiefout of heeft de klant gevraagd om een tijdelijke verhoging vanwege een groot goedgekeurd project.
+
+00:12:03.700 --> 00:12:06.760
+Bevoegd personeel kan een order vrijgeven als daar een gegronde reden voor is.
+
+00:12:06.980 --> 00:12:10.020
+Dat deel is belangrijk omdat bedrijfsregels ruimte nodig hebben voor de realiteit.
+
+00:12:10.220 --> 00:12:15.900
+Het systeem kan een automatische beslissing stoppen, maar de verantwoordelijke beslissen nog steeds wat er daarna gebeurt en laten een duidelijk spoor achter van die beslissing.
+
+00:12:15.900 --> 00:12:18.660
+Dit is waar Sales en Finance vanuit hetzelfde beeld moeten werken.
+
+00:12:18.860 --> 00:12:25.560
+Sales wil een klant tevreden houden, zeker als de order belangrijk is, terwijl Finance het bedrijf moet beschermen tegen het opbouwen van een saldo dat wellicht nooit wordt terugbetaald.
+
+00:12:25.720 --> 00:12:27.740
+Geen van beide partijen hoeft een discussie te winnen.
+
+00:12:27.920 --> 00:12:31.900
+Ze hebben alleen de order, het onbetaalde bedrag en de kredietregels allemaal op één plek nodig.
+
+00:12:32.160 --> 00:12:35.840
+Veel mensen horen kredietbeheer en gaan ervan uit dat het betekent dat je klanten wegstuurt.
+
+00:12:36.040 --> 00:12:36.720
+Dat is niet zo.
+
+00:12:36.900 --> 00:12:40.680
+Het betekent het afspreken van veilige grenzen voordat een late betaling een veel groter probleem wordt.
+
+00:12:40.840 --> 00:12:44.600
+U kunt nog steeds goede klanten ondersteunen, uitzonderingen goedkeuren en met vertrouwen verkopen.
+
+00:12:45.900 --> 00:12:47.860
+Van schuld zonder eerst de feiten te controleren.
+
+00:12:48.040 --> 00:12:52.020
+Zodra de vervaldatum van een factuur is verstreken, maakt preventie plaats voor opvolging.
+
+00:12:52.240 --> 00:12:55.900
+Vijf, incasso en geschillen, betalingen innen zonder de klant te verliezen.
+
+00:12:56.140 --> 00:12:58.780
+Zodra een vervaldatum is verstreken, verandert het werk.
+
+00:12:58.980 --> 00:13:01.120
+Het bedrijf beslist niet langer of het krediet verleent.
+
+00:13:01.280 --> 00:13:04.660
+Er is een duidelijke, respectvolle manier nodig om om geld te vragen dat al opeisbaar is.
+
+00:13:04.880 --> 00:13:08.260
+Dynamics 365 Finance brengt dat werk samen op de incasso pagina.
+
+00:13:08.500 --> 00:13:11.180
+Zie het als een gedeeld bureau voor achterstallige klantaccounts.
+
+00:13:11.180 --> 00:13:13.740
+In plaats van dat één persoon notices bijhoudt in e-mail,
+
+00:13:13.740 --> 00:13:17.980
+een ander gesprekken volgt in een spreadsheet en iemand anders facturen controleert bij finance,
+
+00:13:18.160 --> 00:13:21.940
+ziet het incasso-team het klant saldo en alle opvolgingsactiviteiten op één plek.
+
+00:13:22.180 --> 00:13:23.360
+Dat verandert het gesprek.
+
+00:13:23.500 --> 00:13:27.580
+Een incasso-medewerker werkt met klantenlijsten die zijn gemaakt op basis van incasso-criteria,
+
+00:13:27.860 --> 00:13:31.580
+waarmee klanten kunnen worden gevonden met facturen die een bepaald aantal dagen over tijd zijn,
+
+00:13:31.720 --> 00:13:33.300
+boven een gekozen achterstallig bedrag,
+
+00:13:33.480 --> 00:13:36.360
+of die aandacht vereisen volgens de eigen incasso-regels van uw bedrijf.
+
+00:13:36.440 --> 00:13:39.100
+Het team hoeft dus niet te raden wie ze als eerste moeten benaderen.
+
+00:13:39.100 --> 00:13:44.100
+Voor elke klant kan de medewerker actie ondernemen, een herinnering sturen, een aanmaning aanmaken,
+
+00:13:44.300 --> 00:13:46.920
+de klant mailen of een taak voor een telefoongesprek toevoegen.
+
+00:13:47.100 --> 00:13:49.060
+Het doel is niet om boze berichten te sturen.
+
+00:13:49.280 --> 00:13:51.720
+De meeste te laten betalingen beginnen met iets alledaags.
+
+00:13:51.940 --> 00:13:54.100
+O, een factuur die in de verkeerde inbox belandt,
+
+00:13:54.200 --> 00:13:57.320
+een klant die een kopie nodig heeft of een betalingsteam dat de vervaldatum mist.
+
+00:13:57.500 --> 00:13:59.380
+Een rustige herinnering kan veel oplossen.
+
+00:13:59.680 --> 00:14:02.540
+Soms reageert een klant met de belofte om aanstaande vrijdag te betalen.
+
+00:14:02.800 --> 00:14:05.980
+Dynamics 365 kan dat vastleggen als een betalingsbelofte,
+
+00:14:05.980 --> 00:14:09.780
+zodat het team weet dat er een toezegging is en kan controleren of de betaling aankomt zoals beloofd.
+
+00:14:09.900 --> 00:14:13.480
+Zonder dat record zou de volgende medewerker de klant de volgende ochtend kunnen bellen,
+
+00:14:13.540 --> 00:14:15.480
+niet wetende dat er al een datum was afgesproken.
+
+00:14:15.700 --> 00:14:17.420
+Geschillen vereisen dezelfde zorg.
+
+00:14:17.620 --> 00:14:21.140
+Een geschil betekent dat de klant een factuur geheel of gedeeltelijk betwist.
+
+00:14:21.340 --> 00:14:24.720
+Misschien omdat de prijs niet klopt, sommige goederen nooit zijn aangekomen
+
+00:14:24.720 --> 00:14:27.500
+of de factuur verwijst naar werk dat ze niet hebben goedgekeurd.
+
+00:14:27.700 --> 00:14:30.760
+De slechtste reactie is dat probleem in een inbox te laten verdwijnen.
+
+00:14:30.980 --> 00:14:35.720
+Dynamics 365 kan de factuur markeren als betwist en zichtbaar houden tijdens incassowerkzaamheden.
+
+00:14:35.720 --> 00:14:38.560
+Het team kan de status en het nodige werk om het op te lossen volgen,
+
+00:14:38.800 --> 00:14:42.080
+in plaats van stilte te behandelen als een reden om steeds dezelfde herinnering te sturen.
+
+00:14:42.260 --> 00:14:44.960
+Dat helpt het bedrijf ook om terugkerende problemen te signaleren.
+
+00:14:45.180 --> 00:14:47.600
+Als meerdere klanten hetzelfde type kosten betwisten,
+
+00:14:47.860 --> 00:14:50.540
+heeft Finance meer geleerd dan alleen over één te laten betaling.
+
+00:14:51.000 --> 00:14:55.720
+Facturati, verkoop, levering of klantenservice moeten mogelijk het proces repareren dat die geschillen veroorzaakt.
+
+00:14:55.880 --> 00:14:57.720
+Incasso gebruikt ook ouderdomsanalyses,
+
+00:14:57.880 --> 00:15:00.660
+die onbetaalde bedragen sorteren op basis van hoe lang ze openstaan.
+
+00:15:00.780 --> 00:15:04.860
+U kunt kijken naar bedragen die nu opeisbaar zijn en vervolgens 30, 60 of 90 dagen achterstallig.
+
+00:15:04.860 --> 00:15:09.820
+Die tijdsperiode helpen het team te zien welke schulden aandacht vereisen voordat ze uitmonden in een veel lastiger gesprek.
+
+00:15:09.900 --> 00:15:15.280
+Een factuur die twee dagen te laat is, verdient niet altijd dezelfde aanpak als een factuur die al drie maanden openstaat.
+
+00:15:15.500 --> 00:15:19.000
+Finance kan ook betalingsvoorspellingen gebruiken, indien beschikbaar,
+
+00:15:19.260 --> 00:15:25.280
+om in te schatten of openstaande facturen op tijd, laat of erg laat zullen worden betaald op basis van eerdere gegevens.
+
+00:15:25.920 --> 00:15:28.360
+Een ouderdomsanalyse laat zien wat er al is gebeurd,
+
+00:15:28.560 --> 00:15:33.220
+maar een voorspelling helpt het team te bepalen waar ze zich op moeten richten voordat een betalingsachterstand een probleem wordt.
+
+00:15:33.220 --> 00:15:35.080
+Dat vervangt het eigen oordeel niet.
+
+00:15:35.560 --> 00:15:40.320
+Het geeft het incasso-team een extra signaal wanneer ze moeten kiezen tussen een lange lijst met accounts.
+
+00:15:40.540 --> 00:15:47.160
+Het doel is simpel, geldt op een gestage, transparante manier innen en de klant behandelen als klant in plaats van als een dossiernummer.
+
+00:15:47.380 --> 00:15:50.300
+Laten we de hele reis nu in één eenvoudig voorbeeld vatten.
+
+00:15:51.040 --> 00:15:52.140
+6. Eén factuur.
+
+00:15:52.340 --> 00:15:53.440
+Eén verbonden proces.
+
+00:15:53.700 --> 00:15:54.640
+Het grote geheel.
+
+00:15:55.020 --> 00:15:57.900
+Laten we eens kijken wat er gebeurt wanneer Northwind een bestelling plaatst.
+
+00:15:57.900 --> 00:16:03.180
+Uw systeem deze verwerkt en zodra het overeengekomen facturatiemoment is bereikt, de factuur wordt verstuurd.
+
+00:16:03.340 --> 00:16:10.760
+Het klantaccount bevat al de betalingsvoorwaarden, dus Dynamics 365 berekent de vervaldatum automatisch op basis van de afspraken met Northwind.
+
+00:16:11.000 --> 00:16:13.900
+Finance ziet het openstaande bedrag en de klant ontvangt een duidelijk betalingsverzoek.
+
+00:16:14.880 --> 00:16:16.200
+Dat is het begin van het proces.
+
+00:16:16.460 --> 00:16:19.740
+Een paar weken later stuurt Northwind een bankbetaling met het factuurkenmerk.
+
+00:16:19.920 --> 00:16:22.600
+Finance koppelt de betaling aan de factuur en wikkelt deze af.
+
+00:16:22.740 --> 00:16:26.960
+Het openstaande saldo wordt gesloten en de klantaccount toont nu dat dat deel van de relatie is afgerond.
+
+00:16:26.960 --> 00:16:28.900
+Want matige controle is niet nodig.
+
+00:16:29.120 --> 00:16:30.660
+Maar wat gebeurt er als dingen anders lopen?
+
+00:16:30.860 --> 00:16:34.140
+Als Northwind de vervaldatum mist, komt de factuur in het incasso traject terecht.
+
+00:16:34.360 --> 00:16:35.740
+Een medewerker stuurt een herinnering.
+
+00:16:35.940 --> 00:16:41.740
+Northwind reageert dat een deel van de kosten niet klopt en het team registreert een geschil in plaats van het als een onverklaarde late betaling te zien.
+
+00:16:41.940 --> 00:16:46.080
+Iedereen ziet dezelfde status en weet wat de volgende actie is, omdat alles op één plek staat.
+
+00:16:46.340 --> 00:16:49.160
+Dit is het verschil met Dynamics 365 Finance.
+
+00:16:49.380 --> 00:16:50.520
+Er blijft niets apart staan.
+
+00:16:50.520 --> 00:16:59.360
+Verkooporders, facturen, betalingen, kredietcontroles en incassowerkzaamheden zijn allemaal verbonden met dezelfde klantrelatie, dus u hoeft geen informatie na te jagen in verschillende systemen.
+
+00:16:59.540 --> 00:17:01.960
+Dat betekent snellere beslissingen en minder fouten.
+
+00:17:02.160 --> 00:17:10.060
+De oude manier verspreidde het verhaal over spreadsheets, e-mailmappen, papieren notices en bankbestanden, waarbij tijd verloren ging aan de vraag welke versie correct was.
+
+00:17:10.300 --> 00:17:14.900
+Dynamics 365 houdt het verhaal verbonden, één beeld van de klant van begin tot eind.
+
+00:17:14.900 --> 00:17:20.460
+Debiteurenbeheer betekent weten wie uw geld schuldig is, wanneer het vervalt, wat er tot nu toe is gebeurd en wat u vervolgens moet doen.
+
+00:17:20.620 --> 00:17:24.820
+Als er een stukje ontbreekt, kan een bedrijf veel verkopen en toch moeite hebben om te weten waar het geld blijft.
+
+00:17:25.040 --> 00:17:27.160
+Daarom is dit verbonden proces zo belangrijk.
+
+00:17:27.660 --> 00:17:28.060
+Conclusie
+
+00:17:28.060 --> 00:17:30.340
+Hou het geld intern onder controle
+
+00:17:30.340 --> 00:17:32.740
+Een factuur is pas het begin van het proces.
+
+00:17:33.020 --> 00:17:38.580
+Volgt uw debiteurenadministratie het geld totdat het saldo is vereffend of er actie wordt ondernomen op openstaande posten.
+
+00:17:38.580 --> 00:17:42.620
+Het intern onder controle houden van dat geld is cruciaal voor de gezondheid van uw bedrijf.
+
+00:17:42.720 --> 00:17:43.840
+Ik ben Mirko Peters.
+
+00:17:43.840 --> 00:17:52.000
+Abonneer u op Microsoft Knowledge Magnets op M365FM en bekijk daarna de gerelateerde Dynamics 365 Finance aflevering op uw scherm om het heldere overzicht verder uit te bouwen.

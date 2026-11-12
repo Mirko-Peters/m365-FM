@@ -1,0 +1,922 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:04.400
+Dus, wat verandert er precies wanneer een bedrijf overstapt van één AI-chatbot naar tientallen AI-tools?
+
+00:00:04.580 --> 00:00:06.220
+In het begin voelt het eenvoudig.
+
+00:00:06.380 --> 00:00:08.760
+Een team voegt een chatbot toe voor klantenservice.
+
+00:00:09.080 --> 00:00:13.860
+Een ander gebruikt AI om bedrijfsdocumenten te doorzoeken en notulen worden automatisch geschreven.
+
+00:00:14.040 --> 00:00:18.380
+Een workflow kan een e-mail lezen, een verzoek eruit halen en naar het juiste systeem sturen.
+
+00:00:18.640 --> 00:00:23.980
+Voor je het weet, heeft het bedrijf verschillende modellen, actieve agents en tools die bij bedrijfsgegevens kunnen.
+
+00:00:23.980 --> 00:00:30.260
+Elk team maakt vaak rechtstreeks verbinding met een andere AI-aanbieder met een eigen sleutel, limieten en veiligheidsregels.
+
+00:00:30.400 --> 00:00:31.880
+Kosten worden lastig te herleiden.
+
+00:00:32.080 --> 00:00:33.980
+Een sleutel kan op de verkeerde plek terechtkomen.
+
+00:00:34.180 --> 00:00:37.780
+En wanneer een agent een tool aanroept, heeft niemand misschien een duidelijk overzicht van wat deze probeerde te doen.
+
+00:00:37.980 --> 00:00:40.500
+Dit is waar Microsoft AI Gateway om de hoek komt kijken.
+
+00:00:40.700 --> 00:00:46.440
+Aan het eind van deze aflevering begrijp je wat het is, hoe de bouwstenen in elkaar passen en wanneer het zinvol is voor jouw bedrijf.
+
+00:00:46.620 --> 00:00:48.760
+Zie het als een kantoorpand met veel zijdeuren.
+
+00:00:48.760 --> 00:00:55.180
+Je kunt elke deur openlaten en hopen dat mensen ze goed gebruiken, of je kunt iedereen door één beheerde ingang laten komen.
+
+00:00:55.420 --> 00:00:56.480
+Een voordeur voor AI.
+
+00:00:56.780 --> 00:01:02.660
+Microsoft AI Gateway is een set Azure API beheerfuncties die je AI-verkeer één centraal controlepunt geeft.
+
+00:01:02.900 --> 00:01:04.720
+Laten we het in begrijpelijke taal uitleggen.
+
+00:01:04.920 --> 00:01:07.780
+Stel je de AI-omgeving van je bedrijf voor als een modern kantoorpand.
+
+00:01:07.960 --> 00:01:10.580
+De AI-modellen zijn ruimtes waar het denkwerk plaatsvindt.
+
+00:01:10.680 --> 00:01:14.960
+Je agents zijn werknemers die door het pand bewegen en beslissen welke goedgekeurde taak ze als volgende uitvoeren.
+
+00:01:14.960 --> 00:01:20.680
+Tools zijn servicedeuren die leiden naar plekken als hour, financiën, klantgegevens en interne bestanden.
+
+00:01:20.900 --> 00:01:24.420
+De AI Gateway is de receptie en de beveiligingsbalie bij de ingang.
+
+00:01:24.680 --> 00:01:30.800
+Deze controleert wie er binnenkomt, past de regels toe en registreert waar verzoeken heen gaan voordat ze de rest van het pand bereiken.
+
+00:01:31.020 --> 00:01:32.800
+Een verzoek volgt een eenvoudig pad.
+
+00:01:33.020 --> 00:01:36.300
+Een app, een co-pilot of een agent stuurt een verzoek naar de Gateway.
+
+00:01:36.620 --> 00:01:43.680
+De Gateway controleert de regels voor die beller en stuurt het dan door naar het goedgekeurde model, de tool, de agent of de bedrijfs-API.
+
+00:01:43.680 --> 00:01:48.400
+En wanneer er een antwoord terugkomt, gaat dit weer door de Gateway voordat het de gebruiker bereikt.
+
+00:01:48.800 --> 00:01:56.320
+Dat ene pad geeft het bedrijf een plek om toegang, limieten, veiligheidschecks en logbestanden te beheren zonder die controles in elke app in te bouwen.
+
+00:01:56.580 --> 00:01:58.960
+Dit scheidt ook twee taken die vaak door elkaar lopen.
+
+00:01:59.540 --> 00:02:02.820
+Applicatieteams kunnen zich concentreren op de ervaring die mensen daadwerkelijk gebruiken.
+
+00:02:03.060 --> 00:02:07.240
+Zij bouwen de supportassistent, het zoekscherm voor documenten of de workflow die tijd bespaart.
+
+00:02:07.440 --> 00:02:10.780
+Ondertussen beheert het platform team de gedeelde regels achter de schermen.
+
+00:02:10.780 --> 00:02:17.280
+Zij bepalen welke diensten zijn goedgekeurd, welke identiteiten deze kunnen gebruiken, hoeveel verkeer een project kan versturen en wat er wordt gelogd.
+
+00:02:17.380 --> 00:02:20.660
+Je wilt niet dat elk team een nieuw beveiligingsplan bedenkt voor elke chatbot.
+
+00:02:20.880 --> 00:02:24.340
+Microsoft AI Gateway kan voor verschillende soorten AI-verkeer worden geplaatst.
+
+00:02:24.480 --> 00:02:29.080
+Het kan oproepen naar AI-modellen en modelcontext, protocol, MCP, tool aanroepen, beheren.
+
+00:02:29.220 --> 00:02:33.860
+Het kan ook agent naar agent A2A, verkeer beheren en de bedrijfs-API's die je bedrijf al gebruikt,
+
+00:02:33.860 --> 00:02:38.980
+zoals een API voor het controleren van een bestelling, het lezen van ouder beleid of het openen van een support ticket.
+
+00:02:39.220 --> 00:02:44.020
+Dat laatste is belangrijk omdat de meeste bedrijven hun bestaande systemen niet hoeven weg te gooien om AI te gebruiken.
+
+00:02:44.240 --> 00:02:49.440
+Ze hebben alleen een veilige manier nodig voor AI om met die systemen te werken en een gateway helpt bij het controleren van die verbinding.
+
+00:02:49.800 --> 00:02:51.980
+Microsoft AI Gateway is op zichzelf geen model.
+
+00:02:52.180 --> 00:02:53.500
+Het schrijft zelf geen antwoorden.
+
+00:02:53.720 --> 00:02:55.140
+Het is ook geen builder voor agents.
+
+00:02:55.140 --> 00:02:58.920
+Je gebruikt het dus niet om een ouder assistent te ontwerpen of een financiële agent te instrueren wat deze moet doen.
+
+00:02:58.920 --> 00:03:03.240
+En het vervangt niet Microsoft Foundry, waar teams AI-projecten kunnen bouwen, testen en beheren.
+
+00:03:03.380 --> 00:03:05.160
+In plaats daarvan bevindt het zich in het midden.
+
+00:03:05.360 --> 00:03:07.760
+Foundry helpt je bij het werken met AI-modellen en agents,
+
+00:03:07.940 --> 00:03:13.260
+terwijl Azure API Management AI Gateway helpt bij het beheersen van het verkeer dat die modellen, agents en tools creëren.
+
+00:03:13.420 --> 00:03:17.240
+Je kent Azure API Management wellicht al als een manier om normale APIs te beheren.
+
+00:03:17.240 --> 00:03:21.880
+Een API is simpelweg een manier voor het ene software-onderdeel om iets aan een ander software-onderdeel te vragen.
+
+00:03:22.040 --> 00:03:24.240
+AI Gateway breidt datzelfde concept uit naar AI-werkzaamheden.
+
+00:03:24.940 --> 00:03:26.860
+Want AI-aanvragen roepen nieuwe vragen op.
+
+00:03:26.980 --> 00:03:28.020
+Wie gebruikte welk model?
+
+00:03:28.020 --> 00:03:29.640
+Hoeveel tokens zijn er verbruikt?
+
+00:03:29.840 --> 00:03:31.360
+Mag deze agent die tool aanroepen?
+
+00:03:31.520 --> 00:03:33.400
+Moet deze prompt het model überhaupt bereiken?
+
+00:03:33.560 --> 00:03:36.940
+Door de gateway in het midden te plaatsen, heb je één plek om die vragen te beantwoorden.
+
+00:03:37.120 --> 00:03:41.820
+En het eerste knelpunt ontstaat wanneer elke applicatie zijn eigen model-eindpunt begint te kiezen.
+
+00:03:42.220 --> 00:03:43.780
+Eén eindpunt, veel modellen.
+
+00:03:43.940 --> 00:03:49.900
+Wanneer je applicatie direct verbinding maakt met een enkel model-eindpunt, wordt die keuze vastgelegd in de code zelf.
+
+00:03:50.120 --> 00:03:56.020
+Vaak is de code gekoppeld aan één provider, één specifieke implementatie, één Azure-regio en een vaste set-limieten.
+
+00:03:56.020 --> 00:04:01.300
+Dat werkt prima zolang het project klein is, maar stel je voor dat je ondersteuningssysteem op één model in één regio draait.
+
+00:04:01.520 --> 00:04:07.640
+Maanden later bereikt dat model zijn capaciteit, komt er een beter model voor minder geld of moet je bedrijf verhuizen naar een andere regio.
+
+00:04:07.880 --> 00:04:12.860
+Zonder een gedeelde laag moet elk app-team zijn code aanpassen, opnieuw testen en een update uitrollen.
+
+00:04:13.040 --> 00:04:15.200
+Dat zorgt voor trage en rommelige veranderingen.
+
+00:04:15.200 --> 00:04:18.560
+Microsoft AI Gateway biedt uw applicaties een stabiele hoofdingang.
+
+00:04:18.760 --> 00:04:23.100
+Ze sturen verzoeken daarheen en de modelkeuze kan achter de schermen wijzigen zonder dat u de app hoeft aan te passen.
+
+00:04:23.280 --> 00:04:25.060
+Zie het als een telefoonnummer van een bedrijf.
+
+00:04:25.200 --> 00:04:29.000
+Klanten bellen één nummer, zelfs als het gesprek wordt doorverbonden naar een ander team of kantoor.
+
+00:04:29.180 --> 00:04:31.060
+Ze hoeven nooit te weten hoe het wordt afgehandeld.
+
+00:04:31.280 --> 00:04:37.840
+Met AI Gateway roept uw app één goedgekeurd eindpunt aan en achter dat eindpunt stuurt de gateway het verzoek naar het juiste model voor de taak.
+
+00:04:37.840 --> 00:04:41.680
+Microsoft heeft ook een nieuwe aanpak genaamd de Unified Model API.
+
+00:04:41.980 --> 00:04:50.900
+Simpel gezegd, hiermee kan een applicatie op OpenAI wijze een verzoek indienen, terwijl de gateway dat verzoek achter de schermen koppelt aan verschillende modelproviders.
+
+00:04:51.400 --> 00:04:56.400
+Uw app stuurt dus één vertrouwd type verzoek en de gateway regelt alle details van de provider.
+
+00:04:56.680 --> 00:05:04.620
+Afhankelijk van uw configuratie kan dat verzoek naar een Azure OpenAI implementatie gaan, een model in Microsoft Foundry, Enthropic, Google Gemini of Amazon Bedrock.
+
+00:05:04.620 --> 00:05:09.000
+De route volgt regels die u instelt, geen hardgecodeerde keuze die in elke applicatie verborgen zit.
+
+00:05:09.180 --> 00:05:13.360
+Dat geeft het platformteam de ruimte om wijzigingen door te voeren zonder de gebruikers van de app te storen.
+
+00:05:13.520 --> 00:05:16.480
+Stel dat uw bedrijf een AI-assistent voor klantenondersteuning gebruikt.
+
+00:05:16.680 --> 00:05:18.280
+De meeste vragen zijn eenvoudig.
+
+00:05:18.440 --> 00:05:20.880
+Waar is mijn bestelling? Hoe reset ik mijn wachtwoord?
+
+00:05:21.080 --> 00:05:25.080
+Die kunnen snel door een kleiner, goedkoper model worden beantwoord zonder onnodige kosten.
+
+00:05:25.360 --> 00:05:29.760
+Dan stuurt een klant een lange, ongebruikelijke vraag die zorgvuldig redeneren of productkennis vereist.
+
+00:05:29.960 --> 00:05:32.600
+De gateway stuurt dat type verzoek door naar een krachtiger model.
+
+00:05:32.600 --> 00:05:38.420
+De support-app blijft verzoeken op dezelfde manier versturen, dus uw team hoeft nooit te weten welk model de vraag heeft afgehandeld
+
+00:05:38.420 --> 00:05:41.360
+en uw ontwikkelaars hoeven geen aparte verbindingen te maken voor elke optie.
+
+00:05:41.800 --> 00:05:43.180
+Hoe zit het met de capaciteit?
+
+00:05:43.480 --> 00:05:45.260
+Eindpunten voor AI-modellen hebben limieten.
+
+00:05:45.500 --> 00:05:48.620
+Ze kunnen slechts een bepaalde hoeveelheid verkeer in een bepaalde tijd verwerken.
+
+00:05:48.820 --> 00:05:53.460
+Als elk verzoek bij één implementatie binnenkomt, kan een drukuur de hele ervaring vertragen of blokkeren.
+
+00:05:53.660 --> 00:05:56.640
+Een gateway kan verkeer verspreiden over meerdere goedgekeurde implementaties,
+
+00:05:56.780 --> 00:06:00.900
+door naar een andere regio te routeren als er een vol zit, of een back-up-route te gebruiken als een eindpunt uitvalt.
+
+00:06:00.900 --> 00:06:03.660
+Dat betekent niet dat verzoeken willekeurig moeten rondstuiteren.
+
+00:06:03.760 --> 00:06:05.220
+U bepaalt nog steeds de regels.
+
+00:06:05.440 --> 00:06:10.920
+Bijvoorbeeld, klantgericht verkeer krijgt voorrang op uw hoofdmodel, terwijl interne tests een ander pad gebruiken,
+
+00:06:11.180 --> 00:06:15.320
+of de ene regio handelt lokale gebruikers af terwijl de andere als back-up fungeert.
+
+00:06:15.920 --> 00:06:16.920
+Het punt is simpel.
+
+00:06:17.140 --> 00:06:19.800
+Uw applicaties verbinden met één gecontroleerde hoofdingang,
+
+00:06:20.040 --> 00:06:24.160
+en daarachter kan het platform modellen, regio's of providers aanpassen met minimale verstoring.
+
+00:06:24.400 --> 00:06:26.420
+Dat is belangrijk omdat AI zich snel ontwikkelt.
+
+00:06:26.580 --> 00:06:29.400
+Een model dat vandaag werkt, is volgende maand misschien niet meer de beste keuze.
+
+00:06:29.400 --> 00:06:33.580
+Als elke app direct met zijn provider praat, wordt het wisselen van modellen een project voor elk team.
+
+00:06:33.760 --> 00:06:36.920
+Met de gateway bevindt de beslissing over het model zich op één gedeelde plek.
+
+00:06:37.080 --> 00:06:39.560
+Een korte opmerking over de Unified Model API.
+
+00:06:39.880 --> 00:06:41.940
+Microsoft vermeldt deze als public preview.
+
+00:06:42.180 --> 00:06:45.400
+Preview-functies kunnen veranderen en zijn mogelijk nog niet klaar voor elk productiegebruik.
+
+00:06:46.100 --> 00:06:48.640
+Toch hangt het grotere patroon niet af van die ene functie.
+
+00:06:48.820 --> 00:06:51.400
+Want je API-beheer kan al voor model-eindpunten staan,
+
+00:06:51.580 --> 00:06:54.760
+roteringsregels toepassen en helpen bij het beheer van meerdere back-ends.
+
+00:06:54.760 --> 00:06:59.840
+De Unified Model API is bedoeld om die ervaring tussen providers makkelijker te maken voor applicaties.
+
+00:07:00.020 --> 00:07:02.380
+Het kiezen van het juiste model is slechts de helft van het werk,
+
+00:07:02.520 --> 00:07:04.040
+want een model kan een vraag beantwoorden,
+
+00:07:04.240 --> 00:07:07.840
+maar een agent kan besluiten een actie te ondernemen die invloed heeft op echte bedrijfssystemen.
+
+00:07:07.960 --> 00:07:09.760
+Het aansturen van agents en tools.
+
+00:07:10.000 --> 00:07:12.860
+Een agent tilt AI voorbij het simpelweg beantwoorden van vragen.
+
+00:07:13.040 --> 00:07:14.620
+Het is software die naar een taak kan kijken,
+
+00:07:14.840 --> 00:07:18.340
+uitgoedgekeurde opties kan kiezen en een tool of dienst kan aanroepen om werk gedaan te krijgen.
+
+00:07:18.540 --> 00:07:20.460
+Een ouder agent kan een verlofbeleid opzoeken,
+
+00:07:20.460 --> 00:07:24.760
+een supportagent kan een bestelling controleren en een financeagent kan een betalingsverzoek voorbereiden.
+
+00:07:24.980 --> 00:07:27.920
+Dat vermogen is nuttig, maar het verandert ook het risicoprofiel.
+
+00:07:28.080 --> 00:07:30.040
+Een foutief antwoord van een model zorgt voor verwarring,
+
+00:07:30.200 --> 00:07:31.660
+maar een agent die de verkeerde tool gebruikt,
+
+00:07:31.780 --> 00:07:35.740
+kan data blootstellen, een record wijzigen of een proces starten dat het nooit had mogen aanraken.
+
+00:07:35.980 --> 00:07:37.860
+Daarom hebben tools eigen regels nodig.
+
+00:07:38.080 --> 00:07:40.460
+Je zult de term MCP horen of modelcontextprotocol.
+
+00:07:41.340 --> 00:07:45.860
+Zie het als een standaard connectorvorm die een agent een bekende manier geeft om een bedrijfstool te vinden en te gebruiken,
+
+00:07:46.000 --> 00:07:48.220
+zoals een documentzoekdienst of een API voor bestellingen.
+
+00:07:48.220 --> 00:07:51.440
+In plaats van voor elke agent en elk systeem een andere verbinding te bouwen,
+
+00:07:51.580 --> 00:07:53.480
+geeft MCP Teams een algemeen patroon.
+
+00:07:53.540 --> 00:07:55.260
+Dan is er nog A2A Agent to Agent,
+
+00:07:55.420 --> 00:07:58.100
+een standaard manier voor een agent om contact te leggen met een andere agent.
+
+00:07:58.280 --> 00:08:01.440
+Bijvoorbeeld, een supportagent vraagt een verzendagent om leveringsgegevens
+
+00:08:01.440 --> 00:08:03.600
+in plaats van zelf het verzendsysteem te moeten begrijpen.
+
+00:08:03.800 --> 00:08:04.980
+Dat klinkt op papier netjes,
+
+00:08:05.120 --> 00:08:08.340
+maar een agentketen wordt gecompliceerd wanneer elke verbinding andere toegangsregels,
+
+00:08:08.560 --> 00:08:10.540
+verborgen inloggegevens en onbekende tools heeft.
+
+00:08:10.780 --> 00:08:13.620
+Stel je een financeagent voor die vragen over facturen beantwoord.
+
+00:08:13.820 --> 00:08:16.340
+Deze zou alleen een goedgekeurde factuuropzoek tool moeten gebruiken,
+
+00:08:16.340 --> 00:08:18.820
+maar iemand geeft hem brede toegang tot het financiële systeem
+
+00:08:18.820 --> 00:08:20.800
+omdat dat sneller is dan een specifieke tool definiëren.
+
+00:08:20.920 --> 00:08:22.820
+Een gebruiker stuurt een onschuldig lijkende prompt,
+
+00:08:23.020 --> 00:08:24.960
+maar verborgen instructies in een bijgevoegd document
+
+00:08:24.960 --> 00:08:26.720
+sturen de agent naar een niet-goedgekeurde actie.
+
+00:08:26.860 --> 00:08:28.140
+Als de agent teveel toegang heeft,
+
+00:08:28.280 --> 00:08:30.760
+kan deze onnodige gegevens opvragen of een workflow starten
+
+00:08:30.760 --> 00:08:32.620
+waarvoor menselijke goedkeuring nodig zou moeten zijn.
+
+00:08:32.780 --> 00:08:34.120
+De agent is niet kwaadaardig.
+
+00:08:34.280 --> 00:08:37.220
+Hij had simpelweg teveel vrijheid bij het verwerken van niet-vertrouwde invoer.
+
+00:08:37.520 --> 00:08:40.180
+Microsoft AI Gateway stelt je in staat om controles toe te voegen
+
+00:08:40.180 --> 00:08:42.080
+voor MCP-survers en bedrijfs-APIs.
+
+00:08:42.080 --> 00:08:44.420
+In plaats van een direct pad van een AI-app naar een database,
+
+00:08:44.660 --> 00:08:47.860
+stel je een kleine, gecontroleerde tool voor één specifieke taak beschikbaar.
+
+00:08:48.100 --> 00:08:51.060
+Bijvoorbeeld, een agent vraagt, controleer de status van deze bestelling.
+
+00:08:51.260 --> 00:08:52.840
+De tool geeft alleen de status terug,
+
+00:08:53.040 --> 00:08:55.060
+niet elke bestelling of het volledige klantendossier.
+
+00:08:55.260 --> 00:08:57.160
+Het is een beperkte taak en de gateway controleert
+
+00:08:57.160 --> 00:08:59.100
+wie de vraag stelt voordat de aanroep wordt toegestaan.
+
+00:08:59.440 --> 00:09:01.360
+Identiteit vormt het middelpunt van deze opzet.
+
+00:09:01.580 --> 00:09:04.760
+Met Microsoft Entra ID melden app zich aan via beheerde identiteiten
+
+00:09:04.760 --> 00:09:06.500
+in plaats van gedeelde providersleutels.
+
+00:09:06.700 --> 00:09:09.380
+Een beheerde identiteit bewijst wie het is zonder dat een ontwikkelaar
+
+00:09:09.380 --> 00:09:11.000
+een geheim in de code hoeft te kopiëren.
+
+00:09:11.000 --> 00:09:13.140
+Elke agent moet zijn eigen identiteit hebben.
+
+00:09:13.380 --> 00:09:15.220
+Zo kun je zien welke agent een tool heeft aangeroepen,
+
+00:09:15.320 --> 00:09:17.460
+de toegang voor één agent intrekken zonder anderen te verstoren
+
+00:09:17.460 --> 00:09:18.620
+en verschillende regels toepassen.
+
+00:09:18.800 --> 00:09:21.460
+Een ouder agent zou niet de rechten van een financiële agent moeten erven
+
+00:09:21.460 --> 00:09:22.820
+alleen omdat ze beide naïe gebruiken.
+
+00:09:23.040 --> 00:09:24.500
+Dit volgt het Zero Trust principe.
+
+00:09:24.860 --> 00:09:27.780
+Controleer elk verzoek, verleen alleen de toegang die nodig is voor de huidige taak
+
+00:09:27.780 --> 00:09:30.260
+en ga ervan uit dat elke prompt of tolreactie onveilig kan zijn.
+
+00:09:30.420 --> 00:09:33.660
+In de praktijk krijgt de agent toestemming voor één specifieke tool en actie.
+
+00:09:33.840 --> 00:09:36.680
+Het kan een verlofsaldo lezen, maar niet het loonbestand downloaden.
+
+00:09:36.800 --> 00:09:39.720
+Het kan een concept support ticket aanmaken, maar niet een zaak sluiten.
+
+00:09:39.720 --> 00:09:43.240
+De gateway past ook veiligheidscontroles toe op prompts en tolverkeer.
+
+00:09:43.360 --> 00:09:46.660
+Als een verzoek schadelijke inhoud bevat of gegevens die het systeem niet mogen verlaten,
+
+00:09:46.860 --> 00:09:48.760
+houdt een beleid het tegen voordat het de backend bereikt.
+
+00:09:49.000 --> 00:09:52.220
+Geen enkel filter vangt alles op, maar het controleren van verkeer op een gedeeldpunt
+
+00:09:52.220 --> 00:09:55.080
+is veel veiliger dan hopen dat elke agentbouwer dezelfde bescherming toevoegt.
+
+00:09:55.240 --> 00:09:57.500
+Je hebt ook een catalogus met goedgekeurde tools nodig.
+
+00:09:57.720 --> 00:10:00.960
+API Center fungeert als een privé-catalogus voor APIs en MCP-services,
+
+00:10:01.220 --> 00:10:03.540
+zodat teams de juiste tool vinden zonder oude documenten te doorzoeken
+
+00:10:03.540 --> 00:10:05.220
+of ongeverifiëerde webadressen te kopiëren.
+
+00:10:05.220 --> 00:10:09.800
+Dat helpt om de keuze, welke tool kan mijn agent gebruiken om te vormen tot een gecontroleerde zakelijke beslissing.
+
+00:10:10.640 --> 00:10:13.460
+Beveiligingscontroles beschermen het pad, maar roepen ook een nieuwe vraag op.
+
+00:10:13.640 --> 00:10:16.820
+Welke teams gebruiken dat pad en hoeveel AI-gebruik genereren zij?
+
+00:10:17.100 --> 00:10:19.240
+Token kosten, limieten en zichtbaarheid.
+
+00:10:19.420 --> 00:10:21.980
+AI-kosten werken anders dan een normale softwarelicentie.
+
+00:10:22.120 --> 00:10:23.620
+De teller loopt op basis van tokens.
+
+00:10:23.880 --> 00:10:26.060
+Wat is een token? Het is een klein stukje tekst.
+
+00:10:26.200 --> 00:10:27.720
+Een kort woord gebruikt wellicht één token.
+
+00:10:27.920 --> 00:10:29.060
+Een langer woord gebruikt er meer.
+
+00:10:29.060 --> 00:10:30.980
+Het model telt alles wat je instuurt.
+
+00:10:31.160 --> 00:10:35.400
+Je vraag, de instructies die je toevoegt, eventuele bijgevoegde documenten en het antwoord dat het teruggeeft.
+
+00:10:35.580 --> 00:10:39.020
+Dus, een simpele vraag gebruikt heel weinig, maar een agent die een lang beleidsdocument leest,
+
+00:10:39.160 --> 00:10:42.440
+vervolgvragen stelt, een tool aanroept en vervolgens een gedetailleerd antwoord genereert,
+
+00:10:42.540 --> 00:10:43.720
+kan veel meer verbruiken dan je verwacht.
+
+00:10:43.860 --> 00:10:46.280
+Je hebt dit waarschijnlijk wel eens gezien bij een vergadertranscriptie.
+
+00:10:46.400 --> 00:10:47.960
+Je ziet een paar pagina's met notices.
+
+00:10:48.220 --> 00:10:52.300
+Het AI-systeem verwerkt ook de systeeminstructies, het transcript, opgehaalde bedrijfsgegevens,
+
+00:10:52.500 --> 00:10:54.020
+toolresultaten en het uiteindelijke antwoord.
+
+00:10:54.020 --> 00:10:55.980
+Elk onderdeel draagt bij aan het gebruik.
+
+00:10:56.120 --> 00:10:59.480
+Daarom kan één drukke agent verrassend snel een gedeelde modellimiet opmaken.
+
+00:10:59.700 --> 00:11:02.900
+Stel je een team voor dat op een vrijdagmiddag een nieuwe marketingassistent test.
+
+00:11:03.100 --> 00:11:06.900
+Iemand geeft het een grote set campagnebestanden en vraagt het om deze in een lust te vergelijken,
+
+00:11:07.060 --> 00:11:08.340
+te herschrijven en samen te vatten.
+
+00:11:08.540 --> 00:11:12.660
+Ondertussen is de klantenservice afhankelijk van dezelfde modelcapaciteit voor mensen die hulp nodig hebben.
+
+00:11:12.860 --> 00:11:14.840
+Als de testwerkbelasting het gedeelde quotum verbruikt,
+
+00:11:15.020 --> 00:11:17.980
+kan de ondersteuningsassistent vertragen of uitvallen wanneer klanten hem nodig hebben.
+
+00:11:18.120 --> 00:11:20.500
+Het probleem is niet alleen dat het bedrijf geld heeft uitgegeven.
+
+00:11:20.500 --> 00:11:24.100
+De verkeerde werkbelasting nam capaciteit weg van de werkbelasting die er het meest toedeed.
+
+00:11:24.200 --> 00:11:28.040
+Azure API Management AI Gateway kan limieten toepassen voordat dat gebeurt.
+
+00:11:28.220 --> 00:11:33.380
+Je kunt verzoeklimieten, tokenlimieten en quota instellen voor een app, team, project of consument.
+
+00:11:33.600 --> 00:11:39.420
+Een quotum kan een kort venster beslaan, tokens per minuut of een langere periode zoals een dagelijkse of maandelijkse toelage.
+
+00:11:39.620 --> 00:11:41.580
+Dat geeft elke werkbelasting een grens.
+
+00:11:41.800 --> 00:11:44.640
+De marketingassistent kan een budget krijgen dat past bij zijn doel.
+
+00:11:44.860 --> 00:11:47.820
+Klantenservice kan een eigen toelage en een hogere prioriteit krijgen.
+
+00:11:47.820 --> 00:11:52.280
+Wanneer de marketingassistent zijn limiet bereikt, kan de gateway de volgende verzoeken weigeren of vertragen.
+
+00:11:52.480 --> 00:11:56.340
+De klantenservice blijft draaien omdat één testproject niet alles kan verbruiken wat beschikbaar is.
+
+00:11:56.540 --> 00:11:58.600
+Dit verandert ook de maandelijkse kostenbespreking.
+
+00:11:58.880 --> 00:12:03.860
+Zonder een gedeeld overzicht krijgt een financiële afdeling misschien één grote AI-rekening en vraagt wie heeft dit allemaal verbruikt.
+
+00:12:04.040 --> 00:12:08.660
+Het antwoord is vaak moeilijk te vinden wanneer teams direct verbinding maken met verschillende services met gedeelde sleutels.
+
+00:12:08.840 --> 00:12:14.280
+Een gateway kan de aanroeper, het model, tokengebruik, responsstatus en de tolaanroepen gekoppeld aan een verzoek registreren.
+
+00:12:14.280 --> 00:12:24.380
+Dat geeft je een duidelijker spoor. Je kunt zien of de uitgaven kwamen van een ouder assistent, een testomgeving voor ontwikkelaars, een klantgerichte chatbot of een agent die bleef proberen na een fout.
+
+00:12:24.580 --> 00:12:29.320
+Je kunt ook ongebruikelijke patronen ontdekken, zoals één applicatie die veel grotere prompts verstuurt dan normaal.
+
+00:12:29.460 --> 00:12:33.120
+Als je team in Microsoft Foundry begint, kan de gateway ook met dat werk verbonden worden.
+
+00:12:33.340 --> 00:12:37.860
+Foundry-projecten kunnen tokenlimieten op projectniveau gebruiken terwijl de gateway de verkeersregels eromheen toepast.
+
+00:12:38.080 --> 00:12:43.720
+Dat geeft AI-bouwers een eenvoudiger startpunt terwijl het platformteam nog steeds een gedeelde plek heeft om limieten en monitoring te beheren.
+
+00:12:43.720 --> 00:12:46.440
+Er is ook een handige functie genaamd semantische caching.
+
+00:12:46.680 --> 00:12:49.680
+Stel dat een medewerker vraagt, waar kan ik het reisbeleid vinden?
+
+00:12:49.860 --> 00:12:53.460
+Een paar seconden later vraagt een ander, waar is ons beleid voor zaken reizen?
+
+00:12:53.660 --> 00:13:00.100
+De woorden verschillen, maar de betekenis kan dicht genoeg bij elkaar liggen zodat de gateway een eerder antwoord kan hergebruiken in plaats van het model opnieuw aan te roepen.
+
+00:13:00.260 --> 00:13:02.520
+Dat kan de kosten verlagen en de reactietijd versnellen.
+
+00:13:02.700 --> 00:13:05.160
+Dit is alleen geschikt voor vragen waarbij hergebruik zinvol is.
+
+00:13:05.320 --> 00:13:10.020
+Je zou een verzoek om iemands actuele verlofsaldo of een bestelstatus niet cachen, omdat die antwoorden kunnen veranderen.
+
+00:13:10.180 --> 00:13:12.220
+Routing kan ook helpen bij het beheersen van de kosten.
+
+00:13:12.220 --> 00:13:20.420
+Een bedrijf kan geschikt werk naar een goedkoper model sturen, gereserveerde capaciteit gebruiken voordat er extra wordt betaald en overschakelen naar een back-upad wanneer een limiet wordt bereikt.
+
+00:13:20.600 --> 00:13:23.100
+Toch neemt een gateway de behoefte aan eigenaarschap niet weg.
+
+00:13:23.280 --> 00:13:24.520
+Teams hebben budgetten nodig.
+
+00:13:24.780 --> 00:13:26.220
+Iemand moet de antwoorden van het model controleren.
+
+00:13:26.920 --> 00:13:29.380
+Iemand moet beslissen of een agent überhaupt zou moeten bestaan.
+
+00:13:29.600 --> 00:13:32.640
+De gateway biedt je de meter, de vangrails en het overzicht van het verkeer.
+
+00:13:32.820 --> 00:13:34.680
+Het neemt geen zakelijke beslissingen voor je.
+
+00:13:34.840 --> 00:13:39.520
+Zodra je het verkeer kunt zien en beheersen, wordt de hele opzet makkelijker voor te stellen aan de hand van een alledaagsvoorbeeld.
+
+00:13:39.720 --> 00:13:41.100
+Een eenvoudig verzoektraject.
+
+00:13:41.340 --> 00:13:43.480
+Stel je een ouder assistent binnen een bedrijf voor.
+
+00:13:43.660 --> 00:13:47.880
+Een medewerker vraagt, hoeveel dagen ouderschapsverlof kan ik opnemen en kun je het verzoek voor mij starten.
+
+00:13:48.060 --> 00:13:52.720
+Het doel is simpel, geef de medewerker een snel, nuttig antwoord en help vervolgens bij de volgende goedgekeurde stap.
+
+00:13:52.880 --> 00:13:55.460
+Maar de ouder assistent mag geen salarisgegevens verstrekken.
+
+00:13:55.700 --> 00:13:58.380
+Elk ouder bestand openen of een modelsleutel in zijn code dragen.
+
+00:13:58.380 --> 00:14:01.100
+Het verzoek begint wanneer de medewerker zich aanmeldt.
+
+00:14:01.160 --> 00:14:08.420
+Voordat de assistent iets naar een model of tool stuurt, controleert de gateway wie de medewerker is of deze de ouder assistent mag gebruiken en welke limieten voor die app gelden.
+
+00:14:08.580 --> 00:14:12.580
+De medewerker ziet één simpel chatvenster, terwijl deze controles op de achtergrond plaatsvinden.
+
+00:14:12.800 --> 00:14:14.680
+Vervolgens heeft de assistent een antwoord nodig.
+
+00:14:14.880 --> 00:14:18.620
+Een eenvoudige beleidsvraag kan naar het goedgekeurde model-eindpunt van het bedrijf gaan.
+
+00:14:18.800 --> 00:14:24.720
+Als dat eindpunt bezet is of een limiet bereikt, kan de gateway een back-up route volgen die het bedrijf al heeft goedgekeurd.
+
+00:14:24.720 --> 00:14:31.220
+De medewerker krijgt nog steeds antwoord via dezelfde ouder assistent, in plaats van een foutmelding te zien omdat de modelimplementatie te druk is.
+
+00:14:31.480 --> 00:14:33.880
+Vervolgens vraagt de medewerker om het verlofverzoek te starten.
+
+00:14:34.040 --> 00:14:36.020
+Op dit punt heeft de agent meer nodig dan alleen een model.
+
+00:14:36.280 --> 00:14:40.080
+Het heeft een tool nodig die de gegevens van de medewerker kan controleren en het juiste verzoek kan aanmaken.
+
+00:14:40.260 --> 00:14:43.520
+De agent vraagt om een goedgekeurde MCP-tool voor verlofbeheer te gebruiken.
+
+00:14:43.740 --> 00:14:45.520
+De gateway controleert dat verzoek ook.
+
+00:14:45.700 --> 00:14:47.740
+Mag deze ouder agent deze tool aanroepen?
+
+00:14:47.900 --> 00:14:50.060
+Mag deze medewerker dit type verzoek starten?
+
+00:14:50.240 --> 00:14:52.940
+Past de actie binnen de rechten die aan de agent zijn toegewezen?
+
+00:14:52.940 --> 00:14:54.860
+Pas dan ontvangt de tool de aanroep.
+
+00:14:55.020 --> 00:14:57.860
+De tool geeft geen enorme lijst met werknemersgegevens terug.
+
+00:14:58.040 --> 00:15:05.680
+Hij geeft alleen terug wat de taak vereist, het beschikbare verlofsaldo van de werknemer, het beleid dat op hen van toepassing is en een bevestiging dat het verzoek als concept is aangemaakt.
+
+00:15:05.860 --> 00:15:07.420
+Dat beperkte antwoord is belangrijk.
+
+00:15:07.620 --> 00:15:12.660
+De agent heeft genoeg informatie om te helpen, maar krijgt geen brede toegang alleen omdat er een vraag in gewone taal wordt gesteld.
+
+00:15:12.900 --> 00:15:16.260
+Stel je nu voor dat de werknemer tekst uit een extern document in de chat plakt.
+
+00:15:16.440 --> 00:15:21.880
+De tekst bevat instructies die proberen de assistent te misleiden om zijn regels te negeren of vertrouwelijke informatie op te vragen.
+
+00:15:21.880 --> 00:15:26.880
+De gateway kan veiligheidscontroles toepassen voordat de prompt het model bereikt of voordat een tool een verzoek ontvangt.
+
+00:15:26.980 --> 00:15:29.220
+Als het verzoek een regel overtreedt kan het daar stoppen.
+
+00:15:29.460 --> 00:15:33.100
+Hetzelfde soort controle kan een antwoord beoordelen voordat het de werknemer bereikt.
+
+00:15:33.340 --> 00:15:35.640
+Niet elk probleem komt bovendien door een slechte prompt.
+
+00:15:35.860 --> 00:15:39.740
+Een model kan een antwoord genereren dat informatie bevat die het niet zou mogen teruggeven.
+
+00:15:39.940 --> 00:15:43.820
+Een gedeeld controlepunt geeft het bedrijf een plek om dat pad te inspecteren en er actie op te ondernemen.
+
+00:15:44.060 --> 00:15:45.720
+Ondertussen creëert het verzoek een record.
+
+00:15:45.940 --> 00:15:48.920
+Het bedrijf kan het gebruikte token koppelen aan het oude assistentproject.
+
+00:15:48.920 --> 00:15:54.800
+Het kan zien welk model de vraag heeft afgehandeld, of de aanroep van de tool is geslaagd, of een verzoek is geblokkeerd en hoe lang het proces duurde.
+
+00:15:54.960 --> 00:15:57.260
+Dat maakt ondersteuning en controle veel eenvoudiger.
+
+00:15:57.460 --> 00:16:03.060
+Als een oude team meldt dat werknemers geen verlofaanvragen kunnen indienen, kan het operatieteam zoeken naar mislukte aanroepen van tools.
+
+00:16:03.300 --> 00:16:07.640
+Als een veiligheidsregel geldige vragen blokkeert, kunnen ze het patroon zien en het beleid verbeteren.
+
+00:16:07.800 --> 00:16:12.180
+Als één agent plotseling veel meer AI-capaciteit gebruikt dan normaal, wordt die verandering zichtbaar.
+
+00:16:12.180 --> 00:16:18.860
+En als het bedrijf een regel bijwerkt, zoals het vereisen van een extra controle bij bepaalde verlofaanvragen, kan het het gatewaybeleid één keer bijwerken.
+
+00:16:19.000 --> 00:16:25.060
+Het hoeft niet te wachten op afzonderlijke code-updates in elke hour-app, chatbot en workflow die hetzelfde gecontroleerde pad gebruikt.
+
+00:16:25.260 --> 00:16:34.120
+Hetzelfde verzoekpatroon werkt nog steeds wanneer het bedrijf een ander model, een nieuwe regio, meer interne tools of een andere agent die een gerelateerde hour-taak afhandelt, toevoegt.
+
+00:16:34.120 --> 00:16:39.040
+Begin echter klein. Een gateway wordt nuttig zodra AI-verkeer gedeeld verkeer begint te worden.
+
+00:16:39.300 --> 00:16:41.640
+Waar te beginnen? Dus, waar begin je eigenlijk?
+
+00:16:41.940 --> 00:16:50.240
+Begin met het kiezen van één echte werklast, misschien een ondersteuningsassistent die al een model aanroept, of een agent die het team plant voor hour, finance of het doorzoeken van interne documenten.
+
+00:16:50.380 --> 00:16:54.600
+Probeer niet elk model en elke tool tegelijk aan te pakken. Dat is de snelste weg naar chaos.
+
+00:16:54.840 --> 00:17:01.300
+In plaats van provider sleutels direct aan elke applicatie te geven, plaats je het model-eindpunt van die werklast achter de Azure API Management AI-gateway.
+
+00:17:01.300 --> 00:17:04.200
+Zie het als een enkel veiligheidscontrolepunt voor je AI-verkeer.
+
+00:17:04.360 --> 00:17:05.460
+Bepaal daarna de basis.
+
+00:17:05.800 --> 00:17:07.580
+Wijs een duidelijke eigenaar toe aan de workload.
+
+00:17:07.820 --> 00:17:11.080
+Gebruik entra gebaseerde toegang zodat alleen de juiste personen of diensten erbij kunnen.
+
+00:17:11.300 --> 00:17:13.780
+Stel een tokenlimiet in die bij de taak past, niet meer en niet minder.
+
+00:17:14.000 --> 00:17:16.160
+Schakel logboekregistratie in zodat je kunt zien wat er gebeurt.
+
+00:17:16.360 --> 00:17:18.960
+Voeg één inhoudsbeveiligingsregel toe die je team kan testen en beoordelen.
+
+00:17:19.160 --> 00:17:19.840
+Begin simpel.
+
+00:17:20.100 --> 00:17:24.480
+Zodra het modelpad en de toegangsgrenzen werken, voeg je goedgekeurde MCP-tools één voor één toe.
+
+00:17:24.640 --> 00:17:28.300
+Elke tool moet een specifieke taak hebben en een duidelijke reden waarom de agent deze gebruikt.
+
+00:17:28.300 --> 00:17:29.860
+Geen onnodige extra's.
+
+00:17:30.060 --> 00:17:34.420
+Van daaruit groei je van één gecontroleerde workload naar gedeelde modellen, tools en agents.
+
+00:17:34.680 --> 00:17:41.060
+Zonder dat initiële controlepunt creëert elke nieuwe AI-app een onbeheerd pad naar bedrijfsgegevens en een extra kostenpost op de AI-factuur.
+
+00:17:41.280 --> 00:17:44.980
+Bekijk voor het volgende kennisfragment Azure API Management Simply Explain.
+
+00:17:45.220 --> 00:17:48.060
+Dat is het fundament waarop de Microsoft AI Gateway voortbouwt.

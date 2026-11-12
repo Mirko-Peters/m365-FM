@@ -1,0 +1,1642 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:01.380
+Was genau ist Azure AI Foundry?
+
+00:00:01.700 --> 00:00:03.980
+Ist es nur ein weiterer Dienst von Microsoft oder steckt mehr dahinter?
+
+00:00:04.720 --> 00:00:07.760
+Im letzten Jahr hat Microsoft eine KI-Ankündigung nach der anderen gemacht.
+
+00:00:08.520 --> 00:00:09.480
+Da verliert man leicht den Überblick.
+
+00:00:09.880 --> 00:00:11.760
+Ich bin Mirko Peters von den Microsoft Knowledge Nuggets.
+
+00:00:11.960 --> 00:00:15.040
+Am Ende dieser Folge wissen Sie, was Foundry wirklich ist und warum es wichtig ist.
+
+00:00:15.540 --> 00:00:16.360
+Kein Marketing-Geschwaffel.
+
+00:00:16.820 --> 00:00:20.180
+Wir unterteilen es in klare Bereiche, was es ist, was drinsteckt und wie alles zusammenhängt.
+
+00:00:20.960 --> 00:00:22.460
+Warum alle über den Namen verwirrt sind.
+
+00:00:23.020 --> 00:00:24.100
+Die Verwirrung beginnt schon beim Namen.
+
+00:00:24.680 --> 00:00:26.720
+Foundry hatte mehr Namensänderungen, als ich zählen kann.
+
+00:00:26.720 --> 00:00:32.180
+Erst war es Cognitive Services, dann Azure AI Services, dann Azure AI Studio, dann Azure AI Foundry
+
+00:00:32.180 --> 00:00:34.780
+und seit Ende letzten Jahres offiziell Microsoft Foundry.
+
+00:00:35.460 --> 00:00:37.320
+Dasselbe Produkt, vier oder fünf Namen, etwa drei Jahre.
+
+00:00:37.720 --> 00:00:39.780
+Das allein ist schon verwirrend, aber es wird noch komplizierter.
+
+00:00:40.260 --> 00:00:42.400
+Aktuell laufen zwei Versionen der Plattformen parallel.
+
+00:00:43.200 --> 00:00:45.300
+Die klassische Hub-basierte Architektur ist der alte Weg.
+
+00:00:45.960 --> 00:00:47.680
+Das neue Foundry-Projektmodell ist die moderne Version.
+
+00:00:48.200 --> 00:00:51.160
+Beide findet man unter derselben URL, ai.azure.com.
+
+00:00:51.920 --> 00:00:55.560
+Dort gibt es einen Umschalter, der zwischen zwei völlig unterschiedlichen Architekturen wechselt.
+
+00:00:55.560 --> 00:00:59.240
+Es ist nicht nur ein neues Design, sondern eine grundlegend andere Organisation im Hintergrund.
+
+00:00:59.520 --> 00:01:04.300
+Das verwirrt Anfänger, denn bei der Suche nach Hilfe findet man Artikel über Hubs und klassische Projekte.
+
+00:01:04.720 --> 00:01:06.000
+Diese Artikel sind zwar immer noch korrekt.
+
+00:01:06.260 --> 00:01:09.860
+Microsoft unterstützt beide Versionen, aber neue Funktionen, Agentenfähigkeiten und alles,
+
+00:01:09.940 --> 00:01:11.880
+worin Microsoft investiert, gibt es nur für Foundry.
+
+00:01:11.980 --> 00:01:13.780
+Projekte gibt es nur für Foundry-Projekte.
+
+00:01:13.880 --> 00:01:16.500
+Man könnte einem alten Tutorial folgen, ein Hub einrichten und dann feststellen,
+
+00:01:16.560 --> 00:01:17.700
+dass man die neuesten Tools nicht nutzen kann.
+
+00:01:17.880 --> 00:01:18.680
+Das ist wirklich ärgerlich.
+
+00:01:19.000 --> 00:01:19.700
+Hier ist also mein Rat.
+
+00:01:20.040 --> 00:01:21.020
+Ignorieren Sie das alte Zeugel.
+
+00:01:21.240 --> 00:01:23.080
+Das moderne Foundry ist das, worauf Microsoft alles setzt.
+
+00:01:23.080 --> 00:01:26.860
+Wenn Sie heute neu anfangen, überspringen Sie die Hubs und nutzen Sie direkt Foundry-Projekte.
+
+00:01:27.440 --> 00:01:28.560
+Dort sind die neuen Funktionen zu finden.
+
+00:01:28.980 --> 00:01:32.200
+Was also Azure AI Foundry wirklich ist, fangen wir ganz von vorn an.
+
+00:01:32.740 --> 00:01:33.740
+Was ist Azure AI Foundry?
+
+00:01:34.220 --> 00:01:38.540
+Es ist eine einheitliche Plattform zum Erstellen, Testen und Bereitstellen von KI-Anwendungen an einem Ort.
+
+00:01:38.960 --> 00:01:40.080
+Das ist die einfachste Definition.
+
+00:01:40.540 --> 00:01:41.460
+Denn sie ist sich wie eine Fabrik vor.
+
+00:01:41.840 --> 00:01:42.920
+O-Materialien kommen rein.
+
+00:01:43.120 --> 00:01:45.840
+Modelle, Daten, Tools und fertige Anwendungen kommen raus.
+
+00:01:45.840 --> 00:01:48.300
+Chatbots, Co-Piloten, Automatisierungsagenten.
+
+00:01:48.900 --> 00:01:49.940
+Sie bauen die Fabrik nicht selbst.
+
+00:01:50.040 --> 00:01:50.880
+Microsoft betreibt sie.
+
+00:01:51.280 --> 00:01:53.220
+Sie gehen einfach hinein, nehmen, was sie brauchen und fangen an zu bauen.
+
+00:01:53.780 --> 00:01:55.640
+Dies ist kein einzelnes Produkt wie Word oder Excel.
+
+00:01:56.460 --> 00:01:59.620
+Foundry ist ein Container, der Modelle, Tools, Projekte und Sicherheit bündelt.
+
+00:02:00.460 --> 00:02:03.960
+Erstellen Sie eine Foundry-Resource und Sie erhalten den gesamten Modellkatalog mit tausenden von Modellen.
+
+00:02:04.620 --> 00:02:07.980
+Sie erhalten Tools zum Erstellen von Agenten, Testumgebungen, Evaluierungstools und Sicherheit.
+
+00:02:08.120 --> 00:02:08.840
+Alles in einem Paket.
+
+00:02:09.660 --> 00:02:10.700
+Hier gibt es nun einen Wesenunterschied.
+
+00:02:11.220 --> 00:02:12.080
+Foundry ist für Entwickler gemacht.
+
+00:02:12.080 --> 00:02:17.300
+Wenn Sie Python oder C-Shack schreiben und individuelle KI-Lösungen mit Code erstellen möchten, ist dies Ihre Plattform.
+
+00:02:18.220 --> 00:02:20.080
+Suchen Sie nach einer Low-Code-Lösung per Drag & Drop.
+
+00:02:20.880 --> 00:02:21.900
+Das ist Co-Pilot Studio.
+
+00:02:22.340 --> 00:02:23.800
+Ein anderes Tool für eine andere Zielgruppe.
+
+00:02:24.440 --> 00:02:25.140
+Beides eine Berechtigung.
+
+00:02:26.660 --> 00:02:30.660
+Vor Foundry bedeutete die Erstellung einer KI-Anwendung in Azure die Bereitstellung separater Dienste.
+
+00:02:31.280 --> 00:02:35.320
+Sie mussten Azure Open AI Cognitive Services, Azure Machine Learning und Azure AI Search einrichten
+
+00:02:35.320 --> 00:02:37.320
+und dann benutzerdefinierten Codeschreiben alles zu verbinden.
+
+00:02:37.660 --> 00:02:38.120
+Eine Menge Arbeit.
+
+00:02:38.600 --> 00:02:39.520
+Foundry ersetzt all das.
+
+00:02:39.520 --> 00:02:41.820
+Erstellen Sie eine Ressource und alles ist bereits mit da verbunden.
+
+00:02:42.080 --> 00:02:44.480
+Modelle sind vorhanden, Tools sind bereit, Sicherheit ist integriert.
+
+00:02:44.780 --> 00:02:45.900
+Sie können direkt mit dem Entwickeln beginnen.
+
+00:02:46.180 --> 00:02:46.760
+Genau das ist der Punkt.
+
+00:02:47.060 --> 00:02:50.520
+Es geht nicht darum, ein weiteres Tool hinzuzufügen, sondern den Aufwand für die Verwaltung zahlreicher
+
+00:02:50.520 --> 00:02:51.640
+separater Dienste zu beseitigen.
+
+00:02:52.180 --> 00:02:53.880
+Die wichtigste Organisationseinheit, Foundry-Projekt.
+
+00:02:54.320 --> 00:02:55.320
+Sie haben also Ihre KI-Fabrik.
+
+00:02:55.720 --> 00:02:56.800
+Aber eine Fabrik braucht Organisation.
+
+00:02:57.340 --> 00:02:58.400
+Dafür sind Foundry-Projekte da.
+
+00:02:58.920 --> 00:03:02.260
+Ein Foundry-Projekt ist ein isolierter Arbeitsbereich für eine spezifische KI-Lösung.
+
+00:03:02.800 --> 00:03:05.540
+Wenn Foundry die Fabrik ist, sind Projekte die individuellen Werkbänke.
+
+00:03:05.880 --> 00:03:09.700
+Jedes hat seine eigenen Werkzeuge, Materialien und Mitarbeiter, ohne sich gegenseitig zu stören.
+
+00:03:09.700 --> 00:03:14.320
+Das Team, das ein Kundensupport-Chatbot baut, wird nicht versehentlich das HR-Assistenten-Projekt beeinträchtigen.
+
+00:03:14.780 --> 00:03:15.940
+Was befindet sich innerhalb des Projekts?
+
+00:03:16.220 --> 00:03:19.520
+Eigene Modellbereitstellungen, Agenten, Wissensspeicher, Evaluierungen und Überwachung.
+
+00:03:19.960 --> 00:03:22.240
+Alles, was Sie für eine Lösung benötigen, an einem Ort.
+
+00:03:22.860 --> 00:03:23.740
+Hier ist die grundlegende Struktur.
+
+00:03:24.160 --> 00:03:25.720
+Projekte befinden sich innerhalb einer Foundry-Ressource.
+
+00:03:26.080 --> 00:03:28.640
+Die Ressource ist die Abrechnungs- und Sicherheitsgrenze, quasi das Gebäude.
+
+00:03:29.220 --> 00:03:30.160
+Projekte sind die Räume darin.
+
+00:03:30.660 --> 00:03:33.120
+Ein Gebäude, ein Haupteingang, eine Sicherheitszentrale, eine Rechnung.
+
+00:03:33.120 --> 00:03:35.600
+Aber jeder Raum hat seinen eigenen Zweck und sein eigenes Team.
+
+00:03:35.900 --> 00:03:38.900
+Nehmen wir zum Beispiel ein Unternehmens-Contoso, das drei KI-Lösungen entwickelt.
+
+00:03:39.300 --> 00:03:43.100
+Einen Kundensupport-Agenten, einen HR-Assistenten und ein System zur Dokumenten-Fahrung.
+
+00:03:43.580 --> 00:03:47.460
+Mit Foundry erstellen Sie eine Ressource für das gesamte Unternehmen und dann drei Projekte darin.
+
+00:03:48.000 --> 00:03:50.400
+Jedes Projekt hat seine eigenen Modelle, Agenten und Wissensspeicher.
+
+00:03:50.940 --> 00:03:53.220
+Teams arbeiten unabhängig voneinander, ohne sich in die Quere zu kommen.
+
+00:03:53.600 --> 00:03:55.920
+Das ist wichtig, weil verschiedene Teams unterschiedliche Zugriffsberechtigungen.
+
+00:03:56.460 --> 00:03:58.800
+Das Kundensupport-Team muss keine HR-Dokumente sehen.
+
+00:03:59.240 --> 00:04:01.300
+Das Team für Dokumentenverarbeitung benötigt keine Erstattungsrichtlinie.
+
+00:04:01.300 --> 00:04:02.740
+Projekte bieten Ihnen diese Isolierung.
+
+00:04:03.160 --> 00:04:06.500
+Gleichzeitig behält die IT die zentrale Kontrolle durch die Verwaltung einer Ressource,
+
+00:04:06.940 --> 00:04:08.760
+einer Sicherheitsrichtlinie und eines Budgets.
+
+00:04:09.340 --> 00:04:10.820
+Teamautonomie bei zentraler Governance.
+
+00:04:11.620 --> 00:04:13.560
+Das Herzstück von Foundry, der Modellkatalog.
+
+00:04:14.100 --> 00:04:14.920
+Betrachten Sie es einmal so.
+
+00:04:15.340 --> 00:04:16.760
+Jedes Projekt benötigt ein Gehirn.
+
+00:04:17.120 --> 00:04:18.940
+In Foundry lebt dieses Gehirn im Modellkatalog.
+
+00:04:19.460 --> 00:04:21.200
+Über 11.000 Modelle und das ist kein Tippfehler.
+
+00:04:21.760 --> 00:04:24.940
+Sie erhalten OpenAI-Modelle wie GPT-4O und GPT-4.1,
+
+00:04:25.200 --> 00:04:28.620
+Meta-Slama-Familie, Mistral, DeepSeq, Microsofts eigene Fie-Modelle,
+
+00:04:28.820 --> 00:04:31.200
+Anthropics Cloud, Kohere sowie Modelle für Text,
+
+00:04:31.400 --> 00:04:32.940
+Bilder, Code und Embeddings.
+
+00:04:33.680 --> 00:04:35.480
+Dies ist derzeit der umfangreichste Modellkatalog,
+
+00:04:35.560 --> 00:04:36.980
+den Sie auf irgendeiner Cloud-Plattform finden werden.
+
+00:04:38.000 --> 00:04:39.360
+Und da teilen wir diese in zwei Grundtypen.
+
+00:04:39.440 --> 00:04:41.020
+Große Sprachmodelle und kleine Sprachmodelle.
+
+00:04:41.400 --> 00:04:43.000
+Die großen verfügen über Milliarden von Parametern.
+
+00:04:43.380 --> 00:04:46.380
+GPT-4 hat über eine Billion, wodurch Sie komplexe Schlussfolgerungen,
+
+00:04:46.540 --> 00:04:49.440
+kreatives Schreiben und nuancierte Konversationen bewältigen können.
+
+00:04:50.180 --> 00:04:51.660
+Aber sie sind teuer und langsam.
+
+00:04:52.160 --> 00:04:53.700
+Kleine Modelle haben weitaus weniger Parameter.
+
+00:04:54.260 --> 00:04:57.700
+Microsofts V3 hat etwa 3,8 Milliarden winzig im Vergleich zu GPT-4,
+
+00:04:57.700 --> 00:04:59.360
+aber es ist schnell und kostengünstig.
+
+00:05:00.140 --> 00:05:02.660
+Für fokussierte Aufgaben wie das Extrahieren von Daten aus einem Formular
+
+00:05:02.660 --> 00:05:04.700
+oder das Beantworten einer einfachen Frage funktioniert das hervorragend.
+
+00:05:05.280 --> 00:05:06.100
+Hier ist der praktische Nutzen.
+
+00:05:06.540 --> 00:05:07.760
+Sie können ein Modell in Sekunden bereitstellen.
+
+00:05:08.160 --> 00:05:10.900
+Wählen Sie eines aus dem Katalog, klicken Sie auf Bereitstellen und es ist einsatzbar.
+
+00:05:11.200 --> 00:05:12.700
+Keine Hardware-Bereitstellung, keine Netzwerkkonfiguration,
+
+00:05:13.520 --> 00:05:15.280
+kein stundenlanges Warten auf die Einrichtung bis Sekunden.
+
+00:05:15.560 --> 00:05:17.600
+Und bevor Sie sich festlegen, können Sie es im Playground testen.
+
+00:05:18.120 --> 00:05:19.280
+Probieren Sie verschiedene Prompts aus,
+
+00:05:19.380 --> 00:05:21.420
+passen Sie Einstellungen wie Temperatur und maximale Token an
+
+00:05:21.420 --> 00:05:22.480
+und sehen Sie die Antworten sofort.
+
+00:05:22.480 --> 00:05:24.520
+Es ist wie eine Probefahrt, bevor Sie das Auto kaufen.
+
+00:05:24.940 --> 00:05:26.320
+Sie sind nicht an ein einziges Modell gebunden,
+
+00:05:26.400 --> 00:05:29.320
+was ein großer Vorteil gegenüber der direkten Nutzung der OpenAI-API ist.
+
+00:05:29.960 --> 00:05:32.860
+Mit Foundry können Sie GPT-4O für komplexe Überlegungen nutzen,
+
+00:05:32.960 --> 00:05:33.900
+bei denen Qualität zählt,
+
+00:05:34.100 --> 00:05:35.520
+viel für einfache Klassifizierungen,
+
+00:05:35.680 --> 00:05:37.240
+bei denen Geschwindigkeit und Kosten wichtig sind
+
+00:05:37.240 --> 00:05:38.620
+und Metaslama für Compliance,
+
+00:05:38.720 --> 00:05:41.060
+falls Sie Modelle in Ihrem eigenen Rechenzentrum betreiben müssen.
+
+00:05:41.780 --> 00:05:42.740
+Sie wechseln je nach Aufgabe.
+
+00:05:43.380 --> 00:05:44.880
+Foundry enthält außerdem ein Vergleichstool,
+
+00:05:44.940 --> 00:05:46.660
+das Ihnen hilft, Modelle nebeneinander zu bewerten.
+
+00:05:47.800 --> 00:05:49.740
+Vergleichen Sie nach Qualität, wie präzis sind die Antworten?
+
+00:05:49.740 --> 00:05:52.540
+Nach Sicherheit, wie gut widersteht, ist Prompt Injection-Angriffen?
+
+00:05:53.000 --> 00:05:54.700
+Nach Kosten, der Preis pro Million Token?
+
+00:05:55.280 --> 00:05:57.060
+Nach Geschwindigkeit, wie schnell generiert es die Ausgabe?
+
+00:05:57.620 --> 00:05:59.340
+Das macht die Modellauswahl von einem Ratespiel
+
+00:05:59.340 --> 00:06:00.380
+zu einer fundierten Entscheidung.
+
+00:06:01.140 --> 00:06:03.220
+Sie wählen das richtige Werkzeug für die jeweilige Aufgabe,
+
+00:06:03.340 --> 00:06:04.380
+nicht nur das, über das alle reden.
+
+00:06:05.540 --> 00:06:07.720
+Das Erstellen von KI-Agenten, Foundry's Killer Feature.
+
+00:06:08.160 --> 00:06:09.400
+Ein Modell allein ist nicht sehr nützlich.
+
+00:06:10.040 --> 00:06:11.260
+Sie können im Playground mit ihm chatten,
+
+00:06:11.340 --> 00:06:12.840
+Fragen stellen und sehen, was es generiert,
+
+00:06:12.940 --> 00:06:14.560
+aber das ist nur in Unterhaltung.
+
+00:06:15.040 --> 00:06:15.900
+Die wahre Magie geschieht,
+
+00:06:15.940 --> 00:06:17.560
+wenn Sie etwas bauen, das tatsächlich Dinge tun kann.
+
+00:06:17.560 --> 00:06:19.100
+Und genau hier kommen Agenten ins Spiel.
+
+00:06:19.640 --> 00:06:20.840
+Ein Agent ist mehr als ein Chatbot.
+
+00:06:21.520 --> 00:06:22.520
+Ein Chatbot beantwortet Fragen.
+
+00:06:22.960 --> 00:06:23.820
+Ein Agent ergreift Maßnahmen.
+
+00:06:24.480 --> 00:06:26.220
+Es kann das Internet durchsuchen, Dateien lesen,
+
+00:06:26.280 --> 00:06:27.640
+Berechnungen durchführen, sich daran erinnern,
+
+00:06:27.660 --> 00:06:28.720
+was Sie im letzten Wochen gesagt haben
+
+00:06:28.720 --> 00:06:29.980
+und eine Reihe von Anweisungen befolgen.
+
+00:06:30.600 --> 00:06:31.900
+Es ist, als hätten Sie einen Assistenten,
+
+00:06:31.920 --> 00:06:33.360
+der nicht nur redet, sondern wirklich Dinge erledigt.
+
+00:06:34.220 --> 00:06:35.640
+Foundry bietet Ihnen fünf Komponenten
+
+00:06:35.640 --> 00:06:36.500
+zum Erstellen eines Agenten.
+
+00:06:36.740 --> 00:06:37.780
+Lassen Sie mich jeder Einzelne drücken.
+
+00:06:38.120 --> 00:06:38.940
+Erstens Anweisungen.
+
+00:06:39.300 --> 00:06:40.540
+Hier legen Sie fest, was der Agent tun
+
+00:06:40.540 --> 00:06:41.600
+und wie er sich verhalten soll.
+
+00:06:42.480 --> 00:06:43.700
+Stellen Sie es sich wie eine Stellenbeschreibung vor.
+
+00:06:44.000 --> 00:06:44.480
+Sie könnten sagen,
+
+00:06:44.480 --> 00:06:45.720
+du bist ein Kundendienstmitarbeiter,
+
+00:06:46.240 --> 00:06:47.300
+sei freundlich und professionell.
+
+00:06:47.680 --> 00:06:49.620
+Antworte nur Fragen zu unseren Rückgaberichtlinien.
+
+00:06:49.880 --> 00:06:50.760
+Wenn du die Antwort nicht weißt,
+
+00:06:50.860 --> 00:06:52.180
+sage es und leite es an einen Menschen weiter.
+
+00:06:53.500 --> 00:06:54.640
+Ohne Anweisungen tut der Agent,
+
+00:06:54.700 --> 00:06:55.960
+was auch immer dem Modell gerade in den Sinn kommt.
+
+00:06:56.240 --> 00:06:57.640
+Mit Anweisungen hat er ein klares Ziel.
+
+00:06:58.240 --> 00:06:59.020
+Zweitens das Modell.
+
+00:06:59.340 --> 00:07:00.080
+Das ist das Gehirn.
+
+00:07:00.340 --> 00:07:01.500
+Es verarbeitet jede Anfrage
+
+00:07:01.500 --> 00:07:02.520
+und generiert Antworten.
+
+00:07:03.200 --> 00:07:04.180
+Sie wählen das Modell aus,
+
+00:07:04.340 --> 00:07:06.000
+GPT 4O für komplexes Denken,
+
+00:07:06.120 --> 00:07:07.220
+5 für einfache Aufgaben,
+
+00:07:07.320 --> 00:07:08.000
+was auch immer passt.
+
+00:07:08.440 --> 00:07:09.920
+Das Modell macht den Agenten intelligent,
+
+00:07:10.100 --> 00:07:10.780
+aber es ist nur ein Teil davon.
+
+00:07:11.120 --> 00:07:11.480
+Werkzeuge.
+
+00:07:11.920 --> 00:07:12.460
+Das ist der Bereich,
+
+00:07:12.540 --> 00:07:13.500
+in dem der Agent seine Hände bekommt.
+
+00:07:13.500 --> 00:07:14.680
+Werkzeuge sind Fähigkeiten,
+
+00:07:14.760 --> 00:07:15.160
+die er nutzen kann,
+
+00:07:15.200 --> 00:07:15.960
+um Dinge zu erledigen.
+
+00:07:16.040 --> 00:07:17.080
+Die Websuche ermöglicht es ihm,
+
+00:07:17.140 --> 00:07:18.180
+aktuelle Informationen nachzuschlagen.
+
+00:07:18.360 --> 00:07:19.360
+Der Codeinterpreter erlaubt ihm,
+
+00:07:19.420 --> 00:07:20.160
+Mathematik zu betreiben
+
+00:07:20.160 --> 00:07:20.860
+und Berechnungen durchzuholen.
+
+00:07:21.060 --> 00:07:22.280
+Die Dateisuche ermöglicht es ihm,
+
+00:07:22.340 --> 00:07:23.420
+von ihm hochgeleidene Dokumente zu finden.
+
+00:07:23.660 --> 00:07:25.420
+Ohne Werkzeuge kann der Agent nur Text generieren.
+
+00:07:25.860 --> 00:07:27.260
+Mit Werkzeugen kann er in der Welt agieren.
+
+00:07:27.780 --> 00:07:28.360
+Viertens Wissen.
+
+00:07:28.780 --> 00:07:29.440
+Das sind die Informationen,
+
+00:07:29.560 --> 00:07:30.400
+auf die der Agent zugreifen kann.
+
+00:07:30.800 --> 00:07:32.720
+Sie laden Dokumente, PDFs, JSON-Dateien
+
+00:07:32.720 --> 00:07:33.660
+oder andere Daten hoch,
+
+00:07:33.720 --> 00:07:34.520
+die ihr Agent benötigt,
+
+00:07:34.560 --> 00:07:35.800
+um Fragen präzise zu beantworten.
+
+00:07:36.280 --> 00:07:37.440
+Foundry verwendet im Hintergrund
+
+00:07:37.440 --> 00:07:38.380
+Azure AI Search,
+
+00:07:38.380 --> 00:07:39.380
+um diese Daten zu indizieren
+
+00:07:39.380 --> 00:07:40.140
+und durchsuchbar zu machen.
+
+00:07:40.520 --> 00:07:41.560
+Wenn ein Kunde nach einer bestimmten
+
+00:07:41.560 --> 00:07:42.260
+Richtlinie fragt,
+
+00:07:42.300 --> 00:07:43.000
+rät der Agent nicht?
+
+00:07:43.440 --> 00:07:44.720
+Er findet das tatsächliche Dokument
+
+00:07:44.720 --> 00:07:45.180
+und liest es.
+
+00:07:45.380 --> 00:07:46.080
+Fünftes Gedächtnis.
+
+00:07:46.600 --> 00:07:47.560
+Dies ermöglicht es dem Agenten,
+
+00:07:47.600 --> 00:07:48.860
+sich über Konversationen hinweg zu erinnern.
+
+00:07:49.180 --> 00:07:50.060
+Sie sprechen heute mit ihm
+
+00:07:50.060 --> 00:07:51.180
+und er merkt sich ihre Präferenzen.
+
+00:07:51.520 --> 00:07:52.100
+Sie kommen morgen wieder
+
+00:07:52.100 --> 00:07:52.980
+und er macht genau dort weiter,
+
+00:07:53.020 --> 00:07:53.600
+wo sie aufgehört haben.
+
+00:07:53.920 --> 00:07:55.120
+Er speichert Chat-Zusammenfassungen
+
+00:07:55.120 --> 00:07:56.040
+und Benutzerpräferenzen,
+
+00:07:56.120 --> 00:07:57.120
+sodass sich das Erlebnis persönlich
+
+00:07:57.120 --> 00:07:58.000
+und kontinuierlich anfühlt.
+
+00:07:58.460 --> 00:07:59.400
+Hier ist ein konkretes Beispiel
+
+00:07:59.400 --> 00:08:00.080
+aus meiner Recherche.
+
+00:08:00.600 --> 00:08:01.240
+Jemand hat in Foundry
+
+00:08:01.240 --> 00:08:01.700
+einen Agenten
+
+00:08:01.700 --> 00:08:02.560
+zur Geschenkeverwaltung erstellt.
+
+00:08:02.880 --> 00:08:03.580
+Die Idee ist einfach,
+
+00:08:04.220 --> 00:08:04.920
+sie möchten den Überblick
+
+00:08:04.920 --> 00:08:06.300
+über Geschenke für ihre Familie behalten,
+
+00:08:06.400 --> 00:08:07.800
+was sie ihnen in der Vergangenheit gegeben haben,
+
+00:08:07.880 --> 00:08:08.320
+was sie mögen,
+
+00:08:08.400 --> 00:08:08.700
+was nicht
+
+00:08:08.700 --> 00:08:09.640
+und wie viel sie ausgeben.
+
+00:08:10.260 --> 00:08:11.360
+Der Agent hat also die Anweisung,
+
+00:08:11.420 --> 00:08:12.840
+du hilfst bei der Geschenkplanung.
+
+00:08:13.420 --> 00:08:14.320
+Schlage niemals etwas vor,
+
+00:08:14.360 --> 00:08:15.220
+das sie bereits erhalten haben.
+
+00:08:15.800 --> 00:08:17.400
+Es nutzt GPT-4 als Gehirn,
+
+00:08:17.680 --> 00:08:18.940
+Websuche für Geschenkideen,
+
+00:08:19.160 --> 00:08:20.260
+Dateisuche mit Profilen
+
+00:08:20.260 --> 00:08:21.300
+aller Familienmitglieder
+
+00:08:21.300 --> 00:08:22.340
+inklusive Vorlieben,
+
+00:08:22.620 --> 00:08:23.980
+Abneigungen und Geschenkverlauf
+
+00:08:23.980 --> 00:08:24.960
+der letzten drei Jahre,
+
+00:08:25.520 --> 00:08:27.080
+einen Code-Interpreter für Budgets
+
+00:08:27.080 --> 00:08:28.320
+sowie einen Speicher.
+
+00:08:29.040 --> 00:08:29.840
+Wenn sie das nächste Mal
+
+00:08:29.840 --> 00:08:30.680
+ein Gespräch öffnen,
+
+00:08:30.680 --> 00:08:31.600
+weiß es also noch,
+
+00:08:31.660 --> 00:08:32.660
+dass sie ein Geburtstagsgeschenk
+
+00:08:32.660 --> 00:08:33.660
+für ihren Sohn Adam gesucht.
+
+00:08:34.100 --> 00:08:35.380
+Sie erstellen und testen all das
+
+00:08:35.380 --> 00:08:36.300
+in der Agent-Spielwiese.
+
+00:08:36.780 --> 00:08:37.980
+Es ist eine visuelle Schnittstelle,
+
+00:08:38.120 --> 00:08:39.500
+in der sie jede Komponente konfigurieren,
+
+00:08:39.560 --> 00:08:40.680
+die Antworten des Agenten testen
+
+00:08:40.680 --> 00:08:41.200
+und genau sehen,
+
+00:08:41.260 --> 00:08:42.360
+welche Tools er warum verwendet hat.
+
+00:08:42.680 --> 00:08:43.320
+Sobald es funktioniert,
+
+00:08:43.420 --> 00:08:44.040
+können sie es bereitstellen.
+
+00:08:44.560 --> 00:08:46.080
+Foundry bietet ihnen einen APN-Punkt,
+
+00:08:46.140 --> 00:08:47.180
+den sie von jeder Anwendung aus
+
+00:08:47.180 --> 00:08:47.800
+aufrufen können
+
+00:08:47.800 --> 00:08:48.980
+oder sie veröffentlichen ihn direkt
+
+00:08:48.980 --> 00:08:49.700
+im Microsoft Teams
+
+00:08:49.700 --> 00:08:50.640
+als Co-Pilot-Agent.
+
+00:08:51.560 --> 00:08:52.420
+So gelangt ihr Agent
+
+00:08:52.420 --> 00:08:53.720
+von der Idee bis zur Produktion,
+
+00:08:53.860 --> 00:08:55.100
+ohne dass sie eine einzige Zeile
+
+00:08:55.100 --> 00:08:56.340
+Infrastrukturcode schreiben müssen.
+
+00:08:57.000 --> 00:08:58.000
+Unter der Haube Architektur
+
+00:09:00.680 --> 00:09:01.920
+Was passiert eigentlich unter der Haube?
+
+00:09:02.480 --> 00:09:03.620
+Hier ist die Architektur einfach erklärt.
+
+00:09:04.120 --> 00:09:05.540
+Wenn Sie eine Foundry-Ressource erstellen,
+
+00:09:05.880 --> 00:09:07.280
+richtet Azure die gesamte Infrastruktur
+
+00:09:07.280 --> 00:09:07.980
+automatisch ein,
+
+00:09:08.220 --> 00:09:09.400
+sodass Sie keinen Speicher bereitstellen,
+
+00:09:09.500 --> 00:09:10.680
+keine Protokollierung konfigurieren
+
+00:09:10.680 --> 00:09:11.980
+und keine Sicherheitsgruppen einrichten müssen.
+
+00:09:12.200 --> 00:09:13.120
+Alles geschieht im Hintergrund.
+
+00:09:13.220 --> 00:09:14.060
+Es wird ein Speicherkonto
+
+00:09:14.060 --> 00:09:15.560
+für Dateien und Protokolle erstellt,
+
+00:09:15.660 --> 00:09:16.520
+die Überwachung eingerichtet
+
+00:09:16.520 --> 00:09:17.900
+und die Identität konfiguriert.
+
+00:09:18.340 --> 00:09:19.620
+Sie müssen also nur die Ressource erstellen
+
+00:09:19.620 --> 00:09:20.460
+und können mit dem Aufbau beginnen.
+
+00:09:20.920 --> 00:09:22.500
+Foundry verwendet den Ressourcentyp
+
+00:09:22.500 --> 00:09:23.480
+Cognitive Services,
+
+00:09:23.760 --> 00:09:24.920
+denselben wie Azure OpenAI
+
+00:09:24.920 --> 00:09:26.280
+und ältere KI-Dienste
+
+00:09:26.280 --> 00:09:27.580
+wie Vision und Speech.
+
+00:09:28.240 --> 00:09:29.700
+Die alte Hub-basierte Architektur
+
+00:09:29.700 --> 00:09:30.960
+nutzte Machine Learning Services,
+
+00:09:31.380 --> 00:09:32.460
+einen völlig anderen Anbieter
+
+00:09:32.460 --> 00:09:33.280
+mit anderer Abrechnung,
+
+00:09:33.460 --> 00:09:35.100
+Netzwerkstruktur und Governance.
+
+00:09:35.660 --> 00:09:36.160
+Das ist wichtig,
+
+00:09:36.260 --> 00:09:37.920
+da Foundry in einem einfachen Teil
+
+00:09:37.920 --> 00:09:39.340
+der Azure-Infrastruktur angesiedelt ist.
+
+00:09:39.960 --> 00:09:41.520
+Projekte sind untergeordnete Ressourcen
+
+00:09:41.520 --> 00:09:42.240
+der Foundry-Ressource.
+
+00:09:42.360 --> 00:09:43.580
+Sie teilen sich also dieselbe Identität
+
+00:09:43.580 --> 00:09:44.280
+und Sicherheitsgrenze.
+
+00:09:44.740 --> 00:09:45.700
+Wenn Sie die Zugriffskontrolle
+
+00:09:45.700 --> 00:09:46.740
+auf Foundry-Ebene einrichten,
+
+00:09:47.080 --> 00:09:48.060
+gilt diese für alle Projekte,
+
+00:09:48.240 --> 00:09:48.900
+sodass Sie die Sicherheit
+
+00:09:48.900 --> 00:09:50.480
+nicht für jedes Einzelnen konfigurieren müssen.
+
+00:09:51.280 --> 00:09:52.840
+Aber falls Sie projektspezifische Berechtigungen
+
+00:09:52.840 --> 00:09:54.060
+benötigen, können Sie diese ebenfalls hin.
+
+00:09:54.760 --> 00:09:55.660
+Foundry arbeitet nicht allein.
+
+00:09:56.080 --> 00:09:57.660
+Es verbindet sich mit anderen Azure-Diensten,
+
+00:09:57.660 --> 00:09:59.820
+wobei Azure AI Search der wichtigste ist,
+
+00:09:59.880 --> 00:10:01.340
+da Ihre Agenten darüber Wissen finden
+
+00:10:01.340 --> 00:10:02.840
+und abrufen und abrufen.
+
+00:10:03.560 --> 00:10:04.680
+Key Vault speichert Geheimnisse
+
+00:10:04.680 --> 00:10:05.660
+und LPI-Schlüssel sicher
+
+00:10:05.660 --> 00:10:07.020
+und Speicherkonten halten Dateien,
+
+00:10:07.120 --> 00:10:08.680
+Protokolle und Vektorindizes bereit.
+
+00:10:09.580 --> 00:10:10.520
+Diese Verbindungen werden
+
+00:10:10.520 --> 00:10:12.080
+über sogenannte Connections in Foundry
+
+00:10:12.080 --> 00:10:13.500
+verwaltet vor konfigurierte Links,
+
+00:10:13.620 --> 00:10:14.320
+mit denen Ihre Agenten
+
+00:10:14.320 --> 00:10:15.660
+auf diese Ressourcen zugreifen können,
+
+00:10:15.740 --> 00:10:16.640
+ohne dass Sie Anmelde-Daten
+
+00:10:16.640 --> 00:10:17.480
+manuell verwalten müssen.
+
+00:10:18.580 --> 00:10:19.480
+Der Foundry-Agent-Service
+
+00:10:19.480 --> 00:10:20.340
+ist die Laufzeitumgebung,
+
+00:10:20.400 --> 00:10:21.480
+die Ihre Agenten tatsächlich hostet.
+
+00:10:21.820 --> 00:10:22.940
+Betrachten Sie ihn als den Maschinenraum.
+
+00:10:23.480 --> 00:10:24.880
+Wenn ein Benutzer einer Anfrage ist,
+
+00:10:25.280 --> 00:10:26.340
+koordiniert der Agent-Service
+
+00:10:26.340 --> 00:10:27.320
+den gesamten Ablauf.
+
+00:10:27.420 --> 00:10:28.300
+Er empfängt die Anfrage,
+
+00:10:28.540 --> 00:10:29.360
+prüft die Anweisungen,
+
+00:10:29.560 --> 00:10:30.240
+ruft das Modell auf,
+
+00:10:30.360 --> 00:10:31.380
+aktiviert die richtigen Tools,
+
+00:10:31.680 --> 00:10:32.360
+ruft Wissen ab
+
+00:10:32.360 --> 00:10:34.100
+und generiert eine Antwort.
+
+00:10:35.220 --> 00:10:36.380
+Er führt zu dem Sicherheitsfilter aus,
+
+00:10:36.440 --> 00:10:37.500
+um schädliche Inhalte zu erkennen
+
+00:10:37.500 --> 00:10:38.500
+und die Skalierung zu verwalten.
+
+00:10:38.780 --> 00:10:39.580
+Wenn also tausend Benutzer
+
+00:10:39.580 --> 00:10:40.840
+gleichzeitig auf Ihren Agenten zugreifen,
+
+00:10:40.920 --> 00:10:41.680
+wird automatisch die nötige
+
+00:10:41.680 --> 00:10:42.460
+Kapazität bereitgestellt.
+
+00:10:42.780 --> 00:10:44.820
+Alles läuft innerhalb der Azure-Sicherheitsarchitektur
+
+00:10:44.820 --> 00:10:45.580
+auf Enterprise-Niveau.
+
+00:10:45.680 --> 00:10:47.240
+Entra-ID übernimmt die Authentifizierung.
+
+00:10:47.440 --> 00:10:48.460
+Verwaltete Netzwerke halten
+
+00:10:48.460 --> 00:10:49.440
+den Datenverkehr privat
+
+00:10:49.440 --> 00:10:50.780
+und die rollenbasierte Zugriffssteuerung
+
+00:10:50.780 --> 00:10:51.140
+stellt sicher,
+
+00:10:51.240 --> 00:10:52.220
+dass nur autorisierte Personen
+
+00:10:52.220 --> 00:10:52.960
+Agenten ändern können.
+
+00:10:53.460 --> 00:10:54.560
+Content-Sicherheitsfilter blockieren
+
+00:10:54.560 --> 00:10:55.600
+unangemessene Antworten.
+
+00:10:56.220 --> 00:10:57.660
+Es ist dieselbe Sicherheitsinfrastruktur,
+
+00:10:57.760 --> 00:10:59.080
+die auch Microsofts eigene Dienste schützt.
+
+00:10:59.980 --> 00:11:00.980
+Noch ein wichtiger Hinweis,
+
+00:11:01.040 --> 00:11:02.200
+die alte Hub- und Projektarchitektur
+
+00:11:02.200 --> 00:11:02.840
+existiert weiterhin.
+
+00:11:03.540 --> 00:11:04.600
+Wenn Sie Azure AI Foundry
+
+00:11:04.600 --> 00:11:05.160
+schon länger nutzen,
+
+00:11:05.260 --> 00:11:06.500
+haben Sie vielleicht noch Hubs eingerichtet,
+
+00:11:06.620 --> 00:11:08.320
+die weiterhin mit Microsoft Support funktionieren.
+
+00:11:08.840 --> 00:11:09.400
+Sie erhalten jedoch
+
+00:11:09.400 --> 00:11:10.780
+keine neuen Agentenfunktionen
+
+00:11:10.780 --> 00:11:11.720
+wie den Agent-Playground,
+
+00:11:11.820 --> 00:11:12.480
+den Agent-Service
+
+00:11:12.480 --> 00:11:13.780
+oder die Speicherfunktion.
+
+00:11:14.300 --> 00:11:15.000
+All dies ist ausschließlich
+
+00:11:15.000 --> 00:11:16.220
+in den neuen Foundry-Projekten verfügbar.
+
+00:11:16.540 --> 00:11:17.440
+Wenn Sie also neu starten
+
+00:11:17.440 --> 00:11:18.460
+oder Agenten erstellen möchten,
+
+00:11:18.520 --> 00:11:19.360
+verwenden Sie die neuen Projekte.
+
+00:11:19.840 --> 00:11:20.280
+Bauen Sie nicht
+
+00:11:20.280 --> 00:11:21.220
+auf der alten Grundlage auf.
+
+00:11:21.220 --> 00:11:22.620
+Wie alles zusammenhängt.
+
+00:11:23.020 --> 00:11:23.720
+Der große Überblick.
+
+00:11:24.280 --> 00:11:24.940
+Was passiert eigentlich,
+
+00:11:25.040 --> 00:11:26.440
+wenn jemand eine Foundry-Anwendung nutzt?
+
+00:11:26.900 --> 00:11:27.520
+Stellen Sie sich vor,
+
+00:11:27.560 --> 00:11:28.780
+ein Benutzer tippt eine Frage ein
+
+00:11:28.780 --> 00:11:29.800
+und diese Frage erreicht Janagen.
+
+00:11:30.100 --> 00:11:31.380
+Der Agent prüft seine Anweisungen,
+
+00:11:31.640 --> 00:11:32.640
+wählt das richtige Modell aus
+
+00:11:32.640 --> 00:11:33.680
+und beginnt mit der Verarbeitung.
+
+00:11:34.320 --> 00:11:35.540
+Dabei rät er nicht einfach die Antwort.
+
+00:11:36.120 --> 00:11:37.660
+Er greift auf Azure AI Search zu,
+
+00:11:37.780 --> 00:11:38.580
+um relevantes Wissen
+
+00:11:38.580 --> 00:11:39.640
+aus Ihren Dokumenten zu finden,
+
+00:11:40.000 --> 00:11:40.960
+ruft ein Tool wie die Websuche
+
+00:11:40.960 --> 00:11:42.160
+für aktuelle Informationen auf,
+
+00:11:42.400 --> 00:11:43.480
+verarbeitet all diesen Kontext
+
+00:11:43.480 --> 00:11:44.380
+und generiert eine Antwort.
+
+00:11:45.180 --> 00:11:45.880
+Anschließend speichert er
+
+00:11:45.880 --> 00:11:46.720
+das Gespräch im Gedächtnis,
+
+00:11:46.780 --> 00:11:47.500
+damit er sich beim nächsten Mal
+
+00:11:47.500 --> 00:11:47.920
+daran erinnert,
+
+00:11:47.980 --> 00:11:48.980
+wer Sie sind und was Sie besprochen haben.
+
+00:11:48.980 --> 00:11:50.500
+Das ist der durchgängige Prozess.
+
+00:11:51.460 --> 00:11:52.560
+Vor Foundry benötigten Sie
+
+00:11:52.560 --> 00:11:53.880
+fünf separate Azure-Dienste
+
+00:11:53.880 --> 00:11:55.020
+und benutzerdefinierten Code,
+
+00:11:55.100 --> 00:11:55.960
+um dies zu ermöglichen.
+
+00:11:56.220 --> 00:11:57.560
+Azure Open AI für das Modell,
+
+00:11:57.860 --> 00:11:59.280
+AI Search für den Wissensabruf,
+
+00:11:59.400 --> 00:12:00.120
+einen separaten Dienst
+
+00:12:00.120 --> 00:12:00.700
+für die Websuche,
+
+00:12:00.840 --> 00:12:02.200
+Speicher für Protokolle und Dateien,
+
+00:12:02.440 --> 00:12:04.020
+sowie Keyvoid für Geheimnisse.
+
+00:12:04.660 --> 00:12:05.640
+Da mussten Sie Code schreiben,
+
+00:12:05.720 --> 00:12:06.960
+um all das miteinander zu verknüpfen,
+
+00:12:07.040 --> 00:12:08.240
+die Authentifizierung zu handhaben,
+
+00:12:08.300 --> 00:12:08.880
+Fehler zu verwalten
+
+00:12:08.880 --> 00:12:09.880
+und das Monitoring einzurichten.
+
+00:12:10.340 --> 00:12:11.020
+Foundry erledigt all das
+
+00:12:11.020 --> 00:12:11.620
+sofort einsatzbereit.
+
+00:12:11.940 --> 00:12:13.460
+Sie konfigurieren einfach die Komponenten
+
+00:12:13.460 --> 00:12:14.180
+und schon läuft die Agent.
+
+00:12:14.520 --> 00:12:15.120
+Das Wichtigste ist,
+
+00:12:15.160 --> 00:12:15.880
+alles interagiert miteinander.
+
+00:12:15.880 --> 00:12:16.940
+Ändern Sie das Modell,
+
+00:12:17.020 --> 00:12:17.740
+ändern Sie damit die Kosten
+
+00:12:17.740 --> 00:12:19.000
+und die Genauigkeit jeder Antworten.
+
+00:12:19.400 --> 00:12:20.820
+Fügen Sie bessere Wissensquellen hinzu
+
+00:12:20.820 --> 00:12:21.920
+und Ihre Antworten werden präziser.
+
+00:12:22.360 --> 00:12:23.400
+Aktivieren Sie das Gedächtnis
+
+00:12:23.400 --> 00:12:24.640
+und die Erfahrung fühlt sich persönlich
+
+00:12:24.640 --> 00:12:25.460
+statt robotisch an.
+
+00:12:26.100 --> 00:12:27.300
+Dies sind keine isolierten Entscheidungen.
+
+00:12:27.740 --> 00:12:28.480
+Sie bilden ein System
+
+00:12:28.480 --> 00:12:29.260
+und Foundry gibt Ihnen
+
+00:12:29.260 --> 00:12:30.220
+die Steuerelemente an die Hand,
+
+00:12:30.300 --> 00:12:30.760
+um dieses System
+
+00:12:30.760 --> 00:12:32.120
+für Ihre spezifischen Anforderungen anzupassen.
+
+00:12:32.460 --> 00:12:33.240
+Deshalb gehen Unternehmen
+
+00:12:33.240 --> 00:12:34.700
+von Pilotprojekten zur Produktion über.
+
+00:12:35.240 --> 00:12:36.480
+Foundry bietet das Grundgerüst,
+
+00:12:36.560 --> 00:12:37.260
+um vertrauenswürdige
+
+00:12:37.260 --> 00:12:38.320
+KI-Anwendungen zu erstellen.
+
+00:12:38.680 --> 00:12:39.660
+Sicherheit, Überwachung
+
+00:12:39.660 --> 00:12:40.340
+und Evaluierung
+
+00:12:40.340 --> 00:12:41.320
+sind bereits integriert.
+
+00:12:41.760 --> 00:12:42.620
+Die fangen nicht bei Null an.
+
+00:12:42.620 --> 00:12:43.860
+Sie nutzen eine Plattform,
+
+00:12:43.960 --> 00:12:45.140
+die die schwierigen Aufgaben übernimmt,
+
+00:12:45.320 --> 00:12:46.380
+damit Sie sich auf Ihre Anwendung
+
+00:12:46.380 --> 00:12:47.020
+konzentrieren können.
+
+00:12:47.460 --> 00:12:48.680
+Der Einstieg Ihrer ersten Schritte.
+
+00:12:49.480 --> 00:12:50.240
+Wo fängt man also an?
+
+00:12:50.780 --> 00:12:52.320
+Gehen Sie zu ai.azure.com
+
+00:12:52.320 --> 00:12:53.340
+und erstellen Sie Ihre erste
+
+00:12:53.340 --> 00:12:54.100
+Foundry-Ressource.
+
+00:12:54.700 --> 00:12:55.740
+Die benötigen ein Azure-Abonnement.
+
+00:12:56.160 --> 00:12:56.880
+Falls Sie keines haben,
+
+00:12:56.980 --> 00:12:57.540
+registrieren Sie sich
+
+00:12:57.540 --> 00:12:58.420
+für ein kostenloses Konto
+
+00:12:58.420 --> 00:12:59.780
+mit Startguthaben zum Experimentieren.
+
+00:13:00.120 --> 00:13:00.880
+Die gesamte Einrichtung
+
+00:13:00.880 --> 00:13:01.620
+dauert etwa eine Minute.
+
+00:13:01.960 --> 00:13:02.940
+Erstellen Sie als nächstes
+
+00:13:02.940 --> 00:13:04.260
+ein Projekt innerhalb dieser Ressource
+
+00:13:04.260 --> 00:13:04.760
+und geben Sie ihm
+
+00:13:04.760 --> 00:13:06.000
+einen passenden Namen für Ihr Vorhaben.
+
+00:13:06.540 --> 00:13:07.120
+Wählen Sie dann ein Modell
+
+00:13:07.120 --> 00:13:07.820
+aus dem Katalog auf.
+
+00:13:08.200 --> 00:13:09.440
+Ich empfehle ein Start mit einem Modell,
+
+00:13:09.440 --> 00:13:10.420
+das für die meisten Experimente
+
+00:13:10.420 --> 00:13:11.260
+leistungsfähig genug ist.
+
+00:13:11.420 --> 00:13:12.660
+Sie können es mit einem Tick bereitstellen.
+
+00:13:13.160 --> 00:13:14.540
+Öffnen Sie danach die Agent-Spielwiese
+
+00:13:14.540 --> 00:13:16.080
+und erstellen Sie einen einfachen Agenten.
+
+00:13:16.960 --> 00:13:18.300
+Geben Sie ihm Anweisungen wie
+
+00:13:18.300 --> 00:13:20.400
+Du bist ein hilfreicher Assistent,
+
+00:13:20.860 --> 00:13:22.480
+der Fragen zu Unternehmensrichtlinien
+
+00:13:22.480 --> 00:13:23.240
+beantwortet.
+
+00:13:24.360 --> 00:13:25.200
+Fügen Sie dann die Websuche
+
+00:13:25.200 --> 00:13:25.860
+als Werkzeug hinzu.
+
+00:13:26.200 --> 00:13:26.760
+Testen Sie ihn,
+
+00:13:26.840 --> 00:13:27.700
+indem Sie eine Frage stellen
+
+00:13:27.700 --> 00:13:28.500
+und die Ablaufverfolgung,
+
+00:13:28.560 --> 00:13:29.220
+Beobachtung zu sehen,
+
+00:13:29.280 --> 00:13:30.280
+welche Tools er warum verwendet hat.
+
+00:13:30.620 --> 00:13:31.180
+Versuchen Sie nicht,
+
+00:13:31.180 --> 00:13:31.980
+alles auf einmal zu bauen.
+
+00:13:32.580 --> 00:13:33.680
+Wählen Sie einen Anwendungsfall,
+
+00:13:33.780 --> 00:13:35.220
+vielleicht einen Dokumenten-Q&A-Bot
+
+00:13:35.220 --> 00:13:36.220
+für Ihr Mitarbeiterhandbuch
+
+00:13:36.220 --> 00:13:37.040
+und fangen Sie klein an.
+
+00:13:37.040 --> 00:13:38.240
+Bringen Sie ihn zum Laufen
+
+00:13:38.240 --> 00:13:38.900
+und bauen Sie ihn dann weiter.
+
+00:13:39.280 --> 00:13:40.180
+Fügen Sie Dateisuche
+
+00:13:40.180 --> 00:13:41.300
+mit echten Dokumenten hinzu,
+
+00:13:41.400 --> 00:13:42.580
+geben Sie ihm Gedächtnis für Benutzer
+
+00:13:42.580 --> 00:13:44.080
+und nutzen Sie den Code-Interpreter
+
+00:13:44.080 --> 00:13:44.720
+für Berechnungen.
+
+00:13:45.080 --> 00:13:45.820
+Das Wichtige dabei ist,
+
+00:13:45.900 --> 00:13:47.100
+Foundry enthält einen integrierten
+
+00:13:47.100 --> 00:13:47.740
+KI-Chatboard,
+
+00:13:47.800 --> 00:13:49.320
+der Fragen zur Plattform selbst beantwortet.
+
+00:13:49.580 --> 00:13:50.360
+Wenn Sie nicht weiterkommen,
+
+00:13:50.440 --> 00:13:51.180
+fragen Sie ihn Dinge wie,
+
+00:13:51.260 --> 00:13:52.680
+welche Modelle sind in meiner Region verfügt?
+
+00:13:53.080 --> 00:13:54.100
+Oder wie füge ich meinem Agenten
+
+00:13:54.100 --> 00:13:54.820
+ein Gedächtnis hinzu?
+
+00:13:55.560 --> 00:13:56.700
+Er durchsucht die Dokumentation
+
+00:13:56.700 --> 00:13:57.760
+und liefert sofort eine Antwort,
+
+00:13:57.760 --> 00:13:59.120
+als hätten Sie einen Support-Ingenieur
+
+00:13:59.120 --> 00:14:00.020
+direkt im Portal.
+
+00:14:01.080 --> 00:14:01.940
+Das ist das System,
+
+00:14:02.060 --> 00:14:03.120
+eine einheitliche Plattform,
+
+00:14:03.380 --> 00:14:04.480
+die Modelle, Projekte,
+
+00:14:04.480 --> 00:14:05.500
+Agentenwissen und Sicherheit
+
+00:14:05.500 --> 00:14:07.000
+zu einem funktionierenden Ganzen verbindet.
+
+00:14:08.420 --> 00:14:09.180
+Wenn Sie sehen,
+
+00:14:09.260 --> 00:14:10.240
+wie alles ineinander greift,
+
+00:14:10.340 --> 00:14:11.160
+verfliegt die Verwirrung.
+
+00:14:11.840 --> 00:14:13.180
+Foundry ist nicht nur ein weiteres Tool,
+
+00:14:13.260 --> 00:14:13.920
+es ist die Werkstatt,
+
+00:14:13.980 --> 00:14:15.140
+in der Sie KI-Anwendungen bauen.
+
+00:14:15.760 --> 00:14:16.580
+Das Fazit lautet,
+
+00:14:16.680 --> 00:14:18.140
+Ihr größter Erfolg heute ist ganz einfach.
+
+00:14:18.460 --> 00:14:19.500
+Erstellen Sie ein Foundry-Projekt
+
+00:14:19.500 --> 00:14:20.600
+und bauen Sie einen einzigen Agenten.
+
+00:14:20.940 --> 00:14:21.260
+Das war's.
+
+00:14:21.740 --> 00:14:22.660
+Wenn Ihnen dies geholfen hat,
+
+00:14:22.760 --> 00:14:23.440
+abonnieren Sie den Kanal
+
+00:14:23.440 --> 00:14:24.900
+für weitere einfache Erklärungen wie diese
+
+00:14:24.900 --> 00:14:25.720
+und teilen Sie diese Folge
+
+00:14:25.720 --> 00:14:26.600
+mit jemandem, der auch verwirrt
+
+00:14:26.600 --> 00:14:28.040
+von Microsofts KI-Angebot ist.
+
+00:14:28.560 --> 00:14:29.120
+Er wird es Ihnen danken.

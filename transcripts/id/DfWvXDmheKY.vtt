@@ -1,0 +1,1912 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:04.980
+Ban berjalan berhenti mendadak, fuck with tidak mau menyala, pompa mulai bocor, dan tiba-tiba semua orang butuh jawaban.
+
+00:00:05.500 --> 00:00:09.540
+Tim mana yang akan memperbaikinya? Kapan servis terakhir dilakukan? Apakah kita punya suku ca dengan tepat di tang?
+
+00:00:09.940 --> 00:00:11.720
+Dan di mana catatan servis dari perbaikan sebelumnya?
+
+00:00:12.480 --> 00:00:18.240
+Alih-alih orang-orang mulai menelpon ke sana kemarin membuka spreadsheet lama mencari dalam folder O sementara perawatan itu hanya diam tak terpakai.
+
+00:00:18.320 --> 00:00:21.620
+Kekacauan itu memakan waktu dan biayanya nyata bahkan sebelum kunci Inggris menyentuh mesin.
+
+00:00:21.840 --> 00:00:28.220
+Saya Mirko Peters dari M365FM, dan inti sehari pengetahuan ini menjelaskan manajemen aset dynamics 3, aset dynamics 365 adalah bahasa sederhana.
+
+00:00:28.220 --> 00:00:36.740
+Ini adalah bagian dari manajemen rantai pasokan dynamics 365, yang memberi perusahaan satu tempat untuk menacak peralatan, pekerjaan pemeliharaan, biaya, dan riwayat servis.
+
+00:00:37.780 --> 00:00:42.320
+Nanti, kita akan melihat bagaimana peringatan sensor dapat mengubah perbaikan darurat menjadi pekerjaan terencana.
+
+00:00:42.880 --> 00:00:46.880
+Namun sebelum sampai ke sana, kita perlu melihat aset fisik yang diandalkan bisnis setiap harinya.
+
+00:00:47.580 --> 00:00:49.800
+Tarang, mengapa aset fisik menjadi masalah bisnis?
+
+00:00:50.220 --> 00:00:52.840
+Mari kita pikirkan peralatan yang menjaga operasional kerja tetap berjalan.
+
+00:00:53.340 --> 00:00:56.040
+Pabrik mungkin memiliki mesin produksi, ban berjalan motor, dan pompa.
+
+00:00:56.040 --> 00:00:59.620
+Kudang bergantung pada forklift, peralatan pemuatan, dan sistem penyortiran.
+
+00:01:00.340 --> 00:01:02.360
+Perusahaan transportasi butuh truk yang benar-benar berangkat tepat.
+
+00:01:02.900 --> 00:01:06.580
+Dan tim kantor atau fasilitas mengurus pemanas, pendingin, generator, dan lift.
+
+00:01:07.760 --> 00:01:14.600
+Setiap barang yang melakukan tugasnya, tetapi setiap barang juga membawa serangkaian pertanyaan yang tidak hilang begitu saja hanya karena peralatannya berfungsi hari ini.
+
+00:01:15.320 --> 00:01:18.200
+Di mana posisinya saat ini, siapa yang merawat? Apakah kinerjanya masih baik?
+
+00:01:18.200 --> 00:01:19.980
+Kapan inspeksi atau perbaikan terakhir laku?
+
+00:01:20.320 --> 00:01:23.600
+Pertanyaan-pertanyaannya tetap dengar sederhana, sampai jawabannya tersimpan di lima tanpa beda.
+
+00:01:23.600 --> 00:01:29.000
+Seorang teknisi mungkin tahu bahwa suara aneh pada mesin berarti masalah karena mereka telah bekerja di sampingnya selama bertahun-tahun.
+
+00:01:29.620 --> 00:01:33.380
+Orang lain menyimpan spreadsheet berisi tangan servis, berkes pembelian, dan pesanan suku cadang di tempat lain.
+
+00:01:34.040 --> 00:01:37.760
+Bagian keuangan melihat tagihan dan biaya, tetapi tidak selalu melihat keseluruhan cerita perbaikan di balik.
+
+00:01:38.380 --> 00:01:41.740
+Kemudian teknisi itu cuti, berganti pekerjaan, atau sekadar tidak masuk giliran kerja.
+
+00:01:42.260 --> 00:01:43.240
+Pengetahuan itu pun ikut hilang.
+
+00:01:43.240 --> 00:01:48.800
+Hal ini sering terjadi dengan lembar servis kertas, folder di lemari bengkel, dan spreadsheet yang dibagikan lewat surail.
+
+00:01:49.040 --> 00:01:49.340
+Surail.
+
+00:01:49.340 --> 00:01:53.040
+Sebuah tim mungkin masih bisa menjaga peralatan tetap berjalan tetapi mencari gambar lengkapnya.
+
+00:01:53.180 --> 00:01:55.120
+Orang sering bekerja dengan informasi yang tidak lengkap.
+
+00:01:55.700 --> 00:01:57.440
+Saat peralatan rusak, masalah menyebar dengan cepat.
+
+00:01:57.780 --> 00:02:01.920
+Operasional mungkin kehilangan produksi atau memperlambat pengiriman, dan tim pemeliharaan harus menemukan kerusakannya.
+
+00:02:02.140 --> 00:02:04.520
+Bagian pembelian mungkin perlu memesan suku cadang yang hilang secara menarik.
+
+00:02:04.900 --> 00:02:09.980
+Bagian keuangan nantinya melihat tagihan yang mahal, tetapi tidak selalu bisa menghubungkan biaya tersebut dengan mesin atau perbaikan tertentu.
+
+00:02:10.560 --> 00:02:11.540
+Tidak ada yang merencanakan kerusakan.
+
+00:02:12.500 --> 00:02:14.400
+Pekerjaan darurat juga mengubah perilaku orang.
+
+00:02:14.400 --> 00:02:21.260
+Tim memesan suku cadang pertama yang mereka temukan membayar ekstra untuk pengiriman cepat atau melewatkan perencanaan rutin karena mesin harus segera beroperasi kembali.
+
+00:02:22.020 --> 00:02:28.520
+Terkadang tindakan sementara itu adalah pilihan tepat, tetapi jika setiap perbaikan terasa seperti keadaan darurat, biaya akan membengkakan kesalahan yang sama terus berulang.
+
+00:02:29.120 --> 00:02:31.040
+Orang yang berbeda membutuhkan bagian cerita yang berbeda pula.
+
+00:02:31.040 --> 00:02:34.900
+Pekerja pemeliharaan memerlukan detail perbaikan dan catatan sebelumnya.
+
+00:02:35.020 --> 00:02:37.320
+Bagian operasional perlu mengetahui apakah peralatan bisa beroperasi.
+
+00:02:37.580 --> 00:02:39.840
+Bagian pembelian perlu mengetahui suku cadang apa saja yang diperlukan.
+
+00:02:40.140 --> 00:02:44.600
+Bagian keuangan memerlukan jejak biaya yang jelas dan manajer perlu melihat di mana kegagalan dan pengeluaran terus muncul.
+
+00:02:45.080 --> 00:02:51.340
+Manajemen Asset Dynamics 365 menjaga catatan kerja tersebut tetap terpadu untuk peralatan fisik dan pekerjaan pemeliharaan yang terkait dengannya.
+
+00:02:51.740 --> 00:02:54.740
+Sistem ini tidak hadir untuk menggantikan orang yang ahli memperbaiki motor.
+
+00:02:54.740 --> 00:03:00.820
+Sistem ini memberi orang tersebut dan semua orang di sekitar mereka tempat berbagi untuk mencatat apa yang terjadi dan menemukan apa yang mereka butuhkan.
+
+00:03:01.240 --> 00:03:05.580
+Sebelum siapapun dapat merencanakan pekerjaan perbaikan, sistem memerlukan gambaran jelas tentang setiap aset individu.
+
+00:03:06.420 --> 00:03:08.640
+Catatan Asset, sebuah berkas digital untuk setiap mesin.
+
+00:03:09.480 --> 00:03:10.940
+Jadi beginilah cara berpikir tentang aset.
+
+00:03:11.440 --> 00:03:15.240
+Bayangkan lemari arsip di ruang pemeliharaan di mana setiap mesin memiliki folder berlabel sendiri.
+
+00:03:15.880 --> 00:03:19.500
+Perbedaannya adalah folder ini tersimpan di dalam Dynamics 365 Supply Chain Management
+
+00:03:19.500 --> 00:03:23.320
+dan orang yang tepat dapat menemukannya tanpa harus membongkar lemari atau bertanya ke sana kemari.
+
+00:03:23.320 --> 00:03:26.300
+Buka folder untuk sebuah mesin dan Anda akan mulai dengan identitasnya.
+
+00:03:26.700 --> 00:03:31.100
+Catat nama, nomor produk atau model, nomor seri, dan deskripsi sederhana tentang fungsinya.
+
+00:03:31.560 --> 00:03:38.060
+Tambahkan juga detail teknis dan informasi garansi agar tim dapat memeriksa apakah perbaikan termasuk dalam cakupan vendor sebelum memesan suku cadang.
+
+00:03:38.660 --> 00:03:40.740
+Itu terdengar mendasar tetapi bisa mencegah masalah besar.
+
+00:03:41.180 --> 00:03:46.320
+Dua mesin di lantai yang sama bisa terlihat hampir identik sementara suku cadang, tanggal garansi, atau kebutuhan servisnya sangat berbeda.
+
+00:03:46.540 --> 00:03:49.520
+Catatan aset yang jelas memberi tahu tim mesin mana yang sedang mereka tangani.
+
+00:03:50.160 --> 00:03:52.180
+Catatan tersebut juga perlu menjawab pertanyaan praktis.
+
+00:03:52.180 --> 00:03:53.860
+Di mana peralatan ini bekerja.
+
+00:03:54.360 --> 00:03:58.340
+Manajemen aset Dynamics 365 menggunakan sesuatu yang disebut lokasi fungsional untuk itu.
+
+00:03:58.960 --> 00:04:03.820
+Anggap lokasi fungsional sebagai tempat aset melakukan pekerjaannya, bukan sekadar titik di tetah,
+
+00:04:04.180 --> 00:04:07.220
+melainkan seperti lokasi, gedung, gudang, bengkel, atau lini produksi.
+
+00:04:07.800 --> 00:04:08.380
+Berikut contohnya.
+
+00:04:08.680 --> 00:04:09.960
+Bayangkan sebuah perusahaan dengan tiga pabrik.
+
+00:04:10.320 --> 00:04:11.900
+Di dalam satu pabrik terdapat area pengemas.
+
+00:04:12.220 --> 00:04:13.660
+Di dalam area tersebut terdapat lini konfior.
+
+00:04:14.060 --> 00:04:16.520
+Konfior itu mencakup beberapa motor, sensor, dan roll.
+
+00:04:16.520 --> 00:04:19.020
+Anda dapat menjelaskan seluruh struktur tersebut dalam sistem.
+
+00:04:19.200 --> 00:04:22.260
+Mulai dari lokasi yang lebih besar hingga keperalatan yang sebenarnya diperiksa dan diperbaiki.
+
+00:04:22.940 --> 00:04:24.180
+Pabrik berada di posisi paling atas.
+
+00:04:24.480 --> 00:04:25.680
+Di bawahnya terdapat lini produksi.
+
+00:04:26.000 --> 00:04:27.040
+Di bawah lini tersebut ada konfior.
+
+00:04:27.520 --> 00:04:28.660
+Di bawah konfior terdapat motor.
+
+00:04:29.200 --> 00:04:32.300
+Dan di bawah motor, Anda mungkin melacak komponen yang memerlukan perhatian khusus.
+
+00:04:32.900 --> 00:04:36.540
+Struktur induk dan anak ini membantu orang memahami di mana aset berada dan apa hubungannya.
+
+00:04:36.980 --> 00:04:39.420
+Jadi saat motor rusak, teknisi tidak hanya melihat nomor seri.
+
+00:04:39.980 --> 00:04:43.180
+Mereka melihat bawah motor tersebut milik lini konfior 2 di area pengemasan di pabrik utara.
+
+00:04:43.180 --> 00:04:47.780
+Konteks tersebut membantuti memperkirakan pekerjaan apa yang mungkin terhenti selama motor tidak beroperasi.
+
+00:04:48.160 --> 00:04:48.840
+Berapa bisa berpindah?
+
+00:04:49.460 --> 00:04:50.980
+Forklay berpindah di satu gudang ke gudang lain.
+
+00:04:51.740 --> 00:04:54.140
+Ompak mungkin keluar dari penyimpanan dan dipasang di suatu bangunan.
+
+00:04:54.820 --> 00:04:58.420
+Setelah perubahan proses, mesin mungkin pindah dari satu lini produksi ke lini yang berbeda.
+
+00:04:59.020 --> 00:05:01.640
+Manajemen aset dapat melacak perubahan tersebut melalui lokasi fungsional.
+
+00:05:02.280 --> 00:05:03.180
+Dan hal itu juga penting bagi biaya.
+
+00:05:03.720 --> 00:05:08.560
+Oh, ketika aset berpindah, sistem menghubungkan biaya perawatannya dengan detail keuangan lokasi yang baru.
+
+00:05:09.100 --> 00:05:11.900
+Jadi jika mesin kini bekerja di pabrik atau departemen yang berbeda,
+
+00:05:11.900 --> 00:05:13.800
+biaya mengikuti mesin tersebut ke tempat yang menggunakan,
+
+00:05:14.100 --> 00:05:16.760
+Anda tidak perlu menebak-nebak nantinya bagian bisnis mana yang menanggung tagian perbaikan.
+
+00:05:17.160 --> 00:05:20.760
+Sekarang, folder yang hanya berisi detail asli mesin tidak akan banyak membantu setelah tahun pertama.
+
+00:05:21.520 --> 00:05:23.900
+Bagian yang berguna adalah riwayat di samping catatan aset.
+
+00:05:24.420 --> 00:05:27.760
+Inspeksi bersan perbaikan, suku cadang yang diganti bersanding dengan waktu pengerti.
+
+00:05:27.840 --> 00:05:31.900
+Catatan teknisi, detail kerusakan, dan waktu henti yang tercatat semuanya menjadi bagian dari riwayat peralatan yang sama.
+
+00:05:32.180 --> 00:05:33.880
+Teknisi baru dapat memperiksa apa yang terjadi sebelum.
+
+00:05:34.260 --> 00:05:37.060
+Mungkin mereka menemukan motor yang sama, menerima dua perbaikan dalam enam bulan.
+
+00:05:37.380 --> 00:05:38.960
+Mungkin suku cadang tertentu terus-menerus out.
+
+00:05:38.960 --> 00:05:43.440
+Atau catatan sebelumnya, menjelaskan pengaturan yang perlu diperiksa sebelum seseorang membongkar mesin.
+
+00:05:43.900 --> 00:05:45.880
+Sistem tidak mengingat lebih baik daripada manusia,
+
+00:05:46.140 --> 00:05:49.360
+tetapi memberikan tempat bagi orang untuk meninggalkan informasi berguna bagi orang berikut.
+
+00:05:49.560 --> 00:05:50.580
+Satu poin perlu diperjelas.
+
+00:05:50.920 --> 00:05:56.080
+Manajemen aset berfokus pada peralatan fisik yang memerlukan perawatan, perbaikan, inspeksi, atau servis rutin dari waktu ke waktu.
+
+00:05:56.500 --> 00:06:00.640
+Uh, bayangkan mesin, peralatan produksi, kendaraan, peralatan bangunan, dan aset kerja serupa.
+
+00:06:01.560 --> 00:06:04.880
+Ini bukan alat untuk melacak laptop kantor, ponsel, atau lisensi perangkat lunak.
+
+00:06:04.880 --> 00:06:08.820
+Barang tersebut mungkin penting bagi perusahaan, tetapi mesin produksi dengan suku cadang bergerak,
+
+00:06:08.940 --> 00:06:12.740
+kebutuhan servis, dan risiko waktu henti menciptakan jenis catatan yang berbeda.
+
+00:06:12.840 --> 00:06:15.040
+Manajemen aset berfokus pada riwayat meliharaan tersebut.
+
+00:06:15.560 --> 00:06:20.280
+Setelah setiap aset memiliki identitas, lokasi, struktur, dan riwayat yang jelas, percakapan pun berubah.
+
+00:06:21.020 --> 00:06:23.440
+Daripada menunggu peralatan rusak, lalu bertanya apa yang terjadi,
+
+00:06:23.560 --> 00:06:26.840
+tim bisa mulai merencanakan perawatan yang benar-benar dibutuhkan peralatan tersebut.
+
+00:06:26.840 --> 00:06:33.380
+Biasanya ada dua cara pemeliharaan dimulai.
+
+00:06:34.040 --> 00:06:35.380
+Pertama adalah perintah kerja reaktif.
+
+00:06:36.040 --> 00:06:40.280
+Sesuatu rusak, produksi terhenti, dan orang harus memperbaikinya karena tidak ada pilihan lain.
+
+00:06:40.660 --> 00:06:44.600
+Kedua adalah pemeliharaan terencana di manetim mengurus peralatan sebelum kerusakan menyebabkan penghenti.
+
+00:06:45.060 --> 00:06:48.640
+Menggunakan panduan produsen beserta kebutuhan nyata peralatan dalam penggunaan sehari-hari,
+
+00:06:48.640 --> 00:06:50.240
+perbedaan itu mengubah hari kerja.
+
+00:06:50.880 --> 00:06:54.140
+Produsen mungkin menyarankan pemeriksaan pompa setelah sejumlah jam kerja,
+
+00:06:54.140 --> 00:06:59.460
+tetapi pompa di area berdebu dan panas mungkin perlu perhatian lebih cepat daripada model yang sama di tempat yang lebih bersih.
+
+00:07:00.320 --> 00:07:04.980
+Manajemen aset memberi tim pemeliharaan cara untuk merencanakan berdasarkan manual maupun kondisi nyata di lapangan.
+
+00:07:05.500 --> 00:07:08.340
+Pemeliharaan terencana bukan berarti memperbaiki peralatan yang berfungsi sempur.
+
+00:07:08.660 --> 00:07:11.680
+Ini tentang melakukan pekerjaan kecil yang diketahui pada waktu yang tepat,
+
+00:07:11.800 --> 00:07:15.360
+agar masalah kecil tidak berkembang menjadi kerusakan tak terduga selama si tersibuk dalam seminggu.
+
+00:07:16.200 --> 00:07:19.560
+Rencana pemeliharaan dapat mencakup pekerjaan rutin seperti inspeksi visual,
+
+00:07:19.700 --> 00:07:22.800
+pembersihan, pelumasan, pemeriksaan keselamatan, pengujian sabuk atau filter,
+
+00:07:22.800 --> 00:07:24.880
+dan penggantian suku cadang yang aus seiring waktu.
+
+00:07:25.620 --> 00:07:26.580
+Pikirkan tentang sebuah forklift.
+
+00:07:26.900 --> 00:07:30.640
+Forklift membutuhkan pemeriksaan rutin pada rem, bahan tingkat cairan, lampu, dan kondisi baterai.
+
+00:07:31.280 --> 00:07:32.960
+Pemeriksaan tersebut mungkin terasa sepele,
+
+00:07:33.380 --> 00:07:36.520
+tetapi jika terus dilewatkan, forklift bisa rusak saat gudang paling membutuhkannya.
+
+00:07:37.280 --> 00:07:38.800
+Ide yang sama berlaku untuk lini produksi.
+
+00:07:39.240 --> 00:07:41.240
+Seorang teknisi mungkin membersihkan sensor setiap minggu,
+
+00:07:41.540 --> 00:07:42.740
+memeriksa ketegangan sabuk setiap bulan,
+
+00:07:42.860 --> 00:07:44.780
+dan mengganti suku cadang setelah periode penggunaan tertentu.
+
+00:07:45.460 --> 00:07:47.640
+Manajemen aset membantu tim mencetat rutinitas tersebut
+
+00:07:47.640 --> 00:07:49.560
+dan memunculkan pekerjaan berikutnya saat jatuh tempo.
+
+00:07:50.040 --> 00:07:51.660
+Jadwal adalah salah satu bagian dari gambaran tersebut.
+
+00:07:52.060 --> 00:07:54.160
+Pekerjaan bisa jatuh tempo setiap minggu, setiap bulan,
+
+00:07:54.260 --> 00:07:55.480
+atau setelah sejumlah hari tertentu.
+
+00:07:55.960 --> 00:07:57.540
+Namun, tanggal kalender tidak selalu cukup,
+
+00:07:57.660 --> 00:08:00.560
+karena dua mesin dengan tipe yang sama mungkin beroperasi dengan jam kerja yang sangat berbeda.
+
+00:08:00.860 --> 00:08:02.720
+Satu mesin mungkin beroperasi, satu shift setiap hari,
+
+00:08:02.800 --> 00:08:03.940
+sementara yang lain mungkin beroperasi sempat.
+
+00:08:04.240 --> 00:08:07.220
+Pembacaan teknis memberi tim cara lain untuk menilai kapan pemeliharaan dilakukan.
+
+00:08:07.860 --> 00:08:09.000
+Tergantung pada perawatannya,
+
+00:08:09.000 --> 00:08:11.820
+ini bisa mencakup jam kerja, jarak tempuh, suhu, tekan,
+
+00:08:11.820 --> 00:08:14.280
+atau pengukuran lain yang memberi tahu tim tentang kondisinya.
+
+00:08:14.880 --> 00:08:17.380
+Anda tidak mengganti suku cadang hanya karena tanggal muncul di kalender.
+
+00:08:17.960 --> 00:08:21.820
+Anda menggantinya saat rencana penggunaan peralatan dan pembacaan menunjukkan pekerjaan tersebut sudah harus dilakukan.
+
+00:08:22.080 --> 00:08:24.320
+Kutaran pemeliharaan membantu dalam jenis perawatan rutin seperti
+
+00:08:24.320 --> 00:08:28.820
+Tugas rutin memberikan teknisi rute terencana atau serangkaian inspeksi pada beberapa aset.
+
+00:08:29.640 --> 00:08:32.140
+Alih-alih menangani setiap pemeriksaan sebagai kejutan terpisah,
+
+00:08:32.140 --> 00:08:35.740
+pekerja memeriksa peralatan terkait dalam satu kunjungan rutin dan mencatat hasilnya.
+
+00:08:36.380 --> 00:08:38.920
+Bayangkan seorang teknisi memulai putaran pagi di area pengemasan.
+
+00:08:38.920 --> 00:08:42.340
+Mereka memeriksa datang motor konveyor, mendengarkan suara yang tidak biasa,
+
+00:08:42.460 --> 00:08:45.440
+mencari sambungan longgar, dan mencatat data yang penting bagi perusahaan.
+
+00:08:45.900 --> 00:08:49.640
+Pekerjaan menjadi konsisten bahkan ketika orang yang berbeda melakukan tugas rutin tersebut pada hari yang berbeda.
+
+00:08:50.200 --> 00:08:52.820
+Sekarang bayangkan salah satu pemeriksaan tersebut melancat ketaran pada motor.
+
+00:08:53.240 --> 00:08:55.260
+Selama beberapa minggu pembacaan tetap berada dalam kisaran normal.
+
+00:08:55.680 --> 00:08:56.800
+Kemudian angkanya mulai merayap naik.
+
+00:08:56.900 --> 00:09:00.720
+Konveyor masih berjalan, jadi tidak ada orang di luar bagian pemeliharaan yang menyadari masalahnya,
+
+00:09:00.820 --> 00:09:03.080
+tetapi pembacaan berulang beritahu teknisi bahwa ada sesuatu yang beruk.
+
+00:09:03.080 --> 00:09:07.640
+Hal itu memberi tim waktu untuk memeriksa motor sebelum mengalami kerusakan atau menghentikan ini produksi,
+
+00:09:08.320 --> 00:09:09.700
+yang disebut pemeliharaan berbasis kondisi.
+
+00:09:10.860 --> 00:09:13.840
+Daripada hanya bertindak pada tanggal tetap, tim mengawasi nilai teknis tertentu.
+
+00:09:14.280 --> 00:09:16.840
+Ketika pembacaan itu melampaui batas yang ditetapkan perusahaan,
+
+00:09:17.040 --> 00:09:19.040
+kebetulan pemeliharaan akan muncul untuk ditinjau.
+
+00:09:19.560 --> 00:09:23.060
+Sensor dapat memasukkan pembacaan tersebut ke dalam proses, tetapi tidak memperbaiki apapun.
+
+00:09:23.540 --> 00:09:27.480
+Sensor dapat memperingatkan jika suhu terlalu tinggi atau getaran telah melewati batas yang diterima.
+
+00:09:27.480 --> 00:09:31.060
+Karena seseorang tetap perlu memperiksa peralatan, memutuskan arti peringatan tersebut,
+
+00:09:31.200 --> 00:09:33.820
+mengikuti aturan keselamatan, dan melakukan perbaikan atau inspeksi.
+
+00:09:34.320 --> 00:09:35.160
+Langkah manusia itu penting.
+
+00:09:35.820 --> 00:09:37.520
+Pembacaan mungkin menunjukkan bantalan yang aus,
+
+00:09:37.640 --> 00:09:41.460
+tetapi bisa juga berasal dari sambungan longgar, masalah sensor, atau perubahan cara kerja peralatan.
+
+00:09:42.460 --> 00:09:44.080
+Sistem menarik perhatian pada kondisi tersebut.
+
+00:09:44.580 --> 00:09:46.620
+Orang terlatih memutuskan tindakan apa yang harus dilakukan setnya.
+
+00:09:46.920 --> 00:09:48.860
+Jadi tujuannya bukan untuk memprediksi setiap kerusakan dengar.
+
+00:09:49.420 --> 00:09:52.100
+Tujuannya adalah memberi tim pemeliharaan pemberitahuan lebih awal,
+
+00:09:52.100 --> 00:09:54.320
+rutinitas yang lebih baik, dan lebih sedikit perbaikan darurat
+
+00:09:54.320 --> 00:09:56.700
+melalui pandilan telepon terburu-buru setelah peralatan berhenti.
+
+00:09:57.480 --> 00:09:59.780
+Pekerjaan terencana tetap memerlukan catatan tugas yang jelas,
+
+00:09:59.880 --> 00:10:02.360
+penanggung jawab, suku cadang yang tepat, dan cara untuk melacak biaya.
+
+00:10:03.140 --> 00:10:05.940
+Perintah kerja, tiket tugas yang menyatukan proses perbaikan.
+
+00:10:06.840 --> 00:10:08.880
+Jadi kapan kebutuhan pemeliharaan menjadi pekerjaan nyata?
+
+00:10:09.400 --> 00:10:10.360
+Kebutuhan itu menjadi perintah.
+
+00:10:10.660 --> 00:10:13.280
+Anggaplah itu sebagai tiket tugas yang mengikuti perbaikan
+
+00:10:13.280 --> 00:10:15.380
+dari laporan pertama hingga pekerjaan selesai,
+
+00:10:15.640 --> 00:10:17.400
+memberi tim catatan tunggal tentang apa yang salah,
+
+00:10:17.400 --> 00:10:21.080
+apa yang perlu dilakukan, siapa yang bertanggung jawab, dan berapa biayanya.
+
+00:10:21.900 --> 00:10:24.720
+Tanpa perintah kerja, teknisi mungkin tetap bisa memperbaiki masalah,
+
+00:10:24.960 --> 00:10:26.860
+tetapi detailnya bisa hilang dalam panggilan telepon,
+
+00:10:27.060 --> 00:10:29.100
+setelah terima gileon kerja, atau ingatan seseorang.
+
+00:10:29.640 --> 00:10:31.920
+Dan nantinya, tidak ada yang bisa menjawab dengan mudah pekerjaan
+
+00:10:31.920 --> 00:10:33.320
+apa yang dilakukan, berapa lama waktunya,
+
+00:10:33.440 --> 00:10:34.940
+atau apakah kerusakan yang sama kembali terjadi.
+
+00:10:35.680 --> 00:10:37.520
+Dan tanpa catatan itu, Anda hanya bisa menebak-nebak.
+
+00:10:38.060 --> 00:10:39.740
+Kini perintah kerja bisa dimulai dengan beberapa cara.
+
+00:10:40.260 --> 00:10:43.000
+Bisa berasal dari pekerjaan pemeliharaan terjadwal yang sudah waktunya,
+
+00:10:43.000 --> 00:10:44.640
+dari inspeksi yang menemukan kerusakan,
+
+00:10:44.860 --> 00:10:46.260
+dari kerusakan saat peralatan berhenti,
+
+00:10:46.460 --> 00:10:48.440
+atau dari teknisi yang menyelesaikan satu perbaikan,
+
+00:10:48.440 --> 00:10:51.100
+melihat asalah lain, dan membuat pekerjaan tindak lanjut
+
+00:10:51.100 --> 00:10:52.220
+sebelum meninggalkan lokasi.
+
+00:10:53.120 --> 00:10:54.580
+Alasannya berbeda, namun strukturnya sama.
+
+00:10:54.960 --> 00:10:56.540
+Perintah kerja mengubah kebutuhan pemeliharaan
+
+00:10:56.540 --> 00:10:58.500
+menjadi sesuatu yang bisa dijadwalkan, ditugaskan,
+
+00:10:58.580 --> 00:10:59.780
+dilacak, dan diselesaikan oleh tim.
+
+00:11:00.300 --> 00:11:01.800
+Jadi, baik terencana maupun tidak,
+
+00:11:01.920 --> 00:11:03.700
+perintah kerja mencatat alasan dan responsnya.
+
+00:11:04.440 --> 00:11:06.080
+Pertama, perintah kerja menjelaskan pekerjaannya.
+
+00:11:06.860 --> 00:11:07.860
+Judul singkat mungkin berbunyi,
+
+00:11:07.860 --> 00:11:10.340
+periksa getaran tidak biasa pada motor konveor 4.
+
+00:11:11.120 --> 00:11:13.400
+Di bawahnya, tim pemeliharaan dapat menambahkan tugas
+
+00:11:13.400 --> 00:11:15.120
+yang diperlukan untuk menyelesaikan pekerjaan,
+
+00:11:15.280 --> 00:11:16.300
+seperti mengisolasi peralatan,
+
+00:11:18.440 --> 00:11:19.720
+dan mengoperasikan kembali mesin.
+
+00:11:20.220 --> 00:11:22.340
+Tingkat detail tersebut membantu saat pekerjaan beralih tangan.
+
+00:11:22.700 --> 00:11:24.280
+Daftar periksa dapat memandu teknisi
+
+00:11:24.280 --> 00:11:26.720
+melalui pekerjaan yang harus dilakukan sesuai urutan tertentu
+
+00:11:26.720 --> 00:11:27.880
+yang berguna untuk inspeksi rutin,
+
+00:11:28.260 --> 00:11:29.920
+dan membantu perbaikan di mana langkah yang terlewat
+
+00:11:29.920 --> 00:11:31.320
+dapat menimbulkan risiko keselamatan
+
+00:11:31.320 --> 00:11:32.860
+atau membuat peralatan bekerja tidak optimal.
+
+00:11:34.000 --> 00:11:36.020
+Petunjuk keselamatan juga harus disertakan dalam kerjaan.
+
+00:11:36.020 --> 00:11:37.760
+Pekerja mungkin perlu memutus aliran listrik
+
+00:11:37.760 --> 00:11:39.880
+sebelum membuka panel, mengenakan alat pelindung,
+
+00:11:40.220 --> 00:11:42.820
+atau memastikan jalur telah berhenti sebelum menyentuh bagian yang bergerak.
+
+00:11:43.300 --> 00:11:44.500
+Perintah kerja memberi tim tempat
+
+00:11:44.500 --> 00:11:45.840
+untuk mencantumkan petunjuk tersebut
+
+00:11:45.840 --> 00:11:47.640
+di mana orang akan melihatnya selama bekerja.
+
+00:11:47.840 --> 00:11:48.820
+Kemudian tibalah tahap rencana.
+
+00:11:49.040 --> 00:11:50.580
+Tim pemeliharaan dapat menugaskan pekerja
+
+00:11:50.580 --> 00:11:52.340
+memperkirakan berapa lama waktu yang dibutuhkan
+
+00:11:52.340 --> 00:11:53.260
+serta menjadwalkan tenor.
+
+00:11:53.420 --> 00:11:54.740
+Itu tidak berarti setiap perbaikan
+
+00:11:54.740 --> 00:11:56.180
+berjalan tepat sesuai rencana
+
+00:11:56.180 --> 00:11:57.940
+karena kegagalan peralatan jarang mengikuti kalender,
+
+00:11:58.060 --> 00:11:59.840
+namun hal ini memberikan titik awal yang jelas bagi tim.
+
+00:12:00.060 --> 00:12:01.400
+Anda juga bisa menambahkan suku cadang
+
+00:12:01.400 --> 00:12:02.700
+dan perlengkapan yang dibutuhkan pekerjaan.
+
+00:12:03.060 --> 00:12:04.100
+Untuk motor konveyor kita,
+
+00:12:04.360 --> 00:12:05.820
+itu bisa mencakup bantalan pengganti,
+
+00:12:05.980 --> 00:12:06.520
+baut, gemuk,
+
+00:12:06.660 --> 00:12:07.720
+atau mungkin satu motor utuh.
+
+00:12:08.440 --> 00:12:09.900
+Perintah kerja menghubungkan perbaikan
+
+00:12:09.900 --> 00:12:10.840
+dengan barang yang diperlukan
+
+00:12:10.840 --> 00:12:12.820
+sehingga teknisi tidak perlu datang siap bekerja
+
+00:12:12.820 --> 00:12:14.480
+lalu menemukan suku cadang yang hilang.
+
+00:12:15.160 --> 00:12:16.400
+Itu berarti teknisi tidak tercebak
+
+00:12:16.400 --> 00:12:17.860
+menunggu suku cadang yang tak kunjung datang.
+
+00:12:18.460 --> 00:12:19.380
+Jika stok sudah tersedia,
+
+00:12:19.520 --> 00:12:20.660
+tim dapat merencanakan pekerjaan
+
+00:12:20.660 --> 00:12:21.620
+berdasarkan pasokan tersebut.
+
+00:12:22.040 --> 00:12:23.220
+Jika stok tidak mencukupi,
+
+00:12:23.520 --> 00:12:25.200
+kebutuhan tersebut masuk ke proses pembelian
+
+00:12:25.200 --> 00:12:27.780
+dan seseorang dapat memesan suku cadang yang diperlukan
+
+00:12:27.780 --> 00:12:29.480
+tanpa mengandalkan pesan terburu-buru
+
+00:12:29.480 --> 00:12:31.640
+atau catatan tulisan tangan yang hilang di atas meja.
+
+00:12:32.620 --> 00:12:34.580
+Perintah kerja tetap menjaga riwayat perbaikan
+
+00:12:34.580 --> 00:12:35.860
+terhubung dengan pembelian tersebut.
+
+00:12:36.380 --> 00:12:37.840
+Di senilai tiket pekerjaan mulai berfungsi
+
+00:12:37.840 --> 00:12:39.200
+lebih dari sekang kerusakan-kerusakan.
+
+00:12:39.500 --> 00:12:40.760
+Ini seperti pos komando pusat
+
+00:12:40.760 --> 00:12:42.100
+yang bisa dilihat semua orang
+
+00:12:42.100 --> 00:12:43.360
+sebelum memulai bagian tugas mereka.
+
+00:12:43.960 --> 00:12:44.920
+Ini membantu orang bersiap
+
+00:12:44.920 --> 00:12:45.740
+sebelum pekerjaan dimulai.
+
+00:12:46.220 --> 00:12:47.540
+Teknisi tahu apa yang harus diperiksa,
+
+00:12:47.660 --> 00:12:49.140
+perencana tahu siapa yang harus mengambil tugas,
+
+00:12:49.340 --> 00:12:50.960
+tim gudang bisa suku cadang apa yang dibutuhkan,
+
+00:12:51.220 --> 00:12:52.300
+dan bagian pembelian bisa bertindak
+
+00:12:52.300 --> 00:12:53.660
+sepertindak saat suku cadang tidak tersedia.
+
+00:12:53.920 --> 00:12:55.020
+Seiring berjalannya pekerjaan,
+
+00:12:55.100 --> 00:12:56.160
+perintah kerja mencatat statusnya.
+
+00:12:56.460 --> 00:12:57.120
+Dimulai dengan dibuat,
+
+00:12:57.240 --> 00:12:58.200
+lalu seseorang menjadwalkannya.
+
+00:13:04.580 --> 00:13:05.760
+Tanggung jawab lainnya dapat meninjauhnya
+
+00:13:05.760 --> 00:13:06.640
+sebelum catatan ditutup.
+
+00:13:07.080 --> 00:13:08.120
+Langkah-langkah itu mungkin terdengar
+
+00:13:08.120 --> 00:13:09.160
+seperti pekerjaan administratif
+
+00:13:09.160 --> 00:13:09.720
+tetapi mencapai.
+
+00:13:10.080 --> 00:13:10.960
+Apakah ada yang menangani ini?
+
+00:13:11.400 --> 00:13:12.320
+Apakah pekerjaan sudah dilakukan?
+
+00:13:12.660 --> 00:13:14.320
+Apakah mesin siap untuk kembali digunakan sedang norma?
+
+00:13:14.620 --> 00:13:15.380
+Apakah ada yang meniksa
+
+00:13:15.380 --> 00:13:16.920
+bahwa pekerjaan memenuhi standar yang diperlukan?
+
+00:13:17.360 --> 00:13:18.460
+Dan pertanyaan-pertanyaan itulah
+
+00:13:18.460 --> 00:13:19.920
+yang perlu dijawab oleh tim pemeliharaan
+
+00:13:19.920 --> 00:13:20.980
+selama giliran kerja yang sibuk.
+
+00:13:21.500 --> 00:13:22.640
+Perintah kerja yang telah selesai
+
+00:13:22.640 --> 00:13:23.940
+juga mencatat apa yang digunakan
+
+00:13:23.940 --> 00:13:25.380
+dalam perbaikan waktu pekerjaan,
+
+00:13:25.440 --> 00:13:26.880
+suku cadang, dan piaya lainnya,
+
+00:13:26.880 --> 00:13:28.340
+dan sistem menghubungkan piaya tersebut
+
+00:13:28.340 --> 00:13:29.320
+dengan aset yang terlibat.
+
+00:13:30.140 --> 00:13:31.560
+Seiring waktu, hal itu memberikan gambaran
+
+00:13:31.560 --> 00:13:32.500
+yang lebih jelas bagi perusahaan
+
+00:13:32.500 --> 00:13:33.340
+daripada sekadar tumpukan fakt.
+
+00:13:33.560 --> 00:13:34.680
+Manager bisa melihat bahwa
+
+00:13:34.680 --> 00:13:36.160
+satu motor perlu perbaikan berulang
+
+00:13:36.160 --> 00:13:38.000
+dan tim pemeliharaan bisa membandingkan
+
+00:13:38.000 --> 00:13:39.320
+biaya perbaikan berkelanjutan
+
+00:13:39.320 --> 00:13:40.660
+dengan biaya penggantian peralatan
+
+00:13:40.660 --> 00:13:42.440
+tanpa harus mencari di sistem terpisah
+
+00:13:42.440 --> 00:13:43.760
+dan menebak tagihan mana yang terkait
+
+00:13:43.760 --> 00:13:44.700
+dengan kerusakan tertentu.
+
+00:13:45.520 --> 00:13:46.540
+Bagian akhir seringkali menjadi
+
+00:13:46.540 --> 00:13:47.580
+yang paling berguna bagi teknisi.
+
+00:13:48.100 --> 00:13:49.420
+Saat pekerjaan selesai,
+
+00:13:49.620 --> 00:13:50.780
+teknisi bisa menambahkan catatan
+
+00:13:50.780 --> 00:13:51.600
+tentang kerusakan,
+
+00:13:51.820 --> 00:13:52.700
+pemeriksaan yang dilakukan,
+
+00:13:52.700 --> 00:13:53.620
+suku cadang yang diganti
+
+00:13:53.620 --> 00:13:54.740
+dan apapun yang patut diperhatikan.
+
+00:13:54.920 --> 00:13:55.920
+Mungkin bantalan rusak
+
+00:13:55.920 --> 00:13:56.960
+karena dudukannya kendur.
+
+00:13:57.460 --> 00:13:59.200
+Mungkin perbaikan menghilangkan kebisingan
+
+00:13:59.200 --> 00:14:00.540
+tetapi motor harus diperiksa lagi
+
+00:14:00.540 --> 00:14:01.160
+dalam dua minggu.
+
+00:14:01.820 --> 00:14:02.580
+Catatan itu tersimpan
+
+00:14:02.580 --> 00:14:03.580
+bersama pekerjaan yang selesai.
+
+00:14:03.660 --> 00:14:04.300
+Jadi berbulan-bulan,
+
+00:14:04.380 --> 00:14:05.460
+kemudian seseorang yang menghadapi
+
+00:14:05.460 --> 00:14:06.020
+masalah yang sama
+
+00:14:06.020 --> 00:14:06.820
+tidak perlu oleh dari nol.
+
+00:14:07.620 --> 00:14:08.320
+Mereka bisa melihat
+
+00:14:08.320 --> 00:14:09.300
+apa yang terjadi sebelumnya,
+
+00:14:09.560 --> 00:14:10.100
+apa yang berhasil,
+
+00:14:10.160 --> 00:14:10.840
+dan apa yang diperhatikan
+
+00:14:10.840 --> 00:14:11.720
+oleh teknisi sebelumnya.
+
+00:14:12.360 --> 00:14:13.240
+Kelangsungan itu bisa menghemat
+
+00:14:13.240 --> 00:14:14.140
+banyak waktu di masa depan.
+
+00:14:14.520 --> 00:14:15.480
+Perintah kerja menjelaskan
+
+00:14:15.480 --> 00:14:16.540
+satu tugas pemeliharaan
+
+00:14:16.540 --> 00:14:17.440
+dari awal hingga akhir
+
+00:14:17.440 --> 00:14:18.600
+tetapi peran luasnya muncul
+
+00:14:18.600 --> 00:14:19.580
+saat tugas itu terhubung
+
+00:14:19.580 --> 00:14:20.400
+dengan catatan stok,
+
+00:14:20.480 --> 00:14:21.200
+aktivitas pembelian,
+
+00:14:21.320 --> 00:14:22.380
+dan catatan biaya di sekitarnya.
+
+00:14:22.920 --> 00:14:23.760
+Dan itulah nilai nyata
+
+00:14:23.760 --> 00:14:24.660
+dari sebuah perintah kerja.
+
+00:14:25.100 --> 00:14:25.880
+Ini bukan sekedar dokumen.
+
+00:14:26.380 --> 00:14:27.320
+Ini adalah alat yang menjaga
+
+00:14:27.320 --> 00:14:28.280
+operasional pemeliharaan
+
+00:14:28.280 --> 00:14:28.920
+berjalan lancar.
+
+00:14:30.240 --> 00:14:31.160
+Terhubung ke rantai pasok,
+
+00:14:31.280 --> 00:14:31.540
+keuangan,
+
+00:14:31.640 --> 00:14:32.400
+dan pekerjaan lapangan.
+
+00:14:33.500 --> 00:14:34.180
+Anggaplah bisnis seperti
+
+00:14:34.180 --> 00:14:34.760
+sebuah gedung perang.
+
+00:14:35.140 --> 00:14:36.080
+Manajemen aset adalah jantung
+
+00:14:36.080 --> 00:14:36.780
+dari ruang pembelian.
+
+00:14:37.100 --> 00:14:38.200
+Fokusnya adalah menjaga
+
+00:14:38.200 --> 00:14:39.340
+peralatan tetap berfungsi
+
+00:14:39.340 --> 00:14:40.220
+namun tidak terputus
+
+00:14:40.220 --> 00:14:41.340
+dari bagian lain perusahaan
+
+00:14:41.340 --> 00:14:42.360
+karena gudang suku cadang,
+
+00:14:42.480 --> 00:14:43.080
+kantor pembelian,
+
+00:14:43.200 --> 00:14:43.700
+tim keuangan,
+
+00:14:43.940 --> 00:14:44.600
+dan pekerja servis
+
+00:14:44.600 --> 00:14:45.280
+semuanya membutuhkan
+
+00:14:45.280 --> 00:14:45.980
+informasi yang sama.
+
+00:14:46.820 --> 00:14:48.100
+Manajemen aset tidak terisolasi
+
+00:14:48.100 --> 00:14:48.900
+melainkan terhubung
+
+00:14:48.900 --> 00:14:49.820
+ke setiap departemen lain
+
+00:14:49.820 --> 00:14:50.760
+melalui perintah kerja.
+
+00:14:51.400 --> 00:14:52.060
+Koneksi tersebut
+
+00:14:52.060 --> 00:14:52.660
+mencegah orang
+
+00:14:52.660 --> 00:14:53.920
+untuk menyalin detail yang sama
+
+00:14:53.920 --> 00:14:54.860
+ke tempat yang terpisah.
+
+00:14:55.240 --> 00:14:56.020
+Itu berarti lebih sedikit
+
+00:14:56.020 --> 00:14:56.780
+kemungkinan kesalahan
+
+00:14:56.780 --> 00:14:57.400
+dan jauh lebih sedikit
+
+00:14:57.400 --> 00:14:57.980
+waktu yang terpuas.
+
+00:14:58.920 --> 00:15:00.060
+Di dalam Dynamics 365
+
+00:15:00.060 --> 00:15:01.080
+Supply Chain Management,
+
+00:15:01.220 --> 00:15:02.180
+pekerjaan pemeliharaan
+
+00:15:02.180 --> 00:15:02.920
+dapat terhubung dengan
+
+00:15:02.920 --> 00:15:03.480
+catatan stok
+
+00:15:03.480 --> 00:15:04.120
+untuk suku cadang
+
+00:15:04.120 --> 00:15:04.820
+dan perlengkapan.
+
+00:15:05.900 --> 00:15:06.440
+Jika perbaikan
+
+00:15:06.440 --> 00:15:07.340
+membutuhkan bantalan,
+
+00:15:07.600 --> 00:15:07.920
+filter,
+
+00:15:08.140 --> 00:15:08.940
+atau motor pengganti,
+
+00:15:09.040 --> 00:15:10.100
+tim dapat memeriksa
+
+00:15:10.100 --> 00:15:11.100
+apakah barang tersebut
+
+00:15:11.100 --> 00:15:11.680
+sudah tersedia
+
+00:15:11.680 --> 00:15:12.720
+sebelum mulai mencari vendor.
+
+00:15:13.540 --> 00:15:14.160
+Stok memberitahu
+
+00:15:14.160 --> 00:15:14.740
+anda apa yang tersedia.
+
+00:15:15.180 --> 00:15:16.140
+Saat suku cadang
+
+00:15:16.140 --> 00:15:17.040
+yang dibutuhkan tidak ada,
+
+00:15:17.300 --> 00:15:17.940
+Departemen Pembelian
+
+00:15:17.940 --> 00:15:18.440
+dapat bekerja
+
+00:15:18.440 --> 00:15:18.940
+dari kebutuhan
+
+00:15:18.940 --> 00:15:19.860
+pemeliharaan yang sama
+
+00:15:19.860 --> 00:15:20.700
+dan pesanan pembelian
+
+00:15:20.700 --> 00:15:21.500
+terhubung ke pekerjaan
+
+00:15:21.500 --> 00:15:22.280
+perbaikan memberikan
+
+00:15:22.280 --> 00:15:22.980
+gembaran yang lebih jelas
+
+00:15:22.980 --> 00:15:23.600
+kepada semua orang
+
+00:15:23.600 --> 00:15:24.280
+mengapa barang tersebut
+
+00:15:24.280 --> 00:15:24.920
+di pesanan gembaran
+
+00:15:24.920 --> 00:15:25.440
+yang bergislatih.
+
+00:15:25.780 --> 00:15:26.820
+Produksi juga sangat terkait
+
+00:15:26.820 --> 00:15:27.480
+dengan proses ini.
+
+00:15:27.480 --> 00:15:28.680
+Jika suatu mesin
+
+00:15:28.680 --> 00:15:29.520
+memerlukan waktu henti
+
+00:15:29.520 --> 00:15:29.980
+yang terencana,
+
+00:15:30.080 --> 00:15:30.700
+bagian operasional
+
+00:15:30.700 --> 00:15:31.400
+dapat melihat bahwa
+
+00:15:31.400 --> 00:15:32.160
+pekerjaan pemeliharaan
+
+00:15:32.160 --> 00:15:32.740
+mungkin mengaruhi
+
+00:15:32.740 --> 00:15:33.460
+lini atau prosesnya.
+
+00:15:33.680 --> 00:15:34.540
+Hal itu tidak menghilangkan
+
+00:15:34.540 --> 00:15:35.340
+kebutuhan bagi orang
+
+00:15:35.340 --> 00:15:36.100
+untuk berkomunikasi,
+
+00:15:36.220 --> 00:15:37.440
+tetapi memberikan catatan bersama
+
+00:15:37.440 --> 00:15:38.360
+untuk percakapan tersebut
+
+00:15:38.360 --> 00:15:39.440
+alihannya berdasarkan tebakan.
+
+00:15:39.840 --> 00:15:40.620
+Jadi saat pemeliharaan
+
+00:15:40.620 --> 00:15:41.040
+dan produksi
+
+00:15:41.040 --> 00:15:42.000
+menggunakan sistem yang sama,
+
+00:15:42.100 --> 00:15:42.600
+hambatan penerbuk.
+
+00:15:42.940 --> 00:15:43.540
+Keuangan membutuhkan
+
+00:15:43.540 --> 00:15:43.840
+sudut pada.
+
+00:15:44.320 --> 00:15:44.960
+Tim pemeliharaan
+
+00:15:44.960 --> 00:15:45.560
+memikirkan tentang
+
+00:15:45.560 --> 00:15:46.400
+kerusakan dan perbaikan,
+
+00:15:46.560 --> 00:15:47.400
+namun keuangan perlu mengetahui
+
+00:15:47.400 --> 00:15:48.140
+kemana pengeluaran tersebut
+
+00:15:48.140 --> 00:15:48.560
+dialokasikan.
+
+00:15:48.720 --> 00:15:49.560
+Manajemen aset dapat
+
+00:15:49.560 --> 00:15:50.440
+menautkan biaya aset
+
+00:15:50.440 --> 00:15:51.280
+ke lokasi fungsional
+
+00:15:51.280 --> 00:15:52.460
+tempat peralatan beroperasi
+
+00:15:52.460 --> 00:15:53.700
+sehingga pengeluaran perbaikan
+
+00:15:53.700 --> 00:15:54.620
+mengikuti mesin
+
+00:15:54.620 --> 00:15:55.460
+ke departemen pabrik
+
+00:15:55.460 --> 00:15:56.620
+atau area bisnis yang tepat.
+
+00:15:56.940 --> 00:15:57.620
+Bayangkan jenis mesin
+
+00:15:57.620 --> 00:15:58.760
+yang sama beroperasi berbeda.
+
+00:15:59.340 --> 00:16:00.240
+Keduanya perlu diperbaiki,
+
+00:16:00.360 --> 00:16:01.000
+tetapi satu lokasi
+
+00:16:01.000 --> 00:16:02.020
+menggunakannya jauh lebih intensif.
+
+00:16:02.780 --> 00:16:03.680
+Saat biaya terhubung
+
+00:16:03.680 --> 00:16:04.500
+ke lokasi yang benar,
+
+00:16:04.660 --> 00:16:05.420
+manajer dapat melihat
+
+00:16:05.420 --> 00:16:06.460
+lokasi mana yang menanggung
+
+00:16:06.460 --> 00:16:07.200
+pengeluaran tersebut
+
+00:16:07.200 --> 00:16:07.980
+alih-alih hanya melihat
+
+00:16:07.980 --> 00:16:09.240
+satu total biaya perbaikan besar
+
+00:16:09.240 --> 00:16:10.080
+tanpa konteks yang bertukur.
+
+00:16:10.180 --> 00:16:10.740
+Hal itu membuat
+
+00:16:10.740 --> 00:16:11.420
+pembahasan biaya
+
+00:16:11.420 --> 00:16:12.480
+menjadi tidak membingungkan
+
+00:16:12.480 --> 00:16:13.720
+dan membantu perusahaan menungkap.
+
+00:16:13.920 --> 00:16:14.600
+Jika satu lokasi
+
+00:16:14.600 --> 00:16:15.560
+terus mengeluarkan biaya besar
+
+00:16:15.560 --> 00:16:16.660
+untuk jenis peralatan yang sama,
+
+00:16:16.760 --> 00:16:17.320
+tim dapat mengajukan
+
+00:16:17.320 --> 00:16:18.020
+pertanyaan yang lebih baik.
+
+00:16:18.460 --> 00:16:19.180
+Apakah lokasi tersebut
+
+00:16:19.180 --> 00:16:19.940
+menjalankan kerja yang lebih lama?
+
+00:16:20.320 --> 00:16:21.420
+Apakah mereka meliharaan yang berbeda?
+
+00:16:21.880 --> 00:16:22.820
+Atau apakah peralatan itu
+
+00:16:22.820 --> 00:16:23.520
+sendiri perlu diganti?
+
+00:16:24.240 --> 00:16:25.260
+Pola-pola inilah yang mendorong
+
+00:16:25.260 --> 00:16:26.100
+keputusan pemeliharaan
+
+00:16:26.100 --> 00:16:27.040
+yang lebih baik dari waktu ke waktu.
+
+00:16:27.580 --> 00:16:28.820
+Manajemen aset juga dapat terhubung
+
+00:16:28.820 --> 00:16:30.620
+dengan Dynamics 365 Field Service.
+
+00:16:31.080 --> 00:16:32.000
+Manajemen aset biasanya
+
+00:16:32.000 --> 00:16:33.180
+melacak peralatan yang dimiliki
+
+00:16:33.180 --> 00:16:34.120
+dan digunakan perusahaan
+
+00:16:34.120 --> 00:16:34.980
+dalam operasinya sendiri,
+
+00:16:34.980 --> 00:16:36.060
+sementara Field Service
+
+00:16:36.060 --> 00:16:37.080
+berfokus pada pekerjaan
+
+00:16:37.080 --> 00:16:38.000
+yang dilakukan untuk pelanggan,
+
+00:16:38.180 --> 00:16:39.160
+seringkali di lokasi pelanggan.
+
+00:16:39.820 --> 00:16:40.860
+Ketika bidang-bidang tersebut
+
+00:16:40.860 --> 00:16:42.260
+berbagi informasi layanan terkait,
+
+00:16:42.380 --> 00:16:43.160
+bisnis dapat memiliki
+
+00:16:43.160 --> 00:16:44.000
+pandangan lebih jelas
+
+00:16:44.000 --> 00:16:44.720
+tentang peralatan,
+
+00:16:44.880 --> 00:16:45.600
+aktivitas layanan,
+
+00:16:45.740 --> 00:16:46.940
+dan orang yang melakukan pekerjaan.
+
+00:16:47.340 --> 00:16:48.140
+Satu perusahaan mungkin
+
+00:16:48.140 --> 00:16:49.500
+memelihara mesin di pabriknya sendiri
+
+00:16:49.500 --> 00:16:50.720
+sambil juga mengirim teknisi
+
+00:16:50.720 --> 00:16:51.780
+untuk memperbaiki peralatan
+
+00:16:51.780 --> 00:16:52.820
+yang dijual kepada pelanggan.
+
+00:16:53.320 --> 00:16:54.480
+Itu adalah pekerjaan yang berbeda,
+
+00:16:54.560 --> 00:16:55.420
+tetapi riwayat layanan,
+
+00:16:55.620 --> 00:16:56.300
+detail peralatan,
+
+00:16:56.400 --> 00:16:57.360
+dan kebiasaan perbaikan
+
+00:16:57.360 --> 00:16:58.880
+dapat terhubung sesuai kebutuhan bisnis
+
+00:16:58.880 --> 00:16:59.800
+alih-alih tersimpan
+
+00:16:59.800 --> 00:17:00.900
+dalam catatan yang tidak relevan.
+
+00:17:01.700 --> 00:17:02.500
+Sensor menambahkan
+
+00:17:02.500 --> 00:17:03.420
+sumber informasi lainnya.
+
+00:17:03.740 --> 00:17:04.540
+Azure IoT Central
+
+00:17:04.540 --> 00:17:05.720
+dapat menerima pembacaan
+
+00:17:05.720 --> 00:17:06.800
+dari peralatan yang terhubung
+
+00:17:06.800 --> 00:17:07.780
+seperti suhu, tekanan,
+
+00:17:07.860 --> 00:17:08.280
+atau getara.
+
+00:17:08.780 --> 00:17:09.800
+Saat pembacaan bergerak
+
+00:17:09.800 --> 00:17:11.360
+di luar batas yang dipilih perusahaan,
+
+00:17:11.440 --> 00:17:12.560
+hal itu dapat memicu
+
+00:17:12.560 --> 00:17:13.440
+respons pemeliharaan
+
+00:17:13.440 --> 00:17:14.460
+untuk ditinjau seseorang.
+
+00:17:15.080 --> 00:17:16.040
+Sensor memberikan sinyal,
+
+00:17:16.160 --> 00:17:17.480
+tetapi teknisi tetap memutuskan
+
+00:17:17.480 --> 00:17:18.260
+arti sinyal tersebut
+
+00:17:18.260 --> 00:17:19.360
+dan apakah peralatan
+
+00:17:19.360 --> 00:17:20.240
+memerlukan inspeksi,
+
+00:17:20.420 --> 00:17:20.800
+perbaikan,
+
+00:17:20.960 --> 00:17:21.960
+atau pemeriksaan lebih lanjut.
+
+00:17:22.840 --> 00:17:23.740
+Peringatan dapat mencapai
+
+00:17:23.740 --> 00:17:24.680
+proses pemeliharaan
+
+00:17:24.680 --> 00:17:25.820
+saat peralatan masih berjalan,
+
+00:17:26.020 --> 00:17:27.300
+bukan setelah kerusakan menghentikannya.
+
+00:17:27.840 --> 00:17:28.920
+Peringatan dini semacam ini
+
+00:17:28.920 --> 00:17:30.100
+dapat mencegah masalah kecil
+
+00:17:30.100 --> 00:17:31.040
+menjadi kerusakan besar.
+
+00:17:31.520 --> 00:17:32.300
+Beberapa pekerjaan juga
+
+00:17:32.300 --> 00:17:33.060
+memerlukan lebih dari
+
+00:17:33.060 --> 00:17:33.580
+sekadar doktor.
+
+00:17:34.460 --> 00:17:36.060
+Dynamics 365 Guides
+
+00:17:36.060 --> 00:17:37.280
+yang digunakan dengan HoloLens
+
+00:17:37.280 --> 00:17:38.460
+dapat memberikan panduan langkah
+
+00:17:38.460 --> 00:17:39.460
+demi langkah kepada teknisi
+
+00:17:39.460 --> 00:17:40.620
+saat mereka peralatan rumit.
+
+00:17:41.140 --> 00:17:42.420
+Pekerja dapat mengikuti instruksi
+
+00:17:42.420 --> 00:17:43.220
+di depan mata mereka
+
+00:17:43.220 --> 00:17:44.220
+yang membantu saat tugas
+
+00:17:44.220 --> 00:17:45.060
+memiliki banyak langkah,
+
+00:17:45.400 --> 00:17:46.300
+atau saat metode teknisi
+
+00:17:46.300 --> 00:17:47.460
+berpengalaman perlu dibagikan
+
+00:17:47.460 --> 00:17:48.220
+kepada staff baru.
+
+00:17:49.100 --> 00:17:50.160
+Itu tidak mengubah pemula
+
+00:17:50.160 --> 00:17:51.440
+menjadi ahli dalam semalam,
+
+00:17:51.700 --> 00:17:53.280
+tetapi memberikan panduan praktis
+
+00:17:53.280 --> 00:17:54.680
+kepada teknisi di tempat kerja,
+
+00:17:55.000 --> 00:17:56.360
+sementara catatan pemeliharaan
+
+00:17:56.360 --> 00:17:57.560
+melacak pekerjaan tersebut.
+
+00:17:58.380 --> 00:17:59.140
+Banyak orang mengharapkan
+
+00:17:59.140 --> 00:18:00.000
+suatu aplikasi bisnis
+
+00:18:00.000 --> 00:18:01.380
+menangani setiap pekerjaan sendirian,
+
+00:18:01.480 --> 00:18:02.540
+tetapi tidak begitu cerah kerjanya.
+
+00:18:03.040 --> 00:18:04.020
+Manajemen aset menangani
+
+00:18:04.020 --> 00:18:04.880
+sisi pemeliharaan,
+
+00:18:04.960 --> 00:18:06.240
+sementara bagian Dynamics 365
+
+00:18:06.240 --> 00:18:07.240
+yang terhubung menangani
+
+00:18:07.240 --> 00:18:08.020
+stok pembelian,
+
+00:18:08.380 --> 00:18:09.600
+keuangan, layanan pelanggan,
+
+00:18:09.920 --> 00:18:10.840
+dan pekerjaan lainnya.
+
+00:18:11.640 --> 00:18:12.880
+Manfaatnya berasal dari catatan
+
+00:18:12.880 --> 00:18:14.200
+yang berpindah antar area tersebut
+
+00:18:14.200 --> 00:18:15.280
+tanpa orang harus mengetik
+
+00:18:15.280 --> 00:18:16.120
+ulang detail yang sama
+
+00:18:16.120 --> 00:18:17.540
+atau kehilangan alasan di baliknya.
+
+00:18:18.180 --> 00:18:19.280
+Koneksi antar sistem inilah
+
+00:18:19.280 --> 00:18:20.520
+yang membuat platform ini hebat.
+
+00:18:21.080 --> 00:18:21.840
+Jadi mari kita satukan
+
+00:18:21.840 --> 00:18:22.920
+ruang-ruang terhubung tersebut
+
+00:18:22.920 --> 00:18:24.300
+melalui satu cerita pemeliharaan sederhana.
+
+00:18:24.660 --> 00:18:26.060
+Sekarang Anda memiliki gambaran jelas
+
+00:18:26.060 --> 00:18:27.220
+tentang bagaimana manajemen aset
+
+00:18:27.220 --> 00:18:28.800
+cocok dengan ekosistem Dynamics 365
+
+00:18:28.800 --> 00:18:29.080
+besar.
+
+00:18:30.800 --> 00:18:32.120
+Sehari dalam operasional,
+
+00:18:32.520 --> 00:18:33.240
+dari peringatan hingga
+
+00:18:33.240 --> 00:18:33.960
+perbaikan selesai.
+
+00:18:35.000 --> 00:18:36.300
+Bayangkan motor konfair gudang
+
+00:18:36.300 --> 00:18:37.240
+mengirimkan pemelacakan
+
+00:18:37.240 --> 00:18:38.000
+getaran yang tidak biasa.
+
+00:18:38.420 --> 00:18:38.980
+Itulah peringatan
+
+00:18:38.980 --> 00:18:39.860
+sebelum kegagalan terjadi.
+
+00:18:40.260 --> 00:18:41.020
+Berikut adalah prosesnya.
+
+00:18:41.360 --> 00:18:42.620
+Anda membuka catatan aset,
+
+00:18:42.760 --> 00:18:43.900
+melihat lokasi, riwayat,
+
+00:18:44.240 --> 00:18:45.960
+garansi, dan jadwal kerja motor tersebut.
+
+00:18:46.480 --> 00:18:47.220
+Kemudian Anda membuat
+
+00:18:47.220 --> 00:18:48.660
+perintah kerja menugaskan teknisi,
+
+00:18:48.840 --> 00:18:49.760
+mencantumkan langkah inspeksi,
+
+00:18:49.980 --> 00:18:50.980
+dan memeriksa stok bantalan.
+
+00:18:51.460 --> 00:18:52.620
+Jika bantalan tidak tersedia,
+
+00:18:52.760 --> 00:18:53.520
+sistem akan memesannya
+
+00:18:53.520 --> 00:18:54.520
+sambil melacak waktu dan biaya.
+
+00:18:55.060 --> 00:18:55.860
+Setelah perbaikan,
+
+00:18:56.180 --> 00:18:57.240
+teknisi mencatat hasilnya
+
+00:18:57.240 --> 00:18:58.040
+dan memberikan catat.
+
+00:18:58.440 --> 00:18:59.460
+Manager melihat biaya,
+
+00:18:59.660 --> 00:19:00.380
+kesalahan berulang,
+
+00:19:00.560 --> 00:19:01.040
+waktu henti,
+
+00:19:01.280 --> 00:19:02.120
+dan semua pemeliharaan
+
+00:19:02.120 --> 00:19:03.020
+terkait motor tersebut.
+
+00:19:03.500 --> 00:19:04.620
+Peringatan itu tidak memperbaiki motor.
+
+00:19:04.940 --> 00:19:05.940
+Peringatan itu memberi waktu
+
+00:19:05.940 --> 00:19:06.960
+bagi tim untuk merencanakan
+
+00:19:06.960 --> 00:19:08.100
+alih-alih panik saat keadaan daro.
+
+00:19:08.360 --> 00:19:09.480
+Jadi untuk siapa ini cocok
+
+00:19:09.480 --> 00:19:10.460
+dan apa yang tidak bisa digantikan?
+
+00:19:11.060 --> 00:19:11.760
+Jadi siapa yang butuhkan
+
+00:19:11.760 --> 00:19:12.320
+manajemen aset?
+
+00:19:12.820 --> 00:19:14.060
+Perusahaan manapun yang bergantung
+
+00:19:14.060 --> 00:19:15.140
+pada mesin, kendaraan,
+
+00:19:15.300 --> 00:19:16.080
+peralatan produksi,
+
+00:19:16.260 --> 00:19:17.040
+atau perlengkapan gedung.
+
+00:19:17.620 --> 00:19:18.640
+Itu mencakup manufaktur,
+
+00:19:18.940 --> 00:19:20.060
+gudang, tim transportasi,
+
+00:19:20.280 --> 00:19:21.300
+utilitas, dan operasi
+
+00:19:21.300 --> 00:19:22.320
+yang padat layanan.
+
+00:19:23.040 --> 00:19:23.760
+Namun perlu diingat,
+
+00:19:23.840 --> 00:19:24.780
+ini tidak menggantikan teknisi,
+
+00:19:24.880 --> 00:19:25.560
+aturan keselamatan,
+
+00:19:25.660 --> 00:19:26.240
+atau penilaian musik.
+
+00:19:26.660 --> 00:19:27.360
+Ini memberi mereka
+
+00:19:27.360 --> 00:19:28.240
+satu catatan bersama
+
+00:19:28.240 --> 00:19:28.960
+seperti rekam medis
+
+00:19:28.960 --> 00:19:29.740
+untuk peralatan Anda
+
+00:19:29.740 --> 00:19:30.860
+dan cara terencana
+
+00:19:30.860 --> 00:19:31.660
+untuk menjaga semuanya
+
+00:19:31.660 --> 00:19:32.340
+tetap berjalan.
+
+00:19:34.220 --> 00:19:34.740
+Kesimpulan,
+
+00:19:35.220 --> 00:19:36.120
+simpan riwayat peralatan
+
+00:19:36.120 --> 00:19:36.800
+di satu tempat.
+
+00:19:37.760 --> 00:19:38.640
+Dengan manajemen aset,
+
+00:19:38.840 --> 00:19:39.580
+Anda menyimpan aset,
+
+00:19:39.580 --> 00:19:40.700
+pekerjaan pemeliharaan,
+
+00:19:40.780 --> 00:19:41.220
+suku cadang,
+
+00:19:41.640 --> 00:19:42.620
+biaya, dan riwayat service
+
+00:19:42.620 --> 00:19:43.160
+di satu tempat.
+
+00:19:43.680 --> 00:19:45.220
+Berlangganan AKM 365.2 FM
+
+00:19:45.220 --> 00:19:45.900
+untuk mendapatkan
+
+00:19:45.900 --> 00:19:46.920
+lebih banyak pengetahuan praktis
+
+00:19:46.920 --> 00:19:47.820
+dan lanjutkan ke blok
+
+00:19:47.820 --> 00:19:48.300
+bangunan berikut.

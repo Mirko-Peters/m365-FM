@@ -1,0 +1,1810 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:04.360
+Topik hari ini adalah sesuatu yang hampir semua orang pernah dengar, tapi hanya sedikit yang bisa menjelaskannya.
+
+00:00:05.040 --> 00:00:05.360
+GitOps.
+
+00:00:05.980 --> 00:00:09.440
+Anda mungkin pernah melihatnya disebut di long kerja seminar atau dokumentasi Azure.
+
+00:00:10.020 --> 00:00:10.760
+Tapi apa sebenarnya itu?
+
+00:00:11.140 --> 00:00:14.440
+Apakah itu hanya istilah trend DevOps lainnya atau sesuatu yang sangat berbeda?
+
+00:00:14.900 --> 00:00:15.580
+Ini versi singkatnya.
+
+00:00:16.100 --> 00:00:20.900
+GitOps adalah model operasional di mana Git menjadi satu-satunya sumber kebenaran bagi seluruh infrastruktur Anda.
+
+00:00:21.180 --> 00:00:23.620
+Bukan hanya kode aplikasi, tetapi semua yang menjalankannya.
+
+00:00:24.320 --> 00:00:29.480
+Di akhir episode ini, Anda akan memahami apa itu GitOps, mengapa ini menjadi standar untuk mengelola kubernetes di Azure.
+
+00:00:30.000 --> 00:00:32.220
+Dan bagaimana ini membuat rollback semudah satu perintah.
+
+00:00:34.200 --> 00:00:36.380
+Cara lama penerapan manual dan penyebangan konfigurasi.
+
+00:00:36.920 --> 00:00:38.060
+Mari kita mulai dengan masalah GitOps.
+
+00:00:38.540 --> 00:00:40.540
+Bayangkan Anda sedang mengelola kubernetes di Azure.
+
+00:00:41.120 --> 00:00:47.180
+Anda memiliki pengembang yang mengirim kode alur CI yang membangun gambar kontainer dan seseorang menjalankan kubek to apply untuk menerapkan gambar tersebut.
+
+00:00:47.540 --> 00:00:52.380
+Mungkin Anda, rekan satu tim, atau Anda mengklik tombol di Azure DevOps dan bagaimanapun caranya penerapan terjadi.
+
+00:00:52.900 --> 00:00:54.120
+Itu berhasil dengan baik sampai tidak baik.
+
+00:00:54.560 --> 00:00:55.320
+Nilai yang terjadi selanjut.
+
+00:00:55.320 --> 00:01:02.640
+Seseorang di tim Anda perlu memperbaiki bug cepat, jadi mereka SSH ke sebuah node menggunakan portal Azure atau menjalankan kubek to edit langsung pada deployment.
+
+00:01:03.300 --> 00:01:08.180
+Mereka membuat perubahan kecil seperti penyesuaian config map atau variable lingkungan yang berbeda, dan itu tampak tidak berbahaya.
+
+00:01:08.600 --> 00:01:09.380
+Setidaknya menurut mereka.
+
+00:01:09.380 --> 00:01:15.740
+Masalahnya adalah perubahan itu tidak pernah kembali ke Git, jadi kluster Anda sekarang memiliki konfigurasi yang tidak cocok dengan yang ada di repository Anda.
+
+00:01:16.300 --> 00:01:17.620
+Itu disebut penyimpangan konfigurasi drift.
+
+00:01:18.120 --> 00:01:25.440
+Penyimpangan adalah pembunuh diam-diam karena semuanya berjalan baik sampai penerapan berikutnya saat seseorang menjalankan kubek to apply dengan manifest asli dan menimpa perbaikan cepat tersebut.
+
+00:01:25.640 --> 00:01:28.940
+Atau lebih buruk lagi, penyimpangan menyebabkan perilaku tak terduga yang tidak bisa dijelaskan siapa.
+
+00:01:29.100 --> 00:01:34.680
+Anda mulai mendebak, memeriksa log, melihat YAML di Git, dan tidak ada yang terlihat salah, tetapi kluster melakukan sesuatu yang berbeda.
+
+00:01:34.760 --> 00:01:37.500
+Anda tidak tahu apa yang berubah, kapan berubah, atau siapa yang mengubahnya.
+
+00:01:39.380 --> 00:01:44.020
+Dan satu tim melakukan SSH ke Node, mengubah konfigurasi untuk menguji sesuatu, lupa menguji sesuatu, lupa menguji sesuatu, lupa menguji.
+
+00:01:44.860 --> 00:01:47.680
+Keesokan harinya, penerapan rusak, dan tidak ada yang bisa menjelaskan alasan.
+
+00:01:48.360 --> 00:01:52.960
+Repository Git terlihat bersih, tetapi kluster berantakan, dan Anda terjebak menghabiskan waktu berjam-jam untuk mencari.
+
+00:01:53.160 --> 00:01:54.280
+Jadi inilah pertanyaannya.
+
+00:01:54.860 --> 00:01:58.140
+Bagaimana jika ada cara untuk memaksa kluster agar selalu cocok dengan apa yang ada di Git?
+
+00:01:58.440 --> 00:02:02.620
+Bagaimana jika Anda bisa menjamin bahwa apapun yang ada di repository Anda adalah persis apa yang berjalanan di produksi?
+
+00:02:02.880 --> 00:02:03.960
+Itulah ide inti dibuat di GitOps.
+
+00:02:04.860 --> 00:02:05.780
+Apa sebenarnya GitOps itu?
+
+00:02:05.780 --> 00:02:07.400
+Jadi apa sebenarnya GitOps itu?
+
+00:02:07.740 --> 00:02:09.240
+Definisi paling sederhana yang bisa saya berikan.
+
+00:02:10.240 --> 00:02:11.660
+Git menjadi sumber kebenaran tunggal Anda.
+
+00:02:11.840 --> 00:02:14.400
+Bukan hanya untuk kode, tapi untuk semua kebutuhan infrastruktur Anda.
+
+00:02:15.800 --> 00:02:19.460
+Tiap konfigurasi, setiap manifest deployment, setiap variable lingkungan, semuanya ada di Git.
+
+00:02:20.800 --> 00:02:22.980
+Tidak ada yang berjalan di kluster Anda kecuali jika definisikan ini.
+
+00:02:23.260 --> 00:02:24.620
+GitOps bukanlah alat yang bisa Anda beli.
+
+00:02:25.060 --> 00:02:27.220
+Ini adalah model operasional seperti DevOps atau DevSec.
+
+00:02:27.940 --> 00:02:30.160
+Sekumpulan prinsip yang memandu cara Anda mengelola infrastruktur.
+
+00:02:30.160 --> 00:02:35.040
+Standar Open GitOps menetapkan empat prinsip utama dan saya ingin membahasnya satu persatu.
+
+00:02:35.540 --> 00:02:36.920
+Pertama, sistem Anda harus diklarati.
+
+00:02:37.360 --> 00:02:40.160
+Anda mendeskripsikan kondisi akhir, bukan langkah-langkah untuk mencapainya.
+
+00:02:40.680 --> 00:02:45.620
+Jadi daripada menulis skrip yang mengatakan buat deployment, skala ke 5 replika, buka port 8080,
+
+00:02:46.420 --> 00:02:50.980
+Anda menulis file YAML yang mengatakan saya ingin 5 replika di port 8080 dan sistem yang menentukan langkah-langkahnya.
+
+00:02:51.360 --> 00:02:52.140
+Ini adalah yang disibu diklarati.
+
+00:02:52.380 --> 00:02:53.440
+Kedua, harus memiliki versi.
+
+00:02:54.060 --> 00:02:56.240
+Setiap perubahan yang Anda buat pada status cluster adalah komitif.
+
+00:02:56.240 --> 00:02:59.100
+Jadi Anda mendapatkan reward lengkap siapa yang mengubah apa kapan dan mengapa.
+
+00:02:59.460 --> 00:03:00.760
+Tidak perlu lagi menebak atau menggali log.
+
+00:03:01.420 --> 00:03:02.900
+Ketiga, perubahan ditarik secara otomatis.
+
+00:03:03.380 --> 00:03:05.040
+Cluster menjangkau Git untuk melihat apa yang mengang.
+
+00:03:05.400 --> 00:03:07.020
+Nanti saya akan jelaskan mengapa hal ini sangat penting.
+
+00:03:07.260 --> 00:03:08.980
+Keempat, sistem direkonsiliasi secara berkelanjutan.
+
+00:03:09.620 --> 00:03:14.560
+Ada agen perangkat lunak yang berjalan di dalam cluster Anda yang terus-menerus membandingkan isi Git dengan apa yang sebenarnya berjalan.
+
+00:03:14.780 --> 00:03:16.320
+Jika tidak cocok, dia akan memperbaiki perbedaan.
+
+00:03:16.740 --> 00:03:17.820
+Itulah yang disebut dulu prekonsiliasi.
+
+00:03:18.240 --> 00:03:18.880
+Bayangkan seperti ini.
+
+00:03:19.320 --> 00:03:20.500
+Git adalah cotak biru arsitek kan?
+
+00:03:20.500 --> 00:03:23.160
+Ini mendeskripsikan dengan tepat seperti apa penggunaan itu seharusnya.
+
+00:03:23.740 --> 00:03:24.920
+Bernatet adalah lokasi konstruksinya.
+
+00:03:25.380 --> 00:03:26.880
+Dan operator Gitops adalah mandornya.
+
+00:03:27.580 --> 00:03:30.640
+Ia berjalan berkeliling dengan cotak biru memeriksa setiap dinding, setiap balok, setiap jenit.
+
+00:03:30.980 --> 00:03:32.600
+Jika ada sesuatu yang tidak cocok, ia memperbaik.
+
+00:03:33.020 --> 00:03:35.200
+Misalnya ada anggota kru yang membuat perubahan tanpa izin.
+
+00:03:35.300 --> 00:03:36.800
+Ia akan menemukannya dan membalikannya.
+
+00:03:37.440 --> 00:03:39.000
+Cetak biru selalu menjadi sumber kebenaran.
+
+00:03:39.660 --> 00:03:40.740
+Tapi di sini perubahannya terterja.
+
+00:03:41.200 --> 00:03:42.440
+Bagaimana deployment sebenarnya bekerja?
+
+00:03:42.880 --> 00:03:45.180
+Dalam CI Persedia tradisional, Anda mendorong perubahan ke cluster.
+
+00:03:45.540 --> 00:03:46.960
+Dalam Gitops, cluster menariknya.
+
+00:03:46.960 --> 00:03:49.120
+Dan perbedaan itu jauh lebih penting daripada kedengarannya.
+
+00:03:50.220 --> 00:03:52.040
+Deployment berbasis tarik dibandingkan berbasis.
+
+00:03:52.300 --> 00:03:54.220
+Mari bicara tentang bagaimana deployment bekerja.
+
+00:03:54.380 --> 00:03:55.920
+Karena di sinilah Gitops mengubah segalanya.
+
+00:03:56.580 --> 00:03:59.500
+Dalam modal tradisional, berbasis dorong pipeline CI Anda melakukan segalanya.
+
+00:03:59.980 --> 00:04:01.980
+Azure Pipelines, Jenkins, GitHub Actions.
+
+00:04:03.260 --> 00:04:05.480
+Ia membangun kontainer, menjalankan pengujian,
+
+00:04:05.620 --> 00:04:08.080
+lalu mendorong gambar tersebut langsung ke cluster Kubernetes Anda.
+
+00:04:08.700 --> 00:04:11.580
+Pipeline tersebut menyimpan kredensial yang memberikan akses langsung ke API cluster.
+
+00:04:12.200 --> 00:04:13.480
+Pipeline itu berkata ini penerapan baru.
+
+00:04:14.120 --> 00:04:14.640
+Terapkan sekarang.
+
+00:04:14.640 --> 00:04:17.020
+Dan itu berhasil tetapi menciptakan masalah keaman.
+
+00:04:17.520 --> 00:04:19.560
+Masalahnya, jika pipeline itu disusupi,
+
+00:04:19.880 --> 00:04:21.400
+seseorang menyuntikkan langkah berbahaya.
+
+00:04:21.780 --> 00:04:23.780
+Token bocor atau dependensi dibacak,
+
+00:04:24.380 --> 00:04:26.600
+pipeline itu punya akses langsung ke cluster produksi Anda.
+
+00:04:27.500 --> 00:04:29.600
+Ia bisa menghancurkan penerapan, menghapus namespace,
+
+00:04:29.700 --> 00:04:33.260
+mengubah konfigurasi, semuanya dengan izin yang Anda berikan untuk tugasnya.
+
+00:04:33.660 --> 00:04:34.580
+Sekarang lihat model Gitops.
+
+00:04:35.020 --> 00:04:35.800
+Alurnya dikencara yang sama.
+
+00:04:36.120 --> 00:04:39.280
+CI membangun kontainer dan mendorongnya ke registry seperti Azure Container Registry.
+
+00:04:39.620 --> 00:04:40.260
+Disitulah CI berhenti.
+
+00:04:40.620 --> 00:04:41.480
+Ia tidak menyentuh cluster.
+
+00:04:41.480 --> 00:04:45.020
+Sebagai gantinya, CI memperbarui repository Git dengan tag gambar baru.
+
+00:04:45.600 --> 00:04:47.180
+Ia mengubah satu baris dalam file YAML,
+
+00:04:47.320 --> 00:04:49.740
+yaitu versi gambar dan melakukan commit pada perubahan tersebut.
+
+00:04:50.140 --> 00:04:50.400
+Hanya itu.
+
+00:04:50.820 --> 00:04:51.800
+Tidak ada akses cluster langsung.
+
+00:04:52.100 --> 00:04:55.000
+Kemudian operator Gitops yang berjalan di dalam cluster Anda melihat perubahan itu.
+
+00:04:55.540 --> 00:04:57.320
+Ia menarik status terbaru dari Git dan menerapkannya.
+
+00:04:57.860 --> 00:04:59.880
+Cluster yang menjangkau Git, bukan sebaliknya.
+
+00:05:00.380 --> 00:05:01.360
+Ini adalah model berbasis PUL.
+
+00:05:01.860 --> 00:05:04.200
+Cluster Anda tidak pernah mengekspos AP-nya ke sistem eksternal.
+
+00:05:04.560 --> 00:05:05.460
+Ia hanya menarik dari Git.
+
+00:05:05.460 --> 00:05:09.940
+Jika seseorang menyusupi pipeline CI Anda, hal terburuk yang bisa mereka lakukan hanyalah mengubah manifest di repositor.
+
+00:05:10.080 --> 00:05:11.460
+Mereka tidak bisa menyentuh cluster secara-nya.
+
+00:05:11.720 --> 00:05:13.380
+Operator yang memutuskan apa yang akan diterapkan.
+
+00:05:13.680 --> 00:05:14.540
+Ada keuntungan lain juga.
+
+00:05:14.880 --> 00:05:16.360
+Anda memisahkan proses membangun pada proses menerap.
+
+00:05:16.680 --> 00:05:19.280
+C yang melakukan apa yang dikuasainya, yaitu membangun, menguji, dan mendai.
+
+00:05:19.520 --> 00:05:20.840
+Operator Gitops menangani penerapan.
+
+00:05:21.400 --> 00:05:22.580
+Setiap situ berfokus pada satu tugas.
+
+00:05:23.040 --> 00:05:24.780
+Jika build gagal, tidak ada yang berubah di cluster.
+
+00:05:24.780 --> 00:05:27.560
+Jika penerapan gagal, operator akan mencoba lagi atau memberitak.
+
+00:05:27.880 --> 00:05:28.480
+Misalnya yang rapi.
+
+00:05:29.020 --> 00:05:31.240
+Jadi, alih-alih pipeline mendorong perubahan ke cluster Anda.
+
+00:05:31.320 --> 00:05:33.160
+Cluster Anda menarik status yang diinginkan dari Git.
+
+00:05:33.580 --> 00:05:36.160
+Pembalikan sederhana itu membuat infrastruktur Anda lebih aman,
+
+00:05:36.540 --> 00:05:38.900
+lebih mudah diaudit, dan lebih sulit rusak secara tidak sengaja.
+
+00:05:40.720 --> 00:05:40.780
+Loop rekonsiliasi.
+
+00:05:42.060 --> 00:05:43.680
+Jadi, bagaimana operator tahu kapan harus berbaru?
+
+00:05:44.120 --> 00:05:44.780
+Ia tidak menunggu notifikasi.
+
+00:05:45.840 --> 00:05:47.120
+Ia menjalankan loop terus-menerus,
+
+00:05:47.280 --> 00:05:48.900
+mengamati Git, membandingkannya dengan cluster,
+
+00:05:49.040 --> 00:05:50.200
+menerapkan perubahan jika perlu,
+
+00:05:50.380 --> 00:05:51.700
+lalu melakukannya lagi dan lagi selamanya.
+
+00:05:52.240 --> 00:05:53.540
+Ini disebut sebagai loop rekonsiliasi.
+
+00:05:53.540 --> 00:05:56.260
+Ia berjalan terus-menerus setiap beberapa detik atau menit
+
+00:05:56.260 --> 00:05:57.580
+tergantung pada konfigurasi Anda.
+
+00:05:57.960 --> 00:05:59.300
+Operator tidak pernah berhenti mengawasi.
+
+00:05:59.720 --> 00:06:00.860
+Bayangkan seperti termostat di rumah.
+
+00:06:01.340 --> 00:06:04.060
+Anda mengatur suhu yang diinginkan, misalnya 21 derajat.
+
+00:06:04.420 --> 00:06:06.160
+Termostat terus memeriksa suhu sebenarnya.
+
+00:06:06.760 --> 00:06:08.920
+Jika turun di bawah 21, pemanas akan menyala.
+
+00:06:09.300 --> 00:06:11.040
+Jika naik di atasnya, pemanas akan mati.
+
+00:06:11.120 --> 00:06:12.800
+Ia terus menyesuaikan agar sesuai dengan pengaturan Anda.
+
+00:06:13.200 --> 00:06:14.760
+Operator Git harus bekerja dengan cara yang sama.
+
+00:06:15.040 --> 00:06:16.220
+Git menyimpan status yang diinginkan,
+
+00:06:16.320 --> 00:06:17.540
+cluster memiliki status aktual,
+
+00:06:17.660 --> 00:06:19.340
+dan operator membandingkannya secara terus-menerus
+
+00:06:19.340 --> 00:06:20.320
+untuk melakukan penyesuaian.
+
+00:06:20.320 --> 00:06:23.140
+Jadi, apa yang terjadi ketika seseorang mengedit deployment di cluster secara manual?
+
+00:06:23.540 --> 00:06:26.100
+Mungkin mereka menjalankan kubek tol edit untuk mengubah jumlah replika.
+
+00:06:26.420 --> 00:06:29.240
+Operator akan mendeteksi perbedaan tersebut pada siklus rekonsiliasi berikutnya.
+
+00:06:29.800 --> 00:06:32.040
+Cluster sekarang memiliki 3 replika, tetapi Git menyatakan 5.
+
+00:06:32.560 --> 00:06:34.380
+Jadi, operator menerapkan status yang ditentukan Git,
+
+00:06:34.480 --> 00:06:35.840
+dan cluster kembali ke 5 replika.
+
+00:06:36.380 --> 00:06:37.440
+Perubahan yang di dasar tersebut hilang.
+
+00:06:37.760 --> 00:06:39.180
+Apa yang terjadi ketika Anda mengirim perubahan?
+
+00:06:39.600 --> 00:06:40.160
+Prosesnya sama.
+
+00:06:40.480 --> 00:06:42.360
+Operator mendeteksi perbedaan tersebut dan menerapkan.
+
+00:06:42.360 --> 00:06:45.300
+Seorang pengembang menggabungkan PR yang memperbarui versi image
+
+00:06:45.300 --> 00:06:47.060
+dari V1-T3 ke V1-T3.
+
+00:06:47.380 --> 00:06:48.700
+Operator melihat manifest baru,
+
+00:06:49.180 --> 00:06:49.920
+menarik image baru,
+
+00:06:50.300 --> 00:06:51.600
+dan menjalankan pot baru.
+
+00:06:52.220 --> 00:06:54.140
+Dalam hitungan detik, cluster kembali cocok dengan Git.
+
+00:06:54.400 --> 00:06:55.720
+Nah, ada perbedaan penting di sini.
+
+00:06:56.500 --> 00:06:58.340
+Jika sebuah pot mengalami crash, operator tidak berduk.
+
+00:06:58.660 --> 00:07:01.100
+Itu adalah tugas Kubernetes yang ditangani oleh Repi Chesset Controller.
+
+00:07:01.460 --> 00:07:03.440
+Operator GitOps hanya peduli pada konfigurasi.
+
+00:07:04.140 --> 00:07:05.100
+Jika manifest deployment,
+
+00:07:05.720 --> 00:07:07.640
+menyatakan 5 replika dengan image V1-T3,
+
+00:07:07.640 --> 00:07:10.100
+dan cluster memiliki 5 replika yang menjalankan V1-T3,
+
+00:07:10.180 --> 00:07:11.240
+operator sudah puas.
+
+00:07:11.240 --> 00:07:13.860
+Operator tidak peduli apakah pot tertentu telah dimulai.
+
+00:07:14.220 --> 00:07:15.680
+Itu adalah perilaku normal Kubernetes.
+
+00:07:16.220 --> 00:07:17.860
+Namun, jika seseorang mengubah manifest di Git
+
+00:07:17.860 --> 00:07:19.160
+atau mengubah cluster secara langsung
+
+00:07:19.160 --> 00:07:20.820
+dan menyebabkan penyimpangan operator akan berduk.
+
+00:07:21.160 --> 00:07:22.720
+Dia berlembut GitOps mampu berperibagi dia self.
+
+00:07:22.900 --> 00:07:24.440
+GitOps tidak hanya menerapkan perubahan,
+
+00:07:24.560 --> 00:07:26.340
+tetapi secara aktif mencegah infrastruktur Anda
+
+00:07:26.340 --> 00:07:27.700
+menyimpang dari apa yang telah ditetapkan.
+
+00:07:27.920 --> 00:07:30.140
+Jadi, Anda memerlukan operator GitOps yang berjalan di cluster Anda.
+
+00:07:30.480 --> 00:07:32.000
+Disitulah Argo CD dan Flux berperan.
+
+00:07:32.840 --> 00:07:33.840
+Argo CD versus Flux
+
+00:07:33.840 --> 00:07:36.240
+Jadi, Anda memerlukan operator GitOps
+
+00:07:36.240 --> 00:07:38.880
+dan Anda punya dua pilihan utama yang sama-sama hebat.
+
+00:07:38.880 --> 00:07:41.440
+Argo CD dan Flux adalah proyek lulusan CNCF
+
+00:07:41.440 --> 00:07:43.640
+yang berarti keduanya telah melewati standar tertinggi
+
+00:07:43.640 --> 00:07:45.620
+untuk stabilitas komunitas dan kesiapan produksi.
+
+00:07:46.860 --> 00:07:48.040
+Namun, keduanya menangani pekerja yang sama
+
+00:07:48.040 --> 00:07:48.840
+dari sudut pandang yang berbit.
+
+00:07:49.540 --> 00:07:51.020
+Argo CD awalnya dibangun oleh Intuit
+
+00:07:51.020 --> 00:07:52.280
+dan dilengkapi dengan UAweb.
+
+00:07:52.680 --> 00:07:53.660
+Saat menginstall Argo CD,
+
+00:07:53.860 --> 00:07:55.200
+Anda mendapatkan dashboard untuk melihat
+
+00:07:55.200 --> 00:07:57.600
+setiap aplikasi status sinkronisasi kesehatan
+
+00:07:57.600 --> 00:07:59.040
+dan riwayat deployment.
+
+00:07:59.600 --> 00:08:00.380
+Anda bisa menelusuri,
+
+00:08:00.540 --> 00:08:02.160
+melihat perbedaan antara Git dan cluster,
+
+00:08:02.340 --> 00:08:03.420
+memicu proses secara manual,
+
+00:08:03.660 --> 00:08:04.560
+dan menyetujui perubahan.
+
+00:08:04.760 --> 00:08:06.260
+Argo CD dirancang untuk tim
+
+00:08:06.260 --> 00:08:08.300
+yang menginginkan dashboard visual dan titik kontrol manual.
+
+00:08:08.880 --> 00:08:09.880
+Flux berasal dari Waveworks
+
+00:08:09.880 --> 00:08:11.100
+dan sifatnya lebih modular.
+
+00:08:11.580 --> 00:08:12.660
+Seri Vueworks tidak memiliki UI.
+
+00:08:13.160 --> 00:08:14.480
+Anda bekerja melalui baris perintah
+
+00:08:14.480 --> 00:08:15.440
+dan mendefinisikan semuanya
+
+00:08:15.440 --> 00:08:16.560
+sebagai custom resource Kubernetes.
+
+00:08:17.100 --> 00:08:18.520
+Anda membuat objek repository Git
+
+00:08:18.520 --> 00:08:19.240
+yang memberi instruksi.
+
+00:08:19.360 --> 00:08:19.820
+Pantau repo ini.
+
+00:08:20.560 --> 00:08:21.980
+Dan objek kustomisasi yang menyatakan,
+
+00:08:22.260 --> 00:08:23.000
+terapkan jalur ini.
+
+00:08:23.560 --> 00:08:24.900
+Blog mengambilnya dan melakukan rekonsilasi.
+
+00:08:25.400 --> 00:08:27.400
+Ini memaksa Anda menggunakan alur kerja asli Git
+
+00:08:27.400 --> 00:08:28.920
+karena tidak ada dashboard yang bisa diandalkan.
+
+00:08:29.620 --> 00:08:30.900
+Sekarang yang penting bagi pengguna Azure.
+
+00:08:31.040 --> 00:08:32.840
+Flux adalah opsi GitOps default
+
+00:08:32.840 --> 00:08:34.080
+di Azure Kubernetes Service.
+
+00:08:34.080 --> 00:08:36.160
+Microsoft membangun integrasi aslinya
+
+00:08:36.160 --> 00:08:37.060
+menggunakan Flux V2.
+
+00:08:37.580 --> 00:08:38.800
+Saat Anda mengaktifkan GitOps
+
+00:08:38.800 --> 00:08:40.580
+pada kluster AKS melalui portal Azure,
+
+00:08:40.700 --> 00:08:41.960
+Anda menggunakan Flux di balik layar.
+
+00:08:42.520 --> 00:08:43.680
+Azure Art juga menggunakan Flux
+
+00:08:43.680 --> 00:08:44.720
+untuk manajemen multi-kluster.
+
+00:08:45.100 --> 00:08:46.260
+Jadi jika Anda seorang inginir,
+
+00:08:46.320 --> 00:08:47.700
+Azure Flux adalah titik awal yang alam.
+
+00:08:48.020 --> 00:08:49.440
+Namun Argo CD memiliki keunggulannya sendiri.
+
+00:08:49.900 --> 00:08:50.780
+Argo CD lebih populer
+
+00:08:50.780 --> 00:08:51.880
+untuk skenario platform engineering
+
+00:08:51.880 --> 00:08:53.340
+di mana Anda menginginkan kontrol plan pusat
+
+00:08:53.340 --> 00:08:54.300
+untuk mengelola banyak kluster.
+
+00:08:54.840 --> 00:08:55.720
+Antar muka pengguna UI
+
+00:08:55.720 --> 00:08:56.820
+membuatnya lebih mudah bagi tim
+
+00:08:56.820 --> 00:08:57.760
+yang tidak terbiasa dengan BDS.
+
+00:08:58.280 --> 00:08:59.640
+Dan Argo CD terintegrasi erat
+
+00:08:59.640 --> 00:09:00.320
+dengan Argo Rollouts
+
+00:09:00.320 --> 00:09:01.260
+untuk pengiriman progresif
+
+00:09:01.260 --> 00:09:02.200
+seperti penerapan generi,
+
+00:09:02.260 --> 00:09:03.680
+penerapan biru, perhijau, dan sejenisnya.
+
+00:09:04.220 --> 00:09:05.860
+Perbedaan arsitektur utamanya adalah ini.
+
+00:09:05.980 --> 00:09:07.720
+Argo CD berjalan sebagai aplikasi mandiri
+
+00:09:07.720 --> 00:09:08.840
+dengan server API sendiri.
+
+00:09:09.760 --> 00:09:10.980
+Flux berjalan sebagai sekumpulan
+
+00:09:10.980 --> 00:09:11.760
+pengontrol Kubernetes
+
+00:09:11.760 --> 00:09:13.480
+yang tertanam lebih dalam kluster itu sendiri.
+
+00:09:14.120 --> 00:09:15.320
+Flux terasa seperti bagian
+
+00:09:15.320 --> 00:09:16.680
+dari kontrol plan Kubernetes Anda.
+
+00:09:16.900 --> 00:09:17.940
+Sementara Argo CD terasa
+
+00:09:17.940 --> 00:09:18.960
+seperti platform terpisah
+
+00:09:18.960 --> 00:09:19.820
+yang berada di atasnya.
+
+00:09:20.240 --> 00:09:21.780
+Flux juga sangat bergantung pada Customize
+
+00:09:21.780 --> 00:09:22.980
+yang merupakan alat pembuatan
+
+00:09:22.980 --> 00:09:23.800
+template asli Kubernetes.
+
+00:09:24.320 --> 00:09:25.820
+Argo CD dapat menggunakan Customize
+
+00:09:25.820 --> 00:09:26.680
+Helm App biasa.
+
+00:09:27.680 --> 00:09:28.580
+Keduanya mendukung Helm,
+
+00:09:28.740 --> 00:09:30.200
+tetapi Flux memiliki pengontrol Helm
+
+00:09:30.200 --> 00:09:30.980
+khusus yang menangani
+
+00:09:30.980 --> 00:09:32.000
+rilis Helm secara native.
+
+00:09:32.400 --> 00:09:33.180
+Tidak ada pilihan yang salah di sini.
+
+00:09:33.500 --> 00:09:34.760
+Kedua alat tersebut melakukan pekerjaan sama.
+
+00:09:35.100 --> 00:09:36.060
+Namun bagi engineer Azure,
+
+00:09:36.200 --> 00:09:37.020
+Flux adalah jalan dengan
+
+00:09:37.020 --> 00:09:37.780
+hambatan paling sedikit.
+
+00:09:38.220 --> 00:09:39.340
+Anda dapat mengaktifkan GitOps
+
+00:09:39.340 --> 00:09:40.680
+dengan Flux hanya dalam beberapa klik
+
+00:09:40.680 --> 00:09:41.480
+melalui portal Azure,
+
+00:09:41.580 --> 00:09:42.500
+arahkan ke repository Git,
+
+00:09:42.580 --> 00:09:43.520
+dan sinkronisasi pun dimulai.
+
+00:09:44.040 --> 00:09:44.960
+Tanpa instalasi tambahan,
+
+00:09:45.080 --> 00:09:46.440
+tanpa server terpisah untuk dikelola.
+
+00:09:47.240 --> 00:09:48.680
+GitOps di Azure AKS,
+
+00:09:48.800 --> 00:09:49.280
+Azure Art,
+
+00:09:49.520 --> 00:09:50.160
+dan Azure DevOps.
+
+00:09:50.760 --> 00:09:51.700
+Jadi seperti apa sebenarnya
+
+00:09:51.700 --> 00:09:52.880
+tampilannya saat Anda menyatukannya
+
+00:09:52.880 --> 00:09:53.260
+dengan Azure?
+
+00:09:53.560 --> 00:09:54.400
+Mari kita mulai dengan AKS.
+
+00:09:54.400 --> 00:09:55.700
+Azure Kubernetes Service
+
+00:09:55.700 --> 00:09:56.660
+memiliki dukungan GitOps
+
+00:09:56.660 --> 00:09:58.000
+bawaan menggunakan Flux V2.
+
+00:09:58.700 --> 00:09:59.480
+Di portal Azure,
+
+00:09:59.660 --> 00:10:00.760
+Anda pergi ke kluster Anda,
+
+00:10:00.940 --> 00:10:01.780
+cari bagian GitOps,
+
+00:10:01.880 --> 00:10:02.860
+dan konfigurasikan dengan
+
+00:10:02.860 --> 00:10:04.500
+mengarahkannya ke repository Git,
+
+00:10:04.580 --> 00:10:06.420
+tai Azure Repos GitHub
+
+00:10:06.420 --> 00:10:07.120
+di mana saja.
+
+00:10:07.760 --> 00:10:08.800
+Flux mulai memantau,
+
+00:10:08.900 --> 00:10:09.880
+dan manifest apapun yang Anda
+
+00:10:09.880 --> 00:10:11.060
+masukkan ke repository tersebut
+
+00:10:11.060 --> 00:10:12.140
+akan diterapkan ke kluster Anda.
+
+00:10:12.480 --> 00:10:13.580
+Namun AKS satu bagian,
+
+00:10:14.240 --> 00:10:15.500
+Azure Arc memperluas GitOps
+
+00:10:15.500 --> 00:10:16.420
+ke kluster yang tidak ada
+
+00:10:16.420 --> 00:10:17.300
+di Azure lokal,
+
+00:10:17.700 --> 00:10:18.260
+di Cloud Lane,
+
+00:10:18.440 --> 00:10:19.140
+atau di Edge.
+
+00:10:20.040 --> 00:10:21.360
+Hubungkan mereka ke Azure Arc,
+
+00:10:21.360 --> 00:10:22.620
+dan Anda dapat mengelola semuanya
+
+00:10:22.620 --> 00:10:23.840
+dengan konfigurasi GitOps yang sama.
+
+00:10:24.040 --> 00:10:25.080
+Satu repo banyak kluster,
+
+00:10:25.220 --> 00:10:26.340
+status yang konsisten di mana saja.
+
+00:10:26.340 --> 00:10:27.080
+Itulah yang dilakukan.
+
+00:10:27.480 --> 00:10:28.600
+Sekarang mari kita bicara tentang pipeline.
+
+00:10:29.000 --> 00:10:30.640
+Azure DevOps terintegrasi secara alami
+
+00:10:30.640 --> 00:10:31.280
+dengan model ini,
+
+00:10:31.440 --> 00:10:32.280
+dan inilah pola umumnya.
+
+00:10:32.660 --> 00:10:33.700
+Kode sumber Anda berada di
+
+00:10:33.700 --> 00:10:34.880
+Azure Repos atau GitHub,
+
+00:10:35.220 --> 00:10:35.940
+dan Azure Pipelines
+
+00:10:35.940 --> 00:10:36.600
+menangani CA.
+
+00:10:37.440 --> 00:10:39.020
+Pipeline ini membangun image container,
+
+00:10:39.240 --> 00:10:40.100
+menjalankan pengujian,
+
+00:10:40.200 --> 00:10:40.960
+memindai kerentanan,
+
+00:10:41.120 --> 00:10:41.860
+dan mengirim image ke
+
+00:10:41.860 --> 00:10:42.860
+Azure Container Registry.
+
+00:10:43.560 --> 00:10:45.160
+Kemudian, pipeline memperbarui manifest
+
+00:10:45.160 --> 00:10:46.320
+di repository GitOps Anda
+
+00:10:46.320 --> 00:10:47.360
+dengan mengubah tag image
+
+00:10:47.360 --> 00:10:48.160
+dari V1 di 3
+
+00:10:48.160 --> 00:10:49.420
+melakukan komit perubahan tersebut
+
+00:10:49.420 --> 00:10:50.020
+dan mengirimnya.
+
+00:10:50.020 --> 00:10:50.660
+Hanya dosa.
+
+00:10:50.940 --> 00:10:52.340
+Pipeline sama sekali tidak menyentuh kluster.
+
+00:10:52.860 --> 00:10:54.460
+Flux yang berjalan di dalam AKS
+
+00:10:54.460 --> 00:10:55.540
+mendeteksi perubahan di Git,
+
+00:10:56.340 --> 00:10:57.580
+terus baru melihat tag image
+
+00:10:57.580 --> 00:10:58.180
+yang diperbarui
+
+00:10:58.180 --> 00:10:59.140
+dan menerapkan deployment.
+
+00:10:59.660 --> 00:11:00.440
+Pod baru melambat jalan
+
+00:11:00.440 --> 00:11:01.480
+kluster melakukan rekanselasi.
+
+00:11:02.040 --> 00:11:03.080
+Anda dapat menggunakan GitHub Action
+
+00:11:03.080 --> 00:11:04.160
+sebagai penggantian Azure Pipelines
+
+00:11:04.160 --> 00:11:04.720
+jika Anda mau.
+
+00:11:05.420 --> 00:11:06.120
+Polanya tetap sama.
+
+00:11:06.720 --> 00:11:07.660
+CI menangani build
+
+00:11:07.660 --> 00:11:09.200
+dan memperbarui manifest,
+
+00:11:09.400 --> 00:11:10.400
+sedangkan operator GitOps
+
+00:11:10.400 --> 00:11:11.160
+menangani deployment.
+
+00:11:11.660 --> 00:11:12.360
+Alatnya tidak penting,
+
+00:11:12.440 --> 00:11:12.980
+moda yang terpenting.
+
+00:11:13.620 --> 00:11:14.680
+Berikut adalah detail penting.
+
+00:11:15.240 --> 00:11:16.380
+Anda jangan pernah menyimpan rahasia
+
+00:11:16.380 --> 00:11:16.880
+langsung di Git,
+
+00:11:16.960 --> 00:11:17.480
+bukan kunci api,
+
+00:11:17.560 --> 00:11:18.120
+bukan string koneksi,
+
+00:11:18.120 --> 00:11:18.920
+bukan sertifikat.
+
+00:11:20.020 --> 00:11:21.020
+Bahkan di repository privat,
+
+00:11:21.240 --> 00:11:22.340
+rahasia di Git tetaplah berisiko.
+
+00:11:22.780 --> 00:11:23.380
+Sebagai gantinya,
+
+00:11:23.480 --> 00:11:24.340
+gunakan Azure Key Vault
+
+00:11:24.340 --> 00:11:25.580
+atau operator rahasia eksternal.
+
+00:11:25.980 --> 00:11:27.280
+Manifest mereferensikan rahasia
+
+00:11:27.280 --> 00:11:28.080
+berdasarkan nama
+
+00:11:28.080 --> 00:11:29.440
+dan operator menarik nilai
+
+00:11:29.440 --> 00:11:30.260
+sebenarnya dari Vault
+
+00:11:30.260 --> 00:11:31.220
+saat waktu penerapan.
+
+00:11:31.740 --> 00:11:32.560
+Anda juga dapat menambahkan
+
+00:11:32.560 --> 00:11:33.100
+kebijakan di atas.
+
+00:11:33.520 --> 00:11:34.760
+Azure Policy dengan Gatekeeper
+
+00:11:34.760 --> 00:11:35.760
+dapat menegakkan aturan
+
+00:11:35.760 --> 00:11:36.700
+seperti larangan konten
+
+00:11:36.700 --> 00:11:37.580
+berhak akses khusus
+
+00:11:37.580 --> 00:11:38.540
+atau hanya menggunakan
+
+00:11:38.540 --> 00:11:39.580
+registri konten yang ditetujui.
+
+00:11:40.660 --> 00:11:41.540
+Jika seseorang mencoba
+
+00:11:41.540 --> 00:11:42.280
+menerapkan manifest
+
+00:11:42.280 --> 00:11:43.200
+yang melanggar kebijakan,
+
+00:11:43.540 --> 00:11:44.560
+Gatekeeper akan memblokirnya
+
+00:11:44.560 --> 00:11:45.500
+sebelum mencapai kluster.
+
+00:11:45.940 --> 00:11:46.560
+Manfaatnya tadi sini
+
+00:11:46.560 --> 00:11:47.300
+adalah skalabilitas.
+
+00:11:47.700 --> 00:11:48.860
+Dengan 50 kluster AKS,
+
+00:11:48.980 --> 00:11:49.720
+Anda tidak perlu mengelola
+
+00:11:49.720 --> 00:11:50.580
+masing-masing secara individu.
+
+00:11:51.200 --> 00:11:51.980
+Definisikan status
+
+00:11:51.980 --> 00:11:52.820
+yang diinginkan dalam
+
+00:11:52.820 --> 00:11:53.760
+satu repository gate
+
+00:11:53.760 --> 00:11:54.420
+dan setiap kluster
+
+00:11:54.420 --> 00:11:55.720
+akan melakukan rekonsiliasi
+
+00:11:55.720 --> 00:11:56.500
+ke status tersebut.
+
+00:11:57.320 --> 00:11:58.080
+Tambahkan kluster baru,
+
+00:11:58.180 --> 00:11:59.260
+arahkan ke repository tersebut
+
+00:11:59.260 --> 00:12:00.200
+dan kluster sendirinya sendiri.
+
+00:12:00.680 --> 00:12:01.880
+Perlu memperbarui konfigurasi
+
+00:12:01.880 --> 00:12:02.520
+di semua kluster.
+
+00:12:03.160 --> 00:12:04.340
+Ubah satu file di gate dan operator
+
+00:12:04.340 --> 00:12:05.460
+akan menangani sisanya.
+
+00:12:06.420 --> 00:12:07.400
+Tulah janji kita opsi Azure.
+
+00:12:08.540 --> 00:12:09.420
+Satu sumber kebenaran,
+
+00:12:09.640 --> 00:12:10.800
+banyak kluster tidak ada penyimpangan.
+
+00:12:12.340 --> 00:12:13.000
+Manfaat utamanya.
+
+00:12:13.380 --> 00:12:14.260
+Jadi semua ini terdengar
+
+00:12:14.260 --> 00:12:14.980
+bagus secara teori,
+
+00:12:15.080 --> 00:12:15.820
+tetapi artinya sebenarnya
+
+00:12:15.820 --> 00:12:16.220
+bagi timan.
+
+00:12:16.640 --> 00:12:17.280
+Mari kita mulai dengan
+
+00:12:17.280 --> 00:12:18.220
+hari perhatian semua orang.
+
+00:12:19.040 --> 00:12:20.120
+Rollback menjadi sangat mudah.
+
+00:12:20.700 --> 00:12:21.840
+Deployment yang buruk terjadi.
+
+00:12:21.980 --> 00:12:23.300
+Aplikasi Anda mulai memunculkan
+
+00:12:23.300 --> 00:12:24.420
+error, pengguna pun mengeluh.
+
+00:12:25.160 --> 00:12:26.520
+Dahulu Anda harus bersusah payah
+
+00:12:26.520 --> 00:12:27.720
+mencari konfigurasi terakhir
+
+00:12:27.720 --> 00:12:28.260
+yang berfungsi,
+
+00:12:28.460 --> 00:12:29.240
+menjalankan serangkaian
+
+00:12:29.240 --> 00:12:29.780
+perintah manual,
+
+00:12:29.940 --> 00:12:30.660
+dan berdoa agar tidak
+
+00:12:30.660 --> 00:12:31.140
+ada yang terlewat.
+
+00:12:31.540 --> 00:12:32.040
+Dalam GitOps,
+
+00:12:32.100 --> 00:12:32.820
+Anda cukup membatalkan
+
+00:12:32.820 --> 00:12:33.260
+Revered Commit.
+
+00:12:35.660 --> 00:12:36.380
+Operator melihat
+
+00:12:36.380 --> 00:12:37.160
+pembatalan tersebut,
+
+00:12:37.500 --> 00:12:38.320
+menarik status sebelumnya,
+
+00:12:38.420 --> 00:12:39.040
+dan kluster kembali
+
+00:12:39.040 --> 00:12:40.220
+ke kondisi yang berfungsi sebelumnya.
+
+00:12:40.540 --> 00:12:41.280
+Tidak perlu SSH,
+
+00:12:41.400 --> 00:12:42.260
+tidak perlu kubektel,
+
+00:12:42.340 --> 00:12:43.600
+dan pastinya tidak perlu panik.
+
+00:12:44.180 --> 00:12:44.720
+Jejak audit sudah
+
+00:12:44.720 --> 00:12:45.380
+otomatis tersedia.
+
+00:12:45.960 --> 00:12:46.660
+Setiap perubahan pada
+
+00:12:46.660 --> 00:12:47.600
+infrastruktur Anda adalah
+
+00:12:47.600 --> 00:12:48.360
+sebuah komo.
+
+00:12:48.420 --> 00:12:49.460
+Anda tahu siapa yang membuatnya,
+
+00:12:49.560 --> 00:12:50.060
+kapan dibuat,
+
+00:12:50.120 --> 00:12:50.820
+dan apa yang diubah.
+
+00:12:51.320 --> 00:12:52.020
+Tidak perlu lagi menebak
+
+00:12:52.020 --> 00:12:53.040
+apakah seseorang mengedit
+
+00:12:53.040 --> 00:12:54.080
+deployment jam 2 pagi
+
+00:12:54.080 --> 00:12:54.800
+dan lupa memberitahu.
+
+00:12:55.280 --> 00:12:56.020
+Riwanya tersimpan,
+
+00:12:56.120 --> 00:12:56.660
+tidak bisa diubah,
+
+00:12:56.720 --> 00:12:57.240
+dan bisa ditinjau.
+
+00:12:57.680 --> 00:12:58.720
+Self-healing adalah hal lain
+
+00:12:58.720 --> 00:12:59.760
+yang terdengar seperti sihir
+
+00:12:59.760 --> 00:13:00.860
+sampai Anda melihatnya bekerja.
+
+00:13:01.300 --> 00:13:02.140
+Seseorang secara manual
+
+00:13:02.140 --> 00:13:02.760
+mengedit deployment
+
+00:13:02.760 --> 00:13:03.260
+di dalam kluster.
+
+00:13:03.560 --> 00:13:04.560
+Mungkin seorang junior engineer
+
+00:13:04.560 --> 00:13:05.260
+yang mencoba memperbaiki
+
+00:13:05.260 --> 00:13:05.860
+sudut peningan cepat.
+
+00:13:06.080 --> 00:13:07.340
+Operator mendeteksi penyimpangan
+
+00:13:07.340 --> 00:13:08.640
+pada siklus rekonsilasi berikutnya
+
+00:13:08.640 --> 00:13:09.280
+dan mengembalikannya.
+
+00:13:09.280 --> 00:13:10.880
+Kluster memperbaiki dirinya sendiri
+
+00:13:10.880 --> 00:13:11.700
+dan Anda bahkan tidak tahu
+
+00:13:11.700 --> 00:13:12.680
+itu terjadi kecuali-kecuali
+
+00:13:12.680 --> 00:13:13.100
+Anda meriksa.
+
+00:13:13.460 --> 00:13:14.620
+Konsistensi di seluruh lingkungan
+
+00:13:14.620 --> 00:13:15.460
+menjadi otomatum.
+
+00:13:15.800 --> 00:13:17.020
+Dev, test, staging, produksi
+
+00:13:17.020 --> 00:13:17.860
+semuanya menarik data
+
+00:13:17.860 --> 00:13:18.980
+dari repository git yang sama.
+
+00:13:19.580 --> 00:13:20.620
+Cabang atau folder berbeda,
+
+00:13:20.760 --> 00:13:21.760
+tetapi sumber kebenaran yang sama.
+
+00:13:22.360 --> 00:13:23.040
+Tidak ada lagi masalah
+
+00:13:23.040 --> 00:13:23.980
+berjalan di komputer saya
+
+00:13:23.980 --> 00:13:24.860
+karena kluster staging Anda
+
+00:13:24.860 --> 00:13:25.620
+berbeda dari produksi
+
+00:13:25.620 --> 00:13:26.420
+sejak berminggu-minggu lalu.
+
+00:13:27.060 --> 00:13:27.660
+Keamanan meningkat
+
+00:13:27.660 --> 00:13:28.540
+karena kluster menarik data
+
+00:13:28.540 --> 00:13:29.920
+dari git bukan didorong ke dalamnya.
+
+00:13:30.360 --> 00:13:31.040
+Pipeline CI Anda
+
+00:13:31.040 --> 00:13:32.200
+tidak pernah menyimpan kredensial
+
+00:13:32.200 --> 00:13:32.920
+yang memberikan akses
+
+00:13:32.920 --> 00:13:33.600
+langsung ke produksi.
+
+00:13:33.600 --> 00:13:35.100
+Jika seseorang membabul pipeline,
+
+00:13:35.220 --> 00:13:36.340
+mereka tidak bisa menyentuh kluster.
+
+00:13:36.900 --> 00:13:37.780
+Operator yang memutuskan
+
+00:13:37.780 --> 00:13:38.700
+apa yang diterapkan dengan kapan.
+
+00:13:39.140 --> 00:13:40.220
+Tak akses minimal sesuai desain.
+
+00:13:40.540 --> 00:13:41.580
+Ada data yang mendukung hal ini juga.
+
+00:13:42.160 --> 00:13:42.920
+Menurut riset Dora,
+
+00:13:43.100 --> 00:13:44.000
+tim yang mengadopsi GitOps
+
+00:13:44.000 --> 00:13:45.320
+mengalami penurunan error deployment
+
+00:13:45.320 --> 00:13:46.440
+sekitar 25%,
+
+00:13:46.440 --> 00:13:47.420
+sekitar 25%,
+
+00:13:47.420 --> 00:13:48.720
+dan waktu pemulihan rata-rata turun
+
+00:13:48.720 --> 00:13:49.500
+hingga di bawah 2 menit
+
+00:13:49.500 --> 00:13:51.040
+pada pengaturan yang diimplementasikan dengan baik.
+
+00:13:51.380 --> 00:13:51.980
+Itu bukan teori,
+
+00:13:52.080 --> 00:13:53.060
+itu adalah apa yang dilaporkan
+
+00:13:53.060 --> 00:13:53.960
+oleh berbagai organisasi.
+
+00:13:54.260 --> 00:13:55.400
+Dan ada manfaat kolaborasi
+
+00:13:55.400 --> 00:13:56.260
+yang mudah terlewatkan.
+
+00:13:56.940 --> 00:13:57.800
+Perubahan infrastruktur
+
+00:13:57.800 --> 00:13:58.720
+melalui pull request,
+
+00:13:59.100 --> 00:13:59.840
+peninjauan kode,
+
+00:13:59.840 --> 00:14:00.860
+dan tes otomatis
+
+00:14:00.860 --> 00:14:02.540
+sama persis seperti kode aplikasi.
+
+00:14:03.140 --> 00:14:04.020
+Tim Ops dan tim Dev Anda
+
+00:14:04.020 --> 00:14:05.040
+berbicara dan bahasa yang sama,
+
+00:14:05.160 --> 00:14:05.660
+yaitu,
+
+00:14:05.740 --> 00:14:06.960
+Git, tidak ada lagi serah terima,
+
+00:14:07.060 --> 00:14:08.300
+tidak lagi sekadar tolong dikulai untuk saya.
+
+00:14:08.640 --> 00:14:09.500
+Semua orang bekerja yang sama.
+
+00:14:10.000 --> 00:14:10.880
+Namun masih ada beberapa
+
+00:14:10.880 --> 00:14:11.640
+kesalahpahaman umum
+
+00:14:11.640 --> 00:14:12.440
+yang perlu diluruskan.
+
+00:14:14.060 --> 00:14:15.400
+Mitos umum dan cara memulainya.
+
+00:14:15.800 --> 00:14:16.740
+Mari mulai dengan meluruskan
+
+00:14:16.740 --> 00:14:18.000
+beberapa mitos umum tentang GitOps.
+
+00:14:18.300 --> 00:14:18.680
+Pertama,
+
+00:14:18.860 --> 00:14:19.780
+banyak orang mengira GitOps
+
+00:14:19.780 --> 00:14:20.540
+hanya untuk Kubernetes.
+
+00:14:21.140 --> 00:14:21.620
+Tentu saja,
+
+00:14:21.740 --> 00:14:22.580
+GitOps bekerja paling baik
+
+00:14:22.580 --> 00:14:23.720
+di Kubernetes tidak perlu diagum.
+
+00:14:23.980 --> 00:14:24.700
+Kubernetes dibangun
+
+00:14:24.700 --> 00:14:25.900
+berdasarkan status deklaratif
+
+00:14:25.900 --> 00:14:26.680
+dan rekonsiliasi,
+
+00:14:26.680 --> 00:14:27.560
+jadi ini sangat cocok.
+
+00:14:28.300 --> 00:14:28.900
+Tapi begini,
+
+00:14:29.100 --> 00:14:30.200
+prinsip-pinsip yang sama berlaku
+
+00:14:30.200 --> 00:14:31.060
+dimanapun Anda memiliki
+
+00:14:31.060 --> 00:14:32.080
+konfigurasi deklaratif,
+
+00:14:32.780 --> 00:14:33.760
+Anda bisa menggunakan GitOps
+
+00:14:33.760 --> 00:14:35.140
+dengan terraform puluh mimbakan ansible.
+
+00:14:35.720 --> 00:14:36.940
+Simpan saja konfigurasi tersebut
+
+00:14:36.940 --> 00:14:37.800
+di Git dan buat pipeline
+
+00:14:37.800 --> 00:14:38.420
+untuk menerapkan.
+
+00:14:38.860 --> 00:14:39.560
+Bagian self-healing
+
+00:14:39.560 --> 00:14:40.200
+memang lebih sulit
+
+00:14:40.200 --> 00:14:40.860
+di luar Kubernetes,
+
+00:14:41.100 --> 00:14:42.320
+tetapi disiplin sumber kebenaran
+
+00:14:42.320 --> 00:14:43.260
+berlaku di mana saja.
+
+00:14:44.040 --> 00:14:44.780
+Mitos lainnya adalah
+
+00:14:44.780 --> 00:14:45.880
+bahwa Anda harus menggunakan
+
+00:14:45.880 --> 00:14:46.780
+argosidia atau flux
+
+00:14:46.780 --> 00:14:47.700
+untuk melakukan GitOps.
+
+00:14:48.160 --> 00:14:49.580
+Jika Anda menginginkan model lengkap,
+
+00:14:49.740 --> 00:14:50.760
+penyebaran berbasis tarikan,
+
+00:14:50.880 --> 00:14:51.920
+rekonsiliasi berkelanjutan,
+
+00:14:52.000 --> 00:14:52.740
+dan deteksi penyimpangan,
+
+00:14:52.740 --> 00:14:53.640
+maka ya Anda memerlukan
+
+00:14:53.640 --> 00:14:54.480
+semacam operator GitOps.
+
+00:14:55.000 --> 00:14:55.960
+Tetapi Anda bisa memulainya
+
+00:14:55.960 --> 00:14:56.700
+dengan jauh lebih sederhan.
+
+00:14:56.980 --> 00:14:58.040
+Masukkan saja semua manifest Anda
+
+00:14:58.040 --> 00:14:58.660
+ke Git dan gunakan
+
+00:14:58.660 --> 00:14:59.500
+kali per request untuk perlu.
+
+00:14:59.760 --> 00:15:00.700
+Itu saja sudah memberi Anda
+
+00:15:00.700 --> 00:15:01.760
+sebagian besar manfaat audit
+
+00:15:01.760 --> 00:15:02.420
+dan kolaborasi.
+
+00:15:02.760 --> 00:15:03.700
+Anda selalu bisa menambahkan
+
+00:15:03.700 --> 00:15:04.600
+operator nanti saat Anda
+
+00:15:04.600 --> 00:15:05.460
+membutuhkan otomatisasi.
+
+00:15:05.880 --> 00:15:06.860
+Dan akhirnya ada mitos
+
+00:15:06.860 --> 00:15:07.680
+bahwa GitOps sepenuhnya
+
+00:15:07.680 --> 00:15:08.760
+menggantikan CI per sedih.
+
+00:15:09.200 --> 00:15:10.720
+Tidak, GitOps hanya menggantikan.
+
+00:15:11.240 --> 00:15:12.380
+CI tetap membangun kode Anda,
+
+00:15:12.580 --> 00:15:13.500
+menjalankan pengujian,
+
+00:15:13.600 --> 00:15:14.220
+memindai kerentanan,
+
+00:15:14.480 --> 00:15:15.180
+dan mendorong citra
+
+00:15:15.180 --> 00:15:16.140
+kontainer ke repository.
+
+00:15:16.860 --> 00:15:17.560
+Semua itu tetap sama.
+
+00:15:18.120 --> 00:15:18.620
+Yang berubah adalah
+
+00:15:22.740 --> 00:15:24.120
+operator GitOps menarik manifest
+
+00:15:24.120 --> 00:15:25.300
+yang diperbarui dari Git.
+
+00:15:25.960 --> 00:15:26.740
+Jadi CI dan GitOps
+
+00:15:26.740 --> 00:15:27.340
+bekerja bersama,
+
+00:15:27.520 --> 00:15:28.340
+bukan saling menggantikan.
+
+00:15:28.840 --> 00:15:30.020
+Memulainya sebenarnya cukup mudah.
+
+00:15:30.500 --> 00:15:31.540
+Pilih kluster AKS kecil
+
+00:15:31.540 --> 00:15:32.360
+dan aktifkan Flux
+
+00:15:32.360 --> 00:15:33.260
+melalui portal Azure.
+
+00:15:33.960 --> 00:15:34.940
+Hanya butuh beberapa klik saja.
+
+00:15:35.620 --> 00:15:36.080
+Kemudian,
+
+00:15:36.220 --> 00:15:37.220
+arahkan ke repository Git
+
+00:15:37.220 --> 00:15:38.800
+yang berisi YAML penyebaran sederhana,
+
+00:15:38.960 --> 00:15:40.340
+saksikan proses sinkronisasinya,
+
+00:15:40.560 --> 00:15:41.380
+dan Anda siap melaju.
+
+00:15:41.920 --> 00:15:43.100
+Coba ubah nilai di YAML tersebut,
+
+00:15:43.200 --> 00:15:43.780
+lakukan close communication
+
+00:15:43.780 --> 00:15:44.820
+dan sekalian kluster diperbarui.
+
+00:15:45.120 --> 00:15:46.260
+Itulah alur kerja GitOps pertama.
+
+00:15:46.480 --> 00:15:47.120
+Dari sana,
+
+00:15:47.320 --> 00:15:48.460
+Anda bisa menambahkan lingkungan
+
+00:15:48.460 --> 00:15:49.320
+mempelajari customis
+
+00:15:49.320 --> 00:15:50.560
+karena Flux sangat mengandalkannya
+
+00:15:50.560 --> 00:15:52.200
+dan mengatur pembaraan citra otomatis
+
+00:15:52.200 --> 00:15:52.840
+dengan alat seperti
+
+00:15:52.840 --> 00:15:53.900
+Renovate atau Dependabot.
+
+00:15:54.920 --> 00:15:55.980
+Jadi itulah GitOps secara singkat.
+
+00:15:56.460 --> 00:15:57.640
+Ini mengubah infrastruktur Anda
+
+00:15:57.640 --> 00:15:58.740
+menjadi repository Git,
+
+00:15:59.040 --> 00:16:00.120
+membuat semuanya dapat dilacak,
+
+00:16:00.220 --> 00:16:00.720
+dibatalkan,
+
+00:16:00.800 --> 00:16:01.720
+dan memulihkan diri sendiri.
+
+00:16:02.520 --> 00:16:04.000
+Jika Anda mengelola Kubernetes di Azure,
+
+00:16:04.160 --> 00:16:05.940
+coba integrasi GitOps di AKS hari ini.
+
+00:16:06.460 --> 00:16:07.240
+Hanya butuh 10 menit
+
+00:16:07.240 --> 00:16:07.820
+untuk menyiapkannya
+
+00:16:07.820 --> 00:16:09.140
+dan akan mengubah cara Anda berpikir tentang.
+
+00:16:09.940 --> 00:16:11.040
+Berlanggananlah untuk penjelasan
+
+00:16:11.040 --> 00:16:11.620
+yang lebih sederhana
+
+00:16:11.620 --> 00:16:12.740
+mengenai alat KaliCrosoft.

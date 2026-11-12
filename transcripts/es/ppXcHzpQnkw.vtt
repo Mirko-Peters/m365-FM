@@ -1,0 +1,985 @@
+WEBVTT
+
+00:00:00.340 --> 00:00:06.880
+Listo para 10 días de Microsoft 365, Copilot, IA, Azure y las personas que están dando forma al futuro del trabajo.
+
+00:00:07.880 --> 00:00:11.860
+Este enero, M365 con regresa y venimos con más fuerza.
+
+00:00:12.860 --> 00:00:14.300
+Únete a nosotros en sesiones en vivo.
+
+00:00:14.480 --> 00:00:18.180
+Demostraciones reales y conocimientos prácticos de MVPs y expertos de la industria de todo el mundo.
+
+00:00:18.900 --> 00:00:21.360
+Nada de diapositivas genéricas, nada de palabras de moda interminable.
+
+00:00:22.080 --> 00:00:23.360
+Abordaremos los retos reales.
+
+00:00:23.760 --> 00:00:28.660
+Copilot Studio, agentes de IA Fabric, seguridad, gobernanza y automatización.
+
+00:00:28.660 --> 00:00:34.360
+Tanto si eres un profesional de TI, desarrollador o líder empresarial, hay sesiones diseñadas para ti.
+
+00:00:35.500 --> 00:00:40.020
+Con 10 días completos, podrás explorar diversas tecnologías y conectar con una comunidad global.
+
+00:00:40.940 --> 00:00:44.240
+Míralo en vivo y lleva ideas prácticas a tu organización.
+
+00:00:45.140 --> 00:00:48.920
+Enero de 2027. 10 días. Una sola comunidad de Microsoft.
+
+00:00:49.420 --> 00:00:50.520
+El registro ya está abierto.
+
+00:00:51.880 --> 00:00:55.540
+Ve a m365com.net y asegura tu lugar hoy mismo.
+
+00:00:55.540 --> 00:00:58.760
+Eso es m365com.net, Cowie.
+
+00:01:00.200 --> 00:01:03.240
+Únete ahora en m365com.net y te veremos.
+
+00:01:03.760 --> 00:01:04.620
+En vivo en enero.
+
+00:01:05.380 --> 00:01:08.960
+Bienvenidos a otro episodio de Píldoras de Conocimiento de Microsoft aquí en M365 FM.
+
+00:01:09.460 --> 00:01:10.420
+Soy su anfitrión Milko Pite.
+
+00:01:10.860 --> 00:01:13.580
+El tema de hoy es uno del que casi todos los que desarrollan en Azure han oído hablar.
+
+00:01:13.980 --> 00:01:16.040
+Pero pocos comprenden realmente en términos sencillos.
+
+00:01:16.200 --> 00:01:16.960
+Azure Virtual One.
+
+00:01:17.480 --> 00:01:18.160
+Entonces esto es lo que sucede.
+
+00:01:18.500 --> 00:01:22.580
+Si alguna vez has intentado construir una red global en Azure de la forma tradicional, sabes que se complica rápido.
+
+00:01:23.180 --> 00:01:23.840
+Realmente rápido.
+
+00:01:23.840 --> 00:01:31.520
+Empiezas con una región y unas pocas redes virtuales y todo funciona bien, pero luego añades una segunda región, después una tercera y de repente necesitas conectar sucursales.
+
+00:01:32.320 --> 00:01:37.500
+Ahora estás gestionando peerings, tablas de rutas, reglas de firewall y puertas de enlace VPN en media docena de ubicaciones.
+
+00:01:37.860 --> 00:01:41.040
+Es como si tuvieras que construir cada carretera, cada semáforo y cada intersección tú mismo.
+
+00:01:41.580 --> 00:01:43.960
+Y cada vez que añades una nueva región tienes que construir más carreteras.
+
+00:01:44.640 --> 00:01:47.280
+Azure Virtual One se encarga de la parte difícil para que tú no tengas que hacerlo.
+
+00:01:47.820 --> 00:01:48.980
+Piénsalo como un sistema de autopistas.
+
+00:01:49.440 --> 00:01:52.440
+Microsoft construye y gestiona la autopista, tú solo construyes los carriles de acceso.
+
+00:01:52.440 --> 00:01:57.540
+Al final de este episodio, entenderás cómo funciona, por qué existe y cuándo deberías usarlo, usarlo.
+
+00:01:58.380 --> 00:02:00.380
+La vieja manera, la complejidad del modelo Hub & Spoke.
+
+00:02:00.820 --> 00:02:01.640
+Empecemos por la vieja manera.
+
+00:02:02.140 --> 00:02:04.320
+Una vez que ves el problema, la solución tiene mucho más sentido.
+
+00:02:05.240 --> 00:02:07.680
+El enfoque tradicional en Azure se llama Hub & Spoke Center de Radio.
+
+00:02:07.680 --> 00:02:09.900
+Imagina una red virtual central.
+
+00:02:10.700 --> 00:02:15.280
+Ese es tu Hub, donde pones servicios compartidos como firewalls, controladores de dominio y puertas de enlace VPN.
+
+00:02:15.280 --> 00:02:24.420
+Luego conectas tus redes virtuales de aplicación, los Spokes, a ese Hub mediante webinete peering para que el tráfico fluya desde los Spokes a través del Hub, donde puedes inspeccionarlo y controlarlo.
+
+00:02:24.640 --> 00:02:25.500
+¿Cuándo funciona esto bien?
+
+00:02:25.760 --> 00:02:29.840
+En una sola región con un puñado de redes virtuales tienes control total sobre el enrutamiento y la seguridad.
+
+00:02:30.200 --> 00:02:33.420
+Sabes exactamente a dónde va cada paquete y es simple, limpio y funciona.
+
+00:02:34.040 --> 00:02:34.860
+Pero aquí es donde falla.
+
+00:02:35.140 --> 00:02:37.380
+En el momento en que añades una segunda región, las cosas se compliquen.
+
+00:02:37.380 --> 00:02:45.840
+Necesitas interconectar tus Hubs, configurar rutas definidas por el usuario UDR, para forzar el tráfico a través de firewalls y configurar tablas de rutas para cada Spoke.
+
+00:02:46.220 --> 00:02:48.940
+Y cada vez que añades una nueva región, multiplicas esa complejidad.
+
+00:02:49.300 --> 00:02:50.280
+Déjame darte un ejemplo real.
+
+00:02:50.660 --> 00:02:56.580
+Imagina una empresa con sucursales en tres regiones, Norteamérica, Europa y Asia, que necesita conectividad entre todas ellas.
+
+00:02:56.780 --> 00:03:00.340
+En una configuración tradicional de Hub & Spoke, eso significa al menos dos de interconexión.
+
+00:03:00.720 --> 00:03:05.220
+Cada Hub necesita conectarse con todos los demás Hubs y cada Spoke necesita tablas de rutas que apunten al firewall correcto.
+
+00:03:05.220 --> 00:03:09.620
+Y cuando añaden una nueva región, tienen que actualizar manualmente cada tabla de ruta.
+
+00:03:10.240 --> 00:03:12.500
+Esa es la pesadilla de gestionar redes globales al antiguo Samsung.
+
+00:03:13.000 --> 00:03:14.780
+No es que no funcione, es que no escala.
+
+00:03:15.360 --> 00:03:20.960
+Cuanto más añades, más tienes que gestionar y al final la complejidad se convierte en un trabajo de tiempo completo para un equipo de ingenieros de red.
+
+00:03:21.520 --> 00:03:23.400
+Por esto Microsoft creó Azure Virtual One.
+
+00:03:23.900 --> 00:03:25.760
+Resuelve el problema de escalado sin sacrificar el control.
+
+00:03:26.160 --> 00:03:26.880
+Entonces, ¿qué es eso también?
+
+00:03:27.160 --> 00:03:27.860
+Vamos a desglosar.
+
+00:03:28.340 --> 00:03:30.020
+Lo que Azure Virtual One es en realidad.
+
+00:03:30.680 --> 00:03:32.100
+¿Qué es exactamente Azure Virtual One?
+
+00:03:32.480 --> 00:03:33.540
+¿Qué tienes la definición más simple?
+
+00:03:33.540 --> 00:03:40.100
+Azure Virtual One es un servicio de red gestionado que conecta tus sucursales, usuarios y recursos en la nube a través de una única red troncal gestionada por Microsoft.
+
+00:03:40.780 --> 00:03:45.060
+En lugar de construir y gestionar todas las conexiones tú mismo, Microsoft se encarga del trabajo pesado.
+
+00:03:45.800 --> 00:03:46.840
+Piénsalo como un sistema de autopista.
+
+00:03:47.200 --> 00:03:49.640
+No construyes ni mantienes la autopista, solo construyes las rampas de acceso.
+
+00:03:50.060 --> 00:03:54.420
+Tus rampas de acceso son las conexiones desde tus sucursales, tus usuarios remotos y tus redes virtuales.
+
+00:03:55.180 --> 00:03:59.560
+La autopista en sí, el enrutamiento, las interconexiones entre regiones, la red troncal, todo eso, gestionado por Microsoft.
+
+00:03:59.960 --> 00:04:01.360
+Entonces, ¿cuáles son los componentes reales?
+
+00:04:01.360 --> 00:04:03.360
+Vamos a dividirlo en las cuatro partes principales.
+
+00:04:03.820 --> 00:04:05.580
+Primero, el recurso de Virtual One en sí.
+
+00:04:06.180 --> 00:04:09.300
+Es el contenedor de red general, el nombre para todo tu sistema de autopistas.
+
+00:04:09.880 --> 00:04:12.600
+Segundo, los hubs virtuales, los puntos de conexión regionales.
+
+00:04:12.880 --> 00:04:13.640
+Uno por región de Azure.
+
+00:04:14.120 --> 00:04:15.520
+Cada hub es como un intercambio de autopista.
+
+00:04:16.080 --> 00:04:19.340
+Tercero, las redes virtuales Spoke, tus aplicaciones conectadas a esos hubs.
+
+00:04:19.680 --> 00:04:20.860
+Y cuarto, las puertas del Nasegate.
+
+00:04:21.300 --> 00:04:25.580
+Estas manejan las conexiones VPN desde tus sucursales y las conexiones ExpressRoute desde tus centros de datos.
+
+00:04:25.580 --> 00:04:27.260
+Ahora, hay dos niveles de Virtual One.
+
+00:04:27.620 --> 00:04:29.340
+Basic te ofrece solo VPN de sitio a sitio.
+
+00:04:29.740 --> 00:04:30.480
+Es simple pero limitado.
+
+00:04:31.020 --> 00:04:32.460
+Standard le ofrece el conjunto completo de función.
+
+00:04:33.100 --> 00:04:38.600
+ExpressRoute, VPN punto a sitio para usuarios remotos, enrutamiento entre centros, integración con Azure Firewall y más.
+
+00:04:39.060 --> 00:04:41.500
+Para casi cualquier escenario del mundo real que hará utilizar Standard.
+
+00:04:41.780 --> 00:04:44.080
+La gran diferencia con el modelo tradicional de HubSpoke es esta.
+
+00:04:44.740 --> 00:04:47.000
+Microsoft gestiona el enrutamiento entre centros automáticamente.
+
+00:04:47.380 --> 00:04:49.620
+No tiene que crear interconexiones PIDRINGS ni configurar tablas root.
+
+00:04:50.040 --> 00:04:52.380
+Conecta sus epochs al centro y el centro se encarga del resto.
+
+00:04:52.880 --> 00:04:53.420
+Es así de simple.
+
+00:04:53.760 --> 00:04:55.640
+El corazón de Virtual One es el centro virtual Hub.
+
+00:04:56.040 --> 00:04:56.860
+Veamos eso a continuación.
+
+00:04:57.600 --> 00:04:59.720
+El centro virtual sube de acceso a la red global.
+
+00:05:00.500 --> 00:05:01.620
+No sé qué es realmente un centro virtual.
+
+00:05:02.120 --> 00:05:03.180
+Aquí tiene la forma más enciente.
+
+00:05:03.760 --> 00:05:08.600
+Es un enrutador regional gestionado por Microsoft que reside dentro de una región específica de Azure.
+
+00:05:09.600 --> 00:05:13.520
+Un enrutador que Microsoft configura y mantiene por usted para que no tenga que preocuparse por el sistema de enrutamiento.
+
+00:05:13.620 --> 00:05:15.980
+Cada centro es un punto de conexión para cuatro cosas.
+
+00:05:16.100 --> 00:05:19.460
+Redes virtuales, sus aplicaciones Spoke, sucursales conectadas.
+
+00:05:19.760 --> 00:05:25.000
+Mediante VPN o ExpressRoute, usuarios remotos que se conectan mediante VPN.sitio y otros centros.
+
+00:05:25.180 --> 00:05:27.960
+Centros en diferentes regiones que se comunican entre sí.
+
+00:05:28.500 --> 00:05:29.380
+Aquí está la parte de importe.
+
+00:05:29.920 --> 00:05:32.640
+El centro gestiona automáticamente todo el enrutamiento entre estas conexiones.
+
+00:05:33.100 --> 00:05:36.480
+Sin tablas de rutas manuales, sin rutas definidas por el usuario, sin configuraciones de peering.
+
+00:05:37.100 --> 00:05:41.220
+Conecta algo al centro y el centro determina cómo enviar el tráfico a donde debe ir.
+
+00:05:41.640 --> 00:05:43.340
+Ahora bien, sí necesita planificar sus espacios de dirección.
+
+00:05:43.600 --> 00:05:47.140
+Cada centro necesita su propio rango IP, igual que cualquier otro componente de red.
+
+00:05:47.140 --> 00:05:50.300
+Cuando conecta una red virtual FENET se puede que el centro es una conexión simple aduana.
+
+00:05:50.640 --> 00:05:51.280
+Unos pocos clics.
+
+00:05:51.820 --> 00:05:54.400
+El centro aprende el espacio y direcciones de la guaneta automáticamente.
+
+00:05:54.940 --> 00:05:56.780
+Aquí es donde la analogía de la autopista realmente encaja.
+
+00:05:57.180 --> 00:06:01.000
+Puede tener varios centros en diferentes regiones y se conectan automáticamente entre sí.
+
+00:06:01.480 --> 00:06:05.020
+Sí, un centro en Norteamérica se comunica con uno en Europa y a su vez se comunica con uno en Asia.
+
+00:06:05.440 --> 00:06:07.040
+Todo a través de la infraestructura global de Microsoft.
+
+00:06:07.600 --> 00:06:09.480
+Cada centro es como una vía de acceso a ese infraestructura.
+
+00:06:09.480 --> 00:06:13.100
+Si usted construye el acceso para su región, Microsoft maneja la autopista entre ellos.
+
+00:06:13.600 --> 00:06:14.520
+Y la escala es impresionante.
+
+00:06:15.080 --> 00:06:19.880
+Un solo centro puede manejar hasta mil conexiones VPN sitio a sitio hasta 100.000 usuarios remotos
+
+00:06:19.880 --> 00:06:23.500
+y hasta 50 gigabits por segundo de rendimiento a través del enrutador del centro.
+
+00:06:24.140 --> 00:06:25.200
+Eso no es escala de pequeño oficio.
+
+00:06:25.480 --> 00:06:26.420
+Eso es escala empresarial.
+
+00:06:26.940 --> 00:06:31.800
+Ahora que tenemos los centros, conectemos todo a ellos, conectando sucursales, usuarios y recursos en Norteamérica.
+
+00:06:32.200 --> 00:06:33.420
+Así que comencemos con la sucursal.
+
+00:06:33.920 --> 00:06:38.520
+La VPN sitio a sitio conecta sus ubicaciones físicas a Azure mediante túneles VPN IPC estándar.
+
+00:06:38.520 --> 00:06:42.820
+Funciona prácticamente con cualquier dispositivo VPN, Cisco, Fortinet, lo que sea que esté usando, lo que sea usando.
+
+00:06:43.100 --> 00:06:44.180
+No se necesita hardware especial.
+
+00:06:44.540 --> 00:06:45.220
+Así es como funciona.
+
+00:06:45.660 --> 00:06:50.280
+Usted crea un sitio VPN en el Hub, proporciona la dirección IP pública y el espacio de direcciones de su sucursal,
+
+00:06:50.500 --> 00:06:51.540
+y Azure se encarga del resto.
+
+00:06:52.120 --> 00:06:54.340
+Crea el túnel, gestiona el cifrado y lo mantiene en funcionamiento.
+
+00:06:54.740 --> 00:06:55.780
+Los usuarios remotos no siguen.
+
+00:06:56.320 --> 00:07:00.340
+La VPN de punto a sitio permite a los empleados conectarse desde cualquier lugar, casa, cafetería, hotel.
+
+00:07:01.000 --> 00:07:03.880
+Utiliza el cliente VPN de Azure, OpenVPN o el estándar y que tú.
+
+00:07:04.300 --> 00:07:05.200
+Y aquí está el detalle claro.
+
+00:07:05.620 --> 00:07:07.760
+Es compatible con Microsoft EntryD para la autenticación.
+
+00:07:07.760 --> 00:07:11.320
+Por lo tanto, los usuarios inician sesión con sus credenciales de trabajo, igual que con todo.
+
+00:07:11.820 --> 00:07:14.420
+Sin contraseñas de VPN separadas, sin certificados que gestionar.
+
+00:07:14.860 --> 00:07:17.040
+Cuando un usuario se conecta, se dirige al Hub más cercano.
+
+00:07:17.680 --> 00:07:20.460
+Y obtiene acceso automático a cada recurso conectado a ese Hub,
+
+00:07:20.540 --> 00:07:23.660
+o a ver Nets, redes de sucursales y otras regiones y otras regiones.
+
+00:07:23.860 --> 00:07:25.600
+Sin la complejidad del túnel dividido ni en ruta manual.
+
+00:07:25.840 --> 00:07:27.540
+Se conecta una vez y ya están en la red.
+
+00:07:28.120 --> 00:07:30.620
+Para sus oficinas principales y centros de datos, existe Express.
+
+00:07:30.620 --> 00:07:34.420
+Se trata de una conexión privada y dedicada desde su ubicación local hasta Azure.
+
+00:07:34.740 --> 00:07:36.140
+Admite por completo a la Internet pública.
+
+00:07:36.660 --> 00:07:38.300
+Su tráfico nunca toca a una red pública.
+
+00:07:38.940 --> 00:07:43.820
+Además, VirtualOne admite tanto VPN como ExpressRoute en el mismo Hub con computación por error automático entre ellas.
+
+00:07:44.200 --> 00:07:48.440
+Si su circuito ExpressRoute se cae, el tráfico cambia a VPN sin intervención manual.
+
+00:07:48.440 --> 00:07:50.460
+Ahora, sus aplicaciones en el.
+
+00:07:50.860 --> 00:07:53.480
+Conectar UvNets tipo Spocal Hub requiere solo unos pocos gigs.
+
+00:07:54.020 --> 00:07:56.840
+Usted selecciona el Hub, selecciona la UvNet y la conexión se establece.
+
+00:07:57.320 --> 00:07:59.240
+Aprende el espacio de direcciones de la UvNet automáticamente,
+
+00:07:59.760 --> 00:08:02.280
+sin configuración de emparejamiento ni configuración de tablas de ruta.
+
+00:08:02.660 --> 00:08:06.220
+Y entre regiones los Hubs se comunican automáticamente a través de la red troncal de Microsoft.
+
+00:08:06.900 --> 00:08:08.560
+No necesita configurar conexiones entre Hubs.
+
+00:08:08.960 --> 00:08:10.080
+Por lo tanto, no gestiona el utransit.
+
+00:08:10.420 --> 00:08:10.720
+Y funciona.
+
+00:08:11.400 --> 00:08:13.680
+El resultado es una conectividad de cualquiera a cualquiera.
+
+00:08:13.680 --> 00:08:18.480
+Cualquier sucursal, usuario remoto, UvNet o sitio local pueden comunicarse entre sí,
+
+00:08:18.720 --> 00:08:21.280
+manteniendo el tráfico en la red privada de Microsoft todo el tiempo.
+
+00:08:21.920 --> 00:08:23.060
+Permítame darle un ejemplo al banal.
+
+00:08:23.680 --> 00:08:26.620
+Imagina un minorista con tiendas en Europa, Asia y América del Norte.
+
+00:08:27.100 --> 00:08:30.100
+Cada tienda se conecta mediante una VPN de sitio a sitio a su Hub regional.
+
+00:08:30.480 --> 00:08:32.500
+Las tiendas europeas se conectan al Hub Europeo.
+
+00:08:32.640 --> 00:08:34.400
+Las tiendas asiáticas se conectan al Hub Asia.
+
+00:08:34.700 --> 00:08:36.600
+Y cuando el tráfico necesita viajar entre regiones,
+
+00:08:36.760 --> 00:08:39.940
+por ejemplo, si una tienda en Asia necesita consultar el inventario en el almacén de América del Norte,
+
+00:08:40.400 --> 00:08:42.220
+el tráfico viaja a través de la red troncal de Microsoft.
+
+00:08:42.220 --> 00:08:46.480
+No por la Internet pública, no por una red MPLS de terceros, sino por la red privada de Microsoft.
+
+00:08:46.840 --> 00:08:48.280
+Pero la conectividad es solo la mitad de la historia.
+
+00:08:48.620 --> 00:08:51.140
+El verdadero poder es cómo Virtual One maneja el enrutamiento y la seguridad.
+
+00:08:52.020 --> 00:08:53.100
+Enrutamiento y seguridad integrada.
+
+00:08:53.580 --> 00:08:55.100
+Pero la conectividad es solo la mitad de la historia.
+
+00:08:55.620 --> 00:08:58.620
+El verdadero poder de Virtual One es cómo maneja el enrutamiento y la seguridad.
+
+00:08:59.540 --> 00:09:01.500
+En una configuración tradicional de Hub & Spoke,
+
+00:09:01.580 --> 00:09:03.480
+si quieres forzar el tráfico a través de un firewall,
+
+00:09:03.860 --> 00:09:06.280
+debes crear rutas definidas por el usuario, UDR,
+
+00:09:06.700 --> 00:09:08.320
+para cada subred en cada radio.
+
+00:09:08.960 --> 00:09:11.160
+Y si tienes varias regiones, tienes que hacerlo todo de nuevo.
+
+00:09:11.160 --> 00:09:12.080
+Es complejo.
+
+00:09:12.520 --> 00:09:13.160
+Es propenso a horror.
+
+00:09:13.780 --> 00:09:17.320
+Cuando algo falla, buena suerte tratando de averiguar qué tabla de rutas tienen entrada incorrecta.
+
+00:09:17.720 --> 00:09:20.080
+Virtual One resuelve esto con algo llamado intención de enrutamiento.
+
+00:09:20.520 --> 00:09:24.300
+Piénsalo como una configuración única que le dice al Hub enviar todo el tráfico a través del firewall.
+
+00:09:25.100 --> 00:09:25.420
+Eso es.
+
+00:09:25.820 --> 00:09:26.320
+Un ajuste.
+
+00:09:26.440 --> 00:09:27.420
+200 de tablas de rutas.
+
+00:09:28.160 --> 00:09:29.020
+Y esto es lo que cubre.
+
+00:09:29.280 --> 00:09:30.100
+Tráfico de Internet.
+
+00:09:30.480 --> 00:09:31.360
+Todo lo que sale a la web.
+
+00:09:31.660 --> 00:09:32.360
+Tráfico privado.
+
+00:09:32.600 --> 00:09:33.220
+VNet a VNet.
+
+00:09:33.340 --> 00:09:34.420
+Sucursal a Sucursal a VNet.
+
+00:09:34.420 --> 00:09:35.260
+Y tráfico entre Hubs.
+
+00:09:35.340 --> 00:09:37.520
+El tráfico que se mueve entre regiones.
+
+00:09:38.000 --> 00:09:39.120
+Una política de aplicación global.
+
+00:09:39.780 --> 00:09:41.340
+La estableces una vez y se aplica en todas partes.
+
+00:09:41.680 --> 00:09:43.280
+Ahora, ¿cómo entra realmente el firewall en el centro?
+
+00:09:43.760 --> 00:09:45.100
+A través de Hubs virtuales asegurados.
+
+00:09:45.440 --> 00:09:47.260
+Prima, mientras hay un firewall directamente en el Hub,
+
+00:09:48.000 --> 00:09:50.940
+o un NGF de Google de terceros como Fortinet, Checkpoint o Palo Alto,
+
+00:09:51.780 --> 00:09:54.120
+el firewall se coloca en la ruta del tráfico de manera transparente,
+
+00:09:54.360 --> 00:09:56.260
+sin necesidad de UDR ni enrutamiento complejo.
+
+00:09:56.260 --> 00:09:58.460
+El tráfico entra, se inspecciona y sale.
+
+00:09:59.060 --> 00:09:59.600
+Realmente funciona.
+
+00:10:00.120 --> 00:10:02.980
+Para el cifrado, todos los túneles VPN utilizan el estándar IPSEC.
+
+00:10:03.380 --> 00:10:06.940
+Microsoft recomienda GSMIS 256 para mejor equilibrio entre rendimiento y seguridad.
+
+00:10:07.540 --> 00:10:10.260
+Y si usas ExpressRoute, también puedes cifrar ese tráfico
+
+00:10:10.860 --> 00:10:12.720
+si incluso tu conexión privada está protegida.
+
+00:10:13.060 --> 00:10:14.560
+Esto se alinea con los principios de confianza cero.
+
+00:10:14.960 --> 00:10:18.060
+Sin acceso directo a Internet, desde los radios, todo el tráfico inspeccionado,
+
+00:10:18.300 --> 00:10:20.200
+microsegmentación dentro de Azure VNets y
+
+00:10:20.200 --> 00:10:23.160
+todo gestionado centralmente mediante Azure Firewall Manager.
+
+00:10:23.160 --> 00:10:26.440
+Una política aplicada en todos los hubs a nivel global.
+
+00:10:26.920 --> 00:10:28.080
+La ventaja de seguridad es en sí.
+
+00:10:28.640 --> 00:10:30.480
+En lugar de gestionar reglas de firewall por región,
+
+00:10:30.620 --> 00:10:32.720
+gestionas una política que se aplica en todas partes.
+
+00:10:33.480 --> 00:10:35.300
+En lugar de solucionar problemas de tablas de rutas,
+
+00:10:35.400 --> 00:10:36.440
+configuras la intención de ruta mía.
+
+00:10:36.900 --> 00:10:39.060
+En lugar de esperar que nada falle al añadir una nueva región,
+
+00:10:39.260 --> 00:10:40.860
+sabes que la política se aplica automáticamente.
+
+00:10:41.520 --> 00:10:43.000
+Entonces, ¿cuándo deberías usar Virtual One
+
+00:10:43.000 --> 00:10:44.680
+frente al modelo tradicional de Hub & Spoke?
+
+00:10:45.680 --> 00:10:48.400
+Virtual One frente al Hub & Spoke tradicional.
+
+00:10:48.900 --> 00:10:50.860
+Cuando usar cada uno, dejemos algo claro.
+
+00:10:51.360 --> 00:10:52.140
+El Hub & Spoke está roto.
+
+00:10:52.140 --> 00:10:54.120
+Simplemente es la herramienta adecuada para el trabajo.
+
+00:10:54.420 --> 00:10:56.000
+Entonces, ¿cuándo gana el Hub & Spoke?
+
+00:10:56.320 --> 00:10:57.420
+¿Cuándo estás en una sola región?
+
+00:10:57.980 --> 00:11:00.800
+Cuando tienes un puñado de redes virtuales, quizás 5 o 10.
+
+00:11:01.640 --> 00:11:04.160
+¿Quieres un control total sobre cada ruta y cada regla de firewall?
+
+00:11:04.740 --> 00:11:07.040
+Tienes un equipo pequeño que conoce esta red a la perfección.
+
+00:11:07.560 --> 00:11:09.600
+En ese caso, el modelo Hub & Spoke es más sencillo económico.
+
+00:11:09.960 --> 00:11:11.480
+No necesitas la sobrecaria en un administrativo.
+
+00:11:12.420 --> 00:11:14.800
+Virtual One gana cuando estás en múltiples regiones.
+
+00:11:15.320 --> 00:11:16.600
+Cuando tienes sucursales en todas partes.
+
+00:11:17.040 --> 00:11:19.140
+Cuando los usuarios remotos necesitan conectarse desde cualquier lugar.
+
+00:11:19.140 --> 00:11:22.220
+Cuando tu red abarca el mundo y quieres dejar de gestionar la pieza por pieza.
+
+00:11:22.800 --> 00:11:25.600
+Cuanto más distribuida está tu red, más sentido tiene Virtual One.
+
+00:11:26.100 --> 00:11:26.700
+Hablamos de número.
+
+00:11:27.280 --> 00:11:29.960
+A pequeña escala, digamos 10 binets, Hub & Spoke es más barato.
+
+00:11:30.540 --> 00:11:32.560
+Solo pagas por los peerings y las puertas de enlace básica.
+
+00:11:33.120 --> 00:11:36.160
+Pero con 200 binets, Virtual One es cerca de un 21% más barato.
+
+00:11:36.760 --> 00:11:37.040
+¿Por qué?
+
+00:11:37.440 --> 00:11:40.640
+Porque no pagas a tu equipo por gestionar cientos de peerings y tablas de rutas.
+
+00:11:41.440 --> 00:11:43.080
+Sus ahorros operativos se suman rápidamente.
+
+00:11:43.500 --> 00:11:43.940
+El rendimiento.
+
+00:11:43.940 --> 00:11:48.320
+En implementaciones globales, Virtual One ofrece entre un 15% y un 25% menos de latencia.
+
+00:11:48.760 --> 00:11:51.860
+Eso porque el enrutamiento troncal de Microsoft está optimizado para el tráfico global.
+
+00:11:52.300 --> 00:11:55.800
+Tus paquetes toman la mejor ruta, no la que configuraste manualmente hace tres años.
+
+00:11:56.460 --> 00:11:57.880
+La diferencia en la gestión es aún mayor.
+
+00:11:58.460 --> 00:12:02.360
+Con Hub & Spoke, gestiones peerings, tablas de rutas, puertas de enlace y firewalls por región.
+
+00:12:02.940 --> 00:12:04.460
+Cada región se convierte en su propio proyecto.
+
+00:12:04.980 --> 00:12:09.100
+Con Virtual One es un panel único, una vista, un conjunto de políticas, una forma de gestionarlo todo.
+
+00:12:09.660 --> 00:12:10.380
+Eso es como decías.
+
+00:12:10.380 --> 00:12:11.560
+Te hace una sola pregunta.
+
+00:12:12.000 --> 00:12:13.940
+Estoy construyendo para hoy o para dentro de tres años.
+
+00:12:14.440 --> 00:12:17.520
+Si eres una startup con una región y cinco VNets, Hub & Spoke está bien.
+
+00:12:18.280 --> 00:12:20.400
+Pero si planeas expandirte, Virtual One crece contigo.
+
+00:12:21.020 --> 00:12:21.840
+Aquí está la buena noticia.
+
+00:12:22.000 --> 00:12:23.740
+Puedes empezar con Hub & Spoke y migrar después.
+
+00:12:24.240 --> 00:12:25.720
+Microsoft admite esa ruta de migración.
+
+00:12:26.180 --> 00:12:27.540
+No tienes que ser lo perfecto desde el primero.
+
+00:12:28.180 --> 00:12:30.760
+Si alguna vez te preguntan esto en una entrevista, aquí tienes la respuesta corta.
+
+00:12:31.480 --> 00:12:33.800
+Hub & Spoke para implementaciones controladas de una sola región.
+
+00:12:34.280 --> 00:12:36.240
+Virtual One para conectividad global a gran escala.
+
+00:12:36.880 --> 00:12:38.820
+Esa frase demuestra que entiendes el equilibrio.
+
+00:12:39.280 --> 00:12:41.800
+Veamos algunos escenarios del mundo real para ver cómo funciona esto.
+
+00:12:42.720 --> 00:12:44.420
+Escenarios del mundo real y rutas de migración.
+
+00:12:44.980 --> 00:12:47.260
+Hagamos esto concreto con tres escenarios del mundo real.
+
+00:12:47.820 --> 00:12:48.280
+Escenario 1.
+
+00:12:48.520 --> 00:12:49.460
+Una cadena minorista global.
+
+00:12:49.620 --> 00:12:50.960
+50 tiendas en tres continentes.
+
+00:12:51.600 --> 00:12:54.200
+Trabajadores remotos haciendo inventario, atención al cliente y gestión.
+
+00:12:54.780 --> 00:12:56.640
+Un sistema de ARP centralizado ejecutando cenazo.
+
+00:12:57.260 --> 00:12:58.960
+Si es como Virtual One hace que esto funcione.
+
+00:12:59.520 --> 00:13:02.400
+Despliega hubs en Norteamérica, Europa y Asia, uno por continente.
+
+00:13:02.400 --> 00:13:05.840
+Cada tienda se conecta mediante VPN sitio a sitio a su hub regional.
+
+00:13:06.240 --> 00:13:08.020
+Una tienda en Londres se conecta al hub europeo.
+
+00:13:08.520 --> 00:13:10.120
+Una tienda en Tokio se conecta al hub asiático.
+
+00:13:10.800 --> 00:13:14.880
+Los trabajadores remotos usan VPN punto a sitio, autenticados mediante Microsoft Entry ID.
+
+00:13:15.040 --> 00:13:17.280
+Sus cadenciales de trabajo, nada adicional, nada adicional.
+
+00:13:17.620 --> 00:13:18.340
+Ahora aquí está la clave.
+
+00:13:18.340 --> 00:13:21.880
+Todo el tráfico entre las tiendas y Azure permanece en la red troncal de Microsoft.
+
+00:13:22.300 --> 00:13:25.040
+Esa tienda en Londres que revisa el inventario en el almacén de Norteamérica,
+
+00:13:25.200 --> 00:13:26.760
+ese tráfico nunca toca a la internet pública.
+
+00:13:27.280 --> 00:13:29.600
+Va desde el centro europeo a través de la red privada de Microsoft
+
+00:13:29.600 --> 00:13:32.500
+hacia el centro norteamericano y entra al sistema ERP.
+
+00:13:33.080 --> 00:13:33.520
+Resulta.
+
+00:13:34.220 --> 00:13:35.720
+Conectividad consistente en todas partes.
+
+00:13:36.200 --> 00:13:37.760
+Seguridad centralizada a través de los centros.
+
+00:13:37.960 --> 00:13:39.140
+Y menor costo que MPLS.
+
+00:13:39.620 --> 00:13:40.620
+Sin contratos de proveedores.
+
+00:13:40.880 --> 00:13:41.900
+Sin compromisos a largo plazo.
+
+00:13:42.020 --> 00:13:42.940
+Solo paga por lo que usa.
+
+00:13:43.820 --> 00:13:44.440
+Escenario 2.
+
+00:13:44.760 --> 00:13:45.780
+Reemplazo de MPLS.
+
+00:13:46.300 --> 00:13:47.100
+Este es uno importante.
+
+00:13:47.100 --> 00:13:50.580
+Muchas empresas han estado pagando a proveedores por circuitos MPLS durante años.
+
+00:13:51.020 --> 00:13:52.360
+Costoso, rígido, difícil de cambiar.
+
+00:13:52.800 --> 00:13:54.120
+Virtual One le ofrece una salida.
+
+00:13:54.580 --> 00:13:57.260
+Comience usando Virtual One para nuevas sucursales y conectividad de Azure.
+
+00:13:57.660 --> 00:14:00.480
+Cualquier nueva ubicación que abra va directamente a la red troncal de Virtual One.
+
+00:14:00.960 --> 00:14:03.920
+Luego migre gradualmente los sitios MPLS existentes o VPN Express.
+
+00:14:04.500 --> 00:14:07.640
+Use Express Road para sus centros de datos heredados que necesitan conectividad privada.
+
+00:14:08.140 --> 00:14:11.980
+Con el tiempo reduzca sus circuitos MPLS a medida que el tráfico cambie la red troncal de Virtual One.
+
+00:14:12.340 --> 00:14:13.720
+No tiene que cambiar todo de una vez.
+
+00:14:14.200 --> 00:14:15.300
+Puede ejecutar ambos en paralelo.
+
+00:14:15.300 --> 00:14:19.980
+A medida que cada contrato MPLS se acerca a su renovación, ¿usted decide si se mueve el sitio de Virtual One?
+
+00:14:20.320 --> 00:14:21.820
+La mayoría de las veces la respuesta es sí.
+
+00:14:22.660 --> 00:14:23.260
+Escenario 3.
+
+00:14:23.360 --> 00:14:24.460
+Una startup orientada a la nube.
+
+00:14:24.780 --> 00:14:28.660
+Hoy está en una región, un centro, un puñado de Benets, un equipo pequeño, pero planea expandirse.
+
+00:14:29.060 --> 00:14:30.180
+Tiene clientes en Europa y Asia.
+
+00:14:30.300 --> 00:14:32.160
+Está contratando trabajadores remotos a nivel mundial.
+
+00:14:32.600 --> 00:14:33.860
+Despliega un centro de su región actual.
+
+00:14:34.560 --> 00:14:35.280
+Conecte su...
+
+00:14:35.280 --> 00:14:37.400
+Configure PN punto a sitio para su equipo remoto.
+
+00:14:38.040 --> 00:14:38.880
+Ese es su punto de partida.
+
+00:14:38.880 --> 00:14:40.980
+A medida que se expande a nuevas regiones, agrega siempre.
+
+00:14:41.540 --> 00:14:42.400
+En el rotomático es automático.
+
+00:14:42.660 --> 00:14:43.640
+No tiene que reconfigurar nada.
+
+00:14:44.020 --> 00:14:46.920
+Sus usuarios remotos se conectan al centro más cercano sin cambios de su parte.
+
+00:14:47.220 --> 00:14:48.480
+Está listo para escalar sin un rediceno.
+
+00:14:48.860 --> 00:14:49.760
+Esa es la belleza de Virtual One.
+
+00:14:50.160 --> 00:14:50.740
+Crece con usted.
+
+00:14:51.180 --> 00:14:52.240
+Entonces, ¿cómo empezar realmente?
+
+00:14:53.080 --> 00:14:54.400
+¿Cómo empezar con Azure Virtual One?
+
+00:14:54.920 --> 00:14:56.120
+Entonces, ¿cómo comienza realmente?
+
+00:14:56.620 --> 00:14:57.380
+Crea en la Virtual One.

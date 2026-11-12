@@ -1,0 +1,1138 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:01.320
+Selamat datang di selanjutnya, teman-teman lainnya.
+
+00:00:01.760 --> 00:00:05.420
+Bayangkan Anda menjalankan sebuah perusahaan dan mempekerjakan tim spesialis hebat
+
+00:00:05.420 --> 00:00:08.720
+perencanaan perjalanan kelas dunia, pakar orientasi karyawan, dan staf dukungan TI.
+
+00:00:09.280 --> 00:00:12.680
+Namun, tak saat ini berbicara, setiap kali ada tugas yang membutuhkan dua orang dari mereka,
+
+00:00:12.900 --> 00:00:15.300
+Anda harus berjalan di antara meja dan membawa informasi itu sendiri.
+
+00:00:15.680 --> 00:00:17.500
+Begitulah cara kerja sebagian besar agen AI saat ini.
+
+00:00:17.820 --> 00:00:21.120
+Mereka beroperasi secara terisolasi bahkan ketika masalah tersebut jelas membutuhkan kerja tim.
+
+00:00:21.320 --> 00:00:23.960
+Jadi, hari ini kita akan membahas bagaimana agen dapat berkomunikasi,
+
+00:00:23.960 --> 00:00:26.840
+menyerahkan pekerjaan dan bertindak seperti tim sungguh, Samir Kapiters.
+
+00:00:27.160 --> 00:00:28.120
+Ini bukan konsep masa depan.
+
+00:00:28.740 --> 00:00:30.460
+Orkestrasi multi-agen sudah terjadi saat ini.
+
+00:00:31.060 --> 00:00:33.140
+Dan ini didukung oleh protokol yang disebut A2A.
+
+00:00:33.540 --> 00:00:36.460
+Kita akan mulai dengan masalahnya, membedah protokol tersebut bagian demi bagian,
+
+00:00:36.700 --> 00:00:39.500
+dan melihat bagaimana Microsoft menggunakannya di dalam Kopet Studio dan Azure Air.
+
+00:00:39.840 --> 00:00:41.080
+Ambil kopi Anda dan mari kita mulai.
+
+00:00:41.680 --> 00:00:42.540
+Jadi, apa masalah sebenarnya?
+
+00:00:43.200 --> 00:00:45.880
+Agen AI saat ini persis seperti spesialis yang terisolasi tersebut.
+
+00:00:46.500 --> 00:00:48.280
+Masih memiliki pengetahuan alat dan tujuannya sendiri.
+
+00:00:49.000 --> 00:00:50.120
+Agen cuaca mengetahui perkecah.
+
+00:00:50.120 --> 00:00:53.080
+Agen hotel mengetahui ketersediaan kamar, tetapi mereka tidak berbagi apapun.
+
+00:00:53.480 --> 00:00:57.220
+Sekarang, bayangkan seorang pengguna meminta perjalanan ke Seattle minggu depan dengan hotel di dekat kantor.
+
+00:00:57.860 --> 00:01:01.900
+Satu agen harus menjadi pakar cuaca, pakar perjalanan, dan pakar bisnis lokal sekaligus.
+
+00:01:02.300 --> 00:01:06.860
+Itu berarti perintah prom yang sangat besar dan memungkak yang memaksakan setiap kemampuan ke dalam satu sistem
+
+00:01:06.860 --> 00:01:08.040
+dan perintah tersebut terus-menerus-menerus.
+
+00:01:08.560 --> 00:01:09.640
+Solusi lama adalah kode kustom.
+
+00:01:10.340 --> 00:01:13.140
+Anda menulis jembatan antara agen cuaca dan agen hotel,
+
+00:01:13.340 --> 00:01:17.160
+lalu satu lagi antara agen hotel dan agen penerbangan, dan satu lagi untuk agen kalender.
+
+00:01:17.400 --> 00:01:20.860
+Awalnya berhasil, tetapi setiap kali Anda menambahkan agen baru, Anda membangun integrasi lain.
+
+00:01:20.860 --> 00:01:25.280
+Segera Anda akan memiliki mimpi buruk koneksi point-to-point yang rumit di mana satu perubahan merusak segalanya.
+
+00:01:25.640 --> 00:01:29.400
+Peningkatan produktivitas yang seharusnya diberikan oleh AI Anda bisa dimakan oleh pekerjaan pemeliharaan.
+
+00:01:29.820 --> 00:01:30.880
+Mari kita lihat masalah bisnis yang sebenarnya.
+
+00:01:30.880 --> 00:01:33.780
+Organisasi Anda sudah memiliki proses dengan serah terima pekerjaan.
+
+00:01:34.080 --> 00:01:38.800
+Sebuah tiket dibuat, seseorang menyeleksinya, seseorang menyelesaikannya, seseorang mencatatnya, dan setiap langkah adalah serah terima.
+
+00:01:39.100 --> 00:01:43.620
+Di dunia lama, Anda mengotomatiskan setiap langkah dengan agen terpisah lalu menghabiskan waktu berminggu-minggu untuk menghubungkan.
+
+00:01:43.940 --> 00:01:48.760
+Tetapi bagaimana jika ada protokol yang memungkinkan agen untuk saling menemukan dan bekerja sama tanpa jembatan kustom?
+
+00:01:49.240 --> 00:01:50.280
+Itulah tepatnya yang dilakukan A2A.
+
+00:01:50.280 --> 00:01:56.120
+Dalam bahasa sederhana, A2A adalah cara standar bagi agen untuk saling berbicara, mengopor pekerjaan, dan menyelesaikan sesuatu sebagai tim.
+
+00:01:56.780 --> 00:01:58.720
+Apa itu A2A? Definisi sederhananya.
+
+00:01:59.080 --> 00:02:00.740
+A2A adalah singkatan dari agent to agent.
+
+00:02:01.060 --> 00:02:05.260
+Ini adalah protokol terbuka yang memungkinkan agen-agen AI berkomunikasi langsung satu sama lain terlepas dari siapa yang buat.
+
+00:02:05.600 --> 00:02:07.140
+Anda bisa menganggapnya seperti HTTP untuk agen?
+
+00:02:07.560 --> 00:02:12.560
+HTTP adalah bahasa yang digunakan perambahan web dan server untuk berkomunikasi dan A2A melakukan hal yang sama untuk agen.
+
+00:02:12.660 --> 00:02:18.960
+Agen yang dibuat oleh tim TI Anda di Microsoft Copilot Studio dapat berbicara dengan agen yang dibuat oleh perusahaan lain di Google Cloud
+
+00:02:18.960 --> 00:02:20.640
+selama keduanya menggunakan A2A.
+
+00:02:21.060 --> 00:02:22.160
+Ini juga bukan proyek kecil.
+
+00:02:22.760 --> 00:02:28.680
+A2A disponsori oleh delapan perusahaan besar termasuk Google, Microsoft, Cisco, Salesforce, SAP, dan lainnya
+
+00:02:28.680 --> 00:02:31.160
+serta dihosting oleh Linux Foundation Takti.
+
+00:02:31.520 --> 00:02:34.280
+Versi satu teknik yang stabil dan siap untuk digunakan secara nyata
+
+00:02:34.280 --> 00:02:36.920
+yang berarti tidak ada vendor tunggal yang mengendalikan protokol ini.
+
+00:02:37.440 --> 00:02:38.740
+Ini bukan milik Google atau Microsoft.
+
+00:02:39.400 --> 00:02:39.960
+Ini adalah industri.
+
+00:02:40.440 --> 00:02:41.800
+Desainnya sengaja dibuat sederhana.
+
+00:02:42.220 --> 00:02:45.440
+A2A dibangun di atas standar web yang ada seperti HTTP dan JSON-RPC,
+
+00:02:45.660 --> 00:02:47.580
+hal-hal yang sudah diketahui oleh setiap pengembang.
+
+00:02:47.580 --> 00:02:49.440
+Tidak ada yang eksotis atau berpemirisan.
+
+00:02:50.080 --> 00:02:54.400
+Itu membuatnya mudah diadopsi oleh perusahaan tanpa harus membongkar infrastruktur mereka yang sudah ada.
+
+00:02:54.780 --> 00:02:58.280
+Anda mungkin pernah mendengar protokol lain yang disebut MCP atau model konteks protokol.
+
+00:02:59.020 --> 00:02:59.580
+Berikut pedaannya.
+
+00:03:00.020 --> 00:03:04.260
+MCP adalah agen ke alat, artinya protokol ini menghubungkan agen ke sumber data eksternal dan API.
+
+00:03:04.840 --> 00:03:07.800
+Adalah agen ke agen yang menghubungkan agen langsung satu sama lain.
+
+00:03:08.360 --> 00:03:09.840
+Keduanya bukan bersaing, melainkan saling lengkap.
+
+00:03:09.840 --> 00:03:17.960
+Anggap MCP sebagai koneksi vertikal dari agen ke alatnya dan A2A sebagai koneksi horizontal antar agen yang berdampingan.
+
+00:03:18.960 --> 00:03:19.660
+Lagi pilihan desain.
+
+00:03:20.080 --> 00:03:21.920
+A2A memperlakukan agen sebagai entitas yang pulang.
+
+00:03:22.300 --> 00:03:27.300
+Jadi ke satu agen berbicara dengan agen lain, ia tidak melihat penalaran internal, alat, atau data pribadi agen tersebut.
+
+00:03:27.660 --> 00:03:29.960
+Ia hanya melihat tugas yang dikirimnya dan hasil yang didapatkan kembali.
+
+00:03:30.380 --> 00:03:31.980
+Hal itu menjaga privasi dan kekayaan elektrik.
+
+00:03:31.980 --> 00:03:36.780
+Agen cuaca tidak perlu tahu bagaimana agen hotel mesan kamar, ia hanya perlu memberikan perakhiran cuaca.
+
+00:03:37.380 --> 00:03:40.420
+Sekarang mari kita lihat bagian pertama dari tegak-teki ini, yaitu kartu agen.
+
+00:03:41.280 --> 00:03:42.500
+Kartu agen, yaitu resume.
+
+00:03:43.020 --> 00:03:46.660
+Setiap agen yang kompatibel dengan A2A menerbitkan sesuatu yang disebut kartu agen.
+
+00:03:47.100 --> 00:03:55.480
+Kartu tersebut adalah dokumen yang dapat dibaca mesin yang berada di URL standar di domain agen, khususnya di path well-known agent card, jason.
+
+00:03:56.420 --> 00:04:00.000
+Jika Anda tahu di mana lokasi agen tersebut, Anda dapat mengambil kartunya dan mempelajari semua yang perlu dengar.
+
+00:04:00.000 --> 00:04:02.540
+Anggap kartu agen sebagai resume atau kartu nama.
+
+00:04:03.200 --> 00:04:04.880
+Kartu ini memberitahu ke yang lain siapa Anda lakukan.
+
+00:04:06.740 --> 00:04:11.880
+Kartu tersebut berisi nama agen, deskripsi teks biasa tentang kemampuannya, dan teks keterampilan yang membantu dalam penemuan.
+
+00:04:13.480 --> 00:04:19.460
+Ini juga mencantumkan URL titik akhir tempat ia menerima permintaan, persyaratan autentikasi, serta format input dan output yang diterimanya.
+
+00:04:20.380 --> 00:04:21.360
+Berikut adalah contoh konkret.
+
+00:04:21.700 --> 00:04:22.820
+Katakanlah Anda miliki agen spesialis.
+
+00:04:23.080 --> 00:04:27.300
+Kartu agen yang berbunyi, saya dapat menyediakan cuaca saat ini dan perakhiran 5 hari untuk kota manapun.
+
+00:04:27.300 --> 00:04:33.120
+Ia mencantumkan titik akhir apinya karena ia menerima nama kota dan mengembalikan suhu serta kondisi dalam format jason.
+
+00:04:33.900 --> 00:04:34.460
+Hanya itu saja.
+
+00:04:35.000 --> 00:04:39.320
+Ini hanyalah pernyataan yang jelas tentang apa yang bisa dilakukannya tanpa mengungkap rahasia atau logika internal.
+
+00:04:39.780 --> 00:04:40.760
+Penemuan pekerja seperti ini.
+
+00:04:41.260 --> 00:04:45.420
+Agen orkestrator memiliki daftar URL agen yang dikenal atau Anda dapat mengonfigurasinya dengan URL tersebut.
+
+00:04:45.980 --> 00:04:50.680
+Saat tugas masuk, orkestrator mengambil kartu agen, membaca deskripsinya, dan memutuskan agen mana yang paling cocok.
+
+00:04:50.680 --> 00:04:54.540
+Kartu cuaca menyebutkan cuaca, jadi tugas cuaca diarahkan ke sana.
+
+00:04:54.860 --> 00:04:57.540
+Kartu hotel menyebutkan hotel, jadi tugas hotel diarahkan ke sana.
+
+00:04:58.020 --> 00:04:59.680
+Perhatikan bahwa tidak diperlukan registri pusat.
+
+00:05:00.120 --> 00:05:02.040
+Agen tidak perlu mendaftar ke direktori global.
+
+00:05:02.600 --> 00:05:04.940
+Mereka hanya menerbitkan kartu mereka di lokasi yang diketahui,
+
+00:05:05.100 --> 00:05:07.380
+dan agen lain yang mengetahui URL tersebut dapat menemukannya.
+
+00:05:07.680 --> 00:05:10.860
+Itu adalah pilihan desain yang disengaja agar sistem tetap terdesentralisasi dan fleksibel.
+
+00:05:11.340 --> 00:05:16.080
+Anda dapat menambahkan spesialis baru ke jaringan Anda dengan memberikan URL-nya kepada orkestrator dan penemuan terjadi secara teman.
+
+00:05:16.080 --> 00:05:17.700
+Jadi orkestrator tahu siapa yang tersedia.
+
+00:05:17.700 --> 00:05:19.880
+Namun bagaimana mereka benar-benar menyerahkan pekerjaan?
+
+00:05:20.360 --> 00:05:21.700
+Bagaimana komunikasi A2A pekerjaan?
+
+00:05:22.480 --> 00:05:25.360
+Jadi orkestrator tahu agen mana yang tersedia melalui kartu agen.
+
+00:05:26.140 --> 00:05:28.580
+Namun bagaimana agen-agen ini benar-benar saling menyerahkan pekerjaan?
+
+00:05:29.000 --> 00:05:29.660
+Desbannya sederhana.
+
+00:05:30.420 --> 00:05:34.280
+Semua komunikasi terjadi melalui HTTP menggunakan pesan JSON-RPC protokol yang sama
+
+00:05:34.280 --> 00:05:36.320
+yang mendukung sebagian besar layanan web saat ini.
+
+00:05:36.920 --> 00:05:40.380
+Tidak ada yang custom atau rumit, hanya lalu lintas web standar yang mengalir di antara dua agen.
+
+00:05:40.960 --> 00:05:42.620
+Ini masalahnya, tidak semua tugas sama.
+
+00:05:43.040 --> 00:05:46.420
+A2A mendukung tiga pola interaksi berbeda tergantung pada apa yang Anda butuhkan.
+
+00:05:46.420 --> 00:05:50.340
+Respons instan menangani pencarian cepat, di mana agen jarak jauh dapat menjawab segera.
+
+00:05:50.980 --> 00:05:53.360
+Anda mengirim permintaan, ia langsung membalas dan Anda selesai.
+
+00:05:53.860 --> 00:05:57.080
+Meminta perakhiran cuaca hari ini kepada agen cuaca bekerja persis seperti ini.
+
+00:05:57.280 --> 00:05:58.720
+Balasan asinkron, masuk dan keluar.
+
+00:05:59.180 --> 00:06:00.400
+Streaming menangani tugas yang lebih lama.
+
+00:06:00.760 --> 00:06:05.200
+Mungkin agen spesialis perlu mencari di beberapa basis data atau menjalankan analisis yang rumit.
+
+00:06:05.960 --> 00:06:10.260
+Aliham buat Anda menunggu satu respons, agen mengirim kembaran status saat bekerja menggunakan peristiwaan dikirim server.
+
+00:06:10.420 --> 00:06:13.820
+Anda mendapatkan laporan kemajuan di sepanjang jalan, lalu hasil akhir muncul di akhir.
+
+00:06:14.280 --> 00:06:15.900
+Melacok pengiriman paket bekerja dengan cara yang sama.
+
+00:06:15.900 --> 00:06:17.620
+Anda melihat setiap langkah satu terjadi.
+
+00:06:18.020 --> 00:06:23.580
+Pemberitahuan asinkron menangani tugas yang berjalan lama, di mana agen jarak jauh mungkin memerlukan waktu beberapa menit, jam, atau bahkan hari.
+
+00:06:23.760 --> 00:06:25.180
+Onboarding karyawan adalah contoh yang bagus.
+
+00:06:25.740 --> 00:06:30.020
+Satu spesialis menyediakan akun IT, sementara yang lain menangani pendaftaran tunjangan selama beberapa hari.
+
+00:06:30.640 --> 00:06:34.460
+Agen klien mengirimkan permintaan, mendapatkan ID tugas kembali, dan melanjutkan pekerjaannya.
+
+00:06:34.960 --> 00:06:37.240
+Nantinya, agen jarak jauh mengirimkan hasilnya melalui web.
+
+00:06:37.600 --> 00:06:40.800
+Klien juga dapat meriksa kemajuan kapan saja dan melakukan polling pada ID tugas tersebut.
+
+00:06:41.220 --> 00:06:43.960
+Setiap interaksi mengikuti struktur yang sama, semuanya diatur sebagai tugas.
+
+00:06:43.960 --> 00:06:48.240
+Saat klien mengirimkan permintaan, agen jarak jauh membuat tugas dan mengembalikan ID tugas.
+
+00:06:48.660 --> 00:06:51.140
+ID tersebut menjadi penanda pelacakan untuk semua yang terjadi setelahnya.
+
+00:06:51.780 --> 00:06:57.000
+Pesan di dalam tugas itu memiliki peran memberi tahu siapa pengirimnya, dan bagian-bagian yang bisa berupa teks biasa.
+
+00:06:57.520 --> 00:07:03.200
+Data binar seperti gambar atau dokumen, payload JSON, atau URL yang mengarah ke file yang disimpan di tempat lain.
+
+00:07:05.020 --> 00:07:09.100
+Autentikasi mengikuti konvensi web standar OAUT kunci APA token bearer.
+
+00:07:09.960 --> 00:07:11.680
+Hal-hal yang biasa tidak ada yang baru untuk dipelajar di sini.
+
+00:07:11.680 --> 00:07:17.720
+Kartu agen memberi tahu klien metode autentikasi mana yang harus digunakan, dan klien menanganinya dengan cara yang sama seperti panggilan api lainnya.
+
+00:07:18.160 --> 00:07:19.140
+Beginilah bentuknya dalam praktek.
+
+00:07:19.540 --> 00:07:21.840
+Katakanlah orkestrator membutuhkan data cuaca untuk sebuah perjalanan.
+
+00:07:22.100 --> 00:07:23.320
+Ia mengirimkan tugas ke spesialis cuaca.
+
+00:07:23.800 --> 00:07:28.200
+Spesialis cuaca mengakui permintaan tersebut, memulai pemrosesan, dan melakukan streaming pembaruan kembali.
+
+00:07:28.640 --> 00:07:29.160
+Mengambil data.
+
+00:07:29.860 --> 00:07:30.420
+Mengurai hasil.
+
+00:07:30.420 --> 00:07:33.760
+Kemudian ia mengirimkan pelakiran akhir.
+
+00:07:34.160 --> 00:07:38.920
+Orkestrator tidak pernah melihat alat internal agen cuaca, kunci APA, atau proses penalarannya, atau proses.
+
+00:07:39.260 --> 00:07:40.180
+Ia hanya melihat keluarannya.
+
+00:07:40.640 --> 00:07:41.920
+Itu adalah prinsip desain utama.
+
+00:07:42.280 --> 00:07:45.160
+Batasan yang bersih antar agen dan tidak ada status internal yang bocor keluar.
+
+00:07:45.580 --> 00:07:46.700
+Namun A2A saja tidak cukup.
+
+00:07:47.180 --> 00:07:49.500
+Anda membutuhkan pos yang cerdas untuk mengordinasikan semua spesialis.
+
+00:07:49.720 --> 00:07:51.780
+Hal itu membawa kita pada pola spesialis orkestrator.
+
+00:07:52.340 --> 00:07:53.720
+Pola spesialis orkestrator.
+
+00:07:54.240 --> 00:07:55.420
+Di sini lah semuanya terhubung.
+
+00:07:56.080 --> 00:08:00.140
+Pola spesialis orkestrator adalah arsitektur yang paling umum dalam sistem multi-agen produksi saat ini.
+
+00:08:00.540 --> 00:08:04.920
+Bayangkan seperti perusahaan dengan departemen, IT, HR, keuangan masing-masing menangani bidangnya sendiri.
+
+00:08:05.580 --> 00:08:08.840
+Anda memiliki pengambil keputusan pusat yang merutekan pekerjaan ke tim khusus.
+
+00:08:09.120 --> 00:08:11.200
+Dan setiap tim fokus pada apa yang mereka lakukan dengan baik.
+
+00:08:11.740 --> 00:08:13.040
+Orkestrator memegang gambaran besar.
+
+00:08:13.640 --> 00:08:16.220
+Ia menerima permintaan pengguna, mencari tahu apa yang perlu dilakukan,
+
+00:08:16.440 --> 00:08:18.580
+dan memutuskan spesialis mana yang dapat menangani setiap bagian.
+
+00:08:19.040 --> 00:08:21.580
+Jika pengguna bertanya, rencanakan perjalanan ke Seattle minggu depan.
+
+00:08:22.000 --> 00:08:24.520
+Orkestrator tidak memesan penerbangan atau memeriksa hotel sendiri.
+
+00:08:24.700 --> 00:08:28.460
+Ia tahu ada spesialis penerbangan, spesialis hotel, dan spesialis cuaca.
+
+00:08:28.460 --> 00:08:31.640
+Ia memecah permintaan tersebut menjadi bagian-bagian itu dan mendirikan sikap.
+
+00:08:32.000 --> 00:08:33.540
+Setiap spesialis memiliki fokus yang sempit.
+
+00:08:33.960 --> 00:08:35.500
+Satu agen menangani pemesanan penerbangan,
+
+00:08:35.640 --> 00:08:38.120
+yang lain menangani pencarian hotel, dan yang ketiga menangani triasins.
+
+00:08:38.360 --> 00:08:40.060
+Mereka tidak perlu mengetahui domain satu sama lain.
+
+00:08:40.580 --> 00:08:42.560
+Spesialis penerbangan, maskapai ruta, dan harga.
+
+00:08:43.280 --> 00:08:46.420
+Ia tidak perlu tahu apapun tentang jenis kamar hotel atau kebijakan pembatalan.
+
+00:08:47.280 --> 00:08:50.820
+Fokus yang sempit itu membuat setiap agen sederhana mudah dirawat dan mudah diuji.
+
+00:08:51.540 --> 00:08:52.340
+Inilah bagian pentingnya.
+
+00:08:52.340 --> 00:08:54.440
+Orkestrator tidak mengeksekusi tugas tersebut.
+
+00:08:54.880 --> 00:08:56.300
+Ia merutakan pekerjaan dan menggabungkan.
+
+00:08:56.680 --> 00:08:57.580
+Itulah satu-satunya tugas.
+
+00:08:57.860 --> 00:08:59.900
+Peran orkestrator adalah menjadi pengatur yang cerdas,
+
+00:09:00.040 --> 00:09:01.780
+bukan agen super yang mencoba melakukan segalanya.
+
+00:09:02.380 --> 00:09:04.980
+Saat Anda membiarkan orkestrator mulai mengerjakan tugas spesialis,
+
+00:09:05.100 --> 00:09:06.580
+Anda kehilangan seluruh manfaat dari pola lain.
+
+00:09:06.800 --> 00:09:08.100
+Sistem itu kembali menjadi kekacauan umulit.
+
+00:09:08.340 --> 00:09:09.560
+Waspadalah terhadap kesalahan umulit.
+
+00:09:09.820 --> 00:09:11.920
+Beberapa tim membuat domain spesialis yang tumpang tindih.
+
+00:09:12.480 --> 00:09:13.700
+Dua agen sama-sama mengklaim,
+
+00:09:13.940 --> 00:09:15.900
+bisa menangani dukungan pelanggan atau pencarian data,
+
+00:09:15.900 --> 00:09:17.600
+yang menciptakan kebingungan perutean.
+
+00:09:17.980 --> 00:09:19.700
+Orkestrator tidak tahu mana yang harus dipilih,
+
+00:09:19.780 --> 00:09:21.500
+dan pengguna mendapatkan hasil yang tidak konsisten.
+
+00:09:22.020 --> 00:09:22.920
+Perbaikannya cukup mudah.
+
+00:09:23.520 --> 00:09:26.300
+Setiap spesialis memiliki domain yang dibatasi dengan jelas tanpa tumantin.
+
+00:09:26.660 --> 00:09:28.200
+Jika dua agen bisa melakukan hal yang sama,
+
+00:09:28.300 --> 00:09:29.920
+gabungkan mereka atau bagi domainnya dengan lebih bersih.
+
+00:09:30.420 --> 00:09:32.840
+Copilot Studio dari Microsoft menggunakan pola ini secara asli.
+
+00:09:33.360 --> 00:09:35.260
+Copilot utama Anda bertindak sebagai orkestrator,
+
+00:09:35.420 --> 00:09:37.820
+sementara agen turunan dan agen yang terhubung bertindak spesialis.
+
+00:09:38.320 --> 00:09:40.520
+Saat pengguna meminta sesuatu yang mencakup berbagai domain,
+
+00:09:40.660 --> 00:09:43.660
+Copilot utama mendelegasikannya ke spesialis yang tepat melalui A2A.
+
+00:09:43.660 --> 00:09:47.920
+Ini sudah ada dalam platform, jadi Anda tidak perlu membuat logika orkestrasi dari awal.
+
+00:09:48.600 --> 00:09:49.660
+Manfaat besar di sini adalah modularitas.
+
+00:09:50.680 --> 00:09:52.080
+Perlu mengganti penyedia pemesanan hotel Anda.
+
+00:09:52.780 --> 00:09:55.820
+Ganti spesialis hotel tanpa menyentuh orkestrator atau agen lainnya.
+
+00:09:56.340 --> 00:09:57.200
+Menambahkan kemampuan baru.
+
+00:09:57.820 --> 00:10:00.320
+Buat spesialis baru, daftarkan ke orkestrator dan selesai.
+
+00:10:01.020 --> 00:10:04.280
+Setiap agen tetap kecil, mudah dikelola, dan dapat diterapkan secara mendiri.
+
+00:10:04.900 --> 00:10:07.740
+Itulah inti dari beralih dari agen monolitik ke sistem multi-agen.
+
+00:10:08.280 --> 00:10:10.140
+Jadi kita punya protokol kartu agen dan polanya.
+
+00:10:10.680 --> 00:10:12.020
+Mari kita lihat aksinya dalam skenario-nya.
+
+00:10:12.020 --> 00:10:14.780
+Contoh nyata A2A dalam tindakan.
+
+00:10:15.380 --> 00:10:17.420
+Jadi seperti apa sebenarnya A2A di dunia nyata?
+
+00:10:17.940 --> 00:10:19.020
+Mari kita mulai dengan contoh sederhana.
+
+00:10:19.600 --> 00:10:21.020
+Anda memberitahu asisten AI Anda.
+
+00:10:21.400 --> 00:10:22.980
+Rencanakan perjalanan ke Seattle minggu depan.
+
+00:10:24.000 --> 00:10:26.280
+Dalam cara lama, satu asisten itu harus tahu segalanya.
+
+00:10:26.420 --> 00:10:29.180
+Cuaca, penerbangan, hotel, restoran, sekaligus.
+
+00:10:30.360 --> 00:10:31.820
+Itu terlalu banyak untuk diminta dari satu klit.
+
+00:10:32.120 --> 00:10:33.560
+Dengan A2A, orkestrator Mojah.
+
+00:10:33.560 --> 00:10:37.720
+Ia mengirim tugas ke spesialis cuaca untuk menanyakan perakiraan untuk hari-hari tersebut.
+
+00:10:38.240 --> 00:10:43.200
+Pada saat yang sama, ia meminta spesialis penerbangan untuk mencari penerbangan yang tiba selasa pagi kembali kamis malam,
+
+00:10:43.600 --> 00:10:46.960
+dan spesialis hotel untuk mencari tempat dekat pusat kota Seattle untuk tiga malam.
+
+00:10:48.000 --> 00:10:49.580
+Setiap spesialis bekerja secara mandiri.
+
+00:10:50.000 --> 00:10:51.680
+Dan mereka tidak perlu berbicara dengan agen lain,
+
+00:10:51.680 --> 00:10:54.820
+karena mereka masing-masing memiliki sumber data, alat, dan kealian sendiri.
+
+00:10:55.320 --> 00:10:58.460
+Orkestrator mengumpulkan semua hasil dan menggabungkannya menjadi satu tanggap.
+
+00:10:59.380 --> 00:11:00.480
+Pengguna melihat satu jawaban tunggu.
+
+00:11:01.280 --> 00:11:01.860
+Ini perakhirannya.
+
+00:11:02.340 --> 00:11:04.900
+Ini adalah pilihan penerbangan Anda dan ini ada tiga hotel yang dekatkan.
+
+00:11:05.560 --> 00:11:09.540
+Di balik layar, tiga agen terpisah bekerja bersama tanpa kode integrasi custom apapun.
+
+00:11:10.480 --> 00:11:11.260
+Sekarang sekarang ada bisnis.
+
+00:11:11.840 --> 00:11:12.640
+Katakanlah ada tiket masuk.
+
+00:11:13.080 --> 00:11:14.440
+Laptop saya tidak bisa terhubung ke VPN.
+
+00:11:15.120 --> 00:11:17.120
+Orkestrator menyimpulkan ini adalah masalah jaringan.
+
+00:11:17.660 --> 00:11:21.060
+Ia menyerahkan tiket tersebut kepada spesialis runbook yang mengetahui langkah-langkah standar.
+
+00:11:21.680 --> 00:11:25.880
+Periksa status klien VPN, verifikasi kredensial jaringan, mulai ulang layanan.
+
+00:11:26.720 --> 00:11:27.800
+Spesialis itu mengembalikan langkah.
+
+00:11:28.280 --> 00:11:32.780
+Kemudian orkestrator meneruskan hasilnya ke spesialis penulis tiket yang mencatat resolusi dalam sistem.
+
+00:11:33.560 --> 00:11:36.260
+Semua ini terjadi dalam hitungan detik tanpa campur tangan manusia,
+
+00:11:36.400 --> 00:11:39.460
+dan tim IT hanya terlibat jika langkah otomatis tidak memperbaiki masalah.
+
+00:11:40.240 --> 00:11:43.800
+Orientasi karyawan adalah contoh lain, tetapi yang ini memakan waktu berhari-hari, bukan detik.
+
+00:11:44.360 --> 00:11:45.360
+Karyawan baru bergabung dengan proses.
+
+00:11:46.180 --> 00:11:51.000
+Orkestrator memicu spesialis IT untuk membuat akun dan menetapkan perangkat keras yang mungkin memakan waktu beberapa jam.
+
+00:11:51.680 --> 00:11:55.140
+Pada saat yang sama, ia memicu spesialis tunjangan SDM untuk formulir pendaftaran,
+
+00:11:55.240 --> 00:11:57.680
+dan kemudian spesialis fasilitas untuk akses meja dan lencana.
+
+00:11:58.340 --> 00:12:01.160
+Setiap spesialis menjalankan tugas jangka panjangnya sendiri secara mandiri,
+
+00:12:01.480 --> 00:12:04.840
+dan orkestrator melacak kemajuan menggunakan ID tugas yang kita bicarakan sebelumnya.
+
+00:12:05.340 --> 00:12:07.980
+Jadi, jika spesialis IT selesai, orkestrator mengetahuinya,
+
+00:12:08.060 --> 00:12:10.100
+dan jika spesialitas terlambat, ia bisa menindak lanjutinya.
+
+00:12:10.100 --> 00:12:12.640
+Nah, pengguna melihat satu alur orientasi yang lancar,
+
+00:12:12.840 --> 00:12:15.980
+namun di balik layar ini adalah tim terkoordinasi yang bekerja selama beberapa hari.
+
+00:12:16.280 --> 00:12:17.180
+Dan ini bukan sekadar teori.
+
+00:12:17.680 --> 00:12:21.580
+Coca-Cola Beverages Africa sudah menggunakan Aigen Copel Studio dengan dinamik 365
+
+00:12:21.580 --> 00:12:23.460
+untuk mengotomatiskan siklus perencanaan.
+
+00:12:24.160 --> 00:12:27.560
+Perencanaan mereka biasanya menghabiskan waktu hingga 1,5 jam setiap hari untuk tugasnya guru.
+
+00:12:28.020 --> 00:12:30.460
+Dengan orkestrasi multi-agen, siklus tersebut berjalan dengan sendiri.
+
+00:12:30.920 --> 00:12:32.760
+Orkestrator mendelegasikan kepada spesialis,
+
+00:12:33.020 --> 00:12:35.600
+yang menangani berbagai bagian dari proses perencanaan rantai pasokan.
+
+00:12:35.600 --> 00:12:38.820
+Hasilnya adalah penghematan waktu lebih dari 1 jam per orang setiap hari
+
+00:12:38.820 --> 00:12:40.540
+hanya dengan membiarkan Aigen saling berkomunikasi
+
+00:12:40.540 --> 00:12:42.740
+alih-alih membuat manusia, alih-alih membuat manusia antar sistem.
+
+00:12:43.620 --> 00:12:45.080
+Jadi polanya sama dalam semua contoh ini.
+
+00:12:46.120 --> 00:12:48.600
+Setiap Aigen adalah pakar mandiri yang mengetahui domininya sendiri
+
+00:12:48.600 --> 00:12:49.760
+dan memiliki alatnya sendiri,
+
+00:12:49.920 --> 00:12:52.000
+serta tidak perlu tahu apapun tentang Aigen lainnya.
+
+00:12:52.820 --> 00:12:54.740
+A2A menyediakan lapisan komunikasi sederhana
+
+00:12:54.740 --> 00:12:56.660
+sehingga mereka dapat pekerja sama tanpa kode khusus.
+
+00:12:57.700 --> 00:13:00.100
+Anda mendapatkan protokol standar dan orkestrator cerdas
+
+00:13:00.100 --> 00:13:01.960
+tanpa jembatan, tanpa integrasi point-to-point,
+
+00:13:02.060 --> 00:13:02.920
+dan tanpa meliharaan.
+
+00:13:03.820 --> 00:13:04.980
+Microsoft telah sepenuhnya mendukung hal ini.
+
+00:13:04.980 --> 00:13:07.580
+Mari kita lihat di mana Copilot Studio dan Azure AI berperan.
+
+00:13:08.480 --> 00:13:11.360
+Ekosistem Microsoft, Copilot Studio, dan Azure AI.
+
+00:13:12.080 --> 00:13:13.420
+Nah di mana posisi Microsoft dalam semua ini?
+
+00:13:13.880 --> 00:13:14.640
+Tepat di tengah-tengahnya.
+
+00:13:15.120 --> 00:13:17.480
+Copilot Studio kini mendukung A2A secara asli
+
+00:13:17.480 --> 00:13:19.860
+dan telah tersedia secara umum sejak April 2006.
+
+00:13:20.560 --> 00:13:21.640
+Itu bukan peran tinggi atau beta.
+
+00:13:22.140 --> 00:13:23.640
+Fitur ini sudah siap produksi dan pelanggan
+
+00:13:23.640 --> 00:13:25.100
+yang memenuhi syarat dapat menggunakannya hari ini.
+
+00:13:25.400 --> 00:13:25.980
+Begini masalahnya.
+
+00:13:26.340 --> 00:13:27.800
+Anda dapat menghubungkan Aigen eksternal
+
+00:13:27.800 --> 00:13:29.180
+ke orkestrator Copilot Studio Anda.
+
+00:13:29.620 --> 00:13:31.740
+Saat saya katakan eksternal, maksud saya benar-benar eksternal.
+
+00:13:32.200 --> 00:13:34.840
+Agen yang dibangun di Google Cloud, AWS, atau platform
+
+00:13:34.840 --> 00:13:37.040
+lain manapun yang mendukung protokol A2A.
+
+00:13:37.540 --> 00:13:39.360
+Orkestrator tidak peduli di mana agen berada
+
+00:13:39.360 --> 00:13:41.180
+atau kerangga kerja apa yang digunakan untuk membangun.
+
+00:13:41.480 --> 00:13:44.520
+Selama mendukung A2A, agen tersebut dapat bergabung dengan pengaturannya sederhana.
+
+00:13:45.100 --> 00:13:47.580
+Di Copilot Studio Anda membuat sesuatu yang disebut agen terhubung.
+
+00:13:48.420 --> 00:13:50.220
+Anda menempelkan URL endpoint agen tersebut.
+
+00:13:50.680 --> 00:13:53.720
+Copilot Studio secara otomatis mengambil kartu agen dari URL tersebut
+
+00:13:53.720 --> 00:13:56.300
+yang merupakan file JSON kartu agen yang kita bahas sebelumnya.
+
+00:13:56.840 --> 00:14:00.200
+Sistem membaca kemampuan agen, persyaratan autentikasi,
+
+00:14:00.380 --> 00:14:01.560
+serta format input dan output.
+
+00:14:01.560 --> 00:14:04.600
+Kemudian sistem membangun konektor kustom di latar belakang
+
+00:14:04.600 --> 00:14:06.980
+dan orkestrator Anda dapat langsung mendelegasikan tugas.
+
+00:14:07.320 --> 00:14:09.540
+Anda tidak perlu pekerja integrasi manual atau kode khusus.
+
+00:14:10.000 --> 00:14:11.380
+Cukup tempel URL-nya dan selesai.
+
+00:14:12.040 --> 00:14:14.920
+Di sisi Azure, Azure Eye Foundry Agent Service juga mendukung A2A.
+
+00:14:15.660 --> 00:14:19.260
+Layanan ini memiliki endpoint IP A2A khusus yang menginginkan orkestrator sumber terbuka
+
+00:14:19.260 --> 00:14:22.480
+seperti autogen, link chain, dan semantik kernel memanggil agen foundry.
+
+00:14:22.980 --> 00:14:25.700
+Jadi, jika Anda telah membangun agen menggunakan kerangka kerja tersebut,
+
+00:14:25.700 --> 00:14:28.420
+Anda dapat menghubungkannya ke ekosistem Microsoft tanpa menulis ulang apapun.
+
+00:14:28.420 --> 00:14:29.720
+Ini adalah hubungan dua arah.
+
+00:14:30.080 --> 00:14:33.600
+Microsoft mengikuti pola orkestrator spesialis yang sama seperti yang telah kita jelaskan.
+
+00:14:33.860 --> 00:14:36.180
+Agen utama di Copilot Studio bertindak sebagai orkestrator,
+
+00:14:36.360 --> 00:14:38.880
+sementara agen turunan dan agen terhubung bertindak sebagai spesialis.
+
+00:14:39.340 --> 00:14:42.460
+Masing-masing menangani domain sendiri, dan orkestrator mengarahkan serta menggabungkan hasil.
+
+00:14:42.880 --> 00:14:45.360
+Ini adalah arsitektur yang sama, hanya saja berjalan di platform Microsoft.
+
+00:14:45.920 --> 00:14:48.320
+Namun, ada beberapa batasan yang perlu Anda ketahui.
+
+00:14:48.920 --> 00:14:51.620
+Pertama, setiap lompatan orkestrasi tambahan akan menambah latensi.
+
+00:14:51.620 --> 00:14:55.680
+Jika agen utama Anda memanggil agen terhubung, dan agen terhubung itu memanggil spesialis lain,
+
+00:14:55.820 --> 00:14:57.280
+setiap lompatan menambah waktu jaringan.
+
+00:14:57.780 --> 00:15:01.020
+Untuk percakapan waktu nyata, terlalu banyak lompatan dapat membuat pengalaman terasal.
+
+00:15:01.480 --> 00:15:03.900
+Kedua, delegasi berlebihan menciptakan kekacauan perhutian.
+
+00:15:04.440 --> 00:15:07.320
+Jika Anda memiliki terlalu banyak spesialis dengan domain yang tumpang tindih,
+
+00:15:07.440 --> 00:15:09.520
+orkestrator akan mulai membuat keputusan perhutian yang buruk.
+
+00:15:09.700 --> 00:15:13.380
+Jadi, jaga jumlah spesialis Anda agar tetap bisa dikelola dan pisahkan domain Anda dengan jelas.
+
+00:15:13.940 --> 00:15:16.560
+Ketiga, ada batasan khusus terkait agen data Fabric.
+
+00:15:16.560 --> 00:15:20.620
+Agen tersebut tidak berfungsi saat agen utama diterapkan ke Microsoft di Gerasna Kopel.
+
+00:15:21.120 --> 00:15:22.880
+Jika penerapan Anda menargetkan MT kan tepat,
+
+00:15:23.020 --> 00:15:23.700
+mengencanakan tepat.
+
+00:15:24.160 --> 00:15:25.600
+Kendala ini nyata namun bisa dikelola.
+
+00:15:26.460 --> 00:15:29.020
+Platform ini sudah cukup matang untuk penggunaan produksi,
+
+00:15:29.180 --> 00:15:31.120
+dan Microsoft aktif berupaya menutup celah tersebut.
+
+00:15:31.920 --> 00:15:33.460
+Sekarang mari hubungkan semua poin dan lihat gambar-gambar.
+
+00:15:34.220 --> 00:15:36.380
+Bagian koneksi, bagaimana semuanya saling melengkap.
+
+00:15:37.000 --> 00:15:38.940
+Mari mundur secenak dan melihat bagaimana bagian ini terhubung.
+
+00:15:39.420 --> 00:15:41.960
+Adalah sistem telepon yang digunakan agen untuk saling menelpon.
+
+00:15:42.580 --> 00:15:43.760
+Laptop agen itulah buku telepon Anda.
+
+00:15:43.760 --> 00:15:46.460
+Kartu ini menunjukkan siapa yang harus digunakan dan apa yang ditangani setiap agen.
+
+00:15:46.800 --> 00:15:49.740
+Orkestrator adalah resepsionis yang mengarahkan setiap panggilan ke departemen yang tepat.
+
+00:15:49.880 --> 00:15:51.060
+Tidak satu dari bagian ini bekerja sendiri.
+
+00:15:51.360 --> 00:15:52.140
+Anda membutuhkan ketiganya.
+
+00:15:52.400 --> 00:15:54.120
+Tanpa buku telepon Anda tidak tahu siapa yang harus digunakan.
+
+00:15:54.440 --> 00:15:56.860
+Tanpa resepsionis, tidak ada yang mengatur lalu lintas.
+
+00:15:57.320 --> 00:16:00.100
+Dan tanpa sistem telepon, resepsionis tidak bisa menghubungkan siapapun.
+
+00:16:00.500 --> 00:16:01.440
+Mereka hanya bekerja sebagai tim.
+
+00:16:01.740 --> 00:16:02.800
+Disitulah modularitas berperan.
+
+00:16:03.240 --> 00:16:04.660
+Saat spesialis Anda bersifat modular,
+
+00:16:04.880 --> 00:16:07.400
+Anda bisa menambah kemampuan baru tanpa merusak apa yang sudah berjalan.
+
+00:16:07.400 --> 00:16:10.920
+Katakanlah, Anda ingin menambahkan spesialis penyewaan mobil ke asisten perjalanan Anda.
+
+00:16:11.020 --> 00:16:13.720
+Anda membuatnya, menerbitkan kartu agennya dan memberikan kartu agennya ke orkestrator.
+
+00:16:14.720 --> 00:16:17.080
+Spesialis penerbangan dan spesialis hotel tetap sama persis.
+
+00:16:17.680 --> 00:16:18.700
+Orkestrator pun tidak berubah.
+
+00:16:19.300 --> 00:16:21.460
+Anda cukup memasukkan bagian baru dan sistem akan disiakan.
+
+00:16:22.000 --> 00:16:24.720
+Karena protokolnya terbuka, Anda tidak akan terjebak dengan satu vendor.
+
+00:16:26.060 --> 00:16:27.860
+Orkestrator Anda bisa berjalan di Copilot Studio.
+
+00:16:28.240 --> 00:16:29.640
+Egen cuaca Anda bisa berada di Google Cloud.
+
+00:16:29.860 --> 00:16:30.900
+Egen hotel Anda di AWS.
+
+00:16:31.080 --> 00:16:32.120
+Sistem internal Anda tetap di Azure.
+
+00:16:32.120 --> 00:16:34.720
+Mereka semua berbicara bahasa yang sama.
+
+00:16:35.120 --> 00:16:36.240
+Itulah keindahan standar terbuka.
+
+00:16:36.840 --> 00:16:40.300
+Hal ini mencegah ketergantungan pada vendor dan memungkinkan Anda memilih alat terberi untuk set pekerjaan.
+
+00:16:40.420 --> 00:16:43.100
+A2A bukan tentang membangun satu agen super cerdas yang tahu segalanya.
+
+00:16:43.440 --> 00:16:47.180
+Ini tentang membangun tenaga kerja spesialis yang fleksibel yang bisa Anda atur ulang saat kebutuhan Anda.
+
+00:16:47.400 --> 00:16:49.300
+Anda tidak mengganti agen Anda. Anda mengatur ulang mereka.
+
+00:16:49.620 --> 00:16:50.380
+Anda menambahkan yang baru.
+
+00:16:50.700 --> 00:16:51.460
+Anda menukar yang lama.
+
+00:16:52.060 --> 00:16:54.420
+Sistem tumbuh bersama Anda alih-alih menjadi penghambat.
+
+00:16:54.420 --> 00:16:56.300
+Apa yang bisa dilakukan dengan pengetahuan ini hari ini?
+
+00:16:56.880 --> 00:16:57.740
+Paling penting yang bisa dititik.
+
+00:16:58.100 --> 00:16:58.580
+Malah dengan kecil.
+
+00:16:58.580 --> 00:17:02.280
+Pilih satu proses berulang di organisasi Anda yang melibatkan banyak sistem.
+
+00:17:03.340 --> 00:17:06.660
+Misalnya penyelesaian tiket, onboarding karyawan, atau pelaporan pengeluaran.
+
+00:17:07.380 --> 00:17:09.060
+Sesuatu dengan serah terima yang jelas antar langkah.
+
+00:17:09.560 --> 00:17:12.020
+Kemudian buat prototipe dengan satu orkestrator dan dua spesialis.
+
+00:17:12.420 --> 00:17:13.960
+Anda tidak memerlukan arsitektur yang...
+
+00:17:13.960 --> 00:17:15.660
+Anda hanya butuh contoh kerja yang bisa Anda pelajari.
+
+00:17:16.340 --> 00:17:17.740
+Gunakan alat yang sudah mendukung ini.
+
+00:17:18.400 --> 00:17:20.240
+Copel Studio memiliki dukungan A2A bawaan.
+
+00:17:20.240 --> 00:17:21.600
+Azure AI Foundry pun demikian.
+
+00:17:22.240 --> 00:17:25.080
+Anda tidak perlu membangun protokol dari awal atau menulis kode integrasi custom.
+
+00:17:25.080 --> 00:17:28.800
+Tempelkan URL, konfigurasikan agen Anda, dan mulailah mendelegasikan.
+
+00:17:29.300 --> 00:17:30.200
+Waspada kendala-kendala umum.
+
+00:17:30.620 --> 00:17:32.160
+Pastikan domain spesialis Anda tidak tumal ini.
+
+00:17:32.720 --> 00:17:36.020
+Jika dua agen bisa melakukan hal yang sama, gabungkan atau bagi domainnya dengan lebih rapi.
+
+00:17:36.300 --> 00:17:38.320
+Biarkan orkestrator menangani perlutenan, bukan eksekusi.
+
+00:17:38.820 --> 00:17:40.500
+Dan perhatikan latensi dari lompatan orkestrasi.
+
+00:17:40.900 --> 00:17:43.980
+Jika waktu respons Anda mulai meningkat, mungkin ada terlalu banyak lapisan delegasi.
+
+00:17:44.460 --> 00:17:45.700
+Langkah pertama yang terbaik adalah yang sedang.
+
+00:17:45.860 --> 00:17:48.060
+Tetakan serah terima dalam alur kerja Anda yang ada.
+
+00:17:48.520 --> 00:17:51.000
+Di mana informasi diteruskan antar orang atau antar sistem.
+
+00:17:51.320 --> 00:17:53.120
+Itulah titik di mana agen dapat mengambil alih.
+
+00:17:53.120 --> 00:17:54.780
+Setiap serah terima adalah sebuah peluang.
+
+00:17:55.480 --> 00:17:57.240
+Jadi itulah sistem A2A secara singkat.
+
+00:17:58.060 --> 00:17:59.420
+Tiga bagian sederhana yang bekerja bersama.
+
+00:18:00.080 --> 00:18:02.540
+Agen tidak lagi terisolasi dan mulai bertindak seperti tim sungguhan.
+
+00:18:02.940 --> 00:18:05.160
+Pilih satu alur kerja dengan serah terima yang jelas dan bangun dari sana.
+
+00:18:06.000 --> 00:18:09.140
+Berlanggananlah untuk penjelasan yang lebih sederhana dan beri komentar jika ada yang dipahami.

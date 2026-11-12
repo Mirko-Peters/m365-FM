@@ -1,0 +1,1285 @@
+WEBVTT
+
+00:00:00.450 --> 00:00:04.090
+Welkom iedereen bij de MC65FM podcast.
+
+00:00:04.730 --> 00:00:12.270
+Vandaag gaan we verder dan een van de meest gebruikelijke gesprekken over Microsoft 365 Copilot Prompt Engineering, want...
+
+00:00:13.290 --> 00:00:19.970
+zodra organisaties Copilot serieus gaan gebruiken, verandert de vraag al snel van hoe schrijven we betere prompts.
+
+00:00:21.550 --> 00:00:29.250
+Naar hoe koppelen we Copilot aan de applicaties, data, apps, bedrijfsprocessen en kennis die daadwerkelijk in ons bedrijf draaien.
+
+00:00:30.270 --> 00:00:34.530
+En dat is waar Copilot extensibiliteit interessant wordt en uitdagend.
+
+00:00:35.410 --> 00:00:42.890
+Mijn gast vandaag is Evas Harvest, Microsoft MVP Business Application Consultant bij de AI Werkgroep in Zwitserland.
+
+00:00:43.870 --> 00:00:55.790
+Evas werkt met Microsoft 365, Azure, Dynamics 365 en het Power Platform met een specifieke focus op het uitbreiden van Microsoft 365 Copilot via agents en maatwerkontwikkeling.
+
+00:00:55.790 --> 00:01:04.590
+We gaan Microsoft 365 Copilot extensibiliteit verkennen, Copilot Studio, Microsoft Azure AI Foundry, ik weet het ook niet.
+
+00:01:04.770 --> 00:01:09.930
+Ze veranderen de naam steeds Microsoft Graph, maatwerkontwikkeling, MCPS enzovoort.
+
+00:01:10.130 --> 00:01:13.510
+Dus ja, Evas, welkom bij de MC65 podcast.
+
+00:01:14.230 --> 00:01:16.910
+Ja, hallo iedereen, bedankt dat ik erbij mag zijn.
+
+00:01:18.170 --> 00:01:20.830
+Het is echt een goede gelegenheid voor mij om hier te zijn.
+
+00:01:21.490 --> 00:01:23.070
+Dus bedankt voor de uitnodiging.
+
+00:01:23.070 --> 00:01:25.170
+Ja, ik dank jou.
+
+00:01:27.520 --> 00:01:33.400
+Voordat we technisch worden, kun je iets vertellen over je reis en hoe je in het Microsoft ecosysteem terecht bent gekomen.
+
+00:01:35.960 --> 00:01:41.520
+Ja, ja, ja, natuurlijk, want ik ben mijn carrière om eerlijk te zijn niet begonnen in de Microsoft wereld.
+
+00:01:41.700 --> 00:01:43.840
+Ik begon mijn carrière in de Apple wereld.
+
+00:01:43.840 --> 00:01:50.580
+Ik was software engineer op het Mac platform en daarna ging ik over naar iOS en dat soort zaken.
+
+00:01:52.380 --> 00:02:00.260
+En oh, dat is alweer een hele tijd geleden, misschien wel 15 of 20 jaar geleden, toen ik overstapte naar de Microsoft wereld.
+
+00:02:00.260 --> 00:02:04.720
+Om eerlijk te zijn begon ik mijn carrière met C Sharp op SharePoint.
+
+00:02:06.140 --> 00:02:10.500
+En daarna stapte ik over naar de cloud, Azure en M365.
+
+00:02:10.500 --> 00:02:22.070
+Ik begon met on-premises SharePoint, zo ben ik begonnen, en daarna stapte ik over naar alle cloud diensten, uiteindelijk naar het power platform en recentelijk naar al die AI dingen.
+
+00:02:25.750 --> 00:02:34.510
+Eerlijk gezegd, omdat het nu een groot deel van M365 is, aangezien we nu een agentische transitie doormaken en in een notendop is dat mijn reis.
+
+00:02:34.510 --> 00:02:56.140
+Maar ik begon mijn carrière in de wereld van software engineering, wat vandaag de dag misschien een woord is dat veel mensen vergeten, omdat we nu al die AI dingen hebben, en eigenlijk zijn dit soort activiteiten of banen verschoven naar AI, dus het is heel anders dan 20 jaar geleden vergeleken met nu.
+
+00:03:02.050 --> 00:03:08.630
+Ja, je werkt, je zegt dat je met SharePoint werkt en ik zie ook dat je met Graph, Speak, Dynamics en Power platform werkt.
+
+00:03:10.800 --> 00:03:14.660
+Hoe heeft die achtergrond je voorbereid op de huidige generatie AI ontwikkeling?
+
+00:03:14.660 --> 00:03:27.320
+Eigenlijk, eigenlijk heb ik een profiel dat echt, het is echt transversaal, omdat ik in mijn carrière met heel veel verschillende producten heb gewerkt.
+
+00:03:30.100 --> 00:03:38.660
+Dat kunnen Microsoft en non-Microsoft producten zijn, dus ik heb eigenlijk een brede rijkwijte aan vaardigheden in heel veel verschillende technologieën en tools.
+
+00:03:38.660 --> 00:03:53.250
+Dus, eh, al mijn banen gaven me een goede achtergrond, want nu met AI is het een, het is een breed, het is een breed onderwerp omdat je verschillende soorten benaderingen en verschillende soorten technologieën hebt om nu uit te doen.
+
+00:03:55.600 --> 00:03:59.440
+Het kan agentgebaseerd zijn, het kan meer workflow zijn, dat soort dingen.
+
+00:03:59.440 --> 00:04:07.260
+Dus, eigenlijk gaven al mijn voorrige banen me veel vaardigheden om klaar te zijn voor deze AI-transitie nu om eerlijk te zijn.
+
+00:04:07.260 --> 00:04:12.960
+Dus, ik stapte over naar low-code, naar non-e, naar pro-code tools.
+
+00:04:12.960 --> 00:04:26.420
+Dus, ja, al deze, eh, oh, ja, al deze, eh, kansen en, eh, en activiteiten in mijn, in mijn banen gaven me, eh, goede vaardigheden om voordeel te behalen in de AI-wereld, om eerlijk te zijn.
+
+00:04:28.690 --> 00:04:31.670
+Ja, en, en nu ben je een AI-testlead.
+
+00:04:32.910 --> 00:04:34.550
+Wat doet een AI-testlead?
+
+00:04:35.150 --> 00:04:35.370
+Uw.
+
+00:04:36.650 --> 00:04:40.510
+Dat is een, dat is een echt goede vraag, want veel mensen vragen me dat.
+
+00:04:40.510 --> 00:04:48.050
+Dus mijn baan is gewoon om functionele specificaties te koppelen aan de technische, aan de technische stack.
+
+00:04:50.580 --> 00:04:53.720
+Dus ik neem de leiding wanneer de business-analyse is afgerond.
+
+00:04:55.100 --> 00:04:59.160
+We hebben use cases gedefinieerd in de AI, eh, voor de AI-zaken.
+
+00:04:59.420 --> 00:05:02.320
+We hebben scenario's en use cases gedefinieerd.
+
+00:05:02.880 --> 00:05:12.320
+We hebben gedefinieerd, we hebben de volledige business-analyse gedaan, en mijn baan is, oké, ik neem deze behoeften en ik koppel die behoeften aan de technische stack achter de schermen.
+
+00:05:15.000 --> 00:05:21.940
+En daarna leid ik de volledige implementatie van de tools en de, en de oplossing, eh, wanneer we klaar zijn om te beginnen met ontwikkelen.
+
+00:05:24.750 --> 00:05:25.690
+Ja, interessant.
+
+00:05:30.210 --> 00:05:38.930
+Eigenlijk, veel bedrijven kopen trainingen voor hun werknemers, vooral, eh, ja, eh, voor prompt engineering, en waarom zou je zeggen dat dat niet genoeg is?
+
+00:05:46.710 --> 00:05:49.070
+Bedoel je tegenwoordig alleen prompt engineering?
+
+00:05:49.070 --> 00:05:53.770
+Ja, ja, waarom, waarom, waarom, waarom, zij?
+
+00:05:56.010 --> 00:06:02.810
+Waarom, is het alleen, weet je, waarom is het voor bedrijven, u, niet, niet genoeg om mensen alleen prompt engineering te leren?
+
+00:06:02.810 --> 00:06:06.870
+Ah, ja, oké, ik begrijp het, ik begrijp het.
+
+00:06:06.870 --> 00:06:22.130
+Oké, ja, ja, u, eigenlijk, om eerlijk te zijn, tegenwoordig heb je, zoals ik al zei, veel verschillende tools en technologieën, dus, en eigenlijk, op een gegeven moment, kan AI begrijpen wat je moet doen en je misschien, u, een beetje begeleiden.
+
+00:06:26.310 --> 00:06:34.170
+Maar voor mij, u, de rol van bijvoorbeeld architect of software ontwerper, u, moet je een mens achter de schermen hebben omdat je de klant moet begrijpen.
+
+00:06:37.230 --> 00:06:40.350
+Eigenlijk kan AI de context van de klant soms niet begrijpen.
+
+00:06:40.350 --> 00:07:08.560
+U, je ziet daar het totaalplaatje, maar achter de schermen, u, om alleen te focussen op prompt engineering, is dat op een gegeven moment misschien goed, maar je hebt meer nodig omdat je achter de schermen, u, mensen nodig hebt die, u, architecten of software engineers zijn, en eigenlijk veel mensen met vaardigheden in technologieën, u, informatietechnologieën zoals SharePoint, zoals OneDrive, zoals ik weet niet, of Salesforce, dat soort dingen.
+
+00:07:08.560 --> 00:07:16.870
+Je moet specialisten hebben in u, die technologieën, want AI kan veel dingen begrijpen.
+
+00:07:18.130 --> 00:07:19.670
+Het kan u, het kan je begeleiden.
+
+00:07:20.610 --> 00:07:28.830
+Het kan geweldige technische of functionele documenten genereren, maar je moet mensen achter de schermen hebben die controleren, oké, is dit goed.
+
+00:07:29.810 --> 00:07:37.170
+Voldoet het, u, aan de behoeften van de klant en dat soort dingen, je ziet, om alles te valideren en focussen op alleen prompt engineering.
+
+00:07:37.170 --> 00:07:49.550
+Voor mij nu is, ja, het zou, het zou een optie kunnen zijn als je, als je geen u, tijd hebt om, om, te trainen of te investeren, u, in, u, in, u, in het opdoen van wat vaardigheden.
+
+00:07:50.510 --> 00:07:58.110
+Maar voor mij, je, je moet, u, goede vaardigheden hebben in de basistechnologieën waar je je oplossingen op wilt bouwen, om eerlijk te zijn.
+
+00:07:58.110 --> 00:08:04.470
+Ja, ja, en jij bent een expert in co-pilot extensibiliteit.
+
+00:08:08.610 --> 00:08:14.750
+Waar stopt de standaard Microsoft 365 co-pilot en waar begint co-pilot extensibiliteit?
+
+00:08:14.750 --> 00:08:31.310
+Ah ja, dat is een goede vraag, want om eerlijk te zijn, twee jaar geleden toen, toen co-pilot UL werd uitgebracht en UL misschien de eerste versie, UL was de chat eigenlijk, om eerlijk te zijn, echt heel erg minimalistisch.
+
+00:08:33.900 --> 00:08:42.220
+Eigenlijk kun je, oké, het was als een chat GPT, maar Microsoft heeft Microsoft 365 co-pilot enorm laten evolueren.
+
+00:08:42.220 --> 00:09:05.490
+Eigenlijk heb je nu, je hebt verschillende soorten functies, dus de uitbreidbaarheid is nu minder dan voorheen, want vroeger ontwikkelde je plugins en dat soort dingen, maar tegenwoordig, eerlijk gezegd, is uitbreidbaarheid wanneer je iets wilt bouwen en de orchestrator wilt aanpassen,
+
+00:09:05.490 --> 00:09:16.450
+of als je iets meer wilt personaliseren, bijvoorbeeld de gebruikersinterface, als je je agent niet alleen in Microsoft 365 chat wilt integreren, maar bijvoorbeeld ook op je website,
+
+00:09:16.650 --> 00:09:22.810
+dus uitbreidbaarheid begint wanneer je eigenlijk meer achter de schermen wilt aanpassen, wanneer je net iets meer wilt personaliseren.
+
+00:09:34.480 --> 00:09:45.180
+Het kan de orchestrator zijn als je die wilt aanpassen, als je je interface wilt aanpassen, of als je verschillende aspecten wilt aanpassen waar co-pilot chat eigenlijk niet bij kan of niet kan antwoorden op de.
+
+00:09:45.180 --> 00:09:57.290
+En, en, ik denk dat veel mensen praten over agents.
+
+00:09:58.850 --> 00:09:59.770
+Um, zijn.
+
+00:10:05.670 --> 00:10:13.710
+Waarom, waarom, waarom denken we nu zoveel in, ja, in co-pilot agents, en waarom bouwen we niet, ik weet het niet, één grote co-pilot voor alles?
+
+00:10:18.120 --> 00:10:25.340
+Ja, het is echt interessant, want, nu, eerlijk gezegd, is Microsoft, zoals ik al eerder zei, enorm geëvolueerd.
+
+00:10:27.940 --> 00:10:32.080
+En misschien als we zes maanden terug zouden gaan, was een agent inderdaad een onderwerp.
+
+00:10:32.080 --> 00:10:42.320
+Nu heeft Microsoft co-pilot co-work geïntroduceerd en eerlijk gezegd kan co-pilot co-work tegenwoordig veel agents vervangen.
+
+00:10:45.480 --> 00:10:55.040
+En als we over agents nadenken, is het gewoon om de zaken te scheiden, want we zitten nu meer in een multi-agent model waarbij elke agent zijn eigen scope en verantwoordelijkheden heeft.
+
+00:10:55.040 --> 00:11:02.100
+En we maken geen grote co-pilot, eigenlijk gewoon vanwege de prestaties.
+
+00:11:03.240 --> 00:11:09.580
+Ten eerste omdat, eh, wanneer je een grote set instructies en tools hebt, het qua prestaties een puinhoop wordt.
+
+00:11:12.250 --> 00:11:20.110
+En de architectuur is nu meer multi-agent, dat kan in co-pilot studio zijn, of in een op maat ontwikkelde agent via code of custom development.
+
+00:11:20.110 --> 00:11:35.270
+Maar tegenwoordig is het beter om een multi-agent benadering te hebben, waarbij elke agent zijn eigen bereik en verantwoordelijkheid heeft wat betreft prestaties en om een duidelijke architectuur te hebben wat betreft agents.
+
+00:11:35.270 --> 00:11:56.400
+Ja, Schopenhauer.
+
+00:11:56.880 --> 00:12:11.510
+En als we hiernaar kijken, oké, ik denk aan een basis AI-agent architectuur, dan hebben we, zeg ik.
+
+00:12:14.980 --> 00:12:15.800
+Wat wachtwoorden?
+
+00:12:16.580 --> 00:12:17.720
+We, we wachtwoorden.
+
+00:12:18.220 --> 00:12:18.700
+Oké.
+
+00:12:20.380 --> 00:12:24.440
+Maar we moeten denken aan redeneren, tools, kennis en instructies.
+
+00:12:28.430 --> 00:12:30.530
+Hoe past dit in een AI-agent architectuur?
+
+00:12:34.990 --> 00:12:40.830
+Het eerste waar je over na moet denken, een van de eerste vragen die je moet beantwoorden is, oké, wat is het doel?
+
+00:12:41.110 --> 00:12:44.610
+Het eerste objectief van deze agent.
+
+00:12:48.820 --> 00:12:58.920
+Eigenlijk hangt de agent architectuur echt af van of je een low-code aanpak hanteert of een maatwerkontwikkeling, want de aanpak is totaal verschillend, omdat je bij maatwerk alles zelf beheert.
+
+00:13:03.730 --> 00:13:08.230
+Dus je beheert de beveiliging, je beheert de hosting, je beheert veel verschillende dingen.
+
+00:13:09.830 --> 00:13:16.310
+Bij de low-code aanpak is het echt anders, want je denkt na over oké, je geeft de instructie en selecteert wat tools.
+
+00:13:20.720 --> 00:13:33.800
+Dus in feite is de architectuur bij een low-code aanpak niet zo simpel als ik nu zeg, maar het kan heel snel gaan omdat je kunt definiëren, oké, je hebt de instructie, je kunt je tools selecteren, je kunt andere agents selecteren als je wilt koppelen.
+
+00:13:38.810 --> 00:13:43.710
+Maar het is erg simpel wanneer je te maken hebt met maatwerk of wanneer je je eigen agent ontwikkelt.
+
+00:13:43.710 --> 00:13:49.150
+Het kan bijvoorbeeld gaan om cementen kernel, agent framework, dat soort dingen.
+
+00:13:49.590 --> 00:13:56.350
+De architectuur kan echt veel complexer zijn omdat je te maken krijgt met zeer geavanceerde concepten zoals ik al zei, beveiliging.
+
+00:13:57.210 --> 00:13:57.730
+MHM
+
+00:13:57.730 --> 00:14:10.270
+Wat betreft authenticatie, als je bijvoorbeeld meerdere tools hebt en je wilt wat NCP integreren, of als je wilt verbinden met interne tools die beschermd zijn door reverse proxies, dat soort zaken.
+
+00:14:10.270 --> 00:14:20.860
+Dus in principe moet je meer nadenken over de architectuur wanneer je werkt met aangepaste agents, bijvoorbeeld in Copilot Studio.
+
+00:14:23.950 --> 00:14:28.970
+Wat architectuur betreft is het erg snel om de architectuur te definiëren in een maatwerktraject.
+
+00:14:28.970 --> 00:14:37.650
+Je moet omgaan met geavanceerde concepten en voor veel mensen kan dit lastig zijn omdat het echt fundamentele aspecten zijn.
+
+00:14:39.350 --> 00:14:40.350
+En UL
+
+00:14:40.350 --> 00:14:47.730
+In mijn werk, om eerlijk te zijn, krijg ik te maken met UL veel verschillende behoeften.
+
+00:14:48.950 --> 00:14:55.450
+Het kan custom development zijn, Copilot Studio of een simpele agent-in-agent-builder voor iets heel eenvoudigs.
+
+00:14:55.450 --> 00:15:02.750
+Dus, in feite, is het definiëren van een architectuur echt gebaseerd op de aanpak die je wilt kiezen.
+
+00:15:04.650 --> 00:15:12.870
+Kortom, je hebt een algemene UL architectuur die je kunt maken, maar daarna hangt het echt af van de aanpak, low-code of pro-code, begrijp je.
+
+00:15:14.570 --> 00:15:16.690
+Ja, ja, um, maar kunnen we.
+
+00:15:19.600 --> 00:15:24.660
+UM, kun, kun, kun, kun jij de anatomie van een typische enterprise UL AI-agent beschrijven.
+
+00:15:25.680 --> 00:15:28.740
+Ja, ja, dat kan ik.
+
+00:15:32.940 --> 00:15:43.260
+UL, in feite, als je het zo simpel mogelijk wilt houden, UL, wanneer je, wanneer je een behoefte hebt, bijvoorbeeld een IT-support-agent, UL, dan heb je in principe een set aan zaken.
+
+00:15:49.130 --> 00:15:56.530
+Maar tegenwoordig, zoals ik al zei, heb je deze multi-agent-aanpak en ik zet de eerste agent aan het front, UL, als een soort front-end.
+
+00:15:58.920 --> 00:16:06.660
+Dus dit is een front-agent en deze front-agent zal, UL, alle verzoeken doorsturen naar, bijvoorbeeld, verschillende agents.
+
+00:16:06.660 --> 00:16:17.250
+Dus bijvoorbeeld, als de gebruiker een vraag heeft over, ik weet het niet, Salesforce, dan stuurt hij het verzoek door naar de Salesforce IT-support-agent.
+
+00:16:20.000 --> 00:16:25.800
+Zie je, voor sommige klanten hebben we dit soort architectuur gemaakt omdat elke agent zijn eigen scope beheert.
+
+00:16:25.800 --> 00:16:29.980
+Het kan gaan om producten zoals Salesforce.
+
+00:16:30.720 --> 00:16:34.040
+Het kan voor M365 zijn, dat soort dingen.
+
+00:16:34.760 --> 00:16:38.860
+En achter de schermen heeft elke agent een set, instructies en een set-tools.
+
+00:16:41.400 --> 00:16:50.500
+En tegenwoordig is het beter om MCP-survers te gebruiken, want een MCP-server is nu een universele plug om UL meerdere services te integreren met AI.
+
+00:16:50.500 --> 00:16:58.230
+Dus ik heb een set MCP-survers en ik heb ook, UL, wat interne kennisbronnen.
+
+00:16:59.810 --> 00:17:04.350
+Het kan zijn zoals JIRA of een Service Now Knowledge Base, dat soort dingen.
+
+00:17:05.370 --> 00:17:07.690
+Dus je hebt een set instructies per agent.
+
+00:17:10.790 --> 00:17:16.190
+UL en die instructies definiëren de scope van de agent en UL, wat de rol van elke agent is.
+
+00:17:16.430 --> 00:17:22.350
+En daarna, UL, heb je een set MCP-survers en misschien, UL, kennisbronnen zoals PDF-bestanden.
+
+00:17:22.350 --> 00:17:28.740
+Dus het kunnen, UL, meerdere soorten databronnen zijn.
+
+00:17:34.220 --> 00:17:43.020
+En na, sorry, wanneer een gebruiker bijvoorbeeld een verzoek indient bij de hoofdagent, zal deze bepalen, oké, ik moet deze taak delegeren aan de betreffende agent.
+
+00:17:47.880 --> 00:17:50.380
+Laten we eens kijken naar de mogelijkheden of.
+
+00:17:54.060 --> 00:17:57.440
+Naar Copilot Studio, waar past dit in de algemene architectuur?
+
+00:18:00.720 --> 00:18:04.700
+Copilot Studio is eerlijk gezegd een low-code tool van Microsoft.
+
+00:18:04.700 --> 00:18:09.860
+Ten eerste, en qua architectuur, is Copilot Studio echt.
+
+00:18:13.540 --> 00:18:17.980
+Bedoeld voor makers, in principe voor mensen die in de eerste plaats geen ontwikkelaars zijn.
+
+00:18:20.920 --> 00:18:28.460
+En wat betreft de architectuur, als we bijvoorbeeld het voorbeeld van IT Support nemen dat ik eerder noemde, dan past Copilot Studio daar prima bij.
+
+00:18:28.460 --> 00:18:42.790
+Architectonisch gezien doet Copilot Studio het werk, omdat je het kunt definiëren, je kunt een server instellen en je kunt eenvoudig externe of interne kennisbronnen integreren als je dat wilt.
+
+00:18:42.790 --> 00:18:59.440
+Zoals ik eerder zei, als je bijvoorbeeld een use case hebt waarbij je de orchestrator een beetje wilt aanpassen, dan kan dat niet, want achter de schermen van Copilot Studio kun je de orchestrator niet aanpassen, je activeert de AI-orchestrator en dat is het.
+
+00:19:02.420 --> 00:19:10.520
+Je kunt bijvoorbeeld de prioriteit van de taak die je wilt uitvoeren niet aanpassen, want achter de schermen bepaalt Copilot Studio je plan en voert het daarna uit.
+
+00:19:10.520 --> 00:19:25.720
+Maar als je wat meer aanpassingsmogelijkheden wilt, moet je gebruik maken van custom development met bijvoorbeeld Semantic Kernel of Longchain, een framework dat onlangs door Microsoft is uitgebracht.
+
+00:19:29.720 --> 00:19:35.860
+In die fase kun je eenvoudig de orchestratie aanpassen, workflows definiëren en aanpassen wat je maar wilt.
+
+00:19:39.570 --> 00:19:46.770
+Dat is Copilot Studio als architectuur, het is echt ontworpen voor bouwers en makers omdat het heel eenvoudig is om een werkende agent te krijgen.
+
+00:19:46.770 --> 00:20:02.830
+Het enige probleem met Copilot Studio, en daar moet je rekening mee houden, is dat wanneer je je pad kiest en je architectuur definieert, je moet letten op de licenties, want dat is tegenwoordig een groot onderdeel van elke oplossing.
+
+00:20:09.370 --> 00:20:24.870
+Tegenwoordig is Copilot Studio een beetje geëvolueerd naar een PSU-BO-model en moet je goed letten op de kostenraming, want afhankelijk van wat je wilt bereiken, is het soms beter om maatwerk te ontwikkelen omdat je het dan kunt hosten waar je wilt, de kosten zelf beheert en ze makkelijker kunt inschatten dan nu.
+
+00:20:30.760 --> 00:20:38.080
+Want met de Copilot Credit benadering is het soms lastig om te voorspellen wat de kosten zullen zijn voor een maand, twee maanden en dat soort zaken.
+
+00:20:43.330 --> 00:20:45.650
+En wat zijn de beperkingen van Copilot Studio?
+
+00:20:51.030 --> 00:21:01.650
+Studio, wanneer ik moet kiezen, dan denk ik aan de, ja, Microsoft Foundry Azure, Foundry, ik weet niet wat de echte naam is en wanneer ik moet zeggen, oké, ik moet volledig maatwerk ontwikkelen.
+
+00:21:01.650 --> 00:21:13.890
+De eerste vraag om te beantwoorden is, oké, moet ik de orchestratie aanpassen?
+
+00:21:17.800 --> 00:21:32.500
+Dat is voor mij de eerste vraag, want deze vraag vertelt je, oké, als je de orchestratie niet wilt aanpassen of diep in de materie wilt duiken over hoe de orchestratie of het plan wordt gegenereerd, kun je een low-code aanpak gebruiken met Copilot Studio, bijvoorbeeld een builder.
+
+00:21:32.500 --> 00:21:39.760
+Ook kun je dit soort tools soms gebruiken bij eenvoudige use cases.
+
+00:21:42.990 --> 00:21:47.370
+Maar als je de orchestratie wilt aanpassen, moet je kiezen voor specifieke ontwikkeling.
+
+00:21:51.330 --> 00:21:57.050
+In dat geval moet je Foundry gebruiken voor het model of je eigen platform, want het voordeel van maatwerk is.
+
+00:22:00.710 --> 00:22:04.590
+Dat je modellen kunt integreren die niet in Microsoft Foundry worden gehost.
+
+00:22:04.590 --> 00:22:23.400
+Als je wilt, kun je Foundry modellen gebruiken, maar als je ook een AWS of Google platform hebt en je hebt bijvoorbeeld Gemini of Elders modellen ingezet, dan heb je bij een maatwerkaanpak de mogelijkheid om die modellen direct in je agent te integreren.
+
+00:22:30.770 --> 00:22:38.590
+Dit is ook een voordeel en daarna kun je de orchestratie en hoe het plan wordt gegenereerd aanpassen, alle zaken komen dan in de agent Foundry terecht.
+
+00:22:41.310 --> 00:22:46.770
+Het probleem met Foundry is tegenwoordig dat het in het begin slechts een platform was voor het hosten van modellen.
+
+00:22:47.450 --> 00:22:53.190
+Als je een paar jaar terugkijkt, was het gewoon een simpele model katalogus waar je op kon deployen.
+
+00:22:55.950 --> 00:23:05.530
+Tegenwoordig heeft Microsoft dit product zo ontwikkeld dat je, oké, je kunt agenten maken met een Copilot Studio-achtige gebruikersinterface, eigenlijk zonder enige code.
+
+00:23:08.040 --> 00:23:11.440
+Je kunt governance beheren, je kunt een heleboel dingen beheren.
+
+00:23:12.540 --> 00:23:18.080
+Het is echt een agentisch platform geworden, zoals Copilot Studio voor low-code en dat soort zaken.
+
+00:23:18.080 --> 00:23:26.890
+En tegenwoordig is Foundry erg lastig te plaatsen in het ecosysteem, omdat Foundry snel evolueert.
+
+00:23:30.820 --> 00:23:41.960
+En in feite heeft Microsoft een aantal functies geïntroduceerd die eigenlijk, ik weet het niet, niet anders zijn, maar er zijn overeenkomsten met Copilot Studio wat betreft MCP-integratie en dat soort zaken.
+
+00:23:45.360 --> 00:23:49.020
+Maar de voornaamste beperking van Copilot Studio gaat over de modellen.
+
+00:23:49.020 --> 00:23:55.140
+Dus je hebt, oké, je hebt de mogelijkheid om code te integreren of dingen te visualiseren.
+
+00:23:56.740 --> 00:24:08.040
+Maar als je bijvoorbeeld je eigen model wilt integreren omdat je een specifieke versie van je model hebt, dan kan dat niet en moet je eigenlijk maatwerk gebruiken om bijvoorbeeld je eigen LLM-platform te integreren als je dat hebt.
+
+00:24:08.040 --> 00:24:18.750
+Ik heb een klant die zijn eigen AWS-platform heeft, in dat geval kun je dit model integreren met prijzen die extern worden beheerd.
+
+00:24:23.180 --> 00:24:24.320
+Oké, oké.
+
+00:24:24.320 --> 00:24:29.900
+En ik denk dat als we een agent bouwen, één onderwerp ook al ontegenwoordig is.
+
+00:24:38.770 --> 00:24:50.130
+Ja, Schopenhauer.
+
+00:24:57.870 --> 00:25:01.650
+De meeste mensen praten over MCP, het modelcontextprotocol.
+
+00:25:05.610 --> 00:25:13.570
+Waarom is dit een van de grootste onderwerpen geworden in agentische ontwikkeling en voor iemand die er nog niet mee gewerkt heeft, wat is een modelcontextprotocol?
+
+00:25:18.010 --> 00:25:19.690
+Ja, het is een groot woord.
+
+00:25:20.870 --> 00:25:24.590
+Eigenlijk praten veel mensen erover omdat het een groot probleem oplost.
+
+00:25:28.750 --> 00:25:43.070
+Het gaat erom hoe je de integratie van tools, vaardigheden, misschien externe tooling naar AI toe kunt verenigen en het lost dit probleem op omdat het in het verleden zonder MCP een puinhoop was omdat veel services op verschillende manieren met elkaar communiceerden.
+
+00:25:50.820 --> 00:25:59.660
+Je hebt verschillende technologische protocollen, verschillende architecturale benaderingen en in feite verenigt MCP hoe je services integreert met je.
+
+00:25:59.660 --> 00:26:08.440
+Het kan een AI-agent of AI-oplossing zijn als ik generieker ben, maar MCP is nu echt de manier om externe of interne tooling te integreren, of beide.
+
+00:26:14.630 --> 00:26:20.510
+Maar MCP is nu een groot onderdeel van AI-architectuur omdat je die eenheid hebt op technologisch vlak.
+
+00:26:21.790 --> 00:26:24.070
+En tegenwoordig is het een belangrijk punt.
+
+00:26:24.070 --> 00:26:36.730
+Dit is niet de evolutie, maar in het verleden integreerde je je agent met een API.
+
+00:26:38.070 --> 00:26:42.890
+Je moet beheren, oké, hoe te authenticeren of dat te beheren of de tool aan te roepen.
+
+00:26:42.890 --> 00:26:50.030
+Nu kan de AI, oké, ik heb deze tool beschikbaar, ik kan selecteren wat ik nodig heb om het doel te bereiken.
+
+00:26:53.900 --> 00:26:58.520
+En wat is, wat is er nu echt veranderd van, van MCP naar een API-verbinding?
+
+00:27:05.010 --> 00:27:10.270
+Eigenlijk in het verleden, wat betreft integratie, zijn APIs eigenlijk niet intelligent.
+
+00:27:10.270 --> 00:27:17.570
+Als ik dat zo mag zeggen, APIs zijn gewoon, oké, je roept, je roept, je roept een tool aan en die geeft je data.
+
+00:27:17.570 --> 00:27:32.480
+Het verschil met MCP is, MCP is intelligenter qua architectuur, want achter de schermen heb je niet alleen tools die je data of informatie geven,
+
+00:27:32.740 --> 00:27:38.680
+maar je hebt ook vaardigheden in instructies, en verschillende soorten dingen die MCP echt intelligent maken.
+
+00:27:43.100 --> 00:27:46.840
+En eigenlijk kan MCP de AI geven, oké, wil je dat bereiken?
+
+00:27:50.130 --> 00:27:55.910
+Ik kan je de exacte tools geven die bij je verzoek passen en je kunt niet slechts één tool aanroepen,
+
+00:27:56.070 --> 00:27:58.850
+maar je moet deze tools aanroepen om te bereiken wat je wilt.
+
+00:28:01.460 --> 00:28:03.380
+Dit is de rol van MCP.
+
+00:28:04.980 --> 00:28:12.060
+Het geeft de AI, oké, ik heb deze tools en daarna, eh, kun je deze of deze of meerdere tools aanroepen om je doelen te bereiken.
+
+00:28:13.660 --> 00:28:24.020
+Het geeft je, het geeft je, het geeft aan de AI de context, de echte context van, eh, alles en een API is gewoon, oké, je hebt tools, je hebt een beschrijving en dat is eigenlijk alles.
+
+00:28:24.020 --> 00:28:34.420
+Dus, dus is het, het is het model context protocol, ik, ik denk vergelijkbaar met, met, met metadata, of, of hoe werkt het?
+
+00:28:37.180 --> 00:28:37.740
+Eh, nee.
+
+00:28:38.740 --> 00:28:42.520
+MCP achter de schermen, eh, is gewoon, eh, het is een protocol.
+
+00:28:42.520 --> 00:28:56.740
+B, eigenlijk is het, het is een technologisch protocol en achter de schermen heb je, heb je ja, je hebt metadata, je hebt beschrijvingen, eh, je hebt AI vaardigheden die meer beschrijven, eh, het is echt gericht op AI.
+
+00:28:56.740 --> 00:29:12.740
+Eigenlijk heb je vaardigheden, heb je instructies en in feite kan de AI beter begrijpen, oké, deze tools, eh, doen dat, deze tool doet dat, oké, ik kan deze vaardigheden aanroepen, ik kan, eh, deze informatie opvragen bij de MCP server om mijn taak te volbrengen.
+
+00:29:14.680 --> 00:29:22.480
+Maar je hebt, ja, je hebt, een stukje metadata, want je moet definiëren, oké, uw, de naam van de tool, wat het achter de schermen doet.
+
+00:29:22.480 --> 00:29:27.560
+Kijk, kunnen we, kunnen we zeggen dat, dat, dat de toekomst MCP is.
+
+00:29:28.080 --> 00:29:37.120
+Dus, moeten we beginnen na te denken over, ik weet het niet, bedrijven hebben honderden rest APIs binnen de organisatie, moeten ze beginnen met het bouwen van MCP servers eromheen.
+
+00:29:40.000 --> 00:29:44.920
+Ja, ja, eigenlijk, eigenlijk, uw, werkt een MCP server uw met APIs achter de schermen.
+
+00:29:46.280 --> 00:29:48.280
+Uw, dit is in feite geen vervanging.
+
+00:29:49.500 --> 00:29:53.660
+Uw, als je, als ik dit samenvat, want de MCP server is gewoon oké.
+
+00:29:54.520 --> 00:29:59.160
+Uw, het geeft de context en achter de schermen kan de MCP APIs aanroepen.
+
+00:29:59.960 --> 00:30:12.180
+Achter de schermen, maar de MCP server is een frontend, de, de front, uw, de front, uw, de front tool die je, die je moet aanroepen, want achter de schermen ga je je verzoek, uw, versturen op basis van oké.
+
+00:30:12.180 --> 00:30:20.580
+Achter de schermen kan het een API zijn, een database, of meerdere tools.
+
+00:30:20.580 --> 00:30:33.480
+Maar als je, als je je eigen MCP server wilt hebben, bijvoorbeeld, als je intern in je bedrijf, uw, APIs hebt en verschillende soorten diensten, het kan zijn, ik weet het niet, een financiële dienst of een ouder dienst.
+
+00:30:33.700 --> 00:30:42.420
+Als je je eigen MCP wilt bouwen, moet je achter de schermen, uw, met al deze APIs omgaan en de MCP server moet al deze APIs blootstellen.
+
+00:30:42.420 --> 00:30:49.180
+Wat zijn de, wat zijn de, de diensten, wat zijn de beschikbare tools, wat zijn de vaardigheden en dat soort zaken.
+
+00:30:52.790 --> 00:30:53.310
+H.M.
+
+00:30:55.280 --> 00:31:06.020
+Daarna moet je achter de schermen omgaan met authenticatie, omdat de APIs niet allemaal op dezelfde manier werken, want je kunt authenticatie hebben via een sleutel, via, via dit soort dingen.
+
+00:31:07.340 --> 00:31:15.120
+Dus je moet daarmee omgaan, maar de MCP zal je de beschikbare tools blootstellen en achter de schermen kunnen al deze tools meerdere APIs aanroepen.
+
+00:31:15.120 --> 00:31:20.300
+1 API, het kan zijn, uw, je hebt verschillende soorten architecturen achter de schermen.
+
+00:31:21.160 --> 00:31:21.640
+Oké.
+
+00:31:23.100 --> 00:31:25.060
+En U M, hoe kiest de MCP?
+
+00:31:29.410 --> 00:31:34.190
+De juiste, de juiste tool wanneer ik, ik weet het niet, 100, 500 AI agents heb.
+
+00:31:36.670 --> 00:31:39.270
+Uw, dat zal gebaseerd zijn op, uw, eerste zaken.
+
+00:31:40.030 --> 00:31:45.330
+Eigenlijk, wanneer, wanneer je een verzoek hebt in een agent, uw, ontdek je alle beschikbare tools.
+
+00:31:45.330 --> 00:31:51.390
+De MCP-server zal, je zult, uw, je zult controleren, oké, ik heb al deze tools beschikbaar.
+
+00:31:53.090 --> 00:31:59.050
+En eigenlijk, zal de orchestrator van de agent begrijpen, oké, ik heb dit, ik heb een LLM beschikbaar.
+
+00:32:01.450 --> 00:32:02.970
+Daarna zul je het plan maken.
+
+00:32:02.970 --> 00:32:19.210
+Als ik het een beetje samenvat, maak je een plan met wat acties die uitgevoerd moeten worden, en daarna, in deze actie, in de actie die je wilt uitvoeren, kun je 1, 2, 3 of meer tools aanroepen om de taak te volbrengen die de gebruiker heeft verzocht.
+
+00:32:19.210 --> 00:32:27.820
+Dus eigenlijk zal de orchestrator van de agent MCP-tools begrijpen en de beste selecteren voor het verzoek.
+
+00:32:28.580 --> 00:32:29.080
+Begrijp je?
+
+00:32:32.590 --> 00:32:49.670
+En dit is echt de rol van de orchestrator, het selecteren van tools en dat soort zaken met de hulp van de LLM, natuurlijk, want de LLM is als onderdeel van het brein en de orchestrator zal, oké, communiceren met de LLM en ook de tools om de beste keuze en het beste plan te maken om de taak te volbrengen.
+
+00:32:49.670 --> 00:33:01.930
+Ja, ik, ik denk dat veel bedrijven een tijdje geleden zijn begonnen met de PowerShell en nu gebruiken ze de Microsoft Graph API.
+
+00:33:07.190 --> 00:33:09.870
+Kwamen er Graph en MCP'en of of hoedoende?
+
+00:33:10.190 --> 00:33:17.910
+Ja, ik denk dat eigenlijk, eigenlijk Graph API'en, om eerlijk te zijn, nee, er is geen MCP, MCP voor Graph.
+
+00:33:17.910 --> 00:33:35.160
+Als je dit benoemt, weet je, je hebt nu in de Microsoft 365 wereld, heeft Microsoft veel MCP-servers geïntroduceerd en die MCP-servers zijn achter de schermen gebaseerd op Microsoft Graph.
+
+00:33:37.430 --> 00:33:47.050
+Dus bijvoorbeeld als je wilt, ik weet niet, de Teams MCP-server wilt gebruiken, wordt achter de schermen de Graph API aangeroepen wanneer je de MCP-server gebruikt.
+
+00:33:47.050 --> 00:34:01.860
+Dus Graph API in de Microsoft 365 wereld is centraal, want achter de schermen zal de MCP communiceren met Graph achter de schermen om het verzoeken goed te laten werken.
+
+00:34:01.860 --> 00:34:17.200
+Maar ja, tegenwoordig is Graph ook centraal in Copilot in het algemeen, omdat de semantische index van Copilot gebaseerd is op ruwe data, maar eigenlijk, weet je, verbruik je Graph via MCP-servers.
+
+00:34:19.510 --> 00:34:20.930
+Tegenwoordig is het de, is het zo.
+
+00:34:28.900 --> 00:34:40.040
+Microsoft 365 bevat ongelooflijke waarden, organisatorische contexten, documenten, vergaderingen, e-mails, mensen, teams, gesprekken en, zeg ik, gedeelde inhoud.
+
+00:34:40.040 --> 00:34:44.980
+Hoe stellen we die context bloot zonder ja?
+
+00:34:46.260 --> 00:34:48.600
+Een beveiligingsnachtmerrie te creëren?
+
+00:34:50.850 --> 00:34:53.410
+Bedoel je in termen van governance en dat soort dingen?
+
+00:34:56.550 --> 00:35:02.870
+Ja, het is altijd een probleem omdat veel mensen een agent te bouwen zonder achter de schermen voor de juiste governance te zorgen.
+
+00:35:04.390 --> 00:35:07.210
+Dus ik wil een agent bouwen, oké, laten we beginnen.
+
+00:35:08.050 --> 00:35:13.310
+We bouwen en implementeren en daarna, ah maar u, oké, deze agent zal met veel data werken.
+
+00:35:14.510 --> 00:35:15.270
+Hoe beheer ik dat?
+
+00:35:16.850 --> 00:35:20.350
+De eerste vraag is, oké, hoe zet ik het beheer van de agent op?
+
+00:35:21.870 --> 00:35:24.650
+Uw, voorheen kon het, zoals je zei, een puinhoop zijn.
+
+00:35:24.850 --> 00:35:32.490
+Omdat, uw, veel mensen willen, oké, ik wil agent, agent, agent bouwen, of ik wil iets bouwen, uw, ik wil een AI-oplossing bouwen.
+
+00:35:32.490 --> 00:35:42.770
+Maar achter de schermen, uw, een van de dingen, als je in een Microsoft 365 context bent, bijvoorbeeld, is een van de eerste dingen die je moet doen, oké, je data begrijpen.
+
+00:35:42.770 --> 00:35:46.410
+Want zonder je data te begrijpen, uw, ben je verloren.
+
+00:35:47.130 --> 00:35:53.270
+Je moet je data begrijpen, want het is belangrijk om te weten, oké, uw, werk ik met vertrouwelijke gegevens of niet.
+
+00:35:54.110 --> 00:35:56.550
+Werk ik met uw zeer vertrouwelijke gegevens?
+
+00:35:56.550 --> 00:36:00.230
+Oké, uw, je moet je data begrijpen.
+
+00:36:00.230 --> 00:36:12.850
+Daarna, als je in een Microsoft-omgeving zit, moet je bijvoorbeeld DLP-functies, vertrouwelijkheidslabels en dat soort dingen implementeren, want zonder dit, uw, zou het een probleem kunnen zijn.
+
+00:36:12.850 --> 00:36:31.500
+En daarna moet je je data ook een beetje opschonen, want uw, AI-met, met slechte data, zal je agent niet werken zoals je wilt, want uw, als je een puinhoop hebt in je, ik weet niet, SharePoint, uw, Teamkanaal, dat soort dingen.
+
+00:36:31.500 --> 00:36:37.500
+Als het een puinhoop is, uw, zal het in feite moeilijk zijn om correct te werken, uw, in de, in de agentbenadering.
+
+00:36:37.500 --> 00:37:01.310
+Maar ja, je moet je data begrijpen, je moet wat uw, basisbeveiliging implementeren, zoals uw, authenticatie, zoals ik zei, Purview-functies uw, en Purview is een centrale oplossing geworden om, om al deze uw, al die beveiligings- en governance-middelen op een plek te krijgen.
+
+00:37:01.310 --> 00:37:24.260
+En nadat je je data hebt opgeschoond, wanneer je een aantal basisbeveiligingen hebt ingevoerd, moet je ook begrijpen hoe het zit met licenties, want voordat je begint met het bouwen van een agent, moet je weten, oké, wie zijn de ontwikkelaars?
+
+00:37:24.260 --> 00:37:30.500
+Zijn ze daarvoor opgeleid? Hebben we de juiste licenties om te starten? Hebben we abonnementen nodig? Dat soort zaken.
+
+00:37:41.700 --> 00:37:48.920
+Een groot probleem is de tooling, hoe integreer ik al mijn tools op de juiste manier in mijn ontwikkeling en mijn agent, moet ik bepaalde zaken beperken.
+
+00:37:48.920 --> 00:38:07.810
+Eerlijk gezegd is dat een grote vraag, je hebt verschillende activiteiten om rekening mee te houden, maar voor mij is het allerbelangrijkste dat je je data begrijpt, want als een bedrijf de data niet begrijpt, zal het in het begin al een probleem zijn.
+
+00:38:12.990 --> 00:38:23.100
+Oké. En Ul? Wanneer, wanneer, wij, hoe? Hebben we het uw oké gevraagd?
+
+00:38:24.680 --> 00:38:32.340
+Ul? Het beveiligingsonderwerp, Ul? Ik denk dat er daar 2-2-2.
+
+00:38:32.340 --> 00:38:36.900
+Oké. Ja, 2-2 soorten mensen zijn.
+
+00:38:39.040 --> 00:38:44.480
+De een zegt oké, ze hebben gebruikersrechten nodig en de ander zegt dat ze applicatierechten nodig hebben.
+
+00:38:47.900 --> 00:38:50.220
+Hoe zou een agent over het algemeen moeten werken?
+
+00:38:58.080 --> 00:39:06.400
+Over het algemeen en mijn beste aanbeveling is eigenlijk, wanneer je met agentoplossingen werkt, doe het altijd met gebruikersrechten, gedelegeerde rechten,
+
+00:39:06.400 --> 00:39:12.400
+want qua beveiliging is dat eerlijk gezegd beter omdat de gebruiker alleen werkt met data en tools waar hij toegang toe heeft.
+
+00:39:17.750 --> 00:39:20.150
+Dat, dat is het belangrijkste principe.
+
+00:39:21.970 --> 00:39:27.650
+Als je daarna applicatierechten nodig hebt voor een specifieke API of context, dan kan dat.
+
+00:39:32.590 --> 00:39:36.850
+Maar gebruik niet direct applicatierechten, doe het liever in de context van een wrapper.
+
+00:39:36.850 --> 00:39:48.060
+Dus je maakt, ik weet het niet, bijvoorbeeld een MCP-server, en je integreert die MCP met applicatierechten op de achtergrond.
+
+00:39:53.600 --> 00:40:01.120
+De MCP roept dan bijvoorbeeld jouw API aan op de achtergrond met applicatierechten en geeft je vervolgens de informatie die je nodig hebt,
+
+00:40:01.360 --> 00:40:04.040
+maar de gebruiker werkt niet direct met de applicatierechten.
+
+00:40:04.040 --> 00:40:17.760
+Wij roepen de MCP-server aan met gebruikersrechten en de MCP-server roept op de achtergrond applicaties of services aan met specifieke applicatierechten.
+
+00:40:18.960 --> 00:40:19.800
+Zie je het verschil?
+
+00:40:21.820 --> 00:40:23.920
+Uw oké. Uw interessant.
+
+00:40:26.810 --> 00:40:30.570
+Ik denk dat als we nadenken over architectuur, we ook wat dieper moeten kijken.
+
+00:40:33.970 --> 00:40:37.290
+Ik denk dat er drie grote onderwerpen zijn binnen de architectuur.
+
+00:40:37.290 --> 00:40:45.730
+We hebben Retrieval Augmented Generation, we hebben het kennisonderwerp en we hebben wat ik noem Enterprise-se arch via de achterdeur.
+
+00:40:47.950 --> 00:40:48.470
+EHM
+
+00:40:48.470 --> 00:40:52.870
+Waar laten we beginnen met met RAG?
+
+00:40:54.410 --> 00:40:56.490
+Waar past RAG in de architectuur?
+
+00:40:58.670 --> 00:40:59.490
+A. RAG
+
+00:40:59.490 --> 00:41:09.110
+Om eerlijk te zijn, is RAG eigenlijk de meest om eerlijk te zijn qua prestaties,
+
+00:41:09.930 --> 00:41:15.050
+omdat AI verschillende soorten data moet begrijpen en in feite is RAG hierom een vraag te beantwoorden.
+
+00:41:15.050 --> 00:41:26.580
+Want in het verleden, toen we geen RAG hadden, moest je in feite omgaan met andere benaderingen.
+
+00:41:29.350 --> 00:41:31.550
+Niet echt ouderwets, maar het was ingewikkeld.
+
+00:41:35.770 --> 00:41:43.410
+Maar RAG is essentieel omdat RAG verschillende soorten data begrijpt en je in feite de informatie ophaalt die de AI nodig heeft uit documenten,
+
+00:41:43.630 --> 00:41:45.830
+het kunnen meerdere verschillende soorten data zijn.
+
+00:41:50.400 --> 00:41:53.120
+Dus ja, RAG is tegenwoordig centraal in AI-architectuur.
+
+00:41:53.120 --> 00:42:04.580
+Ja, maar het klopt dat voor veel gebruikers, wanneer je praat over wat er achter de schermen bij RAG gebeurt,
+
+00:42:04.820 --> 00:42:10.160
+ze niet weten wat het is omdat Microsoft of veel andere softwarebedrijven hier tegenwoordig niet over praten,
+
+00:42:10.320 --> 00:42:11.920
+omdat er achter de schermen RAG zit.
+
+00:42:17.040 --> 00:42:22.160
+Maar bijvoorbeeld in Copilot Studio begrijpt de gebruiker niet dat er achter de schermen RAG zit, zie je.
+
+00:42:22.160 --> 00:42:30.930
+En tegenwoordig, als je dieper wilt duiken, oké, dan heb je dit soort concepten,
+
+00:42:31.150 --> 00:42:37.190
+maar voor veel gebruikers is RAG totaal onbekend omdat ze gewoon de tool gebruiken en die concepten achter de schermen zitten.
+
+00:42:41.300 --> 00:42:47.460
+En dan hebben we het volgende onderwerp, het is kennis, hoe krijgen we dit, waar halen de AI-systemen hun kennis vandaan?
+
+00:42:49.640 --> 00:42:51.660
+Is het een verzameling of hoe werkt dit?
+
+00:42:54.770 --> 00:42:57.910
+EHM eigenlijk, om eerlijk te zijn, de kennis is.
+
+00:43:02.700 --> 00:43:05.440
+Kan gehost worden in heel veel verschillende systemen.
+
+00:43:08.420 --> 00:43:13.900
+Het kan een plat tekstbestand zijn, een markdown bestand, een kennisbank, het kan van alles zijn.
+
+00:43:15.260 --> 00:43:19.360
+Maar eigenlijk, als je een MCP-server hebt, kun je die kennis benaderen.
+
+00:43:20.380 --> 00:43:24.420
+Of als je bijvoorbeeld, ik weet het niet, connectoren hebt naar SharePoint,
+
+00:43:24.660 --> 00:43:27.220
+je hebt tegenwoordig voor veel diensten connectoren,
+
+00:43:27.520 --> 00:43:31.520
+dus toegang krijgen tot die kennis is makkelijker dan vroeger, laten we eerlijk zijn.
+
+00:43:32.100 --> 00:43:35.820
+Want in het verleden moest je je eigen plugin bouwen en alles zelf instellen.
+
+00:43:35.820 --> 00:43:44.100
+Tegenwoordig heb je een directe verbinding met elk systeem en kun je je kennis integreren zonder dat je grote ontwikkelteams nodig hebt.
+
+00:43:47.710 --> 00:43:53.610
+Ik denk, ik denk vaak, heb ik, ik weet het niet, ik verzamel dit voor mijn, ik zeg tegen mijn, ik weet het niet, iemand.
+
+00:43:58.690 --> 00:44:04.350
+En hoe begrijpt AI welke documenten niet klaar zijn, of verouderd zijn, of ik weet het niet, dubbel zijn?
+
+00:44:04.350 --> 00:44:12.920
+Hoe, hoe kan, hoe begrijpt een AI-systeem dit?
+
+00:44:13.560 --> 00:44:15.200
+Wat moeten we gebruiken en waarvoor?
+
+00:44:20.760 --> 00:44:24.580
+Eigenlijk gebruik je RAG omdat je achter de schermen moet begrijpen wat je data is.
+
+00:44:29.840 --> 00:44:33.880
+Maar eerlijk gezegd, als ik het een beetje samenvat, begin je bij de prompt, oké.
+
+00:44:36.760 --> 00:44:42.800
+De gebruiker wil, oké, je wilt bijvoorbeeld zoeken in, ik weet het niet, een kennisbank en bijvoorbeeld OneDrive.
+
+00:44:42.800 --> 00:44:56.040
+Achter de schermen, wanneer de orchestrator met behulp van een LM de prompt en de intentie van de gebruiker begrijpt, heb je in feite de index.
+
+00:45:06.090 --> 00:45:17.330
+Want in Copilot heb je bijvoorbeeld de semantische index en deze semantische index geeft je eigenlijk inzicht in alle kennis en de AI kan die semantische index direct bevragen om bijvoorbeeld RAG uit te voeren,
+
+00:45:17.530 --> 00:45:21.390
+zodat je direct de juiste documenten kunt selecteren op basis van de behoefte.
+
+00:45:21.390 --> 00:45:35.470
+Maar in Copilot heb je deze semantische index en de AI kan deze index achter de schermen direct in natuurlijke taal bevragen.
+
+00:45:37.270 --> 00:45:42.610
+Dus ik vraag, oké, ik wil begrijpen, ik weet het niet, hoe ik mijn bedrijfs-VPN moet instellen.
+
+00:45:45.510 --> 00:45:54.270
+En achter de schermen voer je RAG uit op de semantische index en haal je in feite het document op dat bijvoorbeeld de volledige configuratie van de bedrijfs-VPN bevat.
+
+00:45:54.270 --> 00:46:06.340
+In Microsoft 365 Copilot Chat is dat achter de schermen bijvoorbeeld de Graph API, want zoals ik al zei, is de semantische index gebouwd op de Graph API.
+
+00:46:08.940 --> 00:46:15.140
+Het is achter de schermen een Graph-functie, maar bij maatwerkontwikkeling heb je bijvoorbeeld Foundry-AQ achter de schermen.
+
+00:46:17.340 --> 00:46:19.700
+Het was een Azure Surface met een andere naam.
+
+00:46:20.640 --> 00:46:23.320
+Maar nu kun je je eigen RAG-systeem hebben als je dat wilt.
+
+00:46:23.320 --> 00:46:30.180
+En eigenlijk kun je UL, wanneer je een aangepaste agent hebt, dit direct vragen aan de Foundry-AQ-instantie.
+
+00:46:31.000 --> 00:46:40.060
+Oké, UL, ik wil UL, ik wil de configuratie van UL, mijn VPN-bedrijf en de AI kan UL ophalen wat UL je nodig hebt aan documenten.
+
+00:46:42.120 --> 00:46:45.500
+Dat kunnen PDF's zijn, Word, Excel, dat soort dingen.
+
+00:46:48.370 --> 00:46:54.560
+En, en, dat is hoe de de zoekfunctie werkt, toch?
+
+00:46:59.070 --> 00:46:59.390
+Of
+
+00:46:59.390 --> 00:47:02.830
+UL achter de schermen, bedoel je?
+
+00:47:03.330 --> 00:47:03.650
+Ja,
+
+00:47:04.290 --> 00:47:07.470
+A, achter de schermen, ja, je hebt de de zoekfunctie.
+
+00:47:11.370 --> 00:47:18.650
+UL, maar eigenlijk heb je tegenwoordig UL achter de schermen en achter de schermen van UL van Copilot UL Copilot Chat heb je drie UL drie mogelijkheden.
+
+00:47:18.650 --> 00:47:27.170
+Je hebt de standaard zoekfunctie, wat eigenlijk een zoekopdracht is waarbij je okéën voert, simpelweg UL wat trefwoorden in en UL je zoekt in UL je documenten en dat soort dingen.
+
+00:47:30.180 --> 00:47:31.920
+Dit is een eenvoudige zoekopdracht.
+
+00:47:32.140 --> 00:47:34.540
+We kennen allemaal trefwoord zoeken zoals Google.
+
+00:47:34.760 --> 00:47:38.740
+Daarna UL heb je twee verschillende UL-mogelijkheden.
+
+00:47:40.740 --> 00:47:42.820
+Je hebt eerst de RAG achter de schermen.
+
+00:47:44.080 --> 00:47:47.800
+Je hebt de mogelijkheid van RAG in InBreath en je hebt ook
+
+00:47:47.800 --> 00:47:58.790
+UL de Copilot Semantische Index zoekopdracht die een beetje anders is omdat RAG echt geavanceerder is dan de Copilot Semantische Index zoekopdracht.
+
+00:47:58.790 --> 00:48:15.940
+Maar je hebt al deze drie mogelijkheden achter de schermen om ervoor te zorgen dat jou UL het ben je niet zelf, maar achter de schermen kan de AI deze drie UL verschillende mogelijkheden aanroepen om de gegevens op te halen uit OneDrive, Teams en 365 in het algemeen daarna.
+
+00:48:15.940 --> 00:48:22.650
+Hij kan de Semantische Index van Copilot bevat ook de Copilot Connectoren.
+
+00:48:22.650 --> 00:48:33.050
+Dus bijvoorbeeld als je een Salesforce hebt verbonden met de Copilot Connector, kan het ook zoeken in al je gegevens in Salesforce in ServiceNow in meerdere tools.
+
+00:48:33.050 --> 00:48:45.130
+Omdat het alles UL met de Copilot Connector heb je alle gegevens geïntegreerd in de Graph, UL, Index, Semantische Index, kun je direct je externe systemen bevragen.
+
+00:48:47.010 --> 00:48:47.530
+MHM
+
+00:48:47.530 --> 00:48:50.890
+Oké, en UM ik denk het.
+
+00:48:56.230 --> 00:49:02.850
+Wanneer we agents bouwen hebben we het governance gedeeld en een van de onderdelen is voor mij ook zeg maar agent lifecycle management.
+
+00:49:03.130 --> 00:49:04.570
+Ha, hoe ziet dit er eigenlijk uit?
+
+00:49:07.800 --> 00:49:09.080
+Hoe ziet het er eigenlijk uit?
+
+00:49:10.120 --> 00:49:15.680
+UL eerlijk gezegd, in het Microsoft ecosysteem is het vrij eenvoudig als ik dat zo mag zeggen.
+
+00:49:16.880 --> 00:49:23.240
+Omdat wanneer je, wanneer je te maken hebt met low-code, bijvoorbeeld Copilot Studio, heb je te maken met Power Platform.
+
+00:49:24.320 --> 00:49:26.800
+Concept al en UL, er is niets veranderd.
+
+00:49:27.200 --> 00:49:31.080
+Dus, je hebt oplossingen, je hebt An op zijn plek, je hebt pipelines.
+
+00:49:31.080 --> 00:49:39.980
+Dus, als je met Copilot Studio werkt, is het eerlijk gezegd zoals voorheen, omdat je alle zaken hebt waarin je hebt geïnvesteerd op het gebied van Power Platform Governance.
+
+00:49:40.120 --> 00:49:41.320
+Levenscyclus en al.
+
+00:49:41.680 --> 00:49:43.440
+Het is precies hetzelfde.
+
+00:49:44.800 --> 00:49:50.920
+Uw, dit is een goede zaak, want veel mensen vragen me, oh, Copilot Studio, hoe beheer je dat? Is het anders?
+
+00:49:50.920 --> 00:49:57.920
+Aanhalingsteken, nee, het is heel simpel, zoals bij Power Apps of Power Automate applicatie Levenscyclusbeheer.
+
+00:49:58.140 --> 00:50:04.500
+Dus, in dit geval is het agent Levenscyclusbeheer, maar achter de schermen is het hetzelfde concept als bij het Power Platform.
+
+00:50:04.500 --> 00:50:18.160
+En wanneer je te maken hebt met UL, bijvoorbeeld, maatwerk, is het eigenlijk hetzelfde als wanneer je UL applicaties bouwt, .net applicaties, dat soort zaken, omdat je alles als code beheert.
+
+00:50:20.440 --> 00:50:24.640
+Dus, je hebt frameworks, je hebt beveiligingsaspecten, dat soort dingen.
+
+00:50:24.640 --> 00:50:32.720
+Dus alles om eerlijk te zijn, UL, qua applicatie en agent Levenscyclusbeheer, is echt hetzelfde concept als voorheen.
+
+00:50:34.380 --> 00:50:41.940
+En dit is voor mij een goed punt, omdat je niet veel hoeft te investeren, UL, in termen van, UL, Levenscyclusprocessen en dat soort zaken.
+
+00:50:42.900 --> 00:50:53.020
+Maar het enige is dat je wat veranderingen hebt, UL, maar UL, een van de grote veranderingen is, oké, je moet rekening houden met LLM, dat soort dingen, deployment, dat soort zaken.
+
+00:50:53.020 --> 00:50:58.960
+Maar achter de schermen lijkt het op de DevOps-aanpak uit het verleden, met pipelines, dat soort dingen.
+
+00:51:00.120 --> 00:51:03.540
+Dus, naar mijn mening is er niets veranderd, omdat we agents beheren.
+
+00:51:05.630 --> 00:51:12.610
+UL, het kan maatwerk of copilot zijn, je gebruikt tegenwoordig eerlijk gezegd dezelfde aanpak als voorheen.
+
+00:51:14.510 --> 00:51:24.030
+En, en, dit dit betekent of of wanneer wanneer een bedrijf tussen ze nog geen AI in het bedrijf gebruikte,
+
+00:51:24.030 --> 00:51:29.050
+maar ze hebben de perfecte setup voor Purview, voor Defender en al, al, al de tools daarnaast.
+
+00:51:34.340 --> 00:51:38.220
+Is er dan enige verandering nodig of betekent dit AI-gereedheid?
+
+00:51:38.720 --> 00:51:48.590
+A, het is het is en het is een grote vraag, omdat AI-gereedheid, UL, voor, voor, voor Microsoft, UL, is oké.
+
+00:51:50.130 --> 00:51:53.490
+UL, UL, ben je scherp op permissies, beheer je dat soort dingen?
+
+00:51:53.850 --> 00:51:58.210
+Maar, UL, oké, AI-gereedheid is voor mij niet alleen een technische aanpak,
+
+00:51:58.210 --> 00:52:01.010
+want oké, technisch gezien weten we wat we moeten doen.
+
+00:52:02.650 --> 00:52:06.310
+Oké, we moeten permissies beheren over een hoop services, weet je?
+
+00:52:07.510 --> 00:52:12.650
+Voor mij moet AI-gereedheid ook, UL, de data omvatten, de data, begrijp je.
+
+00:52:14.800 --> 00:52:21.660
+Want, UL, als je je data niet begrijpt, zoals ik al zei, UL, dan kun je, UL, kun je het technische gedeelte niet beheren,
+
+00:52:21.940 --> 00:52:24.960
+want, UL, als je niet weet wat wel of niet vertrouwelijk is,
+
+00:52:24.960 --> 00:52:31.120
+is, bijvoorbeeld, UL, is het lastig om enige, enige beveiliging, enige beveiligingszaken in te stellen.
+
+00:52:33.180 --> 00:52:38.700
+Maar als we, als we Microsoft volgen, is AI-gereedheid oké, je moet machtigingen beheren,
+
+00:52:38.960 --> 00:52:44.980
+je wilt vertrouwelijkheidslabels instellen, UL, je moet voldoen aan de AVG, UL, dat soort dingen.
+
+00:52:49.590 --> 00:52:53.570
+Maar je hebt ook een meer hoogwaardig, UL, hoogwaardig, UL, aspect,
+
+00:52:53.570 --> 00:53:01.570
+en voor mij is AI-gereedheid niet alleen technisch, je hebt tegenwoordig ook een functioneel of hoogwaardig aspect om rekening mee te houden, eerlijk gezegd.
+
+00:53:10.890 --> 00:53:15.710
+UM, ja, dat is echt interessant, um, ik denk dat veel bedrijven, dit was begonnen met de AI,
+
+00:53:15.830 --> 00:53:22.110
+maar nu met met agents zeggen veel bedrijven, oh, het heeft al mijn ik weet het niet, e-mails verwijderd of doet iets kwaadaardigs, kwaadaardigs.
+
+00:53:26.330 --> 00:53:32.310
+Um, hoe dacht je wat wat zullen bedrijven, zeggen ze, ze zijn bang voor AI?
+
+00:53:32.310 --> 00:53:53.780
+Het is, het is een goede vraag, want ik woon in Zwitserland en in feite hebben we, hebben we veel private banken en we hebben veel, om eerlijk te zijn, echt, UL, gevoelige klanten, om eerlijk te zijn, en UL, en in feite, is het, het meest kritieke onderdeel, oké, waar worden de gegevens verwerkt.
+
+00:53:56.180 --> 00:54:00.800
+In principe, en UL, ja, ook, oké, doorzoekt AI mijn e-mails.
+
+00:54:01.800 --> 00:54:02.960
+Dit soort dingen.
+
+00:54:02.960 --> 00:54:24.020
+Dus achter de schermen, zij, zij vragen dit altijd, maar, weet je, het, het meest kritieke deel voor hen is, oké, ik moet begrijpen, oké, waar de gegevens worden verwerkt, en UL, en ook, oké, UL, ik ben de, de, de, eigenaar van de AI.
+
+00:54:24.020 --> 00:54:49.710
+Dus ik, ik geef de instructie aan de AI, en de AI achter de schermen zal het werk doen, en ze zijn bang voor, bijvoorbeeld, het autonome, UL, aspect, want tegenwoordig, oké, kun je, oké, dat doen, en achter de schermen zal de AI naar iets zoeken, UL, een query, UL, iets achter de schermen, en ze zijn bang van, oké, UL, als ik de, vraag om iets te doen, wat wordt er dan achter de schermen uitgevoerd.
+
+00:54:49.710 --> 00:55:03.490
+En UL, ja, er zijn veel van dit soort vragen, oké, hoe, hoe krijg ik de volledige controle over het proces achter de schermen, of het nu een AI-agent of een AI-service is?
+
+00:55:08.820 --> 00:55:18.240
+Ja, dat is een soort vraag, maar het is echt een kwestie van adoptie, ook training, om wat training op te zetten over hoe je AI begrijpt en wat er precies achter de schermen gebeurt.
+
+00:55:18.240 --> 00:55:38.200
+En transparantie is ook een belangrijk punt, want transparantie moet in elke AI-oplossing worden doorgevoerd, want transparantie is voor mij een groot onderwerp, omdat je alles moet inrichten, aangezien je AI-oplossing transparant moet zijn.
+
+00:55:41.990 --> 00:55:48.190
+Je moet begrijpen wat er achter de schermen gebeurt, welke data wordt opgevraagd, je moet alles kunnen traceren en loggen.
+
+00:55:48.190 --> 00:56:01.120
+Alles moet dus transparant zijn wanneer je tegenwoordig een oplossing hebt, want je moet precies begrijpen wat er op de achtergrond wordt uitgevoerd, welke data wordt verwerkt en wat de logica achter de schermen is.
+
+00:56:03.020 --> 00:56:08.220
+Oké, hoe heb je dit plan gegenereerd, op basis van welke feiten en dat soort zaken?
+
+00:56:08.220 --> 00:56:14.760
+Geweldig, oh, ik zie dat we een beetje door onze tijd heen raken, dus ja, sorry.
+
+00:56:15.680 --> 00:56:21.920
+Weet je, dit was echt geweldig, maar ik heb in elke podcast een vragenvuurronde, dus Uw.
+
+00:56:23.820 --> 00:56:27.020
+Uw dus Uw, ik geef een korte zin en jij geeft een kort antwoord.
+
+00:56:28.120 --> 00:56:29.520
+Uw dus, ben je er klaar voor?
+
+00:56:30.520 --> 00:56:33.320
+Ja, Copilot Studio of Custom Code?
+
+00:56:33.320 --> 00:56:38.840
+Co-Pilot Studio, uw Microsoft Foundry of Co-Pilot Studio?
+
+00:56:40.080 --> 00:56:43.380
+Co-Pilot Studio, uw type script of C-Sharp?
+
+00:56:46.700 --> 00:56:48.240
+GitHub of Azure DevOps?
+
+00:56:49.240 --> 00:56:49.680
+GitHub.
+
+00:56:50.740 --> 00:56:52.000
+Uw RAG of Fine Tuning?
+
+00:56:54.080 --> 00:56:54.640
+All right.
+
+00:56:56.120 --> 00:57:00.040
+Wat is de meest ondergewaardeerde Microsoft 365 API?
+
+00:57:04.720 --> 00:57:05.660
+De RAG API.
+
+00:57:05.660 --> 00:57:11.240
+Een technologie die elke Microsoft-ontwikkelaar in 2026 moet leren.
+
+00:57:12.540 --> 00:57:13.840
+GitHub Co-Pilot.
+
+00:57:17.360 --> 00:57:24.380
+Stel dat Satya Nadelja naar je toe komt en zegt, je krijgt al het geld en de middelen die je wilt om ons AI-platform te verbeteren.
+
+00:57:25.940 --> 00:57:28.680
+Uw, je kunt één functie ontwikkelen. Wat zou dat zijn?
+
+00:57:29.660 --> 00:57:31.780
+Alle governance zaken die we nodig hebben.
+
+00:57:34.390 --> 00:57:34.850
+NUM.
+
+00:57:34.850 --> 00:57:40.390
+Wie moet ik als volgende uitnodigen voor de podcast en welke vraag moet ik stellen?
+
+00:57:47.510 --> 00:57:48.610
+Oh, goede vraag.
+
+00:57:50.070 --> 00:57:55.890
+Ik heb veel vrienden, maar Uw ja, misschien kun je het aan mijn co-spreker vragen met wie ik op veel conferenties sta.
+
+00:57:56.730 --> 00:57:59.110
+Je kunt het bijvoorbeeld aan Chloe Moro vragen.
+
+00:58:00.210 --> 00:58:04.610
+Uw, zij was voorheen functioneel consultant voordat ze zich op de technische kant ging richten.
+
+00:58:06.610 --> 00:58:12.350
+En Uw, ze heeft een heel goed verhaal over functionele, minder technische zaken in de Dynamics wereld.
+
+00:58:15.080 --> 00:58:24.900
+Dus misschien kun je haar uitnodigen en vragen, vertel me eens, hoe ga je tegenwoordig om met de balans tussen functioneel en technisch werk, want daar liggen toch behoorlijk grote uitdagingen.
+
+00:58:24.900 --> 00:58:35.140
+Ja, en mijn, mijn, mijn afsluitende vraag is, wat zouden mensen, als ze één, één lee uit deze sessie kunnen meenemen, wat zouden ze moeten meenemen?
+
+00:58:37.590 --> 00:58:38.710
+Uw uit deze sessie?
+
+00:58:38.910 --> 00:58:39.470
+Je bedoelt.
+
+00:58:42.480 --> 00:58:44.760
+Uw eigenlijk, AI evolueert snel.
+
+00:58:44.760 --> 00:58:56.440
+En als je tegenwoordig bij wilt blijven, Uw, moet je alles volgen, want eerlijk gezegd zit AI tegenwoordig echt door, Uw, de hele Microsoft-stek heen.
+
+00:59:01.760 --> 00:59:15.660
+En tegenwoordig is een van de dingen die je moet begrijpen dat de evolutie snel gaat en je moet echt, echt, Uw, constant bijblijven, want, Uw, je mist op een gegeven moment iets als je niet, Uw, als je niet leert, als je de evolutie op dit gebied niet begrijpt.
+
+00:59:15.660 --> 00:59:24.080
+Ja, dus, dus ja, Uw, bedankt voor je komst.
+
+00:59:25.440 --> 00:59:35.340
+Ik denk dat de belangrijke lee uit dit gesprek is dat de uitbreidbaarheid van Microsoft 365 Copilot niet simpelweg gaat over het schrijven van steeds geavanceerdere prompts.
+
+00:59:38.020 --> 00:59:47.980
+Uw, ik denk dat we bewegen naar een architectuur waarin Copilot en agents verbinding kunnen maken met organisatiekennis, Microsoft Graph, bedrijfsapplicaties, APIs en ga zo maar door.
+
+00:59:47.980 --> 01:00:01.260
+Uhm, ja, ik denk dat Copilot Studio, Microsoft Foundry, maatwerkontwikkeling en technologieën zoals MCP-ontwikkelaars een, ja, een geweldige, krachtige gereedschapskist bieden.
+
+01:00:03.780 --> 01:00:16.520
+Uw, en ja, maar hoe capabeler de agents worden, hoe belangrijker ook de fundamenten worden, identiteit, rechten, beveiliging, governance, testen, observability, applicatie, levenscyclusbeheer enzovoort.
+
+01:00:16.520 --> 01:00:24.010
+Dus ja, ik denk dat je een heel, heel goed overzicht hebt gegeven van al deze onderwerpen.
+
+01:00:24.970 --> 01:00:27.750
+Dus bedankt voor je komst en voor de luisteraars.
+
+01:00:27.950 --> 01:00:39.610
+Alle informatie kun je vinden in de show notes op de M365FM podcastpagina en Uw, ja, waar je verbinding kunt maken en het werk van EES kunt zien en ja, bedankt dat je er was.
+
+01:00:40.850 --> 01:00:44.150
+Bedankt dat ik er mocht zijn. Het was een erg leuke tijd met jou.

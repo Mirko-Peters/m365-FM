@@ -1,0 +1,805 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:03.260
+Cuando un cliente hace clic en comprar en su sitio web, el artículo que desea podría estar
+
+00:00:03.260 --> 00:00:06.480
+en un almacén, en una tienda al otro lado de la ciudad o con un socio entrega.
+
+00:00:06.960 --> 00:00:08.980
+Sin embargo, todo lo que el cliente realmente espera son dos cosas,
+
+00:00:09.280 --> 00:00:10.980
+una promesa clara y un paquete en su puerta.
+
+00:00:11.440 --> 00:00:14.740
+Bienvenidos a otro episodio de Microsoft Knowledge Nuggets en M365FM.
+
+00:00:15.220 --> 00:00:19.560
+Soy Mo Peters y hoy analizaremos la gestión inteligente de pedidos de Dynamics 365 en un
+
+00:00:19.560 --> 00:00:22.800
+lenguaje sencillo. Leguiremos ese pedido desde el clic de pago hasta el trabajo que realmente
+
+00:00:22.800 --> 00:00:26.560
+logra que se entregue. Piénselo como la mesa de despacho central en un edificio de oficinas
+
+00:00:26.560 --> 00:00:30.820
+con mucho movimiento. No es otra tienda en línea y no empaca la caja. Solo dirige a las personas
+
+00:00:30.820 --> 00:00:33.280
+y sistemas adecuados para que el trabajo ocurra en el lugar correcto.
+
+00:00:34.900 --> 00:00:36.280
+¿Por qué los pedidos se vuelven un desastre?
+
+00:00:38.000 --> 00:00:41.240
+Imagine que vende los mismos auriculares a través de su sitio web, sus tiendas físicas,
+
+00:00:41.360 --> 00:00:45.160
+un mercado en línea y un centro de llamadas. Para el cliente, todas esas son solo formas
+
+00:00:45.160 --> 00:00:48.780
+de comprar auriculares. Pero detrás de escena, cada canal envía los detalles del pedido a un
+
+00:00:48.780 --> 00:00:52.920
+sistema completamente diferente. Su sitio web tiene un registro, el punto de venta de la tienda
+
+00:00:52.920 --> 00:00:56.540
+tiene otro, un mercado envía su propio formato y un agente del centro de llamadas crea un
+
+00:00:56.540 --> 00:01:00.960
+pedido en otro lugar completamente distinto. Una simple promesa al cliente se divide en
+
+00:01:00.960 --> 00:01:04.780
+varias partes móviles que no se comunican entre sí. El inventario añade otra capa de
+
+00:01:04.780 --> 00:01:08.920
+complejidad. El almacén principal podría tener 20 paredes. Una tienda al otro lado de la ciudad
+
+00:01:08.920 --> 00:01:12.680
+tiene 5 y otro almacén también de existencias, pero está más lejos y con costos de envío
+
+00:01:12.680 --> 00:01:16.760
+más altos. Parte del inventario ya está reservado para otros pedidos, artículos devueltos o clientes
+
+00:01:16.760 --> 00:01:20.580
+en la tienda. Así que ver un número junto a un producto no resuelve realmente el problema.
+
+00:01:21.020 --> 00:01:24.480
+Luego tiene que decidir cómo realizar la entrega. Debería enviarlo a un almacén. Debería enviar
+
+00:01:24.480 --> 00:01:28.560
+una tienda. Puede el cliente recoger localmente. Y si alguien compra dos artículos y ninguna
+
+00:01:28.560 --> 00:01:31.700
+ubicación tiene ambos, divide el pedido en dos paquetes o espera hasta que todo pueda
+
+00:01:31.700 --> 00:01:36.200
+enviarse junto. Cada elección afecta el costo, el tiempo de entrega y la promesa que le hizo
+
+00:01:36.200 --> 00:01:39.700
+al cliente. Hace dos décadas las empresas realizaban estos trabajos en sistemas separados
+
+00:01:39.700 --> 00:01:43.220
+con equipos separados. Ventas tomaba el pedido. Alguien verificaba el invento. El almacén
+
+00:01:43.220 --> 00:01:46.760
+recibió una solicitud. Un socio de envío recibió otra solicitud. Facturación se ocupaba
+
+00:01:46.760 --> 00:01:50.060
+de su propia parte más tarde. Eso funcionaba bien cuando los pedidos eran simples y los volúmenes
+
+00:01:50.060 --> 00:01:53.900
+se mantenían bajos. Pero aquí está el detalle. Cuando las actualizaciones se mueven lentamente entre los sistemas,
+
+00:01:53.900 --> 00:01:57.880
+las personas comienzan a llenar dudas. Un agente de servicio al cliente revisa una pantalla, envía un correo
+
+00:01:57.880 --> 00:02:01.640
+a un equipo de almacén, luego llama a un transportista y mientras tanto un producto puede venderse a través
+
+00:02:01.640 --> 00:02:05.060
+de otro canal antes de que la actualización del inventario llegue al sitio web. Ahora tienes un pedido
+
+00:02:05.060 --> 00:02:08.700
+de algo que no puedes enviar. Así es como ocurre la sobremesa. Y también es por eso que las opciones
+
+00:02:08.700 --> 00:02:12.600
+de entrega tardan. Los equipos siguen copiando detalles de un lugar a otro y los clientes reciben
+
+00:02:12.600 --> 00:02:16.480
+actualizaciones vagas en lugar de respuestas firmes. Desde el punto de vista del cliente, nada de esa
+
+00:02:16.480 --> 00:02:22.160
+complejidad importa porque solo hacen una pregunta. ¿Dónde está mi pedido? Lo que una empresa realmente necesita es un lugar
+
+00:02:22.160 --> 00:02:25.440
+que pueda ver el recorrido del pedido a través de todas esas aplicaciones empresariales conectadas
+
+00:02:25.440 --> 00:02:29.920
+mientras cada una siga haciendo lo que mejor sabe hacer. Venta registra la venta. El almacén gestiona
+
+00:02:29.920 --> 00:02:33.940
+la preparación y el embalaje. Envío sin carga de entrega. Facturación maneja el dinero. Nadie
+
+00:02:33.940 --> 00:02:38.920
+necesita desechar todo su sistema. Lo que falta es el coordinador entre ellos. O un lugar que pueda
+
+00:02:38.920 --> 00:02:42.580
+recibir un pedido, ver qué debe suceder a continuación y dirigir el trabajo sin depender
+
+00:02:42.580 --> 00:02:47.820
+de una cadena de transferencias manuales. Ese es el problema. Dynamics 365 Intelligent Order Management
+
+00:02:47.820 --> 00:02:53.980
+La definición en lenguaje sencillo. Entonces, ¿qué es exactamente Dynamics 365 Intelligent Order
+
+00:02:53.980 --> 00:03:00.960
+Management? Hoy vamos a explicarlo en lenguaje sencillo. Aquí está la definición. Es una aplicación
+
+00:03:00.960 --> 00:03:05.040
+en la nube que toma un pedido y lo guía a través de todos los sistemas que una empresa ya utiliza
+
+00:03:05.040 --> 00:03:09.140
+desde el momento en que llega el pedido hasta que se completan la entrega y la facturación.
+
+00:03:09.960 --> 00:03:13.680
+Piensa en una estación de tren concurrida. Los trenes llegan desde diferentes direcciones. Los
+
+00:03:13.680 --> 00:03:17.100
+pasajeros necesitan diferentes plataformas. Algunas conexiones son rápidas, otras tienen que esperar.
+
+00:03:17.420 --> 00:03:21.400
+Intelligent Order Management funciona como la sala de control de la estación. No conduce el tren ni
+
+00:03:21.400 --> 00:03:25.040
+vende el boleto, pero ve toda la ruta y le dice a cada sistema qué hacer a continuación.
+
+00:03:25.620 --> 00:03:29.900
+Microsoft construyó Intelligent Order Management sobre Dataverse. Dataverse es la base de datos
+
+00:03:29.900 --> 00:03:34.780
+compartida detrás de muchas aplicaciones de Dynamics 365 y Power Platform. El lenguaje sencillo
+
+00:03:34.780 --> 00:03:38.420
+ofrece a las aplicaciones empresariales un lugar común y un formato común para almacenar
+
+00:03:38.420 --> 00:03:42.520
+información. Eso significa que un pedido no significa algo completamente diferente en cada pantalla y
+
+00:03:42.520 --> 00:03:46.760
+sistema. Esa base compartida ayuda, pero no necesitas comprar todas las demás aplicaciones de Dynamics
+
+00:03:46.760 --> 00:03:51.340
+365 para usar Intelligent Order Management. Una empresa podría ejecutar Dynamics 365 Finance
+
+00:03:51.340 --> 00:03:55.700
+o Supply Chain Management. Otra podría usar un sistema de almacén diferente, una tienda en línea
+
+00:03:55.700 --> 00:04:00.460
+distinta o un servicio de envíos de otro proveedor. Esta aplicación puede funcionar tanto con aplicaciones
+
+00:04:00.460 --> 00:04:03.580
+empresariales de Microsoft como de otros fábricos. Los puntos de conexión se llaman proveedor.
+
+00:04:04.060 --> 00:04:07.780
+Un proveedor mueve la información de pedidos y cumplimiento entre Intelligent Order Management
+
+00:04:07.780 --> 00:04:12.480
+y otro sistema. Piensa en un proveedor como un traductor en la puerta. Un sistema envía un pedido en su propio
+
+00:04:12.480 --> 00:04:17.020
+formato. El proveedor entiende ese formato, pasa la información a Intelligent Order Management y puede
+
+00:04:17.020 --> 00:04:21.400
+enviar la siguiente solicitud de vuelta en un formato que el otro sistema entienda. Entonces,
+
+00:04:21.560 --> 00:04:24.720
+la aplicación reúne la información de pedidos incluso cuando el pedido comenzó en otro lugar.
+
+00:04:25.160 --> 00:04:28.960
+Un cliente podría comprar a través de un sitio de comercio Ayo. Otro podría realizar un pedido a través
+
+00:04:28.960 --> 00:04:33.060
+de un sistema de punto de venta. Un cliente empresarial podría enviar un pedido electrónico mediante un
+
+00:04:33.060 --> 00:04:37.760
+proceso B2B. La gestión inteligente de pedidos ofrece a la empresa un lugar para ver esos pedidos y saber en qué
+
+00:04:37.760 --> 00:04:42.100
+etapa de cumplimiento se encuentre a cada uno. No todos los pedidos siguen el mismo camino. Uno puede
+
+00:04:42.100 --> 00:04:46.160
+estar esperando existen. Otro puede estar ya en un almacén. Un tercero podría requerir un paso de
+
+00:04:46.160 --> 00:04:49.860
+facturación tras la entrega. La aplicación rastrea ese estado para que el equipo vea más que solo
+
+00:04:49.860 --> 00:04:54.560
+pedido recibido. Pueden ver exactamente en qué punto de recorrido se encuentra el pedido. Aquí está la
+
+00:04:54.560 --> 00:04:58.740
+parte que a veces la gente pasa por algo. La gestión inteligente de pedidos no asume todas las tareas.
+
+00:04:59.340 --> 00:05:02.740
+No se convierte de repente en la pantalla de selección del trabajador del almacén, la red de entrega del
+
+00:05:02.740 --> 00:05:06.920
+transportista o el sistema de facturación del equipo financiero. Esas aplicaciones conectadas siguen
+
+00:05:06.920 --> 00:05:10.340
+realizando su trabajo especial. La gestión inteligente de pedidos dirige las transferencias
+
+00:05:10.340 --> 00:05:14.780
+entre ellas. Recibe la solicitud, verifica la ruta, pasa el trabajo y luego espera la siguiente
+
+00:05:14.780 --> 00:05:19.280
+actualización. Ahora sigamos un pedido a través de ese camino, porque el recorrido del pedido hace
+
+00:05:19.280 --> 00:05:23.880
+que la idea general sea mucho más fácil de ver. Las reglas del recorrido del pedido dirigen el
+
+00:05:23.880 --> 00:05:29.120
+trabajo. Imagine que un cliente pide dos artículos de su sitio web tarde por la tarde y quiere que ambos
+
+00:05:29.120 --> 00:05:34.320
+artículos se entreguen mañana. La tienda en línea captura el nombre del cliente del pedido, la dirección de
+
+00:05:34.320 --> 00:05:38.720
+entrega, las dos líneas de pedido y la opción de entrega. Un proveedor lleva ese pedido a la gestión
+
+00:05:38.720 --> 00:05:43.620
+inteligente de pedidos y el recorrido puede comenzar antes de que alguien intente cumplirlo. El sistema
+
+00:05:43.620 --> 00:05:47.600
+valida el pedido para asegurarse de que toda la información necesaria esté allí y siga las reglas
+
+00:05:47.600 --> 00:05:52.540
+de la empresa. Verifica el encabezado del pedido para obtener detalles del cliente. Verifica cada línea
+
+00:05:52.540 --> 00:05:55.900
+para confirmar el producto y la cantidad. Confirma que la dirección tiene suficiente información para
+
+00:05:55.900 --> 00:06:00.020
+la entrega y se asegura de que el pedido cumpla con las reglas de ese canal de ventas. Esa primera
+
+00:06:00.020 --> 00:06:04.680
+verificación evita que la información incorrecta avance antes de causar problemas. Imagina un pedido
+
+00:06:04.680 --> 00:06:08.780
+al que le falta el número de apartamento. Si va directo al almacén y luego al transportista, alguien
+
+00:06:08.780 --> 00:06:12.700
+podría anotar el problema solo después de que el paquete no pueda entregarse. Un paso de validación
+
+00:06:12.700 --> 00:06:17.620
+detecta el problema antes, mientras aún hay tiempo de contactar al cliente o retener el pedido. A raíz
+
+00:06:17.620 --> 00:06:22.940
+de este trabajo reside en un flujo de orquestación. Esa frase suena técnica, pero es sencilla. Un flujo de
+
+00:06:22.940 --> 00:06:27.600
+orquestación es un mapa visual que le indica la gestión inteligente de pedidos que debe suceder a medida que
+
+00:06:27.600 --> 00:06:31.980
+llegan información y los eventos de los sistemas conectados. Te crea ese mapa basándose en su propio
+
+00:06:31.980 --> 00:06:36.340
+proceso de negocio. Un flujo de pedido básico podría comenzar con un nuevo pedido. Valida el encabezado
+
+00:06:36.340 --> 00:06:41.000
+y las líneas. Envía el pedido para las decisiones de cumplimiento. Después de eso, envía la orden de
+
+00:06:41.000 --> 00:06:44.860
+cumplimiento al sistema conectado correcto. Una vez que el trabajo llega a la etapa adecuada, puede enviar
+
+00:06:44.860 --> 00:06:49.000
+información del pedido a un proveedor de facturación. Cada acción tiene una función clara. Validar el encabezado
+
+00:06:49.000 --> 00:06:53.180
+de pedido. Revisa los detalles principales del pedido. Validar línea de pedido. Revisa los productos y
+
+00:06:53.180 --> 00:06:57.580
+cantidades individuales. Enviar a cumplimiento. Pasa la orden de cumplimiento al proveedor que gestiona
+
+00:06:57.580 --> 00:07:02.240
+ese trabajo. Enviar a factura pasa la información del pedido al proveedor de facturación. Los nombres
+
+00:07:02.240 --> 00:07:06.120
+parecen etiquetas en un panel de control de fábrica. Y eso es útil porque cada etiqueta indica
+
+00:07:06.120 --> 00:07:10.800
+exactamente qué sucede en ese punto del flujo. Pero un negocio real a menudo necesita más que
+
+00:07:10.800 --> 00:07:15.000
+una línea recta. Quizás los pedidos del sitio web siguen un camino, mientras que los clientes
+
+00:07:15.000 --> 00:07:19.100
+comerciales siguen otro. Quizás un tipo de producto requiere una aprobación especial. Quizás un pedido
+
+00:07:19.100 --> 00:07:23.360
+solo puede avanzar si el primer paso tiene éxito. La gestión inteligente de pedidos incluye condiciones
+
+00:07:23.360 --> 00:07:27.420
+para ese tipo de elección. Una condición crea un camino de sí, un camino. Si la acción
+
+00:07:27.420 --> 00:07:31.780
+anterior tiene éxito, el pedido puede continuar por el camino de sí. Si falla, el flujo puede
+
+00:07:31.780 --> 00:07:35.680
+dirigir el pedido a un camino diferente. Eso no soluciona todos los problemas por sí solo,
+
+00:07:36.040 --> 00:07:39.380
+pero le da al proceso una respuesta planificada en lugar de dejar que un equipo descubra un
+
+00:07:39.380 --> 00:07:44.140
+error por casualidad. También existen los divisores. Un divisor envía el flujo a más de un camino
+
+00:07:44.140 --> 00:07:48.060
+basado en reglas que usted define. Podría usar uno cuando los pedidos de fuentes separadas necesitan
+
+00:07:48.060 --> 00:07:52.300
+verificaciones diferentes o cuando distintas partes del trabajo necesitan rutas diferentes. Algunos caminos
+
+00:07:52.300 --> 00:07:55.800
+divididos pueden volver a unirse más tarde, mientras que otros continúan por su cuenta. Las acciones
+
+00:07:55.800 --> 00:07:59.440
+personalizadas cubren las tareas únicas de un negocio. Quizás una empresa tiene su propio
+
+00:07:59.440 --> 00:08:03.380
+sistema de fabricación o un sistema asociado que no está cubierto por una acción estándar. Una
+
+00:08:03.380 --> 00:08:06.880
+acción personalizada puede conectar ese paso al flujo de pedidos para que la ruta siga mostrando
+
+00:08:06.880 --> 00:08:09.860
+el proceso completo en lugar de ocultar una parte en correos electrónicos o trabajo manual.
+
+00:08:10.020 --> 00:08:13.640
+Regresemos a nuestro pedido de dos artículos. El sistema lo recibe desde el sitio web y verifica
+
+00:08:13.640 --> 00:08:17.620
+los detalles del cliente, la dirección y las líneas de producto. Pedido llega entonces al paso de decisión
+
+00:08:17.620 --> 00:08:22.520
+de cumplimiento. Si ambos artículos pueden seguir la misma ruta, el flujo puede enviar la solicitud de
+
+00:08:22.520 --> 00:08:26.380
+cumplimiento como una sola unidad. Si las reglas de la empresa requieren un resultado diferente,
+
+00:08:26.540 --> 00:08:30.160
+el pedido puede tomar otro camino. Tal vez los dos artículos necesiten solicitudes de cumplimiento
+
+00:08:30.160 --> 00:08:34.140
+separadas. Tal vez el pedido necesite una opción de entrega distinta. El flujo no es bien. Sigue
+
+00:08:34.140 --> 00:08:38.420
+las reglas que creó el negocio y los eventos que los sistemas conectados devuelven. Esta última
+
+00:08:38.420 --> 00:08:42.160
+parte es importante. La gestión inteligente de pedidos puede dirigir el trabajo, pero los sistemas
+
+00:08:42.160 --> 00:08:46.060
+conectados informan a medida que el trabajo avanza. Un proveedor de cumplimiento puede recibir la
+
+00:08:46.060 --> 00:08:50.960
+solicitud. Un proveedor de facturación puede recibir los detalles del pedido. Esos eventos mantienen el recorrido
+
+00:08:50.960 --> 00:08:54.600
+del pedido avanzando a través de él. Por lo tanto, la aplicación no es un sistema de reemplazo gigante.
+
+00:08:55.040 --> 00:08:58.360
+Es un conjunto de reglas que conecta a especialistas, dando a cada sistema el trabajo
+
+00:08:58.360 --> 00:09:02.320
+que necesitan en el momento justo. La tienda en línea captura el pedido. El sistema de cumplimiento
+
+00:09:02.320 --> 00:09:05.660
+se encarga de cumplimiento. El sistema de facturación se encarga de facturación. La gestión
+
+00:09:05.660 --> 00:09:09.600
+inteligente de pedidos administra la ruta entre esos trabajos. Las personas responsables del proceso
+
+00:09:09.600 --> 00:09:13.920
+de pedidos pueden diseñar estos flujos directamente en la aplicación. No necesitan escribir cada ruta
+
+00:09:13.920 --> 00:09:17.940
+como código tradicional, ni tienen que pedirle a un administrador de TI que cambie cada regla
+
+00:09:17.940 --> 00:09:21.500
+de negocio. Eso le da al equipo de cadena de suministro una forma de modelar el proceso
+
+00:09:21.500 --> 00:09:25.140
+que realmente necesite. Aun así, esos cambios requieren cuidado. Un flujo de orquestación
+
+00:09:25.140 --> 00:09:29.500
+permanece sin publicar mientras lo construye y prueba. Durante esa etapa, los datos entrantes
+
+00:09:29.500 --> 00:09:33.740
+no pasan por el flujo. Una vez que lo publica, el flujo y sus acciones se ejecutan cuando
+
+00:09:33.740 --> 00:09:37.380
+los datos ingresan al sistema. Después de publicar, no puede editar ese flujo publicado directamente.
+
+00:09:37.960 --> 00:09:41.800
+Si el negocio necesita un cambio, el equipo puede tener el flujo publicado, lo que lo devuelve
+
+00:09:41.800 --> 00:09:45.320
+en estado, sin publicar. Pueden editar el flujo y luego publicar la nueva versión cuando
+
+00:09:45.320 --> 00:09:48.540
+esté lista. Esa configuración impulsa a los equipos a probar la ruta antes de que
+
+00:09:48.540 --> 00:09:52.100
+los pedidos en vivo viajen a través de ella. Una ruta solo funciona si sabe que stock está
+
+00:09:52.100 --> 00:09:55.800
+realmente disponible. Eso nos lleva a la información de inventario en vivo detrás de cada decisión
+
+00:09:55.800 --> 00:10:01.920
+de cumplimiento. Visibilidad de inventario. Ver lo que realmente puede vender. Aquí hay
+
+00:10:01.920 --> 00:10:06.420
+una verdad simple. No puede cumplir un pedido si no sabe que tiene el stock. Suena obvio,
+
+00:10:06.540 --> 00:10:09.920
+pero el stock puede esconderse en un almacén, una tienda, la ubicación de un socio o entre
+
+00:10:09.920 --> 00:10:13.380
+diferentes entidades legales dentro de la misma empresa. Cuando cada ubicación mantiene
+
+00:10:13.380 --> 00:10:16.780
+su propio conteo, no puede responder la pregunta básica. ¿Qué puedo prometerle a este cliente
+
+00:10:16.780 --> 00:10:19.960
+ahora mismo? La visibilidad de inventario le da a la gestión inteligente de pedidos una
+
+00:10:19.960 --> 00:10:23.140
+vista en vivo de todo ese stock a través de su red de suministro. Piénselo como un
+
+00:10:23.140 --> 00:10:26.660
+tablero de existencias en un centro de distribución. En lugar de llamar a cada estante y pedirle
+
+00:10:26.660 --> 00:10:30.220
+a alguien que verifique, el proceso de pedido mira una vista compartida en la que se alimentan
+
+00:10:30.220 --> 00:10:33.820
+todos sus sistemas. Ahora, solo porque un artículo aparezca como stock en algún lugar no
+
+00:10:33.820 --> 00:10:37.180
+significa que pueda cumplir con cada pedido. Un producto podría estar en un almacén pero
+
+00:10:37.180 --> 00:10:40.380
+ya está reservado, o estar en una tienda que puede vender localmente pero no puede enviar,
+
+00:10:40.380 --> 00:10:43.980
+o simplemente está demasiado lejos para cumplir con la promesa de entrega que el cliente seleccionó.
+
+00:10:44.580 --> 00:10:47.980
+Hay una gran diferencia entre el stock que existe en algún lugar y el stock que puede
+
+00:10:47.980 --> 00:10:51.740
+cumplir este pedido ahora mismo. Imagina que un cliente compró una chaqueta en línea y
+
+00:10:51.740 --> 00:10:56.580
+la quiere para mañana. En tu almacén principal ya no quedan. Sin datos de inventario actualizados,
+
+00:10:56.680 --> 00:11:00.820
+tu sitio web podría aceptar el pedido con cifras antiguas y el almacén recibiría una solicitud
+
+00:11:00.820 --> 00:11:05.520
+que no puede surtir dejando que el cliente se entere después de pagar. Eso genera trabajo para
+
+00:11:05.520 --> 00:11:09.520
+todos. Con información de inventario conectada, la gestión inteligente de pedidos ve que el
+
+00:11:09.520 --> 00:11:14.520
+almacén principal no tiene la chaqueta, pero una tienda cercana sí. Si esa tienda permite
+
+00:11:14.520 --> 00:11:18.520
+envíos, puede surtir el pedido. Si el cliente eligió recogerlo, esa misma tienda se convierte
+
+00:11:18.520 --> 00:11:22.380
+en el punto de retiro. La decisión comienza con una mejor visión de las existencias. Para una
+
+00:11:22.380 --> 00:11:26.760
+empresa con varias entidades legales, esta vista abarca el inventario de todas ellas. Esto es
+
+00:11:26.760 --> 00:11:30.700
+importante cuando operas en más de un país, región o unidad de negocio y las existencias no están en
+
+00:11:30.700 --> 00:11:35.480
+un solo registro. El proceso de pedidos usa datos de inventario en tiempo real para decidir qué camino
+
+00:11:35.480 --> 00:11:39.920
+tomar. Un almacén, tienda u otra fuente de inventario sigue gestionando sus propios registros
+
+00:11:39.920 --> 00:11:44.080
+de existencias. La visibilidad del inventario integra las cifras actuales en el proceso general
+
+00:11:44.080 --> 00:11:48.260
+de pedidos, donde las reglas de cumplimiento pueden usarlas. Eso ayuda a evitar promesas basadas
+
+00:11:48.260 --> 00:11:51.980
+en datos de ayer y permite al servicio al cliente dar una respuesta clara cuando alguien pregunta si
+
+00:11:51.980 --> 00:11:56.480
+un artículo llegará a tiempo. En lugar de buscar en varios sistemas esperando que la información
+
+00:11:56.480 --> 00:12:00.360
+coincida, el equipo de pedidos ve la posición de existencias que motivó la elección de cumplimiento.
+
+00:12:00.680 --> 00:12:03.560
+Por supuesto, ver todas las ubicaciones posibles nos responde todas las preguntas.
+
+00:12:03.560 --> 00:12:08.280
+Podrías encontrar el artículo en cinco lugares. Uno más cerca del cliente, otro con más existencia,
+
+00:12:08.380 --> 00:12:13.220
+es un tercero que permite enviar ambos productos juntos. Alguien o algo todavía tiene que elegir.
+
+00:12:13.600 --> 00:12:21.780
+Esa labor corresponde a la optimización de cumplimiento. Cumplimiento. Optimización. Elegir
+
+00:12:21.780 --> 00:12:26.720
+el mejor lugar desde donde enviar el pedido. La optimización compara las ubicaciones posibles
+
+00:12:26.720 --> 00:12:31.120
+para un pedido y selecciona una basándose en las reglas que tu empresa establece. En palabras sencillas
+
+00:12:31.120 --> 00:12:35.740
+responde, ¿de dónde debe salir este pedido? Lo mejor no siempre significa lo más cercano. La
+
+00:12:35.740 --> 00:12:39.640
+tienda más cercana podría tener el artículo, pero enviarlo desde allí podría costar más. Un almacén
+
+00:12:39.640 --> 00:12:43.780
+más lejano podría tener ambos artículos listos para empacar juntos y otra ubicación podría tener
+
+00:12:43.780 --> 00:12:48.000
+existencias, pero no cumplir con la fecha de entrega elegida. Cada empresa debe decidir qué quiere que
+
+00:12:48.000 --> 00:12:52.580
+favorezcan sus reglas. Algunos negocios priorizan la velocidad de entrega. Otros quieren mantener bajo los
+
+00:12:52.580 --> 00:12:56.420
+costos de envío. Una empresa también podría querer proteger el inventario en tienda para los clientes
+
+00:12:56.420 --> 00:13:00.880
+presenciales o evitar dividir un pedido en varios paquetes a menos que no haya otra opción. La
+
+00:13:00.880 --> 00:13:04.440
+gestión inteligente de pedidos utiliza estrategias de cumplimiento que reflejan estas elecciones.
+
+00:13:04.920 --> 00:13:08.520
+Piénsalo como elegir la ruta para una camioneta de reparto. El camino más corto puede no ser más
+
+00:13:08.520 --> 00:13:13.820
+rápido si hay tráfico, obras o una parada que toma más tiempo. Del mismo modo, el edificio más cercano
+
+00:13:13.820 --> 00:13:17.820
+podrían ofrecer el mejor resultado de cumplimiento una vez que se consideran el costo de inventario,
+
+00:13:17.920 --> 00:13:22.400
+las promesas de servicio y las opciones de entrega. Volvamos al cliente que compró dos artículos en línea.
+
+00:13:22.400 --> 00:13:26.980
+Una tienda a 10 minutos tiene el primer artículo. El almacén tiene ambos artículos, pero se encuentra
+
+00:13:26.980 --> 00:13:32.400
+más lejos. Si la tienda envía el primero y el almacén el segundo, el cliente podría recibir dos
+
+00:13:32.400 --> 00:13:37.680
+paquetes a tiempo, pero esto también aumenta los costos de envío. El almacén podría enviar ambos
+
+00:13:37.680 --> 00:13:41.860
+artículos juntos. Si aún se puede cumplir con la fecha de entrega prometida, un solo paquete desde su
+
+00:13:41.860 --> 00:13:45.740
+ubicación puede ser la mejor opción. La regla puede favorecer menos envíos y un menor costo de
+
+00:13:45.740 --> 00:13:50.500
+transporte, pero si la entrega de mañana es más importante que enviar ambos artículos juntos, el sistema puede
+
+00:13:50.500 --> 00:13:53.580
+elegir la tienda para un artículo y el almacén para el otro. Eso es un pedido dividido.
+
+00:13:54.240 --> 00:13:57.940
+Un pedido dividido no significa que el sistema falle. Puede ser la elección planificada cuando
+
+00:13:57.940 --> 00:14:01.660
+ninguna ubicación puede cumplir con todo el pedido de manera adecuada. El negocio decide
+
+00:14:01.660 --> 00:14:05.200
+cuándo dividir tiene sentido a través de la estrategia de cumplimiento que establece. El
+
+00:14:05.200 --> 00:14:09.000
+mismo razonamiento respalda comprar en línea y enviar desde la tienda. Un cliente hace un pedido en un
+
+00:14:09.000 --> 00:14:13.500
+sitio web, pero una tienda cercana tiene el inventario correcto y puede enviarlo rápido. Entonces esa tienda se
+
+00:14:13.500 --> 00:14:18.680
+convierte en la fuente de cumplimiento, aunque el cliente nunca la haya visitado. También respalda comprar en línea y recoger
+
+00:14:18.680 --> 00:14:23.840
+en tienda. El sistema usa información de inventario y ubicación para encontrar una tienda que pueda
+
+00:14:23.840 --> 00:14:28.180
+surtir el pedido para recolección y el cliente obtiene una opción local, mientras la empresa dirige
+
+00:14:28.180 --> 00:14:33.760
+el pedido al lugar correcto. Estas decisiones no tienen que estar aisladas dentro de cada canal de
+
+00:14:33.760 --> 00:14:38.140
+ventas. Sin un proceso compartido de decisiones de cumplimiento, un sitio web, un marketplace y un
+
+00:14:38.140 --> 00:14:42.120
+centro de llamadas podrían requerir sus propias reglas de enrutamiento. Cuando el negocio cambia su
+
+00:14:42.120 --> 00:14:46.620
+política de envío o empieza a hacer tiendas para cumplimiento, los equipos deben actualizar varios
+
+00:14:46.620 --> 00:14:50.660
+sistemas. La optimización del cumplimiento coloca ese proceso de decisión en un solo lugar dentro
+
+00:14:50.660 --> 00:14:54.820
+del ciclo del pedido. El sitio web sigue aceptando pedidos, el marketplace sigue aceptando pedidos y
+
+00:14:54.820 --> 00:14:59.140
+la tienda sigue vendiendo productos. Pero la empresa puede cambiar cómo selecciona una ubicación de
+
+00:14:59.140 --> 00:15:03.240
+cumplimiento sin reconstruir reglas en cada canal, dándole más control cuando el inventario se mueve,
+
+00:15:03.460 --> 00:15:09.020
+cambian las promesas de entrega o surge una nueva opción. Aún así, la estrategia de cumplimiento
+
+00:15:09.020 --> 00:15:13.080
+solo puede comparar ubicaciones si la información necesaria llega de los sistemas que la gestionan.
+
+00:15:13.080 --> 00:15:17.860
+Los pedidos deben entrar, las actualizaciones de inventario deben llegar y los socios logísticos
+
+00:15:17.860 --> 00:15:21.900
+deben recibir su trabajo y reportar el progreso. Este trabajo de conexión depende de los proveedores.
+
+00:15:23.360 --> 00:15:27.500
+Proveedores y conexiones, las puertas de entrada al edificio, para que la gestión inteligente de
+
+00:15:27.500 --> 00:15:31.060
+pedidos haga su trabajo, necesita una forma confiable de comunicarse con todo lo que le rodea.
+
+00:15:31.440 --> 00:15:35.100
+Los proveedores son quienes hacen su sed. Un proveedor es básicamente una conexión que mueve los detalles
+
+00:15:35.100 --> 00:15:38.940
+del pedido y las actualizaciones de cumplimiento entre la gestión inteligente de pedidos y otro sistema.
+
+00:15:39.700 --> 00:15:42.720
+La información fluye en ambos sentidos para que nadie tenga que copiar nada a mano,
+
+00:15:43.380 --> 00:15:47.420
+imagina un edificio con muchas puertas de entrega. Una puerta recibe los pedidos de su tienda en línea,
+
+00:15:47.980 --> 00:15:51.960
+otra se conecta a su sistema de inventario. Una tercera envía trabajo a un almacén o a un socio
+
+00:15:51.960 --> 00:15:56.400
+de entrega. Cada puerta tiene un propósito claro y los proveedores gestionan la información que pasa
+
+00:15:56.400 --> 00:16:01.200
+por cada una. Microsoft construye algunos de estos conectores por sí mismo. Los llaman proveedores de
+
+00:16:01.200 --> 00:16:06.300
+primera parte. Conectan la gestión inteligente de pedidos con aplicaciones como Dynamics 365 Supply Chain
+
+00:16:06.300 --> 00:16:11.940
+Management, Dynamics 365 Commerce o Dynamics 365 Finance. Los servicios de inventario y cumplimiento dentro
+
+00:16:11.940 --> 00:16:15.280
+de la gestión inteligente de pedidos también usan estos proveedores para intercambiar datos.
+
+00:16:16.080 --> 00:16:19.620
+Ahora bien, es probable que ya tenga otro sistema. Ahí es donde entran los proveedores de tercero.
+
+00:16:19.940 --> 00:16:23.620
+Conectan servicios que Microsoft no construye. Tal vez sea su plataforma de comercio electrónico
+
+00:16:23.620 --> 00:16:27.560
+existente, un mercado, una empresa logística o un sistema de almacén. El punto no es obligarlo a usar
+
+00:16:27.560 --> 00:16:31.580
+un conjunto específico de aplicación. Es permitir. Es permitirle conectar los sistemas que ya se adaptan
+
+00:16:31.580 --> 00:16:35.560
+a su negocio. Detrás de escena de estos proveedores utilizan conectores de Power Automate.
+
+00:16:35.960 --> 00:16:40.060
+Power Platform tiene más de 200 conectores prediseñados, por lo que tiene muchos puntos de partida.
+
+00:16:40.060 --> 00:16:43.700
+Y si ninguno de ellos encaja, usted o su socio pueden crear su propio proveedor.
+
+00:16:44.300 --> 00:16:47.920
+Cada aplicación conectada sigue siendo su propio Trump. Su tienda en línea captura la compra.
+
+00:16:48.320 --> 00:16:51.880
+El sistema de inventario arrastra existencias. Un socio de cumplimiento en paqueta entrega el
+
+00:16:51.880 --> 00:16:55.820
+pedido. Un sistema de facturación maneja las finanzas. La gestión inteligente de pedidos
+
+00:16:55.820 --> 00:16:59.800
+coordina los mensajes y los siguientes pasos entre todos ellos. Una vez que sus sistemas comparten
+
+00:16:59.800 --> 00:17:03.600
+actualizaciones, su empresa puede ver lo que sucede en todo el proceso de pedido. No más perseguir
+
+00:17:03.600 --> 00:17:04.980
+información a través de pantallas separadas.
+
+00:17:04.980 --> 00:17:08.500
+Información y una visión más amplia.
+
+00:17:09.380 --> 00:17:12.580
+Esa información compartida le brinda una imagen mucho más clara del trabajo de su pedido.
+
+00:17:12.940 --> 00:17:16.280
+La gestión inteligente de pedidos incluye paneles de Power BI que reúnen las métricas
+
+00:17:16.280 --> 00:17:19.780
+de pedidos y cumplimiento en un solo lugar. El servicio al cliente puede encontrar los
+
+00:17:19.780 --> 00:17:23.200
+pedidos que han dejado de moverse. Las operaciones pueden detectar rutas bloqueadas o retrasos
+
+00:17:23.200 --> 00:17:26.600
+en el cumplimiento. Los líderes empresariales pueden buscar patrones en todo el proceso.
+
+00:17:27.300 --> 00:17:31.340
+Sin esa vista, un retraso podría parecer un problema aislado. Pero cuando los datos están
+
+00:17:31.340 --> 00:17:36.060
+juntos, su equipo puede notar que muchos pedidos se ralentizan en un socio de cumplimiento específico
+
+00:17:36.060 --> 00:17:38.980
+o que una determinada opción de entrega crea más excepciones de lo esperado.
+
+00:17:39.500 --> 00:17:42.880
+El panel no soluciona el problema por sí solo, pero ayuda a las personas a saber exactamente
+
+00:17:42.880 --> 00:17:44.960
+dónde mirar. Piense de nuevo en el edificio de oficina.
+
+00:17:45.620 --> 00:17:49.980
+La gestión inteligente de pedidos une la recepción que recibe las solicitudes, el panel de inventario
+
+00:17:49.980 --> 00:17:53.540
+que muestra la disponibilidad, el planificador de rutas que elige el lugar de cumplimiento
+
+00:17:53.540 --> 00:17:57.300
+y la sala de informes donde los equipos observan el movimiento de todo. Cada parte tiene
+
+00:17:57.300 --> 00:17:59.360
+una tarea diferente, pero el pedido las conecta a todas.
+
+00:17:59.360 --> 00:18:03.520
+En conclusión, un pedido, un viaje coordinado.
+
+00:18:04.880 --> 00:18:06.620
+Gracias por acompañarme en esta cápsula de conocimiento.
+
+00:18:07.020 --> 00:18:10.160
+La gestión inteligente de pedidos traza una ruta única y directa a través de todo
+
+00:18:10.160 --> 00:18:13.840
+su proceso, desde la captura inicial hasta la facturación final. Suscríbase en su plataforma
+
+00:18:13.840 --> 00:18:18.280
+de podcast favorita y vea el siguiente episodio. Verá exactamente cómo Dynamics 65 y Power Platform
+
+00:18:18.280 --> 00:18:19.560
+manejan el trabajo detrás de las pantallas.

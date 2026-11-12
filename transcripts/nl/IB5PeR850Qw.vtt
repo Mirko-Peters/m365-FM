@@ -1,0 +1,748 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:03.480
+De meeste mensen denken dat identiteit gewoon een gebruikersnaam en wachtwoord is.
+
+00:00:03.640 --> 00:00:05.540
+Je voert ze in, krijgt toegang en klaar.
+
+00:00:05.680 --> 00:00:09.220
+Maar als bedrijf dat klanten bedient, wordt identiteit veel ingewikkelder.
+
+00:00:09.460 --> 00:00:15.560
+Wat als je app duizenden mensen moet laten registreren of laten inloggen met hun Google-account in plaats van nog een wachtwoord aan te maken?
+
+00:00:15.760 --> 00:00:19.920
+En hoe hou je al die klantgegevens veilig zonder ze te vermengen met je werknemerslijst?
+
+00:00:20.080 --> 00:00:23.480
+Dat is precies het probleem dat Microsoft Entra External ID moet oplossen.
+
+00:00:23.720 --> 00:00:24.700
+Dit is de situatie.
+
+00:00:24.900 --> 00:00:27.400
+Het vervangt Azure ADB2C volledig.
+
+00:00:27.400 --> 00:00:34.400
+Aan het eind van deze aflevering begrijp je wat External ID is, de drie manieren om het te gebruiken en waarom het belangrijk is voor klantgerichte apps.
+
+00:00:35.160 --> 00:00:37.680
+De oude manier, aparte identiteitssiloos.
+
+00:00:37.920 --> 00:00:41.260
+Stel je voor dat het 20 jaar geleden is en je een app voor klanten hebt gebouwd.
+
+00:00:41.420 --> 00:00:48.520
+Toen bouwde je zelf een inlogsysteem, schreef je code voor wachtwoorden, zette je een database op en maakte je zelf een wachtwoordvergeten procedure.
+
+00:00:48.920 --> 00:00:54.160
+Dat werkte voor een kleine app met honderden gebruikers, maar naarmate apps groeiden, werd het snel ingewikkeld.
+
+00:00:54.160 --> 00:01:01.380
+Bedrijven wilden inloggen met Google of Facebook, multifactor authenticatie en miljoenenaccounts kunnen verwerken zonder dat alles vastliep.
+
+00:01:01.580 --> 00:01:03.580
+Dat allemaal zelf bouwen werd een nachtmerrie.
+
+00:01:03.980 --> 00:01:06.760
+Microsoft's eerste antwoord was Azure ADB2C.
+
+00:01:06.960 --> 00:01:10.500
+Het was een klantidentiteitsdienst die destijds een reëel probleem oploste.
+
+00:01:10.680 --> 00:01:11.860
+Maar hier begon de ellende.
+
+00:01:12.120 --> 00:01:16.540
+Het grootste probleem was custom policies en die regels waren geschreven in XML.
+
+00:01:16.540 --> 00:01:21.380
+Als je ooit met XML bestanden van honderden regels hebt gewerkt, weet je hoe pijnlijk dat is.
+
+00:01:21.600 --> 00:01:26.300
+Moeilijk te configureren, moeilijk te diebubben en als er iets misging, kon je veel succes wensen met het vinden van de oorzaak.
+
+00:01:26.480 --> 00:01:30.600
+Bovendien stond Azure ADB2C los van Microsoft's belangrijkste identiteitsplatform.
+
+00:01:30.800 --> 00:01:37.560
+Dus als je Microsoft 365 of Azure AD voor je medewerkers had, voelde B2C als een compleet nieuw product.
+
+00:01:37.840 --> 00:01:45.460
+Zoals te verwachten viel, hadden IT-teams moeite met het onderhoud, vreesden ontwikkelaars ervoor en kregen klanten een stroeve ervaring waardoor ze afhaakten.
+
+00:01:45.460 --> 00:01:51.320
+Microsoft besefte dat er iets eenvoudigere en uniformers nodig was en dat werd Microsoft Entra External ID.
+
+00:01:51.600 --> 00:01:54.140
+Wat Microsoft Entra External ID eigenlijk is.
+
+00:01:54.380 --> 00:01:56.940
+Dus, wat is Microsoft Entra External ID nu precies?
+
+00:01:57.100 --> 00:01:58.620
+Hier is de simpelste definitie.
+
+00:01:58.820 --> 00:02:03.600
+Het is een cloud-identiteitsdienst voor externe gebruikers, klanten, partners en gasten, niet voor werknemers.
+
+00:02:03.800 --> 00:02:04.480
+Bekijk het zo.
+
+00:02:04.720 --> 00:02:06.580
+Stel je voor dat je bedrijf een kantoorpand heeft.
+
+00:02:06.840 --> 00:02:08.020
+Dat is je workforce tenant.
+
+00:02:08.020 --> 00:02:11.760
+Het is waar je werknemers werken, waar hun bureaus staan en waar hun badges hen toegang geven.
+
+00:02:11.940 --> 00:02:13.500
+Entra ID beheert dat gebouw.
+
+00:02:13.500 --> 00:02:19.200
+Stel je nu voor dat je een winkel opent voor klanten, een aparte ruimte met een eigen ingang, eigen regels en eigen beveiliging.
+
+00:02:19.360 --> 00:02:24.240
+Klanten dwalen niet door de kantine voor werknemers en werknemers krijgen niet per ongeluk toegang tot klantaccounts.
+
+00:02:24.380 --> 00:02:25.400
+Dat is External ID.
+
+00:02:25.740 --> 00:02:29.000
+Het maakt deel uit van de Microsoft Entra familie, maar dan in een andere vorm.
+
+00:02:29.180 --> 00:02:35.320
+Het is gebouwd voor CIAM, Customer Identity & Access Management en het beheert de volledige levenscyclus van een externe gebruiker.
+
+00:02:35.320 --> 00:02:39.940
+Registreren, aanmelden, wachtwoordherstel, profielbeheer, MFA en tokenuitgifte.
+
+00:02:40.100 --> 00:02:45.960
+Het werkt met standaard protocollen zoals OAuth 2.0, OpenID Connect en SAML, zodat bijna elke app die about verbinding kan maken.
+
+00:02:46.140 --> 00:02:48.740
+Maar hier is het grote verschil met het oude Azure ADB2C.
+
+00:02:48.940 --> 00:02:50.380
+External ID is eenvoudiger.
+
+00:02:50.620 --> 00:02:52.460
+Geen aangepaste XML beleidsregels meer.
+
+00:02:52.620 --> 00:02:55.480
+In plaats daarvan configureer je gebruikersstromen direct in het beheerscentrum.
+
+00:02:55.660 --> 00:02:59.800
+Of je gebruikt aangepaste authenticatie extensies die aansluiten op je bestaande backend logica.
+
+00:03:00.020 --> 00:03:01.480
+Dezelfde kracht, minder gedoe.
+
+00:03:01.680 --> 00:03:03.380
+De drie kerngebruikscenario's.
+
+00:03:03.580 --> 00:03:05.360
+Dus, hoe gebruik je external ID eigenlijk?
+
+00:03:05.580 --> 00:03:07.160
+Er zijn drie hoofdscenario's.
+
+00:03:07.340 --> 00:03:10.820
+Ze dekken bijna elke situatie waarin je iemand moet beheren die geen werknemer is.
+
+00:03:11.060 --> 00:03:14.420
+Begin met de meest voorkomende klantidentiteit ofwel B2C.
+
+00:03:14.680 --> 00:03:17.020
+Stel je voor dat je een app voor het bestellen van pizza's bouwt.
+
+00:03:17.140 --> 00:03:20.620
+Je wilt dat mensen zich registreren, bestellingen plaatsen en volgende week terugkomen.
+
+00:03:20.620 --> 00:03:24.220
+Je wilt dat ze zich aanmelden met hun Google-account in plaats van een nieuw wachtwoord aan te maken.
+
+00:03:24.480 --> 00:03:27.060
+En je moet hun naam, telefoonnummer en bezorgvoorkeuren verzamelen.
+
+00:03:27.260 --> 00:03:28.840
+External ID regelt dat allemaal.
+
+00:03:28.840 --> 00:03:31.580
+Je krijgt kant een klare registratie en aanmeldstromen.
+
+00:03:31.720 --> 00:03:36.200
+Je configureert welke kenmerken je wilt verzamelen, naam, telefoonnummer of wat je maar nodig hebt.
+
+00:03:36.340 --> 00:03:39.260
+Je stelt social login in met Google, Facebook of Apple.
+
+00:03:39.680 --> 00:03:45.500
+En wanneer een gebruiker zich verifieert, geeft external ID een token uit aan je app, zodat deze weet wie die persoon is.
+
+00:03:45.500 --> 00:03:49.900
+Dit is de vervanging voor Azure ADB2C en het is waar de meeste organisaties mee beginnen.
+
+00:03:50.120 --> 00:03:53.740
+Een ander scenario is business-to-business samenwerking, oftewel B2B.
+
+00:03:53.980 --> 00:03:57.720
+Dit is wanneer je partners of leveranciers toegang moet geven tot je interne apps.
+
+00:03:57.720 --> 00:04:04.940
+Misschien heb je een SharePoint site die je externe logistieke partner moet zien of een project management tool die je freelance ontwerpers gebruiken.
+
+00:04:05.140 --> 00:04:08.820
+In dit scenario nodig je hen uit als gastgebruikers in je workforce tenant.
+
+00:04:09.160 --> 00:04:16.260
+External ID beheert de uitnodigingsmail, het proces waarbij ze de uitnodiging accepteren en het toegangsbeleid dat bepaalt wat ze kunnen zien.
+
+00:04:16.260 --> 00:04:20.600
+Dit bestaat eigenlijk al jaren als B2B-samenwerking binnen Azure AD.
+
+00:04:20.940 --> 00:04:25.740
+Maar nu valt het onder de paraplu van external ID, dus beheer je het op dezelfde plek als je klantidentiteiten.
+
+00:04:25.940 --> 00:04:28.320
+Dan is er nog machine-to-machine, ofwel M2M.
+
+00:04:28.520 --> 00:04:31.240
+Dit is minder zichtbaar voor eindgebruikers, maar net zo belangrijk.
+
+00:04:31.480 --> 00:04:37.560
+Soms moet je back-end service communiceren met een andere API, een betalingsverwerker, een data-analyse dienst of een interne microservice.
+
+00:04:37.820 --> 00:04:41.200
+Hier komt geen mens aan te pas, het is gewoon de ene applicatie die de andere aanroept.
+
+00:04:41.420 --> 00:04:45.040
+External ID maakt gebruik van de OAuth 2.0 Client Credentials Flow.
+
+00:04:45.040 --> 00:04:50.680
+Je service verifieert zichzelf met een client-ID en een geheim, en ontvangt een token om de downstream API aan te roepen.
+
+00:04:50.860 --> 00:04:57.560
+Dit vereist de M2M Premium Add-on, dus er zijn kosten aan verbonden, maar voor het beveiligen van API naar API communicatie zit het ingebakken.
+
+00:04:57.780 --> 00:05:02.220
+Deze drie scenario's dekken vrijwel elke situatie rond externe identiteit die je tegenkomt.
+
+00:05:02.320 --> 00:05:06.220
+Maar er is een belangrijke beslissing die je moet nemen, en dat is waar die gebruikers daadwerkelijk verblijven.
+
+00:05:06.380 --> 00:05:10.880
+Want external ID kan op twee heel verschillende plekken draaien, een workforce tenant of een external tenant.
+
+00:05:11.140 --> 00:05:12.900
+Laten we de twee opties eens uiteenzetten.
+
+00:05:12.900 --> 00:05:17.460
+External ID kan draaien binnen je bestaande workforce tenant, of als een volledig gescheiden external tenant.
+
+00:05:17.660 --> 00:05:21.000
+Het is niet hetzelfde, en de verkeerde keuze maken kan later voor problemen zorgen.
+
+00:05:21.200 --> 00:05:23.240
+Laten we beginnen met de optie van de workforce tenant.
+
+00:05:23.460 --> 00:05:26.140
+Je bedrijf heeft al een entra-ID tenant voor je medewerkers.
+
+00:05:26.360 --> 00:05:27.540
+Dat is je workforce tenant.
+
+00:05:27.820 --> 00:05:34.840
+Als je een functie genaamd Guest Self Service Sign Up inschakelt in die tenant, kunnen externe gebruikers zich aanmelden en belanden ze in dezelfde directory als je medewerkers.
+
+00:05:34.980 --> 00:05:37.400
+Hun accounts staan dan direct naast het account van je CEO.
+
+00:05:37.400 --> 00:05:43.960
+Voor eenvoudigere B2B scenario's, zoals het uitnodigen van een handjevol partners voor een SharePoint site, is het mengen in dezelfde directory prima.
+
+00:05:44.160 --> 00:05:47.080
+Het is eenvoudig in te stellen en je hoeft geen aparte tenant te beheren.
+
+00:05:47.220 --> 00:05:48.120
+Maar hier is het punt.
+
+00:05:48.340 --> 00:05:53.800
+Als je een app voor klanten bouwt met duizenden gebruikers, wil je niet dat die klanten in dezelfde directory staan als je medewerkers.
+
+00:05:54.000 --> 00:05:55.400
+Dat is een beveiligingsrisico.
+
+00:05:55.600 --> 00:05:58.100
+Een medewerker zou per ongeluk klantgegevens kunnen tegenkomen.
+
+00:05:58.280 --> 00:06:01.620
+Een configuratiewijziging bedoeld voor medewerkers kan de toegang van klanten beïnvloeden.
+
+00:06:01.620 --> 00:06:05.660
+En je branding voor inlogpagina's voor klanten zou gekoppeld zijn aan wat je hebt ingesteld voor je bedrijf.
+
+00:06:05.740 --> 00:06:06.720
+Dat is niet ideaal.
+
+00:06:06.880 --> 00:06:08.940
+Het alternatief is de optie van de external tenant.
+
+00:06:09.140 --> 00:06:11.620
+Je creëert een gloednieuwe, geïsoleerde directory specifiek voor klantidentiteiten.
+
+00:06:12.400 --> 00:06:13.860
+Er zijn hier geen medewerkers aanwezig.
+
+00:06:14.020 --> 00:06:15.420
+Het is een volledig gescheiden ruimte.
+
+00:06:15.640 --> 00:06:17.760
+Herinner je je de vergelijking met het kantoorgebouw van eerder nog?
+
+00:06:17.880 --> 00:06:19.720
+De workforce tenant is je hoofdkantoor.
+
+00:06:19.860 --> 00:06:22.960
+De external tenant is de speciale winkel die je opent voor je klanten.
+
+00:06:23.220 --> 00:06:26.560
+Ze hebben hun eigen ingang, hun eigen regels en hun eigen beveiliging.
+
+00:06:26.800 --> 00:06:27.760
+Niets raakt vermengd.
+
+00:06:27.900 --> 00:06:30.020
+Dus, wat zijn de voordelen van een external tenant?
+
+00:06:30.020 --> 00:06:32.020
+Ten eerste krijg je een geïsoleerd gebruikersarchief.
+
+00:06:32.880 --> 00:06:37.820
+Klantgegevens blijven volledig gescheiden van werknemersgegevens, wat risico's vermindert en compliance vereenvoudigt.
+
+00:06:37.960 --> 00:06:39.540
+Ten tweede krijg je aparte branding.
+
+00:06:39.780 --> 00:06:45.360
+Je kunt de uitstraling van inlogpagina's specifiek aanpassen voor je klanten, zonder je bedrijfsomgeving te beïnvloeden.
+
+00:06:45.540 --> 00:06:52.320
+Ten derde krijg je de native authenticatie API voor mobiele apps, waarmee je volledig aangepaste inlogschermen bouwt in je iOS of Android app.
+
+00:06:52.440 --> 00:06:54.020
+Geen browseromleidingen, geen loggen webweergave.
+
+00:06:54.940 --> 00:06:58.580
+En ten vierde krijg je mouw gebaseerde prijzen, oftewel maandelijks actieve gebruikers.
+
+00:06:58.580 --> 00:07:03.980
+Je betaalt alleen voor gebruikers die in een bepaalde maand daadwerkelijk inloggen, wat natuurlijk meegroeit met je klantenbestand.
+
+00:07:04.180 --> 00:07:05.380
+Dus, wanneer kies je wat?
+
+00:07:05.600 --> 00:07:06.800
+Dat is vrij eenvoudig.
+
+00:07:06.980 --> 00:07:10.600
+Als je een B2C-app bouwt met duizenden klanten, kies dan voor een externe tenant.
+
+00:07:10.860 --> 00:07:14.160
+Dat is de aanbevolen aanpak en waarvoor external idee is ontworpen.
+
+00:07:14.340 --> 00:07:18.820
+Als je alleen partners uitnodigt voor toegang tot interne bronnen, dan is de werkplek tenant prima.
+
+00:07:19.080 --> 00:07:24.920
+Het is cruciaal om het verschil te begrijpen voordat je begint met bouwen, want later migreren van de een naar de ander is niet eenvoudig.
+
+00:07:25.320 --> 00:07:27.820
+Beveiliging, MFA en voorwaardelijke toegang.
+
+00:07:27.820 --> 00:07:29.720
+Laten we het nu over beveiliging hebben.
+
+00:07:29.920 --> 00:07:33.800
+Als je klanten toegang geeft tot je app, moet je zorgen dat onbevoegden buiten blijven.
+
+00:07:34.020 --> 00:07:39.140
+External ID bevat dezelfde beveiligingsfuncties op bedrijfsniveau die Entra ID biedt voor werknemers.
+
+00:07:39.360 --> 00:07:43.920
+Dat betekent multifactor authenticatie, voorwaardelijke toegang en risico gebaseerd beleid.
+
+00:07:44.080 --> 00:07:46.120
+Voor MFA heb je op dit moment twee opties.
+
+00:07:46.300 --> 00:07:48.480
+Een eenmalige toegangscode via e-mail is gratis.
+
+00:07:48.620 --> 00:07:50.640
+Het systeem stuurt een code naar de e-mail van de gebruiker.
+
+00:07:50.820 --> 00:07:51.820
+Zij voeren deze in en klaar.
+
+00:07:51.940 --> 00:07:56.280
+Een eenmalige toegangscode via SMS werkt op dezelfde manier, maar gaat naar hun telefoon en brengt providerkosten met zich mee.
+
+00:07:56.280 --> 00:07:59.460
+Let wel op, er is nog geen ondersteuning voor Microsoft Authenticator.
+
+00:07:59.620 --> 00:08:04.440
+Dat is een huidige beperking waar Microsoft waarschijnlijk aan werkt, maar voor nu is het e-mail of SMS.
+
+00:08:04.940 --> 00:08:06.960
+Voorwaardelijke toegang is waar het interessant wordt.
+
+00:08:07.160 --> 00:08:11.280
+Je kunt regels definiëren zoals verrijs MFA bij een gemiddeld of hoger inlogrisico,
+
+00:08:12.080 --> 00:08:14.520
+of blokkeert toegang uit landen waar we geen zaken doen.
+
+00:08:14.800 --> 00:08:17.920
+Het systeem evalueert elke inlogpoging in realtime.
+
+00:08:17.920 --> 00:08:21.880
+Als iemand probeert in te loggen vanaf een verdachte locatie of apparaat,
+
+00:08:22.080 --> 00:08:26.780
+kan het automatisch de beveiligingseisen opschroeven zonder dat je die logica zelf hoeft te bouwen.
+
+00:08:26.980 --> 00:08:30.260
+Maar er is één functie die er echt uitspringt, step-up authenticatie.
+
+00:08:30.460 --> 00:08:31.360
+Dit is hoe het werkt.
+
+00:08:31.600 --> 00:08:35.420
+Stel dat een gebruiker inlogt op je app met alleen een wachtwoord om je productcatalogus te bekijken.
+
+00:08:35.620 --> 00:08:37.600
+Dat is prima voor activiteiten met een laag risico,
+
+00:08:37.820 --> 00:08:40.820
+maar als ze hun betalingsgeschiedenis willen inzien of een factuur willen downloaden,
+
+00:08:40.960 --> 00:08:42.160
+wil je aanvullende verificatie.
+
+00:08:42.160 --> 00:08:46.460
+Met step-up authenticatie kunt u MFA alleen vereisen voor specifieke onderdelen van uw app.
+
+00:08:46.460 --> 00:08:50.140
+De gebruiker krijgt pas een prompt wanneer deze toegang probeert te krijgen tot gevoelige informatie.
+
+00:08:50.300 --> 00:08:55.020
+En dit wordt achter de schermen volledig afgehandeld door external ideeën met behulp van authenticatiecontext.
+
+00:08:55.200 --> 00:08:59.700
+U bepaalt zelf welke delen van uw app extra beveiliging nodig hebben en het systeem regelt de rest.
+
+00:08:59.880 --> 00:09:04.620
+De gebruiker ervaart een soepele navigatie, terwijl de gevoelige gegevens goed beschermd blijven.
+
+00:09:04.860 --> 00:09:06.360
+Branding en gebruikerservaring
+
+00:09:06.360 --> 00:09:10.820
+Controle over de branding is een van de belangrijkste redenen waarom organisaties voor external idee kiezen
+
+00:09:10.820 --> 00:09:12.640
+in plaats van zelf een inlogsysteem te bouwen.
+
+00:09:12.780 --> 00:09:16.360
+U krijgt volledige controle over de look en feel van uw aanmeld- en inlogpagina's,
+
+00:09:16.460 --> 00:09:20.520
+Upload uw logo, stijl achtergrondkleuren in, voeg een VV-con toe voor het browser-tabblad
+
+00:09:20.520 --> 00:09:23.580
+en pas de kop- en voetekst aan met links naar uw privacybeleid en servicevoorwaarden.
+
+00:09:23.740 --> 00:09:26.900
+Als u nog meer controle wilt, kunt u een aangepast CSS-bestand uploaden
+
+00:09:26.900 --> 00:09:29.220
+om lettertypes, knopkleuren en de layout te overschrijven.
+
+00:09:29.380 --> 00:09:31.820
+Het is uw merk, uw kleuren, u bepaalt alles.
+
+00:09:32.040 --> 00:09:33.540
+Nu wordt het een beetje ingewikkeld.
+
+00:09:33.780 --> 00:09:36.300
+Branding is globaal per tenant, niet per applicatie.
+
+00:09:36.520 --> 00:09:39.400
+Dus als u meerdere apps heeft, zoals een klantportal en een mobiele app,
+
+00:09:39.400 --> 00:09:41.740
+delen ze allemaal dezelfde gebrandmerkte pagina's.
+
+00:09:41.860 --> 00:09:44.000
+U kunt elke app niet een eigen uitstraling geven.
+
+00:09:44.180 --> 00:09:47.360
+Het oude Azure ADB2C stond wel branding per applicatie toe,
+
+00:09:47.480 --> 00:09:49.240
+maar external idee ondersteunt dat nog niet.
+
+00:09:49.420 --> 00:09:52.900
+Een andere beperking is dat foutmeldingen op inlogpagina's niet aanpasbaar zijn.
+
+00:09:53.080 --> 00:09:55.080
+Als iemand een e-mailadres invoert dat niet bestaat,
+
+00:09:55.200 --> 00:09:56.040
+krijgen ze iets te zien als,
+
+00:09:56.120 --> 00:09:57.960
+we konden geen account vinden met dit e-mailadres.
+
+00:09:58.120 --> 00:09:59.660
+En u kunt die tekst niet wijzigen.
+
+00:09:59.900 --> 00:10:01.600
+Voor sommige organisaties is dat prima,
+
+00:10:01.820 --> 00:10:05.180
+maar voor anderen, vooral in gereguleerde sectoren of met een strikte merkstem,
+
+00:10:05.440 --> 00:10:06.380
+is het een echt probleem.
+
+00:10:06.380 --> 00:10:08.180
+Mobiele apps krijgen een betere optie.
+
+00:10:08.380 --> 00:10:12.120
+External ID heeft een native authenticatie API voor iOS en Android.
+
+00:10:12.260 --> 00:10:15.100
+In plaats van gebruikers door te sturen naar een inlogpagina in de browser,
+
+00:10:15.300 --> 00:10:17.760
+kunt u volledig aangepaste inlogschermen in uw app bouwen.
+
+00:10:17.980 --> 00:10:20.340
+Geen browseromleiding, geen onhandige webweergave.
+
+00:10:20.540 --> 00:10:23.940
+De gebruiker blijft de hele tijd in uw app en u heeft de controle over elke pixel.
+
+00:10:24.180 --> 00:10:28.480
+Het is een veel soepelere ervaring en een van de functies die Azure ADB2C nooit had.
+
+00:10:28.740 --> 00:10:30.700
+Migratie van Azure ADB2C
+
+00:10:30.700 --> 00:10:32.740
+Als u al Azure ADB2C gebruikt,
+
+00:10:32.980 --> 00:10:34.880
+vraagt u zich waarschijnlijk af wat dit voor u betekent.
+
+00:10:34.880 --> 00:10:39.180
+Het zit zo, Microsoft blijft B2C in ieder geval tot 2030 ondersteunen.
+
+00:10:39.300 --> 00:10:43.000
+Uw bestaande tenants stoppen dus niet morgen met werken, maar er komen geen nieuwe functies meer bij.
+
+00:10:43.180 --> 00:10:48.200
+Alle innovatie, pas, keys, native authenticatie en fraudebescherming zijn exclusief voor external ID.
+
+00:10:48.420 --> 00:10:50.620
+U zit op een platform dat in feite bevroren is.
+
+00:10:50.840 --> 00:10:55.660
+Microsoft heeft officiële migratietools en richtlijnen gepubliceerd en er zijn twee paden afhankelijk van je schaal.
+
+00:10:55.880 --> 00:11:00.860
+Voor tenants met minder dan ongeveer 5 miljoen directory objecten, gebruikers, groepen en aangepaste kenmerken,
+
+00:11:01.080 --> 00:11:02.980
+is een standaard migratie relatief eenvoudig.
+
+00:11:02.980 --> 00:11:05.140
+Het werkt als een tenant-naar-tenant verplaatsing.
+
+00:11:05.300 --> 00:11:11.160
+Je maakt een nieuwe external ID tenant aan, migreert je gebruikers en hun inloggegevens en schakelt vervolgens je applicaties over.
+
+00:11:11.400 --> 00:11:18.540
+Microsoft biedt tools voor bulk export en import van gebruikers en je kunt just-in-time wachtwoord migratie gebruiken om verstoring tijdens de overgang te beperken.
+
+00:11:18.740 --> 00:11:24.120
+Voor grotere tenants met meer dan 5 miljoen directory objecten is er de high-scale compatibility mode, oftewel HSC.
+
+00:11:24.120 --> 00:11:29.080
+In deze modus draaien Azure ADB2C en External ID zij aan zij in dezelfde tenant.
+
+00:11:29.300 --> 00:11:33.720
+Je bestaande B2C-eindpunten blijven actief terwijl je geleidelijk applicaties overzet.
+
+00:11:33.900 --> 00:11:39.080
+Het is ontworpen voor organisaties die niet miljoenen gebruikers van de ene op de andere dag kunnen migreren, maar er zijn compromissen.
+
+00:11:39.340 --> 00:11:44.480
+Geen sociale identiteitsproviders, geen paskeys, beperkte voorwaardelijke toegang en sommige functies zijn simpelweg niet beschikbaar.
+
+00:11:44.680 --> 00:11:47.280
+Zie het als een overbruggingstrategie, niet als een permanente oplossing.
+
+00:11:47.280 --> 00:11:48.660
+Nu, een grote verandering.
+
+00:11:48.940 --> 00:11:50.300
+Aangepast beleid is verdwenen.
+
+00:11:50.460 --> 00:11:57.060
+Als je complexe authenticatiestromen hebt gebouwd met het op XML gebaseerde Identity Experience Framework van Azure ADB2C, werken deze niet in External ID.
+
+00:11:57.320 --> 00:12:01.440
+Je zult die logica opnieuw moeten opbouwen met gebruikersstromen en aangepaste authenticatie-extensies.
+
+00:12:01.620 --> 00:12:04.600
+Er is geen magische tool die je XML conforteert naar het nieuwe formaat.
+
+00:12:04.720 --> 00:12:06.000
+Je zult het werk zelf moeten doen.
+
+00:12:06.220 --> 00:12:07.340
+Dus, waar komt het op neer?
+
+00:12:07.480 --> 00:12:09.900
+Als je vandaag vanaf nul begint, gebruik dan External ID.
+
+00:12:10.140 --> 00:12:12.280
+Er is geen reden om überhaupt naar B2C te kijken.
+
+00:12:12.500 --> 00:12:15.740
+Als je een bestaande B2C-tenant hebt, begin dan nu met het plannen van je migratie.
+
+00:12:15.740 --> 00:12:22.580
+Je hebt tot 2030, maar wachten tot het laatste moment betekent dat je moet haasten door een complexe migratie terwijl je bestaande apps draaiende moet houden.
+
+00:12:22.780 --> 00:12:23.440
+Begin klein.
+
+00:12:23.660 --> 00:12:27.880
+Kies één applicatie, migreer deze, test het, leer van het proces en doe dan de rest.
+
+00:12:28.620 --> 00:12:30.000
+Ontwikkelaarservaring en automatisering.
+
+00:12:30.240 --> 00:12:36.920
+Microsoft heeft zich echt gericht op het makkelijk maken van External ID voor ontwikkelaars en het is een enorme verandering ten opzichte van het oude B2C-beleid.
+
+00:12:37.100 --> 00:12:41.260
+Ken je die XML-bestanden die honderden regels lang waren en kapot gingen als je één haakje verkeerd plaatste?
+
+00:12:41.440 --> 00:12:42.440
+Dat is verleden tijd.
+
+00:12:42.440 --> 00:12:46.300
+Er is een Visual Studio Code-extensie genaamd Microsoft Entra External ID.
+
+00:12:46.580 --> 00:12:54.100
+Nadat je bent aangemeld, kun je door je tenant bladeren, gebruikersstromen bekijken, ze downloaden als JSON-bestanden en zelfs je branding bekijken, zonder je editor te verlaten.
+
+00:12:54.240 --> 00:12:57.480
+Je ziet hoe je aanmeldingspagina eruit ziet voordat je deze publiceert.
+
+00:12:57.680 --> 00:12:59.560
+Dan is er nog de Microsoft Graph API.
+
+00:12:59.880 --> 00:13:05.220
+Bijna elke External ID resource, zoals gebruikersstromen, app-registraties en branding, kan programmatisch worden beheerd.
+
+00:13:05.420 --> 00:13:10.320
+Dat betekent dat je de tenant-setup kunt automatiseren in je CI-CD pipelines met PowerShell of Rest aanroepen.
+
+00:13:10.320 --> 00:13:15.480
+Maak een nieuwe tenant aan, configureer de gebruikersstromen, registreer je app-en-style branding in, allemaal vanuit een script.
+
+00:13:15.660 --> 00:13:18.540
+Als je meerdere omgevingen beheert, bespaart dat enorm veel tijd.
+
+00:13:18.860 --> 00:13:21.460
+Aangepaste authenticatie-extensies vormen de echte kracht.
+
+00:13:21.640 --> 00:13:26.380
+In plaats van complexe XML, breed je authenticatiestromen uit met eenvoudige HTTP aanroepen naar Azure Functions.
+
+00:13:26.560 --> 00:13:28.720
+Er zijn vier gebeurtenissen waar je op kunt inhaken.
+
+00:13:28.720 --> 00:13:34.120
+Bij het starten van tokenuitgifte kun je aangepaste claims aan tokens toevoegen, zoals rollen- of loyaliteitsniveau informatie.
+
+00:13:34.300 --> 00:13:39.700
+Bij het verzamelen van attributen kun je aanmeldgegevens valideren of vooraf invullen door je eigen bekende aan te roepen.
+
+00:13:39.860 --> 00:13:43.180
+En met e-mail OTP verzonden, kun je de verificatie e-mails aanpassen.
+
+00:13:43.380 --> 00:13:46.940
+Het biedt dezelfde flexibiliteit als B2C, maar in een model waar elke ontwikkelaar mee kan werken.
+
+00:13:47.100 --> 00:13:49.020
+Er zijn wel beperkingen waar je rekening mee moet houden.
+
+00:13:49.180 --> 00:13:54.040
+Er zijn nog geen Microsoft Graph meldingen, dus je kunt niet automatisch een workflow starten wanneer een nieuwe gebruiker zich aanmeldt.
+
+00:13:54.040 --> 00:13:59.020
+Sommige configuraties moeten nog handmatig in het centrum worden gedaan en er is geen ingebouwde pagina voor profielbewerking.
+
+00:13:59.180 --> 00:14:04.140
+Als je wilt dat gebruikers hun informatie bijwerken, moet je die pagina zelf in je app bouwen en de Graph API aanroepen.
+
+00:14:04.300 --> 00:14:05.520
+Maar de richting is duidelijk.
+
+00:14:05.720 --> 00:14:08.740
+Microsoft wil dat External ID volledig automatiseerbaar wordt.
+
+00:14:08.900 --> 00:14:11.020
+Dat maakt het gemakkelijker om op schaal te beheren.
+
+00:14:11.180 --> 00:14:12.660
+Dus nu weet je het Microsoft.
+
+00:14:12.820 --> 00:14:18.140
+Entra External ID is de moderne vervanger voor Azure ADB2C, verenigd onder het Entra-merk.
+
+00:14:18.140 --> 00:14:22.240
+De drie use cases, klantidentiteit, partnersamenwerking en machine-to-machine,
+
+00:14:22.440 --> 00:14:25.620
+dekken bijna elke externe identiteitsbehoefte die je zult tegenkomen.
+
+00:14:25.800 --> 00:14:30.380
+De belangrijkste beslissing is of je je workforce-tenant gebruikt of een afzonderlijke externe tenant aanmaakt.
+
+00:14:30.580 --> 00:14:33.540
+Voor klantgerichte apps is een aparte tenant bijna altijd beter.
+
+00:14:33.880 --> 00:14:35.880
+Identiteit is de voordeur van je applicatie.
+
+00:14:36.080 --> 00:14:42.000
+Het goed, veilig, herkenbaar en eenvoudig inrichten heeft direct invloed op het gebruikersvertrouwen en de bedrijfsgroei.
+
+00:14:42.000 --> 00:14:48.160
+Jouw huiswerk? Ga naar entra.microsoft.com, maak een externe tenant aan en probeer de aan de slag, gids.
+
+00:14:48.420 --> 00:14:51.300
+Deze lijkt je in enkele minuten door het opzetten van een voorbeeld-app.
+
+00:14:51.440 --> 00:14:55.060
+Abonneer je voor meer uitleg in begrijpelijke taal over het identiteitsplatform van Microsoft.

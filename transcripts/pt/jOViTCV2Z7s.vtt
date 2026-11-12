@@ -1,0 +1,6646 @@
+WEBVTT
+
+00:00:00.590 --> 00:00:03.350
+Boas-vindas a todos ao podcast M65FM.
+
+00:00:04.570 --> 00:00:10.990
+Hoje vamos além de uma das conversas mais comuns sobre engenharia de prompts do Microsoft 305 Copilot.
+
+00:00:11.170 --> 00:00:11.490
+Por quê?
+
+00:00:11.890 --> 00:00:19.350
+Quando as organizações começam a usar o Copilot seriamente, a pergunta muda rapidamente de como escrevemos prompts melhores.
+
+00:00:20.630 --> 00:00:29.530
+Para como conectamos o Copilot às aplicações, dados, apps, processos de negócio e o conhecimento que realmente operam em nossa empresa.
+
+00:00:30.590 --> 00:00:33.970
+E é aí que a extensibilidade do Copilot se torna interessante, testando.
+
+00:00:33.970 --> 00:00:42.970
+Meu convidado hoje é Evas Harvest, Microsoft MVP, consultor de aplicações de negócio e A, no grupo Word na Suíça.
+
+00:00:44.170 --> 00:00:54.750
+Evas trabalha com Microsoft 306.5, Azure, Dynamics 306.5 e Power Platform, com foco especial na extensão do Microsoft 306 Copilot por meio de agentes e desenvolvimento personalizado.
+
+00:00:54.750 --> 00:00:59.830
+Vamos explorar a extensibilidade do Microsoft 305 Copilot e Copilot Studio.
+
+00:01:00.130 --> 00:01:02.530
+Microsoft Azure AI Foundry, não sei.
+
+00:01:02.830 --> 00:01:08.950
+Eles mudam o nome Microsoft Graph, desenvolvimento personalizado, MSPSE e assim por diante.
+
+00:01:09.390 --> 00:01:09.690
+MIG.
+
+00:01:10.330 --> 00:01:12.630
+Então Eva, seja bem-vindo ao podcast M65.
+
+00:01:14.130 --> 00:01:16.290
+Olá a todos, obrigado por me receberem.
+
+00:01:16.290 --> 00:01:21.070
+É realmente uma oportunidade para mim estar aqui.
+
+00:01:21.690 --> 00:01:22.570
+Muito obrigado pelo convite.
+
+00:01:24.030 --> 00:01:24.830
+Eu que agradeço.
+
+00:01:25.670 --> 00:01:34.150
+Antes de entrarmos nos aspectos técnicos, você poderia nos contar um pouco sobre sua jornada e como entrou no ecossistema Microsoft?
+
+00:01:34.150 --> 00:01:40.410
+Claro, porque, para ser sincero, eu não comecei minha carreira no mundo Microsoft.
+
+00:01:41.130 --> 00:01:43.010
+Comecei minha carreira no mundo Apple.
+
+00:01:44.450 --> 00:01:50.710
+Eu era engenheiro de software na plataforma Mac e depois migrei para iOS, esse tipo de coisa.
+
+00:01:51.990 --> 00:01:59.890
+E foi há muito tempo, talvez uns 15 ou 20 anos atrás, que me mudei para o mundo Microsoft.
+
+00:01:59.890 --> 00:02:10.340
+Para ser sincero, comecei minha carreira em SharePoint, depois migrei para a Nuvem, Azure e M365.
+
+00:02:12.430 --> 00:02:22.230
+Eu trabalhava com SharePoint on-premises, comecei assim e depois fui para todos os serviços em Nuvem, Power Platform e mais recentemente tudo relacionado à IA.
+
+00:02:22.230 --> 00:02:35.670
+Para ser sincero, porque isso é uma grande parte do M365 agora, já que temos uma transição para agentes e basicamente essa é, em resumo, minha jornada.
+
+00:02:35.670 --> 00:02:44.970
+Mas eu comecei minha carreira no mundo da engenharia de software, que é hoje talvez uma palavra que muitas pessoas estão esquecendo,
+
+00:02:45.410 --> 00:02:54.290
+porque você tem todas as coisas de IA agora e basicamente esse tipo de atividades ou trabalhos mudaram para IA.
+
+00:02:54.570 --> 00:02:58.670
+Então é bem diferente de 20 anos atrás para agora.
+
+00:02:58.670 --> 00:03:07.400
+Sim, você diz que trabalha com SharePoint e eu vejo também que você trabalha com Graph, Speak, Dynamics, Power Platform.
+
+00:03:07.600 --> 00:03:14.620
+Como esse histórico te preparou para a geração atual de desenvolvimento de IA?
+
+00:03:17.280 --> 00:03:28.940
+Basicamente, basicamente meu perfil é realmente, realmente transversal, porque na minha carreira eu costumava trabalhar com muitos, muitos produtos.
+
+00:03:28.940 --> 00:03:32.480
+poderiam ser produtos Microsoft e não Microsoft.
+
+00:03:33.260 --> 00:03:38.500
+Então basicamente eu tenho um grande escopo de habilidades, em muitas tecnologias e ferramentas diferentes.
+
+00:03:40.340 --> 00:03:48.940
+Então todos os meus trabalhos me deram uma boa base, porque agora com a IA é um tópico amplo,
+
+00:03:49.000 --> 00:03:54.240
+porque você tem diferentes tipos de abordagens, diferentes tipos de tecnologias para fazer IA agora.
+
+00:03:54.240 --> 00:03:58.580
+Pode ser agente, pode ser mais fluxo de trabalho, esse tipo de coisa.
+
+00:03:59.760 --> 00:04:07.240
+Então basicamente todos os meus empregos anteriores me deram muitas habilidades para estar pronto para essa transição, para IA agora, para ser honesto.
+
+00:04:08.720 --> 00:04:12.660
+Então eu mudei para Low Code, para ferramentas Pro Code.
+
+00:04:12.660 --> 00:04:26.300
+Então sim, todas essas, oh sim, todas essas oportunidades e atividades nos meus trabalhos me deram boas habilidades para tirar vantagem no mundo da IA, para ser honesto.
+
+00:04:29.060 --> 00:04:34.420
+E agora você é um líder de testes de IA, e o que faz um líder de testes de IA?
+
+00:04:34.420 --> 00:04:39.820
+Essa é uma pergunta muito boa, porque muitas pessoas me fazem essa pergunta.
+
+00:04:41.320 --> 00:04:47.900
+Então meu trabalho é apenas combinar especificações funcionais com a pilha técnica.
+
+00:04:49.480 --> 00:04:53.480
+Então eu assumo a liderança quando a análise de negócios já foi feita.
+
+00:04:53.480 --> 00:05:05.600
+Nós definimos o caso de uso para as coisas de IA, nós definimos cenários, caso de uso, nós definimos, nós fizemos a análise de negócios completa.
+
+00:05:05.700 --> 00:05:12.640
+E meu trabalho é, ok, eu pego essas necessidades e combino essas necessidades com a pilha técnica por trás.
+
+00:05:12.640 --> 00:05:21.920
+E depois eu lhe dero toda a implementação das ferramentas e da solução quando estamos prontos para começar a desenvolver.
+
+00:05:24.540 --> 00:05:25.460
+Sim, interessante.
+
+00:05:27.720 --> 00:05:35.540
+Na verdade, muitas empresas compram treinamentos para seus funcionários, especialmente para engenharia de prompt.
+
+00:05:36.340 --> 00:05:41.340
+E por que você diria que isso não é suficiente?
+
+00:05:46.610 --> 00:05:48.990
+Apenas engenharia de prompt, você quer dizer, hoje em dia?
+
+00:05:48.990 --> 00:06:02.680
+Por que, por que, por que eles, por que é só, sabe, por que para as empresas não é suficiente apenas ensinar as pessoas a engenharia de prompt?
+
+00:06:04.140 --> 00:06:05.720
+Assim, entendo.
+
+00:06:06.100 --> 00:06:15.400
+Ok, sim, sim, basicamente para ser honesto, hoje em dia você tem, como eu disse antes, muitas ferramentas e tecnologias diferentes.
+
+00:06:15.400 --> 00:06:23.440
+Então, e basicamente, em certo ponto a IA pode entender o que fazer e talvez te guiar um pouco.
+
+00:06:25.040 --> 00:06:34.400
+Mas, para mim, o papel de, por exemplo, arquiteto ou designer de software, você precisa ter um humano por trás das cenas porque você precisa entender o cliente.
+
+00:06:34.400 --> 00:06:39.790
+Basicamente, basicamente, a IA às vezes não consegue entender o contexto do cliente.
+
+00:06:39.990 --> 00:06:52.650
+O cliente, você vê a rede completa, mas por trás das cenas, ter apenas um foco em engenharia de prompt pode ser bom em certo ponto.
+
+00:06:52.650 --> 00:07:02.650
+Mas, você precisa ter mais porque precisa ter por trás das cenas algumas pessoas que sejam arquitetos, engenheiros de software e basicamente muitas pessoas que tenham habilidades em tecnologias.
+
+00:07:02.650 --> 00:07:11.250
+Tecnologias, tecnologias da informação como o SharePoint, como o OneDrive ou o Salesforce, esse tipo de coisa.
+
+00:07:12.250 --> 00:07:16.730
+Você precisa ter especialistas nessas tecnologias porque a IA pode entender muitas coisas.
+
+00:07:17.710 --> 00:07:28.450
+Ela pode te guiar, ela pode gerar ótimos documentos técnicos ou funcionais, mas você precisa ter humanos por trás das cenas que cuidem de, ok, isso está bom?
+
+00:07:28.450 --> 00:07:36.130
+Isso está o atendendo a necessidade do cliente, esse tipo de coisa, sabe, para validar tudo e focar apenas na engenharia de prompt.
+
+00:07:36.130 --> 00:07:50.070
+Para mim, agora, sim, poderia ser uma opção se você não tem tempo para treinar ou para investir em adquirir algumas habilidades.
+
+00:07:50.590 --> 00:07:58.130
+Mas, para mim, você precisa ter boas habilidades nas tecnologias fundamentais onde você quer construir suas soluções para ser honesto.
+
+00:08:00.690 --> 00:08:04.450
+E você é um especialista em extensibilidade do Copilot.
+
+00:08:06.370 --> 00:08:16.250
+Onde um Copilot padrão, o Microsoft 365 Copilot, para e onde a extensibilidade do Copilot começa?
+
+00:08:16.250 --> 00:08:26.250
+Sim, é uma boa pergunta porque, para ser honesto, dois anos atrás, quando o Copilot foi lançado,
+
+00:08:26.570 --> 00:08:32.830
+talvez a primeira versão, basicamente o chat era, para ser honesto, muito, muito minimalista.
+
+00:08:33.610 --> 00:08:38.810
+Basicamente, você pode, ok, era como um chat GPT, mas a Microsoft evoluiu muito.
+
+00:08:38.810 --> 00:08:51.810
+O Microsoft 365 Copilot, basicamente, agora você tem diferentes tipos de recursos, então a extensibilidade é menor do que antes,
+
+00:08:51.950 --> 00:08:55.510
+porque no passado você desenvolvia alguns plugins, esse tipo de coisa.
+
+00:08:55.510 --> 00:09:06.510
+Mas, hoje em dia, para ser sincero, neste momento, a extensibilidade é quando você quer construir algo e quer personalizar, basicamente, o orquestrador
+
+00:09:06.510 --> 00:09:11.510
+ou quer personalizar um pouco mais, por exemplo, a interface do usuário.
+
+00:09:11.510 --> 00:09:19.990
+Se você quiser integrar seu agente, não apenas no chat do Microsoft Trezenco, mas, por exemplo, no seu site, esse tipo de...
+
+00:09:19.990 --> 00:09:29.930
+Então, a extensibilidade começa quando você quer, basicamente, personalizar mais os bastidores, você quer personalizar um pouco mais.
+
+00:09:32.270 --> 00:09:38.650
+Pode ser o orquestrador, se você quiser personalizar o orquestrador, se quiser personalizar a sua interface,
+
+00:09:38.650 --> 00:09:46.930
+se você quiser personalizar diferentes aspectos, onde, basicamente, o chat do Copilot não pode fazer, não pode responder.
+
+00:09:51.790 --> 00:09:56.410
+E acho que muita gente fala sobre agentes...
+
+00:09:58.010 --> 00:09:59.410
+Um som...
+
+00:10:02.930 --> 00:10:15.410
+Por que pensamos tanto agora em agentes do Copilot e por que não construímos, sei lá, um grande Copilot para tudo?
+
+00:10:15.410 --> 00:10:24.690
+Sim, é muito interessante, porque, para ser sincero, o Microsoft, como eu disse antes, evoluiu muito, evoluiu muito.
+
+00:10:25.850 --> 00:10:32.430
+E, talvez, se estivéssemos seis meses atrás, ok, um agente era um tópico,
+
+00:10:34.980 --> 00:10:42.160
+agora, o Microsoft introduziu o Copilot para trabalho e, para ser sincero, hoje em dia, o Copilot para trabalho pode substituir muitos agentes.
+
+00:10:42.160 --> 00:10:51.860
+E, quando pensamos sobre agentes, é apenas para separar as coisas, porque, agora, estamos mais em um modelo multi-agente,
+
+00:10:51.940 --> 00:10:55.960
+onde cada agente tem seu escopo e suas responsabilidades.
+
+00:10:55.960 --> 00:11:02.220
+E não fazemos um grande Copilot, basicamente, por causa do desempenho.
+
+00:11:02.920 --> 00:11:08.080
+Primeiro, porque, quando você tem um grande conjunto de instruções e ferramentas em termos de desempenho,
+
+00:11:08.320 --> 00:11:09.160
+vira uma bagunça.
+
+00:11:11.280 --> 00:11:15.420
+E a arquitetura, agora, é mais multi-agente, pode ser no Copilot Studio,
+
+00:11:16.040 --> 00:11:20.960
+pode ser em um agente desenvolvido sob medida em termos de código ou desenvolvimento personalizado.
+
+00:11:20.960 --> 00:11:25.880
+Mas, hoje em dia, é melhor ter uma abordagem multi-agente,
+
+00:11:26.000 --> 00:11:32.700
+onde cada agente tem seu escopo e sua responsabilidade apenas em termos de desempenho
+
+00:11:32.700 --> 00:11:36.480
+e para ter uma arquitetura clara de agentes.
+
+00:11:55.490 --> 00:11:56.050
+Chopembe!
+
+00:11:56.450 --> 00:12:10.670
+E, quando olhamos para isso, ok, eu penso em uma arquitetura básica de agente de IA,
+
+00:12:10.670 --> 00:12:15.650
+então, nós temos, eu diria, algumas palavras-chave.
+
+00:12:16.130 --> 00:12:17.790
+Nossas palavras-chave.
+
+00:12:18.830 --> 00:12:25.290
+Mas, nós temos que pensar sobre raciocínio, ferramentas, conhecimento e instruções.
+
+00:12:26.550 --> 00:12:31.410
+Como isso se encaixa em uma arquitetura de agente IA?
+
+00:12:31.850 --> 00:12:40.580
+A primeira coisa é pensar, uma das primeiras perguntas que você precisa responder é que é objetivo.
+
+00:12:42.600 --> 00:12:48.400
+O primeiro objetivo deste agente, basicamente, depois da arquitetura de agente,
+
+00:12:48.400 --> 00:12:53.860
+isso realmente depende de se você está em uma abordagem low-code ou se está em uma abordagem de desenvolvimento personalizado,
+
+00:12:54.520 --> 00:13:02.060
+porque a abordagem é totalmente diferente, já que em uma abordagem de desenvolvimento personalizado você gerencia tudo.
+
+00:13:02.940 --> 00:13:07.860
+Então, você gerencia a segurança, gerencia a hospedagem, gerencia muitas coisas diferentes.
+
+00:13:07.860 --> 00:13:16.140
+Na abordagem low-code é muito diferente porque você pensa, ok, você dá a instrução, você seleciona algumas ferramentas.
+
+00:13:16.140 --> 00:13:25.520
+Então, basicamente, a arquitetura em uma abordagem low-code não é tão simples quanto eu disse agora,
+
+00:13:25.640 --> 00:13:31.520
+mas pode ser muito rápida porque você pode definir, ok, você tem a instrução, pode selecionar suas ferramentas,
+
+00:13:32.040 --> 00:13:36.500
+pode selecionar um outro agente diferente se quiser se conectar.
+
+00:13:36.500 --> 00:13:44.040
+Mas é muito simples, quando você está lidando com desenvolvimento personalizado ou quando desenvolve seu próprio agente,
+
+00:13:45.180 --> 00:13:48.280
+poderia ser, por exemplo, semantic kernel, agent framework, esse tipo de coisa.
+
+00:13:49.380 --> 00:13:54.800
+A arquitetura pode ser muito mais complexa porque você precisa lidar com conceitos realmente avançados,
+
+00:13:54.880 --> 00:13:55.960
+como eu disse, segurança.
+
+00:13:55.960 --> 00:14:04.440
+Em termos de autenticação, se você tem, por exemplo, múltiplas ferramentas e quer integrar algum NCP,
+
+00:14:04.780 --> 00:14:11.360
+se quer se conectar a ferramentas internas protegidas por proxys, reversos, esse tipo de coisa.
+
+00:14:12.800 --> 00:14:16.860
+Então, basicamente, você precisa refletir, mas em termos de arquitetura,
+
+00:14:17.380 --> 00:14:21.840
+quando está lidando com agentes personalizados, por exemplo, no Copilot Studio,
+
+00:14:21.840 --> 00:14:27.640
+em termos de arquitetura, é muito rápido definir arquitetura em uma abordagem de desenvolvimento.
+
+00:14:28.820 --> 00:14:34.980
+Personalizado, você tem que lidar com conceitos avançados e, para muitas pessoas, pode ser difícil
+
+00:14:34.980 --> 00:14:37.920
+porque são aspectos realmente fundamentais.
+
+00:14:39.720 --> 00:14:47.500
+E no meu trabalho, para ser honesto, eu lido com muitas necessidades diferentes, sabe?
+
+00:14:48.720 --> 00:14:51.600
+Pode ser desenvolvimento personalizado, pode ser o Copilot Studio,
+
+00:14:51.600 --> 00:14:55.300
+ou um agente simples no Agent Builder com uma necessidade bem básica.
+
+00:14:56.420 --> 00:15:02.760
+Então, basicamente, definir uma arquitetura depende muito de qual abordagem você quer adotar.
+
+00:15:04.560 --> 00:15:06.780
+Basicamente, você tem uma arquitetura geral que pode criar,
+
+00:15:07.000 --> 00:15:11.120
+mas depois depende realmente da abordagem que você quer, low-code ou full-code, entende?
+
+00:15:15.680 --> 00:15:18.800
+Mas podemos...
+
+00:15:18.800 --> 00:15:20.080
+Pode, pode...
+
+00:15:20.080 --> 00:15:24.660
+Você pode descrever a anatomia de um agente diacorporativo típico...
+
+00:15:24.660 --> 00:15:28.530
+Ah, sim, eu posso...
+
+00:15:28.530 --> 00:15:32.970
+Basicamente, se você quer falar da forma mais simples possível,
+
+00:15:33.730 --> 00:15:41.210
+quando você tem uma necessidade, por exemplo, pode ser um agente de suporte de TI, basicamente,
+
+00:15:41.730 --> 00:15:47.110
+pode ser que você tenha um conjunto, basicamente,
+
+00:15:47.110 --> 00:15:51.530
+mas depois, hoje em dia, como eu disse, você tem essa abordagem multi-agente
+
+00:15:51.530 --> 00:15:56.730
+e, basicamente, eu coloco o primeiro agente como a frente, como uma interface.
+
+00:15:57.970 --> 00:16:04.510
+Então, este é um agente de frente e esse agente de frente vai rotear todas as solicitações, por exemplo,
+
+00:16:05.010 --> 00:16:07.170
+entre diferentes agentes.
+
+00:16:07.950 --> 00:16:11.990
+Então, por exemplo, se o usuário estiver perguntando, sei lá, uma dúvida sobre Salesforce,
+
+00:16:11.990 --> 00:16:19.150
+ele roteará toda a solicitação para o agente de suporte de TI, do Salesforce, entende?
+
+00:16:19.590 --> 00:16:22.670
+Então, basicamente, para alguns clientes nós criamos esse tipo de arquitetura,
+
+00:16:22.990 --> 00:16:26.530
+porque cada agente cuida do seu escopo.
+
+00:16:27.530 --> 00:16:33.090
+Pode ser para produtos como o Salesforce, pode ser para o M3 e M5, esse tipo de coisa.
+
+00:16:34.470 --> 00:16:38.970
+E por trás das cenas, cada agente tem um conjunto de instruções e um conjunto de ferramentas.
+
+00:16:38.970 --> 00:16:47.370
+E, hoje em dia, é melhor usar servidores MCP, porque o servidor MCP agora é um plug universal
+
+00:16:47.370 --> 00:16:51.310
+para integrar vários serviços com o IA.
+
+00:16:52.290 --> 00:16:59.390
+Então, eu tenho um conjunto de servidores MCP e também algumas fontes de conhecimento internas,
+
+00:17:00.250 --> 00:17:03.830
+pode ser como o Gira, pode ser base de conhecimento do ServiceNow, esse tipo de coisa.
+
+00:17:03.830 --> 00:17:14.730
+Então, você tem um conjunto de instruções por agente e essas instruções definem o escopo do agente e qual é o papel de cada um.
+
+00:17:14.890 --> 00:17:23.730
+E, depois, você tem um conjunto de servidores MCP e, talvez, fontes de conhecimento que possam ser arquivos PDF.
+
+00:17:23.730 --> 00:17:29.110
+Então, pode ser vários, vários tipos de fontes de dados.
+
+00:17:32.870 --> 00:17:39.510
+E, depois, desculpe, quando um usuário solicita, por exemplo, ao agente principal, ele definirá,
+
+00:17:40.010 --> 00:17:43.550
+ok, preciso delegar esta tarefa ao agente respectivo.
+
+00:17:47.760 --> 00:17:57.240
+Vamos analisar um pouco as possibilidades onde o Copilot Studio se encaixa na arquitetura geral.
+
+00:17:57.240 --> 00:18:04.840
+O Copilot Studio, para ser sincero, é uma ferramenta low-code da Microsoft.
+
+00:18:06.060 --> 00:18:14.300
+Então, primeiro, em termos de arquitetura, o Copilot Studio é realmente projetado para criadores,
+
+00:18:14.640 --> 00:18:17.880
+basicamente para pessoas que não são desenvolvedores a princípio.
+
+00:18:19.760 --> 00:18:25.740
+E, em termos de arquitetura, basicamente, se pegarmos o exemplo que usei antes,
+
+00:18:25.740 --> 00:18:29.120
+o suporte de TI, o Copilot Studio, se encaixa bem.
+
+00:18:29.560 --> 00:18:33.000
+Porque, arquiteturalmente, ele dá conta do recado,
+
+00:18:33.200 --> 00:18:43.580
+pois você pode definir servidores, integrar facilmente fontes de conhecimento externas ou internas, se desejar.
+
+00:18:45.500 --> 00:18:51.400
+Depois, como eu disse antes, se você tiver um caso de uso onde deseja personalizar um pouco o orquestrador,
+
+00:18:51.400 --> 00:18:55.580
+nos bastidores do Copilot Studio, você não consegue personalizar o orquestrador.
+
+00:18:55.860 --> 00:18:59.620
+Você apenas ativa o orquestrador de IA, e é isso, e é isso.
+
+00:19:01.200 --> 00:19:05.920
+Você não pode, por exemplo, personalizar a prioridade das tarefas que deseja realizar,
+
+00:19:06.260 --> 00:19:11.200
+porque o Copilot Studio definirá o plano nos bastidores e, em seguida, o executará.
+
+00:19:11.200 --> 00:19:17.160
+Mas, se você quiser ter um pouco mais de personalização, nesse caso,
+
+00:19:17.920 --> 00:19:20.700
+precisará usar desenvolvimento customizado, como, por exemplo,
+
+00:19:21.560 --> 00:19:26.480
+Semantic Kernel Langchain, ou um framework mais recente lançado pela Microsoft,
+
+00:19:26.860 --> 00:19:30.280
+onde você pode facilmente personalizar a orquestração,
+
+00:19:31.200 --> 00:19:35.880
+definir fluxos de trabalho e personalizar o que quiser.
+
+00:19:38.510 --> 00:19:43.070
+Essa é a arquitetura do Copilot Studio, realmente definida para construtores e criadores,
+
+00:19:43.070 --> 00:19:46.970
+porque é muito simples colocar um agente para funcionar.
+
+00:19:49.660 --> 00:19:54.120
+O único problema com o Copilot Studio, e você precisa se atentar a isso,
+
+00:19:54.340 --> 00:19:57.480
+é que, ao escolher seu caminho e definir sua arquitetura,
+
+00:19:57.600 --> 00:19:59.540
+você precisa considerar o licenciamento,
+
+00:19:59.820 --> 00:20:04.060
+pois ele é uma parte importante de toda solução agora.
+
+00:20:06.710 --> 00:20:10.470
+E, hoje em dia, o Copilot Studio evoluiu um pouco para o modelo de pagamento,
+
+00:20:10.550 --> 00:20:14.990
+conforme o uso, e você precisa ter cuidado com a estimativa de custos,
+
+00:20:14.990 --> 00:20:17.730
+porque, dependendo do que deseja alcançar,
+
+00:20:18.010 --> 00:20:21.410
+às vezes é melhor fazer um desenvolvimento personalizado,
+
+00:20:21.570 --> 00:20:24.750
+já que depois você hospeda onde quiser, controla todos os custos,
+
+00:20:25.150 --> 00:20:26.990
+e consegue estimar com mais facilidade.
+
+00:20:28.690 --> 00:20:32.870
+Porque, com a abordagem de créditos do Copilot,
+
+00:20:34.150 --> 00:20:37.930
+às vezes é difícil prever quanto vai custar por um mês, dois meses,
+
+00:20:38.050 --> 00:20:39.070
+e esse tipo de coisa.
+
+00:20:39.070 --> 00:20:46.200
+E quais são as limitações do Copilot Studio?
+
+00:20:48.270 --> 00:20:51.450
+Studio, quando devo escolher, então, penso,
+
+00:20:51.790 --> 00:20:55.310
+Microsoft Foundry, Azure Foundry, não sei qual é o nome real,
+
+00:20:55.550 --> 00:20:57.590
+e quando tenho que dizer,
+
+00:20:57.910 --> 00:21:03.590
+ok, devo fazer um desenvolvimento totalmente personalizado?
+
+00:21:07.060 --> 00:21:11.120
+A primeira pergunta a responder é,
+
+00:21:11.240 --> 00:21:14.580
+ok, preciso personalizar a orquestração?
+
+00:21:14.580 --> 00:21:17.440
+Essa é a primeira pergunta para mim,
+
+00:21:17.620 --> 00:21:22.700
+porque ela lhe dirá, ok, se você não quer personalizar a orquestração,
+
+00:21:23.160 --> 00:21:26.040
+se aprofundar em como toda a orquestração é feita,
+
+00:21:26.260 --> 00:21:28.000
+ou como o plano é gerado,
+
+00:21:28.100 --> 00:21:32.240
+você pode usar uma abordagem low-code com o Copilot Studio.
+
+00:21:32.660 --> 00:21:34.920
+Por exemplo, um construtor,
+
+00:21:36.020 --> 00:21:38.240
+além disso, às vezes, quando você tem um caso de uso simples,
+
+00:21:38.360 --> 00:21:39.780
+pode usar esse tipo de ferramenta.
+
+00:21:39.780 --> 00:21:45.660
+Mas se você quiser personalizar a orquestração,
+
+00:21:45.900 --> 00:21:48.960
+ok, precisa partir para um desenvolvimento específico,
+
+00:21:49.000 --> 00:21:51.200
+e nesse caso, precisa usar o Foundry para o modelo,
+
+00:21:51.360 --> 00:21:53.220
+ou se você tiver sua própria plataforma,
+
+00:21:53.380 --> 00:21:56.900
+porque a vantagem do desenvolvimento personalizado,
+
+00:22:01.040 --> 00:22:03.920
+você pode integrar modelos que não estão hospedados no Foundry da Microsoft,
+
+00:22:04.540 --> 00:22:06.680
+se quiser, pode usar modelos do Foundry,
+
+00:22:06.680 --> 00:22:10.620
+mas também, se você tiver uma AWS ou Google,
+
+00:22:11.040 --> 00:22:13.400
+plataforma Google, desculpe,
+
+00:22:13.500 --> 00:22:15.740
+e tiver o Gemini, por exemplo,
+
+00:22:15.900 --> 00:22:18.040
+ou tiver implantado um modelo externamente,
+
+00:22:18.240 --> 00:22:21.900
+você tem a capacidade de integrar esses modelos
+
+00:22:21.900 --> 00:22:23.740
+diretamente no seu agente
+
+00:22:23.740 --> 00:22:26.240
+quando usa uma abordagem personalizada.
+
+00:22:29.080 --> 00:22:30.340
+Essa também é uma vantagem.
+
+00:22:30.340 --> 00:22:34.940
+E depois você pode personalizar a orquestração,
+
+00:22:35.300 --> 00:22:36.300
+como o plano é gerado,
+
+00:22:36.420 --> 00:22:39.760
+todas as coisas que entrarão no agente do Foundry.
+
+00:22:41.040 --> 00:22:43.160
+O problema do Foundry hoje em dia é que, no início,
+
+00:22:43.280 --> 00:22:46.640
+o Foundry era apenas uma plataforma de hospedagem de modelos.
+
+00:22:47.360 --> 00:22:48.840
+Quando você olha alguns anos atrás,
+
+00:22:48.980 --> 00:22:51.360
+era, sim, apenas um catálogo simples de modelos,
+
+00:22:51.400 --> 00:22:52.860
+e você o implantava.
+
+00:22:53.220 --> 00:22:53.960
+E você o implantava.
+
+00:22:54.340 --> 00:22:57.020
+Hoje em dia, a Microsoft evoluiu este produto
+
+00:22:57.020 --> 00:23:00.060
+para permitir que você crie agentes
+
+00:23:00.060 --> 00:23:01.940
+com uma interface de usuário,
+
+00:23:02.000 --> 00:23:03.140
+tipo Copilot Studio,
+
+00:23:03.740 --> 00:23:06.360
+basicamente, sem nenhum código.
+
+00:23:07.500 --> 00:23:09.640
+Você pode gerenciar governança,
+
+00:23:09.740 --> 00:23:11.240
+você pode gerenciar muitas coisas.
+
+00:23:12.060 --> 00:23:15.160
+Ele se tornou uma plataforma realmente agentica,
+
+00:23:15.580 --> 00:23:18.440
+como Copilot Studio para low-code e coisas do tipo.
+
+00:23:19.640 --> 00:23:22.440
+E hoje em dia, é muito difícil posicionar
+
+00:23:22.440 --> 00:23:24.520
+o Foundry no ecossistema,
+
+00:23:24.520 --> 00:23:27.680
+porque o Foundry está evoluindo rápido.
+
+00:23:29.800 --> 00:23:31.800
+Basicamente, a Microsoft introduziu
+
+00:23:31.800 --> 00:23:33.800
+alguns recursos que são...
+
+00:23:34.720 --> 00:23:35.920
+Eu não sei, não diria diferentes.
+
+00:23:36.340 --> 00:23:39.660
+Mas há semelhanças com o Copilot Studio
+
+00:23:39.660 --> 00:23:41.720
+em termos de integração com o MCP
+
+00:23:41.720 --> 00:23:43.020
+e coisas assim.
+
+00:23:44.320 --> 00:23:46.280
+Mas, no final,
+
+00:23:46.420 --> 00:23:48.060
+a principal limitação do Copilot Studio
+
+00:23:48.060 --> 00:23:49.240
+são os modelos.
+
+00:23:50.520 --> 00:23:52.640
+Então, você tem a capacidade de integrar código
+
+00:23:52.640 --> 00:23:54.280
+ou visualizar esse tipo de coisa.
+
+00:23:54.280 --> 00:23:56.780
+Mas, se você quiser integrar, por exemplo,
+
+00:23:56.860 --> 00:23:58.720
+o seu próprio modelo,
+
+00:23:58.820 --> 00:24:01.560
+porque você tem uma versão específica,
+
+00:24:01.620 --> 00:24:02.260
+você não consegue.
+
+00:24:02.560 --> 00:24:03.220
+E, basicamente,
+
+00:24:03.780 --> 00:24:05.280
+precisa usar um desenvolvimento customizado
+
+00:24:05.820 --> 00:24:09.020
+para integrar a sua própria plataforma de LLM,
+
+00:24:09.140 --> 00:24:09.580
+se tiver.
+
+00:24:10.440 --> 00:24:11.580
+Tem o cliente que possui
+
+00:24:11.580 --> 00:24:13.800
+a sua própria plataforma AWS.
+
+00:24:14.100 --> 00:24:16.180
+Nesse caso, você pode integrar esse modelo
+
+00:24:16.180 --> 00:24:19.620
+com o preço gerenciado externamente.
+
+00:24:19.620 --> 00:24:26.500
+E eu acho que quando construímos
+
+00:24:26.500 --> 00:24:27.300
+um agente,
+
+00:24:27.500 --> 00:24:28.500
+um tópico também,
+
+00:24:28.740 --> 00:24:29.420
+é...
+
+00:24:29.420 --> 00:24:30.340
+Tudo é guerra.
+
+00:24:49.390 --> 00:24:49.830
+Schopenhauer.
+
+00:24:58.120 --> 00:24:59.760
+A maioria das pessoas fala sobre o MCP,
+
+00:24:59.840 --> 00:25:00.920
+o Model Context Protocol.
+
+00:25:02.300 --> 00:25:03.000
+Por quê?
+
+00:25:03.420 --> 00:25:06.140
+Ele se tornou um dos maiores tópicos
+
+00:25:06.140 --> 00:25:07.780
+no desenvolvimento de agentes
+
+00:25:07.780 --> 00:25:10.740
+e, para alguém que ainda não trabalhou com isso,
+
+00:25:11.260 --> 00:25:14.980
+o que é o Model Context Protocol?
+
+00:25:14.980 --> 00:25:15.740
+Protocol.
+
+00:25:18.140 --> 00:25:19.100
+Sim, é uma palavra grande.
+
+00:25:20.280 --> 00:25:20.740
+Basicamente,
+
+00:25:21.060 --> 00:25:22.620
+muitas pessoas estão falando sobre isso
+
+00:25:22.620 --> 00:25:24.940
+porque resolve um problema importante.
+
+00:25:26.460 --> 00:25:28.520
+É sobre como unificar
+
+00:25:28.520 --> 00:25:31.680
+a integração de ferramentas,
+
+00:25:31.920 --> 00:25:32.600
+habilidades.
+
+00:25:33.100 --> 00:25:35.480
+Talvez ferramentas externas aí há.
+
+00:25:35.760 --> 00:25:36.880
+E isso resolve o problema,
+
+00:25:37.040 --> 00:25:38.380
+porque, antigamente,
+
+00:25:38.580 --> 00:25:39.400
+sem o MCP,
+
+00:25:39.600 --> 00:25:41.340
+era uma bagunça,
+
+00:25:41.720 --> 00:25:42.820
+pois muitos serviços
+
+00:25:42.820 --> 00:25:44.800
+conversavam de formas diferentes.
+
+00:25:44.800 --> 00:25:47.200
+Você tem
+
+00:25:47.200 --> 00:25:50.520
+diferentes protocolos tecnológicos,
+
+00:25:50.640 --> 00:25:53.000
+diferentes abordagens de arquitetura
+
+00:25:53.000 --> 00:25:54.120
+e, basicamente,
+
+00:25:54.280 --> 00:25:56.220
+o MCP unifica a forma
+
+00:25:56.220 --> 00:25:58.180
+como você integra
+
+00:25:58.180 --> 00:26:00.580
+serviços ao seu agente de IA
+
+00:26:00.580 --> 00:26:01.660
+ou solução de IA,
+
+00:26:01.820 --> 00:26:02.640
+sendo mais genérico.
+
+00:26:03.220 --> 00:26:04.720
+Mas o MCP, agora,
+
+00:26:04.880 --> 00:26:06.300
+é realmente a maneira
+
+00:26:06.300 --> 00:26:08.620
+de integrar
+
+00:26:08.620 --> 00:26:10.900
+ferramentas externas ou internas,
+
+00:26:11.020 --> 00:26:12.160
+podendo ser ambas.
+
+00:26:12.160 --> 00:26:14.640
+mas o MCP, agora,
+
+00:26:14.800 --> 00:26:15.740
+é uma grande parte
+
+00:26:15.740 --> 00:26:16.660
+da arquitetura de IA,
+
+00:26:16.760 --> 00:26:18.720
+porque você tem essa unidade
+
+00:26:18.720 --> 00:26:20.860
+em termos de tecnologia
+
+00:26:20.860 --> 00:26:22.480
+e, hoje em dia,
+
+00:26:22.500 --> 00:26:23.660
+é um ponto muito importante
+
+00:26:23.660 --> 00:26:26.180
+porque, no passado,
+
+00:26:26.280 --> 00:26:27.460
+era integração via API
+
+00:26:27.460 --> 00:26:28.480
+e, agora, é MCP.
+
+00:26:31.250 --> 00:26:32.550
+Esta é...
+
+00:26:32.550 --> 00:26:33.810
+Esta não é a evolução,
+
+00:26:33.930 --> 00:26:34.610
+mas, antigamente,
+
+00:26:34.670 --> 00:26:36.530
+você integrava seu agente
+
+00:26:36.530 --> 00:26:37.150
+com a API.
+
+00:26:38.350 --> 00:26:39.890
+Você precisava gerenciar, certo?
+
+00:26:39.930 --> 00:26:40.610
+Como autentical,
+
+00:26:40.690 --> 00:26:41.330
+gerenciar isso,
+
+00:26:41.430 --> 00:26:42.350
+chamar a ferramenta.
+
+00:26:42.350 --> 00:26:45.670
+Agora, a IA pode...
+
+00:26:45.670 --> 00:26:47.170
+Ok, tem essa ferramenta disponível.
+
+00:26:47.590 --> 00:26:48.650
+Posso selecionar o que preciso
+
+00:26:48.650 --> 00:26:49.970
+para alcançar o objetivo.
+
+00:26:53.480 --> 00:26:55.680
+E o que realmente mudou
+
+00:26:55.680 --> 00:26:58.500
+do MCP para a conexão API?
+
+00:27:02.960 --> 00:27:05.040
+Basicamente, no passado,
+
+00:27:05.600 --> 00:27:07.400
+em termos de...
+
+00:27:07.400 --> 00:27:09.760
+Basicamente, APIs não são inteligentes,
+
+00:27:09.840 --> 00:27:10.920
+se é que posso dizer isso.
+
+00:27:11.880 --> 00:27:12.980
+APIs são apenas...
+
+00:27:12.980 --> 00:27:17.820
+Ok, você chama uma ferramenta
+
+00:27:17.820 --> 00:27:19.280
+e ela te dá dados.
+
+00:27:20.600 --> 00:27:22.640
+A diferença com o MCP é...
+
+00:27:22.640 --> 00:27:24.020
+O MCP é mais inteligente
+
+00:27:24.020 --> 00:27:25.000
+em termos de arquitetura
+
+00:27:25.000 --> 00:27:26.340
+porque, nos bastidores,
+
+00:27:27.400 --> 00:27:29.060
+você não tem apenas ferramentas
+
+00:27:29.060 --> 00:27:29.960
+que te dão dados
+
+00:27:29.960 --> 00:27:31.480
+ou informações,
+
+00:27:32.040 --> 00:27:34.200
+mas você também tem habilidades
+
+00:27:34.200 --> 00:27:36.180
+em instruções
+
+00:27:36.180 --> 00:27:39.140
+e diferentes tipos de coisas
+
+00:27:39.140 --> 00:27:40.000
+que tornam o MCP
+
+00:27:40.000 --> 00:27:41.460
+realmente inteligente.
+
+00:27:41.460 --> 00:27:43.700
+e, basicamente,
+
+00:27:44.180 --> 00:27:45.340
+o MCP pode dizer a IA
+
+00:27:45.340 --> 00:27:46.960
+Ok, você quer alcançar isso?
+
+00:27:48.280 --> 00:27:49.160
+Eu posso te dar
+
+00:27:49.160 --> 00:27:51.580
+as ferramentas exatas
+
+00:27:51.580 --> 00:27:52.960
+que correspondem
+
+00:27:52.960 --> 00:27:54.860
+à sua solicitação.
+
+00:27:55.000 --> 00:27:55.520
+É...
+
+00:27:55.520 --> 00:27:56.320
+E você pode chamar
+
+00:27:56.320 --> 00:27:57.300
+não apenas uma ferramenta,
+
+00:27:57.380 --> 00:27:58.020
+mas precisa chamar
+
+00:27:58.020 --> 00:27:58.800
+essas ferramentas
+
+00:27:58.800 --> 00:28:00.600
+para alcançar o que deseja.
+
+00:28:02.000 --> 00:28:02.900
+Este é o papel do MCP.
+
+00:28:03.660 --> 00:28:04.640
+Ele diz a IA.
+
+00:28:04.840 --> 00:28:06.480
+Ok, eu tenho essas ferramentas.
+
+00:28:06.480 --> 00:28:07.520
+E, depois,
+
+00:28:07.920 --> 00:28:08.400
+hum...
+
+00:28:08.400 --> 00:28:09.400
+Você pode chamar
+
+00:28:09.400 --> 00:28:10.140
+esta ou aquela
+
+00:28:10.140 --> 00:28:11.420
+ou múltiplas ferramentas
+
+00:28:11.420 --> 00:28:13.220
+para alcançar seus objetivos.
+
+00:28:14.220 --> 00:28:14.700
+Ele te dá...
+
+00:28:14.700 --> 00:28:15.280
+Ele te dá...
+
+00:28:15.280 --> 00:28:15.920
+Ele dá a IA
+
+00:28:15.920 --> 00:28:17.220
+ao contexto real de...
+
+00:28:17.220 --> 00:28:17.480
+Hum...
+
+00:28:17.480 --> 00:28:17.900
+De tudo.
+
+00:28:18.440 --> 00:28:18.880
+E a API
+
+00:28:18.880 --> 00:28:20.000
+é apenas ok.
+
+00:28:20.100 --> 00:28:20.960
+Você tem ferramentas,
+
+00:28:21.020 --> 00:28:21.400
+tem descrição
+
+00:28:21.400 --> 00:28:23.120
+e é basicamente isso.
+
+00:28:27.620 --> 00:28:28.100
+Então...
+
+00:28:28.100 --> 00:28:29.640
+Então, é o protocolo
+
+00:28:29.640 --> 00:28:30.400
+de contexto de modelo.
+
+00:28:30.580 --> 00:28:31.480
+Eu acho semelhante
+
+00:28:31.480 --> 00:28:33.180
+a metadados
+
+00:28:33.180 --> 00:28:34.700
+ou como isso funciona?
+
+00:28:37.150 --> 00:28:37.770
+Hum...
+
+00:28:37.770 --> 00:28:39.450
+O MCP nos bastidores.
+
+00:28:39.730 --> 00:28:40.370
+Hum...
+
+00:28:40.370 --> 00:28:41.390
+É apenas...
+
+00:28:41.390 --> 00:28:41.770
+Hum...
+
+00:28:41.770 --> 00:28:43.090
+É um protocolo.
+
+00:28:44.010 --> 00:28:45.010
+B, basicamente,
+
+00:28:45.110 --> 00:28:46.510
+é um protocolo tecnológico.
+
+00:28:46.750 --> 00:28:47.410
+E nos bastidores
+
+00:28:47.410 --> 00:28:48.230
+você tem...
+
+00:28:48.230 --> 00:28:49.030
+Você tem metadados,
+
+00:28:49.110 --> 00:28:49.590
+você tem descrição,
+
+00:28:50.390 --> 00:28:51.190
+hum...
+
+00:28:51.190 --> 00:28:52.150
+Você tem habilidades
+
+00:28:52.150 --> 00:28:52.950
+de IA que descrevem,
+
+00:28:53.390 --> 00:28:54.190
+mas...
+
+00:28:54.190 --> 00:28:54.730
+Hum...
+
+00:28:54.730 --> 00:28:55.770
+É realmente focado em IA.
+
+00:28:57.270 --> 00:28:57.710
+Basicamente,
+
+00:28:57.950 --> 00:28:59.210
+você tem habilidades,
+
+00:28:59.310 --> 00:29:00.190
+você tem instruções
+
+00:29:00.190 --> 00:29:00.770
+e, basicamente,
+
+00:29:00.810 --> 00:29:01.710
+a IA pode entender melhor.
+
+00:29:02.050 --> 00:29:02.310
+Ok.
+
+00:29:02.850 --> 00:29:03.770
+Essas ferramentas
+
+00:29:03.770 --> 00:29:04.910
+hum...
+
+00:29:04.910 --> 00:29:05.570
+Fazem isso.
+
+00:29:05.650 --> 00:29:06.690
+Esta ferramenta faz aquilo.
+
+00:29:06.790 --> 00:29:06.930
+Ok.
+
+00:29:07.050 --> 00:29:08.230
+Posso chamar essas habilidades,
+
+00:29:08.430 --> 00:29:09.570
+posso solicitar
+
+00:29:09.570 --> 00:29:10.610
+essa informação
+
+00:29:10.610 --> 00:29:11.630
+ao servidor MCP
+
+00:29:11.630 --> 00:29:12.770
+para alcançar a minha tarefa.
+
+00:29:14.950 --> 00:29:15.890
+Mas você tem, sim,
+
+00:29:15.970 --> 00:29:17.070
+você tem uma parte de
+
+00:29:17.070 --> 00:29:18.070
+metadados
+
+00:29:18.070 --> 00:29:18.870
+porque você precisa definir,
+
+00:29:18.950 --> 00:29:19.050
+ok,
+
+00:29:19.190 --> 00:29:20.250
+o nome da ferramenta,
+
+00:29:20.310 --> 00:29:20.830
+o que ela está fazendo
+
+00:29:20.830 --> 00:29:21.510
+nos bastidores.
+
+00:29:24.170 --> 00:29:24.330
+Olha,
+
+00:29:24.410 --> 00:29:26.130
+podemos dizer que o futuro
+
+00:29:26.130 --> 00:29:27.050
+é o MCP.
+
+00:29:28.350 --> 00:29:28.610
+Então,
+
+00:29:28.730 --> 00:29:29.470
+temos que começar a pensar,
+
+00:29:29.610 --> 00:29:29.790
+não sei,
+
+00:29:29.870 --> 00:29:30.670
+empresas que têm
+
+00:29:30.670 --> 00:29:31.730
+sem APIs hash
+
+00:29:31.730 --> 00:29:32.730
+dentro da organização,
+
+00:29:32.870 --> 00:29:33.590
+elas deveriam começar
+
+00:29:33.590 --> 00:29:34.090
+a construir
+
+00:29:34.090 --> 00:29:35.650
+servidores MCP
+
+00:29:35.650 --> 00:29:36.470
+ao redor delas?
+
+00:29:36.470 --> 00:29:39.470
+Sim, sim,
+
+00:29:39.630 --> 00:29:40.310
+basicamente,
+
+00:29:40.650 --> 00:29:42.130
+o servidor MCP,
+
+00:29:42.530 --> 00:29:43.870
+nós trabalhamos com APIs
+
+00:29:43.870 --> 00:29:45.050
+nos bastidores.
+
+00:29:46.450 --> 00:29:47.390
+Isso não é uma substituição,
+
+00:29:47.710 --> 00:29:48.150
+basicamente.
+
+00:29:49.850 --> 00:29:51.190
+Se eu resumir isso,
+
+00:29:51.290 --> 00:29:52.150
+porque o servidor MCP
+
+00:29:52.150 --> 00:29:52.930
+é apenas ok,
+
+00:29:55.030 --> 00:29:56.210
+ele fornece o contexto
+
+00:29:56.210 --> 00:29:57.150
+e, nos bastidores,
+
+00:29:57.250 --> 00:29:58.570
+o MCP pode chamar APIs
+
+00:29:58.570 --> 00:30:00.150
+nos bastidores,
+
+00:30:00.710 --> 00:30:02.050
+mas o servidor MCP
+
+00:30:02.050 --> 00:30:02.790
+é um front-end,
+
+00:30:03.370 --> 00:30:05.710
+a ferramenta de frente
+
+00:30:05.710 --> 00:30:07.090
+que você precisa chamar,
+
+00:30:07.330 --> 00:30:08.050
+porque nos bastidores
+
+00:30:08.050 --> 00:30:09.450
+você vai despachar
+
+00:30:09.450 --> 00:30:11.330
+a sua solicitação
+
+00:30:11.330 --> 00:30:12.230
+baseada em ok.
+
+00:30:12.830 --> 00:30:13.730
+Nos bastidores
+
+00:30:13.730 --> 00:30:14.670
+pode ser uma API,
+
+00:30:15.090 --> 00:30:16.110
+pode ser um banco de dados,
+
+00:30:16.250 --> 00:30:17.530
+podem ser várias ferramentas,
+
+00:30:17.630 --> 00:30:18.930
+mas você precisa,
+
+00:30:19.090 --> 00:30:19.710
+se você quer ter
+
+00:30:19.710 --> 00:30:20.850
+seu próprio servidor MCP,
+
+00:30:20.930 --> 00:30:21.210
+por exemplo,
+
+00:30:21.290 --> 00:30:22.910
+se você tem internamente
+
+00:30:22.910 --> 00:30:23.530
+na sua empresa,
+
+00:30:23.650 --> 00:30:25.310
+você tem o API
+
+00:30:25.310 --> 00:30:28.830
+e tem diferentes tipos
+
+00:30:28.830 --> 00:30:29.530
+de serviços,
+
+00:30:30.030 --> 00:30:30.770
+pode ser, não sei,
+
+00:30:30.850 --> 00:30:31.630
+serviço financeiro,
+
+00:30:31.730 --> 00:30:32.630
+pode ser serviço de RH,
+
+00:30:32.770 --> 00:30:33.570
+se você quer construir
+
+00:30:33.570 --> 00:30:34.370
+seu próprio MCP,
+
+00:30:34.370 --> 00:30:35.850
+você precisa lidar
+
+00:30:35.850 --> 00:30:36.630
+nos bastidores
+
+00:30:36.630 --> 00:30:38.430
+com todas essas APIs
+
+00:30:38.430 --> 00:30:39.950
+e o servidor MCP
+
+00:30:39.950 --> 00:30:40.830
+precisará
+
+00:30:40.830 --> 00:30:44.570
+por todas essas APIs,
+
+00:30:44.730 --> 00:30:45.750
+quais são os
+
+00:30:45.750 --> 00:30:47.090
+quais são os
+
+00:30:47.090 --> 00:30:47.970
+os serviços,
+
+00:30:48.130 --> 00:30:48.690
+quais são as
+
+00:30:48.690 --> 00:30:49.830
+ferramentas disponíveis,
+
+00:30:49.970 --> 00:30:50.970
+quais são as habilidades,
+
+00:30:51.070 --> 00:30:51.670
+esse tipo de coisa.
+
+00:30:54.660 --> 00:30:55.840
+Depois você precisa lidar
+
+00:30:55.840 --> 00:30:56.760
+com a autenticação
+
+00:30:56.760 --> 00:30:57.500
+nos bastidores,
+
+00:30:57.640 --> 00:30:58.360
+porque as APIs
+
+00:30:58.360 --> 00:30:59.540
+não funcionam da mesma forma,
+
+00:30:59.620 --> 00:31:00.720
+já que você pode ter
+
+00:31:00.720 --> 00:31:01.480
+você pode ter
+
+00:31:01.480 --> 00:31:02.760
+autenticação por chave,
+
+00:31:03.700 --> 00:31:05.040
+por entrada,
+
+00:31:05.240 --> 00:31:06.240
+esse tipo de coisa,
+
+00:31:06.240 --> 00:31:07.640
+então você precisa lidar
+
+00:31:07.640 --> 00:31:07.960
+com isso.
+
+00:31:08.300 --> 00:31:09.740
+Mas o MCP vai expor
+
+00:31:09.740 --> 00:31:11.600
+as ferramentas disponíveis
+
+00:31:11.600 --> 00:31:12.420
+e nos bastidores
+
+00:31:12.420 --> 00:31:13.260
+todas as ferramentas
+
+00:31:13.260 --> 00:31:13.800
+podem chamar
+
+00:31:13.800 --> 00:31:14.960
+múltiplas APIs.
+
+00:31:15.820 --> 00:31:16.840
+Uma API pode ser,
+
+00:31:17.140 --> 00:31:18.000
+você tem diferentes tipos
+
+00:31:18.000 --> 00:31:18.560
+de arquitetura
+
+00:31:18.560 --> 00:31:19.320
+nos bastidores.
+
+00:31:22.160 --> 00:31:22.340
+E?
+
+00:31:22.780 --> 00:31:23.440
+Hum...
+
+00:31:23.440 --> 00:31:25.580
+Como o MCP
+
+00:31:25.580 --> 00:31:29.620
+escolhe
+
+00:31:29.620 --> 00:31:31.120
+a ferramenta certa
+
+00:31:31.120 --> 00:31:31.620
+quando eu tenho,
+
+00:31:31.740 --> 00:31:31.880
+não sei,
+
+00:31:31.960 --> 00:31:32.780
+100, 500 agentes
+
+00:31:32.780 --> 00:31:33.940
+de IA?
+
+00:31:36.620 --> 00:31:37.620
+Será baseado em
+
+00:31:37.620 --> 00:31:38.880
+primeiras coisas.
+
+00:31:38.880 --> 00:31:40.200
+basicamente,
+
+00:31:40.360 --> 00:31:41.240
+quando você tem
+
+00:31:41.240 --> 00:31:41.880
+uma solicitação
+
+00:31:41.880 --> 00:31:42.420
+em um agente,
+
+00:31:42.960 --> 00:31:43.720
+você vai descobrir
+
+00:31:43.720 --> 00:31:44.500
+todas as ferramentas
+
+00:31:44.500 --> 00:31:45.040
+disponíveis.
+
+00:31:46.100 --> 00:31:46.820
+Servidor MCP.
+
+00:31:47.060 --> 00:31:48.100
+Você vai verificar,
+
+00:31:48.200 --> 00:31:48.740
+ok, eu tenho todas
+
+00:31:48.740 --> 00:31:49.540
+essas ferramentas
+
+00:31:49.540 --> 00:31:50.140
+disponíveis
+
+00:31:50.140 --> 00:31:52.160
+e basicamente
+
+00:31:52.160 --> 00:31:54.460
+o orquestrador
+
+00:31:54.460 --> 00:31:55.740
+do agente
+
+00:31:55.740 --> 00:31:56.740
+entenderá,
+
+00:31:56.800 --> 00:31:57.740
+ok, eu tenho isso,
+
+00:31:58.160 --> 00:31:59.340
+tenho um
+
+00:31:59.340 --> 00:32:00.620
+LLM disponível,
+
+00:32:01.500 --> 00:32:02.100
+depois você
+
+00:32:02.100 --> 00:32:02.740
+criará o plano.
+
+00:32:04.000 --> 00:32:05.080
+Se eu resumir um pouco,
+
+00:32:05.380 --> 00:32:06.320
+você criará um plano
+
+00:32:06.320 --> 00:32:07.120
+com algumas ações
+
+00:32:07.120 --> 00:32:07.940
+a serem feitas
+
+00:32:07.940 --> 00:32:09.160
+e depois,
+
+00:32:09.380 --> 00:32:10.020
+nessa ação,
+
+00:32:10.540 --> 00:32:11.740
+na ação que deseja
+
+00:32:11.740 --> 00:32:12.340
+executar,
+
+00:32:12.520 --> 00:32:13.320
+você pode chamar
+
+00:32:13.320 --> 00:32:13.600
+uma,
+
+00:32:14.300 --> 00:32:14.680
+duas,
+
+00:32:15.240 --> 00:32:16.160
+três ou mais
+
+00:32:16.160 --> 00:32:17.000
+ferramentas
+
+00:32:17.000 --> 00:32:17.980
+para realizar
+
+00:32:17.980 --> 00:32:18.960
+a tarefa
+
+00:32:18.960 --> 00:32:19.540
+que o usuário
+
+00:32:19.540 --> 00:32:20.220
+solicitou.
+
+00:32:21.480 --> 00:32:21.900
+Portanto,
+
+00:32:22.020 --> 00:32:22.540
+basicamente,
+
+00:32:22.660 --> 00:32:23.240
+o orquestrador
+
+00:32:23.240 --> 00:32:23.780
+do agente
+
+00:32:23.780 --> 00:32:25.220
+entenderá as ferramentas
+
+00:32:25.220 --> 00:32:25.720
+MCP
+
+00:32:25.720 --> 00:32:26.620
+e selecionará
+
+00:32:26.620 --> 00:32:27.140
+a melhor
+
+00:32:27.140 --> 00:32:28.040
+para a solicitação.
+
+00:32:28.460 --> 00:32:28.700
+Entende?
+
+00:32:30.140 --> 00:32:31.580
+E esse é realmente
+
+00:32:31.580 --> 00:32:32.260
+o papel
+
+00:32:32.260 --> 00:32:33.620
+do orquestrador
+
+00:32:33.620 --> 00:32:34.980
+de selecionar
+
+00:32:34.980 --> 00:32:35.940
+ferramentas
+
+00:32:35.940 --> 00:32:37.300
+e coisas do tipo
+
+00:32:37.300 --> 00:32:37.940
+com a ajuda
+
+00:32:37.940 --> 00:32:38.560
+do LLM,
+
+00:32:38.660 --> 00:32:38.900
+claro,
+
+00:32:39.060 --> 00:32:39.940
+porque o LLM
+
+00:32:39.940 --> 00:32:40.840
+é parte do cérebro
+
+00:32:40.840 --> 00:32:41.980
+e o orquestrador
+
+00:32:41.980 --> 00:32:42.940
+irá,
+
+00:32:43.060 --> 00:32:43.400
+ok,
+
+00:32:43.660 --> 00:32:44.380
+se comunicar
+
+00:32:44.380 --> 00:32:45.520
+com o LLM
+
+00:32:45.520 --> 00:32:46.100
+e também
+
+00:32:46.100 --> 00:32:47.220
+com as ferramentas
+
+00:32:47.220 --> 00:32:47.980
+para fazer
+
+00:32:47.980 --> 00:32:48.920
+a melhor escolha
+
+00:32:48.920 --> 00:32:49.900
+e o melhor plano
+
+00:32:49.900 --> 00:32:50.740
+para concluir
+
+00:32:50.740 --> 00:32:51.520
+a tarefa.
+
+00:32:54.430 --> 00:32:54.750
+Sim,
+
+00:32:54.870 --> 00:32:55.870
+eu acho que por um tempo
+
+00:32:55.870 --> 00:32:56.890
+muitas empresas
+
+00:32:56.890 --> 00:32:58.250
+começaram com o PowerShell
+
+00:32:58.250 --> 00:32:59.050
+e agora
+
+00:32:59.050 --> 00:33:00.150
+elas usam
+
+00:33:00.150 --> 00:33:00.730
+a IP
+
+00:33:00.730 --> 00:33:01.850
+do Microsoft Graph.
+
+00:33:04.280 --> 00:33:04.940
+O Graph
+
+00:33:04.940 --> 00:33:05.680
+e o MCP
+
+00:33:05.680 --> 00:33:06.380
+chegaram
+
+00:33:06.380 --> 00:33:06.660
+ou
+
+00:33:06.660 --> 00:33:07.960
+como é que,
+
+00:33:07.960 --> 00:33:08.500
+sim,
+
+00:33:08.740 --> 00:33:09.540
+eu acho que
+
+00:33:09.540 --> 00:33:10.500
+na verdade
+
+00:33:10.500 --> 00:33:12.540
+a API
+
+00:33:12.540 --> 00:33:13.720
+do Graph
+
+00:33:13.720 --> 00:33:14.960
+para ser sincero
+
+00:33:15.860 --> 00:33:18.380
+não existe
+
+00:33:18.380 --> 00:33:19.240
+um MCP
+
+00:33:19.240 --> 00:33:20.340
+para o Graph.
+
+00:33:22.580 --> 00:33:23.300
+Se você pensar bem,
+
+00:33:23.400 --> 00:33:23.540
+sabe,
+
+00:33:23.900 --> 00:33:24.420
+você tem agora
+
+00:33:24.420 --> 00:33:24.940
+no mundo
+
+00:33:24.940 --> 00:33:25.620
+do Microsoft
+
+00:33:25.620 --> 00:33:26.400
+da MC5,
+
+00:33:26.700 --> 00:33:27.120
+a Microsoft
+
+00:33:27.120 --> 00:33:27.800
+introduziu
+
+00:33:27.800 --> 00:33:28.660
+muitos servidores
+
+00:33:28.660 --> 00:33:29.200
+MCP
+
+00:33:29.200 --> 00:33:30.240
+e esses servidores
+
+00:33:30.240 --> 00:33:30.620
+MCP
+
+00:33:30.620 --> 00:33:31.920
+são baseados
+
+00:33:31.920 --> 00:33:32.760
+nos bastidores
+
+00:33:32.760 --> 00:33:34.380
+no Microsoft Graph.
+
+00:33:36.020 --> 00:33:36.160
+Então,
+
+00:33:36.260 --> 00:33:36.580
+por exemplo,
+
+00:33:36.700 --> 00:33:37.560
+se você quiser usar
+
+00:33:37.560 --> 00:33:38.760
+o servidor MCP
+
+00:33:38.760 --> 00:33:39.460
+do Teams
+
+00:33:39.460 --> 00:33:40.200
+nos bastidores,
+
+00:33:40.340 --> 00:33:40.960
+você tem
+
+00:33:40.960 --> 00:33:42.520
+a API
+
+00:33:42.520 --> 00:33:43.160
+do Graph
+
+00:33:43.160 --> 00:33:44.340
+sendo chamada
+
+00:33:44.340 --> 00:33:45.720
+quando você usa
+
+00:33:45.720 --> 00:33:46.520
+o servidor
+
+00:33:46.520 --> 00:33:48.160
+MCP.
+
+00:33:48.620 --> 00:33:49.140
+Portanto,
+
+00:33:49.200 --> 00:33:50.060
+a API do Graph
+
+00:33:50.060 --> 00:33:50.940
+no mundo
+
+00:33:50.940 --> 00:33:51.640
+do Microsoft
+
+00:33:51.640 --> 00:33:53.520
+3.300
+
+00:33:53.520 --> 00:33:54.160
+é central
+
+00:33:54.160 --> 00:33:54.780
+porque
+
+00:33:54.780 --> 00:33:55.980
+nos bastidores
+
+00:33:55.980 --> 00:33:56.660
+o MCP
+
+00:33:56.660 --> 00:33:57.780
+se comunicará
+
+00:33:57.780 --> 00:33:58.760
+com o Graph
+
+00:33:58.760 --> 00:33:59.420
+para fazer
+
+00:33:59.420 --> 00:34:02.100
+a solicitação
+
+00:34:02.100 --> 00:34:03.240
+funcionar bem.
+
+00:34:03.240 --> 00:34:04.960
+mas sim,
+
+00:34:05.040 --> 00:34:05.380
+hoje em dia
+
+00:34:05.380 --> 00:34:05.720
+o Graph
+
+00:34:05.720 --> 00:34:06.220
+é central
+
+00:34:06.220 --> 00:34:06.620
+também
+
+00:34:06.620 --> 00:34:07.240
+no Copilot
+
+00:34:07.240 --> 00:34:07.720
+em geral
+
+00:34:07.720 --> 00:34:08.240
+porque
+
+00:34:08.240 --> 00:34:09.140
+o índice
+
+00:34:09.140 --> 00:34:09.700
+semântico
+
+00:34:09.700 --> 00:34:10.700
+do Copilot
+
+00:34:10.700 --> 00:34:11.260
+é baseado
+
+00:34:11.260 --> 00:34:11.560
+em dados
+
+00:34:11.560 --> 00:34:12.080
+brutos,
+
+00:34:12.520 --> 00:34:13.380
+mas na verdade
+
+00:34:13.380 --> 00:34:14.780
+você
+
+00:34:14.780 --> 00:34:15.980
+consome o Graph
+
+00:34:15.980 --> 00:34:16.420
+por meio
+
+00:34:16.420 --> 00:34:17.040
+de servidores
+
+00:34:17.040 --> 00:34:18.160
+MCP.
+
+00:34:19.100 --> 00:34:19.840
+Hoje em dia
+
+00:34:19.840 --> 00:34:20.740
+é assim.
+
+00:34:27.800 --> 00:34:28.320
+Microsoft
+
+00:34:28.320 --> 00:34:29.540
+3D65
+
+00:34:29.540 --> 00:34:30.480
+contém um valor
+
+00:34:30.480 --> 00:34:30.960
+incrível
+
+00:34:30.960 --> 00:34:31.760
+com textos
+
+00:34:31.760 --> 00:34:32.980
+organizacionais,
+
+00:34:33.120 --> 00:34:33.760
+documentos,
+
+00:34:34.100 --> 00:34:34.500
+reuniões,
+
+00:34:34.680 --> 00:34:35.020
+e-mails,
+
+00:34:35.240 --> 00:34:35.660
+pessoas,
+
+00:34:36.000 --> 00:34:36.480
+equipes,
+
+00:34:36.680 --> 00:34:37.240
+conversas
+
+00:34:37.240 --> 00:34:38.520
+e eu diria
+
+00:34:38.520 --> 00:34:39.000
+conteúdo
+
+00:34:39.000 --> 00:34:39.840
+compartilhado.
+
+00:34:42.440 --> 00:34:43.420
+Como expomos
+
+00:34:43.420 --> 00:34:44.200
+esse contexto
+
+00:34:44.200 --> 00:34:44.640
+sem
+
+00:34:44.640 --> 00:34:45.280
+é sim
+
+00:34:45.280 --> 00:34:47.240
+criar um pesadelo
+
+00:34:47.240 --> 00:34:48.000
+de segurança?
+
+00:34:50.910 --> 00:34:51.470
+Dizem termos
+
+00:34:51.470 --> 00:34:52.010
+de governança
+
+00:34:52.010 --> 00:34:52.930
+e coisas desse tipo.
+
+00:34:55.960 --> 00:34:56.200
+Sim,
+
+00:34:56.400 --> 00:34:57.160
+é sempre um problema
+
+00:34:57.160 --> 00:34:58.100
+porque muitas pessoas
+
+00:34:58.100 --> 00:34:59.320
+estão criando
+
+00:34:59.320 --> 00:35:00.240
+agentes
+
+00:35:00.240 --> 00:35:01.620
+sem uma governança
+
+00:35:01.620 --> 00:35:02.340
+adequada
+
+00:35:02.340 --> 00:35:03.040
+por trás.
+
+00:35:04.300 --> 00:35:04.600
+Então eu quero
+
+00:35:04.600 --> 00:35:05.340
+criar um agente,
+
+00:35:06.080 --> 00:35:06.300
+ok,
+
+00:35:06.400 --> 00:35:06.720
+vamos lá,
+
+00:35:07.120 --> 00:35:08.020
+nós construímos
+
+00:35:08.020 --> 00:35:08.780
+e implantamos
+
+00:35:08.780 --> 00:35:09.340
+e depois,
+
+00:35:09.520 --> 00:35:09.640
+ah,
+
+00:35:09.700 --> 00:35:10.220
+mas ok,
+
+00:35:10.640 --> 00:35:11.160
+esse agente
+
+00:35:11.160 --> 00:35:11.660
+lidará
+
+00:35:11.660 --> 00:35:13.180
+com muitos
+
+00:35:13.180 --> 00:35:13.680
+dados,
+
+00:35:14.360 --> 00:35:14.960
+como gerenciar
+
+00:35:14.960 --> 00:35:15.200
+isso?
+
+00:35:15.720 --> 00:35:16.080
+A primeira
+
+00:35:16.080 --> 00:35:16.720
+pergunta é,
+
+00:35:16.820 --> 00:35:16.980
+ok,
+
+00:35:17.280 --> 00:35:18.180
+como coloco
+
+00:35:18.180 --> 00:35:19.500
+em prática
+
+00:35:19.500 --> 00:35:20.640
+a governança
+
+00:35:20.640 --> 00:35:21.220
+do agente?
+
+00:35:22.220 --> 00:35:22.800
+Antes poderia
+
+00:35:22.800 --> 00:35:23.280
+ser como você
+
+00:35:23.280 --> 00:35:23.400
+disse,
+
+00:35:23.440 --> 00:35:24.160
+uma bagunça
+
+00:35:24.160 --> 00:35:25.060
+porque
+
+00:35:25.060 --> 00:35:26.420
+muitas pessoas
+
+00:35:26.420 --> 00:35:26.640
+querem,
+
+00:35:26.800 --> 00:35:26.960
+ok,
+
+00:35:27.080 --> 00:35:27.500
+quero construir
+
+00:35:27.500 --> 00:35:27.900
+agente,
+
+00:35:27.960 --> 00:35:28.220
+agente,
+
+00:35:28.300 --> 00:35:28.700
+agente,
+
+00:35:28.800 --> 00:35:29.500
+ou quero
+
+00:35:29.500 --> 00:35:30.140
+construir algo,
+
+00:35:30.220 --> 00:35:30.680
+quero construir
+
+00:35:30.680 --> 00:35:31.200
+uma solução
+
+00:35:31.200 --> 00:35:31.520
+de IA,
+
+00:35:31.600 --> 00:35:32.120
+mas por trás
+
+00:35:32.120 --> 00:35:32.540
+da cena,
+
+00:35:32.640 --> 00:35:33.220
+se você está
+
+00:35:33.220 --> 00:35:33.840
+em um contexto
+
+00:35:33.840 --> 00:35:36.260
+de Microsoft
+
+00:35:36.260 --> 00:35:37.180
+365,
+
+00:35:37.760 --> 00:35:38.220
+por exemplo,
+
+00:35:38.700 --> 00:35:39.300
+uma das primeiras
+
+00:35:39.300 --> 00:35:40.000
+coisas a fazer
+
+00:35:40.000 --> 00:35:40.920
+é, ok,
+
+00:35:40.920 --> 00:35:42.160
+entender seus dados,
+
+00:35:42.440 --> 00:35:44.160
+porque sem entender
+
+00:35:44.160 --> 00:35:44.720
+seus dados
+
+00:35:44.720 --> 00:35:46.040
+você está perdido,
+
+00:35:47.120 --> 00:35:48.260
+você precisa entender
+
+00:35:48.260 --> 00:35:48.800
+seus dados,
+
+00:35:48.900 --> 00:35:49.600
+porque é importante
+
+00:35:49.600 --> 00:35:50.340
+entender, ok,
+
+00:35:50.720 --> 00:35:51.380
+estou lidando
+
+00:35:51.380 --> 00:35:51.800
+com dados
+
+00:35:51.800 --> 00:35:52.560
+confidenciais
+
+00:35:52.560 --> 00:35:53.080
+ou não,
+
+00:35:53.700 --> 00:35:54.180
+estou lidando
+
+00:35:54.180 --> 00:35:54.660
+com dados
+
+00:35:54.660 --> 00:35:55.220
+altamente
+
+00:35:55.220 --> 00:35:56.480
+confidenciais,
+
+00:35:58.440 --> 00:35:59.160
+você precisa entender
+
+00:35:59.160 --> 00:35:59.800
+seus dados,
+
+00:36:01.380 --> 00:36:01.700
+pois,
+
+00:36:02.700 --> 00:36:03.340
+se você estiver
+
+00:36:03.340 --> 00:36:04.020
+no Microsoft
+
+00:36:04.020 --> 00:36:04.860
+365,
+
+00:36:05.540 --> 00:36:06.660
+precisa implementar,
+
+00:36:06.660 --> 00:36:07.360
+por exemplo,
+
+00:36:07.520 --> 00:36:08.540
+recursos de DLP,
+
+00:36:08.880 --> 00:36:10.440
+rotulagem de sensibilidade,
+
+00:36:10.440 --> 00:36:11.140
+desse tipo de coisa,
+
+00:36:11.220 --> 00:36:12.240
+porque sem isso
+
+00:36:12.240 --> 00:36:13.060
+pode ser um problema.
+
+00:36:15.230 --> 00:36:15.710
+E depois,
+
+00:36:15.850 --> 00:36:16.830
+você também precisa
+
+00:36:16.830 --> 00:36:18.390
+limpar um pouco
+
+00:36:18.390 --> 00:36:19.010
+seus dados,
+
+00:36:19.170 --> 00:36:19.890
+porque IA,
+
+00:36:20.790 --> 00:36:21.810
+com dados ruins,
+
+00:36:22.230 --> 00:36:22.630
+fará com que
+
+00:36:22.630 --> 00:36:23.130
+seu agente
+
+00:36:23.130 --> 00:36:23.790
+não funcione
+
+00:36:23.790 --> 00:36:24.910
+como você quer,
+
+00:36:25.150 --> 00:36:25.810
+pois se você
+
+00:36:25.810 --> 00:36:26.590
+tiver
+
+00:36:26.590 --> 00:36:28.470
+uma bagunça
+
+00:36:28.470 --> 00:36:29.850
+no seu SharePoint,
+
+00:36:30.510 --> 00:36:31.230
+Teams,
+
+00:36:31.410 --> 00:36:32.150
+canal de equipe,
+
+00:36:32.370 --> 00:36:33.470
+esse tipo de coisa,
+
+00:36:33.650 --> 00:36:34.730
+se for uma bagunça,
+
+00:36:35.930 --> 00:36:36.490
+basicamente,
+
+00:36:36.490 --> 00:36:37.150
+será difícil
+
+00:36:37.150 --> 00:36:37.730
+funcionar
+
+00:36:37.730 --> 00:36:38.650
+corretamente
+
+00:36:38.650 --> 00:36:40.110
+em uma abordagem
+
+00:36:40.110 --> 00:36:41.470
+de agentes.
+
+00:36:42.730 --> 00:36:43.250
+Mas sim,
+
+00:36:43.350 --> 00:36:43.970
+você precisa entender
+
+00:36:43.970 --> 00:36:44.510
+seus dados,
+
+00:36:44.650 --> 00:36:45.650
+você precisa implementar
+
+00:36:45.650 --> 00:36:47.750
+alguma segurança
+
+00:36:47.750 --> 00:36:48.510
+básica
+
+00:36:48.510 --> 00:36:49.070
+como
+
+00:36:49.070 --> 00:36:51.290
+autenticação,
+
+00:36:51.670 --> 00:36:52.190
+como eu disse,
+
+00:36:52.310 --> 00:36:53.250
+recursos do Purview,
+
+00:36:53.610 --> 00:36:54.030
+e
+
+00:36:54.030 --> 00:36:55.030
+o Purview
+
+00:36:55.030 --> 00:36:55.670
+se tornou
+
+00:36:55.670 --> 00:36:56.550
+uma solução
+
+00:36:56.550 --> 00:36:57.690
+central
+
+00:36:57.690 --> 00:36:58.910
+para implementar
+
+00:36:58.910 --> 00:37:00.410
+toda essa parte
+
+00:37:00.410 --> 00:37:01.890
+de segurança
+
+00:37:01.890 --> 00:37:02.490
+e
+
+00:37:02.490 --> 00:37:03.650
+governança.
+
+00:37:05.430 --> 00:37:05.890
+E depois,
+
+00:37:06.050 --> 00:37:06.610
+quando você tiver
+
+00:37:06.610 --> 00:37:08.110
+limpado seus dados,
+
+00:37:08.250 --> 00:37:08.870
+quando você tiver
+
+00:37:08.870 --> 00:37:10.030
+colocado em prática
+
+00:37:10.030 --> 00:37:11.110
+alguma segurança
+
+00:37:11.110 --> 00:37:11.630
+básica,
+
+00:37:12.570 --> 00:37:13.130
+você também
+
+00:37:13.130 --> 00:37:13.950
+precisa entender
+
+00:37:13.950 --> 00:37:14.910
+o licenciamento,
+
+00:37:15.350 --> 00:37:15.590
+porque
+
+00:37:15.590 --> 00:37:17.090
+antes de
+
+00:37:17.090 --> 00:37:18.250
+começar
+
+00:37:18.250 --> 00:37:19.570
+a criar agentes,
+
+00:37:19.770 --> 00:37:20.350
+você precisa
+
+00:37:20.350 --> 00:37:20.810
+entender
+
+00:37:20.810 --> 00:37:21.730
+ok,
+
+00:37:22.350 --> 00:37:23.010
+quais são
+
+00:37:23.010 --> 00:37:24.330
+os desenvolvedores,
+
+00:37:25.410 --> 00:37:25.930
+eles estão
+
+00:37:25.930 --> 00:37:26.430
+treinados
+
+00:37:26.430 --> 00:37:26.830
+para isso.
+
+00:37:28.490 --> 00:37:29.270
+Nós temos
+
+00:37:29.270 --> 00:37:30.150
+o licenciamento
+
+00:37:30.150 --> 00:37:30.730
+correto
+
+00:37:30.730 --> 00:37:31.370
+para começar
+
+00:37:31.370 --> 00:37:32.370
+a desenvolver,
+
+00:37:33.450 --> 00:37:33.970
+precisamos
+
+00:37:33.970 --> 00:37:34.770
+de assinaturas,
+
+00:37:35.650 --> 00:37:36.090
+esse tipo
+
+00:37:36.090 --> 00:37:36.430
+de coisa
+
+00:37:36.430 --> 00:37:36.910
+depois.
+
+00:37:40.040 --> 00:37:40.320
+Um dos
+
+00:37:40.320 --> 00:37:40.600
+grandes
+
+00:37:40.600 --> 00:37:41.180
+problemas
+
+00:37:41.180 --> 00:37:42.340
+é o
+
+00:37:42.340 --> 00:37:42.900
+ferramental
+
+00:37:42.900 --> 00:37:43.240
+como eu
+
+00:37:43.240 --> 00:37:43.760
+integro
+
+00:37:43.760 --> 00:37:44.740
+adequadamente
+
+00:37:44.740 --> 00:37:45.740
+todas as
+
+00:37:45.740 --> 00:37:46.380
+ferramentas
+
+00:37:46.380 --> 00:37:46.820
+no meu
+
+00:37:46.820 --> 00:37:47.980
+desenvolvimento,
+
+00:37:48.060 --> 00:37:48.220
+no meu
+
+00:37:48.220 --> 00:37:48.600
+agente.
+
+00:37:49.920 --> 00:37:50.480
+Preciso
+
+00:37:50.480 --> 00:37:51.100
+restringir
+
+00:37:51.100 --> 00:37:51.760
+alguma coisa
+
+00:37:51.760 --> 00:37:53.140
+para ser
+
+00:37:53.140 --> 00:37:53.820
+sincero,
+
+00:37:54.040 --> 00:37:54.320
+é uma
+
+00:37:54.320 --> 00:37:54.640
+grande
+
+00:37:54.640 --> 00:37:55.160
+questão.
+
+00:37:56.780 --> 00:37:57.380
+Você
+
+00:37:57.380 --> 00:37:57.780
+tem
+
+00:37:57.780 --> 00:37:58.380
+diferentes
+
+00:37:58.380 --> 00:37:58.900
+atividades
+
+00:37:58.900 --> 00:37:59.840
+a considerar,
+
+00:38:00.180 --> 00:38:00.360
+mas
+
+00:38:00.360 --> 00:38:00.840
+para mim,
+
+00:38:01.260 --> 00:38:01.720
+o mais
+
+00:38:01.720 --> 00:38:02.380
+importante
+
+00:38:02.380 --> 00:38:02.920
+é entender
+
+00:38:02.920 --> 00:38:03.640
+seus dados
+
+00:38:03.640 --> 00:38:03.860
+e se
+
+00:38:03.860 --> 00:38:04.000
+uma
+
+00:38:04.000 --> 00:38:04.460
+empresa
+
+00:38:04.460 --> 00:38:05.220
+não
+
+00:38:05.220 --> 00:38:05.740
+entende
+
+00:38:05.740 --> 00:38:05.920
+os
+
+00:38:05.920 --> 00:38:06.260
+dados.
+
+00:38:06.260 --> 00:38:07.340
+será um
+
+00:38:07.340 --> 00:38:07.660
+problema
+
+00:38:07.660 --> 00:38:08.100
+logo
+
+00:38:08.100 --> 00:38:08.260
+no
+
+00:38:08.260 --> 00:38:08.660
+início,
+
+00:38:08.980 --> 00:38:09.900
+para ser
+
+00:38:09.900 --> 00:38:10.680
+sincero.
+
+00:38:13.860 --> 00:38:14.000
+E
+
+00:38:14.000 --> 00:38:17.150
+quando
+
+00:38:17.150 --> 00:38:17.810
+nós
+
+00:38:17.810 --> 00:38:22.980
+perguntamos
+
+00:38:22.980 --> 00:38:23.220
+isso,
+
+00:38:27.020 --> 00:38:27.400
+o tópico
+
+00:38:27.400 --> 00:38:27.900
+de segurança,
+
+00:38:30.390 --> 00:38:30.830
+eu acho que
+
+00:38:30.830 --> 00:38:31.130
+existem
+
+00:38:31.130 --> 00:38:31.770
+dois
+
+00:38:31.770 --> 00:38:36.160
+tipos
+
+00:38:36.160 --> 00:38:36.360
+de
+
+00:38:36.360 --> 00:38:36.840
+pessoas,
+
+00:38:37.320 --> 00:38:38.020
+uma
+
+00:38:38.020 --> 00:38:38.300
+diz,
+
+00:38:38.400 --> 00:38:38.600
+ok,
+
+00:38:39.500 --> 00:38:40.160
+eles precisam
+
+00:38:40.160 --> 00:38:40.740
+de permissões
+
+00:38:40.740 --> 00:38:41.340
+de usuário,
+
+00:38:41.480 --> 00:38:41.860
+e a outra
+
+00:38:41.860 --> 00:38:42.480
+diz que eles
+
+00:38:42.480 --> 00:38:42.840
+precisam
+
+00:38:42.840 --> 00:38:43.440
+de permissões
+
+00:38:43.440 --> 00:38:44.860
+de aplicação,
+
+00:38:45.800 --> 00:38:47.080
+como
+
+00:38:47.080 --> 00:38:47.640
+a gente
+
+00:38:47.640 --> 00:38:48.300
+deve
+
+00:38:48.300 --> 00:38:49.680
+geralmente
+
+00:38:49.680 --> 00:38:50.780
+operar.
+
+00:38:54.680 --> 00:38:55.300
+Geralmente,
+
+00:38:55.420 --> 00:38:55.640
+e minha
+
+00:38:55.640 --> 00:38:55.880
+melhor
+
+00:38:55.880 --> 00:38:56.640
+recomendação
+
+00:38:56.640 --> 00:38:57.800
+é basicamente
+
+00:38:57.800 --> 00:38:58.440
+quando você
+
+00:38:58.440 --> 00:38:59.900
+precisa lidar
+
+00:38:59.900 --> 00:39:00.520
+com soluções
+
+00:39:00.520 --> 00:39:01.220
+de agentes,
+
+00:39:01.700 --> 00:39:02.360
+sempre faça
+
+00:39:02.360 --> 00:39:02.800
+desculpe,
+
+00:39:02.900 --> 00:39:03.500
+com permissões
+
+00:39:03.500 --> 00:39:04.120
+de usuário,
+
+00:39:04.440 --> 00:39:04.800
+permissões
+
+00:39:04.800 --> 00:39:05.420
+delegadas,
+
+00:39:05.540 --> 00:39:06.540
+porque em
+
+00:39:06.540 --> 00:39:07.000
+termos de
+
+00:39:07.000 --> 00:39:07.480
+segurança.
+
+00:39:08.080 --> 00:39:08.480
+Para ser
+
+00:39:08.480 --> 00:39:09.040
+sincero,
+
+00:39:09.160 --> 00:39:09.880
+é melhor,
+
+00:39:10.200 --> 00:39:10.800
+pois o
+
+00:39:10.800 --> 00:39:11.360
+usuário
+
+00:39:11.360 --> 00:39:12.040
+lidará
+
+00:39:12.040 --> 00:39:12.700
+apenas com
+
+00:39:12.700 --> 00:39:13.140
+os dados
+
+00:39:13.140 --> 00:39:14.020
+e ferramentas
+
+00:39:14.020 --> 00:39:14.600
+aos quais
+
+00:39:14.600 --> 00:39:14.980
+ele tem
+
+00:39:14.980 --> 00:39:15.400
+acesso.
+
+00:39:15.400 --> 00:39:18.760
+esse é o
+
+00:39:18.760 --> 00:39:19.120
+princípio
+
+00:39:19.120 --> 00:39:19.780
+principal.
+
+00:39:20.780 --> 00:39:21.160
+Depois,
+
+00:39:21.480 --> 00:39:21.820
+se você
+
+00:39:21.820 --> 00:39:22.380
+precisar
+
+00:39:22.380 --> 00:39:23.300
+de permissão
+
+00:39:23.300 --> 00:39:23.880
+de aplicação
+
+00:39:23.880 --> 00:39:24.260
+para um
+
+00:39:24.260 --> 00:39:24.580
+contexto
+
+00:39:24.580 --> 00:39:25.220
+específico,
+
+00:39:25.260 --> 00:39:25.540
+não sei,
+
+00:39:26.300 --> 00:39:26.640
+uma API
+
+00:39:26.640 --> 00:39:27.300
+específica,
+
+00:39:28.160 --> 00:39:28.780
+você pode,
+
+00:39:30.680 --> 00:39:31.580
+mas não
+
+00:39:31.580 --> 00:39:32.020
+use
+
+00:39:32.020 --> 00:39:33.000
+permissão
+
+00:39:33.000 --> 00:39:33.700
+de aplicação
+
+00:39:33.700 --> 00:39:34.600
+diretamente,
+
+00:39:34.840 --> 00:39:35.520
+faça isso
+
+00:39:35.520 --> 00:39:36.600
+em um
+
+00:39:36.600 --> 00:39:37.060
+contexto
+
+00:39:37.060 --> 00:39:37.360
+de um
+
+00:39:37.360 --> 00:39:37.700
+wrapper.
+
+00:39:39.760 --> 00:39:39.880
+Então,
+
+00:39:40.040 --> 00:39:40.120
+você
+
+00:39:40.120 --> 00:39:40.940
+não sei,
+
+00:39:41.300 --> 00:39:41.780
+poderia ser um
+
+00:39:41.780 --> 00:39:42.060
+servidor
+
+00:39:42.060 --> 00:39:42.740
+MCP,
+
+00:39:42.840 --> 00:39:43.260
+por exemplo,
+
+00:39:43.320 --> 00:39:43.600
+e você
+
+00:39:43.600 --> 00:39:44.140
+integra
+
+00:39:44.140 --> 00:39:44.480
+esse
+
+00:39:44.480 --> 00:39:44.960
+MCP
+
+00:39:44.960 --> 00:39:45.460
+com
+
+00:39:45.460 --> 00:39:46.140
+permissão
+
+00:39:46.140 --> 00:39:46.340
+de
+
+00:39:46.340 --> 00:39:47.020
+aplicação
+
+00:39:47.020 --> 00:39:47.940
+nos
+
+00:39:47.940 --> 00:39:48.760
+bastidores.
+
+00:39:50.460 --> 00:39:50.940
+Então,
+
+00:39:51.060 --> 00:39:51.640
+o MCP
+
+00:39:51.640 --> 00:39:52.180
+chamará,
+
+00:39:52.540 --> 00:39:52.940
+por exemplo,
+
+00:39:53.040 --> 00:39:53.320
+não sei,
+
+00:39:53.440 --> 00:39:53.900
+sua API
+
+00:39:53.900 --> 00:39:54.700
+nos bastidores
+
+00:39:54.700 --> 00:39:55.240
+com permissão
+
+00:39:55.240 --> 00:39:55.780
+de aplicação
+
+00:39:55.780 --> 00:39:56.620
+e depois
+
+00:39:56.620 --> 00:39:57.500
+ele te dá
+
+00:39:57.500 --> 00:39:59.640
+a informação
+
+00:39:59.640 --> 00:40:00.420
+ou o dado
+
+00:40:00.420 --> 00:40:00.760
+que você
+
+00:40:00.760 --> 00:40:01.200
+precisa,
+
+00:40:01.380 --> 00:40:01.500
+mas o
+
+00:40:01.500 --> 00:40:01.900
+usuário
+
+00:40:01.900 --> 00:40:02.820
+não
+
+00:40:02.820 --> 00:40:04.080
+lida
+
+00:40:04.080 --> 00:40:05.300
+diretamente
+
+00:40:05.300 --> 00:40:05.840
+com a
+
+00:40:05.840 --> 00:40:06.140
+permissão
+
+00:40:06.140 --> 00:40:06.220
+de
+
+00:40:06.220 --> 00:40:06.620
+aplicação.
+
+00:40:07.960 --> 00:40:08.480
+Nós
+
+00:40:08.480 --> 00:40:09.320
+chamamos
+
+00:40:09.320 --> 00:40:09.780
+o servidor
+
+00:40:09.780 --> 00:40:10.500
+MCP,
+
+00:40:10.600 --> 00:40:11.020
+por exemplo,
+
+00:40:11.140 --> 00:40:11.600
+com permissão
+
+00:40:11.600 --> 00:40:12.080
+de usuário,
+
+00:40:12.180 --> 00:40:12.420
+o servidor
+
+00:40:12.420 --> 00:40:13.020
+MCP
+
+00:40:13.020 --> 00:40:13.800
+chamará
+
+00:40:13.800 --> 00:40:14.020
+nos
+
+00:40:14.020 --> 00:40:14.500
+bastidores
+
+00:40:14.500 --> 00:40:15.160
+aplicações
+
+00:40:15.160 --> 00:40:15.340
+ou
+
+00:40:15.340 --> 00:40:15.800
+serviços
+
+00:40:15.800 --> 00:40:16.460
+com permissão
+
+00:40:16.460 --> 00:40:16.560
+de
+
+00:40:16.560 --> 00:40:16.960
+aplicação
+
+00:40:16.960 --> 00:40:17.800
+dedicada.
+
+00:40:18.640 --> 00:40:19.020
+Você consegue
+
+00:40:19.020 --> 00:40:19.640
+ver a diferença?
+
+00:40:21.680 --> 00:40:22.040
+Ok.
+
+00:40:23.000 --> 00:40:23.720
+O interessante,
+
+00:40:24.600 --> 00:40:25.240
+eu acho que
+
+00:40:25.240 --> 00:40:27.580
+quando pensamos
+
+00:40:27.580 --> 00:40:28.260
+em arquitetura,
+
+00:40:28.640 --> 00:40:29.020
+nós também
+
+00:40:29.020 --> 00:40:29.560
+precisamos
+
+00:40:29.560 --> 00:40:30.300
+olhar um pouco
+
+00:40:30.300 --> 00:40:30.680
+mais
+
+00:40:30.680 --> 00:40:31.860
+a fundo.
+
+00:40:32.420 --> 00:40:33.540
+Eu acho
+
+00:40:33.540 --> 00:40:34.060
+que existem
+
+00:40:34.060 --> 00:40:34.880
+três
+
+00:40:34.880 --> 00:40:35.660
+grandes
+
+00:40:35.660 --> 00:40:36.160
+tópicos
+
+00:40:36.160 --> 00:40:37.000
+em arquitetura.
+
+00:40:38.540 --> 00:40:39.100
+Temos
+
+00:40:39.100 --> 00:40:39.740
+a geração
+
+00:40:39.740 --> 00:40:40.540
+aumentada
+
+00:40:40.540 --> 00:40:41.420
+por recuperação,
+
+00:40:41.540 --> 00:40:42.140
+temos o tópico
+
+00:40:42.140 --> 00:40:42.800
+de conhecimento
+
+00:40:42.800 --> 00:40:43.480
+e temos
+
+00:40:43.480 --> 00:40:43.660
+o que
+
+00:40:43.660 --> 00:40:44.000
+eu chamo
+
+00:40:44.000 --> 00:40:44.460
+de busca
+
+00:40:44.460 --> 00:40:45.080
+empresarial,
+
+00:40:45.540 --> 00:40:46.000
+de porta
+
+00:40:46.000 --> 00:40:46.580
+dos fundos.
+
+00:40:50.780 --> 00:40:51.240
+Por onde
+
+00:40:51.240 --> 00:40:51.780
+vamos começar
+
+00:40:51.780 --> 00:40:52.360
+com o RAG?
+
+00:40:53.760 --> 00:40:54.720
+Onde o RAG
+
+00:40:54.720 --> 00:40:55.420
+se encaixa
+
+00:40:55.420 --> 00:40:56.340
+na arquitetura?
+
+00:40:58.820 --> 00:41:00.840
+Para ser
+
+00:41:00.840 --> 00:41:01.580
+sincero,
+
+00:41:01.820 --> 00:41:02.380
+o RAG
+
+00:41:02.380 --> 00:41:02.760
+é,
+
+00:41:03.300 --> 00:41:03.900
+na verdade,
+
+00:41:04.060 --> 00:41:04.920
+o mais,
+
+00:41:05.340 --> 00:41:05.780
+para ser
+
+00:41:05.780 --> 00:41:06.420
+sincero,
+
+00:41:06.460 --> 00:41:06.940
+em termos
+
+00:41:06.940 --> 00:41:08.640
+de desempenho,
+
+00:41:08.760 --> 00:41:09.060
+porque
+
+00:41:09.060 --> 00:41:10.120
+a IA
+
+00:41:10.120 --> 00:41:10.640
+precisa
+
+00:41:10.640 --> 00:41:11.340
+entender
+
+00:41:11.340 --> 00:41:11.960
+diferentes
+
+00:41:11.960 --> 00:41:12.300
+tipos
+
+00:41:12.300 --> 00:41:12.840
+de dados
+
+00:41:12.840 --> 00:41:13.700
+e,
+
+00:41:13.800 --> 00:41:14.600
+basicamente,
+
+00:41:14.820 --> 00:41:15.460
+o RAG
+
+00:41:15.460 --> 00:41:16.420
+está aqui
+
+00:41:16.420 --> 00:41:16.720
+para
+
+00:41:16.720 --> 00:41:17.960
+responder
+
+00:41:17.960 --> 00:41:19.020
+a uma
+
+00:41:19.020 --> 00:41:19.560
+pergunta.
+
+00:41:20.900 --> 00:41:21.340
+Porque,
+
+00:41:21.860 --> 00:41:22.420
+no passado,
+
+00:41:22.540 --> 00:41:22.840
+quando você
+
+00:41:22.840 --> 00:41:23.180
+não tinha
+
+00:41:23.180 --> 00:41:23.540
+RAG,
+
+00:41:23.780 --> 00:41:24.320
+basicamente,
+
+00:41:24.420 --> 00:41:24.980
+você precisava
+
+00:41:24.980 --> 00:41:25.400
+lidar
+
+00:41:25.400 --> 00:41:26.780
+com abordagens
+
+00:41:26.780 --> 00:41:27.640
+diferentes.
+
+00:41:28.600 --> 00:41:28.860
+Não era
+
+00:41:28.860 --> 00:41:29.220
+exatamente
+
+00:41:29.220 --> 00:41:29.880
+antigo,
+
+00:41:29.960 --> 00:41:30.480
+mas era
+
+00:41:30.480 --> 00:41:31.160
+complicado.
+
+00:41:33.120 --> 00:41:33.720
+Mas,
+
+00:41:34.280 --> 00:41:34.760
+o RAG
+
+00:41:34.760 --> 00:41:35.300
+é central,
+
+00:41:35.400 --> 00:41:35.680
+porque ele
+
+00:41:35.680 --> 00:41:36.240
+entenderá
+
+00:41:36.240 --> 00:41:37.200
+diferentes tipos
+
+00:41:37.200 --> 00:41:37.700
+de dados
+
+00:41:37.700 --> 00:41:38.300
+se você
+
+00:41:38.300 --> 00:41:38.900
+recuperará
+
+00:41:38.900 --> 00:41:40.140
+basicamente
+
+00:41:40.140 --> 00:41:40.680
+a
+
+00:41:40.680 --> 00:41:43.240
+informação
+
+00:41:43.240 --> 00:41:44.080
+de que a
+
+00:41:44.080 --> 00:41:44.240
+IA
+
+00:41:44.240 --> 00:41:44.740
+precisa
+
+00:41:44.740 --> 00:41:45.840
+documentos,
+
+00:41:46.360 --> 00:41:46.860
+pode ser
+
+00:41:46.860 --> 00:41:47.300
+múltiplos
+
+00:41:47.300 --> 00:41:47.720
+tipos de
+
+00:41:47.720 --> 00:41:47.960
+dados.
+
+00:41:50.070 --> 00:41:50.230
+Então,
+
+00:41:50.410 --> 00:41:50.570
+sim,
+
+00:41:50.670 --> 00:41:50.950
+o RAG
+
+00:41:50.950 --> 00:41:51.510
+é central,
+
+00:41:52.230 --> 00:41:52.770
+hoje em dia,
+
+00:41:52.830 --> 00:41:53.330
+na arquitetura
+
+00:41:53.330 --> 00:41:53.670
+de IA.
+
+00:41:56.560 --> 00:41:56.800
+Mas,
+
+00:41:56.840 --> 00:41:57.240
+é verdade
+
+00:41:57.240 --> 00:41:57.620
+que,
+
+00:41:58.040 --> 00:41:58.700
+para muitos
+
+00:41:58.700 --> 00:41:59.380
+usuários,
+
+00:41:59.600 --> 00:42:00.020
+quando você
+
+00:42:00.020 --> 00:42:00.580
+fala sobre
+
+00:42:00.580 --> 00:42:01.040
+RAG,
+
+00:42:01.560 --> 00:42:02.420
+nos bastidores,
+
+00:42:02.580 --> 00:42:03.380
+eles não sabem
+
+00:42:03.380 --> 00:42:04.580
+o que é,
+
+00:42:04.660 --> 00:42:05.400
+porque a Microsoft,
+
+00:42:05.580 --> 00:42:06.020
+hoje em dia,
+
+00:42:06.120 --> 00:42:06.780
+ou muitas
+
+00:42:06.780 --> 00:42:07.620
+empresas de
+
+00:42:07.620 --> 00:42:08.420
+software diferentes,
+
+00:42:08.860 --> 00:42:09.620
+não falam sobre
+
+00:42:09.620 --> 00:42:09.840
+isso.
+
+00:42:09.940 --> 00:42:10.220
+Por quê?
+
+00:42:11.080 --> 00:42:11.880
+Nos bastidores,
+
+00:42:11.980 --> 00:42:12.740
+você tem o RAG.
+
+00:42:13.120 --> 00:42:13.280
+Mas,
+
+00:42:13.340 --> 00:42:13.640
+por exemplo,
+
+00:42:14.120 --> 00:42:15.180
+no Copilot Studio,
+
+00:42:15.400 --> 00:42:15.940
+o usuário
+
+00:42:15.940 --> 00:42:17.160
+não entende
+
+00:42:17.160 --> 00:42:17.920
+que por trás
+
+00:42:17.920 --> 00:42:18.480
+das cenas
+
+00:42:18.480 --> 00:42:19.120
+é RAG.
+
+00:42:19.460 --> 00:42:19.860
+Entende?
+
+00:42:22.310 --> 00:42:23.170
+E hoje em dia,
+
+00:42:23.290 --> 00:42:23.870
+quando você quer
+
+00:42:23.870 --> 00:42:24.770
+se aprofundar,
+
+00:42:24.870 --> 00:42:25.070
+ok,
+
+00:42:25.190 --> 00:42:26.110
+você tem esse tipo
+
+00:42:26.110 --> 00:42:26.770
+de conceito,
+
+00:42:26.870 --> 00:42:27.470
+mas para muitos
+
+00:42:27.470 --> 00:42:28.090
+usuários,
+
+00:42:28.190 --> 00:42:29.590
+o RAG é algo
+
+00:42:29.590 --> 00:42:30.810
+que eles desconhecem
+
+00:42:30.810 --> 00:42:31.370
+totalmente,
+
+00:42:31.690 --> 00:42:33.330
+porque eles
+
+00:42:33.330 --> 00:42:34.170
+apenas usam
+
+00:42:34.170 --> 00:42:35.090
+a ferramenta
+
+00:42:35.090 --> 00:42:36.730
+e nos bastidores
+
+00:42:36.730 --> 00:42:37.490
+você tem esses
+
+00:42:37.490 --> 00:42:38.030
+conceitos.
+
+00:42:39.630 --> 00:42:40.130
+Então,
+
+00:42:40.210 --> 00:42:40.810
+temos o próximo
+
+00:42:40.810 --> 00:42:41.290
+tópico,
+
+00:42:41.390 --> 00:42:43.130
+que é o conhecimento.
+
+00:42:43.690 --> 00:42:44.090
+Como nós
+
+00:42:44.090 --> 00:42:44.850
+obtemos isso?
+
+00:42:44.850 --> 00:42:46.690
+De onde os sistemas
+
+00:42:46.690 --> 00:42:47.030
+de A
+
+00:42:47.030 --> 00:42:48.190
+tiram seu conhecimento?
+
+00:42:49.010 --> 00:42:49.770
+É uma coleta
+
+00:42:49.770 --> 00:42:50.170
+manual
+
+00:42:50.170 --> 00:42:50.850
+ou como isso
+
+00:42:50.850 --> 00:42:51.490
+funciona?
+
+00:42:53.310 --> 00:42:54.350
+Na verdade,
+
+00:42:54.590 --> 00:42:55.190
+você tem,
+
+00:42:55.310 --> 00:42:56.290
+para ser sincero,
+
+00:42:56.790 --> 00:42:57.730
+o conhecimento
+
+00:42:57.730 --> 00:43:01.850
+pode estar
+
+00:43:01.850 --> 00:43:02.570
+hospedado
+
+00:43:02.570 --> 00:43:03.170
+em muitos
+
+00:43:03.170 --> 00:43:03.690
+sistemas
+
+00:43:03.690 --> 00:43:04.550
+diferentes.
+
+00:43:08.350 --> 00:43:08.990
+Pode ser
+
+00:43:08.990 --> 00:43:09.370
+um arquivo
+
+00:43:09.370 --> 00:43:09.750
+de texto
+
+00:43:09.750 --> 00:43:10.230
+simples,
+
+00:43:10.330 --> 00:43:10.710
+um arquivo
+
+00:43:10.710 --> 00:43:11.270
+markdown,
+
+00:43:11.390 --> 00:43:11.750
+uma base
+
+00:43:11.750 --> 00:43:12.570
+de conhecimento,
+
+00:43:12.690 --> 00:43:12.930
+pode ser
+
+00:43:12.930 --> 00:43:13.570
+qualquer coisa.
+
+00:43:14.850 --> 00:43:15.130
+mas,
+
+00:43:15.230 --> 00:43:15.630
+na verdade,
+
+00:43:16.090 --> 00:43:16.610
+se você tiver
+
+00:43:16.610 --> 00:43:16.990
+um servidor
+
+00:43:16.990 --> 00:43:17.550
+MCP,
+
+00:43:17.830 --> 00:43:18.130
+você pode
+
+00:43:18.130 --> 00:43:18.490
+acessar
+
+00:43:18.490 --> 00:43:19.190
+esse conhecimento
+
+00:43:19.190 --> 00:43:21.150
+ou se você
+
+00:43:21.150 --> 00:43:21.370
+tiver,
+
+00:43:21.470 --> 00:43:21.850
+por exemplo,
+
+00:43:22.110 --> 00:43:22.870
+conectores
+
+00:43:22.870 --> 00:43:23.570
+para o SharePoint,
+
+00:43:23.690 --> 00:43:24.110
+conectores
+
+00:43:24.110 --> 00:43:24.850
+para muitos
+
+00:43:24.850 --> 00:43:25.310
+serviços
+
+00:43:25.310 --> 00:43:25.850
+hoje em dia,
+
+00:43:25.970 --> 00:43:26.670
+então acessar
+
+00:43:26.670 --> 00:43:27.910
+o conhecimento
+
+00:43:27.910 --> 00:43:28.670
+está mais fácil
+
+00:43:28.670 --> 00:43:29.230
+do que antes.
+
+00:43:30.010 --> 00:43:31.030
+Vamos ser sinceros,
+
+00:43:32.010 --> 00:43:32.730
+porque antigamente
+
+00:43:32.730 --> 00:43:33.210
+você precisava
+
+00:43:33.210 --> 00:43:33.750
+criar seu próprio
+
+00:43:33.750 --> 00:43:34.030
+plugin,
+
+00:43:34.130 --> 00:43:34.530
+fazer tudo
+
+00:43:34.530 --> 00:43:35.130
+manualmente
+
+00:43:35.130 --> 00:43:36.690
+e hoje em dia
+
+00:43:36.690 --> 00:43:37.130
+você tem
+
+00:43:37.130 --> 00:43:37.990
+conectores diretos
+
+00:43:37.990 --> 00:43:38.350
+para qualquer
+
+00:43:38.350 --> 00:43:38.830
+sistema,
+
+00:43:39.070 --> 00:43:40.430
+pode integrar
+
+00:43:40.430 --> 00:43:41.210
+seu conhecimento
+
+00:43:41.210 --> 00:43:42.130
+sem lidar
+
+00:43:42.130 --> 00:43:42.930
+com grandes
+
+00:43:42.930 --> 00:43:43.930
+equipes
+
+00:43:43.930 --> 00:43:44.770
+de desenvolvimento.
+
+00:43:44.850 --> 00:43:48.880
+eu acho
+
+00:43:48.880 --> 00:43:49.740
+que muitas
+
+00:43:49.740 --> 00:43:50.360
+vezes nós temos,
+
+00:43:50.540 --> 00:43:50.720
+não sei,
+
+00:43:50.760 --> 00:43:51.120
+eu coleto
+
+00:43:51.120 --> 00:43:51.480
+para o meu,
+
+00:43:51.640 --> 00:43:52.260
+eu digo para o meu,
+
+00:43:52.320 --> 00:43:52.560
+não sei,
+
+00:43:52.600 --> 00:43:53.420
+algum pessoal,
+
+00:43:55.930 --> 00:43:58.490
+e como a IA
+
+00:43:58.490 --> 00:43:59.790
+entende o que são
+
+00:43:59.790 --> 00:44:00.730
+documentos
+
+00:44:00.730 --> 00:44:01.390
+que
+
+00:44:01.390 --> 00:44:03.770
+não estão prontos
+
+00:44:03.770 --> 00:44:04.850
+ou desatualizados
+
+00:44:04.850 --> 00:44:05.290
+ou,
+
+00:44:05.530 --> 00:44:05.650
+não sei,
+
+00:44:05.730 --> 00:44:06.490
+duplicados,
+
+00:44:10.170 --> 00:44:12.050
+como o sistema
+
+00:44:12.050 --> 00:44:12.330
+de IA
+
+00:44:12.330 --> 00:44:12.950
+entende isso?
+
+00:44:13.710 --> 00:44:14.270
+O que devemos
+
+00:44:14.270 --> 00:44:14.710
+usar e o que?
+
+00:44:14.710 --> 00:44:19.540
+basicamente
+
+00:44:19.540 --> 00:44:21.460
+você está usando
+
+00:44:21.460 --> 00:44:21.860
+RAG,
+
+00:44:22.040 --> 00:44:23.220
+porque por trás
+
+00:44:23.220 --> 00:44:23.780
+das câmeras
+
+00:44:23.780 --> 00:44:24.180
+você precisa
+
+00:44:24.180 --> 00:44:25.120
+entender,
+
+00:44:25.200 --> 00:44:25.320
+ok,
+
+00:44:25.420 --> 00:44:25.840
+quais são
+
+00:44:25.840 --> 00:44:26.360
+os seus dados.
+
+00:44:28.340 --> 00:44:28.780
+Mas,
+
+00:44:28.980 --> 00:44:29.940
+para ser sincero,
+
+00:44:29.980 --> 00:44:30.480
+se eu resumir
+
+00:44:30.480 --> 00:44:31.580
+um pouco,
+
+00:44:32.860 --> 00:44:33.240
+você começa
+
+00:44:33.240 --> 00:44:34.120
+pelo prompt,
+
+00:44:34.280 --> 00:44:34.600
+ok,
+
+00:44:34.880 --> 00:44:36.820
+o usuário
+
+00:44:36.820 --> 00:44:37.060
+quer,
+
+00:44:37.140 --> 00:44:37.300
+ok,
+
+00:44:37.400 --> 00:44:37.800
+você quer,
+
+00:44:37.880 --> 00:44:38.100
+por exemplo,
+
+00:44:38.660 --> 00:44:39.700
+pesquisar em,
+
+00:44:39.800 --> 00:44:40.040
+não sei,
+
+00:44:40.040 --> 00:44:41.300
+uma base
+
+00:44:41.300 --> 00:44:42.020
+de conhecimento
+
+00:44:42.020 --> 00:44:42.460
+e,
+
+00:44:42.600 --> 00:44:42.780
+por exemplo,
+
+00:44:42.880 --> 00:44:43.520
+no OneDrive.
+
+00:44:43.520 --> 00:44:45.400
+por trás
+
+00:44:45.400 --> 00:44:46.120
+das câmeras
+
+00:44:46.120 --> 00:44:48.120
+quando o
+
+00:44:48.120 --> 00:44:48.700
+orquestrador
+
+00:44:48.700 --> 00:44:49.300
+com a ajuda
+
+00:44:49.300 --> 00:44:50.400
+de um LLM
+
+00:44:50.400 --> 00:44:51.400
+entende o prompt
+
+00:44:51.400 --> 00:44:52.840
+e a intenção
+
+00:44:52.840 --> 00:44:53.420
+do usuário.
+
+00:44:54.460 --> 00:44:55.520
+Nos bastidores
+
+00:44:55.520 --> 00:44:57.240
+você tem
+
+00:44:57.240 --> 00:44:57.740
+o índice,
+
+00:44:58.180 --> 00:44:59.020
+basicamente,
+
+00:45:00.860 --> 00:45:01.180
+porque,
+
+00:45:01.340 --> 00:45:01.700
+por exemplo,
+
+00:45:01.820 --> 00:45:02.340
+no Copilot
+
+00:45:02.340 --> 00:45:03.100
+você tem o índice
+
+00:45:03.100 --> 00:45:03.580
+semântico
+
+00:45:03.580 --> 00:45:04.300
+e esse índice
+
+00:45:04.300 --> 00:45:04.760
+semântico
+
+00:45:04.760 --> 00:45:05.140
+lhe dá
+
+00:45:05.140 --> 00:45:06.260
+basicamente,
+
+00:45:06.660 --> 00:45:06.860
+ok,
+
+00:45:07.020 --> 00:45:08.140
+eu tenho
+
+00:45:08.140 --> 00:45:09.320
+todo esse conhecimento
+
+00:45:09.320 --> 00:45:10.380
+e você pode
+
+00:45:10.380 --> 00:45:11.400
+ir com uma consulta
+
+00:45:11.400 --> 00:45:12.280
+ao índice
+
+00:45:12.280 --> 00:45:12.820
+semântico
+
+00:45:12.820 --> 00:45:13.860
+a IA
+
+00:45:13.860 --> 00:45:14.680
+pode consultar
+
+00:45:14.680 --> 00:45:15.280
+diretamente
+
+00:45:15.280 --> 00:45:15.780
+o índice
+
+00:45:15.780 --> 00:45:16.280
+semântico
+
+00:45:16.280 --> 00:45:17.180
+para realizar
+
+00:45:17.180 --> 00:45:18.180
+para realizar
+
+00:45:18.180 --> 00:45:18.580
+RAG,
+
+00:45:18.740 --> 00:45:19.120
+por exemplo,
+
+00:45:19.640 --> 00:45:20.160
+e você pode
+
+00:45:20.160 --> 00:45:20.760
+diretamente,
+
+00:45:21.000 --> 00:45:21.260
+ok,
+
+00:45:21.640 --> 00:45:22.280
+selecionar
+
+00:45:22.280 --> 00:45:23.040
+os documentos
+
+00:45:23.040 --> 00:45:23.420
+certos
+
+00:45:23.420 --> 00:45:24.340
+com base
+
+00:45:24.340 --> 00:45:26.120
+nas necessidades.
+
+00:45:27.380 --> 00:45:28.400
+Mas no Copilot
+
+00:45:28.400 --> 00:45:28.880
+você tem
+
+00:45:28.880 --> 00:45:29.260
+esse índice
+
+00:45:29.260 --> 00:45:29.840
+semântico
+
+00:45:29.840 --> 00:45:30.540
+e a IA
+
+00:45:30.540 --> 00:45:31.240
+pode consultar
+
+00:45:31.240 --> 00:45:31.760
+diretamente
+
+00:45:31.760 --> 00:45:32.280
+esse índice
+
+00:45:32.280 --> 00:45:33.060
+com linguagem
+
+00:45:33.060 --> 00:45:33.480
+natural
+
+00:45:33.480 --> 00:45:34.780
+por trás
+
+00:45:34.780 --> 00:45:35.640
+das câmeras.
+
+00:45:36.120 --> 00:45:36.640
+Então,
+
+00:45:36.740 --> 00:45:37.320
+eu vou perguntar,
+
+00:45:37.420 --> 00:45:37.600
+ok,
+
+00:45:37.920 --> 00:45:38.780
+eu quero entender
+
+00:45:38.780 --> 00:45:39.260
+o,
+
+00:45:39.360 --> 00:45:39.680
+não sei,
+
+00:45:39.840 --> 00:45:41.880
+como configurar
+
+00:45:41.880 --> 00:45:42.180
+a VPN
+
+00:45:42.180 --> 00:45:43.080
+da minha empresa
+
+00:45:43.080 --> 00:45:45.280
+e por trás
+
+00:45:45.280 --> 00:45:45.860
+das câmeras
+
+00:45:45.860 --> 00:45:46.520
+ele realizará
+
+00:45:46.520 --> 00:45:46.880
+o RAG
+
+00:45:46.880 --> 00:45:47.580
+no índice
+
+00:45:47.580 --> 00:45:48.180
+semântico
+
+00:45:48.180 --> 00:45:48.880
+e basicamente
+
+00:45:48.880 --> 00:45:49.520
+recuperará
+
+00:45:49.520 --> 00:45:50.620
+o documento
+
+00:45:50.620 --> 00:45:51.840
+que contém,
+
+00:45:51.900 --> 00:45:52.320
+por exemplo,
+
+00:45:52.500 --> 00:45:53.540
+toda a configuração
+
+00:45:53.540 --> 00:45:54.120
+da VPN
+
+00:45:54.120 --> 00:45:54.800
+da empresa.
+
+00:45:56.220 --> 00:45:56.920
+Por exemplo,
+
+00:45:57.040 --> 00:45:57.560
+no chat
+
+00:45:57.560 --> 00:45:58.100
+do Microsoft
+
+00:45:58.100 --> 00:45:58.720
+365
+
+00:45:58.720 --> 00:46:00.120
+Copilot,
+
+00:46:00.320 --> 00:46:00.940
+o por trás
+
+00:46:00.940 --> 00:46:01.640
+das câmeras
+
+00:46:01.640 --> 00:46:02.740
+é a Graph API,
+
+00:46:02.860 --> 00:46:03.360
+porque como eu disse
+
+00:46:03.360 --> 00:46:03.560
+antes,
+
+00:46:03.600 --> 00:46:04.040
+você tem o índice
+
+00:46:04.040 --> 00:46:04.480
+semântico
+
+00:46:04.480 --> 00:46:04.900
+construído
+
+00:46:04.900 --> 00:46:05.800
+sobre a Graph API.
+
+00:46:07.340 --> 00:46:07.900
+É um recurso
+
+00:46:07.900 --> 00:46:08.260
+do Graph
+
+00:46:08.260 --> 00:46:08.640
+por trás
+
+00:46:08.640 --> 00:46:09.220
+das câmeras,
+
+00:46:09.220 --> 00:46:10.880
+mas quando você
+
+00:46:10.880 --> 00:46:11.560
+tem um desenvolvimento
+
+00:46:11.560 --> 00:46:12.300
+personalizado,
+
+00:46:12.400 --> 00:46:12.760
+você tem,
+
+00:46:12.900 --> 00:46:13.180
+por exemplo,
+
+00:46:13.900 --> 00:46:14.980
+o Azure AI Search
+
+00:46:14.980 --> 00:46:15.680
+por trás
+
+00:46:15.680 --> 00:46:16.240
+das câmeras,
+
+00:46:16.800 --> 00:46:17.900
+era um serviço
+
+00:46:17.900 --> 00:46:18.380
+do Azure
+
+00:46:18.380 --> 00:46:18.920
+com um nome
+
+00:46:18.920 --> 00:46:19.540
+diferente,
+
+00:46:20.420 --> 00:46:21.080
+mas agora você pode
+
+00:46:21.080 --> 00:46:21.860
+ter seu próprio sistema
+
+00:46:21.860 --> 00:46:22.440
+de RAG
+
+00:46:22.440 --> 00:46:23.300
+se quiser.
+
+00:46:23.820 --> 00:46:24.540
+E basicamente,
+
+00:46:24.660 --> 00:46:25.100
+quando você tem
+
+00:46:25.100 --> 00:46:26.020
+um agente personalizado,
+
+00:46:26.100 --> 00:46:26.680
+você pode perguntar
+
+00:46:26.680 --> 00:46:27.360
+diretamente
+
+00:46:27.360 --> 00:46:28.640
+para essa instância
+
+00:46:28.640 --> 00:46:29.920
+do Foundry
+
+00:46:29.920 --> 00:46:32.660
+é que eu usar,
+
+00:46:32.840 --> 00:46:33.300
+quero obter
+
+00:46:33.300 --> 00:46:34.020
+a configuração
+
+00:46:34.020 --> 00:46:35.220
+da minha empresa
+
+00:46:35.220 --> 00:46:36.020
+de VPN
+
+00:46:36.020 --> 00:46:37.140
+e a IA
+
+00:46:37.140 --> 00:46:38.120
+pode recuperar
+
+00:46:38.120 --> 00:46:39.580
+o que você precisa
+
+00:46:39.580 --> 00:46:41.760
+em termos de documento.
+
+00:46:42.660 --> 00:46:43.380
+Podem ser PDFs,
+
+00:46:43.420 --> 00:46:43.920
+Word, Excel,
+
+00:46:44.040 --> 00:46:44.500
+esse tipo de coisa.
+
+00:46:51.140 --> 00:46:51.600
+É assim
+
+00:46:51.600 --> 00:46:52.460
+que a busca
+
+00:46:52.460 --> 00:46:53.580
+funciona.
+
+00:46:54.600 --> 00:46:55.040
+Certo?
+
+00:47:01.230 --> 00:47:01.930
+Nos bastidores,
+
+00:47:02.030 --> 00:47:02.470
+você quer dizer?
+
+00:47:04.430 --> 00:47:04.590
+Ah,
+
+00:47:04.590 --> 00:47:05.210
+nos bastidores
+
+00:47:05.210 --> 00:47:07.250
+você tem a busca,
+
+00:47:08.950 --> 00:47:09.390
+mas,
+
+00:47:09.870 --> 00:47:10.510
+basicamente,
+
+00:47:10.510 --> 00:47:11.150
+hoje em dia,
+
+00:47:11.250 --> 00:47:11.910
+nos bastidores
+
+00:47:11.910 --> 00:47:12.750
+do chat
+
+00:47:12.750 --> 00:47:13.390
+do Copilot,
+
+00:47:13.530 --> 00:47:14.090
+você tem
+
+00:47:14.090 --> 00:47:16.030
+três capacidades.
+
+00:47:16.210 --> 00:47:16.810
+Você tem
+
+00:47:16.810 --> 00:47:18.090
+a busca padrão,
+
+00:47:18.550 --> 00:47:19.550
+que é basicamente
+
+00:47:19.550 --> 00:47:20.290
+uma busca
+
+00:47:20.290 --> 00:47:21.790
+onde você
+
+00:47:21.790 --> 00:47:22.690
+coloca algumas
+
+00:47:22.690 --> 00:47:23.610
+palavras-chave.
+
+00:47:24.230 --> 00:47:25.330
+E ele pesquisa
+
+00:47:25.330 --> 00:47:27.050
+em seus documentos
+
+00:47:27.050 --> 00:47:28.530
+e coisas do tipo.
+
+00:47:30.490 --> 00:47:31.430
+Essa é uma busca simples.
+
+00:47:31.890 --> 00:47:32.630
+Todos nós conhecemos
+
+00:47:32.630 --> 00:47:33.770
+a busca por palavra-chave,
+
+00:47:33.830 --> 00:47:34.290
+como o Google.
+
+00:47:35.450 --> 00:47:35.970
+Depois,
+
+00:47:36.250 --> 00:47:36.770
+você tem
+
+00:47:36.770 --> 00:47:37.890
+duas capacidades
+
+00:47:37.890 --> 00:47:38.590
+diferentes.
+
+00:47:38.590 --> 00:47:40.630
+você tem
+
+00:47:40.630 --> 00:47:41.070
+primeiro
+
+00:47:41.070 --> 00:47:41.970
+o RAG
+
+00:47:41.970 --> 00:47:42.690
+nos bastidores.
+
+00:47:44.370 --> 00:47:45.010
+Você tem
+
+00:47:45.010 --> 00:47:45.590
+a capacidade
+
+00:47:45.590 --> 00:47:46.030
+de RAG
+
+00:47:46.030 --> 00:47:46.430
+no Graph
+
+00:47:46.430 --> 00:47:47.030
+e você também
+
+00:47:47.030 --> 00:47:47.330
+tem
+
+00:47:47.330 --> 00:47:50.800
+a busca
+
+00:47:50.800 --> 00:47:51.280
+pelo índice
+
+00:47:51.280 --> 00:47:51.740
+semântico
+
+00:47:51.740 --> 00:47:52.340
+do Copilot,
+
+00:47:52.840 --> 00:47:53.400
+que é um pouco
+
+00:47:53.400 --> 00:47:53.900
+diferente,
+
+00:47:54.040 --> 00:47:55.060
+porque o RAG
+
+00:47:55.060 --> 00:47:56.300
+é realmente
+
+00:47:56.300 --> 00:47:57.180
+mais avançado
+
+00:47:57.180 --> 00:47:57.680
+do que a busca
+
+00:47:57.680 --> 00:47:58.120
+pelo índice
+
+00:47:58.120 --> 00:47:58.480
+semântico
+
+00:47:58.480 --> 00:47:59.080
+do Copilot.
+
+00:47:59.080 --> 00:48:02.100
+mas você tem
+
+00:48:02.100 --> 00:48:02.620
+essas três
+
+00:48:02.620 --> 00:48:03.360
+capacidades
+
+00:48:03.360 --> 00:48:04.180
+nos bastidores
+
+00:48:04.180 --> 00:48:04.960
+para que a IA
+
+00:48:04.960 --> 00:48:07.340
+possa acioná-las
+
+00:48:07.340 --> 00:48:08.640
+e recuperar
+
+00:48:08.640 --> 00:48:09.360
+dados
+
+00:48:09.360 --> 00:48:10.680
+do OneDrive,
+
+00:48:10.900 --> 00:48:11.400
+Teams
+
+00:48:11.400 --> 00:48:13.040
+e M3S,
+
+00:48:13.580 --> 00:48:15.140
+QENS,
+
+00:48:15.580 --> 00:48:16.000
+em geral.
+
+00:48:18.320 --> 00:48:19.420
+O índice semântico
+
+00:48:19.420 --> 00:48:20.000
+do Copilot
+
+00:48:20.000 --> 00:48:20.740
+também inclui
+
+00:48:20.740 --> 00:48:21.380
+os conectores
+
+00:48:21.380 --> 00:48:22.080
+do Copilot.
+
+00:48:22.820 --> 00:48:23.340
+Então, por exemplo,
+
+00:48:23.480 --> 00:48:24.820
+se você conectou
+
+00:48:24.820 --> 00:48:25.260
+o Salesforce
+
+00:48:25.260 --> 00:48:26.160
+com o conector
+
+00:48:26.160 --> 00:48:26.840
+do Copilot,
+
+00:48:26.980 --> 00:48:27.280
+ele também
+
+00:48:27.280 --> 00:48:28.500
+pode pesquisar
+
+00:48:28.500 --> 00:48:29.560
+em todos os seus dados.
+
+00:48:29.560 --> 00:48:30.100
+no Salesforce,
+
+00:48:30.620 --> 00:48:31.260
+no ServiceNow
+
+00:48:31.260 --> 00:48:32.000
+e em várias
+
+00:48:32.000 --> 00:48:33.200
+outras ferramentas.
+
+00:48:33.920 --> 00:48:35.160
+E como tudo
+
+00:48:35.160 --> 00:48:35.900
+está integrado
+
+00:48:35.900 --> 00:48:36.920
+através do conector
+
+00:48:36.920 --> 00:48:37.580
+do Copilot
+
+00:48:37.580 --> 00:48:38.640
+no índice semântico
+
+00:48:38.640 --> 00:48:39.060
+do Graph,
+
+00:48:39.200 --> 00:48:40.380
+você pode consultar
+
+00:48:40.380 --> 00:48:41.420
+diretamente
+
+00:48:41.420 --> 00:48:43.060
+seus sistemas
+
+00:48:43.060 --> 00:48:44.620
+externos.
+
+00:48:49.290 --> 00:48:50.830
+E eu acho que
+
+00:48:50.830 --> 00:48:55.060
+quando criamos
+
+00:48:55.060 --> 00:48:56.120
+agentes,
+
+00:48:56.380 --> 00:48:57.080
+temos a parte
+
+00:48:57.080 --> 00:48:57.920
+de governança
+
+00:48:57.920 --> 00:48:59.200
+e uma das partes
+
+00:48:59.200 --> 00:48:59.640
+para mim
+
+00:48:59.640 --> 00:49:00.840
+é o gerenciamento
+
+00:49:00.840 --> 00:49:02.360
+do ciclo de vida
+
+00:49:02.360 --> 00:49:03.420
+do agente.
+
+00:49:04.320 --> 00:49:05.340
+Como isso funciona
+
+00:49:05.340 --> 00:49:06.040
+na prática?
+
+00:49:07.640 --> 00:49:08.580
+Como é na prática?
+
+00:49:09.520 --> 00:49:10.360
+Para ser sincero,
+
+00:49:10.400 --> 00:49:11.100
+no ecossistema
+
+00:49:11.100 --> 00:49:11.900
+da Microsoft
+
+00:49:11.900 --> 00:49:13.040
+é bem simples.
+
+00:49:13.560 --> 00:49:14.160
+Se é que posso
+
+00:49:14.160 --> 00:49:15.040
+dizer assim,
+
+00:49:15.500 --> 00:49:15.900
+assim.
+
+00:49:17.000 --> 00:49:17.340
+Porque
+
+00:49:17.340 --> 00:49:18.540
+quando você trabalha
+
+00:49:18.540 --> 00:49:19.400
+com low-code,
+
+00:49:19.500 --> 00:49:19.860
+por exemplo,
+
+00:49:19.980 --> 00:49:20.660
+o Copilot Studio,
+
+00:49:20.760 --> 00:49:21.380
+você está lidando
+
+00:49:21.380 --> 00:49:22.780
+com a Power Platform,
+
+00:49:23.400 --> 00:49:24.280
+conceito,
+
+00:49:24.700 --> 00:49:26.380
+e nada mudou.
+
+00:49:27.380 --> 00:49:27.860
+Então,
+
+00:49:27.960 --> 00:49:28.760
+você tem soluções,
+
+00:49:28.880 --> 00:49:29.700
+tem LM implementado
+
+00:49:29.700 --> 00:49:30.380
+e tem pipelines.
+
+00:49:31.200 --> 00:49:31.360
+Então,
+
+00:49:31.460 --> 00:49:31.900
+ao lidar
+
+00:49:31.900 --> 00:49:32.880
+com o Copilot Studio,
+
+00:49:33.000 --> 00:49:34.280
+para ser sincero,
+
+00:49:34.280 --> 00:49:35.180
+é como antes,
+
+00:49:35.340 --> 00:49:36.300
+porque você tem
+
+00:49:36.300 --> 00:49:36.980
+tudo o que investiu
+
+00:49:36.980 --> 00:49:37.860
+em termos de governança
+
+00:49:37.860 --> 00:49:38.720
+da Power Platform,
+
+00:49:38.920 --> 00:49:39.620
+ciclo de vida
+
+00:49:39.620 --> 00:49:40.400
+e ALM.
+
+00:49:40.800 --> 00:49:41.300
+E ALM
+
+00:49:41.300 --> 00:49:42.540
+é exatamente
+
+00:49:42.540 --> 00:49:43.140
+a mesma coisa.
+
+00:49:44.300 --> 00:49:44.880
+Isso é bom,
+
+00:49:44.960 --> 00:49:45.760
+porque muitas pessoas
+
+00:49:45.760 --> 00:49:46.400
+me perguntam,
+
+00:49:46.540 --> 00:49:46.780
+ah,
+
+00:49:46.860 --> 00:49:47.760
+Copilot Studio,
+
+00:49:48.300 --> 00:49:49.440
+como eu gerencio?
+
+00:49:51.020 --> 00:49:51.420
+É diferente?
+
+00:49:51.940 --> 00:49:52.120
+Não,
+
+00:49:52.140 --> 00:49:53.120
+é realmente simples
+
+00:49:53.120 --> 00:49:54.380
+como o gerenciamento
+
+00:49:54.380 --> 00:49:55.120
+de ciclo de vida
+
+00:49:55.120 --> 00:49:55.600
+de aplicativos
+
+00:49:55.600 --> 00:49:56.280
+para Power Apps
+
+00:49:56.280 --> 00:49:57.200
+ou Power Automate.
+
+00:49:58.060 --> 00:49:58.240
+Então,
+
+00:49:58.340 --> 00:49:58.820
+neste caso,
+
+00:49:59.080 --> 00:49:59.740
+é o gerenciamento
+
+00:49:59.740 --> 00:50:00.360
+de ciclo de vida
+
+00:50:00.360 --> 00:50:00.760
+de agentes,
+
+00:50:00.900 --> 00:50:01.600
+mas nos bastidores.
+
+00:50:01.720 --> 00:50:02.480
+É o mesmo conceito
+
+00:50:02.480 --> 00:50:03.680
+da plataforma principal.
+
+00:50:05.160 --> 00:50:06.320
+E quando você lida,
+
+00:50:07.320 --> 00:50:07.900
+por exemplo,
+
+00:50:08.360 --> 00:50:09.280
+com o desenvolvimento
+
+00:50:09.280 --> 00:50:10.220
+customizado,
+
+00:50:10.840 --> 00:50:11.460
+basicamente,
+
+00:50:11.780 --> 00:50:12.860
+é como quando você
+
+00:50:12.860 --> 00:50:14.620
+constrói aplicações
+
+00:50:14.620 --> 00:50:15.300
+do Ontenet,
+
+00:50:15.960 --> 00:50:16.760
+esse tipo de coisa,
+
+00:50:16.860 --> 00:50:17.680
+porque você gerencia
+
+00:50:17.680 --> 00:50:19.320
+tudo como código.
+
+00:50:20.100 --> 00:50:20.520
+Portanto,
+
+00:50:20.600 --> 00:50:21.760
+você tem frameworks,
+
+00:50:21.940 --> 00:50:22.960
+aspectos de segurança,
+
+00:50:23.120 --> 00:50:23.800
+esse tipo de coisa,
+
+00:50:24.280 --> 00:50:24.920
+esse tipo de coisa.
+
+00:50:25.200 --> 00:50:25.340
+Então,
+
+00:50:25.420 --> 00:50:26.020
+para ser honesto,
+
+00:50:26.040 --> 00:50:26.740
+em termos
+
+00:50:26.740 --> 00:50:28.300
+de gerenciamento
+
+00:50:28.300 --> 00:50:29.040
+de ciclo de vida
+
+00:50:29.040 --> 00:50:29.500
+de agentes
+
+00:50:29.500 --> 00:50:30.220
+e aplicações,
+
+00:50:30.620 --> 00:50:31.080
+é realmente
+
+00:50:31.080 --> 00:50:32.180
+o mesmo conceito
+
+00:50:32.180 --> 00:50:32.720
+de antes.
+
+00:50:33.720 --> 00:50:34.660
+E esse é um bom ponto
+
+00:50:34.660 --> 00:50:35.020
+para mim,
+
+00:50:35.140 --> 00:50:36.200
+porque você não precisa
+
+00:50:36.200 --> 00:50:37.760
+investir muito
+
+00:50:37.760 --> 00:50:38.340
+em termos
+
+00:50:38.340 --> 00:50:39.500
+de processos
+
+00:50:39.500 --> 00:50:40.380
+de ciclo de vida
+
+00:50:40.380 --> 00:50:42.540
+e coisas do tipo.
+
+00:50:43.580 --> 00:50:44.760
+Mas há algumas mudanças.
+
+00:50:44.840 --> 00:50:46.040
+E uma das grandes mudanças é
+
+00:50:46.040 --> 00:50:46.560
+ok,
+
+00:50:47.500 --> 00:50:48.540
+você precisa se preocupar
+
+00:50:48.540 --> 00:50:49.520
+com LLM,
+
+00:50:49.660 --> 00:50:50.280
+esse tipo de coisa,
+
+00:50:50.380 --> 00:50:51.420
+implantação, etc.
+
+00:50:51.680 --> 00:50:52.780
+Mas nos bastidores
+
+00:50:52.780 --> 00:50:54.960
+parece a abordagem
+
+00:50:54.960 --> 00:50:56.040
+de DevOps do passado,
+
+00:50:56.560 --> 00:50:57.340
+com pipelines
+
+00:50:57.340 --> 00:50:58.680
+e coisas do tipo.
+
+00:50:59.740 --> 00:50:59.900
+Então,
+
+00:50:59.940 --> 00:51:00.400
+na minha opinião,
+
+00:51:00.500 --> 00:51:01.020
+nada mudou
+
+00:51:01.020 --> 00:51:02.100
+que nós gerenciamos
+
+00:51:02.100 --> 00:51:03.100
+agentes,
+
+00:51:06.920 --> 00:51:07.700
+pode ser desenvolvimento
+
+00:51:07.700 --> 00:51:08.340
+customizado,
+
+00:51:08.440 --> 00:51:08.840
+copilot,
+
+00:51:08.960 --> 00:51:09.840
+você usa a mesma abordagem
+
+00:51:09.840 --> 00:51:10.180
+de antes
+
+00:51:10.180 --> 00:51:11.900
+para ser honesto
+
+00:51:11.900 --> 00:51:12.500
+hoje em dia.
+
+00:51:16.780 --> 00:51:18.620
+Isso significa
+
+00:51:18.620 --> 00:51:19.720
+que quando uma empresa
+
+00:51:19.720 --> 00:51:21.000
+não usava IA antes,
+
+00:51:21.240 --> 00:51:22.480
+mas tem a configuração
+
+00:51:22.480 --> 00:51:23.480
+perfeita
+
+00:51:23.480 --> 00:51:24.280
+para Purview,
+
+00:51:24.640 --> 00:51:25.120
+Defender
+
+00:51:25.120 --> 00:51:26.800
+e todas as outras
+
+00:51:26.800 --> 00:51:28.460
+Ferramender
+
+00:51:28.460 --> 00:51:29.560
+e todas as outras
+
+00:51:29.560 --> 00:51:30.420
+ferramentas,
+
+00:51:30.800 --> 00:51:34.500
+algo a mudar.
+
+00:51:34.500 --> 00:51:35.960
+ou isso significa
+
+00:51:35.960 --> 00:51:37.280
+que eles estão
+
+00:51:37.280 --> 00:51:38.200
+prontos para IA?
+
+00:51:41.920 --> 00:51:42.480
+Essa
+
+00:51:42.480 --> 00:51:44.040
+é uma grande questão,
+
+00:51:44.180 --> 00:51:44.900
+porque prontidão
+
+00:51:44.900 --> 00:51:45.380
+para IA,
+
+00:51:45.660 --> 00:51:46.960
+para a Microsoft
+
+00:51:46.960 --> 00:51:48.020
+está tudo bem.
+
+00:51:49.240 --> 00:51:50.300
+Se você ajustar
+
+00:51:50.300 --> 00:51:50.920
+permissões
+
+00:51:50.920 --> 00:51:51.460
+e gerenciar
+
+00:51:51.460 --> 00:51:51.900
+essas coisas,
+
+00:51:52.060 --> 00:51:52.240
+ok,
+
+00:51:53.400 --> 00:51:54.920
+mas prontidão
+
+00:51:54.920 --> 00:51:55.220
+para IA.
+
+00:51:55.360 --> 00:51:55.660
+Para mim,
+
+00:51:55.740 --> 00:51:56.300
+não é apenas
+
+00:51:56.300 --> 00:51:57.320
+uma abordagem técnica,
+
+00:51:58.220 --> 00:51:58.500
+porque
+
+00:51:58.500 --> 00:51:59.920
+tecnicamente
+
+00:51:59.920 --> 00:52:00.480
+nós sabemos
+
+00:52:00.480 --> 00:52:01.020
+o que fazer.
+
+00:52:01.960 --> 00:52:02.280
+Ok,
+
+00:52:02.700 --> 00:52:03.660
+precisamos gerenciar
+
+00:52:03.660 --> 00:52:04.200
+permissões
+
+00:52:04.200 --> 00:52:05.280
+em vários serviços,
+
+00:52:05.740 --> 00:52:06.020
+sabe?
+
+00:52:06.020 --> 00:52:08.140
+para mim,
+
+00:52:08.200 --> 00:52:08.660
+a prontidão
+
+00:52:08.660 --> 00:52:10.400
+também deve incluir
+
+00:52:10.400 --> 00:52:10.980
+os dados,
+
+00:52:11.160 --> 00:52:11.800
+entender os dados,
+
+00:52:11.920 --> 00:52:12.200
+entende?
+
+00:52:13.720 --> 00:52:14.200
+Porque
+
+00:52:14.200 --> 00:52:15.720
+quando você não
+
+00:52:15.720 --> 00:52:16.680
+entende seus dados,
+
+00:52:16.800 --> 00:52:17.640
+como eu disse antes,
+
+00:52:17.880 --> 00:52:18.820
+você não pode
+
+00:52:18.820 --> 00:52:20.340
+gerenciar
+
+00:52:20.340 --> 00:52:21.160
+a parte técnica,
+
+00:52:21.300 --> 00:52:21.580
+porque
+
+00:52:21.580 --> 00:52:23.480
+quando você não sabe
+
+00:52:23.480 --> 00:52:24.180
+o que é
+
+00:52:24.180 --> 00:52:25.200
+confidencial
+
+00:52:25.200 --> 00:52:25.760
+ou não,
+
+00:52:25.840 --> 00:52:26.340
+por exemplo,
+
+00:52:26.960 --> 00:52:28.680
+é difícil implementar
+
+00:52:28.680 --> 00:52:30.040
+alguma segurança,
+
+00:52:30.160 --> 00:52:30.640
+algumas medidas
+
+00:52:30.640 --> 00:52:31.340
+de segurança.
+
+00:52:31.340 --> 00:52:33.340
+mas se nós
+
+00:52:33.340 --> 00:52:33.980
+seguirmos
+
+00:52:33.980 --> 00:52:34.640
+a Microsoft,
+
+00:52:35.140 --> 00:52:35.980
+a prontidão
+
+00:52:35.980 --> 00:52:36.340
+para IA
+
+00:52:36.340 --> 00:52:37.060
+está tudo bem,
+
+00:52:37.220 --> 00:52:37.620
+você precisa
+
+00:52:37.620 --> 00:52:38.100
+gerenciar
+
+00:52:38.100 --> 00:52:38.840
+permissões,
+
+00:52:38.980 --> 00:52:39.340
+quer colocar
+
+00:52:39.340 --> 00:52:39.860
+rótulos de
+
+00:52:39.860 --> 00:52:40.640
+sensibilidade,
+
+00:52:41.040 --> 00:52:41.980
+você precisa
+
+00:52:41.980 --> 00:52:42.900
+fazer governança,
+
+00:52:43.260 --> 00:52:44.000
+esse tipo
+
+00:52:44.000 --> 00:52:44.500
+de coisa,
+
+00:52:44.760 --> 00:52:45.220
+esse tipo
+
+00:52:45.220 --> 00:52:45.580
+de coisa.
+
+00:52:46.920 --> 00:52:47.620
+Mas você
+
+00:52:47.620 --> 00:52:48.120
+também tem
+
+00:52:48.120 --> 00:52:48.860
+um aspecto
+
+00:52:48.860 --> 00:52:49.520
+mais
+
+00:52:49.520 --> 00:52:51.960
+de alto nível
+
+00:52:51.960 --> 00:52:52.400
+e para mim
+
+00:52:52.400 --> 00:52:53.060
+a prontidão
+
+00:52:53.060 --> 00:52:54.300
+para IA
+
+00:52:54.300 --> 00:52:55.180
+não é apenas
+
+00:52:55.180 --> 00:52:55.720
+técnica,
+
+00:52:56.120 --> 00:52:56.540
+você também
+
+00:52:56.540 --> 00:52:57.920
+tem um aspecto
+
+00:52:57.920 --> 00:52:58.700
+funcional
+
+00:52:58.700 --> 00:52:59.940
+ou de alto
+
+00:52:59.940 --> 00:53:00.420
+nível
+
+00:53:00.420 --> 00:53:01.680
+a considerar,
+
+00:53:01.940 --> 00:53:02.360
+para ser
+
+00:53:02.360 --> 00:53:03.020
+sincero,
+
+00:53:03.080 --> 00:53:03.680
+hoje em dia.
+
+00:53:07.100 --> 00:53:07.660
+Sim,
+
+00:53:07.860 --> 00:53:08.620
+isso é muito
+
+00:53:08.620 --> 00:53:09.200
+interessante.
+
+00:53:10.880 --> 00:53:11.440
+Eu acho
+
+00:53:11.440 --> 00:53:11.760
+que muitas
+
+00:53:11.760 --> 00:53:12.180
+empresas
+
+00:53:12.180 --> 00:53:12.820
+começaram
+
+00:53:12.820 --> 00:53:13.900
+com a IA,
+
+00:53:14.040 --> 00:53:14.500
+mas agora
+
+00:53:14.500 --> 00:53:15.320
+com os agentes,
+
+00:53:15.460 --> 00:53:16.100
+muitas empresas
+
+00:53:16.100 --> 00:53:16.480
+dizem,
+
+00:53:16.540 --> 00:53:17.200
+ela
+
+00:53:17.200 --> 00:53:19.160
+apagou
+
+00:53:19.160 --> 00:53:19.960
+todos os meus
+
+00:53:19.960 --> 00:53:20.900
+e-mails
+
+00:53:20.900 --> 00:53:21.240
+ou está
+
+00:53:21.240 --> 00:53:21.580
+fazendo
+
+00:53:21.580 --> 00:53:22.360
+algo
+
+00:53:22.360 --> 00:53:23.900
+maligno,
+
+00:53:23.900 --> 00:53:25.660
+algo maligno.
+
+00:53:28.530 --> 00:53:28.950
+O que você
+
+00:53:28.950 --> 00:53:29.510
+acha que as
+
+00:53:29.510 --> 00:53:30.310
+empresas dirão,
+
+00:53:30.470 --> 00:53:30.890
+elas têm
+
+00:53:30.890 --> 00:53:31.790
+medo da
+
+00:53:31.790 --> 00:53:32.130
+IA?
+
+00:53:32.130 --> 00:53:37.080
+é uma
+
+00:53:37.080 --> 00:53:37.760
+boa pergunta
+
+00:53:37.760 --> 00:53:38.200
+porque eu
+
+00:53:38.200 --> 00:53:38.560
+moro na
+
+00:53:38.560 --> 00:53:39.000
+Suíça
+
+00:53:39.000 --> 00:53:39.860
+e basicamente
+
+00:53:39.860 --> 00:53:41.040
+temos muitos
+
+00:53:41.040 --> 00:53:41.760
+bancos privados
+
+00:53:41.760 --> 00:53:42.060
+e temos
+
+00:53:42.060 --> 00:53:42.620
+muitos,
+
+00:53:43.340 --> 00:53:43.680
+para ser
+
+00:53:43.680 --> 00:53:44.060
+sincero,
+
+00:53:44.500 --> 00:53:45.100
+clientes
+
+00:53:45.100 --> 00:53:45.600
+realmente
+
+00:53:45.600 --> 00:53:46.860
+sensíveis
+
+00:53:46.860 --> 00:53:49.100
+e basicamente
+
+00:53:49.100 --> 00:53:49.720
+a parte
+
+00:53:49.720 --> 00:53:50.580
+mais crítica
+
+00:53:50.580 --> 00:53:50.880
+é,
+
+00:53:51.440 --> 00:53:51.720
+ok,
+
+00:53:51.940 --> 00:53:52.360
+onde os
+
+00:53:52.360 --> 00:53:52.580
+dados
+
+00:53:52.580 --> 00:53:52.800
+são
+
+00:53:52.800 --> 00:53:53.600
+processados
+
+00:53:53.600 --> 00:53:55.060
+para
+
+00:53:55.060 --> 00:53:56.800
+basicamente
+
+00:53:56.800 --> 00:53:57.760
+e é
+
+00:53:57.760 --> 00:53:57.980
+também,
+
+00:53:58.100 --> 00:53:58.280
+ok,
+
+00:53:58.700 --> 00:53:59.300
+a IA está
+
+00:53:59.300 --> 00:54:00.300
+pesquisando
+
+00:54:00.300 --> 00:54:00.680
+nos meus
+
+00:54:00.680 --> 00:54:01.120
+e-mails,
+
+00:54:02.120 --> 00:54:02.320
+esse tipo
+
+00:54:02.320 --> 00:54:02.580
+de coisa,
+
+00:54:03.020 --> 00:54:03.320
+então,
+
+00:54:04.000 --> 00:54:04.880
+nos bastidores
+
+00:54:04.880 --> 00:54:05.300
+eles sempre
+
+00:54:05.300 --> 00:54:05.800
+perguntam
+
+00:54:05.800 --> 00:54:06.100
+isso,
+
+00:54:06.200 --> 00:54:06.900
+mas sabe,
+
+00:54:07.360 --> 00:54:07.720
+a parte
+
+00:54:07.720 --> 00:54:08.640
+mais crítica
+
+00:54:08.640 --> 00:54:09.140
+para eles
+
+00:54:09.140 --> 00:54:09.740
+é,
+
+00:54:09.940 --> 00:54:10.100
+ok,
+
+00:54:10.220 --> 00:54:10.760
+eu preciso
+
+00:54:10.760 --> 00:54:11.420
+entender,
+
+00:54:12.180 --> 00:54:12.540
+ok,
+
+00:54:12.700 --> 00:54:13.180
+onde os
+
+00:54:13.180 --> 00:54:13.400
+dados
+
+00:54:13.400 --> 00:54:13.600
+são
+
+00:54:13.600 --> 00:54:14.360
+processados
+
+00:54:14.360 --> 00:54:15.600
+e também,
+
+00:54:16.100 --> 00:54:16.400
+ok,
+
+00:54:16.760 --> 00:54:18.600
+eu sou
+
+00:54:18.600 --> 00:54:20.020
+o
+
+00:54:20.020 --> 00:54:23.480
+dono da
+
+00:54:23.480 --> 00:54:23.620
+IA,
+
+00:54:25.220 --> 00:54:25.560
+então,
+
+00:54:26.780 --> 00:54:28.100
+eu dou a instrução
+
+00:54:28.100 --> 00:54:28.580
+para a IA
+
+00:54:28.580 --> 00:54:29.840
+e a IA nos bastidores
+
+00:54:29.840 --> 00:54:30.900
+fará o trabalho
+
+00:54:30.900 --> 00:54:31.680
+e eles
+
+00:54:31.680 --> 00:54:32.200
+têm medo
+
+00:54:32.200 --> 00:54:32.620
+por exemplo
+
+00:54:32.620 --> 00:54:33.120
+do aspecto
+
+00:54:33.120 --> 00:54:33.540
+autônomo
+
+00:54:33.540 --> 00:54:34.360
+porque hoje em dia
+
+00:54:34.360 --> 00:54:34.960
+ok,
+
+00:54:35.120 --> 00:54:35.580
+você pode
+
+00:54:35.580 --> 00:54:36.080
+ok,
+
+00:54:36.200 --> 00:54:36.780
+fazer isso
+
+00:54:36.780 --> 00:54:37.800
+e nos bastidores
+
+00:54:37.800 --> 00:54:38.360
+a IA
+
+00:54:38.360 --> 00:54:39.300
+buscará algo,
+
+00:54:39.600 --> 00:54:40.940
+fará uma consulta
+
+00:54:40.940 --> 00:54:42.600
+algo nos bastidores
+
+00:54:42.600 --> 00:54:44.340
+e eles têm medo
+
+00:54:44.340 --> 00:54:45.180
+de ok,
+
+00:54:45.540 --> 00:54:46.220
+quando eu peço
+
+00:54:46.220 --> 00:54:46.580
+para a IA
+
+00:54:46.580 --> 00:54:47.400
+fazer algo,
+
+00:54:48.020 --> 00:54:48.380
+o que
+
+00:54:48.380 --> 00:54:49.360
+ela executa
+
+00:54:49.360 --> 00:54:50.000
+nos bastidores
+
+00:54:50.000 --> 00:54:52.760
+e
+
+00:54:52.760 --> 00:54:53.540
+sim,
+
+00:54:53.600 --> 00:54:53.840
+há muitas
+
+00:54:53.840 --> 00:54:54.340
+perguntas
+
+00:54:54.340 --> 00:54:54.880
+como essa,
+
+00:54:55.500 --> 00:54:55.660
+ok,
+
+00:54:55.660 --> 00:54:57.900
+como eu assumo
+
+00:54:57.900 --> 00:54:58.440
+o controle
+
+00:54:58.440 --> 00:54:59.280
+de todo o processo
+
+00:54:59.280 --> 00:55:00.120
+por trás da coisa,
+
+00:55:00.320 --> 00:55:01.040
+seja um agente
+
+00:55:01.040 --> 00:55:01.400
+de IA
+
+00:55:01.400 --> 00:55:02.320
+ou de um serviço
+
+00:55:02.320 --> 00:55:02.740
+de IA,
+
+00:55:04.680 --> 00:55:04.960
+sim,
+
+00:55:05.080 --> 00:55:05.680
+existem algumas
+
+00:55:05.680 --> 00:55:06.620
+perguntas
+
+00:55:06.620 --> 00:55:07.640
+como essa,
+
+00:55:08.640 --> 00:55:09.400
+mas é realmente
+
+00:55:09.400 --> 00:55:10.080
+uma questão
+
+00:55:10.080 --> 00:55:11.880
+de adoção
+
+00:55:11.880 --> 00:55:13.460
+também de treinamento
+
+00:55:13.460 --> 00:55:14.660
+para implementar
+
+00:55:14.660 --> 00:55:15.480
+algum treinamento
+
+00:55:15.480 --> 00:55:16.000
+sobre,
+
+00:55:16.260 --> 00:55:16.520
+ok,
+
+00:55:17.020 --> 00:55:17.640
+como entender
+
+00:55:17.640 --> 00:55:18.140
+a IA,
+
+00:55:18.840 --> 00:55:19.320
+como entender
+
+00:55:19.320 --> 00:55:20.040
+o que é feito
+
+00:55:20.040 --> 00:55:20.620
+exatamente
+
+00:55:20.620 --> 00:55:21.880
+nos bastidores
+
+00:55:21.880 --> 00:55:24.520
+e a transparência
+
+00:55:24.520 --> 00:55:25.380
+também é um ponto
+
+00:55:25.380 --> 00:55:26.020
+importante
+
+00:55:26.020 --> 00:55:27.180
+porque a transparência
+
+00:55:27.180 --> 00:55:28.700
+precisa ser implementada
+
+00:55:28.700 --> 00:55:30.040
+em todas as soluções
+
+00:55:30.040 --> 00:55:30.400
+de IA
+
+00:55:30.400 --> 00:55:31.740
+porque a transparência
+
+00:55:31.740 --> 00:55:32.840
+é para mim
+
+00:55:32.840 --> 00:55:33.980
+um grande tópico
+
+00:55:33.980 --> 00:55:34.860
+já que você precisa
+
+00:55:34.860 --> 00:55:35.600
+implementar
+
+00:55:35.600 --> 00:55:36.900
+tudo
+
+00:55:36.900 --> 00:55:38.480
+porque sua solução
+
+00:55:38.480 --> 00:55:38.800
+de IA
+
+00:55:38.800 --> 00:55:40.460
+precisa ser transparente
+
+00:55:40.460 --> 00:55:42.860
+você precisa entender
+
+00:55:42.860 --> 00:55:43.420
+o que é feito
+
+00:55:43.420 --> 00:55:44.120
+nos bastidores
+
+00:55:44.120 --> 00:55:44.860
+quais dados
+
+00:55:44.860 --> 00:55:45.640
+são consultados
+
+00:55:45.640 --> 00:55:46.700
+você precisa rastrear
+
+00:55:46.700 --> 00:55:47.480
+precisa registrar
+
+00:55:47.480 --> 00:55:48.160
+tudo
+
+00:55:48.160 --> 00:55:50.160
+então tudo
+
+00:55:50.160 --> 00:55:51.480
+precisa ser transparente
+
+00:55:51.480 --> 00:55:52.060
+quando você tem
+
+00:55:52.060 --> 00:55:52.600
+uma solução
+
+00:55:52.600 --> 00:55:53.100
+hoje em dia
+
+00:55:53.100 --> 00:55:54.100
+porque você precisa
+
+00:55:54.100 --> 00:55:54.580
+entender
+
+00:55:54.580 --> 00:55:55.700
+exatamente
+
+00:55:55.700 --> 00:55:57.360
+o que é feito
+
+00:55:57.360 --> 00:55:57.880
+por trás
+
+00:55:57.880 --> 00:55:58.460
+quais dados
+
+00:55:58.460 --> 00:55:59.360
+são processados
+
+00:55:59.360 --> 00:56:00.500
+e qual é o raciocínio
+
+00:56:00.500 --> 00:56:00.940
+por trás
+
+00:56:00.940 --> 00:56:01.860
+de tudo
+
+00:56:01.860 --> 00:56:04.480
+como você gerou
+
+00:56:04.480 --> 00:56:05.020
+esse plano
+
+00:56:05.020 --> 00:56:06.680
+com base em quais fatos
+
+00:56:06.680 --> 00:56:07.780
+e esse tipo de coisa
+
+00:56:07.780 --> 00:56:10.380
+incrível
+
+00:56:10.380 --> 00:56:11.220
+vejo que estamos
+
+00:56:11.220 --> 00:56:11.980
+ficando um pouco
+
+00:56:11.980 --> 00:56:12.760
+sem tempo
+
+00:56:12.760 --> 00:56:14.380
+desculpa
+
+00:56:14.380 --> 00:56:15.800
+sabe
+
+00:56:15.800 --> 00:56:16.580
+isso foi realmente
+
+00:56:16.580 --> 00:56:17.160
+incrível
+
+00:56:17.160 --> 00:56:18.000
+mas eu tenho
+
+00:56:18.000 --> 00:56:18.820
+em todo o podcast
+
+00:56:18.820 --> 00:56:19.780
+uma rodada
+
+00:56:19.780 --> 00:56:20.780
+de perguntas rápidas
+
+00:56:20.780 --> 00:56:21.500
+então
+
+00:56:21.500 --> 00:56:23.860
+eu digo uma frase
+
+00:56:23.860 --> 00:56:24.540
+curta
+
+00:56:24.540 --> 00:56:25.160
+e você
+
+00:56:25.160 --> 00:56:26.120
+dá uma resposta
+
+00:56:26.120 --> 00:56:26.760
+curta
+
+00:56:26.760 --> 00:56:29.140
+então você está pronto
+
+00:56:29.140 --> 00:56:32.230
+copilot studio
+
+00:56:32.230 --> 00:56:33.170
+ou código personalizado
+
+00:56:33.170 --> 00:56:35.630
+copilot studio
+
+00:56:35.630 --> 00:56:37.450
+microsoft foundry
+
+00:56:37.450 --> 00:56:38.450
+ou copilot studio
+
+00:56:38.450 --> 00:56:41.130
+copilot studio
+
+00:56:41.130 --> 00:56:42.170
+typescript
+
+00:56:42.170 --> 00:56:42.810
+ou cshark
+
+00:56:42.810 --> 00:56:47.260
+github
+
+00:56:47.260 --> 00:56:47.980
+ou azure devops
+
+00:56:47.980 --> 00:56:49.500
+github
+
+00:56:49.500 --> 00:56:50.840
+rag
+
+00:56:50.840 --> 00:56:51.880
+ou ajuste fino
+
+00:56:51.880 --> 00:56:54.500
+tudo bem
+
+00:56:54.500 --> 00:56:56.580
+qual é a
+
+00:56:56.580 --> 00:56:57.540
+api do microsoft
+
+00:56:57.540 --> 00:56:58.400
+300 i5
+
+00:56:58.400 --> 00:56:59.740
+mais subestimada
+
+00:56:59.740 --> 00:57:05.300
+api de rag
+
+00:57:05.300 --> 00:57:08.020
+uma tecnologia
+
+00:57:08.020 --> 00:57:08.800
+que todo desenvolvedor
+
+00:57:08.800 --> 00:57:09.800
+microsoft deve aprender
+
+00:57:09.800 --> 00:57:10.480
+em 2026
+
+00:57:10.480 --> 00:57:13.450
+github copilot
+
+00:57:13.450 --> 00:57:16.780
+quando satia
+
+00:57:16.780 --> 00:57:17.480
+nadela
+
+00:57:17.480 --> 00:57:18.640
+chegar até você
+
+00:57:18.640 --> 00:57:19.900
+e disser que você
+
+00:57:19.900 --> 00:57:21.760
+tem todo o dinheiro
+
+00:57:21.760 --> 00:57:22.420
+e recursos
+
+00:57:22.420 --> 00:57:23.020
+que quiser
+
+00:57:23.020 --> 00:57:23.560
+para tornar
+
+00:57:23.560 --> 00:57:24.320
+nossa plataforma
+
+00:57:24.320 --> 00:57:24.720
+de iá
+
+00:57:24.720 --> 00:57:25.240
+melhor
+
+00:57:25.240 --> 00:57:26.840
+você pode desenvolver
+
+00:57:26.840 --> 00:57:27.440
+um recurso
+
+00:57:27.440 --> 00:57:28.320
+qual seria
+
+00:57:28.320 --> 00:57:30.400
+toda a parte
+
+00:57:30.400 --> 00:57:30.880
+de governança
+
+00:57:30.880 --> 00:57:31.440
+que precisamos
+
+00:57:31.440 --> 00:57:34.650
+e
+
+00:57:34.650 --> 00:57:37.530
+quem devo convidar
+
+00:57:37.530 --> 00:57:38.350
+para o próximo podcast
+
+00:57:38.350 --> 00:57:39.010
+e que pergunta
+
+00:57:39.010 --> 00:57:39.630
+devo fazer
+
+00:57:39.630 --> 00:57:48.720
+boa pergunta
+
+00:57:48.720 --> 00:57:50.420
+tenho muitos amigos
+
+00:57:50.420 --> 00:57:51.420
+mas sim
+
+00:57:51.420 --> 00:57:52.000
+talvez você
+
+00:57:52.000 --> 00:57:53.220
+possa perguntar
+
+00:57:53.220 --> 00:57:53.540
+para a minha
+
+00:57:53.540 --> 00:57:54.400
+copalestrante
+
+00:57:54.400 --> 00:57:56.040
+em muitas conferências
+
+00:57:56.040 --> 00:57:57.540
+você pode perguntar
+
+00:57:57.540 --> 00:57:57.860
+por exemplo
+
+00:57:57.860 --> 00:57:58.720
+para a Chloe Moro
+
+00:57:58.720 --> 00:58:00.900
+ela era consultora
+
+00:58:00.900 --> 00:58:01.740
+funcional
+
+00:58:01.740 --> 00:58:02.780
+antes de lidar
+
+00:58:02.780 --> 00:58:03.860
+com o lado técnico
+
+00:58:03.860 --> 00:58:04.340
+agora
+
+00:58:04.340 --> 00:58:07.700
+e ela tem uma história
+
+00:58:07.700 --> 00:58:08.500
+muito boa
+
+00:58:08.500 --> 00:58:10.120
+sobre coisas funcionais
+
+00:58:10.120 --> 00:58:11.260
+e menos técnicas
+
+00:58:11.260 --> 00:58:12.260
+no mundo dynamics
+
+00:58:12.260 --> 00:58:14.820
+então
+
+00:58:14.820 --> 00:58:15.960
+talvez você possa
+
+00:58:15.960 --> 00:58:16.600
+convidá-la
+
+00:58:16.600 --> 00:58:17.360
+e perguntar
+
+00:58:17.360 --> 00:58:17.660
+ok
+
+00:58:17.660 --> 00:58:18.780
+me diga
+
+00:58:18.780 --> 00:58:19.640
+hoje em dia
+
+00:58:19.640 --> 00:58:20.460
+como lidar
+
+00:58:20.460 --> 00:58:21.140
+entre o trabalho
+
+00:58:21.140 --> 00:58:22.340
+funcional e o técnico
+
+00:58:22.340 --> 00:58:22.760
+porque
+
+00:58:22.760 --> 00:58:23.900
+você tem alguns
+
+00:58:23.900 --> 00:58:24.660
+grandes desafios
+
+00:58:24.660 --> 00:58:24.920
+aí
+
+00:58:24.920 --> 00:58:28.100
+e minha
+
+00:58:28.100 --> 00:58:29.500
+pergunta de encerramento
+
+00:58:29.500 --> 00:58:30.340
+é o que as pessoas
+
+00:58:30.340 --> 00:58:31.500
+devem quando puderem
+
+00:58:31.500 --> 00:58:32.860
+levar um aprendizado
+
+00:58:32.860 --> 00:58:33.540
+desta sessão
+
+00:58:33.540 --> 00:58:34.320
+o que devem levar
+
+00:58:34.320 --> 00:58:38.740
+desta sessão
+
+00:58:38.740 --> 00:58:43.180
+basicamente
+
+00:58:43.180 --> 00:58:44.040
+a IA está evoluindo
+
+00:58:44.040 --> 00:58:44.580
+rápido
+
+00:58:44.580 --> 00:58:46.940
+e se você quiser
+
+00:58:46.940 --> 00:58:47.560
+estar atualizado
+
+00:58:47.560 --> 00:58:48.140
+hoje em dia
+
+00:58:48.140 --> 00:58:50.440
+você precisa acompanhar
+
+00:58:50.440 --> 00:58:51.700
+tudo
+
+00:58:51.700 --> 00:58:52.040
+porque
+
+00:58:52.040 --> 00:58:52.880
+hoje em dia
+
+00:58:52.880 --> 00:58:53.700
+a IA está realmente
+
+00:58:53.700 --> 00:58:54.240
+presente
+
+00:58:54.240 --> 00:58:55.860
+em toda a pilha
+
+00:58:55.860 --> 00:58:56.360
+da Microsoft
+
+00:58:56.360 --> 00:58:57.520
+para ser sincero
+
+00:58:57.520 --> 00:58:59.380
+e hoje em dia
+
+00:58:59.380 --> 00:59:00.220
+uma das coisas
+
+00:59:00.220 --> 00:59:00.680
+que você
+
+00:59:00.680 --> 00:59:01.780
+você precisa entender
+
+00:59:01.780 --> 00:59:02.520
+é que evolução
+
+00:59:02.520 --> 00:59:03.240
+é rápida
+
+00:59:03.240 --> 00:59:04.340
+você precisa
+
+00:59:04.340 --> 00:59:05.080
+estar atualizado
+
+00:59:05.080 --> 00:59:06.420
+o realmente
+
+00:59:06.420 --> 00:59:07.140
+o
+
+00:59:07.140 --> 00:59:08.980
+o tempo todo
+
+00:59:08.980 --> 00:59:09.320
+porque
+
+00:59:09.320 --> 00:59:10.060
+você
+
+00:59:10.060 --> 00:59:10.540
+você
+
+00:59:10.540 --> 00:59:12.340
+vai perder algo
+
+00:59:12.340 --> 00:59:13.100
+em algum momento
+
+00:59:13.100 --> 00:59:13.520
+se você
+
+00:59:13.520 --> 00:59:14.120
+se você não
+
+00:59:14.120 --> 00:59:15.980
+ou se você não
+
+00:59:15.980 --> 00:59:16.360
+aprender
+
+00:59:16.360 --> 00:59:17.360
+se você não entender
+
+00:59:17.360 --> 00:59:17.780
+evolução
+
+00:59:17.780 --> 00:59:18.440
+nesse sentido
+
+00:59:18.440 --> 00:59:21.410
+sim
+
+00:59:21.410 --> 00:59:22.190
+então sim
+
+00:59:22.190 --> 00:59:23.210
+obrigado por
+
+00:59:23.210 --> 00:59:23.950
+por se juntar
+
+00:59:23.950 --> 00:59:24.410
+a mim
+
+00:59:24.410 --> 00:59:26.250
+acho que a lição
+
+00:59:26.250 --> 00:59:26.870
+é importante
+
+00:59:26.870 --> 00:59:28.030
+desta conversa
+
+00:59:28.030 --> 00:59:29.150
+é que a extensibilidade
+
+00:59:29.150 --> 00:59:29.690
+do Microsoft
+
+00:59:29.690 --> 00:59:30.270
+305
+
+00:59:30.270 --> 00:59:30.770
+e Copilot
+
+00:59:30.770 --> 00:59:31.550
+não se resume
+
+00:59:31.550 --> 00:59:32.150
+simplesmente
+
+00:59:32.150 --> 00:59:32.870
+a escrever
+
+00:59:32.870 --> 00:59:33.310
+prompts
+
+00:59:33.310 --> 00:59:34.230
+cada vez mais
+
+00:59:34.230 --> 00:59:35.590
+sofisticados
+
+00:59:35.590 --> 00:59:37.310
+acho que estamos
+
+00:59:37.310 --> 00:59:37.670
+caminhando
+
+00:59:37.670 --> 00:59:38.070
+para uma
+
+00:59:38.070 --> 00:59:39.270
+arquitetura
+
+00:59:39.270 --> 00:59:40.470
+onde Copilot
+
+00:59:40.470 --> 00:59:41.150
+e a gente
+
+00:59:41.150 --> 00:59:41.910
+podem conectar
+
+00:59:41.910 --> 00:59:42.390
+o conhecimento
+
+00:59:42.390 --> 00:59:43.090
+da organização
+
+00:59:43.090 --> 00:59:44.370
+o Microsoft Graph
+
+00:59:44.370 --> 00:59:45.050
+EPIs
+
+00:59:45.050 --> 00:59:45.790
+de aplicativos
+
+00:59:45.790 --> 00:59:46.950
+de negócios
+
+00:59:46.950 --> 00:59:47.950
+e assim por diante
+
+00:59:47.950 --> 00:59:48.830
+e assim por diante
+
+00:59:48.830 --> 00:59:50.310
+sim
+
+00:59:50.310 --> 00:59:51.430
+acho que o Copilot
+
+00:59:51.430 --> 00:59:51.850
+Studio
+
+00:59:51.850 --> 00:59:52.990
+Microsoft Foundry
+
+00:59:52.990 --> 00:59:53.610
+o desenvolvimento
+
+00:59:53.610 --> 00:59:54.230
+personalizado
+
+00:59:54.230 --> 00:59:54.850
+e tecnologias
+
+00:59:54.850 --> 00:59:55.430
+como o MCP
+
+00:59:55.430 --> 00:59:57.190
+dão aos desenvolvedores
+
+00:59:57.190 --> 00:59:59.870
+uma caixa de ferramentas
+
+00:59:59.870 --> 01:00:00.750
+incrível e poderosa
+
+01:00:00.750 --> 01:00:02.430
+e sim
+
+01:00:02.430 --> 01:00:03.650
+mas quanto mais
+
+01:00:03.650 --> 01:00:06.450
+sim
+
+01:00:06.450 --> 01:00:07.270
+capazes os agentes
+
+01:00:07.270 --> 01:00:07.750
+se tornam
+
+01:00:07.750 --> 01:00:08.490
+mais importantes
+
+01:00:08.490 --> 01:00:09.050
+os fundamentos
+
+01:00:09.050 --> 01:00:09.730
+também se tornam
+
+01:00:09.730 --> 01:00:10.550
+identidade
+
+01:00:10.550 --> 01:00:11.130
+permissão
+
+01:00:11.130 --> 01:00:11.690
+segurança
+
+01:00:11.690 --> 01:00:12.170
+governança
+
+01:00:12.170 --> 01:00:12.690
+testes
+
+01:00:12.690 --> 01:00:13.530
+observabilidade
+
+01:00:13.530 --> 01:00:15.170
+gerenciamento
+
+01:00:15.170 --> 01:00:15.790
+do ciclo de vida
+
+01:00:15.790 --> 01:00:16.450
+de aplicativos
+
+01:00:16.450 --> 01:00:17.570
+e assim por diante
+
+01:00:17.570 --> 01:00:19.750
+então sim
+
+01:00:19.750 --> 01:00:20.170
+acho que você
+
+01:00:20.170 --> 01:00:21.010
+deu uma visão geral
+
+01:00:21.010 --> 01:00:22.130
+realmente muito boa
+
+01:00:22.130 --> 01:00:23.270
+de todos esses tópicos
+
+01:00:23.270 --> 01:00:25.050
+tão obrigado
+
+01:00:25.050 --> 01:00:26.610
+por se juntar a mim
+
+01:00:26.610 --> 01:00:27.650
+e pros ouvintes
+
+01:00:27.650 --> 01:00:28.430
+todas as informações
+
+01:00:28.430 --> 01:00:29.650
+sobre o
+
+01:00:29.650 --> 01:00:30.790
+você encontra nas notas
+
+01:00:30.790 --> 01:00:31.290
+do episódio
+
+01:00:31.290 --> 01:00:32.470
+na página do podcast
+
+01:00:32.470 --> 01:00:33.870
+MTZ5FM
+
+01:00:33.870 --> 01:00:35.590
+e o sim
+
+01:00:35.590 --> 01:00:36.690
+onde você pode se conectar
+
+01:00:36.690 --> 01:00:37.610
+ver o trabalho de Jesse
+
+01:00:37.610 --> 01:00:38.590
+e sim obrigado
+
+01:00:38.590 --> 01:00:39.830
+por estar aqui
+
+01:00:39.830 --> 01:00:41.830
+obrigado por me receber
+
+01:00:41.830 --> 01:00:42.910
+foi um tempo
+
+01:00:42.910 --> 01:00:43.730
+muito bom com você
+
+01:00:43.730 --> 01:00:45.110
+tchau
+
+01:00:45.110 --> 01:00:45.430
+tchau
+
+01:00:45.430 --> 01:00:45.730
+tchau
+
+01:00:45.730 --> 01:00:46.250
+tchau
+
+01:00:46.250 --> 01:00:46.510
+tchau

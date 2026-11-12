@@ -1,0 +1,3169 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:02.280
+Masalah Copilot Anda sebenarnya bukanlah masalah fitur.
+
+00:00:02.560 --> 00:00:04.040
+Ini adalah masalah kepercayaan pada model di balik.
+
+00:00:04.520 --> 00:00:05.980
+Kebanyakan tim masih berpikir keamanan
+
+00:00:05.980 --> 00:00:08.560
+ada pada prom, izin, dan beberapa filter di lapisan terluar.
+
+00:00:08.980 --> 00:00:09.700
+Namun kenyataannya,
+
+00:00:09.980 --> 00:00:11.320
+penyerang tidak perlu mengalahkan prom Anda,
+
+00:00:11.520 --> 00:00:13.120
+mereka hanya perlu memajuni konteks di sekitarnya,
+
+00:00:13.280 --> 00:00:14.240
+dan disitulah segalanya rusak.
+
+00:00:14.480 --> 00:00:16.020
+Filter dasar bisa menangkap sampah yang jelas,
+
+00:00:16.140 --> 00:00:17.940
+tetapi mereka melewatkan muatan tersembunyi di email,
+
+00:00:18.160 --> 00:00:19.720
+file SharePoint, atau bidang formulir.
+
+00:00:20.160 --> 00:00:21.960
+Konten yang diambil ini berdiam diri di sana,
+
+00:00:22.400 --> 00:00:24.220
+sampai Copilot menariknya dan memperlakukannya
+
+00:00:24.220 --> 00:00:25.100
+seperti instruksi langsung.
+
+00:00:25.300 --> 00:00:26.660
+Kita sudah melihat tanda-tanda peringatan
+
+00:00:26.660 --> 00:00:29.520
+dengan kebocoran Echo di Microsoft 3 dan Share di Copilot Studio
+
+00:00:29.520 --> 00:00:30.960
+dan kebocoran Share di Copilot Studio.
+
+00:00:31.040 --> 00:00:33.300
+Dan kenyatanya adalah bahwa penambahan tidak menghentikan pola tersebut.
+
+00:00:33.900 --> 00:00:35.240
+Karena Copilot dapat mencari,
+
+00:00:35.500 --> 00:00:37.680
+meringkas, dan bertindak di seluruh lingkungan Microsoft
+
+00:00:37.680 --> 00:00:40.240
+di galur instruksi yang buruk dapat menyebar dengan cepat.
+
+00:00:41.020 --> 00:00:43.340
+Jadi ini bukan tentang menambahkan dashboard lain ketumpukan Anda,
+
+00:00:43.660 --> 00:00:45.220
+tetapi tentang menempatkan Azure Dot tersebut
+
+00:00:45.220 --> 00:00:47.580
+untuk memeriksa, menilai, dan memblokir muatan berbahaya
+
+00:00:47.580 --> 00:00:48.580
+sebelum Copilot berjalan.
+
+00:00:49.400 --> 00:00:51.200
+Bahaya yang sebenarnya adalah arsitekturnya, bukan prom.
+
+00:00:51.440 --> 00:00:53.660
+Model lama berasumsi Anda bisa menjaga sistem tetap aman
+
+00:00:53.660 --> 00:00:55.460
+dengan menulis instruksi yang lebih baik di sekitar model.
+
+00:00:55.460 --> 00:00:57.080
+Anda memberinya prom sistem yang kuat,
+
+00:00:57.220 --> 00:00:58.180
+Anda menambahkan pembatas,
+
+00:00:58.300 --> 00:01:00.020
+dan Anda memberitahu pengguna apa yang tidak boleh dilakukan.
+
+00:01:00.280 --> 00:01:02.120
+Itu terdengar masuk akal di atas kertas,
+
+00:01:02.280 --> 00:01:04.180
+tetapi kenyataannya model tidak menegakkan
+
+00:01:04.180 --> 00:01:05.880
+batasan kepercayaan seperti sistem keamanan
+
+00:01:05.880 --> 00:01:07.880
+karena ia membaca bahasa dalam satu saluran bersama
+
+00:01:07.880 --> 00:01:10.460
+di mana instruksi dan data bersaing untuk mendapatkan perhatian.
+
+00:01:10.780 --> 00:01:11.620
+Asumsi itulah kelemahan.
+
+00:01:12.320 --> 00:01:14.080
+Jika model tidak dapat membedakan andal
+
+00:01:14.080 --> 00:01:16.260
+antara pengguna yang meminta bantuan dan dokumen
+
+00:01:16.260 --> 00:01:18.680
+yang diam-diam menyuruhnya mengabaikan instruksi sebelumnya,
+
+00:01:18.860 --> 00:01:21.160
+maka titik kontrol tidak bisa hanya berada di lapisan prom.
+
+00:01:21.980 --> 00:01:23.960
+Anda mencoba mengamankan perilaku di lapisan terluar
+
+00:01:23.960 --> 00:01:26.240
+sementara risiko sebenarnya terletak pada aliran konteks
+
+00:01:26.240 --> 00:01:26.940
+yang masuk ke model.
+
+00:01:27.700 --> 00:01:29.680
+Hal ini disadari oleh banyak tim setelah beban kerja
+
+00:01:29.680 --> 00:01:30.980
+Copilot yang berat dalam pengambilan data.
+
+00:01:31.240 --> 00:01:33.460
+Saat Copilot mulai menarik data dari email,
+
+00:01:33.640 --> 00:01:35.360
+file, dan riwayat obrolan Microsoft Graph,
+
+00:01:35.480 --> 00:01:36.940
+permukaan serangan berubah sepenuhnya.
+
+00:01:37.600 --> 00:01:39.380
+Anda tidak lagi hanya mengamankan percakapan,
+
+00:01:39.380 --> 00:01:40.860
+Anda mengamankan aliran langsung input
+
+00:01:40.860 --> 00:01:41.980
+dengan tingkat kepercayaan yang berakhir.
+
+00:01:42.500 --> 00:01:43.380
+Dan satu tingkat lebih dalam,
+
+00:01:43.520 --> 00:01:44.540
+Copilot meningkat kenjangkauan.
+
+00:01:45.020 --> 00:01:46.300
+Ia tidak hanya menjawab pertanyaan,
+
+00:01:46.400 --> 00:01:48.480
+ia mengambil, meringkas, dan mengikuti referensi.
+
+00:01:49.060 --> 00:01:49.940
+Dalam beberapa pengaturan,
+
+00:01:50.040 --> 00:01:51.320
+ia bahkan dapat memicu alat atau alur.
+
+00:01:51.320 --> 00:01:53.320
+Jadi ketika konten yang tidak dipercaya
+
+00:01:53.320 --> 00:01:54.320
+yang masuk ke dalam rantai itu,
+
+00:01:54.440 --> 00:01:55.920
+model dapat membawa pengaruh tersebut
+
+00:01:55.920 --> 00:01:56.800
+ke tindakan sensitif.
+
+00:01:57.280 --> 00:01:58.240
+Itulah mengapa injeksi PROM
+
+00:01:58.240 --> 00:01:59.400
+tidak langsung sangat penting saat ini.
+
+00:02:00.100 --> 00:02:00.920
+Dalam sistem produksi,
+
+00:02:01.020 --> 00:02:02.420
+serangan umum tidak selalu berubah pengguna
+
+00:02:02.420 --> 00:02:03.560
+yang mengetik abaikan aturan Anda
+
+00:02:03.560 --> 00:02:04.280
+ke dalam kotak obrol.
+
+00:02:04.980 --> 00:02:05.900
+Versi yang lebih berbahaya
+
+00:02:05.900 --> 00:02:07.780
+ada di dalam konten yang diambil seringkali,
+
+00:02:08.100 --> 00:02:09.980
+berminggu-minggu sebelum ada yang menyadarinya.
+
+00:02:10.600 --> 00:02:12.460
+Dokumen beracun, email yang dibuat khusus,
+
+00:02:12.600 --> 00:02:13.900
+atau entry formulir mungkin tampak
+
+00:02:13.900 --> 00:02:14.980
+tidak berbahaya bagi manusia,
+
+00:02:15.100 --> 00:02:16.040
+tetapi mengandung instruksi
+
+00:02:16.040 --> 00:02:17.220
+yang ditujukan langsung ke model.
+
+00:02:17.220 --> 00:02:19.840
+Kemudian, co-pilot mengambil konten tersebut
+
+00:02:19.840 --> 00:02:20.960
+sebagai konteks yang relevan,
+
+00:02:21.080 --> 00:02:22.460
+memadukannya dengan materi terpercaya,
+
+00:02:22.640 --> 00:02:23.820
+dan model mengikuti hal yang salah.
+
+00:02:24.280 --> 00:02:25.320
+Rantai serangannya sederhana,
+
+00:02:25.520 --> 00:02:26.680
+dan itulah yang membuatnya berbahaya.
+
+00:02:27.280 --> 00:02:28.660
+Pertama, penyerang menempatkan konten
+
+00:02:28.660 --> 00:02:30.280
+di tempat yang nantinya bisa dijangkau co-pilot.
+
+00:02:30.720 --> 00:02:32.040
+Lalu pengambilan membawa konten itu
+
+00:02:32.040 --> 00:02:32.600
+ke dalam sesi,
+
+00:02:32.800 --> 00:02:34.200
+kemudian model memperlakukan pilot
+
+00:02:34.200 --> 00:02:35.440
+sebagai instruksi bukan data.
+
+00:02:36.380 --> 00:02:36.880
+Setelah itu,
+
+00:02:37.140 --> 00:02:38.780
+ia bisa mulai mengatur informasi sensitif,
+
+00:02:38.920 --> 00:02:39.560
+membentuk respons,
+
+00:02:39.740 --> 00:02:41.600
+atau mendorong data ke jalur eksfiltrasi
+
+00:02:41.600 --> 00:02:43.240
+melalui tautan atau penggunaan alat.
+
+00:02:43.240 --> 00:02:45.300
+Jadi, bagi para pemimpin,
+
+00:02:45.360 --> 00:02:46.460
+ini bukan sekadar kebersihan AI,
+
+00:02:46.600 --> 00:02:47.380
+melainkan kontrol runtime
+
+00:02:47.380 --> 00:02:48.680
+yang terikat langsung pada tata kelolaks.
+
+00:02:49.360 --> 00:02:50.920
+Jika co-pilot memiliki jangkauan luas
+
+00:02:50.920 --> 00:02:51.620
+di seluruh penyewa,
+
+00:02:51.720 --> 00:02:52.800
+dan model menggunakan konteks
+
+00:02:52.800 --> 00:02:54.680
+kepercayaan campuran tanpa pemisahan yang ketat,
+
+00:02:55.180 --> 00:02:56.680
+model keamanan Anda harus memperhitungkan
+
+00:02:56.680 --> 00:02:58.260
+apa yang masuk ke alur sebelum eksekusi.
+
+00:02:58.940 --> 00:02:59.620
+Setelah Anda melihatnya,
+
+00:02:59.660 --> 00:03:00.340
+perbaikannya juga baru.
+
+00:03:00.740 --> 00:03:02.540
+Anda berhenti terobsesi dengan prompt yang sempurna,
+
+00:03:02.740 --> 00:03:03.780
+dan mulai menerapkan penegakan
+
+00:03:03.780 --> 00:03:04.760
+di tempat konteks bergerak.
+
+00:03:05.740 --> 00:03:07.120
+Mengapa pertanda sergagal dalam produksi?
+
+00:03:07.740 --> 00:03:09.120
+Kebanyakan tim membuat kesalahan
+
+00:03:09.120 --> 00:03:09.940
+mendasar sejak awal.
+
+00:03:10.460 --> 00:03:11.680
+Mereka berasumsi kontrol keamanan
+
+00:03:11.680 --> 00:03:12.960
+yang telah mereka gunakan bertahun-tahun
+
+00:03:12.960 --> 00:03:13.940
+dalam pengembangan aplikasi
+
+00:03:13.940 --> 00:03:15.400
+akan berfungsi sama baiknya untuk kopi.
+
+00:03:15.440 --> 00:03:16.600
+Mereka menulis prompt system
+
+00:03:16.600 --> 00:03:17.240
+yang lebih kuat,
+
+00:03:17.340 --> 00:03:18.260
+memungkus input pengguna
+
+00:03:18.260 --> 00:03:19.140
+dengan karakter khusus,
+
+00:03:19.220 --> 00:03:20.400
+dan merebitkan pedoman karyawan,
+
+00:03:20.540 --> 00:03:21.380
+lalu mereka merasa aman.
+
+00:03:21.820 --> 00:03:23.000
+Langkah-langkah itu tidak buruk,
+
+00:03:23.240 --> 00:03:24.200
+dan saya tidak akan menyuruh Anda
+
+00:03:24.200 --> 00:03:24.940
+berhenti melakukannya,
+
+00:03:25.060 --> 00:03:25.920
+tetapi itu tidak menciptakan
+
+00:03:25.920 --> 00:03:26.620
+batasan keamanannya.
+
+00:03:26.920 --> 00:03:27.640
+Mereka hanya mencoba
+
+00:03:27.640 --> 00:03:29.000
+membujuk model untuk berperilaku,
+
+00:03:29.120 --> 00:03:29.820
+dan dalam keamanan,
+
+00:03:29.880 --> 00:03:31.200
+persuasi tidak sama dengan penegakan.
+
+00:03:31.600 --> 00:03:32.460
+Disitulah kesenyangannya berada.
+
+00:03:39.120 --> 00:03:40.400
+file itu ditarik ke ruang kerja.
+
+00:03:41.320 --> 00:03:42.040
+Menggunakan pembatas
+
+00:03:42.040 --> 00:03:43.260
+mungkin membantu menyusun teks,
+
+00:03:43.380 --> 00:03:44.460
+tetapi tidak memberi model cara
+
+00:03:44.460 --> 00:03:45.700
+untuk memeriksa izin keamanan.
+
+00:03:46.120 --> 00:03:47.040
+Panduan karyawan bagus
+
+00:03:47.040 --> 00:03:48.160
+untuk menghentikan kesalahan
+
+00:03:48.160 --> 00:03:48.920
+yang tidak disengaja,
+
+00:03:49.060 --> 00:03:49.760
+tetapi sama sekali
+
+00:03:49.760 --> 00:03:50.700
+tidak berpengaruh terhadap
+
+00:03:50.700 --> 00:03:51.760
+dokumen beracun atau pelu
+
+00:03:51.760 --> 00:03:53.140
+tersembunyi dalam data yang Anda ambil.
+
+00:03:53.960 --> 00:03:55.380
+Kontrol tersebut ada sebagai saran,
+
+00:03:55.480 --> 00:03:56.400
+bukan sebagai aturan ketat
+
+00:03:56.400 --> 00:03:57.340
+yang berjalan saat ekskusi.
+
+00:03:57.720 --> 00:03:58.740
+Regex memiliki masalah instruksi.
+
+00:03:59.100 --> 00:04:00.060
+Regex cepat dan murah,
+
+00:04:00.160 --> 00:04:00.860
+jadi layak digunakan
+
+00:04:00.860 --> 00:04:01.840
+sebagai pemeriksaan awalnya.
+
+00:04:02.380 --> 00:04:03.560
+Jika pengguna mengetik abaikan
+
+00:04:03.560 --> 00:04:04.700
+semua instruksi sebelumnya,
+
+00:04:04.700 --> 00:04:05.840
+sistem Anda harus menangkapnya
+
+00:04:05.840 --> 00:04:06.800
+dalam beberapa mili detik.
+
+00:04:07.180 --> 00:04:08.360
+Anda juga dapat menggunakannya
+
+00:04:08.360 --> 00:04:09.000
+untuk menandai
+
+00:04:09.000 --> 00:04:10.340
+rasa pintasan privasi yang jelas
+
+00:04:10.340 --> 00:04:11.360
+atau karakter gaya SQL
+
+00:04:11.360 --> 00:04:12.280
+dalam argumen alat Anda.
+
+00:04:12.640 --> 00:04:13.960
+Bagian itu berfungsi dengan baik,
+
+00:04:14.120 --> 00:04:15.200
+namun regex hanya mengenali
+
+00:04:15.200 --> 00:04:16.380
+pola yang telah Anda tentukan,
+
+00:04:16.520 --> 00:04:17.640
+sehingga gagal saat kata-kata
+
+00:04:17.640 --> 00:04:18.240
+sedikit berubah
+
+00:04:18.240 --> 00:04:19.340
+atau saat serangan didasarkan
+
+00:04:19.340 --> 00:04:20.800
+pada makna alih-alih kata-kata tertentu.
+
+00:04:21.180 --> 00:04:21.680
+Ini adalah sebabnya Anda
+
+00:04:21.680 --> 00:04:22.720
+menggunakan lapisan mengklasifikasi.
+
+00:04:22.900 --> 00:04:23.960
+Azure Eye Content Safety
+
+00:04:23.960 --> 00:04:24.980
+memiliki perisai PROM
+
+00:04:24.980 --> 00:04:26.080
+yang dapat mendeteksi serangan
+
+00:04:26.080 --> 00:04:27.480
+injeksi langsung maupun tidak langsung.
+
+00:04:27.980 --> 00:04:28.640
+Dalam Logic App,
+
+00:04:28.740 --> 00:04:29.640
+Anda bisa memanggil API
+
+00:04:29.640 --> 00:04:30.480
+untuk memeriksa PROM
+
+00:04:30.480 --> 00:04:31.500
+sebelum model melihatnya,
+
+00:04:31.680 --> 00:04:32.720
+lalu mengubah alur kerja
+
+00:04:32.720 --> 00:04:34.000
+jika serangan terdeteksi.
+
+00:04:35.200 --> 00:04:36.400
+Ini adalah kontrol yang jauh
+
+00:04:36.400 --> 00:04:37.140
+lebih kuat daripada
+
+00:04:37.140 --> 00:04:38.260
+pencocokan string sederhana
+
+00:04:38.260 --> 00:04:39.080
+karena mencari maksud
+
+00:04:39.080 --> 00:04:39.680
+dibalik kata-kata
+
+00:04:39.680 --> 00:04:40.220
+di seluruh PROM
+
+00:04:40.220 --> 00:04:41.260
+dan dokumen secara bersamaan.
+
+00:04:41.860 --> 00:04:42.400
+Meski begitu,
+
+00:04:42.680 --> 00:04:43.640
+deteksi saja tidak cukup
+
+00:04:43.640 --> 00:04:44.380
+karena melihat risiko
+
+00:04:44.380 --> 00:04:45.100
+tidak ada gunanya
+
+00:04:45.100 --> 00:04:46.180
+jika Anda tidak punya cara
+
+00:04:46.180 --> 00:04:46.900
+untuk menghentikannya.
+
+00:04:47.400 --> 00:04:48.880
+Keamanan seringkali meremehkan
+
+00:04:48.880 --> 00:04:50.380
+bagian spesifik dari proses ini.
+
+00:04:51.400 --> 00:04:52.220
+Peringatan di file lock
+
+00:04:52.220 --> 00:04:53.080
+bukanlah penahanan
+
+00:04:53.080 --> 00:04:54.480
+dan tampilan dashboard yang cantik
+
+00:04:54.480 --> 00:04:55.580
+juga bukan penahanan.
+
+00:04:56.480 --> 00:04:58.260
+Bahkan peringatan prioritas tinggi
+
+00:04:58.260 --> 00:04:59.520
+di CM Anda tetap gagal
+
+00:04:59.520 --> 00:05:00.580
+jika pilot telah bergerak
+
+00:05:00.580 --> 00:05:01.240
+melalui co-pilot
+
+00:05:01.240 --> 00:05:02.080
+dan memicu tindakan
+
+00:05:02.080 --> 00:05:02.820
+di sistem hilir.
+
+00:05:03.500 --> 00:05:04.520
+Meninjau apa yang terjadi
+
+00:05:04.520 --> 00:05:05.260
+setelahnya berguna
+
+00:05:05.260 --> 00:05:06.060
+untuk investigasi
+
+00:05:06.060 --> 00:05:07.020
+tetapi tidak cukup baik
+
+00:05:07.020 --> 00:05:07.860
+saat serangan terjadi
+
+00:05:07.860 --> 00:05:08.540
+dalam hitungan detik.
+
+00:05:09.180 --> 00:05:10.060
+Anda berurusan dengan model
+
+00:05:10.060 --> 00:05:10.820
+yang dapat bertindak
+
+00:05:10.820 --> 00:05:11.360
+di dalam sistem
+
+00:05:11.360 --> 00:05:11.980
+yang sudah dipercaya
+
+00:05:11.980 --> 00:05:12.700
+organisasi Anda.
+
+00:05:13.320 --> 00:05:13.960
+Ada juga masalah
+
+00:05:13.960 --> 00:05:14.740
+dengan negatif palsu
+
+00:05:14.740 --> 00:05:15.440
+yang diabaikan oleh
+
+00:05:15.440 --> 00:05:16.500
+sebagian besar pemasaran produk.
+
+00:05:17.160 --> 00:05:17.920
+Serangan tidak langsung
+
+00:05:17.920 --> 00:05:19.500
+menyebabkan sebagian besar deteksi
+
+00:05:19.500 --> 00:05:20.780
+yang terlewat di dunia nyata
+
+00:05:20.780 --> 00:05:21.920
+karena instruksi berbahaya
+
+00:05:21.920 --> 00:05:22.580
+terlihat normal
+
+00:05:22.580 --> 00:05:23.900
+sampai model menggabungkannya
+
+00:05:23.900 --> 00:05:25.100
+dengan sisa percakapan.
+
+00:05:28.260 --> 00:05:29.340
+Kesalahan input buruk tersebut
+
+00:05:29.340 --> 00:05:30.500
+sudah menyelesaikan tugasnya.
+
+00:05:31.120 --> 00:05:31.660
+Kesalahan praktis
+
+00:05:31.660 --> 00:05:32.400
+di sini sangat sederhana.
+
+00:05:32.740 --> 00:05:33.620
+Tim menghabiskan seluruh waktu
+
+00:05:33.620 --> 00:05:34.280
+mereka mengawasi
+
+00:05:34.280 --> 00:05:35.200
+apa yang dikatakan co-pilot
+
+00:05:35.200 --> 00:05:36.300
+tetapi mereka tidak mengontrol
+
+00:05:36.300 --> 00:05:37.080
+apa yang masuk ke dalamnya
+
+00:05:37.080 --> 00:05:37.740
+dengan disiplin yang sama.
+
+00:05:38.040 --> 00:05:39.080
+Mereka memeriksa jawaban
+
+00:05:39.080 --> 00:05:39.840
+setelah dihasilkan
+
+00:05:39.840 --> 00:05:40.840
+sambil membiarkan materi
+
+00:05:40.840 --> 00:05:41.700
+yang tidak terpercaya masuk
+
+00:05:41.700 --> 00:05:42.600
+sebelum pekerjaan dimulai.
+
+00:05:43.000 --> 00:05:44.160
+Urutan itu benar-benar terbalik.
+
+00:05:44.640 --> 00:05:45.380
+Setelah Anda mengenali
+
+00:05:45.380 --> 00:05:46.120
+kekurangan tersebut
+
+00:05:46.120 --> 00:05:47.340
+seluruh tujuan strategi
+
+00:05:47.340 --> 00:05:48.340
+keamanan Anda berubah.
+
+00:05:48.900 --> 00:05:49.780
+Anda berhenti bertanya
+
+00:05:49.780 --> 00:05:50.800
+bagaimana cara menulis
+
+00:05:50.800 --> 00:05:51.480
+prom yang lebih aman
+
+00:05:51.480 --> 00:05:52.100
+dan mulai bertanya
+
+00:05:52.100 --> 00:05:52.780
+di mana Anda bisa
+
+00:05:52.780 --> 00:05:53.580
+mencegat data sebelum
+
+00:05:53.580 --> 00:05:55.220
+menerima model logic app firewall.
+
+00:05:55.980 --> 00:05:57.220
+Jika pencegatan adalah tujuannya
+
+00:05:57.220 --> 00:05:57.820
+kita perlu melihat
+
+00:05:57.820 --> 00:05:58.660
+seperti apa kontrol itu
+
+00:05:58.660 --> 00:05:59.560
+sebenarnya dalam praktek.
+
+00:06:00.200 --> 00:06:00.940
+Anda harus menggunakan
+
+00:06:00.940 --> 00:06:01.740
+Azure logic apps
+
+00:06:01.740 --> 00:06:02.760
+bagi lapisan kebijakan
+
+00:06:02.760 --> 00:06:03.560
+yang berada di depan
+
+00:06:03.560 --> 00:06:04.240
+fase eksekusi.
+
+00:06:04.840 --> 00:06:05.500
+Itu seharusnya bukan
+
+00:06:05.500 --> 00:06:06.560
+alat pasif yang mengirimkan
+
+00:06:06.560 --> 00:06:07.760
+laporan setelah kerusakan terjadi.
+
+00:06:08.240 --> 00:06:09.320
+Anda perlu menempatkannya langsung
+
+00:06:09.320 --> 00:06:10.280
+di jalur tempat input
+
+00:06:10.280 --> 00:06:11.020
+pengguna dan data
+
+00:06:11.020 --> 00:06:11.680
+yang diambil berada
+
+00:06:11.680 --> 00:06:12.480
+sehingga dapat diperiksa
+
+00:06:12.480 --> 00:06:13.600
+sebelum model mulai bekerja.
+
+00:06:14.480 --> 00:06:15.460
+Perubahan ini sangat kuat
+
+00:06:15.460 --> 00:06:16.280
+karena apps dibangun
+
+00:06:16.280 --> 00:06:17.220
+untuk orkestrasi.
+
+00:06:17.220 --> 00:06:18.680
+Ini dapat memicu
+
+00:06:18.680 --> 00:06:19.460
+peristiwa tertentu
+
+00:06:19.460 --> 00:06:20.760
+memanggil API lain
+
+00:06:20.760 --> 00:06:21.640
+dan membuat keputusan
+
+00:06:21.640 --> 00:06:23.200
+berdasarkan kondisi yang kompleks.
+
+00:06:24.140 --> 00:06:25.140
+Anda dapat merutekan data
+
+00:06:25.140 --> 00:06:25.800
+mengirim peringatan
+
+00:06:25.800 --> 00:06:26.560
+ke Microsoft Sentinel
+
+00:06:26.560 --> 00:06:27.780
+dan memperkaya proses
+
+00:06:27.780 --> 00:06:28.620
+dengan informasi luar
+
+00:06:28.620 --> 00:06:29.440
+tanpa perlu membangun
+
+00:06:29.440 --> 00:06:30.960
+gateway keamanan khusus dari awal.
+
+00:06:31.740 --> 00:06:32.560
+Anda tidak sedang mencoba
+
+00:06:32.560 --> 00:06:33.460
+menggantikan copelo di sini.
+
+00:06:33.900 --> 00:06:34.860
+Anda hanya menyisipkan
+
+00:06:34.860 --> 00:06:35.620
+lapisan kontrol
+
+00:06:35.620 --> 00:06:36.900
+ke dalam alur di sekitarnya.
+
+00:06:37.460 --> 00:06:38.320
+Logika dibalik model ini
+
+00:06:38.320 --> 00:06:39.220
+dibuat sederhana dengan sengat.
+
+00:06:39.540 --> 00:06:40.600
+Pertama Anda micu prosesnya
+
+00:06:40.600 --> 00:06:41.740
+lalu Anda menormalisasi data.
+
+00:06:41.960 --> 00:06:42.980
+Anda memeriksanya
+
+00:06:42.980 --> 00:06:43.940
+menilai risikonya
+
+00:06:43.940 --> 00:06:44.680
+membuat keputusan
+
+00:06:44.680 --> 00:06:45.400
+dan akhirnya merutekan
+
+00:06:45.400 --> 00:06:46.080
+atau mencatat hasil.
+
+00:06:46.360 --> 00:06:47.180
+Itulah keseluruhan polanya.
+
+00:06:47.860 --> 00:06:48.540
+Saat permintaan
+
+00:06:48.540 --> 00:06:49.760
+atau konten masuk ke alur kerja
+
+00:06:49.760 --> 00:06:50.500
+Logic App menarik
+
+00:06:50.500 --> 00:06:51.120
+payload tersebut
+
+00:06:51.120 --> 00:06:52.380
+dan menstandardisasinya.
+
+00:06:53.160 --> 00:06:53.940
+Input mentah biasanya
+
+00:06:53.940 --> 00:06:54.760
+berantakan karena konektor
+
+00:06:54.760 --> 00:06:55.720
+yang berbeda menangani data
+
+00:06:55.720 --> 00:06:56.680
+dengan cara yang berbeda pula.
+
+00:06:57.480 --> 00:06:58.320
+Innel terlihat berbeda
+
+00:06:58.320 --> 00:06:59.160
+dari entry formulir
+
+00:06:59.160 --> 00:06:59.880
+dan konten file
+
+00:06:59.880 --> 00:07:00.940
+atau argumen alat semuanya
+
+00:07:00.940 --> 00:07:01.620
+disertai metadata
+
+00:07:01.620 --> 00:07:02.660
+dan kolom yang berbeda.
+
+00:07:03.220 --> 00:07:03.880
+Jika Anda mencoba
+
+00:07:03.880 --> 00:07:04.920
+menjalankan pemeriksaan
+
+00:07:04.920 --> 00:07:06.360
+sebelum menormalisasi data tersebut
+
+00:07:06.360 --> 00:07:07.280
+sistem deteksi Anda
+
+00:07:07.280 --> 00:07:08.200
+akan sangat berisik.
+
+00:07:08.660 --> 00:07:09.480
+Telah payload diratakan
+
+00:07:09.480 --> 00:07:10.620
+menjadi format yang konsisten
+
+00:07:10.620 --> 00:07:12.020
+tahap pemeriksaan pertama dimulai.
+
+00:07:15.400 --> 00:07:16.560
+Akhir atau perbaikan ajaib
+
+00:07:16.560 --> 00:07:18.000
+tetapi berfungsi sebagai filter
+
+00:07:18.000 --> 00:07:19.160
+yang sangat cepat di tepi sistem Anda.
+
+00:07:19.460 --> 00:07:20.320
+Anda dapat dengan cepat
+
+00:07:20.320 --> 00:07:21.400
+memindai bahasa penggantian
+
+00:07:21.400 --> 00:07:21.920
+diketahui,
+
+00:07:22.060 --> 00:07:22.760
+petunjuk pengodean
+
+00:07:22.760 --> 00:07:23.680
+atau pola mencurigakan
+
+00:07:23.680 --> 00:07:24.540
+dalam parameter alat
+
+00:07:24.540 --> 00:07:25.800
+untuk mendapatkan triasi instan
+
+00:07:25.800 --> 00:07:26.620
+atas situasi tersebut.
+
+00:07:27.320 --> 00:07:27.940
+Kemudian Anda beralih
+
+00:07:27.940 --> 00:07:28.820
+ke tahap pemeriksaan kedua
+
+00:07:28.820 --> 00:07:30.100
+yang masuk jauh lebih dalam konten.
+
+00:07:30.860 --> 00:07:32.040
+Disinilah Anda memanggil
+
+00:07:32.040 --> 00:07:33.120
+perisai prom keamanan
+
+00:07:33.120 --> 00:07:33.840
+konten Azure AI.
+
+00:07:34.480 --> 00:07:34.940
+Logic App
+
+00:07:34.940 --> 00:07:36.240
+mengirimkan prom pengguna
+
+00:07:36.240 --> 00:07:37.820
+dan dokumen yang diambil ke API
+
+00:07:37.820 --> 00:07:39.120
+lalu bercabang berdasarkan
+
+00:07:39.120 --> 00:07:40.300
+apakah serangan terdeteksi.
+
+00:07:41.040 --> 00:07:42.240
+Ini penting karena injeksi prom
+
+00:07:42.240 --> 00:07:43.120
+tidak selalu terlihat
+
+00:07:43.120 --> 00:07:44.460
+seperti kode komputer yang jelas.
+
+00:07:45.520 --> 00:07:46.200
+Terkadang bahaya
+
+00:07:46.200 --> 00:07:47.040
+hanya menjadi jelas
+
+00:07:47.040 --> 00:07:48.100
+ketika prom dan dokumen
+
+00:07:48.100 --> 00:07:49.700
+dievaluasi sebagai satu kesatuan.
+
+00:07:50.140 --> 00:07:51.080
+Ada satu lapisan lagi
+
+00:07:51.080 --> 00:07:52.160
+yang mengubah ini
+
+00:07:52.160 --> 00:07:53.040
+dari filter sederhana
+
+00:07:53.040 --> 00:07:54.220
+menjadi kontrol keamanan nyata
+
+00:07:54.220 --> 00:07:55.340
+yaitu intelijen ancaman.
+
+00:07:55.720 --> 00:07:56.520
+Jika suatu konten
+
+00:07:56.520 --> 00:07:57.700
+mereferensikan domain berbahaya
+
+00:07:57.700 --> 00:07:58.160
+yang diketahui
+
+00:07:58.160 --> 00:07:59.120
+atau URL mencurigakan
+
+00:07:59.120 --> 00:08:00.420
+yang pernah dilihat tim Anda sebelumnya
+
+00:08:00.420 --> 00:08:01.600
+itu harus mengubah keputusan Anda.
+
+00:08:01.880 --> 00:08:02.740
+Logic App dapat meriksa
+
+00:08:02.740 --> 00:08:03.280
+peristiwa tersebut
+
+00:08:03.280 --> 00:08:04.480
+terhadap intelijen ancaman defender
+
+00:08:04.480 --> 00:08:05.580
+atau fit pihak ketiga lainnya
+
+00:08:05.580 --> 00:08:06.800
+untuk menambahkan skor kepercayaan
+
+00:08:06.800 --> 00:08:07.440
+pada risiko tersebut.
+
+00:08:07.820 --> 00:08:08.680
+Ini berarti pola aneh
+
+00:08:08.680 --> 00:08:09.460
+dari sumber terpercaya
+
+00:08:09.460 --> 00:08:10.380
+mungkin diizinkan lewat.
+
+00:08:10.580 --> 00:08:11.360
+Sementara pola yang sama
+
+00:08:11.360 --> 00:08:11.980
+yang dipasangkan
+
+00:08:11.980 --> 00:08:12.960
+dengan skor reputasi buruk
+
+00:08:12.960 --> 00:08:13.940
+akan segera diblokir.
+
+00:08:15.480 --> 00:08:16.600
+Ini mengubah pohon
+
+00:08:16.600 --> 00:08:17.240
+keputusan Anda
+
+00:08:17.240 --> 00:08:17.880
+menjadi sesuatu
+
+00:08:17.880 --> 00:08:19.040
+yang lebih dari sekadar pilihannya
+
+00:08:19.040 --> 00:08:19.400
+atau tidak.
+
+00:08:20.160 --> 00:08:21.480
+Anda dapat mengizinkan permintaan
+
+00:08:21.480 --> 00:08:22.560
+jika skor risikonya rendah
+
+00:08:22.560 --> 00:08:23.780
+atau Anda dapat membersihkannya
+
+00:08:23.780 --> 00:08:24.440
+dengan menghapus
+
+00:08:24.440 --> 00:08:25.200
+fragment yang tidak aman.
+
+00:08:25.580 --> 00:08:26.260
+Anda mungkin memilih
+
+00:08:26.260 --> 00:08:27.040
+untuk mengharantina data
+
+00:08:27.040 --> 00:08:27.580
+jika sumbernya
+
+00:08:27.580 --> 00:08:28.800
+memerlukan peninjauan menurut.
+
+00:08:28.800 --> 00:08:29.660
+Jika tindakan tersebut
+
+00:08:29.660 --> 00:08:30.660
+melibatkan data sensitif
+
+00:08:30.660 --> 00:08:31.520
+Anda bahkan dapat meminta
+
+00:08:31.520 --> 00:08:32.360
+persetujuan manusia
+
+00:08:32.360 --> 00:08:33.040
+sebelum dilanjutkan.
+
+00:08:33.440 --> 00:08:33.900
+Tentu saja
+
+00:08:33.900 --> 00:08:34.860
+jika sinyal cukup kuat
+
+00:08:34.860 --> 00:08:35.640
+Anda cukup memblokir
+
+00:08:35.640 --> 00:08:36.300
+permintaan tersebut
+
+00:08:36.300 --> 00:08:37.140
+dan mengirimkan peringat.
+
+00:08:37.420 --> 00:08:38.100
+Rakaian opsi itulah
+
+00:08:38.100 --> 00:08:38.820
+yang membuat model ini
+
+00:08:38.820 --> 00:08:39.640
+benar-benar berfungsi
+
+00:08:39.640 --> 00:08:40.160
+bagi bisnis.
+
+00:08:40.700 --> 00:08:41.640
+Tim keamanan seringkali
+
+00:08:41.640 --> 00:08:42.420
+menghambat adopsi
+
+00:08:42.420 --> 00:08:43.240
+karena mereka menolak
+
+00:08:43.240 --> 00:08:44.200
+setiap kasus yang terlihat
+
+00:08:44.200 --> 00:08:44.960
+sedikit tidak pasti
+
+00:08:44.960 --> 00:08:46.400
+dan ketika kontrol terlalu ketat
+
+00:08:46.400 --> 00:08:47.300
+orang akan mencari cara
+
+00:08:47.300 --> 00:08:48.060
+untuk mengakalinya.
+
+00:08:48.800 --> 00:08:49.760
+Alur kerja dengan penilaian
+
+00:08:49.760 --> 00:08:50.400
+memberi Anda ruang
+
+00:08:50.400 --> 00:08:51.460
+untuk merespons berdasarkan
+
+00:08:51.460 --> 00:08:52.100
+risiko aktual
+
+00:08:52.100 --> 00:08:52.600
+bukan kepanik.
+
+00:08:53.140 --> 00:08:54.000
+Inilah alasan mengapa
+
+00:08:54.000 --> 00:08:55.000
+Logic Apps lebih cocok
+
+00:08:55.000 --> 00:08:55.920
+daripada kumpulan alat
+
+00:08:55.920 --> 00:08:56.480
+yang terpisah.
+
+00:08:57.120 --> 00:08:57.720
+Ini sudah terhubung
+
+00:09:03.900 --> 00:09:05.040
+dan mendorong peristiwa audit
+
+00:09:05.040 --> 00:09:05.960
+semuanya di satu tempat.
+
+00:09:06.500 --> 00:09:07.260
+Anda tidak memerlukan
+
+00:09:07.260 --> 00:09:08.400
+siklus pengembangan yang panjang
+
+00:09:08.400 --> 00:09:09.200
+setiap kali penyerang
+
+00:09:09.200 --> 00:09:10.000
+mengubah rasa mereka
+
+00:09:10.000 --> 00:09:10.840
+atau muncul cara baru
+
+00:09:10.840 --> 00:09:11.560
+untuk memasuki sistem.
+
+00:09:11.940 --> 00:09:12.900
+Aturan yang membuat semua ini
+
+00:09:12.900 --> 00:09:13.920
+berfungsi sangatlah mudah.
+
+00:09:14.700 --> 00:09:15.460
+Anda harus memperlakukan
+
+00:09:15.460 --> 00:09:16.180
+setiap bagian konteks
+
+00:09:16.180 --> 00:09:16.960
+sebagai tidak terpercaya
+
+00:09:16.960 --> 00:09:18.040
+sampai nilainya dinilai.
+
+00:09:18.800 --> 00:09:19.760
+Itu tidak hanya berarti
+
+00:09:19.760 --> 00:09:20.320
+prom pengguna
+
+00:09:20.320 --> 00:09:21.420
+tetapi juga isi email,
+
+00:09:21.580 --> 00:09:22.260
+file yang diunggah
+
+00:09:22.260 --> 00:09:23.640
+dan kolom formulir share point.
+
+00:09:24.400 --> 00:09:25.680
+Ini mencakup payload konektor,
+
+00:09:25.980 --> 00:09:27.100
+potongan dokumen yang diambil
+
+00:09:27.100 --> 00:09:28.460
+dan bahkan argumen alat.
+
+00:09:29.040 --> 00:09:29.860
+Semuanya harus diperiksa.
+
+00:09:30.280 --> 00:09:31.060
+Saat Anda menganggap
+
+00:09:31.060 --> 00:09:31.980
+salah satu sumber tersebut
+
+00:09:31.980 --> 00:09:32.780
+aman secara default,
+
+00:09:32.960 --> 00:09:34.080
+Anda telah menciptakan celah baru
+
+00:09:34.080 --> 00:09:34.900
+untuk digunakan penyerang.
+
+00:09:35.280 --> 00:09:36.080
+Setelah alur kerja Anda
+
+00:09:36.080 --> 00:09:36.940
+menerapkan aturan ini
+
+00:09:36.940 --> 00:09:37.620
+secara konsisten,
+
+00:09:37.880 --> 00:09:38.540
+Anda tidak perlu lagi
+
+00:09:38.540 --> 00:09:39.320
+mengandalkan co-pilot
+
+00:09:39.320 --> 00:09:40.460
+untuk memisahkan data baik
+
+00:09:40.460 --> 00:09:41.680
+dari data buruk secara mandiri.
+
+00:09:42.420 --> 00:09:43.000
+Prosesnya menjadi
+
+00:09:43.000 --> 00:09:43.920
+sistem entry yang terkontrol.
+
+00:09:44.640 --> 00:09:45.280
+Di atas kertas,
+
+00:09:45.440 --> 00:09:46.740
+itu terdengar seperti teori yang hebat
+
+00:09:46.740 --> 00:09:47.360
+tetapi yang sebenarnya
+
+00:09:47.360 --> 00:09:48.320
+dipedulikan orang adalah
+
+00:09:48.320 --> 00:09:49.900
+apa yang terjadi ketika pilot berbahaya
+
+00:09:49.900 --> 00:09:50.900
+benar-benar menyerang alur kerja
+
+00:09:50.900 --> 00:09:51.380
+di dunia nyata.
+
+00:09:52.140 --> 00:09:52.840
+Apa yang sebenarnya
+
+00:09:52.840 --> 00:09:53.820
+dilakukan alur kerja?
+
+00:09:54.120 --> 00:09:54.680
+Saat runtime,
+
+00:09:54.840 --> 00:09:55.980
+ketika sistem mulai beroperasi,
+
+00:09:55.980 --> 00:09:57.180
+ia tidak hanya memindai teks
+
+00:09:57.180 --> 00:09:57.960
+untuk kata-kata buruk,
+
+00:09:58.320 --> 00:09:59.420
+ia membangun gambaran lengkap
+
+00:09:59.420 --> 00:10:00.380
+tentang permintaan tersebut
+
+00:10:00.380 --> 00:10:01.500
+sebelum keputusan apapun dibuat.
+
+00:10:01.820 --> 00:10:02.740
+Sebuah peristiwa mencapai
+
+00:10:02.740 --> 00:10:03.420
+titik masuk Anda,
+
+00:10:03.660 --> 00:10:04.660
+mungkin pengiriman formulir,
+
+00:10:04.800 --> 00:10:05.240
+alur email,
+
+00:10:05.420 --> 00:10:06.160
+atau unggahan dokumen
+
+00:10:06.160 --> 00:10:07.440
+yang terikat pada proses co-pilot,
+
+00:10:07.920 --> 00:10:08.480
+dan logic apps
+
+00:10:08.480 --> 00:10:09.660
+karena membungkus peristiwa tersebut
+
+00:10:09.660 --> 00:10:10.140
+dengan metadata.
+
+00:10:10.900 --> 00:10:11.640
+Ia melacak siapa yang
+
+00:10:11.640 --> 00:10:12.400
+mengirim permintaan,
+
+00:10:12.540 --> 00:10:13.660
+aplikasi mana yang menyentuhnya,
+
+00:10:13.760 --> 00:10:14.900
+dari mana file tersebut berasal,
+
+00:10:14.960 --> 00:10:15.780
+dan apa yang akan dilakukan
+
+00:10:15.780 --> 00:10:16.400
+sistem selanjutnya.
+
+00:10:16.640 --> 00:10:17.400
+Konteks tambahan ini
+
+00:10:17.400 --> 00:10:18.020
+sangat penting
+
+00:10:18.020 --> 00:10:18.920
+karena kalimat yang sama
+
+00:10:18.920 --> 00:10:20.000
+bisa berarti hal yang sangat
+
+00:10:20.000 --> 00:10:20.680
+berbeda tergantung
+
+00:10:20.680 --> 00:10:21.440
+dari mana asalnya.
+
+00:10:22.000 --> 00:10:23.020
+Setelah data itu diambil,
+
+00:10:23.140 --> 00:10:23.380
+payload,
+
+00:10:23.680 --> 00:10:24.480
+dibagi ke dalam zona
+
+00:10:24.480 --> 00:10:25.420
+kepercayaan tertentu,
+
+00:10:25.900 --> 00:10:26.360
+Anda harus menjaga
+
+00:10:26.360 --> 00:10:27.060
+pemisahan tertentu.
+
+00:10:27.560 --> 00:10:28.740
+Prom pengguna masuk ke satu wadah,
+
+00:10:29.220 --> 00:10:29.900
+dokumen yang diambil
+
+00:10:29.900 --> 00:10:30.480
+ke wadah lain,
+
+00:10:30.600 --> 00:10:31.440
+serta file percakapan
+
+00:10:31.440 --> 00:10:32.320
+atau parameter alat
+
+00:10:32.320 --> 00:10:33.180
+mendapatkan ruangnya sendiri.
+
+00:10:33.740 --> 00:10:34.560
+Jika Anda menggabungkan
+
+00:10:34.560 --> 00:10:35.500
+semua ini terlalu dini,
+
+00:10:35.740 --> 00:10:36.720
+Anda akan kehilangan kemampuan
+
+00:10:36.720 --> 00:10:37.360
+untuk mengetahui
+
+00:10:37.360 --> 00:10:38.760
+dari mana instruksi berisiko itu
+
+00:10:38.760 --> 00:10:39.200
+sebenarnya,
+
+00:10:39.500 --> 00:10:40.760
+permula dan proses peninjauan Anda
+
+00:10:40.760 --> 00:10:41.580
+menjadi tebak-tebakan.
+
+00:10:42.200 --> 00:10:43.440
+Banyak tim melewatkan langkah ini
+
+00:10:43.440 --> 00:10:44.160
+karena menggabungkan
+
+00:10:44.160 --> 00:10:45.220
+semuanya terasa lebih cepat.
+
+00:10:45.540 --> 00:10:46.200
+Namun kenyataannya,
+
+00:10:46.420 --> 00:10:46.960
+hal itu justru
+
+00:10:46.960 --> 00:10:47.700
+menyembunyikan jalur
+
+00:10:47.700 --> 00:10:48.400
+yang perlu Anda ikuti.
+
+00:10:48.780 --> 00:10:49.220
+Selanjutnya,
+
+00:10:49.300 --> 00:10:50.480
+alur kerja beralih ke normalisasi.
+
+00:10:50.960 --> 00:10:51.840
+Ini adalah bagian pekerjaan
+
+00:10:51.840 --> 00:10:52.380
+yang membosankan,
+
+00:10:52.460 --> 00:10:53.180
+tetapi ini juga yang membuat
+
+00:10:53.180 --> 00:10:54.040
+deteksi Anda benar-benar
+
+00:10:54.040 --> 00:10:54.620
+dapat digunakan.
+
+00:10:55.100 --> 00:10:56.160
+Anda perlu menghapus markup
+
+00:10:56.160 --> 00:10:56.920
+yang menambah gangguan,
+
+00:10:57.220 --> 00:10:58.360
+mendekode URL encoding
+
+00:10:58.360 --> 00:10:59.420
+atau jejak base 64,
+
+00:10:59.700 --> 00:11:01.060
+dan meratakan bidang bertingkat
+
+00:11:01.060 --> 00:11:02.040
+agar inspeksi berjalan
+
+00:11:02.040 --> 00:11:02.800
+pada bentuk yang stabil.
+
+00:11:03.280 --> 00:11:04.120
+Jika satu konektor
+
+00:11:04.120 --> 00:11:04.840
+mengirim teks kaya,
+
+00:11:04.960 --> 00:11:05.460
+sementara yang lain
+
+00:11:05.460 --> 00:11:06.300
+mengirim fragment JSON,
+
+00:11:06.520 --> 00:11:07.280
+Anda ingin semuanya
+
+00:11:07.280 --> 00:11:08.240
+direduksi menjadi bidang
+
+00:11:08.240 --> 00:11:08.800
+yang dapat dibaca
+
+00:11:08.800 --> 00:11:09.440
+secara konsisten
+
+00:11:09.440 --> 00:11:10.180
+oleh pemeriksaan Anda.
+
+00:11:10.560 --> 00:11:11.040
+Tanpa ini,
+
+00:11:11.160 --> 00:11:12.160
+logika Anda akan menghabiskan
+
+00:11:12.160 --> 00:11:12.780
+lebih banyak waktu
+
+00:11:12.780 --> 00:11:13.900
+untuk mengatasi pergeseran format
+
+00:11:13.900 --> 00:11:14.860
+daripada menemukan serangannya.
+
+00:11:15.320 --> 00:11:16.080
+Setelah data bersih,
+
+00:11:16.200 --> 00:11:17.080
+pemeriksaan pula cepat
+
+00:11:17.080 --> 00:11:18.060
+dijalankan terlebih dahulu.
+
+00:11:18.620 --> 00:11:19.440
+Proses ini harus murah,
+
+00:11:19.520 --> 00:11:20.200
+langsung, dan cepat.
+
+00:11:20.740 --> 00:11:21.560
+Anda mencari frasa
+
+00:11:21.560 --> 00:11:22.060
+yang mencoba
+
+00:11:22.060 --> 00:11:23.260
+mengabaikan perilaku sistem
+
+00:11:23.260 --> 00:11:24.720
+seperti variasi abaikan
+
+00:11:24.720 --> 00:11:25.740
+semua instruksi sebelumnya
+
+00:11:25.740 --> 00:11:26.780
+atau pengambilan sistem.
+
+00:11:27.780 --> 00:11:28.480
+Anda juga mencari
+
+00:11:28.480 --> 00:11:29.120
+bahasa ekstraksi
+
+00:11:29.120 --> 00:11:30.200
+di mana seseorang meminta
+
+00:11:30.200 --> 00:11:30.940
+untuk mengungkapkan
+
+00:11:30.940 --> 00:11:31.580
+materi rahasia,
+
+00:11:31.720 --> 00:11:32.380
+membongkar rahasia,
+
+00:11:32.520 --> 00:11:33.740
+atau memintas pengaturan privasi.
+
+00:11:34.420 --> 00:11:35.380
+Dalam aplikasi logika,
+
+00:11:35.540 --> 00:11:36.380
+tim biasanya menangan ini
+
+00:11:36.380 --> 00:11:37.060
+melalui ekspresi
+
+00:11:37.060 --> 00:11:37.880
+atau langkah komposisi
+
+00:11:37.880 --> 00:11:38.500
+yang memasang tanda
+
+00:11:38.500 --> 00:11:39.100
+daripada langsung
+
+00:11:39.100 --> 00:11:39.920
+memblokir permintaan
+
+00:11:39.920 --> 00:11:40.660
+pada setiap temuan.
+
+00:11:41.400 --> 00:11:42.340
+Pemberian tanda itu penting
+
+00:11:42.340 --> 00:11:43.040
+karena satu frasa
+
+00:11:43.040 --> 00:11:43.900
+tidak selalu berarti
+
+00:11:43.900 --> 00:11:45.220
+seseorang sedang bersikap kasar.
+
+00:11:46.060 --> 00:11:46.760
+Seseorang yang bekerja
+
+00:11:46.760 --> 00:11:47.660
+dalam alur kerja keamanan
+
+00:11:47.660 --> 00:11:48.060
+yang valid
+
+00:11:48.060 --> 00:11:49.140
+mungkin benar-benar berpertanyaan
+
+00:11:49.140 --> 00:11:49.740
+tentang peninjauan
+
+00:11:49.740 --> 00:11:50.600
+penangan konten rahasia.
+
+00:11:51.340 --> 00:11:52.040
+Untuk mengatasinya,
+
+00:11:52.160 --> 00:11:52.980
+alur kerja mengirimkan
+
+00:11:52.980 --> 00:11:53.740
+pelot yang lebih kaya
+
+00:11:53.740 --> 00:11:54.360
+keperisai prom
+
+00:11:54.360 --> 00:11:55.580
+keamanan konten Azure AI
+
+00:11:55.580 --> 00:11:56.620
+untuk pemeriksaan lebih mendalam.
+
+00:11:57.140 --> 00:11:57.720
+Panggilan API
+
+00:11:57.720 --> 00:11:58.720
+yang mencakup prom pengguna
+
+00:11:58.720 --> 00:11:59.680
+dan dokumen yang diambil
+
+00:11:59.680 --> 00:12:00.580
+karena hubungan.
+
+00:12:00.680 --> 00:12:01.280
+Di antara keduanya,
+
+00:12:01.480 --> 00:12:02.240
+biasanya menjadi tempat
+
+00:12:02.240 --> 00:12:03.360
+masalah sebenarnya tersembunyi.
+
+00:12:04.740 --> 00:12:05.500
+Layanan mengembalikan
+
+00:12:05.500 --> 00:12:06.200
+sinyal sederhana
+
+00:12:06.200 --> 00:12:07.620
+dan jika serangan terdeteksi,
+
+00:12:07.740 --> 00:12:08.380
+alur kerja langsung
+
+00:12:08.380 --> 00:12:08.980
+mengubah jalur
+
+00:12:08.980 --> 00:12:10.220
+sebelum panggilan model terjadi.
+
+00:12:10.920 --> 00:12:11.440
+Kemudian Anda perlu
+
+00:12:11.440 --> 00:12:12.380
+menambahkan konteks luar.
+
+00:12:12.740 --> 00:12:13.820
+Pencarian intelijen ancaman
+
+00:12:13.820 --> 00:12:14.660
+memberikan alur kerja
+
+00:12:14.660 --> 00:12:15.780
+lensa lain untuk melihat situasi.
+
+00:12:16.220 --> 00:12:16.880
+Anda dapat mengquery
+
+00:12:16.880 --> 00:12:17.560
+intelijen ancaman
+
+00:12:17.560 --> 00:12:18.220
+Microsoft Defender
+
+00:12:18.220 --> 00:12:18.860
+atau sumber teksi
+
+00:12:18.860 --> 00:12:19.820
+manapun yang Anda percaya
+
+00:12:19.820 --> 00:12:20.620
+untuk memiksa domain,
+
+00:12:20.760 --> 00:12:21.000
+URL,
+
+00:12:21.220 --> 00:12:21.920
+atau indikator sumber
+
+00:12:21.920 --> 00:12:23.120
+yang terkait dengan penyalahgunaan.
+
+00:12:24.200 --> 00:12:24.880
+Anda harus menarik
+
+00:12:24.880 --> 00:12:25.620
+skor kepercayaan
+
+00:12:25.620 --> 00:12:26.180
+jika tersedia
+
+00:12:26.180 --> 00:12:27.400
+karena reputasi sumber
+
+00:12:27.400 --> 00:12:28.540
+harus memengaruhi skor akhir
+
+00:12:28.540 --> 00:12:29.940
+bukan menggantikannya sepenuhnya.
+
+00:12:30.920 --> 00:12:32.220
+Pelot lemah dari sumber berisiko
+
+00:12:32.220 --> 00:12:32.920
+harus selalu diberi
+
+00:12:32.920 --> 00:12:33.620
+peringkat lebih tinggi
+
+00:12:33.620 --> 00:12:34.600
+daripada pelot yang sama
+
+00:12:34.600 --> 00:12:35.440
+dari proses internal
+
+00:12:35.440 --> 00:12:36.160
+yang sudah dipahami.
+
+00:12:36.900 --> 00:12:37.240
+Terakhir,
+
+00:12:37.340 --> 00:12:38.400
+sistem membangun skor gabungan.
+
+00:12:39.060 --> 00:12:39.540
+Sistem melihat
+
+00:12:39.540 --> 00:12:40.560
+kekuatan deteksi pola,
+
+00:12:40.680 --> 00:12:41.320
+hasil prompt shield,
+
+00:12:41.480 --> 00:12:42.140
+reputasi sumber,
+
+00:12:42.320 --> 00:12:43.060
+dan seberapa sensitif
+
+00:12:43.060 --> 00:12:43.780
+tindakan yang diminta.
+
+00:12:44.480 --> 00:12:45.560
+Permintaan berisiko rendah
+
+00:12:45.560 --> 00:12:46.760
+untuk merangkum artikel publik
+
+00:12:46.760 --> 00:12:47.500
+tidak memiliki bobot
+
+00:12:47.500 --> 00:12:48.560
+yang sama dengan permintaan
+
+00:12:48.560 --> 00:12:50.180
+yang dapat mengekspos file terlindungi.
+
+00:12:50.600 --> 00:12:51.220
+Skor gabungan inilah
+
+00:12:51.220 --> 00:12:52.320
+yang menentukan percambangan tindakan.
+
+00:12:52.740 --> 00:12:53.560
+Peristiwa yang bersih berlanjut
+
+00:12:53.560 --> 00:12:54.100
+sesuai rencana.
+
+00:12:54.600 --> 00:12:55.600
+Kasus berisiko menengah
+
+00:12:55.600 --> 00:12:56.380
+akan dibersihkan
+
+00:12:56.380 --> 00:12:57.760
+atau dialihkan ke cadangan yang aman.
+
+00:12:58.380 --> 00:12:59.300
+Dan kasus berisiko tinggi
+
+00:12:59.300 --> 00:12:59.840
+akan diblokir
+
+00:12:59.840 --> 00:13:00.980
+sebelum kopelot dijalankan.
+
+00:13:01.800 --> 00:13:02.440
+Semuanya dicatat
+
+00:13:02.440 --> 00:13:03.160
+ke dalam audit trail
+
+00:13:03.160 --> 00:13:04.500
+dengan jalur keputusan yang tersimpan.
+
+00:13:05.020 --> 00:13:05.940
+Peristiwa yang diblokir inilah
+
+00:13:05.940 --> 00:13:06.640
+yang memberitahu Anda
+
+00:13:06.640 --> 00:13:07.540
+di mana tekanan meningkat
+
+00:13:07.540 --> 00:13:08.480
+dan sumber mana-sumber mana
+
+00:13:08.480 --> 00:13:09.300
+yang terus menimbulkan masalah.
+
+00:13:09.500 --> 00:13:10.100
+Saat Anda melihat
+
+00:13:10.100 --> 00:13:10.660
+pelaman yang masuk
+
+00:13:10.660 --> 00:13:11.660
+ke alur kerja bisnis Anda,
+
+00:13:11.780 --> 00:13:12.320
+Anda akhirnya
+
+00:13:12.320 --> 00:13:13.480
+memiliki data yang dibutuhkan
+
+00:13:13.480 --> 00:13:14.260
+untuk menyesuaikan sistem
+
+00:13:14.260 --> 00:13:15.340
+pada putaran berikutnya.
+
+00:13:16.380 --> 00:13:17.500
+Cara menyesuaikan agar minim gangguan
+
+00:13:17.500 --> 00:13:18.480
+dan sesuai penggunaan bisnis yang lain.
+
+00:13:18.900 --> 00:13:19.820
+Setelah sistem berjalan,
+
+00:13:19.940 --> 00:13:21.080
+sifat pekerjaannya akan berubah.
+
+00:13:21.480 --> 00:13:22.080
+Membangun alurnya
+
+00:13:22.080 --> 00:13:23.160
+sebenarnya adalah bagian yang mudah.
+
+00:13:23.700 --> 00:13:24.180
+Menyesuaikannya
+
+00:13:24.180 --> 00:13:25.140
+agar orang percaya
+
+00:13:25.140 --> 00:13:26.340
+dan tidak mencari jalan pintas
+
+00:13:26.340 --> 00:13:27.360
+adalah penentu apakah ini
+
+00:13:27.360 --> 00:13:28.700
+menjadi kontrol keamanan yang nyata
+
+00:13:28.700 --> 00:13:30.140
+atau sekadar eksperimen yang gagal.
+
+00:13:30.640 --> 00:13:31.480
+Jika sistem menciptakan
+
+00:13:31.480 --> 00:13:32.400
+terlalu banyak hambatan,
+
+00:13:32.560 --> 00:13:33.440
+pengguna akan mencari cara
+
+00:13:33.440 --> 00:13:34.120
+untuk melewatinya
+
+00:13:34.120 --> 00:13:35.000
+yang membuat seluruh proyek
+
+00:13:35.000 --> 00:13:35.640
+menjadi sia-sia.
+
+00:13:36.180 --> 00:13:36.940
+Anda dicokpan yang sempit.
+
+00:13:37.480 --> 00:13:38.360
+Jangan mencoba mengawasi
+
+00:13:38.360 --> 00:13:39.360
+setiap titik sentukopilot
+
+00:13:39.360 --> 00:13:39.940
+pada hari pertama.
+
+00:13:40.560 --> 00:13:41.040
+Sebaliknya,
+
+00:13:41.240 --> 00:13:42.340
+pilih tempat dengan risiko tertinggi
+
+00:13:42.340 --> 00:13:43.220
+dan jalur yang jelas
+
+00:13:43.220 --> 00:13:43.920
+seperti tindakan
+
+00:13:43.920 --> 00:13:45.360
+berbasis alat atau sumber data
+
+00:13:45.360 --> 00:13:46.180
+bernilai tinggi.
+
+00:13:46.780 --> 00:13:47.500
+Anda bisa mulai dengan
+
+00:13:47.500 --> 00:13:48.380
+satu proses yang didukung
+
+00:13:48.380 --> 00:13:49.440
+SharePoint atau alur kerja
+
+00:13:49.440 --> 00:13:50.200
+formulir tertentu
+
+00:13:50.200 --> 00:13:51.040
+untuk mendapatkan sinyal
+
+00:13:51.040 --> 00:13:51.800
+yang benar-benar bisa dibaca.
+
+00:13:52.020 --> 00:13:53.060
+Cakupan kecil memberi Anda
+
+00:13:53.060 --> 00:13:53.840
+ruang untuk belajar
+
+00:13:53.840 --> 00:13:54.620
+tanpa tenggelam data.
+
+00:13:55.560 --> 00:13:56.960
+Saat menyiapkan pemeriksaan awal,
+
+00:13:57.300 --> 00:13:58.700
+atur penolakan untuk fokus pada recall
+
+00:13:58.700 --> 00:13:59.680
+bukan kepastian mutlak.
+
+00:13:59.680 --> 00:14:00.760
+Pemeriksaan pertama
+
+00:14:00.760 --> 00:14:01.940
+dimaksudkan untuk menangkap
+
+00:14:01.940 --> 00:14:02.760
+bahasa yang mencurigakan
+
+00:14:02.760 --> 00:14:03.240
+sejak dini
+
+00:14:03.240 --> 00:14:03.940
+bukan membuktikan
+
+00:14:03.940 --> 00:14:05.020
+niat jahat secara meyakinkan.
+
+00:14:05.380 --> 00:14:06.420
+Jika Anda memaksa pola Anda
+
+00:14:06.420 --> 00:14:07.020
+menjadi sempurna,
+
+00:14:07.120 --> 00:14:08.060
+pola tersebut menjadi rapuh
+
+00:14:08.060 --> 00:14:08.780
+dan mulai melewatkan
+
+00:14:08.780 --> 00:14:09.820
+hal-hal yang justru Anda pedulikan.
+
+00:14:10.160 --> 00:14:11.120
+Lebih baik membiarkan sistem
+
+00:14:11.120 --> 00:14:12.440
+menandai sedikit berlebihan di awal,
+
+00:14:12.580 --> 00:14:13.860
+lalu biarkan pemeriksaan berikutnya
+
+00:14:13.860 --> 00:14:14.560
+menambahkan konteks
+
+00:14:14.560 --> 00:14:15.580
+untuk mengurangi gangguan.
+
+00:14:16.140 --> 00:14:17.220
+Inilah sebabnya skor lebih penting
+
+00:14:17.220 --> 00:14:18.080
+daripada deteksi tunggal.
+
+00:14:18.700 --> 00:14:19.580
+Kecocokan frasa saja
+
+00:14:19.580 --> 00:14:20.300
+tidak selalu harus
+
+00:14:20.300 --> 00:14:21.280
+membatalkan permintaan,
+
+00:14:21.400 --> 00:14:22.000
+tetapi saat Anda
+
+00:14:22.000 --> 00:14:23.060
+menggabungkan kecocokan itu
+
+00:14:23.060 --> 00:14:23.900
+dengan tanda prom shield
+
+00:14:23.900 --> 00:14:24.740
+dan sumber berisiko,
+
+00:14:24.980 --> 00:14:25.720
+situasinya berubah.
+
+00:14:26.660 --> 00:14:27.580
+Sinyal lemah harus ditumpuk
+
+00:14:27.580 --> 00:14:28.320
+satu sama lain
+
+00:14:28.320 --> 00:14:29.320
+dan sinyal kuat
+
+00:14:29.320 --> 00:14:30.560
+harus mempercepat pemblokiran.
+
+00:14:31.080 --> 00:14:32.280
+Ini adalah perbedaan mendasar
+
+00:14:32.280 --> 00:14:33.280
+antara filter yang kaku
+
+00:14:33.280 --> 00:14:33.880
+dan menyebalkan
+
+00:14:33.880 --> 00:14:34.740
+dengan model kebijakan
+
+00:14:34.740 --> 00:14:35.580
+yang benar-benar berfungsi
+
+00:14:35.580 --> 00:14:36.120
+bagi bisnis.
+
+00:14:36.740 --> 00:14:37.460
+Anda juga perlu menetapkan
+
+00:14:37.460 --> 00:14:38.320
+batas atas untuk positif.
+
+00:14:38.820 --> 00:14:39.900
+Cobalah untuk menjaganya
+
+00:14:39.900 --> 00:14:40.500
+di bawah 2 persen
+
+00:14:40.500 --> 00:14:41.100
+karena begitu orang
+
+00:14:41.100 --> 00:14:41.840
+merasa kendali tersebut
+
+00:14:41.840 --> 00:14:42.900
+menghambat pekerjaan normal mereka,
+
+00:14:43.000 --> 00:14:43.860
+mereka angkret dan di Manchester.
+
+00:14:44.300 --> 00:14:45.040
+Setelah itulah jalan pintas
+
+00:14:45.040 --> 00:14:45.500
+mulai berbicara.
+
+00:14:45.500 --> 00:14:46.760
+Mengguna akan menyalin teks
+
+00:14:46.760 --> 00:14:47.720
+ke alat yang tidak dikelola,
+
+00:14:47.900 --> 00:14:48.500
+tim akan membangun
+
+00:14:48.500 --> 00:14:49.040
+alur bayangan
+
+00:14:49.040 --> 00:14:50.080
+dan admin akan mulai
+
+00:14:50.080 --> 00:14:51.420
+meminta pengecualian menyeluruh.
+
+00:14:51.740 --> 00:14:52.300
+Kendali tersebut
+
+00:14:52.300 --> 00:14:53.240
+akan runtuh dari dalam.
+
+00:14:53.480 --> 00:14:54.600
+Bukan karena deteksinya gagal
+
+00:14:54.600 --> 00:14:55.380
+tetapi karena hambatan
+
+00:14:55.380 --> 00:14:56.280
+yang terjadi terlalu berat
+
+00:14:56.280 --> 00:14:56.760
+untuk ditangan.
+
+00:14:57.320 --> 00:14:58.100
+Untuk mencegah hal ini,
+
+00:14:58.220 --> 00:14:59.220
+Anda harus memantah metering antepak.
+
+00:14:59.700 --> 00:15:00.480
+Rupakan dasmur yang hanya
+
+00:15:00.480 --> 00:15:01.460
+untuk pamer dan fokuslah
+
+00:15:01.460 --> 00:15:02.160
+pada waktu rata-rata
+
+00:15:02.160 --> 00:15:02.660
+untuk mendeteksi.
+
+00:15:02.860 --> 00:15:03.700
+Anda harus menjaganya
+
+00:15:03.700 --> 00:15:04.520
+di bawah 15 menit
+
+00:15:04.520 --> 00:15:05.240
+untuk segala sesuatu
+
+00:15:05.240 --> 00:15:06.080
+yang memerlukan tinjauan man.
+
+00:15:06.300 --> 00:15:07.200
+Anda juga harus melacak
+
+00:15:07.200 --> 00:15:08.300
+waktu penahanan otomatis
+
+00:15:08.300 --> 00:15:08.940
+dan menarketkan
+
+00:15:08.940 --> 00:15:09.620
+di bawah 5 menit
+
+00:15:09.620 --> 00:15:10.340
+jika pemblokiran
+
+00:15:10.340 --> 00:15:11.180
+dapat dilakukan dengan lain.
+
+00:15:11.500 --> 00:15:12.140
+Jika alur kerja
+
+00:15:12.140 --> 00:15:12.760
+terus berjalan
+
+00:15:12.760 --> 00:15:13.500
+tetapi tidak pernah
+
+00:15:13.500 --> 00:15:14.420
+memengaruhi keputusan
+
+00:15:14.420 --> 00:15:15.460
+itu hanyalah kebisingan.
+
+00:15:16.080 --> 00:15:16.980
+Biaya adalah faktor lain
+
+00:15:16.980 --> 00:15:17.460
+yang memerlukan
+
+00:15:17.460 --> 00:15:18.220
+penyesuaian terus-menar.
+
+00:15:18.660 --> 00:15:19.680
+Logikai berbasis konsumsi
+
+00:15:19.680 --> 00:15:20.160
+sangat bagus
+
+00:15:20.160 --> 00:15:20.840
+untuk beban kerja
+
+00:15:20.840 --> 00:15:21.380
+yang tidak menentu
+
+00:15:21.380 --> 00:15:22.340
+atau proyek percontohan kecil
+
+00:15:22.340 --> 00:15:23.280
+karena Anda hanya membayar
+
+00:15:23.280 --> 00:15:24.160
+untuk apa yang dijalankan.
+
+00:15:24.580 --> 00:15:25.400
+Namun, paket standar
+
+00:15:25.400 --> 00:15:26.060
+lebih masuk akal
+
+00:15:26.060 --> 00:15:27.120
+setelah volume peristiwa Anda
+
+00:15:27.120 --> 00:15:27.720
+dapat diprediksi
+
+00:15:27.720 --> 00:15:28.340
+dan cukup tinggi
+
+00:15:28.340 --> 00:15:29.180
+hingga biaya pereksekusi
+
+00:15:29.180 --> 00:15:29.960
+mulai terasa membani.
+
+00:15:29.960 --> 00:15:31.120
+Namun, paket, paket, paket,
+
+00:15:31.160 --> 00:15:32.460
+ukur jumlah pemicu
+
+00:15:32.460 --> 00:15:33.380
+dan ukuran pelot Anda
+
+00:15:33.380 --> 00:15:34.320
+yang sebenar sebelum Anda
+
+00:15:34.320 --> 00:15:35.600
+memilih modal penetapan harga.
+
+00:15:35.880 --> 00:15:36.440
+Berhati-hati dengan cara
+
+00:15:36.440 --> 00:15:37.280
+Anda menangani penyimpanan.
+
+00:15:37.560 --> 00:15:38.180
+Anda memerlukan
+
+00:15:38.180 --> 00:15:38.860
+riwayat eksekusi
+
+00:15:38.860 --> 00:15:39.740
+yang cukup untuk tinjauan
+
+00:15:39.740 --> 00:15:40.760
+sidan dan bukti tata kelola
+
+00:15:40.760 --> 00:15:41.400
+tetapi Anda tidak
+
+00:15:41.400 --> 00:15:42.380
+memerlukan basis data besar
+
+00:15:42.380 --> 00:15:43.300
+yang penuh dengan content sensitivity.
+
+00:15:43.500 --> 00:15:44.300
+Simpan kolom spesifik
+
+00:15:44.300 --> 00:15:45.120
+yang menjelaskan alasan
+
+00:15:45.120 --> 00:15:46.040
+suatu keputusan dibuat
+
+00:15:46.040 --> 00:15:47.220
+dan hapus data yang tidak perlu
+
+00:15:47.220 --> 00:15:48.480
+yang menciptakan risiko retensi.
+
+00:15:48.900 --> 00:15:50.000
+Menyimpan terlalu banyak data
+
+00:15:50.000 --> 00:15:51.520
+dapat mengubah alat keamanan Anda
+
+00:15:51.520 --> 00:15:52.580
+menjadi kewajiban privasi
+
+00:15:52.580 --> 00:15:53.680
+jika Anda tidak berhati-hati.
+
+00:15:53.960 --> 00:15:54.840
+Terakhir, hubungkan semua
+
+00:15:54.840 --> 00:15:55.360
+penyesuaian ini
+
+00:15:55.360 --> 00:15:56.320
+kembali ke tata kelola Anda.
+
+00:15:56.640 --> 00:15:57.440
+Petakan alur kerja
+
+00:15:57.440 --> 00:15:58.640
+ke fungsi NIS IRMF
+
+00:15:58.640 --> 00:15:59.920
+seperti mengukur dan mengelola
+
+00:15:59.920 --> 00:16:01.140
+serta kaitkan dengan label
+
+00:16:01.140 --> 00:16:02.400
+sensitivitas data Anda di preview.
+
+00:16:02.780 --> 00:16:03.840
+Terkadang, solusi terbaik
+
+00:16:03.840 --> 00:16:04.640
+bukanlah pendeteksi
+
+00:16:04.640 --> 00:16:05.240
+yang lebih cerdas
+
+00:16:05.240 --> 00:16:06.500
+melainkan hanya menghapus akses
+
+00:16:06.500 --> 00:16:07.040
+yang tidak perlu
+
+00:16:07.040 --> 00:16:07.740
+dari alur kerja
+
+00:16:07.740 --> 00:16:08.580
+sebelum menjadi masalah.
+
+00:16:08.920 --> 00:16:10.140
+Ketika Anda mencapai titik itu,
+
+00:16:10.280 --> 00:16:10.860
+Anda tidak lagi
+
+00:16:10.860 --> 00:16:11.720
+hanya memperdebatkan
+
+00:16:11.720 --> 00:16:12.920
+keamanan AI secara abstrak.
+
+00:16:13.440 --> 00:16:14.980
+Anda menjalankan model operasi nyata
+
+00:16:14.980 --> 00:16:15.840
+dengan ambang batas
+
+00:16:15.840 --> 00:16:16.380
+dan pertukaran
+
+00:16:16.380 --> 00:16:17.500
+yang dapat dikelola oleh bisnis.
+
+00:16:18.300 --> 00:16:18.800
+Apa yang berubah
+
+00:16:18.800 --> 00:16:20.080
+bagi para pemimpin dan arsitek?
+
+00:16:20.640 --> 00:16:21.740
+Setelah Anda menerapkan ini,
+
+00:16:21.920 --> 00:16:22.880
+Copilot berhenti bertindak
+
+00:16:22.880 --> 00:16:24.100
+seperti sistem kepercayaan buta.
+
+00:16:24.460 --> 00:16:25.240
+Dan disitulah perubahan
+
+00:16:25.240 --> 00:16:25.840
+nyata terjadi.
+
+00:16:26.260 --> 00:16:27.020
+Sebelum perubahan ini,
+
+00:16:27.300 --> 00:16:27.960
+model hanya menerima
+
+00:16:27.960 --> 00:16:29.120
+kekacauan konteks campuran
+
+00:16:29.120 --> 00:16:29.980
+sementara tim Anda
+
+00:16:29.980 --> 00:16:30.720
+berharap instruksi
+
+00:16:30.720 --> 00:16:31.540
+yang tepat akan menang.
+
+00:16:32.120 --> 00:16:33.400
+Sekarang, konteks itu disaring,
+
+00:16:33.580 --> 00:16:34.100
+diberi skor,
+
+00:16:34.200 --> 00:16:34.760
+dan diarahkan
+
+00:16:34.760 --> 00:16:36.140
+sebelum model sempat menyentuhnya.
+
+00:16:36.880 --> 00:16:37.500
+Hasil keamanan
+
+00:16:37.500 --> 00:16:38.180
+bukan lagi sekadar
+
+00:16:38.180 --> 00:16:38.920
+kebijakan abstrak
+
+00:16:38.920 --> 00:16:39.720
+karena sekarang berfungsi
+
+00:16:39.720 --> 00:16:40.900
+sebagai eksekusi terkontrol.
+
+00:16:41.300 --> 00:16:41.900
+Bagi arsitek,
+
+00:16:41.900 --> 00:16:42.720
+hal ini memindahkan
+
+00:16:42.720 --> 00:16:43.320
+letak keamanan
+
+00:16:43.320 --> 00:16:43.960
+dalam desain Anda.
+
+00:16:44.880 --> 00:16:45.920
+Ini tidak lagi
+
+00:16:45.920 --> 00:16:47.460
+hanya berada di pengaturan penyewa,
+
+00:16:47.560 --> 00:16:47.780
+izin,
+
+00:16:47.860 --> 00:16:48.660
+atau tempat perintah,
+
+00:16:48.780 --> 00:16:49.180
+melainkan
+
+00:16:49.180 --> 00:16:49.980
+berada langsung
+
+00:16:49.980 --> 00:16:50.880
+di jalur transaksi.
+
+00:16:52.160 --> 00:16:52.920
+Setiap permintaan penting
+
+00:16:52.920 --> 00:16:54.140
+mendapatkan titik intersepsi
+
+00:16:54.140 --> 00:16:55.500
+dan setiap tindakan sensitif
+
+00:16:55.500 --> 00:16:56.180
+mengikuti jalur
+
+00:16:56.180 --> 00:16:57.140
+keputusan tertentu.
+
+00:16:57.760 --> 00:16:58.140
+Ini berarti
+
+00:16:58.140 --> 00:16:58.760
+setiap konektor,
+
+00:16:58.880 --> 00:16:59.120
+agen,
+
+00:16:59.200 --> 00:16:59.620
+atau plugin
+
+00:16:59.620 --> 00:17:00.460
+baru menjadi sesuatu
+
+00:17:00.460 --> 00:17:01.200
+yang Anda evaluasi
+
+00:17:01.200 --> 00:17:01.980
+sebagai jalur input,
+
+00:17:02.140 --> 00:17:03.440
+bukan sekadar fitur produktivitas.
+
+00:17:03.920 --> 00:17:04.420
+Hal ini penting
+
+00:17:04.420 --> 00:17:05.600
+karena penyimpangan arsitektur
+
+00:17:05.600 --> 00:17:06.360
+biasanya menjadi alasan
+
+00:17:06.360 --> 00:17:07.360
+kegagalan program-program ini.
+
+00:17:07.840 --> 00:17:08.600
+Satu tim meluncurkan
+
+00:17:11.900 --> 00:17:12.600
+dan akhirnya seseorang
+
+00:17:12.600 --> 00:17:13.500
+menambahkan alur kerja
+
+00:17:13.500 --> 00:17:14.820
+atau memberikan akses alat agen.
+
+00:17:15.500 --> 00:17:16.120
+Setiap perubahan ini
+
+00:17:16.120 --> 00:17:16.700
+terlihat kecil
+
+00:17:16.700 --> 00:17:17.620
+tetapi secara kolektif
+
+00:17:17.620 --> 00:17:18.620
+menciptakan jalur serangan
+
+00:17:18.620 --> 00:17:19.380
+yang jauh lebih besar
+
+00:17:19.380 --> 00:17:20.700
+dari yang direncanakan.
+
+00:17:21.500 --> 00:17:22.020
+Jika Anda tidak
+
+00:17:22.020 --> 00:17:22.920
+membangun intersepsi
+
+00:17:22.920 --> 00:17:24.020
+ke dalam model operasi Anda,
+
+00:17:24.140 --> 00:17:24.920
+lingkungan akan berkembang
+
+00:17:24.920 --> 00:17:25.520
+jauh lebih cepat
+
+00:17:25.520 --> 00:17:26.620
+daripada kemampuan kontrol Anda.
+
+00:17:27.100 --> 00:17:28.220
+Bagi pemimpin keamanan,
+
+00:17:28.400 --> 00:17:28.940
+pendekatan ini
+
+00:17:28.940 --> 00:17:29.700
+akhirnya memperbaiki
+
+00:17:29.700 --> 00:17:30.700
+masalah kepemilikan rumit
+
+00:17:30.700 --> 00:17:31.760
+yang melanda banyak organisasi.
+
+00:17:32.360 --> 00:17:32.700
+Saat ini,
+
+00:17:32.800 --> 00:17:33.400
+risiko kopilot
+
+00:17:33.400 --> 00:17:34.320
+biasanya jatuh ke celah
+
+00:17:34.320 --> 00:17:35.540
+antara berbagai tim yang berbeda.
+
+00:17:35.540 --> 00:17:37.440
+SoC melihat peringatan,
+
+00:17:37.660 --> 00:17:38.700
+admin Microsoft 365
+
+00:17:38.700 --> 00:17:39.940
+melihat konfigurasi,
+
+00:17:40.140 --> 00:17:40.820
+dan pemilik AI
+
+00:17:40.820 --> 00:17:42.380
+hanya peduli pada adopsi.
+
+00:17:43.080 --> 00:17:43.900
+Saat Anda menggunakan
+
+00:17:43.900 --> 00:17:44.920
+jalur kontrol logic app,
+
+00:17:45.000 --> 00:17:45.520
+semua kelompok ini
+
+00:17:45.520 --> 00:17:46.380
+akhirnya dapat bekerja
+
+00:17:46.380 --> 00:17:47.620
+dari model respons yang sama.
+
+00:17:48.420 --> 00:17:49.060
+Mereka menggunakan
+
+00:17:49.060 --> 00:17:49.760
+jejak peristiwa,
+
+00:17:49.920 --> 00:17:50.640
+logika penilaian,
+
+00:17:50.760 --> 00:17:51.760
+dan riwayat cabang yang sama
+
+00:17:51.760 --> 00:17:52.800
+yang mengurangi kebingungan total
+
+00:17:52.800 --> 00:17:53.820
+saat perintah berisiko
+
+00:17:53.820 --> 00:17:54.760
+atau dokumen berbahaya
+
+00:17:54.760 --> 00:17:56.160
+muncul dalam alur kerja langsung.
+
+00:17:57.040 --> 00:17:57.920
+Sisi bisnis dari hal ini
+
+00:17:57.920 --> 00:17:58.500
+jauh lebih langsung
+
+00:17:58.500 --> 00:17:59.680
+daripada yang diperkirakan orang.
+
+00:18:00.200 --> 00:18:01.300
+Membrokir ancaman sejak awal
+
+00:18:01.300 --> 00:18:01.900
+selalu lebih murah
+
+00:18:01.900 --> 00:18:02.860
+daripada mencoba bersihkan.
+
+00:18:02.860 --> 00:18:04.440
+Pembersihan melibatkan
+
+00:18:04.440 --> 00:18:05.040
+investigasi,
+
+00:18:05.160 --> 00:18:05.700
+tinjauan hukum,
+
+00:18:05.780 --> 00:18:06.580
+dan gangguan pengguna,
+
+00:18:06.940 --> 00:18:07.860
+dan biasanya berakhir
+
+00:18:07.860 --> 00:18:08.740
+dengan tinjauan akses
+
+00:18:08.740 --> 00:18:09.700
+yang seharusnya dilakukan
+
+00:18:09.700 --> 00:18:11.080
+sebelum Anda menerapkannya.
+
+00:18:11.880 --> 00:18:12.760
+Para pemimpin tidak perlu
+
+00:18:12.760 --> 00:18:14.080
+kuliah panjang tentang etika AI
+
+00:18:14.080 --> 00:18:14.780
+untuk memahaminya.
+
+00:18:14.940 --> 00:18:15.740
+Mereka hanya perlu melihat
+
+00:18:15.740 --> 00:18:16.880
+bahwa kontrol waktu jalan
+
+00:18:16.880 --> 00:18:17.740
+lebih murah daripada
+
+00:18:17.740 --> 00:18:18.900
+membiarkan risiko tak terkendali
+
+00:18:18.900 --> 00:18:19.580
+menyebar-penisiko
+
+00:18:19.580 --> 00:18:20.440
+tak terkendali menyebar
+
+00:18:20.440 --> 00:18:21.820
+melalui sistem yang digunakan setiap hari.
+
+00:18:22.180 --> 00:18:22.980
+Bagi para eksekutif,
+
+00:18:23.060 --> 00:18:23.760
+ini memunculkan poin
+
+00:18:23.760 --> 00:18:24.200
+yang tidak nyaman
+
+00:18:24.200 --> 00:18:25.080
+tentang di mana risiko berat.
+
+00:18:25.780 --> 00:18:26.980
+Risiko AI tidak lagi berada
+
+00:18:26.980 --> 00:18:27.560
+di kotak pasir
+
+00:18:32.860 --> 00:18:33.900
+di tempat-tempat ini cukup aman
+
+00:18:33.900 --> 00:18:34.740
+untuk bergerak cepat
+
+00:18:34.740 --> 00:18:35.920
+dan kepercayaan pinjaman itulah
+
+00:18:35.920 --> 00:18:37.060
+yang justru meningkatkan risiko
+
+00:18:37.060 --> 00:18:37.800
+bagi perusahaan.
+
+00:18:38.560 --> 00:18:39.320
+Alur kerja yang buruk
+
+00:18:39.320 --> 00:18:40.700
+dalam aplikasi eksperimental
+
+00:18:40.700 --> 00:18:41.860
+adalah masalah terbatas.
+
+00:18:42.120 --> 00:18:43.040
+Tetapi alur kerja buruk
+
+00:18:43.040 --> 00:18:44.060
+dalam tumpukan produktivitas
+
+00:18:44.060 --> 00:18:44.580
+harian Anda
+
+00:18:44.580 --> 00:18:45.260
+adalah cerita yang
+
+00:18:45.260 --> 00:18:46.060
+sama sekali berbeda.
+
+00:18:46.700 --> 00:18:47.520
+Jalur peluncuran Anda
+
+00:18:47.520 --> 00:18:48.180
+harus tetap kecil
+
+00:18:48.180 --> 00:18:48.860
+dan sangat rencan.
+
+00:18:49.200 --> 00:18:49.620
+Mulainya dengan
+
+00:18:49.620 --> 00:18:50.420
+satu kasus penggunaan,
+
+00:18:50.500 --> 00:18:50.940
+satu pemicu,
+
+00:18:51.000 --> 00:18:51.840
+dan satu moda penilaian.
+
+00:18:52.100 --> 00:18:53.000
+Pilih jalur di mana
+
+00:18:53.000 --> 00:18:54.080
+data benar-benar penting
+
+00:18:54.080 --> 00:18:55.020
+dan perilakunya mudah
+
+00:18:55.020 --> 00:18:55.800
+untuk Anda amati.
+
+00:18:56.300 --> 00:18:57.080
+Anda harus membuktikan
+
+00:18:57.080 --> 00:18:58.080
+bahwa alur kerja tersebut
+
+00:18:58.080 --> 00:18:59.060
+menangkap input berisiko
+
+00:18:59.060 --> 00:18:59.860
+dan mengarahkan yang aman
+
+00:18:59.860 --> 00:19:00.820
+sambil memberikan informasi
+
+00:19:00.820 --> 00:19:01.520
+berguna bagi manusia
+
+00:19:01.520 --> 00:19:02.420
+saat peninjauan diperlukan.
+
+00:19:03.000 --> 00:19:03.740
+Setelah Anda membuktikan
+
+00:19:03.740 --> 00:19:04.380
+hal itu berhasil,
+
+00:19:04.480 --> 00:19:05.300
+Anda bisa melakukan ekspansi.
+
+00:19:05.760 --> 00:19:06.440
+Nantinya Anda bisa
+
+00:19:06.440 --> 00:19:07.600
+menambahkan deteksi anomali
+
+00:19:07.600 --> 00:19:08.340
+atau kontrol output
+
+00:19:08.340 --> 00:19:09.040
+di mana pun yang sesuai.
+
+00:19:09.380 --> 00:19:10.420
+Anda bahkan bisa menambahkan
+
+00:19:10.420 --> 00:19:11.340
+pemantauan lebih dalam
+
+00:19:11.340 --> 00:19:12.280
+untuk penyalahgunan alat
+
+00:19:12.280 --> 00:19:13.060
+tetapi Anda harus tetap
+
+00:19:13.060 --> 00:19:13.800
+menaruh gerbang pertama
+
+00:19:13.800 --> 00:19:14.620
+tepat di tempat konteks
+
+00:19:14.620 --> 00:19:15.080
+yang tidak terjadi.
+
+00:19:15.460 --> 00:19:16.680
+Jika gerbang pertama itu
+
+00:19:16.680 --> 00:19:17.180
+tetap lemah,
+
+00:19:17.300 --> 00:19:18.440
+setiap kontrol yang Anda tambahkan
+
+00:19:18.440 --> 00:19:19.280
+nanti hanya akan mencoba
+
+00:19:19.280 --> 00:19:20.360
+menutupi titik awal yang buruk.
+
+00:19:21.160 --> 00:19:21.580
+Perubahan di sini
+
+00:19:21.580 --> 00:19:22.300
+sebenarnya sangat sederhana.
+
+00:19:22.700 --> 00:19:23.500
+Berhentilah menganggap
+
+00:19:23.500 --> 00:19:24.160
+injeksi perintah
+
+00:19:24.160 --> 00:19:24.960
+hanya sebagai masalah
+
+00:19:24.960 --> 00:19:25.500
+tata bahasa
+
+00:19:25.500 --> 00:19:26.480
+dan mulailah menganggapnya
+
+00:19:26.480 --> 00:19:27.160
+sebagai kontrol
+
+00:19:27.160 --> 00:19:28.340
+waktu proses atas konteks
+
+00:19:28.340 --> 00:19:29.260
+tidak terpercaya yang bergerak
+
+00:19:29.260 --> 00:19:29.860
+melalui kopelot.
+
+00:19:30.640 --> 00:19:31.520
+Luangkan waktu minggu ini
+
+00:19:31.520 --> 00:19:32.120
+untuk memutakan
+
+00:19:32.120 --> 00:19:33.460
+satu alur kerja kopelot dari akhir.
+
+00:19:34.140 --> 00:19:35.060
+Temukan titik intersepsi
+
+00:19:35.060 --> 00:19:36.240
+aman terakhir sebelum eksekusi
+
+00:19:36.240 --> 00:19:36.680
+dan membangun
+
+00:19:36.680 --> 00:19:37.540
+satu aplikasi logika
+
+00:19:37.540 --> 00:19:38.020
+yang menilai,
+
+00:19:38.320 --> 00:19:39.100
+memblokir, dan mencetat
+
+00:19:39.100 --> 00:19:40.040
+jalur spesifik tersebut.
+
+00:19:40.740 --> 00:19:41.520
+Jika Anda ingin informasi
+
+00:19:41.520 --> 00:19:42.740
+lebih lanjut tentang keamanan kopelot
+
+00:19:42.740 --> 00:19:43.340
+tanpa bahasa basi
+
+00:19:43.340 --> 00:19:44.480
+berlangganlah dan tinggalkan ulasan.
+
+00:19:44.740 --> 00:19:45.620
+Anda juga dapat terhubung
+
+00:19:45.620 --> 00:19:46.660
+dengan saya, Mirko Peters
+
+00:19:46.660 --> 00:19:47.100
+di LinkedIn
+
+00:19:47.100 --> 00:19:48.140
+untuk memberitahu saya
+
+00:19:48.140 --> 00:19:49.580
+tentang skenario penyewa spesifik
+
+00:19:49.580 --> 00:19:50.480
+yang ingin Anda amankan.

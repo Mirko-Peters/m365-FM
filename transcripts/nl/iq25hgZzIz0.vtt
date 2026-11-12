@@ -1,0 +1,820 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:01.320
+Voor het vakmanschap
+
+00:00:01.320 --> 00:00:05.580
+Het onderwerp van vandaag is er een waar bijna iedereen van gehoord heeft, maar weinig een echt begrijpen.
+
+00:00:05.760 --> 00:00:10.700
+Je hebt Azure Monitor waarschijnlijk wel eens in de portal gezien en misschien wat rondgeklikt om vervolgens de draad kwijt te raken.
+
+00:00:10.940 --> 00:00:13.460
+Dat is volkomen normaal. Dit is het echte probleem.
+
+00:00:13.620 --> 00:00:18.840
+Je hebt één dashboard voor je virtuele machines, een ander voor je apps, nog een voor beveiliging, en ze communiceren onderling niet.
+
+00:00:19.020 --> 00:00:23.220
+Als er iets misgaat, spring je tussen vijf verschillende schermen om te achterhalen wat er is gebeurd.
+
+00:00:23.400 --> 00:00:29.160
+Dus, wat als je alles kon zien, statistieken, logboeken, waarschuwingen, zelfs identiteit en e-mail, allemaal op één plek.
+
+00:00:29.160 --> 00:00:34.940
+Aan het einde van deze aflevering begrijp je wat Azure Monitor echt is en hoe het je dat centrale overzicht biedt.
+
+00:00:35.000 --> 00:00:39.460
+Het grote geheel. Wat is Azure Monitor? Dus, wat is Azure Monitor nu precies?
+
+00:00:39.680 --> 00:00:41.640
+Laten we beginnen met een eenvoudige definitie.
+
+00:00:41.800 --> 00:00:47.900
+Azure Monitor is Microsoft's centrale platform voor waarneembaarheid voor het verzamelen, analyseren en handelen op basis van telemetriegegevens.
+
+00:00:48.140 --> 00:00:50.020
+Dat is een mond vol, dus laten we het opdelen.
+
+00:00:50.220 --> 00:00:54.320
+Zie het als een modern kantoorpand. Je hebt een centrale beveiligingsbalie bij de hoofdingang.
+
+00:00:54.320 --> 00:00:58.920
+Die balie ziet iedereen die binnenkomt, naar welke verdieping ze gaan, welke kamer ze betreden en wanneer ze vertrekken.
+
+00:00:58.920 --> 00:01:01.580
+Het is het enige punt van bewustzijn voor het hele gebouw.
+
+00:01:01.660 --> 00:01:06.700
+Azure Monitor is precies dat voor jouw cloud. Het is het centrale zenuwstelsel dat alles met elkaar verbindt.
+
+00:01:06.820 --> 00:01:09.540
+Dit is het punt. Azure Monitor is niet één enkele tool.
+
+00:01:09.760 --> 00:01:14.840
+Het is een platform dat statistieken, logboeken, traces en waarschuwingen samenbrengt vanuit Azure, on-premises en zelfs andere clouds.
+
+00:01:15.040 --> 00:01:17.580
+Twintig jaar geleden kocht je voor alles afzonderlijke producten.
+
+00:01:17.720 --> 00:01:20.780
+Eén tool voor servers, een andere voor apps, nog een voor netwerken.
+
+00:01:20.960 --> 00:01:23.280
+Ze zaten in silo's en deelden nooit informatie.
+
+00:01:23.280 --> 00:01:26.000
+Azure Monitor vervangt die versnippering volledig.
+
+00:01:26.000 --> 00:01:28.820
+Nu vraag je je misschien af, is dit alleen voor IT-beheer?
+
+00:01:29.140 --> 00:01:29.820
+Absoluut niet.
+
+00:01:30.000 --> 00:01:34.400
+Azure Monitor vormt in feite de basis voor Microsoft Defender for Cloud en Microsoft Sentinel.
+
+00:01:34.700 --> 00:01:36.560
+Het is dus ook het fundament voor beveiliging.
+
+00:01:36.760 --> 00:01:40.840
+Hetzelfde data-platform dat aangeeft dat je CPU-belasting piekt, voedt ook je beveiligingstools.
+
+00:01:41.060 --> 00:01:43.280
+Dat is een krachtig idee als je er even bij stilstaat.
+
+00:01:43.400 --> 00:01:44.620
+Maar laten we concreet worden.
+
+00:01:44.800 --> 00:01:50.560
+Azure Monitor verwerkt twee hoofdtype gegevens en het verschil daartussen begrijpen is essentieel om het hele platform te begrijpen.
+
+00:01:50.740 --> 00:01:53.060
+De twee bouwstenen, statistieken en logboeken.
+
+00:01:53.060 --> 00:01:57.800
+Laten we beginnen met statistieken. Dit zijn numerieke waarden die met regelmatige tussenpozen worden verzameld.
+
+00:01:58.020 --> 00:02:01.980
+Zie ze als je vitale functies, zoals hartslag, bloeddruk of lichaamstemperatuur.
+
+00:02:02.180 --> 00:02:04.200
+Ze laten zien hoe de zaken er op dit moment voor staan.
+
+00:02:04.380 --> 00:02:08.540
+In Azure Monitor zijn metwerks zaken als CPU-percentage, geheugengebruik of schijfleestoegang per seconde.
+
+00:02:08.680 --> 00:02:11.860
+Ze zijn lichtgewicht en komen bijna in realtime binnen, perfect voor dashboards en triggers.
+
+00:02:12.080 --> 00:02:13.960
+Je ziet een piek op het moment dat deze zich voordoet.
+
+00:02:14.120 --> 00:02:15.720
+Dan heb je logs, die zijn heel anders.
+
+00:02:15.960 --> 00:02:19.500
+Het zijn gedetailleerde verslagen van gebeurtenissen, als een dagboek of een blackbox recorder.
+
+00:02:19.500 --> 00:02:26.860
+Een loogvermelding vertelt je wanneer iemand een virtuele machine opnieuw opstartte, welke foutcode een applicatie gaf, die er vanaf waar inlogde en op welk exact tijdstip.
+
+00:02:27.000 --> 00:02:29.760
+Logs zijn veel rijker dan metrics, maar ze zijn ook omvangrijker.
+
+00:02:29.980 --> 00:02:35.500
+Ze staan in een log-analytics-werkruimte en je bevraagt ze met iets dat Cousteau Query Language heet, oftewel KQL.
+
+00:02:36.300 --> 00:02:37.780
+Dit is dus het belangrijkste verschil.
+
+00:02:38.000 --> 00:02:39.540
+Metrics vertellen je dat er iets mis is.
+
+00:02:39.760 --> 00:02:40.800
+Logs vertellen je waarom.
+
+00:02:41.000 --> 00:02:42.560
+Stel je voor dat je in je auto rijdt.
+
+00:02:42.640 --> 00:02:46.980
+Het controlelampje van de motor gaat branden, dat is een metric die zegt dat er nu iets mis is, maar je weet niet wat.
+
+00:02:46.980 --> 00:02:50.120
+Dus rijd je naar een garage en zij voeren een diagnoserapport uit.
+
+00:02:50.260 --> 00:02:53.220
+Dat rapport vertelt je precies welke sensor faalde en welke code deze gaf.
+
+00:02:53.400 --> 00:02:54.020
+Dat is de log.
+
+00:02:54.200 --> 00:02:55.780
+Metrics zijn het controlelampje van de motor.
+
+00:02:55.980 --> 00:02:57.620
+Logs zijn het diagnoserapport van de monteur.
+
+00:02:57.780 --> 00:02:58.620
+Je hebt beide nodig.
+
+00:02:58.840 --> 00:03:00.640
+Hier is een kort praktisch detail, gratis.
+
+00:03:00.780 --> 00:03:02.440
+Je krijgt 90 dagen loogretentie.
+
+00:03:02.660 --> 00:03:07.640
+Dat is een goed venster voor de meeste probleemoplossingen, maar als je meer nodig hebt voor compliance of auditing, kun je dit verlengen.
+
+00:03:07.800 --> 00:03:10.240
+Onthoud wel, langer bewaren kost meer, dus plan het in.
+
+00:03:10.420 --> 00:03:12.140
+Nu begrijp je de twee bouwstenen.
+
+00:03:12.340 --> 00:03:16.860
+Metrics voor de snelle check, logs voor de diepe duik, maar waar komt al deze data eigenlijk vandaan?
+
+00:03:16.860 --> 00:03:18.240
+Dat is de volgende vraag.
+
+00:03:18.440 --> 00:03:20.020
+Waar alle data vandaan komt?
+
+00:03:20.240 --> 00:03:22.120
+Waar komt al deze data eigenlijk vandaan?
+
+00:03:22.260 --> 00:03:26.920
+Dat is het interessante gedeelte, want Azure Monitor houdt niet alleen je virtuele machines in de gaten, maar alles.
+
+00:03:27.160 --> 00:03:28.740
+Laten we beginnen met de makkelijkste bron.
+
+00:03:28.940 --> 00:03:34.860
+Elke Azure resource die je aanmaakt, zoals virtuele machines, databases, opslagaccounts en app services, verstuurt automatisch platformmetrics.
+
+00:03:35.660 --> 00:03:38.280
+CPU gebruik, schijf-IO, netwerkdoorvoer.
+
+00:03:38.460 --> 00:03:38.860
+Dit is ingebouwd.
+
+00:03:39.500 --> 00:03:40.860
+Je hoeft niets te configureren.
+
+00:03:41.040 --> 00:03:43.140
+Je krijgt het gratis zodra je de resource aanmaakt.
+
+00:03:43.300 --> 00:03:44.960
+Maar dat is slechts het topje van de ijsberg.
+
+00:03:44.960 --> 00:03:47.180
+Voor je applicaties heb je Application Insights nodig.
+
+00:03:47.360 --> 00:03:48.960
+De service van Azure Monitor voor applicatieprestatiebeheer.
+
+00:03:49.780 --> 00:03:53.760
+Het volgt aanvraagsnelheden, responstijden, uitzonderingen en afhankelijkheidsaanroepen.
+
+00:03:53.900 --> 00:03:59.180
+Als je webapp een database of een externe API aanroept, ziet Application Insights die aanroep en meet hoe lang het duurde.
+
+00:03:59.340 --> 00:04:01.400
+Het is alsof je een detective in je code hebt.
+
+00:04:01.620 --> 00:04:02.640
+Laten we nu dieper gaan.
+
+00:04:02.840 --> 00:04:09.100
+De platformmetriek waar we het over hadden, vertelt je wat Azure ziet van buiten je virtuele machine, maar niet wat er binnen het besturingssysteem gebeurt.
+
+00:04:09.340 --> 00:04:11.340
+Daarvoor heb je de Azure Monitor agent nodig.
+
+00:04:11.540 --> 00:04:13.760
+Een klein stukje software dat je binnen je VM installeert.
+
+00:04:13.760 --> 00:04:19.300
+Deze verzamelt metriek en logboeken op OS-niveau, zoals geheugenbelasting, schijfwachtrijlengte en specifieke applicatiecrashes.
+
+00:04:19.540 --> 00:04:22.000
+Dit is waar je ziet wat er werkelijk binnen de machine gebeurt.
+
+00:04:22.200 --> 00:04:25.120
+Het goede nieuws is dat diezelfde agent ook buiten Azure werkt.
+
+00:04:25.280 --> 00:04:29.720
+Als je servers hebt die on-premises of in een andere cloud draaien, kun je Azure Arc gebruiken om ze te verbinden.
+
+00:04:29.960 --> 00:04:36.980
+Zodra ze verbonden zijn, werkt de Azure Monitor agent precies hetzelfde en krijg je dezelfde gegevens, dashboards en waarschuwingen, ongeacht waar je server staat.
+
+00:04:36.980 --> 00:04:42.480
+Er is ook de mogelijkheid om Microsoft 365 en Entra ID-gegevens rechtstreeks naar Azure Monitor te streamen.
+
+00:04:42.860 --> 00:04:45.220
+Aanmeldlogboeken, auditlogboeken, activiteitsgegevens.
+
+00:04:45.400 --> 00:04:50.260
+Elke keer dat iemand probeert in te loggen vanaf een ongebruikelijke locatie, kan die gebeurtenis in je Log Analytics werkruimte stromen.
+
+00:04:50.440 --> 00:04:53.860
+Je kunt dit correleren met je applicatieprestatiegegevens en het volledige plaatje zien.
+
+00:04:54.040 --> 00:04:55.760
+En tot slot, beveiligingsgegevens.
+
+00:04:55.760 --> 00:05:00.000
+Microsoft Defender for Cloud en Microsoft Sentinel bevinden zich bovenop hetzelfde data-platform.
+
+00:05:00.160 --> 00:05:04.260
+Dus wanneer je een beveiligingsincident onderzoekt, bekijk je dezelfde logboeken die je gebruikt voor het oplossen van prestatieproblemen.
+
+00:05:04.360 --> 00:05:05.960
+Je hebt geen afzonderlijk hulpprogramma nodig.
+
+00:05:06.140 --> 00:05:07.360
+Het staat allemaal op één plek.
+
+00:05:07.500 --> 00:05:09.560
+Je hebt dus al deze gegevens die overal vandaan komen.
+
+00:05:09.760 --> 00:05:13.240
+VM's, apps, on-premises servers, identiteitssystemen, beveiligingshulpmiddelen.
+
+00:05:13.380 --> 00:05:14.980
+Hoe krijg je hier nu eigenlijk inzicht in?
+
+00:05:15.660 --> 00:05:17.340
+Visualisatie, je centrale overzicht.
+
+00:05:17.560 --> 00:05:19.600
+Dus, hoe zie je al deze gegevens in de praktijk?
+
+00:05:19.600 --> 00:05:23.220
+Azure Monitor biedt verschillende manieren, maar de belangrijkste tool is Workbooks.
+
+00:05:23.220 --> 00:05:28.820
+Workbooks zijn interactieve rapporten die tekst, metrie, logboeken en parameters combineren tot aangepaste dashboards.
+
+00:05:29.060 --> 00:05:30.540
+Zie ze als je commandocentrum.
+
+00:05:30.740 --> 00:05:32.180
+Hier is een concreet voorbeeld.
+
+00:05:32.480 --> 00:05:36.120
+Stel je voor dat je één workbook maakt dat drie dingen op één pagina toont.
+
+00:05:36.340 --> 00:05:40.140
+VM-status, reactietijden van apps en aanmeldingsanomalieën.
+
+00:05:40.360 --> 00:05:41.200
+Draai je je servers?
+
+00:05:41.560 --> 00:05:42.560
+Is je webapp traag?
+
+00:05:42.760 --> 00:05:45.200
+Zijn er ongebruikelijke inlogpogingen van buiten je land?
+
+00:05:45.360 --> 00:05:46.620
+Alle drie op één scherm.
+
+00:05:46.620 --> 00:05:49.560
+Je hebt geen drie verschillende tools nodig, slechts één workbook.
+
+00:05:49.680 --> 00:05:51.400
+En workbooks zijn niet alleen statische grafieken.
+
+00:05:51.400 --> 00:05:53.720
+Ze ondersteunen kleurcodering, pictogrammen en drempelwaarden.
+
+00:05:53.880 --> 00:05:55.560
+Een gezonde server toont een groen vinkje.
+
+00:05:55.720 --> 00:05:58.100
+Een server die zijn capaciteit nadert, toont een gele waarschuwing.
+
+00:05:58.260 --> 00:06:00.120
+Een server die uit de lucht is, wordt rood weergegeven.
+
+00:06:00.260 --> 00:06:02.940
+Je kunt er in één oogopslag naar kijken en precies weten waar je problemen zijn.
+
+00:06:03.120 --> 00:06:05.780
+De belangrijkste functie, die grafieken bevatten aan klikbare links.
+
+00:06:06.000 --> 00:06:10.860
+Als je een server met een hoog CPU gebruik ziet, klik je erop en ga je direct naar die resource in de Azure Portal.
+
+00:06:11.120 --> 00:06:14.060
+Niet zoeken, niet kopiëren en plakken, gewoon klikken en gaan.
+
+00:06:14.320 --> 00:06:16.120
+Workbooks zijn echter niet de enige optie.
+
+00:06:16.120 --> 00:06:18.140
+Je hebt ook dashboards in de Azure Portal.
+
+00:06:18.380 --> 00:06:21.640
+Hiermee kun je tegels van verschillende bronnen vastmaken voor een snel overzicht.
+
+00:06:21.840 --> 00:06:23.060
+Zie het als je ochtendbriefing.
+
+00:06:23.200 --> 00:06:25.700
+Een snelle blik om er zeker van te zijn dat alles in orde is.
+
+00:06:25.920 --> 00:06:28.160
+Dan is er nog de Metric Explorer voor ad hoc grafieken.
+
+00:06:28.380 --> 00:06:30.960
+Wil je het CPU gebruik van al je VM's van het laatste uur zien?
+
+00:06:31.140 --> 00:06:34.620
+Open Metric Explorer, selecteer je resources en je hebt binnen seconden een grafiek.
+
+00:06:34.780 --> 00:06:36.020
+Geen installatie vereist.
+
+00:06:36.220 --> 00:06:40.380
+En als je rapporten moet delen met belanghebbenden die niet in Azure werken, kun je integreren met Power BI.
+
+00:06:40.560 --> 00:06:44.120
+Je management team krijgt een maandelijks rapport met de service status, uptime en prestatietrends.
+
+00:06:44.120 --> 00:06:47.420
+Zij hoeven geen KQL of Log Analytics te begrijpen.
+
+00:06:47.620 --> 00:06:49.600
+Ze zien gewoon de cijfers die voor hen belangrijk zijn.
+
+00:06:49.780 --> 00:06:50.660
+Het doel is simpel.
+
+00:06:50.860 --> 00:06:52.780
+Eén plek om naartoe te gaan als er iets niet in de haak is.
+
+00:06:52.980 --> 00:06:54.340
+Niet meer schakelen tussen vijf schermen.
+
+00:06:54.500 --> 00:06:57.100
+Niet meer inloggen bij drie verschillende tools om te achterhalen wat er kapot is.
+
+00:06:57.260 --> 00:06:59.260
+Je opent Azure Monitor en je ziet alles.
+
+00:06:59.540 --> 00:07:00.820
+Dat is het centrale dashboard.
+
+00:07:01.280 --> 00:07:02.560
+Waarschuwingen en automatisering.
+
+00:07:02.860 --> 00:07:03.700
+Wanneer je moet handelen.
+
+00:07:03.900 --> 00:07:06.640
+De data zien is geweldig, maar je moet ook weten wanneer je moet ingrijpen.
+
+00:07:06.860 --> 00:07:08.080
+Daar komen waarschuwingen kijken.
+
+00:07:08.300 --> 00:07:10.680
+Azure Monitor waarschuwingen werken met zowel metrieken als logboeken.
+
+00:07:10.680 --> 00:07:13.720
+Je stelt een voorwaarde in en wanneer aan die voorwaarde is voldaan, gebeurt er iets.
+
+00:07:13.900 --> 00:07:15.120
+Laten we dat nader bekijken.
+
+00:07:15.320 --> 00:07:17.760
+Metriek waarschuwingen zijn gebaseerd op drempelwaarden en erg snel.
+
+00:07:17.920 --> 00:07:21.780
+Je stelt in CPU boven 90% gedurende vijf minuten en zodra dat gebeurt wordt er een waarschuwing geactiveerd.
+
+00:07:21.940 --> 00:07:23.440
+Simpel, direct, bijna real-time.
+
+00:07:23.680 --> 00:07:25.860
+Deze zijn ideaal wanneer je precies weet wat een probleem is.
+
+00:07:26.060 --> 00:07:27.300
+Log waarschuwingen zijn anders.
+
+00:07:27.560 --> 00:07:29.480
+Ze zijn gebaseerd op queries en veel flexibeler.
+
+00:07:29.700 --> 00:07:33.240
+In plaats van een simpele drempelwaarde schrijf je een query die zoekt naar een specifiek patroon.
+
+00:07:33.420 --> 00:07:36.720
+Vind alle mislukte inlogpogingen van buiten de VS van het afgelopen uur.
+
+00:07:36.720 --> 00:07:39.640
+Als de query resultaten oplevert, wordt de waarschuwing geactiveerd.
+
+00:07:39.780 --> 00:07:42.960
+Hiermee kun je complexe scenario's detecteren die een simpele drempelwaarde zou missen.
+
+00:07:43.120 --> 00:07:45.100
+Wanneer een waarschuwing wordt geactiveerd, wat gebeurt er dan?
+
+00:07:45.260 --> 00:07:46.620
+Daar komen actiegroepen van pas.
+
+00:07:46.800 --> 00:07:48.340
+Een actiegroep bepaalt de reactie.
+
+00:07:48.500 --> 00:07:53.860
+Het kan een e-mail, een SMS, een pushbericht naar je telefoon sturen of een webhoek activeren die een ander systeem aanroept.
+
+00:07:54.040 --> 00:07:57.720
+Maar de echt krachtige optie is het activeren van een Logic App voor geautomatiseerd herstel.
+
+00:07:57.960 --> 00:08:01.580
+Stel je voor een waarschuwing wordt geactiveerd omdat de schijfruimte van een server bijna op is.
+
+00:08:01.580 --> 00:08:06.920
+In plaats van iemand om twee uur s'nachts wakker te maken, activeert de waarschuwing een Logic App die automatisch een opschoonscript uitvoert.
+
+00:08:07.080 --> 00:08:09.420
+Het probleem is opgelost voordat iemand het überhaupt merkt.
+
+00:08:09.580 --> 00:08:12.360
+Nu is er iets nieuws in 2026 dat het spel volledig verandert.
+
+00:08:12.580 --> 00:08:16.940
+Dynamische drempelwaarden gebruiken machine learning om te leren hoe normaal gedrag er uitziet voor jouw specifieke omgeving.
+
+00:08:17.160 --> 00:08:19.560
+Ze houden rekening met uur-, dag- en weekpatronen.
+
+00:08:19.720 --> 00:08:28.320
+Dus als je server overdag normaal op 40% CPU draait, maar elke dinsdag om drie uur smiddagspiek naar 70% vanwege een geplande backup, leert het systeem dat.
+
+00:08:28.320 --> 00:08:32.020
+Het waarschuwt je niet voor die piek, alleen wanneer er echt iets abnormaals gebeurt.
+
+00:08:32.220 --> 00:08:34.520
+Dit vermindert het aantal valse meldingen aanzienlijk.
+
+00:08:34.620 --> 00:08:37.340
+En er is nog een nieuwe functie, query-gebaseerde metrische waarschuwingen.
+
+00:08:37.460 --> 00:08:41.400
+Hiermee kun je KQL-stel queries gebruiken op Prometheus en OpenTelemetry metrie-eken.
+
+00:08:41.600 --> 00:08:48.020
+Dus, als je Kubernetes gebruikt en Prometheus voor metrie-eken, kun je dezelfde soort log-stel queries op je metrische data uitvoeren.
+
+00:08:48.180 --> 00:08:51.520
+Het verenigt je waarschuwingslogica over al je telemetriebronnen heen.
+
+00:08:51.660 --> 00:08:55.320
+Kortom, monitoring wordt proactief wanneer je waarschuwingen correct instelt.
+
+00:08:55.320 --> 00:08:57.940
+Je pakt problemen aan voordat gebruikers ze opmerken.
+
+00:08:58.160 --> 00:09:03.760
+Dat is het verschil tussen om drie uur s'nachts gebeld worden door je baas dat de website plat ligt, of om drie uur s'nachts een melding krijgen.
+
+00:09:03.980 --> 00:09:06.660
+We hebben een potentieel probleem opgelost voordat iemand het merkte.
+
+00:09:06.900 --> 00:09:09.640
+Wat is er nieuw in 2026 en waarom is het belangrijk?
+
+00:09:09.940 --> 00:09:16.140
+Laten we nu praten over wat er daadwerkelijk is veranderd in Azure Monitor in 2026, want dit is niet hetzelfde platform als twee jaar geleden.
+
+00:09:16.360 --> 00:09:19.200
+Dit is de grootste update, OpenTelemetry is nu de standaard.
+
+00:09:19.400 --> 00:09:22.640
+Native OTLP-ingestie werkt direct met de Azure Monitor-agent.
+
+00:09:22.640 --> 00:09:26.820
+Wat dat voor jou betekent, is dat je leverancier neutrale instrumentatie kunt gebruiken voor al je applicaties.
+
+00:09:26.980 --> 00:09:29.500
+Je zit niet vast aan Microsoft-specifieke SDK's.
+
+00:09:29.680 --> 00:09:35.440
+Schrijf je instrumentatie eenmalig met open standaarden en het werkt of je nu data verstuurt naar Azure Monitor, Datadak of een andere tool.
+
+00:09:35.660 --> 00:09:38.660
+Dat is erg belangrijk als je organisatieflexibiliteit waardeert.
+
+00:09:38.980 --> 00:09:42.220
+Vervolgens, SLI- en SLO-ondersteuning is nu van het hoogste niveau.
+
+00:09:42.480 --> 00:09:49.880
+Je kunt service-level indicators voor beschikbaarheid en latentie definiëren, je resources groeperen in servicegroepen en je betrouwbaarheidsdoelen nee te volgen.
+
+00:09:49.880 --> 00:09:53.520
+Geen data meer exporteren naar een spreadsheet om de uptime te berekenen.
+
+00:09:53.640 --> 00:09:55.280
+Het is direct ingebouwd in het platform.
+
+00:09:55.620 --> 00:09:58.200
+Nu is hier iets waar je actie op moet ondernemen als je dat nog niet hebt gedaan.
+
+00:09:58.380 --> 00:10:00.980
+De oude Log Analytics-agent is volledig buiten gebruik gesteld.
+
+00:10:01.180 --> 00:10:04.160
+Op 2 maart 2026 werd de backend definitief afgesloten.
+
+00:10:04.360 --> 00:10:07.220
+Als je nog steeds die oude agent gebruikt, is je datastroom gestopt.
+
+00:10:07.420 --> 00:10:10.840
+Iedereen moet overstappen op de Azure Monitor-agent met regels voor gegevensverzameling.
+
+00:10:11.020 --> 00:10:13.620
+Als je nog niet bent gemigreerd, is dat je hoogste prioriteit.
+
+00:10:13.840 --> 00:10:18.920
+En nog een verandering die eraan komt, Microsoft Entra ID is nu vereist om Application Insights gegevens op te vragen.
+
+00:10:18.920 --> 00:10:21.160
+De oude Legacy API-sleutels verdwijnen.
+
+00:10:21.320 --> 00:10:23.720
+De deadline is 30 september 2026.
+
+00:10:24.020 --> 00:10:29.180
+Dus als je scripts of tools hebt die die oude sleutels gebruiken, moet je deze bijwerken naar Entra ID-authenticatie.
+
+00:10:29.360 --> 00:10:34.840
+Ten slotte maken de nieuwe Basic- en Axiali-log niveaus het veel goedkoper om minder vaak geraadpleegde gegevens op te slaan.
+
+00:10:35.000 --> 00:10:39.860
+Ik praat zo meer over kosten, maar dit is erg belangrijk voor iedereen die zijn monitoringfactuur onder controle wil houden.
+
+00:10:40.020 --> 00:10:42.140
+Praktische tips en kostenoptimalisatie.
+
+00:10:42.360 --> 00:10:47.860
+Over kosten gesproken, laten we kijken hoe de prijsstelling van Azure Monitor echt werkt, want het kan je verrassen als je niet oppast.
+
+00:10:47.860 --> 00:10:49.900
+Azure Monitor is gebaseerd op gebruik.
+
+00:10:50.020 --> 00:10:53.420
+Je betaalt voor logopname, retentie, aangepaste statistieken en waarschuwingen.
+
+00:10:53.520 --> 00:10:57.680
+Er is geen vast maandbedrag, dat is fijn als je klein bent, maar het kan snel oplopen als je niet oplet.
+
+00:10:57.840 --> 00:10:59.540
+Dit is het belangrijkste om te begrijpen.
+
+00:10:59.740 --> 00:11:00.980
+Er zijn drie logniveaus.
+
+00:11:01.200 --> 00:11:04.260
+Analytics-logs kosten ongeveer 2,30 dollar per gigabyte.
+
+00:11:04.500 --> 00:11:07.460
+Dit zijn je logs met volledige getrouwheid en volledige query-mogelijkheden.
+
+00:11:07.680 --> 00:11:10.060
+Basic-logs kosten ongeveer 50 cent per gigabyte.
+
+00:11:10.260 --> 00:11:12.600
+Die zijn voor gegevens die je moet bewaren, maar niet vaak opvraagt.
+
+00:11:12.780 --> 00:11:15.580
+En Axiali-logs kosten ongeveer 0,05 dollar per gigabyte.
+
+00:11:15.580 --> 00:11:19.480
+Dat zijn archieftarieven. Je bewaart ze voor compliance, maar kijkt er bijna nooit naar.
+
+00:11:19.620 --> 00:11:22.520
+Je krijgt 5 gigabyte per maand gratis voor Analytics-logs.
+
+00:11:22.700 --> 00:11:27.620
+Dat is genoeg voor een kleine omgeving, maar het is snel op zodra je meerdere servers en applicaties monitort.
+
+00:11:27.820 --> 00:11:34.480
+Als je dagelijkse opname stabiel is en boven de 100 gigabyte per dag ligt, kunnen commitmentniveaus je 15 tot 30 procent besparen.
+
+00:11:34.660 --> 00:11:40.420
+Je committeert je aan een bepaalde hoeveelheid dagelijkse data en Microsoft geeft je korting, maar doe dit alleen als je gebruik voorspelbaar is.
+
+00:11:40.420 --> 00:11:46.700
+Als het sterk fluctueert, kan PSU-go eigenlijk goedkoper zijn. Dus, wat moet je nu eigenlijk doen om de kosten onder controle te houden?
+
+00:11:46.880 --> 00:11:50.460
+Begin door LAX met een lage waarde naar basic of auxiliary niveaus te verplaatsen.
+
+00:11:50.660 --> 00:11:54.380
+Die debug-logging van je ontwikkelomgeving hoeft niet in een analytics-niveau te staan.
+
+00:11:54.640 --> 00:11:56.780
+Stel vervolgens retentiebeleid per tabel in.
+
+00:11:57.020 --> 00:11:59.320
+Bewaar operationele gegevens gedurende 31 dagen.
+
+00:11:59.560 --> 00:12:02.020
+Bewaar compliance-gegevens langer, maar bewaar niet alles voor altijd.
+
+00:12:02.260 --> 00:12:04.380
+Gebruik vervolgens sampling in Application Insights.
+
+00:12:04.580 --> 00:12:06.420
+Je hoeft niet elk afzonderlijk verzoek te loggen.
+
+00:12:06.420 --> 00:12:10.360
+Een statistisch significante steekproef geeft je dezelfde inzichten tegen een fractie van de kosten.
+
+00:12:10.580 --> 00:12:13.340
+En tot slot, stel dagelijkse uitgaaflimieten en waarschuwingen in.
+
+00:12:13.520 --> 00:12:16.780
+Laat je waarschuwen wanneer je 80% van je budget bereikt, zodat er geen verrassingen zijn.
+
+00:12:16.960 --> 00:12:20.080
+De grootste fout die mensen maken, is alles standaard naar het analytics-niveau sturen.
+
+00:12:20.480 --> 00:12:21.500
+Categoriseer je telemetrie.
+
+00:12:21.700 --> 00:12:24.020
+Niet elk logbestand heeft volledige query-mogelijkheden nodig.
+
+00:12:24.260 --> 00:12:26.220
+Behandel goedkope data als goedkope data.
+
+00:12:26.400 --> 00:12:27.740
+Hoe het allemaal samenkomt.
+
+00:12:27.880 --> 00:12:29.540
+Dus, dit is het punt met Azure Monitor.
+
+00:12:29.780 --> 00:12:30.720
+Het werkt niet alleen.
+
+00:12:30.920 --> 00:12:33.760
+Het is het middelpunt dat alles in je Microsoft-wereld verbindt.
+
+00:12:33.760 --> 00:12:35.180
+Laat me zien hoe dat eruitziet.
+
+00:12:35.180 --> 00:12:38.840
+Azure AD Logs stromen in Azure Monitor via diagnostische instellingen.
+
+00:12:38.940 --> 00:12:42.820
+Dus, wanneer iemand zegt dat een app traag is, bekijk je de aanmeldingslogs naast de prestatiegegevens.
+
+00:12:43.060 --> 00:12:44.640
+Was er een vertraging bij de authenticatie?
+
+00:12:44.820 --> 00:12:46.780
+Werd er een beleid voor voorwaardelijke toegang geactiveerd?
+
+00:12:46.920 --> 00:12:48.340
+Je ziet het allemaal vanaf één scherm.
+
+00:12:48.600 --> 00:12:51.240
+Microsoft Sentinel draait op dezelfde log-analytics-werkruimte.
+
+00:12:51.380 --> 00:12:54.140
+Je operationele gegevens en beveiligingsgegevens staan zij aan zij.
+
+00:12:54.320 --> 00:12:56.720
+Wanneer je een incident onderzoekt, wissel je niet van hulpmiddel.
+
+00:12:56.840 --> 00:12:58.000
+Je bevraagt één dataset.
+
+00:12:58.360 --> 00:12:59.380
+Dat is de echte kracht.
+
+00:12:59.380 --> 00:13:03.380
+Een verdachte beveiligingsgebeurtenis kan worden verklaard door een prestatieprobleem dat je al had opgemerkt.
+
+00:13:03.540 --> 00:13:05.860
+De vendor voor cloud haalt ook gegevens uit Azure Monitor.
+
+00:13:06.100 --> 00:13:07.680
+Het creëert geen eigen telemetrie.
+
+00:13:07.880 --> 00:13:10.300
+Het gebruikt dezelfde statistieken en logs die je al verzamelt.
+
+00:13:10.480 --> 00:13:15.460
+Dus, wanneer de vendor een kwetsbaarheid in een VM markeert, kun je direct de prestatiegegevens van die VM bekijken om de impact te zien.
+
+00:13:15.680 --> 00:13:19.300
+Zelfs governancegegevens van Microsoft Purview kunnen worden gekoppeld voor compliance monitoring.
+
+00:13:19.520 --> 00:13:23.760
+Je dataclassificatie en retentiebeleid koppelen allemaal terug naar hetzelfde observatieplatform.
+
+00:13:23.760 --> 00:13:28.680
+Het Cloud Adoption Framework van Microsoft beveelt Azure Monitor aan als je primaire monitoringsplatform.
+
+00:13:28.840 --> 00:13:30.100
+Dat is hun eigen richtlijn.
+
+00:13:30.320 --> 00:13:32.220
+Ze vertellen je om rondom deze tool te bouwen.
+
+00:13:32.440 --> 00:13:34.860
+Stel je nu voor dat iemand zegt dat SharePoint traag is.
+
+00:13:35.060 --> 00:13:38.500
+Met Azure Monitor open je één werkmap, controleer je de SharePoint Service Gezondheid,
+
+00:13:38.640 --> 00:13:40.280
+kijk je naar de VM die de webfront endhost,
+
+00:13:40.440 --> 00:13:42.980
+check je Entra ID aanmeldingslogs voor authenticatievertragingen
+
+00:13:42.980 --> 00:13:45.240
+en zie je app prestatiegegevens van Application Insights.
+
+00:13:45.420 --> 00:13:46.620
+Alles vanaf één scherm.
+
+00:13:46.880 --> 00:13:52.140
+Niet meer springen tussen het SharePoint Beheerscentrum, het VM Dashboard, Entra ID en Application Insights.
+
+00:13:52.140 --> 00:13:55.200
+Het staat allemaal daar, dus dit is de kern van de zaak.
+
+00:13:55.300 --> 00:13:57.720
+Azure Monitor is niet zomaar een monitoringshulpmiddel.
+
+00:13:57.840 --> 00:14:02.100
+Het is het centrale dashboard dat je apps, infrastructuur, identiteit en beveiliging samenbrengt.
+
+00:14:02.220 --> 00:14:05.460
+De echte waarde zit in de integratie, niet in één specifieke functie.
+
+00:14:05.600 --> 00:14:08.620
+Eén data platform, één query taal, één plek om te kijken.
+
+00:14:08.860 --> 00:14:12.960
+Als je aan je cloudreis begint, schakel dan vandaag nog Azure Monitor in op je eerste VM.
+
+00:14:13.220 --> 00:14:16.160
+Schakel gewoon de diagnostische instellingen in en zie wat je hebt gemist.
+
+00:14:16.380 --> 00:14:20.820
+Abonneer je op je favoriete podcast platform en deel deze aflevering met iemand die verdrinkt in te veel dashboards.
+
+00:14:20.820 --> 00:14:25.120
+Ik ben Mirko Peters, dit is Microsoft Knowledge Nuggets op M365.

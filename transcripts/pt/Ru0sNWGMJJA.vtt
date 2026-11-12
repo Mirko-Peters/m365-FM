@@ -1,0 +1,3277 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:02.600
+Você ainda está fazendo auditorias manuais no Fabric? Fascinante.
+
+00:00:03.060 --> 00:00:07.260
+Isso significa que você passa o fim de semana voluntariamente cruzando dados de conjuntos do Power BI,
+
+00:00:07.460 --> 00:00:09.820
+workspaces do Fabric e classificações do Purview com planilhas.
+
+00:00:10.440 --> 00:00:14.460
+Admirável, se o seu objetivo é ganhar um prêmio pelo uso, menos eficiente da inteligência humana.
+
+00:00:15.460 --> 00:00:18.120
+Governança Microsoft Fabric não é difícil por falta de recursos.
+
+00:00:18.800 --> 00:00:21.320
+É difícil porque os sistemas se recusam a falar a mesma língua.
+
+00:00:22.340 --> 00:00:25.760
+Cada um opera como um gerente arrogante que insiste que seu departamento é diferente.
+
+00:00:25.760 --> 00:00:30.420
+O Purview rastreia classificações, o Power BI impõe segurança, o Fabric gerencia a Pipeline,
+
+00:00:30.500 --> 00:00:32.520
+e você fica como árbitro das discussões deles no Excel.
+
+00:00:33.380 --> 00:00:36.080
+Apresentamos o GPT-5 dentro do Microsoft 305 Pilot.
+
+00:00:36.480 --> 00:00:38.980
+Este não é o mesmo assistente obediente que você usava para resumir antes.
+
+00:00:39.240 --> 00:00:40.380
+É um auditor com capacidade de raciocínio.
+
+00:00:40.660 --> 00:00:44.040
+A diferença? O GPT-5 não apenas encontra informações, ele entende relacionamentos.
+
+00:00:44.740 --> 00:00:48.460
+Neste vídeo você aprenderá como ele automatiza a governança do Fabric entre serviços
+
+00:00:48.460 --> 00:00:50.320
+sem única verificação manual.
+
+00:00:50.860 --> 00:00:54.760
+O raciocínio passo a passo que vem a seguir transforma o trabalho árduo e conformidade em pura lógica.
+
+00:00:54.760 --> 00:00:57.300
+Por que a governança falha no Microsoft Fabric?
+
+00:00:57.820 --> 00:00:58.820
+Aqui está a verdade desconfortar.
+
+00:00:59.380 --> 00:01:01.880
+O Fabric unificou a análise, mas esqueceu de unificar a governança.
+
+00:01:02.540 --> 00:01:06.180
+Sob os dashboards elegantes, existe uma rede bagunçada de sistemas competindo por atenção.
+
+00:01:07.300 --> 00:01:10.580
+O Fabric armazena os dados, o Power BI os visualiza e o Purview os categoriza,
+
+00:01:10.660 --> 00:01:11.920
+mas nenhum deles se comunica bem.
+
+00:01:12.480 --> 00:01:14.140
+Você pensaria que a Microsoft Construpa ia cooperar?
+
+00:01:14.720 --> 00:01:17.140
+Na prática, aparece mais três gênios em uma mesa de conferência,
+
+00:01:17.220 --> 00:01:18.960
+cada um falando seu próprio dialeto de Jason.
+
+00:01:19.520 --> 00:01:21.820
+Por isso que a governança entra em colapso sob sua própria ambição.
+
+00:01:22.180 --> 00:01:24.480
+Em ambos, você tem um lake house cheio de dados sensíveis.
+
+00:01:25.020 --> 00:01:27.480
+Dashboards do Power BI referenciando os de 15 ângulos
+
+00:01:27.480 --> 00:01:29.780
+e o Purview atribuindo rótulos em isolamento total.
+
+00:01:30.660 --> 00:01:34.220
+Quando os auditores pedem provas de que cada conjunto de dados classificados está seguro,
+
+00:01:34.560 --> 00:01:37.100
+você descobre que o Fabric conhece a linhagem, o Purview conhece as tags
+
+00:01:37.100 --> 00:01:40.240
+e o Power BI conhece as funções, mas ninguém sabe a história toda.
+
+00:01:40.880 --> 00:01:42.320
+O resultado é um emaranhado digital,
+
+00:01:42.640 --> 00:01:45.520
+uma tigela sem fim de campos, permissões e fluxos interconectados.
+
+00:01:46.180 --> 00:01:49.060
+Cada fio toca outro, mas nenhum deles reconhece a conexão.
+
+00:01:49.060 --> 00:01:52.960
+As equipes de governança acabam extraindo exportações de EPI manualmente,
+
+00:01:53.040 --> 00:01:54.920
+cruzando nomes que quase, mas não totalmente,
+
+00:01:55.300 --> 00:01:57.440
+coincidem e discutindo com CSVs que se recusam a alinhar.
+
+00:01:57.920 --> 00:02:00.740
+A auditoria média se torna um experimento sociológico sobre a paciência humana.
+
+00:02:01.120 --> 00:02:02.040
+Veja a Helena da conformidade.
+
+00:02:02.560 --> 00:02:05.220
+Ela passou duas semanas reconciliando conjuntos de dados
+
+00:02:05.220 --> 00:02:07.640
+altamente confidenciais do Purview com as restrições do Power BI.
+
+00:02:08.160 --> 00:02:11.020
+Duas semanas para descobrir que metade dos ativos estava classificada incorretamente,
+
+00:02:11.120 --> 00:02:13.880
+e a outra metade com rótulos errados porque alguém renomeou o workspace durante o projeto.
+
+00:02:13.880 --> 00:02:17.200
+O veredito dela, se o Fabric tivesse consciência, ele pediria desculpa.
+
+00:02:17.640 --> 00:02:18.440
+Mas o Fabric não tem.
+
+00:02:18.840 --> 00:02:20.180
+Ele apenas registra eventos e sorri.
+
+00:02:20.820 --> 00:02:22.380
+O problema real não é técnico, é lógico.
+
+00:02:22.860 --> 00:02:24.580
+As plataformas são brilhantes e armazenar fatos,
+
+00:02:24.620 --> 00:02:26.140
+mas não fazem ideia de como raciocinar sobre ele.
+
+00:02:26.460 --> 00:02:29.220
+Eles podem lhe dizer o que existe, mas não como essas coisas se relacionam com ele.
+
+00:02:29.780 --> 00:02:31.820
+É por isso que seus scripts e consultas só vão até certo ponto.
+
+00:02:32.260 --> 00:02:33.900
+Para validar a conformidade entre sistemas,
+
+00:02:34.080 --> 00:02:35.860
+você precisa de uma entidade capaz de inferência,
+
+00:02:35.980 --> 00:02:39.060
+algo que não apenas veja dados, mas deduza relações entre eles.
+
+00:02:39.540 --> 00:02:42.060
+Conheça o GPT-5, o primeiro estagiário da história da Microsoft
+
+00:02:42.060 --> 00:02:43.580
+que não precisa de supervisão constante.
+
+00:02:44.240 --> 00:02:45.800
+Diferente dos modelos anteriores do Coparity,
+
+00:02:45.900 --> 00:02:47.260
+não para na correspondência de palavra-chave.
+
+00:02:47.880 --> 00:02:49.400
+Ele realiza raciocínio estruturado,
+
+00:02:49.520 --> 00:02:51.280
+correlacionando grafos de linhagem do Fabric,
+
+00:02:51.400 --> 00:02:53.740
+classificações do Purview e modelos de segurança do Power BI
+
+00:02:53.740 --> 00:02:54.880
+em uma narrativa unificada.
+
+00:02:55.940 --> 00:02:58.160
+Ele constrói que as próprias ferramentas não conseguem contê-lo.
+
+00:02:58.680 --> 00:03:01.040
+A governança finalmente passa da inspeção interminável
+
+00:03:01.040 --> 00:03:02.100
+para automação inteligente,
+
+00:03:02.300 --> 00:03:04.080
+e pela primeira vez você pode editar o sistema
+
+00:03:04.080 --> 00:03:05.600
+em vez de diagnosticar seus mal-entendidos.
+
+00:03:06.860 --> 00:03:10.120
+Conheça o GPT-5, o raciocínio como elo perdido.
+
+00:03:10.660 --> 00:03:13.080
+Para ser claro, o GPT-5 não acordou uma manhã
+
+00:03:13.080 --> 00:03:14.560
+e aprendeu a digitar mais rápido.
+
+00:03:15.400 --> 00:03:16.800
+As manchetes podem falar sobre velocidade,
+
+00:03:17.000 --> 00:03:17.760
+mas isso é um efeito colateral.
+
+00:03:18.260 --> 00:03:19.640
+A verdadeira manchete é o raciocínio.
+
+00:03:20.160 --> 00:03:22.240
+A Microsoft incorporou a lógica de cadeia de pensamento
+
+00:03:22.240 --> 00:03:23.780
+diretamente no cérebro operacional do Copilot.
+
+00:03:24.440 --> 00:03:24.960
+Em tradução,
+
+00:03:25.360 --> 00:03:27.180
+o modelo não apenas regurgita a documentação,
+
+00:03:27.280 --> 00:03:28.860
+ele simula como um especialista humano pensaria
+
+00:03:28.860 --> 00:03:30.540
+sem o vício em café e as férias anuais.
+
+00:03:31.080 --> 00:03:32.160
+Compare isso ao GPT-4.
+
+00:03:32.660 --> 00:03:34.160
+O modelo anterior era com um assistente dirigente
+
+00:03:34.160 --> 00:03:36.120
+que respondia perguntas exatamente conformiladas.
+
+00:03:36.440 --> 00:03:37.760
+Pergunte sobre políticas do Purview
+
+00:03:37.760 --> 00:03:39.860
+e ele obedientemente permaneceria dentro daquela caixa de ferramentas.
+
+00:03:39.860 --> 00:03:40.920
+Inteligente, sim.
+
+00:03:41.500 --> 00:03:42.080
+Autônomo, não.
+
+00:03:42.740 --> 00:03:44.200
+Ele não conseguia inferir que sua pergunta
+
+00:03:44.200 --> 00:03:45.480
+sobre acesso a conjuntos de dados
+
+00:03:45.480 --> 00:03:47.200
+também poderia exigir uma verificação cruzada
+
+00:03:47.200 --> 00:03:49.160
+de funções do Power BI e pipelines do Fabric.
+
+00:03:49.960 --> 00:03:51.200
+Você precisava entregar o contexto de bandeira.
+
+00:03:51.720 --> 00:03:52.740
+O GPT-5, por outro lado,
+
+00:03:52.800 --> 00:03:54.100
+aprende o contexto conforme avança.
+
+00:03:54.880 --> 00:03:56.420
+Ele percebe as conexões que você esqueceu
+
+00:03:56.420 --> 00:03:58.300
+de mencionar e raciocina sobre elas antes de responder.
+
+00:03:59.020 --> 00:04:01.280
+Veja como isso funciona dentro do Microsoft Adolescencia Copilot.
+
+00:04:01.820 --> 00:04:03.660
+No momento em que você envia uma consulta de governança,
+
+00:04:03.740 --> 00:04:04.060
+por exemplo,
+
+00:04:04.220 --> 00:04:06.340
+mostre todos os ativos do Fabric com endereços de clientes
+
+00:04:06.340 --> 00:04:07.500
+que não estão classificados no Purview,
+
+00:04:07.580 --> 00:04:09.680
+o GPT-5 aciona uma cadeia de raciocínio interna,
+
+00:04:09.880 --> 00:04:10.760
+ou GPT-5 interna.
+
+00:04:11.140 --> 00:04:11.460
+Passo 1,
+
+00:04:11.520 --> 00:04:12.400
+interpreta a sua intenção.
+
+00:04:12.920 --> 00:04:15.300
+Ele reconhece que a solicitação não é sobre um único sistema,
+
+00:04:15.480 --> 00:04:17.620
+mas sobre as três superfícies do seu patrimônio de dados.
+
+00:04:18.680 --> 00:04:19.160
+Passo 2,
+
+00:04:19.340 --> 00:04:20.700
+ele lança threads mentais separadas,
+
+00:04:20.780 --> 00:04:21.520
+uma para cada domínio.
+
+00:04:22.020 --> 00:04:23.620
+O Fabric fornece linhagem de dados,
+
+00:04:23.700 --> 00:04:25.560
+o Purview contribui com metadados de classificação
+
+00:04:25.560 --> 00:04:27.680
+e o Power BI expõe a configuração de segurança.
+
+00:04:28.340 --> 00:04:29.100
+Passo 3,
+
+00:04:29.100 --> 00:04:30.620
+ele converge essas threads,
+
+00:04:30.780 --> 00:04:32.880
+reconciliando identificadores e verificando semânticas
+
+00:04:32.880 --> 00:04:34.600
+para que a resposta final seja validada,
+
+00:04:34.740 --> 00:04:36.040
+em vez de aproximada.
+
+00:04:36.800 --> 00:04:38.220
+O Copilot antigo unia informações.
+
+00:04:38.500 --> 00:04:39.840
+O novo Copilot valida a lógica,
+
+00:04:40.200 --> 00:04:41.580
+por isso que comparações simples de velocidade
+
+00:04:41.580 --> 00:04:42.460
+perdem o ponto principal.
+
+00:04:42.820 --> 00:04:44.940
+O aspecto revolucionário não é a rapidez da resposta,
+
+00:04:45.200 --> 00:04:46.400
+mas o fato de que cada resposta
+
+00:04:46.400 --> 00:04:48.080
+traz um raciocínio interno incorporado
+
+00:04:48.080 --> 00:04:50.660
+é como se o Power Automate tivesse ido para a faculdade,
+
+00:04:50.820 --> 00:04:51.640
+se formado com louvor
+
+00:04:51.640 --> 00:04:53.820
+e voltado a determinado aplicar cláusulas de conformidade.
+
+00:04:54.500 --> 00:04:56.660
+A maioria dos usuários confunde raciocínio com verbosidade.
+
+00:04:57.020 --> 00:04:58.320
+Suponho que uma explicação mais longa
+
+00:04:58.320 --> 00:04:59.660
+significa que o modelo está se exibindo.
+
+00:04:59.900 --> 00:05:01.700
+Não, a verbosidade é a evidência de deliberação,
+
+00:05:01.800 --> 00:05:03.480
+é o registro de sua trilha de auditoria cognitiva.
+
+00:05:03.860 --> 00:05:05.460
+Assim como o auditor escreve notas
+
+00:05:05.460 --> 00:05:06.520
+apoiando cada conclusão,
+
+00:05:06.860 --> 00:05:08.920
+o GPT-5 descreve os passos lógicos que seguiu.
+
+00:05:09.340 --> 00:05:10.840
+Essa trilha de auditoria não é enrolação,
+
+00:05:10.920 --> 00:05:11.420
+é proteção.
+
+00:05:12.060 --> 00:05:13.100
+Quando os reguladores perguntam
+
+00:05:13.100 --> 00:05:14.360
+como a conclusão foi alcançada,
+
+00:05:14.420 --> 00:05:15.460
+você finalmente tem uma resposta
+
+00:05:15.460 --> 00:05:16.400
+que vai além do que o disse.
+
+00:05:17.340 --> 00:05:18.640
+Vamos secar o modelo funcional.
+
+00:05:19.260 --> 00:05:21.040
+Pense nele como um pipeline de três estágios,
+
+00:05:21.120 --> 00:05:22.260
+interpretação de solicitação,
+
+00:05:22.500 --> 00:05:23.300
+raciocínio multidomínio,
+
+00:05:23.400 --> 00:05:24.480
+síntese, verificada.
+
+00:05:24.480 --> 00:05:26.540
+No primeiro estágio,
+
+00:05:26.620 --> 00:05:28.340
+o copilot analisa a linguagem no contexto,
+
+00:05:28.760 --> 00:05:30.560
+entendendo que dados sensíveis não rotulados
+
+00:05:30.560 --> 00:05:32.580
+implicam uma lacuna de classificação no purview.
+
+00:05:33.900 --> 00:05:34.860
+No segundo estágio,
+
+00:05:35.180 --> 00:05:38.000
+ele raciocina através de planos de dados simultaneamente,
+
+00:05:38.520 --> 00:05:40.320
+correlacionando campos que não são idênticos,
+
+00:05:40.420 --> 00:05:41.700
+mas funcionalmente relacionados,
+
+00:05:41.860 --> 00:05:43.400
+como combinar a ID do cliente no Fabric
+
+00:05:43.400 --> 00:05:44.740
+com o Cust-ID no Power BI.
+
+00:05:46.200 --> 00:05:47.560
+No estágio final de síntese,
+
+00:05:47.640 --> 00:05:48.960
+ele verifica cada link inferido
+
+00:05:48.960 --> 00:05:51.060
+antes de apresentar o resumo em que você confia.
+
+00:05:51.060 --> 00:05:52.540
+E aqui está o choque,
+
+00:05:52.600 --> 00:05:53.740
+você nunca pediu para ele fazer nada disso.
+
+00:05:54.520 --> 00:05:56.240
+O loop de raciocínio roda invisivelmente
+
+00:05:56.240 --> 00:05:57.520
+como um pequeno comitê interno
+
+00:05:57.520 --> 00:05:58.540
+que debate as evidências
+
+00:05:58.540 --> 00:06:00.060
+antes de deixar o porta-voz falar.
+
+00:06:00.720 --> 00:06:01.620
+E é isso que o Microsoft quer dizer
+
+00:06:01.620 --> 00:06:02.760
+com cadeia de pensamento integrada.
+
+00:06:03.600 --> 00:06:05.080
+GPT-5 escolhe quando um raciocínio
+
+00:06:05.080 --> 00:06:06.020
+mais profundo é necessário
+
+00:06:06.020 --> 00:06:06.960
+ou aplica automaticamente.
+
+00:06:07.840 --> 00:06:09.060
+Então, quando você faz uma pergunta
+
+00:06:09.060 --> 00:06:10.640
+de conformidade aparentemente inocente,
+
+00:06:10.780 --> 00:06:12.360
+quais tabelas de Lakehouse contêm pi
+
+00:06:12.360 --> 00:06:13.440
+mas carecem de um artefato
+
+00:06:13.440 --> 00:06:14.560
+correspondente no Power BI?
+
+00:06:15.140 --> 00:06:15.660
+Como regra,
+
+00:06:15.660 --> 00:06:17.860
+o GPT-5 não recorre à busca por palavra-chave.
+
+00:06:18.300 --> 00:06:19.640
+Ele reconstrói o grafo de linhagem,
+
+00:06:19.640 --> 00:06:22.220
+faz referência cruzada de tags do Purview,
+
+00:06:22.400 --> 00:06:23.560
+interpreta vínculos de segurança
+
+00:06:23.560 --> 00:06:25.240
+e revela apenas as divergências verificáveis
+
+00:06:25.240 --> 00:06:26.340
+em todos os conjuntos de dados.
+
+00:06:27.080 --> 00:06:28.140
+O resultado não é um palpite,
+
+00:06:28.200 --> 00:06:29.180
+é uma conclusão derivada.
+
+00:06:29.840 --> 00:06:30.860
+E sim, isso finalmente resolve
+
+00:06:30.860 --> 00:06:31.580
+o problema de governança
+
+00:06:31.580 --> 00:06:33.120
+que o próprio Fabric nunca conseguiu articular.
+
+00:06:34.380 --> 00:06:35.000
+Pela primeira vez,
+
+00:06:35.060 --> 00:06:35.860
+a correção contextual
+
+00:06:35.860 --> 00:06:37.080
+substitui a correlação manual.
+
+00:06:37.660 --> 00:06:39.260
+Gasta menos tempo reunindo fragmentos
+
+00:06:39.260 --> 00:06:40.440
+e mais tempo interpretando estratégia.
+
+00:06:41.320 --> 00:06:43.060
+O modelo realiza pensamento relacional
+
+00:06:43.060 --> 00:06:44.440
+em seu nome como delegar uma análise
+
+00:06:44.440 --> 00:06:45.760
+a alguém que não apenas lê a política,
+
+00:06:45.860 --> 00:06:46.920
+mas também entende a política
+
+00:06:46.920 --> 00:06:47.740
+por trás dela.
+
+00:06:47.740 --> 00:06:49.840
+Então, quão diferente fica o seu dia?
+
+00:06:50.580 --> 00:06:51.420
+Imagine um estagiário
+
+00:06:51.420 --> 00:06:52.860
+que prevê quais objetos de política
+
+00:06:52.860 --> 00:06:54.220
+se sobrepõe antes mesmo de você
+
+00:06:54.220 --> 00:06:55.020
+redigir a consulta.
+
+00:06:55.080 --> 00:06:56.440
+Explica seu raciocínio linha por linha
+
+00:06:56.440 --> 00:06:57.180
+e não o incomoda.
+
+00:06:57.300 --> 00:06:58.440
+A menos que o conjunto de dados
+
+00:06:58.440 --> 00:06:59.520
+realmente entre em conflito.
+
+00:07:00.560 --> 00:07:01.940
+Esse é o GPT-5 dentro do Copilot,
+
+00:07:02.080 --> 00:07:02.800
+o estagiário promovido
+
+00:07:02.800 --> 00:07:03.580
+oficial de conformidade
+
+00:07:03.580 --> 00:07:04.680
+trabalhando silenciosamente
+
+00:07:04.680 --> 00:07:05.460
+e sempre raciocinando.
+
+00:07:06.320 --> 00:07:07.040
+Agora vamos colocá-lo
+
+00:07:07.040 --> 00:07:08.140
+para trabalhar em uma auditoria real.
+
+00:07:09.100 --> 00:07:09.760
+O método antigo
+
+00:07:09.760 --> 00:07:10.980
+versus o método GPT-5.
+
+00:07:11.400 --> 00:07:12.420
+Vamos percorrer um cenário real.
+
+00:07:13.140 --> 00:07:13.600
+Sua tarefa,
+
+00:07:13.740 --> 00:07:14.960
+confirmar se todo o conjunto de dados
+
+00:07:14.960 --> 00:07:15.780
+em um lake house do Fabric
+
+00:07:15.780 --> 00:07:17.080
+que contém informações de identificação pessoal,
+
+00:07:17.320 --> 00:07:18.160
+está classificado no Purview
+
+00:07:18.160 --> 00:07:19.020
+e protegido por segurança
+
+00:07:19.020 --> 00:07:20.160
+em nível de linha no Power BI
+
+00:07:20.160 --> 00:07:21.180
+e protegido por segurança
+
+00:07:21.180 --> 00:07:22.600
+em nível de linha no Power BI.
+
+00:07:22.900 --> 00:07:23.720
+Objetivo direto,
+
+00:07:23.820 --> 00:07:24.900
+execução catastrófica.
+
+00:07:25.460 --> 00:07:26.360
+O antigo fluxo de trabalho
+
+00:07:26.360 --> 00:07:27.340
+parecia uma caça ao tesouro
+
+00:07:27.340 --> 00:07:28.040
+projetado a mãozinha.
+
+00:07:28.500 --> 00:07:29.460
+Você abriu o Power BI
+
+00:07:29.460 --> 00:07:30.760
+para exportar perfis de acesso
+
+00:07:30.760 --> 00:07:31.560
+e ao Purview
+
+00:07:31.560 --> 00:07:32.820
+para listar ativos rotulados
+
+00:07:32.820 --> 00:07:33.800
+e exportava metadados
+
+00:07:33.800 --> 00:07:34.760
+de pipelines do Fabric
+
+00:07:34.760 --> 00:07:35.600
+torcendo para que os nomes
+
+00:07:35.600 --> 00:07:36.560
+das colunas coincidissem.
+
+00:07:36.860 --> 00:07:37.620
+Raramente coincidiam.
+
+00:07:37.820 --> 00:07:38.460
+Três dashboards,
+
+00:07:38.600 --> 00:07:39.220
+quatro exportações,
+
+00:07:39.340 --> 00:07:39.840
+dois migrantes
+
+00:07:39.840 --> 00:07:40.740
+e ainda sem nenhuma certeza.
+
+00:07:41.240 --> 00:07:42.420
+Você tentava reconciliar dados
+
+00:07:42.420 --> 00:07:43.720
+que viviam em universos paralelos.
+
+00:07:44.120 --> 00:07:45.300
+O antigo copilot não ajudava muito.
+
+00:07:45.640 --> 00:07:46.800
+Ele resumia cada serviço,
+
+00:07:46.880 --> 00:07:48.020
+mas faltava cola intelectual
+
+00:07:48.020 --> 00:07:48.840
+para conectá-los.
+
+00:07:49.800 --> 00:07:50.580
+Ao pedir para listar
+
+00:07:50.580 --> 00:07:51.360
+conjuntos de dados
+
+00:07:51.360 --> 00:07:52.360
+classificados pelo Purview
+
+00:07:52.360 --> 00:07:53.200
+usados no Power BI,
+
+00:07:53.660 --> 00:07:54.660
+ele gentilmente recuperava
+
+00:07:54.660 --> 00:07:55.400
+listas separadas.
+
+00:07:55.880 --> 00:07:56.680
+Era como contratar
+
+00:07:56.680 --> 00:07:57.460
+três tradutores
+
+00:07:57.460 --> 00:07:58.760
+que conhecem apenas um idioma cada.
+
+00:07:59.320 --> 00:08:00.400
+Sim, eles falam fluentemente,
+
+00:08:00.520 --> 00:08:01.240
+mas nunca entre si.
+
+00:08:01.780 --> 00:08:02.980
+A auditoria terminava com você,
+
+00:08:03.060 --> 00:08:03.620
+rezando para que os nomes
+
+00:08:03.620 --> 00:08:04.420
+alinhassem com coincidência.
+
+00:08:04.800 --> 00:08:05.660
+Spoiler, eles não alinhavam.
+
+00:08:06.140 --> 00:08:07.140
+Agora, entra o GPT sim.
+
+00:08:07.780 --> 00:08:08.460
+A mesma consulta,
+
+00:08:08.500 --> 00:08:09.300
+mas com uma mecânica cerebral
+
+00:08:09.300 --> 00:08:09.880
+completamente feia.
+
+00:08:10.280 --> 00:08:10.700
+Você diz,
+
+00:08:10.700 --> 00:08:11.780
+audite todos os ativos
+
+00:08:11.780 --> 00:08:12.560
+do Fabric Compi
+
+00:08:12.560 --> 00:08:13.140
+para confirmar
+
+00:08:13.140 --> 00:08:13.660
+a classificação
+
+00:08:13.660 --> 00:08:14.880
+e restrições de segurança.
+
+00:08:16.180 --> 00:08:17.180
+O copilot impulsionado
+
+00:08:17.180 --> 00:08:17.980
+pelo GPT-5
+
+00:08:17.980 --> 00:08:18.700
+interpreta a afirmação
+
+00:08:18.700 --> 00:08:19.300
+de forma holística.
+
+00:08:19.820 --> 00:08:20.300
+Passo 1.
+
+00:08:20.760 --> 00:08:21.660
+Ele consulta o gráfico
+
+00:08:21.660 --> 00:08:22.900
+de linhagem interna do Fabric,
+
+00:08:23.060 --> 00:08:24.180
+rastreando cada artefato
+
+00:08:24.180 --> 00:08:25.520
+que referencia dados de clientes.
+
+00:08:26.100 --> 00:08:26.980
+Ele não para nos contêineres
+
+00:08:26.980 --> 00:08:27.420
+de armazenamento.
+
+00:08:27.940 --> 00:08:28.820
+Ele segue as transformações
+
+00:08:28.820 --> 00:08:29.580
+através de notebooks
+
+00:08:29.580 --> 00:08:29.940
+e pipeline.
+
+00:08:30.740 --> 00:08:31.380
+Passo 2.
+
+00:08:31.640 --> 00:08:32.340
+Ele busca as tabelas
+
+00:08:32.340 --> 00:08:33.360
+de classificação do Purview,
+
+00:08:33.740 --> 00:08:34.820
+verificando se esses artefatos
+
+00:08:34.820 --> 00:08:36.260
+contêm rótulos de dados sensíveis.
+
+00:08:37.160 --> 00:08:37.840
+Passo 3.
+
+00:08:37.840 --> 00:08:39.340
+Ele mergulha no Power BI,
+
+00:08:39.560 --> 00:08:40.420
+cruzando os mapeamentos
+
+00:08:40.420 --> 00:08:41.480
+de segurança em nível de linha
+
+00:08:41.480 --> 00:08:42.580
+com os mesmos identificadores
+
+00:08:42.580 --> 00:08:43.540
+de linhagem expostos
+
+00:08:43.540 --> 00:08:44.160
+pelo Fabric.
+
+00:08:45.000 --> 00:08:45.680
+Passo 4.
+
+00:08:45.760 --> 00:08:46.800
+Ele mescla esse conhecimento
+
+00:08:46.800 --> 00:08:47.500
+em um único resumo
+
+00:08:47.500 --> 00:08:48.100
+de conformidade,
+
+00:08:48.200 --> 00:08:48.900
+com inconsistências
+
+00:08:48.900 --> 00:08:49.500
+não resolvidas
+
+00:08:49.500 --> 00:08:50.600
+sinalizadas como riscos.
+
+00:08:51.260 --> 00:08:51.780
+Em nenhum momento
+
+00:08:51.780 --> 00:08:52.840
+você mencionou explicitamente
+
+00:08:52.840 --> 00:08:53.640
+correlacionar e diz
+
+00:08:53.640 --> 00:08:54.340
+ou juntar pelo nome
+
+00:08:54.340 --> 00:08:54.980
+do conjunto de dados.
+
+00:08:56.100 --> 00:08:57.160
+A camada de raciocínio
+
+00:08:57.160 --> 00:08:57.980
+deduziu-se sozinha
+
+00:08:57.980 --> 00:08:58.840
+porque o GPT-5
+
+00:08:58.840 --> 00:09:00.080
+estrutura a lógica internamente
+
+00:09:00.080 --> 00:09:01.120
+identificando relações
+
+00:09:01.120 --> 00:09:01.920
+que auditores humanos
+
+00:09:01.920 --> 00:09:03.320
+teriam que confirmar manualmente.
+
+00:09:04.440 --> 00:09:05.180
+Isso não é correspondência
+
+00:09:05.180 --> 00:09:05.580
+de padrões,
+
+00:09:05.660 --> 00:09:06.840
+referência em escala empresarial.
+
+00:09:07.680 --> 00:09:08.260
+Para entender melhor,
+
+00:09:08.340 --> 00:09:09.100
+vamos expor a sequência
+
+00:09:09.100 --> 00:09:09.720
+de raciocínio.
+
+00:09:10.420 --> 00:09:11.480
+Identificar, combinar,
+
+00:09:11.740 --> 00:09:12.800
+cruzar dados, sintetizar.
+
+00:09:13.260 --> 00:09:13.620
+Primeiro,
+
+00:09:13.860 --> 00:09:14.640
+identifique a linhagem
+
+00:09:14.640 --> 00:09:15.300
+que vem de onde.
+
+00:09:15.900 --> 00:09:16.560
+Segundo, combine
+
+00:09:16.560 --> 00:09:17.260
+conjuntos de dados
+
+00:09:17.260 --> 00:09:18.100
+com rótulos do pervio.
+
+00:09:18.400 --> 00:09:18.840
+Terceiro,
+
+00:09:18.920 --> 00:09:19.620
+cruze as restrições
+
+00:09:19.620 --> 00:09:20.100
+do Power BI
+
+00:09:20.100 --> 00:09:20.660
+para esses mesmos
+
+00:09:20.660 --> 00:09:21.240
+conjuntos de dados.
+
+00:09:21.780 --> 00:09:22.220
+Finalmente,
+
+00:09:22.340 --> 00:09:23.060
+sintetize tudo
+
+00:09:23.060 --> 00:09:23.520
+em um relatório
+
+00:09:23.520 --> 00:09:24.540
+de governança verificado.
+
+00:09:25.000 --> 00:09:25.600
+O ciclo inteiro
+
+00:09:25.600 --> 00:09:26.800
+é executado com uma consulta
+
+00:09:26.800 --> 00:09:27.860
+substituindo horas
+
+00:09:27.860 --> 00:09:28.660
+de triagem manual.
+
+00:09:29.760 --> 00:09:30.700
+O que torna isso poderoso
+
+00:09:30.700 --> 00:09:31.260
+não é mágica,
+
+00:09:31.320 --> 00:09:31.880
+é consistência.
+
+00:09:32.680 --> 00:09:33.200
+Auditores humanos
+
+00:09:33.200 --> 00:09:33.600
+são falidos.
+
+00:09:33.960 --> 00:09:34.640
+Eles esquecem o nome
+
+00:09:34.640 --> 00:09:35.320
+de um fluxo de dados,
+
+00:09:35.400 --> 00:09:35.940
+ignoram uma tabela
+
+00:09:35.940 --> 00:09:36.500
+reclassificada,
+
+00:09:36.600 --> 00:09:37.180
+perdem a paciência.
+
+00:09:40.420 --> 00:09:41.140
+de uma corrente lógica,
+
+00:09:41.200 --> 00:09:41.900
+rastreando relações
+
+00:09:41.900 --> 00:09:42.580
+até que os limiares
+
+00:09:42.580 --> 00:09:43.620
+de confiança sejam atingidos.
+
+00:09:44.340 --> 00:09:44.780
+Na prática,
+
+00:09:44.860 --> 00:09:45.240
+isso significa
+
+00:09:45.240 --> 00:09:46.220
+que a governança do fábrica
+
+00:09:46.220 --> 00:09:46.860
+deixa de ser um jogo
+
+00:09:46.860 --> 00:09:47.380
+de adivinhação
+
+00:09:47.380 --> 00:09:48.080
+e passa a ser álgebra.
+
+00:09:48.520 --> 00:09:49.140
+O modelo reduz
+
+00:09:49.140 --> 00:09:49.720
+a conformidade
+
+00:09:49.720 --> 00:09:50.940
+a uma equação solucionável.
+
+00:09:51.480 --> 00:09:51.900
+Vamos adicionar
+
+00:09:51.900 --> 00:09:52.580
+uma pitada de descrença.
+
+00:09:53.260 --> 00:09:54.560
+Durante uma revisão fechada,
+
+00:09:54.620 --> 00:09:55.160
+um líder de TI
+
+00:09:55.160 --> 00:09:56.080
+executou uma auditoria
+
+00:09:56.080 --> 00:09:56.660
+entre serviços
+
+00:09:56.660 --> 00:09:57.700
+esperando que o GPT-5
+
+00:09:57.700 --> 00:09:58.140
+travasse com
+
+00:09:58.140 --> 00:09:59.260
+identificadores inconsistentes.
+
+00:09:59.780 --> 00:10:00.340
+Em vez disso,
+
+00:10:00.420 --> 00:10:00.980
+o modelo inferiu
+
+00:10:00.980 --> 00:10:02.160
+os mapeamentos corretamente,
+
+00:10:02.280 --> 00:10:03.400
+reconhecendo que o Cust ID
+
+00:10:03.400 --> 00:10:04.020
+no Power BI
+
+00:10:04.020 --> 00:10:05.080
+se referia ao mesmo campo
+
+00:10:05.080 --> 00:10:05.920
+que a Customer Key
+
+00:10:05.920 --> 00:10:06.580
+no Fabric.
+
+00:10:07.120 --> 00:10:08.140
+O líder encarou o resultado
+
+00:10:08.140 --> 00:10:08.800
+como se o sistema
+
+00:10:08.800 --> 00:10:09.680
+tivesse lido sua mente.
+
+00:10:10.300 --> 00:10:11.200
+A rigor ele lê os metadados
+
+00:10:11.200 --> 00:10:12.360
+melhor do que ele jamais conseguiu.
+
+00:10:13.140 --> 00:10:13.980
+Esse é um momento de revelação.
+
+00:10:14.620 --> 00:10:15.620
+Complexidade de prompt dente,
+
+00:10:15.720 --> 00:10:16.620
+que raciocínio exponencialmente
+
+00:10:16.620 --> 00:10:17.240
+mais inteligente.
+
+00:10:17.680 --> 00:10:18.200
+Você não se tornou
+
+00:10:18.200 --> 00:10:19.200
+aditor mirada à noite por dia.
+
+00:10:19.500 --> 00:10:19.860
+Se tornou.
+
+00:10:20.380 --> 00:10:20.840
+E de repente,
+
+00:10:20.960 --> 00:10:21.880
+tarefas que antes exigiam
+
+00:10:21.880 --> 00:10:22.760
+scripts, exportações
+
+00:10:22.760 --> 00:10:23.460
+e horas de fim de semana
+
+00:10:23.460 --> 00:10:24.020
+foram reduzidas
+
+00:10:24.020 --> 00:10:24.960
+ao comando conversacional.
+
+00:10:25.260 --> 00:10:26.300
+Ergunte, aguarde, revise.
+
+00:10:26.640 --> 00:10:27.280
+O raciocínio lida
+
+00:10:27.280 --> 00:10:27.860
+com a correlação.
+
+00:10:28.420 --> 00:10:29.180
+Observe algo sutil.
+
+00:10:29.940 --> 00:10:30.900
+O Copilot agora entrega
+
+00:10:30.900 --> 00:10:31.360
+explicações,
+
+00:10:31.460 --> 00:10:32.280
+não apenas respostas.
+
+00:10:33.140 --> 00:10:33.880
+Seu relatório inclui
+
+00:10:33.880 --> 00:10:34.460
+a fundamentação
+
+00:10:34.460 --> 00:10:35.140
+para cada conclusão.
+
+00:10:35.740 --> 00:10:36.520
+Caminhos de linhagem,
+
+00:10:36.660 --> 00:10:37.440
+fontes de classificação,
+
+00:10:37.580 --> 00:10:38.800
+políticas de RLS aplicadas.
+
+00:10:39.320 --> 00:10:40.100
+Essa transparência
+
+00:10:40.100 --> 00:10:41.120
+transforma auditorias
+
+00:10:41.120 --> 00:10:42.180
+de documentação reativa
+
+00:10:42.180 --> 00:10:43.140
+em evidências vivas.
+
+00:10:43.720 --> 00:10:44.720
+Você pode mostrar a gestão
+
+00:10:44.720 --> 00:10:45.760
+porque um conjunto de dados
+
+00:10:45.760 --> 00:10:46.620
+falha na conformidade
+
+00:10:46.620 --> 00:10:47.760
+sem reler três exportações.
+
+00:10:48.420 --> 00:10:49.700
+A IEA já aprovou sua lógica.
+
+00:10:50.560 --> 00:10:51.000
+Economicamente,
+
+00:10:51.080 --> 00:10:51.680
+isso é transformador.
+
+00:10:52.280 --> 00:10:53.260
+Custo numa auditoria manual
+
+00:10:53.260 --> 00:10:54.320
+não é apenas mão de obra.
+
+00:10:54.320 --> 00:10:55.060
+É oportunidade.
+
+00:10:55.580 --> 00:10:56.240
+Cada hora gasta
+
+00:10:56.240 --> 00:10:57.200
+conciliando CSVs
+
+00:10:57.200 --> 00:10:57.960
+é uma hora que não foi gasto
+
+00:10:57.960 --> 00:10:58.880
+melhorando a arquitetura.
+
+00:10:59.860 --> 00:11:01.080
+O GPT-5 muda esse equilíbrio.
+
+00:11:01.600 --> 00:11:02.580
+Você recupera tempo,
+
+00:11:03.020 --> 00:11:03.600
+reduz erros
+
+00:11:03.600 --> 00:11:04.440
+e estabelece padrões
+
+00:11:04.440 --> 00:11:05.480
+de conformidade repetíveis
+
+00:11:05.480 --> 00:11:06.320
+entre locatários.
+
+00:11:07.720 --> 00:11:08.480
+A mudança é mesurada.
+
+00:11:08.960 --> 00:11:09.440
+A governança
+
+00:11:09.440 --> 00:11:10.600
+deixa de ser um pânico episódico
+
+00:11:10.600 --> 00:11:10.960
+para se tornar
+
+00:11:10.960 --> 00:11:11.880
+uma garantia contínua.
+
+00:11:12.700 --> 00:11:13.420
+E, filosoficamente,
+
+00:11:13.500 --> 00:11:14.360
+algo mais profundo ocorre.
+
+00:11:15.000 --> 00:11:16.060
+Fabric parecia opaco,
+
+00:11:16.120 --> 00:11:16.820
+uma grande máquina
+
+00:11:16.820 --> 00:11:18.200
+com compartimentos secretos demais.
+
+00:11:18.780 --> 00:11:19.540
+Com o GPT-5
+
+00:11:19.540 --> 00:11:20.580
+observando os compartimentos
+
+00:11:20.580 --> 00:11:21.140
+se iluminarem,
+
+00:11:21.240 --> 00:11:22.200
+as linhas entre Purview,
+
+00:11:22.200 --> 00:11:23.240
+Power BI e Fabric
+
+00:11:23.240 --> 00:11:24.440
+se fundem em um esquema conectado
+
+00:11:24.440 --> 00:11:25.680
+supervisionado por uma inteligência
+
+00:11:25.680 --> 00:11:27.080
+que raciocina constantemente.
+
+00:11:28.020 --> 00:11:28.880
+Você não está mais rastejando
+
+00:11:28.880 --> 00:11:29.280
+por logs
+
+00:11:29.280 --> 00:11:29.920
+e está gerenciando
+
+00:11:29.920 --> 00:11:31.040
+a responsabilidade sistêmica?
+
+00:11:31.040 --> 00:11:32.100
+Então, sim,
+
+00:11:32.160 --> 00:11:32.920
+a geração da prancheta
+
+00:11:32.920 --> 00:11:33.720
+de auditores de planilhas
+
+00:11:33.720 --> 00:11:34.680
+pode finalmente descansar.
+
+00:11:35.360 --> 00:11:36.580
+O GPT-5 no Copilot
+
+00:11:36.580 --> 00:11:37.740
+internalizou seus métodos,
+
+00:11:37.820 --> 00:11:38.580
+refinou sua bagunça
+
+00:11:38.580 --> 00:11:39.820
+e automatizou seu propósito.
+
+00:11:40.320 --> 00:11:41.300
+Visibilidade não é mais o problema.
+
+00:11:41.760 --> 00:11:42.800
+A verificação é instantânea.
+
+00:11:43.380 --> 00:11:44.120
+E agora que a lógica
+
+00:11:44.120 --> 00:11:44.740
+está resolvida,
+
+00:11:44.840 --> 00:11:46.160
+podemos falar sobre o próximo efeito,
+
+00:11:46.240 --> 00:11:46.880
+o que essa automação
+
+00:11:46.880 --> 00:11:47.820
+faz com seu orçamento,
+
+00:11:47.920 --> 00:11:48.920
+sua postura de conformidade
+
+00:11:48.920 --> 00:11:49.640
+e sua sanidade.
+
+00:11:50.920 --> 00:11:52.040
+O impacto nos negócios,
+
+00:11:52.080 --> 00:11:53.060
+da conformidade reativa
+
+00:11:53.060 --> 00:11:53.780
+para preditiva.
+
+00:11:54.460 --> 00:11:55.680
+Vamos quantificar isso racionalmente
+
+00:11:55.680 --> 00:11:56.380
+antes que alguém comece
+
+00:11:56.380 --> 00:11:57.080
+a celebrar milagres
+
+00:11:57.080 --> 00:11:57.700
+de produtividade.
+
+00:11:57.700 --> 00:11:59.140
+Auditorias manuais
+
+00:11:59.140 --> 00:11:59.860
+não são apenas lentas,
+
+00:11:59.920 --> 00:12:00.680
+são formas financeiramente
+
+00:12:00.680 --> 00:12:01.620
+extravagantes de avalestruição.
+
+00:12:02.060 --> 00:12:03.140
+Cada revisão trimestral
+
+00:12:03.140 --> 00:12:04.260
+exige analistas humanos
+
+00:12:04.260 --> 00:12:05.480
+extraindo metadados,
+
+00:12:05.680 --> 00:12:06.580
+alinhando exportações,
+
+00:12:06.960 --> 00:12:07.920
+verificando classificações
+
+00:12:07.920 --> 00:12:09.160
+e justificando discrepâncias,
+
+00:12:09.400 --> 00:12:10.200
+atividades que não geram
+
+00:12:10.200 --> 00:12:11.320
+nenhuma vantagem competitiva.
+
+00:12:12.080 --> 00:12:12.320
+Portanto,
+
+00:12:12.400 --> 00:12:12.940
+você é essencialmente
+
+00:12:12.940 --> 00:12:13.580
+pagando especialistas
+
+00:12:13.580 --> 00:12:14.080
+por log logs.
+
+00:12:14.740 --> 00:12:15.320
+Multiplique isso
+
+00:12:15.320 --> 00:12:16.560
+por todas as unidades de negócio
+
+00:12:16.560 --> 00:12:17.120
+e a governança
+
+00:12:17.120 --> 00:12:17.900
+deixa de ser uma função
+
+00:12:17.900 --> 00:12:18.420
+de controle.
+
+00:12:19.060 --> 00:12:20.080
+Torna-se um imposto oculto.
+
+00:12:20.300 --> 00:12:21.180
+Agora, observe o que acontece
+
+00:12:21.180 --> 00:12:21.600
+no momento em que
+
+00:12:21.600 --> 00:12:22.320
+a automação de raciocínio
+
+00:12:22.320 --> 00:12:22.540
+é assim.
+
+00:12:23.100 --> 00:12:23.920
+O GPT-5
+
+00:12:23.920 --> 00:12:24.680
+não apenas acelera
+
+00:12:24.680 --> 00:12:25.720
+verificações individuais,
+
+00:12:27.700 --> 00:12:28.220
+conformidade.
+
+00:12:29.320 --> 00:12:29.620
+Antes,
+
+00:12:29.760 --> 00:12:30.940
+fotos estáticas agendadas.
+
+00:12:31.060 --> 00:12:31.880
+A cada símbolo fiscal,
+
+00:12:32.020 --> 00:12:33.640
+cada uma perdendo precisão
+
+00:12:33.640 --> 00:12:34.260
+no momento em que
+
+00:12:34.260 --> 00:12:35.000
+um pipeline muda.
+
+00:12:35.860 --> 00:12:36.200
+Depois,
+
+00:12:36.380 --> 00:12:37.100
+garantia contínua
+
+00:12:37.100 --> 00:12:38.100
+sustentada por correlação
+
+00:12:38.100 --> 00:12:38.700
+automatizada.
+
+00:12:39.660 --> 00:12:40.240
+O padrão antigo
+
+00:12:40.240 --> 00:12:40.860
+buscava erros
+
+00:12:40.860 --> 00:12:41.820
+depois que eles ocorriam.
+
+00:12:42.380 --> 00:12:43.440
+O novo os antecipa
+
+00:12:43.440 --> 00:12:44.360
+antes que se espalhem.
+
+00:12:45.060 --> 00:12:45.880
+Com CDB aditiva,
+
+00:12:46.660 --> 00:12:47.400
+como o GPT-5
+
+00:12:47.400 --> 00:12:48.280
+entende relacionamentos,
+
+00:12:48.360 --> 00:12:48.900
+ele reconhece
+
+00:12:48.900 --> 00:12:49.660
+quando a deriva de dados
+
+00:12:49.660 --> 00:12:50.440
+começa a surgir.
+
+00:12:51.140 --> 00:12:51.600
+Digamos que alguém
+
+00:12:51.600 --> 00:12:52.860
+modifique o notebook do fábrica
+
+00:12:52.860 --> 00:12:53.700
+e alimenta tabelas de dados
+
+00:12:53.700 --> 00:12:54.100
+de clientes.
+
+00:12:54.580 --> 00:12:55.920
+O modelo infere instantaneamente
+
+00:12:55.920 --> 00:12:56.920
+que o escopo de classificação
+
+00:12:56.920 --> 00:12:57.260
+do preview
+
+00:12:57.260 --> 00:12:58.380
+pode não corresponder mais,
+
+00:12:58.880 --> 00:12:59.440
+gerando um aviso
+
+00:12:59.440 --> 00:12:59.940
+antes que a falha
+
+00:12:59.940 --> 00:13:00.780
+apareça no relatório.
+
+00:13:01.320 --> 00:13:02.380
+É como um sistema imunológico
+
+00:13:02.380 --> 00:13:03.180
+integrado ao Copilot
+
+00:13:03.180 --> 00:13:04.140
+detectando a infecção
+
+00:13:04.140 --> 00:13:04.840
+antes dos sintomas.
+
+00:13:05.700 --> 00:13:06.380
+Em termos de governança,
+
+00:13:06.460 --> 00:13:06.940
+isso é evolução.
+
+00:13:07.540 --> 00:13:08.380
+A matemática operacional
+
+00:13:08.380 --> 00:13:09.160
+é igualmente impressionante.
+
+00:13:09.840 --> 00:13:10.520
+Ciclos de auditoria
+
+00:13:10.520 --> 00:13:11.080
+que levavam dias
+
+00:13:11.080 --> 00:13:12.040
+agora se resolvem em minutos.
+
+00:13:12.980 --> 00:13:13.340
+O modelo
+
+00:13:13.340 --> 00:13:14.760
+realiza raciocínio correlacional
+
+00:13:14.760 --> 00:13:15.500
+entre plataformas
+
+00:13:15.500 --> 00:13:16.000
+mais rápido
+
+00:13:16.000 --> 00:13:17.280
+do que scripts convencionais
+
+00:13:17.280 --> 00:13:18.580
+conseguem autenticar conexões.
+
+00:13:19.540 --> 00:13:20.280
+Isso não é hiperbole,
+
+00:13:20.540 --> 00:13:21.420
+é realidade computacional.
+
+00:13:22.300 --> 00:13:23.120
+O raciocínio permite
+
+00:13:23.120 --> 00:13:23.560
+que o Copilot
+
+00:13:23.560 --> 00:13:24.940
+execute validações simultâneas,
+
+00:13:25.200 --> 00:13:26.380
+colapsando fluxos sequenciais
+
+00:13:26.380 --> 00:13:27.580
+em fluxos paralelizados.
+
+00:13:28.140 --> 00:13:28.720
+O resultado,
+
+00:13:28.860 --> 00:13:29.540
+tempo recuperado,
+
+00:13:29.620 --> 00:13:30.420
+frustração anulada,
+
+00:13:30.520 --> 00:13:31.400
+precisão de conformidade
+
+00:13:31.400 --> 00:13:32.120
+mantida em escala.
+
+00:13:32.860 --> 00:13:33.660
+A confiança expande
+
+00:13:33.660 --> 00:13:34.280
+junto com a velocidade.
+
+00:13:35.100 --> 00:13:35.960
+Auditorias antigas
+
+00:13:35.960 --> 00:13:36.760
+dependiam de junções
+
+00:13:36.760 --> 00:13:37.340
+incompletas
+
+00:13:37.340 --> 00:13:38.020
+e inferência manual,
+
+00:13:38.340 --> 00:13:38.840
+com os palpites
+
+00:13:38.840 --> 00:13:40.060
+embalados em relatórios formais.
+
+00:13:40.060 --> 00:13:41.400
+O GPT-5
+
+00:13:41.400 --> 00:13:42.280
+substitui a estimativa
+
+00:13:42.280 --> 00:13:43.300
+pela verificação cruzada.
+
+00:13:44.040 --> 00:13:44.580
+Quando ele declara
+
+00:13:44.580 --> 00:13:45.320
+um conjunto de dados
+
+00:13:45.320 --> 00:13:46.080
+em conformidade,
+
+00:13:46.420 --> 00:13:47.080
+é porque a linhagem,
+
+00:13:47.160 --> 00:13:47.600
+a classificação
+
+00:13:47.600 --> 00:13:48.500
+e as políticas de segurança
+
+00:13:48.500 --> 00:13:49.080
+se alinham
+
+00:13:49.080 --> 00:13:50.120
+sob uma lógica observável
+
+00:13:50.120 --> 00:13:50.960
+e não suposições.
+
+00:13:51.800 --> 00:13:52.660
+Gerentes param de assinar
+
+00:13:52.660 --> 00:13:53.360
+relatórios dos quais
+
+00:13:53.360 --> 00:13:54.100
+duvidam secretamente.
+
+00:13:54.440 --> 00:13:55.260
+Executivos recuperam
+
+00:13:55.260 --> 00:13:56.320
+confiança em seus dashboards.
+
+00:13:57.060 --> 00:13:58.160
+A organização transita
+
+00:13:58.160 --> 00:13:58.960
+de achamos que estamos
+
+00:13:58.960 --> 00:13:59.700
+em conformidade
+
+00:13:59.700 --> 00:14:00.460
+para podermos provar
+
+00:14:00.460 --> 00:14:01.320
+isso programaticamente.
+
+00:14:02.000 --> 00:14:02.660
+A escalabilidade
+
+00:14:02.660 --> 00:14:03.480
+é o triunfo silencioso.
+
+00:14:03.900 --> 00:14:04.680
+Antes, a governança
+
+00:14:04.680 --> 00:14:05.720
+escalava linearmente
+
+00:14:05.720 --> 00:14:06.220
+com a equipe.
+
+00:14:07.240 --> 00:14:07.960
+Cada novo workspace
+
+00:14:07.960 --> 00:14:09.400
+exigia trabalho proporcional.
+
+00:14:09.400 --> 00:14:11.680
+Com o raciocínio do Copilot,
+
+00:14:11.780 --> 00:14:13.020
+a escala se torna logarítmica.
+
+00:14:13.680 --> 00:14:14.720
+Um modelo de raciocínio
+
+00:14:14.720 --> 00:14:15.520
+pode supervisionar
+
+00:14:15.520 --> 00:14:16.200
+milhares de ativos
+
+00:14:16.200 --> 00:14:16.940
+simultaneamente,
+
+00:14:17.320 --> 00:14:18.360
+aprendendo padrões sistêmicos
+
+00:14:18.360 --> 00:14:19.020
+em vez de repetir
+
+00:14:19.020 --> 00:14:19.760
+etapas manuais.
+
+00:14:20.560 --> 00:14:21.820
+Quando novos tenants surgem,
+
+00:14:21.880 --> 00:14:22.620
+eles herdam estruturas
+
+00:14:22.620 --> 00:14:23.640
+de governança pré-validadas
+
+00:14:23.640 --> 00:14:24.540
+em vez de calça ou medida.
+
+00:14:25.540 --> 00:14:26.720
+E sim, o GPT-5
+
+00:14:26.720 --> 00:14:27.660
+tem uma memória mais afiada
+
+00:14:27.660 --> 00:14:28.520
+que a planilha compartilhada
+
+00:14:28.520 --> 00:14:29.340
+com a equipe de conformidade.
+
+00:14:29.840 --> 00:14:30.760
+Ele não apenas rastreia
+
+00:14:30.760 --> 00:14:31.680
+arquivos não classificados
+
+00:14:31.680 --> 00:14:32.660
+e lembra porque foram ignorados.
+
+00:14:33.400 --> 00:14:34.140
+Esse contexto
+
+00:14:34.140 --> 00:14:35.180
+transforma a remediação
+
+00:14:35.180 --> 00:14:36.160
+de limpeza em prevenção.
+
+00:14:37.080 --> 00:14:37.800
+No próximo ciclo,
+
+00:14:37.880 --> 00:14:38.920
+o modelo verifica primeiro
+
+00:14:38.920 --> 00:14:39.820
+esses pontos fracos,
+
+00:14:40.160 --> 00:14:40.620
+o que significa
+
+00:14:40.620 --> 00:14:41.900
+que seus CSVs esquecidos,
+
+00:14:42.000 --> 00:14:43.120
+aqueles escondidos em pastas
+
+00:14:43.120 --> 00:14:44.320
+de fluxo de dados aleatórias,
+
+00:14:44.400 --> 00:14:45.340
+são finalmente expostos
+
+00:14:45.340 --> 00:14:46.200
+antes de envergonhá-lo
+
+00:14:46.200 --> 00:14:47.240
+em uma reunião de auditoria.
+
+00:14:48.080 --> 00:14:48.880
+O progresso às vezes
+
+00:14:48.880 --> 00:14:49.680
+parece vigilância,
+
+00:14:49.760 --> 00:14:50.180
+e neste caso,
+
+00:14:50.260 --> 00:14:50.840
+esse é o objetivo.
+
+00:14:52.080 --> 00:14:52.440
+Economicamente,
+
+00:14:52.540 --> 00:14:53.000
+as implicações
+
+00:14:53.000 --> 00:14:53.700
+se espalham para fora.
+
+00:14:54.120 --> 00:14:54.940
+A redução do tempo
+
+00:14:54.940 --> 00:14:55.440
+de auditoria
+
+00:14:55.440 --> 00:14:56.220
+se traduz em horas
+
+00:14:56.220 --> 00:14:57.320
+de engenharia recuperadas,
+
+00:14:57.460 --> 00:14:58.640
+menos penalidades regulatórias
+
+00:14:58.640 --> 00:14:59.780
+e menor risco reputacional.
+
+00:15:00.440 --> 00:15:01.380
+O financiamento de governança
+
+00:15:01.380 --> 00:15:02.440
+muda da mitigação de crises
+
+00:15:02.440 --> 00:15:03.040
+para o desenvolvimento
+
+00:15:03.040 --> 00:15:03.660
+de capacidades.
+
+00:15:04.300 --> 00:15:05.100
+Em vez de contratar
+
+00:15:05.100 --> 00:15:06.500
+terceiros para corrigir planilhas,
+
+00:15:06.500 --> 00:15:07.440
+as equipes investem
+
+00:15:07.440 --> 00:15:08.200
+em refinar promptes
+
+00:15:08.200 --> 00:15:08.680
+e conectores
+
+00:15:08.680 --> 00:15:09.120
+que melhoram
+
+00:15:09.120 --> 00:15:10.300
+o próprio motor de raciocínio.
+
+00:15:10.740 --> 00:15:11.560
+Você para de trabalhar
+
+00:15:11.560 --> 00:15:12.060
+para a conformidade
+
+00:15:12.060 --> 00:15:12.560
+e começa a fazer
+
+00:15:12.560 --> 00:15:13.540
+a conformidade trabalhar para você.
+
+00:15:13.920 --> 00:15:14.580
+A mudança cultural
+
+00:15:14.580 --> 00:15:15.460
+é sutil, mas profunda.
+
+00:15:15.980 --> 00:15:16.740
+Na TI tradicional,
+
+00:15:16.860 --> 00:15:17.740
+a conformidade era sinônimo
+
+00:15:17.740 --> 00:15:18.520
+de tarefa árdua,
+
+00:15:18.620 --> 00:15:19.100
+um trabalho extra
+
+00:15:19.100 --> 00:15:20.020
+anexado à inovação.
+
+00:15:20.880 --> 00:15:22.000
+O GPT-5 e o Copilot
+
+00:15:22.000 --> 00:15:22.620
+reformulam isso
+
+00:15:22.620 --> 00:15:23.040
+como um princípio
+
+00:15:23.040 --> 00:15:23.740
+de design contínuo.
+
+00:15:24.160 --> 00:15:25.420
+A governança se torna ambiente.
+
+00:15:26.000 --> 00:15:26.880
+Auditorias não interrompem
+
+00:15:26.880 --> 00:15:27.520
+mais projetos,
+
+00:15:27.660 --> 00:15:28.280
+elas os acompanham
+
+00:15:28.280 --> 00:15:28.940
+como uma compilação
+
+00:15:28.940 --> 00:15:29.480
+em segundo plano.
+
+00:15:30.020 --> 00:15:30.840
+Designers percebem
+
+00:15:30.840 --> 00:15:31.240
+a segurança
+
+00:15:31.240 --> 00:15:32.180
+não como burocracia,
+
+00:15:32.180 --> 00:15:32.860
+mas como higiene
+
+00:15:32.860 --> 00:15:33.700
+sempre presente,
+
+00:15:34.260 --> 00:15:35.160
+raramente obstrutiva.
+
+00:15:35.940 --> 00:15:37.060
+Vamos ser devidamente irônicos.
+
+00:15:37.540 --> 00:15:38.280
+Os mesmos gerentes
+
+00:15:38.280 --> 00:15:39.060
+que antes ignoravam
+
+00:15:39.060 --> 00:15:39.980
+os painéis de governança
+
+00:15:39.980 --> 00:15:41.240
+agora os citam em apresentações.
+
+00:15:42.020 --> 00:15:43.140
+Porque a inteligência preditiva
+
+00:15:43.140 --> 00:15:43.620
+faz os dados
+
+00:15:43.620 --> 00:15:44.540
+parecerem impressionantes.
+
+00:15:45.300 --> 00:15:45.900
+Quando o Copilot
+
+00:15:45.900 --> 00:15:47.240
+prevê a exposição ao risco
+
+00:15:47.240 --> 00:15:47.920
+antes que os auditores
+
+00:15:47.920 --> 00:15:48.800
+solicitem relatórios,
+
+00:15:49.080 --> 00:15:49.880
+a liderança chama isso
+
+00:15:49.880 --> 00:15:50.900
+de visão estratégica.
+
+00:15:51.500 --> 00:15:52.120
+Em outras palavras,
+
+00:15:52.220 --> 00:15:53.080
+eles finalmente veem valor
+
+00:15:53.080 --> 00:15:54.120
+em não serem pegos de surpresa.
+
+00:15:54.580 --> 00:15:54.920
+Então sim,
+
+00:15:54.980 --> 00:15:55.820
+o GPT-5 não apenas
+
+00:15:55.820 --> 00:15:56.840
+automatiza a documentação,
+
+00:15:56.920 --> 00:15:57.700
+ele atualiza a consciência
+
+00:15:57.700 --> 00:15:58.300
+organizacional,
+
+00:15:58.460 --> 00:15:59.340
+transformando a conformidade
+
+00:15:59.340 --> 00:15:59.960
+de um exercício
+
+00:15:59.960 --> 00:16:01.560
+forense em medicina preventiva.
+
+00:16:02.180 --> 00:16:03.760
+O sistema se imuniza
+
+00:16:03.760 --> 00:16:04.460
+contra a decadência
+
+00:16:04.460 --> 00:16:05.180
+procedimental.
+
+00:16:05.580 --> 00:16:05.980
+E você,
+
+00:16:06.060 --> 00:16:07.000
+o auditor privado de sono,
+
+00:16:07.120 --> 00:16:08.080
+torna-se o diagnosticador
+
+00:16:08.080 --> 00:16:08.920
+operando na velocidade
+
+00:16:08.920 --> 00:16:09.540
+do pensamento.
+
+00:16:10.040 --> 00:16:11.200
+Única reclamação persistente,
+
+00:16:11.300 --> 00:16:12.060
+quase ninguém sente falta
+
+00:16:12.060 --> 00:16:12.580
+das planilhas.
+
+00:16:13.300 --> 00:16:14.080
+Implementando o fluxo
+
+00:16:14.080 --> 00:16:15.060
+de trabalho do GPT-5
+
+00:16:15.060 --> 00:16:15.680
+no Copilot Studio.
+
+00:16:16.220 --> 00:16:17.140
+Agora vamos ao lado tático.
+
+00:16:17.840 --> 00:16:18.540
+A parte onde a teoria
+
+00:16:18.540 --> 00:16:19.380
+encontra a configuração.
+
+00:16:20.180 --> 00:16:20.960
+Configurar o fluxo
+
+00:16:20.960 --> 00:16:22.120
+de raciocínio do GPT-5
+
+00:16:22.120 --> 00:16:22.860
+no Copilot Studio
+
+00:16:22.860 --> 00:16:23.460
+não é bruxaria
+
+00:16:23.460 --> 00:16:24.860
+apenas encanamento estruturado.
+
+00:16:25.820 --> 00:16:26.560
+Em qualquer encanamento,
+
+00:16:26.640 --> 00:16:27.280
+um conector errado
+
+00:16:27.280 --> 00:16:28.420
+e a lógica vaza por toda parte.
+
+00:16:28.920 --> 00:16:29.500
+Então vamos conectar
+
+00:16:29.500 --> 00:16:30.280
+os tubos corretamente.
+
+00:16:30.960 --> 00:16:31.380
+Passo 1.
+
+00:16:31.380 --> 00:16:32.480
+Habilite o raciocínio
+
+00:16:32.480 --> 00:16:33.140
+do GPT-5
+
+00:16:33.140 --> 00:16:33.960
+dentro do Copilot Studio.
+
+00:16:34.380 --> 00:16:35.280
+Não presumo que ele esteja ativo.
+
+00:16:35.700 --> 00:16:36.600
+Microsoft trata isso
+
+00:16:36.600 --> 00:16:37.460
+como um recurso de segurança,
+
+00:16:37.580 --> 00:16:38.080
+não como padrão.
+
+00:16:38.460 --> 00:16:39.000
+No seu ambiente
+
+00:16:39.000 --> 00:16:39.980
+do Copilot Studio,
+
+00:16:40.220 --> 00:16:41.020
+abra o menu de seleção
+
+00:16:41.020 --> 00:16:41.760
+de modelo e encontre
+
+00:16:41.760 --> 00:16:42.660
+o modelo de raciocínio
+
+00:16:42.660 --> 00:16:43.360
+do GPT-5
+
+00:16:43.360 --> 00:16:44.360
+e defina explicitamente
+
+00:16:44.360 --> 00:16:44.880
+como padrão
+
+00:16:44.880 --> 00:16:46.260
+para o seu Copilot personalizado.
+
+00:16:46.920 --> 00:16:47.960
+Esta flag controla
+
+00:16:47.960 --> 00:16:48.820
+o acesso às operações
+
+00:16:48.820 --> 00:16:49.780
+de cadeia de pensamento,
+
+00:16:49.880 --> 00:16:50.660
+um mecanismo que permite
+
+00:16:50.660 --> 00:16:51.600
+ao Copilot raciocinar
+
+00:16:51.600 --> 00:16:52.780
+através do Fabric Power BI
+
+00:16:52.780 --> 00:16:53.760
+e Preview simultaneamente
+
+00:16:53.760 --> 00:16:54.560
+em vez de sequencialmente.
+
+00:16:54.940 --> 00:16:55.320
+Sem isso,
+
+00:16:55.400 --> 00:16:56.140
+você está apenas falando
+
+00:16:56.140 --> 00:16:56.920
+com o modelo de ontem
+
+00:16:56.920 --> 00:16:57.440
+e se perguntando
+
+00:16:57.440 --> 00:16:58.040
+porque ele esquece
+
+00:16:58.040 --> 00:16:58.840
+o contexto mais rápido
+
+00:16:58.840 --> 00:16:59.460
+do que seu estagiário
+
+00:16:59.460 --> 00:16:59.980
+depois do almoço.
+
+00:17:00.280 --> 00:17:00.680
+Passo 2.
+
+00:17:00.780 --> 00:17:01.580
+Configura os conectores.
+
+00:17:02.340 --> 00:17:03.740
+A lógica requer visibilidade
+
+00:17:03.740 --> 00:17:04.400
+e o raciocínio
+
+00:17:04.400 --> 00:17:05.080
+não pode inferir
+
+00:17:05.080 --> 00:17:05.940
+o que não consegue ver.
+
+00:17:07.040 --> 00:17:07.760
+Garanta que as APIs
+
+00:17:07.760 --> 00:17:08.480
+do Fabric Power BI
+
+00:17:08.480 --> 00:17:08.820
+e Preview
+
+00:17:08.820 --> 00:17:09.560
+estejam vinculadas
+
+00:17:09.560 --> 00:17:10.700
+por meio de conectores oficiais.
+
+00:17:11.560 --> 00:17:12.140
+Cada conector
+
+00:17:12.140 --> 00:17:13.280
+se autentica com o Microsoft
+
+00:17:13.280 --> 00:17:13.840
+e entra a ID
+
+00:17:13.840 --> 00:17:14.800
+e expõe endpoints
+
+00:17:14.800 --> 00:17:15.620
+de metadados.
+
+00:17:16.460 --> 00:17:17.060
+Conjunto de dados,
+
+00:17:17.140 --> 00:17:17.620
+classificadores,
+
+00:17:17.740 --> 00:17:18.280
+funções e segurança.
+
+00:17:18.280 --> 00:17:19.920
+A beleza do Copilot Studio
+
+00:17:19.920 --> 00:17:20.940
+é que esses conectores
+
+00:17:20.940 --> 00:17:21.660
+falam os dialetos
+
+00:17:21.660 --> 00:17:22.560
+da plataforma para você.
+
+00:17:23.720 --> 00:17:24.540
+O Fabric fornece
+
+00:17:24.540 --> 00:17:25.300
+mapas de linhagem,
+
+00:17:25.400 --> 00:17:25.840
+o Power BI
+
+00:17:25.840 --> 00:17:26.800
+expõe vínculos de dados
+
+00:17:26.800 --> 00:17:27.240
+e o Preview
+
+00:17:27.240 --> 00:17:28.700
+lista rótulos de sensibilidade.
+
+00:17:29.500 --> 00:17:29.820
+Juntos,
+
+00:17:29.860 --> 00:17:30.220
+eles formam
+
+00:17:30.220 --> 00:17:30.980
+ecossistema de dados
+
+00:17:30.980 --> 00:17:31.560
+que o GPT-5
+
+00:17:31.560 --> 00:17:32.220
+precisa propensar
+
+00:17:32.220 --> 00:17:32.900
+de forma coerente.
+
+00:17:33.520 --> 00:17:34.000
+Passo 3.
+
+00:17:34.120 --> 00:17:35.160
+Configure modelos de prompt
+
+00:17:35.160 --> 00:17:36.300
+para auditorias recorrentes.
+
+00:17:37.040 --> 00:17:37.860
+Você criará esqueletos
+
+00:17:37.860 --> 00:17:38.800
+de comando reutilizáveis
+
+00:17:38.800 --> 00:17:39.880
+como auditar todos os ativos
+
+00:17:39.880 --> 00:17:40.300
+do Fabric
+
+00:17:40.300 --> 00:17:41.100
+contendo o tipo de dados
+
+00:17:41.100 --> 00:17:41.900
+para confirmar alinhamento
+
+00:17:41.900 --> 00:17:42.640
+com rótulos do Preview
+
+00:17:42.640 --> 00:17:43.480
+e regras de RLS.
+
+00:17:44.440 --> 00:17:45.800
+Variáveis injetam contexto
+
+00:17:45.800 --> 00:17:46.600
+enquanto o mecanismo
+
+00:17:46.600 --> 00:17:47.560
+de raciocínio do modelo
+
+00:17:47.560 --> 00:17:48.460
+realiza a consulta.
+
+00:17:49.160 --> 00:17:50.100
+Diferente dos fluxos
+
+00:17:50.100 --> 00:17:50.800
+de trabalho rígidos
+
+00:17:50.800 --> 00:17:51.460
+no Power Automate,
+
+00:17:51.540 --> 00:17:51.840
+esses prompts
+
+00:17:51.840 --> 00:17:52.780
+se comportam de forma de novo.
+
+00:17:53.020 --> 00:17:53.960
+O GPT-5 adapta
+
+00:17:53.960 --> 00:17:55.040
+a profundidade do raciocínio
+
+00:17:55.040 --> 00:17:55.840
+e a complexidade do corpo.
+
+00:17:56.220 --> 00:17:57.180
+Uma verificação trivial
+
+00:17:57.180 --> 00:17:57.700
+em um workspace
+
+00:17:57.700 --> 00:17:58.940
+executa um raciocínio leve,
+
+00:17:59.160 --> 00:17:59.760
+enquanto uma auditoria
+
+00:17:59.760 --> 00:18:00.640
+corporativa completa
+
+00:18:00.640 --> 00:18:01.400
+aciona uma inferência
+
+00:18:01.400 --> 00:18:02.040
+multicamada.
+
+00:18:02.840 --> 00:18:03.360
+Passo 4.
+
+00:18:03.480 --> 00:18:04.200
+Teste a profundidade
+
+00:18:04.200 --> 00:18:04.760
+do raciocínio
+
+00:18:04.760 --> 00:18:05.880
+usando anomalias planejadas.
+
+00:18:06.240 --> 00:18:06.820
+Erros artificiais
+
+00:18:06.820 --> 00:18:07.300
+não servem apenas
+
+00:18:07.300 --> 00:18:08.040
+para controle de qualidades
+
+00:18:08.040 --> 00:18:08.720
+no exercício do óleo.
+
+00:18:09.300 --> 00:18:10.120
+Introduz um conjunto
+
+00:18:10.120 --> 00:18:10.500
+de dados
+
+00:18:10.500 --> 00:18:11.560
+classificado incorretamente
+
+00:18:11.560 --> 00:18:12.520
+em Lake House do Fabric
+
+00:18:12.520 --> 00:18:13.320
+e remova seu rótulo
+
+00:18:13.320 --> 00:18:13.740
+do Purview
+
+00:18:13.740 --> 00:18:14.660
+e conceda acesso aberto
+
+00:18:14.660 --> 00:18:15.060
+no Power BI.
+
+00:18:15.440 --> 00:18:16.360
+Então execute sua auditoria
+
+00:18:16.360 --> 00:18:16.700
+com o corpo.
+
+00:18:17.140 --> 00:18:18.180
+O resultado deve destacar
+
+00:18:18.180 --> 00:18:18.660
+a classificação
+
+00:18:18.660 --> 00:18:19.420
+sem correspondência,
+
+00:18:19.540 --> 00:18:20.320
+RLS ausente
+
+00:18:20.320 --> 00:18:21.300
+e conflito de linhagem.
+
+00:18:21.920 --> 00:18:22.700
+Se não destacar,
+
+00:18:22.800 --> 00:18:23.520
+sua configuração
+
+00:18:23.520 --> 00:18:24.160
+de raciocínio
+
+00:18:24.160 --> 00:18:25.100
+carece de visibilidade
+
+00:18:25.100 --> 00:18:25.700
+ou os conectores
+
+00:18:25.700 --> 00:18:26.680
+estão com o escopo incorreto.
+
+00:18:27.100 --> 00:18:27.540
+Pense nisso
+
+00:18:27.540 --> 00:18:28.100
+como calibrar
+
+00:18:28.100 --> 00:18:29.120
+a bússola moral da IA.
+
+00:18:29.880 --> 00:18:30.640
+Ela não pode aplicar
+
+00:18:30.640 --> 00:18:31.520
+uma governança ética
+
+00:18:31.520 --> 00:18:32.140
+se estiver cega.
+
+00:18:32.720 --> 00:18:33.220
+Passo 5.
+
+00:18:33.320 --> 00:18:34.020
+Revise e tere
+
+00:18:34.020 --> 00:18:34.600
+dentro do painel
+
+00:18:34.600 --> 00:18:35.400
+de governança do Fabric.
+
+00:18:36.020 --> 00:18:37.200
+O GPT-5 gera resultados
+
+00:18:37.200 --> 00:18:37.920
+tanto como narrativa
+
+00:18:37.920 --> 00:18:38.560
+quanto como esquema.
+
+00:18:39.220 --> 00:18:40.000
+Resumos exportáveis
+
+00:18:40.000 --> 00:18:40.400
+em JSON
+
+00:18:40.400 --> 00:18:41.540
+com identificadores de origem,
+
+00:18:41.640 --> 00:18:42.420
+probabilidades de risco
+
+00:18:42.420 --> 00:18:43.540
+e correções recomendadas.
+
+00:18:44.220 --> 00:18:45.040
+Alimente-os no workspace
+
+00:18:45.040 --> 00:18:46.000
+de auditoria do Fabric
+
+00:18:46.000 --> 00:18:46.800
+onde você pode classificar
+
+00:18:46.800 --> 00:18:47.220
+as descobertas
+
+00:18:47.220 --> 00:18:47.660
+sob severidade.
+
+00:18:48.360 --> 00:18:48.820
+Com o tempo,
+
+00:18:48.920 --> 00:18:49.640
+essas seções criam
+
+00:18:49.640 --> 00:18:50.220
+uma biblioteca
+
+00:18:50.220 --> 00:18:51.300
+de modelos de raciocínio
+
+00:18:51.300 --> 00:18:52.340
+ajustados às convenções
+
+00:18:52.340 --> 00:18:53.240
+de nomes de seus dados,
+
+00:18:53.400 --> 00:18:54.420
+seus regimes de conformidade
+
+00:18:54.420 --> 00:18:55.300
+e seu estilo particular
+
+00:18:55.300 --> 00:18:56.080
+de caos corporativo.
+
+00:18:56.860 --> 00:18:58.080
+Aqui está o atalho conceitual.
+
+00:18:58.560 --> 00:18:59.800
+Power Query encontra a IA.
+
+00:19:00.440 --> 00:19:00.920
+No passado,
+
+00:19:01.040 --> 00:19:01.760
+Power Query permitia
+
+00:19:01.760 --> 00:19:02.380
+transformar dados
+
+00:19:02.380 --> 00:19:03.280
+de forma declarativa.
+
+00:19:03.940 --> 00:19:04.820
+Lógica escrita uma vez,
+
+00:19:04.920 --> 00:19:05.700
+aplicada infinitamente.
+
+00:19:06.400 --> 00:19:07.260
+Comparado com o raciocínio
+
+00:19:07.920 --> 00:19:08.740
+realiza a introspecção
+
+00:19:08.740 --> 00:19:09.400
+da mesma maneira.
+
+00:19:10.060 --> 00:19:10.920
+Caminhos de raciocínio
+
+00:19:10.920 --> 00:19:11.480
+escritos uma vez,
+
+00:19:11.580 --> 00:19:12.420
+aplicados continuamente.
+
+00:19:13.120 --> 00:19:14.100
+Você não está criando fluxo
+
+00:19:14.100 --> 00:19:14.660
+e está definindo
+
+00:19:14.660 --> 00:19:15.280
+como a inteligência
+
+00:19:15.280 --> 00:19:15.980
+se autovalida.
+
+00:19:16.920 --> 00:19:17.540
+Agora uma observação
+
+00:19:17.540 --> 00:19:18.000
+de cautela.
+
+00:19:18.380 --> 00:19:19.560
+Automação sem ceticismo
+
+00:19:19.560 --> 00:19:20.200
+transforma você
+
+00:19:20.200 --> 00:19:20.760
+em um espectador
+
+00:19:20.760 --> 00:19:21.460
+do seu próprio sistema.
+
+00:19:22.240 --> 00:19:23.060
+Embora as deduções
+
+00:19:23.060 --> 00:19:23.720
+do GPT-5
+
+00:19:23.720 --> 00:19:25.060
+sejam surpreendentemente precisas,
+
+00:19:25.100 --> 00:19:25.740
+a confiança cega
+
+00:19:25.740 --> 00:19:26.640
+convida a complacência.
+
+00:19:27.780 --> 00:19:28.560
+Sempre valide a saída
+
+00:19:28.560 --> 00:19:29.360
+usando o visualizador
+
+00:19:29.360 --> 00:19:30.460
+de linhagem nativo do Fabric
+
+00:19:30.460 --> 00:19:31.340
+ou os insights do Purview.
+
+00:19:31.700 --> 00:19:32.120
+Pense nisso
+
+00:19:32.120 --> 00:19:33.060
+como fazer uma contabilidade
+
+00:19:33.060 --> 00:19:33.840
+de partidas dobradas
+
+00:19:33.840 --> 00:19:34.500
+para a lógica da máquina.
+
+00:19:34.900 --> 00:19:35.660
+Você está confirmando
+
+00:19:35.660 --> 00:19:36.560
+que o novo evangelho da IA
+
+00:19:36.560 --> 00:19:37.120
+ainda se alinha
+
+00:19:37.120 --> 00:19:37.840
+com a verdade canônica.
+
+00:19:38.300 --> 00:19:39.440
+Quando surgirem discrepâncias
+
+00:19:39.440 --> 00:19:40.660
+a ajuste e injeção de contexto,
+
+00:19:41.460 --> 00:19:42.180
+faça um ajuste fino
+
+00:19:42.180 --> 00:19:43.220
+de quais fontes de metadados
+
+00:19:43.220 --> 00:19:43.740
+ela prioriza.
+
+00:19:44.220 --> 00:19:44.960
+Um breve intervalo
+
+00:19:44.960 --> 00:19:45.700
+de melhores práticas.
+
+00:19:46.180 --> 00:19:46.380
+Primeiro,
+
+00:19:46.460 --> 00:19:47.680
+mantenha os prompts específicos
+
+00:19:47.680 --> 00:19:48.440
+mais generalizáveis.
+
+00:19:49.040 --> 00:19:49.820
+Evite diretivas
+
+00:19:49.820 --> 00:19:50.460
+como verificar
+
+00:19:50.460 --> 00:19:51.060
+tabela de dados
+
+00:19:51.060 --> 00:19:51.820
+de clientes 123
+
+00:19:51.820 --> 00:19:52.940
+e prefira padrões
+
+00:19:52.940 --> 00:19:53.540
+como verificar
+
+00:19:53.540 --> 00:19:54.240
+todas as tabelas
+
+00:19:54.240 --> 00:19:55.060
+relacionadas a clientes.
+
+00:19:55.740 --> 00:19:56.360
+O GPT-5
+
+00:19:56.360 --> 00:19:57.640
+prospera com inferência relacional.
+
+00:19:58.360 --> 00:19:59.020
+Ele precisa de escopo,
+
+00:19:59.080 --> 00:19:59.820
+não de especificidade.
+
+00:20:00.820 --> 00:20:01.120
+Segundo,
+
+00:20:01.200 --> 00:20:01.740
+estabeleça pontos
+
+00:20:01.740 --> 00:20:02.560
+de verificação de avaliação.
+
+00:20:02.920 --> 00:20:03.720
+Agende o Copilot
+
+00:20:03.720 --> 00:20:04.740
+para realizar execuções
+
+00:20:04.740 --> 00:20:05.300
+de raciocínio
+
+00:20:05.300 --> 00:20:06.440
+após mudanças significativas
+
+00:20:06.440 --> 00:20:06.900
+de esquema
+
+00:20:06.900 --> 00:20:07.760
+ou implantações de pipeline.
+
+00:20:07.900 --> 00:20:08.620
+Mais fácil do que correr
+
+00:20:08.620 --> 00:20:09.160
+atrás de problemas
+
+00:20:09.160 --> 00:20:09.600
+após...
+
+00:20:09.600 --> 00:20:10.160
+Terceiro,
+
+00:20:10.220 --> 00:20:11.000
+monitore o versionamento
+
+00:20:11.000 --> 00:20:11.360
+do modelo.
+
+00:20:11.740 --> 00:20:12.560
+Futuras atualizações
+
+00:20:12.560 --> 00:20:13.020
+podem ajustar
+
+00:20:13.020 --> 00:20:13.800
+teorísticas de raciocínio.
+
+00:20:14.020 --> 00:20:14.900
+A consistência exige
+
+00:20:14.900 --> 00:20:15.560
+documentação.
+
+00:20:16.040 --> 00:20:16.780
+Uma última microhistória
+
+00:20:16.780 --> 00:20:17.400
+para fundamentar isso.
+
+00:20:17.900 --> 00:20:18.560
+Uma equipe financeira
+
+00:20:18.560 --> 00:20:19.080
+de médio porte
+
+00:20:19.080 --> 00:20:19.780
+testou este fluxo
+
+00:20:19.780 --> 00:20:20.240
+e trabalha exato.
+
+00:20:20.640 --> 00:20:21.480
+Uma equipe de conformidade
+
+00:20:21.480 --> 00:20:22.020
+de duas pessoas
+
+00:20:22.020 --> 00:20:22.540
+mantendo oito
+
+00:20:22.540 --> 00:20:23.320
+lake houses do Fabric.
+
+00:20:23.860 --> 00:20:24.260
+Antes,
+
+00:20:24.360 --> 00:20:25.220
+o ciclo de auditoria
+
+00:20:25.220 --> 00:20:26.260
+levava três semanas.
+
+00:20:27.020 --> 00:20:27.780
+Após implementar
+
+00:20:27.780 --> 00:20:29.040
+o raciocínio do GPT-5,
+
+00:20:29.040 --> 00:20:29.900
+com uma sessão contínua
+
+00:20:29.900 --> 00:20:30.320
+do Copilot
+
+00:20:30.320 --> 00:20:30.940
+tirou a validação
+
+00:20:30.940 --> 00:20:31.620
+multiplataforma
+
+00:20:31.620 --> 00:20:32.200
+durante a noite.
+
+00:20:32.940 --> 00:20:33.440
+Na manhã seguinte,
+
+00:20:33.540 --> 00:20:33.880
+eles não estavam
+
+00:20:33.880 --> 00:20:34.600
+conciliando planilhas,
+
+00:20:34.700 --> 00:20:35.100
+estavam aprovando
+
+00:20:35.100 --> 00:20:36.060
+relatórios de automação.
+
+00:20:37.160 --> 00:20:38.200
+O conselho de conformidade
+
+00:20:38.200 --> 00:20:38.960
+escreveu a mudança
+
+00:20:38.960 --> 00:20:40.180
+como uma produtividade heróica.
+
+00:20:40.940 --> 00:20:41.560
+Eu diria que é a lógica
+
+00:20:41.560 --> 00:20:42.500
+finalmente fazendo o seu trabalho.
+
+00:20:42.860 --> 00:20:43.940
+E é assim que o GPT-5
+
+00:20:43.940 --> 00:20:44.720
+transforma a governança
+
+00:20:44.720 --> 00:20:45.280
+de um combate
+
+00:20:45.280 --> 00:20:46.160
+a incêndios episódicos
+
+00:20:46.160 --> 00:20:47.120
+em alinhamento perpétuo.
+
+00:20:47.940 --> 00:20:48.660
+Você mantém a ordem
+
+00:20:48.660 --> 00:20:50.120
+na velocidade do raciocínio,
+
+00:20:50.240 --> 00:20:50.660
+o que nos traz
+
+00:20:50.660 --> 00:20:51.560
+precisamente ao desfecho.
+
+00:20:52.200 --> 00:20:53.220
+Por que suar com governança
+
+00:20:53.220 --> 00:20:54.140
+está prestes a se tornar
+
+00:20:54.140 --> 00:20:55.020
+um artefato histórico,
+
+00:20:55.020 --> 00:20:55.860
+mas uma governança
+
+00:20:55.860 --> 00:20:56.660
+sem esforço?
+
+00:20:57.440 --> 00:20:58.140
+Então esse é o arco.
+
+00:20:58.500 --> 00:20:59.320
+Auditorias manuais
+
+00:20:59.320 --> 00:21:00.600
+substituídas por lógica inferida
+
+00:21:00.600 --> 00:21:01.560
+conformidade reativa
+
+00:21:01.560 --> 00:21:03.120
+substituída por garantia preditiva.
+
+00:21:04.200 --> 00:21:05.440
+O raciocínio do GPT-5
+
+00:21:05.440 --> 00:21:06.320
+transforma o Copilot
+
+00:21:06.320 --> 00:21:07.380
+de assistente de anotações
+
+00:21:07.380 --> 00:21:07.880
+em um genuíno
+
+00:21:07.880 --> 00:21:09.160
+supervisor de responsabilidade.
+
+00:21:09.900 --> 00:21:10.520
+Ele não está apenas
+
+00:21:10.520 --> 00:21:11.480
+produzindo respostas,
+
+00:21:11.560 --> 00:21:12.620
+está construindo compreensão.
+
+00:21:13.180 --> 00:21:13.740
+Lembra do antigo
+
+00:21:13.740 --> 00:21:14.420
+trio de governança?
+
+00:21:14.880 --> 00:21:15.660
+Fábrica astreia.
+
+00:21:15.980 --> 00:21:16.740
+A linhagem e o overview
+
+00:21:16.740 --> 00:21:17.360
+classifica dados
+
+00:21:17.360 --> 00:21:18.620
+o Power BI restringe o acesso.
+
+00:21:19.120 --> 00:21:19.780
+O GPT-5
+
+00:21:19.780 --> 00:21:20.860
+os une sob um cérebro
+
+00:21:20.860 --> 00:21:21.480
+de auditoria
+
+00:21:21.480 --> 00:21:22.360
+que avalia o contexto
+
+00:21:22.360 --> 00:21:22.940
+tão facilmente
+
+00:21:22.940 --> 00:21:23.620
+quanto o conteúdo.
+
+00:21:23.620 --> 00:21:25.140
+Coisa mais inteligente
+
+00:21:25.140 --> 00:21:25.660
+sobre o Fábrica
+
+00:21:25.660 --> 00:21:26.160
+não é o Fábrica.
+
+00:21:26.300 --> 00:21:26.800
+É finalmente
+
+00:21:26.800 --> 00:21:27.880
+mantendo tudo íntegro.
+
+00:21:28.500 --> 00:21:29.220
+Se você suportou
+
+00:21:29.220 --> 00:21:30.080
+noite sem dormir
+
+00:21:30.080 --> 00:21:31.440
+verificando CSVs
+
+00:21:31.440 --> 00:21:32.360
+este é o seu alívio.
+
+00:21:33.000 --> 00:21:33.800
+Ative o raciocínio
+
+00:21:33.800 --> 00:21:34.400
+nos conectores
+
+00:21:34.400 --> 00:21:35.640
+sem fio do Copilot Studio
+
+00:21:35.640 --> 00:21:36.620
+e deixe o GPT-5
+
+00:21:36.620 --> 00:21:37.660
+encontrar inconsistências
+
+00:21:37.660 --> 00:21:38.740
+antes que elas encontrem você.
+
+00:21:39.420 --> 00:21:40.160
+Próxima evolução
+
+00:21:40.160 --> 00:21:41.280
+da governança não é papelada
+
+00:21:41.280 --> 00:21:42.360
+é o raciocínio perpétuo.
+
+00:21:43.040 --> 00:21:43.720
+Garanta seu caminho
+
+00:21:43.720 --> 00:21:44.180
+de atualização.
+
+00:21:44.340 --> 00:21:44.720
+Inscreva-se
+
+00:21:44.720 --> 00:21:45.420
+e ative os alertas
+
+00:21:45.420 --> 00:21:46.360
+e deixe que novos episódios
+
+00:21:46.360 --> 00:21:47.460
+sejam implantados automaticamente.
+
+00:21:47.700 --> 00:21:48.600
+Sem verificações manuais
+
+00:21:48.600 --> 00:21:49.620
+sem atualizações perdidas
+
+00:21:49.620 --> 00:21:50.260
+apenas a entrega
+
+00:21:50.260 --> 00:21:50.880
+contínua esclareta.
+
+00:21:51.060 --> 00:21:51.420
+Prossiga.

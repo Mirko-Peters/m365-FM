@@ -1,0 +1,2032 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:03.240
+Anda telah diberitahu bahwa menambahkan protokol konteks modal, disingkat MCP,
+
+00:00:03.460 --> 00:00:06.420
+TocoPilot Studio itu mudah, cukup gunakan konektor khusus, kata mereka.
+
+00:00:06.640 --> 00:00:09.740
+Secara teknis, itu benar. Secara fungsional, itu bohong.
+
+00:00:09.940 --> 00:00:13.680
+Kebohongan yang sama seperti mencolokkan USB tanpa memberitahu sisi mana yang menghadap ke atas
+
+00:00:13.680 --> 00:00:16.380
+atau bahwa Anda memerlukan driver, 3 kali penyuntingan registri,
+
+00:00:16.620 --> 00:00:19.020
+dan sedikit berdoa kepada Dewa Cloud untuk stabilitas paket.
+
+00:00:19.140 --> 00:00:21.940
+MCP dipasarkan sebagai USB untuk agen AI.
+
+00:00:22.140 --> 00:00:23.580
+Ide-nya terdengar bersih.
+
+00:00:23.800 --> 00:00:26.300
+Agen manapun dapat berbicara dengan sumber pengetahuan manapun
+
+00:00:26.300 --> 00:00:28.020
+jika keduanya mengikuti protokol yang sama,
+
+00:00:28.020 --> 00:00:29.920
+jabat tangan universal untuk konteks.
+
+00:00:30.000 --> 00:00:33.200
+Namun Microsoft yang selalu minimalis hanya memberi Anda power.
+
+00:00:33.360 --> 00:00:36.260
+Tidak ada kabel, tidak ada diagram pinode, bahkan tidak ada label peringatan.
+
+00:00:36.520 --> 00:00:39.880
+Jadi, ya, Anda dapat menghubungkan sesuatu, tetapi separuh waktu itu hanya hiasan.
+
+00:00:40.080 --> 00:00:42.280
+Mitos itu tetap ada karena antarmukanya tampak patuh.
+
+00:00:42.460 --> 00:00:44.220
+Tambahkan alat, alat itu akan berbunyi.
+
+00:00:44.460 --> 00:00:46.200
+Saring berdasarkan protokol konteks modal,
+
+00:00:46.400 --> 00:00:50.060
+Anda mengeklik menu tarik turun muncul dan foila interoperabilitas instan.
+
+00:00:50.220 --> 00:00:53.800
+Kecuali tidak, yang sebenarnya Anda sambungkan adalah MCP bawaan
+
+00:00:53.800 --> 00:00:55.360
+setelah dihubungkan langsung ke produk.
+
+00:00:55.360 --> 00:00:58.680
+Dataverse MCP itu berfungsi karena itu milik Microsoft.
+
+00:00:58.680 --> 00:01:02.660
+MCP khusus Anda, Copilot bahkan tidak mengenalinya sampai Anda membuat penerjemah,
+
+00:01:02.860 --> 00:01:04.980
+konektor khusus yang berperilaku tidak seperti jalan pintas,
+
+00:01:05.160 --> 00:01:08.580
+tetapi seperti misi diplomatik penuh antara sistem yang tidak berbagi kosa kata atau tempo.
+
+00:01:08.880 --> 00:01:11.120
+Jadi, hari ini kita akan membongkar mitos tersebut.
+
+00:01:11.340 --> 00:01:13.680
+Saya akan menunjukkan kepada Anda apa sebenarnya MCP itu,
+
+00:01:13.940 --> 00:01:15.920
+mengapa konektor Anda tidak terhubung sebagaimana mestinya,
+
+00:01:16.160 --> 00:01:19.240
+dan cara membuat konektor yang benar-benar bertukar konteks alih-alih meniru konektivitas.
+
+00:01:19.240 --> 00:01:22.120
+MCP bukanlah sumber data, melainkan jembatan kontekstual,
+
+00:01:22.320 --> 00:01:24.840
+penerjemah antara Copilot Anda dan kecerdasan eksternal Anda.
+
+00:01:25.040 --> 00:01:28.800
+Dan konektor khusus bukanlah add-on, melainkan perancah konstruksi untuk jembatan itu.
+
+00:01:29.060 --> 00:01:31.260
+Jadi, mari kita singkirkan pernis pemasaran Microsoft
+
+00:01:31.260 --> 00:01:35.660
+dan mengintip apa yang sebenarnya terjadi di dalam Copilot Studio ketika Anda mengira telah menghubungkan MCP.
+
+00:01:35.800 --> 00:01:37.080
+Ilusi kesederhanaan.
+
+00:01:37.320 --> 00:01:42.220
+Sekilas, Copilot Studio membuat integrasi MCP tampak biasa saja seperti menambahkan susu ke kopi.
+
+00:01:42.400 --> 00:01:45.480
+Klik tambahkan alat, filter berdasarkan protokol konteks modal,
+
+00:01:45.480 --> 00:01:47.080
+pilih server Anda, selesai.
+
+00:01:47.220 --> 00:01:50.560
+Beberapa detik kemudian, itu dia, tercantum dengan bangga di bawah alat.
+
+00:01:50.740 --> 00:01:55.080
+Sebagian besar pengguna berhenti di sana dan memposting di forum sambil membanggakan bahwa konteks eksternal mereka aktif.
+
+00:01:55.180 --> 00:01:57.800
+Padahal tidak, apa yang Anda hubungkan adalah placebo.
+
+00:01:58.160 --> 00:02:02.460
+Inilah alasannya, filter MCP yang ramah itu hanya menampilkan bawaan Microsoft sendiri.
+
+00:02:02.740 --> 00:02:06.520
+Dataverse MCP, sarepoin MCP, mungkin satu untuk GitHub jika Anda beruntung.
+
+00:02:06.760 --> 00:02:09.100
+Mereka berada jauh di dalam infrastruktur penyewa yang sama.
+
+00:02:09.400 --> 00:02:11.240
+Saat Anda mencoba menautkan MCP eksternal,
+
+00:02:11.460 --> 00:02:13.760
+katakanlah Microsoft Learn atau pencarian semantik internal Anda,
+
+00:02:13.760 --> 00:02:15.140
+Anda menemukan rak kosong.
+
+00:02:15.140 --> 00:02:18.800
+Tidak ada slot import, tidak ada perintah autentikasi, tidak ada jabat tangan yang sebenarnya.
+
+00:02:19.000 --> 00:02:23.380
+Opsi protokol yang seharusnya sebenarnya hanyalah label kategori pada mainan yang sudah terpasang sebelumnya.
+
+00:02:23.540 --> 00:02:27.220
+Di balik layar, Copilot mengharapkan disiplin pemformatan yang sangat spesifik.
+
+00:02:27.380 --> 00:02:31.520
+Ia menginginkan titik akhir HTTP yang dapat dialirkan yang sesuai dengan skema MCP.
+
+00:02:31.680 --> 00:02:33.780
+Permintaan dibentuk sebagai JSON kontekstual,
+
+00:02:34.040 --> 00:02:35.500
+respons dipancarkan sebagai peristiwa,
+
+00:02:35.740 --> 00:02:37.840
+sepanjang waktu untuk mengalirkan token, bukan membuangnya.
+
+00:02:38.060 --> 00:02:40.100
+Layanan eksternal Anda, tidak peduli seberapa cerdasnya,
+
+00:02:40.320 --> 00:02:42.300
+tidak terlihat kecuali jika merespons dalam dialek tersebut.
+
+00:02:42.300 --> 00:02:45.700
+Tampaknya, Copilot bertindak seperti turis yang menghafal tiga frasa perjalanan
+
+00:02:45.700 --> 00:02:48.020
+dan bersikeras bahwa penduduk setempat tidak berbicara dengan benar.
+
+00:02:48.200 --> 00:02:49.440
+Inilah inti kebohongan.
+
+00:02:49.640 --> 00:02:52.560
+Apa yang tampak seperti plug and play sebenarnya adalah kode dan berdoa.
+
+00:02:52.720 --> 00:02:55.980
+UI yang terlihat menyembunyikan penegakan skema yang membuat MCP bekerja.
+
+00:02:56.240 --> 00:03:00.020
+Saat Anda memilih MCP dari menu, Anda tidak menyematkan konteks model Anda sendiri.
+
+00:03:00.260 --> 00:03:02.280
+Anda memanggil mekanisme pengambilan internal.
+
+00:03:02.560 --> 00:03:05.380
+Ia bekerja dengan sangat baik dengan indeks bergaya Bing dan Apidatavus,
+
+00:03:05.380 --> 00:03:08.100
+tetapi tidak pernah berkonsultasi dengan titik akhir MCP Anda,
+
+00:03:08.240 --> 00:03:09.900
+kecuali Anda membuat jembatan secara manual.
+
+00:03:10.160 --> 00:03:11.820
+Dan disinilah letak paradoksnya.
+
+00:03:12.000 --> 00:03:15.540
+Copilot Studio secara bersamaan merupakan salah satu alat orkestrasi paling canggih
+
+00:03:15.540 --> 00:03:18.780
+yang pernah dibuat Microsoft dan salah satu yang paling dibatasi secara menipu.
+
+00:03:18.940 --> 00:03:20.700
+Ia menjanjikan pertukaran konteks universal,
+
+00:03:21.000 --> 00:03:22.320
+tetapi memberikan amnesia selektif,
+
+00:03:22.420 --> 00:03:24.600
+kecuali Anda mengajarkannya cara baru melalui konfigurasi.
+
+00:03:24.800 --> 00:03:27.960
+Kebanyakan admin yang menemukan ini untuk pertama kalinya berasumsi adanya bug.
+
+00:03:28.140 --> 00:03:29.740
+Dengan cara ini mereka mengikuti dokumentasi,
+
+00:03:29.980 --> 00:03:31.820
+mengimpor URL, menekan refresh tiga kali,
+
+00:03:32.080 --> 00:03:32.860
+tetap tidak ada yang muncul.
+
+00:03:32.860 --> 00:03:35.060
+Itu karena mereka belum membangun jembatan.
+
+00:03:35.280 --> 00:03:36.980
+Mereka hanya melukis terowongan di dinding.
+
+00:03:37.260 --> 00:03:40.000
+Mengenali ilusi itu adalah langkah pertama menuju kompetensi.
+
+00:03:40.180 --> 00:03:42.240
+Panel konektor Anda tidak berbohong dengan jahat.
+
+00:03:42.400 --> 00:03:45.780
+Itu hanya menarasikan versi realitas yang disederhanakan yang ditujukan untuk pengguna rata-rata.
+
+00:03:45.960 --> 00:03:47.480
+Tetapi Anda bukanlah orang biasa.
+
+00:03:47.760 --> 00:03:49.880
+Andalah yang diharapkan untuk membuatnya benar-benar berfungsi.
+
+00:03:50.080 --> 00:03:51.900
+Dan itulah langkah pertama menuju pencerahan.
+
+00:03:52.120 --> 00:03:55.300
+Mengetahui bahwa panel kecil yang menyenangkan di Copilot Studio itu berbohong kepada Anda.
+
+00:03:55.460 --> 00:03:56.840
+Apa sebenarnya MCP itu?
+
+00:03:57.060 --> 00:03:59.420
+Oke, mari kita definisikan makhluk yang sedang kita hadapi.
+
+00:03:59.520 --> 00:04:01.260
+MCP, model conteks protokol,
+
+00:04:01.260 --> 00:04:03.640
+bukanlah suatu format file atau pembungkus api.
+
+00:04:03.840 --> 00:04:06.240
+Itu adalah bahasa pergaulan untuk sistem kecerdasan buatan,
+
+00:04:06.480 --> 00:04:09.720
+suatu cara bagi otak yang berbeda untuk berbagi bukan data tetapi makna tentang data.
+
+00:04:09.920 --> 00:04:11.580
+Microsoft menyebutnya USB untuk agen,
+
+00:04:11.800 --> 00:04:13.200
+bukan karena ia mentransmisikan byte,
+
+00:04:13.420 --> 00:04:15.080
+tetapi karena ia menstandardisasi jabat tangan,
+
+00:04:15.260 --> 00:04:16.200
+siapa yang menyambungkan kemana,
+
+00:04:16.480 --> 00:04:17.240
+arus apa yang mengalir,
+
+00:04:17.440 --> 00:04:20.360
+dan bagaimana kedua belah pihak sepakat bahwa apa yang bergerak adalah konteks yang valid,
+
+00:04:20.540 --> 00:04:21.040
+bukan noise.
+
+00:04:21.260 --> 00:04:21.940
+Secara teknis,
+
+00:04:22.180 --> 00:04:25.980
+MCP mendefinisikan bagaimana agen dan sumber konteks bertukar metadata terstruktur,
+
+00:04:25.980 --> 00:04:28.940
+skema alat, tindakan, parameter, dan token konteks.
+
+00:04:29.100 --> 00:04:30.980
+Anggap saja ini sebagai diplomasi internasional.
+
+00:04:31.760 --> 00:04:34.660
+Server MCP mewakili negara informasi yang berdaulat.
+
+00:04:34.780 --> 00:04:38.300
+Seperangkat aturan tentang bagaimana kumpulan pengetahuan tertentu dapat ditanyakan,
+
+00:04:38.500 --> 00:04:39.740
+diringkas, atau diperbarui.
+
+00:04:39.940 --> 00:04:42.160
+Klien MCP, dalam hal ini Co-Pilot Studio,
+
+00:04:42.460 --> 00:04:45.140
+adalah utusan yang berkunjung dan berbicara atas nama pengguna.
+
+00:04:45.360 --> 00:04:47.300
+Dan yang menjembatani keduanya adalah konektor,
+
+00:04:47.560 --> 00:04:50.900
+penerjemah kami yang sangat sabar memastikan query sarepoin dalam satu bahasa
+
+00:04:50.900 --> 00:04:53.660
+menjadi permintaan konteks pascafes satu dalam bahasa lain.
+
+00:04:53.660 --> 00:04:57.740
+Di dalam protokol, semuanya adalah JSON, dapat diprediksi, efisien,
+
+00:04:57.980 --> 00:04:59.580
+terkadang JSON yang membosankan,
+
+00:04:59.840 --> 00:05:02.600
+sehingga bahkan model bahasa yang besar dapat mengurekannya tanpa melamun.
+
+00:05:02.840 --> 00:05:04.600
+Setiap permintaan memiliki maksud,
+
+00:05:04.780 --> 00:05:07.700
+setiap respons membawa token konteks dan kutipan opsional.
+
+00:05:07.960 --> 00:05:10.360
+Yang lebih menarik, respons tersebut dapat dialirkan.
+
+00:05:10.540 --> 00:05:12.100
+Co-Pilot menerima fragment parsial,
+
+00:05:12.240 --> 00:05:14.160
+sementara server MCP menyusun makna.
+
+00:05:14.340 --> 00:05:17.340
+Itu mencegah air membeku di tengah pikiran dan menunggu respons penuh.
+
+00:05:17.520 --> 00:05:19.960
+Ini adalah perlombaan estafet, bukan pengiriman paket.
+
+00:05:19.960 --> 00:05:23.860
+Sekarang, metafora USB Microsoft menggoda karena mengisyaratkan kesederhanaan.
+
+00:05:24.020 --> 00:05:26.960
+Colokan A ke B dan elektron pengetahuan mulai mengalir.
+
+00:05:27.120 --> 00:05:29.060
+Namun analogi itu langsung rusak.
+
+00:05:29.240 --> 00:05:33.620
+Kabel USB fisik mengasumsikan pin tetap, voltase stabil, dan satu jenis listrik.
+
+00:05:33.800 --> 00:05:36.680
+Sebaliknya, MCP menegosiasikan skema dinamis.
+
+00:05:36.960 --> 00:05:38.840
+Setiap perangkat, setiap implementasi server,
+
+00:05:39.180 --> 00:05:42.660
+dapat menentukan kata kerja, properti, dan kemampuan kontekstualnya sendiri.
+
+00:05:42.940 --> 00:05:46.220
+Bayangkan drive USB yang mengubah kabelnya tergantung pada siapa yang dicolokkan.
+
+00:05:46.220 --> 00:05:47.960
+Itu lebih mendekati kenyataan.
+
+00:05:48.160 --> 00:05:49.820
+Jadi, apa sebenarnya yang ada di mana?
+
+00:05:50.040 --> 00:05:52.620
+Di lapisan dasar, server MCP berisi definisi alat,
+
+00:05:52.820 --> 00:05:54.420
+deskripsi tindakan seperti mencari dokumen,
+
+00:05:54.660 --> 00:05:56.400
+membuat catatan, atau membuat daftar tabel,
+
+00:05:56.580 --> 00:05:58.320
+beserta parameter dan tipe data yang diperlukan.
+
+00:05:58.540 --> 00:06:00.200
+Itu adalah kortex kecerdasan.
+
+00:06:00.400 --> 00:06:01.760
+Klien MCP, Copilot Studio,
+
+00:06:02.020 --> 00:06:04.640
+menjadi tuan rumah bagi otak agen yang menafsirkan perintah bahasa alami
+
+00:06:04.640 --> 00:06:06.480
+dan memutuskan tindakan mana yang akan dijalankan.
+
+00:06:06.660 --> 00:06:07.400
+Di antara keduanya,
+
+00:06:07.700 --> 00:06:09.460
+konektor khusus mengimplementasikan kontrak,
+
+00:06:09.660 --> 00:06:10.640
+menangani autentikasi,
+
+00:06:10.920 --> 00:06:11.660
+menvalidasi skema,
+
+00:06:11.880 --> 00:06:14.980
+dan mengalirkan percakapan melalui HTTP sambil mempertahankan struktur.
+
+00:06:16.220 --> 00:06:17.480
+Dengan perintah, katakanlah,
+
+00:06:17.740 --> 00:06:19.700
+temukan artikel tentang pengindeksan sarepoin.
+
+00:06:19.880 --> 00:06:21.420
+Itu tidak mengambil halaman web.
+
+00:06:21.560 --> 00:06:24.280
+Ia menghasilkan query kontekstual yang disematkan dalam JSON,
+
+00:06:24.720 --> 00:06:26.740
+mendorongnya melalui konektor ke server MCP,
+
+00:06:27.000 --> 00:06:29.060
+dan menerima muatan kontekstual terstruktur kembali,
+
+00:06:29.340 --> 00:06:30.100
+bukan teks mentah.
+
+00:06:30.260 --> 00:06:33.180
+Muatan itu berisi metadata, sumber, skor relevansi,
+
+00:06:33.460 --> 00:06:35.820
+teks cuplikan yang kemudian diringkas oleh model bahasa besar
+
+00:06:35.820 --> 00:06:37.780
+menjadi bahasa Inggris yang fasi bagi pengguna.
+
+00:06:38.000 --> 00:06:40.540
+Itu adalah sintesis konteks, bukan pengambilan sederhana.
+
+00:06:40.780 --> 00:06:41.600
+Tanpa disiplin itu,
+
+00:06:41.600 --> 00:06:45.160
+Copilot beroperasi seperti burung bio yang mengulang ringkasan apapun yang diberikan kepadanya.
+
+00:06:45.160 --> 00:06:47.780
+Tambahkan MCP dan tiba-tiba ia mengingat hubungan.
+
+00:06:47.980 --> 00:06:49.460
+Dokumen mana yang merujuk pada api mana,
+
+00:06:49.700 --> 00:06:52.340
+bidang mana di datafas yang dipetakan ke properti mana di CRM Anda,
+
+00:06:52.560 --> 00:06:54.400
+klausul lisensi mana yang mengatur tindakan itu.
+
+00:06:54.620 --> 00:06:57.820
+Intinya, MCP meningkatkan Copilot dari pelengkapan otomatis
+
+00:06:57.820 --> 00:06:59.520
+dengan swangger menjadi analis semi-andal
+
+00:06:59.520 --> 00:07:02.040
+yang benar-benar memahami topologi data organisasi Anda.
+
+00:07:02.300 --> 00:07:04.820
+Jadi, ya, USB untuk agen kedengarannya menarik,
+
+00:07:04.900 --> 00:07:06.840
+tetapi interpretasi praktisnya adalah bahwa MCP
+
+00:07:06.840 --> 00:07:09.600
+memberlakukan percakapan yang sopan antara sistem yang sangat berpendirian.
+
+00:07:09.600 --> 00:07:11.580
+Ia memberitahu Copilot Studio untuk bertanya,
+
+00:07:11.580 --> 00:07:13.180
+Bolehkah saya menanyakan skema ini?
+
+00:07:13.400 --> 00:07:14.440
+Alih-alih langsung berkata,
+
+00:07:14.660 --> 00:07:15.640
+Berikan saya semuanya.
+
+00:07:15.840 --> 00:07:19.440
+Kesopanan kecil itu adalah perbedaan antara halusinasi dan respons yang patuh.
+
+00:07:19.640 --> 00:07:21.820
+Dan inilah hal yang tidak pernah disoroti Microsoft.
+
+00:07:22.080 --> 00:07:24.960
+Menu tarik turun MCP di Copilot Studio sudah menggunakan protokol ini,
+
+00:07:25.240 --> 00:07:26.440
+tetapi hanya dengan layanannya sendiri.
+
+00:07:26.760 --> 00:07:27.980
+Saat Anda membuat menu khusus,
+
+00:07:28.220 --> 00:07:30.700
+Anda secara efektif membuat dialek baru dalam perjanjian itu.
+
+00:07:30.920 --> 00:07:34.480
+Anda mendefinisikan apa sebenarnya arti konteks di dalam dinding perusahaan Anda.
+
+00:07:34.480 --> 00:07:36.040
+Mengetahui apa itu MCP,
+
+00:07:36.260 --> 00:07:38.380
+tata bahasa terstruktur yang dinamis untuk konteks,
+
+00:07:38.580 --> 00:07:39.320
+bukan sumber data,
+
+00:07:39.620 --> 00:07:42.000
+memberi Anda teori sebelum melakukan kejahatan implementasi.
+
+00:07:42.220 --> 00:07:44.520
+Karena selanjutnya kita akan melakukannya bersama-sama.
+
+00:07:44.720 --> 00:07:46.600
+Kita akan membangun jabat tangan sendiri dan membuktikan
+
+00:07:46.600 --> 00:07:49.060
+bahwa kekuatan sebenarnya di Copilot Studio tidak berasal dari menu,
+
+00:07:49.300 --> 00:07:50.820
+melainkan berasal dari pemahaman kontrak.
+
+00:07:50.960 --> 00:07:52.320
+Itulah ajaran sesat praktis kami,
+
+00:07:52.580 --> 00:07:55.760
+membangun konektor kustom yang sepenuhnya sesuai dengan standar dan dapat dialirkan,
+
+00:07:55.760 --> 00:07:58.400
+yang berbicara dengan lancar dalam MCP alih-alih meniru aksen.
+
+00:07:58.560 --> 00:08:00.380
+Membangun konektor kustom yang sebenarnya.
+
+00:08:00.380 --> 00:08:04.620
+Sekarang kita memasuki bagian yang dilalui semua orang dengan tergesa-gesa konstruksi yang sebenarnya.
+
+00:08:04.860 --> 00:08:07.580
+Sebagian besar tutorial melambaikan tangan mereka dengan samar dan berkata,
+
+00:08:07.860 --> 00:08:08.640
+impor saja dari GitHub.
+
+00:08:08.840 --> 00:08:10.920
+Mereka mengabaikan ladang ranjok ketidakcocokan skema,
+
+00:08:11.180 --> 00:08:12.140
+kesalahan konfigurasi host,
+
+00:08:12.320 --> 00:08:15.240
+dan keanehan autentikasi yang menunggu di bawah tombol yang tampak tidak berbahaya itu.
+
+00:08:15.480 --> 00:08:17.540
+Hari ini kita akan membahasnya secara mendetail
+
+00:08:17.540 --> 00:08:21.600
+karena presisi adalah perbedaan antara agen yang berpikir dan agen yang merajuk dalam diam.
+
+00:08:21.840 --> 00:08:23.960
+Pertama, pahami kerangka alur kerja.
+
+00:08:24.160 --> 00:08:27.300
+Impor GitHub, konfigurasi titik akhir, penerbitan konektor.
+
+00:08:27.460 --> 00:08:28.160
+Tiga tulang.
+
+00:08:28.160 --> 00:08:30.980
+Kehilangan satu sendi dan Anda memiliki anggota tubuh yang tidak bernyawa.
+
+00:08:31.180 --> 00:08:34.180
+Jadi, mari kita mulai dari tempat Microsoft menyembunyikan tulang di Power Apps.
+
+00:08:34.380 --> 00:08:37.440
+Disitulah konektor kustom lahir, bukan di Copilot Studio itu sendiri.
+
+00:08:37.640 --> 00:08:41.100
+Copilot hanyalah konsumen akhir dari artikulasi apapun yang Anda buat di sini.
+
+00:08:41.340 --> 00:08:43.180
+Ketika Anda mengeklik konektor kustom baru,
+
+00:08:43.500 --> 00:08:45.680
+Anda akan disuguhi pilihan langsung dari topi pesulap,
+
+00:08:45.800 --> 00:08:47.860
+dari open api, dari postman, dari awal,
+
+00:08:48.080 --> 00:08:49.560
+atau impor yang diberkati dari GitHub.
+
+00:08:49.760 --> 00:08:52.380
+Pilih yang terakhir karena Microsoft diam-diam memelihara
+
+00:08:52.380 --> 00:08:55.460
+repository template konektor MCP di cabang pengembangnya.
+
+00:08:55.460 --> 00:08:58.940
+Templat yang sebenarnya Anda perlukan diberi label MCP Streamable.
+
+00:08:59.160 --> 00:09:01.700
+Apapun yang tidak dapat dialirkan akan tampak berfungsi
+
+00:09:01.700 --> 00:09:03.760
+hingga saat Copilot menanyakan pertanyaan pertama,
+
+00:09:04.120 --> 00:09:05.940
+yang kemudian akan gagal secara diam-diam.
+
+00:09:06.180 --> 00:09:08.180
+Tidak ada kembang api, tidak ada kesalahan,
+
+00:09:08.440 --> 00:09:09.720
+hanya tidak ada apa-apa yang sopan.
+
+00:09:10.020 --> 00:09:11.600
+Setelah memilih MCP Streamable,
+
+00:09:11.960 --> 00:09:13.900
+arahkan ke cabang dev dan klik lanjutkan.
+
+00:09:14.140 --> 00:09:17.740
+Sistem mengambil gumpalan JSON yang mendefinisikan parameter konektor.
+
+00:09:17.740 --> 00:09:18.700
+Autentikasi
+
+00:09:18.700 --> 00:09:23.360
+Biasanya tidak ada autentikasi karena MCP saat ini bergantung pada isolasi penyewa,
+
+00:09:23.560 --> 00:09:25.200
+beberapa badan permintaan yang diperlukan,
+
+00:09:25.460 --> 00:09:27.280
+dan pemetaan header penting untuk streaming.
+
+00:09:27.640 --> 00:09:28.780
+Jangan sentuh ini dulu.
+
+00:09:29.120 --> 00:09:31.500
+Naluri setiap orang adalah untuk segera mengubahnya,
+
+00:09:31.800 --> 00:09:33.420
+yang pasti akan merusak seluruh urutan.
+
+00:09:33.740 --> 00:09:34.560
+Gulir ke host
+
+00:09:34.560 --> 00:09:37.200
+Dokumentasi Microsoft membisikkan ini sebagai catatan kaki,
+
+00:09:37.480 --> 00:09:38.480
+tetapi inilah kenyataannya.
+
+00:09:38.720 --> 00:09:40.640
+Bidang host hanya mengharapkan nama domain.
+
+00:09:40.640 --> 00:09:44.580
+Jika Anda menempelkan URL lengkap dengan top sebagai ukuran yang disertakan
+
+00:09:44.580 --> 00:09:46.720
+atau membiarkan jalur akhir ke API MCP,
+
+00:09:46.980 --> 00:09:49.940
+langkah validasi konektor gagal dengan keheningan yang luar biasa.
+
+00:09:50.200 --> 00:09:53.140
+Ia memberitahu Anda bahwa semuanya telah divalidasi dengan benar,
+
+00:09:53.400 --> 00:09:54.860
+lalu menolak untuk muncul di Copilot.
+
+00:09:55.040 --> 00:09:57.320
+Hapus awalan, potong API MCP,
+
+00:09:57.640 --> 00:09:58.820
+dan masukkan host kosong,
+
+00:09:59.000 --> 00:10:00.740
+tanpa garis miring, tanpa skema.
+
+00:10:00.980 --> 00:10:04.780
+Satu langkah bedah itu memperbaiki 80% dari URL yang tidak muncul di keluhan drop-down saya.
+
+00:10:05.020 --> 00:10:07.240
+Selanjutnya, Anda harus menyesuaikan URL dasar.
+
+00:10:07.240 --> 00:10:09.820
+Templat menyertakan API MCP secara default.
+
+00:10:09.820 --> 00:10:11.320
+Hapus itu, mengapa?
+
+00:10:11.520 --> 00:10:13.880
+Karena ketika Copilot menggabungkan jalur secara internal,
+
+00:10:14.180 --> 00:10:15.560
+ia sudah mengasumsikan awalan itu.
+
+00:10:15.780 --> 00:10:18.780
+Biarkan saja dan Anda akan menghasilkan akar ganda seperti
+
+00:10:18.780 --> 00:10:21.440
+API MCP, API MCP, SEJ,
+
+00:10:21.660 --> 00:10:23.840
+yang ditolak server karena berlebihan dan konyol.
+
+00:10:24.020 --> 00:10:25.280
+Pangkas tanpa ampun.
+
+00:10:25.600 --> 00:10:27.780
+Sekarang, beri nama kreasi Anda dengan jelas.
+
+00:10:28.040 --> 00:10:30.200
+Tahan keinginan untuk menyebutnya konektor uji.
+
+00:10:30.460 --> 00:10:33.000
+Case internal Copilot hanya menghormati nama-nama unik.
+
+00:10:33.000 --> 00:10:37.180
+Gandakan satu, dan konektor baru Anda bersembunyi seperti anak pemalu di balik yang pertama.
+
+00:10:37.180 --> 00:10:42.420
+Gunakan judul deskriptif Microsoft Learn MCP atau Internal Research Context MCP.
+
+00:10:42.620 --> 00:10:43.640
+Lalu, klik buat.
+
+00:10:43.820 --> 00:10:47.220
+Pada tahap ini, UI Microsoft melakukan jeda teatrikal yang panjang.
+
+00:10:47.480 --> 00:10:49.040
+Layanan konektor menvalidasi struktur,
+
+00:10:49.200 --> 00:10:50.620
+mendaftarkan metadata dengan lingkungan,
+
+00:10:50.780 --> 00:10:52.680
+dan mendistribusikannya ke seluruh pusat data regional.
+
+00:10:52.940 --> 00:10:54.640
+Ini dapat memakan waktu hingga 5 menit.
+
+00:10:54.800 --> 00:10:56.960
+Selama beberapa menit tersebut, Anda akan tergoda untuk menyegarkan.
+
+00:10:57.260 --> 00:10:59.100
+Jangan setiap penyegaran memulai ulang casing,
+
+00:10:59.100 --> 00:11:01.600
+memperpanjang waktu tunggu Anda seperti sisi fus dengan roda putar.
+
+00:11:01.760 --> 00:11:02.420
+Ambil minuman.
+
+00:11:02.420 --> 00:11:07.060
+Saat validasi berhasil diselesaikan, konektor sekarang secara resmi ada di lingkungan Anda.
+
+00:11:07.240 --> 00:11:09.260
+Namun, lahir tidak sama dengan berguna.
+
+00:11:09.540 --> 00:11:12.500
+Langkah berikutnya, yang diabaikan oleh hampir setiap blok mulai cepat,
+
+00:11:12.740 --> 00:11:13.840
+adalah penyelarasan skema.
+
+00:11:14.040 --> 00:11:16.840
+Response server MCP mencakup bidang seperti deskripsi tindakan,
+
+00:11:17.120 --> 00:11:18.860
+skema alat, dan ide token aliran.
+
+00:11:19.080 --> 00:11:22.520
+Copilot mengharapkannya persis seperti yang ditentukan dalam spesifikasi MCP.
+
+00:11:22.520 --> 00:11:25.740
+Jika server MCP eksternal Anda menggunakan huruf kapital yang berbeda
+
+00:11:25.740 --> 00:11:28.280
+atau menyarankan metadata di bawah response muatan alih-alih data,
+
+00:11:28.520 --> 00:11:30.820
+tool, Copilot akan membuangnya sebagai omong kosong.
+
+00:11:30.820 --> 00:11:32.740
+Tidak ada peringatan, tidak ada kesalahan.
+
+00:11:32.980 --> 00:11:33.940
+Sekali lagi, diam.
+
+00:11:34.160 --> 00:11:38.080
+LLM di balik Copilot menafsirkannya sebagai saya tidak tahu bagaimana membantu dengan itu.
+
+00:11:38.340 --> 00:11:40.760
+Selamat, Anda telah membangun kekosongan yang patuh.
+
+00:11:40.960 --> 00:11:44.580
+Untuk menyelaraskan dengan benar, buka tab definisi di konektor yang baru Anda buat.
+
+00:11:44.740 --> 00:11:48.000
+Perluas operasi pertama, biasanya query atau dapatkan konteks
+
+00:11:48.000 --> 00:11:51.340
+dan bandingkan bagian responsnya dengan skema MCP terbaru di GitHub.
+
+00:11:51.560 --> 00:11:54.040
+Sesuaikan nama dan jenis properti sehingga array adalah array,
+
+00:11:54.260 --> 00:11:57.200
+objek adalah objek, dan setiap string menggunakan huruf kapital yang benar.
+
+00:11:57.360 --> 00:11:59.040
+Ya, ini terasa seperti klerikal.
+
+00:11:59.040 --> 00:12:00.520
+Selamat datang di diplomasi.
+
+00:12:00.680 --> 00:12:02.620
+Penerjemah tidak mengimprovisasi tata bahasa.
+
+00:12:02.860 --> 00:12:05.480
+Setelah penyelarasan selesai, alihkan dukungan streaming ke ya.
+
+00:12:05.680 --> 00:12:10.140
+Sekali lagi, dokumentasi menempatkan ini di belakang akordeon berlabel pengaturan lanjutan opsional,
+
+00:12:10.440 --> 00:12:12.620
+seolah-olah itu adalah hiasan daripada hidangan utama.
+
+00:12:12.840 --> 00:12:15.340
+Namun Copilot memerlukan titik akhir yang dapat dialirkan
+
+00:12:15.340 --> 00:12:17.440
+karena ia merender respons AI secara bertahap.
+
+00:12:17.560 --> 00:12:18.520
+Jika Anda gagal menandainya,
+
+00:12:18.720 --> 00:12:21.140
+konektor secara teknis mengautentikasi tetapi waktu habis di tengah respons,
+
+00:12:21.340 --> 00:12:22.900
+menghasilkan setengah kalimat atau lebih buruk lagi,
+
+00:12:23.120 --> 00:12:24.380
+penurunan harga yang berakhir di tengah kata.
+
+00:12:24.380 --> 00:12:25.520
+Seseorang pasti bertanya,
+
+00:12:25.800 --> 00:12:27.480
+tidak bisakah saya menggunakan sinkronisasi saja?
+
+00:12:27.680 --> 00:12:28.040
+Tidak.
+
+00:12:28.240 --> 00:12:30.520
+MCP mengharapkan aliran token, bukan dump masal,
+
+00:12:30.740 --> 00:12:32.700
+tepatnya untuk menjaga alur percakapan tetap hidup.
+
+00:12:32.840 --> 00:12:35.680
+Anggap saja seperti memberi makan model bahasa besar melalui infus
+
+00:12:35.680 --> 00:12:37.880
+daripada menjejalkan seluruh makanan ketenggorokannya.
+
+00:12:38.120 --> 00:12:40.280
+Infus itu memungkinkannya berpikir sambil makan.
+
+00:12:40.500 --> 00:12:43.120
+Pada titik ini, Anda mungkin yakin keberhasilan sudah terlihat.
+
+00:12:43.240 --> 00:12:44.420
+Anda kembali ke Copilot Studio,
+
+00:12:44.680 --> 00:12:46.160
+klik tambahkan alat, filter MCP,
+
+00:12:46.340 --> 00:12:48.340
+dan segarkan berulang kali saat konektor Anda tidak muncul.
+
+00:12:48.580 --> 00:12:50.080
+Inilah kenyataan yang tidak mengenakan,
+
+00:12:50.300 --> 00:12:52.780
+propagasi lingkungan tertinggal beberapa menit dari publikasi.
+
+00:12:52.780 --> 00:12:56.340
+Ruang kerja harus menyinkronkan daftar konektornya dengan layanan power platform.
+
+00:12:56.500 --> 00:12:58.580
+Penyegaran yang berlebihan menunda sinkronisasi.
+
+00:12:58.820 --> 00:13:00.400
+Admin yang efisien pergi begitu saja.
+
+00:13:00.660 --> 00:13:04.120
+Admin yang tidak sabar akan terjebak dalam paradoks temporal yang mereka buat sendiri.
+
+00:13:04.400 --> 00:13:05.840
+Saat konektor Anda akhirnya muncul,
+
+00:13:06.120 --> 00:13:09.020
+Anda akan melihat sesuatu yang sedikit berbeda dari konektor asli Microsoft.
+
+00:13:09.200 --> 00:13:10.980
+Ikonnya tidak memiliki sigil bawaan.
+
+00:13:11.160 --> 00:13:13.420
+Tidak apa-apa, Anda telah membuat sesuatu yang unik.
+
+00:13:13.560 --> 00:13:16.380
+Pilih, pilih tambahkan, dan autentikasi jika diminta.
+
+00:13:16.600 --> 00:13:18.920
+Copilot kini membuat pengikatan ke konektor tersebut,
+
+00:13:18.920 --> 00:13:22.720
+mengambil metadata, judul, deskripsi, dan parameter alatnya.
+
+00:13:22.880 --> 00:13:26.200
+Kehadiran metadata tersebut merupakan bukti bahwa jabat tangan berhasil.
+
+00:13:26.420 --> 00:13:29.320
+Jika Anda tidak melihat apapun, tinjau kembali penyelarasan skema Anda.
+
+00:13:29.480 --> 00:13:32.560
+Titik akhir berbicara, tetapi Copilot tidak dapat meneruskan aksen tersebut.
+
+00:13:32.740 --> 00:13:35.160
+Dua jebakan tetap ada, keduanya sangat bodoh.
+
+00:13:35.300 --> 00:13:37.060
+Pertama, validasi sertifikat.
+
+00:13:37.240 --> 00:13:39.640
+Jika server MCP Anda menggunakan TLS yang ditanda tangani sendiri
+
+00:13:39.640 --> 00:13:41.760
+dan Anda belum menambahkan sertifikat tersebut ke lingkungan konektor,
+
+00:13:41.960 --> 00:13:43.420
+percakapan akan terhenti saat tersambung.
+
+00:13:43.640 --> 00:13:46.020
+Gunakan sertifikat valid yang dikeluarkan oleh CA publik
+
+00:13:46.020 --> 00:13:48.840
+atau unggah sertifikat root Anda melalui pengaturan power platform.
+
+00:13:48.840 --> 00:13:50.800
+Kedua, penganggaran waktu habis.
+
+00:13:50.980 --> 00:13:52.980
+Titik akhir yang dapat dialirkan harus merespons
+
+00:13:52.980 --> 00:13:54.960
+dengan pengkodean transfer header yang dipotong-potong.
+
+00:13:55.120 --> 00:13:58.120
+Tampanya, Copilot mengasumsikan penutupan HTTP standar
+
+00:13:58.120 --> 00:14:00.540
+untuk memberi sinyal akhir pesan dan memotongnya sebelum waktunya.
+
+00:14:00.780 --> 00:14:02.740
+Uji dengan curul sebelum menuduh Microsoft.
+
+00:14:02.960 --> 00:14:05.900
+Berikut adalah cerita mikro yang merangkum ritual ini dengan sempurna.
+
+00:14:06.100 --> 00:14:09.280
+Seorang admin pernah mengeluh bahwa konektor mereka tiba-tiba berhenti berfungsi.
+
+00:14:09.520 --> 00:14:10.660
+Setelah pemeriksaan forensik,
+
+00:14:10.940 --> 00:14:13.480
+kami menemukan teknisi hosting mereka telah memperkenalkan Cloudflare
+
+00:14:13.480 --> 00:14:16.160
+di depan titik akhir MCP yang tampaknya untuk casing.
+
+00:14:16.440 --> 00:14:18.780
+Dan Cloudflare, dalam ketidaktahuannya yang baik hati,
+
+00:14:19.000 --> 00:14:21.200
+menghapus header streaming untuk mengompresi lalu lintas.
+
+00:14:21.360 --> 00:14:22.820
+Hasilnya, keningan total.
+
+00:14:23.080 --> 00:14:25.360
+Intinya, pipa tidak peduli dengan pengoptimalan Anda.
+
+00:14:25.620 --> 00:14:27.860
+Ikuti spesifikasi atau nikmati di baging purgatori.
+
+00:14:28.120 --> 00:14:29.160
+Sekarang pencerahannya.
+
+00:14:29.500 --> 00:14:31.760
+Seluruh proses ini bukanlah kompleksitas yang berbahaya.
+
+00:14:31.940 --> 00:14:33.260
+Microsoft tidak memasang jebakan,
+
+00:14:33.580 --> 00:14:35.100
+hanya mengasumsikan kesabaran profesional.
+
+00:14:35.360 --> 00:14:36.900
+Kebohongan konektor khusus tetap ada
+
+00:14:36.900 --> 00:14:40.060
+karena UI menghilangkan langkah-langkah tingkat rendah yang memastikan kebenaran.
+
+00:14:40.060 --> 00:14:42.860
+Ia menyampaikan kebenaran setengah-setengah kepada orang banyak.
+
+00:14:42.860 --> 00:14:45.740
+Jika Anda masih menonton, Anda telah melampaui orang banyak itu.
+
+00:14:46.000 --> 00:14:46.960
+Jika dilakukan dengan benar,
+
+00:14:47.220 --> 00:14:48.740
+apa yang telah Anda buat lebih dari sekadar konektor?
+
+00:14:49.000 --> 00:14:50.340
+Itu adalah jembatan menuju kebenaran.
+
+00:14:50.540 --> 00:14:53.140
+Co-pilot Anda tidak akan lagi memalsukan pengetahuan dari Bing.
+
+00:14:53.360 --> 00:14:55.660
+Ia akan melakukan pertukaran konteks yang terautentikasi,
+
+00:14:55.940 --> 00:14:56.480
+sesuai skema,
+
+00:14:56.720 --> 00:14:59.420
+dan dapat dialirkan dengan lapisan intelijen apapun yang Anda ekspos.
+
+00:14:59.620 --> 00:15:01.460
+Lain kali seseorang di organisasi Anda berkata,
+
+00:15:01.740 --> 00:15:03.700
+saya menghubungkan MCP, tetapi tidak merespons.
+
+00:15:03.880 --> 00:15:05.440
+Anda akan tersenyum muram dan menjawab,
+
+00:15:05.580 --> 00:15:07.980
+ya, karena Anda membangun lukisan terowongan, bukan jembatan.
+
+00:15:07.980 --> 00:15:09.420
+Sekarang setelah jembatan berdiri,
+
+00:15:09.420 --> 00:15:12.080
+mari kita verifikasi apakah penyeberangan itu benar-benar berfungsi.
+
+00:15:12.240 --> 00:15:14.620
+Karena jembatan gantung yang indah tetap tidak berguna
+
+00:15:14.620 --> 00:15:16.360
+sampai ada sesuatu yang melintasinya.
+
+00:15:16.600 --> 00:15:18.800
+Menguji dan memverifikasi integrasi.
+
+00:15:19.040 --> 00:15:21.760
+Verifikasi adalah bagian yang dianggap remeh oleh semua orang
+
+00:15:21.760 --> 00:15:23.900
+sampai agen mereka tersenyum sopan dan berkata,
+
+00:15:24.260 --> 00:15:26.080
+saya tidak tahu bagaimana membantu dengan itu.
+
+00:15:26.340 --> 00:15:28.660
+Frasa itu adalah versi layar biru Co-pilot.
+
+00:15:28.820 --> 00:15:31.780
+Protokol gagal di suatu tempat antara konektor dan model.
+
+00:15:32.020 --> 00:15:33.360
+Menguji MCP bukanlah hal yang menarik,
+
+00:15:33.360 --> 00:15:35.940
+tetapi itulah cara Anda membuktikan bahwa Anda telah membangun jembatan
+
+00:15:35.940 --> 00:15:36.980
+dan bukan seni pertunjukan.
+
+00:15:37.220 --> 00:15:38.560
+Mulailah dengan uji lakmus.
+
+00:15:38.560 --> 00:15:41.140
+Apakah Co-pilot Studio benar-benar melihat konektor Anda?
+
+00:15:41.360 --> 00:15:44.720
+Di panel alat, filter berdasarkan protokol konteks model sekali lagi.
+
+00:15:45.000 --> 00:15:47.580
+Judul Anda yang baru dibuat, mungkin Microsoft Learn MCP,
+
+00:15:47.800 --> 00:15:49.640
+akan muncul di samping MCP Dataverse resmi.
+
+00:15:49.920 --> 00:15:51.520
+Jika tidak, berhenti di situ saja.
+
+00:15:51.840 --> 00:15:53.360
+Visibilitas sama dengan pendaftaran.
+
+00:15:53.620 --> 00:15:56.080
+Tidak ada entry berarti skema atau host masih belum selaras.
+
+00:15:56.340 --> 00:15:59.020
+Dengan asumsi itu muncul, tambahkan alat tersebut ke Co-pilot Anda.
+
+00:15:59.020 --> 00:16:00.360
+Saat Anda menghubungkannya,
+
+00:16:00.640 --> 00:16:03.220
+Co-pilot mengambil metadata deskriptif dari server MCP,
+
+00:16:03.440 --> 00:16:04.360
+kamus alat yang tersedia,
+
+00:16:04.600 --> 00:16:07.160
+masing-masing dengan parameter dan deskripsi bahasa Inggris sederhana.
+
+00:16:07.160 --> 00:16:11.280
+Jika Anda melihat kolom deskripsi terisi dengan Microsoft Doc Search atau yang serupa,
+
+00:16:11.640 --> 00:16:13.080
+selamat, jabat tangan berhasil.
+
+00:16:13.260 --> 00:16:15.400
+Konteks sekarang dikenali, bukan ditebak.
+
+00:16:15.600 --> 00:16:17.160
+Untuk memverifikasi fungsionalitas,
+
+00:16:17.320 --> 00:16:18.820
+Anda memerlukan pertanyaan terkontrol.
+
+00:16:19.060 --> 00:16:21.500
+Gunakan Microsoft Learn MCP sebagai tempat pembuktian
+
+00:16:21.500 --> 00:16:24.060
+karena bersifat publik, sopan, dan tidak mungkin meledak.
+
+00:16:24.200 --> 00:16:25.220
+Tanyakan kepada agen Anda,
+
+00:16:25.520 --> 00:16:27.700
+bagaimana cara menyiapkan sarepoin sebagai sumber pengetahuan?
+
+00:16:27.700 --> 00:16:30.200
+Jika alur Anda utuh, perhatikan telemetri.
+
+00:16:30.420 --> 00:16:32.380
+Perintah tersebut berjalan melalui jalur ini,
+
+00:16:32.640 --> 00:16:34.940
+pengguna, konektor khusus, server MCP,
+
+00:16:35.220 --> 00:16:36.000
+model bahasa besar,
+
+00:16:36.260 --> 00:16:37.280
+jawaban dengan kutipan.
+
+00:16:37.540 --> 00:16:39.940
+Setiap kaki memperkenalkan potensi kegagalan.
+
+00:16:40.240 --> 00:16:42.420
+Ketika jawaban mengembalikan bahasa Inggris
+
+00:16:42.420 --> 00:16:44.820
+yang tidak koheren dengan kutipan penurunan harga
+
+00:16:44.820 --> 00:16:46.640
+yang menghubungkan ke trifekta suci,
+
+00:16:46.960 --> 00:16:47.440
+koneksi,
+
+00:16:47.680 --> 00:16:48.200
+pemahaman,
+
+00:16:48.440 --> 00:16:49.700
+dan kontekstualisasi.
+
+00:16:49.920 --> 00:16:51.740
+Penurunan harga itu sendiri adalah bukti
+
+00:16:51.740 --> 00:16:53.540
+bahwa mode streaming berfungsi dengan benar.
+
+00:16:53.540 --> 00:16:55.520
+Anda akan melihat teks dirender secara bertahap,
+
+00:16:55.640 --> 00:16:55.980
+kalimat,
+
+00:16:56.160 --> 00:16:56.380
+jeda,
+
+00:16:56.540 --> 00:16:56.860
+kalimat,
+
+00:16:57.040 --> 00:16:57.360
+kutipan,
+
+00:16:57.500 --> 00:16:58.840
+alih-alih membuang semuanya sekaligus.
+
+00:16:59.000 --> 00:17:01.140
+Ritme itu adalah detak jantung MCP yang menandakan,
+
+00:17:01.420 --> 00:17:02.740
+tetapi jika terjadi kesalahan,
+
+00:17:02.800 --> 00:17:04.040
+kopilot menjadi pasif agresif.
+
+00:17:04.220 --> 00:17:05.740
+Mari kita uraikan suasana hatinya.
+
+00:17:05.980 --> 00:17:06.820
+Respons kosong,
+
+00:17:07.040 --> 00:17:08.060
+Anda mengetik query yang valid,
+
+00:17:08.280 --> 00:17:08.920
+kopilot mengangguk,
+
+00:17:09.020 --> 00:17:09.940
+dan tidak memberikan apapun.
+
+00:17:10.120 --> 00:17:11.520
+Itu adalah ketidakselarasan URL,
+
+00:17:11.860 --> 00:17:12.640
+kemungkinan besar api,
+
+00:17:12.760 --> 00:17:13.760
+MSIP dengan awalan ganda.
+
+00:17:13.920 --> 00:17:16.300
+Tinjau jalur lengkap di tab definisi konektor Anda,
+
+00:17:16.620 --> 00:17:17.660
+hapus redundansi,
+
+00:17:17.820 --> 00:17:18.480
+terbitkan ulang,
+
+00:17:18.480 --> 00:17:19.720
+tunggu 5 menit yang wajib.
+
+00:17:19.860 --> 00:17:20.740
+Markdown terpotong,
+
+00:17:20.960 --> 00:17:23.000
+jawabannya tiba tetapi berakhir di tengah kalimat,
+
+00:17:23.160 --> 00:17:25.620
+seperti pekerja magang yang bosan keluar di tengah percakapan.
+
+00:17:25.860 --> 00:17:28.900
+Titik akhir Anda tidak mendeklarasikan transfer encoding cung.
+
+00:17:29.180 --> 00:17:29.860
+Dengan kata lain,
+
+00:17:30.040 --> 00:17:32.380
+Anda menjanjikan streaming tetapi mengirimkan dump status.
+
+00:17:32.620 --> 00:17:35.400
+Sejajarkan header Anda dengan aturan streaming HTTP 1.1.
+
+00:17:35.620 --> 00:17:37.280
+Saya tidak tahu bagaimana membantu dengan itu,
+
+00:17:37.520 --> 00:17:39.320
+yang ini memicu ketakutan eksistensial.
+
+00:17:39.580 --> 00:17:39.940
+Artinya,
+
+00:17:40.080 --> 00:17:41.340
+kopilot dapat mencapai konektor,
+
+00:17:41.460 --> 00:17:42.780
+tetapi tidak dapat meneruskan skema.
+
+00:17:42.980 --> 00:17:46.740
+Nama properti Anda berbeda dari spesifikasi MCP atau objek yang tampak hilang.
+
+00:17:46.740 --> 00:17:49.200
+Bandingkan lagi dengan referensi JSON Microsoft.
+
+00:17:49.400 --> 00:17:50.580
+Perbaikannya tidak mistis,
+
+00:17:50.740 --> 00:17:51.360
+hanya klerikal.
+
+00:17:51.620 --> 00:17:53.160
+Dan jika Anda menerima kegagalan koneksi,
+
+00:17:53.400 --> 00:17:54.920
+periksa rantai sertifikat SSL Anda.
+
+00:17:55.160 --> 00:17:57.080
+Sertifikat yang ditandatangani sendiri atau kedalu warsa
+
+00:17:57.080 --> 00:17:58.400
+seringkali menyebabkan penolakan diam-diam
+
+00:17:58.400 --> 00:18:01.140
+karena layanan power platform tidak mempercayai akar yang tidak diverifikasi.
+
+00:18:01.380 --> 00:18:04.000
+Ganti dengan yang dikeluarkan oleh CA terpercaya atau unggah
+
+00:18:04.000 --> 00:18:05.720
+sertifikat akar secara eksplisit.
+
+00:18:05.860 --> 00:18:06.240
+Sekarang,
+
+00:18:06.400 --> 00:18:08.320
+pengujian konfirmasi tidak hanya bersifat teknis,
+
+00:18:08.500 --> 00:18:09.240
+tetapi juga logis.
+
+00:18:09.420 --> 00:18:12.160
+Ajukan berbagai pertanyaan untuk mendeteksi penyimpangan semantik.
+
+00:18:12.160 --> 00:18:14.400
+Tunjukkan kepada saya dokumen pengindeksan Sarepoin
+
+00:18:14.400 --> 00:18:16.280
+harus memicu tindakan pencarian dokumen Microsoft
+
+00:18:16.280 --> 00:18:18.380
+yang sama seperti bagaimana Sarepoin mengindeks file.
+
+00:18:18.620 --> 00:18:19.420
+Kata-kata yang berbeda,
+
+00:18:19.660 --> 00:18:20.600
+pilihan alat yang identik,
+
+00:18:20.820 --> 00:18:21.780
+itu pemahaman kontekstual,
+
+00:18:22.000 --> 00:18:23.060
+bukan pengambilan kata kunci.
+
+00:18:23.300 --> 00:18:25.140
+Jika respons tetap stabil di seluruh frasa,
+
+00:18:25.380 --> 00:18:27.000
+copilot Anda secara resmi lancar.
+
+00:18:27.180 --> 00:18:29.440
+Berikut trik diagnostik yang disebutkan sedikit orang.
+
+00:18:29.680 --> 00:18:31.980
+Amati header aliran di tab jaringan browser Anda.
+
+00:18:32.180 --> 00:18:34.500
+Anda akan melihat potongan respons yang diawali oleh data
+
+00:18:34.500 --> 00:18:37.160
+diikuti oleh objek JSON yang mewakili token tambahan.
+
+00:18:37.420 --> 00:18:39.520
+Setiap potongan sesuai dengan bagian dari balasan.
+
+00:18:39.520 --> 00:18:41.540
+Jika Anda melihat satu muatan besar di akhir streaming,
+
+00:18:41.760 --> 00:18:42.600
+Anda telah kehilangan streaming
+
+00:18:42.600 --> 00:18:44.520
+dan berisiko kehabisan waktu pada query yang lebih panjang.
+
+00:18:44.740 --> 00:18:45.600
+Secara konseptual,
+
+00:18:45.760 --> 00:18:47.460
+anggap pengujian sebagai konduktor orkestra.
+
+00:18:47.720 --> 00:18:49.380
+Server MCP memainkan instrumen,
+
+00:18:49.640 --> 00:18:49.900
+data,
+
+00:18:50.200 --> 00:18:50.460
+skema,
+
+00:18:50.620 --> 00:18:50.940
+indeks.
+
+00:18:51.100 --> 00:18:52.780
+Konektor memegang tongkat estafet.
+
+00:18:52.880 --> 00:18:54.440
+Copilot adalah telinga konduktor Anda
+
+00:18:54.440 --> 00:18:55.560
+yang menafsirkan ritme.
+
+00:18:55.760 --> 00:18:56.940
+Jika seorang musisi tertinggal
+
+00:18:56.940 --> 00:18:58.240
+atau memulai dengan kunci yang salah,
+
+00:18:58.520 --> 00:18:59.740
+musiknya runtuh menjadi kebisingan.
+
+00:18:59.960 --> 00:19:01.260
+Verifikasi adalah latihan Anda
+
+00:19:01.260 --> 00:19:02.620
+yang menyelaraskan waktu semua orang
+
+00:19:02.620 --> 00:19:04.120
+sebelum konser untuk para eksekutif
+
+00:19:04.120 --> 00:19:05.100
+yang menganggap keajaiban.
+
+00:19:05.100 --> 00:19:06.760
+Ketika setiap bagian selaras,
+
+00:19:07.060 --> 00:19:07.800
+pengiriman cepat,
+
+00:19:08.040 --> 00:19:08.980
+pertukaran HTTP,
+
+00:19:09.380 --> 00:19:10.180
+pengurutan streaming,
+
+00:19:10.560 --> 00:19:12.400
+Anda akan menyaksikan keajaiban kecil,
+
+00:19:12.680 --> 00:19:13.580
+jawaban yang konsisten,
+
+00:19:13.860 --> 00:19:14.260
+dikutip,
+
+00:19:14.460 --> 00:19:15.740
+dan diatur perusahaan alih-alih
+
+00:19:15.740 --> 00:19:17.940
+jazz improvisasi yang menjadi default copilot.
+
+00:19:18.140 --> 00:19:18.940
+Baru setelah itu,
+
+00:19:19.080 --> 00:19:20.960
+Anda dapat menyatakan integrasi selesai.
+
+00:19:21.160 --> 00:19:23.120
+Anda telah mencapai lapisan mekanis MCP,
+
+00:19:23.320 --> 00:19:24.620
+pengangkutan konteks yang andal.
+
+00:19:24.860 --> 00:19:25.280
+Jadi ya,
+
+00:19:25.420 --> 00:19:27.040
+nikmatilah hasil pengujian kecil yang rapi.
+
+00:19:27.320 --> 00:19:28.520
+Tetapi ingat itu bukanlah akhir.
+
+00:19:28.740 --> 00:19:29.940
+Itu adalah bunyi bip diagnostik
+
+00:19:29.940 --> 00:19:31.320
+yang mengonfirmasi bahwa jantung eye Anda
+
+00:19:31.320 --> 00:19:32.880
+sekarang berdetak seiring dengan denyut data Anda.
+
+00:19:32.880 --> 00:19:34.500
+Mekanikanya sudah selesai.
+
+00:19:34.680 --> 00:19:35.220
+Berikutnya,
+
+00:19:35.440 --> 00:19:36.480
+kita hadapi filosofinya.
+
+00:19:36.780 --> 00:19:37.980
+Mengapa ada orang yang peduli
+
+00:19:37.980 --> 00:19:39.400
+bahwa simfoni yang rumit ini ada?
+
+00:19:39.620 --> 00:19:41.120
+Mengapa ini penting di luar demo?
+
+00:19:41.420 --> 00:19:43.200
+Inilah kebenaran yang tidak mengenakan.
+
+00:19:43.520 --> 00:19:45.440
+Menyiapkan MCP bukanlah trik pesta.
+
+00:19:45.680 --> 00:19:46.760
+Ini infrastruktur.
+
+00:19:47.040 --> 00:19:48.940
+Sementara yang lain mengejar respons wow,
+
+00:19:49.280 --> 00:19:50.520
+Anda membangun konstitusi
+
+00:19:50.520 --> 00:19:52.480
+yang mengatur bagaimana ID perusahaan Anda
+
+00:19:52.480 --> 00:19:53.380
+bertukar kebenaran.
+
+00:19:53.640 --> 00:19:54.780
+Protokol konteks modal
+
+00:19:54.780 --> 00:19:56.260
+menstandardisasi kebenaran itu.
+
+00:19:56.600 --> 00:19:57.140
+Setiap query,
+
+00:19:57.400 --> 00:19:58.100
+setiap pengambilan,
+
+00:19:58.100 --> 00:20:00.100
+semuanya dibatasi oleh kepatuhan skema.
+
+00:20:00.260 --> 00:20:00.820
+Tanpa itu,
+
+00:20:01.120 --> 00:20:02.260
+copilot hanya memperindah.
+
+00:20:02.260 --> 00:20:03.060
+Dengan MCP,
+
+00:20:03.260 --> 00:20:04.920
+ia bernalar dalam batasan yang ditentukan.
+
+00:20:05.180 --> 00:20:06.780
+Itulah perbedaan antara imajinasi
+
+00:20:06.780 --> 00:20:07.460
+dan tata kelola
+
+00:20:07.460 --> 00:20:09.020
+antara pekerja magang yang aneh
+
+00:20:09.020 --> 00:20:10.460
+dan analis yang patuh pada peraturan.
+
+00:20:10.740 --> 00:20:11.640
+Bagi perusahaan,
+
+00:20:11.800 --> 00:20:12.680
+ini sangat penting.
+
+00:20:12.900 --> 00:20:14.480
+MCP yang terintegrasi dengan baik
+
+00:20:14.480 --> 00:20:16.420
+memastikan bahwa setiap respons copilot
+
+00:20:16.420 --> 00:20:18.020
+berasal dari sistem yang disetujui,
+
+00:20:18.280 --> 00:20:18.740
+sarepoin,
+
+00:20:19.000 --> 00:20:19.420
+data first,
+
+00:20:19.680 --> 00:20:20.200
+api internal,
+
+00:20:20.540 --> 00:20:22.180
+daripada fragment yang diambil dari Bing.
+
+00:20:22.400 --> 00:20:23.760
+AI Anda sekarang berkonsultasi
+
+00:20:23.760 --> 00:20:24.540
+dengan sumber utama,
+
+00:20:24.760 --> 00:20:25.240
+bukan rumor.
+
+00:20:25.420 --> 00:20:26.980
+Keamanan mengikuti secara alami.
+
+00:20:26.980 --> 00:20:28.100
+Pada tahun 2025,
+
+00:20:28.500 --> 00:20:30.140
+peneliti keamanan mencatat lonjakan pelanggaran
+
+00:20:30.140 --> 00:20:31.220
+yang terkait dengan konektor khusus
+
+00:20:31.220 --> 00:20:31.980
+yang salah konfigurasi,
+
+00:20:32.200 --> 00:20:33.560
+titik akhir yang memiliki izin berlebihan
+
+00:20:33.560 --> 00:20:34.860
+yang dengan mudah membiarkan data bocor
+
+00:20:34.860 --> 00:20:35.560
+di antara penyewa.
+
+00:20:35.720 --> 00:20:37.100
+Integrasi MCP yang dilakukan
+
+00:20:37.100 --> 00:20:38.980
+dengan benar memperkuat prinsip zero trust.
+
+00:20:39.160 --> 00:20:40.260
+Konektor bertindak seperti
+
+00:20:40.260 --> 00:20:41.520
+pos pemeriksaan kedutaan.
+
+00:20:41.700 --> 00:20:43.040
+Hak istimewa paling sedikit ditegakkan,
+
+00:20:43.280 --> 00:20:43.940
+kredensial dicakup,
+
+00:20:44.100 --> 00:20:45.380
+konteks dipertukarkan hanya berdasarkan
+
+00:20:45.380 --> 00:20:46.400
+perjanjian yang ditetapkan.
+
+00:20:46.560 --> 00:20:48.620
+Tim tata kelola menghargai nilai yang lebih dalam,
+
+00:20:48.840 --> 00:20:49.960
+yaitu auditabilitas.
+
+00:20:49.960 --> 00:20:52.600
+Setiap transaksi MCP menghasilkan log eksplisit,
+
+00:20:52.820 --> 00:20:53.540
+siapa yang bertanya,
+
+00:20:53.820 --> 00:20:54.760
+skema mana yang menjawab,
+
+00:20:54.980 --> 00:20:56.220
+metadata apa yang dikembalikan.
+
+00:20:56.440 --> 00:20:58.180
+Itu adalah jejak kertas yang dapat dipeluk
+
+00:20:58.180 --> 00:20:59.820
+oleh petugas kepatuhan Anda di malam hari.
+
+00:21:00.040 --> 00:21:02.060
+Bandingkan dengan halusinasi AI generatif
+
+00:21:02.060 --> 00:21:04.260
+yang asal-usulnya ada di suatu tempat di internet.
+
+00:21:04.400 --> 00:21:06.880
+Pembuktian masa depan memperkuat argumen tersebut.
+
+00:21:07.340 --> 00:21:09.260
+Saat Microsoft, OpenAI, dan lainnya
+
+00:21:09.260 --> 00:21:10.500
+berkumpul menuju protokol
+
+00:21:10.500 --> 00:21:12.020
+antaragen yang terstandarisasi,
+
+00:21:12.380 --> 00:21:13.880
+kepatuhan MCP akan berkembang
+
+00:21:13.880 --> 00:21:15.680
+dari rasa ingin tahu menjadi persyaratan.
+
+00:21:15.840 --> 00:21:16.680
+Industri yang diatur,
+
+00:21:16.840 --> 00:21:18.240
+keuangan, perawatan kesehatan,
+
+00:21:18.240 --> 00:21:19.700
+pemerintah akan mengamanatkannya
+
+00:21:19.700 --> 00:21:21.740
+untuk sistem AI yang bertukar data kontekstual.
+
+00:21:21.920 --> 00:21:24.060
+Saat memo itu tiba, Anda tidak akan berebut.
+
+00:21:24.220 --> 00:21:25.800
+Anda sudah memiliki jembatan yang patuh
+
+00:21:25.800 --> 00:21:27.160
+yang berdengung pelan dalam produksi.
+
+00:21:27.420 --> 00:21:28.820
+Jadi, ketika rakan kerja menganggap
+
+00:21:28.820 --> 00:21:29.980
+konfigurasi Anda yang melelahkan
+
+00:21:29.980 --> 00:21:31.080
+sebagai rekayasa yang berlebihan,
+
+00:21:31.280 --> 00:21:32.060
+tersenyumlah dengan tenang.
+
+00:21:32.240 --> 00:21:34.080
+Tata kelola selalu terasa seperti birokrasi
+
+00:21:34.080 --> 00:21:35.080
+hingga pelanggaran terjadi.
+
+00:21:35.320 --> 00:21:36.940
+Lalu terasa seperti pandangan ke depan.
+
+00:21:37.200 --> 00:21:38.180
+Lakukan dengan benar sekali,
+
+00:21:38.440 --> 00:21:39.440
+dan setiap instans copilot
+
+00:21:39.440 --> 00:21:41.280
+yang Anda terapkan setelahnya mewarisi disiplin itu,
+
+00:21:41.500 --> 00:21:43.440
+kesadaran kontekstual dalam batasan yang terkendali.
+
+00:21:43.440 --> 00:21:45.020
+Itulah inti dari demo ini.
+
+00:21:45.240 --> 00:21:46.860
+Anda tidak hanya menghubungkan protokol,
+
+00:21:47.160 --> 00:21:48.960
+Anda mendefinisikan memori institusional
+
+00:21:48.960 --> 00:21:49.860
+dalam bentuk mesin.
+
+00:21:50.080 --> 00:21:52.140
+Lain kali copilot menjawab pertanyaan regulasi
+
+00:21:52.140 --> 00:21:53.760
+menggunakan sumber dan rantai kutipan
+
+00:21:53.760 --> 00:21:54.620
+yang Anda otorisasi,
+
+00:21:54.920 --> 00:21:55.600
+ingatlah momen ini,
+
+00:21:55.860 --> 00:21:57.160
+berjam-jam pemangkasan URL,
+
+00:21:57.520 --> 00:21:58.340
+pencocokan skema,
+
+00:21:58.600 --> 00:21:59.700
+dan pemeriksaan kewarasan.
+
+00:22:00.000 --> 00:22:01.260
+Itulah rekayasa tak terlihat
+
+00:22:01.260 --> 00:22:02.940
+di balik setiap AI yang bertanggung jawab.
+
+00:22:03.080 --> 00:22:04.800
+Sekarang, dengan kepuasan moral yang dipulihkan
+
+00:22:04.800 --> 00:22:06.160
+dan jembatan yang secara struktural koko,
+
+00:22:06.400 --> 00:22:07.320
+satu pertanyaan tetap ada.
+
+00:22:07.500 --> 00:22:09.540
+Apakah Anda akan terus membangun kecerdasan yang disiplin
+
+00:22:09.540 --> 00:22:10.880
+atau membiarkan kesederhanaan pemasaran
+
+00:22:10.880 --> 00:22:12.240
+menggoda Anda kembali ke dalam kekacauan?
+
+00:22:12.380 --> 00:22:13.840
+Hal yang efisien sudah jelas.
+
+00:22:14.080 --> 00:22:16.000
+Menambahkan MCP bukanlah membalik sakla.
+
+00:22:16.280 --> 00:22:18.240
+Ini adalah pengkabelan ulang otak Copilot Studio,
+
+00:22:18.540 --> 00:22:20.380
+sehingga berhenti berhalusinasi dan mulai bernalar.
+
+00:22:20.640 --> 00:22:22.780
+Janji malas untuk menggunakan konektor khusus runtuh
+
+00:22:22.780 --> 00:22:24.500
+saat Anda menyadari bahwa konektor tersebut
+
+00:22:24.500 --> 00:22:25.220
+bukanlah pintu,
+
+00:22:25.480 --> 00:22:27.180
+melainkan lorong utuh yang harus Anda bangun,
+
+00:22:27.360 --> 00:22:28.780
+perkuat, dan uji kebocoran.
+
+00:22:28.960 --> 00:22:30.060
+Namun, setelah selesai,
+
+00:22:30.220 --> 00:22:31.840
+hal tersebut mengubah perilaku setiap copilot
+
+00:22:31.840 --> 00:22:32.560
+di masa mendatang.
+
+00:22:32.780 --> 00:22:34.020
+Apa yang telah Anda capai adalah
+
+00:22:34.020 --> 00:22:35.140
+sistem literasi struktural
+
+00:22:35.140 --> 00:22:36.840
+yang dirancang untuk menyembunyikan kabelnya.
+
+00:22:37.020 --> 00:22:38.380
+Anda mengajari Copilot Studio
+
+00:22:38.380 --> 00:22:39.820
+untuk meminta konteks dengan sopan,
+
+00:22:40.040 --> 00:22:41.680
+melakukan autentikasi sebelum berbicara,
+
+00:22:41.900 --> 00:22:43.800
+dan mengembalikan kutipan alih-alih fiksi kreatif.
+
+00:22:43.980 --> 00:22:45.800
+Disiplin tersebut mengubahnya dari chatbot
+
+00:22:45.800 --> 00:22:47.520
+yang mencolok menjadi analis yang patuh.
+
+00:22:47.700 --> 00:22:49.360
+Dan ya, hal tersebut membutuhkan kesabaran,
+
+00:22:49.580 --> 00:22:50.200
+validasi skema,
+
+00:22:50.360 --> 00:22:51.280
+dan toleransi yang luar biasa
+
+00:22:51.280 --> 00:22:52.420
+terhadap penundaan penyegaran Microsoft,
+
+00:22:52.580 --> 00:22:54.260
+tetapi begitu pula dengan apapun yang layak dipercaya.
+
+00:22:54.400 --> 00:22:55.980
+Kebohongan konektor khusus yang disebut-sebut
+
+00:22:55.980 --> 00:22:56.920
+bukanlah konspirasi,
+
+00:22:57.160 --> 00:22:58.520
+melainkan pemasaran penyederhanaan.
+
+00:22:58.520 --> 00:23:01.040
+Microsoft mengatakan kebenaran yang sesuai untuk demo.
+
+00:23:01.280 --> 00:23:03.520
+Anda membangun kebenaran yang sesuai untuk produksi.
+
+00:23:03.760 --> 00:23:05.520
+Anda sekarang tahu bahwa protokol konteks modal
+
+00:23:05.520 --> 00:23:06.720
+tidak lagi bersifat plug-and-play,
+
+00:23:06.940 --> 00:23:08.400
+tetapi lebih bersifat plug-and-negosiasikan
+
+00:23:08.400 --> 00:23:09.240
+persyaratan perjanjian.
+
+00:23:09.480 --> 00:23:11.300
+Jadi, perlakukan setiap konektor yang Anda terbitkan
+
+00:23:11.300 --> 00:23:12.420
+sebagai amandemen konstitusi,
+
+00:23:12.520 --> 00:23:13.440
+hak minimal, aturan ketat,
+
+00:23:13.600 --> 00:23:14.680
+keluaran yang dapat diverifikasi.
+
+00:23:14.920 --> 00:23:16.640
+Begitulah cara Anda meningkatkan tata kelola
+
+00:23:16.640 --> 00:23:17.960
+tanpa mengorbankan kecepatan.
+
+00:23:18.160 --> 00:23:20.280
+Lewatkan saja dan Anda akan menghabiskan malam Anda
+
+00:23:20.280 --> 00:23:21.760
+menjelaskan kepada para eksekutif
+
+00:23:21.760 --> 00:23:23.740
+mengapa chatbot mengutip Bing alih-alih kebijakan.
+
+00:23:23.980 --> 00:23:25.300
+Kunci jalur peningkatan Anda,
+
+00:23:28.520 --> 00:23:30.020
+dan disiplin datang secara otomatis.
+
+00:23:30.200 --> 00:23:31.140
+Tidak ada pemeriksaan manual,
+
+00:23:31.380 --> 00:23:33.280
+tidak ada kekhawatiran atas demo yang setengah berfungsi,
+
+00:23:33.540 --> 00:23:35.000
+hanya penyampaian intelijen yang berkelanjutan
+
+00:23:35.000 --> 00:23:36.440
+yang menghormati konteks dan kepatuhan.
+
+00:23:36.660 --> 00:23:38.680
+Entropi menang kecuali Anda memilih struktur.
+
+00:23:38.960 --> 00:23:40.240
+Berlangganan adalah struktur.
+
+00:23:40.460 --> 00:23:42.300
+Tekan ikuti, terus bangun AI yang rasional,
+
+00:23:42.580 --> 00:23:44.540
+dan pembaruan berikutnya akan mendarat sesuai jadwal
+
+00:23:44.540 --> 00:23:46.320
+seperti konektor yang dikonfigurasi dengan benar
+
+00:23:46.320 --> 00:23:47.380
+yang dijalankan tepat satu kali,
+
+00:23:47.620 --> 00:23:49.100
+mengalirkan kebenaran secara real-time.
+
+00:23:49.360 --> 00:23:49.880
+Lanjutkan.

@@ -1,0 +1,1444 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:03.320
+Selamat datang di episode lain dari Microsoft Knowledge Nuggets, Tamir Kopiters.
+
+00:00:03.760 --> 00:00:04.980
+Topik hari ini Azure Logic Apps.
+
+00:00:05.780 --> 00:00:09.840
+Pertanyaannya, bagaimana jika Anda bisa menghubungkan aplikasi Anda tanpa menulis satu baris kuno?
+
+00:00:10.180 --> 00:00:12.100
+Saya tidak berbicara tentang hal-hal sederhana seperti email.
+
+00:00:12.580 --> 00:00:14.920
+Saya berbicara tentang menghubungkan sistem yang tidak sering terhubung.
+
+00:00:15.360 --> 00:00:20.240
+Email, penyimpanan file, basis data, catatan pelanggan Anda, dan membuat semuanya bekerja bersama secara otomatis.
+
+00:00:20.940 --> 00:00:21.980
+Itulah yang dilakukan Azure Apps.
+
+00:00:22.320 --> 00:00:25.800
+Di episode ini, saya akan menjelaskan apa sebenarnya itu, bagaimana cara kerjanya,
+
+00:00:26.060 --> 00:00:29.080
+dan mengapa itu penting bagi siapa saja yang menggunakan alat Microsoft di tempat kerja.
+
+00:00:29.080 --> 00:00:33.860
+Pada akhirnya, Anda akan memahami gambaran besarnya, dan tahu persis di mana logic apps cocok dalam dunia Anda.
+
+00:00:34.600 --> 00:00:36.780
+Masalahnya, mengapa otomatisasi butuh berkat?
+
+00:00:37.380 --> 00:00:38.960
+Mari mulai dengan skenario yang diketahui kebanyakan orang.
+
+00:00:39.680 --> 00:00:43.360
+Anda menerima file yang dimasukkan ke folder SharePoint, dan seseorang perlu mengetahuinya di Teams.
+
+00:00:43.860 --> 00:00:45.360
+Mungkin basis data juga perlu diperbarui.
+
+00:00:46.100 --> 00:00:48.080
+Tiga sistem terpisah tanpa koneksi di antara ketiganya.
+
+00:00:48.500 --> 00:00:48.920
+Apa yang terjadi?
+
+00:00:49.300 --> 00:00:52.460
+Seseorang memeriksanya secara manual di folder, menyalin informasi, menempelnya di Teams,
+
+00:00:52.580 --> 00:00:56.180
+lalu membuka basis data dan melakukan pembaruan setiap saat, dan melakukan pembaruan setiap saat.
+
+00:00:56.180 --> 00:00:58.480
+Prosesnya lambat, membosankan, dan mudah terjadi kesalah.
+
+00:00:58.480 --> 00:01:01.560
+Cara lama untuk menangani ini adalah dengan meminta seseorang menulis kode khusus.
+
+00:01:01.760 --> 00:01:05.800
+Itu berarti mencari pengembang, menjelaskan kebutuhan Anda, menunggu berminggu-minggu untuk mereka membangunnya,
+
+00:01:05.960 --> 00:01:07.080
+lalu menunggu lagi saat ada yang rusak.
+
+00:01:07.420 --> 00:01:10.740
+Bagi kebanyakan tim, itu tidak mungkin karena Departemen TI memiliki tumpukan pekerjaan,
+
+00:01:10.860 --> 00:01:12.940
+dan tim bisnis punya masalah yang perlu segera diselesaikan.
+
+00:01:13.280 --> 00:01:14.120
+Jadi pekerjaan tetap dilawan.
+
+00:01:14.480 --> 00:01:16.200
+Masalahnya bukan karena orang tidak ingin melakukan otomatisasi.
+
+00:01:16.500 --> 00:01:18.180
+Masalahnya adalah menghubungkan sistem yang berbeda tersebut.
+
+00:01:18.560 --> 00:01:22.380
+Setiap sistem punya caranya sendiri dalam menangani autentikasi, format data sendiri, dan aturannya sendiri.
+
+00:01:22.380 --> 00:01:25.840
+Menulis kode untuk menjembatani semua itu membutuhkan waktu dan keahlian,
+
+00:01:26.000 --> 00:01:28.240
+dan kebanyakan perusahaan tidak memiliki cukup pengembang untuk itu.
+
+00:01:28.540 --> 00:01:31.020
+Jadi bagaimana jika ada platform yang melakukan semua koneksi itu untuk Anda?
+
+00:01:31.420 --> 00:01:35.200
+Platform yang sudah tahu cara berkomunikasi dengan SharePoint, Teams, Outlook, basis data,
+
+00:01:35.340 --> 00:01:38.540
+dan ratusan layanan lain di mana Anda cukup mengatakan jika ini terjadi, lakukan itu,
+
+00:01:38.760 --> 00:01:40.000
+dan platform itu menangani sisanya.
+
+00:01:40.700 --> 00:01:42.060
+Itulah tepatnya Azure Logic Apps.
+
+00:01:42.860 --> 00:01:43.900
+Apa sebenarnya Logic Apps itu?
+
+00:01:44.560 --> 00:01:46.940
+Selamat datang di episode lain dari Microsoft Knowledge Nuggets.
+
+00:01:47.440 --> 00:01:50.620
+Saya Mirko Peters, dan hari ini kita membahas Azure Logic Apps dalam bahasa yang sederhana.
+
+00:01:50.620 --> 00:01:52.620
+Nah, ya apa sebenarnya itu? Mari kita bedah.
+
+00:01:53.080 --> 00:01:56.100
+Azure Logic Apps adalah layanan alur kerja berbasis cloud dari Microsoft.
+
+00:01:56.460 --> 00:01:58.900
+Layanan ini berjalan di Azure yang berarti Microsoft menangani server,
+
+00:01:59.040 --> 00:02:00.200
+pensekalaan, dan waktu aktifnya.
+
+00:02:00.680 --> 00:02:01.960
+Anda tidak perlu khawatir tentang hal tersebut.
+
+00:02:02.340 --> 00:02:04.000
+Anda cukup membangun alur kerja Anda dari itu benar-benar itu.
+
+00:02:04.240 --> 00:02:05.280
+Berikut adalah cara paling sederhana.
+
+00:02:05.820 --> 00:02:07.680
+Bayangkan perusahaan Anda adalah sebuah gedung kantor.
+
+00:02:07.780 --> 00:02:08.760
+Setiap departemen Anda terpisah.
+
+00:02:09.200 --> 00:02:10.180
+SharePoint adalah salah satu ruangannya.
+
+00:02:10.520 --> 00:02:11.180
+Teams adalah orang lainnya.
+
+00:02:11.420 --> 00:02:12.520
+Basis data Anda ada di ujung lorong.
+
+00:02:12.780 --> 00:02:15.740
+Biasanya, jika ada sesuatu yang perlu dipindahkan dari satu ruang ke ruang lain,
+
+00:02:15.860 --> 00:02:17.060
+seseorang harus membahasanya secara fisik.
+
+00:02:17.060 --> 00:02:18.720
+Logic Apps adalah ruang surat otomatisnya.
+
+00:02:19.060 --> 00:02:21.060
+Ia berada di tengah, tahu kemana segalanya harus pergi,
+
+00:02:21.260 --> 00:02:23.280
+dan merutekan pesan antar departemen secara otomatis.
+
+00:02:23.680 --> 00:02:25.360
+Anda tidak perlu membangun pintu baru di antara setiap ruang.
+
+00:02:25.820 --> 00:02:27.580
+Anda cukup memberitahu ruang surat tersebut apa yang harus.
+
+00:02:27.760 --> 00:02:29.480
+Nah, Anda mungkin pernah mendengar tentang Power Automate.
+
+00:02:29.880 --> 00:02:31.640
+Dan mungkin bertanya-tanya, bukankah itu hal yang sama?
+
+00:02:31.880 --> 00:02:32.440
+Tidak persis sama.
+
+00:02:32.880 --> 00:02:34.440
+Power Automate dibuat untuk pengguna bisnis.
+
+00:02:34.880 --> 00:02:36.760
+Ia dirancang untuk alur kerja pribadi yang sederhana,
+
+00:02:36.760 --> 00:02:38.820
+seperti email saya-saya mendapat pesan di Teams.
+
+00:02:39.680 --> 00:02:41.860
+Logic Apps dibangun untuk tim TI dan pengembang.
+
+00:02:42.520 --> 00:02:45.080
+Ia menangani skenario yang lebih kompleks, volume lebih besar,
+
+00:02:45.080 --> 00:02:47.400
+dan kebutuhan tingkat perusahaan seperti keamanan dan kepatut.
+
+00:02:47.980 --> 00:02:50.960
+Anggap Power Automate sebagai sepeda sangat bagus untuk berkeliling kantor.
+
+00:02:51.640 --> 00:02:52.860
+Logic Apps adalah truk pengiriman.
+
+00:02:53.180 --> 00:02:54.660
+Dibangun untuk beban lebih berat dan lebih panjang.
+
+00:02:55.420 --> 00:02:56.580
+Logic Apps juga bersifatnya server.
+
+00:02:57.020 --> 00:02:58.020
+Itu adalah istilah teknis.
+
+00:02:58.320 --> 00:02:59.020
+Namun artinya sederhana.
+
+00:02:59.440 --> 00:03:01.280
+Anda hanya membayar saat alur kerjaan dan benar-benar benar-benar.
+
+00:03:01.580 --> 00:03:03.100
+Jika tidak ada yang terjadi sepanjang hari apapun.
+
+00:03:03.360 --> 00:03:04.960
+Jika seribu file diunggah sekaligus,
+
+00:03:05.060 --> 00:03:07.260
+platform akan meningkat secara otomatis untuk menanganinya,
+
+00:03:07.620 --> 00:03:08.900
+dan Anda membayar sesuai yang digunakan.
+
+00:03:09.340 --> 00:03:10.480
+Tidak ada server untuk dikelola,
+
+00:03:10.620 --> 00:03:11.680
+tidak ada perencanaan kapasitas,
+
+00:03:11.680 --> 00:03:13.620
+tidak ada uang terbuang untuk perangkat keras yang menganggur.
+
+00:03:14.380 --> 00:03:16.120
+Blok pembangunnya, pemicu dan tindakan.
+
+00:03:16.860 --> 00:03:18.540
+Setiap Logic Apps dimulai dengan cara yang sama,
+
+00:03:18.780 --> 00:03:19.520
+dengan pemicu trigger.
+
+00:03:20.120 --> 00:03:21.880
+Pemicu hanyalah sesuatu yang memulai alur kerja Anda.
+
+00:03:22.280 --> 00:03:23.480
+Bayangkan itu seperti sensor gerak.
+
+00:03:23.880 --> 00:03:25.080
+Saat sensor mendeteksi gerakan,
+
+00:03:25.500 --> 00:03:25.960
+lampu menyala.
+
+00:03:26.400 --> 00:03:27.940
+Di Logic Apps, saat pemicu aktif,
+
+00:03:28.020 --> 00:03:29.060
+alur kerja Anda mulai berjalan.
+
+00:03:29.400 --> 00:03:30.660
+Pemicu hadir dalam dua jenis utama.
+
+00:03:31.120 --> 00:03:32.940
+Pemicu berbasis peristiwa menunggu sesuatu terjadi.
+
+00:03:33.500 --> 00:03:34.640
+Sebuah file diunggah ke SharePoint.
+
+00:03:35.320 --> 00:03:36.440
+Sebuah email tiba di Outlook.
+
+00:03:36.840 --> 00:03:38.260
+Baris baru muncul di tabel basis data.
+
+00:03:38.260 --> 00:03:40.940
+Pemicu berbasis jadwal berjalan dengan pengatur waktu
+
+00:03:40.940 --> 00:03:43.240
+setiap jam, setiap hari, jam 9 pagi, setiap Senin pagi.
+
+00:03:43.620 --> 00:03:45.120
+Anda memilih apa yang masuk akal untuk skenario.
+
+00:03:45.500 --> 00:03:47.000
+Setelah pemicu aktif, Anda memakan tindakan.
+
+00:03:47.380 --> 00:03:49.160
+Tindakan adalah langkah-langkah yang diambil alur kerjaan.
+
+00:03:49.500 --> 00:03:50.100
+Kirim pesan di Teams.
+
+00:03:50.660 --> 00:03:51.480
+Buat catatan di Salesforce.
+
+00:03:52.100 --> 00:03:53.300
+Perbarui baris di SQL Server.
+
+00:03:53.520 --> 00:03:54.440
+Panggil API eksternal.
+
+00:03:54.880 --> 00:03:57.080
+Setiap tindakan adalah blok pembangun yang bisa Anda susun bersama.
+
+00:03:57.440 --> 00:03:58.580
+Ijinkan sambil Anda contoh konkret.
+
+00:03:58.980 --> 00:04:00.740
+Katakanlah Anda memiliki pustaka dokumen SharePoint
+
+00:04:00.740 --> 00:04:01.920
+tempat tim Anda mengunggah proposal.
+
+00:04:02.440 --> 00:04:05.280
+Saat proposal baru masuk, Anda ingin tim mengetahuinya di Teams.
+
+00:04:05.280 --> 00:04:07.780
+Pemicunya adalah saat file dibuat di SharePoint.
+
+00:04:08.740 --> 00:04:10.780
+Tindakannya adalah memposting pesan di saluran Teams.
+
+00:04:11.560 --> 00:04:11.980
+Dua blok.
+
+00:04:12.360 --> 00:04:12.660
+Itu saja.
+
+00:04:13.080 --> 00:04:15.300
+Alur kerja berjalan otomatis setiap kali seseorang mengunggah file.
+
+00:04:16.020 --> 00:04:17.960
+Tidak ada yang perlu repot mengirimkan pemberitahuan.
+
+00:04:18.400 --> 00:04:19.300
+Semua terjadi sudah otomatis.
+
+00:04:19.620 --> 00:04:21.480
+Desain visualnya tempat Anda membangun alur kerja ini.
+
+00:04:21.940 --> 00:04:23.680
+Ini adalah kanvas seri dan lepas di portal Azure.
+
+00:04:24.220 --> 00:04:26.480
+Anda pilih pemicu dari daftar, jatuhkan ke kanvas,
+
+00:04:26.780 --> 00:04:27.920
+lalu tambahkan tindakan di bawahnya.
+
+00:04:28.740 --> 00:04:30.460
+Setiap tindakan terhubung ke tindakan sebelumnya.
+
+00:04:31.360 --> 00:04:32.300
+Anda bisa menambahkan kondisi.
+
+00:04:32.300 --> 00:04:35.240
+Jika file lebih dari 1 MB, kirim ke tim peninjau.
+
+00:04:35.340 --> 00:04:36.860
+Jika tidak, simpan di RSIP.
+
+00:04:37.580 --> 00:04:38.400
+Anda bisa menambahkan pelut.
+
+00:04:38.720 --> 00:04:39.880
+Anda bisa menambahkan cabang paralel.
+
+00:04:40.400 --> 00:04:42.240
+Desainer menampilkan seluruh alur secara visual
+
+00:04:42.240 --> 00:04:44.720
+sehingga Anda tahu persis apa yang akan terjadi di setiap langkah.
+
+00:04:45.280 --> 00:04:47.440
+Dan poinnya adalah Anda tidak perlu menjadi pengembang untuk menggunak.
+
+00:04:47.800 --> 00:04:49.800
+Jika Anda bisa menggambar diagram alur, Anda bisa logik app.
+
+00:04:50.220 --> 00:04:52.600
+Platform ini menangani semua infrastruktur teknis di balik layar.
+
+00:04:53.120 --> 00:04:55.380
+Autentikasi penangan kesalahan percobaan ulang semuanya sudah ada di dalam.
+
+00:04:55.800 --> 00:04:57.860
+Namun kekuatan sebenarnya bukan sekadar alur kerjanya,
+
+00:04:57.860 --> 00:04:58.860
+melainkan apa yang bisa Anda hubung.
+
+00:04:59.360 --> 00:05:00.260
+Dan ini membawa kita konektor.
+
+00:05:00.260 --> 00:05:02.620
+Konektor kekuatan super yang sebenarnya.
+
+00:05:03.560 --> 00:05:06.540
+Logic Apps hadir dengan lebih dari 1.400 konektor siap pakai.
+
+00:05:07.340 --> 00:05:08.440
+Angka itu terdengar mengesankan.
+
+00:05:08.600 --> 00:05:09.760
+Tapi izinkan saya menjelaskan apa ini.
+
+00:05:10.180 --> 00:05:13.580
+Konektor adalah jembatan siap pakai antara Logic Apps dan layanan lain.
+
+00:05:14.160 --> 00:05:16.280
+Microsoft telah menangani tugas berat seperti autentikasi,
+
+00:05:16.380 --> 00:05:17.820
+penanganan kesalahan, dan percobaan ulang.
+
+00:05:17.940 --> 00:05:20.180
+Jadi Anda tinggal memilih layanan yang diinginkan dan semua yang langsung berfungsi.
+
+00:05:20.420 --> 00:05:21.360
+Ingin menarik data dari Salesforce?
+
+00:05:21.880 --> 00:05:22.560
+Ada konektornya.
+
+00:05:22.880 --> 00:05:23.980
+Terlumah berbaru jatahan di SAP.
+
+00:05:24.420 --> 00:05:25.300
+Ada konektor untuk itu juga.
+
+00:05:25.340 --> 00:05:27.740
+Dan jika Anda perlu mengirim pesan keantraan ServiceNow,
+
+00:05:27.840 --> 00:05:29.020
+ada konektor yang siap digunakan.
+
+00:05:29.020 --> 00:05:33.760
+Layanan Microsoft 365 seperti SharePoint, Teams, Outlook, dan OneDrive semuanya memiliki konektor.
+
+00:05:34.480 --> 00:05:37.960
+Layanan Azure seperti SQL Database, Blob Storage, dan Event Grid semuanya tercakup.
+
+00:05:38.540 --> 00:05:41.020
+Layanan pihak ketiga seperti Dropbox, GitHub, Twitter, dan Slack
+
+00:05:41.020 --> 00:05:42.840
+ada konektor untuk masing-masing layanan tersebut.
+
+00:05:43.500 --> 00:05:47.000
+Setiap konektor memberi Anda serangkaian pemicu dan tindakan yang khusus untuk layanan tersebut.
+
+00:05:47.680 --> 00:05:49.200
+Konektor SharePoint memantau file baru,
+
+00:05:49.380 --> 00:05:50.600
+konektor Outlook mengirim email,
+
+00:05:50.740 --> 00:05:53.180
+dan konektor SQL menjalankan query serta prosedur tersimpan.
+
+00:05:53.780 --> 00:05:55.860
+Anda tidak perlu mempelajari API untuk setiap layanan.
+
+00:05:56.380 --> 00:05:57.840
+Konektor akan menyedhanakan semua itu untuhan.
+
+00:05:57.840 --> 00:06:00.700
+Sekarang ada dua jenis konektor yang perlu Anda ketahui.
+
+00:06:01.340 --> 00:06:03.760
+Konektor bawaan berjalan di dalam rantai Logic Apps itu sendiri.
+
+00:06:04.320 --> 00:06:07.160
+Konektor ini lebih cepat dan hemat biaya karena tidak ada panggilan eksternal kelainan.
+
+00:06:07.860 --> 00:06:12.240
+Konektor bawaan mencakup HTTP, Service Bus, Azure Functions, dan beberapa layanan Azure.
+
+00:06:13.240 --> 00:06:16.580
+Konektor terkelola dihosting oleh Microsoft dan mencakup ekosistem yang lebih luas.
+
+00:06:17.100 --> 00:06:19.100
+Ratusan layanan dari Microsoft dan pihak ketiga.
+
+00:06:19.620 --> 00:06:21.020
+Biaya sedikit lebih mahal per panggilan,
+
+00:06:21.020 --> 00:06:24.760
+tetapi mencakup lebih banyak jika tidak ada konektor untuk layanan yang Anda butuhkan dan tidak perlu hot.
+
+00:06:24.760 --> 00:06:29.060
+Logic Apps menyertakan tindakan HTTP umum yang mengungkirkan Anda memanggil API-RES apapun secara langsung.
+
+00:06:29.680 --> 00:06:31.720
+Cukup masukkan URL, metode, header.
+
+00:06:32.540 --> 00:06:34.940
+Cara kerjanya sama dengan konektor hanya saja tanpa kemudahan bawaan.
+
+00:06:35.280 --> 00:06:39.620
+Anda menangani autentikasi sendiri, tetapi tetap mendapatkan semua fitur coba lagi dan penanganan kesalahan dari Logic Apps.
+
+00:06:39.620 --> 00:06:44.420
+Seribu empat tar tersebut penting karena menghilangkan hambatan terbesar dalam otomatisasi, yaitu pekerjaan integrasi.
+
+00:06:44.720 --> 00:06:48.000
+Setiap konektor yang tidak perlu Anda buat sendiri menghemat waktu pengembangan selama berminggu ini.
+
+00:06:48.400 --> 00:06:51.200
+Dan ketika Anda menggabungkan konektor dengan pemicu dan tindakan,
+
+00:06:51.400 --> 00:06:56.240
+Anda dapat membangun alur kerja yang mencakup seluruh tumpukan teknologi tanpa menulis satu baris kode integrasi pun.
+
+00:06:57.340 --> 00:06:59.440
+Consumption versus standard, mudah-mudahan yang cocok online.
+
+00:06:59.860 --> 00:07:03.560
+Jadi Anda memahami apa itu Logic Apps, cara kerja pemicu dan tindakan, serta kekuatan konektor.
+
+00:07:04.260 --> 00:07:06.280
+Namun ada keputusan lain yang perlu Anda buat yang membayar.
+
+00:07:07.240 --> 00:07:12.800
+Logic Apps hadir dalam dua varian, consumption dan standard, dan keduanya tidak sama, jadi memilih yang salah bisa merugikan Anda.
+
+00:07:14.340 --> 00:07:15.980
+Consumption adalah model bayar preksibel.
+
+00:07:16.620 --> 00:07:18.980
+Anda membangun alur kerja dan hanya membayar se-alur sebut berjalan.
+
+00:07:19.600 --> 00:07:21.440
+Jika tidak digunakan semenjang hari Anda tidak membayar apa.
+
+00:07:21.820 --> 00:07:24.480
+Jika berjalan 100 kali, Anda membayar untuk 100 eksekusi.
+
+00:07:25.020 --> 00:07:29.460
+4 ribu tindakan pertama setiap bulan gratis, dan setelah itu biayanya hanya sebagian kecil sen per tindakan.
+
+00:07:30.240 --> 00:07:32.540
+Panggilan konektor sedikit lebih mahal, tetapi jumlahnya tetap besar.
+
+00:07:32.540 --> 00:07:34.820
+Bagi sebagian besar pemula, ini adalah tempat yang tepat menunggu.
+
+00:07:35.100 --> 00:07:36.360
+Anggaplah consumption seperti taksi.
+
+00:07:36.800 --> 00:07:37.860
+Anda membayar untuk perjalanan anak.
+
+00:07:38.260 --> 00:07:40.020
+Jika Anda tidak pergi kemanapun, Anda tidak membayar.
+
+00:07:40.300 --> 00:07:41.800
+Jika Anda melakukan perjalanan singkat, biayanya sedikit.
+
+00:07:42.380 --> 00:07:44.080
+Jika Anda melakukan perjalanan jauh, biayanya mahal.
+
+00:07:44.600 --> 00:07:46.220
+Harganya sesuai dengan penggunaan Anda secara tepat.
+
+00:07:46.480 --> 00:07:47.200
+Standard itu berbeda.
+
+00:07:47.760 --> 00:07:51.480
+Ini berjalan pada komputasi khusus, seperti memiliki server sendiri, namun dikelola oleh Microsoft.
+
+00:07:51.900 --> 00:07:54.800
+Anda membayar biaya bulanan tetap berdasarkan seberapa besar daya komputasi yang Anda pesan.
+
+00:07:54.800 --> 00:08:01.180
+Paket standar terkecil dimulai sekitar 175 per bulan dan memberi Anda satu CPU virtual dan memori 3,5 GB.
+
+00:08:01.740 --> 00:08:04.680
+Anda dapat menjalankan alur kerja sebanyak yang Anda inginkan paket itu,
+
+00:08:04.880 --> 00:08:07.660
+dan harganya tidak berubah berdasarkan berapa kali alur tersebut dijalankan.
+
+00:08:07.920 --> 00:08:09.100
+Standard itu seperti cicilan mobil.
+
+00:08:09.520 --> 00:08:12.740
+Anda membayar jumlah yang sama setiap bulan baik Anda mengendalikan sekali sehari atau sekali setahun.
+
+00:08:12.740 --> 00:08:16.680
+Jika Anda sering berkendara, biayanya tersebut bisa lebih murah perjalanan daripada naik taksi keman.
+
+00:08:16.960 --> 00:08:19.380
+Namun jika Anda jarang berkendara, Anda membayar untuk kapasitas yang tidak.
+
+00:08:19.800 --> 00:08:20.820
+Jadi kapan Anda memilih masing-masing?
+
+00:08:21.160 --> 00:08:23.740
+Consumption sangat bagus untuk beban kerja yang melonjak atau bervolumeran.
+
+00:08:23.740 --> 00:08:27.100
+Misalnya alur kerja yang berjalan beberapa kali sehari saat seseorang mengunggah file,
+
+00:08:27.220 --> 00:08:28.800
+biayanya hanya beberapa sen per bulan konsumsi.
+
+00:08:28.900 --> 00:08:30.580
+Jadi menempatkannya pada standar akan sia-sia.
+
+00:08:31.320 --> 00:08:34.160
+Namun jika Anda memiliki alur kerja yang berjalan ribuan kali per jam,
+
+00:08:34.260 --> 00:08:36.100
+memproses pesanan, menangani data waktu nyata,
+
+00:08:36.200 --> 00:08:37.560
+atau mengatur integrasi yang kompleks,
+
+00:08:37.560 --> 00:08:40.200
+biaya pereksekusi pada konsumsi akan bertambah dengan cepat.
+
+00:08:41.400 --> 00:08:44.780
+Pada titik itu, harga bulanan tetap standar menjadi pilihan yang lebih murah.
+
+00:08:45.340 --> 00:08:46.480
+Ada perbedaan lain yang perlu diketahui.
+
+00:08:46.780 --> 00:08:47.940
+Standar pemberian Anda lebih banyak kena.
+
+00:08:48.480 --> 00:08:51.840
+Anda mendapatkan kinerja yang lebih baik karena komputernya didedikasikan untuk Anda
+
+00:08:51.840 --> 00:08:54.500
+ditambah dukungan jaringan virtual untuk persyaratan keamanan yang ketat.
+
+00:08:54.820 --> 00:08:57.800
+Dan Anda bahkan dapat menjalankan alur kerja standar secara lokal di perangkat kerasendir.
+
+00:08:58.280 --> 00:09:00.900
+Konsumsi hanya berjalan di cloud Microsoft pada infrastruktur bersama.
+
+00:09:01.340 --> 00:09:02.940
+Jadi Anda tidak mendapatkan tingkat kendali yang sama,
+
+00:09:03.060 --> 00:09:04.760
+tetapi Anda juga tidak perlu mengelola apapun.
+
+00:09:04.980 --> 00:09:07.000
+Bagi kebanyakan orang yang belum mengulai jawabannya sederhana,
+
+00:09:07.560 --> 00:09:08.220
+mulai dengan konsumsi.
+
+00:09:08.640 --> 00:09:10.120
+Hampir tidak ada biaya untuk mencobanya.
+
+00:09:10.660 --> 00:09:11.860
+Bangun alur kerja pertama Anda,
+
+00:09:12.020 --> 00:09:12.780
+lihat cara kerjanya,
+
+00:09:12.920 --> 00:09:15.280
+dan baru pikirkan tentang standar jika volume Anda tumbuh hingga titik
+
+00:09:15.280 --> 00:09:17.180
+di mana konsumsi menjadi lebih mahal daripada paket total.
+
+00:09:17.300 --> 00:09:18.380
+Anda selalu bisa bermigresin Anda.
+
+00:09:18.380 --> 00:09:20.300
+Tentu dunia nyata dalam tindakan.
+
+00:09:20.640 --> 00:09:23.020
+Ijinkan saya menunjukkan seperti apa bentuknya saat perusahaan nyata menjawab.
+
+00:09:23.180 --> 00:09:23.980
+Ini bukan sekadar ide,
+
+00:09:24.120 --> 00:09:25.740
+ini adalah alur kerja nyata yang terjadi saat ini.
+
+00:09:26.260 --> 00:09:27.480
+Contoh satu adalah yang paling sederhana.
+
+00:09:27.840 --> 00:09:29.600
+Sebuah file mendarat di pustaka dokumen SharePoint,
+
+00:09:29.880 --> 00:09:30.640
+dan itulah pemicunya.
+
+00:09:31.180 --> 00:09:33.800
+Tindakan tersebut memicu notifikasi ke saluran Microsoft Teams,
+
+00:09:34.440 --> 00:09:35.640
+nama file, siapa yang mengunggahnya,
+
+00:09:35.780 --> 00:09:36.860
+dan tautan untuk membuka.
+
+00:09:37.220 --> 00:09:38.480
+Penyiapannya memakan waktu sekitar tim.
+
+00:09:38.800 --> 00:09:39.180
+Hasilnya,
+
+00:09:39.700 --> 00:09:41.500
+tidak ada lagi yang perlu memeriksa folder secara manual.
+
+00:09:41.960 --> 00:09:43.820
+Setiap anggota tim melihat notifikasi itu secara instan.
+
+00:09:43.880 --> 00:09:44.620
+Selama setahun,
+
+00:09:44.620 --> 00:09:47.280
+satu alur kerja itu menghemat waktu berjam-jam untuk memeriksa untuk pemeriksaan.
+
+00:09:47.700 --> 00:09:49.300
+Dan pesan-pesan apakah kamu sudah melihat file baru,
+
+00:09:49.440 --> 00:09:49.940
+pesan tersebut.
+
+00:09:50.280 --> 00:09:50.740
+Itu hal kecil,
+
+00:09:50.820 --> 00:09:51.840
+tapi jumlahnya cepat bertambah.
+
+00:09:52.340 --> 00:09:53.500
+Contoh dua menjadi lebih komplek.
+
+00:09:53.940 --> 00:09:55.680
+Seorang pelanggan melakukan pemesanan di situs web,
+
+00:09:56.100 --> 00:09:57.520
+dan pesanan itu masuk ke database SGA.
+
+00:09:58.120 --> 00:09:59.080
+Logic App mengambilnya,
+
+00:09:59.240 --> 00:10:01.180
+memvalidasi inventaris terhadap database lain,
+
+00:10:01.640 --> 00:10:03.280
+mengirim email konfirmasi melalui Outlook,
+
+00:10:03.460 --> 00:10:04.400
+membuat catatan di Salesforce,
+
+00:10:04.980 --> 00:10:07.100
+dan mengirimkan pemberitahuan ke tim gudang di Teams.
+
+00:10:07.680 --> 00:10:09.560
+Itu adalah lima sistem berbeda yang terhubung dalam satu alur.
+
+00:10:10.020 --> 00:10:11.140
+Sebelum ada Logic App,
+
+00:10:11.140 --> 00:10:13.220
+seseorang harus memeriksa basis data itu secara manual,
+
+00:10:13.360 --> 00:10:13.920
+mengirim email,
+
+00:10:14.040 --> 00:10:14.620
+membuka Salesforce,
+
+00:10:14.780 --> 00:10:15.600
+dan berjalan ke gudang.
+
+00:10:16.140 --> 00:10:17.900
+Sekarang semuanya terjadi dalam hitungan detik
+
+00:10:17.900 --> 00:10:19.400
+secara otomatis tanpa campur dengan manusia.
+
+00:10:19.840 --> 00:10:21.880
+Itulah jenis integrasi yang menyelamatkan seluruh departemen.
+
+00:10:22.360 --> 00:10:23.660
+Contoh ketiga berasal dari sektor eksep.
+
+00:10:24.320 --> 00:10:25.400
+Sebuah studi kasus penelitian
+
+00:10:25.400 --> 00:10:26.820
+mendokumentasikan alur kerja Logic App
+
+00:10:26.820 --> 00:10:27.900
+untuk proses orientasi pasien.
+
+00:10:28.860 --> 00:10:31.380
+Saat pasien baru terdaftar di sistem rekam medis elektronik mereka,
+
+00:10:31.600 --> 00:10:32.220
+Logic App akan
+
+00:10:32.220 --> 00:10:34.180
+membuat akun di Microsoft 365,
+
+00:10:34.740 --> 00:10:35.560
+menerima teri-teri sambutan,
+
+00:10:35.960 --> 00:10:37.100
+menjadwalkan janji temu pertama,
+
+00:10:37.100 --> 00:10:38.320
+dan memberitahu tim medis.
+
+00:10:38.320 --> 00:10:40.660
+Angkanya sangat mengesan.
+
+00:10:41.100 --> 00:10:43.000
+Salahan manual turun sebesar 75%
+
+00:10:43.000 --> 00:10:45.520
+dan kecepatan orientasi meningkat sebesar 40%.
+
+00:10:45.520 --> 00:10:46.940
+Itu bukan sekadar lebih cepat,
+
+00:10:47.080 --> 00:10:48.120
+tetapi perawatan pasien
+
+00:10:48.120 --> 00:10:50.540
+lebih baik karena tugas administratif tidak terlewatkan.
+
+00:10:51.300 --> 00:10:52.800
+Contoh keempat adalah respons insiden TI.
+
+00:10:53.380 --> 00:10:55.240
+Peringatan Azure Monitor aktif saat serpemati.
+
+00:10:55.780 --> 00:10:56.980
+Peringatan itu memicu Logic App.
+
+00:10:57.460 --> 00:10:59.260
+Alur kerja tersebut membuat tiket di ServiceNow,
+
+00:10:59.620 --> 00:11:00.700
+mengirim pesan di saluran Teams
+
+00:11:00.700 --> 00:11:01.560
+dengan detail Insiden,
+
+00:11:01.740 --> 00:11:02.720
+dan memulai penghitung waktu.
+
+00:11:03.200 --> 00:11:05.360
+Jika tidak ada yang menanggapi Insiden dalam 15 menit,
+
+00:11:05.360 --> 00:11:06.820
+Logic App akan melakukan eskalasi.
+
+00:11:06.820 --> 00:11:09.560
+Sistem mengirim SMS ke teknisi yang sedang bertugas,
+
+00:11:09.700 --> 00:11:10.380
+lalu ke ketua tim,
+
+00:11:10.480 --> 00:11:11.140
+kemudian ke manager.
+
+00:11:11.720 --> 00:11:12.960
+Proses berlanjut hingga seorang merespon.
+
+00:11:13.500 --> 00:11:13.920
+Sebelum ini,
+
+00:11:14.040 --> 00:11:15.360
+tim TI mengandalkan peringatan email
+
+00:11:15.360 --> 00:11:16.660
+yang sering terkubur dalam kotak masuk.
+
+00:11:17.340 --> 00:11:18.740
+Sekarang Insiden ditangani lebih cepat
+
+00:11:18.740 --> 00:11:20.320
+karena eskalasi dilakukan secara otomatis.
+
+00:11:20.860 --> 00:11:22.560
+Benang merah dari semua contoh ini sama saja.
+
+00:11:23.340 --> 00:11:25.000
+Logic Apps menghubungkan sistem yang secara alami
+
+00:11:25.000 --> 00:11:25.760
+tidak saling berkomunik.
+
+00:11:26.100 --> 00:11:27.220
+SharePoint tidak mengenali Teams.
+
+00:11:27.580 --> 00:11:29.120
+Basis data Anda tidak mengenali Salesforce.
+
+00:11:29.640 --> 00:11:31.520
+Alat pemantauan Anda tidak mengenali sistem tiket Anda.
+
+00:11:31.820 --> 00:11:33.240
+Logic Apps berada di tengah,
+
+00:11:33.360 --> 00:11:34.260
+mendengarkan peristiwa,
+
+00:11:34.260 --> 00:11:36.100
+dan menyalurkan informasi ke tempat yang tepat.
+
+00:11:36.540 --> 00:11:38.260
+Ini adalah perkat yang menyatukan otomatisasi Anda.
+
+00:11:39.060 --> 00:11:39.840
+Memana arah Logic Apps,
+
+00:11:39.960 --> 00:11:41.300
+yaitu Automatisasi Agent.
+
+00:11:41.800 --> 00:11:43.480
+Jadi, itulah posisi Logic Apps saat ini.
+
+00:11:43.800 --> 00:11:45.160
+Tetapi platform ini berubah dengan cepat,
+
+00:11:45.480 --> 00:11:47.660
+dan perubahan terbesar adalah sesuatu yang perlu Anda ketahui.
+
+00:11:48.160 --> 00:11:49.900
+Ini disebut otomatisasi berbasis agen,
+
+00:11:50.040 --> 00:11:51.600
+dan hal ini mengubah kemungkinan yang bisa dilakukan.
+
+00:11:52.080 --> 00:11:54.080
+Microsoft menghubungkan otomatisasi Logic Apps
+
+00:11:54.080 --> 00:11:54.920
+di ajang Build 2002.
+
+00:11:55.380 --> 00:11:56.980
+Fitur unggulannya sederhana namun sangat kuat.
+
+00:11:57.440 --> 00:11:58.620
+Anda sekarang dapat mendeskripsikan
+
+00:11:58.620 --> 00:11:59.960
+apa yang diinginkan dalam bahasa alami
+
+00:11:59.960 --> 00:12:01.400
+dan platform akan membangun alur kerja untuk
+
+00:12:01.400 --> 00:12:04.080
+alih-alih menarik dan melepas setiap pemicu dan tindakan,
+
+00:12:04.360 --> 00:12:05.300
+Anda cukup mengetik seperti
+
+00:12:05.300 --> 00:12:06.800
+saat tiket dukungan masuk,
+
+00:12:06.960 --> 00:12:07.920
+periksa riwayat pelanggan,
+
+00:12:08.280 --> 00:12:09.440
+dan jika mereka pelanggan premium,
+
+00:12:09.680 --> 00:12:10.700
+tugaskan ke tim senior.
+
+00:12:11.580 --> 00:12:13.580
+Logic Apps menganalisis permintaan Anda,
+
+00:12:13.820 --> 00:12:14.740
+memilih konektor yang tepat,
+
+00:12:15.140 --> 00:12:16.040
+memonfigurasi parameter,
+
+00:12:16.400 --> 00:12:17.900
+dan menyusun ke rangka seluruh alur kerja.
+
+00:12:18.300 --> 00:12:20.020
+Anda kemudian dapat menyesuaikannya di perancang visual,
+
+00:12:20.140 --> 00:12:21.120
+tetapi pekerjaan beratnya suhasis.
+
+00:12:21.120 --> 00:12:22.500
+Itu saja sudah merupakan besar,
+
+00:12:22.720 --> 00:12:24.340
+tetapi perubahan yang lebih besar adalah agen AI.
+
+00:12:24.560 --> 00:12:25.180
+Logic Apps kini,
+
+00:12:25.180 --> 00:12:27.040
+memungkinkan Anda mengintegrasikan agen AI
+
+00:12:27.040 --> 00:12:28.820
+secara langsung sebagai langkah dalam alur kerjaan.
+
+00:12:29.060 --> 00:12:30.500
+Agen-agen ini tidak hanya memanggil API
+
+00:12:30.500 --> 00:12:31.320
+dan mengembalikan hasil.
+
+00:12:31.700 --> 00:12:32.280
+Mereka bernahat.
+
+00:12:32.580 --> 00:12:33.300
+Mereka menggunakan alat.
+
+00:12:33.540 --> 00:12:34.400
+Mereka mengambil keputusan.
+
+00:12:34.740 --> 00:12:36.020
+Anda memberi agen sebuah tujuan,
+
+00:12:36.220 --> 00:12:37.500
+serangkaian alat yang bisa digunakan,
+
+00:12:37.620 --> 00:12:38.880
+dan instruksi tentang cara berperilang.
+
+00:12:39.140 --> 00:12:40.780
+Agen kemudian mencari cara terbaik
+
+00:12:40.780 --> 00:12:41.940
+untuk mencapai tujuan tersebut,
+
+00:12:42.080 --> 00:12:42.760
+memanggil konektor,
+
+00:12:42.900 --> 00:12:43.940
+membuat query basis data,
+
+00:12:44.160 --> 00:12:46.040
+bahkan meminta persetujuan manusia jika perlu.
+
+00:12:46.420 --> 00:12:47.220
+Pikirkan apa artinya itu
+
+00:12:47.220 --> 00:12:48.320
+bagi contoh yang baru saja kita bahas.
+
+00:12:48.320 --> 00:12:50.360
+Notifikasi SharePoint ke Teams itu sederhana,
+
+00:12:50.500 --> 00:12:52.300
+tetapi bagaimana dengan alur kerja pesanan pelanggan?
+
+00:12:52.700 --> 00:12:53.820
+Alih-alih melakukan pengodean kaku
+
+00:12:53.820 --> 00:12:54.520
+untuk setiap langkah,
+
+00:12:54.640 --> 00:12:56.060
+Anda bisa memiliki agen yang menengah dipengecor.
+
+00:12:56.280 --> 00:12:57.840
+Ada pesanan masuk dengan alamat pelanggan
+
+00:12:57.840 --> 00:12:59.120
+yang tidak cocok dengan basis data.
+
+00:12:59.740 --> 00:13:00.900
+Alih-alih alur kerja gagal,
+
+00:13:00.980 --> 00:13:02.160
+agen dapat memeriksa riwayat pelanggan,
+
+00:13:02.320 --> 00:13:03.300
+mencari alamat alternatif,
+
+00:13:03.360 --> 00:13:04.840
+dan memutuskan apakah akan memproses
+
+00:13:04.840 --> 00:13:06.300
+atau menandainya untuk ditinjau.
+
+00:13:06.980 --> 00:13:08.260
+Agen beradaptasi dengan situasi
+
+00:13:08.260 --> 00:13:09.700
+yang tidak diantisipasi oleh perancang alur.
+
+00:13:09.960 --> 00:13:11.240
+Wawasan utamanya adalah bahwa
+
+00:13:11.240 --> 00:13:13.160
+Logic Apps bukan lagi sekadar untuk menghubungkan aplikasi.
+
+00:13:13.160 --> 00:13:15.280
+Logic Apps kini menjadi lapisan opestrasi untuk
+
+00:13:15.280 --> 00:13:17.360
+konektor menangani infrastruktur,
+
+00:13:17.540 --> 00:13:18.740
+alur kerja menangani logika,
+
+00:13:19.080 --> 00:13:20.160
+dan agen menangani keputusan
+
+00:13:20.160 --> 00:13:21.820
+yang dulunya memerlukan keterlibatan manusia.
+
+00:13:22.300 --> 00:13:23.940
+Itu adalah cara berpikir yang sangat berbeda
+
+00:13:23.940 --> 00:13:24.860
+tentang otomatisasi.
+
+00:13:26.080 --> 00:13:27.040
+Memulai dengan Logic Apps.
+
+00:13:27.600 --> 00:13:29.080
+Izinkan saya memberitahu Anda cara memulainya
+
+00:13:29.080 --> 00:13:30.020
+jika Anda ingin mencobanya sendiri.
+
+00:13:30.360 --> 00:13:31.180
+Anda tidak perlu banyak hal.
+
+00:13:31.440 --> 00:13:32.460
+Anda akan memerlukan langgan Azure.
+
+00:13:32.900 --> 00:13:33.480
+Jika belum punya,
+
+00:13:33.680 --> 00:13:35.180
+Microsoft memberi Anda kredit gratis
+
+00:13:35.180 --> 00:13:36.520
+200 total untuk bulan pertama.
+
+00:13:36.980 --> 00:13:38.280
+Itu sudah lebih dari cukup untuk membangun
+
+00:13:38.280 --> 00:13:39.480
+dan menguji beberapa alur kerja
+
+00:13:39.480 --> 00:13:40.520
+tanpa mengeluarkan biaya sebesar.
+
+00:13:40.520 --> 00:13:42.320
+Dan Anda akan memerlukan akun kantor atau skor.
+
+00:13:42.640 --> 00:13:44.140
+Akun Hotmail pribadi bisa digunakan
+
+00:13:44.140 --> 00:13:44.980
+untuk beberapa hal,
+
+00:13:45.100 --> 00:13:46.120
+tetapi untuk pengalaman penuh,
+
+00:13:46.380 --> 00:13:47.320
+gunakan akun yang terhubung
+
+00:13:47.320 --> 00:13:48.220
+dengan organisasi Anda.
+
+00:13:48.680 --> 00:13:49.600
+Mulai dengan paket konsumsi.
+
+00:13:50.120 --> 00:13:51.180
+Itu adalah cara termurah untuk belajar.
+
+00:13:51.600 --> 00:13:53.160
+Anda bisa membangun alur kerja pertama Anda
+
+00:13:53.160 --> 00:13:54.160
+tanpa terikat biaya bulan agar.
+
+00:13:54.640 --> 00:13:56.240
+Jika alur kerja Anda berjalan sekali sehari,
+
+00:13:56.340 --> 00:13:57.500
+Anda hanya akan membayar beberapa sen.
+
+00:13:57.700 --> 00:13:58.280
+Tidak risiko.
+
+00:13:58.740 --> 00:13:59.920
+Pilih satu skenario yang sudah Anda lakukan
+
+00:13:59.920 --> 00:14:00.340
+secara manual.
+
+00:14:01.000 --> 00:14:01.940
+Jangan mencoba mengotomatiskan
+
+00:14:01.940 --> 00:14:03.060
+seluruh departemen Anda di hari pertama.
+
+00:14:03.540 --> 00:14:04.320
+Fokuslah pada suatu hal.
+
+00:14:04.620 --> 00:14:05.700
+Mungkin mendapatkan notifikasi
+
+00:14:05.700 --> 00:14:07.300
+saat sebuah file masuk ke folder tertentu
+
+00:14:07.300 --> 00:14:09.100
+atau menyimpan lampiran email
+
+00:14:09.100 --> 00:14:10.220
+ke OneDrive secara otomatis
+
+00:14:10.220 --> 00:14:11.720
+atau mengirim pesan di tim
+
+00:14:11.720 --> 00:14:13.460
+saat item baru muncul di daftar SharePoint.
+
+00:14:14.120 --> 00:14:15.240
+Semakin sederhana skenario-nya,
+
+00:14:15.420 --> 00:14:16.860
+semakin cepat Anda membuatnya berhasil
+
+00:14:16.860 --> 00:14:17.980
+dan semakin percaya diri Anda
+
+00:14:17.980 --> 00:14:19.060
+dalam membangun yang berikutnya.
+
+00:14:19.600 --> 00:14:20.880
+Portal Azure memiliki perancang visual.
+
+00:14:21.380 --> 00:14:22.860
+Buka, pilih pemicu dari daftar,
+
+00:14:23.040 --> 00:14:24.180
+tambahkan tindakan, lalu uji.
+
+00:14:24.420 --> 00:14:25.680
+Anda tidak perlu menulis kode apapun.
+
+00:14:25.980 --> 00:14:27.540
+Desainer menampilkan alur secara keseluruhan
+
+00:14:27.540 --> 00:14:28.660
+dan Anda bisa langsung menjalankannya
+
+00:14:28.660 --> 00:14:29.280
+untuk melihat hasilnya.
+
+00:14:29.700 --> 00:14:31.140
+Microsoft juga menyediakan tempat
+
+00:14:31.140 --> 00:14:32.100
+untuk skenario umum.
+
+00:14:33.000 --> 00:14:33.980
+Buka Desainer Logic Apps
+
+00:14:33.980 --> 00:14:35.880
+dan Anda akan melihat galeri templat siap pakai
+
+00:14:35.880 --> 00:14:37.720
+pemberitahuan unggah file,
+
+00:14:38.020 --> 00:14:38.940
+peringatan email ke Teams,
+
+00:14:39.080 --> 00:14:40.100
+ekspor data terjadwal.
+
+00:14:40.660 --> 00:14:42.180
+Anda bisa menggunakan templat sebagai titik awal
+
+00:14:42.180 --> 00:14:43.240
+dan menyesuaikannya dengan kebutuhan.
+
+00:14:43.360 --> 00:14:44.580
+Itu adalah cara tercepat
+
+00:14:44.580 --> 00:14:45.560
+untuk membuat sesuatu berjalan.
+
+00:14:45.840 --> 00:14:47.620
+Mulailah, pilih satu tugas berulang
+
+00:14:47.620 --> 00:14:49.620
+yang Anda lakukan di berbagai aplikasi dan otomatis.
+
+00:14:49.860 --> 00:14:51.160
+Sekipun hanya menghemat 5 menit sehari,
+
+00:14:51.260 --> 00:14:52.600
+itu adalah 5 menit yang kembali kepada Anda.
+
+00:14:52.880 --> 00:14:54.100
+Setelah melihat betapa mudahnya,
+
+00:14:54.220 --> 00:14:55.460
+Anda akan mulai menemukan lebih banyak lagi.
+
+00:14:56.480 --> 00:14:57.400
+Jadilah yang perlu Anda ingat,
+
+00:14:57.840 --> 00:14:59.200
+Logic Apps adalah perkat otomatisasi
+
+00:14:59.200 --> 00:14:59.720
+milik Microsoft.
+
+00:15:00.240 --> 00:15:01.440
+Ini menghubungkan sistem yang biasanya
+
+00:15:01.440 --> 00:15:02.480
+tidak saling berkomunikasi.
+
+00:15:03.280 --> 00:15:04.360
+Ini menangani infrastruktur,
+
+00:15:04.680 --> 00:15:05.780
+autentikasi percobaan ulang,
+
+00:15:05.860 --> 00:15:06.900
+penanganan error, dan perskalaan
+
+00:15:06.900 --> 00:15:08.260
+sehingga Anda tidak perlu mengelolanya.
+
+00:15:09.080 --> 00:15:10.920
+Dan ini berjalan tanpa perlu memikirkan server.
+
+00:15:11.380 --> 00:15:12.500
+Poin utamanya adalah ini.
+
+00:15:12.960 --> 00:15:14.100
+Anda tidak harus menjadi pengembang
+
+00:15:14.100 --> 00:15:15.260
+untuk membangun otomatisasi
+
+00:15:15.260 --> 00:15:16.240
+dan tidak harus menjadi pro-IT
+
+00:15:16.240 --> 00:15:16.980
+untuk menjalankannya.
+
+00:15:17.520 --> 00:15:18.140
+Desain visual,
+
+00:15:18.360 --> 00:15:19.000
+konektor siap pakai,
+
+00:15:19.100 --> 00:15:20.000
+templat, semuanya dirancang
+
+00:15:20.000 --> 00:15:21.220
+untuk menurunkan hambatan.
+
+00:15:21.780 --> 00:15:23.260
+Jika Anda bisa mendeskripsikan suatu proses,
+
+00:15:23.360 --> 00:15:24.120
+Anda bisa mengotomasikan.
+
+00:15:24.780 --> 00:15:25.500
+Tugas Anda sederhana,
+
+00:15:25.840 --> 00:15:26.900
+pikirkan satu tugas berulang
+
+00:15:26.900 --> 00:15:28.240
+yang Anda lakukan di berbagai aplikasi.
+
+00:15:28.240 --> 00:15:30.000
+Sesuatu yang melibatkan pemindahan informasi
+
+00:15:30.000 --> 00:15:31.160
+dari satu sistem ke sistem lain.
+
+00:15:31.560 --> 00:15:33.080
+Lalu cobalah untuk mengotomasikannya dengan logic.
+
+00:15:33.380 --> 00:15:34.420
+Mulailah dengan paket konsumsi.
+
+00:15:34.860 --> 00:15:36.000
+Gunakan plat jika ada yang tersedia.
+
+00:15:36.480 --> 00:15:37.200
+Dan seberapa bisa melakukan.
+
+00:15:37.660 --> 00:15:38.380
+Sekian untuk episode
+
+00:15:38.380 --> 00:15:39.660
+Microsoft Knowledge Nuggets kali ini.
+
+00:15:40.300 --> 00:15:41.240
+Jika ini membantu Anda
+
+00:15:41.240 --> 00:15:42.820
+memahami logic apps lebih baik,
+
+00:15:43.140 --> 00:15:44.040
+bagikan kepada seseorang
+
+00:15:44.040 --> 00:15:45.380
+yang mulai perjalanan otomatisasi
+
+00:15:45.380 --> 00:15:45.980
+Microsoft mereka.
+
+00:15:46.680 --> 00:15:47.780
+Dan berlangganan di platform
+
+00:15:47.780 --> 00:15:48.700
+podcast favorit Anda
+
+00:15:48.700 --> 00:15:50.240
+agar tidak ketinggalan episode berikutnya.
+
+00:15:50.240 --> 00:15:51.180
+Saya Merko Peters
+
+00:15:51.180 --> 00:15:52.200
+dan terima kasih telah mendengarkan.

@@ -1,0 +1,1399 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:04.820
+Ciao a tutti e benvenuti a un altro episodio delle pillole di conoscenza Microsoft qui su M365FM.
+
+00:00:05.200 --> 00:00:06.240
+Sono il vostro ospite, mi copite?
+
+00:00:06.680 --> 00:00:10.460
+L'argomento di oggi è uno di quelli di cui quasi tutti hanno sentito parlare, ma che pochissimi comprendono davvero.
+
+00:00:10.880 --> 00:00:11.720
+Database vettoriali.
+
+00:00:12.180 --> 00:00:16.340
+Probabilmente avrete visto questo termine in articoli sull'IA o sentito in conversazioni su Copilot e ChatGPT.
+
+00:00:16.960 --> 00:00:18.460
+Ma cos'è esattamente un database vettoriale?
+
+00:00:18.620 --> 00:00:20.540
+È solo un normale database con un nome più elegante?
+
+00:00:21.000 --> 00:00:22.300
+O è qualcosa di completamente diverso?
+
+00:00:22.640 --> 00:00:27.860
+Immaginate di cercare su un sito di e-commerce giacca rossa e ottenere risultati che mostrano capotto cremisi, capospalla bordeaux.
+
+00:00:27.860 --> 00:00:30.200
+Come fa il computer a sapere che sono la stessa cosa?
+
+00:00:30.640 --> 00:00:31.900
+Lo sta facendo corrispondere a parole chiave.
+
+00:00:32.260 --> 00:00:34.360
+Cremisi non è rosso e cappotto non è giacca.
+
+00:00:35.220 --> 00:00:39.060
+Eppure in qualche modo il motore di ricerca capisce che sono correlati e questa è la ricerca vettoriale in azione.
+
+00:00:39.340 --> 00:00:45.800
+Alla fine di questo episodio capirete cosa sono realmente i database vettoriali perché alimentano la ricerca IA e Copilot e come si inseriscono nel cloud Microsoft.
+
+00:00:46.860 --> 00:00:48.240
+Useremo un linguaggio semplice e chiaro.
+
+00:00:48.240 --> 00:00:51.060
+Niente matematica, niente gergo, solo concetti base comprensivi.
+
+00:00:51.700 --> 00:00:52.640
+Cos'è effettivamente un vettore?
+
+00:00:53.340 --> 00:00:54.680
+Iniziamo dalla domanda fondamentale.
+
+00:00:55.140 --> 00:00:56.160
+Cos'è esattamente un vettore?
+
+00:00:56.160 --> 00:01:01.600
+Quando la maggior parte delle persone sente la parola vettore, immagina una freccia delle lezioni di fisica, direzione e intensità.
+
+00:01:02.120 --> 00:01:03.240
+L'informatica è molto più semplice.
+
+00:01:03.580 --> 00:01:05.180
+Un vettore è in realtà solo una lista di numeri.
+
+00:01:05.720 --> 00:01:09.080
+Un array unidimensionale che rappresenta qualcosa in un formato che il computer può elaborare.
+
+00:01:09.600 --> 00:01:10.820
+Ecco un modo pratico per immaginarlo.
+
+00:01:11.200 --> 00:01:16.160
+Se vi dicessi di incontrarmi al terzo piano, alla B stanza 12, questi sono tre numeri che descrivono una posizione specifica.
+
+00:01:16.320 --> 00:01:19.920
+Qual è un vettore tridimensionale che vi dice esattamente dove si trova qualcosa in un edificio.
+
+00:01:20.380 --> 00:01:21.620
+E immaginate di aggiungere più dettagli.
+
+00:01:21.920 --> 00:01:24.420
+Colore della porta, dimensioni della stanza, prezzo al metro quadro.
+
+00:01:24.420 --> 00:01:26.940
+Ogni nuovo dettaglio diventa un'altra dimensione.
+
+00:01:27.300 --> 00:01:30.420
+Quindi più dimensioni accumulate e più informazioni potete catturare su quella cosa.
+
+00:01:31.160 --> 00:01:34.660
+Un'auto potrebbe essere descritta da velocità, chilometraggio, prezzo, peso, valutazione e sicurezza.
+
+00:01:35.020 --> 00:01:36.200
+Quello è un vettore a 5 dimensioni.
+
+00:01:36.620 --> 00:01:40.520
+Un prodotto potrebbe essere descritto da centinaia di caratteristiche, il che vi dà un vettore ad alta dimensionalità.
+
+00:01:40.880 --> 00:01:41.340
+Ecco il punto.
+
+00:01:41.700 --> 00:01:44.300
+I vettori ci permettono di trasformare le cose in numeri che il computer possono avere.
+
+00:01:44.680 --> 00:01:47.720
+Parole, immagini, suoni, documenti, qualsiasi cosa può diventare una lista di numeri.
+
+00:01:47.720 --> 00:01:51.300
+Una volta che tutto è in numeri potete iniziare a misurare quanto due cose siano effettivamente simili.
+
+00:01:51.640 --> 00:01:55.680
+Due stanze sullo stesso piano con colori delle porte simili finiscono vicine allo spazio vettoriale.
+
+00:01:55.740 --> 00:01:58.200
+Anche due prodotti con caratteristiche simili si raggruppano insieme.
+
+00:01:58.800 --> 00:02:01.320
+Quella semplice idea è ciò che rende possibile la moderna ricerca tramite
+
+00:02:01.320 --> 00:02:03.000
+due vettori agli embedding.
+
+00:02:03.100 --> 00:02:04.300
+Non tutti i vettori sono uguali.
+
+00:02:05.120 --> 00:02:08.120
+Esiste un tipo speciale chiamato embedding ed è qui che risiede alla vera potenza.
+
+00:02:08.540 --> 00:02:09.680
+Quindi cos'è esattamente un embedding?
+
+00:02:09.940 --> 00:02:11.760
+Un embedding è un vettore che rappresenta un significato.
+
+00:02:11.760 --> 00:02:17.760
+Un modello di machine learning come Text Embedding 3Small di Azure OpenAI legge il testo e lo colloca in uno spazio ad alta dimensione.
+
+00:02:18.980 --> 00:02:22.480
+Il modello è imparato da migliaia di esempi quindi capisce come le parole si relazionano.
+
+00:02:23.420 --> 00:02:26.220
+Re e regina finiscono vicini perché condividono un contesto simile.
+
+00:02:27.040 --> 00:02:29.200
+Re e caffè finiscono molto distanti perché non lo fanno.
+
+00:02:30.040 --> 00:02:31.300
+E cosa significa in parole semplici?
+
+00:02:31.780 --> 00:02:34.660
+Quando cerchi giacca rossa il sistema trova cappotto e cremisi.
+
+00:02:35.860 --> 00:02:40.800
+Modello di embedding riconosce che rosso e cremisi hanno significati vicini e anche giacca e cappotto sono simili.
+
+00:02:40.800 --> 00:02:44.580
+Gli embedding per quelle due frasi diventano vicini nello spazio vettoriale.
+
+00:02:44.960 --> 00:02:46.680
+Il computer non sta più cercando corrispondenze di lei.
+
+00:02:47.100 --> 00:02:48.140
+Sta cercando corrispondenze di significato.
+
+00:02:48.760 --> 00:02:50.300
+Ora lascia che ti faccio un esempio classico.
+
+00:02:50.880 --> 00:02:54.380
+Prendi il vettore per re, sottrai il vettore per uomo e aggiungi il vettore per donna.
+
+00:02:55.360 --> 00:02:57.600
+Il risultato è molto vicino al vettore per regina.
+
+00:02:58.340 --> 00:02:59.780
+Re meno uomo più donna uguale regina.
+
+00:03:00.440 --> 00:03:04.040
+Potrebbe sembrare magia ma è davvero così che il modello integra le relazioni nei numeri.
+
+00:03:04.040 --> 00:03:11.560
+Hai imparato che re e regina condividono una relazione simile a uomo e donna e quella relazione è codificata nelle coordinate.
+
+00:03:12.520 --> 00:03:16.600
+Quindi i modelli di embedding prendono i tuoi dati grezzi, siano essi testo, immagini o audio,
+
+00:03:17.140 --> 00:03:19.460
+e li convertono in una lista di numeri che ne rappresentano il significato.
+
+00:03:20.060 --> 00:03:22.820
+Quei numeri diventano coordinate in uno spazio ad alta dimensione.
+
+00:03:23.480 --> 00:03:26.700
+Poi quando effettui una ricerca la tua query viene convertita nello stesso tipo di coordinate.
+
+00:03:27.200 --> 00:03:28.940
+Tutto ciò che devi fare è misurare la distanza tra loro.
+
+00:03:28.940 --> 00:03:30.120
+Questa è l'idea fondamentale.
+
+00:03:30.440 --> 00:03:32.100
+Perché i database tradizionali non sono ad alta dimensione.
+
+00:03:32.540 --> 00:03:35.160
+Se gli embedding sono così potenti perché non possiamo usare un database normale?
+
+00:03:35.620 --> 00:03:36.420
+Rispondiamo a questa domanda.
+
+00:03:37.540 --> 00:03:40.080
+I database e squali tradizionali sono costruiti per corrispondenza esatta.
+
+00:03:40.700 --> 00:03:45.260
+Scrivi dove il colore è rosso e trova ogni riga dove la colonna del colore è letteralmente rosso.
+
+00:03:45.680 --> 00:03:49.200
+Funziona benissimo per dati strutturati come i nomi di clienti, dati di ordine o prezzi di prodotti,
+
+00:03:49.280 --> 00:03:51.760
+ma fallisce completamente quando serve un significato approssimativo.
+
+00:03:52.820 --> 00:03:57.380
+Prova a scrivere una query SQL che trovi cappotto cremisi quando i tuoi dati dicono solo giacca a bordeaux.
+
+00:03:57.380 --> 00:04:00.040
+Non puoi perché SQL non comprende i concetti.
+
+00:04:00.840 --> 00:04:03.560
+I database tradizionali memorizzano i dati in righe e colonna.
+
+00:04:04.140 --> 00:04:07.040
+Sono ottimizzati per join, aggregazioni e ricerche esatte.
+
+00:04:08.020 --> 00:04:10.280
+Non sanno che auto e automobile sono la stessa cosa.
+
+00:04:10.760 --> 00:04:12.100
+Non sanno che entusiasta è elettrezzato.
+
+00:04:12.380 --> 00:04:13.140
+Sono emozioni simili.
+
+00:04:13.720 --> 00:04:14.800
+Fanno solo corrispondenze di string.
+
+00:04:15.060 --> 00:04:18.480
+E se i tuoi dati non sono strutturati come pdf, immagini, registrazioni audio, documenti lunghi,
+
+00:04:18.480 --> 00:04:22.120
+i database tradizionali possono archiviarli come blob, ma non possono davvero cercarmi il contenuto.
+
+00:04:22.360 --> 00:04:23.840
+Ma non possono davvero cercarmi il contenuto.
+
+00:04:24.020 --> 00:04:27.060
+Avresti bisogno di ricerca full text che si basa ancora sulla corrispondenza delle parole chiave.
+
+00:04:27.380 --> 00:04:30.500
+Se l'utente digita il report budget, ma il documento dice riepilogo finanziario,
+
+00:04:30.560 --> 00:04:33.040
+la ricerca per parole chiave lo perde completamente.
+
+00:04:33.500 --> 00:04:34.140
+Pensare in questo modo.
+
+00:04:34.360 --> 00:04:35.860
+Un database normale è come un archivio.
+
+00:04:36.360 --> 00:04:38.740
+Devi conoscere il nome esatto del file per trovare quello che cerchi.
+
+00:04:39.340 --> 00:04:42.100
+Un database vettoriale è come un bibliotecario che capisce cosa intendi.
+
+00:04:42.620 --> 00:04:45.040
+Puoi dire, ha bisogno di quel documento sulle spese dell'ultimo trimestre?
+
+00:04:45.380 --> 00:04:50.460
+E il bibliotecario sa esattamente quale cartella prendere, anche se è etichettata come riepilogo finanziario Q3.
+
+00:04:51.260 --> 00:04:53.540
+Il bibliotecario comprende l'intento, non solo le etichette.
+
+00:04:54.120 --> 00:04:55.540
+Ecco perché esistono i database vettoriali.
+
+00:04:55.540 --> 00:04:58.400
+Memorizzano gli embedding, quei vettori che catturano il significato,
+
+00:04:58.440 --> 00:05:01.000
+e li indicizzano in modo da rendere veloce la ricerca di similarità.
+
+00:05:01.580 --> 00:05:03.020
+Non sostituiscono i database anali.
+
+00:05:03.420 --> 00:05:06.460
+Aggiungono uno strato di comprensione sopra di essi, e quello strato cambia tutto.
+
+00:05:07.260 --> 00:05:10.220
+Aggiungono uno strato di comprensione sopra di essi, e quello strato cambia tutto.
+
+00:05:10.620 --> 00:05:11.980
+Come funzionano i database vettoriali?
+
+00:05:12.280 --> 00:05:13.860
+Quindi, come funziona tutto questo dietro le qui?
+
+00:05:14.320 --> 00:05:16.880
+Analizziamo le due fasi principali in gestione e interrogazione.
+
+00:05:17.300 --> 00:05:18.560
+In gestione è la fase di configurazione.
+
+00:05:18.560 --> 00:05:23.260
+Prendi i tuoi dati grezzi, descrizione di prodotti, ticket di supporto, documenti interni,
+
+00:05:23.340 --> 00:05:26.580
+qualsiasi cosa tu abbia, e passi ogni elemento attraverso un modello di embedding.
+
+00:05:27.580 --> 00:05:30.860
+Quel modello trasforma il testo in un vettore, che è fondamentalmente una lista di numeri
+
+00:05:30.860 --> 00:05:31.960
+che ne cattura il significato.
+
+00:05:32.420 --> 00:05:35.540
+Poi memorizzi quel vettore nel database, insieme a dei metadati, il testo originale,
+
+00:05:35.640 --> 00:05:39.140
+un timestamp, magari una categoria, o una URL sorgente.
+
+00:05:39.580 --> 00:05:40.480
+Ora, ecco la parte intelligente.
+
+00:05:40.480 --> 00:05:43.880
+Se avessi un milione di documenti, controllare ogni singolo vettore uno per uno richiederebbe
+
+00:05:43.880 --> 00:05:44.520
+un determinato.
+
+00:05:44.540 --> 00:05:47.100
+Ecco perché i database vettoriali usano qualcosa chiamato indicizzazione.
+
+00:05:47.440 --> 00:05:50.420
+Pensa all'indicizzazione come alla creazione di una mappa dello spazio vettoriale, invece
+
+00:05:50.420 --> 00:05:51.600
+di bussare a ogni singola porta.
+
+00:05:52.340 --> 00:05:54.220
+Due metodi comuni sono i VF e HNSV.
+
+00:05:54.640 --> 00:05:56.360
+VF sta per Inverted File Index, Indice di File Index.
+
+00:05:56.580 --> 00:05:58.520
+Funziona raggruppando vettori simili in cluster.
+
+00:05:59.160 --> 00:06:02.700
+Quando cerchi, invece di scansionare tutti i milioni di vettori, controlli solo i cluster più
+
+00:06:02.700 --> 00:06:03.180
+promettenti.
+
+00:06:03.460 --> 00:06:04.840
+È come cercare un libro in una biblioteca.
+
+00:06:05.460 --> 00:06:07.740
+Vai dritto nella sezione giusta, invece di scansionare ogni scaffale.
+
+00:06:07.740 --> 00:06:10.720
+HNSV sta per Hierarchical Navigable Small World.
+
+00:06:11.240 --> 00:06:12.260
+L'idea è piuttosto elegante.
+
+00:06:12.720 --> 00:06:14.560
+Costruisce una mappa a multilivello dei tuoi vettori.
+
+00:06:15.260 --> 00:06:18.080
+Contiene alcuni vettori rappresentativi che ti danno un'idea approssimativa di dove si
+
+00:06:18.080 --> 00:06:18.700
+trovino le cose.
+
+00:06:19.520 --> 00:06:21.080
+Ogni livello sottostante diventa più dettaglio.
+
+00:06:21.660 --> 00:06:24.580
+Quando cerchi, inizi dall'alto, trovi il vicinato generale e poi scendi livello dopo
+
+00:06:24.580 --> 00:06:26.480
+livello finché non trovi la corrispondenza esatta.
+
+00:06:27.480 --> 00:06:30.760
+È come usare prima una mappa della città, poi una mappa del quartiere e infine una mappa
+
+00:06:30.760 --> 00:06:31.040
+strada.
+
+00:06:31.500 --> 00:06:32.420
+Ognuno ti avvicina sempre di lui.
+
+00:06:32.740 --> 00:06:35.640
+Il risultato è che puoi cercare tra milioni di vettori in pochi millisecondi.
+
+00:06:35.640 --> 00:06:37.840
+È ciò che alimenta le funzionalità di intelligenza artificiale.
+
+00:06:38.260 --> 00:06:42.040
+Quando digiti una domanda in un copilot e otti una risposta in pochi secondi, da qualche
+
+00:06:42.040 --> 00:06:45.200
+parte un database vettoriale ha appena eseguito una ricerca di similarità tra migliaia o
+
+00:06:45.200 --> 00:06:46.020
+milioni di documenti.
+
+00:06:46.140 --> 00:06:48.100
+La fase di interrogazione funziona allo stesso modo al contrario.
+
+00:06:48.400 --> 00:06:49.240
+Tu diciti la tua domanda.
+
+00:06:49.560 --> 00:06:52.860
+Quella domanda viene convertita in un vettore usando esattamente lo stesso modello di embedding.
+
+00:06:53.100 --> 00:06:56.420
+Quindi il database trova i vicini più prossimi al tuo vettore di ricerca usando l'indice.
+
+00:06:57.080 --> 00:06:59.300
+Restituisci i risultati più simili classificati per distanza.
+
+00:07:00.060 --> 00:07:02.280
+Più i vettori sono vicini, più il risultato è pertinente.
+
+00:07:02.900 --> 00:07:05.380
+L'ecosistema Microsoft dove risiedono i vettori.
+
+00:07:05.840 --> 00:07:07.600
+Quindi dove si trova tutto questo nel mondo Microsoft?
+
+00:07:08.060 --> 00:07:09.040
+La risposta è breve ovunque.
+
+00:07:09.420 --> 00:07:13.000
+Microsoft sta aggiungendo funzionalità vettoriali alle piattaforme dati che già utilizzi invece
+
+00:07:13.000 --> 00:07:15.180
+di spingerti verso un database specialistico separato.
+
+00:07:15.780 --> 00:07:16.760
+Vediamo insieme le principali.
+
+00:07:17.260 --> 00:07:20.800
+Azure AI Search è l'archivio vettoriale più comune per il RUG aziendale.
+
+00:07:21.700 --> 00:07:23.320
+Si tratta di Retrieval Augmented Generation.
+
+00:07:24.120 --> 00:07:27.640
+Supporta la ricerca ibrida che combina la corrispondenza tradizionale per parole chiave
+
+00:07:27.640 --> 00:07:28.900
+con la similarità vettoriale.
+
+00:07:29.320 --> 00:07:30.040
+Perché è importante?
+
+00:07:30.380 --> 00:07:32.460
+Perché alcune ricerche funzionano meglio con parole chiave.
+
+00:07:32.540 --> 00:07:35.620
+Codici prodotto esatti, nomi dati, mentre altri richiedono una comprensione semantica.
+
+00:07:36.220 --> 00:07:37.540
+La ricerca ibrida ti offre entrambe le cose.
+
+00:07:37.920 --> 00:07:40.500
+Azure AI Search include anche la vettorizzazione integrata.
+
+00:07:40.900 --> 00:07:44.800
+Quindi puoi configurare una pipeline che suddivida automaticamente i documenti, generi embedding
+
+00:07:44.800 --> 00:07:47.000
+e gli indicizi senza scrivere codice personalizzato.
+
+00:07:47.560 --> 00:07:50.460
+Cosmos DB ora dispone di ricerca vettoria nativa con indicizzazione DiskNet.
+
+00:07:50.900 --> 00:07:53.540
+DiskNN sta per Disk Based Approximate Nearest Neighbor
+
+00:07:53.540 --> 00:07:57.120
+ed è progettato per una latenza inferiore ai 20ms anche su scala massiva.
+
+00:07:57.380 --> 00:08:00.000
+È ottimo per i dati operativi che risiedono già in Cosmos DB.
+
+00:08:00.000 --> 00:08:03.760
+Quindi immagina di creare un'app di e-commerce con Cosmos DB come back-end.
+
+00:08:04.380 --> 00:08:07.160
+Ora puoi aggiungere la ricerca vettoriale direttamente al catalogo prodotti
+
+00:08:07.160 --> 00:08:08.920
+senza spostare i dati su un servizio separato.
+
+00:08:09.500 --> 00:08:11.080
+Un cliente cerca Scarpe Steve Leggere
+
+00:08:11.080 --> 00:08:13.500
+e la tua app trova prodotti con descrizioni simili,
+
+00:08:13.640 --> 00:08:15.380
+tutto all'interno del tuo database esistente.
+
+00:08:16.860 --> 00:08:19.680
+Anche Azure SQL Server 2025 e Azure sono uniti al gruppo.
+
+00:08:20.580 --> 00:08:23.880
+Ora includono un tipo di dati vettoriali nativo e funzioni come una ricerca vettoriale.
+
+00:08:24.200 --> 00:08:27.000
+Ciò significa che puoi archivare gli embedding direttamente insieme ai tuoi dati relazionali.
+
+00:08:27.000 --> 00:08:30.260
+Schede cliente con rappresentazioni vettoriali delle loro preferenze,
+
+00:08:30.360 --> 00:08:32.300
+articoli di inventario con descrizioni vettoriali,
+
+00:08:32.380 --> 00:08:35.080
+ticket di supporto con embedding vettoriali del loro contenuto.
+
+00:08:35.820 --> 00:08:37.420
+Non hai bisogno di un database vettoriale separato.
+
+00:08:37.720 --> 00:08:39.340
+Le tue attuali competenze SQL sono ancora valide.
+
+00:08:39.740 --> 00:08:41.080
+Basta aggiungere una colonna vettoriale,
+
+00:08:41.160 --> 00:08:43.100
+creare un indice e iniziare a interrogare per similarità.
+
+00:08:43.680 --> 00:08:45.360
+Ecco come Copilot utilizza tutto questo interno.
+
+00:08:45.920 --> 00:08:46.560
+Quando chiedi
+
+00:08:46.560 --> 00:08:49.560
+Mostrami il report sulle vendite del terzo trimestre dell'anno scorso,
+
+00:08:49.620 --> 00:08:52.460
+Copilot non cerca l'esatta espressione report sulle vendite del terzo trimestre.
+
+00:08:52.460 --> 00:08:54.380
+Converte la tua domanda in un vettore.
+
+00:08:54.680 --> 00:08:56.460
+Effettua ricerche tra documenti indicizzati,
+
+00:08:56.760 --> 00:08:59.240
+email, file sharepoint, documenti OneDrive, chat di Teams
+
+00:08:59.240 --> 00:09:02.040
+e trova il documento in cui embedding è più vicino alla tua richiesta.
+
+00:09:03.420 --> 00:09:04.580
+Potrebbe trovare un file chiamato
+
+00:09:04.580 --> 00:09:06.500
+riepilogo finanziario Q32024
+
+00:09:06.500 --> 00:09:09.060
+perché il significato corrisponde anche se le parole esatte sono diverse.
+
+00:09:09.500 --> 00:09:10.580
+Questa è la ricerca vettoriale, innanzi.
+
+00:09:10.980 --> 00:09:12.580
+L'intuizione chiave qui è la strategia di Microsoft.
+
+00:09:13.140 --> 00:09:15.480
+Invece di dire acquistate un database vettoriale specializzato,
+
+00:09:15.480 --> 00:09:18.120
+stanno aggiungendo funzionalità vettoriali agli strumenti che già usate.
+
+00:09:18.780 --> 00:09:20.580
+Azure Research, Cosmos DB, SQL Server,
+
+00:09:20.580 --> 00:09:22.140
+ora parlano tutti il linguaggio dei vettori,
+
+00:09:22.720 --> 00:09:24.080
+non c'è bisogno di imparare un nuovo sistema.
+
+00:09:24.460 --> 00:09:25.600
+Devi solo comprendere nel concetto
+
+00:09:25.600 --> 00:09:27.600
+Microsoft si occupa del lavoro pesante.
+
+00:09:28.580 --> 00:09:30.040
+Casi d'uso reali nell'IA.
+
+00:09:30.700 --> 00:09:31.840
+Quindi dove vediamo effettivamente
+
+00:09:31.840 --> 00:09:33.380
+i database vettoriali all'opera oggi?
+
+00:09:33.980 --> 00:09:35.620
+Ecco come si manifesta nel mondo reale.
+
+00:09:35.680 --> 00:09:36.500
+Il raga è il più importante.
+
+00:09:37.000 --> 00:09:38.780
+Sta per il retrieval augmented generation
+
+00:09:38.780 --> 00:09:41.120
+ed è il modo in cui funziona la maggior parte dell'IA aziendale oggi.
+
+00:09:41.780 --> 00:09:42.960
+Quando fai una domanda a un chatbot
+
+00:09:42.960 --> 00:09:44.600
+lui non tira a indovinare dei suoi dati da destra.
+
+00:09:44.920 --> 00:09:47.660
+Invece cerca in un database vettoriale documenti pertinenti,
+
+00:09:47.920 --> 00:09:49.320
+prende le corrispondenze più vicine
+
+00:09:49.320 --> 00:09:51.460
+e le fornisce al modello linguistico come contesto.
+
+00:09:51.960 --> 00:09:54.680
+Modello costruisce quindi una risposta basata su quei documenti reali.
+
+00:09:55.080 --> 00:09:56.780
+Ciò significa risposte accurate sulle politiche
+
+00:09:56.780 --> 00:09:57.960
+e i prodotti e i dati della tua azienda.
+
+00:09:58.580 --> 00:09:59.700
+Senza database vettoriali
+
+00:09:59.700 --> 00:10:00.660
+li attirerebbe a indovinare
+
+00:10:00.660 --> 00:10:02.320
+basandosi sulla conoscenza generale di...
+
+00:10:02.320 --> 00:10:04.560
+Con loro attinge direttamente dai tuoi file reali.
+
+00:10:04.940 --> 00:10:06.820
+I motori di raccomandazione sono un altro enorme caso d'uso.
+
+00:10:07.200 --> 00:10:09.480
+Netflix, Amazon, YouTube funzionano tutti allo stesso modo.
+
+00:10:09.480 --> 00:10:11.180
+Trasformano gli utenti in vettori
+
+00:10:11.180 --> 00:10:12.400
+basandosi sul comportamento,
+
+00:10:12.500 --> 00:10:14.220
+ciò che guardi, compri o su cui clicchi
+
+00:10:14.220 --> 00:10:16.340
+e trasformano gli elementi in vettori
+
+00:10:16.340 --> 00:10:17.860
+basandosi su descrizioni caratteristiche.
+
+00:10:18.560 --> 00:10:19.940
+Poi trovano semplici media vicini più prossimi.
+
+00:10:20.340 --> 00:10:21.700
+Se il tuo vettore è vicino a quello di un film
+
+00:10:21.700 --> 00:10:22.620
+ti consigliano quel film.
+
+00:10:23.220 --> 00:10:24.300
+È una ricerca di similarità
+
+00:10:24.300 --> 00:10:25.180
+su scala massiccia
+
+00:10:25.180 --> 00:10:26.980
+eseguita centinaia di volte al secondo
+
+00:10:26.980 --> 00:10:28.160
+per ogni singolo utente.
+
+00:10:28.160 --> 00:10:31.020
+La ricerca semantica è il terzo grande caso d'uso.
+
+00:10:31.080 --> 00:10:32.380
+Si tratta di cercare per significato
+
+00:10:32.380 --> 00:10:33.180
+non per parole chiamate.
+
+00:10:33.700 --> 00:10:34.780
+Un addetto al supporto scrive
+
+00:10:34.780 --> 00:10:37.100
+il cliente non riesce ad accedere dopo il reset da password
+
+00:10:37.100 --> 00:10:38.560
+e trova un articolo chiamato
+
+00:10:38.560 --> 00:10:40.140
+risoluzione dei problemi di autenticazione
+
+00:10:40.140 --> 00:10:41.460
+dopo l'aggiornamento delle credenziali.
+
+00:10:41.920 --> 00:10:42.980
+Le parole non coincidono
+
+00:10:42.980 --> 00:10:43.800
+ma il significato sì.
+
+00:10:44.020 --> 00:10:45.240
+È ciò che abilita la ricerca vettoriale.
+
+00:10:45.600 --> 00:10:47.440
+Per un team che gestisce centinaia di ticket al giorno
+
+00:10:47.440 --> 00:10:49.320
+questo riduce drasticamente i tempi di risoluzione.
+
+00:10:49.900 --> 00:10:50.840
+Poi c'è il rilevamento delle anomalie.
+
+00:10:51.340 --> 00:10:52.360
+Meno ovvio ma potente.
+
+00:10:53.020 --> 00:10:53.900
+Si trasformano in vettori
+
+00:10:53.900 --> 00:10:54.800
+comportamento normale
+
+00:10:54.800 --> 00:10:56.060
+i pattern di transazione tipici
+
+00:10:56.060 --> 00:10:57.260
+le metriche di sistema abituali
+
+00:10:57.260 --> 00:10:58.280
+e le azioni standard di utente.
+
+00:10:58.760 --> 00:10:59.900
+Si memorizzano quei vettori
+
+00:10:59.900 --> 00:11:02.040
+poi si segnala tutto ciò che cade lontano dal cluster.
+
+00:11:02.400 --> 00:11:04.020
+Una transazione che non somiglia affatto a quella normale
+
+00:11:04.020 --> 00:11:04.500
+quella è una flaw.
+
+00:11:04.780 --> 00:11:05.660
+Una metrica del server
+
+00:11:05.660 --> 00:11:06.720
+ben oltre il range abituale
+
+00:11:06.720 --> 00:11:07.600
+è un incidente in arrivo.
+
+00:11:07.920 --> 00:11:08.760
+I database vettoriali
+
+00:11:08.760 --> 00:11:11.120
+rendono tutto abbastanza veloce da girare in tempo reale.
+
+00:11:11.200 --> 00:11:12.840
+Nel mondo Microsoft questo si trova ovunque.
+
+00:11:13.560 --> 00:11:14.980
+Power Apps usa la ricerca vettoriale
+
+00:11:14.980 --> 00:11:15.840
+per suggerimenti AI
+
+00:11:15.840 --> 00:11:16.640
+quando crei moduli.
+
+00:11:17.280 --> 00:11:18.260
+Dynamics 365
+
+00:11:18.260 --> 00:11:19.720
+la usa per la ricerca intelligente
+
+00:11:19.720 --> 00:11:20.740
+tra i record dei clienti.
+
+00:11:21.240 --> 00:11:22.540
+Le trascrizioni delle riunioni Teams
+
+00:11:22.540 --> 00:11:23.460
+diventano vettori
+
+00:11:23.460 --> 00:11:25.540
+così puoi cercare cosa abbiamo deciso sul budget
+
+00:11:25.540 --> 00:11:27.500
+e trovare l'esatto momento in una registrazione.
+
+00:11:28.620 --> 00:11:30.320
+Copilot per Microsoft 365
+
+00:11:30.320 --> 00:11:32.540
+è essenzialmente un enorme sistema RUG
+
+00:11:32.540 --> 00:11:34.260
+sui dati personali e aziendali
+
+00:11:34.260 --> 00:11:36.360
+basato sulla ricerca vettoriale.
+
+00:11:37.400 --> 00:11:38.600
+Mantenere tutto sincronizzato.
+
+00:11:38.680 --> 00:11:39.400
+L'ETL è vettoriale.
+
+00:11:39.920 --> 00:11:40.880
+Ora ecco la sfida pratica.
+
+00:11:41.500 --> 00:11:42.200
+I dati cambiano
+
+00:11:42.200 --> 00:11:43.420
+i documenti vengono aggiornati
+
+00:11:43.420 --> 00:11:44.420
+nuovi prodotti aggiunti
+
+00:11:44.420 --> 00:11:45.780
+vecchie policy archiviate
+
+00:11:45.780 --> 00:11:47.560
+ogni volta che i dati sorgenti cambiano
+
+00:11:47.560 --> 00:11:48.880
+anche i vettori devono cambiare.
+
+00:11:49.400 --> 00:11:50.360
+E' qui che entra in gioco l'ETL.
+
+00:11:50.740 --> 00:11:51.780
+ETL sta per estazione
+
+00:11:51.780 --> 00:11:52.740
+trasformazione e caricamento.
+
+00:11:52.740 --> 00:11:53.980
+Per i database vettoriali
+
+00:11:53.980 --> 00:11:54.980
+il processo funziona così.
+
+00:11:55.760 --> 00:11:56.960
+Prima estrai documenti nuovi
+
+00:11:56.960 --> 00:11:58.020
+o modificati dalla fonte
+
+00:11:58.020 --> 00:11:59.340
+magari un blob storage
+
+00:11:59.340 --> 00:12:00.380
+o una libreria SharePoint
+
+00:12:00.380 --> 00:12:01.360
+o un database SQL.
+
+00:12:02.320 --> 00:12:03.040
+Poi li trasformi
+
+00:12:03.040 --> 00:12:03.800
+suddividendo il testo
+
+00:12:03.800 --> 00:12:04.560
+in pezzi gestibili
+
+00:12:04.560 --> 00:12:05.420
+e passando ogni pezzo
+
+00:12:05.420 --> 00:12:07.000
+attraverso il tuo modello di embedding.
+
+00:12:08.280 --> 00:12:09.860
+Infine carichi i vettori risultanti
+
+00:12:09.860 --> 00:12:10.720
+nel tuo vector store
+
+00:12:10.720 --> 00:12:11.700
+con metadati come
+
+00:12:11.700 --> 00:12:12.680
+URL sorgente
+
+00:12:12.680 --> 00:12:14.000
+timestamp versione
+
+00:12:14.000 --> 00:12:15.240
+del modello usata.
+
+00:12:16.000 --> 00:12:16.720
+La best practice qui
+
+00:12:16.720 --> 00:12:17.900
+è elaborare in modo incrementale.
+
+00:12:18.340 --> 00:12:19.200
+Non rieseguire l'embedding
+
+00:12:19.200 --> 00:12:19.980
+dell'intero corpus
+
+00:12:19.980 --> 00:12:21.120
+ogni volta che qualcosa cambia.
+
+00:12:21.120 --> 00:12:22.240
+Elabora solo i documenti
+
+00:12:22.240 --> 00:12:23.220
+effettivamente modificati.
+
+00:12:23.860 --> 00:12:24.660
+Traccia quale versione
+
+00:12:24.660 --> 00:12:25.480
+del modello ha generato
+
+00:12:25.480 --> 00:12:26.040
+ogni embedding.
+
+00:12:26.140 --> 00:12:26.960
+Se aggiorni il modello
+
+00:12:26.960 --> 00:12:27.680
+i vecchi vettori
+
+00:12:27.680 --> 00:12:28.780
+diventeranno incompatibili.
+
+00:12:29.680 --> 00:12:30.500
+E tini d'occhio costa.
+
+00:12:30.840 --> 00:12:31.540
+Le IP di embedding
+
+00:12:31.540 --> 00:12:32.240
+si pagano a token
+
+00:12:32.240 --> 00:12:33.300
+quindi elaborare milioni
+
+00:12:33.300 --> 00:12:33.760
+di documenti
+
+00:12:33.760 --> 00:12:34.560
+può diventare costoso.
+
+00:12:35.140 --> 00:12:35.480
+In Azure
+
+00:12:35.480 --> 00:12:36.460
+un flusso di lavoro tipico
+
+00:12:36.460 --> 00:12:36.860
+è lineare.
+
+00:12:37.360 --> 00:12:38.160
+Carica i tuoi documenti
+
+00:12:38.160 --> 00:12:38.760
+nel blob story.
+
+00:12:38.760 --> 00:12:40.100
+Poi configura
+
+00:12:40.100 --> 00:12:40.700
+un indicizzatore
+
+00:12:40.700 --> 00:12:41.400
+di Azure Eye Search
+
+00:12:41.400 --> 00:12:42.580
+con un set di skill integrato
+
+00:12:42.580 --> 00:12:43.540
+che gestisce chunking
+
+00:12:43.540 --> 00:12:44.060
+ed embedding
+
+00:12:44.060 --> 00:12:44.880
+automaticamente.
+
+00:12:45.880 --> 00:12:46.780
+Microsoft fornisce
+
+00:12:46.780 --> 00:12:47.700
+la skill di suddivisione
+
+00:12:47.700 --> 00:12:48.640
+testo per il chunking
+
+00:12:48.640 --> 00:12:49.520
+e la skill di embedding
+
+00:12:49.520 --> 00:12:50.200
+di Azure OpenAI
+
+00:12:50.200 --> 00:12:51.440
+per la generazione vettoriale.
+
+00:12:51.980 --> 00:12:53.440
+L'indicizzatore gira intervalli
+
+00:12:53.440 --> 00:12:54.340
+rileva i nuovi file
+
+00:12:54.340 --> 00:12:54.760
+li elabora
+
+00:12:54.760 --> 00:12:55.560
+e inserisce o aggiorna
+
+00:12:55.560 --> 00:12:56.520
+i vettori nell'indice.
+
+00:12:57.060 --> 00:12:58.580
+Nessun codice personalizzato necessario.
+
+00:12:58.980 --> 00:12:59.800
+Ecco un errore comune
+
+00:12:59.800 --> 00:13:00.780
+ignorare i metadati.
+
+00:13:01.420 --> 00:13:02.200
+Ogni vettore necessita
+
+00:13:02.200 --> 00:13:03.140
+di riferimento alla fonte
+
+00:13:03.140 --> 00:13:03.820
+nome e versione
+
+00:13:03.820 --> 00:13:04.720
+del modello di embedding
+
+00:13:04.720 --> 00:13:05.700
+e timestamp di creazione.
+
+00:13:06.260 --> 00:13:06.580
+Senza
+
+00:13:06.580 --> 00:13:07.140
+non puoi tracciare
+
+00:13:07.140 --> 00:13:08.260
+la provenienza di un risultato
+
+00:13:08.260 --> 00:13:08.860
+non puoi rieseguire
+
+00:13:08.860 --> 00:13:10.080
+l'embedding con modelli diversi
+
+00:13:10.080 --> 00:13:11.420
+e avrai problemi negli audit.
+
+00:13:12.180 --> 00:13:12.860
+Tratta i tuoi vettori
+
+00:13:12.860 --> 00:13:13.560
+come qualsiasi altro
+
+00:13:13.560 --> 00:13:14.180
+dato aziendale
+
+00:13:14.180 --> 00:13:15.160
+tracciando le linee derivazioni.
+
+00:13:16.180 --> 00:13:16.840
+Passi mi passi.
+
+00:13:17.340 --> 00:13:17.500
+Allora
+
+00:13:17.500 --> 00:13:18.680
+sei pronto a provare di persona?
+
+00:13:19.660 --> 00:13:20.100
+Il semplice.
+
+00:13:20.540 --> 00:13:21.340
+Apri il portale Azure
+
+00:13:21.340 --> 00:13:22.120
+e crea una risorsa
+
+00:13:22.120 --> 00:13:22.960
+di Azure Eye Search.
+
+00:13:23.460 --> 00:13:24.280
+Quindi abilita la ricerca
+
+00:13:24.280 --> 00:13:25.380
+vettoriale sull'indice sistema.
+
+00:13:25.880 --> 00:13:26.800
+Carica alcuni documenti
+
+00:13:26.800 --> 00:13:27.820
+scegli un modello di embedding
+
+00:13:27.820 --> 00:13:29.020
+ed esegui una query di similarità.
+
+00:13:29.560 --> 00:13:30.240
+Vedrai che funzionerà
+
+00:13:30.240 --> 00:13:30.760
+in meno di un'ora.
+
+00:13:31.080 --> 00:13:31.880
+Per gli sviluppatori
+
+00:13:31.880 --> 00:13:33.200
+prendete l'SDK a Python
+
+00:13:33.200 --> 00:13:34.420
+e incorporate alcuni documenti
+
+00:13:34.420 --> 00:13:35.320
+usando Azure OpenAI
+
+00:13:35.320 --> 00:13:36.380
+archiviateli nella ricerca
+
+00:13:36.380 --> 00:13:37.440
+vettoriale di Cosmos DB
+
+00:13:37.440 --> 00:13:38.320
+e scrivete una query
+
+00:13:38.320 --> 00:13:39.400
+che trovi la corrispondenza
+
+00:13:39.400 --> 00:13:39.940
+più vicina.
+
+00:13:40.720 --> 00:13:41.380
+Microsoft fornisce
+
+00:13:41.380 --> 00:13:42.240
+esempi di codici chiari
+
+00:13:42.240 --> 00:13:42.820
+e documentazione
+
+00:13:42.820 --> 00:13:43.780
+per guidarvi passo dopo passo.
+
+00:13:43.940 --> 00:13:44.800
+Non è necessario diventare
+
+00:13:44.800 --> 00:13:45.580
+scienziati dei dati
+
+00:13:45.580 --> 00:13:46.900
+per usare i database vettoriali.
+
+00:13:47.000 --> 00:13:47.880
+Gli strumenti Microsoft
+
+00:13:47.880 --> 00:13:48.980
+gestiscono la generazione
+
+00:13:48.980 --> 00:13:49.640
+degli embedding,
+
+00:13:49.780 --> 00:13:50.420
+l'indicizzazione
+
+00:13:50.420 --> 00:13:51.200
+e la logica delle query.
+
+00:13:51.540 --> 00:13:52.200
+Il vostro unico compito
+
+00:13:52.200 --> 00:13:53.040
+è comprendere il concetto
+
+00:13:53.040 --> 00:13:53.960
+e puntare gli strumenti
+
+00:13:53.960 --> 00:13:54.960
+verso i vostri dati.
+
+00:13:55.600 --> 00:13:56.120
+Ecco una sfida.
+
+00:13:56.520 --> 00:13:57.120
+Pensate al problema
+
+00:13:57.120 --> 00:13:58.200
+di ricerca che affrontate oggi.
+
+00:13:58.660 --> 00:13:59.200
+Forse si tratta
+
+00:13:59.200 --> 00:14:00.380
+di trovare documenti interni,
+
+00:14:00.440 --> 00:14:01.600
+cercare in un catalogo prodotti
+
+00:14:01.600 --> 00:14:02.400
+o rispondere alle domande
+
+00:14:02.400 --> 00:14:02.840
+dei clienti
+
+00:14:02.840 --> 00:14:03.540
+da una knowledge base.
+
+00:14:04.000 --> 00:14:04.720
+La ricerca vettoriale
+
+00:14:04.720 --> 00:14:05.040
+farà meglio
+
+00:14:05.040 --> 00:14:05.680
+della corrispondenza
+
+00:14:05.680 --> 00:14:06.260
+per parole chiare.
+
+00:14:07.540 --> 00:14:08.760
+Scegliete un piccolo set di dati
+
+00:14:08.760 --> 00:14:09.860
+e anche solo 100 documenti
+
+00:14:09.860 --> 00:14:10.540
+e fate una prova.
+
+00:14:11.240 --> 00:14:12.000
+Sentirete la differenza
+
+00:14:12.000 --> 00:14:12.380
+fin da su.
+
+00:14:13.760 --> 00:14:14.480
+Quindi ora capite
+
+00:14:14.480 --> 00:14:15.160
+cosa sono realmente
+
+00:14:15.160 --> 00:14:16.060
+i database vettoriali.
+
+00:14:16.460 --> 00:14:18.040
+Non sono una misteriosa tecnologia AI,
+
+00:14:18.220 --> 00:14:18.780
+sono solo un modo
+
+00:14:18.780 --> 00:14:19.400
+per archiviare
+
+00:14:19.400 --> 00:14:20.300
+e cercare il significato
+
+00:14:20.300 --> 00:14:20.860
+dei vostri dati
+
+00:14:20.860 --> 00:14:21.700
+invece delle parole esatte.
+
+00:14:22.280 --> 00:14:23.560
+Alimentano la ricerca intelligente
+
+00:14:23.560 --> 00:14:24.480
+e le funzionalità di AI
+
+00:14:24.480 --> 00:14:26.020
+all'interno di Microsoft 305
+
+00:14:26.020 --> 00:14:26.820
+e Azure Ecopilot.
+
+00:14:27.260 --> 00:14:28.320
+Ogni volta che fate una domanda
+
+00:14:28.320 --> 00:14:29.500
+e ottenete una risposta pertinente
+
+00:14:29.500 --> 00:14:30.000
+da qualche parte
+
+00:14:30.000 --> 00:14:30.860
+un database vettoriale
+
+00:14:30.860 --> 00:14:31.700
+ha trovato la corrispondenza
+
+00:14:31.700 --> 00:14:32.700
+più vicina alla vostra query.
+
+00:14:33.440 --> 00:14:34.580
+I vostri fatti strutturati,
+
+00:14:34.660 --> 00:14:35.240
+i nomi dei clienti,
+
+00:14:35.320 --> 00:14:35.920
+i importi degli ordini,
+
+00:14:36.000 --> 00:14:36.700
+i conteggi dell'inventario,
+
+00:14:36.800 --> 00:14:37.440
+quelli risiedono ancora
+
+00:14:37.440 --> 00:14:38.540
+nei database tradizionali.
+
+00:14:38.940 --> 00:14:39.860
+I database vettoriali
+
+00:14:39.860 --> 00:14:41.200
+aggiungono il livello di comprensione.
+
+00:14:41.560 --> 00:14:42.560
+Permettono alla vostra applicazione
+
+00:14:42.560 --> 00:14:43.580
+di cercare per significato,
+
+00:14:43.660 --> 00:14:44.560
+per intento, per contesto.
+
+00:14:44.900 --> 00:14:45.700
+Questo è il quadro generale.
+
+00:14:46.040 --> 00:14:47.380
+Iscrivetevi per ulteriori spiegazioni
+
+00:14:47.380 --> 00:14:48.800
+semplici delle tecnologie Microsoft.
+
+00:14:48.800 --> 00:14:50.100
+La prossima volta vedremo
+
+00:14:50.100 --> 00:14:50.940
+come funzionano realmente
+
+00:14:50.940 --> 00:14:51.620
+le pipeline reg
+
+00:14:51.620 --> 00:14:52.620
+e come poterne costruire
+
+00:14:52.620 --> 00:14:53.520
+in un pomeriggio.
+
+00:14:53.880 --> 00:14:54.540
+Grazie per l'ascosta.

@@ -1,0 +1,3058 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:03.700
+Já sentiu que suas conversas no Microsoft 365 BizChat são superficiais?
+
+00:00:04.120 --> 00:00:06.420
+Você pede para uma ferramenta orientar decisões importantes,
+
+00:00:06.520 --> 00:00:09.160
+mas ela não alcança seus dados proprietários ou apps principais.
+
+00:00:09.660 --> 00:00:10.540
+Essa lacuna não é pequena.
+
+00:00:11.020 --> 00:00:15.340
+É a diferença entre respostas genéricas e insights fundamentados no contexto real do seu negócio.
+
+00:00:15.980 --> 00:00:17.880
+Neste podcast, vou mostrar como fechar essa lacuna.
+
+00:00:18.520 --> 00:00:21.020
+Você aprenderá a identificar os sistemas certos para conectar,
+
+00:00:21.420 --> 00:00:24.400
+como criar um conector para o Copilot e como protegê-lo usando o Teams Toolkit.
+
+00:00:25.200 --> 00:00:28.040
+Isso é para criadores e desenvolvedores que conhecem a Microsoft 365
+
+00:00:28.040 --> 00:00:30.300
+e querem que o BizChat funcione com seus apps principais.
+
+00:00:31.080 --> 00:00:32.640
+Porque, antes de resolver o problema,
+
+00:00:32.740 --> 00:00:35.280
+precisamos falar sobre por que o BizChat frequentemente parece meio cego.
+
+00:00:36.520 --> 00:00:37.800
+Por que o BizChat parece meio cego?
+
+00:00:38.420 --> 00:00:41.880
+A maioria das pessoas recorre ao BizChat esperando que ele atue como um estrategista experiente,
+
+00:00:42.320 --> 00:00:44.100
+com respostas baseadas na realidade do negócio.
+
+00:00:44.620 --> 00:00:48.040
+Mas a razão pela qual ele frequentemente decepciona-se é que ele consegue ver o quadro completo.
+
+00:00:48.660 --> 00:00:52.960
+Sem configurações extras, ele lida bem com informações que o Microsoft 365 já possui.
+
+00:00:54.140 --> 00:00:56.080
+Mensagem do Outlook, chats do Teams,
+
+00:00:56.080 --> 00:00:58.180
+arquivos do OneDrive e bibliotecas do SharePoint.
+
+00:00:58.780 --> 00:01:01.820
+O problema surge quando os usuários perguntam sobre dados que residem em outro lugar.
+
+00:01:02.240 --> 00:01:05.340
+O CRM que gerencia vendas, o ERP que rastreia estoque e faturas,
+
+00:01:05.820 --> 00:01:07.820
+ou a ferramenta de projetos que monitora prazos.
+
+00:01:08.560 --> 00:01:10.680
+No momento em que o BizChat não consegue acessar esses sistemas,
+
+00:01:10.820 --> 00:01:13.600
+ele começa a dar meias-respostas que parecem mais um palpite do que uma orientação.
+
+00:01:14.520 --> 00:01:15.240
+Veja um exemplo comum.
+
+00:01:15.860 --> 00:01:17.860
+Um gerente de vendas começa uma reunião de segunda-feira
+
+00:01:17.860 --> 00:01:19.740
+perguntando ao BizChat sobre o pipeline atual.
+
+00:01:20.620 --> 00:01:22.800
+Claro, o BizChat traz informações de threads de meio recente,
+
+00:01:22.800 --> 00:01:24.780
+documentos de proposta, talvez até notas de reuniões.
+
+00:01:24.780 --> 00:01:28.020
+Mas sem acesso ao CRM, esses números ficam incompletos.
+
+00:01:28.660 --> 00:01:31.140
+Em vez de uma previsão confiável, a resposta vem vaga,
+
+00:01:31.260 --> 00:01:34.980
+com poucos dados reais e praticamente inútil pra uma decisão de alto risco.
+
+00:01:35.720 --> 00:01:37.980
+O que deveria ser um insight rápido torna esse trabalho extra.
+
+00:01:38.840 --> 00:01:40.520
+O gerente agora precisa abrir outro sistema,
+
+00:01:40.880 --> 00:01:43.160
+buscar os números reais e explicar a falha pra equipe.
+
+00:01:43.860 --> 00:01:45.500
+Em um instante, a confiança na ferramenta cai.
+
+00:01:45.980 --> 00:01:47.480
+Esse padrão se repete em outros departamentos.
+
+00:01:47.480 --> 00:01:50.340
+Um diretor financeiro pede o total de faturas pendentes,
+
+00:01:50.440 --> 00:01:53.760
+mas sem visibilidade do ERP, o BizChat fornece um relatório vazio.
+
+00:01:54.460 --> 00:01:56.660
+Um gerente de projeto pergunta quando as entregas vencem,
+
+00:01:56.700 --> 00:01:59.280
+mas sem acesso ao sistema de rastreamento, o BizChat não responde.
+
+00:02:00.060 --> 00:02:01.500
+Cada cenário termina da mesma forma,
+
+00:02:01.700 --> 00:02:03.260
+alternando entre o BizChat e o sistema real,
+
+00:02:03.460 --> 00:02:04.960
+preenchendo manualmente as lacunas.
+
+00:02:05.460 --> 00:02:06.140
+Pergunte a si mesmo.
+
+00:02:06.200 --> 00:02:08.880
+Se sua equipe tivesse que verificar cada resposta do BizChat em outra ferramenta,
+
+00:02:08.960 --> 00:02:10.540
+eles continuariam usando-a como primeira opção?
+
+00:02:10.540 --> 00:02:13.720
+Esse é o custo prático, a constante alternância de contexto.
+
+00:02:14.280 --> 00:02:15.880
+A equipe entra e sai do BizChat,
+
+00:02:15.980 --> 00:02:17.060
+copiando números para o chat,
+
+00:02:17.160 --> 00:02:18.500
+colando capturas de tela de dashboards
+
+00:02:18.500 --> 00:02:20.440
+ou refazendo análises que deveriam ser automáticas,
+
+00:02:20.900 --> 00:02:24.580
+ou em vez de um fluxo de trabalho otimizado e impulsionado por IA,
+
+00:02:24.740 --> 00:02:26.480
+a experiência regride para um remendo manual.
+
+00:02:27.700 --> 00:02:29.900
+Com o tempo, as pessoas aprendem a não se dar o trabalho de perguntar
+
+00:02:29.900 --> 00:02:32.020
+sobre o que realmente importa, especialmente quando há muito em jogo.
+
+00:02:32.720 --> 00:02:33.980
+Elas voltam aos velhos hábitos,
+
+00:02:34.120 --> 00:02:36.700
+downloads, tabelas dinâmicas ou a busca por dados em vários aplicativos.
+
+00:02:37.620 --> 00:02:39.880
+Eventualmente, o BizChat acaba relegado tarefas superficiais,
+
+00:02:39.880 --> 00:02:41.640
+não porque seus algoritmos principais sejam fracos,
+
+00:02:41.700 --> 00:02:43.820
+mas porque eles não se conectam onde as respostas reais estão.
+
+00:02:44.500 --> 00:02:45.840
+A liderança observa os efeitos disso.
+
+00:02:46.420 --> 00:02:47.540
+Quando a adoção parece desigual,
+
+00:02:47.900 --> 00:02:49.440
+eles questionam se a implementação valeu a pena.
+
+00:02:50.640 --> 00:02:53.060
+A TI recebe reclamações que não apontam erros na plataforma,
+
+00:02:53.140 --> 00:02:54.320
+mas pontos cegos em seu alcance.
+
+00:02:55.160 --> 00:02:57.740
+Os funcionários, integrados com a ideia de um copiloto mais inteligente,
+
+00:02:57.860 --> 00:02:59.560
+passam a tratá-lo como um chatbot ilimitado.
+
+00:03:00.400 --> 00:03:02.900
+Essa incompatibilidade entre expectativa e realidade
+
+00:03:02.900 --> 00:03:04.480
+cria uma lenta erosão de confiança,
+
+00:03:05.120 --> 00:03:06.720
+uma vez que a confiança desgasta o impulso.
+
+00:03:07.600 --> 00:03:09.020
+E quando os resultados de produtividade
+
+00:03:09.020 --> 00:03:10.180
+ficam abaixo do esperado,
+
+00:03:10.300 --> 00:03:11.820
+o apoio organizacional enfraquece.
+
+00:03:12.740 --> 00:03:15.060
+Na verdade é que nada disso acontece porque o BizChat carece inteligência.
+
+00:03:15.520 --> 00:03:16.920
+Acontece porque ele carece de visibilidade.
+
+00:03:17.420 --> 00:03:18.580
+O modelo trabalha com o que tem,
+
+00:03:18.700 --> 00:03:19.900
+mas com apenas metade dos dados.
+
+00:03:20.080 --> 00:03:21.560
+Ele produz resultados incompletos.
+
+00:03:22.000 --> 00:03:23.640
+A boa notícia é que essa lacuna pode ser corrigida.
+
+00:03:23.960 --> 00:03:24.740
+Com a abordagem certa,
+
+00:03:24.840 --> 00:03:26.480
+você pode dar ao BizChat acesso controlado
+
+00:03:26.480 --> 00:03:27.600
+aos sistemas que realmente importam.
+
+00:03:27.860 --> 00:03:29.680
+Assim, as respostas parecem específicas
+
+00:03:29.680 --> 00:03:30.860
+em vez de genéricas,
+
+00:03:30.880 --> 00:03:32.900
+e a tomada de decisão acelera em vez de desacelerar.
+
+00:03:33.560 --> 00:03:35.000
+E isso aponta para uma questão maior,
+
+00:03:35.000 --> 00:03:36.820
+o que separa uma ferramenta que parece útil
+
+00:03:36.820 --> 00:03:38.780
+daquela que realmente gera resultados para o negócio.
+
+00:03:39.080 --> 00:03:39.660
+Para o negócio?
+
+00:03:40.620 --> 00:03:42.180
+A diferença entre um assistente e um copiloto?
+
+00:03:43.040 --> 00:03:45.460
+O que faz o BizChat parecer limitado para muitas equipes
+
+00:03:45.460 --> 00:03:46.320
+é que, em sua essência,
+
+00:03:46.400 --> 00:03:48.680
+ele ainda atua mais como um assistente do que como um copiloto.
+
+00:03:49.500 --> 00:03:50.180
+Por conta própria,
+
+00:03:50.240 --> 00:03:52.040
+ele faz um bom trabalho respondendo perguntas,
+
+00:03:52.200 --> 00:03:53.900
+resumindo e-mails e extraindo notas rápidas
+
+00:03:53.900 --> 00:03:55.740
+do seu ambiente Microsoft 305.
+
+00:03:56.200 --> 00:03:57.760
+Mas essas são tarefas superficiais,
+
+00:03:57.820 --> 00:03:59.160
+baseadas apenas no que já está assistindo.
+
+00:03:59.740 --> 00:04:01.120
+Um assistente fornece comentários.
+
+00:04:01.120 --> 00:04:02.780
+Um copiloto trabalha ao seu lado
+
+00:04:02.780 --> 00:04:03.980
+para moldar decisões reais.
+
+00:04:03.980 --> 00:04:06.000
+E a única forma dessa mudança acontecer
+
+00:04:06.000 --> 00:04:07.620
+é quando a ferramenta tem acesso controlado
+
+00:04:07.620 --> 00:04:08.680
+aos seus sistemas de registro,
+
+00:04:08.980 --> 00:04:10.160
+os dados e fluxos de trabalho
+
+00:04:10.160 --> 00:04:11.760
+que definem como o seu negócio realmente opera.
+
+00:04:12.420 --> 00:04:13.580
+Esta é a distinção fundamental
+
+00:04:13.580 --> 00:04:15.320
+que a maioria das organizações ignora no lançamento.
+
+00:04:16.020 --> 00:04:17.140
+Elas esperam que o BizChat
+
+00:04:17.140 --> 00:04:19.220
+forneça insights profundos prontos para o uso,
+
+00:04:19.300 --> 00:04:20.340
+mas resumos conversacionais
+
+00:04:20.340 --> 00:04:21.460
+não fazem dele um copiloto.
+
+00:04:21.980 --> 00:04:23.600
+Sem conectores que o alimentem com informações
+
+00:04:23.600 --> 00:04:25.700
+do seu CRM, ERP ou aplicativos personalizados,
+
+00:04:26.160 --> 00:04:27.600
+ele é essencialmente um anotador sofisticado.
+
+00:04:27.740 --> 00:04:29.280
+Com esses links estabelecidos,
+
+00:04:29.400 --> 00:04:31.020
+começa a parecer que ele está verdadeiramente
+
+00:04:31.020 --> 00:04:32.540
+no processo de tomada de decisão,
+
+00:04:32.680 --> 00:04:33.620
+refletindo números reais,
+
+00:04:33.760 --> 00:04:34.740
+aprovações em tempo real
+
+00:04:34.740 --> 00:04:35.560
+ou prazos precisos
+
+00:04:35.560 --> 00:04:36.520
+em vez de apenas refrasear
+
+00:04:36.520 --> 00:04:37.420
+o que já está visível.
+
+00:04:38.380 --> 00:04:39.700
+Aqui está um modelo mental simples
+
+00:04:39.700 --> 00:04:40.780
+que você pode usar para julgar
+
+00:04:40.780 --> 00:04:41.760
+se está lidando com um assistente
+
+00:04:41.760 --> 00:04:42.400
+ou com um copiloto.
+
+00:04:43.140 --> 00:04:43.500
+Primeiro,
+
+00:04:43.620 --> 00:04:44.980
+a IA tem acesso a sistemas ativos
+
+00:04:44.980 --> 00:04:46.420
+dos locais onde os registros críticos
+
+00:04:46.420 --> 00:04:47.140
+realmente vivem,
+
+00:04:47.220 --> 00:04:48.640
+e não apenas cadeias de e-mail ou arquivos.
+
+00:04:49.520 --> 00:04:49.880
+Segundo,
+
+00:04:49.960 --> 00:04:51.420
+ela respeita as permissões baseadas
+
+00:04:51.420 --> 00:04:53.080
+em função para que as informações retornadas
+
+00:04:53.080 --> 00:04:54.220
+sejam seguras e adaptadas
+
+00:04:54.220 --> 00:04:55.160
+à pessoa que as utiliza.
+
+00:04:55.680 --> 00:04:56.240
+E terceiro,
+
+00:04:56.340 --> 00:04:57.980
+ela consegue realmente impulsionar resultados,
+
+00:04:58.080 --> 00:04:58.280
+ou seja,
+
+00:04:58.340 --> 00:04:59.580
+suas respostas resolvem tarefas
+
+00:04:59.580 --> 00:05:00.580
+ou aceleram pontos de decisão
+
+00:05:00.580 --> 00:05:01.600
+em vez de te enviar para outro lugar
+
+00:05:01.600 --> 00:05:02.100
+para confirmar.
+
+00:05:02.540 --> 00:05:03.960
+Se você pode marcar essas três caixas,
+
+00:05:04.040 --> 00:05:04.640
+então você está obtendo
+
+00:05:04.640 --> 00:05:05.400
+a experiência de um copiloto.
+
+00:05:06.040 --> 00:05:06.280
+Se não,
+
+00:05:06.340 --> 00:05:07.880
+você ainda está no território de assistente.
+
+00:05:08.640 --> 00:05:09.220
+Exemplos reais
+
+00:05:09.220 --> 00:05:10.340
+tornam essa distinção mais clara.
+
+00:05:10.820 --> 00:05:11.520
+E uma equipe financeira
+
+00:05:11.520 --> 00:05:12.240
+perguntando ao BizChat
+
+00:05:12.240 --> 00:05:13.340
+sobre tendências de despesas.
+
+00:05:13.960 --> 00:05:14.540
+Como assistente,
+
+00:05:14.600 --> 00:05:15.740
+ele pesquisa anexos de e-mail
+
+00:05:15.740 --> 00:05:16.760
+e pastas compartilhadas
+
+00:05:16.760 --> 00:05:18.040
+para produzir um panorama superficial
+
+00:05:18.040 --> 00:05:18.820
+dos custos de viagem.
+
+00:05:19.280 --> 00:05:20.240
+Isso é o último e incompleto.
+
+00:05:20.660 --> 00:05:21.860
+Como copiloto com conectores
+
+00:05:21.860 --> 00:05:23.020
+para o aplicativo de gerenciamento
+
+00:05:23.020 --> 00:05:24.160
+de despesas ou livro-razão,
+
+00:05:24.460 --> 00:05:25.640
+ele entrega uma previsão precisa
+
+00:05:25.640 --> 00:05:26.880
+até sinaliza variações futuras
+
+00:05:26.880 --> 00:05:27.800
+no fluxo de caixa.
+
+00:05:28.720 --> 00:05:30.020
+A mesma mudança se aplica às vendas.
+
+00:05:30.520 --> 00:05:32.140
+Em vez de resumir rascunhos de propostas,
+
+00:05:32.220 --> 00:05:33.000
+um verdadeiro copiloto
+
+00:05:33.000 --> 00:05:33.860
+extrai os números reais
+
+00:05:33.860 --> 00:05:35.040
+do funil de vendas do CRM
+
+00:05:35.040 --> 00:05:36.900
+e mostra onde os negócios estão travados.
+
+00:05:37.900 --> 00:05:39.320
+Uma versão economiza alguns cliques,
+
+00:05:39.740 --> 00:05:40.420
+a outra muda a maneira
+
+00:05:40.420 --> 00:05:41.460
+como as decisões são tomadas.
+
+00:05:42.340 --> 00:05:43.240
+Também vale a pena ser claro
+
+00:05:43.240 --> 00:05:43.840
+sobre a imitação.
+
+00:05:44.380 --> 00:05:45.220
+As equipes não precisam escolher
+
+00:05:45.220 --> 00:05:45.860
+uma única bordar.
+
+00:05:46.260 --> 00:05:47.080
+Os conectores abrangem
+
+00:05:47.080 --> 00:05:48.000
+o espectro de no-code,
+
+00:05:48.100 --> 00:05:48.880
+low-code e pro-code.
+
+00:05:49.300 --> 00:05:50.100
+Um analista de negócios
+
+00:05:50.100 --> 00:05:50.980
+geralmente consegue conectar
+
+00:05:50.980 --> 00:05:52.420
+um conector a um aplicativo SaaS comum
+
+00:05:52.420 --> 00:05:53.420
+sem escrever muito código.
+
+00:05:53.840 --> 00:05:55.060
+Um desenvolvedor pode ir mais fundo
+
+00:05:55.060 --> 00:05:56.240
+e estender a lógica personalizada
+
+00:05:56.240 --> 00:05:57.300
+através do kit de ferramentas
+
+00:05:57.300 --> 00:05:57.920
+do Teams ou APIs.
+
+00:05:58.760 --> 00:05:59.800
+O caminho certo depende
+
+00:05:59.800 --> 00:06:01.100
+das suas habilidades internas
+
+00:06:01.100 --> 00:06:02.540
+e da sua tolerância à complexidade,
+
+00:06:02.880 --> 00:06:03.940
+não de uma afirmação genérica
+
+00:06:03.940 --> 00:06:04.920
+de que um é mais fácil.
+
+00:06:05.520 --> 00:06:06.720
+O ponto real é que há um caminho
+
+00:06:06.720 --> 00:06:07.920
+a seguir independentemente
+
+00:06:07.920 --> 00:06:09.260
+do nível de profundidade técnica
+
+00:06:09.260 --> 00:06:10.120
+em que sua equipe opera.
+
+00:06:10.880 --> 00:06:12.400
+O que frequentemente trava o progresso
+
+00:06:12.400 --> 00:06:13.660
+é a suposição de que o copilot
+
+00:06:13.660 --> 00:06:14.700
+aprenderá de alguma forma
+
+00:06:14.700 --> 00:06:15.860
+os dados exclusivos de uma empresa
+
+00:06:15.860 --> 00:06:17.180
+sem ter acesso estruturado a eles.
+
+00:06:17.640 --> 00:06:18.260
+Esse nunca é o caso.
+
+00:06:18.900 --> 00:06:19.940
+Sem conectores, o Bichet
+
+00:06:19.940 --> 00:06:20.720
+não tem visibilidade
+
+00:06:20.720 --> 00:06:21.820
+dos registros de transações,
+
+00:06:21.960 --> 00:06:22.660
+catálogos de produtos
+
+00:06:22.660 --> 00:06:23.760
+ou fluxos de trabalho de aprovação.
+
+00:06:23.760 --> 00:06:25.000
+Como resultado,
+
+00:06:25.140 --> 00:06:26.380
+ele recorre a respostas genéricas,
+
+00:06:26.460 --> 00:06:27.180
+mesmo que a inteligência
+
+00:06:27.180 --> 00:06:28.340
+para raciocinar sobre esse dado
+
+00:06:28.340 --> 00:06:29.380
+já esteja lá aguardando.
+
+00:06:30.240 --> 00:06:30.840
+Construir a ponte
+
+00:06:30.840 --> 00:06:31.460
+é o que desbloqueia
+
+00:06:31.460 --> 00:06:32.460
+o nível mais alto de valor.
+
+00:06:33.300 --> 00:06:34.400
+E uma vez que você faz essa mudança,
+
+00:06:34.500 --> 00:06:35.140
+a experiência do dia a dia
+
+00:06:35.140 --> 00:06:35.680
+se transforma.
+
+00:06:36.020 --> 00:06:37.260
+Os usuários não ficam alternando
+
+00:06:37.260 --> 00:06:38.520
+entre o Bichet e outros aplicativos
+
+00:06:38.520 --> 00:06:39.260
+apenas para preencher
+
+00:06:39.260 --> 00:06:40.320
+o que ele não conseguiu fornecer.
+
+00:06:40.900 --> 00:06:41.940
+Eles obtêm o que precisam
+
+00:06:41.940 --> 00:06:43.020
+dentro do fluxo da conversa.
+
+00:06:43.500 --> 00:06:43.860
+Com o tempo,
+
+00:06:43.940 --> 00:06:45.080
+isso constrói confiança e credibilidade.
+
+00:06:45.520 --> 00:06:46.460
+As perguntas mais profundas.
+
+00:06:47.320 --> 00:06:48.240
+As taxas de adoção sobem
+
+00:06:48.240 --> 00:06:49.260
+porque as pessoas veem o Bichet
+
+00:06:49.260 --> 00:06:49.760
+como um sistema
+
+00:06:49.760 --> 00:06:50.380
+em que podem confiar
+
+00:06:50.380 --> 00:06:51.780
+não apenas uma ferramenta de conveniência.
+
+00:06:52.520 --> 00:06:53.880
+A liderança também sente a diferença
+
+00:06:53.880 --> 00:06:54.960
+porque as equipes conseguem
+
+00:06:54.960 --> 00:06:56.080
+tomar decisões mais rápidas
+
+00:06:56.080 --> 00:06:56.740
+com dados claros
+
+00:06:56.740 --> 00:06:57.860
+e defensáveis ao seu alcance.
+
+00:06:58.360 --> 00:06:58.660
+Portanto,
+
+00:06:58.700 --> 00:06:59.840
+a diferença entre um assistente
+
+00:06:59.840 --> 00:07:00.480
+e um co-pilot
+
+00:07:00.480 --> 00:07:01.680
+não é o estilo,
+
+00:07:01.840 --> 00:07:03.060
+é a integração.
+
+00:07:03.820 --> 00:07:04.440
+Assistentes repetem
+
+00:07:04.440 --> 00:07:05.020
+o que conseguem ver.
+
+00:07:05.620 --> 00:07:06.580
+Co-pilots conectam-se
+
+00:07:06.580 --> 00:07:07.340
+ao que é mais importante
+
+00:07:07.340 --> 00:07:07.900
+e ajudam você
+
+00:07:07.900 --> 00:07:08.700
+a conduzir com base nisso.
+
+00:07:09.360 --> 00:07:10.340
+Reconhecer esse contraste
+
+00:07:10.340 --> 00:07:10.880
+é essencial,
+
+00:07:11.020 --> 00:07:11.980
+pois a próxima decisão
+
+00:07:11.980 --> 00:07:12.580
+que você tomar
+
+00:07:12.580 --> 00:07:13.660
+determinará se continuará
+
+00:07:13.660 --> 00:07:14.580
+executando o Bichet
+
+00:07:14.580 --> 00:07:15.360
+no modo assistente
+
+00:07:15.360 --> 00:07:16.560
+ou se começará a capacitá-lo
+
+00:07:16.560 --> 00:07:16.920
+para atuar
+
+00:07:16.920 --> 00:07:18.000
+como um verdadeiro co-pilot.
+
+00:07:18.000 --> 00:07:19.600
+E isso começa
+
+00:07:19.600 --> 00:07:20.540
+com um passo prático,
+
+00:07:20.960 --> 00:07:21.840
+decidir quais sistemas
+
+00:07:21.840 --> 00:07:23.000
+vale a pena conectar primeiro,
+
+00:07:23.680 --> 00:07:24.300
+encontrando os pontos
+
+00:07:24.300 --> 00:07:25.140
+de integração certos.
+
+00:07:25.760 --> 00:07:26.300
+Quando se trata
+
+00:07:26.300 --> 00:07:27.240
+de obter resultados reais
+
+00:07:27.240 --> 00:07:27.760
+com o Bichet,
+
+00:07:27.860 --> 00:07:28.380
+a questão não é
+
+00:07:28.380 --> 00:07:29.240
+o que posso conectar,
+
+00:07:29.320 --> 00:07:30.280
+mas quais conexões
+
+00:07:30.280 --> 00:07:31.020
+mudarão a forma
+
+00:07:31.020 --> 00:07:32.120
+como as equipes trabalham.
+
+00:07:33.320 --> 00:07:34.280
+O ecossistema Microsoft
+
+00:07:34.280 --> 00:07:35.200
+é vasto e aberto,
+
+00:07:35.380 --> 00:07:35.880
+com a capacidade
+
+00:07:35.880 --> 00:07:36.380
+de conectar
+
+00:07:36.380 --> 00:07:37.260
+dezenas de aplicativos
+
+00:07:37.260 --> 00:07:38.000
+e fontes de dados.
+
+00:07:38.820 --> 00:07:39.480
+Mas nenhuma equipe
+
+00:07:39.480 --> 00:07:40.340
+tem tempo ou recursos
+
+00:07:40.340 --> 00:07:41.400
+para vincular tudo de uma vez.
+
+00:07:41.820 --> 00:07:42.500
+É por isso que a jogada
+
+00:07:42.500 --> 00:07:43.240
+mais inteligente
+
+00:07:43.240 --> 00:07:43.900
+é focar apenas
+
+00:07:43.900 --> 00:07:44.580
+nas integrações
+
+00:07:44.580 --> 00:07:45.720
+que entregam impacto visível
+
+00:07:45.720 --> 00:07:46.280
+rapidamente.
+
+00:07:46.280 --> 00:07:48.060
+Acertando nelas,
+
+00:07:48.080 --> 00:07:48.960
+a confiança no Bichet
+
+00:07:48.960 --> 00:07:49.400
+aumenta.
+
+00:07:50.040 --> 00:07:50.680
+Errando nelas,
+
+00:07:50.720 --> 00:07:51.380
+a adoção estagna.
+
+00:07:52.100 --> 00:07:52.760
+O erro mais comum
+
+00:07:52.760 --> 00:07:54.080
+é começar com vitórias fáceis
+
+00:07:54.080 --> 00:07:54.680
+que não importam.
+
+00:07:55.120 --> 00:07:55.820
+Parece produtivo
+
+00:07:55.820 --> 00:07:56.740
+conectar uma fonte de dados
+
+00:07:56.740 --> 00:07:57.580
+secundária apenas
+
+00:07:57.580 --> 00:07:57.960
+para mostrar
+
+00:07:57.960 --> 00:07:58.720
+que algo está funcionando.
+
+00:07:59.260 --> 00:07:59.980
+Mas integrações
+
+00:07:59.980 --> 00:08:00.520
+de baixo valor
+
+00:08:00.520 --> 00:08:01.300
+não aliviam os problemas
+
+00:08:01.300 --> 00:08:01.680
+que as pessoas
+
+00:08:01.680 --> 00:08:02.260
+realmente sentem.
+
+00:08:02.720 --> 00:08:03.260
+Como resultado,
+
+00:08:03.400 --> 00:08:04.060
+os fluxos de trabalho
+
+00:08:04.060 --> 00:08:05.100
+permanecem fragmentados
+
+00:08:05.100 --> 00:08:05.660
+e os funcionários
+
+00:08:05.660 --> 00:08:06.400
+concluem que a ferramenta
+
+00:08:06.400 --> 00:08:07.020
+é mais uma novidade
+
+00:08:07.020 --> 00:08:07.760
+do que uma necessidade.
+
+00:08:08.020 --> 00:08:08.480
+Você não quer vitórias
+
+00:08:08.480 --> 00:08:08.980
+de demonstração.
+
+00:08:09.260 --> 00:08:10.440
+Você quer vitórias operacionais,
+
+00:08:11.000 --> 00:08:11.500
+como na fiação
+
+00:08:11.500 --> 00:08:11.920
+de uma casa.
+
+00:08:12.340 --> 00:08:12.880
+As primeiras tomadas
+
+00:08:12.880 --> 00:08:13.400
+que você escolhe
+
+00:08:13.400 --> 00:08:14.360
+determinam se os ambientes
+
+00:08:14.360 --> 00:08:15.320
+que as pessoas mais precisam
+
+00:08:15.320 --> 00:08:15.900
+serão utilizáveis
+
+00:08:15.900 --> 00:08:16.540
+ou ficarão no escuro.
+
+00:08:17.180 --> 00:08:18.040
+Então, como você foca
+
+00:08:18.040 --> 00:08:18.460
+no que importa?
+
+00:08:18.880 --> 00:08:19.620
+Uma maneira rápida
+
+00:08:19.620 --> 00:08:20.500
+é usar um filtro simples
+
+00:08:20.500 --> 00:08:21.380
+de três perguntas.
+
+00:08:21.980 --> 00:08:22.280
+Primeiro,
+
+00:08:22.320 --> 00:08:23.100
+com que frequência e sério
+
+00:08:23.100 --> 00:08:23.580
+são necessários
+
+00:08:23.580 --> 00:08:24.180
+no trabalho diário?
+
+00:08:24.580 --> 00:08:24.940
+Segundo,
+
+00:08:25.300 --> 00:08:26.120
+conectá-los elimina
+
+00:08:26.120 --> 00:08:26.500
+uma mudança
+
+00:08:26.500 --> 00:08:27.460
+de contexto desgastante?
+
+00:08:27.960 --> 00:08:28.380
+Aqueles momentos
+
+00:08:28.380 --> 00:08:28.800
+em que as pessoas
+
+00:08:28.800 --> 00:08:29.360
+saem do Bichet
+
+00:08:29.360 --> 00:08:30.280
+para procurar em outro sistema?
+
+00:08:31.140 --> 00:08:31.500
+Terceiro,
+
+00:08:31.560 --> 00:08:32.460
+qual é o risco de exposição?
+
+00:08:33.080 --> 00:08:34.140
+Os dados são sensíveis
+
+00:08:34.140 --> 00:08:34.640
+o suficiente
+
+00:08:34.640 --> 00:08:35.320
+para que a integração
+
+00:08:35.320 --> 00:08:36.240
+exija governança extra
+
+00:08:36.240 --> 00:08:36.800
+antes de seguir em frente?
+
+00:08:37.260 --> 00:08:37.800
+Se você obtiver
+
+00:08:37.800 --> 00:08:38.600
+resposta sólida
+
+00:08:38.600 --> 00:08:39.600
+sobre frequência e atrito
+
+00:08:39.600 --> 00:08:40.440
+e resposta gerenciável
+
+00:08:40.440 --> 00:08:40.940
+sobre risco,
+
+00:08:41.020 --> 00:08:41.320
+você encontra
+
+00:08:41.320 --> 00:08:42.280
+um excelente candidato.
+
+00:08:43.140 --> 00:08:43.420
+Você não precisa
+
+00:08:43.420 --> 00:08:44.280
+de uma análise intensiva
+
+00:08:44.280 --> 00:08:45.140
+para saber por onde começar.
+
+00:08:45.860 --> 00:08:46.540
+Tente o exercício
+
+00:08:46.540 --> 00:08:47.160
+de 60 segundos
+
+00:08:47.160 --> 00:08:47.880
+com qualquer stakeholder.
+
+00:08:48.720 --> 00:08:48.980
+Pergunte,
+
+00:08:49.060 --> 00:08:49.540
+quando o Bichet
+
+00:08:49.540 --> 00:08:50.120
+atinge um limite
+
+00:08:50.120 --> 00:08:50.480
+para você
+
+00:08:50.480 --> 00:08:51.260
+para onde você vai em seguida?
+
+00:08:52.340 --> 00:08:53.120
+As respostas,
+
+00:08:53.240 --> 00:08:53.880
+seja de um catálogo
+
+00:08:53.880 --> 00:08:54.440
+de produtos,
+
+00:08:54.520 --> 00:08:55.500
+uma ferramenta de projetos
+
+00:08:55.500 --> 00:08:56.180
+ou uma biblioteca
+
+00:08:56.180 --> 00:08:57.260
+de documentos compartilhados,
+
+00:08:57.360 --> 00:08:58.260
+destacarão as dificuldades
+
+00:08:58.260 --> 00:08:59.140
+que todos já conhecem.
+
+00:08:59.980 --> 00:09:01.040
+Esses momentos de ruptura
+
+00:09:01.040 --> 00:09:02.200
+são ideais para começar,
+
+00:09:02.520 --> 00:09:03.180
+pois integrá-los
+
+00:09:03.180 --> 00:09:04.460
+elimina interrupções constantes
+
+00:09:04.460 --> 00:09:05.180
+e cria confiança
+
+00:09:05.180 --> 00:09:05.820
+na plataforma.
+
+00:09:06.660 --> 00:09:07.760
+Uma vitória inicial clara
+
+00:09:08.600 --> 00:09:09.280
+de alta frequência
+
+00:09:09.280 --> 00:09:09.900
+e alto impacto.
+
+00:09:10.540 --> 00:09:10.920
+Por exemplo,
+
+00:09:11.040 --> 00:09:11.580
+em vez de verificar
+
+00:09:11.580 --> 00:09:12.580
+cronogramas de projetos
+
+00:09:12.580 --> 00:09:13.580
+em um rastreador separado,
+
+00:09:13.800 --> 00:09:14.620
+as equipes podem perguntar
+
+00:09:14.620 --> 00:09:15.680
+diretamente ao chat de negócios
+
+00:09:15.680 --> 00:09:16.500
+sobre status mais recente.
+
+00:09:16.800 --> 00:09:17.720
+Esse é o tipo de interação
+
+00:09:17.720 --> 00:09:18.580
+que as pessoas repetem
+
+00:09:18.580 --> 00:09:19.200
+todos os dias,
+
+00:09:19.360 --> 00:09:21.020
+onde eliminar a troca de contexto
+
+00:09:21.020 --> 00:09:22.180
+tem um efeito multiplicador
+
+00:09:22.180 --> 00:09:22.860
+imediato.
+
+00:09:23.540 --> 00:09:24.020
+Compare isso
+
+00:09:24.020 --> 00:09:24.880
+com um relatório mensal
+
+00:09:24.880 --> 00:09:25.360
+e você verá
+
+00:09:25.360 --> 00:09:26.060
+por que priorizar
+
+00:09:26.060 --> 00:09:26.640
+pela frequência
+
+00:09:26.640 --> 00:09:27.140
+e pelo atrito
+
+00:09:27.140 --> 00:09:27.940
+no fluxo de trabalho
+
+00:09:27.940 --> 00:09:29.380
+é a estratégia mais inteligente.
+
+00:09:29.900 --> 00:09:30.700
+É igualmente importante
+
+00:09:30.700 --> 00:09:31.720
+evitar buscar integrações
+
+00:09:31.720 --> 00:09:32.260
+apenas porque são
+
+00:09:32.260 --> 00:09:33.140
+tecnicamente viáveis.
+
+00:09:33.940 --> 00:09:34.740
+Quase qualquer sistema
+
+00:09:34.740 --> 00:09:35.460
+pode ser conectado
+
+00:09:35.460 --> 00:09:36.040
+de alguma forma,
+
+00:09:36.160 --> 00:09:36.880
+mas nem toda conexão
+
+00:09:36.880 --> 00:09:37.720
+altera o comportamento.
+
+00:09:38.340 --> 00:09:39.360
+As integrações certas
+
+00:09:39.360 --> 00:09:40.180
+são aquelas que melhoram
+
+00:09:40.180 --> 00:09:40.980
+diretamente os pontos
+
+00:09:40.980 --> 00:09:42.200
+de decisão de alto tráfego.
+
+00:09:43.120 --> 00:09:44.000
+Onde quer que o chat
+
+00:09:44.000 --> 00:09:44.540
+de negócios
+
+00:09:44.540 --> 00:09:45.700
+possa apresentar dados reais
+
+00:09:45.700 --> 00:09:46.260
+em tempo real,
+
+00:09:46.400 --> 00:09:46.800
+previsões,
+
+00:09:46.960 --> 00:09:47.540
+marcos de projeto
+
+00:09:47.540 --> 00:09:48.600
+atualizados ou status,
+
+00:09:49.380 --> 00:09:50.400
+ele deixa de ser um assistente
+
+00:09:50.400 --> 00:09:51.180
+e passa a ser uma parte
+
+00:09:51.180 --> 00:09:52.200
+confiável do processo.
+
+00:09:52.700 --> 00:09:54.320
+É por isso que mapear
+
+00:09:54.320 --> 00:09:55.040
+pontos de integração
+
+00:09:55.040 --> 00:09:55.760
+é mais que um passo
+
+00:09:55.760 --> 00:09:56.760
+de planejamento técnico.
+
+00:09:57.480 --> 00:09:58.600
+Trata-se de moldar a percepção.
+
+00:09:59.060 --> 00:10:00.120
+Os funcionários não se importam
+
+00:10:00.120 --> 00:10:00.520
+se o conector
+
+00:10:00.520 --> 00:10:01.120
+foi fácil de criar.
+
+00:10:01.480 --> 00:10:02.080
+Eles se importam
+
+00:10:02.080 --> 00:10:02.840
+que o chat de negócio
+
+00:10:02.840 --> 00:10:04.300
+finalmente entregue respostas úteis
+
+00:10:04.300 --> 00:10:04.800
+sem que eles precisem
+
+00:10:04.800 --> 00:10:05.400
+sair da conversa.
+
+00:10:05.400 --> 00:10:06.880
+E, uma vez que veem
+
+00:10:06.880 --> 00:10:07.800
+que ele lida com consultas
+
+00:10:07.800 --> 00:10:08.460
+de forma confiável,
+
+00:10:08.520 --> 00:10:09.260
+eles continuam voltando
+
+00:10:09.260 --> 00:10:09.920
+e é assim que a adoção
+
+00:10:09.920 --> 00:10:10.540
+se intensifica.
+
+00:10:10.980 --> 00:10:11.700
+Claro, a priorização
+
+00:10:11.700 --> 00:10:12.680
+não significa ignorar
+
+00:10:12.680 --> 00:10:13.780
+oportunidades de longo prazo.
+
+00:10:14.600 --> 00:10:15.520
+Sistemas de menor frequência
+
+00:10:15.520 --> 00:10:16.340
+ainda podem valer a pena
+
+00:10:16.340 --> 00:10:17.160
+conectar mais tarde,
+
+00:10:17.300 --> 00:10:18.300
+assim que os alvos de alto valor
+
+00:10:18.300 --> 00:10:19.540
+provarem a utilidade do bestiativo.
+
+00:10:19.860 --> 00:10:20.420
+Mas, no início,
+
+00:10:20.540 --> 00:10:21.160
+o foco é eliminar
+
+00:10:21.160 --> 00:10:22.280
+as maiores fontes de atrito.
+
+00:10:22.980 --> 00:10:23.740
+É isso que sinaliza
+
+00:10:23.740 --> 00:10:24.320
+aos funcionários
+
+00:10:24.320 --> 00:10:24.840
+e à liderança
+
+00:10:24.840 --> 00:10:25.520
+que a implementação
+
+00:10:25.520 --> 00:10:26.200
+está funcionando
+
+00:10:26.200 --> 00:10:27.560
+e que integrar mais sistemas
+
+00:10:27.560 --> 00:10:28.640
+vale o tempo e o esforço.
+
+00:10:29.400 --> 00:10:30.360
+Portanto, o filtro real
+
+00:10:30.360 --> 00:10:31.760
+não é sobre possibilidade técnica,
+
+00:10:31.880 --> 00:10:32.580
+mas sobre impacto.
+
+00:10:32.580 --> 00:10:34.260
+Quais integrações
+
+00:10:34.260 --> 00:10:35.120
+introduzidas agora
+
+00:10:35.120 --> 00:10:35.820
+dão ao bestiativo
+
+00:10:35.820 --> 00:10:36.540
+o poder de fornecer
+
+00:10:36.540 --> 00:10:37.820
+respostas claras e confiáveis
+
+00:10:37.820 --> 00:10:38.500
+no momento exato
+
+00:10:38.500 --> 00:10:39.080
+em que uma decisão
+
+00:10:39.080 --> 00:10:39.800
+está sendo tomada?
+
+00:10:40.640 --> 00:10:41.100
+Identifique-se,
+
+00:10:41.180 --> 00:10:42.300
+você terá estabelecido a base
+
+00:10:42.300 --> 00:10:42.880
+para transformar
+
+00:10:42.880 --> 00:10:43.720
+as interações diárias.
+
+00:10:44.380 --> 00:10:45.200
+E assim que você souber
+
+00:10:45.200 --> 00:10:46.400
+onde estão essas oportunidades,
+
+00:10:46.500 --> 00:10:47.160
+o próximo passo
+
+00:10:47.160 --> 00:10:48.140
+é entender o mecanismo real
+
+00:10:48.140 --> 00:10:49.360
+que torna a integração possível.
+
+00:10:50.580 --> 00:10:51.180
+O que os conectores
+
+00:10:51.180 --> 00:10:52.100
+do Copilot realmente são?
+
+00:10:52.720 --> 00:10:53.720
+Os conectores do Copilot
+
+00:10:53.720 --> 00:10:54.280
+são a peça
+
+00:10:54.280 --> 00:10:55.220
+que transforma o bestiat
+
+00:10:55.220 --> 00:10:56.200
+de um assistente superficial
+
+00:10:56.200 --> 00:10:56.880
+em uma ferramenta
+
+00:10:56.880 --> 00:10:57.540
+que é realmente útil
+
+00:10:57.540 --> 00:10:58.380
+para a tomada de decisões
+
+00:10:58.380 --> 00:10:58.940
+no dia a dia.
+
+00:10:59.900 --> 00:11:00.540
+Em sua essência,
+
+00:11:00.620 --> 00:11:00.940
+um conector
+
+00:11:00.940 --> 00:11:01.980
+é uma integração controlada
+
+00:11:01.980 --> 00:11:02.740
+que permite ao bestiat
+
+00:11:02.740 --> 00:11:03.880
+consultar um sistema de registro
+
+00:11:03.880 --> 00:11:05.080
+e retornar respostas ilimitadas.
+
+00:11:05.680 --> 00:11:06.140
+Esse é o papel
+
+00:11:06.140 --> 00:11:06.740
+que ele desempenha,
+
+00:11:06.840 --> 00:11:07.460
+criando uma ponte
+
+00:11:07.460 --> 00:11:08.460
+gerenciada entre a IA
+
+00:11:08.460 --> 00:11:09.320
+e as fontes confiáveis
+
+00:11:09.320 --> 00:11:10.200
+dentro da sua empresa.
+
+00:11:11.020 --> 00:11:12.160
+Dois fatos valem a manter em mente.
+
+00:11:12.780 --> 00:11:13.260
+Os conectores
+
+00:11:13.260 --> 00:11:14.060
+não alteram o modelo
+
+00:11:14.060 --> 00:11:15.320
+em se eles fornecem contexto
+
+00:11:15.320 --> 00:11:16.160
+e podem ser criados
+
+00:11:16.160 --> 00:11:17.160
+em um espectro
+
+00:11:17.160 --> 00:11:18.040
+que vai de configurações
+
+00:11:18.040 --> 00:11:18.580
+sem código
+
+00:11:18.580 --> 00:11:19.340
+até implementações
+
+00:11:19.340 --> 00:11:20.580
+completas de código profissional.
+
+00:11:21.440 --> 00:11:21.900
+Pense em como
+
+00:11:21.900 --> 00:11:22.780
+seus dados estão hoje,
+
+00:11:22.900 --> 00:11:23.780
+espalhados por bibliotecas
+
+00:11:23.780 --> 00:11:24.300
+de documentos,
+
+00:11:24.380 --> 00:11:25.280
+bancos de dados estruturados,
+
+00:11:25.360 --> 00:11:25.880
+sistemas em nuvem
+
+00:11:25.880 --> 00:11:27.060
+e aplicativos especializados.
+
+00:11:28.340 --> 00:11:29.120
+O bestiat não possui
+
+00:11:29.120 --> 00:11:29.960
+naturalmente uma porta
+
+00:11:29.960 --> 00:11:30.800
+de entrada para exambir.
+
+00:11:31.200 --> 00:11:32.360
+O conector abre essa porta,
+
+00:11:32.480 --> 00:11:32.860
+mas faz isso
+
+00:11:32.860 --> 00:11:33.540
+de uma maneira segura
+
+00:11:33.540 --> 00:11:33.980
+e governada.
+
+00:11:34.800 --> 00:11:35.340
+Quando você faz
+
+00:11:35.340 --> 00:11:36.260
+uma pergunta ao bichet,
+
+00:11:36.300 --> 00:11:37.000
+o conector decide
+
+00:11:37.000 --> 00:11:38.200
+para onde essa consulta deve ir,
+
+00:11:38.400 --> 00:11:38.980
+seja para encontrar
+
+00:11:38.980 --> 00:11:39.660
+números de vendas
+
+00:11:39.660 --> 00:11:40.780
+em tempo real no CRM,
+
+00:11:40.880 --> 00:11:41.580
+faturas no ERP
+
+00:11:41.580 --> 00:11:42.400
+ou projetos ativos
+
+00:11:42.400 --> 00:11:42.940
+em uma ferramenta
+
+00:11:42.940 --> 00:11:43.620
+de planejamento,
+
+00:11:44.160 --> 00:11:45.120
+então retorna as informações
+
+00:11:45.120 --> 00:11:45.660
+delimitadas
+
+00:11:45.660 --> 00:11:46.640
+de que você realmente precisa.
+
+00:11:47.080 --> 00:11:47.860
+A diferença é visível.
+
+00:11:48.700 --> 00:11:49.240
+Sem o conector,
+
+00:11:49.420 --> 00:11:50.100
+o bichet fornece
+
+00:11:50.100 --> 00:11:51.000
+aproximações obtidas
+
+00:11:51.000 --> 00:11:51.680
+a partir de menções
+
+00:11:51.680 --> 00:11:52.660
+em chats ou documentos.
+
+00:11:53.540 --> 00:11:54.000
+Com o conector,
+
+00:11:54.120 --> 00:11:54.980
+você obtém dados reais
+
+00:11:54.980 --> 00:11:55.540
+e autoritativos
+
+00:11:55.540 --> 00:11:56.160
+que refletem
+
+00:11:56.160 --> 00:11:56.600
+o que o sistema
+
+00:11:56.600 --> 00:11:57.540
+de registro diz agora.
+
+00:11:58.620 --> 00:11:59.560
+Existe um equívoco comum
+
+00:11:59.560 --> 00:12:00.240
+de que os conectores
+
+00:12:00.240 --> 00:12:01.460
+servem apenas para desenvolvedores
+
+00:12:01.460 --> 00:12:01.880
+que escrevem
+
+00:12:01.880 --> 00:12:03.000
+centenas de linhas de código.
+
+00:12:03.540 --> 00:12:04.680
+A realidade é mais equilibrada.
+
+00:12:04.900 --> 00:12:05.620
+Para casos simples,
+
+00:12:05.720 --> 00:12:06.480
+criadores de soluções
+
+00:12:06.480 --> 00:12:06.900
+de negócios
+
+00:12:06.900 --> 00:12:07.540
+podem configurar
+
+00:12:07.540 --> 00:12:08.280
+integrações por meio
+
+00:12:08.280 --> 00:12:09.000
+e opções sem código
+
+00:12:09.000 --> 00:12:09.380
+ou com pouco.
+
+00:12:10.140 --> 00:12:11.200
+Para cenários complexos
+
+00:12:11.200 --> 00:12:12.160
+ou de alta governança,
+
+00:12:12.600 --> 00:12:13.220
+os desenvolvedores
+
+00:12:13.220 --> 00:12:13.720
+entram em cena
+
+00:12:13.720 --> 00:12:14.300
+com construções
+
+00:12:14.300 --> 00:12:15.000
+mais avançadas.
+
+00:12:15.400 --> 00:12:16.260
+Ambos os papéis são importantes.
+
+00:12:16.600 --> 00:12:17.640
+É aqui que o Copilot Studio
+
+00:12:17.640 --> 00:12:18.240
+entra em cena.
+
+00:12:18.640 --> 00:12:19.600
+É o ambiente projetado
+
+00:12:19.600 --> 00:12:20.020
+para estender
+
+00:12:20.020 --> 00:12:21.020
+o Microsoft Copilot
+
+00:12:21.020 --> 00:12:21.580
+com agentes,
+
+00:12:21.700 --> 00:12:22.420
+ações e integrações
+
+00:12:22.420 --> 00:12:23.120
+personalizadas,
+
+00:12:23.260 --> 00:12:24.040
+oferecendo às equipes
+
+00:12:24.040 --> 00:12:24.940
+uma maneira de projetar
+
+00:12:24.940 --> 00:12:25.460
+as experiências
+
+00:12:25.460 --> 00:12:26.340
+de que realmente precisa.
+
+00:12:26.940 --> 00:12:27.740
+Para cenários de plugins
+
+00:12:27.740 --> 00:12:28.400
+de API com uso
+
+00:12:28.400 --> 00:12:29.120
+intensivo de código,
+
+00:12:29.220 --> 00:12:29.660
+o time Stalkit
+
+00:12:29.660 --> 00:12:30.220
+também é compatível.
+
+00:12:30.760 --> 00:12:31.580
+Os desenvolvedores
+
+00:12:31.580 --> 00:12:32.280
+podem usá-lo
+
+00:12:32.280 --> 00:12:33.320
+para expor APIs seguras
+
+00:12:33.320 --> 00:12:33.940
+que trazem dados
+
+00:12:33.940 --> 00:12:34.940
+de aplicativos proprietários
+
+00:12:34.940 --> 00:12:35.960
+diretamente para o BizChat
+
+00:12:35.960 --> 00:12:36.560
+com as permissões
+
+00:12:36.560 --> 00:12:37.640
+corretas aplicadas.
+
+00:12:38.360 --> 00:12:39.060
+Essa flexibilidade
+
+00:12:39.060 --> 00:12:39.880
+significa que as integrações
+
+00:12:39.880 --> 00:12:40.520
+podem ser escaladas
+
+00:12:40.520 --> 00:12:41.020
+de acordo com o nível
+
+00:12:41.020 --> 00:12:41.900
+de habilidade e a complexidade,
+
+00:12:41.980 --> 00:12:42.420
+mas também nos lembra
+
+00:12:42.420 --> 00:12:43.060
+que algumas integrações
+
+00:12:43.060 --> 00:12:43.940
+exigirão um grande envolvimento
+
+00:12:43.940 --> 00:12:44.520
+dos desenvolvedores
+
+00:12:44.520 --> 00:12:47.320
+e uma governança adequada
+
+00:12:47.320 --> 00:12:48.280
+para serem feitas corretamente.
+
+00:12:49.160 --> 00:12:49.960
+É igualmente importante
+
+00:12:49.960 --> 00:12:51.060
+esclarecer como os conectores
+
+00:12:51.060 --> 00:12:52.000
+interagem com a inteligência
+
+00:12:52.000 --> 00:12:52.760
+integrada do BizChat.
+
+00:12:54.940 --> 00:12:56.760
+Ele simplesmente melhora
+
+00:12:56.760 --> 00:12:57.200
+o que a IA
+
+00:12:57.200 --> 00:12:58.680
+tem à disposição para trabalhar.
+
+00:12:59.360 --> 00:13:00.060
+Imagine perguntar
+
+00:13:00.060 --> 00:13:01.240
+sobre pedidos de compra em aberto.
+
+00:13:01.960 --> 00:13:02.480
+Sem um conector,
+
+00:13:02.700 --> 00:13:03.360
+o BizChat coleta
+
+00:13:03.360 --> 00:13:04.160
+menções dispersas
+
+00:13:04.160 --> 00:13:04.940
+de e-mails ou reuniões
+
+00:13:04.940 --> 00:13:06.140
+e forma uma resposta vaga.
+
+00:13:07.120 --> 00:13:07.960
+Adicione um conector
+
+00:13:07.960 --> 00:13:08.540
+e, de repente,
+
+00:13:08.620 --> 00:13:09.780
+o BizChat consulta o RP,
+
+00:13:09.960 --> 00:13:10.700
+recupera contagens
+
+00:13:10.700 --> 00:13:11.480
+status exatos,
+
+00:13:11.560 --> 00:13:12.360
+exatos eles apresentam
+
+00:13:12.360 --> 00:13:13.040
+em linguagem natural.
+
+00:13:13.860 --> 00:13:14.520
+O motor principal
+
+00:13:14.520 --> 00:13:15.220
+ainda é o modelo,
+
+00:13:15.340 --> 00:13:15.880
+mas a precisão
+
+00:13:15.880 --> 00:13:16.500
+vem do conector.
+
+00:13:17.420 --> 00:13:18.200
+Torna isso poderoso
+
+00:13:18.200 --> 00:13:18.900
+a que não se restringe
+
+00:13:18.900 --> 00:13:20.200
+apenas aos sistemas da Microsoft.
+
+00:13:21.140 --> 00:13:22.100
+Sim, você pode vincular
+
+00:13:22.100 --> 00:13:23.080
+serviços do 365,
+
+00:13:23.520 --> 00:13:24.400
+mas com a mesma facilidade
+
+00:13:24.400 --> 00:13:25.200
+você pode conectar
+
+00:13:25.200 --> 00:13:26.280
+plataformas de RH,
+
+00:13:26.460 --> 00:13:27.180
+ferramentas de logística
+
+00:13:27.180 --> 00:13:28.220
+ou bancos de dados personalizados
+
+00:13:28.220 --> 00:13:29.140
+dos quais sua empresa depende.
+
+00:13:29.380 --> 00:13:30.040
+A parte crucial
+
+00:13:30.040 --> 00:13:31.220
+é que cada uma dessas transferências
+
+00:13:31.220 --> 00:13:32.300
+acontece por meio de um conector.
+
+00:13:33.060 --> 00:13:34.040
+O BizChat não está capturando
+
+00:13:34.040 --> 00:13:34.960
+dados cegamente em segundo ponto.
+
+00:13:35.340 --> 00:13:36.320
+Ele está roteando perguntas
+
+00:13:36.320 --> 00:13:37.140
+de maneira gerenciada,
+
+00:13:37.220 --> 00:13:38.000
+respeitando permissões
+
+00:13:38.000 --> 00:13:39.180
+e retornando resultados específicos.
+
+00:13:39.660 --> 00:13:40.380
+É assim que ele permanece
+
+00:13:40.380 --> 00:13:40.740
+governado,
+
+00:13:40.840 --> 00:13:41.360
+mantendo sua tida.
+
+00:13:42.180 --> 00:13:42.720
+Outro ponto
+
+00:13:42.720 --> 00:13:43.180
+que existe espaço
+
+00:13:43.180 --> 00:13:43.800
+é despercebido
+
+00:13:43.800 --> 00:13:44.400
+é que os conectores
+
+00:13:44.400 --> 00:13:45.460
+são tanto sobre alinhamento
+
+00:13:45.460 --> 00:13:45.940
+de negócios
+
+00:13:45.940 --> 00:13:46.900
+quanto sobre tecnologia.
+
+00:13:47.420 --> 00:13:48.080
+Configurar um deles
+
+00:13:48.080 --> 00:13:48.940
+força uma conversa
+
+00:13:48.940 --> 00:13:49.740
+entre as equipes de TI
+
+00:13:49.740 --> 00:13:50.380
+e de negócios
+
+00:13:50.380 --> 00:13:51.300
+sobre quais perguntas
+
+00:13:51.300 --> 00:13:52.040
+realmente importam.
+
+00:13:52.460 --> 00:13:53.020
+Gerentes precisam
+
+00:13:53.020 --> 00:13:53.500
+de atualizações
+
+00:13:53.500 --> 00:13:54.100
+de vendas integral.
+
+00:13:54.400 --> 00:13:55.120
+Os líderes financeiros
+
+00:13:55.120 --> 00:13:55.880
+precisam de visibilidade
+
+00:13:55.880 --> 00:13:56.800
+sobre faturas não pagas.
+
+00:13:57.180 --> 00:13:57.980
+As equipes de projeto
+
+00:13:57.980 --> 00:13:58.680
+precisam ter os marcos
+
+00:13:58.680 --> 00:13:59.180
+de entrega à mão
+
+00:13:59.180 --> 00:13:59.820
+durante as reuniões.
+
+00:14:00.400 --> 00:14:00.880
+Os conectores
+
+00:14:00.880 --> 00:14:01.800
+trazem essas prioridades
+
+00:14:01.800 --> 00:14:02.220
+para o foco
+
+00:14:02.220 --> 00:14:02.940
+e a torno operacional.
+
+00:14:03.440 --> 00:14:04.540
+Esse é um dos seus valores ocultos.
+
+00:14:04.940 --> 00:14:05.720
+Eles não servem apenas
+
+00:14:05.720 --> 00:14:06.600
+para conectar sistemas,
+
+00:14:06.680 --> 00:14:07.220
+mas para revelar
+
+00:14:07.220 --> 00:14:08.020
+quais fluxos de trabalho
+
+00:14:08.020 --> 00:14:08.800
+valem a pena apoiar.
+
+00:14:09.340 --> 00:14:09.940
+Até este ponto,
+
+00:14:10.020 --> 00:14:10.720
+o papel de um conector
+
+00:14:10.720 --> 00:14:11.340
+deve estar claro.
+
+00:14:11.780 --> 00:14:12.600
+Não é um complemento
+
+00:14:12.600 --> 00:14:13.000
+de nicho
+
+00:14:13.000 --> 00:14:13.520
+ou um projeto
+
+00:14:13.520 --> 00:14:14.380
+de desenvolvimento.
+
+00:14:15.200 --> 00:14:15.780
+É um mecanismo
+
+00:14:15.780 --> 00:14:16.300
+que transforma
+
+00:14:16.300 --> 00:14:17.080
+um cheque de resumos
+
+00:14:17.080 --> 00:14:17.640
+inteligentes
+
+00:14:17.640 --> 00:14:18.660
+e um copiloto confiável
+
+00:14:18.660 --> 00:14:19.120
+com acesso
+
+00:14:19.120 --> 00:14:20.080
+a dados precisos.
+
+00:14:20.860 --> 00:14:21.280
+Sem eles,
+
+00:14:21.380 --> 00:14:22.060
+a adoção é difícil
+
+00:14:22.060 --> 00:14:22.660
+porque a ferramenta
+
+00:14:22.660 --> 00:14:23.420
+não consegue responder
+
+00:14:23.420 --> 00:14:23.820
+as perguntas
+
+00:14:23.820 --> 00:14:24.440
+com as quais as pessoas
+
+00:14:24.440 --> 00:14:24.740
+se importam.
+
+00:14:25.120 --> 00:14:25.560
+Com eles,
+
+00:14:25.700 --> 00:14:26.620
+ele assume um novo papel
+
+00:14:26.620 --> 00:14:27.780
+confiável o suficiente
+
+00:14:27.780 --> 00:14:28.400
+para ser usado
+
+00:14:28.400 --> 00:14:29.200
+diante de colegas
+
+00:14:29.200 --> 00:14:29.840
+em cenários reais
+
+00:14:29.840 --> 00:14:30.760
+de tomada de decisão
+
+00:14:30.760 --> 00:14:31.940
+e alinhado com a forma
+
+00:14:31.940 --> 00:14:32.420
+como o negócio
+
+00:14:32.420 --> 00:14:33.040
+realmente opera.
+
+00:14:33.500 --> 00:14:34.560
+O próximo passo natural
+
+00:14:34.560 --> 00:14:35.120
+é colocar a ideia
+
+00:14:35.120 --> 00:14:35.540
+em prática.
+
+00:14:36.460 --> 00:14:36.940
+Entender o que são
+
+00:14:36.940 --> 00:14:37.840
+os conectores é importante,
+
+00:14:37.960 --> 00:14:38.580
+mas o que lhes dá
+
+00:14:38.580 --> 00:14:39.640
+valor é construir um
+
+00:14:39.640 --> 00:14:40.280
+e garantir que ele
+
+00:14:40.280 --> 00:14:41.400
+esteja protegido corretamente.
+
+00:14:42.640 --> 00:14:43.480
+Construindo e protegendo
+
+00:14:43.480 --> 00:14:44.140
+seu primeiro conector
+
+00:14:44.140 --> 00:14:45.320
+Construir e proteger
+
+00:14:45.320 --> 00:14:46.120
+seu primeiro conector
+
+00:14:46.120 --> 00:14:46.700
+tem menos a ver
+
+00:14:46.700 --> 00:14:47.740
+com a habilidade de programação
+
+00:14:47.740 --> 00:14:48.440
+e mais com disciplina
+
+00:14:48.440 --> 00:14:49.160
+na forma como você
+
+00:14:49.160 --> 00:14:49.780
+projeta o acesso.
+
+00:14:50.260 --> 00:14:50.420
+Sim,
+
+00:14:50.560 --> 00:14:51.640
+há desenvolvimento envolvido,
+
+00:14:51.740 --> 00:14:52.300
+mas o peso real
+
+00:14:52.300 --> 00:14:52.880
+está em decidir
+
+00:14:52.880 --> 00:14:53.760
+o que o bicheque deve ver
+
+00:14:53.760 --> 00:14:54.420
+com restrito
+
+00:14:54.420 --> 00:14:55.220
+esse escopo é definido
+
+00:14:55.220 --> 00:14:55.860
+e com rigorosamente
+
+00:14:55.860 --> 00:14:56.360
+as permissões
+
+00:14:56.360 --> 00:14:57.060
+são aplicadas.
+
+00:14:58.080 --> 00:14:58.880
+Se a estrutura
+
+00:14:58.880 --> 00:14:59.560
+não for planejada
+
+00:14:59.560 --> 00:15:00.180
+desde o início,
+
+00:15:00.520 --> 00:15:01.260
+você correrá o risco
+
+00:15:01.260 --> 00:15:02.640
+de vazar dados confidenciais
+
+00:15:02.640 --> 00:15:03.360
+ou criar algo
+
+00:15:03.360 --> 00:15:04.120
+tão restrito
+
+00:15:04.120 --> 00:15:04.940
+que não ajude ninguém.
+
+00:15:05.660 --> 00:15:06.320
+A segurança aqui
+
+00:15:06.320 --> 00:15:06.720
+não é a camada
+
+00:15:06.720 --> 00:15:07.560
+que você adiciona depois.
+
+00:15:08.020 --> 00:15:08.460
+É a estrutura
+
+00:15:08.460 --> 00:15:09.280
+sobre a qual você constrói.
+
+00:15:09.580 --> 00:15:10.220
+A principal ferramenta
+
+00:15:10.220 --> 00:15:10.700
+com a qual a maioria
+
+00:15:10.700 --> 00:15:11.380
+das equipes começam
+
+00:15:11.380 --> 00:15:11.720
+o time school.
+
+00:15:12.260 --> 00:15:13.200
+Ele fornece ferramentas
+
+00:15:13.200 --> 00:15:14.200
+e modelos de desenvolvedor
+
+00:15:14.200 --> 00:15:15.020
+para acelerar a criação
+
+00:15:15.020 --> 00:15:15.800
+de plugins de API
+
+00:15:15.800 --> 00:15:16.340
+para o copiloto
+
+00:15:16.340 --> 00:15:16.780
+e integração
+
+00:15:16.780 --> 00:15:17.440
+com seus recursos
+
+00:15:17.440 --> 00:15:18.620
+do Azure e do IntegraSware.
+
+00:15:19.020 --> 00:15:19.980
+Ele faz você avançar
+
+00:15:19.980 --> 00:15:21.040
+rapidamente no lado técnico,
+
+00:15:21.100 --> 00:15:21.680
+mas o que ele não faz
+
+00:15:21.680 --> 00:15:22.360
+é tomar as decisões
+
+00:15:22.360 --> 00:15:23.160
+de design por você.
+
+00:15:23.580 --> 00:15:24.320
+Você ainda precisa
+
+00:15:24.320 --> 00:15:25.040
+definir os pontos
+
+00:15:25.040 --> 00:15:25.860
+de entrada certos,
+
+00:15:25.940 --> 00:15:26.300
+alinhá-los
+
+00:15:26.300 --> 00:15:27.200
+às necessidades de negócio
+
+00:15:27.200 --> 00:15:28.220
+e garantir que cada chamada
+
+00:15:28.220 --> 00:15:29.200
+permaneça dentro de limites
+
+00:15:29.200 --> 00:15:30.080
+estritamente definidos.
+
+00:15:30.780 --> 00:15:31.440
+É tentador apressar
+
+00:15:31.440 --> 00:15:32.480
+um conector de demonstração
+
+00:15:32.480 --> 00:15:33.400
+apenas para exibir dados
+
+00:15:33.400 --> 00:15:33.800
+ao vivo,
+
+00:15:33.980 --> 00:15:35.140
+apenas para descobrir mais tarde
+
+00:15:35.140 --> 00:15:36.260
+que ele expõe mais informações
+
+00:15:36.260 --> 00:15:37.420
+do que qualquer um esperava.
+
+00:15:38.360 --> 00:15:39.300
+Essas vitórias rápidas
+
+00:15:39.300 --> 00:15:40.000
+parecem empolgantes,
+
+00:15:40.100 --> 00:15:40.680
+mas se as fronteiras
+
+00:15:40.680 --> 00:15:41.440
+baseadas em funções
+
+00:15:41.440 --> 00:15:42.380
+desaparecerem no processo,
+
+00:15:42.480 --> 00:15:43.040
+você cria um problema
+
+00:15:43.040 --> 00:15:43.720
+em vez de uma solução.
+
+00:15:44.300 --> 00:15:44.960
+Uma abordagem melhor
+
+00:15:44.960 --> 00:15:45.720
+é tratar a construção
+
+00:15:45.720 --> 00:15:46.900
+como uma sequência estruturada.
+
+00:15:47.220 --> 00:15:48.100
+Dá uma lista de verificação
+
+00:15:48.100 --> 00:15:48.680
+de seis etapas
+
+00:15:48.680 --> 00:15:49.540
+para manter o processo fundamental.
+
+00:15:49.900 --> 00:15:50.440
+Primeiro passo,
+
+00:15:50.520 --> 00:15:51.280
+defina o caso de uso
+
+00:15:51.280 --> 00:15:52.000
+em termos claros.
+
+00:15:52.600 --> 00:15:53.640
+Qual é a pergunta de negócio real
+
+00:15:53.640 --> 00:15:54.220
+que você deseja
+
+00:15:54.220 --> 00:15:54.880
+que o cheque responda?
+
+00:15:55.600 --> 00:15:56.160
+Passo 2,
+
+00:15:56.380 --> 00:15:57.520
+mapeie as consultas exatas
+
+00:15:57.520 --> 00:15:58.140
+e o conjunto mínimo
+
+00:15:58.140 --> 00:15:58.880
+de dados necessário.
+
+00:15:59.420 --> 00:16:00.080
+Não forneça tudo
+
+00:16:00.080 --> 00:16:00.960
+se apenas alguns campos
+
+00:16:00.960 --> 00:16:01.500
+forem importantes.
+
+00:16:02.280 --> 00:16:02.760
+Passo 3,
+
+00:16:02.760 --> 00:16:04.080
+projete a superfície do conector
+
+00:16:04.080 --> 00:16:05.020
+escolhendo quais campos
+
+00:16:05.020 --> 00:16:05.540
+são expostos
+
+00:16:05.540 --> 00:16:06.320
+e quais são restritos.
+
+00:16:07.000 --> 00:16:07.520
+Passo 4,
+
+00:16:07.600 --> 00:16:08.460
+implemente a autenticação
+
+00:16:08.460 --> 00:16:09.100
+e escopo usando
+
+00:16:09.100 --> 00:16:09.880
+controles de acesso
+
+00:16:09.880 --> 00:16:10.840
+baseados em identidade
+
+00:16:10.840 --> 00:16:11.380
+para determinar
+
+00:16:11.380 --> 00:16:12.260
+quem pode perguntar o que,
+
+00:16:12.340 --> 00:16:13.180
+quem pode perguntar o que
+
+00:16:13.180 --> 00:16:14.220
+e quem pode ver quais resultados.
+
+00:16:14.940 --> 00:16:15.540
+Passo 5,
+
+00:16:15.660 --> 00:16:16.200
+teste com TI
+
+00:16:16.200 --> 00:16:17.480
+e proprietários de negócios juntos,
+
+00:16:17.600 --> 00:16:18.440
+idealmente com um pequeno
+
+00:16:18.440 --> 00:16:19.080
+grupo de usuários
+
+00:16:19.080 --> 00:16:20.180
+executando consultas reais
+
+00:16:20.180 --> 00:16:20.680
+para validar
+
+00:16:20.680 --> 00:16:21.520
+se as permissões funcionam
+
+00:16:21.520 --> 00:16:21.980
+corretamente
+
+00:16:21.980 --> 00:16:22.500
+e se os resultados
+
+00:16:22.500 --> 00:16:23.060
+realmente apoiam
+
+00:16:23.060 --> 00:16:23.820
+a tomada de decisão.
+
+00:16:24.500 --> 00:16:25.080
+Passo 6,
+
+00:16:25.200 --> 00:16:26.060
+implante com monitoramento
+
+00:16:26.060 --> 00:16:26.880
+e governança ativos
+
+00:16:26.880 --> 00:16:28.120
+para que você possa rastrear o uso
+
+00:16:28.120 --> 00:16:28.980
+e ajustar caso algo
+
+00:16:28.980 --> 00:16:29.760
+saia do escopo.
+
+00:16:30.480 --> 00:16:31.400
+Leia isso em voz alta
+
+00:16:31.400 --> 00:16:32.080
+e quase funciona
+
+00:16:32.080 --> 00:16:32.620
+como um roteiro
+
+00:16:32.620 --> 00:16:33.080
+para projetar
+
+00:16:33.080 --> 00:16:34.120
+qualquer integração segura.
+
+00:16:34.860 --> 00:16:35.820
+Para tornar isso tangível,
+
+00:16:35.900 --> 00:16:36.380
+vamos considerar
+
+00:16:36.380 --> 00:16:37.280
+um exemplo hipotético.
+
+00:16:37.820 --> 00:16:38.460
+Digamos que sua equipe
+
+00:16:38.460 --> 00:16:39.060
+queira que o bichete
+
+00:16:39.060 --> 00:16:40.360
+resuma a saúde do pipeline de CRM.
+
+00:16:40.940 --> 00:16:42.140
+O pedido parece simples,
+
+00:16:42.300 --> 00:16:42.920
+extrair tamanhos
+
+00:16:42.920 --> 00:16:43.820
+de negociações futuras,
+
+00:16:43.960 --> 00:16:44.740
+estágios e proprietários.
+
+00:16:45.200 --> 00:16:46.220
+Mas os registros brutos
+
+00:16:46.220 --> 00:16:47.180
+de CRM também contêm
+
+00:16:47.180 --> 00:16:47.620
+notas livres
+
+00:16:47.620 --> 00:16:48.260
+dos representantes
+
+00:16:48.260 --> 00:16:48.820
+que frequentemente
+
+00:16:48.820 --> 00:16:49.340
+incluem detalhes
+
+00:16:49.340 --> 00:16:50.080
+confidenciais de cliente.
+
+00:16:50.580 --> 00:16:51.240
+Neste cenário,
+
+00:16:51.480 --> 00:16:52.460
+o conector deve exibir
+
+00:16:52.460 --> 00:16:53.480
+os campos estruturados,
+
+00:16:53.580 --> 00:16:54.480
+estágio, valor,
+
+00:16:54.620 --> 00:16:55.120
+proprietário,
+
+00:16:55.200 --> 00:16:56.420
+enquanto exclui explicitamente
+
+00:16:56.420 --> 00:16:57.740
+essas notas não estruturadas.
+
+00:16:58.360 --> 00:16:59.380
+Se você apenas conectar
+
+00:16:59.380 --> 00:17:00.000
+o conector a tudo,
+
+00:17:00.080 --> 00:17:00.720
+você expôs demais.
+
+00:17:01.240 --> 00:17:02.200
+Se você definir o escopo
+
+00:17:02.200 --> 00:17:02.600
+com rigor,
+
+00:17:02.840 --> 00:17:03.540
+obterá os insights
+
+00:17:03.540 --> 00:17:04.480
+que os gerentes precisam
+
+00:17:04.480 --> 00:17:05.120
+sem vazar nada
+
+00:17:05.120 --> 00:17:06.060
+que viole as expectativas
+
+00:17:06.060 --> 00:17:07.420
+de privacidade ou conformidade.
+
+00:17:08.160 --> 00:17:08.740
+Isso não é apenas
+
+00:17:08.740 --> 00:17:09.700
+uma salvaguarda técnica,
+
+00:17:09.780 --> 00:17:10.480
+é um princípio de design.
+
+00:17:11.280 --> 00:17:12.360
+A autenticação é o que torna
+
+00:17:12.360 --> 00:17:13.320
+a aplicação do escopo real.
+
+00:17:13.960 --> 00:17:14.820
+Uma gestão robusta
+
+00:17:14.820 --> 00:17:15.720
+de identidade e acesso
+
+00:17:15.720 --> 00:17:16.580
+garante que um usuário
+
+00:17:16.580 --> 00:17:17.360
+veja apenas o que ele tem
+
+00:17:17.360 --> 00:17:17.920
+permissão para ver.
+
+00:17:18.560 --> 00:17:19.640
+Controles baseados em função
+
+00:17:19.640 --> 00:17:20.340
+estendem as regras
+
+00:17:20.340 --> 00:17:21.100
+de negócio ao conector.
+
+00:17:21.760 --> 00:17:22.920
+Um líder regional de vendas
+
+00:17:22.920 --> 00:17:23.680
+pode ver o pipeline
+
+00:17:23.680 --> 00:17:24.440
+do seu território,
+
+00:17:26.420 --> 00:17:28.140
+uma chamada autenticada
+
+00:17:28.140 --> 00:17:29.120
+valida tanto a identidade
+
+00:17:29.120 --> 00:17:29.820
+quanto os direitos
+
+00:17:29.820 --> 00:17:30.500
+antes que um registro
+
+00:17:30.500 --> 00:17:31.040
+seja exibido.
+
+00:17:31.620 --> 00:17:32.140
+Esses não são
+
+00:17:32.140 --> 00:17:32.980
+mecanismos opcionais,
+
+00:17:33.040 --> 00:17:33.860
+são passos essenciais
+
+00:17:33.860 --> 00:17:35.040
+para manter os limites existentes
+
+00:17:35.040 --> 00:17:36.100
+e impedir que dados sensíveis
+
+00:17:36.100 --> 00:17:36.860
+vazem para um chat
+
+00:17:36.860 --> 00:17:37.640
+onde não deveriam estar.
+
+00:17:38.420 --> 00:17:38.960
+Também é um erro
+
+00:17:38.960 --> 00:17:39.940
+deixar que apenas um grupo
+
+00:17:39.940 --> 00:17:40.700
+controle o processo.
+
+00:17:41.220 --> 00:17:41.940
+A TI pode conhecer
+
+00:17:41.940 --> 00:17:42.720
+a arquitetura do sistema,
+
+00:17:42.820 --> 00:17:43.800
+mas os proprietários de negócios
+
+00:17:43.800 --> 00:17:44.760
+sabem quais pontos de dados
+
+00:17:44.760 --> 00:17:45.600
+são essenciais para a missão
+
+00:17:45.600 --> 00:17:46.560
+e quais nunca devem ser expostos.
+
+00:17:47.240 --> 00:17:47.960
+Deixar um lado de fora
+
+00:17:47.960 --> 00:17:48.560
+desequilíbrio,
+
+00:17:48.720 --> 00:17:49.280
+muito restrito,
+
+00:17:49.700 --> 00:17:50.260
+para ser útil
+
+00:17:50.260 --> 00:17:51.060
+ou muito aberto,
+
+00:17:51.180 --> 00:17:51.840
+para ser seguro.
+
+00:17:52.900 --> 00:17:54.080
+Trazer ambas as perspectivas
+
+00:17:54.080 --> 00:17:54.580
+desde o início
+
+00:17:56.420 --> 00:17:56.760
+dos testes,
+
+00:17:56.820 --> 00:17:58.080
+certifique-se de que os usuários reais
+
+00:17:58.080 --> 00:17:59.080
+executem suas consultas
+
+00:17:59.080 --> 00:17:59.460
+no dia a dia.
+
+00:17:59.900 --> 00:18:00.780
+É assim que você confirma
+
+00:18:00.780 --> 00:18:01.940
+que os resultados são precisos
+
+00:18:01.940 --> 00:18:03.040
+e adequadamente delimitados
+
+00:18:03.040 --> 00:18:03.780
+antes que qualquer coisa
+
+00:18:03.780 --> 00:18:05.000
+seja lançada em maior escala.
+
+00:18:05.580 --> 00:18:06.300
+Ao analisar,
+
+00:18:06.520 --> 00:18:07.160
+criar um conector
+
+00:18:07.160 --> 00:18:07.980
+é menos sobre truques
+
+00:18:07.980 --> 00:18:09.060
+de codificação inteligentes
+
+00:18:09.060 --> 00:18:10.380
+e mais sobre disciplina aplicada.
+
+00:18:10.900 --> 00:18:11.640
+Defina exatamente
+
+00:18:11.640 --> 00:18:13.140
+qual pergunta você quer resolver,
+
+00:18:13.340 --> 00:18:13.820
+dê ao bichete
+
+00:18:13.820 --> 00:18:15.040
+apenas o acesso necessário
+
+00:18:15.040 --> 00:18:15.700
+para respondê-la
+
+00:18:15.700 --> 00:18:17.040
+e aplique as mesmas permissões
+
+00:18:17.040 --> 00:18:18.180
+em que sua empresa já confia.
+
+00:18:19.540 --> 00:18:21.160
+Essa combinação controle de escopo,
+
+00:18:21.240 --> 00:18:22.740
+autenticação e testes conjuntos
+
+00:18:22.740 --> 00:18:23.520
+é o que diferencia
+
+00:18:23.520 --> 00:18:24.680
+uma demonstração chamativa
+
+00:18:24.680 --> 00:18:25.260
+de uma ferramenta
+
+00:18:25.260 --> 00:18:26.220
+de negócios confiável
+
+00:18:26.220 --> 00:18:27.940
+Quando esses fundamentos
+
+00:18:27.940 --> 00:18:28.540
+estão estabelecidos,
+
+00:18:28.620 --> 00:18:29.700
+o biscuit ganha credibilidade.
+
+00:18:30.480 --> 00:18:31.400
+Ele deixa de ser tratado
+
+00:18:31.400 --> 00:18:32.540
+como um experimento interessante
+
+00:18:32.540 --> 00:18:33.300
+e passa a ser usado
+
+00:18:33.300 --> 00:18:34.200
+em fluxos de trabalho reais.
+
+00:18:34.940 --> 00:18:35.900
+A verdadeira vantagem
+
+00:18:35.900 --> 00:18:36.700
+não é apenas o sistema
+
+00:18:36.700 --> 00:18:38.180
+tecnicamente retornar respostas,
+
+00:18:38.540 --> 00:18:39.200
+mas o fato de que elas
+
+00:18:39.200 --> 00:18:39.860
+são específicas,
+
+00:18:39.940 --> 00:18:40.800
+seguras e confiáveis.
+
+00:18:42.120 --> 00:18:42.760
+E com essa base,
+
+00:18:42.820 --> 00:18:43.320
+você está pronto
+
+00:18:43.320 --> 00:18:44.260
+para ter uma perspectiva
+
+00:18:44.260 --> 00:18:44.820
+mais ampla
+
+00:18:44.820 --> 00:18:45.580
+sobre o que tudo isso
+
+00:18:45.580 --> 00:18:46.320
+realmente agrega
+
+00:18:46.320 --> 00:18:47.240
+à sua organização.
+
+00:18:48.360 --> 00:18:49.180
+A conclusão aqui
+
+00:18:49.180 --> 00:18:49.680
+não é teórica,
+
+00:18:49.760 --> 00:18:50.280
+é sobre a ação.
+
+00:18:51.080 --> 00:18:51.740
+O próximo passo
+
+00:18:51.740 --> 00:18:52.700
+mais importante é este.
+
+00:18:52.920 --> 00:18:54.000
+Escolha um fluxo de trabalho
+
+00:18:54.000 --> 00:18:54.720
+de alta frequência
+
+00:18:54.720 --> 00:18:55.700
+defina os campos exatos
+
+00:18:55.700 --> 00:18:56.460
+que o biscuit precisa
+
+00:18:56.460 --> 00:18:57.080
+desse sistema
+
+00:18:57.080 --> 00:18:57.980
+e construa um conector
+
+00:18:57.980 --> 00:18:59.000
+com um escopo definido.
+
+00:18:59.740 --> 00:19:00.560
+Comece pequeno,
+
+00:19:00.700 --> 00:19:01.500
+prove o valor uma vez
+
+00:19:01.500 --> 00:19:02.280
+e você terá uma base
+
+00:19:02.280 --> 00:19:02.840
+na qual sua equipe
+
+00:19:02.840 --> 00:19:03.860
+poderá confiar expandir.
+
+00:19:04.360 --> 00:19:05.120
+Gostaria de saber de você
+
+00:19:05.120 --> 00:19:05.820
+qual é o primeiro sistema
+
+00:19:05.820 --> 00:19:06.420
+que você conectaria.
+
+00:19:07.020 --> 00:19:07.760
+CRM, RP,
+
+00:19:07.900 --> 00:19:08.580
+catálogo de produtos
+
+00:19:08.580 --> 00:19:09.280
+ou rastreador de poré?
+
+00:19:09.440 --> 00:19:10.280
+Deixe nos comentários.
+
+00:19:10.940 --> 00:19:11.700
+E se você quiser mais
+
+00:19:11.700 --> 00:19:12.300
+passo a passo
+
+00:19:12.300 --> 00:19:12.980
+sobre como criar
+
+00:19:12.980 --> 00:19:14.120
+e proteger conectores,
+
+00:19:14.260 --> 00:19:15.220
+não deixe de se inscrever.

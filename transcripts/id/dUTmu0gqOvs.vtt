@@ -1,0 +1,2149 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:03.360
+Anda membangun agen AI Custom untuk Microsoft 365 dengan cara yang sulit.
+
+00:00:03.860 --> 00:00:08.620
+Itulah sebabnya agen tersebut rusak, terhenti, dan gagal dalam tinjauan keamanan saat pengguna nyata muncul.
+
+00:00:09.060 --> 00:00:09.520
+Kebenarannya.
+
+00:00:09.940 --> 00:00:14.740
+Microsoft 365 Agent SDK bukanlah pilihan jika Anda menginginkan skala keamanan dan jangkauan multisalurannya.
+
+00:00:14.880 --> 00:00:19.820
+Anda akan mempelajari mengapa solusi custom gagal, apa yang diberikan SDK secara bawaan, dan cara menerapkannya hari ini.
+
+00:00:20.200 --> 00:00:22.920
+Ada sebuah kemampuan yang secara diam-diam mematikan sebagian besar agen botan sendiri.
+
+00:00:23.340 --> 00:00:24.440
+Saya akan mengungkapnya semua selesai.
+
+00:00:24.920 --> 00:00:25.500
+Hasil instan.
+
+00:00:25.500 --> 00:00:30.780
+Anda akan mendapatkan cetak biru siap pakai yang dapat dipertahankan di depan tim keamanan, dikirim ke tim, dan dihubungkan ke kopek.
+
+00:00:31.100 --> 00:00:33.440
+Sekarang mari bongkar pendekatan mandiri yang umum dengan cepat.
+
+00:00:34.280 --> 00:00:37.000
+Mengapa agen buatan sendiri gagal di ekosistem M365?
+
+00:00:37.940 --> 00:00:39.800
+Anda memperlakukan identitas.
+
+00:00:40.360 --> 00:00:48.060
+Sebagai formalitas, bertindak sebagai aplikasi, padahal harusnya sebagai pengguna merusak akurasi izin, menghapus jejak audit, dan menjamin kegagalan tinjauan.
+
+00:00:49.160 --> 00:00:50.960
+Di M365, akses terikat pada identitas.
+
+00:00:51.500 --> 00:00:52.780
+File, obrolan, kalender, email.
+
+00:00:52.780 --> 00:00:57.700
+Jika agen Anda menggunakan call service principal emu, agen tersebut akan mendapatkan hak akses berlebih atau di-block.
+
+00:00:57.940 --> 00:01:01.040
+Dan ketika auditor bertanya siapa yang mengakses file sharepoint ini dan mengapa,
+
+00:01:01.660 --> 00:01:02.480
+loh Anda tidak tahu jawabannya.
+
+00:01:02.880 --> 00:01:04.340
+Itu bukan tata kelola, itu hanya tebak-tebakan.
+
+00:01:04.800 --> 00:01:06.100
+Nah, disinilah kebanyakan orang menggunakan salah.
+
+00:01:06.480 --> 00:01:06.720
+Status.
+
+00:01:07.360 --> 00:01:12.400
+Anda membuat prototip di laptop berhasil sekali, lalu saat ditingkatkan kebanyak node, logika multiputaran Anda berantakan.
+
+00:01:12.400 --> 00:01:20.260
+Tanpa status percakapan dan putaran yang dibagikan antar instans, tarifikasi menghilang, output alat melenceng, dan agen mengulang diri seperti ikan mas yang amnesia.
+
+00:01:21.140 --> 00:01:27.040
+Di bawah beban, peretasan tanpa status menjadi bug yang terlihat oleh pengguna, konteks, hilang, jawaban kontradiktif.
+
+00:01:27.560 --> 00:01:28.780
+Dan maaf kita tadi membahas apa.
+
+00:01:29.300 --> 00:01:30.840
+Kekacauan saluran adalah langkah berikutnya.
+
+00:01:31.200 --> 00:01:35.140
+Teams, obrolan web, Slack, Outlook, masing-masing menggunakan dialek berbeda.
+
+00:01:35.140 --> 00:01:38.840
+Indikator mengetik, lampiran, kartu, streaming, tidak ada yang konsisten.
+
+00:01:39.920 --> 00:01:45.780
+Anda membuat adaptor manual biasanya berhasil, sampai teams mengharapkan semantik protokol aktivitas yang tidak dikenal adaptor Anda.
+
+00:01:46.420 --> 00:01:51.460
+Hasilnya, pesan rusak, tidak ada streaming yang diharapkan pengguna, dan perilaku tidak konsisten yang terasa murahan.
+
+00:01:52.100 --> 00:01:53.360
+Pengguna tidak peduli dengan adaptor Anda.
+
+00:01:53.840 --> 00:01:56.120
+Mereka peduli agen berperilaku seperti warga asli dimanapun.
+
+00:01:56.860 --> 00:02:03.100
+Jurang tata kola, bot custom mengabaikan sinyal preview, melawatkan penegakan DLP, dan menghasilkan respons yang tidak bisa ditemukan melalui e-discovery.
+
+00:02:03.100 --> 00:02:05.160
+Tim keamanan mengatakan tidak karena mereka harus melakukan.
+
+00:02:05.560 --> 00:02:09.780
+Jika agen Anda tidak dapat menghormati label sensitivitas retensi dan penahan hukum, itu sudah gagal sejak awal.
+
+00:02:10.440 --> 00:02:13.880
+Hal yang dilewatkan kebanyakan orang adalah tata kelola bukanlah fitur yang ditambahkan nanti.
+
+00:02:14.300 --> 00:02:15.280
+Itu adalah pijakan tempat Anda bedi.
+
+00:02:15.520 --> 00:02:17.020
+Membangun tanpa itu membuat lantai runtuh.
+
+00:02:17.600 --> 00:02:19.180
+Penyepuan orkestrator menambah entropi.
+
+00:02:19.580 --> 00:02:24.020
+Sedikit length change di sini, sedikit semantik kernel di sana, ditambah alat custom yang direkatkan dengan panggilan HTTP.
+
+00:02:24.980 --> 00:02:27.040
+Tidak ada rencana eksekusi standar, tidak ada percobaan yang seragam.
+
+00:02:27.680 --> 00:02:30.960
+Observabilitas berubah menjadi misteri pembunuhan dengan terlalu banyak tersangka dan tanpa lini masa.
+
+00:02:30.960 --> 00:02:34.720
+Ganti model atau perencana, dan Anda menulis ulang agen, bukan sekadar mengganti komponen.
+
+00:02:35.020 --> 00:02:36.800
+Itulah kerapuan yang menyamar sebagai fleksibilitas.
+
+00:02:37.700 --> 00:02:42.180
+Kesenjangan kepatuhan, residensi data, kebijakan retensi, dan RBAC tidak selaras secara ajaib.
+
+00:02:42.900 --> 00:02:45.980
+Operuhan eksternal bisa bucur internal jika perhutuan Anda mengabaikan batas penyewa.
+
+00:02:46.400 --> 00:02:48.200
+Skenario lintas penyewa selamat menikmati wadah.
+
+00:02:48.660 --> 00:02:54.080
+Jika agen Anda tidak mewarisi postur kepatuhan organisasi, Anda menciptakan alam semesta paralel dengan hukum yang tidak kompatif.
+
+00:02:54.320 --> 00:02:56.760
+Ingatlah spoiler, alam semesta itu tidak akan pernah mendapatkan persidu.
+
+00:02:57.240 --> 00:02:59.420
+Keputusasaan dalam penelusuran kesalahan adalah hasil dari sini.
+
+00:02:59.420 --> 00:03:03.540
+Tanpa terowongan pengembangan yang konsisten, Anda akan disibukkan dengan total ngrok dan bloks yang setengah rusak.
+
+00:03:04.140 --> 00:03:06.840
+Tanpa pelacakan menyeluruh, setiap kedagalan tampak seperti hantu.
+
+00:03:07.300 --> 00:03:09.820
+Dan streaming yang sadar saluran, jika Anda tidak mendeteksi kemampuan,
+
+00:03:09.980 --> 00:03:13.320
+Anda akan memasukkan streaming di tempat yang tidak ada atau menghilangkannya bagi pengguna yang membutuhkannya.
+
+00:03:14.420 --> 00:03:16.680
+Keduanya terasa salah. Keduanya menggis kepercayaan.
+
+00:03:16.980 --> 00:03:21.220
+Kebenarannya, DIY DM365 biasanya berarti Anda membangun ulang sistem pemipaan dengan selang tamat.
+
+00:03:21.800 --> 00:03:24.280
+Anda sibuk melawan tekanan air saat seharusnya merancang otaknya.
+
+00:03:24.280 --> 00:03:31.260
+Hadir Microsoft 365 Agent SDK, jalur standar yang membosankan yang menjaga sistem tetap hidup agar Anda bisa fokus pada kognisi.
+
+00:03:32.280 --> 00:03:35.460
+SDK ini menangani identitas dengan benar, menyimpan status di seluruh node,
+
+00:03:35.820 --> 00:03:39.280
+menjalankan protokol aktivitas dengan adapt ternyata, dan menghormati tata kelola secara default.
+
+00:03:40.180 --> 00:03:43.620
+Dan ya, ini agnostik model sehingga drama orkestrator Anda tidak lagi menjadi masalah orang lain.
+
+00:03:44.160 --> 00:03:46.020
+Begitu Anda menguasai fondasinya, segalanya akan berjalanan saja.
+
+00:03:46.020 --> 00:03:47.540
+Apa yang sebenarnya?
+
+00:03:47.660 --> 00:03:51.240
+Disediakan Microsoft 365 Agent SDK, intinya agnostik terhadap model.
+
+00:03:52.160 --> 00:03:53.360
+Autentikasi dilakukan dengan benar, sayo.
+
+00:03:53.980 --> 00:03:58.540
+SDK menyisipkan identitas ke dalam alur aktivitas agar agen Anda dapat bertindak sebagai pengguna saat dibutuhkan
+
+00:03:58.540 --> 00:04:00.440
+dan beralih ke kredensia layanan saat harus melakukan.
+
+00:04:00.900 --> 00:04:04.000
+Anda mendapatkan penangan masuk yang menampilkan momen persetujuan yang bersih,
+
+00:04:04.000 --> 00:04:10.460
+menukar kode dengan token, dan menghidrasi giliran dengan akses lingkup pengguna, grafik, sharepoint, outlook yang terikat pada manusia yang sebenarnya.
+
+00:04:11.360 --> 00:04:16.160
+Manfaatnya jelas, fidelitas izin, jejak audit nyata, dan hak akses paling sedikit secara default.
+
+00:04:16.680 --> 00:04:22.480
+Hal yang dilewatkan kebanyakan orang adalah bagaimana ini membuka persetujuan dan tindakan yang tidak dapat dilakukan oleh aplikasi tanpa wajah tanpa akses berlebih.
+
+00:04:22.680 --> 00:04:24.920
+Ini bukan sekadar autentikasi, ini adalah otorisasi dengan hati nuran.
+
+00:04:25.400 --> 00:04:26.360
+Selanjutnya, menu percakapan.
+
+00:04:27.240 --> 00:04:31.020
+SDK memberi Anda status sesi dan utas yang tahan lama yang bertahan di seluruh node cluster.
+
+00:04:31.780 --> 00:04:38.860
+Status giliran, pola penyimpanan bersama, dan ID korelasi yang konsisten berarti multi giliran tidak berantakan saat penyeimbang beban memindahkan Anda ke instance line.
+
+00:04:38.860 --> 00:04:44.640
+Klarifikasi, output alat, dan memori jangka pendek tetap ada tanpa Anda harus menciptakan sihir sesi lengket Anda sendiri.
+
+00:04:45.240 --> 00:04:49.020
+Alasan ini berhasil adalah karena kerangga kerja ini memperlakukan percakapan sebagai sumber daya kelas 1.
+
+00:04:49.860 --> 00:04:55.680
+Agen Anda berhenti mengulangi dirinya sendiri dan mulai berperilaku seolah mengenal Anda karena ia memang mengenal Anda di seluruh giliran saluran dan mesin.
+
+00:04:55.680 --> 00:04:57.060
+Masuk ke protokol aktivitas.
+
+00:04:57.460 --> 00:05:02.920
+Anggap ini sebagai bahasa umum untuk agen, tipe untuk pesan, acara, pengetikan, lampiran kartu adaptif.
+
+00:05:03.700 --> 00:05:06.260
+Sehingga logika Anda tidak terpaku pada keunikan satu saluran saja.
+
+00:05:07.180 --> 00:05:13.960
+SDK ini menyediakan adaptor untuk teams, obrolan web, Slack, dan copilot studio yang menerjemahkan dialek mereka ke dalek-mereka ke dalam model aktivitas dan sebaliknya.
+
+00:05:14.780 --> 00:05:17.240
+Pendekan adaptor khusus yang selalu melewatkan kasus-kasus yang tidak terdut.
+
+00:05:17.800 --> 00:05:20.540
+Sebutkan entitas, alur persetujuan file, kartu langsung.
+
+00:05:20.540 --> 00:05:25.180
+Di sini semantik tersebut distandarisasi sehingga agen Anda terasa asli di setiap ruang yang dimasukinya.
+
+00:05:25.780 --> 00:05:28.240
+Netralitas orkestrator adalah hal yang akan disyukuri Anda di masa depan.
+
+00:05:28.660 --> 00:05:33.900
+Hubungkan semantik kernel sebagai perencana AI foundry Anda, open AI, atau tumpukan buatan sendiri di balik antarmuka yang bersih.
+
+00:05:34.440 --> 00:05:37.640
+ROM dan alat berada dalam unit modular tidak tersebar di seluruh penangan.
+
+00:05:38.420 --> 00:05:41.700
+Tukar model, ubah perencana, jalankan AB tanpa merusak agen Anda.
+
+00:05:42.460 --> 00:05:45.440
+SDK ini tidak menentukan pemenang, tetapi melakukan batasan agar Anda yang menentukan.
+
+00:05:45.440 --> 00:05:50.560
+Jika Anda hanya ingat satu hal, bisakan kognisi dari komunikasi agar peningkatan tidak harus selalu menulis ulang.
+
+00:05:51.260 --> 00:05:53.900
+Sedang streaming itu penting karena pengalaman pengguna adalah kepercayaan.
+
+00:05:54.400 --> 00:05:56.600
+SDK ini mendeteksi kapabilitas saluran secara otomatis.
+
+00:05:57.200 --> 00:06:03.280
+Jika klien mendukung streaming token, Anda dapat melakukan streaming umpan, balik cepat penalaran parsial, dan penyelesaian kartu adaptif.
+
+00:06:03.940 --> 00:06:07.220
+Jika tidak, Anda beralih dengan lancar ke indikator pengetikan dan pesan yang dipotong-potong.
+
+00:06:07.280 --> 00:06:09.880
+Tidak ada peretasan streaming palsu, tidak ada kecemasan dengan jeda wak.
+
+00:06:09.880 --> 00:06:16.660
+Dan ya, logika yang sama mencakup lampiran kartu dan tindakan yang disarankan per kapabilitas saluran tanpa kondisional salin tempan tersebar di kode Anda.
+
+00:06:17.500 --> 00:06:20.320
+Integrasi perangkat adalah produktivitas mempusankan yang sebenarnya Anda butuhkan.
+
+00:06:20.820 --> 00:06:24.480
+Gavolding Visual Studio dan VS Code menyiapkan agen dengan nada dering kema yang berfungsi.
+
+00:06:25.320 --> 00:06:28.200
+Dev Tunnel mengeksposnya dengan aman untuk pengujian saluran nyata,
+
+00:06:28.200 --> 00:06:34.060
+dan diagnostik memberi Anda pelacakan end-to-end, header permintaan, token yang ada atau tidak, serta aktivitas masuk dan keluar.
+
+00:06:34.620 --> 00:06:39.020
+Playground mensimulasikan berbagai saluran sehingga Anda dapat melihat perbedaan kapabilitas tanpa menjalankan nama aplikasi.
+
+00:06:39.020 --> 00:06:46.200
+Cara Metri Hooks memancarkan ID korelasi dan pengaturan waktu sehingga Anda dapat mendeteksi latensi dalam alat dibandingkan panggilan model dibandingkan-ibandingkan ipo saluran.
+
+00:06:46.320 --> 00:06:48.340
+Beginilah cara Anda melakukan debak dalam hitungan jam, bukan berdasarkan.
+
+00:06:48.840 --> 00:06:50.880
+Dan karena Anda pasti akan bertanya, ini open source dan gratis.
+
+00:06:51.400 --> 00:06:56.140
+Biaya SDK adalah apa yang Anda bayarkan untuk layanan hilir, model, pencarian, penyimpanan Anda yang memiliki.
+
+00:06:56.140 --> 00:06:59.460
+Itu berarti Anda mendapatkan infrastruktur perusahaan tanpa harus menyerahkan kendali atas tumpukan Anda.
+
+00:07:00.040 --> 00:07:01.720
+Lebih suka petan bulan ini dan C++ produksi?
+
+00:07:02.020 --> 00:07:02.420
+Didukung.
+
+00:07:02.920 --> 00:07:03.120
+Test.
+
+00:07:03.680 --> 00:07:08.580
+Ingin mencoba OpenAI lalu melakukan standarisasi pada Azure AI Foundry dengan evaluasi kepatuan tugas dan keamanan?
+
+00:07:09.020 --> 00:07:10.740
+Tukar orkestratornya, pertahankan agen.
+
+00:07:12.060 --> 00:07:17.140
+SDK ini menstandarisasi identitas, status, protokol, dan penyiriman sehingga kode Anda dapat fokus pada penalaran dan alat.
+
+00:07:17.440 --> 00:07:21.480
+Ini dirancang agar agnostik terhadap model sehada saluran secara default dan ramah tetap kelola sejak awal.
+
+00:07:22.020 --> 00:07:24.140
+Fitur hebat dan menarik, tapi ini adalah sifat sifat untuk bertanya.
+
+00:07:24.380 --> 00:07:30.020
+Sekarang setelah Anda tahu apa yang didapat, mari kita bicara tentang cara merangkainya agar siap rilis dan mampu bertahan saat pertama kali bertemu pengunas.
+
+00:07:30.760 --> 00:07:33.820
+Cetak biru implementasi, dari nol hingga agen multisaluran.
+
+00:07:34.440 --> 00:07:35.240
+Mulai dengan kerangka dasar.
+
+00:07:35.500 --> 00:07:38.560
+Buat proyek agen Microsoft 365 baru dengan template echo.
+
+00:07:39.020 --> 00:07:43.680
+Itu adalah nada panggil Anda, sinyal lampu menyala yang menjamin bahwa kabel saluran dan alur aktivitas berfungsi.
+
+00:07:44.140 --> 00:07:45.520
+Jalankan secara lokal dan bekopek.
+
+00:07:45.900 --> 00:07:48.020
+Kirim pesan, jika Anda tidak mendapat respon di sini, berhentilah.
+
+00:07:48.420 --> 00:07:51.860
+Berbaiki variabel lingkungan, port, dan credensia sebelum menambahkan kecerdasan apapun.
+
+00:07:52.360 --> 00:07:54.560
+Pengguna rata-rata melewatkan ini lalu menyalakan modalnya.
+
+00:07:54.840 --> 00:07:55.480
+Jangan di pengguna rata.
+
+00:07:55.800 --> 00:07:56.720
+Sekarang penanggupan makhluk Anda.
+
+00:07:57.020 --> 00:07:59.940
+Tambahkan penangan join untuk menyapa pengguna dan penangan pesan untuk memproses input.
+
+00:08:00.460 --> 00:08:05.360
+Saring berdasarkan jenis aktivitas terlebih dahulu, pesan, percakapan, dan pemanggilan pembaruan baru kemudian berdasarkan konten.
+
+00:08:05.360 --> 00:08:09.080
+Buat filter yang diklaratif dan spesifik, Anda juga akan menyambungkan penangan masuk sana.
+
+00:08:09.460 --> 00:08:14.980
+Disitulah SDK menampilkan persetujuan, menukar kode dengan token, dan memberi Anda token akses berbasis pengguna pada giliran tersebut.
+
+00:08:15.560 --> 00:08:16.020
+Bermanfaatnya.
+
+00:08:16.580 --> 00:08:21.180
+Anda dapat memanggil Microsoft Grab sebagai pengguna tanpa mengubah buat Anda menjadi prinsip pelayanan yang memiliki hak istimewa.
+
+00:08:21.620 --> 00:08:22.380
+Ya, itu cara yang profesional.
+
+00:08:22.900 --> 00:08:23.840
+Selanjutnya, pelagis trator.
+
+00:08:24.480 --> 00:08:29.880
+Daftarkan orkestrator, semantik kernel, Azure AI Foundry, dan OpenAI Anda melalui koleksi layanan SDK.
+
+00:08:30.640 --> 00:08:32.120
+Pisahkan prom dan alat dari penangan.
+
+00:08:32.120 --> 00:08:38.580
+Prom disimpan dalam file, alat disimpan sebagai fungsi dengan input dan output yang jelas, dan keduanya dapat diuji unit tanpa saluran.
+
+00:08:39.180 --> 00:08:41.940
+Jalan pintas yang jarang diajarkan, bungkus panggilan model dibalik antarmu.
+
+00:08:42.420 --> 00:08:43.440
+Hari ini itu adalah penyelesaian apa?
+
+00:08:43.780 --> 00:08:44.580
+Besok itu ya berencana.
+
+00:08:44.920 --> 00:08:46.060
+Agen seharusnya tidak perlu memperlukan.
+
+00:08:46.340 --> 00:08:47.700
+Migrasi Anda di masa depan akan berterima.
+
+00:08:48.140 --> 00:08:50.320
+Management status adalah saat mainan berubah menjadi sistem.
+
+00:08:50.700 --> 00:08:57.060
+Gunakan status giliran untuk mempertahankan rewet obrolan, output alat, dan memori jangka pendek apapun yang diperlukan untuk logika multi giliran.
+
+00:08:57.580 --> 00:09:00.740
+Simpan ID korelasi agar Anda dapat melacak perjalanan satu pengguna di seluruh node.
+
+00:09:00.740 --> 00:09:04.100
+Hal yang dilewatkan kebanyakan orang adalah ketahanan lintas node.
+
+00:09:04.760 --> 00:09:07.140
+Penyeimbang beban Anda akan memindahkan percakapan di tengah jalan.
+
+00:09:07.500 --> 00:09:10.700
+Tanpa status bersama, klarifikasi akan menguap dan agen Anda akan terbata-bata.
+
+00:09:11.300 --> 00:09:13.120
+Dengan pola status SDK, itu tidak akan terjadi.
+
+00:09:13.620 --> 00:09:16.140
+Pendaftaran saluran adalah saat Anda berhenti menjadi proyek laboratorium.
+
+00:09:16.800 --> 00:09:19.520
+Daftarkan agen Anda dengan Azure Bot Service bagi broker persisten.
+
+00:09:20.440 --> 00:09:23.940
+ABS menghentikan protokol saluran dan meleruskan aktivitas ke titik akhir tunggal Anda.
+
+00:09:24.400 --> 00:09:27.620
+Arahkan Teams, obrolan web, dan Copilot Studio ke titik akhir ABS tersebut.
+
+00:09:28.240 --> 00:09:30.540
+Satu titik akhir banyak saluran semantik yang konsisten.
+
+00:09:31.200 --> 00:09:33.500
+Bandingkan itu dengan soket khusus persaluran yang rapuh,
+
+00:09:33.680 --> 00:09:36.240
+tidak dapat diobservasi, dan pasti gagal saat pengujian skala.
+
+00:09:36.780 --> 00:09:39.620
+Aktifkan tombol streaming, aktifkan respon streaming di SDK,
+
+00:09:40.200 --> 00:09:41.980
+akan mendeteksi kemampuan saluran secara otomatis.
+
+00:09:42.740 --> 00:09:44.220
+Jika streaming didukung di Teams Playground,
+
+00:09:44.420 --> 00:09:46.780
+Anda akan men-stream token dan memberikan umpan balik instan.
+
+00:09:47.160 --> 00:09:50.640
+Jika tidak, di beberapa klien web Anda akan melihat indikator mengetik dan pengiriman potongan data.
+
+00:09:51.100 --> 00:09:54.060
+Anda tidak perlu membuat percambangan kode persaluran adaptor menangani semuanya dengan cara
+
+00:09:54.060 --> 00:09:56.060
+umpan balik awal yang cepat mengurangi pemata.
+
+00:09:56.360 --> 00:09:59.460
+Dan ya, Anda bisa menyelesaikannya dengan adaptive card tanpa memasukan apapun.
+
+00:09:59.460 --> 00:10:00.640
+Diagnostik bukan opsi.
+
+00:10:01.000 --> 00:10:03.240
+Gunakan Playground untuk menyelesaikan berbagai saluran,
+
+00:10:03.440 --> 00:10:06.760
+memeriksa header, memastikan token tersedia saat Anda perlu bertindak sebagai pengguna,
+
+00:10:07.040 --> 00:10:08.640
+dan melacak aktivitas dari ujung ke ujung.
+
+00:10:09.020 --> 00:10:12.960
+Pancarkan ID korelasi dari penerimaan pesan kepingan model pemanggilan alat hingga respons.
+
+00:10:13.880 --> 00:10:15.320
+Kenyataannya tanpa korelasi yang belum bermula.
+
+00:10:15.880 --> 00:10:19.220
+Dengan itu, Anda bisa membuktikan apakah kelambatan terjadi pada model alat Anda terjaringan.
+
+00:10:19.560 --> 00:10:21.920
+Saatnya menghubungkan kemampuan sederhana dari ujung ke ujung.
+
+00:10:21.920 --> 00:10:24.040
+Dalam penangan pesan Anda, teruskan maksud dengan ringan.
+
+00:10:24.040 --> 00:10:26.060
+Tidak perlu berlebihan cukup untuk melakukan pelotif.
+
+00:10:26.360 --> 00:10:29.420
+Panggil orkestrator Anda dengan perintah sistem yang menetapkan batasan dan pesan pengguna
+
+00:10:29.420 --> 00:10:30.800
+yang menyatakan status giliran sebelumnya.
+
+00:10:31.520 --> 00:10:34.860
+Jika model berencana memanggil alat, jalankan alat dengan token cakupan pengguna
+
+00:10:34.860 --> 00:10:39.100
+saat tindakan terikat pada grafik atau kredensial layanan saat bersifat eksternal dan aman.
+
+00:10:40.100 --> 00:10:41.320
+Tulis hasil alat ke status giliran.
+
+00:10:41.880 --> 00:10:43.080
+Stream text parsial jika didukung.
+
+00:10:43.640 --> 00:10:46.760
+Setelah selesai, render adaptive card akhir dengan output terstruktur.
+
+00:10:47.500 --> 00:10:48.360
+Tambahkan bahagian batas korelas.
+
+00:10:48.360 --> 00:10:50.980
+Batasi alat berdasarkan peranan sensitivitas data.
+
+00:10:51.660 --> 00:10:53.020
+Perencana dapat mengusulkan panggilan.
+
+00:10:53.280 --> 00:10:54.440
+Hakin Anda yang mengotorisasinya.
+
+00:10:55.320 --> 00:10:58.420
+Itu berarti memverifikasi audience label dan batasan tindakan sebelum eksekusi.
+
+00:10:59.080 --> 00:11:02.040
+Jika alat ingin mengirim email, perlukan konfirmasi pengguna secara ekspresif.
+
+00:11:02.760 --> 00:11:05.880
+Jika alat ingin data sharepoint periksa label sensitivitas dan patuhi DLP,
+
+00:11:06.840 --> 00:11:08.980
+Anda bukan jin, Anda adalah agen dengan batasan.
+
+00:11:09.600 --> 00:11:10.540
+Terapkan irisan minimang.
+
+00:11:10.940 --> 00:11:11.480
+ECO berfungsi.
+
+00:11:12.200 --> 00:11:13.180
+Tambahkan satu alat dan satu.
+
+00:11:13.360 --> 00:11:16.160
+Puji di playground, website, dan Teams melalui ABS.
+
+00:11:16.920 --> 00:11:18.260
+Verifikasi streaming di tempat yang didukung.
+
+00:11:18.760 --> 00:11:21.140
+Verifikasi alur bertindak sebagai pengguna dan entry audit.
+
+00:11:21.500 --> 00:11:23.280
+Masukkan pemeriksaan ini ke dalam definisi selesaian.
+
+00:11:23.920 --> 00:11:26.960
+Baru kemudian tambahkan lebih banyak alat, ROM, dan penalaran yang lebih kaya.
+
+00:11:27.280 --> 00:11:28.460
+Terakhir, kemas kemampungan pengelangan.
+
+00:11:29.080 --> 00:11:31.180
+Buat skrip yang menyediakan sumber daya ABS,
+
+00:11:31.300 --> 00:11:34.540
+mendaftarkan saluran, mengonfigurasi ID aplikasi, dan mengatur variable lingkungan.
+
+00:11:35.200 --> 00:11:37.540
+Komit file prom, skema status, dan antarmuka alat Anda.
+
+00:11:38.520 --> 00:11:39.300
+Hasilnya sederhana.
+
+00:11:39.300 --> 00:11:41.840
+Agen multisaluran berstatus dengan identitas yang benar,
+
+00:11:41.920 --> 00:11:43.480
+yang mudah didebak, dan mampu menangani beban.
+
+00:11:44.180 --> 00:11:46.000
+Sekarang kita bisa bicara tentang gerbang keamanan,
+
+00:11:46.000 --> 00:11:47.480
+karena itulah pintu yang harus benar-benar Anda buka.
+
+00:11:48.180 --> 00:11:51.340
+Keamanan, kepatuhan, dan tata kelola itulah mengapa SDK tidak opsional.
+
+00:11:51.980 --> 00:11:53.900
+Anda tidak bisa melewati gerbang perusahaan dan virasat.
+
+00:11:54.260 --> 00:11:57.100
+Anda melewatinya dengan identitas saat ditegakkan kebijakan yang dapat ditegak.
+
+00:11:57.360 --> 00:11:59.640
+SDK menghubungkan hal-hal tersebut ke dalam agen Anda,
+
+00:11:59.780 --> 00:12:02.520
+sehingga Anda berhenti bernegosiasi dengan keamanan dan mulai mewarisi kontrol mag.
+
+00:12:02.520 --> 00:12:04.020
+Mulai dengan identitas enter untuk agen.
+
+00:12:04.540 --> 00:12:05.740
+Ini bukan sekadar pendaftaran aplikasi.
+
+00:12:06.200 --> 00:12:09.400
+Ini adalah model identitas terpadu di mana agen memiliki persona sendiri
+
+00:12:09.400 --> 00:12:11.640
+dapat bertindak sebagai pengguna dengan izin eksplisit
+
+00:12:11.640 --> 00:12:14.760
+dan meninggalkan jejak audit yang memetakkan setiap tindakan ke prinsip tertentu.
+
+00:12:15.560 --> 00:12:17.720
+Bertindak sebagai pengguna berarti kesetiaan pada izin.
+
+00:12:18.500 --> 00:12:22.220
+Email, kalender, sharepoint, teams, persis seperti yang bisa dilakukan manusia itu.
+
+00:12:22.560 --> 00:12:22.940
+Tidak lebih.
+
+00:12:23.540 --> 00:12:25.060
+Nah, istimewa minimum, bukanlah sekadar slogan di sini.
+
+00:12:25.540 --> 00:12:27.820
+Ini adalah cara token dicetak dan ditentukan cakupannya di sini.
+
+00:12:27.820 --> 00:12:29.980
+Tiga bagian kepatuhan bertanya,
+
+00:12:30.240 --> 00:12:31.280
+siapa yang mengakses file ini?
+
+00:12:31.420 --> 00:12:32.580
+Di bawah wadang siapa dan kapan?
+
+00:12:33.240 --> 00:12:35.080
+Anda mendapatkan jawaban yang deterministik
+
+00:12:35.080 --> 00:12:37.880
+karena SDK menghubungkan identitas tersebut melalui alur aktivitas.
+
+00:12:38.160 --> 00:12:39.160
+Sekarang integrasi purview,
+
+00:12:39.340 --> 00:12:41.560
+disinilah sebagian besar pembangunan mandiri di EWI menemui kegagang.
+
+00:12:41.800 --> 00:12:42.920
+Prom dan respons adalah konten.
+
+00:12:43.400 --> 00:12:45.680
+Konten memiliki label, retensi, dan kewajiban hukum.
+
+00:12:46.380 --> 00:12:48.800
+Klasifikasi dan DLP yang diberlakukan purview
+
+00:12:48.800 --> 00:12:52.140
+dapat mengevaluasi input dan output AI secara real-time,
+
+00:12:52.380 --> 00:12:53.600
+memblokir kebocoran sensitif,
+
+00:12:53.720 --> 00:12:54.900
+menghormati label sensitivitas,
+
+00:12:55.000 --> 00:12:57.100
+dan memastikan teks yang dihasilkan tidak melanggar kebijakan.
+
+00:12:57.820 --> 00:13:00.720
+Penjangan rasaan e-discovery berarti percakapan dan artefak agen Anda
+
+00:13:00.720 --> 00:13:03.140
+dapat ditemukan, ditempatkan dalam penahanan hukum, legal hold,
+
+00:13:03.220 --> 00:13:05.960
+dan diekspor di bawah kontrol yang sama persis seperti email dan dokumen.
+
+00:13:06.860 --> 00:13:09.200
+Hal yang sering dilewatkan orang adalah bahwa purview bukan letam remak.
+
+00:13:09.440 --> 00:13:11.260
+Dalam ekosistem Microsoft itu adalah sistem syarafnya.
+
+00:13:11.600 --> 00:13:12.840
+SDK merutekan sinyal,
+
+00:13:12.980 --> 00:13:15.400
+sehingga label, retensi, dan keputusan akses berlaku
+
+00:13:15.400 --> 00:13:19.020
+tanpa Anda harus menulis filter regex khusus yang rusak di hari kedua.
+
+00:13:19.960 --> 00:13:22.100
+Masuklah defender workload dengan deteksi berbasis AI.
+
+00:13:23.000 --> 00:13:26.100
+Ya, jailbreak, injeksi prompt, dan exfiltrasi data bukanlah hipotetis.
+
+00:13:26.360 --> 00:13:27.400
+Itu adalah ambiasa.
+
+00:13:27.960 --> 00:13:30.400
+Defender memberikan rekomendasi postur dan peringatan runtime
+
+00:13:30.400 --> 00:13:31.840
+yang disesuaikan untuk sistem agen.
+
+00:13:32.640 --> 00:13:35.340
+Itu berarti Anda mendapatkan telemetri yang mengenali pola pemanggilan alat
+
+00:13:35.340 --> 00:13:37.200
+yang mencurigakan lonjakan output anomali
+
+00:13:37.200 --> 00:13:39.840
+dan penyalahgunaan token yang didukung oleh intelijen ancaman
+
+00:13:39.840 --> 00:13:41.600
+yang tidak akan pernah bisa Anda reproduksi sendiri.
+
+00:13:42.140 --> 00:13:44.760
+Rekayasa kamar dan mandiri di AI berpura-pura bisa mengawasi segalanya.
+
+00:13:45.340 --> 00:13:47.420
+SDK memanfaatkan menara pengawas yang sudah ada
+
+00:13:47.420 --> 00:13:48.820
+untuk memantau penyewatanan Anda.
+
+00:13:49.360 --> 00:13:51.420
+Zero trust untuk agen bukanlah sekadar selain presentasi.
+
+00:13:51.420 --> 00:13:52.640
+Ini adalah mode operasinya.
+
+00:13:53.300 --> 00:13:54.220
+Tindakan yang terikat.
+
+00:13:54.660 --> 00:13:55.940
+Identitas dan dibatasi pada alat
+
+00:13:55.940 --> 00:13:58.140
+serta pemeriksaan kepatuhan tugas di Azure AI Foundry
+
+00:13:58.140 --> 00:13:59.300
+membatasi perilaku agen.
+
+00:14:00.020 --> 00:14:01.340
+Rencana dapat menyarankan suatu tindak.
+
+00:14:02.000 --> 00:14:04.440
+Kebijakan Anda yang memutuskan apakah agen boleh mengesekusinya
+
+00:14:04.440 --> 00:14:06.000
+untuk siapa dan dengan token yang mana.
+
+00:14:06.860 --> 00:14:08.560
+Alat beroperasi di dalam batasan izin
+
+00:14:08.560 --> 00:14:10.340
+bersifat baca saja jika diperlukan,
+
+00:14:10.700 --> 00:14:12.820
+terubang konfirmasi eksplisit untuk operasi berisiko
+
+00:14:12.820 --> 00:14:15.060
+dan blokir keras terhadap pelintasan antar penyewa atau label.
+
+00:14:15.500 --> 00:14:16.780
+Alasan mengapa ini berhasil sangat sedar.
+
+00:14:17.080 --> 00:14:18.160
+Token adalah otoritasnya
+
+00:14:18.160 --> 00:14:19.540
+dan SDK mengontrol kapan
+
+00:14:19.540 --> 00:14:21.460
+serta bagaimana token tersebut diterbitkan dan digunakan.
+
+00:14:21.820 --> 00:14:24.100
+Otomatisasi kepatuhan adalah tempat Anda menghemat waktu berbulan.
+
+00:14:24.760 --> 00:14:26.280
+Kebijakan retensi berlaku untuk percakapan.
+
+00:14:27.200 --> 00:14:29.740
+Lok audit mencatat siapa melakukan apa, kapan, dan melalui serb.
+
+00:14:30.180 --> 00:14:32.300
+Penahanan hukum dapat membebukan interaksi relevan
+
+00:14:32.300 --> 00:14:33.800
+tanpa Anda perlu membuat arsip para alat.
+
+00:14:34.200 --> 00:14:36.180
+Anda tidak membangun kembali kontrol, Anda mewarisinya.
+
+00:14:36.800 --> 00:14:39.320
+Bandingkan dengan agen kustom yang sekadar membuang lok ke tabel
+
+00:14:39.320 --> 00:14:40.460
+dan menyebutnya patuh aturan.
+
+00:14:41.040 --> 00:14:42.440
+Auditor Anda tidak akan terpesona dengan JSON.
+
+00:14:42.440 --> 00:14:44.800
+Perbedaan risiko dibandingkan solusi kustom sangatnya.
+
+00:14:45.400 --> 00:14:48.000
+DIY berarti berbulan-bulan merancang alur identitas,
+
+00:14:48.240 --> 00:14:49.200
+menulis penukar token,
+
+00:14:49.460 --> 00:14:50.620
+menambahkan pemindahan konten,
+
+00:14:50.720 --> 00:14:51.900
+menciptakan aturan penyuntingan,
+
+00:14:51.980 --> 00:14:53.540
+dan memetakan output ke e-discovery.
+
+00:14:54.800 --> 00:14:56.260
+Lalu Anda menghabiskan berbulan-bulan lagi
+
+00:14:56.260 --> 00:14:57.680
+untuk membuktikan kepada tim keamanan
+
+00:14:57.680 --> 00:14:59.000
+bahwa sistem itu bekerja di bawah beban
+
+00:14:59.000 --> 00:15:00.160
+di berbagai kanal dan skeneris.
+
+00:15:00.540 --> 00:15:01.880
+Dengan SDK, Anda mulai dengan default
+
+00:15:01.880 --> 00:15:03.760
+yang mencerminkan postur keamanan Microsoft 365
+
+00:15:03.760 --> 00:15:04.820
+yang sudah Anda jalankan.
+
+00:15:05.740 --> 00:15:07.720
+Sejak hari pertama, Anda memiliki keterlacakan,
+
+00:15:07.820 --> 00:15:08.600
+penegakan kebijakan,
+
+00:15:08.720 --> 00:15:10.800
+dan semantik aktivitas yang sadar kanal yang lolos uji awal.
+
+00:15:10.800 --> 00:15:12.520
+Perbedaannya terletak pada moda poarisan.
+
+00:15:13.040 --> 00:15:15.320
+Akin Anda hidup di dalam pagar pembatas perusahaan,
+
+00:15:15.520 --> 00:15:16.680
+bukannya berada tepat di luarnya.
+
+00:15:17.200 --> 00:15:18.500
+Tata kelola dalam skala besar adalah
+
+00:15:18.500 --> 00:15:20.200
+tempat proyek menjadi platform atau justru mati.
+
+00:15:20.940 --> 00:15:22.960
+Kontrol admin terpusat memberi IT satu tempat
+
+00:15:22.960 --> 00:15:23.800
+untuk melihat agen,
+
+00:15:23.980 --> 00:15:24.760
+mengelola identitas,
+
+00:15:24.880 --> 00:15:25.560
+merotasi rahasia,
+
+00:15:25.780 --> 00:15:26.700
+dan menerapkan kebijakan.
+
+00:15:27.200 --> 00:15:28.700
+Alur persetujuan dapat membatasi alat baru,
+
+00:15:28.820 --> 00:15:29.840
+kanal baru, dan cakupan baru.
+
+00:15:30.380 --> 00:15:32.260
+Poarisan kebijakan berarti jika organisasi Anda
+
+00:15:32.260 --> 00:15:33.880
+memperketar DLP atau merevisi retensi,
+
+00:15:33.980 --> 00:15:35.560
+agen Anda beradaptasi tanpa perlu refactor.
+
+00:15:36.040 --> 00:15:37.560
+Visibilitas seluruh organisasi di Teams,
+
+00:15:37.740 --> 00:15:38.420
+web, dan co-pilot
+
+00:15:38.420 --> 00:15:40.300
+memungkinkan Anda menjawab satu-satunya pertanyaan
+
+00:15:40.300 --> 00:15:41.280
+yang diperlukan eksekutif.
+
+00:15:41.660 --> 00:15:43.160
+Apa yang dilakukan agen-agen ini di tenan kita?
+
+00:15:43.900 --> 00:15:44.860
+Dengan telemetri SDK,
+
+00:15:45.080 --> 00:15:46.540
+Anda dapat mengorasikan peristiwa kanal,
+
+00:15:46.760 --> 00:15:47.240
+langkah agen,
+
+00:15:47.340 --> 00:15:48.720
+dan panggilan model dalam satu atap
+
+00:15:48.720 --> 00:15:49.840
+serta menyeting data sensitif
+
+00:15:49.840 --> 00:15:51.140
+sebelum log meninggalkan engklaaf.
+
+00:15:52.000 --> 00:15:52.800
+Sebelum kita lanjut,
+
+00:15:52.940 --> 00:15:54.640
+Anda perlu memahami realitas politisnya.
+
+00:15:55.220 --> 00:15:56.280
+Tim keamanan tidak akan pernah
+
+00:15:56.280 --> 00:15:57.720
+menyetujui sistem AI kustom
+
+00:15:57.720 --> 00:15:59.720
+yang tidak bisa buktikan fidelitas identitas
+
+00:15:59.720 --> 00:16:00.520
+tata kelola konten
+
+00:16:00.520 --> 00:16:01.660
+dan observabilitas operasional
+
+00:16:01.660 --> 00:16:02.460
+sejak hari pertama.
+
+00:16:03.040 --> 00:16:04.320
+Mereka akan mengambat Anda dan mereka benar.
+
+00:16:04.700 --> 00:16:05.740
+SDK ini tidak opsional
+
+00:16:05.740 --> 00:16:07.260
+karena SDK mengubah perdebatan tersebut
+
+00:16:07.260 --> 00:16:08.060
+menjadi konfigurasi.
+
+00:16:08.760 --> 00:16:09.780
+Anda menyambung depanangan masuk,
+
+00:16:09.880 --> 00:16:11.160
+Anda mewarisi hak istimewa paling rendah.
+
+00:16:12.120 --> 00:16:13.660
+Anda mendaftar melalui Azure Boat Service,
+
+00:16:13.980 --> 00:16:15.000
+Anda mewarisi kontrol kanal.
+
+00:16:15.720 --> 00:16:16.720
+Anda menampilkan konten
+
+00:16:16.720 --> 00:16:17.900
+melalui protokol aktivitas,
+
+00:16:18.020 --> 00:16:18.700
+purview, dan DLP
+
+00:16:18.700 --> 00:16:20.220
+dapat melihat serta menindak lanjutinya.
+
+00:16:20.940 --> 00:16:21.800
+Anda tidak perlu memohon,
+
+00:16:22.000 --> 00:16:22.820
+Anda cukup menunjukkannya.
+
+00:16:23.380 --> 00:16:24.720
+Jika ada satu hal yang harus diingat,
+
+00:16:24.820 --> 00:16:26.080
+identitas, perlindungan konten,
+
+00:16:26.180 --> 00:16:26.960
+dan pemantauan ancaman
+
+00:16:26.960 --> 00:16:28.100
+harus menjadi prioritas utama
+
+00:16:28.100 --> 00:16:28.720
+dalam agen Anda.
+
+00:16:29.260 --> 00:16:29.940
+SDK menjadikannya
+
+00:16:29.940 --> 00:16:30.920
+hal yang rutin dan otomatis.
+
+00:16:31.540 --> 00:16:32.700
+Kodil kustom Anda harus fokus
+
+00:16:32.700 --> 00:16:33.900
+pada penalaran dan alat
+
+00:16:33.900 --> 00:16:35.360
+bukan menciptakan ulang kepatuhan.
+
+00:16:36.400 --> 00:16:37.700
+Sekarang, mari kita bicara tentang
+
+00:16:37.700 --> 00:16:39.400
+cara tim menyambut asediri mereka sendiri
+
+00:16:39.400 --> 00:16:41.200
+dan cara menghindari bencana lambat itu.
+
+00:16:42.300 --> 00:16:43.700
+Jebakan umum dan cara menghindarinya.
+
+00:16:44.420 --> 00:16:45.640
+Membangun adapter kanal sendiri
+
+00:16:45.640 --> 00:16:46.620
+adalah cara tercepat
+
+00:16:46.620 --> 00:16:47.660
+untuk menciptakan roda
+
+00:16:47.660 --> 00:16:48.560
+berbentuk segitiga.
+
+00:16:49.280 --> 00:16:50.840
+Protokol aktivitas sudah mendefinisikan
+
+00:16:50.840 --> 00:16:51.980
+pesan, peristiwa, pengetikan,
+
+00:16:52.100 --> 00:16:53.020
+lampiran, dan kartu.
+
+00:16:54.140 --> 00:16:55.060
+Gunakan adapter SDK
+
+00:16:55.060 --> 00:16:56.060
+untuk teams Overland Web,
+
+00:16:56.140 --> 00:16:56.980
+Slack, dan Copilot Studio.
+
+00:16:57.440 --> 00:16:58.240
+Anda akan mendapatkan
+
+00:16:58.240 --> 00:16:59.120
+semantik yang konsisten
+
+00:16:59.120 --> 00:17:00.120
+alur persetujuan file
+
+00:17:00.120 --> 00:17:01.300
+dan deteksi kapabilitas
+
+00:17:01.300 --> 00:17:02.640
+tanpa tumpukan kasus ekstrem
+
+00:17:02.640 --> 00:17:03.660
+yang tak pernah selesai.
+
+00:17:04.220 --> 00:17:05.460
+Memperlakukan agen sebagai stateless
+
+00:17:05.460 --> 00:17:06.280
+adalah untuk sebetul setting.
+
+00:17:06.900 --> 00:17:07.720
+Multitekan memori.
+
+00:17:08.420 --> 00:17:09.640
+Pertahankan thread percakapan
+
+00:17:09.640 --> 00:17:10.440
+dan status turn
+
+00:17:10.440 --> 00:17:11.340
+menggunakan pola SDK
+
+00:17:11.340 --> 00:17:12.180
+agar klarifikasi,
+
+00:17:12.340 --> 00:17:13.560
+hasil alat, dan ID korelasi
+
+00:17:13.560 --> 00:17:14.560
+tetap ada saat failover
+
+00:17:14.560 --> 00:17:15.400
+dan load balancing.
+
+00:17:16.880 --> 00:17:18.140
+Tanpa status bersama,
+
+00:17:18.460 --> 00:17:19.620
+agen kitar Anda akan mengalami
+
+00:17:19.620 --> 00:17:20.540
+amnesia setiap kali
+
+00:17:20.540 --> 00:17:21.440
+lalu lintas melancar.
+
+00:17:22.100 --> 00:17:23.200
+Melakukan hargut logika model
+
+00:17:23.200 --> 00:17:23.720
+ke dalam handler
+
+00:17:23.720 --> 00:17:24.620
+akan menyatukan kognisi
+
+00:17:24.620 --> 00:17:25.140
+dengan transport.
+
+00:17:25.620 --> 00:17:26.760
+Isolasikan prom dan alat
+
+00:17:26.760 --> 00:17:27.480
+dibalik antarmuka
+
+00:17:27.480 --> 00:17:28.660
+yang dapat didaftarkan oleh SDK.
+
+00:17:29.080 --> 00:17:29.580
+Dengan begitu,
+
+00:17:29.760 --> 00:17:30.500
+Anda bisa menukar
+
+00:17:30.500 --> 00:17:31.220
+semantic kernel dengan
+
+00:17:31.220 --> 00:17:32.340
+Azure AI Founded Planners
+
+00:17:32.340 --> 00:17:33.060
+menguji OpenAI
+
+00:17:33.060 --> 00:17:33.840
+versus penyedia lain
+
+00:17:33.840 --> 00:17:34.780
+atau melakukan A-B test
+
+00:17:34.780 --> 00:17:35.440
+pada prompt system
+
+00:17:35.440 --> 00:17:36.060
+tanpa membongkar
+
+00:17:36.060 --> 00:17:37.040
+kode routing dan status Anda.
+
+00:17:37.200 --> 00:17:38.140
+Peningkatan harus terasa
+
+00:17:38.140 --> 00:17:39.160
+seperti mengganti bila pisau
+
+00:17:39.160 --> 00:17:40.020
+bukan membongkar pesawat
+
+00:17:40.020 --> 00:17:40.680
+saat sedang terbang.
+
+00:17:41.400 --> 00:17:42.680
+Melewati autentikasi pengguna
+
+00:17:42.680 --> 00:17:43.620
+dan menjalankan semuanya
+
+00:17:43.620 --> 00:17:44.700
+sebagai servis prinsipal
+
+00:17:44.700 --> 00:17:45.700
+akan meratakan izin
+
+00:17:45.700 --> 00:17:47.160
+dan menghilangkan auditabilitas.
+
+00:17:47.860 --> 00:17:48.700
+Terapkan handler masuk
+
+00:17:48.700 --> 00:17:49.400
+agar agen Anda
+
+00:17:49.400 --> 00:17:50.520
+dapat bertindak sebagai pengguna
+
+00:17:50.520 --> 00:17:51.300
+saat menyentuh aset
+
+00:17:51.300 --> 00:17:52.160
+yang terikat pada graph
+
+00:17:52.160 --> 00:17:52.840
+dan hanya kembali
+
+00:17:52.840 --> 00:17:53.660
+ke token aplikasi
+
+00:17:53.660 --> 00:17:54.680
+untuk operasi non-pengguna.
+
+00:17:55.140 --> 00:17:55.620
+Anda akan lulus
+
+00:17:55.620 --> 00:17:56.820
+pemeriksaan hak istimewa terkecil
+
+00:17:56.820 --> 00:17:57.640
+dan akhirnya bisa menjawab
+
+00:17:57.640 --> 00:17:58.540
+siapa yang melakukan apa
+
+00:17:58.540 --> 00:17:59.580
+kapan dan di bawah homo nasib.
+
+00:18:00.100 --> 00:18:01.300
+Mengabaikan semantik streaming
+
+00:18:01.300 --> 00:18:02.100
+akan menghasilkan
+
+00:18:02.100 --> 00:18:03.120
+UI yang terasa lamban
+
+00:18:03.120 --> 00:18:03.680
+dan amatir.
+
+00:18:04.280 --> 00:18:05.260
+Aktifkan streaming di SDK
+
+00:18:05.260 --> 00:18:06.320
+agar saluran yang mendukungnya
+
+00:18:06.320 --> 00:18:07.040
+menampilkan progres
+
+00:18:07.040 --> 00:18:07.600
+waktu nyata
+
+00:18:07.600 --> 00:18:08.740
+dan saluran yang tidak mendukungnya
+
+00:18:08.740 --> 00:18:09.700
+dapat menampilkan indikator
+
+00:18:09.700 --> 00:18:10.480
+mengantik serta pengiriman
+
+00:18:10.480 --> 00:18:11.380
+potongan data dengan lancar.
+
+00:18:11.940 --> 00:18:12.920
+Jangan memasukkan streamnya.
+
+00:18:13.000 --> 00:18:13.960
+Pengguna akan menyadarinya
+
+00:18:13.960 --> 00:18:14.620
+dan kepercanaan.
+
+00:18:15.060 --> 00:18:16.240
+Melewati Azure Boat Service
+
+00:18:16.240 --> 00:18:16.960
+untuk menghubungkan
+
+00:18:16.960 --> 00:18:17.980
+soket langsung bersaluran
+
+00:18:17.980 --> 00:18:18.760
+akan melipat gendakan
+
+00:18:18.760 --> 00:18:19.340
+mode kegagalan.
+
+00:18:19.920 --> 00:18:21.540
+ABS adalah broker persisten
+
+00:18:21.540 --> 00:18:22.720
+yang menghentikan protokol,
+
+00:18:23.060 --> 00:18:23.980
+menormalisasi aktivitas
+
+00:18:23.980 --> 00:18:24.540
+dan mengarahkan
+
+00:18:24.540 --> 00:18:25.060
+banyak saluran
+
+00:18:25.060 --> 00:18:26.000
+ke satu titik akhir.
+
+00:18:26.640 --> 00:18:26.880
+Gunakan.
+
+00:18:27.060 --> 00:18:28.520
+Tim Ops Anda akan berterima kasih
+
+00:18:28.520 --> 00:18:29.680
+saat pesan terkirim dengan Anda
+
+00:18:29.680 --> 00:18:30.700
+selama pengujian skala
+
+00:18:30.700 --> 00:18:31.400
+alih-alih menghilang
+
+00:18:31.400 --> 00:18:32.220
+ke dalam soket khusus
+
+00:18:32.220 --> 00:18:32.760
+yang bermasalah.
+
+00:18:33.460 --> 00:18:34.160
+Tidak ada tata kelola
+
+00:18:34.160 --> 00:18:35.100
+berarti agen bayangan.
+
+00:18:35.740 --> 00:18:36.680
+Daftarkan identitas,
+
+00:18:36.840 --> 00:18:37.760
+terapkan kebijakan purview
+
+00:18:37.760 --> 00:18:38.200
+dan DLP
+
+00:18:38.200 --> 00:18:39.220
+serta aktifkan lock audit
+
+00:18:39.220 --> 00:18:39.820
+sejak hari pertama.
+
+00:18:40.580 --> 00:18:41.520
+Jika tim kepatuhan Anda
+
+00:18:41.520 --> 00:18:42.300
+tidak dapat melakukan
+
+00:18:42.300 --> 00:18:43.280
+e-discovery percakapan
+
+00:18:43.280 --> 00:18:44.220
+atau melihat penegakan label
+
+00:18:44.220 --> 00:18:44.660
+pada output,
+
+00:18:44.780 --> 00:18:45.860
+peluncuran Anda sudah berakhir.
+
+00:18:48.760 --> 00:18:49.620
+bukan sesuatu untungan itu.
+
+00:18:50.180 --> 00:18:51.160
+Itu adalah pintu menuju produksi.
+
+00:18:51.480 --> 00:18:51.860
+Nah ini adalah
+
+00:18:51.860 --> 00:18:52.360
+daftar periksa
+
+00:18:52.360 --> 00:18:53.060
+yang harus Anda jalankan.
+
+00:18:54.100 --> 00:18:55.220
+Gunakan adapter SDK,
+
+00:18:55.580 --> 00:18:56.480
+pertahankan status,
+
+00:18:56.780 --> 00:18:57.700
+abstraksi kognisi,
+
+00:18:58.320 --> 00:18:58.940
+terapkan login,
+
+00:18:59.120 --> 00:19:00.180
+aktifkan streaming,
+
+00:19:00.500 --> 00:19:01.440
+daftar melalui ABS
+
+00:19:01.440 --> 00:19:02.760
+dan hubungkan purview DLP.
+
+00:19:03.400 --> 00:19:03.840
+Lakukan itu
+
+00:19:03.840 --> 00:19:04.560
+dan jebakan umum.
+
+00:19:04.680 --> 00:19:05.100
+Tidak akan lagi
+
+00:19:05.100 --> 00:19:05.940
+menjadi masalah bagi itu.
+
+00:19:06.620 --> 00:19:07.260
+Oleh tingkat lanjut,
+
+00:19:07.520 --> 00:19:07.760
+skala,
+
+00:19:07.880 --> 00:19:08.420
+ekstensibilitas
+
+00:19:08.420 --> 00:19:09.580
+dan penggunaan perusahaan
+
+00:19:09.580 --> 00:19:10.080
+yang nyata.
+
+00:19:10.760 --> 00:19:11.440
+Katalog alat adalah
+
+00:19:11.440 --> 00:19:12.360
+cara Anda menjaga kekuatan
+
+00:19:12.360 --> 00:19:13.040
+tanpa kekacauan.
+
+00:19:13.440 --> 00:19:14.160
+Definisikan alat
+
+00:19:14.160 --> 00:19:15.060
+dengan cakupan peran
+
+00:19:15.060 --> 00:19:16.320
+dan tingkat sensitivitas data.
+
+00:19:16.980 --> 00:19:18.000
+Perencana mengusulkan,
+
+00:19:18.140 --> 00:19:19.200
+kebijakan Anda menyetujui
+
+00:19:19.200 --> 00:19:20.280
+berdasarkan label audiens
+
+00:19:20.280 --> 00:19:20.800
+dan tindakan.
+
+00:19:21.280 --> 00:19:22.140
+Tetakan baca kalender
+
+00:19:22.140 --> 00:19:23.300
+untuk sebagian besar pengguna,
+
+00:19:23.460 --> 00:19:24.280
+kirim email ke pemilik
+
+00:19:24.280 --> 00:19:25.560
+dengan konfirmasi eksplisit
+
+00:19:25.560 --> 00:19:26.380
+dan ekspor catatan
+
+00:19:26.380 --> 00:19:27.100
+hanya untuk admin.
+
+00:19:27.660 --> 00:19:28.160
+Alat tersimpan
+
+00:19:28.160 --> 00:19:28.700
+dalam registri,
+
+00:19:29.080 --> 00:19:29.780
+agen tidak pernah bekerja
+
+00:19:29.780 --> 00:19:30.400
+secara bebas tanpa.
+
+00:19:30.740 --> 00:19:31.520
+Komposisi keterampilan
+
+00:19:31.520 --> 00:19:32.360
+melalui Anda melampaui trik
+
+00:19:32.360 --> 00:19:33.300
+satu kali putaran yang sedang.
+
+00:19:33.540 --> 00:19:34.180
+Gunakan urutan
+
+00:19:34.180 --> 00:19:35.120
+yang dipimpin perencana
+
+00:19:35.120 --> 00:19:36.060
+dengan percobaan ulang
+
+00:19:36.060 --> 00:19:36.900
+dan pemutus arus
+
+00:19:36.900 --> 00:19:37.680
+di edge orkestrat.
+
+00:19:38.220 --> 00:19:39.080
+Alat eksternal bisa gagal,
+
+00:19:39.440 --> 00:19:40.040
+sudah menjadi hobi.
+
+00:19:40.040 --> 00:19:41.680
+Bungkus dengan desain idem poten
+
+00:19:41.680 --> 00:19:42.840
+dan jeda eksponensial.
+
+00:19:43.460 --> 00:19:44.180
+Jaga alur pemikiran
+
+00:19:44.180 --> 00:19:44.620
+tetap pribadi.
+
+00:19:45.180 --> 00:19:46.000
+Kembalikan rasional
+
+00:19:46.000 --> 00:19:46.540
+yang diringkas
+
+00:19:46.540 --> 00:19:47.380
+bukan penalaran mentah.
+
+00:19:47.940 --> 00:19:48.660
+Anda butuh transparansi
+
+00:19:48.660 --> 00:19:49.580
+bukan terapi kebocoran perong.
+
+00:19:50.320 --> 00:19:51.400
+Paparan lintas penyewa
+
+00:19:51.400 --> 00:19:52.340
+menuntut paranoia
+
+00:19:52.340 --> 00:19:53.360
+dengan instrumentasi.
+
+00:19:54.220 --> 00:19:54.860
+Untuk skenario
+
+00:19:54.860 --> 00:19:55.960
+tanpa autentikasi
+
+00:19:55.960 --> 00:19:56.960
+atau B2B,
+
+00:19:57.240 --> 00:19:58.160
+jalankan sesi yang dipantau
+
+00:19:58.160 --> 00:19:58.980
+dengan berbatas laju
+
+00:19:58.980 --> 00:19:59.860
+klasifikasi konten
+
+00:19:59.860 --> 00:20:00.660
+dan pengawasan purview
+
+00:20:00.660 --> 00:20:01.520
+pada input dan output.
+
+00:20:02.620 --> 00:20:03.760
+Identitas menulikan tindakan.
+
+00:20:04.260 --> 00:20:04.640
+Sesi anonim
+
+00:20:04.640 --> 00:20:05.580
+membaca dokumen publik
+
+00:20:05.580 --> 00:20:06.520
+bukan email pribadi.
+
+00:20:07.200 --> 00:20:08.040
+Setiap giliran eksternal
+
+00:20:08.040 --> 00:20:08.980
+harus memancarkan peristiwa
+
+00:20:08.980 --> 00:20:09.960
+yang dapat diaudit atau tidak.
+
+00:20:10.420 --> 00:20:11.080
+Observabilitas adalah
+
+00:20:11.080 --> 00:20:11.780
+hal yang tidak bisa ditahu.
+
+00:20:12.420 --> 00:20:13.540
+Korelasikan peristiwa saluran,
+
+00:20:13.660 --> 00:20:14.140
+langkah agen,
+
+00:20:14.280 --> 00:20:14.800
+panggilan model,
+
+00:20:14.940 --> 00:20:15.580
+dan pemanggilan alat
+
+00:20:15.580 --> 00:20:16.620
+dengan satu ID pelacakan.
+
+00:20:17.640 --> 00:20:18.840
+Samarkan fragment sensitif
+
+00:20:18.840 --> 00:20:19.740
+di edge sebelum rok
+
+00:20:19.740 --> 00:20:20.660
+meninggalkan enklaf.
+
+00:20:21.280 --> 00:20:22.160
+Dashboard harus menjawab
+
+00:20:22.160 --> 00:20:23.480
+tiga pertanyaan secara instan.
+
+00:20:23.860 --> 00:20:24.740
+Kemana waktu berlalu,
+
+00:20:25.020 --> 00:20:26.000
+dari mana kesalahan berasal,
+
+00:20:26.060 --> 00:20:26.780
+dan siapa yang berwenang
+
+00:20:26.780 --> 00:20:27.320
+melakukan apa.
+
+00:20:27.940 --> 00:20:28.580
+Jika Anda tidak bisa
+
+00:20:28.580 --> 00:20:29.200
+meneskelakannya.
+
+00:20:29.800 --> 00:20:30.860
+Migasi dari Teams FX
+
+00:20:30.860 --> 00:20:31.760
+ada jalurnya.
+
+00:20:32.580 --> 00:20:33.380
+Mulainya dengan menempatkan
+
+00:20:33.380 --> 00:20:34.040
+pot Anda yang ada
+
+00:20:34.040 --> 00:20:35.040
+di depan ABS jika belum.
+
+00:20:35.960 --> 00:20:36.840
+Ganti adapter custom
+
+00:20:36.840 --> 00:20:38.380
+secara bertahap dengan adapter SDK
+
+00:20:38.380 --> 00:20:39.100
+pindahkan status
+
+00:20:39.100 --> 00:20:40.460
+ke pola status giliran SDK
+
+00:20:40.460 --> 00:20:42.000
+dan isolasi di balik antarmuka.
+
+00:20:43.040 --> 00:20:43.840
+Gunakan template SDK
+
+00:20:43.840 --> 00:20:45.000
+untuk menyiapkan rute paralel
+
+00:20:45.000 --> 00:20:45.940
+dan mengalihkan lalu lintas
+
+00:20:45.940 --> 00:20:46.520
+secara bertahap.
+
+00:20:47.220 --> 00:20:47.980
+Jam penghentian dukungan
+
+00:20:47.980 --> 00:20:48.500
+tidak akan menulis.
+
+00:20:49.100 --> 00:20:49.960
+Rencana refaktor Anda pun
+
+00:20:49.960 --> 00:20:50.540
+seharusnya didermin.
+
+00:20:51.320 --> 00:20:52.200
+Tata kelola biaya penting
+
+00:20:52.200 --> 00:20:52.860
+saat CFO Anda
+
+00:20:52.860 --> 00:20:54.260
+mengetahui berapa biaya jendela konteks.
+
+00:20:54.780 --> 00:20:55.620
+Simpan cacah embedding,
+
+00:20:55.740 --> 00:20:56.600
+hapus duplikasi pengambilan
+
+00:20:56.600 --> 00:20:57.560
+dan gunakan kembali konteks
+
+00:20:57.560 --> 00:20:57.960
+yang kependek
+
+00:20:57.960 --> 00:20:58.740
+di seluruh giliran Anda.
+
+00:20:59.500 --> 00:21:00.300
+Batasi panggilan alat
+
+00:21:00.300 --> 00:21:00.820
+dengan jeda
+
+00:21:00.820 --> 00:21:01.840
+dan batasi generasi
+
+00:21:01.840 --> 00:21:02.680
+dengan enggaran token
+
+00:21:02.680 --> 00:21:03.680
+yang wajar bermaksud.
+
+00:21:04.460 --> 00:21:04.900
+Jalan pintas
+
+00:21:04.900 --> 00:21:05.760
+yang tidak diajarkan silap.
+
+00:21:06.320 --> 00:21:07.320
+Klasifikasikan permintaan
+
+00:21:07.320 --> 00:21:07.840
+lebih awal
+
+00:21:07.840 --> 00:21:09.080
+dan arahkan prompt tingkat FAQ
+
+00:21:09.080 --> 00:21:09.960
+ke model yang lebih murah
+
+00:21:09.960 --> 00:21:11.040
+tanpa menyentuh perencana premium.
+
+00:21:11.780 --> 00:21:12.480
+Ketahanan di bawah-boban
+
+00:21:12.480 --> 00:21:13.600
+adalah desain bukan keberuntungan.
+
+00:21:14.300 --> 00:21:15.360
+Gunakan persistensi sesi
+
+00:21:15.360 --> 00:21:16.040
+jika tersedia
+
+00:21:16.040 --> 00:21:17.200
+tetapi asumsikan Anda
+
+00:21:17.200 --> 00:21:17.920
+akan berpindah not
+
+00:21:17.920 --> 00:21:18.500
+di tengah giliran.
+
+00:21:19.080 --> 00:21:19.640
+Itulah sebabnya
+
+00:21:19.640 --> 00:21:20.880
+status berada di luar proses.
+
+00:21:21.440 --> 00:21:22.560
+Buat alat menjadi idem poten
+
+00:21:22.560 --> 00:21:23.440
+dengan ID permintaan
+
+00:21:23.440 --> 00:21:24.100
+agar pecoban ulang
+
+00:21:24.100 --> 00:21:25.320
+tidak menagih kartu kredit ganda
+
+00:21:25.320 --> 00:21:26.140
+atau mengirim ulang email.
+
+00:21:26.620 --> 00:21:27.440
+Penjaga konkurensi
+
+00:21:27.440 --> 00:21:28.220
+mencegah dua giliran
+
+00:21:28.220 --> 00:21:29.260
+menimpa sumber daya yang sama.
+
+00:21:29.980 --> 00:21:30.460
+Pengujian harus
+
+00:21:30.460 --> 00:21:31.800
+mensimulasikan lalu lintas mendadak,
+
+00:21:31.960 --> 00:21:32.660
+kemandaman sebagian
+
+00:21:32.660 --> 00:21:33.620
+dan ketergantungan lambat
+
+00:21:33.620 --> 00:21:34.880
+karena produksi akan mengalaminya.
+
+00:21:35.620 --> 00:21:36.040
+Setelah Anda
+
+00:21:36.040 --> 00:21:36.820
+menguasai katalog,
+
+00:21:36.940 --> 00:21:37.400
+komposisi,
+
+00:21:37.580 --> 00:21:38.440
+kontrol lintas penyewa,
+
+00:21:38.580 --> 00:21:39.340
+observabilitas,
+
+00:21:39.500 --> 00:21:40.240
+kebersihan migrasi,
+
+00:21:40.340 --> 00:21:40.880
+pengungkit biaya,
+
+00:21:41.000 --> 00:21:42.120
+dan ketahanan agen Anda
+
+00:21:42.120 --> 00:21:43.140
+bukan lagi sekadar demo
+
+00:21:43.140 --> 00:21:44.260
+melainkan infrastruktur.
+
+00:21:45.540 --> 00:21:45.860
+Dan ya,
+
+00:21:45.960 --> 00:21:46.640
+disinilah SDK
+
+00:21:46.640 --> 00:21:48.120
+membuktikan nilainya.
+
+00:21:48.700 --> 00:21:49.560
+Identitas, status,
+
+00:21:49.780 --> 00:21:50.900
+protokol, dan semantik saluran
+
+00:21:50.900 --> 00:21:51.720
+yang terstandarisasi
+
+00:21:51.720 --> 00:21:52.540
+agar pelacanggi Anda
+
+00:21:52.540 --> 00:21:53.180
+berdiri di atas
+
+00:21:53.180 --> 00:21:56.080
+pembunuh diam-diam,
+
+00:21:56.200 --> 00:21:57.060
+status, identitas,
+
+00:21:57.180 --> 00:21:57.860
+dan semantik saluran.
+
+00:21:58.440 --> 00:21:59.260
+Anda bisa memasukkan prompt.
+
+00:21:59.720 --> 00:22:00.740
+Anda tidak bisa memasukkan
+
+00:22:00.740 --> 00:22:01.320
+identitas saluran
+
+00:22:01.320 --> 00:22:02.340
+yang terikat identitas.
+
+00:22:03.080 --> 00:22:04.380
+Tanpa token lingkup pengguna,
+
+00:22:04.540 --> 00:22:05.460
+agen Anda akan bertindak
+
+00:22:05.460 --> 00:22:06.540
+berlebihan atau diblokir
+
+00:22:06.540 --> 00:22:07.460
+dan jejak audit Anda
+
+00:22:07.460 --> 00:22:07.980
+menjadi bruta.
+
+00:22:08.540 --> 00:22:09.960
+Tanpa status percakapan bersama,
+
+00:22:10.140 --> 00:22:11.000
+logika multigiliran
+
+00:22:11.000 --> 00:22:11.660
+akan terpecah
+
+00:22:11.660 --> 00:22:12.300
+saat word balancer
+
+00:22:12.300 --> 00:22:13.200
+menjalankan tugasnya.
+
+00:22:13.700 --> 00:22:15.040
+Tanpa pengiriman yang sadar kanal,
+
+00:22:15.220 --> 00:22:15.920
+streaming kartu
+
+00:22:15.920 --> 00:22:16.720
+dan semantik pengetikan
+
+00:22:16.720 --> 00:22:17.580
+akan terdegradasi
+
+00:22:17.580 --> 00:22:18.420
+menjadi perilaku acak.
+
+00:22:19.120 --> 00:22:20.820
+SDK memecahkan ketiga kendala ini
+
+00:22:20.820 --> 00:22:21.420
+secara desain,
+
+00:22:21.540 --> 00:22:22.460
+bertindak sebagai pengguna
+
+00:22:22.460 --> 00:22:22.960
+dengan audit,
+
+00:22:23.080 --> 00:22:24.000
+mempertahankan multigiliran
+
+00:22:24.000 --> 00:22:24.440
+antar node,
+
+00:22:24.560 --> 00:22:25.400
+dan beradaptasi dengan
+
+00:22:25.400 --> 00:22:26.020
+kemampuan kanal
+
+00:22:26.020 --> 00:22:26.900
+secara otomatis.
+
+00:22:27.520 --> 00:22:28.360
+Itulah bagian yang terlewatkan
+
+00:22:28.360 --> 00:22:29.260
+semua orang saat menyambungkan
+
+00:22:29.260 --> 00:22:30.180
+panggilan LLM secara.
+
+00:22:30.580 --> 00:22:31.420
+Kirim kognisi di atas
+
+00:22:31.420 --> 00:22:32.060
+fondasi yang kuat
+
+00:22:32.060 --> 00:22:33.240
+bukan hanya berdasarkan asumsi
+
+00:22:33.240 --> 00:22:34.240
+atau produksi akan memberi
+
+00:22:34.240 --> 00:22:34.900
+Anda pelajar lemah.
+
+00:22:35.720 --> 00:22:36.240
+Poin utama,
+
+00:22:36.580 --> 00:22:37.440
+di M365,
+
+00:22:37.600 --> 00:22:38.020
+keamanan,
+
+00:22:38.200 --> 00:22:39.040
+fidelitas identitas,
+
+00:22:39.180 --> 00:22:40.100
+dan perilaku multikanal
+
+00:22:40.100 --> 00:22:41.140
+bukanlah sekadar fitur.
+
+00:22:41.680 --> 00:22:42.540
+Itu adalah syarat dasar
+
+00:22:42.540 --> 00:22:43.220
+yang disediakan oleh
+
+00:22:43.220 --> 00:22:44.500
+SDK agen secara default.
+
+00:22:45.440 --> 00:22:46.280
+Langkah selanjutnya,
+
+00:22:46.460 --> 00:22:47.240
+buat kerangka agen,
+
+00:22:47.420 --> 00:22:48.140
+pasang penangan mas
+
+00:22:48.140 --> 00:22:49.340
+untuk bertindak sebagai pengguna,
+
+00:22:49.520 --> 00:22:50.540
+daftar ke Azure Bot Service,
+
+00:22:50.660 --> 00:22:51.280
+dan aktifkan tim
+
+00:22:51.280 --> 00:22:51.920
+serta co-pilot
+
+00:22:51.920 --> 00:22:53.000
+dengan status yang tersimpan.
+
+00:22:53.760 --> 00:22:54.460
+Jika ini membuat Anda
+
+00:22:54.460 --> 00:22:55.300
+lebih cepat dan lebih aman,
+
+00:22:55.400 --> 00:22:55.860
+silakan berhenti.
+
+00:22:56.260 --> 00:22:57.400
+Dengarkan podcast berikutnya
+
+00:22:57.400 --> 00:22:58.320
+tentang batasan AI
+
+00:22:58.320 --> 00:22:59.360
+yang diberlakukan preview
+
+00:22:59.360 --> 00:23:00.080
+agar output Anda
+
+00:23:00.080 --> 00:23:00.760
+mematuhi label,
+
+00:23:00.900 --> 00:23:01.240
+DLP,
+
+00:23:01.440 --> 00:23:02.060
+dan e-discovery
+
+00:23:02.060 --> 00:23:02.780
+sejak hari pertama.
+
+00:23:03.100 --> 00:23:03.980
+Tim kepatuan Anda tidak akan.

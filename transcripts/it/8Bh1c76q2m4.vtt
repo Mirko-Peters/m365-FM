@@ -1,0 +1,565 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:03.420
+Oggi parliamo di qualcosa di cui quasi tutti hanno sentito parlare ma che nessuno sa spiegare
+
+00:00:03.420 --> 00:00:07.400
+Kubernetes. È fonte di confusione perché risolve un problema che la maggior parte delle persone non
+
+00:00:07.400 --> 00:00:10.780
+vede finché non ci sbatte. Tutti sanno che è importante ma se chiedi cosa faccia riceverai
+
+00:00:10.780 --> 00:00:14.360
+solo sguardi smarriti. Non è un sostituto di Docker né un sistema operativo cloud anche se
+
+00:00:14.360 --> 00:00:18.220
+spesso la gente lo pensa. La confusione è comprensibile dato che Kubernetes risolve un
+
+00:00:18.220 --> 00:00:21.480
+problema di cui non conosci l'esistenza finché non lo offload. È uno strumento che diventa
+
+00:00:21.480 --> 00:00:25.240
+essenziale una volta che hai più di una manciata di container da gestire. Alla fine di questo
+
+00:00:25.240 --> 00:00:29.380
+episodio capirai cos'è davvero Kubernetes, come si integra con i container e perché
+
+00:00:29.380 --> 00:00:33.380
+Azure Kubernetes Service lo rende pratico per i team che non vogliono costruire tutto
+
+00:00:33.380 --> 00:00:39.220
+da zero. Prendi il tuo caffè e iniziamo. Problema prima dei container. Torniamo al problema.
+
+00:00:39.780 --> 00:00:43.100
+Immagina un'azienda di software di dieci anni fa. Hai alcune applicazioni da seguire quindi
+
+00:00:43.100 --> 00:00:47.140
+compri server, installi sistemi operativi e distribuisci tutto manualmente. Ogni app
+
+00:00:47.140 --> 00:00:51.080
+ottiene la sua macchina e non puoi condividere le risorse tra loro. Se un'app ha bisogno di
+
+00:00:51.080 --> 00:00:54.360
+molta memoria un'altra ne usa malapena ottengono comunque il proprio server ciascuna.
+
+00:00:55.100 --> 00:00:59.360
+I server giravano forse al 20% la capacità ma non potevi consolidare
+
+00:00:59.380 --> 00:01:03.960
+perché le applicazioni entravano in conflitto per le dipendenze. Finivi con una stanza piena
+
+00:01:03.960 --> 00:01:07.640
+di server, ognuno che lavorava malapena consumando energia e raffreddamento e tutti i bisognosi
+
+00:01:07.640 --> 00:01:13.040
+di manutenzione costante. Un'app richiede python 3.8, un'altra richiede python 3.8. La necessità
+
+00:01:13.040 --> 00:01:15.920
+di una libreria più vecchia, un'altra di quella più recente. Non puoi eseguirle sulla stessa
+
+00:01:15.920 --> 00:01:19.120
+macchina senza rompere qualcosa, quindi compri più server e paghi per hardware che rimane
+
+00:01:19.120 --> 00:01:23.100
+per lo più inattivo. Le macchine virtuali hanno aiutato un po' permettendo di dividere un server
+
+00:01:23.100 --> 00:01:27.020
+fisico in pezzi più piccoli, ognuno con il proprio sistema operativo, ma ogni VM è pesante,
+
+00:01:27.020 --> 00:01:31.100
+con un SO completo che occupa spazio su disco e memoria e impiega minuti per avviarsi. E
+
+00:01:31.100 --> 00:01:34.540
+dovevi configurare ognuna separatamente, il che richiedeva molto lavoro. Dovevi ancora
+
+00:01:34.540 --> 00:01:39.260
+gestire tutti quei sistemi operativi, applicare patch, aggiornare e proteggerli. I team avevano
+
+00:01:39.260 --> 00:01:43.000
+bisogno di qualcosa di più leggero e portatile, un modo per pacchettizzare un'applicazione
+
+00:01:43.000 --> 00:01:46.520
+con tutto ciò che serve per funzionare senza il sovraccarico di una macchina virtuale completa
+
+00:01:46.520 --> 00:01:49.500
+che potesse essere spostata facilmente tra le macchie. È qui che sono entrati in gioco i container.
+
+00:01:49.980 --> 00:01:53.740
+Cosa sono effettivamente i container? Un container è un piccolo pacchetto che include la tua
+
+00:01:53.740 --> 00:01:57.280
+applicazione e tutto ciò che le serve per funzionare. Ciò significa che il codice, il
+
+00:01:57.280 --> 00:02:00.660
+rantame, le librerie e i file di configurazione sono tutti raggruppati in un'unica unità.
+
+00:02:01.060 --> 00:02:04.400
+Immaginalo come un container per il trasporto merci ma per solo. Un container per spedizioni
+
+00:02:04.400 --> 00:02:08.140
+può viaggiare su un camion, un treno o una nave e il container in sé rimane lo stesso.
+
+00:02:08.820 --> 00:02:12.340
+Il tuo software container funziona allo stesso modo. Lo crea una volta e viene eseguito allo
+
+00:02:12.340 --> 00:02:16.260
+stesso modo sul tuo portatile, sul server di test e nell'ambiente di produzione. La differenza
+
+00:02:16.260 --> 00:02:20.680
+chiave tra container e macchine virtuali è la loro efficienza. Una macchina virtuale esegue il
+
+00:02:20.680 --> 00:02:23.760
+proprio sistema operativo completo, quindi ogni VM ha il proprio kernel, file di sistema
+
+00:02:23.760 --> 00:02:28.140
+e tutto il resto. Un container condivide il sistema operativo dell'host. È solo un processo
+
+00:02:28.140 --> 00:02:31.840
+con la propria visione isolata del mondo. Ciò significa che i container si avviano in pochi
+
+00:02:31.840 --> 00:02:35.800
+secondi, non minuti. Usano meno memoria, puoi caricarne molti di più su una singola
+
+00:02:35.800 --> 00:02:40.040
+macchina. Docker ha reso i container popolari, offrendo agli sviluppatori un modo semplice per
+
+00:02:40.040 --> 00:02:43.840
+crearli ed eseguirli con un solo comando. Improvvisamente il problema del suo mio computer
+
+00:02:43.840 --> 00:02:47.660
+funziona ha iniziato a scomparire. Se la tua applicazione gira in un container sul tuo
+
+00:02:47.660 --> 00:02:52.300
+portatile, girerà allo stesso modo sul server. L'ambiente è coerente ovunque, ma i container
+
+00:02:52.300 --> 00:02:56.100
+risolvono un problema e ne creano un altro. Con una manciata di container, la gestione
+
+00:02:56.100 --> 00:03:00.920
+manuale funziona bene. Puoi avviarli, fermarli, tenerli traccia da solo. Ma cosa succede quando
+
+00:03:00.920 --> 00:03:05.280
+non hai centinaia? Devi decidere quale server esegue quale container, riavviare quelli guasti,
+
+00:03:05.400 --> 00:03:09.680
+collegarli tra loro e scalarli quando il traffico aumenta. Questa è una nuova sfida ed è esattamente
+
+00:03:09.680 --> 00:03:14.020
+qui che entra in gioco Kubernetes. Problema dell'orchestrazione. Quindi fatto funzionare i container,
+
+00:03:14.140 --> 00:03:16.920
+hai impacchettato la tua applicazione e gira in modo coerente ovunque, la vita è bella.
+
+00:03:16.920 --> 00:03:22.280
+Ma solo per un po'. Con 10 o 20 container puoi gestire le cose manualmente. Sai quale server
+
+00:03:22.280 --> 00:03:26.460
+esegue quale container, puoi riavviare qualcosa se si blocca e puoi aggiornare alcune cose qua e
+
+00:03:26.460 --> 00:03:32.060
+là. È gestibile. Ma poi la tua applicazione cresce. Passi ai microservizi. Quindi invece di un'unica
+
+00:03:32.060 --> 00:03:36.260
+grande applicazione ne hai 20 più piccole. Ognuna necessita di più copie in esecuzione per
+
+00:03:36.260 --> 00:03:41.560
+l'affidabilità e ora ti ritrovi con 200 container. La gestione manuale non funziona più. Devi decidere
+
+00:03:41.560 --> 00:03:45.120
+quale server esegue ogni container, riavviare i container quando falliscono e connetterli affinché
+
+00:03:45.120 --> 00:03:49.220
+possano comunicare. Devi anche scalare verso l'alto quando il traffico aumenta. Magari
+
+00:03:49.220 --> 00:03:52.340
+durante una vendita o il lancio di un prodotto è scalare verso il basso quando le cose si
+
+00:03:52.340 --> 00:03:56.420
+calmano. E devi implementare gli aggiornamenti senza tempi di inattività, il che significa
+
+00:03:56.420 --> 00:03:59.820
+sostituire i vecchi container con quelli nuovi uno alla volta con attenzione, senza rompere
+
+00:03:59.820 --> 00:04:03.540
+nulla. Questi sono problemi di orchestrazione ed è esattamente ciò che Kubernetes è stato
+
+00:04:03.540 --> 00:04:07.360
+costruito per risolvere. Kubernetes è una piattaforma open source che automatizza il deployment,
+
+00:04:07.540 --> 00:04:11.320
+lo scaling e la gestione di applicazioni containerizzate. Pensalo come il sistema operativo
+
+00:04:11.320 --> 00:04:15.460
+del tuo datacenter. Proprio come Windows o Linux gestiscono le risorse su un singolo
+
+00:04:15.460 --> 00:04:19.680
+computer come CPU, memoria, disco, Kubernetes gestisce le risorse su tutti i tuoi server.
+
+00:04:20.760 --> 00:04:24.360
+Clatta tutte le tue macchine come un unico grande pool di potenza di carico. Tu gli dici
+
+00:04:24.360 --> 00:04:28.340
+cosa vuoi eseguire, lui capisce dove metterlo, come mantenerlo attivo e come collegarlo a tutto
+
+00:04:28.340 --> 00:04:34.040
+il resto. Concetti chiave, pod, nodi, cluster. Vediamo come funziona effettivamente Kubernetes.
+
+00:04:34.760 --> 00:04:38.340
+L'unità più piccola in Kubernetes si chiama pod. Un pod racchiude uno più container.
+
+00:04:38.340 --> 00:04:42.020
+I container all'interno dello stesso pod condividono archiviazione e rete, così possono
+
+00:04:42.020 --> 00:04:45.220
+comunicare tra loro tramite localhost. Puoi pensare a un pod come a una singola unità
+
+00:04:45.220 --> 00:04:48.800
+di deployment. Non esegui il deployment dei container direttamente in Kubernetes. Esegui
+
+00:04:48.800 --> 00:04:52.440
+il deployment dei pod. I pod non funzionano da soli, vengono eseguiti sui nodi. Un nodo
+
+00:04:52.440 --> 00:04:57.160
+è un server fisico virtuale che fa parte del tuo cluster Kubernetes. Ogni nodo esegui il
+
+00:04:57.160 --> 00:05:00.940
+software necessario per far girare i pod, oltre ad altre cose che vedremo tra poco. Cluster è
+
+00:05:00.940 --> 00:05:05.040
+l'insieme di tutti i nodi gestiti come un unico sistema unificato. In termini semplici,
+
+00:05:05.040 --> 00:05:08.680
+un pod è la tua applicazione, un nodo dove viene eseguita e il cluster è l'intero
+
+00:05:08.680 --> 00:05:12.720
+ambiente. I pod sono effimeri. Possono essere creati, distrutti o spostati in qualsiasi
+
+00:05:12.720 --> 00:05:16.500
+modo. Progettato così. Se un nodo si guasta, Kubernetes sposta i pod su un altro. Per lo
+
+00:05:16.500 --> 00:05:20.260
+scaling verso l'alto crea nuovi pod. E quando un pod si arresta in modo anomalo, viene sostituito
+
+00:05:20.260 --> 00:05:24.060
+automaticamente. Il sistema considera i pod come temporane. Ma se i pod vanno e vengono,
+
+00:05:24.160 --> 00:05:27.280
+hai bisogno di un modo per comunicare con uno. Invece di parlare direttamente con un pod,
+
+00:05:27.420 --> 00:05:30.960
+parli con un servizio. Un servizio fornisce un indirizzo di rete stabile che è in strada
+
+00:05:30.960 --> 00:05:34.560
+del traffico verso i pod corretti, anche se i pod cambiano. Imagine un hotel. Il numero
+
+00:05:34.560 --> 00:05:38.020
+di telefono dell'hotel è il servizio. Le stanze cambiano ospiti continuamente, ma il
+
+00:05:38.020 --> 00:05:41.180
+numero di telefono rimane lo stesso. Chiami la reception e loro in strada non la tua chiamata
+
+00:05:41.180 --> 00:05:45.280
+alla stanza. Esattamente ciò che fa un servizio in Kubernetes. Ti fornisce un indirizzo fisso
+
+00:05:45.280 --> 00:05:50.420
+che punta sempre ai pod che attualmente eseguono la tua applicazione. Il control plane, il cervello
+
+00:05:50.420 --> 00:05:55.400
+del cluster. Quindi iPod, nodi, on cluster. La domanda è chi decide cosa viene eseguito
+
+00:05:55.400 --> 00:05:59.500
+dove. Questo è il compito del control plane. Ogni cluster Kubernetes ne ha uno ed è il cervello
+
+00:05:59.500 --> 00:06:03.220
+dell'intera operazione. Qui vengono prese tutte le decisioni. Control plane è composta
+
+00:06:03.220 --> 00:06:06.880
+da versi remei. Il primo è l'API server, che funge da porta d'ingresso per il tuo cluster.
+
+00:06:07.220 --> 00:06:10.900
+Ogni comando è inviato a Kubernetes che provenga dalla riga di comando, da una dashboard o da
+
+00:06:10.900 --> 00:06:15.560
+uno script automatizzato passa attraverso l'API server. Autentica la tua richiesta. Verifica
+
+00:06:15.560 --> 00:06:20.160
+se sei autorizzato a procedere e la trasmette al componente corretto. Nulla accade in Kubernetes
+
+00:06:20.160 --> 00:06:25.020
+senza passare prima dall'API server. Segue lo scheduler che decide su quale nodo eseguire
+
+00:06:25.020 --> 00:06:29.280
+ogni pod. Quando dici voglio che questa applicazione sia in esecuzione, lo scheduler analizza
+
+00:06:29.280 --> 00:06:33.760
+tutti i nodi disponibili, controlla le risorse come CPU, memoria e spazio su disco e sceglie
+
+00:06:33.760 --> 00:06:37.200
+il più adatto e sceglie il più adatto. È come un direttore d'albergo che assegna le
+
+00:06:37.200 --> 00:06:40.440
+camere in base alle esigenze di ogni ospite. Un ospite con molti bagagli riceve una stanza
+
+00:06:40.440 --> 00:06:43.460
+più grande, mentre un'applicazione leggera ottiene un nodo più piccolo con capacità
+
+00:06:43.460 --> 00:06:47.660
+disponibile. Poi c'è il controller manager. Questo componente monitora il cluster e assicura
+
+00:06:47.660 --> 00:06:51.160
+che lo stato effettivo corrisponda a quello dichiarato. Hai richiesto l'esecuzione di
+
+00:06:51.160 --> 00:06:54.920
+tre copie della tua web app. Controller manager verifica che vi siano effettivamente tre copie
+
+00:06:54.920 --> 00:06:59.320
+in esecuzione. Se una si arresta, se ne accorge, ne avvia una sostitutiva. Se qualcuno elimina
+
+00:06:59.320 --> 00:07:03.260
+accidentalmente un pod, ne crea uno nuovo. È il componente che mantiene il tuo cluster
+
+00:07:03.260 --> 00:07:08.960
+coerente. Infine c'è etcd, che è il database del cluster. Archivia tutto, cosa è in esecuzione,
+
+00:07:09.240 --> 00:07:14.140
+dove si trova e come è configurato. È la fonte di verità per l'intero cluster. Se l'API
+
+00:07:14.140 --> 00:07:18.300
+server è la porta d'ingresso, etcd è l'archivio nel retroufficio dove vengono conservati tutti
+
+00:07:18.300 --> 00:07:22.240
+i documenti. Il bello di questo design è che tu descrivi ciò che vuoi e Kubernetes trova
+
+00:07:22.240 --> 00:07:25.980
+il modo di realizzarlo. Non gli dici come fare le cose, gli dici come dovrebbe apparire
+
+00:07:25.980 --> 00:07:29.500
+il risultato finale. Questo è il modello dichiarativo ed è l'idea centrale dietro
+
+00:07:29.500 --> 00:07:35.040
+tutto ciò che fa Kubernetes. Workload, deployment, servizi e scalabilità. Parliamo quindi di
+
+00:07:35.040 --> 00:07:38.580
+come eseguire concretamente le applicazioni su Kubernetes. Non creerai PO direttamente.
+
+00:07:39.060 --> 00:07:42.860
+Userai invece un oggetto di livello superiore chiamato deployment. Pensa a un deployment come
+
+00:07:42.860 --> 00:07:46.980
+un gestore che indica a Kubernetes quante copie del tuo pod eseguire, quale immagine, container,
+
+00:07:47.240 --> 00:07:51.360
+usare e come aggiornare all'uscita di una nuova versione. È il metodo standard per eseguire
+
+00:07:51.360 --> 00:07:55.300
+applicazioni state. Quando aggiorni un deployment, ad esempio pubblicando una nuova versione
+
+00:07:55.300 --> 00:07:59.480
+della tua app, Kubernetes esegue un rolling update. Sostituisci i pod una alla volta assicurandosi
+
+00:07:59.480 --> 00:08:03.080
+che almeno una copia sia sempre in esecuzione. Ciò significa nessun downtime e nessuna interruzione
+
+00:08:03.080 --> 00:08:06.780
+improvvisa per i tuoi tempi. E se qualcosa va storto con la nuova versione, puoi tornare
+
+00:08:06.780 --> 00:08:10.980
+a quella precedente con un solo comando. È una potente rete di sicurezza, ma i tuoi pod
+
+00:08:10.980 --> 00:08:14.420
+devono comunque essere raggiungibili. È qui che entrano in gioco i servizi. Un servizio
+
+00:08:14.420 --> 00:08:18.020
+fornisce un indirizzo di rete stabile che instrada il traffico verso i pod corretti. Può anche
+
+00:08:18.020 --> 00:08:23.680
+esporre quei pod ad altre parti della tua applicazione o al mondo esterno. Un servizio
+
+00:08:23.680 --> 00:08:27.880
+può essere interno, accessibile solo nel cluster o esterno, con un IP pubblico, raggiungibile
+
+00:08:27.880 --> 00:08:32.260
+da internet. Ecco la questione riguardante la scalabilità. Kubernetes può far crescere
+
+00:08:32.260 --> 00:08:35.740
+o ridurre automaticamente la tua applicazione in base alla domanda. Imposti un obiettivo,
+
+00:08:35.800 --> 00:08:41.040
+ad esempio al 70%, utilizzo CPU e Kubernetes aggiunge pod se supera la soglia e li rimuove
+
+00:08:41.040 --> 00:08:45.380
+quando cala. La tua applicazione scala verso l'alto durante un picco di traffico e si riduce
+
+00:08:45.380 --> 00:08:48.960
+quando le cose si calmano. Nessun intervento manuale necessario. Ma tutto questo potere
+
+00:08:48.960 --> 00:08:52.840
+comporta complessità. Gestire il tuo cluster Kubernetes significa essere responsabile del
+
+00:08:52.840 --> 00:08:57.180
+control plane, aggiornamenti, patch di sicurezza e backup. Serve una profonda competenza per
+
+00:08:57.180 --> 00:09:01.100
+gestire guasti ai nodi, configurazione di rete e scalabilità del cluster. Molti team
+
+00:09:01.100 --> 00:09:04.740
+passano più tempo a gestire il cluster che a creare applicazioni. È qui che entra in gioco
+
+00:09:04.740 --> 00:09:09.040
+il Kubernetes gestito. Kubernetes autogestito contro il Kubernetes gestito. Quindi parliamo
+
+00:09:09.040 --> 00:09:13.060
+della realtà di gestire Kubernetes da soli. Quando crea il tuo cluster sei responsabile
+
+00:09:13.060 --> 00:09:18.480
+di tutto, control plane, aggiornamenti, patch di sicurezza e backup di etcd. Se l'API server
+
+00:09:18.480 --> 00:09:22.800
+va giù, è un tuo problema. Se viene scoperta una vulnerabilità di sicurezza nella versione
+
+00:09:22.800 --> 00:09:27.080
+che usi, devi applicare la patch. Se etcd si corrompe, devi ripristinare dal backup.
+
+00:09:27.680 --> 00:09:31.420
+Tutto ciò richiede una profonda competenza. Devi capire come falliscono i nodi, come funziona
+
+00:09:31.420 --> 00:09:35.880
+la rete a livello di cluster e come scalare senza rompere nulla. Ecco cosa sorprende a molti
+
+00:09:35.880 --> 00:09:40.500
+team. Molte organizzazioni passano più tempo a gestire il loro cluster Kubernetes che a costruire
+
+00:09:40.500 --> 00:09:44.380
+applicazioni che ci girano sopra. Lottano costantemente con aggiornamenti, risoluzione
+
+00:09:44.380 --> 00:09:47.700
+di problemi di rete e gestione dei guasti ai nodi. Il cluster diventa un lavoro a tempo
+
+00:09:47.700 --> 00:09:51.140
+pieno. Non è questo il motivo per cui è adottato Kubernetes fin dall'inizio. È qui
+
+00:09:51.140 --> 00:09:55.100
+che entrano in gioco i servizi Kubernetes gestiti. Servizi come Azure Kubernetes Service
+
+00:09:55.100 --> 00:10:00.680
+o HS gestiscono il control plane per te. Azure gestisce l'API server e ZTD lo scheduler
+
+00:10:00.680 --> 00:10:04.400
+e controller manager. Non devi preoccuparti di aggiornarli o di mantenerli in funzione.
+
+00:10:04.720 --> 00:10:07.880
+Paghi solo per i worker node, le macchine virtuali che eseguono effettivamente i tuoi carichi
+
+00:10:07.880 --> 00:10:11.340
+di lavoro. Piano di controllo è gratuito. Questo cambia drasticamente l'equazione.
+
+00:10:11.860 --> 00:10:15.240
+Invece di dedicare tempo alla manutenzione del cluster, il tuo team può concentrarsi su
+
+00:10:15.240 --> 00:10:18.720
+ciò che conta davvero, le applicazioni che stai creando. Per la maggior parte dei team,
+
+00:10:18.820 --> 00:10:22.480
+specialmente quelli agli inizi, Kubernetes gestito è la scelta giusta. Ottieni tutta la
+
+00:10:22.480 --> 00:10:27.940
+potenza di Kubernetes senza il carico operativo. HS Kubernetes è reso semplice sul. Quindi
+
+00:10:27.940 --> 00:10:32.200
+cos'è esattamente HS? È il servizio Kubernetes gestito di Azure che ti offre un cluster completo
+
+00:10:32.200 --> 00:10:36.900
+senza doverlo costruire da zero. Il piano di controllo è gratuito, come abbiamo detto, quindi paghi
+
+00:10:36.900 --> 00:10:39.900
+solo per le macchine virtuali che eseguono i tuoi carichi di lavoro. Ciò significa che
+
+00:10:39.900 --> 00:10:42.920
+puoi iniziare in piccolo, pagare poco e scalare man mano che le tue esigenze crescono.
+
+00:10:43.880 --> 00:10:48.280
+Azure gestisce tutto il lavoro pesante. Aggiornamenti, pace e monitoraggio dello stato del piano di
+
+00:10:48.280 --> 00:10:52.040
+controllo sono tutti gestiti. Non serve un team dedicato di esperti Kubernetes solo per
+
+00:10:52.040 --> 00:10:57.400
+far funzionare le cose. E poiché HS fa parte dell'ecosistema, Azure si integra con gli strumenti
+
+00:10:57.400 --> 00:11:02.300
+che probabilmente stai già usando. Azure Active Directory per l'autenticazione, Azure Monitor
+
+00:11:02.300 --> 00:11:07.980
+per log e metriche e Azure Policy per la governance. Funzionano tutti insieme fin da subito, senza
+
+00:11:07.980 --> 00:11:12.600
+dover aggiungere prezzi separati. Configurare pipeline CIS-TD con GitHub Actions o Azure DevOps
+
+00:11:12.600 --> 00:11:17.280
+richiede solo pochi minuti. Pubblica una modifica nel repository e il sistema crea automaticamente
+
+00:11:17.280 --> 00:11:20.740
+una nuova immagine container, la invia ad Azure Container Registry e aggiorna il deployment
+
+00:11:20.740 --> 00:11:25.100
+su HS. Nessun passaggio manuale, nessun accesso SH e server. È tutto automatizzato.
+
+00:11:25.680 --> 00:11:29.140
+Per i principianti c'è la modalità automatica di HS pensata per i team che non vogliono prendere
+
+00:11:29.140 --> 00:11:33.060
+ogni singola decisione sulla configurazione del cluster. Fornisci impostazioni predefinite
+
+00:11:33.060 --> 00:11:36.280
+e pronte all'uso per scalabilità, networking, sicurezza e aggiornamenti. Non devi diventare
+
+00:11:36.280 --> 00:11:39.700
+un esperto di Kubernetes per iniziare. Descrivi semplicemente la tua applicazione
+
+00:11:39.700 --> 00:11:44.140
+e HS gestisce Red. Un comando per creare il cluster, un file manifesto per avviare l'applicazione.
+
+00:11:45.000 --> 00:11:48.400
+Le competenze acquisite su HS sono trasferibili a qualsiasi ambiente Kubernetes perché sotto
+
+00:11:48.400 --> 00:11:51.820
+il cofano c'è Kubernetes standard. Non stai imparando un sistema proprietario ma quello
+
+00:11:51.820 --> 00:11:57.340
+reale con Azure che gestisce la complessità operativa. Curai il quadro generale.
+
+00:11:57.340 --> 00:12:01.880
+I container impacchettano le tue applicazioni affinché funzionino in modo coerente ovunque
+
+00:12:01.880 --> 00:12:05.820
+e Kubernetes orchestra quei container su larga scala, gestendo automaticamente deployment,
+
+00:12:06.000 --> 00:12:10.300
+scalabilità e ripristino. HS rende tale orchestrazione gestibile occupandosi del
+
+00:12:10.300 --> 00:12:12.920
+piano di controllo e integrandolo con gli strumenti Azure che già conosci.
+
+00:12:13.780 --> 00:12:16.980
+Concetto principale è questo. Kubernetes non è solo per le grandi aziende tecnologiche
+
+00:12:16.980 --> 00:12:20.860
+con enormi team di ingegneri. Con servizi gestiti come HS è accessibile a qualsiasi team.
+
+00:12:21.620 --> 00:12:26.040
+I compiti per questa settimana sono semplici. Crea un account Azure gratuito, avvia un cluster
+
+00:12:26.040 --> 00:12:30.580
+HS e distribuisci una semplice applicazione. Richiede pochi minuti e vedrai quanta strada
+
+00:12:30.580 --> 00:12:34.800
+ha fatto la piattaforma. Pronto ad approfondire. Il prossimo episodio tratta di come creare la
+
+00:12:34.800 --> 00:12:39.100
+tua prima immagine di container e caricarla su Azure Container Registry. Iscriviti sulla
+
+00:12:39.100 --> 00:12:42.560
+tua piattaforma podcast preferita e condividi questo episodio con chi sta iniziando il suo
+
+00:12:42.560 --> 00:12:43.480
+percorso con Kubernetes.

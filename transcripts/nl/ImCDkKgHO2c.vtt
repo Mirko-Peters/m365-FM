@@ -1,0 +1,946 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:03.020
+Stel je voor, je baas vraagt je om Copilot Studio te proberen.
+
+00:00:03.160 --> 00:00:04.960
+Je denkt dat je een beleefde chatbot opzet.
+
+00:00:05.100 --> 00:00:09.720
+Tien minuten later is hij niet alleen aan het chatten, maar boekt hij een cruise en probeert hij de bedrijfskaart te gebruiken voor pizza.
+
+00:00:09.960 --> 00:00:13.380
+Dat is het echte verschil tussen een copilot die suggereert en een agent die handelt.
+
+00:00:13.580 --> 00:00:18.140
+In de komende vijftien minuten zie je hoe agents die grens overgaan, waar hun geheugen echt zit,
+
+00:00:18.420 --> 00:00:21.020
+en de eerste drie governance checks om je tenant veilig te houden.
+
+00:00:21.260 --> 00:00:26.100
+Volg M365 Show voor MVP-livestreams die voorbij de marketingpraatjes gaan.
+
+00:00:26.100 --> 00:00:30.720
+En als een chatbot nu al de lunch kan bestellen, wacht maar tot hij de agenda's van mensen gaat beheren.
+
+00:00:30.880 --> 00:00:33.360
+Van slimme stagiairs naar volwaardige werknemers.
+
+00:00:33.580 --> 00:00:34.560
+Nu wordt het interessant.
+
+00:00:34.800 --> 00:00:37.520
+De sprong van slimme stagiair naar volwaardige werknemer.
+
+00:00:37.780 --> 00:00:42.300
+Dat is de kernverschuiving van copilots naar autonome agents en het is niet slechts semantiek.
+
+00:00:42.500 --> 00:00:47.840
+Een copilot is als de stagiair, wij vertellen wat hij moet doen, hij ontwerpt content of doet een suggestie en wij klikken op goedkeuren.
+
+00:00:48.000 --> 00:00:49.620
+De controle blijft in onze handen.
+
+00:00:49.780 --> 00:00:52.980
+Een autonome agent gedraagt zich echter als een werknemer met echt initiatief.
+
+00:00:52.980 --> 00:00:58.340
+Hij suggereert niet alleen ideeën, hij voert workflows uit, onderneemt acties met of zonder te vragen en rapporteert achteraf.
+
+00:00:58.440 --> 00:01:00.960
+Het addertje, beheerders kunnen dat gedrag configureren.
+
+00:01:01.140 --> 00:01:08.220
+Je kunt bepalen of een agent jouw goedkeuring nodig heeft voordat hij de e-mail verstuurt, de reis boekt of data bijwerkt of dat hij volledig zelfstandig handelt.
+
+00:01:08.440 --> 00:01:12.520
+Die ene schakelaar is de grens tussen ondersteunende assistent en onafhankelijke operator.
+
+00:01:12.840 --> 00:01:15.520
+Neem Microsoft Copilot in Teams als een duidelijk voorbeeld.
+
+00:01:15.760 --> 00:01:18.880
+Wanneer je een antwoord typt en hij suggereert een betere formulering, is dat de stagiairmodus.
+
+00:01:18.880 --> 00:01:25.820
+Jij bent nog steeds degene die op verzenden klikt, maar verander de context naar een autonome opzet met machtigingen en plotseling suggereert hij niet meer.
+
+00:01:26.000 --> 00:01:31.260
+Hij boekt vergaderingen, plant vervolgacties en mailt de klant direct zonder dat jij over zijn schouder meekijkt.
+
+00:01:31.540 --> 00:01:37.220
+Zelfde app, zelfde UI, maar totaal ander gedrag afhankelijk van of je actie of alleen suggestie hebt toegestaan.
+
+00:01:37.420 --> 00:01:39.020
+Daarom moeten beheerders opletten.
+
+00:01:39.500 --> 00:01:44.340
+De scheidende factor die een stagiair vaak naar het niveau van werknemer tilt, is geheugen.
+
+00:01:44.340 --> 00:01:47.900
+Bij Copilot duurt de context meestal een paar prompts.
+
+00:01:48.120 --> 00:01:50.820
+Het is kortstondig en verdwijnt zodra de sessie eindigt.
+
+00:01:51.040 --> 00:01:52.620
+Bij agents is het geheugen anders.
+
+00:01:52.900 --> 00:01:57.220
+Ze behouden gespreksgeschiedenis, slaan idee's op en refereren aan eerdere acties om nieuwe te sturen.
+
+00:01:57.480 --> 00:02:02.700
+Sterker nog, in Microsoft's eigen voorbeeldimplementatie slaan agents sessie-idees en gespreksgeschiedenis op,
+
+00:02:02.740 --> 00:02:05.000
+zodat ze interacties kunnen onthouden over taken heen.
+
+00:02:05.000 --> 00:02:13.960
+Dat betekent dat de bot die gisteren een servicegesprek afhandelde, het vandaag onthoudt, de follow-up locht en morgen een nieuw contactmoment plant zonder dat jij de details opnieuw hoeft in te voeren.
+
+00:02:13.960 --> 00:02:16.280
+Ineens ben je geen concepten meer aan het controleren.
+
+00:02:16.420 --> 00:02:19.740
+Je beheert een machine die dingen onthoudt en hard werkt als een junior medewerker.
+
+00:02:19.920 --> 00:02:23.460
+Cosmos DB vormt hier de ruggengraat, omdat daar vaak dat geheugen zit.
+
+00:02:23.680 --> 00:02:25.400
+Zonder dat is AI als een goudvis.
+
+00:02:25.600 --> 00:02:27.180
+Het vergeet alles na een minuut.
+
+00:02:27.420 --> 00:02:32.220
+Met dat geheugen gedragen agents zich als teamleden die nooit een klantklacht of deadline vergeten.
+
+00:02:32.220 --> 00:02:36.180
+En die persistentie is niet alleen krachtig, het is potentieel problematisch.
+
+00:02:36.180 --> 00:02:47.700
+Zodra een agent geheugen en rechten heeft en beheerders de rij kwijt te vergroten, heb je eigenlijk een digitale werknemer ingehuurd die niet moe wordt, niet om vrije dagen vraagt en niet per se op goedkeuring wacht voordat hij verder gaat.
+
+00:02:47.920 --> 00:02:52.160
+Dat is ook het punt waarop beheerders het idee moeten loslaten dat AI op een menselijke manier denkt.
+
+00:02:52.160 --> 00:02:54.960
+Het redeneert niet en weegt geen context af zoals wij dat doen.
+
+00:02:55.160 --> 00:03:00.100
+Wat het doet is sequenties uitvoeren en acties plannen en aansturen op basis van data, geheugen en de beschikbare rechten.
+
+00:03:00.340 --> 00:03:03.020
+Als het toegang heeft tot creditcards kan het betalingsprocessen uitvoeren.
+
+00:03:03.020 --> 00:03:07.000
+Als het rechten heeft voor de agenda, kan het vergaderingen inplannen. Het is niet aan het samenzweren.
+
+00:03:07.120 --> 00:03:11.420
+Het volgt simpelweg logische ketens en uitvoeringsstaken die geworteld zijn in hoe het is gebouwd en wat het heeft gekregen.
+
+00:03:11.600 --> 00:03:17.120
+Het probleem is dus niet of de AI slim is in menselijke zin, maar of we de juiste fangrails hebben geplaatst voordat we de sleutels overhandigen.
+
+00:03:17.280 --> 00:03:19.760
+En ja, de horrorscenario's zijn makkelijk te bedenken.
+
+00:03:19.980 --> 00:03:22.200
+Niemand is van plan om de bot pizza te laten bestellen.
+
+00:03:22.360 --> 00:03:30.840
+Maar als de rijkwijte te breed is en de uitvoering van het plan probleem snel oplossen, koppelt aan eten voor het team bestellen, dan heb je plotseling 20 pepperoni pizza's op de bedrijfsrekening staan.
+
+00:03:30.840 --> 00:03:35.160
+Dat is niet de bot die slim is, dat is een zwakke scoop gecombineerd met zelfverzekerde automatisering.
+
+00:03:35.320 --> 00:03:40.860
+En zodra je deze dingen als volwaardige werknemers gaat zien, en niet als schattige stagiairs, worden de audit uitdagingen duidelijker.
+
+00:03:41.040 --> 00:03:46.220
+De realiteit is dit, door autonome agents in te schakelen, test je niet zomaar weer een nieuwe productiviteitsfunctie.
+
+00:03:46.400 --> 00:03:54.160
+Je delegeert daadwerkelijke operationele macht aan software die geen pauzes neemt, niet wacht op goedkeuringen tenzij je dat instelt, en niet vergeet wat het gisteren heeft gedaan.
+
+00:03:54.160 --> 00:04:03.400
+Dat kan tennens efficiënter laten draaien, maar het vergroot ook de risico's als rechten en governance slordig zijn, wat leidt tot de logische vraag, als AI nu als personeelslid fungeert,
+
+00:04:03.620 --> 00:04:09.720
+wat is dan de gereedschapskist waarmee deze nieuwe krachten worden gebouwd en hoe zorgen we dat we de controle niet verliezen zodra ze actief zijn.
+
+00:04:09.920 --> 00:04:13.200
+De gereedschapskist, Azure AI Foundry en Copilot Studio.
+
+00:04:13.580 --> 00:04:15.180
+Microsoft verkoopt het als magie.
+
+00:04:15.420 --> 00:04:17.540
+Start autonome agents in enkele minuten.
+
+00:04:17.740 --> 00:04:23.680
+In de praktijk voelt het minder als tovenarij en meer als het opnieuw bedraden van een auto terwijl die met volle snelheid over de snelweg raast.
+
+00:04:23.680 --> 00:04:26.660
+De dia's laten zien dat alles er netjes en opgeruimd uitziet.
+
+00:04:26.860 --> 00:04:33.480
+Binnen een tenant ben je modellen aan het temmen, met rechten aan het jongleren en connectors aan het vastschroeven tot het lijkt op een IT-afdeling gekruist met een inktvisconventie.
+
+00:04:33.680 --> 00:04:37.280
+Laten we dus de marketingpraat weglaten en dit in echte beheerders taal vertalen.
+
+00:04:37.520 --> 00:04:40.460
+Azure AI Foundry wordt gepresenteerd als de werkplaats.
+
+00:04:40.640 --> 00:04:45.680
+Een integratielaag waar je taalmodellen, API's en de bedrijfssystemen die je al hebt aankoppelt.
+
+00:04:45.680 --> 00:04:55.260
+Klantgegevens, SharePoint bibliotheken, CRM data of aangepaste API's kunnen allemaal worden aangesloten, samengevoegd en gehard tot iets dat je echt in productie kunt draaien.
+
+00:04:55.420 --> 00:04:57.020
+In de kern is de belofte simpel.
+
+00:04:57.300 --> 00:05:03.760
+Geef AI een gestructureerde manier om je data te begrijpen en te gebruiken in plaats van ongestructureerde prompts te gooien en te hopen op samenhang.
+
+00:05:04.000 --> 00:05:06.460
+Zonder dat heb je een karaokezanger zonder songteksten.
+
+00:05:06.700 --> 00:05:08.440
+Met dat heb je tenminste een werkende band.
+
+00:05:08.640 --> 00:05:11.500
+Het is de moeite waard om even stil te staan bij de NA-aangevingschaos.
+
+00:05:11.500 --> 00:05:16.060
+Microsoft hernoemt tools alsof het een sport is en daarom verwarren velen van ons Foundry met Fabric.
+
+00:05:16.220 --> 00:05:17.280
+Ze zijn niet hetzelfde.
+
+00:05:17.500 --> 00:05:20.860
+Foundry is gepositioneerd als een plek om agents te bouwen en te integreren.
+
+00:05:21.120 --> 00:05:22.800
+Fabric is meer een analytics suite.
+
+00:05:23.100 --> 00:05:27.360
+Als je beslissingen neemt over licenties of architectuur, vertrouw dan niet op marketingteksten.
+
+00:05:27.560 --> 00:05:33.060
+Check eerst de documentatie van de leverancier, want de labels veranderen sneller dan de stemming van je CFO tijdens het begrotingsseizoen.
+
+00:05:33.520 --> 00:05:35.620
+Daarbovenop heb je Microsoft Copilot Studio.
+
+00:05:35.960 --> 00:05:41.140
+Deze bevindt zich binnen het Power Platform en werkt goed samen met Power Automate, Power Apps en AI Builder.
+
+00:05:41.140 --> 00:05:50.080
+Het is de low-code interface waar zowel zakelijke gebruikers als beheerders copilots kunnen maken, configureren en publiceren zonder Visual Studio te openen om drie uur.
+
+00:05:50.300 --> 00:05:57.340
+Denk aan kantenklare schablonen, data connectors en workflows die direct aansluiten op de Microsoft Stack, Teams, SharePoint en Dynamics 365.
+
+00:05:57.960 --> 00:06:00.040
+Het praktische voordeel hier is snelheid.
+
+00:06:00.220 --> 00:06:05.720
+Je kunt een workflow bot ontwerpen, deze verbinden met bedrijfsdata en met zeer weinig code in productie brengen.
+
+00:06:05.720 --> 00:06:12.740
+Simpel gezegd geeft Studio je de mogelijkheid om snel copilots en agents te ontwerpen, in te zetten en te koppelen aan de apps die je medewerkers al gebruiken.
+
+00:06:12.960 --> 00:06:14.940
+Stel je een reisboekingsbot in Teams voor.
+
+00:06:15.140 --> 00:06:17.880
+Een werknemer typt, boek volgende week een vlucht naar Chicago.
+
+00:06:18.200 --> 00:06:24.480
+En in plaats van een statisch antwoord terug te sturen, pust de copilot dat verzoek naar de Dynamics reisgegevens en legt de reservering vast.
+
+00:06:24.820 --> 00:06:26.040
+Gebruikers zien een gesprek.
+
+00:06:26.200 --> 00:06:30.280
+Achter de schermen voert het workflow stappen uit die ops medewerkers normaal handmatig zouden invoeren.
+
+00:06:30.280 --> 00:06:34.980
+Dat is het moment waarop een bot er niet meer uitziet als een gimmick en daadwerkelijk administratief werk begint te vervangen.
+
+00:06:35.160 --> 00:06:38.340
+En hier is waar Cosmos DB stilletjes de boel bij elkaar houdt.
+
+00:06:38.420 --> 00:06:46.200
+In de eigen agentvoorbeelden van Microsoft fungeert Cosmos DB als het uniforme geheugen dat niet alleen de gespreksgeschiedenis opslaat, maar ook in beddings- en workflowcontext.
+
+00:06:46.380 --> 00:06:52.040
+Met een latentie van minder dan 10 milliseconden en wereldwijde schaalbaarheid blijven agents snel en consistent tussen sessies.
+
+00:06:52.300 --> 00:06:55.360
+Zonder dit vergeten copilots alles als goudvissen tussen prompts door.
+
+00:06:55.360 --> 00:07:02.300
+Hiermee kunnen ze dagen later weer aanknopen, idee's ophalen, eerdere plannen inzien en zich meer gedragen als vaste teamgenoten dan als tijdelijke chatpartners.
+
+00:07:02.480 --> 00:07:04.760
+Het is de technische lijn die het geheugen laat werken.
+
+00:07:04.960 --> 00:07:06.320
+Wordt echter niet te zelf voldaan.
+
+00:07:06.540 --> 00:07:10.800
+Studio verlaagt de drempel voor coderen, zeker, maar het verplaatst alle last naar integratie en governance.
+
+00:07:11.020 --> 00:07:19.160
+In plaats van JSON of Python te debuggen, zul je debuggen waarom een agent met de verkeerde connector een record verkeerd heeft opgeslagen of een reeks vergaderingen heeft ingepland zonder rechten te controleren.
+
+00:07:19.300 --> 00:07:22.140
+De complexiteit verdwijnt niet, ze verandert alleen van vorm.
+
+00:07:22.140 --> 00:07:28.800
+Beheerders moeten de rijkwijten van connectors zorgvuldig bepalen, beslissen waar data leeft en goedkeuringsdrempels instellen voor gevoelige operaties.
+
+00:07:28.980 --> 00:07:33.360
+Anders wordt het gemak van low-code een vermenigvuldiging van fouten waar niemand voor heeft getekend.
+
+00:07:33.520 --> 00:07:35.940
+Het resultaat maakt de hoofdpijn het overwegen waard.
+
+00:07:36.140 --> 00:07:41.680
+Foundry biedt de bedrading achter de schermen, studio geeft je de interface en Cosmos DB zorgt dat geheugen lang genoeg leeft om nuttig te zijn.
+
+00:07:41.940 --> 00:07:43.860
+Samen verkorten ze tijdlijnen aanzienlijk.
+
+00:07:43.860 --> 00:07:50.580
+Een proof-of-concept agent kan in dagen in plaats van maanden in elkaar worden gezet en daarna worden gehard tot productieniveau zodra deze waarde toont.
+
+00:07:50.800 --> 00:07:56.540
+Snellere prototypes betekenen snellere feedback en dat is een enorme verandering ten opzichte van de traditionele IT-ontwikkelcyclus,
+
+00:07:56.820 --> 00:07:59.900
+waarin een idee een jaar in een PowerPoint-deck bleef staan voordat iemand het live testte.
+
+00:08:00.040 --> 00:08:02.600
+De kleine lettertjes gaan over risico en verantwoordelijkheid.
+
+00:08:02.780 --> 00:08:06.260
+Op het moment dat een agent zaken onthoudt en acties uitvoert over meerdere dagen,
+
+00:08:06.520 --> 00:08:12.720
+heb je een digitale collega in je workflow ingebed die data verplaatst, records opent en nooit om bevestiging vraagt als je geen fanwils instelt.
+
+00:08:12.720 --> 00:08:17.780
+Respecteer de geheugenopslag, respecteer de connectors en, voor je eigen gemoedsrust, respecteer de governance instellingen.
+
+00:08:17.920 --> 00:08:23.160
+Behandel deze tools als scherpe messen, niet omdat ze op zichzelf gevaarlijk zijn, maar omdat ze zonder controle diepe sneden kunnen achterlaten.
+
+00:08:23.300 --> 00:08:27.640
+En als je voorbij de gereedschapskist kijkt, zie je dat Microsoft niet stopt bij Bouw het zelf.
+
+00:08:27.880 --> 00:08:31.780
+Ze plaatsen al kantenklare co-pilot agents in SharePoint, Dynamics en daarbuiten,
+
+00:08:32.020 --> 00:08:36.120
+met demo's die doen lijken alsof de hele helpdesk van de ene op de andere dag is geautomatiseerd.
+
+00:08:36.120 --> 00:08:42.040
+Maar of die gepolijste stagebots kunnen overleven in de chaos van een echte tenant, dat is het volgende dat we moeten uitzoeken.
+
+00:08:42.040 --> 00:08:50.020
+Kantenklare co-pilot agents, klaar of niet, Microsoft vult de schappen al met voorgebouwde co-pilot agents die je zo in je tenant kunt inschakelen.
+
+00:08:50.280 --> 00:08:54.520
+Denk hierbij aan de facilitator agent in Teams die real-time vergadersamenvattingen maakt,
+
+00:08:54.700 --> 00:09:00.560
+de tolk agent die gesprekken vertaalt in negen talen, zelfs servicebots voor werknemers die hour- en IT-vragen afhandelen,
+
+00:09:00.880 --> 00:09:04.180
+projectmanagement co-pilots die plannen bijhouden en aan deadlines herinneren,
+
+00:09:04.180 --> 00:09:09.420
+en een groeiende set Dynamics 365 co-pilots voor verkoop, supply chain en klantenservice.
+
+00:09:09.660 --> 00:09:12.280
+Op papier zien ze eruit als een buffet aan automatisering.
+
+00:09:12.520 --> 00:09:16.460
+De echte vraag is, welke besparen je daadwerkelijk tijd en welke zorgen alleen maar voor meer ruis?
+
+00:09:16.640 --> 00:09:18.820
+Tijdens conferentiedemo's lijken ze foutloos.
+
+00:09:19.000 --> 00:09:21.560
+Je ziet dan een SharePoint-agent die direct documenten ophaalt,
+
+00:09:21.720 --> 00:09:24.660
+of een Dynamics Sales-agent die perfecte reacties op niets voorbereidt.
+
+00:09:24.780 --> 00:09:26.680
+De realiteit op de werkvloer is wisselend.
+
+00:09:26.900 --> 00:09:29.720
+Sommigen doen precies wat ze beloven, andere falen op pijnlijke wijze.
+
+00:09:29.720 --> 00:09:33.340
+Maar eerlijk is eerlijk, de data over vroege adoptie van Microsoft is niet zomaar uit de lucht gegrepen.
+
+00:09:33.500 --> 00:09:36.000
+Een verkooporganisatie die een kant-en-klare Sales-agent testte,
+
+00:09:36.120 --> 00:09:38.860
+rapporteerde een stijging van 9,4% in omzet per verkoop.
+
+00:09:38.980 --> 00:09:40.040
+Dat is niet onbelangrijk.
+
+00:09:40.200 --> 00:09:42.720
+Toch komen die cijfers uit gecontroleerde pilots, niet uit chaotische productieomgevingen,
+
+00:09:43.380 --> 00:09:45.940
+dus zie ze als interessante testresultaten en niet als de absolute waarheid.
+
+00:09:46.140 --> 00:09:47.680
+Laten we ze agent voor agent bekijken.
+
+00:09:47.880 --> 00:09:50.180
+De facilitator is een van de makkelijkere successen.
+
+00:09:50.320 --> 00:09:53.480
+In plaats van dat beheerders of managers zelf 10 chat threads moeten samenvoegen,
+
+00:09:53.680 --> 00:09:55.720
+stelt hij notulen op in een leesbare samenvatting.
+
+00:09:55.720 --> 00:09:59.540
+Dat is handig, zeker wanneer plannerborden, bestanden en chatlaks verspreid zijn.
+
+00:09:59.720 --> 00:10:01.700
+Het risico ontstaat wanneer hij te ver gaat.
+
+00:10:02.220 --> 00:10:04.140
+Gefantaseerde actiepunten waar niemand het over eens was,
+
+00:10:04.300 --> 00:10:07.260
+kunnen zorgen voor politiek gedoe of ongemakkelijke, wie heeft wat beloofd.
+
+00:10:07.520 --> 00:10:10.300
+Momenten, hou die fout positieven in de gaten tijdens je pilot.
+
+00:10:10.520 --> 00:10:14.840
+Als je voorbeelden locht, kun je de formulering van prompts aanpassen of het bereik afbaken voordat je uitrolt.
+
+00:10:15.000 --> 00:10:19.420
+De talk voelt als een pronkstuk die live gesprekken in teams, vergaderingen of chats vertaalt.
+
+00:10:19.580 --> 00:10:20.840
+Als het werkt, is het strak.
+
+00:10:21.120 --> 00:10:24.960
+Wereldwijde teams kunnen natuurlijk praten en deelnemers krijgen zelfs gesimuleerde stemvertaling.
+
+00:10:24.960 --> 00:10:26.720
+Maar hier schiet het risico omhoog.
+
+00:10:27.140 --> 00:10:29.240
+Vertaalfouten in informele chats zijn vervelend.
+
+00:10:29.400 --> 00:10:33.200
+In scenario's met strenge compliance, contracten, beleidsklausules en regelgeving
+
+00:10:33.200 --> 00:10:36.200
+kan een verkeerd vertaalde zin veranderen van een foutje in een aansprakelijkheid.
+
+00:10:36.340 --> 00:10:39.720
+Ik heb gezien dat hij gesprekken in het Duits, Spaans en Japans feilloos vertaalde,
+
+00:10:39.900 --> 00:10:43.020
+om vervolgens bij een disclaimer zo erg de mist in te gaan dat het sarcastisch leek.
+
+00:10:43.120 --> 00:10:46.960
+Als de verkeerde toon in een klantchat terechtkomt, gaat alle bespaarde tijd op aanschadeherstel.
+
+00:10:47.740 --> 00:10:51.780
+Nogmaals, log elke misser en controleer of foutpatronen overeen komen met bepaalde inhoudstypen.
+
+00:10:51.780 --> 00:10:54.820
+Zelf-service agents voor werknemers zijn momenteel de veiligste keuze.
+
+00:10:55.000 --> 00:10:59.180
+Ze zitten in de zakelijke chat van Microsoft 365 en beantwoorden standaard ouwervragen,
+
+00:10:59.400 --> 00:11:02.000
+betaaldata, vakantiesaldie en handleidingen voor IT-resets.
+
+00:11:02.200 --> 00:11:06.260
+Deze workflows zijn saai en voorspelbaar en precies daarom zijn het sterke eerste pilots.
+
+00:11:06.520 --> 00:11:09.920
+Begin met ouwer- of wachtwoordresets, omdat die systemen goed afgebakend zijn.
+
+00:11:10.120 --> 00:11:11.920
+Als het kapot gaat, is de schade minimaal.
+
+00:11:12.100 --> 00:11:15.560
+Als het werkt, heb je tientallen onbelangrijke tickets weggewerkt die je helpdesk toch al niet wilde.
+
+00:11:15.700 --> 00:11:18.060
+Co-pilots voor projectmanagement zitten daar precies tussenin.
+
+00:11:18.060 --> 00:11:21.420
+Ze maken takenlijsten, plannen herinneringen en wijzen werk toe aan teamleden.
+
+00:11:21.540 --> 00:11:25.820
+Bij projecten met een lage complexiteit, zoals terugkerende marketingcampagnes of sprint retrospectives,
+
+00:11:25.960 --> 00:11:26.820
+besparen ze veel tijd.
+
+00:11:26.980 --> 00:11:30.880
+Maar zonder zorgvuldige afbakening verschuiven ze deadlines of wijzen ze de verkeerde verantwoordelijke toe.
+
+00:11:31.080 --> 00:11:33.300
+Zie het als Jira twee dubbele espressos geven.
+
+00:11:33.480 --> 00:11:36.560
+Het gaat sneller, maar niet per se de goede kant op, tenzij je oplet.
+
+00:11:36.760 --> 00:11:40.480
+Dynamics 365 agents zijn gedurfd, maar niet altijd klaar voor het grote werk.
+
+00:11:40.640 --> 00:11:43.640
+Een agent voor leveranciersbeheer kan bestellingen volgen en vertragingen signaleren.
+
+00:11:43.780 --> 00:11:46.880
+Een agent voor verkoopkwalificatie kan je meest waardevolle leads uitlichten.
+
+00:11:46.880 --> 00:11:49.740
+En een agent voor klantintentie springt bij tijdens service tickets.
+
+00:11:49.980 --> 00:11:52.780
+Dit is waar het grootste voordeel en het grootste risico samenkomen.
+
+00:11:52.980 --> 00:11:55.280
+Het sluiten van eenvoudige service tickets werkt prima.
+
+00:11:55.520 --> 00:11:59.640
+Het inzetten op complexe escalatiegevallen is als een tijdelijke kracht je bestuursvergadering laten leiden.
+
+00:11:59.840 --> 00:12:01.700
+Grote snelheid, gebrekkig beoordelingsvermogen.
+
+00:12:01.920 --> 00:12:02.780
+Wat is dus de conclusie?
+
+00:12:02.960 --> 00:12:05.360
+Niet alle kantenklare agents zijn ook klaar voor ondernemingsniveau.
+
+00:12:05.520 --> 00:12:06.720
+De vuistregel is simpel.
+
+00:12:06.960 --> 00:12:11.960
+Test eerst de voorspelbare varianten, hour, IT-selfservice of routinematige projectupdates.
+
+00:12:11.960 --> 00:12:18.180
+Documenteer foutpositieven en vertaalfouten tijdens je proefperiode, zodat je connectoren of scope kunt aanpassen voor het opschalen.
+
+00:12:18.380 --> 00:12:24.460
+Bewaar klantgerichte copilots voor later, tenzij je graag in zes talen tegelijk je excuses aanbiedt, wat meteen het echte probleem blootlegt.
+
+00:12:24.720 --> 00:12:28.340
+Deze agents zijn pas veilig en nuttig als je ze de juiste kaders geeft om in te werken.
+
+00:12:28.560 --> 00:12:32.920
+Met de verkeerde van rails kan dezelfde bot die tickets bespaart ook een compliance nachtmerrie veroorzaken.
+
+00:12:33.100 --> 00:12:36.540
+En daarom gaat het volgende onderdeel niet over functies, maar over governance.
+
+00:12:36.540 --> 00:12:40.460
+Want zonder strikte limieten kunnen zelfs goede copilots snel ontsporen.
+
+00:12:41.960 --> 00:12:43.920
+Verantwoorden AI, van rails of niks.
+
+00:12:44.180 --> 00:12:49.220
+Dat is waar verantwoorden AI om de hoek komt kijken, want zodra deze systemen zich als werknemers gaan gedragen,
+
+00:12:49.500 --> 00:12:52.420
+verschuift jouw taak van coole bots bouwen naar zorgen dat ze niet op hol slaan.
+
+00:12:52.820 --> 00:13:00.520
+Verantwoorden AI gaat minder over mooie ethiek, posters aan de muur en meer over van rails die je uit de ad het hel houden terwijl ze toch de beloofde efficiëntie leveren.
+
+00:13:00.720 --> 00:13:02.020
+Dit is de harde realiteit.
+
+00:13:02.020 --> 00:13:08.860
+Als je niet kunt uitleggen wat een agent heeft gedaan, wanneer dat gebeurde en welke data er zijn geraakt, gaan de boze telefoontjes niet naar Microsoft, maar naar jou.
+
+00:13:09.240 --> 00:13:12.840
+Verantwoorden AI draait om vertrouwen, controleerbaarheid en overlevingskracht.
+
+00:13:13.020 --> 00:13:17.460
+Je wilt snelheid van de agent, maar je wilt ook volledig inzicht zodat elke actie traceerbaar is.
+
+00:13:17.680 --> 00:13:21.840
+Anders betekent een gestroomlijnde workflow alleen maar snellere fouten met een grotere impact.
+
+00:13:22.040 --> 00:13:25.480
+De afweging is productiviteit aan de ene kant en risico aan de andere kant.
+
+00:13:25.480 --> 00:13:35.760
+Natuurlijk kunnen agents uren besparen op planning, tickettriage of gegevensverwerking, maar dezelfde agent kan ook loonadministratiegegevens blootstellen in een chat of e-mail aan een vertrouwelijke distributiegroep zonder dat eerst te vragen.
+
+00:13:35.920 --> 00:13:42.360
+En zodra gebruikers het vertrouwen verliezen, als het ook maar één keer privégegevensprijs geeft, ben je de rest van het kwartaal bezig ze te smeken het ooit nog eens te proberen.
+
+00:13:42.620 --> 00:13:45.740
+Microsoft kan magie vermarkten, jij zit vast aan het uitleggen van de gevolgen.
+
+00:13:45.740 --> 00:13:46.960
+Hoe lossen we dit nu op?
+
+00:13:47.060 --> 00:13:50.040
+Drie van rails zijn niet onderhandelbaar als je autonomie wilt zonder chaos.
+
+00:13:50.220 --> 00:13:54.540
+Ten eerste op rollen gebaseerde toegang en bereik permissies gekoppeld aan de eigen identiteit van de agent.
+
+00:13:54.540 --> 00:13:57.140
+Laat agents geen wereldwijde beheerdersrechten erven.
+
+00:13:57.360 --> 00:13:59.400
+Behandel ze als bewuste service accounts.
+
+00:13:59.680 --> 00:14:01.740
+Bepaal waar de bot bij mag en niets meer dan dat.
+
+00:14:02.040 --> 00:14:06.140
+Ten tweede, gegevensclassificatie en handhaving, meestal met Azure Purview.
+
+00:14:06.420 --> 00:14:10.480
+Zo voorkom je dat agents vertrouwelijke looninformatie in openbare teams sites dumpen.
+
+00:14:10.980 --> 00:14:15.840
+Klassificatie en vertrouwelijkheidslabels maken het verschil tussen een klein foutje en een compliance falen.
+
+00:14:16.000 --> 00:14:19.200
+Ten derde, verplichte audit logging en sessie gebaseerd geheugen.
+
+00:14:19.440 --> 00:14:22.920
+Dit geeft je een traceerbaar overzicht van wat de agent zag en waarom hij handelde.
+
+00:14:22.920 --> 00:14:28.740
+Geen audit trail betekent dat je aan toezichthouders moet uitleggen, dat weten we eigenlijk niet, wat niet bijdraagt aan je carrière.
+
+00:14:28.940 --> 00:14:30.300
+Hier is nog een kritieke knop.
+
+00:14:30.500 --> 00:14:33.700
+Of een agent met of zonder menselijke goedkeuring handelt, is aan jou.
+
+00:14:33.920 --> 00:14:35.100
+Dat is configureerbaar.
+
+00:14:35.340 --> 00:14:40.740
+Als het gaat om financiën, ouder of elke taak die wijzigingen aanbrengt in kerngegevens, vereist dan standaard altijd goedkeuring.
+
+00:14:40.920 --> 00:14:45.460
+Klik om door te gaan moet ingebouwd zijn, tenzij je wilt dat bots om twee uur s'nachts loonstroken bewerken.
+
+00:14:45.460 --> 00:14:54.940
+Bij taken met een laag risico, zoals documenten opzoeken of vergaderingen samenvatten, is autonomie prima, maar jij bepaalt vooraf in welke categorie de taak valt en je stelt goedkeuringen die overeenkomstig in.
+
+00:14:55.340 --> 00:14:57.200
+Geheugenbeheer krijgt ook niet genoeg aandacht.
+
+00:14:57.480 --> 00:15:04.540
+Zonder gestructureerde sessie-idees en opslag per agent zal je bot zich gedragen als een vergeetachtige goudvis of een black box worden met onduidelijke herinneringen.
+
+00:15:04.720 --> 00:15:11.800
+Het voorbeeld van de reisboekingsagent liet zien hoe Microsoft gespreks en sessie-idees opslaat, zodat je acties kunt terugkijken en indien nodig kunt wissen.
+
+00:15:11.800 --> 00:15:18.720
+Dat is geheugenhygiëne. Eist als beheerderscoping per agent en per sessie, zodat één agent geen context meedraagt die hij niet hoort te hebben.
+
+00:15:18.880 --> 00:15:23.920
+En eist altijd de mogelijkheid om het geheugen voor specifieke objecten te wissen als compliance met vragen komt.
+
+00:15:24.160 --> 00:15:28.300
+Zie governance als vangrails langs een tweebaansweg. Niemand plaatst ze om de rit te verpesten.
+
+00:15:28.540 --> 00:15:31.380
+Ze zijn er zodat één moment van afleiding je niet over de rand laat rijden.
+
+00:15:31.540 --> 00:15:36.100
+In de praktijk zijn op rollen gebaseerde toegang, beperkte permissies, gegevensclassificatie en logginggeen van police.
+
+00:15:36.280 --> 00:15:40.240
+Het zijn veiligheidsgordels. Ze houden je tenant operationeel wanneer het onverwachte gebeurt.
+
+00:15:40.240 --> 00:15:45.740
+Laten we dit operationeel maken. Voordat je autonomie inschakelt, zorg voor RBAC voor agentidentiteiten.
+
+00:15:46.000 --> 00:15:52.180
+Pas vertrouwelijkheidslabels toe op alle databronnen, activeer volledige audit trails en verrijs goedkeuringstromen voor alle schrijfbewerkingen.
+
+00:15:52.340 --> 00:15:56.660
+Dat is je pre-flight checklist. Sla er één over en je vraagt om de botversie van Schaduw-IT.
+
+00:15:57.020 --> 00:15:58.880
+Neem nog eens dat co-pilot-bookingsysteem.
+
+00:15:59.020 --> 00:16:03.400
+Te losjes en het verstuurt een vertrouwelijke gastenlijst naar elke aanwezige alsof het je een gunst bewijst.
+
+00:16:03.580 --> 00:16:09.880
+Met governance op orde controleert het vertrouwelijkheidslabels, respecteert het verspreidingsbereik en voorkomt het dat gegevens worden blootgesteld.
+
+00:16:09.880 --> 00:16:14.540
+Dezelfde tool, twee uitkomsten. De ene is een productiviteitspost waar je CEO mee zal ponken.
+
+00:16:14.740 --> 00:16:18.180
+De andere zorgt dat je wordt meegesleurd naar een vergadering met de juridische afdeling op de speakerphone.
+
+00:16:18.360 --> 00:16:21.840
+Kortom, verantwoorden AI is geen papierwerk, het is overlevingszoetrusting.
+
+00:16:22.080 --> 00:16:26.200
+Met vangrails worden agents betrouwbare teamgenoten die snel werken en elke actie loggen.
+
+00:16:26.420 --> 00:16:29.140
+Zonder vangrails zijn het peuters met elektrisch gereedschap.
+
+00:16:29.240 --> 00:16:31.820
+Jouw set bepaalt welke versie in productie terechtkomt.
+
+00:16:31.940 --> 00:16:34.100
+En dit gaat niet alleen over de co-pilots van vandaag.
+
+00:16:34.100 --> 00:16:39.880
+De volgende golf agents is al in zicht en ze zullen niet alleen e-mails opstellen, ze zullen op knoppen klikken en interfaces besturen.
+
+00:16:40.100 --> 00:16:41.320
+Dat legt de lat nog hoger.
+
+00:16:41.540 --> 00:16:48.940
+Van low-code bots tot magma-aangedreven agents, de huidige co-pilot studio voelt nog aan als macro's schrijven in Excel, nuttig maar onhandig.
+
+00:16:49.160 --> 00:16:55.780
+Denk bij de magma-aangedreven agents van morgen niet aan een macro hulpje, maar aan een junior teamgenoot die dashboards bestudeert,
+
+00:16:56.080 --> 00:16:59.920
+door schermen klikt en volledige workflows uitvoert voordat je je eerste koffie op hebt.
+
+00:16:59.920 --> 00:17:02.000
+Dat is de verschuiving die op ons afkomt.
+
+00:17:02.120 --> 00:17:03.980
+Co-pilot studio zijn zijwieltjes.
+
+00:17:04.140 --> 00:17:08.540
+Magma is de motor die de fiets verandert in iets dat meer lijkt op een crossmotor met lachgas erop.
+
+00:17:08.780 --> 00:17:10.620
+Dit is wat magma echt anders maakt.
+
+00:17:10.820 --> 00:17:12.560
+Het is niet beperkt tot tekst, prompts.
+
+00:17:12.860 --> 00:17:18.960
+Het is een multimodaal visie taalactie, fla, model dat beelden, video, schermindelingen en beweging verwerkt.
+
+00:17:19.100 --> 00:17:20.660
+Allemaal bovenop een taalmodel.
+
+00:17:21.080 --> 00:17:26.240
+Technieken zoals set of mark, zon, waarbij interactieve elementen zoals knoppen nummerieke labels krijgen.
+
+00:17:26.240 --> 00:17:32.620
+En trace of mark, tom, dat bewegende objecten in de tijd volgt, stellen het in staat om wat het ziet te verbinden met wat het kan doen.
+
+00:17:32.920 --> 00:17:40.640
+Dat betekent dat magma niet alleen zinnen leest, het kijkt naar UI stromen, herkent patronen zoals welke knop tot goedkeuring leidt en leert hoe te handelen.
+
+00:17:40.820 --> 00:17:42.240
+En het zijn ook geen kleine experimenten.
+
+00:17:42.960 --> 00:17:49.140
+Het is getraind op ongeveer 39 miljoen multimodale samples, varierend van UI screenshots tot robotica trajecten en video data.
+
+00:17:49.140 --> 00:17:59.740
+Daarom, in tegenstelling tot de tekst georiënteerde scope van Copilot Studio, strekt het speelveld van magma zich uit van het aantikken van een knop tot het beheren van een navigatiestroom of zelfs het nabootsen van een robotaxie die het tijdens de training zag.
+
+00:17:59.920 --> 00:18:01.200
+Die verschuiving is belangrijk.
+
+00:18:01.440 --> 00:18:07.600
+Copilots leven vandaag de dag in de conceptfase, e-mails, samenvattingen, zoekopdrachten en misschien het aansporen van een takenlijst.
+
+00:18:07.800 --> 00:18:09.140
+Magma opereert op de uitvoeringslaag.
+
+00:18:09.140 --> 00:18:15.200
+In plaats van een Outlook concept voor te stellen, kunnen magma agents de verzendknop in de UI herkennen en erop klikken.
+
+00:18:15.340 --> 00:18:22.240
+In plaats van een datapunt in Power BI naar voren te halen, kunnen ze door het dashboard scrollen, een grafiek isoleren en deze in een actieplan voor de financiële leiding trekken.
+
+00:18:22.440 --> 00:18:24.380
+Zie UI interactie als een grenslijn.
+
+00:18:24.600 --> 00:18:27.060
+Alles voor magma kon alleen ontwerpen en voorstellen.
+
+00:18:27.320 --> 00:18:30.880
+Alles na magma kan ontwerpen, beslissen en vervolgens daadwerkelijk klikken.
+
+00:18:31.100 --> 00:18:35.960
+Zodra je de stap naar klikautomatisering zet, kunnen je vangrails niet langer stoppen bij datatoegang.
+
+00:18:35.960 --> 00:18:41.220
+Ze moeten ook interface acties omvatten, zodat een agent niet door menu's gaat dwalen die je nooit bedoeld had.
+
+00:18:41.440 --> 00:18:42.740
+Stel je een scenario voor.
+
+00:18:42.960 --> 00:18:45.180
+De agent is verbonden met je financiële dashboard.
+
+00:18:45.400 --> 00:18:46.280
+De omzet daalt.
+
+00:18:46.480 --> 00:18:49.360
+In plaats van alleen te signaleren, wil je misschien het management waarschuwen.
+
+00:18:49.520 --> 00:18:55.980
+Hij plaatst een teamsbericht in het financiële kanaal, voegt een conceptrapport toe en werkt CRM Records bij om aanbiedingen voor risicoklanten voor te bereiden.
+
+00:18:56.180 --> 00:18:57.620
+Heb jij die workflow goed gekeurd?
+
+00:18:57.840 --> 00:19:02.460
+Misschien niet, maar autonomie op UI niveau betekent dat de agent geen e-mail API nodig heeft.
+
+00:19:02.460 --> 00:19:07.180
+Hij bekeek hoe dashboards en retentiestromen werken en bouwde de reeks klikken zelf.
+
+00:19:07.900 --> 00:19:14.120
+De tijd die je bespaart brengt nieuwe lasten met zich mee, controleren welke stappen de agent nam en verifiëren of ze overeen kwamen met je beleid.
+
+00:19:14.300 --> 00:19:16.860
+De technische basis verklaart waarom dit mogelijk is.
+
+00:19:17.240 --> 00:19:22.360
+Magma is gebouwd op een CompNext XL model voor visie en een Yama 3 8B model voor taal.
+
+00:19:22.560 --> 00:19:25.860
+Het verwerkt tekst, beelden en acties als eengedeelde context.
+
+00:19:25.860 --> 00:19:33.880
+M en 2M geven het een gestructureerde manier om visuele stappen te doorlopen, knoppen te identificeren, objecten te volgen en meer stapstromen aan elkaar te reigen.
+
+00:19:34.060 --> 00:19:39.820
+En daarom presteerde Magma in tests beter dan eerdere modellen, zowel in nauwkeurigheid van UI-navigatie als bij robotbesturingstaken.
+
+00:19:40.000 --> 00:19:41.860
+Het lost niet slechts één type probleem op.
+
+00:19:42.020 --> 00:19:47.320
+Het is getraind om stappen te generaliseren over meerdere omgevingen, of dat nu het besturen van een robotarm is of klikken in SAP.
+
+00:19:47.420 --> 00:19:50.760
+Voor beheerders betekent dit dat dit niet zomaar een upgrade van een chatballonnetje is.
+
+00:19:50.760 --> 00:19:55.920
+Dit is de eerste golfbots die het tenant behandelen als een besturingsomgeving waar ze naar wens doorheen kunnen navigeren.
+
+00:19:56.040 --> 00:20:02.200
+Het is dan ook geen verrassing dat orchestratieframeworks zoals Autogen, Plankchain of de Assistance API steeds vaker worden genoemd.
+
+00:20:02.320 --> 00:20:07.820
+Het zijn de middelen waarmee ontwikkelaars meerdere agents aan elkaar koppelen, een die plant, een die uitvoert en een die valideert.
+
+00:20:08.040 --> 00:20:11.600
+Beheerders hoeven die toolkits vandaag niet te leren, maar je moet ze wel in de gaten houden.
+
+00:20:11.800 --> 00:20:16.720
+Het is het leidingwerk dat één Magma-agent verandert in een team van agents die samenwerken aan gedeelde taken.
+
+00:20:16.720 --> 00:20:22.720
+En als orchestratie in jouw tenant draait, moet je weten welke agents de leiding hebben en welke vangrails ze elk volgen.
+
+00:20:22.940 --> 00:20:26.540
+Dit is de valkuil. Minder klikken voor jou betekent niet minder risico's.
+
+00:20:26.760 --> 00:20:34.620
+Wanneer agents taken op UI-niveau gaan uitvoeren, riskeren foutieve configuraties niet langer alleen datalekken, maar ook de directe uitvoering van werkstromen.
+
+00:20:34.760 --> 00:20:42.580
+Als governance niet wordt uitgebreid om zowel de zichtbare gegevens als de acties in een interface te dekken, kan de eerste misstap een kettingreactie veroorzaken.
+
+00:20:42.580 --> 00:20:48.520
+Taken onjuist toewijzen om terecht te onkostig goedkeuren of klantcommunicatie verkeerd doorsturen.
+
+00:20:49.040 --> 00:20:52.360
+Hoe sneller de agent handelt, hoe sneller die fouten zich verspreiden.
+
+00:20:52.580 --> 00:20:54.980
+De weg vooruit is dus helder, ook al is die complex.
+
+00:20:55.240 --> 00:21:00.760
+Vandaag de dag zijn co-pilots in de studio begrensd en geïsoleerd, waarbij je stromen nauwgezet controleert en rechten aan sharepte.
+
+00:21:00.960 --> 00:21:05.840
+Morgen zijn ze als Magma, multimodaal en actiegericht, terwijl ze playbooks draaien die jij niet hebt vastgelegd.
+
+00:21:05.840 --> 00:21:07.980
+Daartussen bevindt zich jouw governance verhaal.
+
+00:21:08.120 --> 00:21:14.120
+En als je denkt dat de huidige vangrails fouten voorkomen, dan zal het tijdperk van UI acties een dikkere muur en scherpere controles vereisen.
+
+00:21:14.360 --> 00:21:17.780
+Want uiteindelijk zijn deze agents niet zomaar slimmere chatbots.
+
+00:21:17.980 --> 00:21:23.560
+Ze gedragen zich meer als collega's die geen inloggegevens of training nodig hebben en niet altijd eerst toestemming vragen.
+
+00:21:24.000 --> 00:21:30.620
+Of die toekomst een succes of een nachtmerrie wordt, hangt volledig af van hoe strak die vangrails staan wanneer je de schakelaar omzet.
+
+00:21:30.920 --> 00:21:33.320
+Dus, hier is de kern van de zaak voor beheerders.
+
+00:21:33.320 --> 00:21:40.280
+Co-pilot agents zijn al in opkomst en het verschil tussen een nuttige hulp en een grote puinhoop hangt af van hoe je ze uitrolt.
+
+00:21:40.920 --> 00:21:42.440
+Hou het simpel met drie stappen.
+
+00:21:42.640 --> 00:21:49.220
+Ten eerste, test alleen voorspelbare agents met een laag risico, zoals hour- of IT-selfservice, voordat je klantgerichte scenario's aanpakt.
+
+00:21:49.380 --> 00:21:53.860
+Ten tweede, vergrendel rechten en verrijs menselijke goedkeuring voor alles wat naar je systemen schrijft.
+
+00:21:54.000 --> 00:21:58.740
+Ten derde, implementeer geheugen en audit-lock zodat je elke sessie kunt traceren en indien nodig de status kunt wissen.
+
+00:21:58.920 --> 00:22:02.380
+Co-pilots besparen tijd, maar IT moet de sleutels van de bedrijfsauto in handen houden.
+
+00:22:02.380 --> 00:22:07.080
+Doe de basis, begrens, controleer, test en agents worden betrouwbare helpers in plaats van hoofdpijndossiers.
+
+00:22:07.280 --> 00:22:17.460
+Abonneer je op de M365 Show nieuwsbrief voor meer van deze no-nonsense playbooks en volg de M365 Show LinkedIn pagina voor livestreams met MVP's die dit eerder hebben stukgemaakt en hersteld.

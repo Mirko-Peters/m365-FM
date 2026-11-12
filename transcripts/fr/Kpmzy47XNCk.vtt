@@ -1,0 +1,919 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:03.300
+Le sujet d'aujourd'hui est quelque chose dont presque tout le monde a entendu parler, mais que peu comprennent vraiment.
+
+00:00:03.900 --> 00:00:05.240
+Copilot dans Microsoft EntraID.
+
+00:00:05.800 --> 00:00:08.900
+Vous avez probablement vu ce nom dans votre centre d'administration ou entendu une conférence à ce sujet.
+
+00:00:09.320 --> 00:00:10.460
+Que fait-il concrètement ?
+
+00:00:10.460 --> 00:00:13.680
+Juste un chatbot qui répond à des questions basiques ou est-ce bien plus vaste ?
+
+00:00:13.680 --> 00:00:14.920
+Voici la manière la plus simple de l'appréhender.
+
+00:00:15.460 --> 00:00:19.740
+Imaginez que vous êtes administrateur informatique et qu'un utilisateur appelle le support frustré de ne pas pouvoir accéder au CRM.
+
+00:00:20.120 --> 00:00:21.540
+Il perd du temps et a besoin d'une réponse immédiate.
+
+00:00:21.880 --> 00:00:23.040
+Votre travail est d'en déterminer la raison.
+
+00:00:23.300 --> 00:00:27.240
+Vous ouvrez le centre d'administration Entra, accédez aux journaux de connexion, filtrez par nom d'utilisateur
+
+00:00:27.240 --> 00:00:31.440
+et vous voilà face à une feuille de données brute, identifiant de corrélation, code d'erreur, horodata, gblobs, json.
+
+00:00:32.220 --> 00:00:34.780
+La réponse se trouve quelque part dans ce fouillis, mais la trouvée prend du temps.
+
+00:00:35.240 --> 00:00:38.200
+Si vous êtes un administrateur junior ou nouveau sur Entra, vous ne savez pas par où commencer.
+
+00:00:38.580 --> 00:00:39.660
+C'est le problème que résout Copilot.
+
+00:00:40.100 --> 00:00:43.500
+A la fin de cette capsule d'informations, vous comprendrez ce qu'est réellement Copilot dans EntraID,
+
+00:00:43.620 --> 00:00:47.680
+comment il transforme des journaux complexes en réponse claire et pourquoi il révolutionne la gestion des identités.
+
+00:00:48.220 --> 00:00:50.820
+Pas de discours marketing, juste les bases du problème de dépannage.
+
+00:00:50.920 --> 00:00:52.560
+Les identités ?
+
+00:00:52.560 --> 00:00:54.220
+Intéressons-nous au problème que Copilot résout.
+
+00:00:54.220 --> 00:01:00.240
+Car pour comprendre l'utilité d'un assistant IA, il faut d'abord mesurer la difficulté du dépannage des identités.
+
+00:01:01.120 --> 00:01:02.560
+Pensez à l'échelle de l'identité moderne.
+
+00:01:03.160 --> 00:01:05.700
+Dans une organisation type, des milliers de connexions ont lieu chaque jour.
+
+00:01:06.700 --> 00:01:08.800
+Certaines réussissent, d'autres échouent, certaines sont bloquées par des politiques.
+
+00:01:09.480 --> 00:01:12.720
+Vous avez des centaines de politiques d'accès conditionnel qui interagissent de manière imprévisible
+
+00:01:12.720 --> 00:01:17.040
+et en plus de cela, la protection des identités génère des signaux de risque pour les utilisateurs potentiellement compromis.
+
+00:01:17.900 --> 00:01:20.000
+Cela représente énormément de données provenant de sources indiverts.
+
+00:01:20.340 --> 00:01:23.120
+Maintenant, imaginez que vous cherchez pourquoi un utilisateur spécifique a été bloqué.
+
+00:01:23.120 --> 00:01:28.080
+Vous commencez par les journaux de connexion et trouvez l'événement, mais ils indiquent seulement que la connexion a échoué sans expliquer pourquoi.
+
+00:01:28.860 --> 00:01:32.900
+Vous passez donc à l'onglet d'accès conditionnel, vérifiez la conformité de l'appareil de l'utilisateur,
+
+00:01:32.980 --> 00:01:34.920
+puis les journaux d'audit pour voir si des politiques ont changé,
+
+00:01:35.060 --> 00:01:37.920
+et enfin la protection des identités pour détecter d'éventuels risques ingrises.
+
+00:01:38.580 --> 00:01:41.440
+Chacune de ces étapes correspond à un volet séparé avec ses propres vues et filtres.
+
+00:01:41.940 --> 00:01:45.020
+Le temps que vous fassiez le lien entre toutes ces informations, 15 ou 20 minutes se sont écoulées.
+
+00:01:45.620 --> 00:01:46.940
+La barrière de la langue aggrave encore les choses.
+
+00:01:46.940 --> 00:01:48.820
+Les journaux bruts ne sont pas rédigés en langage clair.
+
+00:01:49.560 --> 00:01:53.380
+Ils s'expriment en code technique, identifiant de corrélation qui ressemble à des chaînes aléatoires,
+
+00:01:53.660 --> 00:01:57.720
+numéro d'erreur à rechercher manuellement, et blob JSON au champ imbriqué difficile à analyser.
+
+00:01:58.600 --> 00:02:01.680
+Si vous êtes un administrateur débutant ou au support technique, vous ne savez pas quel champ vérifier,
+
+00:02:02.020 --> 00:02:04.740
+alors vous transférez le dossier à un administrateur senior, déjà surchargé.
+
+00:02:05.080 --> 00:02:05.800
+Voici un exemple concret.
+
+00:02:06.160 --> 00:02:09.440
+Un utilisateur appelle le support technique et dit qu'il ne peut pas accéder à Microsoft Teams.
+
+00:02:10.280 --> 00:02:11.440
+C'est la seule information dont vous disposez.
+
+00:02:11.440 --> 00:02:12.840
+Par où commencer ?
+
+00:02:12.840 --> 00:02:15.260
+Vérifiez-vous la licence de l'utilisateur, la conformité de son appareil,
+
+00:02:15.340 --> 00:02:17.760
+les stratégies d'accès conditionnels, les journaux de connexion, le score de risque.
+
+00:02:18.340 --> 00:02:21.140
+Sans une connaissance approfondie d'Entra, vous travaillez à l'aveugle et cela prend du temps.
+
+00:02:21.420 --> 00:02:22.760
+C'est précisément là que Copilot intervient.
+
+00:02:23.420 --> 00:02:25.440
+Qu'est-ce que Security Copilot dans EntraID ?
+
+00:02:25.440 --> 00:02:28.260
+Alors qu'est-ce que Security Copilot dans EntraID exactement ?
+
+00:02:28.260 --> 00:02:29.300
+Voici la définition la plus simple.
+
+00:02:29.700 --> 00:02:32.440
+C'est un assistant IA intégré directement au centre d'administration Entra,
+
+00:02:32.560 --> 00:02:34.820
+et non un site ou un portail séparé auquel vous devez vous connecter.
+
+00:02:35.660 --> 00:02:37.020
+Il est intégré là où vous travaillez déjà,
+
+00:02:37.020 --> 00:02:41.240
+comme un agent de sécurité qui connaît chaque journal, chaque stratégie et chaque utilisateur du bâtiment.
+
+00:02:41.800 --> 00:02:43.520
+Vous n'avez plus besoin de chercher les informations par vous-même.
+
+00:02:43.920 --> 00:02:44.460
+Il suffit de demander.
+
+00:02:45.440 --> 00:02:46.260
+Voici comment cela fonctionne.
+
+00:02:46.600 --> 00:02:48.400
+Tapez une question en langage naturel, comme EGA.
+
+00:02:48.760 --> 00:02:50.160
+Affiche-moi les utilisateurs à haut risque dans mon temps.
+
+00:02:50.500 --> 00:02:52.300
+Ou pourquoi cette connexion a-t-elle échoué ?
+
+00:02:52.300 --> 00:02:54.780
+Ou résume l'activité de connexion des dernières 24 heures.
+
+00:02:55.640 --> 00:02:59.600
+Copilot prend cette question, interroge vos données, Entra, et vous répond en langage naturel.
+
+00:03:00.780 --> 00:03:03.660
+Il se connecte aux journaux de connexion, d'audit, aux stratégies d'accès conditionnels,
+
+00:03:03.740 --> 00:03:05.660
+à la protection des identités et aux détails des utilisateurs.
+
+00:03:05.660 --> 00:03:07.540
+Toutes ces données existent déjà dans Entra,
+
+00:03:07.620 --> 00:03:09.840
+mais Copilot les synthétise en quelques secondes au lieu de minutes.
+
+00:03:10.500 --> 00:03:11.260
+Et voici le point clé.
+
+00:03:11.680 --> 00:03:13.540
+Copilot ne se contente pas de vous déverser des données brutes.
+
+00:03:14.080 --> 00:03:15.980
+Il vous donne un résumé, un récit, une explication.
+
+00:03:16.540 --> 00:03:18.440
+Au lieu de scruter un tableau de code d'erreur, vous obtenez.
+
+00:03:18.660 --> 00:03:23.700
+Gakar, cet utilisateur a été bloqué car la stratégie d'accès conditionnel X exigeait un appareil conforme,
+
+00:03:23.800 --> 00:03:25.080
+et son appareil ne l'était pas.
+
+00:03:25.580 --> 00:03:27.400
+C'est une information sur laquelle vous pouvez agir immédiatement.
+
+00:03:27.960 --> 00:03:30.660
+Copilot suggère également des questions de suivi basées sur le contexte.
+
+00:03:30.660 --> 00:03:37.660
+Après avoir répondu à votre première question, il pourrait dire, voulez-vous voir tous les échecs de connexion pour cet utilisateur au cours des 7 derniers jours ?
+
+00:03:37.660 --> 00:03:40.520
+Ou souhaitez-vous connaître les autres stratégies applicables ?
+
+00:03:40.520 --> 00:03:43.520
+Il vous guide étape par étape au lieu de vous laisser deviner seul la marche à suivre.
+
+00:03:44.560 --> 00:03:45.160
+Voici l'analogie.
+
+00:03:45.720 --> 00:03:47.800
+Les données en trace sont une bibliothèque pleine d'informations.
+
+00:03:48.280 --> 00:03:49.420
+Mais trouver le bon livre prend du temps.
+
+00:03:49.780 --> 00:03:52.060
+Copilot est le bibliothécaire qui sait exactement où se trouve tout.
+
+00:03:52.520 --> 00:03:54.140
+Vous lui dites ce dont vous avez besoin et vous l'apport.
+
+00:03:54.520 --> 00:03:57.120
+Fini d'irrer dans les allées, fini de deviner les étagères, juste la réponse quand vous en avez besoin.
+
+00:03:57.120 --> 00:03:59.900
+Premier cas d'usage, le dépannage des connexions.
+
+00:04:00.600 --> 00:04:01.940
+Concrétisons cela avec un exemple réel.
+
+00:04:02.660 --> 00:04:04.700
+Un employé signale qu'il ne peut pas accéder à Microsoft Teams.
+
+00:04:05.100 --> 00:04:07.540
+Cela fait une heure qu'il essaye à redémarrer son ordinateur et rien ne fonctionne.
+
+00:04:08.220 --> 00:04:09.180
+Il appelle donc le support technique.
+
+00:04:09.920 --> 00:04:15.020
+A l'ancienne, vous ouvrez les journaux de connexion filtrés par nom d'utilisateur, puis vous devez deviner la bonne plage horaire.
+
+00:04:15.860 --> 00:04:18.280
+A-t-il essayé de se connecter il y a 10 minutes 20 ?
+
+00:04:18.280 --> 00:04:24.580
+Vous faites défiler les événements à la recherche de celui en échec et quand vous le trouvez, vous tombez sur un code d'erreur brut avec un statut d'échec sans explication.
+
+00:04:24.880 --> 00:04:26.980
+Juste un nombre à A-A à rechercher.
+
+00:04:27.600 --> 00:04:33.840
+Ensuite, vous cliquez sur l'onglet d'accès conditionnel pour voir si une stratégie a bloqué la connexion, vérifier la conformité de l'appareil et le niveau de risque de l'utilisateur.
+
+00:04:34.500 --> 00:04:38.300
+Chaque étape nécessite un clic, une vue et un changement de contexte mental distinct.
+
+00:04:39.360 --> 00:04:42.280
+15 minutes plus tard, vous avez peut-être une réponse ou vous êtes encore plus confus.
+
+00:04:42.800 --> 00:04:43.740
+Voici maintenant la méthode Copilot.
+
+00:04:44.280 --> 00:04:46.280
+Vous ouvrez le centre d'administration en tra et tapez une seule phrase.
+
+00:04:46.280 --> 00:04:49.780
+Pourquoi cet utilisateur n'a-t-il pas pu se connecter à Teams ?
+
+00:04:49.780 --> 00:04:50.060
+C'est tout.
+
+00:04:50.400 --> 00:04:52.220
+Pas de filtre, pas de conjecture, pas d'aller-retour entre les onglets.
+
+00:04:52.760 --> 00:04:55.180
+En coulisses, Copilot fait le travail que vous faisiez manuellement.
+
+00:04:55.700 --> 00:05:04.160
+Il récupère les journaux de connexion récents, vérifie l'évaluation de l'accès conditionnel, examine le statut de conformité de l'appareil et identifie la cause de l'échec et identifie la cause de l'échec.
+
+00:05:05.120 --> 00:05:06.520
+Ensuite, il vous renvoie une réponse comme celle-ci.
+
+00:05:07.420 --> 00:05:11.280
+Connexion échouée car la stratégie d'accès conditionnel exigeant un appareil conforme a bloqué la session.
+
+00:05:12.400 --> 00:05:14.520
+L'appareil de l'utilisateur a été marqué comme non conforme.
+
+00:05:14.880 --> 00:05:15.920
+Tout est dit en une seule phrase.
+
+00:05:16.660 --> 00:05:18.420
+Vous savez exactement ce qui s'est passé et ce qui doit changer.
+
+00:05:19.060 --> 00:05:22.800
+L'appareil de l'utilisateur doit devenir conforme ou vous devez créer une exception.
+
+00:05:23.360 --> 00:05:25.080
+Dans les deux cas, vous avez une voie claire à suivre.
+
+00:05:25.780 --> 00:05:26.720
+Mais Copilot ne s'arrête pas là.
+
+00:05:27.120 --> 00:05:28.720
+Il peut également faire apparaître un contexte supplémentaire.
+
+00:05:29.140 --> 00:05:33.620
+La plateforme de l'appareil, la version de l'OS, le navigateur, l'adresse IP, l'emplacement et la méthode d'authentification.
+
+00:05:34.040 --> 00:05:36.820
+Toutes ces informations sont disponibles avec une simple demande de suivi telle que OK.
+
+00:05:37.120 --> 00:05:39.680
+Montre-moi tous les échecs de connexion pour cet utilisateur sur les 7 derniers jours.
+
+00:05:40.120 --> 00:05:42.200
+Ou quelles autres stratégies s'appliquent ?
+
+00:05:42.200 --> 00:05:43.400
+Les gains de temps sont spectaculaires.
+
+00:05:43.400 --> 00:05:46.540
+Ce qui prenait autrefois 15 minutes ne prend plus qu'environ 30 secondes.
+
+00:05:47.440 --> 00:05:48.640
+Et voici le véritable avantage.
+
+00:05:48.940 --> 00:05:51.080
+Le personnel junior peut gérer ses problèmes sans escalade.
+
+00:05:51.740 --> 00:05:57.180
+Un membre du support technique sans connaissance approfondie d'entra peut poser la même question à Copilot et obtenir la même réponse claire.
+
+00:05:57.180 --> 00:06:03.960
+Cela signifie que les administrateurs seniors passent moins de temps sur le dépannage routinier et plus de temps sur les problèmes complexes qui nécessitent réellement leur expertise.
+
+00:06:05.060 --> 00:06:07.180
+Deuxième cas d'usage, l'investigation sur les utilisateurs à risque.
+
+00:06:07.580 --> 00:06:08.720
+Les échecs de connexion sont une chose.
+
+00:06:09.040 --> 00:06:11.080
+Mais les risques liés à l'identité, c'est un tout autre niveau.
+
+00:06:11.780 --> 00:06:14.880
+La protection des identités d'entraïdis génère des scores de risque pour les utilisateurs.
+
+00:06:15.300 --> 00:06:19.460
+Et bien que cela semble simple, comprendre pourquoi quelqu'un a été signalé comme étant à haut risque est un tout autre défi.
+
+00:06:20.200 --> 00:06:23.620
+Les données brutes issues de la protection des identités peuvent donner l'impression d'être submergées par un flux d'interrompu.
+
+00:06:24.220 --> 00:06:28.340
+Vous voyez un score de risque et une liste de détection, mais faire le lien avec le comportement réel de l'utilisateur prend du temps.
+
+00:06:28.720 --> 00:06:30.280
+Vous devez vérifier chaque détection individuellement.
+
+00:06:30.720 --> 00:06:34.420
+Comparer les horodatages, croiser les activités de connexion, puis décider connexion, puis décider quoi faire.
+
+00:06:34.700 --> 00:06:35.740
+C'est faisable, mais c'est lent.
+
+00:06:36.660 --> 00:06:39.060
+Et lorsque vous gérez des centaines d'utilisateurs, cette rapidité compte.
+
+00:06:39.940 --> 00:06:42.920
+Copilot change la donne avec une fonctionnalité appelée résumée des utilisateurs à risque.
+
+00:06:43.200 --> 00:06:47.040
+C'est l'une des fonctionnalités les plus pratiques de l'expérience Copilot intégrée, et voici comment elle fonctionne.
+
+00:06:47.040 --> 00:06:52.420
+Vous ouvrez le rapport des utilisateurs à risque dans la protection des identités, et repérez un utilisateur avec un score de risque élevé.
+
+00:06:53.000 --> 00:06:57.940
+Au lieu de fouiller manuellement dans chaque détection, vous demandez simplement à Copilot, résume l'activité à risque pour cet utilisateur.
+
+00:06:58.440 --> 00:06:59.480
+Non, c'est tout.
+
+00:07:00.740 --> 00:07:06.900
+Copilot récupère les détections de risques, comme des propriétés de connexion inhabituelles, des identifiants compromis ou des adresses IP suspectes,
+
+00:07:06.960 --> 00:07:10.260
+et les corrèlent avec l'activité de connexion récente de l'utilisateur.
+
+00:07:11.120 --> 00:07:12.660
+Ensuite, il présente le tout sous forme de récit.
+
+00:07:13.620 --> 00:07:14.840
+Le résultat peut ressembler à ceci.
+
+00:07:14.840 --> 00:07:18.340
+Cet utilisateur est signalé comme étant à haut risque.
+
+00:07:18.760 --> 00:07:22.840
+En raison de deux détections, une connexion depuis un emplacement inconnu dans un pays jamais accédé auparavant,
+
+00:07:23.220 --> 00:07:26.240
+et une activité correspondant à des identifiants connus ayant fuité sur le dark web.
+
+00:07:27.420 --> 00:07:27.820
+C'est puissant.
+
+00:07:28.300 --> 00:07:29.840
+Au lieu d'une liste d'événements, vous obtenez une histoire.
+
+00:07:30.380 --> 00:07:33.840
+Vous comprenez ce qui s'est passé, pourquoi c'est suspect, et quel est le niveau de gravité, et...
+
+00:07:33.840 --> 00:07:35.320
+Mais Copilot ne s'arrête pas au résumé.
+
+00:07:35.480 --> 00:07:41.620
+Il vous fournit également des recommandations sur la marche à suivre, réinitialiser le mot de passe, bloquer les prochaines connexions ou confirmer si l'activité était légitime.
+
+00:07:41.620 --> 00:07:45.840
+Ces recommandations sont adaptées aux détections de risques spécifiques, et non à des conseils génériques.
+
+00:07:46.340 --> 00:07:47.580
+Cela change complètement la perspective.
+
+00:07:48.240 --> 00:07:50.900
+Au lieu de vous demander, cet utilisateur est-il compromis ?
+
+00:07:50.900 --> 00:07:52.780
+Pouvez-vous demander comment dois-je réagir ?
+
+00:07:52.780 --> 00:07:57.520
+Copilot vous donne une marche à suivre claire, afin que les équipes chargées des identités puissent réagir plus rapidement et avec plus d'assurance.
+
+00:07:57.520 --> 00:07:58.960
+L'impact réel est immense.
+
+00:07:59.640 --> 00:08:05.880
+Au lieu de passer 20 minutes à enquêter sur un utilisateur risqué sans certitude, vous obtenez une vision complète en quelques secondes, accompagnée d'étapes exploitables.
+
+00:08:06.900 --> 00:08:11.580
+Pour les organisations gérant des milliers d'utilisateurs et des signaux de risque constants, ce n'est pas seulement pratique, c'est essentiel.
+
+00:08:12.820 --> 00:08:15.000
+Troisième cas d'usage, les insights de l'accès conditionnel.
+
+00:08:15.280 --> 00:08:17.600
+L'accès conditionnel est l'une des fonctionnalités les plus puissantes d'entraide.
+
+00:08:17.980 --> 00:08:18.980
+C'est aussi l'une des plus complexes.
+
+00:08:19.460 --> 00:08:25.160
+Lorsque vous avez des dizaines, voire des centaines de stratégies, comprendre ce qui s'est réellement passé lors d'une connexion peut être étonnamment complexe.
+
+00:08:25.640 --> 00:08:26.560
+Voici la méthode manuelle.
+
+00:08:27.040 --> 00:08:28.320
+Vous trouvez l'enregistrement de connexion.
+
+00:08:28.560 --> 00:08:32.800
+Faites défiler jusqu'à l'onglet accès conditionnel et vous voyez une liste de noms de stratégies avec leurs résultats.
+
+00:08:33.120 --> 00:08:35.020
+Succès, échec, non appliqué.
+
+00:08:36.040 --> 00:08:37.620
+C'est utile, mais cela ne vous donne qu'une partie de l'histoire.
+
+00:08:38.260 --> 00:08:43.960
+Vous devez encore déterminer quelles conditions ont déclenché la stratégie, pourquoi elle s'est appliquée à cet utilisateur précis et si le résultat est cohérent.
+
+00:08:44.780 --> 00:08:46.040
+Voici maintenant la méthode avec Copilot.
+
+00:08:46.440 --> 00:08:51.080
+Posez une seule question, quelles stratégies d'accès conditionnel se sont appliquées à cette connexion et qu'ont-elles fait ?
+
+00:08:51.080 --> 00:08:56.440
+Copilot renvoie une liste claire des stratégies évaluées, leurs résultats et les conditions spécifiques qui les ont déclenchées, qui les ont déclenchées.
+
+00:08:56.840 --> 00:08:58.720
+Au lieu de lire un tableau, vous obtenez une explication.
+
+00:08:59.400 --> 00:09:02.780
+La stratégie X a requis le MFA car la connexion provenait d'un emplacement non approuvé.
+
+00:09:03.500 --> 00:09:06.560
+La stratégie Y a bloqué la cession car l'appareil n'était pas conforme.
+
+00:09:07.060 --> 00:09:09.380
+C'est le genre d'informations qui permet de gagner du temps et de réduire les erreurs.
+
+00:09:09.520 --> 00:09:14.540
+Car lorsque vous comprenez exactement pourquoi une stratégie s'est appliquée, vous pouvez prendre de meilleures décisions sur son ajustement.
+
+00:09:15.220 --> 00:09:16.740
+Copilot peut également vous aider à un niveau supérieur.
+
+00:09:17.220 --> 00:09:19.880
+Vous pouvez demander, montre-moi les stratégies qui bloquent les connexions le plus fréquemment.
+
+00:09:19.880 --> 00:09:24.600
+C'est incroyablement utile pour identifier les stratégies trop restrictives ou les mauvaises configurations.
+
+00:09:25.500 --> 00:09:28.900
+Peut-être qu'une stratégie bloque trop d'utilisateurs légitimes car ces conditions sont trop larges
+
+00:09:28.900 --> 00:09:31.800
+ou qu'elle a trop d'exclusions créant des failles de sécurité.
+
+00:09:32.900 --> 00:09:37.860
+Copilot fait ressortir ces tendances pour que vous puissiez les traiter de manière proactive au lieu d'attendre les plaintes des utilisateurs.
+
+00:09:38.480 --> 00:09:39.880
+Il y a un développement récent qui mérite d'être mentionné.
+
+00:09:40.360 --> 00:09:44.740
+Microsoft a introduit un agent d'optimisation de l'accès conditionnel qui fonctionne avec Copilot.
+
+00:09:45.540 --> 00:09:48.240
+Cet agent analyse vos stratégies existantes et suggère des changements.
+
+00:09:48.240 --> 00:09:53.040
+Par exemple, il pourrait dire, cette stratégie a trop d'exclusions, envisagez de restreindre son périmètre.
+
+00:09:53.360 --> 00:09:56.320
+Ou encore, ces deux stratégies se chevauchent, envisagez de déregrouper.
+
+00:09:56.940 --> 00:10:00.300
+Les suggestions sont basées sur les données réelles de votre client, pas sur des bonnes pratiques génériques.
+
+00:10:01.560 --> 00:10:03.920
+Cela rend les ajustements de stratégies plus sûrs et plus ciblés.
+
+00:10:04.300 --> 00:10:07.680
+En résumé, l'accès conditionnel est puissant, mais il est aussi facile de se tromper.
+
+00:10:09.020 --> 00:10:11.880
+Copilot vous donne une visibilité sur le comportement réel de vos stratégies
+
+00:10:11.880 --> 00:10:14.540
+afin que vous puissiez les affiner en toute confiance au lieu de deviner.
+
+00:10:14.540 --> 00:10:17.740
+La preuve, est-ce que cela aide vraiment ?
+
+00:10:17.740 --> 00:10:20.640
+Copilot semble génial en théorie, mais est-ce que ça marche vraiment ?
+
+00:10:20.640 --> 00:10:23.820
+Microsoft a mené une étude sur Copilot dans Antra, et les chiffres valent le détour.
+
+00:10:24.460 --> 00:10:25.160
+Voici ce qu'ils ont trouvé.
+
+00:10:25.320 --> 00:10:29.140
+Les administrateurs utilisant Copilot ont terminé leur tâche de dépannage de connexion 46% plus rapidement.
+
+00:10:29.700 --> 00:10:30.580
+C'est presque moitié moins de temps.
+
+00:10:30.960 --> 00:10:32.600
+Au lieu de passer 15 minutes à chercher dans les journaux,
+
+00:10:32.680 --> 00:10:34.920
+ils avaient des réponses en quelques minutes, voire quelques secondes.
+
+00:10:35.480 --> 00:10:37.100
+Et voici le point important, ils étaient aussi plus précis.
+
+00:10:37.500 --> 00:10:39.540
+La précision a été améliorée de 46,8%.
+
+00:10:39.540 --> 00:10:42.600
+Si non seulement ils étaient plus rapides, mais ils avaient aussi plus de chances d'obtenir la bonne réponse.
+
+00:10:42.880 --> 00:10:46.140
+C'est crucial lorsqu'une erreur pourrait bloquer un utilisateur légitime ou laisser passer une menace réelle.
+
+00:10:46.540 --> 00:10:49.560
+95% des administrateurs ont déclaré que Copilot améliorait la qualité de leur travail.
+
+00:10:49.960 --> 00:10:52.200
+C'est un soutien de poids de la part de ceux qui l'utilisent au quotidien.
+
+00:10:52.820 --> 00:10:55.980
+Et 96,7% pensent déclarer vouloir continuer à l'utiliser dans leur flux de travail.
+
+00:10:56.800 --> 00:10:59.340
+Quand presque tous ceux qui l'essaient veulent le garder, cela veut dire quelque chose.
+
+00:10:59.900 --> 00:11:01.760
+Que signifient réellement ces chiffres dans la pratique ?
+
+00:11:01.760 --> 00:11:03.380
+Moins d'escalade vers les administrateurs seniors,
+
+00:11:03.700 --> 00:11:05.100
+des temps de réponse aux incidents plus rapides,
+
+00:11:05.460 --> 00:11:07.080
+moins de stress pour les équipes de gestion des identités.
+
+00:11:07.080 --> 00:11:08.900
+Au lieu de passer des heures sur des enquêtes routinières,
+
+00:11:08.960 --> 00:11:12.240
+les administrateurs peuvent se concentrer sur les problèmes qui nécessitent réellement leur expertise.
+
+00:11:12.840 --> 00:11:15.140
+Un bémol toutefois, ces chiffres proviennent d'études contrôlées.
+
+00:11:15.940 --> 00:11:17.680
+Vos résultats varieront en fonction de votre environnement,
+
+00:11:17.900 --> 00:11:20.240
+de la qualité de vos données et de la manière dont votre équipe adopte l'outil.
+
+00:11:20.920 --> 00:11:21.740
+Mais la tendance est claire.
+
+00:11:22.460 --> 00:11:25.120
+L'IA rend la gestion des identités plus accessibles et plus efficaces,
+
+00:11:25.240 --> 00:11:27.180
+et cette tendance ne fait que s'accélérer.
+
+00:11:28.020 --> 00:11:29.200
+Est-ce sécurisé ?
+
+00:11:29.200 --> 00:11:30.080
+Gouvernance et sécurité.
+
+00:11:30.700 --> 00:11:32.780
+Une question que j'entends tout le temps est sûre.
+
+00:11:33.140 --> 00:11:35.700
+Copilote contente-t-il vos contrôles de sécurité et d'accès ?
+
+00:11:35.700 --> 00:11:36.420
+Préoccupation légitime.
+
+00:11:36.420 --> 00:11:38.560
+Vous donnez à un assistant et à l'accès à vos jambes de connexion,
+
+00:11:38.640 --> 00:11:41.080
+à vos politiques d'accès conditionnels et à vos données utilisateurs.
+
+00:11:41.320 --> 00:11:42.640
+Cela semble représenter beaucoup de confiance à lui.
+
+00:11:42.780 --> 00:11:43.360
+Voici la réponse.
+
+00:11:43.700 --> 00:11:45.880
+Copilote hérite de vos rôles et autorisations en train existant.
+
+00:11:46.200 --> 00:11:46.720
+C'est le point clé.
+
+00:11:47.100 --> 00:11:49.800
+Si vous n'avez pas l'autorisation de consulter un journal ou une ressource spécifique,
+
+00:11:49.920 --> 00:11:50.960
+Copilote ne peut pas le voir non plus.
+
+00:11:51.480 --> 00:11:53.000
+Pas de porte dérobée, pas d'élévation de privilège.
+
+00:11:53.500 --> 00:11:55.200
+Il fonctionne dans les limites que vous avez déjà définies.
+
+00:11:55.640 --> 00:11:57.220
+L'accès conditionnel s'applique aussi à Copilote.
+
+00:11:57.640 --> 00:12:00.740
+Si votre politique exige le MFA pour le centre d'administration, Copilote le respecte.
+
+00:12:00.740 --> 00:12:03.240
+Si vous bloquez les connexions depuis des emplacements non approuvés,
+
+00:12:03.520 --> 00:12:04.760
+Copilote respecte cela également.
+
+00:12:05.120 --> 00:12:06.100
+Même règles, même cadre.
+
+00:12:06.660 --> 00:12:09.100
+Toutes les requêtes et réponses de Copilote sont enregistrées dans les journaux d'audit
+
+00:12:09.100 --> 00:12:09.740
+en tra-standard.
+
+00:12:10.440 --> 00:12:12.380
+Ainsi, si quelqu'un pose une question qu'il n'aurait pas dû poser,
+
+00:12:12.480 --> 00:12:13.500
+cette interaction est enregistrée.
+
+00:12:14.100 --> 00:12:15.800
+Les équipes de sécurité peuvent examiner ces journaux
+
+00:12:15.800 --> 00:12:17.380
+comme n'importe quelle autre activité d'administration.
+
+00:12:17.760 --> 00:12:18.260
+Aucun anglement.
+
+00:12:18.580 --> 00:12:19.760
+La résidence des données est un autre point.
+
+00:12:20.000 --> 00:12:21.320
+Copilote fonctionne au sein de votre tenant.
+
+00:12:21.700 --> 00:12:22.780
+Vos données restent la World of Death.
+
+00:12:23.120 --> 00:12:25.740
+IA travaille sur vos données à l'intérieur de votre tenant, sous votre contrôle.
+
+00:12:26.200 --> 00:12:27.280
+Et voici le principe qui compte vraiment.
+
+00:12:27.280 --> 00:12:30.400
+Copilote suggère des actions, mais ne les exécute pas automatiquement.
+
+00:12:31.020 --> 00:12:33.120
+Il pourrait recommander de réinitialiser le mot de passe d'un utilisateur
+
+00:12:33.120 --> 00:12:33.940
+ou de bloquer une connexion.
+
+00:12:34.280 --> 00:12:36.200
+Mais il ne fera rien sans qu'un administrateur n'approuve l'action.
+
+00:12:36.880 --> 00:12:37.660
+L'humain garde le contrôle.
+
+00:12:38.220 --> 00:12:38.900
+Exemple concret.
+
+00:12:39.340 --> 00:12:41.500
+Un technicien de support, disposant de permissions limitées,
+
+00:12:41.800 --> 00:12:43.780
+peut interroger Copilote sur les utilisateurs qui l'assistent.
+
+00:12:44.280 --> 00:12:46.700
+Il peut obtenir des résumés d'échec de connexion et de détection de risque,
+
+00:12:47.240 --> 00:12:49.480
+mais ne peut pas interroger le système sur les comptes administrateurs globaux
+
+00:12:49.480 --> 00:12:51.080
+ou les ressources sensibles auxquelles il n'a pas d'accès.
+
+00:12:51.700 --> 00:12:53.400
+Copilote impose ses limites automatiquement.
+
+00:12:54.040 --> 00:12:55.180
+C'est une conception axée sur la gouvernance.
+
+00:12:57.280 --> 00:12:59.500
+C'est un autre modèle de sécurité existant et non pour le contourner.
+
+00:12:59.740 --> 00:13:01.160
+C'est ce qu'il rend sûr pour une utilisation en production.
+
+00:13:01.840 --> 00:13:03.360
+A qui cela s'adresse-t-il vraiment ?
+
+00:13:03.360 --> 00:13:05.940
+Alors, qui tire réellement parti de Copilote dans EntraID ?
+
+00:13:05.940 --> 00:13:06.940
+Seulement les administrateurs seniors.
+
+00:13:07.220 --> 00:13:09.060
+Les administrateurs d'identité sont les premiers en bénéficie.
+
+00:13:09.320 --> 00:13:10.380
+Ils dépannent les politiques au quotidien.
+
+00:13:10.840 --> 00:13:13.440
+Une investigation de 15 minutes se transforme en une réponse de 30 secondes.
+
+00:13:13.820 --> 00:13:15.500
+Copilote met en évidence des modèles qu'ils auraient pu n'avoir.
+
+00:13:15.880 --> 00:13:18.020
+Cela les aide à gérer la complexité sans s'y noyer.
+
+00:13:18.600 --> 00:13:20.040
+Les équipes de support technique en profitent tout autant.
+
+00:13:20.700 --> 00:13:22.180
+Le personnel de première ligne peut résoudre seul
+
+00:13:22.180 --> 00:13:23.980
+les problèmes de connexion sans escalader les tickets.
+
+00:13:23.980 --> 00:13:27.140
+Ils posent la même question à Copilote et obtiennent la même réponse claire.
+
+00:13:27.680 --> 00:13:30.460
+Cela signifie moins de tickets bloqués en fil d'attente en attendant un administrateur senior.
+
+00:13:30.980 --> 00:13:32.560
+C'est comme avoir un expert directement au bureau.
+
+00:13:33.040 --> 00:13:35.180
+Les analystes en sécurité obtiennent également des temps de réponse plus rapide.
+
+00:13:35.620 --> 00:13:38.340
+Lorsqu'un compromis potentiel survient, ils peuvent demander à Copilote une vue d'ensemble,
+
+00:13:38.560 --> 00:13:40.880
+l'activité de l'utilisateur, les détections de risques et les recommandations.
+
+00:13:41.520 --> 00:13:44.300
+Au lieu de passer une heure à collecter des données, ils passent quelques minutes à les comprendre.
+
+00:13:45.580 --> 00:13:47.880
+Les propriétaires d'applications et les développeurs citoyens sont aussi gaines.
+
+00:13:48.340 --> 00:13:50.460
+Lorsque leur application personnalisée échoue à l'authentification
+
+00:13:50.460 --> 00:13:53.260
+ou rencontre une politique inconnue, ils demandent simplement pourquoi à Copilote.
+
+00:13:53.260 --> 00:13:56.560
+Pas besoin d'être un expert en identité, ils ont juste besoin de savoir ce qui a échoué
+
+00:13:56.560 --> 00:13:57.380
+et comment le corriger.
+
+00:13:58.300 --> 00:14:01.340
+Voici un groupe que l'on oublie souvent, les managers et les profils non techniques.
+
+00:14:01.960 --> 00:14:03.940
+Ils doivent comprendre la posture de sécurité de leur département,
+
+00:14:04.220 --> 00:14:05.840
+mais n'ont pas le temps d'analyser les journaux.
+
+00:14:06.460 --> 00:14:08.100
+Copilote leur fournit des résumés en langage clair.
+
+00:14:08.880 --> 00:14:09.880
+Voici vos utilisateurs à AORIS.
+
+00:14:10.220 --> 00:14:11.260
+Voici ce que nous recommandons.
+
+00:14:11.560 --> 00:14:13.480
+Ce sont des informations utiles sur lesquelles ils peuvent réellement agir.
+
+00:14:13.820 --> 00:14:16.620
+En résumé, Copilote facilite la gestion des identités pour tout le monde.
+
+00:14:17.120 --> 00:14:19.300
+Il ne remplace pas l'expertise, il la diffuse au sein de l'équipe.
+
+00:14:19.300 --> 00:14:22.720
+La gestion des identités était autrefois une compétence spécialisée réservée à un petit groupe.
+
+00:14:23.340 --> 00:14:26.460
+Désormais plus de personnes peuvent contribuer, car elles disposent d'un assistant IA qui parle leur langue.
+
+00:14:26.760 --> 00:14:29.260
+Euh, la gestion des identités est désormais l'affaire de tous.
+
+00:14:29.660 --> 00:14:30.820
+Copilote en fait l'outil de tous.
+
+00:14:31.720 --> 00:14:33.240
+C'est cela Copilote dans Microsoft en Tridy.
+
+00:14:33.600 --> 00:14:36.300
+Il transforme un annuaire complexe en quelque chose avec lequel vous pouvez réellement dialoguer.
+
+00:14:36.820 --> 00:14:40.800
+Si cela vous a aidé à y voir plus clair, partagez-le avec quelqu'un qui débute son parcours dans la gestion des identités.
+
+00:14:40.800 --> 00:14:45.300
+Abonnez-vous sur votre plateforme de podcast préférée et je vous donne rendez-vous pour la prochaine pépite de connaissances.

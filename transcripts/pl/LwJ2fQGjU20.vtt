@@ -1,0 +1,826 @@
+WEBVTT
+
+00:00:02.610 --> 00:00:07.550
+Dzisiaj porozmawiamy o funkcji platformy Azure, o której prawdopodobnie słyszałeś, ale być może nie do końca rozumiesz.
+
+00:00:07.550 --> 00:00:15.470
+Azure Policy to jedno z najpotężniejszych narzędzi ładu korporacyjnego w całej platformie, a mimo to większość ludzi albo je ignoruje, albo uważa, że jest przeznaczone tylko dla administratorów IT.
+
+00:00:15.590 --> 00:00:25.010
+Pod koniec tego odcinka dowiesz się, czym tak naprawdę jest Azure Policy, jak działa niczym niewidzialny zbiór zasad i dlaczego jest niezbędne do zapewnienia bezpieczeństwa i kontroli Twojego środowiska Azure.
+
+00:00:25.270 --> 00:00:29.010
+Rozbijemy to na przejrzyste elementy, zaczynając od problemu, który rozwiązuje.
+
+00:00:29.250 --> 00:00:30.490
+Weź kawę i zaczynajmy.
+
+00:00:30.490 --> 00:00:33.910
+Problem. Dlaczego chmura potrzebuje zabezpieczeń?
+
+00:00:33.910 --> 00:00:35.870
+Pomyśl o dawnym sposobie działania.
+
+00:00:36.050 --> 00:00:40.550
+W środowisku lokalnym, gdy potrzebowałeś serwera, przesyłałeś wniosek do zespołu operacyjnego.
+
+00:00:40.830 --> 00:00:47.450
+Sprawdzali oni zasady, polityki firmy, standardy bezpieczeństwa, być może jakieś wymogi regulacyjne, a następnie udostępniali Ci serwer.
+
+00:00:47.650 --> 00:00:50.050
+Między Tobą a infrastrukturą stał ludzki strażnik.
+
+00:00:50.190 --> 00:00:53.030
+Ta osoba znała zasady i upewniała się, że nic nie prześlizgnie się przez kontrolę.
+
+00:00:53.170 --> 00:00:54.730
+Chmura całkowicie zmienia to podejście.
+
+00:00:54.950 --> 00:00:58.170
+Teraz właściciel aplikacji ma bezpośredni dostęp bezpośrednika w postaci człowieka.
+
+00:00:58.170 --> 00:01:01.010
+Klikasz, utwórz w portalu Azure i dzieje się to natychmiast.
+
+00:01:01.210 --> 00:01:05.910
+Możesz również użyć wiersza poleceń, interfejsu API lub narzędzi typu infrastruktura jako kod, takich jak Terraform.
+
+00:01:06.150 --> 00:01:08.990
+Chodzi o to, że nikt nie sprawdza Twojej pracy przed utworzeniem zasobu.
+
+00:01:09.090 --> 00:01:10.430
+I właśnie tutaj zaczyna się problem.
+
+00:01:10.690 --> 00:01:12.690
+Większość właścicieli aplikacji nie zna wszystkich zasad.
+
+00:01:12.930 --> 00:01:16.190
+Może nie zdają sobie sprawy, że polityka firmy wymaga, aby wszystkie dane pozostawały w Europie.
+
+00:01:16.350 --> 00:01:18.710
+Albo, że konta magazynowe muszą blokować dostęp publiczny.
+
+00:01:18.850 --> 00:01:22.630
+Albo, że określone rozmiary maszyn wirtualnych są drogie i powinny być używane tylko w środowisku produkcyjnym.
+
+00:01:22.630 --> 00:01:25.070
+Więc tworzą zasoby i czasami zdarzają się błędy.
+
+00:01:25.230 --> 00:01:29.050
+Maszyna wirtualna zostaje wdrożona z publicznym adresem IP i otwartymi portami na świat.
+
+00:01:29.230 --> 00:01:33.390
+Konto magazynowe zostaje utworzone z publicznym dostępem do obiektów blob, narażając poufne dane.
+
+00:01:33.630 --> 00:01:37.630
+Ktoś uruchamia drogą instancję z procesorem GPU do szybkiego testu i zapomina ją usunąć.
+
+00:01:37.790 --> 00:01:39.430
+Takie rzeczy zdarzają się cały czas.
+
+00:01:39.630 --> 00:01:45.250
+Potrzebujemy automatycznego systemu egzekwowania, który działa za każdym razem, bez względu na to, kto tworzy zasób lub w jaki sposób to robi.
+
+00:01:45.250 --> 00:01:51.310
+Niezależnie od tego, czy jest to portal interfejs CLI, wywołanie API, czy wdrożenie przez Terraform, zasady powinny być sprawdzane automatycznie.
+
+00:01:51.450 --> 00:01:53.670
+I właśnie to ma na celu zapewnienie Azure Policy.
+
+00:01:53.930 --> 00:01:54.990
+Czym jest Azure Policy?
+
+00:01:55.170 --> 00:01:56.410
+Ten niewidzialny zbiór zasad?
+
+00:01:56.630 --> 00:01:57.990
+Czym więc jest Azure Policy?
+
+00:01:58.250 --> 00:01:59.530
+Oto najprostsza definicja.
+
+00:01:59.730 --> 00:02:04.230
+Azure Policy to usługa, która pozwala definiować reguły dla zasobów Azure i automatycznie je egzekwować.
+
+00:02:04.390 --> 00:02:06.490
+Pomyśl o tym jak o instrukcji do gry planszowej.
+
+00:02:06.690 --> 00:02:10.310
+Gra oferuje wiele możliwych ruchów, ale instrukcja określa, które z nich są faktycznie dozwolone.
+
+00:02:10.310 --> 00:02:12.930
+Nie możesz po prostu przesunąć swojego pionka gdziekolwiek chcesz.
+
+00:02:12.930 --> 00:02:15.110
+Zasady określają, co jest dozwolone, a co nie.
+
+00:02:15.290 --> 00:02:16.410
+Oto kluczowe rozróżnienie.
+
+00:02:16.630 --> 00:02:19.650
+Azure Policy to nie to samo, co kontrola dostępu oparta na rolach RBAC.
+
+00:02:20.030 --> 00:02:21.950
+RBAC kontroluje, kto może coś zrobić.
+
+00:02:22.150 --> 00:02:25.130
+Odpowiada na pytanie, kto może tworzyć zasoby w tej subskrypcji.
+
+00:02:25.350 --> 00:02:29.730
+Azure Policy kontroluje, co można zrobić lub dokładniej jakie konfiguracje są dozwolone.
+
+00:02:29.910 --> 00:02:33.690
+Odpowiada na pytanie, jakie zasoby można tworzyć i jak powinny być skonfigurowane.
+
+00:02:33.930 --> 00:02:39.850
+Zatem RBAC mówi, że Mirko może tworzyć konta magazynu, a Azure Policy mówi, że konta magazynu muszą mieć włączony HTTPS.
+
+00:02:40.010 --> 00:02:41.790
+To dwie różne rzeczy i obie są potrzebne.
+
+00:02:41.790 --> 00:02:43.130
+Oto najważniejsza kwestia.
+
+00:02:43.290 --> 00:02:46.130
+Usługa Azure Policy jest zawsze włączona i zawsze egzekwowana.
+
+00:02:46.350 --> 00:02:51.390
+Każde żądanie utworzenia, aktualizacji lub usunięcia zasobu przechodzi przez Azure Policy i nie da się tego obejść.
+
+00:02:51.650 --> 00:02:55.170
+Znajduje się między Tobą a Azure Resource Manager płaszczyzną kontroli Azure.
+
+00:02:55.350 --> 00:02:57.190
+Potraktuj to jako automatyczny filtr.
+
+00:02:57.390 --> 00:03:03.910
+Każde żądanie przechodzi przez ten filtr, a jeśli nie spełnia zasad, zostaje zablokowane lub oflagowane i dotyczy to nie tylko nowych zasobów.
+
+00:03:04.070 --> 00:03:08.870
+Azure Policy ocenia również istniejące zasoby, wykrywając zmiany konfiguracji w czasie.
+
+00:03:08.870 --> 00:03:15.150
+Jeśli ktoś zmieni ustawienie w już wdrożonym zasobie i ta zmiana narusza zasady Azure Policy, to odnotuje.
+
+00:03:15.430 --> 00:03:17.170
+Jak więc faktycznie pisać te reguły?
+
+00:03:17.330 --> 00:03:19.210
+Tu właśnie przydają się definicje zasad.
+
+00:03:19.590 --> 00:03:21.670
+Definicje zasad, czyli pisanie reguł.
+
+00:03:21.810 --> 00:03:23.590
+Jak więc faktycznie pisać te reguły?
+
+00:03:23.710 --> 00:03:25.550
+Tu właśnie przydają się definicje zasad.
+
+00:03:25.790 --> 00:03:28.650
+Definicja zasady to sama reguła zapisana jako dokument JSON.
+
+00:03:29.030 --> 00:03:32.250
+JSON może brzmieć technicznie, ale struktura jest w rzeczywistości dość prosta.
+
+00:03:32.490 --> 00:03:33.930
+Opiera się na podstawowym schemacie.
+
+00:03:33.930 --> 00:03:36.790
+Jeśli ten warunek jest spełniony, zastosuj ten efekt.
+
+00:03:36.910 --> 00:03:38.230
+Podam Ci rzeczywisty przykład.
+
+00:03:38.470 --> 00:03:42.910
+Istnieje wbudowana zasada, która mówi, jeśli konto magazynu nie ma włączonego HTTPS, odrzuć je.
+
+00:03:43.050 --> 00:03:43.570
+To wszystko.
+
+00:03:43.890 --> 00:03:46.810
+Gdy warunek jest spełniony, efekt wchodzi w życie i blokuje wdrożenie.
+
+00:03:47.030 --> 00:03:49.330
+Każda definicja zasady ma trzy kluczowe elementy.
+
+00:03:49.490 --> 00:03:50.550
+Po pierwsze, warunki.
+
+00:03:50.710 --> 00:03:51.850
+To część, jeśli...
+
+00:03:51.850 --> 00:03:52.610
+Co sprawdzasz?
+
+00:03:52.770 --> 00:03:55.190
+Typ zasobu, lokalizację czy konkretne ustawienie.
+
+00:03:55.370 --> 00:03:56.370
+Po drugie, efekty.
+
+00:03:56.530 --> 00:03:57.610
+To część, wtedy...
+
+00:03:57.610 --> 00:03:59.290
+Co się dzieje, gdy warunek jest spełniony?
+
+00:03:59.450 --> 00:04:01.470
+Czy blokujesz wdrożenie, czy tylko je oflagowujesz?
+
+00:04:01.470 --> 00:04:02.610
+Po trzecie, parametry.
+
+00:04:02.810 --> 00:04:05.670
+To wypełniane pola, dzięki którym zasada jest wielokrotnego użytku.
+
+00:04:05.850 --> 00:04:08.170
+Parametry to miejsce, w którym kryje się prawdziwa moc.
+
+00:04:08.410 --> 00:04:12.510
+Wyobraź sobie, że chcesz napisać zasadę zezwalającą na zasoby tylko w określonych regionach.
+
+00:04:12.690 --> 00:04:15.850
+Nie chcesz pisać osobnej zasady dla każdej możliwej kombinacji regionów.
+
+00:04:16.050 --> 00:04:18.850
+Zamiast tego tworzysz jedną definicję o nazwie dozwolone lokalizacje.
+
+00:04:19.010 --> 00:04:21.470
+I dodajesz parametr określający, które regiony są dozwolone.
+
+00:04:21.630 --> 00:04:23.710
+Podczas przypisywania zasad uzupełniasz puste pole.
+
+00:04:23.990 --> 00:04:28.270
+Możesz wskazać Europa Zachodnia i Północna dla jednej subskrypcji oraz Wschodnie i Zachodnie USA dla innej.
+
+00:04:28.270 --> 00:04:31.810
+Ta sama definicja, inne parametry. W ten sposób zachowujesz porządek.
+
+00:04:31.950 --> 00:04:34.770
+Oto dobra wiadomość. Nie musisz pisać ich wszystkich od zera.
+
+00:04:35.030 --> 00:04:39.030
+Microsoft udostępnia setki wbudowanych definicji zasad, których możesz użyć od razu.
+
+00:04:39.250 --> 00:04:44.170
+Obejmują one kategorie takie jak obliczenia, pamięć, sieć, centrum zabezpieczeń, tagowanie, koszty i inne.
+
+00:04:44.430 --> 00:04:47.870
+Znajdziesz je w portalu Azure, wyszukasz potrzebne i przypiszesz je natychmiast.
+
+00:04:48.070 --> 00:04:50.430
+Nie musisz pisać kodu JSON, jeśli nie chcesz.
+
+00:04:50.510 --> 00:04:52.790
+Ale definicja zapisana w pliku sama nic nie robi.
+
+00:04:53.030 --> 00:04:54.910
+Musisz ją przypisać, aby zaczęła działać.
+
+00:04:54.910 --> 00:04:57.090
+Przypisania zasad wprowadzają reguły w życie.
+
+00:04:57.290 --> 00:05:00.850
+Przypisanie zasady polega na wskazaniu definicji i określeniu zakresu jej działania.
+
+00:05:01.050 --> 00:05:03.610
+Zakres to po prostu granica, w której obowiązuje dana reguła.
+
+00:05:03.810 --> 00:05:06.050
+Masz trzy opcje od najszerszej do najwęższej.
+
+00:05:06.250 --> 00:05:09.770
+Przypisz na poziomie grupy zarządzania, a obejmie ona cały zestaw subskrypcji.
+
+00:05:09.990 --> 00:05:13.510
+Zastosuj na poziomie subskrypcji, a obejmie wszystko, co się w niej znajduje.
+
+00:05:13.670 --> 00:05:17.350
+Lub przypisz na poziomie grupy zasobów, co obejmie tylko zasoby w tej grupie.
+
+00:05:17.530 --> 00:05:19.130
+Teraz porozmawiajmy o dziedziczeniu.
+
+00:05:19.130 --> 00:05:20.390
+To kluczowe pojęcie.
+
+00:05:20.630 --> 00:05:26.490
+Gdy przypiszesz zasadę na poziomie grupy zarządzania, automatycznie spływa ona do wszystkich podrzędnych subskrypcji i grup zasobów.
+
+00:05:26.650 --> 00:05:28.370
+Nie musisz przypisywać jej wielokrotnie.
+
+00:05:28.530 --> 00:05:31.790
+To jak wywieszenie zasad na głównej tablicy ogłoszeń przy wejściu do biurowca.
+
+00:05:32.010 --> 00:05:34.370
+Każdy, kto przechodzi przez wejście, musi ich przestrzegać.
+
+00:05:34.510 --> 00:05:36.610
+Nie wywieszałbyś tej samej reguły na każdym piętrze.
+
+00:05:36.750 --> 00:05:37.750
+To strata wysiłku.
+
+00:05:38.010 --> 00:05:39.370
+Zasada po prostu spływa w dół.
+
+00:05:39.570 --> 00:05:41.490
+Co jednak zrobić, gdy potrzebujesz wyjątku?
+
+00:05:41.690 --> 00:05:46.730
+Może twoja firma wymaga, aby dane zostawały w Europie, ale jeden projekt musi użyć Centrum Danych w Azji.
+
+00:05:46.730 --> 00:05:51.670
+Nie chcesz usuwać całej zasady, bo to naraziłoby wszystko inne, więc tworzysz wyłączenie.
+
+00:05:51.990 --> 00:05:56.570
+Wyłączenia pozwalają pominąć konkretne zasoby bez usuwania zasady wszędzie indziej.
+
+00:05:56.730 --> 00:05:58.890
+To przejrzysty sposób obsługi wyjątków.
+
+00:05:59.090 --> 00:06:00.490
+Oto praktyczne wskazówki.
+
+00:06:01.050 --> 00:06:04.490
+Przypisuj ogólne, podstawowe zasady na poziomie grupy zarządzania.
+
+00:06:04.730 --> 00:06:08.310
+Rzeczy takie jak dozwolone lokalizacje czy wymagane tagi powinny dotyczyć wszystkiego.
+
+00:06:08.530 --> 00:06:12.050
+Następnie przypisuj bardziej szczegółowe zasady na poziomie subskrypcji lub grupy zasobów.
+
+00:06:12.210 --> 00:06:15.430
+Być może twoja subskrypcja deweloperska ma luźniejsze reguły niż produkcyjna.
+
+00:06:15.430 --> 00:06:16.730
+To całkowicie w porządku.
+
+00:06:16.970 --> 00:06:18.850
+Szczegółowe zasady uzupełniają te ogólne.
+
+00:06:18.990 --> 00:06:21.830
+Teraz porozmawiajmy o tym, co faktycznie dzieje się, gdy ktoś złamie zasadę.
+
+00:06:22.010 --> 00:06:23.470
+Właśnie tutaj wkraczają efekty.
+
+00:06:23.650 --> 00:06:25.870
+Efekty, czyli co się dzieje, gdy zasady są łamane.
+
+00:06:26.070 --> 00:06:28.070
+Załóżmy, że napisałeś zasadę i ją przypisałeś.
+
+00:06:28.190 --> 00:06:29.610
+Co się stanie, gdy ktoś ją złamie?
+
+00:06:29.790 --> 00:06:31.210
+Właśnie tutaj wkraczają efekty.
+
+00:06:31.390 --> 00:06:33.490
+Efekty to część wtedy danej polityki.
+
+00:06:33.710 --> 00:06:36.230
+Decydują one o tym, co się stanie, gdy zasób nie spełnia reguły.
+
+00:06:36.430 --> 00:06:38.430
+Wyróżniamy cztery główne rodzaje, z którymi się spotkasz.
+
+00:06:38.550 --> 00:06:39.810
+Po pierwsze, odmowa deny.
+
+00:06:39.810 --> 00:06:42.230
+To najczęstszy efekt w przypadku krytycznych reguł.
+
+00:06:42.410 --> 00:06:45.610
+Gdy uruchomiona zostanie polityka odmowy, wdrożenie jest całkowicie blokowane.
+
+00:06:45.810 --> 00:06:48.950
+Użytkownik otrzymuje jasny komunikat o błędzie informujący o niepowodzeniu walidacji
+
+00:06:48.950 --> 00:06:50.530
+oraz o tym, która polityka go zatrzymała.
+
+00:06:50.710 --> 00:06:52.990
+Żaden zasób nie zostaje utworzony, nie ma żadnych szkód.
+
+00:06:53.150 --> 00:06:55.770
+Używaj tego dla zasad, których pod żadnym pozorem nie wolno łamać.
+
+00:06:55.930 --> 00:06:58.930
+Na przykład brak publicznego dostępu do obiektów blob na kontach magazynów
+
+00:06:58.930 --> 00:07:00.870
+lub brak wdrożeń poza zatwierdzonymi regionami.
+
+00:07:01.050 --> 00:07:01.870
+Po drugie, audit.
+
+00:07:01.870 --> 00:07:03.510
+Ten działa inaczej.
+
+00:07:03.510 --> 00:07:07.910
+Wdrożenie przechodzi, ale zasób jest oznaczany jako niezgodny w pulpicie nawigacyjnym zgodności.
+
+00:07:08.130 --> 00:07:12.170
+Audyt jest niezwykle przydatny, gdy nie masz pewności, jak nowa reguła wpłynie na Twoje środowisko.
+
+00:07:12.430 --> 00:07:14.590
+Możesz zobaczyć, co się dzieje, nie psując niczego.
+
+00:07:14.790 --> 00:07:17.010
+To jak wykonanie pomiaru przed wymuszeniem zmiany.
+
+00:07:17.130 --> 00:07:19.650
+Po trzecie, modyfikacja modify i dołączanie append.
+
+00:07:19.810 --> 00:07:22.510
+Te efekty automatycznie naprawiają problem zamiast go blokować.
+
+00:07:22.750 --> 00:07:25.350
+Modyfikacja zmienia istniejące ustawienia podczas wdrażania.
+
+00:07:25.570 --> 00:07:27.530
+Dołączanie dodaje coś do istniejącego pola.
+
+00:07:27.530 --> 00:07:32.010
+Możesz na przykład utworzyć politykę, która automatycznie dodaje wymagany tak z domyślną wartością.
+
+00:07:32.010 --> 00:07:38.650
+Jeśli ktoś zapomni dodać tak centrum kosztów, polityka doda go za niego, wdrożenie przejdzie, a zasób będzie zgodny bez dodatkowej pracy.
+
+00:07:38.850 --> 00:07:41.430
+Po czwarte, wdróż, jeśli nie istnieje, deploy if not exist.
+
+00:07:41.590 --> 00:07:44.450
+To rozwiązanie obsługuje sytuacje, w których brakuje zasobu pomocniczego.
+
+00:07:44.650 --> 00:07:47.690
+Powiedzmy, że chcesz mieć włączone logowanie diagnostyczne na każdym koncie magazynu.
+
+00:07:47.830 --> 00:07:53.670
+Jeśli ktoś utworzy konto magazynu bez ustawień diagnostycznych, mechanizm wdróż, jeśli nie istnieje, zadziała i automatycznie wdroży brakującą konfigurację.
+
+00:07:53.810 --> 00:07:55.930
+To jak posiadanie pomocnika, który sprząta za Tobą.
+
+00:07:56.110 --> 00:07:57.210
+Oto najlepsza praktyka.
+
+00:07:57.450 --> 00:07:58.330
+Zacznij od audytu.
+
+00:07:58.330 --> 00:08:00.730
+Najpierw zobacz, co faktycznie dzieje się w Twoim środowisku.
+
+00:08:00.930 --> 00:08:03.370
+Sprawdź, ile zasobów zostałoby objętych nową regułą.
+
+00:08:03.590 --> 00:08:07.710
+Następnie przejdź do odmowy, gdy będziesz pewien, że reguła jest poprawna i nie zablokuje poprawnych wdrożeń.
+
+00:08:07.870 --> 00:08:09.570
+Zarządzanie jedną polityką jest proste.
+
+00:08:09.710 --> 00:08:13.150
+Co jednak, jeśli potrzebujesz ich 50, a wszystkie dotyczą bezpieczeństwa lub zgodności?
+
+00:08:13.350 --> 00:08:15.050
+Wtedy z pomocą przychodzą inicjatywy.
+
+00:08:15.330 --> 00:08:16.950
+Inicjatywy grupują zasady razem.
+
+00:08:17.190 --> 00:08:18.490
+Czym więc jest inicjatywa?
+
+00:08:18.630 --> 00:08:22.070
+Potraktuj ją jako zbiór polityk pogrupowanych wokół jednego wspólnego celu.
+
+00:08:22.070 --> 00:08:27.810
+Zamiast przypisywać 50 pojedynczych polityk, jedna po drugiej przypisujesz jedną inicjatywę, która zawiera je wszystkie.
+
+00:08:28.050 --> 00:08:30.510
+To jak gotowy zestaw narzędzi do konkretnego zadania?
+
+00:08:30.730 --> 00:08:32.870
+Nie bierzesz młotka, śrubokręta i klucza oddzielnie.
+
+00:08:33.030 --> 00:08:34.710
+Po prostu bierzesz całą skrzynkę narzędziową.
+
+00:08:34.930 --> 00:08:36.630
+Wszystko, czego potrzebujesz, jest w jednym miejscu.
+
+00:08:36.790 --> 00:08:38.650
+Prawdziwą zaletą jest tu raportowanie zgodności.
+
+00:08:38.870 --> 00:08:42.030
+Przypisując inicjatywę, zyskujesz jeden widok zgodności dla całej grupy.
+
+00:08:42.250 --> 00:08:45.490
+Możesz na pierwszy rzut oka sprawdzić, czy środowisko spełnia ogólne standardy.
+
+00:08:45.490 --> 00:08:49.770
+A jeśli coś jest niezgodne, możesz przejść bezpośrednio do konkretnej zasady, która nie jest spełniona.
+
+00:08:49.930 --> 00:08:52.670
+To znacznie czytelniejsze niż śledzenie 50 oddzielnych zasad.
+
+00:08:52.910 --> 00:08:56.510
+Microsoft udostępnia wbudowane inicjatywy obejmujące główne ramy zgodności.
+
+00:08:56.770 --> 00:09:03.230
+Takie jak Azure Security Benchmark, CIS, NIST, PCI DSS, HIPAA, ISO 27001 i inne.
+
+00:09:03.510 --> 00:09:05.690
+Są one już stworzone i gotowe do przypisania.
+
+00:09:05.910 --> 00:09:09.150
+Nie musisz sprawdzać, które zasady odpowiadają danym wymogom zgodności.
+
+00:09:09.410 --> 00:09:11.150
+Microsoft wykonał te prace za Ciebie.
+
+00:09:11.350 --> 00:09:13.610
+Niektóre z tych inicjatyw zawierają setki pojedynczych zasad.
+
+00:09:13.610 --> 00:09:16.010
+Wyobraź sobie, że próbujesz przypisywać je wszystkie po kolei.
+
+00:09:16.170 --> 00:09:16.910
+Nie robiłbyś tego.
+
+00:09:17.130 --> 00:09:17.610
+Użyłbyś inicjatywy.
+
+00:09:18.410 --> 00:09:21.010
+Możesz także tworzyć własne inicjatywy dla swoich standardów.
+
+00:09:21.210 --> 00:09:25.670
+Może masz bazę produkcyjną, która obejmuje zasady szyfrowania, logowania i bezpieczeństwa sieci.
+
+00:09:25.850 --> 00:09:30.570
+Albo inicjatywę kontroli kosztów, która ogranicza rozmiary maszyn wirtualnych i wymaga tagów centrum kosztów.
+
+00:09:30.670 --> 00:09:31.510
+Ta sama zasada.
+
+00:09:31.750 --> 00:09:35.230
+Grupujesz zasady, przypisujesz pakiet i śledzisz zgodność jako jedną całość.
+
+00:09:35.450 --> 00:09:39.870
+Przejdźmy do konkretów, przedstawiając przykłady z życia wzięte, jak ludzie używają Azure Policy.
+
+00:09:40.130 --> 00:09:42.090
+Przykłady z życia, zasady w działaniu.
+
+00:09:42.090 --> 00:09:43.370
+Uczyńmy to realnym.
+
+00:09:43.550 --> 00:09:47.530
+Oto pięć typowych scenariuszy, w których Azure Policy rozwiązuje rzeczywiste problemy.
+
+00:09:47.650 --> 00:09:50.190
+Po pierwsze, ograniczenia regionów dla zgodności danych.
+
+00:09:50.410 --> 00:09:54.330
+Wyobraź sobie, że firma wymaga, aby wszystkie dane klientów pozostawały w Europie.
+
+00:09:54.590 --> 00:09:58.430
+Możesz przypisać wbudowaną zasadę dozwolonych lokalizacji na poziomie głównej grupy zarządzania
+
+00:09:58.430 --> 00:10:01.830
+i zezwolić tylko na regiony UE, takie jak Europa Zachodnia i Północna.
+
+00:10:02.010 --> 00:10:05.410
+Teraz, gdy ktoś tworzy nową subskrypcję, automatycznie dziedziczy tę regułę.
+
+00:10:05.610 --> 00:10:08.530
+Nie może wdrożyć zasobów w USA ani Azji, nawet jeśli spróbuje.
+
+00:10:08.530 --> 00:10:11.970
+Zasada to blokuje. Żadnych ręcznych kontroli, żadnego proszenia o pozwolenie.
+
+00:10:12.150 --> 00:10:13.610
+Reguła jest po prostu egzekwowana.
+
+00:10:13.810 --> 00:10:15.970
+Po drugie, wymuszanie tagów do rozliczania kosztów.
+
+00:10:16.110 --> 00:10:21.730
+Twój zespół finansowy musi śledzić wydatki według działów, ale nie może tego zrobić, jeśli zasoby nie mają odpowiednich tagów.
+
+00:10:21.950 --> 00:10:26.530
+Dlatego tworzysz zasadę, która wymaga tagu Centrum Kosztów i tagu Środowiska dla każdego zasobu.
+
+00:10:26.670 --> 00:10:28.430
+Ale tu pojawia się sprytne rozwiązanie.
+
+00:10:28.650 --> 00:10:30.010
+Używasz efektu modyfikacji.
+
+00:10:30.270 --> 00:10:33.630
+Jeśli ktoś zapomni dodać tag, zasada automatycznie doda go z wartością domyślną.
+
+00:10:33.630 --> 00:10:36.410
+Wdrożenie przechodzi pomyślnie, a zasób jest zgodny z zasadami.
+
+00:10:36.610 --> 00:10:40.030
+Dział finansów otrzymuje dokładne dane o kosztach, a programiści nie są blokowani przez brakujący tag.
+
+00:10:40.170 --> 00:10:42.050
+Po trzecie, kontrola kosztów w fazie tworzenia.
+
+00:10:42.290 --> 00:10:45.630
+Zespoły programistyczne uwielbiają eksperymentować, ale eksperymenty szybko stają się kosztowne.
+
+00:10:45.770 --> 00:10:49.390
+Ktoś może uruchomić instancję GPU z 24 rdzeniami tylko po to, by przetestować prosty skrypt.
+
+00:10:49.550 --> 00:10:53.850
+Tworzysz więc zasadę, która ogranicza rozmiary maszyn wirtualnych w subskrypcjach deweloperskich do mniejszych SKU.
+
+00:10:54.010 --> 00:10:56.430
+Takie jak serię B lub D z ograniczoną liczbą rdzeni.
+
+00:10:56.430 --> 00:11:01.950
+Jeśli ktoś spróbuje wdrożyć drogi procesor GPU lub maszynę z dużą ilością pamięci, efekt odmowy zablokuje to działanie.
+
+00:11:02.090 --> 00:11:04.850
+Programiści nadal mogą eksperymentować, ale nie przekroczą budżetu.
+
+00:11:05.010 --> 00:11:07.350
+Po czwarte, standardy bezpieczeństwa dla pamięci masowej.
+
+00:11:07.510 --> 00:11:11.410
+Konta magazynu są jednym z najczęstszych miejsc, w których dochodzi do błędów związanych z bezpieczeństwem.
+
+00:11:11.590 --> 00:11:16.390
+Ktoś tworzy konto magazynu z publicznym dostępem do obiektów blob i nagle wrażliwe dane trafiają do internetu.
+
+00:11:16.550 --> 00:11:21.270
+Tworzysz więc zasadę, która wymaga ruchu tylko przez HTTPS i blokuje publiczny dostęp do obiektów blob.
+
+00:11:21.270 --> 00:11:27.010
+Używasz też opcji wdroż, jeśli nie istnieje, aby automatycznie włączyć logowanie diagnostyczne dla każdego konta magazynu.
+
+00:11:27.190 --> 00:11:30.290
+Zasada rozwiązuje problem, zanim w ogóle stanie się on realnym zagrożeniem.
+
+00:11:30.430 --> 00:11:32.210
+Po piąte, konwencje nazewnictwa.
+
+00:11:32.430 --> 00:11:37.930
+Twój zespół chce, aby wszystkie zasoby zaczynały się od PROD lub DEW, by łatwo rozpoznać środowisko.
+
+00:11:39.290 --> 00:11:44.610
+Tworzysz zasadę sprawdzającą nazwę zasobu, ale zamiast blokować wdrożenie używasz efektu audytu.
+
+00:11:44.830 --> 00:11:47.770
+Zasób zostaje utworzony, ale jest oznaczony jako niezgodny z zasadami.
+
+00:11:47.770 --> 00:11:51.130
+Następnie generujesz miesięczny raport zgodności i prosisz zespół o poprawienie nazewnictwa.
+
+00:11:51.270 --> 00:11:54.270
+To delikatny sposób na egzekwowanie standardów bez zakłócania przepływu pracy.
+
+00:11:54.490 --> 00:11:56.890
+Każdy z tych przykładów opiera się na tym samym schemacie.
+
+00:11:57.210 --> 00:12:02.730
+Zidentyfikuj problem, wybierz lub stwórz zasadę ustal efekt, przypisz do odpowiedniego zakresu, monitoruj zgodność.
+
+00:12:02.870 --> 00:12:04.550
+To jest cały scenariusz postępowania.
+
+00:12:04.790 --> 00:12:08.850
+Teraz spójrzmy szerzej, jak te wszystkie elementy pasują do większego obrazu zarządzania w Azure.
+
+00:12:09.090 --> 00:12:11.250
+Szersza perspektywa, jak to wszystko się łączy.
+
+00:12:11.510 --> 00:12:14.030
+Gdzie więc Azure Policy pasuje w tym szerszym ujęciu?
+
+00:12:14.210 --> 00:12:15.630
+Pomyślmy o tym w ten sposób.
+
+00:12:15.630 --> 00:12:20.070
+Azure Policy działa na poziomie płaszczyzny kontroli nad Azure Resource Manager
+
+00:12:20.070 --> 00:12:22.210
+i ocenia każde przychodzące żądanie.
+
+00:12:22.670 --> 00:12:27.310
+Za każdym razem, gdy ktoś tworzy, aktualizuje lub usuwa zasób, Azure Policy sprawdza reguły.
+
+00:12:27.490 --> 00:12:29.170
+To strażnik przy głównym wejściu.
+
+00:12:29.330 --> 00:12:31.970
+To nie jest jedyne narzędzie w arsenale zarządzania zasobami.
+
+00:12:32.170 --> 00:12:34.770
+Azure Policy to tylko jeden element większego systemu.
+
+00:12:34.950 --> 00:12:39.570
+Grupy zarządzania tworzą hierarchię, która porządkuje subskrypcję i pozwala stosować reguły na dużą skalę.
+
+00:12:39.730 --> 00:12:42.650
+Kontrola dostępu oparta na rolach decyduje, kto ma dostęp do czego,
+
+00:12:42.650 --> 00:12:45.630
+a Azure Policy kontroluje, jakie konfiguracje są dozwolone.
+
+00:12:45.870 --> 00:12:47.770
+Razem tworzą fundament ładu w chmurze.
+
+00:12:47.930 --> 00:12:48.930
+A teraz ważna rzecz.
+
+00:12:49.130 --> 00:12:52.830
+Azure Policy jest również silnikiem napędzającym inne usługi, z których być może już korzystasz.
+
+00:12:53.030 --> 00:12:57.170
+Microsoft Defender for Cloud używa Azure Policy do generowania swoich zaleceń dotyczących zgodności.
+
+00:12:57.430 --> 00:13:00.450
+Kiedy Defender informuje, że konto magazynu nie jest zgodne z zasadami,
+
+00:13:00.550 --> 00:13:02.070
+w rzeczywistości przeprowadza oceny zasad.
+
+00:13:02.290 --> 00:13:07.250
+Azure Advisor pobiera wiele swoich rekomendacji dotyczących kosztów i niezawodności z tych samych ocen zasad.
+
+00:13:07.250 --> 00:13:11.310
+A pulpit nawigacyjny zgodności w portalu Azure jest w całości zbudowany na danych z zasad.
+
+00:13:11.510 --> 00:13:13.610
+Więc nawet jeśli nigdy sam nie utworzyłeś żadnej zasady,
+
+00:13:13.610 --> 00:13:15.370
+prawdopodobnie korzystałeś z nich, nie wiedząc o tym.
+
+00:13:15.570 --> 00:13:18.690
+Istnieje jeszcze inna praktyka, zwana Policy as Code, czyli zasady jako kod.
+
+00:13:18.870 --> 00:13:23.290
+Zamiast tworzyć zasady przez portal, przechowujesz je jako pliki JSON w repozytorium Git
+
+00:13:23.290 --> 00:13:26.350
+i wdrażasz przez potoki CI, CD, zupełnie jak kod aplikacji.
+
+00:13:26.610 --> 00:13:30.630
+Daje to kontrolę wersji, przeglądy kodu i zautomatyzowane testowanie reguł zarządzania.
+
+00:13:30.790 --> 00:13:34.130
+To bardziej skalowalny sposób zarządzania zasadami w dużych organizacjach.
+
+00:13:34.130 --> 00:13:36.530
+Oto najważniejsza rzecz, którą warto zapamiętać.
+
+00:13:36.730 --> 00:13:39.950
+Gdy poprawnie skonfigurujesz Azure Policy, działa ono dyskretnie w tle.
+
+00:13:39.950 --> 00:13:43.550
+To automatyczna bariera ochronna, która zapobiega problemom, zanim one wystąpią.
+
+00:13:43.750 --> 00:13:48.030
+Użytkownicy mogą nigdy nie wiedzieć, że tam jest, ale korzystają z niej za każdym razem, gdy wdrażają zasób.
+
+00:13:48.230 --> 00:13:53.450
+Zyskujesz spójne egzekwowanie zasad za każdym razem, bez ręcznych kontroli, zgłoszeń o zatwierdzenie czy błędów ludzkich.
+
+00:13:53.590 --> 00:13:56.210
+To właśnie Azure Policy wyjaśnione prostym językiem.
+
+00:13:56.390 --> 00:14:01.410
+To niewidzialny zbiór zasad, który wymusza standardy Twojej organizacji dla każdego zasobu za każdym razem.
+
+00:14:01.410 --> 00:14:04.890
+Jeśli chcesz jedną konkretną wskazówkę z tego odcinka, oto ona.
+
+00:14:05.110 --> 00:14:10.590
+Wejdź do portalu Azure, znajdź Policy i przypisz wbudowaną zasadę dozwolonych lokalizacji do subskrypcji testowej.
+
+00:14:10.830 --> 00:14:12.590
+Zacznij od audytu i zobacz, co się stanie.
+
+00:14:12.790 --> 00:14:14.890
+To najszybszy sposób, aby zrozumieć, jak to działa.
+
+00:14:15.130 --> 00:14:19.510
+Zasubskrybuj, aby otrzymywać więcej wiedzy o rozwiązaniach Microsoft i udostępnij to komuś, kto zaczyna swoją przygodę z Azure.
+
+00:14:19.710 --> 00:14:22.030
+Napisz w komentarzu, co mam wyjaśnić w następnym odcinku.
+
+00:14:22.030 --> 00:14:52.010
+Napisz w komentarzu.

@@ -1,0 +1,745 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:02.480
+Twój problem z Copilotem tak naprawdę nie dotyczy samych funkcji.
+
+00:00:02.620 --> 00:00:04.580
+To problem zaufania do modelu, który za nim stoi.
+
+00:00:04.740 --> 00:00:09.000
+Większość zespołów wciąż uważa, że bezpieczeństwo opiera się na promptach, uprawnieniach i kilku filtrach na brzegu sieci.
+
+00:00:09.220 --> 00:00:14.320
+Sęk w tym, że atakujący nie muszą łamać Twojego promptu, muszą jedynie zatruć kontekst wokół niego i właśnie tam wszystko się sypie.
+
+00:00:14.500 --> 00:00:20.240
+Podstawowe filtry wyłapią oczywiste śmieci, ale przeoczą ładunek ukryty w wiadomości e-mail, pliku SharePoint czy polu formularza.
+
+00:00:20.400 --> 00:00:25.080
+Pobrana zawartość czeka cierpliwie, aż Copilot ją wczyta i potraktuje jak bezpośrednią instrukcję.
+
+00:00:25.080 --> 00:00:30.560
+Widzieliśmy już sygnały ostrzegawcze przy wycieku Echo w Microsoft 365, Copilot oraz Share w Copilot Studio.
+
+00:00:30.740 --> 00:00:33.800
+A rzeczywistość jest taka, że łatki nie wyeliminowały tego schematu.
+
+00:00:33.900 --> 00:00:40.920
+Ponieważ Copilot może przeszukiwać, podsumowywać i działać w całym środowisku Microsoft 365, jedna błędna instrukcja może szybko wyrządzić szkody.
+
+00:00:41.140 --> 00:00:48.960
+Nie chodzi więc o dodanie kolejnego pulpitu nawigacyjnego, lecz o umieszczenie Azure Logic Apps na ścieżce, by sprawdzać, oceniać i blokować złośliwe ładunki, zanim Copilot w ogóle ruszy.
+
+00:00:49.120 --> 00:00:51.500
+Prawdziwym zagrożeniem jest architektura, a nie prompt.
+
+00:00:51.500 --> 00:00:55.820
+Stary model zakłada, że można zapewnić bezpieczeństwo systemu, pisząc lepsze instrukcje dla modelu.
+
+00:00:55.980 --> 00:01:00.280
+Dajesz mu silny prompt systemowy, dodajesz ograniczniki i mówisz użytkownikom, czego nie robić.
+
+00:01:00.480 --> 00:01:10.400
+Na papierze brzmi to rozsądnie, ale w rzeczywistości model nie narzuca granic zaufania tak jak system bezpieczeństwa, ponieważ czyta język w jednym wspólnym kanale, gdzie instrukcje i dane rywalizują o uwagę.
+
+00:01:10.400 --> 00:01:21.700
+To założenie jest błędem. Jeśli model nie potrafi niezawodnie odróżnić użytkownika prosząsego o pomoc od dokumentu, który po cichu każe mu ignorować wcześniejsze instrukcje, to punkt kontrolny nie może znajdować się tylko na warstwie promptu.
+
+00:01:21.840 --> 00:01:27.200
+Próbujesz zabezpieczyć zachowanie na brzegu sieci, podczas gdy rzeczywiste ryzyko tkwi w przepływie kontekstu trafiającego do modelu.
+
+00:01:27.380 --> 00:01:31.500
+Wiele zespołów zrozumiało to dopiero wtedy, gdy pojawiły się obciążenia Copilota intensywnie korzystające z wyszukiwania.
+
+00:01:31.500 --> 00:01:37.580
+W momencie, gdy Copilot zaczyna pobierać dane z Microsoft Graph, wiadomości e-mail, plików i historii czatów, powierzchnia ataku całkowicie się zmienia.
+
+00:01:37.780 --> 00:01:42.140
+Nie zabezpieczasz już tylko konwersacji, zabezpieczasz strumień danych o różnym poziomie zaufania.
+
+00:01:42.320 --> 00:01:48.660
+A poziom głębiej Copilot zwiększa swój zasięg. Nie tylko odpowiada na pytania, ale też wyszukuje, podsumowuje i śledzi odnośniki.
+
+00:01:48.920 --> 00:01:56.920
+W niektórych konfiguracjach może nawet uruchamiać narzędzia lub przepływy pracy, więc kiedy do tego łańcucha trafia niepewna zawartość, model może przenieść ten wpływ na wrażliwe działania.
+
+00:01:56.920 --> 00:02:04.900
+Dlatego pośrednia iniekcja promptu jest teraz tak istotna. W systemach produkcyjnych powszechny atak nie zawsze polega na tym, że użytkownik wpisuje w czacie polecenie zignoruj swoje zasady.
+
+00:02:05.120 --> 00:02:10.540
+Bardziej niebezpieczna wersja kryje się w pobranych treściach, często na wiele tygodni przed tym, zanim ktokolwiek zauważy jej obecność.
+
+00:02:10.740 --> 00:02:17.820
+Zatrutym dokumentem, spreparowanym e-mailem lub wpisem w formularzu może wydawać się człowiekowi nieszkodliwy, lecz zawiera instrukcje skierowane bezpośrednio do modelu.
+
+00:02:17.940 --> 00:02:24.040
+Później Copilot pobiera tę treść jako istotny kontekst, miesza ją z zaufanymi materiałami, a model zaczyna postępować według niewłaściwych wytycznych.
+
+00:02:24.040 --> 00:02:27.200
+Łańcuch ataku jest prosty i właśnie to czyni go tak niebezpiecznym.
+
+00:02:27.420 --> 00:02:36.140
+Najpierw atakujący umieszcza treść w miejscu, do którego Copilot może dotrzeć, następnie proces pobierania wprowadza ją do sesji, a model traktuje ten ładunek jako instrukcję, a nie dane.
+
+00:02:36.400 --> 00:02:43.840
+Następnie może on zacząć przygotowywać wrażliwe informacje, kształtować odpowiedzi lub kierować dane ku ścieżce eksfiltracji poprzez linki lub użycie narzędzi.
+
+00:02:44.040 --> 00:02:49.140
+Dlatego dla liderów nie jest to tylko higiena, lecz kontrola w czasie wykonywania, ściśle powiązana z zarządzaniem dostępem.
+
+00:02:49.140 --> 00:02:54.900
+Jeśli Copilot ma szeroki zasięg w całym środowisku, a model przetwarza kontekst o zróżnicowanym poziomie zaufania bez twardej separacji,
+
+00:02:55.020 --> 00:02:58.440
+Twój model bezpieczeństwa musi uwzględniać to, co trafia do obiegu przed uruchomieniem.
+
+00:02:58.640 --> 00:03:00.740
+Gdy to zrozumiesz, zmieni się również sposób naprawy.
+
+00:03:00.880 --> 00:03:05.080
+Przestajesz obsesyjnie dążyć do idealnych promptów i zaczynasz wprowadzać egzekwowanie zasad tam, gdzie przepływa kontekst.
+
+00:03:05.260 --> 00:03:07.740
+Dlaczego podstawowe zabezpieczenia zawodzą w środowisku produkcyjnym?
+
+00:03:07.920 --> 00:03:10.600
+Większość zespołów popełnia fundamentalny błąd już na samym początku.
+
+00:03:10.900 --> 00:03:15.360
+Zakładają, że zabezpieczenia stosowane od lat w tworzeniu aplikacji sprawdzą się równie dobrze w przypadku Copilota.
+
+00:03:15.360 --> 00:03:21.760
+Piszą silniejszy prompt systemowy, otaczają dane wejściowe użytkownika znakami specjalnymi i publikują wytyczne dla pracowników, a potem czują się bezpiecznie.
+
+00:03:21.900 --> 00:03:26.620
+Te kroki nie są złe i nie namawiam do zaprzestania ich stosowania, ale nie tworzą one prawdziwej bariery bezpieczeństwa.
+
+00:03:26.800 --> 00:03:31.480
+Próbują jedynie przekonać model do odpowiedniego zachowania, a w bezpieczeństwie perswazja to nie to samo, co egzekwowanie.
+
+00:03:31.660 --> 00:03:32.860
+To właśnie tutaj tkwi luka.
+
+00:03:33.080 --> 00:03:40.740
+Prompt systemowy informuje model o preferowanych działaniach, ale nie powstrzyma złośliwego pliku przed walką o uwagę modelu, gdy zostanie on wciągnięty do obszaru roboczego.
+
+00:03:40.740 --> 00:03:46.240
+Użycie ograniczników może pomóc w ustrukturyzowaniu tekstu, ale nie daje modelowi możliwości sprawdzania uprawnień bezpieczeństwa.
+
+00:03:46.400 --> 00:03:53.280
+Wytyczne dla pracowników świetnie sprawdzają się w zapobieganiu uczciwym błędom, ale są bezużyteczne wobec zatrutego dokumentu lub ukrytego ładunku w pobranych danych.
+
+00:03:53.460 --> 00:03:57.560
+Kontrola ta istnieje jedynie jako sugestia, a nie jako twarda reguła egzekwowana w momencie wykonania.
+
+00:03:57.760 --> 00:03:58.920
+Regex ma podobny problem.
+
+00:03:59.160 --> 00:04:02.340
+Jest szybki i tani, więc warto go użyć jako szybkiej, wstępnej weryfikacji.
+
+00:04:02.580 --> 00:04:07.140
+Jeśli użytkownik wpisze, zignoruj wszystkie poprzednie instrukcje, twój system powinien wyłapać to w ciągu kilku milisekund.
+
+00:04:07.140 --> 00:04:12.680
+Możesz go również użyć do oznaczania oczywistych fraz omijających prywatność lub znaków w stylu SQL w argumentach swoich narzędzi.
+
+00:04:12.800 --> 00:04:20.780
+Ta część działa dobrze, ale wyrażenia regularne rozpoznają tylko wzorce, które już zdefiniowałeś, więc zawodzą, gdy brzmienie się zmienia lub gdy atak opiera się na znaczeniu, a nie na konkretnych słowach.
+
+00:04:20.920 --> 00:04:22.880
+Dlatego potrzebujesz warstw klasyfikatorów.
+
+00:04:23.020 --> 00:04:28.020
+Usługa Azure AI Content Safety posiada osłony promptów, które potrafią wykryć zarówno bezpośrednie, jak i pośrednie ataki typu Injection.
+
+00:04:28.020 --> 00:04:34.800
+W aplikacji logicznej możesz wywołać API, aby sprawdzić prompt, zanim model go zobaczy, a następnie zmienić ścieżkę przepływu pracy w razie wykrycia ataku.
+
+00:04:34.940 --> 00:04:41.440
+To znacznie silniejsza kontrola niż proste dopasowywanie ciągów znaków, ponieważ analizuje intencje ukryte za słowami w promptzie i dokumentach jednocześnie.
+
+00:04:41.680 --> 00:04:46.880
+Nawet wtedy samo wykrywanie nie wystarczy, ponieważ zauważenie ryzyka nic nie daje, jeśli nie masz sposobu, by je powstrzymać.
+
+00:04:47.040 --> 00:04:47.920
+Zespoły do spraw.
+
+00:04:47.920 --> 00:04:51.200
+Bezpieczeństwa często nie doceniają tego konkretnego elementu procesu.
+
+00:04:51.340 --> 00:04:56.460
+Ostrzeżenie w pliku dziennika to nie jest izolacja, a ładny kafelek na pulpicie nawigacyjnym również nią nie jest.
+
+00:04:56.680 --> 00:05:03.280
+Nawet alarm o wysokim priorytecie w systemie CM zawodzi, jeśli ładunek przeszedł już przez kopilota i wywołał akcję w systemie podrzędnym.
+
+00:05:03.500 --> 00:05:08.720
+Analiza tego, co się stało po fakcie, jest pomocna w dochodzeniu, ale nie wystarcza, gdy atak trwa kilka sekund.
+
+00:05:08.720 --> 00:05:13.020
+Masz do czynienia z modelem, który może działać wewnątrz systemów, którym Twoja organizacja już ufa.
+
+00:05:13.180 --> 00:05:17.200
+Istnieje również problem z wynikami fałszywie ujemnymi, który większość materiałów marketingowych ignoruje.
+
+00:05:17.200 --> 00:05:25.500
+Ataki pośrednie odpowiadają za znaczną część niewykrytych zagrożeń w rzeczywistych warunkach, ponieważ niebezpieczna instrukcja wygląda zupełnie normalnie, dopóki model nie połączy jej z resztą konwersacji.
+
+00:05:25.720 --> 00:05:30.780
+Zanim człowiek przejrzy dane wyjściowe i zda sobie sprawę, że coś jest nie tak, szkodliwe dane wejściowe wykonały już swoją pracę.
+
+00:05:30.940 --> 00:05:32.780
+Praktyczny błąd jest tutaj bardzo prosty.
+
+00:05:32.980 --> 00:05:37.960
+Zespoły spędzają cały czas na obserwowaniu tego, co mówi kopilot, ale nie kontrolują tego, co do niego trafia, z taką samą dyscypliną.
+
+00:05:38.180 --> 00:05:42.720
+Sprawdzają odpowiedź po jej wygenerowaniu, pozwalając jednocześnie na przepływ niezaufanych materiałów przed rozpoczęciem pracy.
+
+00:05:42.720 --> 00:05:48.680
+Ta kolejność jest całkowicie błędna. Gdy rozpoznasz tę lukę, cel całej Twojej strategii bezpieczeństwa ulegnie zmianie.
+
+00:05:48.820 --> 00:05:53.780
+Przestajesz pytać, jak napisać bezpieczniejszy prompt, a zaczynasz pytać, gdzie przechwycić dane, zanim model je przetworzy.
+
+00:05:54.000 --> 00:05:56.020
+Model zapory sieciowej aplikacji logicznych.
+
+00:05:56.220 --> 00:06:00.060
+Jeśli celem jest przechwycenie, musimy przyjrzeć się, jak taka kontrola wygląda w praktyce.
+
+00:06:00.300 --> 00:06:04.500
+Należy użyć Azure Logic Apps jako warstwy polityk, która znajduje się przed fazą wykonania.
+
+00:06:04.500 --> 00:06:07.980
+Nie powinno to być pasywne narzędzie, które wysyła raport po wyrządzeniu szkód.
+
+00:06:08.140 --> 00:06:14.240
+Musisz umieścić je bezpośrednio na ścieżce, w której znajdują się dane wejściowe użytkownika i pobrane dane, aby mogły zostać sprawdzone, zanim model przystąpi do pracy.
+
+00:06:14.420 --> 00:06:17.900
+Ta zmiana jest skuteczna, ponieważ aplikacje są stworzone do orkiestracji.
+
+00:06:18.140 --> 00:06:23.720
+Może on wyzwalać określone zdarzenia, wywoływać inne interfejsy API i podejmować decyzje w oparciu o złożone warunki.
+
+00:06:24.000 --> 00:06:31.560
+Możesz przesyłać dane, wysyłać alerty do Microsoft Sentinel i wzbogacać proces o informacje zewnętrzne, nie budując niestandardowej bramy bezpieczeństwa od podstaw.
+
+00:06:31.560 --> 00:06:36.980
+Nie próbujesz tutaj zastąpić kopilota. Po prostu wprowadzasz warstwę kontroli w przepływie wokół niego.
+
+00:06:37.280 --> 00:06:42.060
+Logika tego modelu jest celowo prosta. Najpierw uruchamiasz proces, a następnie normalizujesz dane.
+
+00:06:42.340 --> 00:06:46.460
+Sprawdzasz je, oceniasz ryzyko, podejmujesz decyzję, a na końcu przesyłasz lub rejestrujesz wynik.
+
+00:06:46.580 --> 00:06:52.620
+To cały ten wzorzec. Gdy żądanie lub zawartość trafia do przepływu pracy, Logic App pobiera ten ładunek i standaryzuje go.
+
+00:06:52.880 --> 00:06:57.360
+Surowe dane wejściowe są zazwyczaj nieuporządkowane, ponieważ różne łączniki obsługują dane na różne sposoby.
+
+00:06:57.560 --> 00:07:03.080
+Wiadomość e-mail wygląda inaczej niż wpis w formularzu, a zawartość pliku lub argumenty narzędzi mają różne metadany i pola.
+
+00:07:03.240 --> 00:07:08.260
+Jeśli spróbujesz przeprowadzić inspekcję przed normalizacją danych, twój system detekcji będzie generował mnóstwo szumu.
+
+00:07:08.500 --> 00:07:12.080
+Gdy ładunek zostanie sprowadzony do spójnego formatu, rozpoczyna się pierwszy etap inspekcji.
+
+00:07:12.240 --> 00:07:15.120
+To tutaj twoje niestandardowe wyrażenia regularne wciąż mają do wykonania zadanie.
+
+00:07:15.300 --> 00:07:19.500
+Nie jest to ostateczny sędzia ani magiczne rozwiązanie, ale działa jako bardzo szybki filtr na brzegu systemu.
+
+00:07:19.500 --> 00:07:26.920
+Możesz szybko przeskanować tekst pod kątem znanych poleceń nadpisujących, wskazówek dotyczących kodowania lub podejrzanych wzorców w parametrach narzędzi, aby natychmiast przeprowadzić segregację sytuacji.
+
+00:07:27.140 --> 00:07:30.740
+Następnie przechodzisz do drugiego etapu inspekcji, który znacznie głębiej analizuje treść.
+
+00:07:30.940 --> 00:07:34.660
+W tym miejscu wywołujesz mechanizmy ochrony monitów Prompt Shields z usługi Azure, a i Content Safety.
+
+00:07:34.920 --> 00:07:40.700
+Logic App wysyła monit użytkownika i pobrane dokumenty do API, a następnie rozgałęzia proces w zależności od tego, czy wykryto atak.
+
+00:07:40.900 --> 00:07:45.340
+Ma to znaczenie, ponieważ ataki typu Prompt Injection nie zawsze wyglądają jak oczywisty kod komputerowy.
+
+00:07:45.340 --> 00:07:50.000
+Czasami zagrożenie staje się jasne dopiero wtedy, gdy monit i dokument są oceniane jako jedna całość.
+
+00:07:50.220 --> 00:07:55.660
+Istnieje jeszcze jedna warstwa, która zmienia to z prostego filtra w prawdziwą kontrolę bezpieczeństwa, a jest nią analiza zagrożeń.
+
+00:07:55.780 --> 00:08:01.820
+Jeśli treść odwołuje się do znanej złośliwej domeny lub podejrzanego adresu URL, który twój zespół już wcześniej widział, powinno to wpłynąć na twoją decyzję.
+
+00:08:01.980 --> 00:08:07.680
+Logic Apps mogą sprawdzić zdarzenie w usłudze Defender Threat Intelligence lub innych zewnętrznych źródłach, aby dodać ocenę pewności ryzyka.
+
+00:08:07.680 --> 00:08:15.600
+Oznacza to, że dziwny wzorzec z zaufanego źródła może zostać przepuszczony, podczas gdy ten sam wzorzec powiązany z wrogą reputacją zostanie natychmiast zablokowany.
+
+00:08:15.800 --> 00:08:19.620
+To przekształca twoje drzewo decyzyjne w coś więcej niż tylko wybór tak lub nie.
+
+00:08:19.880 --> 00:08:25.180
+Możesz zezwolić na żądanie, jeśli wskaźnik ryzyka jest niski, albo oczyścić je, usuwając niebezpieczne fragmenty.
+
+00:08:25.380 --> 00:08:28.820
+Możesz zdecydować o poddaniu danych kwarantannie, jeśli ich źródło wymaga ręcznej weryfikacji.
+
+00:08:29.040 --> 00:08:33.160
+Jeśli działanie dotyczy wrażliwych danych, możesz nawet wymagać zatwierdzenia przez człowieka, zanim przejdzie dalej.
+
+00:08:33.160 --> 00:08:37.080
+Oczywiście, jeśli sygnał jest wystarczająco silny, po prostu blokujesz żądanie i wysyłasz alert.
+
+00:08:37.240 --> 00:08:40.540
+To szerokie spektrum opcji sprawia, że ten model faktycznie sprawdza się w biznesie.
+
+00:08:40.720 --> 00:08:41.580
+Zespoły do spraw.
+
+00:08:41.820 --> 00:08:48.500
+Bezpieczeństwa często hamują wdrażanie, odrzucając każdy przypadek budzący wątpliwości, a przy zbyt surowych kontrolach ludzie znajdują sposoby, by je obejść.
+
+00:08:48.680 --> 00:08:53.020
+Oparty na ocenie przepływ pracy daje przestrzeń do reagowania w oparciu o faktyczne ryzyko, a nie panikę.
+
+00:08:53.220 --> 00:08:56.760
+Właśnie dlatego Logic Apps sprawdzają się lepiej niż zbiór oddzielnych narzędzi.
+
+00:08:56.760 --> 00:09:01.340
+Usługa ta łączy się z resztą ekosystemu Microsoft i współpracuje idealnie z podręcznikami Sentinel.
+
+00:09:01.640 --> 00:09:06.340
+Możesz zlecić kontrolę bezpieczeństwa treści, sprawdzić dane o zagrożeniach i przesyłać zdarzenia audytowe w jednym miejscu.
+
+00:09:06.480 --> 00:09:11.780
+Nie potrzebujesz długiego cyklu programistycznego za każdym razem, gdy atakujący zmienia sformułowania lub pojawia się nowy sposób wejścia do systemu.
+
+00:09:11.920 --> 00:09:14.480
+Zasada, dzięki której to wszystko działa, jest bardzo prosta.
+
+00:09:14.720 --> 00:09:18.620
+Musisz traktować każdy element kontekstu jako niezaufany, dopóki nie zostanie oceniony.
+
+00:09:18.840 --> 00:09:24.200
+Nie chodzi tylko o monit użytkownika, ale także o treść wiadomości e-mail, przesłany plik i pole formularza SharePoint.
+
+00:09:24.200 --> 00:09:28.580
+Obejmuje to ładunek łącznika, pobrane fragmenty dokumentów, a nawet argumenty narzędzi.
+
+00:09:28.760 --> 00:09:30.220
+Wszystko musi zostać sprawdzone.
+
+00:09:30.440 --> 00:09:35.360
+W momencie, gdy założysz, że jedno z tych źródeł jest domyślnie bezpieczne, tworzysz lukę, którą może wykorzystać atakujący.
+
+00:09:35.580 --> 00:09:41.960
+Gdy twój przepływ pracy konsekwentnie egzekwuje tę zasadę, nie musisz już polegać na kopilocie w kwestii samodzielnego oddzielania dobrych danych od złych.
+
+00:09:42.200 --> 00:09:44.700
+Proces staje się systemem kontrolowanego dostępu.
+
+00:09:44.700 --> 00:09:52.000
+Na papierze brzmi to jak świetna teoria, ale ludzi interesuje przede wszystkim to, co stanie się w rzeczywistości, gdy niebezpieczny ładunek trafi do obiegu.
+
+00:09:52.000 --> 00:10:01.420
+Podczas działania systemu, w czasie rzeczywistym, przepływ pracy nie tylko skanuje tekst w poszukiwaniu złych słów, ale buduje pełny obraz żądania przed podjęciem jakiejkolwiek decyzji.
+
+00:10:01.640 --> 00:10:10.000
+Zdarzenie dociera do punktu wejścia, może to być przesłanie formularza, przepływ e-mail lub przesłanie dokumentu powiązane z procesem kopilot, a Logic Apps natychmiast uzupełnia je metadanymi.
+
+00:10:10.800 --> 00:10:16.360
+Śledzi, kto wysłał żądanie, która aplikacja je przetworzyła, skąd pochodzi plik i co system ma zamiar zrobić w następnej kolejności.
+
+00:10:16.360 --> 00:10:21.760
+Ten dodatkowy kontekst jest kluczowy, ponieważ to samo zdanie może znaczyć coś zupełnie innego w zależności od jego źródła.
+
+00:10:21.980 --> 00:10:25.600
+Gdy dane zostaną przechwycone, ładunek jest dzielony na określone strefy zaufania.
+
+00:10:25.840 --> 00:10:27.480
+Musisz utrzymać wyraźną separację.
+
+00:10:27.680 --> 00:10:33.920
+Prompt użytkownika trafia do jednego koszyka, pobrane dokumenty do drugiego, a historia konwersacji lub parametry narzędzi otrzymują własną przestrzeń.
+
+00:10:34.060 --> 00:10:41.920
+Jeśli wymieszasz to wszystko zbyt wcześnie, stracisz możliwość ustalenia, gdzie faktycznie zaczęła się ryzykowna instrukcja, a proces weryfikacji zmieni się w czyste zgadywanie.
+
+00:10:41.920 --> 00:10:48.380
+Wiele zespołów pomija ten krok, bo łączenie wszystkiego wydaje się szybsze, ale w rzeczywistości tylko ukrywa ścieżkę, którą musisz podążać.
+
+00:10:48.560 --> 00:10:50.860
+Następnie przepływ pracy przechodzi do normalizacji.
+
+00:10:51.020 --> 00:10:55.040
+To nudna część pracy, ale to właśnie ona sprawia, że wykrywanie jest faktycznie użyteczne.
+
+00:10:55.260 --> 00:11:03.160
+Musisz usunąć znaczniki, które dodają szum, zdekodować adresy URL lub ślady BASE64 oraz spłaszczyć zagnieżdżone pola, aby inspekcja działała na stabilnej strukturze.
+
+00:11:03.300 --> 00:11:10.420
+Jeśli jeden łącznik przesyła sformatowany tekst, a inny fragmenty JSON, chcesz, aby wszystkie zostały sprowadzone do pól, które Twoje testy mogą odczytać w sposób spójny.
+
+00:11:10.420 --> 00:11:15.040
+Bez tego Twoja logika poświęca więcej czasu na walkę ze zmianami formatu niż na znajdowanie rzeczywistych ataków.
+
+00:11:15.220 --> 00:11:18.400
+Gdy dane są już czyste, najpierw uruchamiany jest szybki test wzorców.
+
+00:11:18.620 --> 00:11:20.700
+Musi być on tani, bezpośredni i szybki.
+
+00:11:20.920 --> 00:11:27.580
+Szukasz fraz, które próbują zastąpić zachowanie systemu, takich jak warianty zignoruj wszystkie poprzednie instrukcje lub nadpisanie systemu.
+
+00:11:27.760 --> 00:11:34.040
+Szukasz również języka ekstrakcji, w którym ktoś prosi o ujawnienie poufnych materiałów, zrzut sekretów lub obejście ustawień prywatności.
+
+00:11:34.040 --> 00:11:41.180
+W Logic Apps zespoły zazwyczaj obsługują to za pomocą wyrażeń lub kroków komponowania, które ustawiają flagi, zamiast natychmiast blokować żądanie przy każdym trafieniu.
+
+00:11:41.320 --> 00:11:45.680
+To flakowanie jest ważne, ponieważ pojedyncza fraza nie zawsze oznacza, że ktoś zachowuje się agresywnie.
+
+00:11:45.880 --> 00:11:51.180
+Osoba pracująca w ramach prawidłowego procesu bezpieczeństwa może dosłownie potrzebować zapytać o przegląd zasad obsługi poufnych treści.
+
+00:11:51.420 --> 00:11:56.980
+Aby to rozwiązać, przepływ pracy wysyła bogatszy ładunek do osłon promptów Azure, a i content safety w celu dokładniejszego sprawdzenia.
+
+00:11:56.980 --> 00:12:04.120
+Wywołanie API zawiera zarówno prompt użytkownik, jak i pobrane dokumenty, ponieważ relacja między nimi jest zazwyczaj miejscem, w którym kryje się prawdziwy problem.
+
+00:12:04.300 --> 00:12:10.440
+Usługa zwraca prosty sygnał, a jeśli zostanie wykryty atak, przepływ pracy po prostu zmienia ścieżkę, zanim w ogóle dojdzie do wywołania modelu.
+
+00:12:10.620 --> 00:12:12.680
+Następnie musisz dodać zewnętrzny kontekst.
+
+00:12:12.880 --> 00:12:16.220
+Wyszukiwania w ramach wywiadu o zagrożeniach dają przepływowi pracy kolejną perspektywę.
+
+00:12:16.400 --> 00:12:23.820
+Możesz odpytać Microsoft Defender Fred Intelligence lub dowolne zaufane źródło TAXII, aby sprawdzić domeny, adresy URL lub wskaźniki źródłowe powiązane z nadużyciami.
+
+00:12:23.820 --> 00:12:30.560
+Powinieneś uwzględnić wyniki pewności, gdzie są dostępne, ponieważ reputacja źródła powinna wpływać na końcowy wynik, a nie całkowicie go zastępować.
+
+00:12:30.780 --> 00:12:36.600
+Słaby ładunek z ryzykownego źródła powinien zawsze mieć wyższy priorytet niż ten sam ładunek pochodzący z dobrze znanego procesu wewnętrznego.
+
+00:12:36.820 --> 00:12:38.720
+Na koniec system tworzy wynik zbiorczy.
+
+00:12:38.960 --> 00:12:44.280
+Analizuje siłę dopasowania wzorca, wyniki osłon promptów, reputację źródła oraz poziom wrażliwości żądanej akcji.
+
+00:12:44.520 --> 00:12:49.940
+Niskoryzykowne żądanie podsumowania artykułu publicznego nie ma takiej samej wagi, jak żądanie, które mogłoby ujawnić chronione pliki.
+
+00:12:49.940 --> 00:12:54.760
+To właśnie ten łączny wynik determinuje ścieżkę postępowania. Zdarzenia bezpieczne są realizowane zgodnie z planem.
+
+00:12:54.940 --> 00:13:01.640
+Przypadki o średnim ryzyku są czyszczone lub przekierowywane do bezpiecznej alternatywy, a przypadki wysokiego ryzyka są blokowane, zanim kopilot w ogóle się uruchomi.
+
+00:13:01.820 --> 00:13:04.960
+Wszystko trafia do ścieżki audytu wraz z zachowaną historią decyzji.
+
+00:13:05.100 --> 00:13:09.460
+Te zablokowane zdarzenia uczą, gdzie narasta presja i które źródła sprawiają najwięcej problemów.
+
+00:13:09.640 --> 00:13:15.480
+Gdy widzisz, jakie wzorce przenikają do Twoich procesów biznesowych, masz wreszcie dane potrzebne do dostrojenia systemu na kolejną rundę.
+
+00:13:15.480 --> 00:13:18.800
+Jak dostroić system, aby ograniczyć szum i wspierać realne potrzeby biznesowe?
+
+00:13:18.960 --> 00:13:23.940
+Gdy system już działa, charakter pracy ulega zmianie. Zbudowanie przepływu jest w rzeczywistości najłatwiejszą częścią.
+
+00:13:24.120 --> 00:13:30.340
+Dostrojenie go tak, by ludzie mu ufali i nie szukali obejść, decyduje o tym, czy stanie się on skutecznym zabezpieczeniem, czy kolejnym nieudanym eksperymentem.
+
+00:13:30.520 --> 00:13:35.660
+Jeśli system tworzy zbyt wiele utrudnień, użytkownicy po prostu znajdą sposób, by go ominąć, co czyni cały projekt bezcelowym.
+
+00:13:35.920 --> 00:13:37.540
+Należy zacząć od wąskiego zakresu.
+
+00:13:37.700 --> 00:13:40.480
+Nie próbuj monitorować każdego punktu styku z kopilotem pierwszego dnia.
+
+00:13:40.480 --> 00:13:46.460
+Zamiast tego wybierz miejsca o najwyższym ryzyku i jasnej ścieżce, takie jak akcje wspomagane narzędziami lub źródła danych o wysokiej wartości.
+
+00:13:46.700 --> 00:13:51.820
+Możesz zacząć od jednego procesu opartego na SharePoint lub konkretnego przepływu formularzy, aby uzyskać sygnał, który można zrozumieć.
+
+00:13:51.920 --> 00:13:55.220
+Ograniczony zakres daje przestrzeń na naukę bez ryzyka utonięcia w nadmiarze danych.
+
+00:13:55.440 --> 00:14:00.040
+Podczas konfiguracji wstępnych kontroli dostosuj odrzucenia pod kątem wyłapywania podejrzanych zdarzeń, a nie absolutnej pewności.
+
+00:14:00.040 --> 00:14:05.160
+Pierwszy etap ma na celu wczesne wykrycie podejrzanego języka, a nie udowodnienie złych intencji ponad wszelką wątpliwość.
+
+00:14:05.380 --> 00:14:09.960
+Jeśli wymusisz idealną precyzję wzorców, staną się one sztywne i zaczną pomijać to, na czym najbardziej Ci zależy.
+
+00:14:10.240 --> 00:14:15.880
+Lepiej pozwolić systemowi na nieco zbyt częste flakowanie na początku, a potem pozwolić późniejszym kontrolom dodać kontekst i zredukować szum.
+
+00:14:16.060 --> 00:14:18.740
+Dlatego punktacja ma większe znaczenie niż pojedyncze trafienia.
+
+00:14:19.000 --> 00:14:26.240
+Dopasowanie frazy samo w sobie nie zawsze powinno odrzucać żądanie, ale gdy połączysz je z flagą osłony promptu i ryzykownym źródłem, sytuacja się zmienia.
+
+00:14:26.240 --> 00:14:30.680
+Słabe sygnały powinny się sumować, a silne sygnały powinny przyspieszać blokadę.
+
+00:14:30.800 --> 00:14:36.300
+To fundamentalna różnica między sztywnym, irytującym filtrem, a modelem polityki, który rzeczywiście sprawdza się w biznesie.
+
+00:14:36.480 --> 00:14:38.940
+Musisz również wyznaczyć górny limit dla fałszywych trafień.
+
+00:14:39.140 --> 00:14:44.100
+Staraj się utrzymać ten wskaźnik poniżej 2%, ponieważ gdy ludzie poczują, że kontrola blokuje ich codzienną pracę, przestaną ufać systemowi.
+
+00:14:44.260 --> 00:14:45.820
+Wtedy właśnie zaczynają się obejścia.
+
+00:14:46.020 --> 00:14:51.740
+Użytkownicy będą kopiować tekst do niezarządzanych narzędzi, zespoły będą tworzyć ukryte procesy, a administratorzy zaczną prosić o ogólne wyłączenia.
+
+00:14:51.740 --> 00:14:56.900
+Kontrola zawali się od wewnątrz nie dlatego, że detekcja zawiodła, ale dlatego, że opór stał się zbyt duży do zniesienia.
+
+00:14:57.120 --> 00:14:59.540
+Aby temu zapobiec, musisz obserwować odpowiednie metryki.
+
+00:14:59.740 --> 00:15:02.860
+Zapomnij o efektownych pulpitach nawigacyjnych i skup się na średnim czasie wykrywania.
+
+00:15:03.120 --> 00:15:06.380
+Warto utrzymać go poniżej 15 minut dla wszystkiego, co wymaga ręcznego przeglądu.
+
+00:15:06.580 --> 00:15:11.320
+Powinieneś również śledzić czas automatycznej izolacji i dążyć do poniżej 5 minut tam, gdzie blokowanie jest bezpieczne.
+
+00:15:11.520 --> 00:15:15.800
+Jeśli przepływ pracy uruchamia się stale, ale nigdy nie wpływa na decyzję, to tylko szum informacyjny.
+
+00:15:15.800 --> 00:15:18.600
+Koszty to kolejny czynnik, który wymaga ciągłego dostrajania.
+
+00:15:18.800 --> 00:15:24.440
+Aplikacje logiczne oparte na zużyciu świetnie sprawdzają się przy zmiennym obciążeniu lub małych projektach pilotażowych, bo płacisz tylko za to, co wykonasz.
+
+00:15:24.600 --> 00:15:30.340
+Jednak plan standardowy ma więcej sensu, gdy wolumen zdarzeń jest przewidywalny i na tyle wysoki, że koszty pojedynczego uruchomienia zaczynają boleć.
+
+00:15:30.460 --> 00:15:31.520
+Nie zgaduj w tej kwestii.
+
+00:15:31.720 --> 00:15:35.620
+Zmierz rzeczywistą liczbę wyzwalaczy i rozmiary ładunków danych, zanim zdecydujesz się na konkretny model cenowy.
+
+00:15:35.800 --> 00:15:37.760
+Uważaj na to, jak zarządzasz przechowywaniem danych.
+
+00:15:37.760 --> 00:15:43.380
+Potrzebujesz wystarczającej historii uruchomiń do przeglądów incydentów i dowodów zgodności, ale nie potrzebujesz ogromnej bazy danych pełnej wrażliwych treści.
+
+00:15:43.600 --> 00:15:48.640
+Zachowaj konkretne pola, które wyjaśniają powody podjętych decyzji i usuń zbędne dane, które tworzą ryzyko związane z retencją.
+
+00:15:48.820 --> 00:15:53.620
+Przechowywanie zbyt dużej ilości danych może zmienić Twoje narzędzie bezpieczeństwa w zagrożenie dla prywatności, jeśli nie będziesz ostrożny.
+
+00:15:53.760 --> 00:15:56.820
+Na koniec połącz całe to dostrajanie z szerszymi zasadami ładu korporacyjnego.
+
+00:15:56.820 --> 00:16:02.700
+Mapuj przepływ pracy na funkcje NISTA i RMF, takie jak pomiar i zarządzanie, i powiąż go z etykietami wrażliwości danych w perwiu.
+
+00:16:02.860 --> 00:16:08.940
+Czasem najlepszą poprawką nie jest inteligentniejszy detektor, a po prostu usunięcie niepotrzebnego zasięgu z procesu, zanim stanie się problemem.
+
+00:16:09.080 --> 00:16:13.060
+Kiedy osiągniesz ten punkt, nie dyskutujesz już o bezpieczeństwie, a i tylko w teorii.
+
+00:16:13.220 --> 00:16:18.080
+Prowadzisz rzeczywisty model operacyjny z progami i kompromisami, którymi firma może realnie zarządzać.
+
+00:16:18.260 --> 00:16:20.280
+Co to zmienia dla liderów i architektów?
+
+00:16:20.280 --> 00:16:26.220
+Gdy wdrożysz to rozwiązanie, Kopilot przestaje działać jak system oparty na ślepym zaufaniu i to właśnie wtedy następuje prawdziwa zmiana.
+
+00:16:26.820 --> 00:16:31.760
+Model otrzymywał jedynie mieszankę kontekstów, a Twój zespół miał nadzieję, że właściwe instrukcje przeważą.
+
+00:16:31.920 --> 00:16:36.480
+Teraz ten kontekst jest sprawdzany, oceniany i kierowany, zanim model w ogóle będzie miał okazję go dotknąć.
+
+00:16:36.700 --> 00:16:41.120
+Wynik bezpieczeństwa nie jest już tylko abstrakcyjną polityką, ponieważ teraz funkcjonuje jako kontrolowane wykonanie.
+
+00:16:41.340 --> 00:16:44.980
+Dla architektów zmienia to miejsce, w którym bezpieczeństwo faktycznie znajduje się w projekcie.
+
+00:16:44.980 --> 00:16:51.660
+Nie ogranicza się już tylko do ustawień dzierżawy, uprawnień czy szablonów zapytań, lecz znajduje się bezpośrednio na ścieżce transakcji.
+
+00:16:51.660 --> 00:16:57.340
+Każde istotne żądanie otrzymuje punkt przechwytywania, a każde wrażliwe działanie podąża określoną ścieżką decyzyjną.
+
+00:16:57.540 --> 00:17:03.780
+Oznacza to, że każdy nowy łącznik, agent lub wtyczka staje się elementem ocenianym jako ścieżka wejściowa, a nie tylko kolejna funkcja zwiększająca produktywność.
+
+00:17:03.960 --> 00:17:07.880
+Jest to kluczowe, ponieważ dryf architektury jest zazwyczaj przyczyną porażek takich programów.
+
+00:17:07.880 --> 00:17:15.180
+Jeden zespół wdraża kopilota do pojedynczego przypadku użycia, potem inny zespół podłącza formularz, aż w końcu ktoś dodaje przepływ pracy lub nadaje agentowi dostęp do narzędzi.
+
+00:17:15.340 --> 00:17:21.020
+Każda z tych zmian z osobna wydaje się niewielka, ale razem tworzą znacznie szerszą ścieżkę ataku niż ktokolwiek kiedykolwiek planował.
+
+00:17:21.220 --> 00:17:26.680
+Jeśli nie budujesz przechwytywania w swój model operacyjny, środowisko będzie rozrastać się znacznie szybciej niż twoje zabezpieczenia będą w stanie nadążyć.
+
+00:17:26.880 --> 00:17:32.280
+Dla liderów do spraw, bezpieczeństwa podejście to wreszcie rozwiązuje niejasny problem własności, który nęka większość organizacji.
+
+00:17:32.280 --> 00:17:36.120
+Obecnie ryzyko związane z kopilotem zazwyczaj wpada w luki między różnymi zespołami.
+
+00:17:36.280 --> 00:17:42.760
+SOC widzi alerty, administratorzy Microsoft 365 widzą konfigurację, a właściciel, a i dba tylko o adopcję.
+
+00:17:42.920 --> 00:17:48.040
+Korzystając ze ścieżki kontrolnej Logic Apps, wszystkie te grupy mogą wreszcie pracować w oparciu o jeden model reagowania.
+
+00:17:48.260 --> 00:17:52.200
+Korzystają z tego samego dziennika zdarzeń, tej samej logiki, oceniania i tej samej historii rozgałęzień,
+
+00:17:52.280 --> 00:17:56.380
+co ogranicza zamieszanie, gdy w aktywnym przepływie pracy pojawi się ryzykowne zapytanie lub szkodliwy dokument.
+
+00:17:56.580 --> 00:17:59.920
+Biznesowy aspekt tego rozwiązania jest znacznie bardziej bezpośredni niż ludzie przypuszczają.
+
+00:17:59.920 --> 00:18:03.720
+Blokowanie zagrożenia na wczesnym etapie jest zawsze tańsze niż późniejsze próby usuwania jego skutków.
+
+00:18:03.920 --> 00:18:07.780
+Sprzątanie wiąże się z dochodzeniami, przeglądami prawnymi i zakłóceniami pracy użytkowników,
+
+00:18:07.860 --> 00:18:11.760
+a zazwyczaj kończy się żmudną rundą przeglądów dostępu, które powinny odbyć się przed wdrożeniem.
+
+00:18:11.920 --> 00:18:15.580
+Liderzy nie potrzebują długich wykładów o etyce, a by to zrozumieć, wystarczy, że zobaczą,
+
+00:18:15.720 --> 00:18:19.980
+iż kontrola w czasie rzeczywistym kosztuje mniej niż pozwolenie na rozprzestrzenianie się niezarządzanego ryzyka w systemach,
+
+00:18:20.040 --> 00:18:21.640
+z których pracownicy korzystają na co dzień.
+
+00:18:21.640 --> 00:18:25.800
+Dla kadry zarządzającej porusza to niewygodną kwestię dotyczącą miejsca, w którym rezyduje ryzyko.
+
+00:18:26.000 --> 00:18:29.480
+Ryzyko AI nie znajduje się już w piaskownicy czy pilotażowym laboratorium,
+
+00:18:29.660 --> 00:18:31.760
+lecz w Wordzie, Outlooku, SharePoint i Teams.
+
+00:18:31.980 --> 00:18:35.440
+Ludzie z góry zakładają, że te miejsca są na tyle bezpieczne, by działać szybko,
+
+00:18:35.520 --> 00:18:38.360
+a to zaufanie jest właśnie tym, co podnosi stawkę dla firmy.
+
+00:18:38.600 --> 00:18:41.860
+Zły przepływ pracy w eksperymentalnej aplikacji to problem ograniczony,
+
+00:18:42.000 --> 00:18:45.860
+ale zły przepływ pracy w codziennym pakiecie produktywności to zupełnie inna historia.
+
+00:18:46.140 --> 00:18:49.000
+Twoja ścieżka wdrażania powinna pozostać niewielka i bardzo przemyślana.
+
+00:18:49.000 --> 00:18:52.200
+Zacznij od jednego przypadku użycia jednego wyzwalacza i jednego modelu punktacji.
+
+00:18:52.400 --> 00:18:56.220
+Wybierz ścieżkę, na której dane mają rzeczywiste znaczenie, a zachowanie jest łatwe do obserwowania.
+
+00:18:56.480 --> 00:18:59.900
+Musisz udowodnić, że proces wyłapuje ryzykowne dane wejściowe i kieruje te bezpieczne dalej,
+
+00:19:00.020 --> 00:19:02.800
+zapewniając ludziom użyteczne informacje, gdy potrzebna jest weryfikacja.
+
+00:19:03.020 --> 00:19:05.540
+Gdy udowodnisz, że to działa, możesz zacząć się rozwijać.
+
+00:19:05.700 --> 00:19:09.400
+Później możesz dodać wykrywanie anomalii lub kontrolę danych wyjściowych tam, gdzie to pasuje.
+
+00:19:09.660 --> 00:19:11.540
+Możesz nawet dodać głębsze monitorowanie nadużyć,
+
+00:19:11.680 --> 00:19:15.460
+ale pierwsza brama musi pozostać dokładnie tam, gdzie niezaufany kontekst trafia do systemu.
+
+00:19:15.460 --> 00:19:20.560
+Jeśli ta pierwsza brama pozostanie słaba, każda kolejna kontrola będzie jedynie próbą naprawienia błędnego punktu wyjścia.
+
+00:19:20.800 --> 00:19:22.980
+Zmiana podejścia jest w rzeczywistości bardzo prosta.
+
+00:19:23.200 --> 00:19:25.840
+Przestań traktować wstrzykiwanie promptów jako problem językowy
+
+00:19:25.840 --> 00:19:30.180
+i zacznij postrzegać je jako kontrolę środowiska wykonawczego nad niezaufanym kontekstem w kopilocie.
+
+00:19:30.420 --> 00:19:33.920
+Znajdź w tym tygodniu czas na pełne zmapowanie jednego procesu roboczego kopilota.
+
+00:19:34.160 --> 00:19:37.840
+Znajdź ostatni punkt bezpiecznego przechwycenia przed wykonaniem i stwórz aplikację logiczną,
+
+00:19:37.960 --> 00:19:40.400
+która ocenia, blokuje i rejestruje tę konkretną ścieżkę.
+
+00:19:40.400 --> 00:19:44.760
+Jeśli chcesz więcej wiedzy o bezpieczeństwie kopilota bez zbędnego gadania, zasubskrybuj i zostaw recenzję.
+
+00:19:44.960 --> 00:19:47.600
+Możesz również skontaktować się ze mną, Mirko Petersem, na LinkedIn,
+
+00:19:47.780 --> 00:19:50.980
+aby opowiedzieć mi o konkretnym scenariuszu dzierżawy, który próbujesz zabezpieczyć.

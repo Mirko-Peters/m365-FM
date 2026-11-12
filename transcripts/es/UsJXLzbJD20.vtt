@@ -1,0 +1,934 @@
+WEBVTT
+
+00:00:00.160 --> 00:00:03.700
+Bienvenidos a otro episodio de Píldoras de Conocimiento de Microsoft aquí en M365FM.
+
+00:00:03.960 --> 00:00:04.960
+Soy su anfitrión Mirko Peter.
+
+00:00:05.180 --> 00:00:08.580
+El tema de hoy es uno del que casi todos han oído hablar, pero muy pocos entienden realmente.
+
+00:00:09.540 --> 00:00:14.960
+Hablo de Power Automate, una herramienta que la mayoría descarta como esa cosa de flujos escondida en Microsoft 365.
+
+00:00:15.800 --> 00:00:19.340
+Quizá la hayan visto mencionada en un menú o hayan hecho clic en ella por accidente, pero escuchen esto.
+
+00:00:19.780 --> 00:00:22.920
+Power Automate es una de las herramientas más potentes de toda la plataforma Microsoft.
+
+00:00:23.600 --> 00:00:28.600
+Al final de este episodio, sabrán exactamente qué es, cómo funciona y por qué importa para su trabajo diario.
+
+00:00:28.600 --> 00:00:34.040
+Imaginen que contratan a un asistente virtual que nunca duerme, nunca olvida y nunca pide un aumento.
+
+00:00:34.940 --> 00:00:35.960
+Tomen su café y comencemos.
+
+00:00:36.840 --> 00:00:38.000
+El problema que resuelve Power Automate.
+
+00:00:38.640 --> 00:00:39.700
+Empecemos primero con el problema.
+
+00:00:40.260 --> 00:00:43.140
+Piensen en su día de trabajo típico y en cuántas veces repiten la misma sección.
+
+00:00:43.800 --> 00:00:48.460
+Mover archivos entre carpetas, copiar datos a otro sistema, enviar ese mismo correo por centésima vez,
+
+00:00:48.680 --> 00:00:53.420
+reenviar un documento para aprobación o actualizar una hoja de cálculo porque alguien envió un formulario.
+
+00:00:54.300 --> 00:00:56.220
+Estas tareas consumen horas cada semana.
+
+00:00:56.220 --> 00:00:59.560
+Lo frustrante es que no aportan casi ningún valor estratégico.
+
+00:01:00.180 --> 00:01:04.580
+Nadie fue ascendido por ser excelente copiando y pegando, pero lo hacemos de todos modos porque hay que hacerlo.
+
+00:01:05.380 --> 00:01:09.160
+Hace 20 años, si querías automatizar estas tareas repetitivas, realmente solo tenías dos opciones.
+
+00:01:09.700 --> 00:01:13.440
+Podías contratar a alguien para hacer el trabajo aburrido por ti o podías aprender a escribir complejo tú mismo.
+
+00:01:14.100 --> 00:01:17.340
+Ninguna opción era buena porque los scripts eran frágiles y fallaban todo el tiempo,
+
+00:01:17.440 --> 00:01:21.880
+mientras que el software de automatización empresarial costaba una fortuna y requería un equipo de expertos para su mantenimiento.
+
+00:01:22.520 --> 00:01:24.860
+Entonces, la mayor gente simplemente seguía haciendo el trabajo repetitivo manualmente.
+
+00:01:24.860 --> 00:01:29.420
+Microsoft analizó esa situación frustrante y decidió cambiarla creando una herramienta que permite a cualquiera,
+
+00:01:29.540 --> 00:01:34.360
+y digo cualquiera, automatizar tareas repetitivas sin escribir una sola línea de código.
+
+00:01:35.060 --> 00:01:36.140
+Esa herramienta es Power Automate.
+
+00:01:36.640 --> 00:01:41.020
+Su forma más simple conecta tus aplicaciones y servicios para que puedan comunicarse entre sí sin que tú estés en el medio.
+
+00:01:41.020 --> 00:01:46.280
+En lugar de ser tú el puente entre Outlook, SharePoint y Teams, Power Automate se convierte en ese puente,
+
+00:01:46.500 --> 00:01:50.320
+trabajando las 24 horas sin tomar un descanso ni cometer jamás un error tipográfico.
+
+00:01:50.320 --> 00:01:53.520
+La definición simple, disparador más acción.
+
+00:01:54.040 --> 00:01:55.320
+Entonces, ¿qué es exactamente Power Automate?
+
+00:01:55.700 --> 00:01:56.780
+Aquí está la definición más sencilla.
+
+00:01:57.160 --> 00:01:58.700
+Power Automate está compuesto de dos cosas.
+
+00:01:59.140 --> 00:02:00.740
+Un disparador, trigger y una más acciones.
+
+00:02:01.060 --> 00:02:01.400
+Eso es tú.
+
+00:02:01.820 --> 00:02:03.220
+Todo lo demás se construye sobre esa base.
+
+00:02:03.680 --> 00:02:05.260
+Piensen en un disparador como disparo de séril.
+
+00:02:05.520 --> 00:02:06.060
+Es el cuándo.
+
+00:02:06.060 --> 00:02:10.520
+Cuando llega un nuevo correo a tu bandeja, cuando se crea un archivo en SharePoint,
+
+00:02:10.680 --> 00:02:13.780
+cuando alguien envía un formulario de Microsoft, cuando empieza un evento de calendario,
+
+00:02:14.660 --> 00:02:16.440
+no ocurre nada hasta que se activa el disparador.
+
+00:02:16.840 --> 00:02:17.280
+Esa es la clave.
+
+00:02:18.640 --> 00:02:20.360
+Una acción es lo que sucede a continuación.
+
+00:02:21.000 --> 00:02:24.220
+Enviar una notificación, crear un archivo, actualizar una fila de hoja de cálculo,
+
+00:02:24.320 --> 00:02:27.000
+publicar un mensaje en Teams, añadir una tarea planera, enviar un correo.
+
+00:02:27.380 --> 00:02:29.400
+Eso es lo que hace la automatización en respuesta al disparador.
+
+00:02:29.700 --> 00:02:30.180
+Esa es en sí.
+
+00:02:30.700 --> 00:02:31.760
+Analicemos un escenario real.
+
+00:02:32.380 --> 00:02:34.800
+Imagina que un cliente rellena un formulario de contacto en tu sitio web.
+
+00:02:34.800 --> 00:02:36.320
+El envío de ese formulario es el disparador.
+
+00:02:36.760 --> 00:02:37.400
+¿Qué sucede después?
+
+00:02:37.840 --> 00:02:39.740
+Podrías guardar su información en una lista de SharePoint.
+
+00:02:40.120 --> 00:02:40.960
+Esa es la acción número uno.
+
+00:02:41.520 --> 00:02:43.340
+Enviar una notificación a tu equipo de ventas en Teams.
+
+00:02:44.160 --> 00:02:44.780
+Acción número dos.
+
+00:02:45.360 --> 00:02:47.500
+Crear una tarea de seguimiento en Planner para mañana por la mañana.
+
+00:02:47.940 --> 00:02:48.600
+Acción número tres.
+
+00:02:49.160 --> 00:02:52.040
+Un disparador, múltiples acciones, todo ocurre automáticamente en segundo.
+
+00:02:52.420 --> 00:02:53.300
+No se requiere trabajo humano.
+
+00:02:53.700 --> 00:02:56.340
+La cuestión es que no escribes ni una sola línea de código para que esto flujo.
+
+00:02:56.820 --> 00:02:59.000
+Conectas piezas prefabricadas como si fueran bloques de Lego.
+
+00:02:59.380 --> 00:03:01.800
+Microsoft ya ha creado los bloques para cientos de servicios diferentes.
+
+00:03:02.140 --> 00:03:02.800
+Solo tienes que encajar.
+
+00:03:03.200 --> 00:03:04.560
+¿Quieres añadir un paso de enviar correo?
+
+00:03:04.980 --> 00:03:05.420
+Arrastralo.
+
+00:03:05.760 --> 00:03:06.980
+¿Quieres añadir un paso de crear archivo?
+
+00:03:07.480 --> 00:03:07.920
+Arrastralo.
+
+00:03:08.300 --> 00:03:11.060
+¿Quieres añadir una condición que compruebe si algo es cierto antes de proceder?
+
+00:03:11.340 --> 00:03:11.780
+Arrastralo.
+
+00:03:12.000 --> 00:03:13.360
+Realmente es así de visual y es así de sencillo.
+
+00:03:13.620 --> 00:03:15.160
+La mayoría que Power Automate es complicado.
+
+00:03:15.700 --> 00:03:18.060
+Pero si eliminas todo el marketing y la agrega técnica, en realidad es solo.
+
+00:03:18.280 --> 00:03:20.440
+Cuando pase esto, haz aquello, haz aquello.
+
+00:03:21.020 --> 00:03:21.900
+Ese es todo el concepto.
+
+00:03:22.220 --> 00:03:24.960
+Una vez que entiendes esa base de todo lo más, empieza a cobrar sentido.
+
+00:03:25.920 --> 00:03:26.880
+Los tres tipos de flujo.
+
+00:03:26.880 --> 00:03:30.560
+Ahora que conoces el concepto básico, veamos las diferentes formas en que pueden ejecutarse
+
+00:03:30.560 --> 00:03:30.900
+los flujos.
+
+00:03:31.060 --> 00:03:32.220
+No todos los flujos funcionan en él.
+
+00:03:32.580 --> 00:03:34.300
+Analicemos los tres tipos que necesitas conocer.
+
+00:03:34.840 --> 00:03:36.080
+Primero están los flujos automatizados.
+
+00:03:36.400 --> 00:03:38.280
+Estos se ejecutan por sí solos cuando ocurre algo.
+
+00:03:38.860 --> 00:03:40.740
+Llega un correo nuevo a tu bandeja y ¡pum!
+
+00:03:40.880 --> 00:03:42.180
+Se crea una tarea en Planner.
+
+00:03:42.940 --> 00:03:44.040
+No requiere interacción humana.
+
+00:03:44.460 --> 00:03:47.160
+Simplemente se ejecuta en segundo plano haciendo su trabajo mientras tú te enfocas
+
+00:03:47.160 --> 00:03:47.580
+en otra cosa.
+
+00:03:48.100 --> 00:03:50.980
+Este es el tipo de flujo más común para la automatización empresarial diaria.
+
+00:03:51.720 --> 00:03:54.100
+Lo configuras una vez y se ejecuta siempre hasta que lo desactivas.
+
+00:03:55.040 --> 00:03:56.240
+Segundo están los flujos instantáneos.
+
+00:03:56.800 --> 00:04:01.220
+Estos se ejecutan al hacer clic en un botón desde tu teléfono, desde Teams o desde un sitio
+
+00:04:01.220 --> 00:04:01.600
+de SharePoint.
+
+00:04:02.060 --> 00:04:06.200
+Imagina que ves un documento en SharePoint y hay un botón que dice Enviar para aprobación.
+
+00:04:06.200 --> 00:04:08.680
+Haces clic y el flujo se encarga del resto.
+
+00:04:09.760 --> 00:04:12.400
+Los flujos instantáneos son perfectos para acciones que deseas controlar.
+
+00:04:12.680 --> 00:04:15.780
+No quieres que se ejecuten automáticamente porque necesitas decidir cuándo se activan,
+
+00:04:16.060 --> 00:04:18.420
+pero una vez que lo decides, el flujo hace todo el trabajo pesado por ti.
+
+00:04:18.820 --> 00:04:20.180
+En tercer lugar están los flujos programados.
+
+00:04:20.560 --> 00:04:21.600
+Estos se ejecutan con un temporito.
+
+00:04:21.780 --> 00:04:22.660
+Todos los lunes a las 8 de la tarde.
+
+00:04:23.180 --> 00:04:24.760
+Envíame un resumen de todas las tareas incompletas.
+
+00:04:25.100 --> 00:04:27.000
+Todos los días al mediodía es una copia de seguridad de esta carpeta.
+
+00:04:27.140 --> 00:04:27.980
+Primero de cada mes.
+
+00:04:28.400 --> 00:04:29.000
+Genera un informe.
+
+00:04:29.360 --> 00:04:33.800
+Tú estableces el horario, diario, semanal, mensual, lo que necesites y funciona como un reloj.
+
+00:04:33.800 --> 00:04:37.440
+Los flujos programados son ideales para informes recurrentes, recordatorios y tareas de limpieza.
+
+00:04:38.040 --> 00:04:38.920
+Esto es lo que debes entender.
+
+00:04:39.680 --> 00:04:42.000
+El motor central es exactamente el mismo para los tres tipos.
+
+00:04:42.540 --> 00:04:44.000
+La única diferencia real es el desencadenador.
+
+00:04:44.340 --> 00:04:45.780
+Los flujos automatizados usan desencadenados.
+
+00:04:46.160 --> 00:04:47.780
+Los flujos instantáneos usan desencadenazón.
+
+00:04:48.160 --> 00:04:50.180
+Los flujos programados usan desencadenadores de tiempo,
+
+00:04:50.580 --> 00:04:52.900
+pero una vez que se activa, todo lo que sigue funciona exactamente igual.
+
+00:04:53.340 --> 00:04:56.460
+Así que elige el desencadenador que coincida con cómo quieres que inicie el flujo y listo.
+
+00:04:56.460 --> 00:05:00.120
+Conectores como Power Automate se comunica con todo.
+
+00:05:00.360 --> 00:05:01.740
+Bien, tienes desencadenadores y acciones,
+
+00:05:01.900 --> 00:05:04.720
+pero ¿cómo se comunica realmente Power Automate con todas estas aplicaciones diferentes?
+
+00:05:04.820 --> 00:05:06.020
+La respuesta son los conectores.
+
+00:05:06.220 --> 00:05:07.300
+Los conectores son los traductores.
+
+00:05:07.800 --> 00:05:10.880
+Power Automate no habla de forma nativa a SharePoint, Outlook, Teams o Excel,
+
+00:05:11.020 --> 00:05:12.120
+pero los conectores sí.
+
+00:05:13.040 --> 00:05:15.780
+Cada conector sabe cómo comunicarse con un servicio específico,
+
+00:05:15.880 --> 00:05:18.480
+qué puede hacer, qué datos espera y cómo enviar comandos.
+
+00:05:19.300 --> 00:05:22.300
+Cuando agregas un paso a tu flujo, en realidad solo estás eligiendo un conector
+
+00:05:22.300 --> 00:05:23.300
+y diciéndole qué hacer.
+
+00:05:23.900 --> 00:05:26.480
+Existen más de 1.400 conectores preconfigurados en este momento
+
+00:05:26.480 --> 00:05:27.560
+y ese número sigue creciendo.
+
+00:05:28.180 --> 00:05:31.120
+Los conectores de Microsoft, SharePoint, Teams, Outlook, OneDrive
+
+00:05:31.120 --> 00:05:33.060
+vienen de serie en la mayoría de los planes
+
+00:05:33.060 --> 00:05:35.140
+y cubren los servicios que probablemente usas a diario.
+
+00:05:35.440 --> 00:05:37.960
+Pero los conectores de terceros abren todo un mundo nuevo.
+
+00:05:38.520 --> 00:05:41.660
+Salesforce, Adobe, DocuSign, Google, Twitter, MailChimp, Power Automate
+
+00:05:41.660 --> 00:05:43.140
+pueden comunicarse con todos ellos.
+
+00:05:43.820 --> 00:05:46.160
+Lo es crear un flujo que comience con un envío de Google Forms,
+
+00:05:46.240 --> 00:05:48.440
+guarde los datos en SharePoint, envía un acuerdo de Docsign
+
+00:05:48.440 --> 00:05:50.120
+y publica una notificación en Teams.
+
+00:05:50.900 --> 00:05:53.280
+Todo en un solo flujo, todo sin salir del ecosistema de Microsoft.
+
+00:05:53.860 --> 00:05:55.920
+Si no existe un conector para el sistema que necesitas,
+
+00:05:56.140 --> 00:05:56.960
+puedes crear el tuyo propio.
+
+00:05:57.260 --> 00:05:58.960
+Los conectores personalizados te permiten conectarte
+
+00:05:58.960 --> 00:05:59.980
+a cualquier servicio que tenga una app.
+
+00:06:00.380 --> 00:06:01.300
+Requiere un poco más de trabajo,
+
+00:06:01.460 --> 00:06:03.040
+pero eso significa que Power Automate puede comunicarse
+
+00:06:03.040 --> 00:06:03.540
+con cualquier cosa.
+
+00:06:03.700 --> 00:06:06.020
+Cada conector tiene su propio conjunto de desencadenadores y acción.
+
+00:06:06.260 --> 00:06:08.620
+Cuando eliges uno, solo ves lo que ese servicio realmente puede hacer.
+
+00:06:08.920 --> 00:06:11.240
+El conector de SharePoint conoce las listas y bibliotecas.
+
+00:06:11.660 --> 00:06:13.120
+El conector de Outlook maneja CoroSign,
+
+00:06:13.120 --> 00:06:15.860
+el conector de Teams encarga de canales y mensajes.
+
+00:06:15.860 --> 00:06:18.400
+No tienes que adivinar porque el conector te indica exactamente
+
+00:06:18.400 --> 00:06:19.000
+qué hay disponible.
+
+00:06:19.420 --> 00:06:20.940
+Ese es el verdadero poder de Power Automate.
+
+00:06:21.240 --> 00:06:22.420
+No es solo para servicios de Microsoft.
+
+00:06:22.920 --> 00:06:24.440
+Conecta todo tu conjunto de herramientas,
+
+00:06:24.540 --> 00:06:26.800
+tu CRM, tu correo electrónico, tu almacenamiento de archivos
+
+00:06:26.800 --> 00:06:29.220
+y tu gestión de proyectos en un sistema de automatización unificado.
+
+00:06:29.660 --> 00:06:31.420
+Todos se convierten en parte del mismo flujo.
+
+00:06:32.080 --> 00:06:33.800
+Flujos de nube frente a flujos de escritorio.
+
+00:06:34.240 --> 00:06:35.580
+Aquí es donde la gente suele confundirse.
+
+00:06:36.040 --> 00:06:37.880
+En realidad existen dos tipos de Power Automate
+
+00:06:37.880 --> 00:06:39.060
+y funcionan de forma muy distinta.
+
+00:06:39.060 --> 00:06:40.520
+El primer tipo son los flujos de nube.
+
+00:06:40.900 --> 00:06:42.480
+Estos se ejecutan completamente en los servers de Mac.
+
+00:06:42.480 --> 00:06:44.820
+Cuando creas un flujo de nube, todo ocurre en la nube.
+
+00:06:45.340 --> 00:06:47.400
+Se envía un formulario, los datos se guardan en SharePoint.
+
+00:06:47.940 --> 00:06:50.120
+Llega un correo electrónico y se crea un evento en el calendario.
+
+00:06:50.620 --> 00:06:52.280
+Tu computadora no necesita estar encendida,
+
+00:06:52.480 --> 00:06:53.840
+ni requieres instalar ningún software.
+
+00:06:54.480 --> 00:06:56.200
+El flujo se ejecuta en la infraestructura de Microsoft
+
+00:06:56.200 --> 00:06:57.460
+y tú son los resultados después.
+
+00:06:58.320 --> 00:07:00.040
+Los flujos de nube son lo que la mayoría imagina
+
+00:07:00.040 --> 00:07:01.200
+al oír hablar de Power Automate.
+
+00:07:01.680 --> 00:07:03.080
+El segundo tipo son los flujos de escritorio.
+
+00:07:03.540 --> 00:07:04.560
+Esto es completamente diferente.
+
+00:07:04.560 --> 00:07:06.480
+Los flujos de escritorio utilizan algo llamado
+
+00:07:06.480 --> 00:07:08.340
+automatización robótica de procesos URP.
+
+00:07:08.840 --> 00:07:10.240
+Esto es lo que significa en palabras sencillas.
+
+00:07:10.240 --> 00:07:13.480
+Power Automate toma literalmente el control de tu ratón y tu teclado.
+
+00:07:13.940 --> 00:07:16.100
+Abre ventanas de navegador, hace clic en botones,
+
+00:07:16.320 --> 00:07:19.540
+escribe texto en campos y copia datos de una aplicación a otra.
+
+00:07:20.140 --> 00:07:22.680
+Si alguna vez has visto a alguien usar un software de escritorio remoto
+
+00:07:22.680 --> 00:07:23.960
+para controlar otra computadora,
+
+00:07:24.280 --> 00:07:26.980
+se ve exactamente igual, solo que no hay nadie al otro lado.
+
+00:07:27.640 --> 00:07:29.020
+Es solo software moviendo tu rato.
+
+00:07:29.540 --> 00:07:31.560
+La primera vez que ves un flujo de escritorio en ejecución,
+
+00:07:31.560 --> 00:07:32.460
+¿resulta un poco extraño?
+
+00:07:32.800 --> 00:07:35.580
+El cursor empieza a moverse solo, se abren y cierran ventanas
+
+00:07:35.580 --> 00:07:37.620
+y aparece texto en campos donde no hiciste clic.
+
+00:07:38.080 --> 00:07:39.860
+Parece como si un fantasma estuviera usando tu computadora.
+
+00:07:40.240 --> 00:07:43.320
+Pero una vez que superas la extrañeza, te das cuenta de lo potente que es.
+
+00:07:43.860 --> 00:07:45.140
+Entonces, ¿por qué necesitarías flujo de escritorio?
+
+00:07:45.420 --> 00:07:47.960
+Porque no todos los sistemas tienen una app y un conector moderno.
+
+00:07:48.300 --> 00:07:50.800
+Piensa en esas viejas aplicaciones empresariales que las compañías todavía usan.
+
+00:07:51.200 --> 00:07:53.020
+El sistema de contabilidad de principios de los 2000,
+
+00:07:53.240 --> 00:07:55.120
+la base de datos personalizada creada hace 15 años,
+
+00:07:55.320 --> 00:07:57.360
+el software de recursos humanos heredado en un servidor local.
+
+00:07:57.860 --> 00:08:00.220
+Estos sistemas no tienen disparadores, conectores,
+
+00:08:00.320 --> 00:08:01.740
+ni forma de comunicarse con el exterior.
+
+00:08:02.100 --> 00:08:04.000
+Pero un flujo de escritorio puede interactuar con ellos
+
+00:08:04.000 --> 00:08:06.720
+igual que un humano haciendo clic en botones y escribiendo texto.
+
+00:08:06.720 --> 00:08:08.140
+¿Cuál necesitas tú?
+
+00:08:08.480 --> 00:08:11.560
+Los flujos de nube funcionan para servicios modernos que tienen apps y conectores.
+
+00:08:11.960 --> 00:08:14.020
+Los flujos de escritorio manejan aplicaciones heredadas,
+
+00:08:14.200 --> 00:08:17.020
+software antiguo o cualquier cosa que no pueda conectarse mediante programación.
+
+00:08:17.540 --> 00:08:19.460
+En muchas organizaciones terminarás usando ambos.
+
+00:08:20.280 --> 00:08:21.360
+¿Cómo encajan las piezas?
+
+00:08:21.520 --> 00:08:21.900
+El sistema.
+
+00:08:21.900 --> 00:08:25.940
+La cuestión es que la mayoría piensa que Power Automate es solo una herramienta,
+
+00:08:26.080 --> 00:08:28.680
+pero entender cómo encajan sus piezas es lo que libera su verdadero poder.
+
+00:08:29.880 --> 00:08:31.200
+En realidad son tres capas trabajando juntos.
+
+00:08:31.720 --> 00:08:32.540
+Comencemos con el activador.
+
+00:08:32.880 --> 00:08:33.920
+Algo sucede en tu entorno de trabajo.
+
+00:08:34.540 --> 00:08:37.200
+Se envía un formulario, se carga un archivo o llega un correo electrónico.
+
+00:08:37.900 --> 00:08:39.000
+Esa es la chispa que inicia todo.
+
+00:08:39.620 --> 00:08:40.340
+Lo siguiente es la acción.
+
+00:08:40.640 --> 00:08:42.780
+La automatización hace algo útil como guardar datos,
+
+00:08:43.020 --> 00:08:45.780
+enviar una notificación, crear una tarea o actualizar un registro.
+
+00:08:46.040 --> 00:08:46.980
+Ahí es donde se realiza el trabajo.
+
+00:08:47.360 --> 00:08:48.100
+Luego está el conector.
+
+00:08:48.100 --> 00:08:50.540
+Esto cierra la brecha entre tus diferentes herramientas.
+
+00:08:50.720 --> 00:08:52.280
+Permite que el activador se comunique con la acción
+
+00:08:52.280 --> 00:08:54.020
+incluso cuando está en sistemas completamente diferentes.
+
+00:08:54.440 --> 00:08:57.100
+El poder real no reside en una sola pieza, sino en cómo se combina.
+
+00:08:57.340 --> 00:08:58.280
+Déjame darte un ejemplo real.
+
+00:08:58.520 --> 00:09:00.780
+Supongamos que un cliente completa un formulario de contacto en tu sitio web.
+
+00:09:00.940 --> 00:09:01.640
+Ese es el activador.
+
+00:09:01.940 --> 00:09:05.580
+Power Automate lo detecta y busca el vendedor correcto en una lista de SharePoint.
+
+00:09:06.120 --> 00:09:06.620
+Primera acción.
+
+00:09:07.220 --> 00:09:09.240
+Luego envía una alerta de Teams a ese vendedor.
+
+00:09:09.860 --> 00:09:10.320
+Segunda acción.
+
+00:09:10.980 --> 00:09:13.380
+Después crea una tarea de seguimiento en Planner para la mañana siguiente.
+
+00:09:13.940 --> 00:09:14.460
+Tercera acción.
+
+00:09:14.960 --> 00:09:17.240
+Entonces registra todo en una hoja de cálculo de Excel para informes.
+
+00:09:17.860 --> 00:09:18.380
+Cuarta acción.
+
+00:09:18.900 --> 00:09:21.580
+Cuatro acciones desde un activador a través de tres servicios diferentes
+
+00:09:21.580 --> 00:09:23.400
+y todo sucede en segundos, en segundo.
+
+00:09:23.720 --> 00:09:26.600
+Un activador puede encadenarse a docenas de acciones en múltiples servicios.
+
+00:09:27.400 --> 00:09:31.700
+Puedes crear flujos que conecten SharePoint, Teams, Outlook, Planner, Excel y Salesforce
+
+00:09:31.700 --> 00:09:33.120
+en la misma automatización.
+
+00:09:34.180 --> 00:09:37.020
+Cada acción transmite datos a la siguiente, construyendo sobre lo anterior.
+
+00:09:37.880 --> 00:09:39.120
+El flujo no hace solo una cosa.
+
+00:09:39.860 --> 00:09:41.580
+Gestiona un proceso completo de principio a fin.
+
+00:09:42.340 --> 00:09:42.960
+Esa es la magia.
+
+00:09:43.600 --> 00:09:45.620
+Lo que solía ser un proceso manual de 10 minutos.
+
+00:09:45.620 --> 00:09:50.060
+Revisar el formulario, buscar a la persona, enviar un mensaje, crear una tarea, registrar
+
+00:09:50.060 --> 00:09:52.060
+los datos, ahora ocurre en instante y automáticamente.
+
+00:09:52.840 --> 00:09:53.220
+Sin error.
+
+00:09:53.720 --> 00:09:55.000
+El cliente recibe una respuesta más rápida.
+
+00:09:55.480 --> 00:09:56.820
+El vendedor recibe un paso a seguir claro.
+
+00:09:57.340 --> 00:09:58.520
+Y tú no tuviste que mover un dedo.
+
+00:09:59.160 --> 00:10:00.940
+Ejemplos del mundo real que puedes usar mañana mismo.
+
+00:10:01.400 --> 00:10:02.100
+Hagamos esto concreto.
+
+00:10:02.980 --> 00:10:05.220
+Aquí hay tres flujos que puedes construir ahora mismo empezando hoy.
+
+00:10:06.040 --> 00:10:07.280
+Comienza con un flujo de formularios.
+
+00:10:07.760 --> 00:10:09.040
+Alguien completa un Microsoft Form.
+
+00:10:09.480 --> 00:10:10.540
+Tal vez un registro de evento.
+
+00:10:10.920 --> 00:10:11.680
+Un formulario de opinión.
+
+00:10:11.880 --> 00:10:12.700
+O una solicitud de soporte.
+
+00:10:12.700 --> 00:10:16.140
+Cuando presionan enviar, Power Automate guarda sus respuestas en una lista de SharePoint.
+
+00:10:16.440 --> 00:10:18.180
+Luego envía un correo electrónico a tu equipo con los detalles.
+
+00:10:18.520 --> 00:10:18.880
+Eso es todo.
+
+00:10:19.300 --> 00:10:22.580
+Un activador, dos secciones y de repente nunca más tendrás que copiar malmente las respuestas
+
+00:10:22.580 --> 00:10:23.980
+de los formularios o una hoja de cálculo.
+
+00:10:24.620 --> 00:10:29.060
+Cada envío se captura, organiza y comparte automáticamente con las personas que necesitan
+
+00:10:29.060 --> 00:10:29.400
+verlo.
+
+00:10:30.140 --> 00:10:31.980
+Lo siguiente es un flujo de aprobación para documentos.
+
+00:10:32.420 --> 00:10:33.820
+¿Alguien carga un archivo en la carpeta de SharePoint?
+
+00:10:34.480 --> 00:10:37.740
+Power Automate detecta el nuevo archivo y envía una solicitud de aprobación a un gerente.
+
+00:10:38.240 --> 00:10:41.080
+El gerente recibe un correo o notificación de Teams con un botón simple para
+
+00:10:41.080 --> 00:10:45.160
+aprobar o rechazar. Si lo aprueba, el archivo se mueve automáticamente a una carpeta de
+
+00:10:45.160 --> 00:10:49.120
+publicados. Si lo rechazas, se quedan borradores. Ya no hace falta perseguir a la gente para
+
+00:10:49.120 --> 00:10:51.860
+tener firme. Ya no hay que preguntar si ese documento ha sido revisado o no.
+
+00:10:52.660 --> 00:10:55.120
+El flujo maneja toda la cadena de aprobación de principio a fin.
+
+00:10:56.000 --> 00:10:58.400
+Luego está el resumen de tareas diarias. Cada mañana a las 7.
+
+00:10:59.080 --> 00:11:02.500
+Power Automate revisa tu lista de tareas de SharePoint buscando lo que está en completo.
+
+00:11:02.500 --> 00:11:06.140
+Recopila todos los elementos pendientes o vencidos y te envía un resumen en Teams.
+
+00:11:06.940 --> 00:11:10.680
+Empiezas el día sabiendo exactamente qué te espera. No hace falta abrir múltiples listas
+
+00:11:10.680 --> 00:11:14.060
+ni revisar distintas herramientas. El resumen aparece en tu chat justo cuando te sientas con
+
+00:11:14.060 --> 00:11:18.200
+tu café. Cada uno de estos flujos toma de 10 a 15 minutos sin crearse. No se requiere
+
+00:11:18.200 --> 00:11:22.520
+promoción. No se necesita el departamento de YouTube. Solo tú, navegador y editor de Power Automate.
+
+00:11:23.100 --> 00:11:27.340
+El truco es empezar con el proceso que más te molesta. Ese que haces todos los días y piensas
+
+00:11:27.340 --> 00:11:30.660
+tiene que ver una mejor manera. Ese es tu primer objetivo de automatización.
+
+00:11:30.660 --> 00:11:36.540
+O empezar. Tu primer flujo en 5 minutos. ¿Listo para probar? Aquí te explico exactamente
+
+00:11:36.540 --> 00:11:41.160
+cómo poner en marcha tu primer flujo en solo unos minutos. Abre tu navegador y ve a make.powerautomate.com.
+
+00:11:41.360 --> 00:11:45.700
+Ese es tu centro principal para crear y gestionar flujos. Inicia sesión con la misma cuenta de
+
+00:11:45.700 --> 00:11:50.940
+trabajo de Microsoft 365 que ya usas para correo y Teams. Una vez dentro, haz clic en crear en la
+
+00:11:50.940 --> 00:11:55.160
+barra lateral izquierda y elige flujo de nube automatizado. Solo indica a Power Automate que
+
+00:11:55.160 --> 00:11:59.480
+quieres un flujo que se ejecuta automáticamente cuando algo sucede. Para tu primer flujo, recomiendo
+
+00:11:59.480 --> 00:12:04.060
+usar cuando llega un nuevo correo como disparador. Es simple, fácil de probar y todos recibimos
+
+00:12:04.060 --> 00:12:09.060
+correos. Haz clic en crear y estarás en el editor. Ahora necesitas una acción. Haz clic
+
+00:12:09.060 --> 00:12:12.480
+en el signo más debajo de tu disparador y busca a Teams. Elige publicar un mensaje en
+
+00:12:12.480 --> 00:12:18.680
+un chat o canal. Selecciona Flow Bot como el remitente. Elígete a ti mismo como destinatario
+
+00:12:18.680 --> 00:12:23.340
+y escribe un mensaje como nuevo correo recibido. Eso es todo lo que hay que hacer. Haz clic en
+
+00:12:23.340 --> 00:12:26.440
+guardar y tu primer flujo estará listo. Aquí tienes un consejo que usarás una de otra
+
+00:12:26.440 --> 00:12:30.840
+vez. El botón de prueba es tu mejor amigo. Al hacer clic, Power Automate ejecuta tu flujo
+
+00:12:30.840 --> 00:12:35.040
+inmediatamente usando cualquier dato de disparador disponible. Para el disparador de correo, espera
+
+00:12:35.040 --> 00:12:38.920
+que llegue un nuevo mensaje. Solo envíate un correo electrónico de prueba y observa cómo
+
+00:12:38.920 --> 00:12:42.040
+se activa el flujo. No tienes que esperar a que el disparador real ocurra de forma natural.
+
+00:12:42.300 --> 00:12:46.440
+Si algo sale mal, no entres en pánico. Haz clic en el paso que falló y revisa las secciones
+
+00:12:46.440 --> 00:12:50.960
+de entradas y salidas. Las entradas muestran qué datos recibe el paso. Las salidas muestran
+
+00:12:50.960 --> 00:12:54.720
+qué datos. Nueve de cada diez veces, el problema se vuelve obvio al revisar esas dos áreas.
+
+00:12:54.720 --> 00:12:58.940
+Quizás el asunto del correo tenía un formato diferente al esperado. Tal vez un campo estaba
+
+00:12:58.940 --> 00:13:02.280
+vacío. Los mensajes de error son sorprendentemente útiles una vez que sabes dónde encontrarlo.
+
+00:13:02.480 --> 00:13:06.120
+Empieza poco a poco, prueba seguido y construye gradualmente. Tu primer flujo podría tener
+
+00:13:06.120 --> 00:13:10.340
+solo dos pasos. Tu décimo flujo podría tener 20. Eso está perfectamente bien. Cada flujo
+
+00:13:10.340 --> 00:13:13.760
+que construyes te enseña algo nuevo sobre cómo tus herramientas se conectan y funcionan
+
+00:13:13.760 --> 00:13:18.320
+juntas. Así que este sistema. Disparadores, acciones y conectores trabajando juntos para manejar
+
+00:13:18.320 --> 00:13:22.360
+el trabajo tedioso que consume tu tiempo diario. La mayoría cree que la automatización
+
+00:13:22.360 --> 00:13:26.780
+es complicada o requiere saber programar, pero ya no es así. La decisión más inteligente
+
+00:13:26.780 --> 00:13:30.680
+que puedes tomar ahora es elegir una tarea repetitiva que hagas a diario y crear un flujo
+
+00:13:30.680 --> 00:13:34.860
+para ella. Suscríbete para más análisis como este y deja un comentario diciéndome qué
+
+00:13:34.860 --> 00:13:35.860
+automatizarías primero.

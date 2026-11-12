@@ -1,0 +1,1309 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:01.260
+Sur le papier, les tickets sont propres.
+
+00:00:01.660 --> 00:00:03.440
+Vous avez les chiffres, les files d'attente, les tableaux de bord.
+
+00:00:04.140 --> 00:00:07.840
+Mais en réalité, ce modèle ne mesure la douleur qu'après que le système a déjà échoué.
+
+00:00:08.380 --> 00:00:10.740
+La partie coûteuse du problème commence généralement bien plus tôt.
+
+00:00:11.200 --> 00:00:14.160
+Elle commence lorsqu'un employé perd 10 minutes, puis 20, puis finit par abandonner.
+
+00:00:14.640 --> 00:00:15.060
+Il réessaye.
+
+00:00:15.360 --> 00:00:16.060
+Il demande à un collègue.
+
+00:00:16.460 --> 00:00:19.460
+Il manque la réunion ou partage le mauvais fichier parce que le bon chemin ne fonctionne plus.
+
+00:00:20.020 --> 00:00:22.360
+Et c'est la partie que la plupart des équipes d'assistance ne voient toujours pas.
+
+00:00:22.700 --> 00:00:25.440
+Le meilleur modèle d'assistance interne aujourd'hui ne consiste pas à accélérer le triage.
+
+00:00:25.820 --> 00:00:27.780
+Il s'agit de supprimer complètement le besoin de triage.
+
+00:00:27.780 --> 00:00:32.120
+Imaginez un agent autonome au sein de Microsoft 365 qui surveille le contexte,
+
+00:00:32.200 --> 00:00:36.180
+détecte les frictions à un stade précoce et agit avant même qu'une personne ne pense à ouvrir un portail.
+
+00:00:37.500 --> 00:00:40.980
+Dans cet épisode, je vais vous montrer pourquoi le modèle du service d'assistance est défaillant
+
+00:00:40.980 --> 00:00:43.580
+en ce qu'il remplace réellement et comment vous pouvez le gérer sans créer le chaos.
+
+00:00:44.580 --> 00:00:47.680
+Si ce changement est important pour votre travail, abonnez-vous à M365FM
+
+00:00:47.680 --> 00:00:51.100
+car à un niveau plus profond, le vrai problème n'est pas la file d'attente, mais le modèle qui la sous-tend.
+
+00:00:52.000 --> 00:00:52.900
+La fin du ticket.
+
+00:00:53.400 --> 00:00:55.000
+L'ancien flux d'assistance est toujours présent.
+
+00:00:55.400 --> 00:00:55.980
+Quelque chose ne va pas.
+
+00:00:56.280 --> 00:00:57.180
+Un utilisateur le remarque.
+
+00:00:57.180 --> 00:00:58.620
+L'utilisateur essaie de l'expliquer.
+
+00:00:59.020 --> 00:01:01.920
+Le service informatique traduit ensuite cette explication en une catégorie, une priorité
+
+00:01:01.920 --> 00:01:03.640
+et éventuellement un groupe d'affectation.
+
+00:01:04.080 --> 00:01:05.400
+Le problème entre dans une file d'attente.
+
+00:01:05.580 --> 00:01:06.180
+Quelqu'un le trie.
+
+00:01:06.540 --> 00:01:07.760
+Quelqu'un d'autre demande plus de détails.
+
+00:01:08.160 --> 00:01:09.060
+Une autre équipe intervient.
+
+00:01:09.540 --> 00:01:11.660
+Le temps continue de s'écouler tandis que le travail réel reste bloqué.
+
+00:01:12.000 --> 00:01:15.960
+Ce processus semble normal car il est familier, mais familier et efficace ne sont pas la même chose.
+
+00:01:16.760 --> 00:01:17.640
+Un ticket n'est pas une assistance.
+
+00:01:17.960 --> 00:01:19.640
+Un ticket est la preuve que l'assistance est arrivée en retard.
+
+00:01:20.260 --> 00:01:23.860
+Au moment où un ticket existe, l'employé a déjà rencontré des difficultés et perdu le contexte.
+
+00:01:23.860 --> 00:01:27.380
+Il a déjà détourné son attention du travail qu'il essayait de faire.
+
+00:01:27.920 --> 00:01:28.780
+La file d'attente n'est pas le service.
+
+00:01:29.200 --> 00:01:30.500
+La file d'attente est un enregistrement d'échecs.
+
+00:01:30.780 --> 00:01:34.480
+Dans les grands domaines Microsoft 365, le tri manuel devient le véritable point d'étranglement.
+
+00:01:34.980 --> 00:01:36.720
+Cela n'arrive pas parce que les équipes d'assistance sont paresseuses.
+
+00:01:37.240 --> 00:01:40.660
+Cela arrive parce que l'on demande aux humains de faire quelque chose qui ne correspond plus à l'échelle de l'environnement.
+
+00:01:41.380 --> 00:01:43.820
+Vous avez plus d'utilisateurs, plus d'appareils, plus d'applications, plus de politiques.
+
+00:01:44.220 --> 00:01:46.200
+Vous avez davantage de cas limites qui traversent les équipes.
+
+00:01:46.200 --> 00:01:49.400
+SharePoint, Exchange, Intune et Entra en même temps.
+
+00:01:50.120 --> 00:01:51.060
+Le volume ne fait pas qu'augmenter.
+
+00:01:51.420 --> 00:01:52.420
+Les combinaisons augmentent.
+
+00:01:52.900 --> 00:01:54.100
+C'est là que l'ancien modèle tombe en panne.
+
+00:01:54.380 --> 00:01:56.220
+La plupart des équipes réagissent en ajoutant plus de structures.
+
+00:01:56.680 --> 00:01:59.100
+Elle crée un autre portail, un autre botte ou une autre règle de routage.
+
+00:01:59.740 --> 00:02:03.380
+Mais en réalité, cela ne fait qu'ajouter une couche supplémentaire entre l'employé et la résolution.
+
+00:02:03.880 --> 00:02:08.840
+Le système attend toujours que l'utilisateur remarque le problème, le décrive et demande de l'aide de la bonne manière.
+
+00:02:09.640 --> 00:02:12.900
+Le travail ne commence pas dans un portail d'assistance, il commence dans Teams, il commence dans Outlook,
+
+00:02:13.020 --> 00:02:17.160
+il commence dans un document dont quelqu'un a besoin, immédiatement ou dans une réunion qui commence dans 30 secondes.
+
+00:02:17.660 --> 00:02:22.160
+C'est là que la demande d'assistance commence réellement, et le modèle de ticket est complètement détaché de ce moment, moment.
+
+00:02:22.460 --> 00:02:24.940
+Le coût caché est bien plus élevé que ce que montre votre rapport de fil d'attente.
+
+00:02:25.360 --> 00:02:26.260
+Les personnes contactent à nouveau.
+
+00:02:26.820 --> 00:02:28.620
+Les incidents en double s'accumulent sous différentes étiquettes.
+
+00:02:28.980 --> 00:02:30.600
+Les articles de la base de connaissances deviennent obsolètes.
+
+00:02:30.600 --> 00:02:34.800
+Les analystes passent toute leur journée à trier, à acheminer et à clarifier les choses au lieu de réellement corriger les choses.
+
+00:02:35.420 --> 00:02:38.600
+Le délai de résolution s'allonge, car chaque transfert ajoute un délai et…
+
+00:02:38.840 --> 00:02:40.960
+Chaque délai supprime le contexte d'origine.
+
+00:02:41.560 --> 00:02:44.740
+Les recherches sur l'IA agentique et les opérations informatiques mettent en évidence le même problème structurel.
+
+00:02:45.400 --> 00:02:48.660
+Moins 80% des efforts sont toujours bloqués dans un travail réactif de type ETL.
+
+00:02:49.260 --> 00:02:51.700
+Ce chiffre est important, car il indique exactement où va le travail.
+
+00:02:52.160 --> 00:02:55.020
+Il ne s'agit pas de résilience ou de prévention, mais de réaction, mais de réaction.
+
+00:02:55.360 --> 00:02:59.080
+Une fois que vous voyez cela, le ticket commence à ressembler moins à un modèle opérationnel qu'à un symptôme.
+
+00:02:59.260 --> 00:03:02.180
+C'est le symptôme d'un système qui ne réagit qu'une fois que les dommages sont visibles.
+
+00:03:02.820 --> 00:03:05.160
+La question suivante n'est donc pas de savoir comment traiter les tickets plus rapidement,
+
+00:03:05.280 --> 00:03:07.260
+mais ce que le système doit faire avant qu'un ticket ne soit nécessaire.
+
+00:03:07.260 --> 00:03:09.220
+Le modèle de l'employé invisible
+
+00:03:09.220 --> 00:03:11.460
+Alors qu'est-ce qui remplace réellement le ticket ?
+
+00:03:11.460 --> 00:03:13.780
+Ce n'est pas juste un autre chatbot qui se trouve au-dessus du même désordre,
+
+00:03:14.000 --> 00:03:16.860
+et ce n'est certainement pas une porte d'entrée plus jolie, vers la même vieille file d'attente.
+
+00:03:17.240 --> 00:03:22.380
+Le changement va bien plus moins que cela, car l'employé invisible est un travailleur opérationnel qui vit au sein de votre environnement.
+
+00:03:22.480 --> 00:03:24.260
+Microsoft 365 a…
+
+00:03:24.260 --> 00:03:27.020
+Cet agent possède sa propre identité, un périmètre de travail défini,
+
+00:03:27.180 --> 00:03:30.260
+une mémoire de ce qu'il a fait hier, et des règles strictes sur ce qu'il peut et ne peut pas toucher…
+
+00:03:30.920 --> 00:03:32.120
+La distinction est importante.
+
+00:03:32.120 --> 00:03:36.580
+Un chatbot attend que vous saisissiez une invite, mais un employé invisible surveille les changements de conditions.
+
+00:03:37.060 --> 00:03:39.340
+Il part du contexte, au lieu de partir d'une conversation.
+
+00:03:40.280 --> 00:03:44.280
+Comme il peut voir les états de connexion, l'état de santé des appareils, l'état des licences et la manière dont les fichiers sont partagés,
+
+00:03:44.520 --> 00:03:45.940
+il n'a pas besoin d'attendre qu'une friction apparaisse.
+
+00:03:45.940 --> 00:03:51.480
+Au lieu de demander comment il peut aider après une panne, il pose constamment une question différente en arrière-plan, en arrière-plan.
+
+00:03:52.000 --> 00:03:56.040
+Qu'est-ce qui s'éloigne de l'état dont cet employé a besoin pour faire son travail maintenant ?
+
+00:03:56.040 --> 00:03:57.040
+C'est là que les choses changent.
+
+00:03:57.540 --> 00:03:59.480
+Le modèle est directement intégré au travail lui-même.
+
+00:04:00.520 --> 00:04:02.940
+Lorsqu'une personne rejoint une réunion et que le routage audio échoue,
+
+00:04:03.180 --> 00:04:05.540
+ou qu'un invité ne peut pas ouvrir un fichier qui vient de lui être envoyé,
+
+00:04:05.920 --> 00:04:07.840
+l'ancien monde crée un rapport et un transfert.
+
+00:04:08.800 --> 00:04:10.900
+Dans le nouveau modèle, l'agent voit immédiatement le modèle,
+
+00:04:11.040 --> 00:04:15.040
+vérifie si la condition correspond à un problème connu et prend la prochaine mesure de sécurité pour le résoudre.
+
+00:04:15.040 --> 00:04:18.320
+Peut-être qu'il réinitialise un chemin ou déclenche une vérification de politique,
+
+00:04:18.440 --> 00:04:21.680
+ou peut-être qu'il redirige une demande et lance l'authentification multifacteur avant de documenter la correction.
+
+00:04:22.240 --> 00:04:22.900
+Le principe est simple.
+
+00:04:23.320 --> 00:04:27.240
+La première réponse ne nécessite plus qu'un humain, vise une description vague et devine ce qui s'est passé.
+
+00:04:27.880 --> 00:04:31.080
+Cela semble invisible lorsque cela fonctionne bien, car il n'y a pas de salle d'attente ni de formulaire.
+
+00:04:31.200 --> 00:04:32.820
+Veuillez sélectionner une catégorie plaignant remplir.
+
+00:04:33.160 --> 00:04:34.720
+Le support apparaît comme un flux rétabli.
+
+00:04:35.320 --> 00:04:36.660
+Employé retourne simplement au travail.
+
+00:04:37.040 --> 00:04:39.700
+Et dans de nombreux cas, il ne voit même pas les machines fonctionner en coulisses.
+
+00:04:40.020 --> 00:04:42.860
+Vous pouvez déjà voir comment cela modifie votre logique de dotation en personnel.
+
+00:04:42.860 --> 00:04:46.360
+L'ancien modèle embauchait des personnes pour absorber le volume, trier les demandes
+
+00:04:46.360 --> 00:04:48.520
+et nettoyer les contextes rompus entre différentes équipes.
+
+00:04:49.240 --> 00:04:52.740
+Le nouveau modèle nécessite moins de personnes pour le tri et plus de personnes pour concevoir des garde-fous,
+
+00:04:52.820 --> 00:04:56.140
+définir les états souhaités et superviser le comportement de ces agents au fil du temps.
+
+00:04:56.960 --> 00:05:00.400
+Les humains restent dans le système, mais la forme globale de leur travail quotidien change.
+
+00:05:01.060 --> 00:05:03.760
+Les recherches sur l'IA agentique dans le support continuent d'aller dans cette direction.
+
+00:05:04.580 --> 00:05:07.560
+Le support de routine peut évoluer vers une gestion basée sur les exceptions,
+
+00:05:07.560 --> 00:05:11.560
+ce qui génère des gains d'efficacité considérables lorsque l'environnement et les politiques sont bien délimités.
+
+00:05:11.560 --> 00:05:14.080
+Cette dernière partie est essentielle, car ce n'est pas magique.
+
+00:05:14.640 --> 00:05:16.740
+Si vos données sont faibles ou si votre processus est désordonné,
+
+00:05:17.020 --> 00:05:19.780
+l'agent ne deviendra pas intelligent simplement parce que vous avez décidé de le qualifier d'autonome.
+
+00:05:20.660 --> 00:05:23.720
+Tout cela a fait-il pour moi lorsque j'ai arrêté de considérer l'agent comme une fonctionnalité logicielle
+
+00:05:23.720 --> 00:05:26.900
+et que j'ai commencé à le considérer comme un employé non humain avec un mec, un badge ?
+
+00:05:26.900 --> 00:05:30.960
+Un véritable travailleur a besoin d'une entité, d'une description de poste, d'autorisation et d'un responsable à qui rend des comptes.
+
+00:05:31.420 --> 00:05:35.040
+L'agent a besoin exactement de ces mêmes choses car la valeur provient d'une action fiable au sein d'un système
+
+00:05:35.040 --> 00:05:37.060
+et non d'un langage intelligent dans une fenêtre de chat.
+
+00:05:37.060 --> 00:05:39.860
+L'employé invisible n'est pas une astuce d'interface utilisateur.
+
+00:05:40.400 --> 00:05:44.200
+C'est une nouvelle couche de support qui surveille les frictions au sein du parc Microsoft 365,
+
+00:05:44.960 --> 00:05:49.000
+agit dans le cadre de la politique et attire l'attention humaine sur les exceptions qui nécessitent réellement un jugement.
+
+00:05:49.960 --> 00:05:52.280
+Une fois ce modèle clair, la question suivante devient très pratique.
+
+00:05:52.800 --> 00:05:54.460
+Comment fonctionne réellement la préemption ?
+
+00:05:54.460 --> 00:05:55.460
+L'architecture de la préemption.
+
+00:05:56.300 --> 00:05:59.540
+Alors comment fonctionne réellement la préemption dans Microsoft 365 ?
+
+00:05:59.540 --> 00:06:02.700
+Le passage de la demande et de la réponse au raisonnement et à l'orchestration des événements.
+
+00:06:03.280 --> 00:06:05.800
+Cela semble technique, mais le modèle est simple une fois qu'on l'a décomposé.
+
+00:06:05.800 --> 00:06:10.720
+Tout d'abord, un élément change dans l'environnement, puis le système interprète si ce changement représente un risque ou une dérive.
+
+00:06:11.140 --> 00:06:14.340
+Et enfin, il prend l'action approuvée en utilisant les outils déjà présents dans votre pile.
+
+00:06:15.140 --> 00:06:16.020
+Commencez par la couche d'événements.
+
+00:06:16.600 --> 00:06:21.100
+Microsoft 365 génère déjà des signaux partout, ce qui signifie qu'en travoie le comportement de connexion,
+
+00:06:21.180 --> 00:06:23.520
+tandis qu'un tune suit la posture et la conformité des appareils.
+
+00:06:24.620 --> 00:06:28.960
+Defender surveille les activités suspectes et Teams vous indique exactement quand une réunion échoue ou que la qualité des appels baisse.
+
+00:06:29.880 --> 00:06:32.540
+SharePoint et Exchange exposent les modèles d'accès et l'activité du contenu,
+
+00:06:32.540 --> 00:06:35.840
+tandis que les signaux d'intégrité du service vous indiquent quand la plateforme elle-même pose problème.
+
+00:06:36.440 --> 00:06:39.840
+Lorsque vous ajoutez des actions utilisateurs à cela, vous obtenez un flux constant de contexte.
+
+00:06:40.180 --> 00:06:44.360
+La plupart des organisations collectent ces signaux, mais très peu les utilisent réellement comme système de support.
+
+00:06:44.800 --> 00:06:48.820
+Les événements bruts seuls ne sont pas utiles, car ils ont besoin d'une couche de raisonnement pour donner un sens au bruit.
+
+00:06:49.360 --> 00:06:53.320
+C'est là que l'employé invisible cesse d'être un théâtre d'automatisation et commence à agir comme un véritable opérateur.
+
+00:06:53.320 --> 00:06:58.620
+L'agent examine le signal, compare l'état actuel à l'état souhaité et décide de la classe d'action qu'il est sûr de prendre.
+
+00:06:59.460 --> 00:07:04.580
+Un problème audio lors d'une réunion n'est pas la même chose qu'une connexion risquée et un lien de partage rompu est différent d'une incompatibilité de licence.
+
+00:07:05.420 --> 00:07:09.540
+L'agent doit d'abord classer le problème, car agir sans classification ne fait que créer des erreurs plus rapidement.
+
+00:07:10.320 --> 00:07:11.260
+Vient ensuite l'orchestration.
+
+00:07:12.080 --> 00:07:15.320
+Une fois que l'agent a compris le problème, il peut utiliser le mécanisme approprié pour y répondre.
+
+00:07:15.320 --> 00:07:20.320
+Il peut s'agir de Power Automate pour les flux de travail, de Copelo Studio pour la logique ou de Microsoft Graph pour les actions système et le contexte.
+
+00:07:21.140 --> 00:07:23.940
+Les outils sont importants, mais le plus important est la manière dont ils se connectent les uns aux autres.
+
+00:07:24.560 --> 00:07:29.240
+Vous ne créez pas une invite intelligente, mais plutôt une chaîne capable de détecter, de décider, d'agir et de vérifier.
+
+00:07:29.740 --> 00:07:31.340
+Cette dernière partie est systématiquement négligée.
+
+00:07:31.700 --> 00:07:34.200
+Un système autocorrecteur ne s'arrête pas une fois l'action entreprise.
+
+00:07:34.980 --> 00:07:41.160
+Il exécute une boucle dans laquelle il détecte le problème, teste la condition, applique le correctif et vérifie le résultat avant d'enregistrer ce qui s'est passé.
+
+00:07:41.160 --> 00:07:46.300
+Les recherches sur la logique autocorrectrice montrent clairement que ces systèmes fonctionnent par le biais de modèles de retour d'informations et de corrections,
+
+00:07:46.440 --> 00:07:48.720
+plutôt que par une réponse isolée issue d'un modèle linguistique.
+
+00:07:49.680 --> 00:07:55.840
+Si la première action échoue, le système a besoin d'un moyen d'évaluer la raison, afin de pouvoir réviser l'étape suivante, tout en restant dans les limites définies.
+
+00:07:56.300 --> 00:07:58.860
+Vous pouvez clairement l'imaginer dans quelques cas Microsoft 365,
+
+00:07:59.360 --> 00:08:02.840
+lorsqu'un utilisateur est bloqué parce que sa licence et son étendue de stratégie ne correspondent pas,
+
+00:08:03.060 --> 00:08:05.540
+l'agent détecte l'incompatibilité et vérifie le profil de rôle prévu.
+
+00:08:05.540 --> 00:08:11.300
+Il applique la correction autorisée, confirme que l'utilisateur a accès et consigne la modification sans que personne ne le lui demande.
+
+00:08:12.000 --> 00:08:16.540
+Si une connexion à risque apparaît dans Antra, l'agent voit l'événement à risque et vérifie immédiatement vos règles d'accès conditionnelles.
+
+00:08:17.960 --> 00:08:23.520
+Il demande une vérification plus poussée ou bloque l'accès en fonction de votre stratégie, puis enregistre le résultat pour qu'un humain puisse l'examiner ultérieurement.
+
+00:08:24.320 --> 00:08:29.840
+Lorsqu'un lien de partage obsolète échoue à plusieurs reprises dans SharePoint, l'agent compare le chemin d'accès actuel aux règles de partage attendues.
+
+00:08:29.840 --> 00:08:39.840
+Il remplace la racine cassée par celle approuvée et envoie le lien, corrigé dans son contexte ce qui boucle la boucle, avant qu'un analyste de bureau n'ait à lire un ticket intitulé « Problème d'accès urgent ».
+
+00:08:40.600 --> 00:08:42.180
+Le support de réunion est un autre excellent exemple.
+
+00:08:42.760 --> 00:08:48.660
+Si un appareil de salle tombe en panne ou si un chemin de jonction est interrompu quelques secondes avant le début d'un appel, l'agent peut détecter la condition et valider la panne.
+
+00:08:49.040 --> 00:08:53.940
+Il tente une étape de récupération à faible risque et informe l'organisateur dans Teams avec une mise à jour de statut là où le travail se déroule.
+
+00:08:54.400 --> 00:08:56.780
+Cette couche de communication est une partie essentielle de la conception.
+
+00:08:57.380 --> 00:08:59.120
+Le support doit être présent là où l'interruption se produit.
+
+00:08:59.120 --> 00:09:05.200
+Si votre travail se déroule dans Teams, Outlook et l'espace de travail M365, le support, doit également vous répondre là-bas.
+
+00:09:05.740 --> 00:09:09.560
+Vous ne devriez pas avoir à déplacer l'utilisateur ailleurs lorsque vous pouvez répondre à l'événement dans son contexte.
+
+00:09:09.960 --> 00:09:13.740
+Rien de tout cela ne signifie qu'il faut effectuer une opération complète sur chaque tâche car ce serait imprudent.
+
+00:09:14.320 --> 00:09:18.680
+Les actions à faible risque peuvent s'exécuter automatiquement, mais les modifications à fort impact nécessitent toujours l'approbation de perte.
+
+00:09:18.900 --> 00:09:23.740
+Ce chemin d'approbation doit faire partie de l'architecture dès le début plutôt que d'être ajouté ultérieurement.
+
+00:09:24.000 --> 00:09:27.200
+L'agent doit savoir quand agir, quand demander et quand exactement s'arrêter.
+
+00:09:27.200 --> 00:09:31.200
+Et une fois que vous avez intégré cela au flux, la conversation ne porte plus sur les fonctionnalités d'automatisation.
+
+00:09:32.300 --> 00:09:35.920
+Elle porte sur le contrôle, la gouvernance, la confiance et l'identité de l'agent.
+
+00:09:36.700 --> 00:09:39.940
+Lorsque le support commence à agir de son propre chef, une question difficile se pose immédiatement.
+
+00:09:40.600 --> 00:09:42.420
+Qui fait réellement le travail ?
+
+00:09:42.420 --> 00:09:44.720
+Si cette réponse est vague, tout le modèle s'effondre.
+
+00:09:45.320 --> 00:09:49.240
+Un agent ne peut pas exister dans votre environnement en tant qu'assistant flou avec un accès étendu et son propriétaire clair.
+
+00:09:49.680 --> 00:09:51.320
+Il a besoin d'une véritable identité d'entrée.
+
+00:09:51.640 --> 00:09:56.260
+Il a besoin d'un propriétaire nommé, d'une portée définie et d'un cycle de vie qui commence et se termine pour une raison spécifique.
+
+00:09:56.840 --> 00:10:00.420
+Si cet agent peut lire des données, déclencher des workflows ou envoyer des messages à vos utilisateurs,
+
+00:10:00.680 --> 00:10:02.840
+vous devez le gouverner comme un participant actif du locataire.
+
+00:10:03.380 --> 00:10:06.140
+Vous ne pouvez pas le traiter comme une fonctionnalité que quelqu'un a activé puis oublié.
+
+00:10:06.140 --> 00:10:08.980
+C'est pourquoi l'identité de l'agent est si essentielle au système.
+
+00:10:09.700 --> 00:10:14.360
+Vous devez savoir exactement qui est l'agent, quel système il peut toucher et qui reçoit la peine lorsque les choses commencent à dériver.
+
+00:10:14.880 --> 00:10:16.520
+Le principe du moindre privilège doit être la base ici.
+
+00:10:16.840 --> 00:10:20.720
+Vous ne pouvez pas vous contenter d'une commodité générale ou vous dire que vous resserrez les autorisations plus tard.
+
+00:10:21.340 --> 00:10:24.300
+Étant donné que le rayon d'action d'un agent de support dépend entièrement de ses autorisations,
+
+00:10:24.800 --> 00:10:27.620
+la conception de ses autorisations est un élément essentiel de la conception du support.
+
+00:10:28.500 --> 00:10:31.600
+Agent 365 sert de couche de contrôle nécessaire dans cette configuration,
+
+00:10:31.860 --> 00:10:34.320
+car il permet de visualiser clairement l'ensemble du parc d'agents.
+
+00:10:34.320 --> 00:10:39.700
+Il fournit le registre, les flux de travail d'approbation et les modèles de politique qui garantissent le bon fonctionnement de l'ensemble.
+
+00:10:40.360 --> 00:10:44.340
+Bien que ces éléments puissent sembler être des tâches administratives, ils résolvent un problème structurel majeur.
+
+00:10:44.920 --> 00:10:47.940
+La plupart des organisations ne rencontrent pas de difficultés parce qu'elles ne disposent pas de fonctionnalités d'IA,
+
+00:10:48.040 --> 00:10:50.960
+mais parce qu'elles ne peuvent pas voir ou contrôler ce qui est déjà en cours d'exécution dans leur environnement.
+
+00:10:51.500 --> 00:10:52.820
+Les recherches sur ce point sont catégoriques.
+
+00:10:53.440 --> 00:10:58.260
+Seule une petite minorité de grandes entreprises peuvent répertorier entièrement chaque agent actuellement en cours d'exécution dans leur système.
+
+00:10:58.820 --> 00:11:01.600
+Avant que les dirigeants ne commencent à parler de la mise à l'échelle du support autonome,
+
+00:11:01.960 --> 00:11:03.320
+ils doivent répondre à une question beaucoup plus simple.
+
+00:11:03.320 --> 00:11:07.280
+Savons-nous au moins quels agents existent et ce qu'ils font en ce moment ?
+
+00:11:07.280 --> 00:11:09.580
+La supervision doit également être à la hauteur du niveau de risque encouru.
+
+00:11:10.080 --> 00:11:12.920
+Un agent de productivité personnelle travaillant dans une voie étroite est une chose,
+
+00:11:13.160 --> 00:11:15.920
+mais un agent collaboratif touchant du contenu partagé en est une autre.
+
+00:11:16.600 --> 00:11:19.200
+Vous avez ensuite des agents d'entreprise qui agissent sur des flux de travail sensibles,
+
+00:11:19.300 --> 00:11:20.880
+ce qui relève d'une catégorie de risque différente.
+
+00:11:21.440 --> 00:11:25.140
+C'est pourquoi le modèle de zone de risque, personnel, collaboratif et d'entreprise est si important.
+
+00:11:25.580 --> 00:11:27.820
+Votre modèle de contrôle doit être adapté à l'impact possible.
+
+00:11:27.820 --> 00:11:32.040
+Si vous traitez chaque agent de la même manière, les tâches à faible risque sont noyées dans des approbations lentes,
+
+00:11:32.120 --> 00:11:35.140
+tandis que les tâches à haut risque passent à travers les mailles du filet sans être examinées attentivement.
+
+00:11:35.560 --> 00:11:39.300
+Au minimum, votre pile de contrôle dans Microsoft 365 doit sembler familière à votre équipe.
+
+00:11:39.840 --> 00:11:43.780
+Vous utilisez l'identité dans Intra, les limites de données, via Purview et la surveillance via Defender.
+
+00:11:44.280 --> 00:11:46.580
+Vous appliquez des conditions d'accès via l'accès conditionnel,
+
+00:11:46.580 --> 00:11:49.420
+et vous assurez que l'auditabilité est intégrée dès le départ.
+
+00:11:49.940 --> 00:11:51.940
+Vous devez être en mesure de reconstituer exactement ce qui s'est passé
+
+00:11:51.940 --> 00:11:54.020
+sans avoir à deviner après qu'un incident se soit produit.
+
+00:11:54.720 --> 00:11:58.440
+La supervision humaine doit être intégrée à la logique plutôt qu'improvisée en période de crise.
+
+00:11:59.120 --> 00:12:01.960
+Les actions à fort impact doivent toujours être interrompues pour une tignature humaine.
+
+00:12:02.540 --> 00:12:05.440
+Le raisonnement doit être consigné sous une forme que les personnes peuvent réellement inspecter et comprendre.
+
+00:12:05.940 --> 00:12:09.660
+Vous devez disposer de chemins de restauration avant que la toute première action autonome ne soit mise en œuvre.
+
+00:12:10.240 --> 00:12:12.880
+Si un agent met à jour l'accès ou modifie une stratégie de routage,
+
+00:12:13.020 --> 00:12:16.100
+quelqu'un doit avoir un moyen de retracer cette décision et de l'annuler proprement.
+
+00:12:16.100 --> 00:12:19.900
+Il existe un autre facteur que les dirigeants oublient souvent parce que les premières démonstrations ont l'air si bonnes.
+
+00:12:20.340 --> 00:12:21.040
+Le coût du remaniement.
+
+00:12:21.800 --> 00:12:25.540
+Si un agent crée des boucles de nettoyage pour votre équipe, les économies prévues disparaissent instantanément.
+
+00:12:26.200 --> 00:12:26.960
+C'est la taxe de reprise.
+
+00:12:27.420 --> 00:12:32.500
+C'est le temps passé à corriger les mauvais résultats, à annuler les mauvaises actions ou à traquer les effets secondaires imprévus.
+
+00:12:33.120 --> 00:12:36.200
+Si votre équipe gagne 10 minutes sur l'exécution mais en perd 8 à nettoyer le désordre,
+
+00:12:36.300 --> 00:12:38.380
+vous n'avez pas, réellement, automatisé le support.
+
+00:12:38.840 --> 00:12:41.500
+Vous avez simplement déplacé la friction vers une autre partie du processus.
+
+00:12:41.720 --> 00:12:44.580
+La confiance ne vient pas d'une stratégie bien ficelée ou d'une grande annonce de lancement.
+
+00:12:44.580 --> 00:12:46.020
+Elle vient de preuve d'exécution.
+
+00:12:46.560 --> 00:12:49.700
+Les gens ont besoin de voir ce que l'agent a vu, ce qu'il a décidé et ce qui a réellement changé dans le système.
+
+00:12:50.240 --> 00:12:52.040
+C'est ainsi que vous établissez la confiance dans le support autonome.
+
+00:12:52.340 --> 00:12:55.760
+La preuve doit résider dans le comportement de l'outil plutôt que dans l'image de marque du projet.
+
+00:12:56.440 --> 00:12:57.980
+Une fois que cette base de gouvernance est solide,
+
+00:12:58.120 --> 00:13:02.080
+la conversation peut enfin s'éloigner du jargon de la sécurité et entrer dans le langage de la direction.
+
+00:13:02.560 --> 00:13:04.940
+Qu'est-ce que cela change réellement pour les résultats ?
+
+00:13:04.940 --> 00:13:10.320
+Une fois que les dirigeants acceptent le modèle de contrôle, les questions financières commencent à changer.
+
+00:13:10.780 --> 00:13:13.800
+Dans l'ancien modèle, la valeur du support est mesurée par le travail visible comme les tickets fermés,
+
+00:13:14.000 --> 00:13:15.600
+les appels traités et les performances des SLA.
+
+00:13:16.300 --> 00:13:19.360
+Ces chiffres ont toujours de l'importance, mais ils ne décrivent qu'une réaction à un problème.
+
+00:13:20.000 --> 00:13:22.320
+Elles ne vous indiquent pas le nombre d'interruptions qui n'ont jamais atteint la file d'attente
+
+00:13:22.320 --> 00:13:25.260
+ni le temps de travail des employés qui restaient intacts parce qu'un problème a été résolu prématurément.
+
+00:13:25.720 --> 00:13:26.980
+C'est le problème comptable fondamental.
+
+00:13:26.980 --> 00:13:29.460
+Le support invisible crée de la valeur par l'absence.
+
+00:13:30.060 --> 00:13:32.240
+Voyez la valeur lorsqu'il n'y a pas de tickets, pas d'escalade,
+
+00:13:32.480 --> 00:13:36.800
+et aucun analyste ne passe 20 minutes à reconstituer un problème à partir de notes à moitié terminées.
+
+00:13:37.940 --> 00:13:39.880
+Si vous ne mesurez que l'effort visible de l'équipe de support,
+
+00:13:40.020 --> 00:13:42.000
+vous passez à côté du résultat que vous souhaitiez réellement,
+
+00:13:42.420 --> 00:13:44.460
+vous vouliez un travail stable avec moins d'interruptions.
+
+00:13:44.740 --> 00:13:47.320
+Le volume de tickets est un signal faible lorsqu'il est pris en compte.
+
+00:13:47.760 --> 00:13:49.240
+Une baisse du nombre de tickets, une baisse de la demande,
+
+00:13:49.520 --> 00:13:51.180
+mais cela peut également signifier que l'environnement s'est amélioré,
+
+00:13:51.240 --> 00:13:53.180
+que la couche de support et de support et de support du support du plus intelligent.
+
+00:13:53.180 --> 00:13:54.580
+Ce sont deux histoires très différentes.
+
+00:13:54.580 --> 00:13:58.000
+Les dirigeants ont besoin d'un ensemble d'indicateurs clés de performance qui puissent faire la différence.
+
+00:13:58.680 --> 00:14:00.780
+Vous devriez commencer par examiner le taux de résolution autonome.
+
+00:14:01.400 --> 00:14:03.380
+Il ne s'agit pas du nombre de conversations que le bot a eu,
+
+00:14:03.700 --> 00:14:07.280
+mais du nombre d'événements de support qui ont été résolus de bout en bout sans qu'un humain n'ait jamais touché.
+
+00:14:07.840 --> 00:14:10.220
+Vous devez également suivre la réduction du délai moyen de résolution.
+
+00:14:10.660 --> 00:14:11.840
+Dans les environnements pilotés par l'IA,
+
+00:14:11.960 --> 00:14:15.320
+les flux des diagnostics intensifs enregistrent souvent des améliorations de l'ordre de 40 à 60%.
+
+00:14:15.320 --> 00:14:19.300
+Vous pouvez ensuite examiner le coût par résolution et la productivité utilisateur que vous avez retrouvé.
+
+00:14:19.680 --> 00:14:21.240
+Cette dernière mesure est facile à ignorer,
+
+00:14:21.380 --> 00:14:23.880
+car elle ne figure pas clairement dans un rapport de services d'assistance standard.
+
+00:14:24.580 --> 00:14:26.340
+Cependant, c'est souvent là que réside la véritable barre.
+
+00:14:26.740 --> 00:14:29.380
+Une personne bloquée pendant 15 minutes avant même d'ouvrir un ticket
+
+00:14:29.380 --> 00:14:31.340
+a déjà généré un coût pour l'entreprise.
+
+00:14:31.880 --> 00:14:34.980
+Lorsque vous multipliez cela par les interruptions de réunion et les frictions d'accès sur un grand locataire,
+
+00:14:35.060 --> 00:14:37.600
+la perte cachée est bien plus importante que ne suggère la file d'attente.
+
+00:14:38.740 --> 00:14:41.680
+C'est pourquoi le modèle du coût de l'inaction est si important pour l'analyse de rentabilisation.
+
+00:14:42.220 --> 00:14:45.580
+Vous calculez les heures consacrées aux efforts manuels avant même que le support formel ne commence.
+
+00:14:46.120 --> 00:14:48.040
+Ensuite, vous ajoutez le coût des erreurs et du travail répété.
+
+00:14:48.380 --> 00:14:51.280
+Soudain, l'argument en faveur de la préemption cesse de ressembler à une théorie.
+
+00:14:51.280 --> 00:14:53.680
+Vous ne financez pas seulement une couche de support futuriste.
+
+00:14:54.320 --> 00:14:57.300
+Vous supprimez une taxe qui fait partie de votre travail quotidien depuis des années.
+
+00:14:57.880 --> 00:14:59.920
+Les aspects économiques du cas restreint rendent cela encore plus clair.
+
+00:15:00.440 --> 00:15:03.140
+Les recherches sur le support informatique agentique estiment que la gestion humaine
+
+00:15:03.140 --> 00:15:04.960
+coûte environ 8 ou 75 dollars par problème.
+
+00:15:05.620 --> 00:15:08.800
+En revanche, la gestion agentique étroite peut tomber en dessous de 50 cents par problème
+
+00:15:08.800 --> 00:15:10.380
+une fois le système développé.
+
+00:15:11.020 --> 00:15:13.320
+Cela ne signifie pas que chaque action de support sera aussi bon marché
+
+00:15:13.320 --> 00:15:15.980
+et les dirigeants doivent faire attention aux moyennes générales.
+
+00:15:15.980 --> 00:15:18.660
+La qualité et la gouvernance de la télémétrie affecteront toujours le coût final,
+
+00:15:18.660 --> 00:15:20.840
+mais la direction de la tendance est indubitable.
+
+00:15:21.660 --> 00:15:24.240
+C'est le moment où l'informatique sort de l'ancienne histoire de centre de coût.
+
+00:15:25.080 --> 00:15:26.540
+Ce n'est pas parce que le support disparaît,
+
+00:15:26.680 --> 00:15:28.960
+mais parce que le support se transforme en une couche de fiabilité
+
+00:15:28.960 --> 00:15:30.840
+qui protège le rendement des employés en arrière-plan.
+
+00:15:31.740 --> 00:15:33.600
+L'entreprise considère cela comme un travail plus fluide
+
+00:15:33.600 --> 00:15:35.080
+plutôt qu'un événement de support dramatique.
+
+00:15:35.660 --> 00:15:37.680
+Vous obtenez moins d'interruptions, une restauration plus rapide
+
+00:15:37.680 --> 00:15:39.560
+et moins de travail gaspillé en routage et en clarification.
+
+00:15:40.540 --> 00:15:42.740
+Cependant, une mauvaise mesure peut facilement fausser les progrès.
+
+00:15:42.740 --> 00:15:44.720
+Si votre télémétrie est faible,
+
+00:15:44.920 --> 00:15:46.920
+l'agent pourrait simplement résumer une défaillance plus rapidement
+
+00:15:46.920 --> 00:15:47.960
+au lieu de la prévenir réellement.
+
+00:15:48.320 --> 00:15:49.760
+Si les retouches ne figurent pas sur le tableau de bord,
+
+00:15:49.840 --> 00:15:51.920
+le retour sur investissement semblera beaucoup plus net qu'il ne l'est en rayon.
+
+00:15:52.080 --> 00:15:55.220
+Si le temps récupéré se retrouve simplement dans des activités à faible valeur ajoutée,
+
+00:15:55.600 --> 00:15:56.860
+les dirigeants surestimeront le gain.
+
+00:15:57.220 --> 00:15:59.260
+L'argumentaire financier doit reposer sur des preuves tangibles
+
+00:15:59.260 --> 00:16:01.640
+telles que la prévention des incidents et la réduction des interventions manuelles.
+
+00:16:02.060 --> 00:16:04.420
+Vous devez mesurer le temps réellement consacré au travail utile.
+
+00:16:05.080 --> 00:16:06.360
+Une fois que vous l'avez correctement mesuré,
+
+00:16:06.360 --> 00:16:08.900
+la fonction de support cesse de ressembler à des frais généraux à réduire.
+
+00:16:08.900 --> 00:16:12.220
+Elle commence à ressembler à une capacité opérationnelle que l'entreprise récupère enfin.
+
+00:16:13.340 --> 00:16:15.040
+Quels sont les effets sur l'équipe de support ?
+
+00:16:15.040 --> 00:16:17.180
+Pensez à ce que cela signifie réellement pour l'équipe sur le terrain
+
+00:16:17.180 --> 00:16:19.500
+car ce changement ne consiste pas vraiment à réduire les effectifs,
+
+00:16:19.640 --> 00:16:21.800
+mais à changer la manière dont vos employés occupent leur journée.
+
+00:16:22.540 --> 00:16:24.920
+Dans l'ancienne configuration, la majeure partie de votre capacité de support
+
+00:16:24.920 --> 00:16:26.500
+était absorbée par les réinitialisations de mots de passe,
+
+00:16:26.580 --> 00:16:28.320
+le routage des tickets et les boucles de clarification sans fin.
+
+00:16:28.600 --> 00:16:30.140
+Vous aviez des personnes qui couraient après les mises à jour
+
+00:16:30.140 --> 00:16:31.400
+et qui déplaçaient des données entre des systèmes
+
+00:16:31.400 --> 00:16:32.960
+qui n'avaient jamais été conçus pour communiquer entre eux.
+
+00:16:33.320 --> 00:16:34.960
+Aucune de ces tâches ne rend l'environnement plus stable,
+
+00:16:34.960 --> 00:16:37.000
+elles empêchent simplement la file d'attente de déborder.
+
+00:16:37.600 --> 00:16:39.720
+Lorsque les agents prennent en charge ce travail de routine prévisible,
+
+00:16:40.220 --> 00:16:41.820
+l'effort humain passe enfin à un niveau supérieur.
+
+00:16:42.560 --> 00:16:44.280
+Les ingénieurs de support commencent à consacrer leur temps
+
+00:16:44.280 --> 00:16:45.640
+à définir à quoi ressemble un état sain
+
+00:16:45.640 --> 00:16:47.460
+et à peaufiner la logique sous-jacente aux approbations.
+
+00:16:48.120 --> 00:16:50.080
+Ils se concentrent sur l'amélioration des sources de connaissances,
+
+00:16:50.200 --> 00:16:51.460
+le test du comportement des politiques
+
+00:16:51.460 --> 00:16:53.560
+et la vérification que l'agent reste dans les limites qui lui ont été données.
+
+00:16:54.160 --> 00:16:55.860
+C'est un travail complètement différent de celui consistant
+
+00:16:55.860 --> 00:16:56.920
+à fixer des lignes d'objets toute la journée
+
+00:16:56.920 --> 00:16:59.140
+et à essayer de deviner ce que veut réellement un utilisateur.
+
+00:16:59.780 --> 00:17:01.640
+C'est exactement là que la plupart des déploiements stagnent.
+
+00:17:01.640 --> 00:17:04.720
+Les organisations essaient de conserver leurs anciens processus défaillants
+
+00:17:04.720 --> 00:17:06.100
+et de simplement ajouter un agent en plus
+
+00:17:06.100 --> 00:17:07.460
+tout en espérant un meilleur résultat.
+
+00:17:07.920 --> 00:17:09.320
+Mais le processus reste réactif,
+
+00:17:09.460 --> 00:17:10.620
+les transferts sont toujours désordonnés
+
+00:17:10.620 --> 00:17:12.300
+et les connaissances sous-genres faibles, faibles.
+
+00:17:12.960 --> 00:17:14.520
+L'agent n'est qu'une couche de peinture supplémentaire
+
+00:17:14.520 --> 00:17:15.380
+sur un mur qui s'effrite.
+
+00:17:15.920 --> 00:17:17.100
+Il peut répondre à une question plus rapidement,
+
+00:17:17.260 --> 00:17:18.620
+mais il ne peut pas réparer un modèle d'assistance
+
+00:17:18.620 --> 00:17:19.540
+qui a été construit autour du retard.
+
+00:17:19.980 --> 00:17:21.780
+La meilleure façon de procéder est de repenser le travail en prime.
+
+00:17:22.140 --> 00:17:23.580
+Vous devez décider quelle tâche reste humaine
+
+00:17:23.580 --> 00:17:26.380
+car elle nécessite du jugement ou une communication sensible.
+
+00:17:27.100 --> 00:17:28.900
+Ensuite, vous décidez quelle tâche passe en flux autonome
+
+00:17:28.900 --> 00:17:31.120
+car le résultat est prévisible et les actions sont sûres.
+
+00:17:31.820 --> 00:17:33.440
+Cette division est essentielle car les équipes d'assistance
+
+00:17:33.440 --> 00:17:34.220
+ne vont pas disparaître.
+
+00:17:34.640 --> 00:17:35.560
+Elles deviennent simplement les personnes
+
+00:17:35.560 --> 00:17:37.100
+qui conçoivent les contrôles et gèrent les exceptions.
+
+00:17:37.680 --> 00:17:39.120
+Cela signifie que la manière dont nous formons les personnes
+
+00:17:39.120 --> 00:17:39.740
+doit également changer.
+
+00:17:40.340 --> 00:17:42.060
+Les équipes doivent apprendre à superviser un système
+
+00:17:42.060 --> 00:17:44.040
+plutôt qu'à simplement exécuter une tâche manuelle.
+
+00:17:44.660 --> 00:17:46.040
+Ils doivent comprendre la logique de restauration,
+
+00:17:46.420 --> 00:17:48.040
+les révisions d'audit et savoir comment tester un agent
+
+00:17:48.040 --> 00:17:48.960
+avant sa mise en service.
+
+00:17:49.640 --> 00:17:50.920
+Ils doivent également être capables de repérer
+
+00:17:50.920 --> 00:17:51.740
+les défaillances d'un modèle
+
+00:17:51.740 --> 00:17:53.220
+car un mauvais workflow automatisé
+
+00:17:53.220 --> 00:17:54.640
+reste un mauvais workflow workflow.
+
+00:17:55.100 --> 00:17:56.120
+Cela accélère simplement les choses.
+
+00:17:56.580 --> 00:17:57.620
+Si vous recrutez pour cet avenir,
+
+00:17:57.620 --> 00:17:59.540
+vous n'avez probablement pas besoin d'un autre généraliste
+
+00:17:59.540 --> 00:18:00.060
+pour trier les tickets.
+
+00:18:00.580 --> 00:18:01.840
+Vous avez besoin de quelqu'un qui puisse orchestrer
+
+00:18:01.840 --> 00:18:03.380
+les flux dans la pile Microsoft 365
+
+00:18:03.380 --> 00:18:05.520
+et définir les contrôles qui permettent de contrôler les agents.
+
+00:18:06.500 --> 00:18:08.340
+Vous voulez des personnes capables d'améliorer l'environnement
+
+00:18:08.340 --> 00:18:10.080
+afin que la demande de support diminue réellement
+
+00:18:10.080 --> 00:18:11.460
+au lieu de simplement s'accumuler.
+
+00:18:12.200 --> 00:18:13.120
+Alors comment démarrer cela
+
+00:18:13.120 --> 00:18:14.420
+sans que cela ne se transforme en un projet
+
+00:18:14.420 --> 00:18:16.320
+de transformation massive sur plusieurs années ?
+
+00:18:16.320 --> 00:18:18.060
+La meilleure solution est de choisir un seul flux
+
+00:18:18.060 --> 00:18:19.240
+qui provoque des frictions constantes
+
+00:18:19.240 --> 00:18:20.000
+au sein de votre environnement.
+
+00:18:20.100 --> 00:18:22.100
+Microsoft 365 et la correction des accès
+
+00:18:22.100 --> 00:18:23.300
+est généralement un excellent candidat
+
+00:18:23.300 --> 00:18:25.300
+mais vous pouvez également envisager le support de réunion
+
+00:18:25.300 --> 00:18:26.780
+ou les transferts de conformité des appareils.
+
+00:18:26.780 --> 00:18:28.260
+Peu importe celui que vous choisissez
+
+00:18:28.260 --> 00:18:29.760
+tant que le modèle se reproduit souvent
+
+00:18:29.760 --> 00:18:31.820
+et que vous savez exactement à quoi devrait ressembler
+
+00:18:31.820 --> 00:18:32.880
+le résultat positif.
+
+00:18:33.360 --> 00:18:34.260
+Une fois que vous avez l'objectif
+
+00:18:34.260 --> 00:18:35.120
+vous devez définir les bases
+
+00:18:35.120 --> 00:18:36.460
+avec une véritable discipline.
+
+00:18:37.260 --> 00:18:39.040
+Vous devez savoir à quoi ressemble une situation saine
+
+00:18:39.040 --> 00:18:40.180
+et quels événements spécifiques
+
+00:18:40.180 --> 00:18:41.460
+vous indiquent que les choses déraillent.
+
+00:18:42.340 --> 00:18:43.860
+Décidez quelles actions peuvent être automatisées
+
+00:18:43.860 --> 00:18:44.480
+en toute sécurité
+
+00:18:44.480 --> 00:18:46.240
+et où exactement l'escalade humaine doit commencer.
+
+00:18:46.980 --> 00:18:48.000
+Avant de mettre quoi que ce soit en ligne
+
+00:18:48.000 --> 00:18:49.340
+assurez-vous d'avoir une base de référence
+
+00:18:49.340 --> 00:18:50.020
+pour le nombre de tickets,
+
+00:18:50.120 --> 00:18:50.920
+les interventions manuelles
+
+00:18:50.920 --> 00:18:51.780
+et la durée pendant laquelle
+
+00:18:51.780 --> 00:18:53.080
+les utilisateurs attendent actuellement une correction.
+
+00:18:53.420 --> 00:18:54.240
+Devez également mettre en place
+
+00:18:54.240 --> 00:18:55.260
+votre gouvernance dès le premier jour.
+
+00:18:55.260 --> 00:18:57.280
+Donnez à l'agent une identité spécifique
+
+00:18:57.280 --> 00:18:58.460
+attribue lui un propriétaire humain
+
+00:18:58.460 --> 00:19:00.100
+et définissez des règles d'approbation claires.
+
+00:19:00.860 --> 00:19:02.020
+Chaque action entreprise par l'agent
+
+00:19:02.020 --> 00:19:02.860
+doit être consignée.
+
+00:19:03.420 --> 00:19:04.260
+Vous devez également prévoir
+
+00:19:04.260 --> 00:19:05.920
+le moment où cet agent sera mis à la retraite
+
+00:19:05.920 --> 00:19:06.480
+ou réaffecté
+
+00:19:06.480 --> 00:19:07.280
+afin qu'il ne devienne pas
+
+00:19:07.280 --> 00:19:08.660
+une simple automatisation fantôme.
+
+00:19:09.520 --> 00:19:10.900
+Lorsque ce premier flux commence à fonctionner
+
+00:19:10.900 --> 00:19:12.540
+tout votre modèle opérationnel commence à changer.
+
+00:19:13.060 --> 00:19:13.940
+Le support cesse d'agir
+
+00:19:13.940 --> 00:19:14.680
+comme un service d'accueil
+
+00:19:14.680 --> 00:19:15.700
+qui ne fait que réagir au problème.
+
+00:19:16.600 --> 00:19:17.040
+Au lieu de cela
+
+00:19:17.040 --> 00:19:18.140
+il commence à se comporter
+
+00:19:18.140 --> 00:19:19.200
+comme un moteur de fiabilité
+
+00:19:19.200 --> 00:19:20.500
+directement intégré au système.
+
+00:19:21.380 --> 00:19:23.060
+Le support passe d'une réaction visible
+
+00:19:23.060 --> 00:19:24.080
+à une prévention intégrée.
+
+00:19:24.080 --> 00:19:25.740
+Le ticket n'a jamais été le service.
+
+00:19:26.060 --> 00:19:27.000
+C'était la preuve que le service
+
+00:19:27.000 --> 00:19:27.720
+est arrivé trop tard.
+
+00:19:28.280 --> 00:19:29.720
+Choisissez un flux de support ce trimestre
+
+00:19:29.720 --> 00:19:30.960
+et repensez-le pour la préemption
+
+00:19:30.960 --> 00:19:31.860
+plutôt que la réponse.
+
+00:19:32.500 --> 00:19:33.520
+Si vous souhaitez en savoir plus
+
+00:19:33.520 --> 00:19:35.180
+sur M365 au pilote Azure
+
+00:19:35.180 --> 00:19:36.840
+la sécurité et les modèles d'exploitation de l'IA
+
+00:19:36.840 --> 00:19:38.660
+abonnez-vous à M365FM
+
+00:19:38.660 --> 00:19:39.280
+et laissez un avis.
+
+00:19:40.220 --> 00:19:41.260
+Contactez-moi Mirko Peter
+
+00:19:41.260 --> 00:19:42.000
+sur LinkedIn
+
+00:19:42.000 --> 00:19:43.140
+pour discuter du prochain sujet
+
+00:19:43.140 --> 00:19:43.780
+que vous souhaitez aborder.

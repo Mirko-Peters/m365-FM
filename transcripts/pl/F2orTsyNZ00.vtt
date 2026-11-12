@@ -1,0 +1,1006 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:07.900
+Wyobraź sobie taką sytuację. Pracujesz w firmowej aplikacji. Może to portal HR, baza wsparcia klienta albo wewnętrzna wiki ze wszystkimi zasadami, których musisz przestrzegać.
+
+00:00:08.020 --> 00:00:14.600
+Wpisujesz pytanie w pasek wyszukiwania. Na przykład jak rozliczyć wydatki na kolację z klientem? Naciskasz Enter i co dostajesz?
+
+00:00:14.840 --> 00:00:19.780
+Nic. Albo gorzej listę przypadkowych plików PDF sprzed 3 lat, które jako tako pasują do wpisanych słów.
+
+00:00:19.940 --> 00:00:23.880
+Z wyszukiwarek korzystamy każdego dnia, a przez większość czasu działają one fatalnie.
+
+00:00:23.880 --> 00:00:28.480
+Ale wiesz co? Wcale nie muszą. Co gdyby Twoje aplikacje rzeczywiście rozumiały? O co pytasz?
+
+00:00:28.480 --> 00:00:33.560
+Co gdyby wyszukiwały jak Google, znajdując właściwą odpowiedź, nawet jeśli nie używasz idealnie dobranych słów?
+
+00:00:33.740 --> 00:00:40.760
+Dziś zajmiemy się Azure AI Search. Czym dokładnie jest, jak działa od środka i dlaczego jest silnikiem wyszukiwania, na którym bazują nowoczesne aplikacje?
+
+00:00:40.960 --> 00:00:43.700
+Złap kawę i zaczynajmy. Dlaczego wyszukiwanie nie działa?
+
+00:00:43.920 --> 00:00:47.860
+Aby zrozumieć, dlaczego wyszukiwanie zazwyczaj zawodzi, musimy przyjrzeć się, jak robi to większość aplikacji.
+
+00:00:48.040 --> 00:00:51.440
+Tradycyjny sposób nazywa się wyszukiwaniem słów kluczowych lub wyszukiwaniem leksykalnym.
+
+00:00:51.620 --> 00:00:56.900
+Wpisujesz słowo laptop w pole, a system przeszukuje wszystko i znajduje każdy dokument zawierający dokładnie to słowo.
+
+00:00:56.900 --> 00:01:00.760
+Od środka wiele z tych systemów korzysta z algorytmu o nazwie BM25.
+
+00:01:01.160 --> 00:01:03.720
+Nie jest skomplikowany, ale na swój sposób pomysłowy.
+
+00:01:04.260 --> 00:01:06.760
+BM25 szereguje wyniki w oparciu o kilka czynników.
+
+00:01:07.000 --> 00:01:12.420
+Jak często szukany termin występuje w dokumencie, jak długi jest dokument i jak rzadki jest ten termin w całym zbiorze danych.
+
+00:01:12.640 --> 00:01:17.880
+Pomyśl o tym, jak o bardzo zaawansowanym liczniku słów, który na podstawie tych czynników ustala, które dokumenty są najistotniejsze.
+
+00:01:18.100 --> 00:01:19.640
+W tym miejscu pojawiają się problemy.
+
+00:01:19.820 --> 00:01:21.160
+Ludzki język jest skomplikowany.
+
+00:01:21.400 --> 00:01:24.280
+Ludzie nie zadają pytań, używając dokładnie tych samych słów, które znajdują się w dokumentach.
+
+00:01:24.280 --> 00:01:28.380
+Podam Ci konkretny przykład. Użytkownik wpisuje w portalu wsparcia takie zdanie.
+
+00:01:28.580 --> 00:01:30.960
+Mój laptop zacina się podczas rozmów wideo.
+
+00:01:31.640 --> 00:01:38.160
+Wyszukiwanie słów kluczowych posłusznie poszuka dokumentów zawierających słowa laptop zacina podczas rozmów wideo.
+
+00:01:38.280 --> 00:01:40.560
+A co, jeśli najlepszy artykuł na ten temat nosi tytuł
+
+00:01:40.560 --> 00:01:43.360
+Rozwiązywanie problemów z zawieszaniem systemu podczas spotkań Teams?
+
+00:01:43.560 --> 00:01:46.000
+Albo zarządzanie dławieniem procesora w stacjach dokujących?
+
+00:01:46.220 --> 00:01:48.220
+Wyszukiwanie słów kluczowych całkowicie je pominie.
+
+00:01:48.400 --> 00:01:48.700
+Dlaczego?
+
+00:01:48.700 --> 00:01:50.180
+Ponieważ słowa się nie zgadzają.
+
+00:01:50.380 --> 00:01:51.900
+Kluczowy problem jest następujący.
+
+00:01:52.040 --> 00:01:53.820
+Wyszukiwanie słów kluczowych rozumie pisownie.
+
+00:01:54.000 --> 00:01:56.240
+Rozumie wzorce znaków, ale nie rozumie znaczenia.
+
+00:01:56.500 --> 00:01:59.580
+Dostajesz wyniki, które mają poprawne litery, ale często błędną treść.
+
+00:01:59.800 --> 00:02:03.400
+Jeśli więc dopasowywanie słów co do joty zostawia takie luki, to jaka jest alternatywa?
+
+00:02:03.600 --> 00:02:04.180
+Nowy sposób.
+
+00:02:04.380 --> 00:02:05.400
+Wyszukiwanie wektorowe.
+
+00:02:05.620 --> 00:02:08.300
+Wyszukiwanie wektorowe to zupełnie inne podejście do działania.
+
+00:02:08.540 --> 00:02:11.000
+Zamiast dopasowywać dokładne słowa, dopasowuje znaczenie.
+
+00:02:11.260 --> 00:02:13.400
+Brzmi to abstrakcyjnie, więc rozbijmy to na części.
+
+00:02:13.400 --> 00:02:19.080
+Najprostsza definicja, jaką musisz znać wektor, to po prostu lista liczb, która reprezentuje coś, z czym komputer może pracować.
+
+00:02:19.240 --> 00:02:20.540
+To wszystko lista liczb.
+
+00:02:20.720 --> 00:02:24.400
+Embedding to specjalny rodzaj wektora, który przechwytuje znaczenie tekstu.
+
+00:02:24.620 --> 00:02:28.380
+Zamienia zdanie akapit, a nawet cały dokument w długą listę liczb.
+
+00:02:28.820 --> 00:02:31.340
+Komputer nie rozumie słów, ale rozumie liczby.
+
+00:02:31.540 --> 00:02:32.760
+Oto pomocna analogia.
+
+00:02:32.980 --> 00:02:35.020
+Pomyśl o wektorach jak o współrzędnych na mapie.
+
+00:02:35.200 --> 00:02:37.220
+Na mapie podobne miejsca znajdują się blisko siebie.
+
+00:02:37.420 --> 00:02:40.120
+W przestrzeni wektorowej podobne pojęcia znajdują się blisko siebie.
+
+00:02:40.120 --> 00:02:44.780
+Wektor dla króla i wektor dla królowej są blisko siebie, ponieważ reprezentują powiązane idee.
+
+00:02:45.040 --> 00:02:48.060
+Wektor dla króla i wektor dla jabłka są daleko od siebie.
+
+00:02:48.280 --> 00:02:55.300
+Komputer nie wie, co słowo król oznacza w ludzkim sensie, ale potrafi zmierzyć odległość między jego współrzędnymi, a współrzędnymi każdego innego słowa lub dokumentu.
+
+00:02:55.420 --> 00:02:57.320
+To jak posiadanie GPS dla idei.
+
+00:02:57.560 --> 00:03:00.980
+System wie, jak daleko od siebie znajdują się pojęcia, patrząc tylko na liczby.
+
+00:03:01.220 --> 00:03:04.900
+Gdy wyszukujesz za pomocą wektorów, system przekształca twoje zapytanie w embedding.
+
+00:03:05.100 --> 00:03:08.360
+Następnie znajduje dokumenty, których embeddingi są najbliższe twojemu.
+
+00:03:08.360 --> 00:03:12.320
+Znajduje rzeczy semantycznie podobne, które dzielą znaczenie, a nie tylko słownictwo.
+
+00:03:12.520 --> 00:03:15.800
+Wyobraź sobie, że szukasz dokumentu o rozwiązywaniu problemów z zawieszonym laptopem.
+
+00:03:15.980 --> 00:03:19.440
+W wyszukiwaniu słów kluczowych musiałbyś wpisać dokładnie zawieszenie lub zawiecha.
+
+00:03:19.620 --> 00:03:23.920
+Ale przy wyszukiwaniu wektorowym możesz wpisać mój komputer ciągle się zacina, a on znajdzie właściwy dokument.
+
+00:03:24.140 --> 00:03:25.860
+Na tym polega moc rozumienia znaczenia.
+
+00:03:26.140 --> 00:03:28.360
+Wróćmy do naszego przykładu z zepsutym wyszukiwaniem.
+
+00:03:28.560 --> 00:03:30.920
+Użytkownik wpisuje mój laptop ciągle się zawiesza.
+
+00:03:30.920 --> 00:03:37.680
+Dzięki wyszukiwaniu wektorowemu system może zwrócić artykuł o zawieszaniu systemu podczas spotkań na Teams, nawet jeśli żadne z tych słów nie pojawia się w zapytaniu.
+
+00:03:37.920 --> 00:03:43.040
+Dlaczego? Ponieważ znaczenie zawieszania systemu jest bardzo bliskie zawieszaniu komputera w przestrzeni wektorowej.
+
+00:03:43.180 --> 00:03:45.600
+Te pojęcia znajdują się blisko siebie na tej mapie.
+
+00:03:45.860 --> 00:03:49.080
+System nie przejmuje się dokładnymi słowami, dba o to, co masz na myśli.
+
+00:03:49.280 --> 00:03:50.120
+To jest przełom.
+
+00:03:50.280 --> 00:03:52.900
+Komputery zaczynają rozumieć intencje, a nie tylko pisownie.
+
+00:03:53.100 --> 00:03:56.040
+Znajdują odpowiedzi, które wyszukiwanie słów kluczowych całkowicie by pominęło.
+
+00:03:56.040 --> 00:03:58.180
+Ale wyszukiwanie wektorowe ma też swoje słabości.
+
+00:03:58.400 --> 00:04:01.320
+Może pominąć dokładne dopasowania, które są absolutnie krytyczne.
+
+00:04:01.540 --> 00:04:06.040
+Jeśli technik szuka konkretnego kodu błędu, na przykład X870570,
+
+00:04:06.840 --> 00:04:11.560
+wyszukiwanie wektorowe może nadać priorytet dokumentom o błędach dysku lub uszkodzeniach systemu plików,
+
+00:04:11.660 --> 00:04:14.360
+zamiast wskazać dokument omawiający ten konkretny kod.
+
+00:04:14.500 --> 00:04:16.140
+Przedkłada zrozumienie nad precyzję.
+
+00:04:16.380 --> 00:04:17.340
+Mamy więc dwie metody.
+
+00:04:17.540 --> 00:04:19.660
+Wyszukiwanie słów kluczowych świetnie sprawdza się w kwestii precyzji.
+
+00:04:19.820 --> 00:04:22.440
+Doskonale radzi sobie z dokładnymi terminami, identyfikatorami produktów czy numerami umów.
+
+00:04:22.440 --> 00:04:24.460
+Wyszukiwanie wektorowe świetnie sprawdza się w kwestii znaczenia.
+
+00:04:26.040 --> 00:04:28.800
+Gdy nie używasz odpowiednich słów, każda z nich ma swoje słabe punkty.
+
+00:04:28.960 --> 00:04:30.080
+To rodzi oczywiste pytanie.
+
+00:04:30.320 --> 00:04:32.940
+Co, gdyby można było połączyć oba podejścia i czerpać z nich to?
+
+00:04:33.000 --> 00:04:33.500
+Co najlepsze?
+
+00:04:33.660 --> 00:04:34.580
+Przełom hybrydowy.
+
+00:04:34.820 --> 00:04:37.260
+Wyszukiwanie hybrydowe to połączenie zalet obu rozwiązań.
+
+00:04:37.420 --> 00:04:39.960
+Uruchamia jednocześnie wyszukiwanie słów kluczowych i wektorowe,
+
+00:04:40.040 --> 00:04:42.240
+a następnie łączy wyniki w jedną rankingową listę.
+
+00:04:42.440 --> 00:04:45.180
+Zamiast wybierać jedną metodę, system stosuje tak zwany
+
+00:04:45.180 --> 00:04:47.380
+fuzję odwrotności rank, czyli RRF.
+
+00:04:47.520 --> 00:04:48.300
+Oto jak to działa.
+
+00:04:48.520 --> 00:04:51.480
+RRF sprawdza, jakie miejsce dany dokument zajmuje w wynikach słów kluczowych,
+
+00:04:51.480 --> 00:04:52.660
+a jakie w wynikach wektorowych.
+
+00:04:52.860 --> 00:04:54.500
+Następnie nadaje mu łączną punktację.
+
+00:04:54.720 --> 00:04:56.880
+Jeśli dokument wypada dobrze w obu, zyskuje wyższą pozycję.
+
+00:04:57.020 --> 00:04:59.500
+To tak, jakby zestawić opinię dwóch ekspertów i wyciągnąć z nich średnią.
+
+00:04:59.660 --> 00:05:02.500
+Ostateczna odpowiedź jest bardziej wiarygodna niż w przypadku każdej z metod z osobna.
+
+00:05:02.660 --> 00:05:04.880
+Ma to znaczenie, ponieważ wyszukiwanie słów kluczowych i wektorowe
+
+00:05:04.880 --> 00:05:06.280
+mają fundamentalnie różne mocne strony.
+
+00:05:06.540 --> 00:05:08.800
+Wyszukiwanie słów kluczowych przoduje w dokładnych dopasowaniach.
+
+00:05:08.980 --> 00:05:11.240
+Jest niezastąpione przy identyfikatorach produktów, numerach umów,
+
+00:05:11.340 --> 00:05:12.640
+konkretnych nazwach czy kodach błędów.
+
+00:05:12.820 --> 00:05:14.320
+Jest precyzyjne i przewidywalne.
+
+00:05:14.540 --> 00:05:16.620
+Wyszukiwanie wektorowe przoduje w podobieństwie semantycznym,
+
+00:05:16.620 --> 00:05:18.760
+znajdując dokumenty o tym samym znaczeniu, co zapytanie,
+
+00:05:18.880 --> 00:05:20.860
+nawet jeśli nie zawierają one dokładnie tych samych słów.
+
+00:05:21.000 --> 00:05:23.120
+Razem eliminują swoje wzajemne słabe punkty.
+
+00:05:23.380 --> 00:05:26.620
+System wychwytuje dokładne i koncepcyjne dopasowania w ramach jednego zapytania.
+
+00:05:26.820 --> 00:05:28.100
+Na tym polega prawdziwa siła.
+
+00:05:28.280 --> 00:05:29.600
+I nie jest to tylko teoria.
+
+00:05:29.860 --> 00:05:31.880
+Badania nad korporacyjnym wyszukiwaniem hybrydowym pokazują,
+
+00:05:32.020 --> 00:05:34.580
+że zapewnia ono od 70 do 80% precyzji pobierania,
+
+00:05:34.700 --> 00:05:35.720
+w zależności od zbioru danych.
+
+00:05:35.880 --> 00:05:39.840
+To o około 15 do 20 punktów procentowych więcej niż w przypadku samego wyszukiwania wektorowego.
+
+00:05:39.840 --> 00:05:43.100
+Różnica jest znacząca i przekłada się na rzeczywiste wyniki biznesowe.
+
+00:05:43.300 --> 00:05:45.220
+Weźmy pod uwagę platformę księgową Xero.
+
+00:05:45.440 --> 00:05:49.380
+Wdrożyli wyszukiwanie hybrydowe w swojej obsłudze klienta za pośrednictwem firmy Caveo.
+
+00:05:49.560 --> 00:05:53.660
+W ciągu trzech miesięcy odnotowali 20% wzrost liczby rozwiązań uzyskanych dzięki samoobsłudze.
+
+00:05:53.840 --> 00:05:57.700
+Klienci częściej znajdowali odpowiedzi samodzielnie, bez potrzeby kontaktowania się z obsługą.
+
+00:05:57.920 --> 00:06:03.180
+Inni klienci w tym samym studium w przypadku odnotowali do 40% skrócenia czasu rozwiązywania spraw przez wsparcie.
+
+00:06:03.380 --> 00:06:06.020
+Oznacza to, że agenci szybciej znajdowali właściwe informacje,
+
+00:06:06.020 --> 00:06:09.000
+klienci otrzymywali odpowiedzi szybciej, a koszty wsparcia zmalały.
+
+00:06:09.120 --> 00:06:12.120
+To nie tylko miły dodatek, to mierzalny wpływ na wynik finansowy.
+
+00:06:12.300 --> 00:06:13.560
+To najważniejszy wniosek.
+
+00:06:13.720 --> 00:06:17.820
+Wyszukiwanie hybrydowe to nie tylko miłe ulepszenie, czy pozycja na liście funkcji to wymiernie lepsze rozwiązanie.
+
+00:06:18.020 --> 00:06:21.220
+Zapewnia wyższą precyzję, lepszy odzysk informacji i lepsze wyniki dla użytkownika.
+
+00:06:21.420 --> 00:06:26.100
+I to właśnie połączenie tych podejść sprawia, że Azure AI Search jest tak potężne w nowoczesnych aplikacjach.
+
+00:06:26.340 --> 00:06:30.840
+Istnieje jednak inna technologia, którą to połączenie odblokowuje, a która obecnie zyskuje dużą popularność.
+
+00:06:30.840 --> 00:06:32.840
+Nazywa się RAC, czyli połączenie RAC.
+
+00:06:33.160 --> 00:06:34.220
+Porozmawiajmy więc o RAC.
+
+00:06:34.360 --> 00:06:37.100
+RAC to skrót od Retrival Augmented Generation, czyli generowania wspomaganego wyszukiwaniem.
+
+00:06:37.240 --> 00:06:39.540
+To trudne do wymówienia, ale oto najprostsza definicja.
+
+00:06:39.700 --> 00:06:43.680
+To framework, który daje asystentom, a i dostęp do informacji, na których nie byli szkoleni.
+
+00:06:43.920 --> 00:06:48.340
+Duże modele językowe, takie jak GPT, wiedzą wiele o historii, nauce i programowaniu,
+
+00:06:48.500 --> 00:06:52.240
+ale nie znają wewnętrznych dokumentów Twojej firmy, polityk, historii klientów,
+
+00:06:52.300 --> 00:06:54.760
+czy konkretnych procedur stosowanych przez Twój zespół.
+
+00:06:54.980 --> 00:06:59.160
+Większość ludzi uważa, że można po prostu wrzucić całą tę wewnętrzną wiedzę do samego modelu.
+
+00:06:59.160 --> 00:07:02.000
+To nie działa. Jest to kosztowne i trudne do aktualizacji.
+
+00:07:02.220 --> 00:07:04.140
+RAC rozwiązuje ten problem w sprytny sposób.
+
+00:07:04.400 --> 00:07:08.260
+Zamiast upychać wszystko w modelu, pobierasz istotne informacje z bazy wiedzy w momencie,
+
+00:07:08.480 --> 00:07:09.480
+gdy ktoś zadaje pytanie.
+
+00:07:09.760 --> 00:07:12.100
+Bierzesz zapytanie użytkownika, przeszukujesz wewnętrzne dane,
+
+00:07:12.240 --> 00:07:17.040
+znajdujesz najbardziej odpowiednie dokumenty i przekazujesz ten kontekst do modelu LLM wraz z oryginalnym pytaniem.
+
+00:07:17.280 --> 00:07:20.080
+Model LLM generuje następnie odpowiedź opartą na Twoich danych.
+
+00:07:20.280 --> 00:07:21.180
+Na tym polega magia.
+
+00:07:21.380 --> 00:07:24.720
+Azure iSearch stanowi połowę tego równania, odpowiedzialną za wyszukiwanie.
+
+00:07:24.720 --> 00:07:28.840
+To silnik, który znajduje właściwe dokumenty, aby model LLM mógł odpowiedzieć precyzyjnie.
+
+00:07:29.040 --> 00:07:33.240
+Bez solidnej warstwy wyszukiwania, system RAC jest tylko tak dobry, jak dokumenty, które znajduje.
+
+00:07:33.380 --> 00:07:35.440
+I właśnie tutaj wyszukiwanie hybrydowe naprawdę błyszczy,
+
+00:07:35.540 --> 00:07:37.780
+ponieważ zapytania RAC to często pytania w języku naturalnym,
+
+00:07:37.860 --> 00:07:41.200
+a odpowiedzi często znajdują się w dokumentach używających zupełnie innej terminologii.
+
+00:07:41.340 --> 00:07:43.820
+Podam kilka litw, które naprawdę pokazują różnicę.
+
+00:07:44.000 --> 00:07:46.680
+Badanie dotyczące wyszukiwania w aplikacjach korporacyjnych wykazało,
+
+00:07:46.780 --> 00:07:50.780
+że hybrydowy framework RAC poprawił dokładność wyszukiwania TOPKa od 18 do 25 razy
+
+00:07:50.780 --> 00:07:52.620
+w porównaniu z samym wyszukiwaniem słów kluczowych.
+
+00:07:52.840 --> 00:07:56.380
+Dokładność wykonywania zadań w ramach przepływu pracy poprawiła się 21-krotnie.
+
+00:07:56.580 --> 00:07:59.900
+Oznacza to, że użytkownicy znacznie częściej skutecznie kończyli złożone zadania,
+
+00:08:00.020 --> 00:08:02.760
+gdy wspierał ich system RAC korzystający z wyszukiwania hybrydowego.
+
+00:08:03.000 --> 00:08:05.640
+Ogólnie rzecz biorąc, odpowiednio wdrożone systemy RAC mogą zwiększyć
+
+00:08:05.640 --> 00:08:11.060
+dokładność wyszukiwania średnio o 85%, a w niektórych wyspecjalizowanych dziedzinach nawet do 99%.
+
+00:08:11.060 --> 00:08:14.460
+A ponieważ model LLM generuje odpowiedzi na podstawie pobranego kontekstu,
+
+00:08:14.520 --> 00:08:19.160
+a nie własnych domysłów, systemy RAC wykazały około 40% redukcję halucynacji w odpowiedziach.
+
+00:08:19.300 --> 00:08:23.340
+Dlatego właśnie Azure AI Search ma kluczowe znaczenie dla tworzenia agentów AI i kopilotów.
+
+00:08:23.520 --> 00:08:26.440
+Zapewnia oparte na faktach wyszukiwanie, dzięki któremu modele LLM
+
+00:08:26.440 --> 00:08:28.500
+stają się godne zaufania w kontekście biznesowym.
+
+00:08:28.720 --> 00:08:31.540
+Jeśli tworzysz asystenta, który ma precyzyjnie odpowiadać na pytania
+
+00:08:31.540 --> 00:08:35.340
+i podawać źródła architektura, wyszukiwanie hybrydowe plus RAC będzie najlepszym wyborem.
+
+00:08:35.580 --> 00:08:38.680
+Zatem wyszukiwanie hybrydowe w połączeniu z RAC to potężne rozwiązanie.
+
+00:08:38.680 --> 00:08:40.680
+Ale jak to właściwie wygląda w praktyce?
+
+00:08:40.900 --> 00:08:42.840
+Jaki jest realny wpływ tego rozwiązania?
+
+00:08:43.080 --> 00:08:44.760
+Gdzie więc możemy spotkać to w praktyce?
+
+00:08:44.920 --> 00:08:46.140
+Podam kilka przykładów.
+
+00:08:46.280 --> 00:08:48.660
+Handel elektroniczny jest prawdopodobnie najbardziej znany.
+
+00:08:48.820 --> 00:08:51.540
+Klient wpisuje w pasek wyszukiwania wygodne buty do biegania.
+
+00:08:51.720 --> 00:08:54.480
+Opis produktu może zawierać hasło amortyzowane obuwie sportowe,
+
+00:08:54.580 --> 00:08:56.580
+ponieważ dział marketingu użył innych słów.
+
+00:08:56.660 --> 00:08:59.640
+Samo wyszukiwanie słów kluczowych zupełnie pominęłoby ten wynik.
+
+00:08:59.740 --> 00:09:02.980
+Dzięki Azure AI Search system rozumie, że wygodne i amortyzowane
+
+00:09:02.980 --> 00:09:05.060
+oznaczają w tym kontekście mniej więcej to samo.
+
+00:09:05.280 --> 00:09:08.260
+Wyświetla właściwy produkt, nawet jeśli użyte słowa nie są identyczne.
+
+00:09:08.260 --> 00:09:10.240
+Dzięki temu klient znajduje to, czego szuka,
+
+00:09:10.380 --> 00:09:11.880
+zamiast sfrustrowany opuszczać stronę.
+
+00:09:12.000 --> 00:09:14.180
+Portale wsparcia klienta działają w ten sam sposób.
+
+00:09:14.420 --> 00:09:17.280
+Wyobraźmy sobie, że klient wpisuje, jak anulować subskrypcję.
+
+00:09:17.480 --> 00:09:19.200
+Odpowiednia polityka może nosić tytuł
+
+00:09:19.200 --> 00:09:20.980
+wypowiedzenie umowy o świadczenie usług.
+
+00:09:21.180 --> 00:09:23.460
+Wyszukiwanie hybrydowe znajduje ten konkretny dokument
+
+00:09:23.460 --> 00:09:25.960
+poprzez dopasowanie słów kluczowych w terminologii prawnej,
+
+00:09:26.120 --> 00:09:28.340
+ale dzięki podobieństwu semantycznemu wskazuje również
+
+00:09:28.340 --> 00:09:31.240
+powiązane FAQ dotyczące wcześniejszego zakończenia planu.
+
+00:09:31.400 --> 00:09:33.320
+Klient otrzymuje wyczerpującą odpowiedź,
+
+00:09:33.400 --> 00:09:35.740
+zamiast przekopywać się przez pięć różnych artykułów.
+
+00:09:35.740 --> 00:09:38.420
+Kolejnym przykładem jest pobieranie dokumentów prawnych.
+
+00:09:38.520 --> 00:09:40.000
+Prawnicy muszą przeszukiwać umowy
+
+00:09:40.000 --> 00:09:42.680
+według dokładnych numerów klauzul i odniesień do sekcji.
+
+00:09:42.860 --> 00:09:44.240
+To domena czystych słów kluczowych,
+
+00:09:44.400 --> 00:09:46.320
+ale muszą oni także znajdować podobne zapisy
+
+00:09:46.320 --> 00:09:48.500
+w różnych umowach, nawet jeśli brzmią one inaczej.
+
+00:09:48.720 --> 00:09:50.620
+Wyszukiwanie hybrydowe obsługuje obie te potrzeby
+
+00:09:50.620 --> 00:09:52.320
+w jednym zapytaniu, a w branżach regulowanych
+
+00:09:52.320 --> 00:09:54.500
+możliwość prześledzenia, dlaczego dany wynik się pojawił,
+
+00:09:54.580 --> 00:09:56.060
+jest kluczowa dla zapewnienia zgodności.
+
+00:09:56.300 --> 00:09:58.480
+Wewnętrzne bazy wiedzy również na tym korzystają.
+
+00:09:58.700 --> 00:10:00.380
+Pracownik szukający zasad urlopowych
+
+00:10:00.380 --> 00:10:02.000
+otrzymuje oficjalny dokument HR,
+
+00:10:02.000 --> 00:10:04.740
+ale także powiązaną wiadomość e-mail oddziału prawnego
+
+00:10:04.740 --> 00:10:06.300
+dotyczącą przeniesienia dni wolnych
+
+00:10:06.300 --> 00:10:08.560
+oraz najnowszą aktualizację z intranetu firmy.
+
+00:10:08.780 --> 00:10:10.820
+Wyszukiwarka rozumie, że wszystkie te elementy
+
+00:10:10.820 --> 00:10:12.400
+są powiązane z tym samym pytaniem.
+
+00:10:12.580 --> 00:10:14.000
+Produkcja to mniej oczywisty,
+
+00:10:14.180 --> 00:10:15.440
+ale bardzo skuteczny przykład.
+
+00:10:15.700 --> 00:10:17.540
+Technik wpisuje w interfejs wyszukiwania
+
+00:10:17.540 --> 00:10:19.280
+naprawa przegrzewającego się silnika.
+
+00:10:19.580 --> 00:10:21.420
+System zwraca sekcję rozwiązywania problemów
+
+00:10:21.420 --> 00:10:22.740
+z instrukcji obsługi urządzenia
+
+00:10:22.740 --> 00:10:25.240
+oraz zeskanowany schemat przedstawiający odpowiednie części.
+
+00:10:25.540 --> 00:10:26.920
+Chociaż schemat jest obrazem Azure,
+
+00:10:27.040 --> 00:10:28.780
+a iSearch potrafi wyodrębnić i zindeksować
+
+00:10:28.780 --> 00:10:29.700
+jego treść tekstową,
+
+00:10:29.700 --> 00:10:31.620
+dzięki czemu pojawia się on w wynikach wyszukiwania.
+
+00:10:31.800 --> 00:10:33.660
+Wspólnym mianownikiem wszystkich tych przykładów
+
+00:10:33.660 --> 00:10:34.920
+są dane nieustrukturyzowane.
+
+00:10:35.100 --> 00:10:36.280
+Pliki PDF, dokumenty Word,
+
+00:10:36.400 --> 00:10:37.680
+zgłoszenia pomocy technicznej i mail,
+
+00:10:37.780 --> 00:10:38.500
+zeskanowane obrazy.
+
+00:10:38.700 --> 00:10:39.720
+Tradycyjne zapytania bazodanowe
+
+00:10:39.720 --> 00:10:40.680
+i wyszukiwanie słów kluczowych
+
+00:10:40.680 --> 00:10:41.720
+nigdy nie zostały zaprojektowane
+
+00:10:41.720 --> 00:10:42.640
+do obsługi tego typu danych.
+
+00:10:42.840 --> 00:10:44.940
+Azure iSearch jest stworzony specjalnie dla tego świata
+
+00:10:44.940 --> 00:10:46.060
+i im bardziej się mu przyglądasz,
+
+00:10:46.140 --> 00:10:46.780
+tym wyraźniej widać,
+
+00:10:46.940 --> 00:10:47.800
+że wyszukiwanie hybrydowe
+
+00:10:47.800 --> 00:10:49.240
+to coś więcej niż tylko miły dodatek.
+
+00:10:49.300 --> 00:10:50.400
+To fundamentalny element
+
+00:10:50.400 --> 00:10:52.300
+sposobu budowania nowoczesnych aplikacji.
+
+00:10:52.520 --> 00:10:54.100
+Jak te elementy do siebie pasują,
+
+00:10:54.100 --> 00:10:56.380
+Jak to wszystko właściwie działa pod maską?
+
+00:10:56.560 --> 00:10:59.200
+Azure iSearch ma trzy kluczowe bloki konstrukcyjne
+
+00:10:59.200 --> 00:11:01.680
+źródło danych, indeksator i indeks wyszukiwania.
+
+00:11:01.900 --> 00:11:02.860
+Źródło danych to miejsce,
+
+00:11:03.040 --> 00:11:04.620
+w którym znajdują się Twoje informacje.
+
+00:11:04.880 --> 00:11:05.940
+Może to być blob storage,
+
+00:11:06.100 --> 00:11:08.220
+baza danych Azure SQL, Cosmos DB,
+
+00:11:08.380 --> 00:11:09.160
+a nawet SharePoint.
+
+00:11:09.320 --> 00:11:10.160
+To surowy materiał,
+
+00:11:10.300 --> 00:11:11.780
+który musi stać się przeszukiwalny.
+
+00:11:11.960 --> 00:11:12.520
+Pomyśl o tym,
+
+00:11:12.600 --> 00:11:14.960
+jak o stosie dokumentów czekających na uporządkowanie.
+
+00:11:15.280 --> 00:11:16.220
+Indeksator to potok,
+
+00:11:16.360 --> 00:11:17.720
+który odczytuje dane ze źródła,
+
+00:11:17.860 --> 00:11:18.880
+wyodrębnia zawartość,
+
+00:11:19.020 --> 00:11:20.880
+stosuje skonfigurowane wzbogacenia AI,
+
+00:11:20.980 --> 00:11:22.800
+a następnie buduje indeks wyszukiwania.
+
+00:11:22.800 --> 00:11:25.120
+Oto prosty sposób, by to sobie wyobrazić.
+
+00:11:25.340 --> 00:11:26.640
+Wyobraź sobie bibliotekarza
+
+00:11:26.640 --> 00:11:28.520
+wchodzącego do magazynu pełnego książek.
+
+00:11:28.700 --> 00:11:29.400
+Czyta każdą z nich,
+
+00:11:29.560 --> 00:11:30.500
+robi szczegółowe notatki,
+
+00:11:30.640 --> 00:11:32.340
+identyfikuje kluczowe tematy i encje
+
+00:11:32.340 --> 00:11:34.360
+oraz organizuje wszystko w katalogu kartkowym.
+
+00:11:34.560 --> 00:11:35.820
+To czytanie i robienie notatek
+
+00:11:35.820 --> 00:11:36.900
+to proces indeksowania.
+
+00:11:37.160 --> 00:11:39.340
+Indeks wyszukiwania to właśnie ten katalog kartkowy.
+
+00:11:39.500 --> 00:11:40.680
+To nie są same książki.
+
+00:11:40.840 --> 00:11:42.760
+To ustrukturyzowany, zoptymalizowany system,
+
+00:11:42.920 --> 00:11:44.360
+który pozwala znaleźć dokładnie to,
+
+00:11:44.480 --> 00:11:45.860
+czego potrzebujesz w milisekundach.
+
+00:11:46.020 --> 00:11:47.140
+Kiedy wpisujesz zapytanie,
+
+00:11:47.320 --> 00:11:49.240
+system nie wraca do oryginalnych dokumentów,
+
+00:11:49.280 --> 00:11:50.140
+aby je przeszukać.
+
+00:11:50.140 --> 00:11:51.700
+Zamiast tego sprawdza indeks,
+
+00:11:51.860 --> 00:11:54.000
+który już wie, gdzie dokładnie wszystko się znajduje.
+
+00:11:54.160 --> 00:11:55.860
+Ta wstępna organizacja nazywana jest
+
+00:11:55.860 --> 00:11:56.920
+indeksem odwróconym.
+
+00:11:57.140 --> 00:11:58.220
+Zamiast przechowywać dokumenty
+
+00:11:58.220 --> 00:11:59.300
+z listą zawartych w nich słów,
+
+00:11:59.420 --> 00:12:00.800
+przechowujesz słowa z listą dokumentów,
+
+00:12:00.880 --> 00:12:01.560
+w których występują.
+
+00:12:01.740 --> 00:12:03.340
+Oznacza to, że podczas wyszukiwania terminu
+
+00:12:03.340 --> 00:12:04.780
+od razu przechodzisz do właściwego miejsca.
+
+00:12:05.000 --> 00:12:06.840
+Bez konieczności przekartkowywania każdej strony.
+
+00:12:07.100 --> 00:12:08.860
+Efektem jest ogromna poprawa szybkości.
+
+00:12:09.120 --> 00:12:10.460
+Zamiast skanować każdy dokument,
+
+00:12:10.560 --> 00:12:11.780
+co zajmuje coraz więcej czasu
+
+00:12:11.780 --> 00:12:13.160
+wraz ze wzrostem ilości danych,
+
+00:12:13.280 --> 00:12:14.720
+trafiasz od razu w odpowiednie miejsce.
+
+00:12:14.980 --> 00:12:16.100
+Przy milionach dokumentów
+
+00:12:16.100 --> 00:12:17.420
+Ta różnica decyduje o tym,
+
+00:12:17.520 --> 00:12:19.000
+czy wyszukiwanie zajmie sekundy,
+
+00:12:19.100 --> 00:12:19.920
+czy milisekundy.
+
+00:12:20.120 --> 00:12:20.920
+Teraz już rozumiesz,
+
+00:12:21.040 --> 00:12:22.120
+czym jest Azure iSearch,
+
+00:12:22.220 --> 00:12:23.760
+jak pasują do siebie główne komponenty
+
+00:12:23.760 --> 00:12:25.180
+i dlaczego wyszukiwanie hybrydowe
+
+00:12:25.180 --> 00:12:26.000
+zmienia zasady gry.
+
+00:12:26.300 --> 00:12:27.640
+Podsumujmy, co właściwie możesz
+
+00:12:27.640 --> 00:12:28.740
+dzięki temu osiągnąć.
+
+00:12:28.880 --> 00:12:30.480
+Po pierwsze, zrozum swoje dane.
+
+00:12:30.720 --> 00:12:31.900
+Jeśli są już ustrukturyzowane,
+
+00:12:32.040 --> 00:12:33.200
+jak tabele produktów w SQL,
+
+00:12:33.400 --> 00:12:34.600
+rekordy klientów w bazie danych,
+
+00:12:34.680 --> 00:12:36.400
+czy cokolwiek z czytelnymi wierszami i kolumnami,
+
+00:12:36.540 --> 00:12:37.760
+możesz je przeszukiwać bezpośrednio
+
+00:12:37.760 --> 00:12:38.620
+za pomocą SQL.
+
+00:12:38.860 --> 00:12:40.240
+Azure iSearch jest stworzony
+
+00:12:40.240 --> 00:12:41.660
+do nieustrukturyzowanego tekstu.
+
+00:12:41.660 --> 00:12:43.140
+Mowa o plikach PDF, e-mailach,
+
+00:12:43.240 --> 00:12:44.820
+dokumentach Word, zgłoszeniach wsparcia.
+
+00:12:44.980 --> 00:12:46.700
+To tam dostarcza prawdziwą wartość.
+
+00:12:46.840 --> 00:12:48.560
+Po drugie, jeśli tworzysz aplikację RAC
+
+00:12:48.560 --> 00:12:49.920
+lub asystenta AI Azure,
+
+00:12:50.060 --> 00:12:51.700
+a iSearch z wyszukiwaniem hybrydowym
+
+00:12:51.700 --> 00:12:52.900
+to silnik pobierania danych,
+
+00:12:53.040 --> 00:12:53.860
+którego potrzebujesz.
+
+00:12:54.080 --> 00:12:55.900
+Daje Ci dokładne dopasowania słów kluczowych
+
+00:12:55.900 --> 00:12:57.700
+dla precyzji oraz semantyczne zrozumienie
+
+00:12:57.700 --> 00:12:58.380
+dla kontekstu.
+
+00:12:58.520 --> 00:13:00.200
+Takie połączenie daje bardziej wiarygodne
+
+00:13:00.200 --> 00:13:01.700
+i łatwiejsze do cytowania odpowiedzi
+
+00:13:01.700 --> 00:13:03.160
+niż każde z tych podejść z osobna.
+
+00:13:03.320 --> 00:13:05.580
+Po trzecie, nie komplikuj niepotrzebnie konfiguracji.
+
+00:13:05.800 --> 00:13:07.780
+Portal Azure posiada kreator importu danych.
+
+00:13:07.780 --> 00:13:09.080
+Podłącz swój magazyn obiektów Blob,
+
+00:13:09.160 --> 00:13:10.100
+skonfiguruj kilka ustawień
+
+00:13:10.100 --> 00:13:11.820
+i pozwól indeksatorowi zbudować pierwszy indeks.
+
+00:13:12.020 --> 00:13:13.300
+Możesz przeprowadzić pierwsze wyszukiwanie
+
+00:13:13.300 --> 00:13:14.080
+w mniej niż godzinę.
+
+00:13:14.180 --> 00:13:15.160
+To tyle, jeśli chodzi o Azure,
+
+00:13:15.260 --> 00:13:16.640
+a iSearch wyjaśnione w prostych słowach.
+
+00:13:16.800 --> 00:13:17.620
+Zmienia nieuporządkowane,
+
+00:13:17.740 --> 00:13:19.380
+chaotyczne dane w gotową do przeszukiwania wiedzę,
+
+00:13:19.480 --> 00:13:20.960
+z której skorzysta sztuczna inteligencja.
+
+00:13:21.160 --> 00:13:22.260
+Dziękuję za wspólny czas.
+
+00:13:22.500 --> 00:13:23.240
+Zasubskrybuj kanał
+
+00:13:23.240 --> 00:13:24.500
+i do zobaczenia w kolejnym odcinku.

@@ -1,0 +1,1063 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:03.760
+Você clicou porque o podcast disse que o Azure AI Foundry é uma armadilha, certo?
+
+00:00:04.640 --> 00:00:05.460
+Está no lugar certo.
+
+00:00:05.820 --> 00:00:06.820
+Aqui vai a promessa de antemão.
+
+00:00:07.440 --> 00:00:11.940
+Co-pilotos colapsam sem fundamentação, mas ferramentas como a geração aumentada de recuperação
+
+00:00:11.940 --> 00:00:17.520
+ou RAG com Azure AI Search híbrido e avaliadores semânticos de fundamentação, relevância e coerência
+
+00:00:17.520 --> 00:00:21.700
+são as soluções reais que impedem você de entregar alucinações disfarçadas de respostas.
+
+00:00:22.840 --> 00:00:26.680
+Vamos ignorar os slides de marketing e mostrar o guia de sobrevivência com exemplos reais do campo.
+
+00:00:26.680 --> 00:00:31.640
+Inscreva-se na newsletter do M3EB65 Show e acompanhe as transmissões ao vivo com o MVP.
+
+00:00:32.360 --> 00:00:34.320
+É lá que as lições aprendidas e as correções vivem.
+
+00:00:34.920 --> 00:00:37.540
+E como as primeiras falhas geralmente aparecem em aplicativos multimodais...
+
+00:00:37.540 --> 00:00:38.760
+Vamos começar por...
+
+00:00:38.760 --> 00:00:40.900
+Por que aplicativos multimodais falham no mundo real?
+
+00:00:41.520 --> 00:00:43.780
+Quando você vê uma demonstração multimodal no palco, parece impecável.
+
+00:00:44.700 --> 00:00:48.360
+O apresentador insere um prompt de texto, uma imagem limpa, talvez até uma entrada de voz rápida,
+
+00:00:48.360 --> 00:00:51.140
+e o modelo entrega um gráfico perfeito ou um resumo de contrato preciso.
+
+00:00:51.640 --> 00:00:55.800
+Tudo parece mágico, mas no momento em que você tenta o mesmo, dentro de uma empresa real, o brilho desaparece rapidamente.
+
+00:00:56.800 --> 00:00:57.900
+Demonstrações rodam com a entrada SP.
+
+00:00:58.340 --> 00:00:59.460
+Ambiente e trabalho rodam com o link.
+
+00:00:59.800 --> 00:01:00.700
+Essa é a verdadeira divisão.
+
+00:01:01.080 --> 00:01:05.100
+Na produção, ninguém está dando ao seu modelo capturas de tela cuidadosamente organizadas
+
+00:01:05.100 --> 00:01:07.260
+ou CSVs formatados por um comitê de padrões.
+
+00:01:07.840 --> 00:01:09.580
+RH está alimentando o sistema com documentos identitários.
+
+00:01:10.080 --> 00:01:12.920
+Setor de compras está enviando PDFs que estão na quinta geração e fax.
+
+00:01:13.620 --> 00:01:16.980
+Alguém no financeiro está tirando foto de uma nota fiscal com a câmera trincada de um Android.
+
+00:01:17.800 --> 00:01:20.900
+Modelos multimodais podem lidar com texto, imagens, voz e vídeo,
+
+00:01:20.980 --> 00:01:24.420
+mas precisam de dados bem indexados e recuperação para funcionar em condições caóticas.
+
+00:01:24.420 --> 00:01:27.460
+Caso contrário, você está apenas pedindo ao modelo para improvisar sobre lixo.
+
+00:01:28.000 --> 00:01:30.860
+E nenhum gasto com GPU resolve o princípio de lixo entra e lixo sai.
+
+00:01:31.360 --> 00:01:34.860
+É aqui que a geração aumentada de recuperação, ou RAG, deveria salvar você.
+
+00:01:35.600 --> 00:01:38.660
+Em termos simples, o modelo não conhece o seu negócio, então você o conecta a uma fonte de conhecimento.
+
+00:01:39.300 --> 00:01:41.780
+Ele recupera uma fatia de dados e molda a resposta em torno disso.
+
+00:01:42.340 --> 00:01:44.560
+Quando a correspondência precisa, você obtém respostas fundamentadas.
+
+00:01:44.740 --> 00:01:47.840
+Quando é desleixado, o modelo improvisa, cuspindo absurdo com confiança.
+
+00:01:47.840 --> 00:01:54.020
+É assim que você acaba com o chatbot, jurando que sua empresa tem uma nova política de descontos para o terceiro trimestre que não existe.
+
+00:01:54.740 --> 00:01:56.960
+Ele não se tornou autoconsciente, ele apenas puxou os dados errado.
+
+00:01:58.000 --> 00:02:04.960
+O Azure AI Studio e o Azure AI Foundry dependem desse padrão e suportam todos os tipos de modalidades, linguagem, visão, fala e até recuperação de vídeo.
+
+00:02:05.600 --> 00:02:07.640
+Mas o detalhe é que o RAG é tão bom quanto os seus dados.
+
+00:02:08.280 --> 00:02:09.880
+Aqui está o ponto principal que a maioria das equipes...
+
+00:02:09.880 --> 00:02:12.560
+Você não pode simplesmente inserir um método de recuperação e achar que está tudo.
+
+00:02:12.560 --> 00:02:19.680
+Se você quer que os resultados sejam consistentes, você precisa de uma busca híbrida de palavras-chave e mais vetores, complementada por um reclassificador semântico integrado ao Azure Hacer.
+
+00:02:19.920 --> 00:02:24.240
+Isso permite que o sistema equilibre correspondências literais de palavras-chave, com significado semântico ou semântico.
+
+00:02:24.320 --> 00:02:25.560
+Rê o contexto correto, fique no topo.
+
+00:02:26.000 --> 00:02:33.020
+Ao integrar isso à sua configuração multimodal, o modelo passa a lidar bem com digitalizações tortas e imagens borradas, em vez de alucinar sua política de conformidade do nada.
+
+00:02:33.240 --> 00:02:33.520
+Enfim.
+
+00:02:34.300 --> 00:02:36.680
+Agora, vamos falar sobre o porquê tantas implementações fracassam.
+
+00:02:37.100 --> 00:02:41.760
+As empresas esperam resultados perfeitos desde o primeiro dia, mas não reservam um orçamento para ciclos de avaliação.
+
+00:02:42.620 --> 00:02:48.120
+Sem verificações de fundamentação, relevância e coerência rodando em segundo plano, você não percebe o desvio até que os usuários já tenham sido prejudicados.
+
+00:02:48.800 --> 00:02:51.480
+Muitas implementações iniciais falham rapidamente exatamente por esse banco.
+
+00:02:51.680 --> 00:02:54.420
+O resultado parece correto, mas ninguém verificou em relação à fonte de verdade.
+
+00:02:54.960 --> 00:02:57.500
+Pense bem, você nunca implantaria um novo banco de dados sem monitoramento.
+
+00:02:58.320 --> 00:03:02.860
+No entanto, com o IA multimodal, os executivos a colocam em produção como se fosse uma caixa mágica pronta para usar.
+
+00:03:03.280 --> 00:03:04.560
+Não precisa terminar em fracasso.
+
+00:03:05.280 --> 00:03:07.940
+A Carvana é um dos casos de clientes do Foundry que comprova esse ponto.
+
+00:03:07.940 --> 00:03:14.620
+Eles tornaram o IA de alto atendimento realmente útil, ajustando a recuperação, fundamentando seus agentes corretamente e investindo em observabilidade.
+
+00:03:15.220 --> 00:03:19.400
+Isso transformou o que poderia ser apenas mais um robô de brinquedo em algo que os clientes podiam confiar.
+
+00:03:20.220 --> 00:03:25.680
+Agora, compare-se com as empresas que simplesmente anexaram um chatbot genérico à sua página de suporte sem fundamentação ou avaliação.
+
+00:03:26.120 --> 00:03:26.700
+Já viu o resultado.
+
+00:03:26.700 --> 00:03:31.280
+Pedidos de garantia arquivados como leads de vendas, filas de suporte, inchadas e credibilidade destruída.
+
+00:03:31.660 --> 00:03:33.180
+Mesmo stack Azure e resultado oposto.
+
+00:03:33.660 --> 00:03:34.940
+Então, aqui está a conclusão direta.
+
+00:03:35.400 --> 00:03:38.140
+A IA multimodal não entra em colapso porque não é inteligente o suficiente.
+
+00:03:38.880 --> 00:03:41.540
+Ela entra em colapso porque os dados não estão preparados e indexados ao monitorar.
+
+00:03:42.300 --> 00:03:45.640
+Alimente sua recuperação com lixo, pule as avaliações e veja a confiança desaparecer.
+
+00:03:46.200 --> 00:03:49.340
+Mas com busca híbrida, reclassificação semântica e avaliações constantes,
+
+00:03:49.600 --> 00:03:55.160
+você pode processar faturas, contratos, fotos e até notas de áudio com respostas baseadas na realidade e não na fantasia.
+
+00:03:56.700 --> 00:03:59.080
+E uma vez que a fundamentação esteja em ordem, outro risco surge.
+
+00:03:59.860 --> 00:04:03.800
+Pois mesmo que os pipelines de dados estejam limpos, o sistema que os impulsiona ainda pode sair do controle.
+
+00:04:04.540 --> 00:04:05.300
+É aí que pergunta a mão.
+
+00:04:06.080 --> 00:04:08.460
+O agente que coordena tudo isso está realmente ajudando o seu negócio
+
+00:04:08.460 --> 00:04:11.020
+ou apenas transformando silenciosamente seu orçamento de TI e fumaça?
+
+00:04:12.320 --> 00:04:14.000
+Agente útil ou um peso de papel caro?
+
+00:04:15.000 --> 00:04:17.520
+Um agente que coordena modelos, dados, gatilhos e ações.
+
+00:04:18.000 --> 00:04:20.520
+Pense nele como um guarda de trânsito para seus fluxos de trabalho automáticos.
+
+00:04:21.020 --> 00:04:25.940
+Às vezes ele dirige tudo suavemente, às vezes ele libera passagem para caminhões e um carro de palhaço e depois vai almoçar.
+
+00:04:26.700 --> 00:04:30.320
+Esse abismo, entre a definição perfeita e a realidade confusa onde a maioria das equipes se perde,
+
+00:04:31.080 --> 00:04:32.360
+no papel um agente parece infalível.
+
+00:04:33.120 --> 00:04:35.360
+Dê instruções a ele, aponte para seus dados e aplicativos,
+
+00:04:35.920 --> 00:04:38.820
+e ele deverá executar processos, buscar respostas e até iniciar fluxo de trabalho.
+
+00:04:39.400 --> 00:04:40.900
+Mas este não é um colega de trabalho perfeito.
+
+00:04:41.360 --> 00:04:43.780
+É tão provável que ele resolva um problema recorrente às 2 da manhã,
+
+00:04:43.880 --> 00:04:47.280
+quanto em um de sua fila com 100 tickets fantasmas porque interpretou mal um log de erros.
+
+00:04:48.180 --> 00:04:49.180
+Imagine isso do Search Now.
+
+00:04:49.180 --> 00:04:54.680
+Quando bem delimitada, a IA cria tickets reais apenas para problemas genuínos e economiza horas de trabalho humano.
+
+00:04:55.420 --> 00:04:58.500
+Deixada solta, pode soterrar o suporte técnico com uma enxurrada de alertas falsos
+
+00:04:58.500 --> 00:05:00.640
+sobre falhas críticas de impressores que estão funcionando perfeitamente.
+
+00:05:00.880 --> 00:05:03.060
+Tente explicar esse aumento de produtividade ao seu CEO.
+
+00:05:03.540 --> 00:05:04.860
+Aqui está a distinção que muitos vão perceber.
+
+00:05:05.240 --> 00:05:06.560
+Copilotos e agentes não são a mesma coisa.
+
+00:05:07.060 --> 00:05:08.500
+Copiloto é basicamente um parceiro de prompts.
+
+00:05:08.980 --> 00:05:11.200
+Ele responde, ele responde, e você permanece no controle.
+
+00:05:11.880 --> 00:05:14.280
+Agentes, por outro lado, decidem coisas sem esperar por você.
+
+00:05:14.280 --> 00:05:18.440
+Eles seguem suas instruções vagas à risca, mesmo quando os resultados não fazem sentido.
+
+00:05:19.280 --> 00:05:23.420
+É aí que a automação economiza tempo real ou cai no caos que você levará o dobro do tempo para limpar.
+
+00:05:24.300 --> 00:05:28.220
+A verdade é que muitas equipes entregam aos seus agentes uma descrição de cargo que parece promessa de campanha.
+
+00:05:28.940 --> 00:05:31.620
+Otimizar processos, fornecer insights, ajudar as pessoas.
+
+00:05:32.040 --> 00:05:34.120
+Parabéns, você basicamente deu carta branca para o robô.
+
+00:05:34.700 --> 00:05:37.160
+Agentes sem escopo não permanecem educadamente em suas novas atuações.
+
+00:05:37.420 --> 00:05:37.980
+Eles se descontrolam.
+
+00:05:38.280 --> 00:05:39.340
+Eles inventam problemas para resolver.
+
+00:05:39.660 --> 00:05:40.560
+Eles duplicam registros.
+
+00:05:41.080 --> 00:05:42.020
+Eles entram em loops infinitos.
+
+00:05:42.020 --> 00:05:45.280
+E então a liderança se pergunta por que uma demonstração brilhante vira um pesadelo em produção.
+
+00:05:45.820 --> 00:05:46.780
+Agora vamos esclarecer as coisas.
+
+00:05:47.180 --> 00:05:49.580
+Não é que a maioria das organizações falhem nos primeiros dois meses?
+
+00:05:51.300 --> 00:05:56.540
+O que acontece, rapidamente, é que muitas organizações encontram obstáculos cedo porque nunca delimitaram bem seus agentes,
+
+00:05:56.660 --> 00:06:00.560
+nunca adicionaram etapas de validação e nunca instrumentaram telemetria e nunca instrumentaram telemetria.
+
+00:06:00.900 --> 00:06:04.460
+Sem essas proteções, sua nova ferramenta brilhante é apenas um estagiário imprudente com direitos de administração.
+
+00:06:04.940 --> 00:06:07.760
+E é aqui que o conjunto de ferramentas da Microsoft realmente oferece as peças necessárias.
+
+00:06:07.760 --> 00:06:11.660
+O Copilot Studio é um ambiente low-code onde os criadores projetam o comportamento do agente.
+
+00:06:12.020 --> 00:06:13.740
+Pense em fluxos, promptes e guias de evento.
+
+00:06:14.640 --> 00:06:19.440
+Então o Agent Service do Azure AI Foundry é a estrutura corporativa que coloca esses agentes em produção com observabilidade.
+
+00:06:20.520 --> 00:06:23.300
+O Agent Service é onde você adiciona monitoramento, logs e métricas.
+
+00:06:24.200 --> 00:06:27.380
+Ele é deliberadamente projetado para automação com supervisão humana integrada,
+
+00:06:27.460 --> 00:06:31.240
+porque a Microsoft sabe o que acontece se você confiar em um agente não testado no ambiente real.
+
+00:06:32.200 --> 00:06:33.920
+Então como saber se seu agente é realmente útil?
+
+00:06:34.600 --> 00:06:36.400
+Submeta a uma lista de verificação simples de ele.
+
+00:06:36.700 --> 00:06:40.120
+Primeiro, ele reduz as horas de trabalho humano ou arrasta sua equipe para tarefas de depuração.
+
+00:06:40.120 --> 00:06:44.320
+Dois, você está capturando métricas como fundamentação, fluência e coerência,
+
+00:06:44.380 --> 00:06:46.500
+ou está apenas olhando para painéis de marketing bonitos?
+
+00:06:47.760 --> 00:06:51.700
+Três, você tem telemetria implementada para identificar desvios antes que os usuários comecem a reclamar?
+
+00:06:52.580 --> 00:06:55.100
+Se você respondeu errado a qualquer uma dessas, você não tem um agente dirigente.
+
+00:06:55.560 --> 00:06:56.820
+Você tem um protetor de tela caro.
+
+00:06:57.700 --> 00:07:01.780
+A solução é usar os recursos de observabilidade e avaliadores integrados do Azure AI Foundry.
+
+00:07:02.600 --> 00:07:03.580
+Esses itens não são opcionais.
+
+00:07:03.740 --> 00:07:07.500
+Eles são a forma documentada de medir a fundamentação, relevância, coerência e fidelidade à fonte.
+
+00:07:07.500 --> 00:07:12.780
+Sem eles, você está apenas supondo se seu agente é inteligente ou apenas inventando coisas com um tom de voz educado.
+
+00:07:13.280 --> 00:07:16.620
+Com eles, você pode intervir com confiança e realizar ajustes finos quando o resultado se desvia.
+
+00:07:17.100 --> 00:07:18.460
+Então, sem agente, pode mudar o jogo.
+
+00:07:19.160 --> 00:07:22.560
+Com o escopo errado, eles se tornam amplificadores de caos que consomem mais tempo do que economizam.
+
+00:07:23.140 --> 00:07:26.640
+Com o escopo certo, limite de tarefa claros, telemetria real e respostas fundamentadas.
+
+00:07:26.700 --> 00:07:29.120
+Eles lidam com tarefas enquanto humanos focam no trabalho de maior valor.
+
+00:07:30.260 --> 00:07:32.340
+Bem, quando você acha que encontrou esse equilíbrio, a história muda novamente.
+
+00:07:32.340 --> 00:07:37.200
+A Microsoft já está promovendo agentes autônomos, bots que não esperam por você antes de agir.
+
+00:07:38.700 --> 00:07:42.140
+O que leva o risco de útil ou peso de papel para uma categoria totalmente diferente,
+
+00:07:42.240 --> 00:07:44.760
+porque agora falamos de sistemas que rodam mesmo sem ninguém vigiando.
+
+00:07:46.420 --> 00:07:47.660
+A armadilha do agente autônomo.
+
+00:07:48.440 --> 00:07:50.660
+Agentes autônomos são onde o hype se torna perigoso.
+
+00:07:51.500 --> 00:07:52.580
+Na teoria, eles são um sonho.
+
+00:07:53.220 --> 00:07:54.300
+Deixa e age por você.
+
+00:07:54.780 --> 00:07:55.860
+Automatize o trabalho braçal.
+
+00:07:56.180 --> 00:07:59.040
+E pare de ter que levantar da cama às duas da manhã para cuidar de filas de chamados.
+
+00:07:59.540 --> 00:08:00.540
+Sou ótimo na sala de reuniões.
+
+00:08:00.540 --> 00:08:01.540
+A armadilha é simples.
+
+00:08:01.960 --> 00:08:02.840
+Eles não esperam por permissão.
+
+00:08:03.220 --> 00:08:04.220
+Copilot se esperam por você.
+
+00:08:04.740 --> 00:08:05.500
+Agentes autônomos não.
+
+00:08:05.900 --> 00:08:09.180
+Quando eles tomam uma decisão errada, o dano acontece instantaneamente e escala por todo o seu tema.
+
+00:08:09.660 --> 00:08:10.440
+O conceito é fácil de entender.
+
+00:08:10.920 --> 00:08:11.700
+Copilot são reativos.
+
+00:08:12.220 --> 00:08:12.920
+Agentes são criativos.
+
+00:08:13.400 --> 00:08:15.440
+Em vez de ficarem quietos até alguém digitar um comando,
+
+00:08:15.860 --> 00:08:20.380
+você define agentes para monitorar a saúde do serviço, lidar com sinais de segurança ou rodar fluxo de trabalho automaticamente.
+
+00:08:20.900 --> 00:08:25.520
+Microsoft vende isso como eficiência, menos desperdício humano, detecções mais rápidas e operações mais fluídas.
+
+00:08:25.960 --> 00:08:28.220
+A promessa é real, mas aqui está o contexto importante.
+
+00:08:28.220 --> 00:08:31.860
+Agentes autônomos no Copilot Studio hoje ainda estão em preview.
+
+00:08:32.540 --> 00:08:35.940
+Preview não significa que está quebrado, mas significa que não foi testado no mundo real caótico.
+
+00:08:36.640 --> 00:08:41.960
+E até a Microsoft diz que você precisa de guardraias de governança de seguro de vida e o sistema de consulta do Copilot antes de pensar em implementação ampla.
+
+00:08:42.700 --> 00:08:43.740
+Considere um risco realista.
+
+00:08:43.740 --> 00:08:48.380
+Imagine que você cria um agente de helpdesk autônomo e dá a ele autoridade para responder a anomalias de login.
+
+00:08:49.120 --> 00:08:51.180
+Em uma demonstração com 5 usuários funciona perfeitamente.
+
+00:08:51.540 --> 00:08:53.020
+Alertas emitidos, contas gerenciadas.
+
+00:08:53.440 --> 00:08:54.900
+Então entradas ruidosas surgem na produção.
+
+00:08:55.500 --> 00:08:59.800
+Em vez de esperar, ele começa a redefinir em massa centenas de contas com base em falsos positivos.
+
+00:09:00.940 --> 00:09:02.480
+O resultado não é uma interrupção hipotética.
+
+00:09:02.900 --> 00:09:05.120
+Isso poderia, realisticamente, derrubar as operações de fim de mês.
+
+00:09:05.640 --> 00:09:06.600
+Isso não é ficção científica.
+
+00:09:06.980 --> 00:09:09.320
+É o modo de falha que você aceita se pular a definição de escolha.
+
+00:09:09.320 --> 00:09:11.060
+A solução não é descartar a tecnologia.
+
+00:09:11.500 --> 00:09:12.820
+É construir a rede de segurança primeiro.
+
+00:09:13.220 --> 00:09:14.520
+Então qual é a lista de verificação de sobreviver?
+
+00:09:14.900 --> 00:09:16.940
+Três coisas essenciais vêm antes de qualquer automação chamativa.
+
+00:09:17.440 --> 00:09:19.080
+Indefinição de escopo de identidade e acesso.
+
+00:09:20.280 --> 00:09:21.400
+Dê ao seu agente de litros mínimos.
+
+00:09:21.520 --> 00:09:22.620
+Nada de funções de administrador genético.
+
+00:09:22.960 --> 00:09:24.020
+Dois, registro e reversão.
+
+00:09:24.620 --> 00:09:26.600
+Cada ação deve deixar um rastro que você possa auditar.
+
+00:09:27.200 --> 00:09:30.000
+Toda ação séria precisa de um caminho de reversão caso o agente falhe.
+
+00:09:30.880 --> 00:09:32.080
+Três, filtro de comportamento.
+
+00:09:32.540 --> 00:09:36.240
+A Microsoft destaca isso com a segurança de conteúdo do Azure AI e a configuração de conhecimento.
+
+00:09:36.240 --> 00:09:40.800
+Os filtros que impedem o bot entusiasmado de gerar respostas inadequadas ou sair do roteiro.
+
+00:09:41.640 --> 00:09:44.900
+Faça isso primeiro ou a inteligência do seu agente vai enterrar a sua operação em vez de ajudá-la.
+
+00:09:45.320 --> 00:09:46.940
+A camada de ética torna isso ainda mais crítico.
+
+00:09:47.400 --> 00:09:50.780
+Imagine um agente de RH marcando funcionários como arriscados automaticamente
+
+00:09:50.780 --> 00:09:54.560
+ou um agente financeiro retendo pagamentos a fornecedores por classificá-los erroneamente como fraude.
+
+00:09:54.940 --> 00:09:56.400
+Essas não são falhas inofensivas.
+
+00:09:56.520 --> 00:09:58.960
+São falhas com impacto humano e consequências jurídicas de conformidade.
+
+00:09:59.340 --> 00:10:04.160
+O viés nos dados de treinamento na recuperação não desaparece só porque você está executando em uma versão de prévia corporativa.
+
+00:10:04.160 --> 00:10:07.900
+Sem filtros, verificações e alternativas humanas, você está terceirizando decisões
+
+00:10:07.900 --> 00:10:10.760
+que seus advogados certamente não querem que sejam tomadas por um algoritmo não supervisão.
+
+00:10:11.340 --> 00:10:13.760
+A própria mensagem da Microsoft no Ignite foi direta sobre isso.
+
+00:10:14.320 --> 00:10:18.480
+Diretrizes, gerenciamento de ciclo de vida, monitoramento e o sistema de controle do Copilot não são opcionais.
+
+00:10:18.560 --> 00:10:19.200
+São obrigatórios.
+
+00:10:19.800 --> 00:10:24.240
+A prévia de hoje é menos sobre demonstrações brilhantes e mais sobre testadores provando onde as rachaduras aparecem.
+
+00:10:24.640 --> 00:10:27.640
+Se você colocar no ar sem testes de estágio, fluxo de aprovação e auditorias,
+
+00:10:27.680 --> 00:10:31.140
+você não está executando um agente, você está testando o estresse do seu ambiente em produção.
+
+00:10:31.740 --> 00:10:33.020
+É por isso que a observabilidade não é opcional.
+
+00:10:33.020 --> 00:10:37.800
+Você precisa de painéis que mostrem cada passo que um agente dá e que verifiquem se sua saída foi fundamentada,
+
+00:10:37.920 --> 00:10:39.960
+relevante e coerente com sua política.
+
+00:10:40.880 --> 00:10:42.460
+E você precisa de opções com manos no ciclo.
+
+00:10:42.560 --> 00:10:43.560
+A Microsoft não esconde isso.
+
+00:10:44.240 --> 00:10:46.880
+Eles fazem referência a padrões onde o humano permanece com uma rede segura.
+
+00:10:47.760 --> 00:10:52.320
+Pense nisso como um piloto automático de voo, incrivelmente útil, mas sempre projetado com controle manual.
+
+00:10:53.200 --> 00:10:57.040
+Se o bot acredita que o pouso ideal é em um lago, você quer assumir o controle antes do mergulho.
+
+00:10:57.680 --> 00:10:59.880
+A analogia certa aqui é deixar um adolescente aprender a dirigir.
+
+00:10:59.880 --> 00:11:05.020
+O potencial é real, a velocidade é impressionante, mas você não entrega a chave, sai da garagem e torce pelo melhor.
+
+00:11:05.960 --> 00:11:09.300
+Você senta no banco do passageiro e estabelece limites e instala freios que você mesmo pode acionar.
+
+00:11:10.000 --> 00:11:11.600
+Isso é a governação de ciclo de vida na prática.
+
+00:11:12.000 --> 00:11:14.480
+Rodinhas de treinamento até ter certeza de que o sistema não será adestrado.
+
+00:11:15.260 --> 00:11:20.180
+E isso nos leva ao chão de fábrica maior, onde agentes, copilotos e cada fluxo de trabalho que você testou se reúnem.
+
+00:11:20.180 --> 00:11:25.060
+A Microsoft chama isso de Azure AI Foundry, um espaço completo de construção de AI com todas as ferramentas.
+
+00:11:25.920 --> 00:11:30.820
+Se isso se tornar a potência de produção ou o lugar onde seus projetos entram em alto combustão depende inteiramente de como você o trata.
+
+00:11:32.020 --> 00:11:32.940
+Azure AI Foundry.
+
+00:11:33.300 --> 00:11:34.660
+Sua fábrica é o seu campo minado.
+
+00:11:35.660 --> 00:11:38.560
+O Azure AI Foundry é a nova aposta principal da Microsoft.
+
+00:11:39.040 --> 00:11:40.900
+Uma chamada fábrica para tudo o que envolve AI.
+
+00:11:41.740 --> 00:11:42.100
+Problema?
+
+00:11:42.460 --> 00:11:44.340
+Muitas equipes entram e tratam como se fosse o make-up.
+
+00:11:44.340 --> 00:11:51.460
+Elas vagam deslumbradas pelos catálogos, pegam alguns grandes modelos de linguagem brilhantes, jogam alguns conectores e montam algo sem instruções.
+
+00:11:52.360 --> 00:11:54.240
+O que elas obtêm não é um sistema de AI empresarial.
+
+00:11:54.340 --> 00:11:58.860
+É um brinquedo de demonstração que desmorona na primeira vez que um usuário real insere um PDF bagunçado.
+
+00:11:59.420 --> 00:12:02.320
+Tal que o Foundry realmente oferece direto do manual oficial.
+
+00:12:03.080 --> 00:12:06.600
+Um catálogo de modelos que abrange Microsoft, OpenAI, Metamistral, DeepSeek e outros.
+
+00:12:07.420 --> 00:12:10.120
+Opções de personalização com geração aumentada por recuperação.
+
+00:12:10.340 --> 00:12:11.600
+Regue ajuste fino e destilação.
+
+00:12:11.600 --> 00:12:16.640
+Um serviço de agente para orquestração, ferramentas como o Prompt Flow para avaliação e depuração.
+
+00:12:17.100 --> 00:12:21.960
+Recursos de linha de base de segurança, controle de identidade e acesso, filtros de segurança de conteúdo e painéis de observabilidade.
+
+00:12:22.520 --> 00:12:27.360
+Em resumo, são todas as peças necessárias para criar copilotos, agentes e fluxos autônomos mantendo-os em conformidade.
+
+00:12:27.860 --> 00:12:28.420
+Isso é um inventário.
+
+00:12:29.180 --> 00:12:35.320
+O problema não é que a caixa de ferramentas está vazia, que muitos administradores tratam como se fosse apenas ligar um botão do GPT-4 Turbo e dizer que está pronto para produção.
+
+00:12:36.240 --> 00:12:39.200
+A verdade é que o Foundry é um chão de fábrica, não só caixa de brinquedos de hackathon.
+
+00:12:39.200 --> 00:12:43.760
+Isso significa definir limites de identidade, para que apenas as pessoas certas acessem os modelos certos.
+
+00:12:44.400 --> 00:12:46.700
+Significa envolver cada pipeline com segurança de conteúdo.
+
+00:12:47.320 --> 00:12:53.160
+Significa usar observabilidade para saber quando uma resposta é fundamentada em vez de seu modelo inventando políticas da empresa do nada.
+
+00:12:54.080 --> 00:12:58.640
+E significa combinar a tarefa com o modelo certo em vez de apenas escolher o maior porque sou inteligente.
+
+00:12:59.580 --> 00:13:01.200
+Pule essas etapas e o caos entrará pela porta dos...
+
+00:13:01.200 --> 00:13:07.140
+Já vi uma equipe conectar um copiloto do Foundry, SharePoint, que expôs alegremente dados restritos de RH para 20 estagiários.
+
+00:13:07.980 --> 00:13:11.820
+Não foi inteligente, foi um desastre de conformidade que poderia ter sido evitado com regras de acesso integradas.
+
+00:13:12.540 --> 00:13:13.580
+Vamos falar sobre modos de falha.
+
+00:13:13.820 --> 00:13:17.340
+Uma organização certa vez executou o GPT-4 Turbo para etiquetar fotos de produto.
+
+00:13:18.000 --> 00:13:19.640
+No laboratório, a demonstração foi um sucesso.
+
+00:13:20.220 --> 00:13:22.840
+Fotos limpas de estúdio, etiquetas perfeitas, todos aplaudiram.
+
+00:13:22.840 --> 00:13:27.680
+Na produção, as entradas não eram JPEGs brilhantes, eram fotos borradas de celular tiradas no armazém.
+
+00:13:28.520 --> 00:13:33.920
+De repente, a EA rotulou erroneamente carrinhos de bebê como cadeiras de escritório e transformou códigos UPC em números de série falsos.
+
+00:13:34.940 --> 00:13:36.840
+Além do abalo na confiança, os custos começaram a subir.
+
+00:13:37.340 --> 00:13:39.480
+Isso não é um conto de fadas de custo fixo por mensagem.
+
+00:13:39.800 --> 00:13:43.340
+A presticação do Foundry é baseada no consumo e vinculada aos serviços específicos que você usa.
+
+00:13:43.580 --> 00:13:47.340
+Cada conector, cada chamada de recuperação, cada medidor de mensagem é faturado no seu tenente.
+
+00:13:47.880 --> 00:13:49.320
+Cada peça tem seu próprio modelo de cobrança.
+
+00:13:49.320 --> 00:13:54.580
+Essa flexibilidade é boa, mas se você não estimar com a calculadora de preços do Azure e monitorar o uso,
+
+00:13:54.660 --> 00:13:56.580
+sua equipe financeira vai adorar a surpresa da fatura.
+
+00:13:58.100 --> 00:13:58.700
+Essa é a Armacobran.
+
+00:13:59.180 --> 00:14:02.200
+A presticação por consumo funciona se você planeja, monitora e otimiza.
+
+00:14:02.700 --> 00:14:07.060
+Se não, parece muito com usar um carro esportivo para entregar pizza caro, barulhento e inútil, inútil.
+
+00:14:07.500 --> 00:14:10.920
+Todos nós já passamos por isso com ferramentas como Power BI, ótima demonstração, fatura descontrolada.
+
+00:14:11.600 --> 00:14:13.220
+Não deixe o Foundry te colocar na mesma situação.
+
+00:14:13.960 --> 00:14:16.920
+Desenvolvedores adoram criar protótipos no Foundry porque o ambiente de testes parece...
+
+00:14:16.920 --> 00:14:18.380
+Em o ambiente de testes é ágil.
+
+00:14:18.380 --> 00:14:20.900
+Dados de demonstração limpos, sem bagunça, efeitual e instantânea.
+
+00:14:21.180 --> 00:14:21.700
+Acho que está o problema.
+
+00:14:22.080 --> 00:14:24.780
+As equipes levam esse protótipo para a produção sem pipelines de avaliação.
+
+00:14:25.720 --> 00:14:29.880
+Se você ignora avaliadores de fundamentação, fluidez, relevância e coerência está implantando as cegas.
+
+00:14:30.540 --> 00:14:31.060
+O que acontece?
+
+00:14:31.560 --> 00:14:34.980
+Os usuários notam a variação nos resultados, a confiança cai e os executivos cortam menos.
+
+00:14:35.320 --> 00:14:37.540
+Não é o Foundry falhando, são as equipes falhando na governança.
+
+00:14:38.000 --> 00:14:41.060
+Muitos protótipos do Foundry travam antes da produção exatamente por esse motivo.
+
+00:14:41.660 --> 00:14:44.020
+Sem observabilidade, sem verificações de qualidade, sem telemetria.
+
+00:14:44.560 --> 00:14:45.720
+A resposta está bem ali na plataforma.
+
+00:14:45.720 --> 00:14:48.640
+Use a observabilidade do Azure AI Foundry desde o primeiro dia.
+
+00:14:49.020 --> 00:14:49.980
+Conecte seus fluxos de prova.
+
+00:14:50.320 --> 00:14:51.860
+Execute avaliadores integrados dos testes.
+
+00:14:52.300 --> 00:14:57.180
+Fundamente seu sistema com o Azure AI Search usando busca híbrida e ranqui semântico antes mesmo de pensar em entrar no ar.
+
+00:14:57.640 --> 00:15:00.960
+A Microsoft não enterrou essas ferramentas em um anexo, elas estão documentadas para segurança e produção.
+
+00:15:01.620 --> 00:15:04.420
+Mas, com frequência, os construtores as ignoram como se fossem notas de rodada.
+
+00:15:04.420 --> 00:15:07.640
+Essa mentalidade de ponto de verificação é como você se mantém fora do campo minado.
+
+00:15:08.340 --> 00:15:15.660
+Trate o Foundry como uma fábrica, governança com o primeiro passo, políticas de conformidade integradas como acesso condicional e pipelines de observabilidade ativos desde o início.
+
+00:15:16.220 --> 00:15:20.660
+E sim, o escopo de identidade e a segurança de conteúdo não devem ser adicionados depois, eles fazem parte da lista de materiais.
+
+00:15:21.220 --> 00:15:23.380
+Ignore a governança, você arrisca mais do que apenas respostas ruins.
+
+00:15:23.380 --> 00:15:30.240
+Sem ela, seu bote multimodal pode alegremente expor salários do RH a usuários externos ou rotular faturas com números de apólios fictícios.
+
+00:15:30.600 --> 00:15:34.440
+Isso não é apenas IA quebrada, é uma isca para manchetes que seu departamento de conformidade e conformidade nunca tem explicado.
+
+00:15:35.040 --> 00:15:38.060
+E é aí que o foco muda, porque o próximo obstáculo não é técnico de forma alguma.
+
+00:15:39.080 --> 00:15:40.740
+É saber se sua IA é responsável.
+
+00:15:41.540 --> 00:15:48.340
+Todos adoram jogar essas palavras em um slide de apresentação, mas, na prática, trata-se de auditorias, filtros, conformidade e montanhas de escolhas que você faz antes do lançamento.
+
+00:15:48.840 --> 00:15:50.040
+E é aí que as dores de cabeçamento começam.
+
+00:15:50.040 --> 00:15:55.360
+Inscreva-se e siga a nossa newsletter M365 Composhow para soluções diretas e nos acompanhe no M365.
+
+00:15:55.940 --> 00:16:00.860
+Siga a página do LinkedIn para transmissões ao vivo com MVPs que testaram Foundry em produção e viram que dá errado.
+
+00:16:01.640 --> 00:16:03.280
+IA responsável, dor de cabeça responsável.
+
+00:16:04.220 --> 00:16:06.440
+Todos adoram incluir IA responsável em uma palestra.
+
+00:16:06.980 --> 00:16:11.700
+Parece elegante ao lado de termos da moda, com imparcialidade e transparência, mas, na prática, não é uma filosofia inspiradora.
+
+00:16:12.260 --> 00:16:17.420
+Trata-se de configuração, auditorias, filtros e etapas de governança que parecem mais manutenção de servidor do que inovação.
+
+00:16:17.420 --> 00:16:20.380
+IA responsável é o cinto de segurança, não o carro esportivo.
+
+00:16:20.960 --> 00:16:22.240
+Pule uma vez e a batida vem rápido.
+
+00:16:22.920 --> 00:16:28.500
+A Microsoft fala de ética e segurança de antemão, mas para os administradores que implementam isso, traduz-se em barreiras práticas.
+
+00:16:29.460 --> 00:16:37.480
+Você precisa de políticas de acesso que não cedam sob pressão, filtros que realmente bloqueem impromptos prejudiciais e logs detalhados o suficiente para satisfazer um regulador com cafeína ou intimação.
+
+00:16:37.480 --> 00:16:48.220
+Não é um trabalho glamouroso, é isolar copilots de RH de dados financeiros, definir regras de escopo para que bots de equipe não acessem segredos do SharePoint e etiquetar logs para provar como uma resposta foi formada.
+
+00:16:49.440 --> 00:16:52.620
+Faça esse direito, irresponsável não será um slogan corporativo, será sobrevivência.
+
+00:16:53.080 --> 00:16:57.860
+A versão feia de pular é isso, conectar um bot diretamente ao seu repositório de RH sem escopo de locatário.
+
+00:16:57.860 --> 00:17:04.580
+Um usuário pergunta sobre benefícios de seguro, e o bot prestativo publica as faixas salariais dos funcionários no chat.
+
+00:17:05.360 --> 00:17:10.180
+Agora você tem uma violação de privacidade, um pesadelo de moral e possivelmente reguladores na sua cola.
+
+00:17:10.660 --> 00:17:14.020
+A maneira mais rápida de matar a adoção não é uma UX ruim, é um vazamento de dados confidenciais.
+
+00:17:14.380 --> 00:17:15.360
+Então o que impede essa confusão?
+
+00:17:15.720 --> 00:17:17.300
+Comece com a segurança de conteúdo do Azure Air.
+
+00:17:17.300 --> 00:17:24.100
+Ela foi criada para filtrar promptes e respostas violentos, obscenos e ofensivos antes que cheguem aos usuários, mas esse é apenas o básico.
+
+00:17:24.100 --> 00:17:28.620
+O Foundry e o Copilot Studio adicionam pipelines de avaliação que cuidam da próxima camada.
+
+00:17:29.620 --> 00:17:33.720
+Verificações de fundamentação, pontuação de relevância, painéis de transparência e explicabilidade.
+
+00:17:34.740 --> 00:17:39.880
+Em outras palavras, você pode ajustar limites, filtrar entradas e saídas e fazer os bots mostrarem seu raciocínio.
+
+00:17:40.580 --> 00:17:42.880
+Sem isso você está apenas jogando dados sobre o que a AI vai gerar.
+
+00:17:42.880 --> 00:17:44.720
+E aqui está a realidade dos recursos.
+
+00:17:45.180 --> 00:17:46.340
+O Microsoft investe pesado nisso.
+
+00:17:47.480 --> 00:17:52.600
+34 mil engenheiros em tempo integrado dedicados à segurança, mais 15 mil parceiros com profunda experiência e segurança.
+
+00:17:52.600 --> 00:17:55.580
+Isso é uma fortaleza, mas não se acomode.
+
+00:17:56.080 --> 00:17:58.980
+Nenhum desses engenheiros está dentro do seu locatário, criando suas regras de acesso.
+
+00:17:59.600 --> 00:18:06.140
+A Microsoft lhe entrega as barreiras, mas ainda é sua função proteger identidades, definir isolamento de dados, aplicar criptografia e configurar políticas.
+
+00:18:07.080 --> 00:18:09.380
+Se o seu escopo for mal definido, responsabilidade pela falha.
+
+00:18:09.820 --> 00:18:11.440
+A solução real é a governança do ciclo de vida.
+
+00:18:11.740 --> 00:18:14.080
+Pense nisso com uma receita que a própria Microsoft recomenda.
+
+00:18:14.920 --> 00:18:17.980
+Testar, aprovar, liderar, auditar e terá.
+
+00:18:17.980 --> 00:18:22.980
+Com pontos de verificação em cada ciclo, você detecta desvios antes que virem manchetes.
+
+00:18:23.740 --> 00:18:25.800
+Times que lançam e esquecem sempre acabam em problemas.
+
+00:18:26.420 --> 00:18:29.140
+Modelos evoluem, prompt mudam e resultados se perdem.
+
+00:18:29.920 --> 00:18:31.180
+Governança não é burocracia necessária.
+
+00:18:31.600 --> 00:18:35.000
+É como você impede que um bot interno invente políticas no Teams enquanto todos dormem.
+
+00:18:35.660 --> 00:18:38.240
+Alguns administradores reclamam que irresponsável significa mais lento.
+
+00:18:38.860 --> 00:18:39.460
+É saber que eu tive errado.
+
+00:18:40.060 --> 00:18:42.840
+Ser responsável não mata a velocidade, impede que a velocidade mate você.
+
+00:18:42.840 --> 00:18:47.080
+Uma boa governança permite que você sobreviva a auditorias e mantenha os projetos ativos.
+
+00:18:47.540 --> 00:18:48.900
+Ignore, você estará se jogando no princípio.
+
+00:18:49.300 --> 00:18:51.560
+Velocidade sem controle só lhe garante um tipo de recorde.
+
+00:18:51.880 --> 00:18:52.900
+Menor tempo até um desastre.
+
+00:18:54.020 --> 00:18:55.260
+Pense em dirigir em estradas sinodas.
+
+00:18:55.840 --> 00:18:58.920
+Você não xinga as defensas metálicas, você agradece por elas quando a estrada despenca 60 metros.
+
+00:18:59.640 --> 00:19:00.460
+E a responsável é a mesma coisa.
+
+00:19:00.880 --> 00:19:04.880
+Escopos, políticas, filtros e logs não freiam sua velocidade, eles impedem que você vá parar no noticiário.
+
+00:19:05.760 --> 00:19:08.100
+Em resumo, a Microsoft lhe deu ferramentas poderosas.
+
+00:19:08.100 --> 00:19:13.420
+Segurança de conteúdo, pipelines de avaliação, estruturas de segurança, guardias de SDK.
+
+00:19:14.220 --> 00:19:18.260
+Mas ainda é seu trabalho definir escopos, configurar acessos e integrar esses ciclos à sua produção.
+
+00:19:19.800 --> 00:19:22.100
+Faça isso e você terá uma IA que sobrevive à conformidade.
+
+00:19:23.680 --> 00:19:25.560
+Ignore isso, o risco não é apenas uma interrupção.
+
+00:19:25.900 --> 00:19:26.740
+São carreiras em jogo.
+
+00:19:27.320 --> 00:19:28.380
+E a responsável não é lenta.
+
+00:19:28.880 --> 00:19:30.360
+E a responsável é sustentável.
+
+00:19:30.560 --> 00:19:32.140
+E a sustentabilidade é o verdadeiro teste.
+
+00:19:32.140 --> 00:19:37.560
+Porque o que vem a seguir não depende de recursos, mas de você tratar essa plataforma como plug-and-play ou como infraestrutura de governança.
+
+00:19:38.340 --> 00:19:40.760
+Essa distinção decide quem permanece e quem desaparece.
+
+00:19:41.520 --> 00:19:42.240
+Aqui está a conclusão.
+
+00:19:42.680 --> 00:19:44.760
+A armadilha não é o Foundry ou o Co-Pilot Studio.
+
+00:19:44.860 --> 00:19:46.080
+É achar que eles são plug-and-play.
+
+00:19:47.020 --> 00:19:47.800
+O mantra é simples.
+
+00:19:47.940 --> 00:19:50.240
+Governança primeiro, experimento depois, produção por último.
+
+00:19:50.700 --> 00:19:52.880
+Ignore identidade e observabilidade por sua conta em risco.
+
+00:19:53.240 --> 00:19:56.540
+As ferramentas estão lá, mas só a governança transforma protótipos em produção real.
+
+00:19:57.320 --> 00:20:00.280
+Então, se você quer soluções diretas que realmente mantenham seu tenente seguro,
+
+00:20:00.860 --> 00:20:02.520
+assine o podcast e deixe sua avaliação.
+
+00:20:03.560 --> 00:20:05.860
+Dedico horas diárias a isso e seu apoio realmente ajuda.
+
+00:20:05.860 --> 00:20:08.480
+As ferramentas mudarão as táticas de sobrevivência...

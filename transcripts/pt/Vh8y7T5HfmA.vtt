@@ -1,0 +1,967 @@
+WEBVTT
+
+00:00:00.300 --> 00:00:06.980
+Pronto para 10 dias de Microsoft 365, Copilot, IA, Azure e as pessoas que estão moldando o futuro do trabalho?
+
+00:00:07.840 --> 00:00:11.920
+Em janeiro, a M365com está de volta e ainda maior.
+
+00:00:12.640 --> 00:00:18.160
+Junte-se a nós para as sessões ao vivo, demonstrações reais e conhecimento prático de MVPs e especialistas do setor em todo o mundo.
+
+00:00:18.740 --> 00:00:21.020
+Nada de slide genérico, nada de argões sem fim.
+
+00:00:22.120 --> 00:00:28.360
+Estamos abordando os desafios reais. Copilot Studio, agente de IA, fábrica, segurança, governança e automação.
+
+00:00:28.360 --> 00:00:34.320
+Seja você um profissional de TI, desenvolvedor ou líder de negócios, há sessões projetadas para você.
+
+00:00:35.480 --> 00:00:40.000
+Com 10 dias completos, você pode explorar várias tecnologias e se conectar com uma comunidade global.
+
+00:00:40.900 --> 00:00:44.200
+Assista ao vivo e leve insights práticos de volta para a sua organização.
+
+00:00:45.140 --> 00:00:48.760
+Janeiro de 2027, 10 dias, única comunidade Microsoft.
+
+00:00:49.320 --> 00:00:50.500
+As inscrições já estão abertas.
+
+00:00:51.840 --> 00:00:55.480
+Acesse M365com.net e garanta sua vaga hoje mesmo.
+
+00:00:55.480 --> 00:00:58.380
+É MM365com.net?
+
+00:01:00.340 --> 00:01:04.480
+Participe agora em M365com.net e nos vemos ao vivo em janeiro.
+
+00:01:05.600 --> 00:01:09.280
+Se você acha que o Intune é apenas mais uma maneira de enviar políticas para a laptop, está perdendo a visão geral.
+
+00:01:10.380 --> 00:01:13.620
+E se eu lhe dissesse que o verdadeiro poder do Intune não é apenas gerenciar dispositivos,
+
+00:01:13.700 --> 00:01:17.520
+mas controlar a identidade, dados e aplicativos como parte de um ecossistema interconectado.
+
+00:01:17.520 --> 00:01:21.860
+Hoje, vamos analisar por que o Microsoft Intune não é apenas uma ferramenta de TI,
+
+00:01:22.180 --> 00:01:25.480
+mas uma camada estratégica nos modelos de segurança e conformidade do Microsoft 305.
+
+00:01:25.900 --> 00:01:29.140
+Fique por aqui, porque quando você vê como o Intune funciona com Azure AD ou Defender,
+
+00:01:29.260 --> 00:01:32.020
+começará a repensar o que o gerenciamento de dispositivos realmente significa.
+
+00:01:32.860 --> 00:01:34.700
+Por que o Intune é mais do que gerenciamento de dispositivo?
+
+00:01:35.220 --> 00:01:38.220
+A maioria das pessoas ainda pensa que o Intune serve apenas para enviar políticas para laptops.
+
+00:01:38.460 --> 00:01:39.560
+Honestamente, isso não é surpreendente.
+
+00:01:40.320 --> 00:01:43.460
+Durante anos, o gerenciamento de dispositivos significou enviar configurações,
+
+00:01:43.560 --> 00:01:45.760
+bloquear alguns recursos e esperar que nada quebrasse no processo.
+
+00:01:45.760 --> 00:01:49.720
+A história era sobre controlar a hardware e a distância, desabilitar esta porta,
+
+00:01:49.820 --> 00:01:53.120
+definir o tamanho da senha e implementar atualizações durante janelas de manutenção.
+
+00:01:53.860 --> 00:01:58.280
+Se você viveu nos dias em que os objetos de política de grupo controlavam tudo dentro de um domínio corporativo,
+
+00:01:58.440 --> 00:02:00.240
+sabe exatamente quão rígido era aquele modelo.
+
+00:02:01.340 --> 00:02:04.100
+Ele foi criado para um mundo onde cada computador estava na mesma rede,
+
+00:02:04.200 --> 00:02:07.400
+conectado diretamente aos servidores e raramente saia do perímetro.
+
+00:02:08.440 --> 00:02:10.140
+Naquela época, laptops eram exceção não à regra.
+
+00:02:11.280 --> 00:02:13.580
+O problema é que esse estilo de gerenciamento não envelheceu bem.
+
+00:02:13.580 --> 00:02:16.860
+Sem que o trabalho remoto explodiu, as falhas nesse sistema se tornaram evidentes.
+
+00:02:17.200 --> 00:02:20.860
+Enviar uma política por ferramentas antigas frequentemente causava conflitos,
+
+00:02:20.960 --> 00:02:23.180
+duas configurações sobrepostas que pareciam corretas no papel,
+
+00:02:23.280 --> 00:02:25.660
+mas que na realidade bloqueavam o acesso das pessoas na segunda-feira de manhã.
+
+00:02:25.900 --> 00:02:27.160
+Era lento e pior, era reativo.
+
+00:02:27.860 --> 00:02:30.900
+Se alguém levasse um laptop para casa e ele saísse da VPN corporativa,
+
+00:02:31.020 --> 00:02:33.680
+suas políticas não tinham muito efeito até que o dispositivo voltasse para a rede.
+
+00:02:34.360 --> 00:02:36.960
+E então havia identidade, ou mais precisamente, a total falta dela.
+
+00:02:37.340 --> 00:02:38.980
+O sistema não se importava com quem estava entrando,
+
+00:02:39.080 --> 00:02:41.080
+desde que a máquina estivesse de acordo com as regras de configuração.
+
+00:02:41.080 --> 00:02:44.540
+Isso pode parecer seguro à primeira vista, mas na realidade deixava grandes lacões.
+
+00:02:44.780 --> 00:02:45.440
+Pense dessa forma.
+
+00:02:45.940 --> 00:02:49.340
+Gerenciar apenas dispositivos é como trancar a porta do escritório todas as noites,
+
+00:02:49.420 --> 00:02:51.020
+mas deixar todas as janelas escancaradas.
+
+00:02:51.500 --> 00:02:53.460
+A porta parece segura, e tecnicamente está,
+
+00:02:53.740 --> 00:02:57.080
+mas você ignorou o panorama geral de como as pessoas realmente entram e saem, saem.
+
+00:02:57.700 --> 00:03:01.140
+Esse é o problema de tratar o Intune como nada mais do que uma maneira de colocar um bloqueio na tela de um laptop.
+
+00:03:01.720 --> 00:03:04.540
+Isso ignora o escopo mais amplo do que é necessário em um ambiente moderno,
+
+00:03:04.540 --> 00:03:07.180
+onde os funcionários fazem login em qualquer lugar, em qualquer dispositivo,
+
+00:03:07.240 --> 00:03:08.860
+e esperam que os aplicativos de trabalho funcionem.
+
+00:03:08.860 --> 00:03:12.560
+É aqui que o Intune deixa de ser uma ferramenta limitada para desempenhar um papel muito maior.
+
+00:03:13.880 --> 00:03:15.620
+Em vez de focar apenas no dispositivo,
+
+00:03:15.880 --> 00:03:18.340
+sua missão é integrar identidade, aplicativos e segurança.
+
+00:03:19.420 --> 00:03:21.120
+Você não apenas aplica uma política,
+
+00:03:21.220 --> 00:03:23.220
+você molda como os usuários interagem com seus dados,
+
+00:03:23.340 --> 00:03:26.080
+quais aplicativos podem ser abertos e sobre quais condições eles obtêm acesso.
+
+00:03:26.500 --> 00:03:28.540
+Isso significa que as janelas do seu escritório estão fechadas,
+
+00:03:28.600 --> 00:03:30.160
+as portas trancadas, trancada está vinculada,
+
+00:03:30.200 --> 00:03:31.680
+a entrada está vinculada ao mesmo sistema de chaves.
+
+00:03:31.680 --> 00:03:34.920
+Isso cria um alinhamento entre camadas que modelos de gerenciamento mais antigos não conseguiam.
+
+00:03:35.240 --> 00:03:38.640
+Qualquer administrador de TI pode lhe contar uma história de políticas que interromperam o fluxo de trabalho.
+
+00:03:38.860 --> 00:03:40.380
+Talvez o Outlook tenha parado de sincronizar,
+
+00:03:40.500 --> 00:03:42.820
+porque alguma regra condicional não estava alinhada com o cliente VPN.
+
+00:03:43.380 --> 00:03:44.980
+Talvez as chamadas do Teams tenham falhado,
+
+00:03:45.060 --> 00:03:48.480
+porque um certificado expirou e ficou bloqueado por uma configuração de dispositivo restritiva.
+
+00:03:48.980 --> 00:03:51.580
+Essas situações desperdiçam produtividade e causam frustração,
+
+00:03:51.680 --> 00:03:53.520
+porque os dispositivos eram gerenciados isoladamente,
+
+00:03:53.660 --> 00:03:55.280
+sem considerar como as pessoas realmente os usam.
+
+00:03:56.360 --> 00:03:59.180
+Ao operar de forma holística, o Intune ajuda a reduzir essas surpresas.
+
+00:03:59.240 --> 00:04:00.720
+Ele não apenas impõe e coordena.
+
+00:04:01.360 --> 00:04:03.820
+Quando você pensa em escala, essa coordenação importa ainda mais.
+
+00:04:03.820 --> 00:04:08.720
+O Intune pode funcionar para uma startup de 50 pessoas que quer apenas manter o e-mail pessoal
+
+00:04:08.720 --> 00:04:12.060
+separado dos dados corporativos, mas também em escala em empresas multinacionais
+
+00:04:12.060 --> 00:04:13.960
+com dezenas de milhares de terminais.
+
+00:04:14.480 --> 00:04:17.560
+O importante é que a mesma plataforma se adapta a esses cenários.
+
+00:04:18.180 --> 00:04:21.900
+Ela não exige um conjunto de ferramentas para pequenas empresas e outro para empresas globais.
+
+00:04:22.620 --> 00:04:26.600
+O plano de gerenciamento se adapta, o que não apenas reduz a proliferação de fornecedores,
+
+00:04:26.700 --> 00:04:30.800
+mas também simplifica como a consistência de políticas e a conformidade podem ser tratadas em diferentes regiões.
+
+00:04:30.800 --> 00:04:34.780
+Portanto, a verdadeira vantagem é que não é que o Intune facilita a configuração de laptops.
+
+00:04:35.500 --> 00:04:36.360
+Isso é quase o básico, gente.
+
+00:04:36.900 --> 00:04:40.920
+O valor está em transformar o gerenciamento de dispositivos em uma camada de segurança estratégica
+
+00:04:40.920 --> 00:04:44.240
+vinculada a obrigações de conformidade e a realidade da força de trabalho atual.
+
+00:04:45.260 --> 00:04:49.600
+Quando usado corretamente, o gerenciamento de dispositivos torna-se apenas uma peça de um quebra-cabeça maior
+
+00:04:49.600 --> 00:04:52.900
+que garante que aplicativos, dados e identidades estejam alinhados sob o meio de proteção.
+
+00:04:53.340 --> 00:04:54.280
+É algo maior do que dispositivo.
+
+00:04:54.680 --> 00:04:57.580
+Trata-se de orquestrar confiança em tudo o que toca os dados da sua empresa.
+
+00:04:57.580 --> 00:05:01.920
+Mas como isso é feito na prática, a resposta não é encontrada nas configurações do dispositivo.
+
+00:05:02.120 --> 00:05:04.960
+Ela vem de como o Intune se conecta diretamente ao Azure Active Directory.
+
+00:05:05.820 --> 00:05:07.900
+A conexão de identidade, Intune mais Azure AD.
+
+00:05:08.820 --> 00:05:12.180
+E se gerenciar um dispositivo não fosse realmente sobre o dispositivo, mas sobre quem está acessando,
+
+00:05:12.920 --> 00:05:15.680
+essa mudança de perspectiva é onde as coisas começam a fazer sentido com o Intune.
+
+00:05:16.540 --> 00:05:20.480
+Porque o controle real não está no dispositivo em si, mas na identidade vinculada a ele.
+
+00:05:21.020 --> 00:05:25.780
+Um laptop ou celular sem a pessoa por trás dele é apenas hardware, um tijolo caro que não abre nada sozinho.
+
+00:05:25.780 --> 00:05:30.780
+Mas no momento em que alguém acessa com credenciais que podem acessar dados corporativos, tudo muda.
+
+00:05:31.760 --> 00:05:34.520
+Acesso, risco e conformidade seguem a identidade e não a máquina.
+
+00:05:35.260 --> 00:05:36.580
+É aí que o Azure Active Directory entra.
+
+00:05:37.200 --> 00:05:41.160
+Se você pensar no ecossistema de segurança da Microsoft como um corpo, o Azure AD é o cérebro.
+
+00:05:41.620 --> 00:05:44.180
+Ele lida com decisões sobre quem é alguém ou quem tem permissão para ver
+
+00:05:44.180 --> 00:05:46.820
+e se as condições são seguras o suficiente para permitir o acesso.
+
+00:05:47.700 --> 00:05:49.920
+O Intune recebe as instruções dessa inteligência e identidade.
+
+00:05:49.920 --> 00:05:54.080
+Em vez de apenas saber que um dispositivo existe, as políticas fluem com base em quem o está usando,
+
+00:05:54.180 --> 00:05:57.080
+qual é seu cargo e sobre qual é seu cargo e sobre quais circunstâncias o acesso está ocorrendo.
+
+00:05:57.240 --> 00:06:00.960
+Não se trata de controle total sobre um laptop, mas de centralizar a confiança na identidade
+
+00:06:00.960 --> 00:06:04.720
+e deixar a camada de gerenciamento de dispositivos aplicar decisões que fazem sentido no contexto.
+
+00:06:04.980 --> 00:06:06.960
+Agora, considere as falhas de um modelo focado apenas no dispositivo.
+
+00:06:07.200 --> 00:06:11.040
+Se um laptop for perdido ou roubado, as ferramentas tradicionais oferecem a opção de limpeza remota.
+
+00:06:11.280 --> 00:06:13.240
+Isso é útil, mas aborda apenas parcialmente o risco.
+
+00:06:13.240 --> 00:06:16.960
+Se as credenciais estiverem em cache ou se um invasor já tiver descoberto a senha,
+
+00:06:17.200 --> 00:06:19.720
+os dados podem ser comprometidos antes que qualquer limpeza ocorra.
+
+00:06:19.980 --> 00:06:21.860
+Quando o foco é a máquina, você está sempre reagindo.
+
+00:06:22.680 --> 00:06:24.700
+Ao vincular o acesso à identidade, o equilíbrio muda.
+
+00:06:25.220 --> 00:06:28.680
+O Intune conectado ao Azure ID significa que mesmo que alguém tenha um laptop da empresa,
+
+00:06:28.820 --> 00:06:31.920
+sua capacidade de abrir arquivos ou aplicativos sensíveis pode ser limitada,
+
+00:06:31.980 --> 00:06:34.900
+a menos que sua identidade esteja em conformidade com as políticas atuais.
+
+00:06:35.360 --> 00:06:36.200
+Então, um exemplo do mundo real.
+
+00:06:36.600 --> 00:06:39.080
+Digamos que um prestador de serviços faça login a partir de seu laptop e pessoal.
+
+00:06:39.320 --> 00:06:40.120
+Qual é a maior preocupação?
+
+00:06:40.120 --> 00:06:42.500
+O laptop em si ou a identidade por trás dele?
+
+00:06:43.240 --> 00:06:46.780
+Para a maioria das organizações, um prestador de serviços não precisa de acesso irrestrito
+
+00:06:46.780 --> 00:06:49.980
+à rede corporativa nem deve receber o mesmo tratamento de um funcionário em tempo integral.
+
+00:06:50.640 --> 00:06:54.520
+Com a identidade como ponto de ancoragem, o Intune reconhece que se trata de uma conta externa
+
+00:06:54.520 --> 00:06:58.300
+e, por meio do acesso condicional, impõe regras adaptadas a esse contexto.
+
+00:06:58.820 --> 00:07:02.120
+Talvez o acesso seja limitado apenas a uma versão web do Outlook e do Teams
+
+00:07:02.120 --> 00:07:03.600
+sem opção de baixar arquivos localmente.
+
+00:07:04.040 --> 00:07:07.000
+Essa decisão não se baseia em suposições sobre o estado de um laptop qualquer.
+
+00:07:07.500 --> 00:07:10.220
+Baseia-se em uma confiança aplicada precisamente com base em quem é usuário.
+
+00:07:10.220 --> 00:07:13.300
+O acesso condicional torna-se o agente de tráfego nesse sistema.
+
+00:07:14.020 --> 00:07:18.540
+O Intune define a integridade do dispositivo e o Azure AD impõe se esse dispositivo e o usuário
+
+00:07:18.540 --> 00:07:19.280
+podem prosseguir.
+
+00:07:19.840 --> 00:07:22.660
+Juntos, eles criam um sistema onde o acesso não é um simples sim ou não.
+
+00:07:23.260 --> 00:07:23.720
+É contextual.
+
+00:07:24.380 --> 00:07:26.280
+Imagine um usuário com um sistema operacional desatualizado.
+
+00:07:26.760 --> 00:07:28.400
+Ele tenta entrar no OneDrive a partir dessa máquina.
+
+00:07:29.180 --> 00:07:32.580
+Em vez de bloqueá-lo imediatamente, as políticas do Intune podem exigir que ele instale as atualizações
+
+00:07:32.580 --> 00:07:32.860
+primeiro.
+
+00:07:33.280 --> 00:07:36.180
+Até lá, ele fica impedido de acessar aplicativos ou dados confidenciais.
+
+00:07:36.180 --> 00:07:40.240
+O sistema é dinâmico, o usuário se torna compatível, o acesso é restaurado e o fluxo
+
+00:07:40.240 --> 00:07:42.860
+de trabalho continua sem a necessidade de intervenção manual de um administrador T.
+
+00:07:43.020 --> 00:07:44.160
+Essa é a verdadeira mudança no jogo.
+
+00:07:44.580 --> 00:07:48.440
+Essa mudança nos leva de uma abordagem focada primeiro no dispositivo, onde todo o foco
+
+00:07:48.440 --> 00:07:52.660
+está em enviar regras para laptops ou celulares, para uma abordagem focada primeiro na identidade
+
+00:07:52.660 --> 00:07:54.680
+que segue o usuário em qualquer dispositivo que eu escolha.
+
+00:07:54.760 --> 00:07:56.700
+Para de ser sobre bloquear um ponto de extremidade.
+
+00:07:57.100 --> 00:07:59.920
+Passa a ser sobre moldar a confiança condicional em toda a força de trabalho.
+
+00:07:59.920 --> 00:08:04.200
+Dispositivos vão e vêm, pessoas usam múltiplas plataformas diariamente, mas a identidade
+
+00:08:04.200 --> 00:08:04.860
+permanece.
+
+00:08:05.480 --> 00:08:09.180
+E vincular o Intune ao Azure AD significa que suas políticas de segurança e conformidade
+
+00:08:09.180 --> 00:08:11.100
+viajam com o usuário onde quer que ele vá.
+
+00:08:12.020 --> 00:08:13.560
+Isso também significa que o acesso é estático.
+
+00:08:14.380 --> 00:08:17.920
+Em vez de um dispositivo ser simplesmente confiável ou não, o sistema se adapta continuamente.
+
+00:08:18.260 --> 00:08:22.020
+Para cada login, a integridade da identidade e do ponto de extremidade são avaliadas
+
+00:08:22.020 --> 00:08:22.620
+em tempo real.
+
+00:08:23.060 --> 00:08:24.680
+Login suspeito, o acesso pode ser limitado.
+
+00:08:25.360 --> 00:08:26.900
+Dispositivo sinalizado por risco de malware.
+
+00:08:27.000 --> 00:08:28.780
+Aplicativos de alto valor são bloqueados automaticamente.
+
+00:08:28.780 --> 00:08:32.480
+Ao fazer com que a segurança siga o contexto do usuário e do dispositivo, as organizações
+
+00:08:32.480 --> 00:08:35.880
+criam controles mais rígidos, permitindo ainda a flexibilidade para mais trabalho móvel.
+
+00:08:36.460 --> 00:08:38.180
+Portanto, o retorno aqui é simples, mas poderoso.
+
+00:08:38.720 --> 00:08:42.120
+Quando o Intune se integra profundamente ao Azure AD, as decisões de acesso deixam de
+
+00:08:42.120 --> 00:08:43.680
+ser binárias e passam a ser inteligentes.
+
+00:08:44.400 --> 00:08:47.960
+Elas passam a alinhar a identidade, a integridade do dispositivo e risco de negócios em um modelo
+
+00:08:47.960 --> 00:08:49.220
+mais inteligente e adaptável.
+
+00:08:49.920 --> 00:08:53.980
+Antes era uma aplicação rígida de políticas, transforma-se em um controle de acesso contextual
+
+00:08:53.980 --> 00:08:55.560
+que se ajusta conforme as condições mudam.
+
+00:08:55.560 --> 00:09:00.360
+A segurança torna-se mais precisa sem paralisar a produtividade, e as equipes de TI ganham
+
+00:09:00.360 --> 00:09:04.560
+tranquilidade de que nenhum fator isolado, como um laptop perdido, comprometerá seu ambiente.
+
+00:09:05.580 --> 00:09:09.200
+Agora que os dispositivos estão diretamente ligados à identidade, o próximo passo é
+
+00:09:09.200 --> 00:09:12.580
+proteger o que realmente importa, os aplicativos onde os dados de negócio residem.
+
+00:09:13.580 --> 00:09:15.220
+Protegendo os aplicativos que impulsionam o negócio.
+
+00:09:15.220 --> 00:09:18.820
+Dispositivos e identidades são importantes, mas as verdadeiras joias da coroa são os
+
+00:09:18.820 --> 00:09:20.480
+aplicativos onde os dados de negócio vivem.
+
+00:09:20.760 --> 00:09:24.180
+Não é o telefone em si que torna uma empresa vulnerável, mas o fato de que Outlook, Teams
+
+00:09:24.180 --> 00:09:27.640
+ou ferramentas de CRM nesse telefone contém informações confidenciais.
+
+00:09:28.480 --> 00:09:30.960
+Uma vez que você enxerga dessa forma, o foco da segurança muda.
+
+00:09:31.220 --> 00:09:34.500
+Em vez de apenas bloquear o dispositivo, a conversa passa a ser sobre o que acontece dentro dos
+
+00:09:34.500 --> 00:09:36.040
+aplicativos que os funcionários usam diariamente.
+
+00:09:36.580 --> 00:09:40.400
+É aí que o gerenciamento de aplicativos móveis do Intune ou MAN entra em cena, entra em cena.
+
+00:09:40.400 --> 00:09:44.980
+Ele atua junto aos controles de dispositivos tradicionais, mas foca diretamente na proteção
+
+00:09:44.980 --> 00:09:49.440
+dos dados dos aplicativos, em vez de tratar o hardware como o único ponto fraco.
+
+00:09:50.700 --> 00:09:54.940
+O problema com que a maioria das organizações lida hoje é como permitir a flexibilidade
+
+00:09:54.940 --> 00:09:59.100
+do uso do próprio dispositivo, evitando que informações corporativas vazem para espaços
+
+00:09:59.100 --> 00:09:59.700
+pessoais.
+
+00:10:01.120 --> 00:10:04.140
+Os funcionários não querem que a TI diga o que eles podem instalar em seus telefones
+
+00:10:04.140 --> 00:10:04.600
+pessoais.
+
+00:10:05.120 --> 00:10:07.760
+Eles esperam usar o iOS e o Android da maneira que for melhor para eles.
+
+00:10:07.760 --> 00:10:11.660
+No entanto, a empresa tem a responsabilidade de manter os dados protegidos, não importa
+
+00:10:11.660 --> 00:10:13.320
+qual dispositivo seja usado para acessá-los.
+
+00:10:13.820 --> 00:10:18.140
+Essa tensão entre liberdade pessoal e segurança organizacional costumava terminar de duas maneiras.
+
+00:10:18.760 --> 00:10:22.580
+Ou a TI bloqueava tudo de forma tão rígida que frustrava os usuários, ou permitia amplo
+
+00:10:22.580 --> 00:10:24.220
+acesso e esperava que nada desse errado.
+
+00:10:25.660 --> 00:10:28.320
+Imagine um representante de vendas na estrada com seu iPhone pessoal.
+
+00:10:28.800 --> 00:10:30.780
+Ele abre uma proposta cliente no Word logo antes de uma reunião.
+
+00:10:31.780 --> 00:10:35.260
+Sem o gerenciamento de aplicativos, esse documento poderia ser encaminhado por e-mail pessoal,
+
+00:10:35.260 --> 00:10:39.240
+enviado por uma nuvem não gerenciada ou copiado por um aplicativo de mensagens pessoal.
+
+00:10:39.780 --> 00:10:42.920
+O dispositivo pode até estar seguro, mas os dados agora estão totalmente fora do controle
+
+00:10:42.920 --> 00:10:43.340
+da empresa.
+
+00:10:44.240 --> 00:10:46.720
+Esse é o verdadeiro ponto de vazamento para a maioria das organizações.
+
+00:10:46.860 --> 00:10:50.460
+Não alguém roubar um telefone, mas conteúdo sensível, vazando silenciosamente para aplicativos
+
+00:10:50.460 --> 00:10:51.640
+pessoais sem supervisão.
+
+00:10:52.580 --> 00:10:54.560
+E uma vez lá, é praticamente impossível recuperá-lo.
+
+00:10:54.960 --> 00:10:58.500
+O Intune resolve esse problema diretamente, gerenciando a maneira como os aplicativos interagem
+
+00:10:58.500 --> 00:10:59.280
+com o conteúdo corporativo.
+
+00:10:59.280 --> 00:11:03.160
+Por exemplo, ele pode criptografar os dados do aplicativo para que, mesmo em dispositivos
+
+00:11:03.160 --> 00:11:06.680
+pessoais, os documentos da empresa permaneçam protegidos e isolados do resto do telefone.
+
+00:11:07.120 --> 00:11:10.120
+Além disso, as configurações de política podem impedir ações como copiar e colar
+
+00:11:10.120 --> 00:11:11.800
+entre aplicativos gerenciados e não gerenciados.
+
+00:11:11.920 --> 00:11:15.300
+Então, no cenário do representante de vendas, o documento poderia ser aberto no Word, mas
+
+00:11:15.300 --> 00:11:18.240
+tentar colar o conteúdo no WhatsApp ou em uma conta pessoal do Gmail simplesmente
+
+00:11:18.240 --> 00:11:18.940
+não funcionaria.
+
+00:11:19.440 --> 00:11:22.120
+Não se trata de impedir que o representante use seu dispositivo livremente.
+
+00:11:22.700 --> 00:11:25.920
+Eles ainda podem enviar mensagens a amigos, tirar fotos ou instalar os aplicativos que
+
+00:11:25.920 --> 00:11:26.180
+quiserem.
+
+00:11:26.180 --> 00:11:30.360
+O controle se aplica apenas aos dados vinculados à empresa, oferecendo a TI imposição e
+
+00:11:30.360 --> 00:11:31.540
+flexibilidade ao mesmo tempo.
+
+00:11:32.440 --> 00:11:36.320
+Sem essa camada, dados corporativos podem acabar espalhados quase sem que os usuários
+
+00:11:36.320 --> 00:11:36.940
+percebam.
+
+00:11:37.660 --> 00:11:40.360
+Alguém encaminha um e-mail para sua caixa de entrada pessoal apenas para imprimir em
+
+00:11:40.360 --> 00:11:40.620
+casa.
+
+00:11:41.900 --> 00:11:45.740
+Outra pessoa tira um print de uma apresentação confidencial e a compartilha em um app de
+
+00:11:45.740 --> 00:11:47.560
+mensagens comum, por parecer mais rápido.
+
+00:11:48.320 --> 00:11:49.300
+Essas ações não são maliceiras.
+
+00:11:49.660 --> 00:11:50.940
+Geralmente são motivadas pela conveniência.
+
+00:11:51.440 --> 00:11:54.300
+Mas elas expõem as organizações a problemas de conformidade e risco de segurança.
+
+00:11:54.300 --> 00:11:57.800
+As políticas de mando Intune e seus vazamentos acidentais são bloqueados na origem.
+
+00:11:58.240 --> 00:12:01.140
+O usuário simplesmente encontra uma barreira ao tentar mover dados para onde não deve,
+
+00:12:01.220 --> 00:12:03.600
+mas dentro dos apps gerenciados tudo funciona perfeitamente.
+
+00:12:04.340 --> 00:12:07.600
+Um benefício do Intune é que ele não se limita ao controle das ferramentas da Microsoft.
+
+00:12:08.680 --> 00:12:13.180
+É claro que ele se integra bem a apps como Outlook, OneDrive ou Teams, onde o gerenciamento
+
+00:12:13.180 --> 00:12:17.160
+é quase invisível ao usuário, mas também se estende a muitos apps de terceiros que as
+
+00:12:17.160 --> 00:12:18.360
+organizações usam diariamente.
+
+00:12:18.360 --> 00:12:22.560
+Isso significa que o MAM não restringe as empresas a um ambiente exclusivo da Microsoft.
+
+00:12:22.980 --> 00:12:26.280
+Ele aplica os mesmos padrões de proteção de dados de forma consistente, seja o dado
+
+00:12:26.280 --> 00:12:29.740
+trafegando em um app do 365 ou em uma ferramenta de produtividade parceira.
+
+00:12:30.820 --> 00:12:34.480
+Os usuários podem trabalhar como quiserem com os apps necessários, mas não podem colocar
+
+00:12:34.480 --> 00:12:36.200
+dados protegidos em locais inseguros.
+
+00:12:37.420 --> 00:12:39.660
+Essa é a peça que soluciona o antigo desafio do BOG.
+
+00:12:40.400 --> 00:12:45.000
+As empresas querem evitar fornecer dispositivos corporativos a todos devido ao custo e à logística.
+
+00:12:45.000 --> 00:12:48.720
+Os funcionários querem a flexibilidade de usar seu próprio hardware sem sentir que
+
+00:12:48.720 --> 00:12:50.540
+a TI tomou conta de seu celular ou tablet.
+
+00:12:51.200 --> 00:12:55.240
+O Intune une essas duas necessidades protegendo os apps e seus dados em vez de tentar controlar
+
+00:12:55.240 --> 00:12:56.240
+o dispositivo inteiro.
+
+00:12:57.320 --> 00:12:58.120
+Ambos os lados saem, né?
+
+00:12:58.340 --> 00:13:01.020
+Os usuários mantêm sua liberdade, a empresa mantém suas informações seguras.
+
+00:13:01.680 --> 00:13:04.860
+Mas mesmo com dispositivos, identidades e apps sob controle, o quadro não está completo.
+
+00:13:05.700 --> 00:13:08.920
+O ecossistema fica muito mais forte quando o Intune compartilha sinais com o Microsoft
+
+00:13:08.920 --> 00:13:12.660
+Defender, pois é onde a segurança de apps e identidades encontra proteção contra ameaças
+
+00:13:12.660 --> 00:13:13.340
+em tempo real.
+
+00:13:13.340 --> 00:13:18.820
+Fechando o ciclo, conformidade com o Intune e Purview, gerenciar riscos é bom, mas provar
+
+00:13:18.820 --> 00:13:20.560
+a conformidade é o que tira o sono dos CEOs.
+
+00:13:21.300 --> 00:13:24.180
+Os controles de segurança podem ser rígidos, mas os reguladores não querem apenas ouvir.
+
+00:13:24.480 --> 00:13:27.260
+Não basta dizer que a informação está protegida, você precisa demonstrar.
+
+00:13:27.880 --> 00:13:29.440
+É aí que o Microsoft Purview entra na história.
+
+00:13:30.340 --> 00:13:33.940
+Enquanto o Intune estabelece e aplica as diretrizes do dia a dia, o Purview é o sistema de registro
+
+00:13:33.940 --> 00:13:36.280
+para governança, auditoria e supervisão de conformidade.
+
+00:13:37.280 --> 00:13:40.800
+Torna-se a camada que traduz todas essas decisões de política em evidências que um auditor
+
+00:13:40.800 --> 00:13:41.940
+ou regulador possa entender.
+
+00:13:41.940 --> 00:13:47.280
+Sem isso, a segurança vive em uma bolha, desconectada dos relatórios que provam que uma organização
+
+00:13:47.280 --> 00:13:49.540
+está cumprindo requisitos legais ou do setor.
+
+00:13:50.400 --> 00:13:52.860
+O Purview foca na visibilidade em todo o ciclo de vida dos dados.
+
+00:13:53.360 --> 00:13:56.700
+Pense nele como um registro que rastreia não apenas onde as políticas são definidas,
+
+00:13:56.780 --> 00:13:58.240
+mas como elas são aplicadas no mundo real.
+
+00:13:59.080 --> 00:14:02.900
+Quando o Intune aplica restrições a dispositivos, configura controles de aplicativos ou impõe
+
+00:14:02.900 --> 00:14:07.040
+regras de acesso condicional, o Purview é onde essas ações podem ser monitoradas e registradas
+
+00:14:07.040 --> 00:14:07.620
+em escala.
+
+00:14:08.180 --> 00:14:10.240
+Isso torna mais do que apenas uma caixa de verificação de conformidade.
+
+00:14:10.500 --> 00:14:14.180
+Ele vincula a aplicação de políticas de risco diretamente aos relatórios de governança,
+
+00:14:14.360 --> 00:14:17.660
+para que sua equipe de TI não precise correr para reconstruir o que aconteceu meses depois,
+
+00:14:17.780 --> 00:14:18.800
+quando uma auditoria chegar.
+
+00:14:19.660 --> 00:14:20.820
+A tensão aqui é bem direta.
+
+00:14:20.820 --> 00:14:24.400
+Não importa se sua postura de segurança é forte internamente, se você não puder
+
+00:14:24.400 --> 00:14:25.980
+demonstrar essa força externamente.
+
+00:14:27.000 --> 00:14:30.680
+Regulamentações globais de GDPR, AIP, OPC e DSS preocupam-se com duas coisas.
+
+00:14:31.640 --> 00:14:33.340
+Primeiro, que os dados estejam seguros.
+
+00:14:33.480 --> 00:14:37.200
+E segundo, que as organizações possam provar que a segurança foi aplicada de forma consistente.
+
+00:14:37.880 --> 00:14:41.480
+Mesmo em empresas que realmente se preocupam com a segurança, é aqui que os desafios aparecem.
+
+00:14:42.340 --> 00:14:45.620
+Se os controles residem em vários sistemas sem relatórios claros, a conformidade torna-se
+
+00:14:45.620 --> 00:14:46.580
+um pesadelo de planilhas.
+
+00:14:47.100 --> 00:14:50.620
+As equipes acabam coletando arquivos de log, capturas de tela e fragmentos de evidências
+
+00:14:50.620 --> 00:14:54.280
+montando uma história após o ocorrido, em vez de mostrar um registro contínuo e automatizado.
+
+00:14:54.960 --> 00:14:55.540
+Vamos a um exemplo.
+
+00:14:56.040 --> 00:14:59.420
+Uma empresa de serviços financeiros permite que funcionários acessem arquivos confidenciais
+
+00:14:59.420 --> 00:15:02.280
+de clientes em seus próprios celulares, pois isso aumenta a produtividade e reduz custos.
+
+00:15:03.560 --> 00:15:06.620
+Do ponto de vista de segurança, o Intune gerencia as restrições de aplicativos
+
+00:15:06.620 --> 00:15:10.280
+e garante que nenhum documento de cliente saia de um app protegido como Outlook ou Word.
+
+00:15:10.820 --> 00:15:14.220
+Isso aborda a camada de segurança, mas quando um auditor intervém, a pergunta passa a ser
+
+00:15:14.220 --> 00:15:17.160
+como você prova que esses controles estavam ativos em cada dispositivo
+
+00:15:17.160 --> 00:15:18.780
+no momento em que os dados foram acessados.
+
+00:15:18.780 --> 00:15:22.140
+Não basta para a TI dizer que fez isso ou que tinha as políticas do Intune habilitadas.
+
+00:15:22.740 --> 00:15:26.740
+Eles precisam mostrar logs que demonstrem que essas políticas foram aplicadas, monitoradas
+
+00:15:26.740 --> 00:15:30.360
+e impostas sempre que um dispositivo tentava se conectar, mesmo que o hardware fosse do funcionário.
+
+00:15:30.940 --> 00:15:32.940
+É exatamente aqui que o Intune e o Purview se unem.
+
+00:15:33.860 --> 00:15:37.180
+O Intune gera continuamente dados de postura de conformidade, verificando se os dispositivos
+
+00:15:37.180 --> 00:15:40.680
+atenderam aos requisitos de patch, se as proteções de app estavam ativas, se o acesso
+
+00:15:40.680 --> 00:15:42.320
+foi concedido ou bloqueado sob acesso condicional.
+
+00:15:43.540 --> 00:15:47.320
+Purview coleta essa telemetria, padroniza e disponibiliza relatórios sob demanda.
+
+00:15:47.320 --> 00:15:50.760
+Isso significa que quando os reguladores solicitarem, sua equipe de governança não precisará
+
+00:15:50.760 --> 00:15:52.260
+passar no mesmo a escolher trilhas de auditoria.
+
+00:15:52.780 --> 00:15:56.060
+Em vez disso, eles podem estrear um relatório que mostra apenas quais políticas existem, mas
+
+00:15:56.060 --> 00:15:57.800
+que essas políticas foram executadas de forma consistente.
+
+00:15:58.240 --> 00:16:00.940
+É como guardar recibos de cada ação de segurança automaticamente.
+
+00:16:01.540 --> 00:16:03.000
+Não se limita à conformidade dos dispositivos.
+
+00:16:03.540 --> 00:16:09.020
+O Purview une atividades em todo o ecossistema da nuvem Microsoft, classificação de dados,
+
+00:16:09.220 --> 00:16:12.640
+políticas de risco interno, rótulos de proteção de informações, tudo alimenta o mesmo
+
+00:16:12.640 --> 00:16:13.420
+plano de governança.
+
+00:16:13.420 --> 00:16:17.720
+Dessa forma, os relatórios de conformidade refletem não apenas a segurança de endpoints,
+
+00:16:17.840 --> 00:16:19.220
+mas toda a cadeia de proteção de dados.
+
+00:16:19.820 --> 00:16:23.360
+Com a postura do intune integrada diretamente, a camada de endpoint deixa de ser um ponto
+
+00:16:23.360 --> 00:16:24.640
+fora da curva ou um ponto cego.
+
+00:16:25.140 --> 00:16:28.760
+Ela é incorporada ao mesmo pacote de evidências das ferramentas de colaboração, armazenamento
+
+00:16:28.760 --> 00:16:29.380
+e mensagens.
+
+00:16:30.060 --> 00:16:32.120
+O benefício para as equipes de TI conformidade é enorme.
+
+00:16:32.640 --> 00:16:35.820
+Em vez de relatórios reativos, onde você corre para juntar eventos apenas após serem
+
+00:16:35.820 --> 00:16:37.500
+questionados, o sistema trabalha de forma proativa.
+
+00:16:37.900 --> 00:16:39.680
+Os relatórios já existem antes mesmo de alguém solicitar.
+
+00:16:39.680 --> 00:16:43.560
+Tendências de desvio de conformidade podem ser detectadas precocemente, não porque
+
+00:16:43.560 --> 00:16:46.520
+alguém executa verificações manuais, mas porque o painel já mostra onde a postura
+
+00:16:46.520 --> 00:16:47.080
+está falhando.
+
+00:16:48.200 --> 00:16:51.800
+Isso transforma a conformidade de um exercício ocasional de emergência em um check-up de
+
+00:16:51.800 --> 00:16:56.220
+rotina, reduzindo o estresse em todos os níveis, no suporte técnico ao CEO que precisa assinar.

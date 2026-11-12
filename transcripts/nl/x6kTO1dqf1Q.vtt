@@ -1,0 +1,964 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:05.340
+Hallo iedereen en welkom bij een nieuwe aflevering van Microsoft Knowledge Nuggets hier op M365FM.
+
+00:00:05.500 --> 00:00:06.640
+Ik ben Mirko Peters.
+
+00:00:07.020 --> 00:00:09.840
+Microsoft Defender for Cloud klinkt als antivirus, toch?
+
+00:00:10.020 --> 00:00:14.260
+Dat is een logische aanname, omdat de naam Defender op veel beveiligingstools van Microsoft staat.
+
+00:00:14.460 --> 00:00:18.180
+Maar het zit zo, Defender for Cloud is er niet om je laptop op schadelijke bestanden te scannen,
+
+00:00:18.380 --> 00:00:20.040
+maar bewaakt je volledige cloudomgeving.
+
+00:00:20.280 --> 00:00:24.120
+Zie het zo, Defender for het point houdt de beveiliging binnen één enkele kamer.
+
+00:00:24.300 --> 00:00:28.140
+Het controleert één laptop of server op malware, vreemde programma's of tekenen
+
+00:00:28.140 --> 00:00:30.120
+dat iemand de controle probeert over te nemen.
+
+00:00:30.280 --> 00:00:33.500
+Defender for Cloud bewaakt het hele kantoorpand rondom die kamer.
+
+00:00:33.640 --> 00:00:36.940
+Het controleert wie naar binnen kan en of er een zijdeur aan de straatkant zit.
+
+00:00:37.100 --> 00:00:43.100
+Het kijkt naar de sloten, de alarmen, de opslagruimtes en de regels die bepalen wie toegang heeft tot gevoelige gebieden.
+
+00:00:43.240 --> 00:00:47.060
+Kort gezegd helpt het je drie dingen te zien, hoe veilig je cloudbronnen zijn ingesteld,
+
+00:00:47.300 --> 00:00:49.840
+of er iets verdachts gebeurt en wat je als eerste moet aanpakken.
+
+00:00:49.980 --> 00:00:52.280
+Een waarschuwing kan je vertellen dat een deur niet op slot zit.
+
+00:00:52.420 --> 00:00:55.720
+Een actieve dreigingsmelding vertelt je dat iemand mogelijk al aan die deur aan het rommelen is.
+
+00:00:55.900 --> 00:00:56.940
+Dat verschil is belangrijk.
+
+00:00:56.940 --> 00:01:00.400
+Laten we dus beginnen met waarom cloudbeveiliging zo snel rommelig wordt.
+
+00:01:00.620 --> 00:01:02.940
+Waarom cloudbeveiliging zo gemakkelijk faalt.
+
+00:01:03.180 --> 00:01:09.340
+Jaren geleden had een bedrijf misschien een kleine serverruimte, een paar fysieke servers en één team dat het meeste beheerde.
+
+00:01:09.520 --> 00:01:11.040
+De opzet veranderde langzaam.
+
+00:01:11.220 --> 00:01:14.360
+Tegenwoordig kan een bedrijf binnen enkele minuten een nieuwe virtuele machine aanmaken.
+
+00:01:14.500 --> 00:01:17.960
+Een ontwikkelaar kan opslag toevoegen voor een project, een ander team kan een database aanmaken,
+
+00:01:18.080 --> 00:01:19.700
+weer iemand anders kan containers draaien voor een app.
+
+00:01:19.800 --> 00:01:22.880
+Elk onderdeel heeft mogelijk een eigen team en een eigen beveiligingstool.
+
+00:01:22.880 --> 00:01:27.880
+Je hebt misschien één tool voor servers, een andere voor databases, een voor opslag en nog een voor containers.
+
+00:01:28.120 --> 00:01:31.300
+Elke tool toont een deel van het geheel, maar niemand ziet het volledige gebouw.
+
+00:01:31.480 --> 00:01:32.420
+Dat creëert gaten.
+
+00:01:32.640 --> 00:01:35.300
+Een opslagaccount kan per ongeluk openbare toegang toelaten.
+
+00:01:35.520 --> 00:01:39.600
+Een virtuele machine kan het Remote Desktop Protocol, RDP, open laten staan voor het internet.
+
+00:01:39.820 --> 00:01:42.000
+Op Linux kan dat Secure Shell of SSH zijn.
+
+00:01:42.160 --> 00:01:45.600
+Een oud-beheerdersaccount kan maanden nadat een externe medewerker is vertrokken nog steeds toegang hebben.
+
+00:01:45.760 --> 00:01:48.560
+Een server mist mogelijk beveiligingsupdates omdat hij alleen als korte test draaide.
+
+00:01:48.560 --> 00:01:50.580
+Geen van deze fouten vereist een slimme aanvaller.
+
+00:01:50.780 --> 00:01:52.700
+Ze hebben alleen één ontgrendelde zijdeur nodig.
+
+00:01:52.880 --> 00:01:54.720
+En cloud-omgevingen veranderen constant.
+
+00:01:55.040 --> 00:01:59.700
+Een bron die op maandag veilig leek, kan op dinsdag kwetsbaar zijn omdat iemand één instelling wijzigt.
+
+00:01:59.880 --> 00:02:04.120
+Een nieuwe netwerkregel aanmaakt of een oud-schabloon kopieert waar nog zwakke permissies in staan.
+
+00:02:04.340 --> 00:02:06.220
+Je hebt dit waarschijnlijk in het echt wel eens gezien.
+
+00:02:06.400 --> 00:02:08.160
+Een team heeft snel een test-server nodig.
+
+00:02:08.400 --> 00:02:12.020
+Ze maken een virtuele machine aan, geven deze een publiek adres om van huis uit verbinding te maken...
+
+00:02:12.020 --> 00:02:14.180
+...en stellen RDP of SSH open omdat dat sneller is.
+
+00:02:14.300 --> 00:02:15.120
+De test werkt.
+
+00:02:15.320 --> 00:02:18.300
+Daarna eindigt het project, gaan mensen verder en blijft die server online.
+
+00:02:18.300 --> 00:02:20.200
+De publieke deur blijft openstaan.
+
+00:02:20.360 --> 00:02:24.300
+Niemand wil dat dit gebeurt, maar het gebeurt omdat cloud-bronnen makkelijk te maken en makkelijk te vergeten zijn.
+
+00:02:24.460 --> 00:02:26.460
+Kijk nu eens naar hoeveel bedrijven echt werken.
+
+00:02:26.680 --> 00:02:28.140
+Misschien heb je workloads in Azure.
+
+00:02:28.360 --> 00:02:30.980
+Misschien draai je nog steeds servers op eigen kantoor of in een datacenter.
+
+00:02:31.180 --> 00:02:33.960
+Een leverancier kan Amazon Web Services of AWS gebruiken.
+
+00:02:34.140 --> 00:02:36.220
+Een ander team gebruikt misschien Google Cloud Platform.
+
+00:02:36.580 --> 00:02:38.280
+Beveiliging zit allang niet meer in één portal.
+
+00:02:38.500 --> 00:02:40.980
+Een lange lijst met waarschuwingen lost dat probleem ook niet op.
+
+00:02:41.140 --> 00:02:44.740
+Als je honderden waarschuwingen ziet zonder te weten welke klantgegevens blootstelt...
+
+00:02:44.740 --> 00:02:48.160
+...welke een testsysteem beïnvloedt en welke een route naar iets gevoeligs creëert...
+
+00:02:48.160 --> 00:02:49.680
+...weet je nog steeds niet waar je moet beginnen.
+
+00:02:49.880 --> 00:02:50.960
+Je hebt context nodig.
+
+00:02:51.180 --> 00:02:56.000
+Je moet weten wat er bestaat, wat er aan het internet hangt, wie erbij kan en welke oplossing het meeste risico wegneemt.
+
+00:02:56.160 --> 00:02:57.780
+Dat is waar de Vendor4Cloud begint.
+
+00:02:57.960 --> 00:03:00.300
+Het zoekt naar zwakke deuren voordat iemand binnenkomt.
+
+00:03:00.380 --> 00:03:02.220
+Cloud Security Pasture Management.
+
+00:03:02.440 --> 00:03:05.220
+De eerste bouwsteen is Cloud Security Pasture Management.
+
+00:03:05.460 --> 00:03:07.860
+Die naam klinkt zwaar, dus laat ik het simpel uitleggen.
+
+00:03:08.000 --> 00:03:10.780
+Het is een periodieke veiligheidsinspectie voor je cloud-bronnen.
+
+00:03:10.780 --> 00:03:16.160
+In plaats van met een klembord door een echt gebouw te lopen, controleert de Vendor4Cloud de instellingen van je cloud-diensten.
+
+00:03:16.160 --> 00:03:21.320
+Het zoekt naar zaken waardoor een bron blootgesteld kan zijn, een zwakke netwerkregel, ontbrekende versleuteling...
+
+00:03:21.320 --> 00:03:24.400
+...teveel toegang of een instelling die niet meer voldoet aan je bedrijfsregels.
+
+00:03:24.580 --> 00:03:27.360
+En deze controles blijven doorlopen terwijl je omgeving verandert.
+
+00:03:27.560 --> 00:03:30.780
+Dat is belangrijk, want cloudbeveiliging is niet iets wat je eenmalig instelt en vergeet.
+
+00:03:30.900 --> 00:03:34.160
+Een bron kan op elk moment worden aangemaakt, gewijzigd, gekopieerd of verplaatst.
+
+00:03:34.320 --> 00:03:38.740
+De Vendor4Cloud blijft de huidige configuratie controleren in plaats van te vertrouwen op een review van maanden geleden.
+
+00:03:38.880 --> 00:03:41.260
+Je zult vaak de term secure scoren tegenkomen.
+
+00:03:41.480 --> 00:03:43.760
+Zie het als een inspectiescore voor een groot kantoorterrein.
+
+00:03:43.760 --> 00:03:47.820
+Het geeft inzicht in hoeveel aanbevolen veiligheidsmaatregelen actief zijn en waar nog werk aan de winkel is.
+
+00:03:47.960 --> 00:03:49.780
+Het is geen test met een voldoende of onvoldoende.
+
+00:03:49.980 --> 00:03:52.240
+Een score van 100 betekent niet dat er geen risico is.
+
+00:03:52.400 --> 00:03:55.160
+Het betekent dat de controles die in die score zijn opgenomen in orde lijken.
+
+00:03:55.320 --> 00:03:57.760
+En een lagere score betekent niet dat je cloud al gehackt is.
+
+00:03:57.920 --> 00:04:01.080
+Het betekent dat de Vendor4Cloud-instellingen heeft gevonden die aandacht verdienen.
+
+00:04:01.240 --> 00:04:05.220
+De score geeft je richting, maar nuttiger dan het cijfer zelf zijn de aanbevelingen die erachter zitten.
+
+00:04:05.380 --> 00:04:10.040
+Een aanbeveling vertelt je wat aandacht nodig heeft, welke resources risico lopen en welke wijziging dit kan verminderen.
+
+00:04:10.040 --> 00:04:13.980
+Misschien zie je dat een specifiek opslagaccount ruimere toegang toestaat dan je beleid toestaat.
+
+00:04:14.060 --> 00:04:17.640
+Of een virtuele machine beschikt mogelijk niet over een controle die je beveiligingsbaseline vereist.
+
+00:04:17.800 --> 00:04:19.220
+Je hoeft niet te raden waar je moet kijken.
+
+00:04:19.440 --> 00:04:23.500
+De aanbeveling wijst naar de resource en legt het probleem uit op een manier waar het juiste team actie op kan ondernemen.
+
+00:04:23.740 --> 00:04:26.440
+Dat verandert een vage waarschuwing in een taak met een duidelijke eigenaar.
+
+00:04:26.560 --> 00:04:28.560
+Maar niet elke bevinding vereist dezelfde reactie.
+
+00:04:28.780 --> 00:04:30.380
+Stel je voor dat je twee problemen vindt.
+
+00:04:30.440 --> 00:04:33.280
+De ene betreft een kleine test resource die vanaf buitenaf voor niemand bereikbaar is.
+
+00:04:33.280 --> 00:04:37.220
+De andere betreft een openbare resource die toegang heeft tot klantgegevens of een gevoelig systeem.
+
+00:04:37.360 --> 00:04:38.840
+Je lost de tweede als eerste op.
+
+00:04:38.940 --> 00:04:41.400
+Dat is de gedachte achter risico gebaseerde prioriteit.
+
+00:04:41.620 --> 00:04:48.240
+Defender for Cloud helpt je tijd te besteden waar een zwakke instelling tot iets ernstigers kan leiden, in plaats van elke waarschuwing als gelijk te behandelen.
+
+00:04:48.440 --> 00:04:51.100
+Dit leidt tot een term die je misschien tegenkomt, een aanvalspad.
+
+00:04:51.280 --> 00:04:56.740
+Een aanvalspad is een mogelijke route die een aanvaller kan gebruiken, beginnend bij een zwak punt en bewegend naar iets belangrijks.
+
+00:04:56.940 --> 00:04:58.740
+Misschien heeft een resource openbare toegang.
+
+00:04:58.960 --> 00:05:01.500
+Misschien verbindt die resource met een identiteit met ruime rechten.
+
+00:05:01.500 --> 00:05:04.440
+Misschien kan die identiteit een database bereiken met gevoelige informatie.
+
+00:05:04.620 --> 00:05:06.280
+Defender for Cloud kan die keten laten zien.
+
+00:05:06.440 --> 00:05:08.400
+Het betekent niet dat een aanvaller de route heeft gebruikt.
+
+00:05:08.540 --> 00:05:11.720
+Het betekent dat de route bestaat en dat jij moet beslissen of je deze sluit voordat iemand anders dat doet.
+
+00:05:11.920 --> 00:05:12.960
+Dat is een groot verschil.
+
+00:05:13.300 --> 00:05:18.200
+Aanvalspaden helpen je inzien waarom een kleine instelling veel verder kan rijken dan de resource waar het oorspronkelijk verscheen.
+
+00:05:18.340 --> 00:05:21.160
+Een openbaar eindpunt op zich lijkt misschien een klein probleem.
+
+00:05:21.340 --> 00:05:25.920
+Verbonden met een krachtige identiteit en gevoelige data, krijgt het een veel hogere prioriteit.
+
+00:05:26.200 --> 00:05:28.840
+Soms delen meerdere aanvalspaden hetzelfde zwakke punt.
+
+00:05:29.080 --> 00:05:30.740
+Microsoft noemt deze knelpunten.
+
+00:05:30.740 --> 00:05:34.460
+Een knelpunt is een plek waar een oplossing meerdere mogelijke routes tegelijk kan sluiten.
+
+00:05:34.660 --> 00:05:41.140
+Bijvoorbeeld, het beperken van toegang tot één identiteit of het verwijderen van een onnodige openbare verbinding kan het risico voor meerdere resources verkleinen.
+
+00:05:41.380 --> 00:05:42.280
+Dat bespaart tijd.
+
+00:05:42.520 --> 00:05:47.820
+In plaats van tien gerelateerde symptomen één voor één te verhelpen, kunnen je beveiligings- en cloudteams zich richten op de gedeelde oorzaak.
+
+00:05:48.000 --> 00:05:50.860
+Defender for Cloud gebruikt ook beleid en compliance-controles.
+
+00:05:51.100 --> 00:05:54.220
+Beleid is een regel die je toepast op je Azure-abonnementen en resources.
+
+00:05:54.220 --> 00:06:02.720
+Je kunt een regel instellen dat opslag versleuteld moet zijn, dat bepaalde netwerkpoorten niet open mogen blijven, of dat resources een specifieke beveiligingsinstelling nodig hebben voordat mensen ze gebruiken.
+
+00:06:02.900 --> 00:06:04.500
+Beleid creëert consistentie.
+
+00:06:04.760 --> 00:06:09.960
+Zonder beleid kan elk team resources op zijn eigen manier bouwen en wordt beveiliging achteraf een handmatige controle.
+
+00:06:10.200 --> 00:06:15.160
+Met beleidsregels kun je controleren of resources dezelfde regels volgen wanneer ze worden gemaakt of gewijzigd.
+
+00:06:15.160 --> 00:06:16.760
+Maar er wordt hier vaak een fout gemaakt.
+
+00:06:17.000 --> 00:06:20.840
+Veel teams laten beleidsregels in de audit-modus staan en gaan ervan uit dat die regels riskante instellingen tegenhouden.
+
+00:06:21.000 --> 00:06:22.940
+De audit-modus rapporteert het probleem alleen maar.
+
+00:06:23.080 --> 00:06:26.560
+Het meldt dat iemand iets heeft gemaakt dat niet volgens de regels is, maar blokkeert de wijziging niet.
+
+00:06:26.740 --> 00:06:30.660
+Dat kan een logisch beginpunt zijn terwijl je leert welke bestaande resources mogelijk problemen geven.
+
+00:06:30.900 --> 00:06:35.380
+Zodra je de impact begrijpt en oude problemen hebt opgelost, hebben sommige risicovolle regels strengere handhaving nodig.
+
+00:06:35.560 --> 00:06:39.100
+Het doel is dus niet om een perfecte scorena te jagen of elke waarschuwing in elk portaal te lezen.
+
+00:06:39.100 --> 00:06:40.840
+Je bouwt een duidelijke takenlijst op.
+
+00:06:40.840 --> 00:06:47.260
+Je ziet welke resources aandacht nodig hebben, welke risico's betrekking hebben op gevoelige doelwitten en welke reparatie meerdere problemen tegelijk oplost.
+
+00:06:47.480 --> 00:06:50.500
+Dat geeft beveiligingsteams en cloud teams een gedeeld startpunt.
+
+00:06:50.700 --> 00:06:55.580
+Een veiligere opzet vermindert de makkelijke kansen, maar kan niet elke dreiging die al ingang is zetten, stoppen.
+
+00:06:55.780 --> 00:06:59.960
+Workload Protection Posture Management controleert de configuratie rondom je cloud services.
+
+00:07:00.220 --> 00:07:02.880
+Workload Protection kijkt naar de zaken die daar daadwerkelijk draaien.
+
+00:07:03.080 --> 00:07:05.140
+Denk aan alles wat jouw bedrijf in de cloud laat draaien.
+
+00:07:05.140 --> 00:07:07.300
+Een virtuele machine draait een oude bedrijfsapplicatie.
+
+00:07:07.440 --> 00:07:08.840
+Een database bevat klantgegevens.
+
+00:07:09.020 --> 00:07:10.680
+Een opslagaccount bewaart geüploaden bestanden.
+
+00:07:10.840 --> 00:07:12.640
+Containers draaien onderdelen van een moderne app.
+
+00:07:12.780 --> 00:07:14.180
+Een webapp verwerkt klantverzoeken.
+
+00:07:14.380 --> 00:07:15.160
+Dat zijn workloads.
+
+00:07:15.480 --> 00:07:18.720
+De vendor voor cloud voegt beveiliging toe op basis van de workload die je moet beschermen.
+
+00:07:18.860 --> 00:07:23.020
+Het behandelt een database, server en container niet alsof ze allemaal dezelfde risico's lopen.
+
+00:07:23.280 --> 00:07:24.380
+Dat is precies het punt.
+
+00:07:24.620 --> 00:07:26.080
+Het werk gebeurt in twee delen.
+
+00:07:26.280 --> 00:07:31.760
+Eerst zoekt het naar zwakke plekken voordat er problemen ontstaan, zoals bekende softwarefouten of ontbrekende beveiligingsinstellingen.
+
+00:07:31.760 --> 00:07:38.620
+Daarna let het op tekenen van verdachte activiteiten terwijl de workload draait, zodat je een zwakte op een server kunt vinden voordat een aanvaller dat doet.
+
+00:07:38.620 --> 00:07:46.180
+Het kan je ook waarschuwen als activiteit op die server niet klopt, zoals signalen van malware, ongebruikelijke wijzigingen of pogingen om bekende aanvalsmethoden te gebruiken.
+
+00:07:46.400 --> 00:07:49.000
+Microsoft bundelt deze beveiligingen in de vendor plannen.
+
+00:07:49.200 --> 00:07:51.180
+Je kiest plannen op basis van wat je gebruikt.
+
+00:07:51.380 --> 00:07:54.240
+Als je virtuele machines hebt, kijk je naar de vendor voor servers.
+
+00:07:54.500 --> 00:07:58.080
+Als je bedrijf bestanden opslaat in Azure Storage, kijk je naar de vendor voor storage.
+
+00:07:58.080 --> 00:08:02.140
+Als je containers of databases gebruikt, zijn daar plannen en controles voor ontworpen.
+
+00:08:02.280 --> 00:08:05.440
+Er is niet één grote schakelaar die elke resource dezelfde beveiliging geeft.
+
+00:08:05.660 --> 00:08:08.660
+Dat zou onnodige kosten en ruis veroorzaken waar je het misschien niet nodig hebt.
+
+00:08:08.820 --> 00:08:15.120
+In plaats daarvan beslist je welke workloads belangrijke data of services bevatten of meer risico lopen, en schakel je daarvoor de juiste beveiliging in.
+
+00:08:15.300 --> 00:08:16.900
+Laten we een server als voorbeeld nemen.
+
+00:08:17.100 --> 00:08:20.820
+De vendor voor servers kan helpen software kwetsbaarheden op Windows en Linux servers te vinden.
+
+00:08:21.020 --> 00:08:24.820
+Het kan ontbrekende updates rapporteren en laten zien waar een bekende kwetsbaarheid een machine beïnvloedt.
+
+00:08:24.820 --> 00:08:30.460
+Het kan ook bestandswijzigingen monitoren, wat belangrijk is wanneer een bestand of systeeminstelling verandert op een manier die onderzoek vereist.
+
+00:08:30.660 --> 00:08:32.200
+Malware signalen zijn ook van belang.
+
+00:08:32.400 --> 00:08:36.520
+Een server kan er van buiten gezond uitzien terwijl er iets schadelijks draait binnen het besturingssysteem.
+
+00:08:36.640 --> 00:08:39.800
+En dat is waar de vendor voor het point verbinding kan maken met de vendor voor cloud.
+
+00:08:39.980 --> 00:08:42.260
+De namen lijken op elkaar, maar hun taken zijn verschillend.
+
+00:08:42.440 --> 00:08:44.640
+De vendor voor het point houdt het apparaat zelf in de gaten.
+
+00:08:44.840 --> 00:08:48.860
+Het ziet activiteit in het besturingssysteem, processen, bestanden en gedrag op een laptop of server.
+
+00:08:49.080 --> 00:08:52.020
+De vendor voor cloud kijkt naar de cloud resource rondom dat apparaat.
+
+00:08:52.020 --> 00:08:58.140
+Het ziet de cloudinstelling van de server, de netwerkblootstelling, het workloadbeschermingsplan en het bredere risico verbonden aan die resource.
+
+00:08:58.420 --> 00:09:00.200
+Samen geven ze u een vollediger beeld.
+
+00:09:00.460 --> 00:09:04.480
+Stel je voor dat de vendor voor het point verdachte activiteit detecteert op een virtuele machine.
+
+00:09:04.720 --> 00:09:07.660
+Op zichzelf vertelt die waarschuwing je dat er iets mis kan zijn in de server.
+
+00:09:07.900 --> 00:09:09.900
+De vendor voor cloud voegt daar context aan toe.
+
+00:09:10.080 --> 00:09:12.040
+Staat de virtuele machine open naar het internet?
+
+00:09:12.300 --> 00:09:13.280
+Welk team is eigenaar?
+
+00:09:13.460 --> 00:09:15.140
+Maakt deze verbinding met een gevoelige database?
+
+00:09:15.460 --> 00:09:17.420
+Is er een bekende kwetsbaarheid op dezelfde machine?
+
+00:09:17.420 --> 00:09:21.560
+Wat moet het cloud of infrastructuur team herstellen terwijl het beveiligingsteam onderzoek doet?
+
+00:09:21.780 --> 00:09:26.580
+Dat verandert het gesprek van we hebben een waarschuwing naar deze server heeft verdachte activiteit.
+
+00:09:26.780 --> 00:09:30.240
+Het heeft openbare blootstelling en dit is de persoon die actie moet ondernemen.
+
+00:09:30.440 --> 00:09:33.740
+Een praktische functie voor virtuele machines is just-in-time toegang.
+
+00:09:33.960 --> 00:09:37.700
+Veel beheerders hebben RDP nodig voor Windows servers of SSH voor Linux servers.
+
+00:09:37.960 --> 00:09:42.080
+De riskante aanpak is om die beheerpoorten altijd open te laten staan omdat iemand ze later nodig zou kunnen hebben.
+
+00:09:42.320 --> 00:09:44.420
+Just-in-time toegang hanteert een andere aanpak.
+
+00:09:44.420 --> 00:09:49.200
+Het houdt de beheerdeur dicht en opent deze voor een korte, goedgekeurde periode wanneer een beheerder verbinding moet maken.
+
+00:09:49.400 --> 00:09:51.600
+Nadat die tijd is verstreken, gaat de deur weer dicht.
+
+00:09:51.800 --> 00:09:55.320
+Je laat de toegang niet elke dag openstaan alleen omdat je het misschien volgende week nodig hebt.
+
+00:09:55.520 --> 00:09:57.620
+Opslag heeft zijn eigen soort bescherming nodig.
+
+00:09:57.820 --> 00:10:02.500
+Een opslagaccount kan documenten, backups, rapporten of door klanten geüploaden bestanden bevatten.
+
+00:10:02.680 --> 00:10:07.800
+De vendor for storage kan geüploaden bestanden scannen op malware en waarschuwingen geven bij verdachte toegang.
+
+00:10:07.980 --> 00:10:12.600
+Het kan je ook helpen begrijpen wanneer gevoelige data zich op een plek bevinden die meer aandacht vereist.
+
+00:10:12.600 --> 00:10:19.120
+Dat is belangrijk omdat een schadelijk bestand in opslag pas problemen kan veroorzaken wanneer iemand het download of een andere service het begint te verwerken.
+
+00:10:19.340 --> 00:10:22.100
+Containers en databases hebben weer andere controles nodig.
+
+00:10:22.340 --> 00:10:29.120
+Containers draaien vaak snel en in groot aantallen, dus hun bescherming richt zich op de images, instellingen en het gedrag verbonden aan container workloads.
+
+00:10:29.520 --> 00:10:35.100
+Databases hebben aandacht nodig wat betreft verdachte zoekopdrachten, inlogactiviteit en data gerelateerde bedreigingen.
+
+00:10:35.300 --> 00:10:37.960
+Het doel is niet om één algemene scan voor alles te gebruiken.
+
+00:10:38.160 --> 00:10:41.360
+Het is om beveiliging toe te passen die past bij de taak van elke workload.
+
+00:10:41.360 --> 00:10:44.560
+Toch hangt elk van deze beveiligingen af van iets heel bazaals.
+
+00:10:44.780 --> 00:10:48.560
+De vendor voor cloud kan alleen bronnen beveiligen en rapporteren die het kan zien.
+
+00:10:48.740 --> 00:10:53.100
+En zodra je verder kijkt aan één Azure-abonnement, wordt dat een veel grotere vraag.
+
+00:10:53.280 --> 00:10:56.320
+Eén overzicht van Azure, on-premises en andere clouds.
+
+00:10:56.600 --> 00:10:59.320
+De meeste bedrijven houden niet elke workload op één plek.
+
+00:10:59.480 --> 00:11:03.780
+Je draait misschien de meeste services in Azure, terwijl een oudere server nog steeds op kantoor staat.
+
+00:11:03.940 --> 00:11:07.700
+Een bedrijfsafdeling gebruikt wellicht Amazon Web Services, vaak AWS genoemd.
+
+00:11:07.700 --> 00:11:10.980
+Een ander team heeft misschien services in Google Cloud Platform of GCP.
+
+00:11:11.320 --> 00:11:15.260
+Dat laat je achter met aparte portals, aparte lijsten en aparte manieren om problemen te vinden.
+
+00:11:15.440 --> 00:11:18.360
+Het is alsof je drie verschillende beveiligers hebt die niet met elkaar praten.
+
+00:11:18.580 --> 00:11:23.900
+De vendor voor cloud kan verbonden Azure, on-premises, AWS en GCP-omgevingen in één beveiligingsoverzicht samenbrengen.
+
+00:11:23.900 --> 00:11:31.900
+Het doel is simpel. In plaats van één dashboard te openen voor Azure Virtual Machines, een tweede voor AWS-accounts en een derde systeem voor servers in je eigen pand,
+
+00:11:32.060 --> 00:11:35.140
+kun je de beveiligingstatus van die verbonden omgevingen op één plek bekijken.
+
+00:11:35.360 --> 00:11:38.600
+Dat ene overzicht bespaart je het wisselen tussen schermen en het verliezen van context.
+
+00:11:38.860 --> 00:11:41.820
+Nu betekent dat niet dat elke cloud precies op dezelfde manier werkt.
+
+00:11:41.960 --> 00:11:47.460
+Azure, AWS, GCP en on-premises systemen hebben elk hun eigen services, toegangsregels en verbindingsmethoden.
+
+00:11:47.460 --> 00:11:54.300
+Maar de vendor voor cloud kan beveiligingsinformatie verzamelen van de omgevingen die je verbindt en de bevindingen in een gemeenschappelijk overzicht tonen.
+
+00:11:54.460 --> 00:11:56.620
+Dat verkleint de kans op het missen van context.
+
+00:11:56.860 --> 00:12:02.600
+Een waarschuwing op een server betekent bijvoorbeeld meer als je ook kunt zien of die server bij een cloud-abonnement hoort,
+
+00:12:02.800 --> 00:12:07.480
+in een AWS-account staat of als onderdeel van een oudere on-premises service draait.
+
+00:12:07.660 --> 00:12:14.040
+Het beveiligingsteam kan minder tijd besteden aan de vraag, waar staat deze bron, en meer tijd aan het beslissen wat aandacht nodig heeft.
+
+00:12:14.260 --> 00:12:17.020
+Voordat je iets kunt beveiligen, moet je weten dat het bestaat.
+
+00:12:17.020 --> 00:12:19.340
+Dit is waar asset-inventarisatie van belang is.
+
+00:12:19.520 --> 00:12:23.340
+Een asset-inventaris is simpelweg een lijst van de dingen die je bedrijf bezit of in de cloud draait.
+
+00:12:23.560 --> 00:12:28.720
+Dat kan virtuele machines, databases, opslagaccounts, containerclusters en andere services omvatten.
+
+00:12:28.880 --> 00:12:31.660
+Het klinkt voor de hand liggend, maar cloud-bronnen verschijnen snel.
+
+00:12:31.820 --> 00:12:34.000
+Een projectteam kan een testomgeving aanmaken.
+
+00:12:34.160 --> 00:12:36.960
+Een leverancier kan bronnen aanmaken in een ander cloud-account.
+
+00:12:37.180 --> 00:12:41.320
+Een oude workload kan blijven draaien nadat degene die hem heeft gebouwd naar een andere rol is verplaatst.
+
+00:12:41.460 --> 00:12:45.080
+Als het niet in je inventaris staat, kan het gemakkelijk buiten je beveiligingswerk vallen.
+
+00:12:45.080 --> 00:12:49.480
+De vendor for cloud helpt u de resources te zien die het kent, samen met hun beveiligingsdekking.
+
+00:12:49.640 --> 00:12:54.980
+U kunt zien of een resource beveiliging heeft, slechts een deel van de verwachte beveiliging heeft, of helemaal geen beveiliging heeft.
+
+00:12:55.180 --> 00:12:56.820
+Die laatste groep heeft aandacht nodig.
+
+00:12:57.020 --> 00:13:05.260
+Een onbeveiligde resource is niet altijd onveilig op zichzelf, maar als een productiedatabase of server die verbonden is met internet geen geplande dekking heeft, is dat een gat dat u moet begrijpen.
+
+00:13:05.420 --> 00:13:08.820
+Een dekkingsweergave verandert vage aannames in een lijst die u kunt controleren.
+
+00:13:08.820 --> 00:13:12.580
+Zijn al onze servers beveiligd? Wordt een echte vraag met een echt antwoord.
+
+00:13:12.840 --> 00:13:14.160
+Machtigingen zijn ook van belang.
+
+00:13:14.360 --> 00:13:18.660
+Een groot bedrijf wil niet dat iedereen in de beveiligingsportal elke resource kan zien en beheren.
+
+00:13:18.820 --> 00:13:20.820
+Het infrastructuurteam moet wellicht werken met serverbevindingen.
+
+00:13:21.740 --> 00:13:24.180
+Het database team moet wellicht databasebevindingen kunnen zien.
+
+00:13:24.380 --> 00:13:28.820
+Een team dat verantwoordelijk is voor één bedrijfsgebied heeft mogelijk alleen toegang nodig tot de cloud resources van dat gebied.
+
+00:13:29.100 --> 00:13:31.720
+Cloudscopes en machtigingen helpen bij het creëren van die grenzen.
+
+00:13:31.960 --> 00:13:34.960
+Zie een cloudscope als een gedefinieerd gebied waar iemand mee kan werken.
+
+00:13:34.960 --> 00:13:39.000
+U kunt een rol koppelen aan specifieke omgevingen, abonnementen of resourcegroepen,
+
+00:13:39.120 --> 00:13:42.880
+zodat mensen zien waarvoor zij verantwoordelijk zijn zonder toegang te krijgen tot al het overige.
+
+00:13:43.040 --> 00:13:44.800
+Dat houdt de verantwoordelijkheid helder.
+
+00:13:45.000 --> 00:13:48.400
+Het infrastructuurteam kan zich concentreren op servers en de bijbehorende bevindingen.
+
+00:13:48.640 --> 00:13:52.420
+Tegelijkertijd kan het database team databasebevindingen beoordelen en de systemen beheren die zij bezitten.
+
+00:13:52.660 --> 00:13:54.860
+Beide teams werken vanuit hetzelfde verbonden beveiligingsbeeld,
+
+00:13:55.020 --> 00:13:57.400
+maar geen van beide teams hoeft de services van het andere team te beheren.
+
+00:13:57.520 --> 00:13:59.460
+Er is één beperking die u altijd moet onthouden.
+
+00:13:59.660 --> 00:14:03.460
+Defender for Cloud kan alleen rapporteren over omgevingen die u hebt verbonden en aan boord hebt gebracht.
+
+00:14:03.460 --> 00:14:06.780
+Als een Azure-abonnement niet is opgenomen, kan dit een blinde vlek worden.
+
+00:14:06.940 --> 00:14:11.720
+Als een AWS-account niet is verbonden, kan Defender for Cloud niet rapporteren over de resources die daarin staan.
+
+00:14:12.000 --> 00:14:16.260
+Hetzelfde geldt voor GCP en on-premises servers die niet aan de service zijn toegevoegd.
+
+00:14:16.400 --> 00:14:18.580
+Geen enkel dashboard kan laten zien wat het niet kent.
+
+00:14:18.760 --> 00:14:21.340
+Om volledige onboarding veroorzaakt een veelvoorkomend probleem.
+
+00:14:21.480 --> 00:14:25.960
+Een bedrijf ziet een nieuw beveiligingsdashboard, gaat ervan uit dat het het hele bedrijf dekt en ontdekt later een vergeten abonnement
+
+00:14:25.960 --> 00:14:28.080
+of afzonderlijk cloudaccount dat nooit in het overzicht verscheen.
+
+00:14:28.320 --> 00:14:30.800
+Controleer daarom uw dekking voordat u de resultaten vertrouwt.
+
+00:14:30.800 --> 00:14:32.480
+Vraag welke abonnementen er bestaan.
+
+00:14:33.460 --> 00:14:37.380
+Vraag of oudere servers nog steeds in gebruik zijn.
+
+00:14:37.540 --> 00:14:40.580
+Vergelijk die lijst vervolgens met wat Defender for Cloud daadwerkelijk kan zien.
+
+00:14:40.800 --> 00:14:44.960
+Zodra de weergave is verbonden, wordt compliance veel nuttiger dan een spreadsheet vol oude controles.
+
+00:14:45.180 --> 00:14:47.260
+Compliance zonder het najagen van spreadsheets.
+
+00:14:47.440 --> 00:14:52.020
+Compliance betekent controleren of uw cloudinstellingen voldoen aan de regels die uw bedrijf heeft afgesproken na te leven.
+
+00:14:52.240 --> 00:14:58.240
+Die regels kunnen voortkomen uit een klantcontract, een wettelijke vereisten, een industriestandaard of uw eigen interne beveiligingsbeleid.
+
+00:14:58.440 --> 00:15:01.740
+Vroeger betekende dit vaak dat iemand screenshots verzamelde voor een audit.
+
+00:15:01.740 --> 00:15:07.540
+Men vroeg of encryptie was ingeschakeld of logging aanstond of dat toegangsregels voldeden aan het bedrijfsbeleid.
+
+00:15:07.660 --> 00:15:11.920
+Tegen de tijd dat het spreadsheet de auditor bereikte, was de omgeving mogelijk al veranderd.
+
+00:15:12.040 --> 00:15:14.360
+Cloud services wachten niet op jaarlijkse controles.
+
+00:15:14.600 --> 00:15:18.740
+Defender for Cloud biedt een manier om cloud resources continu te toetsen aan ingebouwde standaarden.
+
+00:15:18.920 --> 00:15:25.740
+Je ziet standaarden zoals CIS NIST, ISO 27001, HIPAA, PCI DSS en de Microsoft Cloud Security Benchmark.
+
+00:15:25.860 --> 00:15:28.820
+Je hoeft niet elke standaard uit je hoofd te kennen om het basisidee te begrijpen.
+
+00:15:28.820 --> 00:15:32.820
+Elke standaard bevat controls. Een control is een regel of vereiste beveiligingsmaatregel.
+
+00:15:33.540 --> 00:15:39.440
+Het controleert of een instelling is ingeschakeld, toegang is beperkt of een resource de vereiste configuratie volgt.
+
+00:15:39.620 --> 00:15:44.560
+Het compliance-overzicht toont welke controles zijn geslaagd, welke zijn mislukt en welke resources de fouten veroorzaakten.
+
+00:15:44.740 --> 00:15:47.160
+Dat maakt een omvangrijke standaard makkelijker hanteerbaar.
+
+00:15:47.380 --> 00:15:51.460
+In plaats van een melding dat een control is mislukt, kun je dieper kijken naar de betrokken resources.
+
+00:15:51.800 --> 00:15:56.520
+Je ziet ook voorgestelde herstelacties bij de bevinding, zodat de verantwoordelijke een startpunt heeft.
+
+00:15:56.520 --> 00:16:00.560
+Stel dat een auditor vraagt of je cloudopslag aan een specifieke regel voldoet.
+
+00:16:00.740 --> 00:16:07.980
+In plaats van oude noticies te doorzoeken, bekijk je de actuele control status, de resources en eventuele openstaande punten.
+
+00:16:08.180 --> 00:16:12.820
+Je beveiligingsteam krijgt een takenlijst en je auditor krijgt bewijslast gebaseerd op de huidige omgeving.
+
+00:16:13.040 --> 00:16:15.940
+De controles blijven up-to-date naarmate resources veranderen.
+
+00:16:16.100 --> 00:16:20.860
+Als iemand een cloudinstelling wijzigt na de laatste audit, verschijnt die wijziging in het compliance-overzicht.
+
+00:16:21.060 --> 00:16:25.380
+Dit maakt van compliance een vast onderdeel van resourcebeheer in plaats van een jaarlijkse stressfactor.
+
+00:16:25.380 --> 00:16:28.320
+Dat bespaart tijd en creëert bovendien verantwoordelijkheid.
+
+00:16:28.440 --> 00:16:31.140
+Een mislukte control geeft aan dat een regel aandacht vereist.
+
+00:16:31.320 --> 00:16:36.920
+Het team dat de resource beheert, kan het herstellen, een geaccepteerde uitzondering documenteren of toelichten waarom het niet van toepassing is.
+
+00:16:37.120 --> 00:16:41.000
+Het resultaat is duidelijker dan een spreadsheet waarvan niemand weet wie de laatste wijziging deed.
+
+00:16:41.180 --> 00:16:44.680
+Toch garandeert een hoge compliance score geen volledige bescherming tegen elke aanval.
+
+00:16:44.880 --> 00:16:47.780
+Compliance controleert of je voldoet aan een gedefinieerde set regels.
+
+00:16:47.780 --> 00:16:49.900
+Aanvallers beperken zich niet tot een checklist.
+
+00:16:50.100 --> 00:16:55.780
+Een resource kan aan een standaard voldoen en toch kwetsbaar zijn voor nieuwe softwarefouten, gestolen wachtwoorden of verdachte activiteiten.
+
+00:16:56.000 --> 00:16:59.740
+Gebruik compliance dus om je afgesproken regels te toetsen en bewijslast actueel te houden.
+
+00:16:59.920 --> 00:17:02.940
+Gebruik het om hiaten te vinden, taken toe te wijzen en voortgang aan te tonen.
+
+00:17:03.120 --> 00:17:07.820
+Dit kan overweldigend lijken bij het eerste bezoek aan de portal, dus de beste volgende stap is een eenvoudig plan voor de eerste week.
+
+00:17:07.940 --> 00:17:09.920
+Hoe begin je zonder alles tegelijk in te schakelen?
+
+00:17:09.920 --> 00:17:13.960
+Dus, hoe begin je? Maak eerst een simpel overzicht van wat je daadwerkelijk gebruikt.
+
+00:17:14.160 --> 00:17:22.300
+Lijst je Azure-abonnementen op, daarna je servers, opslagaccounts, databases, containerservices en alle workloads in AWS, Google Cloud of je eigen datacenter.
+
+00:17:22.500 --> 00:17:27.280
+Hou het praktisch. Je probeert één vraag te beantwoorden, wat moet er worden beveiligd en waar bevindt het zich?
+
+00:17:27.480 --> 00:17:31.540
+Zodra je dat overzicht hebt, verbind je de omgevingen die je door Defender voor Cloud wilt laten monitoren.
+
+00:17:31.740 --> 00:17:35.180
+Maar voordat je in honderden aanbevelingen duikt, bekijk eerst het dekkingsoverzicht.
+
+00:17:35.460 --> 00:17:38.380
+Bevindingen helpen alleen als je weet of de juiste resources worden getoond.
+
+00:17:38.380 --> 00:17:43.420
+Begin met posture management. Controleer je secure score en kijk daarna naar de bevindingen met het hoogste risico daarachter.
+
+00:17:43.540 --> 00:17:45.760
+Probeer niet alle waarschuwingen op de eerste dag op te lossen.
+
+00:17:45.960 --> 00:17:48.820
+Zoek in plaats daarvan naar problemen die steeds terugkeren in je omgeving.
+
+00:17:49.000 --> 00:17:53.480
+Publieke blootstelling, zwakke identiteitscontroles, open beheerpoorten en ontbrekende patches.
+
+00:17:53.840 --> 00:17:56.360
+Dat zijn vaak de snelste manieren om risico's te verminderen.
+
+00:17:56.580 --> 00:18:01.180
+Kies daarna workload protection plannen op basis van de services die je echt gebruikt en de risico's die ze met zich meebrengen.
+
+00:18:01.300 --> 00:18:06.860
+Een productieserver met bedrijfsgegevens verdient andere aandacht dan een kortstondig testsysteem zonder gevoelige informatie.
+
+00:18:06.860 --> 00:18:08.980
+Schakel beveiliging dus met een reden in.
+
+00:18:09.140 --> 00:18:13.880
+Verbind Microsoft Defender 4 het point voor servers die diepere detectie op apparaatniveau nodig hebben.
+
+00:18:14.100 --> 00:18:20.520
+Dat geeft je beter inzicht in de activiteit binnen het besturingssysteem, terwijl Defender 4 Cloud de cloud resource en de blootstelling ervan in beeld houdt.
+
+00:18:20.640 --> 00:18:23.640
+Wijs vervolgens een eigenaar toe aan elke bevinding die actie vereist.
+
+00:18:23.800 --> 00:18:26.960
+Een aanbeveling zonder eigenaar wordt een herinnering waar niemand iets mee doet.
+
+00:18:26.960 --> 00:18:34.920
+Je infrastructuurteam is wellicht verantwoordelijk voor server fixes, je appteam voor database instellingen en je securityteam kan het werk volgen en controleren of het is afgerond.
+
+00:18:35.040 --> 00:18:36.800
+Plan een vast moment voor een evaluatie.
+
+00:18:37.020 --> 00:18:40.500
+Wekelijks is wellicht geschikt voor een drukomgeving, terwijl maandelijks voor een kleinere omgeving volstaat.
+
+00:18:40.620 --> 00:18:42.780
+Het schema is minder belangrijk dan de routine zelf.
+
+00:18:42.980 --> 00:18:44.940
+Je probeert geen perfecte scoren te behalen.
+
+00:18:45.100 --> 00:18:48.760
+Je verwijdert de makkelijke toegangswegen naar je cloud één duidelijke fix per keer.
+
+00:18:49.020 --> 00:18:52.760
+Zie Defender 4 Cloud als een beveiliger die controleert hoe je cloud is ingericht.
+
+00:18:52.760 --> 00:18:56.720
+De belangrijke ruimte is bewaakt en je teams wijst op de risico's die eerst aandacht verdienen.
+
+00:18:56.860 --> 00:19:00.100
+Als simpele uitdaging verbindt deze week één Azure abonnement.
+
+00:19:00.260 --> 00:19:05.120
+Kijk welke resources in het dekkingsoverzicht verschijnen, vind de meest blootgestolde resource en wijs iemand aan om dit te verhelpen.
+
+00:19:05.320 --> 00:19:08.940
+Dat geeft je een echt startpunt in plaats van weer een security dashboard om te negeren.
+
+00:19:09.080 --> 00:19:14.040
+De volgende kennismodule om te verkennen is Microsoft Defender 4 Outpoint versus Defender 4 Cloud.
+
+00:19:14.240 --> 00:19:21.060
+De een hout in de gaten wat er op apparaten gebeurt, de ander kijkt naar de cloud resources eromheen en samen helpen ze u beide kanten van hetzelfde beveiligingsprobleem te zien.

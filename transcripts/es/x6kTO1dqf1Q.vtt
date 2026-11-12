@@ -1,0 +1,2572 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:05.020
+Hola a todos y bienvenidos a otro episodio de Microsoft Knowledge Nuggets aquí en M365FEM.
+
+00:00:05.560 --> 00:00:06.260
+Soy Mirko Pizas.
+
+00:00:06.860 --> 00:00:09.680
+Bueno, Microsoft Defender para nubes suena a antivirus, ¿verdad?
+
+00:00:10.180 --> 00:00:13.860
+Es una suposición acertada porque el nombre Defender aparece en muchas herramientas de seguridad de Microsoft.
+
+00:00:14.380 --> 00:00:18.040
+Pero la cosa es esta, Defender for Cloud no está para escanear tu portátil en busca de archivos malos,
+
+00:00:18.100 --> 00:00:19.600
+sino que vigila toda tu infraestructura.
+
+00:00:20.080 --> 00:00:23.740
+Piénsalo de esta manera, Defender para endpoint mantiene la seguridad dentro de una sola habitación.
+
+00:00:24.760 --> 00:00:26.600
+Vigila un portátil o servidor en busca de malware,
+
+00:00:26.600 --> 00:00:29.680
+programas extraños o señales de que alguien está intentando tomar el control.
+
+00:00:30.200 --> 00:00:33.280
+Defender para la nube vigila todo el edificio de oficinas alrededor de esa habitación.
+
+00:00:33.600 --> 00:00:36.400
+Comprueba quién puede entrar y si una puerta lateral da a la calle,
+
+00:00:37.120 --> 00:00:42.860
+examina las cerraduras, las alarmas, los almacenes y las reglas que deciden quién puede acceder a áreas confidenciales.
+
+00:00:43.400 --> 00:00:45.180
+En pocas palabras, te ayuda a ver tres cosas.
+
+00:00:45.340 --> 00:00:47.440
+¿Qué tan seguros están configurados tus recursos en la nube?
+
+00:00:47.520 --> 00:00:49.960
+Si está sucediendo algo sospechoso y qué debes arreglar primero.
+
+00:00:50.440 --> 00:00:52.480
+Una advertencia podría indicarte que una puerta está abierta.
+
+00:00:52.560 --> 00:00:55.240
+Una alerta amenaza activa te indica que alguien podría estar probando esa puerta.
+
+00:00:55.660 --> 00:00:56.720
+Esa diferencia importa.
+
+00:00:57.300 --> 00:00:59.860
+Empecemos por explicar por qué la seguridad en la nube se complica tan rápido.
+
+00:01:00.540 --> 00:01:02.500
+¿Por qué la seguridad en la nube se interrumpe tan fácilmente?
+
+00:01:02.880 --> 00:01:09.460
+Hace años, una empresa podía tener una pequeña sala de servidores, unos cuantos servidores físicos y un equipo que se encargaba de la mayor parte.
+
+00:01:09.980 --> 00:01:11.060
+La configuración avanzaba en tema.
+
+00:01:11.420 --> 00:01:13.860
+Hoy, una empresa puede crear una nueva máquina virtual en minutos.
+
+00:01:14.240 --> 00:01:19.340
+Un desarrollador puede añadir almacenamiento a un proyecto, otro equipo crear una base de datos y alguien más ejecutar contenedores para una.
+
+00:01:19.760 --> 00:01:22.520
+Cada parte puede tener su propio equipo y su propia herramienta de seguridad.
+
+00:01:22.960 --> 00:01:27.740
+Es posible que tengas una herramienta para servidores, otra para bases de datos, otra para almacenamiento y otra para contenedores.
+
+00:01:28.060 --> 00:01:31.120
+Cada herramienta muestra parte de la imagen, pero nadie ve el edificio completo.
+
+00:01:31.520 --> 00:01:32.060
+Eso creará una.
+
+00:01:32.540 --> 00:01:35.200
+Una cuenta de almacenamiento podría permitir acceso público por error.
+
+00:01:35.560 --> 00:01:39.280
+Una máquina virtual podría dejar el protocolo de escritorio remoto RDP abierto a internet.
+
+00:01:39.820 --> 00:01:41.860
+En Linux podría ser SecureShell o SSH.
+
+00:01:41.860 --> 00:01:45.600
+Una vieja cuenta de administrador podrá seguir teniendo acceso meses después de irse a un contratista.
+
+00:01:45.860 --> 00:01:48.640
+Un servidor podría omitir actualizaciones de seguridad al ejecutarse solo como prueba.
+
+00:01:48.880 --> 00:01:50.560
+Ninguno de estos errores necesita un atacante inteligente.
+
+00:01:50.880 --> 00:01:52.220
+Solo necesitan una puerta a la desbloqueada.
+
+00:01:52.540 --> 00:01:54.120
+Y los entornos en la nube cambian todo el tiempo.
+
+00:01:54.540 --> 00:01:59.100
+Un recurso que parecía seguro el lunes puede quedar expuesto el martes porque alguien cambia una configuración,
+
+00:01:59.260 --> 00:02:04.260
+crea una nueva regla de red o copia una plantilla antigua con permisos débiles que aún están dentro.
+
+00:02:04.920 --> 00:02:06.100
+Probablemente hayas visto en la vida real.
+
+00:02:06.500 --> 00:02:07.600
+Un equipo necesita un server rápido.
+
+00:02:08.240 --> 00:02:11.720
+Crean una máquina virtual, le dan una dirección pública para que puedan conectarse desde casa
+
+00:02:11.720 --> 00:02:13.820
+y abren RDP o SSH porque es más rápido.
+
+00:02:14.360 --> 00:02:14.840
+La prueba funciona.
+
+00:02:15.260 --> 00:02:18.200
+Luego, el proyecto finaliza, la gente sigue adelante y ese servidor permanece en línea.
+
+00:02:18.720 --> 00:02:19.820
+¿Su puerta pública permanece abierta?
+
+00:02:20.100 --> 00:02:24.180
+Nadie quiere que eso suceda, pero sucede porque los recursos en la nube son fáciles de crear y fáciles de olvidar.
+
+00:02:24.520 --> 00:02:26.360
+Ahora asume la forma en que trabajan muchas empresas.
+
+00:02:26.780 --> 00:02:28.120
+Puede que tengas cargas de trabajo o NAS.
+
+00:02:28.460 --> 00:02:31.000
+Puede que sigas ejecutando servidores en tu propia oficina o centro de datos.
+
+00:02:31.260 --> 00:02:33.500
+Un proveedor puede usar Amazon Web Services o AWS.
+
+00:02:34.160 --> 00:02:35.880
+Otro equipo puede usar Google Cloud Platform.
+
+00:02:36.340 --> 00:02:37.660
+La seguridad ya no se queda en un portal.
+
+00:02:38.360 --> 00:02:40.260
+Una largarista de alertas tampoco resuelve ese problema.
+
+00:02:40.260 --> 00:02:43.960
+Si ves cientos de advertencias sin saber cuál expone datos de clientes,
+
+00:02:44.060 --> 00:02:47.140
+cuál afecta a un sistema de prueba y cuál crea una ruta hacia algo confidencial,
+
+00:02:47.300 --> 00:02:48.120
+aún no sabes por dónde.
+
+00:02:48.860 --> 00:02:49.260
+Empezar.
+
+00:02:50.100 --> 00:02:50.860
+Necesita contexto.
+
+00:02:51.260 --> 00:02:53.060
+Necesita saber qué existe, a qué se enfrenta Internet,
+
+00:02:53.200 --> 00:02:55.820
+quién puede acceder a ello y qué solución elimina el mayor riesgo.
+
+00:02:56.340 --> 00:02:57.420
+Ahí es donde comienza Defender for Cloud.
+
+00:02:57.880 --> 00:02:59.860
+Busca las puertas débiles antes de que alguien entre.
+
+00:03:00.720 --> 00:03:01.940
+Gestión de la postura de seguridad en la nube.
+
+00:03:02.480 --> 00:03:04.740
+El primer componente es la gestión de la postura de seguridad en la nube.
+
+00:03:05.200 --> 00:03:07.400
+Ese nombre suena pesado, así que déjame explicarlo sencillo.
+
+00:03:07.400 --> 00:03:10.320
+Es una inspección de seguridad periódica de tus recursos en la nube.
+
+00:03:10.840 --> 00:03:13.080
+En lugar de recorrer un edificio real con un portapapeles,
+
+00:03:13.360 --> 00:03:15.720
+Defender for Cloud comprueba la configuración de tus servicios en la nube.
+
+00:03:16.420 --> 00:03:18.460
+Busca elementos que podrían dejar un recurso expuesto,
+
+00:03:18.560 --> 00:03:20.980
+una regla de red débil, un cifrado faltante, demasiado acceso
+
+00:03:20.980 --> 00:03:23.980
+o una configuración que ya no coincide con las reglas de tu empresa.
+
+00:03:25.060 --> 00:03:27.260
+Y estas comprobaciones siguen ejecutándose a medida que cambia tu entorno.
+
+00:03:27.720 --> 00:03:29.320
+Esto es importante porque la seguridad en la nube
+
+00:03:29.320 --> 00:03:30.760
+no es algo que se configura una vez y se olvida.
+
+00:03:31.060 --> 00:03:33.620
+Un recurso se puede crear, cambiar, copiar o mover en cualquier momento.
+
+00:03:33.620 --> 00:03:36.260
+Defender for Cloud sigue comprobando la configuración actual
+
+00:03:36.260 --> 00:03:38.720
+en lugar de confiar en una revisión que alguien completó hace meses.
+
+00:03:39.340 --> 00:03:40.920
+A menudo verás algo llamado puntuación de seguridad.
+
+00:03:41.260 --> 00:03:43.600
+Míralo como una puntuación de inspección para un gran sitio de oficina.
+
+00:03:44.000 --> 00:03:46.780
+Te da una idea cuántos controles de seguridad recomendados están implementados
+
+00:03:46.780 --> 00:03:48.020
+y dónde queda trabajo por hacer.
+
+00:03:48.420 --> 00:03:49.600
+No es una prueba de aprobado o reprobado.
+
+00:03:49.960 --> 00:03:51.860
+Una nota de 100 no significa que no haya riesgo.
+
+00:03:52.480 --> 00:03:54.620
+Significa que los chequeos en esa puntuación lucen saludables.
+
+00:03:54.620 --> 00:03:57.660
+Y una puntuación más baja no significa que tu nube ya haya sido vulnerada.
+
+00:03:58.000 --> 00:04:00.640
+Significa que Defender for Cloud encontró configuraciones que merecen atención.
+
+00:04:00.640 --> 00:04:03.580
+La puntuación te da una dirección, pero más útil que el número en sí
+
+00:04:03.580 --> 00:04:04.960
+son las recomendaciones que hay detrás.
+
+00:04:05.640 --> 00:04:07.420
+Una recomendación te dice que necesita atención,
+
+00:04:07.540 --> 00:04:09.720
+qué recursos se enfrentan en riesgo y qué cambio puede reducirlo.
+
+00:04:10.200 --> 00:04:11.940
+Podrías observar que cierta cuenta de almacenamiento
+
+00:04:11.940 --> 00:04:13.920
+permite un acceso más amplio del que tu política admite.
+
+00:04:14.560 --> 00:04:16.420
+O es posible que una máquina virtual no tenga el control
+
+00:04:16.420 --> 00:04:18.900
+que tu línea base de seguridad, pero necesitas adivinar dónde busca.
+
+00:04:19.240 --> 00:04:21.400
+La recomendación apunta al recurso y explica el problema
+
+00:04:21.400 --> 00:04:23.380
+de una manera en la que el equipo adecuado puede actuar.
+
+00:04:23.940 --> 00:04:26.260
+Eso convierte una advertencia vaga en un trabajo con un propietario claro.
+
+00:04:26.620 --> 00:04:28.500
+Pero no todos los hallazgos merecen la misma respuesta.
+
+00:04:28.920 --> 00:04:30.020
+Imagina que encuentras dos problemas.
+
+00:04:30.020 --> 00:04:32.420
+Uno afecta a un pequeño recurso de prueba al que nadie puede acceder.
+
+00:04:32.700 --> 00:04:34.480
+El otro afecta a un recurso de acceso público
+
+00:04:34.480 --> 00:04:36.920
+que puede acceder a datos de clientes o a un sistema confidencial.
+
+00:04:37.440 --> 00:04:38.380
+Primera solución es el segundo.
+
+00:04:38.940 --> 00:04:40.720
+Esa es la lógica detrás de la prioridad según riesgos.
+
+00:04:41.140 --> 00:04:43.180
+Defender for Cloud intenta ayudarte a invertir tiempo
+
+00:04:43.180 --> 00:04:44.760
+en los casos en que una configuración débil
+
+00:04:44.760 --> 00:04:46.080
+podría dar lugar a algo más grave
+
+00:04:46.080 --> 00:04:48.020
+en lugar de tratar todas las advertencias como iguales.
+
+00:04:48.680 --> 00:04:50.940
+Esto nos lleva a un término que puedes ver llamado ruta de ataque.
+
+00:04:51.360 --> 00:04:53.980
+Una ruta de ataque es una posible ruta que un atacante podría utilizar
+
+00:04:53.980 --> 00:04:56.540
+partiendo de un punto débil y avanzando hacia algo importante.
+
+00:04:57.120 --> 00:04:58.440
+Puede que un recurso tenga acceso público.
+
+00:04:58.440 --> 00:05:01.460
+Puede que ese recurso se conecte a una identidad con permisos amplios.
+
+00:05:01.880 --> 00:05:04.660
+Quizás esa identidad logre acceder a una base de datos con información sencilla.
+
+00:05:04.860 --> 00:05:06.140
+Defender for Cloud puede mostrar esa cadena.
+
+00:05:06.500 --> 00:05:08.240
+No significa que un atacante haya utilizado la ruta.
+
+00:05:08.400 --> 00:05:10.360
+Significa que la ruta existe y que deberías decidir
+
+00:05:10.360 --> 00:05:11.460
+si cerrarla antes de que lo haga.
+
+00:05:11.640 --> 00:05:12.520
+Esa es una gran diferencia.
+
+00:05:12.760 --> 00:05:14.700
+Las rutas de ataque muestran por qué un ajuste menor
+
+00:05:14.700 --> 00:05:17.480
+puede importar mucho más allá del recurso donde apareció primero.
+
+00:05:18.340 --> 00:05:20.800
+Un punto de conexión público por sí solo puede parecer un problema menor.
+
+00:05:21.460 --> 00:05:24.140
+Conectado a una identidad potente y a datos confidenciales
+
+00:05:24.140 --> 00:05:25.560
+se convierte en una prioridad mucho mayor.
+
+00:05:25.560 --> 00:05:28.740
+A veces, varias rutas de ataque comparten el mismo punto débil.
+
+00:05:29.320 --> 00:05:30.500
+Microsoft denomina punto estrangulado.
+
+00:05:30.920 --> 00:05:32.960
+Un punto de estrangulamiento es un sitio donde un arreglo
+
+00:05:32.960 --> 00:05:34.200
+puede cerrar varias rutas a la vez.
+
+00:05:34.520 --> 00:05:36.560
+Por ejemplo, restringir el acceso a una identidad
+
+00:05:36.560 --> 00:05:38.600
+o eliminar una conexión pública innecesaria
+
+00:05:38.600 --> 00:05:40.960
+puede reducir el riesgo en varios recursos.
+
+00:05:41.480 --> 00:05:42.040
+Esto ahorra tiempo.
+
+00:05:42.520 --> 00:05:44.840
+En lugar de corregir 10 síntomas relacionados uno por uno,
+
+00:05:45.040 --> 00:05:46.840
+los equipos de seguridad y de la nube pueden centrarse
+
+00:05:46.840 --> 00:05:47.620
+en la causa compartida.
+
+00:05:48.080 --> 00:05:50.560
+Defender for Cloud también emplea directivas y controles de cumplimiento.
+
+00:05:51.100 --> 00:05:52.460
+Una directiva es una regla que se aplica
+
+00:05:52.460 --> 00:05:53.880
+a todas las suscripciones y recursos de Azure.
+
+00:05:53.880 --> 00:05:57.300
+Podría establecer una regla que exija cifrado para el almacenamiento
+
+00:05:57.300 --> 00:05:59.200
+que ciertos puertos de red no queden abiertos
+
+00:05:59.200 --> 00:06:02.140
+o que los recursos requieran ajustes de seguridad antes de usarse.
+
+00:06:02.980 --> 00:06:04.040
+Las directivas crean coherencia.
+
+00:06:04.800 --> 00:06:06.980
+Sin ellas, cada equipo puede crear recursos a su manera
+
+00:06:06.980 --> 00:06:09.680
+y la seguridad se convierte en una comprobación manual a posteriori.
+
+00:06:10.460 --> 00:06:12.300
+Con las directivas puede comprobar si los recursos
+
+00:06:12.300 --> 00:06:15.080
+siguen las mismas reglas a medida que se crean y cambian.
+
+00:06:15.540 --> 00:06:16.540
+Sin embargo, aquí se comete un error.
+
+00:06:16.540 --> 00:06:19.260
+Muchos equipos dejan sus directivas en modo de solo auditoría,
+
+00:06:19.340 --> 00:06:20.960
+asumiendo que detendrán configuraciones de riesgo.
+
+00:06:21.120 --> 00:06:22.520
+El modo de auditoría solo informa el problema.
+
+00:06:22.960 --> 00:06:24.700
+Te indica que alguien creó algo fuera de la regla,
+
+00:06:24.800 --> 00:06:25.960
+pero no bloquea el cambio.
+
+00:06:26.480 --> 00:06:28.000
+Ese puede ser un punto de partida sensato
+
+00:06:28.000 --> 00:06:30.420
+mientras aprendes qué recursos existentes podrían fallar.
+
+00:06:31.040 --> 00:06:33.060
+Al entender el impacto y corregir problemas antiguos,
+
+00:06:33.140 --> 00:06:34.140
+ciertas reglas de alto riesgo
+
+00:06:34.140 --> 00:06:35.680
+podrían requerir una aplicación más estricta.
+
+00:06:35.860 --> 00:06:37.640
+El objetivo no es perseguir una puntuación perfecta
+
+00:06:37.640 --> 00:06:38.940
+ni leer cada alerta en cada portal.
+
+00:06:39.320 --> 00:06:40.300
+Creas una lista de trabajo clara.
+
+00:06:40.700 --> 00:06:42.100
+Ves qué recursos necesitan atención,
+
+00:06:42.400 --> 00:06:44.500
+qué riesgos se relacionan con objetivos confidenciales
+
+00:06:44.500 --> 00:06:46.560
+y qué solución única elimina varias rutas a la vez.
+
+00:06:47.480 --> 00:06:49.300
+Esto ofrece a los equipos de seguridad y de nube
+
+00:06:49.300 --> 00:06:50.260
+un punto de partida común.
+
+00:06:50.920 --> 00:06:52.820
+Una configuración más segura reduce los riesgos,
+
+00:06:52.960 --> 00:06:55.100
+pero no puede detener toda amenaza que ya esté en camino.
+
+00:06:55.980 --> 00:06:57.960
+La gestión de postura y protección de cargas de trabajo
+
+00:06:57.960 --> 00:07:00.000
+revisa la configuración de tus servicios en la nube.
+
+00:07:00.380 --> 00:07:01.580
+La protección de cargas de trabajo
+
+00:07:01.580 --> 00:07:02.860
+analiza lo que se ejecuta allí.
+
+00:07:03.280 --> 00:07:05.140
+Piensa en todo lo que tu empresa pone a trabajar en la nube.
+
+00:07:05.500 --> 00:07:07.120
+Una pequeña virtual ejecuta una aplicación antigua.
+
+00:07:07.420 --> 00:07:08.560
+Una base de datos con diarquíes de rígur.
+
+00:07:08.900 --> 00:07:10.480
+Una cuenta de almacenamiento guarda de archivos cargados.
+
+00:07:10.480 --> 00:07:13.160
+Los contenedores ejecutan parte de una aplicación web
+
+00:07:13.160 --> 00:07:14.340
+gestionada a solicitudes de los clientes.
+
+00:07:14.340 --> 00:07:15.180
+Esas son las cargas de trabajo.
+
+00:07:15.420 --> 00:07:16.960
+Defender for Cloud agrega protección
+
+00:07:16.960 --> 00:07:18.620
+en función de la carga de trabajo que necesita proteger.
+
+00:07:18.700 --> 00:07:21.040
+No trata una base de datos, un servidor y un contenedor
+
+00:07:21.040 --> 00:07:22.660
+como si todos enfrentaran los mismos riesgos.
+
+00:07:23.180 --> 00:07:24.020
+Ah, ese es el punto.
+
+00:07:24.440 --> 00:07:25.620
+Su trabajo se realiza en dos partes.
+
+00:07:26.060 --> 00:07:28.360
+Primero, busca puntos débiles antes de que surjan problemas,
+
+00:07:28.600 --> 00:07:29.720
+debilidades de software conocidas
+
+00:07:29.720 --> 00:07:31.120
+o ajustes de seguridad faltantes.
+
+00:07:31.660 --> 00:07:33.600
+Después, vigila señales de actividad sospechosa
+
+00:07:33.600 --> 00:07:34.680
+durante la carga de trabajo
+
+00:07:34.680 --> 00:07:37.040
+para ayudarte a detectar cualquier debilidad en el servidor
+
+00:07:37.040 --> 00:07:40.100
+antes que un atacante también pueda alertarte
+
+00:07:40.100 --> 00:07:42.080
+si la actividad en ese servidor parece incorrecta,
+
+00:07:42.180 --> 00:07:43.960
+como señales de malware, cambios inusuales
+
+00:07:43.960 --> 00:07:45.860
+o un intento de usar un método de ataque conocido.
+
+00:07:46.640 --> 00:07:48.700
+Microsoft agrupa estas protecciones en planes de Defender.
+
+00:07:49.220 --> 00:07:50.960
+Eliges planes en función de lo que ejecutas.
+
+00:07:51.580 --> 00:07:53.920
+Si tienes máquinas virtuales, buscas Defender para servidores.
+
+00:07:54.520 --> 00:07:56.380
+Si tu empresa almacena archivos en Azure Storage,
+
+00:07:56.520 --> 00:07:57.660
+buscas Defender para almacenamiento.
+
+00:07:58.160 --> 00:07:59.740
+Si ejecutas contenedores o bases de datos,
+
+00:07:59.840 --> 00:08:01.200
+hay planes y comprobaciones diseñados
+
+00:08:01.200 --> 00:08:02.140
+para esas cargas de trabajo.
+
+00:08:02.500 --> 00:08:03.540
+No existe un gran computador
+
+00:08:03.540 --> 00:08:05.300
+que brinde a todos los recursos la misma protección.
+
+00:08:05.800 --> 00:08:07.040
+Eso generaría costos y ruido
+
+00:08:07.040 --> 00:08:08.100
+donde quizá no los necesita.
+
+00:08:08.100 --> 00:08:10.140
+En cambio, tú decides qué cargas de trabajo
+
+00:08:10.140 --> 00:08:11.900
+contienen datos importantes, servicios importantes
+
+00:08:11.900 --> 00:08:12.700
+o están más expuestas
+
+00:08:12.700 --> 00:08:14.540
+y luego activas la protección adecuada para ellas.
+
+00:08:15.440 --> 00:08:16.600
+Usemos un servidor como ejemplo.
+
+00:08:17.180 --> 00:08:18.460
+Defender para servidores puede ayudar
+
+00:08:18.460 --> 00:08:19.640
+a encontrar debilidades de software
+
+00:08:19.640 --> 00:08:20.760
+en servidores Windows y Linux.
+
+00:08:21.220 --> 00:08:22.540
+Puede reportar actualizaciones faltantes
+
+00:08:22.540 --> 00:08:24.240
+y mostrar dónde una vulnerabilidad afecta al equipo.
+
+00:08:24.940 --> 00:08:26.340
+También supervisa cambios en archivos,
+
+00:08:26.480 --> 00:08:27.900
+lo cual es relevante cuando un archivo
+
+00:08:27.900 --> 00:08:30.100
+o ajuste del sistema varía y requiere investigación.
+
+00:08:30.720 --> 00:08:31.860
+Las señales de malware también son importantes.
+
+00:08:32.460 --> 00:08:34.160
+Un servidor puede parecer saludable desde el exterior
+
+00:08:34.160 --> 00:08:36.280
+mientras que algo dañino se ejecuta de su sistema operativo.
+
+00:08:36.280 --> 00:08:38.100
+Y ahí es donde Defender para Endpoint
+
+00:08:38.100 --> 00:08:39.620
+puede conectarse con Defender para la nube.
+
+00:08:40.200 --> 00:08:41.120
+Los nombres suenan parecidos,
+
+00:08:41.200 --> 00:08:42.100
+pero sus funciones son diferentes.
+
+00:08:42.400 --> 00:08:44.260
+Defender para Endpoint observa el dispositivo en sí.
+
+00:08:44.560 --> 00:08:46.140
+Observa la actividad dentro del sistema operativo,
+
+00:08:46.360 --> 00:08:47.940
+los procesos, los archivos y el comportamiento
+
+00:08:47.940 --> 00:08:48.700
+en un portátil o servidor.
+
+00:08:49.080 --> 00:08:50.460
+Defender para la nube observa el recurso
+
+00:08:50.460 --> 00:08:51.700
+en la nube alrededor de ese dispositivo.
+
+00:08:52.080 --> 00:08:53.700
+Observa la configuración de la nube del servidor,
+
+00:08:53.820 --> 00:08:54.680
+su exposición a la red,
+
+00:08:54.800 --> 00:08:56.120
+el plan de protección de la carga de trabajo
+
+00:08:56.120 --> 00:08:57.900
+y el riesgo más amplio relacionado con ese recurso.
+
+00:08:58.480 --> 00:08:59.900
+Juntos te ofrecen una imagen más completa.
+
+00:09:00.520 --> 00:09:01.880
+Imagina que Defender para Endpoint
+
+00:09:01.880 --> 00:09:04.120
+detecta actividad sospechosa en una máquina virtual.
+
+00:09:04.120 --> 00:09:06.220
+Por sí sola, esa alerta te indica
+
+00:09:06.220 --> 00:09:07.680
+que algo puede ir mal dentro del servidor.
+
+00:09:08.020 --> 00:09:09.380
+Defender for Cloud añade contextos.
+
+00:09:09.960 --> 00:09:11.840
+La máquina virtual está abierta a Internet.
+
+00:09:12.260 --> 00:09:13.040
+¿A qué equipo pertenece?
+
+00:09:13.500 --> 00:09:15.000
+¿Se conecta a una base de datos confidencial?
+
+00:09:15.260 --> 00:09:16.900
+¿Existe una debilidad conocida en la misma máquina?
+
+00:09:17.200 --> 00:09:18.580
+¿Qué debería solucionar el equipo de la nube
+
+00:09:18.580 --> 00:09:19.220
+o de infraestructura
+
+00:09:19.220 --> 00:09:20.780
+mientras el equipo de seguridad investiga?
+
+00:09:21.400 --> 00:09:23.360
+Eso cambia la conversación de tenemos una alerta.
+
+00:09:23.440 --> 00:09:25.120
+Este servidor tiene actividad sospechosa.
+
+00:09:26.800 --> 00:09:28.100
+Está expuesto al público
+
+00:09:28.100 --> 00:09:30.000
+y esta es la persona que debe actuar.
+
+00:09:30.660 --> 00:09:32.520
+Una función práctica para las máquinas virtuales
+
+00:09:32.520 --> 00:09:33.560
+es el acceso justo a tiempo.
+
+00:09:33.560 --> 00:09:35.500
+Muchos administradores necesitan RDP
+
+00:09:35.500 --> 00:09:37.560
+para servidores Windows o SSH para servidores Linux.
+
+00:09:38.000 --> 00:09:38.600
+El enfoque arriesgado
+
+00:09:38.600 --> 00:09:40.180
+es dejar esos puertos de administración abiertos
+
+00:09:40.180 --> 00:09:40.620
+todo el tiempo
+
+00:09:40.620 --> 00:09:42.020
+porque alguien podría necesitarlo más tarde.
+
+00:09:42.280 --> 00:09:43.120
+El acceso justo a tiempo
+
+00:09:43.120 --> 00:09:44.020
+adopta un enfoque diferente.
+
+00:09:44.500 --> 00:09:45.880
+Mantiene la puerta de administración cerrada
+
+00:09:45.880 --> 00:09:47.780
+y luego la abre durante un breve periodo aprobado
+
+00:09:47.780 --> 00:09:49.340
+cuando un administrador necesita conectarse.
+
+00:09:49.580 --> 00:09:50.600
+Una vez transcurrido ese tiempo,
+
+00:09:50.660 --> 00:09:51.540
+la puerta se vuelve a cerrar.
+
+00:09:51.900 --> 00:09:53.500
+No dejas el acceso disponible todos los días
+
+00:09:53.500 --> 00:09:55.080
+solo porque podrías necesitarlo la semana que viene.
+
+00:09:55.620 --> 00:09:57.280
+Almacenamiento necesita su propieta y protección.
+
+00:09:57.780 --> 00:09:58.680
+Una cuenta de almacenamiento
+
+00:09:58.680 --> 00:09:59.720
+puede contener documentos,
+
+00:09:59.820 --> 00:10:00.360
+copias de seguridad,
+
+00:10:00.560 --> 00:10:01.820
+informes o archivos de clientes.
+
+00:10:01.820 --> 00:10:03.500
+Defender for Storage
+
+00:10:03.500 --> 00:10:04.960
+puede analizar los archivos cargados
+
+00:10:04.960 --> 00:10:05.660
+en busca de malware
+
+00:10:05.660 --> 00:10:07.600
+y generar alertas sobre accesos sospechosos.
+
+00:10:08.100 --> 00:10:09.320
+También puede ayudarte a comprender
+
+00:10:09.320 --> 00:10:10.920
+cuándo los datos confidenciales
+
+00:10:10.920 --> 00:10:12.480
+pueden estar en un lugar que requiere más atención.
+
+00:10:12.960 --> 00:10:13.600
+Esto es importante
+
+00:10:13.600 --> 00:10:15.180
+porque un archivo dañino almacenado
+
+00:10:15.180 --> 00:10:16.080
+puede no causar problemas
+
+00:10:16.080 --> 00:10:17.060
+hasta que alguien lo descargue,
+
+00:10:17.120 --> 00:10:17.580
+lo descargue
+
+00:10:17.580 --> 00:10:19.000
+u otro servicio comience a procesarlo.
+
+00:10:19.460 --> 00:10:20.440
+Contenedores y bases de datos
+
+00:10:20.440 --> 00:10:21.680
+necesitan otros controles de nuevo.
+
+00:10:22.240 --> 00:10:23.620
+Como los contenedores operan rápido
+
+00:10:23.620 --> 00:10:24.160
+y en gran número,
+
+00:10:24.260 --> 00:10:25.480
+su protección se enfoca en imágenes,
+
+00:10:25.620 --> 00:10:26.600
+ajustes y el comportamiento
+
+00:10:26.600 --> 00:10:28.160
+de sus cargas de trabajo específicas
+
+00:10:28.160 --> 00:10:29.160
+y algo específicas.
+
+00:10:29.540 --> 00:10:30.360
+Las bases de datos
+
+00:10:30.360 --> 00:10:31.120
+requieren atención
+
+00:10:31.120 --> 00:10:32.460
+ante consultas sospechosas,
+
+00:10:32.560 --> 00:10:33.200
+inicios de sesión
+
+00:10:33.200 --> 00:10:34.200
+y amenazas a los datos.
+
+00:10:34.660 --> 00:10:36.800
+El objetivo no es utilizar
+
+00:10:36.800 --> 00:10:37.780
+un análisis género para todo,
+
+00:10:38.020 --> 00:10:38.940
+es aplicar una protección
+
+00:10:38.940 --> 00:10:39.860
+que coincida con la tarea
+
+00:10:39.860 --> 00:10:40.940
+que realiza cada carga de trabajo.
+
+00:10:41.480 --> 00:10:41.800
+Pero sí,
+
+00:10:41.900 --> 00:10:42.980
+cada una de estas protecciones
+
+00:10:42.980 --> 00:10:44.260
+depende de algo muy básico.
+
+00:10:44.840 --> 00:10:45.600
+Defender for Cloud
+
+00:10:45.600 --> 00:10:46.520
+solo puede proteger
+
+00:10:46.520 --> 00:10:47.620
+e informar sobre los recursos
+
+00:10:47.620 --> 00:10:48.120
+que puede ver.
+
+00:10:48.820 --> 00:10:49.580
+Y al mirar más allá
+
+00:10:49.580 --> 00:10:50.660
+de una sola suscripción de Azure,
+
+00:10:50.820 --> 00:10:51.640
+eso se vuelve una cuestión
+
+00:10:51.640 --> 00:10:52.500
+mucho más grande.
+
+00:10:53.500 --> 00:10:54.920
+Una vista de Azure local
+
+00:10:54.920 --> 00:10:56.080
+y otras nubes.
+
+00:10:56.720 --> 00:10:57.340
+La mayoría de empresas
+
+00:10:57.340 --> 00:10:58.300
+no mantienen toda carga
+
+00:10:58.300 --> 00:10:59.080
+en un solo lugar.
+
+00:10:59.700 --> 00:11:00.300
+Quizás ejecutes
+
+00:11:00.300 --> 00:11:01.160
+la mayoría de tus servicios
+
+00:11:01.160 --> 00:11:01.520
+en Azure
+
+00:11:01.520 --> 00:11:02.520
+mientras un servidor antiguo
+
+00:11:02.520 --> 00:11:03.100
+sigue funcionando
+
+00:11:03.100 --> 00:11:03.560
+en tu oficina.
+
+00:11:04.220 --> 00:11:05.000
+Una unidad de negocio
+
+00:11:05.000 --> 00:11:06.280
+puede usar Amazon Web Services
+
+00:11:06.280 --> 00:11:07.140
+llamado AWS.
+
+00:11:07.920 --> 00:11:09.040
+Otro equipo puede tener servicios
+
+00:11:09.040 --> 00:11:09.980
+en Google Cloud Platform
+
+00:11:09.980 --> 00:11:10.540
+o GCP.
+
+00:11:11.300 --> 00:11:12.580
+Eso te deja con portales separados,
+
+00:11:12.780 --> 00:11:13.360
+listas separadas
+
+00:11:13.360 --> 00:11:14.100
+y formas distintas
+
+00:11:14.100 --> 00:11:14.960
+de encontrar problemas.
+
+00:11:15.460 --> 00:11:15.920
+Es como tener
+
+00:11:15.920 --> 00:11:16.740
+tres guardias de seguridad
+
+00:11:16.740 --> 00:11:17.680
+diferentes que no se comunican
+
+00:11:17.680 --> 00:11:18.060
+entre ellos.
+
+00:11:18.820 --> 00:11:19.500
+Defender for Cloud
+
+00:11:19.500 --> 00:11:20.700
+puede reunir entornos conectados
+
+00:11:20.700 --> 00:11:21.580
+de Azure locales,
+
+00:11:21.640 --> 00:11:22.380
+AWS y GCP
+
+00:11:22.380 --> 00:11:23.300
+en una vista de seguridad.
+
+00:11:23.860 --> 00:11:24.660
+El objetivo es sencillo.
+
+00:11:25.160 --> 00:11:26.000
+En lugar de abrir un panel
+
+00:11:26.000 --> 00:11:26.600
+para comprobar
+
+00:11:26.600 --> 00:11:27.440
+las máquinas virtuales
+
+00:11:27.440 --> 00:11:27.820
+de Azure,
+
+00:11:28.260 --> 00:11:29.280
+otro para las cuentas de AWS
+
+00:11:29.280 --> 00:11:30.380
+y un tercer sistema
+
+00:11:30.380 --> 00:11:31.060
+para los servidores
+
+00:11:31.060 --> 00:11:31.880
+de tu propio edificio,
+
+00:11:31.960 --> 00:11:32.620
+puedes ver el estado
+
+00:11:32.620 --> 00:11:33.060
+de seguridad
+
+00:11:33.060 --> 00:11:33.800
+de esos entornos
+
+00:11:33.800 --> 00:11:34.940
+conectados en un solo lugar.
+
+00:11:35.800 --> 00:11:36.340
+Esa vista única
+
+00:11:36.340 --> 00:11:37.220
+te evita tener que saltar
+
+00:11:37.220 --> 00:11:37.820
+de una pantalla a otra
+
+00:11:37.820 --> 00:11:38.480
+y perder contexto.
+
+00:11:38.800 --> 00:11:39.100
+Ahora bien,
+
+00:11:39.160 --> 00:11:39.720
+eso no significa
+
+00:11:39.720 --> 00:11:40.340
+que todas las nubes
+
+00:11:40.340 --> 00:11:41.260
+funcionen exactamente igual.
+
+00:11:41.880 --> 00:11:43.460
+Azure, AWS, GCP
+
+00:11:43.460 --> 00:11:44.740
+y los sistemas locales
+
+00:11:44.740 --> 00:11:45.760
+tienen sus propios servicios,
+
+00:11:45.920 --> 00:11:46.520
+reglas de acceso
+
+00:11:46.520 --> 00:11:47.780
+y métodos de conexión.
+
+00:11:48.440 --> 00:11:48.820
+Sin embargo,
+
+00:11:49.080 --> 00:11:49.680
+Defender for Cloud
+
+00:11:49.680 --> 00:11:50.560
+puede recopilar información
+
+00:11:50.560 --> 00:11:50.960
+de seguridad
+
+00:11:50.960 --> 00:11:52.000
+de los entornos que conectas
+
+00:11:52.000 --> 00:11:52.660
+y a continuación
+
+00:11:52.660 --> 00:11:53.320
+mostrar los resultados
+
+00:11:53.320 --> 00:11:54.040
+en una vista común.
+
+00:11:54.580 --> 00:11:55.420
+Eso reduce la posibilidad
+
+00:11:55.420 --> 00:11:56.160
+de perder contexto.
+
+00:11:56.500 --> 00:11:56.840
+Por ejemplo,
+
+00:11:56.920 --> 00:11:57.840
+una alerta en un servidor
+
+00:11:57.840 --> 00:11:58.560
+tiene más sentido
+
+00:11:58.560 --> 00:11:59.560
+cuando también puedes ver
+
+00:11:59.560 --> 00:12:00.340
+si ese servidor
+
+00:12:00.340 --> 00:12:01.540
+pertenece a una suscripción
+
+00:12:01.540 --> 00:12:01.960
+en la nube,
+
+00:12:02.120 --> 00:12:03.180
+se encuentra en una cuenta
+
+00:12:03.180 --> 00:12:03.760
+doble S
+
+00:12:03.760 --> 00:12:04.540
+o se ejecuta
+
+00:12:04.540 --> 00:12:05.320
+como parte
+
+00:12:05.320 --> 00:12:06.160
+de un servicio local
+
+00:12:06.160 --> 00:12:06.920
+antiguo.
+
+00:12:07.720 --> 00:12:08.600
+El equipo de seguridad
+
+00:12:08.600 --> 00:12:09.540
+puede dedicar menos tiempo
+
+00:12:09.540 --> 00:12:10.000
+a preguntarse
+
+00:12:10.000 --> 00:12:10.960
+dónde está este recurso
+
+00:12:10.960 --> 00:12:12.260
+y más tiempo
+
+00:12:12.260 --> 00:12:12.680
+a decidir
+
+00:12:12.680 --> 00:12:13.620
+qué necesita atención.
+
+00:12:14.340 --> 00:12:15.600
+Antes de poder proteger algo,
+
+00:12:16.040 --> 00:12:16.960
+debes saber que existe.
+
+00:12:17.640 --> 00:12:18.200
+Aquí es donde importa
+
+00:12:18.200 --> 00:12:18.880
+el inventario de activos.
+
+00:12:19.320 --> 00:12:20.180
+Un inventario de activos
+
+00:12:20.180 --> 00:12:20.600
+es simplemente
+
+00:12:20.600 --> 00:12:21.540
+una lista de las cosas
+
+00:12:21.540 --> 00:12:22.320
+que tu empresa posee
+
+00:12:22.320 --> 00:12:22.880
+lo ejecuta en la nube.
+
+00:12:23.340 --> 00:12:23.980
+Esto puede incluir
+
+00:12:23.980 --> 00:12:24.780
+máquinas virtuales,
+
+00:12:24.980 --> 00:12:25.540
+bases de datos,
+
+00:12:25.700 --> 00:12:26.400
+cuentas de almacenamiento,
+
+00:12:26.500 --> 00:12:27.360
+clústeres de contenedores
+
+00:12:27.360 --> 00:12:28.120
+y otros servicios.
+
+00:12:28.400 --> 00:12:28.860
+Y otros servicios.
+
+00:12:28.980 --> 00:12:29.380
+Parece obvio,
+
+00:12:29.460 --> 00:12:29.880
+pero los recursos
+
+00:12:29.880 --> 00:12:31.100
+en la nube aparecen rápidamente.
+
+00:12:31.700 --> 00:12:32.420
+Un equipo de proyecto
+
+00:12:32.420 --> 00:12:33.300
+puede crear un entorno
+
+00:12:33.300 --> 00:12:33.680
+de prueba.
+
+00:12:34.360 --> 00:12:35.260
+Un proveedor puede crear
+
+00:12:35.260 --> 00:12:36.240
+recursos en otra cuenta
+
+00:12:36.240 --> 00:12:36.580
+en la nube.
+
+00:12:37.280 --> 00:12:38.020
+Una carga de trabajo
+
+00:12:38.020 --> 00:12:39.100
+antigua puede seguir activa
+
+00:12:39.100 --> 00:12:39.980
+después de que quien la creó
+
+00:12:39.980 --> 00:12:40.940
+haya cambiado de función.
+
+00:12:41.460 --> 00:12:42.380
+Si no está en tu inventario,
+
+00:12:42.380 --> 00:12:43.320
+puede quedar fácilmente
+
+00:12:43.320 --> 00:12:44.040
+fuera de tu trabajo
+
+00:12:44.040 --> 00:12:44.540
+de seguridad.
+
+00:12:45.240 --> 00:12:45.980
+Defender for Cloud
+
+00:12:45.980 --> 00:12:47.000
+te ayuda a ver los recursos
+
+00:12:47.000 --> 00:12:47.780
+que conoce junto
+
+00:12:47.780 --> 00:12:49.020
+con su cobertura de seguridad.
+
+00:12:49.020 --> 00:12:50.720
+Puedes ver si un recurso
+
+00:12:50.720 --> 00:12:51.380
+tiene protección,
+
+00:12:51.740 --> 00:12:52.280
+solo tiene parte
+
+00:12:52.280 --> 00:12:53.220
+de la protección que esperas
+
+00:12:53.220 --> 00:12:54.600
+o no tiene ninguna protección.
+
+00:12:55.280 --> 00:12:55.840
+Ese último grupo
+
+00:12:55.840 --> 00:12:56.420
+necesita atención.
+
+00:12:56.740 --> 00:12:57.640
+Un recurso desprotegido
+
+00:12:57.640 --> 00:12:58.480
+no siempre es inseguro
+
+00:12:58.480 --> 00:12:58.940
+por sí mismo,
+
+00:12:59.040 --> 00:13:00.360
+pero si una base de datos
+
+00:13:00.360 --> 00:13:00.860
+de producción
+
+00:13:00.860 --> 00:13:01.380
+o un servidor
+
+00:13:01.380 --> 00:13:02.240
+con conexión a internet
+
+00:13:02.240 --> 00:13:03.260
+no tiene una cobertura
+
+00:13:03.260 --> 00:13:03.820
+planificada,
+
+00:13:03.920 --> 00:13:04.460
+esa es una brecha
+
+00:13:04.460 --> 00:13:05.200
+que debe comprender.
+
+00:13:05.640 --> 00:13:06.460
+Una vista de cobertura
+
+00:13:06.460 --> 00:13:07.620
+convierte suposiciones vagas
+
+00:13:07.620 --> 00:13:08.080
+en una lista
+
+00:13:08.080 --> 00:13:09.020
+que puede consumir.
+
+00:13:09.020 --> 00:13:09.600
+¿Tan protegidos
+
+00:13:09.600 --> 00:13:10.320
+todos nuestros servidores?
+
+00:13:10.660 --> 00:13:11.440
+Si hubo una pregunta real
+
+00:13:11.440 --> 00:13:12.180
+con una respuesta real,
+
+00:13:12.560 --> 00:13:13.580
+los permisos también importan.
+
+00:13:13.580 --> 00:13:15.300
+Una gran empresa
+
+00:13:15.300 --> 00:13:15.860
+no quiere que todas
+
+00:13:15.860 --> 00:13:16.240
+las personas
+
+00:13:16.240 --> 00:13:17.040
+del portal de seguridad
+
+00:13:17.040 --> 00:13:17.960
+vean y administren
+
+00:13:17.960 --> 00:13:18.580
+todos los recursos.
+
+00:13:19.140 --> 00:13:19.960
+El equipo de infraestructura
+
+00:13:19.960 --> 00:13:20.740
+quizás deba trabajar
+
+00:13:20.740 --> 00:13:21.380
+con los hallazgos.
+
+00:13:21.840 --> 00:13:22.840
+El equipo de la base de datos
+
+00:13:22.840 --> 00:13:23.440
+podría requerir
+
+00:13:23.440 --> 00:13:24.040
+los hallazgos.
+
+00:13:24.220 --> 00:13:25.080
+Un equipo responsable
+
+00:13:25.080 --> 00:13:25.820
+de un área empresarial
+
+00:13:25.820 --> 00:13:27.020
+puede necesitar solo acceso
+
+00:13:27.020 --> 00:13:27.500
+a los recursos
+
+00:13:27.500 --> 00:13:28.460
+en la nube de esa área.
+
+00:13:28.960 --> 00:13:29.860
+Los alcances y permisos
+
+00:13:29.860 --> 00:13:30.280
+de la nube
+
+00:13:30.280 --> 00:13:31.440
+ayudan a crear esos límites.
+
+00:13:31.820 --> 00:13:32.660
+Considere el alcance
+
+00:13:32.660 --> 00:13:33.120
+de la nube
+
+00:13:33.120 --> 00:13:34.040
+como un área definida
+
+00:13:34.040 --> 00:13:34.540
+para trabajar.
+
+00:13:35.320 --> 00:13:36.160
+Puede conectar un rol
+
+00:13:36.160 --> 00:13:36.740
+a entornos,
+
+00:13:36.840 --> 00:13:37.380
+suscripciones
+
+00:13:37.380 --> 00:13:39.040
+o grupos de recursos específicos
+
+00:13:39.040 --> 00:13:39.840
+de modo que las personas
+
+00:13:39.840 --> 00:13:40.940
+vean de qué son responsables
+
+00:13:40.940 --> 00:13:41.640
+sin obtener acceso
+
+00:13:41.640 --> 00:13:42.380
+a todo lo demás.
+
+00:13:43.580 --> 00:13:46.080
+El equipo de infraestructura
+
+00:13:46.080 --> 00:13:46.660
+puede centrarse
+
+00:13:46.660 --> 00:13:47.100
+en los servidores
+
+00:13:47.100 --> 00:13:48.100
+y sus hallazgos relacionados.
+
+00:13:48.460 --> 00:13:48.960
+Al mismo tiempo,
+
+00:13:49.040 --> 00:13:49.760
+el equipo de base de datos
+
+00:13:49.760 --> 00:13:50.720
+puede revisar sus hallazgos
+
+00:13:50.720 --> 00:13:51.240
+y encargarse
+
+00:13:51.240 --> 00:13:51.620
+de los sistemas
+
+00:13:51.620 --> 00:13:52.200
+que ellos gestionan.
+
+00:13:52.540 --> 00:13:53.440
+Ambos equipos trabajan
+
+00:13:53.440 --> 00:13:54.100
+desde la misma imagen
+
+00:13:54.100 --> 00:13:54.940
+de seguridad conectada,
+
+00:13:55.160 --> 00:13:55.800
+pero ninguno de los dos
+
+00:13:55.800 --> 00:13:56.600
+necesita administrar
+
+00:13:56.600 --> 00:13:57.420
+los servicios del otro equipo.
+
+00:13:57.680 --> 00:13:58.160
+Hay un límite
+
+00:13:58.160 --> 00:13:59.240
+que siempre debes recordar.
+
+00:13:59.660 --> 00:14:00.280
+Defender for Cloud
+
+00:14:00.280 --> 00:14:00.940
+solo puede informar
+
+00:14:00.940 --> 00:14:01.580
+sobre los entornos
+
+00:14:01.580 --> 00:14:02.280
+que hayas conectado
+
+00:14:02.280 --> 00:14:03.020
+e incorporado.
+
+00:14:03.700 --> 00:14:04.160
+Si no se incluye
+
+00:14:04.160 --> 00:14:04.900
+una suscripción de Azure
+
+00:14:04.900 --> 00:14:05.640
+puede convertirse
+
+00:14:05.640 --> 00:14:06.360
+en un punto ciego.
+
+00:14:07.040 --> 00:14:07.680
+Si no se ha conectado
+
+00:14:07.680 --> 00:14:08.620
+a una cuenta de AWS
+
+00:14:08.620 --> 00:14:09.400
+Defender for Cloud
+
+00:14:09.400 --> 00:14:10.020
+no puede informar
+
+00:14:10.020 --> 00:14:10.640
+sobre los recursos
+
+00:14:10.640 --> 00:14:11.180
+que contiene.
+
+00:14:11.980 --> 00:14:12.760
+Lo mismo se aplica
+
+00:14:12.760 --> 00:14:13.720
+a los servidores de GCP
+
+00:14:13.720 --> 00:14:14.240
+y locales
+
+00:14:14.240 --> 00:14:15.240
+que no se han incorporado
+
+00:14:15.240 --> 00:14:15.780
+al servicio.
+
+00:14:16.820 --> 00:14:17.880
+Ningún panel puede mostrar
+
+00:14:17.880 --> 00:14:18.460
+lo que no sabe.
+
+00:14:18.960 --> 00:14:19.920
+La incorporación incompleta
+
+00:14:19.920 --> 00:14:20.800
+provoca un problema común.
+
+00:14:21.200 --> 00:14:21.720
+Una empresa ve
+
+00:14:21.720 --> 00:14:22.560
+un nuevo panel de seguridad,
+
+00:14:22.740 --> 00:14:23.820
+asume que cubre todo el negocio
+
+00:14:23.820 --> 00:14:24.180
+y más tarde
+
+00:14:24.180 --> 00:14:25.360
+encuentra una suscripción olvidada
+
+00:14:25.360 --> 00:14:25.900
+o una cuenta
+
+00:14:25.900 --> 00:14:26.660
+a la nube independiente
+
+00:14:26.660 --> 00:14:27.680
+que nunca apareció en la vista.
+
+00:14:28.420 --> 00:14:28.800
+Por lo tanto,
+
+00:14:28.940 --> 00:14:29.560
+revisa tu cobertura
+
+00:14:29.560 --> 00:14:30.500
+antes de confiar en los resultados.
+
+00:14:31.160 --> 00:14:32.300
+Pregunte a qué suscripciones existen.
+
+00:14:32.820 --> 00:14:33.440
+Pregunte a quién posee
+
+00:14:33.440 --> 00:14:34.580
+las cuentas AWS y GCP.
+
+00:14:35.140 --> 00:14:36.020
+Pregunte si los servidores
+
+00:14:36.020 --> 00:14:36.780
+antiguos siguen uso.
+
+00:14:37.420 --> 00:14:38.340
+Luego compare esa lista
+
+00:14:38.340 --> 00:14:39.340
+con lo que Defender for Cloud
+
+00:14:39.340 --> 00:14:40.040
+puede ver realmente.
+
+00:14:40.760 --> 00:14:41.620
+Una vez conectada a la vista,
+
+00:14:41.720 --> 00:14:42.520
+el cumplimiento es más útil
+
+00:14:42.520 --> 00:14:43.260
+que una hoja de cálculo
+
+00:14:43.260 --> 00:14:44.620
+repleta de comprobaciones antiguas.
+
+00:14:45.260 --> 00:14:45.580
+Cumplimiento
+
+00:14:45.580 --> 00:14:46.220
+sin la persecución
+
+00:14:46.220 --> 00:14:46.800
+de hojas de cálculo.
+
+00:14:47.580 --> 00:14:48.140
+El cumplimiento
+
+00:14:48.140 --> 00:14:49.000
+significa comprobar
+
+00:14:49.000 --> 00:14:50.120
+si la configuración de la nube
+
+00:14:50.120 --> 00:14:50.720
+cumple las reglas
+
+00:14:50.720 --> 00:14:51.500
+que la empresa seguía.
+
+00:14:52.060 --> 00:14:53.060
+Esas reglas pueden provenir
+
+00:14:53.060 --> 00:14:54.140
+de un contrato con un cliente,
+
+00:14:54.340 --> 00:14:55.060
+un requisito legal,
+
+00:14:55.340 --> 00:14:56.180
+un estándar del sector
+
+00:14:56.180 --> 00:14:57.060
+o su propia política
+
+00:14:57.060 --> 00:14:57.920
+de seguridad interna.
+
+00:14:58.340 --> 00:14:58.740
+En el pasado,
+
+00:14:58.840 --> 00:14:59.440
+esto solía implicar
+
+00:14:59.440 --> 00:15:00.140
+que alguien recopilara
+
+00:15:00.140 --> 00:15:00.760
+capturas de pantalla
+
+00:15:00.760 --> 00:15:01.440
+antes de una auditoría.
+
+00:15:01.880 --> 00:15:02.720
+Preguntaban si el cifrado
+
+00:15:02.720 --> 00:15:03.480
+estaba habilitado,
+
+00:15:04.000 --> 00:15:05.100
+si el registro estaba activado
+
+00:15:08.340 --> 00:15:09.420
+de cálculo llegaba al auditor,
+
+00:15:09.700 --> 00:15:10.700
+es posible que algunas partes
+
+00:15:10.700 --> 00:15:11.160
+del entorno
+
+00:15:11.160 --> 00:15:11.820
+ya hubieran cambiado.
+
+00:15:12.180 --> 00:15:12.960
+Los servicios en la nube
+
+00:15:12.960 --> 00:15:14.380
+no guardan revisiones anuales.
+
+00:15:14.460 --> 00:15:15.160
+Defender for Cloud
+
+00:15:15.160 --> 00:15:15.800
+le ofrece una forma
+
+00:15:15.800 --> 00:15:16.580
+de comprobar los recursos
+
+00:15:16.580 --> 00:15:17.000
+en la nube
+
+00:15:17.000 --> 00:15:17.840
+con respecto a los estándares
+
+00:15:17.840 --> 00:15:18.740
+integrados de forma continua.
+
+00:15:19.200 --> 00:15:20.180
+Es posible que vea estándares
+
+00:15:20.180 --> 00:15:21.780
+como CIS, NIST, ISO 27,
+
+00:15:21.900 --> 00:15:23.340
+FENOM o HIPAA, PCI DSS
+
+00:15:23.340 --> 00:15:25.320
+y Microsoft Cloud Security Benchmark.
+
+00:15:26.220 --> 00:15:26.760
+No es necesario
+
+00:15:26.760 --> 00:15:27.880
+que memorice todos los estándares
+
+00:15:27.880 --> 00:15:28.940
+para comprender la idea básica.
+
+00:15:29.280 --> 00:15:30.080
+Cada uno contiene control.
+
+00:15:30.680 --> 00:15:31.700
+Un control es una regla
+
+00:15:31.700 --> 00:15:32.400
+o protección espera.
+
+00:15:32.900 --> 00:15:33.560
+Puede comprobar
+
+00:15:33.560 --> 00:15:35.020
+si una configuración está habilitada,
+
+00:15:35.380 --> 00:15:36.640
+si el acceso está restringido
+
+00:15:36.640 --> 00:15:37.440
+o si un recurso
+
+00:15:38.340 --> 00:15:39.600
+configuración obligatoria.
+
+00:15:39.960 --> 00:15:40.740
+La vista de cumplimiento
+
+00:15:40.740 --> 00:15:41.660
+muestra qué comprobaciones
+
+00:15:41.660 --> 00:15:42.200
+se aprobaron,
+
+00:15:42.280 --> 00:15:42.740
+cuáles fallaron
+
+00:15:42.740 --> 00:15:43.800
+y qué recursos provocaron
+
+00:15:43.800 --> 00:15:44.400
+el resultado fallido.
+
+00:15:44.800 --> 00:15:45.680
+Esto facilita el trabajo
+
+00:15:45.680 --> 00:15:46.480
+con un estándar amplio.
+
+00:15:47.220 --> 00:15:48.120
+En lugar de ver una línea
+
+00:15:48.120 --> 00:15:49.320
+que indica que el control falló,
+
+00:15:49.440 --> 00:15:50.080
+puede profundizar
+
+00:15:50.080 --> 00:15:51.320
+y ver los recursos afectados.
+
+00:15:51.720 --> 00:15:52.280
+También puede ver
+
+00:15:52.280 --> 00:15:53.160
+las reparaciones sugeridas
+
+00:15:53.160 --> 00:15:54.000
+vinculadas al hallazgo,
+
+00:15:54.060 --> 00:15:54.660
+de modo que la persona
+
+00:15:54.660 --> 00:15:55.400
+responsable de recursos
+
+00:15:55.400 --> 00:15:55.840
+del recurso
+
+00:15:55.840 --> 00:15:56.540
+tenga un punto de partida.
+
+00:15:56.780 --> 00:15:57.520
+Imagina que un auditor
+
+00:15:57.520 --> 00:15:58.640
+pregunta si su almacenamiento
+
+00:15:58.640 --> 00:15:58.940
+en la nube
+
+00:15:58.940 --> 00:15:59.900
+sigue una regla en particular.
+
+00:16:00.400 --> 00:16:01.100
+En lugar de buscar
+
+00:16:01.100 --> 00:16:02.040
+en notas antiguas,
+
+00:16:02.260 --> 00:16:03.320
+puede revisar el estado actual
+
+00:16:03.320 --> 00:16:03.800
+del control,
+
+00:16:03.920 --> 00:16:04.540
+ver los recursos
+
+00:16:04.540 --> 00:16:06.140
+incluidos en la comprobación
+
+00:16:06.140 --> 00:16:07.100
+e identificar cualquier
+
+00:16:07.100 --> 00:16:07.860
+problema abierto.
+
+00:16:08.660 --> 00:16:09.360
+Su equipo de seguridad
+
+00:16:09.360 --> 00:16:10.380
+obtiene una lista de trabajo,
+
+00:16:10.500 --> 00:16:11.420
+su auditor obtiene evidencia
+
+00:16:11.420 --> 00:16:12.160
+basada en el entorno
+
+00:16:12.160 --> 00:16:12.820
+tal como está ahora.
+
+00:16:13.320 --> 00:16:13.940
+Las verificaciones
+
+00:16:13.940 --> 00:16:14.420
+se actualizan
+
+00:16:14.420 --> 00:16:15.180
+según cambian los recursos.
+
+00:16:15.740 --> 00:16:16.300
+Si alguien cambia
+
+00:16:16.300 --> 00:16:17.300
+una configuración de la nube
+
+00:16:17.300 --> 00:16:18.340
+tras la última auditoría,
+
+00:16:18.520 --> 00:16:19.400
+ese cambio aparecerá
+
+00:16:19.400 --> 00:16:20.580
+en la vista de cumplimiento.
+
+00:16:21.100 --> 00:16:21.580
+Esto convierte
+
+00:16:21.580 --> 00:16:22.140
+el cumplimiento
+
+00:16:22.140 --> 00:16:22.960
+de una lucha anual
+
+00:16:22.960 --> 00:16:23.860
+en una parte habitual
+
+00:16:23.860 --> 00:16:24.400
+de la gestión
+
+00:16:24.400 --> 00:16:25.360
+de los recursos en la nube.
+
+00:16:25.860 --> 00:16:26.480
+Esto ahorra tiempo,
+
+00:16:26.640 --> 00:16:27.900
+pero también genera responsabilidad.
+
+00:16:28.340 --> 00:16:29.020
+Un control fallido
+
+00:16:29.020 --> 00:16:29.820
+muestra que una regla
+
+00:16:29.820 --> 00:16:30.700
+necesita atención.
+
+00:16:31.440 --> 00:16:32.080
+El equipo propietario
+
+00:16:32.080 --> 00:16:32.760
+del recurso afectado
+
+00:16:32.760 --> 00:16:33.420
+puede corregirlo,
+
+00:16:33.420 --> 00:16:34.440
+documentar una excepción
+
+00:16:34.440 --> 00:16:35.360
+aceptada o explicar
+
+00:16:35.360 --> 00:16:36.160
+por qué la configuración
+
+00:16:36.160 --> 00:16:36.660
+no se aplica.
+
+00:16:37.060 --> 00:16:38.000
+El resultado es más claro
+
+00:16:38.000 --> 00:16:38.880
+que una hoja de cálculo
+
+00:16:38.880 --> 00:16:39.620
+donde nadie sabe
+
+00:16:39.620 --> 00:16:40.180
+quién actualiza
+
+00:16:40.180 --> 00:16:40.900
+una celda por ritmo.
+
+00:16:41.180 --> 00:16:41.800
+Aún así,
+
+00:16:42.000 --> 00:16:42.600
+una alta puntuación
+
+00:16:42.600 --> 00:16:43.080
+de cumplimiento
+
+00:16:43.080 --> 00:16:43.900
+no garantiza seguridad
+
+00:16:43.900 --> 00:16:44.300
+ante todo.
+
+00:16:45.020 --> 00:16:45.560
+El cumplimiento
+
+00:16:45.560 --> 00:16:46.300
+comprueba si cumples
+
+00:16:46.300 --> 00:16:47.100
+un conjunto definido
+
+00:16:47.100 --> 00:16:47.440
+de reglas.
+
+00:16:47.800 --> 00:16:48.280
+Los atacantes
+
+00:16:48.280 --> 00:16:48.760
+no se limitan
+
+00:16:48.760 --> 00:16:49.460
+a una lista de verificación.
+
+00:16:49.960 --> 00:16:50.800
+Un recurso puede cumplir
+
+00:16:50.800 --> 00:16:51.240
+un estándar
+
+00:16:51.240 --> 00:16:52.060
+y aún así enfrentarse
+
+00:16:52.060 --> 00:16:52.720
+a una nueva debilidad
+
+00:16:52.720 --> 00:16:53.100
+de software,
+
+00:16:53.220 --> 00:16:54.080
+una contraseña robada
+
+00:16:54.080 --> 00:16:55.040
+o una actividad sospechosa
+
+00:16:55.040 --> 00:16:55.780
+que deba investigarse.
+
+00:16:56.380 --> 00:16:57.000
+Usa el cumplimiento
+
+00:16:57.000 --> 00:16:57.940
+para verificar las reglas
+
+00:16:57.940 --> 00:16:58.760
+acordadas y mantener
+
+00:16:58.760 --> 00:16:59.720
+las pruebas actualizadas.
+
+00:17:00.240 --> 00:17:00.920
+Utilícelo para encontrar
+
+00:17:00.920 --> 00:17:01.300
+lagunas,
+
+00:17:01.380 --> 00:17:01.900
+asignar trabajo
+
+00:17:01.900 --> 00:17:02.560
+y mostrar el problema.
+
+00:17:03.100 --> 00:17:04.080
+Todo esto puede abrumar
+
+00:17:04.080 --> 00:17:04.680
+al abrir el portal
+
+00:17:04.680 --> 00:17:05.280
+por primera vez,
+
+00:17:05.380 --> 00:17:05.860
+por eso lo ideal
+
+00:17:05.860 --> 00:17:06.620
+es un plan sencillo
+
+00:17:06.620 --> 00:17:07.500
+para esa primera semana.
+
+00:17:08.140 --> 00:17:08.600
+¿Cómo empezar
+
+00:17:08.600 --> 00:17:09.360
+sin activarlo todo?
+
+00:17:10.020 --> 00:17:10.700
+¿Cómo empiezas?
+
+00:17:11.100 --> 00:17:11.400
+Primero,
+
+00:17:11.520 --> 00:17:12.320
+haz un mapa sencillo
+
+00:17:12.320 --> 00:17:13.340
+de lo que realmente ejecutas.
+
+00:17:13.980 --> 00:17:14.540
+Haz una lista
+
+00:17:14.540 --> 00:17:15.320
+de tus suscripciones
+
+00:17:15.320 --> 00:17:15.700
+de Azure,
+
+00:17:15.820 --> 00:17:16.580
+luego tus servidores,
+
+00:17:16.760 --> 00:17:17.620
+cuentas de almacenamiento,
+
+00:17:17.740 --> 00:17:18.280
+bases de datos,
+
+00:17:18.420 --> 00:17:19.300
+servicios de contenedores
+
+00:17:19.300 --> 00:17:20.120
+y cargas en AWS,
+
+00:17:20.340 --> 00:17:20.820
+Google Cloud
+
+00:17:20.820 --> 00:17:21.960
+o tu centro de datos.
+
+00:17:22.680 --> 00:17:22.980
+De práctica,
+
+00:17:23.540 --> 00:17:24.160
+estás intentando
+
+00:17:24.160 --> 00:17:25.000
+responder a una pregunta
+
+00:17:25.000 --> 00:17:26.360
+que necesita protección
+
+00:17:26.360 --> 00:17:27.340
+y dónde se encuentra.
+
+00:17:27.340 --> 00:17:28.720
+Una vez que tengas ese mapa,
+
+00:17:28.960 --> 00:17:29.700
+conecta a los entornos
+
+00:17:29.700 --> 00:17:30.360
+que quieras que Defender
+
+00:17:30.360 --> 00:17:31.180
+for Cloud Supervise.
+
+00:17:31.660 --> 00:17:32.560
+Pero antes de sumergirte
+
+00:17:32.560 --> 00:17:33.540
+en cientos de recomendaciones,
+
+00:17:33.660 --> 00:17:34.180
+comprueba primero
+
+00:17:34.180 --> 00:17:34.920
+la vista de cobertura.
+
+00:17:35.460 --> 00:17:36.360
+Los hallazgos solo ayudan
+
+00:17:36.360 --> 00:17:36.880
+cuando sabes
+
+00:17:36.880 --> 00:17:38.240
+si aparecen los recursos correctos.
+
+00:17:38.840 --> 00:17:39.440
+Empieza con la gestión
+
+00:17:39.440 --> 00:17:39.820
+de la postura.
+
+00:17:40.240 --> 00:17:41.360
+Revisa tu puntuación de seguridad
+
+00:17:41.360 --> 00:17:42.220
+y observa después
+
+00:17:42.220 --> 00:17:43.280
+los hallazgos de mayor riesgo.
+
+00:17:43.540 --> 00:17:44.280
+No intentes eliminar
+
+00:17:44.280 --> 00:17:44.780
+toda la tendencia.
+
+00:17:45.280 --> 00:17:46.000
+En su lugar,
+
+00:17:46.120 --> 00:17:46.680
+busca problemas
+
+00:17:46.680 --> 00:17:47.640
+que sigan apareciendo
+
+00:17:47.640 --> 00:17:48.280
+en tu entorno.
+
+00:17:49.140 --> 00:17:49.940
+Exposición pública,
+
+00:17:50.100 --> 00:17:51.260
+controles de identidad débiles,
+
+00:17:51.420 --> 00:17:52.500
+puertos de administración abiertos
+
+00:17:52.500 --> 00:17:53.380
+y parches faltantes.
+
+00:17:54.040 --> 00:17:54.580
+Eso son a menudo
+
+00:17:54.580 --> 00:17:55.000
+los lugares
+
+00:17:55.000 --> 00:17:55.640
+donde más rápido
+
+00:17:57.340 --> 00:17:58.060
+tiene planes de protección
+
+00:17:58.060 --> 00:17:58.800
+de cargas de trabajo
+
+00:17:58.800 --> 00:17:59.900
+según los servicios que utilizas
+
+00:17:59.900 --> 00:18:00.620
+y el riesgo que conlleva.
+
+00:18:01.060 --> 00:18:01.900
+Un servidor de producción
+
+00:18:01.900 --> 00:18:03.200
+que contiene datos empresariales
+
+00:18:03.200 --> 00:18:04.160
+merece una atención diferente
+
+00:18:04.160 --> 00:18:05.020
+a la de un sistema de prueba
+
+00:18:05.020 --> 00:18:05.760
+de corta duración
+
+00:18:05.760 --> 00:18:06.820
+sin información confidencial.
+
+00:18:07.200 --> 00:18:07.480
+Por lo tanto,
+
+00:18:07.580 --> 00:18:08.560
+activa la protección con un motivo.
+
+00:18:09.080 --> 00:18:09.560
+Para los servidores
+
+00:18:09.560 --> 00:18:10.480
+que requieren una detección
+
+00:18:10.480 --> 00:18:11.040
+más profunda
+
+00:18:11.040 --> 00:18:11.880
+a nivel de dispositivo,
+
+00:18:12.100 --> 00:18:12.980
+conecta a Microsoft Defender
+
+00:18:12.980 --> 00:18:13.500
+for Endpoint.
+
+00:18:14.140 --> 00:18:14.720
+Esto te ofrece
+
+00:18:14.720 --> 00:18:15.380
+una mejor visión
+
+00:18:15.380 --> 00:18:15.780
+de la actividad
+
+00:18:15.780 --> 00:18:16.720
+dentro del sistema operativo,
+
+00:18:16.840 --> 00:18:17.520
+mientras que Defender
+
+00:18:17.520 --> 00:18:17.940
+para la nube
+
+00:18:17.940 --> 00:18:18.660
+mantiene a la vista
+
+00:18:18.660 --> 00:18:19.340
+el recurso en la nube
+
+00:18:19.340 --> 00:18:20.160
+y su exposición.
+
+00:18:20.860 --> 00:18:21.360
+A continuación,
+
+00:18:21.480 --> 00:18:22.100
+asigne un propietario
+
+00:18:22.100 --> 00:18:22.620
+a cada hallazgo
+
+00:18:22.620 --> 00:18:23.160
+que requiere acción.
+
+00:18:23.620 --> 00:18:24.260
+Una recomendación
+
+00:18:24.260 --> 00:18:24.900
+sin propietario
+
+00:18:24.900 --> 00:18:25.920
+se convierte en un recordatorio
+
+00:18:25.920 --> 00:18:26.660
+del que nadie se encarga.
+
+00:18:27.200 --> 00:18:28.240
+Tu equipo de infraestructura
+
+00:18:28.240 --> 00:18:28.860
+puede gestionar
+
+00:18:28.860 --> 00:18:29.720
+arreglos del servidor,
+
+00:18:29.880 --> 00:18:30.500
+el de aplicaciones,
+
+00:18:30.640 --> 00:18:31.680
+ajustes de la base de datos
+
+00:18:31.680 --> 00:18:32.660
+y el de seguridad,
+
+00:18:32.800 --> 00:18:33.520
+rastrear el trabajo
+
+00:18:33.520 --> 00:18:34.880
+y verificar su conclusión.
+
+00:18:35.580 --> 00:18:36.160
+Establece un horario
+
+00:18:36.160 --> 00:18:36.560
+de revisión.
+
+00:18:37.000 --> 00:18:37.620
+Semanal sirve
+
+00:18:37.620 --> 00:18:38.660
+para un entorno ajetreado,
+
+00:18:38.800 --> 00:18:39.440
+mientras que lo mensual
+
+00:18:39.440 --> 00:18:40.200
+para uno más reducido.
+
+00:18:40.580 --> 00:18:41.400
+La programación importa
+
+00:18:41.400 --> 00:18:42.140
+menos que convertirla
+
+00:18:42.140 --> 00:18:42.500
+en rutina.
+
+00:18:43.040 --> 00:18:43.640
+No estás intentando
+
+00:18:43.640 --> 00:18:44.660
+alcanzar una puntuación perfecta.
+
+00:18:44.960 --> 00:18:45.540
+Estás eliminando
+
+00:18:45.540 --> 00:18:46.400
+los caminos fáciles
+
+00:18:46.400 --> 00:18:46.860
+hacia tu nube,
+
+00:18:46.960 --> 00:18:48.100
+una solución clara cada vez.
+
+00:18:48.900 --> 00:18:49.980
+Piensa en Defender for Cloud
+
+00:18:49.980 --> 00:18:50.980
+como un guardia de seguridad
+
+00:18:50.980 --> 00:18:51.520
+que comprueba
+
+00:18:51.520 --> 00:18:52.620
+cómo está configurada tu nube,
+
+00:18:52.780 --> 00:18:53.740
+protege las áreas importantes
+
+00:18:53.740 --> 00:18:54.860
+y dirige a tus equipos
+
+00:18:54.860 --> 00:18:55.400
+hacia los riesgos
+
+00:18:55.400 --> 00:18:56.480
+que merecen atención primero.
+
+00:18:57.260 --> 00:18:58.180
+Para un desafío sencillo,
+
+00:18:58.300 --> 00:18:59.020
+conecta una suscripción
+
+00:18:59.020 --> 00:18:59.780
+de Azure esta semana.
+
+00:19:00.520 --> 00:19:01.200
+Comprueba qué recursos
+
+00:19:01.200 --> 00:19:02.120
+aparecen en la cobertura,
+
+00:19:02.460 --> 00:19:03.020
+encuentra el recurso
+
+00:19:03.020 --> 00:19:03.480
+más expuesto
+
+00:19:03.480 --> 00:19:03.980
+y asigna a alguien
+
+00:19:03.980 --> 00:19:04.680
+para que lo solucione.
+
+00:19:05.160 --> 00:19:05.840
+Eso te proporciona
+
+00:19:05.840 --> 00:19:06.840
+un verdadero punto de partida
+
+00:19:06.840 --> 00:19:07.820
+en otro panel de seguridad
+
+00:19:07.820 --> 00:19:08.240
+que ignora.
+
+00:19:09.000 --> 00:19:09.640
+La siguiente perla
+
+00:19:09.640 --> 00:19:10.200
+de conocimiento
+
+00:19:10.200 --> 00:19:10.920
+que debes explorar
+
+00:19:10.920 --> 00:19:12.360
+es Microsoft Defender for Endpoint
+
+00:19:12.360 --> 00:19:13.700
+frente a Defender for Cloud.
+
+00:19:14.500 --> 00:19:15.040
+Uno observa
+
+00:19:15.040 --> 00:19:15.440
+lo que ocurre
+
+00:19:15.440 --> 00:19:16.200
+en los dispositivos,
+
+00:19:16.300 --> 00:19:16.800
+el otro observa
+
+00:19:16.800 --> 00:19:17.500
+los recursos de la nube
+
+00:19:17.500 --> 00:19:18.040
+que los rodea
+
+00:19:18.040 --> 00:19:18.780
+y juntos te ayudan
+
+00:19:18.780 --> 00:19:19.520
+a ver ambos lados
+
+00:19:19.520 --> 00:19:20.640
+del mismo problema de seguridad.

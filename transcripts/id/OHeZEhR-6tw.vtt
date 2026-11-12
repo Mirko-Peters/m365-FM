@@ -1,0 +1,1021 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:03.680
+Selamat datang di episode lain, Microsoft Knowledge Nuggets di M365FM.
+
+00:00:04.080 --> 00:00:05.300
+Saya pemandu acara Anda, Mirko Peter.
+
+00:00:05.620 --> 00:00:09.260
+Dalam seri ini, kami mengambil satu teknologi Microsoft dan menjelaskannya dengan bahasa yang mudah dipahami.
+
+00:00:09.520 --> 00:00:13.220
+Topik hari ini adalah topik yang hampir semua orang pernah dengar, tetapi kebanyakan orang tidak bisa menjelaskannya.
+
+00:00:13.460 --> 00:00:14.100
+Azure Landing Zone.
+
+00:00:14.480 --> 00:00:14.940
+Begini gambaran.
+
+00:00:15.360 --> 00:00:18.520
+Bayangkan Anda mewarisi penyewa Azure, di mana setiap tim melakukan apa yang mereka ingin.
+
+00:00:19.060 --> 00:00:21.700
+Tanpa konvensi penamaan, tanpa kebijakan, tanpa rencana jaringan.
+
+00:00:21.860 --> 00:00:22.760
+Langganan ada di mana-mana.
+
+00:00:23.100 --> 00:00:25.120
+Ada yang produksi, ada yang pengujian, dan Anda tidak bisa membedakannya.
+
+00:00:25.640 --> 00:00:26.940
+Tidak ada yang tahu siapa pemilik apa.
+
+00:00:26.940 --> 00:00:30.580
+Tagihannya misterius, dan saat ada yang rusak, mencari masalahnya butuh waktu berjam-jam.
+
+00:00:30.840 --> 00:00:33.480
+Itulah masalah kekacauan cloud, dan itu sangat umum terjadi.
+
+00:00:34.040 --> 00:00:35.060
+Lebih umum dari yang Anda kira.
+
+00:00:35.960 --> 00:00:38.320
+Azure Landing Zone adalah hal yang mencegah kekacauan ini sebelum dimulai.
+
+00:00:38.780 --> 00:00:41.860
+Di akhir episode ini, Anda akan mengerti apa itu Landing Zone sebenarnya,
+
+00:00:42.340 --> 00:00:45.560
+mengapa delapan area desain itu penting, dan cara menghindari kesalahan yang paling umum.
+
+00:00:46.420 --> 00:00:47.520
+Ambil kopi Anda dan dari kita bahas.
+
+00:00:48.520 --> 00:00:50.080
+Apa sebenarnya Azure Landing Zone itu?
+
+00:00:50.920 --> 00:00:54.420
+Kebanyakan orang mengira Azure Landing Zone adalah produk yang Anda klik untuk digunakan padahal bukan.
+
+00:00:54.420 --> 00:00:57.340
+Tidak ada tombol di portal yang bertuliskan buat Landing Zone.
+
+00:00:57.820 --> 00:00:58.520
+Bukan begitu cara kerja.
+
+00:00:58.880 --> 00:01:02.500
+Landing Zone adalah lingkungan yang telah dikonfigurasi sebelumnya dengan pagar batas yang sudah terpasang.
+
+00:01:02.780 --> 00:01:06.840
+Jaringan, identitas, pemantauan, kebijakan, semuanya sudah terpasang sebelum beban kerja apapun masuk.
+
+00:01:07.240 --> 00:01:11.640
+Anggap saja seperti membeli rumah yang sudah memiliki listrik di paledeng, dan sistem keamanan, dan sistem kam.
+
+00:01:12.060 --> 00:01:14.720
+Anda tinggal masuk dan mulai bekerja tanpa harus memasang kabel sendiri.
+
+00:01:14.720 --> 00:01:19.400
+Ide utamanya adalah langganan, subscription adalah unit isolasi, bukan grup sumber daya.
+
+00:01:20.040 --> 00:01:21.440
+Langganan adalah batas radiakan Anda.
+
+00:01:21.980 --> 00:01:27.040
+Anda memberi tim sebuah langganan karena langganan membawa batas kuota, penetapan kebijakan, dan penagihan mereka sendiri.
+
+00:01:27.840 --> 00:01:30.920
+Landing Zone membungkus langgan tersebut dengan segala sesuatu yang diputuskan secara terpusat.
+
+00:01:31.300 --> 00:01:36.240
+Wilayah mana yang diizinkan, jaringan mana yang terhubung, tag apa yang wajib, dan apa yang dilarang untuk mereka lakukan.
+
+00:01:36.980 --> 00:01:38.180
+Jadi apa yang sebenarnya menegakkan atur-atur?
+
+00:01:38.540 --> 00:01:41.160
+Azure Policy, bukan dokumentasi, bukan niat baik.
+
+00:01:41.660 --> 00:01:43.640
+Kebijakan ini ditetapkan pada cakupan grup manajemen.
+
+00:01:43.640 --> 00:01:47.360
+Danai memblokir hal-hal seperti wilayah yang tidak diizinkan atau alamat IP public.
+
+00:01:47.960 --> 00:01:50.160
+Audit menandai sumber daya yang tidak patut tanpa memblokirnya.
+
+00:01:50.900 --> 00:01:56.740
+Deploy if not exist melakukan perbaikan otomatis dengan menyebarkan hal-hal seperti pengaturan diagnostik ke log analytics atau paket Microsoft Defender.
+
+00:01:57.460 --> 00:02:00.680
+Ini adalah perbedaan antara tata kelola yang hanya berupa halaman wiki dan tata kelola yang berupa kode.
+
+00:02:01.080 --> 00:02:05.540
+Tim bergerak cepat di dalam kotak mereka, tetapi tim platform mengontrol kotaknya, bukan isinya.
+
+00:02:06.020 --> 00:02:09.780
+Perubahan besarnya adalah membiarkan tim memiliki langganan mereka sendiri, sementara tim pusat yang menetapkan atur.
+
+00:02:10.280 --> 00:02:12.860
+Identitas dan tata kelola, pintu depan dan buku aturannya.
+
+00:02:12.860 --> 00:02:17.720
+Begini, landing zone bukan sekadar satu hal, melainkan dibangun dari delapan area desain.
+
+00:02:18.420 --> 00:02:19.480
+Mari kita bahas tiga yang pertama.
+
+00:02:20.120 --> 00:02:22.100
+Pertama adalah penagihan azur dan tenan entra.
+
+00:02:22.600 --> 00:02:25.480
+Ini tentang mengatur tenan dan langganan Anda dengan benar sejak awal.
+
+00:02:26.200 --> 00:02:29.260
+Terdengar sederhana, tapi Anda akan terkejut melihat berapa banyak organisasi yang salah.
+
+00:02:29.520 --> 00:02:35.420
+Anda perlu memikirkan struktur penagihan, pendaftaran, dan bagaimana semuanya terhubung ke tenan entra Anda sebelum mendeploy apapun.
+
+00:02:36.360 --> 00:02:38.820
+Batas kamen utama Anda adalah manajemen identitas dan akses.
+
+00:02:38.820 --> 00:02:41.920
+Anggap entra ID sebagai meja resepsionis di sebuah gedung kantor.
+
+00:02:42.460 --> 00:02:44.360
+Ia menentukan siapa yang boleh masuk dan apa yang boleh mereka lakukan.
+
+00:02:44.740 --> 00:02:49.920
+Anda harus menggunakan Privileged Identity Management atau PIM dan menerapkan peran RBS-nya dengan hak akses paling minimal.
+
+00:02:50.660 --> 00:02:52.920
+Jangan berikan akses pemilik kepada semua orang, itu resep menunjukkan.
+
+00:02:53.480 --> 00:03:00.060
+Gunakan PIM untuk memberikan akses sementara saat dibutuhkan dan atur tinjauan akses berkala untuk membersihkan izin yang tidak lagi diperlukan.
+
+00:03:00.060 --> 00:03:06.420
+Area desain ketiga adalah organisasi sumber daya, grup manajemen, langganan, dan grup sumber daya.
+
+00:03:06.980 --> 00:03:12.000
+Grup manajemen berada di atas langganan, serta kebijakan dan penugasan peran diwariskan ke bawah melalui hirarki tersebut.
+
+00:03:12.720 --> 00:03:17.420
+Hirarki referensi Cloud Adoption Framework dimulai dari root tenan, lalu grup perantara untuk organisasi Anda.
+
+00:03:18.520 --> 00:03:21.860
+Di bawahnya terdapat platform, landing zone, decommission, dan sandbox.
+
+00:03:22.520 --> 00:03:26.100
+Platform menampung langganan bersama, manajemen identitas, dan konektivitas Anda.
+
+00:03:26.100 --> 00:03:32.900
+Landing zone terbagi menjadi korp untuk beban kerja yang butuh konektivitas on-premises dan online untuk aplikasi yang menghadap internet.
+
+00:03:33.400 --> 00:03:34.260
+Mengapa struktur ini penting?
+
+00:03:34.920 --> 00:03:38.020
+Anda meletapkan kebijakan sekali di tingkat atas dan semuanya di bawahnya otomatis mom.
+
+00:03:38.440 --> 00:03:43.620
+Contoh nyata, kebijakan tolak di bagian atas memblokir wilayah yang tidak diizinkan untuk setiap langganan di bawahnya.
+
+00:03:44.200 --> 00:03:45.720
+Anda tidak perlu mengaturnya 50 kali.
+
+00:03:46.120 --> 00:03:49.900
+Tetapkan sekali dan kebijakan itu akan diwariskan itulah kekuatan sungguhnya dari hirarki grup manajemen.
+
+00:03:50.560 --> 00:03:52.660
+Jaringan dan keamanan, dinding dan kunci pengamannya.
+
+00:03:53.020 --> 00:03:54.980
+Identitas dan tata kelola menentukan aturannya.
+
+00:03:54.980 --> 00:03:57.240
+Tetapi tidak akan berhasil jika jaringannya berantakan.
+
+00:03:57.820 --> 00:04:02.120
+Topologi jaringan dan konektivitas adalah area di scene keempat, yaitu bagaimana jaringan virtual Anda disusun.
+
+00:04:02.580 --> 00:04:08.660
+Ada dua pola utama, hub and spoke, di mana Anda memiliki satu jaringan virtual pusat sebagai hub dan beberapa jaringan spoke yang terhubung dengannya.
+
+00:04:09.260 --> 00:04:13.140
+Atau Azure Virtual One, versi terkelola Microsoft dari ide tersebut dalam skala lebih besar.
+
+00:04:14.260 --> 00:04:15.580
+Hub menampung semua layanan bersama Anda.
+
+00:04:16.000 --> 00:04:17.680
+Azure Fairwall untuk inspeksi lalu lintas.
+
+00:04:17.840 --> 00:04:20.240
+Express Route atau Gateway VPN untuk konektivitas on-premises.
+
+00:04:20.400 --> 00:04:22.480
+Resolusi DNS hal-hal yang dibutuhkan setiap beban kerja.
+
+00:04:22.480 --> 00:04:24.100
+Hal-hal yang dibutuhkan setiap beban kerja.
+
+00:04:24.100 --> 00:04:29.540
+Spock adalah tempat beban kerja Anda pernah berjalan, melakukan piring ke hub sehingga lalu lintas mengalir melalui layanan pusat.
+
+00:04:29.620 --> 00:04:31.420
+Tetapi setiap spock tetap terisolasi dari yang lain.
+
+00:04:31.880 --> 00:04:32.820
+Berikut adalah kesaringan terjadi.
+
+00:04:33.160 --> 00:04:38.860
+Tim membuat jaring raksasa alih-alih menggunakan hub yang menghubungkan setiap jaringan virtual satu sama lain secara langsung.
+
+00:04:39.460 --> 00:04:41.380
+Itu bersementara waktu, namun akan cepat menjadi berantakan.
+
+00:04:42.060 --> 00:04:44.260
+Anda akan berakhir dengan jaring laba-laba koneksi yang tidak bisa direcek.
+
+00:04:45.040 --> 00:04:46.240
+Sebuah hub menyederhanakan segalanya.
+
+00:04:46.740 --> 00:04:48.560
+Satu tempat untuk dikelola, satu tempat untuk diambil.
+
+00:04:48.560 --> 00:04:50.840
+Rencanakan rentang alamat IP Anda sejarah.
+
+00:04:51.180 --> 00:04:52.000
+Hal ini penting dipanggil.
+
+00:04:52.780 --> 00:04:56.300
+Begitu spock melakukan piring ke hub, tumpang tindih ruang alamat akan sulit diperbaiki.
+
+00:04:56.960 --> 00:04:57.840
+Anda tidak bisa begitu saja, mu.
+
+00:04:58.360 --> 00:05:01.520
+Anda harus menghapus piring, memperbarui rentangnya, lalu menghubungkannya kembali.
+
+00:05:02.180 --> 00:05:07.480
+Jika Anda menjalankan beban kerja produksi, itu berarti waktu henti jadi pilih rentang CIDR Anda lebih awal dan pastikan tidak tumpang kib.
+
+00:05:07.480 --> 00:05:13.740
+Area desain kelima adalah rekomendasi keamanan yang mencakup enkripsi, perlindungan identitas, deteksi ancaman, dan manajemen kerentanan.
+
+00:05:14.340 --> 00:05:17.160
+Aktifkan Microsoft Defender Forecloth di semua langganan sebagai garis dasar Anda.
+
+00:05:18.140 --> 00:05:23.620
+Ini memberi Anda rekomendasi manajemen postur, peringatan, dan panduan remediasi untuk segala sesuatu di lingkungan Anda.
+
+00:05:24.320 --> 00:05:26.840
+Gunakan titik akhir privat e-kelayanan tidak terhubung ke internet publik.
+
+00:05:26.840 --> 00:05:32.440
+Daripada mengakses akun penyimpanan melalui IP publik, Anda memberinya IP privat di dalam jaringan virtual Anda.
+
+00:05:32.580 --> 00:05:34.620
+Lalu lintas tidak pernah meninggalkan tulang punggung keras.
+
+00:05:34.920 --> 00:05:36.240
+Ini lebih aman dan lebih mudah dikelola.
+
+00:05:37.040 --> 00:05:41.140
+Pasang grup keamanan jaringan di setiap subnet dan blokir RDP masuk dari internet secara default.
+
+00:05:41.860 --> 00:05:42.640
+Seharusnya menjadi standar.
+
+00:05:43.120 --> 00:05:47.820
+Jika seseorang memerlukan akses jarak jauh, mereka menggunakan Azure Bastion atau Jambox bukan aturan RDP langsung.
+
+00:05:48.300 --> 00:05:51.740
+Contoh dunia nyata, kebijakan tolak yang memblokir alamat IP publik pada akun penyimpanan.
+
+00:05:52.520 --> 00:05:54.520
+Anda menetapkan kebijakan di tingkat grup manajemen,
+
+00:05:54.520 --> 00:05:58.560
+dan saat seseorang mencoba menerapkan akun penyimpanan dengan titik akhir publik, penerapan akan gagal.
+
+00:05:59.000 --> 00:06:02.260
+Pesan kesalahan akan memberi tahu alasannya dan mereka harus menggunakan titik akhir privat sebagai itu.
+
+00:06:02.480 --> 00:06:03.040
+Tidak ada pengecuan.
+
+00:06:03.560 --> 00:06:04.920
+Itulah tata kelola yang benar-benar berhasil.
+
+00:06:05.400 --> 00:06:06.980
+Bukan sekadar saran dalam dokumen di suatu tempat.
+
+00:06:07.820 --> 00:06:10.260
+Manajemen, tata kelola, dan otomatisasi menjaganya tetap berdiri.
+
+00:06:10.520 --> 00:06:13.600
+Jadi Anda punya bangunan dengan dinding dan kunci, tetapi apa yang sebenarnya terjadi di dalam?
+
+00:06:13.960 --> 00:06:14.920
+Anda perlu memantau semuanya.
+
+00:06:15.220 --> 00:06:16.460
+Area desain ke-enam adalah manajemen.
+
+00:06:16.940 --> 00:06:19.920
+Itu adalah pemantauan, pencadangan, pencatatan, dan sisi operasional.
+
+00:06:19.920 --> 00:06:24.100
+Anda menginginkan satu ruang kerja log analitik sepusat tempat setiap langganan mengirimkan lognya.
+
+00:06:24.480 --> 00:06:27.220
+Satu tempat untuk membuat QAD semuanya, mengatur peringatan, dan mecahkan.
+
+00:06:27.500 --> 00:06:27.960
+Tuhlah tujuannya.
+
+00:06:28.420 --> 00:06:31.400
+Sekarang, bagaimana cara memastikan setiap sumber daya mengirimkan log diagnostiknya ke sana?
+
+00:06:31.820 --> 00:06:32.800
+Anda tidak melakukan secara manual.
+
+00:06:33.040 --> 00:06:37.440
+Anda membuat kebijakan yang menyatakan setiap sumber daya harus mengirim log diagnostiknya ke ruang kerja log analitik ini.
+
+00:06:38.340 --> 00:06:40.500
+Dan Anda mengatur kebijakan tersebut untuk berjalan di klat eksis.
+
+00:06:41.320 --> 00:06:43.540
+Hasilnya, setiap sumber daya baru dikonfigurasi secara otomatis.
+
+00:06:43.960 --> 00:06:44.720
+Tidak perlu Anda mengingat.
+
+00:06:45.060 --> 00:06:45.900
+Hal itu terjadi begitu, Seth.
+
+00:06:45.900 --> 00:06:49.520
+Area Design ke-7 adalah tata kelola, menggunakan Azure Policy untuk menegakkan kepatuhan.
+
+00:06:49.880 --> 00:06:53.460
+Anda menggabungkan aturan terkait ke dalam apa yang disebut inisiatif kebijakan atau set kebijakan.
+
+00:06:54.140 --> 00:06:56.700
+Satu inisiatif untuk keamanan, satu lagi untuk manajemen biaya.
+
+00:06:57.660 --> 00:06:59.940
+Masing-masing berisi beberapa kebijakan yang bekerja bersama.
+
+00:07:00.620 --> 00:07:05.620
+Ini contohnya, satu set kebijakan yang memperlakukan enkripsi, pemberian tag, dan ukuran mesin virtual yang diizinkan.
+
+00:07:06.120 --> 00:07:07.640
+Anda menerapkannya di tingkat group management.
+
+00:07:08.160 --> 00:07:10.020
+Setiap langganan di bawahnya mewarisi aturan tersebut.
+
+00:07:10.020 --> 00:07:17.560
+Saat pengembang mencoba mendeploy VM, kebijakan memeriksa apakah ukurannya disetujui, memiliki tag yang diperlukan, dan menggunakan distri enkripsi.
+
+00:07:18.060 --> 00:07:21.100
+Jika pemeriksaan gagal, deployment akan diblokir atau ditandai saat itu juga.
+
+00:07:21.860 --> 00:07:26.140
+Mari perjelas perbedaan antara tata kelola yang ada di halaman wiki dan tata kelola yang berupa kode sebenar.
+
+00:07:26.680 --> 00:07:28.760
+Halaman wiki berbunyi, tolong beri tag pada sumber daya Anda.
+
+00:07:29.380 --> 00:07:32.640
+Kebijakan berbunyi, Anda tidak dapat mendeploy sumber daya tanpa tag yang diperlukan.
+
+00:07:32.780 --> 00:07:35.880
+Yang satu berupa saran, yang lainnya diberlakukan secara otomatis.
+
+00:07:36.380 --> 00:07:38.880
+Area Design ke-8 adalah otomatisasi platform dan DevOps.
+
+00:07:38.880 --> 00:07:41.980
+Infrastruktur sebagai kode dan alur kerja CI per CD.
+
+00:07:42.380 --> 00:07:44.140
+Berlaku zona pendaratan dan landing zone itu sendiri sebagai kode.
+
+00:07:44.500 --> 00:07:47.840
+Itu berarti bicep, tempat ARM, atau terraform yang disimpan dalam kontrol sumber.
+
+00:07:48.520 --> 00:07:49.680
+Setiap perubahan melalui Queslay.
+
+00:07:50.280 --> 00:07:51.460
+Setiap deployment berjalan bapain.
+
+00:07:51.980 --> 00:07:53.340
+Tidak perlu klik sana-sini di portal lanjut.
+
+00:07:53.740 --> 00:07:55.200
+Disinilah peran penyediaan langganan subscription.
+
+00:07:55.620 --> 00:07:56.880
+Type pipeline kanan baru sesuai permintaan.
+
+00:07:57.880 --> 00:07:58.560
+Baru sesuai permintaan.
+
+00:07:58.820 --> 00:08:02.800
+Sebuah tim mengirimkan permintaan dengan parameter seperti pusat biaya, ukuran jaringan, dan jenis lingkung.
+
+00:08:02.920 --> 00:08:06.880
+Kalau pipeline kalian membuat langgan, menempatkannya di bawah grup manajemen yang tepat,
+
+00:08:06.880 --> 00:08:10.540
+menetapkan anggaran, mengonfigurasi jaringan spok, dan menghubungkannya ke hub.
+
+00:08:11.380 --> 00:08:12.080
+Semuanya otomatis.
+
+00:08:12.880 --> 00:08:13.440
+Mengapa ini penting?
+
+00:08:13.760 --> 00:08:16.160
+Karena langganan baru tersebut patuh sejak saat ia dibuat.
+
+00:08:17.080 --> 00:08:20.880
+Kebijakan sudah ada di grup manajemen dan langganan mewarisi segalanya secara otomatis.
+
+00:08:21.500 --> 00:08:23.060
+Tidak ada celah di mana langganan tersebut tidak diatur.
+
+00:08:23.400 --> 00:08:25.220
+Tidak perlu ada orang yang harus ingat untuk menerapkan aturan.
+
+00:08:25.480 --> 00:08:26.240
+Aturan itu sudah di sana.
+
+00:08:26.860 --> 00:08:30.660
+Inilah yang memungkinkan tim platform mendukung ratusan langganan tanpa menjadi penghambat.
+
+00:08:30.660 --> 00:08:33.140
+Otomatisasi melakukan pekerjaan berat.
+
+00:08:33.380 --> 00:08:37.260
+Dan tim berfokus pada peningkatan platform alih-alih mengklik portal untuk setiap permintaan.
+
+00:08:38.160 --> 00:08:41.000
+Pemisahan antara platform dan aplikasi kebingungan yang paling umum terjadi.
+
+00:08:41.840 --> 00:08:43.220
+Jadi, itulah delapan area desain.
+
+00:08:43.340 --> 00:08:44.840
+Tetapi inilah bagian yang sering disalahpame orang.
+
+00:08:45.220 --> 00:08:46.500
+Ada dua jenis zona pendaratan.
+
+00:08:47.040 --> 00:08:49.040
+Dan mencampurkannya adalah kesalahan paling umum yang saya lihat.
+
+00:08:49.040 --> 00:08:51.460
+Zona pendaratan platform dan zona pendaratan aplikasi.
+
+00:08:51.840 --> 00:08:53.020
+Keduanya melayani tujuan yang sama sekali.
+
+00:08:53.200 --> 00:08:55.360
+Zona pendaratan platform adalah fondasi bersama.
+
+00:08:55.500 --> 00:08:56.480
+Tim milik oleh tim platform.
+
+00:08:56.480 --> 00:09:02.440
+Anda memiliki langganan identitas yang menampung layanan domain, langganan manajemen dengan alitik, log, dan akun otomatisasi.
+
+00:09:02.600 --> 00:09:08.240
+Serta langganan konektivitas yang menampung jaringan virtual hub, Azure firewall, dan gateway express route atau VPN.
+
+00:09:08.820 --> 00:09:11.420
+Ini adalah layanan bersama yang diandalkan oleh setiap beban klik.
+
+00:09:11.800 --> 00:09:14.400
+Zona pendaratan aplikasi adalah tempat beban kerja benar-benar pecat.
+
+00:09:14.400 --> 00:09:16.900
+Ini adalah langganan yang didapatkan oleh tim aplikasi.
+
+00:09:17.460 --> 00:09:17.920
+Jumlahnya banyak.
+
+00:09:18.260 --> 00:09:18.880
+Sifatnya sekali pakai.
+
+00:09:19.300 --> 00:09:20.820
+Dan semuanya mengikuti pola yang sama setiap saat.
+
+00:09:21.180 --> 00:09:22.380
+Sebuah tim mendapatkan langganan.
+
+00:09:22.580 --> 00:09:24.320
+Ditempatkan di bawah grup manajemen yang tepat.
+
+00:09:24.320 --> 00:09:27.960
+Mewarisi kebijakan, melakukan piring ke jaringan hub, dan mereka melakukan penyebaran.
+
+00:09:28.540 --> 00:09:29.600
+Perbedaan pembelikan sangat penting.
+
+00:09:30.300 --> 00:09:33.000
+Zona platform jumlahnya sedikit, mungkin totalnya 3-5 langganan.
+
+00:09:33.540 --> 00:09:35.680
+Zona ini berumur panjang dan dikelola secara terpusat oleh tim.
+
+00:09:35.920 --> 00:09:37.160
+Zona aplikasi jumlahnya banyak.
+
+00:09:37.560 --> 00:09:38.740
+Anda bisa memiliki peruan atau ratusan.
+
+00:09:39.100 --> 00:09:39.660
+Sifatnya sementara.
+
+00:09:39.660 --> 00:09:42.940
+Beban kerja disebarkan berjalan untuk sementara waktu lalu dinonaktifkan.
+
+00:09:43.380 --> 00:09:45.380
+Langganan dibersihkan dan polanya terulang kembali.
+
+00:09:45.960 --> 00:09:47.100
+Berikut adalah antipola klasik.
+
+00:09:47.100 --> 00:09:50.280
+Seseorang menempatkan firewall bersama di dalam langganan aplikasi.
+
+00:09:50.640 --> 00:09:54.680
+Atau mereka menyebarkan gateway express route di langganan beban kerja, bukan di langganan konektivitas.
+
+00:09:55.460 --> 00:09:57.540
+Sekarang layanan bersama tersebar di seluruh lingkungan.
+
+00:09:58.060 --> 00:09:59.120
+Tidak ada yang tahu di mana letas moe.
+
+00:09:59.420 --> 00:10:02.180
+Tim platform tidak bisa mengelola firewall karena berada di langganan orang lain.
+
+00:10:02.180 --> 00:10:04.160
+Dan tim aplikasi tidak ingin meliharanya.
+
+00:10:04.420 --> 00:10:05.960
+Dan tim aplikasi berantak.
+
+00:10:06.440 --> 00:10:07.940
+Simpan layanan bersama di lapisan platform.
+
+00:10:08.580 --> 00:10:13.280
+Langganan konektivitas menampung jaringan virtual hub, Azure Firewall, dan Gateway Express Route.
+
+00:10:13.860 --> 00:10:15.220
+Langganan aplikasi melakukan piring ke dalam.
+
+00:10:15.220 --> 00:10:16.880
+Mereka tidak memiliki bagian apa-apa.
+
+00:10:17.160 --> 00:10:17.860
+Mereka hanya menggunakannya.
+
+00:10:18.140 --> 00:10:20.540
+Artinya bagi Anda adalah pemisahan tanggung jawab yang jelas.
+
+00:10:21.320 --> 00:10:25.240
+Tim platform mengontrol kotak, batasan, layanan bersama, dan kebijakan.
+
+00:10:26.040 --> 00:10:27.420
+Tim aplikasi bergerak cepat di dalamnya.
+
+00:10:28.100 --> 00:10:31.000
+Mereka mendapatkan langganan yang sudah patuh, sudah terhubung, dan sudah dipantau.
+
+00:10:31.000 --> 00:10:32.600
+Mereka tidak memikirkan fondasinya.
+
+00:10:33.020 --> 00:10:33.900
+Mereka tinggal membangun di atas.
+
+00:10:34.780 --> 00:10:35.860
+Bagaimana bagian diterhu?
+
+00:10:36.160 --> 00:10:37.200
+Momen yang mencerahkan.
+
+00:10:37.540 --> 00:10:40.380
+Jadi Anda sudah tahu blok penyusun individunya, tapi inilah yang sebenarnya penting.
+
+00:10:40.880 --> 00:10:42.020
+Mereka tidak bekerja secara tersalasi.
+
+00:10:42.400 --> 00:10:44.300
+Mereka bekerja bersama sebagai satu sistem yang terhubung.
+
+00:10:44.300 --> 00:10:45.520
+Dan disitulah semuanya menjadi padu.
+
+00:10:45.920 --> 00:10:46.720
+Pikirkan dengan cara ini.
+
+00:10:47.080 --> 00:10:49.320
+Identitas memutuskan siapa yang bisa masuk melalui pintu dek.
+
+00:10:49.880 --> 00:10:52.900
+Tata kelola kemudian memberitahu ruangan mana yang boleh mereka masuki setelah mereka masuk.
+
+00:10:53.540 --> 00:10:55.740
+Jaringan mengontrol bagaimana mereka berpindah antar ruangan tersebut.
+
+00:10:56.260 --> 00:10:57.980
+Keamanan mengawasi ancaman di setiap sudut.
+
+00:10:58.740 --> 00:11:00.980
+Manajemen menjaga seluruh gedung berjalan dengan lancar.
+
+00:11:01.300 --> 00:11:04.300
+Dan otomatisasi membuat setiap langkah dapat diulang sehingga tidak ada yang terlupakan.
+
+00:11:05.000 --> 00:11:06.440
+Setiap bagian bergantung pada bagian lainnya.
+
+00:11:06.640 --> 00:11:09.300
+Dan bersama-sama mereka menciptakan sesuatu yang jauh lebih besar daripada bagian lainnya.
+
+00:11:09.300 --> 00:11:12.100
+Ijinkan saya memberi Anda contoh konkret tentang cara kerja interaksi ini.
+
+00:11:12.520 --> 00:11:14.440
+Bayangkan sebuah tim baru perlu mendeploy beban kerja.
+
+00:11:14.880 --> 00:11:17.460
+Mereka mengirimkan permintaan melalui pipeline penyediaan langganan.
+
+00:11:17.780 --> 00:11:20.240
+Dan pipeline itu secara otomatis membuat langganan baru.
+
+00:11:20.980 --> 00:11:23.720
+Pipeline menempatkan langganan tersebut di bawah grup manajemen yang tepat.
+
+00:11:23.840 --> 00:11:26.740
+Sehingga langganan langsung mewarisi semua kebijakan di grup itu.
+
+00:11:27.540 --> 00:11:32.920
+Persyaratan enkripsi, wilayah yang diizinkan, tag wajib, konfigurasi logging, semua yang diperlukan.
+
+00:11:34.080 --> 00:11:36.820
+Pipeline tersebut juga mengonfigurasi jaringan spok dan menghubungkannya ke hub.
+
+00:11:36.820 --> 00:11:41.240
+Pengaturan diagnostik mulai mengirim log langsung ke ruang kerja analitik log terpusat
+
+00:11:41.240 --> 00:11:43.720
+sementara Defender for Cloud mengaktifkan perlindungan.
+
+00:11:44.720 --> 00:11:49.560
+Seluruh langganan menjadi patuh, terhubung, dan terpantau dalam hitungan menit tanpa intervensi manusia.
+
+00:11:50.180 --> 00:11:52.700
+Itulah perbedaan nyata antara kekacauan cloud dan kontrol cloud.
+
+00:11:53.520 --> 00:11:55.480
+Di lingkungan berantakan yang saya jelaskan di awal,
+
+00:11:55.820 --> 00:11:59.280
+setiap langkah bergantung pada seseorang yang ingat untuk melakukannya dan orang sering lupa.
+
+00:11:59.620 --> 00:12:02.700
+Atau mereka melakukannya dengan cara berbeda setiap saat, atau mereka sama sekali tidak melakukan.
+
+00:12:02.960 --> 00:12:05.060
+Namun, dengan landing zone yang tepat, semuanya berjalan otomatis.
+
+00:12:05.060 --> 00:12:08.860
+Sistem menegakkan dirinya sendiri, dan tim bisa bergerak cepat tanpa rusak apapun.
+
+00:12:09.320 --> 00:12:10.780
+Di sini ada sebagian besar organisasi tersatu.
+
+00:12:11.200 --> 00:12:13.080
+Mereka menganggap landing zone sebagai proyek sekali jalan,
+
+00:12:13.380 --> 00:12:15.580
+mendeploynya, mencetang daftar, lalu beralih ke hal lain.
+
+00:12:16.220 --> 00:12:17.640
+Padahal landing zone ada platform yang terus berkembang.
+
+00:12:18.040 --> 00:12:19.400
+Azure terus merilis fitur baru setiap saat.
+
+00:12:19.840 --> 00:12:21.460
+Persyaratan kepatuan Anda berubah seiring one.
+
+00:12:21.840 --> 00:12:22.820
+Bisnis Anda terus berkembang.
+
+00:12:22.900 --> 00:12:25.540
+Landing zone harus ikut berkembang, jika tidak ia akan merugikan Anda.
+
+00:12:25.800 --> 00:12:28.280
+Model operasi sebenarnya lebih penting daripada templat teknis.
+
+00:12:28.600 --> 00:12:29.400
+Siapa pemilik landing zone tersebut?
+
+00:12:29.400 --> 00:12:30.600
+Bagaimana cara pengembangnya?
+
+00:12:30.840 --> 00:12:31.780
+Bagaimana pengecuan ditangani?
+
+00:12:32.020 --> 00:12:35.260
+Jika jawaban Anda hanya tim platform yang mengelolahnya itu tidak cukup,
+
+00:12:35.500 --> 00:12:36.480
+Anda membutuhkan proses yang nyat.
+
+00:12:36.700 --> 00:12:37.820
+Anda membutuhkan backlog yang tepat.
+
+00:12:38.120 --> 00:12:40.380
+Anda harus memperlakukan landing zone sebagai produk, bukan proyek.
+
+00:12:40.620 --> 00:12:41.560
+Berikut contoh dunia nyata.
+
+00:12:42.180 --> 00:12:45.080
+Sebuah tim platform mendukung 200 langganan tanpa menjadi hambatan.
+
+00:12:45.880 --> 00:12:48.600
+Rahasianya adalah penyediaan langganan yang dikombinasikan dengan pura iseng kebijakan.
+
+00:12:49.300 --> 00:12:51.740
+Tim tidak perlu mengeklik portal untuk membuat setiap langganan.
+
+00:12:52.260 --> 00:12:53.640
+Pipeline melangani secara otomatis.
+
+00:12:54.220 --> 00:12:56.380
+Mereka tidak perlu mengonfigurasi login secara maluan untuk setiap bulan.
+
+00:12:56.380 --> 00:12:58.080
+Dan kebijakan menegakkannya secara konsisten.
+
+00:12:58.540 --> 00:13:00.420
+Mereka tidak perlu meninjau setiap deployment untuk kepatuan.
+
+00:13:00.760 --> 00:13:02.660
+Daspor kepatuan hanya menunjukkan pengecualian kepada mereka.
+
+00:13:02.980 --> 00:13:05.220
+Mereka fokus pada pengecualian bukan pada pekerjaan rutin.
+
+00:13:05.660 --> 00:13:09.260
+Dan itulah perbedaan antara platform yang bisa berskala dan platform yang menghambat bisnis.
+
+00:13:10.300 --> 00:13:11.240
+Puan penting yang bisa diterapkan.
+
+00:13:11.600 --> 00:13:12.900
+Mulai dari yang kecil berkembangan cerdak.
+
+00:13:13.500 --> 00:13:15.000
+Jadi apa yang sebenarnya Anda lakukan di Senin Pagi?
+
+00:13:15.520 --> 00:13:16.460
+Inilah jawaban jujurnya.
+
+00:13:16.940 --> 00:13:19.900
+Jangan mencoba membangun hirarki skala perusahaan penuh pada hari pertama.
+
+00:13:20.380 --> 00:13:21.440
+Itu adalah jebakan yang harus Anda hindat.
+
+00:13:21.440 --> 00:13:27.000
+Anda akan menghabiskan waktu berbulan-bulan merancang skenario yang mungkin tidak pernah terjadi dan Anda tidak akan pernah terjadi dan Anda tidak akan pernah meluncurkan sesuatu yang nyata.
+
+00:13:27.200 --> 00:13:30.680
+Sebagai gantinya, mulailah dengan zona penderatan minimum yang layak atau MVLZ.
+
+00:13:31.320 --> 00:13:32.280
+Komponen intinya sederhana.
+
+00:13:33.380 --> 00:13:34.580
+Satu hirarki grup manajemen.
+
+00:13:35.120 --> 00:13:38.320
+Beberapa kebijakan inti seperti batasan wilayah, enkripsi, dan tag wajib.
+
+00:13:38.960 --> 00:13:41.380
+Jaringan dasar dengan satu hub jaringan virtual dan satu spok.
+
+00:13:41.540 --> 00:13:44.180
+Serta pencatatan terpusat ke ruang kerja log, analitik.
+
+00:13:44.900 --> 00:13:45.380
+Sudah cukup.
+
+00:13:45.660 --> 00:13:47.760
+Anda tidak memerlukan Azure Virtual One pada hari pertama.
+
+00:13:47.760 --> 00:13:50.760
+Dan Anda tidak butuh inisiatif kebijakan rumit yang berisi 200 aturan.
+
+00:13:50.760 --> 00:13:53.440
+Dan Anda hanya butuh pagar pengaman yang cukup agar tetap aman, tidak lebih.
+
+00:13:54.240 --> 00:13:57.060
+Lalu gunakan beban kerja nyata pertama Anda di MVLZ tersebut.
+
+00:13:57.320 --> 00:14:00.280
+Bukan VM uji coba, melainkan beban kerja aktual yang diperlukan tim Anda.
+
+00:14:00.660 --> 00:14:02.120
+Perhatikan perilaku kebijakan tersebut.
+
+00:14:02.440 --> 00:14:04.200
+Lihat apa yang rusak pelajari kendalanya.
+
+00:14:04.420 --> 00:14:05.340
+Lalu lakukan interasi dari saya.
+
+00:14:05.640 --> 00:14:08.820
+Tambahkan lebih banyak kebijakan saat dibutuhkan, perluas jaringan saat diperlukan,
+
+00:14:09.060 --> 00:14:11.540
+dan biarkan zona penderatan tumbuh bersama organisasi Anda secara alami.
+
+00:14:12.000 --> 00:14:14.660
+Ijinkan saya memberikan tiga poin penting konkret yang bisa langsung Anda terapkan sekarang.
+
+00:14:15.440 --> 00:14:20.220
+Poin pertama, terapkan akselerator zona penderatan Azure dari portal ke dalam penyewa uji coba.
+
+00:14:20.220 --> 00:14:22.980
+Ini tidak dipungut biaya, butuh waktu sekitar satu jam,
+
+00:14:23.080 --> 00:14:26.020
+dan mengajarkan Anda lebih banyak tentang cara kerja grup manajemen kebijakan
+
+00:14:26.020 --> 00:14:28.480
+dan pewarisan dibandingkan diagram atau dokumentasi manapun.
+
+00:14:29.340 --> 00:14:32.840
+Anda bisa melihat hirarkinya, menyaksikan kebijakan diterapkan secara waktu nyata,
+
+00:14:32.980 --> 00:14:35.280
+dan bereksperimen tanpa merusak apapun yang penting.
+
+00:14:36.320 --> 00:14:39.640
+Poin kedua, aktifkan kebijakan dalam mode audit terlebih dahulu, bukan mode tolak.
+
+00:14:40.120 --> 00:14:43.340
+Mode audit memungkinkan Anda melihat dengan tepat apa yang tidak patuh di lingkungan Anda
+
+00:14:43.340 --> 00:14:44.440
+tanpa memblokir siapapun.
+
+00:14:44.440 --> 00:14:48.680
+Pantau daspur kepatuhan, dan saya janji Anda akan terkejut melihat berapa banyak sumber daya
+
+00:14:48.680 --> 00:14:50.560
+yang diam-diam melanggar aturan yang menurut Anda sudah jelas.
+
+00:14:50.960 --> 00:14:54.380
+Setelah memahami lanskap Anda, Anda bisa mengubah kebijakan penting ke mode tolak.
+
+00:14:55.040 --> 00:14:58.100
+Namun mulailah dengan audit, agar Anda tidak menghentikan tim Anda sendiri
+
+00:14:58.100 --> 00:14:59.400
+sebelum memahami apa yang sedang diadap.
+
+00:15:00.200 --> 00:15:03.740
+Poin ketiga, rencanakan rentang alamat IP dan hirarki grup manajemen Anda
+
+00:15:03.740 --> 00:15:04.940
+sebelum menerapkan apapun.
+
+00:15:05.300 --> 00:15:08.560
+Saya tahu itu terdengar membosankan, tetapi mengubahnya nanti sungguh menyakitkan.
+
+00:15:09.120 --> 00:15:11.900
+Rentang IP yang tumpang tindih berarti harus membongkar pering jaringan
+
+00:15:11.900 --> 00:15:14.680
+dan merestrukturisasi grup manajemen berarti memindahkan langganan
+
+00:15:14.680 --> 00:15:16.220
+dan mengevaluasi ulang penugasan kerja.
+
+00:15:16.400 --> 00:15:19.440
+Tuntaskan dua hal ini di awal, dan Anda akan menghemat waktu pengerjaan ulang
+
+00:15:19.440 --> 00:15:20.600
+selama berminggu-minggu di masa itu.
+
+00:15:20.680 --> 00:15:22.000
+Jebakan-jebakan umumnya cukup sederhana.
+
+00:15:22.580 --> 00:15:24.740
+Rekayasa berlebihan menyebabkan kelumpuhan analisis
+
+00:15:24.740 --> 00:15:26.520
+yang menghalangi Anda untuk melakukan penerapan.
+
+00:15:26.800 --> 00:15:29.160
+Rekayasa yang kurang membuat Anda tanpa pagar pengaman apapun
+
+00:15:29.160 --> 00:15:30.960
+yang hanya merupakan kekacauan cloud dengan nama lain.
+
+00:15:31.300 --> 00:15:33.560
+Dan memperlakukan zona pendaratan sebagai proyek sekali jalan
+
+00:15:33.560 --> 00:15:35.460
+alih-alih platform yang hidup menjamin Anda akan tertinggal.
+
+00:15:35.700 --> 00:15:36.860
+Indah dari ketiga jebakan tersebut,
+
+00:15:36.860 --> 00:15:38.920
+dan Anda sudah berada di depan sebagian besar organisasi.
+
+00:15:39.220 --> 00:15:40.840
+Ingat tujuannya bukanlah zona pendaratan yang sempurna.
+
+00:15:41.240 --> 00:15:43.680
+Tujuannya adalah fondasi terkelola yang membuat tim bergerak cepat
+
+00:15:43.680 --> 00:15:45.040
+tanpa menciptakan kekacauan.
+
+00:15:45.280 --> 00:15:46.440
+Mulai dari yang kecil berulang,
+
+00:15:46.640 --> 00:15:48.260
+dan biarkan kebijakan yang bekerja keras untuk Anda.
+
+00:15:49.100 --> 00:15:50.920
+Jadi itulah zona pendaratan azur dalam bahasa yang seder.
+
+00:15:51.300 --> 00:15:53.000
+Itu bukanlah konsep perusahaan yang rumit.
+
+00:15:53.740 --> 00:15:56.580
+Anggap saja sebagai langganan terkelola dengan pagar pembatas bawaan.
+
+00:15:57.040 --> 00:15:59.460
+Delapan area desain hanyalah pertanyaan yang harus Anda jawab
+
+00:15:59.460 --> 00:16:00.560
+sebelum mulai menerapkan.
+
+00:16:01.360 --> 00:16:04.300
+Identitas, jaringan, keamanan, manajemen, tata kelola, otomatisasi.
+
+00:16:04.300 --> 00:16:06.560
+Jawab sekali, bangun ke dalam fondasi,
+
+00:16:06.640 --> 00:16:08.820
+dan setiap beban kerja setelahnya akan mendapatkan manfaatnya.
+
+00:16:09.220 --> 00:16:10.600
+Inilah hal terbaik yang bisa Anda lakukan sekarang.
+
+00:16:11.180 --> 00:16:12.800
+Terapkan akselerator ke penyewa uji coba,
+
+00:16:12.920 --> 00:16:14.380
+dan lihat bagaimana kebijakan diwariskan.
+
+00:16:14.940 --> 00:16:17.120
+Satu jam itu akan mengajarkan Anda lebih dari diagram manapun.
+
+00:16:17.520 --> 00:16:19.640
+Perlangganan untuk penjelasan bahasa sederhana lainnya seperti ini,
+
+00:16:19.720 --> 00:16:21.040
+dan beri komentar jika ada yang Anda pahami.
+
+00:16:21.480 --> 00:16:21.640
+Saya beri komentar jika ada yang Anda pahami.
+
+00:16:21.640 --> 00:16:22.220
+Saya beri komentar.

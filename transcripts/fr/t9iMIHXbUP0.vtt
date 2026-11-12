@@ -1,0 +1,2284 @@
+WEBVTT
+
+00:00:00.120 --> 00:00:03.040
+Bienvenue dans un nouvel épisode des Microsoft Knowledge Nuggets que sur M365.
+
+00:00:03.200 --> 00:00:04.600
+Bonjour, je suis votre hôte Mirko Peters.
+
+00:00:04.980 --> 00:00:07.040
+Le sujet d'aujourd'hui est quelque chose dont presque tout le monde a entendu parler,
+
+00:00:07.240 --> 00:00:08.380
+mais que peut ça réellement expliquer.
+
+00:00:08.620 --> 00:00:10.080
+Qu'est-ce qu'Azure DevOps exactement ?
+
+00:00:10.080 --> 00:00:12.680
+Est-ce simplement un outil pour les développeurs ou est-ce quelque chose de beaucoup plus vaste ?
+
+00:00:12.680 --> 00:00:13.840
+Imaginons que vous souhaitiez créer un logiciel.
+
+00:00:14.180 --> 00:00:16.020
+Peut-être s'agit-il d'un site web, d'une application mobile,
+
+00:00:16.380 --> 00:00:18.380
+ou d'un outil pour améliorer le fonctionnement de votre entreprise.
+
+00:00:18.660 --> 00:00:19.720
+Vous essayez pour planifier le projet.
+
+00:00:20.160 --> 00:00:22.600
+Il vous faut un outil pour suivre les tâches, un espace pour stocker le code,
+
+00:00:22.600 --> 00:00:25.960
+un moyen de tester votre travail, et enfin un système pour le déployer auprès des utilisateurs.
+
+00:00:26.880 --> 00:00:28.980
+Avant même de vous en rendre compte, vous jonglez avec 5 outils différents
+
+00:00:28.980 --> 00:00:30.520
+provenant de 5 entreprises distinctes.
+
+00:00:31.000 --> 00:00:32.820
+L'un pour la gestion des tâches, un autre pour le code,
+
+00:00:32.940 --> 00:00:34.500
+un troisième pour les tests, un quatrième pour le déploiement,
+
+00:00:34.560 --> 00:00:36.380
+et aucun d'entre eux ne communique avec les autres.
+
+00:00:36.800 --> 00:00:37.160
+C'est le chaos.
+
+00:00:38.120 --> 00:00:40.420
+Microsoft a observé ce désordre et a créé une solution pour y remédier.
+
+00:00:40.780 --> 00:00:43.900
+Cela s'appelle l'Azure DevOps, et ce n'est pas juste un outil de plus à ajouter à votre liste.
+
+00:00:44.260 --> 00:00:47.340
+C'est une plateforme connectée qui gère l'ensemble du cycle de vie du développement logiciel,
+
+00:00:47.440 --> 00:00:51.840
+planification, codage, test, déploiement, le tout au même endroit, le tout au même ordre.
+
+00:00:52.600 --> 00:00:55.500
+A la fin de cet épisode, vous comprendrez ce qu'est réellement Azure DevOps
+
+00:00:55.500 --> 00:00:57.280
+et comment ses 5 composants principaux s'articulent.
+
+00:00:58.320 --> 00:00:59.700
+Imaginez cela comme un immeuble de bureau moderne.
+
+00:01:00.320 --> 00:01:02.340
+Word et Excel sont des pièces individuelles où vous travaillez.
+
+00:01:02.860 --> 00:01:06.100
+Microsoft 365 est l'immeuble entier, avec ses systèmes de sécurité et d'archivage.
+
+00:01:06.720 --> 00:01:08.000
+Azure DevOps repose sur la même idée.
+
+00:01:08.680 --> 00:01:11.320
+C'est tout l'immeuble dédié au développement logiciel, et non juste une seule pièce.
+
+00:01:11.860 --> 00:01:14.280
+Alors qu'est-ce qu'Azure DevOps précisément ?
+
+00:01:14.280 --> 00:01:15.320
+Voici la définition la plus simple.
+
+00:01:15.680 --> 00:01:19.240
+Azure DevOps est une plateforme connectée pour l'intégralité du cycle de vie du développement logiciel.
+
+00:01:19.540 --> 00:01:20.680
+Un peu complexe, alors décortiquons ça.
+
+00:01:20.680 --> 00:01:24.520
+Il y a 20 ans, pour créer un logiciel, vous achetez des produits séparés pour chaque étape.
+
+00:01:25.100 --> 00:01:26.340
+Un outil pour le suivi des bugs.
+
+00:01:26.960 --> 00:01:28.240
+Un autre pour la gestion du code source.
+
+00:01:28.620 --> 00:01:29.880
+Un troisième pour l'automatisation des builds.
+
+00:01:30.040 --> 00:01:30.820
+Un quatrième pour les tests.
+
+00:01:30.900 --> 00:01:31.720
+Un cinquième pour le déploiement.
+
+00:01:31.860 --> 00:01:34.080
+Et vous passiez la moitié de votre temps à essayer de faire en sorte qu'ils partagent leurs données.
+
+00:01:35.740 --> 00:01:37.760
+Microsoft a examiné cette complexité et s'est demandé.
+
+00:01:37.960 --> 00:01:40.280
+Et si tous ces services fonctionnaient ensemble sous un même toit ?
+
+00:01:40.280 --> 00:01:41.300
+C'est ainsi qu'ils ont créé Azure DevOps.
+
+00:01:41.600 --> 00:01:43.660
+Mais pas un seul outil, mais 5 services qui travaillent de concert.
+
+00:01:44.200 --> 00:01:45.300
+Azure Boards pour la planification.
+
+00:01:45.460 --> 00:01:46.180
+Azure Repo pour le code.
+
+00:01:46.320 --> 00:01:47.440
+Azure Pay Plains pour l'automatisation.
+
+00:01:47.560 --> 00:01:48.360
+Azure Test Plan pour la qualité.
+
+00:01:50.680 --> 00:01:53.060
+Chacun remplit sa propre mission, mais ils sont tous interconnectés.
+
+00:01:53.320 --> 00:01:55.080
+Revenons à notre analogie de l'immeuble de bureaux.
+
+00:01:55.600 --> 00:01:56.980
+L'accueil gère les entrées et les sorties.
+
+00:01:57.500 --> 00:01:58.340
+C'est votre service d'identité.
+
+00:01:58.980 --> 00:02:00.300
+Les bureaux sont les endroits où les gens travaillent.
+
+00:02:00.720 --> 00:02:01.660
+Il s'agit des tableaux et des dépôts.
+
+00:02:02.140 --> 00:02:03.340
+Le service courrier s'occupe des colis.
+
+00:02:03.780 --> 00:02:04.460
+Il s'agit des artefacts.
+
+00:02:04.800 --> 00:02:06.200
+L'équipe de sécurité protège le bâtiment.
+
+00:02:06.740 --> 00:02:08.280
+Il s'agit de vos contrôles d'accès et de vos politiques.
+
+00:02:08.860 --> 00:02:10.580
+Chacun a sa mission, mais tous sont sous le même toit.
+
+00:02:10.880 --> 00:02:11.580
+Partage des informations.
+
+00:02:12.080 --> 00:02:12.600
+Travaillez ensemble.
+
+00:02:13.040 --> 00:02:13.640
+C'est là tout l'intérêt.
+
+00:02:14.060 --> 00:02:15.180
+Et voici le meilleur pour les débutants.
+
+00:02:15.700 --> 00:02:17.020
+Azure DevOps propose une offre gratuite.
+
+00:02:17.280 --> 00:02:18.860
+Vous pouvez créer un compte, démarrer un projet
+
+00:02:18.860 --> 00:02:20.840
+et utiliser les fonctionnalités principales sans rien payer.
+
+00:02:21.260 --> 00:02:22.820
+5 utilisateurs gratuits bénéficient d'un accès complet.
+
+00:02:23.020 --> 00:02:25.180
+1 ombre illimité de partie prenante bénéficie d'un accès limité gratuit.
+
+00:02:25.560 --> 00:02:27.660
+Vous pouvez donc littéralement commencer dès aujourd'hui sans aucun coût
+
+00:02:27.660 --> 00:02:28.560
+et voir si cela vous convient.
+
+00:02:29.140 --> 00:02:30.100
+Aucune carte de crédit n'est requite.
+
+00:02:30.440 --> 00:02:30.980
+Aucun appel commercial.
+
+00:02:31.280 --> 00:02:33.380
+Allez simplement sur dev.azure.com et créez un compte.
+
+00:02:33.880 --> 00:02:35.680
+Passons donc en revue les 5 services un par un
+
+00:02:35.680 --> 00:02:38.440
+en commençant par l'endroit où tout votre travail commence.
+
+00:02:39.440 --> 00:02:41.620
+Azure Boards, le centre de commande de votre projet.
+
+00:02:42.260 --> 00:02:44.260
+Azure Boards est l'endroit où vous planifiez et suivez votre travail.
+
+00:02:44.260 --> 00:02:46.560
+Considérez-le comme le centre de commande de votre projet.
+
+00:02:47.340 --> 00:02:49.740
+Si vous avez déjà utilisé des post-its sur un mur pour suivre des tâches,
+
+00:02:49.940 --> 00:02:51.220
+vous comprenez déjà le principe de base.
+
+00:02:52.120 --> 00:02:53.920
+Mais au lieu de post-its physiques qui tombent et se perdent,
+
+00:02:54.100 --> 00:02:56.000
+Boards vous offre un tableau Kanban numérique
+
+00:02:56.000 --> 00:02:58.120
+que toute votre équipe peut voir et mettre à jour en temps réel.
+
+00:02:58.880 --> 00:02:59.380
+Analysons cela.
+
+00:02:59.820 --> 00:03:01.180
+Vous commencez par créer des éléments de travail.
+
+00:03:01.780 --> 00:03:03.320
+Un élément de travail est tout ce que vous devez suivre.
+
+00:03:03.980 --> 00:03:07.160
+Une user story, une fonctionnalité, une épique, une tâche ou un bug.
+
+00:03:08.360 --> 00:03:11.480
+Chacun possède des champs pour la description, la priorité, le statut et le responsable.
+
+00:03:12.200 --> 00:03:14.000
+Vous organisez ces éléments de travail dans un backlog,
+
+00:03:14.260 --> 00:03:16.820
+qui est simplement une liste priorisée de tout ce que vous devez faire.
+
+00:03:17.480 --> 00:03:18.520
+Vous pouvez les regrouper en hiérarchie.
+
+00:03:19.000 --> 00:03:20.640
+Les épiques en haut, les fonctionnalités en dessous,
+
+00:03:20.720 --> 00:03:22.600
+les user stories en dessous et les tâches sous les stories.
+
+00:03:23.400 --> 00:03:25.740
+Cela vous donne une image claire de ce que vous construisez et pourquoi.
+
+00:03:26.480 --> 00:03:27.300
+Ensuite, vous planifiez les sprints.
+
+00:03:27.660 --> 00:03:29.820
+Un sprint est une période fixe, généralement de deux semaines,
+
+00:03:30.420 --> 00:03:32.640
+où votre équipe s'engage à terminer un ensemble d'éléments de travail.
+
+00:03:32.640 --> 00:03:35.560
+Faites glisser les éléments de votre backlog dans un sprint,
+
+00:03:35.780 --> 00:03:36.700
+et soudain, vous avez un plan.
+
+00:03:37.580 --> 00:03:39.520
+Tout le monde sait sur quoi ils travaillent et qu'on s'est dû.
+
+00:03:39.900 --> 00:03:40.620
+Vous avez également des requêtes.
+
+00:03:41.060 --> 00:03:43.060
+Les requêtes vous permettent de rechercher et de filtrer vos éléments de travail.
+
+00:03:43.520 --> 00:03:45.780
+Montrez-moi tous les bugs assignés à Sarah qui sont de haute priorité.
+
+00:03:46.360 --> 00:03:48.660
+Montrez-moi toutes les user stories du sprint actuel qui sont encore actives.
+
+00:03:49.100 --> 00:03:51.580
+Les requêtes sont puissantes car elles transforment vos données en réponses.
+
+00:03:52.100 --> 00:03:54.500
+Vous pouvez les enregistrer, les partager et les utiliser pour créer des tableaux.
+
+00:03:54.860 --> 00:03:56.260
+Et les tableaux de bord sont là où tout se rassemble.
+
+00:03:56.260 --> 00:03:58.180
+Vous pouvez créer des tableaux de bord personnalisés
+
+00:03:58.180 --> 00:03:59.540
+avec des widgets affichant des graphiques d'avancement,
+
+00:03:59.600 --> 00:04:01.300
+la vélocité, le nombre d'éléments de travail et plus encore.
+
+00:04:01.800 --> 00:04:03.540
+Votre équipe obtient une vue en temps réel de la progression
+
+00:04:03.540 --> 00:04:05.300
+sans que personne n'ait à rédiger le rapport de suivi.
+
+00:04:05.940 --> 00:04:06.920
+Laissez-moi vous donner un exemple rapide.
+
+00:04:07.260 --> 00:04:08.740
+Imaginez une petite équipe qui crée un site web.
+
+00:04:09.160 --> 00:04:11.620
+Leur responsable produit crée une capique qu'elle est appelée portail client.
+
+00:04:12.680 --> 00:04:13.920
+En dessous, il crée des fonctionnalités
+
+00:04:13.920 --> 00:04:15.900
+comme l'inscription des utilisateurs et l'historique des commandes.
+
+00:04:17.020 --> 00:04:20.060
+Sous l'inscription des utilisateurs, il crée des user stories egedelke.
+
+00:04:20.460 --> 00:04:22.340
+En tant que client, je veux créer un compte avec mon email.
+
+00:04:22.340 --> 00:04:25.920
+Sous cette story, le développeur crée des tâches.
+
+00:04:26.560 --> 00:04:27.520
+Créez le formulaire d'inscription,
+
+00:04:28.060 --> 00:04:29.360
+configurez la vérification par email,
+
+00:04:29.720 --> 00:04:30.700
+rédigez les tests unitaires.
+
+00:04:31.500 --> 00:04:32.800
+Chaque tâche est assignée à quelqu'un.
+
+00:04:33.380 --> 00:04:34.920
+L'équipe suit la progression sur le tableau Kanban.
+
+00:04:35.440 --> 00:04:37.160
+Chacun peut voir ce qui est terminé, ce qui est en cours
+
+00:04:37.160 --> 00:04:38.200
+et ce qui est prévu ensuite.
+
+00:04:38.940 --> 00:04:40.880
+Comparer cela à l'utilisation d'Excel ou d'un tableau blanc.
+
+00:04:41.380 --> 00:04:42.000
+Excel est statique.
+
+00:04:42.460 --> 00:04:44.020
+Vous envoyez une feuille de calcul par email,
+
+00:04:44.120 --> 00:04:45.180
+quelqu'un la met à jour, vous la renvoie.
+
+00:04:45.540 --> 00:04:47.100
+Et quand vous la recevez, elle est déjà obsolète.
+
+00:04:47.760 --> 00:04:49.320
+Un tableau blanc est meilleur pour le brainstorming,
+
+00:04:49.580 --> 00:04:50.360
+mais il n'est pas consultable.
+
+00:04:50.760 --> 00:04:51.340
+Il n'est relié à rien.
+
+00:04:51.340 --> 00:04:52.980
+Et si quelqu'un efface quelque chose, c'est perdu.
+
+00:04:53.260 --> 00:04:53.580
+C'est perdu.
+
+00:04:53.820 --> 00:04:54.560
+Bords est en temps réel.
+
+00:04:54.860 --> 00:04:55.420
+Il est consultable.
+
+00:04:55.720 --> 00:04:57.540
+Il est connecté à votre code, à vos tests et à vos déploiements.
+
+00:04:58.200 --> 00:04:59.660
+Lorsqu'une personne met à jour un élément de travail,
+
+00:04:59.760 --> 00:05:00.500
+tout le monde le voit instantanément.
+
+00:05:00.800 --> 00:05:02.000
+Vous avez donc planifié votre travail.
+
+00:05:02.140 --> 00:05:02.980
+Vous savez ce qui doit être construit,
+
+00:05:03.040 --> 00:05:04.960
+mais il vous faut un endroit pour stocker le code proprement dit.
+
+00:05:05.440 --> 00:05:06.540
+C'est là qu'Azure Repos entre en jeu.
+
+00:05:07.160 --> 00:05:09.000
+Azure Repos, le domicile permanent de votre...
+
+00:05:09.000 --> 00:05:10.540
+Vous avez donc planifié votre travail.
+
+00:05:10.640 --> 00:05:11.380
+Vous savez ce qui doit être construit,
+
+00:05:11.420 --> 00:05:13.380
+mais il vous faut un endroit pour stocker le code proprement dit.
+
+00:05:13.860 --> 00:05:14.960
+C'est là qu'Azure Repos entre en jeu.
+
+00:05:15.500 --> 00:05:17.860
+Azure Repos, c'est un contrôle de version pour votre code utilisant Git.
+
+00:05:18.440 --> 00:05:19.580
+Git est le standard de l'industrie,
+
+00:05:19.860 --> 00:05:21.220
+et la plupart des développeurs l'utilisent déjà.
+
+00:05:21.780 --> 00:05:23.940
+Repos vous offre un espace pour héberger vos dépôts Git
+
+00:05:23.940 --> 00:05:25.640
+directement dans Azure DevOps.
+
+00:05:25.920 --> 00:05:27.160
+Prenons l'analogie de l'écriture d'un livre.
+
+00:05:27.540 --> 00:05:29.260
+Imaginez que vous écrivez un livre avec une équipe d'auteurs.
+
+00:05:29.760 --> 00:05:31.080
+Vous pourriez vous envoyer des chapitres par email.
+
+00:05:31.740 --> 00:05:32.960
+Quelqu'un modifie le chapitre 3,
+
+00:05:33.180 --> 00:05:33.820
+l'envoie par email,
+
+00:05:33.940 --> 00:05:34.960
+quelqu'un d'autre modifie à nouveau.
+
+00:05:35.320 --> 00:05:36.680
+Et très vite, vous avez des fichiers nommés.
+
+00:05:36.680 --> 00:05:39.040
+Qu'à final, chapitre 3, V2, envoyé.
+
+00:05:39.360 --> 00:05:40.500
+Reel.docx.exuc.
+
+00:05:40.500 --> 00:05:42.720
+Et personne ne sait quelle version est la bonne.
+
+00:05:43.280 --> 00:05:44.920
+C'est à cela que ressemblait le développement logiciel
+
+00:05:44.920 --> 00:05:45.700
+avant le contrôle de version.
+
+00:05:46.140 --> 00:05:47.300
+Avec Git dans Azure Repos,
+
+00:05:47.560 --> 00:05:49.400
+tout le monde travaille à partir du même dépôt central.
+
+00:05:50.240 --> 00:05:50.900
+Vous créez une branche.
+
+00:05:51.460 --> 00:05:53.160
+Considérez cela comme votre propre copie du livre.
+
+00:05:53.280 --> 00:05:55.160
+Vous pouvez apporter des modifications sans affecter personne d'autre.
+
+00:05:55.700 --> 00:05:57.040
+Vous rédigez votre chapitre, vous le testez,
+
+00:05:57.180 --> 00:05:58.380
+et quand vous êtes prêt, vous créez une cakeway.
+
+00:05:58.760 --> 00:06:00.700
+Il s'agit d'une demande pour fusionner vos modifications
+
+00:06:00.700 --> 00:06:01.540
+dans le livre principal.
+
+00:06:02.000 --> 00:06:03.560
+D'autres auteurs examinent vos modifications,
+
+00:06:03.700 --> 00:06:04.880
+laissent des commentaires et corrigent les erreurs.
+
+00:06:05.420 --> 00:06:06.320
+Une fois que tout le monde approuve,
+
+00:06:06.480 --> 00:06:07.600
+vos modifications sont fusionnées.
+
+00:06:08.120 --> 00:06:09.000
+Et l'historique est suivi.
+
+00:06:09.380 --> 00:06:10.180
+Vous pouvez voir précisément
+
+00:06:10.180 --> 00:06:11.260
+qu'il a changé, quoi, quand et pourquoi.
+
+00:06:11.840 --> 00:06:13.100
+C'est pourquoi les débutants devraient s'y intéresser.
+
+00:06:13.580 --> 00:06:14.600
+Fini les noms de fichiers confus
+
+00:06:14.600 --> 00:06:16.360
+ou le doute sur la version sur laquelle vous travaillez.
+
+00:06:17.040 --> 00:06:19.000
+Fini les risques d'écraser par erreur le travail de quelqu'un d'autre.
+
+00:06:19.340 --> 00:06:20.220
+Git vous offre un filet de sécurité.
+
+00:06:20.660 --> 00:06:21.880
+Vous pouvez expérimenter, faire des erreurs
+
+00:06:21.880 --> 00:06:23.220
+et revenir en arrière si quelque chose casse.
+
+00:06:23.660 --> 00:06:25.960
+C'est comme avoir un bouton annulé qu'une pour tout votre projet.
+
+00:06:26.360 --> 00:06:27.860
+Et c'est là qu'intervient la connexion avec Boards.
+
+00:06:28.640 --> 00:06:30.180
+Vous pouvez lier vos commits et vos pull requests
+
+00:06:30.180 --> 00:06:31.300
+directement aux éléments de travail.
+
+00:06:31.940 --> 00:06:33.200
+Lorsqu'un développeur corrige un bug,
+
+00:06:33.360 --> 00:06:35.100
+il inclut l'ID du bug dans son message de commit
+
+00:06:35.100 --> 00:06:37.020
+et ce commit est lié à l'élément de travail dans Boards.
+
+00:06:37.920 --> 00:06:39.540
+Soudainement, vous bénéficiez d'une traçabilité complète.
+
+00:06:39.760 --> 00:06:40.480
+Vous pouvez voir exactement
+
+00:06:40.480 --> 00:06:41.880
+quelles modifications de code ont été faites
+
+00:06:41.880 --> 00:06:43.120
+pour chaque fonctionnalité ou correctif.
+
+00:06:43.660 --> 00:06:44.620
+Les chefs de produits peuvent cliquer
+
+00:06:44.620 --> 00:06:45.360
+sur un élément de travail
+
+00:06:45.360 --> 00:06:46.460
+pour voir le code qui a été écrit.
+
+00:06:47.020 --> 00:06:48.260
+Les développeurs peuvent consulter un commit
+
+00:06:48.260 --> 00:06:49.620
+et voir à quel user story il correspond.
+
+00:06:50.120 --> 00:06:51.040
+Tout est connecté.
+
+00:06:51.560 --> 00:06:52.980
+Votre code est donc maintenant stocké et suivi.
+
+00:06:53.380 --> 00:06:53.860
+Il est en sécurité.
+
+00:06:54.180 --> 00:06:54.740
+Il est versionné.
+
+00:06:55.100 --> 00:06:55.600
+Mais il reste là.
+
+00:06:56.020 --> 00:06:57.100
+Comment faire pour qu'il s'exécute ?
+
+00:06:57.620 --> 00:06:58.620
+Comment transformer ce code
+
+00:06:58.620 --> 00:06:59.680
+en une application fonctionnelle
+
+00:06:59.680 --> 00:07:01.100
+que les utilisateurs peuvent exploiter ?
+
+00:07:01.100 --> 00:07:02.180
+C'est là qu'intervient Azure Pipelines.
+
+00:07:02.180 --> 00:07:04.700
+Azure Pipelines, le moteur d'automatisation.
+
+00:07:05.240 --> 00:07:07.040
+Azure Pipelines est le moteur d'automatisation
+
+00:07:07.040 --> 00:07:09.200
+qui compile, teste et déploie votre code automatiquement.
+
+00:07:09.800 --> 00:07:10.820
+En clair, il prend votre code
+
+00:07:10.820 --> 00:07:12.360
+et le transforme en une application fonctionnelle
+
+00:07:12.360 --> 00:07:13.740
+sans que vous ayez à intervenir manuellement.
+
+00:07:14.400 --> 00:07:15.320
+Voyez cela comme une boulangerie.
+
+00:07:15.840 --> 00:07:16.920
+Imaginez que vous gérez une boulangerie
+
+00:07:16.920 --> 00:07:18.100
+et que vous pétrissez chaque pain à la main
+
+00:07:18.100 --> 00:07:19.280
+pour chaque commande client.
+
+00:07:19.860 --> 00:07:21.200
+C'est à cela que ressemble un déploiement manuel.
+
+00:07:21.640 --> 00:07:22.400
+Quelqu'un écrit du code,
+
+00:07:22.480 --> 00:07:23.660
+vous le copiez manuellement sur un serveur,
+
+00:07:23.720 --> 00:07:24.780
+vous lancez la compilation manuellement,
+
+00:07:24.900 --> 00:07:26.080
+vous vérifiez manuellement si ça marche.
+
+00:07:26.600 --> 00:07:27.860
+C'est lent, sujet aux erreurs
+
+00:07:27.860 --> 00:07:29.020
+et si vous avez beaucoup de commandes,
+
+00:07:29.080 --> 00:07:29.820
+vous ne pouvez pas suivre.
+
+00:07:29.820 --> 00:07:31.720
+C'est là qu'intervient Azure Pipelines.
+
+00:07:32.300 --> 00:07:33.680
+Vous automatisez tout le processus.
+
+00:07:34.080 --> 00:07:34.920
+Vous le configurez une fois
+
+00:07:34.920 --> 00:07:36.240
+et il s'exécute automatiquement
+
+00:07:36.240 --> 00:07:37.540
+chaque fois que quelqu'un modifie le code.
+
+00:07:38.300 --> 00:07:39.440
+C'est ce qu'on appelle CISOCD.
+
+00:07:40.120 --> 00:07:41.660
+L'intégration et la livraison continuent.
+
+00:07:42.500 --> 00:07:43.880
+Voici ce que signifie l'intégration continue.
+
+00:07:44.640 --> 00:07:46.500
+Chaque fois qu'un développeur envoie du code vers le dépôt,
+
+00:07:46.680 --> 00:07:49.060
+le pipeline compile automatiquement l'application
+
+00:07:49.060 --> 00:07:50.040
+et lance les tests.
+
+00:07:50.640 --> 00:07:51.300
+Si quelque chose casse,
+
+00:07:51.360 --> 00:07:52.080
+vous le savez immédiatement,
+
+00:07:52.180 --> 00:07:53.700
+pas deux semaines plus tard au moment de déployer,
+
+00:07:54.000 --> 00:07:54.460
+mais tout de suite.
+
+00:07:54.680 --> 00:07:56.420
+Mais le développeur est averti,
+
+00:07:56.540 --> 00:07:58.120
+corrige le problème et renvoie son code.
+
+00:07:58.120 --> 00:07:59.700
+Les bugs sont détectés tôt
+
+00:07:59.700 --> 00:08:00.800
+quand ils sont peu coûteux à corriger,
+
+00:08:01.000 --> 00:08:01.980
+pas tard quand ils deviennent onéreux.
+
+00:08:02.700 --> 00:08:03.760
+La livraison continue signifie
+
+00:08:03.760 --> 00:08:04.940
+que le code compilé et testé
+
+00:08:04.940 --> 00:08:06.560
+est automatiquement déployé dans vos environnements.
+
+00:08:07.280 --> 00:08:08.440
+D'abord vers un environnement de test
+
+00:08:08.440 --> 00:08:09.440
+pour la validation QA,
+
+00:08:09.600 --> 00:08:11.200
+puis en pré-production pour les contrôles finaux,
+
+00:08:11.400 --> 00:08:13.920
+et enfin en production pour les utilisateurs.
+
+00:08:14.500 --> 00:08:16.000
+Chaque étape peut intégrer des approbations.
+
+00:08:16.520 --> 00:08:17.660
+Un manager devra peut-être approuver
+
+00:08:17.660 --> 00:08:18.600
+le déploiement en production.
+
+00:08:19.120 --> 00:08:20.340
+Un responsable QA devra peut-être valider
+
+00:08:20.340 --> 00:08:20.960
+les résultats des tests.
+
+00:08:21.340 --> 00:08:22.440
+Le pipeline gère tout cela.
+
+00:08:23.080 --> 00:08:24.180
+Analysons les fonctionnalités clés.
+
+00:08:24.180 --> 00:08:25.680
+Vous allez ficher YAML les étapes,
+
+00:08:25.720 --> 00:08:26.640
+les approbations et les agents.
+
+00:08:27.160 --> 00:08:28.420
+YAML est un simple fichier texte
+
+00:08:28.420 --> 00:08:29.500
+où vous définissez votre pipeline.
+
+00:08:30.180 --> 00:08:31.180
+Il se trouve dans votre dépôt
+
+00:08:31.180 --> 00:08:31.960
+aux côtés de votre code,
+
+00:08:32.040 --> 00:08:33.140
+ce qui signifie que votre pipeline
+
+00:08:33.140 --> 00:08:34.300
+est versionné comme votre code.
+
+00:08:35.180 --> 00:08:36.240
+Vous pouvez voir qui l'a modifié,
+
+00:08:36.380 --> 00:08:36.880
+quand et pourquoi.
+
+00:08:37.520 --> 00:08:38.200
+Les étapes vous permettent
+
+00:08:38.200 --> 00:08:39.120
+de diviser votre pipeline
+
+00:08:39.120 --> 00:08:39.800
+en sections logiques.
+
+00:08:40.500 --> 00:08:41.640
+Compiler, tester, déployer.
+
+00:08:42.200 --> 00:08:43.000
+Les approbations permettent
+
+00:08:43.000 --> 00:08:43.860
+de contrôler les déploiements
+
+00:08:43.860 --> 00:08:45.000
+pour que seules les personnes autorisées
+
+00:08:45.000 --> 00:08:45.740
+puissent publier en production.
+
+00:08:46.280 --> 00:08:47.000
+Les agents sont les machines
+
+00:08:47.000 --> 00:08:48.020
+qui exécutent réellement vos builds.
+
+00:08:48.620 --> 00:08:49.960
+Microsoft propose des agents hébergés
+
+00:08:49.960 --> 00:08:51.180
+où vous pouvez utiliser les vôtres.
+
+00:08:51.180 --> 00:08:52.280
+Pourquoi est-ce important
+
+00:08:52.280 --> 00:08:53.420
+pour les débutants ?
+
+00:08:53.420 --> 00:08:54.440
+Parce que les déploiements manuels
+
+00:08:54.440 --> 00:08:55.220
+sont la première source
+
+00:08:55.220 --> 00:08:56.040
+d'incidents en production.
+
+00:08:57.020 --> 00:08:57.720
+Quelqu'un oublie une étape,
+
+00:08:57.800 --> 00:08:58.800
+quelqu'un copie le mauvais fichier,
+
+00:08:58.900 --> 00:08:59.380
+quelqu'un déploie
+
+00:08:59.380 --> 00:09:00.340
+sur le mauvais environnement.
+
+00:09:00.980 --> 00:09:01.920
+Les pipelines éliminent tout cela.
+
+00:09:02.400 --> 00:09:03.420
+Ils s'exécutent de la même manière
+
+00:09:03.420 --> 00:09:03.840
+à chaque fois.
+
+00:09:04.320 --> 00:09:04.880
+Pas d'erreur humaine,
+
+00:09:04.960 --> 00:09:05.640
+pas d'étapes oubliées.
+
+00:09:05.800 --> 00:09:06.320
+Et ils sont rapides.
+
+00:09:07.120 --> 00:09:08.060
+Une équipe dont j'ai entendu parler
+
+00:09:08.060 --> 00:09:08.920
+a vu ces déploiements manuels
+
+00:09:08.920 --> 00:09:09.660
+passer de plusieurs heures
+
+00:09:09.660 --> 00:09:10.620
+à seulement 10 ou 15 minutes
+
+00:09:10.620 --> 00:09:12.000
+après avoir configuré Azure Pipelines.
+
+00:09:13.060 --> 00:09:14.140
+Ce n'est pas une petite amélioration.
+
+00:09:14.560 --> 00:09:15.160
+C'est une transformation.
+
+00:09:15.680 --> 00:09:16.660
+Donc votre code est compilé,
+
+00:09:16.660 --> 00:09:17.380
+il est testé et déployé.
+
+00:09:17.820 --> 00:09:18.660
+Mais avant de le livrer au client,
+
+00:09:18.800 --> 00:09:19.340
+vous devez vous assurer
+
+00:09:19.340 --> 00:09:20.720
+qu'il fonctionne réellement.
+
+00:09:20.860 --> 00:09:21.560
+Seulement qu'il compile,
+
+00:09:21.860 --> 00:09:23.080
+mais qu'il fait ce qu'il est censé faire.
+
+00:09:23.720 --> 00:09:24.820
+C'est là qu'Azure Test Plan intervient.
+
+00:09:25.820 --> 00:09:26.440
+Azure Test Plan,
+
+00:09:26.820 --> 00:09:27.880
+la qualité sans approximation.
+
+00:09:28.380 --> 00:09:29.280
+Donc votre code compile
+
+00:09:29.280 --> 00:09:29.740
+et se déploie,
+
+00:09:29.800 --> 00:09:31.060
+mais fonctionne-t-il vraiment ?
+
+00:09:31.060 --> 00:09:31.860
+Seulement sur votre machine,
+
+00:09:31.960 --> 00:09:33.060
+pas seulement dans le scénario idéal.
+
+00:09:33.740 --> 00:09:34.940
+Fonctionne-t-il si quelqu'un saisit
+
+00:09:34.940 --> 00:09:35.600
+une mauvaise donnée,
+
+00:09:35.700 --> 00:09:36.400
+si le réseau est lent
+
+00:09:36.400 --> 00:09:37.200
+ou si 1000 personnes
+
+00:09:37.200 --> 00:09:38.660
+l'utilisent simultanément ?
+
+00:09:38.660 --> 00:09:40.700
+C'est là qu'Azure Test Plan intervient.
+
+00:09:41.220 --> 00:09:42.680
+Test Plan propose des tests structurés,
+
+00:09:42.820 --> 00:09:44.240
+qu'ils soient manuels ou exploratoires.
+
+00:09:44.980 --> 00:09:45.440
+Considérez cela
+
+00:09:45.440 --> 00:09:46.360
+comme la liste de vérification
+
+00:09:46.360 --> 00:09:46.840
+avant d'un pilote.
+
+00:09:47.180 --> 00:09:48.240
+Les pilotes ne montent pas dans l'avion
+
+00:09:48.240 --> 00:09:49.100
+en espérant que tout se passe bien.
+
+00:09:49.480 --> 00:09:50.200
+Ils ont une liste de contrôle.
+
+00:09:50.640 --> 00:09:51.240
+Vérifiez les volets,
+
+00:09:51.540 --> 00:09:52.200
+vérifiez le carburant,
+
+00:09:52.320 --> 00:09:53.260
+vérifiez les instruments à chaque fois.
+
+00:09:53.320 --> 00:09:53.700
+Car oubliez,
+
+00:09:53.920 --> 00:09:55.320
+un seul élément peut être catastrophique.
+
+00:09:55.540 --> 00:09:56.020
+Pour les logiciels,
+
+00:09:56.120 --> 00:09:56.420
+c'est identique.
+
+00:09:56.900 --> 00:09:57.620
+Un bug en production
+
+00:09:57.620 --> 00:09:58.500
+peut vous coûter de l'argent,
+
+00:09:58.660 --> 00:09:59.660
+des clients et votre réputation.
+
+00:10:00.400 --> 00:10:01.040
+Test Plan vous fournit
+
+00:10:01.040 --> 00:10:01.640
+cette liste de contrôle.
+
+00:10:01.920 --> 00:10:02.640
+Voici comment c'est la fonction.
+
+00:10:02.880 --> 00:10:03.740
+Vous créez des cas de test.
+
+00:10:04.260 --> 00:10:04.900
+Chaque cas de test
+
+00:10:04.900 --> 00:10:06.420
+décrit un élément spécifique à tester.
+
+00:10:07.040 --> 00:10:08.300
+Connectez-vous avec un nom d'utilisateur
+
+00:10:08.300 --> 00:10:08.920
+et un mot de passe valide.
+
+00:10:09.600 --> 00:10:10.240
+Essayez de vous connecter
+
+00:10:10.240 --> 00:10:11.120
+avec un mot de passe invalide.
+
+00:10:11.960 --> 00:10:13.060
+Essayez de soumettre le formulaire
+
+00:10:13.060 --> 00:10:14.280
+sans remplir les chances obligatoires.
+
+00:10:15.020 --> 00:10:15.560
+Chaque cas de test
+
+00:10:15.560 --> 00:10:16.560
+comporte des étapes à suivre
+
+00:10:16.560 --> 00:10:17.480
+et des résultats attendus.
+
+00:10:18.020 --> 00:10:19.220
+Votre testeur parcourt ses cas
+
+00:10:19.220 --> 00:10:20.060
+étape par étape
+
+00:10:20.060 --> 00:10:20.800
+et marque chacun
+
+00:10:20.800 --> 00:10:21.680
+comme réussi ou échoué.
+
+00:10:22.240 --> 00:10:22.860
+Si un test échoue,
+
+00:10:22.940 --> 00:10:23.600
+il peut signaler un bug
+
+00:10:23.600 --> 00:10:24.800
+directement depuis le cas de test.
+
+00:10:25.340 --> 00:10:26.180
+Ce bug est créé
+
+00:10:26.180 --> 00:10:26.900
+comme élément de travail
+
+00:10:26.900 --> 00:10:27.400
+dans Boards
+
+00:10:27.400 --> 00:10:28.680
+attribué au bon développeur
+
+00:10:28.680 --> 00:10:29.400
+et lié au test
+
+00:10:29.400 --> 00:10:30.900
+pour une traçabilité complète.
+
+00:10:31.420 --> 00:10:32.200
+Vous pouvez regrouper
+
+00:10:32.200 --> 00:10:32.780
+les cas de test
+
+00:10:32.780 --> 00:10:33.500
+en suite de test.
+
+00:10:34.120 --> 00:10:34.540
+Vous avez peut-être
+
+00:10:34.540 --> 00:10:35.140
+une suite de test
+
+00:10:35.140 --> 00:10:36.160
+pour le processus de paiement,
+
+00:10:36.300 --> 00:10:37.160
+une autre pour l'enregistrement,
+
+00:10:37.280 --> 00:10:37.860
+une autre pour le panneau
+
+00:10:37.860 --> 00:10:38.520
+d'administration.
+
+00:10:39.500 --> 00:10:40.240
+Ensuite, vous organisez
+
+00:10:40.240 --> 00:10:41.280
+ces suites dans des plans de test
+
+00:10:41.280 --> 00:10:41.920
+pour différentes versions
+
+00:10:41.920 --> 00:10:42.280
+ou sprints.
+
+00:10:42.980 --> 00:10:43.540
+Vous voyez exactement
+
+00:10:43.540 --> 00:10:44.220
+ce qui a été testé,
+
+00:10:44.300 --> 00:10:44.700
+ce qui a réussi,
+
+00:10:44.820 --> 00:10:45.340
+ce qui a échoué,
+
+00:10:45.380 --> 00:10:46.420
+ce qui n'a pas encore été testé.
+
+00:10:47.020 --> 00:10:47.880
+La connexion avec Boards
+
+00:10:47.880 --> 00:10:48.660
+est ce qui rend cela puissant.
+
+00:10:49.300 --> 00:10:50.020
+Lorsqu'un test échoue,
+
+00:10:50.080 --> 00:10:50.640
+cela crée un bug
+
+00:10:50.640 --> 00:10:51.580
+directement dans Boards.
+
+00:10:52.120 --> 00:10:52.820
+Le développeur le voit,
+
+00:10:52.900 --> 00:10:53.260
+le corrige,
+
+00:10:53.340 --> 00:10:54.080
+déploie le correctif,
+
+00:10:54.320 --> 00:10:55.060
+le pipeline compile
+
+00:10:55.060 --> 00:10:55.980
+et déploie la nouvelle version.
+
+00:10:55.980 --> 00:10:57.060
+Le testeur exécute
+
+00:10:57.060 --> 00:10:57.560
+à nouveau le test.
+
+00:10:57.960 --> 00:10:58.360
+La réussite.
+
+00:10:58.820 --> 00:10:59.520
+Le bug est clôturé.
+
+00:10:59.880 --> 00:11:00.360
+Tout cela se passe
+
+00:11:00.360 --> 00:11:00.860
+au sein d'une seule
+
+00:11:00.860 --> 00:11:01.300
+et même plateforme.
+
+00:11:01.520 --> 00:11:02.240
+Pas d'email avec des feuilles
+
+00:11:02.240 --> 00:11:02.600
+de calcul,
+
+00:11:02.740 --> 00:11:03.320
+pas de copie de rapport
+
+00:11:03.320 --> 00:11:04.140
+de bug entre les systèmes.
+
+00:11:04.340 --> 00:11:05.100
+Tout est connecté.
+
+00:11:05.680 --> 00:11:06.280
+Il faut être honnête avec vous.
+
+00:11:06.660 --> 00:11:07.400
+Les débutants négligent
+
+00:11:07.400 --> 00:11:08.120
+souvent test plan.
+
+00:11:08.600 --> 00:11:09.260
+Les tests semblent
+
+00:11:09.260 --> 00:11:10.060
+être du travail supplémentaire.
+
+00:11:10.320 --> 00:11:10.920
+Vous voulez juste livrer
+
+00:11:10.920 --> 00:11:11.940
+votre code ?
+
+00:11:11.940 --> 00:11:13.040
+Vous voulez le voir en ligne ?
+
+00:11:13.040 --> 00:11:13.800
+Mais voici le point important.
+
+00:11:14.140 --> 00:11:14.660
+Chaque développeur
+
+00:11:14.660 --> 00:11:15.140
+à qui j'ai parlé
+
+00:11:15.140 --> 00:11:15.760
+a une histoire
+
+00:11:15.760 --> 00:11:16.600
+concernant un bug
+
+00:11:16.600 --> 00:11:17.260
+arrivant en production
+
+00:11:17.260 --> 00:11:18.420
+et causant un désastre.
+
+00:11:19.420 --> 00:11:20.040
+Système de paiement
+
+00:11:20.040 --> 00:11:20.520
+qui a facturé
+
+00:11:20.520 --> 00:11:21.180
+les clients deux fois.
+
+00:11:21.840 --> 00:11:22.560
+Une page de connexion
+
+00:11:22.560 --> 00:11:23.420
+qui a planté sous la charge.
+
+00:11:23.740 --> 00:11:24.320
+Une fonctionnalité
+
+00:11:24.320 --> 00:11:25.020
+qui a supprimé des données
+
+00:11:25.020 --> 00:11:25.720
+au lieu de les enregistrer.
+
+00:11:26.140 --> 00:11:26.780
+Ces bugs sont toujours
+
+00:11:26.780 --> 00:11:27.920
+ceux qui auraient pu être détectés
+
+00:11:27.920 --> 00:11:28.960
+avec un test simple.
+
+00:11:29.380 --> 00:11:30.220
+Test plan est une assurance
+
+00:11:30.220 --> 00:11:30.580
+bon marché.
+
+00:11:31.020 --> 00:11:31.580
+Cela prend un peu de temps
+
+00:11:31.580 --> 00:11:31.840
+au début,
+
+00:11:32.020 --> 00:11:32.580
+mais cela vous évite
+
+00:11:32.580 --> 00:11:33.540
+beaucoup de problèmes plus tard.
+
+00:11:34.160 --> 00:11:35.140
+À mesure que votre équipe grandit,
+
+00:11:35.280 --> 00:11:36.160
+vous rencontrerez un autre problème.
+
+00:11:36.920 --> 00:11:37.480
+Vous commencerez à écrire
+
+00:11:37.480 --> 00:11:38.440
+le même code encore et encore.
+
+00:11:38.960 --> 00:11:39.700
+Fonction utilitaire,
+
+00:11:39.800 --> 00:11:40.520
+composante de journalisation,
+
+00:11:40.620 --> 00:11:41.140
+rappeur d'API.
+
+00:11:41.580 --> 00:11:42.060
+Vous copierez
+
+00:11:42.060 --> 00:11:42.740
+et collerez du code
+
+00:11:42.740 --> 00:11:43.280
+entre les projets
+
+00:11:43.280 --> 00:11:44.120
+et bientôt vous aurez
+
+00:11:44.120 --> 00:11:44.920
+cinq versions différentes
+
+00:11:44.920 --> 00:11:45.380
+de la même chose,
+
+00:11:45.380 --> 00:11:46.200
+toutes légèrement différentes,
+
+00:11:46.360 --> 00:11:47.540
+toutes potentiellement bugées.
+
+00:11:48.340 --> 00:11:49.120
+C'est là qu'Azure Artifacts
+
+00:11:49.120 --> 00:11:49.540
+entre en jeu.
+
+00:11:50.180 --> 00:11:51.140
+Azure Artifacts partage
+
+00:11:51.140 --> 00:11:51.800
+vos blocs de construction.
+
+00:11:52.500 --> 00:11:53.180
+Azure Artifacts
+
+00:11:53.180 --> 00:11:54.100
+est un gestionnaire de paquets
+
+00:11:54.100 --> 00:11:55.060
+pour vos bibliothèques de code
+
+00:11:55.060 --> 00:11:55.860
+et la meilleure façon
+
+00:11:55.860 --> 00:11:56.320
+de l'imaginer
+
+00:11:56.320 --> 00:11:57.180
+est de penser à des briques Lego.
+
+00:11:57.940 --> 00:11:58.560
+Au lieu de construire
+
+00:11:58.560 --> 00:11:59.600
+chaque pièce à partir de zéro,
+
+00:11:59.740 --> 00:12:00.900
+vous prenez des blocs préconstruits
+
+00:12:00.900 --> 00:12:01.720
+et vous les assemblez.
+
+00:12:02.480 --> 00:12:03.480
+Quand un membre de votre équipe
+
+00:12:03.480 --> 00:12:04.600
+crée une bibliothèque de journalisation,
+
+00:12:04.720 --> 00:12:05.640
+il la publie sur Artifacts
+
+00:12:05.640 --> 00:12:06.560
+et tout le monde peut l'intégrer
+
+00:12:06.560 --> 00:12:07.080
+dans ses projets
+
+00:12:07.080 --> 00:12:08.260
+en une ligne de code.
+
+00:12:09.140 --> 00:12:10.240
+Plus besoin de copier des fichiers,
+
+00:12:10.240 --> 00:12:11.120
+d'envoyer des archives zip
+
+00:12:11.120 --> 00:12:11.540
+par e-mail
+
+00:12:11.540 --> 00:12:12.080
+ou de se demander
+
+00:12:12.080 --> 00:12:12.980
+quelle est la dernière version.
+
+00:12:13.380 --> 00:12:14.300
+Voici l'analogie des Legos
+
+00:12:14.300 --> 00:12:14.900
+plus en détail.
+
+00:12:15.540 --> 00:12:16.440
+Imaginez que vous construisez
+
+00:12:16.440 --> 00:12:16.780
+un château.
+
+00:12:17.160 --> 00:12:17.720
+Vous pourriez sculpter
+
+00:12:17.720 --> 00:12:18.420
+chaque brique à la main
+
+00:12:18.420 --> 00:12:19.760
+ce qui revient à tout écrire de zéro
+
+00:12:19.760 --> 00:12:21.640
+ou prendre des briques toutes faites
+
+00:12:21.640 --> 00:12:22.260
+pour vous concentrer
+
+00:12:22.260 --> 00:12:23.340
+sur les parties uniques du château.
+
+00:12:23.480 --> 00:12:24.940
+C'est là qu'intervient Artifacts.
+
+00:12:25.480 --> 00:12:27.160
+Les briques sont vos bibliothèques partagées,
+
+00:12:27.340 --> 00:12:28.320
+le château est votre application.
+
+00:12:28.600 --> 00:12:29.360
+Vous devez toujours construire
+
+00:12:29.360 --> 00:12:30.020
+les parties uniques
+
+00:12:30.020 --> 00:12:31.340
+mais sans réinventer la roue
+
+00:12:31.340 --> 00:12:32.180
+à chaque fois à chaque fois.
+
+00:12:33.320 --> 00:12:34.180
+Artifacts prend en charge
+
+00:12:34.180 --> 00:12:35.000
+plusieurs types de paquets.
+
+00:12:35.440 --> 00:12:36.160
+Nougat pour Donets,
+
+00:12:36.160 --> 00:12:37.220
+NPM pour Javascript,
+
+00:12:37.340 --> 00:12:37.980
+Maven pour Java,
+
+00:12:38.480 --> 00:12:39.100
+les paquets Python
+
+00:12:39.100 --> 00:12:40.660
+et les paquets universels
+
+00:12:40.660 --> 00:12:41.600
+pour tout le reste.
+
+00:12:42.260 --> 00:12:43.100
+Vous créez un flux
+
+00:12:43.100 --> 00:12:44.240
+qui sert de dépôt privé
+
+00:12:44.240 --> 00:12:45.120
+et vous y publiez
+
+00:12:45.120 --> 00:12:45.960
+vos paquets.
+
+00:12:47.060 --> 00:12:48.100
+Vous configurez des sources en amont
+
+00:12:48.100 --> 00:12:49.140
+pour pouvoir également récupérer
+
+00:12:49.140 --> 00:12:50.740
+des paquets publics depuis Nougat.org
+
+00:12:50.740 --> 00:12:51.760
+ou npmjs.com
+
+00:12:51.760 --> 00:12:52.560
+via le même flux.
+
+00:12:52.900 --> 00:12:53.680
+Tout est centralisé au moment.
+
+00:12:54.000 --> 00:12:55.080
+Pourquoi est-ce important ?
+
+00:12:55.080 --> 00:12:56.040
+Cela permet de gagner du temps,
+
+00:12:56.160 --> 00:12:56.880
+d'assurer la cohérence
+
+00:12:56.880 --> 00:12:57.640
+et de gérer les versions.
+
+00:12:58.360 --> 00:12:58.980
+Lorsque vous mettez à jour
+
+00:12:58.980 --> 00:12:59.760
+une bibliothèque partagée,
+
+00:12:59.980 --> 00:13:00.800
+vous publiez une nouvelle version
+
+00:13:00.800 --> 00:13:01.620
+et les projets qui l'utilisent
+
+00:13:01.620 --> 00:13:02.580
+peuvent effectuer la mise à niveau
+
+00:13:02.580 --> 00:13:03.440
+quand ils sont prêts.
+
+00:13:03.440 --> 00:13:04.520
+Ils ne sont pas forcés
+
+00:13:04.520 --> 00:13:05.020
+de mettre à jour
+
+00:13:05.020 --> 00:13:05.740
+et ne restent pas bloqués
+
+00:13:05.740 --> 00:13:06.460
+sur une ancienne version
+
+00:13:06.460 --> 00:13:07.140
+parce que personne ne trouve
+
+00:13:07.140 --> 00:13:07.820
+la copie la plus récemment.
+
+00:13:08.140 --> 00:13:09.120
+C'est contrôlé et organisé.
+
+00:13:09.560 --> 00:13:10.280
+Cela se connecte directement
+
+00:13:10.280 --> 00:13:10.600
+au pipeline.
+
+00:13:11.020 --> 00:13:11.980
+Votre pipeline de build
+
+00:13:11.980 --> 00:13:12.840
+peut publier des paquets
+
+00:13:12.840 --> 00:13:14.000
+sur Artifact automatiquement
+
+00:13:14.000 --> 00:13:15.400
+et votre pipeline de déploiement
+
+00:13:15.400 --> 00:13:16.000
+peut les consommer
+
+00:13:16.000 --> 00:13:17.720
+rendant tout le flux automatisé.
+
+00:13:18.700 --> 00:13:19.520
+Le code est construit,
+
+00:13:19.760 --> 00:13:20.640
+testé, packagé,
+
+00:13:20.940 --> 00:13:21.880
+publié et consommé
+
+00:13:21.880 --> 00:13:23.000
+sans que personne n'ait besoin
+
+00:13:23.000 --> 00:13:23.700
+de copier manuellement
+
+00:13:23.700 --> 00:13:24.260
+des fichiers.
+
+00:13:25.000 --> 00:13:25.760
+Voilà, vous avez maintenant vu
+
+00:13:25.760 --> 00:13:26.440
+les 5 services.
+
+00:13:27.060 --> 00:13:28.040
+Board pour la planification,
+
+00:13:28.420 --> 00:13:29.000
+Repo pour le code,
+
+00:13:29.100 --> 00:13:30.100
+Pipelines pour l'automatisation,
+
+00:13:30.240 --> 00:13:31.080
+Test Plans pour la qualité
+
+00:13:33.440 --> 00:13:34.100
+n'est pas dans un service
+
+00:13:34.100 --> 00:13:34.600
+en particulier.
+
+00:13:35.300 --> 00:13:36.080
+C'est la façon dont ils fonctionnent
+
+00:13:36.080 --> 00:13:36.540
+tous ensemble.
+
+00:13:37.140 --> 00:13:37.760
+Laissez-moi vous montrer
+
+00:13:37.760 --> 00:13:38.780
+à quoi cela ressemble en pratique.
+
+00:13:39.820 --> 00:13:40.440
+La vue d'ensemble,
+
+00:13:40.600 --> 00:13:41.360
+comment tout s'articule.
+
+00:13:42.200 --> 00:13:42.860
+Laissez-moi vous montrer
+
+00:13:42.860 --> 00:13:43.520
+cela en pratique
+
+00:13:43.520 --> 00:13:44.520
+avec un scénario réel
+
+00:13:44.520 --> 00:13:45.280
+où une équipe développe
+
+00:13:45.280 --> 00:13:46.340
+une nouvelle fonctionnalité.
+
+00:13:47.880 --> 00:13:48.260
+Étape 1,
+
+00:13:48.820 --> 00:13:49.420
+le Product Owner
+
+00:13:49.420 --> 00:13:50.160
+ouvre Azure Boards
+
+00:13:50.160 --> 00:13:51.300
+et crée une user story
+
+00:13:51.300 --> 00:13:52.020
+du type Engekal.
+
+00:13:52.280 --> 00:13:52.720
+En tant que client,
+
+00:13:52.820 --> 00:13:53.420
+je veux réinitialiser
+
+00:13:53.420 --> 00:13:53.900
+mon mot de passe.
+
+00:13:54.360 --> 00:13:55.580
+Ajouter des critères d'acceptation,
+
+00:13:55.760 --> 00:13:56.800
+assigner le au sprint actuel,
+
+00:13:57.100 --> 00:13:57.980
+définissez la priorité
+
+00:13:57.980 --> 00:13:58.900
+et cet élément de travail
+
+00:13:58.900 --> 00:13:59.860
+existe désormais dans le système.
+
+00:14:00.740 --> 00:14:01.280
+Deuxième étape,
+
+00:14:01.280 --> 00:14:02.640
+le développeur ouvre Azure Repos,
+
+00:14:02.740 --> 00:14:03.840
+récupère le dernier code
+
+00:14:03.840 --> 00:14:04.540
+et crée une nouvelle branche
+
+00:14:04.540 --> 00:14:05.640
+à partir de l'élément de travail.
+
+00:14:06.540 --> 00:14:07.160
+Boards vous permet même
+
+00:14:07.160 --> 00:14:07.840
+de faire cela directement
+
+00:14:07.840 --> 00:14:08.300
+depuis la story.
+
+00:14:08.700 --> 00:14:09.380
+Le nom de la branche
+
+00:14:09.380 --> 00:14:10.140
+inclut automatiquement
+
+00:14:10.140 --> 00:14:11.300
+l'identifiant de l'élément de travail.
+
+00:14:11.880 --> 00:14:12.440
+Il écrit le code,
+
+00:14:12.540 --> 00:14:12.780
+le valide
+
+00:14:12.780 --> 00:14:13.760
+et dans le message de validation,
+
+00:14:13.900 --> 00:14:14.640
+il inclut le paquet fixe
+
+00:14:14.640 --> 00:14:15.660
+number 142 au clé.
+
+00:14:16.260 --> 00:14:17.380
+C'est le numéro de l'élément de travail.
+
+00:14:17.880 --> 00:14:18.780
+La validation est maintenant liée
+
+00:14:18.780 --> 00:14:19.780
+à la user story dans Boards.
+
+00:14:20.440 --> 00:14:20.960
+Troisième étape,
+
+00:14:21.140 --> 00:14:21.860
+la validation déclenche
+
+00:14:21.860 --> 00:14:22.880
+automatiquement Azure Pipelines.
+
+00:14:23.680 --> 00:14:24.900
+Le pipeline récupère le code,
+
+00:14:25.020 --> 00:14:25.720
+restaure les dépendances,
+
+00:14:25.840 --> 00:14:26.520
+exécute la compilation
+
+00:14:26.520 --> 00:14:27.540
+et lance les tests unitaires.
+
+00:14:27.540 --> 00:14:28.940
+Si un test échoue,
+
+00:14:29.080 --> 00:14:29.940
+le pipeline s'arrête
+
+00:14:29.940 --> 00:14:31.300
+et le développeur est averti.
+
+00:14:32.180 --> 00:14:32.880
+Si tout est validé,
+
+00:14:33.080 --> 00:14:33.820
+le pipeline déploie
+
+00:14:33.820 --> 00:14:34.940
+dans un environnement de test
+
+00:14:34.940 --> 00:14:35.780
+et le développeur
+
+00:14:35.780 --> 00:14:37.020
+peut voir son code tourner en direct
+
+00:14:37.020 --> 00:14:38.100
+avant que quiconque n'y touche.
+
+00:14:39.680 --> 00:14:40.320
+Quatrième étape,
+
+00:14:40.580 --> 00:14:42.340
+l'ingénieur QA ouvre Azure Test Plans,
+
+00:14:42.520 --> 00:14:43.440
+trouve la suite de tests
+
+00:14:43.440 --> 00:14:44.840
+pour la réinitialisation de mot de passe,
+
+00:14:45.280 --> 00:14:46.260
+exécute les tests manuels,
+
+00:14:46.580 --> 00:14:47.100
+suit les étapes
+
+00:14:47.100 --> 00:14:48.660
+et vérifie que la fonctionnalité fonctionne.
+
+00:14:49.740 --> 00:14:50.580
+Mais il trouve un bug.
+
+00:14:51.240 --> 00:14:52.700
+Le message d'erreur est mal orthographié.
+
+00:14:52.960 --> 00:14:53.860
+Il clique sur créer un bug
+
+00:14:53.860 --> 00:14:55.040
+directement depuis le cas de test
+
+00:14:55.040 --> 00:14:56.080
+et un nouvel élément de travail
+
+00:14:56.080 --> 00:14:56.840
+apparaît dans Boards
+
+00:14:56.840 --> 00:14:58.040
+lié à la user story d'origine.
+
+00:14:58.660 --> 00:14:59.460
+Le développeur le voit,
+
+00:14:59.540 --> 00:14:59.960
+le corrige,
+
+00:15:00.160 --> 00:15:00.680
+pousse le code,
+
+00:15:00.900 --> 00:15:02.100
+le pipeline s'exécute à nouveau,
+
+00:15:02.220 --> 00:15:03.200
+le testeur relance le test
+
+00:15:03.200 --> 00:15:03.740
+et cela passe.
+
+00:15:04.440 --> 00:15:05.040
+Cinquième étape,
+
+00:15:05.400 --> 00:15:06.480
+la fonctionnalité est terminée
+
+00:15:06.480 --> 00:15:07.140
+et l'équipe publie
+
+00:15:07.140 --> 00:15:08.260
+la bibliothèque d'authentification
+
+00:15:08.260 --> 00:15:09.440
+partagée sur Azure Artifacts.
+
+00:15:09.800 --> 00:15:10.080
+Désormais,
+
+00:15:10.160 --> 00:15:10.500
+d'autres équipes
+
+00:15:10.500 --> 00:15:11.380
+peuvent l'utiliser dans leur projet.
+
+00:15:11.900 --> 00:15:13.040
+Le composant de réinitialisation
+
+00:15:13.040 --> 00:15:13.460
+de mot de passe
+
+00:15:13.460 --> 00:15:14.500
+est disponible en tant que package
+
+00:15:14.500 --> 00:15:15.060
+donc toute équipe
+
+00:15:15.060 --> 00:15:16.020
+développe une nouvelle fonctionnalité
+
+00:15:16.020 --> 00:15:17.060
+nécessitant une authentification
+
+00:15:17.060 --> 00:15:17.680
+mais une authentification
+
+00:15:17.680 --> 00:15:18.320
+peut intégrer un donné.
+
+00:15:18.420 --> 00:15:19.020
+Pas de réécriture,
+
+00:15:19.100 --> 00:15:19.440
+pas de copie,
+
+00:15:19.520 --> 00:15:20.100
+juste une référence.
+
+00:15:27.080 --> 00:15:27.400
+Pipeline,
+
+00:15:27.500 --> 00:15:28.240
+c'est l'atelier de fabrication.
+
+00:15:28.820 --> 00:15:29.740
+Test plans est le poste
+
+00:15:29.740 --> 00:15:30.480
+de contrôle qualité
+
+00:15:30.480 --> 00:15:32.280
+et Artifacts est l'entrepôt
+
+00:15:32.280 --> 00:15:33.700
+mais la vraie puissance
+
+00:15:33.700 --> 00:15:34.540
+ne réside dans aucune pièce
+
+00:15:34.540 --> 00:15:35.000
+en particulier.
+
+00:15:35.420 --> 00:15:36.120
+C'est dans les couloirs
+
+00:15:36.120 --> 00:15:36.640
+qui les relie.
+
+00:15:37.300 --> 00:15:37.920
+L'élément de travail
+
+00:15:37.920 --> 00:15:38.520
+est lié au code,
+
+00:15:38.780 --> 00:15:39.740
+le code déclenche le pipeline,
+
+00:15:39.820 --> 00:15:40.780
+le pipeline déploie un test,
+
+00:15:40.900 --> 00:15:41.920
+le test crée des bugs dans Bords
+
+00:15:41.920 --> 00:15:42.660
+et le package fini
+
+00:15:42.660 --> 00:15:43.380
+va dans Artifacts
+
+00:15:43.380 --> 00:15:44.140
+et le package fax.
+
+00:15:44.580 --> 00:15:45.620
+Tout communique avec tout le reste
+
+00:15:45.620 --> 00:15:47.000
+et c'est là que ça devient intéressant.
+
+00:15:47.440 --> 00:15:48.700
+L'IA arrive dans Azure DevOps.
+
+00:15:49.260 --> 00:15:50.140
+Microsoft déploie déjà
+
+00:15:50.140 --> 00:15:51.200
+des intégrations copilot
+
+00:15:51.200 --> 00:15:52.620
+comme l'assistance aux éléments de travail
+
+00:15:52.620 --> 00:15:53.260
+qui aident à rédiger
+
+00:15:53.260 --> 00:15:54.460
+de Meilleure User Stories,
+
+00:15:54.820 --> 00:15:55.740
+une IA capable de résumer
+
+00:15:55.740 --> 00:15:56.560
+de mon fils des discussions
+
+00:15:56.560 --> 00:15:57.940
+et la révision de code
+
+00:15:57.940 --> 00:15:58.320
+par copilot
+
+00:15:58.320 --> 00:15:59.200
+qui examine automatiquement
+
+00:15:59.200 --> 00:15:59.900
+les pull requests.
+
+00:16:00.760 --> 00:16:01.260
+Il est encore tôt
+
+00:16:01.260 --> 00:16:02.040
+mais la direction est claire.
+
+00:16:03.020 --> 00:16:03.660
+Azure DevOps devient
+
+00:16:03.660 --> 00:16:04.540
+une plateforme intelligente
+
+00:16:04.540 --> 00:16:05.240
+et non plus une simple
+
+00:16:05.240 --> 00:16:05.960
+collection d'outils.
+
+00:16:06.580 --> 00:16:07.340
+Alors quelle est la meilleure façon
+
+00:16:07.340 --> 00:16:08.120
+de commencer ?
+
+00:16:08.120 --> 00:16:08.560
+Vous n'avez pas besoin
+
+00:16:08.560 --> 00:16:09.400
+d'adopter les 5 services
+
+00:16:09.400 --> 00:16:09.780
+en même temps.
+
+00:16:10.420 --> 00:16:10.880
+Choisissez-en.
+
+00:16:11.500 --> 00:16:12.320
+Commencez par Bords,
+
+00:16:12.680 --> 00:16:13.320
+créez un projet,
+
+00:16:13.660 --> 00:16:14.480
+suivez quelques tâches
+
+00:16:14.480 --> 00:16:15.460
+et voyez ce que cela donne.
+
+00:16:16.920 --> 00:16:17.700
+Ajoutez ensuite Repo
+
+00:16:17.700 --> 00:16:18.200
+quand vous serez prêt
+
+00:16:18.200 --> 00:16:18.740
+et puis Pipelines.
+
+00:16:18.900 --> 00:16:19.520
+Une étape à la fois.
+
+00:16:20.300 --> 00:16:20.940
+Votre première étape.
+
+00:16:20.940 --> 00:16:22.000
+Voici l'idée centrale.
+
+00:16:22.700 --> 00:16:23.580
+Azure DevOps ne sont pas
+
+00:16:23.580 --> 00:16:24.360
+5 outils séparés,
+
+00:16:24.540 --> 00:16:25.580
+c'est une plateforme connectée.
+
+00:16:26.380 --> 00:16:27.660
+Bords, Repo, Pipelines,
+
+00:16:27.820 --> 00:16:28.700
+Testplans et Artifacts
+
+00:16:28.700 --> 00:16:29.640
+fonctionnent tous ensemble.
+
+00:16:30.100 --> 00:16:30.640
+La valeur ne réside pas
+
+00:16:30.640 --> 00:16:31.260
+dans un seul élément
+
+00:16:31.260 --> 00:16:31.800
+mais dans la façon
+
+00:16:31.800 --> 00:16:32.280
+de se articuler.
+
+00:16:32.560 --> 00:16:33.460
+Voici votre première étape.
+
+00:16:33.800 --> 00:16:35.240
+Rendez-vous sur dev.azure.com
+
+00:16:35.240 --> 00:16:36.220
+et créez un compte gratuit.
+
+00:16:36.720 --> 00:16:37.140
+Lancez ensuite
+
+00:16:37.140 --> 00:16:37.660
+un nouveau projet.
+
+00:16:38.040 --> 00:16:38.560
+Explorez Bords,
+
+00:16:38.740 --> 00:16:39.420
+créez une user story,
+
+00:16:39.620 --> 00:16:40.800
+faites-la glisser sur le tableau Kanban.
+
+00:16:41.000 --> 00:16:41.820
+Voyez comment cela fonctionne.
+
+00:16:42.460 --> 00:16:43.120
+Voici votre défi.
+
+00:16:43.520 --> 00:16:44.280
+Choisissez un petit projet,
+
+00:16:44.460 --> 00:16:45.260
+n'importe lequel fera l'affaire.
+
+00:16:45.820 --> 00:16:46.420
+Suivez-le dans Bords
+
+00:16:46.420 --> 00:16:46.960
+pendant une semaine,
+
+00:16:46.960 --> 00:16:47.640
+ajoutez des tâches.
+
+00:16:47.880 --> 00:16:48.600
+Mettez à jour le statut
+
+00:16:48.600 --> 00:16:49.300
+et voyez ce que ça fait
+
+00:16:49.300 --> 00:16:50.120
+d'avoir un travail visible
+
+00:16:50.120 --> 00:16:50.860
+et organisé.
+
+00:16:51.500 --> 00:16:52.120
+Au prochain épisode,
+
+00:16:52.180 --> 00:16:53.200
+nous plongerons dans Azure Pipelines.
+
+00:16:53.600 --> 00:16:54.080
+Nous construirons
+
+00:16:54.080 --> 00:16:54.900
+votre premier pipeline
+
+00:16:54.900 --> 00:16:56.200
+CISOCD étape par étape
+
+00:16:56.200 --> 00:16:56.840
+et vous verrez
+
+00:16:56.840 --> 00:16:57.820
+comment automatiser les builds
+
+00:16:57.820 --> 00:16:58.460
+et les déploiements
+
+00:16:58.460 --> 00:16:59.060
+à partir de zéro.
+
+00:16:59.660 --> 00:17:00.560
+Abonnez-vous sur votre plateforme
+
+00:17:00.560 --> 00:17:01.340
+de podcast préférée
+
+00:17:01.340 --> 00:17:02.160
+et partagez cet épisode
+
+00:17:02.160 --> 00:17:02.660
+avec quelqu'un
+
+00:17:02.660 --> 00:17:03.660
+qui commence son parcours DevOps.

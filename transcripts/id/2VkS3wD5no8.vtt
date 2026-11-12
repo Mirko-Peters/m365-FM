@@ -1,0 +1,1384 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:01.180
+Apa itu jaringan virtual Azure?
+
+00:00:01.640 --> 00:00:06.220
+Kebanyakan orang mendengar istilah itu dan menganggapnya hanya pengaturan tambahan saat menerapkan mesin virtual,
+
+00:00:06.380 --> 00:00:08.180
+sesuatu yang dicentang lalu dilupakan.
+
+00:00:09.040 --> 00:00:11.840
+Namun tidak kenyataan, jaringan virtual Azure bukan sekadar pengaturan.
+
+00:00:12.440 --> 00:00:14.160
+Ini adalah fondasi dari sekelas Zootio yang Anda bangun di Azure.
+
+00:00:15.140 --> 00:00:19.680
+Setiap mesin virtual, basis data, layanan aplikasi, dan fungsi yang Anda terapkan semuanya berada di dalamnya.
+
+00:00:20.240 --> 00:00:22.940
+Dan jika Anda tidak memahami cara kerjanya, Anda tidak akan tahu apa-apa.
+
+00:00:23.400 --> 00:00:26.940
+Di akhir episode ini Anda akan memahami apa itu vNet sebenarnya, cara kerjanya,
+
+00:00:26.940 --> 00:00:29.580
+dan mengapa setiap sumber daya yang Anda terapkan bergantung padanya.
+
+00:00:30.120 --> 00:00:34.760
+Kami akan membahas apa itu vNet, cara kerja alamat IP, subnet, keamanan, perhubungan, dan cara menghubungkan vNet.
+
+00:00:35.160 --> 00:00:36.280
+Ambil kopi Anda dan mari kita mulai.
+
+00:00:37.200 --> 00:00:39.120
+Apa itu vNet? Jaringan cloud pribadi.
+
+00:00:39.620 --> 00:00:40.940
+Mari kita mulai definisi paling sederhana.
+
+00:00:41.560 --> 00:00:46.260
+Azure Virtual Network, atau disingkat vNet, adalah jaringan pribadi Anda sendiri di dalam Azure.
+
+00:00:47.000 --> 00:00:48.300
+Anggaplah seperti gedung kantor pribadi.
+
+00:00:48.840 --> 00:00:49.980
+Hanya orang yang Anda izinkan yang bisa masuk.
+
+00:00:50.320 --> 00:00:53.980
+Anda mengontrol siapa yang masuk, siapa yang keantai mana, dan siapa yang dilarang sepenuhnya.
+
+00:00:54.660 --> 00:00:56.540
+Sebelum vNet ada, kondisinya berbeda.
+
+00:00:56.540 --> 00:01:00.560
+Menerapkan mesin virtual di cloud berarti secara default ekspos ke internet.
+
+00:01:01.320 --> 00:01:02.480
+Tidak ada jaringan pribadi di sekitar.
+
+00:01:02.920 --> 00:01:04.640
+Siapapun yang tahu alamat IP-nya bisa mencoba terubuh.
+
+00:01:05.000 --> 00:01:06.020
+Itu adalah mimpi buruk keamanan.
+
+00:01:06.300 --> 00:01:06.860
+Apa yang berubah?
+
+00:01:07.380 --> 00:01:10.260
+Azure memberi Anda kemampuan untuk membuat ruang jaringan pribadi yang terisolasi.
+
+00:01:10.620 --> 00:01:11.480
+Anda mendukang batasnya.
+
+00:01:11.880 --> 00:01:12.980
+Anda memutuskan apa yang ada di dalamnya.
+
+00:01:13.340 --> 00:01:16.340
+Tidak ada yang di luar batas itu bisa masuk kecuali Anda mengizinkannya secara eksplisit.
+
+00:01:16.340 --> 00:01:19.580
+Satu hal yang perlu diketahui di awal, vNet Anda berada di wilayah Azure tertentu.
+
+00:01:19.940 --> 00:01:20.600
+Ini tidak bersifat cloud.
+
+00:01:20.920 --> 00:01:22.940
+Buat vNet di Eropa Barat dan disitulah ia berada.
+
+00:01:23.480 --> 00:01:25.380
+Sumber daya berbeda tidak bisa langsung masuk ke dalamnya.
+
+00:01:25.840 --> 00:01:27.000
+Mereka memerlukan vNet sendiri.
+
+00:01:27.260 --> 00:01:28.380
+Atau Anda harus menghubungkannya nanti.
+
+00:01:28.720 --> 00:01:31.520
+Seandainya membuat vNet, Anda menentukan sendiri ruang alamat IP-nya.
+
+00:01:31.820 --> 00:01:32.780
+Azure tidak memilih contohan.
+
+00:01:33.120 --> 00:01:35.540
+Anda menentukan tentang alamat IP yang akan digunakan sumber daya Anda.
+
+00:01:35.920 --> 00:01:39.160
+Itu adalah tanggung jawab besar dan kami akan membahas cara melakukannya dengan benar di bagian berikut.
+
+00:01:39.520 --> 00:01:40.120
+Berapa yang utamanya?
+
+00:01:40.600 --> 00:01:41.720
+VNet adalah fondasinya.
+
+00:01:41.720 --> 00:01:47.980
+Setiap mesin virtual, setiap basis data, setiap fungsi Azure yang Anda terapkan berada di dalamnya.
+
+00:01:48.720 --> 00:01:51.220
+Tanpa vNet, sumber daya Anda tidak memiliki konteks jaringan pribadi.
+
+00:01:51.760 --> 00:01:54.860
+Mereka hanya mengapung di cloud tanpa batas, tanpa isolasi, dan tanpa keamanan.
+
+00:01:55.440 --> 00:01:56.260
+Apa artinya ini bagi Anda?
+
+00:01:56.720 --> 00:01:59.420
+Jika Anda membangun apapun di Azure, mulailah dengan vNet terlebih dahulu.
+
+00:01:59.680 --> 00:02:02.040
+Bukan setelah Anda mendeploy sumber daya Anda, melainkan sebelumnya.
+
+00:02:02.180 --> 00:02:04.020
+VNet Anda adalah lahan tempat Anda membangun.
+
+00:02:04.320 --> 00:02:06.360
+Anda tidak akan membangun rumah dan membeli tanahnya terlebih dahulu, bukan?
+
+00:02:06.580 --> 00:02:07.220
+Gagasan yang sama.
+
+00:02:07.580 --> 00:02:10.060
+Pengalamatan IP dan CIDR memilih ruang alamat Anda.
+
+00:02:10.400 --> 00:02:11.560
+Jadi mari kita mulai.
+
+00:02:12.160 --> 00:02:15.200
+Saat membuat vNet, keputusan besar pertama adalah memilih rentang IP.
+
+00:02:15.520 --> 00:02:17.160
+Anda melakukannya menggunakan notasi CIDR.
+
+00:02:17.360 --> 00:02:19.800
+CIDR adalah singkatan dari Classless Interdomain Routing.
+
+00:02:20.060 --> 00:02:23.080
+Namun artinya hanya Anda menyatakan saya butuh sekian banyak alamat IP.
+
+00:02:24.000 --> 00:02:24.560
+Mengapa ini penting?
+
+00:02:24.960 --> 00:02:29.400
+Karena rentang yang Anda pilih menentukan berapa banyak sumber daya yang dapat dimuat dalam jaringan virtual Anda.
+
+00:02:29.980 --> 00:02:30.640
+Ini cara kerjanya.
+
+00:02:31.020 --> 00:02:33.920
+CIDR menggunakan garis miring dan angka, seperti 16 atau 24.
+
+00:02:34.500 --> 00:02:36.260
+Angka tersebut memberi tahu Anda ukuran ruang alamat.
+
+00:02:36.640 --> 00:02:39.660
+Angka 16 memberi Anda sekitar 65 ribu alamat IP.
+
+00:02:40.140 --> 00:02:40.640
+Sangat banyak.
+
+00:02:40.640 --> 00:02:45.700
+Angka 24 memberi Anda sekitar 290 yang sempurna untuk tim kecil atau satu tingkat aplikasi.
+
+00:02:46.080 --> 00:02:51.120
+Jadi, saat melancang vNet, Anda perlu memikirkan berapa banyak sumber daya yang akan Anda miliki dan bagaimana Anda ingin mengompokkannya.
+
+00:02:51.520 --> 00:02:53.220
+Nah, Anda tidak bisa sembarangan memilih rentang IP.
+
+00:02:53.220 --> 00:02:58.860
+Azure mengikuti standar RFC 1918 yang menyisikan rentang IP privat untuk jaringan internal.
+
+00:02:59.480 --> 00:03:00.260
+Anda memiliki 3 opsi.
+
+00:03:00.580 --> 00:03:03.900
+Rentang 10TX-CTX adalah yang terbesar memberi Anda banyak ruang untuk berkembang.
+
+00:03:04.380 --> 00:03:07.480
+Rentang 107TX sedikit lebih kecil, namun tetap berguna.
+
+00:03:08.440 --> 00:03:12.420
+Dan rentang 1920TX-X adalah yang mungkin Anda miliki di rumah pada router Anda.
+
+00:03:12.420 --> 00:03:17.720
+Ini masalahnya, ruang alamat vNet Anda tidak boleh tumpang tindih dengan jaringan lain yang ingin Anda hubungkan.
+
+00:03:17.940 --> 00:03:19.080
+Ini adalah kesalahan yang umum.
+
+00:03:19.080 --> 00:03:23.920
+Banyak orang memilih rentang yang terlihat familiar hanya untuk mengetahui nantinya bahwa rentang tersebut berkonflik dengan jaringan perusahaan mereka.
+
+00:03:23.920 --> 00:03:29.220
+Jadi, jika jaringan kantor perusahaan Anda menggunakan 10TX-CTX-16, jangan gunakan rentang yang sama di Azure.
+
+00:03:29.560 --> 00:03:33.100
+Jika Anda mencoba mukanya nanti, keduanya akan bentrok dan lalu lintas tidak akan tahu kemana.
+
+00:03:33.440 --> 00:03:34.740
+Ijinkan saya memberikan contoh kongkak.
+
+00:03:35.100 --> 00:03:42.720
+Bayangkan Anda membangun pengaturan hibrida, di mana Azure terhubung kembali ke pusat data on-premises Anda dan pusat data Anda menggunakan 10TX-16.
+
+00:03:43.900 --> 00:03:48.220
+Jika Anda membuat vNet dengan rentang yang sama, Anda akan memiliki 2 jaringan yang memperebutkan IP yang sama.
+
+00:03:48.220 --> 00:03:52.840
+Pikirkanlah, 2 jaringan yang menggunakan rentang IP yang sama tidak dapat berkomunikasi dengan Anda.
+
+00:03:52.840 --> 00:03:54.560
+Ini seperti 2 rumah dengan alamat yang sama.
+
+00:03:55.100 --> 00:03:55.800
+Surat menjadi bingung.
+
+00:03:56.220 --> 00:03:58.100
+Itu adalah masalah yang tidak ingin Anda selesaikan setelah kejadian.
+
+00:03:58.460 --> 00:04:00.220
+Jadi, rencanakan ke depan dan pilih rentangnya.
+
+00:04:00.640 --> 00:04:01.580
+Dan ini tips perencanaan.
+
+00:04:01.800 --> 00:04:03.420
+Pilihlah rentang yang lebih besar dari yang Anda pikir Anda butuh.
+
+00:04:03.780 --> 00:04:08.160
+Anda mungkin berpikir hanya butuh 24 sekarang, tetapi saat aplikasi Anda berkembang, Anda akan berharap punya 16.
+
+00:04:08.840 --> 00:04:10.000
+Anda tidak bisa mengubahnya dengan mudah.
+
+00:04:10.320 --> 00:04:14.580
+Setelah vNet dibuat dan sumber daya diterapkan, mengubah ruang alamat akan merepotkan.
+
+00:04:14.580 --> 00:04:17.960
+Itu mungkin dilakukan, tetapi bukan hal yang ingin Anda lakukan pada sistem yang sedang berjalan.
+
+00:04:18.200 --> 00:04:19.300
+Jadi, berdiri Anda ruang untuk bertemu.
+
+00:04:19.620 --> 00:04:20.380
+Aptainya ini bagi Anda.
+
+00:04:20.740 --> 00:04:24.260
+Anggap ruang alamat vNet Anda seperti membeli tanah, dapatkan yang cukup untuk pertumbuhan di masa.
+
+00:04:24.600 --> 00:04:26.840
+Jika Anda merasa betulan kecil, belilah yang berukuran sedang.
+
+00:04:27.060 --> 00:04:28.040
+Anda berima kasih pada diri sendiri.
+
+00:04:28.420 --> 00:04:29.100
+Itulah poin utamanya.
+
+00:04:29.520 --> 00:04:31.980
+Rencanakan ruang alamat Anda dengan mempertimbangkan pertemuan di masa depan.
+
+00:04:32.860 --> 00:04:34.300
+Subnet membagi jaringan Anda.
+
+00:04:34.860 --> 00:04:37.160
+Jadi, Anda sudah punya vNet dan telah memilih ruang alamat Anda.
+
+00:04:37.400 --> 00:04:37.660
+Lalu apa?
+
+00:04:38.020 --> 00:04:39.760
+Anda tidak bisa begitu saja menumpuk semuanya ke dalam satu.
+
+00:04:39.960 --> 00:04:40.980
+Disitulah subnet berperan.
+
+00:04:40.980 --> 00:04:43.760
+Subnet adalah salah satu blok pembangun mendasar dari vNet Anda.
+
+00:04:44.180 --> 00:04:46.080
+Subnet mengginkan Anda mengatur dan mengamankan sumber daya.
+
+00:04:46.620 --> 00:04:49.420
+Subnet adalah bagian yang lebih kecil dari ruang alamat vNet Anda.
+
+00:04:49.940 --> 00:04:52.800
+Jika vNet adalah bangunannya, subnet adalah ruangan-ruangan di dalamnya.
+
+00:04:53.160 --> 00:04:57.380
+Anda tidak akan menempatkan ruang server, meja resepsionis, dan ruang istirahat di ruangan terbuka yang sama, bukan?
+
+00:04:57.740 --> 00:04:58.360
+Idenya sama di sini.
+
+00:04:58.640 --> 00:05:01.940
+Ini konsep sederhana, tetapi membuat perbedaan besar dalam cara Anda mengelola jaringan.
+
+00:05:02.260 --> 00:05:03.980
+Sumber daya yang berbeda ditempatkan di subnet yang berbeda.
+
+00:05:03.980 --> 00:05:08.920
+Server web Anda di satu subnet, basis data di subnet lain, dan logika aplikasi di subnet ketiga.
+
+00:05:09.280 --> 00:05:09.540
+Mengapa?
+
+00:05:09.540 --> 00:05:11.560
+Dua alasan, keamanan dan organisasi.
+
+00:05:12.020 --> 00:05:14.800
+Mari bahas keamanan dulu, karena itu biasanya yang paling penting.
+
+00:05:15.260 --> 00:05:15.900
+Keamanan yang utama.
+
+00:05:16.380 --> 00:05:20.040
+Jika seseorang merota server web Anda, Anda tidak ingin mereka memiliki akses langsung ke basis data.
+
+00:05:20.500 --> 00:05:21.940
+Subnet terpisah menciptakan penghalang ini.
+
+00:05:22.580 --> 00:05:25.960
+Penyerang harus melewati batas itu dan Anda bisa mengontrol dengan tepat apa yang melintasinya.
+
+00:05:26.320 --> 00:05:29.240
+Anda juga bisa menggunakan kelompok keamanan jaringan untuk mengontrol lalu lintasan.
+
+00:05:29.380 --> 00:05:33.940
+Itu topik untuk video lain, tetapi penting untuk mengetahui bahwa subnet adalah fondasi bagi keamanan tersebut.
+
+00:05:34.880 --> 00:05:35.680
+Organisasi yang kedua.
+
+00:05:36.100 --> 00:05:38.480
+Teka semuanya punya tempatnya, pengelolaannya jadi lebih mudah.
+
+00:05:38.480 --> 00:05:42.680
+Anda tahu subnet mana yang berisi sumber daya frontend dan mana yang menampung data backend Anda.
+
+00:05:43.360 --> 00:05:48.400
+Anda bisa menerapkan kebijakan dan aturan ke seluruh subnet sekaligus alih-alih mengonfigurasi tiap sumber daya secara individu.
+
+00:05:49.100 --> 00:05:50.500
+Menghemat waktu dan mengurangi kesalahan.
+
+00:05:51.200 --> 00:05:52.780
+Nah ini detail yang sering mengejutkan orang.
+
+00:05:53.360 --> 00:05:58.320
+Azure mencadangkan lima alamat IP di setiap subnet untuk kebutuhan internal, seperti perhutuan internal, seperti perhutuan internet.
+
+00:05:58.320 --> 00:06:04.460
+Jadi jika Anda membuat subnet dengan rentang dua pagi yang memberi Anda 250 malamat, Anda sebenarnya hanya mendapatkan 200 ribu lakan bisa digunakan.
+
+00:06:04.680 --> 00:06:05.520
+Itu adalah cipakan yang memutuskan.
+
+00:06:05.840 --> 00:06:07.960
+Anda merencanakan 256 namun hanya mendapatkan 200 ribu lakan.
+
+00:06:08.280 --> 00:06:10.620
+Jadi selalu tambahkan sedikit cadangan saat menentukan ukuran subnet.
+
+00:06:10.820 --> 00:06:13.320
+Kabar baiknya Anda bisa menambahkan subnet setelah membuat vnet.
+
+00:06:13.720 --> 00:06:15.900
+Anda tidak terpaku pada subnet yang dibuat saat awal.
+
+00:06:15.900 --> 00:06:20.760
+Jadi jika Anda butuh subnet terpisah untuk alat manajemen atau sistem pemantauan, tambahkan saja nanti.
+
+00:06:21.400 --> 00:06:21.920
+Tidak masalah.
+
+00:06:22.320 --> 00:06:24.080
+Namun tetap lebih baik untuk merencanakannya sejak awal.
+
+00:06:24.560 --> 00:06:28.520
+Menambahkan subnet nanti memang bisa, tapi Anda mungkin perlu memindahkan sumber daya yang bisa mengganggu.
+
+00:06:29.020 --> 00:06:33.020
+Namun di praktek terbaiknya, gunakan subnet terpisah untuk tingkat aplikasi yang berbeda sejak awal.
+
+00:06:33.420 --> 00:06:34.760
+Pikirkan tentang arsitektur aplikasi Anda.
+
+00:06:35.660 --> 00:06:41.860
+Biasanya ada tingkat front end untuk permintaan pengguna, back end untuk logika bisnis, dan data untuk penyimpanan.
+
+00:06:42.940 --> 00:06:44.140
+Masih harus memiliki subnet-nya sendiri.
+
+00:06:44.140 --> 00:06:47.480
+Jangan menunggu sampai tahap produksi untuk menyadari perlunya misalkan hal tersebut.
+
+00:06:47.740 --> 00:06:49.800
+Itu jauh lebih sulit jika sumber daya sudah diterapkan.
+
+00:06:50.300 --> 00:06:51.000
+Partinya ini bagi Anda.
+
+00:06:51.360 --> 00:06:53.880
+Subnet adalah cara Anda menjaga jaringan tetap terorganisir dalam.
+
+00:06:54.200 --> 00:06:55.300
+Ibarat ruangan-ruangan di gedung Anda.
+
+00:06:55.580 --> 00:06:58.040
+Rencanakan lebih awal dan beri setiap tingkat aplikasi ruangnya sendiri.
+
+00:06:58.520 --> 00:07:00.220
+Begitulah cara Anda menjaga jaringan tetap rapi dalam.
+
+00:07:01.100 --> 00:07:02.280
+IP public versus private.
+
+00:07:02.760 --> 00:07:03.240
+Siap bisa, baca.
+
+00:07:03.800 --> 00:07:06.780
+Mari bahas alamat IP karena tidak semua alamat IP itu sama.
+
+00:07:07.320 --> 00:07:10.940
+Saat Anda menerapkan sumber daya di dalam vnet, Anda mendapatkan IP privat secara default.
+
+00:07:10.940 --> 00:07:14.980
+Itu alamat yang digunakan untuk berkomunikasi dengan sumber daya lain di dalam vnet.
+
+00:07:15.360 --> 00:07:16.820
+Bayangkan seperti nomor ekstensi telepon internal.
+
+00:07:17.280 --> 00:07:18.760
+Hanya orang di dalam gedung yang bisa menghubungi.
+
+00:07:19.200 --> 00:07:22.920
+IP privat hanya dapat diakses dari dalam vnet atau jaringan yang terhubung dengannya.
+
+00:07:23.560 --> 00:07:26.720
+Jika Anda di rumah memakai laptop, Anda tidak bisa menjangkau IP privat di Azure.
+
+00:07:27.280 --> 00:07:28.100
+IP tersebut tidak ada di internet.
+
+00:07:28.560 --> 00:07:29.680
+IP tersebut ada di dalam jaringan privat.
+
+00:07:30.220 --> 00:07:32.380
+Jadi bagaimana membuat sumber daya bisa diakses dari internet?
+
+00:07:32.840 --> 00:07:33.840
+Anda memberinya alamat IP public.
+
+00:07:33.840 --> 00:07:35.960
+Itu alamat yang terlihat oleh dunia luar.
+
+00:07:36.140 --> 00:07:38.720
+Seperti nomor telepon publik alih-alih ekstensi internal.
+
+00:07:39.380 --> 00:07:40.080
+Ini poin kuncinya.
+
+00:07:40.500 --> 00:07:41.560
+IP public bersifat opsional.
+
+00:07:41.960 --> 00:07:43.420
+Anda menetapkannya secara eksplisit.
+
+00:07:43.740 --> 00:07:46.620
+Karena Azure tidak pernah memberikan IP public kecuali Anda memintanya.
+
+00:07:47.060 --> 00:07:47.660
+Itu yang dirancang, bingung.
+
+00:07:47.920 --> 00:07:50.480
+Defaultnya haruslah privat dan publik harus menjadi pilihan yang disengaja.
+
+00:07:50.880 --> 00:07:52.520
+Dan disinilah banyak pemula melakukan kesalahan.
+
+00:07:52.740 --> 00:07:54.080
+Mereka memberikan IP public ke segalanya.
+
+00:07:54.740 --> 00:07:57.340
+Server web, basis data, dan IP backend mereka semua diberi IP public.
+
+00:07:57.740 --> 00:07:58.480
+Itu adalah si keamanan.
+
+00:07:58.800 --> 00:08:01.040
+Basis data Anda tidak perlu bisa dijangkau dari internet.
+
+00:08:01.040 --> 00:08:02.460
+Begitu pula IP backend Anda.
+
+00:08:02.460 --> 00:08:07.100
+Hanya sumber daya frontend yang benar-benar berinteraksi dengan pengguna yang harus memiliki IP public.
+
+00:08:07.700 --> 00:08:10.260
+Nah, IP public hadir dalam dua jenis, statis dan dinamis.
+
+00:08:10.780 --> 00:08:14.020
+IP public statis tetap sama meskipun Anda menghentikan dan memulai ulang sumber daya.
+
+00:08:14.480 --> 00:08:15.860
+IP public dinamis bisa berubah-ubah.
+
+00:08:16.200 --> 00:08:20.400
+Jika Anda menjalankan aplikasi produksi, Anda mungkin butuh IP statis agar pengguna selalu bisa menemukan Anda.
+
+00:08:20.880 --> 00:08:23.340
+Jika Anda sedang menguji sesuatu, IP dinamis mungkin sudah cukup.
+
+00:08:23.740 --> 00:08:27.620
+Anda juga bisa menggunakan apa yang disebut prefix IP public yang memungkinkan Anda memesan blok alam.
+
+00:08:28.000 --> 00:08:31.060
+Alih-alih membuatnya satu per satu, Anda memesan rentang lalu.
+
+00:08:31.060 --> 00:08:33.500
+Menetapkan alamat individu dari rentang tersebut.
+
+00:08:34.000 --> 00:08:37.360
+Berguna jika Anda tahu akan membutuhkan banyak IP public untuk sebuah proyek.
+
+00:08:37.900 --> 00:08:38.700
+Apa artinya ini bagi Anda?
+
+00:08:39.140 --> 00:08:40.420
+IP private adalah standar yang aman.
+
+00:08:40.920 --> 00:08:42.340
+IP tersebut adalah ekstensi telepon internet.
+
+00:08:42.600 --> 00:08:46.580
+IP public adalah pilihan yang disengaja, yang Anda buat hanya saat perlu sesuatu yang dapat diakses dari luar.
+
+00:08:46.740 --> 00:08:51.640
+Dan saat Anda membutuhkannya, pikirkan apakah Anda perlu yang statis atau dinamis, dan apakah prefix itu masuk akal.
+
+00:08:51.640 --> 00:08:53.800
+Grup keamanan jaringan mengendalikan lalu lintas.
+
+00:08:54.160 --> 00:08:56.940
+Jadi Anda sudah mengatur vnet, subnet, dan alamat IP Anda.
+
+00:08:57.440 --> 00:09:00.420
+Namun bagaimana Anda benar mengontrol lalu lintas apa yang diizinkan masuk dan keluar?
+
+00:09:00.700 --> 00:09:02.480
+Disitulah peran grup keamanan jaringan atau NSG.
+
+00:09:02.920 --> 00:09:06.600
+NSG adalah penjaga gerbang yang mengontrol lalu lintas yang masuk dan keluar dari sumber daya Anda.
+
+00:09:06.600 --> 00:09:12.960
+Bayangkan seperti petugas keamanan di pintu kulab, memperiksa identitas, melihat daftar tamu, dan menolak siapapun yang tidak seharusnya ada di sana.
+
+00:09:13.500 --> 00:09:17.400
+Setiap lalu lintas yang mencoba mencapai sumber daya Anda harus melewati petugas ini terlebih dahulu.
+
+00:09:18.080 --> 00:09:19.180
+NSG bekerja dengan aturan.
+
+00:09:19.680 --> 00:09:22.520
+Setiap aturan menyatakan izinkan atau tolak berdasarkan 4 hal.
+
+00:09:22.680 --> 00:09:27.200
+Alamat IP sumber, alamat IP tujuan, nomor port, dan protokol, dan protokol.
+
+00:09:27.200 --> 00:09:31.780
+Jadi Anda bisa mengatakan izinkan lalu lintas dari alamat IP kantor saya pada port 443.
+
+00:09:32.060 --> 00:09:34.500
+Atau tolak semua lalu lintas dari internet pada port 22.
+
+00:09:35.020 --> 00:09:35.640
+Montrol semacam itu.
+
+00:09:35.640 --> 00:09:37.080
+Nah ini adalah fitur yang kuat.
+
+00:09:37.660 --> 00:09:41.440
+Anda bisa melampirkan NSG ke subnet atau langsung ke antarmuka jaringan 1VM.
+
+00:09:42.140 --> 00:09:45.480
+Jika Anda melampirkannya ke subnet, NSG tersebut berlaku untuk semua yang ada di dalam.
+
+00:09:45.820 --> 00:09:47.600
+Setiap PM, setiap basis data, setiap sumber daya.
+
+00:09:47.880 --> 00:09:48.700
+Ini adalah kebijakan Omel.
+
+00:09:49.060 --> 00:09:53.180
+Jika Anda melampirkannya ke antarmuka jaringan VM tertentu, itu hanya berlaku untuk satu mesin tersebut.
+
+00:09:53.720 --> 00:09:54.720
+Anda bahkan bisa melakukan keduanya.
+
+00:09:55.100 --> 00:09:59.320
+NSG tingkat subnet untuk aturan luas dan NSG tingkat NEC untuk pengecualian.
+
+00:10:00.280 --> 00:10:02.240
+Aturan bawaan yang dibuat Azure cukup masuk akal.
+
+00:10:02.240 --> 00:10:07.000
+Mereka mengizinkan semua lalu lintas di dalam vnet agar sumber daya Anda dapat saling berkomunikasi
+
+00:10:07.000 --> 00:10:10.780
+dan mereka menolak semua lalu lintas dari internet sehingga tidak ada dari luar yang bisa menjangkau sumber daya Anda
+
+00:10:10.780 --> 00:10:12.220
+kecuali Anda mengizinkannya secara eksplis.
+
+00:10:12.380 --> 00:10:13.280
+Itu adalah titik awal yang baik.
+
+00:10:13.600 --> 00:10:14.400
+Jangan saya memberikan contoh.
+
+00:10:14.400 --> 00:10:17.860
+Katakanlah Anda mengelola mesin virtual Linux dan Anda perlu melakukan SSH ke dalam.
+
+00:10:18.220 --> 00:10:23.500
+Anda akan membuat aturan NSG yang mengizinkan lalu lintas masuk pada port 22, tetapi Anda tentu tidak ingin mengizinkan SSH dari mana saja.
+
+00:10:23.740 --> 00:10:24.620
+Itu sama saja menggunakan masalah.
+
+00:10:24.900 --> 00:10:29.740
+Jadi Anda membatasinya ke alamat IP Anda sendiri, sehingga hanya Anda yang bisa melakukan SSH dan yang lainnya akan diblokir.
+
+00:10:30.160 --> 00:10:33.140
+Ide yang sama berlaku untuk RDP pada port 389 untuk mesin Windows.
+
+00:10:33.680 --> 00:10:34.360
+Apa arti ini bagi Anda?
+
+00:10:34.900 --> 00:10:37.780
+NSG adalah lini pertahanan pertama Anda dan bagian terbaiknya semuanya gratis.
+
+00:10:38.120 --> 00:10:41.040
+Tidak ada biaya tambahan untuk menggunakannya, jadi tidak ada alasan untuk tidak memasang.
+
+00:10:41.040 --> 00:10:44.140
+Setiap subnet, setiap sumber daya harus memiliki NSG yang terpasang.
+
+00:10:44.420 --> 00:10:46.600
+Mulailah dengan menolak semua dan hanya buka apa yang Anda perlukan.
+
+00:10:47.320 --> 00:10:49.340
+Tabel rute dan perutean mengarahkan lalu lintas.
+
+00:10:49.640 --> 00:10:55.100
+Sekarang mari kita bahas tentang perutean, karena setelah Anda menentukan lalu lintas apa yang diizinkan, Anda perlu menentukan kemana lalu lintas tersebut sebenarnya pergi.
+
+00:10:55.220 --> 00:10:58.360
+Begini, Azure secara otomatis membuat rute sistem untuk setiap subnet.
+
+00:10:58.700 --> 00:10:59.740
+Anda tidak perlu melakukan apa-apa.
+
+00:11:00.220 --> 00:11:02.840
+Bayangkan ini seperti GPS bawaan yang mengetahui jalan-jalan dasar.
+
+00:11:03.380 --> 00:11:06.560
+Lalu lintas di dalam v-net, lalu lintas ke v-net yang di piring, lalu lintas ke internet.
+
+00:11:06.560 --> 00:11:11.420
+Semuanya langsung berfungsi, tetapi terkadang GPS bawaan tidak membawa Anda ke tempat yang Anda inginkan.
+
+00:11:12.000 --> 00:11:14.180
+Setelah itu, Anda memerlukan rute yang ditentukan pengguna atau UDR.
+
+00:11:14.720 --> 00:11:18.380
+Ini memungkinkan Anda mengganti rute sistem Azure dan mengendalikan calur yang di lalu lintas.
+
+00:11:18.640 --> 00:11:20.340
+Bagaimana cara kerjanya? Anda membuat tabel rute.
+
+00:11:20.700 --> 00:11:21.580
+Anda menambahkan rute kustoman.
+
+00:11:21.980 --> 00:11:23.940
+Kemudian Anda mengaitkan tabel rute tersebut dengan sebuah subnet.
+
+00:11:24.200 --> 00:11:27.900
+Sejak saat itu, lalu lintas yang meninggalkan subnet tersebut akan mengikuti aturan Anda, bukan Anda.
+
+00:11:28.140 --> 00:11:29.380
+Izinkan saya memberikan contoh konkret.
+
+00:11:29.560 --> 00:11:33.020
+Katakanlah Anda yang semua lalu lintas internet dari v-net Anda melewati firewall terlebih dahulu.
+
+00:11:33.020 --> 00:11:36.060
+Mungkin Anda perlu meriksanya, mencatatnya, atau memblokir situs berbahaya.
+
+00:11:36.700 --> 00:11:38.980
+Rute sistem default mengirimkan lalu lintas internet langsung keluar.
+
+00:11:39.380 --> 00:11:47.700
+Bukan itu yang Anda inginkan, jadi Anda membuat rute yang menyatakan bahwa semua lalu lintas yang menuju ke 0.0.0.0.0.0.0 yang berarti kemana saja di internet harus diarahkan ke firewall.
+
+00:11:48.500 --> 00:11:49.440
+Itulah rute yang ditentukan pengguna.
+
+00:11:49.820 --> 00:11:51.680
+Tabel rute menggunakan sesuatu yang disebut next hop.
+
+00:11:52.260 --> 00:11:54.200
+Itu adalah tujuan tempat lalu lintas dikirim selanjutnya.
+
+00:11:54.600 --> 00:11:55.320
+Anda memiliki beropo.
+
+00:11:55.760 --> 00:11:57.880
+Anda bisa mengirimnya ke appliance virtual seperti firewall.
+
+00:11:57.880 --> 00:12:02.260
+Anda bisa mengirimnya ke gateway jaringan virtual yang merupakan cara Anda terhubung ke jaringan up-premises.
+
+00:12:02.260 --> 00:12:07.700
+Anda bisa mengirimnya langsung ke internet, atau tidak mengirimnya kemanapun, yang pada dasarnya akan memutus lalu lintas tersebut.
+
+00:12:08.240 --> 00:12:13.060
+Hal utama yang perlu dipahami adalah bahwa perutean adalah cara Anda mengontrol jalur lalu lintas melalui jaringan Anda.
+
+00:12:13.760 --> 00:12:16.820
+Rute sistem adalah standar yang baik, tetapi tidak selalu tepat untuk situasi Anda.
+
+00:12:17.300 --> 00:12:23.040
+Jika Anda perlu agar lalu lintas melewati titik inspeksi atau gateway tertentu, atau diblokir sepenuhnya, Anda memerlukan rute yang ditentukan pengguna.
+
+00:12:23.520 --> 00:12:24.360
+Apa artinya ini bagi Anda?
+
+00:12:24.500 --> 00:12:30.200
+Perutean adalah cara Anda memberitahu lalu lintas kemana harus pergi, dan Anda memiliki kuasa untuk mengabaikan pengaturan default Azure kapan pun dipenuhkan.
+
+00:12:30.200 --> 00:12:35.240
+Mulalah dengan rute sistem, pahami fungsinya, lalu tambahkan rute custom saat arsitektur Anda memerlukannya.
+
+00:12:36.500 --> 00:12:37.960
+Piring VNet menghubungkan jaringan
+
+00:12:37.960 --> 00:12:41.600
+Sejauh ini kita telah membahas satu VNet, satu gedung, satu jaringan privat.
+
+00:12:42.140 --> 00:12:43.800
+Namun apa yang terjadi jika Anda memiliki beberapa VNet?
+
+00:12:44.100 --> 00:12:49.800
+Mungkin Anda memiliki satu untuk lingkungan produksi, dan satu lagi untuk pengujian, atau mungkin Anda menjalankan aplikasi di wilayah Azure yang berbeda.
+
+00:12:50.200 --> 00:12:51.860
+Secara default, VNet ini benar-benar terisolasi.
+
+00:12:52.300 --> 00:12:53.340
+Mereka tidak bisa saling berkomunik.
+
+00:12:53.480 --> 00:12:55.420
+Mereka seperti bangunan terpisah tanpa jalan di antaranya.
+
+00:12:55.420 --> 00:12:56.880
+Di situlah peran Piring VNet.
+
+00:12:57.260 --> 00:13:00.220
+Fitur ini memungkinkan Anda menghubungkan dua VNet secara privat dan yang sebenarnya berbeda.
+
+00:13:00.480 --> 00:13:03.760
+Lalu lintas antar VNet yang di pairing tetap berada di jaringan tulang punggung Microsoft.
+
+00:13:03.880 --> 00:13:05.260
+Lalu lintas tersebut tidak pernah menentu internet.
+
+00:13:05.640 --> 00:13:08.880
+Itu berarti latensi rendah, bandwidth tinggi, dan tambah papanan terhadap ancaman luar.
+
+00:13:09.120 --> 00:13:10.460
+Berikut sesuatu yang mengejutkan banyak orang.
+
+00:13:10.980 --> 00:13:12.360
+Piring juga bisa bekerja antar wilayah.
+
+00:13:12.900 --> 00:13:13.720
+Itu disebut piring global.
+
+00:13:14.380 --> 00:13:17.520
+Anda bisa memiliki VNet di Eropa Barat yang dipiring dengan VNet di Asia Tenggara,
+
+00:13:17.640 --> 00:13:20.180
+dan lalu lintas di antaranya tetap berada di jaringan privat Microsoft.
+
+00:13:20.180 --> 00:13:23.180
+Tanpa gateway VPN, tanpa IP publik, hanya koneksi privat langsung.
+
+00:13:23.700 --> 00:13:25.420
+Namun ada satu aturan yang mutak tidak boleh dilanggar.
+
+00:13:25.940 --> 00:13:28.180
+VNet yang di pairing harus memiliki ruang alamat yang tidak tumpang tindis.
+
+00:13:28.720 --> 00:13:31.800
+Jika kedua VNet mencoba menggunakan rentang 10T0T0T16,
+
+00:13:32.800 --> 00:13:33.600
+mereka tidak bisa di pairing.
+
+00:13:34.280 --> 00:13:35.300
+Alamat IP akan bentrok,
+
+00:13:35.740 --> 00:13:38.140
+dan Azure tidak akan tahu ke jaringan mana paket tersebut berasal.
+
+00:13:39.020 --> 00:13:42.280
+Jadi ingat tips perencanaan sebelumnya tentang memilih ruang alamat dengan cermat.
+
+00:13:42.760 --> 00:13:43.240
+Inilah alasan.
+
+00:13:43.760 --> 00:13:46.240
+Jika Anda berpikir untuk melakukan pairing VNet di kemudian hari,
+
+00:13:46.240 --> 00:13:48.060
+pastikan rentang alamatnya tidak tumpang tindis ya.
+
+00:13:48.420 --> 00:13:50.000
+Nah ini detail yang sering membuat orang bingung.
+
+00:13:50.300 --> 00:13:51.260
+Piring bersifat non-transitif.
+
+00:13:51.520 --> 00:13:51.940
+Artinya itu,
+
+00:13:52.260 --> 00:13:55.820
+katakanlah VNet A di pairing dengan VNet B dan VNet B di pairing dengan VNet C.
+
+00:13:56.420 --> 00:13:58.940
+VNet A tidak secara otomatis menjangkau VNet C melalui B.
+
+00:13:59.320 --> 00:13:59.980
+Mereka tidak terhubung.
+
+00:14:00.380 --> 00:14:02.700
+Setiap pairing adalah hubungan langsung antara tepat dua VNet.
+
+00:14:03.060 --> 00:14:04.720
+Jika Anda ingin A berkomunikasi dengan C,
+
+00:14:04.860 --> 00:14:06.520
+Anda merlukan pairing terpisah antara A dan C.
+
+00:14:06.640 --> 00:14:07.800
+Jadi bagaimana Anda nyelam sekarang besar?
+
+00:14:07.960 --> 00:14:09.300
+Anda menggunakan arsitektur hub dan spok.
+
+00:14:09.600 --> 00:14:10.760
+Satu VNet pusat, yaitu hub.
+
+00:14:11.100 --> 00:14:12.780
+Dihubungkan peer dengan banyak VNet lain, yaitu spok.
+
+00:14:12.780 --> 00:14:16.720
+Hub mungkin berisi layanan bersama seperti firewall, gateway VPN, atau alat pemantauan.
+
+00:14:16.720 --> 00:14:18.920
+Spok berisi beban kerja individual Anda.
+
+00:14:19.580 --> 00:14:21.100
+Setiap spok terhubung langsung dengan hub,
+
+00:14:21.240 --> 00:14:22.680
+tetapi antar spok tidak saling terhubung.
+
+00:14:22.980 --> 00:14:24.600
+Jika satu spok belum mengakses spok lain,
+
+00:14:24.700 --> 00:14:25.680
+lalu lintas akan melewati hub.
+
+00:14:26.060 --> 00:14:27.620
+Hal ini menjaga semuanya tetap teratur
+
+00:14:27.620 --> 00:14:29.760
+dan memberi Anda tempat terpusat untuk menerapkan kebijakan.
+
+00:14:30.240 --> 00:14:30.960
+Apa yang ini bagi Anda?
+
+00:14:31.320 --> 00:14:32.900
+Piring adalah cara Anda membangun jaringan
+
+00:14:32.900 --> 00:14:34.200
+yang mencakup banyak VNet dan wilayah.
+
+00:14:34.680 --> 00:14:35.740
+Ini ada jembatan di antara bangunan Anda.
+
+00:14:36.280 --> 00:14:38.320
+Rencanakan ruang alamat Anda agar tidak tumbang dini.
+
+00:14:38.500 --> 00:14:40.580
+Ingatlah bahwa piring tidak bersifat transitif
+
+00:14:40.580 --> 00:14:42.040
+dan pertimbangkan di sen hub dan spok
+
+00:14:42.040 --> 00:14:43.840
+saat Anda mulai berkembang melampaui satu VNet.
+
+00:14:44.700 --> 00:14:45.660
+Bagaimana semuanya terhubung?
+
+00:14:45.760 --> 00:14:46.160
+Gambaran besar.
+
+00:14:46.500 --> 00:14:47.700
+Jadi, mari kita mundur dan melihat
+
+00:14:47.700 --> 00:14:48.960
+bagaimana potongan ini sebenarnya menyapa.
+
+00:14:49.260 --> 00:14:50.360
+Disitulah letak kekuatan yang sungguh.
+
+00:14:50.600 --> 00:14:51.380
+Anda mulai dengan sebuah VNet.
+
+00:14:51.760 --> 00:14:53.040
+Itu adalah ruang pribadi Anda di ISO.
+
+00:14:53.380 --> 00:14:54.240
+Anggap saja itu sebagai planet.
+
+00:14:54.580 --> 00:14:55.400
+Di dalam lahan tersebut,
+
+00:14:55.480 --> 00:14:56.140
+Anda membuat subnet.
+
+00:14:56.500 --> 00:14:56.980
+Itu adalah ruang-ruang.
+
+00:14:57.280 --> 00:14:58.320
+Satu untuk server web,
+
+00:14:58.420 --> 00:14:59.180
+satu untuk basis data,
+
+00:14:59.320 --> 00:15:00.100
+satu untuk alat manajemen.
+
+00:15:00.740 --> 00:15:02.660
+Setiap subnet mendapatkan blok alamatnya sendiri
+
+00:15:02.660 --> 00:15:04.140
+yang diambil dari ruang alamat VNet.
+
+00:15:04.700 --> 00:15:05.580
+Anda menambahkan keamanan.
+
+00:15:05.580 --> 00:15:07.640
+Grup keamanan jaringan NSG dipasang berat Anda.
+
+00:15:08.200 --> 00:15:09.280
+Grup ini mengontrol lalu lintas
+
+00:15:09.280 --> 00:15:10.360
+apa yang diizinkan masuk dan keluar.
+
+00:15:10.900 --> 00:15:12.620
+Subnet web Anda mengizinkan lalu lintas
+
+00:15:12.620 --> 00:15:13.780
+dari internet pada port 1.3.
+
+00:15:14.340 --> 00:15:15.840
+Subnet basis data Anda hanya mengizinkan
+
+00:15:15.840 --> 00:15:17.700
+lalu lintas dari subnet web pada port 1.3.
+
+00:15:18.360 --> 00:15:19.660
+Penjaga di setiap pintu tahu persis
+
+00:15:19.660 --> 00:15:20.380
+siapa yang diizinkan.
+
+00:15:20.840 --> 00:15:21.940
+Selanjutnya, Anda mengatur perutik.
+
+00:15:22.360 --> 00:15:24.300
+Mungkin Anda ingin semua lalu lintas internet keluar
+
+00:15:24.300 --> 00:15:25.700
+melewati firewall untuk diperiksa.
+
+00:15:26.300 --> 00:15:27.240
+Anda membuat tabel rute,
+
+00:15:27.460 --> 00:15:28.340
+menambahkan rute khusus
+
+00:15:28.340 --> 00:15:29.360
+dan menautkannya ke subnet Anda.
+
+00:15:29.820 --> 00:15:31.360
+Sekarang, lalu lintas mengikuti jalur
+
+00:15:31.360 --> 00:15:32.940
+yang Anda rancang bukan jalur default azure.
+
+00:15:33.320 --> 00:15:34.420
+Dan akhirnya, Anda menghubungkan
+
+00:15:34.420 --> 00:15:35.100
+semuanya menjadi satu.
+
+00:15:35.560 --> 00:15:36.480
+Anda menghubungkan vnet Anda
+
+00:15:36.480 --> 00:15:37.120
+dengan vnet lain.
+
+00:15:37.260 --> 00:15:38.240
+Mungkin vnet hub yang menampung
+
+00:15:38.240 --> 00:15:39.600
+firewall dan layanan bersama Anda.
+
+00:15:40.340 --> 00:15:41.340
+Sekarang, aplikasi Anda
+
+00:15:41.340 --> 00:15:42.360
+mencakup banyak jaringan
+
+00:15:42.360 --> 00:15:43.420
+tetapi semuanya bekerja
+
+00:15:43.420 --> 00:15:44.920
+sebagai satu sistem yang terhubung.
+
+00:15:45.800 --> 00:15:46.680
+Ini adalah momen pencerahan.
+
+00:15:47.140 --> 00:15:47.660
+Tidak ada bagian ini
+
+00:15:47.660 --> 00:15:48.420
+yang berkerja serta desolasi.
+
+00:15:48.740 --> 00:15:49.560
+Vnet tanpa subnet
+
+00:15:49.560 --> 00:15:50.320
+hanyalah ruang kosong.
+
+00:15:50.680 --> 00:15:51.480
+Subnet tanpa NSG
+
+00:15:51.480 --> 00:15:52.140
+akan terbuka lebar.
+
+00:15:52.620 --> 00:15:53.820
+Perhutaan tanpa desain yang jelas
+
+00:15:53.820 --> 00:15:54.900
+akan mengirim lalu lintas
+
+00:15:54.900 --> 00:15:55.480
+ke tempat yang satu.
+
+00:15:55.660 --> 00:15:56.560
+Peering tanpa perencanaan
+
+00:15:56.560 --> 00:15:57.660
+akan menciptakan konflik alamat.
+
+00:15:57.900 --> 00:15:58.720
+Mereka ada satu sistem.
+
+00:15:59.020 --> 00:15:59.660
+Setiap bagian bergantung
+
+00:15:59.660 --> 00:16:00.080
+pada bagian lain.
+
+00:16:00.420 --> 00:16:01.600
+Izinkan saya memberi Anda contoh konkur.
+
+00:16:02.060 --> 00:16:03.100
+Bayangkan sebuah aplikasi web.
+
+00:16:03.480 --> 00:16:04.040
+Server web Anda
+
+00:16:04.040 --> 00:16:05.000
+berada di subnet publik
+
+00:16:05.000 --> 00:16:06.300
+dengan NSG yang mengizinkan
+
+00:16:06.300 --> 00:16:07.800
+lalu lintas HTTPS dari internet.
+
+00:16:08.200 --> 00:16:09.080
+Server aplikasi Anda
+
+00:16:09.080 --> 00:16:10.260
+berada di subnet privat
+
+00:16:10.260 --> 00:16:11.320
+yang hanya menerima
+
+00:16:11.320 --> 00:16:12.520
+lalu lintas dari subnet web.
+
+00:16:12.940 --> 00:16:13.720
+Database Anda berada
+
+00:16:13.720 --> 00:16:14.660
+di subnet privat lain
+
+00:16:14.660 --> 00:16:15.400
+yang hanya menerima
+
+00:16:15.400 --> 00:16:16.940
+lalu lintas dari subnet aplikasi.
+
+00:16:17.480 --> 00:16:18.520
+Tabel rute memaksa semua
+
+00:16:18.520 --> 00:16:19.320
+lalu lintas keluar
+
+00:16:19.320 --> 00:16:20.740
+melalui firewall di hub vnet
+
+00:16:20.740 --> 00:16:21.820
+untuk pencatatan dan inspeksi.
+
+00:16:22.420 --> 00:16:23.180
+Dan semuanya dipering
+
+00:16:23.180 --> 00:16:24.340
+dengan jaringan perusahaan Anda
+
+00:16:24.340 --> 00:16:25.100
+sehingga tim internal
+
+00:16:25.100 --> 00:16:25.840
+dapat mengelolanya.
+
+00:16:26.560 --> 00:16:27.280
+Itulah nilai sebenarnya
+
+00:16:27.280 --> 00:16:28.280
+bukan sekadar satu fitur saja.
+
+00:16:28.760 --> 00:16:29.280
+Ini tentang bagaimana
+
+00:16:29.280 --> 00:16:30.000
+semuanya bekerja bersama.
+
+00:16:30.360 --> 00:16:31.040
+20 tahun lalu
+
+00:16:31.040 --> 00:16:32.620
+Anda harus membeli server terpisah,
+
+00:16:33.000 --> 00:16:33.880
+mengatur ruter fisik,
+
+00:16:34.000 --> 00:16:35.720
+dan mengelola firewall per perangkat.
+
+00:16:36.500 --> 00:16:37.140
+Semuanya manual,
+
+00:16:37.360 --> 00:16:38.100
+lambat, dan mahal.
+
+00:16:38.440 --> 00:16:39.360
+Azure memberikan semua ini
+
+00:16:39.360 --> 00:16:39.980
+sebagai layanan.
+
+00:16:40.520 --> 00:16:41.400
+Anda mendefinisikannya
+
+00:16:41.400 --> 00:16:42.660
+dengan beberapa klik atau script
+
+00:16:42.660 --> 00:16:43.740
+dan semuanya langsung berfungsi.
+
+00:16:44.120 --> 00:16:44.940
+Apa artinya ini bagi Anda?
+
+00:16:45.380 --> 00:16:46.060
+Setelah Anda melihat
+
+00:16:46.060 --> 00:16:47.300
+bagaimana bagian-bagian ini menyatu,
+
+00:16:47.560 --> 00:16:48.280
+jaringan Azure menjadi
+
+00:16:48.280 --> 00:16:48.960
+dapat diprediksi.
+
+00:16:49.440 --> 00:16:50.040
+Anda tidak sedang menambah.
+
+00:16:50.040 --> 00:16:51.200
+Anda sedang merancang.
+
+00:16:51.600 --> 00:16:52.360
+Dan saat ada masalah,
+
+00:16:52.540 --> 00:16:53.300
+Anda tahu persis kemana
+
+00:16:53.300 --> 00:16:54.080
+harus melihat karena Anda
+
+00:16:54.080 --> 00:16:54.880
+memahami sistemnya.
+
+00:16:55.760 --> 00:16:56.400
+Jadi inilah yang ingin
+
+00:16:56.400 --> 00:16:57.420
+saya bagikan dari episode ini.
+
+00:16:58.080 --> 00:16:58.480
+Pertama,
+
+00:16:58.620 --> 00:16:59.300
+langkah paling penting
+
+00:16:59.300 --> 00:16:59.900
+yang bisa Anda amat.
+
+00:17:00.600 --> 00:17:01.920
+Buat VNet dengan ruang alamat
+
+00:17:01.920 --> 00:17:02.780
+yang terencana dengan baik
+
+00:17:02.780 --> 00:17:03.680
+sebelum menyebarkan apapun.
+
+00:17:03.980 --> 00:17:04.700
+Keputusan tunggal itu
+
+00:17:04.700 --> 00:17:05.400
+mengelaruhi segalanya
+
+00:17:05.400 --> 00:17:05.960
+di tab selanjutnya.
+
+00:17:06.320 --> 00:17:07.380
+Kedua, gunakan subnet
+
+00:17:07.380 --> 00:17:08.300
+untuk memisahkan tingkatan
+
+00:17:08.300 --> 00:17:08.800
+aplikasi Anda.
+
+00:17:09.420 --> 00:17:10.440
+Server web, server aplikasi,
+
+00:17:10.520 --> 00:17:10.940
+basis data,
+
+00:17:11.040 --> 00:17:12.100
+berikan masing-masing ruangnya sendiri.
+
+00:17:12.640 --> 00:17:13.700
+Dan ketiga, mulailah dengan SG.
+
+00:17:14.020 --> 00:17:14.460
+Itu gratis.
+
+00:17:14.900 --> 00:17:15.860
+NSG sangat kuat
+
+00:17:15.860 --> 00:17:16.640
+dan secara dramatis
+
+00:17:16.640 --> 00:17:17.580
+meningkatkan keamanan Anda
+
+00:17:17.580 --> 00:17:18.140
+sejak hari pertama.
+
+00:17:18.600 --> 00:17:19.160
+VNet Anda adalah
+
+00:17:19.160 --> 00:17:19.960
+fondasi dari semua
+
+00:17:19.960 --> 00:17:20.880
+yang Anda bangun di Azure.
+
+00:17:21.340 --> 00:17:22.020
+Buatlah dengan benar
+
+00:17:22.020 --> 00:17:22.860
+dan segalanya akan menjadi
+
+00:17:22.860 --> 00:17:23.300
+lebih mudah.
+
+00:17:23.660 --> 00:17:24.340
+Jika salah, Anda akan
+
+00:17:24.340 --> 00:17:25.000
+menghabiskan waktu
+
+00:17:25.000 --> 00:17:25.800
+terus-menerus bergelut
+
+00:17:25.800 --> 00:17:26.280
+dengan jaringan.
+
+00:17:26.620 --> 00:17:27.460
+Perlanggananlah di platform
+
+00:17:27.460 --> 00:17:28.380
+podcast favorit Anda
+
+00:17:28.380 --> 00:17:29.300
+dan bagikan ini kepada
+
+00:17:29.300 --> 00:17:30.000
+seseorang yang memulai
+
+00:17:30.000 --> 00:17:30.720
+perjalanan Azure Mereng.
+
+00:17:31.000 --> 00:17:31.640
+Tinggalkan komentar
+
+00:17:31.640 --> 00:17:32.160
+jika Anda pahami.
+
+00:17:32.780 --> 00:17:34.060
+Sampai jumpa di episode berikutnya.

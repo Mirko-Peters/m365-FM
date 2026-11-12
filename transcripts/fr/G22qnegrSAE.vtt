@@ -1,0 +1,1444 @@
+WEBVTT
+
+00:00:00.300 --> 00:00:07.960
+Prêt pour 10 jours consacrés à Microsoft 365, aux pilotes, l'IA, Azure et aux acteurs qui façonnent l'avenir du travail et…
+
+00:00:07.960 --> 00:00:12.080
+En janvier prochain, la M365-Con est de retour et nous voyons plus grand.
+
+00:00:12.980 --> 00:00:17.940
+Rejoignez-nous pour des sessions en direct, des démos concrètes et les conseils pratiques d'experts et de MVPs du monde entier.
+
+00:00:18.780 --> 00:00:21.280
+Fini les diapositives génériques et le jargon interminable.
+
+00:00:22.020 --> 00:00:28.520
+Nous abordons les vrais enjeux, copilote studio, les agents IA fabriquent, la sécurité, la gouvernance et l'automatisation.
+
+00:00:28.520 --> 00:00:34.500
+Que vous soyez informaticien, développeur ou dirigeant, des sessions sont conçues pour vous, vous ni faim.
+
+00:00:35.520 --> 00:00:39.980
+Pendant 10 jours complets, explorez diverses technologies et connectez-vous à une communauté mondiale.
+
+00:00:41.000 --> 00:00:44.240
+Suivez le direct et rapportez des idées concrètes dans votre entreprise.
+
+00:00:45.160 --> 00:00:50.600
+Janvier 2027, 10 jours. Une seule. Communauté Microsoft. Les inscriptions sont ouvertes.
+
+00:00:51.820 --> 00:00:53.040
+Réservez votre place dès aujourd'hui.
+
+00:00:53.040 --> 00:00:58.120
+Rendez-vous sur m365con.net
+
+00:00:58.120 --> 00:01:03.370
+Inscrivez-vous sur m365con.net. Nous vous attendons.
+
+00:01:03.770 --> 00:01:04.750
+En janvier, in me.
+
+00:01:05.110 --> 00:01:08.370
+Tout le monde pense que Power Automate est un moteur d'intégration. Ce n'est pas le cas.
+
+00:01:08.730 --> 00:01:10.890
+C'est une usine pratique à médiocrité automatisée.
+
+00:01:11.430 --> 00:01:13.990
+Bien pour des rappels, terrible pour des systèmes critiques.
+
+00:01:14.430 --> 00:01:16.830
+Pourtant, des professionnels continuent d'y construire des flux critiques,
+
+00:01:16.950 --> 00:01:19.890
+comme s'il s'agissait d'Azure Logic Apps, avec une nouvelle couche de peinture bleue.
+
+00:01:19.890 --> 00:01:21.730
+Euh... Spoiler, ce n'en est pas.
+
+00:01:22.350 --> 00:01:25.090
+On pense que monter en charge consiste simplement à ajouter un connecteur.
+
+00:01:25.610 --> 00:01:29.090
+Comme si Microsoft avait discrètement intégré l'équilibrage de charge dans l'interface.
+
+00:01:29.550 --> 00:01:32.410
+En réalité, Power Automate est brillant pour la productivité personnelle,
+
+00:01:32.630 --> 00:01:34.490
+mais allergique au traitement à l'échelle industrielle.
+
+00:01:35.350 --> 00:01:37.170
+Soumettez-lui 10 zéro-zéregistrement et il panique.
+
+00:01:37.870 --> 00:01:40.770
+A la fin, vous comprendrez exactement où et pourquoi il échoue
+
+00:01:40.770 --> 00:01:42.570
+et ce que les professionnels utilisent à la place.
+
+00:01:43.710 --> 00:01:47.270
+Voyez ceci moins comme un tutoriel que comme une mission de sauvetage pour votre santé mentale,
+
+00:01:47.270 --> 00:01:51.310
+vos limites de service et le pauvre stagiaire qui devra déboguer votre flux de validation nocturne.
+
+00:01:52.710 --> 00:01:53.730
+Le mythe du développeur citoyen.
+
+00:01:54.210 --> 00:01:57.590
+Power Automate a été conçu pour ce que Microsoft appelle poliment les cas développeurs citoyens.
+
+00:01:58.510 --> 00:02:01.470
+En clair, des utilisateurs non techniques futés qui automatisent des tâches répétitives
+
+00:02:01.470 --> 00:02:02.690
+sans demander d'aide à l'informatique.
+
+00:02:03.790 --> 00:02:06.250
+Il n'a jamais été prévu pour être l'épine dorsale de l'automatisation d'entreprise.
+
+00:02:06.730 --> 00:02:10.230
+Il est idéal pour l'utilisateur lambda qui veut un message Teams quand une liste est mise à jour,
+
+00:02:10.390 --> 00:02:14.550
+pas pour le service opération qui synchronise des milliers de factures entre SAP et Dataverse,
+
+00:02:14.550 --> 00:02:17.930
+et sa conception même crée une illusion séduisante.
+
+00:02:18.430 --> 00:02:20.550
+Vous faites glisser des cases, connectez des déclencheurs et ça fonctionne ?
+
+00:02:21.470 --> 00:02:21.790
+Une fois.
+
+00:02:22.270 --> 00:02:23.930
+Puis quelqu'un dit, déployons ça à toute l'entreprise.
+
+00:02:24.470 --> 00:02:26.730
+C'est là que votre prototype joyeux se transforme en monstre.
+
+00:02:27.750 --> 00:02:29.630
+Un monstre qui hante les API SharePoint à 2h du matin.
+
+00:02:30.110 --> 00:02:31.390
+La simplicité dissimule la fragilité.
+
+00:02:31.910 --> 00:02:35.150
+L'interface masque les contraintes techniques sous une couche d'icône bleue conviviale.
+
+00:02:35.930 --> 00:02:37.550
+Vous croyez que ces connecteurs sont des tuyaux infinis ?
+
+00:02:38.170 --> 00:02:39.190
+Ce sont en réalité des pailles.
+
+00:02:39.190 --> 00:02:44.010
+Chacune est limitée, minutée et étrangement sensible aux boucles de plus de 8 heures.
+
+00:02:44.470 --> 00:02:46.950
+L'utilisateur moyen construit un flux en supposant un débit illimité.
+
+00:02:47.310 --> 00:02:50.590
+Puis il se heurte au plafond de concurrence, aux limites d'étapes et aux redoutés messages cut aux limites,
+
+00:02:50.730 --> 00:02:52.110
+dépassés extégages des week-ends entiers.
+
+00:02:52.770 --> 00:02:55.510
+Imaginez un petit flux d'intégration RH conçu pour 10 employés par mois.
+
+00:02:56.150 --> 00:02:57.350
+Il fonctionne parfaitement lors des tests.
+
+00:02:57.710 --> 00:03:00.650
+Maintenant l'entreprise passe à un millier d'embauches téléchargeant des documents en masse,
+
+00:03:01.150 --> 00:03:03.530
+générant des identifiants et provisionnant des comptes, tout à la fois.
+
+00:03:04.470 --> 00:03:08.190
+Soudain le flux bloc a mis par cours car il a dépassé la limite de 5 séries d'action par jour.
+
+00:03:09.190 --> 00:03:12.990
+« Félicitations, votre système automatisé vient de devenir un plan de récupération manuel. »
+
+00:03:12.990 --> 00:03:15.610
+Le problème n'est pas une conception malveillante, mais un décalage des intentions.
+
+00:03:16.190 --> 00:03:20.430
+Microsoft a créé Power Automate pour démocratiser l'automatisation, pas pour remplacer les ingénieurs systèmes.
+
+00:03:21.090 --> 00:03:23.050
+Mais les chefs d'entreprise adorent la main-d'œuvre gratuite,
+
+00:03:23.110 --> 00:03:25.370
+et quand un employé non technique livre un prototype fonctionnel,
+
+00:03:25.690 --> 00:03:28.010
+les cadres supposent qu'il peut gérer la production, HITS.
+
+00:03:28.710 --> 00:03:31.350
+Il continue donc d'empiler les étapes, les approbations, les e-mails,
+
+00:03:31.530 --> 00:03:32.950
+les mises à jour de bases de données et les conditions,
+
+00:03:33.310 --> 00:03:34.890
+jusqu'à ce qu'un jour la plateforme refuse poliment.
+
+00:03:35.410 --> 00:03:36.570
+Voici ce que la plupart des gens oublient.
+
+00:03:36.870 --> 00:03:38.010
+Ce n'est pas la faute de Power Automate.
+
+00:03:38.010 --> 00:03:40.650
+Il demandait un outil de loisir d'effectuer des charges de travail de marathon.
+
+00:03:41.090 --> 00:03:42.350
+C'est comme tracter une remorque avec un scooter.
+
+00:03:43.170 --> 00:03:45.690
+Héroïque sur 200 mètres, catastrophique sur autoroute.
+
+00:03:46.470 --> 00:03:48.890
+La leçon est simple, la simplicité n'est pas synonyme d'évolutivité.
+
+00:03:49.170 --> 00:03:51.450
+La logique ticlissée déposée écoïque ne remplace pas l'ingénierie de début.
+
+00:03:52.230 --> 00:03:55.030
+Pourtant, les bureaux du monde entier sont soutenus par des flux Power Automate,
+
+00:03:55.150 --> 00:03:56.890
+maintenus par des tentatives et de l'optimisme.
+
+00:03:57.770 --> 00:03:59.830
+Mais n'oubliez pas, le problème n'est pas que Power Automate soit mauvais.
+
+00:04:00.710 --> 00:04:02.770
+C'est que vous le forcez à faire ce pourquoi il n'a jamais été conçu.
+
+00:04:02.770 --> 00:04:06.190
+Les vrais professionnels savent qu'en migrer, car à l'échelle de l'entreprise,
+
+00:04:06.270 --> 00:04:09.450
+la commodité devient collision et ces collisions s'accompagnent de factures.
+
+00:04:11.050 --> 00:04:12.030
+Deux points de défaillance invisibles.
+
+00:04:12.450 --> 00:04:15.050
+Nous arrivons maintenant aux assassins silencieux de l'automatisation en entreprise.
+
+00:04:15.550 --> 00:04:18.590
+Deux points de défaillance invisibles qui se cachent derrière chaque flux opérationnel.
+
+00:04:19.550 --> 00:04:21.610
+Le premier est la limitation de débit et le second est la licence.
+
+00:04:21.610 --> 00:04:24.110
+Tous deux sont responsables d'innombrables plantages mystérieux
+
+00:04:24.110 --> 00:04:26.090
+que les gens diagnostiquent à tort comme des caprices de Microsoft.
+
+00:04:27.110 --> 00:04:30.030
+Non, c'est Microsoft qui est précis alors que vous étiez optimiste.
+
+00:04:30.970 --> 00:04:34.030
+Commençons par la limitation, car c'est là que les rêves vont s'étouffer indéfiniment.
+
+00:04:34.910 --> 00:04:38.030
+Chaque connecteur dans Power Automate, SharePoint, Outlook, Dataverse,
+
+00:04:38.110 --> 00:04:39.610
+peu importe, comporte des limites strictes.
+
+00:04:40.350 --> 00:04:43.010
+Requête par minute, appel par jour, plafond d'exécution parallèle.
+
+00:04:43.970 --> 00:04:46.570
+Lorsque votre flux dépasse ses seuils, il ne ralentit pas.
+
+00:04:47.330 --> 00:04:47.890
+Il s'arrête tout simplement.
+
+00:04:48.410 --> 00:04:49.950
+Imaginez qu'on vous coupe l'oxygène en pleine phrase.
+
+00:04:49.950 --> 00:04:52.010
+Le flux suffoque, ré-essai mollement,
+
+00:04:52.210 --> 00:04:53.850
+puis meurt silencieusement dans l'historique d'exécution
+
+00:04:53.850 --> 00:04:55.350
+que personne ne consulte avant lundi.
+
+00:04:56.090 --> 00:04:57.850
+C'est là qu'un héros décide de corriger le tir
+
+00:04:57.850 --> 00:04:59.630
+en augmentant la fréquence des déclencheurs,
+
+00:04:59.770 --> 00:05:01.450
+ignorant qu'il aggrave l'étouffement.
+
+00:05:02.310 --> 00:05:03.750
+C'est comme augmenter la vitesse du tapis de course
+
+00:05:03.750 --> 00:05:04.550
+alors qu'on manque déjà d'air.
+
+00:05:05.530 --> 00:05:07.230
+Les connecteurs sont limités en débit pour une bonne raison.
+
+00:05:07.710 --> 00:05:09.730
+Le cloud de Microsoft ne veut pas de votre boucle d'approbation
+
+00:05:09.730 --> 00:05:12.310
+non optimisée qui sature la bande passante régionale à 4-0 du matin.
+
+00:05:12.770 --> 00:05:14.490
+Et oui, cela inclut votre traitement par l'eau de facture
+
+00:05:14.490 --> 00:05:16.530
+de 4 heures et droit tendue en comptabilité avant le lever du soleil.
+
+00:05:16.530 --> 00:05:19.210
+Cela échouera et cela échouera de manière spectaculaire,
+
+00:05:19.310 --> 00:05:20.790
+silencieuse, élégante et désastreuse.
+
+00:05:21.450 --> 00:05:23.090
+Changeons maintenant nos perspectives pour parler de la licence,
+
+00:05:23.210 --> 00:05:24.170
+le jumeau financier de la limitation.
+
+00:05:24.790 --> 00:05:25.990
+Si la limitation étouffe les performances,
+
+00:05:26.110 --> 00:05:27.230
+la licence étrangle votre budget.
+
+00:05:28.150 --> 00:05:30.070
+Power Automate propose plusieurs modèles de licence,
+
+00:05:30.350 --> 00:05:32.330
+par utilisateur, par flux et la redoutable catégorie
+
+00:05:32.330 --> 00:05:33.150
+des connecteurs premium.
+
+00:05:34.010 --> 00:05:35.670
+Chacun semble gérable à petite échelle,
+
+00:05:35.930 --> 00:05:37.590
+mais déployer un prototype dans plusieurs services
+
+00:05:37.590 --> 00:05:39.170
+et soudain votre équipe financière se retrouve
+
+00:05:39.170 --> 00:05:41.850
+à gravir une montagne de multiplicateurs cachés.
+
+00:05:42.430 --> 00:05:42.890
+Voici le piège.
+
+00:05:42.890 --> 00:05:45.110
+Chaque instance de flux, utilisation de connecteurs
+
+00:05:45.110 --> 00:05:47.250
+et limite d'environnement entraîne des implications financières.
+
+00:05:48.370 --> 00:05:50.070
+Exécutez le même flux sous différents utilisateurs
+
+00:05:50.070 --> 00:05:51.550
+et chacun nécessite une couverture de licence.
+
+00:05:51.930 --> 00:05:53.450
+Cette automatisation de services gratuite
+
+00:05:53.450 --> 00:05:55.150
+coûte désormais plus cher par mois
+
+00:05:55.150 --> 00:05:56.670
+qu'un abonnement Azure complet.
+
+00:05:57.730 --> 00:05:59.430
+C'est la version petite ligne de l'automatisation.
+
+00:05:59.710 --> 00:06:01.170
+Personne ne l'est dit jusqu'à ce que le rapport financier
+
+00:06:01.170 --> 00:06:01.750
+tire à son hebdala.
+
+00:06:02.090 --> 00:06:03.450
+Imaginez le système comme une paire de poumons.
+
+00:06:04.110 --> 00:06:05.730
+La limitation restreint l'apport en oxygène.
+
+00:06:06.190 --> 00:06:08.050
+La licence vous vend des bouteilles d'oxygène coûteuses.
+
+00:06:08.850 --> 00:06:10.250
+Vous pouvez respirer prudemment et survivre
+
+00:06:10.250 --> 00:06:11.630
+ou inhaler imprudemment et vous effondrez.
+
+00:06:11.630 --> 00:06:15.110
+Les entreprises découvrent ce point de bascule à leur dépens.
+
+00:06:16.110 --> 00:06:18.050
+Le moment précis où Logic Apps ou Azure Functions
+
+00:06:18.050 --> 00:06:20.450
+auraient été moins chers, plus rapides et bien plus fiables.
+
+00:06:21.190 --> 00:06:22.830
+Laissez-moi vous donner un exemple particulièrement tragique.
+
+00:06:23.450 --> 00:06:25.650
+Une entreprise de taille moyenne a créé un flux Power Automate
+
+00:06:25.650 --> 00:06:27.750
+pour gérer l'intégration RH, le téléchargement de documents,
+
+00:06:27.850 --> 00:06:29.810
+la création de dossiers SharePoint, l'approvisionnement d'email
+
+00:06:29.810 --> 00:06:30.830
+et les invitations Teams.
+
+00:06:31.830 --> 00:06:33.350
+Tout a parfaitement fonctionné le premier mois.
+
+00:06:33.910 --> 00:06:35.390
+Puis les embauches trimestrielles ont augmenté,
+
+00:06:35.570 --> 00:06:37.190
+générant des centaines d'exécutions quotidiennes.
+
+00:06:37.710 --> 00:06:39.470
+La limitation a frappé, les approbations ont calé,
+
+00:06:39.470 --> 00:06:40.670
+et les accès des employés n'ont pas été créés.
+
+00:06:41.110 --> 00:06:42.930
+Les RH ont passé deux jours à créer des comptes manuellement.
+
+00:06:43.610 --> 00:06:45.770
+Les auditeurs ont qualifié cela d'échec de contrôle de processus.
+
+00:06:46.090 --> 00:06:48.270
+J'appellerais cela de la négligence prévisible déguisée en innovation.
+
+00:06:49.110 --> 00:06:50.830
+Et avant de vous précipiter pour blâmer la plateforme,
+
+00:06:51.030 --> 00:06:52.970
+n'oubliez pas que Power Automate est transparent sur ses limites
+
+00:06:52.970 --> 00:06:55.990
+si vous lisez réellement la documentation enterrée à 5 clics de profondeur.
+
+00:06:55.990 --> 00:06:59.030
+Le problème est que la plupart des prétendus développeurs citoyens
+
+00:06:59.030 --> 00:07:01.470
+supposent que le cloud fonctionne à la bonne volonté plutôt qu'au quota.
+
+00:07:01.810 --> 00:07:02.350
+Plutôt qu'au quota.
+
+00:07:02.930 --> 00:07:03.910
+Spoiler, ce n'est pas le cas.
+
+00:07:04.410 --> 00:07:06.190
+C'est le moment où les ingénieurs censés cesse de prétendre
+
+00:07:06.190 --> 00:07:08.690
+que Power Automate est un miracle sans serveur illimité.
+
+00:07:09.250 --> 00:07:11.030
+Ils arrêtent de bricoler des tentatives de répétition
+
+00:07:11.030 --> 00:07:12.910
+et commencent à explorer des plateformes conçues pour l'endurance.
+
+00:07:13.670 --> 00:07:16.530
+Car Power Automate n'a jamais été conçu pour traiter des tempêtes de données.
+
+00:07:17.270 --> 00:07:19.030
+Il a été conçu pour envoyer des parapluies quand ils brûnent.
+
+00:07:19.450 --> 00:07:21.850
+Pour les orages, vous avez besoin d'une automatisation de qualité industrielle.
+
+00:07:22.330 --> 00:07:24.450
+Un endroit où les flux ne supplient pas pour avoir de la pitié à grande échelle.
+
+00:07:24.450 --> 00:07:27.730
+Cela nous amène logiquement à la réponse des professionnels à tout ce chaos.
+
+00:07:28.250 --> 00:07:31.270
+L'outil n'est de la même architecture mais débarrassé de ces roulettes d'apprentissage.
+
+00:07:32.070 --> 00:07:34.670
+Quand vous aurez inhalé assez d'erreurs de limitation et de frais de licence,
+
+00:07:34.810 --> 00:07:36.170
+il sera temps de passer au niveau supérieur.
+
+00:07:37.490 --> 00:07:40.890
+Voici Logic Apps, là où l'automatisation se comporte enfin comme une infrastructure,
+
+00:07:41.150 --> 00:07:43.930
+plutôt comme un stagiaire surmené avec trop de connecteurs et pas assez d'air.
+
+00:07:46.040 --> 00:07:48.080
+Voici Logic Apps, l'alternative professionnelle.
+
+00:07:48.400 --> 00:07:49.140
+Ah !
+
+00:07:49.140 --> 00:07:52.120
+Parlons de la version pour adultes de Power Automate Azure Logic Apps.
+
+00:07:52.760 --> 00:07:54.680
+Même patrimoine génétique, mode de vie totalement différent.
+
+00:07:54.680 --> 00:07:58.000
+Par exemple, Power Automate est une nourriture réconfortante pour le développeur citoyen.
+
+00:07:58.500 --> 00:08:00.420
+Logic Apps est une source de protéines pour les vrais ingénieurs.
+
+00:08:01.180 --> 00:08:02.720
+C'est le même concepteur, le même moteur de workflow.
+
+00:08:03.120 --> 00:08:05.640
+Mais au lieu de cacher la complexité derrière des icônes conviviales,
+
+00:08:05.740 --> 00:08:08.480
+il vous tend le volant et vous demande si vous savez vraiment conduire.
+
+00:08:09.440 --> 00:08:10.180
+Voici le contexte.
+
+00:08:10.340 --> 00:08:12.400
+Les deux services reposent sur le moteur de workflow Azure.
+
+00:08:12.960 --> 00:08:14.120
+La différence réside dans le conditionnement.
+
+00:08:14.620 --> 00:08:16.660
+Power Automate fonctionne dans l'environnement gélien de Microsoft
+
+00:08:16.660 --> 00:08:20.500
+avec des réglages limités, une limitation fixe et une interface enrobée de sucre.
+
+00:08:20.500 --> 00:08:23.520
+Logic Apps retire les jouets et expose le moteur brut.
+
+00:08:24.320 --> 00:08:26.780
+Vous pouvez définir des déclencheurs, des paramètres, des tentatives,
+
+00:08:26.860 --> 00:08:29.280
+la gestion des erreurs et la surveillance avec une précision chirurgicale.
+
+00:08:29.980 --> 00:08:31.660
+C'est comme réaliser que le bac à sable de Power Automate
+
+00:08:31.660 --> 00:08:33.460
+n'était qu'un coin clôturé d'azur depuis le début.
+
+00:08:34.240 --> 00:08:37.340
+Dans Power Automate, vos flux vivent et meurent dans un conteneur opaque.
+
+00:08:37.880 --> 00:08:38.200
+Opaque.
+
+00:08:38.200 --> 00:08:39.880
+Vous ne pouvez pas voir ce qui se passe sous le capot
+
+00:08:39.880 --> 00:08:41.740
+sauf via l'écran d'historique des exécutions,
+
+00:08:41.980 --> 00:08:43.700
+lourd qui se met à jour avec 5 minutes de retard
+
+00:08:43.700 --> 00:08:46.060
+et offre la profondeur d'enquête d'un biscuit chinois, chinois.
+
+00:08:46.700 --> 00:08:48.840
+Logic Apps, en revanche, vous confie Application Insights,
+
+00:08:48.940 --> 00:08:51.020
+un télescope de diagnostics avec des journaux interrogeables,
+
+00:08:51.260 --> 00:08:53.620
+des métriques de performance et des règles d'alerte.
+
+00:08:54.060 --> 00:08:55.080
+C'est de l'observabilité pour les adultes.
+
+00:08:55.520 --> 00:08:57.940
+Le parallélisme, Logic Apps, le traite comme un droit fondamental.
+
+00:08:58.480 --> 00:08:59.480
+Vous pouvez ramifier les branches,
+
+00:08:59.820 --> 00:09:01.240
+mettre à l'échelle les exécutions indépendamment
+
+00:09:01.240 --> 00:09:03.100
+et assembler des modèles d'orchestration complexes
+
+00:09:03.100 --> 00:09:04.600
+sans déclencher de limites de flux arbitraires.
+
+00:09:04.600 --> 00:09:08.060
+Dans Power Automate, la concurrence ressemble à de la contrebande.
+
+00:09:08.440 --> 00:09:09.940
+Le genre de fonctionnalité que vous débloquez seulement
+
+00:09:09.940 --> 00:09:11.600
+après 3 négociations de licence et une prière.
+
+00:09:12.700 --> 00:09:14.640
+Et oui, Logic Apps s'intègre au même connecteur,
+
+00:09:14.760 --> 00:09:17.260
+SharePoint, Outlook, Dataverse et même aux API personnalisés
+
+00:09:17.260 --> 00:09:19.360
+mais sans la couche de surréance grand public au milieu.
+
+00:09:21.000 --> 00:09:22.540
+Là où Power Automate s'interrompt discrètement
+
+00:09:22.540 --> 00:09:23.540
+et réessaye pour se protéger,
+
+00:09:23.620 --> 00:09:25.680
+Logic Apps s'exécute exactement comme vous l'avez instruit.
+
+00:09:26.360 --> 00:09:27.960
+En cas d'échec, vous pouvez rediriger l'erreur,
+
+00:09:28.040 --> 00:09:29.780
+la traiter ou l'envoyer vers une destination productive
+
+00:09:29.780 --> 00:09:31.260
+plutôt que de boucler sur une ambiguïté polie.
+
+00:09:31.940 --> 00:09:33.080
+Voici une métaphore d'ingénierie,
+
+00:09:33.080 --> 00:09:34.860
+puisque cela semble aider certains publics.
+
+00:09:35.320 --> 00:09:37.400
+Power Automate est la version Ikea de l'intégration.
+
+00:09:38.100 --> 00:09:39.280
+C'est convivial, accessible
+
+00:09:39.280 --> 00:09:41.140
+et ne nécessite que quelques jurons pour l'assemblage.
+
+00:09:41.960 --> 00:09:43.460
+Logic Apps est commandé une création à un menucier.
+
+00:09:43.940 --> 00:09:44.940
+Vous obtenez toujours une table,
+
+00:09:45.200 --> 00:09:46.880
+mais vous choisissez le bois, l'épaisseur,
+
+00:09:47.060 --> 00:09:48.420
+la finition et la géométrie des pieds.
+
+00:09:48.940 --> 00:09:50.300
+L'une dont vous vantez d'avoir construit,
+
+00:09:50.500 --> 00:09:51.780
+l'autre devient un meuble qui dure.
+
+00:09:52.720 --> 00:09:54.940
+Certains craignent qu'Azure signifie plus complexe.
+
+00:09:55.720 --> 00:09:56.160
+Ce n'est pas le cas,
+
+00:09:56.400 --> 00:09:57.440
+à condition que vous puissiez supporter
+
+00:09:57.440 --> 00:09:58.920
+une interface utilisateur avec moins d'émojis.
+
+00:09:59.800 --> 00:10:01.380
+Le concepteur de Logic Apps s'ouvre directement
+
+00:10:01.380 --> 00:10:03.740
+dans le portail Azure et semble étrangement familier.
+
+00:10:04.400 --> 00:10:06.320
+Même forme, même ligne reliant les actions.
+
+00:10:07.220 --> 00:10:08.800
+La différence est que chaque propriété,
+
+00:10:08.980 --> 00:10:09.940
+chaque option d'exécution,
+
+00:10:10.100 --> 00:10:12.300
+chaque paramètre est ouvert à l'inspection.
+
+00:10:13.560 --> 00:10:15.360
+Vous pouvez le versionner avec un contrôle de code source,
+
+00:10:15.580 --> 00:10:16.600
+le déployer via des pipelines
+
+00:10:16.600 --> 00:10:18.380
+et revenir en arrière comme des professionnels civilisés.
+
+00:10:18.760 --> 00:10:19.880
+Le coût est une autre révélation magique.
+
+00:10:20.380 --> 00:10:22.380
+Power Automate, facture par utilisateur ou par flux,
+
+00:10:22.620 --> 00:10:24.460
+ce qui signifie que vous louez de la commodité au mois.
+
+00:10:24.460 --> 00:10:26.960
+Logic Apps fonctionne sur un modèle de consommation.
+
+00:10:27.340 --> 00:10:28.940
+Vous ne payez que lorsque votre flux s'exécute
+
+00:10:28.940 --> 00:10:30.660
+et uniquement pour les composants que vous utilisez.
+
+00:10:31.140 --> 00:10:32.880
+Si personne ne déclenche le processus durant 7 heures,
+
+00:10:32.960 --> 00:10:33.760
+le coût est égal à 0.
+
+00:10:34.580 --> 00:10:35.800
+Imaginez expliquer cela aux finances
+
+00:10:35.800 --> 00:10:36.740
+et voir leurs yeux s'illuminer
+
+00:10:36.740 --> 00:10:38.340
+parce que quelqu'un a enfin rendu
+
+00:10:38.340 --> 00:10:40.300
+les dépenses d'automatisation prévisibles.
+
+00:10:40.660 --> 00:10:40.800
+One.
+
+00:10:41.440 --> 00:10:42.960
+L'avantage global, cependant, n'est pas l'argent.
+
+00:10:43.360 --> 00:10:43.960
+C'est la gouvernance.
+
+00:10:44.180 --> 00:10:45.160
+Dans les environnements d'entreprise,
+
+00:10:45.240 --> 00:10:46.840
+les équipes de conformité veulent de la visibilité.
+
+00:10:47.180 --> 00:10:47.960
+Qu'est-ce qu'à déployer, quoi ?
+
+00:10:47.960 --> 00:10:48.800
+Où circulent les données ?
+
+00:10:48.800 --> 00:10:49.800
+Comment les échecs sont mis ?
+
+00:10:49.800 --> 00:10:52.640
+En évidence, Power Automate cache ce monde
+
+00:10:52.640 --> 00:10:53.960
+derrière des hyperliens intitulés
+
+00:10:53.960 --> 00:10:56.300
+« Détail de l'activité ».
+
+00:10:56.300 --> 00:10:58.640
+Logic Apps s'aligne sur les normes d'architecture d'entreprise,
+
+00:10:59.000 --> 00:10:59.740
+les groupes de ressources,
+
+00:10:59.820 --> 00:11:01.220
+les identités gérées, l'isolation réseau,
+
+00:11:01.280 --> 00:11:02.560
+le contrôle d'accès basé sur les rôles.
+
+00:11:03.300 --> 00:11:05.420
+En clair, l'informatique réelle peut surveiller sans deviner.
+
+00:11:06.280 --> 00:11:07.200
+Si vous demandez qu'en changer,
+
+00:11:07.440 --> 00:11:08.820
+voici la liste de contrôle diagnostique.
+
+00:11:09.640 --> 00:11:11.060
+Lorsqu'un flux dépasse 20 conditions,
+
+00:11:11.560 --> 00:11:13.080
+se déclenche à partir de sources multiples,
+
+00:11:13.300 --> 00:11:14.620
+gère des appels de services externes
+
+00:11:14.620 --> 00:11:15.880
+ou touche des dépôts de données sensibles,
+
+00:11:16.200 --> 00:11:17.620
+vous avez dépassé le stade du passe-temps.
+
+00:11:18.340 --> 00:11:19.100
+Migrez immédiatement.
+
+00:11:19.480 --> 00:11:21.300
+Exporter la définition depuis Power Automate,
+
+00:11:21.560 --> 00:11:23.000
+importez-la dans Logic Apps et laissez Azure,
+
+00:11:23.140 --> 00:11:23.940
+gérer la mise à l'échelle.
+
+00:11:24.840 --> 00:11:26.580
+Ajoutez Application Insight pour la surveillance
+
+00:11:26.580 --> 00:11:28.580
+et vous disposez soudainement d'un système auditable
+
+00:11:28.580 --> 00:11:30.440
+et maintenable au lieu d'une expérience imprévisible.
+
+00:11:31.460 --> 00:11:32.420
+Un rapide aperçu du monde ray.
+
+00:11:32.820 --> 00:11:34.040
+Une entreprise de services financiers
+
+00:11:34.040 --> 00:11:35.620
+a déplacé son traitement par l'eau nocturne
+
+00:11:35.620 --> 00:11:37.040
+des transactions initialement chancelant
+
+00:11:37.040 --> 00:11:38.380
+sur Power Automate vers Logic Apps.
+
+00:11:38.920 --> 00:11:40.200
+Même logique, mais désormais orchestrée
+
+00:11:40.200 --> 00:11:42.060
+par des pipelines parallèles avec des politiques de race.
+
+00:11:42.800 --> 00:11:44.720
+Le temps de traitement est passé de 90 minutes
+
+00:11:44.720 --> 00:11:46.640
+à moins de 10 et le coût a chuté de 30%.
+
+00:11:46.640 --> 00:11:49.100
+L'ingénieur responsable a déclaré
+
+00:11:49.100 --> 00:11:52.220
+« On dirait que Power Automate est enfin devenu adulte. »
+
+00:11:52.220 --> 00:11:54.700
+Donc, oui, Logic Apps est essentiellement Power Automate
+
+00:11:54.700 --> 00:11:55.900
+qui a grandi à trouver un vrai travail,
+
+00:11:56.040 --> 00:11:57.020
+a appris la discipline budgétaire
+
+00:11:57.020 --> 00:11:58.460
+et a arrêté de planter aux heures de pointe.
+
+00:11:58.460 --> 00:12:00.760
+Il est conçu pour une charge de travail soutenue,
+
+00:12:01.000 --> 00:12:02.920
+une exécution fiable et une facturation transparente.
+
+00:12:03.560 --> 00:12:04.880
+Une fois que vous faites l'expérience de ce contrôle,
+
+00:12:04.960 --> 00:12:06.540
+revenir à Power Automate a l'impression de coder
+
+00:12:06.540 --> 00:12:07.160
+avec des crayons de couleurs.
+
+00:12:07.520 --> 00:12:08.800
+Bien sûr, tout le monde ne veut pas abandonner
+
+00:12:08.800 --> 00:12:10.220
+totalement cet environnement convivial.
+
+00:12:11.280 --> 00:12:12.680
+Certains flux de travail bénéficient encore
+
+00:12:12.680 --> 00:12:13.800
+des offres de Power Automate,
+
+00:12:13.920 --> 00:12:15.580
+surtout lorsque les utilisateurs doivent déclencher
+
+00:12:15.580 --> 00:12:17.380
+des actions directement depuis Microsoft Teams
+
+00:12:17.380 --> 00:12:17.900
+ou SharePoint.
+
+00:12:18.660 --> 00:12:19.200
+C'est très bien.
+
+00:12:20.000 --> 00:12:21.060
+L'approche mature n'est pas l'exil,
+
+00:12:21.180 --> 00:12:22.380
+c'est la division du travail.
+
+00:12:23.380 --> 00:12:25.760
+Utilisez Power Automate pour les points d'interaction humaines
+
+00:12:25.760 --> 00:12:27.960
+et Logic Apps pour le gros du travail.
+
+00:12:28.820 --> 00:12:30.480
+En d'autres termes, gardez le petit pour les boutons
+
+00:12:30.480 --> 00:12:31.780
+et appelez l'adulte pour la machinerie.
+
+00:12:32.580 --> 00:12:34.420
+C'est exactement là que nous allons vers ce modèle hybride
+
+00:12:34.420 --> 00:12:35.820
+qui vous permet de conserver la simplicité
+
+00:12:35.820 --> 00:12:37.540
+tout en atteignant enfin l'échelle.
+
+00:12:38.260 --> 00:12:39.320
+Car les vrais professionnels savent
+
+00:12:39.320 --> 00:12:40.760
+qu'on ne peut pas automatiser la maturité
+
+00:12:40.760 --> 00:12:42.080
+mais qu'on peut certainement l'architecturer.
+
+00:12:43.020 --> 00:12:44.200
+Un modèle hybride pour utilisateurs avancés.
+
+00:12:44.760 --> 00:12:46.740
+C'est ici que la diplomatie rencontre l'ingénierie
+
+00:12:46.740 --> 00:12:48.040
+car s'il est satisfaisant de dire
+
+00:12:48.040 --> 00:12:49.220
+« to-mettre dans Logic Apps »,
+
+00:12:49.220 --> 00:12:50.900
+le monde réel est rempli d'utilisateurs
+
+00:12:50.900 --> 00:12:52.040
+qui adorent leurs petits flux bleus.
+
+00:12:52.740 --> 00:12:54.160
+Ils cliquent sur des boutons dans Teams,
+
+00:12:54.160 --> 00:12:55.720
+approuvent des demandes sur leur téléphone
+
+00:12:55.720 --> 00:12:56.720
+et se sentent autonomes.
+
+00:12:57.120 --> 00:12:58.580
+Vous ne pouvez pas supprimer tout cela du jour au lendemain
+
+00:12:58.580 --> 00:12:59.460
+sans provoquer une mutinerie.
+
+00:12:59.760 --> 00:13:01.340
+L'approche intelligente, c'est l'architecture hybride.
+
+00:13:01.920 --> 00:13:02.920
+Power Automate en façade,
+
+00:13:03.140 --> 00:13:05.040
+Logic Apps pour assurer la puissance en arrière-plan.
+
+00:13:05.700 --> 00:13:06.980
+Vous voyez, c'est l'air comme une fusée à deux étages.
+
+00:13:07.440 --> 00:13:08.900
+Le premier étage est Power Automate,
+
+00:13:09.200 --> 00:13:10.360
+léger, rapide, jetable,
+
+00:13:10.440 --> 00:13:11.400
+qui capture le déclencheur,
+
+00:13:11.460 --> 00:13:12.160
+l'appui sur le bouton,
+
+00:13:12.260 --> 00:13:13.040
+la soumission de formulaire,
+
+00:13:13.100 --> 00:13:13.960
+la mise à jour d'enregistrement,
+
+00:13:14.100 --> 00:13:14.900
+la mise à jour d'enregistrement.
+
+00:13:15.500 --> 00:13:16.780
+Ensuite, au lieu de traîner personnellement
+
+00:13:16.780 --> 00:13:18.260
+toutes ces données dans un labyrinthe de connecteurs,
+
+00:13:18.260 --> 00:13:20.020
+il transmet la charge utile à Logic Apps
+
+00:13:20.020 --> 00:13:20.980
+via un appel HTTP.
+
+00:13:22.140 --> 00:13:23.120
+Logic Apps prend le relais,
+
+00:13:23.260 --> 00:13:24.340
+traite la charge de travail lourde
+
+00:13:24.340 --> 00:13:25.920
+et fait un rapport une fois le travail terminé.
+
+00:13:26.520 --> 00:13:28.000
+Séparation des responsabilités réussies.
+
+00:13:28.580 --> 00:13:30.120
+L'avantage immédiat est prévisible.
+
+00:13:30.840 --> 00:13:31.880
+La familiarité de l'utilisateur
+
+00:13:31.880 --> 00:13:33.340
+rencontre l'exécution évolutive.
+
+00:13:34.740 --> 00:13:35.980
+L'employé moyen clique toujours
+
+00:13:35.980 --> 00:13:37.820
+sur son flux de demandes d'accès familier,
+
+00:13:38.220 --> 00:13:40.200
+ignorant totalement qu'Azure vient de soulever
+
+00:13:40.200 --> 00:13:42.120
+100 fois la charge en coulisses.
+
+00:13:43.080 --> 00:13:44.020
+L'informatique, pendant ce temps,
+
+00:13:44.220 --> 00:13:45.780
+gagne en suivi en gouvernance et en sérénité.
+
+00:13:46.120 --> 00:13:46.680
+Tout le monde y gagne,
+
+00:13:46.680 --> 00:13:48.660
+sauf celui qui insiste pour garder un labyrinthe
+
+00:13:48.660 --> 00:13:49.680
+automatisé monolithique
+
+00:13:49.680 --> 00:13:51.060
+sous prétexte qu'il allait organiser.
+
+00:13:52.460 --> 00:13:53.520
+Examinons un modèle concret.
+
+00:13:54.240 --> 00:13:55.500
+Flux Power Automate se déclenche
+
+00:13:55.500 --> 00:13:56.700
+lorsqu'un nouvel élément SharePoint
+
+00:13:56.700 --> 00:13:57.760
+est ajouté pour approbation.
+
+00:13:58.420 --> 00:14:00.020
+Au lieu de boucler sur chaque fichier associé,
+
+00:14:00.180 --> 00:14:01.340
+il envoie une charge utile structurée,
+
+00:14:01.480 --> 00:14:02.700
+des métadonnées, des édits de fichiers
+
+00:14:02.700 --> 00:14:03.640
+et les détails de la demande
+
+00:14:03.640 --> 00:14:04.800
+à un point de terminaison Logic Apps
+
+00:14:04.800 --> 00:14:06.480
+sécurisé par Azure Active Directory IA,
+
+00:14:06.680 --> 00:14:07.460
+sécurisé par Rectorium.
+
+00:14:07.840 --> 00:14:08.940
+Logic Apps prend le relais,
+
+00:14:09.500 --> 00:14:10.500
+lance des branches parallèles,
+
+00:14:10.720 --> 00:14:11.840
+traite des centaines d'approbations,
+
+00:14:12.200 --> 00:14:12.960
+met à jour Dataverse
+
+00:14:12.960 --> 00:14:14.520
+et renvoie des notifications résumées
+
+00:14:14.520 --> 00:14:16.260
+à Power Automate pour l'alerte finale.
+
+00:14:17.340 --> 00:14:18.940
+L'utilisateur voit un message de fin propre
+
+00:14:18.940 --> 00:14:19.640
+pendant que l'arrière-plan
+
+00:14:19.640 --> 00:14:21.140
+exécute une chorégraphie industrielle.
+
+00:14:21.820 --> 00:14:22.720
+Cette approche réduit également
+
+00:14:22.720 --> 00:14:23.640
+les drames liées aux licences.
+
+00:14:23.960 --> 00:14:24.500
+Souvenez-vous du bazar
+
+00:14:24.500 --> 00:14:25.520
+entre le par-utilisateur et le pas.
+
+00:14:25.840 --> 00:14:27.240
+En déportant le calcul vers Logic Apps,
+
+00:14:27.460 --> 00:14:28.300
+vous transférez efficacement
+
+00:14:28.300 --> 00:14:28.840
+les coûts de traitement
+
+00:14:28.840 --> 00:14:30.440
+vers la tarification et la consommation d'Azure.
+
+00:14:31.240 --> 00:14:32.680
+Cela transforme l'équation imprévisible
+
+00:14:32.680 --> 00:14:34.040
+des licences en un coût mesurable
+
+00:14:34.040 --> 00:14:34.840
+par exécution.
+
+00:14:35.960 --> 00:14:37.240
+Le service financier pourrait même applaudir,
+
+00:14:37.360 --> 00:14:37.920
+bien que discrètement,
+
+00:14:38.040 --> 00:14:39.040
+car la finance n'exprime pas d'émotion.
+
+00:14:39.240 --> 00:14:40.300
+Le suivi devient aussi plus propre.
+
+00:14:40.620 --> 00:14:41.820
+Power Automate reste esthétique
+
+00:14:41.820 --> 00:14:42.500
+pour les utilisateurs.
+
+00:14:42.740 --> 00:14:43.740
+Tandis que Logic Apps se connecte
+
+00:14:43.740 --> 00:14:44.400
+à Application Sites
+
+00:14:44.400 --> 00:14:45.500
+pour la télémétrie opérationnelle.
+
+00:14:45.660 --> 00:14:46.620
+Pour la télémétrie opérationnelle.
+
+00:14:46.720 --> 00:14:47.640
+Vous pouvez suivre la latence,
+
+00:14:47.720 --> 00:14:48.960
+les tentatives de nouvelles tentatives
+
+00:14:48.960 --> 00:14:49.580
+ou les taux d'échec
+
+00:14:49.580 --> 00:14:50.600
+sur l'ensemble des environnements.
+
+00:14:51.320 --> 00:14:52.480
+C'est comme jeter un oeil dans le cerveau
+
+00:14:52.480 --> 00:14:53.520
+plutôt que de simplement vérifier
+
+00:14:53.520 --> 00:14:54.340
+si la lumière est allumée.
+
+00:14:55.080 --> 00:14:55.840
+En matière de sécurité,
+
+00:14:55.960 --> 00:14:56.900
+il y a de l'élégance dans la séparation.
+
+00:14:57.940 --> 00:14:59.460
+Power Automate utilise des connecteurs
+
+00:14:59.460 --> 00:15:00.460
+basés sur des comptes personnels
+
+00:15:00.460 --> 00:15:00.980
+ou de services,
+
+00:15:01.100 --> 00:15:01.980
+ce qui convient aux tâches bénignes,
+
+00:15:02.080 --> 00:15:02.500
+mais est risqué
+
+00:15:02.500 --> 00:15:03.540
+pour les opérations système.
+
+00:15:04.700 --> 00:15:05.820
+Logic Apps, en revanche,
+
+00:15:05.820 --> 00:15:07.040
+tire partie de l'identité gérée
+
+00:15:11.820 --> 00:15:13.080
+prise liée à l'expiration de mot de passe.
+
+00:15:13.720 --> 00:15:14.640
+Correctement configuré,
+
+00:15:14.840 --> 00:15:16.140
+le lien hybride agit comme un transfert
+
+00:15:16.140 --> 00:15:17.440
+sécurisé entre un guichet convivial
+
+00:15:17.440 --> 00:15:18.400
+et une salle serveur verrouillée.
+
+00:15:18.820 --> 00:15:19.920
+Bien sûr, cela exige de la discipline.
+
+00:15:20.260 --> 00:15:21.180
+On ne peut pas simplement insérer
+
+00:15:21.180 --> 00:15:21.980
+un appel Logic App
+
+00:15:21.980 --> 00:15:22.700
+dans un flux au hasard
+
+00:15:22.700 --> 00:15:23.420
+et crier victoire.
+
+00:15:24.460 --> 00:15:25.640
+Il faut des modèles standardisés,
+
+00:15:25.940 --> 00:15:26.800
+des conventions de nommage,
+
+00:15:26.880 --> 00:15:27.680
+des variables d'environnement
+
+00:15:27.680 --> 00:15:28.880
+et une documentation d'architecture
+
+00:15:28.880 --> 00:15:29.920
+lisible pour vos successeurs.
+
+00:15:31.440 --> 00:15:32.520
+Sinon, votre service se retrouve
+
+00:15:32.520 --> 00:15:33.560
+avec 50 appels HTTP,
+
+00:15:33.900 --> 00:15:34.420
+mal documentés,
+
+00:15:34.480 --> 00:15:35.080
+traversant les tenants
+
+00:15:35.080 --> 00:15:36.040
+comme des câbles enchevêtrés.
+
+00:15:36.720 --> 00:15:37.620
+Les professionnels conçoivent
+
+00:15:37.620 --> 00:15:38.080
+l'intégration
+
+00:15:38.080 --> 00:15:39.140
+comme une installation électrique,
+
+00:15:39.140 --> 00:15:40.300
+pas comme un accident en devenir.
+
+00:15:41.160 --> 00:15:41.580
+Et s'il vous plaît,
+
+00:15:41.680 --> 00:15:42.920
+arrêtez d'empiler les blocs de conditions
+
+00:15:42.920 --> 00:15:43.780
+dans Power Automate
+
+00:15:43.780 --> 00:15:44.480
+comme des poupées russes.
+
+00:15:44.900 --> 00:15:45.680
+Si votre flux comporte
+
+00:15:45.680 --> 00:15:46.360
+des branches imbriquées
+
+00:15:46.360 --> 00:15:46.920
+plus profondes
+
+00:15:46.920 --> 00:15:47.820
+que la hauteur de votre écran,
+
+00:15:47.900 --> 00:15:48.600
+vous avez franchi une limite.
+
+00:15:49.240 --> 00:15:49.920
+Extriez la logique,
+
+00:15:50.160 --> 00:15:50.780
+codez-la proprement
+
+00:15:50.780 --> 00:15:51.340
+dans Logic Apps
+
+00:15:51.340 --> 00:15:52.360
+et gardez Power Automate
+
+00:15:52.360 --> 00:15:53.000
+pour ce qui fait de mieux,
+
+00:15:53.180 --> 00:15:54.360
+l'interaction humaine.
+
+00:15:55.000 --> 00:15:55.640
+La suringénierie
+
+00:15:55.640 --> 00:15:56.280
+d'un Power Automate
+
+00:15:56.280 --> 00:15:57.020
+n'est pas ingénieuse,
+
+00:15:57.180 --> 00:15:57.860
+elle est masochiste.
+
+00:15:58.660 --> 00:15:59.180
+Le modèle hybride
+
+00:15:59.180 --> 00:16:00.080
+est le compromis des adultes,
+
+00:16:00.200 --> 00:16:01.480
+le confort utilisateur en façade,
+
+00:16:01.680 --> 00:16:03.020
+l'intégrité structurelle en coulisses.
+
+00:16:03.760 --> 00:16:04.320
+Alors la prochaine fois
+
+00:16:04.320 --> 00:16:05.040
+que quelqu'un insistera
+
+00:16:05.040 --> 00:16:06.000
+sur le fait que Power Automate
+
+00:16:06.000 --> 00:16:06.440
+peut tout gérer,
+
+00:16:06.780 --> 00:16:07.380
+ne discutez pas.
+
+00:16:08.240 --> 00:16:09.180
+Souriez en connaissance de cause
+
+00:16:09.180 --> 00:16:10.240
+et envoyez-lui un plan de migration.
+
+00:16:11.120 --> 00:16:12.000
+Ils vous remercieront plus tard,
+
+00:16:12.220 --> 00:16:12.860
+généralement au moment
+
+00:16:12.860 --> 00:16:13.520
+où leur dixième boucle
+
+00:16:13.520 --> 00:16:14.240
+de réessais échouera
+
+00:16:14.240 --> 00:16:14.660
+et que vous.

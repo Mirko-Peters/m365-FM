@@ -1,0 +1,2902 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:02.360
+Votre problème copilote n'est pas vraiment un problème de fonctionnalité.
+
+00:00:02.640 --> 00:00:04.080
+C'est un problème de confiance dans le modèle qu'il sous-tend.
+
+00:00:04.420 --> 00:00:06.760
+La plupart des équipes pensent encore que la sécurité réside dans les invites,
+
+00:00:06.860 --> 00:00:08.460
+les autorisations et quelques filtres en périphérie.
+
+00:00:08.980 --> 00:00:11.080
+Mais voilà, les attaquants n'ont pas besoin de contourner votre invite,
+
+00:00:11.160 --> 00:00:12.920
+ils ont juste besoin d'empoisonner le contexte qui l'entoure,
+
+00:00:13.220 --> 00:00:14.060
+et c'est là que les choses se gâtent.
+
+00:00:14.380 --> 00:00:16.540
+Les filtres de base peuvent détecter des éléments indésirables évidents,
+
+00:00:16.720 --> 00:00:18.380
+mais ils ne voient pas la charge utile cachée dans un email,
+
+00:00:18.520 --> 00:00:19.900
+un fichier SharePoint ou un champ de formulaire.
+
+00:00:20.300 --> 00:00:22.080
+Ce contenu récupéré reste là, tranquillement,
+
+00:00:22.520 --> 00:00:25.140
+jusqu'à ce que copilote l'intègre et le traite comme une instruction directe.
+
+00:00:25.140 --> 00:00:28.920
+Nous avons déjà vu des signes avant-coureurs avec la fuite Echo dans Microsoft 365 Copilot
+
+00:00:28.920 --> 00:00:30.320
+et la fuite Share dans Copilot Studio,
+
+00:00:30.940 --> 00:00:32.920
+et la réalité est que les correctifs n'ont pas mis fin à ce schéma.
+
+00:00:33.640 --> 00:00:36.380
+Étant donné que Copilot peut rechercher, résumer et agir dans l'ensemble
+
+00:00:36.380 --> 00:00:38.260
+votre environnement Microsoft 365,
+
+00:00:38.400 --> 00:00:40.440
+un mauvais chemin d'instruction peut se propager rapidement.
+
+00:00:41.040 --> 00:00:43.120
+Il ne s'agit donc pas d'ajouter un autre tableau de bord à votre pile,
+
+00:00:43.680 --> 00:00:45.900
+mais de placer Azure Logic App sur le chemin pour inspecter, noter
+
+00:00:45.900 --> 00:00:48.540
+et bloquer les charges utiles malveillantes avant même que Copilot ne s'exécute.
+
+00:00:49.300 --> 00:00:51.380
+Le véritable danger réside dans l'architecture, pas dans la vie.
+
+00:00:51.380 --> 00:00:54.000
+L'ancien modèle part du principe que vous pouvez assurer la sécurité du système
+
+00:00:54.000 --> 00:00:55.380
+en écrivant de meilleures instructions autour du modèle.
+
+00:00:55.720 --> 00:00:57.920
+Vous lui donnez une invite système forte, vous ajoutez des délimiteurs
+
+00:00:57.920 --> 00:00:59.700
+et vous dites aux utilisateurs ce qu'ils ne doivent pas faire.
+
+00:01:00.320 --> 00:01:02.460
+Cela semble logique sur le papier, mais en réalité,
+
+00:01:02.880 --> 00:01:05.940
+le modèle n'applique pas de limites de confiance comme le ferait un système de sécurité,
+
+00:01:06.400 --> 00:01:08.040
+car il lit le langage dans un canal partagé
+
+00:01:08.040 --> 00:01:10.100
+où les instructions et les données se disputent l'attention.
+
+00:01:10.780 --> 00:01:11.720
+Cette hypothèse est la faille.
+
+00:01:12.360 --> 00:01:14.200
+Si un modèle ne peut pas faire la différence de manière fiable
+
+00:01:14.200 --> 00:01:15.980
+entre un utilisateur demandant de l'aide et un document
+
+00:01:15.980 --> 00:01:18.220
+en lui demandant discrètement d'ignorer les instructions précédentes,
+
+00:01:18.220 --> 00:01:21.180
+alors le point de contrôle ne peut pas se limiter à la couche d'invite.
+
+00:01:21.180 --> 00:01:23.980
+Vous essayez de sécuriser le comportement à la périphérie
+
+00:01:23.980 --> 00:01:26.880
+tandis que le risque réel réside dans le flux de contexte entrant dans le modèle.
+
+00:01:27.700 --> 00:01:28.940
+Cela fait-il pour de nombreuses équipes
+
+00:01:28.940 --> 00:01:31.180
+lorsque les charges de travail copilotent, nécessitant beaucoup de récupération.
+
+00:01:31.540 --> 00:01:33.860
+Dès que Copilot commence à extraire des emails, des fichiers,
+
+00:01:33.940 --> 00:01:35.380
+l'historique des discussions de Microsoft Graph,
+
+00:01:35.460 --> 00:01:37.040
+la surface d'attaque change complètement.
+
+00:01:37.700 --> 00:01:39.420
+Vous ne vous contentez plus de sécuriser une conversation,
+
+00:01:39.560 --> 00:01:41.820
+vous sécurisez un flux en direct d'entrée de confiance mixte.
+
+00:01:42.500 --> 00:01:44.480
+Et à un niveau plus bas, Copilot augmente sa portée.
+
+00:01:44.740 --> 00:01:46.480
+Il ne se contente pas de répondre aux questions,
+
+00:01:46.600 --> 00:01:48.320
+il récupère, résume et suit les références.
+
+00:01:48.320 --> 00:01:51.340
+Dans certaines configurations, il peut même déclencher des outils ou des travails.
+
+00:01:52.060 --> 00:01:54.060
+Ainsi, lorsque du contenu non fiable entre dans cette chaîne,
+
+00:01:54.380 --> 00:01:56.600
+le modèle peut transmettre cette influence à des actions sensibles.
+
+00:01:57.220 --> 00:01:59.340
+C'est pourquoi l'injection indirecte d'invite est si importante à l'heure actuelle.
+
+00:02:00.180 --> 00:02:01.120
+Dans les systèmes de production,
+
+00:02:01.240 --> 00:02:02.660
+l'attaque courante n'est pas toujours un utilisateur
+
+00:02:02.660 --> 00:02:04.220
+qui tape ignorer vos règles dans la boîte de discussion.
+
+00:02:04.960 --> 00:02:06.980
+La version la plus dangereuse se trouve dans le contenu récupéré
+
+00:02:06.980 --> 00:02:09.320
+souvent des semaines avant même que quiconque ne remarque sa présence.
+
+00:02:10.320 --> 00:02:12.480
+Un document empoisonné, un email fabriqué
+
+00:02:12.480 --> 00:02:14.820
+ou une entrée de formulaire peuvent sembler inoffensives pour les humains,
+
+00:02:14.920 --> 00:02:17.320
+mais ils contiennent un langage d'instruction visant directement le modèle.
+
+00:02:17.320 --> 00:02:20.740
+Plus tard, copilote récupère ce contenu en tant que contexte pertinent.
+
+00:02:21.180 --> 00:02:23.860
+Le mélange avec du matériel fiable et le modèle suit la mauvaise chose.
+
+00:02:24.280 --> 00:02:26.480
+La chaîne d'attaque est simple, et c'est ce qui la rend dangereuse.
+
+00:02:27.160 --> 00:02:30.180
+Tout d'abord, l'attaquant place du contenu à un endroit auquel copilote peut accéder.
+
+00:02:30.880 --> 00:02:33.020
+Ultérieurement, puis la récupération amène ce contenu dans la session,
+
+00:02:33.120 --> 00:02:35.800
+puis le modèle traite la charge utile comme une instruction plutôt que comme des données.
+
+00:02:36.360 --> 00:02:38.840
+Après cela, il peut commencer à organiser des informations sensibles,
+
+00:02:38.940 --> 00:02:41.920
+à façonner des réponses ou à pousser des données vers un chemin d'exfiltration via des liens
+
+00:02:41.920 --> 00:02:43.800
+ou l'utilisation de l'outil via des liens.
+
+00:02:43.800 --> 00:02:46.260
+Ainsi, pour les dirigeants, il ne s'agit pas seulement d'hygiène de l'IA,
+
+00:02:46.360 --> 00:02:48.540
+mais d'un contrôle d'exécution directement lié à la gouvernance des accès.
+
+00:02:49.300 --> 00:02:51.200
+Si copilote a une large portée sur le locataire
+
+00:02:51.200 --> 00:02:54.040
+et que le modèle consomme un contexte de confiance mixte sans séparation stricte,
+
+00:02:54.180 --> 00:02:57.120
+votre modèle de sécurité doit alors tenir compte de ce qui entre dans le flux,
+
+00:02:57.300 --> 00:02:58.540
+avant les flux, avant l'exécution.
+
+00:02:59.040 --> 00:03:00.360
+Une fois que vous voyez cela, la correction change également.
+
+00:03:00.740 --> 00:03:02.480
+Vous cessez de vous focaliser sur des invites parfaites,
+
+00:03:02.720 --> 00:03:04.700
+et vous commencez à placer l'application là où le contexte évolue.
+
+00:03:05.700 --> 00:03:07.740
+Pourquoi les défenses de base échouent en production ?
+
+00:03:07.740 --> 00:03:09.880
+La plupart des équipes font une erreur fondamentale dès le début.
+
+00:03:10.520 --> 00:03:12.740
+Elles supposent que les contrôles de sécurité qu'elles utilisent depuis des années
+
+00:03:12.740 --> 00:03:15.100
+dans le développement d'applications fonctionneront tout aussi bien pour Copilot.
+
+00:03:15.480 --> 00:03:18.120
+Ils écrivent une envie de système plus forte, enveloppent les entrées utilisateurs
+
+00:03:18.120 --> 00:03:20.440
+dans des caractères spéciaux et publient des directives pour les employés,
+
+00:03:20.520 --> 00:03:21.440
+puis ils se sentent en sécurité.
+
+00:03:21.860 --> 00:03:24.700
+Ces étapes ne sont pas mauvaises, et je ne vous dirai pas d'arrêter de les suivre,
+
+00:03:24.860 --> 00:03:26.540
+mais elles ne créent pas de véritables limites de sécurité.
+
+00:03:26.860 --> 00:03:28.800
+Elles essaient simplement de persuader le modèle de bien se comporter,
+
+00:03:29.020 --> 00:03:31.200
+et en matière de sécurité, la persuasion n'est pas la même chose que l'application.
+
+00:03:31.620 --> 00:03:32.440
+C'est là que réside la lacune.
+
+00:03:32.440 --> 00:03:35.120
+Une envie de système indique au modèle ce que vous préférez faire,
+
+00:03:35.340 --> 00:03:37.320
+mais elle ne peut pas empêcher un fichier malveillant de rivaliser
+
+00:03:37.320 --> 00:03:40.340
+pour attirer l'attention du modèle une fois que ce fichier est inséré dans l'espace de travail.
+
+00:03:41.300 --> 00:03:43.440
+L'utilisation de délimiteurs peut aider à structurer le texte,
+
+00:03:43.520 --> 00:03:45.700
+mais elle ne donne pas au modèle un moyen de vérifier les habilitations de sécurité.
+
+00:03:46.200 --> 00:03:48.680
+Les directives pour les employés sont excellentes pour éviter les erreurs honnêtes,
+
+00:03:48.880 --> 00:03:50.920
+mais elles ne font absolument rien contre un document empoisonné
+
+00:03:50.920 --> 00:03:52.960
+ou une charge utile cachée se trouvant dans vos données récupérées.
+
+00:03:53.940 --> 00:03:55.300
+Le contrôle existe sous forme de suggestion,
+
+00:03:55.500 --> 00:03:57.320
+pas comme une règle stricte qui s'exécute lors de l'exécution.
+
+00:03:57.680 --> 00:03:58.800
+Rejax présente un problème similaire.
+
+00:03:58.800 --> 00:04:01.820
+C'est rapide et peu coûteux, il vaut donc la peine de l'utiliser comme un premier passage rapide.
+
+00:04:02.440 --> 00:04:04.720
+Si un utilisateur tape « Ignorer toutes les instructions précédentes »,
+
+00:04:04.720 --> 00:04:07.080
+votre système devrait détecter cela en quelques millisecondes.
+
+00:04:07.200 --> 00:04:09.040
+Vous pouvez également l'utiliser pour signaler des phrases évidentes
+
+00:04:09.040 --> 00:04:12.120
+de contrôlement de la confidentialité ou des caractères de style SQL dans vos arguments d'outils.
+
+00:04:12.700 --> 00:04:13.600
+Cette partie fonctionne bien,
+
+00:04:13.940 --> 00:04:16.100
+mais Rejax ne reconnaît que les modèles que vous avez déjà définis.
+
+00:04:16.460 --> 00:04:18.260
+Elle échoue donc lorsque la formulation change légèrement
+
+00:04:18.260 --> 00:04:20.620
+ou lorsque l'attaque est basée sur le sens plutôt que sur des mots spécifiques.
+
+00:04:21.200 --> 00:04:22.540
+C'est pourquoi vous avez besoin de couches de classificateurs.
+
+00:04:22.960 --> 00:04:24.980
+Azure AI Content Safety dispose de bouclés d'invites
+
+00:04:24.980 --> 00:04:27.320
+qui peuvent détecter les attaques par injection directe et indirecte.
+
+00:04:27.320 --> 00:04:29.880
+Dans une application logique, vous pouvez appeler une API
+
+00:04:29.880 --> 00:04:31.720
+pour vérifier l'invite avant que le modèle ne la voie,
+
+00:04:31.820 --> 00:04:34.000
+puis modifier le chemin du workflow si une attaque est détectée.
+
+00:04:35.320 --> 00:04:38.100
+Il s'agit d'un contrôle beaucoup plus puissant qu'une simple correspondance de chaîne
+
+00:04:38.100 --> 00:04:40.940
+car ils recherchent l'intention derrière les mots dans l'invite et les documents ensemble.
+
+00:04:41.860 --> 00:04:44.020
+Même dans ce cas, la détection ne suffit pas à elle seule,
+
+00:04:44.360 --> 00:04:46.840
+car voir un risque n'a pas d'importance si vous n'avez pas de moyens de l'arrêter.
+
+00:04:47.300 --> 00:04:50.340
+Les équipes de sécurité sous-estiment souvent cette partie spécifique du processus.
+
+00:04:51.300 --> 00:04:53.360
+Un avertissement dans un fichier journal n'est pas un confinement
+
+00:04:53.360 --> 00:04:55.760
+et une jolie vignette de tableaux de bord n'est pas non plus un confinement.
+
+00:04:55.760 --> 00:04:58.880
+Même une alerte de priorité élevée dans votre CM échoue
+
+00:04:58.880 --> 00:05:00.980
+si la charge utile a déjà transité par copilote
+
+00:05:00.980 --> 00:05:02.880
+et déclenché une action dans un système en aval.
+
+00:05:03.680 --> 00:05:05.680
+Examiner ce qui s'est passé après coup est utile pour une enquête,
+
+00:05:05.780 --> 00:05:08.240
+mais ce n'est pas suffisant lorsqu'une attaque survient en quelques secondes.
+
+00:05:09.200 --> 00:05:11.060
+Vous avez affaire à un modèle qui peut agir à l'intérieur de ce système
+
+00:05:11.060 --> 00:05:12.560
+auquel votre organisation fait déjà confiance.
+
+00:05:13.280 --> 00:05:14.740
+Il existe également un problème de faux négatif
+
+00:05:14.740 --> 00:05:16.340
+que la plupart des spécialistes du marketing produisent.
+
+00:05:17.180 --> 00:05:18.640
+Les attaques indirectes sont à l'origine
+
+00:05:18.640 --> 00:05:20.680
+d'une grande partie des détections manquées dans le monde réel
+
+00:05:20.680 --> 00:05:22.700
+car l'instruction dangereuse semble parfaitement normale
+
+00:05:22.700 --> 00:05:24.880
+jusqu'à ce que le modèle la combine avec le reste de la conversation.
+
+00:05:25.880 --> 00:05:27.220
+Au moment où un humain examine la sortie
+
+00:05:27.220 --> 00:05:28.560
+et se rend compte que quelque chose ne va pas,
+
+00:05:28.840 --> 00:05:30.440
+la mauvaise entrée a déjà terminé son travail.
+
+00:05:31.120 --> 00:05:32.280
+L'erreur pratique ici est très simple.
+
+00:05:32.840 --> 00:05:34.880
+Les équipes passent tout leur temps à surveiller ce que dit copilote
+
+00:05:34.880 --> 00:05:37.400
+mais elles ne contrôlent pas ce qui y entre avec le même niveau de discipline.
+
+00:05:38.080 --> 00:05:39.880
+Elles inspectent la réponse après qu'elle a été générée
+
+00:05:39.880 --> 00:05:41.380
+tout en laissant entrer des éléments non fiables
+
+00:05:41.380 --> 00:05:42.460
+avant que le travail ne commence.
+
+00:05:42.980 --> 00:05:44.100
+Cet ordre est complètement inversé.
+
+00:05:44.580 --> 00:05:45.880
+Une fois que vous avez identifié cette faille,
+
+00:05:45.880 --> 00:05:48.300
+tout l'objectif de votre stratégie de sécurité change.
+
+00:05:48.980 --> 00:05:50.840
+Vous cessez de vous demander comment écrire une invite plus sûre
+
+00:05:50.840 --> 00:05:52.660
+et commencez à vous demander où vous pouvez intercepter les données
+
+00:05:52.660 --> 00:05:53.660
+avant l'exécution du modèle.
+
+00:05:54.360 --> 00:05:55.340
+Le modèle Logica Firewall
+
+00:05:55.340 --> 00:05:57.100
+Si l'interception est l'objectif,
+
+00:05:57.160 --> 00:05:59.460
+nous devons examiner à quoi ressemble réellement ce contrôle dans la pratique.
+
+00:06:00.180 --> 00:06:02.260
+Vous devez utiliser Azure Logic Apps comme couche de stratégie
+
+00:06:02.260 --> 00:06:04.080
+qui se trouve en amont de la phase d'exécution.
+
+00:06:04.820 --> 00:06:06.080
+Il ne doit pas s'agir d'un outil passif
+
+00:06:06.080 --> 00:06:07.640
+qui envoie un rapport une fois que le dommage est fait.
+
+00:06:08.100 --> 00:06:09.420
+Vous devez le placer directement dans le chemin
+
+00:06:09.420 --> 00:06:11.860
+où les données saisies et récupérées par l'utilisateur sont en direct
+
+00:06:11.860 --> 00:06:12.940
+afin qu'elles puissent être inspectées
+
+00:06:12.940 --> 00:06:13.860
+avant que le modèle ne se mette au travail.
+
+00:06:14.500 --> 00:06:15.300
+Ce changement est puissant
+
+00:06:15.300 --> 00:06:17.260
+car les applications sont conçues pour l'orchestration.
+
+00:06:18.040 --> 00:06:19.740
+Elles peuvent se déclencher sur des événements spécifiques,
+
+00:06:19.940 --> 00:06:20.640
+appeler d'autres API
+
+00:06:20.640 --> 00:06:22.920
+et prendre des décisions en fonction de conditions complexes.
+
+00:06:23.980 --> 00:06:24.980
+Vous pouvez acheminer des données,
+
+00:06:25.100 --> 00:06:26.440
+envoyer des alertes à Microsoft Sentinel
+
+00:06:26.440 --> 00:06:28.880
+et enrichir le processus avec des informations externes
+
+00:06:28.880 --> 00:06:31.200
+sans créer de passerelles de sécurité personnalisées à partir de zéro.
+
+00:06:31.740 --> 00:06:33.200
+Vous n'essayez pas de remplacer copilote ici.
+
+00:06:33.900 --> 00:06:35.680
+Vous insérez simplement une couche de contrôle
+
+00:06:35.680 --> 00:06:36.940
+dans le flux qui l'entoure.
+
+00:06:37.460 --> 00:06:39.100
+La logique derrière ce modèle est volontairement simple.
+
+00:06:39.660 --> 00:06:40.860
+D'abord, vous déclenchez le processus,
+
+00:06:40.920 --> 00:06:41.800
+puis vous normalisez les données.
+
+00:06:41.800 --> 00:06:43.640
+Vous l'inspectez, évaluez le risque,
+
+00:06:43.760 --> 00:06:44.280
+prenez une décision
+
+00:06:44.280 --> 00:06:45.980
+et enfin acheminez ou consignez le résultat.
+
+00:06:46.400 --> 00:06:47.220
+C'est le modèle complet.
+
+00:06:47.720 --> 00:06:49.040
+Lorsqu'une requête ou un élément de contenu
+
+00:06:49.040 --> 00:06:49.940
+entre dans le flux de travail,
+
+00:06:50.180 --> 00:06:51.820
+l'application logique extrait cette charge utile
+
+00:06:51.820 --> 00:06:52.640
+et la standardise.
+
+00:06:53.120 --> 00:06:54.640
+Les entrées brutes sont généralement désordonnées
+
+00:06:54.640 --> 00:06:55.600
+car les différents connecteurs
+
+00:06:55.600 --> 00:06:56.780
+gèrent les données de différentes manières.
+
+00:06:57.440 --> 00:06:58.520
+Un email n'a pas la même apparence
+
+00:06:58.520 --> 00:06:59.360
+qu'une entrée de formulaire
+
+00:06:59.360 --> 00:07:00.240
+et le contenu d'un fichier
+
+00:07:00.240 --> 00:07:01.020
+où les arguments d'un outil
+
+00:07:01.020 --> 00:07:02.160
+sont tous accompagnés de métadonnées
+
+00:07:02.160 --> 00:07:02.800
+et de champs différents.
+
+00:07:03.260 --> 00:07:04.740
+Si vous essayez d'exécuter une inspection
+
+00:07:04.740 --> 00:07:05.940
+avant de normaliser ces données,
+
+00:07:06.360 --> 00:07:07.240
+votre système de détection
+
+00:07:11.800 --> 00:07:13.440
+c'est là que votre expression régulière
+
+00:07:13.440 --> 00:07:14.680
+personnalisée a encore du travail à fait.
+
+00:07:15.020 --> 00:07:15.660
+Ce n'est pas le juge final
+
+00:07:15.660 --> 00:07:16.520
+ni une solution miracle,
+
+00:07:16.940 --> 00:07:18.200
+mais elle fonctionne comme un fil très rapide
+
+00:07:18.200 --> 00:07:19.160
+à la périphérie de votre système.
+
+00:07:19.600 --> 00:07:20.420
+Vous pouvez rapidement rechercher
+
+00:07:20.420 --> 00:07:21.620
+un langage de remplacement connu,
+
+00:07:21.820 --> 00:07:22.640
+des indices d'encodage
+
+00:07:22.640 --> 00:07:23.440
+ou des modèles suspects
+
+00:07:23.440 --> 00:07:24.300
+dans les paramètres de l'outil
+
+00:07:24.300 --> 00:07:25.740
+pour vous permettre un tri instantané
+
+00:07:25.740 --> 00:07:26.320
+de la situation.
+
+00:07:27.360 --> 00:07:28.300
+Vous passez ensuite à la deuxième
+
+00:07:28.300 --> 00:07:28.940
+passe d'inspection
+
+00:07:28.940 --> 00:07:30.520
+qui va beaucoup plus loin dans le contenu.
+
+00:07:31.220 --> 00:07:31.780
+C'est là que vous appelez
+
+00:07:31.780 --> 00:07:32.880
+les boucliers d'invites de sécurité
+
+00:07:32.880 --> 00:07:33.740
+du contenu Azure AI.
+
+00:07:34.520 --> 00:07:35.600
+L'application logique envoie
+
+00:07:35.600 --> 00:07:36.500
+l'invite utilisateur
+
+00:07:36.500 --> 00:07:38.060
+et tous les documents récupérés à l'API
+
+00:07:38.060 --> 00:07:39.060
+puis se divisent en fonction
+
+00:07:39.060 --> 00:07:40.300
+de la détection ou non d'une attaque.
+
+00:07:41.080 --> 00:07:41.740
+Cela est important
+
+00:07:41.740 --> 00:07:42.720
+car les injections d'invites
+
+00:07:42.720 --> 00:07:43.520
+ne ressemblent pas toujours
+
+00:07:43.520 --> 00:07:44.840
+à du code informatique évident.
+
+00:07:45.540 --> 00:07:46.740
+Parfois, le danger ne devient évident
+
+00:07:46.740 --> 00:07:47.900
+que lorsque l'invite et le document
+
+00:07:47.900 --> 00:07:49.720
+sont évalués comme une seule et même unité.
+
+00:07:50.180 --> 00:07:51.300
+Il existe une couche supplémentaire
+
+00:07:51.300 --> 00:07:52.400
+qui transforme ce simple filtre
+
+00:07:52.400 --> 00:07:53.860
+en un véritable contrôle de sécurité,
+
+00:07:54.180 --> 00:07:55.260
+à savoir la veille sur les menaces.
+
+00:07:55.780 --> 00:07:56.580
+Si un élément de contenu
+
+00:07:56.580 --> 00:07:58.060
+fait référence à un domaine malveillant connu
+
+00:07:58.060 --> 00:07:59.040
+ou à une URL suspecte
+
+00:07:59.040 --> 00:07:59.840
+que votre équipe a déjà vu,
+
+00:07:59.940 --> 00:08:01.360
+cela devrait modifier votre décision.
+
+00:08:01.700 --> 00:08:02.400
+Les applications logiques
+
+00:08:02.400 --> 00:08:03.100
+peuvent vérifier l'événement
+
+00:08:03.100 --> 00:08:03.800
+par rapport aux informations
+
+00:08:03.800 --> 00:08:04.680
+sur les menaces de Defender
+
+00:08:04.680 --> 00:08:05.300
+ou à d'autres flutières
+
+00:08:05.300 --> 00:08:06.500
+pour ajouter un score de confiance au risque.
+
+00:08:06.640 --> 00:08:07.720
+Pour ajouter un score de confiance au risque,
+
+00:08:07.820 --> 00:08:09.100
+cela signifie qu'un modèle étrange
+
+00:08:09.100 --> 00:08:10.020
+provenant d'une source fiable
+
+00:08:10.020 --> 00:08:11.080
+peut être autorisé à passer,
+
+00:08:11.260 --> 00:08:12.040
+tandis que ce même modèle
+
+00:08:12.040 --> 00:08:13.500
+associé à un score de réputation hostile
+
+00:08:13.500 --> 00:08:15.840
+est immédiatement bloqué et...
+
+00:08:15.840 --> 00:08:17.520
+Cela transforme votre arbre de décision
+
+00:08:17.520 --> 00:08:18.400
+en quelque chose de plus
+
+00:08:18.400 --> 00:08:19.400
+qu'un simple choix oui ou non.
+
+00:08:20.220 --> 00:08:21.160
+Vous pouvez autoriser la demande
+
+00:08:21.160 --> 00:08:22.220
+si le score de risque est faible
+
+00:08:22.220 --> 00:08:23.400
+ou vous pouvez la nettoyer
+
+00:08:23.400 --> 00:08:24.820
+en supprimant les fragments dangereux.
+
+00:08:25.560 --> 00:08:26.080
+Vous pouvez choisir
+
+00:08:26.080 --> 00:08:27.020
+de mettre les données en quarantaine
+
+00:08:27.020 --> 00:08:28.280
+si la source nécessite un examen manuel.
+
+00:08:28.880 --> 00:08:30.260
+Si l'action implique des données sensibles,
+
+00:08:30.340 --> 00:08:31.080
+vous pouvez même exiger
+
+00:08:31.080 --> 00:08:31.780
+qu'un humain la prouve
+
+00:08:34.680 --> 00:08:36.180
+vous bloquez simplement la demande
+
+00:08:36.180 --> 00:08:37.140
+et déclenchez une alerte.
+
+00:08:37.400 --> 00:08:38.160
+C'est cette gamme d'options
+
+00:08:38.160 --> 00:08:38.800
+qui fait que ce modèle
+
+00:08:38.800 --> 00:08:40.160
+fonctionne réellement pour une entreprise.
+
+00:08:40.840 --> 00:08:41.660
+Les équipes de sécurité
+
+00:08:41.660 --> 00:08:42.640
+freinent souvent l'adoption
+
+00:08:42.640 --> 00:08:43.580
+car elles refusent tous les cas
+
+00:08:43.580 --> 00:08:45.240
+qui semblent légèrement incertains
+
+00:08:45.240 --> 00:08:46.560
+et lorsque les contrôles sont trop stricts
+
+00:08:46.560 --> 00:08:47.260
+et les gens trouvent des moyens
+
+00:08:47.260 --> 00:08:47.880
+de les contourner.
+
+00:08:48.820 --> 00:08:49.640
+Un flux de travail noté
+
+00:08:49.640 --> 00:08:51.040
+vous donne la possibilité de réagir
+
+00:08:51.040 --> 00:08:51.920
+en fonction du risque réel
+
+00:08:51.920 --> 00:08:52.560
+plutôt que de paniquer.
+
+00:08:53.060 --> 00:08:53.940
+C'est exactement pourquoi
+
+00:08:53.940 --> 00:08:54.960
+Logic Apps est plus adapté
+
+00:08:54.960 --> 00:08:56.520
+qu'un ensemble d'outils distincts.
+
+00:08:57.180 --> 00:08:57.720
+Il se connecte déjà
+
+00:08:57.720 --> 00:08:58.860
+au reste de l'écosystème Microsoft
+
+00:08:58.860 --> 00:08:59.840
+et fonctionne parfaitement
+
+00:08:59.840 --> 00:09:00.920
+avec les playbooks Sentinelle.
+
+00:09:01.720 --> 00:09:02.640
+Vous pouvez demander une vérification
+
+00:09:04.680 --> 00:09:05.560
+et envoyer des événements d'audit
+
+00:09:05.560 --> 00:09:05.920
+au même endroit.
+
+00:09:06.460 --> 00:09:07.100
+Vous n'avez pas besoin
+
+00:09:07.100 --> 00:09:08.140
+d'un long cycle de développement
+
+00:09:08.140 --> 00:09:09.040
+à chaque fois qu'un attaquant
+
+00:09:09.040 --> 00:09:09.900
+modifie sa formulation
+
+00:09:09.900 --> 00:09:10.660
+ou qu'une nouvelle façon
+
+00:09:10.660 --> 00:09:11.600
+d'entrer dans le système apparaît.
+
+00:09:11.920 --> 00:09:13.060
+La règle qui fait que tout cela fonctionne
+
+00:09:13.060 --> 00:09:13.720
+est très simple.
+
+00:09:14.700 --> 00:09:15.700
+Vous devez traiter chaque élément
+
+00:09:15.700 --> 00:09:16.780
+de contexte comme non fiable
+
+00:09:16.780 --> 00:09:17.960
+jusqu'à ce qu'il ait été noté.
+
+00:09:18.840 --> 00:09:19.780
+Cela ne concerne pas seulement
+
+00:09:19.780 --> 00:09:20.540
+l'invite utilisateur
+
+00:09:20.540 --> 00:09:21.700
+mais également le corps de l'email,
+
+00:09:21.820 --> 00:09:22.560
+le fichier téléchargé
+
+00:09:22.560 --> 00:09:23.680
+et le champ de formulaire SharePoint.
+
+00:09:24.440 --> 00:09:25.940
+Cela inclut la charge utile du connecteur,
+
+00:09:26.140 --> 00:09:27.280
+les fragments de documents récupérés
+
+00:09:27.280 --> 00:09:28.500
+et même les arguments de l'outil.
+
+00:09:29.020 --> 00:09:29.900
+Tout cela doit être vérifié.
+
+00:09:30.400 --> 00:09:30.960
+Dès que vous supposez
+
+00:09:30.960 --> 00:09:31.520
+que l'une de ces sources
+
+00:09:31.520 --> 00:09:32.200
+est sûre par défaut,
+
+00:09:32.300 --> 00:09:33.420
+vous avez créé une nouvelle faille
+
+00:09:33.420 --> 00:09:34.580
+qu'un attaquant peut exploiter.
+
+00:09:35.300 --> 00:09:36.400
+Une fois que votre flux de travail
+
+00:09:36.400 --> 00:09:37.080
+applique cette règle
+
+00:09:37.080 --> 00:09:37.740
+de manière cohérente,
+
+00:09:37.920 --> 00:09:38.540
+vous n'avez plus besoin
+
+00:09:38.540 --> 00:09:39.320
+de compter sur Copilot
+
+00:09:39.320 --> 00:09:40.480
+pour séparer les bonnes données
+
+00:09:40.480 --> 00:09:41.100
+des mauvaises données
+
+00:09:41.100 --> 00:09:41.720
+par lui-même.
+
+00:09:42.380 --> 00:09:43.160
+Le processus devient
+
+00:09:43.160 --> 00:09:44.100
+un système d'entrée contre eux.
+
+00:09:44.700 --> 00:09:45.180
+Sur le papier,
+
+00:09:45.300 --> 00:09:46.620
+cela semble être une excellente théorie
+
+00:09:46.620 --> 00:09:47.820
+mais ce qui intéresse vraiment les gens,
+
+00:09:47.960 --> 00:09:48.480
+c'est ce qui se passe
+
+00:09:48.480 --> 00:09:49.600
+lorsqu'une charge utile dangereuse
+
+00:09:49.600 --> 00:09:50.180
+atteint réellement
+
+00:09:50.180 --> 00:09:51.360
+le flux de travail dans le monde réel.
+
+00:09:52.220 --> 00:09:52.760
+Ce que fait réellement
+
+00:09:52.760 --> 00:09:53.300
+le flux de travail
+
+00:09:53.300 --> 00:09:54.180
+au moment de l'exécution,
+
+00:09:54.180 --> 00:09:55.500
+lorsque le système est mis en service,
+
+00:09:55.860 --> 00:09:56.660
+c'est qu'il ne se contente pas
+
+00:09:56.660 --> 00:09:57.420
+d'analyser le texte
+
+00:09:57.420 --> 00:09:58.200
+à la recherche de gros mots.
+
+00:09:58.300 --> 00:09:59.280
+Il construit une image complète
+
+00:09:59.280 --> 00:09:59.760
+de la requête
+
+00:09:59.760 --> 00:10:01.220
+avant qu'une décision ne soit prise.
+
+00:10:01.680 --> 00:10:02.380
+Un événement atteint
+
+00:10:02.380 --> 00:10:03.060
+votre point d'entrée.
+
+00:10:03.240 --> 00:10:04.280
+Peut-être une soumission de formulaire,
+
+00:10:04.360 --> 00:10:04.820
+un flux d'email
+
+00:10:04.820 --> 00:10:05.800
+ou un téléchargement de documents
+
+00:10:05.800 --> 00:10:06.900
+liés à un processus Copilot
+
+00:10:06.900 --> 00:10:07.540
+et Logic Apps
+
+00:10:07.540 --> 00:10:08.540
+encapsule immédiatement
+
+00:10:08.540 --> 00:10:09.000
+cet événement
+
+00:10:09.000 --> 00:10:09.740
+avec des métadonnées.
+
+00:10:10.880 --> 00:10:12.220
+Il suit qui a envoyé la requête,
+
+00:10:12.540 --> 00:10:13.380
+quelle application l'a touchée,
+
+00:10:13.540 --> 00:10:14.320
+d'où provient le fichier
+
+00:10:14.320 --> 00:10:15.060
+et ce que le système
+
+00:10:15.060 --> 00:10:15.940
+s'apprête à faire ensuite.
+
+00:10:16.560 --> 00:10:17.620
+Ce contexte supplémentaire
+
+00:10:17.620 --> 00:10:18.160
+est essentiel
+
+00:10:18.160 --> 00:10:18.840
+car la même phrase
+
+00:10:18.840 --> 00:10:19.660
+peut signifier quelque chose
+
+00:10:19.660 --> 00:10:20.520
+de complètement différent
+
+00:10:20.520 --> 00:10:21.400
+selon sa provenance.
+
+00:10:22.020 --> 00:10:22.960
+Une fois ces données capturées,
+
+00:10:23.020 --> 00:10:23.520
+la charge utile
+
+00:10:23.520 --> 00:10:24.200
+est divisée en zones
+
+00:10:24.200 --> 00:10:25.280
+de confiance spécifiques.
+
+00:10:25.920 --> 00:10:26.420
+Vous devez maintenir
+
+00:10:26.420 --> 00:10:27.080
+une séparation claire.
+
+00:10:27.520 --> 00:10:28.240
+L'invite utilisateur
+
+00:10:28.240 --> 00:10:29.040
+va dans un compartiment,
+
+00:10:29.220 --> 00:10:30.000
+les documents récupérés
+
+00:10:30.000 --> 00:10:30.500
+dans un autre
+
+00:10:30.500 --> 00:10:31.740
+et l'historique des conversations
+
+00:10:31.740 --> 00:10:32.580
+ou les paramètres de l'outil
+
+00:10:32.580 --> 00:10:33.300
+ont leur propre espace.
+
+00:10:33.740 --> 00:10:34.920
+Si vous mélangez tout cela trop tôt,
+
+00:10:35.080 --> 00:10:36.280
+vous ne pouvez plus déterminer
+
+00:10:36.280 --> 00:10:37.240
+où une instruction risquée
+
+00:10:37.240 --> 00:10:38.220
+a réellement commencé
+
+00:10:38.220 --> 00:10:39.580
+et votre processus de révision
+
+00:10:39.580 --> 00:10:40.260
+se transforme
+
+00:10:40.260 --> 00:10:41.480
+en une estimation totale.
+
+00:10:42.260 --> 00:10:43.000
+De nombreuses équipes
+
+00:10:43.000 --> 00:10:43.680
+ignorent cette étape
+
+00:10:43.680 --> 00:10:44.340
+car tout combiné
+
+00:10:44.340 --> 00:10:45.080
+semble plus rapide
+
+00:10:45.080 --> 00:10:46.240
+mais en réalité,
+
+00:10:46.240 --> 00:10:47.360
+cela ne fait que masquer
+
+00:10:47.360 --> 00:10:48.100
+le chemin à suivre.
+
+00:10:48.780 --> 00:10:49.060
+Ensuite,
+
+00:10:49.160 --> 00:10:49.680
+le flux de travail
+
+00:10:49.680 --> 00:10:50.540
+passe à la normalisation.
+
+00:10:51.000 --> 00:10:52.060
+C'est la partie ennuyeuse du travail
+
+00:10:52.060 --> 00:10:52.660
+mais c'est aussi
+
+00:10:52.660 --> 00:10:53.620
+ce qui rend votre détection
+
+00:10:53.620 --> 00:10:54.560
+réellement utilisable.
+
+00:10:55.160 --> 00:10:55.780
+Vous devez supprimer
+
+00:10:55.780 --> 00:10:56.820
+le balisage qui ajoute du bruit,
+
+00:10:57.020 --> 00:10:57.960
+décoder l'encodage du RL
+
+00:10:57.960 --> 00:10:58.960
+ou les traces en base 64
+
+00:10:58.960 --> 00:11:00.060
+et aplatir les champs,
+
+00:11:00.120 --> 00:11:01.200
+imbriquer afin que l'inspection
+
+00:11:01.200 --> 00:11:02.000
+s'exécute par rapport
+
+00:11:02.000 --> 00:11:02.660
+à la forme stable.
+
+00:11:03.400 --> 00:11:04.140
+Si un connecteur
+
+00:11:04.140 --> 00:11:05.140
+envoie du texte enrichi
+
+00:11:05.140 --> 00:11:05.720
+tandis qu'un autre
+
+00:11:05.720 --> 00:11:06.600
+envoie des fragments de JSON,
+
+00:11:07.120 --> 00:11:07.780
+vous souhaitez qu'ils soient
+
+00:11:07.780 --> 00:11:08.480
+tous réduits en champs
+
+00:11:08.480 --> 00:11:09.300
+que vos contrôles peuvent lire
+
+00:11:09.300 --> 00:11:10.100
+de manière cohérente.
+
+00:11:10.780 --> 00:11:11.060
+Sans cela,
+
+00:11:11.060 --> 00:11:12.160
+votre logique passe plus de temps
+
+00:11:12.160 --> 00:11:13.020
+à lutter contre la dérive
+
+00:11:13.020 --> 00:11:13.900
+de format qu'à détecter
+
+00:11:13.900 --> 00:11:14.640
+les attaques réelles.
+
+00:11:15.380 --> 00:11:16.260
+Une fois les données nettoyées,
+
+00:11:16.320 --> 00:11:17.280
+le passage de modèles rapides
+
+00:11:17.280 --> 00:11:18.020
+s'exécute en premier.
+
+00:11:18.640 --> 00:11:19.640
+Cela doit être peu coûteux,
+
+00:11:19.720 --> 00:11:20.320
+direct et rapide.
+
+00:11:20.660 --> 00:11:21.460
+Vous recherchez des phrases
+
+00:11:21.460 --> 00:11:22.240
+qui tentent de remplacer
+
+00:11:22.240 --> 00:11:23.220
+le comportement du système
+
+00:11:23.220 --> 00:11:23.880
+comme des variantes,
+
+00:11:24.060 --> 00:11:24.980
+d'ignorer toutes les instructions
+
+00:11:24.980 --> 00:11:25.540
+précédentes
+
+00:11:25.540 --> 00:11:26.980
+ou de remplacer le système.
+
+00:11:27.780 --> 00:11:28.540
+Vous recherchez également
+
+00:11:28.540 --> 00:11:29.440
+un langage d'extraction
+
+00:11:29.440 --> 00:11:30.040
+dans lequel quelqu'un
+
+00:11:30.040 --> 00:11:30.800
+demande à révéler
+
+00:11:30.800 --> 00:11:31.680
+des éléments confidentiels,
+
+00:11:31.820 --> 00:11:32.400
+à vider des secrets
+
+00:11:32.400 --> 00:11:32.900
+ou à contourner
+
+00:11:32.900 --> 00:11:33.840
+les paramètres de confidentialité.
+
+00:11:34.300 --> 00:11:35.140
+Dans les applications logiques,
+
+00:11:35.200 --> 00:11:36.060
+les équipes gèrent généralement
+
+00:11:36.060 --> 00:11:36.880
+cela via des expressions
+
+00:11:36.880 --> 00:11:37.720
+ou composent des étapes
+
+00:11:37.720 --> 00:11:38.620
+qui définissent des indicateurs
+
+00:11:38.620 --> 00:11:39.440
+plutôt que de bloquer la demande
+
+00:11:39.440 --> 00:11:40.440
+immédiatement à chaque occurrence
+
+00:11:40.440 --> 00:11:41.060
+à chaque occurrence.
+
+00:11:41.440 --> 00:11:42.340
+Ce signalement est important
+
+00:11:42.340 --> 00:11:43.540
+car une seule phrase
+
+00:11:43.540 --> 00:11:44.300
+ne signifie pas toujours
+
+00:11:44.300 --> 00:11:45.240
+que quelqu'un est abusif.
+
+00:11:45.820 --> 00:11:46.580
+Une personne travaillant
+
+00:11:46.580 --> 00:11:47.260
+dans un flux de travail
+
+00:11:47.260 --> 00:11:48.000
+de sécurité valide
+
+00:11:48.000 --> 00:11:48.840
+peut littéralement avoir besoin
+
+00:11:48.840 --> 00:11:49.660
+de demander à examiner
+
+00:11:49.660 --> 00:11:50.880
+la gestion du contenu confidentiel.
+
+00:11:51.280 --> 00:11:52.100
+Pour résoudre ce problème,
+
+00:11:52.220 --> 00:11:52.800
+le flux de travail
+
+00:11:52.800 --> 00:11:53.600
+envoie la charge utile
+
+00:11:53.600 --> 00:11:54.240
+plus riche au bouclier
+
+00:11:54.240 --> 00:11:54.920
+d'invites de sécurité
+
+00:11:54.920 --> 00:11:55.900
+du contenu Azure et AI
+
+00:11:55.900 --> 00:11:56.840
+pour un examen plus approfond.
+
+00:11:57.180 --> 00:11:57.820
+L'appel d'API
+
+00:11:57.820 --> 00:11:59.180
+inclut à la fois l'invite utilisateur
+
+00:11:59.180 --> 00:12:00.100
+et les documents récupérés
+
+00:12:00.100 --> 00:12:01.580
+car la relation entre eux
+
+00:12:01.580 --> 00:12:02.220
+est généralement là
+
+00:12:02.220 --> 00:12:03.360
+où se cache le véritable problème.
+
+00:12:04.720 --> 00:12:05.380
+Le service renvoie
+
+00:12:05.380 --> 00:12:06.000
+un signal simple
+
+00:12:06.000 --> 00:12:07.220
+et si une attaque est détectée,
+
+00:12:07.300 --> 00:12:07.960
+le workflow modifie
+
+00:12:07.960 --> 00:12:08.620
+simplement le chemin
+
+00:12:08.620 --> 00:12:09.300
+avant même que l'appel
+
+00:12:09.300 --> 00:12:10.200
+du modèle ne se produise.
+
+00:12:11.100 --> 00:12:11.560
+Vous devez ensuite
+
+00:12:11.560 --> 00:12:12.460
+ajouter un contexte extérieur.
+
+00:12:12.780 --> 00:12:13.540
+Les recherches de renseignements
+
+00:12:13.540 --> 00:12:13.960
+sur les menaces
+
+00:12:13.960 --> 00:12:14.480
+offrent le workflow
+
+00:12:14.480 --> 00:12:15.020
+une autre perspective
+
+00:12:15.020 --> 00:12:15.680
+à travers laquelle il peut.
+
+00:12:16.120 --> 00:12:16.720
+Vous pouvez interroger
+
+00:12:16.720 --> 00:12:17.180
+les renseignements
+
+00:12:17.180 --> 00:12:18.500
+sur les menaces de Microsoft Defender
+
+00:12:18.500 --> 00:12:19.220
+ou toute autre source
+
+00:12:19.220 --> 00:12:19.840
+d'accès de confiance
+
+00:12:19.840 --> 00:12:20.880
+pour vérifier les domaines,
+
+00:12:21.060 --> 00:12:22.200
+les URL ou les indicateurs
+
+00:12:22.200 --> 00:12:23.100
+de source associés à un abus.
+
+00:12:24.100 --> 00:12:24.820
+Vous devez extraire
+
+00:12:24.820 --> 00:12:25.460
+les scores de confiance
+
+00:12:25.460 --> 00:12:26.340
+lorsqu'ils sont disponibles
+
+00:12:26.340 --> 00:12:27.540
+car la réputation d'une source
+
+00:12:27.540 --> 00:12:28.780
+doit influencer le score final
+
+00:12:28.780 --> 00:12:30.000
+et non le remplacer entièrement.
+
+00:12:30.900 --> 00:12:31.680
+Une charge utile faible
+
+00:12:31.680 --> 00:12:32.640
+provenant d'une source à risque
+
+00:12:32.640 --> 00:12:33.580
+doit toujours être mieux classée
+
+00:12:33.580 --> 00:12:34.420
+que cette même charge utile
+
+00:12:34.420 --> 00:12:35.720
+provenant d'un processus interne
+
+00:12:35.720 --> 00:12:36.200
+bien compris.
+
+00:12:36.980 --> 00:12:37.780
+Enfin, le système établit
+
+00:12:37.780 --> 00:12:38.460
+un score composite.
+
+00:12:39.020 --> 00:12:39.660
+Il examine la force
+
+00:12:39.660 --> 00:12:40.300
+de frappe du modèle,
+
+00:12:40.480 --> 00:12:41.600
+le résultat des protections d'invite,
+
+00:12:41.720 --> 00:12:42.560
+la réputation de la source
+
+00:12:42.560 --> 00:12:43.240
+et la sensibilité
+
+00:12:43.240 --> 00:12:43.880
+de l'action demandée.
+
+00:12:44.540 --> 00:12:45.620
+Une demande à faible risque
+
+00:12:45.620 --> 00:12:46.280
+visant à résumer
+
+00:12:46.280 --> 00:12:47.020
+un article public
+
+00:12:47.020 --> 00:12:47.760
+n'a pas le même poids
+
+00:12:47.760 --> 00:12:48.680
+qu'une demande susceptible
+
+00:12:48.680 --> 00:12:50.080
+d'exposer des fichiers protégés.
+
+00:12:50.740 --> 00:12:51.380
+Ce score combiné
+
+00:12:51.380 --> 00:12:52.180
+est ce qui pilote la branche.
+
+00:12:52.660 --> 00:12:53.280
+Les événements propres
+
+00:12:53.280 --> 00:12:54.060
+se poursuivent comme prévu.
+
+00:12:54.640 --> 00:12:55.340
+Les cas à risque moyen
+
+00:12:55.340 --> 00:12:56.340
+sont nettoyés ou acheminés
+
+00:12:56.340 --> 00:12:57.640
+vers une solution de secours sûre.
+
+00:12:58.440 --> 00:12:59.060
+Les cas à risque élevé
+
+00:12:59.060 --> 00:12:59.440
+sont bloqués
+
+00:12:59.440 --> 00:13:00.240
+avant même que copilote
+
+00:13:00.240 --> 00:13:00.840
+ne s'exécute.
+
+00:13:01.720 --> 00:13:02.300
+Tout est consigné
+
+00:13:02.300 --> 00:13:03.040
+dans une piste d'audit,
+
+00:13:03.120 --> 00:13:03.780
+le chemin de décision
+
+00:13:03.780 --> 00:13:04.420
+étant préservé.
+
+00:13:05.320 --> 00:13:06.060
+Ces événements bloqués
+
+00:13:06.060 --> 00:13:06.500
+vous indiquent
+
+00:13:06.500 --> 00:13:07.240
+où la pression monte
+
+00:13:07.240 --> 00:13:07.820
+et quelles sources
+
+00:13:07.820 --> 00:13:08.860
+continuent de poser problème.
+
+00:13:09.420 --> 00:13:09.900
+Lorsque vous voyez
+
+00:13:09.900 --> 00:13:10.660
+quel schéma se blisse
+
+00:13:10.660 --> 00:13:11.600
+dans vos flux de travail métier,
+
+00:13:11.820 --> 00:13:12.900
+vous disposez enfin des données
+
+00:13:12.900 --> 00:13:13.560
+dont vous avez besoin
+
+00:13:13.560 --> 00:13:14.400
+pour ajuster le système
+
+00:13:14.400 --> 00:13:15.300
+pour la prochaine étape.
+
+00:13:16.380 --> 00:13:16.800
+Comment ajuster
+
+00:13:16.800 --> 00:13:17.580
+pour un fonctionnement silencieux
+
+00:13:17.580 --> 00:13:18.500
+et une utilisation professionnelle ?
+
+00:13:18.500 --> 00:13:19.460
+Une fois que le système
+
+00:13:19.460 --> 00:13:20.260
+est en cours d'exécution,
+
+00:13:20.340 --> 00:13:21.160
+la nature du travail change.
+
+00:13:21.440 --> 00:13:22.100
+La création du flux
+
+00:13:22.100 --> 00:13:23.120
+est en fait la partie la plus facile.
+
+00:13:23.440 --> 00:13:24.200
+L'ajuster pour que les gens
+
+00:13:24.200 --> 00:13:24.740
+lui fassent confiance
+
+00:13:24.740 --> 00:13:25.160
+et n'essaient pas
+
+00:13:25.160 --> 00:13:25.760
+de trouver des solutions
+
+00:13:25.760 --> 00:13:26.260
+de contournement
+
+00:13:26.260 --> 00:13:26.800
+est-ce qu'ils décident
+
+00:13:26.800 --> 00:13:27.280
+si cela devient
+
+00:13:27.280 --> 00:13:28.480
+un véritable contrôle de sécurité
+
+00:13:28.480 --> 00:13:29.660
+ou juste une autre expérience ratée
+
+00:13:29.660 --> 00:13:30.680
+ou juste une autre expérience ratée.
+
+00:13:30.760 --> 00:13:31.400
+Si le système crée
+
+00:13:31.400 --> 00:13:31.920
+trop de friction,
+
+00:13:32.140 --> 00:13:32.720
+les utilisateurs
+
+00:13:32.720 --> 00:13:33.280
+trouveront simplement
+
+00:13:33.280 --> 00:13:34.100
+un moyen de le contourner,
+
+00:13:34.260 --> 00:13:34.960
+ce qui rendra l'ensemble
+
+00:13:34.960 --> 00:13:35.720
+du projet inutile.
+
+00:13:36.100 --> 00:13:36.600
+Vous devriez commencer
+
+00:13:36.600 --> 00:13:37.100
+de manière estre.
+
+00:13:37.460 --> 00:13:38.220
+N'essayez pas de surveiller
+
+00:13:38.220 --> 00:13:38.980
+chaque point de contact
+
+00:13:38.980 --> 00:13:39.960
+copilote dès le premier jour.
+
+00:13:40.580 --> 00:13:41.140
+Choisissez plutôt
+
+00:13:41.140 --> 00:13:41.500
+les endroits
+
+00:13:41.500 --> 00:13:42.400
+où le risque est le plus élevé
+
+00:13:42.400 --> 00:13:43.160
+et où le chemin est clair,
+
+00:13:43.280 --> 00:13:43.980
+comme les actions activées
+
+00:13:43.980 --> 00:13:44.460
+par des outils
+
+00:13:44.460 --> 00:13:45.160
+ou les sources de données
+
+00:13:45.160 --> 00:13:46.160
+à forte valeur ajoutée.
+
+00:13:46.720 --> 00:13:47.320
+Vous pouvez commencer
+
+00:13:47.320 --> 00:13:48.020
+par un processus
+
+00:13:48.020 --> 00:13:48.740
+basé sur SharePoint
+
+00:13:48.740 --> 00:13:49.380
+ou un flux de travail
+
+00:13:49.380 --> 00:13:50.200
+de formulaire spécifique
+
+00:13:50.200 --> 00:13:50.900
+pour obtenir un signal
+
+00:13:50.900 --> 00:13:51.620
+que vous pouvez réellement lire.
+
+00:13:52.000 --> 00:13:52.760
+Une portée limitée
+
+00:13:52.760 --> 00:13:53.640
+vous donne la possibilité
+
+00:13:53.640 --> 00:13:54.400
+d'apprendre sans vous noyer
+
+00:13:54.400 --> 00:13:54.780
+dans les données.
+
+00:13:55.460 --> 00:13:56.140
+Lorsque vous configurez
+
+00:13:56.140 --> 00:13:57.160
+vos vérifications initiales,
+
+00:13:57.340 --> 00:13:57.940
+ajustez vos rejets
+
+00:13:57.940 --> 00:13:58.680
+en fonction du rappel
+
+00:13:58.680 --> 00:13:59.700
+plutôt que de la certitude absolue.
+
+00:14:00.140 --> 00:14:00.720
+Le premier passage
+
+00:14:00.720 --> 00:14:01.660
+est censé détecter rapidement
+
+00:14:01.660 --> 00:14:02.320
+les propos suspects
+
+00:14:02.320 --> 00:14:02.800
+et non prouvés
+
+00:14:02.800 --> 00:14:03.560
+d'intentions malveillantes
+
+00:14:03.560 --> 00:14:04.200
+au-delà de tout doute
+
+00:14:04.200 --> 00:14:04.820
+raisonnables.
+
+00:14:11.500 --> 00:14:12.220
+pour signaler un peu au début
+
+00:14:12.220 --> 00:14:12.700
+puis de laisser
+
+00:14:12.700 --> 00:14:13.820
+les vérifications ultérieures
+
+00:14:13.820 --> 00:14:14.660
+ajouter du contexte
+
+00:14:14.660 --> 00:14:15.280
+pour réduire le bruit.
+
+00:14:16.120 --> 00:14:16.820
+C'est pourquoi la notation
+
+00:14:16.820 --> 00:14:17.440
+est plus importante
+
+00:14:17.440 --> 00:14:18.160
+que les résultats uniques.
+
+00:14:18.640 --> 00:14:19.520
+Une correspondance de phrase
+
+00:14:19.520 --> 00:14:19.840
+à elle seule
+
+00:14:19.840 --> 00:14:20.500
+ne devrait pas toujours
+
+00:14:20.500 --> 00:14:21.020
+tuer une requête.
+
+00:14:21.220 --> 00:14:21.900
+Mais lorsque vous combinez
+
+00:14:21.900 --> 00:14:22.520
+cette correspondance
+
+00:14:22.520 --> 00:14:23.520
+avec un indicateur de bouclier
+
+00:14:23.520 --> 00:14:24.520
+d'invite et une source risquée,
+
+00:14:25.180 --> 00:14:25.860
+la situation change.
+
+00:14:26.600 --> 00:14:27.180
+Les signaux faibles
+
+00:14:27.180 --> 00:14:27.760
+doivent s'empiler
+
+00:14:27.760 --> 00:14:28.560
+les uns sur les autres
+
+00:14:28.560 --> 00:14:29.420
+et les signaux forts
+
+00:14:29.420 --> 00:14:30.620
+doivent accélérer le blocage.
+
+00:14:31.100 --> 00:14:32.160
+C'est la différence fondamentale
+
+00:14:32.160 --> 00:14:33.440
+entre un filtre rigide et ennuyeux
+
+00:14:33.440 --> 00:14:34.240
+et un modèle de politique
+
+00:14:34.240 --> 00:14:35.240
+qui fonctionne réellement
+
+00:14:35.240 --> 00:14:36.060
+pour une entreprise.
+
+00:14:36.740 --> 00:14:37.220
+Vous devez également
+
+00:14:37.220 --> 00:14:37.800
+fixer un plafond
+
+00:14:37.800 --> 00:14:38.500
+pour les faux positifs.
+
+00:14:39.020 --> 00:14:39.480
+Essayez de le maintenir
+
+00:14:39.480 --> 00:14:40.100
+en dessous de 2%
+
+00:14:40.100 --> 00:14:40.740
+car une fois que les gens
+
+00:14:40.740 --> 00:14:41.720
+sentent que le contrôle bloque
+
+00:14:41.720 --> 00:14:42.400
+leur travail normal,
+
+00:14:42.500 --> 00:14:43.280
+ils cesseront de faire confiance
+
+00:14:43.280 --> 00:14:43.780
+au système.
+
+00:14:44.320 --> 00:14:44.840
+C'est là que les solutions
+
+00:14:44.840 --> 00:14:45.600
+de contournement commencent.
+
+00:14:45.800 --> 00:14:47.020
+Les utilisateurs copieront du texte
+
+00:14:47.020 --> 00:14:47.800
+un des outils non gérés,
+
+00:14:47.920 --> 00:14:48.500
+les équipes créeront
+
+00:14:48.500 --> 00:14:49.160
+des flux fantômes,
+
+00:14:49.440 --> 00:14:50.360
+les administrateurs commenceront
+
+00:14:50.360 --> 00:14:51.540
+à demander des exclusions générales.
+
+00:14:51.820 --> 00:14:52.720
+Le contrôle s'effondrera
+
+00:14:52.720 --> 00:14:53.240
+de l'intérieur,
+
+00:14:53.580 --> 00:14:54.440
+non pas parce que la détection
+
+00:14:54.440 --> 00:14:55.140
+a échoué mais parce que
+
+00:14:55.140 --> 00:14:55.900
+les frictions sont devenues
+
+00:14:55.900 --> 00:14:56.660
+trop difficiles à gérer.
+
+00:14:57.420 --> 00:14:58.020
+Pour éviter cela,
+
+00:14:58.120 --> 00:14:58.620
+vous devez surveiller
+
+00:14:58.620 --> 00:14:59.140
+les bonnes mesures.
+
+00:14:59.820 --> 00:15:00.540
+Oubliez les tableaux de bord
+
+00:15:00.540 --> 00:15:01.080
+personnalisés
+
+00:15:01.080 --> 00:15:01.580
+et concentrez-vous
+
+00:15:01.580 --> 00:15:02.480
+sur le temps moyen de détection.
+
+00:15:02.860 --> 00:15:03.440
+Vous devez le maintenir
+
+00:15:03.440 --> 00:15:04.160
+en dessous de 15 minutes
+
+00:15:04.160 --> 00:15:05.020
+pour tout ce qui nécessite
+
+00:15:05.020 --> 00:15:05.840
+une vérification manuelle.
+
+00:15:06.320 --> 00:15:06.860
+Vous devez également
+
+00:15:06.860 --> 00:15:07.800
+suivre votre temps de confinement
+
+00:15:07.800 --> 00:15:08.740
+automatisé et viser
+
+00:15:08.740 --> 00:15:09.340
+moins de 5 minutes
+
+00:15:09.340 --> 00:15:09.940
+lorsque le blocage
+
+00:15:09.940 --> 00:15:10.500
+peut être effectué
+
+00:15:10.500 --> 00:15:10.960
+en toute sécurité.
+
+00:15:11.520 --> 00:15:12.160
+Si le flux de travail
+
+00:15:12.160 --> 00:15:13.140
+se déclenche en permanence
+
+00:15:13.140 --> 00:15:13.880
+mais n'influence jamais
+
+00:15:13.880 --> 00:15:14.840
+réellement une décision,
+
+00:15:14.960 --> 00:15:15.560
+ce n'est que du bruit.
+
+00:15:16.180 --> 00:15:17.040
+Le coût est un autre facteur
+
+00:15:17.040 --> 00:15:18.120
+qui doit être constamment ajusté.
+
+00:15:18.780 --> 00:15:19.560
+Les applications logiques
+
+00:15:19.560 --> 00:15:20.440
+basées sur la consommation
+
+00:15:20.440 --> 00:15:21.200
+sont idéales pour les charges
+
+00:15:21.200 --> 00:15:21.940
+de travail en rafale
+
+00:15:21.940 --> 00:15:22.580
+ou les petits pilotes
+
+00:15:22.580 --> 00:15:23.220
+car vous ne payez que
+
+00:15:23.220 --> 00:15:24.020
+pour ce que vous exécutez.
+
+00:15:24.680 --> 00:15:24.960
+Cependant,
+
+00:15:25.020 --> 00:15:25.500
+le plan standard
+
+00:15:25.500 --> 00:15:26.180
+est plus judicieux
+
+00:15:26.180 --> 00:15:26.980
+une fois que votre volume
+
+00:15:26.980 --> 00:15:27.760
+d'événements est prévisible
+
+00:15:27.760 --> 00:15:28.420
+et suffisamment élevé
+
+00:15:28.420 --> 00:15:28.860
+pour que les coûts
+
+00:15:28.860 --> 00:15:29.360
+par exécution
+
+00:15:29.360 --> 00:15:30.100
+commencent à faire mal.
+
+00:15:30.660 --> 00:15:31.200
+Ne vous fiez position.
+
+00:15:31.640 --> 00:15:32.460
+Mesurez le nombre réel
+
+00:15:32.460 --> 00:15:33.100
+de déclencheurs
+
+00:15:33.100 --> 00:15:34.120
+et la taille de la charge utile
+
+00:15:34.120 --> 00:15:34.720
+avant de vous engager
+
+00:15:34.720 --> 00:15:35.620
+dans un modèle de tarification.
+
+00:15:35.960 --> 00:15:36.740
+Soyez prudent dans la manière
+
+00:15:36.740 --> 00:15:37.340
+dont vous gérez stocker.
+
+00:15:37.500 --> 00:15:37.860
+Vous avez besoin
+
+00:15:37.860 --> 00:15:38.800
+d'un historique d'exécution
+
+00:15:38.800 --> 00:15:39.620
+suffisant pour les examens
+
+00:15:39.620 --> 00:15:40.400
+des incidents et les preuves
+
+00:15:40.400 --> 00:15:40.860
+de gouvernance
+
+00:15:40.860 --> 00:15:41.480
+mais vous n'avez pas besoin
+
+00:15:41.480 --> 00:15:42.120
+d'une base de données
+
+00:15:42.120 --> 00:15:43.320
+volumineuse remplie de contenu sensé.
+
+00:15:43.320 --> 00:15:44.520
+Conservez les champs spécifiques
+
+00:15:44.520 --> 00:15:45.200
+qui expliquent pourquoi
+
+00:15:45.200 --> 00:15:46.180
+une décision a été prise
+
+00:15:46.180 --> 00:15:47.180
+et supprimez le désordre
+
+00:15:47.180 --> 00:15:48.360
+qui crée un risque de rétention.
+
+00:15:48.920 --> 00:15:49.800
+Stocker trop de données
+
+00:15:49.800 --> 00:15:50.620
+peut transformer
+
+00:15:50.620 --> 00:15:51.520
+votre outil de sécurité
+
+00:15:51.520 --> 00:15:52.820
+en un risque de confidentialité
+
+00:15:52.820 --> 00:15:53.580
+si vous ne faites pas attention.
+
+00:15:53.960 --> 00:15:54.980
+Enfin, reliez tous ces réglages
+
+00:15:54.980 --> 00:15:56.240
+à votre gouvernance plus large.
+
+00:15:56.660 --> 00:15:57.420
+Mapez le flux de travail
+
+00:15:57.420 --> 00:15:58.420
+aux fonctions RMF de l'IA
+
+00:15:58.420 --> 00:15:58.700
+du NIST
+
+00:15:58.700 --> 00:15:59.640
+telles que mesurer et gérer
+
+00:15:59.640 --> 00:16:00.220
+et associez-le
+
+00:16:00.220 --> 00:16:01.520
+à vos étiquettes de sensibilité
+
+00:16:01.520 --> 00:16:02.500
+des données dans le champ d'application.
+
+00:16:02.740 --> 00:16:03.480
+Parfois, la meilleure solution
+
+00:16:03.480 --> 00:16:04.140
+n'est pas un détecteur
+
+00:16:04.140 --> 00:16:04.720
+plus intelligent
+
+00:16:04.720 --> 00:16:05.820
+mais simplement de supprimer
+
+00:16:05.820 --> 00:16:06.540
+la portée inutile
+
+00:16:06.540 --> 00:16:07.140
+du flux de travail
+
+00:16:07.140 --> 00:16:07.860
+avant qu'elle ne devienne
+
+00:16:07.860 --> 00:16:08.720
+un problème, un problème.
+
+00:16:08.920 --> 00:16:09.980
+Lorsque vous atteignez ce stade,
+
+00:16:10.100 --> 00:16:10.720
+vous ne débattez plus
+
+00:16:10.720 --> 00:16:11.640
+de la sécurité de l'IA
+
+00:16:11.640 --> 00:16:12.560
+dans l'abstrait.
+
+00:16:13.500 --> 00:16:14.300
+Vous exécutez un véritable
+
+00:16:14.300 --> 00:16:15.040
+modèle d'exploitation
+
+00:16:15.040 --> 00:16:15.720
+avec des seuils
+
+00:16:15.720 --> 00:16:16.220
+et des compromis
+
+00:16:16.220 --> 00:16:16.720
+qu'une entreprise
+
+00:16:16.720 --> 00:16:17.360
+peut réellement gérer.
+
+00:16:18.400 --> 00:16:19.020
+Ce que cela change
+
+00:16:19.020 --> 00:16:19.600
+pour les dirigeants
+
+00:16:19.600 --> 00:16:20.260
+et les architectes.
+
+00:16:20.720 --> 00:16:21.180
+Une fois que vous avez
+
+00:16:21.180 --> 00:16:21.780
+mis cela en place,
+
+00:16:21.880 --> 00:16:22.660
+Coppileau cesse d'agir
+
+00:16:22.660 --> 00:16:23.140
+comme un système
+
+00:16:23.140 --> 00:16:23.920
+de confiance aveugle
+
+00:16:23.920 --> 00:16:24.360
+et c'est là
+
+00:16:24.360 --> 00:16:25.260
+que le véritable changement
+
+00:16:25.260 --> 00:16:25.700
+se produit.
+
+00:16:26.280 --> 00:16:26.960
+Avant ce changement,
+
+00:16:27.320 --> 00:16:28.020
+le modèle ne recevait
+
+00:16:28.020 --> 00:16:29.140
+qu'un fouille de contexte mixte
+
+00:16:29.140 --> 00:16:29.820
+alors que votre équipe
+
+00:16:29.820 --> 00:16:30.560
+espérait que les bonnes
+
+00:16:30.560 --> 00:16:31.440
+instructions l'emporteraient.
+
+00:16:32.160 --> 00:16:32.940
+Désormais, ce contexte
+
+00:16:32.940 --> 00:16:33.720
+est filtré, noté
+
+00:16:33.720 --> 00:16:34.340
+et acheminé
+
+00:16:34.340 --> 00:16:35.140
+avant même que le modèle
+
+00:16:35.140 --> 00:16:35.840
+n'ait la possibilité
+
+00:16:35.840 --> 00:16:36.280
+de le toucher.
+
+00:16:36.700 --> 00:16:37.380
+Le résultat en matière
+
+00:16:37.380 --> 00:16:37.820
+de sécurité
+
+00:16:37.820 --> 00:16:38.420
+n'est plus une simple
+
+00:16:38.420 --> 00:16:39.100
+politique abstraite
+
+00:16:39.100 --> 00:16:39.940
+car il fonctionne désormais
+
+00:16:39.940 --> 00:16:40.920
+comme une exécution contrôlée.
+
+00:16:41.240 --> 00:16:41.860
+Pour les architectes,
+
+00:16:41.940 --> 00:16:42.520
+cela se déplace là
+
+00:16:42.520 --> 00:16:43.020
+où la sécurité
+
+00:16:43.020 --> 00:16:43.620
+réside réellement
+
+00:16:43.620 --> 00:16:44.140
+dans votre conception.
+
+00:16:45.400 --> 00:16:46.060
+Elle ne se trouve plus
+
+00:16:46.060 --> 00:16:47.220
+uniquement dans les paramètres
+
+00:16:47.220 --> 00:16:47.740
+du locataire,
+
+00:16:47.840 --> 00:16:48.340
+les autorisations
+
+00:16:48.340 --> 00:16:49.180
+ou les modèles d'invite
+
+00:16:49.180 --> 00:16:50.080
+mais directement dans
+
+00:16:50.080 --> 00:16:50.800
+le chemin de la transaction.
+
+00:16:52.040 --> 00:16:52.960
+Chaque requête importante
+
+00:16:52.960 --> 00:16:54.060
+obtient un point d'interception
+
+00:16:54.060 --> 00:16:55.120
+et chaque action sensible
+
+00:16:55.120 --> 00:16:55.640
+suit un chemin
+
+00:16:59.820 --> 00:17:00.540
+devient quelque chose
+
+00:17:00.540 --> 00:17:01.040
+que vous évaluez
+
+00:17:01.040 --> 00:17:01.680
+comme un chemin d'entrée
+
+00:17:01.680 --> 00:17:02.500
+plutôt que comme une simple
+
+00:17:02.500 --> 00:17:03.500
+fonctionnalité de productivité.
+
+00:17:03.940 --> 00:17:04.660
+Ceci est essentiel
+
+00:17:04.660 --> 00:17:05.720
+car la dérive de l'architecture
+
+00:17:05.720 --> 00:17:06.460
+est généralement la raison
+
+00:17:06.460 --> 00:17:06.820
+pour laquelle
+
+00:17:06.820 --> 00:17:07.620
+ces programmes échouent.
+
+00:17:07.960 --> 00:17:08.960
+Une équipe déploie copilote
+
+00:17:08.960 --> 00:17:10.080
+pour un cas d'utilisation unique
+
+00:17:10.080 --> 00:17:10.800
+puis une autre équipe
+
+00:17:10.800 --> 00:17:11.620
+connecte un formulaire
+
+00:17:11.620 --> 00:17:12.360
+et finalement quelqu'un
+
+00:17:12.360 --> 00:17:13.280
+ajoute un flux de travail
+
+00:17:13.280 --> 00:17:13.820
+ou donne accès
+
+00:17:13.820 --> 00:17:14.540
+à un outil d'agent.
+
+00:17:15.440 --> 00:17:16.100
+Chacun de ces changements
+
+00:17:16.100 --> 00:17:16.840
+semble mineur en soi
+
+00:17:16.840 --> 00:17:17.380
+mais ensemble,
+
+00:17:17.740 --> 00:17:18.540
+il crée un chemin d'attaque
+
+00:17:18.540 --> 00:17:19.580
+bien plus vaste que quiconque
+
+00:17:19.580 --> 00:17:20.940
+ne l'avait jamais prévu.
+
+00:17:21.560 --> 00:17:22.100
+Si vous n'intégrez
+
+00:17:22.100 --> 00:17:22.680
+pas l'interception
+
+00:17:22.680 --> 00:17:23.720
+dans votre modèle d'exploitation,
+
+00:17:23.720 --> 00:17:24.980
+l'environnement va se développer
+
+00:17:24.980 --> 00:17:25.540
+beaucoup plus vite
+
+00:17:25.540 --> 00:17:26.600
+que vos contrôles ne peuvent suivre.
+
+00:17:27.120 --> 00:17:27.680
+Pour les responsables
+
+00:17:27.680 --> 00:17:28.160
+de la sécurité,
+
+00:17:28.320 --> 00:17:29.080
+cette approche résout enfin
+
+00:17:29.080 --> 00:17:30.260
+un problème de propriété complexe
+
+00:17:30.260 --> 00:17:30.920
+qui afflige la plupart
+
+00:17:30.920 --> 00:17:31.560
+des organisations.
+
+00:17:32.360 --> 00:17:32.680
+Actuellement,
+
+00:17:32.800 --> 00:17:33.660
+le risque lié à copilote
+
+00:17:33.660 --> 00:17:34.420
+se situe généralement
+
+00:17:34.420 --> 00:17:35.440
+entre les différentes équipes.
+
+00:17:36.120 --> 00:17:36.960
+Le SOC voit les alertes,
+
+00:17:37.020 --> 00:17:37.660
+les administrateurs
+
+00:17:37.660 --> 00:17:38.680
+Microsoft 365
+
+00:17:38.680 --> 00:17:39.660
+voient la configuration
+
+00:17:39.660 --> 00:17:40.760
+et le propriétaire de l'IA
+
+00:17:40.760 --> 00:17:42.500
+ne se soucie que de l'adoption.
+
+00:17:43.140 --> 00:17:43.760
+Lorsque vous utilisez
+
+00:17:43.760 --> 00:17:44.340
+un chemin de contrôle
+
+00:17:44.340 --> 00:17:44.900
+Logic Apps,
+
+00:17:44.980 --> 00:17:45.380
+tous ces groupes
+
+00:17:45.380 --> 00:17:46.120
+peuvent enfin travailler
+
+00:17:46.120 --> 00:17:46.820
+à partir d'un modèle
+
+00:17:46.820 --> 00:17:47.540
+de réponse unique.
+
+00:17:48.400 --> 00:17:49.300
+Ils utilisent la même piste
+
+00:17:49.300 --> 00:17:49.680
+d'événement,
+
+00:17:49.780 --> 00:17:50.660
+la même logique de notation
+
+00:17:50.660 --> 00:17:51.680
+et le même historique de branches
+
+00:17:51.680 --> 00:17:52.740
+qui réduit la confusion totale
+
+00:17:52.740 --> 00:17:53.520
+lorsqu'une invite risquée
+
+00:17:53.520 --> 00:17:54.580
+ou un document toxique
+
+00:17:54.580 --> 00:17:55.240
+apparaît dans un flux
+
+00:17:55.240 --> 00:17:56.040
+de travail en direct.
+
+00:17:56.820 --> 00:17:57.580
+L'aspect commercial
+
+00:17:57.580 --> 00:17:58.180
+de cette approche
+
+00:17:58.180 --> 00:17:58.880
+est bien plus direct
+
+00:17:58.880 --> 00:17:59.700
+que ce que les gens pensent.
+
+00:18:00.260 --> 00:18:00.900
+Bloquer une menace tôt
+
+00:18:00.900 --> 00:18:01.600
+est toujours moins coûteux
+
+00:18:01.600 --> 00:18:02.740
+que d'essayer de la nettoyer plus tard.
+
+00:18:03.400 --> 00:18:04.640
+Le nettoyage implique des enquêtes,
+
+00:18:04.740 --> 00:18:05.560
+des examens juridiques
+
+00:18:05.560 --> 00:18:06.200
+et des interruptions
+
+00:18:06.200 --> 00:18:07.540
+de la part des utilisateurs
+
+00:18:07.540 --> 00:18:08.520
+et il se termine généralement
+
+00:18:08.520 --> 00:18:09.640
+par une série de contrôles d'accès
+
+00:18:09.640 --> 00:18:10.560
+qui aurait dû avoir lieu
+
+00:18:10.560 --> 00:18:11.400
+avant même le déploiement.
+
+00:18:12.100 --> 00:18:13.000
+Les dirigeants n'ont pas besoin
+
+00:18:13.000 --> 00:18:13.420
+d'un long cours
+
+00:18:13.420 --> 00:18:14.060
+sur l'éthique de l'IA
+
+00:18:14.060 --> 00:18:14.860
+pour comprendre cela
+
+00:18:14.860 --> 00:18:15.860
+car ils ont juste besoin
+
+00:18:15.860 --> 00:18:16.660
+de voir que le contrôle
+
+00:18:16.660 --> 00:18:17.820
+de l'exécution coûte moins cher
+
+00:18:17.820 --> 00:18:18.620
+que de laisser un risque
+
+00:18:18.620 --> 00:18:19.480
+non géré se propager
+
+00:18:19.480 --> 00:18:19.960
+dans les systèmes
+
+00:18:19.960 --> 00:18:21.300
+que leur personnel utilise au quotidien.
+
+00:18:22.280 --> 00:18:22.820
+Pour les dirigeants,
+
+00:18:22.880 --> 00:18:23.800
+cela soulève un point délicat
+
+00:18:23.800 --> 00:18:24.920
+concernant la nature du risque.
+
+00:18:25.820 --> 00:18:26.460
+Le risque lié à l'IA
+
+00:18:26.460 --> 00:18:26.940
+ne se trouve plus
+
+00:18:26.940 --> 00:18:27.560
+dans un bac à sable
+
+00:18:27.560 --> 00:18:28.320
+ou en laboratoire pilote
+
+00:18:28.320 --> 00:18:28.980
+mais il se trouve désormais
+
+00:18:28.980 --> 00:18:29.820
+dans World, Outlook,
+
+00:18:29.900 --> 00:18:30.760
+SharePoint et Teams.
+
+00:18:31.840 --> 00:18:33.080
+Les gens partent déjà du principe
+
+00:18:33.080 --> 00:18:34.440
+que ces endroits sont suffisamment sûrs
+
+00:18:34.440 --> 00:18:35.120
+pour évoluer rapidement
+
+00:18:35.120 --> 00:18:36.100
+et cette confiance empruntée
+
+00:18:36.100 --> 00:18:37.040
+est exactement ce qui fait monter
+
+00:18:37.040 --> 00:18:37.900
+les enjeux pour l'entreprise.
+
+00:18:38.560 --> 00:18:39.340
+Un mauvais flux de travail
+
+00:18:39.340 --> 00:18:40.760
+dans une application expérimentale
+
+00:18:40.760 --> 00:18:42.180
+est un problème contenu
+
+00:18:42.180 --> 00:18:43.080
+mais un mauvais flux de travail
+
+00:18:43.080 --> 00:18:44.700
+dans votre pile de productivité quotidienne
+
+00:18:44.700 --> 00:18:45.900
+est une toute autre histoire.
+
+00:18:46.700 --> 00:18:47.540
+Votre chemin de déploiement
+
+00:18:47.540 --> 00:18:48.260
+doit rester restreint
+
+00:18:48.260 --> 00:18:48.860
+et très délibéré.
+
+00:18:49.240 --> 00:18:50.200
+Commencez par un cas d'utilisation,
+
+00:18:50.300 --> 00:18:50.840
+un déclencheur
+
+00:18:50.840 --> 00:18:51.540
+et un modèle de notation.
+
+00:18:52.140 --> 00:18:52.840
+Choisissez un chemin
+
+00:18:52.840 --> 00:18:54.420
+où les données sont réellement importantes
+
+00:18:54.420 --> 00:18:55.200
+et où le comportement
+
+00:18:55.200 --> 00:18:55.840
+est facile à observer.
+
+00:18:56.360 --> 00:18:56.800
+Vous devez prouver
+
+00:18:56.800 --> 00:18:57.580
+que le flux de travail
+
+00:18:57.580 --> 00:18:58.540
+détecte les entrées risquées
+
+00:18:58.540 --> 00:18:59.560
+et achemine les entrées saines
+
+00:18:59.560 --> 00:19:00.460
+tout en fournissant aux humains
+
+00:19:00.460 --> 00:19:01.200
+quelque chose d'utile
+
+00:19:01.200 --> 00:19:02.400
+lorsqu'une révision est nécessaire.
+
+00:19:03.000 --> 00:19:03.640
+Une fois que vous avez prouvé
+
+00:19:03.640 --> 00:19:04.180
+que cela fonctionne,
+
+00:19:04.320 --> 00:19:05.160
+vous pouvez commencer à développer.
+
+00:19:05.780 --> 00:19:06.060
+Plus tard,
+
+00:19:06.140 --> 00:19:06.600
+vous pouvez ajouter
+
+00:19:06.600 --> 00:19:07.480
+la détection des anomalies
+
+00:19:07.480 --> 00:19:08.480
+ou des contrôles de sortie
+
+00:19:08.480 --> 00:19:08.980
+là où ils conviennent.
+
+00:19:09.380 --> 00:19:09.920
+Vous pouvez même ajouter
+
+00:19:09.920 --> 00:19:11.000
+une surveillance plus approfondie
+
+00:19:11.000 --> 00:19:11.980
+pour détecter les abus d'outils
+
+00:19:11.980 --> 00:19:12.640
+mais vous devez maintenir
+
+00:19:12.640 --> 00:19:13.160
+la première porte
+
+00:19:13.160 --> 00:19:14.260
+juste là où le contexte non fiable
+
+00:19:14.260 --> 00:19:15.000
+entre dans le système.
+
+00:19:15.780 --> 00:19:17.080
+Si cette première porte reste faible,
+
+00:19:17.200 --> 00:19:18.100
+chaque contrôle que vous ajouterez
+
+00:19:18.100 --> 00:19:18.480
+par la suite
+
+00:19:18.480 --> 00:19:19.420
+ne fera qu'essayer de compenser
+
+00:19:19.420 --> 00:19:20.140
+un mauvais point de départ.
+
+00:19:21.000 --> 00:19:22.220
+Le changement est en fait très simple.
+
+00:19:22.720 --> 00:19:24.020
+Arrêtez de traiter l'injection rapide
+
+00:19:24.020 --> 00:19:25.020
+comme s'il s'agissait simplement
+
+00:19:25.020 --> 00:19:25.840
+d'un problème de formulation
+
+00:19:25.840 --> 00:19:26.700
+et commencez à la traiter
+
+00:19:26.700 --> 00:19:27.740
+comme un contrôle d'exécution
+
+00:19:27.740 --> 00:19:28.840
+sur un contexte non approuvé
+
+00:19:28.840 --> 00:19:29.860
+transitant par copilote.
+
+00:19:30.720 --> 00:19:31.820
+Prenez le temps de cartographier
+
+00:19:31.820 --> 00:19:32.680
+un workflow copilote
+
+00:19:32.680 --> 00:19:33.500
+de bout en bout cette semaine.
+
+00:19:34.140 --> 00:19:34.780
+Trouvez le dernier point
+
+00:19:34.780 --> 00:19:35.520
+d'interception sûr
+
+00:19:35.520 --> 00:19:36.240
+avant l'exécution
+
+00:19:36.240 --> 00:19:37.980
+et une application logique
+
+00:19:37.980 --> 00:19:38.300
+qui note,
+
+00:19:38.540 --> 00:19:39.100
+bloque et consigne
+
+00:19:39.100 --> 00:19:39.960
+ce chemin spécifique.
+
+00:19:40.840 --> 00:19:41.700
+Si vous souhaitez en savoir plus
+
+00:19:41.700 --> 00:19:42.680
+sur la sécurité de copilote
+
+00:19:42.680 --> 00:19:43.220
+sans fioriture,
+
+00:19:43.460 --> 00:19:44.220
+abonnez-vous et laissez un avis.
+
+00:19:44.860 --> 00:19:45.980
+Vous pouvez également me contacter
+
+00:19:45.980 --> 00:19:47.020
+Mircopiter sur LinkedIn
+
+00:19:47.020 --> 00:19:48.000
+pour me parler du scénario
+
+00:19:48.000 --> 00:19:48.960
+de locataire spécifique
+
+00:19:48.960 --> 00:19:50.160
+que vous essayez de sécuriser.

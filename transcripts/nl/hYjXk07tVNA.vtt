@@ -1,0 +1,949 @@
+WEBVTT
+
+00:00:00.140 --> 00:00:07.520
+Klaar voor 10 dagen Microsoft 365, Copilot, AI, Azure en de mensen die de toekomst van werk vormgeven?
+
+00:00:07.960 --> 00:00:12.380
+Deze januari is M365, kom terug en pakken we groter uit.
+
+00:00:12.660 --> 00:00:18.560
+Doe mee voor live sessies, praktijkdemos en praktische kennis van MVP's en experts van over de hele wereld.
+
+00:00:18.780 --> 00:00:21.500
+Geen generieke sliedes, geen eindeloos jargon.
+
+00:00:21.980 --> 00:00:29.120
+We pakken de echte uitdagingen aan Copilot Studio, AI Agents, Fabric, Beveiliging, Governance en Automatisering.
+
+00:00:29.120 --> 00:00:34.880
+Of je nu IT-professional, ontwikkelaar of business leader bent, er zijn sessies voor jou ontworpen.
+
+00:00:35.320 --> 00:00:40.440
+Met 10 volledige dagen kun je diverse technologieën verkennen en verbinden met een wereldwijde community.
+
+00:00:40.860 --> 00:00:44.620
+Kijk live mee en neem praktische inzichten mee terug naar jouw organisatie.
+
+00:00:44.900 --> 00:00:49.140
+Januari 2027, 10 dagen, 1 Microsoft Community.
+
+00:00:49.420 --> 00:00:51.160
+De registratie is nu geopend.
+
+00:00:51.860 --> 00:00:55.900
+Ga naar m365.com.net en verzeker je vandaag nog van een plek.
+
+00:00:56.240 --> 00:00:58.940
+Dat is m365.com.net.
+
+00:00:59.120 --> 00:01:04.520
+Meld je nu aan op m365.com.net en we zien je live in januari.
+
+00:01:04.760 --> 00:01:07.900
+Stel je voor dat je een nieuwe laptop koopt voor iemand die bij jouw bedrijf komt werken.
+
+00:01:08.120 --> 00:01:12.660
+Diegene heeft e-mail nodig, gedeelde bestanden, kantoor wifi en misschien een VPN voor thuiswerken.
+
+00:01:12.840 --> 00:01:16.020
+Elke verbinding stelt dezelfde stille vraag, hoort deze laptop hier wel?
+
+00:01:16.200 --> 00:01:21.400
+In veel kleine bedrijven is het antwoord nog steeds een wachtwoord, een gedeelde wifi-code, een VPN-log-in via een bericht.
+
+00:01:21.400 --> 00:01:25.400
+En dan handmatig herstel als iemand een wachtwoord wijzigt, een laptop vervangt of het bedrijf verlaat.
+
+00:01:25.400 --> 00:01:27.500
+Dat voelt misschien als een klein kantoorprobleem.
+
+00:01:27.700 --> 00:01:28.340
+Dat is het niet.
+
+00:01:28.520 --> 00:01:32.120
+Dezelfde vraag speelt bij een bedrijf van 10 mensen en bij een bedrijf van 10.000 mensen.
+
+00:01:32.320 --> 00:01:36.840
+Je hebt een manier nodig waarop een apparaat bewijst dat het erbij hoort, zonder dat de gebruiker constant geheimen hoeft in te voeren.
+
+00:01:37.040 --> 00:01:44.820
+Ik ben Melco Peters van M365FM en dit kennisfragment legt certificaten, Microsoft Cloud PKI en de rol van Intune bij het afhandelen van dat bewijs achter de schermen uit.
+
+00:01:44.960 --> 00:01:47.900
+Een klein digitaal bestand kan een wachtwoord bij de kantoordeur vervangen.
+
+00:01:47.900 --> 00:01:50.160
+Laten we eerst kijken waarom dat bestand bestaat.
+
+00:01:50.400 --> 00:01:51.840
+Waarom certificaten bestaan?
+
+00:01:52.040 --> 00:01:53.840
+Open een beveiligde website in je browser.
+
+00:01:54.080 --> 00:01:56.880
+Voordat je de pagina leest, controleert je browser iets op de achtergrond.
+
+00:01:57.060 --> 00:01:58.920
+Het controleert een digitaal certificaat.
+
+00:01:59.120 --> 00:02:03.500
+Dat certificaat helpt de browser bevestigen dat de echte website is bereikt en kan een beveiligde verbinding opzetten.
+
+00:02:03.700 --> 00:02:06.640
+De meeste mensen zien die controle nooit, maar je vertrouwt er elke dag op.
+
+00:02:06.720 --> 00:02:09.440
+Een certificaat werkt een beetje als een ID-batch van het bedrijf.
+
+00:02:09.580 --> 00:02:11.880
+De badge bevat een naam en details over de eigenaar.
+
+00:02:12.040 --> 00:02:14.640
+Het bevat ook een bewijs van een badge-maker die je vertrouwt.
+
+00:02:14.640 --> 00:02:17.960
+Een digitaal certificaat bevat een naam of identiteit en een publieke sleutel.
+
+00:02:18.140 --> 00:02:20.840
+Beschouw de publieke sleutel als informatie die anderen kunnen inzien.
+
+00:02:21.020 --> 00:02:24.420
+Het certificaat bevat ook een vertrouwde digitale handtekening die zegt
+
+00:02:24.420 --> 00:02:27.840
+Dit badge-kantoor heeft deze identiteit gecontroleerd en deze badge goedgekeurd.
+
+00:02:28.060 --> 00:02:31.580
+Dat geeft de beveiliger iets om te controleren, maar een badge alleen is niet genoeg.
+
+00:02:31.760 --> 00:02:34.060
+Iemand zou een geprinte badge van een bureau kunnen pakken.
+
+00:02:34.280 --> 00:02:37.040
+Digitale certificaten lossen dat probleem op met een privé-sleutel.
+
+00:02:37.220 --> 00:02:39.120
+De privé-sleutel is het geheim van de houder.
+
+00:02:39.360 --> 00:02:41.480
+Deze blijft bij een laptop, telefoon of gebruiker.
+
+00:02:41.480 --> 00:02:44.260
+Het apparaat gebruikt deze om te bewijzen dat het echte eigenaar van het certificaat is.
+
+00:02:44.640 --> 00:02:47.560
+Het geheim te overhandigen aan het wifi-netwerk, de VPN of de app die de badge controleert.
+
+00:02:47.740 --> 00:02:50.320
+Zie het als een beveiliger die je vraagt je eigen badge-houder te ontgrendelen,
+
+00:02:50.540 --> 00:02:52.380
+in plaats van je te vragen de combinatie te onthullen.
+
+00:02:52.540 --> 00:02:55.580
+Je bewijst dat je het kunt openen, maar de beveiliger komt de combinatie nooit te weten.
+
+00:02:55.820 --> 00:02:58.520
+Dat is waarom certificaten veiliger kunnen zijn dan een gedeeld wachtwoord.
+
+00:02:58.680 --> 00:03:00.360
+Een gedeeld wifi-wachtwoord kan rondgaan.
+
+00:03:00.520 --> 00:03:03.440
+Iemand kan het opschrijven, doorsturen, hergebruiken op een persoonlijk apparaat
+
+00:03:03.440 --> 00:03:04.800
+of behouden na het verlaten van het bedrijf.
+
+00:03:04.900 --> 00:03:09.080
+Een apparaatscertificaat geeft elke beheerde laptop of telefoon in plaats daarvan zijn eigen bewijs.
+
+00:03:09.080 --> 00:03:11.260
+Dus, wie maakt en beheert deze digitale badges?
+
+00:03:11.580 --> 00:03:14.660
+Die taak hoort bij PKI, kort voor Public Key Infrastructure.
+
+00:03:14.880 --> 00:03:16.800
+De naam klinkt zwaar, maar het idee is simpel.
+
+00:03:17.000 --> 00:03:19.560
+PKI is het badge-kantoor voor jouw digitale werkplek.
+
+00:03:19.700 --> 00:03:23.120
+Het maakt certificaten aan, verstuurt ze naar de juiste personen of apparaten,
+
+00:03:23.300 --> 00:03:26.160
+vernieuwt ze voordat ze verlopen en annuleert ze wanneer ze niet meer mogen werken.
+
+00:03:26.400 --> 00:03:30.120
+Binnen dat badge-kantoor bevindt zich een certificaatautoriteit, meestal afgekort tot circa.
+
+00:03:30.740 --> 00:03:32.620
+Een circa is de vertrouwde badge-specialist.
+
+00:03:32.620 --> 00:03:37.460
+Wanneer een wifi-netwerk, VPN-dienst of interne app een certificaat ziet, stelt het één vraag.
+
+00:03:37.680 --> 00:03:39.760
+Vertrouw ik de badge-specialist die dit heeft goedgekeurd?
+
+00:03:39.940 --> 00:03:44.100
+Als het antwoord ja is, kan het het certificaat controleren en beslissen of het apparaat wordt toegelaten.
+
+00:03:44.300 --> 00:03:45.560
+Er zijn meestal twee lagen.
+
+00:03:45.880 --> 00:03:47.000
+Bovenaan staat de root circa.
+
+00:03:47.320 --> 00:03:50.140
+Zie dat als het hoofdkantoor van het bedrijf dat het hele badge-systeem goedkeurt.
+
+00:03:50.380 --> 00:03:52.540
+Deze hoeft niet voor elke laptop elke badge te printen.
+
+00:03:52.720 --> 00:03:54.060
+Daaronder zit een uitgevende circa.
+
+00:03:54.460 --> 00:03:56.240
+Dat is de balie die het dagelijkse werk afhandelt.
+
+00:03:56.460 --> 00:03:58.760
+Deze geeft certificaten uit voor apparaten en gebruikers,
+
+00:03:58.760 --> 00:04:00.640
+terwijl de autoriteit teruglinkt naar de root circa.
+
+00:04:00.640 --> 00:04:05.220
+Wanneer een dienst de keten controleert, kan deze het certificaat volgen van de laptop naar de uitgevende circa
+
+00:04:05.220 --> 00:04:07.220
+en dan terug naar de root circa die wordt vertrouwd.
+
+00:04:07.420 --> 00:04:09.060
+Die keten geeft het proces structuur.
+
+00:04:09.260 --> 00:04:10.760
+Je kunt dit gebruiken voor veilige wifi,
+
+00:04:11.000 --> 00:04:13.940
+waarbij een laptop zichzelf bewijst voordat deze verbinding maakt met het netwerk.
+
+00:04:14.120 --> 00:04:15.420
+Je kunt het gebruiken voor een VPN,
+
+00:04:15.680 --> 00:04:18.980
+waarbij de laptop bewijst dat deze erbij hoort voordat men vanaf thuis bedrijfsbronnen benadert.
+
+00:04:19.140 --> 00:04:23.220
+Je kunt het ook gebruiken voor een interne app die alleen beheerde bedrijfsapparaten mag accepteren.
+
+00:04:23.360 --> 00:04:25.300
+De werknemer hoeft daar niets van te begrijpen.
+
+00:04:25.300 --> 00:04:28.540
+Ze openen de laptop, kiezen het bedrijfs wifi en maken verbinding.
+
+00:04:28.760 --> 00:04:29.480
+Dat is het doel.
+
+00:04:29.480 --> 00:04:33.240
+Het lastige deel begint wanneer je badge kantoor in een serverruimte staat.
+
+00:04:33.660 --> 00:04:36.480
+Waarom traditionele PKI een last wordt voor het MKB?
+
+00:04:36.780 --> 00:04:40.340
+Jarenlang betekende dit badge systeem het bouwen en beheren van je eigen apparatuur.
+
+00:04:40.520 --> 00:04:43.980
+Je installeert Windows Server, voegt Active Directory Certificate Services toe,
+
+00:04:44.100 --> 00:04:47.980
+vaak ADCS genoemd, die de certificeringsinstantie binnen je bedrijfsnetwerk beheert.
+
+00:04:48.140 --> 00:04:50.120
+Maar de server alleen is niet het hele verhaal.
+
+00:04:50.280 --> 00:04:52.080
+Als je Intune beheerde apparaten gebruikt,
+
+00:04:52.080 --> 00:04:56.240
+hebben ze een manier nodig om die lokale certificeringsinstantie om een certificaat te vragen.
+
+00:04:56.240 --> 00:05:01.720
+Dat betekent het opzetten van een Intune Certificate Connector, een NDES server voor certificaat aanvragen,
+
+00:05:01.920 --> 00:05:05.900
+een reverse proxy voor veilige toegang van buitenaf en firewall regels voor het juiste verkeer.
+
+00:05:06.060 --> 00:05:07.400
+Elk onderdeel heeft een taak.
+
+00:05:07.600 --> 00:05:11.660
+Samen kunnen ze een simpel doel, zoals wachtwoordloze wifi, veranderen in een volledig serverproject.
+
+00:05:11.840 --> 00:05:12.240
+Hier is een vergelijking.
+
+00:05:13.040 --> 00:05:15.400
+Stel je voor dat je zelf toegangspassen voor personeel wilt printen op kantoor.
+
+00:05:15.540 --> 00:05:16.820
+Je koopt niet zomaar een kaartprinter.
+
+00:05:17.000 --> 00:05:18.320
+Je bouwt er een afgesloten ruimte voor.
+
+00:05:18.480 --> 00:05:20.780
+Je voegt afgesloten kasten toe voor de voorraadkaarten en de administratie.
+
+00:05:20.920 --> 00:05:22.000
+Je installeert noodstroom.
+
+00:05:22.180 --> 00:05:23.840
+Je stelt regels op voor wie er naar binnen mag.
+
+00:05:23.840 --> 00:05:27.460
+Dan heb je iemand nodig die weet welke schakelaar je moet omzetten als de printer ermee ophoudt.
+
+00:05:27.580 --> 00:05:30.640
+Dat komt dichter bij traditionele PKI dan de meeste mensen verwachten.
+
+00:05:30.840 --> 00:05:35.520
+Een klein bedrijf wil misschien alleen dat laptops verbinding maken met wifi zonder een wachtwoord te delen met iedereen.
+
+00:05:35.700 --> 00:05:40.060
+Of ze willen een VPN die een beheerde laptop herkent voordat de werknemer moet inloggen.
+
+00:05:40.740 --> 00:05:41.520
+Redelijke doelen.
+
+00:05:41.820 --> 00:05:49.580
+Toch kan de oude route servers, netwerkregels, planning voor openbare toegang en kennis vereisen waar veel kleine IT-teams simpelweg geen tijd voor hebben.
+
+00:05:49.760 --> 00:05:51.640
+En het werk stopt niet na de installatie.
+
+00:05:51.640 --> 00:05:56.060
+Surfers hebben updates nodig, hardware bereikt het einde van de levensduur, backups moeten worden getest.
+
+00:05:56.200 --> 00:05:57.860
+Niet alleen een groen vinkje in een backup tol.
+
+00:05:58.360 --> 00:06:02.100
+Certificaten hebben vervaldata en het systeem moet ze vernieuwen voordat die data verstrijken.
+
+00:06:02.320 --> 00:06:07.480
+Wanneer vernieuwing mislukt, komt het eerste teken misschien van een medewerker die op een drukke maandagochtend niet op wifi kan.
+
+00:06:07.660 --> 00:06:10.240
+Het wachtwoord van de medewerker werkt misschien nog perfect.
+
+00:06:10.420 --> 00:06:16.940
+Hun laptop kan nog steeds woord en e-mail openen via een mobiele verbinding, maar het certificaat dat het netwerk in staat stelt de laptop te herkennen is mogelijk verlopen.
+
+00:06:17.120 --> 00:06:20.880
+De VPN kan het weigeren, een interne app kan het weigeren, wifi kan het weigeren.
+
+00:06:20.880 --> 00:06:24.220
+Dat mond uit in een supportvraag die in eerste instantie vreemd klinkt.
+
+00:06:24.300 --> 00:06:26.400
+Mijn wachtwoord werkt, maar ik kan niet online komen.
+
+00:06:26.660 --> 00:06:33.720
+Dan moet iemand uitzoeken of het probleem bij het apparaat, het certificaatprofiel, de netwerkservice, de lokale circa, de connector of de firewall ligt.
+
+00:06:33.880 --> 00:06:36.940
+Een klein IT-team kan een halve dag kwijt zijn aan het volgen van dat spoor.
+
+00:06:37.140 --> 00:06:39.140
+Werken op afstand voegt nog een extra laag toe.
+
+00:06:39.320 --> 00:06:42.380
+Een laptop op kantoor kan de lokale certificaatdiensten makkelijker bereiken,
+
+00:06:42.620 --> 00:06:47.000
+maar een laptop aan de keukentafel heeft een veilige route nodig om een certificaat of een nieuwe versie op te halen.
+
+00:06:47.000 --> 00:06:51.540
+Je kunt een deel van het proces voorzichtig openstellen via een reverse proxy en firewall regels.
+
+00:06:51.720 --> 00:06:55.280
+Dat werkt als het goed gepland en onderhouden is, maar het voegt ook meer bewegende delen,
+
+00:06:55.420 --> 00:06:58.600
+meer instellingen en meer plekken toe waar een kleine fout de toegang kan onderbreken.
+
+00:06:58.760 --> 00:07:02.060
+De kosten zijn niet alleen een serverlicentie, het is tijd besteed aan patchen,
+
+00:07:02.300 --> 00:07:04.940
+gespecialiseerde kennis en documentatie die actueel moet blijven.
+
+00:07:05.100 --> 00:07:10.540
+Het is het risico dat één persoon het certificaatsysteem begrijpt en vervolgens het bedrijf verlaat met alle kennis in zijn hoofd.
+
+00:07:10.660 --> 00:07:13.240
+PKI op zich is niet voorbehouden aan grote bedrijven.
+
+00:07:13.240 --> 00:07:17.540
+Een klein bedrijf kan profiteren van hetzelfde soort apparaatbeveiliging als een grote onderneming.
+
+00:07:17.680 --> 00:07:22.560
+Het probleem is dat het draaien van traditionele PKI de inspanning van een veel grotere IT-afdeling kan vereisen.
+
+00:07:22.820 --> 00:07:25.580
+Microsoft Cloud PKI behoudt het certificaatproces,
+
+00:07:25.800 --> 00:07:28.900
+maar verplaatst veel van die techniek uit je serverruimte naar de Microsoft Cloud.
+
+00:07:29.120 --> 00:07:31.420
+Wat Microsoft Cloud PKI daadwerkelijk is.
+
+00:07:31.640 --> 00:07:35.680
+Microsoft Cloud PKI is Microsoft's beheerde certificeringsinstantie Service binnen Intune.
+
+00:07:35.880 --> 00:07:38.020
+Dat is de eenvoudige definitie in begrijpelijke taal.
+
+00:07:38.160 --> 00:07:41.520
+Het creëert en beheert certificaten voor apparaten en gebruikers die Intune beheert.
+
+00:07:41.520 --> 00:07:44.460
+In plaats van dat jouw bedrijf het batch systeem op lokale servers draait,
+
+00:07:44.580 --> 00:07:47.400
+voert Microsoft de certificeringsinstantie Service in de Cloud uit.
+
+00:07:47.560 --> 00:07:49.860
+Je werknemers hoeven geen app genaamd Cloud PKI te openen,
+
+00:07:49.980 --> 00:07:51.940
+op een knop te klikken om een certificaat aan te vragen,
+
+00:07:52.060 --> 00:07:53.820
+een bestand op te slaan of nog een wachtwoord te onthouden.
+
+00:07:53.960 --> 00:07:55.760
+Cloud PKI werkt op de achtergrond.
+
+00:07:55.940 --> 00:07:58.740
+Het kan een certificaat uitgeven wanneer een beheertapparaat er een nodig heeft,
+
+00:07:58.900 --> 00:08:02.140
+het vernieuwen voordat het verloopt en het intrekken wanneer dat certificaat niet langer geldig mag zijn.
+
+00:08:02.340 --> 00:08:04.500
+Laten we de analogie van het kantoorpand weer gebruiken.
+
+00:08:04.720 --> 00:08:06.240
+Entra ID zit bij de receptie.
+
+00:08:06.400 --> 00:08:08.520
+Het weet wie mensen zijn en controleert hun inlogidentiteit.
+
+00:08:08.520 --> 00:08:11.000
+Intune fungeert als de gebouwbeheerder.
+
+00:08:11.180 --> 00:08:15.920
+Het weet welke laptops en telefoons bij het bedrijf horen en verstuurt hun instellingen, apps en regels.
+
+00:08:16.120 --> 00:08:18.980
+Cloud PKI is de beveiligde batch Bali binnen dat gebouw.
+
+00:08:19.140 --> 00:08:22.280
+Intune vertelt de batch Bali welke beheerder apparaten toegang nodig hebben.
+
+00:08:22.440 --> 00:08:24.220
+Cloud PKI maakt het certificaat aan.
+
+00:08:24.420 --> 00:08:27.040
+Vervolgens kan het apparaat dat certificaat gebruiken wanneer het verbinding maakt met services
+
+00:08:27.040 --> 00:08:28.640
+die jouw bedrijf zo heeft ingesteld dat ze het vertrouwen.
+
+00:08:28.800 --> 00:08:30.240
+Elke service heeft een duidelijke rol.
+
+00:08:30.420 --> 00:08:33.680
+Je hebt geen lokale Windows Server meer nodig die een root certificeringsinstantie draait.
+
+00:08:33.680 --> 00:08:37.360
+Je hebt geen andere lokale server meer nodig die fungeert als een uitgevende certificeringsinstantie.
+
+00:08:37.360 --> 00:08:41.140
+Microsoft kan beide onderdelen hosten in een cloud-first opzet met een circa aan de top
+
+00:08:41.140 --> 00:08:43.760
+en een uitgevende circa die de certificaten voor uw apparaten beheert.
+
+00:08:43.940 --> 00:08:45.720
+Dat scheelt een hoop apparatuur in het plan.
+
+00:08:45.940 --> 00:08:48.960
+Het verandert ook wie de onderliggende certificaat als service beheert.
+
+00:08:49.160 --> 00:08:53.260
+Bij gelicentieerd productiegebruik beschermt Microsoft de sleutels van de certificaatautoriteit
+
+00:08:53.260 --> 00:08:56.000
+met hardware beveiligingsmodules, meestal HSM's genoemd.
+
+00:08:56.100 --> 00:08:59.780
+Een HSM is een beveiligde kluis hardware die is gebouwd om uiterst gevoelige cryptografische
+
+00:08:59.780 --> 00:09:00.620
+sleutels te beschermen.
+
+00:09:00.620 --> 00:09:04.060
+U hoeft die hardware niet zelf aan te schaffen, in een rack te plaatsen, te patchen of te beveiligen.
+
+00:09:04.240 --> 00:09:06.300
+Microsoft beheert dit als onderdeel van de service.
+
+00:09:06.300 --> 00:09:10.560
+Uw taak blijft gericht op de zakelijke beslissing, welke apparaten moeten certificaten ontvangen
+
+00:09:10.560 --> 00:09:12.480
+en waar moeten die certificaten toegang toegeven.
+
+00:09:12.640 --> 00:09:15.300
+Er is één korte naam die u hier moet kennen, SCEP.
+
+00:09:15.520 --> 00:09:17.880
+Het staat voor Simple Certificate Enrollment Protocol.
+
+00:09:18.140 --> 00:09:20.700
+U hoeft de volledige naam na deze aflevering niet meer te onthouden.
+
+00:09:20.920 --> 00:09:24.260
+Zie SCEP als de beveiligde aanvraagstrook tussen een beheerdapparaat en het kantoor waar
+
+00:09:24.260 --> 00:09:25.140
+passen worden uitgegeven.
+
+00:09:25.300 --> 00:09:27.780
+Een laptop gebruikt die strook om een certificaat aan te vragen.
+
+00:09:27.780 --> 00:09:31.820
+Cloud PKI controleert de aanvraag via Intune en stuurt het ondertekende certificaat terug
+
+00:09:31.820 --> 00:09:33.480
+zodra de aanvraag door de controles komt.
+
+00:09:33.480 --> 00:09:36.180
+Het apparaat stuurt zijn privégeheim niet over die strook.
+
+00:09:36.360 --> 00:09:37.360
+Dat detail is belangrijk.
+
+00:09:37.700 --> 00:09:40.400
+Het apparaat maakt zijn privésleutel lokaal aan en houdt deze daar.
+
+00:09:40.560 --> 00:09:44.240
+Cloud PKI ontvangt een verzoek met de publieke informatie die nodig is om het certificaat uit
+
+00:09:44.240 --> 00:09:46.120
+te geven, niet de privésleutel van het apparaat.
+
+00:09:46.240 --> 00:09:49.940
+Cloud PKI ondersteunt de apparaatfamilies die de meeste kleine bedrijven al gebruiken.
+
+00:09:50.160 --> 00:09:53.960
+Dat omvat Windows laptops, Macs, iPhones, iPads en Android apparaten.
+
+00:09:53.960 --> 00:09:55.600
+De voorwaarde is eenvoudig.
+
+00:09:55.760 --> 00:10:00.260
+Het apparaat moet zijn ingeschreven en beheerd via Intune en het platform moet het certificaatprofiel
+
+00:10:00.260 --> 00:10:01.440
+van Intune ondersteunen.
+
+00:10:01.580 --> 00:10:05.000
+Een persoonlijke laptop die niet via Intune wordt beheerd, past niet in dit model.
+
+00:10:05.260 --> 00:10:06.700
+Die grens is bewust gekozen.
+
+00:10:06.880 --> 00:10:10.620
+Cloud PKI gebruikt Intune's kennis van het apparaat als onderdeel van het proces, dus
+
+00:10:10.620 --> 00:10:14.100
+het werkt het best waar uw bedrijf de configuratie beheert en beveiligingsregels kan toepassen.
+
+00:10:14.400 --> 00:10:16.780
+Controleer de licenties voordat u dit in uw planning opneemt.
+
+00:10:16.880 --> 00:10:20.100
+Cloud PKI vereist de juiste Microsoft licenties naast Intune.
+
+00:10:20.380 --> 00:10:24.240
+Microsoft wijzigt de plandetails in de loop van de tijd, dus controleer uw huidige rechten
+
+00:10:24.240 --> 00:10:27.020
+en bevestig wie een licentie nodig heeft voordat u de service daaromheen ontwerpt.
+
+00:10:27.020 --> 00:10:30.880
+De certificaatautoriteit bevindt zich nu wellicht in de cloud, maar het certificaat moet nog
+
+00:10:30.880 --> 00:10:32.460
+steeds veilig de juiste laptop bereiken.
+
+00:10:32.680 --> 00:10:36.020
+Die reis verklaart waarom Cloud PKI zo goed werkt voor modern werken.
+
+00:10:36.280 --> 00:10:39.780
+Stel u voor dat een nieuwe medewerker voor het eerst hun door Intune beheerde laptop opent
+
+00:10:39.780 --> 00:10:42.840
+en verbinding moet maken met beveiligde wifi of een VPN moet gebruiken.
+
+00:10:43.200 --> 00:10:45.700
+Wat gebeurt er als een apparaat een certificaat nodig heeft?
+
+00:10:45.980 --> 00:10:49.900
+Stel u een nieuwe medewerker voor die de eerste ochtend thuis aan een zakelijke laptop gaat zitten.
+
+00:10:50.140 --> 00:10:52.040
+Die laptop is al ingeschreven in Intune.
+
+00:10:52.040 --> 00:10:56.780
+Ze hebben kantoor wifi nodig zodra ze daar zijn en waarschijnlijk een VPN voor interne systemen vanuit huis,
+
+00:10:56.940 --> 00:11:00.260
+maar ze hoeven niet naar een wifi wachtwoord te zoeken of IT te bellen voor een certificaat.
+
+00:11:00.460 --> 00:11:05.640
+Nog voordat de laptop om zijn eigen certificaat vraagt, verstuurt Intune de certificaten die de laptop moet vertrouwen.
+
+00:11:05.840 --> 00:11:09.720
+Dat omvat het rood certificaat en het uitgevende certificaat van uw Cloud PKI configuratie.
+
+00:11:09.900 --> 00:11:13.020
+Klinkt als een klein detail, toch? Eigenlijk is het het volledige fundament.
+
+00:11:13.360 --> 00:11:16.680
+Het vertelt de laptop, dit is de certificaatautoriteit die je kunt vertrouwen.
+
+00:11:16.680 --> 00:11:22.600
+Zonder dat vertrouwen kan de laptop niet weten of een certificaat van de goedgekeurde dienst van uw bedrijf komt of ergens anders vandaan.
+
+00:11:22.800 --> 00:11:25.300
+Vervolgens genereert de laptop zijn eigen privésleutel.
+
+00:11:25.500 --> 00:11:28.760
+Dit gebeurt direct op het apparaat zelf en die privésleutel verlaat het apparaat nooit.
+
+00:11:28.980 --> 00:11:33.360
+Hij wordt niet gekopieerd naar Intune, verzonden naar Cloud PKI of doorgegeven aan de wifi-dienst.
+
+00:11:33.600 --> 00:11:35.480
+Die scheiding is wat het geheim veilig houdt.
+
+00:11:35.640 --> 00:11:38.060
+Daarna bereidt de laptop een certificaataanvraag voor.
+
+00:11:38.280 --> 00:11:41.180
+Dit verzoek bevat de openbare informatie die nodig is voor het certificaat,
+
+00:11:41.420 --> 00:11:43.720
+plus het bewijs dat de laptop zijn eigen privésleutel beheert.
+
+00:11:43.720 --> 00:11:47.920
+Het verstuurt dat verzoek via SHP, het beveiligt de aanvraagbad waar we het eerder over hadden.
+
+00:11:48.040 --> 00:11:49.780
+Alleen het verzoek reist, niet de sleutel.
+
+00:11:49.940 --> 00:11:51.800
+Nu speelt Intune een actieve rol bij de controle.
+
+00:11:52.020 --> 00:11:55.740
+Het bevestigt dat het verzoek afkomstig is van een apparaat dat is ingeschreven en beheert door uw bedrijf.
+
+00:11:55.860 --> 00:12:00.560
+Het beveiligt ook het verzoek, zodat de Cloud PKI-dienst kan verifiëren dat er onderweg niet mee geknoeid is.
+
+00:12:00.740 --> 00:12:04.720
+Als het verzoek niet overeenkomt met wat Intune verwacht, wordt er geen certificaat uitgegeven.
+
+00:12:04.940 --> 00:12:07.960
+Dat voorkomt dat een onbekende laptop er zomaar omvraagt en er een krijgt.
+
+00:12:07.960 --> 00:12:12.560
+Wanneer alle controles zijn geslaagd, stuurt Cloud PKI het verzoek naar de uitgevende certificaatautoriteit.
+
+00:12:12.740 --> 00:12:17.780
+De uitgevende circa ondertekent een certificaat voor die apparaatidentiteit en Intune levert het terug aan de laptop.
+
+00:12:17.980 --> 00:12:19.420
+De medewerker ziet hier niets van.
+
+00:12:19.640 --> 00:12:24.300
+Ze openen gewoon de laptop en zodra ze op kantoor aankomen, kan het wifi-netwerk de laptop om bewijs vragen.
+
+00:12:24.460 --> 00:12:27.740
+In plaats van een gedeeld wachtwoord te typen, presenteert de laptop zijn certificaat.
+
+00:12:27.900 --> 00:12:30.200
+Het netwerk controleert vervolgens de certificaatketen.
+
+00:12:30.380 --> 00:12:33.160
+Is dit certificaat uitgegeven door de uitgevende circa die het vertrouwt,
+
+00:12:33.160 --> 00:12:38.280
+en linkt die uitgevende circa terug naar de route circa die het vertrouwt, als die controle slagen, maakt de laptop verbinding.
+
+00:12:38.560 --> 00:12:40.280
+Hetzelfde patroon werkt met een VPN.
+
+00:12:40.560 --> 00:12:45.940
+Een VPN-dienst kan controleren of het apparaatcertificaat bij een beheerde bedrijfslaptop hoort voordat verbinding wordt toegestaan.
+
+00:12:46.080 --> 00:12:51.700
+Een interne app kan hetzelfde doen en alleen apparaten accepteren die een certificaat van uw goedgekeurde certificaatautoriteit dragen.
+
+00:12:51.880 --> 00:12:57.440
+Het certificaat vervangt niet elke aanmeldprompt overal, maar geeft de dienst een extra sterke manier om het apparaat te identificeren.
+
+00:12:57.680 --> 00:13:00.720
+Laten we het nu hebben over het onderdeel dat mensen meestal pas opmerken als het kapot gaat.
+
+00:13:00.720 --> 00:13:04.480
+De verloopdatum. Certificaten blijven niet eeuwig geldig en dat is een bewuste keuze.
+
+00:13:04.660 --> 00:13:09.300
+Een certificaat heeft een einddatum nodig, zodat oude apparaatreferenties niet voor altijd blijven werken zonder een nieuwe controle.
+
+00:13:09.480 --> 00:13:13.960
+Cloud PKI en Intune kunnen de verlenging al voor die datum starten zodra het beheerde apparaat incheckt.
+
+00:13:14.100 --> 00:13:18.780
+De laptop vraagt een vervangend certificaat aan en het hele proces volgt hetzelfde beveiligde pad.
+
+00:13:19.000 --> 00:13:20.680
+Voor de medewerker verandert er niets.
+
+00:13:20.900 --> 00:13:24.720
+Ze maken verbinding met wifi, gebruiken de VPN en het certificaat wordt op de achtergrond vernieuwd...
+
+00:13:24.720 --> 00:13:28.840
+achtergrond vernieuwd in plaats van dat het een verrassingssticket bij de supportafdeling wordt op de vervaldag.
+
+00:13:28.960 --> 00:13:30.820
+Een verloren laptop vereist een andere aanpak.
+
+00:13:31.000 --> 00:13:36.160
+Als een apparaat verdwijnt, een medewerker vertrekt of u vermoedt dat het certificaat niet langer te vertrouwen is...
+
+00:13:36.160 --> 00:13:38.440
+...kan een beheerder dat certificaat intrekken in Intune.
+
+00:13:38.620 --> 00:13:44.560
+Cloud PKI publiceert die wijziging, zodat services die de status van certificaten controleren het oude certificaat kunnen weigeren.
+
+00:13:44.700 --> 00:13:48.120
+Het apparaat bestaat fysiek misschien nog, maar het digitale bewijs werkt niet meer.
+
+00:13:48.120 --> 00:13:55.200
+Dat is een veel betere uitgangspositie dan het wijzigen van een gedeeld wifi-wachtwoord in de hoop dat elke oud-medewerker, oude laptop en privé-telefoon dit niet meer heeft.
+
+00:13:55.360 --> 00:14:00.740
+Toch betekent automatische certificaatlevering niet dat Cloud PKI elke certificaat-taak in uw bedrijf afhandelt.
+
+00:14:00.900 --> 00:14:03.040
+Het werkt erg goed voor een specifieke zet taken.
+
+00:14:03.280 --> 00:14:08.760
+Andere taken vereizen een andere certificaatdienst en door die grens te kennen, bespaart u tijd voordat u begint met bouwen.
+
+00:14:08.960 --> 00:14:11.020
+Waar Cloud PKI wel en niet geschikt voor is.
+
+00:14:11.180 --> 00:14:15.480
+Cloud PKI is het meest geschikt wanneer een beheerd bedrijfsapparaat zichzelf moet bewijzen voordat het toegang krijgt.
+
+00:14:15.800 --> 00:14:17.480
+Beveiligde wifi is een klassiek voorbeeld.
+
+00:14:17.480 --> 00:14:25.140
+In plaats van elke nieuwe medewerker hetzelfde draadloze wachtwoord te geven, kan in toen een certificaat op een beheerde laptop of telefoon plaatsen dat het netwerk vervolgens accepteert.
+
+00:14:25.340 --> 00:14:27.360
+VPN-toegang is een andere goede toepassing.
+
+00:14:27.560 --> 00:14:35.300
+Een beheerde laptop kan het certificaat aanbieden bij het verbinden, waardoor wachtwoordproms verdwijnen en de VPN een extra manier heeft om het apparaat te verifiëren voordat toegang wordt verleend.
+
+00:14:35.500 --> 00:14:40.360
+Sommige interne apps kunnen dezelfde methode gebruiken wanneer ze alleen apparaten willen accepteren die uw bedrijf beheert.
+
+00:14:40.580 --> 00:14:45.260
+Dit werkt op beheerde Windows-laptops, Macs, iPhones, iPads en Android-apparaten.
+
+00:14:45.260 --> 00:14:48.000
+Voor een klein bedrijf verandert dit een bekend probleem.
+
+00:14:48.140 --> 00:14:50.540
+Een gedeeld wifi-wachtwoord verspreidt zich vaak snel.
+
+00:14:50.740 --> 00:14:54.720
+Het duikt op in welkomstmails, chatberichten, notitieblokken en oude telefoons.
+
+00:14:54.940 --> 00:15:00.300
+Als iemand vertrekt, kan het wijzigen ervan betekenen dat elke printer, laptop, tablet en vergaderruimteapparaat opnieuw moet worden verbonden.
+
+00:15:00.540 --> 00:15:04.300
+Met apparaatcertificaten draagt elk beheerd apparaat zijn eigen toegangsgegeven bij zich.
+
+00:15:04.460 --> 00:15:06.580
+De toegangsbeslissing wordt bovendien nauwkeuriger.
+
+00:15:06.800 --> 00:15:09.220
+Een wachtwoord bewijst alleen dat iemand het wachtwoord kent.
+
+00:15:09.220 --> 00:15:14.380
+Een certificaat uitgegeven via Cloud PKI koppelt toegang aan een apparaat dat in Toon kent en beheert.
+
+00:15:14.620 --> 00:15:16.800
+Dat ondersteunt de gedachte achter Zero Trust.
+
+00:15:17.060 --> 00:15:19.980
+Verleen geen toegang enkel omdat iets zich op het kantoornetwerk bevindt.
+
+00:15:20.120 --> 00:15:23.040
+Controleer het apparaat en het bewijs stelkens wanneer de dienst daarom vraagt.
+
+00:15:23.200 --> 00:15:25.200
+Er zijn twee gebruikelijke manieren om te beginnen.
+
+00:15:25.440 --> 00:15:31.760
+Als je bedrijf grotendeels in de cloud werkt en geen bestaand certificatiesysteem heeft, kun je een rootcirca en uitgevende circa maken in Cloud PKI.
+
+00:15:32.000 --> 00:15:37.440
+Daarna configureer je de wifi-dienst, VP en gateway of geselecteerde apps van je beheerde apparaten om die certificaatketen te vertrouwen.
+
+00:15:37.440 --> 00:15:39.120
+Dat is de weg van een schone start.
+
+00:15:39.280 --> 00:15:42.840
+Als je al een certificaatinstantie beheert, hoef je deze niet altijd weg te gooien.
+
+00:15:43.000 --> 00:15:50.700
+Cloud PKI kan een uitgevende circa gebruiken die terugverwijst naar een bestaande rootcirca, zodat je nieuwe Intune beheerde apparaten passen binnen de vertrouwensregels die je al gebruikt.
+
+00:15:50.860 --> 00:15:55.460
+De juiste weg hangt af van wat je netwerk al vertrouwt, maar Cloud PKI heeft een duidelijke grens.
+
+00:15:55.640 --> 00:15:58.180
+Het richt zich op apparaten die zijn ingeschreven in Intune.
+
+00:15:58.400 --> 00:16:02.380
+Het geeft niet elk type certificaat uit voor elke machine of dienst die je bedrijf bezit.
+
+00:16:02.380 --> 00:16:08.620
+Het is bijvoorbeeld geen algemene vervanging voor certificaten op webservers, VPN-gateways, loadbalancers of andere servers.
+
+00:16:08.820 --> 00:16:16.360
+Het lost ook geen certificaatbehoeften op voor onbeheerde computers, geïsoleerde systemen zonder cloudverbinding of Linux-apparaten buiten Intune ondersteuning.
+
+00:16:16.560 --> 00:16:18.040
+Dat vermindert het nut ervan niet.
+
+00:16:18.220 --> 00:16:21.020
+Het betekent simpelweg dat je de juiste tool voor de juiste taak moet kiezen.
+
+00:16:21.180 --> 00:16:23.840
+Cloud PKI regelt dit voor je beheerde gebruikersapparaten.
+
+00:16:24.040 --> 00:16:27.740
+Een andere dienst kan nog steeds certificaten beheren voor de systemen waarmee die apparaten verbinding maken.
+
+00:16:27.900 --> 00:16:31.600
+Je wifi-controller, VPN-gateway of interne app heeft ook configuratiewerk nodig.
+
+00:16:31.600 --> 00:16:35.420
+Deze moet de root- en uitgevende certificaatketen vertrouwen die Cloud PKI gebruikt.
+
+00:16:35.540 --> 00:16:39.860
+Als die dienst je certificaatinstantie niet herkent, zal het een uitstekend apparaatcertificaat afwijzen.
+
+00:16:40.020 --> 00:16:42.700
+De kant van het apparaat en de kant van de dienst moeten op elkaar afgestemd zijn.
+
+00:16:42.900 --> 00:16:45.060
+Eén planningspunt kan later frustratie voorkomen.
+
+00:16:45.300 --> 00:16:48.460
+Wanneer je een certificaatinstantie maakt, kies je wat de certificaten kunnen doen.
+
+00:16:48.680 --> 00:16:50.980
+Die keuzes moeten overeenkomen met je geplande gebruik.
+
+00:16:51.120 --> 00:16:54.360
+Client-authenticatie voor wifi of VPN-toegang, bijvoorbeeld.
+
+00:16:54.680 --> 00:17:00.760
+Als je te nauw kiest en later een ander doel nodig hebt, moet je wellicht een nieuwe certificaatinstantie maken en apparaten verplaatsen.
+
+00:17:00.760 --> 00:17:03.280
+Bepaal de eerste use case voordat je iets aanmaakt.
+
+00:17:03.480 --> 00:17:07.120
+Dat brengt ons weg van het technisch diagram en terug naar een eenvoudige zakelijke keuze.
+
+00:17:07.360 --> 00:17:10.840
+Waar zou een apparaatcertificaat een echt toegangsprobleem voor je personeel wegnemen?
+
+00:17:11.020 --> 00:17:13.300
+Een verstandig startpunt voor een klein bedrijf.
+
+00:17:13.440 --> 00:17:15.120
+Dus, waar moet een klein bedrijf beginnen?
+
+00:17:15.360 --> 00:17:18.060
+Begin met één probleem, niet met een bedrijfsbrede uitrol.
+
+00:17:18.260 --> 00:17:23.180
+Misschien gebruikt je personeels wifi nog één gedeeld wachtwoord of moet men via je VP en steeds opnieuw inloggen.
+
+00:17:23.380 --> 00:17:26.700
+Misschien heb je een interne app die alleen geopend mag worden vanaf beheerde bedrijfslaptops.
+
+00:17:26.900 --> 00:17:27.800
+Kies één probleem.
+
+00:17:27.800 --> 00:17:29.780
+Zorg daarna dat de basis op orde is.
+
+00:17:29.980 --> 00:17:31.840
+Zijn die apparaten ingeschreven in Intune?
+
+00:17:32.040 --> 00:17:33.660
+Loggen gebruikers in via Entra ID?
+
+00:17:33.960 --> 00:17:36.740
+Bevat uw Microsoft licentie wat Cloud PKI nodig heeft?
+
+00:17:36.960 --> 00:17:40.280
+Voer een kleine pilot uit om die vragen te beantwoorden zonder iedereen te beïnvloeden.
+
+00:17:40.500 --> 00:17:41.980
+Selecteer een beperkte groep apparaten.
+
+00:17:42.220 --> 00:17:47.360
+Bouw de vertrouwensketen, het certificaatprofiel en het bijbehorende wifi of VPN beleid samen als één verbonden taak.
+
+00:17:47.520 --> 00:17:51.900
+Behandel het certificaat niet apart, want de netwerkservice moet weten welke certificaatketen geaccepteerd moet worden.
+
+00:17:52.100 --> 00:17:54.040
+Betrek de persoon die verantwoordelijk is voor dat netwerk.

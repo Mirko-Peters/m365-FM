@@ -1,0 +1,1852 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:04.220
+Bagaimana jika pusat kontak Anda dapat mengenali pelanggan yang frustrasi bahkan sebelum mereka mengucapkan sepatah kata pun?
+
+00:00:04.560 --> 00:00:09.300
+Itu bukan fiksi ilmiah, itu adalah analitik sentimen yang bekerja di dalam Dynamics 365 Contact Center.
+
+00:00:10.260 --> 00:00:15.500
+Sebelum kita memulai pembahasan hari ini, tekan tombol subscribe agar pengarahan ini otomatis masuk ke antrean Anda tanpa perlu menunggu.
+
+00:00:15.980 --> 00:00:16.520
+Ini cara kelihatan.
+
+00:00:16.940 --> 00:00:22.900
+Agen AI Anda memindai nada, pilihan kata, dan kecepatan bicara, lalu mengarahkan kasus ke orang yang tepat sebelum emosi meledak.
+
+00:00:23.240 --> 00:00:29.780
+Dalam panduan ini, kita akan membedah perutian sentimen dan menunjukkan bagaimana agen kopilot menangani tugas rutin sementara tim Anda mengatasi tantangan nyata.
+
+00:00:30.140 --> 00:00:36.420
+Dan untuk memahami mengapa perubahan itu penting, Anda harus tahu bagaimana rasanya bekerja di pusat tradisional saat harus terus-menerus memadamkan masalah.
+
+00:00:37.180 --> 00:00:39.440
+Mengapa pusat kontak lama terasa seperti terus memadamkan api?
+
+00:00:39.800 --> 00:00:42.860
+Di pusat kontak tradisional, mode utamanya bukanlah dukungan, melainkan bertahan hidup.
+
+00:00:43.340 --> 00:00:48.260
+Anda mulai bekerja dengan mengetahui bahwa hari itu akan menjadi sprint panjang melalui tiket yang sudah terasa tertunda bahkan sebelum Anda masuk.
+
+00:00:48.860 --> 00:00:52.320
+Alat yang ada tidak membantu Anda mengantisipasi mereka hanya melempuh kasus berikutnya ke dalam antrean.
+
+00:00:52.560 --> 00:00:57.040
+Itulah mengapa keseluruhan operasi terasa kurang seperti layanan yang stabil dan lebih seperti respons darurat yang terus berada.
+
+00:00:57.040 --> 00:01:00.040
+Anda memulai giliran kerja, headset siap, dan antrean yang sudah menumpuk.
+
+00:01:00.620 --> 00:01:03.360
+Telepon berdering, jendela obrolan berbunyi, email berkedik merah.
+
+00:01:03.800 --> 00:01:06.800
+Masalah sebenarnya bukan banyaknya saluran, melainkan geningan di antara saluran tersebut.
+
+00:01:07.320 --> 00:01:10.080
+Tentu, Anda mungkin melihat nama pelanggan dan ID kasus baru.
+
+00:01:10.360 --> 00:01:15.900
+Tetapi konteks, email yang sudah dikirim, transkrip obrolan 10 menit lalu, dan rasa frustrasi yang muncul tersembunyi,
+
+00:01:15.900 --> 00:01:21.060
+ini seperti bergabung dalam kampanye permainan tanpa peta atau lembar karakter saat musuh sudah mulai menyerang Anda.
+
+00:01:21.840 --> 00:01:23.580
+Kurangnya konteks tersebut menciptakan pengulangan.
+
+00:01:24.060 --> 00:01:27.280
+Anda menanyakan detail yang sudah diberikan pelanggan, Anda memverifikasi pesanan lagi,
+
+00:01:27.500 --> 00:01:30.400
+Anda mengetik catatan yang tersimpan di satu sistem tapi tidak pernah sampai ke sistem berikut.
+
+00:01:30.760 --> 00:01:31.620
+Pelanggan merasa kesal.
+
+00:01:32.180 --> 00:01:34.900
+Mereka sudah menceritakan kisah yang sama kemarin dan sekarang mereka terjumpa menceritakan.
+
+00:01:35.320 --> 00:01:39.480
+Tanpa integrasi omni channel, percakapan tersebut seringkali tidak langsung muncul di saluran lain.
+
+00:01:39.480 --> 00:01:42.720
+Jadi setiap interaksi terasa seperti memulai lagi dari Rafflesa.
+
+00:01:43.000 --> 00:01:43.800
+Lingkarannya sudah jelas.
+
+00:01:44.300 --> 00:01:47.080
+Pelanggan menjadi tidak sabar bertanya-tanya mengapa perusahaan terkesan berupa.
+
+00:01:47.740 --> 00:01:50.620
+Anda lelah menenangkan kejemkelan yang sama dalam setiap panggilan.
+
+00:01:51.060 --> 00:01:53.580
+Frustrasi pun bertambah dan kedua belah pihak tidak merasa puas.
+
+00:01:54.220 --> 00:01:56.780
+Liputan industri dan studi vendor mengaitkan pola ini pengulangan,
+
+00:01:56.940 --> 00:02:00.140
+waktu tunggu lama kurangnya konteks dengan tekat churn yang lebih tinggi bagi pelanggan dan agen.
+
+00:02:01.220 --> 00:02:04.200
+Setiap momen tunggu saya periksa dulu mengorbankan loyalitas dan moral.
+
+00:02:05.200 --> 00:02:07.160
+Dan moral sudah sangat tipis di lantai pusat kontak.
+
+00:02:07.160 --> 00:02:11.440
+Alih-alih memecahkan masalah sebagian besar waktu Anda habis untuk mengelola skrip dan ritual saling tempel.
+
+00:02:11.840 --> 00:02:13.900
+Rasanya bukan lagi seperti permainan berbasis keterampilan,
+
+00:02:14.020 --> 00:02:15.460
+melainkan sebagai tutorial yang tak ada habisnya.
+
+00:02:16.460 --> 00:02:20.000
+Agen cepat merasa jenuh karena minimnya kemajuan dan ruang untuk solusi kreatif
+
+00:02:20.000 --> 00:02:22.080
+hanya antrean masalah baru yang harus diselesaikan.
+
+00:02:22.940 --> 00:02:25.060
+Sementara itu, para penyelah tidak berulisan dengan strategi.
+
+00:02:25.320 --> 00:02:26.220
+Mereka hanya menambah lekebocoran.
+
+00:02:26.700 --> 00:02:29.800
+Memangkas detik dari waktu penanganan atau mengubah skrip sapaan menjadi solusi
+
+00:02:29.800 --> 00:02:32.200
+padahal hambatan utamanya adalah sistem yang terpecah-pecah.
+
+00:02:32.200 --> 00:02:36.020
+Anda bisa mengoptimalkan bagian tepi sepanjang hari tapi yang berbocor tak akan pernah bisa menampungkan.
+
+00:02:36.460 --> 00:02:40.240
+Tanpa wawasan terpadu, semua orang sibuk bekerja, tapi operasional terasa tidak efisien.
+
+00:02:40.760 --> 00:02:43.940
+Konsekuensinya, pelanggan kehilangan kesabaran karena terus diminta mengulang,
+
+00:02:44.080 --> 00:02:46.180
+agen kehilangan motivasi karena memulai dari awal,
+
+00:02:46.240 --> 00:02:48.540
+dan manajer kehilangan stabilitas akibat perputaran staff.
+
+00:02:49.480 --> 00:02:52.460
+Biaya membengkak karena Anda terjebak dalam rekrut, melatih,
+
+00:02:52.740 --> 00:02:55.640
+dan melatih ulang staff hanya untuk mempertahankan layanan dasar.
+
+00:02:56.060 --> 00:02:59.940
+Ini adalah siklus yang merugikan semua pihak sementara penyebab utamanya tetap tidak tersentuh.
+
+00:02:59.940 --> 00:03:03.560
+Jadi saat orang menyebut kehidupan di pusat kontak seperti memadamkan kebakaran,
+
+00:03:03.660 --> 00:03:04.260
+mereka tidak berlebihan.
+
+00:03:04.380 --> 00:03:06.280
+Anda tidak sedang merencanakan, andanya berusaha mengimbangkan.
+
+00:03:06.640 --> 00:03:08.980
+Sistem tidak saling terhubung, riwayat pelanggan tidak mengikuti,
+
+00:03:09.140 --> 00:03:10.800
+dan masalah yang sama terus muncul berulang kali.
+
+00:03:11.580 --> 00:03:12.860
+Pelanggan maupun agen menyadarinya,
+
+00:03:13.020 --> 00:03:16.520
+dan keduanya merasa terjebak di ruang bawah tanah dengan rasa frustrasi sebagai bos terakhirnya.
+
+00:03:17.240 --> 00:03:18.620
+Hal ini memunculkan pertanyaan nyata.
+
+00:03:18.820 --> 00:03:21.380
+Bagaimana jika kita bisa melihat tercikan api sebelum alarm masa berbeli?
+
+00:03:22.540 --> 00:03:24.820
+Bagaimana saya belajar mendeteksi frustrasi sebelum Anda bisa?
+
+00:03:24.820 --> 00:03:29.800
+Pernahkah Anda memperhatikan bagaimana beberapa sistem bisa mendeteksi suasana hati seseorang lebih cepat daripada memproses ketika?
+
+00:03:29.980 --> 00:03:33.000
+Itulah keunggulan AI sentimen di dalam Dynamics 365 Copilot.
+
+00:03:33.940 --> 00:03:35.440
+Sistem ini tidak menembak dari bahasa tubuh,
+
+00:03:35.560 --> 00:03:39.200
+tetapi menganalisis nada, pilihan kata, tempo, dan bobot emosional di balik setiap kalimat.
+
+00:03:39.960 --> 00:03:42.540
+Jika Anda mungkin merasa lelah setelah seharian menelpon atau mengobrol,
+
+00:03:42.680 --> 00:03:43.900
+algoritma tidak akan mengalami kelelah.
+
+00:03:44.340 --> 00:03:45.900
+Sistem ini terus mengumpulkan sinyal sepanjang waktu.
+
+00:03:46.100 --> 00:03:48.300
+Di permukaan mekanismenya terlihat sederhana.
+
+00:03:48.600 --> 00:03:52.060
+Namun di balik layar, ini adalah pemprosesan bahasa alami yang dipadukan dengan analisis sentimen.
+
+00:03:52.060 --> 00:03:54.960
+Percakapan, baik lisan maupun tertulis,
+
+00:03:55.460 --> 00:03:57.120
+dipecah dan dinilai bukan hanya dari maknanya,
+
+00:03:57.300 --> 00:03:58.740
+tapi juga dari konteks emosionalnya.
+
+00:03:59.580 --> 00:04:02.800
+Saya butuh bantuan terdaftar berbeda dengan kenapa saya harus selalu menelpon Anda untuk ini.
+
+00:04:03.620 --> 00:04:04.740
+Yang pertama bersifat netral,
+
+00:04:04.960 --> 00:04:06.540
+yang kedua mengandung frustrasi yang terselubung.
+
+00:04:07.180 --> 00:04:09.060
+Lapisan-lapisan itulah yang dipelajari sistem untuk dibaca.
+
+00:04:09.700 --> 00:04:11.860
+Sekarang bayangkan Anda sudah bekerja selama 8 jam dalam satu sisi.
+
+00:04:12.060 --> 00:04:14.620
+Anda telah menangani tagihan, penggantian perangkat keras,
+
+00:04:14.740 --> 00:04:16.100
+pengaturan ulang kata sandi yang gagal,
+
+00:04:16.180 --> 00:04:18.360
+dan pelanggan yang menolak langkah-langkah yang sudah Anda kirim lewat email.
+
+00:04:18.360 --> 00:04:19.840
+Pada titik itu, fokus Anda mulai-mulai.
+
+00:04:20.160 --> 00:04:22.960
+Anda membaca terlalu cepat, Anda melewatkan sedikit peningkatan ketegangan selama 8 jam.
+
+00:04:23.260 --> 00:04:25.100
+Sementara itu, AI tidak memiliki titik buta seperti itu.
+
+00:04:25.300 --> 00:04:27.760
+Sistem melihat obrolan huruf kapital dengan kata tidak bisa diterima,
+
+00:04:27.900 --> 00:04:29.960
+sebenarnya tiga kali dan mengenali itu sebagai risiko pelanggan berat.
+
+00:04:30.140 --> 00:04:31.820
+Daripada menunggu Anda menemukannya sendiri,
+
+00:04:32.260 --> 00:04:34.620
+platform ini mendorong kasus tersebut ke posisi antreang yang berhitung.
+
+00:04:34.880 --> 00:04:36.140
+Disitulah perhitungan mengubah segalanya.
+
+00:04:36.500 --> 00:04:38.120
+Secara tradisional, sistemnya adalah siapa cepat.
+
+00:04:38.600 --> 00:04:41.180
+Siapapun yang berada di urutan berikutnya akan dilayani tanpa memperdulikan urgensi.
+
+00:04:41.180 --> 00:04:43.500
+Dengan modal sentimen yang aktif, urutannya berubah.
+
+00:04:44.600 --> 00:04:48.540
+Kasus yang mendesak atau emosional dimunculkan lebih awal dan di tangan yang paling mampu meredamnya.
+
+00:04:49.320 --> 00:04:52.560
+Jika Anda ingin visualnya, bayangkan sistem meletakkan penanda terang di papan.
+
+00:04:53.260 --> 00:04:56.280
+Pesan bahwa pertemuan ini adalah level boss, bukan sekadar musuh biasa.
+
+00:04:56.840 --> 00:04:58.920
+Prinsipnya tidak mistis, ini adalah pengenal pola terapan.
+
+00:04:58.920 --> 00:05:03.940
+Dan, 365 memproses teks dan ucapan melalui NLP dan analisis sentimen,
+
+00:05:04.500 --> 00:05:07.080
+mengubah kata, frasa, bahkan tidak menjadi sinyal yang berguna.
+
+00:05:07.580 --> 00:05:09.040
+Sinyal-sinyal ini kemudian memandu perutnya.
+
+00:05:09.420 --> 00:05:11.580
+Pelanggan marah menyebut ingin batal? Eskalasi.
+
+00:05:11.980 --> 00:05:14.280
+Akun bernilai tinggi mulai tidak sabar? Prioritaskan.
+
+00:05:14.600 --> 00:05:16.360
+Dan supervisor tidak dikesampingkan dari proses ini.
+
+00:05:16.700 --> 00:05:17.740
+Mereka dapat menyesuaikan hal tersebut.
+
+00:05:18.120 --> 00:05:19.880
+Beberapa tim mengutamakan pelanggan bernilai tinggi,
+
+00:05:19.880 --> 00:05:22.600
+yang lain memberikan prioritas utama pada ancaman berhenti berlangganan.
+
+00:05:23.120 --> 00:05:25.420
+Ini hanya konfigurasi, bukan kotak hitam yang menebas sendiri.
+
+00:05:25.420 --> 00:05:29.960
+Dan meskipun fitur canggih sering fokus pada kata kunci, suara, dan analitik transkrip,
+
+00:05:30.040 --> 00:05:33.600
+sistem ini juga dapat memunculkan hal seperti jadah panjang atau kumpulan istilah bernanda emosional.
+
+00:05:34.460 --> 00:05:36.060
+Ini tidak selalu berupa tanda bahaya yang kaku,
+
+00:05:36.160 --> 00:05:38.020
+tetapi merupakan sinyal tambahan yang dipertimbangkan model.
+
+00:05:38.780 --> 00:05:41.160
+Dimana Anda mungkin menganggap cedah sebagai kebisingan latar belakang,
+
+00:05:41.260 --> 00:05:44.180
+sistem setidaknya menandainya sebagai sesuatu yang patut diperhatikan dalam konteks lainnya.
+
+00:05:44.180 --> 00:05:47.140
+Jadi, saat Anda membuka kotak masuk atau antaran panggil, Anda tidak mempunyai kondisi.
+
+00:05:47.640 --> 00:05:51.220
+Sudah ada indikator sentimen pembacaan cepat apakah orang tersebut tenang, kesal,
+
+00:05:51.320 --> 00:05:52.540
+atau siap melakukan eskalasi.
+
+00:05:52.540 --> 00:05:56.160
+Sistem tidak berbicara untuk Anda, tetapi memberitahu Anda bahwa masalah ini mulemen.
+
+00:05:56.460 --> 00:05:59.220
+Mungkin lewatkan bahasa-basi skrip dan langsung bergerak ke pemecahan masalah.
+
+00:05:59.840 --> 00:06:01.740
+Sinyal awal itu memangkas pengulangan yang tidak perlu,
+
+00:06:01.980 --> 00:06:04.280
+menyelamatkan kedua pihak dari siklus frustrasi lainnya.
+
+00:06:05.080 --> 00:06:07.700
+Mungkin terdengar seperti optimasi kecil, tetapi skala mengubah segalanya.
+
+00:06:08.700 --> 00:06:11.160
+Di ribuan kontak, Triasis A mengurangi waktu tunggu,
+
+00:06:11.160 --> 00:06:13.220
+membawa kasus berisiko tinggi ke agen senior,
+
+00:06:13.500 --> 00:06:16.980
+dan menurunkan stres karena Anda tidak terus menebak di mana harus fokus.
+
+00:06:18.080 --> 00:06:18.880
+Antrean kaku pun hilang.
+
+00:06:19.180 --> 00:06:21.460
+Sebaliknya, mereka digantikan oleh antrean berbasis niat,
+
+00:06:21.460 --> 00:06:23.680
+di mana masalah tersulit menara tepat yang seharusnya.
+
+00:06:24.200 --> 00:06:26.920
+Dan begitu Anda menjalankan peta panas emosional itu perspektif Anda berubah.
+
+00:06:27.660 --> 00:06:29.700
+Deteksi sentimen bukan hanya tentang menemukan masalah,
+
+00:06:30.080 --> 00:06:32.320
+ini tentang membebaskan Anda untuk bertindak secara strategis.
+
+00:06:33.120 --> 00:06:35.480
+Karena ketika AI dapat terus memantau lonjakan frustrasi,
+
+00:06:35.620 --> 00:06:38.280
+langkah logis berikutnya adalah apalagi yang bisa AI ambil dari beban kerjaan.
+
+00:06:38.340 --> 00:06:40.740
+Bisa ke sistem menangani penyalinan data, pencatatan detail,
+
+00:06:40.860 --> 00:06:42.240
+dan proses formula tiket yang tak ada habisnya.
+
+00:06:42.580 --> 00:06:44.320
+Itulah bagian selanjutnya dari cerita ini,
+
+00:06:44.460 --> 00:06:47.760
+di mana sistem berhenti sekadar membaca suasana dan mulai bertindak layaknya asisten magang
+
+00:06:47.760 --> 00:06:50.480
+yang tak kenal lelah menangani dokumen agar tim Anda tidak perlu melakukannya.
+
+00:06:51.140 --> 00:06:53.480
+Agen otonom, asisten magang dukungan baru Anda yang tak pernah lupa.
+
+00:06:54.020 --> 00:06:54.640
+Bayangkan seperti ini.
+
+00:06:55.060 --> 00:06:57.660
+Pendeteksi sentimen memberitahu Anda kasus mana yang mulai memanas.
+
+00:06:58.320 --> 00:07:00.540
+Namun apa yang terjadi setelah kasus tersebut masuk ke antrean Anda?
+
+00:07:00.980 --> 00:07:02.280
+Disitulah peran agen otonom dimu.
+
+00:07:02.840 --> 00:07:04.860
+Asisten magang digital di dalam Dynamics 365
+
+00:07:04.860 --> 00:07:08.740
+yang menangani tugas repetitif agar Anda tidak perlu mengurus detail administratif secara mikro.
+
+00:07:09.220 --> 00:07:10.040
+Mereka tidak memimpin,
+
+00:07:10.160 --> 00:07:12.840
+tetapi mereka menjaga segala sesuatunya tetap terorganisasi dan konsisten
+
+00:07:12.840 --> 00:07:14.460
+yang menyelamatkan tim Anda dari rutinitas yang membosankan.
+
+00:07:14.600 --> 00:07:16.360
+Microsoft membaginya menjadi tiga jenis utama.
+
+00:07:16.560 --> 00:07:17.480
+Agen manajemen kasus,
+
+00:07:18.000 --> 00:07:18.740
+agen niat pelanggan,
+
+00:07:18.940 --> 00:07:20.440
+dan agen manajemen pengetahuan pelanggan.
+
+00:07:21.140 --> 00:07:23.280
+Manajemen kasus berfokus pada pembuatan dan pembaruan tiket.
+
+00:07:24.380 --> 00:07:26.720
+Niat pelanggan membangun pustaka niat dari percakapan historis
+
+00:07:26.720 --> 00:07:30.020
+agar sistem dapat lebih baik memprediksi apa yang sebenarnya dibutuhkan pelanggan.
+
+00:07:31.300 --> 00:07:31.920
+Sementara itu,
+
+00:07:32.200 --> 00:07:36.040
+manajemen pengetahuan menghasilkan dan memelihara artikel yang diandalkan tim Anda setiap hari,
+
+00:07:36.600 --> 00:07:39.000
+masing-masing mengotomatiskan bagian tertentu dari siklus layanan.
+
+00:07:39.460 --> 00:07:40.720
+Mari kita bahas manajemen kasus terlebih dong.
+
+00:07:40.720 --> 00:07:43.420
+Biasanya, setiap tiket mengharuskan Anda mengetik detail pelanggan,
+
+00:07:43.520 --> 00:07:45.400
+mengatur kategori, dan mencocokkan stempel waktu.
+
+00:07:46.220 --> 00:07:47.400
+AI memproses teks tersebut,
+
+00:07:47.680 --> 00:07:50.020
+mengisi bidang, dan mengatur entry sesuai teks yang tepat.
+
+00:07:51.000 --> 00:07:52.320
+Saat Anda mengonfigurasi aturan,
+
+00:07:52.520 --> 00:07:53.960
+sistem dapat memicu tindakan tidak lanjut
+
+00:07:53.960 --> 00:07:56.380
+atau bahkan menyelesaikan skenario sederhana secara otomatis
+
+00:07:56.380 --> 00:07:58.960
+seperti menutup kasus setelah pelanggan mengonfirmasi pengiriman.
+
+00:07:59.300 --> 00:07:59.960
+Namun, dilihat catatannya.
+
+00:08:00.860 --> 00:08:01.520
+Selama peluncuran,
+
+00:08:01.680 --> 00:08:03.740
+sebagian besar tim tetap menggunakan mode bantuan untuk langkah lain.
+
+00:08:04.440 --> 00:08:07.320
+Artinya, agen membuat draft pembaruan dan manusia mengonfirmasinya.
+
+00:08:07.320 --> 00:08:09.380
+Autonomi penuh bukanlah pilihan semua atau tidak sama-sama.
+
+00:08:09.740 --> 00:08:11.960
+Anda bisa meningkat kepercayaan seiring dengan perlaluan sistem yang sama gitu.
+
+00:08:12.620 --> 00:08:14.180
+Selanjutnya, agen manajemen pengetahuan.
+
+00:08:14.820 --> 00:08:16.300
+Basis pengetahuan seringkali menjadi kacau.
+
+00:08:17.060 --> 00:08:18.480
+Duplikat, draft setengah jadi,
+
+00:08:18.940 --> 00:08:20.700
+dan konten usang tersebar di mana-mana.
+
+00:08:21.400 --> 00:08:22.400
+AI memberi sekonteks,
+
+00:08:22.580 --> 00:08:23.580
+menandai entry duplikat,
+
+00:08:24.020 --> 00:08:25.560
+dan secara otomatis mengarahkan konten
+
+00:08:25.560 --> 00:08:27.820
+sebagai panduan internal saja atau FAQ public.
+
+00:08:28.980 --> 00:08:30.580
+Admin dapat mengatur perlindungan.
+
+00:08:30.880 --> 00:08:33.220
+Misalnya, draft AI tidak dapat dipublikasikan secara eksternal
+
+00:08:33.220 --> 00:08:34.180
+sebelum disetujui oleh peninjau.
+
+00:08:34.420 --> 00:08:35.240
+Lalu dengan cara yang konservatif.
+
+00:08:35.240 --> 00:08:37.720
+Biarkan agen membuat draft dan membersihkan kekacauan,
+
+00:08:37.780 --> 00:08:40.340
+sementara tim Anda memutuskan apakah artikel baru sudah siap untuk publik.
+
+00:08:40.640 --> 00:08:41.480
+Setelah Anda merasa nyaman,
+
+00:08:41.560 --> 00:08:42.960
+Anda dapat melonggarkan batasan tersebut
+
+00:08:42.960 --> 00:08:45.200
+tanpa harus membuat proses membersihkan berubah menjadi peninjauan komitif.
+
+00:08:45.420 --> 00:08:46.260
+Lalu ada niat pelanggan.
+
+00:08:46.860 --> 00:08:48.100
+Ini adalah tentang mengatologkan
+
+00:08:48.100 --> 00:08:50.080
+apa yang sebenarnya ditanyakan pelanggan dari waktu ke waktu.
+
+00:08:51.040 --> 00:08:53.340
+Alih-alih bersusah payah menusuli transkrip untuk menebak niat,
+
+00:08:53.440 --> 00:08:55.880
+seperti penagihan VS garansi VS pengaturan ulang kata sandi,
+
+00:08:56.220 --> 00:08:58.080
+AI membangun pustaka niat di berbagai saluran.
+
+00:08:58.820 --> 00:09:00.580
+Ketika kasus baru cocok dengan pola yang diketahui,
+
+00:09:00.580 --> 00:09:02.280
+sistem dapat merekomendasikan langkah selanjutnya
+
+00:09:02.280 --> 00:09:03.680
+atau mengisi solusi yang mungkin secara otomatis.
+
+00:09:03.800 --> 00:09:05.180
+Kali lagi, kepercayaan muncul dari verifikasi.
+
+00:09:05.620 --> 00:09:07.820
+Tetap gunakan mode draft agar Anda bisa mengonfirmasi langkah.
+
+00:09:08.640 --> 00:09:10.640
+Seiring waktu, saat akurasi meningkat,
+
+00:09:10.800 --> 00:09:13.520
+Anda mulai mempercepat respons tanpa kehilangan kontrol kualitas.
+
+00:09:14.020 --> 00:09:15.480
+Hasil di ketiga agen tersebut serupa.
+
+00:09:15.960 --> 00:09:17.160
+Lebih sedikit waktu berpindah jendela,
+
+00:09:17.280 --> 00:09:18.320
+lebih banyak waktu untuk berinterak.
+
+00:09:18.920 --> 00:09:19.840
+AI menangani entry lock,
+
+00:09:19.980 --> 00:09:20.580
+pencocokan niat,
+
+00:09:20.680 --> 00:09:22.400
+dan pembersihan basis pengetahuan di latar belakang.
+
+00:09:22.900 --> 00:09:24.120
+Anda menangani sisi manusiawi,
+
+00:09:24.460 --> 00:09:25.440
+mendengarkan, berempati,
+
+00:09:25.540 --> 00:09:27.660
+dan memutuskan cara menyelesaikan masalah.
+
+00:09:27.660 --> 00:09:30.840
+Alih tugas ini penting karena menghemat beberapa menit dari setiap interaksi.
+
+00:09:31.740 --> 00:09:33.080
+Dikalikan dengan ratusan kasus,
+
+00:09:33.220 --> 00:09:35.940
+dan beban kerja tiba-tiba terasa lebih seperti strategi terarah
+
+00:09:35.940 --> 00:09:37.760
+daripada sekadar menekan tombol dengan panik.
+
+00:09:38.260 --> 00:09:39.820
+Untuk saja tata kelola bukanlah hal yang opsional.
+
+00:09:40.180 --> 00:09:41.500
+Perlakukan peluncuran agen layaknya,
+
+00:09:41.580 --> 00:09:42.700
+Anda memperlakukan karyawan baru.
+
+00:09:43.440 --> 00:09:44.900
+Anda tidak akan memberikan hak admin global
+
+00:09:44.900 --> 00:09:46.480
+kepada rekan tim yang baru di hari pertama.
+
+00:09:46.840 --> 00:09:47.620
+Hal yang sama berlaku di sini.
+
+00:09:48.100 --> 00:09:49.200
+Aktifkan persyaratan audit,
+
+00:09:49.560 --> 00:09:51.540
+tahan penutupan otomatis di balik gebang persetujuan
+
+00:09:51.540 --> 00:09:52.740
+sampai Anda mercahi sistemnya
+
+00:09:52.740 --> 00:09:54.600
+dan pantau kinerjanya selama minggu-minggu pertama.
+
+00:09:55.620 --> 00:09:56.640
+Dengan membangun pengawasan,
+
+00:09:56.640 --> 00:09:59.220
+Anda memastikan AE mendukung tim alih-alih mengejutkan mereka.
+
+00:10:00.180 --> 00:10:00.920
+Jika digunakan baik,
+
+00:10:01.040 --> 00:10:03.160
+asisten digital ini menutupi bagian layanan yang merantakan,
+
+00:10:03.340 --> 00:10:03.960
+panggilan terlewat,
+
+00:10:04.120 --> 00:10:05.140
+kategori yang belum ditandai,
+
+00:10:05.340 --> 00:10:06.200
+dan tiket yang hilang.
+
+00:10:06.620 --> 00:10:08.740
+Mereka menjaga catatan tetap akurat dan basis pengetop rapi.
+
+00:10:09.220 --> 00:10:11.340
+Namun mereka tidak hadir untuk menggantikan penilaian otomat.
+
+00:10:11.960 --> 00:10:13.020
+Mereka hanya membersihkan jalan
+
+00:10:13.020 --> 00:10:14.880
+agar manusia dapat menghabiskan energi
+
+00:10:14.880 --> 00:10:16.280
+di tempat yang benar-benar mengubah hasil.
+
+00:10:17.000 --> 00:10:17.860
+Semua itu membantu,
+
+00:10:18.100 --> 00:10:20.740
+tetapi hanya jika Anda bisa langsung terjun ke interaksi pelanggan
+
+00:10:20.740 --> 00:10:21.960
+dengan latar belakang yang tepat.
+
+00:10:22.660 --> 00:10:23.900
+Pembuatan kasus memang penting,
+
+00:10:23.900 --> 00:10:26.080
+tetapi Anda tetap membutuhkan konteks yang relevan
+
+00:10:26.080 --> 00:10:27.980
+saat panggilan atau obrolan dimulai.
+
+00:10:28.540 --> 00:10:30.760
+Jika tidak, Anda meminta pelanggan untuk mulai dari awal.
+
+00:10:31.480 --> 00:10:32.920
+Dan sedikit hal yang menguras kesabaran
+
+00:10:32.920 --> 00:10:34.800
+lebih cepat daripada harus mengulangi cerita yang sama
+
+00:10:34.800 --> 00:10:36.140
+lima kali kepada lima orang berbeda.
+
+00:10:36.820 --> 00:10:38.360
+Kuatan super percakapan tidak akan pernah bertanya
+
+00:10:38.360 --> 00:10:39.000
+bisakah Anda mengulangi.
+
+00:10:39.360 --> 00:10:39.800
+Sekali lagi,
+
+00:10:40.060 --> 00:10:41.740
+ketika agen diberikan teka-teki yang tidak lengkap,
+
+00:10:41.940 --> 00:10:42.660
+kemajuan akan melakukan.
+
+00:10:43.000 --> 00:10:44.520
+Itulah sebabnya kopilot membekali Anda
+
+00:10:44.520 --> 00:10:45.640
+dengan apa yang saya sebut sebagai
+
+00:10:45.640 --> 00:10:46.800
+kekuatan super percakapan.
+
+00:10:47.060 --> 00:10:48.920
+Alat yang dirancang untuk menjaga konteks tetap utuh
+
+00:10:48.920 --> 00:10:50.760
+dan menjaga konteks tetap utuh dan menjaga menghilang.
+
+00:10:50.760 --> 00:10:52.900
+Alih-alih membuat Anda menelusuri log yang rumit
+
+00:10:52.900 --> 00:10:54.840
+kopilot menyusun ringkasan percakapan yang terstruktur.
+
+00:10:55.360 --> 00:10:57.320
+Tiap formulir kasus menyertakan hal-hal penting.
+
+00:10:57.640 --> 00:10:59.340
+Detail pelanggan, produk terkait,
+
+00:10:59.460 --> 00:11:00.120
+riwayat relevan,
+
+00:11:00.820 --> 00:11:03.080
+dan apakah sentimennya tenang, tegang, atau eksplosif.
+
+00:11:03.720 --> 00:11:05.340
+Untuk obrolan dan transkrip panggilan suara
+
+00:11:05.340 --> 00:11:06.880
+ringkasan terstruktur ini menghemat waktu
+
+00:11:06.880 --> 00:11:07.900
+untuk mencari kembali informasi.
+
+00:11:08.820 --> 00:11:09.980
+Cara operasional hal itu penting.
+
+00:11:10.660 --> 00:11:11.460
+Lebih sedikit mencari,
+
+00:11:11.740 --> 00:11:13.180
+lebih sedikit pertanyaan verifikasi,
+
+00:11:13.180 --> 00:11:14.680
+dan lebih cepat menuju solusi nyata.
+
+00:11:15.480 --> 00:11:16.980
+Anggaplah seperti memulai sesi baru
+
+00:11:16.980 --> 00:11:18.700
+dengan jurnal kampanye yang sudah menunggu.
+
+00:11:18.700 --> 00:11:21.040
+Anda tidak perlu membolak-balik catatan yang berserahkan
+
+00:11:21.040 --> 00:11:22.700
+untuk mencari tahu apa yang salah dua misi sebelumnya.
+
+00:11:23.120 --> 00:11:24.720
+Anda mendapatkan ringkasan peristiwa utama,
+
+00:11:24.860 --> 00:11:26.240
+hasil, dan suasana dalam sekejap mata.
+
+00:11:27.260 --> 00:11:28.680
+Saat pelanggan yang frustrasi menelpon,
+
+00:11:28.760 --> 00:11:29.760
+Anda bisa melewati bahasa-bahasa
+
+00:11:29.760 --> 00:11:31.420
+seperti apakah kita pernah bicara sebelumnya,
+
+00:11:31.840 --> 00:11:33.260
+dan langsung menuju penyelesaian masalah.
+
+00:11:34.120 --> 00:11:35.560
+Ringkasan hanyalah separuh dari cerita.
+
+00:11:36.420 --> 00:11:38.360
+Kopilot juga menyertakan fitur tanya-pertanyaan
+
+00:11:38.360 --> 00:11:39.300
+yang persis seperti namanya.
+
+00:11:39.760 --> 00:11:41.400
+Tidak perlu pencarian bulan yang kaku,
+
+00:11:41.520 --> 00:11:42.700
+tidak perlu menembak perasaan yang tepat
+
+00:11:42.700 --> 00:11:43.960
+dari basis pengetahuan yang usang.
+
+00:11:44.780 --> 00:11:45.900
+Anda cukup bertanya secara alami
+
+00:11:45.900 --> 00:11:47.620
+seperti saat bertanya kepadakan kerja disebut.
+
+00:11:48.800 --> 00:11:50.440
+Apa kebijakan garansi untuk model ini,
+
+00:11:50.680 --> 00:11:52.600
+atau bagaimana cara melaporkan keluhan pengiriman?
+
+00:11:53.340 --> 00:11:54.600
+Alat ini menjawab dengan mengambil data
+
+00:11:54.600 --> 00:11:55.700
+dari basis pengetahuan internal,
+
+00:11:55.860 --> 00:11:56.880
+dan jika dikonfigurasi,
+
+00:11:57.080 --> 00:11:58.600
+dari hingga lima domain eksternal terpercaya.
+
+00:11:59.360 --> 00:12:00.940
+Itu berarti Anda mendapatkan jawaban secara instan
+
+00:12:00.940 --> 00:12:02.440
+bahkan saat pelanggan masih berbicara.
+
+00:12:03.480 --> 00:12:04.360
+Waktu tunggu berkurang,
+
+00:12:04.540 --> 00:12:05.440
+dan dukungan tidak terhenti
+
+00:12:05.440 --> 00:12:07.420
+saat Anda mencari di manual yang ketinggalan zaman.
+
+00:12:07.900 --> 00:12:09.300
+Dalam kondisi terbaik,
+
+00:12:09.420 --> 00:12:11.100
+sistem bahkan memberi Anda artikel matang
+
+00:12:11.100 --> 00:12:12.960
+yang siap dibagikan langsung kepada pelanggan.
+
+00:12:12.960 --> 00:12:14.180
+Branding terjaga,
+
+00:12:14.320 --> 00:12:15.120
+kebijakan akurat,
+
+00:12:15.260 --> 00:12:16.060
+tidak perlu diubah lagi.
+
+00:12:16.500 --> 00:12:17.380
+Dan itu tidak berhenti disitu.
+
+00:12:17.680 --> 00:12:18.800
+Untuk menjaga tempo percakapan,
+
+00:12:18.900 --> 00:12:20.280
+Copilot juga menyusun draft tanggapan.
+
+00:12:21.180 --> 00:12:21.920
+Anda bisa mengetik,
+
+00:12:22.020 --> 00:12:23.080
+bertanya dalam bahasa bebas,
+
+00:12:23.200 --> 00:12:24.300
+menindaklanjut di secara alami,
+
+00:12:24.380 --> 00:12:25.340
+dan menyempurnakan jawaban.
+
+00:12:26.280 --> 00:12:27.760
+Minta Copilot menyusun draft obrolan
+
+00:12:27.760 --> 00:12:29.240
+atau email dengan konteks yang sudah ada,
+
+00:12:29.380 --> 00:12:30.400
+lalu edit sebelum mengirim.
+
+00:12:31.540 --> 00:12:32.980
+Lihat sumber pengetahuan di samping jawaban,
+
+00:12:33.120 --> 00:12:35.080
+sehingga Anda dan pelanggan tahu asal informasinya.
+
+00:12:35.920 --> 00:12:37.620
+Kalimat-kalimat itu mungkin tidak terdengar mewah,
+
+00:12:37.620 --> 00:12:38.700
+tetapi itulah perbedaan
+
+00:12:38.700 --> 00:12:39.820
+antara keningan yang canggung
+
+00:12:39.820 --> 00:12:40.760
+dan kelancaran layanan.
+
+00:12:40.760 --> 00:12:43.160
+Transparansi meningkat karena pelanggan tahu
+
+00:12:43.160 --> 00:12:45.060
+Anda mengambil dari aturan yang telah diverifikasi,
+
+00:12:45.240 --> 00:12:45.940
+bukan asal bicara.
+
+00:12:46.320 --> 00:12:47.440
+Dan Anda tidak terjebak menyalin
+
+00:12:47.440 --> 00:12:48.120
+dari berbagai wiki
+
+00:12:48.120 --> 00:12:49.120
+hanya agar terlihat siap.
+
+00:12:49.920 --> 00:12:51.420
+Tentu saja tata kelola tidak menghilang.
+
+00:12:52.000 --> 00:12:52.860
+I menyusun draft balasan,
+
+00:12:53.040 --> 00:12:54.240
+berdasarkan apa yang diketahuinya,
+
+00:12:54.320 --> 00:12:55.240
+tetapi Anda tetap harus
+
+00:12:55.240 --> 00:12:56.440
+meninjaunya sebelum mengirim.
+
+00:12:56.840 --> 00:12:58.580
+Itu adalah akal sehat sekaligus praktek terbaik.
+
+00:12:58.760 --> 00:13:00.120
+Seperti yang dipelajari setiap admin sistem,
+
+00:13:00.260 --> 00:13:00.540
+percaya.
+
+00:13:00.980 --> 00:13:01.860
+Tapi verifikasi,
+
+00:13:03.320 --> 00:13:04.760
+biarkan mesin yang menyiapkan langkahnya,
+
+00:13:04.760 --> 00:13:06.020
+tetapi buat keputusan akhir sendiri
+
+00:13:06.020 --> 00:13:07.660
+sebelum pesan sampai ke kotak masuk pelanggan.
+
+00:13:07.660 --> 00:13:08.620
+Hasilnya,
+
+00:13:09.100 --> 00:13:10.980
+agen tetap fokus dalam alur percakapan,
+
+00:13:11.640 --> 00:13:13.240
+pelanggan merasa didengar tanpa penundaan,
+
+00:13:13.560 --> 00:13:15.140
+dan kasus tidak lagi berlarut-larut dengan
+
+00:13:15.140 --> 00:13:16.200
+tunggu sebentar.
+
+00:13:17.160 --> 00:13:18.380
+Anda tidak perlu berpindah-pindah jendela
+
+00:13:18.380 --> 00:13:19.840
+atau meminta maaf karena kurangnya konteks.
+
+00:13:20.180 --> 00:13:20.820
+Anda mendengarkan,
+
+00:13:20.960 --> 00:13:21.400
+menanggapi,
+
+00:13:21.560 --> 00:13:22.900
+dan membawa tiket menuju penutupan
+
+00:13:22.900 --> 00:13:24.180
+dengan informasi yang tepat di tangan.
+
+00:13:24.820 --> 00:13:25.340
+Bagi pelanggan,
+
+00:13:25.460 --> 00:13:26.200
+semuanya tampak mulus
+
+00:13:26.200 --> 00:13:27.820
+seolah Anda sudah menghafal semua aturannya.
+
+00:13:28.460 --> 00:13:29.800
+Perubahan itu mengubah layanan dalam skala.
+
+00:13:30.300 --> 00:13:32.300
+Setiap interaksi mengalir lancar tanpa mbatu.
+
+00:13:32.300 --> 00:13:34.400
+Tim Anda tetap fokus karena tugas rutin
+
+00:13:34.400 --> 00:13:36.620
+seperti mengingat dan mengumpulkan data sudah tertangani.
+
+00:13:37.320 --> 00:13:38.520
+Pelanggan menikmati kontinuitas
+
+00:13:38.520 --> 00:13:40.200
+karena Anda tidak menginterupsi dengan pengulangan
+
+00:13:40.200 --> 00:13:41.540
+atau menghambat dengan keheningan panjang
+
+00:13:41.540 --> 00:13:42.660
+dan secara korektif pertanyaan
+
+00:13:42.660 --> 00:13:43.540
+tidak lanjut yang ditakuti
+
+00:13:43.540 --> 00:13:44.860
+bisakah Anda tidak lanjut yang ditakuti
+
+00:13:44.860 --> 00:13:45.660
+bisakah Anda kembali masalah.
+
+00:13:46.060 --> 00:13:47.060
+Memudar menjadi sejarah
+
+00:13:47.060 --> 00:13:47.920
+di samping pita cadangan
+
+00:13:47.920 --> 00:13:48.660
+dan nada sambung.
+
+00:13:49.460 --> 00:13:50.240
+Itulah kekuatan nyata
+
+00:13:50.240 --> 00:13:51.480
+dari kekuatan super percakapan.
+
+00:13:51.780 --> 00:13:52.920
+Bukan sekadar memangkas pengulangan,
+
+00:13:53.040 --> 00:13:53.900
+tetapi menjaga semua orang
+
+00:13:53.900 --> 00:13:55.260
+tetap selara secara waktu nyata.
+
+00:13:56.100 --> 00:13:57.620
+Dan begitu dialog berjalan semulus ini,
+
+00:13:57.620 --> 00:13:59.480
+Anda dapat mulai memikirkan transisi yang lebih besar.
+
+00:14:00.140 --> 00:14:00.900
+Seperti apa jadinya
+
+00:14:00.900 --> 00:14:02.000
+jika seluruh pusat kontak
+
+00:14:02.000 --> 00:14:03.320
+beralih dari berdiri dalam antrean
+
+00:14:03.320 --> 00:14:04.500
+menjadi benar-benar memprediksi
+
+00:14:04.500 --> 00:14:05.440
+siapa yang membutuhkan tentunya?
+
+00:14:06.200 --> 00:14:06.920
+Dari antrean panggilan
+
+00:14:06.920 --> 00:14:08.040
+menjadi mesin keterlibatan proaktif.
+
+00:14:08.560 --> 00:14:09.240
+Bayangkan mudah lama.
+
+00:14:09.880 --> 00:14:11.200
+Antrean bekerja seperti barisan kedai
+
+00:14:11.200 --> 00:14:12.000
+yang masuk pertama keluar.
+
+00:14:12.200 --> 00:14:13.840
+Tidak masalah apakah itu pertanyaan
+
+00:14:13.840 --> 00:14:15.080
+atau masalah besar yang sedang terjadi
+
+00:14:15.080 --> 00:14:15.880
+semua orang menunggu sama.
+
+00:14:16.440 --> 00:14:17.540
+Akin mengambil nomor berikutnya
+
+00:14:17.540 --> 00:14:18.740
+dan bersiap menghadapi dampaknya.
+
+00:14:19.220 --> 00:14:20.500
+Itu adalah layanan tanpa konteks
+
+00:14:20.500 --> 00:14:21.780
+dan semua orang menanggung akibat.
+
+00:14:22.220 --> 00:14:23.800
+Pendekatan modern mengubah keadaan
+
+00:14:23.800 --> 00:14:25.220
+dengan perutean berbasis sentimen,
+
+00:14:25.440 --> 00:14:26.260
+analitik prediktif,
+
+00:14:26.520 --> 00:14:27.420
+ekstrasi multisaluran,
+
+00:14:27.600 --> 00:14:28.800
+dan dasbor perakiraan supervisor.
+
+00:14:29.560 --> 00:14:30.680
+Anda tidak hanya mengacak tiket,
+
+00:14:30.800 --> 00:14:31.840
+Anda membangun rencana pertempuran
+
+00:14:31.840 --> 00:14:32.320
+secara waktunya.
+
+00:14:32.880 --> 00:14:34.380
+Alih-alih menerima pesanan secara buta,
+
+00:14:34.480 --> 00:14:35.240
+platform ini bertindak
+
+00:14:35.240 --> 00:14:36.160
+sebagai mesin penyortir
+
+00:14:36.160 --> 00:14:37.880
+menandai urgensi, emosi, dan nilai
+
+00:14:37.880 --> 00:14:38.720
+sehingga kasus yang tepat
+
+00:14:38.720 --> 00:14:39.520
+mendarat di depan agen
+
+00:14:39.520 --> 00:14:40.400
+yang tepat pada waktu yang terakhir.
+
+00:14:40.680 --> 00:14:41.740
+Ambil contoh perubasi sentimen.
+
+00:14:42.180 --> 00:14:43.480
+Jika sistem menandai frustrasi,
+
+00:14:43.580 --> 00:14:44.820
+kasus tersebut melompati antrean
+
+00:14:44.820 --> 00:14:46.180
+menuju agen yang telah tentu eskalasi.
+
+00:14:46.500 --> 00:14:47.040
+Pelanggar perintai tinggi
+
+00:14:47.040 --> 00:14:47.820
+menggunakan bahasa peringatan.
+
+00:14:48.580 --> 00:14:49.900
+Mereka dipindahkan di depan permintaan
+
+00:14:49.900 --> 00:14:50.500
+berdampak rendah
+
+00:14:50.500 --> 00:14:51.340
+sehingga kesabaran mereka
+
+00:14:51.340 --> 00:14:51.900
+tidak menguap.
+
+00:14:52.540 --> 00:14:53.460
+Akhirnya tidak dibiarkan menemak.
+
+00:14:53.900 --> 00:14:54.940
+Mereka ditempatkan di posisi
+
+00:14:54.940 --> 00:14:55.940
+di mana mereka dapat meredam
+
+00:14:55.940 --> 00:14:57.020
+situasi sebelum ada yang berhenti
+
+00:14:57.020 --> 00:14:57.480
+karena marah.
+
+00:14:57.880 --> 00:14:58.520
+Analitik prediktif
+
+00:14:58.520 --> 00:14:59.740
+kemudian menambahkan pandangan jauh ke depan.
+
+00:15:00.140 --> 00:15:01.420
+Dengan memproses lalu lintas langsung
+
+00:15:01.420 --> 00:15:02.120
+dan pola historis,
+
+00:15:02.220 --> 00:15:03.280
+platform memunculkan risiko
+
+00:15:03.280 --> 00:15:04.240
+sebelum masalah membesar.
+
+00:15:04.640 --> 00:15:05.880
+Jika cat produk memicu panggilan
+
+00:15:05.880 --> 00:15:06.640
+di seluruh wilayah,
+
+00:15:06.740 --> 00:15:07.420
+peringatan risiko,
+
+00:15:07.660 --> 00:15:08.560
+pelanggan berhenti muncul
+
+00:15:08.560 --> 00:15:10.120
+tanpa harus menunggu laporan mingguan.
+
+00:15:10.880 --> 00:15:11.680
+Dan matematika yang sama
+
+00:15:11.680 --> 00:15:12.700
+dapat mengidentifikasi peluang
+
+00:15:12.700 --> 00:15:13.340
+bukan hanya ancam.
+
+00:15:14.120 --> 00:15:14.920
+Seseorang menelepon
+
+00:15:14.920 --> 00:15:15.920
+dengan minat pada aksesori
+
+00:15:15.920 --> 00:15:16.420
+atau layanan.
+
+00:15:17.340 --> 00:15:18.620
+Sistem dapat mendorong percakapan
+
+00:15:18.620 --> 00:15:19.840
+menuju peningkatan penjualan
+
+00:15:19.840 --> 00:15:20.700
+pada saat yang tepat.
+
+00:15:21.560 --> 00:15:22.740
+Supervisor mendapatkan sesuatu
+
+00:15:22.740 --> 00:15:23.620
+yang jauh lebih berharga,
+
+00:15:23.880 --> 00:15:24.060
+waktu.
+
+00:15:25.060 --> 00:15:26.100
+Dasber perakiraan menunjukkan
+
+00:15:26.100 --> 00:15:26.940
+kapan tumpukan pekerjaan
+
+00:15:26.940 --> 00:15:27.620
+kemungkinan akan lu.
+
+00:15:28.000 --> 00:15:29.140
+Alih-alih menemukan kekacauan
+
+00:15:29.140 --> 00:15:29.980
+berjam-jam kemudian.
+
+00:15:30.320 --> 00:15:31.700
+Para pemimpin melihat kurva pekerjaan
+
+00:15:31.700 --> 00:15:32.820
+yang masuk lebih awal dari jatuh.
+
+00:15:33.660 --> 00:15:34.500
+Jika staff akan menipis
+
+00:15:34.500 --> 00:15:35.220
+tiga jam ke depan,
+
+00:15:35.340 --> 00:15:36.200
+jadwal dapat bergeser
+
+00:15:36.200 --> 00:15:37.300
+sebelum antrean benar lumpuh.
+
+00:15:37.800 --> 00:15:38.400
+Ini lebih dari sekadar
+
+00:15:38.400 --> 00:15:39.220
+tunjangan kualitas hidup.
+
+00:15:39.680 --> 00:15:40.880
+Ini adalah asuransi operasional
+
+00:15:40.880 --> 00:15:42.380
+yang menjaga moral dan tingkat layanan
+
+00:15:42.380 --> 00:15:42.980
+agar tidak runtuh
+
+00:15:42.980 --> 00:15:43.820
+di bawah lonjakan menerang.
+
+00:15:44.440 --> 00:15:45.420
+Orkestrasi multisaluran
+
+00:15:45.420 --> 00:15:46.100
+menyatukan semuanya.
+
+00:15:46.560 --> 00:15:47.520
+Pelanggan tidak berpikir dalam silu.
+
+00:15:48.100 --> 00:15:49.100
+Mereka berpindah di SMS
+
+00:15:49.100 --> 00:15:50.060
+ke obrolan ke suara
+
+00:15:50.060 --> 00:15:51.120
+tanpa peduli sistem backend
+
+00:15:51.120 --> 00:15:52.000
+apa yang Anda gunakan.
+
+00:15:52.900 --> 00:15:54.620
+Dynamics 365 Contact Center
+
+00:15:54.620 --> 00:15:55.940
+mengintegrasikan jalur tersebut
+
+00:15:55.940 --> 00:15:57.220
+sehingga agen mewarisi catatan
+
+00:15:57.220 --> 00:15:57.680
+yang konsisten,
+
+00:15:57.820 --> 00:15:58.620
+bukan potongan-potongan
+
+00:15:58.620 --> 00:15:59.280
+yang terfragmentasi.
+
+00:15:59.280 --> 00:16:00.880
+Percakapan obrolan
+
+00:16:00.880 --> 00:16:01.740
+berlanjut dengan mulus
+
+00:16:01.740 --> 00:16:02.300
+melalui suara.
+
+00:16:03.060 --> 00:16:03.840
+Eskalasi dari email
+
+00:16:03.840 --> 00:16:05.260
+membawa riwayat ke agen langsung.
+
+00:16:06.200 --> 00:16:07.000
+Ini seperti perbedaan
+
+00:16:07.000 --> 00:16:08.040
+antara mulai dari level 1
+
+00:16:08.040 --> 00:16:08.600
+setiap bertemu
+
+00:16:08.600 --> 00:16:09.440
+dan datang dengan membawa
+
+00:16:09.440 --> 00:16:10.580
+ketaruan bawah tanah yang lengkap.
+
+00:16:10.980 --> 00:16:12.060
+Sekarang satukan bagian-bagian itu.
+
+00:16:12.380 --> 00:16:13.540
+Seorang VIP mencatat keluhan
+
+00:16:13.540 --> 00:16:14.340
+berulang di obrolan.
+
+00:16:15.080 --> 00:16:16.260
+Perhentian sentimen menandainya
+
+00:16:16.260 --> 00:16:17.360
+ada bicara sebagai mendesak.
+
+00:16:17.900 --> 00:16:18.640
+Analitik prediktif
+
+00:16:18.640 --> 00:16:19.500
+mengetahui pelanggan ini
+
+00:16:19.500 --> 00:16:20.880
+memiliki riwayat pengeluaran tinggi
+
+00:16:20.880 --> 00:16:22.360
+dan orkestrasi Omnichannel
+
+00:16:22.360 --> 00:16:23.380
+memastikan agen suara
+
+00:16:23.380 --> 00:16:24.160
+yang tersedia berikutnya
+
+00:16:24.160 --> 00:16:25.660
+melihat setiap upaya kontak sebelumnya.
+
+00:16:25.660 --> 00:16:27.280
+Sementara itu
+
+00:16:27.280 --> 00:16:27.980
+dashboard supervisor
+
+00:16:27.980 --> 00:16:29.020
+memperingatkan adanya
+
+00:16:29.020 --> 00:16:29.660
+peningkatan volume
+
+00:16:29.660 --> 00:16:30.580
+pada tingkat akun tersebut
+
+00:16:30.580 --> 00:16:31.340
+sehingga tambahan staff
+
+00:16:31.340 --> 00:16:32.160
+dialihkan secara proaktif.
+
+00:16:32.680 --> 00:16:33.840
+Alih-alih kehilangan akun lagi
+
+00:16:33.840 --> 00:16:34.940
+Anda mendapatkan situasi
+
+00:16:34.940 --> 00:16:35.780
+yang dapat diselamatkan
+
+00:16:35.780 --> 00:16:36.740
+yang ditangani oleh agen
+
+00:16:36.740 --> 00:16:37.700
+dengan posisi terbaik.
+
+00:16:38.240 --> 00:16:38.720
+Dan perubahan ini
+
+00:16:38.720 --> 00:16:39.480
+bukan hanya teoretis.
+
+00:16:40.040 --> 00:16:40.900
+Perusahaan yang menggunakan
+
+00:16:40.900 --> 00:16:42.580
+Dynamics 365 Customer Service
+
+00:16:42.580 --> 00:16:43.560
+melaporkan penurunan besar
+
+00:16:43.560 --> 00:16:44.160
+dalam antrean
+
+00:16:44.160 --> 00:16:44.940
+dan waktu penanganan
+
+00:16:44.940 --> 00:16:45.440
+yang lebih cepat.
+
+00:16:45.960 --> 00:16:46.660
+Salah satu contoh
+
+00:16:46.660 --> 00:16:47.580
+yang disorot Microsoft
+
+00:16:47.580 --> 00:16:48.480
+adalah Lexmark
+
+00:16:48.480 --> 00:16:49.780
+yang mengubah keterlibatan pelanggan
+
+00:16:49.780 --> 00:16:50.560
+dari tugas reaktif
+
+00:16:50.560 --> 00:16:51.580
+menjadi keunggulan proaktif
+
+00:16:51.580 --> 00:16:52.760
+menggunakan alat yang sama ini.
+
+00:16:53.800 --> 00:16:54.760
+Mengintegrasikan agen AI
+
+00:16:54.760 --> 00:16:55.700
+dan dashboard prediktif
+
+00:16:55.700 --> 00:16:56.140
+memberi mereka
+
+00:16:56.140 --> 00:16:57.000
+penghematan efisiensi
+
+00:16:57.000 --> 00:16:57.740
+sekaligus wawasan
+
+00:16:57.740 --> 00:16:58.460
+yang lebih tajam.
+
+00:16:59.020 --> 00:16:59.600
+Bukti bahwa ini
+
+00:16:59.600 --> 00:17:00.700
+bukan petajaran abstrak
+
+00:17:00.700 --> 00:17:01.620
+melainkan pendekatan
+
+00:17:01.620 --> 00:17:02.280
+yang sudah memberikan
+
+00:17:02.280 --> 00:17:03.000
+hasil di lapangan.
+
+00:17:04.200 --> 00:17:04.680
+Budaya berubah
+
+00:17:04.680 --> 00:17:05.180
+ketika sistem
+
+00:17:05.180 --> 00:17:06.200
+tidak lagi mengecewakan Anda.
+
+00:17:06.780 --> 00:17:07.580
+Agen merasa tidak lagi
+
+00:17:07.580 --> 00:17:08.400
+seperti petugas tiket
+
+00:17:08.400 --> 00:17:09.260
+melainkan mecah masalah
+
+00:17:09.260 --> 00:17:10.080
+karena mereka diberikan
+
+00:17:10.080 --> 00:17:11.340
+pekerjaan prioritas yang penting.
+
+00:17:11.760 --> 00:17:12.500
+Supervisor berhenti
+
+00:17:12.500 --> 00:17:13.360
+menambal masalah sementara
+
+00:17:13.360 --> 00:17:14.420
+dan mulai menyempurnakan strategi.
+
+00:17:14.740 --> 00:17:15.540
+Pelanggan merasa diakui
+
+00:17:15.540 --> 00:17:16.300
+karena urgensi mereka
+
+00:17:16.300 --> 00:17:16.860
+tercermin dalam
+
+00:17:16.860 --> 00:17:18.060
+seberapa cepat mereka dilayani.
+
+00:17:19.240 --> 00:17:20.080
+Sistem antrean yang dulu
+
+00:17:20.080 --> 00:17:20.800
+menguras kesabaran
+
+00:17:20.800 --> 00:17:21.660
+semua pihak berevolusi
+
+00:17:21.660 --> 00:17:22.560
+menjadi mesin yang selaras
+
+00:17:22.560 --> 00:17:24.060
+dengan nilai dan loyalitas.
+
+00:17:24.780 --> 00:17:25.680
+Jadi saat Anda memikirkan
+
+00:17:25.680 --> 00:17:26.160
+antrean sekarang
+
+00:17:26.160 --> 00:17:26.700
+jangan bayangkan
+
+00:17:26.700 --> 00:17:27.520
+antrean di kedai sama sekali.
+
+00:17:27.900 --> 00:17:28.840
+Bayangkan alur percabang
+
+00:17:28.840 --> 00:17:30.060
+yang beradaptasi secara real time
+
+00:17:30.060 --> 00:17:31.000
+dipandu oleh sentimen,
+
+00:17:31.160 --> 00:17:32.400
+urgensi, dan wawasan prediktif.
+
+00:17:33.040 --> 00:17:33.540
+Platform ini
+
+00:17:33.540 --> 00:17:34.620
+tidak hanya melayani tiket
+
+00:17:34.620 --> 00:17:35.060
+lebih cepat
+
+00:17:35.060 --> 00:17:35.940
+tetapi mengkalibrasi
+
+00:17:35.940 --> 00:17:36.900
+ulang seluruh interaksi
+
+00:17:36.900 --> 00:17:37.800
+sehingga setiap pemain
+
+00:17:37.800 --> 00:17:38.320
+di meja tahu
+
+00:17:38.320 --> 00:17:39.800
+peran mereka sebelum dadu dilemparan.
+
+00:17:40.620 --> 00:17:41.180
+Dan antrean itu
+
+00:17:41.180 --> 00:17:42.020
+menyiapkan kesimpuluan akhir.
+
+00:17:42.020 --> 00:17:43.800
+AI di Dynamics 366
+
+00:17:43.800 --> 00:17:44.400
+tidak bertujuan
+
+00:17:44.400 --> 00:17:44.980
+untuk menggantikan
+
+00:17:44.980 --> 00:17:45.660
+siapapun di meja.
+
+00:17:46.080 --> 00:17:47.160
+AI hadir untuk membacara
+
+00:17:47.160 --> 00:17:48.140
+tim Anda memainkan permainan.
+
+00:17:49.080 --> 00:17:49.840
+AI Next 366
+
+00:17:49.840 --> 00:17:50.780
+366 Customer Service
+
+00:17:50.780 --> 00:17:51.700
+tidak hadir untuk bermain
+
+00:17:51.700 --> 00:17:52.520
+mewakili agen Anda
+
+00:17:52.520 --> 00:17:53.580
+tetapi untuk memperkuat mereka.
+
+00:17:54.320 --> 00:17:55.460
+Mengotomatiskan pekerjaan rutin
+
+00:17:55.460 --> 00:17:56.480
+mengalihkan fokus mereka
+
+00:17:56.480 --> 00:17:57.620
+dari ritual administratif
+
+00:17:57.620 --> 00:17:58.220
+ke strategi nyata.
+
+00:17:58.840 --> 00:17:59.520
+Deteksi sentimen
+
+00:17:59.520 --> 00:18:00.820
+menandai masalah lebih awal
+
+00:18:00.820 --> 00:18:01.780
+mengarahkan kasus yang tepat
+
+00:18:01.780 --> 00:18:02.340
+ke tangan yang tepat.
+
+00:18:02.820 --> 00:18:03.800
+Agen menjadi ahli taktik
+
+00:18:03.800 --> 00:18:04.600
+bukan petugas tiket.
+
+00:18:05.200 --> 00:18:05.760
+Namun ingat bahkan
+
+00:18:05.760 --> 00:18:06.500
+staff yang diperkuat
+
+00:18:06.500 --> 00:18:07.420
+tetap membutuhkan batasan.
+
+00:18:07.880 --> 00:18:08.700
+Dalam perlukan kebijakan
+
+00:18:08.700 --> 00:18:09.640
+tetap kelola dan pengawasan.
+
+00:18:10.400 --> 00:18:11.340
+Jika Anda seorang pemimpin
+
+00:18:11.340 --> 00:18:12.580
+yang merencanakan langkah selanjutnya
+
+00:18:12.580 --> 00:18:13.260
+jalannya sederhana.
+
+00:18:13.780 --> 00:18:14.480
+Inilah kebutuhan bisnis
+
+00:18:14.480 --> 00:18:15.080
+dan kendala yang ada.
+
+00:18:15.860 --> 00:18:16.340
+Siapkan data
+
+00:18:16.340 --> 00:18:17.180
+dan infrastruktur Anda.
+
+00:18:17.980 --> 00:18:18.860
+Uji coba agen kopilot
+
+00:18:18.860 --> 00:18:19.740
+dalam mode yang diawasi
+
+00:18:19.740 --> 00:18:20.380
+dengan tata kelola,
+
+00:18:20.580 --> 00:18:21.380
+ukur, dan ulangi.
+
+00:18:22.260 --> 00:18:22.840
+Lalu dikalahkan,
+
+00:18:22.920 --> 00:18:23.800
+layar biru disingkirkan.
+
+00:18:24.340 --> 00:18:25.040
+Jika tayangan hari ini
+
+00:18:25.040 --> 00:18:25.980
+memberimu ide untuk pilot,
+
+00:18:26.120 --> 00:18:26.620
+klik subscribe.
+
+00:18:27.380 --> 00:18:27.800
+Bagi kena ini
+
+00:18:27.800 --> 00:18:28.260
+kerekan timmu
+
+00:18:28.260 --> 00:18:29.080
+sebuah sebuah mengamuk lagi.
+
+00:18:29.600 --> 00:18:30.380
+Kamu pasti butuh keuntungan
+
+00:18:30.380 --> 00:18:31.100
+itu di pertemuan berikut.

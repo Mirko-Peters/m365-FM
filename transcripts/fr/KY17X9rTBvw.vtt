@@ -1,0 +1,2311 @@
+WEBVTT
+
+00:00:00.100 --> 00:00:01.440
+Bienvenue dans cette nouvelle pépite de connaissants.
+
+00:00:01.820 --> 00:00:04.740
+Imaginez que vous dirigez une entreprise et que vous embauchez une équipe de brillants spécialistes,
+
+00:00:04.780 --> 00:00:08.800
+un organisateur de voyage hors pair, un expert en intégration de personnel et un technicien de support informatique.
+
+00:00:09.280 --> 00:00:10.240
+Mais aucun d'entre eux ne se parle.
+
+00:00:10.820 --> 00:00:12.760
+Chaque fois qu'une tâche nécessite l'intervention de deux d'entre eux,
+
+00:00:12.880 --> 00:00:15.340
+vous devez faire des allers-retours entre les bureaux pour transmettre l'information vous-même.
+
+00:00:15.680 --> 00:00:17.660
+C'est exactement ainsi que fonctionnent la plupart des agents et actuels.
+
+00:00:17.920 --> 00:00:21.080
+Ils travaillent de manière isolée, même lorsque le problème nécessite clairement un travail d'équipe.
+
+00:00:21.420 --> 00:00:23.520
+Aujourd'hui, nous allons donc voir comment les agents peuvent communiquer,
+
+00:00:23.680 --> 00:00:25.800
+se déléguer du travail et agir comme de véritables équipes.
+
+00:00:25.800 --> 00:00:26.820
+Je suis Mircopeter.
+
+00:00:27.120 --> 00:00:28.360
+Il ne s'agit pas d'un concept furiste.
+
+00:00:28.740 --> 00:00:30.480
+L'orchestration multi-agents est déjà une réalité.
+
+00:00:31.120 --> 00:00:32.960
+Et elle est propulsée par un protocole appelé A2A.
+
+00:00:33.620 --> 00:00:36.180
+Nous commencerons par le problème, nous analyserons ce protocole pièce par pièce
+
+00:00:36.180 --> 00:00:39.420
+et nous verrons comment Microsoft l'utilise dans Copilot Studio et Azure AI.
+
+00:00:39.900 --> 00:00:41.120
+Prenez votre café et plongeons dans le sujet.
+
+00:00:41.780 --> 00:00:43.280
+Alors quel est le vrai problème ?
+
+00:00:43.280 --> 00:00:45.740
+Les agents IA d'aujourd'hui sont exactement comme ces spécialistes isolés.
+
+00:00:46.460 --> 00:00:48.540
+Chacun possède ses propres connaissances, ses outils et ses objectifs.
+
+00:00:48.960 --> 00:00:50.020
+Un agent météo connaît les prévisions.
+
+00:00:50.440 --> 00:00:53.120
+Un agent hôtelier connaît la disponibilité des chambres, mais il ne partage rien.
+
+00:00:53.580 --> 00:00:55.940
+Imaginez maintenant un utilisateur qui demande un voyage à Seattle la semaine prochaine
+
+00:00:55.940 --> 00:00:56.960
+avec un hôtel près du bureau.
+
+00:00:57.880 --> 00:01:01.900
+Un seul agent devrait être à la fois expert en météo, expert en voyage et expert en commerce locaux.
+
+00:01:02.420 --> 00:01:04.120
+Cela implique des promes gigantesques et complexes
+
+00:01:04.120 --> 00:01:06.300
+qui entassent toutes les capacités possibles dans un seul système
+
+00:01:06.300 --> 00:01:08.020
+et ces promes tombent constamment en panne.
+
+00:01:08.460 --> 00:01:09.840
+L'ancienne solution consistait à créer du code.
+
+00:01:10.180 --> 00:01:13.200
+Vous deviez écrire une passerelle entre l'agent météo et l'agent hôtelier,
+
+00:01:13.480 --> 00:01:15.300
+puis une autre entre l'agent hôtelier et l'agent aérien,
+
+00:01:15.540 --> 00:01:17.100
+et encore une autre pour l'agent de calendrier.
+
+00:01:17.660 --> 00:01:19.760
+Cela fonctionne au début, mais à chaque fois que vous ajoutez un nouvel agent,
+
+00:01:19.840 --> 00:01:20.960
+vous devez construire une nouvelle intégration.
+
+00:01:20.960 --> 00:01:23.720
+Très vite vous vous retrouvez avec un cauchemar de connexion point à point
+
+00:01:23.720 --> 00:01:25.220
+où le moindre changement casse tout le système.
+
+00:01:25.660 --> 00:01:27.760
+Les gains de productivité que votre IA était censé apporter
+
+00:01:27.760 --> 00:01:29.160
+sont dévorés par le travail de maintenance,
+
+00:01:29.720 --> 00:01:31.080
+examinant la véritable difficulté pour les entreprises.
+
+00:01:31.540 --> 00:01:33.860
+Votre organisation possède déjà des processus avec des transferts de tâches.
+
+00:01:34.200 --> 00:01:36.020
+Un ticket est créé, quelqu'un le trie, quelqu'un le résout,
+
+00:01:36.420 --> 00:01:38.360
+quelqu'un l'enregistre et chaque étape est un transfert.
+
+00:01:38.920 --> 00:01:41.820
+Dans l'ancien monde, vous automatisiez chaque étape avec un agent distinct,
+
+00:01:41.920 --> 00:01:43.420
+puis vous passiez des semaines à les relier entre eux.
+
+00:01:44.100 --> 00:01:46.840
+Mais que se passerait-il s'il existait un protocole permettant aux agents de se découvrir
+
+00:01:46.840 --> 00:01:49.300
+et de coopérer sans aucune passerelle personnalisée ?
+
+00:01:49.300 --> 00:01:50.440
+C'est exactement ce que fait A2A.
+
+00:01:50.740 --> 00:01:53.640
+En termes simples, A2A est une méthode standard permettant aux agents de communiquer,
+
+00:01:53.720 --> 00:01:55.780
+de se répartir le travail et d'accomplir des tâches en équipe.
+
+00:01:56.820 --> 00:01:58.640
+Qu'est-ce que A2A ? La définition simple.
+
+00:01:59.180 --> 00:02:00.720
+A2A signifie agent à agent.
+
+00:02:01.260 --> 00:02:04.100
+C'est un protocole ouvert qui permet aux agents IA de communiquer directement entre eux,
+
+00:02:04.180 --> 00:02:05.140
+peu importe qui les a créés.
+
+00:02:05.540 --> 00:02:07.280
+Vous pouvez le voir comme le protocole HTTP appliqué aux agents.
+
+00:02:07.680 --> 00:02:11.080
+Le HTTP est le langage utilisé par les navigateurs web et les serveurs pour communiquer
+
+00:02:11.080 --> 00:02:12.360
+et A2A fait de même pour les agents.
+
+00:02:12.960 --> 00:02:15.860
+Un agent créé par votre équipe informatique sur Microsoft Copilot Studio
+
+00:02:15.860 --> 00:02:18.680
+peut parler à un agent créé par une autre entreprise sur Google Cloud
+
+00:02:18.680 --> 00:02:20.460
+tant qu'ils utilisent A2A.
+
+00:02:21.080 --> 00:02:22.240
+Ce n'est pas un petit projet non plus.
+
+00:02:22.880 --> 00:02:24.940
+A2A est parrainé par 8 grandes entreprises,
+
+00:02:25.220 --> 00:02:28.520
+dont Google, Microsoft, Cisco, Salesforce, SAP et d'autres,
+
+00:02:28.640 --> 00:02:30.820
+et il est hébergé par la fondation Linux.
+
+00:02:31.600 --> 00:02:34.140
+La version 1.0 est stable et prête pour une utilisation réelle,
+
+00:02:34.220 --> 00:02:36.560
+ce qui signifie qu'aucun fournisseur ne contrôle seul le protocole.
+
+00:02:37.080 --> 00:02:39.060
+Ce n'est pas une initiative propre à Google ou à Microsoft.
+
+00:02:39.440 --> 00:02:40.300
+C'est une initiative industrielle.
+
+00:02:40.680 --> 00:02:41.880
+La conception est volontairement simple.
+
+00:02:41.880 --> 00:02:45.360
+A2A s'appuie sur des standards web existants comme HTTP et JSON-RPC,
+
+00:02:45.480 --> 00:02:47.200
+des technologies que tout développeur connaît déjà.
+
+00:02:48.140 --> 00:02:49.500
+Rien d'exotique ou de propriétaire ici.
+
+00:02:50.100 --> 00:02:51.820
+Cela facilite l'adoption par les entreprises
+
+00:02:51.820 --> 00:02:54.360
+sans avoir à remplacer leur infrastructure existante.
+
+00:02:55.080 --> 00:02:57.360
+Vous avez peut-être entendu parler d'un autre protocole appelé MCP,
+
+00:02:57.660 --> 00:02:58.680
+ou modèle contexte-protocole.
+
+00:02:59.080 --> 00:02:59.680
+Voici la différence.
+
+00:02:59.680 --> 00:03:01.660
+MCP concerne la relation agent-outil,
+
+00:03:01.740 --> 00:03:04.860
+ce qui signifie qu'il connecte un agent à des sources de données et des API externes.
+
+00:03:04.960 --> 00:03:07.960
+A2A concerne la relation agent-agent connectant directement les agents entre eux.
+
+00:03:08.400 --> 00:03:09.840
+Ils ne sont pas concurrents, ils sont complémentaires.
+
+00:03:10.500 --> 00:03:14.340
+Considérez MCP comme la connexion verticale d'un agent vers ses outils et A2A,
+
+00:03:14.820 --> 00:03:17.680
+comme la connexion horizontale entre agents côte à côte.
+
+00:03:19.000 --> 00:03:19.660
+Un autre choix de conception.
+
+00:03:20.280 --> 00:03:21.780
+A2A traite les agents comme des boîtes au pain.
+
+00:03:22.440 --> 00:03:24.060
+Ainsi, lorsqu'un agent communique avec un autre,
+
+00:03:24.060 --> 00:03:27.080
+il ne voit pas le raisonnement interne, les outils ou les données privées de l'autre agent.
+
+00:03:27.080 --> 00:03:29.860
+Il ne voit que la tâche qu'il a envoyée et le résultat qu'il reçoit en retour.
+
+00:03:30.320 --> 00:03:32.200
+Cela préserve la confidentialité et la propriété intelligente.
+
+00:03:32.760 --> 00:03:35.520
+Un agent météo n'a pas besoin de savoir comment l'agent d'un hôtel réserve des chambres
+
+00:03:35.520 --> 00:03:36.940
+et doit simplement transmettre les prévisions.
+
+00:03:37.440 --> 00:03:39.060
+Regardons maintenant la première pièce du puzzle.
+
+00:03:39.800 --> 00:03:40.420
+La carte d'agent.
+
+00:03:41.400 --> 00:03:42.640
+La carte d'agent ou CV.
+
+00:03:43.420 --> 00:03:45.900
+Chaque agent compatible A2A publie ce qu'on appelle une carte d'agent.
+
+00:03:47.100 --> 00:03:49.140
+Cette carte est un document lisible par machine
+
+00:03:49.140 --> 00:03:51.360
+qui se trouve à une URL standard sur le domaine de l'agent,
+
+00:03:51.460 --> 00:03:54.680
+spécifiquement au chemin Well-known Agent Card, Jason XAigwe.
+
+00:03:54.680 --> 00:03:58.360
+Si vous savez où se trouve un agent, vous pouvez récupérer sa carte
+
+00:03:58.360 --> 00:04:00.040
+et apprendre tout ce dont vous avez besoin pour travailler avec lui.
+
+00:04:00.620 --> 00:04:02.620
+Considérez la carte d'agent comme un CV ou une carte de visite.
+
+00:04:03.180 --> 00:04:05.080
+Elle indique aux autres agents qui vous a été ce que vous pouvez faire.
+
+00:04:06.900 --> 00:04:07.980
+La carte contient le nom de l'agent,
+
+00:04:08.120 --> 00:04:09.980
+une description en texte simple de ses capacités
+
+00:04:09.980 --> 00:04:11.980
+et des balises de compétences qui facilitent sa découverte.
+
+00:04:13.480 --> 00:04:15.160
+Il liste également l'URL de points de terminaison
+
+00:04:15.160 --> 00:04:17.520
+où il accepte les requêtes, ses exigences d'authentification
+
+00:04:17.520 --> 00:04:19.560
+ainsi que les formats d'entrée et de sortie acceptés.
+
+00:04:20.500 --> 00:04:21.240
+Voici un exemple concret.
+
+00:04:21.640 --> 00:04:22.760
+Disons que vous avez un agent spécialiste.
+
+00:04:22.760 --> 00:04:24.900
+Sa carte d'agent indique « je peux fournir »
+
+00:04:24.900 --> 00:04:27.320
+la météo actuelle et les prévisions sur 5 jours pour n'importe quelle ville.
+
+00:04:27.720 --> 00:04:29.100
+Il liste ses points de terminaison API
+
+00:04:29.100 --> 00:04:30.240
+car il accepte le nom d'une ville
+
+00:04:30.240 --> 00:04:32.880
+et renvoie la température et les conditions au format JSON.
+
+00:04:34.160 --> 00:04:34.440
+C'est tout.
+
+00:04:35.040 --> 00:04:37.000
+C'est simplement une déclaration claire de ce qu'il peut faire
+
+00:04:37.000 --> 00:04:39.160
+sans aucun secret ni logique interne exposée.
+
+00:04:39.780 --> 00:04:40.800
+La découverte fonctionne comme suit.
+
+00:04:41.340 --> 00:04:43.720
+Un agent orchestrateur possède une liste d'URL d'agents connus
+
+00:04:43.720 --> 00:04:45.140
+où vous pouvez les configurer manuellement.
+
+00:04:46.540 --> 00:04:47.220
+Lorsqu'une tâche arrive,
+
+00:04:47.300 --> 00:04:48.620
+l'orchestrateur récupère les cartes d'agents,
+
+00:04:48.620 --> 00:04:50.920
+en lit les descriptions et décide quel agent est le plus adapté.
+
+00:04:50.920 --> 00:04:54.300
+La carte météo indique la météo, ils sont envoyés.
+
+00:04:54.840 --> 00:04:55.960
+La carte hôtel indique les hôtels,
+
+00:04:56.040 --> 00:04:57.460
+donc les tâches liées aux hôtels y sont envoyées.
+
+00:04:58.100 --> 00:04:59.600
+Remarquez qu'aucun registre central n'est requis.
+
+00:05:00.080 --> 00:05:02.220
+Les agents n'ont pas besoin de s'inscrire dans un répertoire mondial.
+
+00:05:02.760 --> 00:05:04.720
+Ils publient simplement leur carte à un emplacement connu
+
+00:05:04.720 --> 00:05:06.940
+et tout autre agent connaissant l'URL peut les trouver.
+
+00:05:07.760 --> 00:05:09.000
+C'est un choix de conception délibérée
+
+00:05:09.000 --> 00:05:10.760
+qui maintient le système décentralisé et flexible.
+
+00:05:11.400 --> 00:05:13.180
+Vous pouvez ajouter un nouveau spécialiste à votre réseau
+
+00:05:13.180 --> 00:05:14.680
+en donnant son URL à l'orchestrateur
+
+00:05:14.680 --> 00:05:15.880
+et la découverte se fait automatiquement.
+
+00:05:16.200 --> 00:05:17.800
+Ainsi l'orchestrateur sait qui est disponible.
+
+00:05:18.340 --> 00:05:20.400
+Mais comment transmettent-ils réellement le travail ?
+
+00:05:20.400 --> 00:05:22.520
+Comment fonctionne la communication A2A ?
+
+00:05:22.520 --> 00:05:24.600
+Donc l'orchestrateur sait quels agents sont disponibles
+
+00:05:24.600 --> 00:05:25.400
+grâce à la carte d'agent.
+
+00:05:26.180 --> 00:05:28.960
+Mais comment ces agents se transmettent-ils réellement le travail ?
+
+00:05:28.960 --> 00:05:29.780
+La réponse est simple.
+
+00:05:30.580 --> 00:05:32.020
+Toute communication se fait via HTTP
+
+00:05:32.020 --> 00:05:33.680
+en utilisant des messages JSON-RPC,
+
+00:05:33.800 --> 00:05:36.200
+le même protocole qui alimente la plupart des services web actuels.
+
+00:05:36.940 --> 00:05:38.280
+Rien de personnalisé ou de complexe,
+
+00:05:38.440 --> 00:05:40.400
+juste du trafic web standard circulant entre deux agents.
+
+00:05:40.940 --> 00:05:41.580
+Voici le point important.
+
+00:05:41.840 --> 00:05:42.900
+Toutes les tâches ne sont pas identiques.
+
+00:05:43.460 --> 00:05:45.560
+A2A prend en charge trois modèles d'interactions différents
+
+00:05:45.560 --> 00:05:46.320
+selon vos besoins.
+
+00:05:46.940 --> 00:05:48.640
+La réponse instantanée gère les recherches rapides
+
+00:05:48.640 --> 00:05:50.200
+où l'agent distant peut répondre immédiatement.
+
+00:05:51.040 --> 00:05:51.800
+Vous envoyez une requête,
+
+00:05:51.880 --> 00:05:53.120
+il répond tout de suite et c'est terminé.
+
+00:05:53.980 --> 00:05:55.660
+Demander les prévisions du jour à un agent météo
+
+00:05:55.660 --> 00:05:56.860
+fonctionne exactement comme cela.
+
+00:05:57.080 --> 00:05:58.740
+Réponse rapide, entrée et sortie.
+
+00:05:59.180 --> 00:06:00.360
+Le streaming gère les tâches plus longues.
+
+00:06:00.720 --> 00:06:01.680
+Peut-être que l'agent spécialiste
+
+00:06:01.680 --> 00:06:02.980
+doit interroger plusieurs bases de données
+
+00:06:02.980 --> 00:06:04.380
+ou effectuer une analyse complexe.
+
+00:06:05.060 --> 00:06:05.340
+Complexe.
+
+00:06:05.960 --> 00:06:07.180
+Au lieu de vous faire attendre une réponse unique,
+
+00:06:07.280 --> 00:06:08.240
+l'agent envoie des mises à jour de statut
+
+00:06:08.240 --> 00:06:08.880
+pendant qu'il travaille,
+
+00:06:09.000 --> 00:06:10.400
+via des événements envoyés par le serveur.
+
+00:06:10.900 --> 00:06:12.560
+Vous recevez des rapports de progression en cours de route,
+
+00:06:12.640 --> 00:06:13.760
+puis le résultat final arrive à la fin.
+
+00:06:13.760 --> 00:06:16.000
+Le suivi de la livraison d'un colis fonctionne de la même manière.
+
+00:06:16.400 --> 00:06:17.640
+Il y a chaque étape au fur et à mesure qu'elle se produit.
+
+00:06:18.240 --> 00:06:20.340
+La notification asynchrone gère les tâches de longue durée
+
+00:06:20.340 --> 00:06:21.900
+où l'agent distant peut prendre des minutes,
+
+00:06:22.100 --> 00:06:23.220
+des heures, voire des jours.
+
+00:06:23.740 --> 00:06:25.300
+L'intégration des nouveaux employés en est un bon exemple.
+
+00:06:25.800 --> 00:06:27.500
+Un spécialiste configure les comptes informatiques
+
+00:06:27.500 --> 00:06:28.620
+tandis qu'un autre gère l'inscription
+
+00:06:28.620 --> 00:06:30.060
+aux avantages sociaux sur plusieurs jours.
+
+00:06:30.720 --> 00:06:31.920
+L'agent client soumet une requête,
+
+00:06:32.040 --> 00:06:33.460
+reçoit un identifiant de tâche en retour
+
+00:06:33.460 --> 00:06:34.380
+et poursuit son travail.
+
+00:06:35.000 --> 00:06:36.480
+Plus tard, l'agent distant envoie le résultat
+
+00:06:36.480 --> 00:06:37.020
+via un webbook.
+
+00:06:37.480 --> 00:06:39.140
+Le client peut également vérifier l'avancement
+
+00:06:39.140 --> 00:06:40.700
+à tout moment en interrogeant cet identifiant de tâche.
+
+00:06:41.260 --> 00:06:42.540
+Chaque interaction suit la même structure,
+
+00:06:42.660 --> 00:06:43.920
+tout étant organisé sous forme de tâche.
+
+00:06:44.340 --> 00:06:45.480
+Lorsqu'un client envoie une requête,
+
+00:06:45.840 --> 00:06:46.920
+l'agent distant crée une tâche
+
+00:06:46.920 --> 00:06:48.060
+et renvoie un identifiant.
+
+00:06:48.680 --> 00:06:50.460
+Cet identifiant devient la référence de suivi
+
+00:06:50.460 --> 00:06:51.100
+pour tout ce qui suit.
+
+00:06:51.840 --> 00:06:53.020
+Les messages au sein de cette tâche
+
+00:06:53.020 --> 00:06:54.700
+possèdent un rôle indiquant l'expéditeur
+
+00:06:54.700 --> 00:06:55.520
+et des composants,
+
+00:06:55.800 --> 00:06:56.920
+qui peuvent être du texte brut,
+
+00:06:57.500 --> 00:06:59.200
+des données binaires comme des images ou documents,
+
+00:06:59.600 --> 00:07:00.400
+des charges utiles JSON
+
+00:07:00.400 --> 00:07:03.140
+ou des URL pointant vers des fichiers stockés ailleurs.
+
+00:07:04.740 --> 00:07:07.020
+L'authentification suit les conventions web standards
+
+00:07:07.020 --> 00:07:09.020
+O-ROT, clé API, jetons porteurs.
+
+00:07:09.960 --> 00:07:11.580
+Les suspects habituels rien ne nous voient apprendre ici.
+
+00:07:12.280 --> 00:07:13.320
+La carte d'agent indique au client
+
+00:07:13.320 --> 00:07:14.900
+quelle méthode d'authentification utiliser
+
+00:07:14.900 --> 00:07:17.420
+et le client la gère comme pour tout autre appel API.
+
+00:07:18.060 --> 00:07:19.200
+Voici à quoi cela ressemble en pratique.
+
+00:07:19.640 --> 00:07:20.600
+Disons que l'orchestrateur a besoin
+
+00:07:20.600 --> 00:07:21.780
+de données météorologiques pour un voyage.
+
+00:07:22.180 --> 00:07:23.420
+Il envoie une tâche au spécialiste météo.
+
+00:07:23.820 --> 00:07:25.720
+Le spécialiste météo accuse réception de la requête,
+
+00:07:25.920 --> 00:07:26.480
+commence le traitement
+
+00:07:26.480 --> 00:07:27.740
+et transmet les mises à jour en continu.
+
+00:07:28.660 --> 00:07:29.300
+Récupération des données.
+
+00:07:29.880 --> 00:07:30.620
+Analyse des résultats.
+
+00:07:31.200 --> 00:07:31.520
+Terminé.
+
+00:07:32.360 --> 00:07:33.820
+Ensuite, il envoie les prévisions finales.
+
+00:07:34.580 --> 00:07:35.540
+L'orchestrateur ne voit jamais
+
+00:07:35.540 --> 00:07:36.680
+les outils internes de l'agent météo,
+
+00:07:36.780 --> 00:07:38.460
+ses clés API ou son processus de raisonnement.
+
+00:07:39.140 --> 00:07:40.240
+Il ne voit que le résultat.
+
+00:07:40.940 --> 00:07:42.220
+C'est le principe de conception clé,
+
+00:07:42.500 --> 00:07:43.640
+des frontières nettes entre les agents
+
+00:07:43.640 --> 00:07:45.020
+et aucune fuite d'état interne.
+
+00:07:45.520 --> 00:07:46.740
+Mais l'A2 à pas seul ne suffit pas.
+
+00:07:47.180 --> 00:07:48.120
+Faut un responsable intelligent
+
+00:07:48.120 --> 00:07:49.360
+pour coordonner tous ses spécialistes.
+
+00:07:49.860 --> 00:07:51.780
+Cela nous amène au modèle orchestrateur spécialiste.
+
+00:07:52.400 --> 00:07:53.980
+Le modèle orchestrateur spécialiste.
+
+00:07:54.520 --> 00:07:55.540
+C'est là que tout se connecte.
+
+00:07:56.140 --> 00:07:57.320
+Le modèle orchestrateur spécialiste
+
+00:07:57.320 --> 00:07:58.360
+est l'architecture la plus courante
+
+00:07:58.360 --> 00:08:00.100
+dans les systèmes multi-agents en production aujourd'hui.
+
+00:08:00.660 --> 00:08:01.660
+Voyez cela comme une entreprise
+
+00:08:01.660 --> 00:08:02.400
+avec ses départements.
+
+00:08:02.640 --> 00:08:03.620
+Informatique, RH, Finance,
+
+00:08:03.720 --> 00:08:04.920
+chacun gérant son propre domaine.
+
+00:08:05.720 --> 00:08:06.820
+Vous avez un décideur central
+
+00:08:06.820 --> 00:08:09.100
+qui achemine le travail vers des équipes spécialisées
+
+00:08:09.100 --> 00:08:10.480
+et chaque équipe se concentre
+
+00:08:10.480 --> 00:08:11.200
+sur ce qu'elle fait de mieux.
+
+00:08:11.740 --> 00:08:13.220
+L'orchestrateur possède une vision d'ensemble.
+
+00:08:13.780 --> 00:08:15.040
+Il reçoit la requête de l'utilisateur,
+
+00:08:15.260 --> 00:08:16.060
+détermine ce qui doit être fait
+
+00:08:16.060 --> 00:08:17.260
+et décide quel spécialiste
+
+00:08:17.260 --> 00:08:18.240
+peut gérer chaque partie.
+
+00:08:19.120 --> 00:08:19.940
+Si un utilisateur demande,
+
+00:08:20.220 --> 00:08:21.540
+prévois un voyage à Seattle la semaine prochaine.
+
+00:08:22.080 --> 00:08:23.200
+L'orchestrateur ne réserve pas
+
+00:08:23.200 --> 00:08:24.440
+lui-même les vols ou les hôtels.
+
+00:08:25.140 --> 00:08:26.520
+Il sait qu'il existe un spécialiste des vols,
+
+00:08:26.560 --> 00:08:27.420
+un spécialiste des hôtels
+
+00:08:27.420 --> 00:08:28.480
+et un spécialiste météo.
+
+00:08:29.000 --> 00:08:30.560
+Il décompose la requête en ses parties
+
+00:08:30.560 --> 00:08:31.480
+et délègue chacune d'elles.
+
+00:08:32.120 --> 00:08:33.600
+Chaque spécialiste a un champ d'action limité.
+
+00:08:33.600 --> 00:08:35.240
+Un agent gère la réservation de vol,
+
+00:08:35.440 --> 00:08:36.400
+un autre la recherche d'hôtels
+
+00:08:36.400 --> 00:08:37.960
+et un troisième le tri des incidents-incidents.
+
+00:08:38.360 --> 00:08:39.180
+Ils n'ont pas besoin de connaître
+
+00:08:39.180 --> 00:08:40.120
+les domaines des uns et des autres.
+
+00:08:40.500 --> 00:08:41.900
+Le spécialiste des vols connaît les compagnies,
+
+00:08:41.980 --> 00:08:42.800
+les itinéraires et les prix.
+
+00:08:43.360 --> 00:08:44.180
+Il n'a rien besoin de savoir
+
+00:08:44.180 --> 00:08:45.140
+sur les types de chambres d'hôtels
+
+00:08:45.140 --> 00:08:46.140
+ou les politiques d'annulation.
+
+00:08:47.340 --> 00:08:49.160
+Cette spécialisation rend chaque agent simple,
+
+00:08:49.320 --> 00:08:50.820
+facile à maintenir et à tester.
+
+00:08:51.600 --> 00:08:52.360
+Voici le point important.
+
+00:08:52.800 --> 00:08:54.340
+L'orchestrateur n'exécute pas les tâches.
+
+00:08:54.880 --> 00:08:56.360
+Il achemine le travail et fusionne les résultats.
+
+00:08:56.800 --> 00:08:57.460
+C'est sa seule fonction.
+
+00:08:58.040 --> 00:08:58.860
+Le rôle de l'orchestrateur
+
+00:08:58.860 --> 00:09:00.180
+est d'être un répartiteur intelligent,
+
+00:09:00.180 --> 00:09:01.720
+pas un super agent qui tente de tout faire.
+
+00:09:02.660 --> 00:09:03.580
+Si vous laissez l'orchestrateur
+
+00:09:03.580 --> 00:09:04.900
+effectuer le travail des spécialistes,
+
+00:09:05.060 --> 00:09:06.300
+vous perdez tout l'intérêt du modèle.
+
+00:09:06.880 --> 00:09:08.120
+Cela redevient un chaos monolithique.
+
+00:09:08.500 --> 00:09:09.380
+Faites attention à une erreur courante.
+
+00:09:09.840 --> 00:09:10.820
+Certaines équipes créent des domaines
+
+00:09:10.820 --> 00:09:12.000
+de spécialisation qui se chevauchent.
+
+00:09:13.120 --> 00:09:14.640
+Deux agents prétendent gérer le support client
+
+00:09:14.640 --> 00:09:15.480
+ou la recherche de données,
+
+00:09:15.640 --> 00:09:16.820
+ce qui crée une confusion de routage.
+
+00:09:18.160 --> 00:09:19.500
+L'orchestrateur ne sait pas lequel choisir
+
+00:09:19.500 --> 00:09:20.420
+et les utilisateurs obtiennent
+
+00:09:20.420 --> 00:09:21.180
+des résultats incohérents.
+
+00:09:22.180 --> 00:09:22.980
+La solution est simple.
+
+00:09:23.500 --> 00:09:24.760
+Chaque spécialiste possède un domaine
+
+00:09:24.760 --> 00:09:26.360
+clairement délimité sans aucun chevauchement.
+
+00:09:26.800 --> 00:09:27.900
+Si deux agents font la même chose,
+
+00:09:28.000 --> 00:09:29.220
+fusionnez-les ou divisez le domaine
+
+00:09:29.220 --> 00:09:29.840
+plus proprement.
+
+00:09:30.460 --> 00:09:31.340
+Copilot Studio de Microsoft
+
+00:09:31.340 --> 00:09:32.780
+utilise ce modèle de façon native.
+
+00:09:33.460 --> 00:09:35.440
+Votre copilot principal agit comme orchestrateur,
+
+00:09:35.520 --> 00:09:36.780
+tandis que les agents enfants et connectés
+
+00:09:36.780 --> 00:09:37.700
+agissent comme spécialistes.
+
+00:09:38.120 --> 00:09:39.660
+Lorsqu'un utilisateur demande quelque chose
+
+00:09:39.660 --> 00:09:40.560
+couvrant plusieurs domaines,
+
+00:09:40.900 --> 00:09:42.920
+le copilot principal délègue au bon spécialiste
+
+00:09:42.920 --> 00:09:44.040
+via A2A.
+
+00:09:44.500 --> 00:09:45.440
+C'est intégré à la plateforme,
+
+00:09:45.520 --> 00:09:46.460
+vous n'avez donc pas à coder
+
+00:09:46.460 --> 00:09:47.960
+la logique d'orchestration depuis zéro.
+
+00:09:48.680 --> 00:09:50.220
+Le grand avantage ici, c'est la modularité.
+
+00:09:50.660 --> 00:09:51.560
+Besoin de changer de fournisseur
+
+00:09:51.560 --> 00:09:52.760
+de réservation d'hôtel ?
+
+00:09:52.760 --> 00:09:54.160
+Remplacez le spécialiste de l'hôtellerie
+
+00:09:54.160 --> 00:09:55.120
+sans toucher à l'orchestrateur
+
+00:09:55.120 --> 00:09:55.840
+ni aux autres agents.
+
+00:09:56.260 --> 00:09:57.660
+Vous ajoutez une nouvelle fonctionnelle ?
+
+00:09:57.660 --> 00:09:58.640
+Créez un nouveau spécialiste,
+
+00:09:58.700 --> 00:10:00.000
+enregistrez-le auprès de l'orchestrateur
+
+00:10:00.000 --> 00:10:00.540
+et c'est terminé.
+
+00:10:01.220 --> 00:10:02.340
+Chaque agent reste petit,
+
+00:10:02.520 --> 00:10:04.180
+gérable et déployable indépendamment.
+
+00:10:04.900 --> 00:10:05.880
+C'est tout l'intérêt de passer
+
+00:10:05.880 --> 00:10:06.580
+d'agent monolithique
+
+00:10:06.580 --> 00:10:07.960
+à un système multi-agent A.
+
+00:10:08.360 --> 00:10:09.260
+Nous avons donc le protocole,
+
+00:10:09.340 --> 00:10:10.140
+les fiches d'agent et le modèle.
+
+00:10:10.720 --> 00:10:11.440
+Voyons cela en action
+
+00:10:11.440 --> 00:10:12.160
+avec des scénarios Ré.
+
+00:10:13.480 --> 00:10:14.460
+Exemple concret d'A2A
+
+00:10:14.460 --> 00:10:14.880
+part en action.
+
+00:10:15.380 --> 00:10:16.540
+À quoi ressemble A2A
+
+00:10:16.540 --> 00:10:18.000
+dans le monde réel ?
+
+00:10:18.000 --> 00:10:19.080
+Commençons par un exemple simple.
+
+00:10:19.620 --> 00:10:20.740
+Vous dites à votre assistant IA,
+
+00:10:21.000 --> 00:10:22.120
+organise un voyage à Seattle
+
+00:10:22.120 --> 00:10:22.820
+la semaine prochaine.
+
+00:10:23.200 --> 00:10:23.700
+À l'ancienne,
+
+00:10:23.800 --> 00:10:25.400
+cet assistant unique devrait tout savoir.
+
+00:10:25.400 --> 00:10:28.460
+Météo, vol, hôtel, restaurant,
+
+00:10:28.720 --> 00:10:30.020
+tout à la fois, tout à la fois.
+
+00:10:30.600 --> 00:10:31.120
+C'est beaucoup demandé
+
+00:10:31.120 --> 00:10:31.820
+pour une seule requête.
+
+00:10:32.140 --> 00:10:32.640
+Avec A2A,
+
+00:10:32.700 --> 00:10:33.820
+l'orchestrateur décompose la dœuf.
+
+00:10:34.280 --> 00:10:34.940
+Il envoie une demande
+
+00:10:34.940 --> 00:10:35.840
+à un spécialiste météo
+
+00:10:35.840 --> 00:10:36.820
+pour obtenir les prévisions
+
+00:10:36.820 --> 00:10:37.560
+sur ses jours précis.
+
+00:10:38.280 --> 00:10:38.720
+En même temps,
+
+00:10:38.820 --> 00:10:39.680
+il demande à un spécialiste
+
+00:10:39.680 --> 00:10:40.640
+des vols de trouver des arrivées
+
+00:10:40.640 --> 00:10:41.300
+le mardi matin
+
+00:10:41.300 --> 00:10:42.320
+et des retours le jeudi soir
+
+00:10:42.320 --> 00:10:43.480
+et à un spécialiste des hôtels
+
+00:10:43.480 --> 00:10:44.540
+de chercher des logements
+
+00:10:44.540 --> 00:10:45.680
+près du centre-ville de Seattle
+
+00:10:45.680 --> 00:10:47.400
+pour trois nuits de...
+
+00:10:47.400 --> 00:10:48.780
+Chaque spécialiste
+
+00:10:48.780 --> 00:10:49.640
+travaille indépendamment
+
+00:10:49.640 --> 00:10:50.500
+et n'a pas besoin
+
+00:10:50.500 --> 00:10:50.960
+de communiquer
+
+00:10:50.960 --> 00:10:51.740
+avec les autres agents
+
+00:10:51.740 --> 00:10:52.320
+car ils disposent
+
+00:10:52.320 --> 00:10:53.240
+chacun de leurs propres sources
+
+00:10:53.240 --> 00:10:54.780
+de données, outils et expertises.
+
+00:10:55.420 --> 00:10:56.040
+L'orchestrateur
+
+00:10:56.040 --> 00:10:56.960
+collecte tous les résultats
+
+00:10:56.960 --> 00:10:57.440
+et les fusionne
+
+00:10:57.440 --> 00:10:58.300
+en une seule réponse.
+
+00:10:59.400 --> 00:11:00.020
+L'utilisateur envoie
+
+00:11:00.020 --> 00:11:00.560
+une réponse unique.
+
+00:11:01.360 --> 00:11:01.980
+Voici les prévisions.
+
+00:11:02.420 --> 00:11:03.300
+Voici vos options de vol
+
+00:11:03.300 --> 00:11:04.140
+et trois hôtels
+
+00:11:04.140 --> 00:11:04.960
+à proximité du bureau.
+
+00:11:05.740 --> 00:11:06.100
+En coulisses,
+
+00:11:06.200 --> 00:11:06.880
+trois agents distincts
+
+00:11:06.880 --> 00:11:07.680
+ont travaillé ensemble
+
+00:11:07.680 --> 00:11:08.300
+sans aucun code
+
+00:11:08.300 --> 00:11:09.460
+d'intégration personnalisé.
+
+00:11:10.440 --> 00:11:11.380
+Passons à un scénario professionnel.
+
+00:11:11.740 --> 00:11:12.640
+Imaginons qu'un ticket arrive,
+
+00:11:12.880 --> 00:11:13.640
+mon ordinateur portable
+
+00:11:13.640 --> 00:11:14.440
+ne se connecte pas au VPN.
+
+00:11:14.820 --> 00:11:15.780
+L'orchestrateur identifie
+
+00:11:15.780 --> 00:11:16.840
+qu'il s'agit d'un problème réseau.
+
+00:11:17.740 --> 00:11:18.500
+Il transmet le ticket
+
+00:11:18.500 --> 00:11:19.260
+à un spécialiste
+
+00:11:19.260 --> 00:11:19.840
+des procédures
+
+00:11:19.840 --> 00:11:20.860
+qui connaît les étapes standards.
+
+00:11:20.860 --> 00:11:23.320
+Vérifier l'état du client VPN,
+
+00:11:23.720 --> 00:11:24.880
+valider les identifiants en réseau,
+
+00:11:25.100 --> 00:11:25.920
+redémarrer le service.
+
+00:11:26.740 --> 00:11:27.240
+Ce spécialiste
+
+00:11:27.240 --> 00:11:28.020
+renvoie les étapes à suivre.
+
+00:11:28.360 --> 00:11:28.900
+L'orchestrateur
+
+00:11:28.900 --> 00:11:29.540
+transmet le résultat
+
+00:11:29.540 --> 00:11:30.100
+à un spécialiste
+
+00:11:30.100 --> 00:11:30.940
+de la rédaction de tickets
+
+00:11:30.940 --> 00:11:31.800
+qui envoie juste
+
+00:11:31.800 --> 00:11:32.800
+la résolution dans le système.
+
+00:11:33.520 --> 00:11:34.240
+Tout cela se produit
+
+00:11:34.240 --> 00:11:34.880
+en quelques secondes
+
+00:11:34.880 --> 00:11:35.800
+sans intervention humaine.
+
+00:11:36.280 --> 00:11:37.020
+Et l'équipe informatique
+
+00:11:37.020 --> 00:11:37.540
+n'intervient que
+
+00:11:37.540 --> 00:11:38.520
+si les étapes automatisées
+
+00:11:38.520 --> 00:11:39.540
+ne règlent pas le problème.
+
+00:11:40.240 --> 00:11:41.180
+L'intégration des employés
+
+00:11:41.180 --> 00:11:41.860
+est un autre exemple,
+
+00:11:42.140 --> 00:11:43.020
+mais celui-ci prend des jours,
+
+00:11:43.320 --> 00:11:43.880
+pas des secondes.
+
+00:11:44.380 --> 00:11:44.880
+Une nouvelle recrue
+
+00:11:44.880 --> 00:11:45.520
+rejoint l'entreprise.
+
+00:11:46.240 --> 00:11:46.880
+L'orchestrateur
+
+00:11:46.880 --> 00:11:47.880
+sollicite un spécialiste
+
+00:11:47.880 --> 00:11:48.400
+informatique
+
+00:11:50.860 --> 00:11:54.280
+pour les formulaires
+
+00:11:54.280 --> 00:11:54.960
+d'avantages sociaux,
+
+00:11:55.160 --> 00:11:55.740
+puis un spécialiste
+
+00:11:55.740 --> 00:11:56.220
+des installations
+
+00:11:56.220 --> 00:11:56.720
+pour le bureau
+
+00:11:56.720 --> 00:11:57.640
+et l'accès par badge.
+
+00:11:58.520 --> 00:11:59.240
+Chaque spécialiste
+
+00:11:59.240 --> 00:12:00.200
+exécute sa propre tâche
+
+00:12:00.200 --> 00:12:01.160
+longue durée indépendamment
+
+00:12:01.160 --> 00:12:01.900
+et l'orchestrateur
+
+00:12:01.900 --> 00:12:02.540
+suit la progression
+
+00:12:02.540 --> 00:12:03.580
+à l'aide des ID de tâches
+
+00:12:03.580 --> 00:12:04.620
+dont nous avons parlé plus tôt.
+
+00:12:05.400 --> 00:12:05.620
+Ainsi,
+
+00:12:05.740 --> 00:12:06.660
+si le spécialiste informatique
+
+00:12:06.660 --> 00:12:07.020
+termine,
+
+00:12:07.120 --> 00:12:07.860
+l'orchestrateur le sait
+
+00:12:07.860 --> 00:12:08.520
+et si le spécialiste
+
+00:12:08.520 --> 00:12:09.360
+des installations a du retard,
+
+00:12:09.480 --> 00:12:10.240
+il peut effectuer un suivi.
+
+00:12:10.800 --> 00:12:11.460
+L'utilisateur voit
+
+00:12:11.460 --> 00:12:12.680
+un processus d'intégration fluide,
+
+00:12:12.960 --> 00:12:13.420
+mais en coulisses,
+
+00:12:13.500 --> 00:12:14.540
+il s'agit d'une équipe coordonnée
+
+00:12:14.540 --> 00:12:15.740
+travaillant sur plusieurs jours.
+
+00:12:16.320 --> 00:12:17.160
+Ce n'est pas que de la théorie.
+
+00:12:17.160 --> 00:12:18.680
+Coca-Cola Beverages Africa
+
+00:12:18.680 --> 00:12:19.940
+utilise déjà des agents
+
+00:12:19.940 --> 00:12:20.660
+copilotes studio
+
+00:12:20.660 --> 00:12:21.860
+avec Dynamics 365
+
+00:12:21.860 --> 00:12:22.660
+pour automatiser
+
+00:12:22.660 --> 00:12:23.660
+ses cycles de planification.
+
+00:12:24.340 --> 00:12:24.940
+Leur planificateur
+
+00:12:24.940 --> 00:12:25.660
+consacré auparavant
+
+00:12:25.660 --> 00:12:26.640
+jusqu'à une heure et demie par jour
+
+00:12:26.640 --> 00:12:27.440
+à des tâches répétitives.
+
+00:12:28.080 --> 00:12:29.200
+Grâce à l'orchestration multi-agents,
+
+00:12:29.260 --> 00:12:29.800
+ces cycles s'exécutent
+
+00:12:29.800 --> 00:12:30.600
+désormais de manière autonome.
+
+00:12:30.920 --> 00:12:31.740
+L'orchestrateur délègue
+
+00:12:31.740 --> 00:12:32.180
+aux spécialistes
+
+00:12:32.180 --> 00:12:33.020
+qui gèrent différentes parties
+
+00:12:33.020 --> 00:12:34.120
+du processus de planification
+
+00:12:34.120 --> 00:12:34.900
+de la chaîne logistique
+
+00:12:34.900 --> 00:12:35.860
+de la chaîne logistique.
+
+00:12:36.160 --> 00:12:36.960
+Le résultat est un gain
+
+00:12:36.960 --> 00:12:37.580
+de plus d'une heure
+
+00:12:37.580 --> 00:12:38.460
+par personne et par jour
+
+00:12:38.460 --> 00:12:39.200
+simplement en laissant
+
+00:12:39.200 --> 00:12:40.200
+les agents communiquer entre eux
+
+00:12:40.200 --> 00:12:40.980
+au lieu de faire transférer
+
+00:12:40.980 --> 00:12:41.860
+les informations manuellement
+
+00:12:41.860 --> 00:12:42.640
+entre les systèmes.
+
+00:12:47.160 --> 00:12:48.100
+Un homme qui maîtrise son domaine
+
+00:12:48.100 --> 00:12:49.200
+et possède ses propres outils
+
+00:12:49.200 --> 00:12:50.020
+sans avoir besoin
+
+00:12:50.020 --> 00:12:51.440
+de connaître les autres agents
+
+00:12:51.440 --> 00:12:52.280
+Sahara et Roser.
+
+00:12:52.920 --> 00:12:53.800
+A2A fournit une couche
+
+00:12:53.800 --> 00:12:54.680
+de communication simple
+
+00:12:54.680 --> 00:12:55.540
+pour qu'il puisse coopérer
+
+00:12:55.540 --> 00:12:56.480
+sans code personnalisé.
+
+00:12:57.280 --> 00:12:57.840
+Vous bénéficiez
+
+00:12:57.840 --> 00:12:58.660
+d'un protocole standard
+
+00:12:58.660 --> 00:12:59.980
+et d'un orchestrateur intelligent.
+
+00:13:00.260 --> 00:13:00.600
+Sans pont,
+
+00:13:00.760 --> 00:13:01.880
+sans intégration point à point
+
+00:13:01.880 --> 00:13:02.560
+et sans casse-tête
+
+00:13:02.560 --> 00:13:03.240
+de maintenance.
+
+00:13:03.920 --> 00:13:04.900
+Microsoft est totalement investi
+
+00:13:04.900 --> 00:13:05.160
+dans ce domaine.
+
+00:13:05.520 --> 00:13:06.180
+Voyons où s'intègrent
+
+00:13:06.180 --> 00:13:07.460
+Copilot Studio et Azure AI.
+
+00:13:08.540 --> 00:13:09.700
+L'écosystème de Microsoft
+
+00:13:09.700 --> 00:13:11.460
+Copilot Studio et Azure AI.
+
+00:13:12.180 --> 00:13:12.740
+Alors quelle est la place
+
+00:13:12.740 --> 00:13:14.020
+de Microsoft dans tout cela ?
+
+00:13:14.020 --> 00:13:14.500
+Pilo Center.
+
+00:13:15.240 --> 00:13:16.320
+Copilot Studio prend désormais
+
+00:13:16.320 --> 00:13:17.040
+en charge la 2A
+
+00:13:17.040 --> 00:13:17.840
+appuyée de manière native
+
+00:13:17.840 --> 00:13:18.780
+et est disponible pour tous
+
+00:13:18.780 --> 00:13:19.920
+depuis avril 2026.
+
+00:13:20.680 --> 00:13:21.120
+Il ne s'agit ni
+
+00:13:21.120 --> 00:13:21.900
+d'une préversion bêta.
+
+00:13:22.340 --> 00:13:23.020
+C'est prêt pour la production
+
+00:13:23.020 --> 00:13:23.820
+et tout client éligible
+
+00:13:23.820 --> 00:13:24.720
+peut l'utiliser dès aujourd'hui.
+
+00:13:25.300 --> 00:13:25.880
+Voici le point important.
+
+00:13:26.320 --> 00:13:26.920
+Vous pouvez connecter
+
+00:13:26.920 --> 00:13:27.740
+des agents externes
+
+00:13:27.740 --> 00:13:28.600
+à votre orchestrateur
+
+00:13:28.600 --> 00:13:29.220
+Copilot Studio.
+
+00:13:29.640 --> 00:13:30.480
+Quand je dis externe,
+
+00:13:30.560 --> 00:13:31.580
+je veux dire vraiment externe.
+
+00:13:32.560 --> 00:13:33.140
+Des agents créés
+
+00:13:33.140 --> 00:13:33.900
+sur Google Cloud,
+
+00:13:34.140 --> 00:13:35.700
+AWS ou toute autre plateforme
+
+00:13:35.700 --> 00:13:36.260
+prenant en charge
+
+00:13:36.260 --> 00:13:37.260
+le protocole A2A.
+
+00:13:37.700 --> 00:13:38.540
+L'orchestrateur se moque
+
+00:13:38.540 --> 00:13:39.540
+de savoir où réside l'agent
+
+00:13:39.540 --> 00:13:40.360
+ou avec quel framework
+
+00:13:40.360 --> 00:13:41.020
+il a été conçu.
+
+00:13:41.460 --> 00:13:42.360
+Tant qu'il parle A2A,
+
+00:13:42.500 --> 00:13:43.280
+il peut rejoindre l'équipe.
+
+00:13:43.740 --> 00:13:44.580
+La configuration est simple.
+
+00:13:45.240 --> 00:13:45.940
+Dans Copilot Studio,
+
+00:13:46.040 --> 00:13:46.600
+vous créez ce qu'on appelle
+
+00:13:46.600 --> 00:13:47.500
+un agent connecté.
+
+00:13:48.520 --> 00:13:49.140
+Vous collez l'URL
+
+00:13:49.140 --> 00:13:50.200
+de point de terminaison de l'agent.
+
+00:13:50.720 --> 00:13:51.680
+Copilot Studio récupère
+
+00:13:51.680 --> 00:13:52.560
+automatiquement la carte
+
+00:13:52.560 --> 00:13:53.900
+de l'agent à partir de cette URL,
+
+00:13:54.040 --> 00:13:55.460
+c'est-à-dire le fameux fichier JSON
+
+00:13:55.460 --> 00:13:56.320
+dont nous avons parlé.
+
+00:13:57.240 --> 00:13:58.400
+Il lit les capacités de l'agent,
+
+00:13:58.560 --> 00:13:59.760
+les exigences d'authentification
+
+00:13:59.760 --> 00:14:00.800
+ainsi que les formats d'entrée
+
+00:14:00.800 --> 00:14:01.320
+et de sortie.
+
+00:14:02.320 --> 00:14:03.280
+Ensuite, il crée un connecteur
+
+00:14:03.280 --> 00:14:04.320
+personnalisé en arrière-plan
+
+00:14:04.320 --> 00:14:05.160
+et votre orchestrateur
+
+00:14:05.160 --> 00:14:05.960
+peut commencer à déléguer
+
+00:14:05.960 --> 00:14:06.800
+des tâches immédiatement.
+
+00:14:07.320 --> 00:14:08.200
+Vous n'avez besoin d'aucun travail
+
+00:14:08.200 --> 00:14:08.820
+d'intégration manuelle
+
+00:14:08.820 --> 00:14:09.600
+ni de code personnalisé.
+
+00:14:13.280 --> 00:14:13.860
+Fondry Agent Service
+
+00:14:13.860 --> 00:14:14.560
+prend également en charge
+
+00:14:14.560 --> 00:14:14.920
+l'A2A.
+
+00:14:15.360 --> 00:14:16.800
+Il dispose d'un point de terminaison
+
+00:14:16.800 --> 00:14:17.800
+API A2A dédié
+
+00:14:17.800 --> 00:14:18.840
+qui permet aux orchestrateurs
+
+00:14:18.840 --> 00:14:19.900
+open source comme Autogen,
+
+00:14:20.080 --> 00:14:21.280
+Longchain et Sémantic Kernel
+
+00:14:21.280 --> 00:14:22.560
+d'invoquer des agents Fondry.
+
+00:14:23.200 --> 00:14:24.400
+Ainsi, si vous avez créé des agents
+
+00:14:24.400 --> 00:14:25.360
+en utilisant ces frameworks,
+
+00:14:25.560 --> 00:14:26.180
+vous pouvez les brancher
+
+00:14:26.180 --> 00:14:27.140
+sur l'écosystème Microsoft
+
+00:14:27.140 --> 00:14:28.080
+sans rien réécrire.
+
+00:14:28.680 --> 00:14:29.700
+C'est une voie à double sens.
+
+00:14:30.080 --> 00:14:31.160
+Microsoft suit le même modèle
+
+00:14:31.160 --> 00:14:32.140
+orchestrateur spécialiste
+
+00:14:32.140 --> 00:14:32.940
+que nous avons décrit.
+
+00:14:33.840 --> 00:14:35.320
+L'agent principal dans Copilot Studio
+
+00:14:35.320 --> 00:14:36.540
+agit comme l'orchestrateur,
+
+00:14:36.680 --> 00:14:37.500
+tandis que les agents enfants
+
+00:14:37.500 --> 00:14:38.140
+et les agents connectés
+
+00:14:38.140 --> 00:14:38.800
+sont les spécialistes.
+
+00:14:39.440 --> 00:14:40.640
+Chacun gère son propre domaine
+
+00:14:40.640 --> 00:14:41.420
+et l'orchestrateur
+
+00:14:41.420 --> 00:14:42.460
+effectue le routage et la fusion.
+
+00:14:43.060 --> 00:14:43.780
+C'est la même architecture,
+
+00:14:44.100 --> 00:14:44.560
+mais exécutée
+
+00:14:44.560 --> 00:14:45.380
+sur la plateforme Microsoft.
+
+00:14:46.040 --> 00:14:46.440
+Mais attention,
+
+00:14:46.720 --> 00:14:47.460
+il y a certaines limites
+
+00:14:47.460 --> 00:14:48.260
+que vous devez connaître.
+
+00:14:49.060 --> 00:14:49.400
+Premièrement,
+
+00:14:49.500 --> 00:14:50.800
+chaque saut d'orchestration supplémentaire
+
+00:14:50.800 --> 00:14:51.580
+ajoute de la latence.
+
+00:14:51.960 --> 00:14:52.840
+Si votre agent principal
+
+00:14:52.840 --> 00:14:53.800
+appelle un agent connecté
+
+00:14:53.800 --> 00:14:54.600
+et que cet agent connecté
+
+00:14:54.600 --> 00:14:55.660
+en appelle un autre à chaque saut,
+
+00:14:56.020 --> 00:14:57.240
+ajoute un temps de réseau.
+
+00:14:57.880 --> 00:14:58.960
+Pour les conversations en temps réel,
+
+00:14:59.100 --> 00:14:59.980
+un trop grand nombre de sauts
+
+00:14:59.980 --> 00:15:00.940
+peut rendre l'expérience lente.
+
+00:15:01.800 --> 00:15:02.120
+Deuxièmement,
+
+00:15:02.160 --> 00:15:03.020
+une délégation excessive
+
+00:15:03.020 --> 00:15:03.940
+crée un chaos de routage.
+
+00:15:04.620 --> 00:15:05.660
+Si vous avez trop de spécialistes
+
+00:15:05.660 --> 00:15:06.220
+avec des domaines
+
+00:15:06.220 --> 00:15:06.860
+qui se chevauchent,
+
+00:15:06.860 --> 00:15:07.780
+l'orchestrateur commence
+
+00:15:07.780 --> 00:15:08.920
+à prendre de mauvaises décisions
+
+00:15:08.920 --> 00:15:09.380
+de routage.
+
+00:15:09.820 --> 00:15:10.460
+Gardez donc un nombre
+
+00:15:10.460 --> 00:15:11.420
+de spécialistes gérables
+
+00:15:11.420 --> 00:15:12.060
+et des domaines
+
+00:15:12.060 --> 00:15:12.840
+clairement séparés.
+
+00:15:14.000 --> 00:15:14.380
+Troisièmement,
+
+00:15:14.440 --> 00:15:15.780
+il existe une limitation spécifique
+
+00:15:15.780 --> 00:15:16.780
+avec les agents de données fabriques.
+
+00:15:17.200 --> 00:15:17.860
+Il ne fonctionne pas
+
+00:15:17.860 --> 00:15:18.680
+lorsque l'agent principal
+
+00:15:18.680 --> 00:15:20.140
+est déployé sur Microsoft 365
+
+00:15:20.140 --> 00:15:20.560
+au pilote.
+
+00:15:21.160 --> 00:15:21.920
+Si votre déploiement cible
+
+00:15:21.920 --> 00:15:23.660
+M365 planifie en conséquence,
+
+00:15:24.180 --> 00:15:25.060
+ces contraintes sont réelles
+
+00:15:25.060 --> 00:15:25.840
+mais elles sont gérables.
+
+00:15:26.520 --> 00:15:27.760
+La plateforme est suffisamment mature
+
+00:15:27.760 --> 00:15:28.960
+pour une utilisation en production
+
+00:15:28.960 --> 00:15:30.420
+et Microsoft travaille activement
+
+00:15:30.420 --> 00:15:31.220
+à combler ses lacunes.
+
+00:15:31.920 --> 00:15:32.160
+Maintenant,
+
+00:15:32.240 --> 00:15:32.640
+relions les points
+
+00:15:32.640 --> 00:15:33.200
+et voyons la situation
+
+00:15:33.200 --> 00:15:33.720
+dans son ensemble.
+
+00:15:34.620 --> 00:15:35.340
+Section connexion,
+
+00:15:35.340 --> 00:15:36.480
+comment tout cela s'articule.
+
+00:15:37.080 --> 00:15:37.740
+Prenons du recul
+
+00:15:37.740 --> 00:15:38.580
+et voyons comment ces pièces
+
+00:15:38.580 --> 00:15:39.120
+se connectent.
+
+00:15:39.480 --> 00:15:40.760
+A2A est le système téléphonique
+
+00:15:40.760 --> 00:15:41.500
+que les agents utilisent
+
+00:15:41.500 --> 00:15:42.140
+pour s'appeler entre eux.
+
+00:15:42.680 --> 00:15:43.140
+Les cartes d'agent,
+
+00:15:43.220 --> 00:15:43.980
+c'est votre annuaire téléphonique.
+
+00:15:44.420 --> 00:15:44.840
+Elles vous indiquent
+
+00:15:44.840 --> 00:15:45.220
+qui appeler,
+
+00:15:45.320 --> 00:15:46.140
+ce que chaque agent gère.
+
+00:15:46.740 --> 00:15:48.000
+L'orchestrateur est le standardiste
+
+00:15:48.000 --> 00:15:48.800
+qui achemine chaque appel
+
+00:15:48.800 --> 00:15:49.540
+vers le bon service.
+
+00:15:49.980 --> 00:15:50.540
+Aucune de ces pièces
+
+00:15:50.540 --> 00:15:51.140
+ne fonctionne seule.
+
+00:15:51.400 --> 00:15:51.980
+Vous avez besoin des trois.
+
+00:15:52.420 --> 00:15:52.880
+Sans annuaire,
+
+00:15:52.960 --> 00:15:53.760
+vous ne savez pas qui appeler.
+
+00:15:54.360 --> 00:15:55.040
+Sans standardiste,
+
+00:15:55.260 --> 00:15:56.660
+personne ne dirige le trafic.
+
+00:15:57.480 --> 00:15:58.440
+Et sans système téléphonique,
+
+00:15:58.520 --> 00:15:59.240
+un standardiste
+
+00:15:59.240 --> 00:16:00.100
+ne peut connecter personne.
+
+00:16:00.580 --> 00:16:01.400
+Il ne fonctionne qu'en équipe.
+
+00:16:01.760 --> 00:16:02.260
+C'est là qu'intervient
+
+00:16:02.260 --> 00:16:02.780
+la modularité.
+
+00:16:03.340 --> 00:16:04.140
+Lorsque vos spécialistes
+
+00:16:04.140 --> 00:16:04.720
+sont modulaires,
+
+00:16:04.800 --> 00:16:05.280
+vous pouvez ajouter
+
+00:16:05.280 --> 00:16:06.100
+de nouvelles capacités
+
+00:16:06.100 --> 00:16:07.180
+sans casser ce qui fonctionne déjà.
+
+00:16:07.540 --> 00:16:08.180
+Disons que vous voulez ajouter
+
+00:16:08.180 --> 00:16:09.260
+un spécialiste de location de voiture
+
+00:16:09.260 --> 00:16:10.040
+à votre assistant de voyage,
+
+00:16:10.140 --> 00:16:10.560
+vous le créez,
+
+00:16:10.620 --> 00:16:11.440
+vous publiez sa carte d'agent,
+
+00:16:11.520 --> 00:16:12.200
+vous donnez son URL
+
+00:16:12.200 --> 00:16:12.960
+à l'orchestrateur,
+
+00:16:13.020 --> 00:16:14.100
+vous donnez son URL à l'orchestrateur.
+
+00:16:14.660 --> 00:16:15.640
+Le spécialiste des vols
+
+00:16:15.640 --> 00:16:16.240
+et celui des hôtels
+
+00:16:16.240 --> 00:16:17.160
+restent exactement les mêmes.
+
+00:16:17.680 --> 00:16:18.880
+L'orchestrateur ne change pas non plus.
+
+00:16:19.400 --> 00:16:20.040
+Vous branchez simplement
+
+00:16:20.040 --> 00:16:20.480
+une nouvelle pièce
+
+00:16:20.480 --> 00:16:21.280
+et le système s'adapte.
+
+00:16:22.340 --> 00:16:23.180
+Comme le protocole est ouvert,
+
+00:16:23.180 --> 00:16:23.980
+vous n'êtes jamais coincé
+
+00:16:23.980 --> 00:16:24.860
+avec un seul fournisseur.
+
+00:16:26.140 --> 00:16:26.820
+Votre orchestrateur
+
+00:16:26.820 --> 00:16:27.960
+peut tourner sur Copilot Studio,
+
+00:16:28.340 --> 00:16:28.940
+votre agent météo
+
+00:16:28.940 --> 00:16:29.500
+sur Google Cloud,
+
+00:16:29.580 --> 00:16:30.640
+votre agent d'hôtel sur AWS,
+
+00:16:30.740 --> 00:16:31.400
+vos systèmes internes
+
+00:16:31.400 --> 00:16:32.160
+peuvent rester sur Azure.
+
+00:16:33.520 --> 00:16:34.680
+Ils parlent tous la même langue.
+
+00:16:35.300 --> 00:16:35.740
+C'est la beauté
+
+00:16:35.740 --> 00:16:36.480
+d'un standard ouvert.
+
+00:16:37.100 --> 00:16:38.240
+Il évite l'enfermement propriétaire
+
+00:16:38.240 --> 00:16:38.920
+et vous permet de choisir
+
+00:16:38.920 --> 00:16:39.420
+le meilleur outil
+
+00:16:39.420 --> 00:16:39.920
+pour chaque tâche.
+
+00:16:40.440 --> 00:16:41.360
+A2A ne consiste pas
+
+00:16:41.360 --> 00:16:41.940
+à construire un agent
+
+00:16:41.940 --> 00:16:42.580
+super intelligent
+
+00:16:42.580 --> 00:16:43.020
+qui sait tout.
+
+00:16:43.400 --> 00:16:44.140
+Il s'agit de constituer
+
+00:16:44.140 --> 00:16:44.900
+une main d'oeuvre flexible
+
+00:16:44.900 --> 00:16:45.420
+de spécialistes
+
+00:16:45.420 --> 00:16:46.260
+que vous pouvez réorganiser
+
+00:16:46.260 --> 00:16:47.140
+selon l'évolution de vos modes.
+
+00:16:47.420 --> 00:16:48.460
+Vous ne remplacez pas vos agents,
+
+00:16:48.460 --> 00:16:49.280
+vous les réorganisez.
+
+00:16:49.580 --> 00:16:50.260
+Vous en ajoutez de nouveaux.
+
+00:16:50.660 --> 00:16:51.480
+Vous remplacez les anciens.
+
+00:16:51.980 --> 00:16:53.080
+Le système grandit avec vous
+
+00:16:53.080 --> 00:16:53.720
+au lieu de devenir
+
+00:16:53.720 --> 00:16:54.460
+un goulot d'étranglement.
+
+00:16:54.840 --> 00:16:55.420
+Alors que pouvez-vous faire
+
+00:16:55.420 --> 00:16:55.940
+avec ces connaissances
+
+00:16:55.940 --> 00:16:56.900
+dès aujourd'hui ?
+
+00:16:56.900 --> 00:16:57.800
+Des points à retenir explaires.
+
+00:16:58.120 --> 00:16:58.600
+Commencez petit.
+
+00:16:59.140 --> 00:17:00.460
+Choisissez un processus répétitif
+
+00:17:00.460 --> 00:17:01.220
+dans votre organisation
+
+00:17:01.220 --> 00:17:02.300
+qui implique plusieurs systèmes.
+
+00:17:03.380 --> 00:17:04.200
+La résolution de tickets,
+
+00:17:04.640 --> 00:17:05.540
+l'intégration des employés
+
+00:17:05.540 --> 00:17:06.200
+ou les notes de frais,
+
+00:17:06.280 --> 00:17:06.660
+par exemple.
+
+00:17:07.400 --> 00:17:08.300
+Quelque chose avec des transferts
+
+00:17:08.300 --> 00:17:09.060
+clairs entre les états.
+
+00:17:09.540 --> 00:17:10.640
+Ensuite, construisez un prototype
+
+00:17:10.640 --> 00:17:11.420
+avec un orchestrateur
+
+00:17:11.420 --> 00:17:12.120
+et deux spécialistes.
+
+00:17:12.420 --> 00:17:12.880
+Vous n'avez pas besoin
+
+00:17:12.880 --> 00:17:13.740
+d'une architecture renduance.
+
+00:17:14.000 --> 00:17:14.440
+Vous avez juste besoin
+
+00:17:14.440 --> 00:17:15.200
+d'un exemple fonctionnel
+
+00:17:15.200 --> 00:17:16.000
+dont vous pouvez tirer des leçons.
+
+00:17:16.360 --> 00:17:17.000
+Utilisez les outils
+
+00:17:17.000 --> 00:17:17.940
+qui prennent déjà cela en charge.
+
+00:17:18.380 --> 00:17:19.020
+Copilot Studio
+
+00:17:19.020 --> 00:17:20.120
+intègre le support A2A,
+
+00:17:20.220 --> 00:17:21.580
+tout comme Azure AI Fondry.
+
+00:17:21.980 --> 00:17:22.800
+Pas besoin de créer
+
+00:17:22.800 --> 00:17:23.460
+le protocole de zéro
+
+00:17:23.460 --> 00:17:24.200
+ou d'écrire du code
+
+00:17:24.200 --> 00:17:25.160
+d'intégration personnalisé.
+
+00:17:25.860 --> 00:17:26.480
+Collez une URL,
+
+00:17:26.720 --> 00:17:27.460
+configurez vos agents
+
+00:17:27.460 --> 00:17:28.700
+et commencez à déléguer.
+
+00:17:29.420 --> 00:17:30.320
+Surveillez les pièges courants.
+
+00:17:30.680 --> 00:17:31.440
+Évitez le chevauchement
+
+00:17:31.440 --> 00:17:32.240
+de vos domaines de spécialité.
+
+00:17:32.900 --> 00:17:33.400
+Si deux agents
+
+00:17:33.400 --> 00:17:34.280
+peuvent faire la même chose,
+
+00:17:34.380 --> 00:17:34.800
+fusionnez-les
+
+00:17:34.800 --> 00:17:35.700
+ou divisez mieux le domaine.
+
+00:17:36.380 --> 00:17:37.120
+Laissez l'orchestrateur
+
+00:17:37.120 --> 00:17:37.720
+gérer le routage,
+
+00:17:37.800 --> 00:17:38.360
+pas l'exécution.
+
+00:17:38.940 --> 00:17:39.660
+Et attention à la latence
+
+00:17:44.440 --> 00:17:45.260
+La meilleure première étape
+
+00:17:45.260 --> 00:17:45.520
+est simple.
+
+00:17:46.180 --> 00:17:46.960
+Tartographiez les transferts
+
+00:17:46.960 --> 00:17:48.120
+dans votre flux de travail existant.
+
+00:17:48.520 --> 00:17:49.300
+Où l'information est-elle
+
+00:17:49.300 --> 00:17:50.200
+transmise entre les personnes
+
+00:17:50.200 --> 00:17:51.300
+ou entre les systèmes ?
+
+00:17:51.300 --> 00:17:51.940
+Ce sont les endroits
+
+00:17:51.940 --> 00:17:52.380
+où les agents
+
+00:17:52.380 --> 00:17:53.160
+peuvent prendre le relais.
+
+00:17:53.480 --> 00:17:54.000
+Chaque transfert
+
+00:17:54.000 --> 00:17:54.800
+est une opportunité.
+
+00:17:55.480 --> 00:17:56.720
+Voilà donc le système A2A
+
+00:17:56.720 --> 00:17:57.320
+en résumé.
+
+00:17:58.000 --> 00:17:58.780
+Trois éléments simples
+
+00:17:58.780 --> 00:17:59.500
+qui fonctionnent ensemble.
+
+00:18:00.060 --> 00:18:01.060
+Les agents ne sont plus isolés
+
+00:18:01.060 --> 00:18:01.840
+et commencent à agir
+
+00:18:01.840 --> 00:18:02.600
+comme une vraie équipe.
+
+00:18:03.000 --> 00:18:03.780
+Choisissez un flux de travail
+
+00:18:03.780 --> 00:18:04.600
+avec des transferts clairs
+
+00:18:04.600 --> 00:18:05.420
+et construisez à partir d'encore.
+
+00:18:06.080 --> 00:18:06.460
+Abonnez-vous
+
+00:18:06.460 --> 00:18:07.560
+pour plus d'explications simples
+
+00:18:07.560 --> 00:18:08.340
+et laissez un commentaire
+
+00:18:08.340 --> 00:18:08.980
+si cela vous a aidé.

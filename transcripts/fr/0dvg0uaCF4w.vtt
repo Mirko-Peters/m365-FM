@@ -1,0 +1,1441 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:02.860
+Pourquoi la clôture mensuelle implique-t-elle encore 5 versions de feuilles de calcul,
+
+00:00:03.000 --> 00:00:08.380
+quelqu'un qui cherche le bon fichier et un manager qui attend une réponse qui devrait être évidente ?
+
+00:00:08.380 --> 00:00:11.640
+Vous avez peut-être un grand livre, plusieurs départements et des milliers de transactions,
+
+00:00:11.800 --> 00:00:14.900
+mais vous ne parvenez toujours pas à raconter une histoire financière cohérente.
+
+00:00:15.420 --> 00:00:17.380
+C'est là que Dynamics 365 Finance intervient.
+
+00:00:17.640 --> 00:00:19.740
+Je suis Mirko Peters de M365FM,
+
+00:00:19.980 --> 00:00:24.660
+et cette capsule de connaissances explique comment les données financières comptabilisées se transforment en rapports lisibles.
+
+00:00:25.520 --> 00:00:28.520
+Considérer chaque transaction comme un document classé une fois dans une armoire centrale,
+
+00:00:28.520 --> 00:00:31.180
+puis consulter de différentes manières sans avoir à refaire les calculs à chaque fois.
+
+00:00:31.600 --> 00:00:33.320
+Commençons par les enregistrements comptés dans cette armoire.
+
+00:00:34.380 --> 00:00:37.180
+La base ? Le grand livre, les comptes principaux et les catégories.
+
+00:00:38.080 --> 00:00:40.520
+Le grand livre est le registre financier principal d'une entreprise,
+
+00:00:40.620 --> 00:00:43.080
+et chaque transaction comptabilisée y finit sous une forme ou une autre.
+
+00:00:44.100 --> 00:00:48.580
+Une facture client, une facture fournisseur, une écriture de paie, un paiement bancaire ou un ajustement de stock
+
+00:00:48.580 --> 00:00:49.960
+laissent tous une trace comptable.
+
+00:00:50.780 --> 00:00:53.700
+Imaginez le grand livre comme un grand classeur, avec une règle stricte,
+
+00:00:54.220 --> 00:00:56.660
+on ne met pas une facture de loyer dans le même tiroir que les ventes de produits,
+
+00:00:56.660 --> 00:00:59.840
+ni un solde bancaire avec les salaires des employés, ni...
+
+00:00:59.840 --> 00:01:01.300
+Chaque montant a besoin d'un foyer financier.
+
+00:01:01.640 --> 00:01:03.980
+Ce foyer commence par un compte principal, et il répond une question simple,
+
+00:01:04.040 --> 00:01:06.040
+à quoi cet argent se rapporte-t-il ?
+
+00:01:06.040 --> 00:01:08.700
+La trésorerie est dans un compte principal, le revenu des ventes dans un autre,
+
+00:01:08.920 --> 00:01:11.580
+et les charges de loyer, les salaires, les clients, les fournisseurs,
+
+00:01:11.860 --> 00:01:13.340
+les emprunts et les taxes ont chacun le leur.
+
+00:01:14.040 --> 00:01:15.920
+Ainsi, lorsque votre entreprise paie un loyer mensuel,
+
+00:01:16.340 --> 00:01:19.580
+Dynamics 365 Finance enregistre ce montant dans le compte de charge de loyer.
+
+00:01:20.140 --> 00:01:21.380
+Et lorsqu'un client paie une facture,
+
+00:01:21.980 --> 00:01:23.340
+le revenu atterrit dans un compte de vente,
+
+00:01:23.640 --> 00:01:25.840
+tandis que le montant impayé atterrit dans les comptes clients.
+
+00:01:26.660 --> 00:01:28.700
+Le compte indique à finances qu'il s'est passé financièrement.
+
+00:01:29.200 --> 00:01:30.220
+Cette structure est importante,
+
+00:01:30.600 --> 00:01:32.200
+car un état financier n'invente pas les chiffres,
+
+00:01:32.300 --> 00:01:35.500
+il lit et regroupe les chiffres déjà comptabilisés dans le grand livre.
+
+00:01:36.260 --> 00:01:38.260
+Si les écritures comptables arrivent au mauvais endroit,
+
+00:01:38.440 --> 00:01:41.100
+aucune conception de rapport ne pourra corriger le sens plus tard sans travail manuel.
+
+00:01:41.640 --> 00:01:43.120
+Les comptes principaux ont aussi des types,
+
+00:01:43.300 --> 00:01:45.080
+et un type de compte donne à Dynamics 365,
+
+00:01:45.380 --> 00:01:46.780
+finance une classification globale.
+
+00:01:48.440 --> 00:01:51.540
+Les comptes de résultats enregistrent les revenus et les dépenses sur une période,
+
+00:01:51.540 --> 00:01:53.840
+et leur solde cumulé contribue aux résultats de fin d'année.
+
+00:01:53.840 --> 00:01:56.580
+Le bilan enregistre ce que l'entreprise possède,
+
+00:01:56.660 --> 00:01:58.080
+ce qu'elle doit et les parts des propriétaires,
+
+00:01:58.240 --> 00:01:59.980
+les actifs, les passifs et les capitaux propres.
+
+00:02:00.660 --> 00:02:01.960
+La trésorerie est normalement un actif,
+
+00:02:02.060 --> 00:02:03.540
+un emprunt bancaire est normalement un passif,
+
+00:02:03.780 --> 00:02:06.180
+le revenu des ventes appartient aux résultats et le loyer aux dépenses.
+
+00:02:06.860 --> 00:02:08.720
+Cela peut sembler être de la comptabilité de base,
+
+00:02:09.060 --> 00:02:09.380
+et ça l'est,
+
+00:02:09.560 --> 00:02:11.460
+mais c'est aussi le premier point de contrôle pour le reporting,
+
+00:02:11.780 --> 00:02:14.380
+car le système doit savoir si un compte appartient au compte de résultats
+
+00:02:14.380 --> 00:02:15.340
+ou au bilan.
+
+00:02:15.700 --> 00:02:18.000
+Il existe également un type de compte totalisateur spécial
+
+00:02:18.000 --> 00:02:19.780
+qui permet d'additionner une plage de solde de compte.
+
+00:02:19.980 --> 00:02:21.920
+Vous pourriez l'utiliser lorsque vous souhaitez obtenir un total
+
+00:02:21.920 --> 00:02:23.420
+sur un intervalle défini ?
+
+00:02:23.420 --> 00:02:24.920
+Cependant, de nombreuses équipes financières
+
+00:02:24.920 --> 00:02:26.840
+construisent leur taux directement dans les rapports financiers.
+
+00:02:27.600 --> 00:02:28.620
+Les types de comptes restent généraux,
+
+00:02:28.780 --> 00:02:30.480
+et c'est là qu'interviennent les catégories de comptes principaux.
+
+00:02:30.800 --> 00:02:32.240
+Elles créent un groupe de reporting plus utile
+
+00:02:32.240 --> 00:02:33.680
+au sein de cette classification générale.
+
+00:02:34.040 --> 00:02:34.440
+C'est...
+
+00:02:34.440 --> 00:02:37.500
+Par exemple, les comptes d'actifs peuvent être classés dans des catégories
+
+00:02:37.500 --> 00:02:39.080
+telles que la trésorerie, telles que la trésorerie,
+
+00:02:39.240 --> 00:02:41.040
+les immobilisations, les clients ou les placements à court terme.
+
+00:02:41.540 --> 00:02:43.660
+Tandis que les comptes de passifs peuvent relever des fournisseurs,
+
+00:02:43.740 --> 00:02:45.180
+des taxes à payer ou des dettes à long terme.
+
+00:02:46.280 --> 00:02:47.040
+La différence est simple.
+
+00:02:47.520 --> 00:02:49.500
+Le type de compte indique la classe comptable générale,
+
+00:02:50.040 --> 00:02:52.300
+et la catégorie de compte principal indique le groupe de reporting
+
+00:02:52.300 --> 00:02:53.240
+que vous souhaitez présenter.
+
+00:02:54.020 --> 00:02:55.380
+Imaginez que vous ayez plusieurs comptes bancaires,
+
+00:02:55.560 --> 00:02:57.380
+une caisse de menu dépense et un compte de virement interne.
+
+00:02:57.980 --> 00:02:59.540
+Chacun peut avoir son propre compte principal,
+
+00:02:59.540 --> 00:03:01.660
+car la finance a besoin de ce niveau de détails.
+
+00:03:01.660 --> 00:03:04.280
+Pourtant, ils peuvent tous appartenir à la catégorie de trésorerie.
+
+00:03:04.640 --> 00:03:06.340
+Un rapport peut afficher une ligne de trésorerie claire
+
+00:03:06.340 --> 00:03:07.860
+lorsque c'est tout ce dont le lecteur a besoin.
+
+00:03:08.420 --> 00:03:09.780
+C'est pourquoi les rapports financiers par défaut
+
+00:03:09.780 --> 00:03:11.180
+utilisent les catégories de comptes principaux.
+
+00:03:11.600 --> 00:03:13.480
+Ils ont besoin d'une structure familière
+
+00:03:13.480 --> 00:03:15.280
+avant de pouvoir afficher les soldes dans des sections
+
+00:03:15.280 --> 00:03:17.660
+comme l'actif, le passif, les revenus ou les charges.
+
+00:03:19.180 --> 00:03:20.500
+Une configuration propre et payante,
+
+00:03:20.680 --> 00:03:22.560
+car lorsque les comptes principaux suivent des règles claires,
+
+00:03:22.840 --> 00:03:24.120
+que les types de comptes sont corrects
+
+00:03:24.120 --> 00:03:26.280
+et que les catégories correspondent à la lecture de vos états financiers,
+
+00:03:26.500 --> 00:03:28.420
+le reporting devient beaucoup plus facile.
+
+00:03:29.320 --> 00:03:31.100
+Vous commencez avec des données qui ont déjà une place.
+
+00:03:31.660 --> 00:03:33.100
+Les comptes expliquent ce qui s'est passé financièrement,
+
+00:03:33.180 --> 00:03:34.920
+mais les dirigeants demandent généralement plus que cela.
+
+00:03:35.620 --> 00:03:37.280
+Ils veulent aussi savoir où cela s'est passé,
+
+00:03:37.420 --> 00:03:38.220
+qui a dépensé l'argent
+
+00:03:38.220 --> 00:03:41.120
+et quelle partie de l'entreprise a produit le résultat.
+
+00:03:42.760 --> 00:03:43.740
+Les dimensions financières,
+
+00:03:43.900 --> 00:03:46.140
+pour répondre aux questions que les dirigeants posent réellement.
+
+00:03:46.900 --> 00:03:48.480
+Un compte principal vous indique à quoi se rapporte l'argent.
+
+00:03:48.860 --> 00:03:51.000
+Assez simple, n'est-ce pas ?
+
+00:03:51.000 --> 00:03:53.680
+Mais les dimensions financières ajoutent le contexte métier autour de ce montant.
+
+00:03:54.240 --> 00:03:55.520
+Elles répondent aux questions que les dirigeants posent
+
+00:03:55.520 --> 00:03:56.260
+lorsqu'ils voient un total.
+
+00:03:56.700 --> 00:03:57.880
+Quel département la dépense ?
+
+00:03:57.880 --> 00:03:59.020
+Quel site l'a généré ?
+
+00:03:59.020 --> 00:04:00.120
+Quelle unité commerciale ?
+
+00:04:00.120 --> 00:04:01.360
+Est-ce lié à un projet ?
+
+00:04:01.360 --> 00:04:02.400
+Prenons l'exemple des charges de loyer.
+
+00:04:02.720 --> 00:04:04.880
+Votre entreprise peut payer le loyer d'un siège social,
+
+00:04:05.100 --> 00:04:06.600
+d'un entrepôt et de plusieurs points de vente.
+
+00:04:07.160 --> 00:04:08.680
+Si chaque paiement est comptabilisé en charge de loyer,
+
+00:04:08.780 --> 00:04:09.460
+vous voyez la facture totale.
+
+00:04:09.720 --> 00:04:10.200
+C'est utile,
+
+00:04:10.360 --> 00:04:12.900
+mais cela n'indique pas à un responsable régional le coût de son site.
+
+00:04:13.320 --> 00:04:14.800
+Une dimension financière comble cette lacune.
+
+00:04:15.140 --> 00:04:16.240
+Vous pourriez ajouter le département,
+
+00:04:16.340 --> 00:04:16.700
+la finance,
+
+00:04:16.800 --> 00:04:17.600
+les ventes ou les opérations,
+
+00:04:17.800 --> 00:04:18.680
+ou encore le centre de coût,
+
+00:04:18.820 --> 00:04:19.680
+l'unité commerciale,
+
+00:04:19.720 --> 00:04:20.660
+la région ou le projet.
+
+00:04:21.080 --> 00:04:23.120
+Ces valeurs sont associées à l'écriture comptable lors de sa validation.
+
+00:04:23.580 --> 00:04:24.760
+Ainsi, le compte reste charge de loyer,
+
+00:04:25.080 --> 00:04:26.440
+mais l'écriture raconte une histoire plus complète.
+
+00:04:26.840 --> 00:04:28.120
+Un paiement pourrait indiquer charge de loyer,
+
+00:04:28.240 --> 00:04:28.640
+siège social.
+
+00:04:29.060 --> 00:04:29.900
+Un autre, charge de loyer,
+
+00:04:30.000 --> 00:04:30.240
+entrepôt.
+
+00:04:30.740 --> 00:04:31.840
+Un troisième, charge de loyer,
+
+00:04:31.940 --> 00:04:32.520
+vente au détail non.
+
+00:04:32.820 --> 00:04:35.040
+Même compte signification commerciale différente ?
+
+00:04:35.040 --> 00:04:36.800
+Cela offre à la finance une structure de compte cohérente,
+
+00:04:36.900 --> 00:04:38.680
+tout en permettant aux responsables de voir les résultats
+
+00:04:38.680 --> 00:04:39.680
+pour leur partie de l'entreprise.
+
+00:04:40.400 --> 00:04:41.900
+Le directeur commercial regarde les ventes.
+
+00:04:42.320 --> 00:04:43.680
+Le responsable d'entrepôt regarde l'entrepôt.
+
+00:04:44.040 --> 00:04:45.760
+La finance voit le total pour tout le monde.
+
+00:04:46.400 --> 00:04:48.140
+Cela élimine une habitude courante liée aux feuilles de quelqu'un.
+
+00:04:48.140 --> 00:04:50.800
+Sans dimension, quelqu'un exporte les soldes du grand livre
+
+00:04:50.800 --> 00:04:52.560
+et commence à ajouter des colonnes manuellement.
+
+00:04:53.260 --> 00:04:55.260
+Trier, filtrer, copier les chiffres dans un nouveau classeur,
+
+00:04:55.340 --> 00:04:56.980
+puis essayer d'expliquer pourquoi le total du département
+
+00:04:56.980 --> 00:04:58.380
+ne correspond pas au total de l'entreprise.
+
+00:04:59.060 --> 00:05:01.060
+Avec des dimensions saisies lors de la comptabilisation de la transaction,
+
+00:05:01.220 --> 00:05:02.380
+ce travail commence sur de meilleures bases.
+
+00:05:03.000 --> 00:05:04.820
+Le détail appartient déjà à l'enregistrement comptable,
+
+00:05:05.180 --> 00:05:07.220
+mais cela ne fonctionne que si les valeurs restent cohérentes.
+
+00:05:08.020 --> 00:05:09.860
+Si une personne sélectionne région Nord,
+
+00:05:10.120 --> 00:05:12.600
+une autre Nord et une troisième Nord 01,
+
+00:05:12.600 --> 00:05:16.600
+le rapport divise ce qui devrait être un seul solde en ligne distincte.
+
+00:05:16.600 --> 00:05:18.480
+La finance a besoin de noms clairs,
+
+00:05:18.580 --> 00:05:19.960
+de responsabilités définies et de règles
+
+00:05:19.960 --> 00:05:21.440
+sur les valeurs que les utilisateurs peuvent utiliser.
+
+00:05:22.120 --> 00:05:24.680
+Dynamics 365 Finance prend cela en charge grâce aux règles comptables.
+
+00:05:25.340 --> 00:05:27.160
+Selon le compte, le système peut exiger une dimension
+
+00:05:27.160 --> 00:05:29.260
+ou limiter les valeurs que les utilisateurs peuvent sélectionner.
+
+00:05:29.900 --> 00:05:31.980
+Par exemple, un compte de charge peut nécessiter un centre de coût,
+
+00:05:32.080 --> 00:05:34.940
+tandis qu'un compte bancaire peut seulement nécessiter une unité commerciale.
+
+00:05:35.060 --> 00:05:36.720
+Vous n'avez pas besoin du même niveau de détail pour chacun.
+
+00:05:37.400 --> 00:05:38.260
+Voici une règle simple.
+
+00:05:38.600 --> 00:05:41.140
+Utilisez une dimension financière lorsque vous prévoyez de réutiliser la valeur
+
+00:05:41.140 --> 00:05:42.880
+et de rapporter des soldes basés sur celle-ci au fil du temps.
+
+00:05:43.100 --> 00:05:44.060
+Le département est réutilisable.
+
+00:05:44.360 --> 00:05:45.340
+Le centre de coût est réutilisable.
+
+00:05:45.340 --> 00:05:46.620
+La région est réutilisable.
+
+00:05:47.080 --> 00:05:49.960
+Le projet l'est aussi si votre équipe financière suit les soldes et les coûts par projet.
+
+00:05:50.200 --> 00:05:52.680
+Le numéro de facture est différent, le numéro de bon de commande est différent.
+
+00:05:53.740 --> 00:05:55.560
+Ces valeurs appartiennent souvent à une seule transaction
+
+00:05:55.560 --> 00:05:56.780
+ou à une tâche de courte durée.
+
+00:05:57.920 --> 00:06:00.060
+Créer une dimension financière pour chaque numéro de facture
+
+00:06:00.060 --> 00:06:01.940
+vous laisse avec des milliers de valeurs uniques
+
+00:06:01.940 --> 00:06:03.740
+dont personne ne veut sur un relevé.
+
+00:06:04.140 --> 00:06:05.580
+C'est là que les étiquettes financières sont plus adaptées.
+
+00:06:06.100 --> 00:06:08.060
+Une étiquette financière stocke une référence flexible,
+
+00:06:08.280 --> 00:06:09.680
+comme un numéro de facture, un bon de commande,
+
+00:06:09.840 --> 00:06:12.100
+une référence de paiement ou un identifiant de système externe.
+
+00:06:12.100 --> 00:06:15.800
+Elle est associée à l'écriture comptable pour le détail et l'analyse,
+
+00:06:16.100 --> 00:06:18.840
+mais n'a pas le même rôle structuré qu'une dimension financière.
+
+00:06:19.320 --> 00:06:21.600
+Les dimensions financières font partie de la structure du compte.
+
+00:06:22.040 --> 00:06:23.620
+Le système vérifie si la valeur est valide
+
+00:06:23.620 --> 00:06:25.780
+et la finance peut l'utiliser pour résumer les soldes.
+
+00:06:26.500 --> 00:06:27.640
+Les étiquettes financières sont plus légères.
+
+00:06:28.020 --> 00:06:30.080
+Elles étiquètent une transaction sans transformer cette étiquette
+
+00:06:30.080 --> 00:06:31.180
+en un segment de rapport permanent.
+
+00:06:31.960 --> 00:06:34.140
+Ne créez donc pas une dimension appelée qu'un numéro de facture qu'il y ait,
+
+00:06:34.300 --> 00:06:35.320
+juste pour retrouver des factures plus tard.
+
+00:06:35.560 --> 00:06:38.080
+Utilisez plutôt les détails de transaction ou une étiquette financière pour cela.
+
+00:06:38.080 --> 00:06:39.660
+Un dernier point de configuration utile à connaître.
+
+00:06:40.000 --> 00:06:42.220
+Le reporting financier peut utiliser les dimensions déjà présentes
+
+00:06:42.220 --> 00:06:43.740
+dans votre système sans outils supplémentaires.
+
+00:06:44.380 --> 00:06:46.240
+Sur la page de configuration du reporting financier,
+
+00:06:46.300 --> 00:06:48.240
+la finance choisit quelles dimensions apparaissent pour la conception
+
+00:06:48.240 --> 00:06:50.100
+et la visualisation des rapports et dans quel ordre.
+
+00:06:50.640 --> 00:06:51.980
+Cet ordre a plus d'importance qu'il n'y paraît.
+
+00:06:52.580 --> 00:06:54.380
+Si vos rapports présentent habituellement le compte principal,
+
+00:06:54.500 --> 00:06:56.000
+le département, le centre de coût et le projet,
+
+00:06:56.280 --> 00:06:57.420
+les utilisateurs savent vous regarder.
+
+00:06:58.120 --> 00:06:59.360
+Si l'ordre change d'un rapport à l'autre,
+
+00:06:59.480 --> 00:07:01.900
+la lecture de détails devient plus lente et les erreurs plus fréquentes.
+
+00:07:02.660 --> 00:07:04.940
+Une fois que chaque écriture porte les bonnes étiquettes réutilisables,
+
+00:07:04.940 --> 00:07:08.140
+« Le grand livre répond à bien plus que qu'avons-nous dépensé ? »
+
+00:07:08.140 --> 00:07:11.100
+Il répond aux questions « Où, que, qui, où, que, quelle partie de l'entreprise ? »
+
+00:07:11.100 --> 00:07:12.160
+Avec ces détails en place,
+
+00:07:12.820 --> 00:07:16.740
+Dynamics 365 Finance peut transformer ses écritures comptabilisées en états financiers.
+
+00:07:17.700 --> 00:07:19.900
+Qu'est-ce que le reporting financier concrètement ?
+
+00:07:19.900 --> 00:07:22.060
+Une fois que vos écritures de grands livres incluent les bons comptes et dimensions,
+
+00:07:22.180 --> 00:07:24.800
+que fait réellement le reporting financier avec elles ?
+
+00:07:24.800 --> 00:07:27.800
+Le reporting financier est le module complémentaire de Dynamics 365 Finance
+
+00:07:27.800 --> 00:07:29.920
+pour créer, gérer et consulter des états financiers.
+
+00:07:30.420 --> 00:07:31.940
+Cela semble technique, alors disons-le simplement.
+
+00:07:31.940 --> 00:07:36.500
+C'est la partie de Dynamics 365 Finance qui transforme les soldes de votre grand livre
+
+00:07:36.500 --> 00:07:42.820
+en rapport, compte de résultat, bilan, flux de trésorerie, balance ou rapport budget slash réel, créel.
+
+00:07:43.220 --> 00:07:44.080
+Ce n'est pas un nouveau grand livre.
+
+00:07:44.500 --> 00:07:47.540
+Personne ne comptabilise une facture dans le reporting financier n'y paie un fournisseur.
+
+00:07:48.340 --> 00:07:50.740
+La comptabilisation se fait dans Dynamics 365 FENOTS,
+
+00:07:50.880 --> 00:07:52.800
+et le reporting financier lit les résultats après coup.
+
+00:07:53.340 --> 00:07:55.140
+Ce n'est pas non plus juste un tableau de bord avec quelques graphiques.
+
+00:07:55.620 --> 00:07:57.380
+Un tableau de bord permet de visualiser rapidement le temps.
+
+00:07:57.380 --> 00:08:00.680
+Un état financier offre une vue structurée des groupes de comptes,
+
+00:08:01.000 --> 00:08:02.960
+totaux, périodes, comparaisons,
+
+00:08:03.180 --> 00:08:05.800
+et la possibilité d'examiner les détails derrière un chiffre.
+
+00:08:06.600 --> 00:08:08.820
+Considérez-le comme la salle des rapports connectée au grand livre.
+
+00:08:09.240 --> 00:08:10.540
+Le grand livre enregistre les transactions.
+
+00:08:10.920 --> 00:08:13.880
+Le reporting financier les organise selon le format dont votre équipe financière,
+
+00:08:14.000 --> 00:08:16.020
+vos directeurs, auditeurs ou membres du conseil ont besoin.
+
+00:08:16.660 --> 00:08:19.260
+En coulisses, le reporting financier utilise un datamart financier
+
+00:08:19.260 --> 00:08:20.760
+qui se met à jour à partir du grand livre.
+
+00:08:20.760 --> 00:08:24.140
+Un datamart est une copie des données financières organisées
+
+00:08:24.140 --> 00:08:26.860
+pour que les rapports tournent sans ralentir la saisie des factures
+
+00:08:26.860 --> 00:08:27.540
+ou les journaux.
+
+00:08:27.920 --> 00:08:28.380
+Ou les journaux.
+
+00:08:29.040 --> 00:08:31.100
+Cette séparation permet à la finance d'examiner un état
+
+00:08:31.100 --> 00:08:32.880
+pendant que les autres utilisateurs continuent de travailler.
+
+00:08:33.720 --> 00:08:35.680
+Vous n'avez pas besoin d'exporter chaque solde dans un tableur
+
+00:08:35.680 --> 00:08:37.660
+juste pour créer un rapport mensuel propre.
+
+00:08:38.300 --> 00:08:40.360
+Microsoft inclut 22 rapports financiers par défaut
+
+00:08:40.360 --> 00:08:42.120
+avec Dynamics 365 Finance.
+
+00:08:42.760 --> 00:08:44.500
+Vous obtenez un compte de résultats, un bilan,
+
+00:08:44.500 --> 00:08:45.720
+un rapport de flux de trésorerie,
+
+00:08:45.840 --> 00:08:47.840
+une balance détaillée, une balance résumée,
+
+00:08:48.380 --> 00:08:49.580
+des rapports de dépenses glissants
+
+00:08:49.580 --> 00:08:51.720
+et des rapports budget slash réels.
+
+00:08:52.520 --> 00:08:53.860
+Plus des rapports sur les ventes hebdomadaires,
+
+00:08:53.960 --> 00:08:55.580
+les remises, les détails d'audit, les ratios
+
+00:08:55.580 --> 00:08:57.120
+ou un bilan à côté d'un compte de résultats.
+
+00:08:57.420 --> 00:08:59.120
+Mais cela ne signifie pas que tout correspond à votre entreprise
+
+00:08:59.120 --> 00:08:59.620
+dès le premier jour.
+
+00:09:00.360 --> 00:09:01.880
+La mise en page du rapport peut sembler correcte,
+
+00:09:01.960 --> 00:09:03.280
+mais vos comptes principaux et catégories
+
+00:09:03.280 --> 00:09:04.960
+doivent être correctement mappés aux lignes.
+
+00:09:05.540 --> 00:09:07.640
+Si votre entreprise appelle un groupe de compte coût direct égat,
+
+00:09:08.060 --> 00:09:09.880
+alors que le rapport par défaut attend coût des ventes égats,
+
+00:09:10.080 --> 00:09:11.760
+quelqu'un doit vérifier cette configuration.
+
+00:09:12.160 --> 00:09:13.520
+Commencez malgré tout par un rapport par défaut.
+
+00:09:13.600 --> 00:09:14.960
+Il vous donne un exemple fonctionnel,
+
+00:09:15.260 --> 00:09:17.340
+une structure familière et un point de départ bien plus rapide
+
+00:09:17.340 --> 00:09:19.460
+que de créer chaque rapport à partir d'une page vierge.
+
+00:09:20.260 --> 00:09:22.280
+Ouvrez-le, comparez les soldes avec votre grand livre,
+
+00:09:22.700 --> 00:09:23.700
+vérifiez les regroupements de comptes
+
+00:09:23.700 --> 00:09:25.200
+et n'ajustez que ce dont votre entreprise a besoin.
+
+00:09:25.660 --> 00:09:28.200
+Dynamics 365 Finance dispose de plusieurs outils de reporting
+
+00:09:28.200 --> 00:09:29.820
+et c'est souvent là que les utilisateurs s'y perdent.
+
+00:09:30.180 --> 00:09:32.160
+Le reporting financier gère les états financiers
+
+00:09:32.160 --> 00:09:33.100
+basés sur le grand livre.
+
+00:09:34.400 --> 00:09:37.500
+SSRS, SQL Server Reporting Services gère généralement
+
+00:09:37.500 --> 00:09:39.960
+les documents commerciaux formatés et les rapports détaillés
+
+00:09:39.960 --> 00:09:41.900
+comme les factures, bons de commande,
+
+00:09:42.180 --> 00:09:44.400
+relevé client ou longue liste de transactions.
+
+00:09:44.400 --> 00:09:48.540
+Il est conçu pour les pages nécessitant une mise en page fixe ?
+
+00:09:48.540 --> 00:09:50.380
+Le reporting électronique gère les fichiers destinés
+
+00:09:50.380 --> 00:09:52.660
+à être exportés, fichiers bancaires, déclarations fiscales,
+
+00:09:52.780 --> 00:09:55.540
+fichiers XML, CSV ou autres formats, réglementés.
+
+00:09:56.300 --> 00:09:57.500
+Cet outil se concentre sur l'envoi
+
+00:09:57.500 --> 00:09:58.940
+ou la réception de données structurées.
+
+00:09:59.440 --> 00:10:00.740
+Power BI gère l'analyse interactive.
+
+00:10:01.400 --> 00:10:03.640
+Utilisez Power BI pour les graphiques, filtres, tendances
+
+00:10:03.640 --> 00:10:06.120
+et vues de gestion qui aident à explorer des questions précises.
+
+00:10:06.880 --> 00:10:09.400
+Quelle région connaît la croissance des coûts la plus rapide ?
+
+00:10:09.400 --> 00:10:11.020
+Comment les dépenses réelles se comparent-elles au budget
+
+00:10:11.020 --> 00:10:12.740
+sur plusieurs mois ?
+
+00:10:12.740 --> 00:10:14.680
+Le reporting financier gère l'état financier formel.
+
+00:10:15.480 --> 00:10:17.800
+Power BI aide à enquêter sur les tendances qui l'entourent.
+
+00:10:18.700 --> 00:10:20.220
+Excel offre aux finances un espace familier
+
+00:10:20.220 --> 00:10:22.460
+pour vérifier les chiffres ou effectuer des analyses supplémentaires,
+
+00:10:22.760 --> 00:10:25.160
+mais ne doit pas devenir le point de départ de chaque état financier.
+
+00:10:26.080 --> 00:10:27.100
+Chaque outil a sa propre fonction.
+
+00:10:27.440 --> 00:10:29.840
+Choisissez le bon et le reporting consistera moins
+
+00:10:29.840 --> 00:10:31.400
+à reconstruire des chiffres qu'à les interpréter.
+
+00:10:31.400 --> 00:10:35.600
+Construction d'un rapport, ligne, colonne et définition de rapport.
+
+00:10:36.960 --> 00:10:38.740
+Tout état financier commence par une forme.
+
+00:10:39.220 --> 00:10:41.000
+Vous devez décider ce qui figure sur le côté gauche,
+
+00:10:41.080 --> 00:10:42.320
+ce qui apparaît en haut et comment.
+
+00:10:42.600 --> 00:10:43.920
+Le rapport réunit ces deux éléments.
+
+00:10:44.820 --> 00:10:47.920
+Dans Dynamics 365 Finance, nous appelons ces parties définition de ligne,
+
+00:10:48.180 --> 00:10:49.800
+définition de colonne et définition de rapport.
+
+00:10:50.420 --> 00:10:51.260
+Commençons par les lignes.
+
+00:10:51.940 --> 00:10:54.020
+Une définition de ligne contrôle le côté gauche de votre état.
+
+00:10:54.520 --> 00:10:56.160
+Elle indique au système qu'elle compte, catégorie de compte
+
+00:10:56.160 --> 00:10:57.720
+ou combinaison de dimensions extraires.
+
+00:10:57.720 --> 00:10:59.740
+Elle définit également l'intitulé de chaque ligne
+
+00:10:59.740 --> 00:11:01.080
+et l'emplacement où les totaux doivent apparaître.
+
+00:11:01.580 --> 00:11:03.080
+Pensez à un compte de résultat classique.
+
+00:11:03.560 --> 00:11:05.140
+Les revenus en haut, le coût des ventes ensuite,
+
+00:11:05.280 --> 00:11:05.920
+puis la marge brute.
+
+00:11:06.360 --> 00:11:07.680
+En dessous viennent les charges d'exploitation
+
+00:11:07.680 --> 00:11:09.300
+et tout en bas, le résultat net.
+
+00:11:09.860 --> 00:11:11.680
+Chacune de ces lignes nécessite ses propres instructions.
+
+00:11:12.060 --> 00:11:13.820
+Le chiffre d'affaires peut pointer vers un groupe de comptes de vente,
+
+00:11:13.920 --> 00:11:15.460
+tandis que le coût des ventes pointe vers des comptes de charges.
+
+00:11:16.160 --> 00:11:19.460
+La marge brute ne pointe vers aucun compte du tout.
+
+00:11:20.100 --> 00:11:22.840
+Elle calcule un total en soustrayant le coût des ventes du chiffre d'affaires.
+
+00:11:23.460 --> 00:11:24.740
+C'est le rôle d'une définition de ligne.
+
+00:11:25.500 --> 00:11:26.780
+Elle indique au reporting financier
+
+00:11:26.780 --> 00:11:28.720
+quels soldes comptabilisées appartiennent à chaque ligne
+
+00:11:28.720 --> 00:11:30.480
+et comment additionner ou soustraire ces lignes
+
+00:11:30.480 --> 00:11:31.760
+pour calculer un total.
+
+00:11:33.000 --> 00:11:35.400
+Vous pouvez construire une ligne à partir de comptes principaux individuels,
+
+00:11:35.480 --> 00:11:37.480
+d'une plage de comptes ou d'une catégorie de comptes principales.
+
+00:11:37.900 --> 00:11:39.400
+Les catégories permettent d'économiser beaucoup de configurations.
+
+00:11:39.780 --> 00:11:43.140
+Par exemple, un bilan sépare normalement l'actif, le passif et les capitaux propres.
+
+00:11:44.020 --> 00:11:45.680
+Au sein de l'actif, vous pourriez afficher la trésorerie,
+
+00:11:45.900 --> 00:11:47.620
+les créances clients, les immobilisations et les stocks.
+
+00:11:48.260 --> 00:11:50.740
+Si ces comptes sont déjà dans les bonnes catégories de comptes principaux,
+
+00:11:51.180 --> 00:11:53.560
+les lignes de bilan par défaut peuvent utiliser ces groupes
+
+00:11:53.560 --> 00:11:55.060
+sans lister chaque compte un par un.
+
+00:11:55.060 --> 00:11:56.760
+Cela vous donne une présentation plus épure.
+
+00:11:57.040 --> 00:11:59.260
+Finances conservent des comptes séparés pour des soldes séparés,
+
+00:11:59.340 --> 00:12:01.680
+mais le lecteur ne voit que le niveau de détail approprié
+
+00:12:01.680 --> 00:12:03.020
+pour un état financier formel.
+
+00:12:03.840 --> 00:12:05.880
+S'ils ont besoin de plus de détails, ils peuvent examiner plus en profondeur.
+
+00:12:06.060 --> 00:12:08.720
+L'état lui-même n'a pas besoin de devenir un annuaire de numéro de compte.
+
+00:12:09.440 --> 00:12:11.940
+Les lignes répondent à une question, que rapportons-nous ?
+
+00:12:11.940 --> 00:12:14.560
+Les colonnes répondent à une autre, comment voulons-nous le visualiser ?
+
+00:12:14.560 --> 00:12:16.080
+Une définition de colonne contrôle les informations
+
+00:12:16.080 --> 00:12:17.340
+qui s'affichent sur la largeur de la page.
+
+00:12:18.020 --> 00:12:20.200
+Vous pourriez afficher le mois en cours, les résultats de l'année,
+
+00:12:20.540 --> 00:12:22.660
+à ce jour, les résultats de l'année précédente, à la même date,
+
+00:12:22.660 --> 00:12:25.540
+le budget, le réel ou l'écart entre le réel et le budget.
+
+00:12:26.240 --> 00:12:28.740
+Un compte de résultats simple pourrait commencer par une colonne de description.
+
+00:12:29.620 --> 00:12:31.680
+Ensuite, vous pourriez afficher le réel pour la période en cours,
+
+00:12:32.000 --> 00:12:34.380
+puis l'année à ce jour, puis le budget, puis l'écart.
+
+00:12:35.880 --> 00:12:37.820
+Cette colonne d'écart calcule automatiquement la différence,
+
+00:12:38.020 --> 00:12:39.600
+afin que les responsables n'aient pas besoin d'ouvrir Excel
+
+00:12:39.600 --> 00:12:41.760
+pour créer une autre formule après l'exécution du rapport.
+
+00:12:42.840 --> 00:12:44.500
+Vous pouvez également placer des périodes côte à côte,
+
+00:12:44.560 --> 00:12:45.740
+par exemple de janvier à décembre,
+
+00:12:45.880 --> 00:12:47.720
+ce trimestre à côté du même trimestre de l'année dernière,
+
+00:12:47.840 --> 00:12:49.480
+ou des résultats réels à côté d'une prévision.
+
+00:12:49.480 --> 00:12:52.920
+Les lignes déterminent les sujets, et les colonnes déterminent la vue.
+
+00:12:53.740 --> 00:12:56.200
+Réunissez ces deux éléments et vous obtenez l'essentiel d'un état financier,
+
+00:12:56.660 --> 00:12:58.900
+mais le système a toujours besoin d'un endroit pour nommer le rapport
+
+00:12:58.900 --> 00:13:02.260
+et indiquer à Dynamics 365 Finance quelle définition de lignes et de colonnes associées.
+
+00:13:02.760 --> 00:13:04.000
+C'est ce qu'on appelle la définition de rapport.
+
+00:13:04.800 --> 00:13:06.580
+Une définition de rapport combine les lignes et les colonnes
+
+00:13:06.580 --> 00:13:08.200
+en un document que les utilisateurs peuvent générer.
+
+00:13:08.840 --> 00:13:09.880
+Elles contrôlent également des paramètres
+
+00:13:09.880 --> 00:13:11.660
+tels que l'arrondi et la manière dont les montants négatifs apparaissent.
+
+00:13:12.340 --> 00:13:13.700
+Voici un exemple concret.
+
+00:13:14.680 --> 00:13:17.120
+Vous pouvez créer une définition de ligne appelée ligne de compte de résultat,
+
+00:13:17.120 --> 00:13:19.920
+puis une définition de colonne appelée réel mensuel, budget et écart.
+
+00:13:20.800 --> 00:13:23.580
+La définition de rapport les connecte et donne un nom au rapport final,
+
+00:13:23.920 --> 00:13:26.120
+comme compte de résultat, de gestion aiguë et...
+
+00:13:26.800 --> 00:13:29.040
+Cette séparation est utile car vous pouvez réutiliser les éléments.
+
+00:13:30.480 --> 00:13:32.720
+Une définition de ligne pour un compte de résultat peut fonctionner
+
+00:13:32.720 --> 00:13:34.340
+avec une mise en page par colonne mensuelle,
+
+00:13:34.700 --> 00:13:37.420
+un cumul annuel ou une comparaison avec l'année précédente.
+
+00:13:38.220 --> 00:13:40.560
+Vous n'aurez pas besoin de reconstruire la même structure de revenus
+
+00:13:40.560 --> 00:13:42.160
+et de dépenses à chaque nouvelle demande.
+
+00:13:42.160 --> 00:13:44.880
+Certaines entreprises ont besoin d'un rapport pour une seule entité.
+
+00:13:45.460 --> 00:13:47.620
+D'autres ont besoin d'un rapport qui suit une structure d'entreprise plus vaste.
+
+00:13:48.760 --> 00:13:50.160
+C'est là qu'intervient une arborescence de rapport.
+
+00:13:50.620 --> 00:13:53.480
+Une arborescence de rapport vous permet d'organiser les résultats financiers en unités de rapport.
+
+00:13:54.220 --> 00:13:55.920
+Ces unités peuvent représenter des entités juridiques,
+
+00:13:56.020 --> 00:13:57.880
+des régions, des départements, des unités opérationnelles
+
+00:13:57.880 --> 00:13:59.380
+ou toute autre partie de la structure d'entreprise.
+
+00:13:59.760 --> 00:14:01.060
+Imaginez un groupe avec trois filiales.
+
+00:14:01.540 --> 00:14:03.560
+La société mère souhaite voir chaque filiale individuellement,
+
+00:14:03.680 --> 00:14:04.880
+puis un total combiné pour le groupe.
+
+00:14:05.620 --> 00:14:07.800
+Une arborescence de rapport peut décrire cette structure,
+
+00:14:07.800 --> 00:14:10.540
+avec chaque filiale comme unité et le total du groupe au-dessus.
+
+00:14:10.540 --> 00:14:12.520
+La même approche fonctionne pour les régions.
+
+00:14:13.100 --> 00:14:15.600
+Vous pouvez afficher le nord, le sud et l'ouest comme des unités distinctes,
+
+00:14:15.680 --> 00:14:17.080
+puis inclure un total pour toute l'entreprise.
+
+00:14:17.820 --> 00:14:20.420
+Ou bien un chef des départements pourrait n'avoir besoin de voir que sa propre unité,
+
+00:14:20.740 --> 00:14:22.980
+tandis que l'équipe financière a besoin d'une vue complète.
+
+00:14:23.600 --> 00:14:26.180
+Une définition de rapport peut être associée à une arborescence à la fois.
+
+00:14:26.400 --> 00:14:28.520
+Choisissez donc celle qui répond à la question du rapport.
+
+00:14:29.920 --> 00:14:32.020
+Pour les débutants, le concepteur de rapport inclut un assistant
+
+00:14:32.020 --> 00:14:35.040
+qui aide à créer ces éléments sans avoir à gérer toutes les options simultanément.
+
+00:14:35.740 --> 00:14:39.600
+Vous choisissez le type de rapport, suivez les étapes de base et créez une ébauche.
+
+00:14:40.540 --> 00:14:42.640
+A mesure que votre équipe financière gagne en aisance,
+
+00:14:42.720 --> 00:14:46.780
+elle peut modifier directement les définitions de lignes, de colonnes, de rapports et les arborescences.
+
+00:14:47.620 --> 00:14:51.500
+Cela leur donne un meilleur contrôle sur les calculs, la mise en page, le regroupement et l'affichage des dimensions.
+
+00:14:52.020 --> 00:14:54.700
+L'objectif n'est pas d'essayer de créer le rapport le plus complexe possible.
+
+00:14:55.720 --> 00:14:58.260
+Il s'agit de créer un rapport où chaque ligne répond à une question réelle,
+
+00:14:58.360 --> 00:15:01.820
+où chaque colonne rend la comparaison claire et où les chiffres correspondent au grand livre.
+
+00:15:03.500 --> 00:15:04.880
+Exécution, lecture et maintenance des rapports.
+
+00:15:04.880 --> 00:15:09.880
+Un rapport n'est utile que lorsque les utilisateurs peuvent le lire, l'interroger et avoir confiance en ce qu'il voit.
+
+00:15:11.020 --> 00:15:14.740
+Une fois qu'un rapport financier est généré, vous n'êtes pas bloqué sur une page statique.
+
+00:15:15.720 --> 00:15:21.500
+Vous pouvez changer la date, choisir une devise, basculer entre synthèse et détail et appliquer des filtres sur les dimensions ou attributs financiers, CA.
+
+00:15:22.460 --> 00:15:26.480
+Cela signifie qu'un même rapport peut répondre à différentes questions sans avoir à être copié dans un nouveau classeur.
+
+00:15:26.880 --> 00:15:30.360
+Un responsable financier pourrait commencer par le compte de résultats complets de l'entreprise pour le moins en cours.
+
+00:15:30.360 --> 00:15:35.660
+Ils peuvent ensuite le filtrer par unité commerciale, l'afficher dans une devise différente ou modifier la date pour comparer une autre période.
+
+00:15:36.180 --> 00:15:37.520
+La conception du rapport reste inchangée.
+
+00:15:37.880 --> 00:15:39.240
+La vue s'adapte à la question posée.
+
+00:15:39.820 --> 00:15:40.620
+Deux vues sont importantes ici.
+
+00:15:41.100 --> 00:15:46.060
+La vue récapitulative donne une vue d'ensemble financière, chiffre d'affaires total, coûts totaux, résultats net.
+
+00:15:46.560 --> 00:15:49.480
+La vue détaillée offre plus de lignes à examiner lorsqu'un total ne semble pas correct.
+
+00:15:50.020 --> 00:15:51.340
+Et cela nous amène à l'exploration des données.
+
+00:15:51.580 --> 00:15:53.880
+Imaginez qu'une ligne de frais de fonctionnement semble beaucoup plus élevée que prévu.
+
+00:15:53.980 --> 00:15:57.920
+Au lieu d'envoyer un email, d'exporter une liste de grands livres et de tenter de faire correspondre les comptes manuellement,
+
+00:15:58.080 --> 00:16:00.080
+vous pouvez explorer ce montant directement depuis le rapport.
+
+00:16:00.640 --> 00:16:03.180
+Vous pouvez suivre le solde jusqu'aux transactions sous-jacentes.
+
+00:16:04.080 --> 00:16:08.280
+Cela vous permet de voir les écritures comptables, les dates, les pièces justificatives et les autres détails en générer ce chiffre.
+
+00:16:08.580 --> 00:16:12.080
+Le rapport devient un point de départ pour une discussion, pas seulement une réponse finale imprimée sur une page.
+
+00:16:12.700 --> 00:16:14.460
+C'est particulièrement utile lors de la clôture mensuelle.
+
+00:16:14.680 --> 00:16:16.880
+Si quelqu'un demande pourquoi les coûts d'entrepôt ont-ils augmenté,
+
+00:16:17.200 --> 00:16:20.320
+vous commencez par la vue entrepôt, trouvez la ligne de dépense, explorez les transactions
+
+00:16:20.320 --> 00:16:24.600
+et vérifiez si l'augmentation provient du loyer, des réparations, du personnel ou d'une charge exceptionnelle.
+
+00:16:26.040 --> 00:16:29.860
+Services financiers passent moins de temps à chercher la source et plus de temps à expliquer le résultat.
+
+00:16:30.340 --> 00:16:31.960
+Les rapports peuvent également être exécutés selon un cadre.
+
+00:16:32.400 --> 00:16:35.920
+Une équipe peut générer des rapports quotidiennement, hebdomadairement, mensuellement ou annuellement, selon les besoins.
+
+00:16:36.520 --> 00:16:38.220
+Les dossiers de gestion mensuelle en sont l'exemple évident,
+
+00:16:38.380 --> 00:16:40.960
+mais les plannings aident aussi les équipes à préparer des revues budgétaires régulières
+
+00:16:40.960 --> 00:16:43.680
+ou des rapports de groupe récurrents ou des rapports de groupe récurrents.
+
+00:16:43.680 --> 00:16:48.640
+Pour les sociétés et en plusieurs entités juridiques, le reporting financier peut prendre en charge des rapports couvrant ces entités
+
+00:16:48.640 --> 00:16:50.700
+et convertir les devises pour les besoins de reporting.
+
+00:16:51.480 --> 00:16:54.520
+Une équipe financière de groupe peut avoir besoin de chaque société dans sa devise vocale,
+
+00:16:54.600 --> 00:16:57.760
+tandis que la direction peut exiger une vue unique dans une devise de reporting.
+
+00:16:58.460 --> 00:17:00.380
+La structure demande une configuration minutieuse,
+
+00:17:00.460 --> 00:17:03.720
+mais le lecteur n'a pas besoin de reconstruire le rapport à partir de fichiers séparés chaque mois.
+
+00:17:04.220 --> 00:17:06.320
+Voici un détail de maintenance important à retenir.
+
+00:17:06.320 --> 00:17:10.600
+Les rapports nouvellement générés reçoivent par défaut une date d'expiration de 90 jours.
+
+00:17:11.220 --> 00:17:14.580
+Les utilisateurs disposant des autorisations de sécurité appropriées peuvent modifier cette période,
+
+00:17:14.680 --> 00:17:16.380
+y compris en configurant un rapport pour qu'il n'expire jamais.
+
+00:17:16.540 --> 00:17:19.140
+La personne qui génère un rapport peut supprimer son propre rapport.
+
+00:17:19.820 --> 00:17:22.240
+Les utilisateurs ayant les droits de sécurité de reporting financier
+
+00:17:22.240 --> 00:17:25.500
+peuvent supprimer les rapports créés par d'autres et gérer les paramètres d'expiration des rapports.
+
+00:17:26.020 --> 00:17:30.140
+Cela évite que la liste des rapports ne devienne une longue archive d'anciennes exécutions que personne ne peut identifier,
+
+00:17:30.820 --> 00:17:32.420
+mais soyez également prudent avec les rapports plus anciens.
+
+00:17:32.840 --> 00:17:35.900
+A partir de la version 10.0.45 du reporting financier,
+
+00:17:36.320 --> 00:17:38.780
+Lorsque vous relancez un rapport enregistré ou explorez ces détails,
+
+00:17:38.900 --> 00:17:41.780
+Dynamics 365 Finance utilise les données de transaction actuelles.
+
+00:17:42.480 --> 00:17:45.560
+Si quelqu'un a modifié une transaction sous-jacente après la première exécution du rapport,
+
+00:17:45.900 --> 00:17:48.300
+le détail de l'analyse peut différer de ce que vous avez vu initialement.
+
+00:17:49.020 --> 00:17:52.860
+Les soldes de haut niveau enregistrés ont tendance à rester stables contrairement aux détails justificatifs.
+
+00:17:53.460 --> 00:17:56.780
+Ainsi, si le service financier a besoin d'une copie d'audit inaltérable pour une période clôturée,
+
+00:17:57.020 --> 00:18:01.100
+exportez le rapport finalisé vers Excel ou PDF et conservez ce fichier selon vos procédures habituelles.
+
+00:18:01.520 --> 00:18:03.800
+Un dernier avertissement concernant le complément lui-même.
+
+00:18:03.800 --> 00:18:06.880
+Si quelqu'un désinstalle le complément de reporting financier,
+
+00:18:07.260 --> 00:18:10.180
+Dynamics 365 Finance supprime définitivement les rapports,
+
+00:18:10.300 --> 00:18:12.540
+les conceptions de rapports et les configurations créées précédemment.
+
+00:18:13.040 --> 00:18:15.400
+Microsoft ne prend pas en charge la récupération de données suite à cette action.
+
+00:18:15.720 --> 00:18:18.120
+Considérez cela comme la suppression d'un espace de travail finance partagé,
+
+00:18:18.300 --> 00:18:20.020
+et non comme la désinstallation d'une application de votre téléphone.
+
+00:18:20.480 --> 00:18:23.760
+Les états financiers officiels aident le service finance à expliquer les chiffres dans un format contrôlé.
+
+00:18:24.260 --> 00:18:26.600
+Pour une lecture visuelle plus rapide et des questions sur les tendances,
+
+00:18:26.720 --> 00:18:27.560
+un autre outil s'y ajoute.
+
+00:18:27.560 --> 00:18:29.980
+La place de Power BI et d'Excel
+
+00:18:29.980 --> 00:18:32.980
+Alors quelle est la place réelle de Power BI et d'Excel ?
+
+00:18:32.980 --> 00:18:35.980
+Le reporting financier gère vos états officiels, ce dont les auditeurs ont besoin.
+
+00:18:36.500 --> 00:18:39.180
+Power BI s'occupe des graphiques, des tendances et des vues de gestion interactive.
+
+00:18:40.180 --> 00:18:42.120
+Revenu par région, budget par rapport au réel.
+
+00:18:42.580 --> 00:18:43.760
+Excel a toujours sa place lui aussi.
+
+00:18:44.500 --> 00:18:45.820
+Votre équipe l'utilise pour les vérifications,
+
+00:18:46.180 --> 00:18:48.900
+les calculs et le partage de chiffres dans un format que tout le monde connaît déjà.
+
+00:18:48.900 --> 00:18:52.780
+L'espace de travail d'analyse financière inclut du contenu Power BI pour les vues courantes,
+
+00:18:52.900 --> 00:18:55.180
+mais gardez chaque tableau de bord concentré sur une seule question.
+
+00:18:55.840 --> 00:18:57.120
+N'entassez pas tout sur le même écran.
+
+00:18:57.760 --> 00:19:00.360
+Le meilleur aspect, tous ces outils lisent les mêmes enregistrements financiers.
+
+00:19:00.880 --> 00:19:01.800
+Tout fonctionne de concert.
+
+00:19:03.100 --> 00:19:03.460
+Conclusion
+
+00:19:03.460 --> 00:19:05.240
+Construisez d'abord le grand livre.
+
+00:19:06.820 --> 00:19:08.480
+Un rapport clair ne commence pas par la mise en page.
+
+00:19:08.880 --> 00:19:09.580
+Il commence bien plus tôt.
+
+00:19:10.060 --> 00:19:11.980
+Des comptes principaux propres, des dimensions réutilisables.
+
+00:19:12.560 --> 00:19:14.180
+Sans ces fondations, le reste n'a aucune importance.
+
+00:19:14.740 --> 00:19:15.900
+Commencez avec un rapport par défaut,
+
+00:19:15.900 --> 00:19:19.480
+testez-le avec vos soldes réels puis modifiez uniquement ce dont votre entreprise a besoin.
+
+00:19:20.520 --> 00:19:24.180
+Abonnez-vous pour plus de pépites de connaissances Microsoft de Mircopyter sur M365FM
+
+00:19:24.180 --> 00:19:27.660
+et partagez ceci avec quelqu'un qui pense encore que le reporting financier de Dynamics 365
+
+00:19:27.660 --> 00:19:28.720
+commence et fini avec Excel.

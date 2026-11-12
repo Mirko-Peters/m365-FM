@@ -1,0 +1,1246 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:03.180
+Que se passe-t-il quand le nom d'un produit dans les ventes ne correspond pas à celui en entrepôt
+
+00:00:03.180 --> 00:00:05.940
+et que la boutique en ligne affiche toujours une photo de l'invernier ?
+
+00:00:05.940 --> 00:00:08.120
+Eh, quelqu'un commande le mauvais article ?
+
+00:00:08.120 --> 00:00:11.520
+Un acheteur demande des détails introuvables et le personnel fouille des feuilles de calcul,
+
+00:00:11.740 --> 00:00:14.920
+de vieux emails, des PDF fournisseurs et 5 systèmes différents,
+
+00:00:15.140 --> 00:00:17.680
+juste pour répondre à une question simple A.
+
+00:00:18.660 --> 00:00:23.740
+Bienvenue dans une nouvelle pépite de connaissances de M365, FM IOTM, DMO Peters,
+
+00:00:24.140 --> 00:00:29.180
+et aujourd'hui nous abordons la gestion des informations produits de Dynamics 365 ou PIM en abrégé.
+
+00:00:30.000 --> 00:00:33.140
+A la fin vous comprendrez comment ils conservent un enregistrement produit partagé,
+
+00:00:33.720 --> 00:00:35.200
+comment les produits peuvent prendre différentes formes
+
+00:00:35.200 --> 00:00:37.800
+et comment cette information atteint les parties de l'entreprise qui en ont besoin.
+
+00:00:39.440 --> 00:00:41.080
+Un seul enregistrement produit pour toute l'entreprise
+
+00:00:41.080 --> 00:00:46.640
+Un produit peut sembler simple vu de l'extérieur, juste un nom, un prix et peut-être une photo.
+
+00:00:47.280 --> 00:00:50.080
+En coulisses, ce même produit touche presque chaque département d'une entreprise.
+
+00:00:50.640 --> 00:00:51.760
+Voici comment cela se passe.
+
+00:00:52.500 --> 00:00:54.340
+Les achats ont besoin des détails fournisseurs et des unités,
+
+00:00:54.660 --> 00:00:57.980
+tandis que les équipes d'entrepôt ont besoin d'informations pour recevoir, stocker et préparer les articles.
+
+00:00:57.980 --> 00:01:01.700
+Les ventes ont besoin d'un nom clair, la finance a besoin d'une configuration correcte
+
+00:01:01.700 --> 00:01:03.900
+et la boutique en ligne a besoin de photos et de descriptions précises.
+
+00:01:04.280 --> 00:01:06.280
+Chaque équipe regarde le même produit sous un angle différent.
+
+00:01:06.740 --> 00:01:10.060
+Sans un lieu unique pour cette information, les gens créent souvent leur propre copie.
+
+00:01:10.500 --> 00:01:11.760
+L'équipe produit tient une feuille de calcul.
+
+00:01:12.360 --> 00:01:14.100
+Les ventes saisissent un nom plus court dans leur système.
+
+00:01:14.620 --> 00:01:17.160
+L'entrepôt utilise un numéro d'article avec une description différente
+
+00:01:17.160 --> 00:01:19.540
+et le marketing enregistre les images dans un dossier partagé,
+
+00:01:19.740 --> 00:01:21.440
+tandis que le service client fouille de vieux emails.
+
+00:01:22.100 --> 00:01:25.440
+Cette approche crée d'abord de petites différences, puis ces différences se propagent.
+
+00:01:25.440 --> 00:01:28.040
+Imaginez une entreprise vendant une bouteille isotherme.
+
+00:01:29.260 --> 00:01:31.920
+Le fournisseur change la capacité de 500 ml à 750 ml,
+
+00:01:32.080 --> 00:01:33.320
+où l'équipe d'achat reçoit de nouveaux détails,
+
+00:01:33.420 --> 00:01:35.380
+mais la boutique en ligne liste toujours anciennes capacités.
+
+00:01:37.240 --> 00:01:38.800
+Les ventes envoient au client la mauvaise fiche technique
+
+00:01:38.800 --> 00:01:42.040
+et le personnel d'entrepôt voit une étiquette produit qui ne correspond pas à la commande.
+
+00:01:42.840 --> 00:01:44.160
+Personne n'avait l'intention de créer un problème.
+
+00:01:44.620 --> 00:01:46.440
+Chaque équipe travaillait simplement à partir d'une copie différente.
+
+00:01:46.440 --> 00:01:51.840
+La gestion des informations produits de Dynamics 365 offre à l'entreprise une définition produit centrale.
+
+00:01:52.600 --> 00:01:54.820
+Voyez cela comme un classeur partagé pour les informations produits.
+
+00:01:55.360 --> 00:01:57.180
+Au lieu que chaque département garde son propre dossier,
+
+00:01:57.460 --> 00:01:59.800
+l'enregistrement produit devient le lieu où résident les détails convenus.
+
+00:02:00.840 --> 00:02:03.000
+Les gens utilisent cette définition dans le travail métier
+
+00:02:03.000 --> 00:02:05.340
+plutôt que de retaper la même information encore et encore.
+
+00:02:06.140 --> 00:02:08.260
+Le numéro de produit est au centre de cet enregistrement.
+
+00:02:08.900 --> 00:02:11.080
+Il aide l'entreprise à identifier le produit de manière cohérente,
+
+00:02:11.680 --> 00:02:13.900
+même si différentes équipes utilisent des mots différents pour en parler.
+
+00:02:13.900 --> 00:02:17.020
+A côté de ce numéro, vous stockez le nom et la description
+
+00:02:17.020 --> 00:02:19.960
+et vous identifiez s'il s'agit d'un article physique que vous pouvez stocker
+
+00:02:19.960 --> 00:02:21.660
+ou d'un service fourni par l'entreprise.
+
+00:02:22.380 --> 00:02:25.160
+L'enregistrement inclut également les unités que les utilisateurs emploient
+
+00:02:25.160 --> 00:02:26.700
+pour acheter, vendre, stocker ou compter le produit.
+
+00:02:27.120 --> 00:02:29.100
+Une boîte, une pièce, un kilogramme, un litre ou une palette
+
+00:02:29.100 --> 00:02:30.920
+peuvent signifier des choses très différentes au quotidien.
+
+00:02:31.420 --> 00:02:32.420
+Lorsque ces unités sont claires,
+
+00:02:32.520 --> 00:02:34.820
+les services d'achat et d'entrepôt disposent d'une bien meilleure base de travail.
+
+00:02:35.520 --> 00:02:37.500
+Les informations produits peuvent aussi inclure des images,
+
+00:02:37.500 --> 00:02:39.640
+des pièces jointes, des catégories, des attributs
+
+00:02:39.640 --> 00:02:41.220
+et des traductions de noms et de descriptions.
+
+00:02:41.220 --> 00:02:43.780
+Ainsi, l'enregistrement peut contenir bien plus qu'une simple étiquette.
+
+00:02:44.360 --> 00:02:46.620
+Il peut stocker le document fournisseur décrivant un produit,
+
+00:02:47.020 --> 00:02:48.740
+une photo facilitant sa reconnaissance,
+
+00:02:49.220 --> 00:02:51.220
+des descriptions traduites pour les équipes ou clients étrangers
+
+00:02:51.220 --> 00:02:53.280
+ainsi que des détails sur la matière, la marque
+
+00:02:53.280 --> 00:02:54.720
+ou les instructions de manipulation.
+
+00:02:56.040 --> 00:02:57.940
+La définition partagée prime sur l'utilisation locale.
+
+00:02:58.220 --> 00:02:59.820
+Une entreprise définit un produit une seule fois,
+
+00:02:59.980 --> 00:03:02.200
+puis permet aux différents services de l'utiliser selon leurs besoins.
+
+00:03:02.840 --> 00:03:04.680
+L'enregistrement partagé centralise les données communes,
+
+00:03:04.680 --> 00:03:07.180
+tandis que chaque domaine applique ses propres paramètres métiers plus tard.
+
+00:03:07.660 --> 00:03:09.260
+Il n'est pas nécessaire de recréer le produit de zéro
+
+00:03:09.260 --> 00:03:10.860
+à chaque fois qu'une équipe en a besoin.
+
+00:03:12.120 --> 00:03:13.960
+C'est une façon de travailler beaucoup plus propre,
+
+00:03:14.560 --> 00:03:18.060
+mais un nom et une description ne racontent toujours pas toute l'histoire du produit.
+
+00:03:19.040 --> 00:03:21.180
+Un seul jean peut se transformer en plusieurs articles
+
+00:03:21.180 --> 00:03:22.660
+dès que la couleur et la taille entrent en jeu.
+
+00:03:23.960 --> 00:03:26.160
+Produits maîtres et variantes, l'arbre généalogique.
+
+00:03:27.660 --> 00:03:30.200
+Alors quand un produit devient-il plusieurs produits ?
+
+00:03:30.200 --> 00:03:30.820
+Pensez à un jean.
+
+00:03:31.840 --> 00:03:33.540
+Vous voyez probablement le jean comme un seul produit.
+
+00:03:33.600 --> 00:03:35.720
+Mais l'entrepôt ne peut pas prendre n'importe lequel
+
+00:03:35.720 --> 00:03:37.360
+si une commande demande du noir en taille L.
+
+00:03:37.360 --> 00:03:40.420
+Et le service commercial ne peut pas promettre un jean bleu en taille XS
+
+00:03:40.420 --> 00:03:41.740
+si cette combinaison n'existe pas.
+
+00:03:42.580 --> 00:03:44.920
+C'est là que Dynamics 365 intervient avec une idée simple.
+
+00:03:45.520 --> 00:03:47.300
+Il distingue un produit de base d'un produit maître.
+
+00:03:47.860 --> 00:03:49.460
+Un produit simple est un article fixe unique.
+
+00:03:50.260 --> 00:03:52.740
+Imaginez une boîte de papier pour imprimante vendue dans une seule taille,
+
+00:03:52.900 --> 00:03:54.840
+une seule couleur et un seul couleur et un seul format.
+
+00:03:55.220 --> 00:03:58.340
+Il possède son propre enregistrement produit car il n'y a pas de choix modifiant la nature de l'article.
+
+00:03:59.100 --> 00:04:00.300
+Un produit maître fonctionne différemment.
+
+00:04:00.760 --> 00:04:02.900
+Il s'agit de l'enregistrement par an pour toute une famille de produits.
+
+00:04:02.900 --> 00:04:07.140
+Il contient les détails partagés et les règles régissant les choix qui créent des articles distincts.
+
+00:04:07.200 --> 00:04:07.980
+Voici comment cela fonctionne.
+
+00:04:08.300 --> 00:04:09.940
+Le produit maître qu'un jean comporte le nom,
+
+00:04:10.260 --> 00:04:13.160
+la description de base et les informations communes pour chaque paire de cette gamme.
+
+00:04:13.800 --> 00:04:16.080
+Ensuite des variantes individuelles identifient le jean exact
+
+00:04:16.080 --> 00:04:18.460
+que quelqu'un achète, stocke, produit ou expédie.
+
+00:04:18.880 --> 00:04:20.600
+Une variante est l'article spécifique commercialisant.
+
+00:04:20.920 --> 00:04:22.780
+Pour un jean bleu et taille M peut constituer une variante.
+
+00:04:23.300 --> 00:04:24.440
+Noir et taille L peut en être une autre.
+
+00:04:24.740 --> 00:04:27.400
+Ils appartiennent à la même famille de produits, mais ne sont pas interchangeables.
+
+00:04:28.060 --> 00:04:30.700
+L'un peut être en rayon dans l'entrepôt tandis que l'autre est en rupture de stock.
+
+00:04:30.700 --> 00:04:33.520
+L'un peut porter une étiquette différente. L'un peut avoir son propre bas.
+
+00:04:33.840 --> 00:04:35.460
+Cette structure parent-enfant est l'idée clé.
+
+00:04:35.780 --> 00:04:37.040
+Le produit principal définit la famille.
+
+00:04:37.480 --> 00:04:39.180
+Les variantes de produits en sont les membres individuels.
+
+00:04:39.460 --> 00:04:41.560
+Au lieu de saisir les mêmes informations de base à répétition,
+
+00:04:42.000 --> 00:04:45.260
+vous partez du produit principal pour créer les combinaisons réelles dont votre entreprise a besoin.
+
+00:04:45.960 --> 00:04:47.340
+Laissez-moi vous donner un exemple concret.
+
+00:04:47.740 --> 00:04:49.780
+Imaginez une gamme de jeans disponibles en bleu, noir et marron.
+
+00:04:50.220 --> 00:04:54.060
+Elle existe aussi en taille très petit, petit, moyen, grand, très grand et très très grand.
+
+00:04:54.900 --> 00:04:57.720
+Si chaque couleur était disponible dans chaque taille, vous auriez 18 combinaisons.
+
+00:04:58.100 --> 00:05:00.260
+Mais les entreprises vendent rarement toutes les combinaisons possibles.
+
+00:05:00.260 --> 00:05:02.360
+Le bleu n'est peut-être disponible que du très petit au moyen.
+
+00:05:02.760 --> 00:05:04.080
+Le noir du moyen au très grand.
+
+00:05:04.660 --> 00:05:05.460
+Le marron commence à grand.
+
+00:05:05.880 --> 00:05:09.320
+Dynamics 365 peut traiter chaque combinaison autorisée comme sa propre variante.
+
+00:05:09.740 --> 00:05:11.280
+Lorsqu'une personne ajoute un jean à une commande,
+
+00:05:11.360 --> 00:05:13.400
+elle choisit les dimensions qui identifient le produit exact.
+
+00:05:13.800 --> 00:05:16.300
+La couleur et la taille indiquent au système quelle variante le client souhaite.
+
+00:05:16.760 --> 00:05:18.380
+Finiez les devinettes pour savoir quelle permet dans la boîte.
+
+00:05:19.120 --> 00:05:20.600
+Ces choix sont appelés dimensions de produit.
+
+00:05:21.540 --> 00:05:22.280
+Dynamics 365.
+
+00:05:23.300 --> 00:05:24.960
+La gestion de la chaîne logistique en inclut 5.
+
+00:05:25.400 --> 00:05:28.120
+Couleur, taille, style, configuration et version.
+
+00:05:28.120 --> 00:05:31.300
+Une entreprise choisit les dimensions adaptées à une famille de produits,
+
+00:05:31.500 --> 00:05:33.080
+puis les regroupe pour ce produit principal.
+
+00:05:33.620 --> 00:05:34.500
+Passons-les rapidement aux rues.
+
+00:05:34.960 --> 00:05:35.600
+La couleur est simple.
+
+00:05:36.080 --> 00:05:37.120
+Bleu noir, marron, rouge.
+
+00:05:37.700 --> 00:05:38.780
+La taille est également familière.
+
+00:05:39.340 --> 00:05:42.100
+Petit, moyen, grand ou un numéro de pointure.
+
+00:05:42.620 --> 00:05:44.520
+Le style permet de distinguer des produits partageant un même nom,
+
+00:05:44.600 --> 00:05:45.420
+mais ayant une apparence différente.
+
+00:05:45.740 --> 00:05:47.600
+Une chemise peut être disponible en coupe classique ou ajustée.
+
+00:05:47.940 --> 00:05:50.000
+Une chaise peut avoir un cadre standard ou une finition différente.
+
+00:05:50.480 --> 00:05:52.840
+La configuration décrit une construction ou une installation choisie.
+
+00:05:52.840 --> 00:05:54.900
+Par exemple, une machine peut nécessiter un moteur,
+
+00:05:54.960 --> 00:05:56.540
+une tension ou un ensemble de pièces spécifiques.
+
+00:05:57.020 --> 00:05:59.100
+La dimension de configuration identifie ce choix.
+
+00:05:59.820 --> 00:06:01.660
+La version suit les changements apportés à un produit au fil du temps.
+
+00:06:02.100 --> 00:06:03.660
+C'est celle qui compte le plus pour les fabricants.
+
+00:06:04.240 --> 00:06:05.860
+Imaginez une pièce qui conserve le même usage,
+
+00:06:06.000 --> 00:06:07.740
+mais qui change après une mise à jour technique approuvée.
+
+00:06:08.380 --> 00:06:10.980
+La version permet à l'entreprise de distinguer la version 1 de la version 2
+
+00:06:10.980 --> 00:06:12.500
+lors de leur passage dans la chaîne logistique.
+
+00:06:12.960 --> 00:06:15.140
+Tous les produits principaux n'ont pas besoin des 5 dimensions.
+
+00:06:15.620 --> 00:06:17.380
+Un t-shirt peut seulement nécessiter la couleur et la taille.
+
+00:06:17.880 --> 00:06:20.200
+Un équipement peut nécessiter la configuration et la version.
+
+00:06:20.200 --> 00:06:23.160
+Le groupe de dimensions agit comme une feuille de règle pour la famille de produits.
+
+00:06:23.740 --> 00:06:25.720
+Il indique à Dynamics 365 quels choix appliqués
+
+00:06:25.720 --> 00:06:27.960
+lors de la création et de l'identification des variantes.
+
+00:06:28.660 --> 00:06:30.380
+Cette décision façonne le produit dès le départ.
+
+00:06:30.820 --> 00:06:32.120
+Vous vous posez peut-être des questions sur le poids,
+
+00:06:32.300 --> 00:06:34.060
+la hauteur, la longueur, la largeur ou le volume.
+
+00:06:34.980 --> 00:06:36.340
+Ces détails décrivent un produit physique,
+
+00:06:36.600 --> 00:06:38.020
+mais ils ne créent pas de variantes.
+
+00:06:38.620 --> 00:06:40.840
+Un jean peut avoir un poids ou une taille de colis répertoriés
+
+00:06:40.840 --> 00:06:42.380
+qui n'en font pas un article différent,
+
+00:06:42.540 --> 00:06:43.760
+contrairement à la couleur ou à la taille.
+
+00:06:44.780 --> 00:06:46.180
+Les dimensions physiques décrivent le produit.
+
+00:06:46.780 --> 00:06:48.760
+Les dimensions produits identifient une variante spécifique.
+
+00:06:48.760 --> 00:06:51.620
+Garder ces deux notions séparées évite toute confusion par la suite.
+
+00:06:52.140 --> 00:06:54.380
+Si l'entrepôt a besoin de connaître l'espace occupé par un carton,
+
+00:06:54.980 --> 00:06:56.100
+les dimensions physiques sont utiles.
+
+00:06:56.640 --> 00:06:58.680
+Si une commande nécessite un jean noir en grande taille,
+
+00:06:58.800 --> 00:07:00.440
+trouver la bonne variante variant.
+
+00:07:00.840 --> 00:07:02.540
+Il y a un choix initial qui affecte tout ce qui suit.
+
+00:07:03.280 --> 00:07:06.440
+Comment l'entreprise va-t-elle créer et contrôler ces variantes de produits ?
+
+00:07:06.440 --> 00:07:07.780
+Et c'est exactement ce que nous allons aborder maintenant.
+
+00:07:08.920 --> 00:07:10.440
+Configurer les produits sans créer de chaos.
+
+00:07:10.440 --> 00:07:14.400
+Choisir les dimensions indiquent à Dynamics 365 et comment identifier une variante.
+
+00:07:14.900 --> 00:07:17.480
+Mais l'entreprise doit encore décider comment créer ces variantes.
+
+00:07:18.120 --> 00:07:19.120
+Ce choix dépend du produit.
+
+00:07:19.740 --> 00:07:22.340
+La gestion de la chaîne logistique prend en charge trois approches principales.
+
+00:07:22.880 --> 00:07:25.780
+Variante prédéfinie, configuration basée sur les dimensions,
+
+00:07:26.160 --> 00:07:28.500
+et configuration basée sur les contraintes.
+
+00:07:28.820 --> 00:07:31.080
+C'est non semble technique, alors laissez-moi les expliquer simplement.
+
+00:07:31.520 --> 00:07:35.140
+Les variantes prédéfinies conviennent au produit ayant un ensemble limité de combinaisons connues.
+
+00:07:35.600 --> 00:07:38.060
+Imaginez ce détaillant vendant la gamme de jeans dont nous venons de parler.
+
+00:07:38.440 --> 00:07:41.320
+L'entreprise sait déjà quelle couleur et taille elle va acheter, stocker et vendre.
+
+00:07:41.820 --> 00:07:43.580
+Le bleu est disponible en très petit et petit et moyen.
+
+00:07:43.900 --> 00:07:45.800
+Le noir est disponible en moyen, grand et très grand.
+
+00:07:46.100 --> 00:07:48.760
+Le marron est disponible en grand, très grand et très très grand.
+
+00:07:49.340 --> 00:07:51.960
+Ces neuf choix peuvent être créés à l'avance en tant que variantes distinctes.
+
+00:07:52.380 --> 00:07:55.220
+L'entreprise n'a pas besoin de chaque combinaison possible de couleur et de taille.
+
+00:07:55.640 --> 00:07:57.140
+Elle ne crée que les combinaisons qui existent.
+
+00:07:57.800 --> 00:07:58.900
+Cela garde le catalogue propre
+
+00:07:58.900 --> 00:08:02.840
+et empêche quelqu'un de commander un jean marron très petit alors que personne ne le fabrique.
+
+00:08:02.840 --> 00:08:05.820
+Les variantes prédéfinies fonctionnent bien lorsque la gamme reste prévisible.
+
+00:08:06.220 --> 00:08:07.080
+Une entreprise de vêtements.
+
+00:08:07.260 --> 00:08:08.880
+Un distributeur avec des tailles de colis fixes.
+
+00:08:09.340 --> 00:08:10.900
+Une entreprise vendant des couleurs de meubles standards.
+
+00:08:11.440 --> 00:08:13.240
+Elles peuvent toutes préparer les articles qu'elles prévoient de traiter.
+
+00:08:13.900 --> 00:08:16.620
+Chaque variante existe en tant qu'article connu avant qu'une commande n'arrive.
+
+00:08:17.000 --> 00:08:20.620
+Afin que les achats, les équipes d'entrepôt et le personnel de vente puissent travailler avec des choix de produits clairs.
+
+00:08:20.980 --> 00:08:23.140
+L'approche suivante est la configuration basée sur les dimensions.
+
+00:08:23.560 --> 00:08:24.780
+Celle-ci apparaît souvent dans la fabrication.
+
+00:08:25.180 --> 00:08:26.980
+Imaginez une entreprise qui fabrique des pompes industrielles.
+
+00:08:27.440 --> 00:08:29.360
+Une gamme de pompes peut utiliser beaucoup de pièces identiques.
+
+00:08:29.360 --> 00:08:31.540
+Mais le client peut choisir une certaine configuration.
+
+00:08:32.320 --> 00:08:34.900
+Ce choix affecte les composants inclus dans la pompe finie.
+
+00:08:36.180 --> 00:08:39.320
+Dynamics 365 peut utiliser la dimension de configuration pour contrôler cela.
+
+00:08:39.720 --> 00:08:41.780
+Le produit utilise une nomenclature partagée.
+
+00:08:42.500 --> 00:08:43.780
+Souvent appelée CAM comme anglais.
+
+00:08:44.200 --> 00:08:47.100
+Une nomenclature est simplement la liste des pièces nécessaires à la fabrication d'un objet.
+
+00:08:47.520 --> 00:08:51.660
+Dans cette liste unique, certaines pièces ne s'appliquent que lorsque le client choisit une configuration particulière.
+
+00:08:52.440 --> 00:08:55.740
+Par exemple, une pompe conçue pour une tension pourrait nécessiter un moteur spécifique.
+
+00:08:56.040 --> 00:08:57.620
+Une tension différente nécessite un autre moteur.
+
+00:08:57.620 --> 00:09:02.100
+Au lieu de maintenir une liste de pièces séparées pour chaque pompe possible, l'entreprise conserve une liste partagée.
+
+00:09:02.820 --> 00:09:04.700
+Elle indique quelles lignes appartiennent à quelles configurations.
+
+00:09:05.460 --> 00:09:07.960
+Lorsque la configuration choisie atteint la planification ou la production,
+
+00:09:08.260 --> 00:09:11.500
+Dynamics 365 utilise uniquement les lignes de composants correspondant à ce choix.
+
+00:09:11.760 --> 00:09:13.220
+Cela permet d'économiser beaucoup de configurations.
+
+00:09:13.580 --> 00:09:17.800
+Cela donne également aux fabricants un moyen plus clair de gérer une famille de produits qui partagent l'essentiel de sa structure,
+
+00:09:17.940 --> 00:09:19.140
+mais diffèrent de manière contrôlée.
+
+00:09:19.320 --> 00:09:20.020
+Mais diffèrent contrôlée.
+
+00:09:20.140 --> 00:09:22.000
+Les dimensions permettent d'identifier le produit choisi.
+
+00:09:22.500 --> 00:09:25.140
+La nomenclature guide les composants qui doivent faire partie de cet assemblage.
+
+00:09:25.140 --> 00:09:27.540
+Il existe ensuite la configuration basée sur des contrats.
+
+00:09:27.920 --> 00:09:30.960
+Cette approche convient aux produits pour lesquels les clients peuvent choisir parmi de nombreuses options.
+
+00:09:31.360 --> 00:09:33.120
+Mais toutes les options ne sont pas compatibles entre elles.
+
+00:09:33.660 --> 00:09:37.420
+Pensez à une machine personnalisée, à un équipement de laboratoire ou à un produit assemblé à partir de nombreuses pièces.
+
+00:09:38.040 --> 00:09:42.160
+Un client peut choisir le type d'alimentation, le boîtier, le moteur, l'option de sécurité et le panneau de contrôle.
+
+00:09:42.760 --> 00:09:44.740
+Certaines combinaisons fonctionnent, d'autres non.
+
+00:09:45.460 --> 00:09:47.500
+Un certain boîtier peut ne pas convenir à un moteur plus puissant.
+
+00:09:47.500 --> 00:09:50.260
+Une tension spécifique peut nécessiter un panneau de contrôle particulier.
+
+00:09:50.500 --> 00:09:52.640
+Un capot de sécurité peut ne fonctionner qu'avec une seule taille de machine.
+
+00:09:53.160 --> 00:09:56.540
+Sans règles, un vendeur pourrait sélectionner une combinaison que l'usine ne peut pas construire.
+
+00:09:57.040 --> 00:10:00.500
+La configuration basée sur des contraintes intègre ces règles dans un modèle de configuration de produit.
+
+00:10:00.920 --> 00:10:03.480
+Le modèle décrit les choix possibles et les règles qui les limitent.
+
+00:10:04.000 --> 00:10:07.180
+Lorsqu'une personne configure le produit, le système l'oriente vers des options valides.
+
+00:10:07.700 --> 00:10:09.660
+Il empêche les choix qui sont en conflit les uns avec les autres.
+
+00:10:10.220 --> 00:10:12.600
+Cela bloque une commande impossible avant qu'elle n'atteigne la production.
+
+00:10:13.000 --> 00:10:15.500
+Je souhaite ralentir ici car il s'agit d'une décision de conception initiale.
+
+00:10:15.500 --> 00:10:21.280
+Une entreprise doit choisir la technologie de configuration adaptée à son processus métier avant de développer la famille de produits.
+
+00:10:22.140 --> 00:10:26.040
+Dynamics 365 ne permet pas de convertir ultérieurement un produit d'un modèle de configuration à un autre.
+
+00:10:26.640 --> 00:10:32.140
+Un détaillant vendant une gamme fixe ne devrait pas mettre en place un modèle de produit personnalisé complexe simplement parce que cela semble flexible.
+
+00:10:32.860 --> 00:10:36.520
+Et un fabricant construisant des équipements sur commande ne devrait pas forcer chaque construction possible
+
+00:10:36.520 --> 00:10:39.560
+dans une longue liste de variantes prédéfinies si les choix dépendent de règles.
+
+00:10:40.300 --> 00:10:44.080
+Partez du processus réel d'achat, de vente et de production. Posez-vous une question simple.
+
+00:10:44.080 --> 00:10:47.520
+Connaissons-nous toutes les combinaisons de produits avant que la commande n'arrive ?
+
+00:10:47.520 --> 00:10:50.920
+Ou le client crée-t-il le choix du produit à travers un ensemble d'options autorisées ?
+
+00:10:50.920 --> 00:10:52.940
+La réponse oriente l'entreprise vers la bonne approche.
+
+00:10:53.620 --> 00:10:55.380
+Une fois que l'entreprise sait ce qu'un produit peut être,
+
+00:10:55.760 --> 00:10:58.720
+elle a besoin d'un moyen de le décrire clairement et de garder ses informations organisées.
+
+00:10:59.660 --> 00:11:02.320
+Catégories, attributs et contrôles des informations produits.
+
+00:11:03.640 --> 00:11:05.420
+Le nom d'un produit vous indique comment il s'appelle,
+
+00:11:05.420 --> 00:11:08.980
+mais cela ne vous aidera pas à l'acheter, à le stocker, à le vendre ou à l'expliquer à un client.
+
+00:11:09.980 --> 00:11:11.260
+C'est là que les catégories interviennent.
+
+00:11:11.940 --> 00:11:14.700
+Considérer les catégories comme les rayons d'un magasin bien organisé.
+
+00:11:15.160 --> 00:11:17.060
+Une entreprise peut regrouper ses produits selon leur nature.
+
+00:11:17.540 --> 00:11:19.140
+Les vêtements dans une allée, les outils dans une autre,
+
+00:11:19.200 --> 00:11:20.700
+les fournitures de bureaux dans une troisième,
+
+00:11:21.080 --> 00:11:23.860
+où ils pourraient les regrouper selon le type de travail à effectuer.
+
+00:11:24.740 --> 00:11:25.960
+Dans tous les cas, l'objectif est le même.
+
+00:11:26.440 --> 00:11:28.040
+Rendre les produits plus faciles à trouver et à gérer.
+
+00:11:28.340 --> 00:11:29.300
+Prenons une perceuse sans fil.
+
+00:11:29.300 --> 00:11:31.540
+Une équipe commerciale doit la trouver sous la rubrique outils électriques.
+
+00:11:31.860 --> 00:11:34.680
+Une équipe produit pourrait la classer dans une catégorie d'équipement sur batterie.
+
+00:11:34.680 --> 00:11:39.180
+Et c'est là le point crucial, un même produit peut appartenir à plusieurs catégories en même temps
+
+00:11:39.180 --> 00:11:41.820
+lorsque celles-ci répondent à des besoins professionnels différents.
+
+00:11:42.600 --> 00:11:45.400
+L'idée n'est pas d'essayer de faire entrer chaque produit dans un dossier unique et parfait.
+
+00:11:46.500 --> 00:11:49.620
+Les catégories offrent à l'entreprise un moyen structuré d'organiser les informations produits,
+
+00:11:49.860 --> 00:11:52.320
+de rechercher des articles et de gérer des groupes d'éléments liés.
+
+00:11:53.140 --> 00:11:55.980
+Elles aident également les utilisateurs à appliquer les bonnes informations aux produits qui vont ensemble.
+
+00:11:56.180 --> 00:11:58.840
+Les catégories font beaucoup, mais elles ne peuvent pas tout contenir.
+
+00:11:59.720 --> 00:12:00.760
+C'est là que les attributs entrent en jeu.
+
+00:12:00.760 --> 00:12:04.880
+Pour une bouteille d'eau, les attributs peuvent inclure le matériau, la capacité, le type de bouchon,
+
+00:12:05.160 --> 00:12:07.060
+l'isolation, la marque et les instructions d'entretien.
+
+00:12:07.480 --> 00:12:10.520
+Pour une pièce de machine, ils peuvent inclure les dimensions, les besoins en énergie,
+
+00:12:10.740 --> 00:12:12.240
+la plage de température ou une norme technique.
+
+00:12:13.060 --> 00:12:16.200
+Les attributs transforment une étiquette générale en une information produit utile.
+
+00:12:16.680 --> 00:12:18.840
+C'est le type d'information dont vous avez réellement besoin pour faire votre travail.
+
+00:12:19.160 --> 00:12:22.360
+Les catégories peuvent porter des attributs adaptés aux produits qu'elles contiennent.
+
+00:12:23.260 --> 00:12:26.100
+Les vêtements nécessitent des informations sur le tissu, la coupe et les instructions de lavage.
+
+00:12:26.100 --> 00:12:28.020
+L'équipement électronique a besoin de l'attention,
+
+00:12:28.140 --> 00:12:30.280
+des détails de garantie et d'information sur la compatibilité.
+
+00:12:30.760 --> 00:12:33.920
+Cela signifie que personne n'a inventé des champs aléatoires pour chaque fiche produit.
+
+00:12:34.220 --> 00:12:36.420
+Il suffit d'utiliser les détails qui correspondent au groupe de produits.
+
+00:12:36.920 --> 00:12:38.600
+Les images et les pièces jointes ajoutent une autre dimension.
+
+00:12:39.160 --> 00:12:42.940
+Une photo aide un employé d'entrepôt, un vendeur ou un client à visualiser l'article dont il parle.
+
+00:12:43.620 --> 00:12:46.800
+Une pièce jointe peut contenir des documents de support comme un document fournisseur,
+
+00:12:47.040 --> 00:12:48.340
+une fiche technique ou d'autres documents.
+
+00:12:48.940 --> 00:12:50.800
+Parfois, le nom écrit seul ne suffit pas.
+
+00:12:51.820 --> 00:12:54.320
+Les traductions sont essentielles lorsque l'entreprise travaille dans plusieurs lois.
+
+00:12:54.320 --> 00:12:56.180
+Les noms et descriptions de produits peuvent être traduits
+
+00:12:56.180 --> 00:12:58.960
+afin que les personnes sur différents marchés obtiennent des informations compréhensibles.
+
+00:12:58.960 --> 00:13:02.000
+Le produit reste le même, mais les termes qui le décrivent s'adaptent au public.
+
+00:13:02.540 --> 00:13:05.080
+Une entreprise doit également contrôler qui peut modifier ces informations.
+
+00:13:05.660 --> 00:13:08.040
+Tout employé ne devrait pas pouvoir éditer chaque fiche produit,
+
+00:13:08.220 --> 00:13:11.440
+renommer un article ou modifier des détails dont dépendent d'autres équipes.
+
+00:13:12.200 --> 00:13:15.020
+Dynamics 365 vous permet d'appliquer des règles d'accès aux données produits
+
+00:13:15.020 --> 00:13:17.240
+au niveau de la catégorie ou pour un produit individuel.
+
+00:13:17.860 --> 00:13:20.660
+Par exemple, l'équipe responsable de l'équipement industriel travaille sur cette catégorie,
+
+00:13:20.660 --> 00:13:23.060
+tandis qu'un autre groupe gère les produits de consommation.
+
+00:13:23.060 --> 00:13:27.520
+Un produit réglementé peut nécessiter un contrôle plus strict des fournitures de bureaux ordinaires.
+
+00:13:28.220 --> 00:13:31.080
+L'entreprise décide qui peut travailler sur chaque zone de ces données produits.
+
+00:13:31.760 --> 00:13:33.520
+Cela protège les informations sur lesquelles les gens s'appuient.
+
+00:13:34.000 --> 00:13:37.400
+L'enregistrement peut désormais comporter les détails, documents, catégories et contrôles appropriés.
+
+00:13:37.760 --> 00:13:40.000
+Et il nécessite encore une approbation avant que les services de l'entreprise
+
+00:13:40.000 --> 00:13:42.620
+qui l'achètent, le vendent, le stockent ou le produisent puissent réellement l'utiliser.
+
+00:13:43.720 --> 00:13:45.480
+Libération des produits vers les entités juridiques.
+
+00:13:45.820 --> 00:13:50.400
+Une définition de produit fini est-elle automatiquement prête à être utilisée par tous ?
+
+00:13:50.400 --> 00:13:51.060
+Oh pas encore !
+
+00:13:51.060 --> 00:13:54.620
+Une entreprise opère souvent via plusieurs entités juridiques
+
+00:13:54.620 --> 00:13:57.040
+qui sont des sociétés distinctes au sein d'une structure plus large.
+
+00:13:57.700 --> 00:13:59.680
+Une entité peut acheter et stocker un produit en Allemagne.
+
+00:14:00.240 --> 00:14:03.240
+Une autre vend le même produit aux Etats-Unis, une troisième le fabrique.
+
+00:14:03.760 --> 00:14:06.060
+Elles peuvent toutes commencer avec la même définition de produit partagé.
+
+00:14:06.420 --> 00:14:10.200
+Dans Dynamics 365, cette définition partagée devient un produit libéré
+
+00:14:10.200 --> 00:14:13.420
+lorsque l'entreprise l'approuve pour une utilisation par une entité juridique spécifique.
+
+00:14:13.880 --> 00:14:16.220
+Considérez la libération comme le fait de donner à cette unité commerciale
+
+00:14:16.220 --> 00:14:18.040
+la permission d'intégrer le produit dans son travail quotidien.
+
+00:14:18.040 --> 00:14:20.220
+Le produit ne change pas son identité.
+
+00:14:21.060 --> 00:14:24.880
+Son nom commun, sa description, sa catégorie, ses dimensions et autres détails partagés
+
+00:14:24.880 --> 00:14:26.300
+restent liés à la définition centrale.
+
+00:14:26.440 --> 00:14:28.920
+Mais chaque entité juridique peut ajouter les paramètres nécessaires
+
+00:14:28.920 --> 00:14:31.200
+avant de commander, vendre, stocker ou produire ce produit.
+
+00:14:31.940 --> 00:14:33.820
+Une entreprise peut acheter le produit auprès d'un fournisseur.
+
+00:14:34.180 --> 00:14:35.100
+Une autre peut seulement le vendre.
+
+00:14:35.360 --> 00:14:37.460
+Une entreprise de fabrication a besoin de paramètres de production,
+
+00:14:37.720 --> 00:14:40.320
+tandis qu'une société de distribution a besoin de paramètres d'entrepôt et de stock.
+
+00:14:40.780 --> 00:14:42.860
+Les détails de vente diffèrent d'une entité à une autre.
+
+00:14:43.240 --> 00:14:44.640
+Les règles commerciales locales diffèrent également.
+
+00:14:44.640 --> 00:14:48.540
+La libération permet à chaque entité juridique de préparer le produit pour son propre travail,
+
+00:14:48.820 --> 00:14:50.880
+sans créer de définition de produit totalement distincte.
+
+00:14:51.300 --> 00:14:54.100
+Imaginez une entreprise qui vend la même bouteille d'eau dans plusieurs pays.
+
+00:14:54.640 --> 00:14:56.740
+L'équipe produit crée une définition de produit centrale unique.
+
+00:14:57.400 --> 00:15:00.240
+Ensuite l'entreprise la libère pour l'entité juridique au Royaume-Uni.
+
+00:15:00.960 --> 00:15:03.840
+Cette entité ajoute les paramètres nécessaires pour acheter et stocker la bouteille.
+
+00:15:03.840 --> 00:15:07.660
+Plus tard, le même produit est libéré pour l'entité juridique canadienne,
+
+00:15:08.040 --> 00:15:10.880
+où les employés complètent les paramètres pour les ventes et les stocks locaux.
+
+00:15:11.260 --> 00:15:12.580
+Les deux entreprises utilisent le même produit.
+
+00:15:13.000 --> 00:15:16.740
+Elles n'ont pas besoin de recommencer avec le nom, la description et les détails de la famille de produits.
+
+00:15:17.480 --> 00:15:19.880
+Elles complètent uniquement les informations qui appartiennent à leur propre entité.
+
+00:15:20.480 --> 00:15:23.820
+Cette séparation permet de garder l'effet partagé et le travail commercial local au bon endroit.
+
+00:15:24.560 --> 00:15:27.920
+Une définition de produit partagé répond à la question « qu'est-ce que ce produit ? ».
+
+00:15:27.920 --> 00:15:29.220
+Un produit libéré répond à une autre question.
+
+00:15:29.560 --> 00:15:31.720
+Comment cette entreprise spécifique va-t-elle l'utiliser ?
+
+00:15:31.720 --> 00:15:34.980
+C'est une petite différence de formulation, mais cela évite beaucoup de travail en double
+
+00:15:34.980 --> 00:15:37.460
+lorsqu'une entreprise opère à travers plusieurs entités juridiques.
+
+00:15:38.060 --> 00:15:41.860
+Dynamics 365 peut libérer des produits vers une entité juridique ou plusieurs à la fois.
+
+00:15:42.860 --> 00:15:46.720
+Cela aide lorsqu'une entreprise introduit une gamme de produits standards sur de nombreuses unités commerciales.
+
+00:15:47.280 --> 00:15:50.920
+Pourtant, la validation ne se résume plus à une étape ultime que l'on oublie une fois effectuée.
+
+00:15:51.460 --> 00:15:53.700
+Chaque entité juridique peut avoir besoin de détails supplémentaires
+
+00:15:53.700 --> 00:15:55.520
+pour que ses équipes puissent utiliser le produit en toute sécurité.
+
+00:15:56.160 --> 00:15:59.080
+L'espace de travail à maintenance des produits lancés qui permet de suivre ce processus.
+
+00:15:59.080 --> 00:16:04.240
+Il affiche les produits récemment lancés et vérifie si la configuration requise pour cette entité juridique est complète.
+
+00:16:05.080 --> 00:16:09.000
+Si quelqu'un doit encore ajouter des attributs, des catégories, des paramètres de commande ou des traductions,
+
+00:16:09.340 --> 00:16:13.080
+cet espace centralise ses tâches et permet d'ouvrir les pages « produits concernés ».
+
+00:16:13.620 --> 00:16:16.900
+Il aide également les équipes à identifier les dossiers de modification de produits inachevés.
+
+00:16:17.620 --> 00:16:20.360
+C'est important, car un produit peut sembler prêt depuis une vue centrale,
+
+00:16:20.620 --> 00:16:22.200
+alors que les paramètres locaux sont incomplets.
+
+00:16:22.720 --> 00:16:25.400
+L'espace de travail fournit à l'entité juridique une liste pratique des produits
+
+00:16:25.400 --> 00:16:28.200
+nécessitant une attention particulière, évitant ainsi de longues recherches manuelles.
+
+00:16:29.120 --> 00:16:31.760
+Ainsi, le lancement ne copie pas un produit dans un univers isolé.
+
+00:16:32.520 --> 00:16:34.700
+Il relie une définition de produit approuvée à une entité juridique,
+
+00:16:34.780 --> 00:16:37.760
+puis laisse à cette entité la liberté d'appliquer ses propres détails opérationnels.
+
+00:16:38.420 --> 00:16:40.940
+Une fois cela fait, les informations sur le produit peuvent être intégrées
+
+00:16:40.940 --> 00:16:43.880
+au flux de travail lié aux commandes, aux stocks et aux besoins des clients.
+
+00:16:44.660 --> 00:16:46.960
+Comment le PIM connecte le travail autour d'un produit ?
+
+00:16:46.960 --> 00:16:50.640
+Alors comment la gestion des informations produits connecte-t-elle concrètement le travail autour d'un produit ?
+
+00:16:50.640 --> 00:16:52.000
+Voici la définition la plus simple.
+
+00:16:52.680 --> 00:16:54.700
+Le PIM ne gère pas chaque processus métier lui-même.
+
+00:16:55.180 --> 00:16:57.580
+Il fournit plutôt les informations produits dont ces processus ont besoin.
+
+00:16:58.180 --> 00:17:00.840
+Voyez cela comme un classeur principal pour les données de produits.
+
+00:17:01.560 --> 00:17:03.560
+Un acheteur doit trouver le bon article sur un bon de commande.
+
+00:17:04.360 --> 00:17:07.240
+L'équipe d'entrepôt a besoin du bon article lors de la réception ou du prélèvement des stocks.
+
+00:17:07.720 --> 00:17:10.640
+L'équipe commerciale a besoin des détails produits devant figurer sur un devis.
+
+00:17:11.100 --> 00:17:13.980
+D'autres applications de Dynamics 365 peuvent également avoir besoin de ces données.
+
+00:17:13.980 --> 00:17:18.060
+Le PIM offre à toutes ces équipes un point de départ commun, une source unique de vérité.
+
+00:17:18.620 --> 00:17:20.720
+Maintenant, d'où proviennent ces données produits ?
+
+00:17:20.720 --> 00:17:24.460
+Les définitions de produits peuvent être créées directement dans Dynamics 365 Supply Chain Management.
+
+00:17:25.020 --> 00:17:28.120
+Cela fonctionne bien lorsque l'entreprise y gère les informations produits dès le début.
+
+00:17:28.800 --> 00:17:32.220
+Mais de nombreuses entreprises utilisent déjà un autre système pour le développement ou les enregistrements de produits.
+
+00:17:32.640 --> 00:17:36.220
+Par exemple, les données produits peuvent provenir d'un système de gestion du cycle de vie du produit, souvent appelé PLM.
+
+00:17:36.780 --> 00:17:40.380
+Un système PLM aide les équipes à gérer un produit tout au long de sa conception et de son développement.
+
+00:17:40.380 --> 00:17:44.720
+Il existe également la gestion des données produits ou PDM qui traite les données produits et les documents associés.
+
+00:17:45.460 --> 00:17:49.880
+Certaines entreprises utilisent même un système PIM distinct avant que les informations produits n'entrent dans la gestion de la chaîne logistique.
+
+00:17:50.200 --> 00:17:50.820
+Voici la bonne nouvelle.
+
+00:17:51.220 --> 00:17:54.120
+Dynamics 365 peut importer des définitions de produits depuis ces systèmes.
+
+00:17:54.660 --> 00:17:59.560
+Cela signifie que vous n'avez pas besoin de saisir à nouveau les mêmes détails produits simplement parce que le produit passe de la conception à la phase de Supply Chain.
+
+00:18:00.200 --> 00:18:04.440
+Supply Chain Management peut ainsi devenir le référentiel maître des données produits pour d'autres instances également.
+
+00:18:05.080 --> 00:18:07.440
+Ceci est important pour les grandes entreprises possédant plusieurs instances.
+
+00:18:07.440 --> 00:18:12.280
+Une instance gère les définitions de produits centrales, puis exporte et importe ces données vers les autres.
+
+00:18:12.780 --> 00:18:17.800
+Microsoft fournit des entités de données pour ce type d'échange, des moyens structurés de déplacer des données définies entre les systèmes.
+
+00:18:18.320 --> 00:18:18.920
+Il n'y a plus.
+
+00:18:19.380 --> 00:18:21.440
+Microsoft Dataverse étend ce chemin de distribution.
+
+00:18:22.080 --> 00:18:26.240
+Dataverse est le service de données cloud partagées de Microsoft utilisé par de nombreuses applications professionnelles.
+
+00:18:26.580 --> 00:18:29.460
+La gestion de la chaîne logistique peut exporter des définitions de produits vers Dataverse
+
+00:18:29.460 --> 00:18:33.420
+et d'autres applications métiers comme Dynamics 365 Sales peuvent utiliser ces données produits.
+
+00:18:34.020 --> 00:18:36.460
+Cela ne signifie pas pour autant que chaque application effectue soudainement le même temps.
+
+00:18:36.460 --> 00:18:39.120
+La gestion des produits organise et maintient les informations sur les produits.
+
+00:18:39.460 --> 00:18:41.920
+Dynamics 365 Sales gère les activités commerciales.
+
+00:18:42.080 --> 00:18:46.500
+D'autres applications s'occupent de leur propre tâche de services clients, commerce, finances, fabrication ou opérationnels.
+
+00:18:47.060 --> 00:18:50.200
+Elles peuvent utiliser les données produits associées, mais chaque application conserve son propre objectif.
+
+00:18:50.640 --> 00:18:51.660
+Examinons un flux pratique.
+
+00:18:52.160 --> 00:18:54.400
+L'équipe produit crée ou importe une nouvelle définition de produit.
+
+00:18:54.880 --> 00:18:57.360
+L'entreprise la diffuse aux entités juridiques qui en ont besoin.
+
+00:18:57.940 --> 00:18:59.640
+Ces entités terminent leur configuration locale.
+
+00:18:59.960 --> 00:19:01.400
+Les achats peuvent travailler avec l'article approuvé.
+
+00:19:01.400 --> 00:19:03.600
+Le personnel de l'entrepôt peut le recevoir et le manipuler.
+
+00:19:03.880 --> 00:19:05.440
+Les ventes peuvent se référer au bon produit.
+
+00:19:05.820 --> 00:19:09.320
+Au lieu d'inventer leur propre version, le résultat apparaît dans les moments ordinaires.
+
+00:19:09.680 --> 00:19:10.820
+Un acheteur commande le bon article.
+
+00:19:11.240 --> 00:19:12.400
+Un client voit les détails corrects.
+
+00:19:12.500 --> 00:19:15.060
+Un employé d'entrepôt peut faire correspondre une commande au stock devant lui.
+
+00:19:15.520 --> 00:19:20.960
+Lorsque les informations produits changent, les équipes disposent d'un itinéraire plus clair pour utiliser les détails approuvés actuels plutôt que de chercher d'ancienne copie.
+
+00:19:21.600 --> 00:19:26.280
+Cela réduit les erreurs de commande, les informations obsolètes et les retours causés par des détails produits incorrects.
+
+00:19:26.280 --> 00:19:32.840
+La gestion des informations produits est la partie qui maintient la définition du produit organisé, tandis que le reste de la plateforme connectée met ses informations à profit.
+
+00:19:33.100 --> 00:19:34.060
+Mais ses informations à profit.
+
+00:19:34.740 --> 00:19:36.560
+Une histoire de produit partagée dans Dynamics.
+
+00:19:37.260 --> 00:19:44.380
+La gestion des informations produits de Dynamics 365 transforme une idée de produit en un enregistrement contrôlé que les entités juridiques et les équipes métiers peuvent utiliser dans leur travail.
+
+00:19:44.840 --> 00:19:46.360
+C'était votre pépite de connaissances pour aujourd'hui.
+
+00:19:46.680 --> 00:19:50.400
+Abonnez-vous sur votre plateforme de podcast préférée et partagez ceci avec quelqu'un qui apprend Dynamics 365.
+
+00:19:50.880 --> 00:19:54.880
+Puis poursuivez avec l'épisode suivant pour voir comment tous les blocs de construction se connectent à travers le système.

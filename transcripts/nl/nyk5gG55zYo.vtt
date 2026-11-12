@@ -1,0 +1,991 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:03.740
+De meeste mensen denken dat het beschermen van data draait om er een sterke muur omheen bouwen.
+
+00:00:03.940 --> 00:00:07.300
+Beveilig het netwerk, blokkeer de slechte rikken en je bent veilig.
+
+00:00:07.440 --> 00:00:11.280
+Het punt is dat die muur niets doet zodra je data binnen is en zich verplaatst.
+
+00:00:11.460 --> 00:00:16.300
+Een werknemer met legitieme toegang kan een klantenlijst naar een persoonlijk account e-mailen...
+
+00:00:16.300 --> 00:00:20.020
+...en de firewall laat het gewoon door omdat het verzoek van een vertrouwde gebruiker kwam.
+
+00:00:20.300 --> 00:00:23.640
+Microsoft Purview wordt tegenwoordig overal genoemd, maar wat is het eigenlijk?
+
+00:00:23.800 --> 00:00:25.300
+Het is niet één enkel hulpmiddel.
+
+00:00:25.480 --> 00:00:28.020
+Het is een familie van oplossingen die allemaal op één ding zijn gericht.
+
+00:00:28.140 --> 00:00:29.100
+Het beschermen van je data.
+
+00:00:29.100 --> 00:00:30.640
+Niet alleen je infrastructuur.
+
+00:00:30.800 --> 00:00:32.200
+Er zijn drie pijlers om te begrijpen.
+
+00:00:32.360 --> 00:00:34.240
+Data governance, weten welke data je hebt.
+
+00:00:34.740 --> 00:00:35.140
+Databeveiliging.
+
+00:00:35.360 --> 00:00:38.460
+En deze beschermen, data compliance, bewijzen dat je de regels naleeft.
+
+00:00:38.640 --> 00:00:42.700
+Aan het einde van deze aflevering zul je zien hoe deze drie onderdelen samenkomen en waar je moet beginnen.
+
+00:00:42.900 --> 00:00:46.600
+Maar om te begrijpen waarom Purview bestaat, moet je het probleem begrijpen dat het oplost.
+
+00:00:46.800 --> 00:00:50.160
+Het echte probleem, waarom infrastructuurbeveiliging niet volstaat.
+
+00:00:50.320 --> 00:00:54.200
+De meeste bedrijven gaan ervan uit dat als het netwerk is vergrendeld, de data veilig is.
+
+00:00:54.360 --> 00:00:58.300
+Twintig jaar geleden, toen alles zich in een fysiek kantoor bevond, was dat een redelijke aanname.
+
+00:00:58.300 --> 00:00:59.720
+Dat is nu gewoon niet meer waar.
+
+00:00:59.940 --> 00:01:01.620
+Data bevindt zich tegenwoordig overal.
+
+00:01:01.800 --> 00:01:08.640
+Cloud apps, persoonlijke apparaten, e-mailbijlagen, gedeelde schijven, chatberichten van teams, verspreid over omgevingen die je niet volledig controleert.
+
+00:01:08.780 --> 00:01:16.300
+En zodra een gebruiker legitieme toegang heeft, zodra ze zijn geauthenticeerd en in het gebouw zijn, kan infrastructuurbeveiliging niet controleren wat ze met die data doen.
+
+00:01:16.520 --> 00:01:17.540
+Beschouw dit voorbeeld.
+
+00:01:17.760 --> 00:01:21.320
+Een werknemer downloadt een klantenlijst naar een persoonlijke USB-stick.
+
+00:01:21.320 --> 00:01:26.440
+De firewall stopte het niet en het inbraakdetectiesysteem merkte het niet op omdat de data niet werd onderschept.
+
+00:01:26.620 --> 00:01:29.180
+Het werd benaderd door iemand die toestemming had om het in te zien.
+
+00:01:29.380 --> 00:01:33.320
+De beveiligingstoels zochten naar een aanval van buitenaf, maar de dreiging kwam van binnenuit.
+
+00:01:33.540 --> 00:01:35.180
+Dit is de fundamentele verschuiving.
+
+00:01:35.480 --> 00:01:38.540
+Bescherming moet verschuiven van de infrastructuurlaag naar de datalaag zelf.
+
+00:01:38.740 --> 00:01:41.720
+In plaats van alleen het gebouw te bewaken, moet je de bestanden erin bewaken.
+
+00:01:41.960 --> 00:01:43.420
+Dat is precies wat Purview doet.
+
+00:01:43.600 --> 00:01:47.220
+Het past beleid direct toe op de data, niet alleen op het systeem dat deze bevat.
+
+00:01:47.380 --> 00:01:48.540
+Bekijk het op deze manier.
+
+00:01:49.120 --> 00:01:53.480
+Gebouwbeveiliging bewaakt de deur door ID's te controleren en ervoor te zorgen dat alleen de juiste mensen binnenkomen,
+
+00:01:53.680 --> 00:01:55.660
+maar eenmaal binnen volgt de beveiliging hen niet overal.
+
+00:01:55.840 --> 00:01:56.860
+Purview is anders.
+
+00:01:57.100 --> 00:02:01.060
+Het plaatst een slot op het archiefkast zelf, wat betekent dat zelfs als iemand in het gebouw is,
+
+00:02:01.160 --> 00:02:03.200
+hij de kast niet kan openen tenzij dat de bedoeling is.
+
+00:02:03.400 --> 00:02:08.600
+Dus Purview draait om het op slot doen van de archiefkast, maar voordat je die kunt afsluiten, moet je weten wat erin zit.
+
+00:02:08.740 --> 00:02:09.280
+Pijler 1.
+
+00:02:09.700 --> 00:02:10.060
+Databeheer.
+
+00:02:10.180 --> 00:02:11.160
+Weet wat je in huis hebt.
+
+00:02:11.160 --> 00:02:15.680
+Weten welke data je daadwerkelijk bezit, is de eerste stap in elke strategie voor gegevensbescherming.
+
+00:02:15.860 --> 00:02:21.660
+Dat klinkt logisch, maar de meeste organisaties hebben geen idee wat er in hun SharePoint, sites, best-end shares of databases staat.
+
+00:02:21.880 --> 00:02:30.260
+Ze hebben jaren aan opgebouwde inhoud, zoals oude projectbestanden, dubbele documenten en spreadsheets met klantinformatie waarvan niemand meer weet wie ze heeft gemaakt.
+
+00:02:30.660 --> 00:02:32.560
+De datakaart van Purview lost dit op.
+
+00:02:32.560 --> 00:02:38.840
+Deze scant je volledige omgeving in Azure, multi-cloud en on-premises en legt metadata vast van alles wat het vindt.
+
+00:02:38.900 --> 00:02:43.560
+Het beantwoordt vragen zoals wat voor soort data het is, waar het is opgeslagen, wie de eigenaar is en hoe gevoelig het is.
+
+00:02:43.720 --> 00:02:46.320
+De datakaart bouwt een compleet beeld van je gegevenslandschap.
+
+00:02:46.500 --> 00:02:49.580
+Vanaf daar wordt al die metadata georganiseerd in de uniforme catalogus.
+
+00:02:49.820 --> 00:02:51.860
+Zie het als een bibliotheek met een kaartsysteem.
+
+00:02:52.060 --> 00:02:59.540
+Voordat de catalogus bestond, moest je door elk gangpad lopen in de hoop te vinden wat je nodig had, maar met de catalogus zoek je één keer en weet je precies welke plank welk boek bevat.
+
+00:02:59.540 --> 00:03:06.660
+Je kunt data organiseren in governance domeinen zoals Finance, Hour en R&D, zodat zakelijke gebruikers kunnen vinden wat ze nodig hebben zonder de IT-afdeling te vragen.
+
+00:03:06.800 --> 00:03:12.260
+Een financieel analist kan het finance domein doorzoeken en alle goedgekeurde datasets zien, compleet met beschrijvingen en eigenaren.
+
+00:03:12.480 --> 00:03:16.360
+Data herkomst, lineage, laat zien waar data vandaan kwam en hoe het in de loop der tijd is veranderd.
+
+00:03:16.460 --> 00:03:19.840
+Als je je voorbereidt op een audit en iemand vraagt, waar komt dit cijfer vandaan?
+
+00:03:20.000 --> 00:03:25.720
+De herkomst traceert het terug door elke transformatie en dat is cruciaal wanneer toezichthouders bewijs willen dat je rapporten accuraat zijn.
+
+00:03:25.720 --> 00:03:33.440
+De zakelijke woordenlijst voegt duidelijke beschrijvingen toe, zodat analisten kunnen begrijpen wat een dataset betekent zonder de persoon te hoeven zoeken die deze drie jaar geleden heeft gemaakt.
+
+00:03:33.620 --> 00:03:40.140
+In plaats van een tabel met de naam kustort 2023v2-final te zien, zien ze klantorders 2023 definitieve versie.
+
+00:03:40.380 --> 00:03:42.100
+Eenvoudige verandering, enorm verschil.
+
+00:03:42.340 --> 00:03:43.180
+Waarom is dit belangrijk?
+
+00:03:43.460 --> 00:03:45.940
+Je kunt data niet beschermen waarvan je niet weet dat ze bestaan.
+
+00:03:46.140 --> 00:03:52.400
+Als je niet weet dat er een SharePoint-site is met burgerservice-nummers van klanten, kun je deze niet beveiligen en governance is het fundament waarop al het andere is gebouwd.
+
+00:03:52.400 --> 00:03:56.620
+Zodra je weet welke data je hebt en waar deze zich bevindt, is de volgende vraag logisch.
+
+00:03:56.760 --> 00:03:58.340
+Hoe bescherm je de gevoelige zaken?
+
+00:03:58.500 --> 00:03:59.020
+Pijler 2.
+
+00:03:59.800 --> 00:04:00.240
+Gegevensbeveiliging.
+
+00:04:01.120 --> 00:04:01.520
+Vertrouwelijkheidslabels.
+
+00:04:01.740 --> 00:04:05.080
+Governance vertelt je welke data er is en beveiliging vertelt je wat je ermee moet doen.
+
+00:04:05.220 --> 00:04:08.880
+Het belangrijkste hulpmiddel daarvoor zijn zogenaamde vertrouwelijkheidslabels, sensitivitylabels.
+
+00:04:08.880 --> 00:04:13.060
+Zie vertrouwelijkheidslabels als digitale tekst die data klassificeren op basis van hoe gevoelig deze is.
+
+00:04:13.260 --> 00:04:16.880
+Veel voorkomende labels die je zult zien zijn openbaar, intern, vertrouwelijk en zeer vertrouwelijk.
+
+00:04:17.040 --> 00:04:18.140
+Maar je zit niet aan die vast.
+
+00:04:18.140 --> 00:04:21.780
+Je kunt aangepaste labels maken die aansluiten bij de behoeften van jouw organisatie.
+
+00:04:21.940 --> 00:04:26.520
+Misschien wilt u een label genaamd oudergegevens, financiële resultaten of vertrouwelijk voor klanten.
+
+00:04:26.720 --> 00:04:27.320
+U beslist.
+
+00:04:27.600 --> 00:04:28.740
+Dit is het punt met labels.
+
+00:04:29.060 --> 00:04:30.480
+Ze reizen mee met de gegevens.
+
+00:04:30.700 --> 00:04:35.180
+Als een document als vertrouwelijk is gemarkeerd en iemand voegt het toe aan een e-mail, blijft het label behouden.
+
+00:04:35.360 --> 00:04:39.740
+Het maakt niet uit of het document wordt gedownload, naar OneDrive wordt gekopieerd of via Teams wordt gedeeld.
+
+00:04:39.920 --> 00:04:41.040
+Het label volgt het overal.
+
+00:04:41.240 --> 00:04:44.640
+Het is geen sticker op een archiefkast, maar een watermerk in het papier zelf.
+
+00:04:44.920 --> 00:04:47.060
+Labels kunnen automatische acties activeren.
+
+00:04:47.060 --> 00:04:50.640
+U kunt het document versleutelen zodat alleen geautoriseerde personen het kunnen openen.
+
+00:04:51.000 --> 00:04:57.220
+Toegangsbeperkingen kunnen bewerken of afdrukken blokkeren en u kunt kopteksten, voedteksten of watermerken toevoegen die duidelijk aangeven dat het vertrouwelijk is.
+
+00:04:57.380 --> 00:05:00.540
+Het label vertelt het systeem wat het moet doen en het systeem doet dit automatisch.
+
+00:05:00.760 --> 00:05:02.500
+Labels worden op drie manieren toegepast.
+
+00:05:02.740 --> 00:05:05.280
+Handmatig betekent dat de gebruiker het label zelf kiest.
+
+00:05:05.580 --> 00:05:10.600
+Automatisch betekent dat Purview gevoelige inhoud zoals een creditcardnummer detecteert en het label zelf toepast.
+
+00:05:11.300 --> 00:05:14.720
+Beleidsaanbeveling betekent dat het systeem een label voorstelt en de gebruiker dit bevestigt.
+
+00:05:14.720 --> 00:05:16.760
+Die middelste optie is waar het interessant wordt.
+
+00:05:16.760 --> 00:05:17.880
+Hier is een voorbeeld.
+
+00:05:18.060 --> 00:05:19.840
+Een document bevat een creditcardnummer.
+
+00:05:20.040 --> 00:05:29.220
+De klassificatie-engine van Purview herkent dat patroon en nog voordat het document wordt opgeslagen, wordt automatisch het label, zeer vertrouwelijk, toegepast en wordt het versleuteld zonder menselijke tussenkomst.
+
+00:05:29.340 --> 00:05:34.160
+De gegevens zijn beschermd vanaf het moment dat ze worden gemaakt, maar labels zijn niet alleen van toepassing op individuele bestanden.
+
+00:05:34.360 --> 00:05:39.400
+Ze zijn ook van toepassing op containers zoals SharePoint sites, Teams kanalen en Microsoft 365 groepen.
+
+00:05:39.580 --> 00:05:44.420
+Dat betekent dat u kunt zeggen, elke Teamsite met het label vertrouwelijk blokkeert standaard extern delen.
+
+00:05:44.420 --> 00:05:48.040
+U stelt de regel één keer in en elke site met dat label neemt de bescherming over.
+
+00:05:48.260 --> 00:05:50.360
+U hoeft ze niet elk afzonderlijk te configureren.
+
+00:05:50.540 --> 00:05:52.080
+Dus labels vertellen u wat iets is.
+
+00:05:52.260 --> 00:05:55.100
+Ze klassificeren het, markeren het en passen automatisch bescherming toe.
+
+00:05:55.240 --> 00:05:58.580
+Maar wat als iemand probeert die gelabelde gegevens ergens naartoe te sturen waar dat niet mag?
+
+00:05:58.720 --> 00:06:00.880
+Data loss prevention, het blokkeren van lekken.
+
+00:06:01.040 --> 00:06:04.580
+Labels klassificeren, DLP, data loss prevention, onderneemt actie.
+
+00:06:04.780 --> 00:06:08.160
+Dit is waar het systeem stopt met passief zijn en in realtime dingen begint te blokkeren.
+
+00:06:08.160 --> 00:06:13.120
+DLP beleids kent e-mail, documenten, chatberichten en cloudapps op gevoelige informatie.
+
+00:06:13.360 --> 00:06:17.780
+Wanneer het iets riskans vindt, kan het de actie volledig blokkeren, een beleidstip aan de gebruiker tonen,
+
+00:06:17.920 --> 00:06:20.900
+een beheerder waarschuwen of de gebeurtenis registreren voor latere controle.
+
+00:06:21.120 --> 00:06:23.360
+U bepaalt welke reactie bij de situatie past.
+
+00:06:23.580 --> 00:06:25.060
+Laat me u een echt voorbeeld geven.
+
+00:06:25.260 --> 00:06:29.840
+Een werknemer probeert een spreadsheet met sofinummers naar zijn persoonlijke Gmail-account te e-mailen.
+
+00:06:30.160 --> 00:06:36.260
+DLP detecteert de gevoelige gegevens, herkent de externe ontvanger en blokkeert het bericht voordat het uw organisatie verlaat.
+
+00:06:36.260 --> 00:06:41.320
+De gebruiker krijgt een waarschuwing, dit bericht bevat gevoelige informatie en is niet afgeleverd.
+
+00:06:41.420 --> 00:06:43.840
+De actie wordt geblokkeerd en het wordt een leermoment.
+
+00:06:44.040 --> 00:06:45.280
+Geen lek, geen inbreuk.
+
+00:06:45.600 --> 00:06:49.820
+DLP werkt in Exchange, SharePoint, OneDrive, Teams en zelfs Windows Endpoints.
+
+00:06:50.000 --> 00:06:53.140
+Het maakt niet uit waar de data staat of hoe iemand deze probeert te verplaatsen.
+
+00:06:53.300 --> 00:06:56.060
+Als het gevoelige informatie bevat, vangt het beleid het op.
+
+00:06:56.240 --> 00:06:59.760
+Goed om te weten, je kunt DLP beleid eerst in simulatiemodus draaien.
+
+00:06:59.980 --> 00:07:03.440
+Dat betekent dat je test wat er geblokkeerd zou worden, zonder daadwerkelijk iets te blokkeren.
+
+00:07:03.440 --> 00:07:09.120
+Je krijgt een rapport met hoeveel items zouden zijn opgevangen, welke datatypes het beleid actief eerden en welke gebruikers erbij betrokken waren.
+
+00:07:09.260 --> 00:07:11.680
+Vervolgens pas je zaken aan voordat je de handhaving inschakelt.
+
+00:07:11.820 --> 00:07:14.460
+Het is een veilige manier om te leren zonder iemands werk te verstoren.
+
+00:07:14.640 --> 00:07:16.260
+De beste aanpak is om klein te beginnen.
+
+00:07:16.500 --> 00:07:21.820
+Kies één type gevoelige data, bijvoorbeeld creditcardnummers, en pas DLP toe op een kleine groep gebruikers.
+
+00:07:21.980 --> 00:07:22.940
+Kijk wat er gebeurt.
+
+00:07:23.180 --> 00:07:26.300
+Informeer gebruikers met beleidstips die uitleggen waarom iets geblokkeerd werd.
+
+00:07:26.540 --> 00:07:29.480
+Breed de handhaving daarna geleidelijk uit naarmate mensen eraan gewend raken.
+
+00:07:29.480 --> 00:07:31.600
+Die beleidstips zijn overigens erg krachtig.
+
+00:07:31.720 --> 00:07:34.300
+In plaats van alleen geblokkeerd te melden, vertellen ze de gebruiker.
+
+00:07:34.440 --> 00:07:35.720
+Dit document bevat gevoelige gegevens.
+
+00:07:35.940 --> 00:07:37.100
+Weet je zeker dat je dit wilt verzenden?
+
+00:07:37.660 --> 00:07:38.060
+Aanhalingsteken.
+
+00:07:38.240 --> 00:07:41.500
+Het geeft hen de kans om te heroverwegen zonder dat het voelt alsof het systeem hen straft.
+
+00:07:41.700 --> 00:07:43.380
+De meeste mensen lekken niet expres data.
+
+00:07:43.660 --> 00:07:44.760
+Ze werken gewoon te snel.
+
+00:07:44.980 --> 00:07:48.760
+Dus, we kennen onze data nu, we beschermen het met labels en blokkeren lekken met DLP.
+
+00:07:49.080 --> 00:07:51.360
+Maar wat gebeurt er als een auditor vraagt om bewijs?
+
+00:07:51.480 --> 00:07:52.040
+Pijler 3.
+
+00:07:52.260 --> 00:07:53.280
+Data compliance.
+
+00:07:53.580 --> 00:07:55.060
+Bewijs dat je de regels volgt.
+
+00:07:55.300 --> 00:07:58.380
+Compliance draait om bewijzen dat je veilig bent, niet alleen om veilig zijn.
+
+00:07:58.380 --> 00:08:02.160
+Je kunt de beste beveiliging ter wereld hebben, maar als een toezichthouder om bewijs vraagt,
+
+00:08:02.300 --> 00:08:03.680
+heb je meer nodig dan goede bedoelingen.
+
+00:08:03.800 --> 00:08:06.600
+Je hebt documentatie, audit trails en een verdedigbaar proces nodig.
+
+00:08:06.840 --> 00:08:08.960
+Dat is waar Purview Compliance Manager van pas komt.
+
+00:08:09.140 --> 00:08:12.380
+Het geeft je een score gebaseerd op hoe goed je voldoet aan wettelijke vereisten.
+
+00:08:12.640 --> 00:08:14.820
+Zie het als een kredietscore, maar dan voor compliance.
+
+00:08:15.040 --> 00:08:17.300
+Hoe hoger je scoren, hoe beter je beveiligingstatus.
+
+00:08:17.480 --> 00:08:19.740
+Deze verandert naarmate je acties onderneemt om het te verbeteren.
+
+00:08:19.880 --> 00:08:23.620
+Compliance Manager bevat ingebouwde assessments voor de belangrijkste regelgevingen waar je waarschijnlijk
+
+00:08:23.620 --> 00:08:24.220
+van hebt gehoord.
+
+00:08:24.220 --> 00:08:30.260
+AVG voor Data Privacy in Europa, HIPAA voor zorginformatie in de Verenigde Staten, ISO 27001
+
+00:08:30.260 --> 00:08:34.640
+voor informatiebeveiliging, FINRA voor financiële diensten, verdrampt voor overheidscloudservices
+
+00:08:34.640 --> 00:08:35.400
+en nog veel meer.
+
+00:08:35.520 --> 00:08:37.680
+In totaal meer dan 320 schablonen.
+
+00:08:37.840 --> 00:08:41.020
+Als er een regelgeving is die van toepassing is op jouw sector, is er waarschijnlijk een
+
+00:08:41.020 --> 00:08:41.580
+assessment voor.
+
+00:08:41.760 --> 00:08:44.220
+Elk assessment splitst de regelgeving op in controles.
+
+00:08:44.420 --> 00:08:48.220
+Elke controle is verder onderverdeeld in verbeteracties met stapsgewijze instructies.
+
+00:08:48.220 --> 00:08:49.960
+Het vertelt je precies wat je moet doen.
+
+00:08:50.180 --> 00:08:54.280
+Schakel auditlogboeken in, configureer vertrouwelijkheidslabels, stel bewaarbeleid in.
+
+00:08:54.400 --> 00:08:56.280
+Je hoeft niet te raden hoe compliance eruit ziet.
+
+00:08:56.460 --> 00:08:57.760
+Het systeem vertelt het je.
+
+00:08:57.940 --> 00:09:00.780
+Je wijst deze verbeteracties toe aan mensen binnen je organisatie.
+
+00:09:00.960 --> 00:09:05.580
+De IT-beheerder krijgt de technische taken, de compliance officer de beleidsdocumentatie,
+
+00:09:05.740 --> 00:09:08.040
+het juridisch team de workflows voor data verzoeken.
+
+00:09:08.240 --> 00:09:11.800
+Iedereen weet waarvoor hij verantwoordelijk is en je kunt de voortgang in realtime volgen.
+
+00:09:12.020 --> 00:09:14.320
+Geen spreadsheets meer die via e-mail worden rondgestuurd.
+
+00:09:14.320 --> 00:09:18.000
+Wanneer iemand een actie voltooit, upload diegene het bewijs direct in Compliance Manager.
+
+00:09:18.220 --> 00:09:21.380
+Dat bewijs kan bestaan uit schermafbeeldingen die laten zien dat een beleid correct is geconfigureerd.
+
+00:09:21.540 --> 00:09:23.460
+Het kunnen beleidsdocumenten zijn die je hebt opgesteld.
+
+00:09:23.620 --> 00:09:25.840
+Het kunnen auditlogboeken zijn die uit het systeem zijn gehaald.
+
+00:09:26.020 --> 00:09:29.340
+Alles staat op één plek, georganiseerd per controle, klaar voor de volgende audit.
+
+00:09:29.560 --> 00:09:30.640
+Dit is het slimme gedeelte.
+
+00:09:30.840 --> 00:09:34.820
+Compliance Manager scant automatisch je Microsoft 365 omgeving voor bepaalde controles.
+
+00:09:35.000 --> 00:09:38.780
+Als je vertrouwelijkheidslabels hebt geconfigureerd, detecteert het systeem dit en krijg je automatisch de credits.
+
+00:09:38.980 --> 00:09:41.540
+Als je auditlogboeken hebt ingeschakeld, ziet het systeem dat ook.
+
+00:09:41.540 --> 00:09:43.600
+Je hoeft niet handmatig elk onderdeel te bewijzen.
+
+00:09:43.780 --> 00:09:45.220
+Het systeem controleert zichzelf.
+
+00:09:45.220 --> 00:09:48.160
+Auditlogboeken in Purview registreren elke activiteit in je omgeving.
+
+00:09:48.360 --> 00:09:49.620
+Wie heeft welk document geopend?
+
+00:09:49.840 --> 00:09:50.880
+Wanneer hebben ze het geopend?
+
+00:09:51.040 --> 00:09:51.620
+Van waaruit?
+
+00:09:51.800 --> 00:09:52.760
+Wat hebben ze ermee gedaan?
+
+00:09:52.980 --> 00:09:54.780
+Elke actie wordt gelogd en is doorzoekbaar.
+
+00:09:55.000 --> 00:09:59.680
+Wanneer een auditor vraagt wie zag dit bestand en wanneer, heb je het antwoord in seconden, niet in dagen.
+
+00:09:59.880 --> 00:10:09.660
+eDiscovery biedt juridische teams de mogelijkheid om al je data, e-mails, documenten, teamsberichten en SharePoint sites te doorzoeken en inhoud vast te houden die relevant is voor onderzoeken of rechtszaken.
+
+00:10:09.660 --> 00:10:14.400
+Bij een juridisch geschil kun je elk relevant stuk data bewaren en als bewijsmateriaal aanleveren.
+
+00:10:14.540 --> 00:10:18.220
+Geen paniek om bestanden te vinden, geen zorgen dat iemand iets belangrijks heeft verwijderd.
+
+00:10:18.400 --> 00:10:23.860
+Records Beheer zorgt ervoor dat kritieke documenten gedurende de vereiste periode worden bewaard en niet voortijdig kunnen worden verwijderd.
+
+00:10:23.980 --> 00:10:28.120
+Als regelgeving vereist dat je financiële gegevens 7 jaar bewaart, dwingt Records Beheer dat af.
+
+00:10:28.320 --> 00:10:29.800
+Gebruikers kunnen ze niet verwijderen.
+
+00:10:29.980 --> 00:10:31.500
+Beheerders kunnen het beleid niet omzeilen.
+
+00:10:31.700 --> 00:10:35.400
+De data blijft staan tot de bewaarperiode is verstreken en wordt daarna op een gecontroleerde manier verwijderd.
+
+00:10:35.580 --> 00:10:36.680
+Waarom is dit allemaal van belang?
+
+00:10:36.680 --> 00:10:38.740
+Toezichthouders geven niet om welke tools je gebruikt.
+
+00:10:38.880 --> 00:10:40.780
+Het interesseert hen niet dat je Purview hebt aangeschaft.
+
+00:10:40.980 --> 00:10:43.180
+Ze geven erom dat je een verdedigbaar proces kunt aantonen.
+
+00:10:43.360 --> 00:10:48.420
+Ze willen zien dat je risico's hebt geïdentificeerd, controles hebt geïmplementeerd, compliance hebt bewaakt en bewijs hebt voor elke stap.
+
+00:10:48.660 --> 00:10:51.920
+Compliance Manager geeft je dat bewijs in een formaat dat auditors herkennen.
+
+00:10:52.120 --> 00:10:54.220
+Maar hier is iets nieuws dat het beeld verandert.
+
+00:10:54.400 --> 00:10:54.640
+AI
+
+00:10:54.640 --> 00:10:56.260
+AI Governance
+
+00:10:56.260 --> 00:10:58.380
+Wat verandert er als co-pilot verschijnt?
+
+00:10:58.560 --> 00:11:00.220
+Dit is de eenvoudigste definitie.
+
+00:11:00.560 --> 00:11:03.580
+Traditionele gegevensbescherming ging ervan uit dat mensen gegevens benaderen.
+
+00:11:03.580 --> 00:11:05.560
+Die aanname was tientallen jaren logisch.
+
+00:11:05.560 --> 00:11:08.200
+Iemand logt in, zoekt een bestand, opent het en leest het.
+
+00:11:08.340 --> 00:11:10.720
+Het systeem weet wie wat deed en kan elke actie volgen.
+
+00:11:10.900 --> 00:11:12.680
+AI verandert die berekening volledig.
+
+00:11:12.840 --> 00:11:16.240
+Co-pilot en andere AI agents hebben in seconde toegang tot enorme hoeveelheden data.
+
+00:11:16.500 --> 00:11:17.980
+Ze lezen niet één bestand tegelijk.
+
+00:11:18.160 --> 00:11:23.180
+Ze scannen duizenden documenten, vatten inhoud samen en tonen informatie waarvan de gebruiker misschien niet is wist dat deze bestond.
+
+00:11:23.360 --> 00:11:26.420
+Die snelheid en schaal creëren een compleet nieuwe categorie risico's.
+
+00:11:26.600 --> 00:11:28.380
+Stel je data voor als een archiefkast.
+
+00:11:28.560 --> 00:11:30.920
+In de oude wereld had elke lade een sleutel nodig.
+
+00:11:30.920 --> 00:11:33.520
+Alleen de juiste persoon kon bij het juiste bestand.
+
+00:11:33.660 --> 00:11:38.320
+Co-pilot is als een slimme assistent die alle laden tegelijk kan openen als de sleutels in het slot zitten.
+
+00:11:38.500 --> 00:11:43.640
+Als je data niet correct is geclassificeerd, kan Co-pilot gevoelige informatie tonen aan iemand die dit niet zou mogen zien.
+
+00:11:43.880 --> 00:11:47.080
+Niet omdat het systeem kapot is, maar omdat de data nooit was gelabeld.
+
+00:11:47.260 --> 00:11:54.720
+Een SharePoint site met klantgegevens die toegankelijk was voor iedereen in het bedrijf, wordt plotseling zichtbaar via AI op manieren die voorheen niet mogelijk waren.
+
+00:11:54.720 --> 00:11:57.280
+De muur was er altijd al, AI vond alleen de deur.
+
+00:11:57.480 --> 00:11:58.840
+Dus, wat doet Purview hier aan?
+
+00:11:58.960 --> 00:12:02.080
+Purview breidt zijn bestaande controles uit naar AI-interacties.
+
+00:12:02.320 --> 00:12:05.720
+DLP-beleid scant nu AI-proms en antwoorden, niet alleen e-mails en documenten.
+
+00:12:06.420 --> 00:12:10.640
+Als iemand Co-pilot een vraag stelt die gevoelige data oplevert, kan DLP dit blokkeren.
+
+00:12:11.400 --> 00:12:14.220
+Vertrouwelijkheidslabels worden afgedwongen op door AI-gegenereerde inhoud.
+
+00:12:14.420 --> 00:12:20.180
+Als Co-pilot een samenvatting maakt van een vertrouwelijk document, neemt die samenvatting hetzelfde label en dezelfde bescherming over.
+
+00:12:20.180 --> 00:12:25.160
+Data Security Posture Management voor AI bewaakt overmatige deling en misbruik in real-time.
+
+00:12:25.360 --> 00:12:30.840
+Het houdt in de gaten hoe AI-tools worden gebruikt, tot welke data ze toegang hebben en of beleidsregels worden geschonden.
+
+00:12:31.080 --> 00:12:36.860
+Als iemand Co-pilot vragen begint te stellen die erop wijzen dat ze zoeken naar data waar ze geen toegang toe horen te hebben, markeert het systeem dit.
+
+00:12:37.020 --> 00:12:41.540
+Compliance Manager bevat nu kant een klare beoordelingen voor AI-regelgeving zoals de EU-AI Act.
+
+00:12:41.700 --> 00:12:45.980
+Als jouw organisatie AI-tools gebruikt, moet je aantonen dat je voldoet aan deze nieuwe regels.
+
+00:12:46.160 --> 00:12:49.000
+De beoordelingsschablonen zijn al aanwezig en klaar voor gebruik.
+
+00:12:49.000 --> 00:12:54.660
+De AI-hub geeft je inzicht in welke AI-apps in je organisatie worden gebruikt en tot welke data ze toegang hebben.
+
+00:12:54.820 --> 00:13:01.100
+Je kunt zien welke werknemers Co-pilot gebruiken, welke AI-tools van derden zijn gekoppeld en welk soort data er doorheen stroomt.
+
+00:13:01.280 --> 00:13:02.320
+Geen blinde vlekken.
+
+00:13:02.760 --> 00:13:06.360
+Purview kan ook AI-prompts en antwoorden bewaren voor controle-trails.
+
+00:13:06.560 --> 00:13:12.340
+Als een toezichthouder vraagt wat heeft die werknemer aan de AI gevraagd en wat heeft de AI hen verteld, dan heb jij het verslag.
+
+00:13:12.500 --> 00:13:17.000
+Prompts, antwoorden, tijdstempels, gebruikersidentiteit, alles wordt bewaard voor onderzoek of nalevingscontrole.
+
+00:13:17.000 --> 00:13:18.600
+Denk er zo over.
+
+00:13:18.720 --> 00:13:24.280
+De drie pijlers waar we over spraken, governance, beveiliging en compliance, zijn nog steeds van toepassing op AI, maar de belangen zijn groter.
+
+00:13:24.460 --> 00:13:27.660
+Als je data voorheen niet goed beveiligd was, zal AI elk lek blootleggen.
+
+00:13:27.820 --> 00:13:31.160
+Purview geeft je de tools om die zwakke plekken te dichten voordat ze data lekken worden.
+
+00:13:31.400 --> 00:13:35.140
+Die drie pijlers zijn geen afzonderlijke projecten, ze werken samen in een lus.
+
+00:13:35.340 --> 00:13:37.340
+Hoe de drie pijlers met elkaar verbonden zijn.
+
+00:13:37.560 --> 00:13:38.860
+Dus, hoe past alles in elkaar?
+
+00:13:38.860 --> 00:13:43.040
+Governance vindt de data, beveiliging beschermt deze, compliance bewijst dat je de regels hebt gevolgd.
+
+00:13:43.180 --> 00:13:45.340
+Drie afzonderlijke taken, één verbonden systeem.
+
+00:13:45.480 --> 00:13:47.120
+Maar hier is het punt dat veel mensen missen.
+
+00:13:47.320 --> 00:13:49.680
+Ze werken niet alleen achter elkaar, ze versterken elkaar.
+
+00:13:49.880 --> 00:13:52.720
+Een compliance audit onthult een hiyaat in je dataclassificatie.
+
+00:13:52.940 --> 00:13:55.900
+Misschien heb je een SharePoint site met ongelabelde klantgegevens gemist.
+
+00:13:56.120 --> 00:13:59.160
+Dat hiyaat wordt teruggekoppeld naar governance, die de datakaartscan bijwerkt.
+
+00:13:59.340 --> 00:14:00.560
+Governance vindt de nieuwe data.
+
+00:14:00.900 --> 00:14:02.160
+Beveiliging past bescherming toe.
+
+00:14:02.440 --> 00:14:03.480
+Compliance vinkt het af.
+
+00:14:03.620 --> 00:14:04.720
+De lus blijft ronddraaien.
+
+00:14:04.720 --> 00:14:06.500
+Laat me je meenemen door een reëel scenario.
+
+00:14:06.780 --> 00:14:08.260
+De datakaart scant je omgeving.
+
+00:14:08.480 --> 00:14:11.460
+Het vindt een SharePoint site met klant PII die nooit was gelabeld.
+
+00:14:11.660 --> 00:14:12.840
+Niemand wist dat het daar stond.
+
+00:14:13.040 --> 00:14:18.820
+De klassificatie engine van Purview detecteert de gevoelige inhoud en past automatisch een, zeer vertrouwelijk, label met versleuteling toe.
+
+00:14:19.040 --> 00:14:22.080
+Dat label activeert een DLP beleid dat je al had geconfigureerd.
+
+00:14:22.240 --> 00:14:25.780
+Elke e-mail die dat label doorstuurt naar een extern adres wordt automatisch geblokkeerd.
+
+00:14:25.980 --> 00:14:29.440
+Compliance Manager ziet dat de controle is geïmplementeerd en geeft je scorepunten.
+
+00:14:29.600 --> 00:14:31.880
+Het audit logboek legt het volledige proces vast.
+
+00:14:31.880 --> 00:14:35.740
+Wie de data vond, wanneer het label werd toegepast, welk beleid de actie blokkeerde.
+
+00:14:35.920 --> 00:14:39.620
+Wanneer de volgende audit eraan komt, heb je het volledige verhaal klaar om te presenteren.
+
+00:14:39.840 --> 00:14:42.140
+Dat is de kracht van Purview als een uniform platform.
+
+00:14:42.480 --> 00:14:44.920
+Het zijn niet drie aparte tools die toevallig een portal delen.
+
+00:14:45.120 --> 00:14:47.320
+Het is één engine waarbij elk onderdeel de andere voedt.
+
+00:14:47.440 --> 00:14:49.160
+De integratie verloopt automatisch.
+
+00:14:49.400 --> 00:14:53.380
+Zodra je governance op orde is, zodra je je omgeving hebt gescand en je data hebt geclassificeerd,
+
+00:14:53.620 --> 00:14:56.140
+profiteren beveiliging en compliance zonder extra configuratie.
+
+00:14:56.300 --> 00:14:58.740
+Je hoeft je labels niet opnieuw op te bouwen voor Compliance Manager.
+
+00:14:58.960 --> 00:15:00.620
+Je hoeft niet opnieuw te scannen voor DLP.
+
+00:15:00.620 --> 00:15:02.520
+Het deelt allemaal dezelfde basis.
+
+00:15:02.880 --> 00:15:07.280
+De meeste organisaties falen in databescherming omdat ze deze als losstaande initiatieven behandelen.
+
+00:15:07.480 --> 00:15:09.940
+Ze hebben een governance team dat niet met beveiliging praat.
+
+00:15:10.120 --> 00:15:13.160
+EHM, een compliance officer die vanuit een ander spreadsheet werkt.
+
+00:15:13.320 --> 00:15:16.980
+Een IT-team dat beleid implementeert zonder te begrijpen wat het bedrijf nodig heeft.
+
+00:15:17.160 --> 00:15:20.420
+Purview dwingt die gesprekken af door de afhankelijkheden zichtbaar te maken.
+
+00:15:20.640 --> 00:15:22.660
+Je kunt compliance niet goed doen zonder governance.
+
+00:15:23.020 --> 00:15:25.980
+Je kunt beveiliging niet goed doen zonder te weten welke data je beschermt.
+
+00:15:26.120 --> 00:15:27.020
+Dus, waar begin je?
+
+00:15:27.200 --> 00:15:28.740
+Niet door alles tegelijk in te schakelen.
+
+00:15:28.740 --> 00:15:29.880
+Begin met governance.
+
+00:15:30.120 --> 00:15:31.460
+Zoek je data, klassificeer het.
+
+00:15:31.580 --> 00:15:32.460
+De rest volgt vanzelf.
+
+00:15:32.680 --> 00:15:34.140
+Dat is de kennis nugget voor vandaag.
+
+00:15:34.300 --> 00:15:35.180
+Je eerste stappen.
+
+00:15:35.380 --> 00:15:36.420
+Dus, laten we beginnen.
+
+00:15:36.660 --> 00:15:40.760
+Open de dataverkenner van Purview en bekijk welke gevoelige informatie al in je omgeving staat.
+
+00:15:40.940 --> 00:15:42.860
+Je zult misschien verrast zijn door wat je vindt.
+
+00:15:42.920 --> 00:15:44.540
+Creditcard nummers in e-mail bijlagen.
+
+00:15:44.700 --> 00:15:46.540
+Sophie nummers in oude SharePoint sites.
+
+00:15:46.720 --> 00:15:49.680
+Medische informatie in Teams chats waarvan je vergeten was dat ze bestonden.
+
+00:15:49.880 --> 00:15:51.800
+Probeer niet alles op de eerste dag op te lossen.
+
+00:15:51.960 --> 00:15:52.680
+Kijk alleen maar.
+
+00:15:52.920 --> 00:15:54.600
+Focus eerst op de grootste risico's.
+
+00:15:54.600 --> 00:15:57.600
+Financiële gegevens, medische dossiers, persoonlijke informatie.
+
+00:15:57.820 --> 00:16:00.340
+Dat zijn de zaken die voor problemen met toezichthouders zorgen.
+
+00:16:00.520 --> 00:16:04.540
+Steek daar je energie in voordat je je zorgen maakt over die interne memo over het kerstfeest.
+
+00:16:04.740 --> 00:16:09.080
+Pas daarna vertrouwelijkheidslabels toe op die kritieke content, maar rol het nog niet naar iedereen uit.
+
+00:16:09.320 --> 00:16:10.940
+Begin met een kleine groep gebruikers.
+
+00:16:11.180 --> 00:16:13.880
+Laat ze het testen, er vertrouwd mee raken en je feedback geven.
+
+00:16:14.060 --> 00:16:17.060
+Je zult configuratiefouten opvangen voordat ze het hele bedrijf beïnvloeden.
+
+00:16:17.060 --> 00:16:19.560
+Stel daarna een DLP-beleid in de testmodus in.
+
+00:16:19.720 --> 00:16:23.340
+Draai het in simulatie zodat je ziet wat er geblokkeerd zou worden zonder echt iets te blokkeren.
+
+00:16:23.540 --> 00:16:27.100
+Bekijk de rapporten, pas je regels aan en schakel de handhaving dan geleidelijk in.
+
+00:16:27.320 --> 00:16:29.420
+Gebruik Compliance Manager als je stappenplan.
+
+00:16:29.640 --> 00:16:33.600
+Het laat precies zien wat er moet gebeuren om te voldoen aan de regelgeving van jouw sector.
+
+00:16:33.860 --> 00:16:35.300
+Je hoeft dit niet alleen uit te zoeken.
+
+00:16:35.500 --> 00:16:39.140
+De beoordelingen vertellen je wat je moet doen, in welke volgorde en hoe je bewijst dat je het gedaan hebt.
+
+00:16:39.360 --> 00:16:40.900
+Dit is het krachtigste wat je nu kunt doen.
+
+00:16:41.140 --> 00:16:42.880
+Voer de dataclassificatiescan uit.
+
+00:16:43.100 --> 00:16:44.020
+Voer hem gewoon uit.
+
+00:16:44.240 --> 00:16:45.680
+Weten wat je hebt verandert alles.
+
+00:16:45.680 --> 00:16:47.780
+Al het andere vloeit voort uit die ene stap.
+
+00:16:48.000 --> 00:16:49.680
+Microsoft Purview is niet één product.
+
+00:16:49.900 --> 00:16:53.680
+Het is een systeem om ervoor te zorgen dat je data wordt gevonden, beschermd en verdedigbaar is.
+
+00:16:53.880 --> 00:16:57.600
+Begin met governance, voeg beveiliging toe, gebruik Compliance om eerlijk te blijven.
+
+00:16:57.760 --> 00:17:00.440
+Het raamwerk werkt voor traditionele data en voor AI.
+
+00:17:00.700 --> 00:17:04.320
+Ja, ook voor AI, omdat het is gebouwd voor de wereld waarin de meeste van ons zal leven.
+
+00:17:04.540 --> 00:17:08.920
+Als dit je het grote plaatje gaf, abonneer je dan op Microsoft Knowledge Nuggets op M365 FM.
+
+00:17:09.160 --> 00:17:11.400
+Laat een reactie achter met wat je de volgende keer uitgelegd wilt hebben.
+
+00:17:11.580 --> 00:17:12.580
+Bedankt voor het luisteren.

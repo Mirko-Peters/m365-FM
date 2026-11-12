@@ -1,0 +1,1237 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:05.120
+Topik hari ini adalah sesuatu yang hampir semua orang pernah dengar, namun hanya sedikit yang bisa menjelaskannya AI Agent Harness.
+
+00:00:05.520 --> 00:00:09.100
+Anda mungkin pernah melihatnya di postingan blog atau pembicaraan di konferensi, tapi apa artinya sebenarnya?
+
+00:00:09.420 --> 00:00:09.980
+Ini masalahnya.
+
+00:00:10.380 --> 00:00:14.080
+Kebanyakan orang mengira membangun agen AI adalah tentang menulis perintah yang sempurna.
+
+00:00:14.400 --> 00:00:17.600
+Satu instruksi ajaib yang membuat model melakukan persis seperti yang Anda inginkan.
+
+00:00:18.040 --> 00:00:19.960
+Tapi itu seperti menganggap mobil hanyalah sebuah mesin?
+
+00:00:20.420 --> 00:00:25.120
+Tentu, mesin itu penting. Tetapi tanpa roda, setir, rem, dan sasis, Anda tidak akan pergi kemana-mana.
+
+00:00:25.120 --> 00:00:32.340
+Di akhir episode ini, Anda akan memahami apa itu Agent Harness, mengapa ini adalah evolusi berikutnya di luar rekayasa perintah Prompt Engineering,
+
+00:00:32.760 --> 00:00:36.160
+dan bagaimana Microsoft AI Foundry mewujudkannya bagi bisnis nyata.
+
+00:00:36.980 --> 00:00:38.760
+Ambil kopi Anda, dan mari kita mulai.
+
+00:00:39.560 --> 00:00:42.060
+Mengapa perintah Prompting tidak lagi? Mari kita kembali ke masa-masa.
+
+00:00:42.460 --> 00:00:45.440
+Sekitar tahun 2002 hingga 2024, pekerja dengan AI itu sederhana.
+
+00:00:46.020 --> 00:00:46.880
+Anda mendapatkan jawaban.
+
+00:00:47.660 --> 00:00:49.360
+Butuh dev email? Lulis perintahnya.
+
+00:00:49.680 --> 00:00:51.740
+Butuh ringkasan artikel? Lulis perintahnya.
+
+00:00:52.080 --> 00:00:53.900
+Untuk tugas sederhana sekali jalan, itu bekerja dengan sangat.
+
+00:00:53.900 --> 00:00:57.220
+Anda bisa meminta sesuatu, dan model akan memberikan respons yang masuk ak.
+
+00:00:57.600 --> 00:00:58.760
+Namun, kondoran orang menjadi ambisius.
+
+00:00:59.140 --> 00:01:01.180
+Mereka mulai meminta model-model ini untuk melakukan pekerjaannya.
+
+00:01:01.860 --> 00:01:03.620
+Meneliti topik dan menulis laporan,
+
+00:01:04.100 --> 00:01:05.840
+menganalisis basis kode dan memperbaiki bug,
+
+00:01:05.960 --> 00:01:09.140
+atau menangani percakapan dukungan pelanggan multilangkah dari awal sampai akhir.
+
+00:01:09.820 --> 00:01:11.440
+Dan tiba-tiba satu perintah tidak bisa menangani.
+
+00:01:11.880 --> 00:01:12.500
+Inilah yang terjadi.
+
+00:01:12.920 --> 00:01:14.260
+Jendela konteks model penuh, iya,
+
+00:01:14.740 --> 00:01:16.000
+melupakan instruksi sebelumnya,
+
+00:01:16.120 --> 00:01:18.740
+dan mulai mengarang fakta atau memberikan hasil yang tidak lengkap.
+
+00:01:19.200 --> 00:01:21.940
+Semakin lama tugas berlangsung, semakin tidak dapat diandalkan keluarannya.
+
+00:01:21.940 --> 00:01:23.900
+Anda mungkin pernah mengalaminya sendiri.
+
+00:01:24.660 --> 00:01:26.980
+Anda meminta AI melakukan sesuatu yang kompleks,
+
+00:01:27.080 --> 00:01:29.540
+dan pada akhirnya ia lupa apa yang Anda minta sejak awal.
+
+00:01:30.700 --> 00:01:33.180
+Bayangkan meminta satu orang membangun seluruh rumah dari awal,
+
+00:01:33.300 --> 00:01:35.620
+dalam sekali duduk, tanpa pernah memeriksa pekerjaannya.
+
+00:01:36.340 --> 00:01:37.940
+Itulah yang kita minta pada model ini untuk dilakukan.
+
+00:01:38.420 --> 00:01:39.900
+Hasilnya persis seperti yang Anda duga.
+
+00:01:40.280 --> 00:01:42.840
+Rumah setengah jadi dengan dinding yang hilang dan pintu yang tidak bisa dibuka.
+
+00:01:43.200 --> 00:01:44.320
+Solusinya bukalah perintah yang lebih baik.
+
+00:01:44.320 --> 00:01:46.200
+Anda bisa menghabiskan waktu berjam-jam,
+
+00:01:46.380 --> 00:01:48.980
+mengubah kata-kata, menambahkan contoh, dan memperbaiki instruksi,
+
+00:01:49.300 --> 00:01:51.860
+namun itu akan tetap gagal pada tugas yang panjang dan kompleks
+
+00:01:51.860 --> 00:01:53.540
+karena masalah mendasarnya bukanlah perintah tersebut.
+
+00:01:53.840 --> 00:01:55.140
+Itu adalah kurangnya sistem di sekitarnya.
+
+00:01:56.580 --> 00:01:58.200
+Yang dibutuhkan model bukanlah kata-kata yang lebih baik.
+
+00:01:59.240 --> 00:02:02.160
+Disitulah evolusi dari rekayasa perintah menuju rekayasa konteks dimulai.
+
+00:02:03.060 --> 00:02:04.140
+Tiga fase evolusi AI.
+
+00:02:04.860 --> 00:02:06.780
+Jadi beginilah cara saya melihat evolusi AI.
+
+00:02:06.780 --> 00:02:09.840
+Tiga fase masing-masing mengalirkan fokus bagi para insinyur.
+
+00:02:10.500 --> 00:02:11.680
+Fase satu adalah rekayasa prom.
+
+00:02:12.100 --> 00:02:13.560
+Itu berlangsung dari sekitar tahun 2024.
+
+00:02:14.520 --> 00:02:15.520
+Pertanyaan besarnya sederhana.
+
+00:02:15.720 --> 00:02:16.740
+Apa yang harus saya katakan kepada model?
+
+00:02:17.460 --> 00:02:20.420
+Anda menulis satu instruksi, mendapatkan satu jawaban, dan selesai.
+
+00:02:20.900 --> 00:02:22.520
+Seluruh keahliannya ada pada pemilihan keatangan.
+
+00:02:22.880 --> 00:02:24.220
+Untuk tugas dasar itu sudah cukup.
+
+00:02:24.840 --> 00:02:28.160
+Fase dua menyusul rekayasa konteks dari tahun 2024 hingga 2025.
+
+00:02:28.940 --> 00:02:30.680
+Pertanyaan berubah dari apa yang harus saya katakan
+
+00:02:30.680 --> 00:02:32.040
+menjadi apa yang harus dilihat model.
+
+00:02:32.780 --> 00:02:34.900
+Para insinyur menemukan bahwa apa yang Anda berikan ke model
+
+00:02:34.900 --> 00:02:36.300
+lebih penting daripada cara Anda bertanya.
+
+00:02:36.780 --> 00:02:39.700
+Jadi mereka membangun sistem seperti pemanggilan alat RAG
+
+00:02:39.700 --> 00:02:41.380
+dan model konteks protokol MCP.
+
+00:02:42.420 --> 00:02:44.820
+Ini memungkinkan model mengambil informasi yang tepat secara langsung.
+
+00:02:45.300 --> 00:02:46.700
+Daripada memasukkan semua yang ke satu prom,
+
+00:02:46.800 --> 00:02:49.380
+model bisa mengambil apa yang dibutuhkan saat diperlukan.
+
+00:02:50.240 --> 00:02:51.480
+Fase tiga adalah tempat kita sekarang.
+
+00:02:51.640 --> 00:02:52.240
+Rekayasa Harness.
+
+00:02:53.220 --> 00:02:55.200
+Mulai sekitar tahun 2026, pertanyaannya adalah
+
+00:02:55.200 --> 00:02:57.140
+sistem apa yang perlu saya bangun di sekitar model?
+
+00:02:57.880 --> 00:02:58.620
+Disinilah hal itu.
+
+00:02:59.180 --> 00:03:02.060
+Menjadi menarik karena reliability, memori, orkestrasi, dan guardrail
+
+00:03:02.060 --> 00:03:03.280
+tidak berasal dari model itu sendiri
+
+00:03:03.280 --> 00:03:04.860
+melainkan dari sistem yang Anda bangun di sekitarnya.
+
+00:03:04.860 --> 00:03:06.820
+Ini dia cara paling sederhana untuk memikirkan.
+
+00:03:07.180 --> 00:03:08.720
+Sebuah agen sama dengan model ditambah Harness.
+
+00:03:09.040 --> 00:03:10.340
+Harness adalah segala sesuatu yang lainnya.
+
+00:03:10.560 --> 00:03:12.300
+Model melakukan pemikiran, Harness melakukan sisanya.
+
+00:03:12.680 --> 00:03:15.260
+Dan Harness itu adalah bumbu rahasia yang membuat semuanya bekerja.
+
+00:03:15.660 --> 00:03:17.700
+Bayangkan seperti ini model adalah pekerja terampil.
+
+00:03:17.940 --> 00:03:19.140
+Sangat berbakat namun terbatas.
+
+00:03:19.600 --> 00:03:23.360
+Harness adalah bengkel, peralatan, daftar periksa, supervisor, dan remnya.
+
+00:03:23.700 --> 00:03:25.540
+Tanpa bengkel, pekerja tidak punya tempat untuk bekerja.
+
+00:03:25.880 --> 00:03:27.580
+Tanpa peralatan, mereka tidak bisa membangun apapun.
+
+00:03:28.020 --> 00:03:29.500
+Tambah daftar periksa, mereka melupakan langkah-langkah.
+
+00:03:29.840 --> 00:03:31.360
+Tanpa supervisor, mereka membuat kesalahan.
+
+00:03:31.360 --> 00:03:32.880
+Dan tanparan, mereka akan kelelahan.
+
+00:03:33.160 --> 00:03:34.460
+Harness menyediakan semua struktur itu.
+
+00:03:34.740 --> 00:03:35.920
+Jadi apa sebenarnya isi dari Harness ini?
+
+00:03:36.360 --> 00:03:36.840
+Mari kita buka.
+
+00:03:37.560 --> 00:03:38.840
+Apa yang sebenarnya terkandung dalam Harness?
+
+00:03:39.240 --> 00:03:40.340
+Jadi apa saja yang masuk ke dalam Harness?
+
+00:03:40.700 --> 00:03:42.140
+Mari kita bahas bagian-bagiannya satu per satu.
+
+00:03:42.600 --> 00:03:43.500
+Pertama, Loop Agen.
+
+00:03:43.960 --> 00:03:45.680
+Ini adalah siklus yang menjaga agen tetap berjalan.
+
+00:03:46.040 --> 00:03:47.960
+Model berpikir lalu memutuskan untuk memanggil alat.
+
+00:03:48.220 --> 00:03:49.880
+Alat dijalankan dan mengirimkan kembali hasil.
+
+00:03:50.100 --> 00:03:52.920
+Model melihat hal itu, berpikir lagi, dan mengingat memanggil alat lain.
+
+00:03:53.280 --> 00:03:55.360
+Loop terus berjalan sampai agen mencapai tujuannya.
+
+00:03:55.360 --> 00:03:59.420
+Tanpa Loop ini, Anda hanya mendapatkan satu pertanyaan dan satu jawaban.
+
+00:04:00.040 --> 00:04:02.960
+Dengan ini, Anda memiliki sistem yang menyelesaikan masalah langkah demi langkah.
+
+00:04:03.940 --> 00:04:04.860
+Selanjutnya, main konteks.
+
+00:04:05.480 --> 00:04:08.040
+Ini sangat penting karena model memiliki rentang perhatian yang terbatas.
+
+00:04:08.480 --> 00:04:10.820
+Jendela konteksnya hanya dapat menampung sedikit sebelum meluat.
+
+00:04:11.220 --> 00:04:12.060
+Di sinilah Harness berperan.
+
+00:04:12.520 --> 00:04:13.940
+Harness memadatkan percakapan,
+
+00:04:14.320 --> 00:04:15.180
+meringkas semua pesan,
+
+00:04:15.480 --> 00:04:16.880
+dan memprioritaskan apa yang penting.
+
+00:04:17.520 --> 00:04:19.360
+Bayangkan ini sebagai sistem pengarsipan untuk percakapan.
+
+00:04:19.960 --> 00:04:21.960
+Harness mengaturnya agar model hanya melihat apa yang relevant.
+
+00:04:21.960 --> 00:04:25.040
+Tanpa ini, sesi panjang akan berantakan karena model kehilangan jejak.
+
+00:04:25.680 --> 00:04:26.840
+Lalu ada alat dan keterampilan.
+
+00:04:27.180 --> 00:04:28.320
+Ini adalah tangan dari agen tersebut.
+
+00:04:28.660 --> 00:04:30.260
+Model dengan sendirinya hanya dapat menghasilkan teks.
+
+00:04:30.600 --> 00:04:32.100
+Ia tidak bisa membaca file menjelajahi web,
+
+00:04:32.180 --> 00:04:33.780
+menjalankan kode, atau meminta data dari basis data.
+
+00:04:33.980 --> 00:04:35.240
+Harness memberikannya kemampuan kemampuan tersebut.
+
+00:04:35.820 --> 00:04:37.960
+Akses file, penelusuran web, eksekusi kode,
+
+00:04:38.220 --> 00:04:40.160
+query basis data, semua alat yang disediakan,
+
+00:04:40.480 --> 00:04:40.840
+Harness.
+
+00:04:42.120 --> 00:04:43.360
+Model memutuskan kapan menggunakannya,
+
+00:04:43.500 --> 00:04:44.540
+dan Harness membuat semuanya berfungsi.
+
+00:04:44.880 --> 00:04:47.100
+Memori dan persistensi sesi adalah bagian besar lainnya.
+
+00:04:47.360 --> 00:04:48.760
+Harness mengingat sesi-sesi sebelumnya.
+
+00:04:48.760 --> 00:04:50.720
+Jadi saat Anda kembali ke agen besok,
+
+00:04:50.820 --> 00:04:51.540
+ia tidak mulai dari no.
+
+00:04:52.140 --> 00:04:54.060
+Ia mengingat referensi Anda, konteks proyek Anda,
+
+00:04:54.140 --> 00:04:55.060
+dan keputusan yang Anda buat.
+
+00:04:55.720 --> 00:04:58.240
+Agen belajar seiring waktu karena Harness menyimpan riwayat tersebut.
+
+00:04:58.780 --> 00:04:59.860
+Gak adalah lapisan keamanan,
+
+00:05:00.000 --> 00:05:01.540
+batasan yang Anda tetapkan pada perilaku agen.
+
+00:05:02.060 --> 00:05:03.400
+Anggap saja ini sebagai buku peraturan agen.
+
+00:05:03.840 --> 00:05:05.200
+Langkah maksimum sebelum berhenti,
+
+00:05:05.460 --> 00:05:06.720
+tindakan yang tidak boleh diambil.
+
+00:05:07.100 --> 00:05:09.220
+Gerbang persetujuan manusia untuk langkah berisi kotinggi
+
+00:05:09.220 --> 00:05:10.860
+seperti melulis file atau mengirim email.
+
+00:05:11.520 --> 00:05:13.440
+Tanpa guardrail, agen bisa berjalan selamanya
+
+00:05:13.440 --> 00:05:15.160
+atau melakukan sesuatu yang tidak Anda inginkan.
+
+00:05:15.160 --> 00:05:16.580
+Harness menjaganya tetap terkenal.
+
+00:05:16.580 --> 00:05:17.840
+Terakhir, orkestrasi.
+
+00:05:18.440 --> 00:05:21.220
+Harness dapat menjalankan sub-agen khusus untuk tugas yang berbeda.
+
+00:05:21.860 --> 00:05:22.760
+Satu menangani riset,
+
+00:05:22.920 --> 00:05:23.960
+yang lain menangani penulisan,
+
+00:05:24.300 --> 00:05:25.500
+yang ketiga menangani verifikasi.
+
+00:05:25.860 --> 00:05:28.360
+Mereka bekerja bersama seperti tim spesialis di lokasi konstruksi.
+
+00:05:28.900 --> 00:05:30.120
+Masing-masing melakukan yang terbaik,
+
+00:05:30.660 --> 00:05:32.520
+dan Harness memastikan mereka tidak saling menghalangi.
+
+00:05:33.180 --> 00:05:34.720
+Sekarang komponen-komponen ini bukan sekadar teot.
+
+00:05:35.200 --> 00:05:37.960
+Microsoft telah membangun platform lengkap yang praktekan semua ini.
+
+00:05:39.000 --> 00:05:41.620
+Perkenalkan Microsoft AI Foundry Harness untuk perusahaan.
+
+00:05:42.180 --> 00:05:44.020
+Platform itu adalah Microsoft AI Foundry.
+
+00:05:44.020 --> 00:05:48.420
+Anggap ini sebagai bengkel lengkap untuk membangun dan menjalankan agen AI dalam skala besar.
+
+00:05:49.040 --> 00:05:49.880
+Dan saat saya katakan skala,
+
+00:05:49.980 --> 00:05:51.760
+masalah saya skala nyata bukan eksperimen laboratorium.
+
+00:05:52.840 --> 00:05:55.060
+Foundry melayani lebih dari 70 ribu pelanggan hari ini,
+
+00:05:55.300 --> 00:05:57.860
+dan kuartal lalu saja ia memproses 100 triliun token.
+
+00:05:58.980 --> 00:06:00.500
+Itu 100 triliun, bukan salah ketik.
+
+00:06:01.080 --> 00:06:01.540
+Setiap hari,
+
+00:06:02.000 --> 00:06:03.780
+ia mendukung 2 miliar query pencarian perusahaan.
+
+00:06:04.240 --> 00:06:07.080
+Ini adalah platform produksi yang menangani beberapa beban kerja terbesar di dunia.
+
+00:06:07.080 --> 00:06:10.340
+Apa yang sebenarnya dilakukan Foundry adalah memberi Anda Harness sebagai layanan terkolah.
+
+00:06:11.000 --> 00:06:15.960
+Anda tidak perlu membangun manajemen kontak, memori, guardrail, dan koordinasi dari nol karena semuanya sudah tersedia.
+
+00:06:16.360 --> 00:06:18.900
+Anda membawa agen Anda dan Foundry menyediakan tempat kerjanya.
+
+00:06:19.280 --> 00:06:20.240
+Karena kita bicara tentang keteritas.
+
+00:06:20.680 --> 00:06:21.480
+Ini adalah hal yang sangat penting.
+
+00:06:21.780 --> 00:06:24.300
+Setiap agen di Foundry mendapatkan ID agen entranya sendiri.
+
+00:06:24.900 --> 00:06:26.080
+Singkatnya sebuah identitas digital.
+
+00:06:26.600 --> 00:06:29.040
+Bayangkan seperti kartu karyawan yang dikeluarkan oleh meja resepsionis.
+
+00:06:29.040 --> 00:06:34.600
+Agen dapat masuk ke layanan, mengakses data, dan bertindak atas nama organisasi seperti layaknya, karyawan manusia.
+
+00:06:35.160 --> 00:06:38.340
+Dan karena setiap tindakan terikat pada identitas tersebut, semuanya dapat diaudit sepenuhi.
+
+00:06:38.720 --> 00:06:39.340
+Mengapa itu penting?
+
+00:06:39.700 --> 00:06:41.280
+Dalam perusahaan Anda perlu tahu siapa yang melakukan.
+
+00:06:41.760 --> 00:06:43.180
+Setiap tindakan dicatat dan dapat dilacak.
+
+00:06:43.680 --> 00:06:46.040
+Foundry terhubung ke lebih dari seri 400 sumber data perusahaan,
+
+00:06:46.880 --> 00:06:50.140
+mulai dari SharePoint dan Dynamics 365 hingga Salesforce dan Basis Data Khusus.
+
+00:06:50.700 --> 00:06:52.960
+Jika perusahaan Anda menggunakannya, Foundry kemungkinan besar memiliki konek.
+
+00:06:53.140 --> 00:06:55.320
+Jadi agen tersebut tidak menebak-nebak atau mengerang hal.
+
+00:06:55.680 --> 00:06:57.260
+Agen mengambil data nyata dari sistem nyata.
+
+00:06:57.260 --> 00:07:00.040
+Yang berarti jawabannya didasarkan pada data bisnis Anda yang sebenarnya.
+
+00:07:00.460 --> 00:07:01.140
+Kemudian ada memori.
+
+00:07:01.520 --> 00:07:03.160
+Foundry mencakup tipe memori bawaan.
+
+00:07:03.440 --> 00:07:05.980
+Memori prosedural membantu agen belajar dari tugas-tugas sebelumnya.
+
+00:07:06.100 --> 00:07:08.360
+Agen menjadi lebih baik seiring waktu, seperti pelatihan sambil bekerja.
+
+00:07:08.620 --> 00:07:10.960
+Persistensi sesi berarti agen mengingat percakapan sebelumnya,
+
+00:07:11.080 --> 00:07:13.020
+jadi tidak mulai dari nol setiap kali Anda berbicara dengan.
+
+00:07:13.260 --> 00:07:15.580
+Hal itu membuat interaksi terasa berkelanjutan dan cerdas.
+
+00:07:15.980 --> 00:07:16.960
+Jadi bagaimana cara kerjanya?
+
+00:07:17.420 --> 00:07:20.480
+Mari kita bedah komponen yang disediakan Microsoft untuk membangun wadah khusus.
+
+00:07:21.360 --> 00:07:23.500
+Kerangka kerja agen, membangun wadah khusus.
+
+00:07:24.040 --> 00:07:25.280
+Jadi bagaimana cara Anda membangun wadah?
+
+00:07:27.260 --> 00:07:29.700
+SDK khusus yang disebut Microsoft Agent Framework
+
+00:07:29.700 --> 00:07:32.460
+yang mungkin Anda kenal dengan nama sebelumnya, Semantic Kernel.
+
+00:07:32.920 --> 00:07:34.460
+Inilah dibangun kembali, tetapi idenya tetap sama.
+
+00:07:34.460 --> 00:07:37.740
+Ini memungkinkan pengembang-membangun wadah agen khusus dalam Python dan CISAR.
+
+00:07:38.200 --> 00:07:39.420
+Kerangka kerja ini memiliki tiga lapisan.
+
+00:07:39.880 --> 00:07:42.380
+Di bagian bawah adalah putaran agen, siklus penawaran inti
+
+00:07:42.380 --> 00:07:45.380
+di mana model berpikir, menggil alat, mendapatkan hasil, dan berpikir lain.
+
+00:07:45.900 --> 00:07:49.040
+Di atasnya terdapat alur kerja, pola koordinasi yang mengelola beberapa agen.
+
+00:07:49.740 --> 00:07:51.820
+Dan yang membungkus semuanya adalah lapisan wadah itu sendiri,
+
+00:07:51.940 --> 00:07:53.100
+cangkang yang menyatukan semuanya.
+
+00:07:53.100 --> 00:07:56.140
+Microsoft menyertakan lima pola koordinasi bawaan.
+
+00:07:56.880 --> 00:07:59.800
+Sequential menjalankan agen satu demi satu dalam urutan yang ditutupkan.
+
+00:08:00.280 --> 00:08:01.740
+Concurrent menjalankan semuanya secara paralah.
+
+00:08:02.220 --> 00:08:05.060
+Handoff mengalihkan kendali dari satu agen ke agen lain berdasarkan kebutuhan.
+
+00:08:05.560 --> 00:08:08.200
+Group chat memungkinkan beberapa agen berbicara dalam percakapan bersama.
+
+00:08:08.860 --> 00:08:11.620
+Dan kemudian ada magentik, pengelola dari Microsoft Research.
+
+00:08:12.140 --> 00:08:14.100
+Di sini, agen pengawas membuat rencana,
+
+00:08:14.360 --> 00:08:17.280
+lalu mendelegasikan pekerjaan ke subagen khusus seperti manager proyek
+
+00:08:17.280 --> 00:08:21.840
+yang menugaskan tugas kepada anggota tim setiap pola menangani masalah koordinasi yang berbeda.
+
+00:08:22.300 --> 00:08:22.920
+Inilah bagian terbaik.
+
+00:08:23.380 --> 00:08:24.540
+Kerangka kerja ini dapat diperluas.
+
+00:08:24.900 --> 00:08:27.180
+Anda bisa menggunakan model apapun yang diinginkan,
+
+00:08:27.280 --> 00:08:29.520
+mulai dari OpenAI, Anthropic, dan Google Gemini,
+
+00:08:29.640 --> 00:08:31.960
+hingga Amazon Bedrock, bahkan model lokal di olamah.
+
+00:08:32.420 --> 00:08:32.740
+Begitu pelik.
+
+00:08:33.120 --> 00:08:36.800
+Anda bisa terhubung melalui OpenAI Protokol Konteks Model atau kode langsung.
+
+00:08:37.280 --> 00:08:40.660
+Beberapa orang khawatir menggunakan kerangka kerja Microsoft akan mengunci Anda ke dalam ekosistem mereka.
+
+00:08:40.920 --> 00:08:41.440
+Itu tidak benar.
+
+00:08:41.860 --> 00:08:44.600
+Kerangka kerja ini dapat bekerja dengan tumpukan teknologi apapun yang sudah Anda gunakan.
+
+00:08:44.600 --> 00:08:47.940
+Lapisan harness menambahkan kemampuan seperti akses file, eksekusi kode,
+
+00:08:48.220 --> 00:08:49.580
+midower perencanaan, dan telemetry.
+
+00:08:49.700 --> 00:08:53.120
+Jadi, membangun agen dengan kerangka kerja ini berarti membangun sistem lengkap yang membaca file,
+
+00:08:53.220 --> 00:08:55.600
+menulis kode, menencanakan tugas multilangkah, dan mencatat semultilangkah,
+
+00:08:55.680 --> 00:08:56.720
+dan mencatat semuanya untuk dibagi.
+
+00:08:56.860 --> 00:08:58.100
+Ini berdari sekadar antar muka obrolan.
+
+00:08:58.480 --> 00:08:59.240
+Beginilah bentuknya.
+
+00:08:59.620 --> 00:09:01.520
+Payankan sebuah ujian pengkodean ke atas kerangka kerja ini.
+
+00:09:02.000 --> 00:09:02.860
+Anda memberinya tugas.
+
+00:09:02.980 --> 00:09:05.280
+Katakanlah, menambahkan fitur baru ke basis kode yang sudah ada.
+
+00:09:05.880 --> 00:09:08.500
+Agen tersebut mulai dengan menelusuri dokumentasi untuk memahami API-nya.
+
+00:09:08.900 --> 00:09:09.680
+Lalu ia menulis kodenya.
+
+00:09:10.100 --> 00:09:11.720
+Kemudian ia menjalankan pengujian untuk memastikan tidak.
+
+00:09:12.100 --> 00:09:13.980
+Jika pengujian gagal, ia membaca kesalahannya,
+
+00:09:14.120 --> 00:09:16.700
+memperbaiki bug, dan menjalankan pengujian lagi semua dalam harness yang sama,
+
+00:09:16.840 --> 00:09:19.120
+mengulang siklus berpikir bertindak periksa sampai tugas selesai.
+
+00:09:20.140 --> 00:09:22.300
+Tanpa harness, Anda harus memasukkan setiap langkah secara manuk.
+
+00:09:22.700 --> 00:09:24.820
+Dengan harness, agen menangani seluruh alur kerja dengan sendiri.
+
+00:09:25.400 --> 00:09:28.000
+Salah satu contoh populer harness yang sedang beraksi adalah pola cloud.
+
+00:09:28.400 --> 00:09:29.980
+Microsoft telah menyediakannya di Foundry,
+
+00:09:30.080 --> 00:09:32.400
+dan itu adalah demonstrasi hebat tentang bagaimana bagian ini bersatu.
+
+00:09:33.180 --> 00:09:34.440
+Agen bergaya cloud dan hermas.
+
+00:09:35.040 --> 00:09:36.380
+Mari kita bicara tentang agen bergaya cloud.
+
+00:09:36.380 --> 00:09:39.300
+Nama itu berasal dari proyek sumber terbuka seperti open cloud.
+
+00:09:39.700 --> 00:09:41.940
+Agen-agen ini tinggal di mesin Anda, menunggu instruksi,
+
+00:09:42.260 --> 00:09:44.060
+lalu menjalankan tugas-tugas panjang dengan sendirinya.
+
+00:09:44.480 --> 00:09:46.300
+Mereka selalu ada siap membantu saat Anda membutuhkannya.
+
+00:09:46.860 --> 00:09:49.400
+Anggaplah mereka sebagai asisten pribadi yang tidak pernah libur.
+
+00:09:50.120 --> 00:09:51.380
+Versi Microsoft disebut Hermes.
+
+00:09:51.960 --> 00:09:54.180
+Ini berjalan di dalam sandbox Eigen and Hosting Foundry,
+
+00:09:54.360 --> 00:09:56.320
+dan dilengkapi dengan beberapa kemampuan yang mengesankan.
+
+00:09:56.640 --> 00:09:59.760
+Hermes memiliki sistem file sendiri, memori sendiri, dan kumpulan alatnya sendiri.
+
+00:10:00.140 --> 00:10:01.920
+Ia dapat mengatur rutinitas pemeliharaannya sendiri,
+
+00:10:02.140 --> 00:10:03.820
+membersihkan file lama, dan mengatur ruang kerjanya.
+
+00:10:03.820 --> 00:10:06.940
+Dan jika ia menyadari membutuhkan keterampilan berubah yang belum diikinya,
+
+00:10:07.060 --> 00:10:08.140
+ia bisa membangunnya secara langsung.
+
+00:10:08.220 --> 00:10:09.300
+Inilah hal tentang agen cloud.
+
+00:10:09.940 --> 00:10:12.220
+Arsiteklot menyebutnya sebagai hewan peliharaan, bukan ternak.
+
+00:10:12.620 --> 00:10:13.400
+Hewan peliharaan itu unik.
+
+00:10:13.680 --> 00:10:15.860
+Anda menamai mereka, merawat mereka, dan tidak bisa menggantinya namun.
+
+00:10:16.180 --> 00:10:16.960
+Pernah bisa sayang dipertukar.
+
+00:10:17.380 --> 00:10:19.220
+Jadi jika satu mati, Anda tinggal mencari gantinya.
+
+00:10:19.640 --> 00:10:20.960
+Agen cloud sudah pasti adalah hewan peliharaan.
+
+00:10:21.320 --> 00:10:23.560
+Masih memiliki status riwayat dan perilaku yang dipelajari sendiri.
+
+00:10:24.420 --> 00:10:25.500
+Keunikan itu membuatnya canggih,
+
+00:10:25.600 --> 00:10:27.820
+namun juga menyulitkan pemulihan dan persekalaan.
+
+00:10:28.060 --> 00:10:31.100
+Jika terjadi kesalahan, Anda tidak bisa begitu saja membuang instans
+
+00:10:31.100 --> 00:10:33.740
+dan memulai dari awal karena Anda akan kehilangan semua pengetah terkumpul.
+
+00:10:33.960 --> 00:10:36.040
+Solusi dari Microsoft adalah sesuatu yang disebut rutinitas.
+
+00:10:36.240 --> 00:10:38.960
+Ini adalah tugas terjadwal yang memungkinkan agen untuk bangun,
+
+00:10:39.060 --> 00:10:40.720
+melakukan pemeliharaan, lalu kembali tidur.
+
+00:10:41.120 --> 00:10:44.200
+Alih-alih membiarkan sandbox berjalan 2 per 7 yang memakan biaya,
+
+00:10:44.660 --> 00:10:46.900
+agen akan berhenti setelah periode tidak aktif.
+
+00:10:47.560 --> 00:10:50.400
+Sistem rutinitas membangunkannya saat tiba waktunya untuk melakukan sesuatu,
+
+00:10:50.540 --> 00:10:51.800
+seperti membersihkan keterampilan lama,
+
+00:10:51.960 --> 00:10:53.540
+menjalankan cadangan, atau meliksa tugas baru.
+
+00:10:53.860 --> 00:10:54.860
+Kemudian ia kembali tidur.
+
+00:10:54.860 --> 00:10:58.580
+Hal ini menghemat biaya sekaligus menjaga agen tetap tersedia saat Anda membutuhkan.
+
+00:10:58.780 --> 00:10:59.920
+Sandbox mengisolasi setiap sesi.
+
+00:11:00.680 --> 00:11:05.180
+File, memori, dan konfigurasi agen Anda semuanya tetap berada dalam lingkungannya sendiri.
+
+00:11:05.700 --> 00:11:08.260
+Dan Harness menangani pengelolaan status tersebut di seluruh sesi,
+
+00:11:08.420 --> 00:11:10.740
+sehingga Anda tidak perlu khawatir data satu agen motor ke agen lain.
+
+00:11:11.360 --> 00:11:13.140
+Membangun Harness sendiri dari awal memang bisa dilakukan,
+
+00:11:13.280 --> 00:11:14.820
+namun sebagian besar bisnis tidak perlu melakukannya.
+
+00:11:15.520 --> 00:11:18.340
+Foundry memberi Anda platform siap pakai dengan semua kemampuan ini di dalamnya.
+
+00:11:18.920 --> 00:11:21.180
+Pertanyaan sebenarnya, apa yang ingin Anda lakukan dengan agen Anda?
+
+00:11:21.180 --> 00:11:24.880
+Penerbitan dan kolaborasi di mana Harness bertemu dengan musik.
+
+00:11:25.200 --> 00:11:28.440
+Jadi Anda telah membangun agen Anda memberinya alat, memori, orkestrasi, dan sandbox.
+
+00:11:28.780 --> 00:11:29.900
+Sekarang bagaimana orang benar-benar menggunakan?
+
+00:11:30.320 --> 00:11:31.640
+Di sinilah Foundry membuat segala yang jadinya.
+
+00:11:32.080 --> 00:11:33.820
+Setelah agen Anda dibuat dan diterapkan,
+
+00:11:33.980 --> 00:11:37.760
+Anda dapat menerbitkannya ke Microsoft 365 Copilot di Microsoft Teams dengan satu klik.
+
+00:11:38.320 --> 00:11:40.940
+Bukan 10 klik, bukan jalur penerapan tiga hari, hanya satu klik.
+
+00:11:41.220 --> 00:11:45.680
+Dan agen Anda muncul tepat di tempat orang bekerja, di email obrolan, dan dokumen mereka.
+
+00:11:46.160 --> 00:11:47.500
+Foundry mendukung dua mode penerapan.
+
+00:11:47.500 --> 00:11:49.060
+Pertama, agen pendamuk.
+
+00:11:49.400 --> 00:11:53.060
+Mereka bekerja atas nama Anda, menyusun email, menjadwalkan rapat, atau membuka dokumen.
+
+00:11:53.400 --> 00:11:55.200
+Mereka bertindak sebagai perpanjangan tangan Anda,
+
+00:11:55.320 --> 00:11:57.500
+seperti memiliki asisten yang sangat cepat yang melakukan apa yang ingat.
+
+00:11:58.520 --> 00:11:59.520
+Kedua, agen autopilot.
+
+00:12:00.180 --> 00:12:01.180
+Ini lebih baru dan lebih menarik.
+
+00:12:01.540 --> 00:12:04.440
+Mereka bertindak atas nama mereka sendiri dengan alamat email dan identitas mereka sendiri.
+
+00:12:04.760 --> 00:12:06.160
+Mereka tidak perlu Anda beri perintah setiap saat.
+
+00:12:06.660 --> 00:12:07.360
+Mereka beri inisiatif.
+
+00:12:07.720 --> 00:12:09.400
+Agen autopilot memiliki akun pengguna penuh.
+
+00:12:09.740 --> 00:12:11.240
+Anda bisa menambahkannya ke obrolan grup tim,
+
+00:12:11.240 --> 00:12:12.600
+seperti Anda menambahkan rekan kerja manusia.
+
+00:12:12.600 --> 00:12:15.580
+Mereka mengikuti percakapan dan turun tangan saat bisa membantu,
+
+00:12:15.740 --> 00:12:16.940
+melacak poin yang belum selesai,
+
+00:12:17.080 --> 00:12:19.240
+menjawab pertanyaan tentang apa yang sedang dikerjakan tim,
+
+00:12:19.360 --> 00:12:22.340
+bahkan melakukan orientasi anggota tim baru dengan mengirimkan dokumen yang tepat
+
+00:12:22.340 --> 00:12:23.900
+dan memperkenalkan mereka kepada orang yang tepat.
+
+00:12:24.080 --> 00:12:24.820
+Ini contoh konkretnya.
+
+00:12:25.260 --> 00:12:27.200
+Katakanlah Anda meliki agen manajer alur kerja,
+
+00:12:27.560 --> 00:12:28.700
+Anda menambahkannya ke obrolan grup tim.
+
+00:12:28.960 --> 00:12:29.840
+Seseorang berkata,
+
+00:12:29.920 --> 00:12:31.640
+Hei, saya butuh laporan ketika selesai di Jumat.
+
+00:12:31.980 --> 00:12:33.620
+Agen tersebut menyadari ini adalah sebuah dilakukan.
+
+00:12:34.000 --> 00:12:34.960
+Agen itu membuat tugas,
+
+00:12:35.100 --> 00:12:36.260
+menugaskannya ke orang yang tepat,
+
+00:12:36.260 --> 00:12:38.600
+dan menambahkan pengingat untuk hari Kamis guna periksa progresnya.
+
+00:12:38.900 --> 00:12:39.880
+Tidak ada yang menyuruhnya melakukan itu.
+
+00:12:40.240 --> 00:12:42.300
+Ia hanya melihat saat tim baru dikerjakan dan langsung melakukan itu.
+
+00:12:42.820 --> 00:12:44.700
+Harness menangani semua izin di balik layar.
+
+00:12:45.220 --> 00:12:47.740
+Hanya pengguna resmi yang dapat berinteraksi dengan agen di obrolan grup.
+
+00:12:48.060 --> 00:12:50.580
+Agen hanya melihat pesan yang diizinkan untuk dilihat dan mengabaikan sisanya.
+
+00:12:50.940 --> 00:12:53.480
+Agen tersebut mematuhi kontrol akses yang sama dengan anggota tim manusia Anda.
+
+00:12:53.760 --> 00:12:55.560
+Inilah mengapa rekaya seharness benar-benar membuatkan sel.
+
+00:12:55.780 --> 00:12:58.200
+Agen tersebut tidak lagi sekadar chatbot yang Anda buka di tab browser.
+
+00:12:58.200 --> 00:12:59.760
+Ia menjadi anggota tim yang produktif.
+
+00:12:59.760 --> 00:13:03.080
+Ia ada di tempat Anda bekerja mengikuti cara kerja tim Anda.
+
+00:13:03.180 --> 00:13:06.000
+Dan ia melakukan semua itu karena harness, sistem di sekitar modal tersebut,
+
+00:13:06.260 --> 00:13:08.900
+menangani identitas, izin, penerapan, dan integrasi.
+
+00:13:09.500 --> 00:13:12.000
+Tanpa harness, Anda hanya akan memiliki jendela obrolan lain untuk diperiksa.
+
+00:13:12.360 --> 00:13:13.920
+Namun alat yang hebat tentu memerlukan penggemar.
+
+00:13:14.220 --> 00:13:16.300
+Mari kita bicara tentang batasan yang membuat semua ini aman.
+
+00:13:16.740 --> 00:13:18.620
+AI yang bertanggung jawab dan tata kelami harness.
+
+00:13:19.200 --> 00:13:19.680
+Ini masalahnya.
+
+00:13:20.100 --> 00:13:22.380
+Rekai seharness bukan hanya tentang membuat agen lebih mampu.
+
+00:13:22.380 --> 00:13:24.480
+Ini tentang membuat mereka aman dan dapat dipercaya.
+
+00:13:25.100 --> 00:13:28.860
+Agen yang bisa mengirim email, mengubah file, dan bertindak di obrolan grup memang canggih.
+
+00:13:28.860 --> 00:13:30.400
+Tetapi kekuatan itu memerlukan kendali.
+
+00:13:30.540 --> 00:13:32.660
+Anggap saja seperti memberikan kunci gedung kepada karyawan.
+
+00:13:33.080 --> 00:13:34.320
+Anda ingin mereka melakukan tugasnya.
+
+00:13:34.420 --> 00:13:36.700
+Tetapi Anda juga menetapkan aturan tentang apa yang bisa mereka aksesnya.
+
+00:13:37.340 --> 00:13:40.280
+Pendekatan Microsoft dibangun di atas standar AI yang bertanggung jawab.
+
+00:13:41.240 --> 00:13:42.460
+Enam prinsip memandu segalanya.
+
+00:13:42.720 --> 00:13:48.920
+Keadilan, keandalan, dan keselamatan, privasi dan keamanan, inklusivitas, transparansi, serta akuntabilitas.
+
+00:13:49.500 --> 00:13:51.260
+Ini bukan sekadar ide bagus yang tertulis di poster.
+
+00:13:51.320 --> 00:13:55.320
+Ini adalah fondasi nyata bagi bagaimana seluruh platform dirancang dari dasar.
+
+00:13:55.960 --> 00:13:58.260
+Harness adalah tempat di mana prinsip-prinsip ini menjadi kode nyata.
+
+00:13:58.260 --> 00:14:00.220
+Batasan guardrails membatasi apa yang dapatnya.
+
+00:14:00.540 --> 00:14:04.020
+Hook siklus hidup memungkinkan Anda menerapkan kebijakan di setiap langkah eksekusi agen.
+
+00:14:04.440 --> 00:14:08.420
+Sebelum agen berjalan, setelah berjalan, sebelum memanggil alat, setelah mendapatkan hasil,
+
+00:14:08.560 --> 00:14:10.780
+dan Anda bisa menyisipkan pemeriksaan Anda sendiri di titik manapun.
+
+00:14:11.160 --> 00:14:13.260
+Ingin memblokir agen agar tidak mengakses basis data tentu?
+
+00:14:13.760 --> 00:14:14.340
+Anda bisa mahu, kan?
+
+00:14:14.620 --> 00:14:16.700
+Ingin mewajibkan perseduan manusia sebelum agen memil?
+
+00:14:17.260 --> 00:14:17.920
+Anda juga bisa mahu.
+
+00:14:18.160 --> 00:14:19.640
+Keduanya sangat mudah untuk diatur.
+
+00:14:20.080 --> 00:14:23.300
+Well-Architected from work Azure mencakup panduan khusus untuk beban kerja AI.
+
+00:14:23.300 --> 00:14:26.440
+Ini mencakup segalanya mulai dari angripsi data hingga responsinsip.
+
+00:14:27.060 --> 00:14:31.380
+Gagasannya adalah bahwa membangun sistem AI pada dasarnya tidak berbeda dengan membangun sistem perusahaan lainnya.
+
+00:14:31.860 --> 00:14:34.240
+Anda tetap menurutkan keamanan, keandalan, dan keunggulan operasi.
+
+00:14:34.920 --> 00:14:38.880
+Well-Architected framework memberikan cara terstruktur untuk memikirkan semua itu tanpa tersesat.
+
+00:14:39.360 --> 00:14:41.020
+Di luar itu ada Cloud Adoption Framework.
+
+00:14:41.440 --> 00:14:43.500
+Framework ini menyediakan proses empat tahap untuk data kalau Anda.
+
+00:14:43.880 --> 00:14:45.080
+Pertama, identifikasi risiko.
+
+00:14:45.080 --> 00:14:47.400
+Kedua, ukur dampaknya.
+
+00:14:47.680 --> 00:14:48.460
+Berapa bulu dampaknya, net?
+
+00:14:48.700 --> 00:14:50.040
+Ketiga, mitigasi dengan kontrol.
+
+00:14:50.340 --> 00:14:51.640
+Apa yang bisa diterapkan untuk mencegahnya?
+
+00:14:52.000 --> 00:14:53.120
+Keempat, operasikan pemontauan.
+
+00:14:53.640 --> 00:14:55.080
+Bagaimana cara mendeteksi masalah itu terjadi?
+
+00:14:55.440 --> 00:14:59.640
+Ini adalah pendekatan praktis langkah demi langkah yang mengubah kekhawatiran abstrak menjadi tindakan nyata.
+
+00:15:00.280 --> 00:15:02.780
+Untuk agent harness secara khusus, ini berarti beberapa hal utama.
+
+00:15:03.280 --> 00:15:05.940
+Batas langkah maksimum agar agen tidak berjalan selamanya.
+
+00:15:06.440 --> 00:15:08.840
+Pembatasan alat agar hanya dapat mengakses apa yang seharusnya.
+
+00:15:09.140 --> 00:15:11.080
+Gerbang persetujuan manusia untuk tindakan berisikotik.
+
+00:15:11.080 --> 00:15:13.640
+Jejak audit agar setiap keputusan tercatat dan dapat ditinjau.
+
+00:15:13.640 --> 00:15:17.280
+Filter keamanan konten yang menangkap output bermasalah sebelum dilihat siapapun.
+
+00:15:17.780 --> 00:15:20.280
+Setiap bagian bekerja bersama untuk menjaga agen Anda tetap dalam kena.
+
+00:15:20.600 --> 00:15:23.880
+Microsoft menyediakan keamanan konten bawaan dan evaluator di dalam foundry.
+
+00:15:24.300 --> 00:15:26.920
+Anda dapat menguji agen Anda terhadap serangka yang kriteria sebelum menerapkan.
+
+00:15:27.300 --> 00:15:28.100
+Apakah ia tetap bertopik?
+
+00:15:28.440 --> 00:15:29.980
+Apakah ia menangani data sensitif dengan menurut?
+
+00:15:30.260 --> 00:15:32.200
+Apakah ia menolak permintaan yang tidak seharusnya dipenuhi?
+
+00:15:32.480 --> 00:15:37.200
+Anda dapat menjalankan evaluasi ini secara otomatis dan mendapatkan skor sebelum memublikasikan agen kepada tim Anda.
+
+00:15:37.420 --> 00:15:40.500
+Dengan begitu, Anda menangani masalah lebih awal bukan setelah terjadi kesalahan.
+
+00:15:40.500 --> 00:15:44.640
+Ini adalah gambaran lengkap dari prom sederhana hingga agen otonom yang aman dan siap produksi.
+
+00:15:45.300 --> 00:15:51.380
+Model melakukan pemikiran, harness melakukan sisanya, koordinasi batasan tata kelola, semua yang membuatnya terpercaya.
+
+00:15:52.100 --> 00:15:53.640
+Jadi mari kita rangkum transformasinya.
+
+00:15:54.120 --> 00:15:55.240
+Kita mulai dengan one-shot prompting.
+
+00:15:55.680 --> 00:15:56.660
+Tulis prom dapatkan jawaban.
+
+00:15:57.660 --> 00:15:58.680
+Berhasil untuk tugas-tugas sudah.
+
+00:15:58.680 --> 00:16:00.340
+Lalu kita beralih ke rekayasa konteks.
+
+00:16:00.800 --> 00:16:03.640
+Kelola apa yang dilihat model, membuat informasi yang tepat pada waktu yang tepat.
+
+00:16:04.040 --> 00:16:05.540
+Itu berhasil untuk tugas yang lebih komplek.
+
+00:16:05.940 --> 00:16:07.700
+Dan sekarang kita telah tiba di rekayasa harness penuh.
+
+00:16:08.320 --> 00:16:12.240
+Bangun sistem lengkap di sekitar model dengan memori, alat koordinasi batasan, dan tata kelola.
+
+00:16:12.800 --> 00:16:13.440
+Ini adalah poin pentingnya.
+
+00:16:14.040 --> 00:16:15.780
+Agen hanya seandal sistem yang melingkupinya.
+
+00:16:16.640 --> 00:16:19.660
+Model memang penting, tetapi harness adalah penentu keberhasilan produksi.
+
+00:16:20.160 --> 00:16:21.840
+Anda bisa memiliki model terbaik di dunia.
+
+00:16:22.040 --> 00:16:24.440
+Namun tanpa harness yang baik, ia akan gagal dalam tugas nyata.
+
+00:16:24.440 --> 00:16:27.540
+Dan Anda bisa memiliki model yang layak dengan harness yang sangat baik.
+
+00:16:27.660 --> 00:16:30.860
+Dan ia akan melampaui ekspektasi setiap saatnya tantangan untuk Anda.
+
+00:16:31.540 --> 00:16:33.920
+Dalam proyek AI Anda berikutnya, berpikirlah melampaui prompt.
+
+00:16:34.560 --> 00:16:36.180
+Jangan tanya apa yang harus saya katakan pada model.
+
+00:16:36.340 --> 00:16:38.100
+Tanyakan sistem apa yang perlu saya bangun di sekelilingnya.
+
+00:16:38.840 --> 00:16:41.340
+Perubahan pola pikir itulah yang membedakan demo dari sistem produksi.
+
+00:16:41.900 --> 00:16:44.980
+Di episode berikutnya, kita akan membahas lebih dalam salah satu komponen pendukung, yaitu memori.
+
+00:16:45.240 --> 00:16:48.320
+Bagaimana agen belajar seiring waktu, bagaimana mereka mengingat apa yang telah dilakukan,
+
+00:16:48.700 --> 00:16:50.620
+dan bagaimana hal itu mengubah apa yang bisa mereka capai.
+
+00:16:50.700 --> 00:16:51.820
+Berlangganan-langganan Anda tidak ketinggalan.

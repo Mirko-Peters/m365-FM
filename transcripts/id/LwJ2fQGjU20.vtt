@@ -1,0 +1,898 @@
+WEBVTT
+
+00:00:03.380 --> 00:00:07.300
+Hari ini kita akan membahas fitur Azure yang mungkin pernah Anda dengar namun belum sepenuhnya Anda paham.
+
+00:00:07.760 --> 00:00:10.960
+Azure Policy, salah satu alat tata kelola paling canggih di seluruh platform,
+
+00:00:11.200 --> 00:00:14.560
+namun banyak orang mengabaikannya atau mengira itu hanya untuk administrator IT.
+
+00:00:15.540 --> 00:00:18.560
+Di akhir episode ini, Anda akan tahu apa itu Azure Policy,
+
+00:00:19.060 --> 00:00:21.360
+bagaimana ia bekerja seperti buku aturan tak terlihat,
+
+00:00:21.520 --> 00:00:24.720
+dan mengapa ia penting untuk menjaga lingkungan Azure Anda tetap aman dan terkendali.
+
+00:00:25.560 --> 00:00:28.440
+Kita akan membedahnya ke dalam poin-poin yang jelas, dimulai dari masalah yang diselesaikan.
+
+00:00:28.820 --> 00:00:30.080
+Siapkan kopi Anda dan mari kita mulai.
+
+00:00:31.120 --> 00:00:31.560
+Masalahnya.
+
+00:00:31.560 --> 00:00:33.380
+Mengapa cloud membutuhkan merasa nebangam?
+
+00:00:33.940 --> 00:00:35.400
+Pikirkan secara lama dalam melakukan sesuatu.
+
+00:00:36.060 --> 00:00:40.020
+Di tempat on-premises, saat Anda membutuhkan server, Anda akan mengajukan permintaan ke tim operasi.
+
+00:00:40.640 --> 00:00:45.640
+Mereka akan memperiksa aturan, kebijakan perusahaan, standar keamanan, mungkin beberapa persyaratan regulasi,
+
+00:00:46.340 --> 00:00:47.520
+lalu menyediakan server untuk Anda.
+
+00:00:47.940 --> 00:00:50.000
+Ada penjaga manusia di antara Anda dan infrastruktur.
+
+00:00:50.560 --> 00:00:52.660
+Orang itu tahu aturannya dan memastikan tidak ada yang terlewat.
+
+00:00:53.100 --> 00:00:54.060
+Cloud mengubah hal itu sepenuh.
+
+00:00:54.720 --> 00:00:57.460
+Sekarang pemilik aplikasi memiliki akses langsung tanpa perantara manusia.
+
+00:00:58.100 --> 00:01:00.440
+Klik buat di portal Azure dan itu terjadi secara instan.
+
+00:01:00.440 --> 00:01:05.660
+Anda juga bisa menggunakan baris perintah API atau alat infrastruktur sebagai kode seperti Terraform.
+
+00:01:06.200 --> 00:01:09.000
+Intinya adalah tidak ada yang memeriksa pekerjaan Anda sebelum sumber daya dibuat.
+
+00:01:09.380 --> 00:01:10.420
+Dan disitulah masalahnya dimulai.
+
+00:01:10.740 --> 00:01:12.120
+Kebanyak aplikasi tidak mengetahui semua aturan.
+
+00:01:12.540 --> 00:01:15.820
+Mungkin mereka tidak sadar bahwa kebijakan perusahaan mengharuskan semua data tetap di Eropa.
+
+00:01:16.400 --> 00:01:18.380
+Atau bahwa akun penyimpanan harus membeloki akses pop.
+
+00:01:18.800 --> 00:01:21.960
+Atau bahwa ukuran VM tertentu mahal dan hanya boleh digunakan di produksi.
+
+00:01:22.380 --> 00:01:24.660
+Jadi mereka lanjut membuat sumber daya dan terkadang kesalahan terjadi.
+
+00:01:24.660 --> 00:01:28.600
+Mesin virtual dideploy dengan IP publik dan port terbuka ke internet.
+
+00:01:29.280 --> 00:01:33.060
+Akun penyimpanan dibuat dengan akses blok publik yang expose data sensitif.
+
+00:01:33.680 --> 00:01:37.220
+Seseorang menjalankan instans GPU yang mahal untuk tes cepat dan lupa menghapusnya.
+
+00:01:37.900 --> 00:01:39.140
+Hal-hal ini sering terjadi sepanjang waktu.
+
+00:01:39.480 --> 00:01:44.920
+Yang kita butuhkan adalah sistem penegakan otomatis yang bekerja setiap saat tidak peduli siapa yang membuat sumber daya atau bagaimana caranya.
+
+00:01:44.920 --> 00:01:50.320
+Entah itu portal, CLE, panggilan IPI, atau deployment platform, aturan harus diperiksa secara otomatis.
+
+00:01:51.260 --> 00:01:53.220
+Dan itulah yang dibuat oleh Azure Policy.
+
+00:01:54.180 --> 00:01:56.440
+Apa itu Azure Policy? Buku aturan yang tak terlihat.
+
+00:01:56.860 --> 00:01:57.720
+Jadi apa itu Azure Policy?
+
+00:01:58.060 --> 00:01:59.160
+Berikut definisi paling sederhana.
+
+00:01:59.400 --> 00:02:04.280
+Azure Policy adalah layanan yang memungkinkan Anda menentukan aturan untuk sumber daya Azure Anda dan menegakkannya secara otomatis.
+
+00:02:04.620 --> 00:02:06.240
+Anggaplah itu seperti buku aturan untuk permainan bakal.
+
+00:02:06.540 --> 00:02:10.360
+Permainan memiliki banyak kemungkinan langkah, tetapi buku aturan menentukan malah yang sebenarnya diizinkan.
+
+00:02:10.360 --> 00:02:12.460
+Anda tidak bisa begitu saja memindahkan bidaan Anda ke mana mau.
+
+00:02:12.860 --> 00:02:14.740
+Aturan memberitahu Anda apa yang legal dan apa yang tidak.
+
+00:02:15.200 --> 00:02:16.200
+Ini perbedaan yang sangat penting.
+
+00:02:16.580 --> 00:02:19.380
+Azure Policy tidak sama dengan kontrol akses berbasis peran atau RBS.
+
+00:02:19.700 --> 00:02:21.240
+RBS-nya mengontrol siapa yang dapat melakukan sesuatu.
+
+00:02:21.700 --> 00:02:24.760
+Ini menjawab pertanyaan, siapa yang diizinkan membuat sumber daya di langganan ini?
+
+00:02:25.460 --> 00:02:29.720
+Azure Policy mengontrol apa yang bisa dilakukan, atau lebih tepatnya, konfigurasi apa yang diizinkan.
+
+00:02:29.800 --> 00:02:33.020
+Ini menjawab pertanyaan, ini sumber daya apa yang bisa dibuat dan bagaimana konfigurasinya.
+
+00:02:34.020 --> 00:02:39.980
+Jadi RBAC mengatakan Mirko boleh membuat akun penyimpanan dan Azure Policy mengatakan akun penyimpanan harus mengaktifkan HTTPS.
+
+00:02:39.980 --> 00:02:41.680
+Dua hal yang berbeda dan Anda membutuhkan ke depannya.
+
+00:02:42.120 --> 00:02:42.700
+Ini poin utamanya.
+
+00:02:42.700 --> 00:02:45.220
+Azure Policy selalu aktif dan selalu ditegakkan.
+
+00:02:45.840 --> 00:02:51.400
+Setiap permintaan untuk membuat, memperbarui, atau menghapus sumber daya akan melewati Azure Policy dan tidak ada cara untuk melewatinya.
+
+00:02:51.800 --> 00:02:54.840
+Kebijakan ini berada di antara Anda dan Azure Resource Manager bidang kontrol Azure.
+
+00:02:55.520 --> 00:02:56.620
+Anggap saja ini sebagai filter tempat.
+
+00:02:57.100 --> 00:02:58.720
+Setiap permintaan, melewati filter ini.
+
+00:02:58.960 --> 00:03:01.380
+Dan jika tidak sesuai aturan, permintaan akan diblokir atau ditandai.
+
+00:03:01.780 --> 00:03:03.280
+Dan ini tidak hanya berlaku untuk sumber daya baru.
+
+00:03:03.980 --> 00:03:08.520
+Azure Policy juga mengevaluasi sumber daya yang ada sehingga mendeteksi penyimpanan konfigurasi seiring waktu.
+
+00:03:08.520 --> 00:03:14.520
+Jika seseorang mengubah pengaturan pada sumber daya yang sudah Anda gunakan dan perubahan itu melanggar kebijakan, Azure Policy akan menandainya.
+
+00:03:15.540 --> 00:03:17.000
+Jadi bagaimana cara Anda menulis aturan-aturan ini?
+
+00:03:17.400 --> 00:03:18.680
+Disitulah definisi kebijakan berubah.
+
+00:03:19.380 --> 00:03:20.280
+Definisi kebijakan.
+
+00:03:20.760 --> 00:03:21.460
+Menulis aturan.
+
+00:03:22.040 --> 00:03:23.600
+Jadi bagaimana cara Anda menulis aturan-aturan ini?
+
+00:03:23.940 --> 00:03:25.300
+Disitulah definisi kebijakan berubah.
+
+00:03:25.680 --> 00:03:28.560
+Definisi kebijakan adalah aturan itu sendiri dan ditulis sebagai dokumen JSON.
+
+00:03:29.300 --> 00:03:32.000
+JSON mungkin terdengar teknis, tetapi strukturnya sebenarnya cukup sederhana.
+
+00:03:32.440 --> 00:03:33.240
+Ini mengikuti pola dasar.
+
+00:03:33.960 --> 00:03:36.200
+Jika kondisi ini benar, maka terapkan efek ini.
+
+00:03:36.920 --> 00:03:37.980
+Izinkan saya memberikan contoh nyata.
+
+00:03:38.360 --> 00:03:42.540
+Ada kebijakan bawaan yang menyatakan, jika akun penyimpanan tidak mengaktifkan HTTPS, tolak akun tersebut.
+
+00:03:43.100 --> 00:03:43.540
+Begitu saja.
+
+00:03:43.940 --> 00:03:46.700
+Ketika kondisinya benar, efeknya mulai bekerja dan memblokir penerapan.
+
+00:03:47.180 --> 00:03:48.980
+Setiap definisi kebijakan memiliki tiga bagian utama.
+
+00:03:49.340 --> 00:03:50.160
+Pertama, kondisi.
+
+00:03:50.660 --> 00:03:51.320
+Itu adalah bagian jika.
+
+00:03:51.720 --> 00:03:52.300
+Apa yang Anda periksa?
+
+00:03:52.860 --> 00:03:54.780
+Jenis sumber daya, lokasi, atau pengaturan tertentu?
+
+00:03:55.460 --> 00:03:55.980
+Kedua, efek.
+
+00:03:56.620 --> 00:03:57.380
+Itu adalah bagian maka.
+
+00:03:57.380 --> 00:03:58.980
+Apa yang terjadi saat kondisi terpenuh?
+
+00:03:58.980 --> 00:04:00.740
+Apakah Anda memblokir penerapan atau tanya-tanya?
+
+00:04:01.460 --> 00:04:02.220
+Ketiga, parameter.
+
+00:04:02.760 --> 00:04:05.080
+Ini adalah bagian isian yang memut kebijakan dapat digunakan kembali.
+
+00:04:05.780 --> 00:04:07.520
+Parameter adalah letak kekuatan yang sebenarnya.
+
+00:04:08.160 --> 00:04:12.300
+Bayangkan Anda ingin menulis kebijakan yang hanya mengizinkan sumber daya di wilayah tertentu.
+
+00:04:12.800 --> 00:04:15.740
+Anda tidak ingin menulis kebijakan terpisah untuk setiap kemungkinan kombinasi wilayah.
+
+00:04:16.120 --> 00:04:18.640
+Sebaliknya, Anda menulis satu definisi yang disebut lokasi yang diizinkan.
+
+00:04:18.960 --> 00:04:21.360
+Dan Anda menambahkan parameter untuk wilayah manasai yang diizinkan.
+
+00:04:21.360 --> 00:04:23.560
+Saat Anda menetapkan kebijakan tersebut, Anda mengisi bagian yang kos.
+
+00:04:23.740 --> 00:04:26.700
+Mungkin Anda memilih Eropa Barat dan Eropa Utara untuk satu langganan,
+
+00:04:26.700 --> 00:04:28.620
+serta AIS Timur dan AIS Barat untuk langganan lain.
+
+00:04:28.740 --> 00:04:29.640
+Definisi sama perbedaan.
+
+00:04:30.180 --> 00:04:31.620
+Begitulah cara Anda menjaga semuanya tetap terkenal.
+
+00:04:32.000 --> 00:04:34.320
+Kabar baik, Anda tidak perlu menulis semuanya dari awal.
+
+00:04:34.760 --> 00:04:38.600
+Microsoft menyediakan ratusan definisi kebijakan bawaan yang bisa langsung Anda gunakan.
+
+00:04:39.200 --> 00:04:42.440
+Ini mencakup kategori seperti komputasi, penyimpanan, jaringan, pusat keamanan,
+
+00:04:42.520 --> 00:04:43.860
+pelabilan, manajemen biaya, dan banyak lagi.
+
+00:04:44.300 --> 00:04:47.820
+Anda dapat menemukannya di portal Azure, mencari yang Anda butuhkan, dan langsung menetapkannya.
+
+00:04:48.200 --> 00:04:50.200
+Tidak perlu JSON jika Anda tidak ingin menulisnya.
+
+00:04:50.660 --> 00:04:52.600
+Namun definisi yang hanya ada dalam fly tidak akan melakukan apapun.
+
+00:04:52.600 --> 00:04:54.540
+Anda harus menetapkannya ke kebijakan tersebut berfungsi.
+
+00:04:54.940 --> 00:04:56.740
+Penetapan kebijakan membuat aturan bekerja.
+
+00:04:57.200 --> 00:05:00.940
+Penetapan kebijakan adalah tempat Anda mengambil definisi dan mengarahkannya ke lingkup tertentu.
+
+00:05:01.160 --> 00:05:02.920
+Lingkup hanyalah batasan di mana tersebut berlaku.
+
+00:05:03.480 --> 00:05:05.860
+Anda memiliki tiga pilihan, dari yang terluas hingga yang terketak.
+
+00:05:06.180 --> 00:05:09.480
+Tetapkan di tingkat grup manajemen, dan kebijakan itu mencakup seluruh rangkaianan.
+
+00:05:09.900 --> 00:05:13.120
+Terapkan di tingkat langganan, dan kebijakan itu mencakup semua yang ada dalam langganan tersebut.
+
+00:05:13.560 --> 00:05:17.240
+Atau tetapkan di tingkat grup sumber daya, dan kebijakan hanya mencakup sumber daya dalam grup itu.
+
+00:05:17.800 --> 00:05:18.800
+Hari kita bicara tentang floresan.
+
+00:05:18.800 --> 00:05:20.000
+Ini adalah konsep kunci.
+
+00:05:20.440 --> 00:05:22.520
+Saat Anda menetapkan kebijakan di tingkat grup manajemen,
+
+00:05:22.980 --> 00:05:26.260
+kebijakan itu otomatis mengalir ke setiap langganan dan grup sumber daya di bawahnya.
+
+00:05:26.780 --> 00:05:28.180
+Anda tidak perlu menetapkannya berulang kali.
+
+00:05:28.500 --> 00:05:31.740
+Ini seperti memasang aturan di papan pengumuman utama di pintu masuk gedung kantor.
+
+00:05:32.460 --> 00:05:34.080
+Setiap orang yang lewat harus mematuhinya.
+
+00:05:34.380 --> 00:05:36.200
+Anda tidak perlu memasang aturan yang sama di setiap lantai.
+
+00:05:36.880 --> 00:05:37.780
+Itu adalah upaya yang sia-sia.
+
+00:05:38.080 --> 00:05:38.940
+Otomatis mengalir ke bawah.
+
+00:05:39.300 --> 00:05:40.820
+Tapi yang terjadi saat Anda memerlukan pengecuang.
+
+00:05:41.180 --> 00:05:43.640
+Mungkin perusahaan Anda menetapkan semua data harus tetap di Eropa,
+
+00:05:43.640 --> 00:05:46.460
+namun satu proyek memiliki alasan sah untuk menggunakan pusat data di Asia.
+
+00:05:46.860 --> 00:05:49.740
+Anda tidak ingin menghapus seluruh kebijakan karena itu akan membuat segalanya terpapar.
+
+00:05:50.220 --> 00:05:51.040
+Ada membuat pengecualian.
+
+00:05:51.520 --> 00:05:55.040
+Pengecualian memungkinkan Anda membuat pengecualian untuk sumber daya atau grup sumber daya tertentu
+
+00:05:55.040 --> 00:05:56.760
+tanpa meniandakan kebijakan di tempat lain.
+
+00:05:57.180 --> 00:05:58.400
+Ini cara yang rapi untuk menangani kasus.
+
+00:05:58.680 --> 00:05:59.880
+Berikut panduan praktisnya.
+
+00:06:01.460 --> 00:06:04.200
+Tetapkan kebijakan dasar Anda yang luas di tingkat grup manajemen.
+
+00:06:04.920 --> 00:06:08.140
+Hal-hal seperti lokasi yang diizinkan atau label yang diperlukan harus berlaku untuk semuanya.
+
+00:06:08.600 --> 00:06:11.740
+Kemudian tetapkan kebijakan yang lebih spesifik di tingkat langganan atau grup sumber daya.
+
+00:06:11.740 --> 00:06:15.400
+Mungkin langganan pengembangan Anda memiliki aturan yang lebih longgar daripada langganan produksi.
+
+00:06:15.680 --> 00:06:16.540
+Tersama sekali tidak masalah.
+
+00:06:16.900 --> 00:06:18.840
+Kebijakan yang spesifik akan melengkapi kebijakan yang luas.
+
+00:06:19.120 --> 00:06:21.340
+Sekarang mari kita bahas apa yang sebenarnya terjadi saat seseorang melanggar.
+
+00:06:21.860 --> 00:06:22.740
+Disitulah peran efek.
+
+00:06:23.720 --> 00:06:25.700
+Efek yaitu apa yang terjadi saat aturan dilanggar.
+
+00:06:26.400 --> 00:06:27.700
+Jadi telah membuat aturan dan meletapkan.
+
+00:06:28.180 --> 00:06:29.380
+Apa yang terjadi jika seseorang melanggar?
+
+00:06:29.720 --> 00:06:30.520
+Disitulah peran efek.
+
+00:06:30.960 --> 00:06:32.880
+Efek adalah bagian konsekuensi dari kebijakan.
+
+00:06:33.780 --> 00:06:36.400
+Efek menentukan apa yang terjadi saat sumber daya tidak sesuai dengan aturan.
+
+00:06:36.820 --> 00:06:37.900
+Ada empat jenis utama yang akan datang.
+
+00:06:38.180 --> 00:06:39.220
+Pertama, dan ini tolak.
+
+00:06:39.220 --> 00:06:41.460
+Ini adalah efek paling umum untuk aturan kritis.
+
+00:06:42.200 --> 00:06:45.400
+Saat kebijakan denet terpicu, penyebaran akan diblokir sepenuhnya.
+
+00:06:45.680 --> 00:06:50.280
+Pengguna akan mendapat pesan kesalahannya yang jelas bahwa validasi gagal dan menjelaskan kebijakan mana yang menghentikan mereka.
+
+00:06:50.880 --> 00:06:52.720
+Tidak ada sumber daya yang dibuat, tidak ada kerusakan yang terjadi.
+
+00:06:53.240 --> 00:06:54.940
+Gunakan ini untuk aturan yang tidak boleh dilanggar.
+
+00:06:55.600 --> 00:07:00.160
+Seperti tidak ada akses blok publik pada akun penyimpanan atau tidak ada penyebaran di luar wilayah yang disetujui.
+
+00:07:01.320 --> 00:07:01.920
+Kedua, audit.
+
+00:07:02.420 --> 00:07:03.220
+Ini bekerja yang berbeda.
+
+00:07:03.860 --> 00:07:07.620
+Penyebaran tetap berjalan tetapi sumber daya ditandai sebagai tidak patuh di dasber kepatuhan.
+
+00:07:07.620 --> 00:07:11.960
+Audit sangat berguna saat Anda tidak yakin bagaimana aturan baru akan memengaruhi lingkungan Anda.
+
+00:07:12.300 --> 00:07:14.340
+Anda bisa melihat apa yang terjadi tanpa merusak apapun.
+
+00:07:14.660 --> 00:07:16.840
+Ini seperti melakukan pengukuran sebelum Anda menerapkan perubahan.
+
+00:07:17.700 --> 00:07:18.840
+Ketiga, modify ubah dengan penyebaran.
+
+00:07:19.340 --> 00:07:22.360
+Efek ini secara otomatis memperbaiki masalah alih-alih memblokirnya.
+
+00:07:22.940 --> 00:07:25.140
+Modify mengubah pengaturan yang ada selama penyebaran.
+
+00:07:25.480 --> 00:07:27.040
+Apain menambahkan sesuatu ke kolomnya sudah ada.
+
+00:07:27.480 --> 00:07:31.300
+Contohnya, Anda bisa membuat kebijakan yang otomatis menambahkan tag wajib dengan nilai default.
+
+00:07:31.300 --> 00:07:38.520
+Jika seseorang lupa menambahkan tag pusat biaya, kebijakan akan menambahkannya penyebaran berjalan dan sumber daya patuh tanpa kerja tambahan.
+
+00:07:39.580 --> 00:07:41.180
+Keempat, deploy if not exist, terapkan jika tidak.
+
+00:07:41.680 --> 00:07:43.960
+Ini menangani situasi di mana sumber daya pendukung tidak ada.
+
+00:07:44.540 --> 00:07:47.160
+Katakanlah Anda ingin pencatatan diagnostik aktif di setiap akun penyimpanan.
+
+00:07:47.520 --> 00:07:53.620
+Jika seseorang membuat akun penyimpanan tanpa pengaturan diagnostik, deploy if not exist akan bekerja dan menerapkan konfigurasi yang hilang secara otomatis.
+
+00:07:54.120 --> 00:07:55.720
+Ini seperti miliki asisten yang membersihkan pekerjaan.
+
+00:07:55.720 --> 00:07:57.140
+Berikut adalah praktek terbaik.
+
+00:07:57.400 --> 00:07:58.000
+Mulailah dengan audit.
+
+00:07:58.420 --> 00:08:00.060
+Lihat apa yang sebenarnya terjadi di lingkungan Anda terlebih dahulu.
+
+00:08:00.580 --> 00:08:03.100
+Cari tahu berapa banyak sumber daya yang akan terdampak oleh aturan baru.
+
+00:08:03.500 --> 00:08:09.200
+Kemudian pindah ke denai setelah Anda yakin aturannya benar dan tidak akan merusak penyebaran yang sah mengelola satu kebijakan yang memudah.
+
+00:08:09.580 --> 00:08:13.060
+Namun bagaimana jika Anda butuh 50 kebijakan yang semua yang terkait keamanan atau kepatuh?
+
+00:08:13.380 --> 00:08:14.380
+Disitulah inisiatif terperang.
+
+00:08:15.080 --> 00:08:16.820
+Inisiatif menggabungkan aturan-aturan menjadi satu.
+
+00:08:17.220 --> 00:08:18.080
+Jadi apa itu inisiatif?
+
+00:08:18.540 --> 00:08:21.600
+Bayangkan ini sebagai kumpulan kebijakan yang dikelompokkan berdasarkan satu tujuan yang besar.
+
+00:08:21.600 --> 00:08:27.540
+Alih-alih menetapkan 50 kebijakan individu satu per satu, Anda menetapkan satu inisiatif yang mencakup semuanya.
+
+00:08:28.300 --> 00:08:30.440
+Ini seperti perangkat siap pakai untuk pekerjaan tertentu.
+
+00:08:31.020 --> 00:08:33.280
+Anda tidak mengambil palu, obeng, dan kunci inggris secara tepisah.
+
+00:08:33.480 --> 00:08:34.700
+Anda cukup mengambil seluruh kotak-kotak.
+
+00:08:34.980 --> 00:08:36.180
+Semua yang Anda butuhkan ada satu tempat.
+
+00:08:36.420 --> 00:08:38.020
+Keunggulan sebenarnya di sini adalah pelaparan kepatuh.
+
+00:08:38.380 --> 00:08:41.660
+Saat Anda menetapkan inisiatif, Anda mendapatkan satu tampilan kepatuhan untuk seluruh grup.
+
+00:08:42.160 --> 00:08:45.060
+Anda dapat melihat sekilas apakah lingkungan Anda memenuhi standar keseluruhan.
+
+00:08:45.680 --> 00:08:49.480
+Dan jika ada sesuatu yang tidak patuh, Anda bisa langsung memeriksa kebijakan spesifik yang gagal.
+
+00:08:49.480 --> 00:08:52.140
+Ini jauh lebih rapi dan melacak 50 kebijakan terpisah.
+
+00:08:52.760 --> 00:08:56.040
+Microsoft menyediakan inisiatif bawaan yang mencakup kerangka kerja kepatuhan utama.
+
+00:08:56.600 --> 00:09:03.280
+Hal-hal seperti Azure Security Benchmark, CES, NIS, PC, DSS, HIPAA, ISO 2701, dan banyak lagi, banyak lagi.
+
+00:09:03.780 --> 00:09:05.400
+Semuanya sudah dibuat dan siap untuk ditetapkan.
+
+00:09:05.880 --> 00:09:09.340
+Anda tidak perlu mencari tahu kebijakan mana yang memetakkan kepersyaratan kepatuhan tertentu.
+
+00:09:09.680 --> 00:09:10.700
+Microsoft memelacakan tertentu.
+
+00:09:11.080 --> 00:09:13.640
+Beberapa inisiatif ini berisi ratusan kebijakan individu.
+
+00:09:13.940 --> 00:09:15.640
+Bayangkan jika harus menetapkan semuanya satu per satu.
+
+00:09:16.080 --> 00:09:17.820
+Anda tidak akan melakukan. Anda akan menggunakan inisiatif.
+
+00:09:17.820 --> 00:09:20.340
+Anda juga dapat membuat inisiatif khusus untuk standar Anda sendiri.
+
+00:09:20.780 --> 00:09:25.580
+Mungkin Anda memiliki garis dasar produksi yang mencakup kebijakan untuk enkripsi, pencatatan, dan keamanan jaringan.
+
+00:09:26.140 --> 00:09:30.140
+Atau inisiatif standar kontrol biaya yang membatasi ukuran VM dan mewajibkan tech pusat biaya.
+
+00:09:30.820 --> 00:09:31.360
+Gagasannya sama.
+
+00:09:31.720 --> 00:09:34.900
+Bundel kebijakan tersebut tetapkan bundelnya dan lacak kepatuhan sebagai satu yang tunggal.
+
+00:09:35.300 --> 00:09:38.980
+Mari buat ini konkret dengan contoh dunia nyata tentang bagaimana orang benar-benar menggunakan Azure Policy.
+
+00:09:39.940 --> 00:09:41.080
+Contoh dunia nyata, kebijakan.
+
+00:09:41.640 --> 00:09:43.300
+Dalam tindakan, mari buat ini menjadi nyata.
+
+00:09:43.940 --> 00:09:47.180
+Berikut adalah lima skenario umum di mana Azure Policy menyelesaikan masalah nyata.
+
+00:09:47.180 --> 00:09:49.520
+Pertama, pembatasan wilayah untuk kepatuhan data.
+
+00:09:49.980 --> 00:09:54.120
+Bayangkan perusahaan Anda memiliki kebijakan bahwa semua data pelanggan harus tetap-pelanggan harus tetap berada di arom.
+
+00:09:54.560 --> 00:09:58.440
+Anda dapat menetapkan kebijakan pahwaan lokasi yang disinkan di tingkat grup manajemen akar
+
+00:09:58.440 --> 00:10:01.620
+dan hanya mengizinkan wilayah US seperti Eropa Barat dan Eropa Utara.
+
+00:10:02.080 --> 00:10:05.240
+Sekarang saat seorang membuat langganan baru, langganan tersebut secara otomatis melalui aturan.
+
+00:10:05.760 --> 00:10:08.640
+Mereka tidak dapat menyebarkan sumber daya di AS atau Asia meskipun mereka muncul.
+
+00:10:08.940 --> 00:10:09.740
+Kebijakan tersebut memblokir.
+
+00:10:09.740 --> 00:10:11.000
+Tidak perlu pemeriksaan manual.
+
+00:10:11.160 --> 00:10:11.760
+Tidak perlu minta isi.
+
+00:10:12.000 --> 00:10:13.220
+Aturan tersebut langsung ditegakkan.
+
+00:10:13.460 --> 00:10:15.020
+Kedua, penegakan tech untuk alokasi biaya.
+
+00:10:15.520 --> 00:10:18.200
+Tim keuangan Anda perlu melacak pengeluaran berdasarkan departemen,
+
+00:10:18.360 --> 00:10:21.380
+tetapi mereka tidak bisa melakukannya jika sumber daya tidak memiliki tech yang tepat.
+
+00:10:21.880 --> 00:10:26.240
+Jadi, Anda membuat kebijakan yang mewajibkan tech pusat biaya dan tech lingkungan pada setiap sumber daya.
+
+00:10:27.340 --> 00:10:28.080
+Namun, nilai bagian cerdas.
+
+00:10:28.540 --> 00:10:29.640
+Anda menggunakan efek modifikasi.
+
+00:10:29.980 --> 00:10:33.700
+Jika seseorang lupa menambahkan tech, kebijakan tersebut secara otomatis menambahkannya dengan nilai default.
+
+00:10:33.920 --> 00:10:35.960
+Penyebaran berhasil dan sumber daya pun patuh.
+
+00:10:35.960 --> 00:10:39.900
+Keuangan mendapatkan data biaya yang akurat dan pengembang tidak terhambat oleh tech yang hilang.
+
+00:10:40.100 --> 00:10:41.600
+Ketiga, kontrol biaya dalam pengembang.
+
+00:10:42.160 --> 00:10:45.160
+Tim pengembang suka bereksperimen, tetapi eksperimen bisa jadi mahal dengan cepat.
+
+00:10:45.700 --> 00:10:49.080
+Seseorang mungkin menjalankan instans GPU dengan dua pengkor hanya untuk menguji skrip sederhana.
+
+00:10:49.460 --> 00:10:53.280
+Jadi, Anda membuat kebijakan yang membatasi ukuran VM dalam langgana pengembang SKU yang lebih kecil.
+
+00:10:54.000 --> 00:10:56.160
+Hal-hal seperti seri B atau seri D dengan kor terbatas,
+
+00:10:56.280 --> 00:11:01.740
+jika seseorang mencoba mendeploy GPU mahal atau VM memori tinggi, efek dana akan aktif dan memblokirnya.
+
+00:11:02.280 --> 00:11:04.820
+Pengembang tetap bisa bereksperimen, tetapi mereka tidak akan menghabiskan anga.
+
+00:11:04.820 --> 00:11:06.740
+Keempat, dasar keaman untuk penyimpanan.
+
+00:11:07.260 --> 00:11:10.660
+Akun penyimpanan adalah salah satu tempat paling umum terjadinya kesalahan keamanan.
+
+00:11:11.340 --> 00:11:16.020
+Seseorang membuat akun penyimpanan dengan akses blog publik dan tiba-tiba data sensitif terekspos ke internet.
+
+00:11:16.720 --> 00:11:20.780
+Jadi, Anda membuat kebijakan yang mengwajibkan lalu lintas HTTPS saja dan memblokir akses blog publik.
+
+00:11:20.920 --> 00:11:27.020
+Dan Anda menggunakan deploy if not exist untuk secara otomatis mengaktifkan log diagnostik di setiap akun penyimpanan yang belum memilikinya.
+
+00:11:27.480 --> 00:11:29.660
+Kebijakan tersebut memperbaiki masalah sebelum menjadi masalah.
+
+00:11:30.140 --> 00:11:31.260
+Kelima, konvensi penamaan.
+
+00:11:31.260 --> 00:11:37.280
+Tim Anda ingin semua sumber daya dimulai dengan plot atau dev agar mereka bisa dengan mudah mengetahui lingkungan mana sesuatu itu berada.
+
+00:11:37.280 --> 00:11:44.660
+Anda membuat kebijakan yang memeriksa nama sumber daya terhadap pola tersebut tetapi alih-alih memblokir deployment Anda menggunakan efek audit.
+
+00:11:45.380 --> 00:11:47.520
+Sumber daya tetap dibuat tetapi ditandai sebagai tidak patuh.
+
+00:11:47.900 --> 00:11:50.880
+Kemudian Anda menjalankan laporan kepatuhan bulanan dan minta tim untuk memperbaiki.
+
+00:11:51.180 --> 00:11:53.900
+Ini adalah cara halus untuk menegakkan standar tanpa merusak alur kerja.
+
+00:11:54.360 --> 00:11:56.080
+Setiap contoh ini mengikuti pola yang sama.
+
+00:11:56.080 --> 00:11:57.900
+Identifikasi masalah
+
+00:11:57.900 --> 00:11:59.360
+Pilih atau buat kebijakan
+
+00:11:59.360 --> 00:12:01.700
+Tentukan efeknya, tetapkan pada cakupan yang tepat
+
+00:12:01.700 --> 00:12:03.960
+Pantau kepatuhan, celah panduannya
+
+00:12:03.960 --> 00:12:08.340
+Mari kita lihat lebih luas bagaimana semua bagian ini masuk ke dalam gambaran tata kelola Azure yang lebih besar.
+
+00:12:09.180 --> 00:12:09.740
+Gambaran besar
+
+00:12:09.740 --> 00:12:11.000
+Bagaimana semuanya terhubung
+
+00:12:11.000 --> 00:12:13.800
+Jadi, di mana posisi Azure Policy dalam gambaran yang lebih besar?
+
+00:12:14.060 --> 00:12:15.020
+Mari kita pikirkan dengan cara ini.
+
+00:12:15.540 --> 00:12:19.080
+Azure Policy bekerja di tingkat kontrol plan tepat di atas Azure Resource Manager
+
+00:12:19.080 --> 00:12:22.160
+Dan mengevaluasi setiap permintaan yang masuk
+
+00:12:22.160 --> 00:12:25.920
+Setiap kali seseorang membuat, memperbarui, atau menghapus sumber daya
+
+00:12:25.920 --> 00:12:27.240
+Azure Policy meriksa aturannya
+
+00:12:27.240 --> 00:12:28.820
+Tidak ada penjaga di pintu depan
+
+00:12:28.820 --> 00:12:31.400
+Nah, ini bukan satu-satunya alat dalam kotak peralatan tata
+
+00:12:31.400 --> 00:12:34.380
+Azure Policy hanyalah satu bagian dari sistem yang lebih besar
+
+00:12:34.380 --> 00:12:37.280
+Management Group menyediakan hirarki untuk mengatur langganan Anda
+
+00:12:37.280 --> 00:12:39.040
+Dan menerapkan aturan dalam skala besar
+
+00:12:39.040 --> 00:12:42.440
+Kontrol akses berbasis peran menentukan siapa yang memiliki akses ke apa
+
+00:12:42.440 --> 00:12:45.180
+Sementara Azure Policy mengontrol konfigurasi apa yang diizinkan
+
+00:12:45.180 --> 00:12:48.160
+Bersama-sama mereka membentuk dasar tata kelola-kelola
+
+00:12:48.160 --> 00:12:48.920
+Nah, begini masalahnya
+
+00:12:48.920 --> 00:12:52.180
+Azure Policy juga merupakan mesin dibalik layanan lain yang mungkin sudah Anda gunakan
+
+00:12:52.180 --> 00:12:56.740
+Microsoft Defender for Cloud menggunakan Azure Policy untuk menghasilkan rekomendasi kepatuhannya
+
+00:12:56.740 --> 00:12:59.720
+Saat Defender memberitahu Anda bahwa akun penyimpanan tidak patuh
+
+00:12:59.720 --> 00:13:01.560
+Itu sebenarnya sedang menjalankan evaluasi kebijakan
+
+00:13:01.560 --> 00:13:07.000
+Azure Advisor menarik banyak rekomendasi biaya dan keandalannya dari evaluasi kebijakan yang sama
+
+00:13:07.000 --> 00:13:11.120
+Dan daspor kepatuhan di portal Azure semuanya dibangun berdasarkan data kebijakan
+
+00:13:11.120 --> 00:13:13.540
+Jadi meskipun Anda belum pernah membuat kebijakan sendiri
+
+00:13:13.540 --> 00:13:15.280
+Anda mungkin telah menggunakannya tanpa disadari
+
+00:13:15.280 --> 00:13:17.620
+Ada praktik lain yang disebut kebijakan sebagai kode?
+
+00:13:17.620 --> 00:13:21.420
+Alih-alih membuat kebijakan melalui portal Anda menyimpannya sebagai file JSON
+
+00:13:21.420 --> 00:13:25.440
+Di depositori Git dan menyebarkannya melalui pipeline CPCD seperti kode aplikasi
+
+00:13:25.440 --> 00:13:26.440
+Seperti kode aplikasi
+
+00:13:26.440 --> 00:13:30.520
+Itu memberi Anda kontrol versi tinjauan kode dan pengujian otomatis untuk aturan tata kelola Anda
+
+00:13:30.520 --> 00:13:34.060
+Ini adalah cara yang lebih skalabel untuk mengelola kebijakan di organisasi besar
+
+00:13:34.060 --> 00:13:35.880
+Inilah hal terpenting yang perlu dipahami
+
+00:13:35.880 --> 00:13:38.140
+Setelah Anda menyiapkan Azure Policy dengan benar
+
+00:13:38.140 --> 00:13:39.940
+Ia akan berjalan secara diam di latar belakang
+
+00:13:39.940 --> 00:13:43.000
+Ini adalah pagar pembatas otomatis yang mencegah masalah sebelum terjadi
+
+00:13:43.000 --> 00:13:45.140
+Pengguna mungkin tidak pernah tahu itu ada
+
+00:13:45.140 --> 00:13:47.600
+Tetapi mereka mendapat manfaat setiap kali menerapkan sumber daya
+
+00:13:47.600 --> 00:13:51.320
+Anda mendapatkan penegakan yang konsisten setiap saat tanpa pemeriksaan manual
+
+00:13:51.320 --> 00:13:53.180
+Tiket persetujuan atau kesalahan manusia
+
+00:13:53.180 --> 00:13:55.720
+Jadi itulah Azure Policy dalam bahasa yang sederhana
+
+00:13:55.720 --> 00:14:01.240
+Ini adalah buku aturan tak terlihat yang menegakkan standar organisasi Anda pada setiap sumber daya setiap saat
+
+00:14:01.240 --> 00:14:04.400
+Jika Anda menginginkan satu tindakan dari episode ini, inilah dia
+
+00:14:04.400 --> 00:14:06.900
+Masuk ke portal Azure, cari kebijakan
+
+00:14:06.900 --> 00:14:10.180
+Dan tetapkan kebijakan lokasi yang diizinkan bawaan ke langganan pengujian
+
+00:14:10.180 --> 00:14:12.400
+Lain dengan audit dan lihat apa yang terjadi
+
+00:14:12.400 --> 00:14:14.640
+Itulah cara tercepat untuk memahami cara kerjanya
+
+00:14:14.640 --> 00:14:16.780
+Berlangganan untuk wawasa Microsoft lainnya
+
+00:14:16.780 --> 00:14:19.300
+Dan bagikan ini dengan seseorang yang memulai perjalanan Azure mereka
+
+00:14:19.300 --> 00:14:21.720
+Tulis komentar tentang apa yang ingin saya jelaskan selanjutnya
+
+00:14:21.720 --> 00:14:51.700
+Terima kasih

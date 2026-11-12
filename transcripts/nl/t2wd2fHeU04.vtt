@@ -1,0 +1,907 @@
+WEBVTT
+
+00:00:00.140 --> 00:00:07.520
+Klaar voor 10 dagen Microsoft 365, Copilot, AI, Azure en de mensen die de toekomst van werk vormgeven?
+
+00:00:07.860 --> 00:00:12.400
+Deze januari is M365, kom terug en we pakken groter uit.
+
+00:00:12.400 --> 00:00:18.360
+Doe mee voor live sessies, praktijkdemos en praktische kennis van MVP's en experts van over de hele wereld.
+
+00:00:18.560 --> 00:00:21.660
+Geen algemene presentaties, geen eindeloos jargon.
+
+00:00:21.960 --> 00:00:29.120
+We pakken de echte uitdagingen aan Copilot Studio, AI Agents, Fabric, Beveiliging, Governance en Automatisering.
+
+00:00:29.120 --> 00:00:34.900
+Of je nu IT-professional, ontwikkelaar of zakelijk leider bent, er zijn sessies speciaal voor jou.
+
+00:00:34.900 --> 00:00:40.540
+Met 10 volledige dagen kun je verschillende technologieën verkennen en in contact komen met een wereldwijde community.
+
+00:00:40.820 --> 00:00:43.900
+Kijk live mee en neem praktische inzichten mee terug naar je organisatie.
+
+00:00:44.680 --> 00:00:47.520
+Januari 2027, 10 dagen.
+
+00:00:47.820 --> 00:00:51.280
+Een Microsoft Community, registratie is nu geopend.
+
+00:00:51.880 --> 00:00:55.920
+Ga naar m365.com.net en verzeker je vandaag nog van een plek.
+
+00:00:56.680 --> 00:00:58.940
+Dat is m365.com.net.
+
+00:00:59.900 --> 00:01:04.720
+Meld je nu aan op m365.com.net en we zien je live in januari.
+
+00:01:04.960 --> 00:01:07.400
+Wat is Microsoft Fabric Data Factory precies?
+
+00:01:07.620 --> 00:01:10.900
+Is het gewoon Azure Data Factory met een nieuwe naam of iets heel anders?
+
+00:01:10.900 --> 00:01:14.620
+Als je de term hebt gehoord en je afvroeg wat het eigenlijk betekent, ben je niet alleen.
+
+00:01:14.820 --> 00:01:20.980
+Aan het eind van deze aflevering weet je wat het is, hoe het verschilt van de klassieke ADF en wat de kernpunten zijn die je echt moet begrijpen.
+
+00:01:21.160 --> 00:01:26.460
+Als je bezig bent met databewegingen in Fabric, is dit de motor die het mogelijk maakt en het is eenvoudiger dan je denkt.
+
+00:01:26.460 --> 00:01:29.920
+We bekijken vier belangrijke bouwstenen en zien hoe deze op elkaar aansluiten.
+
+00:01:30.120 --> 00:01:32.380
+Maar eerst, laten we definiëren waar we het over hebben.
+
+00:01:32.560 --> 00:01:34.100
+Hier is de simpelste definitie.
+
+00:01:34.300 --> 00:01:38.740
+Fabric Data Factory is de engine binnen Microsoft Fabric die je data verplaatst en integreert.
+
+00:01:38.960 --> 00:01:42.320
+Zie het als de vervanging voor Azure Data Factory en Synapse Pipelines?
+
+00:01:42.600 --> 00:01:43.840
+Alles in één SaaS platform.
+
+00:01:44.200 --> 00:01:45.780
+Dat is het eerste wat je moet begrijpen.
+
+00:01:45.780 --> 00:01:48.000
+Het is geen aparte service die je moet beheren.
+
+00:01:48.120 --> 00:01:50.600
+Het zit ingebouwd in Fabric en is verbonden met OneLake.
+
+00:01:50.760 --> 00:01:52.260
+Laten we een vergelijking gebruiken.
+
+00:01:52.420 --> 00:01:57.760
+Als Fabric een kantoorgebouw is, dan is Data Factory de postkamer en de transportbanden die documenten tussen verdiepingen verplaatsen.
+
+00:01:57.880 --> 00:02:02.040
+Je denkt niet elke dag aan de postkamer, maar zonder die kamer komt niets van punt A naar punt B.
+
+00:02:02.140 --> 00:02:02.980
+Hetzelfde geldt hier.
+
+00:02:03.200 --> 00:02:05.720
+Data Factory regelt het verplaatsen achter de schermen.
+
+00:02:05.860 --> 00:02:09.380
+Het grote verschil met de oude wereld, geen extra opslagconfiguratie nodig.
+
+00:02:09.560 --> 00:02:11.180
+Je data komt direct in OneLake terecht.
+
+00:02:11.180 --> 00:02:15.900
+In Azure Data Factory moest je een opslagaccount opzetten, containers aanmaken en gekoppelde services configureren.
+
+00:02:16.040 --> 00:02:17.740
+In Fabric is dat allemaal verleden tijd.
+
+00:02:17.960 --> 00:02:20.820
+OneLake is er al, dus je koppelt je pipeline eraan en je bent klaar.
+
+00:02:20.980 --> 00:02:22.140
+Dat klinkt bekend, toch?
+
+00:02:22.340 --> 00:02:25.060
+Dus hoe verschilt dit van de Azure Data Factory die je al kent?
+
+00:02:25.240 --> 00:02:27.120
+Hoe het verschilt van Azure Data Factory?
+
+00:02:27.400 --> 00:02:31.660
+Veel mensen denken dat Fabric Data Factory gewoon Azure Data Factory met een nieuw label is, maar dat is niet zo.
+
+00:02:31.860 --> 00:02:33.480
+Laten we een paar mythen uit de wereld helpen.
+
+00:02:33.680 --> 00:02:35.320
+Bij de prijsstelling verandert er echt iets.
+
+00:02:35.500 --> 00:02:40.820
+ADF rekent per activiteitsrun, dus elke kopieeractiviteit stoort procedure en pipeline uitvoering verhoogt je rekening.
+
+00:02:40.820 --> 00:02:44.320
+Fabric Data Factory gebruikt in plaats daarvan prijzen op basis van capaciteit.
+
+00:02:44.500 --> 00:02:50.420
+Je koopt een Fabric capaciteit, F2, F4, F16, wat dan ook, en al je workloads delen die rekenkracht.
+
+00:02:50.640 --> 00:02:53.560
+Data Factory, Powerbee, Lakehouse, het hele platform.
+
+00:02:53.780 --> 00:02:57.480
+Als je al Fabric capaciteit hebt, kost het draaien van pipelines heel weinig extra.
+
+00:02:57.820 --> 00:03:01.660
+Zo niet, dan moet je de totale Fabric kosten afwegen tegen je huidige ADF-rekening.
+
+00:03:01.900 --> 00:03:03.360
+Verbindingen zijn ook eenvoudiger.
+
+00:03:03.560 --> 00:03:06.680
+In ADF moest je voor elke bron en bestemming een gekoppelde service maken,
+
+00:03:06.860 --> 00:03:09.940
+daar datasets bovenop plaatsen en dan de integration runtime configureren.
+
+00:03:09.940 --> 00:03:13.700
+Bij Fabric worden verbindingen inline gedefinieerd en is One Lake automatisch.
+
+00:03:13.840 --> 00:03:17.300
+Je kiest je bron, kiest je bestemming en de verbinding wordt ter plekke opgezet.
+
+00:03:17.540 --> 00:03:18.460
+Veel minder klikken.
+
+00:03:18.640 --> 00:03:20.660
+Er zijn ook nieuwe ingebouwde activiteiten.
+
+00:03:20.880 --> 00:03:25.560
+Je kunt direct vanuit je pipeline e-mails of teamsberichten versturen zonder logic apps of aangepaste webhoeks nodig te hebben.
+
+00:03:25.720 --> 00:03:28.640
+Het is gewoon een drag-and-drop activiteit en dat alleen al bespaart veel tijd.
+
+00:03:28.820 --> 00:03:30.320
+En de implementatie is nu ook beter.
+
+00:03:30.540 --> 00:03:32.980
+ADF had implementatie pipelines, maar die waren onhandig.
+
+00:03:33.180 --> 00:03:36.200
+Fabric heeft ingebouwde implementatie pipelines met promotie op workspace-niveau,
+
+00:03:36.360 --> 00:03:38.420
+dus je kunt in een paar klikken van dev naar test naar productie gaan.
+
+00:03:38.420 --> 00:03:40.020
+Geen handmatige scripts nodig.
+
+00:03:40.280 --> 00:03:42.000
+Laten we nu eerlijk zijn over wat er ontbreekt.
+
+00:03:42.220 --> 00:03:44.640
+SSIS-ondersteuning en Managed VNet zijn er nog niet.
+
+00:03:44.800 --> 00:03:48.560
+Als je zwaar hebt geïnvesteerd in SQL Server Integration Services, zul je moeten wachten.
+
+00:03:48.780 --> 00:03:50.180
+Voor de meeste mensen is dat prima.
+
+00:03:50.420 --> 00:03:53.780
+Het overgrote deel van het data-integratiewerk heeft geen SSIS nodig.
+
+00:03:54.000 --> 00:03:55.720
+Dus, hier is een eenvoudige vuistregel.
+
+00:03:55.900 --> 00:03:59.480
+Als je ADF-rekening minder dan 1500 dollar per maand is en je gebruikt geen Fabric,
+
+00:03:59.620 --> 00:04:02.000
+blijf dan bij ADF want dat is goedkoper voor kleine workloads.
+
+00:04:02.180 --> 00:04:05.480
+Als je al in Fabric zit, is Data Factory inbegrepen, dus gebruik het.
+
+00:04:05.480 --> 00:04:10.300
+En als je ADF-kosten hoger zijn dan dat, is het de moeite waard om de berekening voor een Fabric capaciteit te maken.
+
+00:04:10.640 --> 00:04:12.280
+Bouwsteen 1, Data Pipelines.
+
+00:04:12.520 --> 00:04:15.160
+Laten we nu kijken naar de eerste bouwsteen, Data Pipelines.
+
+00:04:15.440 --> 00:04:16.820
+Pipelines zijn de orchestrators.
+
+00:04:17.120 --> 00:04:20.700
+Zij bepalen wat wanneer en in welke volgorde draait en al het andere sluit daarop aan.
+
+00:04:20.900 --> 00:04:22.260
+Zie een pipeline als een recept.
+
+00:04:22.480 --> 00:04:25.060
+Je hebt stappen, je kunt vertakken en je kunt teruglopen.
+
+00:04:25.300 --> 00:04:27.320
+Eerst verwarm je de oven voor, dan meng je de ingrediënten.
+
+00:04:27.580 --> 00:04:30.340
+En als het beslag te droog lijkt, voeg je meer melk toe voordat je gaat bakken.
+
+00:04:30.460 --> 00:04:32.340
+Een pipeline werkt op precies dezelfde manier.
+
+00:04:32.340 --> 00:04:36.900
+Kopieer eerst gegevens van een bron, controleer vervolgens of het bestand bestaat en voorbij bestaan een transformatie uit.
+
+00:04:37.020 --> 00:04:38.700
+Als dat niet zo is, stuur dan een waarschuwing.
+
+00:04:38.920 --> 00:04:39.880
+Jij bepaalt de stroom.
+
+00:04:40.080 --> 00:04:44.940
+De kernactiviteiten die je het meest zult gebruiken zijn Capidata, ForEach, EF-condition, GetMetadata en Lookup.
+
+00:04:45.140 --> 00:04:47.300
+Capidata verplaatst gegevens van .a naar .b.
+
+00:04:47.380 --> 00:04:49.960
+VoorEach doorloopt een lijst, bijvoorbeeld 10 bestanden in een map.
+
+00:04:50.080 --> 00:04:52.380
+EF-condition controleert of iets waar of onwaar is.
+
+00:04:52.800 --> 00:04:54.600
+GetMetadata stelt vragen over je gegevens.
+
+00:04:54.800 --> 00:04:55.880
+Hoe groot is dit bestand?
+
+00:04:56.120 --> 00:04:57.740
+Wanneer is het voor het laatst gewijzigd?
+
+00:04:57.920 --> 00:05:00.800
+Lookup leest het configuratiebestand en brengt de waarde naar je pipeline.
+
+00:05:02.340 --> 00:05:03.440
+Het geheel is low-code.
+
+00:05:03.680 --> 00:05:07.820
+Je sleept activiteiten naar een canvas, verbindt ze met pijlen, stelt de eigenschappen in en je bent klaar.
+
+00:05:08.000 --> 00:05:09.700
+Voor de meeste taken is geen code nodig.
+
+00:05:09.920 --> 00:05:12.360
+Het ziet eruit als een stroomdiagram, want dat is precies wat het is.
+
+00:05:12.520 --> 00:05:13.560
+Hier is een echt voorbeeld.
+
+00:05:13.820 --> 00:05:16.280
+Stel je voor dat je elke ochtend verkoopgegevens ophaalt uit een API.
+
+00:05:16.280 --> 00:05:19.540
+Je pipeline begint met een Capidata-activiteit die het in een lakehouse plaatst.
+
+00:05:19.740 --> 00:05:24.220
+Vervolgens schonen een dataflow en toestapt de gegevens op, verwijdert nullen en corrigeert datanotaties.
+
+00:05:24.460 --> 00:05:26.660
+Daarna verrijkt een notebook het met klantsegmenten.
+
+00:05:26.800 --> 00:05:29.520
+Ten slotte stuurt een Teams-activiteit een bericht naar je team.
+
+00:05:29.520 --> 00:05:31.260
+Verkoopgegevens bijgewerkt.
+
+00:05:31.460 --> 00:05:34.620
+Dat is één pipeline die het werk doet waarvoor voorheen meerdere tools nodig waren.
+
+00:05:34.820 --> 00:05:36.620
+Je kunt pipelines ook herbruikbaar maken.
+
+00:05:36.900 --> 00:05:39.480
+Stel dat je dezelfde logica hebt voor tien verschillende gegevensbronnen.
+
+00:05:39.480 --> 00:05:45.640
+In plaats van tien pipelines te bouwen, bouw je er één en gebruik je parameters, bronurl, tabelnaam, doemap, allemaal als variabelen.
+
+00:05:45.820 --> 00:05:47.620
+Eén pipeline, tien verschillende taken.
+
+00:05:47.900 --> 00:05:49.220
+Dat is parametrisering.
+
+00:05:49.520 --> 00:05:50.720
+En hier is iets nieuws.
+
+00:05:50.920 --> 00:05:54.520
+Je kunt Copilot vragen om pipeline expressies te schrijven in begrijpelijke taal.
+
+00:05:54.520 --> 00:05:57.960
+Typ, voeg twee dagen toe aan deze datum en het genereert de expressie voor je.
+
+00:05:58.160 --> 00:06:01.840
+Nooit meer functiesyntaxis uit het hoofd leren of googlen hoe je een tijdstempel formateert.
+
+00:06:02.060 --> 00:06:03.360
+Zeg gewoon wat je nodig hebt.
+
+00:06:03.680 --> 00:06:05.600
+Bouwsteen 2, Dataflow Gen 2.
+
+00:06:05.860 --> 00:06:09.240
+Dus, wat gebeurt er als je gegevens wilt opschonen maar geen code wilt schrijven?
+
+00:06:09.460 --> 00:06:12.000
+Dat is precies het probleem dat Dataflow Gen 2 oplost.
+
+00:06:12.260 --> 00:06:15.700
+Dataflow Gen 2 is de low-code transformatie tool binnen Fabric Data Factory.
+
+00:06:15.700 --> 00:06:20.240
+Als je eerder Power Query in Excel of Power B hebt gebruikt, zal dit heel vertrouwd aanvoelen.
+
+00:06:20.440 --> 00:06:27.220
+Het heeft dezelfde interface, dezelfde 300-plus transformaties en dezelfde engine, alleen draaiend in de cloud met een lakehouse als bestemming.
+
+00:06:27.440 --> 00:06:34.740
+Zie het zo, als pipelines de lopende band zijn die dozen verplaatst, is Dataflow Gen 2 de keuken waar je de ingrediënten snijdt, kruidt en bereidt.
+
+00:06:34.940 --> 00:06:36.460
+Pipelines regelen de logistiek.
+
+00:06:36.640 --> 00:06:39.800
+Dataflow Gen 2 neemt het eigenlijke werk voor zijn rekening om data nuttig te maken.
+
+00:06:40.060 --> 00:06:41.120
+Wanneer moet je het gebruiken?
+
+00:06:41.120 --> 00:06:47.160
+Als je data moet opschonen, types moet wijzigen, tabellen moet samenvoegen of rijen moet filteren, zonder Spark of SQL aan te raken.
+
+00:06:47.340 --> 00:06:51.240
+Als je transformatie op een whiteboard past, past het waarschijnlijk ook in Dataflow Gen 2.
+
+00:06:51.480 --> 00:06:52.660
+Hier is een kort voorbeeld.
+
+00:06:52.880 --> 00:06:55.580
+Je importeert een CSV bestand vol klantbestellingen.
+
+00:06:55.700 --> 00:06:59.660
+Er zijn dubbele rijen, sommige datums hebben het verkeerde formaat en een paar kolommen bevatten alwaarden.
+
+00:06:59.820 --> 00:07:05.140
+Je opent Dataflow Gen 2, klikt op een paar knoppen om duplicaten te verwijderen, wijzigt het datummattype en vult ontbrekende waarden in.
+
+00:07:05.320 --> 00:07:07.760
+Daarna voeg je het samen met een producttabel uit een andere bron.
+
+00:07:07.760 --> 00:07:12.740
+Het geheel duurt 10 minuten, geen code, de output komt terecht in een lakehouse-tabel, klaar voor rapportage.
+
+00:07:12.900 --> 00:07:14.220
+Je kunt ook alles visueel zien.
+
+00:07:14.400 --> 00:07:16.740
+Er is een diagramweergave die elke stap als een knooppunt toont.
+
+00:07:16.920 --> 00:07:18.360
+De bron gaat naar een filter knooppunt.
+
+00:07:18.560 --> 00:07:20.060
+Filter voedt een samenvoeg knooppunt.
+
+00:07:20.400 --> 00:07:21.380
+Samenvoegen voedt de output.
+
+00:07:21.640 --> 00:07:23.540
+Je kunt de hele stroom in één oogopslag zien.
+
+00:07:23.700 --> 00:07:27.160
+En dat is erg handig bij het debuggen of wanneer je de logica aan iemand anders moet uitleggen.
+
+00:07:27.280 --> 00:07:28.460
+Planning is ook flexibel.
+
+00:07:28.660 --> 00:07:30.780
+Je kunt Dataflow Gen 2 zelfstandig uitvoeren.
+
+00:07:31.000 --> 00:07:32.940
+Stel in dat het elke ochtend om 6 uur ververst.
+
+00:07:33.080 --> 00:07:36.280
+Of je roept het aan vanuit een bovenliggende pipeline als één stap in een grotere workflow.
+
+00:07:36.280 --> 00:07:38.520
+De meeste productieopstellingen doen dat laatste.
+
+00:07:38.680 --> 00:07:42.920
+De pipeline regelt de orkestratie en Dataflow Gen 2 regelt de transformatiestap daarbinnen.
+
+00:07:43.100 --> 00:07:51.600
+Maar even eerlijk, voor echt zware transformaties, denk aan miljarden rijen, complexe vensterfuncties of aangepaste machine learning logica, gebruik je wellicht nog notebooks met Spark.
+
+00:07:52.000 --> 00:08:01.280
+Dataflow Gen 2 is niet gebouwd voor elk scenario, maar voor het overgrote deel van wat de meeste teams nodig hebben, zoals opschonen, vormgeven, samenvoegen en aggregeren, dekt het ongeveer 80% van het werk.
+
+00:08:01.500 --> 00:08:03.420
+Dat is een hoop code die je niet hoeft te schrijven.
+
+00:08:03.680 --> 00:08:05.260
+Bouwsteen 3, kopieertaken.
+
+00:08:05.260 --> 00:08:07.400
+Laten we het nu hebben over het verplaatsen van data.
+
+00:08:07.580 --> 00:08:10.260
+Wat als je continu data vanuit een database wilt laten binnenstromen?
+
+00:08:10.440 --> 00:08:12.080
+Dat is waar kopieertaken van pas komen.
+
+00:08:12.240 --> 00:08:16.660
+Een kopieertaak is een vereenvoudigde manier om data van een bron naar een leek te kopiëren met ingebouwde wijzigingsvolging.
+
+00:08:16.840 --> 00:08:19.960
+Geen complexe pipeline configuratie, geen aangepaste script.
+
+00:08:20.100 --> 00:08:22.460
+Je kiest een bron, een doel en geeft aan hoe vaak het moet draaien.
+
+00:08:22.660 --> 00:08:23.360
+Dat is het echt.
+
+00:08:23.560 --> 00:08:26.520
+De belangrijkste functie is Change Data Capture of CDC.
+
+00:08:27.080 --> 00:08:30.280
+Kopieertaken volgen automatisch toevoegingen, updates en verwijderingen bij de bron.
+
+00:08:30.280 --> 00:08:35.200
+Je hoeft geen handmatige watermarking logica te bouwen, dat proces waarbij je een tijdstempel opslaat en zoekt naar nieuwere records.
+
+00:08:35.600 --> 00:08:37.260
+Kopieertaken regelen dat op de achtergrond.
+
+00:08:37.420 --> 00:08:39.260
+Het werkt gewoon zonder extra inspanning.
+
+00:08:39.440 --> 00:08:39.940
+Er is meer.
+
+00:08:40.260 --> 00:08:43.360
+Kopieertaken ondersteunen SCD type 2, slowly changing dimensions type 2.
+
+00:08:43.560 --> 00:08:45.620
+Dat betekent dat de volledige historie behouden blijft.
+
+00:08:45.800 --> 00:08:48.960
+Wanneer een klant zijn adres wijzigt, blijft het oude adres in de tabel staan met een einddatum.
+
+00:08:49.100 --> 00:08:50.760
+Het nieuwe adres krijgt een begindatum.
+
+00:08:50.920 --> 00:08:53.120
+Je kunt precies zien hoe een record in de loop der tijd is veranderd.
+
+00:08:53.240 --> 00:08:55.520
+Dat is enorm waardevol voor auditing en historische rapportages.
+
+00:08:55.520 --> 00:08:58.680
+Dus, wanneer gebruik je kopieertaken in plaats van de standaard kopieeractiviteit?
+
+00:08:58.860 --> 00:08:59.620
+Dit is de regel.
+
+00:09:00.040 --> 00:09:03.260
+Kopieertaken zijn voor instellen en vergeten, continu data ingestie.
+
+00:09:03.400 --> 00:09:06.820
+Je wilt dat data dag na dag automatisch binnenstroomt met minimaal onderhoud.
+
+00:09:07.700 --> 00:09:13.160
+Kopieeractiviteiten zijn voor eenmalige of geplande bulk loads waarbij je meer controle nodig hebt over mappings en foutafhandeling.
+
+00:09:13.420 --> 00:09:18.980
+Zie het zo, een kopieertaak is als een bibliothecaris die automatisch ziet wanneer nieuwe boeken worden toegevoegd en ze in de kast zet.
+
+00:09:19.100 --> 00:09:22.880
+Je hoeft niet telkens de catalogus te controleren, want de bibliothecaris regelt het.
+
+00:09:22.880 --> 00:09:28.260
+Een kopieeractiviteit is meer alsof je zelf de bibliotheek binnenloopt, de boeken kiest en precies bepaalt waar ze komen te staan.
+
+00:09:28.500 --> 00:09:32.220
+Beiden krijgen het werk gedaan, maar kopieertaken besparen je de moeite bij routineklussen.
+
+00:09:32.380 --> 00:09:33.820
+De installatie is eenvoudig.
+
+00:09:33.960 --> 00:09:36.460
+Je kiest de bron, bijvoorbeeld een SQL Server database.
+
+00:09:36.720 --> 00:09:38.700
+Je kiest de bestemming, een lakehouse tabel.
+
+00:09:38.860 --> 00:09:43.380
+Je koppelt de velden, je geeft aan of je incrementele of volledige vernieuwing wilt, en dat is alles.
+
+00:09:43.600 --> 00:09:47.040
+De taak draait volgens jouw planning en houdt je lakehouse automatisch gesynchroniseerd.
+
+00:09:47.300 --> 00:09:48.380
+Bouwsteen voor mirroring.
+
+00:09:48.600 --> 00:09:50.380
+Wat als je real-time replicatie nodig hebt?
+
+00:09:50.580 --> 00:09:52.120
+Dat is waar mirroring om de hoek komt kijken.
+
+00:09:52.120 --> 00:09:53.780
+Hier is de simpelste definitie.
+
+00:09:53.980 --> 00:09:58.860
+Mirroring is een manier om je operationele database continu te repliceren naar OneLake zonder één regelcode te schrijven.
+
+00:09:59.020 --> 00:10:01.260
+Je stelt het één keer in en het draait op de achtergrond.
+
+00:10:01.440 --> 00:10:03.320
+De data blijft bijna real-time actueel.
+
+00:10:03.520 --> 00:10:06.100
+Geen pipelines om te bouwen, geen data flows om te onderhouden.
+
+00:10:06.260 --> 00:10:07.060
+Het werkt gewoon.
+
+00:10:07.260 --> 00:10:08.120
+Hoe werkt het eigenlijk?
+
+00:10:08.400 --> 00:10:11.040
+Mirroring leest het transactielogboek van je bron-database.
+
+00:10:11.240 --> 00:10:15.860
+Elke wijziging, elke insert, update en delete wordt opgepikt en verschijnt binnen minuten in OneLake.
+
+00:10:16.040 --> 00:10:17.300
+Dit is geen batchverwerking.
+
+00:10:17.300 --> 00:10:19.060
+Het is continu replicatie.
+
+00:10:19.240 --> 00:10:22.520
+Het moment dat er iets verandert in je bron-database, verschijnt het in Fabric.
+
+00:10:22.720 --> 00:10:23.900
+Laten we het over bronnen hebben.
+
+00:10:24.120 --> 00:10:28.460
+Op dit moment kun je Azure SQL Database, Azure Cosmos DB, Snowflake en andere mirroren.
+
+00:10:28.580 --> 00:10:33.540
+Er komt meer aan, zoals Private Network Mirroring voor databases achter firewalls, aangekondigd op beeld 2026.
+
+00:10:34.020 --> 00:10:35.100
+Waarom zou je dit gebruiken?
+
+00:10:35.260 --> 00:10:38.520
+Omdat je een live kopie van je database in OneLake krijgt zonder ETL pipelines te bouwen.
+
+00:10:38.680 --> 00:10:40.200
+Je hebt geen kopieeractiviteiten nodig.
+
+00:10:40.360 --> 00:10:41.780
+Je hebt geen change tracking scripts nodig.
+
+00:10:41.960 --> 00:10:43.540
+Je hebt geen incrementele laadlogica nodig.
+
+00:10:43.540 --> 00:10:45.240
+Het systeem regelt dat allemaal voor je.
+
+00:10:45.400 --> 00:10:47.000
+Hier is een vergelijking om het te onthouden.
+
+00:10:47.220 --> 00:10:50.080
+Zie Mirroring als een real-time clone van je database binnen Fabric.
+
+00:10:50.260 --> 00:10:52.640
+Werkt de bron bij en de clone wordt direct bijgewerkt.
+
+00:10:52.840 --> 00:10:54.600
+Geen code nodig om ze synchroon te houden.
+
+00:10:54.780 --> 00:10:56.120
+Het systeem doet het zware werk.
+
+00:10:56.300 --> 00:10:58.240
+Er is ook een kostenvoordeel dat het vermelden waard is.
+
+00:10:58.460 --> 00:11:01.240
+Mirroring biedt gratis rekenkracht en opslag tot een bepaalde limiet.
+
+00:11:01.380 --> 00:11:03.840
+Je betaalt alleen voor de Fabric capaciteit die je al hebt.
+
+00:11:04.080 --> 00:11:08.340
+Voor veel organisaties is dit goedkoper dan eigen replicatiepijplijnen bouwen en onderhouden.
+
+00:11:08.500 --> 00:11:10.140
+En hier is een praktische use case.
+
+00:11:10.140 --> 00:11:14.140
+Je kunt Power BI rapporten bouwen op gespiegelde data zonder de brondatabase te belasten.
+
+00:11:14.300 --> 00:11:16.800
+Je operationele systeem blijft op volle snelheid draaien.
+
+00:11:16.940 --> 00:11:18.460
+Je analisten krijgen verse data.
+
+00:11:18.700 --> 00:11:19.380
+Iedereen wint.
+
+00:11:19.560 --> 00:11:21.160
+Hoe deze onderdelen samenwerken.
+
+00:11:21.380 --> 00:11:24.460
+Dus, je hebt pijplijnen, data flows, kopieertaken en mirroring.
+
+00:11:24.580 --> 00:11:25.600
+Hoe passen ze bij elkaar?
+
+00:11:25.820 --> 00:11:28.920
+De meeste implementaties in de praktijk volgen een eenvoudig patroon.
+
+00:11:29.100 --> 00:11:31.760
+Ingestie, opschonen, verrijken, serveren.
+
+00:11:31.940 --> 00:11:33.540
+Dit heet de medaillonarchitectuur.
+
+00:11:33.780 --> 00:11:35.200
+Brons, zilver, goud.
+
+00:11:35.480 --> 00:11:36.500
+Zie het als drie lagen.
+
+00:11:36.720 --> 00:11:38.860
+Brons bevat ruwe data precies zoals deze binnenkwam.
+
+00:11:38.860 --> 00:11:41.020
+Zilver is opgeschoond en ontdaan van dubbele gegevens.
+
+00:11:41.220 --> 00:11:42.860
+Goud is verrijkt en klaar voor rapportage.
+
+00:11:43.080 --> 00:11:44.660
+Dit is hoe dat er in de praktijk uitziet.
+
+00:11:44.820 --> 00:11:47.940
+Een mirroring of kopieertaak plaatst ruwe data in een bronzen lakehouse tabel.
+
+00:11:48.120 --> 00:11:49.300
+Dat is de stap voor ingestie.
+
+00:11:49.500 --> 00:11:52.340
+Vervolgens schoont een data flow gen 2 het op en transformeert het naar zilver.
+
+00:11:52.520 --> 00:11:55.820
+Verwijderd nalwaarden, standaardiseert formaten en koppelt gerelateerde tabellen.
+
+00:11:56.000 --> 00:11:58.260
+Ten slotte orkestreert een pijplijn het hele proces.
+
+00:11:58.520 --> 00:12:03.180
+Deze activeert de kopieertaak, wacht tot deze klaar is, draait de data flow en verstuurt een teamsmelding bij voltooiing.
+
+00:12:03.340 --> 00:12:04.520
+Dat is de volledige flow.
+
+00:12:04.520 --> 00:12:06.660
+De echte magie zit niet in één enkele tool.
+
+00:12:06.860 --> 00:12:09.080
+Het is de manier waarop ze communiceren via één lake.
+
+00:12:09.260 --> 00:12:10.980
+Je gespiegelde data leeft in één lake.
+
+00:12:11.120 --> 00:12:13.000
+Je data flow output belandt in één lake.
+
+00:12:13.160 --> 00:12:14.680
+Je pijplijn leest vanuit één lake.
+
+00:12:14.860 --> 00:12:16.520
+Alles deelt dezelfde opslaglaag.
+
+00:12:16.660 --> 00:12:19.320
+Je kunt zelfs data delen tussen werkruimtes met snelkoppelingen.
+
+00:12:19.540 --> 00:12:20.620
+Kopiëren is niet nodig.
+
+00:12:20.840 --> 00:12:23.220
+Er is een afhankelijkheidsketen die de moeite waard is om te begrijpen.
+
+00:12:23.400 --> 00:12:26.280
+Pijplijnen kunnen data flow gen 2 aanroepen als een stap in de pijplijn.
+
+00:12:26.500 --> 00:12:30.960
+Ze kunnen ook notebooks, dbt-taken en zelfs Azure Data Factory pijplijnen bevatten als je geleidelijk migreert.
+
+00:12:30.960 --> 00:12:32.880
+Eén pijplijn kan ze allemaal orkestreren.
+
+00:12:33.080 --> 00:12:33.720
+Dit is het punt.
+
+00:12:33.920 --> 00:12:36.400
+Je hoeft geen vijf verschillende services meer aan elkaar te knopen.
+
+00:12:36.600 --> 00:12:38.940
+Eén platform, één opslaglaag, één zet rechten.
+
+00:12:39.200 --> 00:12:40.280
+Dat is het nut van Fabric.
+
+00:12:40.460 --> 00:12:41.660
+En het werkt in de praktijk.
+
+00:12:41.840 --> 00:12:44.580
+Een distributeur uit de VAE gebruikte precies dit patroon.
+
+00:12:44.940 --> 00:12:48.860
+Kopieertaken voor SAP Data, Data Flow Gen 2 voor opschonen, pijplijnen voor orkestratie.
+
+00:12:49.040 --> 00:12:51.380
+Ze verkortten hun maandijnde afsluiting van 9 naar 2 dagen.
+
+00:12:51.640 --> 00:12:52.440
+Dat is geen demo.
+
+00:12:52.740 --> 00:12:54.960
+Dat is productie, praktisch advies en kosten.
+
+00:12:55.200 --> 00:12:57.520
+Dus wie moet Fabric Data Factory eigenlijk gebruiken?
+
+00:12:57.520 --> 00:13:00.760
+Als je data binnen Fabric moet verplaatsen of transformeren, is dit je tool.
+
+00:13:00.960 --> 00:13:04.640
+Dat geldt voor data engineers die pipelines bouwen, analytics engineers die data modelleren,
+
+00:13:04.820 --> 00:13:08.180
+en zelfs business analisten die Data Flow Gen 2 gebruiken voor self-service transformaties.
+
+00:13:08.360 --> 00:13:09.320
+Wie kan het overslaan?
+
+00:13:09.480 --> 00:13:12.920
+Als je alleen eenmalig bestanden hoeft te uploaden, begin dan direct met Lakehouse.
+
+00:13:13.160 --> 00:13:14.680
+Sliep een CSV bestand erin?
+
+00:13:14.840 --> 00:13:15.120
+Klaar.
+
+00:13:15.260 --> 00:13:18.020
+Als je zwaar investeert in SSIS, wacht dan op die ondersteuning.
+
+00:13:18.200 --> 00:13:21.240
+En als je ADF-rekening onder de 1500 per maand is en je gebruikt Fabric niet,
+
+00:13:21.340 --> 00:13:22.660
+dan is blijven waar je bent voorlopig logisch.
+
+00:13:22.860 --> 00:13:23.980
+Laten we praten over kosten.
+
+00:13:23.980 --> 00:13:24.980
+2.
+
+00:13:24.980 --> 00:13:25.980
+Soep 2.
+
+00:13:25.980 --> 00:13:26.980
+1.
+
+00:13:26.980 --> 00:13:27.980
+2.
+
+00:13:27.980 --> 00:13:28.980
+3.
+
+00:13:28.980 --> 00:13:29.980
+4.
+
+00:13:29.980 --> 00:13:30.980
+5.
+
+00:13:30.980 --> 00:13:31.980
+6.
+
+00:13:31.980 --> 00:13:32.980
+7.
+
+00:13:32.980 --> 00:13:33.980
+8.
+
+00:13:33.980 --> 00:13:34.980
+8.
+
+00:13:34.980 --> 00:13:35.980
+8.
+
+00:13:35.980 --> 00:13:36.980
+8.
+
+00:13:36.980 --> 00:13:37.980
+9.
+
+00:13:37.980 --> 00:13:38.980
+9.
+
+00:13:38.980 --> 00:13:39.980
+10.
+
+00:13:39.980 --> 00:13:40.980
+10.
+
+00:13:40.980 --> 00:13:41.980
+11.
+
+00:13:41.980 --> 00:13:42.980
+11.
+
+00:13:42.980 --> 00:13:43.980
+11.
+
+00:13:43.980 --> 00:13:44.980
+11.
+
+00:13:44.980 --> 00:13:45.980
+11.
+
+00:13:45.980 --> 00:13:46.980
+12.
+
+00:13:46.980 --> 00:13:47.980
+12.
+
+00:13:47.980 --> 00:13:48.980
+11.
+
+00:13:48.980 --> 00:13:49.980
+14.
+
+00:13:49.980 --> 00:13:50.980
+12.
+
+00:13:50.980 --> 00:13:51.980
+14.
