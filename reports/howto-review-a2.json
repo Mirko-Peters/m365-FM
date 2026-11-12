@@ -65,5 +65,79 @@
    "https://learn.microsoft.com/en-us/autopilot/self-deploying"
   ],
   "woerter_entwurf_vs_final": "kein Entwurf -> 1594"
+ },
+ {
+  "n": 35,
+  "slug": "how-to-enable-secure-boot-windows-11",
+  "kwhero_score": 33,
+  "status": "validate OK, humanlint OK (1782 Woerter)",
+  "changes": "kwhero-Entwurf bestand nur aus einer Gliederung (92 Woerter, 0 Absaetze); komplett neu nach Microsoft-Seiten geschrieben. Inhalt: Secure Boot Check (Confirm-SecureBootUEFI, msinfo32), Firmware oeffnen (Settings > Recovery > Advanced startup > UEFI Firmware Settings), Legacy/CSM auf UEFI, Surface-Schritte, MBR2GPT (validate/convert, BitLocker aussetzen, danach Firmware auf UEFI), TPM-2.0-Pruefung, Intune-Compliance 'Require Secure Boot' (braucht TPM 2.0 und Device Health Attestation) mit den vier Pruefschritten aus dem Learn-Troubleshooting, Autopilot self-deploying braucht TPM 2.0, Zertifikate von 2011 laufen ab Juni 2026 (automatisches Update). Topic-Discovery-Punkte (GPO/Intune, Autopilot, Wiederherstellung) teils uebernommen; Event Viewer/Drittwerkzeuge nicht belegt, weggelassen.",
+  "uncertain": "Die Zeile 'Secure Boot State' in msinfo32 (On/Off/Unsupported) steht auf keiner geoeffneten Microsoft-Seite (nur BIOS Mode/PCR7 im Intune-Artikel); im Text als nicht belegt gekennzeichnet. 'Settings > Security > Integrity protection' stammt aus dem Secure-Boot-Enablement-Guide (Menuename kann je Build abweichen). Intune-DHA-Aussage steht nur fuer Windows 10 auf der Learn-Seite; so im Text formuliert.",
+  "urls": [
+   "https://support.microsoft.com/en-us/windows/security/secure-boot-enablement-guide",
+   "https://support.microsoft.com/en-us/windows/security/devicesecurity/windows-11-and-secure-boot",
+   "https://learn.microsoft.com/en-us/powershell/module/secureboot/confirm-securebootuefi",
+   "https://learn.microsoft.com/en-us/windows/security/operating-system-security/system-security/secure-the-windows-10-boot-process",
+   "https://learn.microsoft.com/en-us/windows/deployment/mbr-to-gpt",
+   "https://learn.microsoft.com/en-us/troubleshoot/mem/intune/device-protection/secure-boot-enabled-device-shows-not-compliant",
+   "https://learn.microsoft.com/en-us/intune/device-security/compliance/ref-windows-settings",
+   "https://support.microsoft.com/en-us/windows/enable-tpm-2-0-on-your-pc-1fd5a332-360d-4f46-a1e7-ae6b0c90645c",
+   "https://learn.microsoft.com/en-us/autopilot/self-deploying"
+  ],
+  "woerter_entwurf_vs_final": "92 (nur Gliederung) -> 1782"
+ },
+ {
+  "n": 36,
+  "slug": "map-network-drive-windows-11",
+  "kwhero_score": 66,
+  "status": "validate OK, humanlint OK (2150 Woerter)",
+  "changes": "Entwurf 3620 Woerter. Behalten/ausgebaut: File Explorer, net use, Trennen, Fehlerbehebung, Unterordner, Skripte/Task Scheduler, Mehrbenutzer (jetzt mit Group Policy Preferences Drive Maps laut Learn). Gestrichen als falsch/unbelegt/Fremdthema: Passwort im Klartext im net-use-Befehl (jetzt Sternchen), 'Administrator noetig fuer alle Benutzer', Registry-Tweaks fuer Mapping, Home-vs-Pro-Behauptungen (Microsoft-Vergleich nennt nur Pro mit Windows Server fuer Domain Join/GPO), 'Add a network location' (Seite nicht geoeffnet), OneDrive/Dropbox-Sync-Konflikte, VM-Mapping (Hyper-V/VMware), Verweise auf M365-Governance/DLP/Podcast, 'It's 2024'. Neu: Reconnect/persistent laut net-use-Referenz, New-PSDrive -Persist -Scope Global und New-SmbMapping, Fehler 1219/net use * /delete, Update vs. Replace bei GPP.",
+  "uncertain": "Das Dialogfeld 'Connect using different credentials' ist auf der Microsoft-Seite nicht beschrieben; im Text offen gelassen. Fehler 1219 (eine Anmeldung pro Server und Sitzung) und 'Rotes X nach Anmeldung' stammen aus allgemeinem Windows-Wissen, im Text als solches markiert bzw. vorsichtig formuliert. net-use-Referenz ist eine archivierte Learn-Seite (Server 2012 R2). 'Add a network location' wurde bewusst weggelassen statt ungeprueft behalten. Kuerzung 3620 -> 2150 betrifft v.a. die unbelegten Home/Pro-, Cloud-Sync-, VM- und Registry-Teile.",
+  "urls": [
+   "https://support.microsoft.com/en-us/windows/experience/connectivity-networking/file-sharing-over-a-network-in-windows",
+   "https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-server-2012-r2-and-2012/gg651155(v=ws.11)",
+   "https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.management/new-psdrive",
+   "https://learn.microsoft.com/en-us/powershell/module/smbshare/new-smbmapping",
+   "https://learn.microsoft.com/en-us/windows-server/identity/ad-ds/manage/group-policy/group-policy-preferences",
+   "https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-server-2012-r2-and-2012/dn581924(v=ws.11)",
+   "https://learn.microsoft.com/en-us/powershell/module/scheduledtasks/new-scheduledtasktrigger",
+   "https://learn.microsoft.com/en-us/troubleshoot/windows-server/networking/delete-active-connections-from-local-computer",
+   "https://www.microsoft.com/en-us/windows/business/compare-windows-11"
+  ],
+  "woerter_entwurf_vs_final": "3620 -> 2150"
+ },
+ {
+  "n": 37,
+  "slug": "critical-process-died-windows-11",
+  "kwhero_score": "n/a",
+  "status": "validate OK, humanlint OK (1664 Woerter)",
+  "changes": "kwhero-Analyse fuer dieses Keyword war fehlgeschlagen ('Content analysis failed'); kein Klick (Credits), daher kein Entwurf. Neu nach Microsoft: Bug Check 0xEF (betroffene Prozesse, keine einzelne Ursache), Basisschritte aus dem Stop-Code-Guide (Hardware entfernen, Safe Mode, Device Manager, Speicherplatz 10-15 %, Updates, Wiederherstellung), DISM vor SFC mit Ergebnissen/Log, WinRE-Weg (Start dreimal unterbrechen, Startup Settings, Uninstall updates, Point-in-time restore, Cloud rebuild, Startup Repair), Hinweis auf Debugger/!analyze, Admin-Teil: Update pausieren bis 35 Tage (Windows Update client policies, frueher WUfB).",
+  "uncertain": "Kein Entwurf zum Vergleich. 24H2+ zeigt laut Microsoft einen schwarzen Bildschirm statt Blue Screen (so im Text). Rollback eines Problem-Updates erklaert die WUfB-Seite nicht; im Text offen genannt. 'In Safe Mode zuerst Dateien sichern' ist Empfehlung, kein Zitat.",
+  "urls": [
+   "https://learn.microsoft.com/en-us/windows-hardware/drivers/debugger/bug-check-0xef--critical-process-died",
+   "https://support.microsoft.com/en-us/windows/experience/performance-optimization/troubleshooting-windows-unexpected-restarts-and-stop-code-errors",
+   "https://support.microsoft.com/en-us/windows/experience/backup-recovery/use-the-system-file-checker-tool-to-repair-missing-or-corrupted-system-files",
+   "https://support.microsoft.com/en-us/windows/experience/backup-recovery/recovery-options-in-windows",
+   "https://support.microsoft.com/en-us/windows/experience/startup-boot/startup-repair",
+   "https://support.microsoft.com/en-us/windows/experience/startup-boot/windows-startup-settings",
+   "https://learn.microsoft.com/en-us/windows/deployment/update/waas-manage-updates-wufb"
+  ],
+  "woerter_entwurf_vs_final": "kein Entwurf -> 1664"
+ },
+ {
+  "n": 38,
+  "slug": "audio-renderer-error-windows-11",
+  "kwhero_score": 23,
+  "status": "validate OK, humanlint OK (1504 Woerter)",
+  "changes": "kwhero-Entwurf bestand nur aus einer Gliederung (51 Woerter, 0 Absaetze; letzte Ueberschrift 'Top Rated Answers from User Forums'); komplett neu. Microsoft hat keine eigene Seite zur Meldung; deshalb im Text offen als Mix aus Microsoft-Audioguides (Windows-Audio-Dienste, Lautstaerkemixer, Standardgeraet, Audio enhancements, Treiber update/zurueck/neu installieren, Get-Help-Troubleshooter) und Berichten aus Microsoft-Q&A-Threads (Kopfhoerer neu einstecken, Audiosrv neu starten) gekennzeichnet. Admin-Teil: Update pausieren/zurueckstellen (WUfB). Topic-Discovery-Themen (Realtek/Dolby, Event Viewer, Reliability Monitor, Skript-Neustart des Audiodienstes, Power-Settings) nicht aufgenommen: nicht belegt.",
+  "uncertain": "Ursache der Meldung bleibt laut Threads unklar (Treiber, Adblocker, nichts); als solche genannt. Exklusivmodus: Microsoft-Seite nennt ihn nicht, im Text so gesagt. Die Warnung 'RPC nicht ohne Not neu starten' ist eigene Empfehlung. Q&A-Antworten sind Community, nicht Microsoft-Support.",
+  "urls": [
+   "https://learn.microsoft.com/en-us/answers/questions/3171809/audio-renderer-error-please-restart-your-computer",
+   "https://support.microsoft.com/en-us/windows/fix-sound-or-audio-problems-in-windows-73025246-b61c-40fb-671a-2535c7cd56c8",
+   "https://support.microsoft.com/en-us/windows/fix-audio-stops-working-after-a-windows-update-in-windows-b0dadfe1-051e-4e3f-a971-486ab4f7e6d6",
+   "https://support.microsoft.com/en-US/Windows/Hardware/Audio/fix-app-audio-not-working-while-system-sounds-work-in-windows",
+   "https://learn.microsoft.com/en-us/windows/deployment/update/waas-manage-updates-wufb"
+  ],
+  "woerter_entwurf_vs_final": "51 (nur Gliederung) -> 1504"
  }
 ]
