@@ -9,6 +9,7 @@ import site_ads as ADS   # T37 Sponsor: Kennzeichnung gesponserter Entitaeten (d
 import json
 import site_facts as FX   # belegte Fakten (Rechtsform, Register, Kunden, Partner, Positionen ...)
 import site_mentions as MEN   # Erwaehnungen in fremden Medien als Quellen (data/press_mentions.json)
+import site_listen as LST   # Anhoeren-Karten (kompakte Variante unter den Beitraegen einer Entitaet)
 import re
 from datetime import date
 from urllib.parse import quote, urlsplit
@@ -613,15 +614,18 @@ def articles_block(BASE, e, lang, posts, T_):
         return "", []
     def purl(p):
         return f"{BASE}{pfx(p['lang']) if p['lang'] in ('de',) else ''}/community/u/{p['handle']}/blog/{p['slug']}/"
+    lc = LST.apply_entities(BASE, posts[:100], lang, ENTS)   # kompakte "Anhoeren"-Karte je Beitrag mit guter Folge, dieselbe Folge nur beim ersten Beitrag
     def item(p):
         sm = (p.get("summary") or "")[:180]
         return (f'<li class="en-art"><a href="{purl(p)}"><b>{esc(p["title"])}</b></a><br><span class="mut"><time datetime="{_iso(p.get("published"))}">{_iso(p.get("published"))}</time> · {esc(p.get("name") or p["handle"])}</span>'
-                + (f'<br>{esc(sm)}' if sm else "") + "</li>")
+                + (f'<br>{esc(sm)}' if sm else "") + lc.get((p.get("handle"), p["slug"], p.get("lang")), "") + "</li>")
     head, rest = posts[:20], posts[20:100]
     h = f'<section class="en-arts"><h2>{esc(T_("Articles about {t}", "Artikel zu {t}").format(t=e["name"]))} <span class="mut">({len(posts)})</span></h2><ul class="en-artl">' + "".join(item(p) for p in head) + "</ul>"
     if rest:
-        h += f'<details><summary>{esc(T_("{n} more articles", "{n} weitere Artikel").format(n=len(posts) - 20))}</summary><ul class="en-artl">' + "".join(f'<li><a href="{purl(p)}">{esc(p["title"])}</a> <span class="mut">· {_iso(p.get("published"))}</span></li>' for p in rest) + "</ul></details>"
+        h += f'<details><summary>{esc(T_("{n} more articles", "{n} weitere Artikel").format(n=len(posts) - 20))}</summary><ul class="en-artl">' + "".join(f'<li><a href="{purl(p)}">{esc(p["title"])}</a> <span class="mut">· {_iso(p.get("published"))}</span>{lc.get((p.get("handle"), p["slug"], p.get("lang")), "")}</li>' for p in rest) + "</ul></details>"
     h += "</section>"
+    if lc:
+        h = LST.page_assets(BASE) + h   # Stil und Skript der Karten einmal je Seite
     return h, [purl(p) for p in head + rest]
 
 

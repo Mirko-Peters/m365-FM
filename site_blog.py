@@ -8,6 +8,7 @@ import site_members as MEM
 import site_topics as TOP
 import site_sponsorships as SPM   # T37 Sponsor: Kennzeichnung bezahlter Beitraege (data/sponsorships.json)
 import site_img_dims as IMG
+import site_listen as LST   # Anhoeren-Karten (Stoerer) in den Beitraegen
 import site_milestones as MST   # Wochenzusammenfassungen: eigene Vor/Zurueck-Reihe, darunter nur weitere Zusammenfassungen statt Inhaltslisten
 from site_design import pager as PG, neighbours as NB   # Vor/Zurueck am Seitenende (rel=prev/next)
 
@@ -130,6 +131,7 @@ def build(g, posts, people, api):
                 body_html = IMG.enhance(body_html)
             body_html = IMG.eager_first(body_html)   # erstes Bild oben im Beitrag (oft das LCP-Element) nicht lazy laden
             _ms = MST.is_milestone(p)
+            if not _ms: body_html = LST.apply(BASE, body_html, p, lang, ENTS)   # "Anhoeren"-Karten (site_listen): 1-2 passende Folgen und "Show folgen", nur bei guter Uebereinstimmung
             _rel = [] if _ms else TOP.related(_content, p, k=6)
             relbox = MST.more_box(lang, BASE, posts, p) if _ms else (f'<section class="bl-rel"><h2>{esc(T(lang, "Related articles", "Verwandte Artikel"))}</h2><ul class="bl-list">' + "".join(
                 f'<li><a href="{croot}u/{r["handle"]}/blog/{r["slug"]}/"><b>{esc(r["title"])}</b></a> <span class="mut">· {iso(r["published"])}</span></li>' for r in _rel) + "</ul></section>") if _rel else ""

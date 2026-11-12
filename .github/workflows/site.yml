@@ -49,6 +49,8 @@ jobs:
         run: node --test tests/sponsor_calc.test.mjs
       - name: Player nach Klick (kein iframe im ersten HTML, feste Masse) und Ladezeit-Regeln pruefen (blockierend)
         run: node --test tests/player_facade.test.mjs && python3 -m unittest discover -s tests -p test_player_facade.py
+      - name: Anhören-Karten (Zuordnung, Platzierung, Rückfall ohne R2-Grafik, Geräte-Skript) prüfen (blockierend)
+        run: pip install -q pillow && node --test tests/listen.test.mjs && python3 -m unittest discover -s tests -p test_listen.py
       - name: Interne Links ohne Umweg - Python-Nachbau der Site-Worker-Weiterleitungen, jede alte Adresse in einem Schritt, Sprachwahl auf / (blockierend)
         run: python3 -m unittest discover -s tests -p test_site_links.py && python3 -m unittest discover -s tests -p test_redirect_hops.py && (cd sitewrk && node --test test/legacy.test.mjs test/lang.test.mjs)
       - name: Zusatz-Weiterleitungen (data/redirects_extra.json) gegen den Datenstand pruefen (nicht blockierend)
