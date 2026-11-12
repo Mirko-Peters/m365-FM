@@ -1,6 +1,6 @@
-# Spreaker-Website-Feld im RSS (2026-11-11 04:52 UTC)
+# Spreaker-Website-Feld im RSS (2026-11-12 04:54 UTC)
 
-Gesetzt laut Protokoll: 3230 · im Feed gleich: 3153 · im Feed anders: 0 · nicht im Feed: 77 · ausstehend (frisch gesetzt, Feed noch nicht erneuert): 0
+Gesetzt laut Protokoll: 3237 · im Feed gleich: 3155 · im Feed anders: 0 · nicht im Feed: 82 · ausstehend (frisch gesetzt, Feed noch nicht erneuert): 0
 
 - 67311542: nicht_im_feed · soll https://www.m365.fm/show/episodes/building-reusable-components-with-power-platform-cli-pac-cli/ · Feed None
 - 67312816: nicht_im_feed · soll https://www.m365.fm/show/episodes/using-microsoft-graph-for-custom-app-integrations/ · Feed None
@@ -79,3 +79,8 @@ Gesetzt laut Protokoll: 3230 · im Feed gleich: 3153 · im Feed anders: 0 · nic
 - 67640587: nicht_im_feed · soll https://www.m365.fm/show/episodes/m365-is-not-ready-for-kritis-or-is-it/ · Feed None
 - 67646241: nicht_im_feed · soll https://www.m365.fm/show/episodes/defender-alone-vs-sentinel-whos-failing-you/ · Feed None
 - 67652145: nicht_im_feed · soll https://www.m365.fm/show/episodes/copilot-settings-microsoft-wont-explain/ · Feed None
+- 67655533: nicht_im_feed · soll https://www.m365.fm/show/episodes/your-team-building-is-broken-minecraft-fixes-it/ · Feed None
+- 67656260: nicht_im_feed · soll https://www.m365.fm/show/episodes/copilot-connectors-the-missing-link-in-bizchat/ · Feed None
+- 67659452: nicht_im_feed · soll https://www.m365.fm/show/episodes/why-copilot-fails-most-businesses/ · Feed None
+- 67664576: nicht_im_feed · soll https://www.m365.fm/show/episodes/teams-admins-are-missing-this-hidden-layer/ · Feed None
+- 67664577: nicht_im_feed · soll https://www.m365.fm/show/episodes/your-mip-rollout-is-broken-heres-why/ · Feed None
