@@ -105,6 +105,18 @@ Most people end up with two or three signatures: a full one for first contact, a
 
 If you have a shared mailbox or send from several accounts, set the defaults for each account separately. Outlook stores them per account, and an unset account sends mail with no signature at all.
 
+## Start from a template
+
+If you don't want to design a signature from scratch, Microsoft offers templates. Its small-business signature page describes this route for classic Outlook for Windows:
+
+1. Download the signature template and open it in Word. If Word opens it in Protected View, select **Enable Editing**.
+2. Pick a design, select all its elements and copy them.
+3. In Outlook, start a new email and paste the signature into the message body.
+4. Edit the text, swap the photo or logo and add your links. To change a picture, right-click it, choose **Change Picture**, select the source file and click **Insert**. Drag the handles to resize. To change a link, right-click a social icon or highlight website text and choose **Edit Link**, then enter the address and click **OK**.
+5. Select and copy all signature elements again, go to **Message**, **Signature**, **Signatures**, click **New**, name it and paste into the **Edit signature** field. Click **OK**.
+
+After you save it, you can ask for the signature to be added automatically to future messages from the Signatures dialog. Microsoft's page also suggests emailing the finished signature to colleagues, who follow the same save steps. That keeps a team consistent without any tool, though it relies on everyone doing the steps themselves.
+
 ## What to put in the signature
 
 Microsoft says a signature can include text, links, pictures and images such as a logo or a handwritten signature. Keep it practical.

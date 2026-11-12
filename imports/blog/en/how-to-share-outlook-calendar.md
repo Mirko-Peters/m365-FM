@@ -87,6 +87,21 @@ To open a calendar someone shared with you, tap the same gear, then **Add a shar
 
 Classic Outlook has a **Share Calendar** command on the **Home** tab of the Calendar view. Microsoft's pages that I opened show the classic steps on a separate tab that I couldn't load, so check the Classic Outlook tab on the pages linked above if your ribbon looks different. The permission names are the same as in the list above, and the older labels map as Free/Busy, Free/Busy with subject and location, Reviewer and Editor.
 
+## What the other person has to do
+
+Sharing is a two-sided job, and many "it doesn't work" reports come from the receiving side. The person gets an email invitation and has to accept it. In new Outlook, a shared or delegate calendar isn't visible by default. They select **Show all** in the calendar list, find the calendar under **People's calendars** and select it. They can also use **Add calendar**, then **Add from directory** and choose you, but Microsoft says that direct route works only with work or school accounts. Users with personal accounts have to wait for your invitation.
+
+On a phone, the person taps the calendar menu in the upper left, taps the gear, then **Add a shared calendar**, enters your name and taps the plus sign by it. To see your free or busy status in a color of their choice, they tap the gear icon next to your name. They only see what you allowed, so a viewer with Can view when I'm busy sees blocks of time and nothing else.
+
+## Share or publish?
+
+The two words sound the same, but they work differently.
+
+- **Share** sends an invitation to a named person. You choose their permission, you can change it later and you can remove them. Inside your organization it syncs instantly.
+- **Publish** creates a link. Anyone with the link can see the calendar at the detail level you chose, and the link comes in two forms: HTML for viewing in a browser and ICS for subscribing from another calendar program. Both are read-only, and how often an ICS calendar refreshes depends on the recipient's email provider.
+
+If the person has a Microsoft 365 or Outlook.com account, share. If they use Gmail, Apple Calendar or anything else and just need to see your times, publishing is the practical way, and you accept that you can't tell who opens the link. Choose the lowest level of detail and unpublish when the project ends.
+
 ## Edit or Delegate: which one?
 
 This is where people give too much.

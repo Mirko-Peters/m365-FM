@@ -137,6 +137,22 @@ Scheduled mail carries a quiet risk: you can't see it the way you see sent mail.
 
 If your organization has retention or compliance rules, ask your admin how drafts are treated. I can't tell you from the pages I opened, so I won't guess.
 
+## Which method fits which job?
+
+It helps to match the tool to the problem, because the options aren't interchangeable.
+
+- **Send tomorrow morning, next Monday or after a holiday.** Use Schedule send in new Outlook, Outlook on the web or Outlook for Mac. The message waits in Drafts and goes at the time you set.
+- **Catch typos and missing attachments.** Use a short delay. In classic Outlook that's the rule that defers delivery by 1 to 120 minutes. On a Mac, Microsoft's Undo Send setting under Composing offers delays of 5 to 120 seconds, but Microsoft says that isn't true recall and it needs a Microsoft 365 subscription license or an Outlook.com account.
+- **One message on a classic Exchange mailbox.** Use Delay Delivery on the Options tab.
+- **The same email every week or month.** Use a Power Automate flow with a Recurrence trigger.
+- **Mail you received that you want to see again later.** That's snooze in the mobile apps, not scheduling.
+
+If your mail is on IMAP or POP, none of the Schedule send options apply. The rule for delaying every message is the one thing Microsoft describes for any account type, and it needs Outlook to keep running.
+
+## Picking the time
+
+Choosing the minute is your job, and a few habits save embarrassment. Check the recipient's time zone before you pick the hour, because a 9:00 delivery on your clock can be the middle of the night for them. Avoid the very start of a day if the message needs thought, and avoid a Friday evening if you expect a reply. Do the AM and PM check twice: a 7 PM send when you meant 7 AM is a common slip. After you queue the message, open Drafts or the Outbox once and confirm the time shown there.
+
 ## Common mistakes
 
 - **Treating the last Send click as a send.** In Schedule send you select **Send** to queue the message. It leaves later.
