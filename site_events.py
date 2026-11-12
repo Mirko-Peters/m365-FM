@@ -6,6 +6,7 @@ from site_i18n import COMM_LANGS, pfx, pfx2, overlay
 from datetime import datetime
 from site_learn import ENTS, esc, _fetch_json, LCSS
 from site_entities import eurl, eid_of
+import site_meta_community as PM   # Titel/Description (Suchabsicht)
 
 S = {"en": dict(events="Events", intro="Conferences, webinars and meetups of the Microsoft community – with their sessions and speakers.", upcoming="Upcoming", past="Past", none="No events yet.",
                 organizer="Organizer", when="When", where="Where", online="Online", onsite="On site", hybrid="Hybrid", free="Free", paid="Paid", topics="Topics", sessions="Sessions", speakers="Speakers", website="Website", tickets="Tickets / register",
@@ -233,7 +234,7 @@ def build(g, events, people, orgs):
                       + f'<p><a class="btn" href="{u}event.ics" download>{T(lang, "Add to calendar (.ics)", "Zum Kalender hinzufügen (.ics)")}</a></p>' + f'<h2>{esc(s["sessions"])}</h2>' + ("".join(ss) or f'<p class="mut">{esc(s["nosess"])}</p>')
                       + pt + reg + f'<script>window.M365TopicConfig={{api:{json.dumps(api)},lang:{json.dumps(lang)}}}</script><script defer src="{BASE}/assets/topic-follow.js"></script>' + css)
             ld = [{"@context": "https://schema.org", **event_ld(BASE, ev, pb, ob)}]
-            write(f"{pfx2(lang)}community/events/{ev['handle']}/index.html", page(lang, f'{ev["title"]} – {s["events"]} | M365.FM', (ev.get("summary") or ev.get("about") or "")[:155], u, b, None, ld, og_type="website", extra_head=LCSS, noindex=noidx, side=(g["side"](lang, ev["title"] + " " + (ev.get("about") or "")[:1500], ids=ev.get("topics", []), exclude=(ev["handle"],)) if g.get("side") else "")))
+            write(f"{pfx2(lang)}community/events/{ev['handle']}/index.html", page(lang, *(PM.event_meta(lang, ev, bool(ev.get("sessions"))) or (f'{ev["title"]} – {s["events"]} | M365.FM', (ev.get("summary") or ev.get("about") or "")[:155])), u, b, None, ld, og_type="website", extra_head=LCSS, noindex=noidx, side=(g["side"](lang, ev["title"] + " " + (ev.get("about") or "")[:1500], ids=ev.get("topics", []), exclude=(ev["handle"],)) if g.get("side") else "")))
             write(f"{pfx2(lang)}community/events/{ev['handle']}/event.ics", ics_for(ev, BASE))   # in jeder Sprache neben der Eventseite (deren Link verweist auf <Seite>/event.ics)
             if not noidx:
                 sitemap.append((u, TODAY, None))
@@ -245,7 +246,7 @@ def build(g, events, people, orgs):
                   + (f'<h2>{esc(s["upcoming"])}</h2><ul class="ev-list">{li(up)}</ul>' if up else "") + (f'<details class="ev-past"><summary><h2 style="display:inline">{esc(s["past"])} ({len(pa)})</h2></summary><ul class="ev-list">{li(pa)}</ul></details>' if pa else "") + ("" if events else f'<p class="mut">{esc(s["none"])}</p>') + css)
         ld = [{"@context": "https://schema.org", "@type": "CollectionPage", "name": s["events"], "url": ru, "description": s["intro"], "mainEntity": {"@type": "ItemList", "numberOfItems": len(events),
               "itemListElement": [{"@type": "ListItem", "position": i + 1, "item": {"@id": eurl_(BASE, "en", e["handle"]) + "#event"}} for i, e in enumerate(up + pa)]}}]
-        write(f"{pfx2(lang)}community/events/index.html", page(lang, f'{s["events"]} – M365.FM', s["intro"], ru, b, None, ld, og_type="website", extra_head=LCSS, noindex=noidx))
+        write(f"{pfx2(lang)}community/events/index.html", page(lang, *(PM.hub_meta("events", lang) or (f'{s["events"]} – M365.FM', s["intro"])), ru, b, None, ld, og_type="website", extra_head=LCSS, noindex=noidx))
         if not noidx:
             sitemap.append((ru, TODAY, None))
 

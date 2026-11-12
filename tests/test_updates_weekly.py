@@ -80,7 +80,7 @@ class UpdatesPageTests(unittest.TestCase):
         self.assertIn('<time datetime="2026-11-02">2026-11-02</time>', b)
         self.assertIn("Sponsor page, Expert Connect and fixes.", b)
         self.assertIn("Roadmap &amp; wishlist", b)
-        self.assertEqual(en["title"], "Updates – what's new on M365.FM each week – M365.FM")
+        self.assertEqual(en["title"], "M365.FM Updates: Weekly Website Changes")   # Suchintent-Titel (12.11.2026), site_meta_community.HUBS
         self.assertFalse(en["noindex"])
         self.assertIn((f"{BASE}/updates/", "2026-11-06", None), sitemap)
 
@@ -88,7 +88,7 @@ class UpdatesPageTests(unittest.TestCase):
         _, _, pages, _ = run([W44, W45, W45_DE])
         de = pages[f"{BASE}/de/updates/"]
         b = de["body"]
-        self.assertEqual(de["title"], "Updates – was jede Woche neu ist – M365.FM")
+        self.assertEqual(de["title"], "M365.FM Updates: Änderungen der Website pro Woche")
         self.assertIn(f'href="{BASE}/de/community/u/mirko-p/blog/m365fm-milestones-2026-w45/"', b)   # Sprachfassung
         self.assertIn(f'href="{BASE}/community/u/mirko-p/blog/m365fm-milestones-2026-w44/" hreflang="en" lang="en"', b)   # noch nicht uebersetzt: Original
         self.assertIn("auf Englisch", b)
