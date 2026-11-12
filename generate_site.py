@@ -1291,7 +1291,8 @@ def build():
     import site_legacy_blog as LBL
     _posts = list(BLG.fetch_posts(COMMUNITY_API)); _have = {(p["slug"], p.get("lang") or "en") for p in _posts if p["handle"] == "mirko-p"}
     import site_content_blog as CBL; _posts += [p for p in CBL.translations(BASE, _posts, LRN.ENTS) if (p["slug"], p["lang"]) not in _have]   # Sprachfassungen der englischen Content-Pakete (Uebersetzer-Team, data/blog_i18n), nur zu live stehenden Originalen
-    _posts += [p for p in LBL.items(BASE) if (p["slug"], p.get("lang") or "en") not in _have]   # plus die frueheren Podpage-Blogbeitraege als Community-Beitraege von mirko-p; T6: je Slug UND Sprache (die deutschen Fassungen blieben sonst beim D1-Import auf der Strecke)
+    _leg_all = LBL.items(BASE)   # alle frueheren Beitraege aus der Quelle (auch die schon in der Datenbank stehen): Grundlage der Uebersetzungsuebersicht
+    _posts += [p for p in _leg_all if (p["slug"], p.get("lang") or "en") not in _have]   # plus die frueheren Podpage-Blogbeitraege als Community-Beitraege von mirko-p; T6: je Slug UND Sprache (die deutschen Fassungen blieben sonst beim D1-Import auf der Strecke)
     # Sprach-Startseiten (Wunsch Mirko 6.11.2026: "Behandle die Startseite als komplett eigene"): /<sprache>/ ist die Startseite von "/" in der
     # eigenen Sprache - Hub mit den Inhalten der Sprache (Blog inkl. Sprachfassungen, Podcast, Events, Bibliothek, Videos; ohne Eintrag einer Art:
     # englische Eintraege, gekennzeichnet), dazu ein Abschnitt "Podcast in <Sprache>". Die fruehere Podcast-Startseite der Sprache (Titel,
@@ -1949,7 +1950,7 @@ Mirko Peters, {BASE}/about/
     write_src(OUT, ROOT / "data" / "ui_js_en.json")
     import site_trstatus as TRS
     try:
-        TRS.build(write, TODAY, list(ENT.ENTS.values()), [{"slug": p["slug"], "title": p["title"]} for p in _posts if p.get("legacy") and p.get("lang") == "en"], [{"slug": x["slug"], "title": x["e"]["title"]} for x in PP.episode_index(BASE)["items"]])
+        TRS.build(write, TODAY, list(ENT.ENTS.values()), [{"slug": p["slug"], "title": p["title"]} for p in _leg_all if p.get("legacy") and (p.get("lang") or "en") == "en"], [{"slug": x["slug"], "title": x["e"]["title"]} for x in PP.episode_index(BASE)["items"]], [{"slug": x["slug"], "title": x["title"]} for x in CBL.tr_sources(LRN.ENTS)])
     except Exception as _e:
         print("Uebersetzungsstatus nicht geschrieben:", str(_e)[:160])
     # Inhalt <-> Entitaet mit Gewicht fuer die Datenbank (content_topic, Paket 13): fruehere Beitraege (Slug) und Folgen der Hauptshow (Slug); der Worker uebernimmt die Liste alle 30 Minuten
