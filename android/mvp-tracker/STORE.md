@@ -107,7 +107,7 @@ Weitere Angaben:
 - **Werbung:** „Nein, die App enthält keine Werbung.“
 - **App-Zugriff:** Teile der App brauchen eine Anmeldung. Für die Prüfung von Google ein **Testkonto** mit Zugangsdaten hinterlegen (Mirko legt es an; Zugangsdaten nur in der Play Console, nie im Repo). Anmeldung mit Microsoft, LinkedIn oder GitHub; **Google-Anmeldung funktioniert im WebView nicht** (Google blockiert eingebettete Browser), also kein Google-Konto als Testkonto angeben.
 - **Nachrichten-App / Behörden / Finanzen / Gesundheit / VPN:** jeweils „Nein“.
-- **Berechtigungen:** Die App fragt keine gefährlichen Berechtigungen an (Version 1: Internet, Netzwerkstatus). Der CI-Lauf listet sie bei jedem Build (Schritt „Berechtigungen und Eckdaten der APK“). Mit Push kämen `POST_NOTIFICATIONS` u. a. dazu.
+- **Berechtigungen:** Die App fragt keine gefährlichen Berechtigungen an (Version 1: nur Internet, laut aapt2 im CI-Lauf). Der CI-Lauf listet sie bei jedem Build (Schritt „Berechtigungen und Eckdaten der APK“). Mit Push kämen `POST_NOTIFICATIONS` u. a. dazu.
 - **Datenschutzerklärung, Konto-Löschung, Kontakt:** siehe Stammdaten und Data safety oben.
 
 ## Lücke in der Datenschutzerklärung (vor dem Absenden schließen)
