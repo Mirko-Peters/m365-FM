@@ -6,6 +6,13 @@ BLOGS = {}   # handle -> Sprachen mit Beiträgen
 from site_i18n import COMM_LANGS, pfx, pfx2, overlay, T
 from datetime import datetime, timezone
 from site_learn import ENTS, esc, _fetch_json, LCSS
+import site_meta_community as PM   # Titel/Description der Profile und Verzeichnisse (Suchabsicht)
+
+
+def _topic_name(eid):
+    """Name einer Themen-Entitaet fuer die Description (Personen, Firmen, Jobs und Events zaehlen nicht als Expertise-Thema)."""
+    e = ENTS.get(eid) or {}
+    return e.get("name") if e.get("type") not in (None, "person", "org", "job", "event", "media") else ""
 from site_entities import TL, eurl, eid_of, tlab
 import site_roles as ROLE
 
@@ -435,7 +442,7 @@ def build(g, people, orgs, extra=None):
             ld = [{"@context": "https://schema.org", "@type": "ProfilePage", "@id": purl(BASE, "en", "u", p["handle"]) + "#profile", "url": u, "name": p["name"], "inLanguage": lang, "dateModified": TODAY, "mainEntity": node}]
             ld.extend(mvp_contrib_ld(BASE, p))
             ld.append({"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "M365.FM", "item": f"{BASE}/"}, {"@type": "ListItem", "position": 2, "name": s["members"], "item": f"{BASE}{pfx(lang)}/community/members/"}, {"@type": "ListItem", "position": 3, "name": p["name"], "item": u}]})   # T4
-            write(f"{pfx2(lang)}community/u/{p['handle']}/index.html", page(lang, f'{p["name"]} – {p.get("headline") or s["members"]} | M365.FM', (p.get("headline") or p.get("about") or "")[:155], u, b, None, ld, og_type="profile", extra_head=LCSS, noindex=noidx, side=(g["side"](lang, (p.get("headline") or "") + " " + (p.get("about") or "")[:1500], ids=[x["e"] for x in p.get("expertise", []) + p.get("certs", [])], exclude=()) if g.get("side") else "")))
+            write(f"{pfx2(lang)}community/u/{p['handle']}/index.html", page(lang, *(PM.profile_meta(lang, p, s["members"], _topic_name) or (f'{p["name"]} – {p.get("headline") or s["members"]} | M365.FM', (p.get("headline") or p.get("about") or "")[:155])), u, b, None, ld, og_type="profile", extra_head=LCSS, noindex=noidx, side=(g["side"](lang, (p.get("headline") or "") + " " + (p.get("about") or "")[:1500], ids=[x["e"] for x in p.get("expertise", []) + p.get("certs", [])], exclude=()) if g.get("side") else "")))
             if not noidx:
                 sitemap.append((u, TODAY, None))
         # ---- Firmen-Seiten ----
@@ -457,7 +464,7 @@ def build(g, people, orgs, extra=None):
                           + (f'<h2>{esc(s["expertise"])}</h2>{exp_ul(o, lang, li, s)}' if o.get("expertise") else "") + (f'<h2>{esc(s["team"])}</h2>{mem}' if mem else "")
                           + (f'<h2>{esc(s["latest"])}</h2>{items_ul(o)}' if items_ul(o) else "") + (f'<h2>{esc(s["channels"])}</h2>{chan_ul(o, lang)}' if chan_ul(o, lang) else "") + ((extra or {}).get(lang, {}).get("c", {}).get(o["handle"], "")) + live_js + topic_js + css)
             ld = [{"@context": "https://schema.org", "@type": "ProfilePage", "@id": purl(BASE, "en", "c", o["handle"]) + "#profile", "url": u, "name": o["name"], "inLanguage": lang, "dateModified": TODAY, "mainEntity": org_ld(BASE, o, pb)}]
-            write(f"{pfx2(lang)}community/c/{o['handle']}/index.html", page(lang, f'{o["name"]} – {o.get("tagline") or s["companies"]} | M365.FM', (o.get("tagline") or o.get("about") or "")[:155], u, b, None, ld, og_type="profile", extra_head=LCSS, noindex=noidx, side=(g["side"](lang, (o.get("tagline") or "") + " " + (o.get("about") or "")[:1500], ids=[x["e"] for x in o.get("expertise", [])]) if g.get("side") else "")))
+            write(f"{pfx2(lang)}community/c/{o['handle']}/index.html", page(lang, *(PM.company_meta(lang, o, _topic_name) or (f'{o["name"]} – {o.get("tagline") or s["companies"]} | M365.FM', (o.get("tagline") or o.get("about") or "")[:155])), u, b, None, ld, og_type="profile", extra_head=LCSS, noindex=noidx, side=(g["side"](lang, (o.get("tagline") or "") + " " + (o.get("about") or "")[:1500], ids=[x["e"] for x in o.get("expertise", [])]) if g.get("side") else "")))
             if not noidx:
                 sitemap.append((u, TODAY, None))
         # ---- Verzeichnisse ----
@@ -477,7 +484,7 @@ def build(g, people, orgs, extra=None):
                    [{"@type": "ListItem", "position": i + 1, "item": {"@id": f"{purl(BASE, 'en', pk, it['handle'])}#{'person' if pk == 'u' else 'org'}"}} for i, it in enumerate(lst)]}}]
             if _prec:   # Partner-Block ist als Anzeige gekennzeichnet: Sponsor auch im JSON-LD der Seite (check_schema: Kennzeichnung <-> sponsor)
                 ld[0]["sponsor"] = __import__("site_sponsorships").ld(_prec)
-            write(f"{pfx2(lang)}community/{kind}/index.html", page(lang, f'{title} – M365.FM', intro, ru, b, None, ld, og_type="website", extra_head=LCSS, noindex=noidx))
+            write(f"{pfx2(lang)}community/{kind}/index.html", page(lang, *(PM.hub_meta(kind, lang) or (f'{title} – M365.FM', intro)), ru, b, None, ld, og_type="website", extra_head=LCSS, noindex=noidx))
             if not noidx:
                 sitemap.append((ru, TODAY, None))
 
