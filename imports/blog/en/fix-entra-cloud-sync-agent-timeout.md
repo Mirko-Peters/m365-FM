@@ -7,24 +7,24 @@ author: mirko-p
 date: 2026-11-13
 topics: [entra-cloud-sync, entra-connect]
 keypoints:
-  - "HybridIdentityServiceAgentTimeout usually means the agent cannot reach the cloud service, not that the agent is broken."
+  - "In the reported cases, HybridIdentityServiceAgentTimeout pointed to a connection problem between the agent and the cloud service, not to a broken agent. Learn does not name this status but says an agent timeout is usually caused by the agent being unable to connect."
   - "Check DNS first, then outbound TCP 443 to *.msappproxy.net and *.servicebus.windows.net, then port 80 for certificate revocation lists."
   - "Firewall rules must follow the domain names, not fixed IP addresses, and TLS inspection should be bypassed for these flows."
   - "Collect the agent trace and an AADCloudSyncTools log bundle before you open a support case."
 faq:
   - q: "What does HybridIdentityServiceAgentTimeout mean in Entra Cloud Sync?"
-    a: "It is the status the Microsoft Entra admin center shows when the provisioning agent cannot complete its communication with the cloud service in time. In community reports the cause was outbound connectivity: name resolution, blocked or inspected traffic to the Azure Service Bus and Application Proxy endpoints, or a certificate chain that could not be validated."
+    a: "It is a status that the Microsoft Entra admin center showed in two 2026 community threads. Microsoft Learn does not describe this status by name. Its troubleshooting page says that an agent timeout is usually caused by the agent being unable to connect to the hybrid identity service. In the community reports the suspected cause was outbound connectivity: name resolution, blocked or inspected traffic to the Azure Service Bus and Application Proxy endpoints, or a certificate chain that could not be validated. Neither thread reported a confirmed root cause."
   - q: "Which ports and URLs does the Entra Cloud Sync agent need?"
     a: "According to Microsoft Learn, the agent needs outbound TCP 443 for all communication with the service and port 80 for certificate revocation list downloads. Public cloud destinations include *.msappproxy.net and *.servicebus.windows.net, plus several Microsoft sign-in and certificate endpoints. Always compare with the current Learn page, because the list can change."
   - q: "Does the Entra Cloud Sync agent work behind TLS inspection?"
-    a: "Microsoft's troubleshooting guidance says to avoid inline TLS inspection between the agent and the cloud services. If your firewall inspects TLS, exclude the Application Proxy and Service Bus destinations from inspection and test again."
+    a: "Learn's cloud sync troubleshooting page says to avoid all forms of inline inspection and termination on outbound TLS between Microsoft Entra private network connectors and the Application Proxy cloud services. A community answer applied this to the cloud sync agent and advised excluding the Application Proxy and Service Bus destinations from inspection. If your firewall inspects TLS, test with these destinations excluded."
   - q: "Can I pin the firewall rule to IP addresses?"
     a: "It is not a good idea. The endpoints sit behind wildcard domain names and can change. Use rules that follow the domain names, and test name resolution and TCP 443 from the agent server."
 ---
 
 The agent installs without an error. The services are running. The server has internet access. Still, the first sync never starts, and the Microsoft Entra admin center shows `HybridIdentityServiceAgentTimeout`.
 
-This pattern appeared in two separate Microsoft community threads in 2026. In both, the agent itself was fine. The problem sat between the server and the cloud service. This article turns the shared lessons into a checklist you can follow in order. It is a troubleshooting guide, not an official Microsoft procedure, so confirm each requirement against the current [Microsoft Learn prerequisites for cloud sync](https://learn.microsoft.com/en-us/entra/identity/hybrid/cloud-sync/how-to-prerequisites).
+This pattern appeared in two separate Microsoft community threads in 2026. In both, the agent itself looked fine, and the suspected problem sat between the server and the cloud service. This article turns the shared lessons into a checklist you can follow in order. It is a troubleshooting guide, not an official Microsoft procedure, so confirm each requirement against the current [Microsoft Learn prerequisites for cloud sync](https://learn.microsoft.com/en-us/entra/identity/hybrid/cloud-sync/how-to-prerequisites).
 
 ## What the symptoms look like
 
@@ -50,7 +50,7 @@ If all of this is fine, move on. The agent is not the problem.
 
 ## Step 2: Test name resolution
 
-Both threads point to DNS and name resolution first. Run these from the agent server:
+The accepted answer in the first thread points to DNS first, and the reply in the second thread also asks for name resolution tests. Run these from the agent server:
 
 ```
 nslookup autoupdate.msappproxy.net
@@ -93,7 +93,7 @@ Both answers warn against IP-based rules. The endpoints sit behind wildcard name
 
 ## Step 5: Take these flows out of TLS inspection
 
-Microsoft's troubleshooting page says to avoid inline TLS inspection between the connector and the cloud services. If your firewall inspects TLS, exclude `*.msappproxy.net` and `*.servicebus.windows.net` from inspection, certificate substitution and application proxying. In one thread, the firewall change was planned with inspection bypass for both domains. The poster still reported a failure afterwards, so also continue with the next steps instead of assuming the firewall is the only cause.
+Learn's cloud sync troubleshooting page says to avoid all forms of inline inspection and termination on outbound TLS between Microsoft Entra private network connectors and the Application Proxy cloud services. The agent talks to `msappproxy.net` endpoints, and a reply in the September 2026 thread advised excluding `*.msappproxy.net` and `*.servicebus.windows.net` from TLS inspection, certificate substitution, authentication and application proxying. In one thread, the firewall change was planned with inspection bypass for both domains. The poster still reported a failure afterwards, so also continue with the next steps instead of assuming the firewall is the only cause.
 
 ## Step 6: Check the certificate chain
 
@@ -107,7 +107,7 @@ A certificate error such as "terminated in a root certificate which is not trust
 
 Microsoft requires TLS 1.2 on the agent server before installation. On older servers, TLS 1.2 and strong cryptography for .NET must be enabled. The Learn page shows the registry settings, including `SchUseStrongCrypto` for the .NET Framework. Microsoft warns that changing TLS settings affects the entire forest, so plan the change.
 
-If you must use an outbound proxy, Learn describes adding a `defaultProxy` section to `AADConnectProvisioningAgent.exe.config`. Check that the proxy supports at least HTTP 1.1 with chunked encoding. A poster who had no proxy should confirm that no WinHTTP proxy is set either.
+If you must use an outbound proxy, Learn describes adding a `defaultProxy` section to `AADConnectProvisioningAgent.exe.config`. Check that the proxy supports at least HTTP 1.1 with chunked encoding. Both posters reported that no proxy was in use. Still confirm that no WinHTTP proxy is set.
 
 ## Step 8: Collect evidence
 

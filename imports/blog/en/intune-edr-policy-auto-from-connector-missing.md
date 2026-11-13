@@ -43,7 +43,7 @@ In the thread, a second contributor asked the same two questions that most peopl
 
 ## Step 2: Save the settings on the Intune side
 
-A contributor in the thread suggested these steps. They match the Learn page:
+A contributor in the thread suggested verifying the Defender for Endpoint settings in Intune. Learn describes these settings:
 
 - In **Endpoint security**, **Microsoft Defender for Endpoint** in Intune, save the settings so that the status changes from available to enabled.
 - Turn on **Connect Windows devices to Defender for Endpoint** for compliance policy evaluation if you use it.
@@ -69,11 +69,11 @@ If the connection is active, the fastest route is the preconfigured policy:
 2. Select **Deploy preconfigured policy**.
 3. Choose platform **Windows** and profile **Endpoint detection and response**, name the policy, and create it.
 
-Per Learn, this uses the latest onboarding package and deploys to all applicable devices. Think about the scope before you click, because it is a Windows-only quick deployment that targets everything.
+Per Learn, this uses the latest onboarding package from your Defender for Endpoint tenant and deploys to all applicable devices. Think about the scope before you click, because the quick deployment targets everything. Learn also offers a Windows (ConfigMgr) variant for Configuration Manager collections.
 
 ## Step 5: Fallback with the onboarding package
 
-If the connector option stays missing, this was the route marked as the solution in the thread:
+If the connector option stays missing, this was the route marked as the solution in the thread. The thread gives only a short outline of it, so the menu names below come from Microsoft Learn:
 
 1. In the Defender portal, go to **Settings**, then **Endpoints**, then **Device management**, then **Onboarding**.
 2. Select the operating system, and for the deployment method choose **Mobile Device Management / Microsoft Intune**.
@@ -85,12 +85,12 @@ If the connector option stays missing, this was the route marked as the solution
 
 The original poster reported that this "worked like charm." Statistics took some time to update.
 
-Keep two limits in mind. First, a pasted package is a static copy. With **Auto from connector**, Intune retrieves the latest package for you. With **Onboard**, you are responsible for updating the policy if the package changes. Second, offboarding packages expire seven days after download, and devices reject expired packages. Download them fresh when you need them.
+Keep two limits in mind. First, a pasted package is a copy of the package as it was when you downloaded it. With **Auto from connector**, Intune retrieves the onboarding package from Defender for you. **Onboard** means manual package management. Second, offboarding packages expire seven days after download, and devices reject expired packages. Download them fresh when you need them.
 
 ## Step 6: Verify the result
 
 - Wait 15 to 30 minutes, then look for the devices under **Endpoints**, **Device inventory** in the Defender portal.
-- In Intune, check the **EDR Onboarding Status** tab. You need read access to Microsoft Defender Advanced Threat Protection in Intune role-based access control to see it.
+- In Intune, check the **EDR Onboarding Status** tab under **Endpoint security**, **Endpoint detection and response**.
 - Look at the policy assignment status for individual devices if some do not appear.
 
 ## Is "Auto from connector" deprecated?
