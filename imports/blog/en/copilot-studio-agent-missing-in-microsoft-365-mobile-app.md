@@ -10,7 +10,7 @@ keypoints:
   - "Microsoft Learn says installation links cannot be used in the Teams mobile app. Users who only own a phone need the agent shown in the app store of their organization."
   - "In a June 2026 thread, the accepted answer was to submit the agent with 'Show to everyone in my org', let an admin approve it, and deploy it to the target users."
   - "Sharing with specific people is not enough for mobile-only users, because the 'Shared with you' route depends on an install link or the store on desktop or web."
-  - "Learn names two places for the approval (Teams admin center and Microsoft 365 admin center, Requests). Check both if the request does not show up."
+  - "Learn points to two admin locations (Manage apps in the Teams admin center and Requests in the Microsoft 365 admin center). Check both if you cannot find the submission."
 faq:
   - q: "Why does my Copilot Studio agent show on desktop but not on my phone?"
     a: "Microsoft Learn says installation links cannot be used in the Teams mobile app, and that the agent must be shown in the Teams app store to reach mobile users. In a June 2026 community thread, users who had installed the agent once on desktop or web saw it on mobile afterwards, while phone-only users could not add it. That thread's accepted answer called this a platform limitation and pointed to org-wide publishing with admin approval."
@@ -24,7 +24,7 @@ faq:
 
 A colleague opens the Microsoft 365 app on a phone and cannot find the agent you built in Copilot Studio. On a laptop, the same person can open your link, add the agent, and chat with it. After that, the agent even shows up on the phone. But a person who only has a phone has no way to get started.
 
-This pattern was described in a Microsoft Community Hub thread from June 2026. The agent was published to the Teams and Microsoft 365 channels and shared with specific users. All users had the same Copilot license. Republishing, re-checking licenses and sign-out did not help. The thread has a marked and confirmed solution, and this article checks that solution against current Microsoft Learn pages. It is a troubleshooting guide, not an official Microsoft procedure.
+This pattern was described in a Microsoft Community Hub thread from June 2026. The agent was published to the Teams and Microsoft 365 channels and shared with specific users. All users had the same Copilot license. The thread has a marked and confirmed solution, and this article checks that solution against current Microsoft Learn pages. It is a troubleshooting guide, not an official Microsoft procedure.
 
 ## What the symptoms look like
 
@@ -40,7 +40,7 @@ Microsoft Learn is direct about one part of this. In the article about connectin
 Learn also lists where users can find a Copilot Studio agent. These places are not equal for phone users:
 
 - The **Shared with you** section of the Microsoft 365 Agent Store, for shared users only.
-- The installation link, which Learn describes as desktop and web only.
+- The installation link, which Learn says you cannot use in the Teams mobile app.
 - **Built for your org** in the Teams app store, after admin approval.
 - **Built by your org** in the Microsoft 365 Agent Store, after admin approval.
 - The Teams app bar, if an admin pins the agent with an app setup policy.
@@ -74,13 +74,13 @@ Open **Availability options** on the same page. Learn describes three choices:
 - **Show to my teammates and shared users** adds the agent to the **Shared with you** section of the Microsoft 365 Agent Store.
 - **Show to everyone in my org** submits the agent for admin approval. You select **Submit to org catalog** and then **Yes** at the confirmation prompt.
 
-For people who only use a phone, the first two options are the weak ones, because Learn ties installation links to desktop and web. The org catalog route is the one the thread's marked solution used.
+For people who only use a phone, the first two options are the weak ones, because Learn says an installation link cannot be used in the Teams mobile app. The org catalog route is the one the thread's marked solution used.
 
 ## Step 4: Approve and deploy the agent as an admin
 
 After the maker submits the agent, an admin has to act. Microsoft Learn describes this in two places, and they do not name the same portal:
 
-- The Copilot Studio page says the admin reviews the submission in the **Teams admin center**. The maker can check the status with **Refresh** or from **Make the agent available to others** on the **Publish** page. After approval, the status changes to **Approved**.
+- The Copilot Studio page says the submission is sent to your admin for approval and that admins manage agents in **Built for your org** separately on the **Manage apps** page of the **Teams admin center**. It does not say where the review itself happens. The maker can check the status with **Refresh** or from **Make the agent available to others** on the **Publish** page. After approval, the status changes to **Approved**.
 - The Microsoft 365 admin center page about agent requests gives this path: **Agents** > **All agents** > **Requests**. It says that administrator approval is needed before an agent is available across the tenant, and that agents created with Copilot Studio can be submitted for approval.
 
 The thread said the admin approves under **Copilot** > **Agents** in the Microsoft 365 admin center. That wording does not match the Learn path exactly, so follow Learn and look for the request under **Agents** > **All agents** > **Requests**.
@@ -110,7 +110,7 @@ Learn adds a practical warning. Teams caches app data. If the new agent does not
 
 Two replies in the thread describe the same temporary workaround. A user installs the agent once on desktop or web. After that, the agent appears in the mobile app. One reply added that the team simply sent the agent's direct link and had everyone open it once in the Microsoft 365 web experience.
 
-This matches Learn's statement that links work on desktop and web. It is a workaround for people who have a computer at hand. It does not help someone who owns only a phone. The second reply was not marked as a solution and the person who asked did not confirm it.
+Learn only says that installation links cannot be used in the Teams mobile app, so a link opened on a computer is the part that works. It is a workaround for people who have a computer at hand. It does not help someone who owns only a phone. The second reply was not marked as a solution and the person who asked did not confirm it.
 
 ## How to verify the fix
 
@@ -123,8 +123,8 @@ This matches Learn's statement that links work on desktop and web. It is a worka
 
 - The thread's marked solution said that the Agent Store is available on Android and iOS after org publishing. The Learn pages used here only state that installation links do not work in the Teams mobile app and that the agent must be shown in the Teams app store. The Agent Store on mobile is therefore a community statement, not a confirmed Learn statement.
 - In the same thread, the person who asked wrote that Microsoft support had told them the goal was impossible. After the marked answer, that person confirmed the problem was solved. The thread does not say which store section they used on the phone.
-- An older Q&A thread from 2025 about agents missing in the Copilot mobile app has no confirmed solution. One answer there relayed that mobile support was still planned at that time. Treat older answers with care, because mobile support changed.
-- Learn warns about side effects once the agent is approved: changes to details or the icon need a new approval, content-only changes do not, and users who installed from a link may not see detail changes until they reinstall.
+- An older Q&A thread from 2025 about agents missing in the Copilot mobile app has no confirmed solution. One answer there relayed that mobile support was still planned at that time. That relay came from a community member and is not attributed to a Microsoft employee, so treat older answers with care because mobile support may have changed since.
+- Learn warns about side effects once the agent is approved: changes to details, descriptions or the icon need a new approval, content-only changes do not, and users who installed from a link may not see detail changes until they reinstall.
 - Do not reduce access below everyone in the organization after submitting for approval, or org users may not be able to chat with the agent.
 - Knowledge sources that need user authentication, such as SharePoint, do not work in group or channel chats. Those agents work only in one-to-one chats. This is not a mobile problem, but it often shows up in the same rollout.
 

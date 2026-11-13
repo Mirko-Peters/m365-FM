@@ -8,14 +8,14 @@ date: 2026-11-13
 topics: [power-automate, dlp, power-platform-admin-center, dataverse, advanced-connector-policies]
 keypoints:
   - "A suspended flow does not run until the violation is resolved. Microsoft Learn says a background job suspends flows after a policy is created or changed, so a flow that worked yesterday can be suspended today."
-  - "Learn's Power Automate DLP page does not describe how to find which policy hit a flow. Admins have to compare the connectors in the flow with every policy that applies to the environment."
+  - "The Learn pages used here do not describe how to see which policy hit a flow. Admins have to compare the connectors in the flow with every policy that applies to the environment."
   - "Business connectors can only be combined with other Business connectors, and Blocked connectors cannot be used. Some policies also block single actions or triggers."
   - "Most policy changes take effect within an hour and the worst case is 24 hours, so wait before you conclude that your fix did not work."
 faq:
   - q: "Why was my flow suspended even though I did not change anything?"
     a: "Microsoft Learn says that when a DLP policy is created or changed, a background job scans active flows and suspends violators, within 24 hours. A weekly background check also confirms no check was missed. So a policy change by an administrator can suspend a flow that was working before."
   - q: "Where do I see which policy my flow violated?"
-    a: "As a maker, edit and save the flow and read the flow checker panel. Learn says the checker reports a DLP violation. Learn's Power Automate DLP page states that it does not specify how to identify which policy applies to a given flow. An admin therefore has to review the data policies that apply to the environment, using the Scope and Applied to columns in the policy list."
+    a: "As a maker, edit and save the flow and read the flow checker panel. Learn says the checker reports a DLP violation. None of the Learn pages used for this article describes a maker-side way to see which policy applies to a given flow, so an admin has to review the data policies that apply to the environment, using the Scope and Applied to columns in the policy list."
   - q: "Do I need an admin to fix it?"
     a: "In most cases, yes. Learn says that if a DLP policy blocks your flow, you should contact your administrator. A maker can remove or replace the offending connector or action in the flow. Changing the policy needs the Power Platform administrator role for tenant policies, or environment admin permissions for environment policies."
   - q: "How long until the flow works again after the policy is fixed?"
@@ -30,7 +30,8 @@ Three Microsoft Q&A threads from 2026 show this problem. In one, a person receiv
 
 - The flow shows as **Suspended** in the maker portal and in the Power Platform admin center.
 - Saving the flow shows errors in the flow checker panel.
-- Learn gives the design-time message: "Using these connections together conflicts with the company data loss prevention policies."
+- Learn says that if the flow violates a DLP policy, the service suspends it and the trigger does not fire. On flow details, under **Properties**, you may see a DLP violation message.
+- When a policy blocks certain connectors, Learn says you might see "Looks like this workflow is disabled by your organization" while creating a flow in the portal.
 - In one thread, the error text named an admin data policy and said the policy restricted a connector from using a specific connector action.
 
 ## What a suspension means
@@ -39,7 +40,7 @@ Learn explains the rules in its pages about data policies:
 
 - Connectors are placed in groups: **Business**, **Non-business**, and **Blocked**. Connectors in **Business** can only be used with other **Business** connectors. Blocked connectors cannot be used where the policy applies.
 - At design time, a flow with a conflict still saves, but it is marked **Suspended** and does not run until the maker resolves the violation.
-- At run time, a background process checks for policy changes. Violating resources go into a suspended or quarantine state. Running resources that use a blocked connection, action, trigger or MCP server fail.
+- At run time, a background process checks for policy changes. Violating flows are marked as suspended. Running resources that use a blocked connection, action, trigger or MCP server fail.
 - For flows with child flows, Learn says a violation anywhere in the flow tree suspends the parent flow.
 
 Learn also lists these three triggers for a check: when a flow is created or edited (real time for flows without child flows), when a policy is created or changed (a background job within 24 hours), and weekly (a consistency check).
@@ -50,20 +51,20 @@ Learn also lists these three triggers for a check: when a flow is created or edi
 2. Select **Edit** and then save the flow.
 3. Read the flow checker panel. If it reports a DLP violation, you have the cause.
 
-Learn describes this check in its trigger troubleshooting page. If the flow was turned off and turns off again right after you switch it on, the Learn page on connection failures also points to DLP violations.
+Learn describes this check in its trigger troubleshooting page. If the flow turns off again right after you switch it on, the Learn page on connection failures also points to DLP violations and suggests looking at **flow details** > **Properties** for a DLP violation message.
 
 ## Step 2: List what the flow uses
 
 Write down every trigger and action in the flow, and the connector behind each. Include:
 
 - The trigger connector. Learn says some policies block specific triggers.
-- Every action connector, including Dataverse actions. Learn says Power Automate uses the **Microsoft Dataverse** connector and Power Apps can use the legacy Dataverse connector, and both are treated the same for policy purposes.
+- Every action connector, including Dataverse actions. Learn says Power Automate uses the **Microsoft Dataverse** connector, and that Power Apps native Dataverse connections are treated like the legacy Dataverse connector for policy purposes.
 - Child flows. A violation in a child flow suspends the parent.
 - For desktop flows, the modules and actions, which can also be classified as **Business**, **Non-business** or **Blocked**.
 
 ## Step 3: Find the policies that apply
 
-This is the step that the Learn Power Automate DLP page does not cover. It says it does not specify how to identify which policy applies to a flow. An admin has to look.
+This is the step that the Learn pages used here do not cover: none of them describes how to identify which policy applies to a flow. An admin has to look.
 
 Learn's page on managing data policies gives the path:
 
@@ -74,7 +75,7 @@ Learn's page on managing data policies gives the path:
 
 The policy list has columns for **Name**, **Scope** (environment-level or tenant-level) and **Applied to**, which shows all environments, all environments except some, or specific environments. Learn gives the roles: the **Power Platform Administrator** role for tenant-level policies. For environment-level policies you need Power Apps Environment Admin permissions, or the System Administrator role if the environment has a Dataverse database.
 
-Check every policy whose **Applied to** value includes the environment of the flow. More than one policy can apply. Learn says environment-level policies cannot override tenant-wide policies, and that environment admins cannot edit policies created by tenant admins.
+Check every policy whose **Applied to** value includes the environment of the flow. More than one policy can apply. Learn says environment-level policies cannot override tenant-wide policies.
 
 ## Step 4: Compare the connector groups
 
@@ -93,11 +94,11 @@ The second thread's error mentioned a policy and an action name together. That f
 Pick one, with the owner of your data governance in the loop:
 
 - **Change the flow.** Remove or replace the connector or action that conflicts, so the flow only uses connectors that the policy allows together. This is the safest option for a maker.
-- **Change the policy.** An admin can move connectors so the needed ones share a group, or unblock a connector. Learn warns that policy changes can suspend other flows, so review what else uses those connectors before you save.
+- **Change the policy.** An admin can move connectors so the needed ones share a group, or unblock a connector. Because Learn says a background job suspends violating flows after a policy is created or changed, review what else uses those connectors before you save.
 - **Change the scope.** Learn lists an option to exclude certain environments from a policy. This is a governance decision, not a quick fix.
 - **Get a business justification ready.** A moderator in the web-automation thread suggested documenting the business need and the data movement before escalating to the security or admin team. This is a process tip from the thread, not a Learn step.
 
-For desktop flows, Learn adds a warning. When modules are added to a policy, desktop flows in the tenant are evaluated and suspended if noncompliant. The tenant setting **Show desktop flow actions in DLP policies** cannot be changed once enabled, so check it with care.
+For desktop flows, Learn says background jobs periodically scan them and suspend violators. Learn also says that the tenant setting **Show desktop flow actions in DLP policies** cannot be changed once it is enabled, so check it with care.
 
 ## Step 6: Wait for the policy change to apply and reactivate the flow
 
@@ -119,8 +120,6 @@ Learn's page on DLP policy creation says that suspended flows can be found throu
 
 Learn does not give a full cmdlet example for this. If you use `Get-AdminFlow` from the `Microsoft.PowerApps.Administration.PowerShell` module, check in your own output that the properties above are present before you build a report on them.
 
-Learn also describes a way to give makers a contact. Data policy error messages can show an admin contact and a governance reference link, which you set with the PowerShell governance error message commands. This saves makers from guessing whom to ask.
-
 ## How to verify the fix
 
 1. Edit and save the flow again. The flow checker should show no DLP violation.
@@ -133,8 +132,7 @@ Learn also describes a way to give makers a contact. Data policy error messages 
 - The three threads have no accepted answer. None confirms what fixed the case.
 - Learn does not give a maker-side way to see the exact policy name. Policy review is an admin task.
 - The Learn page on advanced connector policies says it does not describe how existing flows behave after a policy is applied, and it gives no exact error text.
-- A separate Learn page about blocked triggers contains an admin script. Its notes say the script calls a function that the page does not define, so it does not run as is.
-- Page dates differ. The pages used here were last updated between September 2025 and October 2026, so check the current text before you change a production policy.
+- Learn pages disagree on timing. The data policy overview says full enforcement takes at most 24 hours and usually less than an hour, while the connection failures page says DLP policy changes take effect immediately. Plan for the longer window and check the current text before you change a production policy.
 
 ## Related
 

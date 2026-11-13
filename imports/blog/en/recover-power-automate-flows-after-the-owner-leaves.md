@@ -19,7 +19,7 @@ faq:
   - q: "Why does the flow still fail after I added myself as co-owner?"
     a: "Learn says orphaned flows can fail if they use connections tied to the former user's account. The Learn page on connection failures says that for shared connections, the owner must re-authenticate, or you create your own connection and update the flow. Open the flow, check each connection, and fix or replace it."
   - q: "How can I avoid this problem next time?"
-    a: "Learn says a service principal application user can own and run flows, so they do not depend on a person who might leave. It cannot be a co-owner and must be set through Details, Edit and Owner. The flow also has to be solution-aware for an in-place owner change, and the connections must be shared with the application user."
+    a: "Learn describes a service principal application user as a non-interactive user, with no user license and subject to non-licensed user limits, so it is not tied to a person who might leave. It cannot be a co-owner and must be set through Details, Edit and Owner. The flow also has to be solution-aware for an in-place owner change, and the connections must be shared with the application user."
 ---
 
 A person left the company, and an important flow still sits under their name. Maybe it stopped sending emails. Maybe nobody can find it at all.
@@ -80,7 +80,7 @@ Run the first command again afterward to verify the new role. To find all flows 
 Get-AdminFlow -EnvironmentName <env name> -CreatedBy <user-object-id>
 ```
 
-Learn also says this finds flows by creator and does not promise to catch every flow where that person was the only owner. Its longer script loops through all flows in an environment and flags those without a valid `Owner` or `CanEdit` principal.
+Learn says to apply the single-flow steps to each flow in the result. Its longer script loops through all flows in an environment and flags those without a valid `Owner` or `CanEdit` principal.
 
 One caution. Learn's examples use `Get-AzureADUser` to look up object IDs. The same page says the AzureAD and MSOnline modules were deprecated and recommends moving to Microsoft Graph PowerShell. Check that the script still works in your tenant before you rely on it, or look up the object ID some other way. The lookup method is not described on the Learn page beyond the deprecated cmdlet.
 
@@ -139,7 +139,7 @@ A restored flow is disabled. Turn it on manually, then add a co-owner and check 
 
 - Add at least one co-owner to every business-critical flow.
 - Build important flows in solutions.
-- Consider a service principal application user as owner for critical flows. Learn says it does not depend on a person who may leave. It cannot be a co-owner, and it appears only through **Details**, **Edit** and **Owner**. Share the flow's connections with that application user first.
+- Consider a service principal application user as owner for critical flows. Learn describes it as a non-interactive user that is not tied to a person who may leave. It cannot be a co-owner, and it appears only through **Details**, **Edit** and **Owner**. Share the flow's connections with that application user first.
 - Add the departing employee's flows to your offboarding checklist, before the account is removed.
 
 ## Limits and open points

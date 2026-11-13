@@ -15,11 +15,11 @@ faq:
   - q: "Why are my data source credentials greyed out in Power BI?"
     a: "Microsoft Learn says the Data source credentials section is greyed out when you use an on-premises data gateway that gateway admins manage, because the gateway administrator defines the credentials for the data source. You do not enter them in the semantic model. A gateway admin sets them in Manage connections and gateways."
   - q: "Why is my gateway not listed under Gateway and cloud connections?"
-    a: "Learn gives two conditions. Your account must be listed in the Users tab of the gateway data source, and the server and database names in the gateway data source must match the names in Power BI Desktop exactly. If the model uses several data sources, each one must be on the gateway, or the gateway is not offered for scheduled refresh."
+    a: "Learn gives two conditions. Your account must be listed in the Users tab of the gateway data source, and the server and database names in the gateway data source must match the names in Power BI Desktop exactly."
   - q: "Why did my scheduled refresh switch itself off?"
     a: "Learn says Power BI deactivates a refresh schedule after four consecutive failures, or when the service finds an unrecoverable error that needs a configuration change, such as invalid or expired credentials. You cannot change the threshold of four. Fix the cause, then set Configure a refresh schedule back to On and select Apply."
   - q: "Can I use a personal gateway instead?"
-    a: "Learn says personal mode works only with Power BI, only with Import semantic models, and only one personal gateway per user. It runs as an interactive application, not as a Windows service. In a March 2026 Q&A thread, the person who asked said refresh worked after they added a personal gateway. For shared production reports, Learn points to the standard gateway."
+    a: "Learn says personal mode works only with Power BI, only with Import semantic models, and only one personal gateway per user. It runs as an interactive application, not as a Windows service. In a March 2026 Q&A thread, the person who asked said refresh worked after they added a personal gateway. Learn recommends the standard gateway when several people manage data sources, or when you need DirectQuery, high availability or central governance."
 ---
 
 You published a report that reads from an on-premises SQL Server. In the Power BI service you open the semantic model settings. The **Data source credentials** section is greyed out, and scheduled refresh does not work.
@@ -61,7 +61,7 @@ The gateway admin can do this in the service. Learn gives the path: select the *
 
 1. Check that a data source for your SQL Server exists. If not, select **New**, choose **On-premises**, enter the **Gateway cluster name**, a **Connection name**, the connection type, the **Server** and the **Database**.
 2. Choose an **Authentication Method**. For SQL Server, Learn names **Windows** and **Basic** (for SQL authentication). All queries use these credentials unless Kerberos single sign-on is configured.
-3. Set the **Privacy level** if needed, then select **Create**. Learn says it can take several minutes before the connection works.
+3. Set the **Privacy level** if needed, then select **Create**. For DirectQuery, Learn says it can take several minutes before the connection is usable.
 4. Select the data source, select **Manage users**, add the report owner or a security group, choose a role and select **Share**. Learn lists the roles **User**, **User with resharing** and **Owner**.
 
 Each data source has its own user list, so add people to each data source they need. Learn also warns that users with access can use the stored credentials, so share with trusted accounts and preferably use a narrowly scoped service account.
@@ -72,15 +72,15 @@ Learn says the link between a semantic model and the gateway data source rests o
 
 - If Power BI Desktop uses an IP address, the gateway data source must use the same IP address.
 - If Power BI Desktop uses `SERVER\INSTANCE`, the gateway data source must use `SERVER\INSTANCE`.
-- Matching is case-sensitive for some systems. If the source uses a case-sensitive collation, names in Power Query expressions must match the casing of the source.
+- Learn says matching is case-sensitive, and that mismatched casing, for example with case-sensitive collations, can make queries fail or return no data.
 
-The AI answer in the March thread used the same principle with a machine-style name and instance, which fits Learn. If your model reads from several data sources, add every one of them to the gateway. Otherwise the gateway is not offered for scheduled refresh.
+The AI answer in the March thread used the same principle with a machine-style name and instance, which fits Learn.
 
 ## Step 5: Check the gateway version and status
 
-Learn's refresh troubleshooting page lists a basic check: the gateway may be outdated, or the report may have no gateway selected. It says an outdated gateway causes `GatewayNotReachable` when you set credentials, and the fix is to install the latest gateway and try again. For dataflows, it says the gateway must be within the last six supported versions.
+Learn's refresh troubleshooting page says that an outdated gateway causes `GatewayNotReachable` when you set credentials, and the fix is to install the latest gateway and try again. For dataflows, it says the gateway must be within the last six supported versions.
 
-Also check on the gateway machine that the gateway service is running and signed in.
+Also check on the gateway machine that the gateway is running and shows as online. This is a general check, not a step from the Learn pages above.
 
 ## Step 6: Turn the schedule on again
 
@@ -97,16 +97,16 @@ Two more reasons for a switched-off schedule, from the same page: after two mont
 
 ## Step 7: Consider personal mode only for a single author
 
-Learn describes the personal gateway as a way for one author to refresh a few Import models without shared data sources or central credentials. With a personal gateway, you do supply the credentials yourself in **Data source credentials**, and Learn says the credentials are kept with the model after the first refresh. If the password changes or expires, update it there.
+Learn describes the personal gateway as a way for one author to refresh a few Import models without shared data sources or central credentials. With a personal gateway, there is no central credential management. If a refresh prompts for credentials, Learn says to update them in the **Data source credentials** pane of the semantic model in the Power BI service.
 
 Limits from Learn's personal mode page:
 
-- It works only with Power BI.
+- It works only with Power BI, and not with Power Apps or Power Automate.
 - Each user can have only one personal gateway. A newer install on another computer replaces the old one.
 - It supports Import models only. It does not support DirectQuery, live connection to Analysis Services, composite models, clustering or high availability.
 - It runs only as an interactive application, not as a Windows service. The computer must be on and the gateway signed in at refresh time.
 
-That fits the March thread, where the fix described was a personal gateway. For a report that a team depends on, Learn points to the standard gateway.
+That fits the March thread, where the fix described was a personal gateway. Learn recommends the standard gateway when several authors or admins manage data sources, when you need DirectQuery or high availability, or when you need central auditing.
 
 ## Step 8: Handle credential errors for cloud sources
 
@@ -121,7 +121,7 @@ If the error is "Access to the resource is forbidden" or a refresh fails after a
 
 ## Limits and open points
 
-- The August thread also said refresh fails after local changes to the Power BI Desktop file. No human answer covered that, and I found no matching text in the Learn pages used here. If you change columns or tables locally, check the error in **Refresh history** and compare it with the model in the service. Treat any other advice on this as unverified.
+- The August thread also said refresh fails after local changes to the Power BI Desktop file. No human answer covered that, and the Learn pages used here have no matching text. If you change columns or tables locally, check the error in **Refresh history** and compare it with the model in the service. Treat any other advice on this as unverified.
 - Learn's refresh troubleshooting page has no entry for greyed-out credentials by name. The explanation comes from the scheduled refresh page.
 - Whether your tenant lets you see gateway settings depends on your role. Learn notes that a user sees only the connections they belong to.
 

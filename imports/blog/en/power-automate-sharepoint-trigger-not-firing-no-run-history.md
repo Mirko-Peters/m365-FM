@@ -19,7 +19,7 @@ faq:
   - q: "How long can a SharePoint trigger take to fire?"
     a: "Learn describes delays that depend on the plan. On the free plan, a flow runs every 15 minutes, and a trigger inside that window is queued. For Flow for Office 365 or Flow for Dynamics 365 plans, the flow does not run again until five minutes have passed. Learn also says to test manually to see whether throttling is the cause."
   - q: "What does 'Fix the trigger' do?"
-    a: "The banner says Power Automate retried to register the trigger and failed, so the flow will not start until this is fixed. Learn names blocked Power Automate endpoints as a common cause and asks you to have IT allow the listed addresses and domains. After that, edit the flow and save it, edit it back to its original state and save again, so that the trigger is registered again."
+    a: "The banner means Power Automate tried several times to register the trigger and failed, so the flow will not start until this is fixed. Learn names blocked Power Automate endpoints as a common cause and asks you to have IT allow the listed addresses and domains. After that, edit the flow and save it, edit it back to its original state and save again, so that the trigger is registered again."
 ---
 
 You added a new item to a SharePoint list. The item is there. The flow is switched on. But the run history stays empty, and no email goes out.
@@ -51,7 +51,7 @@ If you see nothing at all, the event may not have reached the flow, so keep goin
 
 ## Step 3: Review the trigger conditions
 
-Learn gives these steps for the new designer:
+Learn gives these steps, which it says apply to both the new and the classic designer:
 
 1. Select **Edit** on the command bar.
 2. Select the first card, which is the trigger.
@@ -84,7 +84,7 @@ Also confirm that the account behind the connection still has access to the site
 
 Learn says that if a data loss prevention policy blocks the flow, the service suspends it, and the trigger does not fire. To confirm, edit the flow and save it. The flow checker reports a violation if there is one.
 
-The fix is not in the flow. An administrator has to find the blocking policy, at tenant or environment level, and change it. If you suspect this, see the separate article on suspended flows and DLP violations.
+The fix is not in the flow. An administrator has to find the blocking policy, at tenant or environment level, and change it.
 
 ## Step 7: Check whether the trigger is a premium connector
 
@@ -96,11 +96,11 @@ Learn says premium, on-premises and custom connectors need a standalone Power Ap
 
 ## Step 8: Fix a failed trigger registration
 
-The message `There's a problem with the flow's trigger. Fix the trigger.` means that Power Automate tried to register the trigger again and failed. The flow will not start until this is fixed.
+The message `There's a problem with the flow's trigger. Fix the trigger.` means that Power Automate tried several times to register the trigger and failed. The flow will not start until this is fixed.
 
 Learn gives this order:
 
-1. Select **Fix the trigger** and select the failed trigger to read the real error. A separate Learn page uses the example of a SharePoint folder that was not found, solved by correcting the folder name. That page is from 2024, but the steps are still the same in the current trigger page.
+1. Select **Fix the trigger** and select the failed trigger to read the real error. A separate Learn page on this banner uses the example of a SharePoint folder that was not found, solved by correcting the folder name. That page was last updated in 2024.
 2. If the cause is a blocked network, ask IT to allow the [Power Automate IP addresses and domains](https://learn.microsoft.com/en-us/power-automate/ip-address-configuration). Learn names missing allowlist entries as a common cause.
 3. Edit the flow and save it. Then edit it back to its original state and save again. Learn says the flow detects the setup change and registers the trigger again.
 
