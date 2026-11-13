@@ -13,6 +13,7 @@ import hashlib, json, re, time
 from datetime import datetime, timezone
 from pathlib import Path
 
+import site_index_rule as IR   # Index-Regel "ab 2500 Zeichen eigener Text" (13.11.2026)
 import site_shownotes as SNS
 import site_milestones as MST
 from site_i18n import T
@@ -169,8 +170,8 @@ def translations(BASE, posts, ents):
             title, desc, html, faq = r
             out.append({**{k: o[k] for k in COPY if k in o}, "lang": lang, "title": title, "summary": (desc or "")[:400], "body": "", "html": html, "keypoints": [], "votes": 0,
                         "faq": [{"q": q["name"], "a": q["acceptedAnswer"]["text"]} for q in faq if q.get("name")], "images": re.findall(r'<img[^>]+src="(https://[^"]+)"', html),
-                        "legacy": True, "content_tr": True, "tr_of": "en", "ai_tr": True, "tr_index": lang in index}); n += 1
-        if n: print(f"Content-Pakete Blog {lang}: {n} Sprachfassungen{' (index)' if lang in index else ' (noindex)'}")
+                        "legacy": True, "content_tr": True, "tr_of": "en", "ai_tr": True, "tr_index": IR.index_or_long(lang in index, desc, html)}); n += 1   # 13.11.2026: ab 2500 Zeichen eigener Text immer index (site_index_rule)
+        if n: print(f"Content-Pakete Blog {lang}: {n} Sprachfassungen{' (index)' if lang in index else ' (noindex, ausser Fassungen ab 2500 Zeichen)'}")
     wait = [s["cp_slug"] for s in srcs if (s["author"], s["cp_slug"]) not in orig]
     if wait: print(f"Content-Pakete Blog: {len(wait)} englische Originale noch nicht live, Sprachfassungen warten: {', '.join(wait[:5])}")
     return out

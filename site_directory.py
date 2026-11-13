@@ -5,6 +5,7 @@ import unicodedata
 from pathlib import Path
 from site_i18n import COMM_LANGS, pfx, pfx2, overlay
 from site_learn import esc, LCSS, ENTS
+import site_index_rule as IR   # Index-Regel "ab 2500 Zeichen eigener Text" (13.11.2026)
 
 ROOT = Path(__file__).parent
 
@@ -109,6 +110,8 @@ def _similarity(left, right):
 def _indexable(items, kind="hub", intro="", detail="", parent=""):
     minimum = 5 if kind == "topic" else 3
     own_text = f"{intro} {detail}".strip()
+    if kind != "hub" and items and IR.long_enough(own_text) and _similarity(own_text, parent) < 0.5:
+        return True   # 13.11.2026: eigener Text >= 2500 Zeichen (Sprache der Seite; die Aufrufer uebergeben nur uebersetzte Texte): index, auch mit weniger Eintraegen/Woertern; ein Duplikat des Elterntexts bleibt noindex
     return (len(items) >= minimum if kind != "hub" else len(items) >= minimum) and \
         (kind == "hub" or (bool(parent) and len(_words(own_text)) >= 150 and _similarity(own_text, parent) < 0.5))
 
