@@ -442,7 +442,7 @@
         (function mk(hd) { api("/api/org", { method: "POST", body: { handle: hd, name: e.name, website: e.web || "", public: false, programs: [], expertise: [], channels: [], locations: [] } }).then(function (r) {
           if (r.s === 409 && ++tries < 4) { mk(base.slice(0, 24) + "-" + (tries + 1)); return; }
           // claim_required: es gibt schon eine Firma ohne Inhaber zur Entitaet - sie gehoert erst nach der bestaetigten Uebernahme dir, angelegt ist nichts
-          jm.textContent = r.s === 200 ? ((r.j || {}).claim_required ? CS.pend : CS.made) : (r.j || {}).error === "limit" ? CS.limit : CS.pend; row.appendChild(claimBox(e.id, EM ? EM.domainsOf(e)[0] : "")); }); })(base);
+          jm.textContent = r.s === 200 ? ((r.j || {}).claim_required ? CS.pend : CS.made) : r.s === 429 ? CS.rl : (r.j || {}).error === "limit" ? CS.limit : CS.pend; row.appendChild(claimBox(e.id, EM ? EM.domainsOf(e)[0] : "")); }); })(base);
       });
     }
     function search() {

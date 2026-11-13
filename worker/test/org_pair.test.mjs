@@ -203,5 +203,25 @@ test("Firma uebernehmen: Handle der unbeanspruchten Paar-Firma (Slug des Namens)
     raw.exec("UPDATE orgs SET unclaimed=0 WHERE id=70");
     const f = await org(env, { id: 1 }, "/api/org", "POST", { handle: "ifakt-gmbh", name: "iFAKT GmbH", public: false });
     assert.equal(f.s, 403);
-  } finally { restore(); }
+  } finally { restore(); raw.close(); }
+});
+
+test("3-Firmen-Limit greift nicht, wenn es zur Entitaet schon eine unbeanspruchte Paar-Firma gibt (claim_required legt nichts an)", async () => {
+  const { raw, env } = await setup(), restore = withEntities();
+  try {
+    addUser(raw, 1);
+    for (const i of [1, 2, 3]) {
+      raw.exec(`INSERT INTO orgs(id,handle,name,public,created) VALUES(${i},'own-${i}','Own ${i}',0,1)`);
+      raw.exec(`INSERT INTO org_members(org_id,user_id,role,status,created) VALUES(${i},1,'owner','active',1)`);
+    }
+    // Paar-Firma unter anderem Handle (Slug war schon belegt): der Handle aus dem Frontend ist frei
+    raw.exec("INSERT INTO orgs(id,handle,name,website,public,unclaimed,created) VALUES(70,'ifakt-gmbh-2','iFAKT GmbH','https://www.ifakt.de',0,1,1)");
+    raw.exec("INSERT INTO org_entity(org_id,eid,confirmed) VALUES(70,'ifakt',0)");
+    const r = await org(env, { id: 1 }, "/api/org", "POST", { handle: "ifakt-gmbh", name: "iFAKT GmbH", website: "https://www.ifakt.de", public: false, programs: [], expertise: [], channels: [], locations: [] });
+    assert.deepEqual([r.s, r.j.handle, r.j.eid, r.j.claim_required], [200, "ifakt-gmbh-2", "ifakt", true]);
+    // ohne Paar-Firma bleibt das Limit: eine neue Firma wird nicht angelegt
+    const n = await org(env, { id: 1 }, "/api/org", "POST", { handle: "contoso", name: "Contoso", website: "https://www.contoso.com", public: false, programs: [], expertise: [], channels: [], locations: [] });
+    assert.deepEqual([n.s, n.j.error], [400, "limit"]);
+    assert.equal(raw.prepare("SELECT COUNT(*) n FROM orgs").get().n, 4, "nichts angelegt");
+  } finally { restore(); raw.close(); }
 });
