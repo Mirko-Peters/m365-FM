@@ -13,7 +13,7 @@ keypoints:
   - "After the schema is right, a custom filter is added in the vertical wizard under Filters. Learn says vertical changes can take a few hours to show."
 faq:
   - q: "Can I make a property refinable after the connection is published?"
-    a: "No. Microsoft Learn's schema page says you cannot add or remove a refinable search attribute to a property, and the deployment page says you cannot add or remove it after setup. The Graph connectors schema article says the same for a schema update. To get a different set of refinable properties, create a new connection."
+    a: "No. Microsoft Learn's schema page says you cannot add or remove a refinable search attribute to a property, and the deployment page says you cannot add or remove it after setup. The Graph connectors schema article says you cannot add a refinable attribute as part of a schema update. To get a different set of refinable properties, create a new connection."
   - q: "Which properties can be used as filters?"
     a: "Learn says a refinable property can be used to configure a filter, that it cannot also be searchable, and that int properties cannot be refined. The custom filters page says filters work on text and dateTime properties. The Graph schema article says only string or numeric types can be refinable, so the Learn pages are not fully consistent. Test your property types in a small connection first."
   - q: "How long until a new filter appears in the search results page?"
@@ -68,7 +68,7 @@ Learn gives three statements that you have to read together:
 
 - The custom filters page says filters are configurable on text and dateTime properties and that int properties cannot be refined.
 - The Graph schema article says only string or numeric types can be refinable.
-- The same article lists an example with a string collection marked refinable, but its text does not discuss that type.
+- The same article lists an example property `tags` of type StringCollection with the refinable box ticked, but its text does not say that this type is supported.
 
 So Learn does not clearly say whether a string collection works as a refinable property. In the thread, a refinable string collection coincided with the failure. That is a reported observation. If you need a multi-value field, test it in a small test connection first, with only that property refinable, before you build the production schema.
 

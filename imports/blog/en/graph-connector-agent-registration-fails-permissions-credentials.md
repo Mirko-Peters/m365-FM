@@ -15,7 +15,7 @@ faq:
   - q: "Which permissions does the Graph connector agent app need?"
     a: "According to Microsoft Learn, all of them are Microsoft Graph application permissions. ExternalConnection.ReadWrite.OwnedBy is always required. ExternalItem.ReadWrite.OwnedBy or ExternalItem.ReadWrite.All is always required. Directory.Read.All is required for the Confluence DC, GitHub server, File share, MS SQL and Oracle SQL connectors. Grant admin consent afterwards and check that the status is Granted."
   - q: "Do I need to install the Graph connector agent on every user's computer?"
-    a: "No. Learn says to install it on a computer on the same network as the data source, and that it does not need to run on the data source host itself. In a community thread, a Microsoft moderator described it as a central service, so users do not install anything."
+    a: "No. Learn says to install it on a computer on the same network as the data source, and that it does not need to run on the data source host itself. In a community thread, a Microsoft staff member described it as a central service, so users do not install anything."
   - q: "Where do I find the agent logs?"
     a: "Microsoft Learn lists the GcaHostService logs under the service profile folder, for example C:\\Windows\\ServiceProfiles\\GcaHostService\\AppData\\Local\\Microsoft\\GraphConnectorAgent\\HostService\\logs on most supported Windows versions. One community answer named C:\\ProgramData\\Microsoft\\GraphConnectorAgent\\Logs instead. Learn does not list that folder, so check the Learn path first."
   - q: "Which admin role do I need to sign in to the agent?"
@@ -24,13 +24,13 @@ faq:
 
 You installed the Microsoft Graph connector agent on a server. The services run. Then you try to register it, and the configuration app refuses: either "insufficient permissions" or "invalid application credentials".
 
-Both messages came up in Microsoft Q&A threads in late 2025. This article collects what Microsoft Learn says about the app registration and combines it with what the two threads reported. It is a troubleshooting checklist, not an official Microsoft procedure, so compare each step with the current [Microsoft Graph connector agent page](https://learn.microsoft.com/en-us/microsoft-365/copilot/connectors/connector-agent). The product is now documented under the name Microsoft 365 Copilot connectors, but the agent keeps its old name.
+Both messages came up in Microsoft Q&A threads in late 2025. This article collects what Microsoft Learn says about the app registration and combines it with what the two threads reported. It is a troubleshooting checklist, not an official Microsoft procedure, so compare each step with the current [Microsoft Graph connector agent page](https://learn.microsoft.com/en-us/microsoft-365/copilot/connectors/connector-agent). Learn now uses the name Microsoft 365 Copilot connectors for the feature. The agent page still says "Microsoft Graph connector agent", and the error page also uses "Microsoft 365 Copilot connector agent", so expect both names.
 
 ## What the two threads reported
 
-**Thread 1 (September 2025).** An administrator set up the agent next to a SQL Server instance (SQL Server 2022 Express on Windows Server 2025). Registration failed with an insufficient permissions error, even though the server could reach the Azure, Entra and Power Apps portals. A Microsoft moderator said the Entra app was missing Graph permissions and listed `ExternalItem.ReadWrite.OwnedBy` and `Directory.Read.All`, plus admin consent. The asker later wrote that removing the delegated permissions and adding the same permissions as application permissions fixed it. That is a self-reported result, not a moderator-confirmed one. Adding an Entra role (Cloud Application Administrator) to the signing-in account did not change the error.
+**Thread 1 (September 2025).** An administrator set up the agent next to a SQL Server instance (SQL Server 2022 Express on Windows Server 2025). Registration failed with an insufficient permissions error, even though the server could reach the Azure, Entra and Power Apps portals. A Microsoft staff member said the Entra app was missing Graph permissions and listed `ExternalItem.ReadWrite.OwnedBy` and `Directory.Read.All`, plus admin consent. The asker later wrote that removing the delegated permissions and adding the same permissions as application permissions fixed it. That is the asker's own report. The page labels this post "recommended by moderator", but no Microsoft staff member explained the root cause, and the post does not say whether admin consent was granted in the process. Adding an Entra role (Cloud Application Administrator) to the signing-in account did not change the error.
 
-**Thread 2 (December 2025).** An administrator installed the agent for a file share. Sign-in worked, but the agent name, application ID and client secret produced "invalid application credentials". A Microsoft moderator listed four application permissions, admin consent, a check for typos and spaces, network access and the log folder. The asker answered that it was working, but did not say which step made the difference. So the cause stays unknown.
+**Thread 2 (December 2025).** An administrator installed the agent for a file share. Sign-in worked, but the agent name, application ID and client secret produced "invalid application credentials". A Microsoft staff member listed four application permissions, admin consent, a check for typos and spaces, network access and the log folder. The asker answered that it was working, but did not say which step made the difference. So the cause stays unknown.
 
 Thread 2 also contains an AI-generated answer. We did not use it as evidence.
 
@@ -65,11 +65,11 @@ Learn offers two ways to authenticate: a client secret or a certificate.
 For a client secret:
 
 1. In the app, go to **Certificates and secrets** and create a new client secret with an expiry period.
-2. Copy and save the generated value at once. In thread 2, the moderator pointed out that the secret is displayed only when you create it. If you did not save it, create a new one.
+2. Copy and save the generated value at once. In thread 2, the staff member pointed out that the secret is displayed only when you create it. If you did not save it, create a new one.
 3. Enter the secret and the **Application (client) ID** in the agent.
 4. Keep the agent **Name** simple. Learn says the field accepts alphanumeric characters and no blank spaces.
 
-For a certificate, Learn has its own section. As far as we could see, it asks you to upload the `.cer` file to the app, install the `.pfx` file on the agent computer, and let the `NT Service\GcaHostService` account use the private key. Follow that section step by step.
+For a certificate, Learn has its own section. As far as we could see, it asks you to upload the `.cer` file to the app, copy the thumbprint, place the certificate in the local machine store on the agent computer, and give the `NT Service\GcaHostService` account access to its private key (without using **Check Names**). Follow that section step by step.
 
 ## Step 5: Check the agent service
 
@@ -82,7 +82,7 @@ If you use a Government cloud, Learn also asks you to check that the values in `
 
 ## Step 6: Check the network path
 
-The agent needs outbound access over port 443. For the commercial cloud, Learn lists `*.events.data.microsoft.com`, `*.office.com`, `https://login.microsoftonline.com`, `https://gcs.office.com/` and `https://graph.microsoft.com/`. The moderator in thread 2 mentioned `login.microsoftonline.com` and `graph.microsoft.com` as well.
+The agent needs outbound access over port 443. For the commercial cloud, Learn lists `*.events.data.microsoft.com`, `*.office.com`, `https://login.microsoftonline.com`, `https://gcs.office.com/` and `https://graph.microsoft.com/`. The Microsoft staff member in thread 2 mentioned `login.microsoftonline.com` and `graph.microsoft.com` as well.
 
 Learn also says proxy authentication is not supported. If your proxy needs authentication, let the agent bypass it. Learn gives a test for an agent that shows as offline:
 
@@ -96,11 +96,11 @@ It should return `TcpTestSucceeded : True`. Use the GCC or GCC High host names f
 
 Learn lists the GcaHostService logs under the service profile. On Windows versions other than Windows Server 2016, the folder is `C:\Windows\ServiceProfiles\GcaHostService\AppData\Local\Microsoft\GraphConnectorAgent\HostService\logs`. The Learn page asks you to send the two latest log files when you contact Microsoft Support.
 
-The moderator in thread 2 named `C:\ProgramData\Microsoft\GraphConnectorAgent\Logs`. This is reported in the thread and is not listed on the Learn page. If one folder is empty, look in the other.
+The Microsoft staff member in thread 2 named `C:\ProgramData\Microsoft\GraphConnectorAgent\Logs`. This is reported in the thread and is not listed on the Learn page. If one folder is empty, look in the other.
 
 ## Step 8: Use the error codes after registration
 
-Sometimes registration works and the problems start during crawling. In the Microsoft 365 admin center, go to **Connectors**, then **Your connections**, select the connection and open the **Error** tab. Microsoft Learn's connector error page lists codes that match the problems in this article:
+Sometimes registration works and the problems start during crawling. In the Microsoft 365 admin center, go to **Connectors**, then **Your connections** (Learn's connector management page writes the full path as **Copilot**, **Connectors**, **Your Connections**), select the connection and open the **Error** tab. Microsoft Learn's connector error page lists codes that match the problems in this article:
 
 | Code | Meaning according to Learn |
 |---|---|

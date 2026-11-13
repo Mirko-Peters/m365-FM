@@ -9,13 +9,13 @@ topics: [copilot-connectors, microsoft-search, copilot-search, copilot-chat, cop
 keypoints:
   - "Microsoft Learn describes a Copilot Visibility toggle per connection (Copilot, Connectors, Your Connections). When it is off, the connector is left out of Copilot Search and Copilot Chat, although it keeps crawling."
   - "Items are only shown to users who may see them. Check an item and a user with the index browser and its Check user access function. Permission changes need a full crawl and can take up to 24 hours."
-  - "In a 2025 Q&A thread, an asker confirmed that Copilot returned connector results only after the source was in the All vertical. Learn does not say Copilot depends on that setting."
+  - "In a 2025 Q&A thread, a community member said Copilot returned connector results only after the source was in the All vertical, and the asker confirmed that re-registering had kept removing it. Learn does not say Copilot depends on that setting."
   - "Several other threads with the same symptom, mostly for Confluence, never got a confirmed fix."
 faq:
   - q: "Where is the Copilot Visibility setting?"
-    a: "According to Microsoft Learn, open the Microsoft 365 admin center, go to Copilot, then Connectors, then Your Connections, select the connection, and use the Copilot Visibility toggle. Save the change. Learn says it is visible by default and that changes can take up to 30 minutes to reach all Copilot experiences."
+    a: "According to Microsoft Learn, open the Microsoft 365 admin center, go to Copilot, then Connectors, then Your Connections, select the connection, and use the Copilot Visibility toggle. Save the change. Learn describes this setting for partner connectors, says it is visible by default and that changes can take up to 30 minutes to reach all Copilot experiences. Another Learn page writes the menu as Copilot, then Agents and connectors, so look for the connections list in the Copilot section."
   - q: "Does Copilot need the connector to be in the All vertical of Microsoft Search?"
-    a: "Learn does not say so. It describes the All vertical as the place where connector results show up for Microsoft Search users. In one 2025 community thread, however, an asker confirmed that Copilot started to use connector data once the source was added to the All vertical. Treat this as a reported workaround and check the setting if your connector is missing."
+    a: "Learn does not say so. It describes the All vertical as the place where connector results show up for Microsoft Search users. In one 2025 community thread, however, a community member reported that Copilot started to use connector data once the source was added to the All vertical, and the asker agreed that re-registering had been removing it. No answer was accepted and Microsoft did not confirm it. Treat this as a reported workaround, not as documented behavior, and check the setting if your connector is missing."
   - q: "Why do some users see connector items and others do not?"
     a: "Learn says synced connectors respect source permissions. Access is based on the permission mode you chose, either only users with access or everyone, and on identity mapping that matches users by email to the user principal name or mail attribute in Entra ID by default. A staged rollout to a subset of users also limits who sees results."
   - q: "My Copilot Studio agent cannot see the connector. What should I check?"
@@ -28,7 +28,7 @@ This pattern appeared in several Microsoft community threads between 2024 and 20
 
 ## What the threads reported
 
-- **March 2025, Microsoft Q&A.** An asker had connectors for a content management system, Jira and Confluence working in Microsoft Search. Copilot returned nothing from them. A Microsoft moderator said that connected content in a tenant shows in both Search and Copilot, and asked for prompts and sample data. A community member wrote that Copilot gave results only after the data source was added to the **All** vertical, and that Jira and Confluence results then appeared after a few hours. The asker confirmed that this was the problem: re-registering the connector had kept removing it from the All vertical. No answer was marked as accepted.
+- **March 2025, Microsoft Q&A.** An asker had a connector for a content management system working in Microsoft Search. Copilot returned nothing from it. A Microsoft staff member said that connected content in a tenant shows in both Search and Copilot, and asked for prompts and sample data. A community member wrote that in their own tenant Copilot gave results only after the data source was added to the **All** vertical, and that Jira and Confluence results then appeared after a few hours. The asker replied that this was it: re-registering the connector had kept removing it from the All vertical. No answer was marked as accepted, and no Microsoft staff member confirmed the All vertical as a cause.
 - **February to July 2025, two Q&A threads about Confluence Cloud.** Copilot said it had no access to Confluence, or answered from a wrong page, although the connector was active and had indexed pages. One commenter noted that the same setup worked for Jira. These threads have no confirmed fix.
 - **June 2024, Tech Community.** A Jira connector appeared in Search, but showed the status "unknown" in Copilot Studio. Two other users reported the same for SQL Server, MediaWiki and file share connectors. No solution.
 
@@ -53,7 +53,7 @@ This is the first setting that Learn ties directly to Copilot. In the Microsoft 
 2. Select the connection.
 3. Under **Copilot Visibility**, check that the toggle is on, then choose **Save**.
 
-Learn says connectors are visible by default and that changes can take up to 30 minutes to reach all Copilot experiences. If the toggle is off, the connector is left out of Copilot Search and Copilot Chat, but it can still crawl. That matches the symptom exactly: indexed, searchable in Search, silent in Copilot. Learn's overview page also says that Copilot Search includes indexed connector content without extra setup.
+Learn describes this toggle in its section on partner connectors. It says connectors are visible by default and that changes can take up to 30 minutes to reach all Copilot experiences. If the toggle is off, the connector is left out of Copilot Search and Copilot Chat, but it can still crawl. That matches the symptom exactly: indexed, searchable in Search, silent in Copilot. Learn's overview page also says that Copilot Search includes indexed connector content without extra setup.
 
 ## Step 3: Check permissions with a real user
 
@@ -95,7 +95,7 @@ This will not fix a hidden or unpermitted connector. It may help when Copilot ha
 
 ## Step 7: Copilot Studio agents
 
-For the "unknown" status in Copilot Studio, Learn gives these points:
+Learn does not describe the "unknown" status from the 2024 thread. Its Copilot Studio page for connectors as knowledge sources says:
 
 - The tenant admin must configure the connector before it appears in the agent's knowledge list.
 - In the **Add knowledge** dialog, select **Advanced** if you do not see the connector.
