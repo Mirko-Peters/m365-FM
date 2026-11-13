@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#3b6391">
+<title>M365.FM Contributor – offline</title>
+<style>
+  :root{color-scheme:light dark;--bg:#f3f3f2;--fg:#1d2126;--mut:#5a626d;--ac:#3b6391}
+  @media (prefers-color-scheme:dark){:root{--bg:#1d2126;--fg:#eef0f3;--mut:#98a0ab;--ac:#82a7d4}}
+  body{margin:0;min-height:100vh;display:grid;place-items:center;background:var(--bg);color:var(--fg);font:16px/1.5 system-ui,sans-serif}
+  main{max-width:28em;padding:1.5em}
+  p{color:var(--mut)}
+  button{font:inherit;font-weight:600;padding:.7em 1.4em;border:0;border-radius:.4em;background:var(--ac);color:#fff;min-height:44px;cursor:pointer}
+  @media (prefers-color-scheme:dark){button{color:#1d2126}}
+  [lang=de]{display:none}
+</style>
+</head>
+<body>
+<main>
+  <section lang="en">
+    <h1>No connection</h1>
+    <p>M365.FM Contributor could not be reached. Your contributions are stored in your account on the server, so nothing is lost. Check your internet connection and try again.</p>
+  </section>
+  <section lang="de">
+    <h1>Keine Verbindung</h1>
+    <p>M365.FM Contributor ist nicht erreichbar. Deine Beiträge liegen in deinem Konto auf dem Server, es geht nichts verloren. Prüfe deine Internetverbindung und versuche es erneut.</p>
+  </section>
+  <button id="retry" type="button">Try again</button>
+</main>
+<script>
+  var de = /^de\b/i.test(navigator.language || "");
+  if (de) {
+    document.documentElement.lang = "de";
+    document.querySelector("section[lang=en]").style.display = "none";
+    document.querySelector("section[lang=de]").style.display = "block";
+    document.getElementById("retry").textContent = "Erneut versuchen";
+  }
+  // Diese Seite hat keinen Zugriff auf Capacitor-Plugins; sie laedt die Live-App einfach neu.
+  document.getElementById("retry").addEventListener("click", function () { location.href = "https://www.m365.fm/community/contributor/"; });
+</script>
+</body>
+</html>
