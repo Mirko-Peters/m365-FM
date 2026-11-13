@@ -10,6 +10,7 @@ import site_sponsorships as SPM   # T37 Sponsor: Kennzeichnung gesponserter Folg
 import site_shownotes_seo as SSEO   # neu geschriebene englische Show Notes (rewrite_shownotes.py)
 import site_listen as LST   # "Show folgen"-Knopf (Apple Podcasts/Spotify nach Geraet) unter dem Player der Folgenseiten
 import site_transcripts as TRS   # #266: Transkripte als Dateien neben der Folgenseite (R2)
+import site_index_rule as IR   # Index-Regel "ab 2500 Zeichen eigener Text" (13.11.2026)
 from site_episode_urls import episode_url, sid_owners   # kanonische Folgen-Adresse (eine Quelle); eine Spreaker-ID je Seite
 import gzip, json, re, unicodedata, html as _h
 from functools import lru_cache
@@ -199,6 +200,13 @@ def thumb_of(e, nrec=None):
         return f"https://i.ytimg.com/vi/{m.group(1)}/hqdefault.jpg"
     i = (nrec or {}).get("image") or ""
     return i if i.startswith("https://") else ""
+
+
+def episode_noindex(e, nrec, has_full, rewritten, text_parts):
+    """Englische Folgenseite: noindex? T28: neue Spreaker-Folge ohne Show Notes erst nach dem Show-Notes-Abgleich in den Index. 13.11.2026 (site_index_rule): es sei denn, der
+    englische Text der Seite (text_parts: Teaser, Kernpunkte, Show Notes, FAQ, Transkript im HTML) hat >= 2500 Zeichen. Alle anderen Folgen sind index (hier nie noindex)."""
+    thin = e.get("source") == "spreaker" and not has_full and not rewritten and not plain(e.get("show_notes")) and not (nrec or {}).get("markup")
+    return bool(thin and not IR.long_enough(*text_parts))
 
 
 def short_desc(e, nrec=None, n=180):
@@ -654,7 +662,7 @@ def build(g):
         alts = {"en": ep_url(e), **{l: loc_url(l, f"episodes/{e['slug']}/") for l in TRL if e["slug"] in TRL[l] and TRL[l][e["slug"]][0]}}   # alle Sprachfassungen (uebersetzte Titel/Teaser, teils Show Notes) sind indexierbar und verknuepft
         for _dl, (_du, _) in oa.items(): alts[_dl] = _du   # T3: die Dub-Fassung (eigene Folge in der Sprache) ist die Sprachalternative, nicht die duenne Show-Kopie
         pub(f"episodes/{e['slug']}/", e.get("meta_title") or e["name"], _rwm or short_desc(e, nrec, 155), body, ([ld] + nld) if nld else ld, "article", last=day(e.get("update_time")) or TODAY, alts=alts if len(alts) > 1 else None,
-            noindex=e.get("source") == "spreaker" and not snx and not _rw and not plain(e.get("show_notes")) and not (nrec or {}).get("markup"))   # T28: neue Folge ohne Show Notes erst nach dem Show-Notes-Abgleich in den Index
+            noindex=episode_noindex(e, nrec, bool(snx), _rw, (short_desc(e, nrec, 300), nkp, nnotes, nfaq, tr if len(tr) > 200 else "")))
         # lokalisierte Fassungen dieser Folge
         for l in TRL:
             tt = TRL[l].get(e["slug"])
