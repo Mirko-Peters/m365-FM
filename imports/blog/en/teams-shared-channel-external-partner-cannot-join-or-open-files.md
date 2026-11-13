@@ -50,26 +50,26 @@ In the Teams admin center, open **Teams**, then **Teams policies**. The channel 
 - **Invite external users to shared channels**: owners and members of shared channels can invite external participants from organizations where a cross-organization trust has been configured.
 - **Join external shared channels**: your users can join shared channels of other organizations.
 
-For the first scenario you need the first two on your side. For your people to join the partner's channel, the third one must be on. Microsoft says policy changes can take up to 24 hours. Remember that only team owners can create a shared channel. The shared channels page also says only the shared channel owner can directly add or remove people, while the policies page says owners and members can invite, so check who actually has the owner role.
+For the first scenario you need the first two on your side. For your people to join the partner's channel, the third one must be on. Microsoft says policy changes can take up to 24 hours. Microsoft says team owners can create shared channels when that policy is on. The shared channels page also says only the shared channel owner can directly add or remove people, while the policies page says owners and members can invite, so check who actually has the owner role.
 
 ## Step 3: Set cross-tenant access on both sides
 
 This is the step that most often explains a missing user. B2B direct connect is blocked by default, inbound and outbound. Microsoft's [setup page](https://learn.microsoft.com/en-us/entra/external-id/cross-tenant-access-settings-b2b-direct-connect) requires at least the Security Administrator role to change it. Teams administrators can read these settings but cannot change them.
 
-In the Microsoft Entra admin center, go to **Entra ID**, then **External Identities**, then **Cross-tenant access settings**. Microsoft recommends leaving the defaults and enabling direct connect per organization:
+In the Microsoft Entra admin center, go to **Entra ID**, then **External Identities**, then **Cross-tenant access settings**. The setup page describes enabling direct connect per organization:
 
 1. Select **Organizational settings**, then **Add organization**. Enter the partner's full domain name or tenant ID and select **Add**.
 2. Select the link under **Inbound access**. On the **B2B direct connect** tab choose **Customize settings**, then under **External users and groups** choose **Allow access**. On the **Applications** tab choose **Allow access** as well.
 3. Select the link under **Outbound access** and do the same: **Allow access** for **Users and groups** and for **External applications**.
 4. Ask the partner's admin to do the mirror image for your organization.
 
-The mutual part is the point. Microsoft's example: Contoso can allow inbound access from Fabrikam, but sharing is not possible until Fabrikam enables outbound access to Contoso. If you pick **Select applications**, an archived Teams admin article chose **Office 365**, which covers Teams and SharePoint. That article is retired, so verify the choice against the current Entra pages. Choosing specific users or groups instead of everyone needs Microsoft Entra ID P1 or P2, according to the setup page.
+The mutual part is the point. The setup page says both organizations need to enable B2B direct connect with each other, and the overview page gives an example: Contoso can allow inbound access from Fabrikam, but sharing is not possible until Fabrikam enables outbound access to Contoso. If you pick **Select applications**, an archived Teams admin article chose **Office 365**, which covers Teams and SharePoint. That article is retired, so verify the choice against the current Entra pages. Choosing specific users, groups or applications instead of everyone needs Microsoft Entra ID P1 (inbound) or P1 or P2 (outbound), according to the setup page.
 
 ## Step 4: Handle trust settings and Conditional Access
 
 If your Conditional Access policies require MFA and you allow direct connect with a partner, Microsoft says you must configure the inbound **Trust settings** so that MFA claims from that organization are accepted. If the person already completed MFA at home, they get in. If not, they are blocked. The same page describes **Trust compliant devices** and **Trust Microsoft Entra hybrid joined devices**. Without them, a partner on a compliant device can still fail a compliant-device requirement in your tenant.
 
-Microsoft's shared channels page adds that only the host organization's Conditional Access policies apply to direct connect users. Supported policies are those scoped to **All guest and external users** and the **Office 365 SharePoint Online** cloud app, with grant controls for MFA, a compliant device or a hybrid joined device. Look at the host tenant's sign-in logs. They are labeled with the cross-tenant access type B2B direct connect and have a Conditional Access tab.
+Microsoft's shared channels page adds that only the host organization's Conditional Access policies apply to direct connect users. Supported policies are those scoped to **All guest and external users** and the **Office 365 SharePoint Online** cloud app, with grant controls for MFA, a compliant device or a hybrid joined device. Look at the host tenant's sign-in logs for the failed sign-in. The Learn pages in the sources do not describe how these sign-ins are labeled, so check the log details in your own tenant.
 
 ## Step 5: Add the person correctly
 
@@ -80,7 +80,7 @@ Learn lists several details that cause "I cannot find them":
 - Add external participants by their UPN if it differs from their email address in Microsoft Entra ID.
 - People who must not communicate under information barrier policies cannot be in the channel.
 
-If the partner is still missing, the usual cause is the partner side of Step 3. In the 2023 thread I reviewed for background, a moderator said the same: when the external organization does not allow direct connect, the user's address is not listed.
+If the partner is still missing, the usual cause is the partner side of Step 3. In the 2023 thread I reviewed for background, a moderator's accepted answer said the same: when the external organization does not allow direct connect, the user's address is not listed. The person who asked later wrote that they had completed those steps and the user still did not appear, so this is the usual cause, not a guaranteed one.
 
 ## Step 6: The Files tab and the channel site
 
@@ -100,7 +100,6 @@ The January 2026 thread asked why **Anyone** links vanished from a shared channe
 ## Limits to know
 
 - Shared channels between the Commercial and GCC clouds are not supported, according to the archived admin article.
-- Teams audit logs exist only in the host tenant. There are none in the partner's tenant for activity in your channel.
 - Deleted shared channels can be restored within 30 days.
 
 ## Related

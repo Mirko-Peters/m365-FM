@@ -29,7 +29,7 @@ You created a custom Teams policy and assigned it to a security group. A day lat
 - January 2026: an administrator assigned a custom Audio Conferencing policy to a group of about 200 users. The activity log showed propagation as done, but meetings still showed only the default dial-in number. A moderator suggested checking for direct assignments, assigning per user, or contacting support. The administrator answered that users had no direct assignment and fell back to the Global policy, that a partner would have to contact Microsoft, and that per-user batch assignment was the workaround for now. Nothing was confirmed as the cause.
 - May 2024 (locked thread): a Compliance Recording policy assigned to a group with `New-CsGroupPolicyAssignment` and rank 1 never reached the members, although `Get-CsGroupPolicyAssignment` showed the assignment. The single answer talked about on-premises Active Directory and Windows Group Policy tools, which look unrelated to a Teams policy assignment made with PowerShell. No accepted answer.
 - August 2024: an administrator assigned an External Access policy to a group with a rank of 5, then checked the user with `Get-CsOnlineUser | Select-Object ExternalAccessPolicy` and saw a blank value. The moderator's answer, accepted by the asker, suggested checking the policy list, the group membership and waiting for replication.
-- A 2020 thread (older, but the same pattern): after the person removed the Global policy that was directly assigned to users, members inherited the group's meeting policy.
+- A 2020 thread (older, but the same pattern): a custom meeting policy assigned to a security group did not reach members, who kept the Global (Org-wide default) meeting policy. The person who asked wrote that removing the Global policy from the users made them inherit the group's policy, and marked their own reply as the accepted answer. A responder had pointed to the Learn section on removing a directly assigned policy.
 
 ## Step 1: Check the effective policy with the right cmdlet
 
@@ -55,7 +55,7 @@ To remove a direct assignment:
 Grant-CsTeamsMeetingPolicy -Identity <user> -PolicyName $null
 ```
 
-Use the `Grant-` cmdlet that matches your policy type. In the Teams admin center, open **Users**, then **Manage users**, select the user, open the **Policies** tab, select the policy and choose **Remove**. For many users, Microsoft shows **Actions**, **Unassign policies in bulk**, but warns that choosing a policy there removes all individually assigned users from that policy.
+Use the `Grant-` cmdlet that matches your policy type. Microsoft's page shows the `-PolicyName $null` pattern with other policy types (for example `Grant-CsTeamsMeetingBroadcastPolicy`), so check the cmdlet reference for yours. In the Teams admin center, open **Users**, then **Manage users**, select the user, open the **Policies** tab, select the policy and choose **Remove**. For many users, Microsoft shows **Actions**, **Unassign policies in bulk**, but warns that choosing a policy there removes all individually assigned users from that policy.
 
 ## Step 3: Verify the group assignment and its rank
 

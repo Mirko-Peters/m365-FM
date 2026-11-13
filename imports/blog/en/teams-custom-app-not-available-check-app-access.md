@@ -19,7 +19,7 @@ faq:
   - q: "Do setup policies give users access to an app?"
     a: "No. Setup policies pin apps and install them for users. If a pinned app is blocked by a permission policy, the user still cannot use it."
   - q: "Can I hide blocked apps from the Teams store completely?"
-    a: "Microsoft says users can search for blocked apps and request approval. In a 2025 thread, a moderator said blocked apps can stay visible with a lock icon and that no supported way exists to hide them for all users. That statement is from the thread, not from Learn."
+    a: "Microsoft says users can view apps in the store and request access to apps they cannot use. In a 2025 thread, a moderator said blocked apps can stay visible with a lock icon and that no supported way exists to hide them for all users. That statement is from the thread, not from Learn."
 ---
 
 You built or approved a custom app for your organization. It appears under **Built for your org**, yet users get "This app is not available" or a permissions message. This pattern shows up in Microsoft Q&A threads from 2025 and 2026. The answers in those threads often suggest settings from the older permission policy model, and one asker could not even find the tabs that the moderator mentioned. This article gives a fixed order for the checks and explains why the model matters. It is not an official Microsoft procedure. Statements that come from a thread are labeled as such.
@@ -87,7 +87,7 @@ Microsoft says that after you edit or assign a permission policy, it can take a 
 
 ## Step 8: Blocked apps in the store
 
-Microsoft says users can search for blocked apps and request admin approval. In the August 2025 thread, a moderator said blocked apps can stay visible in the catalog with a lock icon, that a full hide for all users is not supported, and that the asker could use setup policies and availability settings to focus users on approved apps. These statements are from the thread. I did not find them on the Microsoft pages above.
+Microsoft says users can view apps in the store and request access, and that users can ask the admin from the Teams client to allow an unavailable app. In the August 2025 thread, a moderator said blocked apps can stay visible in the catalog with a lock icon, that no supported way exists to hide them for all users (a backend flag exists only through Microsoft Support and works for some apps), and that the asker could use setup and permission policies to focus users on approved apps. These statements are from the thread. I did not find them on the Microsoft pages above.
 
 ## When to stop
 

@@ -7,7 +7,7 @@ author: mirko-p
 date: 2026-11-13
 topics: [teams, teams-admin-center]
 keypoints:
-  - "Only organizers can switch the attendance report on and see it. Co-organizers have limits, and webinar reports are organizer-only."
+  - "Organizers turn the attendance report on for meetings they create. Co-organizers can view it with limits, and webinar reports are organizer-only."
   - "Two settings must both allow it: the per-meeting option Allow attendance report and the Attendance and engagement report setting in the organizer's meeting policy."
   - "The report appears in the meeting chat on the Attendance tab about five minutes after the meeting ends. Lobby-only guests and view-only attendees are never listed."
   - "If the organizer leaves the organization, the reports are deleted for good. Admins can see participant details only within 24 hours after the meeting."
@@ -30,7 +30,7 @@ You organized a Teams meeting, switched on the attendance report, and afterwards
 - After a meeting with more than 100 people, the only report showed who accepted or declined the invitation. The report with join and leave times was missing. A later comment described a 65-person external briefing where the file icon appeared in the chat but opened as "not available, try again later".
 - A webinar report was still empty days after the event.
 
-None of these threads has a confirmed fix from the person who asked. In the first two, a moderator asked for more details or an AI answer listed settings, and nobody came back to say what worked. So treat the steps below as a way to find the cause, not as a promise.
+None of these threads has a confirmed fix from the person who asked. In the first two, a moderator asked for more details or an AI-generated answer and an anonymous answer listed settings, and nobody came back to say what worked. So treat the steps below as a way to find the cause, not as a promise.
 
 ## Step 1: Sign in as the organizer
 
@@ -45,7 +45,7 @@ Admins are not a way around this. The Learn page says admins cannot view the rep
 
 ## Step 2: Check the per-meeting option
 
-Only the organizer can change this setting, and it applies to meetings that person creates. Microsoft describes two places.
+Microsoft says organizers can turn attendance reports on or off in meetings they create. It describes two places.
 
 Before the meeting, in the Teams desktop app:
 
@@ -94,7 +94,7 @@ If the per-meeting option is missing or greyed out, or the Attendance tab is abs
 - **Show everything** (default): join time, leave time and duration.
 - **Only show who attended**: no times and no duration.
 
-The settings map to `Set-CsTeamsMeetingPolicy` with the parameters `-AllowEngagementReport`, `-AllowTrackingInReport` and `-InfoShownInReportMode`. The Learn page gives only a few example values, for instance `-AllowEngagementReport Disabled` for off, so look at the cmdlet reference before you script anything. Policy changes are not always instant, so allow some time before you test again, and check that the policy is really assigned to the organizer.
+The settings map to `Set-CsTeamsMeetingPolicy` with the parameters `-AllowEngagementReport`, `-AllowTrackingInReport` and `-InfoShownInReportMode`. The Learn page gives only a few example values, for instance `-AllowEngagementReport Disabled` for off, so look at the cmdlet reference before you script anything. The page gives no propagation time for policy changes, so allow some time before you test again, and check that the policy is really assigned to the organizer.
 
 ## Step 5: Know who is never in the report
 
@@ -117,7 +117,7 @@ Microsoft says that in meetings with more than 120 participants, the report you 
 
 Within 24 hours after the meeting, an admin can look at attendee details: in the Teams admin center, open **Users**, then **Manage users**, select the organizer, open the **Meetings & calls** tab, choose the meeting ID or call ID and select **Participant details**. Microsoft names only this 24-hour window, so act quickly.
 
-A moderator in the webinar thread also said that a tenant admin can ask Microsoft Support to recover a missing webinar report through **Help & support** in the Microsoft 365 admin center. This is a community-thread statement. Microsoft's own pages do not describe a recovery service, so treat it as something to try, not a guarantee. Another answer in a 2026 thread said the admin center has an **Export data as CSV** button for the meeting. I could not confirm that on Microsoft Learn either.
+A moderator in the webinar thread also said that a tenant admin can ask Microsoft Support to recover a missing webinar report through **Help & support** in the Microsoft 365 admin center. This is a community-thread statement. Microsoft's own pages do not describe a recovery service, so treat it as something to try, not a guarantee. An anonymous answer in the June 2026 thread said the admin center has an **Export data as CSV** option for the meeting. I could not confirm that on Microsoft Learn either.
 
 ## Quick checklist
 

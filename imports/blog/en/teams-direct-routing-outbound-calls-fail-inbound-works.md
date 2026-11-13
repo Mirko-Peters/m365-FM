@@ -15,7 +15,7 @@ faq:
   - q: "Why do inbound calls work but outbound calls fail in Direct Routing?"
     a: "Inbound calls only need the SBC to reach Teams and the number to be assigned to a user. Outbound calls also need the user's voice routing policy, a PSTN usage, a voice route whose number pattern matches the dialed number, and an enabled gateway. A missing link in that chain breaks only outbound calls. Microsoft Learn describes these checks, and a Microsoft moderator named the same chain in a 2026 thread."
   - q: "What does SIP 504 mean in Direct Routing?"
-    a: "On its 504 page, Microsoft lists reason texts that all start with Unable to deliver INVITE or ACK, followed by the detail. The detail points to a lost or refused connection, a TLS or certificate problem, a DNS name that does not resolve, or an invalid SIP message. Match the exact text to Microsoft's table to pick the right fix."
+    a: "On its 504 page, Microsoft lists reason texts that start with Unable to deliver INVITE or Unable to deliver ACK, followed by the detail. The detail points to a lost or refused connection, a TLS or certificate problem, a DNS name that does not resolve, or an invalid SIP message. Match the exact text to Microsoft's table to pick the right fix."
   - q: "Which SIP codes trigger failover to another SBC?"
     a: "Microsoft says the defaults are 408, 503 and 504. Failover happens only if the SBC has not sent any non-100 provisional response. Network-level failures such as a refused connection or a TLS timeout are retried from a different Microsoft datacenter."
   - q: "Does this checklist apply to Calling Plans or Operator Connect?"
@@ -67,7 +67,7 @@ Then compare the result with Microsoft's page on [enabling users for Direct Rout
 Set-CsPhoneNumberAssignment -Identity "<user>" -PhoneNumber <number> -PhoneNumberType DirectRouting
 ```
 
-If the number is managed on-premises, the page uses `-EnterpriseVoiceEnabled $true` instead. On licensing, the two pages word it differently: the troubleshooting page names an E3 with Phone System or E5 license, while the enable-users page says to assign a Teams Phone license. Check the current requirement for your tenant before you change anything.
+If the number is managed on-premises, the page uses `-EnterpriseVoiceEnabled $true` instead. On licensing, the troubleshooting page names an E3 with Phone System or E5 license, while the enable-users page only says to assign a license and links to the licensing requirements in the Direct Routing planning page. Check the current requirement for your tenant before you change anything.
 
 ## Step 3: Walk the routing chain
 
@@ -90,7 +90,7 @@ Microsoft's page on outbound issues adds one trap. If you paste a pattern from W
 
 One more detail from the voice routing page explains why users see a dropped call. Users who have only Teams Phone have the call dropped if no route matches or all SBCs are unavailable. Users who also have a Calling Plan fall back to it. The same page warns that changing the global (Org-wide default) voice routing policy affects all voice-enabled users, including Calling Plan and Operator Connect users, so use custom policies assigned per user.
 
-In the Teams admin center, the routing objects are under **Voice**, then **Direct Routing** (PSTN usages and **Voice routes**), and under **Voice routing policies**. Microsoft also offers a **Run Tests** diagnostic for Direct Routing at `https://aka.ms/TeamsDirectRoutingDiag`, which is not available in Microsoft 365 Government, 21Vianet or Germany.
+In the Teams admin center, the routing objects are under **Voice**, then **Direct Routing** (PSTN usages and **Voice routes**), and under **Voice routing policies**.
 
 ## Step 4: If calls reach the SBC and fail
 
@@ -104,7 +104,7 @@ If the failure is a 504 from Teams, use Microsoft's [SIP 504 page](https://learn
 
 - A disconnected or refused connection, or no response, means: check that the SBC is working, reachable on the right IP and port, and not blocked by a firewall.
 - A TLS negotiation failure with a certificate name, expiry or untrusted root means: check the SBC certificate. Microsoft asks for a certificate signed by a public root CA from its trusted list, and, if the SBC has several TLS profiles, for the profile that uses a Direct Routing-trusted certificate.
-- "No such host is known" means the SBC FQDN does not resolve in DNS. A message about no data of the requested type points to the DNS record type. Microsoft's advice is to check that A or AAAA records are configured. My reading is that a record exists but is of another type, for example only a TXT record, so verify this in DNS.
+- "No such host is known" means the SBC FQDN does not resolve in DNS. A message about no data of the requested type points to the DNS record type. Microsoft's advice is to check that A or AAAA records are configured, and it adds that a record was found, typically a TXT record added for domain verification, but not an A or AAAA record.
 - "Invalid Request/Response line" means the SBC sent a SIP message in a wrong format, for example without `SIP/2.0` in the right headers.
 
 This explains one detail in the thread. A TLS or connection failure can happen before any SIP message is exchanged. This is my reading, not a statement from Microsoft: if the SBC's SIP log is empty, also check its TLS and network logs, not only the SIP trace. A moderator in the thread pointed the other way, to the Teams side, because no signaling arrived at the SBC. Both views are consistent with Microsoft's pages, which is why the steps above cover both.
@@ -115,7 +115,7 @@ Microsoft's page on [trunk failover](https://learn.microsoft.com/en-us/microsoft
 
 ## Step 6: Collect data for support
 
-If all checks pass, collect the exact SIP reason text, the time in UTC, the calling user, the dialed number and the SBC logs (SIP, TLS and network) for the same minute. A moderator in the 2026 threads recommended a support request through the Microsoft 365 admin center as the last step when the forum could not see tenant data.
+If all checks pass, collect the exact SIP reason text, the time in UTC, the calling user, the dialed number and the SBC logs (SIP, TLS and network) for the same minute. A moderator in the April 2026 thread recommended a support request through the Microsoft 365 admin center (Support, Help & Support) so that an engineer can check the backend configuration.
 
 ## Wrong caller ID
 
