@@ -17,9 +17,9 @@ faq:
   - q: "Why does my cmdlet fail with 'HttpClient.Timeout of 100 seconds'?"
     a: "The PnP docs say a request and all its retries must finish within a 100-second HTTP timeout. A long Retry-After can use up that time. For long jobs, set the SharePointPnPHttpTimeout environment variable, in seconds or -1 for no timeout, before you connect. It does not apply to cmdlets built on the PnP Core SDK."
   - q: "Does SharePoint Online return RateLimit headers I can use for pacing?"
-    a: "A community answer suggested monitoring RateLimit headers. Microsoft Learn says SharePoint Online does not return or support the IETF RateLimit headers and that apps should honor Retry-After instead."
+    a: "A community answer suggested monitoring RateLimit headers. Microsoft Learn contradicts itself here: one section says RateLimit headers give early signals, while another says SharePoint Online does not return or support the IETF RateLimit headers and that apps should honor Retry-After instead. Do not build pacing on them. Rely on Retry-After."
   - q: "How many items can I update per minute?"
-    a: "Learn lists default limits that depend on your license count and that can change. For the smallest tier it gives 1,250 resource units per minute for one app in your tenant, and it says to estimate 2 units for an update or create request. Check the live page for your tier."
+    a: "Learn lists default limits that depend on your license count and that can change. For the smallest tier it gives 1,250 resource units per minute for one app in your tenant, and it says to estimate 2 units per request. Learn also says CSOM and REST have no predetermined cost and usually use more than Graph, so treat the figure as a rough floor. Check the live page for your tier."
 ---
 
 A script that updates a few hundred list items runs fine. Run it on 50,000 items and it slows to a crawl, prints 429 errors or stops with a timeout message. The usual first reaction is to wrap everything in a retry loop with a long sleep.
@@ -36,7 +36,7 @@ The last two messages are named in the PnP throttling page. They are two differe
 
 ## Step 1: Understand what throttling means
 
-Microsoft Learn says SharePoint Online answers application requests with HTTP 429 (too many requests) or HTTP 503 (server too busy). Both carry a `Retry-After` header that gives the wait in seconds. Learn says throttled requests still count toward your limits, so ignoring the header can cause more throttling. It also describes blocking as a rare, extreme form for long-term excessive traffic, announced in the Message Center.
+Microsoft Learn says SharePoint Online answers application requests with HTTP 429 (too many requests) or HTTP 503 (server too busy). Both carry a `Retry-After` header that gives the wait in seconds. Learn says throttled requests still count toward your limits, so ignoring the header can cause more throttling. It also says that an application which keeps exceeding the limits may be blocked completely, in which case it keeps getting 503 and the tenant is notified in the Message Center.
 
 Sequential calls can still be throttled. The Q&A answer said so, and Learn's limits are budgets over time windows, for example per minute, so a steady stream of calls can use one up.
 
@@ -58,11 +58,11 @@ Start-PnPTraceLog -WriteToLogStream
 Get-PnPTraceLog | Where-Object Message -like "*retry*"
 ```
 
-Entries look like "Retrying request ... due to status code TooManyRequests", followed by the wait. Counting them tells you whether the job is throttled constantly or only in bursts.
+Entries look like "Retrying request ... due to status code TooManyRequests", followed by the wait. Cmdlets built on the PnP Core SDK are the exception and do not write these entries. Counting them tells you whether the job is throttled constantly or only in bursts.
 
 ## Step 4: Batch the updates
 
-Without batching, one `Set-PnPListItem` call needs several requests. The batching page counts around 6 for an add, so 100 items mean at least 600 requests. With a batch, the list fields are fetched once and cached in the batch, and each item adds one request.
+The batching page uses `Add-PnPListItem` as its example. Without batching, adding one item needs around 6 requests, so 100 items mean at least 600. With a batch, the list fields are fetched once and cached in the batch, and each new item adds one request. The page gives no figure for updates, but `Set-PnPListItem` supports `-Batch` in the same way.
 
 ```powershell
 $batch = New-PnPBatch
@@ -103,27 +103,27 @@ Connect-PnPOnline -Url https://yourtenant.sharepoint.com/sites/projects -ClientI
 
 ## Step 7: Plan against the limits
 
-Learn lists default limits that depend on your license count and says they can change. Examples for the smallest tier, 0 to 1,000 licenses:
+Learn lists default limits that depend on your license count and says they can change. Example values for the smallest tier, 0 to 1,000 licenses:
 
 | Limit | Value |
 |---|---|
 | One app in your tenant, per minute | 1,250 resource units |
 | One app in your tenant, per 24 hours | 1,200,000 resource units |
-| One user, per 5 minutes | 3,000 requests |
+| One user, per 5 minutes (flat, not tied to the tier) | 3,000 requests |
 
-Learn counts 2 units for create, update and delete requests and says to use 2 units per request for planning. By that rule, 1,000 item updates cost about 2,000 units, which is more than one minute of the smallest tier's app budget. This is our arithmetic from Learn's numbers. Batched requests are still evaluated one by one, according to Learn. Spreading a large job over time is advice from the PnP page.
+Learn counts 2 units for create, update and delete requests and says to use 2 units per request for planning. By that rule, 1,000 item updates cost about 2,000 units, which is more than one minute of the smallest tier's app budget. This is our arithmetic from Learn's numbers, and only a rough floor: Learn says CSOM and REST have no predetermined unit cost and usually use more than Graph. Batched requests are still evaluated one by one, according to Learn. Spreading a large job over time is advice from the PnP page.
 
 ## Known issues from related threads
 
 - **Out of memory:** A June 2025 GitHub issue reported `Get-PnPListItem` running out of memory on libraries with hundreds of thousands of items, even with `-ScriptBlock` and `-PageSize`. The reporter said all items still go to the output. The issue closed with no confirmed fix. For huge lists, narrow the query first.
-- **Batched multi-choice fields:** An April 2025 issue reported a multi-choice value written one character at a time in a batch. A contributor reported it fixed in a nightly build, and one commenter confirmed that. Update first if you see it.
-- **List object in a loop:** A June 2026 issue on version 3.2.0 reported `Set-PnPListItem -List $list` failing on the second item, where `$list` came from `Get-PnPList`. The maintainer answered that a fix would be in the next nightly. The thread has no confirmation. The 3.3.0 changelog lists a fix for how `ClientContext` is handled in `Set-PnPListItem` and related cmdlets, which may be the same one. The sources do not link them. Passing the list title as a string worked for the reporter.
-- **Apostrophe in the list title:** A September 2026 issue reported `Set-PnPListItem -Batch` failing when the list title contains an apostrophe. The maintainer said the fix was committed for the next nightly build. The reporter's own workaround was to double the apostrophe. Nobody confirmed the fix.
+- **Batched multi-choice fields:** An April 2025 issue reported a multi-choice value written one character at a time in a batch. A maintainer said it was fixed, and one commenter confirmed the fix on a 3.1.18 nightly build. Another commenter could not reproduce it on a simple list. Update first if you see it.
+- **List object in a loop:** A June 2026 issue on version 3.2.0 reported `Set-PnPListItem -List $list` failing on the second item, where `$list` came from `Get-PnPList`. The maintainer answered that an earlier fix for how the client context is cloned had caused this regression and that the new fix would be in the next nightly. The thread has no confirmation. The 3.3.0 changelog lists a fix for how `ClientContext` is handled in `Set-PnPListItem` and related cmdlets, which may be the same one. The sources do not link them. Passing the list title as a string worked for the reporter.
+- **Apostrophe in the list title:** A September 2026 issue reported `Set-PnPListItem -Batch` failing when the list title contains an apostrophe. A maintainer said the fix was committed for the next nightly build and closed the issue. The reporter's own workaround was to double the apostrophe. Nobody confirmed the fix.
 
 ## Limits and open points
 
 - The January 2026 Q&A thread was accepted by its asker, who only wrote thanks. Nobody reported that the script fixed the throttling.
-- That answer advised watching RateLimit headers. Learn says SharePoint Online does not return them, so Learn wins.
+- That answer advised watching RateLimit headers. The Learn throttling page contradicts itself on this: one section mentions RateLimit headers as early signals, another says SharePoint Online does not return or support them. Honor `Retry-After` and do not depend on the headers.
 - If throttling stays high with batching, fewer reads and one connection, collect the time of the failures and your app's request pattern. Learn says blocks are announced in the Message Center, so check it too.
 
 ## Related

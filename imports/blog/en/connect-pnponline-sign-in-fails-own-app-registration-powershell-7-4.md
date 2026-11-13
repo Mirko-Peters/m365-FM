@@ -93,11 +93,11 @@ Know what changed in the sign-in options. The 3.0.0 changelog says `-Interactive
 - **Windows sign-in broker:** `-OSLogin` uses Web Account Manager. The docs list Windows 10 (1703 or later) and Windows Server 2019 or later, and say it supports Windows Hello, FIDO keys and conditional access.
 - **Unattended jobs:** interactive sign-in is not meant for them. The authentication page points to certificate-based app-only access.
 
-For Azure Cloud Shell, the June 2025 issue ended without a confirmed fix for `-Interactive`. A maintainer said Cloud Shell no longer offers the clipboard or a browser launcher, so the project would have to adapt. The reporter confirmed that `-DeviceLogin` worked in one test. The changelog for 3.2.0 lists a fix for `-DeviceLogin` in Cloud Shell. In that environment, use `-DeviceLogin`, copy the code from the shell and open the device login page by hand.
+For Azure Cloud Shell, the June 2025 issue ended without a confirmed fix for `-Interactive`. A maintainer said Cloud Shell offers no clipboard access, and that Microsoft had updated the base images and removed the packages the module used to open a browser. The maintainer was unsure whether the browser launch could be fixed. The reporter confirmed that `-DeviceLogin` worked in one test, although a later comment in the issue says that a problem persisted (the screenshot is not readable as text). The changelog for 3.2.0 lists a fix for `-DeviceLogin` in Cloud Shell. In that environment, use `-DeviceLogin`, copy the code from the shell and open the device login page by hand.
 
 ## Step 6: Deal with the msalruntime error
 
-This message appeared on the Windows sign-in broker path. In the January 2026 GitHub issue, the module's `Core` folder did not contain the `msalruntime` files on 3.1.0. A maintainer closed the issue as fixed, and the reporter confirmed that build 3.1.275 worked and contained the files.
+This message appeared on the Windows sign-in broker path. In the January 2026 GitHub issue, the module's `Core` folder did not contain the `msalruntime` files on 3.1.0. The reporter confirmed that build 3.1.275 worked and contained the files. A maintainer said the fix was likely in newer builds, asked for a test with the latest nightly build and closed the issue as fixed. No reply to that request is visible in the thread.
 
 What to do:
 

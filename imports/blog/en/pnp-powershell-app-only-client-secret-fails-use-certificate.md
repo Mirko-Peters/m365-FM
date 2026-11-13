@@ -34,7 +34,7 @@ From the July 2026 thread:
 - A Microsoft Graph call that uploaded or deleted a file version returned `403 Forbidden` with `AccessDenied`, although sign-in itself worked.
 - Registrations, unexpired secrets, API permissions, admin consent and site grants had all been checked and looked fine.
 
-A February 2026 GitHub issue shows the same pattern from the PnP side. The reporter tried to call a metered Microsoft Graph API (HTTP 402 Payment Required) and, judging by the maintainers' replies, had followed an example that uses a client secret.
+A February 2026 GitHub issue shows the same pattern from the PnP side. The reporter tried to call a metered Microsoft Graph API (HTTP 402 Payment Required) and, judging by the maintainer's replies, had followed an example that uses a client secret.
 
 ## What the documentation says
 
@@ -64,7 +64,7 @@ The simplest route is the PnP cmdlet. It creates an app registration, creates a 
 Register-PnPEntraIDApp -ApplicationName "Reports App" -Tenant yourtenant.onmicrosoft.com -Store CurrentUser -GraphApplicationPermissions "User.Read.All" -SharePointApplicationPermissions "Sites.Read.All"
 ```
 
-A browser window opens so you can sign in and complete the consent flow. Request only what the script needs. PnP's permission article names `Sites.Selected` as the lowest application permission for SharePoint. It then needs a per-site grant, which is covered in our article on Sites.Selected.
+A browser window opens so you can sign in and complete the consent flow. Request only what the script needs. PnP's permission article names `Sites.Selected` as the lowest application permission for SharePoint. It then needs a per-site grant on each site the script uses.
 
 Other options from the cmdlet page:
 
@@ -99,7 +99,7 @@ Get-PnPAccessToken -ResourceTypeName SharePoint -Decoded
 Test-PnPConnectionPermission -CommandName Get-PnPList
 ```
 
-`Get-PnPWeb` proves that SharePoint accepts the connection. `Get-PnPAccessToken` with `-Decoded` shows the token content, so you can see which application roles it carries. `Test-PnPConnectionPermission` compares the token claims with what a cmdlet needs. The cmdlet page says it checks API permission claims only. It does not test a `Sites.Selected` grant on a site.
+`Get-PnPWeb` proves that SharePoint accepts the connection. `Get-PnPAccessToken` with `-Decoded` shows the token content, so you can see which application roles it carries. `Test-PnPConnectionPermission` compares the token claims with what a cmdlet needs. The changelog lists it as new in 3.4.0, so it is missing in older builds. The cmdlet page says it checks API permission claims only. It does not test a `Sites.Selected` grant on a site.
 
 ## Step 5: Look after the certificate
 
@@ -118,8 +118,8 @@ Once nothing uses the old client secret, delete it from the app registration. Th
 - The July 2026 thread has no accepted answer and no confirmation from the asker. The moderator recommended a certificate and hedged that tokens obtained with a secret might be rejected. The answer cited Learn but quoted no passage, so rely on the Learn pages above.
 - In that thread, some calls were Microsoft Graph file operations. Learn's certificate rule is written for SharePoint CSOM and REST. Why the Graph calls returned 403 is not established. Check that the app holds the right Graph permission and, for `Sites.Selected`, a site grant.
 - Another poster in the thread said a vendor told them a certificate is now required. That is second-hand and unverified.
-- In the February 2026 GitHub issue, maintainers said a client ID with a client secret is not supported and recommended a certificate for app-only access. The reporter said a direct Graph request with the same app and a secret did succeed outside PnP. That fits Learn's rule being written for SharePoint CSOM and REST. No one confirmed a working PnP configuration, and the issue was closed for lack of response.
-- An October 2025 Q&A answer, marked accepted by its asker, offered a client secret as an app-only alternative for `Connect-PnPOnline`. It conflicts with the Learn and PnP pages above, and the asker never reported a result.
+- In the February 2026 GitHub issue, a maintainer said PnP does not support a client ID with a client secret and recommended a certificate for app-only access. A different commenter said a direct Graph request with the same app and a client secret did succeed outside PnP. That fits Learn's rule being written for SharePoint CSOM and REST. No one confirmed a working PnP configuration, and the issue was closed for lack of response.
+- An October 2025 Q&A answer, shown as accepted, offered a client secret as an app-only alternative for `Connect-PnPOnline`. It conflicts with the Learn and PnP pages above, and the asker never reported a result.
 - Learn's ACS page mentions a tenant setting, `-DisableCustomAppAuthentication`, that changes the ACS default. Because the same page says ACS stops working from April 2, 2026, do not plan around re-enabling it.
 
 ## Related
@@ -140,6 +140,6 @@ Once nothing uses the old client secret, delete it from the app registration. Th
 - [PnP PowerShell: Register-PnPEntraIDApp](https://pnp.github.io/powershell/cmdlets/Register-PnPEntraIDApp.html)
 - [PnP PowerShell: Test-PnPConnectionPermission](https://pnp.github.io/powershell/cmdlets/Test-PnPConnectionPermission.html)
 - [PnP PowerShell changelog](https://github.com/pnp/powershell/blob/dev/CHANGELOG.md)
-- [Microsoft Q&A: SharePoint Access Issue (401 Unauthorized, 403 Forbidden, Failed to get metadata) with app registration (July 2026)](https://learn.microsoft.com/en-us/answers/questions/5941445/sharepoint-access-issue-(401-unauthorized-403-forb)
+- [Microsoft Q&A: SharePoint Access Issue (401 Unauthorized, 403 Forbidden, Failed to get metadata) with app registration (July 2026)](https://learn.microsoft.com/en-us/answers/questions/5941445/sharepoint-access-issue-%28401-unauthorized-403-forb)
 - [Microsoft Q&A: Export permissions using PNP (October 2025)](https://learn.microsoft.com/en-us/answers/questions/5571848/export-permissions-using-pnp)
 - [GitHub: Unable to use metered APIs (issue 5245, February 2026)](https://github.com/pnp/powershell/issues/5245)

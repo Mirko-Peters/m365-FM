@@ -17,9 +17,9 @@ faq:
   - q: "Which role do I grant: Read, Write or FullControl?"
     a: "Start with the lowest role that works for your script. The PnP permissions article warns that some operations need a higher level than the verb suggests. Reading permissions needs a right that only Full Control holds, and customizing pages or applying a theme needs Design rather than Edit. If a cmdlet fails with a lower role, check its requirements with Get-PnPCommandPermission before you raise the role."
   - q: "Can a SharePoint administrator grant Sites.Selected access without being a site collection admin?"
-    a: "A December 2025 GitHub issue reports that Grant-PnPAzureADAppSitePermission failed with accessDenied for such an administrator, because the cmdlet looks up the site ID through Graph. Contributors suggested passing a site object that already holds the ID. Nobody confirmed that this works, so test it on one site first."
+    a: "A December 2025 GitHub issue reports that Grant-PnPAzureADAppSitePermission failed with accessDenied for such an administrator, because the cmdlet looks up the site ID through Graph. A maintainer suggested passing a site object that already holds the ID. Nobody confirmed that this works, and one commenter reported a different error when passing the site ID and said that Site Admin rights were needed. Test it on one site first."
   - q: "Does Sites.Selected work with delegated sign-in?"
-    a: "Learn says the Selected scopes support delegated and application modes. A GitHub issue from October 2025 reported Get-PnPSite failing with delegated Sites.Selected after a grant, and it ended without a confirmed solution. Treat delegated Sites.Selected in PnP PowerShell as unverified."
+    a: "Learn says the Selected scopes support delegated and application modes. A GitHub issue from October 2025 reported Get-PnPSite failing with delegated Sites.Selected after a grant. Several commenters reported the same, and the thread ended without a confirmed solution. Treat delegated Sites.Selected in PnP PowerShell as unverified."
 ---
 
 Sites.Selected is the least-privilege way to let a script touch SharePoint. The app sees only the sites you name. The catch is that a grant that looks correct can still end in "Attempted to perform an unauthorized operation".
@@ -47,7 +47,7 @@ PnP PowerShell wraps step 2. Its permission article says the lowest app-only per
 
 ## Step 1: Grant the site
 
-The PnP article says you need a separate sign-in for the grant. Use another app registration that has the delegated `AllSites.FullControl` permission on SharePoint, and sign in as a Global Administrator or SharePoint Administrator. The cmdlet page lists `Sites.FullControl.All` on Microsoft Graph and notes that it works with delegated permissions, not application permissions.
+The PnP article recommends a separate sign-in for the grant: preferably another app registration that has the delegated `AllSites.FullControl` permission on SharePoint, with a Global Administrator or SharePoint Administrator signed in. The cmdlet page lists `Sites.FullControl.All` on Microsoft Graph and notes that it works with delegated permissions, not application permissions.
 
 ```powershell
 Connect-PnPOnline -Url https://yourtenant.sharepoint.com/sites/projects -Interactive -ClientId <admin-app-client-id>
@@ -58,7 +58,7 @@ The older name `Grant-PnPAzureADAppSitePermission` still appears in some docs an
 
 ## Step 2: Pick the role on purpose
 
-The cmdlet accepts Read, Write, Manage or FullControl. The PnP permission article gives two examples where the verb misleads you:
+The cmdlet accepts Read, Write, Manage or FullControl. Learn's Graph role list says read, write, owner and fullcontrol, and the sources do not say how "Manage" and "owner" relate. The PnP permission article gives two examples where the verb misleads you:
 
 - Reading permissions needs the Enumerate Permissions right, which only Full Control holds.
 - Customizing pages or applying a theme needs Design, not Edit.
@@ -77,14 +77,14 @@ A February 2026 Community Hub how-to on app-only reporting warns that permission
 
 ## Step 4: Connect to the granted site and test
 
-Use certificate sign-in, which is what SharePoint requires for app-only access (see our article on client secrets and certificates), and connect to the site you granted:
+Use certificate sign-in, which is what Learn says SharePoint requires for app-only access through Entra ID, and connect to the site you granted:
 
 ```powershell
 Connect-PnPOnline -Url https://yourtenant.sharepoint.com/sites/projects -ClientId <reports-app-client-id> -Tenant yourtenant.onmicrosoft.com -Thumbprint <thumbprint>
 Get-PnPWeb
 ```
 
-Then ask PnP what each failing cmdlet needs:
+Then ask PnP what each failing cmdlet needs. According to the changelog, `Get-PnPCommandPermission` and `Test-PnPConnectionPermission` are new in PnP PowerShell 3.4.0, so older builds do not have them:
 
 ```powershell
 Get-PnPCommandPermission -CommandName Set-PnPList
@@ -113,17 +113,17 @@ The PnP 3.3.0 changelog added cmdlets such as `Grant-PnPEntraIDAppListPermission
 
 | Case | What was reported | Status |
 |---|---|---|
-| Many cmdlets fail after a valid grant | Maintainers suspected a temporary server-side problem and closed the issue. The reporter said it worked early in the week and then stopped. | Not resolved |
+| Many cmdlets fail after a valid grant | A maintainer suspected a temporary server-side problem and announced closing the issue after three weeks without a reply. The reporter said it worked at the start of one week and then stopped. A direct Graph test with the same grant also returned access denied. | Not resolved |
 | Delegated Sites.Selected | `Get-PnPSite` unauthorized after a grant. Commenters reported the same. | Not resolved |
-| Sensitivity label and storage limits | A commenter said these need `Sites.FullControl.All`. | Reported, not confirmed in docs |
+| Sensitivity label and storage limits | A maintainer said Sites.Selected is not enough for `Set-PnPSiteSensitivityLabel`. A commenter said storage limits need `Sites.FullControl.All` and that it is the only alternative they know for labels. | Reported, not confirmed in docs |
 | Sharing settings | `Set-PnPWeb -MembersCanShare:$false` and `Set-PnPGroup -AllowMembersEditMembership:$false` worked with Sites.Selected. | Confirmed by one commenter |
-| Admin without site collection admin rights | The grant cmdlet looks up the site ID through Graph. Contributors suggested `Get-PnPSite -Includes Id,Url` and passing the object to `-Site`. | Not confirmed |
+| Admin without site collection admin rights | According to the reporter, the grant cmdlet looks up the site ID through Graph. A maintainer suggested `Get-PnPSite -Includes Id,Url` and passing the object to `-Site`. Another commenter reported a different error with the ID passed directly. | Not confirmed |
 
 ## Limits and open points
 
-- The Learn page on selected permissions is from 2024. It does not mention PnP PowerShell, SharePoint CSOM or REST. The PnP pages are the source for cmdlet behavior.
+- The Learn page on selected permissions is from 2024. It describes the Graph calls. The PnP pages are the source for cmdlet behavior.
 - No thread in this set links a fix or a pull request. The March 2026 issue did produce one confirmed workaround, for sharing settings.
-- In one thread a contributor reported that Microsoft has no Graph option for sensitivity labels and none planned. That is a community statement. Check Learn before you rely on it.
+- In one thread a commenter reported that Microsoft told them there is no Graph option for sensitivity labels and none in development. That is a community statement. Check Learn before you rely on it.
 - The Community Hub post is a how-to by a community member, not a documented procedure. It has no marked solution.
 
 ## Related
