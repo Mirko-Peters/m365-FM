@@ -13,7 +13,7 @@ keypoints:
   - "Learn says ExchangeOnlineManagement 3.10.0 or later needs PowerShell 7.6, while its Automation runtime page lists 5.1 and 7.4. Pin the module and test in the Test pane before you publish."
 faq:
   - q: "Why does Connect-MgGraph fail after Connect-ExchangeOnline in the same session?"
-    a: "In a confirmed 2024 Tech Community thread, an expert explained that the Exchange Online and Microsoft Graph modules ship different versions of System.Text.Json.dll. PowerShell loads only one version per process, so the module that loads second can fail. The thread's fix was to use an older Exchange Online module version. Microsoft Learn does not describe this conflict, but its release notes for ExchangeOnlineManagement 3.6.0 mention a fix for a compatibility issue with the Microsoft.Graph module."
+    a: "In a 2024 Tech Community thread (not about Azure Automation, on desktop Windows PowerShell 5.1), a community member explained, in the reply marked as the solution, that the Exchange Online and Microsoft Graph modules ship different versions of System.Text.Json.dll. PowerShell loads only one version per process, so the module that loads second can fail. The thread's fix was to use an older Exchange Online module version. Microsoft Learn does not describe this conflict, but its release notes for ExchangeOnlineManagement 3.6.0 mention a fix for a compatibility issue with the Microsoft.Graph module."
   - q: "Can I run the latest ExchangeOnlineManagement module in Azure Automation?"
     a: "Learn says module versions 3.10.0 or later require PowerShell 7.6.0 or later, and that Windows PowerShell 5.1 is not affected. Learn's runtime environment page lists PowerShell 5.1 and 7.4 as the choices. From those two statements it follows that a 7.4 runtime cannot load 3.10.0 or later, but check your own account, because available runtimes change."
   - q: "Do I need Exchange.ManageAsApp and an Exchange role for this?"
@@ -24,7 +24,7 @@ faq:
 
 A test runbook connects to Exchange Online with its managed identity and reads a mailbox. It works. A second test runbook connects to Microsoft Graph with the same identity and reads a user. It works too. Put both in one runbook and it fails.
 
-That is the March 2026 Microsoft Q&A thread this article starts from. It matches an older Tech Community thread from 2024 that did reach a confirmed fix. This article explains the cause, shows what Microsoft Learn says about versions and runtimes, and gives a test plan. It is a troubleshooting guide, not an official Microsoft procedure.
+That is the March 2026 Microsoft Q&A thread this article starts from. It matches an older Tech Community thread from 2024 that did reach a fix confirmed by its asker. This article explains the cause, shows what Microsoft Learn says about versions and runtimes, and gives a test plan. It is a troubleshooting guide, not an official Microsoft procedure.
 
 ## Symptoms
 
@@ -39,11 +39,11 @@ All of these are load or runtime errors. They are not `Authorization_RequestDeni
 
 ## Why it happens
 
-In the 2024 thread, an expert's reply was marked as the solution. It said both modules load their own copy of `System.Text.Json.dll` into the same PowerShell process. Exchange Online 3.5.1 shipped version 8.0.x and Microsoft.Graph.Authentication used a 6.0.x version. PowerShell keeps only one version of an assembly per process, so whichever module loads first wins and the second one can fail.
+In the 2024 thread, a reply from a community member (a Silver Contributor, not a Microsoft employee) was marked as the solution. It said both modules load their own copy of `System.Text.Json.dll` into the same PowerShell process. Exchange Online 3.5.1 shipped version 8.0.x and Microsoft.Graph.Authentication used a 6.0.x version. PowerShell keeps only one version of an assembly per process, so whichever module loads first wins and the second one can fail.
 
 The asker in that thread removed the Graph modules before connecting, updated both modules and cleared the MSAL cache. None of that helped. After going back to ExchangeOnlineManagement 3.4.0, the asker wrote that it worked. Other posters reported the same fix. One more poster reported an improvement with 3.6.0, but certificate-based `Connect-IPPSSession` still failed for them. One poster reported that setting `-LogLevel` to `Default` instead of `All` fixed it in their test. Learn does not mention that setting, so treat it as a community report.
 
-A volunteer moderator in the 2026 thread gave a similar explanation. The modules depend on additional binaries that are not aligned between teams, so you may need to mix and match module versions and PowerShell hosts.
+A volunteer moderator (an MVP) in the 2026 thread gave a similar explanation. The modules depend on additional binaries that are not aligned between teams, so you may need to mix and match module versions and PowerShell hosts.
 
 Learn does not describe the System.Text.Json conflict. It does list, in the ExchangeOnlineManagement 3.6.0 release notes, an item "Added fix for compatibility issue with the Microsoft.Graph module". It gives no detail.
 
@@ -55,13 +55,13 @@ Learn does not describe the System.Text.Json conflict. It does list, in the Exch
 
 ## Step 2: See which assembly version each module wants
 
-The 2024 thread suggested checking the assembly in a fresh session, one module at a time. Import one module, then run:
+The 2024 thread suggested checking the loaded assembly version in a fresh session, one module at a time. The thread summary does not show the exact command. The command below is a general .NET check, not from Learn or the thread, so test it on a spare machine. Import one module, then run:
 
 ```powershell
 (Get-Item -Path "$([System.Text.Json.Utf8JsonReader].Assembly.Location)").VersionInfo
 ```
 
-Repeat in a new session with the other module. If the versions differ, you have the clash from that thread. This check comes from the community thread, not from Learn. Run it on a test machine with the same module versions as the runbook.
+Repeat in a new session with the other module. If the versions differ, you have the clash from that thread. Use the same module versions as in the runbook.
 
 ## Step 3: Pin versions in a separate runtime environment
 
@@ -79,7 +79,7 @@ Learn notes that importing a package can take several minutes, that you can add 
 
 Which version to pin depends on the runtime:
 
-- Learn says ExchangeOnlineManagement 3.10.0 and later need PowerShell 7.6.0 or later because of .NET 10 assembly dependencies. Its runtime page names 5.1 and 7.4 as choices. A 7.4 runtime therefore needs a version older than 3.10.0. This is my reading of two Learn pages, so confirm what your account offers.
+- Learn says ExchangeOnlineManagement 3.10.0 and later need PowerShell 7.6.0 or later because of .NET 10 assembly dependencies. Its runtime page names 5.1 and 7.4 as choices. A 7.4 runtime therefore needs a version older than 3.10.0. This is a conclusion drawn from two Learn pages, not a statement on either, so confirm what your account offers.
 - Learn lists problems for 3.7.0 to 3.9.2 on Ubuntu 20.04 and 18.04, and names 3.9.2 as the latest version for some older platforms. Those notes concern desktop platforms, not Automation.
 - The March thread's own test used 3.5.0 on 7.4. The asker added a comment that the real script was not yet tested, so no confirmed answer exists for 3.9.x on 7.4.
 - Runtime 5.1 did not avoid the clash in the March thread, which failed on 5.1 with 3.9.2.
@@ -102,7 +102,7 @@ Also check whether Graph can replace the Exchange cmdlets in your script. Learn'
 
 - The 2024 thread is older than the usual window and used desktop Windows PowerShell. It is included because it names the cause and has a confirmed outcome.
 - The 2026 thread's solution is a first test, not a verified production fix.
-- Learn's Exchange managed identity page was last updated in 2023 and mentions runtime 5.1 and 7.1 preview. Use the runtime environment page for current runtimes.
+- Learn's Exchange managed identity page still mentions runtime 5.1 and 7.1 (Preview) when you add the module, which differs from the runtime environment page. Use the runtime environment page for current runtimes.
 - Learn does not document the clash itself. The cause comes from a community expert.
 
 ## Related

@@ -15,7 +15,7 @@ faq:
   - q: "Which Azure role does a user need to sign in to an Entra-joined AVD session host?"
     a: "According to Microsoft Learn, Virtual Machine User Login for regular users or Virtual Machine Administrator Login for administrators. You can assign it on the VM, the resource group or the subscription. Learn recommends assigning it at resource group level to the same group used for the application group. Owner or Contributor does not give sign-in rights."
   - q: "Why do users get repeated sign-in prompts after I enable single sign-on?"
-    a: "Learn's troubleshooting page names four causes: different sign-in frequencies on the Azure Virtual Desktop and Windows Cloud Login policies, per-user MFA turned on next to Conditional Access, no Conditional Access policy for Windows Cloud Login, and an unhidden consent dialog. Check the Conditional Access tab of the failed sign-in in the Entra sign-in log to see which policy applies."
+    a: "Learn's single sign-on troubleshooting page names several causes, among them: different sign-in frequencies on the Azure Virtual Desktop and Windows Cloud Login policies, per-user MFA turned on next to Conditional Access, no Conditional Access policy for Windows Cloud Login, and an unhidden consent dialog. Check the Conditional Access tab of the failed sign-in in the Entra sign-in log to see which policy applies."
   - q: "Do I need targetisaadjoined or enablerdsaadauth?"
     a: "They do different jobs. Learn's single sign-on page sets the RDP property enablerdsaadauth to 1 (or the Microsoft Entra single sign-on option on the host pool). Learn's deployment page says that web, Android, macOS and iOS clients, and Windows PCs that are not joined or registered, need targetisaadjoined:i:1 when you do not use single sign-on, and those connections are limited to user name and password."
   - q: "Is per-user MFA still allowed with AVD on Entra-joined hosts?"
@@ -28,10 +28,10 @@ Four Microsoft Q&A threads from December 2025 to June 2026 describe versions of 
 
 ## What the threads reported
 
-- A cloud-only user on an Entra-joined multi-session host got "Your credentials did not work". The sign-in log showed Success and no Conditional Access policy applied. The one answer said single sign-on had apparently not been configured. The asker never confirmed.
+- A cloud-only user on an Entra-joined multi-session host got "Your credentials did not work". The sign-in log showed Success and no Conditional Access policy applied. The one answer, from a volunteer moderator, said single sign-on had apparently not been configured. The asker never confirmed.
 - A new user on a Mac with the Windows App first had credentials rejected. After single sign-on was configured, a pop-up appeared and disappeared in a loop. No answer was confirmed.
 - One user out of many got "Disconnected. Sign in failed." in the web client. Other users were fine. Many checks ruled out the profile, the SID mapping and group membership. The thread is open.
-- New and reset users could open a full desktop but got "wrong password" errors for published apps (RemoteApp). The thread is open, and the asker's last post said every suggestion had failed.
+- New and reset users could open a full desktop but got "wrong password" errors for published apps (RemoteApp). The thread is open. The asker's last post said that three password reset methods had not helped.
 
 The common point is that the Entra sign-in succeeds while a second layer fails. That second layer is the sign-in to the session host itself. The checks below follow that layer.
 
@@ -42,7 +42,7 @@ Microsoft Learn's page on connections to Entra-joined VMs in AVD lists these mes
 | Message | Cause and fix according to Learn |
 |---|---|
 | "Your account is configured to prevent you from using this device." | The user lacks the Virtual Machine User Login role. Assign it. |
-| "The user name or password is incorrect" (repeated) | Missing role, or the Conditional Access policy does not exclude MFA for the Azure Windows VM Sign-In app. Also check per-user MFA. |
+| "The user name or password is incorrect" | Wrong credentials, a missing role, or a Conditional Access policy that requires MFA for the Azure Windows VM Sign-In app. Learn says to exclude that app from the MFA requirement. |
 | "The logon attempt failed" (Windows client) | The client PC must be Entra joined or hybrid joined to the same tenant. PKU2U must be enabled on the PC and the host. Per-user MFA must be off. |
 | "The sign-in method you're trying to use isn't allowed" | A Conditional Access policy restricts access. Enforce MFA the documented way. |
 | "A specified logon session does not exist" | The Kerberos server object is missing or wrong. |
@@ -56,11 +56,11 @@ If you see none of these, go to step 6 and read the sign-in log.
 2. Open **Access control (IAM)** and assign **Virtual Machine User Login** to the user group. Use **Virtual Machine Administrator Login** for administrators.
 3. Wait a few minutes and retry.
 
-Learn's sign-in page explains why Owner and Contributor do not help. Those roles give no sign-in rights, by design, to separate the people who manage VMs from the people who can sign in to them. It also says that adding a user to the local administrators group by hand is not supported. Use the Azure roles. One 2025 thread asker had already checked the roles, so this step will not fix every case.
+Learn's sign-in page explains why Owner and Contributor do not help. Those roles give no sign-in rights, by design, to separate the people who manage VMs from the people who can sign in to them. It also says that adding a user to the local administrators group by hand is not supported. Use the Azure roles. Learn also says that host pools that use a session host configuration do not need this role assignment. One 2025 thread asker had already checked the roles, so this step will not fix every case.
 
 ## Step 3: Turn off per-user MFA
 
-Learn says VM sign-ins do not support per-user Enabled or Enforced MFA on Entra-joined hosts. In the Entra admin center, the AVD troubleshooting page points to **Identity**, **Users**, **All users**, **Per-user MFA**. Set each AVD user to **Disabled** and enforce MFA through Conditional Access instead.
+Learn says VM sign-ins do not support per-user Enabled or Enforced MFA on Entra-joined hosts. Learn's Conditional Access guidance for AVD points to **Identity**, **Users**, **All users**, **Per-user MFA**. Set each AVD user to **Disabled** and enforce MFA through Conditional Access instead.
 
 In the 2025 thread, the asker had checked per-user MFA with Microsoft Graph and found it disabled, so again this does not explain every case.
 
@@ -68,13 +68,13 @@ In the 2025 thread, the asker had checked per-user MFA with Microsoft Graph and 
 
 Learn's single sign-on page lists the steps:
 
-1. In the Entra admin center, go to **Devices**, then **Remote connection configuration**, then **Windows Cloud Login**, and turn on **Enable Microsoft Entra ID authentication protocol to authenticate users to remote devices**. This takes Application Administrator or Cloud Application Administrator rights.
+1. In the Azure portal, open **Microsoft Entra ID**, then **Devices**, then **Remote connection configuration**, then **Windows Cloud Login**, and turn on **Enable Microsoft Entra ID authentication protocol to authenticate users to remote devices**. This takes Application Administrator or Cloud Application Administrator rights.
 2. On the host pool, set **Microsoft Entra single sign-on** to use Microsoft Entra authentication, or set the RDP property `enablerdsaadauth` to `1`.
 3. Optionally hide the consent dialog with a dynamic device group. Learn says Entra remembers up to 15 hosts for 30 days before prompting again.
 
 If you do not use single sign-on, Learn's deployment page says that the web, Android, macOS and iOS clients, and Windows PCs that are not joined or registered to the same tenant, need `targetisaadjoined:i:1` as a custom RDP property. Those connections accept only user name and password.
 
-The threads mixed these two properties up. One answer suggested `targetisaadjoined:i:1` to a user who already had `enablerdsaadauth` set. Learn does not describe them as alternatives.
+The threads mixed these two properties up. In the March 2026 "Sign in failed" thread, a Microsoft moderator suggested `targetisaadjoined:i:1` to a user who already used `enablerdsaadauth:i:1`. Learn describes them for different situations, not as alternatives.
 
 For hybrid-joined hosts, or Entra-joined hosts in an environment with domain controllers, Learn also requires a Kerberos server object. Without it you may see "the specific session doesn't exist" or a standard credentials dialog.
 
@@ -91,9 +91,9 @@ Learn's single sign-on troubleshooting page then names the causes of loops:
 2. **No policy on Windows Cloud Login.** Users are asked for MFA twice.
 3. **Per-user MFA** next to Conditional Access (step 3).
 
-Two more details from Learn. Do not block the **Windows 365** app, because the Windows App authenticates to it even for AVD-only users. And if you do not want to limit sign-in to strong methods such as Windows Hello for Business, exclude the **Azure Windows VM Sign-In** app from the policy. If that app is missing, Learn shows how to create its service principal with `New-MgServicePrincipal -AppId 372140e0-b3b7-4226-8ef9-d57986796201`.
+Two more details from Learn. Do not block the **Windows 365** app, because the Windows App authenticates to it even for AVD-only users. And if you do not want to limit sign-in to strong methods such as Windows Hello for Business, exclude the **Azure Windows VM Sign-In** app from the policy.
 
-One June 2026 answer named "Microsoft Remote Desktop" as a third app to include in policies. Learn's current pages do not list it. Follow Learn, and use the sign-in log to confirm what actually fires.
+Two anonymous answers in June 2026 threads named "Microsoft Remote Desktop" as an app that policies must not block or must include. The Learn pages used here do not list it. Follow Learn, and use the sign-in log to confirm what actually fires.
 
 ## Step 6: Read the sign-in log
 
@@ -105,7 +105,7 @@ Open the Entra sign-in logs, filter by the user, open the failed attempt and loo
 - AADSTS530032: Security Defaults may be on, or a Block access policy applies.
 - AADSTS65001: hide the consent prompt or grant admin consent for Windows Cloud Login.
 
-If your sign-in logs go to Azure Monitor, Learn gives a query on `AADNonInteractiveUserSignInLogs` filtered on `AppId == "372140e0-b3b7-4226-8ef9-d57986796201"`. It shows the MFA result and the policy that applied to the VM sign-in.
+If your sign-in logs go to Azure Monitor, the Learn page on connections to Entra-joined VMs gives a query on `AADNonInteractiveUserSignInLogs` filtered on `AppId == "372140e0-b3b7-4226-8ef9-d57986796201"`. It shows the MFA result and the Conditional Access policies that applied to the VM sign-in.
 
 One answer in the RemoteApp thread listed more AADSTS codes, such as 50055 and 50126. They were not confirmed by Learn on these pages. Treat them as hints.
 
@@ -125,7 +125,7 @@ One answer in the RemoteApp thread listed more AADSTS codes, such as 50055 and 5
 ## Limits
 
 - No thread here has a confirmed root cause. This is a Learn-based checklist, not a record of fixes.
-- Learn pages change. The role names, app names and portal paths above were checked against pages updated in 2025 and 2026, but compare them with the live pages.
+- Learn pages change. Compare the role names, app names and portal paths above with the live pages before you change a production tenant.
 
 ## Related
 

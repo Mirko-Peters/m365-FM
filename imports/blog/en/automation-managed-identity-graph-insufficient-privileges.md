@@ -24,7 +24,7 @@ faq:
 
 An Azure Automation runbook connects to Microsoft Graph with its managed identity. The connection succeeds. The first call fails with `[Authorization_RequestDenied] : Insufficient privileges to complete the operation`.
 
-Two Microsoft Q&A threads from September 2025 describe this. In one, an administrator followed a community article to grant Graph permissions and hit errors in the script. In the other, a runbook that should list inactive Entra ID users failed the same way. Neither thread ended with a confirmation. This article puts the pieces together from Microsoft Learn and marks what the threads only reported. It is not an official Microsoft procedure.
+Two Microsoft Q&A threads from September 2025 describe this. In one, a community member followed a Tech Community article to grant Graph permissions and hit errors in the script. In the other, a runbook that should list inactive Entra ID users failed the same way. Neither thread ended with a confirmation. This article puts the pieces together from Microsoft Learn and marks what the threads only reported. It is not an official Microsoft procedure.
 
 ## Why the error appears
 
@@ -34,8 +34,8 @@ Learn's Graph PowerShell troubleshooting page says that most authorization error
 
 Two things went wrong in the threads and are easy to repeat:
 
-- **Wrong permission type.** The asker consented to delegated permissions. A moderator pointed out that a script that gets its token without a user needs application permissions.
-- **Wrong resource ID.** The first answer used an example ID for the Microsoft Graph service principal. A moderator then said this ID differs between tenants and has to be looked up in your own tenant. Learn says the same: `resourceId` is the object ID of the resource service principal, not its application ID.
+- **Wrong permission type.** The first suggestion in that thread, from a Microsoft moderator, granted delegated permissions through `oauth2PermissionGrants`. The same moderator later said that a runbook gets its token without user interaction and needs application permissions.
+- **Wrong resource ID.** The moderator's sample used an example ID for the Microsoft Graph service principal. The moderator then said this ID differs between tenants and has to be looked up in your own tenant. Learn's Graph PowerShell tutorial describes `ResourceId` as the object ID of the resource service principal.
 
 ## Step 1: Enable the managed identity and note its object ID
 
@@ -43,25 +43,25 @@ Two things went wrong in the threads and are easy to repeat:
 2. Under **Account Settings**, select **Identity**.
 3. Set **System assigned** to **On**, select **Save** and confirm.
 
-The same page shows the object ID. Learn also explains how to get it with the Azure CLI. Keep it as `$MI_ID`. This is the object ID, not the application ID.
+The Identity page shows the object ID. Learn also shows how to read it with PowerShell: `(Get-AzAutomationAccount -ResourceGroupName $resourceGroup -Name $automationAccount).Identity` returns the `PrincipalId`. Keep it as `$MI_ID`. This is the object ID, not the application ID.
 
 ## Step 2: Find out which permission the call needs
 
-Do not guess, and do not choose `Directory.ReadWrite.All` because it sounds safe. Learn's Graph PowerShell troubleshooting page shows how to look up the permission for a cmdlet:
+Do not guess, and do not choose `Directory.ReadWrite.All` because it sounds safe. Learn's Graph PowerShell troubleshooting page shows how to look up the permission for a cmdlet. Its example output is for delegated access, so confirm the application permission in the Graph permissions reference:
 
 ```powershell
 Find-MgGraphCommand -Command Get-MgUser | Select -First 1 -ExpandProperty Permissions
 ```
 
-(The Learn example uses `New-MgServicePrincipal` in place of `Get-MgUser`.) For a script that reads sign-in activity, Learn's user list reference says the `signInActivity` property needs a Microsoft Entra ID P1 or P2 license and the `AuditLog.Read.All` permission. Learn's inactive-accounts page lists `AuditLog.Read.All` and `User.Read.All`. Learn names Reports Reader as the least privileged role for activity logs.
+(The Learn example uses `New-MgServicePrincipal` in place of `Get-MgUser`.) For a script that reads sign-in activity, Learn's user list reference says the `signInActivity` property needs a Microsoft Entra ID P1 or P2 license and the `AuditLog.Read.All` permission. Learn's inactive-accounts page lists `AuditLog.Read.All` and `User.Read.All`. Learn's inactive-accounts page names Reports Reader as the least privileged role for activity logs.
 
-In the inactive-accounts thread, a moderator suggested adding the Reports Reader or Directory Reader role to the identity and the permissions `AuditLog.Read.All` and `Directory.Read.All`. That answer was not accepted, and Learn does not confirm that a directory role is also needed for app roles. Start with the app roles and add a role only if the call still fails.
+In the inactive-accounts thread, a Microsoft moderator suggested adding the Reports Reader or Directory Reader role to the identity and the permissions `AuditLog.Read.All` and `Directory.Read.All`, using the API permissions tab of the enterprise application. The same moderator later said that this tab is not shown for managed identities. None of these answers was accepted, and Learn does not confirm that a directory role is also needed for app roles. Start with the app roles and add a role only if the call still fails.
 
 ## Step 3: Assign the app role with Microsoft Graph PowerShell
 
-You need the right to assign roles. Learn's Graph PowerShell tutorial lists Privileged Role Administrator, and the Tech Community article says a Global Administrator ran its scripts. Sign in as an administrator on your own computer or in Cloud Shell, not in the runbook.
+You need the right to assign roles. Learn's Graph PowerShell tutorial lists Privileged Role Administrator, and the Tech Community article says the person running its scripts must be a Global Administrator. Sign in as an administrator on your own computer or in Cloud Shell, not in the runbook.
 
-Learn's Exchange managed identity page shows this pattern, with the managed identity as both principal and service principal. Here it is adapted to Graph. The Graph application ID `00000003-0000-0000-c000-000000000000` is from Learn's REST page:
+Learn's Exchange managed identity page shows this pattern, with `$MI_ID` passed as both `-ServicePrincipalId` and `-PrincipalId`. Here it is adapted to Graph. The Graph application ID `00000003-0000-0000-c000-000000000000` is from Learn's REST page:
 
 ```powershell
 Connect-MgGraph -Scopes AppRoleAssignment.ReadWrite.All,Application.Read.All
@@ -78,8 +78,8 @@ New-MgServicePrincipalAppRoleAssignment -ServicePrincipalId $MI_ID `
 Notes:
 
 - `$graph.Id` is the Graph service principal's object ID in your tenant. That is the value to use as `ResourceId`.
-- The role lookup follows the pattern in Learn's tutorial, which filters `AppRoles` by `Value`. The check for `AllowedMemberTypes` is my addition and follows the community article, which keeps only roles that allow the Application type.
-- Learn's tutorial page uses a second form, with the resource's ID as `ServicePrincipalId` and a body parameter. Learn shows both forms. Pick one and check the output.
+- The role lookup follows the pattern in Learn's tutorial, which filters `AppRoles` by `Value`. The additional check for `AllowedMemberTypes` comes from the Tech Community article, which keeps only roles that allow the Application type.
+- Learn's tutorial page uses a second form, with the resource's object ID as `ServicePrincipalId` and a body parameter. Pick one and check the output.
 - Learn's REST page cautions that only appropriate users should hold `AppRoleAssignment.ReadWrite.All`, and that permissions assigned this way take effect at once without a review.
 
 The error in the first thread, "Some App Roles are not found on Graph API service principal", comes from the community script. By its logic, it fires when the number of matched roles differs from the number of names requested. A misspelled name, or a name that is not an application role, would trigger it. This is an inference from reading the script. The article does not state it.
@@ -95,9 +95,9 @@ Connect-MgGraph -Identity
 Get-MgContext
 ```
 
-For a user-assigned identity, add `-ClientId` with the identity's client ID. `Get-MgContext` shows `AuthType`, which tells you if the session is delegated or app-only. Import the `Microsoft.Graph.Authentication` module, and any submodules you call, into the Automation account first. Learn's modules page describes the import steps and the runtime version choice.
+For a user-assigned identity, add `-ClientId` with the identity's client ID. `Get-MgContext` shows `AuthType`, which tells you if the session is delegated or app-only. Import the `Microsoft.Graph.Authentication` module, and any submodules you call, into the Automation account first. Learn's modules page describes the import methods and the runtime version choice (5.1 or 7.2), but it does not name the Graph modules.
 
-One more point from the inactive-accounts thread. The script used `Connect-AzAccount -Identity` and `Get-AzADUser` with a `SignInActivity` filter. A moderator suggested `-Property SignInActivity`. I could not confirm in Learn that this works. For `signInActivity`, Learn documents the Graph request `GET /v1.0/users?$select=displayName,userPrincipalName,signInActivity`, with a maximum page size of 500. Using Graph directly is the safer path.
+One more point from the inactive-accounts thread. The script used `Connect-AzAccount -Identity` and `Get-AzADUser` with a `SignInActivity` filter. A Microsoft moderator suggested `-Property SignInActivity`. The Learn pages used here do not confirm that this works. For `signInActivity`, Learn documents the Graph request `GET /v1.0/users?$select=displayName,userPrincipalName,signInActivity`, with a maximum page size of 500. Using Graph directly is the safer path.
 
 ## Step 5: Wait, then test with a fresh job
 
@@ -105,12 +105,12 @@ Learn's managed identity how-to warns that token caching can delay changes. If t
 
 ## Removing a wrong grant
 
-The asker in the first thread wanted to remove permissions granted in Graph Explorer, and got no answer. For app roles, Learn's tutorial shows `Remove-MgServicePrincipalAppRoleAssignedTo`, and the REST page shows a `DELETE` on `appRoleAssignedTo`. The community article's cleanup script uses `Remove-MgServicePrincipalAppRoleAssignment`. For delegated grants made through `oauth2PermissionGrants`, look for the matching removal in the Learn page on granting consent. I did not verify that path.
+The asker in the first thread wanted to remove permissions granted in Graph Explorer, and got no answer. For app roles, Learn's tutorial shows `Remove-MgServicePrincipalAppRoleAssignedTo`, and the REST page shows a `DELETE` on `appRoleAssignedTo`. The Tech Community article's cleanup script uses `Remove-MgServicePrincipalAppRoleAssignment`. For delegated grants made through `oauth2PermissionGrants`, Learn's REST page shows a `PATCH` that keeps only the scopes you list, or a `DELETE` that revokes the whole grant.
 
 ## Limits
 
 - Neither thread confirmed a fix. The steps here follow Learn, not a confirmed outcome.
-- The Learn Exchange page used for the cmdlet pattern was last updated in 2023. The cmdlet and parameters match the newer Graph PowerShell tutorial, but run your own test.
+- The Learn Exchange page used for the cmdlet pattern is written for Exchange permissions, not Graph. The cmdlet and parameters match the Graph PowerShell tutorial, but run your own test.
 - Keep the permission small. Use `AuditLog.Read.All` for sign-in data, not a directory-wide write role.
 
 ## Related

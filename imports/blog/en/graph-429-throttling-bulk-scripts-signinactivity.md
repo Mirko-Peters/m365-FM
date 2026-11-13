@@ -15,7 +15,7 @@ faq:
   - q: "What should a script do when Graph returns 429?"
     a: "Microsoft Learn says to wait the number of seconds in the Retry-After response header and retry, and to keep doing so until the request succeeds. If the response has no Retry-After header, Learn recommends exponential backoff. Learn also says Microsoft Graph SDKs already include handlers for this. The page does not say how Graph PowerShell cmdlets behave, so test your own script."
   - q: "Is Graph throttling counted per SharePoint site or drive?"
-    a: "An accepted answer in a February 2026 Q&A thread said it is not scoped to single sites or drives. Learn's SharePoint throttling page lists user, tenant and application scopes, and does not list a per-site scope. Do not assume that spreading requests over many sites gives you separate quotas."
+    a: "An answer accepted by the asker in a February 2026 Q&A thread (posted anonymously, so its author's role is unknown) said it is not scoped to single sites or drives. Learn's SharePoint throttling page lists user, tenant and application scopes for general requests. The only per-site limits it lists are for anonymous links and anonymous egress. Do not assume that spreading requests over many sites gives you separate quotas."
   - q: "Why do I get throttled when I request signInActivity?"
     a: "Learn's throttling limits page lists GET signInActivity at 10 requests per minute for an app, and warns that $select=signInActivity on List users can cause stricter throttling than usual. It advises $top=500 and, if needed, a $filter on createdDateTime to reduce the data per request."
   - q: "Does a missing signInActivity value mean the user never signed in?"
@@ -30,7 +30,7 @@ A second thread, from February 2026, asked how throttling works when many ShareP
 
 **May 2026 thread (users endpoint).** The asker got 429 on `GET /v1.0/users/{id}` with many properties, including `signInActivity`, plus `$expand=manager`. Pagination and filters did not help, because each call returned one user. A Microsoft moderator answered that the expensive properties, not only the request rate, drive the throttling. The moderator suggested splitting the calls (profile, sign-in activity, manager), honoring `Retry-After` with exponential backoff, caching, and reading sign-in activity less often. That answer was not marked accepted. An AI-generated answer, which the asker did mark as accepted, said much the same. The asker did not say whether the 429s stopped.
 
-**February 2026 thread (driveItems).** The asker wanted to know if throttling applies per site or drive, and what concurrency is safe. An answer, accepted by the asker, said that limits are layered across tenant, app and service, that requests to different sites can draw on the same quota, and that you should honor `Retry-After`, use `$batch`, and prefer delta queries and change notifications over polling. It gave no concurrency number. The asker said it helped.
+**February 2026 thread (driveItems).** The asker wanted to know if throttling applies per site or drive, and what concurrency is safe. An anonymous answer, accepted by the asker, said that limits are layered across tenant, app and service, that requests to different sites can draw on the same quota, and that you should honor `Retry-After`, use `$batch`, and prefer delta queries and change notifications over polling. It gave no concurrency number. The asker said it helped.
 
 ## Step 1: Read the 429 properly
 
@@ -46,7 +46,7 @@ Learn's throttling page is clear on this:
 2. Retry the request.
 3. If it fails with 429 again, keep using the same delay until it succeeds.
 
-Learn explains why: Graph continues to log resource usage while a client is throttled, so backing off with the header is the fastest way to recover. Immediate retries add to your usage. If the response has no `Retry-After` header, Learn recommends exponential backoff.
+Learn explains why: Microsoft Graph continues to log resource usage while a client is throttled, so backing off with the header is the fastest way to recover. Immediate retries add to your usage. If the response has no `Retry-After` header, Learn recommends exponential backoff.
 
 Learn says the Microsoft Graph SDKs already handle this. It does not say the same for Graph PowerShell cmdlets, so do not assume it. If your script wraps raw calls, such as `Invoke-MgGraphRequest`, build the wait in yourself.
 
@@ -57,7 +57,7 @@ Learn's service-specific limits page has a section for identity and access repor
 - Any request in that group: 122 requests per 10 seconds per app across all tenants, and 5 requests per 10 seconds per app per tenant.
 - `GET signInActivity`: 10 requests per minute.
 
-Your one-in-ten-seconds script makes 6 calls a minute, which is under 10 on paper. The thread does not say whether other jobs from the same app registration ran at the same time. Those jobs would share the budget, because the limits apply per app and per tenant. That reading is my inference, not a statement from the thread.
+Your one-in-ten-seconds script makes 6 calls a minute, which is under 10 on paper. The thread does not say whether other jobs from the same app registration ran at the same time. Those jobs would share the budget, because the limits apply per app and per tenant. This is a conclusion from Learn's limits table, not something the thread states.
 
 Learn also says that `$select=signInActivity` on List users may cause stricter throttling than standard calls. Its advice:
 
@@ -89,7 +89,7 @@ So batching does not remove the limit. It moves the retry logic into your code.
 
 ## Step 6: Plan SharePoint and OneDrive reads
 
-For drive scans, Learn's SharePoint throttling page says that SharePoint Online returns 429 or 503 with a `Retry-After` header, and that throttled requests count toward the limits. It lists throttling at user, tenant and application scope. Your quota is not per site. Other points from that page:
+For drive scans, Learn's SharePoint throttling page says that SharePoint Online returns 429 or 503 with a `Retry-After` header, and that throttled requests count toward the limits. It lists throttling at user, tenant and application scope, and its only per-site limits are for anonymous links and anonymous egress. Do not plan around a separate quota per site. Other points from that page:
 
 - Traffic with no app ID and no User-Agent string is undecorated. Learn says well-decorated traffic is prioritized over undecorated traffic. The documented User-Agent formats are `ISV|CompanyName|AppName/Version` and `NONISV|CompanyName|AppName/Version`.
 - A single-item query costs 1 resource unit, a multi-item query or write costs 2, and permission operations, including `$expand=permissions`, cost 5. Avoid permission expansion in bulk scans.
