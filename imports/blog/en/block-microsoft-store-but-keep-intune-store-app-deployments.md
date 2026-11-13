@@ -77,7 +77,7 @@ Two failure modes that Learn names:
 
 ## Step 5: Check the success-then-failed pattern
 
-If your report shows error 0x87D1041C, Learn has an explanation. Assigning a UWP app of the "Microsoft Store app (new)" type, with system install behavior, to a device that already has that app produces "The application was not detected after installation completed successfully (0x87D1041C)." Learn adds that the app still installs correctly. This matches the thread's report of an app that is installed but flagged as failed, but the thread does not show the error code, so confirm it first. For a longer walk-through of this specific error, see the separate article on the Win32 app that is installed but reported failed with 0x87d1041c.
+If your report shows error 0x87D1041C, Learn has an explanation. Assigning a UWP app of the "Microsoft Store app (new)" type, with system install behavior, to a device that already has that app produces "The application was not detected after installation completed successfully (0x87D1041C)." Learn adds that the app still installs correctly. This matches the thread's report of an app that is installed but flagged as failed, but the thread does not show the error code, so confirm it first.
 
 ## Step 6: Compare the physical devices with the Cloud PCs
 
@@ -85,9 +85,9 @@ The thread does not explain why Cloud PCs worked. Use Learn's requirements as a 
 
 - At least two processor cores.
 - The Intune Management Extension is supported on the device.
-- Access to both the Microsoft Store and the content location. Learn points to the Microsoft Store proxy configuration.
+- Access to both the Microsoft Store and the destination content.
 - The app is available in the device's region. Learn says an app assigned to a device in an unsupported region does not install, and installs if the device moves to a supported region.
-- The app is not a paid app, and its platform is supported in the Store.
+- The app is not a paid app. Learn says paid apps are not supported.
 
 ## Step 7: Decide what to do during Autopilot
 

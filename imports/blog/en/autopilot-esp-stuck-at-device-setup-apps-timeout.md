@@ -25,7 +25,7 @@ faq:
 
 A new laptop registers for Windows Autopilot. The hardware hash is in Microsoft Entra. Provisioning starts and then sits at the Device setup phase of the Enrollment Status Page (ESP). The status says the apps are installing, for example "0 of 5 installed," and after the timeout the device shows an error.
 
-A Microsoft Q&A thread from June 2026 describes this with Win32 apps and the error code 0x800705b4. It has no accepted answer and the poster did not reply. A community volunteer answered with a likely cause and a list of checks. An AI-generated answer in the same thread is not a source for this article. This guide takes the scenario from the thread and builds the checks from Microsoft Learn pages that were updated between March and November 2026. It is not an official Microsoft procedure.
+A Microsoft Q&A thread from June 2026 describes this with Win32 apps and the error code 0x800705b4. It has no accepted answer and the poster did not reply. A community volunteer (an independent advisor) answered with a likely cause and a list of checks. An AI-generated answer in the same thread is not a source for this article. This guide takes the scenario from the thread and builds the checks from Microsoft Learn. It is not an official Microsoft procedure.
 
 ## Symptoms
 
@@ -48,7 +48,7 @@ Do not guess from the app count. Get evidence from the device.
 
 Learn says that if the value is 4 for any app, the ESP stops installing apps. Then check the Intune Management Extension log for the cause. The thread answer named the folder `C:\ProgramData\Microsoft\IntuneManagementExtension\Logs`. Learn names the log but I did not find the folder path in the text of the pages that I read, so confirm it on your device.
 
-Learn also says that during the ESP the sidecar tracks only Win32 apps, not PowerShell scripts. LOB MSI apps are recorded under `ESPTrackingInfo\Diagnostics\ExpectedMSIAppPackages`.
+Learn also says the ESP does not track PowerShell scripts as blocking workloads. LOB MSI apps are recorded under `ESPTrackingInfo\Diagnostics\ExpectedMSIAppPackages`.
 
 **Logs from the ESP.** If you turned on **Turn on log collection and diagnostics page for end users**, the user can select **Collect logs** on the timeout screen and copy the files to a USB drive. You can also press Shift+F10 in the out-of-box experience (on devices that are not in S mode) and run the command Learn gives for user-driven mode:
 
@@ -71,7 +71,7 @@ Check **Show an error when installation takes longer than specified number of mi
 
 ## Step 3: Remove the LOB and Win32 mix
 
-The thread answer blamed conflicts between LOB and Win32 apps. That claim was presented as typical, not as verified. Microsoft Learn supports the general point: do not mix LOB and Win32 apps. Both use TrustedInstaller, which does not allow installs at the same time. A Win32 install that collides returns the message "Another installation is in progress, please try again later," and the ESP fails.
+The thread answer blamed conflicts between LOB and Win32 apps. The asker had not mentioned any LOB apps, so this was an assumption that nobody checked on the device. Microsoft Learn supports the general point: do not mix LOB and Win32 apps. Both use TrustedInstaller, which does not allow installs at the same time. A Win32 install that collides returns the message "Another installation is in progress, please try again later," and the ESP fails.
 
 What to do:
 
@@ -98,7 +98,7 @@ Learn also notes that on hybrid Microsoft Entra join, Win32 and UWP apps assigne
 
 ## Step 6: Consider Autopilot device preparation
 
-Windows Autopilot device preparation does not use the ESP. Learn says Microsoft limited the number of apps during the out-of-box experience for stability, and that almost 90 percent of Autopilot deployments use 10 or fewer apps. Learn also says that with device preparation the providers are serialized, so LOB and Win32 apps in the same deployment should not affect each other.
+Windows Autopilot device preparation does not use the ESP. Learn's FAQ says the number of apps during the out-of-box experience was limited for stability, and that almost 90% of Autopilot deployments use 10 or fewer apps. Learn also says that with device preparation the providers are serialized, so LOB and Win32 apps in the same deployment should not affect each other.
 
 If you still see the ESP during a device preparation test, Learn says the device is probably registered as an Autopilot device or has an Autopilot profile assigned. Autopilot profiles take precedence.
 
@@ -114,7 +114,7 @@ If you still see the ESP during a device preparation test, Learn says the device
 - The thread is unresolved. Its cause (LOB and Win32 conflict) is a possibility, not a diagnosis.
 - Learn does not explain 0x800705b4 on the pages I read. Treat it as the symptom of the timeout and look at the logs for the real error.
 - Learn says there are policies that conflict with the ESP and points to the Autopilot known issues list. Check that list for your Windows version.
-- A December 2025 Q&A thread described the ESP failing with "Something went wrong" for many new devices at once, with a community expert suggesting to recreate the ESP and Autopilot profile. It had no accepted answer and looks service-related, so it is not part of this checklist.
+- A December 2025 Q&A thread described the ESP failing with "Something went wrong" on new laptops, with an MVP suggesting to recreate the ESP and Autopilot profile. It had no accepted answer, and the asker linked it to a possible service change, so it is not part of this checklist.
 
 ## Related
 

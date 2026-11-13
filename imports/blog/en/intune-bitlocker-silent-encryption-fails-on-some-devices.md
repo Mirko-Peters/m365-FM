@@ -14,7 +14,7 @@ keypoints:
   - "Microsoft Learn is not fully consistent on whether Secure Boot is required for silent encryption, so check the current pages for your case."
 faq:
   - q: "Why do only some devices fail to encrypt silently?"
-    a: "The usual differences between devices are the TPM state, WinRE, the user type (administrator or standard user), the BIOS mode, and leftover encryption by another tool. Microsoft Learn lists TPM missing, WinRE disabled and UEFI mode not enabled as the most common causes."
+    a: "The usual differences between devices are the TPM state, WinRE, the user type (administrator or standard user), the BIOS mode, and leftover encryption by another tool. Microsoft Learn's encryption-report scenarios cover a missing or not-ready TPM, WinRE not enabled, missing admin rights for a standard user and an encryption method mismatch."
   - q: "Does silent BitLocker work with a startup PIN?"
     a: "No. Microsoft Learn says devices must not require a TPM startup PIN or startup key for silent BitLocker, because these need user interaction. Note that the Microsoft Defender security baseline can enable them by default."
   - q: "Can Intune BitLocker policies encrypt Azure virtual machines?"
@@ -25,7 +25,7 @@ faq:
 
 You deployed a BitLocker policy with Intune. The dashboard looks mostly green. A handful of devices show no error, no obvious TPM problem and no encryption. On those devices, a manual "Turn on BitLocker" works at once.
 
-This is the scenario in a Microsoft Q&A thread from May 2026. An administrator who had moved to a fully remote setup saw about a dozen devices fail silently. The thread has one detailed answer from a community volunteer and a follow-up that asks for an accepted answer. No answer was accepted, and the poster never replied. So the thread gives us a list of ideas, not a confirmed fix. This article checks each idea against Microsoft Learn, using pages updated in March and April 2026. It is not an official Microsoft procedure.
+This is the scenario in a Microsoft Q&A thread from May 2026. An administrator who was preparing a fully remote setup saw about a dozen devices fail silently. The thread has one detailed answer from a community volunteer (an independent advisor) and a follow-up from the same person that asks for an accepted answer. No answer was accepted, and the poster never replied. So the thread gives us a list of ideas, not a confirmed fix. This article checks each idea against Microsoft Learn. It is not an official Microsoft procedure.
 
 ## Symptoms
 
@@ -38,8 +38,8 @@ This is the scenario in a Microsoft Q&A thread from May 2026. An administrator w
 In the Microsoft Intune admin center, go to **Devices**, then **Monitor**, then **Encryption report**. Compare the device state with the cases that Microsoft Learn describes:
 
 - **Not ready and not encrypted:** the policy needs a TPM and the device does not have one.
-- **Not ready and will not encrypt silently:** the TPM may be disabled in firmware or may need clearing. Run `tpm.msc` on the device.
-- **Ready but not encrypted silently:** WinRE may be disabled, or the targeted user has no admin rights and the standard-user setting is off. The status text "The user logged into the device does not have admin rights" points to this case.
+- **Not ready and will not encrypt silently:** Learn says the TPM is likely not ready for BitLocker. Check the TPM state on the device.
+- **Ready but not encrypted silently:** WinRE may be disabled, or the targeted user has no admin rights and the standard-user setting is off. Learn shows the status text "The user logged into the device does not have admin rights" in this scenario and ties it to WinRE not being configured correctly, so check WinRE as well as the standard-user setting.
 - **Error state but encrypted:** the policy's encryption method does not match the encryption that is already on the drive.
 - **Ready but not encrypted, no silent policy:** if the policy is not silent, the user has to answer the prompt.
 
@@ -52,9 +52,9 @@ Silent encryption has requirements for the policy itself. Learn lists these for 
 - **Require Device Encryption** set to **Enabled**.
 - **Allow Warning For Other Disk Encryption** set to **Disabled**.
 - **Allow Standard User Encryption** set to **Enabled**. Learn says it is required when standard users use the device. In the Endpoint protection template the setting is called **Allow standard users to enable encryption during Microsoft Entra join**.
-- No TPM startup PIN or startup key. Learn says that for silent BitLocker, devices must not require them. In the endpoint security profile set the startup PIN, startup key and key and PIN options to the **Do not allow** variants. In the device configuration profile, set the compatible TPM startup PIN, key and key and PIN options to **Do not allow** variants.
+- No TPM startup PIN or startup key. Learn says that for silent BitLocker, devices must not require them. The client-side troubleshooting page says to configure the compatible TPM startup PIN as **Blocked**.
 
-Two label notes. The thread answer calls the standard-user setting "during Autopilot." One Learn page uses that wording in its fix table and another uses "during Microsoft Entra join." Look at the label in your own profile.
+Two label notes. The thread answer calls the standard-user setting "during Autopilot." One Learn page uses that wording in its text and another uses "during Microsoft Entra join." Look at the label in your own profile.
 
 Also check for a second policy. Learn warns that the Security baseline for Microsoft Defender can enable TPM startup PIN and key by default, which blocks silent enablement. The client-side troubleshooting page lists the conflicting error "use of a USB startup key cannot be required" and says that any compatible TPM setting set to **Required** makes silent encryption fail.
 
@@ -79,7 +79,7 @@ manage-bde -status
 ```
 
 - `reagentc /info` shows if WinRE is enabled. If it is disabled, `reagentc /enable` is the fix that Learn gives. The thread answer said the same.
-- `Get-Tpm` should show the TPM as present, ready, enabled, activated and owned.
+- `Get-Tpm` shows the TPM state.
 - `msinfo32` shows the BIOS mode. For silent encryption with TPM 2.0, Learn says the BIOS mode must be UEFI. TPM 1.2 does not need UEFI.
 - `manage-bde -status` shows if the drive is encrypted, with which method, and the protectors.
 
@@ -91,8 +91,8 @@ Learn names these logs for the client side:
 
 1. Do a manual sync first. On the device go to **Settings**, then **Accounts**, then **Access work or school**, select the work account, select **Info**, and under **Device sync status** select **Sync**.
 2. **DeviceManagement-Enterprise-Diagnostics-Provider** (Admin). Filter for Critical, Error and Warning and search for BitLocker. Errors name CSP paths such as `./Device/Vendor/MSFT/BitLocker/RequireDeviceEncryption`.
-3. **BitLocker-API** management log. Learn says it usually shows missing prerequisites such as TPM or WinRE.
-4. The **System** log, with the sources TPMProvisioningService and TPM-WMI, for TPM hardware issues. Check for OEM firmware updates.
+3. **BitLocker-API** management log.
+4. The **System** log, with the sources TPMProvisioningService and TPM-WMI, where Learn says TPM errors appear.
 
 The thread answer named Event ID 853 and a status code 0x8031002c for a DMA bus problem. Learn's client-side page gives no event IDs and does not mention that code. Use the messages in the log first. If one of them says "Un-Allowed DMA capable bus/device(s) detected," follow Learn: confirm with the hardware vendor that the device has no external DMA ports, and add it to the allowed list only if it is an internal DMA interface or bus. The thread answer suggested allowing encryption despite this. That weakens a protection, so do not apply it broadly.
 
@@ -109,7 +109,7 @@ Also compare the applied values. Learn lists the registry keys under `HKLM\SOFTW
 
 ## Step 6: Fix an encryption method mismatch
 
-If a device is encrypted already, for example by the user, MBAM or Configuration Manager, with a different method than the policy (say XTS-AES 128 on the device and 256 in the policy), the report shows an error state. Learn's fix: decrypt the device by hand or with PowerShell. The Intune policy then encrypts it the next time it reaches the device. Plan this carefully for devices with user data.
+If a device is encrypted already, for example manually, with a different method than the policy (say XTS-AES 128 on the device and 256 in the policy), the report shows an error state. Learn's fix: decrypt the device by hand or with PowerShell. The Intune policy then encrypts it the next time it reaches the device. Plan this carefully for devices with user data.
 
 ## Verify
 
