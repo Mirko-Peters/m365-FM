@@ -156,29 +156,32 @@ def u(slug, lang="de", handle="anna"):
 
 
 class BlogPageTests(unittest.TestCase):
-    def test_long_post_without_votes_is_indexed_in_any_language_short_is_not(self):
-        long_body, short_body = "\n\n".join(words(500) for _ in range(6)), words(400)
-        for lang in ("de", "fr", "ja"):
-            pages, sitemap = build_blog([blog_post("lang", lang, body=long_body), blog_post("kurz", lang, body=short_body)])
-            self.assertFalse(pages[u("lang", lang)]["noindex"], lang)
-            self.assertTrue(pages[u("kurz", lang)]["noindex"], lang)
-            self.assertIn(u("lang", lang), [x[0] for x in sitemap])
-            self.assertNotIn(u("kurz", lang), [x[0] for x in sitemap])
+    def test_every_original_post_is_indexed_regardless_of_votes_or_length(self):
+        long_body, short_body = "\n\n".join(words(500) for _ in range(6)), words(40)
+        for lang in ("en", "de", "fr", "ja"):
+            pages, sitemap = build_blog([blog_post("lang", lang, body=long_body), blog_post("kurz", lang, body=short_body, votes=0), blog_post("alt", lang, html="<p>kurz</p>", legacy=True)])
+            for sl in ("lang", "kurz", "alt"):
+                self.assertFalse(pages[u(sl, lang)]["noindex"], (lang, sl))
+                self.assertIn(u(sl, lang), [x[0] for x in sitemap])
 
-    def test_directory_is_indexable_only_with_an_indexable_post(self):
-        pages, sitemap = build_blog([blog_post("kurz", "fr", body=words(300))])
-        self.assertTrue(pages[f"{BASE}/fr/community/blog/"]["noindex"])
-        self.assertTrue(pages[f"{BASE}/fr/community/u/anna/blog/"]["noindex"])
-        pages, sitemap = build_blog([blog_post("kurz", "fr", body=words(300)), blog_post("lang", "fr", body="\n\n".join(words(500) for _ in range(6)))])
+    def test_directory_is_indexable_with_any_original_post(self):
+        pages, sitemap = build_blog([blog_post("kurz", "fr", body=words(40))])
         self.assertFalse(pages[f"{BASE}/fr/community/blog/"]["noindex"])
         self.assertFalse(pages[f"{BASE}/fr/community/u/anna/blog/"]["noindex"])
         self.assertIn(f"{BASE}/fr/community/blog/", [x[0] for x in sitemap])
 
-    def test_votes_rule_and_legacy_html_stay_as_before(self):
-        pages, _ = build_blog([blog_post("stimmen", "de", body=words(50), votes=10), blog_post("alt", "de", html="<p>kurz</p>", legacy=True), blog_post("leer", "de", body=words(50), votes=9)])
-        self.assertFalse(pages[u("stimmen")]["noindex"])
-        self.assertFalse(pages[u("alt")]["noindex"])
-        self.assertTrue(pages[u("leer")]["noindex"])
+    def test_top_block_lists_most_upvoted_and_has_period_tabs(self):
+        posts = [blog_post("a", "de", body=words(40), votes=3, published=100), blog_post("b", "de", body=words(40), votes=7, published=50), blog_post("c", "de", body=words(40), votes=0)]
+        html = BLG.top_block("de", posts, f"{BASE}/de/community/", "https://api.example.test")
+        self.assertLess(html.index("Titel b"), html.index("Titel a"))   # mehr Stimmen zuerst
+        self.assertNotIn("Titel c", html)                              # ohne Stimmen nicht in der Liste
+        for k in ("day", "week", "month", "year", "evergreen"):
+            self.assertIn(f'data-p="{k}"', html)
+        self.assertIn('data-lang="de"', html)
+        # reine Uebersetzungssprache: Stimmen des Originals zaehlen, kein Sprachfilter an der API
+        tr = [blog_post("t", "fr", html="<p>x</p>", votes=4, tr_of="en", tr_index=True, legacy=True)]
+        h2 = BLG.top_block("fr", tr, f"{BASE}/fr/community/", "https://api.example.test")
+        self.assertIn("Titel t", h2); self.assertIn('data-lang=""', h2)
 
     def test_translation_noindex_follows_tr_index_only(self):
         pages, _ = build_blog([blog_post("t1", "fr", html="<p>kurz</p>", tr_of="en", tr_index=False, legacy=True), blog_post("t2", "fr", html="<p>kurz</p>", tr_of="en", tr_index=True, legacy=True)])
