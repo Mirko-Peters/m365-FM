@@ -31,6 +31,7 @@ import site_ads as ADS
 import site_media as MED
 import site_sidebar as SBR
 import site_topweek as TOPW   # Top 10 der Vorwoche (data/top.json): Wochenbezeichnung, ItemList, englische Seite /top/
+import site_meta_podcast as MP   # SEO-Titel und Meta-Descriptions der Podcast-Seiten (suchintent-freundlich, reine Funktionen)
 import site_r2 as R2
 import site_listen as LST   # "Show folgen"-Knopf auf den Folgenseiten und Anhoeren-Karten
 from site_size import sizes, writers
@@ -1153,6 +1154,7 @@ def build():
     if EN_TOP: TOP_REAL.add("en")   # Fusszeile englischer Seiten -> /top/
     # Episoden-Seiten
     DPOS = {l: {i["vid"]: n for n, i in enumerate(seq)} for l, seq in by_lang.items()}   # Stelle jeder Folge in ihrer Sprache (neueste zuerst) fuer Vor/Zurueck
+    MPU = MP.Uniq()   # SEO-Titel der Folgenseiten: je Sprache einmalig
     for (vid, l), it in items.items():
         e = it["e"]; ui = UI[l]
         intro, hdr, bullets, aud = parse_desc(e["desc"])
@@ -1281,8 +1283,9 @@ def build():
 {footer(l)}{community_tags(l, vid, css_async=True)}"""
         if _spr: body = SPM.mark(body, _spr, "episode")   # T37 Sponsor: Links zum Sponsor mit rel="sponsored"
         OG_COVER[canonical] = art_svg(vid, LANGS[l][0], lang=l)
+        _mt = MP.episode_title(l, e["title"], uniq=MPU); _md = MP.episode_desc(l, intro, prefer_answer=True, has_video=True, has_transcript=bool(_trf or tr)) or short(intro)   # Thema zuerst, dann Format und Marke; Description = Kernaussage
         write(f'{l}/{it["slug"]}/index.html',
-              page(l, e["title"], short(intro), canonical, body, alts, ld + _nld, xdefault=alts.get("en"), side=side_for(l, e["title"], body), extra_head=f'<meta property="article:section" content="{esc(cat_name(pc, l))}">' + "".join(f'<meta property="article:tag" content="{esc(t)}">' for t in tagraw[l][vid])))
+              page(l, _mt, _md, canonical, body, alts, ld + _nld, xdefault=alts.get("en"), side=side_for(l, e["title"], body), extra_head=f'<meta property="article:section" content="{esc(cat_name(pc, l))}">' + "".join(f'<meta property="article:tag" content="{esc(t)}">' for t in tagraw[l][vid])))
         sitemap.append((canonical, it["date"], alts))
         if vid in ORIG: ORIG_ALTS.setdefault(ORIG[vid], {})[l] = (canonical, e["title"])
 
@@ -1344,7 +1347,8 @@ def build():
 {section(5, HT(l, "sec_topics"), f'<h2 style="margin-top:0">{esc(HT(l, "topics_h"))}</h2><div class="chips">{cats}</div>')}</main>
 {m365con_band()}
 <main class="wrap"><section id="c-curator"></section><section id="c-sub"></section>{faq_html(l, "FAQ")}{cta_box(HT(l, "cta_h"), HT(l, "cta_p"), HT(l, "cta_btn"), f"{BASE}/show/")}{author_box(l)}</main>{footer(l)}{community_tags(l)}"""
-        write(f"{l}/index.html", page(l, title, d, home, body, alts_home, ld, xdefault=f"{BASE}/", og_type="website"))
+        write(f"{l}/index.html", page(l, title, d, home,   # Titel/Description der Sprach-Startseiten kommen aus data/home_i18n.json (PR Teil C), nicht aus site_meta_podcast.home_meta
+               body, alts_home, ld, xdefault=f"{BASE}/", og_type="website"))
         sitemap.append((home, TODAY, alts_home))
 
     # Wurzel
@@ -1626,7 +1630,8 @@ def build():
 <h2>{esc(ui[3])}</h2><div class="list">{rows_html(lst)}</div>
 <h2>{esc(TOPICS.get(l, "Topics"))}</h2><div class="chips">{others}</div>
 <p style="margin-top:1.6em"><a class="btn" href="{BASE}/{l}/podcast/">{esc(ui[3])} →</a></p></main>{footer(l)}"""
-        return page(l, label, desc, canonical, body, alts, ld, og_type="website", noindex=noindex, side=side_for(l, label, body))
+        _mt, _md = (label, desc) if noindex else MP.category_meta(l, label, len(lst), [x["e"]["title"] for x in lst[:6]])   # Tag-Seiten (noindex) bleiben unveraendert
+        return page(l, _mt, _md, canonical, body, alts, ld, og_type="website", noindex=noindex, side=side_for(l, label, body))
 
     ncat = ntag = 0
     for l in active:
@@ -1650,7 +1655,8 @@ def build():
 <div class="btns">{sub_btns(l)}<a class="btn" href="{BASE}/{l}/">{esc(ui[7])}</a></div></div>{topics_nav(l)}
 <div class="stats"><div><b>{len(_eps)}</b><span>{esc(ui[3])}</span></div><div><b>{len({i["vid"] for i in _eps})}</b><span>Videos</span></div><div><b>{len(active)}</b><span>{esc(HT(l, "st_languages"))}</span></div></div>
 <h2>{esc(ui[3])}</h2><div class="list">{rows_html(_eps)}</div>{author_box(l)}</main>{footer(l)}{community_tags(l)}"""
-        write(f"{l}/podcast/index.html", page(l, _pt, _pd, _pu, _pb, _palts, _pld, og_type="website", side=side_for(l, _pt, _pb)))
+        _mt, _md = MP.podcast_hub_meta(l, _pt, len(_eps))
+        write(f"{l}/podcast/index.html", page(l, _mt, _md, _pu, _pb, _palts, _pld, og_type="website", side=side_for(l, _pt, _pb)))
         sitemap.append((_pu, TODAY, _palts))
         for c in ORDER:
             if c not in catidx[l]:
@@ -1692,7 +1698,8 @@ def build():
 <div class="kicker">★ {esc(LANGS[l][0])}{"" if prov or not _pa else " · " + esc(TOPW.fmt_range(l, _pa, _pb))}</div><h1>{esc(h1)}</h1>{"" if prov else f'<p class="mut">{esc(TOPW.note(l))}</p>'}
 <div class="list">{rows}</div>
 <p style="margin-top:1.6em"><a class="btn" href="{BASE}/{l}/podcast/">{esc(ui[3])} →</a></p></main>{footer(l)}"""
-        write(f"{l}/top/index.html", page(l, f"{label} – M365.FM {LANGS[l][0]}", short(" · ".join(strip_tags(x["e"]["title"]).split(":")[0] for x in t[:3]), 155), u, body, None if prov else alts, ld, og_type="website", noindex=prov, side=side_for(l, label, body), switch=sw_top))
+        _mt, _md = MP.top_meta(l, label, None if prov else h1, [x["e"]["title"] for x in t[:3]])
+        write(f"{l}/top/index.html", page(l, _mt, _md, u, body, None if prov else alts, ld, og_type="website", noindex=prov, side=side_for(l, label, body), switch=sw_top))
         if not prov:
             sitemap.append((u, wk, alts))
         topfeed[l] = [{"rank": n + 1, "title": strip_tags(x["e"]["title"]), "url": url_of(x), "episode": x["eid"]} for n, x in enumerate(t)]

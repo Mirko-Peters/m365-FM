@@ -5,6 +5,7 @@ Daten: data/top.json (sync_spreaker.py, Wochen-Schnappschuss Mo-So, Feld "week" 
 Englische Seiten ohne Sprachpfad liegen auf Wurzelebene wie /press/, /updates/, /accessibility/ -> /top/ (gleicher Pfad wie /de/top/)."""
 import html
 from datetime import date
+import site_meta_podcast as MP   # suchintent-freundliche <title>/meta description
 
 N_TOP = 10      # Eintraege auf der Top-Seite
 N_TEASER = 5    # Eintraege im Teaser (Startseiten der Sprachen)
@@ -152,7 +153,7 @@ def build_en(g, items, topdata, label, alts, switch=None):
 <div class="kicker">★ English{(" · " + esc(fmt_range("en", a, b))) if a else ""}</div><h1>{esc(h1)}</h1><p class="mut">{esc(note("en"))}</p>
 <div class="list">{rows}</div>
 <p style="margin-top:1.6em"><a class="btn" href="{BASE}/show/episodes/">All episodes →</a></p></main>{g["footer"]("en")}"""
-    desc = g["short"](" · ".join(x["e"]["title"].split(":")[0] for x in items[:3]), 155)
-    g["write"](f"{EN_REL}index.html", g["page"]("en", f"{label} – M365.FM", desc, u, body, alts, ld, og_type="website", switch=switch or alts))
+    _mt, desc = MP.top_meta("en", label, h1 if a else None, [x["e"]["title"] for x in items[:3]])
+    g["write"](f"{EN_REL}index.html", g["page"]("en", _mt, desc, u, body, alts, ld, og_type="website", switch=switch or alts))
     feed = [{"rank": n + 1, "title": x["e"]["title"], "url": x["url"], "episode": int(x["sid"]) if str(x.get("sid", "")).isdigit() else x.get("sid")} for n, x in enumerate(items)]
     return u, feed
