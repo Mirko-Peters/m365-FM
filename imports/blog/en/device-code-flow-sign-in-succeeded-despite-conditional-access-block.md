@@ -18,14 +18,14 @@ faq:
   - q: "Why did a device code sign-in succeed if my policy blocks it?"
     a: "Microsoft staff in a 2026 Q&A thread named these checks: the user or app scope, exclusions, report-only mode, and a refresh token that was issued earlier. Open the Conditional Access tab of that sign-in to see what the policy did. The thread never confirmed the actual cause."
   - q: "Does 'Other clients' block device code flow?"
-    a: "Microsoft Learn does not mention it for this flow. The documented control is the Authentication flows condition, so build the block with that condition and do not rely on Other clients."
+    a: "Two replies in the thread suggested checking it, but the Microsoft Learn pages on blocking authentication flows do not mention it. The documented control is the Authentication flows condition, so build the block with that condition and do not rely on Other clients."
   - q: "What should I do right away if an account might be compromised?"
     a: "Microsoft Learn describes disabling the account, revoking sessions, and for hybrid accounts resetting the on-premises password twice. For cloud-only accounts, reset the password and review MFA methods as separate steps."
 ---
 
 Device code flow lets a user sign in on a device that has no browser or keyboard, for example a signage screen. The user types a short code on another device and approves the sign-in there. Attackers use the same flow in phishing. Microsoft recommends blocking it wherever you can.
 
-In April 2026, an administrator posted a question on Microsoft Q&A. A mailbox had been compromised. The Entra logs showed a successful sign-in in March that used the device code protocol. A Conditional Access policy that blocks device code flow for the whole tenant had been active since May 2025. How did the sign-in succeed?
+In April 2026, an administrator posted a question on Microsoft Q&A. A mailbox had been compromised. The Entra logs showed a successful sign-in in March that used the device code protocol. The author said a tenant-wide Conditional Access policy blocking device code flow had been in place since May 2025. How did the sign-in succeed?
 
 Three Microsoft-affiliated contributors answered. No answer was marked as accepted, and the root cause was never confirmed. That is why this article does not present a fix. It shows how to check your own tenant, using the replies and Microsoft Learn. It is not an official Microsoft procedure.
 
@@ -46,7 +46,7 @@ Check how your policy is built. Microsoft Learn describes it like this:
 5. Under **Grant**, choose **Block access**.
 6. Create the policy in **Report-only** mode first. Switch it to **On** after you have checked the impact.
 
-One reply in the thread told the author to confirm that **Other clients** is selected under client apps. That does not match Learn. The Learn pages on this topic never mention Other clients for device code flow. The Authentication flows condition is the documented control. Where the thread and Learn differ, follow Learn.
+Two replies in the thread told the author to confirm that **Other clients** is covered under client apps. The two Learn pages on blocking authentication flows never mention Other clients, and the documented control for device code flow is the Authentication flows condition. Where the thread and Learn differ, follow Learn.
 
 ## Step 2: Open the Conditional Access tab of the sign-in
 
@@ -70,9 +70,9 @@ The audit log of the policy shows when it was changed.
 
 Learn describes a behavior that surprises many administrators. A session that began with device code flow is protocol tracked. The policy applies to that session, and the tracking continues through token refreshes. A later sign-in to a different app in the same session can be blocked even though it did not use device code flow.
 
-This works in the other direction as well. The replies raise a refresh token that existed before the block was in place. The sign-in details show the **Original transfer method** next to the authentication protocol. If the original transfer method is **Device code flow**, the session is protocol tracked. A blocked sign-in of this kind can show error `AADSTS530036`, which Learn ties to refresh tokens invalidated by authentication flow checks.
+This works in the other direction as well. The replies raise a refresh token that existed before the block was in place. The sign-in details show the **Original transfer method** next to the authentication protocol. If the original transfer method is **Device code flow**, the session is protocol tracked. When the policy applies to all applications, a blocked sign-in of this kind can show error `AADSTS530036`, which Learn describes as a refresh token that is invalid because of authentication flow checks by Conditional Access.
 
-Learn does not say in clear words what happens to a token issued before the policy existed. So the question "was there a valid refresh token before the block?" can only be answered from your logs. Look for earlier sign-ins of the same user and session.
+Learn does not say in clear words what happens to a token issued before the policy existed. It only says that, if the policy was disabled or in report-only mode, you may need to get a fresh token to use the device again. So the question "was there a valid refresh token before the block?" can only be answered from your logs. Look for earlier sign-ins of the same user and session.
 
 ## Step 4: Test with What If
 
@@ -94,14 +94,14 @@ Timing matters. Revoking stops new tokens, but an existing access token stays va
 
 ## Step 6: Handle legitimate device code use
 
-Before you switch the policy to **On**, find real users of the flow. In the sign-in logs, filter by authentication protocol device code, or look at the report-only results. Learn gives one example that needs a decision: since September 2024, a policy that targets all resources also applies to the Device Registration Service. If your processes register devices with device code flow, exclude that service in the policy. In the portal, this is under target resources, exclude, then select excluded cloud apps.
+Before you switch the policy to **On**, find real users of the flow. In the sign-in logs, filter by authentication protocol device code, or look at the report-only results. Learn gives one example that needs a decision: since September 2024, a policy that targets all resources also applies to the Device Registration Service. If your processes register devices with device code flow, exclude that service in the policy. In the portal, this is under **Target resources**, **Exclude**, **Select excluded cloud apps**, then **Device Registration Service**.
 
 Learn's own example of a permitted case is a conference room device on a known network. Build such exceptions with extra conditions, and keep the exceptions narrow.
 
 ## Limits of this guide
 
 - The thread never says why the March sign-in worked. Do not copy its conclusion to your tenant.
-- Learn describes protocol tracking but not the handling of tokens that are older than the policy.
+- Learn describes protocol tracking but gives no detail on how tokens that are older than the policy are handled.
 - Service principals are not blocked by user-scoped policies. Learn points to Conditional Access for workload identities for that case.
 
 ## Related

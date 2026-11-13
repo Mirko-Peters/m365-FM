@@ -18,7 +18,7 @@ faq:
   - q: "Does Conditional Access authentication strength control passkey registration?"
     a: "No. An authentication strength decides which methods satisfy a sign-in that a Conditional Access policy protects. Whether a user can register a method is controlled by the Authentication methods policy and, for passkeys, the self-service setup setting."
   - q: "Passkey sign-in fails with 'FIDO sign-in is disabled via policy'. What should I do?"
-    a: "Check the Passkey (FIDO2) target and profile, and compare the AAGUID of the authenticator with your key restrictions. Several people in a community thread reported that the error cleared by itself after 10 minutes to about an hour, or after renaming a passkey profile. Those reports are not confirmed by Microsoft."
+    a: "Check the Passkey (FIDO2) target and profile, and compare the AAGUID of the authenticator with your key restrictions. Two people in a community thread reported that sign-in worked again after about an hour, or after more than 10 minutes together with renaming a passkey profile. Those reports are not confirmed by Microsoft."
   - q: "Can guest users register a passkey in my tenant?"
     a: "No. Microsoft Learn lists passkey registration for internal and external guests, including B2B collaboration users in the resource tenant, as a known limitation."
 ---
@@ -45,7 +45,7 @@ The accepted answer in the first thread lists the same basics: the method is ena
 
 ## Step 2: Check "Allow self-service set up"
 
-Open the **Configure** tab. Microsoft Learn says that **Allow self-service set up** must be **Yes** for users to register passkeys in security info. If it is **No**, nobody can register, even when the method is enabled and targeted. This is a tenant-wide setting, not a per-profile setting.
+Open the **Configure** tab. Microsoft Learn says that **Allow self-service set up** must be **Yes** for users to register passkeys in security info. If it is **No**, users cannot register passkeys in security info, even when the method is enabled and targeted. This is a tenant-wide setting, not a per-profile setting.
 
 ## Step 3: Check who is targeted and who is excluded
 
@@ -76,7 +76,7 @@ Microsoft Learn lists conditions that look like a missing option but are by desi
 
 - **Guest users** cannot register passkeys, including B2B collaboration users in the resource tenant.
 - Users must have completed **MFA within the last five minutes** before they register a passkey. Sign out and back in with MFA, then try again.
-- The device must support FIDO2. Learn names Windows 10 version 1903 or later for Entra joined devices and Windows 10 version 2004 or later for hybrid joined devices. Passkeys in Microsoft Authenticator need a recent app version on iOS or Android.
+- The device must support FIDO2. For the best experience, Learn names Windows 10 version 1903 or later for Entra joined devices and requires Windows 10 version 2004 or later for hybrid joined devices. If a passkey profile for both device-bound and synced passkeys targets Microsoft Authenticator, Learn says users need Authenticator iOS version 6.8.37 or Android version 6.2507.4749.
 - The Passkey (FIDO2) policy has a size limit of 20 KB. When you reach it, you cannot save new profiles.
 - Opting in to passkey profiles cannot be undone. Your existing global settings move into a Default passkey profile, and the tenant allows up to three profiles in total.
 
@@ -90,7 +90,7 @@ Replies over the following year suggested:
 
 1. Confirm the method is enabled and targeted as you intend, and that the AAGUIDs are typed exactly. A typo or extra character is an easy mistake.
 2. Review Conditional Access and authentication strength for conflicts, and test with a clean browser session on an Entra joined device.
-3. Turn the method off, wait a few minutes, turn it on, and wait again. The idea is that the policy had not reached the authentication service.
+3. Turn the method off, wait at least five minutes, turn it on, and wait at least five minutes again. The idea is that the policy had not reached the authentication service.
 4. Wait longer. One person reported that sign-in worked about an hour after the first passkey registration. Another, in a different tenant in May 2026, reported that it worked after more than ten minutes and after renaming a passkey profile, and suggested renaming a profile is gentler than switching passkeys off for all users.
 
 None of these steps is marked as the accepted solution, and Microsoft Learn does not document a propagation time for passkey policy changes. Treat the waiting advice as a field report. Do not switch the whole method off in a production tenant just to test it.

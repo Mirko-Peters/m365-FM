@@ -25,7 +25,7 @@ faq:
 
 An Endpoint DLP policy blocks the copy to USB on one laptop and does nothing on the next. Or it blocks a file on the desktop but lets the same file go when it is opened from a mapped drive. Nothing shows in the policy view that explains it.
 
-This article builds a checklist from four community threads between August 2025 and November 2026 and from the current Microsoft Learn pages. None of the threads ended with a confirmed fix, so this is a way to find the cause in your tenant, not a guaranteed cure. It is not an official Microsoft procedure.
+This article builds a checklist from four community threads started between October 2024 and November 2026 and from the current Microsoft Learn pages. None of the threads ended with a confirmed fix, so this is a way to find the cause in your tenant, not a guaranteed cure. It is not an official Microsoft procedure.
 
 ## The four situations
 
@@ -73,13 +73,13 @@ Learn notes that policies can target users and devices together. If a policy is 
 
 The user versus group difference in the second thread is worth testing. A Microsoft reply asked the poster to confirm that the intended users and devices were part of both the old and the new policy, and to check the per-policy sync status under the DLP policies. The poster reported that local files were blocked afterward.
 
-For shared hosts, such as Azure Virtual Desktop multi-session machines, confirm that each host appears under **Devices**. The fourth thread's author saw no shared hosts in the list, and a personal host that did appear still did not trigger the policy. A moderator could not reproduce it and asked for a support case. Learn lists known limits for virtual environments: copy to clipboard and browser-based enforcement cannot be monitored on Azure Virtual Desktop, and USB storage is reported as a network share.
+For shared hosts, such as Azure Virtual Desktop multi-session machines, confirm that each host appears under **Devices**. The fourth thread's author saw no shared hosts in the list, and a personal host that did appear still did not trigger the policy. A moderator could not reproduce it and asked for a support case. Learn lists known limits for virtual environments: Copy to Clipboard and Endpoint DLP enforcement cannot be monitored on Azure Virtual Desktop through browsers (the same egress is monitored through Remote Desktop sessions), and USB storage is treated as a network share.
 
 ## Step 5: Turn on network share coverage when you need it
 
 In the Endpoint DLP settings, Learn describes the setting **Network share coverage and exclusions**. When it is on, endpoint DLP policies and actions also apply to new and edited files on network shares and mapped network drives. When it is off, files there are not covered.
 
-In the second thread, a Microsoft reply pointed to this setting after the poster reported that files from a file server bypassed the block. The poster turned it on, added exclusions, and still saw files opened from a mapped drive uploaded without a block. No fix was reported. If you are in the same spot, check the Learn prerequisites for this feature, which list minimum Windows cumulative updates and a minimum Defender platform and engine version, and then open a support case.
+In the second thread, a Microsoft reply pointed to this setting after the poster reported that files from a file server bypassed the block. The poster said the setting was already enabled and still saw that a file on a mapped drive was not blocked, while the same file on the desktop was. No fix was reported. If you are in the same spot, check the Learn prerequisites for this feature, which list minimum Windows cumulative updates and a minimum Defender platform and engine version, and then open a support case.
 
 ## Step 6: Check browser and domain restrictions
 

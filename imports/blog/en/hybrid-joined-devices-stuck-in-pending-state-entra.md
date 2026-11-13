@@ -25,7 +25,7 @@ faq:
 
 You roll out Microsoft Entra hybrid join. Entra Connect shows no sync errors. Some devices join and register without trouble. Others sit in the Microsoft Entra admin center with a registration status of **Pending**, sometimes for days, and Conditional Access policies that need a compliant or hybrid joined device keep blocking them.
 
-Several Microsoft Q&A and Tech Community threads between November 2025 and June 2026 describe this. In one, a Microsoft moderator's answer was accepted by the author. In the others, the thread ended without a confirmed fix. This article merges the advice into one order, and checks the key points against Microsoft Learn. It is a troubleshooting guide, not an official Microsoft procedure.
+Several Microsoft Q&A and Tech Community threads between July 2025 and June 2026 describe this. In one, a Microsoft moderator's answer was accepted by the author. In the others, the thread ended without a confirmed fix. This article merges the advice into one order, and checks the key points against Microsoft Learn. It is a troubleshooting guide, not an official Microsoft procedure.
 
 ## What the symptoms look like
 
@@ -37,7 +37,7 @@ Several Microsoft Q&A and Tech Community threads between November 2025 and June 
 
 ## What Pending means
 
-Microsoft Learn explains the state in its page on pending devices. The hybrid join task creates the device object in Entra ID first, and the device has to finish registration afterwards. Until then the state is Pending. A pending device cannot get a Primary Refresh Token and cannot meet device-based Conditional Access. This is why the effect is felt at sign-in, not at the join.
+Microsoft Learn explains the state in its page on pending devices. Entra Connect Sync creates the device object in Entra ID first and temporarily sets its registered state to Pending, and the device has to finish registration afterwards. Until then the state stays Pending. A pending device cannot get a Primary Refresh Token and cannot meet device-based Conditional Access. This is why the effect is felt at sign-in, not at the join.
 
 ## Step 1: Read the state on one affected device
 
@@ -53,11 +53,11 @@ Learn's hybrid join troubleshooting page tells you to read these values:
 |---|---|
 | `DomainJoined` | YES. Without it, hybrid join cannot happen. |
 | `AzureAdJoined` | YES when the join is finished. NO means it did not complete. |
-| `WorkplaceJoined` | NO. YES means a work account was added before the join finished. |
+| `WorkplaceJoined` | NO for a domain joined computer that is also hybrid joined. |
 
-If the join failed, Windows 10 version 1803 and later show a **Previous Registration** section under **Diagnostic Data**, with the error phase, client error code and server error code. The phase is one of pre-check, discover, auth or join. Elevated output also shows pre-join tests for AD connectivity, AD configuration, DRS discovery and DRS connectivity. On older builds, the same information is in **Event Viewer**, **Applications and Services Logs**, **Microsoft**, **Windows**, **User Device Registration**, **Admin**. Look for events 304, 305 and 307.
+If the device is domain joined but the hybrid join failed, Windows 10 version 1803 and later show a **Previous Registration** section under **Diagnostic Data**, with the error phase, client error code and server error code. Learn names the phases Precheck, Discover, Authentication and Join. The same section lists test results for AD connectivity, AD configuration, DRS discovery and DRS connectivity. More detail is in **Event Viewer**, under **Applications and Services Logs**, **Microsoft**, **Windows**, **User Device Registration**. For join failures, Learn points to events 304, 305 and 307. A March 2026 reply names the **Admin** log under that node.
 
-In a 2026 thread, the helper first asked for `DeviceAuthStatus` and `AzureAdPrt`. Learn lists `DeviceAuthStatus` as a field for joined devices, with the values SUCCESS or a failure text, and `AzureAdPrt` in the SSO state. Run the command in the user's context for the second one.
+In the March and June 2026 threads, the moderators first asked for `DeviceAuthStatus` and, in June, also `AzureAdPrt`. Learn lists `DeviceAuthStatus` as a field for joined devices, with the values SUCCESS or a failure text, and `AzureAdPrt` in the SSO state. Run the command in the user's context for the second one.
 
 ## Step 2: Check the service connection point
 
@@ -85,7 +85,7 @@ Two causes look alike and need different checks.
 
 **A new device that never registers.** Check the sync of the device object, and check whether the Active Directory OU is inside the Entra Connect sync scope. The thread replies add the group policy for automatic registration and, if you also use Intune enrollment, the policy for automatic MDM enrollment as items to verify. One reply also names missing Intune licenses as a reason why devices stay registered but never enroll. Learn does not cover these two points on the pages used here.
 
-**A device that moved out of scope and back.** Learn describes this sequence in detail. The device moves to an OU that sync does not include, sync deletes the Entra device, the device returns to an in-scope OU, and sync creates a new pending object. Registration fails because the device had registered before. The same happens if you delete only the Entra device object of a hybrid joined Windows 10 or later device. Entra Connect creates it again as a new pending object, and the device must register again.
+**A device that moved out of scope and back.** Learn describes this sequence in detail. The device moves to an OU that sync does not include, sync deletes the Entra device, the device returns to an in-scope OU, and sync creates a new pending object. Registration fails because the device had registered before. Learn does not describe what happens when you delete only the Entra device object while the on-premises object stays in scope.
 
 ## Step 5: Reset the registration on the device
 
