@@ -7,13 +7,13 @@ author: mirko-p
 date: 2026-11-13
 topics: [entra-id, microsoft-365-admin-center, microsoft-365-administrator]
 keypoints:
-  - "The group-level message can be misleading. Open the product's Errors and issues tab and read the error of one affected user."
+  - "The group-level message can be misleading. Open the product's Errors & issues tab and read the error of one affected user."
   - "Common causes from Microsoft Learn are too few licenses, conflicting service plans, a missing usage location, duplicate proxy addresses and missing prerequisite products."
   - "After you fix the cause, select Reprocess. The portal handles up to 20 users at a time."
   - "Nested groups are not supported. Only direct members of the licensed group receive the license."
 faq:
   - q: "Where do I see why a user did not get the license from the group?"
-    a: "In the Microsoft 365 admin center, open Billing, then Licenses, select the product and open the Errors and issues tab. Select a user to see the error type. In the Entra admin center you can also open Billing, Licenses, Overview and follow the notice about groups with errors."
+    a: "In the Microsoft 365 admin center, open Billing, then Licenses, select the product and open the Errors & issues tab. Select a user to see the error type. In the Entra admin center you can also open Billing, Licenses, Overview and follow the notice about groups with errors."
   - q: "What happens if a user has no usage location?"
     a: "Microsoft Learn says users without a usage location inherit the location of the tenant. A usage location that is missing or not allowed for the product is a listed cause of assignment errors. In tenants that span several countries, set the location when you create the user."
   - q: "How many users can I reprocess at once?"
@@ -22,7 +22,7 @@ faq:
     a: "No. Learn says nested groups are not supported for group-based licensing. If a licensed group contains other groups, only the users in the first level of the group get the license."
 ---
 
-You add nine people to a group that carries a Microsoft 365 license. Within the hour, the group shows an error and some users have no license. The message says the subscription has no available licenses, although you can see unused ones. A brand-new test group with one user works.
+You add nine people to an existing group that carries a Microsoft 365 license. The assignment fails with the message "Subscription does not have any available licenses," although you believe you have enough licenses. A brand-new test group with one user works.
 
 An October 2026 Microsoft Q&A thread describes exactly this. It had no accepted answer, but the moderator's checklist matches the current Microsoft Learn error reference. This article uses both. It is a troubleshooting guide, not an official Microsoft procedure. Confirm the names and paths in your portal.
 
@@ -76,10 +76,10 @@ An automatically generated answer in the same thread added more ideas, such as c
 
 Work on the cause, not on the group.
 
-- For location errors, open the user in **Users**, **Active users** and set the usage location. For many users, plan a scripted update and test it on a few accounts first.
+- For location errors, set the usage location on each affected user. Learn names the fix but does not give a portal path for it here. For many users, plan a scripted update and test it on a few accounts first.
 - For conflicts with direct licenses, remove the direct license that the group now provides. Check first that the group license contains everything the user needs, so that the user does not lose a service.
 - For duplicate proxy addresses, find the object that holds the same address and correct the source. Learn also says license assignment can trigger a recalculation of the `mail` and `proxyAddresses` attributes, so review where those values come from in your directory.
-- For licensing shortages, check that the right product has capacity. The Licenses overview and the **Your products** page can group similar products differently, and the AI answer in the thread hinted at this. I could not confirm it from Learn, so compare both pages if the numbers look odd.
+- For licensing shortages, check that the right product has capacity. The AI-generated answer in the thread claimed that the Licenses overview and the **Your products** page can group similar products differently. I could not confirm this from Learn, so treat it as an unverified hint and compare both pages if the numbers look odd.
 
 ## Step 5: Reprocess
 

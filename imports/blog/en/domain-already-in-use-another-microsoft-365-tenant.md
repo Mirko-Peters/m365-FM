@@ -10,16 +10,16 @@ keypoints:
   - "A custom domain can be verified in only one Microsoft Entra directory at a time, so it must leave the old one before your new tenant can add it."
   - "If you can sign in as Global Administrator of the old tenant, remove the domain there after moving every user, group and alias off it."
   - "If the old directory is unmanaged, Entra offers an internal or an external admin takeover. External takeover does not work for SharePoint, OneDrive or Skype for Business plans."
-  - "If neither works, ask Microsoft Support from any admin center and be ready to prove domain ownership with a DNS TXT record."
+  - "If neither works, ask Microsoft Support from the admin center of a tenant you control and be ready to prove domain ownership with a DNS TXT record."
 faq:
   - q: "Why does Microsoft 365 say my domain is already added to a different organization?"
-    a: "The domain is verified in another Microsoft Entra directory. A domain can be verified in only one directory at a time. That directory can be an old tenant of yours, a tenant a reseller created, or an unmanaged directory created by a self-service sign-up with an address on your domain."
+    a: "The domain is verified in another Microsoft Entra directory. A domain can be verified in only one directory at a time. That directory can be an old tenant of yours or an unmanaged directory created by a self-service sign-up with an address on your domain."
   - q: "What is the difference between internal and external admin takeover?"
     a: "Microsoft Learn describes internal takeover as becoming Global Administrator of the unmanaged directory itself. External takeover moves the domain, with its users and licenses, into a directory you already manage. External takeover does not support plans that include SharePoint, OneDrive or Skype for Business."
   - q: "Can I remove a domain while users or groups still use it?"
     a: "No. Microsoft Learn lists the checks: the domain must not be the default domain, and no users, shared or resource mailboxes, contacts, groups, distribution lists, teams or admin sign-ins may use it. Removal can take minutes or up to a day when many objects reference the domain."
   - q: "What do I do if I have no admin access to the old tenant?"
-    a: "Use the takeover paths if the directory is unmanaged. Otherwise open a support request from the Microsoft 365 admin center of another tenant, and prove ownership of the domain. Moderators in several 2026 threads also described opening the request from a short trial tenant if you have no other one."
+    a: "Use the takeover paths if the directory is unmanaged. Otherwise open a support request from the Microsoft 365 admin center of another tenant, and prove ownership of the domain. Moderators in two 2026 threads also described opening the request from a short trial tenant if you have no other one."
 ---
 
 A small company buys a domain and a Microsoft 365 plan. When the admin adds the domain, the portal says it is already added to a different Microsoft 365 organization. The old tenant may belong to a former IT provider, to a hosting package, or to nobody the company remembers. There is no admin to ask.
@@ -28,13 +28,13 @@ At least five Microsoft Q&A threads from April to November 2026 describe this, a
 
 ## What the symptoms look like
 
-- The portal rejects the domain with a message that it is already added to a different organization, even though domain ownership is confirmed.
+- The portal rejects the domain with a message that it is already added to a different organization.
 - You cannot find the old tenant, or you find it but have no Global Administrator.
 - Or the opposite: you are the admin, but removing the domain fails because one object still references it.
 
 ## Step 1: Understand the rule
 
-Microsoft Entra cannot hold the same verified domain in two directories. Microsoft Learn says you cannot add a domain that another Entra directory has already verified. A moderator in a 2026 thread put it simply: the domain must leave the old tenant before the new one can take it.
+Microsoft Entra cannot hold the same verified domain in two directories. Learn says a domain can be verified in only one directory, so a domain verified in another directory cannot also be verified in the new one, and you must delete it from the old directory. A moderator in a 2026 thread put it simply: the domain must leave the old tenant before the new one can take it.
 
 Your task is therefore not to "force" the new tenant. It is to free the domain from the old one.
 
@@ -46,7 +46,7 @@ Ask three questions:
 2. Was the old directory created by someone signing up with an address on your domain, with no admin ever assigned? That is an unmanaged directory. Go to **Path B**.
 3. Is it a normal managed tenant and nobody can get in? Go to **Path C**.
 
-You may not know the answer to question 2. Learn describes unmanaged directories as the result of self-service or "viral" sign-up. In one thread, the old tenant had been created automatically, had no licenses or mailboxes, and held only guest accounts. The moderator pointed to admin takeover. That was a recommendation, and the asker never confirmed the result.
+You may not know the answer to question 2. Learn describes unmanaged directories as the result of a self-service user signing up for a cloud service with an address on the domain. In one thread, the old tenant had been created automatically, had no licenses or mailboxes, and held only guest accounts. The moderator pointed to admin takeover. That was a recommendation, and the asker never confirmed the result.
 
 ## Path A: Remove the domain in the old tenant
 
@@ -64,7 +64,7 @@ If removal says an object is still using the domain, but you cannot find it, one
 
 Learn describes two takeover methods. Both need a DNS TXT record that proves you own the domain.
 
-**Internal takeover** makes you Global Administrator of the unmanaged directory. Learn calls it the only option for products with SharePoint or OneDrive, such as Microsoft 365. The outline is:
+**Internal takeover** makes you Global Administrator of the unmanaged directory. Learn lists it as the method that supports Microsoft 365 products with SharePoint and OneDrive. External takeover excludes them. The outline is:
 
 1. Sign up for Power BI with a user on your domain and enter the verification code.
 2. Confirm the request in the email that Power BI sends.
@@ -101,7 +101,7 @@ Check licenses and mailboxes before the change, so that no mail is lost.
 ## Limits and open points
 
 - No thread had an accepted solution. The paths come from the Learn pages and the moderators' advice.
-- I could not open the Learn domains FAQ while writing this. Check it for the current wording of the error message.
+- This article does not cite the Learn domains FAQ. Check it for the current wording of the error message.
 - The takeover article was updated in June 2026 and the removal article in April 2026. Names of portal elements may move.
 - Removing a domain changes email addresses. Plan the cutover with the people who send and receive mail.
 

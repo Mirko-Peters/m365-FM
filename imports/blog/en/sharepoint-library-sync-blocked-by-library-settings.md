@@ -8,9 +8,9 @@ date: 2026-11-13
 topics: [sharepoint, onedrive, onedrive-sync-engine, sharepoint-document-libraries]
 keypoints:
   - "Require Check Out, required columns, Draft Item Security and content approval can stop a library from syncing, or make it sync as read-only."
-  - "Microsoft Learn also says that guest or external accounts cannot sync a library. Sign in with an internal account."
+  - "The Learn troubleshooting article lists guest or external accounts as a cause and says to sign in with an internal account. A newer Microsoft Support page says OneDrive supports guest sync under B2B sync requirements."
   - "Changing these settings affects everyone who uses the library. Ask the owner and weigh the loss of approval or metadata rules."
-  - "If the settings must stay, use the browser, Open in app or Teams for that library instead of the sync client."
+  - "If the settings must stay, a moderator in one thread advised using the browser for that library instead of the sync client."
 faq:
   - q: "What does 'Sorry, OneDrive can't add your folder right now' mean?"
     a: "Microsoft Learn ties this error to library settings, not to a broken client. The listed causes are Require Check Out turned on, required columns, Draft Item Security set to only users who can edit items, and syncing with a guest or external account."
@@ -30,7 +30,7 @@ This article collects what three Microsoft Q&A threads from March and July 2026 
 
 - The error "Sorry, OneDrive can't add your folder right now" appears when you try to sync a library or team site.
 - A library that did sync shows a lock icon, and files are read-only in File Explorer.
-- Files open and save normally in the browser or with **Open in app**.
+- Files open and save normally in the browser.
 - Other people who sync the same library have the same problem.
 
 The last point matters. If only one user is affected, look at the user, the account and the client. If several users are affected, look at the library.
@@ -39,15 +39,15 @@ The last point matters. If only one user is affected, look at the user, the acco
 
 Do these quick checks first.
 
-1. Check which account the person used. Microsoft Learn states that syncing with an external or guest account is not supported. In one thread, a commenter reported that some external accounts still failed after the library settings were changed. Use an internal account.
-2. Check permissions. In one thread, an administrator first looked at the Contribute permission level, because a user could not move files. That was a separate permissions problem and not the cause of the read-only sync.
-3. Reset the sync relationship. In the OneDrive app, open **Settings**, then **Account**, and stop syncing the library. Start the sync again from the library page. One moderator suggested this as a first step.
+1. Check which account the person used. The Learn troubleshooting article states that syncing with an external or guest account is not supported and says to use an internal account. A newer Microsoft Support page on restrictions says OneDrive supports syncing as an external or guest user and points to its B2B sync requirements, so the two pages differ. In one thread, a commenter reported that some external accounts still failed after the library settings were changed.
+2. Check permissions. In the content approval thread, a moderator asked the asker to check the Contribute permission level. The asker's file-move error was a separate permissions problem, solved with a custom permission level, and it was not the cause of the read-only sync.
+3. Reset the sync relationship. Stop syncing the library in the OneDrive app and start the sync again from the library page. A moderator in the content approval thread suggested stopping and re-syncing as a first step. Learn does not describe this step.
 
 If all of this changes nothing, move on to the library.
 
 ## Step 2: Open the library settings
 
-You need at least the site owner role. Learn describes the path in the classic library view: open the settings (gear) menu, turn on the ribbon if needed, select the **Library** tab, then **Library Settings**, then **Versioning Settings**. In the modern view, **Library settings** and **More library settings** lead to the same pages.
+Changing library settings needs rights to manage the library. The Learn pages name no specific role, and the Support page says to get the library owner's approval first. Learn describes the path in the classic library view: open the settings (gear) menu, turn on the ribbon if needed, select the **Library** tab, then **Library Settings**, then **Versioning Settings**. In the modern view, a moderator in the "can't add your folder" thread named **Library settings**, then **More library settings**, then **Versioning settings**.
 
 Write down the current values before you change anything. You will want to restore them if the change does not help.
 
@@ -75,9 +75,8 @@ The asker tested this and confirmed two things:
 
 So you trade one feature for the other. Before you switch it off, decide whether the team really needs approval in that library. If yes, you have three options:
 
-- Keep approval and ask users to work in the browser or with **Open in app**.
-- Split the library. Keep the approval library without sync and give editing teams a second library without approval.
-- Move approval into a flow or a review step that does not rely on the library setting. This takes more planning, and I did not find it in the thread or on Learn, so test it first.
+- Keep approval and ask users to work in the browser.
+- Split the library. Keep the approval library without sync and give editing teams a second library without approval. This is my own suggestion, not from Learn or the thread, so test it first.
 
 ## Step 5: Restart the sync
 
@@ -87,14 +86,14 @@ After you change the settings:
 2. If the library is still marked, stop syncing it from the app and start it again from the library page.
 3. Give large libraries time to finish before you judge the result.
 
-Learn describes the changes as library-wide. They affect everyone who uses the library, so tell the users and the owner first. Learn also warns against removing controls your organization needs just to get sync working.
+Learn describes the changes as library-wide. They affect everyone who uses the library, so tell the users and the owner first. Learn also says to confirm these changes with the library owner first.
 
 ## Step 6: If it still fails
 
 Try the points below, in this order:
 
 1. Check for a mix of sync and shortcut. In a July 2026 thread, files from a library did not show up in OneDrive for several users. A community answer said to remove the sync and any shortcut to the same library, wait until it vanished from File Explorer and the web, and then use only one method. The thread did not confirm that this fixed the problem, so use it as a test.
-2. Check whether many users are affected. The moderator in that thread advised opening a support case with the tenant's admin when the issue is tenant-wide.
+2. Check whether many users are affected. A moderator in that thread advised that a Global Admin open a service request when the issue affects users across the tenant.
 3. Collect the exact error text, the account type and the library settings. Support will ask for them.
 
 A commenter on the "can't add your folder" thread, who had the issue for external accounts, was told to open a new question. That is a good reminder: a different root cause can produce the same message.

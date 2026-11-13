@@ -17,7 +17,7 @@ faq:
   - q: "Why can a guest still chat, call and join meetings?"
     a: "A guest has an account in your directory. Teams treats that account like an internal user for these actions. If you do not want this, turn off Teams guest access, restrict invitations in Microsoft Entra, or remove guest accounts you no longer need."
   - q: "Should I turn off the organization-wide setting 'Anonymous users can join a meeting'?"
-    a: "Microsoft Learn recommends leaving the org-wide setting On and controlling anonymous join through the user-level meeting policy of the same name. Learn also says the org-wide setting will be removed in the future. One answer in the community thread advised turning it off, so this is a point where the documentation and the thread differ."
+    a: "Microsoft Learn recommends leaving the org-wide setting On and controlling anonymous join through the user-level meeting policy of the same name. Learn also says the org-wide setting will be removed in the future. The first moderator answer in the community thread advised turning it off, but a later answer from the same moderator says to keep it On, in line with Learn."
   - q: "How do I block one specific external person?"
     a: "In the Teams admin center, open Users, then External access, turn on 'Block specific users from communicating with people in my organization', select Block a user and enter the address. Microsoft Learn lists a limit of 200 blocked users."
 ---
@@ -39,7 +39,7 @@ Teams has four layers that people often mix up. Each has its own setting.
 
 | Layer | What it controls | Where it lives |
 |---|---|---|
-| External access (federation) | Chat and calls between your org and other Microsoft 365 organizations, plus unmanaged Teams and Skype accounts | Teams admin center, **Users**, **External access** |
+| External access (federation) | Chat and calls between your org and other Microsoft 365 organizations, set by domain. Unmanaged Teams accounts and Skype users have their own settings on the same page | Teams admin center, **Users**, **External access** |
 | Guest access | Outside people who have an account in your directory and belong to your teams | Teams admin center, guest access settings, and Microsoft Entra |
 | Meeting join policies | Which external meetings your users may join, and who may join yours | Teams admin center, **Meetings**, **Meeting policies**, **Meeting join & lobby** |
 | Lobby | Who enters a meeting directly and who waits | Same policy page, **Who can bypass the lobby** |
@@ -61,7 +61,7 @@ Do not test this by joining a meeting. Test it by starting a chat with an addres
 
 ## Step 2: Limit which external meetings your users can join
 
-Open **Meetings**, then **Meeting policies**, and select the policy that your users have. Under **Meeting join & lobby**, find **People can join external meetings hosted by**. Learn gives the default as Anyone. The moderator in the thread suggested setting it to **No one** to stop users from joining outside meetings. Learn does not list the other values on the page I read, so check the drop-down in your tenant for the exact choices.
+Open **Meetings**, then **Meeting policies**, and select the policy that your users have. Under **Meeting join & lobby**, find **People can join external meetings hosted by**. Learn gives the default as Anyone. The moderator in the thread suggested setting it to **No one** to stop users from joining outside meetings. In a later answer the moderator added that this applies only to signed-in users: anonymous joining stays possible if the external organizer allows it. Learn does not list the other values on the page I read, so check the drop-down in your tenant for the exact choices.
 
 Remember that policies are assigned per user. Check the policy assignment for the people you test with, not only the Global policy.
 
@@ -72,7 +72,7 @@ Anonymous join has two switches:
 - **Anonymous users can join a meeting** in the meeting policy. Learn says it is On by default and includes people from organizations that are not on your allowed list.
 - **Anonymous users can join a meeting** in the org-wide settings: **Meetings**, **Meeting settings**, **Participants**. Learn says that if this is Off, no anonymous user can join any meeting, regardless of the policy.
 
-Here the documentation and the thread differ. The thread advised turning the org-wide setting off. Learn recommends leaving it On, says it will be removed in the future, and points to the user-level policy instead. Follow Learn and use the policy. If you only want to make anonymous attendees wait, set **Who can bypass the lobby** to **People in my organization**, so outsiders go to the lobby.
+Here the thread contradicts itself. The first moderator answer advised turning the org-wide setting off. A later answer from the same moderator, and Learn, recommend leaving it On. Learn says the org-wide setting will be removed in the future and points to the user-level policy instead. Follow Learn and use the policy. If you only want to make anonymous attendees wait, narrow **Who can bypass the lobby**. The thread names **People in my organization**, while Learn gives the default as **People in my org and guests**, so check the exact labels in the drop-down.
 
 Also note that **Anonymous users and dial-in callers can start a meeting** is Off by default. Leave it Off.
 
@@ -93,7 +93,7 @@ If you only need to stop a few contacts:
 1. In **Users**, **External access**, turn on **Block specific users from communicating with people in my organization**.
 2. Select **Block a user**, enter the email address and select **Apply**. Learn lists a limit of 200 users and says existing one-to-one and group chats with a blocked user are removed.
 
-For domains, Learn describes an option named **Allow my security team to manage blocked domains**. When it is on, the blocked-domain list moves to the Tenant Allow/Block Lists in the Microsoft Defender portal. Learn names the **Teams domains** tab there. The moderator in the thread called it **Teams senders**, so trust the label you see. The Learn page I read, last updated in November 2025, marked this feature as public preview and required Defender for Office 365 Plan 1 or 2. Check whether that is still true. In the thread, the missing **Block specific users** option on the External access page turned out to be a side effect of having this security-team option switched on, so check it first if that option is gone.
+For domains, Learn describes an option named **Allow my security team to manage blocked domains**. When it is on, the blocked-domain list moves to the Tenant Allow/Block Lists in the Microsoft Defender portal. Learn names the **Teams domains** tab there. The moderator in the thread called it **Teams senders**, so trust the label you see. The Learn page I read, last updated in November 2025, marked this feature as public preview and required Defender for Office 365 Plan 1 or 2. Check whether that is still true. The moderator in the thread explained that the missing **Block specific users** option on the External access page was a side effect of having this security-team option switched on. Learn does not state this, so check the option first if the Block specific users setting is gone.
 
 ## Step 6: Retest
 
@@ -102,7 +102,7 @@ The moderator in the thread suggested waiting up to 24 hours for policy changes.
 ## Limits and open points
 
 - The thread ended with the asker saying the explanation gave clarity. No answer was formally marked as accepted.
-- External access settings do not cover GCC, GCC High and DoD for unmanaged Teams and Skype communication, according to Learn.
+- Learn says that communication with unmanaged Teams accounts and Skype users is not available in GCC, GCC High, DoD or private cloud deployments.
 - The other organization must also allow external access. Without that, its users are treated as anonymous in your meetings.
 - Blocking the meeting join policy affects every user on that policy. Plan a pilot group first.
 
