@@ -343,6 +343,27 @@ def long_for(e, lang):
     return lt, bool(lt.strip())
 
 
+LONG_INDEX_MIN = 2500   # Mirko 13.11.2026: hat die Beschreibung (Langtext) in DIESER Sprache mehr als 2500 Zeichen, steht die Seite auf index, egal welche Sprache
+_LONG_IDX = {}
+
+
+def native_long(e, lang):
+    """Langtext genau in lang (ohne Rueckfall auf Englisch/Deutsch, ohne Event-Text): redaktionell, sonst Ueberblick aus data/entity_texts, sonst KI-Uebersetzung."""
+    L = e.get("long") or {}
+    own = "" if FD.is_ai(e, "long", lang) else (L.get(lang) or "")
+    return own or (GENTEXT.get(e["id"]) or {}).get(lang) or FD.long_text(e, lang) or ""
+
+
+def long_index_langs(e):
+    """Sprachen, in denen die Seite wegen eines langen eigenen Textes (> LONG_INDEX_MIN Zeichen) indexiert wird. Der angezeigte Text muss der eigene Text der Sprache sein
+    (kein Englisch-Rueckfall auf einer fr-Seite), sonst gaebe es ein Duplikat in falscher Sprache."""
+    r = _LONG_IDX.get(e["id"])
+    if r is None:
+        r = _LONG_IDX[e["id"]] = [l for l in COMM_LANGS
+                                  if len(native_long(e, l).strip()) > LONG_INDEX_MIN and long_for(e, l)[0].strip() == native_long(e, l).strip()]
+    return r
+
+
 def ent_ld(BASE, e, lang, glossary_set=None, person_aka=None):
     """Schema.org-Knoten einer Entitaet (sprachneutrale @id)."""
     person_aka = person_aka or {}
@@ -922,7 +943,11 @@ def build(g, wiki_links, experts_by_ent, ep_find):
                 _real = (len(FD.desc_en(e)) > 80 and not e.get("speaker")) or bool((e.get("long") or {}).get("en")) or bool(FD.long_text(e, "en"))
                 _thin = not _real and _app < 2 and not SQ.BY_PERSON.get(e["id"])   # eigene Zitate sind echter Inhalt
             _alts = {"en": eurl(BASE, "en", e["id"]), "de": eurl(BASE, "de", e["id"])} if _has_de and not _thin else None
-            _noidx = lang not in ("en", "de") or (lang == "de" and not _has_de) or _thin
+            _lx = long_index_langs(e)   # Sprachen mit Beschreibung > 2500 Zeichen (jede Sprache): index + hreflang
+            _xl = [l for l in _lx if l not in ("en", "de")]
+            if _xl:
+                _alts = {**(_alts or {"en": eurl(BASE, "en", e["id"])}), **{l: eurl(BASE, l, e["id"]) for l in _xl}}
+            _noidx = False if lang in _lx else (lang not in ("en", "de") or (lang == "de" and not _has_de) or _thin)
             _feedu = f"{BASE}/entity/{e['id']}/feed.xml"
             if lang == "en" and (_arts or eps):   # Themen-Feed: neueste Artikel und Folgen zu dieser Entitaet (fuer Leser und Agenten)
                 from xml.sax.saxutils import escape as _x
@@ -940,7 +965,7 @@ def build(g, wiki_links, experts_by_ent, ep_find):
             ld = ld + _qld   # Quotation-Knoten der Person
             _side = g["side"](lang, f'{e["name"]} {d} {_lt[:1500]}', ids=[x for v in groups.values() for x in v], exclude=(e["id"],)) if g.get("side") else ""   # Sidebar wie auf allen Inhaltsseiten; Themen = verwandte Entitaeten
             _mt, _md = MM.entity_meta(lang, e, d, n_eps=len(eps), flags=_nf[e["id"]], type_label=tlab(lang, e["type"]))   # Suchabsicht: "Was ist X?" / "Wer ist X?" statt "X – Typ"
-            _w(f"{rel}/{e['id']}/index.html", page(lang, _mt, _md, u, b, _alts if lang in ("en", "de") else None, ld, xdefault=eurl(BASE, "en", e["id"]), og_type="website", extra_head=LCSS + css + _fhead, noindex=_noidx, side=_side))
+            _w(f"{rel}/{e['id']}/index.html", page(lang, _mt, _md, u, b, _alts if (lang in ("en", "de") or lang in _xl) else None, ld, xdefault=eurl(BASE, "en", e["id"]), og_type="website", extra_head=LCSS + css + _fhead, noindex=_noidx, side=_side))
             if not _noidx: sitemap.append((u, _mod, _alts))
 
 
