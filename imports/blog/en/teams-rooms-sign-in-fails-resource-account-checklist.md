@@ -33,7 +33,7 @@ According to Learn, a Teams Rooms device signs in to Exchange (Online or Server)
 
 That split helps you read the symptoms:
 
-- The console shows a banner that sign-in fails. Meetings are not listed, or the room name is missing. Learn says this usually means an Exchange sign-in failure.
+- The console shows a banner that sign-in fails. Meetings are not listed. Learn says this usually means an Exchange sign-in failure. Learn also lists a missing room display name as a symptom, but gives no cause for it.
 - Meetings are listed, but the **Join** button is not available and you cannot start an unscheduled meeting. Learn says this usually means a Teams sign-in failure.
 
 ## Step 1: Read Event ID 2001

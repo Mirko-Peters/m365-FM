@@ -10,11 +10,11 @@ keypoints:
   - "First decide the route: Server 2019 and later have the sensor built in, while Server 2016 and 2012 R2 need the unified solution. Azure and Azure Arc servers can be onboarded through Defender for Cloud."
   - "Learn lists prerequisites for 2016 and 2012 R2: SSU from September 14, 2021 or later, LCU from September 20, 2018 or later, and Defender Antivirus installed and up to date."
   - "Use sc.exe query sense, the WDATPOnboarding events and the SENSE Operational log to find out where onboarding stops."
-  - "Error 577 or 1058 when starting the service points to a Defender Antivirus conflict. Learn says to clear DisableAntiSpyware and DisableAntiVirus and run onboarding again."
-  - "None of the four community threads reported a confirmed fix. Use them as symptoms, and trust the Learn pages for the steps."
+  - "Error 577 or 1058 when starting the service points to a Defender Antivirus conflict. For devices without the August 2020 antivirus platform update, Learn says to clear DisableAntiSpyware and DisableAntiVirus and run onboarding again."
+  - "None of the four community threads reported a fix confirmed by the asker. Use them as symptoms, and trust the Learn pages for the steps."
 faq:
   - q: "Which route do I use for Windows Server 2016?"
-    a: "Microsoft Learn describes the modern unified solution for Windows Server 2016 and 2012 R2. Server 2016 already has Microsoft Defender Antivirus built in and installs the EDR sensor. Learn also says that Defender Antivirus must be installed as a feature and fully updated before installation. The older Microsoft Monitoring Agent route still appears in the Learn pages for servers that were never upgraded to the unified solution."
+    a: "Microsoft Learn describes the modern unified solution for Windows Server 2016 and 2012 R2. Server 2016 already has Microsoft Defender Antivirus built in and installs the EDR sensor. Learn also says that Defender Antivirus must be installed as a feature and fully updated before installation. The older Microsoft Monitoring Agent route (used before April 2022) still appears in the Learn pages for servers that were never upgraded to the unified solution."
   - q: "What does the status Can be onboarded mean?"
     a: "Learn's device inventory page uses the filter Onboarding status > Can be onboarded to find discovered devices that are ready for agent deployment. A server that stays in this state is visible to the portal but the sensor is not reporting. Learn does not give a longer definition, so check the sensor on the server."
   - q: "Is KB5005292 required?"
@@ -32,7 +32,7 @@ The threads, with what they actually contain:
 - **July 2026:** an on-premises domain controller on Server 2022 stayed at **Can be onboarded** after several offboard and onboard cycles and a temporary allow-all outbound rule. The only answer was AI generated. No result was reported.
 - **2023 to 2024:** the extension failed with `vNext/Unified agent installation failed` on many Server 2016 machines. One answer blamed a Group Policy that disabled Defender Antivirus. The asker said the value was not set in their case.
 
-So there is no confirmed fix in any of them. They are useful as symptom descriptions.
+None has a confirmed fix, so they only serve as symptom descriptions.
 
 ## Step 1: Decide which route the server should use
 
@@ -43,7 +43,7 @@ Learn names these routes:
 
 Learn also says Windows Server 2019 and later have Defender Antivirus and the EDR sensor built in. Server 2012 R2 installs both. Server 2016 has Defender Antivirus built in and installs the EDR sensor.
 
-Pick one route per server. If a server is already Arc-enabled and managed by Defender for Cloud, a manual package on top of it only adds a second variable. The 2026 thread is an example where the route (Arc extension) and the OS age were both in question.
+Pick one route per server. If a server is already Arc-enabled and managed by Defender for Cloud, a manual package on top of it only adds a second variable.
 
 ## Step 2: Check the prerequisites for Server 2016 and 2012 R2
 
@@ -51,12 +51,12 @@ Learn lists these for the unified solution:
 
 - The Servicing Stack Update from September 14, 2021 or later is installed.
 - The Latest Cumulative Update from September 20, 2018 or later is installed.
-- Microsoft Defender Antivirus is enabled and up to date, with the latest platform version (Learn names KB4052623 for the manual download).
+- Microsoft Defender Antivirus is enabled and up to date, with the latest platform version (Learn links to the Microsoft Update Catalog, searched for KB4052623, for a manual download).
 - On Server 2016, Defender Antivirus is installed as a feature and fully updated before installation.
 
 Learn also says to apply or approve KB5005292, and that the installation package is updated every month, so download a fresh one before deployment. After installation you do not run the installer again for updates. If you do, it asks you to offboard first.
 
-A community answer in the 2026 thread named a different baseline (a Server 2016 version with a specific KB). I could not find that baseline on the Learn page, so do not use it. Learn's own dates above apply.
+An independent advisor in the 2026 thread named a different baseline (a Server 2016 version with a specific KB) and said the Microsoft Monitoring Agent must be present. I could not find that baseline on the Learn page, and Learn describes MMA as the solution used before April 2022, which the unified solution replaces. Do not use that advice. Learn's own dates above apply.
 
 ## Step 3: Check the services
 
@@ -67,7 +67,7 @@ sc.exe query Windefend
 sc.exe query sense
 ```
 
-Learn says to use the first command on servers that should run Defender Antivirus in active mode. If it returns "The specified service doesn't exist as an installed service", install Defender Antivirus. The second command confirms that Defender for Endpoint is running. If the `sense` service does not exist at all, the sensor is not installed. The 2025 answer said to check that you used the package for your OS version. That advice comes from the thread, not from the Learn page.
+Learn says to use the first command on servers that should run Defender Antivirus in active mode. If it returns "The specified service doesn't exist as an installed service", install Defender Antivirus. The second command confirms that Defender for Endpoint is running. If the `sense` service does not exist at all, the sensor is not installed. The 2025 answer also said to check that you used the package for your OS version; that comes from the thread.
 
 ## Step 4: Read the onboarding and sensor logs
 
@@ -86,9 +86,9 @@ Then open **Applications and Services Logs** > **Microsoft** > **Windows** > **S
 
 ## Step 5: Look for an antivirus conflict
 
-Learn says that if a non-Microsoft antivirus is present, Defender Antivirus should run in passive mode during installation and onboarding. For the case where the service does not start with system error 577 or 1058, Learn says to clear the `DisableAntiSpyware` and `DisableAntiVirus` values under `HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender`, then run onboarding again. It also says not to change the startup type of `wdboot`, `wdfilter`, `wdnisdrv`, `wdnissvc` or `windefend`, because that is unsupported and may require reimaging.
+Learn says that if a non-Microsoft antivirus is present, Defender Antivirus should run in passive mode during installation and onboarding. For the case where the service does not start with system error 577 or 1058, Learn says to make sure the `DisableAntiSpyware` and `DisableAntiVirus` policies are cleared under `HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender`, then run onboarding again. Learn says this applies only to devices without the August 2020 Defender Antivirus update (4.18.2007.8), and that `DisableAntiSpyware` is ignored on Windows 10 since then. It also says not to change the startup type of `wdboot`, `wdfilter`, `wdnisdrv`, `wdnissvc` or `windefend`, because that is unsupported and may require reimaging.
 
-This matches the 2023 to 2024 thread, where one answerer found that a Group Policy setting `DisableAntiSpyware` = 1 blocked the extension, and setting it to 0 let it install. That worked for that answerer only. Check Group Policy results on the server, not just the local registry.
+A similar idea appears in the 2023 to 2024 thread, where one community answerer reported that a Group Policy setting `DisableAntiSpyware` = 1 blocked the extension on their own system, and setting it to 0 let it install. The asker said the value was not set in their case, and Learn does not confirm this cause for the extension. If you suspect it, check Group Policy results on the server, not just the local registry.
 
 ## Step 6: Test connectivity
 
@@ -96,7 +96,7 @@ The sensor on Windows uses WinHTTP, not the browser proxy settings. Run the Clie
 
 Learn says streamlined connectivity supports Windows Server 2019 and later, and Windows Server 2016 and 2012 R2 running the unified solution. It needs `*.endpoint.security.microsoft.com`, which must be excluded from TLS inspection. Servers still on the Microsoft Monitoring Agent stay on the older method. For those, Learn describes running `TestCloudConnection.exe` from `C:\Program Files\Microsoft Monitoring Agent\Agent` to get the workspace URLs.
 
-In the July 2026 thread, a temporary allow-all outbound firewall rule did not help. That tells you the plain firewall is probably not the only issue, but the thread gives no cause. A TLS-inspecting proxy, name resolution or the sensor itself are still open.
+In the July 2026 thread, a temporary allow-all outbound firewall rule did not help. The thread gives no cause. A TLS-inspecting proxy, name resolution or the sensor itself are still open.
 
 ## Step 7: If you use Azure Arc and Defender for Cloud
 
@@ -106,7 +106,7 @@ If the extension fails, the 2026 thread reported an error that said an assembly 
 
 ## Step 8: Verify
 
-Learn's checks after onboarding: find the server in the Defender device inventory and check its identity, sensor health and recent activity, then run an approved detection test and confirm that the alert arrives. If you offboarded the server several times while testing, remember that Learn says an offboarded device profile can stay in the inventory for up to 180 days, so check the last seen time, not just the name.
+Learn's checks after onboarding: find the server in the Defender device inventory and check its identity, sensor health and recent activity, then run an approved detection test and confirm that the alert arrives. If you offboarded the server several times while testing, remember that Learn's offboarding page says the device profile (without data) stays in the device inventory for up to 180 days, so check the last seen time, not just the name.
 
 ## Limits
 
@@ -128,6 +128,7 @@ Learn's checks after onboarding: find the server in the Defender device inventor
 - [Microsoft Learn: Configure network connectivity to Defender for Endpoint](https://learn.microsoft.com/en-us/defender-endpoint/configure-environment)
 - [Microsoft Learn: Explore devices in the device inventory](https://learn.microsoft.com/en-us/defender-endpoint/machines-view-overview)
 - [Microsoft Learn: Onboard Windows devices with a local script](https://learn.microsoft.com/en-us/defender-endpoint/configure-endpoints-script)
+- [Microsoft Learn: Offboard devices from Defender for Endpoint](https://learn.microsoft.com/en-us/defender-endpoint/offboard-machines)
 - [Microsoft Q&A: Server 2016 onboarding error Id 15, in Spanish (May 2025)](https://learn.microsoft.com/en-us/answers/questions/2277419/al-intentar-hacer-el-onboarding-de-un-servidor-201)
 - [Microsoft Q&A: Microsoft Windows Server 2016, MDE extension (February 2026)](https://learn.microsoft.com/en-us/answers/questions/5770733/microsoft-windows-server-2016)
 - [Microsoft Q&A: Issue with Windows Server 2022 Defender Onboarding (July 2026)](https://learn.microsoft.com/en-us/answers/questions/5945230/issue-with-windows-server-2022-defender-onboarding)

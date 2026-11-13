@@ -10,11 +10,11 @@ keypoints:
   - "Learn says Windows 10 support ended on October 14, 2025. Devices on build 10.0.19045 or lower must move to Windows 11 if eligible, or be replaced."
   - "Teams Rooms holds new Windows feature updates for validation and updates devices during the nightly maintenance reboot. Learn says not to push the next Windows release by any means during that period."
   - "Each Teams Rooms app version supports only certain Windows feature updates. An old app version can block a newer Windows release."
-  - "The manual update script only updates the Teams Rooms app. It cannot install a new app, downgrade it, or upgrade Windows."
+  - "The manual update process is described for the Teams Rooms app. It cannot install a new app or downgrade it, and Learn does not describe a Windows upgrade with it."
   - "Learn does not support LTSB or LTSC editions for Teams Rooms, which contradicts a clean-install suggestion given in the community thread."
 faq:
   - q: "Does the manual update script upgrade Windows 10 to Windows 11?"
-    a: "No. Microsoft Learn says the manual update process updates the Teams Rooms app only. It cannot do a new installation and cannot downgrade the app. The page does not mention a Windows upgrade. In the September 2025 thread, the asker had the same doubt and the thread did not resolve it."
+    a: "Learn does not describe it that way. The manual update page is about updating a Teams Rooms device to a newer version of the Teams Rooms app. It says the process cannot do a new installation and cannot downgrade the app. The page does not mention a Windows upgrade, so do not plan a Windows 10 to 11 move around it. In the September 2025 thread, the asker had the same doubt and the thread did not resolve it."
   - q: "Can I install Windows 11 LTSC on a Teams Rooms device?"
     a: "Learn says Teams Rooms requires Windows IoT Enterprise or Windows Enterprise on the Global Availability Channel servicing option and does not support LTSB or LTSC editions. A responder in the community thread said that LTSC devices need a clean installation of Windows 11 IoT Enterprise LTSC. That conflicts with Learn, and Learn wins. Ask the device maker for a supported image."
   - q: "How do I find out which of my rooms are still on Windows 10?"
@@ -69,13 +69,13 @@ The asker in the thread had the latest app, so this step may not apply there. It
 
 ## Step 3: Know what the manual update does and does not do
 
-In the thread, the asker was pointed to the manual update article and asked whether it covers only the app and not Windows. Learn confirms the doubt. The article says the process updates the Teams Rooms app only, needs an app that is already installed, and cannot downgrade the app. The script has to run from an elevated command prompt in Admin Mode while the Skype user is still signed in:
+In the thread, the asker was pointed to the manual update article and asked whether it covers only the app and not Windows. The thread did not answer that. Learn's page is about updating the Teams Rooms app: it needs an app that is already installed, and it cannot do a new installation or downgrade the app. It does not mention a Windows upgrade. The script has to run from an elevated command prompt in Admin Mode while the Skype user is still signed in:
 
 ```
 PowerShell -ExecutionPolicy Unrestricted "<path to script>"
 ```
 
-If the script fails, Learn says to include the log file from `C:\Users\Skype\AppData\Local\Packages\Microsoft.SkypeRoomSystem_8wekyb3d8bbwe\LocalState\Tracing\MTR-Update` when you contact Microsoft Support. This is the app path. It is not a Windows 10 to 11 upgrade path.
+If the script fails, Learn says to include the log file from `C:\Users\Skype\AppData\Local\Packages\Microsoft.SkypeRoomSystem_8wekyb3d8bbwe\LocalState\Tracing\MTR-Update` when you contact Microsoft Support. This is the app update path. Learn does not present it as a Windows 10 to 11 upgrade path.
 
 ## Step 4: Check what blocks Windows Update
 
@@ -94,7 +94,7 @@ A responder in the thread also named three Windows Update policies to check on d
 
 It is tempting to force Windows 11 or the newest feature update onto a stubborn room. Learn warns against it. During the validation period, do not push the next Windows release to Teams Rooms devices by any means, including overriding the policies or using other device management services. A feature update that is not validated against the app and the peripherals can break a room that works today.
 
-The exception is the Windows 10 problem. Windows 10 is out of support, so the answer for an eligible device is the upgrade to a supported Windows 11 release, and for an ineligible one, replacement. If a device is eligible but stays on Windows 10 after the checks above, do what the thread's asker did and open a support case.
+Windows 10 is a separate problem. It is out of support, and Learn says eligible devices must move to Windows 11 and ineligible ones must be replaced. Learn does not describe a manual way to do that upgrade, so this is not a license to force it. If a device is eligible but stays on Windows 10 after the checks above, do what the thread's asker did and open a support case.
 
 ## Step 6: Verify
 

@@ -47,7 +47,7 @@ On the device, open an elevated Command Prompt:
 sc.exe query sense
 ```
 
-Learn uses this command to confirm that Defender for Endpoint is running. The state should be running.
+Learn uses this command on its server onboarding page to confirm that Defender for Endpoint is running. The state should be running.
 
 Then open Event Viewer and go to **Applications and Services Logs** > **Microsoft** > **Windows** > **SENSE** > **Operational**. Filter the log for Critical, Warning and Error. Learn lists these events in its troubleshooting table:
 
@@ -147,6 +147,7 @@ When the Client Analyzer shows 200 for the URLs and the SENSE log is quiet, give
 - [Microsoft Learn: Configure network connectivity to Defender for Endpoint](https://learn.microsoft.com/en-us/defender-endpoint/configure-environment)
 - [Microsoft Learn: Configure device proxy and internet connectivity settings](https://learn.microsoft.com/en-us/defender-endpoint/configure-proxy-internet)
 - [Microsoft Learn: Onboard Windows devices with a local script](https://learn.microsoft.com/en-us/defender-endpoint/configure-endpoints-script)
+- [Microsoft Learn: Onboard servers to Defender for Endpoint](https://learn.microsoft.com/en-us/defender-endpoint/onboard-server)
 - [Microsoft Learn: Explore devices in the device inventory](https://learn.microsoft.com/en-us/defender-endpoint/machines-view-overview)
 - [Microsoft Q&A: Devices onboarded to Intune are not showing up in Microsoft Defender (September 2024)](https://learn.microsoft.com/en-us/answers/questions/2072325/devices-onboarded-to-intune-are-not-showing-up-in)
 - [Microsoft Q&A: Microsoft Defender for Business not showing onboarded device via Intune/Script (September 2025)](https://learn.microsoft.com/en-us/answers/questions/5561241/microsoft-defender-for-business-not-showing-onboar)
