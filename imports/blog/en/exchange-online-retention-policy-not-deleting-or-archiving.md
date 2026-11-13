@@ -28,9 +28,9 @@ Three Microsoft Q&A threads from 2025 and 2026 describe this. None of them ended
 
 ## What the threads reported
 
-- **August 2025.** A mailbox at about 100 GB with an online archive and auto-expansion. A policy to move items older than 30 days to the archive had been applied a week earlier, and the Managed Folder Assistant had been run. Nothing moved. A moderator posted a checklist: verify the policy and its move-to-archive tag, look for holds, look for personal tags, force the assistant and wait. A volunteer moderator said auto-expansion can take up to 30 days. The person who asked never replied.
+- **August 2025.** A mailbox at about 100 GB with an online archive and auto-expansion. A policy to move items older than 30 days to the archive had been applied a week earlier, and the Managed Folder Assistant had been run. Nothing moved. A Microsoft moderator posted a checklist: verify the policy and its move-to-archive tag, look for holds, look for personal tags, force the assistant and wait 24 to 48 hours. A volunteer moderator said auto-expansion can take up to 30 days. The person who asked never replied.
 - **May 2026.** A one-year archive rule worked, but a three-year delete rule never did. The administrator ruled out a litigation hold by showing `LitigationHoldEnabled` as false and `InPlaceHolds` as empty. An anonymous answer blamed a newer seven-year retention policy for a former employee. The person who asked pointed out that the problem was four years old. Nobody found the cause.
-- **June 2026.** Items in Deleted Items were not removed after 14 days. A moderator and an MVP both said that a hold does not block deletion, and that Deleted Items has no automatic purge by default unless a retention tag is configured. The MVP added that a custom tag should take effect, that the assistant runs on a weekly cadence, and that you can check the assigned policy on the folder properties in Outlook on the web. The person who asked reported that it still did not work.
+- **June 2026.** Items in Deleted Items were not removed after 14 days. A moderator and an MVP both said that a hold does not block deletion, and that Deleted Items has no automatic purge by default unless a retention tag or label is configured. The MVP added that a custom tag should take effect, that the assistant runs on a weekly cadence, and that you can check the assigned policy on the folder properties in Outlook on the web. The person who asked added details about their policy in a later comment, and the thread shows no confirmation that anything worked.
 
 ## Symptoms
 
@@ -95,7 +95,7 @@ Litigation Hold does not stop deletion. Learn describes the flow:
 - With Litigation Hold, items in Purges are preserved for the hold duration, or without end if no duration is set.
 - The hold setting can take up to 60 minutes to apply.
 
-Purview retention behaves alike in principle. Learn says retention wins over deletion: the delete action may start, but permanent deletion is suspended and the retained copy sits in Recoverable Items. The same page says Exchange retention tags and policies (the older MRM features) usually work side by side with Purview retention. In the May thread, a longer policy could only be the reason if it applied to that mailbox. The person who asked showed that no hold existed, and no one proved a conflicting policy. Run Step 1 for the mailbox as it is, and check retention policies in the Purview portal if you use them.
+Purview retention behaves alike in principle. Learn says retention wins over deletion: the delete action may start, but permanent deletion is suspended and the retained copy sits in Recoverable Items. The same page says older features such as Exchange retention tags and policies usually work side by side with Purview retention. It also lists admin-applied MRM retention on specific mailbox folders as not supported by Microsoft 365 retention policies, and recommends moving to Purview going forward. In the May thread, a longer policy could only be the reason if it applied to that mailbox. The person who asked showed that no hold existed, and no one proved a conflicting policy. Run Step 1 for the mailbox as it is, and check retention policies in the Purview portal if you use them.
 
 ## Step 5: Run the assistant and give it time
 
@@ -105,7 +105,7 @@ Start-ManagedFolderAssistant -Identity <mailbox>
 
 Learn says the assistant processes mailboxes at least once every seven days. It usually runs daily, but a pass can take up to seven days. The cmdlet page lists `-FullCrawl` (recalculates how tags apply across the whole mailbox) in Exchange Online. Use it after you change tags. The page does not give an expected duration, so check results after a day or two, not after an hour.
 
-Community answers gave 24 to 48 hours for archiving, and up to 30 days for auto-expansion of the archive. Neither number is on the Learn pages I checked.
+In the August thread, a moderator suggested waiting 24 to 48 hours for large mailboxes, and a volunteer moderator said auto-expansion of the archive can take up to 30 days. Neither number is on the Learn pages I checked.
 
 ## Step 6: Measure what happened
 
@@ -136,13 +136,13 @@ Set-RetentionPolicyTag "<tag applied to Recoverable Items>" -AgeLimitForRetentio
 Start-ManagedFolderAssistant -Identity <mailbox>
 ```
 
-A tag is a shared object, so the change affects every policy that links it. Test on one mailbox first. Learn's best-practice note also says to enable the archive right after you place a mailbox on Litigation Hold, and not to let Recoverable Items sit at its quota.
+A tag is a shared object, so the change affects every policy that links it. Test on one mailbox first. Learn's Litigation Hold page also recommends monitoring mailboxes on hold weekly so they do not reach the Recoverable Items quota.
 
 ## Limits and open points
 
 - None of the three threads has a confirmed cause. The checklist is Learn's, not a proven fix for those cases.
 - The Deleted Items default and the 30-day auto-expansion figure are community statements. Verify them in your tenant.
-- The dates on the Learn pages range from 2025 to mid-2026. Recheck before you change tags in production.
+- Check the current Learn pages before you change tags in production.
 
 ## Related
 

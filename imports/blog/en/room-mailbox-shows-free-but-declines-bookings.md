@@ -28,7 +28,7 @@ This guide is built from three Microsoft Q&A threads in 2026 and the current Mic
 
 ## What the threads reported
 
-- **February 2026.** A room looked available when scheduling, but after booking it showed as in use for all users. A moderator pointed to working hours, time zone and the room's calendar processing settings. The person who asked wrote back that it was a time zone issue on the side of all rooms and that they changed it from Pacific Standard Time to their own time zone. The thread was closed. It has no formal accepted-answer label, but the fix was confirmed by the person who asked.
+- **February 2026.** A room looked available when scheduling, but after booking it showed as in use for all users. A moderator pointed to working hours, time zone and the room's calendar processing settings. The person who asked wrote back that it was a time zone issue on the side of all rooms and that they changed it from Pacific Standard Time to their own time zone. The thread has no formal accepted-answer label or closed status, but the person who asked confirmed the time zone change in a later comment.
 - **April 2026.** Users could not book the main conference room. It looked free, yet invites came back as declined because the room was busy. Two answers were posted, one anonymous and one AI-generated. The person who asked did not confirm a fix, so I did not use them as proof. I also skipped their suggestion to delete calendar items, because it is destructive and nobody confirmed it.
 - **August 2026.** A new room received invites (message trace showed them as delivered) but never accepted or declined. The administrator had already checked that the mailbox type was a room, that AutomateProcessing was AutoAccept, that AllBookInPolicy was true and that conflicts were not allowed. Recreating the mailbox changed nothing. An independent advisor suggested reviewing the full calendar processing output, testing a second room and opening a support case. No fix was confirmed.
 
@@ -134,11 +134,11 @@ Look for an entry near the time of the request saying that processing was skippe
 Set-CalendarProcessing -Identity <room> -ProcessExternalMeetingMessages $True
 ```
 
-Learn says the risk is low, because external people are unlikely to know the room address.
+Learn describes the risk as minimal, because external users are unlikely to know the room address.
 
 3. Higher-risk fix: set `TreatMessagesAsInternal` on the inbound connector. Learn warns that internal messages bypass anti-spam filtering, so use this only when the service carries strictly internal mail. It also says the connector type must be `OnPremises`.
 
-The August 2026 thread did not mention a third-party service, so I cannot say this was the cause there. It is the documented cause of that exact symptom.
+The August 2026 thread did not mention a third-party service (the advisor only referred to external-flagged requests in general, without a source), so I cannot say this was the cause there. It is the documented cause of that exact symptom.
 
 ## Step 6: Test
 

@@ -10,7 +10,7 @@ keypoints:
   - "DMARC needs an aligned pass: the domain that signed the message must match the domain in the From address."
   - "For a custom domain you publish two CNAME records and then enable signing. The exact target values come from Get-DkimSigningConfig, not from a template."
   - "Test with a message to an external mailbox. Mail inside your own organization shows dkim=none and is not a valid test."
-  - "Forwarding and gateways can break SPF and DKIM. Learn recommends trusted ARC sealers, and you add the vendor's signing domain, not your own."
+  - "Forwarding and gateways can break SPF and DKIM. Learn points to trusted ARC sealers, and you add the vendor's signing domain, not your own."
 faq:
   - q: "Why does my mail show d=yourtenant.onmicrosoft.com in the DKIM signature?"
     a: "In a Microsoft Q&A thread from October 2026, an independent advisor said this appears when DKIM is not configured and enabled for the custom domain. Microsoft Learn confirms that mail from the onmicrosoft.com domain is signed by that domain automatically and that custom domains need their own setup, but it does not describe what signature a custom-domain message gets before you enable DKIM."
@@ -118,11 +118,11 @@ Learn warns that mail inside one organization shows `dkim=none (message not sign
 
 ## Step 7: Understand the DMARC side
 
-Learn's troubleshooting page says DMARC requires that SPF or DKIM passes and that the authenticated domain aligns with the From domain. At least one aligned pass is needed. For marketing or third-party senders, its fix is DKIM signing for the From domain, and optionally relaxed alignment (`adkim=r`) in the DMARC record. Learn recommends a separate subdomain for third-party bulk senders.
+Learn's troubleshooting page says DMARC requires that SPF or DKIM passes and that the authenticated domain aligns with the From domain. At least one aligned pass is needed. For marketing or third-party senders, its fix is DKIM signing for the From domain, and optionally relaxed alignment (`adkim=r`) in the DMARC record. If neither option is possible, Learn suggests using a separate subdomain with its own DMARC record for the third-party service.
 
 ## Step 8: Forwarding and gateways
 
-The second part of the thread is about forwarded mail. Learn says forwarded mail commonly fails SPF because the forwarder's IP is not in the sender's SPF record, and that DKIM may survive only if the body was not changed. Its recommendation for intermediaries is trusted ARC sealers, or Enhanced Filtering for Connectors.
+The second part of the thread is about forwarded mail. Learn says forwarded mail commonly fails SPF because the forwarder's IP is not in the sender's SPF record, and that DKIM may survive only if the body was not changed. For gateways, its recommended fix is to configure ARC on the gateway. For forwarding it names Enhanced Filtering for Connectors or trusted ARC sealers as options.
 
 For the receiving tenant:
 
@@ -135,7 +135,7 @@ Set-ArcConfig -Identity Default -ArcTrustedSealers "<sealer1>","<sealer2>"
 
 `-ArcTrustedSealers` replaces the whole list, so include existing entries.
 
-2. Use the vendor's signing domain. Find it in a test message: the `d=` value of the `ARC-Seal` header. Learn calls using your own domain a common mistake.
+2. Use the vendor's signing domain. Find it in a test message: the `d=` value of the `ARC-Seal` header. Learn lists entering your own domain as a wrong sealer configuration.
 3. Allow up to 30 minutes, then test with new messages. Look for `arc=pass` and `compauth=pass reason=130`.
 
 Learn also states that ARC only overrides DMARC failures. It does not bypass spam filtering, bulk filtering or mail flow rules, and each trusted sealer is a risk if the vendor is compromised.

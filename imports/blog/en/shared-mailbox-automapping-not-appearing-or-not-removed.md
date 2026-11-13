@@ -19,7 +19,7 @@ faq:
   - q: "How do I stop a mailbox from auto-mapping for one user?"
     a: "Microsoft Learn says to remove the user's Full Access permission with Remove-MailboxPermission and add it again with Add-MailboxPermission and -AutoMapping $false. You cannot change auto-mapping on an existing permission in place."
   - q: "How long does auto-mapping take to show up?"
-    a: "Learn gives no figure. Two community answers say classic Outlook can take up to about 30 minutes to pick up the change from Autodiscover. Close Outlook fully and reopen it after you change the permission."
+    a: "Learn gives no figure. Several answers in the threads, including one from a Microsoft moderator, say classic Outlook can take up to about 30 minutes to pick up the change from Autodiscover. Close Outlook fully and reopen it after you change the permission."
 ---
 
 You gave a user Full Access to a shared mailbox. The permission shows in the Exchange admin center and in PowerShell, but the mailbox does not appear in the user's Outlook. Or the opposite: you removed access and the mailbox still sits in the folder list and shows an error when opened.
@@ -28,11 +28,11 @@ Both versions came up repeatedly in Microsoft community threads in 2025 and 2026
 
 ## What the threads reported
 
-- **November 2025, thread one.** Permissions were set in the admin center and PowerShell showed AutoMapping as true. The user restarted Outlook, cleared the cache and tried a new profile. The mailbox only worked when added by hand. An answer marked as accepted by the person who asked advised removing and re-adding Full Access with `-AutoMapping $true` and restarting Outlook. The person replied with thanks, but the page does not show a confirmed result.
+- **November 2025, thread one.** Permissions were set in the admin center and PowerShell showed AutoMapping as true. The user restarted Outlook, cleared the cache and tried a new profile. The mailbox only worked when added by hand. An anonymous Microsoft Q&A answer carrying an accepted label advised removing and re-adding Full Access with `-AutoMapping $true` and restarting Outlook. The person replied with thanks, but the page does not show a confirmed result.
 - **November 2025, thread two.** The same symptom for several users of one shared mailbox. A moderator gave the remove-and-re-add steps. A volunteer moderator added that the parameter has to be specified in PowerShell, that Autodiscover can take about 30 minutes to update in classic Outlook, that you can test with the Test E-mail AutoConfiguration tool and the Remote Connectivity Analyzer, and that hybrid setups are not fully supported for auto-mapping. Both answers carry an accepted label, but the person who asked did not confirm a fix.
-- **April 2026.** A new shared mailbox for more than 30 users appeared in new Outlook and Outlook on the web, but not in classic Outlook. A moderator said access granted through a group will not auto-map and gave the remove-and-re-add steps. The person who asked reported it still did not work and planned to contact support.
+- **April 2026.** A new shared mailbox for more than 30 users appeared in new Outlook and Outlook on the web, but not in classic Outlook. A moderator said access granted through a group will not auto-map and gave the remove-and-re-add steps. The person who asked later said that Full Access was granted directly to himself and several others and that classic Outlook still did not show the mailbox, so he planned to contact support. That conflicts with the group explanation for this case.
 - **September 2026.** Full Access granted a few hours earlier, nothing in Outlook. An independent advisor suggested the same remove and re-add. There was no reply.
-- **August 2024, the reverse case.** After a delegation was removed, the mailbox stayed in Outlook. The accepted answer: add the permission again with `-AutoMapping $false`, wait for Outlook to receive the new Autodiscover response, then remove the permission. The person who asked confirmed that the mailbox disappeared from Outlook.
+- **August 2024, the reverse case.** After a delegation was removed, the mailbox stayed in Outlook. The accepted answer said the Autodiscover response keeps telling Outlook to open the mailbox until it is updated, and advised changing the permission to `-AutoMapping $false`. The person who asked then added the permission again with `-AutoMapping $false`, waited for Autodiscover to update, and removed the permission. He confirmed that the mailbox disappeared from Outlook.
 
 So only the removal case has a clear confirmation. The "not appearing" case has a documented cause and a common fix, but few confirmed results.
 
@@ -70,7 +70,7 @@ About the default: Microsoft Learn says `-AutoMapping` defaults to `$true`. Two 
 
 ## Step 3: Wait, restart, and test Autodiscover
 
-Close Outlook fully, then reopen it. Learn gives no propagation time. Two community answers say classic Outlook can take up to about 30 minutes, so test after that.
+Close Outlook fully, then reopen it. Learn gives no propagation time. Several thread answers say classic Outlook can take up to about 30 minutes, so test after that.
 
 If it still does not appear, check what Autodiscover returns. Microsoft's support article on hybrid auto-mapping describes this test:
 
@@ -101,7 +101,7 @@ Add-MailboxPermission -Identity <mailbox> -User <user> -AccessRights FullAccess 
 
 Learn says to repeat this for every mailbox where you want auto-mapping off. It does not say how an already configured Outlook profile reacts, and it gives no timing. Learn gives a reason to do this: when a user has Full Access to many mailboxes, Outlook can start slowly because it tries to open all of them.
 
-For the stuck mailbox after access was removed, the 2024 thread's accepted answer was:
+For the stuck mailbox after access was removed, the person in the 2024 thread did this, following the accepted answer's advice to set `-AutoMapping $false`:
 
 1. Add the permission again with `-AutoMapping $false`. This updates the Autodiscover response.
 2. Wait until Outlook receives it.
@@ -115,7 +115,7 @@ Posters in several threads said the mailbox works when added by hand, and Learn'
 
 ## Limits and open points
 
-- Most "not appearing" threads have no confirmed result. The June and September 2026 answers are advice, not proof.
+- Most "not appearing" threads have no confirmed result. The April and September 2026 answers are advice, not proof.
 - The default value of `-AutoMapping` is documented as `$true`. The community statement that it is not set by default is unconfirmed.
 - Learn gives no timing for Autodiscover updates. The 30-minute figure is a community statement.
 - Hybrid auto-mapping needs directory attributes and may need support. Do not edit Active Directory without a backup.

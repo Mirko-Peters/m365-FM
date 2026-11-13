@@ -28,7 +28,7 @@ This article uses a Tech Community thread from October 2025 as the scenario and 
 
 ## What the thread reported
 
-- The environment was Exchange 2016 on-premises, Exchange Online and Microsoft Entra Connect.
+- The environment was Exchange 2016 on-premises, Exchange Online and Azure AD Connect (the name used in the post; the product is now called Microsoft Entra Connect).
 - The poster said that an Exchange Online Plan 2 license was assigned before the migration. Synchronization then produced a cloud mailbox for a user who already had an on-premises mailbox. The migration then failed with mailbox lookup errors.
 - The poster's fix, as they described it: remove the license, force a directory synchronization, confirm the mailbox exists only on-premises, check that the cloud copy is gone, and run the migration batch again.
 - Nobody replied, and no one confirmed the steps. The "Resolved" label is in the title, written by the author. The poster also said connectors and mail flow settings were not the cause, which no one checked.
@@ -74,7 +74,7 @@ Get-Mailbox "<user>" | Format-List > mailboxinfo.txt
 Learn offers two paths and says other recovery methods are not guaranteed to work.
 
 - **Scenario 1: keep the Exchange Online mailbox.** Learn describes this as the fit when a mailbox was migrated earlier and an old one was reconnected or a new one was created on-premises. It also names the premature license as another possible cause.
-- **Scenario 2: remove the Exchange Online mailbox data.** Learn says the data in Microsoft 365 may no longer be needed, and points to an Exchange Team Blog post called "Permanently Clear Previous Mailbox Info" for the details. The Learn page itself gives no commands for this path, and I could not open the blog post while writing this, so read it yourself before you act.
+- **Scenario 2: remove the Exchange Online mailbox data.** Learn says the data in Microsoft 365 may no longer be needed, and points to a linked Exchange Team Blog post (its URL slug reads "Permanently Clear Previous Mailbox Info") for the details. The Learn page itself gives no commands for this path, and I could not open the blog post while writing this, so read it yourself before you act.
 
 The thread's approach (remove the license, resync, confirm the cloud copy is gone) looks like Scenario 2. It is the author's account, and the license removal and the cleanup of leftover cloud data are separate things. Learn does not describe license removal alone as sufficient, so check that no soft-deleted or leftover cloud mailbox is still attached to the user.
 
