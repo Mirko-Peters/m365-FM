@@ -100,6 +100,20 @@ jobs:
         if: steps.rel.outputs.signed != 'true'
         working-directory: android/mvp-tracker/android
         run: ./gradlew --no-daemon bundleRelease
+      - name: Berechtigungen und Eckdaten der APK (aapt2)
+        run: |
+          AAPT2=$(ls -d "$ANDROID_HOME"/build-tools/*/aapt2 | sort -V | tail -1)
+          {
+            echo "### APK-Eckdaten"
+            echo '```'
+            "$AAPT2" dump badging build/out/mvp-tracker-debug.apk | grep -E "^package:|^sdkVersion|^targetSdkVersion|^uses-permission|^launchable-activity" || true
+            echo '```'
+            echo "AD_ID im Manifest: $("$AAPT2" dump permissions build/out/mvp-tracker-debug.apk | grep -c AD_ID || true) (soll 0 sein)"
+            echo "Intent-Filter (SEND, VIEW, autoVerify):"
+            echo '```'
+            "$AAPT2" dump xmltree --file AndroidManifest.xml build/out/mvp-tracker-debug.apk | grep -E "intent-filter|action|mimeType|android:host|pathPrefix|pathPattern|autoVerify|allowBackup|usesCleartext" || true
+            echo '```'
+          } | tee -a "$GITHUB_STEP_SUMMARY"
       - name: Pruefsumme und Eckdaten (ohne Geheimnisse)
         run: |
           cd build/out && sha256sum * | tee ../sha256.txt
