@@ -188,3 +188,20 @@ test("Widerruf einer per Firmen-E-Mail bestätigten Übernahme gibt die übernom
     assert.equal(raw.prepare("SELECT status FROM entity_claims WHERE eid='fabrikam'").get().status, "rejected");
   } finally { restore(); raw.close(); }
 });
+
+test("Firma uebernehmen: Handle der unbeanspruchten Paar-Firma (Slug des Namens) -> 200 claim_required statt 403 'Das hat nicht geklappt'", async () => {
+  const { raw, env } = await setup(), restore = withEntities();
+  try {
+    addUser(raw, 1);
+    raw.exec("INSERT INTO orgs(id,handle,name,website,public,unclaimed,created) VALUES(70,'ifakt-gmbh','iFAKT GmbH','https://www.ifakt.de',0,1,1)");
+    raw.exec("INSERT INTO org_entity(org_id,eid,confirmed) VALUES(70,'ifakt',0)");
+    const r = await org(env, { id: 1 }, "/api/org", "POST", { handle: "ifakt-gmbh", name: "iFAKT GmbH", website: "https://www.ifakt.de", public: false, programs: [], expertise: [], channels: [], locations: [] });
+    assert.deepEqual([r.s, r.j.ok, r.j.handle, r.j.eid, r.j.claim_required], [200, true, "ifakt-gmbh", "ifakt", true]);
+    assert.equal(raw.prepare("SELECT COUNT(*) n FROM orgs").get().n, 1, "keine zweite Firma");
+    assert.equal(raw.prepare("SELECT COUNT(*) n FROM org_members").get().n, 0, "noch kein Inhaber: das wird man erst durch die bestaetigte Uebernahme");
+    // fremde Firma mit Inhaber bleibt geschuetzt
+    raw.exec("UPDATE orgs SET unclaimed=0 WHERE id=70");
+    const f = await org(env, { id: 1 }, "/api/org", "POST", { handle: "ifakt-gmbh", name: "iFAKT GmbH", public: false });
+    assert.equal(f.s, 403);
+  } finally { restore(); }
+});

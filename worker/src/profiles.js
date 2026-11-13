@@ -581,7 +581,7 @@ export async function handleProfiles(env, request, url, path, user, J) {
     const locations = cleanOrgLocations(b.locations);
     const size = SIZES.includes(b.size) ? b.size : "";
     const wantEid = b.eid === undefined || b.eid === null ? undefined : String(b.eid).toLowerCase().trim();   // Firmen-Entitaet waehlen (leer = Verknuepfung loesen)
-    let o = await db.prepare("SELECT id FROM orgs WHERE handle=?").bind(handle).first();
+    let o = await db.prepare("SELECT id,handle,unclaimed FROM orgs WHERE handle=?").bind(handle).first();
     let link = null;   // { eid, confirmed } -> nach dem Speichern setzen
     if (wantEid) {   // vor dem Anlegen pruefen: eine ungueltige Wahl legt keine Firma an
       const cur = o ? await db.prepare("SELECT * FROM org_entity WHERE org_id=?").bind(o.id).first() : null;
@@ -594,7 +594,7 @@ export async function handleProfiles(env, request, url, path, user, J) {
     }
     if (!o) {
       if (await db.prepare("SELECT 1 x FROM profiles WHERE handle=?").bind(handle).first()) return J({ error: "handle_taken" }, 409);
-      if ((await db.prepare("SELECT COUNT(*) n FROM org_members WHERE user_id=? AND role='owner'").bind(user.id).first()).n >= 3) return J({ error: "limit" }, 400);
+      if (!user.admin && (await db.prepare("SELECT COUNT(*) n FROM org_members WHERE user_id=? AND role='owner'").bind(user.id).first()).n >= 3) return J({ error: "limit" }, 400);   // Admin: kein Limit (wie orgpair.js)
       // Firma und Entitaet sind immer ein Paar: gewaehlte Entitaet (eid) > Treffer ueber Domain/Name ohne Rechtsform > neue Entitaet (live bei vertrauenswuerdigen Mitgliedern, sonst wartend)
       let eid = link ? link.eid : "", made = false;
       // nur freigegebene Firmen-Entitaeten: ein ungeprueftes Mitglied darf mit einem wartenden Vorschlag keine echte Firma blockieren (claim_required ohne Domain)
@@ -618,6 +618,12 @@ export async function handleProfiles(env, request, url, path, user, J) {
       }
     } else {
       const mem = await db.prepare("SELECT role FROM org_members WHERE org_id=? AND user_id=? AND status='active'").bind(o.id, user.id).first();
+      if (!mem && o.unclaimed && wantEid === undefined) {
+        // "Diese Firma uebernehmen" schickt den Namen als Handle: bei Firmen-Entitaeten gibt es schon die unbeanspruchte Paar-Firma mit genau diesem Handle (gleiche Slug-Regel).
+        // Das ist kein Fehler (war 403 forbidden -> "Das hat nicht geklappt"): Inhaber wird, wer die Entitaet per Firmen-E-Mail uebernimmt (adoptUnclaimedForEntity).
+        const pe = await db.prepare("SELECT eid FROM org_entity WHERE org_id=?").bind(o.id).first();
+        return J({ ok: true, handle: o.handle, eid: pe?.eid || "", claim_required: true });
+      }
       if (!mem || !["owner", "admin", "editor"].includes(mem.role)) return J({ error: "forbidden" }, 403);
       await db.prepare("UPDATE orgs SET name=?,tagline=?,about=?,website=?,country=?,size=?,public=? WHERE id=?").bind(name, txt(b.tagline, 120), long(b.about, 1500), website, txt(b.country, 60), size, b.public ? 1 : 0, o.id).run();
       if (wantEid === "" && ["owner", "admin"].includes(mem.role)) await db.prepare("DELETE FROM org_entity WHERE org_id=?").bind(o.id).run();   // Verknuepfung loesen
