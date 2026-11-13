@@ -31,17 +31,17 @@ button{font:inherit;color:inherit}
     <div style="display: grid; gap: 0; background: #ffffff; border: 1px solid rgba(23,25,28,.14)">
       <div style="padding: 10px 14px; border-bottom: 1px solid rgba(23,25,28,.14); display: flex; justify-content: space-between; align-items: center">
         <b style="font-family: 'Barlow Condensed', sans-serif; font-weight: 600; font-size: 18px; letter-spacing: .04em">Ready for the MVP portal</b>
-        <button type="button" onClick="{{copyAll}}" style="min-height: 40px; padding: 0 12px; background: #3b6391; color: #ffffff; border: 0; border-radius: 0; cursor: pointer; font-weight: 600">{{allLabel}}</button>
+        <span style="font-size: 13px; color: #5d6470">Same order as the form</span>
       </div>
       <sc-for list="{{fields}}" as="f" hint-placeholder-count="6">
         <div style="display: flex; gap: 10px; align-items: center; padding: 8px 6px 8px 14px; border-bottom: 1px solid rgba(23,25,28,.08)">
-          <span style="display: grid; flex: 1 1 auto; min-width: 0"><span style="font-size: 12px; color: #5d6470">{{f.k}}</span><span style="overflow-wrap: anywhere">{{f.v}}</span></span>
+          <span style="display: grid; flex: 1 1 auto; min-width: 0"><span style="font-size: 12px; color: #5d6470">{{f.k}}</span><span style="overflow-wrap: anywhere">{{f.v}}</span><span style="{{f.limitStyle}}">{{f.limit}}</span></span>
           <button type="button" onClick="{{f.copy}}" aria-label="{{f.aria}}" style="{{f.btnStyle}}">{{f.btn}}</button>
         </div>
       </sc-for>
     </div>
 
-    <a href="#" style="min-height: 44px; display: flex; align-items: center; font-weight: 600">Open the MVP portal →</a>
+    <a href="https://mvp.microsoft.com/en-US/account/" target="_blank" rel="noopener" style="min-height: 44px; display: flex; align-items: center; font-weight: 600">Open the MVP portal (Activities, Add activity) →</a>
 
     <label style="display: flex; gap: 12px; align-items: center; padding: 12px 14px; background: #ffffff; border: 1px solid rgba(23,25,28,.14); cursor: pointer">
       <input type="checkbox" checked="{{entered}}" onChange="{{toggleEntered}}" style="width: 22px; height: 22px; accent-color: #2f6b3a">
@@ -64,20 +64,28 @@ class Component extends DCLogic {
   renderVals() {
     const s = this.state || {};
     const copied = s.copied || {};
+    // Same fields, same order and same limits as the portal's Add activity form.
+    // The form has no reach field, so reach goes into the description.
     const F = [
-      ['Title', 'Copilot Studio governance – guest episode'],
-      ['Date', '[DATE]'],
-      ['Type', 'Podcast'],
-      ['Technology area', '[AREA 1]'],
-      ['Link', 'https://www.m365.fm/[episode]'],
-      ['Reach', '[N] listeners · [N] countries'],
-      ['Description', 'Guest on M365.FM about governance for Copilot Studio agents: environments, DLP and sharing rules.']
+      ['Activity type', 'Podcast'],
+      ['Primary technology area', '[AREA 1]'],
+      ['Title', 'Copilot Studio governance - guest episode', 100],
+      ['Description', 'Guest on M365.FM about governance for Copilot Studio agents: environments, data loss prevention and sharing rules. Reach: [N] listeners in [N] countries.', 1000],
+      ['Start date', '[DATE]'],
+      ['End date', '[DATE]'],
+      ['Target audience', 'IT Pro, Developer'],
+      ['Activity URL', 'https://www.m365.fm/[episode]']
     ];
-    const fields = F.map(([k, v], i) => ({
+    const fields = F.map(([k, v, max], i) => ({
       k, v, aria: 'Copy ' + k,
-      btn: copied[i] || s.all ? 'Copied' : 'Copy',
-      btnStyle: 'flex: 0 0 auto; min-width: 72px; min-height: 40px; border-radius: 0; cursor: pointer; font-size: 14px; font-weight: 600; ' + (copied[i] || s.all ? 'background: #2f6b3a; color: #ffffff; border: 1px solid #2f6b3a;' : 'background: #ffffff; color: #17191c; border: 1px solid rgba(23,25,28,.3);'),
-      copy: () => this.setState({ copied: Object.assign({}, copied, { [i]: true }) })
+      limit: max ? v.length + ' of ' + max + ' characters' : '',
+      limitStyle: max ? 'font-size: 12px; color: ' + (v.length > max ? '#9a4f0f' : '#5d6470') : 'display: none',
+      btn: copied[i] ? 'Copied' : 'Copy',
+      btnStyle: 'flex: 0 0 auto; min-width: 72px; min-height: 40px; border-radius: 0; cursor: pointer; font-size: 14px; font-weight: 600; ' + (copied[i] ? 'background: #2f6b3a; color: #ffffff; border: 1px solid #2f6b3a;' : 'background: #ffffff; color: #17191c; border: 1px solid rgba(23,25,28,.3);'),
+      copy: () => {
+        try { if (navigator.clipboard) navigator.clipboard.writeText(v).catch(() => {}); } catch (e) { /* preview without clipboard access */ }
+        this.setState({ copied: Object.assign({}, copied, { [i]: true }) });
+      }
     }));
     const on = s.progs || { MVP: true };
     const progs = ['MVP', 'MCT', 'NVP', 'SAP'].map((n) => ({
@@ -87,8 +95,6 @@ class Component extends DCLogic {
     }));
     return {
       fields, progs,
-      allLabel: s.all ? 'All copied' : 'Copy all',
-      copyAll: () => this.setState({ all: true }),
       entered: !!s.entered,
       enteredText: s.entered ? 'Done · 5 left to enter' : 'Tick this after you saved it in the portal',
       toggleEntered: () => this.setState({ entered: !s.entered })
