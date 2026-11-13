@@ -577,6 +577,17 @@ window.M365MVPPeriod = (function () {
     installBtn.addEventListener("click", function () { if (!deferred) return; deferred.prompt(); deferred.userChoice.then(function () { deferred = null; installBtn.hidden = true; }); });
     if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js", { scope: "./" }).catch(function () {});
   }
+  // Teilen-in-die-App (Android-Huelle android/mvp-tracker): /community/contributor/?link=https://... oeffnet "Erfassen" mit vorbefuelltem Link
+  if (APP) {
+    try {
+      var shared = (new URLSearchParams(location.search).get("link") || "").trim();
+      if (/^https:\/\/\S+$/i.test(shared) && shared.length <= 2000) {
+        S.draft = { title: "", kind: "blog", published: new Date().toISOString().slice(0, 10), url: shared, category: "", description: "", read: "" };
+        S.addMode = "link";
+        history.replaceState(null, "", location.pathname + "#add");
+      }
+    } catch (e) {}
+  }
   window.addEventListener("hashchange", function () { route(true); });
   window.addEventListener("online", function () { if (!S.data) load(); });
   route(false);
