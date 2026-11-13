@@ -25,10 +25,10 @@ class LongIndex(unittest.TestCase):
             p.start()
             self.addCleanup(p.stop)
 
-    def test_grenze_2500(self):
-        self.assertEqual(SE.long_index_langs(ent("t-a", fr=text(2500))), [])
+    def test_grenze_ab_2500(self):
+        self.assertEqual(SE.long_index_langs(ent("t-a", fr=text(2499))), [])
         SE._LONG_IDX.clear()
-        self.assertEqual(SE.long_index_langs(ent("t-a", fr=text(2501))), ["fr"])
+        self.assertEqual(SE.long_index_langs(ent("t-a", fr=text(2500))), ["fr"])   # "ab 2500 Zeichen"
 
     def test_jede_sprache(self):
         e = ent("t-b", **{l: text(2600) for l in ("ja", "ar", "pt", "de")})

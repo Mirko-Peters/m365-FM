@@ -343,7 +343,7 @@ def long_for(e, lang):
     return lt, bool(lt.strip())
 
 
-LONG_INDEX_MIN = 2500   # Mirko 13.11.2026: hat die Beschreibung (Langtext) in DIESER Sprache mehr als 2500 Zeichen, steht die Seite auf index, egal welche Sprache
+LONG_INDEX_MIN = 2500   # Mirko 13.11.2026: hat die Beschreibung (Langtext) in DIESER Sprache 2500 Zeichen oder mehr (ab 2500), steht die Seite auf index, egal welche Sprache
 _LONG_IDX = {}
 
 
@@ -355,12 +355,12 @@ def native_long(e, lang):
 
 
 def long_index_langs(e):
-    """Sprachen, in denen die Seite wegen eines langen eigenen Textes (> LONG_INDEX_MIN Zeichen) indexiert wird. Der angezeigte Text muss der eigene Text der Sprache sein
+    """Sprachen, in denen die Seite wegen eines langen eigenen Textes (>= LONG_INDEX_MIN Zeichen) indexiert wird. Der angezeigte Text muss der eigene Text der Sprache sein
     (kein Englisch-Rueckfall auf einer fr-Seite), sonst gaebe es ein Duplikat in falscher Sprache."""
     r = _LONG_IDX.get(e["id"])
     if r is None:
         r = _LONG_IDX[e["id"]] = [l for l in COMM_LANGS
-                                  if len(native_long(e, l).strip()) > LONG_INDEX_MIN and long_for(e, l)[0].strip() == native_long(e, l).strip()]
+                                  if len(native_long(e, l).strip()) >= LONG_INDEX_MIN and long_for(e, l)[0].strip() == native_long(e, l).strip()]
     return r
 
 
