@@ -17,7 +17,7 @@ faq:
   - q: "Where do admins control who can share agents built with Agent Builder?"
     a: "In the Microsoft 365 admin center under Agents, then Settings, in the Sharing section. Microsoft Learn lists three options: all users, specific users or groups, and no users. With no users, org-wide sharing is off and the toggle in the share dialog is grayed out. Changes only affect new sharing actions."
   - q: "Does the user access setting hide an agent or block it?"
-    a: "According to Microsoft Learn, if user access is set to specific users or groups, other users may still be able to install an agent from the registry, but they cannot use it. This can look like an agent that is visible but not usable."
+    a: "According to Microsoft Learn, if user access is set to specific users or groups, some users may have permission to install and use agents from the Agent Registry list, but only the users or groups you select can use agents and plugins. This could look like an agent that is visible but not usable, but Learn does not describe that symptom."
   - q: "Do users need a Microsoft 365 Copilot license?"
     a: "Learn says agent capabilities depend on the user's Microsoft 365 Copilot license, and users without the needed license may get an error. Check the license for the affected user before you change any tenant setting."
 ---
@@ -33,7 +33,7 @@ The checks differ:
 - **Agent Builder agents** are made inside Microsoft 365 Copilot. They are shared from the share dialog, and sharing is controlled by an admin setting.
 - **Copilot Studio agents** are shared from Copilot Studio and may be published to the Microsoft 365 Copilot channel.
 
-Microsoft Learn says the admin sharing setting applies only to agents built with Agent Builder. Learn also says it does not cover how Copilot Studio sharing works with the Microsoft 365 Copilot channel. Keep that gap in mind.
+Microsoft Learn says the admin sharing setting applies only to agents built with Agent Builder. The Learn page on agent settings does not say how this setting relates to Copilot Studio sharing. Keep that gap in mind.
 
 ## Step 1: Check that the agent is actually shared
 
@@ -63,7 +63,7 @@ Learn adds that changes apply to new sharing actions only. An agent that was alr
 
 Learn describes a section for agent and plugin access with separate switches for agents built by Microsoft, by your organization, and by external publishers. If a type is off, its agents do not show in the Agent Store.
 
-In the August 2026 thread, an advisor named a page called "Allowed agent types". The current Learn page calls the same area agent and plugin access, so the label has changed or the thread used an older name. Look for the switch for agents built by your organization.
+In the August 2026 thread about the install block, an independent advisor named a page called "Allowed agent types". The current Learn page calls the same area agent and plugin access, so the label has changed or the thread used an older name. Look for the switch for agents built by your organization.
 
 ## Step 4: Check user access
 
@@ -71,13 +71,13 @@ The user access setting is also under **Agents**, **Settings**. Learn lists thre
 
 - **All users** is the default.
 - **No users** means nobody in the organization can access agents and plugins.
-- **Specific users or groups** limits use to those people. Learn says other users may still be able to install from the agent registry, but they cannot use the agent.
+- **Specific users or groups** limits use to those people. Learn says that some users may have permission to install and use agents from the Agent Registry list, but only the users or groups you select can use agents and plugins.
 
-The last option fits the picture in the "visible but cannot add" thread. An AI-generated answer in that thread pointed to it. The asker did not confirm that this was the cause, so treat it as a candidate to rule out, not as the answer.
+The last option may fit the picture in the "visible but cannot add" thread. An AI-generated answer in that thread pointed to it. The asker did not confirm that this was the cause, so treat it as a candidate to rule out, not as the answer.
 
 ## Step 5: Check the agent's status and requests
 
-An advisor in the August thread suggested two more places in the admin center: the list of all agents, to see whether the agent is blocked, and the requests page, in case an admin approval is waiting. Learn says that agents published by an organization need approval before users can use them, and that admins manage agents and requests in the agent registry. The Learn page does not give exact menu paths for blocking, unblocking or approving. The paths in the thread are reported by an advisor, so verify them in your own admin center.
+The same advisor suggested two more places in the admin center: the list of all agents, to see whether the agent is blocked, and the requests page, in case an admin approval is waiting. Learn says that agents published by an organization need approval before users can use them, and that admins manage agents and requests in the agent registry. The Learn page does not give exact menu paths for blocking, unblocking or approving. The paths in the thread are reported by an advisor, so verify them in your own admin center.
 
 ## Step 6: Check licenses
 
@@ -85,7 +85,7 @@ Learn states that what an agent can do depends on the user's Microsoft 365 Copil
 
 ## Step 7: If an admin changed the owner
 
-In the April 2026 thread, an admin changed the owner of an Agent Builder agent in the admin center. The new owner could not find it in the Agents area of the Copilot Chat page. The asker found it by choosing **New agent** and then **Agent Builder**, where the agent was listed. The asker described this as a navigation issue, not a permission problem.
+In the April 2026 thread, an admin changed the owner of an Agent Builder agent in the admin center. The new owner could not find it in the Agents area of the Copilot Chat page. The asker then wrote that it did not show under the Agents section of the Copilot Chat page and that they found it by choosing **New agent** and then **Agent Builder**. No ownership or permission change was needed to make it appear.
 
 Learn confirms that admins can reassign ownership of shared agents, but it does not say where the new owner finds the agent. Treat the thread result as reported.
 
@@ -109,7 +109,7 @@ After each change:
 2. Try to add it.
 3. Start a chat and ask a question that needs the agent's knowledge.
 
-Learn does not say how long admin center changes take to apply. A thread about an agent that only appeared after eight hours, or after signing out and back in, is unresolved, so allow time and test with a fresh session before you undo a setting.
+Learn does not say how long admin center changes take to apply. In an unresolved August 2026 thread about a Copilot Studio agent deployed through a pipeline, the agent was still missing after more than eight hours and appeared only after the user signed out of the Copilot app and back in. That is one report, not a documented rule, but it is a reason to allow time and test with a fresh session before you undo a setting.
 
 ## Limits of this checklist
 

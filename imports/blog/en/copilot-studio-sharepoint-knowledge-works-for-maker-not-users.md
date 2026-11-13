@@ -10,7 +10,7 @@ keypoints:
   - "SharePoint knowledge runs as the person who is chatting, not as the maker, so a maker test proves very little about other users."
   - "A user without read access, a missing search entry or an encrypted file all end in the same quiet result: no answer and no error."
   - "Test the same question as the affected user in Microsoft 365 Copilot Chat to separate an agent problem from a permission or index problem."
-  - "Authentication, Restricted SharePoint Search and file limits are tenant-level checks that cost five minutes each."
+  - "Authentication, Restricted SharePoint Search and file size limits are quick checks that rule out whole groups of causes."
 faq:
   - q: "Why does my Copilot Studio agent work for me but give the fallback answer for other users?"
     a: "Microsoft Learn explains that SharePoint knowledge respects security trimming. The agent searches with the identity of the person chatting, so a user who lacks read access, whose search results are missing or whose sign-in is not set up gets no answer and no error. You, as the maker, usually have access and a working sign-in, so your tests pass."
@@ -19,7 +19,7 @@ faq:
   - q: "Can Restricted SharePoint Search cause this?"
     a: "Yes. According to Microsoft Learn, if Restricted SharePoint Search is turned on for the tenant, SharePoint knowledge sources are blocked in Copilot Studio. Ask the SharePoint admin whether it is on, or whether the relevant sites are on the allowed list."
   - q: "What if nothing helps and many users report the same?"
-    a: "In August 2026, several community threads described agents that suddenly stopped using SharePoint for everyone, including makers. One thread reported that Microsoft fixed an internal problem. Check service health and the community threads, and open a support case with a conversation ID and a UTC time if your case looks the same."
+    a: "In August 2026, two Microsoft Q&A threads described agents that had worked and then suddenly stopped using SharePoint content. In one of them, a Microsoft support engineer opened an internal bug. An asker later wrote that Microsoft had fixed an internal problem, but another user reported the same issue again afterwards. Check service health and the community threads, and open a support case with a conversation ID and a UTC time if your case looks the same."
 ---
 
 You built a Copilot Studio agent, connected a SharePoint site or library, and tested it. It answers well. Then a colleague opens the same agent in Teams or Microsoft 365 Copilot and gets the generic fallback message, such as "I'm not sure how to help with that" or "Sorry, I am not able to find a related topic".
@@ -51,7 +51,7 @@ The agent also does not read your library file by file. Learn says it uses only 
 
 Learn says agents created in Copilot Studio and Teams use **Authenticate with Microsoft** by default, and that SharePoint generative answers then run on behalf of the chatting user. With **No authentication**, the agent does not retrieve SharePoint information at all.
 
-One community answer, marked as the solution in a SharePoint lists thread, reported that connecting failed while authentication was set to no authentication and worked after switching to Authenticate with Microsoft or manual authentication.
+One community answer, marked as the solution in a SharePoint lists thread, reported that access to SharePoint and OneDrive was blocked while authentication was set to No authentication and worked after switching to Authenticate with Microsoft or manual authentication.
 
 1. In Copilot Studio, open the agent and go to its authentication settings.
 2. Pick **Authenticate with Microsoft**, unless you need a custom Microsoft Entra ID setup.
@@ -72,7 +72,7 @@ Learn says recently uploaded files may not be indexed yet, and some settings can
 
 1. Use the keyword test from step 1. If the file does not appear for the affected user, indexing or search settings are the cause.
 2. A SharePoint site administrator can ask for a reindex: open **Site Information**, then **View all site settings**, then **Search and offline availability**, and select **Re-index site**.
-3. One reply in the Community Hub thread suggested more checks. Confirm that the site setting for appearing in search results is set to yes, that the library is not set to stay out of the index, and that audience targeting on the library is off. It also suggested waiting up to 24 hours after access changes. These points come from a moderator answer without a link to documentation, so treat them as reported, not confirmed.
+3. A Microsoft external staff moderator in the March 2026 Microsoft Q&A thread suggested more checks. Confirm that the site setting for appearing in search results is set to yes, that the library is not set to stay out of the index, and that audience targeting on the library is off. The reply also suggested waiting up to 24 hours after access changes. These points come from a forum reply without a link to documentation, so treat them as reported in a community thread, not confirmed in Microsoft Learn.
 
 ## Step 5: Look for protected and unsupported content
 
@@ -85,7 +85,7 @@ Learn says recently uploaded files may not be indexed yet, and some settings can
 
 **Restricted SharePoint Search:** if it is on for the tenant, Learn says SharePoint knowledge is blocked, no matter how the agent is set up. The SharePoint admin must turn it off or add the sites to the allowed list. See [Restricted SharePoint Search](https://www.m365.fm/entity/restricted-sharepoint-search/).
 
-**Lists:** for SharePoint lists, Learn requires Dataverse search to be on in the agent's environment. It also notes that lists with more than 35,000 rows reduce quality, and that you should use no more than 10 lists per agent. A reply from September 2026 in the lists thread mentions the same Dataverse search requirement. Another reply there reported success by recreating the list as a Dataverse table, which is a workaround, not a fix.
+**Lists:** for SharePoint lists, Learn requires Dataverse search to be on in the agent's environment. It also notes that lists with more than 35,000 rows reduce quality, and that you should use no more than 10 lists per agent. A reply from September 2026 in the lists thread mentions the same Dataverse search requirement. Another reply there suggested recreating the list as a Dataverse table as a workaround until a fix ships. The reply does not confirm that this worked, and it is not a fix.
 
 **Filters and topic settings:** check the filters on the source (title, author, modified by, modified on) under **Knowledge**, then the source, then **Edit**, then **Advanced settings**. On a topic with a generative answers node, the option to search only selected sources means the agent will not fall back to other knowledge.
 
@@ -105,9 +105,9 @@ If all of this passes, write down:
 
 ## What the threads did and did not show
 
-- Two of the threads ended without a confirmed fix. The marked "most helpful" answer in the tester thread was a list of likely causes, and the asker did not report back.
+- Two of the threads ended without a confirmed fix. In the tester thread, the first answer (from Microsoft external staff) was a list of likely causes, no answer was marked accepted, and the asker did not report back. In the March 2026 thread, the asker did not report back either.
 - The lists thread has a solution mark on a reply that gives general setup advice. The asker did not confirm it.
-- In August 2026, two other threads reported that agents suddenly stopped using SharePoint, including for makers and new agents, starting around 12 and 19 August. One asker wrote that Microsoft fixed an internal problem, but other people kept reporting the issue afterwards. If your case affects everyone, including you, check service health first. This pattern is different from the one in this checklist.
+- In August 2026, two other threads reported that agents which had worked suddenly stopped using SharePoint content. In one thread, about an Excel file in SharePoint, several people reported that it started around Wednesday 12 August, and a Microsoft external staff member opened an internal bug on 18 August as a possible service regression. The other thread was posted on 19 August and reported that existing and newly created agents ignored SharePoint documents. In that thread, the asker wrote on 20 August that Microsoft had fixed an internal problem. This is secondhand and not a statement from Microsoft, and another user reported the same issue on 26 August. If your case affects every user and every agent, check service health first. This pattern is different from the one in this checklist.
 
 ## Related
 

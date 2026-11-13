@@ -13,7 +13,7 @@ keypoints:
   - "A custom detection script counts as detected only with exit code 0 and output on STDOUT, and any output on STDERR turns it into not detected."
 faq:
   - q: "What does error 0x87D1041C mean for a Win32 app?"
-    a: "In community threads and advisor answers it means the install command finished but the detection rule did not find the app afterwards. Note that the Microsoft Learn error code page describes this code only for Android, iOS and MSI cases and does not explain the Win32 case. For Win32 apps, the useful Learn page is the one on detection rules."
+    a: "In community threads and advisor answers it means the install command finished but the detection rule did not find the app afterwards. The Microsoft Learn error code page lists the code under Android, iOS/iPadOS and an Other installation errors table. The Other entry reads that the installation succeeded but the application is not detected, and it describes the app as deployed by Intune and then uninstalled. The page does not label that table as Win32, so the Win32 reading is not spelled out. For Win32 apps, the useful Learn page is the one on detection rules."
   - q: "If I add several detection rules, does one match suffice?"
     a: "No. Microsoft Learn says the conditions of all detection rules must be met for the app to count as detected. If you need either-or logic, for example a file or a registry value, use a custom detection script."
   - q: "What must a custom detection script return?"
@@ -24,30 +24,30 @@ faq:
 
 You package an app as a `.intunewin` file and assign it as required. The install command runs and the app is on the device. In the Intune admin center the status is still failed, with the message that the application was not detected after installation completed successfully and the code `0x87D1041C`.
 
-This came up in four Microsoft Q&A threads between late 2024 and mid 2026. One described 25 of 26 identical laptops detecting the app while one failed. Another had about 2,000 devices failing. A third saw thousands of endpoints reporting the error after an update of an internal app. None of the threads has an accepted answer, and in one of them the asker only solved the problem by recreating the app with a simpler rule. So this article is not a copy of one confirmed fix. It combines the points from the threads with what Microsoft Learn says about detection rules. It is not an official Microsoft procedure.
+This came up in Microsoft Q&A threads between late 2024 and mid 2026. Three of them name the error directly. One described 25 of 26 identical devices detecting the app while one failed. Another had about 2,000 devices failing. A third saw several thousand endpoints reporting the error after an update of an internal app. A fourth thread, from May 2026, is about Win32 installs that fail silently on some devices and does not name this code in its human answers. None of the threads has an accepted answer, and in one of them the asker only solved the problem by recreating the app with a simpler rule. So this article is not a copy of one confirmed fix. It combines the points from the threads with what Microsoft Learn says about detection rules. It is not an official Microsoft procedure.
 
 ## What you see
 
 - Intune shows the app as failed, with the error above, on some or all devices.
 - On the device, the app is installed and works.
 - Re-running the install from Intune does not change the result.
-- Often only a share of devices is affected, such as new builds, or machines that were upgraded from Windows 10 to Windows 11.
+- Often only a share of devices is affected. In the March 2025 thread, the asker wrote that about 3% of devices failed and that most of them were new builds or machines migrated from Windows 10 to Windows 11.
 
 ## Why it happens
 
 Microsoft's own description of the Win32 flow, in the support tip on deployment, explains it. The Intune Management Extension (IME) evaluates the detection rules before it downloads anything. If the app is already detected, it skips the install. It then installs, and evaluates the detection rules a second time. The result goes to the service. If the second check does not find what the rule describes, the app is reported as not detected, no matter what the installer said.
 
-One caution on the code itself. The Learn page on app install error codes lists 0x87D1041C with explanations for Android, iOS/iPadOS and MSI-style cases (for example, a user who removed the app, or an MSI that updated itself). It has no entry that explains it for a Win32 app. The Win32 reading, "installed but not detected", comes from the threads and advisor answers.
+One caution on the code itself. The Learn page on app install error codes lists 0x87D1041C with explanations for Android and iOS/iPadOS, and in an Other installation errors table. The Other entry says the installation succeeded but the application is not detected, and it names causes such as a user who removed the app or a self-updating MSI whose version no longer matches. The page does not label that table as Win32. The Win32 reading, "installed but not detected", matches the message text and the threads and advisor answers, but Learn does not confirm it for Win32 apps by name.
 
 ## Step 1: Find out what the detection step saw
 
 On an affected device, open the IME log folder: `C:\ProgramData\Microsoft\IntuneManagementExtension\Logs`. Learn lists these files:
 
-- `AppWorkload.log`, which it recommends as the place to start for app problems.
+- `AppWorkload.log`, which helps troubleshoot and analyze Win32 app deployment activities.
 - `IntuneManagementExtension.log`, the main log.
-- `AppActionProcessor.log`, which covers detection and applicability checks.
+- `AppActionProcessor.log`, which tracks detection and applicability checks for assigned apps.
 
-Open them with CMTrace. Look for the lines of your app and find the detection result after the install. Compare a failing device with a working one, as one answer suggested.
+Open them with CMTrace. Look for the lines of your app and find the detection result after the install. An AI-generated answer in the May 2026 thread suggested comparing these logs from a failing device with those from a working one, which is a sensible check but not a documented procedure.
 
 ## Step 2: Check what the install really leaves behind
 
@@ -57,7 +57,7 @@ On a test device that matches the failing ones, install the app by hand with the
 - the registry keys and values that were written,
 - the MSI product code, if it is an MSI.
 
-Compare this list with your rule. In the threads, the common mismatches were a path that differs between devices, a rule that expects a value the installer never writes, and a rule tied to a specific file date or version that differs on some machines.
+Compare this list with your rule. Typical mismatches to look for are a path that differs between devices, a rule that expects a value the installer never writes, and a rule tied to a specific file date or version that differs on some machines. These are things to check, not findings from the threads.
 
 ## Step 3: Make the rule simpler and machine-wide
 
@@ -65,14 +65,14 @@ Learn describes three manual rule types:
 
 - **MSI**: product code, with an optional version check. It can only be added once.
 - **File**: path, file or folder, and a detection method.
-- **Registry**: key path, value name and method. If the value name is empty, the rule checks that the key exists.
+- **Registry**: key path, value name and method. If the value name is empty, Learn says the detection happens on the key.
 
 The Q&A threads suggest these practical points:
 
-1. For an MSI, use the product code rule. Otherwise a registry rule was recommended over a file rule, as a file check can miss a file that exists.
-2. Avoid very specific properties such as a modified date and time. In the one-of-26 thread, the asker retired the app for that device and recreated it with a rule that only checks that a folder exists, and the problem went away. The cause was never explained, so this is a workaround.
+1. For an MSI, use the product code rule. Otherwise a registry rule was recommended over a file rule in the March 2025 thread, where a Microsoft external staff member wrote that file rules sometimes fail to detect a file that exists. Learn does not say this.
+2. Be careful with very specific properties such as a modified date and time. In the one-of-26 thread, the original rule checked for a specific .exe file in a specific folder with a specific date modified. The asker retired the app and recreated it with a rule that only checks that a folder exists. The asker did not say whether the problem went away, only that they needed to move on, and the cause was never explained, so treat this as a workaround.
 3. Choose a place that the service can read. An answer from June 2026 said that the agent runs as SYSTEM and cannot reliably read `HKEY_CURRENT_USER`, and that machine-wide locations such as `HKLM` or a folder under Program Files are safer. Learn does not state this in the text I read, so test it.
-4. Match the install behavior. Learn says that **System** installs for all users, and **User** installs for a specific user. The rule should look in a location that fits that choice.
+4. Match the install behavior. Learn says that user context refers to only a particular user and system context refers to all users of a Windows device. The rule should look in a location that fits that choice.
 
 ## Step 4: Check the 32-bit and 64-bit setting
 
@@ -110,11 +110,11 @@ if ((Test-Path -Path $folder) -or (Test-Path -Path $regKey)) {
 exit 1
 ```
 
-Test it in the same context Intune uses before you upload it. An advisor answer suggested starting a SYSTEM command prompt with Sysinternals PsExec to reproduce what the agent sees. That tip comes from a thread, not from Learn.
+Test it in the same context Intune uses before you upload it. An independent advisor in the May 2026 thread suggested using PsExec to run the install in the SYSTEM context to reproduce what the agent sees. That tip comes from a thread, not from Learn.
 
 ## Step 6: Look at other things that make an install look odd
 
-Where only some devices fail, the advisor in a May 2026 thread listed more candidates: a pending reboot, locked files, and antivirus or EDR software that silently blocks the installer. Also review the return codes in the app settings. Learn describes success, failed, retry (up to three attempts, five minutes apart), soft reboot and hard reboot, and your installer's exit codes should map to the right type.
+Where only some devices fail, an independent advisor in the May 2026 thread listed more candidates: a pending reboot, locked files, and antivirus or EDR software that silently blocks the installer. That thread is about silent install failures in general, not about this error code. Also review the return codes in the app settings. Learn describes success, failed, retry (up to three attempts, five minutes apart), soft reboot and hard reboot, and your installer's exit codes should map to the right type.
 
 ## Step 7: Redeploy and force a check
 
@@ -134,7 +134,7 @@ If a rule change does not help one device, the one-of-26 thread used another app
 ## Limits
 
 - None of the four threads has a confirmed root cause. The only closed one used a new app with a simpler rule.
-- The meaning of 0x87D1041C for Win32 apps is not documented on the Learn error code page.
+- The Learn error code page does not label any entry for 0x87D1041C as Win32, although the Other installation errors entry describes an installation that succeeded but is not detected.
 - The tip about SYSTEM not reading `HKEY_CURRENT_USER`, and the PsExec test, are reported in threads and not checked against Learn.
 
 ## Related
@@ -146,7 +146,7 @@ If a rule change does not help one device, the one-of-26 thread used another app
 - [Microsoft Learn: Add, assign and monitor a Win32 app in Intune](https://learn.microsoft.com/en-us/intune/intune-service/apps/apps-win32-add)
 - [Microsoft Learn: Understanding the flow behind deployment, delivery and processing of a Win32 app](https://learn.microsoft.com/en-us/troubleshoot/mem/intune/app-management/develop-deliver-working-win32-app-via-intune)
 - [Microsoft Learn: Intune Management Extension](https://learn.microsoft.com/en-us/intune/intune-service/apps/intune-management-extension)
-- [Microsoft Learn: App install error codes](https://learn.microsoft.com/mem/intune/apps/app-install-error-codes)
+- [Microsoft Learn: App install error codes](https://learn.microsoft.com/en-us/troubleshoot/mem/intune/app-management/app-install-error-codes)
 - [Microsoft Q&A: The application was not detected after installation completed successfully (March 2025)](https://learn.microsoft.com/en-us/answers/questions/2236146/the-application-was-not-detected-after-installatio)
 - [Microsoft Q&A: The application was not detected after the installation was completed successfully (December 2024)](https://learn.microsoft.com/en-us/answers/questions/2134779/the-application-was-not-detected-after-the-install)
 - [Microsoft Q&A: Why do some Win32 apps fail to install via Intune without any clear errors (May 2026)](https://learn.microsoft.com/en-us/answers/questions/5881230/why-do-some-win32-apps-fail-to-install-via-intune)
