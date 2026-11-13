@@ -7,18 +7,18 @@ author: mirko-p
 date: 2026-11-13
 topics: [sharepoint, sharepoint-migration, tenant-to-tenant-migration]
 keypoints:
-  - "Allow the full endpoint lists from Microsoft Learn, including api.office.com for SPMT and the scan endpoints for Migration Manager, by host name and not by IP address."
+  - "Allow the full endpoint lists from Microsoft Learn, including api.office.com for SPMT and the scan endpoints for Migration Manager. A thread advises doing this by host name, not by IP address."
   - "A firewall that rejects an entry with https:// in it may need just the host name in an FQDN object, as reported in a thread that marked this as the solution."
   - "SPMT disk space errors that Learn documents point to the local working folder, so check free space on the migration computer first, then the storage of the target site."
   - "'Cannot scan' with a connected agent had no confirmed fix in the threads. One asker had a support case that Microsoft treated as a known issue."
   - "Keep the failure report, the exact error code and the time (UTC) ready, because most threads ended with 'open a support case'."
 faq:
   - q: "Is api.office.com still required for the SharePoint Migration Tool?"
-    a: "The SPMT prerequisites page on Microsoft Learn (last updated August 2026) still lists https://api.office.com as an endpoint for Microsoft 365 APIs for content move and validation. A reply marked as the solution in a community thread says the same and advises allowing it by FQDN over TCP 443."
+    a: "The SPMT prerequisites page on Microsoft Learn (last updated August 2026) still lists https://api.office.com as an endpoint for Microsoft 365 APIs for content move and validation. A reply marked as the solution in a community thread says the same and advises allowing it by FQDN over TCP 443. The Learn page lists the endpoints as HTTPS URLs and names no ports."
   - q: "What does 'There isn't enough disk space in the target site collection' mean in SPMT?"
     a: "The Learn SPMT troubleshooting page lists disk space errors for the local working folder (for example error 0x02040012, temporary storage too low) but does not list that exact target-site wording. In the thread, one reply blamed the local temp storage and another suggested checking the destination site and tenant storage. Check both."
   - q: "Why does the Migration Manager agent show Connected but Cannot scan?"
-    a: "Learn does not list a 'Cannot scan' item in its Migration Manager troubleshooting page. It does list the scan endpoints the agent must reach. In one 2026 thread the asker saw failed SSL requests to Microsoft migration endpoints and had a support case that was described as a known issue, so the cause may be on the service side."
+    a: "Learn does not list a 'Cannot scan' item in its Migration Manager troubleshooting page. It does list the scan endpoints the agent must reach. In one 2026 thread the asker saw failed SSL requests to Microsoft migration endpoints and wrote that a support case was described to them as a known issue, so the cause may be on the service side. The thread does not confirm this."
   - q: "Which folder do I need to keep closed during an SPMT migration?"
     a: "Learn mentions the SPMT working folder %appdata%\\Microsoft\\MigrationToolStorage. Several errors on the Learn troubleshooting page say that its files and folders must stay closed while a migration runs."
 ---
@@ -34,7 +34,7 @@ A file share or on-premises SharePoint migration runs well for weeks. Then a lib
 
 ## Step 1: Check the endpoints
 
-Both tools only make outbound HTTPS calls. According to Learn, the Migration Manager agent sends requests to the endpoints and never receives calls from them.
+Learn lists the endpoints for both tools as HTTPS URLs. For Migration Manager it says the agent sends requests to these endpoints and receives responses, that the endpoints can never call Migration Manager, and that the agent does not open a port for remote connections.
 
 For SPMT, the Learn prerequisites page lists, among others:
 
@@ -44,12 +44,12 @@ For SPMT, the Learn prerequisites page lists, among others:
 - Destination: `*.sharepoint.com`
 - Graph for tenant and site information: `graph.microsoft.com`
 
-For Migration Manager, the Learn prerequisites page adds scan-related endpoints, for example `api.mmp.svc.cloud.microsoft`, `odyssey.mmp.svc.cloud.microsoft`, `api.prod.migrations.microsoft.com`, `odyssey.prod.migrations.microsoft.com` and several SignalR hosts. Always copy the current list from the page, because it changes. The page also mentions a SignalR host that is not in its table, so read the text around the table.
+For Migration Manager, the Learn prerequisites page adds scan-related endpoints, for example `api.mmp.svc.cloud.microsoft`, `odyssey.mmp.svc.cloud.microsoft`, `odyssey.prod.migrations.microsoft.com` and several SignalR hosts. `api.prod.migrations.microsoft.com` is listed there as a requirement for the Migration Manager web UI. Always copy the current list from the page, because it changes. The introduction of the page also names `production.odyssey.ops.mover.io` for SignalR connections, and that host is not in its table, so read the text around the table.
 
 The reply marked as the solution in the `api.office.com` thread gives this advice:
 
 1. Do not treat the firewall's rejection as proof that the endpoint is unneeded.
-2. Allow the host name over TCP 443 from the migration computer, and use DNS-based rules, not IP addresses.
+2. Allow the host name over TCP 443 from the migration computer, and use DNS-based rules, not IP addresses. This is the thread's advice. Learn names no port.
 3. If the firewall field rejects the entry, enter only the host name in an FQDN object. The `https://` prefix may be what the field refuses. This part is advice from the thread, not from Learn.
 4. Test name resolution and an outbound TLS connection from the migration computer, then run the scan again.
 
@@ -77,9 +77,9 @@ In the SharePoint 2019 thread, a reply from a community member with an MVP title
 
 Another reply in the same thread said the second message, "Not all the items in the package have been migrated", is probably a side effect of the first error. It suggested checking the storage limit of the destination site (in the SharePoint admin center under **Active sites**), the total tenant storage, and old versions and recycle bin content. That reply and the other one were not marked as a solution, and the poster did not report a result.
 
-If the target is full, the companion article on SharePoint storage that stays full after deleting files explains what counts against the quota and how to read the numbers. The short version: reports can lag by up to 48 hours, and in Manual storage mode each site has its own limit.
+If the target is full, keep in mind what Learn says about storage: usage reports can lag by up to 48 hours, and in Manual storage mode each site has its own limit.
 
-For the "not all items migrated" part, the Learn troubleshooting page lists error 0x01710009 ("Errors or time-out for Server Processing the file: Not all the items in the package are migrated") and a second variant that says to restart the migration. For missing dependencies on list items (error 0x01410010), check `FailureSummaryReport.csv` and make sure the dependencies are in the migration scope. The thread also suggests retrying one failed library in smaller batches, then running an incremental migration to catch missing items. That is a community suggestion.
+For the "not all items migrated" part, the Learn troubleshooting page lists error 0x01710009 twice: once with the text "Errors or time-out for Server Processing the file: Not all the items in the package are migrated", and once as a failure due to job end failures where some items failed in the package, with the advice to restart the migration. For missing dependencies on list items (error 0x01410010), check `FailureSummaryReport.csv` and make sure the dependencies are in the migration scope. The thread also suggests retrying one failed library in smaller batches, then running an incremental migration to catch missing items. That is a community suggestion, not a Learn step.
 
 ## Step 4: Check the Migration Manager agent
 
@@ -89,15 +89,15 @@ Learn's Migration Manager troubleshooting page covers a few agent cases that are
 - **Scan stays Queued:** only agents in the **Default** agent group can be scheduled. If no agent is in that group, change the agent's group to **Default**.
 - **Failure to submit a job (0x01610002):** the page recommends antivirus exceptions for `microsoft.sharepoint.migration.clientservice.exe` and `microsoft.sharepoint.migration.mthost.exe`.
 
-In the "Cannot scan" thread, one reply listed Microsoft's agent setup steps and asked whether all shares or only some are affected. An automatically generated answer in the same thread suggested editing an agent configuration file. Such answers are not evidence, and I found nothing like it in the Learn pages, so do not apply that change without a statement from Microsoft. The asker wrote that Microsoft Support treated the case as a known issue under investigation. If your symptoms match, go to support early.
+In the "Cannot scan" thread, one reply listed Microsoft's agent setup steps and asked whether all shares or only some are affected. An automatically generated answer in the same thread suggested editing an agent configuration file. Such answers are not evidence, and I found nothing like it in the Learn pages, so do not apply that change without a statement from Microsoft. The asker wrote that a support engineer told them it is a known issue being worked on. Microsoft staff did not confirm this in the thread. If your symptoms match, go to support early.
 
 ## Step 5: Certificate sign-in for the agent
 
-The certificate thread has no confirmed fix. A Microsoft staff reply pointed to a missing or incomplete certificate configuration file as the reason for `token_not_found`, and asked to check the app permissions. The asker then reported that endpoint tests and the admin URL were fine, and the problem stayed. The thread ended with advice to contact support. I could not confirm the file format or permissions in the Learn pages I read, so use the official Migration Manager setup page for certificate authentication and do not rely on the thread.
+The certificate thread has no confirmed fix. A Microsoft staff moderator pointed to a missing or incomplete certificate configuration file as the reason for `token_not_found`, and asked to check the app permissions. The asker answered that the file had been checked and the agent reinstalled many times. The moderator then suggested endpoint checks and granting the app Read on the admin site, and the asker reported that the endpoint tests passed and the problem stayed. The last moderator comment suggested Microsoft Service Hub if the problem remains. No reply confirms a fix. I could not confirm the file format or permissions in the Learn pages I read, so use the official Migration Manager setup page for certificate authentication and do not rely on the thread.
 
 ## Step 6: Collect evidence
 
-Learn names these log locations for Migration Manager: `%AppData%\Microsoft\SPMigration\Logs` for failed tasks, and the `Migration\MigrationTool[tenant_site]` folder under `%AppData%\Microsoft\SPMigration\Logs` for the task report of a completed task (or under your custom working folder). Sort the subfolders by modified time and open the one closest to the task start. The SPMT page does not list its own log folders, so open the failed task and choose **View report** (as one reply suggests). Note the first failed item, the error code, the correlation ID and the time in UTC, and add the destination site URL.
+Learn names these log locations for Migration Manager: `%AppData%\Microsoft\SPMigration\Logs` for failed tasks, and the `Migration\MigrationTool[tenant_site]` folder under `%AppData%\Microsoft\SPMigration\Logs` for the task report of a completed task (or under your custom working folder). Sort the subfolders by modified time and open the one closest to the task start. The SPMT page does not list its own log folders, so open the failed task's report in the tool (as one reply suggests). Note the first failed item, the error code, the correlation ID and the time in UTC, and add the destination site URL.
 
 ## Limits and open points
 

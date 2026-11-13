@@ -18,7 +18,7 @@ faq:
   - q: "Do I have to empty the second-stage recycle bin to free storage?"
     a: "Community answers often say to empty both bins. The Microsoft Support article on the site collection recycle bin says the first-stage bin contributes to the storage-used metric and the second-stage bin does not. Deleted subsites are the exception: they go straight to the second-stage bin and count until they are purged. Emptying the second stage also makes items unrecoverable, so do it only when you are sure."
   - q: "Does Microsoft force me to buy storage after a second overage?"
-    a: "In one thread an outsourced IT provider made that claim. The two replies in the thread said they know of no published policy like that. I also did not find one in the Learn pages listed below. The Learn page on out-of-storage tenants names three options: buy add-on storage or licenses, archive inactive content, or delete content you no longer need."
+    a: "In one thread the asker relayed that claim from an outsourced IT provider. The two replies in the thread, an independent advisor and an AI-generated answer, said they know of no published policy like that. I also did not find one in the Learn pages listed below. The Learn page on out-of-storage tenants names three options: buy add-on storage or licenses, archive inactive content, or delete content you no longer need."
   - q: "How is the tenant storage quota calculated?"
     a: "Microsoft Learn says that for non-EDU organizations the quota is 1 TB plus 10 GB per license for the eligible plan, plus any Microsoft 365 Extra File Storage add-ons. Archived data does not count toward the active quota. The Tenant Storage diagnostic can show how your own quota is allocated."
 ---
@@ -31,7 +31,7 @@ You deleted a large library, or even a whole site. The storage bar in the ShareP
 - A tenant of about 3.2 TB went read-only twice. The admin deleted roughly 1.2 to 1.5 TB and emptied both recycle bin stages, but sites stayed read-only (reported in October 2026).
 - A main site with a "storage exceeded" warning and more than 2,000 users depending on it (reported in June 2026).
 
-In the second thread, the outsourced IT provider said that Microsoft requires a storage purchase after a second overage. None of the replies confirmed this, and none of the three askers came back to say what fixed the problem. So the steps below follow the documentation, not a verified thread outcome.
+In the second thread, the asker relayed that the outsourced IT provider said Microsoft requires a storage purchase after a second overage. The replies, from an independent advisor and an AI-generated answer, did not confirm this. No asker wrote what fixed the problem (in the June thread two answers carry an accepted label, but the asker added nothing). So the steps below follow the documentation, not a verified thread outcome.
 
 ## Step 1: Wait for the report to catch up
 
@@ -53,13 +53,13 @@ Here the community advice and the documentation differ. Replies in the threads s
 - Subsites are the exception. They go directly to the second-stage bin and still count until they are purged.
 - The second-stage bin gets space equal to 200% of the site collection quota, and you cannot configure this.
 
-So go to the site, open **Recycle bin**, and delete the items there. Open the second-stage bin only if you deleted subsites or need to purge items for another reason. On the Recycle bin page, the link to the second stage sits at the bottom. Purging from the second stage cannot be undone.
+So go to the site, open **Recycle bin**, and delete the items there. For a deleted site, Learn says it does not count while it sits in the recycle bin, so if the number has not moved after 48 hours, look at the other causes below. Open the second-stage bin only if you deleted subsites or need to purge items for another reason. On the Recycle bin page, the link to the second stage sits at the bottom. Purging from the second stage cannot be undone.
 
 If you deleted a whole site collection, Learn says deleted sites in the recycle bin do not count toward the organization's total storage. It also says deleted site collections are kept for 93 days and then removed permanently.
 
 ## Step 4: Trim version history
 
-Learn's storage planning page lists trimming low-value versions as a way to reduce storage, and it recommends setting the organization version limits to Automatic. Trimmed versions are permanently deleted and do not go to the recycle bin, so test on one site first. The trim cmdlets and their limits are covered in the companion article on trimming SharePoint file versions with count limits.
+Learn's storage planning page lists trimming low-value versions as a way to reduce storage, and it recommends setting the organization version limits to Automatic. Trimmed versions are permanently deleted and do not go to the recycle bin, so test on one site first. The Learn page on trimming versions describes how the trimming works.
 
 ## Step 5: Check Manual versus Automatic storage management
 
@@ -71,7 +71,7 @@ Be careful when you switch from Manual to Automatic: Learn says SharePoint reset
 
 ## Step 6: Look at retention
 
-One reply says that retention policies, labels or holds can keep deleted content in the Preservation Hold Library, so deleting does not free space. Learn's storage planning page only mentions that version trimming does not touch the Preservation Hold Library. I did not find a Learn statement in the pages I read about whether this library counts toward the quota, so treat the retention point as a lead to check. Ask your compliance team before you weaken any retention setting.
+In the October thread an independent advisor and the AI-generated answer say that retention policies, labels or holds can keep deleted content in the Preservation Hold Library, so deleting does not free space. Learn's storage planning page only mentions that version trimming does not touch the Preservation Hold Library. I did not find a Learn statement in the pages I read about whether this library counts toward the quota, so treat the retention point as a lead to check. Ask your compliance team before you weaken any retention setting.
 
 ## Step 7: Run the tenant storage diagnostic
 
@@ -96,8 +96,8 @@ A OneDrive account has its own per-user quota based on license entitlement. When
 ## Limits and open points
 
 - None of the three threads has a confirmed fix. The steps above come from Learn and Microsoft Support, not from a solved case.
-- Learn does not document the second-stage recycle bin and quota in the same way as the Support article, so the two Microsoft pages differ in detail.
-- The 24 to 72 hour range in one reply is longer than Learn's 48 hours. If your numbers do not change after three days, contact support.
+- Learn's data deletion page does not say whether recycle bin contents count toward the quota. The Support article describes the two stages, and Learn's storage pages mention deleted sites, so read them together.
+- The 24 to 72 hour range in the August thread (independent advisor reply and AI-generated answer) is longer than Learn's 48 hours. If your numbers do not change after three days, contact support.
 
 ## Related
 

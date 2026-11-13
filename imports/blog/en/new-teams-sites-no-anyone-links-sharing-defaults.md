@@ -9,12 +9,12 @@ topics: [sharepoint, sharepoint-sharing-links, microsoft-365-groups, sensitivity
 keypoints:
   - "Each site has its own external sharing level, and it can never be more open than the organization setting."
   - "The sharing level (what is allowed) and the default link type (what the Share dialog preselects) are two separate settings, and you may need to change both."
-  - "Only a SharePoint or Global administrator can change a site's sharing level in the admin center. Site owners cannot."
+  - "Learn says you need at least the SharePoint Administrator role to change a site's sharing level in the admin center. Site owners cannot."
   - "According to Learn, group-connected sites, including Teams sites, do not default to Only people in your organization, so an org-only result calls for a check of group guest settings, labels and past changes."
   - "A script that loops over all team sites changes old sites too. Target specific sites, or use a sensitivity label, and test on one new team first."
 faq:
   - q: "Why does the Share dialog on a new team site not offer Anyone links?"
-    a: "The organization setting only sets the ceiling. Each site has its own sharing level that must be the same or more restrictive. If the site is set to a lower level, or the organization level is not Anyone, the Anyone option is missing. A SharePoint or Global administrator can change the site level under Active sites."
+    a: "The organization setting only sets the ceiling. Each site has its own sharing level that must be the same or more restrictive. If the site is set to a lower level, or the organization level is not Anyone, the Anyone option is missing. An administrator with at least the SharePoint Administrator role can change the site level under Active sites."
   - q: "What is the difference between the sharing level and the default link type?"
     a: "The sharing level decides which kinds of sharing are allowed on the site (for example Anyone, New and existing guests, Existing guests, or Only people in your organization). The default link type decides which link the Share dialog preselects: Anyone, People in your organization or Specific people. In the admin center the default link settings sit under Sharing for the site, and you clear Same as organization-level setting before you change them."
   - q: "Can a sensitivity label set the default sharing link for new sites?"
@@ -33,7 +33,7 @@ An administrator set the tenant to the most open sharing level and chose "Anyone
 
 ## Step 1: Understand the three layers
 
-Microsoft Learn describes link types as **Anyone with the link**, **People in your organization with the link**, **People with existing access** and **Specific people**. These layers control which one a user can pick:
+Microsoft Learn describes three shareable link types: **Anyone**, **People in your organization** and **Specific people**. The default link settings also offer **People with existing access**. These layers control which one a user can pick:
 
 1. **Organization level.** In the SharePoint admin center, expand **Policies**, select **Sharing**, and look at **External sharing** for SharePoint and OneDrive. Learn lists the options **Anyone**, **New and existing guests**, **Existing guests** and **Only people in your organization**.
 2. **Site level.** Each site has its own setting, and Learn says it must be at the same or a more restrictive level than the organization.
@@ -43,7 +43,7 @@ If you set the organization to Anyone and a site stays lower, users of that site
 
 ## Step 2: Check what a new site gets by default
 
-Learn gives a table of default sharing levels by site type. For classic sites, communication sites and modern sites without a group, the default is **Only people in your organization**. OneDrive defaults to **Anyone**. For group-connected sites, including Teams sites, the table says the default is **New and existing guests** if the group setting **Let group owners add people outside the organization to groups** is On, and **Existing guests** otherwise. The root site defaults to **Anyone**.
+Learn gives a table of default sharing levels by site type. For classic sites, communication sites and modern sites without a group, the default is **Only people in your organization**. OneDrive defaults to **Anyone**. For group-connected sites, including Teams sites, the table says the default is **New and existing guests** if the group setting **Let group owners add people outside the organization to groups** is On, and **Existing guests** otherwise. The root communication site (`<tenant>.sharepoint.com`) defaults to **Anyone**.
 
 This means the Learn table does not list "Only people in your organization" as the default for a group-connected site. In the first thread, the asker saw that value, and the moderator said new sites use safer defaults than the tenant setting, without a citation. So when you see org-only on a new team site, check these before you assume a default:
 
@@ -54,7 +54,7 @@ This means the Learn table does not list "Only people in your organization" as t
 
 ## Step 3: Change the sharing level of a site
 
-Learn says only a SharePoint Administrator or Global Administrator can change the setting, and site owners cannot. In the SharePoint admin center:
+Learn says you must be at least a SharePoint Administrator to change the setting, and site owners cannot. In the SharePoint admin center:
 
 1. Open **Active sites** and select the site.
 2. On the **Settings** tab, select **More sharing settings**.
@@ -74,7 +74,7 @@ For a Teams private or shared channel site, Learn says to use `Set-SPOSite` inst
 
 ## Step 5: PowerShell for several sites
 
-The moderator's reply in the first thread offered a script that finds all active sites with the template `GROUP#0` and sets the sharing level and default link on each. Two points about it:
+The moderator's reply in the first thread (the one the asker accepted) offered a script that finds all active sites with the template `GROUP#0` and sets the sharing level and default link on each. Two points about it:
 
 - The date filter in the script was commented out, so it hits every team site, not only new ones. Review the target list before you run it.
 - The template code `GROUP#0` comes from the thread. I did not verify it in Learn.
@@ -83,12 +83,12 @@ The cmdlet parameters themselves are documented. Connect with `Connect-SPOServic
 
 ```powershell
 Set-SPOSite -Identity https://contoso.sharepoint.com/sites/TeamA -SharingCapability ExternalUserAndGuestSharing
-Set-SPOSite -Identity https://contoso.sharepoint.com/sites/TeamA -DefaultSharingLinkType AnonymousAccess
+Set-SPOSite -Identity https://contoso.sharepoint.com/sites/TeamA -DefaultShareLinkScope Anyone
 ```
 
 Learn describes `-SharingCapability` values as follows: `Disabled` means sharing outside the organization is disabled. `ExistingExternalUserSharingOnly` allows only external users already in the directory. `ExternalUserSharingOnly` enables sharing by email but not anonymous links. `ExternalUserAndGuestSharing` enables both.
 
-For the default link, Learn says `-DefaultSharingLinkType` is to be replaced by `-DefaultShareLinkScope`, with the values `Anyone`, `Organization`, `SpecificPeople` and `Uninitialized`. It also says `-DefaultLinkToExistingAccess $true` overrides the default link type, so set it to `$false` if "People with existing access" keeps winning. Another parameter, `-OverrideSharingCapability`, is documented with the remark that the effective site setting is the most restrictive of tenant, partition and site unless you set it to `$true`.
+For the default link, the thread's script uses `-DefaultSharingLinkType AnonymousAccess`. The Learn reference describes that parameter as to be replaced by `-DefaultShareLinkScope`, with the values `Anyone`, `Organization`, `SpecificPeople` and `Uninitialized`, so the example above uses the newer one. Learn also says `-DefaultLinkToExistingAccess $true` overrides the default link type, so set it to `$false` if "People with existing access" keeps winning. Another parameter, `-OverrideSharingCapability`, is documented with the remark that the effective site setting is the most restrictive of tenant, partition and site unless you set it to `$true`.
 
 ## Step 6: Use a sensitivity label for new sites
 
@@ -107,7 +107,6 @@ I did not verify the thread's other claims about the label's own external sharin
 - Neither asker confirmed the outcome in writing. They accepted an answer, nothing more.
 - "People in your organization" links do not work for guests in the directory, according to Learn, and Anyone links are not allowed in shared channel sites.
 - An organization that turns Anyone links on widely should check the governance side first. Learn describes Anyone links as freely transferable, and says access through them cannot be audited.
-- A third thread (October 2026) about a Microsoft Lists form link that colleagues cannot open had no marked answer. It is not covered here.
 
 ## Related
 

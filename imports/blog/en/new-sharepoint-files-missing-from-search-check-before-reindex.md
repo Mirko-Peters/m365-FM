@@ -18,7 +18,7 @@ faq:
   - q: "Where do I turn search visibility on or off for a site or library?"
     a: "For a site: Settings, Site settings, then Search and offline availability, and set Allow this site to appear in Search results. For a library: Library settings, Advanced settings, and set Allow items from this document library to appear in search results. Site settings need Manage Permissions, library settings need Manage Lists."
   - q: "Does reindexing a library fix missing search results?"
-    a: "It can help when the index is stale, but it only queues the content for the next scheduled crawl. Learn warns that reindexing a site can cause a massive load on the search system and says to do it only if you made changes that require all items to be reindexed. In the thread discussed here, an administrator reported that reindexing and the other steps did not help."
+    a: "It can help when the index is stale, but it only queues the content for the next scheduled crawl. Learn warns that reindexing a site can cause a massive load on the search system and says to do it only if you made changes that require all items to be reindexed. In the first thread, a later commenter reported that the suggested steps, which included a library reindex, did not help."
   - q: "Why do shared items not appear in search for some users?"
     a: "Learn describes one cause: if a SharePoint group that defines permissions for the item has more than 2,000 users, search results are not available for that item. The fix in Learn is to keep the group under 2,000 users, or to add a security group to the SharePoint group instead of adding people one by one."
 ---
@@ -29,21 +29,21 @@ A team uploads new documents to a library. They open fine, but a search for the 
 
 - New items in a document library are missing from search results. Older items are found.
 - The asker has already looked at crawl and search settings and followed general advice online.
-- In the second thread, files from 2024 to 2026 did not appear in the **Recent** list on a site.
+- In the second thread, the asker said recent documents from 2024 to 2026 were not shown on the site.
 
-One of the replies in the first thread said that new uploads can take a while to appear, and recommended a library reindex. A later comment from another administrator said they had done all of the suggested steps without success, and the moderator asked them to open a new question with details. So there is no confirmed solution in either thread.
+One of the replies in the first thread said that new uploads can take a while to appear, and recommended a library reindex. A later comment from another user said they had done all of the suggested steps without success, and the moderator asked them to open a new question with details. So there is no confirmed solution in either thread.
 
 ## Step 1: Separate search from the Recent list
 
-The moderator's reply in the second thread says the **Recent** list is personal to each viewer and shows what that viewer opened or worked on, so newly added files can be absent there even when search works. I did not find that statement in the Learn pages I read, so verify it on your own site. The practical test is simple: open the library itself, and search for a file name there. If the file is in the library but not in the Recent list, you do not have a search problem.
+The moderator's reply in the second thread says the **Recent documents** web part is personalized per user and shows only files that the user opened or worked on, so newly added files can be absent there even when search works. I did not find that statement in the Learn pages I read, so verify it on your own site. The practical test is simple: open the library itself, and search for a file name there. If the file is in the library but not in the Recent list, you do not have a search problem.
 
 ## Step 2: Allow time for the crawl
 
-Learn says SharePoint in Microsoft 365 crawls automatically on a defined schedule, and the crawler picks up content that changed since the last crawl. The pages give no duration. In the first thread, the moderator named 24 hours to several days for new uploads, without a source. Compare the modified date of an older file that search finds with your newest file that it does not find. That tells you how big the gap is.
+Learn says SharePoint in Microsoft 365 crawls automatically on a defined schedule, and the crawler picks up content that changed since the last crawl. The pages give no duration. In the first thread, the moderator named 24 hours to several days for new uploads and pointed to the search schema documentation in general, not to a specific time. The second thread's moderator said indexing can take up to 24 hours or longer. Compare the modified date of an older file that search finds with your newest file that it does not find. That tells you how big the gap is.
 
 ## Step 3: Check the site and library search settings
 
-Learn's page on missing search results lists these checks. You need the right permission level to see them: Learn says the site-level settings need **Manage Permissions** (included in the site Owners group), and list or library settings need **Manage Lists**.
+Learn's page on missing search results lists these checks, and its page on making site content searchable adds the permission levels: it says the site-level settings need **Manage Permissions** (included in the site Owners group), and list or library settings need **Manage Lists**.
 
 **Site level**
 
@@ -68,7 +68,7 @@ This applies to pages (.aspx) more than to files. On the same **Search and offli
 - **Always index all Web Parts on this site**
 - **Never index any Web Parts on this site**
 
-Learn says that if a subsite does not inherit permissions, its .aspx pages will not appear in results under the default setting. The two fixes it gives are to select **Always index all Web Parts on this site**, or to make the subsite inherit permissions from the parent. Think about the second option before you choose the first. Always indexing means content from all ASPX pages can appear in results regardless of their permissions, as Learn describes the option.
+Learn says that if a subsite does not inherit permissions, its .aspx pages will not appear in results under the default setting. The two fixes it gives are to select **Always index all Web Parts on this site**, or to make the subsite inherit permissions from the parent. Think about the second option before you choose the first. Learn describes the option as showing content of all ASPX pages in results regardless of the page permissions, so decide whether that is acceptable for the site. Search results stay security trimmed for users.
 
 ## Step 5: Check the size of the SharePoint groups
 
@@ -86,13 +86,13 @@ If all the settings are right and the gap does not close, reindex the library. L
 2. Under **General Settings**, select **Advanced settings**.
 3. Scroll to **Reindex Document Library** and select the button. A warning appears, so select the button again to confirm.
 
-The content is reindexed during the next scheduled crawl. Learn says reindexing marks all content as changed and that it can cause a massive load on the search system, so Microsoft advises not to reindex a site unless changes require it. Learn gives no duration. The first thread's reply said up to 24 hours, but also noted that it only queues the library. For a whole site, use **Site settings**, **Search and offline availability**, and **Reindex site**, then tick the confirmation box.
+The content is reindexed during the next scheduled crawl. Learn says reindexing marks all content as changed and that it can cause a massive load on the search system, so Microsoft advises not to reindex a site unless changes require it. Learn gives no duration. The moderator in the first thread said to wait up to 24 hours after the library reindex. For a whole site, use **Site settings**, **Search and offline availability**, and **Reindex site**, then tick the confirmation box.
 
-Learn's search schema page adds one more reason to reindex: schema changes, such as a new or changed managed property, do not trigger a crawl on their own, so you request the reindex yourself.
+Learn's reindexing page adds one more reason to reindex: changes to a managed property or to the mapping between crawled and managed properties do not trigger a crawl on their own, so you request the reindex yourself.
 
 ## Step 8: Look for custom search settings
 
-The moderator in the first thread suggested a few more checks if the problem lasts 24 to 48 hours: look in the SharePoint admin center under **More features** and **Search** for sites that are excluded from results, create a new modern search results page to rule out custom configuration, and use the Search Query Tool to see what the index contains. I did not verify these three items in the Learn pages above, so use them as leads.
+The moderator in the first thread suggested a few more checks if the problem lasts 24 to 48 hours: check the SharePoint admin center for sites that are excluded from search (the reply names "No Result Sites") or for crawl-blocking rules, and confirm that required metadata is filled in, create a new modern search results page to rule out custom configuration, and use the Search Query Tool to see what the index contains. I did not verify these items in the Learn pages above, and I give no menu path for them, so use them as leads.
 
 ## Step 9: Collect details for support
 
@@ -101,7 +101,7 @@ If everything above checks out, open a Microsoft 365 support request through you
 ## Limits and open points
 
 - The two threads have no confirmed answer, so this is a checklist from documentation, not a verified fix.
-- Learn's reindex page shows a visible update date of April 2025. Its missing-results page shows July 2025. Compare with the current portal text.
+- Learn pages and the SharePoint menus change over time. Compare the steps here with the current Learn text and your own site.
 - No time range for crawling is documented. Treat day counts from community replies as estimates.
 
 ## Related

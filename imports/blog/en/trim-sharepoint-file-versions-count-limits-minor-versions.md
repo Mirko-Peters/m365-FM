@@ -23,7 +23,7 @@ faq:
     a: "For the tenant-level trim cmdlets, which are in public preview, Learn requires a SharePoint Advanced Management license or a Copilot license. The Learn page lists that requirement only for the tenant-level section. The site and library cmdlets in this article are described without a license statement."
 ---
 
-A SharePoint administrator wanted to cut storage by trimming file versions across all sites. They ran a script that read site URLs from a CSV file and called `New-SPOSiteFileVersionBatchDeleteJob` with `-MajorVersionLimit 100` and `-MajorWithMinorVersionsLimit 5`. The expectation was: keep the last 100 major versions and the last 5 minor versions. What happened: the major versions were trimmed, but all minor versions of the remaining major versions stayed.
+A SharePoint administrator wanted to cut storage by trimming file versions across all sites. They ran a script that read site URLs from a CSV file and called `New-SPOSiteFileVersionBatchDeleteJob` with `-MajorVersionLimit 100` and `-MajorWithMinorVersionsLimit 5`. The expectation was: keep the last 100 major versions and the last 5 minor versions of each major version. What happened: the major versions were trimmed, but all minor versions of the remaining major versions stayed.
 
 That question was posted in the Microsoft Community Hub in February 2026. It has no answer. This article does not claim to solve it. It shows what Microsoft Learn says about the two parameters, gives you a careful way to run a trim, and marks the points where documentation and the thread leave a gap. It is not an official Microsoft procedure.
 
@@ -55,9 +55,9 @@ For age-based trimming, Learn lists two limits. The job does not delete versions
 
 ## Step 2: Generate the report and run the what-if analysis
 
-Learn recommends a what-if analysis before any trim. The tutorials describe a version storage usage report for the site or library, which you download as a CSV file. You then run a script against the report with PowerShell 7. For the count-limit case, the what-if script in the tutorial takes `-ImportPath`, `-ExportPath` and `-MajorVersionLimit`. It does not take a minor-version limit. So the what-if result for count limits only models the major version limit.
+Learn's trim page says to run a what-if analysis before trimming (the queue-a-job tutorial calls it optional). The tutorials describe a version storage usage report for the site or library, which you download as a CSV file. You then run a script against the report with PowerShell 7. For the count-limit case, the what-if script in the tutorial takes `-ImportPath`, `-ExportPath` and `-MajorVersionLimit`. It does not take a minor-version limit. So the what-if result for count limits only models the major version limit.
 
-The tutorial pages do not name the cmdlet that creates the report, so follow the Learn tutorial for that step. Learn says a what-if run on a large site or library can take a few days.
+The tutorial pages do not name the cmdlet that creates the report, so follow the Learn tutorial for that step. Learn says a trim job can take a few days depending on library size. The what-if tutorial gives no duration.
 
 ## Step 3: Queue the job on one site first
 
@@ -73,7 +73,7 @@ For one library, use the library variant:
 New-SPOListFileVersionBatchDeleteJob -Site https://contoso.sharepoint.com/sites/site1 -List "Documents" -MajorVersionLimit 100 -MajorWithMinorVersionsLimit 0
 ```
 
-Learn warns that versions deleted this way are permanently deleted and do not go to the recycle bin. The cmdlet reference also lists `-WhatIf` and `-Confirm` as parameters. I did not find a description of what `-WhatIf` prints for these cmdlets, so do not treat it as a replacement for the report-based what-if analysis.
+Learn warns that versions deleted this way are permanently deleted and do not go to the recycle bin. The cmdlet reference also lists `-WhatIf` and `-Confirm` as parameters. The reference describes `-WhatIf` only as showing what would happen if the cmdlet runs, with no detail on its output for these cmdlets, so do not treat it as a replacement for the report-based what-if analysis.
 
 ## Step 4: Watch the job
 
@@ -85,7 +85,7 @@ Get-SPOSiteFileVersionBatchDeleteJobProgress -Identity https://contoso.sharepoin
 
 For a library job, the Learn trim page lists `Get-SPOListFileVersionBatchDeleteJobProgress -Site <url> -List <name>`. To stop a job, use `Remove-SPOSiteFileVersionBatchDeleteJob` or `Remove-SPOListFileVersionBatchDeleteJob`. Cancelling stops further deletion but does not restore versions that were already deleted.
 
-Do not expect the storage report to change at once. Learn says usage figures can lag by up to 48 hours.
+Do not expect the storage report to change at once. Learn's page on site storage limits says storage usage does not include changes from the last 24 to 48 hours.
 
 ## Step 5: Set limits for new versions
 
@@ -94,7 +94,7 @@ A trim job only handles versions that exist today. To control future versions, s
 - Site: `Set-SPOSite -Identity <url> -EnableAutoExpirationVersionTrim $true` for Automatic limits. Learn lists `-ApplyToNewDocumentLibraries` and `-ApplyToExistingDocumentLibraries` to choose the scope.
 - Library: `Set-SPOListVersionPolicy -Site <url> -List <name> -EnableAutoExpirationVersionTrim $true`.
 
-Learn adds that when you lower a count limit on a library, existing versions above the new limit are trimmed gradually, up to 20 per newly created version. The admin center UI does not accept fewer than 100 major versions or an expiration shorter than 30 days. Learn says lower values are possible through public APIs but not recommended, because they can cause inadvertent data loss.
+Setting a site or library policy does not trim versions that already exist, so queue a trim job for those. Changes to existing libraries are processed in a background job that Learn says can take up to 24 hours. Learn adds that when you lower a count limit on a library, existing versions above the new limit are trimmed gradually, up to 20 per newly created version. The admin center UI does not accept fewer than 100 major versions or an expiration shorter than 30 days. Learn says lower values are possible through public APIs but not recommended, because they can cause inadvertent data loss.
 
 ## Step 6: Tenant-wide trimming
 
@@ -120,6 +120,8 @@ Learn lists tenant-level cmdlets such as `New-SPOTenantApplyFileVersionPolicyJob
 - [Microsoft Learn: Run a what-if analysis](https://learn.microsoft.com/en-us/sharepoint/tutorial-run-what-if-analysis)
 - [Microsoft Learn: New-SPOSiteFileVersionBatchDeleteJob](https://learn.microsoft.com/en-us/powershell/module/sharepoint-online/new-spositefileversionbatchdeletejob)
 - [Microsoft Learn: Set version limits for an individual document library](https://learn.microsoft.com/en-us/sharepoint/library-version-limits)
+- [Microsoft Learn: Set version limits for a site](https://learn.microsoft.com/en-us/sharepoint/site-version-limits)
+- [Microsoft Learn: Manage site storage limits](https://learn.microsoft.com/en-us/sharepoint/manage-site-collection-storage-limits)
 - [Microsoft Learn: Overview of version history limits](https://learn.microsoft.com/en-us/sharepoint/document-library-version-history-limits)
 - [Microsoft Learn: Plan version storage on document libraries](https://learn.microsoft.com/en-us/sharepoint/plan-version-storage)
 - [Microsoft Community Hub: Trimming SharePoint Version History - Minor Versions (February 2026)](https://techcommunity.microsoft.com/discussions/sharepoint_general/trimming-sharepoint-version-history---minor-versions/4491609)
