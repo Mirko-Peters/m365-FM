@@ -68,27 +68,27 @@ Open the rule and read its query. If it starts from `SecurityEvent`, you have fo
 
 **Option A: collect the Security channel with the AMA connector.** Learn says to use the Windows Security Events via AMA connector if you need those rules without modification. It also states that, for systems that are not Azure virtual machines, Azure Arc must be installed and enabled before you enable the AMA-based connector. This option changes your collection design, so check it against why you chose forwarding in the first place.
 
-**Option B: adapt the rule.** Learn says to adapt the rule queries to use `WindowsEvent` or supported ASIM parsers. In the thread, a community member listed the practical work:
+**Option B: adapt the rule.** Learn says to adapt the rule queries to use `WindowsEvent` or supported ASIM parsers. In the thread, two community members (one of them an MCT) described the practical work:
 
 1. Run a query on `WindowsEvent` to see which fields the events carry for the IDs you need.
-2. Copy the rule, so the original template stays as it was.
-3. Change the table, add a filter on the channel after checking its real value, and rewrite the field extraction, because the schemas differ.
-4. Rebuild the entity mapping from the new fields.
-5. If you use an ASIM parser, test it before you rely on it.
+2. Clone the rule into a custom rule that queries `WindowsEvent`, so the original template stays as it was. One reply suggested a scheduled rule if NRT does not accept `WindowsEvent`.
+3. Filter on the event ID and rewrite the field extraction, because the schemas differ. For event 4732 one reply mapped the group and member values from `EventData`.
+4. If you use an ASIM parser, test it before you rely on it. One reply said ASIM is not an automatic bridge.
+5. My own addition, not from the thread: check the entity mapping of the copied rule against the new fields.
 
 Learn's page on [ASIM](https://learn.microsoft.com/en-us/azure/sentinel/normalization) says you can write analytics rules with ASIM, but I found no Windows-specific parser name on it, so I name none here. The thread's replies also did not give the field names. Look at the `EventData` column in your own results.
 
 If the rule is a near-real-time rule, remember the limits on the [NRT rules page](https://learn.microsoft.com/en-us/azure/sentinel/near-real-time-rules): at most 50 rules per customer, queries run once per minute, and up to 30 single-event alerts per run. Learn also says an NRT query may reference more than one table. In theory this allows one rule to read both tables in a mixed estate. I did not test that.
 
-For new detections, the NRT page also says Microsoft recommends Custom detections in Defender XDR. Check whether that fits your data before you build more rules on the Sentinel side.
+For new detections, Learn's page on creating NRT rules says Custom detections is now the best way to create new rules across Microsoft Sentinel and Microsoft Defender XDR. Check whether that fits your data before you build more rules on the Sentinel side.
 
-**Option C: change the data collection rule so the events go to `SecurityEvent`.** A Microsoft staff member said in the thread that they had seen this approach used but found no official documentation for it. The reply named two schema changes: rename `Provider` to `EventSourceName`, and convert `EventData` from dynamic to string. Treat this as unsupported until you confirm it with Microsoft. A support case is the right place for that question.
+**Option C: change the data collection rule so the events go to `SecurityEvent`.** A Microsoft staff member said in the thread that they had seen this approach used but had found no official documentation for it. The reply proposed getting forwarding to work first and then changing the data collection rule, and named two schema changes: rename `Provider` to `EventSourceName`, and convert `EventData` from dynamic to string. The same reply asked whether anyone had tried this recently with the current AMA and DCR implementation, and nobody answered. Treat this as unsupported until you confirm it with Microsoft. A support case is the right place for that question.
 
-**Option D: split the collection.** One commenter described a proof of concept: the forwarding connector collects non-security events into `WindowsEvent`, and a Security Events via AMA rule collects the Security channel from the forwarded events into `SecurityEvent`. They reported it seemed to work. A Microsoft reply asked whether anyone had run it in production, and nobody in the thread had. Learn does not describe this design.
+**Option D: split the collection.** One community member described a proof of concept: forwarded events go to `WindowsEvent` through one connector, while a second connector reads the Forwarded Events channel with an XPath filter for Security events to fill `SecurityEvent`. They said it works but that they were not confident enough for production, and asked whether others had tried it. Nobody answered that. Learn does not describe this design.
 
 ## Step 4: Avoid duplicates
 
-Learn does not discuss running both connectors for the same events. A community reply advised against enabling both paths for the same data, to avoid duplicate ingestion and duplicate alerts. Before you add a second path, list which event IDs go where and exclude them from the other path.
+Learn does not discuss running both connectors for the same events. Two community replies warned about enabling both paths for the same data, because of duplicate ingestion and duplicate alerts. Before you add a second path, list which event IDs go where and exclude them from the other path.
 
 ## Step 5: Test the fix
 
@@ -102,7 +102,7 @@ If a rule is later shown with **AUTO DISABLED** at the start of its name, Learn'
 ## What remains open
 
 - The thread had no accepted answer and no confirmation from the poster.
-- Option C and Option D are not covered by Learn. Both rest on single replies.
+- Option C and Option D are not covered by Learn. Each rests on a single reply, and nobody in the thread reported testing either.
 - Which table future built-in templates will use for forwarded events is not stated in the sources I read.
 
 ## Related

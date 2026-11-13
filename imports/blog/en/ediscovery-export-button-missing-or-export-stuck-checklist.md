@@ -30,7 +30,7 @@ This article collects both. The scenarios come from three Microsoft Q&A threads 
 
 - A user was added to the case and holds the Compliance Administrator role group, but the review set menu has no **Export** or **Download**. The browser was Microsoft Edge. (January 2025 thread, with a later comment from another user in July 2026 who reported the same.)
 - An export that includes Exchange stays at "Assessing request, 2 locations and 0 items identified" for more than 24 hours for a few custodians, while SharePoint-only exports for the same people finish and other custodians export normally. (January 2026 thread.)
-- Search and export jobs fail with an internal server error after a Microsoft service problem. (March 2025 thread.)
+- Content searches fail with the internal server error CS019-001 from one day to the next. The asker later quoted a Microsoft service health notice about eDiscovery, and other users reported the same error for months afterwards. (March 2025 thread.)
 
 ## Step 1: Check the roles
 
@@ -56,7 +56,7 @@ Also note: an eDiscovery Manager can only manage the cases they created. If the 
 
 ## Step 3: Use the documented export path and browser
 
-For a review set, [Learn](https://learn.microsoft.com/en-us/purview/edisc-review-set-export) says: open the case, select the **Review sets** tab, open the review set, select the **All items** tab, select the items, then use **Action**, then **Export** on the command bar. The thread's responder used the word "Actions", but Learn's page uses **Action**. Follow Learn's label.
+For a review set, [Learn](https://learn.microsoft.com/en-us/purview/edisc-review-set-export) says: open the case, select the **Review sets** tab, open the review set, select the **All items** tab, select the items, then use **Action**, then **Export** on the command bar. A commenter in the first thread wrote "Actions", while the answer and Learn's page use **Action**. Follow Learn's label.
 
 After you start the export, Learn says to use the **Process manager** to track progress and download the content. The **Exports** tab in a case lists completed exports.
 
@@ -66,7 +66,7 @@ For downloads, [the search export page](https://learn.microsoft.com/en-us/purvie
 - Set automatic downloads to **Allow**.
 - Allow first-party and third-party cookies for the download proxy sites, and turn off tracking prevention for the site.
 - Allowlist the Purview export and Azure storage endpoints. Tools such as Zscaler or Microsoft Defender for Endpoint may need configuration.
-- Use 7-Zip or WinZip instead of the built-in Windows zip tool, and enable **Condense paths to fit within 259 characters** if unzipping fails on long names.
+- Use 7-Zip or WinZip instead of the built-in Windows zip tool, and select **Condense paths** when you configure the export if unzipping fails on long names. Learn names 256 and 259 characters in different places for this limit, so verify the value in your tenant.
 
 The July 2026 comment in the first thread asked whether another browser had helped, and nobody replied, so that point is still open.
 
@@ -88,7 +88,7 @@ For review set exports, Learn says you must download the content within 30 days 
 
 ## Step 5: Check the mailboxes that hang
 
-In the January 2026 thread, only some custodians were stuck. Two moderator replies suggested these checks, which are in line with Learn's troubleshooting table:
+In the January 2026 thread, only some custodians were stuck. The moderator's accepted answer and a follow-up comment suggested these checks. The first two are in line with Learn's troubleshooting page:
 
 1. Check that the user is found with `Get-Recipient`. Learn says that if the recipient is not found, there may be a synchronization delay. If no user object comes back, wait 30 minutes and check again, then retry.
 2. If Learn's "location is ambiguous" error appears, a duplicate or conflicting object uses the same identifier. Run `Get-Recipient` and remove the duplicate.
@@ -101,7 +101,7 @@ The thread shows that the first answer was marked as accepted by the poster. It 
 
 ## Step 6: Rule out a service problem and a license gap
 
-In the March 2025 thread, the search and export failures turned out to be a Microsoft service incident that the poster found in Service Health. Before you change anything else, check Service Health for eDiscovery. One community member in the same thread, months later, reported that their failure was caused by the account running the search having no license. That is a single report, but it is cheap to check.
+In the March 2025 thread, the asker quoted a Microsoft Service Health notice about an eDiscovery degradation that began the day the searches failed, and reported that the main search function was restored. Export had not been tested, and later commenters reported the same CS019-001 error in May and October 2025. Before you change anything else, check Service Health for eDiscovery. One user with very little reputation answered in that thread that their failure was caused by the account running the search having no license. That is a single unverified report, but it is cheap to check.
 
 ## Step 7: Collect data before you call support
 

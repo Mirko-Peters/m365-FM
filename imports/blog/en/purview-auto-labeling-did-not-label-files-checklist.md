@@ -10,7 +10,7 @@ keypoints:
   - "Client-side labeling reacts when a user creates or edits content. Files that already exist need a service-side auto-labeling policy, and that policy must run a simulation before it can label anything."
   - "Microsoft Learn says an email can be labeled while its attachment is not, and that auto-labeling never replaces a manual label unless the policy is set up to do so."
   - "Service-side auto-labeling for SharePoint and OneDrive does not add headers, footers or watermarks, even if the label defines them."
-  - "For bulk labeling when a policy is not an option, the Information Protection client cmdlet Set-FileLabel is the documented route."
+  - "For bulk labeling when a policy is not an option, the Information Protection cmdlet Set-FileLabel is documented, but its path parameter takes local paths, network paths or SharePoint Server URLs, so check how it reaches your files."
 faq:
   - q: "Why did my auto-labeling policy not label files that already existed?"
     a: "Two common reasons. First, client-side auto-labeling, which is a setting on the label itself, only acts when a user creates or edits content in a supported app. Second, a service-side policy cannot label or remove labels until it has run at least one simulation. In one 2025 community thread, a solved answer drew exactly this client-side versus service-side line. Check which method you actually configured."
@@ -47,7 +47,7 @@ In the Microsoft Purview portal, service-side policies are under **Solutions**, 
 
 ## Step 2: Run the simulation first
 
-Learn says you cannot automatically label documents and emails, or remove labels, until the policy has run at least one simulation. Simulation can take up to 12 hours. Review the matches, then turn the policy on. A policy then keeps running until you delete it.
+Learn says you cannot automatically label documents and emails, or remove labels, until the policy has run at least one simulation. Simulation can take up to 12 hours. Review the matches, then turn the policy on.
 
 Two timing notes from the same page help you avoid false alarms:
 
@@ -76,13 +76,13 @@ You can change part of this:
 - On the **Additional label settings** page of a service-side policy, you can allow the policy to override a manually applied label of lower priority. Learn marks this as off by default.
 - For Exchange, the **Emails only** option lets the policy override an existing label if the policy label has a higher priority.
 
-In the 2026 thread about the 1,000 "Confidential" documents, a community member and a Microsoft representative gave the same outcome. If the old label came from auto-labeling or a default, a higher-priority label wins when the content still matches. If a person applied it, it stays. The replies did not describe a confirmed test, and the asker did not report back.
+Learn's rules are the ones above. If the old label came from auto-labeling or a default, a higher-priority label can replace it when the content matches. If a person applied it, it stays unless the policy is set to override manual labels. The February 2026 community thread that asks exactly this, about 1,000 documents already labeled "Confidential", has no replies, so it adds no evidence.
 
 ## Step 5: Treat email and attachments separately
 
 Learn says that service-side policies scan PDF and Office attachments for the conditions. If there is a match, the email is labeled, not the attachment. If the label applies encryption, unencrypted Office attachments are encrypted using Message Encryption, with the settings of the email.
 
-The January 2026 thread fits this. A reply there said that labels on an email are not passed on to attachments. The same reply said a plain text file is only inspected when the Information Protection client is on the endpoint. I could not find the text-file point on the Learn page. Treat it as reported in a community thread, not confirmed in Learn. The Learn page also does not list text files as supported for SharePoint and OneDrive. The poster in that thread never confirmed a fix.
+The January 2026 thread fits this. A Microsoft employee read the documentation the same way, and a community reply (an MCT) said that labels on an email are not passed on to attachments. That reply also said a plain text file is only inspected when the Information Protection client is on the endpoint. I could not find the text-file point on the Learn page. Treat it as reported in a community thread, not confirmed in Learn. The Learn page also does not list text files as supported for SharePoint and OneDrive. The poster in that thread never confirmed a fix.
 
 Learn's comparison table also says the client-side setting does not check Exchange attachments for conditions. So client-side recommendations in Outlook are not a good test for attachment behavior.
 
@@ -94,13 +94,13 @@ In the March 2026 thread, the one reply was marked as the solution. It said the 
 
 ## Step 7: Bulk labeling when a policy is not possible
 
-A January 2025 thread described a tenant where auto-labeling policies were not available and the PowerShell cmdlet for them was not recognized. The poster believed a regional dependency was the cause, and I did not verify this. A reply suggested scripted labeling, and the poster confirmed it worked, using `Set-FileLabel` because the older `Set-AIPFileLabel` had been deprecated. Treat the deprecation as the poster's statement.
+A January 2025 thread described a tenant where auto-labeling policies were not available and the PowerShell cmdlet for them was not recognized. The poster believed a regional dependency was the cause, and I did not verify this. An answer, which the poster accepted, suggested scripted labeling with `Set-AIPFileLabel`. The poster then wrote that it worked, and that the working cmdlet was `Set-FileLabel` because the older one had been deprecated in 2024. Treat the deprecation as the poster's statement. The thread does not say how the cmdlet reached the SharePoint files.
 
-The [Learn page for Set-FileLabel](https://learn.microsoft.com/en-us/powershell/module/purviewinformationprotection/set-filelabel) documents it as a cmdlet of the Information Protection client. It takes a file path and a label ID, and you must use the ID of a sublabel, not the parent. If policy rules require a justification to lower or remove a label, add `-JustificationMessage`, or the file is skipped. Use `-WhatIf` first. The page lists no prerequisites, so read the linked client admin guide before you start. The page was last updated in July 2025.
+The [Learn page for Set-FileLabel](https://learn.microsoft.com/en-us/powershell/module/purviewinformationprotection/set-filelabel) documents it as a cmdlet of the Information Protection client. It takes a file path and a label ID, and Learn says to use the ID of a sublabel, not the parent. The path can be a local path, a network path or a SharePoint Server URL, and the page does not mention SharePoint Online URLs, so for files in SharePoint Online you would need a synced or otherwise reachable copy. I did not test this. If policy rules require a justification to lower or remove a label, add `-JustificationMessage`, or the file is skipped. The page describes `-WhatIf` together with `-DiscoveryInfoTypes` as a way to discover sensitive information types without applying a label, so try the cmdlet on a few test files first. The page lists no prerequisites, so read the linked client admin guide before you start. The page was last updated in July 2025.
 
 ## Step 8: Check licensing
 
-The 2025 thread ended with a licensing answer. A community MVP said that Microsoft 365 E5 Security does not include auto-labeling and listed qualifying plans. That reply was not the one marked as the solution, and the poster did not confirm it.
+The 2025 thread also had a licensing reply. A community MVP said that Microsoft 365 E5 Security does not include auto-labeling and listed qualifying plans. That reply was not the one marked as the solution (the same MVP's client-side versus service-side reply was), and the poster did not confirm it.
 
 Learn lists these SKUs for both client-side and service-side auto-labeling: Microsoft 365 E5, Microsoft 365 E5 Compliance, Microsoft 365 E5 Information Protection & Governance, and Azure Information Protection Premium P2. It also says E3 and Business Premium do not include auto-labeling of files and emails. Check your own plan against the current Learn table.
 

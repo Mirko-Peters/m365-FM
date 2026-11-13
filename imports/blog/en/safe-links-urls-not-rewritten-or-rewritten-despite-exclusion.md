@@ -19,7 +19,7 @@ faq:
   - q: "Why is my URL still rewritten although it is in the Do not rewrite list?"
     a: "Learn describes several causes: the pattern does not match the exact URL, the recipient falls under a different policy whose list is the one that applies, or the click happens in Teams or an Office web app, which ignore the list. In a July 2025 thread the asker used a subdomain pattern and still saw rewriting, and no cause was confirmed."
   - q: "Do URL allow entries in the Tenant Allow/Block List stop rewriting?"
-    a: "No. Learn states that URL allow entries in the Tenant Allow/Block List are not excluded from Safe Links rewriting. The Do not rewrite list is the setting for that."
+    a: "Learn is not consistent here. The Safe Links overview says URL allow entries in the Tenant Allow/Block List are not excluded from Safe Links rewriting. The same page also says that reporting a URL as clean and selecting Allow this URL adds an allow entry so the URL is not scanned or wrapped during mail flow and at click time. Treat the Do not rewrite list as the documented setting for excluding wrapping, and test the allow entry on your own tenant."
 ---
 
 Two opposite complaints come up for Safe Links in Microsoft Defender for Office 365. In one, an administrator enables Safe Links and Safe Attachments, sends a test mail, and the link in the inbox is still the original address. In the other, a vendor sends one-time links to staff, the domain is on the **Do not rewrite** list, and the links are wrapped anyway and stop working.
@@ -42,9 +42,10 @@ Microsoft Learn's [Safe Links overview](https://learn.microsoft.com/en-us/defend
 - S/MIME signed messages are ignored.
 - URLs that point to SharePoint or OneDrive are no longer wrapped, although the Safe Links service still processes them. Learn says this does not lower protection.
 - If another service wraps links before Defender for Office 365 sees them, Safe Links may not be able to process those links.
+- Automatically forwarded mail (through inbox rules or SMTP forwarding) is not rewritten for the final recipient, unless that recipient is also protected by Safe Links or the URL was already rewritten earlier.
 - In Teams and in Office apps, Safe Links checks links at click time and does not rewrite them.
 
-The answers in the 2025 thread named most of these cases too.
+The answers in the 2025 thread named several of these cases too, including public folders, RTF mail, SharePoint links and a third-party filter placed before Defender.
 
 ## Step 2: Read the email settings in the policy
 
@@ -52,7 +53,7 @@ In the Defender portal, go to **Email & collaboration**, then **Policies & rules
 
 - **On: Safe Links checks a list of known, malicious links when users click links in email. URLs are rewritten by default.** If this is off, there is no time-of-click protection for email.
 - **Apply Safe Links to email messages sent within the organization.** If it is off, mail between internal senders and internal recipients is not covered.
-- **Do not rewrite URLs, do checks via SafeLinks API only.** Learn says that when this is selected, no URL wrapping takes place, but URLs are still scanned before delivery. In supported versions of Outlook for Windows, Mac, iOS, Android and Outlook on the web, Safe Links is called through an API at click time for an extra scan.
+- **Do not rewrite URLs, do checks via SafeLinks API only.** Learn says that when this is selected, no URL wrapping takes place, but URLs are still scanned before delivery. In supported versions of Outlook for Windows, Mac and Outlook on the web, Learn's policy page says Safe Links is called through an API at click time for an extra scan. A client that does not support the API leaves the user unprotected if the link turns malicious after delivery.
 
 The last setting is the one to look at first. An unwrapped link in such a policy is the expected result. It is also what one answer in the 2025 thread suggested checking, among others.
 
@@ -62,7 +63,7 @@ A recipient is protected by the first policy that applies to them. Learn gives t
 
 1. The Strict preset security policy, always first.
 2. The Standard preset security policy.
-3. Custom Safe Links policies, in priority order. A lower number is a higher priority, and 0 is the highest.
+3. Custom Safe Links policies, in priority order. A lower number is a higher priority, and 0 is the highest. (The preset policies page also lists Defender for Office 365 evaluation policies between the presets and custom policies.)
 4. Built-in protection, which always has the lowest priority.
 
 Learn adds that Built-in protection covers users who are not in the Standard or Strict presets or in custom policies. So a custom policy you edited may never apply to a user who is also in a preset.
@@ -73,23 +74,23 @@ Also check how the policy is scoped. Under **Users**, **Groups** and **Domains**
 
 ## Step 4: Wait long enough
 
-Learn says to allow up to 6 hours for a new or updated Safe Links policy, and up to 24 hours when you change the Teams setting. A 2025 answer mentioned 48 hours. I would use Learn's number. If the test fails right after you saved the policy, wait and test again before you change more settings.
+Learn says to allow up to 6 hours for a new or updated Safe Links policy, and up to 24 hours when you change the Teams setting. An independent advisor's answer in the 2025 thread mentioned 48 hours. I would use Learn's number. If the test fails right after you saved the policy, wait and test again before you change more settings.
 
 ## Step 5: If an excluded URL is still rewritten
 
 Learn says entries in the **Do not rewrite the following URLs** list are not scanned or wrapped during mail flow, but they might still be blocked at click time. Check these points:
 
-- **Pattern.** Learn's examples show that `contoso.com` allows only `https://contoso.com`, not subdomains or paths. To cover a domain and everything under it, two entries are needed: `contoso.com/*` and `*.contoso.com/*`. Up to three wildcards are allowed per entry.
-- **Which list.** Only one list is applied to a user who is in several active Safe Links policies. If the user falls under a higher-priority policy, your edit in a lower one has no effect.
+- **Pattern.** Learn's examples show that `contoso.com` allows only `https://contoso.com`, not subdomains or paths. To cover a domain, its subdomains and paths, Learn's example is `*.contoso.com/*`. Up to three wildcards are allowed per entry.
+- **Which list.** Learn says processing stops at the first Safe Links policy that applies to the recipient. The list is a per-policy setting, so the list of that first policy should be the one in effect. Learn does not state this for the list in so many words. If the user falls under a higher-priority policy, your edit in a lower one probably has no effect.
 - **Client.** Microsoft Teams and the Office web apps ignore the list, and users can be blocked there by Safe Links scanning.
-- **Tenant Allow/Block List.** Learn states that URL allow entries there are not excluded from rewriting, so they are no substitute for the Do not rewrite list.
+- **Tenant Allow/Block List.** The Safe Links overview contradicts itself on this. One note says URL allow entries in the Tenant Allow/Block List are not excluded from Safe Links rewriting. Another says that a URL reported as clean with **Allow this URL** is not scanned or wrapped during mail flow or at click time. Do not assume that an allow entry stops rewriting, and verify it with a test message.
 - **Wait time.** See Step 4.
 
 In the July 2025 thread, the asker used a subdomain pattern with a trailing wildcard, still saw rewriting, and also added the domain to the Tenant Allow List. The thread did not find a cause. The answer that the asker accepted proposed S/MIME signing or encryption, and the asker was still checking it and a vendor portal option. Learn's S/MIME statement fits that idea, but the thread did not confirm that it solved the case. Neither of the two answers in that thread came from a named Microsoft source, so I did not use them as evidence.
 
 ## Step 6: Teams links and the verification page
 
-Learn says that in Teams, Safe Links checks links at click time and does not rewrite them, and the Do not rewrite list does not apply there. On the pages I read, I found no setting that exempts single domains from Teams link checks. The only Teams option on the policy is the on/off switch, which Learn recommends keeping on. The April 2026 thread reached the same conclusion through an AI-generated answer that the asker accepted. The asker then asked a follow-up about a separate policy for specific users, and nobody answered it. Test any such policy on a pilot group first, and note that turning protection off for users removes it for all their Teams links.
+Learn says that in Teams, Safe Links checks links at click time and does not rewrite them, and the Do not rewrite list does not apply there. On the pages I read, I found no setting that exempts single domains from Teams link checks. The only Teams option on the policy is the on/off switch. The April 2026 thread reached the same conclusion through an AI-generated answer that the asker accepted. The asker then asked a follow-up about a separate policy for specific users, and nobody answered it. Test any such policy on a pilot group first, and note that turning protection off for users removes it for all their Teams links.
 
 ## Step 7: Test the result
 
@@ -97,7 +98,7 @@ Learn says that in Teams, Safe Links checks links at click time and does not rew
 2. Compare the link in the delivered mail with the link you sent.
 3. Repeat in the clients your users use, because Learn describes different click-time behavior by client.
 4. For an exclusion, test the exact URL form from the vendor, including subdomain and path.
-5. Remember that wrapping happens per recipient, even when a message is forwarded or replied to.
+5. Remember Learn's forwarding rule: for automatically forwarded mail (inbox rules or SMTP forwarding) the URL is not rewritten for the final recipient unless that person is also protected by Safe Links or the URL was already rewritten earlier. Manual forwards and replies are rewritten.
 
 ## What stays open
 

@@ -8,12 +8,12 @@ date: 2026-11-13
 topics: [dlp, purview]
 keypoints:
   - "OWA, classic Outlook, new Outlook and Outlook mobile do not behave the same for DLP policy tips, so a tip that works in one client proves the policy, not the client."
-  - "Override only appears if the rule blocks with override, BlockAccess is true, and the policy is set to Turn it on."
+  - "Override only appears if the rule blocks with override and BlockAccess is true. In Outlook on the web the policy must also be set to Turn it on."
   - "Policy tips in Outlook for Android, iOS and macOS are off by default and are switched on in the Microsoft 365 Apps admin center."
   - "A moderator-confirmed workaround for nested exception groups in desktop Outlook exists in a 2026 thread, but Microsoft Learn does not document it."
 faq:
   - q: "Why does my DLP policy tip appear in Outlook on the web but not in desktop Outlook?"
-    a: "The two clients evaluate and display tips differently. Microsoft Learn's tip reference lists features that differ between them, for example the oversharing dialog exists in Outlook for Microsoft 365 and new Outlook but not in Outlook on the web. In two 2026 threads, a Microsoft Q&A moderator described desktop Outlook as relying on client-side evaluation. That explanation is not in Learn. Check rule settings first, then the Outlook MailTips option, then complex exceptions."
+    a: "The two clients evaluate and display tips differently. Microsoft Learn's tip reference lists features that differ between them, for example the oversharing dialog exists in Outlook for Microsoft 365 and new Outlook but not in Outlook on the web. In two 2026 threads, Microsoft Q&A moderators described desktop Outlook as relying on client-side processing. That explanation is not in Learn. Check rule settings first, then the Outlook MailTips option, then complex exceptions."
   - q: "Why is there no business justification prompt for my DLP rule?"
     a: "Learn says that if NotifyAllowOverride is set to WithoutJustification, WithJustification or FalsePositives, BlockAccess must be true and BlockAccessScope must have a suitable value. Otherwise the tip appears but the user finds no way to override. Override in Outlook on the web also needs the policy to be in the Turn it on state."
   - q: "Do DLP policy tips work in Outlook for Android and iOS?"
@@ -30,7 +30,7 @@ This pattern appeared in three Microsoft Q&A threads between June and August 202
 
 - **Attachment over 1 MB, external recipient:** the tip showed in OWA and not in Outlook desktop for the same user and message. A moderator said the policy configuration looked fine and the difference came from how the clients work. The poster later wrote that the issue was resolved, but did not say what fixed it.
 - **Nested exceptions:** a rule with a trusted-domain exception worked in OWA. In desktop Outlook, a message to one internal recipient and one exempted external recipient was blocked. Turning off policy tips on the rule made the message go through.
-- **Mobile override:** the justification prompt worked in desktop Outlook and OWA, but not in Outlook for Android. Mobile did show the forwarding restriction. This one stayed open and was passed to the product team.
+- **Mobile override:** the justification prompt worked in desktop Outlook and OWA, but not in Outlook for Android. Mobile did show the forwarding restriction. This one stayed open. A moderator said that a missing admin setting may mean the feature has not reached the tenant and that the product team would need to look.
 
 ## Step 1: Do not expect identical clients
 
@@ -44,7 +44,7 @@ Open the rule in the Microsoft Purview portal and check these items. All of them
 2. If the user notification action allows override (without justification, with justification, or false positives), BlockAccess must be true and BlockAccessScope must have a suitable value. Otherwise the tip shows but offers no override.
 3. Justification is only asked for the combination of block, allow override and with justification.
 4. Tips do not appear for mail encrypted with Purview Message Encryption when the rule uses the detected-encryption condition.
-5. Policy tips come from one location. If tips are also configured in the Exchange admin center, they hide the Purview tips until you turn those off. Learn also warns that old Exchange DLP policies should be migrated to the Purview portal.
+5. Policy tips come from one location. If tips are also configured in the Exchange admin center, they hide the Purview tips in Outlook on the web and Outlook 2013 and later until you turn those off. Learn says existing mail flow rules keep working until you switch to the Purview portal.
 
 ## Step 3: Check what Learn says about conditions
 
@@ -62,7 +62,7 @@ If the tip is wrong or missing in OWA itself, Learn has a separate [HAR diagnost
 
 This step comes from a single thread. It is not documented by Microsoft.
 
-In the July 2026 case, the exception group contained a nested branch: sender in a group AND recipient domain in two domains. A moderator first suggested flattening the exceptions into top-level entries. The poster then found a different fix: add the tenant's own domain to every "recipient domain is" condition inside the nested exception branches, next to the real exempted domains. The poster tested three cases: internal plus exempted external, internal plus the combined exception, and a non-exempt external recipient, which was still blocked. The moderator later agreed and said to keep the nested logic with the internal domain added, because flattening would change the business meaning. The moderator's reason was that the desktop evaluator checks the recipients together instead of one by one.
+In the July 2026 case, the exception group contained a nested branch: sender in a group AND recipient domain in two domains. A moderator first suggested flattening the exceptions into top-level entries. The poster then found a different fix: add the tenant's own domain to every "recipient domain is" condition inside the nested exception branches, next to the real exempted domains. The poster tested three cases: internal plus exempted external, internal plus the combined exception, and a non-exempt external recipient, which was still blocked. The moderator later agreed and said to keep the nested logic with the internal domain added, because flattening would change the business meaning. The moderator's reason was that the desktop evaluator checks the recipients together instead of one by one. None of these claims links to Learn, and the same moderator's first answer had called flattening the "supported fix" and later said keeping the nested logic is better, so the advice is not fully consistent.
 
 Treat this as a tested workaround from one tenant, backed by a Microsoft Q&A moderator, not as a documented rule. Before you use it, test with a pilot group and keep a non-exempt external recipient in the test so you see that blocking still works. The moderator advised waiting about an hour after saving, and suggested a support case if you want the behavior tracked as a product issue.
 
@@ -78,7 +78,7 @@ One more conflict: the older Learn troubleshooting page says policy tips are not
 
 ## Step 7: Scope and groups
 
-If you limit the policy to a group, check the type. Learn's [DLP policy reference](https://learn.microsoft.com/en-us/purview/dlp-policy-reference) lists mail-enabled security groups, distribution groups and Microsoft 365 groups as supported for both policy creation and rule evaluation. Non-mail-enabled security groups are marked as supported at creation but not during rule evaluation. A policy scoped to a group of that type may look right in the portal and still not evaluate as you expect.
+If you limit the policy to a group, check the type. For the Exchange location, Learn's [DLP policy reference](https://learn.microsoft.com/en-us/purview/dlp-policy-reference) lists mail-enabled security groups, distribution groups and Microsoft 365 groups as supported for both policy creation and rule evaluation. Non-mail-enabled security groups are marked as supported at creation but not during rule evaluation, with a note that this is enabled for specific customers only. A policy scoped to a group of that type may look right in the portal and still not evaluate as you expect.
 
 ## Quick verification
 
