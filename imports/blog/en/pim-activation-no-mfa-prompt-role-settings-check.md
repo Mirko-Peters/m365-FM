@@ -51,7 +51,7 @@ The first two options control the MFA step at activation. Check which of them is
 
 Learn says users might not be prompted for MFA if they authenticated with strong credentials or provided MFA earlier in the session. The activation guide says you are required to authenticate only once per session.
 
-In the 2025 thread, the moderator gave the same explanation and added that a Conditional Access policy that enforces MFA for admin portals can have the same effect. The user had signed in with MFA already, so the activation step did not ask again.
+In the 2025 thread, the moderator gave the same explanation and added that a Conditional Access policy that enforces MFA for admin portals can have the same effect. The moderator described this as the likely cause: MFA had probably been satisfied earlier, so the activation step did not ask again. The thread does not show that anyone verified it.
 
 So before you change anything, answer one question: did this user complete MFA when they signed in?
 
@@ -73,7 +73,7 @@ Learn also says PIM data is available for the past 30 days. If you need more, se
 
 If "MFA once per session" is not enough, switch from the plain MFA setting to an authentication context. Learn's description:
 
-1. Create a Conditional Access policy for the authentication context. Scope it to all users or to the eligible users. Do not scope it to the authentication context and a directory role at the same time, because during activation the user does not have the role yet.
+1. Create a Conditional Access policy for the authentication context. Do not scope it to the authentication context and a directory role at the same time, because during activation the user does not have the role yet.
 2. In the role settings, select **On activation, require Microsoft Entra Conditional Access authentication context** and choose the context.
 3. To force a new authentication each time, set sign-in frequency to **Every time** under **Session controls** in the policy.
 
@@ -90,7 +90,7 @@ Learn adds a security note: people who can manage Conditional Access policies, s
 This is the 2026 thread's question. It has no confirmed answer, and the Learn activation page has no portal troubleshooting section for it. These checks are grounded in other Learn statements:
 
 1. In **ID Governance** > **Privileged Identity Management** > **My roles** > **Microsoft Entra roles**, confirm you are looking at the right area. Learn says this lists your eligible Microsoft Entra roles.
-2. As an administrator, open **Microsoft Entra roles** > **Roles**, select the role, and look at the **Eligible roles** tab. An assignment can be time-bound and expire at the end of its period. Learn says the assignment type must be **Eligible** for a member to need an activation step, while **Active** assignments are always on.
+2. As an administrator, open **Microsoft Entra roles** and find the user's assignment on the **Eligible roles** tab (the exact navigation to it can differ in your portal). An assignment can be time-bound and expire at the end of its period. Learn says the assignment type must be **Eligible** for a member to need an activation step, while **Active** assignments are always on.
 3. If approval is required, go to **My requests** to see whether a pending request exists. Learn says that for a role that needs approval, selecting **Cancel** cancels the request and you must submit a new one.
 4. Learn notes that when someone gets eligibility through group membership, the Microsoft Graph request used to list eligible roles does not return it. That statement is about the Graph call, not the portal.
 

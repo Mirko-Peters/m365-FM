@@ -65,13 +65,13 @@ Learn says to use at least the Reports Reader role and do this:
 
 The Learn page stresses checking both places. The sign-in log has four types: interactive user, non-interactive user, service principal and managed identity sign-ins. The older sign-in log experience shows only interactive sign-ins.
 
-This is where the thread got stuck. The asker could not find a "Legacy authentication clients" option, because the portal listed **Other clients**. The moderator's corrected advice was to filter **Client app** on **Other clients** in the **User sign-ins (non-interactive)** logs. Learn names **Other clients** and **Exchange ActiveSync clients** as the legacy options in the policy, but it does not say in the pages I used that every legacy protocol appears as **Other clients**. So check both, and open a sample sign-in to read its **Client App** value under **Basic Info**.
+This is where the thread got stuck. The asker could not find a "Legacy authentication clients" option, because the portal listed **Other clients**. The moderator's corrected advice was to filter **Client app** on **Other clients** in the **User sign-ins (non-interactive)** logs. Learn names **Other clients** and **Exchange ActiveSync clients** as the legacy options in the policy, but it does not say in the pages I used that every legacy protocol appears as **Other clients**. So check both, and open a sample sign-in to read its **Client App** value in the sign-in details.
 
 Learn also points to the **Sign-ins using legacy authentication** workbook for triage.
 
 ## Step 3: Add the Conditional Access result to the view
 
-In the thread, the accepted answer told the asker to add the **Conditional Access** column to the non-interactive view and read the result for the policy. To check one event in detail, open the sign-in and use the **Conditional Access** and **Report-only** tabs. Learn says they show which policies were enabled, in report-only mode, applied or not applied.
+In the thread, the accepted answer told the asker to add the **Conditional Access** column to the non-interactive view and read the result for the policy. To check one event in detail, open the sign-in and select the **Conditional Access** tab. Learn's troubleshooting page says this tab shows the policies that affected the sign-in. Your portal may also show a separate report-only view there, which the Learn pages I used do not describe.
 
 How to read what you see:
 
@@ -84,7 +84,7 @@ Check a long enough period. A monthly job or a rarely used scanner may appear on
 
 If you do not want to open events one by one, which the asker asked about, Learn describes two options:
 
-- **Policy impact**, available to admins with at least the Security Reader role. It shows the impact for the past 24 hours, 7 days or 1 month, with links to sample sign-ins.
+- **Policy impact**, available to admins with at least the Security Reader role. It shows the impact on interactive sign-ins for the past 24 hours, 7 days or 1 month. Because legacy protocols mostly show up as non-interactive sign-ins, treat it as a supplement to the log filter, not a replacement.
 - The **Insights and Reporting** workbook. Learn says it can compare report-only and enforced results, and that it needs Microsoft Entra ID P1 and a Log Analytics workspace that receives sign-in logs.
 
 A Conditional Access What If tool exists, and Learn links to it from its troubleshooting page, but I did not verify its steps for this article.
@@ -95,7 +95,7 @@ For each legacy sign-in you find, identify the app or device and its owner. Move
 
 ## Step 6: Turn it on in stages
 
-Learn says that once you are comfortable with the results, you can switch **Enable policy** from **Report-only** to **On**, or stage the rollout by adding specific groups and excluding others. Once the policy is on, Learn's list of Conditional Access error codes includes `AADSTS53003`, shown as `BlockedByConditionalAccess`, which is the code you would look for on blocked sign-ins. Keep the emergency access exclusion in place.
+Learn says that after you have validated the impact, you move the **Enable policy** toggle from **Report-only** to **On**. Once the policy is on, Learn's list of Conditional Access error codes includes `AADSTS53003`, shown as `BlockedByConditionalAccess`, which is the code you would look for on blocked sign-ins. Keep the emergency access exclusion in place.
 
 ## One caution for other report-only policies
 

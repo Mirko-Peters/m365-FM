@@ -10,7 +10,7 @@ keypoints:
   - "Entra tries a hard match on sourceAnchor against ImmutableId first, then a soft match on userPrincipalName or the primary SMTP address, and otherwise creates a new object."
   - "If the on-premises UPN suffix is not verified in the tenant, Entra builds a new UPN from the mailNickName and the initial onmicrosoft.com domain."
   - "Duplicate attribute resiliency quarantines a conflicting proxyAddresses or UPN value instead of failing, so sync can look healthy while one value is missing."
-  - "Since July 1, 2026, Learn says hard match is blocked for cloud accounts that already have onPremisesObjectIdentifier set or hold or are eligible for a privileged role."
+  - "Since July 1, 2026, Learn says hard match can be blocked for cloud accounts that already have onPremisesObjectIdentifier set or hold or are eligible for a privileged role."
 faq:
   - q: "What is the difference between soft match and hard match?"
     a: "Hard match compares the on-premises sourceAnchor, stored in Entra ID as ImmutableId, with existing cloud objects. Soft match compares userPrincipalName or the primary SMTP address of a new object. Microsoft Learn says Entra tries hard match first, then soft match, and creates a new object if both fail."
@@ -73,17 +73,17 @@ Start-ADSyncSyncCycle -PolicyType Delta
 
 Learn does not describe the cleanup order for this exact case. The thread's reply set the ImmutableId first, synced, checked and removed the duplicate afterwards. Before deleting anything, check licences and mailbox data on the duplicate.
 
-The opposite direction is documented in Learn for a different error. If soft match finds a cloud user with a different `sourceAnchor`, provisioning fails with `AttributeValueMustBeUnique`. Learn says to set the on-premises user's `mS-Ds-ConsistencyGuid` to the cloud user's `ImmutableId` so the hard match works.
+Learn documents a related error, `InvalidSoftMatch`. It occurs when hard match finds nothing, soft match finds a cloud object, but that object has a different `ImmutableId` than the incoming `sourceAnchor`. This suggests the cloud object was synced from another on-premises object. Learn's fix is the same as for `AttributeValueMustBeUnique`: identify the duplicated value and the objects involved, decide which object keeps it, and remove the value from the other object in the directory where it is sourced.
 
 ### New protections since July 2026
 
-Learn says that from July 1, 2026, a hard match is blocked when the target cloud account:
+Learn says that from July 1, 2026, a hard match can be blocked when the target cloud account:
 
 - already has `onPremisesObjectIdentifier` set,
 - has a privileged Microsoft Entra role assigned, or
 - is eligible for a privileged Microsoft Entra role.
 
-Cloud-managed accounts with writeback enabled are excluded. Soft match is not changed. Learn also describes tenant-wide flags, `BlockSoftMatchEnabled` and `BlockCloudObjectTakeoverThroughHardMatchEnabled`, and a temporary bypass, `AllowOnPremUpdateOfOnPremisesObjectIdentifierEnabled`, which is off by default. Learn warns that the bypass reduces protection and should be switched off afterwards. By default, Entra also does not soft match on-premises users to cloud users that hold an admin role, and Microsoft strongly advises against syncing on-premises accounts with preexisting admin accounts.
+Cloud-managed accounts with writeback enabled are excluded. Learn says these protections do not disable hard match for safe targets. It also describes tenant-wide flags, `BlockSoftMatchEnabled` and `BlockCloudObjectTakeoverThroughHardMatchEnabled`, and a temporary bypass, `AllowOnPremUpdateOfOnPremisesObjectIdentifierEnabled`, which is off by default. Learn warns that the bypass reduces protection and should be switched off afterwards. By default, Entra also does not soft match on-premises users to cloud users that hold an admin role, and Microsoft strongly advises against syncing on-premises accounts with preexisting admin accounts.
 
 So if the hard match from the 2025 thread fails today, one of these protections may be the reason.
 
@@ -96,11 +96,11 @@ Note that the accepted reply in that thread was generic, and the diagnosis came 
 ### What Learn adds
 
 - Entra ID needs unique values for `mail`, `proxyAddresses`, `signInName` and `userPrincipalName`. Adding or updating a value that another object already holds causes `AttributeValueMustBeUnique`.
-- With duplicate attribute resiliency, which is on by default, Entra quarantines a duplicate `proxyAddresses` or UPN value instead of failing the export. It does not fix the data.
+- Duplicate attribute resiliency is the default behavior and cannot be turned off. It handles only UPN and SMTP `proxyAddresses` values: Entra quarantines a duplicate one instead of failing the export. It does not fix the data, and Learn's page does not list `mail` among the attributes it covers.
 - For a duplicate UPN, a placeholder is assigned, in the form `<OriginalPrefix>+<4DigitNumber>@<InitialTenantDomain>.onmicrosoft.com`. A quarantined SMTP proxy address is held back while the object is still created or updated.
 - Because the export succeeds, the sync client logs no error and does not retry.
 
-That matches what the thread described: no visible failure, one value missing. The thread did not say whether resiliency was involved, so this is a plausible explanation, not a confirmed one.
+That matches what the thread described: no visible failure, one value missing. The accepted reply mentioned duplicate attribute resiliency only in general terms, and nobody confirmed that it applied, so this is a plausible explanation, not a confirmed one.
 
 ### How to find the conflicts
 
