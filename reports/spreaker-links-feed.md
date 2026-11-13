@@ -1,6 +1,6 @@
-# Spreaker-Website-Feld im RSS (2026-11-12 04:54 UTC)
+# Spreaker-Website-Feld im RSS (2026-11-13 05:01 UTC)
 
-Gesetzt laut Protokoll: 3237 · im Feed gleich: 3155 · im Feed anders: 0 · nicht im Feed: 82 · ausstehend (frisch gesetzt, Feed noch nicht erneuert): 0
+Gesetzt laut Protokoll: 3471 · im Feed gleich: 3379 · im Feed anders: 0 · nicht im Feed: 89 · ausstehend (frisch gesetzt, Feed noch nicht erneuert): 3
 
 - 67311542: nicht_im_feed · soll https://www.m365.fm/show/episodes/building-reusable-components-with-power-platform-cli-pac-cli/ · Feed None
 - 67312816: nicht_im_feed · soll https://www.m365.fm/show/episodes/using-microsoft-graph-for-custom-app-integrations/ · Feed None
@@ -84,3 +84,10 @@ Gesetzt laut Protokoll: 3237 · im Feed gleich: 3155 · im Feed anders: 0 · nic
 - 67659452: nicht_im_feed · soll https://www.m365.fm/show/episodes/why-copilot-fails-most-businesses/ · Feed None
 - 67664576: nicht_im_feed · soll https://www.m365.fm/show/episodes/teams-admins-are-missing-this-hidden-layer/ · Feed None
 - 67664577: nicht_im_feed · soll https://www.m365.fm/show/episodes/your-mip-rollout-is-broken-heres-why/ · Feed None
+- 67677986: nicht_im_feed · soll https://www.m365.fm/show/episodes/full-stack-skills-why-youre-not-using-them-in-teams/ · Feed None
+- 67684642: nicht_im_feed · soll https://www.m365.fm/show/episodes/azure-solutions-break-under-pressure-heres-why/ · Feed None
+- 67692646: nicht_im_feed · soll https://www.m365.fm/show/episodes/did-mainframes-just-win-altair-vs-azure/ · Feed None
+- 67697666: nicht_im_feed · soll https://www.m365.fm/show/episodes/agentic-ai-is-rewriting-devops/ · Feed None
+- 67704978: nicht_im_feed · soll https://www.m365.fm/show/episodes/azure-cli-vs-powershell-one-clear-winner/ · Feed None
+- 67714774: nicht_im_feed · soll https://www.m365.fm/show/episodes/the-hidden-risks-lurking-in-your-cloud/ · Feed None
+- 67722917: nicht_im_feed · soll https://www.m365.fm/show/episodes/microsoft-fabric-changes-everything-for-bi-pros/ · Feed None
