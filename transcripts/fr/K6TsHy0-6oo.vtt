@@ -1,0 +1,661 @@
+WEBVTT
+
+00:00:00.300 --> 00:00:07.860
+Prêt pour 10 jours consacrés à Microsoft 365, Copilot, l'IA, Azure et aux acteurs qui façonnent l'avenir du travail à…
+
+00:00:07.860 --> 00:00:12.100
+En janvier prochain, la M365-Con est de retour et nous voyons les choses en grand.
+
+00:00:12.940 --> 00:00:18.080
+Rejoignez-nous pour des sessions en direct, des démonstrations concrètes et les conseils pratiques de MVP et d'experts du monde entier.
+
+00:00:18.900 --> 00:00:21.140
+Fini les diapositives génériques et le jargon interminable.
+
+00:00:22.000 --> 00:00:23.060
+Nous abordons les vrais défis.
+
+00:00:23.740 --> 00:00:28.560
+Copilot Studio, les agents IA, Fabrique, la sécurité, la gouvernance et l'automatisation.
+
+00:00:28.560 --> 00:00:33.940
+Que vous soyez professionnel de l'informatique, développeur ou dirigeant, des sessions sont conçues pour vous.
+
+00:00:35.220 --> 00:00:39.900
+Sur 10 jours complets, explorez de multiples technologies et connectez-vous à une communauté mondiale.
+
+00:00:40.940 --> 00:00:44.060
+Suivez le direct et rapportez des idées pratiques au sein de votre organisation.
+
+00:00:45.220 --> 00:00:47.780
+Du 20 au 27 janvier, 10 jours, une seule communauté.
+
+00:00:48.080 --> 00:00:50.600
+Microsoft. Les inscriptions sont ouvertes.
+
+00:00:51.880 --> 00:00:55.560
+Rendez-vous sur m365con.net pour réserver votre place dès aujourd'hui.
+
+00:00:55.560 --> 00:00:58.300
+C'est m365con.net.
+
+00:01:00.220 --> 00:01:04.680
+Scrivez-vous sur m365con.net et nous vous attendons en direct en janvier.
+
+00:01:05.720 --> 00:01:09.840
+Si les données de vos projets sont éparpillées à 10 endroits différents dans Microsoft 365,
+
+00:01:10.220 --> 00:01:13.560
+comment obtenir un statut clair sans perdre une demi-journée à cliquer partout ?
+
+00:01:14.200 --> 00:01:19.040
+Imaginez demander à Copilot où en est le projet Apollo et obtenir une réponse unique et précise instantanément.
+
+00:01:19.660 --> 00:01:21.240
+Plus de tableurs ni de rapports manuels.
+
+00:01:21.900 --> 00:01:24.580
+Aujourd'hui, je vous montre précisément comment créer le plugin qui rend cela possible.
+
+00:01:24.580 --> 00:01:31.180
+En partant de zéro, vous verrez les vrais appels API, le manifeste qui guide Copilot et comment configurer l'accès sécurisé.
+
+00:01:32.440 --> 00:01:34.800
+Le résultat, une question posée et une réponse obtenue à chaque fois.
+
+00:01:36.100 --> 00:01:38.440
+Là où les données de projet se cachent dans Microsoft 365,
+
+00:01:38.800 --> 00:01:44.320
+la plupart des chefs de projet croient savoir où tout se trouve jusqu'à cette redoutable demande de rapport du vendredi après-midi.
+
+00:01:44.320 --> 00:01:50.000
+Vous commencez à rassembler les chiffres et vous voilà soudain à fouiller dans des outils que vous n'avez pas ouverts depuis des semaines.
+
+00:01:52.170 --> 00:01:56.330
+Des tâches cachées dans Planner, des jalons enfouis dans une liste SharePoint qu'on a promis de mettre à jour,
+
+00:01:56.630 --> 00:01:59.910
+des conversations Teams contenant le contexte d'un délai manqué.
+
+00:02:01.810 --> 00:02:02.490
+Tout est là quelque part.
+
+00:02:02.870 --> 00:02:05.850
+C'est juste que ce n'est pas centralisé que ces outils ne communiquent certainement pas entre eux sans votre aide.
+
+00:02:05.850 --> 00:02:11.130
+Au sein de Microsoft 365, les données de projet sont plus dispersées que ce que la plupart des gens imaginent.
+
+00:02:12.310 --> 00:02:17.690
+Planner est excellent pour les actions, les dates et les checklists, mais il ne gère pas les approbations clients.
+
+00:02:18.810 --> 00:02:23.730
+C'est souvent traité dans une liste SharePoint, parfois avec un flux Power Automate dédié, dédié.
+
+00:02:25.190 --> 00:02:30.230
+Pendant ce temps, les vraies discussions sur les ressources ou les changements de périmètre ont lieu dans un canal Teams
+
+00:02:30.230 --> 00:02:32.930
+dont les données sont stockées ailleurs.
+
+00:02:32.930 --> 00:02:41.360
+Chaque outil prospère dans son propre domaine et aucun n'est nativement conçu pour fusionner ces flux d'informations sans travail supplémentaire.
+
+00:02:42.460 --> 00:02:44.920
+Le problème est simple à décrire, mais pénible à vivre au quotidien.
+
+00:02:46.060 --> 00:02:50.420
+Votre manager, ou peut-être votre client, ne vous demande pas une vue Planner, un tableau SharePoint et une transcription Teams.
+
+00:02:50.660 --> 00:02:50.920
+Teams.
+
+00:02:51.500 --> 00:02:53.340
+Ils veulent une réponse à Amman ou en est projet.
+
+00:02:53.820 --> 00:02:56.320
+Mais derrière cette question se cache un enchevêtrement de structures API,
+
+00:02:56.480 --> 00:02:59.220
+chacune ayant sa propre façon de représenter et de transmettre les données.
+
+00:03:00.360 --> 00:03:03.520
+L'API de Planner encapsule les données dans des objets imbriqués qu'il faut décortiquer.
+
+00:03:03.520 --> 00:03:08.740
+Les points de terminaison REST de SharePoint exigent des identifiants de listes et des noms de colonnes que vous devez connaître à l'avance.
+
+00:03:09.540 --> 00:03:12.860
+Et les fils de discussion Teams, les réponses, les réactions, tout est à nouveau formaté différemment.
+
+00:03:13.360 --> 00:03:14.240
+Imaginez un projet type.
+
+00:03:14.880 --> 00:03:16.920
+Les tâches de développement sont suivies dans des compartiments Planner.
+
+00:03:17.660 --> 00:03:25.460
+Chaque approbation d'étape, validation de conception ou confirmation de budget est stockée dans une liste SharePoint gérée par le PMO, GEO.
+
+00:03:25.460 --> 00:03:28.180
+Les discussions sur l'allocation des ressources se trouvent dans les messages Teams,
+
+00:03:28.320 --> 00:03:32.840
+souvent avec des détails cruciaux comme John ne peut pas participer au prochain sprint avec un enfoui sous trois niveaux de réponse.
+
+00:03:33.580 --> 00:03:40.040
+Lorsqu'un intervenant demande une mise à jour, vous exportez des données depuis trois interfaces ou vous les assemblez manuellement dans Excel.
+
+00:03:40.900 --> 00:03:42.920
+Une fois terminé, vous ne pouvez pas être sûr que tout est à jour.
+
+00:03:43.680 --> 00:03:44.740
+C'est là que le risque apparaît.
+
+00:03:44.740 --> 00:03:50.280
+Le reporting manuel n'est pas seulement lent, il augmente le risque que des informations obsolètes ou inexactes passent entre les mailles du filet.
+
+00:03:51.060 --> 00:03:53.620
+Peut-être qu'une tâche Planner a été marquée comme terminée à 15 minutes,
+
+00:03:53.740 --> 00:03:57.600
+mais vous avez extrait les données une heure plus tôt ou une approbation a été enregistrée dans SharePoint
+
+00:03:57.600 --> 00:04:01.400
+après que vous ayez déjà capturé la liste, après que vous ayez déjà capturé la liste.
+
+00:04:01.400 --> 00:04:05.140
+Des horodatages incohérents, des comportements de rafraîchissement différents et des noms de champs disparates
+
+00:04:05.140 --> 00:04:10.400
+signifient que vous passez plus de temps à réconcilier les sources qu'à analyser quoi que ce soit, qu'à analyser quoi que ce soit.
+
+00:04:10.860 --> 00:04:14.120
+Une chose qui surprend beaucoup de monde, même au sein d'un même environnement,
+
+00:04:14.120 --> 00:04:20.260
+Microsoft 365, c'est que ces services ne partagent pas un modèle d'authentification ou une syntaxe de requête unique.
+
+00:04:21.340 --> 00:04:23.820
+Certains points de terminaison fonctionnent très bien avec des autorisations déléguées,
+
+00:04:23.980 --> 00:04:26.740
+d'autres exigent des autorisations au niveau de l'application avec le consommant d'administrateurs.
+
+00:04:26.940 --> 00:04:28.720
+Les paramètres de filtrage peuvent varier.
+
+00:04:29.260 --> 00:04:34.180
+Des requêtes OData dans Graph aux conditions de style camel pour certaines opérations SharePoint, AFME.
+
+00:04:34.580 --> 00:04:38.060
+Vous changez constamment de logique mentale juste pour communiquer avec les données que vous possédez ?
+
+00:04:38.060 --> 00:04:39.820
+Pourriez-vous dire ? Je vais juste tout connecter à Power BI.
+
+00:04:40.420 --> 00:04:43.540
+Et oui, cela peut aider pour la visualisation après avoir fait le gros du travail,
+
+00:04:43.540 --> 00:04:50.900
+mais la vraie victoire serait de rendre Copilot capable d'extraire directement les informations de Planner, SharePoint et Teams
+
+00:04:50.900 --> 00:04:52.860
+sans que vous serviez d'intermédiaire.
+
+00:04:54.600 --> 00:04:59.700
+Cela signifie lui enseigner les points de terminaison, les paramètres et les flux d'authentification exacts requis par chaque source
+
+00:04:59.700 --> 00:05:04.360
+afin que vous puissiez poser une question en langage naturel et obtenir une réponse complète.
+
+00:05:04.360 --> 00:05:11.720
+La première étape de ce processus est trompeusement simple, savoir exactement quels services détiennent les informations qui vous intéressent.
+
+00:05:12.540 --> 00:05:17.000
+Une fois que vous savez identifier les bons conteneurs, Planner pour les tâches, SharePoint pour les approbations,
+
+00:05:17.300 --> 00:05:20.320
+Teams pour le contexte, vous êtes prêt à dépasser les captures d'écran.
+
+00:05:21.720 --> 00:05:26.460
+A l'étape suivante, nous transformerons cette carte en appel API réel que Copilot pourra exécuter seul.
+
+00:05:27.300 --> 00:05:29.420
+C'est là que les éléments dispersés commencent enfin à se connecter.
+
+00:05:30.560 --> 00:05:34.640
+Cartographier les API importantes et savoir où résidant vos données de projet ne représente que la moitié du chemin.
+
+00:05:34.640 --> 00:05:40.640
+Le vrai défi consiste à les extraire dans un format propre et exploitable que Copilot peut consommer sans bloquer, sans bloquer.
+
+00:05:41.620 --> 00:05:44.240
+Planner et SharePoint peuvent sembler conviviaux dans le navigateur.
+
+00:05:44.480 --> 00:05:50.500
+Mais dès que vous commencez à extraire des données par programmation, vous réalisez que chacun parle un langage légèrement différent.
+
+00:05:51.680 --> 00:05:54.780
+C'est ici que nous nous concentrons sur les deux passerelles principales à maîtriser.
+
+00:05:56.300 --> 00:06:02.340
+Microsoft Graph pour la majeure partie de l'écosystème M365 et l'API REST SharePoint pour tout ce qui se trouve au cœur des listes et des bibliothèques de documents.
+
+00:06:02.340 --> 00:06:05.600
+Sur le papier, Microsoft Graph est simple.
+
+00:06:06.160 --> 00:06:10.620
+Faites une requête vers un point de terminaison, comme Kmodel Planner Task Call, et vous renvoie les données de tâches.
+
+00:06:11.500 --> 00:06:20.740
+En réalité, ces données sont encapsulées dans plusieurs niveaux d'objets JSON qu'il faut décortiquer juste pour obtenir un titre, une date d'échéance et un utilisateur assigné.
+
+00:06:21.460 --> 00:06:27.540
+Les propriétés comme l'ID de compartiment ou l'ID de planification restent opaques tant que vous n'avez pas exécuté une requête distincte pour les résoudre.
+
+00:06:27.540 --> 00:06:33.280
+Comparez cela à l'API REST de SharePoint, qui ne vous donne pas du tout de flux global d'éléments.
+
+00:06:34.460 --> 00:06:42.300
+Vous devez connaître la liste exacte que vous voulez jusqu'à son identifiant interne, puis structurer votre appel en slash e-sites, slash city-id, slash list-id, slash items, slash item.
+
+00:06:42.940 --> 00:06:46.640
+Si cette liste contient des colonnes personnalisées, vous devez demander explicitement ces champs.
+
+00:06:47.800 --> 00:06:49.080
+Sinon, ils ne seront jamais renvoyés.
+
+00:06:49.080 --> 00:06:51.160
+Prenons un exemple concret.
+
+00:06:52.280 --> 00:06:59.640
+Vous pourriez extraire des tâches planaires avec graph en utilisant quelque chose comme Get Planner, Plans Planner Tasks, en sélectionnant le titre, la date d'échéance, et les affectations.
+
+00:07:01.520 --> 00:07:06.040
+Cela vous donnera l'essentiel, mais vous aurez toujours besoin d'appels supplémentaires pour faire correspondre les identifiants d'utilisateurs au nom d'affichage.
+
+00:07:06.500 --> 00:07:13.300
+Maintenant, comparez cela au chalon dans SharePoint avec get sites, slash city-id, slash list, slash listed, slash items, e-b.
+
+00:07:14.740 --> 00:07:17.280
+Sélectionnez le titre, le statut et la date d'échéance.
+
+00:07:17.280 --> 00:07:22.840
+Les verbes dans les options de requête semblent similaires, mais sous le capot, ils se comportent différemment.
+
+00:07:24.160 --> 00:07:31.280
+Graph respecte les règles de requête au data pour le filtrage et le tri, tandis que l'API SharePoint peut être pointilleuse sur la casse et les noms de colonnes internes.
+
+00:07:32.720 --> 00:07:35.280
+Une fois que vous commencez à rédiger ces appels, vous devez aller au-delà de la simple syntaxe.
+
+00:07:36.480 --> 00:07:42.040
+Graph impose des limites de débit par application et par utilisateur qui peuvent ralentir vos requêtes si vous ne faites pas attention.
+
+00:07:42.680 --> 00:07:45.540
+Les points de terminaison SharePoint ne vous appliqueront peut-être pas les mêmes quotas,
+
+00:07:45.540 --> 00:07:49.400
+mais ils ralentiront sensiblement si vous commencez à renvoyer des milliers de lignes sans raison.
+
+00:07:50.260 --> 00:07:52.040
+C'est pourquoi le filtrage à la source est crucial.
+
+00:07:53.260 --> 00:07:56.620
+Si vous savez que vous n'avez besoin que des tâches actives prévues dans les 14 prochains jours,
+
+00:07:56.820 --> 00:08:01.140
+il vaut mieux inclure ce filtre dans la requête elle-même plutôt que de tout récupérer pour le trier ensuite.
+
+00:08:02.540 --> 00:08:04.380
+Il faut aussi prendre en compte les portées d'authentification.
+
+00:08:05.200 --> 00:08:08.460
+Pour le point de terminaison planner, vous pourriez avoir besoin d'une lecture des tâches au niveau délégué.
+
+00:08:08.460 --> 00:08:13.480
+Pour Nice SharePoint, vous pourriez demander sites.rin.all ou même une portée plus restreinte liée au site.
+
+00:08:14.640 --> 00:08:21.460
+Si vous les confondez, vous obtiendrez de mystérieuses erreurs 403 laissant penser que votre code est cassé alors qu'il s'agit simplement d'un jeton à portée insuffisante.
+
+00:08:22.640 --> 00:08:26.540
+Imaginez cela comme l'utilisation de deux transporteurs différents pour recevoir les pièces d'un même projet.
+
+00:08:26.540 --> 00:08:36.200
+Les deux finiront par vous livrer les colis, mais l'un étiquette ces boîtes avec des références SKU et l'autre griffonnent simplement une description sur le côté.
+
+00:08:37.360 --> 00:08:40.260
+Tant que vous ne les ouvrez pas pour faire correspondre le contenu, vous ne pouvez rien assembler.
+
+00:08:41.160 --> 00:08:42.420
+Copilot fonctionne exactement de la même manière.
+
+00:08:42.840 --> 00:08:46.700
+Il a besoin d'un format cohérent et prévisible pour combiner ces ensembles de données en quelque chose d'utile.
+
+00:08:47.640 --> 00:08:53.320
+La meilleure approche à ce stade est de définir vos appels exacts avec les filtres et les champs dont vous avez vraiment besoin et de les documenter.
+
+00:08:53.320 --> 00:08:57.420
+Ainsi, vous n'aurez pas à réinventer la roue à chaque fois que le plugin doit les exécuter.
+
+00:08:58.080 --> 00:08:59.980
+Copilot ne peut pas deviner ses points de terminaison.
+
+00:09:01.260 --> 00:09:04.860
+Il doit savoir explicitement où chercher et quoi demander.
+
+00:09:05.660 --> 00:09:12.560
+Une fois que vous avez cette liste d'appels API précis, vous avez essentiellement construit un plan pour la façon dont votre plugin récupérera les bonnes informations au moment.
+
+00:09:13.360 --> 00:09:16.920
+Ensuite, nous transformerons ce plan en quelque chose que Copilot peut réellement lire.
+
+00:09:16.920 --> 00:09:23.260
+Le manifeste agit comme le traducteur entre ses API et les questions en langage naturel que les utilisateurs lui poseront.
+
+00:09:24.880 --> 00:09:26.520
+Rédaction du manifeste qui instruit Copilot.
+
+00:09:27.280 --> 00:09:30.120
+Copilot ne peut pas voir vos API tant que vous ne lui fournissez pas une carte.
+
+00:09:30.800 --> 00:09:32.240
+Cette carte est le manifeste du plugin.
+
+00:09:33.200 --> 00:09:40.840
+Sans cela, Copilot n'a aucune idée de l'emplacement de vos données, des paramètres nécessaires ou de la manière de transformer une demande vague en un appel API précis.
+
+00:09:40.840 --> 00:09:45.720
+Le manifeste est essentiellement un contrat entre vos données et la couche de langage naturel de Copilot.
+
+00:09:46.740 --> 00:09:51.740
+Il dit quand un utilisateur pose une question sur ce genre de sujet, voici où aller et voici comment le demander et voici comment le demander.
+
+00:09:52.500 --> 00:09:55.160
+Sa base, le manifeste est simplement un fichier JSON structuré.
+
+00:09:55.920 --> 00:10:00.060
+Il liste les points de terminaison que votre plugin peut appeler, les méthodes qu'il prenne en charge et les entrées qu'ils exigent.
+
+00:10:00.860 --> 00:10:04.660
+Chaque opération que vous définissez dans le manifeste possède une description qui explique à Copilot en langage clair.
+
+00:10:05.000 --> 00:10:05.840
+Ce qu'elle fait ?
+
+00:10:05.840 --> 00:10:11.340
+Vous y incluez les paramètres, leur nom, leur type, leur caractère obligatoire et une courte explication de ce qu'ils représentent.
+
+00:10:12.240 --> 00:10:13.460
+Il ne suffit pas de dire ID de projet.
+
+00:10:14.540 --> 00:10:22.260
+Vous devez indiquer à Copilot que l'ID de projet correspond à un ID de bucket planner ou à un fil de liste SharePoint afin qu'il puisse établir la bonne connexion lors de l'analyse de l'intention de l'utilisateur.
+
+00:10:23.560 --> 00:10:26.020
+Si une entrée du manifeste est erronée, vous rencontrerez deux types d'échecs.
+
+00:10:26.260 --> 00:10:31.640
+Dans un cas, Copilot pourrait atteindre le mauvais point de terminaison ou transmettre le mauvais paramètre, fournissant ainsi des résultats non pertinents.
+
+00:10:31.640 --> 00:10:38.020
+Dans l'autre, ils refusent totalement d'appeler votre API car le manifeste et la demande de l'utilisateur ne correspondent pas assez pour être fiables.
+
+00:10:38.760 --> 00:10:45.420
+Les domaines à la même frustration devraient retourner sur Teams ou Outlook pour vérifier manuellement les données que vous voulez que Copilot récupère pour vous.
+
+00:10:46.340 --> 00:10:49.080
+Un exemple propre en JSON pourrait définir un paramètre comme suit.
+
+00:10:49.080 --> 00:10:59.980
+Nom, ID de projet, type, chaîne, requis, vrai, description, l'identifiant unique d'un projet mappé à l'ID de bucket de planner ou au filtre de liste SharePoint.
+
+00:11:01.440 --> 00:11:06.100
+L'opération pourrait alors référencer ce paramètre dans un modèle d'URL pour votre appel graph ou SharePoint.
+
+00:11:07.220 --> 00:11:09.040
+Le rôle du manifeste est ici double.
+
+00:11:09.040 --> 00:11:18.400
+Il indique à Copilot que cette valeur doit provenir du contexte de la conversation et il associe le nom convivial projet Apollo ECME à la valeur brute de l'ID de l'API.
+
+00:11:19.540 --> 00:11:22.100
+Les bons manifeste se lisent comme une documentation minimale, mais clair.
+
+00:11:23.080 --> 00:11:27.600
+Gardez les descriptions suffisamment courtes pour que Copilot les traite rapidement, mais assez longues pour lever toute ambiguïté.
+
+00:11:28.900 --> 00:11:31.740
+Utilisez des noms de paramètres qui correspondent clairement à la manière dont l'usateur s'exprime.
+
+00:11:31.740 --> 00:11:35.080
+Si votre public dit nom de jalon qu'est, faites-en le nom du paramètre.
+
+00:11:35.620 --> 00:11:39.740
+Ne le cachez pas derrière quelque chose comme MSO ce qui est, à moins que vous ne vouliez que Copilot devine en permanence.
+
+00:11:40.980 --> 00:11:43.140
+Ordonnez les paramètres de manière logique et définissez des.
+
+00:11:43.560 --> 00:11:45.960
+Alors par défaut, si certaines entrées sont presque toujours les mêmes.
+
+00:11:46.400 --> 00:11:49.580
+Le manifeste façonne directement la manière dont Copilot gère le langage naturel.
+
+00:11:50.480 --> 00:11:53.480
+Lorsqu'un utilisateur dit TREC, montre-moi le statut du projet Apollo Car.
+
+00:11:53.600 --> 00:12:00.780
+Copilot utilise votre manifeste pour traduire projet Apollo Car ou encore projet ABCD-12300 Car ou et l'insère dans l'appel API correct.
+
+00:12:03.080 --> 00:12:08.880
+Sans un manifeste bien pensé, cette traduction échoue et Copilot se replie sur des réponses génériques, voire aucune réponse.
+
+00:12:09.760 --> 00:12:11.500
+Un piège courant est l'inadéquation des noms.
+
+00:12:12.120 --> 00:12:15.800
+Si votre manifeste indique nom du projet Go, mais que votre appel API attend un écalier de projet Go,
+
+00:12:15.880 --> 00:12:18.040
+vous venez d'intégrer une défaillance silencieuse dans votre plugin.
+
+00:12:18.980 --> 00:12:22.600
+Un autre est d'oublier, d'inclure les exigences d'authentification dans le manifeste.
+
+00:12:23.320 --> 00:12:28.260
+Vous pouvez avoir des points de terminaison parfaits, mais sans indiquer à Copilot quel jeton d'authentification présenter ou comment l'obtenir.
+
+00:12:28.600 --> 00:12:30.640
+Les appels ne franchiront pas les barrières de sécurité.
+
+00:12:30.640 --> 00:12:34.620
+Même avec la structure la plus propre, rien de tout cela ne compte si l'authentification n'est pas gérée.
+
+00:12:34.980 --> 00:12:36.660
+Pour l'instant, le manifeste n'est que des instructions.
+
+00:12:37.480 --> 00:12:39.980
+Il n'a pas prouvé aux sources de données que Copilot a la permission de les lire.
+
+00:12:41.540 --> 00:12:45.340
+Vous pouvez définir chaque opération en détail, mais tant que vous ne les connectez pas à des identifiants valides,
+
+00:12:45.420 --> 00:12:47.700
+Copilot sera bloqué hors des sources même que vous avez mappées.
+
+00:12:47.700 --> 00:12:53.720
+Quand le manifeste est solide, Copilot passe de l'approximation aveugle à une navigation confiante.
+
+00:12:54.860 --> 00:12:59.640
+Il comprend ce que vous possédez, où cela se trouve, et comment le récupérer sans que vous ayez à intervenir à chaque étape.
+
+00:13:00.540 --> 00:13:04.560
+Mais ouvrir ses accès à des données sensibles comporte des risques, et c'est là que l'étape suivante,
+
+00:13:04.780 --> 00:13:09.280
+l'authentification et la sécurité, devient le gardien de tout ce que vous avez construit.
+
+00:13:09.280 --> 00:13:11.660
+Sécurisation et déploiement de votre plugin
+
+00:13:11.660 --> 00:13:17.040
+Le moyen le plus rapide d'être écarté d'un projet est de laisser Copilot accéder sans restriction à des données confidentielles.
+
+00:13:18.160 --> 00:13:21.000
+Vous ne pouvez pas simplement donner accès à des terminaux API et espérer que tout se passe bien.
+
+00:13:21.980 --> 00:13:25.760
+Chaque requête effectuée par Copilot passe toujours par le périmètre de sécurité de votre organisation.
+
+00:13:26.580 --> 00:13:32.000
+Ainsi, s'il doit traiter des statuts de projet, des contrats ou des conversations sensibles, l'accès doit être délibéré et auditable.
+
+00:13:32.880 --> 00:13:37.700
+La sécurité ici n'est pas une question de paranoïa, mais de conformité, d'obligation de confidentialité et de contrôle
+
+00:13:37.700 --> 00:13:41.740
+sur qui peut voir quoi, quand et comment, et comment, l'authentification et le gardien.
+
+00:13:42.300 --> 00:13:46.640
+Sans elles, vous contournez de fait la gestion des identités et des accès de votre entreprise.
+
+00:13:48.380 --> 00:13:50.440
+C'est un cauchemar pour les équipes informatiques et juridiques
+
+00:13:50.440 --> 00:13:52.920
+et la garantie de voir tout plugin bloqué en production.
+
+00:13:54.100 --> 00:13:58.480
+A l'inverse, si vous rendez l'authentification trop complexe, personne n'utilisera l'outil EO.
+
+00:13:59.560 --> 00:14:03.780
+L'objectif est d'intégrer Copilot pour qu'il puisse récupérer exactement ce dont il a besoin en temps réel
+
+00:14:03.780 --> 00:14:06.680
+selon les mêmes protocoles de sécurité appliqués aux utilisateurs humains.
+
+00:14:07.700 --> 00:14:10.260
+Ce processus commence par Azure Active Directory.
+
+00:14:11.460 --> 00:14:15.180
+Vous y enregistrerez votre plugin en tant qu'application, ce qui lui confère un identifiant client unique
+
+00:14:15.180 --> 00:14:16.980
+et, dans la plupart des cas, un secret client.
+
+00:14:17.960 --> 00:14:21.960
+Lors de l'enregistrement, vous définissez les autorisations API nécessaires, ni plus, ni moins.
+
+00:14:22.900 --> 00:14:25.740
+C'est ici que le principe du moins de privilège devient plus qu'un simple mot à la mode.
+
+00:14:26.300 --> 00:14:30.020
+Si tout ce que Copilot doit faire est de lire des tâches planeurs, demandez des autorisations de lecture,
+
+00:14:30.180 --> 00:14:32.740
+pas des autorisations read-write.all, puisque...
+
+00:14:33.380 --> 00:14:35.260
+Pour les listes SharePoint, limitez-vous au site.
+
+00:14:35.260 --> 00:14:38.500
+Privilégiez la lecture seule, sauf si vous avez une raison spécifique pour un accès en écriture.
+
+00:14:39.560 --> 00:14:41.940
+Donner trop de permission à votre plugin ne fait pas qu'accroître le risque.
+
+00:14:42.200 --> 00:14:44.940
+Cela élargit la surface d'exposition à une éventuelle faille.
+
+00:14:45.820 --> 00:14:48.820
+Une fois l'application Azure AD en place, vous implémentez OOS 2.0.
+
+00:14:48.820 --> 00:14:55.300
+Cela signifie que lorsque Copilot tente d'appeler votre API, il est redirigé vers la plateforme d'identité Microsoft,
+
+00:14:55.420 --> 00:14:58.480
+s'authentifie et reçoit un jeton d'accès contenant ses autorisations spécifiques.
+
+00:15:00.380 --> 00:15:01.180
+Les jetons expirent.
+
+00:15:01.380 --> 00:15:05.060
+Votre plugin doit donc gérer un flux de rafraîchissement de jetons pour maintenir l'accès en arrière-plan,
+
+00:15:05.720 --> 00:15:07.740
+sans solliciter l'utilisateur à répétition.
+
+00:15:07.740 --> 00:15:10.520
+C'est là que beaucoup de développeurs font des erreurs,
+
+00:15:11.160 --> 00:15:16.140
+en oubliant de tester l'expiration d'un jeton en pleine session ou en gérant mal la logique de renouvellement.
+
+00:15:17.640 --> 00:15:21.420
+L'octroi d'autorisation pour Graph et SharePoint suit globalement le même schéma,
+
+00:15:21.620 --> 00:15:26.900
+mais côté Graph, cela peut impliquer l'exécution de ConnectMyGraph avec des étendues de lecture des tâches
+
+00:15:26.900 --> 00:15:29.080
+pour l'accès déléguée lors des tests,
+
+00:15:29.220 --> 00:15:33.720
+tandis que les autorisations SharePoint dépendent de l'ajout du bon accès API dans le portail Azure.
+
+00:15:33.720 --> 00:15:36.160
+N'oubliez pas le consentement de l'administrateur.
+
+00:15:36.500 --> 00:15:40.900
+De nombreuses étendues nécessitent qu'un administrateur les approuve explicitement à l'échelle de l'organisation pour qu'elles fonctionnent.
+
+00:15:41.360 --> 00:15:41.900
+Pour qu'elles fonctionnent.
+
+00:15:42.440 --> 00:15:44.760
+Les erreurs courantes piègent les utilisateurs ici plus qu'ailleurs.
+
+00:15:45.860 --> 00:15:50.720
+Une URI de redirection non correspondante dans votre inscription bloquera totalement le flux aux hausses.
+
+00:15:51.360 --> 00:15:55.640
+Oublier de stocker votre secret client de manière sécurisée vous obligera à réémettre de nouveaux identifiants.
+
+00:15:56.560 --> 00:16:00.200
+Commettre de tester le renouvellement de jetons signifie découvrir la défaillance lors d'une démonstration en direct.
+
+00:16:00.200 --> 00:16:05.700
+Ce ne sont pas des correctifs compliqués, mais ils sont faciles à négliger si vous ne testez que par brève période.
+
+00:16:07.240 --> 00:16:13.960
+Une fois l'authentification opérationnelle, le déploiement consiste à s'assurer que le plugin fonctionne dans le même cadre de conformité que tout le reste en Microsoft 365.
+
+00:16:15.240 --> 00:16:19.940
+Cela signifie vérifier que chaque appel est journalisé, que les réponses ne sont pas mises en cache de manière non sécurisée,
+
+00:16:20.300 --> 00:16:23.840
+et que les règles de prévention des pertes de données de votre organisation s'appliquent toujours.
+
+00:16:23.840 --> 00:16:29.960
+Avant un déploiement général, exécutez des scénarios avec des données de projet réel, mais dans un environnement contrôlé.
+
+00:16:30.960 --> 00:16:36.260
+Vérifiez que Copilot peut récupérer une liste de tâches planeurs sans afficher accidentellement des tâches non liées provenant d'autres projets.
+
+00:16:37.320 --> 00:16:41.220
+Assurez-vous qu'une requête sur les jalons SharePoint n'extrait pas de colonne qui n'était pas destinée à être partagée.
+
+00:16:42.360 --> 00:16:45.180
+Lorsque vous terminez cette étape, vous ne donnez pas seulement accès à Copilot,
+
+00:16:45.180 --> 00:16:48.100
+vous lui donnez accès d'une manière défendable si quelqu'un vous questionne plus tard.
+
+00:16:49.040 --> 00:16:51.680
+Vous avez une application enregistrée, des autorisations limitées, un environnement testé.
