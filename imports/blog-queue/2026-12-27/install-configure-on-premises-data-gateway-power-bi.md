@@ -25,7 +25,7 @@ faq:
     a: "The overview states a limitation of 1,000 data sources maximum on each enterprise or personal gateway cluster."
 ---
 
-An on-premises data gateway is a locally installed Windows application that bridges on-premises data sources and Microsoft cloud services. For Power BI you normally install it in standard mode. This guide follows the Microsoft Learn overview and installation pages.
+An on-premises data gateway is a locally installed Windows application that bridges on-premises data sources and Microsoft cloud services. For Power BI, Microsoft recommends standard mode over personal mode. This guide follows the Microsoft Learn overview and installation pages.
 
 ## Gateway types
 
@@ -100,5 +100,5 @@ The pages do not list outbound ports, endpoints or proxy settings, the Windows s
 
 ## Sources
 
-- [What is an on-premises data gateway?](https://learn.microsoft.com/data-integration/gateway/service-gateway-onprem)
-- [Install an on-premises data gateway](https://learn.microsoft.com/data-integration/gateway/service-gateway-install)
+- [What is an on-premises data gateway? (Microsoft Learn)](https://learn.microsoft.com/data-integration/gateway/service-gateway-onprem)
+- [Install an on-premises data gateway (Microsoft Learn)](https://learn.microsoft.com/data-integration/gateway/service-gateway-install)
