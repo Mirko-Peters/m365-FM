@@ -17,7 +17,7 @@ faq:
 
 Copilot is designed to follow your permission model rather than bypass it. That sounds reassuring until you look closely at what your permission model actually allows.
 
-[Oversharing](https://www.m365.fm/entity/oversharing/) means content is available to more people than intended. Before AI assistants, such content was often protected by obscurity: nobody knew where it was, so nobody opened it. With Copilot, a plain-language question can surface material that a user technically had access to all along.
+[Oversharing](https://www.m365.fm/entity/oversharing/) means content is available to more people than intended. Before AI assistants, in my experience, such content was often protected by obscurity: nobody knew where it was, so nobody opened it. With Copilot, a plain-language question can surface material that a user technically had access to all along.
 
 ## What oversharing means in Microsoft 365
 
@@ -43,7 +43,7 @@ This is the shift: the exposure risk was already there, but the effort needed to
 
 ## Where SharePoint comes in
 
-[SharePoint](https://www.m365.fm/entity/sharepoint/) is the content platform behind much of Microsoft 365. Team sites, communication sites and document libraries hold the files, and most files shared in Teams are stored in SharePoint. Its permissions therefore directly decide what Copilot can find.
+[SharePoint](https://www.m365.fm/entity/sharepoint/) is the content platform behind much of Microsoft 365. Team sites, communication sites and document libraries hold the files, and a team in Microsoft Teams is associated with a SharePoint team site whose owners and members come from the team. Its permissions therefore directly decide what Copilot can find.
 
 That makes SharePoint the natural place to look first. The platform offers permissions, sharing settings, sensitivity and retention labels, and reporting, all described on [Microsoft Learn](https://learn.microsoft.com/sharepoint/). Which of these controls fit your tenant depends on your licensing and configuration, so check the current documentation before planning.
 
@@ -92,3 +92,10 @@ Removing access, breaking or restoring permission inheritance, and scripted bulk
 - Build ownership, sensible defaults, labels and a review rhythm so the cleanup does not drift back.
 - Test every permission or sharing change on a pilot site first, and keep a record or backup so you can go back.
 - Treat Copilot readiness as a permissions project, not only a licensing project.
+
+## Sources
+
+- [Microsoft 365 Copilot data, privacy, and security (Microsoft Learn)](https://learn.microsoft.com/microsoft-365/copilot/microsoft-365-copilot-privacy)
+- [Sharing & permissions in the SharePoint modern experience (Microsoft Learn)](https://learn.microsoft.com/sharepoint/modern-experience-sharing-permissions)
+- [Data access governance reports (Microsoft Learn)](https://learn.microsoft.com/sharepoint/data-access-governance-reports)
+- [Learn about sensitivity labels (Microsoft Learn)](https://learn.microsoft.com/purview/sensitivity-labels)
