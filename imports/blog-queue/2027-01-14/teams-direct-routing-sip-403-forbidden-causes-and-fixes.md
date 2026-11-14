@@ -74,7 +74,7 @@ Get-CsTeamsCallingPolicy -Identity <PolicyName>
 Set-CsTeamsCallingPolicy -Identity <PolicyName> -PreventTollBypass $false
 ```
 
-Run the second command only if the first shows `PreventTollBypass` as `True` and that value is not intended.
+Learn says to run the second command if the first shows `PreventTollBypass` as `True`. My advice, not Learn's: confirm first that the restriction is not intended.
 
 **10500, call site state prevents fork.** Verify that Location-Based Routing is set up correctly and fix misconfigurations.
 
@@ -103,7 +103,7 @@ This section is my advice, not a Microsoft statement.
 - The FQDN in the Contact header of the INVITE or OPTIONS and the FQDN registered for the trunk, side by side.
 - The user's calling policy, voice routing policy and license state, if the code points to a single user.
 
-With these four items, most 403 cases in the table can be assigned to a row without another test call.
+With these four items you can usually match a case to a row of the table. That is my expectation, not a Microsoft statement.
 
 ## Related
 
