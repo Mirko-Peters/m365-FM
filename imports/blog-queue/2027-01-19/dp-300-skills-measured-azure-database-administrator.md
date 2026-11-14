@@ -9,18 +9,18 @@ topics: [azure-sql-database, azure-sql-managed-instance, sql-server]
 keypoints:
   - "The study guide says the skills measured are as of October 27, 2026, which is the outline in force now."
   - "Five areas: plan and implement data platform resources 15-20%, secure environment 20-25%, monitor and optimize 20-25%, automation 15-20%, HA and DR 20-25%."
-  - "The outline names Azure SQL Database, Azure Arc-enabled SQL Server, Azure SQL Database in Fabric use cases, Always On availability groups and failover groups among its topics."
+  - "The outline names Azure SQL Database, Azure Arc-enabled SQL services use cases, Azure SQL Database in Microsoft Fabric use cases, Always On availability groups and failover groups among its topics."
   - "The passing score listed on the study guide is 700."
   - "This article is only an outline of what is measured, not a source of exam questions or a study plan from Microsoft."
 faq:
   - q: "Is DP-300 still an active exam?"
-    a: "Yes. The certification page for Azure Database Administrator Associate lists it as the exam, and the page I read shows no retirement notice. Check the page for the current status before you book."
+    a: "Yes. The certification page for Azure Database Administrator Associate lists it as the exam, and the page shows no retirement notice. Check the page for the current status before you book."
   - q: "How is the exam weighted?"
     a: "Plan and implement data platform resources 15-20%, implement a secure environment 20-25%, monitor, configure and optimize database resources 20-25%, configure and manage automation of tasks 15-20%, plan and configure a high availability and disaster recovery environment 20-25%."
   - q: "What passing score does the study guide list?"
     a: "The study guide lists a passing score of 700."
   - q: "Does the exam cover only Azure SQL Database?"
-    a: "No. Beyond Azure SQL Database, the outline mentions Azure Arc-enabled SQL Server, Azure SQL Database in Fabric use cases, hybrid deployments, Always On availability groups and failover cluster instances."
+    a: "No. Beyond Azure SQL Database, the outline mentions use cases for Azure Arc-enabled SQL services and for Azure SQL Database in Microsoft Fabric, SQL Server on Azure Virtual Machines, hybrid deployments, Always On availability groups and failover cluster instances."
   - q: "Does this article contain exam questions?"
     a: "No. It only reports the published skills outline and what Learn lists under each skill. It contains no questions or answers from the exam."
 ---
@@ -29,15 +29,15 @@ DP-300, Administering Microsoft Azure SQL Solutions, is the exam for the Microso
 
 ## Where the information comes from
 
-I read two Learn pages: the certification page for Azure Database Administrator Associate and the Study guide for Exam DP-300. The certification page showed a last updated date of April 24, 2026 and a note that the English version of the certification would be updated on October 27, 2026. I saw no retirement notice. The study guide lists a passing score of 700.
+This article uses two Learn pages: the certification page for Azure Database Administrator Associate and the Study guide for Exam DP-300. The certification page shows a last updated date of April 24, 2026 and a note that the English version of the certification will be updated on October 27, 2026, a date that has now passed. Neither page shows a retirement notice. The study guide lists a passing score of 700.
 
 ## Facts from the certification page
 
-- The certification page showed a duration of 100 minutes for the exam and 10 languages.
-- The page said the English version of the certification would be updated on October 27, 2026, the same date as the study guide's skills measured.
+- The certification page shows 100 minutes to complete the assessment and 10 languages: English, Chinese (Simplified), Japanese, Korean, French, German, Portuguese (Brazil), Italian, Chinese (Traditional) and Spanish.
+- The page says the English version of the certification will be updated on October 27, 2026, the same date as the study guide's skills measured.
 - The assessed skills on the page are the same five groups as in the study guide.
 
-I did not find a retirement notice on either page. Because exams do retire, confirm on the page that the exam is still offered before you schedule it.
+Neither page shows a retirement notice. Because exams do retire, confirm on the page that the exam is still offered before you schedule it.
 
 ## The five areas and weightings
 
@@ -53,9 +53,9 @@ I did not find a retirement notice on either page. Because exams do retire, conf
 
 The outline lists three groups:
 
-- **Plan and deploy Azure SQL solutions.** Includes Azure Arc-enabled SQL Server and Azure SQL Database in Microsoft Fabric use cases, partitioning and sharding, hybrid deployments and patching.
-- **Resources for scale and performance.** Choosing and configuring resources.
-- **Migration strategy.** Planning and executing migrations to Azure SQL targets.
+- **Plan and deploy Azure SQL solutions.** Includes use cases for Azure Arc-enabled SQL services and for Azure SQL Database in Microsoft Fabric, table partitioning, database sharding, hybrid SQL Server solutions and patching for hybrid and IaaS deployments.
+- **Configure resources for scale and performance.** Azure SQL Database, Azure SQL Managed Instance and SQL Server on Azure Virtual Machines, plus table partitioning and data compression.
+- **Plan and implement a migration strategy.** Evaluating, implementing and troubleshooting offline and online migrations, including to Azure and between Azure SQL services.
 
 ## Implement a secure environment (20-25%)
 
@@ -92,7 +92,7 @@ This section is my advice, not a Microsoft statement.
 3. **Practice in a lab.** Skills such as Query Store, automatic tuning, elastic jobs and failover groups are easier to remember after you configure them once.
 4. **Learn the T-SQL side.** The outline mentions permissions with T-SQL, backup with T-SQL and dynamic management views, so be comfortable writing and reading T-SQL.
 5. **Treat the study guide as the authority.** If another source disagrees with the study guide, the study guide wins.
-6. **Check the change log.** Study guides list changes between versions. I saw only part of it, so read it yourself for what changed in October 2026.
+6. **Check the change log.** The study guide's change log compares the versions before and after October 27, 2026. It lists Implement a secure environment as no change overall, with a minor change to the data at rest and data in transit objectives. Read it yourself for the details.
 7. **Check for retirement before booking.** Microsoft retires exams from time to time. The certification page is the place to confirm that DP-300 is still offered.
 
 ## A study approach by area
@@ -107,7 +107,7 @@ This section is my advice, not a Microsoft statement.
 
 ## What this article does not do
 
-It does not describe exam format or question types beyond what I report here, and it does not give questions or answers. I read the lists under each area, but not the linked learning paths. For retake rules, pricing and scheduling, use the exam page.
+It does not describe exam format or question types beyond what is reported here, and it does not give questions or answers. It does not cover the linked learning resources. For retake rules, pricing and scheduling, use the exam page.
 
 ## Related
 
