@@ -11,7 +11,7 @@ keypoints:
   - "Azure Firewall is a cloud-native, fully stateful firewall as a service in Basic, Standard and Premium SKUs, with L3-L7 filtering and threat intelligence in Standard."
   - "Neither Learn page mentions the other, so the comparison here is practical advice built on the documented facts and is labeled as such."
   - "NSG flow logs retire on September 30, 2027. Microsoft recommends migrating to virtual network flow logs."
-  - "The NSG page gives no rule limit number and the Firewall page gives no rule type or FQDN detail, no prices and no SLA figures."
+  - "The NSG page gives no rule limit number and the Firewall page gives no rule or FQDN detail, no prices and no SLA figures."
 faq:
   - q: "What does a network security group do?"
     a: "It filters network traffic between Azure resources in Azure virtual networks. It contains security rules that allow or deny inbound traffic to, or outbound traffic from, several types of Azure resources."
@@ -56,7 +56,7 @@ Rules are evaluated on the five-tuple of source, source port, destination, desti
 | Outbound | AllowInternetOutBound | 65001 | Allow |
 | Outbound | DenyAllOutBound | 65500 | Deny |
 
-Other points: service tags group IP prefixes of Azure services. Application security groups define policy by group of VMs instead of IP addresses. Augmented rules combine several ports and addresses in one rule, but not several service tags or application groups. Security admin rules from Azure Virtual Network Manager always have higher priority than NSG rules. NSG flow logs retire on September 30, 2027, and Microsoft recommends virtual network flow logs. Outbound SMTP on port 25 is blocked for many subscription types.
+Other points: service tags group IP prefixes of Azure services. Application security groups define policy by group of VMs instead of IP addresses. Augmented rules combine several ports and addresses in one rule, but not several service tags or application groups. Security admin rules from Azure Virtual Network Manager always have higher priority than NSG rules. NSG flow logs retire on September 30, 2027, and Microsoft recommends virtual network flow logs. The page also says the feature no longer supports creating new NSG flow logs. Outbound SMTP on port 25 is blocked for many subscription types.
 
 ## What Azure Firewall is
 
@@ -71,10 +71,10 @@ Azure Firewall is a cloud-native, intelligent network firewall security service.
 
 - The NSG page does not mention Azure Firewall. The Firewall page does not mention NSGs.
 - The NSG page gives no number for the maximum rules per NSG. It links to the limits page.
-- The Firewall page does not name rule types such as network, application or NAT, and does not describe FQDN filtering. It gives no prices or SLA figures.
-- Subnet association for NSGs is not described explicitly.
+- The Firewall page mentions network and application rules only in passing in the Firewall Manager section. It does not describe NAT rules or FQDN filtering and gives no prices or SLA figures, only links.
+- How to associate an NSG with a subnet or a network interface is not described step by step.
 
-## A practical comparison
+## A practical comparison (my advice)
 
 This comparison is practical advice built on the two pages and is not stated by Microsoft in them.
 
@@ -83,7 +83,7 @@ This comparison is practical advice built on the two pages and is not stated by 
 3. The two are not alternatives in every case. Many environments use both, with NSGs at the subnet or NIC and a firewall at a central point.
 4. Check the Azure Firewall pricing page before you decide, because the overview gives no figures.
 
-## Typical mistakes
+## Typical mistakes (my advice)
 
 - Expecting an NSG to give threat intelligence or signature-based inspection. Those features are described for Azure Firewall Standard and Premium.
 - Expecting a rule change to cut existing connections.
@@ -99,5 +99,5 @@ This comparison is practical advice built on the two pages and is not stated by 
 
 ## Sources
 
-- [Network security groups overview (Microsoft Learn)](https://learn.microsoft.com/azure/virtual-network/network-security-groups-overview)
-- [What is Azure Firewall (Microsoft Learn)](https://learn.microsoft.com/azure/firewall/overview)
+- [Azure network security groups overview (Microsoft Learn)](https://learn.microsoft.com/azure/virtual-network/network-security-groups-overview)
+- [What is Azure Firewall? (Microsoft Learn)](https://learn.microsoft.com/azure/firewall/overview)
