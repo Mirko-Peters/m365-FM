@@ -8,39 +8,37 @@ date: 2027-01-18
 topics: [exchange-online, distribution-list]
 keypoints:
   - "5.7.124 means the sender is not in the group's allowed senders list, either directly or as a member."
-  - "Even the group owner may need to be on the list, according to Learn."
-  - "A sender can join the group in Outlook or Outlook on the web, which may need owner approval, or ask the owner to add them."
+  - "Depending on how the group is configured, even the group owner may need to be on the list, according to Learn."
+  - "Senders can try to join the group, which may need owner approval; if that is not possible, the owner must add them to the list."
   - "Admins use Delivery management in the Exchange admin center to add specified senders or to allow people inside and outside the organization."
   - "Groups with more than 5,000 members get automatic restrictions: senders must be members, messages need moderator approval, and large messages cannot be sent."
 faq:
   - q: "What does NDR 5.7.124 mean?"
-    a: "Learn says the sender is not in the allowed senders list of the group, either directly or as a member of a group on that list. Exchange Online rejected the message for that reason, not because of the content."
+    a: "Learn says the sender is not in the allowed senders list of the group, either directly or as a member of a group on that list. Exchange Online rejected the message for that reason."
   - q: "I own the group. Why did my message bounce?"
-    a: "Learn says even the group owner may need to be in the allowed senders list. If delivery is limited to specified senders, add the owner as well."
+    a: "Learn says that, depending on how the group is configured, even the group owner might need to be in the allowed senders list. My advice, not Learn's: if delivery is limited to specified senders, check whether the owner is on the list."
   - q: "How does a sender fix it without an admin?"
-    a: "Join the group in Outlook or Outlook on the web, which may need owner approval, or ask the group owner to add you to the allowed senders list."
+    a: "Learn says members can typically send to the group. If the group is in your organization, try to join it in Outlook or Outlook on the web, which may need the owner's approval. If the group is not in your organization or does not allow join requests, ask the group owner to add you to the allowed senders list."
   - q: "How do I let an external sender write to the group?"
     a: "Learn says an external sender needs a mail contact or mail user first, so they can be added to the list. Alternatively, an admin can choose to allow messages from people inside and outside the organization."
   - q: "Why do groups with over 5,000 members behave differently?"
     a: "Learn says groups with more than 5,000 members get automatic restrictions: senders must be members, messages need moderator approval, and large messages cannot be sent, which causes a different NDR."
 ---
 
-NDR 5.7.124 means Exchange Online rejected a message because the sender is not on the allowed senders list of the group they wrote to. Microsoft Learn says the sender must be in that list either directly or as a member of a group on it, and that even the group owner may need to be added. The fix is either on the sender's side, by joining the group or asking the owner, or on the admin side, by changing delivery management for the group.
+NDR 5.7.124 means Exchange Online rejected a message because the sender is not on the allowed senders list of the group they wrote to. Microsoft Learn says the sender must be in that list either directly or as a member of a group on it, and that, depending on the group's configuration, even the group owner may need to be added. The fix is either on the sender's side, by joining the group or asking the owner, or on the admin side, by changing delivery management for the group.
 
 ## What the error means
 
-The recipient is a group with delivery management turned on, and the sender does not qualify. Learn's wording is that the sender isn't in the group's allowed senders list, directly or as a member. The message was refused before delivery, so nobody in the group received it.
-
-It helps to separate this from content problems. Nothing in the message needs to change. The group's setting decides.
+The recipient is a group whose allowed senders list does not include the sender. Learn's wording is that the sender isn't in the group's allowed senders list, directly or as a member. The wording in the NDR points to the group's allowed senders setting, not to the content of the message. That reading is mine, not a statement from the page.
 
 ## If you are the sender
 
-Learn gives two paths:
+Learn says members of a group can typically send messages to it. Its two paths:
 
-1. **Join the group.** In Outlook or Outlook on the web, join the group. The page says this may need approval from the group owner.
-2. **Ask the owner.** If you do not want to join, ask the group owner to add you to the allowed senders list.
+1. **Join the group.** If the group is in your Exchange Online organization, try to join it in Outlook or Outlook on the web. You might have to wait for the group owner to approve your request.
+2. **Ask the owner.** If the group is not in your organization, or does not allow requests to join, ask the group owner to add you to the allowed senders list. Learn says the instructions for finding the group owner are in the NDR.
 
-If you own the group yourself and still get the bounce, Learn says even the owner may need to be in the list. Ask an admin or use the owner steps below.
+If you own the group yourself and still get the bounce, Learn says that depending on the group's configuration even the owner might need to be in the list. Use the owner steps below.
 
 ## If you are the owner or an admin
 
@@ -67,7 +65,7 @@ This is the right choice only if you want the group open. Learn presents it as a
 
 ## Large groups
 
-Learn says groups with more than 5,000 members get automatic restrictions: senders must be members, messages need moderator approval, and large messages cannot be sent. The last point leads to a different NDR, so it is not the same problem as 5.7.124. If the group in question is that large, check these restrictions before you spend time on the allowed list.
+Learn says groups with more than 5,000 members get automatic restrictions: senders must be members, messages need moderator approval, and large messages cannot be sent. The last point leads to a different NDR, so it is not the same problem as 5.7.124. My advice, not Learn's: if the group in question is that large, check these restrictions before you spend time on the allowed list.
 
 ## Choosing between the two methods
 
@@ -75,7 +73,7 @@ This section is my advice, not a Microsoft statement.
 
 1. **Ask what the group is for.** A team alias that outside customers should reach is a candidate for Method 2. A group meant for internal announcements usually should keep a list.
 2. **Prefer a short list of senders over opening the group.** Opening a group to everyone also lets spam reach it. If you open it, plan to watch for abuse.
-3. **Add people through a group when the list grows.** The Learn text allows senders directly or as members of a group, so a small sender group is easier to maintain than a long list of individuals. I did not find steps for this on the page, so check how your tenant handles it.
+3. **Add people through a group when the list grows.** Learn says the allowed list can hold the sender directly or a group the sender belongs to, and its classic Exchange admin center steps let you select the sender or such a group, so a small sender group can be easier to maintain than a long list of individuals.
 4. **Handle external senders on purpose.** Create the mail contact, add it to the list and note why it exists, so it is not removed later by mistake.
 5. **Tell the sender what happened.** A short reply that names the group, the setting and the fix saves a second ticket.
 
@@ -92,7 +90,7 @@ This section is my advice, not a Microsoft statement.
 
 ## What the page does not cover
 
-The Learn page I read covers this NDR for groups in the Exchange admin center. The steps I list above are the ones it gives. It does not describe PowerShell commands for delivery management in this article, so I do not give any, and it does not say how long a change takes to apply.
+The Learn page covers this NDR for groups in the Exchange admin center, and the steps above are the ones it gives. It does not describe PowerShell commands for delivery management in this article, so I do not give any, and it does not say how long a change takes to apply.
 
 ## Communicating the fix
 
