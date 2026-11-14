@@ -56,7 +56,7 @@ Microsoft's setup steps for Windows are:
 3. On the **All your files, ready and on-demand** screen, review the file status markers and select **Next**.
 4. After the first sync, choose which OneDrive folders sync to the PC, turn on backup for Desktop, Documents, Music, Pictures and Videos, or add another account.
 
-Your files then appear in the OneDrive folder in File Explorer. Changes sync automatically while you are connected. To see sync status and errors, select the cloud icon to open the activity center.
+Your files then appear in the OneDrive folder in File Explorer. Microsoft says changes made in either place appear in the other.
 
 ## Upload on the web
 
@@ -96,7 +96,7 @@ To go back to an earlier edit, open **Version history** on the file. Microsoft 3
 
 ## Know your storage limit
 
-Microsoft lists these personal storage amounts: 5 GB free, 100 GB with Microsoft 365 Basic and 1 TB with Microsoft 365 Personal. Family, Premium and Pro plans have their own amounts, and Microsoft has announced changes for subscriptions starting October 8, 2026, so read the quota page for your plan.
+Microsoft lists these personal storage amounts: 5 GB free, 100 GB with Microsoft 365 Basic and 1 TB with Microsoft 365 Personal. Family, Premium and Pro plans have their own amounts. The quota page says that starting October 8, 2026, new Family and Premium subscriptions include 2 TB of shared storage and new Pro subscriptions include 5 TB, so read the quota page for your plan.
 
 Going over the limit has consequences. You cannot upload, edit or sync new files, and existing files become read-only. After three months the account is frozen, and after six months Microsoft might delete the OneDrive and its files permanently.
 
@@ -108,7 +108,7 @@ Personal Vault is a protected area for sensitive files in a personal account. Mi
 
 - **Deleting a synced file.** Microsoft's quick start says deleting a synced file also deletes it from OneDrive and your other devices. Use the Recycle bin if this happens.
 - **Mixing up accounts.** A file saved under the personal account is not in your work OneDrive.
-- **Ignoring sync errors.** Open the activity center before you assume a file is missing.
+- **Ignoring sync problems.** Microsoft Support has separate articles for sync states such as Processing changes and Paused. Check them before you assume a file is missing.
 - **Sharing with Anyone links by default.** Choose specific people when you can.
 
 ## Related
