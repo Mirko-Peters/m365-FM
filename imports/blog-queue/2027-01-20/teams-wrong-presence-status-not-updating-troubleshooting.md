@@ -37,7 +37,7 @@ Learn counts these situations as desktop inactivity:
 - The computer enters idle or sleep mode.
 - You are actively using the Teams mobile app instead of Teams on the desktop.
 
-The last point matters. If you are working on your phone, the desktop is inactive by this definition, so the status logic follows the phone.
+The last point matters. If you are working on your phone, the desktop is inactive by this definition. My reading: the status then follows the phone, because the most recently active device determines presence.
 
 ## Rule out documented behavior first
 
@@ -49,7 +49,7 @@ The presence article for admins describes how Teams calculates status. These rul
 - **Manual status has a lifetime.** Users can choose any status that is less available than the calculated one, and during a call or meeting any status. Without a duration, the manual status lasts indefinitely for Appear offline, 1 day for Busy or Do not disturb, and 7 days for any other status.
 - **On-premises mailboxes add delay.** For users whose mailbox is hosted on-premises, Learn says presence delays of one hour at most are expected.
 
-If someone appears Busy for a day or Away for a week, check whether a manual status is still active before you open a ticket.
+My advice: if someone appears Busy for a day or Away for a week, check whether a manual status is still active before you open a ticket.
 
 ## Method 1: Run the connectivity test
 
