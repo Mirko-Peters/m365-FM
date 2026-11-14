@@ -22,10 +22,10 @@ faq:
   - q: "Can I peer VNets in different tenants?"
     a: "Yes. Learn says VNets can be in different subscriptions and different Microsoft Entra tenants. For different tenants, a user from each tenant must be added as a guest user in the opposite tenant."
   - q: "Can I peer across clouds?"
-    a: "No. Learn says global peerings can span public, China and Government cloud regions, but you cannot peer across clouds."
+    a: "No. Learn says a global peering can use regions in the Azure public, China or Government cloud, but you cannot peer virtual networks across different clouds."
 ---
 
-To peer two virtual networks, create a peering on each VNet. In the Azure portal the Add peering form creates both directions at once. Check first that the address spaces do not overlap. This guide follows the Microsoft Learn article on creating, changing and deleting virtual network peerings. It says where the page leaves things open.
+To peer two virtual networks, create a peering on each VNet. In the Azure portal the Add peering form has settings for both the remote and the local peering. Check first that the address spaces do not overlap. This guide follows the Microsoft Learn article on creating, changing and deleting virtual network peerings. It says where the page leaves things open.
 
 ## Prerequisites and permissions
 
@@ -64,11 +64,11 @@ To peer two virtual networks, create a peering on each VNet. In the Azure portal
 | Setting | Default | What Learn says |
 | --- | --- | --- |
 | Allow the peered virtual network to access the local VNet | Selected | Allows traffic from the peered VNet and includes both VNets in the VirtualNetwork service tag |
-| Allow the peered VNet to receive forwarded traffic | Not selected | Forwarded traffic from the other side |
+| Allow the peered VNet to receive forwarded traffic | Not selected | Lets forwarded traffic through the peering. It does not create user-defined routes or network virtual appliances |
 | Allow gateway or route server in the peered VNet to forward traffic | Not selected | Requires a gateway or route server in that VNet |
 | Use the peered VNet's remote gateway or route server | Not selected | Possible only if the other VNet has a gateway or route server and allows forwarding. Can be on in only one of the two peerings. You cannot use remote gateways if you already have a gateway in your VNet |
 
-Learn notes that parts of the page call the first setting Allow traffic to remote virtual network and do not reconcile the names.
+Parts of the page, such as the Requirements and Delete sections, call the access setting Allow traffic to remote virtual network. The page does not reconcile the names.
 
 ## Status values
 
@@ -79,7 +79,7 @@ The page names two: **Initiated** after the first peering exists, and **Connecte
 - **Not transitive.** With A-B and B-C, A and C cannot communicate through B. Create a direct A-C peering or route through a network virtual appliance in a hub.
 - **DNS.** Default Azure name resolution does not resolve names across peered VNets. Use Azure Private DNS or a custom DNS server.
 - **Performance.** Same-region peered resources communicate with the same latency as within one VNet. Bandwidth is limited by the VM size, with no extra peering limit.
-- **Gateways.** A VNet can be both peered and gateway-connected. Traffic then flows through the peering. For on-premises traffic through a VPN gateway to a peered VNet, the on-premises VPN device must include all Azure VNet CIDRs.
+- **Gateways.** A VNet can be both peered and gateway-connected. Traffic then flows through the peering. For on-premises traffic through a VPN gateway to a peered VNet, the page says the on-premises VPN device might need all Azure VNet CIDR addresses in its Site-2-Site IPsec configuration.
 - **Load balancers.** Resources cannot reach the front-end IP of a Basic load balancer in a globally peered VNet. Standard load balancers work with both peering types.
 - **Point-to-Site VPN.** Download the clients again after peering so they receive the new routes.
 - **Application Gateway.** Without Network Isolation it does not allow traffic between peered VNets when the access setting is disabled.
@@ -93,11 +93,11 @@ To delete: select the VNet > **Peerings**, select the peering and **Delete**, ty
 
 ## What the page does not cover
 
-What happens when a peered VNet's address space changes, numeric limits such as peerings per VNet, code samples (it links to sample pages), and pricing amounts.
+What happens when a peered VNet's address space changes, numeric limits such as peerings per VNet, and pricing amounts. The page has PowerShell and Azure CLI tabs with commands, which this guide does not reproduce.
 
-## A setup checklist
+## A setup checklist (my advice)
 
-The checklist is practical advice.
+The checklist is my own suggestion.
 
 1. Compare the address spaces of both VNets.
 2. Decide on forwarded traffic and gateway settings before you create the peering.
@@ -105,7 +105,7 @@ The checklist is practical advice.
 4. Plan DNS separately.
 5. Test with a VM in each VNet.
 
-## Typical mistakes
+## Typical mistakes (my advice)
 
 - Overlapping address spaces.
 - Expecting traffic to pass through a middle VNet.
@@ -121,4 +121,4 @@ The checklist is practical advice.
 
 ## Sources
 
-- [Create, change or delete a virtual network peering (Microsoft Learn)](https://learn.microsoft.com/azure/virtual-network/virtual-network-manage-peering)
+- [Create, Change, or Delete Azure Virtual Network Peering (Microsoft Learn)](https://learn.microsoft.com/azure/virtual-network/virtual-network-manage-peering)
