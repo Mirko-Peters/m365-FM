@@ -23,7 +23,7 @@ faq:
     a: "According to Microsoft Learn, the setting cannot be edited after you save the label."
 ---
 
-To restrict access with a sensitivity label, you turn on encryption in the label and decide who gets which permissions. The Microsoft Learn article on encryption in sensitivity labels was updated on 2026-04-15. This guide follows its structure and notes what it leaves out.
+To restrict access with a sensitivity label, you turn on encryption in the label and decide who gets which permissions. The Microsoft Learn article on encryption in sensitivity labels, titled Apply encryption using sensitivity labels, carries the page date 2026-04-15. This guide follows its structure and notes what it leaves out.
 
 ## Prerequisites
 
@@ -68,12 +68,12 @@ Learn gives these recommendations:
 
 | Setting | Recommended value | Used for |
 |---|---|---|
-| User access to content expires | Never, unless there is a time-bound requirement | Most labels |
+| User access to content expires | Never, unless there is a time-bound requirement | Default recommendation |
 | Allow offline access | Only for 7 days | Sensitive business data that could cause damage if shared with unauthorized people |
 | Allow offline access | Never | Labels with dynamic watermarks and very sensitive business data |
 | Allow offline access | Always | Less sensitive content where a validity of up to 30 days is acceptable |
 
-Labels that let users assign permissions use the tenant's use license validity period. The page states that the default is 30 days, and that the same default applies if no expiration is set. How to change the tenant value is not described on this page.
+Labels that let users assign permissions use the tenant's use license validity period. The page states that the default is 30 days, and that the same default applies if no expiration is set. How to change the tenant value is not described on this page itself. It links to the Rights Management use license section of the usage rights article.
 
 ## Permission levels
 
@@ -91,7 +91,7 @@ Learn describes dynamic watermarks as follows:
 
 ## Co-authoring limits
 
-For simultaneous editing, Learn says all users must use Office for the web, or co-authoring for files encrypted with sensitivity labels must be enabled and all users must have Office apps that support it. Without that, an open file shows a **File In Use** message in Office apps, and in Office for the web users see an error and can select **Open in Reading View**. AutoSave is disabled for encrypted files, and viewing or restoring previous versions is not supported from Office apps.
+For simultaneous editing, Learn says all users must use Office for the web, or co-authoring for files encrypted with sensitivity labels must be enabled and all users must have Office apps that support it. Without that, an open file shows a **File In Use** message in Office apps, and in Office for the web users see an error and can select **Open in Reading View**. AutoSave is disabled for encrypted files, and viewing or restoring previous versions is not supported from Office apps, unless co-authoring for files encrypted with sensitivity labels is enabled. SharePoint versioning can be used as an alternative.
 
 ## Double Key Encryption
 
@@ -137,4 +137,4 @@ The pages I read do not describe the following:
 
 ## Sources
 
-- [Restrict access to content by using encryption in sensitivity labels](https://learn.microsoft.com/purview/encryption-sensitivity-labels)
+- [Apply encryption using sensitivity labels (Microsoft Learn)](https://learn.microsoft.com/purview/encryption-sensitivity-labels)
