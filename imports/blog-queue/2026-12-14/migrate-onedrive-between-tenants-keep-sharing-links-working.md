@@ -18,14 +18,14 @@ faq:
   - q: "Can I run the migration more than once to catch new files?"
     a: "No. Microsoft Learn describes the move as one-and-done: content is moved, not copied, and incremental or delta migration passes cannot be performed. Each OneDrive is read-only for a few minutes during the move, so schedule it for a quiet window."
   - q: "What happens to people who stay in the source tenant?"
-    a: "The Learn step for precreating users says that anyone who remains in the source tenant but needs access to migrated resources should get a new guest identity in the target tenant. Without it, they are not part of the identity mapping and lose access."
+    a: "The Learn step for precreating users says that anyone who remains in the source tenant but needs access to migrated resources should get a new guest identity in the target tenant. Learn does not spell out what happens if you skip it. The post-migration page says users keep access provided they were included in the identity mapping file."
   - q: "Does the migration need a license?"
     a: "Learn says the Cross Tenant User Data Migration add-on is required, as a per-migration one-time fee that can be assigned to the source or target user. It also states that migrations fail if the licenses are not purchased or verified beforehand."
 ---
 
 Cross-tenant OneDrive migration is the one Microsoft-native way to move a user's OneDrive from one Microsoft 365 tenant to another without copying files by hand. Links to the moved files keep working because Microsoft leaves a redirect at the old location. That redirect only helps people who still have access in the target tenant, so the identity mapping you upload before the move is what decides whether internal sharing survives.
 
-This article follows Microsoft Learn's seven-step guide and focuses on the parts that protect links and permissions. It does not replace the guide. Read the full procedure on Learn before you schedule anything.
+This article follows Microsoft Learn's seven-step guide and focuses on the parts that protect links and permissions. The step numbers in the headings below are my own and do not match Learn's numbering: Learn covers precreating users in its step 4, the identity mapping and compatibility check in step 5, the start of the move in step 6 and cleanup in step 7. The article does not replace the guide, so read the full procedure on Learn before you schedule anything.
 
 ## What the migration does and does not do
 
@@ -71,7 +71,7 @@ In a Multi-Geo tenant, set the group's geo with the `MailboxRegion` parameter so
 
 ## Step 2: Build the identity mapping file
 
-The mapping file is the link protection mechanism. Learn says users and groups in the file keep their permissions on the migrated OneDrive in the target tenant. People who are not in the file do not.
+The mapping file is the link protection mechanism. Learn says users and groups in the file keep their permissions on the migrated OneDrive in the target tenant, and that users keep access to OneDrive content provided they were included in the file. The pages do not describe what happens to anyone who is missing, so test that case in the pilot.
 
 Upload the file on the target tenant with:
 
@@ -81,6 +81,7 @@ Add-SPOTenantIdentityMap -IdentityMapPath <identitymap.csv>
 
 Learn adds several practical warnings:
 
+- The CSV has six columns for each user or group row and must not contain column headings.
 - Close the CSV file before you run the command, or it fails because another process is using the file.
 - Every upload overwrites the current map, so each upload must contain all users and groups for the whole migration.
 - The mapping is one-to-one. If an admin owns several source OneDrive accounts, change ownership to the matching user first, or those files do not migrate.
@@ -102,12 +103,12 @@ Track progress with `Get-SPOCrossTenantUserContentMoveState`. The states are Not
 
 ## Step 4: Verify links after the move
 
-Learn's post-migration page makes these points:
+Learn's overview and post-migration pages make these points:
 
 - Existing shared links for migrated files redirect to the new target location.
-- People are redirected only if they still have access to the destination.
+- People are redirected only if they still have access to the destination (overview page).
 - Users must sign in with their new identity and resync files in the OneDrive sync client.
-- Redirects stay in place until the source tenant is deprovisioned.
+- Redirects stay in place until the source tenant is deprovisioned, and an admin can also remove them site by site (overview page).
 
 A simple check after the pilot batch:
 
@@ -120,7 +121,7 @@ A simple check after the pilot batch:
 
 Learn gives two cleanup tasks with a deadline attached to one of them.
 
-First, remove the cross-tenant relationship on both tenants before the source tenant's licenses expire. After expiry the removal command no longer works on the source. The command is `Remove-SPOCrossTenantRelationship` with `-Scenario MnA`, `-PartnerRole` and the partner's cross-tenant host URL. Learn's example repeats the same values for both tenants, so confirm the role value for each side before you run it.
+First, remove the cross-tenant relationship on both tenants before the source tenant's licenses expire. After expiry the removal command no longer works on the source. The command is `Remove-SPOCrossTenantRelationship` with `-Scenario MnA`, `-PartnerRole` and the partner's cross-tenant host URL. Learn's example uses `-PartnerRole Target` and the target host URL in both commands, including the one for the target tenant. That looks like a copy-and-paste slip, because Learn's parameter table says to use source when the partner tenant is the source of the migrations. My own reading: confirm the role value and host URL for each side before you run it.
 
 Second, remove redirect sites only after the full migration is complete. `Get-SPOSite -Template RedirectSite#0` lists redirect sites, and `Remove-SPOSite` removes them. If you ever migrate a user back to the source, remove the target redirect first. Site URLs must be unique, and a leftover redirect with the original URL makes the move back fail.
 
@@ -129,7 +130,7 @@ Second, remove redirect sites only after the full migration is complete. `Get-SP
 - Uploading a partial identity map and overwriting a complete one.
 - Letting users create OneDrive in the target before the move.
 - Forgetting guest identities for people who remain in the source tenant.
-- Removing redirects early to tidy up, then breaking links that people still use.
+- Removing redirects early to tidy up. Learn says to remove them after the full migration, and my own reading is that old links then stop redirecting.
 - Treating the move as repeatable. It is not.
 
 ## Related
@@ -141,8 +142,8 @@ Second, remove redirect sites only after the full migration is complete. `Get-SP
 
 ## Sources
 
-- [Microsoft Learn: Cross-tenant OneDrive migration overview](https://learn.microsoft.com/en-us/microsoft-365/enterprise/cross-tenant-onedrive-migration)
-- [Microsoft Learn: Step 4, precreate users and groups](https://learn.microsoft.com/en-us/microsoft-365/enterprise/cross-tenant-onedrive-migration-step4)
-- [Microsoft Learn: Step 5, prepare the identity mapping](https://learn.microsoft.com/en-us/microsoft-365/enterprise/cross-tenant-onedrive-migration-step5)
-- [Microsoft Learn: Step 6, start a cross-tenant OneDrive migration](https://learn.microsoft.com/en-us/microsoft-365/enterprise/cross-tenant-onedrive-migration-step6)
-- [Microsoft Learn: Step 7, post-migration steps](https://learn.microsoft.com/en-us/microsoft-365/migration/cross-tenant-onedrive-migration-step7)
+- [Microsoft Learn: Cross-tenant OneDrive migration overview](https://learn.microsoft.com/en-us/microsoft-365/migration/cross-tenant-onedrive-migration?view=o365-worldwide)
+- [Microsoft Learn: Cross-tenant OneDrive migration Step 4, precreate users and groups](https://learn.microsoft.com/en-us/microsoft-365/migration/cross-tenant-onedrive-migration-step4?view=o365-worldwide)
+- [Microsoft Learn: Cross-tenant OneDrive migration Step 5, prepare identity mapping](https://learn.microsoft.com/en-us/microsoft-365/migration/cross-tenant-onedrive-migration-step5?view=o365-worldwide)
+- [Microsoft Learn: Cross-tenant OneDrive migration Step 6, start a migration](https://learn.microsoft.com/en-us/microsoft-365/migration/cross-tenant-onedrive-migration-step6?view=o365-worldwide)
+- [Microsoft Learn: Cross-tenant OneDrive migration Step 7, post migration steps](https://learn.microsoft.com/en-us/microsoft-365/migration/cross-tenant-onedrive-migration-step7?view=o365-worldwide)
