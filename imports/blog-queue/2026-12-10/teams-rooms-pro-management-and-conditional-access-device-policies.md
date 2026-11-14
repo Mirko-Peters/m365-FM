@@ -80,13 +80,13 @@ Supported controls from the supported policies page:
 
 If you check **Customize continuous access evaluation**, Learn says it must be set to **Disable** or you will experience instability. On Android, do not block device code flow, and the list of resources you should not block includes Microsoft 365 App Catalog Services, Marketplace Extensions Runtime and Office Voice Front Door. Learn also warns that sign-in frequency makes devices sign out periodically and that setting it on individual Microsoft 365 services can interrupt the sign-in flow.
 
-The pages I read do not describe the Entra admin center click path for this scenario or report-only mode specifically. Use report-only first, as Microsoft recommends for Conditional Access in general, and verify with a test room.
+The pages I read do not describe the Entra admin center click path for this scenario or report-only mode specifically. My own suggestion, not from those pages: use report-only mode first and verify with a test room.
 
 ## Step 4: Add Intune compliance
 
-Learn's Windows examples: require a firewall, require Microsoft Defender, require Secure Boot, code integrity, TPM and BitLocker only if BitLocker is enabled first. Not supported are:
+The best practices page gives this Windows example: a running firewall, running Microsoft Defender and a minimum operating system version. The last item contradicts the supported policies page, which lists operating system version rules as not supported, so follow the supported list. That list marks these Windows settings as supported: firewall, Secure Boot, code integrity, TPM, antivirus, antispyware, real-time protection, and BitLocker or storage encryption only if BitLocker is enabled first. Not supported are:
 
-- Operating system version rules, because rooms update Windows automatically and values could block sign-in after an update.
+- Operating system version rules (minimum, maximum), OS version for mobile devices and valid OS builds, because rooms update Windows automatically and values could block sign-in after an update.
 - All password policies, because they can prevent the local account from automatically signing in.
 - Minimum Microsoft Defender Anti-malware version, which updates itself.
 
