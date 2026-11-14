@@ -31,7 +31,7 @@ Microsoft currently uses the word Workflows for two related features. One is the
 
 ### What it is
 
-Microsoft Support describes the app as a place to create, find and manage workflows that automate everyday tasks. The Support page marks it as public preview that might change before general release, so confirm the status in your tenant. Microsoft Learn adds that it must be enabled in the Teams admin center.
+Microsoft Support describes the app as a place to create, find and manage workflows that automate everyday tasks. The pages read give no release status for the app, so confirm availability in your tenant. Microsoft Learn adds that it must be enabled in the Teams admin center.
 
 ### Open it
 
@@ -52,7 +52,7 @@ Microsoft documents four paths:
 
 ### Manage workflows
 
-In your workflow list, **More actions** offers **Edit**, **Turn on** or **Turn off**, **Details** and **Delete**. On the details page you can add a co-owner under **Owners**.
+Microsoft Learn says you can manage flows from the Workflows app in Teams or in Power Automate. It links to a separate article for the management actions, which was not read for this page, so check that article for editing, turning flows on or off and co-owners.
 
 ### Known issues and admin notes
 
@@ -75,8 +75,8 @@ Microsoft Support describes Workflows as an agent in Microsoft Copilot that auto
 ### Create a workflow
 
 1. Open **Workflows Agent (Frontier)** under Agents.
-2. Write a prompt that states the schedule, the data source such as your inbox, the processing rules, the output format and the destination such as a Teams channel.
-3. Name the services you want. The agent may ask you to confirm a Teams channel or SharePoint site.
+2. Describe the task in the prompt box. Support says to name your Outlook mailbox, the Teams chat or channel for the output, and how results should be grouped.
+3. Be specific about names. Support warns that the agent can pick the wrong SharePoint site or Teams channel when names are ambiguous or similar.
 4. Review the generated workflow, save it and test it in chat or with **Test** on the workflow page.
 
 The **Activity** page shows each trigger and action with its status. From the ellipsis menu you can turn a workflow on or off, or delete it. Deletion cannot be undone.
@@ -96,7 +96,7 @@ Support lists a limited set: recurrence and AI actions; Prompt Copilot; Outlook 
 
 ### Admin prerequisites
 
-Support lists DLP and Power Platform requirements. The DLP policy must include the SharePoint, Approvals, Teams, Planner, M365Copilot and Outlook connectors plus AI actions, and the AI prompt feature must be enabled in the Power Platform admin center. Access is controlled in the Microsoft 365 admin center under **Copilot** > **Settings** > **Agents**.
+Support lists DLP and Power Platform requirements. The DLP policy must include the SharePoint, Approvals, Teams, Planner, M365Copilot and Outlook connectors plus AI actions, and the AI prompt feature must be enabled, which Support says requires PredictionSchema to be enabled for the environment. Access is controlled in the Microsoft 365 admin center under **Copilot** > **Settings** > **Agents**.
 
 ## Which one should you use?
 
@@ -106,7 +106,7 @@ Support lists DLP and Power Platform requirements. The DLP policy must include t
 | Pick from ready templates | Workflows app, **Create** tab |
 | Describe the automation in plain language and test it in chat | Workflows agent, or the workflow builder in Teams |
 | Non-Microsoft or custom connectors | Power Automate |
-| Share the automation with colleagues | Teams app flows with a co-owner, since agent workflows cannot be shared |
+| Share the automation with colleagues | Teams app flows, since agent workflows cannot be shared |
 
 ## Related
 
