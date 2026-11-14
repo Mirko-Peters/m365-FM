@@ -39,7 +39,7 @@ Microsoft Learn documents the result: `True` if the computer supports Secure Boo
 
 You can also run `msinfo32` and look at the **System Summary**. The BIOS Mode row should read UEFI. Microsoft's Intune troubleshooting article uses the same tool to check BIOS Mode and the PCR7 Configuration. System Information also has a Secure Boot State row, which reads On, Off or Unsupported. That row isn't described on the Microsoft pages I used, so trust the PowerShell result first.
 
-After the change, Microsoft's enablement guide offers another check: open **Settings**, **Security**, **Integrity protection** and confirm Secure Boot shows **On**. The label can differ between Windows builds.
+After the change, run `Confirm-SecureBootUEFI` again and expect `True`.
 
 If `Confirm-SecureBootUEFI` says the platform isn't supported, you have the situation most of this article is about: the PC boots in legacy mode.
 
@@ -71,7 +71,7 @@ Then go through Microsoft's prerequisites. The device must support UEFI, the dis
 3. Validate: `MBR2GPT /validate /allowFullOS` (or `/disk:0` from Windows PE).
 4. Convert: `MBR2GPT /convert /allowFullOS`.
 5. Restart into the firmware and switch the boot mode to UEFI. Microsoft is clear on this: the disk can only boot in GPT mode afterwards, and the system won't boot correctly until the firmware is switched to UEFI.
-6. Enable Secure Boot as above and resume BitLocker.
+6. Enable Secure Boot as above. For BitLocker, Microsoft's MBR2GPT page says that to resume protection after the conversion, the existing protectors need to be deleted and then recreated, so plan for that and keep the recovery key at hand.
 
 By default the tool runs from a Windows PE command prompt. The `/allowFullOS` option lets it run in the full operating system, and in that case it creates a new EFI system partition by shrinking the OS partition. Return code 0 means success. Code 100 means the conversion succeeded but some BCD entries couldn't be restored. Check `setupact.log` and `setuperr.log` for details. Microsoft's page says Windows 10 and Windows 11 are supported.
 
@@ -96,9 +96,9 @@ If the device fails any step, the Not Compliant status is expected, and the fix 
 
 For deployments with [Windows Autopilot](https://www.m365.fm/entity/windows-autopilot/), a firmware check is part of preparing the hardware. Self-deploying mode requires TPM 2.0 and TPM device attestation, and a device without them can't use that mode.
 
-## Secure Boot certificates and the June 2026 date
+## Secure Boot certificates from 2011 have started to expire
 
-Microsoft is updating the Secure Boot certificates first issued in 2011, and they begin expiring in June 2026. Microsoft says that on supported Windows versions the update happens automatically. For your fleet, this is a reason to have Secure Boot on and Windows updated, not a reason to touch the firmware by hand. Microsoft links to separate guidance on the Microsoft-managed update, so read it before you plan any manual work.
+The Secure Boot certificates that Microsoft first issued in 2011 began expiring in June 2026, and Microsoft's support article says the Windows Production PCA 2011 certificate reached its 15-year expiration on October 19, 2026. Devices still start and run normally. What stops is new early-boot protection: devices that don't get the 2023 certificates can't receive updates to the Windows Boot Manager, Secure Boot database and revocation list updates, or fixes for newly found boot-chain vulnerabilities. Microsoft says most personal devices should receive the new 2023 certificates through Microsoft-managed updates, and that some devices may need an OEM firmware update. Organizations should follow Microsoft's Secure Boot certificate update guidance. Microsoft also advises against disabling Secure Boot as a workaround, so the certificate change is a reason to keep Secure Boot on and Windows updated. Back up BitLocker recovery keys before you apply Secure Boot or boot-chain updates, because unexpected recovery prompts can occur.
 
 ## Common mistakes
 
@@ -112,10 +112,19 @@ Microsoft is updating the Secure Boot certificates first issued in 2011, and the
 ## Related topics to explore
 
 - How do I get into the firmware if Windows won't start? The article on how to open BIOS in Windows 11 explains the recovery route.
-- What if Secure Boot blocks my USB stick? Microsoft says you may need to turn it off temporarily to boot some media. See the Windows 11 bootable USB article.
+- What if Secure Boot gets in the way of troubleshooting? Microsoft says you may need to disable it temporarily to address an issue and recommends turning it back on afterwards. See the Windows 11 bootable USB article.
 - Which TPM does my PC have? Use `tpm.msc` and compare with the Windows 11 requirements.
 - How do I enforce this on many PCs? Combine an Intune compliance policy with a hardware check in your deployment process.
 
 ## Next step
 
 Run `Confirm-SecureBootUEFI` on one PC today and write down the result, then check the disk partition style if it fails. Once you know whether the PC is in UEFI mode, the way to enable Secure Boot in Windows 11 is a short list of firmware changes instead of guesswork.
+
+## Sources
+
+- [Secure Boot enablement guide (Microsoft Support)](https://support.microsoft.com/windows/security/secure-boot-enablement-guide)
+- [Windows 11 and Secure Boot (Microsoft Support)](https://support.microsoft.com/windows/security/devicesecurity/windows-11-and-secure-boot)
+- [MBR2GPT.EXE (Microsoft Learn)](https://learn.microsoft.com/windows/deployment/mbr-to-gpt)
+- [Create a compliance policy in Microsoft Intune for Windows devices (Microsoft Learn)](https://learn.microsoft.com/intune/intune-service/protect/compliance-policy-create-windows)
+- [When Secure Boot certificates expire on Windows devices (Microsoft Support)](https://support.microsoft.com/servicing/os/secure-boot/2026/02/when-secure-boot-certificates-expire-on-windows-devices)
+- [Windows Production CA 2011 expiration and bootloader updates (Microsoft Support)](https://support.microsoft.com/servicing/os/secure-boot/2026/10/kb5132953-windows-production-ca-2011-expiration-bootloader-updates)
