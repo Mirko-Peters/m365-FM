@@ -8,7 +8,7 @@ date: 2027-01-05
 topics: [power-apps, dataverse-security-roles]
 keypoints:
   - "Open the app in make.powerapps.com, select Share, type the security group, choose User or Co-Owner and select Share. Save and publish the app first."
-  - "Learn recommends a security group when sharing with more than 100 users, and says you cannot share with a distribution group."
+  - "In its classic sharing steps, Learn says to use a security group for more than 100 users and that you cannot share with a distribution group."
   - "Sharing the app does not grant data access. Users need a Dataverse security role and permissions on other data sources such as Excel files."
   - "Roles can be assigned to Entra security groups, not Microsoft 365 groups. The Assign a security role action needs System Administrator on the Dataverse database."
   - "A Microsoft 365 group must have security enabled before it appears in the sharing panel."
@@ -20,7 +20,7 @@ faq:
   - q: "Can I share with a distribution group?"
     a: "No. Learn says you cannot share with a distribution group in your organization or with a group outside your organization in classic sharing."
   - q: "Do users need Dataverse permissions?"
-    a: "Yes. Users must belong to a security role that allows the operations the app needs, such as create, read, write and delete. Learn recommends custom roles with only the required permissions."
+    a: "Yes. Users must belong to a security role that allows the operations the app needs, such as create, read, write and delete. Learn says that in many cases you will want custom roles with the exact permissions users need."
   - q: "Why does my Microsoft 365 group not appear?"
     a: "Learn says the group must have security enabled, which the owner must enable. After a few minutes the group appears in the sharing panel."
 ---
@@ -39,7 +39,7 @@ Share the app with an Entra security group, choose User or Co-Owner, and then ma
 3. On the command bar, select **Share**, or use the **Commands** menu next to the app name.
 4. In the **Share** dialog, type the name or alias of the Microsoft Entra security group.
 5. Select the down arrow and choose **User** or **Co-Owner**.
-6. Optionally add a message. The overflow menu offers **Upload app image** and **Manage access**, which includes an **Additional data access** tab.
+6. Optionally add a message. The overflow menu offers **Upload app image**. **Manage access** shows app access details and has an **Additional data access** tab.
 7. Select **Share**.
 
 Classic sharing is available through the overflow menu (**Use classic sharing**). There you can enter several names separated by semicolons, tick **Co-owner**, optionally send an email invitation, and select **Share**.
@@ -51,7 +51,7 @@ Classic sharing is available through the overflow menu (**Use classic sharing**)
 | User | Run the app only |
 | Co-Owner | Use, edit and share the app. Cannot delete it or change owners |
 
-To remove access, select the Remove (x) icon. To downgrade a co-owner, clear the Co-owner check box in classic sharing or change the permission.
+To remove access, select the Remove (x) icon. To let a co-owner only run the app, clear the Co-owner check box in classic sharing.
 
 ## Limits and restrictions
 
@@ -73,7 +73,7 @@ The group must have **security enabled**, and the owner must enable it. Setting 
 
 ## Dataverse security roles
 
-- Users must belong to a security role that allows the app's operations, such as create, read, write and delete. Learn recommends custom roles with only the required permissions.
+- Users must belong to a security role that allows the app's operations, such as create, read, write and delete. Learn says that in many cases you will want custom roles with the exact permissions users need.
 - The **Assign a security role** action under **Data permissions** needs **System Administrator** on the Dataverse database.
 - Roles can go to individual users and Entra security groups, not Microsoft 365 groups.
 - If a user is not in the Dataverse root business unit, share the app without a role and set the role directly.
@@ -92,9 +92,9 @@ When sharing in Teams, the recipient must be in the same tenant and have access 
 
 Numeric limits for managed environments, exact group sync timing beyond a few minutes, full cmdlet syntax, connection sharing mechanics and guest sharing.
 
-## A sharing checklist
+## A sharing checklist (my advice)
 
-The checklist is practical advice.
+The checklist is my own suggestion.
 
 1. Publish the latest version.
 2. Create or pick an Entra security group.
@@ -103,7 +103,7 @@ The checklist is practical advice.
 5. Share other data sources and connections.
 6. Test with an account that is only in the group.
 
-## Typical mistakes
+## Typical mistakes (my advice)
 
 - Sharing the app but not the data.
 - Using a distribution group or an M365 group without security enabled.
