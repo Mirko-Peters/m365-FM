@@ -45,13 +45,13 @@ Learn describes these steps:
 5. In the **New Eventstream** window, enter a name and select **Create**.
 6. Wait a few seconds. You are taken to the main editor, where you can start adding sources.
 
-The page describes the editor only as the place where you start adding sources. It does not describe the editor controls in text, and it does not mention a choice between a default and an enhanced experience. It also does not explain how to edit or delete an eventstream afterwards. The next steps it links are the articles on adding sources and adding destinations.
+The page describes the editor only as the place where you start adding sources and does not describe the editor controls in text. It says enhanced capabilities are enabled by default now, and that eventstreams created with standard capabilities keep working and can still be edited and published. The overview also offers an opt-in schema-aware eventstream (preview) as a second experience. The creation page does not explain how to edit or delete an eventstream afterwards.
 
 ## What can feed an eventstream
 
-The overview lists sources such as Azure Event Hubs, Azure Event Grid, Azure Service Bus, Azure IoT Hub, a custom endpoint, sample data, change data capture connectors for databases, and Kafka-based sources. The list on the page is longer than this, and sources change over time, so use the sources article for the current set.
+The overview lists sources such as Azure Event Hubs, Azure Event Grid, Azure Service Bus, Azure IoT Hub, a custom endpoint, sample data, change data capture connectors for databases, and Kafka-based sources. The list on the page is longer than this and also includes, for example, Amazon Kinesis Data Streams, Google Cloud Pub/Sub, MQTT (preview), Confluent Cloud and several more CDC connectors. Sources change over time, so check the live overview for the current set.
 
-Learn also notes that the Kafka endpoint of an eventstream is backed by Event Hubs.
+Learn also notes that the eventstreams feature is associated with Azure Event Hubs: an event hub namespace is created automatically with each eventstream, and an Apache Kafka endpoint is available.
 
 ## Transformations
 
@@ -111,7 +111,7 @@ The pages I read do not describe the following:
 - Editing or deleting an eventstream after creation.
 - Pricing or the capacity consumption of an eventstream.
 - Per-operator configuration steps on the overview page.
-- The full current list of connectors, which lives in the sources article.
+- Per-source setup steps, which live in the individual source articles.
 - Troubleshooting for a source that does not deliver events.
 
 ## Related
@@ -122,5 +122,5 @@ The pages I read do not describe the following:
 
 ## Sources
 
-- [Microsoft Fabric Eventstreams overview](https://learn.microsoft.com/fabric/real-time-intelligence/event-streams/overview)
-- [Create and manage an eventstream](https://learn.microsoft.com/fabric/real-time-intelligence/event-streams/create-manage-an-eventstream)
+- [Microsoft Fabric Eventstreams Overview (Microsoft Learn)](https://learn.microsoft.com/fabric/real-time-intelligence/event-streams/overview)
+- [Create an eventstream in Microsoft Fabric (Microsoft Learn)](https://learn.microsoft.com/fabric/real-time-intelligence/event-streams/create-manage-an-eventstream)
