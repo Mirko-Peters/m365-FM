@@ -76,7 +76,7 @@ Gen2 requires a Fabric capacity, a Fabric trial capacity or a Power BI Premium c
 
 - A limitations section. The only restriction in the comparison is Direct Query.
 - What Fast Copy does. It is mentioned in the introduction but not explained or compared.
-- Performance or capacity unit cost numbers. The page links to benchmarks.
+- Performance or capacity unit cost numbers.
 - A retirement or end-of-support date for Gen1.
 - Which queries or connectors may not transfer during migration.
 - Destination write modes and schema handling.
@@ -107,4 +107,4 @@ This checklist is practical advice built on the page.
 
 ## Sources
 
-- [Dataflow Gen2 overview and comparison with Gen1 (Microsoft Learn)](https://learn.microsoft.com/fabric/data-factory/dataflows-gen2-overview)
+- [Differences between Dataflow Gen1 and Dataflow Gen2 - Microsoft Fabric (Microsoft Learn)](https://learn.microsoft.com/fabric/data-factory/dataflows-gen2-overview)
