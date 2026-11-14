@@ -8,7 +8,7 @@ date: 2026-12-10
 topics: [onedrive, sharepoint, conditional-access, microsoft-defender-for-cloud-apps]
 keypoints:
   - "The SharePoint admin center option Allow limited, web-only access gives browser-only access with no download, print or sync on unmanaged devices. It blocks Office desktop apps too."
-  - "Selecting that option creates a Conditional Access policy for all users and disables earlier policies created from that page. Changes can take up to 24 hours."
+  - "Selecting that option creates a Conditional Access policy for all users and disables earlier policies created from that page. Reverting to Allow Full Access can take up to 24 hours."
   - "A Defender for Cloud Apps session policy behind Conditional Access App Control can block downloads of files matching filters such as sensitivity label. It needs Entra ID P1 as well."
   - "The block download policy set with Set-SPOSite -BlockDownloadPolicy works per site without Conditional Access and cannot be set at organization level."
   - "Session controls apply to the app you target. Learn says Defender for Cloud Apps policies apply to the host app, not connected resource apps, so create a separate policy."
@@ -16,7 +16,7 @@ faq:
   - q: "How do I allow only browser access from personal devices?"
     a: "In the SharePoint admin center, go to Access control, select Unmanaged devices, choose Allow limited, web-only access and save. Microsoft Learn says users on unmanaged devices then have browser-only access with no ability to download, print or sync files, and cannot use apps including the Office desktop apps."
   - q: "How long does the change take?"
-    a: "Learn says it can take up to 24 hours, and it does not take effect for users already signed in from unmanaged devices. Reverting to Allow Full Access can also take up to 24 hours."
+    a: "For Allow limited, web-only access, Learn only states that reverting to Allow Full Access can take up to 24 hours. The 24-hour delay and the note that the change does not affect users already signed in from unmanaged devices appear in the Block access steps, so plan for similar behavior but verify it with a test user."
   - q: "Can I allow viewing but block editing in the browser?"
     a: "Learn says that by default the policy lets users view and edit files in the browser. The PowerShell parameters -AllowEditing $false and -ReadOnlyForUnmanagedDevices $true are listed for stricter behavior."
   - q: "How do I block downloads of only sensitive files?"
@@ -39,9 +39,8 @@ Learn describes the result: "Users on unmanaged devices have browser-only access
 Things to plan for, per Learn:
 
 - The setting relies on Microsoft Entra Conditional Access. Selecting an option disables previous policies you created from this page and creates a new policy for all users. Earlier customizations are not carried over.
-- The change can take up to 24 hours, and does not apply to users already signed in from unmanaged devices.
-- Reverting to **Allow Full Access** can also take up to 24 hours.
-- For tenant-wide control, Learn recommends a Conditional Access policy that selects the **Office 365** cloud app.
+- Reverting to **Allow Full Access** can take up to 24 hours. In the **Block access** steps, Learn also says the policy can take up to 24 hours and does not take effect for users already signed in from unmanaged devices. The limited-access steps do not repeat that, so test it.
+- To extend control beyond SharePoint, Learn describes a Conditional Access policy that selects the **Office 365** cloud app and says this can give better security and a better user experience.
 - By default, users can still view and edit files in the browser.
 
 PowerShell offers the same control and finer options:
@@ -67,11 +66,11 @@ Learn adds a note: allow the **Microsoft Defender for Cloud Apps - Session Contr
 
 Licensing per Learn: Defender for Cloud Apps and Microsoft Entra ID P1, each standalone or included in another license. Limits to note:
 
-- Policies apply to the host app only, not connected resource apps such as SharePoint or OneDrive for Teams, so create a separate policy for those.
+- Policies created for a host app such as Teams or Exchange are not connected to resource apps such as SharePoint or OneDrive, so create a separate policy for those.
 - When policies conflict, the more restrictive one wins.
 - Access policies with the **Client app** filter set to **Mobile and desktop** can affect authentication for some apps.
 
-The Learn page links to a tutorial for the exact unmanaged-device scenario, which I did not read, so verify the device condition against that tutorial.
+The session policy page does not walk through an unmanaged-device scenario. Its **Device** filter only lists device tags (for example a device management method) and device types such as PC, mobile or tablet, so test how your own tenant tags unmanaged devices.
 
 ## Option 3: Block download policy per site
 
