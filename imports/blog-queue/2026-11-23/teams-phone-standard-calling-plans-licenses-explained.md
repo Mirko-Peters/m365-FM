@@ -14,7 +14,7 @@ keypoints:
   - "Microsoft 365 E5 does not connect users to the PSTN. You still need Calling Plans, Direct Routing or Operator Connect."
 faq:
   - q: "What is Teams Phone Standard?"
-    a: "According to Microsoft Learn it is an add-on license that provides a hosted PBX: cloud voicemail, call forwarding, call transfer, auto attendants, call queues and caller ID. Teams Phone alone needs only this license, but external calling also requires a PSTN connectivity option."
+    a: "According to Microsoft Learn it is an add-on license that provides a hosted PBX: cloud voicemail, call forwarding, auto attendants, call queues and caller ID. Teams Phone alone needs only this license, but external calling also requires a PSTN connectivity option."
   - q: "What is the difference between Teams Phone Standard and Teams Phone with Calling Plan?"
     a: "Learn lists them as different licenses. Teams Phone with Calling Plan is a bundle that adds Microsoft as the PSTN carrier. Teams Phone Standard has no carrier part, so you connect through a Calling Plan you buy separately, Operator Connect or Direct Routing."
   - q: "Do I need a Calling Plan if I already have Microsoft 365 E5?"
@@ -33,15 +33,15 @@ Most confusion comes from the product names. This article sorts them out.
 
 | Name | What it is | What it does not include |
 |---|---|---|
-| Teams Phone Standard | Add-on license with PBX features: cloud voicemail, forwarding, transfer, auto attendants, call queues, caller ID | Phone numbers and carrier connectivity |
+| Teams Phone Standard | Add-on license with PBX features: cloud voicemail, forwarding, auto attendants, call queues, caller ID | Phone numbers and carrier connectivity |
 | Calling Plan | Add-on license where Microsoft is the PSTN carrier | The Teams Phone features, unless bought as the bundle |
 | Teams Phone with Calling Plan | Bundle of Teams Phone and a Calling Plan | Nothing extra to buy for domestic or international calling, depending on the plan |
 | Operator Connect | Your carrier from Microsoft's Operator Connect program manages PSTN calling | The Teams Phone license, which you still need |
 | Direct Routing | A customer-provided Session Border Controller connects your telephony to Teams | The Teams Phone license, which you still need |
 
-Learn also lists Teams Phone Mobile, Operator Connect for India and Shared Calling as separate PSTN options. Shared Calling uses the number of a resource account linked to an auto attendant.
+Learn also lists Teams Phone Mobile, Operator Connect for India and Shared Calling as separate PSTN options.
 
-The Teams Phone Standard license also covers a variant for Frontline Workers. Learn says it can be used when the tenant also has Frontline Worker licenses.
+The Teams Phone Standard license also covers the Teams Phone Standard for Frontline Workers variant.
 
 The product part names differ. Learn gives `MCOEV` for Teams Phone Standard and `MCOTEAMS_ESSENTIALS` for Teams Phone with Calling Plan. They are different licenses.
 
@@ -71,7 +71,7 @@ Pay-As-You-Go must be funded before users can make outgoing calls. Learn also no
 
 ## Which base plans qualify
 
-Learn's add-on licensing page lists the Microsoft 365 and Teams plans that can take Teams Phone, including Teams Essentials, Microsoft 365 Business Basic, Standard and Premium, E1, E3, Frontline F1 and F3, and some education and government plans. A separate PSTN option also works with Microsoft 365 E5 without Teams. The page does not state a base license requirement on the assignment page itself, so check the add-on licensing article for your plan.
+The pages I read do not list which base Microsoft 365 or Teams plans can take the Teams Phone add-on. The assignment page states no base license requirement, so check the add-on licensing article for your plan before you buy.
 
 ## How to assign the licenses
 
