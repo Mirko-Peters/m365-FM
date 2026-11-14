@@ -8,7 +8,7 @@ date: 2027-01-20
 topics: [azure-virtual-machines, network-security-group]
 keypoints:
   - "Learn's quick order: reset the SSH configuration, reset the user's credentials, check NSG rules and role assignment, check resource health, restart, then redeploy."
-  - "Try to reconnect after each step. The portal, Serial Console, Run Command, Azure CLI and the VMAccess extension can all perform the resets."
+  - "Try to reconnect after each step. Learn lists the portal, Serial Console, Run Command, Azure CLI and the VMAccess extension as methods for resetting or troubleshooting SSH."
   - "The NSG needs an inbound allow rule for SSH, by default TCP port 22. Port redirection or mapping needs an Azure load balancer."
   - "With Microsoft Entra login, the user needs the Virtual Machine Administrator Login or Virtual Machine User Login role, or sees Permission denied (publickey)."
   - "Redeploying moves the VM to another node. Ephemeral disk data is lost and dynamic IP addresses associated with the VM are updated."
@@ -38,7 +38,7 @@ Learn gives six quick steps:
 5. Restart the VM.
 6. Redeploy the VM.
 
-Learn also suggests running VM assist for Linux or Windows first. These are script-based diagnostic tools that help identify common issues affecting the Azure VM Guest Agent and overall VM health.
+Learn also recommends VM assist for Linux or Windows. These are script-based diagnostic tools that help identify common issues affecting the Azure VM Guest Agent and overall VM health. For performance problems on VMs, Learn says to run these tools before you contact Microsoft Support.
 
 ## Step 1: Reset the SSH configuration
 
@@ -81,13 +81,13 @@ sudo ss --listen --tcp --process --numeric | grep sshd
 grep -i port /etc/ssh/sshd_config
 ```
 
-The first shows whether the service is active and which port and addresses it listens on. The second shows listening sockets, and any output means SSH is running. Learn recommends `ss` because `netstat` is deprecated and not always available. The third shows a configured port. Lines starting with `#` are comments, and if nothing is returned the default applies: all IP addresses, port 22. If sshd listens on another port, your NSG rule and client command must use that port.
+The first shows whether the service is active and which port and addresses it listens on. The second shows listening sockets, and any output means SSH is running. Learn recommends `ss` because `netstat` is deprecated and not always available. The third shows a configured port. Lines starting with `#` are comments, and if nothing is returned the default applies: all IP addresses, port 22. If sshd listens on another port, my advice is to make sure your NSG rule and client command use that port too (Learn does not spell this out).
 
 ## Step 6: Restart and redeploy
 
 **Restart:** select the VM and then **Restart**, or run `az vm restart`. This addresses underlying compute issues after the resets.
 
-**Redeploy:** select the VM, go to **Help** and select **Redeploy**, or run `az vm redeploy`. Learn says it moves the VM to another node within Azure, which may correct underlying networking issues. After the operation, ephemeral disk data is lost and dynamic IP addresses associated with the VM are updated. Plan for that before you redeploy a VM that stores data on an ephemeral disk or that clients reach by a dynamic address.
+**Redeploy:** select the VM, go to **Help** and select **Redeploy**, or run `az vm redeploy`. Learn says it moves the VM to another node within Azure, which may correct underlying networking issues. After the operation, ephemeral disk data is lost and dynamic IP addresses associated with the VM are updated. My advice: plan for that before you redeploy a VM that stores data on an ephemeral disk or that clients reach by a dynamic address.
 
 ## Which method fits which situation
 
