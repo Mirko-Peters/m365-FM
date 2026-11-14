@@ -22,14 +22,14 @@ faq:
   - q: "How do I make a line break?"
     a: "In lists, use a single carriage return or newline between items. Two newlines in a list indent the next element. Anywhere else in a TextBlock, use two newlines to start a new line."
   - q: "Can cards contain emoji and mentions?"
-    a: "Learn says emoji are supported and that you should set charset UTF-8 in REST headers. Mentions use the at tag around the user name plus a mention object in the msteams entity. Channel and team mentions are not supported in bot messages."
+    a: "Learn says emoji are supported and that you should set charset UTF-8 in REST headers. Mentions use the at tag around the user name plus a mention object inside an msteams property in the card content. Channel and team mentions are not supported in bot messages."
 ---
 
 Teams Adaptive Cards accept a limited Markdown syntax in three places: the `TextBlock` element, `Fact.Title` and `Fact.Value`. You get bold, italic, ordered and unordered lists, and links. Headers, tables, images, preformatted text and blockquotes are not supported, and HTML is not supported in Adaptive Cards at all. This article summarises the Markdown section of Microsoft Learn's page on formatting text in Teams cards, with my notes on how to use it.
 
 ## Where Markdown applies
 
-Learn says Markdown is supported in the Adaptive Card `TextBlock`, `Fact.Title` and `Fact.Value`. Two related points keep people from guessing wrong:
+Learn says Markdown is supported in the Adaptive Card `TextBlock`, `Fact.Title` and `Fact.Value`. Three related points keep people from guessing wrong:
 
 - HTML is not supported in Adaptive Cards.
 - Connector cards for Microsoft 365 Groups support Markdown and a limited set of HTML. That is a different card type with different rules.
@@ -53,7 +53,7 @@ Notice that italics use underscores in Learn's example, and the list items are s
 
 ## What is not supported
 
-The page says these are not supported: headers, tables, images, preformatted text and blockquotes. If you need structure that Markdown cannot give you, the card elements themselves are the tool. Learn's page covers further card features in other sections, for example CodeBlock, containers, a responsive layout and an overflow menu, which I list below but did not use here.
+The page says these are not supported: headers, tables, images, preformatted text and blockquotes. If you need structure that Markdown cannot give you, the card elements themselves are the tool. Learn's page covers further card features in other sections, for example CodeBlock, a responsive layout and an overflow menu, which are listed further below.
 
 ## Newlines are the usual trouble
 
@@ -72,7 +72,7 @@ A short example in the shape Learn describes:
 }
 ```
 
-The first paragraph break uses two newlines. The list uses a single carriage return between items. I wrote this example from the rules above, so test it in your own card before relying on it.
+The first paragraph break uses two newlines. The list uses a single carriage return between items. This example is my own, built from the rules above, so test it in your own card before relying on it.
 
 ## Emoji, mentions and size limits
 
@@ -80,7 +80,7 @@ Learn says emoji are supported in cards. If you send the card through REST, set 
 
 Mentions use an `<at>username</at>` tag in the text together with the `msteams` mention object. Learn adds that channel and team mentions are not supported in bot messages.
 
-Message size is limited: 28 KB for Incoming Webhooks and 100 KB for bot messages. A card with many long text blocks can reach these limits sooner than you expect.
+In its note on mentions, Learn gives message size limits: 28 KB for Incoming Webhooks and 100 KB for bot messages.
 
 ## Inline images
 
@@ -103,7 +103,7 @@ This section is my advice, not a Microsoft statement.
 
 ## Other card topics on the same page
 
-The page also has sections on information masking, full width cards, responsive layout, typeahead, Stageview, CodeBlock, an overflow menu, borders, scrollable containers, compound buttons, icons and ratings. I read the Markdown section closely for this article and only noted the other headings, so use the page itself for those features.
+The page also has sections on information masking, full width cards, responsive layout, typeahead, Stageview, CodeBlock, an overflow menu, borders, scrollable containers, compound buttons, icons and ratings. This article covers only the Markdown section, so use the page itself for those features.
 
 ## A checklist before you send a card
 
