@@ -14,7 +14,7 @@ keypoints:
   - "Use Microsoft Entra-only authentication for Azure SQL where possible, and use secret rotation only when SQL logins are required."
 faq:
   - q: "When does Key Vault raise the near-expiry event?"
-    a: "Microsoft Learn says Key Vault publishes SecretNearExpiry to Event Grid 30 days before a secret's expiration date. If you set an expiry within a day, as the tutorial does, the event is published within 15 minutes."
+    a: "Microsoft Learn says Key Vault publishes SecretNearExpiry to Event Grid 30 days before a secret's expiration date. The tutorial sets the expiry to tomorrow and says that a short expiration date publishes a SecretNearExpiry event within 15 minutes."
   - q: "Can a Logic App rotate the secret?"
     a: "The Learn pages I read document a Logic App that sends an email on the SecretNewVersionCreated event, and a Function that rotates a SQL password. They do not document a Logic App that rotates a secret. You can build one with the same pattern, but the steps are your own design."
   - q: "What happens if the rotation fails?"
@@ -58,7 +58,7 @@ For consumers, Learn says to check the topic to confirm the event comes from the
 
 ## Step 3: Deploy and test the rotation
 
-The tutorial deploys three templates: a key vault with SQL Server, the rotation function with its Event Grid subscription for `SecretNearExpiry`, and a web app for verification. To trigger it quickly, create the secret with an expiry of tomorrow. Learn says the event is then published within 15 minutes. In the portal, open **Key Vault** > **Secrets** and compare the versions of the secret.
+The tutorial deploys three templates: a key vault with SQL Server, the rotation function with its Event Grid subscription for `SecretNearExpiry`, and a web app for verification. To trigger it quickly, create the secret with an expiry of tomorrow. Learn says that setting a short expiration date publishes the event within 15 minutes. In the portal, open **Key Vault** > **Secrets** and compare the versions of the secret.
 
 Some notes from the page:
 
@@ -78,15 +78,15 @@ Learn's Logic Apps tutorial sends an email when a secret changes:
 
 To verify, open **Events** > **Event Subscriptions** in the vault and check that a subscription exists. Then create a secret. An email should arrive. The page does not document role assignments.
 
-## Designing a Logic App that rotates
+## Designing a Logic App that rotates (my own design, not documented)
 
-A Logic App can take the place of the function if you accept that Microsoft does not document it. Use the same shape: trigger on the near-expiry event, read the secret's tags, change the credential at the target, then write the new secret version. Decide the order carefully, because the documented pattern shows a window in which the stored value may be wrong. Plan for retries and for a failure alert.
+A Logic App could take the place of the function, but none of the Learn pages I read describe this, so treat the following as my own sketch. Use the same shape: trigger on the near-expiry event, read the secret's tags, change the credential at the target, then write the new secret version. Decide the order carefully, because the documented pattern shows a window in which the stored value may be wrong. Plan for retries and for a failure alert.
 
 ## Where Logic Apps help most
 
-Even if the Function does the rotation, a Logic App is a good second subscriber. It can read the same Event Grid event and tell the owning team that a secret is about to expire or that a new version exists. The Logic Apps tutorial sends an email, but the connector list is long, so a chat message or a ticket works too. Learn also notes that multiple subscriptions can route events to the same handler, which is why the handler should check the topic and event type before it acts.
+Even if the Function does the rotation, a Logic App is a good second subscriber. It can read the same Event Grid event and tell the owning team that a secret is about to expire or that a new version exists. The Logic Apps tutorial sends an email. Its prerequisites point to the Logic Apps connectors overview for other mail providers. Using the Logic App for a chat message or a ticket is my own idea and is not described in the tutorial. Learn also notes that multiple subscriptions can route events to the same handler, which is why the handler should check the topic and event type before it acts.
 
-## Typical mistakes
+## Typical mistakes (own checklist)
 
 - No event subscription on the vault, so nothing ever fires.
 - Expecting events for a secret that never gets a new version.
@@ -102,7 +102,7 @@ Even if the Function does the rotation, a Logic App is a good second subscriber.
 
 ## Sources
 
-- [Automate secret rotation for resources with one set of credentials (Microsoft Learn)](https://learn.microsoft.com/azure/key-vault/secrets/tutorial-rotation)
+- [Automate secret rotation for resources with one set of credentials (Microsoft Learn)](https://learn.microsoft.com/en-us/azure/key-vault/secrets/tutorial-rotation)
 - [Understanding autorotation in Azure Key Vault (Microsoft Learn)](https://learn.microsoft.com/en-us/azure/key-vault/general/autorotation)
 - [Monitoring Key Vault with Azure Event Grid (Microsoft Learn)](https://learn.microsoft.com/en-us/azure/key-vault/general/event-grid-overview)
 - [Use Logic Apps to receive email about status changes of key vault secrets (Microsoft Learn)](https://learn.microsoft.com/en-us/azure/key-vault/general/event-grid-logicapps)
