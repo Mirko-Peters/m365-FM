@@ -10,7 +10,7 @@ keypoints:
   - "AI-901 has two domains: Identify AI concepts and capabilities at 40-45%, and Implement AI solutions by using Microsoft Foundry at 55-60%."
   - "The skills measured outline is dated April 15, 2026, and the passing score is 700."
   - "The audience profile expects conceptual AI knowledge in Azure, Python syntax and familiarity with Azure resources."
-  - "Official prep includes the course Introduction to AI in Azure (AI-901T00) and a free practice assessment on AI Skills Navigator."
+  - "Official prep includes the instructor-led course Introduction to AI in Azure (AI-901T00), self-paced Learn content and a free practice assessment on AI Skills Navigator."
   - "The pages do not state price, duration or number of questions, so check the exam details page when you schedule."
 faq:
   - q: "What does the AI-901 exam measure?"
@@ -20,7 +20,7 @@ faq:
   - q: "Do I need to know how to code?"
     a: "The audience profile on Microsoft Learn says candidates should have conceptual knowledge of AI solutions in Azure and foundational technical skills, plus knowledge of Python coding syntax and programming techniques and familiarity with Azure resources. The page also says to be familiar with REST APIs, SDKs and CLIs."
   - q: "How can I practice officially?"
-    a: "Microsoft Learn names a free practice assessment on AI Skills Navigator, which needs a sign-in, and the course Introduction to AI in Azure, AI-901T00, offered self-paced or instructor-led."
+    a: "Microsoft Learn names a free practice assessment on AI Skills Navigator, which needs a sign-in, and the instructor-led course Introduction to AI in Azure, AI-901T00. The study guide also points to self-paced learning paths and modules."
   - q: "How much does the exam cost and how long is it?"
     a: "The exam details page does not list a price, duration or number of questions. It says the price is based on the country or region where the exam is proctored and is subject to change. Check the scheduling page for your region."
 ---
@@ -80,7 +80,7 @@ This list restates the outline in practical form. It is not an official checklis
 
 ## Official resources
 
-- The course **Introduction to AI in Azure (AI-901T00)**, self-paced or instructor-led.
+- The instructor-led course **Introduction to AI in Azure (AI-901T00)**. The study guide also mentions self-paced learning paths and modules, and the exam page links two Learn items (AI technical concepts, and get started with AI apps and agents) that I did not read.
 - The free **practice assessment** on AI Skills Navigator. You must sign in to launch it.
 - The skills measured page itself. Learn says two versions of the objectives may exist depending on test date, and that localized versions follow English by about eight weeks.
 
