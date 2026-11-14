@@ -33,10 +33,10 @@ The Data management framework moves data in and out of Dynamics 365 finance and 
    - Define the project category.
    - Identify the entities. Use **Apply template** after you name and save the job, or add entities one by one.
    - Set the data format in the **Data sources setup** tile. A format combines type, file format, row delimiter and column delimiter. Valid types are Excel, XML (element or attribute style) and delimited or fixed width with a comma, semicolon, tab, vertical bar or colon.
-   - Sequence the entities with **Resequencing**, available when several entities are selected, and **Sort by**.
-   - Decide whether to use staging tables. For import, **Truncating** is off by default.
-2. **Validate mapping** with **View map**. Choose **Mapping visualization** (default) or **Mapping details**. Required fields show a red asterisk. **Generate source mapping** maps automatically, and you map the remaining fields by hand. **Delete selection** unmaps a field. Then **Save**.
-3. **Verify security.** Use **Applicable roles** or user assignment, and **Applicable legal entities** for legal-entity-based access.
+   - Sequence the entities with **Resequencing**, available when several entities are selected, and **Sort by**. The page says the execution unit, level and sequence control the processing order, that you sequence mainly to address functional dependencies, and that entities without dependencies can be scheduled for parallel import or export.
+   - Decide whether to use staging tables. By default the process creates a staging table for each entity in the target database. For import, **Truncating** is off by default.
+2. **Validate mapping** with **View map**. If the column names in the staging table and the file match, the system maps them automatically. If they differ, you complete the mapping here. Choose **Mapping visualization** (default) or **Mapping details**. Required fields show a red asterisk. **Generate source mapping** maps automatically, and you map the remaining fields by hand. **Delete selection** unmaps a field. Then **Save**.
+3. **Verify security.** Use **Applicable roles** or user assignment, and **Applicable legal entities** for legal-entity-based access. Access to a job implies full access to its execution history and the staging tables. Data jobs are global by default, so other legal entities can see them unless you restrict them. You can secure a job by roles, users and legal entity at the same time.
 4. **Run the job.**
    - **Import** or **Export** schedules a one-time batch job.
    - **Import now** or **Export now** runs it immediately.
@@ -52,20 +52,21 @@ The page has no separate export procedure. Export follows the same process, with
 
 ## Key settings
 
-- **Parallel import.** Data management workspace > **Import / Export** > **Framework parameters** > **Entity settings** > **Configure entity execution parameters**. Set **Import threshold record count** and **Import task count**. Example from the page: 10,000 records with a threshold of 2,500 and four tasks means each thread processes 2,500 records.
-- **Job history cleanup.** **Number of days to retain history** (default seven days) and **Number of hours to execute the job** (default and minimum two hours). Set **Recurring batch** to schedule it.
+- **Parallel import.** Data management workspace > **Import / Export** > **Framework parameters** > **Entity settings** > **Configure entity execution parameters**. Set **Import threshold record count** and **Import task count**. Example from the page: 10,000 records with a threshold of 2,500 and four tasks means each thread processes 2,500 records. The task count cannot exceed the maximum batch threads allocated under System administration > Server configuration. An empty **Entity** field sets the default for all later imports of entities that support parallel import.
+- **Job history cleanup.** Open it under Data management > Job history cleanup. It replaces the previous staging table cleanup, which is deprecated. **Number of days to retain history** (default seven days) and **Number of hours to execute the job** (default and minimum two hours). Set **Recurring batch** to schedule it.
 - **Automatic deletion.** Execution history older than 90 days is deleted automatically if you do not use the cleanup feature.
-- **Archival (preview).** Needs the flight DMFEnableExecutionHistoryCleanupSystemJob and the staging cleanup feature. Days to retain package in blob accepts 7 to 90. The page also says the feature has been always on since version 10.0.20, so verify which applies.
+- **Sort a composite entity export (XML).** Create an XSLT file, then open **View map** for an entity in an export project with an XML data source, go to the **Transformations** tab, select **New** and upload the file.
+- **Archival (preview).** The page describes a default mode in which a system batch job runs every hour from midnight, keeps the most recent seven days of history and archives the purged history to blob storage, where the package is available for seven days. Needs the flight DMFEnableExecutionHistoryCleanupSystemJob and the staging cleanup feature. Days to retain package in blob accepts 7 to 90. The page also says the feature has been always on since version 10.0.20, so verify which applies.
 
 ## Cautions
 
 - Entities with custom import-sequence processing, such as Vendors V2, must use an import task count of 1. Higher values are rejected.
-- Too many parallel tasks can drive resource use to 100 percent and affect other operations.
+- Too many parallel tasks can drive resource use to 100 percent and affect other operations. The page also says the task count check does not define a supported design for splitting an import file across separate jobs, so test such an approach with representative data in a non-production environment.
 - In delimited formats the delimiter or text qualifier must not appear in the data.
 - In XML formats use only legal XML 1.0 characters. Square brackets, curly brackets and backslashes are illegal.
 - Use Unicode code pages such as 65001 UTF-8 to avoid failures.
 - Batch jobs are subject to throttling and may not start immediately. Batch is recommended for large volumes.
-- From version 10.0.42, DMFBatchImporter and DMFBatchExporter create a child job. To track completion, monitor the end time of the last DMFImportTaskScheduler or DMFExportTaskScheduler task.
+- From version 10.0.42, automatic retry support for batch node restarts means DMFBatchImporter and DMFBatchExporter create a child job. To track completion, monitor the end time of the last DMFImportTaskScheduler or DMFExportTaskScheduler task. Custom batch tasks must now be added to the child job instead of the first job.
 
 ## What the page does not say
 
@@ -76,7 +77,7 @@ The page has no separate export procedure. Export follows the same process, with
 
 ## A job outline
 
-This outline is practical advice built on the page.
+This outline is my advice, built on the page.
 
 1. Start with one entity and a small file to test the format and mapping.
 2. Generate the source mapping, fix required fields and save.
@@ -84,7 +85,7 @@ This outline is practical advice built on the page.
 4. Read the execution log for failed records.
 5. Schedule job history cleanup so staging tables do not grow.
 
-## Typical mistakes
+## Typical mistakes (my advice)
 
 - Refreshing the browser during a job that does not run in batch.
 - Setting the import task count above 1 for entities such as Vendors V2.
@@ -99,4 +100,4 @@ This outline is practical advice built on the page.
 
 ## Sources
 
-- [Data import and export jobs overview (Microsoft Learn)](https://learn.microsoft.com/dynamics365/fin-ops-core/dev-itpro/data-entities/data-import-export-job)
+- [Data import and export jobs overview (Microsoft Learn)](https://learn.microsoft.com/dynamics365/fin-ops-core/fin-ops/data-entities/data-import-export-job)
