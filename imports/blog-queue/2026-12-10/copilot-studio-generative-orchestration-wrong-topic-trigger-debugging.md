@@ -46,7 +46,7 @@ Learn's recommendations for descriptions:
 
 The risk is overlap. Learn says that when topics have similar descriptions, the agent selects one topic rather than invoking all of them, and the overlap makes that choice unpredictable. If two topics are close, rewrite both so each states its own scope and exclusions.
 
-If you switched an existing agent from classic to generative orchestration, Copilot Studio generated a default description for each topic from its trigger phrases. Learn recommends revising them. Those auto descriptions are a common source of vague matching.
+If you switched an existing agent from classic to generative orchestration, Copilot Studio generated a default description for each topic from its trigger phrases. Learn says the generated descriptions are often good enough, but recommends revising them. Whether they cause vague matching in your agent is something to check in the test chat, not a documented fact.
 
 ## Step 2: Check trigger order and priority
 
@@ -56,7 +56,7 @@ More than one trigger can fire for one incoming activity. Learn gives this order
 2. **A message is received**, **A custom client event occurs**, **The conversation changes**, **It's invoked**
 3. **The agent chooses** or **User says a phrase**
 
-Among triggers of the same type, the system runs them in creation order, oldest first. The **Priority** property on the trigger overrides this. If an old topic with a broad trigger keeps winning, this is where to look. The **Condition** property can also limit a trigger, for example to one channel.
+Among triggers of the same type, the system runs them in creation order, oldest first. The **Priority** property on the trigger overrides this. Learn gives this order for triggers that fire, but does not say how it interacts with the description-based choice among several **The agent chooses** topics. My own reading, not from Microsoft: the order matters most when you also use non-description triggers such as **A message is received**, which rank before **The agent chooses**. The **Condition** property can also limit a trigger, for example to one channel.
 
 ## Step 3: Know the documented limitations
 
@@ -86,11 +86,11 @@ Use **Reset** between tests so earlier turns do not influence the result. Learn 
 
 If the orchestrator keeps executing steps you do not want, use an **End all topics** node to cancel remaining planned steps. If a topic's own message is being repeated, Learn advises returning outputs, including an answered-state output, so the orchestrator composes one reply instead of answering again. By default, the **Reset Conversation** topic does not clear conversation history.
 
-## A short test routine
+## A short test routine (my own suggestion)
 
-Build a small set of test questions for each topic, including one question that should match two topics and one that should match none. Run each in a fresh chat and again after a few earlier turns, since Learn says history can change results. Record which topic, tool or knowledge source answered. If the same question lands on different topics across runs, the descriptions overlap and need to be rewritten, not the trigger phrases. Repeat the set after every change to a description, because one edit can move other questions.
+Build a small set of test questions for each topic, including one question that should match two topics and one that should match none. Run each in a fresh chat and again after a few earlier turns, since Learn says history can change results. Record which topic, tool or knowledge source answered. If the same question lands on different topics across runs, overlapping descriptions are a likely cause, which is my own inference. Learn says similar descriptions make the selection unpredictable. Repeat the set after every change to a description, because one edit can move other questions.
 
-## Typical mistakes
+## Typical mistakes (my own list)
 
 - Two topics with near-identical descriptions.
 - Leaving auto-generated descriptions after switching orchestration mode.
