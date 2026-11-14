@@ -9,8 +9,8 @@ topics: [dataverse, power-platform-admin-center]
 keypoints:
   - "Open the Power Platform admin center, then Licensing, then Capacity add-ons or Dataverse. Environment Details show actual database, file and log use and the top tables."
   - "Dataverse has three storage types. The Log type includes AuditBase and PlugInTraceLogBase, and Attachment and AnnotationBase count toward file and database storage."
-  - "Learn lists removing data and apps, removing unused environments, data governance policies, long-term retention, purchasing capacity, pay-as-you-go and a capacity extension."
-  - "A capacity extension is 25 percent of consumption for up to 45 days, with up to three requests in any 365 day period."
+  - "Learn names deleting unused data, deleting unwanted environments, buying capacity, pay-as-you-go, a capacity extension and, in the storage advisor preview, archival policies."
+  - "A capacity extension adds 25 percent, based on capacity used, for 45 days. Learn allows up to three requests in the last 365 days."
   - "Restore, copy, create and recover need at least 1 GB of available capacity, so they can be blocked even when the tenant is not over its overall position."
 faq:
   - q: "Where do I see how much Dataverse storage I use?"
@@ -18,14 +18,14 @@ faq:
   - q: "What counts as log storage?"
     a: "Learn lists AuditBase, PlugInTraceLogBase and elastic tables as log. Attachment, AnnotationBase, tables with file or image columns, WebResourceBase and RibbonClientMetadataBase are file and database. All other tables are database only."
   - q: "How do I free up space?"
-    a: "Learn names removing data and apps you no longer need, removing unused environments, data governance policies, long-term retention for inactive data, and, in the storage advisor preview, an archival policy or bulk delete. The page does not list audit log deletion or attachment removal as steps."
+    a: "Learn names freeing up storage, deleting unwanted environments, buying more capacity and pay-as-you-go. In the storage advisor preview you can create an archival policy or run a bulk delete. The separate Free up storage space page lists methods such as deleting audit logs, removing email and note attachments, and cleaning up bulk import, workflow and bulk deletion system jobs."
   - q: "What happens when I exceed capacity?"
-    a: "Create, copy, restore and recover are blocked first. After 30 days unresolved, affected sandbox environments go to administration mode, and after 90 days sign-in to them is blocked. Production environments do not enter administration mode or become disabled."
+    a: "Tenant admins get notifications when less than 15 percent or less than 5 percent of a capacity type remains and when capacity is exceeded after borrowing. Creating, copying, restoring, recovering and converting environments, and adding a Dataverse database, can become unavailable when the required capacity type has too little space. Learn says exceeding entitlements currently does not affect service availability and data stays durable, but the licensing terms allow Microsoft to suspend the service after reasonable notice."
   - q: "Do trial environments count?"
     a: "No. Learn says trial, preview, support and developer environments do not count, and the Teams and Trial tabs show usage that does not count toward Dataverse usage."
 ---
 
-Dataverse storage is tracked as database, file and log capacity. This guide follows the Microsoft Learn page on capacity-based storage and keeps to the cleanup options it names. A separate Learn page on freeing up storage space exists, but I did not read it, so this article does not give step-by-step cleanup for individual tables.
+Dataverse storage is tracked as database, file and log capacity. This guide follows the Microsoft Learn page on capacity-based storage, the page on freeing up storage space, the capacity extension page and the capacity-based storage overview.
 
 ## See your capacity
 
@@ -47,12 +47,20 @@ Database storage includes row data and indexes. Quick Find lookups add indexes, 
 
 ## Cleanup options on the page
 
-- Remove data and apps you no longer need, and remove unused environments.
-- Establish data governance policies in Dataverse (Power Platform admin center, Manage, Dataverse).
-- Use long-term retention for eligible inactive data you must keep. Policy processing and reporting are not immediate.
+- Free up storage, delete unwanted environments or buy more capacity. The overview page also names deleting unused data.
 - In the Dataverse storage advisor (preview), review cleanable data per table and either create an archival policy, run a bulk delete or adjust environment allocation.
 - Buy capacity of the matching type, since file capacity cannot resolve a database deficit.
-- Use pay-as-you-go for variable demand. Linking a sandbox environment removes overage restrictions, even if the tenant remains in overage.
+- In Manage capacity you can draw from the tenant pool or link the environment to a pay-as-you-go billing plan, where any overage is charged to the associated Azure subscription.
+
+## Methods from the Free up storage space page
+
+That page describes 15 methods and warns that deleted data cannot be restored. The system can take up to 72 hours to update storage information, so wait before judging the result.
+
+- **File:** remove email attachments with Advanced Find, remove emails with attachments or notes with attachments with a bulk deletion job, and delete audit logs. The new audit process is under Auditing, Free up capacity, Delete audit logs, by table, by access type or up to a date, and runs as a system job that can take up to 72 hours.
+- **Database:** delete bulk email and workflow instances, evaluate suspended workflows, delete duplicate detection jobs, delete bulk import instances and bulk deletion job instances, remove unrequired tables and columns from Dataverse search, remove unrequired activity and Activity Feeds records, change Item Level Monitoring settings and remove unrequired trace (alert) records.
+- **Log:** delete plug-in trace logs with a bulk deletion job.
+
+The page also notes that storage consumption does not match the size shown in the app, because metadata and encryption add storage.
 
 ## Allocate capacity to an environment
 
@@ -62,26 +70,25 @@ Go to **Licensing**, **Dataverse**, **Summary**, **Manage capacity**, select the
 
 Create, copy, restore, convert trial to paid and recover need at least 1 GB available in the native storage type. Notifications use borrowing, so these operations can be blocked even when the report shows no deficit. Borrowing flows only Database to Log to File.
 
-| Stage | When | Effect |
-| --- | --- | --- |
-| Early notification | Over 85 percent | Informational notifications |
-| Restricted | First exceeds 100 percent | Create, copy, restore and recover blocked |
-| Administration mode | 30 days unresolved | Affected sandboxes limited to administrators |
-| Disabled | 90 days unresolved | Sign-in to affected sandboxes blocked |
+| Notification tier | Trigger |
+| --- | --- |
+| Approaching limit | Less than 15 percent of a capacity type available after borrowing |
+| Admin operations could be impacted | Less than 5 percent available |
+| Final tier | Allocated capacity exceeded after borrowing |
 
-Production environments and sandboxes with active pay-as-you-go do not enter administration mode or become disabled.
+Tenant admins, Power Platform admins and Dynamics 365 admins receive these emails weekly, and there is no opt-out. For capacity allocated to an environment, the FAQ says only soft enforcement through email is on, with notifications starting above 85 percent of the allocated capacity.
 
 ## Capacity extension
 
-On the Dataverse Licenses page select Enable capacity extension. It applies at tenant level, can be requested after consumption exceeds 80 percent, and is granted for 25 percent of consumption for up to 45 days, with up to three requests in any 365 days. It is temporary.
+Go to Licensing, Dataverse, Summary and select Enable capacity extension, review the overage details and confirm. The extension applies at tenant level, adds 25 percent calculated on capacity used for each capacity type, and lasts 45 days. The overview page says you can request it after 80 percent overall consumption, up to three times in the last 365 days and after an existing extension has expired. During the extension admins can create, copy and restore environments. Afterwards copying and restoring are blocked again if the tenant has no available capacity.
 
 ## Notifications and extras
 
-Banners and emails appear at less than 15 percent remaining, less than 5 percent remaining and when entitled capacity is exceeded after borrowing. Capacity is evaluated about every 24 hours, and a banner can take up to seven days to disappear after the issue is resolved. Every environment consumes 1 GB, whether or not it has a database. Reallocating capacity between environments does not resolve a tenant overage, because it only redistributes existing capacity. A tenant admin can exit administration mode for one affected sandbox at a time, but that does not resolve the overage or pause the timeline.
+Banners appear in Dataverse-only tenants when any capacity type has less than 15 percent remaining or is exceeded after borrowing. If a user dismisses the banner and less than 15 percent is still left, it reappears after seven days, or on every refresh in model-driven apps. Every environment consumes 1 GB, whether or not it has a database. Default, production and sandbox environments count toward consumption, while trial, preview, support and developer environments do not.
 
 ## Not covered
 
-This page does not give audit log deletion or attachment removal steps, and it does not give the org-level default entitlement amounts from sign-up. The default environment includes 3 GB database, 3 GB file and 1 GB log.
+The capacity page does not give per-table cleanup steps or the org-level default entitlement amounts from sign-up. The default environment includes 3 GB database, 3 GB file and 1 GB log.
 
 ## Related
 
@@ -90,4 +97,7 @@ This page does not give audit log deletion or attachment removal steps, and it d
 
 ## Sources
 
-- [Dataverse capacity-based storage details](https://learn.microsoft.com/power-platform/admin/capacity-storage)
+- [Dataverse capacity-based storage details (Microsoft Learn)](https://learn.microsoft.com/power-platform/admin/capacity-storage)
+- [Free up storage space (Microsoft Learn)](https://learn.microsoft.com/power-platform/admin/free-storage-space)
+- [Extend Dataverse capacity for 45 days (Microsoft Learn)](https://learn.microsoft.com/power-platform/admin/extend-capacity)
+- [Dataverse capacity-based storage overview (Microsoft Learn)](https://learn.microsoft.com/power-platform/admin/whats-new-storage)
