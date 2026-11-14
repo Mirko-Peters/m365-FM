@@ -9,20 +9,20 @@ topics: [power-apps, canvas-app, microsoft-lists, sharepoint]
 keypoints:
   - "Two routes exist: from Power Apps at make.powerapps.com with Start with data and SharePoint, or from the list itself with Integrate, Power Apps and Create an app."
   - "From Power Apps you enter the site URL, connect, pick the list and select Create app."
-  - "New apps are one responsive screen built with containers, tablet layout by default and adapting to phone; earlier apps keep Browse, Details and Edit screens."
+  - "The generated layout depends on the template in your environment: a responsive single screen, or an updated template with grid and list views plus separate create and edit screens."
   - "Prerequisites per Learn are subscriptions to Microsoft 365 and Power Platform; on-premises lists connect through a data gateway."
   - "Learn's sample is a device orders list with columns such as Employee name, Device type, Request date, Reason for the order, Approved or denied, and Status."
 faq:
   - q: "How many ways are there to create the app?"
     a: "Two, according to Learn. You can start from Power Apps and connect to the SharePoint list, or you can start in the list and use the Integrate menu to create an app."
   - q: "What does the generated app look like?"
-    a: "Learn says new apps consist of a single responsive screen built with containers. The default layout is tablet and it adapts to phone. Apps created earlier keep the three-screen design with Browse, Details and Edit screens."
+    a: "Learn says the layout depends on the template available in your environment. The responsive single-screen template combines browsing and record editing on one screen. The updated modern-controls template has a records screen with grid and list views plus separate screens for creating and editing records."
   - q: "What do I need before I start?"
     a: "Learn lists subscriptions to Microsoft 365 and Power Platform. If the list is on-premises, you connect through a data gateway."
   - q: "Where in the list do I start the app?"
     a: "In SharePoint or Microsoft Lists, open the list, select Integrate, then Power Apps, then Create an app."
   - q: "Do I need to save and publish?"
-    a: "Yes. Learn says you preview the app, then save and publish it so others can use it."
+    a: "Learn's steps end with previewing the app, then saving and publishing it. It says that information you add or edit in the app also updates in SharePoint or Lists."
 ---
 
 You can create a canvas app from a SharePoint list in two ways. From Power Apps, go to make.powerapps.com, select **Start with data** and **SharePoint**, enter the site URL, pick the list and select **Create app**. From the list itself, open it, select **Integrate**, then **Power Apps**, then **Create an app**. Both produce a generated app that you can preview, save and publish. This article follows Microsoft Learn's page on creating a canvas app with data from a list.
@@ -57,13 +57,18 @@ This route begins where your data already is, so there is no URL to type. Learn'
 
 ## What gets generated
 
-Learn describes a change in the generated design. New apps are built as a single responsive screen that uses containers. The default is a tablet layout that adapts to phone. Apps created earlier use a different design with three screens: Browse, Details and Edit.
+Learn says Power Apps Studio opens with a generated app connected to your list, and that the layout depends on the template available in your environment. It describes two:
 
-That difference matters when you open an old app and a new one side by side. The old app has separate screens, and the new one puts the same functions into one screen with containers. If you follow older tutorials that talk about editing the Browse screen, your new app may not have one.
+- The **responsive single-screen template** combines browsing and record editing on one screen.
+- The **updated modern-controls template** provides a responsive records screen with grid and list views, plus separate screens for creating and editing records. It uses responsive containers, a modern data grid and modern forms, and Learn says it is not the same as a customized list form hosted inside SharePoint.
+
+For the updated template, Learn adds these details. The grid view shows the edit action when exactly one row is selected. The template generates filter tabs from the connected data; grid view filters a generated collection, while list view filters the connected data source, so check the same filter in both views. Generated counts and collection-backed results do not guarantee that every record in a large list is loaded, so review delegation limits. The new-record form uses one column below an app width of 768 and two columns at 768 or greater, and its save action calls `SubmitForm`. When you customize the screens, Learn says to preserve the generated DataSource, Item, navigation formulas and the form's success and failure actions unless you mean to replace them, and to use the control names in your own app rather than names from an older tutorial.
 
 ## Preview, save and publish
 
-After creation, preview the app to check that the list data shows up and that you can browse, view and edit items. Learn then says to save and publish. Until you publish, the app is not available to the people you want to use it.
+Select the **Preview the app** icon to see how the app works. Learn then says to save and publish the app, and notes that information you add or edit in the app also updates in SharePoint or Lists.
+
+For the updated template, Learn gives this check before you share the app: preview grid and list views at narrow and wide widths, apply a filter and check both views show the expected records, create and edit a test record and confirm the values in the source list, and test required fields and a failed save. It adds that a notification alone is not proof that a data operation succeeded.
 
 ## Choosing a route
 
@@ -71,9 +76,9 @@ This section is my advice, not a Microsoft statement.
 
 1. **Use the list route when you are a list owner.** It saves a step and keeps you in the context of the data.
 2. **Use the Power Apps route when you work across several sites.** You can start from the maker portal and connect to whichever site you need.
-3. **Clean up the list before you generate the app.** The app reflects the columns, so rename unclear columns and remove ones you do not need. In my experience, a tidy list gives a tidy app.
+3. **Clean up the list before you generate the app.** Rename unclear columns and remove ones you do not need before you generate the app, because the app is built on the list's data.
 4. **Treat the generated app as a first draft.** It gives you a working layout, but you will likely adjust labels, order and rules to match the process.
-5. **Check permissions on the list.** Users of the app need access to the data in the list. Learn's page does not discuss sharing in the sections I read, so test with a second account.
+5. **Check permissions on the list.** Users of the app need access to the data in the list. The page does not describe list permissions for app users, so test with a second account.
 6. **Mind the connection if your list is on-premises.** Learn says to use a data gateway, so involve the person who manages it.
 
 ## A test routine before you share
@@ -82,19 +87,17 @@ This section is my advice, not a Microsoft statement.
 
 - Create a test item in the app and confirm it appears in the list.
 - Edit the item in the app and confirm the change in the list.
-- Open the app on a phone to check the responsive layout, since Learn says the new design adapts to phone.
+- Check the layout at narrow and wide widths, as Learn's check list for the updated template suggests.
 - Remove a field from the list in a copy of the environment, if you can, to see how the app reacts, before you do it in production.
 - Write down which list the app is bound to, so that the next maker knows where the data lives.
 
 ## What the page does not cover
 
-Learn's page is a tutorial for the generation step. I read the whole page. It does not explain how to customize the app in depth, how to manage licensing for premium connectors, or how delegation limits affect large lists. If your list has many items or complex column types, use other Power Apps documentation for those topics.
+Learn's page is a tutorial for the generation step. It does not explain in depth how to customize the app, how to manage licensing for premium connectors, or how delegation limits work; it links to separate pages on delegation limits and on SharePoint data types and delegable operations. If your list has many items or complex column types, use those pages.
 
 ## Reading the two routes side by side
 
-This section is my advice, not a Microsoft statement. The two routes end in the same place, a generated app bound to your list, so the choice is about workflow. If you are already in the list, adding a quick app is a natural next step and you stay in the same browser tab. If you build many apps, the maker portal gives you one starting point for all of them, with the recent sites list saving typing. Whichever route you use, record which one you took and which list the app uses, so a colleague can recreate the app if it has to be rebuilt.
-
-A final point on naming: give the app a name that tells users what it does, because the generated default may reflect the list name. A clear name matters when people look for the app later.
+This section is my advice, not a Microsoft statement. The two routes end in the same place, a generated app bound to your list, so the choice is about workflow. If you are already in the list, adding a quick app is a natural next step. If you build many apps, the maker portal gives you one starting point for all of them, with the recent sites list saving typing. Whichever route you use, record which one you took and which list the app uses, so a colleague can recreate the app if it has to be rebuilt.
 
 ## Related
 
