@@ -25,7 +25,7 @@ faq:
     a: "Yes. The page offers a 90-day Plan 2 trial."
 ---
 
-Exchange Online Protection (EOP) is the baseline for email security in Microsoft 365. Microsoft Defender for Office 365 adds layers on top in two plans. This guide follows the Microsoft Learn page that compares them. The page compares each plan against the built-in features. It has no separate EOP-versus-Defender table.
+All organizations with cloud mailboxes get built-in security features, which this guide calls EOP. The page itself says Microsoft Defender for Office 365 is the primary email and collaboration security solution for Microsoft 365, with two plans on top of the built-in layer. This guide follows the Microsoft Learn page Why do I need Microsoft Defender for Office 365? The page calls the first layer the built-in security features for all cloud mailboxes and compares each plan against it. It has no separate EOP-versus-Defender table.
 
 ## The protection ladder
 
@@ -43,7 +43,7 @@ Exchange Online Protection (EOP) is the baseline for email security in Microsoft
 - ZAP for Teams.
 - User and domain impersonation protection, mailbox intelligence impersonation protection, URL trace and Defender for Office 365 reports.
 
-Real-time detections are the quick Plan 1 differentiator for investigation.
+The page says the presence of Real-time detections in the Defender portal is a quick way to tell Plan 1 from Plan 2. Plan 2 has Explorer instead.
 
 ## What Plan 2 adds
 
@@ -70,6 +70,10 @@ For SIEM integration, Plan 1 covers alerts and detections. Plan 2 adds automated
 
 Defender for Office 365 is also available as an add-on to many subscriptions with cloud mailboxes. A 90-day Plan 2 trial is available. The page points to the Entra service plan reference as the exhaustive source for which subscription includes which plan.
 
+## Email authentication
+
+The page also says that, whether you use only the onmicrosoft.com domain or custom domains, you should configure email authentication (SPF, DKIM and DMARC records in DNS) for used and unused domains, so that Microsoft 365 can protect more accurately against spoofing.
+
 ## What the page does not say
 
 - A direct EOP-versus-Defender comparison. Plans are compared with the built-in column.
@@ -80,7 +84,7 @@ Defender for Office 365 is also available as an add-on to many subscriptions wit
 
 ## A choice outline
 
-This outline is practical advice built on the page.
+This outline is my advice, built on the page.
 
 1. Start with what your subscription already includes and check the service plan reference.
 2. If you need Safe Attachments, Safe Links or impersonation protection, you need Plan 1 or higher.
@@ -88,7 +92,7 @@ This outline is practical advice built on the page.
 4. Use the 90-day Plan 2 trial to test before you buy.
 5. Check the service description for feature availability in your cloud.
 
-## Typical mistakes
+## Typical mistakes (my advice)
 
 - Assuming Plan 1 includes attack simulation training. It is a Plan 2 feature.
 - Assuming Safe Documents comes with the plans.
@@ -109,9 +113,9 @@ This outline is practical advice built on the page.
 
 The table restates the page's cheat sheet and detailed rows. The EOP column is an inference from the page's statement that the listed Plan 1 and Plan 2 capabilities are not in the built-in features.
 
-## Reading the ladder
+## Reading the ladder (my reading)
 
-Each step contains the previous one. Plan 2 includes everything in Plan 1. Plan 1 sits on top of the built-in protection. So the question is rarely one or the other. It is how far up the ladder your risk and your team's skills justify going. Plan 1 mostly prevents and detects. Plan 2 adds the tools for investigation, hunting, response and training.
+The page says Plan 1 contains a subset of the features in Plan 2, and that all levels of the ladder can protect, detect, investigate and respond, but the available features and automation increase as you move up. It describes Plan 1 as adding more prevention and detection, and Plan 2 as expanding investigation and response with automation. My reading: the question is rarely one or the other. It is how far up the ladder your risk and your team's skills justify going.
 
 ## Related
 
@@ -122,4 +126,4 @@ Each step contains the previous one. Plan 2 includes everything in Plan 1. Plan 
 
 ## Sources
 
-- [Microsoft Defender for Office 365 overview and plans (Microsoft Learn)](https://learn.microsoft.com/defender-office-365/mdo-about)
+- [Why do I need Microsoft Defender for Office 365? (Microsoft Learn)](https://learn.microsoft.com/defender-office-365/mdo-about)
