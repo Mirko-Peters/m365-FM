@@ -25,7 +25,7 @@ faq:
     a: "Run queries against the master database on sys.event_log filtered by event_category connectivity for the last 2 hours, and sys.database_connection_stats for the last 24 hours."
 ---
 
-Most Azure SQL connection failures are either short-lived faults that a retry fixes, or a client that the firewall does not allow. This guide follows the Microsoft Learn page on common connectivity issues. The page focuses on transient faults and retry logic. It is not a full error code reference.
+Two common causes of Azure SQL connection failures are short-lived faults that a retry can fix and a client IP that the firewall does not allow. This guide follows the Microsoft Learn page Working with Transient Errors. The page applies to Azure SQL Database, Azure SQL Managed Instance, Azure Synapse Analytics and SQL database in Fabric. It focuses on transient faults and retry logic and is not a full error code reference.
 
 ## Transient faults
 
@@ -61,7 +61,7 @@ The page lists numbers that its sample code treats as transient, including 40613
 - **11001:** no such host is known, used in a network-disconnect test.
 - **18456:** login failed, used in a misspelled-username test.
 
-The list comes from the Enterprise Library 6 source, which Microsoft does not plan to update, so it may be outdated. Error 49918 and error 40615 are not on the page.
+The list comes from the Enterprise Library 6 source code, and the page notes that Microsoft has no plans for further feature or maintenance updates to it. My inference: the list may therefore be outdated. Error 49918 and error 40615 are not on the page.
 
 ## Firewall rules
 
@@ -94,11 +94,11 @@ Log all errors in your application so you can correlate them with the server log
 - The meaning and recommended action for most error numbers.
 - Error 40615 and 49918.
 - The difference between server-level and database-level firewall rules.
-- A full error reference. It points to a separate troubleshooting article.
+- A full error reference. The page links no error list.
 
 ## A troubleshooting order
 
-This order is practical advice built on the page.
+This order is my advice, built on the page.
 
 1. Note the exact error number and message.
 2. If it looks transient, retry with a fresh connection and the documented delays.
@@ -106,7 +106,7 @@ This order is practical advice built on the page.
 4. Check port 1433 from the client.
 5. Query the connectivity logs on master.
 
-## Typical mistakes
+## Typical mistakes (my advice)
 
 - Retrying a failed command on the same connection.
 - Retrying every few seconds without a maximum.
@@ -121,4 +121,4 @@ This order is practical advice built on the page.
 
 ## Sources
 
-- [Troubleshoot transient connection errors in Azure SQL (Microsoft Learn)](https://learn.microsoft.com/azure/azure-sql/database/troubleshoot-common-connectivity-issues)
+- [Working with Transient Errors (Microsoft Learn)](https://learn.microsoft.com/azure/azure-sql/database/troubleshoot-common-connectivity-issues)
