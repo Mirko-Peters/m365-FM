@@ -59,6 +59,8 @@ The values only filter data in Desktop. After publishing, the policy overrides t
 
 Select the date column, then **Date Filters** > **Custom Filter**. Use **is after or equal to** `RangeStart` and **is before** `RangeEnd`, both as parameters. Select **Close & Apply**.
 
+Note that the overview article says the parameters must be referenced manually and cannot be used through the standard Custom Filter dialog, while the configuration article describes the Custom Filter dialog. If the dialog does not offer the parameters in your version, add the filter step in the formula bar with `Table.SelectRows`.
+
 Microsoft is explicit: use an equal-to on either `RangeStart` or `RangeEnd`, never both. If both include it, a row can fall into two partitions and appear twice.
 
 If the table has only an integer date key in `yyyymmdd` form, the configuration article shows a function that converts `RangeStart` and `RangeEnd` to the key format, so the filter still folds. Converting the column directly to Date/Time usually breaks folding.
@@ -94,7 +96,7 @@ Microsoft says that on each refresh the service rolls the periods forward and up
 
 ## Keep the report responsive
 
-For reports on a real-time model, Microsoft suggests enabling automatic page refresh at a fixed interval or on change detection, so reports pick up the latest data. The pages read give no performance figures for DirectQuery partitions, so test with realistic data volumes. Keep the DirectQuery window small by choosing a short refresh period and complete-day refresh, and make sure the source has an index on the date column used by the filter. The index advice is general database practice and is not stated on the Microsoft pages.
+For reports on a real-time model, Microsoft suggests enabling automatic page refresh at a fixed interval or on change detection, so reports pick up the latest data. The pages read give no performance figures for DirectQuery partitions, so test with realistic data volumes. Microsoft does not document how to size or tune the DirectQuery window. One general database practice, not stated on the Microsoft pages, is to make sure the source has an index on the date column used by the filter.
 
 ## Related
 
