@@ -96,4 +96,4 @@ The page states no license requirements and does not explain how tenant isolatio
 
 ## Sources
 
-- [Cross-tenant inbound and outbound restrictions](https://learn.microsoft.com/power-platform/admin/cross-tenant-restrictions)
+- [Restrict cross-tenant inbound and outbound access (Microsoft Learn)](https://learn.microsoft.com/power-platform/admin/cross-tenant-restrictions)
