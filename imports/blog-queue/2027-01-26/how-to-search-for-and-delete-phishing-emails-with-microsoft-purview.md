@@ -29,7 +29,7 @@ Phishing messages that have already reached mailboxes can be found and removed w
 
 ## Choose the right tool first
 
-- If your organization has **Defender for Office 365 Plan 2**, the page tells you to use the procedure in Remediate malicious email delivered in Office 365 instead of this one. I did not read that article, so I do not describe it.
+- If your organization has **Defender for Office 365 Plan 2**, the page tells you to use the procedure in Remediate malicious email delivered in Office 365 instead of this one. This article does not describe that procedure.
 - The page also names the purge feature in **Data Security Investigations** as a way to search for and permanently delete Exchange mailbox and Teams items, with a purge queue dashboard.
 - The eDiscovery purge is meant for **data spillage and incident response**. The page says it is not for reducing mailbox quota, clearing mailboxes or enforcing retention. For those, use retention policies, archive policies, or manual deletion by the mailbox owner.
 
