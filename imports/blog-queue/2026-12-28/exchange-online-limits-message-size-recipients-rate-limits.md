@@ -11,7 +11,7 @@ keypoints:
   - "Sending limits include 10,000 recipients per day, 30 messages per minute and a recipient limit customizable up to 1000 per message. Receiving is limited to 3,600 messages per hour."
   - "User mailboxes are 100 GB on E3 and E5, with warning at 98 GB, prohibit send at 99 GB and prohibit send and receive at 100 GB."
   - "Transport rules are limited to 300 rules, 8 KB per rule and 100 recipients added by all rules. Distribution groups hold up to 100,000 members."
-  - "Learn says Exchange Online is not suited for bulk mailing and that most of these limits cannot be modified."
+  - "Learn says most of these limits cannot be modified and points bulk senders to third-party providers or Azure Communication Services email."
 faq:
   - q: "What is the default message size limit?"
     a: "According to Microsoft Learn, 35 MB for sending and 36 MB for receiving. Administrators can set a custom limit between 1 MB and 150 MB, and larger messages are not delivered and the sender receives a non-delivery report."
@@ -76,7 +76,7 @@ The attachment scanning limit appears as 1 MB in a table, while the text says th
 
 ## Practical notes
 
-This section is a suggestion. When a user reports a bounce, compare the message size with the client limit and remember the 33 percent encoding growth. For senders reaching the daily recipient limit, the page recommends third-party providers or Azure Communication Services email for bulk scenarios, because Exchange Online is not suited to bulk mailing. Using journaling, transport rules or auto-forwarding to copy mail into an Exchange Online mailbox for archiving is not permitted.
+This section is a suggestion. When a user reports a bounce, compare the message size with the client limit and remember the 33 percent encoding growth. For senders reaching the daily recipient limit, the page recommends third-party providers that specialize in legitimate bulk email, such as newsletters, and Azure Communication Services email for bulk or high-volume mailing to external recipients. Using journaling, transport rules or auto-forwarding to copy mail into an Exchange Online mailbox for archiving is not permitted.
 
 ## Not covered
 
@@ -88,4 +88,4 @@ The values above are for E3 and E5. Other plans and the tenant external recipien
 
 ## Sources
 
-- [Exchange Online limits](https://learn.microsoft.com/office365/servicedescriptions/exchange-online-service-description/exchange-online-limits)
+- [Exchange Online limits (Microsoft Learn)](https://learn.microsoft.com/office365/servicedescriptions/exchange-online-service-description/exchange-online-limits)
