@@ -51,7 +51,7 @@ Learn adds that eDiscovery never operates against the real Teams message data in
 On the **Searches** tab of the case, select the search, then **Add to review set**. In the **Add items to review set** flyout:
 
 1. Choose **Add to a new review set** or an existing one.
-2. Under the indexing section, choose which items to add, such as indexed items that match, or also partially indexed items. Learn describes advanced indexing on partially indexed items as an option.
+2. In the **Select items to add to review set** section, choose which items to add, such as indexed items that match, or also partially indexed items. Learn describes advanced indexing on partially indexed items as an option.
 3. Choose sampling or keep **Add all search results to review set**. Sampling needs **Generate statistics** to have completed.
 4. Under messages and related items from mailboxes, set **Organize conversation into HTML transcript** and **Include Teams and Viva Engage conversations**. Learn says the second option collects up to 12 hours of related conversation around a matching message.
 5. For links in messages, **Access links (cloud attachments) in messages** takes version choices from latest only to all versions. Learn says cloud attachments are treated as message attachments, and compliance boundaries are not reflected.
@@ -83,7 +83,7 @@ Learn's limits and timing for exports:
 | Automatic cancel | Export running more than seven days |
 | Tracking | **Process manager**, and the case **Exports** tab |
 
-If a large export fails, Learn suggests splitting it into smaller batches or narrowing with date ranges or filters.
+To improve export performance, Learn suggests narrowing the results with date ranges or other filters. Because an export running more than seven days is canceled automatically, it also says to divide large exports into smaller batches.
 
 ## What the documentation does not say
 
