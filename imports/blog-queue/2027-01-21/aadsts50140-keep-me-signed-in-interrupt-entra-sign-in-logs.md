@@ -1,6 +1,6 @@
 ---
 title: "AADSTS50140 KmsiInterrupt: Why the Keep Me Signed In Prompt Shows Up as an Error in Entra Sign-In Logs"
-summary: "AADSTS50140 is not a failure of your sign-in setup. It records the Stay signed in prompt, an expected part of the flow. What the log entry means, when the prompt is not shown, and how to turn it off for everyone or for a group."
+summary: "AADSTS50140 records the Stay signed in prompt, which Learn calls an expected part of the sign-in flow. What the log entry means, when the prompt is not shown, and how to turn it off for everyone or for a group."
 status: review
 publish: false
 author: mirko-p
@@ -8,7 +8,7 @@ date: 2027-01-21
 topics: [entra-id, conditional-access]
 keypoints:
   - "Learn calls AADSTS50140 KmsiInterrupt: the Keep me signed in prompt interrupted the sign-in, which is an expected part of the flow."
-  - "A log entry with this code usually means the user saw the Stay signed in prompt and left the sign-in attempt without answering it."
+  - "Learn says a sign-in log entry appears when the user sees the Stay signed in prompt but abandons the sign-in attempt without acting on it."
   - "Answering Yes sets a persistent cookie. Without KMSI, the cookie is non-persistent and lasts 24 hours or until the browser closes."
   - "Turn the prompt off for the whole directory in User settings, or for selected users with persistent browser session controls in Conditional Access."
   - "The prompt is not shown for seamless SSO, guests, high-risk sign-ins, consent flows or when a persistent browser session control is configured."
@@ -25,7 +25,7 @@ faq:
     a: "The page says a non-persistent cookie is issued and lasts for 24 hours or until the browser is closed. If a user answers Yes to the prompt, a persistent authentication cookie is set instead. The cookie must be stored in session for KMSI to work, and KMSI does not work with locally stored cookies."
 ---
 
-AADSTS50140 looks like an error in the sign-in logs, but Microsoft Learn describes it as an expected part of the sign-in flow. The code is named KmsiInterrupt, and it records the Keep me signed in (KMSI) prompt. Nothing is misconfigured when you see it. This article explains what the entry means, when users do not get the prompt, and the two documented ways to hide it.
+AADSTS50140 looks like an error in the sign-in logs, but Microsoft Learn describes it as an expected part of the sign-in flow. The code is named KmsiInterrupt, and it records the Keep me signed in (KMSI) prompt. Seeing it does not by itself point to a setup problem (my reading). This article explains what the entry means, when users do not get the prompt, and the two documented ways to hide it.
 
 ## What Learn says about the code
 
@@ -36,7 +36,7 @@ The separate page on the Stay signed in prompt adds the practical detail. If a u
 - **Sign in error code**: 50140
 - **Failure reason**: the error occurred due to the Keep me signed in interrupt when the user was signing in
 
-Read that as: the user got far enough to see the prompt, and the session then stopped there. My reading, not a Microsoft statement: if you see a few of these per day across many users, that is normal browser behavior such as closing a tab on that page.
+My reading, not a Microsoft statement: the user got far enough to see the prompt, and the session then stopped there. Also my reading: if you see a few of these per day across many users, that is normal browser behavior such as closing a tab on that page.
 
 ## What the prompt does
 
@@ -75,13 +75,13 @@ The KMSI setting lives in **User settings**. Learn's enable steps are:
 2. Go to **Entra ID** > **Users** > **User settings**.
 3. Set the **Show keep user signed in** toggle to **Yes** to enable it.
 
-To stop the interrupt, the troubleshooting section says to set **Show option to remain signed in** to **No**. The page uses both wordings for what is clearly the same setting, so match the label you actually see in your tenant. Setting it to No disables the prompt for all users in your directory. You need the Global Administrator role to change it.
+To stop the interrupt, the troubleshooting section says to set **Show option to remain signed in** to **No**. The page uses both wordings, so match the label you actually see in your tenant. Setting it to No disables the prompt for all users in your directory. The page says you need the Global Administrator role to enable the prompt.
 
 ## Option 2: Hide it only for selected users
 
 Use the persistent browser session controls in Conditional Access. Learn says this lets you disable the KMSI prompt for a select group of users without affecting sign-in behavior for everyone else. It also fits the list above: once a persistent browser session control is configured in a policy, the prompt is not shown.
 
-If you take this route, the session lifetime article it links to is the place for the exact control settings. I did not read that page for this article, so I do not describe its options here.
+The page links its Conditional Access session lifetime article for the control. This article does not describe those options.
 
 ## Licensing
 
@@ -89,12 +89,12 @@ The page lists these licenses for configuring KMSI: Microsoft Entra ID Free, Off
 
 ## How I would handle it (my advice)
 
-This list is my experience and suggestion, not a Microsoft procedure:
+This list is my suggestion, not a Microsoft procedure:
 
 1. Filter your sign-in log noise. If you build alerts or reports from failed sign-ins, exclude 50140 so that expected interrupts do not look like attacks or outages.
 2. Decide on purpose whether you want persistent cookies. On shared or kiosk-style devices, a persistent session can be unwanted. Choose Option 2 for those groups instead of switching it off for everyone.
 3. Test with a pilot group first, because turning the prompt off can change how often people see other prompts.
-4. Check the correlation ID only if a user says they were blocked. A user who is truly stuck usually has a different code in the log.
+4. Check the correlation ID only if a user says they were blocked, since this code on its own records the prompt.
 
 ## Related Learn pages
 
@@ -107,5 +107,5 @@ The error code row links to a Microsoft Tech Community post about the new sign-i
 
 ## Sources
 
-- [Microsoft Entra authentication and authorization error codes (Microsoft Learn)](https://learn.microsoft.com/entra/identity-platform/reference-error-codes)
+- [Microsoft Entra authentication & authorization error codes (Microsoft Learn)](https://learn.microsoft.com/entra/identity-platform/reference-error-codes)
 - [Manage the 'Stay signed in' prompt in Microsoft Entra ID (Microsoft Learn)](https://learn.microsoft.com/entra/fundamentals/how-to-manage-stay-signed-in-prompt)
