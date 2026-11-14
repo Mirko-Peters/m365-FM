@@ -59,11 +59,9 @@ From the guardrails article:
 2. Choose the intervention point and one action. Learn says user input attacks can be scanned only at the user input intervention point.
 3. Select **Add control**. The control appears in the table on the right.
 
-The actions the page names are **Annotate and block**, and annotation mode, where controls report results without filtering. In annotation mode a response includes detected and filtered values, so you can see attacks without stopping them. This is useful for a trial period. Learn recommends switching from block to annotate when you are investigating false positives.
+The guardrails how-to page names the action **Annotate and block**. The Prompt Shields page also describes annotate mode, where results are logged without filtering. Each configured control returns detected and filtered values, so in annotate mode you can see attacks without stopping them. This is useful for a trial period. Learn recommends switching from block to annotate when you are investigating false positives.
 
 Optionally add **Indirect attacks** (the document attack control) if your app feeds retrieved content to the model. In the Prompt Shields article, document attacks also have a Spotlighting option, which is in preview. Spotlighting encodes document content in base-64 so the model treats it as lower trust. It is off by default, can increase token cost, can push large documents over input limits and works only for models used through the Chat Completions API.
-
-Learn also says that core-harm blocking levels do not change Prompt Shields sensitivity. Configure user prompt attack and document attack detection separately from hate, sexual, violence and self-harm controls.
 
 ## Step 3: Assign the guardrail
 
