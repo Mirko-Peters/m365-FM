@@ -25,7 +25,7 @@ faq:
     a: "Learn lists, for both tiers: multitenant PaaS services such as Azure App Service Environment for Power Apps, API Management outside the virtual network integration mode and Azure Virtual WAN are not supported, a public IP attached to a NAT Gateway cannot be protected, and Classic or RDFE virtual machines are not supported."
 ---
 
-Azure DDoS Network Protection and DDoS IP Protection share the same core engineering features. The documented differences are four: Public IP Basic tier protection, DDoS rapid response support, cost protection and the WAF discount exist only in Network Protection, and the price model differs. This article follows the tier comparison and overview pages on Microsoft Learn.
+Azure DDoS Network Protection and DDoS IP Protection share the same core engineering features. There are five documented differences: Public IP Basic tier protection, DDoS rapid response support, cost protection and the WAF discount exist only in Network Protection, and the price model differs. This article follows the tier comparison and overview pages on Microsoft Learn.
 
 ## The two tiers in one paragraph
 
@@ -60,7 +60,7 @@ Read the table from the bottom. The first eleven rows are the same. The last fiv
 
 - **DDoS rapid response:** during an active attack, customers with Network Protection have access to the DDoS Rapid Response team, who can help with investigation during the attack and analysis afterward.
 - **Cost protection:** Learn's overview calls it a cost guarantee: you receive data-transfer and application scale-out service credit for resource costs incurred as a result of documented DDoS attacks.
-- **WAF discount:** listed in the comparison as available only with Network Protection. The pages I read do not state the amount, so check the pricing page.
+- **WAF discount:** listed in the comparison as available only with Network Protection. The comparison and overview pages do not state the amount, so check the pricing page.
 - **Public IP Basic tier:** IP Protection does not support it, which is listed as the one additional limitation of IP Protection.
 
 ## What both tiers do
@@ -84,7 +84,7 @@ A single VM behind a public IP is supported but not recommended, according to th
 
 ## Free baseline and layer 7
 
-Azure DDoS infrastructure protection comes at no additional cost for every Azure service with public IPv4 and IPv6 addresses. It needs no configuration. The paid tiers add the monitoring, tuning, reporting and support features above, applied to your own resources.
+Azure DDoS infrastructure protection comes at no additional cost for every Azure service with public IPv4 and IPv6 addresses. It needs no configuration. In my reading, the paid tiers add the monitoring, tuning, reporting and support features above, applied to your own resources.
 
 Both tiers protect at layers 3 and 4. For web applications at layer 7, add a web application firewall. Learn names the Application Gateway WAF SKU and third-party WAFs from the Azure Marketplace. The overview also lists DDoS Protection as one of the Network Security services next to Azure Firewall and Azure Web Application Firewall, each with its own use cases.
 
