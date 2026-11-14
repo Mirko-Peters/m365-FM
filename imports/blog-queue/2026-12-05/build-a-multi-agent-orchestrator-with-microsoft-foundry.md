@@ -31,7 +31,7 @@ Note on sources: Microsoft Learn pages in this area change often. The statements
 
 ## Why use several agents at all
 
-Learn's workflow page says that orchestrating multiple specialized agents is more robust than a single agent for complex tasks. A Microsoft Learn training module on multi-agent orchestration adds a caution: it asks learners to decide when multi-agent architectures earn their coordination cost. Start with one agent. Split only when a single agent fails on scope, tools or reliability.
+A Microsoft Learn training module on multi-agent orchestration asks learners to decide when multi-agent architectures earn their coordination cost. As a practical rule of this article, start with one agent. Split only when a single agent fails on scope, tools or reliability.
 
 ## The options, side by side
 
