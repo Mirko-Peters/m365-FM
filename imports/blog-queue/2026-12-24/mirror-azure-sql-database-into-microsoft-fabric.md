@@ -9,7 +9,7 @@ topics: [fabric-mirroring]
 keypoints:
   - "Mirroring creates a read-only, continuously replicated copy of Azure SQL Database data in OneLake. A paused or deleted Fabric capacity stops replication."
   - "Enable the tenant settings Service principals can call Fabric public APIs and Users can access data stored in OneLake with apps external to Fabric."
-  - "Turn on the system-assigned managed identity of the logical server and make it the primary identity. Create a login and user with SELECT, ALTER ANY EXTERNAL MIRROR and two VIEW permissions."
+  - "Make a managed identity (system-assigned, or user-assigned in preview) the primary one on the logical server. Grant SELECT, ALTER ANY EXTERNAL MIRROR and two VIEW permissions."
   - "Create the item through Create > Data Warehouse > Mirrored Azure SQL Database, connect, keep Mirror all data or pick tables, then Mirror database."
   - "Wait 2 to 5 minutes, then Monitor replication. Source granular security must be reconfigured on the mirrored copy."
 faq:
@@ -25,7 +25,7 @@ faq:
     a: "A paused or deleted Fabric capacity stops replication, according to the page. Keep the capacity running."
 ---
 
-Fabric mirroring keeps a read-only copy of an Azure SQL Database in OneLake, updated continuously, without building a pipeline. This guide follows Microsoft Learn's tutorial and lists the prerequisites that most often block the first run.
+Fabric mirroring keeps a read-only copy of an Azure SQL Database in OneLake, updated continuously, without building a pipeline. This guide follows Microsoft Learn's tutorial and lists the prerequisites it names.
 
 ## What mirroring gives you
 
@@ -36,7 +36,7 @@ A read-only, continuously replicated copy of your Azure SQL Database data in One
 - **Fabric capacity:** an active, running capacity. A paused or deleted capacity stops replication. A Fabric trial works if you have no capacity.
 - **Tenant settings:** enable both **Service principals can call Fabric public APIs** and **Users can access data stored in OneLake with apps external to Fabric**.
 - **Workspace role:** Member or Admin. Contributors can't complete the step that grants the server's managed identity Read and write permission on the mirrored database.
-- **Managed identity:** enable the system-assigned managed identity on the logical server. Under **Security**, select **Identity** and set **System assigned managed identity** **Status** to **On**. It must be the primary identity. Check with `SELECT * FROM sys.dm_server_managed_identities;`.
+- **Managed identity:** a system-assigned managed identity (SAMI) or a user-assigned managed identity (UAMI, preview) must be enabled and be the primary identity on the logical server. For SAMI, go to **Security** > **Identity** and set **System assigned managed identity** **Status** to **On**. Check with `SELECT * FROM sys.dm_server_managed_identities;`.
 - **Database principal:** create a login in `master` and a mapped user in the database to mirror.
 
 ```sql
@@ -47,10 +47,9 @@ CREATE USER [fabric_user] FOR LOGIN [fabric_login];
 GRANT SELECT, ALTER ANY EXTERNAL MIRROR, VIEW DATABASE PERFORMANCE STATE, VIEW DATABASE SECURITY STATE TO [fabric_user];
 ```
 
-The page also covers Microsoft Entra, service principal and workspace identity logins.
+The page also covers Microsoft Entra, service principal and workspace identity logins. Learn notes that Microsoft Entra server principals (logins) are in preview for Azure SQL Database, and that users created from Entra logins can see delays when roles and permissions are granted.
 
 - **Networking:** if the database isn't publicly accessible and doesn't allow Azure services, use a virtual network data gateway or an on-premises data gateway, and confirm connectivity through a private endpoint or firewall rule.
-- **Restricted OneLake access:** if inbound access is restricted, a workspace admin must add the server's Azure resource ID to the workspace's Resource Instance Rules.
 
 ## Create the mirrored database
 
@@ -87,13 +86,13 @@ The status changes to **Running** when tables are synchronizing. A date in the *
 1. Confirm the capacity is running and the tenant settings are on.
 2. Enable the managed identity and verify it is primary.
 3. Create the login and user with the four permissions.
-4. Check networking and OneLake access rules.
+4. Check networking: gateway, private endpoint or firewall rule.
 5. Create the item, connect and select tables.
 6. Check **Monitor replication** after a few minutes.
 
-## If replication does not start
+## If replication does not start (my advice)
 
-The tutorial does not include a dedicated troubleshooting section, so the following order is a suggestion built from the prerequisites above, not a Microsoft procedure.
+The tutorial does not include a dedicated troubleshooting section, so the following order is my suggestion built from the prerequisites above, not a Microsoft procedure.
 
 1. Check that the Fabric capacity is running, because a paused or deleted capacity stops replication.
 2. Check that both tenant settings are enabled and that your workspace role is Member or Admin.
@@ -109,4 +108,4 @@ Work through these in order before you recreate the mirrored item.
 
 ## Sources
 
-- [Tutorial: Configure Microsoft Fabric mirrored databases from Azure SQL Database](https://learn.microsoft.com/fabric/mirroring/azure-sql-database-tutorial)
+- [Tutorial: Configure Microsoft Fabric Mirrored Databases From Azure SQL Database (Microsoft Learn)](https://learn.microsoft.com/fabric/mirroring/azure-sql-database-tutorial)
