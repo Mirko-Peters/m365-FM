@@ -25,7 +25,7 @@ faq:
     a: "Learn highly recommends disabling SMTP AUTH in the organization and enabling it only for accounts that still require it. It also notes that client SMTP submission with basic authentication is scheduled for deprecation and recommends OAuth where the client supports it."
 ---
 
-If SMTP AUTH fails with a 535 5.7.139 error, find out which of two situations you are in. If the error text says authentication was unsuccessful because a federated STS service could not be reached or does not support HTTPS, the problem sits with your on-premises federation server. If SMTP AUTH is simply switched off for the tenant or mailbox, check the organization setting, the mailbox override, security defaults and any authentication policy. This guide follows Learn's page on enabling or disabling SMTP AUTH, its troubleshooting page for devices that send mail, and its device setup page.
+Learn's troubleshooting page lists two 535 5.7.139 messages. Both say authentication was unsuccessful because a federated STS service could not be reached or does not support HTTPS, so the problem sits with your on-premises federation server. Separately, SMTP AUTH can be switched off for the tenant or a mailbox. For that, check the organization setting, the mailbox override, security defaults and any authentication policy. This guide follows Learn's page on enabling or disabling SMTP AUTH, its troubleshooting page for devices that send mail, and its device setup page.
 
 ## What Learn says about the settings
 
@@ -76,7 +76,7 @@ The troubleshooting page for printers, scanners and line of business apps lists 
 
 The same page lists other SMTP AUTH errors with their own checks. For `535 5.7.3 Authentication unsuccessful` and `5.7.57 Client not authenticated to send mail`, check that SMTP AUTH is enabled on the licensed mailbox, disable MFA for that mailbox, check security defaults, and exclude the mailbox from a Conditional Access policy that blocks legacy authentication. Learn adds a caution not to turn off security defaults unless you understand the risks.
 
-The Learn pages I used do not contain the wording some clients show for a tenant with SMTP AUTH disabled. If your error text differs from the ones above, compare the message with the checks in this guide, and treat the Learn wording as the reference.
+If your error text differs from the ones above, compare it with the messages and checks in this guide, and treat the Learn wording as the reference.
 
 ## What else to check
 
