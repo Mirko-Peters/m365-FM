@@ -25,7 +25,7 @@ faq:
     a: "The page does not say. It does not define SCUs, give pricing or describe provisioned and overage billing."
 ---
 
-Security Copilot onboarding depends on one question: do you have Microsoft 365 E5 or E7? If yes, the product is included and Microsoft rolls it out in your tenant. If not, you provision Security Compute Units (SCUs) yourself. This guide follows the Microsoft Learn getting-started page. That page is short on SCU detail, and this guide says where.
+Security Copilot onboarding depends on one question: do you have Microsoft 365 E5 or E7? If yes, the product is included, but it must be rolled out in your tenant. If not, you provision Security Compute Units (SCUs) yourself. This guide follows the Microsoft Learn getting-started page. That page is short on SCU detail, and this guide says where.
 
 ## Scope
 
@@ -40,7 +40,7 @@ Do not begin onboarding until you know whether your organization has an E5 or E7
 
 ## Step 2: follow the matching path
 
-E5 and E7 tenants are provisioned automatically as part of the rollout. Other tenants complete the manual onboarding. The page says that whether you need to buy capacity depends on your license status. It does not give the onboarding steps.
+Per the page, if you are eligible for Microsoft 365 E5 or E7 and Microsoft has onboarded you to this benefit, Security Copilot is auto provisioned and you can start using it. Other tenants complete the manual onboarding. The page says that whether you need to buy capacity depends on your license status. It does not give the onboarding steps.
 
 ## Step 3: start using it
 
@@ -52,30 +52,30 @@ The page gives role-based pointers. Administrators assign access and roles, revi
 
 ## Two homepages during rollout
 
-The page notes that, during rollout, you might see either an agents-first homepage or a chat-first homepage. In the agents-first experience, the page describes different starting points for different people. An administrator assigns access and roles, reviews usage and capacity, and discovers and sets up agents. A security analyst sets up an agent, browses the agent store and tries an agent in Microsoft Defender. In both experiences you can open a chat session, and in both you can save a prompt as a promptbook. If your tenant shows a different layout from the page, the steps still describe the same two ways to begin: agents or chat.
+The page notes that your first sign-in experience might differ depending on your onboarding and rollout stage. New Microsoft 365 E5 or E7 customers might see an agents-first landing experience, where agents are the default homepage. Existing customers might continue to see the current experience with chat and prompts on the homepage. In the agents-first experience you access chat from **All history** instead of the homepage, and the initial guidance varies by role: administrators assign access and roles, review usage and capacity, and discover and set up agents, while security analysts set up an agent, browse the agent store and try an agent in Microsoft Defender. After manual onboarding is complete, the page says your experience might vary too, for example with an agents-first landing page.
 
-## Next steps named on the page
+## What to try next, per the page
 
-The page ends with a link to explore agents, plugins, connectors and promptbooks in your workflows. It gives no detail on any of them, so this guide does not describe plugins or connectors. Read those pages before you plan which data sources Security Copilot should use.
+The page ends with three suggestions: run an agent to complete a common task, ask a question using a prompt, and save your prompts as a promptbook for reuse. It does not mention plugins or connectors, so this guide does not describe them.
 
 ## Caveats
 
 - Your experience may differ during rollout. You may see an agents-first homepage or a chat-first homepage.
-- Navigation labels in the page are inconsistent, such as Home and homepage, or History and All history.
+- Navigation labels in the page differ between sections: one says **All history** and another says **History** for starting a chat session.
 
 ## What the page does not say
 
 - What an SCU is, what it costs or how provisioned and overage capacity are billed.
-- Capacity creation steps and sizing. Those are on the manual onboarding page.
+- Capacity creation steps and sizing. The page points to the manual onboarding article for the onboarding steps.
 - An Azure subscription requirement.
 - Named roles or a permission model.
-- Plugin details. They appear only in a link title.
+- Plugins and connectors. The page does not mention them.
 
-Treat any statement about SCU pricing or billing as unconfirmed until you read the dedicated pricing and onboarding pages.
+My advice: treat any statement about SCU pricing or billing as unconfirmed until you read the dedicated pricing and onboarding pages.
 
 ## A starting outline
 
-This outline is practical advice built on the page.
+This outline is my advice, built on the page.
 
 1. Check your license: E5, E7 or neither.
 2. If E5 or E7, check with your admin whether the tenant rollout has finished.
@@ -83,7 +83,7 @@ This outline is practical advice built on the page.
 4. Run one agent from Home as a first test.
 5. Try a chat session and save a useful prompt as a promptbook.
 
-## Typical mistakes
+## Typical mistakes (my advice)
 
 - Assuming that an E5 or E7 license already gives users access.
 - Starting onboarding before you know the license category.
