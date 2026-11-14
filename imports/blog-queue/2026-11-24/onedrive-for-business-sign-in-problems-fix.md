@@ -10,15 +10,15 @@ keypoints:
   - "A grayed-out OneDrive icon with a line through it means the account is signed out. Select it and sign in again."
   - "Errors 0x8004de85 and 0x8004de8a point to a missing account or a personal and work account mismatch."
   - "Unlink the PC, delete PreSignInSettingsConfig.json and sign in again if a normal sign-in fails."
-  - "Resetting OneDrive with onedrive.exe /reset disconnects all sync connections. Microsoft says it doesn't lose files or data."
+  - "If unlinking doesn't help, the Microsoft Learn error page documents a reset with onedrive.exe /reset, run as administrator after quitting OneDrive."
   - "Admins should confirm a OneDrive license is assigned in the Microsoft 365 admin center under Users, Active users."
 faq:
   - q: "Why can't I sign in to OneDrive for Business?"
-    a: "Microsoft Learn lists several causes: a missing account, a mismatch between a personal Microsoft account and work or school credentials, a firewall blocking OneDrive, or a missing license. Start by checking which account the app shows under Help and Settings, Settings, Account."
+    a: "The Microsoft pages read cover several causes: a missing account or a mismatch between a personal Microsoft account and work or school credentials (Microsoft Learn), an internet provider's firewall blocking OneDrive (Microsoft Support), and a missing license (a Learn resolution step). Start by checking which account the app shows under Help and Settings, Settings, Account."
   - q: "What do errors 0x8004de85 and 0x8004de8a mean?"
     a: "Microsoft Learn says these errors might occur when a problem affects the OneDrive account, such as a missing account, or when someone signs in to a personal Microsoft account with work or school credentials or the other way round."
   - q: "Does resetting OneDrive delete my files?"
-    a: "Microsoft Support says a reset disconnects all sync connections, including a personal OneDrive if one is set up, and that you won't lose files or data. After the reset, sign in again and the files sync back."
+    a: "The pages read for this article don't say what a reset does to local files or to sync connections, so don't assume it is harmless. They only give the command and say to restart OneDrive and sign in again afterwards. Check Microsoft's dedicated reset documentation before running it on a PC with unsynced changes."
   - q: "Who can fix a license problem?"
     a: "A Microsoft 365 administrator. Microsoft Learn says to open the Microsoft 365 admin center, go to Users, Active users, select the user, open Licenses and apps and confirm that a OneDrive for Business license is assigned."
 ---
@@ -29,7 +29,7 @@ When OneDrive for Business won't sign in, the cause is usually the wrong account
 A grayed-out OneDrive icon with a line through it means the account is signed out. Select the icon. On the **Set up OneDrive** screen, enter the email address and password.
 
 - **Work or school account:** if the password is forgotten, reset it or contact the organization's IT admin.
-- **Personal account:** Microsoft points to the sign-in helper for Microsoft accounts. Only one personal Microsoft account can be added.
+- **Personal account:** Only one personal Microsoft account can be added.
 
 Then confirm which account the app is using:
 
@@ -37,7 +37,7 @@ Then confirm which account the app is using:
 2. Select **Help & Settings**, then **Settings**.
 3. On the **Account** tab, check that the expected account is shown. Otherwise sign in with the correct one.
 
-Also sign in to the Microsoft 365 account online first. If that fails, the problem is the account and not the sync app. Microsoft's work sync article suggests selecting **View online** from the OneDrive icon and says to contact the network administrator if the account isn't reachable online.
+The Learn error page also suggests signing in to the Microsoft 365 account first to verify there are no authentication issues. Microsoft's work sync article suggests selecting **View online** from the OneDrive icon and says to contact the network administrator if the account isn't reachable online.
 
 ## Error 0x8004de85 or 0x8004de8a
 
@@ -75,7 +75,7 @@ If unlinking doesn't help, Microsoft Learn documents a reset:
 3. Run `%localappdata%\Microsoft\OneDrive\onedrive.exe /reset`
 4. Restart OneDrive and sign in with the work or school account.
 
-Microsoft Support says a reset disconnects all sync connections, including a personal OneDrive if configured, and that no files or data are lost.
+The pages read don't state what a reset does to existing sync connections or local files. Treat it as a step that may need re-setup, and check Microsoft's dedicated reset documentation if unsynced changes exist.
 
 ## Check the license (admin task)
 
@@ -90,12 +90,9 @@ If many users have the problem, the subscription might have expired. Check **Bil
 
 ## Browser sign-in to onedrive.cloud.microsoft
 
-Two error messages on the work or school web site mean a personal account is being used:
+Microsoft Support says the message "Selected user account does not exist in tenant 'Microsoft Services'" at onedrive.cloud.microsoft means you're likely using a personal account.
 
-- "Selected user account does not exist in tenant 'Microsoft Services'"
-- "cannot access the application '00000003-0000-0ff1-ce00-000000000000'"
-
-The fix from Microsoft is to sign in with the work or school Microsoft Entra ID account. If that still fails, contact the helpdesk or admin.
+The fix from Microsoft is to switch to the work or school Microsoft Entra ID account. If that still fails, contact the helpdesk or admin.
 
 ## Suggested order of work
 
