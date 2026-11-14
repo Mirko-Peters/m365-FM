@@ -32,22 +32,22 @@ Microsoft Learn describes Insider Risk Management as a compliance solution that 
 2. **Alerts.** Risk indicators generate alerts when activity matches a policy.
 3. **Triage.** Reviewers evaluate alerts. An alert can open a new case, join an existing case, or be dismissed.
 4. **Investigate.** Reviewers use User activity, Content explorer and Case notes.
-5. **Action.** Reviewers resolve the case, send a notice template, or escalate to another Purview solution such as eDiscovery (Premium).
+5. **Action.** Reviewers can send notice templates to users or escalate cases to another Purview solution such as eDiscovery (Premium).
 
 The page lists twelve policy templates. They include Data theft by departing users, Data leaks, Data leaks by priority users, Data leaks by risky users, Security policy violations, Risky AI usage and Risky browser usage (preview). Pick the template that matches the question the organization wants answered, not the one with the most indicators.
 
 ### Privacy by design
 
-Microsoft states that the solution is built with privacy by design. Users are pseudonymized by default, and role-based access controls and audit logs help protect user-level privacy. Tenant-level administrators can enable user-level identification. The configuration page adds that customers are solely responsible for using the service in compliance with applicable laws, so involve legal and HR before turning identification on.
+Microsoft states that the solution is built with privacy by design. Users are pseudonymized by default, and role-based access controls and audit logs help protect user-level privacy. The configuration page adds that customers are solely responsible for using the service in compliance with applicable laws, so involve legal and HR before turning identification on.
 
 ## What to set up first
 
 The configuration page lists six steps. Four are required, one is recommended and one is optional.
 
-1. Assign permissions. The role groups named are **Insider Risk Management** and **Insider Risk Management Admins**. Enabling analytics also needs a Microsoft 365 Global Administrator. Microsoft recommends the roles with the fewest permissions.
+1. Assign permissions. The role groups named are **Insider Risk Management** and **Insider Risk Management Admins**. Enabling analytics needs membership in the Insider Risk Management or Insider Risk Management Admins role group, or the Microsoft 365 Global admin role. Microsoft recommends the roles with the fewest permissions.
 2. Enable the Microsoft 365 audit log. Auditing is on by default in Microsoft 365 organizations. If it is off, confirm with other administrators before turning it on. After you turn it on, wait for the audit log to be prepared before searching.
 3. Optional: enable insider risk analytics. Results might take up to 48 hours.
-4. Recommended: configure the prerequisites for policies, for example connecting apps in Microsoft Defender for cloud indicators.
+4. Recommended: configure the prerequisites for policies.
 5. Configure the insider risk settings.
 6. Create a policy.
 
