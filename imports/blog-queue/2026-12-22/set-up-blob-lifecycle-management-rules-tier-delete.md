@@ -96,7 +96,7 @@ Learn lists these known limitations:
 
 Policies are free. You pay standard operation costs for Set Blob Tier API calls. Delete operations are free. Each last access time update is charged as an other transaction at most once every 24 hours per object.
 
-## Practical pattern for logs
+## Practical pattern for logs (my advice)
 
 1. Create one rule per data class, with a container or prefix filter.
 2. Move to cool after the period when reads stop, then delete after your retention requirement.
@@ -113,5 +113,5 @@ The pages I read do not give the total policy size or a rule-count limit, and th
 
 ## Sources
 
-- [Optimize costs by automatically managing the data lifecycle](https://learn.microsoft.com/azure/storage/blobs/lifecycle-management-overview)
-- [Configure a lifecycle management policy](https://learn.microsoft.com/azure/storage/blobs/lifecycle-management-policy-configure)
+- [Azure Blob Storage lifecycle management overview (Microsoft Learn)](https://learn.microsoft.com/azure/storage/blobs/lifecycle-management-overview)
+- [Configure a lifecycle management policy (Microsoft Learn)](https://learn.microsoft.com/azure/storage/blobs/lifecycle-management-policy-configure)
