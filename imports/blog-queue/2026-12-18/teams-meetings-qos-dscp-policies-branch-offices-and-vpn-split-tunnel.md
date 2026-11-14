@@ -7,14 +7,14 @@ author: mirko-p
 date: 2026-12-18
 topics: [teams, teams-admin-center, virtual-private-network, intune]
 keypoints:
-  - "Teams default markings are DSCP 46 for audio on ports 50000-50019, 34 for video on 50020-50039 and 18 for screen sharing on 50040-50059."
+  - "Learn's recommended initial markings are DSCP 46 for audio on ports 50000-50019, 34 for video on 50020-50039 and 18 for screen sharing on 50040-50059."
   - "Turn on Insert Quality of Service (QoS) markers for real-time media traffic in Meetings > Meeting settings, because it is off by default."
   - "On Windows, apply DSCP marking for ms-teams.exe with Intune, New-NetQosPolicy or Group Policy-based QoS."
   - "QoS only works on links you manage. Microsoft recommends avoiding real-time media over VPN and using a split tunnel for the Optimize endpoints."
   - "Capture traffic at your network egress to confirm the DSCP values are not changed or stripped in transit."
 faq:
   - q: "Which DSCP values does Teams use for meetings?"
-    a: "According to Microsoft Learn, audio uses DSCP 46 (EF), video uses 34 (AF41), screen sharing uses 18 (AF21) and calling and meeting signaling uses 40 (CS5). You can adjust port ranges but you cannot configure the DSCP markings."
+    a: "According to Microsoft Learn, audio uses DSCP 46 (EF), video uses 34 (AF41), screen sharing uses 18 (AF21) and calling and meeting signaling uses 40 (CS5). Learn's note adds that you can adjust port ranges but cannot configure the DSCP markings, although another passage says Windows clients allow full customization of the markings."
   - q: "Do I need the Teams admin center setting if I mark packets with Group Policy?"
     a: "Microsoft Learn says to enable Insert Quality of Service (QoS) markers for real-time media traffic in the Teams admin center. The default is Off. Learn describes this as needed for client-side marking to work, including on Mac, mobile and Teams Phone devices."
   - q: "Does QoS help users who connect over a VPN?"
@@ -38,11 +38,11 @@ Learn lists these client source ports and DSCP values:
 | Screen sharing | 50040 to 50059 | 18 | AF21 |
 | Calling and meeting signaling | 50070 to 50089 | 40 | CS5 |
 
-Each media type needs its own DSCP value and a non-overlapping port range. You can change the port ranges, but you cannot configure the DSCP markings. Signaling ports are not configurable. Mac and mobile clients use hard-coded values, EF for audio and AF41 for video and screen sharing. Browser clients keep using dynamic ports.
+Each media type needs its own DSCP value and a non-overlapping port range. Learn titles the table "Recommended initial port ranges & DSCP values". Its closing note says you can adjust the port ranges but cannot configure the DSCP markings. Another passage says Windows clients allow full customization of the DSCP markings through client policy and calls the table values suggestions, so the two statements conflict. Signaling ports are not configurable. Mac and mobile clients use hard-coded values, EF for audio and AF41 for video and screen sharing. Learn adds that port ranges must not overlap and should be adjacent. Browser clients keep using dynamic ports.
 
 ## Step 2: Enable marking in the Teams admin center
 
-Go to **Meetings** > **Meeting settings** and find the **Network** section. Set **Insert Quality of Service (QoS) markers for real-time media traffic** to **On**. The default is Off. Under **Select a port range for each type of real-time media traffic**, keep **Specify port ranges** and the defaults above, unless you have a reason to change them. If you change them, change the router and client policies to match.
+Go to **Meetings** > **Meeting settings** and find the **Network** section. Set **Insert Quality of Service (QoS) markers for real-time media traffic** to **On**. The default is Off. Under **Select a port range for each type of real-time media traffic**, keep **Specify port ranges** and the defaults above, unless you have a reason to change them. Learn warns that a range that is too narrow leads to dropped calls and poor quality, and not to choose **Automatically use any available ports** unless you are not implementing QoS. If you change the ranges, change the router and client policies to match. Learn also says this setting only makes the endpoints tag packets leaving the client, so matching rules on internal network devices are still needed. The setting label differs slightly between the Learn pages (with or without "Insert").
 
 ## Step 3: Mark traffic on Windows clients
 
@@ -64,11 +64,11 @@ Repeat for video (34, 50020 to 50039), sharing (18, 50040 to 50059) and signalin
 
 ### Group Policy
 
-Under **Computer Configuration** > **Windows Settings**, right-click **Policy-based QoS** and select **Create new policy**. Create one policy per media type. Specify the DSCP value, restrict it to `ms-teams.exe`, leave the source and destination IP as any, choose TCP and UDP, and enter the source port range, for example `50000:50019`. Run `gpupdate /force`. To verify, run `gpresult /R` and check `HKEY_LOCAL_MACHINE\Software\Policies\Microsoft\Windows\QoS` for the application name, DSCP value and local port.
+Under **Computer Configuration** > **Windows Settings**, right-click **Policy-based QoS** and select **Create new policy**. Create one policy per media type. Specify the DSCP value, restrict it to `ms-teams.exe`, leave the source and destination IP as any, choose TCP and UDP, and enter the source port range, for example `50000:50019`. Run `gpupdate /force`. To verify, run `gpresult /R > gp.txt` and look under **Applied Group Policy Objects** for your policies. Then open the registry key `HKEY_LOCAL_MACHINE\Software\Policies\Microsoft\Windows\QoS` and check the application name, DSCP value and local port entries.
 
 ## Step 4: Add router marking at the branch
 
-Learn describes two methods and recommends both. Client-side marking covers managed devices. Port-based tagging at the router covers devices that cannot mark their own traffic, and Learn calls it the most reliable method across platforms. Router policies should match the client source ports with the source and destination IP set to any, so they catch both directions. Learn also advises keeping the path short, avoiding closed ports and avoiding proxies. Router syntax depends on the vendor, and the page gives no examples.
+Learn describes two methods and recommends both. Client-side marking covers managed devices. Port-based tagging at the router covers devices that cannot mark their own traffic. Learn calls it the most reliable method because it works in mixed Windows, Mac and Linux environments, but notes that it marks traffic only at the WAN edge, not all the way to the client, and creates management overhead. Router policies should match the client source ports with the source and destination IP set to any, so they catch both directions. Learn also advises keeping the path short, avoiding closed ports and avoiding proxies. Router syntax depends on the vendor, and the page gives no examples.
 
 ## Step 5: Handle VPN users
 
@@ -88,7 +88,7 @@ For the split tunnel, route the **Optimize** category endpoints directly. Teams 
 4. Run `tracert worldaz.tr.teams.microsoft.com` from a VPN client. The path should use the local ISP.
 5. Monitor call analytics and the Call Quality Dashboard.
 
-## Typical mistakes
+## Typical mistakes (my summary)
 
 - Leaving the admin center QoS setting Off.
 - Using `Teams.exe` instead of `ms-teams.exe` in a policy.
@@ -109,9 +109,10 @@ The pages read do not list Group Policy names beyond the steps above, do not giv
 
 ## Sources
 
-- [Implement Quality of Service in Microsoft Teams](https://learn.microsoft.com/microsoftteams/qos-in-teams)
-- [Implement QoS in Teams clients](https://learn.microsoft.com/microsoftteams/qos-in-teams-clients)
-- [Manage meeting settings in Teams](https://learn.microsoft.com/microsoftteams/meeting-settings-in-teams)
-- [Prepare your organization's network for Microsoft Teams](https://learn.microsoft.com/MicrosoftTeams/prepare-network)
-- [Implementing VPN split tunneling for Microsoft 365](https://learn.microsoft.com/en-us/microsoft-365/enterprise/microsoft-365-vpn-implement-split-tunnel)
-- [Securing Teams media traffic for VPN split tunneling](https://learn.microsoft.com/en-us/microsoft-365/enterprise/microsoft-365-vpn-securing-teams)
+- [Implement Quality of Service in Microsoft Teams](https://learn.microsoft.com/en-us/microsoftteams/qos-in-teams)
+- [Implement Quality of Service (QoS) in Microsoft Teams desktop clients on Windows](https://learn.microsoft.com/en-us/microsoftteams/qos-in-teams-clients)
+- [Configure QoS settings in the Teams admin center](https://learn.microsoft.com/en-us/microsoftteams/meetings-real-time-media-traffic)
+- [Teams settings and policies reference](https://learn.microsoft.com/en-us/microsoftteams/settings-policies-reference)
+- [Prepare your organization's network for Teams](https://learn.microsoft.com/en-us/microsoftteams/prepare-network)
+- [Implementing VPN split tunneling for Microsoft 365](https://learn.microsoft.com/en-us/microsoft-365/enterprise/microsoft-365-vpn-implement-split-tunnel?view=o365-worldwide)
+- [Securing Teams media traffic for VPN split tunneling](https://learn.microsoft.com/en-us/microsoft-365/enterprise/microsoft-365-vpn-securing-teams?view=o365-worldwide)
