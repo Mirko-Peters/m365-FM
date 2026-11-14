@@ -104,10 +104,10 @@ So when a user says "I don't have Copilot in Outlook", ask which one they mean. 
 
 ## Related topics to explore
 
-- Turn off Copilot in Outlook: Outlook has its own **Turn on Copilot** toggle, which Microsoft describes in its [turn-off article](https://support.microsoft.com/en-us/privacy/turn-off-copilot-in-microsoft-365-apps).
-- Use Copilot in Outlook day to day: summarize threads, draft replies and prepare for meetings, as listed in the [Outlook Copilot FAQ](https://support.microsoft.com/en-us/outlook/frequently-asked-questions-about-copilot-in-outlook).
-- Licensing in depth: the [license options](https://learn.microsoft.com/en-us/copilot/plan/copilot-license-options) page shows which base plans qualify.
-- Requirements for rollouts: the [requirements page](https://learn.microsoft.com/en-us/copilot/microsoft-365/microsoft-365-copilot-requirements) covers apps, mailboxes and the Office Feature Updates task.
+- Turn off Copilot in Outlook: Outlook has its own **Turn on Copilot** toggle, which Microsoft describes in its [turn-off article](https://support.microsoft.com/privacy/turn-off-copilot-in-microsoft-365-apps).
+- Use Copilot in Outlook day to day: summarize threads, draft replies and prepare for meetings, as listed in the [Outlook Copilot FAQ](https://support.microsoft.com/outlook/frequently-asked-questions-about-copilot-in-outlook).
+- Licensing in depth: the [license options](https://learn.microsoft.com/copilot/plan/copilot-license-options) page shows which base plans qualify.
+- Requirements for rollouts: the [requirements page](https://learn.microsoft.com/copilot/microsoft-365/microsoft-365-copilot-requirements) covers apps, mailboxes and the Office Feature Updates task.
 - Copilot Chat pinning: decide whether the entry point should appear for unlicensed users.
 
 ## Next step
