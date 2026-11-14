@@ -1,6 +1,6 @@
 ---
 title: "Fix AADSTS50020: User Account From an External Identity Provider Does Not Exist in the Tenant"
-summary: "AADSTS50020 means a guest or external account is not in the tenant it tries to reach. Eight causes from Microsoft Learn with a check and fix for each: personal accounts, single-tenant app registration, wrong endpoint, wrong tenant session, missing invite, user assignment, ROPC and re-created users."
+summary: "AADSTS50020 means a guest or external account is not in the tenant it tries to reach. Eight causes from Microsoft Learn with the fix for each: personal accounts, single-tenant app registration, wrong endpoint, wrong tenant session, missing invite, user assignment, ROPC and re-created users."
 status: review
 publish: false
 author: mirko-p
@@ -39,7 +39,7 @@ Learn adds that the home tenant's sign-in logs may show a failure with a 90072 c
 
 ## Step 1: Triage with the error text
 
-Look at the **User account** and **Identity provider** values in the message and ask whether they are the expected combination. Learn's questions: did the user sign in with their organization account to your tenant instead of their home tenant, or did they sign in to the `live.com` provider with a different personal account than the one that was invited? That points to cause 4. If the values are right, work through the other causes.
+Look at the **User account** and **Identity provider** values in the message and ask whether they are the expected combination. Learn's questions: did the user sign in with their organization account to your tenant instead of their home tenant, or did they sign in to the `live.com` provider with a different personal account than the one that was invited? That points to cause 4. If the values are as expected, cause 4 is unlikely (my reading), and the other causes come next.
 
 ## The eight causes
 
@@ -128,4 +128,4 @@ This is my suggestion, not an order from the page:
 ## Sources
 
 - [Error AADSTS50020 - User account from identity provider does not exist in tenant (Microsoft Learn)](https://learn.microsoft.com/troubleshoot/entra/entra-id/app-integration/error-code-aadsts50020-user-account-identity-provider-does-not-exist)
-- [Microsoft Entra authentication and authorization error codes (Microsoft Learn)](https://learn.microsoft.com/entra/identity-platform/reference-error-codes)
+- [Microsoft Entra authentication & authorization error codes (Microsoft Learn)](https://learn.microsoft.com/entra/identity-platform/reference-error-codes)
