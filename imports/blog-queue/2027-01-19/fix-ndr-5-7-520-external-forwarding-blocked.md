@@ -25,7 +25,7 @@ faq:
     a: "Not if the outbound spam filter policy is set to Off. Learn's table says the block typically wins, so forwarded messages to the affected domains are blocked."
 ---
 
-NDR 5.7.520 means a message was detected as automatically forwarded to an external recipient and the outbound spam filter policy in Microsoft 365 blocks that. Microsoft Learn shows the NDR text as: 5.7.520 Access denied, Your organization does not allow external forwarding. Please contact your administrator for further assistance. The fix is a decision, not a repair: either allow automatic external forwarding in the policy or keep it blocked and stop the forwarding rule. This article follows Learn's page on controlling external email forwarding.
+NDR 5.7.520 means a message was detected as automatically forwarded to an external recipient and the outbound spam filter policy in Microsoft 365 blocks that. Microsoft Learn shows the NDR text as: 5.7.520 Access denied, Your organization does not allow external forwarding. Please contact your administrator for further assistance. AS(7555). In my framing, the fix is a decision rather than a repair: either allow automatic external forwarding in the policy or keep it blocked and stop the forwarding rule. This article follows Learn's page on controlling external email forwarding.
 
 ## What triggers the error
 
@@ -48,7 +48,7 @@ The outbound spam filter policy has three values for automatic forwarding:
 
 Learn adds two notes. Disabling automatic forwarding disables any inbox rules or mailbox forwarding that redirect messages to external addresses. And automatic forwarding between internal users is not affected by these settings.
 
-For the steps to change the setting, Learn points to its page on configuring outbound spam filtering, which I did not read for this article. Learn's screenshot shows the Protection settings flyout in the properties of the default outbound spam filter policy.
+For the steps to change the setting, Learn points to its page on configuring outbound spam filtering, which this article does not cover. Learn's screenshot shows the Protection settings flyout in the properties of the default outbound spam filter policy.
 
 ## Other controls that can block forwarding
 
@@ -96,7 +96,7 @@ This section is my advice, not a Microsoft statement.
 
 ## What the page does not cover
 
-I read the whole page. It does not list how long a policy change takes to apply, and it does not describe PowerShell commands for the policy in the text I read. The configuration steps are on a separate page that I did not read.
+The page does not say how long a policy change takes to apply, and it gives no PowerShell commands for the policy. The configuration steps are on a separate Learn page that it links.
 
 ## Related
 
