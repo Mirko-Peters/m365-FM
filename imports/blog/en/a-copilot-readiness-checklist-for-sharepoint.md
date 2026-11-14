@@ -103,3 +103,10 @@ Microsoft documents several admin and Purview capabilities that support these ta
 - **Test every access-changing step on a pilot site or test tenant,** inform owners, and keep a way back.
 - **Plan for the long term.** Schedule access reviews, define responsibilities and keep monitoring after go-live.
 - **Check Microsoft Learn** for current capabilities and licence requirements before you commit to a plan.
+
+## Sources
+
+- [Data, Privacy, and Security for Microsoft Copilot (Microsoft Learn)](https://learn.microsoft.com/microsoft-365/copilot/microsoft-365-copilot-privacy)
+- [Learn about sensitivity labels (Microsoft Learn)](https://learn.microsoft.com/purview/sensitivity-labels)
+- [SharePoint Advanced Management overview (Microsoft Learn)](https://learn.microsoft.com/sharepoint/advanced-management)
+- [Secure & Governed Data Foundation for Microsoft Copilot - Foundational Deployment Guidance (Microsoft Learn)](https://learn.microsoft.com/copilot/plan/secure-govern-copilot-foundational-deployment-guidance)
