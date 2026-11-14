@@ -34,7 +34,7 @@ Microsoft Exchange Online can move mailboxes from one Microsoft 365 tenant to an
 - After a successful move the source mailbox is deleted. It is not available or discoverable in the source tenant afterwards.
 - Hybrid, cloud-only and mixed tenants are supported.
 
-It does not cover SharePoint, OneDrive documents, Teams chats or Microsoft 365 Groups. Microsoft 365 Groups are not supported. Mailboxes on any type of hold are not migrated, and the move is blocked.
+This mailbox process does not move SharePoint sites, Teams chat folder content or Microsoft 365 Groups. Learn says the same license also covers OneDrive migration, but OneDrive has its own cross-tenant process that this article does not describe. Mailboxes on any type of hold are not migrated, and the move is blocked.
 
 ## Step 1: Buy and plan the licenses
 
@@ -106,7 +106,7 @@ Learn lists causes and fixes in a table. For example, `MailboxNotInCrossTenantMi
 
 ## Known limits
 
-Mailbox signatures, client-side outbox items and Teams chat folder content are not migrated. Teams meeting URLs are not updated. Sensitivity labels are not exported. Auto-expanding archives that grow during the move make it fail. Cross-cloud moves are not supported. Source eDiscovery against the migrated mailbox no longer works.
+Mailbox signatures, client-side outbox items and Teams chat folder content are not migrated. Teams meeting URLs are not updated. Sensitivity labels are not exported. Users with auto-expanding archives can move (Learn supports up to 12 auxiliary archive mailboxes), but if the source mailbox expands during the migration, a new auxiliary archive appears only in the source and the move fails. In that case remove the user from the batch and resubmit. Cross-cloud moves are not supported. Source eDiscovery against the migrated mailbox no longer works.
 
 ## Related
 
@@ -117,4 +117,4 @@ Mailbox signatures, client-side outbox items and Teams chat folder content are n
 
 ## Sources
 
-- [Cross-tenant mailbox migration (Microsoft Learn)](https://learn.microsoft.com/microsoft-365/enterprise/cross-tenant-mailbox-migration)
+- [Cross-tenant mailbox migration (Microsoft Learn)](https://learn.microsoft.com/en-us/microsoft-365/migration/cross-tenant-mailbox-migration)
