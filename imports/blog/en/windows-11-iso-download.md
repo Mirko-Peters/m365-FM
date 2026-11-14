@@ -32,7 +32,7 @@ The second is the **Media Creation Tool**. Use it for a clean install or a reins
 
 The third is the **disk image (ISO)**. This is what you want when you need the file itself: for a virtual machine, for your own deployment share, for burning to a disc, or to build installation media with another tool. Which edition ends up activated depends on your license, so check that before you build media for a whole team.
 
-If you manage a fleet, stop and ask whether you need an ISO at all. For upgrading Windows 10 devices, [Microsoft Intune](https://www.m365.fm/entity/intune/) can deploy a feature update policy and you select the Windows 11 version in the admin center. Microsoft's page on [upgrading devices to Windows 11 with Intune](https://learn.microsoft.com/en-us/intune/device-updates/windows/upgrade-to-windows-11) shows how to select a Windows 11 version from the **Feature update to deploy** list. The prerequisites sit on the linked page about managing feature updates, and the devices must meet the Windows 11 requirements. That's a cleaner route than walking around with media.
+If you manage a fleet, stop and ask whether you need an ISO at all. For upgrading Windows 10 devices, [Microsoft Intune](https://www.m365.fm/entity/intune/) can deploy a feature update policy and you select the Windows 11 version in the admin center. Microsoft's page on [upgrading devices to Windows 11 with Intune](https://learn.microsoft.com/intune/device-updates/windows/upgrade-to-windows-11) shows how to select a Windows 11 version from the **Feature update to deploy** list. The prerequisites sit on the linked page about managing feature updates, and the devices must meet the Windows 11 requirements. That's a cleaner route than walking around with media.
 
 ## Download the ISO step by step
 
@@ -45,7 +45,7 @@ The ISO download happens on the download page. In practice it's four clicks, but
 
 Two details are easy to miss. First, the download link is time-limited. If it expires halfway through, go through the steps again. Second, the option in step 1 is for x64 devices. If you have an Arm-based PC, check Microsoft's current download options for Arm instead of assuming this image fits.
 
-Plan for the requirements, too. Microsoft says it isn't recommended to install Windows 11 on a device that doesn't meet them, and that if you already did, you should roll back to Windows 10. The minimum list, from the [Windows 11 requirements](https://learn.microsoft.com/en-us/windows/whats-new/windows-11-requirements) on Microsoft Learn, includes a 1 GHz processor with two or more cores, 4 GB of RAM, 64 GB of storage, UEFI firmware with Secure Boot capability and TPM 2.0.
+Plan for the requirements, too. Microsoft says it isn't recommended to install Windows 11 on a device that doesn't meet them, and that if you already did, you should roll back to Windows 10. The minimum list, from the [Windows 11 requirements](https://learn.microsoft.com/windows/whats-new/windows-11-requirements) on Microsoft Learn, includes a 1 GHz processor with two or more cores, 4 GB of RAM, 64 GB of storage, UEFI firmware with Secure Boot capability and TPM 2.0.
 
 ## Verify the file with a SHA-256 hash
 
@@ -66,7 +66,7 @@ To burn it to a DVD, right-click the ISO and select **Burn disc image**. Check t
 
 To use it in a virtual machine, attach the ISO as the virtual DVD drive and boot from it.
 
-To make bootable USB media, copy the contents of the ISO onto a FAT32 drive. Microsoft Learn describes this in [Install Windows from a flash drive](https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/install-windows-from-a-usb-flash-drive), including how to split `install.wim` with DISM when it is larger than 4 GB.
+To make bootable USB media, copy the contents of the ISO onto a FAT32 drive. Microsoft Learn describes this in [Install Windows from a flash drive](https://learn.microsoft.com/windows-hardware/manufacture/desktop/install-windows-from-a-usb-flash-drive), including how to split `install.wim` with DISM when it is larger than 4 GB.
 
 You can also right-click the ISO, select **Mount** and double-click `setup.exe`. Be careful here. Running setup from the media can upgrade the Windows installation you are on, as Microsoft's page on ways to install Windows 11 notes for installation media. That's fine on a machine you want to upgrade and a bad surprise on a machine you only meant to look at. Back up first.
 
