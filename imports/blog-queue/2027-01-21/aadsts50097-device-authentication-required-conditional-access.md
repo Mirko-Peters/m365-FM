@@ -31,7 +31,7 @@ AADSTS50097, DeviceAuthenticationRequired, means a Conditional Access policy nee
 
 The error code reference lists AADSTS50097 as *DeviceAuthenticationRequired - Device authentication is required.* That row is one line. The MSAL.NET page for device authentication errors gives the explanation: the error happens when a Conditional Access policy applies to the resource you are accessing, and the policy requires that the device the token is acquired from is managed by the organization, and that MSAL.NET proves this identity. It is a policy applied by the tenant admin.
 
-So the cause is not a broken password or a damaged account. The policy asks for a device identity, and the client did not present one.
+In my reading, the cause is therefore not a broken password or a damaged account. The policy asks for a device identity, and the client did not present one.
 
 ## Question 2: Which policy is it?
 
@@ -56,7 +56,7 @@ This decides the fix. The MSAL.NET page says that to satisfy the requirement, yo
 | iOS and Android app | Enable the authentication broker. Learn names Microsoft Authenticator and Company Portal |
 | Web application in a browser | Use a browser that can talk to WAM: Edge on Chromium, or Chrome with the Microsoft Entra extensions |
 
-For a web application, the page links to the Conditional Access conditions article for the Chrome details. I did not read that article for this post, so I leave the extension specifics to it.
+For a web application, the page links to the Conditional Access conditions article for the Chrome details. This article does not cover the extension specifics, so see that article for them.
 
 ## Question 4: Is it the right error?
 
@@ -70,7 +70,7 @@ Learn lists several device-related codes in the Conditional Access troubleshooti
 | 53003 | BlockedByConditionalAccess |
 | 53009 | Application needs to enforce Intune protection policies |
 
-Those appear with the prefix AADSTS, for example AADSTS53002. They are different from 50097. If the log shows 53000, the string says the device is not compliant, which is a different finding than a client that did not present a device identity. In my experience it pays not to mix the two.
+Those appear with the prefix AADSTS, for example AADSTS53002. They are different from 50097. If the log shows 53000, the string says the device is not compliant, which is a different finding than a client that did not present a device identity. My advice: do not mix the two.
 
 ## Question 5: Is the policy too broad?
 
@@ -90,7 +90,7 @@ This is my suggestion, not a Microsoft procedure:
 
 1. Get the exact code and the correlation ID from the user or the log.
 2. Identify the client: custom app, Microsoft app, or plain browser.
-3. For a browser, check the browser first. A browser that cannot pass device identity is a frequent reason a managed device still fails. This is my experience, not a Learn statement.
+3. For a browser, check the browser first. A browser that cannot pass device identity can be a reason a managed device still fails. This is my reading, not a Learn statement.
 4. For a custom app, check whether it uses WAM or a broker.
 5. Only change the policy after you know the client cannot be fixed.
 
@@ -106,6 +106,6 @@ The error reference row is one line and the MSAL.NET page is short. Neither expl
 
 ## Sources
 
-- [Microsoft Entra authentication and authorization error codes (Microsoft Learn)](https://learn.microsoft.com/entra/identity-platform/reference-error-codes)
+- [Microsoft Entra authentication & authorization error codes (Microsoft Learn)](https://learn.microsoft.com/entra/identity-platform/reference-error-codes)
 - [Device authentication errors (Microsoft Learn)](https://learn.microsoft.com/entra/msal/dotnet/advanced/exceptions/device-authentication-errors)
 - [Troubleshooting sign-in problems with Conditional Access (Microsoft Learn)](https://learn.microsoft.com/entra/identity/conditional-access/troubleshoot-conditional-access)
