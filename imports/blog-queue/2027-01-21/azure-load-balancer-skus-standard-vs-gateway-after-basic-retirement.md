@@ -72,7 +72,7 @@ You chain a Standard Public Load Balancer, or a Standard IP configuration of a v
 
 ## Standard or Gateway
 
-They answer different questions, so you often use both:
+They answer different questions, so you can use both:
 
 | Question | Answer from Learn |
 | --- | --- |
@@ -98,7 +98,7 @@ If you upgrade manually, Learn warns:
 This list is my suggestion, not a Microsoft procedure:
 
 1. Inventory Basic load balancers and their public IP SKUs first.
-2. Decide how outbound traffic will work after the move. That is the most common surprise, since Standard blocks it by default.
+2. Decide how outbound traffic will work after the move. That is an easy point to miss, since Standard blocks it by default.
 3. Prepare NSG rules before cutover.
 4. Add Gateway Load Balancer only if you have an appliance use case.
 
@@ -112,4 +112,4 @@ This list is my suggestion, not a Microsoft procedure:
 
 - [Azure Load Balancer SKUs (Microsoft Learn)](https://learn.microsoft.com/azure/load-balancer/skus)
 - [Gateway load balancer (Microsoft Learn)](https://learn.microsoft.com/azure/load-balancer/gateway-overview)
-- [Upgrading from Basic Load Balancer - Guidance (Microsoft Learn)](https://learn.microsoft.com/azure/load-balancer/load-balancer-basic-upgrade-guidance)
+- [Upgrade from Basic Load Balancer (Microsoft Learn)](https://learn.microsoft.com/azure/load-balancer/load-balancer-basic-upgrade-guidance)
