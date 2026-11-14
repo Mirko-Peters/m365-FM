@@ -11,7 +11,7 @@ keypoints:
   - "Create a policy under Meetings > Meeting policies in the Teams admin center, select Add, enter a name and description and select Save. The name cannot be changed later."
   - "A policy name cannot contain special characters or exceed 64 characters. You cannot delete a policy while users are assigned to it."
   - "Policy settings work per organizer, per user, or both. Who can bypass the lobby follows the organizer. Meeting recording depends on both."
-  - "The page does not cover assignment precedence, propagation time or the full settings list. It links to other articles for them."
+  - "The page does not cover assignment precedence, propagation time or the full settings list. It links only an assignment overview and a unified policies article."
 faq:
   - q: "What policy do users get by default?"
     a: "Users get the global policy unless you create and assign a custom policy. You can edit the global policy or create custom ones."
@@ -25,7 +25,7 @@ faq:
     a: "No. You cannot delete a policy while users are assigned to it. Reassign those users first."
 ---
 
-Teams meeting policies control what users can do in meetings, such as recording, lobby handling and who can present. This guide follows the Microsoft Learn overview of meeting policies. The page explains how policies are structured and how to create and edit them. It leaves assignment details and the settings reference to other articles.
+Teams meeting and events policies control the features available to organizers and participants, such as recording and lobby handling. This guide follows the Microsoft Learn page Manage meeting and events policies in Microsoft Teams. The page explains how policies are implemented and how to create and edit them. It leaves assignment details to a linked article and gives no settings reference.
 
 ## How policies work
 
@@ -62,26 +62,26 @@ You cannot delete a policy while users are assigned to it. Reassign those users 
 
 ## PowerShell
 
-The page only says policies can be managed through Teams PowerShell. It shows no examples.
+The page only says that, depending on the feature, you can manage meeting policies in the Teams admin center or through PowerShell. It shows no examples.
 
 ## What the page does not say
 
 - Policy assignment precedence, such as how a direct assignment interacts with a group assignment.
 - How long a change takes to apply.
-- The full list of settings and categories. A settings reference is linked.
+- The full list of settings and categories. The page links no settings reference.
 - PowerShell examples.
 
 ## A policy outline
 
-This outline is practical advice built on the page.
+This outline is my advice, built on the page.
 
 1. Decide which groups of users need different behavior.
 2. Create one custom policy per group and give it a clear name, because you cannot rename it.
 3. Remember that organizer settings affect all participants, so assign policies to organizers carefully.
 4. Assign the policy and then test with a pilot user.
-5. Read the policy assignment article for precedence and timing before a broad rollout.
+5. Check the linked policy assignment article, which I did not read, for precedence and timing before a broad rollout.
 
-## Typical mistakes
+## Typical mistakes (my advice)
 
 - Choosing a name with special characters or more than 64 characters.
 - Trying to delete a policy that still has users.
@@ -101,11 +101,11 @@ This outline is practical advice built on the page.
 
 ## Examples of how settings behave
 
-The page gives one example for each behavior. Who can bypass the lobby follows the organizer, so a participant gets the organizer's setting. Meet now in channel meetings is a per-user setting, so it applies to the user who has it. Meeting recording needs both the organizer's and the participant's policies to allow it. When you design policies, ask for each setting whose policy counts, because that decides whom you must assign the policy to.
+The page gives one example for each behavior. Who can bypass the lobby follows the organizer, so a participant gets the organizer's setting. Meet now in channel meetings is a per-user setting, so it applies to the user who has it. Meeting recording depends on both policies. The page says turning on the setting allows the meeting organizer and participants to start and stop a recording. My advice: when you design policies, ask for each setting whose policy counts, because that decides whom you must assign the policy to.
 
-## Global policy as the fallback
+## Global policy as the fallback (my reading)
 
-Every user who has no custom policy uses the global policy. Editing the global policy therefore changes the behavior for all of these users at once. Creating a custom policy and assigning it to a group limits the change to that group.
+Learn says users get the global policy unless you create and assign a custom policy. Editing the global policy therefore changes the behavior for all of these users at once. Creating a custom policy and assigning it to a group limits the change to that group.
 
 ## Related
 
@@ -115,4 +115,4 @@ Every user who has no custom policy uses the global policy. Editing the global p
 
 ## Sources
 
-- [Meeting policies in Teams (Microsoft Learn)](https://learn.microsoft.com/microsoftteams/meeting-policies-overview)
+- [Manage meeting and events policies in Microsoft Teams (Microsoft Learn)](https://learn.microsoft.com/microsoftteams/meeting-policies-overview)
