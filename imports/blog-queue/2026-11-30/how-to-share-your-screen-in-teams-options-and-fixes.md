@@ -7,14 +7,14 @@ author: mirko-p
 date: 2026-11-30
 topics: [teams, teams-admin-center, teams-premium]
 keypoints:
-  - "In a meeting, select Share, then choose the screen, a window, Microsoft Whiteboard, content from camera or PowerPoint Live."
+  - "In a meeting, select Share, then present your entire screen or a window, or live share a PowerPoint file, an Excel file or Whiteboard."
   - "A greyed-out or missing Share option usually means the organizer or an admin policy does not allow it. The Screen sharing mode policy has the values Entire screen, Single application and Not enabled."
   - "Participants can give or request control is on by default. External participants can give or request control is off by default."
   - "Black or white shared content has several documented causes: missing screen-recording permission on macOS, DRM-protected content, outdated clients and tenant policies."
   - "Detect sensitive content during screen sharing needs Teams Premium. PowerPoint Live, Whiteboard and Shared notes are controlled by admin policy."
 faq:
   - q: "How do I share my screen in a Teams meeting?"
-    a: "During the meeting, select Share and choose what to share. Microsoft Q&A answers list the entire screen, a specific window, Microsoft Whiteboard, content from camera and PowerPoint Live as options."
+    a: "Microsoft Support says to select Share in the meeting controls and present your entire screen or a window. You can also live share a PowerPoint file, an Excel file or Whiteboard. Microsoft Q&A answers additionally list content from camera."
   - q: "Why is the Share button greyed out?"
     a: "Microsoft Q&A moderators say the organizer may not allow sharing, or an administrator policy may block it. In the Teams admin center, the Screen sharing mode policy can be set to Not enabled."
   - q: "Why do participants see a black screen when I share?"
@@ -25,17 +25,17 @@ faq:
     a: "Only if control sharing is allowed. Microsoft Learn says Participants can give or request control is on by default, and External participants can give or request control is off by default."
 ---
 
-To share your screen in Teams, select **Share** during a meeting and pick a screen, a window, Microsoft Whiteboard, content from camera or PowerPoint Live. If the option is missing or greyed out, the organizer or an admin policy usually blocks it. If participants see a black or white window, the causes range from macOS permissions to protected video content.
+To share your screen in Teams, select **Share** during a meeting and present your entire screen or a window, or live share a PowerPoint file, an Excel file or Whiteboard. If the option is missing or greyed out, the organizer or an admin policy usually blocks it. If participants see a black or white window, the causes range from macOS permissions to protected video content.
 
-**A note on sources.** Microsoft's end-user support article for sharing content could not be opened for this page. The steps below come from Microsoft Q&A answers, some marked AI-generated, and the policy details come from Microsoft Learn admin pages. Confirm menu names in your own Teams client.
+**A note on sources.** The basic steps come from Microsoft's Support article on sharing content in a meeting. Some details come from Microsoft Q&A answers, some marked AI-generated, and the policy details come from Microsoft Learn admin pages. Confirm menu names in your own Teams client.
 
 ## How to share
 
 1. Join the meeting.
 2. Select **Share** in the meeting controls. One Q&A answer describes it as a monitor or upward-arrow icon.
-3. Choose what to share. A Q&A moderator thread lists **Screen**, **Window**, **Microsoft Whiteboard**, **Content from camera** and **PowerPoint Live**.
+3. Present your entire screen or a window. Microsoft Support also describes live sharing of a PowerPoint file, an Excel file or Whiteboard. A Q&A moderator thread lists the labels **Screen**, **Window**, **Microsoft Whiteboard**, **Content from camera** and **PowerPoint Live**, which the Support article does not use.
 4. Select the item to start sharing. The same thread says a red border surrounds shared content, and that Linux does not show the border and lacks window sharing.
-5. To switch, stop sharing by selecting **Close share tray**, then choose the new item. One answer says only one window or screen can be shared at a time.
+5. To stop, select **Stop sharing** on the presenter toolbar, which appears when you move the cursor to the top of your shared screen. One Q&A answer says only one window or screen can be shared at a time, and the Support article does not state this.
 
 Permissions usually only need to be granted once, according to a community answer.
 
@@ -43,7 +43,7 @@ Permissions usually only need to be granted once, according to a community answe
 
 - **Screen:** shares a whole display. This corresponds to the Entire screen mode in the admin policy.
 - **Window:** shares one application window. This corresponds to the Single application mode. Microsoft Learn notes that in Teams on the web, Single application acts as Not enabled.
-- **PowerPoint Live:** lets attendees navigate forward and back through a shared presentation, according to Learn.
+- **PowerPoint Live:** live sharing of a PowerPoint file. An admin policy controls whether a user can share PowerPoint presentations.
 - **Microsoft Whiteboard:** controlled by admin policy.
 
 ## Admin policies that affect sharing
@@ -79,7 +79,7 @@ In events optimized for large audiences, only presenters, organizers and co-orga
 
 A Microsoft moderator answer says this is usually not a viewing permission on the viewer's side. Likely causes, in the order listed:
 
-1. The presenter's device has not granted screen-recording permission, especially on macOS. The answer points to **System Settings** > **Privacy & Security** > **Screen Recording** for Teams or the browser.
+1. The presenter's device has not granted screen-recording permission, especially on macOS. Microsoft Support describes the macOS path as **System Settings** > **Privacy & Security** > **Screen & System Audio Recording**, where you turn on the Microsoft Teams toggle. Teams on the web needs the permission for your browser.
 2. The organizer's or an external tenant's meeting settings restrict sharing.
 3. DRM-protected content is being shared. Streaming services can appear black.
 4. The browser or app version behaves inconsistently. Try the latest Microsoft Edge or Chrome, or the Teams desktop app.
@@ -116,6 +116,7 @@ A moderator answer in another thread attributes it to a known Microsoft issue th
 
 ## Sources
 
+- [Microsoft Support: Share content in a meeting in Teams](https://support.microsoft.com/en-us/office/share-content-in-a-meeting-in-teams-fcc2bf59-aecd-4481-8f99-ce55dd836ce8)
 - [Microsoft Learn: Configure desktop sharing in Teams](https://learn.microsoft.com/en-us/microsoftteams/configure-desktop-sharing)
 - [Microsoft Learn: Teams settings and policies reference](https://learn.microsoft.com/en-us/microsoftteams/settings-policies-reference)
 - [Microsoft Learn: Manage the meeting presentation experience for sensitive Teams meetings](https://learn.microsoft.com/en-us/microsoftteams/manage-meeting-presentation-experience)
