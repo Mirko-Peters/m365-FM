@@ -18,7 +18,7 @@ faq:
   - q: "Does Microsoft document a zero-downtime domain cutover?"
     a: "The pages I read do not. The cutover guide changes the MX record to an unreachable domain during migration, and sending servers queue and retry for about 24 hours, with some senders returning an NDR. An MX backup service can queue mail longer."
   - q: "What do I do before removing the domain from the source tenant?"
-    a: "Learn lists these steps in order: move any SharePoint public website to the initial domain, remove Lync licenses, reset default addresses for mailboxes, groups, rooms and resources to the onmicrosoft.com address, remove secondary proxy addresses on the old domain, set the default domain to the onmicrosoft.com routing domain, and find blocking objects with Get-MsolUser -DomainName."
+    a: "Learn lists these steps in order: move any SharePoint public website to the initial domain, remove Lync licenses, reset default addresses for mailboxes, distribution lists, rooms and resources to the onmicrosoft.com address, remove secondary proxy addresses on the old domain, set the default domain to the onmicrosoft.com routing domain, and find blocking objects with Get-MsolUser -DomainName."
   - q: "Why must target MailUser objects not carry the source domain?"
     a: "The cross-tenant migration page says every SMTP proxy on the target must belong to the target tenant. A non-owned proxy prevents converting the MailUser into a mailbox, and applying an Exchange license removes proxies the tenant has not verified."
   - q: "How long can DNS verification take?"
@@ -42,7 +42,7 @@ Two ways to deal with the domain:
 
 - **Verify the domain in the target early.** Add the TXT record three days before migration. Verification fails while the source still uses the domain, but it lets DNS propagate, which can take up to 72 hours.
 - **Lower the MX TTL.** Set it to a short value such as 5 minutes. If the minimum is higher, change the MX record that many hours ahead. Check with nslookup or MxToolbox.
-- **Disable directory sync in the source tenant** at least 24 hours before, since it can take 24 hours or more.
+- **Disable directory sync in the source tenant** ahead of the migration, since Learn says it can take 24 hours or more.
 - **Increase target licenses** and create admin accounts in both tenants.
 - **Recreate non-synced objects** such as rooms, resources and groups in the target.
 - **Build the mapping file.** Use the `onmicrosoft.com` initial domain for source accounts, because the custom domain will keep changing.
@@ -58,7 +58,7 @@ Learn's order for removing the domain:
 3. Reset default email addresses on mailboxes, distribution lists, rooms and resources to the `onmicrosoft.com` address.
 4. Remove secondary proxy addresses still using the old domain.
 5. Set the default domain to the `onmicrosoft.com` routing domain.
-6. Find remaining blockers with `Get-MsolUser -DomainName`. The page's scripts use MSOnline cmdlets, which Microsoft has retired, so look for Microsoft Graph PowerShell equivalents.
+6. Find remaining blockers with `Get-MsolUser -DomainName`. The page's scripts use MSOnline cmdlets such as `Get-MsolUser`. The page does not mention a Microsoft Graph PowerShell replacement, so check the current module guidance before you rely on these cmdlets.
 
 ## Cutover sequence
 
@@ -84,7 +84,7 @@ On the day:
 
 ## Shorten the gap
 
-Choices that reduce risk, all from the pages above: short TTL, early TXT record, a tested script for removing proxies, a backup MX service, and a rehearsal with a test domain or a pilot user. The documented cutover still has a window, so schedule it outside business hours.
+Choices from the pages above that reduce risk: short TTL, early TXT record, the sample script for removing secondary proxy addresses, and a backup MX service. A rehearsal with a test domain or a pilot user is this article's suggestion; the pages do not describe one. The documented cutover still has a window, so schedule it outside business hours.
 
 ## Extra prerequisites for the native cross-tenant feature
 
@@ -106,5 +106,5 @@ After migration, the source mailbox becomes a MailUser with a targetAddress for 
 
 ## Sources
 
-- [How to migrate mailboxes from one Microsoft 365 organization to another](https://learn.microsoft.com/en-us/Exchange/mailbox-migration/migrate-mailboxes-across-tenants)
-- [Cross-tenant mailbox migration](https://learn.microsoft.com/en-us/microsoft-365/enterprise/cross-tenant-mailbox-migration)
+- [How to migrate mailboxes from one Microsoft 365 organization to another](https://learn.microsoft.com/en-us/exchange/mailbox-migration/migrate-mailboxes-across-tenants)
+- [Cross-tenant mailbox migration](https://learn.microsoft.com/en-us/microsoft-365/migration/cross-tenant-mailbox-migration)
