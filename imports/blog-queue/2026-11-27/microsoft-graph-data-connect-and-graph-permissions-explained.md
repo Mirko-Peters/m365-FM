@@ -17,7 +17,7 @@ faq:
   - q: "What is the difference between Graph Data Connect and the Microsoft Graph API?"
     a: "The Data Connect FAQ on Microsoft Learn says both give access to the same underlying data in different ways. Data Connect is designed to extract large amounts of data in bulk for the whole organization, while the Graph APIs suit small amounts of data from selected users and groups."
   - q: "Who approves a Graph Data Connect application?"
-    a: "In Microsoft's quickstart, a Global Administrator approves the request in the Microsoft 365 admin center under Settings > Org settings > Security & privacy > Microsoft Graph Data Connect applications. The quickstart states that you cannot self-approve your own apps."
+    a: "In Microsoft's quickstart, an administrator approves the request in the Microsoft 365 admin center under Settings > Org settings > Security & privacy > Microsoft Graph Data Connect applications. The quickstart states that you cannot self-approve your own apps."
   - q: "Does every pipeline run need a new consent request?"
     a: "No. According to the Data Connect FAQ, as long as the scope stays the same for datasets, columns, users and sink, a run does not need a new consent request. Running the same scope for different dates is covered."
   - q: "Should an app use delegated or application permissions?"
@@ -51,7 +51,7 @@ The quickstart walks through these steps. Menu names are as Microsoft lists them
 2. **Create the Entra application.** In the Microsoft Entra admin center, go to **App registrations** > **New registration**. Choose "Accounts in this organizational directory only." Copy the application (client) ID and tenant ID, create a client secret and save its value immediately. The application owner needs a mailbox and, per the quickstart, a working E5 subscription.
 3. **Create Azure Storage.** Create a storage account in a region that matches your Microsoft 365 region. Grant the application the **Storage Blob Data Contributor** role under **Access control (IAM)**, and create a private container.
 4. **Register the application with Data Connect** in the Azure portal. Choose the destination, the application and the datasets and columns.
-5. **Approve the request.** A Global Administrator opens **Settings** > **Org settings** > **Security & privacy** > **Microsoft Graph Data Connect applications**. The application shows **Pre-consent**. Review the datasets and select **Approve**. The quickstart warns that you cannot self-approve.
+5. **Approve the request.** An administrator opens **Settings** > **Org settings** > **Security & privacy** > **Microsoft Graph Data Connect applications**. The application shows **Pre-consent**. Review the datasets and select **Approve**. The quickstart warns that you cannot self-approve.
 6. **Run the pipeline** in Synapse, Data Factory or Fabric. The status moves through Initializing, Consent Pending, Extracting Data, Persisting Data and Succeeded. The first run can take over 40 minutes.
 
 Supported sinks include Azure Data Lake Storage Gen2, Azure Storage Blob, Azure SQL DB (mapping data flows only) and Microsoft Fabric OneLake. Service principal authentication is the only supported mechanism.
@@ -75,7 +75,7 @@ Consent for application permissions needs the Privileged Role Administrator or G
 
 ## Naming and least privilege
 
-Permissions follow `{resource}.{operation}.{constraint}`. Operations include Read, ReadWrite, Create and Manage. Constraints include All, OwnedBy and Selected. If no constraint is given, access is limited to data owned by the signed-in user. For example, Application.ReadWrite.OwnedBy manages only applications the app creates or owns, while Application.ReadWrite.All manages all of them.
+Permissions follow `{resource}.{operation}.{constraint}`. The page's examples use operations such as Read and ReadWrite and constraints such as All and OwnedBy. If no constraint is given, access is limited to data owned by the signed-in user. For example, Application.ReadWrite.OwnedBy manages only applications the app creates or owns, while Application.ReadWrite.All manages all of them.
 
 Microsoft's guidance: grant the minimum permission needed. Use Directory.AccessAsUser.All, Directory.ReadWrite.All and Directory.Read.All with caution and prefer lesser permissions. Resource-specific consent lets a user grant access to one resource instance, such as a team, instead of the whole tenant. It is supported by only a subset of features.
 
