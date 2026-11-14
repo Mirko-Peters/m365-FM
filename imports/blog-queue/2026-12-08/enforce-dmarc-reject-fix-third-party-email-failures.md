@@ -18,7 +18,7 @@ faq:
   - q: "Why does mail from my marketing platform fail DMARC?"
     a: "Microsoft Learn explains that the service often uses its own domain in MAIL FROM and does not sign with your domain. Then neither SPF nor DKIM aligns with your From address. The fix is to configure DKIM signing with your domain at the service, or to change the MAIL FROM to your domain or subdomain."
   - q: "Does Microsoft 365 reject mail from other domains that publish p=reject?"
-    a: "With the Honor DMARC record policy setting on, which Learn marks as recommended, inbound mail that fails DMARC with p=reject is rejected during SMTP with a 550 5.7.1 error. Mail with p=quarantine goes to the Junk Email folder, configurable to quarantine."
+    a: "With the Honor DMARC record policy setting on, inbound mail that fails DMARC with p=reject is rejected during SMTP with a 550 5.7.1 error. Mail with p=quarantine goes to the Junk Email folder, configurable to quarantine."
   - q: "Should I use SPF ~all or -all?"
     a: "The SPF page on Microsoft Learn recommends -all (hard fail) because DKIM and DMARC are also recommended. It explains that with ~all the DMARC policy is effectively ignored for SPF failures when the message has no DKIM signature."
   - q: "Can I manage DMARC records in the Microsoft 365 admin center?"
@@ -65,9 +65,9 @@ A message passes DMARC if one or both of the SPF and DKIM checks pass **and alig
 |---|---|---|
 | Third-party service sends as you | MAIL FROM uses the service's domain and there is no DKIM signature with your domain | Configure DKIM with your domain at the service, or change MAIL FROM to your domain or subdomain |
 | DKIM passes, DMARC fails | The `d=` domain does not match the From domain | Sign with the exact From domain |
-| Subdomain with strict alignment | `aspf=s` fails for subdomain senders | Use `aspf=r` or match the From address |
+| Subdomain with strict alignment | Strict SPF (`aspf=s`) needs an exact domain match, for example `user@marketing.contoso.com` with MAIL FROM `contoso.com` fails | Relaxed alignment (`aspf=r`, the default) allows organizational-domain matches, or match the From address exactly |
 | Forwarding | The envelope sender changes and DKIM may break | Trusted ARC sealer at the destination |
-| Mailing lists | Body changes break DKIM | ARC, or accept some failures |
+| Mailing lists | Body modification breaks DKIM | Trusted ARC sealer, as the DMARC page suggests for forwarded mail |
 
 ## Handle third-party senders
 
@@ -94,7 +94,7 @@ Get-AntiPhishPolicy | Format-List Name, HonorDmarcPolicy, DmarcQuarantineAction,
 
 If a service in front of your mailbox changes messages, add it as a **trusted ARC sealer** under the **ARC** tab on the same Email authentication settings page. Use the vendor's signing domain from the `d=` value in the ARC-Seal header, not your own. Learn says allow up to 30 minutes for the change, and that ARC overrides DMARC only, not spam filtering. Other options, a mail flow rule or a Tenant Allow/Block List entry, are less preferred, and the allow entry expires in 30 days.
 
-## Common mistakes
+## Common mistakes (own reading of the pages above)
 
 - Jumping to `p=reject` without reading aggregate reports.
 - Forgetting parked domains. Learn suggests `v=DMARC1; p=reject;` for domains that send no mail.
