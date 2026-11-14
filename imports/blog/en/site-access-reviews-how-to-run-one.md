@@ -25,6 +25,8 @@ A site access review is a feature of SharePoint Advanced Management. It lets adm
 
 The owners then confirm who should keep access. The idea is simple: instead of IT guessing, the people closest to the content make the call.
 
+Microsoft Learn names the reports a review can start from: sharing link reports, "Content shared with 'Everyone except external users'" reports, and the oversharing baseline report using permissions. The feature supports SharePoint sites only, not OneDrive. From the web view of the reports you can start reviews for up to 100 sites at once, PowerShell is the route for larger numbers, and up to 1,000 reviews per calendar month can be started from the "Site permissions across your organization" report.
+
 An example, clearly hypothetical: imagine a project site created two years ago that still has a large group with access, including people who left the project long ago. A data access governance report flags it. An admin starts a site access review, and the owner of the site gets the task of confirming who should stay.
 
 ## Prepare before you start
@@ -45,8 +47,8 @@ The exact screens depend on your tenant and on current Microsoft documentation, 
 
 1. An administrator works with the data access governance reports to identify overshared sites.
 2. The administrator delegates the review of selected sites to the site owners.
-3. The owners go through the access list and confirm who should keep access.
-4. The administrator checks the outcome and follows up where needed.
+3. The owners receive an email with a link to a review page for the specific issue, use Manage access to remove users, groups, links or permissions where needed, and then select Complete review and add a comment.
+4. The administrator tracks the status under My review requests. A review stays pending until the owner completes it, and Microsoft Learn notes that it is marked as failed if, for example, the owner's email address is invalid. Follow up where needed.
 
 Two cautions apply here, because reviews can lead to access being changed or removed.
 
@@ -87,3 +89,12 @@ They can complement each other. A SharePoint site whose access comes through a M
 - Start small, then widen the scope once owners understand the task.
 - Plan for non-responses and follow up on the cause of oversharing, not just the symptoms.
 - Keep site access reviews and Entra access reviews clearly apart in your communication.
+
+## Sources
+
+- [Initiate site access reviews for Data access governance reports (Microsoft Learn)](https://learn.microsoft.com/sharepoint/site-access-review)
+- [Request recurring site attestations for SharePoint sites (Microsoft Learn)](https://learn.microsoft.com/sharepoint/request-site-attestations)
+- [SharePoint Advanced Management overview (Microsoft Learn)](https://learn.microsoft.com/sharepoint/advanced-management)
+- [Default SharePoint groups (Microsoft Learn)](https://learn.microsoft.com/sharepoint/default-sharepoint-groups)
+- [Planning intranet governance (Microsoft Learn)](https://learn.microsoft.com/sharepoint/intranet-governance)
+- [What are access reviews? (Microsoft Learn)](https://learn.microsoft.com/entra/id-governance/access-reviews-overview)
