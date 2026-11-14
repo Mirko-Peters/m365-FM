@@ -81,7 +81,7 @@ Microsoft's tips on this page:
 1. Minimize unique scopes by relying on inheritance.
 2. Share folders instead of individual files.
 3. Make sure folders that need unique permissions are shared before they exceed 100,000 items.
-4. Review access requests and run regular audits.
+4. Regularly review and minimize unique scopes, monitor performance and audit permissions.
 
 ## Step 5: Treat sharing links as permissions
 
