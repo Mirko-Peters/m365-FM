@@ -65,7 +65,7 @@ Rules: creating a policy alone doesn't complete setup, you connect or disconnect
 
 ## Budgets and monitoring
 
-Budgets trigger email notifications at the percentage milestones you choose. They are not enforced, so usage continues after the budget is exceeded. For monitoring, the page lists the Cost Management page in the Microsoft 365 admin center, Azure Cost Management in the Azure portal, and the Message center for announcements.
+Budgets trigger email notifications at the percentage milestones you choose. They are not enforced, so usage continues after the budget is exceeded. For monitoring, the overview names the **Cost Management** page in the Microsoft 365 admin center for each pay-as-you-go service and the cost breakdown in the Azure portal. Microsoft announces new pay-as-you-go features in a message center post.
 
 ## Check that it works
 
@@ -85,7 +85,7 @@ Pay-as-you-go can exist in both the Power Platform admin center and the Microsof
 
 The overview does not name the Azure meter for Copilot Chat and gives no prices. It links to a separate meters article, which I did not read. If you plan a budget, read that article first.
 
-## Checklist
+## Checklist (my advice)
 
 1. Check your roles and Azure subscription rights.
 2. Create a billing policy with the right users or groups.
@@ -100,5 +100,5 @@ The overview does not name the Azure meter for Copilot Chat and gives no prices.
 
 ## Sources
 
-- [Microsoft Copilot pay-as-you-go overview](https://learn.microsoft.com/copilot/microsoft-365/pay-as-you-go/overview)
-- [Set up Microsoft Copilot pay-as-you-go](https://learn.microsoft.com/microsoft-365/copilot/pay-as-you-go/setup)
+- [Microsoft Copilot Pay-as-You-Go Service Overview (Microsoft Learn)](https://learn.microsoft.com/microsoft-365/copilot/pay-as-you-go/pay-as-you-go-overview)
+- [Set Up Microsoft Copilot Pay-as-You-Go Services (Microsoft Learn)](https://learn.microsoft.com/microsoft-365/copilot/pay-as-you-go/setup)
