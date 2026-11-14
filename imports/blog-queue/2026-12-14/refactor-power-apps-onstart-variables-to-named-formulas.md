@@ -50,7 +50,7 @@ Learn says that more often than not OnStart variables set up static values, and 
 
 ## Step 2: Convert each statement
 
-Each `Set` or `Collect` becomes `name = formula;` in the `App.Formulas` property. The Learn example:
+Each `Set` or `Collect` becomes `name = formula;` in the `App.Formulas` property. The Learn example, shortened here (the original also converts a `varFormStyle` record):
 
 ```power-fx
 // Before: App.OnStart
@@ -132,5 +132,5 @@ Learn does not give a checklist of valid OnStart uses. It describes the intended
 
 ## Sources
 
-- [Microsoft Learn: Working with large apps in Power Apps](https://learn.microsoft.com/en-us/power-apps/maker/canvas-apps/working-with-large-apps)
-- [Microsoft Learn: App object, Formulas, OnStart and StartScreen properties](https://learn.microsoft.com/en-us/power-platform/power-fx/reference/object-app)
+- [Microsoft Learn: Build large and complex canvas apps](https://learn.microsoft.com/en-us/power-apps/maker/canvas-apps/working-with-large-apps)
+- [Microsoft Learn: App object in Power Apps (Formulas, OnStart and StartScreen properties)](https://learn.microsoft.com/en-us/power-platform/power-fx/reference/object-app)
