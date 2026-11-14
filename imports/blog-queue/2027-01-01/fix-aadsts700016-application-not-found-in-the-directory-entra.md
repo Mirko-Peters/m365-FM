@@ -23,7 +23,7 @@ faq:
     a: "No. The Microsoft Learn troubleshooting article for AADSTS70001 covers SAML-based single sign-on where the Issuer in the SAML request does not match the Identifier configured in Entra ID."
 ---
 
-AADSTS700016 means Microsoft Entra could not find the application in the tenant that the sign-in request targeted. The usual checks are the application ID in the request, the tenant the request goes to, and whether the app exists in that tenant through registration or consent. This guide uses the Microsoft Learn error code reference and related pages. The reference gives causes but no numbered fix steps, so the order of checks below is a suggestion.
+AADSTS700016 means Microsoft Entra could not find the application in the tenant that the sign-in request targeted. The usual checks are the application ID in the request, the tenant the request goes to, and whether the app exists in that tenant through registration or consent. This guide uses the Microsoft Learn error code reference, Microsoft Entra authentication & authorization error codes, and related pages. The reference gives causes but no numbered fix steps, so the order of checks below is a suggestion.
 
 ## What the reference says
 
@@ -65,7 +65,7 @@ The tenancy page says single-tenant apps are available only in the tenant they w
 - Accounts in any Microsoft Entra directory (multitenant).
 - Accounts in any Microsoft Entra directory and personal Microsoft accounts (multitenant).
 
-The page does not describe what a user from another tenant sees when signing in to a single-tenant app. Learn also links an article on converting an app to multitenant.
+The page does not describe what a user from another tenant sees when signing in to a single-tenant app. It also does not describe how to convert an app to multitenant.
 
 ## Step 5: Check that the app exists in the tenant
 
@@ -79,7 +79,7 @@ Learn says the app must already be provisioned in the tenant. For apps registere
 
 ## A related code: AADSTS70001
 
-The reference lists AADSTS70001 as the application being disabled, and links an article whose title says application with identifier was not found in the directory. That article covers SAML single sign-on: the Issuer sent in the SAML request does not match the Identifier configured in Entra ID. Check **Basic SAML configuration** for the **Identifier**, including a trailing slash. This is a different case from AADSTS700016, and the link slug and description do not match on the reference page.
+The reference lists AADSTS70001 as the application being disabled, and links an article whose title says application with identifier was not found in the directory. That article covers SAML single sign-on: the Issuer sent in the SAML request does not match the Identifier configured in Entra ID. Check **Basic SAML configuration** for the **Identifier**, including a trailing slash. This is a different case from AADSTS700016, and the link slug and description do not match on the reference page. The reference also lists AADSTS700011 UnauthorizedClientAppNotFoundInOrgIdTenant, which says a client application requested a token from your tenant, but the client app does not exist in your tenant.
 
 ## Not covered
 
@@ -97,9 +97,9 @@ The pages I read do not describe the following:
 
 ## Sources
 
-- [Microsoft Entra authentication and authorization error codes](https://learn.microsoft.com/entra/identity-platform/reference-error-codes)
-- [Tenancy in Microsoft Entra ID](https://learn.microsoft.com/entra/identity-platform/single-and-multi-tenant-apps)
-- [Microsoft identity platform and OAuth 2.0 protocols](https://learn.microsoft.com/entra/identity-platform/v2-protocols)
-- [Troubleshoot sign-in errors](https://learn.microsoft.com/entra/identity/monitoring-health/howto-troubleshoot-sign-in-errors)
-- [Grant tenant-wide admin consent](https://learn.microsoft.com/entra/identity/enterprise-apps/grant-admin-consent)
-- [Error AADSTS70001](https://learn.microsoft.com/troubleshoot/azure/active-directory/error-code-aadsts70001-app-not-found-in-directory)
+- [Microsoft Entra authentication & authorization error codes (Microsoft Learn)](https://learn.microsoft.com/entra/identity-platform/reference-error-codes)
+- [Single and multitenant apps in Microsoft Entra ID (Microsoft Learn)](https://learn.microsoft.com/entra/identity-platform/single-and-multi-tenant-apps)
+- [OAuth 2.0 and OpenID Connect protocols (Microsoft Learn)](https://learn.microsoft.com/entra/identity-platform/v2-protocols)
+- [How to troubleshoot sign-in errors (Microsoft Learn)](https://learn.microsoft.com/entra/identity/monitoring-health/howto-troubleshoot-sign-in-errors)
+- [Grant tenant-wide admin consent to an application (Microsoft Learn)](https://learn.microsoft.com/entra/identity/enterprise-apps/grant-admin-consent)
+- [Error AADSTS70001 - Application with Identifier was not found in the directory. (Microsoft Learn)](https://learn.microsoft.com/troubleshoot/entra/entra-id/app-integration/error-code-aadsts70001-app-not-found-in-directory)
