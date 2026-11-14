@@ -22,7 +22,7 @@ faq:
   - q: "Why does Intune show my device as non-compliant after onboarding?"
     a: "The page lists three known cases: the user has not finished the out-of-box experience, the SENSE service startup type is Delayed Start, which the page says should fix itself within 24 hours, or onboarding and offboarding policies are deployed to the same device at the same time."
   - q: "Do servers follow the same steps?"
-    a: "The page has a separate section for Windows Server 2016 and earlier. It points to the Microsoft Monitoring Agent and the server onboarding article. I did not read that article, so use it for server specifics."
+    a: "The page has a separate section for Windows Server 2016 and earlier. It points to the Microsoft Monitoring Agent and the server onboarding article. Use that article for server specifics."
 ---
 
 When a device does not appear in Microsoft Defender for Endpoint after onboarding, the cause can sit in the deployment tool, on the device, or in the connection to the service. The Microsoft Learn page on onboarding troubleshooting is long. This article follows its order and keeps the tables that matter most. The page first asks you to confirm that the minimum requirements for licensing, hardware and software are met, so do that before anything below. My own advice is marked.
@@ -123,7 +123,7 @@ The page says this applies to devices that did not yet get the August 2020 updat
 
 For a newly built device, the SENSE service may not start if the OOBE or first user logon is not completed and the device is turned off or restarted first. The page says a logon after OOBE is no longer required from Windows 10 version 1809, Windows Server 2019 and Azure Stack HCI OS version 23H2.
 
-For Windows Server 2016 and earlier, the page lists verification steps around the Microsoft Monitoring Agent, the proxy and Internet settings, and checks in Task Manager, Event Viewer and Services. I did not read the linked server onboarding article, and I did not check the current status of that agent, so use the server onboarding documentation for those systems.
+For Windows Server 2016 and earlier, the page lists verification steps around the Microsoft Monitoring Agent, the proxy and Internet settings, and checks in Task Manager, Event Viewer and Services. Use the linked server onboarding documentation for those systems, since this article does not cover the server steps in detail.
 
 ## Checking order (my advice)
 
