@@ -18,7 +18,7 @@ faq:
   - q: "What do the subscriptions include?"
     a: "Learn says Premium and Essential subscriptions include one production and three sandbox environments at no extra charge. Each additional production environment bought through a CSP partner adds three sandboxes and 4 GB of tenant-wide database capacity."
   - q: "What is the default update window?"
-    a: "8:00 PM to 6:00 AM local time. You can change it after creation."
+    a: "Learn says the default update window guarantees that updates do not run between 8:00 PM and 6:00 AM local time of the environment country or region. You can change it after creation."
   - q: "Can I export a sandbox database?"
     a: "No. Learn says environment databases of sandbox environments cannot be exported. Use Excel, RapidStart or copy to production first."
   - q: "Can I delete a linked environment?"
@@ -37,7 +37,7 @@ The Business Central admin center lists environments under the Environments tab.
 6. Select the **Version**. Preview versions can appear for sandboxes. Preview environments are not updated when the version becomes available and are deleted automatically when the preview ends.
 7. Select **Create**.
 
-The environment is not accessible until **State** is **Active**. The default update window is 8:00 PM to 6:00 AM local time, and you can change it later.
+The environment is not accessible until **State** is **Active**. The new environment has a default update window that guarantees future updates do not run between 8:00 PM and 6:00 AM local time for the environment country or region. You can change the window after you create the environment.
 
 ## Production and sandbox
 
@@ -65,7 +65,7 @@ Apps published from VS Code or Designer are scoped to the service node. On a san
 
 ## Link to Power Platform
 
-- You must be an internal admin with a role that gives access to the admin center, and you need permission to update the target Power Platform environment, such as **Environment Admin**. Learn warns that Microsoft Entra admin roles do not grant the Power Platform environment admin role automatically.
+- You must be an internal admin with a role that gives access to the admin center, and you need permission to update the target Power Platform environment, such as **Environment Admin**. Learn warns that Microsoft Entra admin roles might not automatically grant the Power Platform environment admin role.
 - The Power Platform environment must be in the Ready state, of the same type (production or sandbox) and not already linked.
 - Open the environment, select **Link** or **Modify** under Linked Power Platform Environment, pick the environment and select **Link**.
 - Links are one-to-one. Cross-geography linking is possible, but customer-managed encryption keys need the same geography.
@@ -86,7 +86,7 @@ The log shows operations by internal and partner delegated admins, through the a
 
 Step-by-step instructions for copy, restore, rename, update scheduling and delete or recover. The soft-delete retention period. The numeric company limit. Backup frequency. Specific admin center role names. Any PowerShell or scripting options.
 
-## Typical mistakes
+## Typical mistakes (my advice)
 
 - Planning performance tests in a sandbox.
 - Expecting to export a sandbox database.
@@ -102,4 +102,4 @@ Step-by-step instructions for copy, restore, rename, update scheduling and delet
 
 ## Sources
 
-- [Managing environments in the Business Central admin center (Microsoft Learn)](https://learn.microsoft.com/dynamics365/business-central/dev-itpro/administration/tenant-admin-center-environments)
+- [Managing Production and Sandbox Environments (Microsoft Learn)](https://learn.microsoft.com/dynamics365/business-central/dev-itpro/administration/tenant-admin-center-environments)
