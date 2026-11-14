@@ -43,7 +43,7 @@ Select **Copy** in the top menu bar. You then choose one of two levels.
 
 **Everything** copies all application data, users, customizations and schemas. Learn lists user acceptance testing, upgrade testing, preview in production and training as typical uses.
 
-**Customizations and schemas only** copies users, customizations and schema, but no business data. Learn recommends it for iterative team development, partner or ISV solutions and proofs of concept. The page lists many tables that are truncated in this mode, for example Account, Contact, Email, Lead, Opportunity and Audit.
+**Customizations and schemas only** copies users, customizations and schema, but no business data. Learn lists it as suitable for iterative team development, partner or ISV solutions and proof of concept. The page lists many tables that are truncated in this mode, for example Account, Contact, Email, Lead, Opportunity and Audit.
 
 ### Copy steps
 
@@ -69,7 +69,7 @@ If a copy fails, the target is left disabled. Learn says to wait 30 minutes and 
 
 ## What to do after a copy
 
-After the copy, the target is in administration mode, so only users with the System Administrator role can sign in. Background operations, including workflows and Exchange synchronization, are disabled. This protects production, because a mailbox cannot sync with two environments.
+After the copy, the target is in administration mode, so only users with the System Administrator role can sign in. Background operations, including workflows and Exchange synchronization, are disabled. Learn's reason: a mailbox can't be synced with two different environments.
 
 Learn recommends reviewing every component with an external connection:
 
@@ -97,7 +97,7 @@ Learn describes two conversions: production to sandbox and sandbox to production
 
 Administration mode matters here. Learn notes that in an environment in administration mode only System Administrator or System Customizer users can sign in, and after conversion to production all users can access the organization.
 
-## Which action fits
+## Which action fits (my summary)
 
 | Goal | Action | Key effect |
 | --- | --- | --- |
@@ -106,12 +106,12 @@ Administration mode matters here. Learn notes that in an environment in administ
 | Start clean or remove personal data | Reset | Sandbox or developer environment reprovisioned empty |
 | Go live from a tested sandbox | Convert to production | Environment type changes, all users get access |
 
-## Common mistakes
+## Common mistakes (my advice)
 
 - Expecting a production target in the overwrite list. It will not appear.
 - Forgetting that unsolutioned apps and flows may be missing after a copy. Put assets into solutions first.
 - Leaving email sync active in a copy, which can conflict with production.
-- Resetting the wrong environment. Learn says reset deletes backups too, so there is no restore point afterward.
+- Resetting the wrong environment. Learn says reset deletes backups too and that deleted data can't be recovered.
 
 ## Related
 
@@ -120,6 +120,6 @@ Administration mode matters here. Learn notes that in an environment in administ
 
 ## Sources
 
-- [Copy an environment](https://learn.microsoft.com/power-platform/admin/copy-environment)
-- [Reset an environment to delete and reprovision](https://learn.microsoft.com/power-platform/admin/reset-environment)
-- [Change environment type](https://learn.microsoft.com/power-platform/admin/switch-environment)
+- [Copy an environment (Microsoft Learn)](https://learn.microsoft.com/power-platform/admin/copy-environment)
+- [Reset an environment to delete and reprovision (Microsoft Learn)](https://learn.microsoft.com/power-platform/admin/reset-environment)
+- [Change environment type (Microsoft Learn)](https://learn.microsoft.com/power-platform/admin/switch-environment)
