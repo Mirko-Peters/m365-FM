@@ -7,16 +7,16 @@ author: mirko-p
 date: 2026-12-09
 topics: [teams, teams-premium]
 keypoints:
-  - "In the Teams admin center, open Meetings > Events policies. Separate settings control who can attend events up to 1,000 attendees and events optimized for a large audience."
+  - "In the Teams admin center, open Meetings > Events policies. Who can attend webinars and Who can attend town halls control attendance for events up to 1,000 attendees and large-audience events."
   - "Both attendee access settings default to Everyone. Restrict them to the organization, with or without guests, if the event is internal."
   - "Public events allow anyone with a registration link to join. In-org events do not."
-  - "Organizers can require registration approval, limit registration times and auto-reject people who cannot bypass the lobby."
+  - "Organizers can require registration approval, enable a waitlist and limit registration times. For events up to 1,000 attendees they can also auto-reject people who cannot bypass the lobby."
   - "Watermarks and blocking copy or forward of chat, captions and transcripts need Teams Premium."
 faq:
   - q: "Where do admins restrict who can attend a town hall?"
-    a: "Microsoft Learn says in the Teams admin center under Meetings, Events policies. The setting Who can attend events optimized for a large audience maps to the TownhallEventAttendeeAccess parameter with the values Everyone, EveryoneInOrganization and EveryoneInOrganizationAndGuests. The default is Everyone."
+    a: "Microsoft Learn says in the Teams admin center under Meetings, Events policies. The setting Who can attend town halls maps to the TownhallEventAttendeeAccess parameter with the values Everyone, EveryoneInOrganization and EveryoneInOrganizationAndGuests. The default is Everyone."
   - q: "What is the difference between public and in-org events?"
-    a: "Microsoft Learn says that in a public event anyone with a registration link can join and anonymous users can register. In an in-org event they cannot. Both types include guests and unique join links per attendee, and organizers can auto-reject people who cannot bypass the lobby."
+    a: "Microsoft Learn says that in a public event anyone with a registration link can join and anonymous users can register. In an in-org event they cannot. Both types include guests and unique join links per attendee. For events up to 1,000 attendees, organizers can also auto-reject people who cannot bypass the lobby in both types."
   - q: "Can I require approval for webinar registrations?"
     a: "Yes. Learn says organizers can decide how many people can register, require manual registration approval, enable a waitlist and limit registration start and end time. Admins manage who can register and which questions organizers can require on the form."
   - q: "Do watermarks require a license?"
@@ -33,8 +33,8 @@ Microsoft Learn describes two groups of settings. **Events up to 1,000 attendees
 
 In the **Teams admin center**, select **Meetings** > **Events policies**, then open or create a policy. Two toggles, both on by default, control who can create events:
 
-- **Events up to 1k attendees**, parameter `-AllowWebinars`.
-- **Events optimized for a large audience**, parameter `-AllowTownhalls`.
+- **Webinars** (events with up to 1,000 attendees), parameter `-AllowWebinars`.
+- **Town halls** (events optimized for large audiences), parameter `-AllowTownhalls`.
 
 Learn warns that if you turn a toggle off after someone scheduled an event, that person can no longer run or start it.
 
@@ -44,8 +44,8 @@ In the same policy, set attendee access. Both settings default to **Everyone**.
 
 | Event type | Admin center setting | PowerShell parameter | Values |
 |---|---|---|---|
-| Up to 1,000 attendees | Who can attend events up to 1k attendees | `-EventAccessType` | `Everyone`, `EveryoneInCompanyExcludingGuests`, `EveryoneInCompany` |
-| Large audience | Who can attend events optimized for a large audience | `-TownhallEventAttendeeAccess` | `Everyone`, `EveryoneInOrganization`, `EveryoneInOrganizationAndGuests` |
+| Up to 1,000 attendees | Who can attend webinars | `-EventAccessType` | `Everyone`, `EveryoneInCompanyExcludingGuests`, `EveryoneInCompany` |
+| Large audience | Who can attend town halls | `-TownhallEventAttendeeAccess` | `Everyone`, `EveryoneInOrganization`, `EveryoneInOrganizationAndGuests` |
 
 For an internal town hall, choose the organization option. In the admin center the labels read "Everyone in my organization excluding guests" and "Everyone in my organization including guests". Example from Learn:
 
@@ -57,7 +57,7 @@ The pages read here do not state how long a policy change takes to apply. Check 
 
 ## Step 4: Understand public and in-org events
 
-Admins control whether organizers can schedule public or only in-org events. Learn's comparison:
+Admins control whether organizers can schedule public or only in-org events. Learn's comparison for events up to 1,000 attendees (the table for events optimized for large audiences has the same entries except that the two lobby rows, bypass and auto-reject, are not listed):
 
 | Capability | In-org | Public |
 |---|---|---|
@@ -79,7 +79,7 @@ Per Microsoft Learn, admins manage who can register for events and which questio
 - enable a waitlist, and
 - limit the registration start and end time.
 
-Registration is not labeled a Teams Premium feature on the webinar planning page.
+The admin and organizer controls table on the events planning page does not label registration as a Teams Premium feature.
 
 ## Step 6: Set lobby, anonymous and presenter controls
 
@@ -110,7 +110,7 @@ Learn lists these as Teams Premium: watermarks for attendee video and shared con
 
 ## What the pages read do not cover
 
-They do not describe end-to-end encryption or DRM for town halls. Learn's town hall planning page states neither. If your requirements include them, check Microsoft's current feature comparison for meetings and events.
+They do not describe end-to-end encryption or DRM for town halls. Learn's events planning page states neither. If your requirements include them, check Microsoft's current feature comparison for meetings and events.
 
 ## Related
 
@@ -121,5 +121,4 @@ They do not describe end-to-end encryption or DRM for town halls. Learn's town h
 ## Sources
 
 - [Microsoft Learn: Manage who can schedule and attend events in Microsoft Teams](https://learn.microsoft.com/en-us/microsoftteams/set-up-events)
-- [Microsoft Learn: Plan for Teams town halls](https://learn.microsoft.com/en-us/microsoftteams/plan-town-halls)
-- [Microsoft Learn: Plan for Teams webinars](https://learn.microsoft.com/en-us/microsoftteams/plan-webinars)
+- [Microsoft Learn: Plan for Teams events](https://learn.microsoft.com/en-us/microsoftteams/plan-events)
