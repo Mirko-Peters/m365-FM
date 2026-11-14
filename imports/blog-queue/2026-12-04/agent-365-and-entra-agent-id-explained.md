@@ -68,7 +68,7 @@ From the convergence article:
 The statements below are from Learn, and plan details should be checked in the service description.
 
 - Agent ID is available to all Microsoft Entra customers.
-- Agent 365 is generally available for the Commercial segment and licensed per user. At least one user must hold a qualifying license to enable it. Learn says Microsoft E5 works best as a prerequisite.
+- Agent 365 is a separate product that requires a per-user license.
 - Extending Entra security features, such as Conditional Access, to agents requires Agent 365. It is included in Microsoft 365 E7 and available as an add-on to E5, A5 and Business Premium, or to Defender Suite plus Purview Suite.
 - Viewing the inventory needs no specific license.
 
