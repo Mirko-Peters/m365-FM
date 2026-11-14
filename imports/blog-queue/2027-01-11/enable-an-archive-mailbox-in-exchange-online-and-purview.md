@@ -83,11 +83,13 @@ Items move according to the default archive policy in the retention policy assig
 
 ## Verify
 
-Check that **Archive status** shows **Active**. For a deeper check, a Microsoft 365 global admin can run the diagnostic Run Tests: Archive Mailbox from the admin center, entering the mailbox address. It is not available in Government clouds, 21Vianet or Germany.
+Check that **Archive status** shows **Active**. For a deeper check, the page offers an automated diagnostic on a user's archive mailbox. You must be a Microsoft 365 global admin, and the page recommends roles with the fewest permissions. A flyout opens in the Microsoft 365 admin center. Enter the mailbox address and select **Run Tests**. The diagnostic is not available in Government clouds, 21Vianet or Germany.
+
+The page also says to explain to users how their archive works in Outlook on Windows, macOS and the web, and it links basic end-user instructions on the Microsoft support site.
 
 ## Auto-expanding archiving
 
-The page only links to a separate article. It does not mention the commands for it.
+The page does not describe auto-expanding archiving. It mentions it only in passing, in the note that the Recoverable Items quota increase applies even if auto-expanding archive is not enabled. It links no separate article about it.
 
 ## What the page does not say
 
@@ -100,15 +102,15 @@ The page only links to a separate article. It does not mention the commands for 
 
 ## A rollout outline
 
-This outline is practical advice built on the page.
+This outline is my advice, built on the page.
 
 1. Check that the license includes archiving.
 2. Enable one pilot mailbox in the Exchange admin center and confirm Archive status Active.
 3. Use the bulk command for user mailboxes, or turn on auto-enable.
 4. Review the retention policy that moves items after two years.
-5. Read the auto-expanding archiving article if mailboxes grow past quota.
+5. Look for guidance on auto-expanding archiving elsewhere if mailboxes grow past quota, since this page has none.
 
-## Typical mistakes
+## Typical mistakes (my advice)
 
 - Disabling an archive and waiting more than 30 days before reconnecting.
 - Expecting the bulk command to include shared mailboxes.
@@ -123,4 +125,4 @@ This outline is practical advice built on the page.
 
 ## Sources
 
-- [Enable archive mailboxes (Microsoft Learn)](https://learn.microsoft.com/purview/enable-archive-mailboxes)
+- [Enable archive mailboxes for Microsoft 365 (Microsoft Learn)](https://learn.microsoft.com/purview/enable-archive-mailboxes)
