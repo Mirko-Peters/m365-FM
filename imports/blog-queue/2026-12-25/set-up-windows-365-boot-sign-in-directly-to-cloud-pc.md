@@ -89,5 +89,5 @@ The pages do not give full device model requirements, Entra join steps, the full
 
 ## Sources
 
-- [Windows 365 Boot overview](https://learn.microsoft.com/windows-365/enterprise/windows-365-boot-overview)
-- [Configure Windows 365 Boot](https://learn.microsoft.com/windows-365/enterprise/windows-365-boot-guide)
+- [What is Windows 365 Boot? (Microsoft Learn)](https://learn.microsoft.com/windows-365/enterprise/windows-365-boot-overview)
+- [Windows 365 Boot guided scenario (Microsoft Learn)](https://learn.microsoft.com/windows-365/enterprise/windows-365-boot-guide)
