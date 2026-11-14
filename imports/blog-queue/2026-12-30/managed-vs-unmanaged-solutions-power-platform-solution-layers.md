@@ -80,11 +80,10 @@ This is a suggestion, not Microsoft guidance. Build in unmanaged in development 
 - Deploy managed solutions to test, UAT, SIT and production, not to the development environment.
 - Create your own publisher with a meaningful name and prefix before building anything.
 - Use patches for small fixes and upgrades for rolled-up releases.
-- A solution file can be up to 95 MB.
 
 ## Caveats to remember
 
-Updates and patches cannot delete components, while upgrades can. Some managed components are not editable. Prefixes and metadata names cannot be changed after items are created. Because deleting a managed solution can delete data, plan which tables hold production data before you decide what goes into a solution.
+The page also states that a solution can be up to 95 MB in size. Updates and patches cannot delete components, while upgrades can. Some managed components are not editable. Prefixes and metadata names cannot be changed after items are created. Because deleting a managed solution can delete data, plan which tables hold production data before you decide what goes into a solution.
 
 ## Not covered
 
@@ -97,4 +96,4 @@ The page has no solution layer ordering, no managed property rules, no pipelines
 
 ## Sources
 
-- [Solution concepts](https://learn.microsoft.com/power-platform/alm/solution-concepts-alm)
+- [Solution concepts with Power Platform (Microsoft Learn)](https://learn.microsoft.com/power-platform/alm/solution-concepts-alm)
