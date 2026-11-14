@@ -19,8 +19,8 @@ faq:
     a: "It follows from a Conditional Access sign-in frequency setting. Learn describes sign-in frequency as how long a user can access a resource before being asked to sign in again, so a token older than the allowed period no longer qualifies."
   - q: "What is the default sign-in frequency?"
     a: "Learn says the Entra ID default configuration is a rolling window of 90 days, and that sessions are revoked on policy violations such as a password change, a noncompliant device or a disabled account."
-  - q: "Why do some users get prompted more often than the policy says?"
-    a: "Learn lists causes to check: Remember MFA on trusted devices enabled together with sign-in frequency, background tasks whose enforcement is deferred until the next interaction, and the Primary Refresh Token refresh cycle of four hours on joined devices."
+  - q: "Why do prompts not always match the policy period exactly?"
+    a: "Learn describes three things that affect timing: Remember MFA on trusted devices used together with sign-in frequency might prompt users unexpectedly, enforcement for background services is deferred until the next user interaction, and on joined devices the Primary Refresh Token refreshes on a four-hour cycle."
   - q: "Which setting causes sign-in loops?"
     a: "Learn warns that using sign-in frequency to require reauthentication every time, without multifactor authentication, might result in sign-in looping."
 ---
@@ -44,7 +44,7 @@ Learn defines sign-in frequency as how long a user can access a resource before 
 - It works with non-Microsoft SAML apps and OAuth2 or OIDC apps as long as they do not drop their own cookies and regularly redirect back to Entra ID.
 - Sign-in frequency now applies to multifactor authentication as well as first-factor authentication.
 
-When the policy shortens the window, a refresh token older than that window fails the check, and the platform reports AADSTS70043.
+My reading: when a policy sets a shorter window, a refresh token older than that window fails the check, and that is when AADSTS70043 appears. The pages do not state this sequence.
 
 ## Device behaviour that affects timing
 
@@ -59,6 +59,8 @@ The page describes a setting called **Every time**. The policy then requires ful
 **Every time strict (preview)** uses a 10-second validity window for authentication freshness. Learn says it is meant for specific apps that request a new token for sensitive actions, and warns not to apply it to Office 365 applications.
 
 ## Review checklist for the administrator
+
+Items 1 and 2 are my advice; items 3 to 5 come from Learn.
 
 1. **Find the policy.** Open the sign-in event in the sign-in logs and read the Conditional Access tab to see which policy applied.
 2. **Compare the configured period with the message.** The error states the maximum allowed lifetime for the request, so check it against the policy value.
@@ -77,7 +79,7 @@ This section is my advice, not a Microsoft statement. The documented behaviour i
 
 ## Choosing a period
 
-Learn warns that asking for credentials too often can backfire, because users who habitually enter credentials might unintentionally provide them to malicious prompts. The page also recommends time-based sign-in frequency for Microsoft 365 apps for a better experience, and for the Azure portal and Entra admin center suggests time-based frequency or reauthentication on PIM activation. In my experience, the shortest period that the business can accept is the one users stop noticing, because a very short one trades security for prompt fatigue.
+Learn warns that asking for credentials too often can backfire, because users who habitually enter credentials might unintentionally provide them to malicious prompts. The page also recommends time-based sign-in frequency for Microsoft 365 apps for a better experience, and for the Azure portal and Entra admin center suggests time-based frequency or reauthentication on PIM activation. My advice, not a Microsoft statement: avoid a very short period unless the business needs it, because Learn itself warns that frequent prompts add friction and MFA fatigue.
 
 ## Related
 
