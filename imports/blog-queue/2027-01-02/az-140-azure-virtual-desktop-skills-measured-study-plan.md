@@ -68,7 +68,7 @@ Learn notes that the bullets illustrate how skills are assessed, that related to
 
 ## What changed on July 20, 2026
 
-Every changed row in the change log is labelled minor: the audience profile, identity integration, security, FSLogix, user experience and client settings, and apps on a session host. The top-level labels for identity and security and for user environments and apps read no change. If you studied from the older outline, review those six items first.
+Every changed row in the change log is labelled minor: the audience profile, identity integration, security, FSLogix, user experience and client settings, and apps on a session host. The top-level labels for identity and security and for user environments and apps read no change. My suggestion: if you studied from the older outline, review those six items first.
 
 ## A study plan built on the weights
 
@@ -76,13 +76,13 @@ Every changed row in the change log is labelled minor: the audience profile, ide
 2. **Week 4: identity and security.** Configure Conditional Access and Microsoft Entra single sign-on for a host pool, and review Defender settings on session hosts.
 3. **Weeks 5-6: user environments.** Configure FSLogix profile containers and Cloud Cache, publish a RemoteApp and try App attach.
 4. **Week 7: monitoring and recovery.** Set up Azure Virtual Desktop Insights, autoscaling and a backup plan.
-5. **Final days:** take the free practice assessment and try the exam sandbox.
+5. **Final days:** take the free practice assessment and try the exam sandbox. The page says the new Practice Assessment experience on AI Skills Navigator is closer to the exam experience, and that the legacy Practice Assessment on Learn is no longer updated.
 
-The week counts are a suggestion, not a Microsoft recommendation.
+This plan is my advice, built on the weights. The week counts are a suggestion, not a Microsoft recommendation.
 
 ## Resources named by Microsoft
 
-The study guide points to learning paths and instructor-led courses on the exam page, the Azure and Azure Virtual Desktop documentation, FSLogix configuration examples, Microsoft Q&A and the Exam Readiness Zone. It also says associate, expert and specialty certifications expire annually and can be renewed with a free online assessment.
+The study guide points to learning paths and instructor-led courses on the exam page, the Azure and Azure Virtual Desktop documentation, FSLogix configuration examples, Microsoft Q&A, Azure Community Support, Microsoft Learn on the Tech Community and videos. It also says associate, expert and specialty certifications expire annually and can be renewed with a free online assessment.
 
 ## Related
 
