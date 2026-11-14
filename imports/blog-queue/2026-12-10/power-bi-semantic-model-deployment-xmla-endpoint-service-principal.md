@@ -29,7 +29,8 @@ Automated semantic model deployment through XMLA needs four things: the XMLA end
 
 ## Prerequisites from Learn
 
-- The workspace must be on a Premium capacity, Premium Per User, or a Fabric capacity. Learn does not name a specific minimum Fabric SKU in the page I read.
+- Learn says Power BI Premium, Premium Per User and Power BI Embedded workspaces use the XMLA endpoint. The page mentions a Fabric capacity only for connecting to personal workspaces and names no minimum Fabric SKU.
+- The user account or app identity that a tool uses must have a valid Premium Per User license unless the semantic model resides on a Premium capacity.
 - The tenant setting **Allow XMLA endpoints and Analyze in Excel with on-premises semantic models** must be enabled. Learn says the related tenant settings are enabled by default.
 - Write operations require XMLA read-write on the capacity or PPU settings.
 
@@ -42,7 +43,7 @@ Read-only is on by default. For a Premium capacity, an admin selects **Settings*
 Learn's steps for service principals:
 
 1. Create an app registration in Microsoft Entra ID, and save the app name, application (client) ID, directory (tenant) ID and client secret.
-2. Optionally create a dedicated security group for service principals, so you can limit tenant settings to it.
+2. Optionally create a Microsoft Entra security group. Learn says service principals by default have access to any tenant setting they are enabled for. To restrict this, allow specific security groups in the tenant setting, or create a dedicated group for service principals and exclude it from the tenant settings you want to protect.
 3. In **OneLake catalog** > **Govern** > **Configurations** > **Tenant settings**, expand **Developer settings** and enable **Service principals can call Fabric public APIs**. Learn recommends applying it to specific security groups. Setting names change between portal versions, so use the name shown in your admin portal.
 4. In the workspace, select **More** > **Workspace access** and add the application as **Member** or **Admin**.
 
@@ -75,7 +76,7 @@ With AMO or ADOMD.NET, the page requires version 15.1.42.26 or later. Store the 
 | DAX Studio | Read-only for queries |
 | PowerShell | SqlServer module 21.1.18256 or higher, read-write |
 
-The Learn page covers Tabular Editor 2.x. It does not document command-line options for deploying with Tabular Editor. I could not read Tabular Editor's own documentation while preparing this article, so confirm the deployment switches, overwrite behavior and handling of roles, partitions and connections there before building a pipeline.
+The Learn page covers Tabular Editor 2.x. It does not document command-line options for deploying with Tabular Editor. Tabular Editor's own documentation was not available while checking this article, so confirm the deployment switches, overwrite behavior and handling of roles, partitions and connections there before building a pipeline.
 
 Learn also says Azure Analysis Services cmdlets in `Az.AnalysisServices` are not supported for Power BI semantic models.
 
@@ -119,5 +120,5 @@ Learn does not describe this pipeline end to end, so treat it as an outline buil
 
 ## Sources
 
-- [Semantic model connectivity with the XMLA endpoint](https://learn.microsoft.com/en-us/power-bi/enterprise/service-premium-connect-tools)
-- [Automate Premium workspace and semantic model tasks with service principals](https://learn.microsoft.com/en-us/power-bi/enterprise/service-premium-service-principal)
+- [Semantic model connectivity with the XMLA endpoint](https://learn.microsoft.com/en-us/fabric/enterprise/powerbi/service-premium-connect-tools)
+- [Automate Premium workspace and semantic model tasks with service principals](https://learn.microsoft.com/en-us/fabric/enterprise/powerbi/service-premium-service-principal)
