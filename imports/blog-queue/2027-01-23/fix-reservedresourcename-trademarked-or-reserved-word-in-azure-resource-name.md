@@ -1,6 +1,6 @@
 ---
 title: "Fix ReservedResourceName: A Trademarked or Reserved Word in an Azure Resource Name"
-summary: "ReservedResourceName means the name of a resource with an accessible endpoint contains a reserved word or trademark. The full word list from Microsoft Learn, the three matching rules, why disabled endpoints are checked too, and how to fix templates."
+summary: "ReservedResourceName means the name of a resource with an accessible endpoint contains a reserved word or trademark. The full word list from Microsoft Learn, the three matching rules, the point that the check also applies when the endpoint is not enabled, and how to fix templates."
 status: review
 publish: false
 author: mirko-p
@@ -10,7 +10,7 @@ keypoints:
   - "The error text says the resource name or a part of the name is a trademarked or reserved word. The code is ReservedResourceName."
   - "It applies to resources with an accessible endpoint, such as a fully qualified domain name. The name is checked at creation even if the endpoint is not currently enabled."
   - "Microsoft and Windows cannot be used as a whole word or as a substring. LOGIN cannot be used at the start of a name, but can appear later."
-  - "The fix is a name without any of the listed words. Check name parts you build with parameters or variables."
+  - "The fix is a name without any of the listed words. My advice: also check name parts built from parameters or variables."
   - "The naming rules page adds that names are case-insensitive unless noted, and that # should not be used in a resource name."
 faq:
   - q: "What does ReservedResourceName mean?"
@@ -20,7 +20,7 @@ faq:
   - q: "Are all the words blocked in the same way?"
     a: "No. Most listed words, such as AZURE, OFFICE, EXCEL or OUTLOOK, are reserved. MICROSOFT and WINDOWS cannot be used as either a whole word or a substring. LOGIN cannot be used at the start of a resource name, but can be used later in the name."
   - q: "How do I fix the deployment?"
-    a: "Provide a name that does not use one of the reserved words. In a template, check which parameter, variable or expression builds the name, and change the part that contains the word. Check the whole built name, since a part of the name is enough to trigger the error."
+    a: "Provide a name that does not use one of the reserved words. That is the solution on the Learn page. My advice for templates: check which parameter, variable or expression builds the name, change the part that contains the word, and check the whole built name, since a part of the name is enough to trigger the error."
   - q: "Where do I find other naming limits?"
     a: "The Azure naming rules and restrictions page lists the rules by resource provider, with length and valid characters per resource type. It says names are case-insensitive unless noted, that you should always compare names case-insensitively, and not to use the hash character in a name because it interferes with URL parsing in Azure Resource Manager requests."
 ---
@@ -38,9 +38,9 @@ The phrase "a part of the name" matters. A name like `myofficeapp01` is not the 
 
 ## When the check applies
 
-Learn says resources with an accessible endpoint, such as a fully qualified domain name, cannot use reserved words or trademarks in the name. The name is checked when the resource is created, even if the endpoint is not currently enabled. So you cannot avoid the check by leaving public access off.
+Learn says resources with an accessible endpoint, such as a fully qualified domain name, cannot use reserved words or trademarks in the name. The name is checked when the resource is created, even if the endpoint is not currently enabled. So a disabled endpoint does not exempt the name from the check.
 
-The naming rules page says the same in a note, for resources with a public endpoint. Some resource types in that page also carry the rule in their own row. For example, Synapse workspaces and SQL pools list that they cannot contain reserved words.
+The naming rules page says the same in a note, for resources with a public endpoint. Some resource types in that page also carry the rule in their own row. For example, Synapse Spark pools (`bigDataPools`) and SQL pools list that they cannot contain reserved words.
 
 ## The three kinds of rule
 
@@ -68,7 +68,7 @@ LOGIN cannot be used at the start of a resource name, but can be used later in t
 
 Provide a name that does not use one of the reserved words. That is the whole solution on the page.
 
-In an ARM template or Bicep file, the name often comes from parameters and variables, so the word can hide in a prefix. Work through this list:
+In an ARM template or Bicep file, the name can be built from parameters and variables, so the word can sit in a prefix. This list is my advice, not a Microsoft procedure:
 
 1. Copy the name from the error message. It shows the resource name that failed.
 2. Find which `name` property in the template produced it, and which parameters, variables or functions feed it.
