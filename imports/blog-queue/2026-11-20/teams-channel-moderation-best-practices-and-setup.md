@@ -72,7 +72,7 @@ If the only goal is to keep guests from opening new threads, the guest restricti
 
 - **Private channels.** Both pages say moderation is not available.
 - **Shared channels.** Microsoft Learn says it is not available for private or shared channels.
-- **General channel.** The pages disagree. Microsoft Support says moderation is not available for the General channel. The Microsoft Learn module describes three General channel options: **Anyone can post messages**, **Anyone can post; show alert that posting will notify everyone** and **Only owners can post messages**. Look at the channel's settings in your client to see which applies to you.
+- **General channel.** The pages disagree. Microsoft Support says moderation is not available for the General channel. The Microsoft Learn module describes three General channel options: **Anyone can post messages**, **Anyone can post; show alert that posting will notify everyone** and **Only owners can post messages**. The Learn module page carries a 2023 publication date and was last updated in March 2024, so it may be older than the Support page. Look at the channel's settings in your client to see which applies to you.
 
 The pages I read give no numeric limits for moderation. Microsoft points to the separate Limits and specifications for Microsoft Teams article.
 
