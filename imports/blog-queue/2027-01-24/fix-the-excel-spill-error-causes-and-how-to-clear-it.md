@@ -25,7 +25,7 @@ faq:
     a: "The page says Excel cannot determine the cause in that case. Check that the formula includes all required arguments for its scenario."
 ---
 
-A #SPILL! error is Excel telling you that a formula wants to put several results on the sheet, and it cannot. Microsoft's Support page on correcting a #SPILL! error lists seven causes with a fix for each. This article puts them in the order you would check them. I read a condensed version of the page, so I stick to the points it gave and keep my own advice separate.
+A #SPILL! error is Excel telling you that a formula wants to put several results on the sheet, and it cannot. Microsoft's Support page on correcting a #SPILL! error lists seven causes with a fix for each. This article keeps the page's order of causes and keeps my own advice separate.
 
 ## What the error means
 
@@ -39,11 +39,11 @@ Something occupies cells that the formula needs.
 2. Open the error checking alert and choose **Select Obstructing Cells**.
 3. Delete or move the obstructing entry. The formula or PivotTable fills in automatically.
 
-This is the most common cause, so check it first.
+The page does not say how common each cause is. In my experience this is the quickest one to rule out, so I check it first.
 
 ## Cause 2: Indeterminate size
 
-Excel cannot tell the size of the result because it changes between calculation passes. Random functions are the typical reason, such as `RAND`, `RANDARRAY` or `RANDBETWEEN`. The page's example is `=SEQUENCE(RANDBETWEEN(1,1000))`. It adds that `OFFSET`, `INDIRECT` and `TODAY` do not cause this, because they do not return different values on each pass. The fix is to make the size of the result stable.
+Excel cannot tell the size of the result because it changes between calculation passes. Random functions are the typical reason, such as `RAND`, `RANDARRAY` or `RANDBETWEEN`. The page's example is `=SEQUENCE(RANDBETWEEN(1,1000))`. It adds that `OFFSET`, `INDIRECT` and `TODAY` do not cause this, because they do not return different values on each pass. The page gives no fix steps for this cause. My reading: avoid volatile functions in whatever decides the size of the result, so the size stays the same between calculation passes.
 
 ## Cause 3: Extends beyond the edge of the worksheet
 
@@ -53,7 +53,7 @@ A whole-column reference can return more rows than the grid holds. In the page's
 | --- | --- | --- |
 | 1. Limit the lookup values | `=VLOOKUP(A2:A7,A:C,2,FALSE)` | Returns a dynamic array. Does not work in Excel tables |
 | 2. Use one value and copy down | `=VLOOKUP(A2,A:C,2,FALSE)` | Works in tables. Does not return a dynamic array |
-| 3. Use the implicit intersection operator | `=VLOOKUP(@A:A,A:C,2,FALSE)` | Works in tables. Does not return a dynamic array. The @ tells Excel to use the value in the same row |
+| 3. Use the implicit intersection operator | `=VLOOKUP(@A:A,A:C,2,FALSE)` | Works in tables. Does not return a dynamic array. The @ is the implicit intersection operator |
 
 For options 2 and 3 you copy the formula down.
 
