@@ -115,3 +115,9 @@ For a plant, the useful tools handle production data: orders, routings, capacity
 ## Next step
 
 What is value stream management for you? If you run a plant, it is the physical flow of one product family, and software-delivery articles are a side topic. Pick one product family this week and check whether it has an owner and three shared measures.
+
+## Sources
+
+- [Value Stream - Lean Enterprise Institute (Lean Lexicon)](https://www.lean.org/lexicon-terms/value-stream/)
+- [Toyota Production System - Toyota Motor Corporation (global site)](https://global.toyota/en/company/vision-and-philosophy/production-system/)
+- [DORA metrics: the software delivery performance metrics - DORA](https://dora.dev/guides/dora-metrics-four-keys)
