@@ -18,9 +18,9 @@ faq:
   - q: "How do I avoid user-bound connections that expire?"
     a: "Microsoft Learn recommends an application user for server-to-server scenarios. You create the user in the Power Platform admin center, bind it to a Microsoft Entra app registration and use a secret or certificate. The Dataverse connector's Service Principal auth type takes the client ID, client secret and tenant ID."
   - q: "How long does a Dataverse access token last?"
-    a: "The Dataverse Web API article on Microsoft Learn notes that the access token expires in about an hour, with a default expiration of 60 minutes. MSAL libraries cache and refresh tokens, so long-running clients should acquire a token per request."
+    a: "The Dataverse OAuth authentication article on Microsoft Learn says the access token expires in about an hour and that the default expiration is 60 minutes. It also says MSAL libraries cache the token and refresh it each time the acquire method is called, and its delegating-handler example refreshes the token with every request."
   - q: "What throttling limit applies to the Dataverse connector?"
-    a: "The connector reference lists 6000 API calls per connection per 300 seconds. A separate Logic Apps Standard article on this site covers Dataverse service protection limits in detail."
+    a: "The connector reference lists 6000 API calls per connection per 300 seconds. The page gives only the limit and the renewal period."
 ---
 
 A Dataverse connection in Logic Apps that keeps failing with expired tokens is usually bound to a user sign-in. Microsoft documents a service principal connection, using an application user in Dataverse, as the non-interactive alternative. The pages read for this article do not document managed identity for the Dataverse connector itself, so this article states what is documented and marks the gap.
@@ -36,7 +36,7 @@ The Dataverse connector reference describes four authentication types:
 | Service Principal | Yes | Client ID, client secret and tenant ID |
 | Default (deprecated) | No | Only for older connections without an explicit type |
 
-An Oauth connection depends on the account that signed in. If that account is changed, disabled or must sign in again, the connection fails. The Microsoft pages read do not describe the exact token or refresh lifetime of such a connection, so treat the cause as an account or consent problem and check the connection status first. The Dataverse Web API article does say a Microsoft Entra access token has a finite lifetime, with a default of 60 minutes.
+My own inference: an Oauth connection depends on the account that signed in, so if that account is changed, disabled or must sign in again, the connection can fail. The Microsoft pages read do not describe the exact token or refresh lifetime of such a connection, so treat the cause as an account or consent problem and check the connection status first. The Dataverse OAuth article says, in a code comment, that a Microsoft Entra access token has a finite lifetime with a default expiration of 60 minutes. That concerns the access token and does not describe how the connector refreshes it.
 
 ## Is managed identity supported?
 
@@ -46,7 +46,7 @@ The built-in HTTP action does support managed identity. So a workflow could call
 
 ## Use an application user for non-interactive access
 
-Microsoft's Dataverse guidance for apps that run without a signed-in user is to create a special application user bound to a Microsoft Entra app registration, then use either a secret or a certificate. Microsoft adds that this does not consume a paid license, and advises against using an ordinary user account for these scenarios.
+The Dataverse OAuth article's guidance for apps that run without a signed-in user is to create a special application user bound to a Microsoft Entra app registration, then use either a secret or a certificate. Microsoft adds that this does not consume a paid license, and advises against using an ordinary user account for these scenarios.
 
 Create the application user in the Power Platform admin center:
 
@@ -63,11 +63,11 @@ Rules from the same page:
 - Application users are unlicensed. The Application ID cannot be changed after creation.
 - The page says you can also enter an Azure Managed Identity Application ID, and that for a managed identity you should not enter the application name.
 
-Assign a security role that grants only the table privileges the workflow needs. Microsoft does not describe a specific least-privilege role for Logic Apps, so build one for your tables.
+Assign a security role that grants only the table privileges the workflow needs. Microsoft does not describe a specific least-privilege role for Logic Apps. The OAuth article says to create a custom security role first, so build one for your tables.
 
 ## Switch the Logic App connection
 
-In the connector's **Create connection** pane, choose the **Service Principal** authentication type and supply the tenant, client ID and client secret. Because this type is shareable, other users or workflows can reuse the connection. A secret expires on a date you choose in the app registration, so record that date and renew the secret before it ends. The Dataverse Web API article also warns that a secret value is shown only once after you save it.
+In the connection dialog, choose the **Service Principal** authentication type and supply the tenant, client ID and client secret, the three parameters the connector reference lists. The pages read do not show the Logic Apps screen itself, so the exact dialog wording may differ. Because this type is shareable, other users or workflows can reuse the connection. A secret expires on a date you choose in the app registration, so record that date and renew the secret before it ends. The Dataverse OAuth article also warns that a secret value is shown only once after you save it.
 
 If you call the Web API yourself, Microsoft says to use a scope of `<environment-url>/.default` for a confidential client, and `<environment-url>/user_impersonation` for a public client.
 
@@ -79,9 +79,9 @@ For built-in actions, Microsoft's steps are:
 2. On the HTTP action, open **Advanced parameters**, select **Authentication**, then set **Authentication type** to **Managed identity** and choose the identity.
 3. Set the **Audience** to the exact resource ID the target expects.
 
-The page warns that the target resource ID must match exactly, otherwise you may get a 400 Bad Request or 401 Unauthorized error. Do not disable the system-assigned identity to remove access. Disabling it generates a new object ID, and connections that used it stop working even if you re-enable it. Remove the role assignment instead.
+The page warns that the target resource ID must match exactly, otherwise you may get a 400 Bad Request or 401 Unauthorized error. Learn says to avoid disabling the system-assigned identity to remove access. Disabling it deletes the object ID, a re-enabled identity gets a different one, and connections that used it stop working even if you re-enable it immediately. The documented fix is to recreate the connections. To remove access, remove the role assignment instead.
 
-For Dataverse, the identity must also exist as an application user. The pages read do not give the Audience value for a Dataverse environment under managed identity, so confirm it against current Dataverse documentation.
+My own inference, based on the application users page mentioning managed identity application IDs: for Dataverse the identity probably must also exist as an application user. The pages read do not give the Audience value for a Dataverse environment under managed identity, so confirm it against current Dataverse documentation.
 
 ## Troubleshooting order
 
@@ -103,4 +103,4 @@ For Dataverse, the identity must also exist as an application user. The pages re
 - [Microsoft Learn: Microsoft Dataverse connector reference](https://learn.microsoft.com/en-us/connectors/commondataserviceforapps/)
 - [Microsoft Learn: Authenticate with managed identities in Azure Logic Apps](https://learn.microsoft.com/en-us/azure/logic-apps/authenticate-with-managed-identity)
 - [Microsoft Learn: Manage application users in the Power Platform admin center](https://learn.microsoft.com/en-us/power-platform/admin/manage-application-users)
-- [Microsoft Learn: Connect to Dataverse with OAuth](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/authenticate-oauth)
+- [Microsoft Learn: Use OAuth authentication with Microsoft Dataverse](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/authenticate-oauth)
