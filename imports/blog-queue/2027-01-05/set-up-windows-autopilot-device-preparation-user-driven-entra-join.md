@@ -7,11 +7,11 @@ author: mirko-p
 date: 2027-01-05
 topics: [windows-autopilot-device-preparation, intune]
 keypoints:
-  - "The tutorial applies to Windows 11. Steps 1 to 6 are required: automatic Intune enrollment, user join setting, device group, user group, apps and scripts, and the policy."
+  - "Steps 1 to 6 of the tutorial are required: automatic Intune enrollment, user join setting, device group, user group, apps and scripts, and the policy."
   - "The device group must be an assigned security group with the service principal Intune Provisioning Client (AppId f1346770-5b25-470b-88bd-d5744ab7952c) as owner. Dynamic groups are not used."
   - "A policy selects up to 25 apps and up to 10 PowerShell scripts. A failure in a selected app or script fails the deployment."
   - "The policy is assigned to the user group, and the device group is chosen on the Device group page of the wizard."
-  - "OOBE customization and device naming work only for devices associated with your tenant. Use corporate identifiers or device association, not both."
+  - "OOBE customization and device naming work only for devices associated with your tenant. You need either corporate identifiers or device association, not both."
 faq:
   - q: "What are the required steps?"
     a: "Per Microsoft Learn: set up Windows automatic Intune enrollment, allow users to join devices to Microsoft Entra ID, create an assigned device group, create a user group, assign applications and PowerShell scripts to the device group, and create the device preparation policy. Step 7, for corporate identifiers or device association, is optional."
@@ -21,11 +21,11 @@ faq:
     a: "Up to 25 essential apps and up to 10 essential PowerShell scripts. Learn does not say whether the limits are per policy or per device."
   - q: "What happens if an app fails?"
     a: "For LOB, Microsoft 365, Win32, Store and Enterprise App Catalog apps selected in the policy, a failure fails the deployment. The same applies to selected PowerShell scripts. MDM policy application is not tracked and does not fail it."
-  - q: "What if the device is registered in Autopilot?"
-    a: "If a device is registered as an Autopilot device but not associated with your tenant, the Windows Autopilot deployment runs instead. If it is associated, device preparation runs."
+  - q: "Which policy settings need device association?"
+    a: "Learn says language and region, automatic keyboard, hiding license terms and privacy settings, hiding change-account options and the device name template are only available to associated devices. They have no effect on devices onboarded with corporate identifiers only."
 ---
 
-Autopilot device preparation for user-driven Microsoft Entra join takes seven steps, six of them required. You set up automatic enrollment and user join rights, create an assigned device group owned by the Intune Provisioning Client, create a user group, assign apps and scripts, and create the policy. This guide follows the Microsoft Learn tutorial overview and its pages on the device group, the join setting and the policy. It applies to Windows 11.
+Autopilot device preparation for user-driven Microsoft Entra join takes seven steps, six of them required. You set up automatic enrollment and user join rights, create an assigned device group owned by the Intune Provisioning Client, create a user group, assign apps and scripts, and create the policy. This guide follows the Microsoft Learn tutorial overview and its pages on the device group, the join setting and the policy.
 
 ## The seven steps
 
@@ -100,12 +100,12 @@ Path: Intune admin center > **Devices** > **By platform: Windows** > **Windows d
 
 - Apps and scripts that are only assigned to the group, and not selected in the policy, install after the desktop appears.
 - If multiple policies apply, the highest priority policy (smallest number) wins. A device-based assignment beats a user-based one.
-- Use either corporate identifiers or device association, not both.
+- Learn says you need either corporate identifiers or device association for each device, and you do not need both.
 - The tutorial suits labs and tests but can be used in production.
 
 ## What the pages do not say
 
-Licensing, minimum Windows 11 build, network endpoints, the number of attempts behind the skip option, default values for toggles, and the roles needed for the Intune portal steps.
+Licensing, supported Windows versions and builds, network endpoints, the number of attempts behind the skip option, default values for toggles, and the roles needed for the Intune portal steps.
 
 ## Typical mistakes
 
@@ -122,7 +122,7 @@ Licensing, minimum Windows 11 build, network endpoints, the number of attempts b
 
 ## Sources
 
-- [Overview: user-driven Microsoft Entra join (Microsoft Learn)](https://learn.microsoft.com/autopilot/device-preparation/tutorial/user-driven/entra-join-workflow)
-- [Step 2: allow users to join devices (Microsoft Learn)](https://learn.microsoft.com/autopilot/device-preparation/tutorial/user-driven/entra-join-allow-users-to-join)
-- [Step 3: create an assigned device group (Microsoft Learn)](https://learn.microsoft.com/autopilot/device-preparation/tutorial/user-driven/entra-join-device-group)
-- [Step 6: create the device preparation policy (Microsoft Learn)](https://learn.microsoft.com/autopilot/device-preparation/tutorial/user-driven/entra-join-autopilot-policy)
+- [Overview for Windows Autopilot device preparation user-driven Microsoft Entra join in Intune (Microsoft Learn)](https://learn.microsoft.com/autopilot/device-preparation/tutorial/user-driven/entra-join-workflow)
+- [Windows Autopilot device preparation user-driven Microsoft Entra join - Step 2 of 7 - Allow users to join devices to Microsoft Entra ID (Microsoft Learn)](https://learn.microsoft.com/autopilot/device-preparation/tutorial/user-driven/entra-join-allow-users-to-join)
+- [Windows Autopilot device preparation user-driven Microsoft Entra join - Step 3 of 7 - Create an assigned device group (Microsoft Learn)](https://learn.microsoft.com/autopilot/device-preparation/tutorial/user-driven/entra-join-device-group)
+- [Windows Autopilot device preparation user-driven Microsoft Entra join - Step 6 - Create a Windows Autopilot device preparation policy (Microsoft Learn)](https://learn.microsoft.com/autopilot/device-preparation/tutorial/user-driven/entra-join-autopilot-policy)
