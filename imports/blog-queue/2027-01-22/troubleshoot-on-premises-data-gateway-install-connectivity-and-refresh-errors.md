@@ -40,7 +40,7 @@ When an on-premises data gateway misbehaves, the Microsoft Learn troubleshooting
 | Failed to add user to group (-2147463168 PBIEgwService Performance Log Users) | Installing on a domain controller, which is not supported. Use a machine that is not a domain controller |
 | Install fails, antivirus out of date | Update the antivirus, or disable it only during installation and re-enable it afterwards |
 | Install fails with antivirus such as McAfee Endpoint Defender enabled | Configure the antivirus to ignore the gateway process |
-| Error when installing the same or an older version than the one installed | The page shows the error in a screenshot. Install a newer version |
+| Error when installing the same or an older version than the one installed | The page shows the error in a screenshot and gives no fix. My reading: install a newer version than the one that is already there |
 | The user profile is a temporary profile | A problem with the machine. Ask your internal IT team to remove the temporary profile |
 | Error generating an asymmetric key | Antivirus such as McAfee can corrupt or delete files the setup needs. Disable it temporarily or configure it to ignore the gateway process, delete the RSA folder under `c:\Users\<GW Service Account User>\AppData\Roaming\Microsoft\Crypto\RSA`, restart the machine, then finish setup and sign in. The root path can differ depending on whether you sign in as a user or service profile |
 
@@ -54,7 +54,7 @@ Typical symptoms on the page:
 
 Learn's verifications, in order:
 
-1. Are the FQDNs and ports from the gateway communication documentation allowed in the firewall or proxy? Run the network ports test. The result is Completed (Succeeded) or Completed (Failed, see last test results). A failure means your network might block required ports and servers.
+1. Are the FQDNs and ports from the gateway communication documentation allowed in the firewall or proxy? In its firewall and proxy section, Learn also describes a network ports test. The result is Completed (Succeeded) or Completed (Failed, see last test results). A failure means your network might block required ports and servers.
 2. If you use a proxy: confirm it is configured in the gateway config files, confirm the proxy configuration is consistent, and check the proxy logs for blocked requests.
 3. If the firewall allows only ports 80 and 443, enable HTTPS mode in the gateway.
 
