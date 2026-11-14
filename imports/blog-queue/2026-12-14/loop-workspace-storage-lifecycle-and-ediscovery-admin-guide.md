@@ -7,7 +7,7 @@ author: mirko-p
 date: 2026-12-14
 topics: [microsoft-loop, loop-workspaces, ediscovery, sharepoint-embedded]
 keypoints:
-  - "Loop app workspaces live in SharePoint Embedded containers, count against the organization's SharePoint storage quota, and have no admin-set limit per container."
+  - "Loop app workspaces live in SharePoint Embedded containers (25 TB maximum each), count against the SharePoint storage quota, and have no admin-set limit per container."
   - "A personal My workspace container follows the OneDrive deletion lifecycle, with one manual handoff step when the user leaves."
   - "Retention policies for all SharePoint sites apply to Loop workspaces. Retention labels cannot be applied to the containers themselves."
   - "eDiscovery search and collection are supported, while review and HTML export need Premium. Legal hold on My workspace has a documented rollout caveat."
@@ -43,7 +43,7 @@ Three container ownership models exist:
 - **Tenant-owned shared workspaces** use a roster for permissions.
 - **Microsoft 365 group-owned workspaces** follow the group's permissions and lifetime, similar to Teams sites.
 
-Shared workspaces create one container per workspace. All of it counts against the organization's SharePoint storage quota. Learn's storage page lists a maximum of 25 TB per container, while the compliance summary says there is no admin control to set storage limits for individual containers. Both statements can hold at once: you cannot tune the cap.
+Shared workspaces create one container per workspace. All of it counts against the organization's SharePoint storage quota. Learn's storage page lists a maximum of 25 TB per container, while the compliance summary says there is no admin control to set storage limits for individual containers. My own reading: both statements can hold at once, because the cap exists but you cannot tune it per container.
 
 ## Find and inspect containers
 
@@ -61,7 +61,7 @@ Membership roles map as follows: Owner in the admin center equals Owner in Loop,
 
 ## Lifecycle: departures, ownerless workspaces and deletion
 
-**A user leaves.** The My workspace container follows the OneDrive deletion lifecycle. After the account is deleted, the container stays active for a configurable retention period, then moves to a recycle bin, then is permanently deleted. One control governs both OneDrive and user-owned containers. The Loop pages do not state the number of days. The OneDrive retention page says the default is 30 days, followed by 93 days in the site collection recycle bin.
+**A user leaves.** The My workspace container follows the OneDrive deletion lifecycle. After the account is deleted, the container stays active for a configurable retention period, then moves to a recycle bin, then is permanently deleted. One control governs both OneDrive and user-owned containers. The Loop pages do not state the number of days. The OneDrive retention page describes the OneDrive process: a default retention period of 30 days that can be changed, then seven more days before the move to the site collection recycle bin, where it is kept for 93 days. Retention policies and holds take precedence over that process. Whether the container follows exactly those numbers is not spelled out on the Loop pages, which only say it follows the same lifecycle.
 
 OneDrive delegates access to the manager automatically. User-owned containers do not, so the admin completes that step manually. Learn gives two options:
 
@@ -72,7 +72,7 @@ If nobody is granted access before the retention period ends, the content is per
 
 **Shared workspaces.** If all owners leave a tenant-owned workspace, it becomes ownerless and is not deleted automatically. Members cannot delete it, because only an owner can. An admin adds new owners first.
 
-**Deleted containers.** In the SharePoint admin center, **Deleted containers** lists removed containers. Learn's SharePoint Embedded admin page says deleted containers are permanently purged after 93 days, unless a retention policy changes the outcome. Restore from the **Restore** button, or with `Restore-SPODeletedContainer -Identity <ContainerId>`.
+**Deleted containers.** In the SharePoint admin center, **Deleted containers** lists removed containers. Learn's page on managing containers in the SharePoint admin center says deleted containers are permanently purged after 93 days, unless a retention policy changes the outcome. Restore with the **Restore** button, or with `Restore-SPODeletedContainer -Identity <ContainerId>` from the PowerShell page.
 
 Two caveats from the compliance summary:
 
@@ -97,8 +97,8 @@ The Loop compliance summary lists status per feature:
 Details worth knowing:
 
 - Retention labels can't be viewed or applied from a Loop component. Users must open the file in the Loop app. Record labels can't be applied manually at all.
-- For legal hold on My workspace, selecting the container in the custodian picker was described as rolling out with an expected date of October 2026. Until then, retrieve the container URL and add it as a data source manually. Check whether the picker has reached your tenant.
-- Version history for SharePoint Embedded content defaults to 50 major versions per file, changeable with `Set-SPOApplication -ItemMajorVersionLimit`.
+- For legal hold on My workspace, selecting the container in the custodian picker was described as rolling out, with an expected date of October 2026 on the page. That date may already have passed, so check whether the picker has reached your tenant. Until then, retrieve the container URL and add it as a data source manually.
+- Version history for SharePoint Embedded content defaults to 50 major versions per file, changeable with `Set-SPOApplication -ItemMajorVersionLimit`. The PowerShell page for containers says application administration cmdlets do not apply to Microsoft Loop, so test this setting before relying on it.
 
 ## Target a specific workspace in Purview
 
@@ -114,7 +114,7 @@ That URL is for Purview targeting only, not a shareable link. For a search on on
 
 Creation is controlled by the Cloud Policy setting **Create Loop workspaces in Loop**, or in the Microsoft 365 admin center under **Org settings > Services > Loop**. To stop a personal container from being created, disable both that setting and **Create and view Copilot Pages and Copilot Notebooks** for the same user. Disabling only one leaves a creation path open. These controls do not restrict access to existing workspaces.
 
-## Checklist
+## Checklist (my own suggestions)
 
 1. Inventory containers with the Loop application ID, and list ownerless ones.
 2. Add a manual step to the leaver process for My workspace containers.
@@ -131,12 +131,12 @@ Creation is controlled by the Cloud Policy setting **Create Loop workspaces in L
 
 ## Sources
 
-- [Microsoft Learn: Loop storage](https://learn.microsoft.com/microsoft-365/loop/loop-storage)
-- [Microsoft Learn: Loop compliance summary](https://learn.microsoft.com/microsoft-365/loop/loop-compliance-summary)
-- [Microsoft Learn: Manage Loop workspace experiences in SharePoint Embedded](https://learn.microsoft.com/microsoft-365/loop/loop-workspaces-configuration)
-- [Microsoft Learn: Managing SharePoint Embedded containers for Loop](https://learn.microsoft.com/en-us/microsoft-365/loop/spe-management)
-- [Microsoft Learn: Grant access to containers](https://learn.microsoft.com/en-us/microsoft-365/loop/grant-access)
-- [Microsoft Learn: Purview management for Loop](https://learn.microsoft.com/microsoft-365/loop/purview-management)
-- [Microsoft Learn: Manage SharePoint Embedded containers in the SharePoint admin center](https://learn.microsoft.com/sharepoint/dev/embedded/concepts/admin-exp/consuming-tenant-admin/ctaux)
-- [Microsoft Learn: SharePoint Embedded container management in PowerShell](https://learn.microsoft.com/sharepoint/dev/embedded/concepts/admin-exp/consuming-tenant-admin/ctapowershell)
-- [Microsoft Learn: OneDrive and SharePoint retention and deletion](https://learn.microsoft.com/en-us/sharepoint/retention-and-deletion)
+- [Microsoft Learn: Loop storage](https://learn.microsoft.com/en-us/microsoft-365/loop/loop-storage?view=o365-worldwide)
+- [Microsoft Learn: Loop compliance summary](https://learn.microsoft.com/en-us/microsoft-365/loop/loop-compliance-summary?view=o365-worldwide)
+- [Microsoft Learn: Manage Loop in your organization](https://learn.microsoft.com/en-us/microsoft-365/loop/loop-admin-configuration?view=o365-worldwide)
+- [Microsoft Learn: Manage SharePoint Embedded containers](https://learn.microsoft.com/en-us/microsoft-365/loop/spe-management?view=o365-worldwide)
+- [Microsoft Learn: Grant access to Copilot Pages, Copilot Notebooks, and Loop containers](https://learn.microsoft.com/en-us/microsoft-365/loop/grant-access?view=o365-worldwide)
+- [Microsoft Learn: Purview management for SharePoint Embedded containers](https://learn.microsoft.com/en-us/microsoft-365/loop/purview-management?view=o365-worldwide)
+- [Microsoft Learn: Manage containers in SharePoint admin center](https://learn.microsoft.com/en-us/sharepoint/dev/embedded/admin/manage-containers-sharepoint-admin-center)
+- [Microsoft Learn: Manage containers with PowerShell](https://learn.microsoft.com/en-us/sharepoint/dev/embedded/admin/manage-containers-powershell)
+- [Microsoft Learn: OneDrive retention and deletion](https://learn.microsoft.com/en-us/sharepoint/retention-and-deletion)
