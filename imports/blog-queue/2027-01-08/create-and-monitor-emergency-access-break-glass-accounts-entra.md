@@ -25,7 +25,7 @@ faq:
     a: "At least every 90 days, after IT staff changes and when Entra subscriptions change. Learn also suggests testing Conditional Access sign-in quarterly."
 ---
 
-Emergency access, or break-glass, accounts are the way back into your tenant when normal administration fails. They are cloud-only accounts that are excluded from blocking policies, kept in a safe place and watched closely. This guide follows the Microsoft Learn page on managing emergency access accounts in Microsoft Entra ID.
+Emergency access, or break-glass, accounts are the way back into your tenant when normal administration fails. They are cloud-only accounts that are excluded from blocking policies, kept in a safe place and watched closely. This guide follows the Microsoft Learn page Manage emergency access admin accounts.
 
 ## Why you need them
 
@@ -56,9 +56,11 @@ Exclude the accounts from Conditional Access policies that block or restrict sig
 
 ## Monitor sign-ins
 
+Learn says you can use Azure Monitor, Microsoft Sentinel or other tools to watch the sign-in logs and send email and SMS alerts whenever an emergency access account signs in. The page illustrates Azure Monitor, and so does this guide.
+
 1. Send Microsoft Entra sign-in logs to Azure Monitor.
-2. Get the object ID of each emergency account.
-3. Create an alert rule on the Log Analytics workspace with a custom log search.
+2. Get the object ID of each emergency account in **Entra ID** > **Users** (the page signs in as at least User Administrator for this).
+3. In Azure Monitor (the page signs in as at least Monitoring Contributor), create an alert rule on your Log Analytics workspace with the signal **Custom log search** and the query type **Aggregated logs**.
 4. Use a query such as the one on the page:
 
 ```kusto
@@ -67,8 +69,8 @@ SigninLogs
 | project TimeGenerated, UserPrincipalName, UserId, IPAddress, ResultType, ResultDescription
 ```
 
-5. Set threshold type static, operator Greater than, threshold value 0 and severity **0 - Critical**.
-6. Notify through an action group by email, SMS, push or voice.
+5. Under **Measurement**, select the measure, aggregation type and aggregation granularity, and split by the **Resource ID column**. Set threshold type static, operator Greater than, threshold value 0 and a frequency of evaluation that suits you. On the **Details** tab, use severity **0 - Critical**.
+6. Notify through an action group. The page's example uses the notification type Email/SMS message/Push/Voice.
 
 Add another `or UserId ==` clause for more accounts. After an alert, preserve the logs and run a post-mortem to decide whether it was a drill, a real emergency or misuse.
 
@@ -95,7 +97,7 @@ Keep credentials secure and known only to authorized people. Learn says to store
 
 ## A setup order
 
-This order is practical advice built on the page.
+This order is my advice, built on the page.
 
 1. Create two cloud-only accounts and assign permanent Global Administrator.
 2. Register a passkey or certificate on each, using a different method than your other admins.
@@ -103,7 +105,7 @@ This order is practical advice built on the page.
 4. Send sign-in logs to Azure Monitor and create the alert.
 5. Store the credentials and schedule 90-day checks.
 
-## Typical mistakes
+## Typical mistakes (my advice)
 
 - Making the role assignment eligible instead of active.
 - Registering MFA on a personal phone.
@@ -119,4 +121,4 @@ This order is practical advice built on the page.
 
 ## Sources
 
-- [Manage emergency access admin accounts in Microsoft Entra ID (Microsoft Learn)](https://learn.microsoft.com/entra/identity/role-based-access-control/security-emergency-access)
+- [Manage emergency access admin accounts (Microsoft Learn)](https://learn.microsoft.com/entra/identity/role-based-access-control/security-emergency-access)
