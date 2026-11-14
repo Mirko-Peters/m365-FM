@@ -53,7 +53,7 @@ Use the same questions for each service:
 | Recommended sync size | 300,000 files per synced library |
 | ZIP download | 20 GB |
 
-**Sync guidance.** Microsoft says performance issues can appear at 300,000 or more items across all synced libraries, including shortcut folders.
+**Sync guidance.** Microsoft recommends a maximum of 300,000 files per synced library. The limits article says this also applies across all synced libraries and to shortcut folders.
 
 ## Personal vs shared storage
 
@@ -81,13 +81,13 @@ The workflow is the same: connect, scan, copy to the list, review destinations, 
 - Migration Manager does not recreate external sharing links and does not share content with external collaborators.
 - Google does not allow export of sites and maps from Drive. Google Forms are migrated and need a Forms destination.
 - Two Google Drives with the same name cannot both be migrated.
-- The documented maximum file size for Google sources is 250 GB.
+- The Google overview only links to a separate file size limitations article, so check it for source limits.
 
 ### Choosing destinations
 
-For each migration task, pick a OneDrive, SharePoint or Teams path. For SharePoint, enter the site URL and location. For OneDrive, enter the URL or email address. For Teams, select the team and channel. If you select a SharePoint document library root as the destination, source root-folder permissions are not migrated.
+For each migration task, pick a OneDrive, SharePoint or Teams path. For SharePoint, enter the site URL and location. For OneDrive, enter the URL or email address. For Teams, select the team and channel. The Google FAQ mentions a source root-folder exception in the permission settings, so review it before you migrate.
 
-A 2018 Microsoft Q&A thread about moving about 1 TB from Google Drive to OneDrive shows the manual alternative: sync an empty SharePoint library to a local folder and copy the files into it. The thread's author warned that details may be outdated, and it reports conflicting path length figures, so prefer the current documentation.
+A 2018 Microsoft Q&A thread about moving about 1 TB from Google Drive to OneDrive shows the manual alternative: sync an empty SharePoint library to a local folder and copy the files into it. The thread dates from May 2018 and has no accepted answer. One answer in it says the published path length limit is conflicting information (422, 400 or 255 characters), so prefer the current documentation.
 
 ## Decision guide
 
