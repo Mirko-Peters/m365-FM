@@ -21,7 +21,7 @@ The [list view threshold](https://www.m365.fm/entity/sharepoint-list-view-thresh
 
 ## What the threshold is, and what it is not
 
-By default, the list view threshold is 5,000 items. It applies to how many list items a single database operation, such as a view query, can process at once. It does not limit how many items a list or library can store.
+By default, the list view threshold is 5,000 items. It applies to how many list items a single database operation, such as a view query, can process at once. It does not limit how many items a list or library can store. Microsoft Learn names the storage limit separately: up to 30 million items or files in a list or library. It also notes that the actual threshold can vary with site configuration and database activity, and that in SharePoint Online it cannot be changed.
 
 That distinction matters because the two ideas are often mixed up:
 
@@ -30,7 +30,7 @@ That distinction matters because the two ideas are often mixed up:
 
 So the practical question is not "how many files do we have?" but "how many items does this query have to look at to answer the request?"
 
-Microsoft describes the behaviour in its troubleshooting article [on items that exceed the list view threshold](https://learn.microsoft.com/en-us/troubleshoot/sharepoint/lists-and-libraries/items-exceeds-list-view-threshold). Because limits and defaults can change over time, treat that page as the reference and check it when you plan a design.
+Microsoft shows the error message in its troubleshooting article [on items that exceed the list view threshold](https://learn.microsoft.com/en-us/troubleshoot/sharepoint/lists-and-libraries/items-exceeds-list-view-threshold) and points from there to its Support article on managing large lists and libraries. Because limits and defaults can change over time, treat that page as the reference and check it when you plan a design.
 
 ## Why a small view can still hit the limit
 
@@ -40,7 +40,7 @@ Imagine a library with a large number of contracts. A user opens a view filtered
 
 The same applies to sorting. A sort on a column that has no index can force the query to process the whole set before it can return the first page.
 
-Things that commonly contribute:
+Microsoft defines the threshold by what an operation has to process, not by what it returns. Its pages do not list the individual causes in detail; in my experience these commonly contribute:
 
 - Filters on columns that are not indexed
 - Sorting on columns that are not indexed
@@ -53,7 +53,7 @@ Which of these apply depends on your library and configuration, so use Microsoft
 
 The native approach most admins start with is to design views so that the query can narrow the result set early. Two building blocks are involved.
 
-**Indexed columns.** Document libraries support columns for metadata, and you can index columns that are used for filtering and sorting. An index is designed to help SharePoint find matching items without scanning everything, though it does not remove every limit; see Microsoft's documentation for the details. The effect depends on choosing the right column: an index only helps if the view actually filters on it in a way that narrows the result.
+**Indexed columns.** Document libraries support columns for metadata, and you can index columns that are used for filtering and sorting. Microsoft lists indexing and filtering among the ways to manage the number of items a view returns. An index is designed to help SharePoint find matching items without scanning everything, though it does not remove every limit; see Microsoft's documentation for the details. The effect depends on choosing the right column: an index only helps if the view actually filters on it in a way that narrows the result.
 
 **Filtered views.** Instead of one "All Documents" view, create views that answer real questions: "My open documents", "Documents modified this quarter", "Documents for client X". Each view filters on a metadata column that is indexed.
 
@@ -76,7 +76,7 @@ Consider these design habits:
 - **Use metadata instead of deep folder trees.** Metadata columns can drive filtered views and give indexes something useful to work with. Folders still have a place, but a structure that relies only on folders can make it harder to answer cross-cutting questions.
 - **Define the default view carefully.** The view users land on should be filtered and sorted on indexed columns, not an unfiltered list of everything.
 - **Separate content with different life cycles.** Imagine one library that mixes active project files with ten years of archived material. Splitting active and archive content into separate libraries or sites can keep working views small. Whether this is right depends on your governance and retention needs.
-- **Be careful with unique permissions.** Library, folder and file level permissions are supported, but many individually permissioned items can add complexity of their own. Review Microsoft's guidance on permission limits and plan access around groups rather than individual items where you can.
+- **Be careful with unique permissions.** Library, folder and file level permissions are supported, but many individually permissioned items can add complexity of their own. Microsoft Learn names 50,000 as the supported limit of unique permissions in a list or library and gives a general recommendation of 5,000. Plan access around groups rather than individual items where you can.
 
 None of these habits is a fix for every case. They are ways to reduce the chance that a query needs to process more items than the threshold allows.
 
@@ -110,3 +110,8 @@ If you need visibility across many libraries to decide where to start, check Mic
 - Make the default view of every large library filtered and sorted on indexed columns.
 - Treat bulk moves, restructuring and permission changes as risky: use a pilot site or test tenant first and keep a backup or a way back.
 - Check the [Microsoft troubleshooting article](https://learn.microsoft.com/en-us/troubleshoot/sharepoint/lists-and-libraries/items-exceeds-list-view-threshold) and Microsoft Learn for the current behaviour and defaults before you design or change anything.
+
+## Sources
+
+- [The number of items in this list exceeds the list view threshold (Microsoft Learn)](https://learn.microsoft.com/troubleshoot/sharepoint/lists-and-libraries/items-exceeds-list-view-threshold)
+- [List View Threshold for large lists and libraries (Microsoft Support)](https://support.microsoft.com/office/b8588dae-9387-48c2-9248-c24122f07c59)
