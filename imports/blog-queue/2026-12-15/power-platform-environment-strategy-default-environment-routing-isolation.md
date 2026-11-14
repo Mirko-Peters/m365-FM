@@ -11,7 +11,7 @@ keypoints:
   - "Environment routing is off by default, creates managed developer environments and evaluates rules in priority order."
   - "Environment groups apply shared rules such as sharing limits and solution checker. An environment must be managed to join one."
   - "Tenant isolation restricts cross-tenant Entra ID connections for canvas apps and flows, with inbound and outbound allow lists."
-  - "Learn has no dedicated multi-tenant section. Environments belong to one tenant, so multi-tenant design means separate strategies plus isolation rules."
+  - "The Learn pages I read have no multi-tenant section. Repeating the strategy per tenant plus isolation rules is my own inference."
 faq:
   - q: "Can I block access to the default environment?"
     a: "No. Microsoft Learn says you can't block access, but you can minimize what is done in it. Recommended steps are environment routing, limiting admins, renaming it, and a data policy that restricts connectors."
@@ -22,16 +22,16 @@ faq:
   - q: "What does tenant isolation block?"
     a: "When on, it restricts cross-tenant connections in both directions for connectors that use Microsoft Entra ID authentication, such as SharePoint and Office 365 Outlook, even when the user has valid credentials. The Azure DevOps connector is a known exception because it uses its own OAuth flow."
   - q: "What changes on December 15, 2026?"
-    a: "The environment routing page says unmanaged developer environments are deprecated and will be suspended starting December 15, 2026. Routing creates managed developer environments, so it is not affected. The strategy page also says no new Dataverse for Teams environments can be created starting November 15, 2026."
+    a: "The environment routing page says unmanaged developer environments are deprecated and will be suspended starting December 15, 2026. Routing creates managed developer environments, so it is not affected. The Important changes page adds that creating new unmanaged developer environments ends November 15, 2026 and deletion starts January 15, 2027, and that no new Dataverse for Teams environments can be created starting November 15, 2026."
 ---
 
-A sound layout has four parts: a default environment limited to personal productivity, routing that sends makers to their own managed developer environments, shared environments organized into environment groups, and tenant isolation to restrict cross-tenant data movement. Microsoft Learn describes each. It does not describe a multi-tenant architecture as such. Environments belong to a tenant, so for several tenants you repeat the strategy per tenant and use isolation and allow lists to control traffic between them.
+A sound layout has four parts: a default environment limited to personal productivity, routing that sends makers to their own managed developer environments, shared environments organized into environment groups, and tenant isolation to restrict cross-tenant data movement. Microsoft Learn describes each. The pages I read do not describe a multi-tenant architecture as such. Environments belong to a tenant, so my own inference for several tenants is to repeat the strategy per tenant and use isolation and allow lists to control traffic between them.
 
 ## Understand the default environment
 
 Every tenant has one. Learn says it isn't intended for long-term or permanent work beyond Microsoft 365 personal productivity scenarios. You can't block access to it.
 
-Securing steps in Learn's order:
+The strategy page puts routing first, then admin access, renaming and a data policy. The secure-the-default-environment page adds sharing limits and Exchange rules. Steps:
 
 1. Use environment routing to send makers to their own workspace.
 2. Review who has admin access and limit it. Prefer environment admin or system administrator over Power Platform administrator where possible, and use PIM for high-privilege roles.
@@ -61,7 +61,7 @@ Routed environments are managed by default and inherit group rules. Preconfigure
 
 Groups let you apply rules to many managed environments. Constraints from Learn: an environment must be managed to join, it can be in one group at a time, groups can span regions, and groups cannot contain groups. Rules cover sharing controls, usage insights, maker welcome content, solution checker enforcement, backup retention and AI-generated descriptions. While a group manages a setting, the environment setting is locked.
 
-Group by lifecycle stage, department, project or region. Learn's naming pattern example is `Prod-US-Finance-Payroll`. Groups have no rule for data policies, so name the data policy similarly to the group.
+Group by lifecycle stage, department, project or region. Learn's naming pattern example is `Prod-US-Finance-Payroll`. Environment groups have no rule for data policies. Learn's example is to create a data policy with the same or a similar name as the group and apply it to the environments in that group.
 
 ## Environment types and sharing limits
 
@@ -84,7 +84,7 @@ Tenant isolation governs cross-tenant data movement for connections that use Mic
 2. Turn on **Restrict cross-tenant connections**.
 3. Select **Add exceptions**, choose the direction, enter the tenant domain or ID, and **Save**.
 
-Direction matters. Allowing outbound to a partner tenant does not allow inbound from it. The allow list holds up to 500 rules, and `*` allows all tenants. Policy changes take about an hour to be assessed against active apps and flows. Learn recommends running the cross-tenant isolation reports in preview before enabling, to find tenants to exempt.
+Direction matters. Allowing outbound to a partner tenant does not allow inbound from it. The allow list holds up to 500 rules, and `*` allows all tenants. Policy changes take about an hour to be assessed against active apps and flows. Learn's scenario list for tenant isolation includes running the cross-tenant isolation reports (preview) to find tenants to exempt.
 
 ## Rolling this out in an existing tenant
 
@@ -99,7 +99,7 @@ Restrict creation of new production environments to admins, as Learn advises.
 
 ## Know the developer environment rules
 
-Learn describes the developer environment as a personal workspace. Each maker gets one managed developer environment, it does not count against tenant capacity, and Dynamics 365 apps are not available in it. It is removed automatically if it is inactive and the owner does not respond to notifications. Unmanaged developer environments are deprecated.
+Learn describes the developer environment as a personal workspace. The strategy page says makers can have up to three developer environments, they do not count against tenant capacity and Dynamics 365 apps are not available in them. A developer environment unused for 90 days is turned off and then removed if the owner does not respond to notifications. Routing creates a new one only for a maker who has none of their own. Unmanaged developer environments are deprecated: creation ends November 15, 2026, suspension starts December 15, 2026 and deletion starts January 15, 2027 according to the Important changes page.
 
 Because routing creates managed environments, users who run apps in them need a premium license. Budget for that before you turn routing on for everyone. To limit who is eligible, name a security group in the routing rule. Non-members fall back to the default environment, which is why the default environment still needs the controls above.
 
@@ -114,7 +114,8 @@ Also decide early where Dynamics 365 might be used. Learn says that if Dynamics 
 
 ## Sources
 
-- [Environment routing](https://learn.microsoft.com/en-us/power-platform/admin/default-environment-routing)
-- [Develop a tenant environment strategy](https://learn.microsoft.com/en-us/power-platform/guidance/adoption/environment-strategy)
-- [Secure the default environment](https://learn.microsoft.com/en-us/power-platform/guidance/adoption/secure-default-environment)
-- [Cross-tenant inbound and outbound restrictions](https://learn.microsoft.com/en-us/power-platform/admin/cross-tenant-restrictions)
+- [Microsoft Learn: Environment routing](https://learn.microsoft.com/en-us/power-platform/admin/default-environment-routing)
+- [Microsoft Learn: Develop a tenant environment strategy to adopt Power Platform at scale](https://learn.microsoft.com/en-us/power-platform/guidance/adoption/environment-strategy)
+- [Microsoft Learn: Secure the default environment](https://learn.microsoft.com/en-us/power-platform/guidance/adoption/secure-default-environment)
+- [Microsoft Learn: Restrict cross-tenant inbound and outbound access](https://learn.microsoft.com/en-us/power-platform/admin/cross-tenant-restrictions)
+- [Microsoft Learn: Important changes (deprecations) coming in Power Platform](https://learn.microsoft.com/en-us/power-platform/important-changes-coming)
