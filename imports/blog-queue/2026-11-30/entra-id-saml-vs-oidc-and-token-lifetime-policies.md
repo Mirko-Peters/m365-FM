@@ -42,7 +42,7 @@ Microsoft's decision guide opens with two statements. Entra ID fully supports bo
 | Customer onboarding | More complex, manual setup | Simpler, automated discovery |
 | Long-term maintainability | Higher overhead | Lower maintenance |
 
-The table is generalized, and individual integrations may differ.
+This is Microsoft's own comparison. The guide does not say whether the ratings hold for every individual integration.
 
 ### When to choose which
 
@@ -68,8 +68,8 @@ Microsoft Learn lists these defaults:
 | Access token | Random 60 to 90 minutes, 75 on average. Depends on client, resource and whether Conditional Access is enabled. With Continuous Access Evaluation it may extend to 24 to 28 hours |
 | ID token | 1 hour |
 | SAML2 token | 1 hour, set by `NotOnOrAfter` in the `<conditions>` element |
-| Refresh token | Maximum inactive time of 90 days, maximum age until revoked |
-| Session token | Non-persistent: 24 hours maximum inactive time. Persistent: 90 days. Maximum age until revoked. Each use extends validity |
+| Refresh token | 90 days maximum inactive time |
+| Session token | Non-persistent: 24 hours inactive. Persistent: 90 days inactive |
 
 ## The access token lifetime policy
 
