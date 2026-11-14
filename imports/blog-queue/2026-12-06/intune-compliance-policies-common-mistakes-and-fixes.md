@@ -68,7 +68,7 @@ You can add the same action more than once, for example an email on day 2 and an
 
 You can assign a policy to user groups or device groups. A policy assigned to a user checks all of that user's devices. Microsoft Learn notes that device groups help with compliance reporting. Linux policies support device groups only.
 
-Whichever you choose, keep the assignment pattern the same across policies, or reports become hard to read.
+Microsoft Learn does not give a rule for choosing between the two, so decide per policy and check the result in the compliance reports.
 
 ## Mistake 5: Ignoring check-in timing and the validity period
 
@@ -99,7 +99,7 @@ For custom compliance settings on Windows, macOS and Linux, the discovery script
 
 ## What the pages do not say
 
-The pages I read do not describe a "Not evaluated" state, and they do not give a duration for the remote lock or retire actions beyond "for some time". Treat advice that gives exact numbers for these as unverified. For troubleshooting a specific noncompliant device, see the separate article on Intune non-compliant devices.
+The Microsoft pages used here describe the remote lock and retire actions only as steps that apply to devices that stay noncompliant on a schedule you set. Anything beyond that, such as fixed durations, is not documented on these pages. Note that Add device to retire list only adds the device to a list; an admin must start the retirement.
 
 ## Related
 
@@ -109,6 +109,6 @@ The pages I read do not describe a "Not evaluated" state, and they do not give a
 
 ## Sources
 
-- [Intune device compliance policies](https://learn.microsoft.com/en-us/intune/intune-service/protect/device-compliance-get-started)
-- [Actions for noncompliance in Intune](https://learn.microsoft.com/en-us/intune/intune-service/protect/actions-for-noncompliance)
-- [Create a compliance policy in Microsoft Intune](https://learn.microsoft.com/en-us/intune/intune-service/protect/create-compliance-policy)
+- [Device compliance policies in Microsoft Intune](https://learn.microsoft.com/en-us/intune/device-security/compliance/overview)
+- [Configure compliance policies with actions for noncompliance](https://learn.microsoft.com/en-us/intune/device-security/compliance/configure-noncompliance-actions)
+- [Create device compliance policies in Microsoft Intune](https://learn.microsoft.com/en-us/intune/device-security/compliance/create-policy)
