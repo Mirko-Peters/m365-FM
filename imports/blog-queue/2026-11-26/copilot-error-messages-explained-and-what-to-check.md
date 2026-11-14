@@ -8,13 +8,13 @@ date: 2026-11-26
 topics: [copilot, copilot-chat, copilot-governance]
 keypoints:
   - "Learn ties 'Couldn't update license', 'Error code: 29' and 'Something went wrong. Let's try again.' to license timing, account mix, network, device licensing, update channel and privacy settings."
-  - "'Sorry, I wasn't able to respond to that' has no official explanation in the pages I read. Forum cases point to office networks, so check network rules first."
+  - "'Sorry, I wasn't able to respond to that' has no official explanation in the Learn pages read for this article. Forum cases point to office networks, so check network rules first."
   - "Microsoft's requirements page names three network causes: blocked WebSocket Secure traffic, TLS inspection that interferes, and aggressive proxy timeouts."
   - "A generic 'Something went wrong' can be a service incident. Check Service Health in the Microsoft 365 admin center before changing anything locally."
   - "Excel can refuse edits for file reasons: a file checked out in SharePoint, an unsupported format such as Strict Open XML, or calculation not set to Automatic."
 faq:
   - q: "What does 'Sorry, I wasn't able to respond to that' mean in Copilot?"
-    a: "The Microsoft Learn pages I read do not explain this message. A Microsoft Q&A thread from June 2026 reports it on managed devices on an office network only, with Try again working. The only reply was labeled as an AI answer, so treat its network suggestions as unverified. Microsoft's requirements page does document that blocked WebSocket traffic, interfering TLS inspection or short proxy timeouts can break Copilot."
+    a: "The Microsoft Learn pages read for this article do not explain this message. A Microsoft Q&A thread from June 2026 reports it on managed devices on an office network only, with Try again working. The only reply was labeled as an AI answer, so treat its network suggestions as unverified. Microsoft's requirements page does document that blocked WebSocket traffic, interfering TLS inspection or short proxy timeouts can break Copilot."
   - q: "What does 'Couldn't update license' with Error code 29 mean?"
     a: "Microsoft Learn lists it with 'Something went wrong. Let's try again.' as symptoms of Copilot being missing, disabled or not working in Microsoft 365 apps. Listed causes are a newly assigned license, a personal and work account conflict, connectivity, a recent Office reset or update, device-based licensing, Semi-Annual Enterprise Channel and privacy settings for connected experiences."
   - q: "How do I know whether a Copilot error is a Microsoft outage?"
@@ -27,7 +27,7 @@ faq:
 
 Copilot errors fall into four groups: license and account problems, network problems, service incidents and file problems. The message wording is a weak guide. A generic line such as "Something went wrong" can come from any of them. This article lists the messages people report, what Microsoft documents for each, and which advice only comes from forum threads.
 
-I found no official Microsoft catalog of Copilot error texts. Everything below comes from Microsoft Learn and Support pages, plus Microsoft Q&A and Tech Community threads that are marked as such. A separate checklist covers a missing Copilot button. This one focuses on errors that appear after Copilot loads.
+The pages read for this article include no official Microsoft catalog of Copilot error texts. Everything below comes from Microsoft Learn and Support pages, plus Microsoft Q&A and Tech Community threads that are marked as such. A separate checklist covers a missing Copilot button. This one focuses on errors that appear after Copilot loads.
 
 ## Quick map of messages
 
@@ -73,7 +73,7 @@ Microsoft's endpoint allow list for the Copilot app also names `config.edge.skyp
 Two Microsoft Q&A threads from June 2026 describe network cases. They are not official guidance.
 
 - "Sorry, I wasn't able to respond to that. Is there something else I can help with?" appeared mostly on first use, on managed devices, only on the office LAN or Wi-Fi, and Try again worked. The only answer was labeled as an AI answer and suggested allowing the Microsoft 365 endpoints and `config.edge.skype.com`. Nobody confirmed a fix.
-- In another thread, Copilot worked in Excel but not in Word, Loop or Copilot Chat from the corporate network. A moderator suspected WSS handling and suggested exempting the endpoints from inspection and proxy authentication, with long timeouts for persistent connections. The poster later bypassed the proxy for `substrate.svc.cloud.microsoft` and it worked. The moderator said she could not officially confirm that endpoint and recommended a support ticket.
+- In another thread, Copilot worked in Excel but not in Word, Loop or Copilot Chat from the corporate network. A moderator suspected WSS handling and suggested exempting the endpoints from inspection and proxy authentication, with long timeouts for persistent connections. The poster later bypassed the proxy for `substrate.svc.cloud.microsoft` and it worked. The moderator said they could not officially confirm that endpoint and recommended a support ticket.
 
 Treat both as leads for your network team, not as settings to copy.
 
@@ -92,7 +92,7 @@ Microsoft's Copilot in Excel FAQ describes an "unsupported file state" error. Ca
 - An unsupported format such as Strict Open XML Spreadsheet. Save as Excel Workbook (.xlsx).
 - Calculation Options not set to Automatic. The FAQ says Copilot editing works only in Automatic.
 
-A Tech Community thread reports "Failed to fetch document context due to an internal error" after a subscription upgrade, with Copilot saying tasks were done while the workbook stayed unchanged. The only reply was from an MVP, who suggested a modern format stored in OneDrive or SharePoint with AutoSave on. Microsoft's FAQ says Copilot works with AutoSave on or off, so that advice may not apply. No Microsoft staff answered.
+A Tech Community thread from a paid Microsoft 365 user reports "Failed to fetch document context due to an internal error" for more than five days, with Copilot saying tasks were done while the workbook stayed unchanged. The only reply was from an MVP, who suggested a modern format (.xlsx, .xlsb or .xlsm) stored in OneDrive or SharePoint with AutoSave on. The Excel FAQ page read for this article does not state an AutoSave requirement, so treat that as unverified. No Microsoft staff answered.
 
 ## A sensible order
 
@@ -111,7 +111,7 @@ A Tech Community thread reports "Failed to fetch document context due to an inte
 
 ## Sources
 
-- [Microsoft Learn: Copilot is missing, disabled, or doesn't work correctly](https://learn.microsoft.com/en-us/office/troubleshoot/copilot/copilot-missing-disabled-not-work-correctly)
+- [Microsoft Learn: Copilot is missing, disabled, or doesn't work correctly (archived)](https://learn.microsoft.com/en-us/previous-versions/troubleshoot/microsoft-365/microsoft-365-apps/copilot/copilot-missing-disabled-not-work-correctly)
 - [Microsoft Learn: Microsoft Copilot requirements](https://learn.microsoft.com/en-us/copilot/plan/microsoft-copilot-requirements)
 - [Microsoft Learn: Add Copilot endpoints to your allow list](https://learn.microsoft.com/en-us/copilot/plan/add-copilot-endpoints-allowlist)
 - [Microsoft Support: Frequently asked questions about Copilot in Excel](https://support.microsoft.com/office/7a13758f-d61e-4a56-8440-f2c9a07802ec)
