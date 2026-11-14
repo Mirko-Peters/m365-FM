@@ -44,11 +44,11 @@ A successful response holds an `access_token`, and also a `refresh_token` if `of
 
 ## How this error differs from invalid_grant
 
-The same page lists `invalid_grant` among token endpoint errors: the authorization code or PKCE code verifier is invalid or has expired. The client action is to try a new request to `/authorize` and verify that `code_verifier` was correct. AADSTS54005 is the more specific case in which the platform recognizes that the code was used before. The error reference row states that outcome directly.
+The same page lists `invalid_grant` among token endpoint errors: the authorization code or PKCE code verifier is invalid or has expired. The client action is to try a new request to `/authorize` and verify that `code_verifier` was correct. My reading: AADSTS54005 is the more specific case in which the platform recognizes that the code was used before. The error reference row states that outcome directly, but neither page says how the two relate.
 
 ## What the documentation does not say
 
-The pages I read give the lifetime of a code and the meaning of the error. They do not list the ways an app ends up redeeming a code twice. The causes in the next section are my own experience and reasoning, so test each against your logs.
+The error reference and the flow page give the lifetime of a code and the meaning of the error. They do not list the ways an app ends up redeeming a code twice. The causes in the next section are my own reasoning, so test each against your logs.
 
 ## Likely causes of double redemption
 
@@ -63,8 +63,10 @@ This section is my advice, not a Microsoft statement.
 
 ## Fix it
 
+This section is my advice, except where it cites Learn.
+
 1. **Find the second call.** Compare the correlation IDs and timestamps of the successful and failed `/token` requests in your server logs or in the sign-in logs.
-2. **Make redemption happen once.** Guard the callback so that a code is redeemed in one place, and mark the state value as used after the first attempt. Learn says the `state` value should be checked on return, which also helps tie a callback to one request.
+2. **Make redemption happen once.** Guard the callback so that a code is redeemed in one place, and mark the state value as used after the first attempt. Learn says the app should verify that the `state` values in the request and response are identical.
 3. **Do not retry a failed redemption with the same code.** On this error, start a new `/authorize` request, or call `/token` with a refresh token if you have one.
 4. **Use the library.** Learn says to use a Microsoft-built and supported authentication library to get tokens, not hand-built HTTP requests. A library keeps this logic out of your code.
 5. **Use refresh tokens for later tokens.** Learn says refresh tokens are valid for the permissions the client already has consent for, and that you should replace the old refresh token with the new one. Single page apps should expect refresh tokens to expire after 24 hours, per the page, so plan an interactive sign-in at that point.
