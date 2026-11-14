@@ -71,10 +71,10 @@ The Sync Error table holds columns including Error Time, Error Message, Error Ty
 
 - Giving users a role with read access to the table.
 - Building a model-driven app that lists errors by user and offers **Retry changes**.
-- Creating a cloud flow that triggers when a Sync Error row is added and notifies the owner.
+- Creating an automated cloud flow with the Dataverse trigger **When a row is added, modified or deleted** that sends an email or a device notification. The Owner column of the Sync Error row gives you the user to notify.
 - Setting up the device status page in canvas apps, which is not out of the box as in model-driven apps.
 
-For on-device messages, Learn's troubleshooting article lists errors such as a timeout calculating data to download for a table, no profile assigned to the user, and a record count above the supported limit. Typical actions are simplifying profile filters and checking that the user has a profile. That page describes canvas sync errors as appearing in a dialog when the app is first opened and labels canvas support there as preview, so confirm the current status in the documentation.
+For on-device messages, Learn's troubleshooting article lists errors such as a timeout calculating data to download for a table, no profile assigned to the user, and a record count above the supported limit. Typical actions are simplifying profile filters and reducing the records the profile downloads. The "no profile assigned" message refers to the user and app module, which are model-driven concepts, and the page does not say how it applies to canvas apps, so confirm with your admin. The canvas setup article says not to add users under Users with offline access, because that setting applies only to model-driven apps. That page describes canvas sync errors as appearing in a dialog when the app is first opened and labels canvas support there as preview, so confirm the current status in the documentation.
 
 ## Step 5: Design for performance
 
@@ -85,7 +85,7 @@ Learn's best practices for offline apps include:
 - Bulk patch a collection instead of patching records one by one.
 - Configure only necessary tables for offline, and test airplane mode behavior against online data.
 - Roll out in phases and move to a manual profile if first sync takes too long.
-- Choose a sort order in galleries so item order stays consistent.
+- The limitations page adds that without an explicit sort, gallery items may appear in a different order offline, so choose a sort order.
 
 ## The alternative: LoadData and SaveData
 
