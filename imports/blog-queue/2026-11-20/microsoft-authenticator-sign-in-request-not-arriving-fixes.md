@@ -16,7 +16,7 @@ faq:
   - q: "Why is my Microsoft Authenticator sign-in request not arriving?"
     a: "Microsoft Support lists these checks. Switch between mobile data and Wi-Fi and confirm airplane mode is off, update the app, turn off battery optimization, confirm Show notifications is on, check Do Not Disturb or Quiet mode and see whether other apps receive notifications. If only some accounts fail, remove the affected account and add it again with notifications allowed."
   - q: "What do I do if there is no notification at all?"
-    a: "Microsoft Learn says that anomalous sign-ins do not generate notifications. Open Microsoft Authenticator, pull down to refresh or tap Refresh and approve the request. On the sign-in page, Microsoft Support says you can select Other ways to sign in and then Approve a request on my Microsoft Authenticator app."
+    a: "Microsoft Learn says that anomalous sign-ins do not generate notifications. Open Microsoft Authenticator, pull down to refresh or tap Refresh and approve the request. On the sign-in page, Microsoft Support says that if Send notification is not offered you can choose Other ways to sign in and pick the option to approve a request in the Authenticator app."
   - q: "Why am I asked to enter a number instead of tapping Approve?"
     a: "Microsoft Learn says number matching is enabled for all Authenticator push notifications. The sign-in screen shows a number that the user must enter in the app. Users cannot opt out of it. Microsoft says users need the latest version of Authenticator, and older versions will not work for sign-in."
   - q: "Why does my approval request always show as expired?"
@@ -31,13 +31,13 @@ When a Microsoft Authenticator request does not arrive, the cause is usually on 
 
 Microsoft Support describes the flow. At the sign-in prompt, enter the username, select **Next**, then **Send notification**. On the phone, open Authenticator or tap the **New sign-in request** notification, then enter or tap the number shown on the sign-in screen and select **Approve**.
 
-If no notification arrives, the page says to select **Other ways to sign in** and then **Approve a request on my Microsoft Authenticator app**. For work or school accounts, the app may need to be unlocked first.
+If **Send notification** is not offered, the page says to choose **Other ways to sign in** and pick the option to approve a request in the Authenticator app. For work or school accounts, the app may need to be unlocked first.
 
 ## Number matching explained
 
 Microsoft Learn says number matching is enabled for all Authenticator push notifications and that users cannot opt out. In a browser, the user sees a notification with the number request and taps it to enter the number. In Microsoft mobile apps such as Outlook or Teams, they can tap the notification and select **Approve** or **Deny**. Wearables do not help here. Learn says wearable users need their phone to approve.
 
-Users still see Approve and Deny in a few cases that Learn lists. These include a default method other than Authenticator, unpatched AD FS servers and older versions of the NPS extension. The page also says users on older Authenticator versions cannot authenticate and must upgrade.
+Users still see Approve and Deny in a few cases that Learn lists. These include unpatched AD FS servers and NPS extension versions earlier than 1.2.2216.1, where users without a registered TOTP method keep seeing Approve and Deny. A user whose default method is not Authenticator push keeps that default, but number matching applies whenever Authenticator push is prompted. The page also says users on older Authenticator versions cannot authenticate and must upgrade.
 
 ## No notification: the check order
 
@@ -48,7 +48,7 @@ Work through this list in order. It follows Microsoft Support's general tips and
 3. **Battery.** In **Settings**, select **Turn off battery optimization**.
 4. **Notifications.** In **Settings** > **Notification Settings**, confirm **Show notifications** is on.
 5. **Phone modes.** Check Do Not Disturb or Quiet mode.
-6. **Other apps.** If other apps cannot notify either, check network connections and the phone's notification channel, and contact your provider if needed.
+6. **Other apps.** Test whether other apps can send notifications.
 7. **One account only.** Remove the affected account and add it again with notifications allowed.
 8. **Date and time.** Keep the device, Microsoft Defender and Intune Company Portal updated and make sure the date and time are correct. If requests always show as expired, set the clock to automatic and restart.
 9. **Refresh in the app.** Open Authenticator, pull down to refresh or tap **Refresh** and approve there.
@@ -61,8 +61,8 @@ Microsoft Learn notes that on Android in China, the Notification through mobile 
 |---|---|
 | Enable push notifications to receive alerts | Enable push notifications in device settings, confirm connectivity, remove the account and retry. If it still fails, contact Support or your IT admin. |
 | We could not complete the sign-in at this time | Enable push notifications, confirm connectivity, remove the account and retry. |
-| Google Play services are currently unavailable | Enable push notifications, Google Play Services and the Play Store. Require a PIN or biometric to unlock the device. For an Android Work Profile, enable a PIN or biometric in Authenticator. Enable hardware encryption and check for malware. |
-| Something went wrong [4s8qz] | Wait and retry, confirm the app launches and lists your account, update Authenticator and Company Portal, restart the device. |
+| Google Play services are currently unavailable | On Android, require a PIN or biometric lock, enable hardware encryption, check the work profile lock, confirm device registration and scan for malware. If it still fails, contact Support or your IT admin. |
+| Something went wrong [4s8qz] | Wait and retry, open the app, update Authenticator and, on work devices, Company Portal, and restart. If maintenance was underway, retry after a few minutes. |
 | Your device is jailbroken or rooted | Microsoft says that starting February 2026, work or school Entra credentials stop working on jailbroken or rooted devices. |
 | Sign-in denied | Authenticator denies sign-ins when GPS-reported locations do not match. |
 
