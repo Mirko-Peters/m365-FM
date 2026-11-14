@@ -29,7 +29,7 @@ Journaling copies email that matches a rule to a separate mailbox, normally outs
 
 ## Journaling or retention
 
-Learn recommends Microsoft 365 retention to archive and manage data in place for compliance. Some organizations may need a third-party solution to receive copies of email, and journaling serves that case. Because journaled data leaves Microsoft 365, you must secure it and handle any duplication it causes. Retention and other Purview compliance solutions keep data inside your tenant and avoid that overhead.
+Learn recommends Microsoft 365 retention to archive and manage data in place for compliance. Some organizations may need a third-party solution to receive copies of email, and journaling serves that case. Because journaled data leaves Microsoft 365, you must secure it and handle any duplication it causes. Learn also says it is your responsibility to monitor and follow up on any non-delivery receipts to the journaling mailbox that can occur because of external and dependent services. Retention and other Purview compliance solutions keep data inside your tenant and avoid that overhead.
 
 ## How it works
 
@@ -90,7 +90,7 @@ There is a limit on the number of journal rules in Exchange Online. The page giv
 
 ## A planning checklist
 
-This list is practical advice built on the page.
+This list is my advice, built on the page.
 
 1. Check whether retention meets the requirement before you choose journaling.
 2. If you need journaling, pick the target system, outside Exchange Online.
@@ -99,7 +99,7 @@ This list is practical advice built on the page.
 5. Plan how you will resubmit reports with Send Again after an outage.
 6. Decide about duplicate prevention and decryption.
 
-## Typical mistakes
+## Typical mistakes (my advice)
 
 - Pointing a rule at an Exchange Online mailbox.
 - Having no alternate mailbox, or one that fails at the same time.
