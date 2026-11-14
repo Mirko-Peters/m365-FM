@@ -31,7 +31,7 @@ A reset is a late step, not a first one. It forces a full sync, which can take h
 - Is one file open, hidden, or blocked by its name or path? The activity center usually names it.
 - Did you recently change your password or switch accounts?
 
-Our guide to fixing a [OneDrive](https://www.m365.fm/entity/onedrive/) that isn't syncing covers these checks in order. If the client still sits on "Processing changes" or "Sync pending" after that, or settings seem damaged, Microsoft's own advice for a case like this is to reset OneDrive. Its page [Reset OneDrive](https://support.microsoft.com/en-us/onedrive/reset-onedrive) says a reset can fix sync problems.
+Our guide to fixing a [OneDrive](https://www.m365.fm/entity/onedrive/) that isn't syncing covers these checks in order. If the client still sits on "Processing changes" or "Sync pending" after that, or settings seem damaged, Microsoft's own advice for a case like this is to reset OneDrive. Its page [Reset OneDrive](https://support.microsoft.com/onedrive/reset-onedrive) says a reset can fix sync problems.
 
 ## What a reset does
 
@@ -116,7 +116,7 @@ If you only need to reconnect one account, unlink it. This doesn't reset all set
 4. Select **Unlink this PC**, then **Unlink account**.
 5. Open OneDrive again and sign in.
 
-Microsoft's page [How to remove an account in OneDrive](https://support.microsoft.com/en-us/onedrive/how-to-remove-an-account-in-onedrive) lists what happens to your files. They aren't deleted, and you can reach them on OneDrive on the web. Files marked "Available on this device" stay in your computer's OneDrive folders. Files marked "Available when online" are accessible only through OneDrive on the web. On iOS and Android, you tap your profile picture, then **Settings**, the arrow next to the account and **Sign out**.
+Microsoft's page [How to remove an account in OneDrive](https://support.microsoft.com/onedrive/how-to-remove-an-account-in-onedrive) lists what happens to your files. They aren't deleted, and you can reach them on OneDrive on the web. Files marked "Available on this device" stay in your computer's OneDrive folders. Files marked "Available when online" are accessible only through OneDrive on the web. On iOS and Android, you tap your profile picture, then **Settings**, the arrow next to the account and **Sign out**.
 
 When to prefer unlinking: one account is stuck or shows "You're syncing a different account," and the other accounts work. When to prefer the reset: several accounts misbehave, or settings look damaged.
 
