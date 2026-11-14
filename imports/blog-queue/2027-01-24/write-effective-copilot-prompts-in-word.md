@@ -18,18 +18,20 @@ faq:
   - q: "Can I give Copilot an existing document to work from?"
     a: "Yes. The page lists reusing a template or document and updating only its contents as a prompt category. Its examples are filling out an invoice using information from a purchase order PDF, and updating a regulatory approval package using the latest trial manufacturing data."
   - q: "Can Copilot use my files, emails and meetings?"
-    a: "The page says Copilot can pull relevant context from files, emails, meetings and notes based on your prompt. Its examples are Summarize the team's priorities and Create a section based on a file name. What Copilot can reach depends on your license and organization settings, which the page does not detail."
+    a: "The page says Copilot can pull relevant context from files, emails, meetings and notes based on your prompt. Its examples are Summarize the team's priorities and Create a section based on a file name. License and organization settings can limit what Copilot can reach. That is my note, not part of the page."
   - q: "How do I improve a result I do not like?"
     a: "Use targeted follow-up prompts instead of starting over. The page's examples are Shorten this by half, Use a warmer tone and Visualize this table as an infographic."
   - q: "Do I need to check what Copilot writes?"
     a: "Yes. The page advises reviewing generated content for accuracy, completeness, tone, style and safety before you share it."
 ---
 
-Copilot in Word follows the instructions in your prompt, so the quality of the prompt decides much of the result. The Microsoft Support page "Write effective prompts for Copilot in Word" is short. It applies to Word for Microsoft 365 and Word for Microsoft 365 for Mac. This article restates its guidance, groups its examples, and adds a few working habits that are clearly marked as my own. I could read only a condensed version of that page, so I stay close to the points that came through and do not describe menus or steps that the page may contain.
+Copilot in Word follows the instructions in your prompt, so the quality of the prompt decides much of the result. The Microsoft Support page "Write effective prompts for Copilot in Word" is short. It applies to Word for Microsoft 365 and Word for Microsoft 365 for Mac. This article restates its guidance, groups its examples, and adds a few working habits that are clearly marked as my own.
 
 ## The core rule
 
 For the best results, describe the outcome you want clearly. The page lists what to include in a prompt:
+
+The right column below is my plain-language gloss, not the page's wording.
 
 | Element | What it means |
 | --- | --- |
@@ -53,7 +55,7 @@ Give the document type and the structure you want.
 
 ### Edit content
 
-Describe the specific change, and say what must not change.
+Describe the specific change.
 
 - Make the introduction concise and executive-ready without changing the meaning.
 
@@ -89,7 +91,7 @@ Use short, targeted follow-ups.
 
 ## Licensing and availability
 
-The page does not go into licensing in the part I could read. Other Microsoft Support pages for Copilot say that Copilot may not be included in your Microsoft 365 subscription, or may be restricted by organization settings. If the Copilot button is missing in Word, check with your administrator.
+Other Microsoft Support pages for Copilot say that Copilot may not be included in your Microsoft 365 subscription, or may be restricted by organization settings. My advice: if the Copilot button is missing in Word, check with your administrator.
 
 ## Prompt patterns (my advice)
 
