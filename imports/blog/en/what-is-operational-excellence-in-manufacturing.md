@@ -35,7 +35,7 @@ Three ideas sit at the centre.
 - **Process focus.** Results come from processes. When a result is poor, you look at the process, not for a person to blame.
 - **Everyone takes part.** Operators, planners and managers all take part in improvement. The people closest to the work know the problems best. This is organizational learning, not a one-off event.
 
-Mike Orzen, a lean coach and Shingo Institute faculty member, puts one objective plainly in [his essay on flow](https://shingo.org/?p=484): one objective of operational excellence and lean is to eliminate non-value added work, which improves the flow of value to customers. So operational excellence does not replace lean. It sets the frame in which lean works.
+One objective that operational excellence and lean share is to eliminate non-value-added work, which improves the flow of value to customers. So operational excellence does not replace lean. It sets the frame in which lean works.
 
 ## How is OpEx different from lean, Six Sigma and kaizen?
 
@@ -51,7 +51,7 @@ Think of it as a framework: the principles set the direction, and the methods fi
 
 ## Which ten principles guide it?
 
-The Shingo Model, which IBM names as the origin of the approach, rests on ten guiding principles. An [overview of the Shingo Model](https://www.interfacing.com/the-shingo-model) lists them, and the Shingo Institute itself says the model captures ten timeless principles that apply to all. Sources word the ten names a little differently.
+The Shingo Model, which IBM names as the origin of the approach, rests on ten guiding principles. An [overview of the Shingo Model](https://www.interfacing.com/the-shingo-model) lists them, and the Shingo Institute describes its principles as universal and timeless. Sources word the ten names a little differently.
 
 1. **Respect every individual.** Every person has value and potential.
 2. **Lead with humility.** Leaders who seek feedback and keep learning enable improvement.
@@ -64,7 +64,7 @@ The Shingo Model, which IBM names as the origin of the approach, rests on ten gu
 9. **Create constancy of purpose.** Be clear about why the organization exists and where it is heading.
 10. **Create value for the customer.** Value is what the customer wants and is willing to pay for.
 
-Orzen notes that flow is the least practiced of these principles. Any plant that wants operational excellence has to face it. In many plants it is easy to see why: batch production, large stocks and long queues feel safe, even when they hide problems.
+In my experience, flow is the principle plants practice least. Any plant that wants operational excellence has to face it. In many plants it is easy to see why: batch production, large stocks and long queues feel safe, even when they hide problems.
 
 ## How does the Shingo diamond fit together?
 
@@ -73,7 +73,7 @@ The same overview describes a "diamond" that shows how the parts of a business s
 - **Principles.** The basis of a sustainable culture of excellence.
 - **Culture.** The foundation, where principles are embedded to guide behaviour.
 - **Systems.** Layers of systems and subsystems that produce performance and behaviour.
-- **Tools.** They answer how, but not why. The overview warns that focusing too much on one tool is a common mistake.
+- **Tools.** They answer how, but not why.
 - **Results.** Key performance indicators (KPIs). Lagging KPIs can signal that culture needs attention.
 
 The lesson for a plant is practical. When a KPI falls short, do not only ask which tool to apply. Ask what behaviour produced the result, and which principle is missing. If the same board, the same meeting and the same tool give a good result in one area and a poor result in another, the difference is often culture, not the tool.
@@ -144,3 +144,8 @@ Improvement needs reliable data on plans, flow and results. [iFAKT](https://www.
 ## Next step
 
 Choose one value stream and write down three measures with targets. Then book the first daily routine, because operational excellence starts with one habit that the team keeps.
+
+## Sources
+
+- [What Is Operational Excellence? - IBM](https://www.ibm.com/think/topics/operational-excellence)
+- [Measuring What Matters in Operational Excellence (The Shingo Model) - Interfacing](https://www.interfacing.com/the-shingo-model)
