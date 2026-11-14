@@ -11,7 +11,7 @@ keypoints:
   - "Two tiers exist: the analytics tier for hunting, alerting and incidents, and the data lake tier for long-term storage and Python analytics."
   - "Learn says it retains up to 12 years of security data and telemetry. It works with all existing Sentinel data connectors."
   - "You query it with KQL in a query editor, with one-time or scheduled jobs that can promote data to the analytics tier, and with Jupyter notebooks."
-  - "Auditing is on by default and captures KQL queries, notebook runs and job events. The page gives no prices, prerequisites or query limits."
+  - "Auditing is on by default and captures, among other things, KQL queries, notebook runs and job events. The page gives no prices, prerequisites or query limits."
 faq:
   - q: "What is the Sentinel data lake?"
     a: "According to Microsoft Learn, it is a purpose-built, cloud-native security data lake that ingests, stores and analyzes large volumes of security data at scale. It is fully managed and stores a single copy of security data in open-format Parquet files."
@@ -20,7 +20,7 @@ faq:
   - q: "What is the difference between the tiers?"
     a: "The analytics tier supports advanced hunting, alerting and incident management. The data lake tier provides centralized long-term storage for querying and Python-based advanced analytics. Analytics tier data is mirrored to the lake tier."
   - q: "How long can data be kept?"
-    a: "Learn says up to 12 years of security data and telemetry. It gives no per-tier defaults and points to a separate article on managing data tiers and retention."
+    a: "Learn says up to 12 years of security data and telemetry, and describes the data lake tier as designed for cost-effective retention for up to 12 years. It gives no per-tier defaults and points to a separate article on managing data tiers and retention."
   - q: "How do I query it?"
     a: "Use KQL in the data lake exploration query editor, run one-time or scheduled jobs, or use Jupyter notebooks with Python libraries and machine learning tools."
 ---
@@ -29,20 +29,20 @@ The Sentinel data lake adds a long-term, low-cost home for security data next to
 
 ## What it is
 
-Microsoft Sentinel data lake is a purpose-built, cloud-native security data lake. It ingests, stores and analyzes large volumes of diverse security data at scale. It is fully managed, so you do not deploy or maintain data infrastructure. It keeps a single copy of security data across assets, activity logs and threat intelligence, as open-format Parquet files. It works with all existing Sentinel data connectors.
+Microsoft Sentinel data lake is a purpose-built, cloud-native security data lake. It ingests, stores and analyzes large volumes of diverse security data at scale. It is fully managed, so you do not deploy or maintain data infrastructure. It keeps a single copy of security data across assets, activity logs and threat intelligence, as open-format Parquet files. It works with all existing Sentinel data connectors. The page lists storage and compute as separate and native integration with Sentinel SIEM and its security operations workflows among the architecture benefits.
 
 ## What it stores
 
-The page names data from:
+The page names data from the following (the connector list plus the introduction):
 
 - Microsoft Defender XDR and all Defender and Sentinel data sources.
 - Microsoft 365, Microsoft Entra ID and Microsoft Resource Graph.
 - EDR platforms, firewall and network logs, and cloud infrastructure and workload telemetry.
 - Identity and access logs, including Entra and Okta.
 - DNS, proxy and email telemetry.
-- Third-party sources, assets, activity logs and threat intelligence.
+- Third-party sources, assets, activity logs and threat intelligence (named in the page introduction, not in the connector list).
 
-The page says the list is broad and not exhaustive.
+The page introduces its connector list with "including", so it is not presented as complete.
 
 ## The two tiers
 
@@ -55,7 +55,7 @@ Data in the analytics tier is mirrored to the lake tier, so there is one copy. T
 
 ## Retention
 
-Learn says the lake keeps up to 12 years of security data and telemetry. It gives no defaults for each tier or steps to change retention. It points to an article on managing data tiers and retention in the Defender portal.
+Learn says the lake keeps up to 12 years of security data and telemetry. It describes the data lake tier as designed for cost-effective retention of large volumes of security data for up to 12 years. It gives no defaults for each tier or steps to change retention. It points to an article on managing data tiers and retention in the Defender portal.
 
 ## How to query it
 
@@ -65,7 +65,7 @@ Learn says the lake keeps up to 12 years of security data and telemetry. It give
 
 ## Audit
 
-Auditing is enabled by default. It captures KQL queries, notebook runs, and create, edit, run and delete events for jobs.
+Auditing is enabled by default. The audit log captures data access, job management and query events. The page lists these as examples of audited activities: accessing lake data with KQL queries, running notebooks, and creating, editing, running and deleting jobs. Audited actions are shown in the audit log.
 
 ## Costs and regions
 
@@ -81,7 +81,7 @@ The page describes the lake as cost-effective, with tiered storage, on-demand da
 
 ## A planning outline
 
-This outline is practical advice built on the page.
+This outline is my advice, built on the page.
 
 1. Decide which data needs long retention but not real-time alerting.
 2. Read the onboarding and permissions pages before you plan.
@@ -89,7 +89,7 @@ This outline is practical advice built on the page.
 4. Start with KQL exploration, then add jobs or notebooks for repeated analysis.
 5. Review the audit log for query and job activity.
 
-## Typical mistakes
+## Typical mistakes (my advice)
 
 - Expecting the lake tier to run real-time alerting. That is the analytics tier.
 - Assuming prices or limits that the page does not state.
