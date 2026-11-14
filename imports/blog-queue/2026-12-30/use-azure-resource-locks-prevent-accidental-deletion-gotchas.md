@@ -9,7 +9,7 @@ topics: [azure-resource-locks]
 keypoints:
   - "Lock levels are Delete (CanNotDelete in the CLI) and Read-only. A lock overrides user permissions and applies to all users and roles, and the most restrictive lock in the inheritance chain wins."
   - "Locks apply to control plane operations only. Data plane operations, such as changing data in an SQL database, are not restricted."
-  - "A ReadOnly lock can block operations that do not look like changes, because Resource Manager treats POST requests as writes. Examples include listing storage account keys and starting a VM."
+  - "A ReadOnly lock can block operations that do not look like changes, because locks block POST requests to Resource Manager. Examples include listing storage account keys and starting a VM."
   - "Creating or deleting locks needs Microsoft.Authorization/locks actions. Owner and User Access Administrator have them, and you cannot add locks to management groups."
   - "A Delete lock on any resource blocks deleting its whole resource group, with no partial deletion."
 faq:
@@ -100,4 +100,4 @@ The page gives no lock limits or quotas, no complete list of blocked POST operat
 
 ## Sources
 
-- [Protect your Azure resources with a lock](https://learn.microsoft.com/azure/azure-resource-manager/management/lock-resources)
+- [Lock your Azure resources to protect your infrastructure (Microsoft Learn)](https://learn.microsoft.com/azure/azure-resource-manager/management/lock-resources)
