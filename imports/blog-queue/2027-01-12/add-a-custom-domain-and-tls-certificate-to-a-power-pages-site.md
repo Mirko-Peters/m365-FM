@@ -25,7 +25,7 @@ faq:
     a: "A trusted CA signature, a password-protected PFX, a private key of at least 2,048 bits, all intermediate certificates, SHA2, TripleDES encryption (AES-256 is not supported) and Extended Key Usage for server authentication."
 ---
 
-A Power Pages site starts on a Microsoft-provided address. A custom domain such as www.contoso.com needs a DNS record and a TLS certificate. This guide follows the Microsoft Learn page on adding a custom domain. The queue text names a different menu path, so this guide uses the path documented on the page.
+According to the page, a custom domain such as www.contoso.com needs a CNAME record at your domain provider and an SSL certificate. This guide follows the Microsoft Learn page on adding a custom domain. The steps below use the menu path documented on the page.
 
 ## Prerequisites
 
@@ -40,19 +40,19 @@ A Power Pages site starts on a Microsoft-provided address. A custom domain such 
 2. Under **Choose a SSL certificate** select **Add Microsoft Managed certificate**, **Upload a new certificate** (choose the .pfx file and enter the password) or **Use an existing certificate**.
 3. Select **Next** and enter the **Host Name**, for example www.contoso.com.
 4. Select **Next**. If the site uses a CDN or WAF, copy the record type, name and value from **Validate the domain** and create the TXT record.
-5. Select **Next**, check that the custom host name matches the certificate subject, then select **Next** to create the SSL binding.
+5. Select **Next**, review the information that compares the custom host name and the SSL certificate subject, then select **Next** to begin creating the SSL binding.
 6. When the success message appears, select **Close**.
 
 ## DNS records
 
 - **CNAME (required).** Point your hostname to the Power Pages site URL. You cannot use a root domain as the hostname. The CNAME must be publicly resolvable. Private or internal DNS zones make setup fail. Check with `nslookup -type=CNAME <hostname>` on Windows or `dig CNAME <hostname>` on macOS or Linux.
-- **TXT (CDN or WAF sites only).** Create a TXT record named as shown, for example `_dnsauth.www`, with the displayed value. Delete any existing `asuid.<customDomain>` TXT record before binding. Token values expire and are regenerated, and an expired value does not pass validation, so copy the current value right before you create the record.
+- **TXT (CDN or WAF sites only).** Create a TXT record named as shown, for example `_dnsauth.www`, with the displayed value. Delete any existing `asuid.<customDomain>` TXT record before binding. Token values expire and are regenerated, and an expired value does not pass validation, so copy the current value right before you create the record. After adding it, select **Refresh** in the wizard to validate the domain. **Next** becomes active when the information is validated. The page says this step verifies that you own the domain before Power Pages routes traffic through Azure Front Door. To check the record, run `nslookup -type=TXT _dnsauth.www.<hostname>` on Windows or `dig TXT _dnsauth.www.<hostname> +short` on macOS or Linux.
 
 ## Certificate options
 
 - **Microsoft managed.** Provisioned, configured and renewed by Microsoft. Not available if CDN or WAF is enabled.
 - **Bring your own .pfx.** Requirements: signed by a trusted certificate authority, password-protected PFX, private key of at least 2,048 bits, all intermediate certificates included, SHA2, TripleDES encryption (AES-256 is not supported) and Extended Key Usage for server authentication.
-- **Azure Front Door sites.** Front Door creates its own TLS certificates with a six-month lifetime that renew automatically 45 days before expiry. Certificates you upload are different, and you manage their renewal.
+- **CDN or WAF sites.** Azure Front Door automatically creates certificates for sites that use CDN or WAF. For CDN-enabled sites the page says these Front Door-managed TLS certificates have a six-month lifetime and renew automatically 45 days before expiry. Certificates you upload are different, and you manage their expiration and renewal.
 
 ## Timing
 
@@ -61,19 +61,19 @@ DNS records take some time to propagate. If you see an incorrect URL mapping err
 ## Change, switch and renew
 
 - **Change the domain.** Select the pencil icon next to the custom URL in Site Details, delete the SSL binding, the SSL certificate and the assigned hostname, then run the add steps again.
-- **Switch certificate type.** Delete the existing binding and certificate, then configure again.
-- **Renew an uploaded certificate.** Generate a new CSR, get the renewed .pfx from your CA, upload it with **New** in the **Edit Custom Domain** pane, delete the old binding and create a new one.
+- **Switch certificate type.** Select the pencil icon next to the custom URL, delete the SSL binding and the SSL certificate if they exist, then follow the add steps again.
+- **Renew an uploaded certificate.** Generate a new CSR, get the renewed .pfx from your CA, upload it with **New** in the **Edit Custom Domain** pane, delete the old binding and create a new one. Export the renewed PFX as a password-protected file encrypted with triple DES. The page says the renewal steps vary by certificate authority and points to the CA website for the complete process.
 
 ## What the page does not say
 
 - The admin roles required.
 - DNS propagation times and the lifetime of the TXT token.
 - Whether the Microsoft-managed option is available on sites without CDN or WAF beyond the stated restriction.
-- The renewal section refers to a Power Portals admin center with a different URL, which may be outdated.
+- The renewal section refers to a Power Portals admin center with a different URL (admin.powerplatform.microsoft.com/resources/portals). My guess is that this reference may be outdated, but the page does not say so.
 
 ## A setup outline
 
-This outline is practical advice built on the page.
+This outline is my advice, built on the page.
 
 1. Confirm the site is in production state and pick a hostname that is not a root domain.
 2. Create the CNAME record first and check it with nslookup or dig.
@@ -81,7 +81,7 @@ This outline is practical advice built on the page.
 4. For TXT validation, copy the value only when you are ready to create the record.
 5. Set a reminder for certificate renewal if you upload your own certificate.
 
-## Typical mistakes
+## Typical mistakes (my advice)
 
 - Using a root domain as the hostname.
 - Pointing a CNAME in a private DNS zone.
@@ -96,4 +96,4 @@ This outline is practical advice built on the page.
 
 ## Sources
 
-- [Add a custom domain name to a Power Pages site (Microsoft Learn)](https://learn.microsoft.com/power-pages/admin/add-custom-domain)
+- [Add a custom domain name (Microsoft Learn)](https://learn.microsoft.com/power-pages/admin/add-custom-domain)
