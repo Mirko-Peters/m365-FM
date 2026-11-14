@@ -20,23 +20,24 @@ faq:
   - q: "Which quarantine policy is the default?"
     a: "AdminOnlyAccessPolicy, whose quarantine notifications are disabled. Create or select a policy with notifications on if recipients should be notified. For encrypted attachments that cannot be scanned the default is DefaultFullAccessWithNotificationPolicy."
   - q: "How long until a new policy works?"
-    a: "Allow up to 30 minutes. Typical scanning completes within 15 minutes, although retries can extend that."
+    a: "Allow up to 30 minutes for a new or updated policy to be applied. Separately, typical attachment scanning completes within 15 minutes, although retries and analysis time can extend that."
   - q: "Do I need a custom policy at all?"
-    a: "Built-in protection provides Safe Attachments to all recipients by default and there is no default custom policy. The page recommends turning on Standard or Strict presets for all users rather than managing many custom policies."
+    a: "Built-in protection provides Safe Attachments to all recipients by default and there is no default Safe Attachments policy. The page recommends turning on Standard or Strict presets for all users rather than managing many custom policies."
 ---
 
-Safe Attachments opens email attachments in a safe environment before delivery to look for malware. This guide follows the Microsoft Learn page on configuring Safe Attachments policies. The page applies to Microsoft Defender for Office 365 Plan 1 and Plan 2 and Microsoft Defender XDR, and it offers a 90-day Plan 2 trial.
+Safe Attachments opens email attachments in a safe environment before delivery to look for malware. This guide follows the Microsoft Learn page Set up Safe Attachments policies in Microsoft Defender for Office 365. The page is intended for business customers who have Defender for Office 365, and it points to a 90-day Plan 2 trial.
 
 ## Permissions
 
 - **Create, modify, delete:** Organization Management or Security Administrator in Email & collaboration permissions, and Organization Management in Exchange Online permissions.
 - **Read-only:** Global Reader or Security Reader, or View-Only Organization Management in Exchange Online.
+- **Defender XDR unified RBAC:** applies when both the Defender for Office 365 and Exchange Online permissions toggles under Email & collaboration are Active, and only in the Defender portal. The page names Core Security settings (manage) or (read).
 - **Microsoft Entra:** Global Administrator, Security Administrator, Global Reader or Security Reader. The page advises least privilege and limiting Global Administrator to emergencies.
 - If saving fails with a 403 or `CmdletAccessDeniedException`, an Exchange RBAC refresh may be needed. Contact Microsoft Support.
 
 ## Built-in protection and presets
 
-Built-in protection provides Safe Attachments to all recipients by default. There is no default custom policy. Standard and Strict preset security policies are managed on the preset security policies page. Settings in custom policies are ignored for recipients who are also in the Standard or Strict presets. The page recommends turning on Standard or Strict for all users rather than managing many custom policies.
+Built-in protection provides Safe Attachments to all recipients by default. There is no default Safe Attachments policy. Standard and Strict preset security policies are managed on the preset security policies page. Settings in custom policies are ignored for recipients who are also in the Standard or Strict presets. The page recommends turning on Standard or Strict for all users rather than managing many custom policies.
 
 ## Create a policy
 
@@ -48,17 +49,18 @@ Go to **Email & collaboration** > **Policies & rules** > **Threat policies** > *
    - **Safe Attachments unknown malware response:** Off, Monitor, Block (default) or Dynamic Delivery (Preview messages).
    - **Quarantine policy:** applies to messages quarantined by Block or Dynamic Delivery. The default is AdminOnlyAccessPolicy, with notifications disabled.
    - **Redirect messages with detected attachments:** select **Enable redirect** and enter an address. Available only for Monitor.
-   - **Block messages containing encrypted attachments that could not be scanned:** appears only with Block. You can exclude types such as pdf, archives, Office files and all other file types. The default quarantine policy there is DefaultFullAccessWithNotificationPolicy.
+   - **Block messages containing encrypted attachments that could not be scanned:** appears only with Block. Select Block unscanned attachments to quarantine messages with encrypted (password-protected) attachments that cannot be scanned. You can then exclude types: Acrobat (pdf), archives (zip, gzip, 7z, rar, tar only), Office files (doc, docx, xls, xlsx, ppt, pptx only) and all other file types. The default quarantine policy there is DefaultFullAccessWithNotificationPolicy.
 4. **Review.** Select **Submit**, then **Done**.
 
-Allow up to 30 minutes for the policy to take effect. Typical scanning completes within 15 minutes, though retries can extend this. Users cannot release their own messages quarantined by Safe Attachments. They can only request release, if the quarantine policy allows it.
+Allow up to 30 minutes for a new or updated policy to be applied. Separately, typical attachment scanning completes within 15 minutes, though retries and analysis time can extend this. Users cannot release their own messages quarantined by Safe Attachments. They can only request release, if the quarantine policy allows it.
 
 ## Manage
 
 - Columns: Name, Status (On or Off), Priority.
 - The flyout offers Edit, Turn on or off, priority changes and Delete for custom policies.
 - You cannot modify or disable the Standard preset, Strict preset or built-in protection here.
-- You can export the list to CSV.
+- You can export the list to CSV and open the Threat protection status report with View reports.
+- Selecting the check box next to a policy offers More actions: enable, disable or delete selected policies.
 
 ## Priority
 
@@ -78,11 +80,11 @@ New-SafeAttachmentPolicy -Name "Contoso All" -Enable $true
 New-SafeAttachmentRule -Name "Contoso All" -SafeAttachmentPolicy "Contoso All" -RecipientDomainIs contoso.com
 ```
 
-The default action is Block. Removing a policy does not remove its rule. The policy cannot be renamed in PowerShell.
+The default action is Block. Removing a policy does not remove its rule, and removing a rule does not remove its policy. The policy cannot be renamed in PowerShell, and renaming in the portal renames only the rule. A policy created in PowerShell is not visible in the portal until a rule uses it.
 
 ## Global settings
 
-Safe Attachments for SharePoint, OneDrive and Microsoft Teams is turned on separately. The page links to it.
+Safe Attachments for SharePoint, OneDrive and Microsoft Teams is turned on separately. The page links to it, and to Safe Documents in Microsoft 365 E5, as features configured in the global settings that do not depend on Safe Attachments policies.
 
 ## What the page does not say
 
@@ -93,7 +95,7 @@ Safe Attachments for SharePoint, OneDrive and Microsoft Teams is turned on separ
 
 ## A setup outline
 
-This outline is practical advice built on the page.
+This outline is my advice, built on the page. Its first two steps reflect the page's tip that Microsoft typically recommends the Standard and Strict presets over custom policies.
 
 1. Check whether the presets already cover your users.
 2. Add a custom policy only for exceptions.
@@ -101,7 +103,7 @@ This outline is practical advice built on the page.
 4. Wait up to 30 minutes, then test.
 5. Review priorities if you have several custom policies.
 
-## Typical mistakes
+## Typical mistakes (my advice)
 
 - Using redirect with Block. It works only with Monitor.
 - Expecting users to release their own quarantined mail.
@@ -117,4 +119,4 @@ This outline is practical advice built on the page.
 
 ## Sources
 
-- [Set up Safe Attachments policies in Defender for Office 365 (Microsoft Learn)](https://learn.microsoft.com/defender-office-365/safe-attachments-policies-configure)
+- [Set up Safe Attachments policies in Microsoft Defender for Office 365 (Microsoft Learn)](https://learn.microsoft.com/defender-office-365/safe-attachments-policies-configure)
