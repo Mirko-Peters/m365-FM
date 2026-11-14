@@ -10,30 +10,30 @@ keypoints:
   - "Microsoft describes Teams as the central collaboration workspace in Microsoft 365 for calls, meetings, private messages and team chats."
   - "A team is a group of people with owners and members. Channels inside the team keep conversations organized by topic, project or department."
   - "Chat is for private conversations with one or more people. Files shared in a channel are stored in SharePoint."
-  - "Teams uses services behind it: Exchange Online, SharePoint Online and OneDrive for Business. Each team also has a Microsoft 365 group."
+  - "Teams uses services behind it: Exchange Online, SharePoint Online and OneDrive for Business. Each generated team also generates an Office 365 group, according to Microsoft's training page."
   - "Phone calls to external numbers need Teams Phone licensing and a PSTN connection. Calls between Teams users do not."
 faq:
   - q: "What is Microsoft Teams used for?"
-    a: "Microsoft Learn calls Teams the central collaboration workspace in Microsoft 365. People use it to make audio and video calls, manage meetings and private messages and collaborate through team chats. Microsoft Support adds that it also holds files, apps such as Planner or Excel, and organized spaces for projects."
+    a: "Microsoft Learn calls Teams the central collaboration workspace in Microsoft 365. People use it to make audio and video calls, manage meetings and private messages and collaborate through team chats. Microsoft Support adds that it offers rich chat with text, audio, video and file sharing and integrates apps such as Planner and Trello."
   - q: "What is the difference between a team and a channel?"
-    a: "A team is a group of people working together. Microsoft Learn says each team has owners and members. Channels are the spaces inside the team, each dedicated to a topic, department or project. When you create a team, a General channel is created by default."
+    a: "A team is a group of people working together. Microsoft Learn says each team has owners and members. Channels are the spaces inside the team, each dedicated to a topic, department or project. Microsoft's channel documentation also refers to a General channel, which uses the same description as its team."
   - q: "Do I need a Microsoft 365 license to use Teams?"
     a: "Microsoft Support says Teams is part of Microsoft 365 and lists licenses such as Business Essentials, Business Premium and Enterprise plans. The Teams limits page on Microsoft Learn also names Microsoft Teams Essentials among the plans. Your organization's licensing decides what you get, so ask your admin."
   - q: "Where are files shared in Teams stored?"
-    a: "Microsoft Learn says files you share in a channel, on the Files tab, are stored in SharePoint. Creating a new team or a private or shared channel also creates a SharePoint team site. Each generated team also generates a Microsoft 365 group."
+    a: "Microsoft Learn says files you share in a channel, on the Files tab, are stored in SharePoint. Creating a new team or a private or shared channel also creates a SharePoint team site. Microsoft's training page adds that each generated team also generates an Office 365 group."
 ---
 Microsoft Teams is the central collaboration workspace in Microsoft 365. It combines chat, team spaces called channels, online meetings, calls, file sharing and apps in one place. This overview explains the main parts in plain terms, based on Microsoft's documentation.
 
 ## The short definition
 
-Microsoft Learn says Teams provides a broad set of communication and collaboration features as part of Microsoft 365, and that you can use it to make audio and video calls, manage meetings and private messages and collaborate through team chats. Microsoft Support describes it as a messaging app for your organization and lists chat, meetings, calls, teams and channels, files and apps as the main features.
+Microsoft Learn says Teams provides a broad set of communication and collaboration features as part of Microsoft 365, and that you can use it to make audio and video calls, manage meetings and private messages and collaborate through team chats. Microsoft Support describes it as the ultimate messaging app for your organization, with rich chat (text, audio, video and file sharing), file storage in one place and apps such as Planner and Trello.
 
 ## Teams, channels and chat
 
 These three words cause most beginner confusion.
 
-- **Team:** a group of people gathered to get something done. A team has owners and members. Owners can add members, manage settings and rename or delete the team. Microsoft Learn says teams can be private to invited people, or public so anyone in the organization can join, up to 10,000 members.
-- **Channel:** a section inside a team for a specific topic, department or project. Every team starts with a General channel, and members can add others if the owner allows it.
+- **Team:** a group of people gathered to get something done. A team has owners and members. Owners can add members, change guest permission settings and restore deleted channels, according to Microsoft Support. Microsoft Learn says teams can be private to invited people, or public so anyone in the organization can join, up to 10,000 members.
+- **Channel:** a section inside a team for a specific topic, department or project. Members can add channels if the team owner allows it. Microsoft's channel pages also mention a General channel.
 - **Chat:** a private conversation between you and one or more people, separate from public channel conversations. Chats can include text, audio, video and files, and can be turned into calls. A private group chat can have up to 250 participants, according to the Teams limits page.
 
 An @mention gets someone's attention in a channel or chat and creates a notification in their Activity feed.
@@ -44,17 +44,17 @@ Channels come in three types, according to Microsoft Learn. Standard channels ar
 
 ## Meetings and calls
 
-You can schedule meetings from Outlook, share your desktop or an app and use chat and files inside the meeting. Microsoft Learn mentions HD video, VoIP calls and dial-in audio conferencing options. Meeting size depends on the plan. The Teams limits page lists 300 interactive participants for Microsoft 365 Business Basic, Business Standard, Business Premium, Teams Essentials and A1 plans, and 1,000 for the Microsoft 365 F1, F3, E3, E5, A3, A5, G3 and G5 plans among others. Meetings and events can last up to 30 hours.
+Microsoft Support's comparison table lists scheduling a meeting from Outlook, sharing your desktop or an app and persistent chat before, during and after the meeting. Microsoft Learn mentions meetings with or without HD video, VoIP calls and dial-in audio conferencing options. Meeting size depends on the plan. The Teams limits page lists up to 300 people for Microsoft 365 Business Basic, Business Standard, Business Premium, Teams Essentials and A1 plans, and 1,000 for the Microsoft 365 F1, F3, E3, E5, A3, A5, G3 and G5 plans among others. Meetings and events can last up to 30 hours.
 
 Calls between Teams users work for everyone licensed for Teams. To call regular phone numbers you need Teams Phone licensing and a PSTN connection, which is a separate topic.
 
 ## Files and apps
 
-Files you share in a channel on the Files tab are stored in SharePoint. The pages read for this article describe only the channel case, so they do not say where files from private chats are kept. Apps add bots, tabs and connectors that bring in content from other services such as Planner, Excel or GitHub. Apps are added from the Store.
+Files you share in a channel on the Files tab are stored in SharePoint. The pages read for this article describe only the channel case, so they do not say where files from private chats are kept. Apps extend channels with tabs, connectors and bots. Microsoft Support names Planner and Trello as examples of apps you can integrate.
 
 ## What sits behind Teams
 
-Microsoft Learn explains that Teams interacts with Exchange Online, SharePoint Online and OneDrive for Business, and that SharePoint Online, OneNote and Microsoft 365 groups enhance Teams functionality. Each generated team also generates a Microsoft 365 group. Learn's tip is to enable every user for Exchange Online, SharePoint Online and group creation to get the full Teams experience. Microsoft's training page uses older Office 365 plan names, so treat its license table as background and use current admin center information for licensing.
+Microsoft Learn explains that Teams interacts with Exchange Online, SharePoint Online and OneDrive for Business, and that SharePoint Online, OneNote and Microsoft 365 groups enhance Teams functionality. Each generated team also generates an Office 365 group, the page's wording. Learn's tip is to enable every user for Exchange Online, SharePoint Online and Office 365 group creation to get the full Teams experience. Microsoft's training page uses older Office 365 plan names, so treat its license table as background and use current admin center information for licensing.
 
 ## Security and admin control
 
@@ -62,12 +62,12 @@ Microsoft Learn states that Teams provides enterprise security and compliance fe
 
 ## Getting started
 
-1. Sign in to Teams with your Microsoft 365 account on Windows, Mac or the web at teams.microsoft.com.
+1. Sign in to Teams with your Microsoft 365 account.
 2. To create a team, select **Chat** (or **Teams** in the separate view), then **New items**, and invite people.
 3. To start a private chat, select **New message**, enter names in the **To** field, write your message and select **Send**.
 4. To add members to a team, owners select **More options**, then **Add members**.
 
-Microsoft Support notes that your organization may require extra verification at sign-in, such as a code from a mobile device.
+Your available features depend on your organization's license and admin settings.
 
 ## Where to go next
 
