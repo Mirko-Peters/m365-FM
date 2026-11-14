@@ -25,7 +25,7 @@ faq:
     a: "Capacity admins can disable job-level bursting under OneLake catalog, Govern, Capacities, then the capacity settings, Data Engineering or Science settings, Open Spark Compute, Disable job-level bursting. Then a single job is capped, for example at the base 128 VCores for F64, leaving headroom for other jobs. Learn suggests this for multi-tenant or high-concurrency environments."
 ---
 
-An HTTP 430 on a Fabric Spark job is a capacity message, not a code defect. Microsoft Learn explains how Spark in Fabric admits jobs, which ones are queued, and which numbers apply per SKU. This article uses that page to explain the error and to list the levers you have.
+An HTTP 430 on a Fabric Spark job is a capacity message. Microsoft Learn explains how Spark in Fabric admits jobs, which ones are queued, and which numbers apply per SKU. This article uses that page to explain the error and to list the levers you have.
 
 ## The error
 
@@ -89,11 +89,13 @@ Capacity admins can switch this in **OneLake catalog** > **Govern** > **Capaciti
 
 With it disabled, no single job can use all available capacity including burst cores. For an F64, a job could be capped at the base 128 VCores, which leaves headroom for others. Learn calls this useful for multi-tenant or high-concurrency environments and mixed workloads where fairness matters more than one job's speed. With bursting enabled, which is the default, a large batch notebook can use all 384 VCores when nothing else runs.
 
-## Fixing the error
+## Fixing the error (my reading of the page)
+
+Learn gives only the three suggestions in the message. The steps below are my own way of working through them.
 
 1. Open the **Monitoring hub** and look at active Spark jobs. Cancel what is not needed.
 2. Check whether the job came from a source that queues. If it is interactive or uses the notebook API, resubmit later.
-3. Check the capacity state. If it is throttled, new Spark jobs are rejected until it recovers.
+3. Check the capacity state. If it is throttled, Learn says new Spark jobs are rejected instead of queued.
 4. If this happens regularly, compare the Spark VCores and burst numbers with your job pool settings, or consider a larger SKU.
 5. For fairness between teams, consider disabling job-level bursting.
 
