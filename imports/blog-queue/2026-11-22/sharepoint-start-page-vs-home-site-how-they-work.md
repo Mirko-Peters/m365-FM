@@ -66,7 +66,7 @@ Learn describes a home site as a customized landing experience that reflects the
 What a home site adds, according to Learn:
 
 - **Intranet-wide search.** Users search sites, news and files across the intranet instead of only within the site.
-- **Organizational news source.** By default a home site is set as the organizational news source.
+- **Organizational news source.** News posted from the home site becomes official organizational news and takes priority on the start page by default. Admins can designate other sites as news sources in the SharePoint admin center.
 - **Global navigation.** The SharePoint app bar can show navigation nodes wherever users are in SharePoint. To use this fully you need a home site. Global navigation can be customized only from the home site's home page.
 
 ### Start page versus home site
@@ -88,11 +88,11 @@ Learn lists these requirements and steps:
 2. You need a SharePoint admin role to open the SharePoint admin center.
 3. You need an Enterprise (E), Frontline (F) or Academic (A) license type to create the SharePoint app in Teams experience. Creating more than one experience, up to 50, requires a Microsoft Viva Suite or Viva Communications and Communities license for every user.
 4. As a best practice, swap the communication site in place of the tenant root site before setting it as the home site. Learn warns that doing it in the other order might lose home site settings.
-5. Learn says to set it as a home site in the SharePoint admin center. A FAQ entry states that starting in July 2026 the SharePoint admin center is the way to set a home site for the SharePoint app in Teams experience.
+5. Learn says to set it as a home site in the SharePoint admin center. The requirements section states that starting in July 2026 the SharePoint admin center is the way to set a home site and establish the SharePoint app in Teams experience.
 
 The home site plan page also lists planning steps: align objectives, organize priority content, design navigation, think about branding and use audience targeting. Its build steps include content approval flow, site health checks and testing on all devices.
 
-Learn does not give an admin center menu path or a cmdlet name in the pages read, so confirm the exact click path in your tenant.
+The plan page's build list also mentions using PowerShell to turn the communication site into a home site. The pages read give no admin center menu path or cmdlet name, so confirm the exact steps in your tenant.
 
 ## Common mistakes
 
@@ -103,7 +103,7 @@ Learn does not give an admin center menu path or a cmdlet name in the pages read
 
 ## Limits of the sources
 
-The Microsoft Support article does not compare the start page with a site home page and does not cover mobile. The Learn pages on the home site give no menu path or cmdlet and do not say how many home sites a tenant can have.
+The Microsoft Support article does not compare the start page with a site home page and does not cover mobile. The Learn pages on the home site give no menu path or cmdlet name and do not say how many home sites a tenant can have.
 
 ## Related
 
