@@ -19,7 +19,7 @@ faq:
   - q: "Where are files shared in a Teams channel stored?"
     a: "In SharePoint. Microsoft Learn says the Files tab on each standard channel is a folder in the parent site's default document library, while each private or shared channel has its own SharePoint site and its Files tab is connected to that site's default document library."
   - q: "Where are Teams chat messages stored?"
-    a: "Microsoft Learn states that Teams uses an Azure-powered chat service as primary storage for chats and channel messages. Data copied from chats is also stored in a hidden folder in each participant's mailbox, and channel message data in a hidden folder in a group mailbox, which compliance administrators can search with eDiscovery tools."
+    a: "Microsoft Learn states that Teams uses an Azure-powered chat service as primary storage for chats and channel messages. The Teams retention article says messages are also kept in Exchange mailboxes for compliance operations, in hidden mailbox folders, and that retention deletion removes them from both the mailboxes and the chat service."
   - q: "Where do Teams meeting recordings go?"
     a: "Microsoft Learn says a recording is uploaded to the meeting organizer's OneDrive for private meetings, or to SharePoint for channel meetings. Channel meeting recordings are saved to a Recordings folder in the channel's SharePoint site."
 ---
@@ -49,7 +49,7 @@ How channel types map to sites:
 |---|---|---|
 | Standard | Shares the team's parent site. Each channel is a folder in the default document library | Team owners and members |
 | Private | Its own channel site, with the Files tab connected to the default library | Only channel members |
-| Shared | Its own channel site | Only channel members |
+| Shared | Its own channel site | The Teams-connected sites page says team owners and members are included in the site owner and member groups. The shared channels page says only channel owners and members can access the site, so verify in your tenant |
 
 Four events connect a site: creating a team from scratch, creating a team from an existing group, adding Teams to an existing SharePoint site, and creating a private or shared channel.
 
@@ -68,7 +68,7 @@ Some settings are managed elsewhere:
 
 ## Exchange: mailbox, calendar and message data
 
-The team's shared mailbox and calendar are part of the group. For messages, Microsoft Learn describes two layers. Teams uses an Azure-powered chat service as primary storage for all chats and channel messages. Exchange mailboxes also hold data copied from these messages. Chat data goes to a hidden folder in the mailbox of each user in the chat. Channel message data goes to a similar hidden folder in a group mailbox. The folders are not designed to be accessed directly by users or administrators. They hold data that compliance administrators can search with eDiscovery tools.
+The team's shared mailbox and calendar are part of the group. For messages, Microsoft Learn describes two layers. Teams uses an Azure-powered chat service as primary storage for all chats and channel messages. Exchange mailboxes also hold message data for compliance operations, in hidden mailbox folders, according to the retention article. The pages read do not describe exactly which hidden folder holds which messages, so check the Purview documentation for those details.
 
 Mailbox types hold different data, per the retention article:
 
@@ -81,7 +81,7 @@ When messages are deleted by a retention policy, they are removed from both the 
 
 ## OneDrive: personal and chat-related files
 
-Microsoft Learn describes OneDrive as the place for files shared with people a user invites. Content a user saves there is private until it is shared, which makes it suited to personal and draft documents. The retention article adds that for files and meeting recordings and transcripts from user chats, a retention policy must include the organizer's OneDrive account as the location. Files from channels follow the group or SharePoint locations instead.
+The Learn pages read for this article do not describe OneDrive's role in detail. The retention article says that for files and meeting recordings and transcripts from user chats, a retention policy must include the organizer's OneDrive account as the location. Files from channels follow the group or SharePoint locations instead.
 
 ## Meeting recordings
 
@@ -98,7 +98,7 @@ The recording page states that a recording is uploaded to the organizer's OneDri
 - Adding people directly to the parent SharePoint site and expecting them to see the team.
 - Looking for private channel files in the team's site.
 - Assuming a Teams retention policy also governs files.
-- Expecting to browse the hidden Exchange folders. They are for compliance search.
+- Expecting to browse the hidden Exchange folders. They hold compliance copies of messages.
 
 ## What the documentation does not say
 
