@@ -22,23 +22,23 @@ faq:
   - q: "Is it safe to share files with the Anyone link?"
     a: "Microsoft Support describes the Anyone link as giving access to whoever receives it, including people outside your organization, and recommends avoiding it unless absolutely necessary. Links for people in your organization or for specific people keep access narrower. Admins can also remove the Anyone option."
 ---
-The best way to use SharePoint for team collaboration is to create a team site, connect it to a Microsoft 365 group and Teams, keep working files in its document library and control access through groups. Everything else in this guide builds on those four decisions. It describes what Microsoft documents, so menu names can differ slightly in your tenant if an admin has changed settings.
+The best way to use SharePoint for team collaboration is to create a team site, connect it to a Microsoft 365 group and Teams, keep working files in its document library and control access through groups. Everything else in this guide builds on those four decisions. Together they are the best practice for secure collaboration in Microsoft SharePoint: one SharePoint site for the team, document management in a library, and access that team members get through groups. The guide describes what Microsoft documents, so menu names can differ slightly in your tenant if an admin has changed settings.
 
 ## Start with the right type of site
 
-Microsoft Support separates two site types. A **team site** connects a team to shared content and resources. People use it to store and co-author files, keep lists, track project status and post announcements. A **communication site** is for sharing news, reports and status, typically with a small number of contributors and many readers.
+Microsoft Support separates two site types. A **team site** connects a team to shared content and resources. People use it to store and co-author files, keep a SharePoint list, track project status for project management and post announcements. A **communication site** is for sharing news, reports and status, typically with a small number of contributors and many readers.
 
 For day-to-day collaboration, pick the team site. Use a communication site only when the goal is to inform people rather than work together. If you need a single home for several sites, Microsoft's planning page describes a hub site as a frame that connects and organizes team and communication sites. It recommends one site collection per workload, each associated with a hub.
 
 ## Connect the site to a Microsoft 365 group and Teams
 
-When an admin has enabled Microsoft 365 groups, creating a team site also creates a group. Microsoft Support says members added to either the site or the group are added to the other. The group brings Outlook conversations and calendar, SharePoint files, Planner tasks and a shared OneNote notebook into one space.
+When an admin has enabled Microsoft 365 groups, creating a team site also creates a group. Microsoft Support says members added to either the site or the group are added to the other. The group brings Outlook conversations and calendar, SharePoint files, Planner tasks and a shared OneNote notebook into one space, so the collaboration tools your team already uses sit around the site.
 
-The project collaboration page adds that a connected group gives the team a group calendar, OneNote, Planner and an email address, and that you can create a connected Microsoft Team. Weekly status posts written as news appear in the Teams channel too. If your tenant does not offer group-connected sites, ask your SharePoint admin whether Microsoft 365 groups are turned on.
+The project collaboration page adds that a connected group gives the team a group calendar, OneNote, Planner and an email address, and that you can create a connected Microsoft Team. A typical use case: weekly status posts written as news appear in the Teams channel too. If your tenant does not offer group-connected sites, ask your SharePoint admin whether Microsoft 365 groups are turned on.
 
 ## Set up access with groups
 
-Add people at the group level so permissions stay manageable:
+Add team members at the group level so you can manage permissions and access in one place:
 
 1. Select **Settings**, then **Site Permissions**.
 2. Select **Add members**, then **Add members to group**.
@@ -56,7 +56,7 @@ Microsoft's advice is to avoid assigning permission levels directly to individua
 
 ## Keep files in the library and co-author
 
-Put working files in the site's document library instead of sending attachments. Microsoft Support describes co-authoring as several people working on the same Word, Excel or PowerPoint file at once. The requirements are:
+Put working files in the site's document library (one of the SharePoint libraries) so the team can access documents in one place instead of sending attachments. Microsoft Support describes co-authoring as several people working on the same Word, Excel or PowerPoint file at once, which is real-time collaboration on documents. To collaborate on documents this way and share documents without copies, the requirements are:
 
 - The file is stored in OneDrive or SharePoint.
 - The file is a modern format: .docx, .pptx or .xlsx.
@@ -67,7 +67,7 @@ Files inherit the permissions of their library. That is why a library everyone c
 
 ## Share links with care
 
-To share one file or folder, select it, then **Share**. Under the link settings, Microsoft Support lists these options:
+To share one file or folder, select it, then **Share**. For SharePoint security, the link type matters most. Under the link settings, Microsoft Support lists these options:
 
 - **Anyone:** whoever has the link, including people outside your organization. Microsoft recommends avoiding it unless necessary.
 - **People in your organization with the link:** anyone inside the organization, even if the link was forwarded.
@@ -80,11 +80,11 @@ You can also choose **Can edit**, **Can review** (Word documents only) or **Can 
 
 A team site home page can show news, Quick Links, an activity feed and a document library web part. The project collaboration page suggests a Planner web part for progress, a News web part for milestones, a group calendar web part for availability and Quick Links for frequently used items. Editors enter edit mode with **Edit** in the top right and use **Republish** or **Publish** to make changes visible.
 
-For ongoing care, Microsoft Support suggests a regular review schedule, regular news posts, checking links and web parts, using the built-in usage report and reviewing site permissions periodically.
+These web parts are SharePoint features that improve collaboration because the team sees status without asking for it. For ongoing care, Microsoft Support suggests a regular review schedule, regular news posts, checking links and web parts, using the built-in usage report and reviewing site permissions periodically.
 
 ## Notifications: alerts versus rules and Power Automate
 
-Many teams relied on "Alert me" for files. Microsoft Support's alert page shows a banner that SharePoint alerts in Microsoft 365 are fully retired and stop working starting July 2026, and recommends rules or Power Automate. A Microsoft Q&A answer from a moderator explains the difference. Rules are created at list or library level and work on column conditions, so they cannot select one specific file. Power Automate can notify only when a specific file changes, for example with the trigger "When a file is created or modified (properties only)" plus a condition on the file.
+Many teams relied on "Alert me" for files. Microsoft Support's alert page shows a banner that SharePoint alerts in Microsoft 365 are fully retired and stop working starting July 2026, and recommends rules or Power Automate. A Microsoft Q&A answer from a moderator explains the difference. Rules are created at list or library level and work on column conditions, so they cannot select one specific file. Use Power Automate when only one specific file matters: it can notify only when that file changes, for example with the trigger "When a file is created or modified (properties only)" plus a condition on the file.
 
 ## Common mistakes
 
