@@ -9,7 +9,7 @@ topics: [copilot-studio, dataverse, azure-event-grid, power-automate]
 keypoints:
   - "Copilot Studio has an event trigger named When a row is added, modified or deleted for Dataverse, with the table selected in the trigger."
   - "Event triggers need generative orchestration, solution-aware cloud flow sharing and the agent maker's credentials."
-  - "Trigger activity counts toward Copilot Credit consumption, and a payload is billed like a user message."
+  - "Trigger activity counts toward units of consumption for usage and billing, and each payload sent to the agent counts as a message."
   - "Dataverse publishes events to Azure through service endpoints for Service Bus and Event Hubs. The page I read does not mention Event Grid."
   - "The Azure Event Grid connector lists one trigger, When a resource event occurs, and is available in Copilot Studio as a Premium connector."
 faq:
@@ -20,7 +20,7 @@ faq:
   - q: "Whose credentials does an event trigger use?"
     a: "Microsoft Learn says event triggers can only use the agent maker's credentials. Users of a published agent may access data and systems through the author's credentials, and Copilot Studio shows a warning about this before you publish an agent with authenticated triggers."
   - q: "How are triggers billed?"
-    a: "Learn says event trigger activity counts toward Copilot Credit consumption. Each trigger payload is processed like a user message and the response is billed at Copilot Credit rates. A recurrence trigger every 10 minutes sends a payload every 10 minutes."
+    a: "Learn says event trigger activity counts toward units of consumption for usage and billing, and it links to its Copilot Credits billing rates table. A message includes payloads sent to the agent by event triggers, so a recurrence trigger set to every 10 minutes sends a payload as a message every 10 minutes."
 ---
 
 The request is to stream real-time Dataverse events into Copilot Studio through Azure Event Grid. The documentation I could read supports a simpler core than that: Copilot Studio has a Dataverse event trigger, and Dataverse has its own Azure integration through service endpoints. The pages do not describe a combined path through Event Grid. This article explains the documented parts, what each one costs and requires, and where the gaps are, so you can decide with accurate information.
@@ -39,6 +39,8 @@ The agent does not invent new actions. You define what it can call. Learn recomm
 
 ### Requirements
 
+Both Learn pages note that they describe features of agents or agent flows powered by the standard harness.
+
 - **Generative orchestration** must be on for the agent.
 - **Solution-aware cloud flow sharing** must be on in the environment. Otherwise you cannot add triggers.
 - Your organization's data policies must allow triggers. Admins can block event triggers in an environment.
@@ -51,7 +53,7 @@ The agent does not invent new actions. You define what it can call. Learn recomm
 4. Configure the event parameters and the trigger payload instructions.
 5. Add the actions or topics the agent should call, and write instructions that say when to call each one.
 
-Payload instructions should not conflict with the agent's instructions, or you may get errors or unexpected results. To change a trigger later, select the three dots, then **Edit in Power Automate**, and use the **Parameters** and **Code view** tabs.
+Payload instructions should not conflict with the agent's instructions, or you may get errors or unexpected results. To change a trigger later, select the three dots, then **Edit in Power Automate**, and use the **Parameters** and **Code** tabs.
 
 ### Test and publish
 
@@ -63,9 +65,9 @@ Event triggers can only use the maker's credentials. For autonomous operation, c
 
 ### Cost and limits
 
-Event trigger activity counts toward Copilot Credit consumption, and each payload is processed like a user message. For Microsoft 365 Copilot license holders, agent flows called while responding to a trigger payload consume Copilot Credits at the standard rate and are blocked when the environment has none available. Frequent or recurring triggers use more resources, and exceeding quota limits can cause throttling. Admins can monitor usage in Power Platform.
+Event trigger activity counts toward units of consumption for usage and billing, and the overview page links to its Copilot Credits billing rates table. A message is any request sent to the agent that triggers an action or response, and that includes payloads sent by event triggers. Frequent or recurring triggers use more resources, and exceeding quota limits can cause throttling. Admins can monitor usage in Power Platform.
 
-For a busy Dataverse table, this matters. Every row change can be a billable payload, so use trigger parameters or filters to limit which changes reach the agent.
+My own inference for a busy Dataverse table: every matching row change could send a payload that counts as a message. Learn advises narrowing what activates a trigger with the trigger parameters, so use them to limit which changes reach the agent.
 
 ## Option 2: Dataverse service endpoints
 
@@ -82,22 +84,22 @@ The page I read does not mention Azure Event Grid in this context.
 
 ## Where Event Grid fits
 
-The Azure Event Grid connector reference lists one trigger, **When a resource event occurs** (CreateSubscription). It needs a subscription ID, resource type and resource name, with optional prefix, suffix and event type filters, and returns event data, time, type, ID, subject and topic. It lists no actions. It is Premium in Copilot Studio and Power Automate, Standard in Logic Apps, not available in Power Apps, and throttled at 100 calls per connection per 60 seconds.
+The Azure Event Grid connector reference lists one trigger, **When a resource event occurs** (CreateSubscription). It needs a subscription ID, resource type and resource name, with an optional subscription name and optional prefix, suffix and event type filters, and returns event data, time, type, ID, subject and topic. It lists no actions. It is Premium in Copilot Studio and Power Automate, Standard in Logic Apps, not available in Power Apps, and throttled at 100 calls per connection per 60 seconds.
 
 What I could not confirm:
 
 - That the Event Grid trigger appears in the Copilot Studio event trigger library. The event trigger article says the library contains triggers for Microsoft and partner services but does not list Event Grid.
 - That Dataverse publishes events to Event Grid natively.
 
-A reasonable design for Azure-side sources is therefore to use the connector in a cloud flow and test whether the agent can use it. For Dataverse changes alone, use the Dataverse trigger and skip the extra moving parts.
+My own suggestion for Azure-side sources: use the connector in a cloud flow and test whether the agent can use it. For Dataverse changes alone, the documented Dataverse trigger avoids the extra moving parts.
 
-## Decision guide
+## Decision guide (my own summary)
 
 - **Reacting to row changes in one environment:** the Dataverse event trigger.
 - **Sending Dataverse events to other Azure consumers:** a service endpoint to Service Bus or Event Hubs.
 - **Reacting to Azure resource events:** the Event Grid connector, after confirming availability in your agent.
 
-## Common mistakes
+## Common mistakes (my own list, derived from the pages above)
 
 - Expecting the trigger to fire before publishing the agent.
 - Publishing with maker credentials without reviewing who can use the agent.
@@ -113,7 +115,7 @@ A reasonable design for Azure-side sources is therefore to use the connector in 
 
 ## Sources
 
-- [Microsoft Learn: Event trigger overview](https://learn.microsoft.com/microsoft-copilot-studio/authoring-triggers-about)
-- [Microsoft Learn: Add an event trigger](https://learn.microsoft.com/microsoft-copilot-studio/authoring-trigger-event)
-- [Microsoft Learn: Azure integration with Dataverse](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/azure-integration)
-- [Microsoft Learn: Azure Event Grid connector](https://learn.microsoft.com/en-us/connectors/azureeventgrid/)
+- [Microsoft Learn: Event triggers overview](https://learn.microsoft.com/en-us/microsoft-copilot-studio/authoring-triggers-about)
+- [Microsoft Learn: Add an event trigger](https://learn.microsoft.com/en-us/microsoft-copilot-studio/authoring-trigger-event)
+- [Microsoft Learn: Azure Service Bus Integration for Dataverse](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/azure-integration)
+- [Microsoft Learn: Azure Event Grid - Connectors](https://learn.microsoft.com/en-us/connectors/azureeventgrid/)
