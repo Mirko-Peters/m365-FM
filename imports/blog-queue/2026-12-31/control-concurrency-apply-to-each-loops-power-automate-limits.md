@@ -29,11 +29,11 @@ An Apply to each loop in Power Automate runs one item at a time by default. To s
 
 ## What Learn says about the default
 
-Apply to each runs sequentially by default. Learn gives a default concurrency of 1 and a maximum of 50. The guidance page shows the setting in screenshots only, so it gives no click path and no label text. In the loop's settings you set the **degree of parallelism**.
+Apply to each runs sequentially by default. Learn gives a default concurrency of 1 and a maximum of 50. The guidance page shows the setting in screenshots only, so it gives no click path and no label text. The page calls the setting the degree of concurrency, or parallelism.
 
 ## When Learn suggests parallel execution
 
-The guidance page says parallel execution and concurrency run multiple actions at the same time and can significantly reduce execution time. It suggests considering them for tasks that do not depend on each other and for tasks that take more than five seconds, presented as guidance and not a hard rule. The goal is to optimize performance without overwhelming the system.
+The guidance page says parallel execution and concurrency run multiple actions at the same time and can significantly reduce execution time. For parallel execution in branches, it suggests considering tasks that do not depend on each other and tasks that take more than five seconds, presented as guidance and not a hard rule. The goal is to optimize performance without overwhelming the system.
 
 For Apply to each, the page lists these use cases:
 
@@ -76,7 +76,7 @@ The page does not explain the test setup, such as the action type, the endpoint 
 
 ## Trigger concurrency is a different setting
 
-Concurrency can also be set on a trigger. The limits page states that with trigger concurrency off, the number of runs is unlimited, and with it on the range is 1 to 100 with a default of 25. The article on optimizing triggers describes it as off by default, with a default parallelism of 1 once enabled. Learn states that concurrency control is irreversible once turned on, and mentions a dirty-read note for trigger concurrency. Read that article before you change a production trigger.
+Concurrency can also be set on a trigger. The limits page states that with trigger concurrency off, the number of runs is unlimited, and with it on the range is 1 to 100 with a default of 25. The article on optimizing triggers describes it as off by default, with a default parallelism of 1 once enabled. Learn states that concurrency control is irreversible once turned on: the limits page says it cannot be undone without deleting and re-adding the trigger, and the triggers article says to create a new flow. The triggers article also names dirty reads as a reason to use trigger concurrency control. Read that article before you change a production trigger.
 
 The setting on Apply to each controls items inside one run. Trigger concurrency controls how many runs execute at the same time. They are separate decisions.
 
@@ -96,7 +96,7 @@ The pages I read do not describe the following:
 - A click path or exact label for the setting.
 - Behavior of variables and ordering in parallel loops.
 - Throttling limits of individual connectors.
-- How to undo trigger concurrency once it is on.
+- Why the trigger concurrency default differs between the two pages: 25 on the limits page and 1 on the triggers article.
 
 ## Related
 
@@ -105,6 +105,6 @@ The pages I read do not describe the following:
 
 ## Sources
 
-- [Implement parallel execution](https://learn.microsoft.com/power-automate/guidance/coding-guidelines/implement-parallel-execution)
-- [Limits and configuration in Power Automate](https://learn.microsoft.com/power-automate/limits-and-config)
-- [Optimize Power Automate triggers](https://learn.microsoft.com/power-automate/guidance/coding-guidelines/optimize-power-automate-triggers)
+- [Optimize flows with parallel execution and concurrency (Microsoft Learn)](https://learn.microsoft.com/power-automate/guidance/coding-guidelines/implement-parallel-execution)
+- [Limits of automated, scheduled, and instant flows (Microsoft Learn)](https://learn.microsoft.com/power-automate/limits-and-config)
+- [Optimize Power Automate triggers (Microsoft Learn)](https://learn.microsoft.com/power-automate/guidance/coding-guidelines/optimize-power-automate-triggers)
