@@ -93,7 +93,7 @@ A script that works in your own session can still fail when it runs unattended, 
 
 For scripts that run in Azure, the managed identity option removes the certificate handling entirely. Whether it fits depends on where the script runs.
 
-## Common errors and checks
+## Common errors and checks (own checklist, partly from the tutorial notes)
 
 1. **Connection fails with the certificate not found.** Check the store and the thumbprint on the machine and account that run the script.
 2. **Authenticated, but commands return insufficient privileges.** The application permissions were not granted or not consented. Check the app's API permissions and admin consent. Learn does not describe how the app-only session derives its scopes, so compare `Get-MgContext` output with the permission each cmdlet documents.
@@ -113,6 +113,6 @@ They do not describe cleaning up the app registration or certificate, certificat
 
 ## Sources
 
-- [Microsoft Learn: Use app-only authentication with the Microsoft Graph PowerShell SDK](https://learn.microsoft.com/en-us/powershell/microsoftgraph/app-only)
+- [Microsoft Learn: Use app-only authentication with the Microsoft Graph PowerShell SDK](https://learn.microsoft.com/en-us/powershell/microsoftgraph/app-only?view=graph-powershell-1.0)
 - [Microsoft Learn: Microsoft Graph PowerShell authentication commands](https://learn.microsoft.com/en-us/powershell/microsoftgraph/authentication-commands?view=graph-powershell-1.0)
-- [Microsoft Learn: Connect-MgGraph reference](https://learn.microsoft.com/en-us/powershell/module/microsoft.graph.authentication/connect-mggraph)
+- [Microsoft Learn: Connect-MgGraph reference](https://learn.microsoft.com/en-us/powershell/module/microsoft.graph.authentication/connect-mggraph?view=graph-powershell-1.0)
