@@ -18,7 +18,7 @@ faq:
   - q: "Where are FSLogix logs stored?"
     a: "Microsoft Learn lists three kinds: client event logs under Event Viewer, Applications and Services Logs, FSLogix; text logs in C:\\ProgramData\\FSLogix\\Logs; and event trace logs. The Profile_%date%.log file in the Profile subfolder is the most common one to read first, and Cloud Cache events appear under the CloudCache node."
   - q: "Where does Cloud Cache keep its local copy?"
-    a: "According to Microsoft Learn, in C:\\ProgramData\\FSLogix\\Cache. Learn adds that the local cache only grows up to the maximum container size set in SizeInMBs, and that Cloud Cache flushes changes to all storage providers while the user signs out."
+    a: "According to Microsoft Learn, in C:\\ProgramData\\FSLogix\\Cache. Learn adds that the local cache only grows up to the maximum container size set in SizeInMBs. Cloud Cache flushes changes lazily and asynchronously to all storage providers, and a sign-out is delayed until all providers are at the same sequence."
   - q: "How many providers does Cloud Cache read from?"
     a: "Learn says only one provider is used when data is hydrated, chosen by the order of entries in CCDLocations, while data is written to all providers. It advises listing providers by proximity and then preference."
   - q: "Do the Learn pages give a repair procedure for a corrupt VHD?"
@@ -42,7 +42,7 @@ To read the profile log, follow Learn's sequence:
 4. Note the process id for that user and use it to follow the whole sign-in or sign-out sequence, because other users may log at the same time.
 5. Look for `Begin Session: Logon`, `Begin Session: Logoff`, `loadProfile time:` and `unloadProfile time:`.
 
-Entries are prefixed `[INFO]`, `[WARN:xxxxxx]` or `[ERROR:xxxxxx]`. Warnings and errors carry a code that you can look up in the FSLogix error codes reference. Learn lists codes such as 12 (can't attach to virtual disk), 11 (can't open virtual disk) and 17 (error while formatting virtual disk). It does not label any code as "corrupt".
+Entries are prefixed `[INFO]`, `[WARN:xxxxxx]` or `[ERROR:xxxxxx]`. The FSLogix codes page separates two things. The code after `[WARN:` or `[ERROR:` comes from Windows and corresponds to a Windows system error code, so decode it with the system error code documentation or `NET HELPMSG`. FSLogix's own status values appear as lines such as `Status set to 28: No user session config found`. Among them are 11 (can't open virtual disk), 12 (can't attach to virtual disk) and 17 (error while formatting virtual disk). No code is described as "corrupt".
 
 ## Step 2: Check antivirus exclusions
 
@@ -56,7 +56,7 @@ Learn cautions against excluding profile data just to save capacity. The folders
 
 ## Step 4: Check container size and free space
 
-A container must have more than 200 MB of free space to attach, according to Learn. To check:
+Learn's sign-in troubleshooting page states that the container must have more than 200 MB to attach successfully; it does not say more precisely what that figure measures. To check:
 
 1. Read the `SizeInMBs` setting on the VM.
 2. Find the user's container on the SMB share.
@@ -68,7 +68,7 @@ FSLogix expands a container automatically when you set a larger `SizeInMBs`, and
 
 Container attach fails if the VM cannot resolve or reach the storage path. Learn suggests testing from another VM and running `Test-NetConnection -ComputerName <server FQDN> -CommonTCPPort SMB`.
 
-Learn also repeats a notice: an April 2026 Windows Server update changes the default Kerberos encryption type from RC4 to AES-SHA1. File shares that host FSLogix containers and are not upgraded to AES-SHA1 may have access problems, so complete the upgrade first.
+Learn also repeats a notice, still worded as an upcoming change: the April 2026 Windows Server update changes the default Kerberos encryption type from RC4 to AES-SHA1. File shares that host FSLogix containers and are not upgraded to AES-SHA1 might have access issues after this change is applied, so Learn advises completing the upgrade before installing the update.
 
 ## Step 6: Understand Cloud Cache sync behavior
 
@@ -89,7 +89,7 @@ Learn says Cloud Cache puts an even greater load on the VM and suggests starting
 
 ## What the pages read do not cover
 
-The Learn pages used here have no dedicated Cloud Cache troubleshooting steps and no procedure to repair a corrupt VHD. The configuration settings page also does not detail the Cloud Cache settings on the section read. If the steps above find nothing, gather logs with the FSLogix Support Tool and open a support case. Before touching a damaged container, make a copy. Learn warns that deleting the wrong data can lead to data loss or profile corruption.
+The Learn pages used here have no dedicated Cloud Cache troubleshooting steps and no procedure to repair a corrupt VHD. If the steps above find nothing, gather logs with the FSLogix Support Tool and open a support case. Before touching a damaged container, make a copy. Learn warns that deleting the wrong data can lead to data loss or profile corruption.
 
 ## Related
 
