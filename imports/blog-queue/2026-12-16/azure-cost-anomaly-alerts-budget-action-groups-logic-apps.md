@@ -39,7 +39,7 @@ To see anomalies, open **Cost Management**, select a subscription scope, choose 
 
 ### Create the alert
 
-1. Open **Cost Management** > **Cost alerts** > **+ Add**.
+1. Open **Cost Management**, verify the subscription scope at the top of the page, then select **Cost alerts** > **+ Add**.
 2. Choose **Anomaly** as the alert type.
 3. Fill in the required fields and select **Create**. View and manage rules under **Alert rules**.
 
@@ -68,8 +68,8 @@ Timing matters. Data typically arrives within 8 to 24 hours, and the evaluation 
 Learn's scenario stops virtual machines at budget thresholds. Its components are an Automation runbook, webhooks, a Logic App with an HTTP trigger, an action group and the budget.
 
 1. **Trigger.** Use **Request: When an HTTP request is received**.
-2. **Parse JSON.** The action group has no custom headers for the webhook, so parse the payload in a separate step. The sample payload has the schema ID `AIP Budget Notification` and a `data` object with `SubscriptionName`, `SubscriptionId`, `SpendingAmount`, `Budget`, `Unit`, `BudgetName`, `BudgetType`, `ResourceGroup` and `NotificationThresholdAmount`.
-3. **Branch.** Compare `NotificationThresholdAmount` as a number. In the scenario, a value of at least 0.8 and below 1 posts to one webhook, and a value of at least 1 posts to another. In the Logic App the value is a fraction, while the budget API uses whole percentages such as 80.
+2. **Parse JSON.** The action group has no custom headers for the webhook, so parse the payload in a separate step. The sample payload has the schema ID `AIP Budget Notification` and a `data` object with fields such as `SubscriptionName`, `SubscriptionId`, `SpendingAmount`, `BudgetStartDate`, `Budget`, `Unit`, `BudgetCreator`, `BudgetName`, `BudgetType`, `ResourceGroup` and `NotificationThresholdAmount`.
+3. **Branch.** Compare `NotificationThresholdAmount` as a number. In the scenario, a value of at least 0.8 and below 1 posts to one webhook, and a value of at least 1 posts to another. The scenario's sample payload shows `NotificationThresholdAmount` as 0.8, while its budget request uses thresholds of 80 and 100. Learn does not explain the difference, so check the real payload of your own budget before you copy the condition values.
 4. **Notify.** Send an email in each branch.
 5. **Action group.** Add a Logic App action to an action group, then give the group to the budget as a contact group.
 
@@ -77,17 +77,17 @@ The webhook URL cannot be viewed again after creation, so save it at once. A run
 
 ## Handle the dated parts
 
-The Learn scenario was written for older tooling. It uses an Automation Run As account and the budget API version 2018-03-31 with 2018 dates. The page itself has a few inconsistencies, for example in the wording of the 100 percent email step. Verify the current authentication method for Automation and the current API version before you copy it.
+The Learn scenario was written for older tooling. It uses an Automation Run As account and the budget API version 2018-03-31 with 2018 dates. The page itself has a few inconsistencies, for example the email text in the 100 percent branch still says the optional VMs were shut down although that branch stops all remaining VMs. Verify the current authentication method for Automation and the current API version before you copy it.
 
 ## Connect anomaly alerts to Logic Apps
 
-Since the anomaly alert is only an email, a common design is a Logic App with a mailbox trigger that reads messages from `microsoft-noreply@microsoft.com`. The Learn page names mailbox-based automation as the integration path but does not give steps. Check that no mail rule blocks that sender, and remember the alert is sent once.
+Since the anomaly alert is only an email, Learn describes the pattern of a Logic App that monitors an Office 365 Outlook mailbox, parses a new anomaly alert email and starts a workflow, for example posting to Teams or Slack, calling the Cost Management Query API or logging to a FinOps dashboard. It gives no step-by-step build. Learn's troubleshooting list for missing anomaly emails names `microsoft-noreply@microsoft.com` as the sender and says to check that no mail rule blocks it. Filtering the mailbox trigger on that sender is my own suggestion. Remember the alert is sent once.
 
 ## A sensible split of responsibilities
 
-Use anomaly alerts to learn quickly that something unusual happened, and use budgets with action groups for thresholds that must start an action. Keep the actions reversible. Stopping virtual machines suits a noncritical workload, as Microsoft says about its own scenario. For production, a Logic App that opens a ticket or posts to a team channel is safer than one that shuts resources down. Budgets also support forecast alerts, which warn before the actual cost crosses the threshold, so consider a forecast condition for the early warning and an actual condition for the action.
+Learn's FinOps anomaly page suggests subscribing to anomaly alerts for each subscription and, for a specific scope or workload, creating a budget with alerts for both actual and forecast costs. The rest of this section is my own view. Use anomaly alerts to learn quickly that something unusual happened, and use budgets with action groups for thresholds that must start an action. Keep the actions reversible. Stopping virtual machines suits a noncritical workload, as Microsoft says about its own scenario. For production, a Logic App that opens a ticket or posts to a team channel is safer than one that shuts resources down. Budgets also support forecast alerts, which warn before the actual cost crosses the threshold, so consider a forecast condition for the early warning and an actual condition for the action.
 
-## Typical mistakes
+## Typical mistakes (my own list)
 
 - Expecting a budget alert to stop spending.
 - Creating a budget on a management group and expecting an action group to work.
@@ -103,7 +103,7 @@ Use anomaly alerts to learn quickly that something unusual happened, and use bud
 
 ## Sources
 
-- [Identify anomalies and unexpected changes in cost (Microsoft Learn)](https://learn.microsoft.com/azure/cost-management-billing/understand/analyze-unexpected-charges)
+- [Identify anomalies and unexpected changes in cost (Microsoft Learn)](https://learn.microsoft.com/en-us/azure/cost-management-billing/understand/analyze-unexpected-charges)
 - [Create and manage budgets (Microsoft Learn)](https://learn.microsoft.com/en-us/azure/cost-management-billing/costs/tutorial-acm-create-budgets)
 - [Manage costs with budgets: stop VMs at thresholds (Microsoft Learn)](https://learn.microsoft.com/en-us/azure/cost-management-billing/manage/cost-management-budget-scenario)
-- [Anomaly management in the FinOps Framework (Microsoft Learn)](https://learn.microsoft.com/mt-mt/cloud-computing/finops/framework/understand/anomalies)
+- [Anomaly management (Microsoft Learn, FinOps Framework)](https://learn.microsoft.com/en-us/cloud-computing/finops/framework/understand/anomalies)
