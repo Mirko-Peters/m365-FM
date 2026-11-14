@@ -37,7 +37,7 @@ From the exam page:
 - Part of the requirements for Microsoft Certified: Dynamics 365 Customer Service Functional Consultant Associate.
 - The English version was updated on October 3, 2025. Localized versions are updated about eight weeks later, though the page says there may be delays.
 
-The exam page also contains an older-style summary sentence that names tasks such as managing entitlements and SLAs, scheduling, multi-session experiences and connected customer service. The study guide's current outline is organized differently, so I follow the study guide below. The study guide says it includes two versions of the skills measured depending on when you take the exam. The text I read gave the version as of March 11, 2026, so check the guide for the version that applies on your exam date.
+The exam page also contains an older-style summary sentence that names tasks such as managing entitlements and SLAs, scheduling, multi-session experiences and connected customer service. The study guide's current outline is organized differently, so this article follows the study guide. The study guide says it includes two versions of the skills measured depending on when you take the exam. The page currently lists the version as of March 11, 2026, so check the guide for the version that applies on your exam date.
 
 ## Who the exam is for
 
