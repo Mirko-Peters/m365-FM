@@ -51,12 +51,12 @@ Look at the arrows first. A schedule that goes to every step at once, with a das
 
 ## Which symbols appear on a future state map?
 
-The *future state map* shows the improved flow. Gemba Academy describes the symbols it adds in its guide to [creating a future state map](https://blog.gembaacademy.com/2008/02/26/lets-create-a-future-state-value-stream-map/):
+The *future state map* shows the improved flow. Gemba Academy introduces these elements in its guide to [creating a future state map](https://blog.gembaacademy.com/2008/02/26/lets-create-a-future-state-value-stream-map/). The guide shows them as images and does not describe each symbol in text, so the descriptions below are my summary:
 
 - **Supermarket.** A holding point for finished goods or work in progress that controls stock levels.
 - **Kanban.** A card that signals production or withdrawal. Withdrawal cards trigger shipments and production cards trigger replenishment.
 - **Kanban post.** A goal-post symbol that is used to replenish a work-in-progress supermarket.
-- **Pacemaker.** The one process that is scheduled. The guide describes it as typically the process step closest to the customer. The upstream steps respond through kanban.
+- **Pacemaker.** The one process that is scheduled. In the guide's example, shipping is the pacemaker, and the upstream steps respond through kanban.
 
 A related term is the *FIFO lane*. LEI describes it as a painted lane or physical channel that holds a limited amount of inventory in order. The supplier fills it, the customer empties it, and when it is full the supplier stops. Many icon sets include a symbol for it, so check your legend.
 
@@ -106,3 +106,9 @@ Hand-drawn maps are quick, but a shared symbol library keeps teams consistent wh
 ## Next step
 
 Print one legend page with the symbols you will use, and draw your next map with it. Then check each of your value stream mapping symbols against what you see on the floor.
+
+## Sources
+
+- [Value Stream Mapping - Lean Enterprise Institute (Lean Lexicon)](https://www.lean.org/lexicon-terms/value-stream-mapping/)
+- [Let's Create a Current State Value Stream Map! - Gemba Academy](https://blog.gembaacademy.com/2008/02/24/lets-create-a-current-state-value-stream-map/)
+- [Let's Create a Future State Value Stream Map! - Gemba Academy](https://blog.gembaacademy.com/2008/02/26/lets-create-a-future-state-value-stream-map/)
