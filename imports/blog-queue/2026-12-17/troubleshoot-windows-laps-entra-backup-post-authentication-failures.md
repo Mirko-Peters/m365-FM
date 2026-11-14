@@ -20,7 +20,7 @@ faq:
   - q: "Why does a post-authentication action not run?"
     a: "Microsoft Learn says PostAuthenticationResetDelay of 0 disables all post-authentication actions. Otherwise the actions run after the grace period, which defaults to 24 hours. If the reset fails, event 10043 logs it and LAPS keeps retrying. Event 10048 appears after the retry maximum of 100 on a boot."
   - q: "Can Entra Connect sync Windows LAPS passwords?"
-    a: "No. Microsoft Learn states that the Entra and Intune portals show only passwords backed up directly by a Windows LAPS device. Microsoft Entra Connect does not sync Windows LAPS attributes, and a manual sync of AD attributes will not make them appear."
+    a: "Not as a tested path. Microsoft Learn says Windows LAPS devices back up to Entra ID directly over https with no dependency on Entra Connect, and that the Entra and Intune portals show only passwords backed up directly by a Windows LAPS device. Syncing the on-premises AD Windows LAPS attributes with Entra Connect is not a tested scenario, and a manual sync will not make them appear in the portals."
   - q: "Does the Intune policy create the local admin account?"
     a: "No. Microsoft Learn says Windows LAPS does not create a custom account on older builds and that Intune manages an existing account. If the named account does not exist, no account is managed. Windows 11 24H2 and Windows Server 2025 and later can create the managed account through automatic account management."
 ---
@@ -29,7 +29,7 @@ When Windows LAPS does not back up a password to Microsoft Entra ID, start with 
 
 ## Step 1: Check the prerequisites
 
-Windows LAPS in Entra mode supports Windows 11, Windows 10, Windows Server 2025, 2022 and 2019. Learn calls Microsoft Entra joined devices the preferred approach. Hybrid joined devices can use the Group Policy based Windows LAPS, but Learn ties that to backup to on-premises Active Directory.
+The Learn pages read for this article do not list the supported Windows versions, so check the Windows LAPS overview for that. The troubleshooting page says the Entra scenario applies to devices that are Microsoft Entra joined or hybrid joined. For policy deployment, Learn calls Microsoft Intune with the Windows LAPS CSP the preferred option for Microsoft Entra joined devices. For devices hybrid joined to on-premises Active Directory, Learn says you can deploy policy with Windows LAPS Group Policy.
 
 By default, Microsoft Entra ID does not allow managed devices to post new Windows LAPS passwords. An administrator must enable the feature at tenant level. The Learn pages read for this article do not name the exact toggle and link to the Entra article on enabling Windows LAPS, so confirm the setting there.
 
@@ -43,16 +43,16 @@ Key values from the policy reference:
 |---|---|---|
 | `BackupDirectory` | 0 disabled, 1 Entra ID, 2 Active Directory | 0 |
 | `PasswordAgeDays` | 1 to 365, minimum 7 for Entra ID | 30 |
-| `PasswordLength` | 8 to 64 | 14 |
-| `PasswordComplexity` | 4 recommended or higher | 4 |
+| `PasswordLength` | 8 to 64 (ignored if PasswordComplexity is a passphrase option) | 14 |
+| `PasswordComplexity` | 1 to 8 (4 recommended; 5 to 8 need Windows 11 24H2 or Windows Server 2025 or later) | 4 |
 | `PostAuthenticationResetDelay` | 0 to 24 hours | 24 |
 | `PostAuthenticationActions` | 1, 3, 5 or 11 | 3 |
 
-If `BackupDirectory` is 0, all other settings are ignored. If the directory does not match the device join type, the Intune page says the policy applies without error but cannot back up the account.
+If `BackupDirectory` is 0, all other settings are ignored. If the directory does not match the device join type, the Intune page says the policy applies without error but cannot back up the account. The scenario page lists seven settings as applicable in Entra mode. The policy settings page also marks PassphraseLength and the AutomaticAccountManagement settings as applicable in Entra mode, which the scenario page does not mention. Learn also says an unsupported value falls back to the default, so a newer value such as a passphrase complexity on an older Windows build ends up as 4.
 
-If `AdministratorAccountName` is empty, Windows LAPS manages the built-in administrator by its well-known RID. For a custom account, Learn says Windows LAPS does not create it on earlier builds, and Intune does not create accounts either. Windows 11 24H2 and Windows Server 2025 and later offer automatic account management for that case.
+If `AdministratorAccountName` is empty, Windows LAPS manages the built-in administrator by its well-known RID. For a custom account, Learn says Windows LAPS does not create it on earlier builds, and Intune does not create accounts either. The scenario page recommends the Accounts CSP for creating the account. Windows 11 24H2 and Windows Server 2025 and later offer automatic account management for that case, and in that mode AdministratorAccountName is ignored.
 
-In Intune, the policy lives under **Endpoint security** > **Account protection** > **Create Policy**, with the profile **Local admin password solution (Windows LAPS)**. Assign it to device groups. Learn advises against user groups because a user policy follows the user between devices. If two policies conflict, the device keeps its last applied values and both report a conflict, so make them set identical values.
+In Intune, the policy lives under **Endpoint security** > **Account protection** > **Create Policy**, with the profile **Local admin password solution (Windows LAPS)**. Assign it to device groups. Learn advises against user groups because a user policy follows the user between devices. If a device that already has a working policy gets conflicting policies, it keeps the values it last applied and both policies report a conflict. If a device without a LAPS policy gets two conflicting policies at once, no settings are sent and both report conflicts. Learn's remedy is to remove assignments or make the policies set the same values.
 
 ## Step 3: Force processing and read the log
 
@@ -78,7 +78,7 @@ Learn's troubleshooting page maps events to Entra scenarios:
 | 10028 | Failed to update Entra ID with the new password | Same checks as 10026 |
 | 10059 | Azure returned a failure code | Endpoint access, tenant setting, device state, `dsregcmd /status` and the Entra error codes |
 
-For 10025, Learn says that opening the endpoint in a browser should return "Unsupported method or endpoint", which confirms it is reachable. Event 10017 is a status event at the end of a cycle, so look at the events before it.
+For 10025, Learn says that opening the endpoint in a browser should return "Unsupported method or endpoint", which confirms it is reachable. Learn lists event 10017 only for the Active Directory scenario and calls it a status event at the end of a processing cycle with no root cause of its own, so look at the events before it. In the Entra table above, 10028 is the matching failure to update the directory (my reading).
 
 If the portals show nothing, remember that the Intune policy data only appears after the device checks in and processes its policy.
 
@@ -99,9 +99,9 @@ The event flow is 10041 for a detected sign-in, 10042 when the grace period expi
 
 ## Step 6: Test rotation and retrieval
 
-Use `Reset-LapsPassword` to rotate on the device. Learn says to avoid frequent use because calls can be throttled, and that Entra ID does not support expiring a stored password by changing its expiration timestamp. In Intune, go to **Devices** > **All devices**, select the device, and choose **Rotate local admin password**. The device must be online for Entra joined devices, and rotation works on one device at a time. It fails on a device that has not backed up its account yet.
+Use `Reset-LapsPassword` to rotate on the device. Learn says to avoid frequent use because calls can be throttled, and that Entra ID does not support expiring a stored password by changing its expiration timestamp. In Intune, go to **Devices** > **All devices**, select the device, open the ellipsis menu in the menu bar and choose **Rotate local admin password**. Your account needs the Intune permissions Managed devices Read, Organization Read and Remote tasks Rotate Local Admin Password. The device must be online for Entra joined devices, and rotation works on one device at a time. It fails on a device that has not backed up its account yet.
 
-Reading passwords needs the permissions `microsoft.directory/deviceLocalCredentials/password/read` or `.../standard/read`, which the Cloud Device Administrator role grants. For `Get-LapsAADPassword`, the app needs `Device.Read.All` plus `DeviceLocalCredential.ReadBasic.All` or `DeviceLocalCredential.Read.All`.
+Reading passwords needs the permissions `microsoft.directory/deviceLocalCredentials/password/read` or `.../standard/read`, which Learn says you can grant with the built-in Cloud Device Administrator role or a custom Entra role. For `Get-LapsAADPassword`, the app needs `Device.Read.All` plus `DeviceLocalCredential.ReadBasic.All` (metadata such as backup time and expected expiration) or `DeviceLocalCredential.Read.All` (everything, including the clear-text password).
 
 ## Typical mistakes
 
@@ -113,7 +113,7 @@ Reading passwords needs the permissions `microsoft.directory/deviceLocalCredenti
 
 ## What the sources do not say
 
-The pages read do not list the exact tenant toggle name, and the event log page does not document a dedicated configuration error event for Entra mode. The Intune page does not describe the post-authentication settings, so check the CSP reference for them.
+The pages read do not list the exact tenant toggle name, and the event log page does not document a dedicated configuration error event for Entra mode. The Intune page does not describe the post-authentication settings; the policy settings page does.
 
 ## Related
 
@@ -124,8 +124,8 @@ The pages read do not list the exact tenant toggle name, and the event log page 
 
 ## Sources
 
-- [Windows LAPS scenarios: back up passwords to Microsoft Entra ID](https://learn.microsoft.com/en-us/windows-server/identity/laps/laps-scenarios-azure-active-directory)
-- [Windows LAPS policy settings](https://learn.microsoft.com/en-us/windows-server/identity/laps/laps-management-policy-settings)
+- [Get started with Windows LAPS and Microsoft Entra ID](https://learn.microsoft.com/en-us/windows-server/identity/laps/laps-scenarios-azure-active-directory)
+- [Configure Policy Settings for Windows LAPS](https://learn.microsoft.com/en-us/windows-server/identity/laps/laps-management-policy-settings)
 - [Use Windows LAPS event logs](https://learn.microsoft.com/en-us/windows-server/identity/laps/laps-management-event-log)
 - [Windows LAPS troubleshooting guidance](https://learn.microsoft.com/en-us/troubleshoot/windows-server/windows-security/windows-laps-troubleshooting-guidance)
-- [Use Windows LAPS policy with Intune](https://learn.microsoft.com/en-us/intune/intune-service/protect/windows-laps-policy)
+- [Deploy Intune policies to manage Windows LAPS](https://learn.microsoft.com/en-us/intune/device-security/laps/deploy-policy)
