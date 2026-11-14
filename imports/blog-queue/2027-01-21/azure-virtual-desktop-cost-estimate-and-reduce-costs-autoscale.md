@@ -25,7 +25,7 @@ faq:
     a: "No. Learn says you cannot use autoscale and scaling session hosts with Azure Automation on the same host pool, and advises not combining autoscale with other Microsoft or third-party scaling tools. Disable those on the host pools where you apply scaling plans."
 ---
 
-Azure Virtual Desktop (AVD) costs fall into two groups: Azure resource consumption and licensing. The Microsoft Learn page on understanding and estimating costs names the components in each, and the autoscale page explains the main tool for lowering compute spend. This article puts them into one planning view.
+Azure Virtual Desktop (AVD) costs fall into two groups: Azure resource consumption and licensing. The Microsoft Learn page on understanding and estimating costs names the components in each, and the autoscale page explains one of the tools for lowering compute spend. This article puts them into one planning view.
 
 ## Who pays
 
@@ -69,7 +69,7 @@ Learn separates two cases:
 - **Internal commercial purposes**: people who are members of your organization, such as employees or students, including external vendors or contractors. You must purchase an eligible license for each user who accesses AVD.
 - **External commercial purposes**: your customers, for example when you provide a SaaS application using AVD. Per-user access pricing lets you pay for access rights on behalf of external users. You must enroll in it to build a compliant deployment, and you pay through an Azure subscription.
 
-The page points to a separate article on licensing for the options, which I did not read for this post, so I list no license names here.
+The page points to its License Azure Virtual Desktop article for the options. This article lists no license names.
 
 ## Estimate before you deploy
 
@@ -86,7 +86,7 @@ The note on the page matters: the AVD module only estimates consumption for sess
 
 Use Microsoft Cost Management and its cost analysis tools to follow monthly AVD consumption under your subscriptions, and tag AVD resources to manage costs. With per-user access pricing, charges appear on the Azure billing invoice of each enrolled subscription. AVD Insights can show how the deployment is used, which Learn says helps optimize it and reduce costs.
 
-## Autoscale: the main lever
+## Autoscale: one lever for compute costs
 
 A scaling plan defines schedules for scaling session hosts in a host pool. What the autoscale page says:
 
@@ -102,15 +102,15 @@ A scaling plan defines schedules for scaling session hosts in a host pool. What 
 - You cannot use autoscale and Azure Automation scaling on the same host pool. Learn also advises against other scaling tools.
 - For pooled host pools, autoscale overwrites drain mode, so use exclusion tags when you update VMs. A VM with the exclusion tag is not turned on, off or changed in drain mode in any phase.
 - For pooled host pools, autoscale ignores the load-balancing algorithm in the host pool settings and applies load balancing from the schedule.
-- Autoscale turns on a session host when used host pool capacity exceeds the capacity threshold, and turns hosts off only when it can do so without exceeding the threshold and when a host has no sessions. In ramp-down with force logoff enabled, it can sign users out after a notification period.
-- The minimum percentage of hosts keeps some hosts available. If you tag all VMs with the exclusion tag, users can get a No resources available error, because nothing can be turned on.
+- Autoscale turns on a session host when used host pool capacity exceeds the capacity threshold. It turns hosts off when used capacity is below the threshold, turning one off would not push it over the threshold, and a host has no sessions. Pooled autoscale does not turn hosts off in the ramp-up phase. In ramp-down with force logoff enabled, it can sign users out after a notification period.
+- The minimum percentage of hosts keeps some hosts available. If all VMs carry the exclusion tag and are turned off, users can get a No resources available error, because autoscale cannot turn any on.
 
 ## A cost checklist (my advice)
 
 This is my suggestion, not a Microsoft recommendation:
 
 1. Estimate with the calculator using realistic concurrency, not the total user count.
-2. Add the items the module leaves out: licenses for internal users, identity infrastructure and profile storage.
+2. Add the items the module does not cover, such as licenses for internal users, and check that identity infrastructure and profile storage are in your estimate.
 3. Start a scaling plan with conservative ramp-down settings and review the effect in Cost Management before tightening.
 4. Tag AVD resources by host pool or department, so cost analysis can split the bill.
 5. Review reserved instances or a savings plan only after usage is stable.
