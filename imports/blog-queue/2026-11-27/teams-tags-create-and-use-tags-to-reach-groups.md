@@ -67,7 +67,7 @@ Team owners can control tag behavior for their own team, if the admin allows it.
 
 - **Let members create tags:** find the team, select **More options** > **Manage team**, open the **Settings** tab and go to the **@mention** section. Choose who can use team, channel and group @mentions.
 - **Turn on shift-based tags:** in **Settings**, go to **Tags** and turn on the **Shifts** toggle.
-- **Allow @mentions by job title or department:** in the **@mention** section, select the option to show members the choice to @mention groups based on job title or department.
+
 
 ## Admin settings
 
