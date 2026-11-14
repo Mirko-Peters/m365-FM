@@ -93,13 +93,13 @@ This section is my advice, not a Microsoft statement, except where I quote Learn
 1. **Start from required features.** If you need session recording or no public IP, only Premium works. If you need the native client, shareable links, custom ports or file transfer, Standard is the minimum.
 2. **Check capacity against your admin team.** Basic's 40 RDP and 80 SSH sessions is Learn's figure for two instances. Count how many people connect at the same time.
 3. **Treat Developer as a lab tool.** It is free, but Learn calls it unsuitable for production.
-4. **Weigh Learn's recommendation.** The page says the cost difference between Standard and Premium is marginal and that Premium is the recommended choice for production. Check the pricing page for your region before you decide, since the page I read does not give prices.
+4. **Weigh Learn's recommendation.** The page says the cost difference between Standard and Premium is marginal and that Premium is the recommended choice for production. Check Microsoft's Azure Bastion pricing page for your region before you decide, since the SKU pages give no prices.
 5. **Plan the downgrade you cannot do.** Because downgrades are not supported, choose the SKU you can live with for a while.
 6. **Note regional limits.** Learn lists regions for Developer, and says the other SKUs are available in all regions where Azure Bastion is supported.
 
 ## What the pages do not say
 
-I read the SKU comparison page, the overview and the configuration settings page. None of them gives prices, so I give none. The configuration page also marks some features, such as availability zones and IPv6 dual stack, as preview with conditions, and I did not cover them in depth. For networking rules such as NSG entries, use the configuration settings page directly.
+The SKU comparison page, the overview and the configuration settings page give no prices, so this article gives none. The comparison page only states that Developer is free, the other SKUs have an hourly charge, and outbound data transfer is charged for them, with the first 5 GB per month free. The configuration page also marks some features, such as availability zones and IPv6 dual stack, as preview with conditions, which this article does not cover in depth. For networking rules such as NSG entries, use the configuration settings page directly.
 
 ## Related
 
