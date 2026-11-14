@@ -7,14 +7,14 @@ author: mirko-p
 date: 2027-01-04
 topics: [azure-ad-graph, graph]
 keypoints:
-  - "Per Learn, extended access ended on August 31, 2025 and Azure AD Graph is fully retired. Apps that still depend on it need migration."
+  - "Learn lists August 31, 2025 as the end of extended access, after which Azure AD Graph will be fully retired. Apps that still depend on it need migration."
   - "The documented timeline: 30 June 2023 notice ended, 31 August 2024 new apps blocked without opt-in, 1 February 2025 all apps needed opt-in."
   - "The migration checklist has four steps: review API differences, examine API use, review app details, then deploy, test and extend."
   - "Learn says that in many cases you can change only the endpoint, version and resource name in the code."
   - "The pages read do not explain how to find apps that still call Azure AD Graph, so that part needs other documentation."
 faq:
   - q: "Is Azure AD Graph still available?"
-    a: "Microsoft Learn describes 31 August 2025 as the end of extended access, when Azure AD Graph is fully retired. Today is after that date, so plan on the basis that apps depending on it need migration to Microsoft Graph."
+    a: "Microsoft Learn lists 31 August 2025 as the end of extended access, after which Azure AD Graph will be fully retired. The overview page was last updated in September 2025 and still calls Azure AD Graph deprecated and in its retirement path, so check the latest announcement. Today is after that date, so plan on the basis that apps depending on it need migration to Microsoft Graph."
   - q: "What happened on the earlier dates?"
     a: "Learn lists 31 August 2024, when new apps could not use Azure AD Graph unless they opted in for extended access, and 1 February 2025, when all new and existing apps had to opt in."
   - q: "What are the steps to migrate?"
@@ -25,7 +25,7 @@ faq:
     a: "The Learn pages read for this guide do not describe the steps, such as Entra recommendations or sign-in log filters. The page on examining API use only says to catalog the APIs your app calls and compare them with the known differences."
 ---
 
-Azure AD Graph is retired. Microsoft Learn gives 31 August 2025 as the end of extended access. If an app still calls it, plan the move to Microsoft Graph. This guide covers the documented timeline, the migration checklist and the comparison areas. It also says plainly that the Learn pages read do not explain how to find the affected apps.
+Azure AD Graph is deprecated and on its retirement path. Microsoft Learn gives 31 August 2025 as the end of extended access, after which it will be fully retired. If an app still calls it, plan the move to Microsoft Graph. This guide covers the documented timeline, the migration checklist and the comparison areas. It also says plainly that the Learn pages read do not explain how to find the affected apps.
 
 ## Timeline from Learn
 
@@ -35,7 +35,7 @@ Azure AD Graph is retired. Microsoft Learn gives 31 August 2025 as the end of ex
 | 30 June 2023 | The three-year notice period ended and Azure AD Graph entered its retirement cycle |
 | 31 August 2024 | New apps created after this date cannot use Azure AD Graph unless they explicitly opt in for extended access. Existing apps continued to work |
 | 1 February 2025 | All new and existing apps had to opt in for extended access, including apps created before 31 August 2024 |
-| 31 August 2025 | End of extended access. Azure AD Graph is fully retired |
+| 31 August 2025 | End of extended access. Azure AD Graph will be fully retired |
 
 Learn also says Azure AD Graph receives no further investment and no SLA or maintenance commitment beyond security-related fixes. New features go only to Microsoft Graph. For the latest announcement, Learn points to a Tech Community post.
 
@@ -71,7 +71,7 @@ Learn publishes a checklist with four items.
 
 The overview page and the checklist page do not describe how to find apps that use Azure AD Graph. They do not mention Microsoft Entra recommendations, and they give no sign-in log filters or queries. The page on examining API use says to list the Azure AD Graph APIs your app currently calls and compare the list with the known differences. It gives no discovery procedure either.
 
-If you do not own the code, start from your app inventory and ask each owner to run the audit step. For tenant-level discovery, check the current Microsoft Entra documentation. Do not rely on filter syntax from memory.
+My advice: if you do not own the code, start from your app inventory and ask each owner to run the audit step. For tenant-level discovery, check the current Microsoft Entra documentation. Do not rely on filter syntax from memory.
 
 ## A migration plan
 
@@ -85,7 +85,7 @@ The plan below applies the Learn checklist. The ordering is practical advice.
 6. Test in a test tenant with Graph Explorer or your own test harness.
 7. Roll out in stages and watch for failed calls.
 
-## Typical mistakes
+## Typical mistakes (my advice)
 
 - Assuming the endpoint swap alone is enough when permissions differ.
 - Testing only in production data.
@@ -101,6 +101,6 @@ The plan below applies the Learn checklist. The ordering is practical advice.
 
 ## Sources
 
-- [Migrate your apps from Azure Active Directory (Azure AD) Graph to Microsoft Graph (Microsoft Learn)](https://learn.microsoft.com/graph/migrate-azure-ad-graph-overview)
-- [Azure AD Graph app migration planning checklist (Microsoft Learn)](https://learn.microsoft.com/graph/migrate-azure-ad-graph-planning-checklist)
-- [Examine Azure AD Graph API use (Microsoft Learn)](https://learn.microsoft.com/graph/migrate-azure-ad-graph-audit-api-use)
+- [Migrate from Azure Active Directory (Azure AD) Graph to Microsoft Graph (Microsoft Learn)](https://learn.microsoft.com/graph/migrate-azure-ad-graph-overview)
+- [Azure Active Directory (Azure AD) Graph app migration checklist (Microsoft Learn)](https://learn.microsoft.com/graph/migrate-azure-ad-graph-planning-checklist)
+- [Examine Azure AD Graph APIs app usage (Microsoft Learn)](https://learn.microsoft.com/graph/migrate-azure-ad-graph-audit-api-use)
