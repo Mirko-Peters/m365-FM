@@ -9,7 +9,7 @@ topics: [teams-premium, teams, teams-admin-center, sensitivity-labels]
 keypoints:
   - "Both features need Teams Premium for the meeting organizer. Attendees do not need a license for E2EE."
   - "Watermarks are set in Meetings > Meeting policies > Content Protection. E2EE is set under Enhanced encryption policies."
-  - "A sensitivity label can enforce watermarks and E2EE even when the organizer's policy is off, but templates cannot enforce them."
+  - "A sensitivity label can enforce watermarks and E2EE even when the organizer's policy is off. A template cannot override a policy that is off."
   - "E2EE disables recording, live captions, breakout rooms, PowerPoint Live, PSTN dial-in and Copilot in meetings, and allows at most 200 participants."
   - "Web, VDI and CVI participants are blocked from E2EE meetings. Watermarked meetings give some clients an audio-only experience."
 faq:
@@ -20,7 +20,7 @@ faq:
   - q: "How do I enable end-to-end encryption for meetings?"
     a: "In the Teams admin center open Enhanced encryption policies, edit or add a policy and set End-to-end meeting encryption, then assign it. Learn says the Global policy has meeting E2EE enabled by default, so organizers with Teams Premium can schedule E2EE meetings unless you assigned a different policy."
   - q: "Which wins when policy, label and template disagree?"
-    a: "Learn gives this order. Admin policies decide whether a feature is available, sensitivity labels override templates and organizer settings for what they control, templates apply only to settings a label does not control, and organizers change what is not enforced. Labels can enforce E2EE and watermarks even if the policy is off for the organizer."
+    a: "Learn does not give a numbered order. It says admin policies take precedence over template settings, labels take precedence over templates and organizer settings, and labels can enforce E2EE, watermarks and automatic recording even if the policy is off for the organizer. Templates apply to settings a label leaves uncontrolled, and organizers change what is not enforced."
   - q: "Are watermarks in recordings?"
     a: "According to Learn, playback in Microsoft Stream applies the watermark per viewer with their own email address. Downloaded .mp4 files do not contain a watermark, and download is turned off by default for watermarked recordings."
 ---
@@ -59,7 +59,7 @@ Side effects when a watermark is in use: large gallery and content from camera a
 3. Set **End-to-end meeting encryption** to **Not enabled, but users can enable** or **Not enabled**.
 4. Select **Save** and assign the policy to users or groups.
 
-Learn describes the Global policy defaults: meetings enabled, one-to-one calls disabled. Each user can hold only one encryption policy. PowerShell cmdlets are `New-`, `Set-`, `Get-`, `Grant-` and `Remove-CsTeamsEnhancedEncryptionPolicy`. The page shows the call-encryption parameter but not the meeting one, so use the admin center for meetings.
+Learn describes the Global policy defaults: meetings enabled, one-to-one calls disabled. Each user can hold only one encryption policy. PowerShell cmdlets are `New-`, `Set-`, `Get-`, `Grant-` and `Remove-CsTeamsEnhancedEncryptionPolicy`. The page shows the call-encryption parameter but not the meeting one, so the steps above use the admin center for meetings.
 
 ### What E2EE turns off
 
@@ -82,14 +82,14 @@ For consistent protection, use the guidance for highly sensitive meetings.
 3. Publish the label in a label policy.
 4. In the Teams admin center, go to **Meetings** > **Meeting templates** > **Add**, apply the label and lock it, then set options such as automatic recording off and meeting chat.
 
-Learn's precedence rules are the key to avoiding surprises:
+Learn does not number the order. This is my own summary of its statements, and it is the key to avoiding surprises:
 
-1. Admin policies decide availability. If E2EE is Not enabled for the organizer, a template that enables it has no effect.
-2. Sensitivity labels override templates and organizers for settings they control.
-3. Templates apply to the rest.
-4. Organizers change what remains.
+1. Admin policies take precedence over templates. If E2EE is Not enabled for the organizer, a template that enables it has no effect.
+2. Sensitivity labels take precedence over templates and organizers for settings they control, and can enforce E2EE, watermarks and automatic recording even when the admin policy is off.
+3. Templates apply to settings the label leaves uncontrolled.
+4. Organizers change what is not enforced.
 
-Labels can enforce E2EE and watermarks even when the organizer's policy has them off. Templates cannot enforce E2EE, watermarks or automatic recording. The same page warns that watermarks and encryption still need admin policy support to be used, so confirm the policies as well.
+Labels can enforce E2EE and watermarks even when the organizer's policy has them off. Learn's text says templates can't enforce E2EE, watermarks or automatic recording in that case. Its table says a template can enforce or prevent watermarks and E2EE unless a label controls them, and the E2EE page says a template can enforce E2EE if the policy is turned on for the organizer. My reading: a template cannot override a policy that is off. Learn also advises enabling the settings you want to control in admin policies where required.
 
 Combining both: the pages I read do not describe a conflict or special interaction between watermarks and E2EE. The E2EE page does not mention watermarks, and the watermark page does not mention E2EE. Test your exact combination with a pilot meeting before you rely on it.
 
@@ -121,7 +121,7 @@ Other points from the highly sensitive protection guidance:
 
 ## Sources
 
-- [Require a watermark for sensitive Teams meetings](https://learn.microsoft.com/MicrosoftTeams/watermark-meeting-content-video)
-- [Require end-to-end encryption for sensitive Teams meetings](https://learn.microsoft.com/en-us/MicrosoftTeams/end-to-end-encrypted-meetings)
-- [Meeting templates, sensitivity labels and admin policies](https://learn.microsoft.com/en-us/microsoftteams/meeting-templates-sensitivity-labels-policies)
-- [Configure Teams meetings with protection for highly sensitive data](https://learn.microsoft.com/en-us/microsoftteams/configure-meetings-highly-sensitive-protection)
+- [Microsoft Learn: Require a watermark for sensitive Teams meetings](https://learn.microsoft.com/en-us/microsoftteams/watermark-meeting-content-video)
+- [Microsoft Learn: Manage end-to-end encryption for Microsoft Teams meetings and one-to-one calls](https://learn.microsoft.com/en-us/microsoftteams/teams-end-to-end-encryption)
+- [Microsoft Learn: Use Teams meeting templates, sensitivity labels, and admin policies together for sensitive meetings](https://learn.microsoft.com/en-us/microsoftteams/meeting-templates-sensitivity-labels-policies)
+- [Microsoft Learn: Configure Teams meetings with protection for highly sensitive data](https://learn.microsoft.com/en-us/microsoftteams/configure-meetings-highly-sensitive-protection)
