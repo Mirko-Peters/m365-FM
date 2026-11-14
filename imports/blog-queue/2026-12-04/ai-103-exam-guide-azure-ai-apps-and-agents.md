@@ -22,19 +22,22 @@ faq:
   - q: "Will preview features appear on the exam?"
     a: "The study guide says most questions cover generally available features, and the exam may contain questions on preview features if they are commonly used. Because Foundry changes quickly, check the skills measured date on the live page before you study."
   - q: "Is there an official practice assessment?"
-    a: "Yes. The study guide points to a Practice Assessment on AI Skills Navigator for the Microsoft Certified: Azure AI Apps and Agents Developer Associate certification. It says the new experience is closer to the actual exam experience."
+    a: "Yes. The certification page says the Practice Assessment is available on AI Skills Navigator with a new upgraded experience, and that you must be signed in to AI Skills Navigator to launch it. Learn also offers an exam sandbox that shows the look and feel of the exam and its question types."
 ---
 
 AI-103 tests whether you can plan, build and operate AI apps and agents on Azure with Microsoft Foundry. This guide turns the official skills measured outline into a study plan. It lists the areas and weights from Microsoft Learn, and it does not contain exam questions or recalled content.
 
 ## Exam facts
 
-From the Learn study guide:
+From the Learn study guide and the certification page:
 
 - **Exam:** AI-103, Developing AI Apps and Agents on Azure.
-- **Certification:** Microsoft Certified: Azure AI Apps and Agents Developer Associate.
-- **Skills measured as of:** April 16, 2026. The page footer shows a later update on 2026-10-31.
+- **Certification:** Microsoft Certified: Azure AI Apps and Agents Developer Associate (intermediate level, per the certification page).
+- **Skills measured as of:** April 16, 2026, according to the study guide.
 - **Passing score:** 700 or greater.
+- **Duration and format:** 120 minutes. The exam is proctored and may include interactive components.
+- **Languages:** The certification page lists English, Chinese (Simplified), Chinese (Traditional), French, German, Japanese, Korean, Italian, Portuguese (Brazil) and Spanish.
+- **Retake:** After a failed attempt you can retake after 24 hours. The wait for later retakes varies, see Microsoft's retake policy.
 - **Language:** English first. Localized versions are updated about eight weeks later, though not always on time. If your language isn't available you can request an additional 30 minutes.
 - **Renewal:** Associate certifications expire annually and renew through a free online assessment.
 
@@ -98,7 +101,7 @@ These map to outline items on tools, multi-agent solutions, observability, secur
 1. Spend the first block on Area 2, because it is the largest. Build one prompt agent and one agent with function calling.
 2. Then Area 1, with attention to security and responsible AI, since those bullets are specific.
 3. Give the three 10 to 15 percent areas an equal slice each. Together they weigh 30 to 45 percent.
-4. Take the Practice Assessment on AI Skills Navigator, then fill the gaps it shows.
+4. Take the Practice Assessment on AI Skills Navigator, which requires signing in there, and try the exam sandbox to see the question types. Then fill the gaps they show.
 
 Learn's page does not list a retirement date and gives no formal prerequisites.
 
@@ -106,7 +109,7 @@ Learn's page does not list a retirement date and gives no formal prerequisites.
 
 - Studying only agents. The other areas add up to more than a third of the exam.
 - Ignoring the skills measured date. The outline can change.
-- Learning from outdated product names. Foundry has been renamed and role names changed.
+- Learning from outdated product names. Product and service names change over time, so check the current names in the documentation.
 
 ## Related
 
@@ -117,5 +120,6 @@ Learn's page does not list a retirement date and gives no formal prerequisites.
 
 ## Sources
 
-- [Study guide for Exam AI-103 (Microsoft Learn)](https://learn.microsoft.com/credentials/certifications/resources/study-guides/ai-103)
-- [Foundry Agent Service overview (Microsoft Learn)](https://learn.microsoft.com/azure/foundry/agents/overview)
+- [Study guide for Exam AI-103 (Microsoft Learn)](https://learn.microsoft.com/en-us/credentials/certifications/resources/study-guides/ai-103)
+- [Foundry Agent Service overview (Microsoft Learn)](https://learn.microsoft.com/en-us/azure/foundry/agents/overview)
+- [Microsoft Certified: Azure AI Apps and Agents Developer Associate (Microsoft Learn)](https://learn.microsoft.com/en-us/credentials/certifications/azure-ai-apps-and-agents-developer-associate/)
