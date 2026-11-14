@@ -10,7 +10,7 @@ keypoints:
   - "Learn lists three Who can present options: Only organizers and co-organizers, People in my org and guests, and Everyone, which is the default."
   - "Admins set the default under Meetings > Meeting policies > Content sharing. Organizers can change it per meeting in Meeting options."
   - "The policy affects all meetings and events, including Meet Now meetings."
-  - "Participants can give or request control is a per-user policy. External participants have a separate policy and the organizer's Who can present setting decides what they can do."
+  - "Participants can give or request control is a per-user policy. A separate policy covers external participants, and the organizer's Who can present and lobby settings decide what they can do."
   - "The page does not cover channel meetings, webinars, or the handling of anonymous users under Who can present."
 faq:
   - q: "What are the Who can present options?"
@@ -85,9 +85,9 @@ Use `$False` to turn them off. The page's intro names one parameter, but its exa
 - The page describes Who can present as a per-user policy and also as affecting all meetings and events, and does not reconcile the two.
 - It gives no behavior for channel meetings and webinars, no specific handling of anonymous users under Who can present, no default values for the control settings, no client version requirements and no licensing details.
 
-## Choosing an option
+## Choosing an option (my advice)
 
-The guidance below is practical advice built on the option descriptions.
+The guidance below is my own suggestion built on the option descriptions.
 
 | Situation | Option to consider |
 | --- | --- |
@@ -95,9 +95,9 @@ The guidance below is practical advice built on the option descriptions.
 | Internal workshop with invited guests | People in my org and guests |
 | Small informal call | Everyone |
 
-For sensitive meetings, set the policy default to the most restrictive option that your users can live with, and let organizers loosen it per meeting. Learn links a separate page on the presentation experience for sensitive meetings, which was not read here.
+For sensitive meetings, my advice is to set the policy default to the most restrictive option that your users can live with, and let organizers loosen it per meeting.
 
-## Typical mistakes
+## Typical mistakes (my advice)
 
 - Assuming the external control policy decides who may present.
 - Expecting an Only me option, which the page does not list.
