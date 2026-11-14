@@ -1,6 +1,6 @@
 ---
 title: "Conditional Access Breaking B2B Guest Access: How to Find and Fix the Policy"
-summary: "Guests are blocked or looping on MFA after a Conditional Access change? Read the sign-in log, check guest targeting, cross-tenant trust settings and unsupported controls, in the order Microsoft's pages support."
+summary: "Guests are blocked or looping on MFA after a Conditional Access change? Read the sign-in log, check guest targeting, cross-tenant trust settings and unsupported controls, following Microsoft Learn's guidance."
 status: review
 publish: false
 author: mirko-p
@@ -14,7 +14,7 @@ keypoints:
   - "User risk policies that require a password change block guests. Microsoft suggests excluding a group of external users from risk policies."
 faq:
   - q: "Why are my B2B guests suddenly blocked after a new policy?"
-    a: "Microsoft Learn lists causes: a device grant control that guests cannot satisfy, a grant or session control that is not supported for the guest type, MFA required for direct connect users without inbound trust, or a risk policy that requires a password change. Open the sign-in event and read the Conditional Access tab to see which policy applied."
+    a: "Microsoft Learn describes these situations: a device grant control that guests cannot satisfy, a grant or session control that is not supported for the guest type, MFA required for direct connect users without inbound trust, or a risk policy that requires a password change. Open the sign-in event and read the Conditional Access tab to see which policy applied."
   - q: "Do guests have to do MFA in my tenant?"
     a: "It depends on trust settings. Learn says that when MFA trust is enabled and the session carries an MFA claim from the home tenant, the user signs in seamlessly. Without trust, B2B collaboration users are challenged by the resource tenant. Non-Microsoft Entra users always do MFA in the resource tenant."
   - q: "Can I require a compliant device for guests?"
@@ -25,7 +25,7 @@ faq:
     a: "Learn says to check whether another admin who is not blocked can disable the policy. If none can, submit a support request. Microsoft support reviews it and updates the blocking policies after confirmation."
 ---
 
-When Conditional Access breaks guest sign-in, find the exact policy in the Microsoft Entra sign-in log first, then compare it with how Microsoft says policies treat guests. Most cases come down to four things: the guest type is in scope, a control is unsupported for guests, device claims are not trusted, or MFA trust is missing.
+When Conditional Access breaks guest sign-in, find the exact policy in the Microsoft Entra sign-in log first, then compare it with how Microsoft says policies treat guests. The checks below group the documented causes into four things: the guest type is in scope, a control is unsupported for guests, device claims are not trusted, or MFA trust is missing.
 
 ## Step 1: Read the sign-in event
 
@@ -60,7 +60,7 @@ Learn's table shows what works for guests.
 
 - **Not supported for either type:** Require approved client app, Require app protection policy, Require password change. Custom controls are not supported for cross-tenant trusts.
 - **Not supported for B2B direct connect:** Terms of Use, app enforced restrictions, Conditional Access App control, sign-in frequency and persistent browser session.
-- **Supported for guests:** Block, Require MFA, Require compliant device and Require hybrid joined device (the last two with trust), plus Terms of Use for B2B collaboration.
+- **Supported for guests:** Block. Require MFA (for B2B direct connect only with inbound MFA trust). Require compliant device and Require hybrid joined device (both guest types, with the matching inbound trust). For B2B collaboration only: Terms of Use, app enforced restrictions, Conditional Access App control, sign-in frequency and persistent browser session.
 
 Microsoft does not recommend requiring an app protection policy for external users, because that needs a device registered in the resource tenant, which guests cannot do.
 
@@ -71,7 +71,9 @@ The flow, according to Learn: Entra ID evaluates your policies and the cross-ten
 - B2B collaboration users are prompted for MFA in your tenant.
 - B2B direct connect users are blocked.
 
-To change this, open **Entra ID** > **External Identities** > **Cross-tenant access settings**. Use **Default settings** or an entry under **Organizational settings**, then adjust the inbound trust settings: trust MFA, trust compliant devices, trust Microsoft Entra hybrid joined devices. Targeting specific users, groups or applications there needs a Microsoft Entra ID P1 or P2 subscription. Note that setting default inbound or outbound access to Block can interrupt business-critical access.
+If device compliance is required but cannot be evaluated, Learn says access is blocked for both B2B collaboration and B2B direct connect users.
+
+To change this, open **Entra ID** > **External Identities** > **Cross-tenant access settings**. Use **Default settings** or an entry under **Organizational settings**, open the **Trust settings** tab of the inbound settings and select **Trust multifactor authentication from Microsoft Entra tenants**, **Trust compliant devices** or **Trust Microsoft Entra hybrid joined devices**. Learn's comparison table links the B2B direct connect inbound trust settings to a separate B2B direct connect page, which I did not read. Learn also notes that MFA trust is not applied when an external user signs in through granular delegated admin privileges (GDAP): MFA is then always required in the user's home tenant. Targeting specific users, groups or applications there needs a Microsoft Entra ID P1 or P2 subscription. Note that setting default inbound or outbound access to Block can interrupt business-critical access.
 
 For users who do not sign in with Microsoft Entra ID, such as Google, SAML or email one-time passcode users, your tenant is always responsible for MFA. It needs licenses that support MFA, and the guest uses one from the resource tenant.
 
@@ -87,9 +89,9 @@ Sign-in risk policies are enforced when a guest satisfies the grant control. If 
 
 ## Step 7: Avoid lockouts when you fix it
 
-Learn warns against broad settings for all users and all resources: Block access, Require compliant device, Require hybrid joined device and Require app protection policy can lock out an organization, including admins. Use report-only mode for testing. If a policy locks out all admins, another admin who is not blocked can disable it, or you open a support request.
+Learn warns against broad settings for all users and all resources: Block access, Require compliant device, Require hybrid joined device and Require app protection policy can lock out an organization, including admins. If a policy locks out all admins, Learn says another admin who is not blocked can disable it, or you submit a support request. My own addition: use report-only mode for testing. The pages I read do not describe it.
 
-## Checklist
+## Checklist (my own summary)
 
 1. Which policy does the Conditional Access tab show?
 2. Is the guest type in scope?
@@ -107,6 +109,6 @@ Learn warns against broad settings for all users and all resources: Block access
 
 ## Sources
 
-- [Authentication and Conditional Access for External ID (Microsoft Learn)](https://learn.microsoft.com/en-us/entra/external-id/authentication-conditional-access)
-- [Troubleshoot Conditional Access (Microsoft Learn)](https://learn.microsoft.com/en-us/entra/identity/conditional-access/troubleshoot-conditional-access)
-- [Cross-tenant access settings for B2B collaboration (Microsoft Learn)](https://learn.microsoft.com/en-us/entra/external-id/cross-tenant-access-settings-b2b-collaboration)
+- [Authentication and Conditional Access for B2B users (Microsoft Learn)](https://learn.microsoft.com/en-us/entra/external-id/authentication-conditional-access)
+- [Troubleshooting sign-in problems with Conditional Access (Microsoft Learn)](https://learn.microsoft.com/en-us/entra/identity/conditional-access/troubleshoot-conditional-access)
+- [Cross-tenant access settings (Microsoft Learn)](https://learn.microsoft.com/en-us/entra/external-id/cross-tenant-access-settings-b2b-collaboration)
