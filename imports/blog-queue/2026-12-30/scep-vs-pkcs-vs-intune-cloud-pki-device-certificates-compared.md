@@ -7,14 +7,14 @@ author: mirko-p
 date: 2026-12-30
 topics: [intune]
 keypoints:
-  - "SCEP gives a unique certificate per request and PKCS one per device or user. A PKCS imported certificate deploys one certificate to many devices and users, for S/MIME."
+  - "SCEP gives a unique certificate per request and PKCS one per device. A PKCS imported certificate deploys one certificate to many devices and users, for S/MIME."
   - "With a Microsoft CA, SCEP needs an NDES server and the Intune Certificate Connector, and PKCS needs the connector. Third-party CA SCEP does not need the connector."
   - "Microsoft Cloud PKI is a cloud service that replaces an on-premises CA, NDES and the Intune certificate connector, and it issues certificates through SCEP."
   - "Cloud PKI needs a subscription in addition to Intune Plan 1 or 2, and allows a maximum of 3 CAs per tenant."
-  - "The Cloud PKI page does not compare SCEP and PKCS or mention PKCS profiles, and the certificate profiles page does not mention Cloud PKI."
+  - "The Cloud PKI page does not compare SCEP and PKCS or mention PKCS certificate profiles, and the certificate profiles page does not mention Cloud PKI."
 faq:
   - q: "What is the difference between SCEP and PKCS?"
-    a: "According to Microsoft Learn, SCEP deploys a request template and each certificate is unique and tied to the requesting user or device, including userless devices. PKCS provisions a unique certificate per device or user, and user-type certificates always need user affinity."
+    a: "According to Microsoft Learn, SCEP deploys a request template and each certificate is unique and tied to the requesting user or device, including userless devices. PKCS deploys a request template with a certificate type of user or device, and user-type certificates always need user affinity."
   - q: "When do I use a PKCS imported certificate?"
     a: "When you must deploy the same certificate, exported from a source such as an email server, to multiple recipients, for example S/MIME signing and encryption."
   - q: "What does Cloud PKI replace?"
@@ -65,11 +65,11 @@ This section is a suggestion, not Microsoft guidance. If you run NDES and the co
 
 ## Trusted certificate first
 
-Learn says to deploy the trusted root certificate from your CA with a trusted certificate profile before you deploy SCEP or PKCS profiles, to the same devices and users that receive the certificate profiles. The page does not list imported PKCS among those that need this, and does not state it either way. Cloud PKI uses the same idea with trust certificate profiles for its root and issuing CAs.
+Learn says to deploy the trusted root certificate from your CA with a trusted certificate profile before you deploy SCEP or PKCS profiles, to the same devices and users that receive the certificate profiles. The page names SCEP and PKCS in that sentence and SCEP, PKCS and imported PKCS in its sentence about deploying to the same devices and users. Cloud PKI uses the same idea with trust certificate profiles for its root and issuing CAs.
 
 ## Not covered
 
-Neither page compares security strength, private key handling, renewal or cost. The Cloud PKI page gives no leaf certificate validity periods, pricing or setup steps, and the certificate profiles page never mentions Cloud PKI.
+Neither page compares the options on security strength or cost. The Cloud PKI page gives no leaf certificate validity periods or prices, and only a high-level list of setup actions rather than step-by-step instructions. The certificate profiles page never mentions Cloud PKI.
 
 ## Related
 
@@ -77,5 +77,5 @@ Neither page compares security strength, private key handling, renewal or cost. 
 
 ## Sources
 
-- [Use certificates for authentication in Microsoft Intune](https://learn.microsoft.com/intune/intune-service/protect/certificates-configure)
-- [Microsoft Cloud PKI overview](https://learn.microsoft.com/intune/intune-service/protect/microsoft-cloud-pki-overview)
+- [Types of certificate that are supported by Microsoft Intune (Microsoft Learn)](https://learn.microsoft.com/intune/fundamentals/certificates/overview)
+- [Microsoft Cloud PKI for Microsoft Intune (Microsoft Learn)](https://learn.microsoft.com/intune/cloud-pki/)
