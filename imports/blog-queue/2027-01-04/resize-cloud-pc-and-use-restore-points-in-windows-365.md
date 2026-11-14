@@ -11,7 +11,7 @@ keypoints:
   - "Single resize path: Intune admin center > Devices > All Devices > select the device > Resize. The Cloud PC must be Provisioned."
   - "With group-based licenses the Cloud PC enters Resize pending license, and you have 48 hours to remove the old license and assign the new one."
   - "Learn lists short-term restore points every 4, 6, 12, 16 or 24 hours (10 per Cloud PC), 4 long-term points and one manual point."
-  - "Restore settings are created in Devices > Cloud PC Settings > Add. The restore procedure steps were not on the pages read."
+  - "Restore settings are created in Devices > Cloud PC Settings > Add. The restore overview shows steps only for retention snapshots; other restores have their own article."
 faq:
   - q: "Does resizing delete user data?"
     a: "No. Learn says the Resize remote action preserves user and disk data. It does disconnect the user automatically, and unsaved work might be lost, so users should save and sign out first."
@@ -25,7 +25,7 @@ faq:
     a: "Only if an admin allows it. In the user setting, the option is Allow user to initiate restore service."
 ---
 
-To resize a Cloud PC, open the device in the Intune admin center and select Resize, then pick a size. For restore points, create a Cloud PC user setting that sets the restore point frequency. This guide follows three Microsoft Learn pages: the resize overview, the single resize article and the restore overview, plus the restore configuration page. It says where the pages stop.
+To resize a Cloud PC, open the device in the Intune admin center and select Resize, then pick a size. For restore points, create a Cloud PC user setting that sets the restore point frequency. This guide follows four Microsoft Learn pages: the resize overview, the single resize article, the restore overview and the restore configuration page. It says where the pages stop.
 
 ## What resize does
 
@@ -77,7 +77,7 @@ Resizing starts only when both actions are done.
 | Neither done | The device returns to Provisioned |
 | Wrong target assigned | The Cloud PC is provisioned to match that license |
 
-Learn recommends discrete Entra groups for licensing, separate from provisioning policy groups. For bulk resizing and step-up license migration, Learn links to its bulk resize article. The page says full step-up users have 90 days to migrate.
+Learn recommends discrete Entra groups for licensing, separate from provisioning policy groups. For bulk resizing and step-up license migration, Learn links to its bulk resize article. On step-up licenses, the page says that if you step up all licenses in a subscription you have 90 days to migrate users before they lose access to the Cloud PC provisioned with the original license. If you step up only a subset, you must migrate users immediately to avoid disruption.
 
 ## Restore points
 
@@ -98,20 +98,20 @@ Path from Learn: Intune admin center > **Devices** > **Cloud PC Settings** > **A
 1. Enter a **Name**.
 2. Optionally select **Enable Local admin**.
 3. Select **Allow user to initiate restore service** if users may restore their own Cloud PCs.
-4. Choose a value for **Frequency of restore-point service**.
+4. Choose a value for **Frequency of restore-point service**. Learn notes a limit of 10 restore points, so a shorter frequency means a shorter overall history.
 5. Select **Next**, assign groups, then **Review + Create** > **Finish**.
 
 ### Restore and risks
 
-Learn says changes after the restore point are lost, including data, documents, installed apps and configurations. Data in cloud services such as OneDrive is not lost. Rolling passwords, secrets, certificates and keys updated after the point can break services. Choose the point closest to the present, and have the user sign in right after the restore. Restore points with a triangle warning icon are unhealthy and have a low probability of success, although restore is still allowed.
+Learn says changes after the restore point are lost, including data, documents, installed apps, configurations and downloads. Data in cloud services such as OneDrive is not lost. If rolling passwords, secrets, certificates or keys were updated between the restore point and now, the associated service or application is impacted. Choose the point closest to the present, and have the user sign in right after the restore. Restore points with a triangle warning icon are unhealthy and have a low probability of success, although restore is still allowed.
 
-For Cloud PCs deprovisioned by license expiration, retention snapshots are available for 28 days. Restore from them needs a renewed license of the same SKU, the existing provisioning policy, and a new Cloud PC in the same region.
+For Cloud PCs deprovisioned by license expiration, retention snapshots are available for 28 days after creation. This does not cover Cloud PCs deprovisioned when a license was removed from the user. Restore from them needs a renewed license of the same SKU, the existing provisioning policy with its assignments, existing users, and a newly provisioned Cloud PC. The snapshot is shown for restore when the new Cloud PC is in the same region as the old one. On the new Cloud PC, the overview says to go to Devices > All Cloud PCs, select it and use **Restore**.
 
 ## Gaps in the pages read
 
-The restore pages read do not give the click-by-click steps for restoring one Cloud PC or in bulk. They link to separate articles for that. They also state no roles for restore.
+Apart from the retention snapshot case above, the restore pages read do not give the click-by-click steps for restoring one Cloud PC or in bulk. They link to separate articles for that. They also state no roles for restore.
 
-## Typical mistakes
+## Typical mistakes (my advice)
 
 - Resizing during working hours without telling the user.
 - Expecting to shrink the disk.
@@ -128,5 +128,5 @@ The restore pages read do not give the click-by-click steps for restoring one Cl
 
 - [Resize a Cloud PC (Microsoft Learn)](https://learn.microsoft.com/windows-365/enterprise/resize-cloud-pc)
 - [Resize a single Cloud PC (Microsoft Learn)](https://learn.microsoft.com/windows-365/enterprise/resize-cloud-pc-single)
-- [Restore a Cloud PC to a previous state: overview (Microsoft Learn)](https://learn.microsoft.com/windows-365/enterprise/restore-overview)
-- [Configure Windows 365 for point-in-time restore (Microsoft Learn)](https://learn.microsoft.com/windows-365/enterprise/restore-configure)
+- [Overview of restoring a Cloud PC to a previous state with Windows 365 Enterprise (Microsoft Learn)](https://learn.microsoft.com/windows-365/enterprise/restore-overview)
+- [Configure Windows 365 to permit point-in-time restore of Cloud PCs (Microsoft Learn)](https://learn.microsoft.com/windows-365/enterprise/restore-configure)
