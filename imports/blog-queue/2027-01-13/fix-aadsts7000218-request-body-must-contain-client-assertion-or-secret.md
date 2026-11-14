@@ -22,7 +22,7 @@ faq:
   - q: "How does Entra ID decide whether my app is public or confidential?"
     a: "Learn describes two methods. If the request contains a redirect URI, its type decides: Web classifies the app as confidential and Mobile and desktop applications as public. If no redirect URI is provided, as in ROPC, device code and Integrated Windows Authentication, the Enable the following mobile and desktop flows setting decides."
   - q: "Is changing the client type to public safe?"
-    a: "Learn warns that changing the default client type from confidential to public has security implications and links to its page on public and confidential client applications. Only enable it for flows that cannot keep a secret."
+    a: "Learn warns that changing the default client type from confidential to public has security implications and links to its page on public and confidential client applications. My advice: only enable it for flows that cannot keep a secret."
 ---
 
 AADSTS7000218 means the token request reached Microsoft Entra ID without a client secret or client assertion, and Entra ID treated the app as a confidential client that must have one. You have two documented fixes. Send the credential in the request, or, for flows such as ROPC or device code that should run as a public client, allow public client flows in the app registration.
@@ -48,7 +48,7 @@ Some flows are not meant for confidential clients, for example the OAuth 2 resou
 3. Select **Advanced settings** > **Allow public client flows**.
 4. For **Enable the following mobile and desktop flows**, select **Yes**.
 
-Learn warns that changing the default client type from confidential to public has security implications and points to its page on public and confidential clients. So only do this when the app really cannot keep a secret, such as a desktop or mobile app in an unmanaged environment.
+Learn warns that changing the default client type from confidential to public has security implications and points to its page on public and confidential clients. My advice: only do this when the app really cannot keep a secret. Learn's example of a public client is a mobile or desktop app in an insecure or unmanaged environment.
 
 ## Why Entra ID calls your app confidential
 
@@ -62,7 +62,7 @@ In the app registration model a registered application can be both, depending on
 1. **By redirect URI type.** It compares the redirect URI in the request with the registered ones. A **Web** redirect URI classifies the application as confidential. A **Mobile and desktop applications** redirect URI classifies it as public.
 2. **By the mobile and desktop flows setting, when no redirect URI is sent.** In ROPC, device code and Integrated Windows Authentication no redirect URI is provided. Then **Enable the following mobile and desktop flows** decides. **Yes** means public. **No** means confidential.
 
-A confidential client is expected in certain flows, namely client credentials, authorization code and on-behalf-of, according to Learn. So the usual causes of this error are an app that sends a request without a credential, or a flow that sends no redirect URI while the setting is still **No**.
+A confidential client is expected in certain flows, namely client credentials, authorization code and on-behalf-of, according to Learn. My reading of the page: the likely causes are an app that sends a request without a credential, or a flow that sends no redirect URI while the setting is still **No**.
 
 ## Identify the flow your app uses
 
@@ -85,7 +85,7 @@ This is my reading of the page, not an extra Microsoft rule.
 2. `device_code` or `password` with no secret available: the flow is public. Check the **Allow public client flows** setting.
 3. A desktop or mobile app that registered a Web redirect URI by mistake: Entra ID sees a confidential client. Fix the redirect URI type before you change the public client setting.
 
-Learn links separate pages for the ROPC and device code flows. I did not read them for this article, so check them before you rely on either flow.
+Learn links separate pages for the ROPC and device code flows. This article does not cover them, so check those pages before you rely on either flow.
 
 ## Related
 
