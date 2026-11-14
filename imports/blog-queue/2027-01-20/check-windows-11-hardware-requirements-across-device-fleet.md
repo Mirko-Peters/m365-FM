@@ -64,15 +64,11 @@ The Plan for Windows 11 page says enterprises evaluating device readiness can ex
 4. Read the **Windows 11 readiness status** column. A device is **Capable** or **Not capable**, or it is listed as already **Upgraded**, or the status is **Unknown**.
 5. For devices that are **Not capable**, read the **Windows 11 readiness reason** column. It names the hardware requirements that are not met.
 
-The report covers devices enrolled via Intune, co-management, or Configuration Manager version 2107 or newer with tenant attach enabled. Learn also says the Windows 11 hardware readiness insights do not affect the Work from anywhere score. The page I read does not give a full menu path to reach the report and does not state licensing requirements, so confirm both in your tenant.
+The report covers devices enrolled via Intune, co-management, or Configuration Manager version 2107 or newer with tenant attach enabled. Learn also says the Windows 11 hardware readiness insights do not affect the Work from anywhere score. The page gives the path Reports > Endpoint analytics > Work from anywhere in the Microsoft Intune admin center. It states no licensing requirements, so confirm those in your tenant.
 
 ### Reading Unknown
 
 Learn says that in most cases a device with Unknown status is simply inactive, and recommends checking the last check-in time in Intune. A device appears in the report only if it has uploaded at least one Endpoint analytics event, such as a boot, sign-in or application crash event, in the past 29 days.
-
-### Exporting
-
-The exported CSV uses numbers for the readiness column: 0 for Upgraded, 1 for Unknown, 2 for Not capable and 3 for Capable. Keep that mapping at hand when you filter an export.
 
 ## Feature-specific requirements
 
@@ -80,17 +76,17 @@ Some features need more than the minimum hardware. Learn lists examples such as 
 
 ## Virtual machines
 
-For VMs, Learn requires generation 2, 64 GB or more storage, 4 GB or more memory and two or more virtual processors. The VM host processor must also meet the Windows 11 processor requirements. In Azure, trusted launch with vTPM is required. On Hyper-V, Secure Boot and TPM must be enabled. Learn says in-place upgrade of existing generation 1 VMs is not possible, and that virtual TPM 2.0 is emulated in the guest independent of the host TPM.
+For VMs, Learn requires generation 2, 64 GB or more storage, 4 GB or more memory and two or more virtual processors. The VM host processor must also meet the Windows 11 processor requirements. In Azure, trusted launch with vTPM is required. On Hyper-V, Secure Boot and TPM must be enabled. Learn says in-place upgrade of existing generation 1 VMs is not possible, and, for Hyper-V hosts, that virtual TPM 2.0 is emulated in the guest VM independent of the host TPM.
 
 ## What the Learn pages leave open
 
-The Plan for Windows 11 page treats the hardware check as the first step and then covers deployment planning, managed and unmanaged devices and servicing. It says organizations using Windows Update client policies can keep devices that do not meet the minimum requirements from being offered the upgrade automatically. That is useful once you know which devices fail, because it lets you hold them while you plan hardware refreshes.
+The Plan for Windows 11 page treats the hardware check as the first step and then covers deployment planning, managed and unmanaged devices and servicing. It says organizations using Windows Update client policies can keep devices that do not meet the minimum requirements from being offered the upgrade automatically. In my reading, that is useful once you know which devices fail, because it lets you hold them while you plan hardware refreshes.
 
 ## A practical order of work (my advice)
 
 This sequence is my suggestion, not a Microsoft procedure:
 
-1. Export the Not capable list and group it by reason, since one blocker such as TPM often covers many devices.
+1. Take the Not capable list and group it by reason, since one blocker such as TPM often covers many devices.
 2. Look at the Unknown devices separately and bring them online before you decide anything.
 3. Check VMs against the generation 2 and virtual TPM rules.
 4. Use the refresh plan to prioritize eligible and non-eligible devices.
