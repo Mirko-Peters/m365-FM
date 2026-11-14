@@ -10,7 +10,7 @@ keypoints:
   - "Information barriers prevent individuals or groups from communicating. In Teams they cover team and channel membership and content, chats, calls, meetings, screen sharing and search."
   - "Enable scoped directory search in Teams first and wait at least a few hours before you set up or define policies."
   - "Modes for Teams are Open, Implicit and Owner Moderated. Teams created before activation default to Open and need updating to Implicit."
-  - "SharePoint sites connected to Teams are not covered by default and must be updated separately."
+  - "IB policies do not apply to the SharePoint site connected to a team by default. Enabling IB for SharePoint follows a separate article."
   - "Limits include 5,000 segments in the current mode and 250 in legacy mode, and a meeting chat roster capped at 1,000 users."
 faq:
   - q: "What is required before defining policies?"
@@ -50,7 +50,7 @@ The page does not mention an Entra address book policy.
 
 1. Manage segments and policies in the Microsoft Purview portal or with PowerShell. The article points to other pages for the detailed steps.
 2. Set the IB mode for each team. Teams created before IB activation default to Open. After you activate IB policies, update existing teams to Implicit, for example with `Set-UnifiedGroup -InformationBarrierMode Implicit`. A linked script updates all existing teams.
-3. Update SharePoint sites connected to Teams separately, because IB policies do not apply to them by default.
+3. Handle SharePoint separately: IB policies do not apply to the site connected to a team by default, and enabling IB for SharePoint and OneDrive follows a separate article. If you change the mode of existing Teams-connected groups, also update the IB modes of the associated SharePoint sites.
 
 ### Modes
 
@@ -72,11 +72,11 @@ A background processor receives change notifications for user or group changes, 
 
 ## A rollout order
 
-This order is a suggestion built from the page, not a Microsoft procedure.
+This order is my advice, built from the page, not a Microsoft procedure.
 
 1. Enable scoped directory search and wait.
 2. Define segments and policies in the Purview portal.
-3. Update existing teams to Implicit and update connected SharePoint sites.
+3. Update existing teams to Implicit, and update the IB modes of connected SharePoint sites if you changed the mode of Teams-connected groups.
 4. Test chats, a call, a meeting invite and people search between two incompatible users.
 
 ## Why the mode matters
@@ -94,4 +94,4 @@ The page gives no licensing detail, no portal or PowerShell steps for segments a
 
 ## Sources
 
-- [Information barriers in Microsoft Teams](https://learn.microsoft.com/purview/information-barriers-teams)
+- [Information Barriers in Microsoft Teams (Microsoft Learn)](https://learn.microsoft.com/purview/information-barriers-teams)
