@@ -16,9 +16,9 @@ faq:
   - q: "How do I build try-catch in Power Automate?"
     a: "According to Microsoft Learn, put the main actions in a scope named Try, create a second scope named Catch and set the Catch scope's Run after to has failed. Actions in the Catch scope can identify the error, log it and send a notification."
   - q: "Which Run after options exist?"
-    a: "Microsoft Learn names is successful, has failed, is skipped and has timed out. Use them to create alternative paths, for example sending a notification when an update action fails."
+    a: "Microsoft Learn says Run after can react to an action that fails, times out, is skipped or is successful, and the designer labels these is successful, has failed, is skipped and has timed out. Use them to create alternative paths, for example sending a notification when an update action fails."
   - q: "How do I get the error message in the Catch scope?"
-    a: "Learn says result() returns the outcomes of actions in a scope and that a Filter array action can isolate the error. The page does not show the exact expression. A common pattern filters result('Try') for items whose status equals Failed, which is a pattern and not text from the page."
+    a: "The error handling page shows a Filter array action that filters the response of the result() function to get the error, but it does not show the exact expression. The workflow expression reference describes result() as returning the inputs and outputs of the top-level actions inside a scope, and its example output includes a status field per action. Filtering result('Try') for items whose status equals Failed is therefore a reasonable pattern, but it is a pattern and not text from the error handling page."
   - q: "What are the requirements for a child flow?"
     a: "Per Microsoft Learn, parent and child flows must be created in the same solution, the child uses Manually trigger a flow and ends with Respond to a Power App or flow or the premium Response action. The parent calls it with Run a Child Flow."
   - q: "Does Learn say how a failed child flow appears in the parent?"
@@ -33,11 +33,11 @@ The standard pattern is a **Try** scope for the main work and a **Catch** scope 
 2. Add a second **Scope** below it and rename it `Catch`.
 3. Open the Catch scope's menu, select **Configure run after**, and clear **is successful**. Select **has failed**. If a timeout should also be handled, select **has timed out** as well.
 
-Run after outcomes named by Learn: **is successful**, **has failed**, **is skipped** and **has timed out**.
+Learn's error handling page says Run after can react when an action fails, times out, is skipped or is successful. The designer labels these checkboxes **is successful**, **has failed**, **is skipped** and **has timed out**.
 
 ## Step 2: Capture error details
 
-`result('Try')` returns the outcomes of the actions inside the scope. Learn says to filter this output with a **Filter array** action to isolate the error. The page does not show the expression. A common pattern, not taken from the page:
+`result('Try')` returns the outcomes of the top-level actions inside the scope. The workflow expression reference describes `result()` as returning the inputs and outputs of the top-level actions inside a scope such as `Scope`, and its example output shows a `status` field for each action. The Power Automate error handling page filters this output with a **Filter array** action to isolate the error but does not show the expression. A common pattern, not taken from either page:
 
 ```
 Filter array input:  @result('Try')
@@ -110,3 +110,4 @@ Because the child must end with a response, a clean design is to define outputs 
 
 - [Error handling in Power Automate](https://learn.microsoft.com/en-us/power-automate/guidance/coding-guidelines/error-handling)
 - [Create child flows](https://learn.microsoft.com/en-us/power-automate/create-child-flows)
+- [Workflow definition language functions reference, result() (Microsoft Learn)](https://learn.microsoft.com/en-us/azure/logic-apps/workflow-definition-language-functions-reference#result)
