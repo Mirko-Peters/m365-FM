@@ -79,7 +79,7 @@ Because the bounce text mentions anonymous mail, it is worth knowing what Learn 
 
 This section is my advice, not a Microsoft statement.
 
-1. **Find out which method the device is meant to use.** An error about anonymous mail often means a device configured as relay or Direct Send is pointed at the authenticated endpoint, or the reverse. Compare the device's server and port with Learn's table.
+1. **Find out which method the device is meant to use.** Learn does not name the method that causes this bounce. My reading: the wording about anonymous mail may point to a device that is set up like relay or Direct Send, which do not sign in with a mailbox, but that connects to smtp.office365.com. Compare the device's server and port with Learn's tables.
 2. **Check the server name.** Client submission uses smtp.office365.com, while relay and Direct Send use your domain's MX endpoint.
 3. **Test the credentials interactively.** Sign in to the mailbox with the same username and password to rule out an expired password or a locked account.
 4. **Check TLS support in the device.** Older printers and scanners may not offer TLS 1.2. Learn says if so, client submission cannot be used.
@@ -87,9 +87,9 @@ This section is my advice, not a Microsoft statement.
 6. **Plan for the Basic authentication change.** If the device only supports username and password over Basic authentication, make a plan now, using the alternatives Learn lists.
 7. **Document the working configuration.** Write down method, server, port and mailbox, so the next replacement device is quick to set up.
 
-## What I did not read
+## What the pages do not cover
 
-I read the NDR page and the whole setup page. Neither says exactly when Basic authentication for client SMTP submission stops working; Learn links a timeline article that I did not read, so check it before you plan dates. I also did not read the page on enabling SMTP AUTH.
+Neither page says exactly when Basic authentication for client SMTP submission stops working. The setup page links to a timeline article for that, so check it before you plan dates. How to enable SMTP AUTH for a mailbox is covered on a separate Learn page that the setup page links to.
 
 ## Related
 
