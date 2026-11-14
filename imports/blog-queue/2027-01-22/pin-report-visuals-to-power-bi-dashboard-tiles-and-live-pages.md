@@ -102,7 +102,7 @@ This order is my suggestion, not a Microsoft procedure:
 
 ## What the pages leave open
 
-The pages say pinned tiles refresh depending on dataset refresh and cache, but they do not give a schedule. I do not state refresh timing here.
+The Learn page says dashboard tile refresh and behavior might depend on dataset refresh and cache. It gives no schedule, and this article states no refresh timing.
 
 ## Related
 
