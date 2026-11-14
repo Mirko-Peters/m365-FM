@@ -44,8 +44,8 @@ Scope alone does not tell you whether a link is a problem. You need context: who
 
 Microsoft 365 already gives you several ways to see and control sharing. The exact features and licensing requirements change, so verify the current state on [Microsoft Learn](https://learn.microsoft.com/) before you plan.
 
-- **Tenant and site sharing settings.** Limit the most permissive link types at the tenant level and tighten them further per site. This prevents new broad links but does not remove existing ones.
-- **Manage access on the item.** Site owners and file owners can see who has access and delete individual links. This works well for small clean-ups and for training owners.
+- **Tenant and site sharing settings.** In the SharePoint admin center (Policies, then Sharing) you set the external sharing level for the organization, and a site can be set to the same or a more restrictive level. You can also set the default link type, at organization and site level. Settings like these shape new links but do not by themselves remove existing ones.
+- **Manage access on the item.** Microsoft Support documents the Manage access pane (select the item, open Details, then Manage access), where you can stop sharing or remove an individual sharing link on the Links tab. Access inherited from a parent folder or site must be removed at that level. This works well for small clean-ups and for training owners.
 - **Admin tools and PowerShell.** Administrators can report on and change sharing at scale. Scripts that remove links or change permissions are risky: **test them on a pilot site or in a test tenant first, and make sure you have a record of the previous state or a backup so you can restore access.**
 - **Governance and review features in Microsoft 365.** Some Microsoft 365 licensing tiers may include access reviews or sharing reports. Availability depends on your plan, so check Microsoft Learn for what applies to you.
 
@@ -87,3 +87,11 @@ These are the vendor's own statements and were not tested by M365.FM. Cognillo s
 - Replace broad links with narrower ones where collaboration still needs access.
 - Treat cleanup as a recurring process, not a one-time project.
 - Check [Microsoft Learn](https://learn.microsoft.com/) for the current state of sharing controls and licensing before you plan.
+
+## Sources
+
+- [Manage sharing settings for SharePoint and OneDrive in Microsoft 365 (Microsoft Learn)](https://learn.microsoft.com/sharepoint/turn-external-sharing-on-or-off)
+- [Change the default sharing link for a site (Microsoft Learn)](https://learn.microsoft.com/sharepoint/change-default-sharing-link)
+- [Sharing & permissions in the SharePoint modern experience (Microsoft Learn)](https://learn.microsoft.com/sharepoint/modern-experience-sharing-permissions)
+- [Data, Privacy, and Security for Microsoft Copilot (Microsoft Learn)](https://learn.microsoft.com/microsoft-365/copilot/microsoft-365-copilot-privacy)
+- [Manage sharing and permissions in OneDrive and SharePoint (Microsoft Support)](https://support.microsoft.com/en-us/office/stop-sharing-onedrive-or-sharepoint-files-or-folders-or-change-permissions-0a36470f-d7fe-40a0-bd74-0ac6c1e13323)
