@@ -1,6 +1,6 @@
 ---
 title: "How to Set Up Virtual Network Support for Power Platform Environments"
-summary: "Plan virtual network support for Power Platform: subnet delegation, paired regions, supported environment types and services, subnet sizing examples, limitations and the setup steps that the Learn overview page leaves to a separate article."
+summary: "Plan virtual network support for Power Platform: subnet delegation, paired regions, supported environment types and services, subnet sizing examples, limitations, and what the Learn overview page leaves out, such as setup steps."
 status: review
 publish: false
 author: mirko-p
@@ -22,10 +22,10 @@ faq:
   - q: "How big must the subnet be?"
     a: "Learn says to allocate 25 to 30 IPs for production and 6 to 10 for nonproduction, plus five reserved addresses per subnet. Its examples give a /25 for four production environments and a /24 for twenty nonproduction environments."
   - q: "Where are the setup steps?"
-    a: "The overview points to a separate Set up VNet support article. The overview names only Get-EnvironmentRegion, Disable-SubnetInjection and Enable-SubnetInjection."
+    a: "The overview has no setup steps and does not link a dedicated setup article. It mentions only Get-EnvironmentRegion, Disable-SubnetInjection and Enable-SubnetInjection, and it links the subnet diagnostics PowerShell module and a whitepaper on securing outbound connections."
 ---
 
-Virtual network support lets Power Platform reach private resources. It matters for admins who must keep SQL servers, key vaults or storage accounts off the public internet while still using them from plug-ins and connectors. This guide follows the Microsoft Learn overview page. The page is an overview. The setup itself is described on a separate page that was not read.
+Virtual network support lets Power Platform reach private resources. It matters for admins who must keep SQL servers, key vaults or storage accounts off the public internet while still using them from plug-ins and connectors. This guide follows the Microsoft Learn page Microsoft Azure Virtual Network support. The page is an overview and has no setup steps.
 
 ## What it does
 
@@ -58,6 +58,8 @@ The page's examples: four production environments at 30 IPs plus 5 reserved give
 
 ## Limitations
 
+The page states these in its Limitations list, its FAQ and its Considerations section.
+
 - Dataverse low-code plug-ins that use connectors are not supported until those connectors use subnet delegation.
 - Copy, backup and restore have constraints. Restores work within the same virtual network, across environments on the same network and from non-VNet environments into VNet environments.
 - SQL Server connections through an on-premises data gateway are not supported in VNet-linked environments.
@@ -67,6 +69,14 @@ The page's examples: four production environments at 30 IPs plus 5 reserved give
 - You cannot change a delegated subnet's IP range or the DNS settings of the network while the feature is in use. Run Disable-SubnetInjection first. After a DNS change wait 30 minutes before you re-enable.
 - A subnet cannot be reused across several enterprise policies.
 - Public calls from plug-ins and connectors can break unless you update URLs or add private endpoints before enabling VNet support.
+
+## Other answers in the page's FAQ
+
+- **Virtual network data gateway.** Learn says VNet support is the only supported option for all outbound connectivity scenarios from Power Platform except Power BI and Power Platform dataflows, which continue to use the virtual network data gateway.
+- **Internet-bound calls.** Internet-bound access is available by default from plug-ins and connectors in a subnet-delegated environment. Learn suggests attaching an Azure NAT gateway to the delegated subnet to control outbound access.
+- **Other regions.** A virtual network linked to an environment must be in the environment's region. To reach resources in another region, create a network in the environment's region and use VNet peering.
+- **Monitoring.** You can use a network security group and firewalls to monitor outbound traffic from delegated subnets.
+- **DNS.** Power Platform uses the custom DNS configured in the virtual network that holds the delegated subnet.
 
 ## What the page does not say
 
@@ -78,15 +88,15 @@ The page's examples: four production environments at 30 IPs plus 5 reserved give
 
 ## A planning outline
 
-This outline is practical advice built on the page.
+This outline is my advice, built on the page.
 
 1. Look up the environment region and the paired Azure regions.
 2. Size the delegated subnets with the page's IP guidance.
 3. Check every connector and plug-in against the supported list and the limitations.
 4. Add private endpoints or update URLs before you enable the feature.
-5. Read the separate setup article for the creation and linking steps.
+5. Look elsewhere in Microsoft Learn for the creation and linking steps, since this page has none.
 
-## Typical mistakes
+## Typical mistakes (my advice)
 
 - Creating the network in the wrong region.
 - Reusing a subnet for another purpose or policy.
@@ -102,4 +112,4 @@ This outline is practical advice built on the page.
 
 ## Sources
 
-- [Virtual Network support overview for Power Platform (Microsoft Learn)](https://learn.microsoft.com/power-platform/admin/vnet-support-overview)
+- [Microsoft Azure Virtual Network support (Microsoft Learn)](https://learn.microsoft.com/power-platform/admin/vnet-support-overview)
