@@ -84,7 +84,7 @@ This section is my advice, not a Microsoft statement.
 
 1. **Start at the subscription scope.** It is the simplest place to learn how alerts behave.
 2. **Use both actual and forecasted alerts.** Forecasted alerts give earlier warning, since they react to the trend.
-3. **Pick thresholds people will act on.** In my experience, three alerts that someone owns beat five that everyone ignores.
+3. **Pick thresholds people will act on.** Learn allows up to five, but a few alerts that someone owns are easier to act on than many that nobody reads.
 4. **Send alerts to a shared mailbox or a group address.** A budget tied to one person's mailbox breaks when that person leaves.
 5. **Add an action group for real automation.** An email only informs, so if you need a response, link to a runbook or ticket.
 6. **Review budgets when scopes change.** Moving subscriptions between management groups, or adding one in another currency, can affect evaluation, as Learn's single currency note says.
@@ -101,7 +101,7 @@ This section is my advice, not a Microsoft statement, built on points from Learn
 
 ## What the page does not cover
 
-I read the whole tutorial. It does not give a maximum number of budgets, and it does not describe pricing for Cost Management. The related pages on cost alerts and on budget-based automation are separate and I did not read them.
+The tutorial does not give a maximum number of budgets, and it does not describe pricing for Cost Management. It links separate pages on cost alerts and on budget-based automation with action groups for more detail.
 
 ## Related
 
