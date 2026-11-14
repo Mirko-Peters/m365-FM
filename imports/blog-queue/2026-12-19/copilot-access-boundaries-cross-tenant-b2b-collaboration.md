@@ -100,6 +100,6 @@ The pages read for this article do not describe guest licensing for Copilot, do 
 - [Microsoft 365 Copilot privacy and data protection (Microsoft Learn)](https://learn.microsoft.com/en-us/microsoft-365/copilot/microsoft-365-copilot-privacy)
 - [Copilot for B2B members in multitenant organizations (Microsoft Learn)](https://learn.microsoft.com/en-us/microsoftteams/copilot-mto)
 - [Cross-tenant access overview (Microsoft Learn)](https://learn.microsoft.com/en-us/entra/external-id/cross-tenant-access-overview)
-- [Microsoft 365 Copilot requirements (Microsoft Learn)](https://learn.microsoft.com/en-us/copilot/microsoft-365/microsoft-365-copilot-requirements)
-- [Microsoft 365 Copilot security (Microsoft Learn)](https://learn.microsoft.com/en-us/microsoft-365/copilot/microsoft-365-copilot-ai-security)
+- [Microsoft 365 Copilot requirements (Microsoft Learn)](https://learn.microsoft.com/en-us/copilot/plan/microsoft-copilot-requirements)
+- [Microsoft 365 Copilot security (Microsoft Learn)](https://learn.microsoft.com/en-us/copilot/plan/security-microsoft-copilot)
 - [Can external B2B guest accounts be assigned a Copilot license (Microsoft Q&A, community answer)](https://learn.microsoft.com/en-us/answers/questions/5847621/can-external-b2b-guest-accounts-be-assigned-a-copi)
