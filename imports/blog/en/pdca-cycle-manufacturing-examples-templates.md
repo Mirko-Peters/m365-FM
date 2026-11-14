@@ -27,13 +27,13 @@ The PDCA cycle is a four-step model for carrying out change: plan, do, check, ac
 
 The American Society for Quality (ASQ) describes the [PDCA cycle](https://www.m365.fm/entity/pdca-cycle/) as a four-step model for carrying out change, meant to be repeated for continuous improvement. Its steps are to recognize an opportunity and plan a change, test the change on a small scale, review the results, and then act: fold the change into broader work if it succeeded, or restart the cycle with a different plan. See the [ASQ page on the PDCA cycle](https://asq.org/quality-resources/pdca-cycle).
 
-PDCA has other names. ASQ links it to the Deming cycle, the Shewhart cycle and the plan-do-study-act (PDSA) variant. Many people call it the Deming wheel, after W. Edwards Deming, whose name is tied to the method. As a management method, it is plan-do-check-act in plain words: think, try, look, decide. The idea comes from the scientific method: form a hypothesis, test it, learn.
+PDCA has other names. ASQ links it to the Deming cycle, the Shewhart cycle and the plan-do-study-act (PDSA) variant. Some people also call it the Deming wheel, after W. Edwards Deming, whose name is tied to the method. As a management method, it is plan-do-check-act in plain words: think, try, look, decide. The idea comes from the scientific method: form a hypothesis, test it, learn.
 
 Why does it matter in a plant? Because most improvement fails not for lack of ideas but for lack of checking. PDCA forces the team to state what it expects, test it small and look at the data. It is an iterative process: each loop starts with what the last one taught.
 
 ## What happens in each step?
 
-**Plan.** Define the problem with a number, such as "scrap on line 2 is 3.1%". Collect baseline data, find the likely root cause (the 5 whys or a fishbone diagram help), and choose one countermeasure. Decide the target and the single measure you will use. The item24 article on the continuous improvement process gives a useful rule here: [define just one measure for each PDCA cycle](https://blog.item24.com/en/intralogistics/what-is-cip-a-simple-explanation-of-continuous-improvement/). If you change three things at once, you cannot tell which one worked.
+**Plan.** Define the problem with a number, such as "scrap on line 2 is 3.1%". Collect baseline data, find the likely root cause (the 5 whys or a fishbone diagram help), and choose one countermeasure. Decide the target and the single measure you will use. The item24 article on kaizen gives a useful rule here: [just one measure per PDCA cycle should be defined](https://blog.item24.com/?p=9510). If you change three things at once, you cannot tell which one worked.
 
 **Do.** Test the change on a small scale. One shift, one machine or one product family is enough. Keep the trial short. Record what actually happened, including deviations from the plan.
 
@@ -84,11 +84,11 @@ One cycle is a tool. A routine is a system. Implementing the PDCA cycle across a
 4. **Limit open cycles** per team, so that work gets finished. Two or three open cycles are usually enough.
 5. **Review monthly** with a supervisor or manager: which cycles closed, which standards changed, which problems return.
 
-This routine is the practical engine of [continuous improvement](https://www.m365.fm/entity/continuous-improvement/) in many plants. In [kaizen](https://www.m365.fm/entity/kaizen/), the Lean Enterprise Institute notes that PDCA cycles are used to identify, implement and check changes. See the [LEI lexicon entry on kaizen](https://www.lean.org/lexicon-terms/kaizen/).
+This routine is the practical engine of [continuous improvement](https://www.m365.fm/entity/continuous-improvement/) in many plants. In [kaizen](https://www.m365.fm/entity/kaizen/), the Lean Enterprise Institute notes that the kaizen process is based on PDCA cycles. See the [LEI lexicon entry on kaizen](https://www.lean.org/lexicon-terms/kaizen/).
 
 ## How does PDCA relate to quality management and Six Sigma?
 
-PDCA is widely used in quality management. An Advisera guide to [PDCA in the ISO 9001 standard](https://advisera.com/9001academy/?p=1620) maps the standard's clauses onto the four steps: planning, operation, monitoring and evaluation, and improvement. The same guide notes that a main goal of ISO 9001 is the continual improvement of the quality management system.
+PDCA is widely used in quality management and is commonly linked to ISO 9001 and its aim of continual improvement. Advisera has a guide to [PDCA in the ISO 9001 standard](https://advisera.com/9001academy/?p=1620) that relates the standard's clauses to the four steps. We could not re-open that guide for this review, so check its mapping there before you rely on it.
 
 Six Sigma uses a longer structure called DMAIC (define, measure, analyze, improve, control). PDCA is lighter and suits fast tests on the shop floor, while DMAIC fits projects that need more statistics. Some plants use both: PDCA for daily process improvement, DMAIC for complex problems, and both help you optimize flow and quality. Organizational support, such as time and a place on the shop floor to look at the data, decides whether either method sticks. If you aim for operational excellence, you need a method that people actually use every week, and PDCA is often the simplest one.
 
@@ -108,3 +108,10 @@ A whiteboard and a template are enough for a start. When many cycles run in para
 ## Next step
 
 Choose one problem on your line this week, fill in the one-page PDCA template and run a short trial. After the check, decide: standardize, adjust or stop. That is the quickest way to learn how the PDCA cycle works in your plant.
+
+## Sources
+
+- ASQ: Plan-Do-Check-Act (PDCA) Cycle - https://asq.org/quality-resources/pdca-cycle
+- item24 blog: Kaizen - the principle behind it, what it means and how it differs from CIP - https://blog.item24.com/?p=9510
+- Lean Enterprise Institute: Kaizen (Lean Lexicon) - https://www.lean.org/lexicon-terms/kaizen/
+- Advisera: Plan-Do-Check-Act in the ISO 9001 Standard - https://advisera.com/9001academy/?p=1620 (could not be re-opened for this review)
