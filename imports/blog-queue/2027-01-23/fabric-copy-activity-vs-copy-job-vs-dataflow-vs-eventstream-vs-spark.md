@@ -22,7 +22,7 @@ faq:
   - q: "When do I need Spark?"
     a: "When you want code: Spark in Scala, Python, Spark SQL or R, developed in notebooks or Spark job definitions, with support for native Spark and open-source libraries and low to high transformation complexity. The example reads structured, semi-structured and unstructured data from OneLake, transforms it and writes Delta tables in a lakehouse."
   - q: "Can I combine the tools?"
-    a: "The guide treats them as choices for a given job, and its scenarios describe a layered flow: copy activity brings raw data into a bronze lakehouse, and another person uses a dataflow for cleansing and business logic. Whether you combine them in one solution is a design decision the page does not prescribe."
+    a: "The guide treats them as choices for a given job, and its scenarios describe a layered flow: in scenario 1 copy activity brings raw data into a bronze lakehouse, and in scenario 2 a data engineer uses a dataflow for cleansing and business logic after an upstream team has loaded data into a common lakehouse. Whether you combine them in one solution is a design decision the page does not prescribe."
 ---
 
 Microsoft Fabric has several ways to move and shape data, and the Learn decision guide compares five of them: pipeline copy activity, Copy job, Dataflow Gen2, Eventstream and Spark. This article reproduces the comparison in a compact form, adds the five scenarios from the page, and ends with a short way to choose. Note that the Learn page title lists four tools, while its table has five columns, because Copy job is in the table.
@@ -44,9 +44,9 @@ Microsoft Fabric has several ways to move and shape data, and the Learn decision
 ## Reading the table
 
 - **Copy activity and Copy job** are the movers. Their transformation ability is limited to the lightweight set listed. Copy job differs by use case: incremental copy and replication.
-- **Dataflow Gen2** is the transformation tool with a visual Power Query interface and the widest connector list in the table, 150+.
+- **Dataflow Gen2** is the transformation tool with a visual Power Query interface and the highest connector count in the table, 150+. Spark's source and destination cells say "hundreds of Spark libraries" instead of a connector count.
 - **Eventstream** is the only one built around events. It lists medium to high volume and lightweight transformation.
-- **Spark** is the only code-first choice and has the widest transformation range.
+- **Spark** is the only code choice in the table. Its transformation complexity is listed as low to high, with support for native Spark and open-source libraries, the same range as Dataflow Gen2.
 
 ## The five scenarios
 
@@ -58,7 +58,7 @@ Microsoft Fabric has several ways to move and shape data, and the Learn decision
 
 ## Choosing quickly
 
-| Question | Pointer from the page |
+| Question | Pointer (my reading of the page) |
 | --- | --- |
 | Do you move data in bulk with no or low code? | Copy activity |
 | Do you need incremental copy or replication through a wizard? | Copy job |
@@ -91,4 +91,4 @@ This is my suggestion, not Microsoft guidance:
 
 ## Sources
 
-- [Fabric decision guide: copy activity, dataflow, Eventstream, or Spark (Microsoft Learn)](https://learn.microsoft.com/fabric/fundamentals/decision-guide-pipeline-dataflow-spark)
+- [Fabric decision guide - copy activity, dataflow, Eventstream, or Spark (Microsoft Learn)](https://learn.microsoft.com/fabric/fundamentals/decision-guide-pipeline-dataflow-spark)
