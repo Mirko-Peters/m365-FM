@@ -123,3 +123,9 @@ Pull controls execution, but plants still need a good plan for the mix, the sequ
 ## Next step
 
 Pick one flow, map it and set a clear limit on work in process between its two busiest steps. Run it for four weeks and compare the queue and the lead time with your baseline, then decide where else the pull system fits.
+
+## Sources
+
+- [Pull Production - Lean Enterprise Institute (Lean Lexicon)](https://www.lean.org/lexicon-terms/pull-production/)
+- [Push Production - Lean Enterprise Institute (Lean Lexicon)](https://www.lean.org/lexicon-terms/push-production/)
+- [The (True) Difference Between Push and Pull - AllAboutLean.com](https://www.allaboutlean.com/de/en-the-true-difference-between-push-and-pull/)
