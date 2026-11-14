@@ -28,7 +28,7 @@ The error is bug check 0xEF. Microsoft's reference says it indicates that a crit
 
 The reference does not name a single root cause, and the Microsoft troubleshooting guide doesn't either. That matters for how you troubleshoot. There is no one switch to flip. A driver, a failed update, damaged system files, a hardware fault or malware can all lead to a critical process dying, so the plan is to rule them out one by one.
 
-What you see depends on the version. According to Microsoft's page on [unexpected restarts and stop code errors](https://support.microsoft.com/en-us/windows/experience/performance-optimization/troubleshooting-windows-unexpected-restarts-and-stop-code-errors), Windows 11 24H2 and later shows a black screen with an unexpected-error message, while Windows 11 23H2 and older shows the traditional stop code screen. The stop code is at the bottom of the screen, together with the module name of the failing code when it's available. Write it down or take a photo.
+What you see depends on the version. According to Microsoft's page on [unexpected restarts and stop code errors](https://support.microsoft.com/windows/experience/performance-optimization/troubleshooting-windows-unexpected-restarts-and-stop-code-errors), Windows 11 24H2 and later shows a black screen with an unexpected-error message, while Windows 11 23H2 and older shows the traditional stop code screen. The stop code is at the bottom of the screen, together with the module name of the failing code when it's available. Write it down or take a photo.
 
 ## The basic steps, in Microsoft's order
 
@@ -45,7 +45,7 @@ Microsoft's bug check page adds more ideas that apply here. Remove or update rec
 
 ## Repair system files with DISM and SFC
 
-Damaged system files are one reason a critical process dies, and two built-in tools address them. Microsoft's page on the [System File Checker](https://support.microsoft.com/en-us/windows/experience/backup-recovery/use-the-system-file-checker-tool-to-repair-missing-or-corrupted-system-files) says to run DISM first, because DISM supplies the files SFC needs.
+Damaged system files are one reason a critical process dies, and two built-in tools address them. Microsoft's page on the [System File Checker](https://support.microsoft.com/windows/experience/backup-recovery/use-the-system-file-checker-tool-to-repair-missing-or-corrupted-system-files) says to run DISM first, because DISM supplies the files SFC needs.
 
 1. Type `cmd` in the search box, right-click **Command Prompt** and select **Run as administrator**.
 2. Run `DISM.exe /Online /Cleanup-Image /RestoreHealth` and wait for it to finish. Microsoft says it can take several minutes.
@@ -59,7 +59,7 @@ When Windows Update is broken, DISM can use another repair source such as a moun
 
 If the PC shows the stop code on every start, you have to work from the Windows Recovery Environment. Windows enters it on its own after several failed starts. You can also force it: turn the PC on, hold the power button as soon as the logo appears, and repeat once. On the third start, the **Automatic Repair** screen appears, where you select **Advanced options**.
 
-Microsoft's page on [recovery options in Windows](https://support.microsoft.com/en-us/windows/experience/backup-recovery/recovery-options-in-windows) lists these tools for a PC that won't start, in order:
+Microsoft's page on [recovery options in Windows](https://support.microsoft.com/windows/experience/backup-recovery/recovery-options-in-windows) lists these tools for a PC that won't start, in order:
 
 1. Point-in-time restore (**Troubleshoot**, **Point-in-time restore**), listed for Windows 11, version 24H2 or later.
 2. **Uninstall updates** (**Troubleshoot**, **Advanced options**, **Uninstall updates**). Useful if the crash started right after a Windows update.
