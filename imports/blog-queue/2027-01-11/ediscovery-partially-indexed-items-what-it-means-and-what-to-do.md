@@ -25,11 +25,11 @@ faq:
     a: "The page says it applies only to organizations in Microsoft 365 operated by 21Vianet. Classic Content Search and eDiscovery were retired on August 31, 2025, and other organizations should use the new eDiscovery experience in the Microsoft Purview portal."
 ---
 
-A content search can report items that were not fully indexed. These partially indexed items are included in the estimated results, but a keyword search cannot see inside them. This guide follows the Microsoft Learn article on partially indexed items in content search. Read the scope note first, because it limits who the article applies to.
+A content search can report items that were not fully indexed. These partially indexed items are included in the estimated results, but a keyword search cannot see inside them. This guide follows the Microsoft Learn article Partially indexed items in Content Search. Read the scope note first, because it limits who the article applies to.
 
 ## Scope of the Learn page
 
-The article applies only to organizations hosted in Microsoft 365 operated by 21Vianet. It states that Microsoft retired classic Content Search, classic eDiscovery (Standard) and classic eDiscovery (Premium) on August 31, 2025. Other organizations should use the new eDiscovery experience in the Microsoft Purview portal. The article does not describe how the new experience handles partially indexed items. It points to a separate article for that.
+The article applies only to organizations hosted in Microsoft 365 operated by 21Vianet. It states that Microsoft retired classic Content Search, classic eDiscovery (Standard) and classic eDiscovery (Premium) on August 31, 2025. Other organizations should use the new eDiscovery experience in the Microsoft Purview portal. The article does not describe how the new experience handles partially indexed items. It only points to the guidance for the new eDiscovery experience in the Microsoft Purview portal.
 
 ## What they are
 
@@ -45,7 +45,7 @@ Partially indexed items are Exchange mailbox items and SharePoint or OneDrive do
 - The file is encrypted with non-Microsoft technology or is password-protected.
 - Email is encrypted with S/MIME, or files are encrypted with Microsoft encryption in SharePoint or OneDrive.
 
-Email protected with Azure Rights Management is indexed, not partially indexed. It can be previewed and exported with the RMS Decrypt role, which the eDiscovery Manager role group includes by default.
+Email protected with Azure Rights Management is indexed, not partially indexed. It can be previewed and exported with the RMS Decrypt role, which the eDiscovery Manager role group includes by default. Files encrypted with Microsoft encryption technologies and attached to a matching email can be previewed and are decrypted when exported.
 
 ## Email indexing limits
 
@@ -57,6 +57,7 @@ Email protected with Azure Rights Management is indexed, not partially indexed. 
 | Attachment nesting depth | 30 |
 | Parse time per item | 30 seconds |
 | Parser output indexed | 2 million characters |
+| Annotation tokens per message | 2 million |
 | Body size in the index, body plus attachments | 67 million characters |
 | Unique tokens in the body | 1 million |
 
@@ -80,7 +81,7 @@ Select **Only items that have an unrecognized format, are encrypted, or weren't 
 | Only partially indexed items | Not exported | Exported | Exported |
 | Indexed and partially indexed | Exported | Exported with indexed items | Exported |
 
-Date ranges cannot exclude partially indexed items. A query-based hold holds all partially indexed items, including those that do not match the query.
+If you include all mailbox items, or the query has no keywords or only a date range, partially indexed items might not be copied to the PST file for partially indexed items, because all items are already in the regular results. Date ranges cannot exclude partially indexed items. A query-based hold holds all partially indexed items, including those that do not match the query.
 
 ## What the page does not say
 
@@ -91,7 +92,7 @@ Date ranges cannot exclude partially indexed items. A query-based hold holds all
 
 ## A handling outline
 
-This outline is practical advice built on the page.
+This outline is my advice, built on the page.
 
 1. Confirm whether your organization is in scope of this article.
 2. Look at the estimate and note how many items are partially indexed.
@@ -99,7 +100,7 @@ This outline is practical advice built on the page.
 4. Remember that holds cover all partially indexed items.
 5. For the new experience, read the article the page links to.
 
-## Typical mistakes
+## Typical mistakes (my advice)
 
 - Expecting a keyword search to find text inside unsupported files.
 - Trying to preview partially indexed items.
@@ -115,4 +116,4 @@ This outline is practical advice built on the page.
 
 ## Sources
 
-- [Partially indexed items in Content search (Microsoft Learn)](https://learn.microsoft.com/purview/ediscovery-partially-indexed-items-in-content-search)
+- [Partially indexed items in Content Search (Microsoft Learn)](https://learn.microsoft.com/purview/ediscovery-partially-indexed-items-in-content-search)
