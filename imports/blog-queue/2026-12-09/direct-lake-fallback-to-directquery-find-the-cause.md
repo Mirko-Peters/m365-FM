@@ -27,7 +27,7 @@ Direct Lake falls back to DirectQuery when the semantic model cannot read a tabl
 
 ## First check which Direct Lake flavor you have
 
-Fallback is not a property of every Direct Lake model. Microsoft Learn says that only **Direct Lake on SQL analytics endpoints** can use DirectQuery fallback. **Direct Lake on OneLake** does not support it and runs exclusively in DirectLakeOnly mode. If your model is on OneLake and a query fails, the cause is not a silent switch. The query simply returns an error.
+Fallback is not a property of every Direct Lake model. Microsoft Learn says that only **Direct Lake on SQL analytics endpoints** can use DirectQuery fallback. **Direct Lake on OneLake** does not support it and runs exclusively in DirectLakeOnly mode. If your model is on OneLake, a slow or failing query cannot be explained by a fallback to DirectQuery, so look at other causes such as the guardrails and memory limits.
 
 For a model on SQL analytics endpoints, fallback means the table "no longer operates in Direct Lake mode" and retrieves data from the SQL analytics endpoint of the lakehouse or warehouse. Learn adds that these queries return the latest data, because they are not tied to the last framing operation, but they might be slower.
 
@@ -70,7 +70,7 @@ Microsoft Learn lists the conditions under which Direct Lake mode stays in use. 
 - No single table exceeds the guardrail limits for Parquet files, row groups or rows.
 - The model was refreshed (framed) after the Delta tables were created or modified.
 
-A related page in the Direct Lake overview adds that SQL-based granular access control in a warehouse also triggers fallback, and that tables created through XMLA and not yet processed fall back unless fallback is disabled, in which case queries fail.
+The query-processing page also names memory pressure that prevents loading the columns a DAX query needs as a typical fallback reason. The Direct Lake overview adds that SQL-based granular access control in a warehouse also triggers fallback, and that tables created through XMLA and not yet processed fall back unless fallback is disabled, in which case queries fail.
 
 ## Step 4: Fix the matching cause
 
@@ -97,7 +97,7 @@ To change it in the Fabric portal, open the semantic model's **Model** view, ope
 
 A practical pattern is to run DirectLakeOnly while you build and test, so every fallback becomes a visible error. Switch to Automatic once the model is stable and users depend on it. The pages read for this article do not describe other settings paths, such as Power BI Desktop menus for this property.
 
-## Common mistakes
+## Common mistakes (own reading of the pages above)
 
 - Treating a slow report as a capacity problem without checking for fallback first.
 - Testing only with Automatic, so fallbacks never surface.
