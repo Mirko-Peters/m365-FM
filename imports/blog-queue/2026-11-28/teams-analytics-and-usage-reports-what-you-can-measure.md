@@ -49,7 +49,7 @@ For the Teams admin center, the reporting reference lists the Teams administrato
 
 ## The 21 reports in the Teams admin center
 
-The reference lists 21 reports. Some are public cloud only. Grouped by purpose:
+The reference table lists 21 reports marked as available in the public cloud. Grouped by purpose:
 
 | Purpose | Reports |
 |---|---|
@@ -61,7 +61,7 @@ The reference lists 21 reports. Some are public cloud only. Grouped by purpose:
 | Other | Frontline usage, SMS notifications usage |
 | Security | User reported security submissions, Security detections |
 
-There is no separate meetings report. Meeting figures appear in the user activity report.
+No report in this list is named for meetings in general. Meeting counts appear in the Team usage report (total organized meetings) and in the User activity report, and the events reports cover events.
 
 ## What the Team usage report measures
 
