@@ -20,7 +20,7 @@ faq:
   - q: "When is Azure Disk Encryption retired?"
     a: "Learn says ADE is scheduled for retirement on September 15, 2028. After that date, encrypted disks fail to unlock after VM reboots, which causes service disruption."
   - q: "Which option should I use for new VMs?"
-    a: "Learn recommends encryption at host for new VMs. It can use customer-managed keys through a disk encryption set."
+    a: "Learn recommends encryption at host for new VMs, or Confidential VM sizes with OS disk encryption for confidential computing workloads. Encryption at host can use customer-managed keys through a disk encryption set."
   - q: "Do all options support hardware security modules?"
     a: "Learn lists Key Vault Premium and Managed HSM for SSE, encryption at host and confidential disk encryption. For ADE it lists Key Vault Premium only."
 ---
@@ -52,15 +52,15 @@ For new virtual machines, Microsoft Learn recommends encryption at host, not Azu
 | Enhanced key protection | No | No | No | Yes |
 | Defender for Cloud status | Unhealthy | Healthy | Healthy | Not applicable |
 
-## What this means for the comparison in the title
+## What this means for the comparison in the title (my reading)
 
-The question is how ADE differs from SSE with customer-managed keys. The page shows three differences.
+The question is how ADE differs from SSE with customer-managed keys. The page has no such direct comparison. Reading its table, I see three differences.
 
 - **Where encryption happens.** SSE with a DES encrypts in the storage clusters and does not use VM CPU. ADE encrypts inside the guest operating system and uses VM CPU.
 - **Coverage.** SSE does not cover temp disks, caches or data flows between compute and storage. ADE does.
 - **Key control.** Both allow customer control. SSE uses a DES, and ADE uses Key Vault with an optional KEK.
 
-If you want customer-managed keys and temp disk coverage together, the page points to encryption at host, but with a limit. Temp disk encryption under encryption at host is supported only with platform-managed keys.
+If you want customer-managed keys and temp disk coverage together, the table lists encryption at host as covering temp disks, but with a limit. Temp disk encryption under encryption at host is supported only with platform-managed keys.
 
 ## Defender for Cloud recommendations
 
@@ -71,7 +71,7 @@ The page lists how recommendations map to the options.
 - The Windows and Linux recommendations that say to enable ADE or EncryptionAtHost detect both.
 - Confidential disk encryption has no applicable recommendation at present.
 
-Because Defender for Cloud reports SSE alone as Unhealthy, a VM that relies only on SSE can appear as a finding even though its disks are encrypted at rest.
+Because Defender for Cloud reports SSE alone as Unhealthy, a VM that relies only on SSE can appear as a finding even though its disks are encrypted at rest. That consequence is my inference from the table.
 
 ## Retirement of ADE
 
@@ -86,9 +86,9 @@ Learn says ADE is scheduled for retirement on September 15, 2028. After that dat
 - Whether ADE supports custom Windows images. The page names only Linux.
 - The migration procedure from ADE to encryption at host.
 
-## A decision outline
+## A decision outline (my advice)
 
-This outline is practical advice built on the page.
+This outline is my own suggestion built on the page.
 
 1. For a new VM, start with encryption at host.
 2. If you need customer-managed keys for OS and data disks, add a DES.
@@ -96,7 +96,7 @@ This outline is practical advice built on the page.
 4. For confidential VMs, review confidential disk encryption.
 5. For existing ADE VMs, plan the migration well before September 15, 2028.
 
-## Typical mistakes
+## Typical mistakes (my advice)
 
 - Assuming SSE encrypts the temp disk.
 - Expecting customer-managed keys on the temp disk with encryption at host.
