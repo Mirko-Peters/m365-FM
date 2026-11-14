@@ -14,13 +14,13 @@ keypoints:
   - "Teams retention policies can take up to seven days to apply, and expired messages are removed by a timer job that typically takes 1 to 7 days."
 faq:
   - q: "Can I clean up inactive teams with Graph?"
-    a: "Yes, in two ways. Microsoft Learn documents the getTeamsTeamActivityDetail report to find teams by last activity, the team archive API to archive them, and the groupLifecyclePolicy API to set an expiration policy that deletes unrenewed Microsoft 365 groups. Deleted groups can be restored within 30 days."
+    a: "Yes. Microsoft Learn documents the getTeamsTeamActivityDetail report to find teams by last activity, the team archive API to archive them, and the groupLifecyclePolicy API to set an expiration policy that deletes unrenewed Microsoft 365 groups. Deleted groups can be restored within 30 days."
   - q: "Does the expiration policy delete inactive teams automatically?"
     a: "Microsoft Learn says groups with user activity are renewed automatically as expiration nears, owners are notified to renew otherwise, and groups that are not renewed are deleted. Visiting a Teams channel counts as activity. The policy applies to Microsoft 365 groups, and a team is backed by one."
   - q: "How long does a Teams retention policy take to apply?"
     a: "Learn says it can take up to seven days after you create and submit a retention policy. If the status shows an error about taking longer than expected, Set-RetentionCompliancePolicy with -RetryDistribution, or Set-AppRetentionCompliancePolicy for some locations, retries distribution."
   - q: "Do Teams retention policies cover files?"
-    a: "No. Learn states that emails and files used with Teams are not included in retention policies for Teams. Channel files fall under policies for Microsoft 365 Group mailboxes and sites or SharePoint sites, and files from chats need a policy that includes the organizer's OneDrive account."
+    a: "No. Learn states that emails and files used with Teams are not included in retention policies for Teams. Channel files fall under policies for Microsoft 365 Group mailboxes and sites or SharePoint sites, and files from user chats need a policy that includes OneDrive accounts. Learn names the meeting organizer's OneDrive for recordings and transcripts, and the OneDrive of the user who shared the file for files shared in chat."
 ---
 
 Teams cleanup sounds like one task, but it is two. One system decides how long chat and channel messages are kept. A different system decides whether a team that nobody uses still exists. Graph and PowerShell can automate parts of both, with different tools and different limits. This guide separates them and shows how to chain them into a routine.
@@ -37,12 +37,12 @@ GET /reports/getTeamsTeamActivityDetail(period='D90')
 
 Learn lists the details:
 
-- Permission: `Reports.Read.All`, for delegated and application access.
+- Permission: `Reports.Read.All`, for delegated and application access. For delegated access, the page's note says the tenant admin must have assigned the user an appropriate limited administrator role. Only the global service is marked as supported, not the US Government or China operated clouds.
 - Period values: `D7`, `D30`, `D90`, `D180`. A `date` parameter is also available for the past 30 days.
 - Response: a `302 Found` that redirects to a preauthenticated download URL. The URL expires after a few minutes and does not need an `Authorization` header.
 - CSV columns include Team Name, Team Id, Team Type, Last Activity Date, Active Users, Active Channels, Guests, Meetings Organized and Active External Users.
 
-The longest period is 180 days, so that is the oldest inactivity signal this report can give. Pick a rule, for example a Last Activity Date older than your cutoff in the D90 report and no meetings organized, then export those team IDs as the cleanup candidates.
+The longest period is 180 days, so that is the oldest inactivity signal this report can give. My own suggestion, not from Learn: pick a rule, for example a Last Activity Date older than your cutoff in the D90 report and no meetings organized. Keep in mind that this report reflects Teams activity only, while the expiration policy renews groups on activity in SharePoint, Outlook, Teams or Viva Engage, so the two signals can disagree. Then export those team IDs as the cleanup candidates.
 
 ## Part 2: Notify and archive
 
@@ -60,7 +60,7 @@ Documented behavior:
 - Once archived, users can no longer send or like messages, or edit the team's name, description or settings. Membership changes are still allowed.
 - The team and its group must have an owner.
 
-To undo it, the unarchive API restores the team. A sensible script waits on the async operation, logs the result, and skips teams that have no owner, since the call would fail for them.
+To undo it, the unarchive API restores the team. My own suggestion: a script should wait on the async operation, log the result, and skip teams that have no owner, because Learn says the team and its group must have an owner to archive it.
 
 ## Part 3: Let the expiration policy do the deletion
 
@@ -107,7 +107,7 @@ Teams message retention is configured in Purview, not by the expiration policy. 
 - Retention policies for Teams don't cover code snippets, voice memos from the mobile client, or emoticon reactions.
 - Files are separate. Channel files need policies on the group mailboxes and sites or SharePoint locations.
 
-The `New-RetentionCompliancePolicy` reference documents the Teams parameters:
+The `New-RetentionCompliancePolicy` reference documents the Teams parameters but has no Teams example. The command below is my own example built from those parameters, and the value `All` is implied by the exception parameter descriptions:
 
 ```powershell
 New-RetentionCompliancePolicy -Name "Teams chats" -TeamsChatLocation All
@@ -134,10 +134,10 @@ Some settings cannot be changed after saving: Learn says the policy name, the sc
 
 ## Sources
 
-- [Microsoft Learn: Microsoft 365 group expiration policy](https://learn.microsoft.com/en-us/entra/identity/users/groups-lifecycle)
-- [Microsoft Learn: groupLifecyclePolicy resource type](https://learn.microsoft.com/en-us/graph/api/resources/grouplifecyclepolicy)
-- [Microsoft Learn: team archive API](https://learn.microsoft.com/en-us/graph/api/team-archive)
-- [Microsoft Learn: reportRoot getTeamsTeamActivityDetail](https://learn.microsoft.com/en-us/graph/api/reportroot-getteamsteamactivitydetail)
-- [Microsoft Learn: Create and configure retention policies](https://learn.microsoft.com/en-us/purview/create-retention-policies)
+- [Microsoft Learn: Set expiration for Microsoft 365 groups](https://learn.microsoft.com/en-us/entra/identity/users/groups-lifecycle)
+- [Microsoft Learn: groupLifecyclePolicy resource type](https://learn.microsoft.com/en-us/graph/api/resources/grouplifecyclepolicy?view=graph-rest-1.0)
+- [Microsoft Learn: Archive team](https://learn.microsoft.com/en-us/graph/api/team-archive?view=graph-rest-1.0)
+- [Microsoft Learn: reportRoot getTeamsTeamActivityDetail](https://learn.microsoft.com/en-us/graph/api/reportroot-getteamsteamactivitydetail?view=graph-rest-1.0)
+- [Microsoft Learn: Automatically retain or delete content by using retention policies](https://learn.microsoft.com/en-us/purview/create-retention-policies)
 - [Microsoft Learn: Learn about retention for Teams](https://learn.microsoft.com/en-us/purview/retention-policies-teams)
-- [Microsoft Learn: New-RetentionCompliancePolicy](https://learn.microsoft.com/en-us/powershell/module/exchange/new-retentioncompliancepolicy)
+- [Microsoft Learn: New-RetentionCompliancePolicy](https://learn.microsoft.com/en-us/powershell/module/exchangepowershell/new-retentioncompliancepolicy?view=exchange-ps)
