@@ -40,7 +40,7 @@ The page names four sensitive information categories: Financial, Medical and hea
 
 ## Step 2: Design each policy
 
-Microsoft's design guidance says a documented design reaches the goal faster than trial and error. Summarize each policy in one intent statement. The Learn example reads like this in structure: who you are, what content you detect, where it is stored, where it may be shared and who must be restricted. Then map the statement to settings:
+Microsoft's design guidance says a documented design reaches the goal faster than trial and error. Summarize each policy in one intent statement. The Learn example is a fictitious U.S. organization that wants to detect Office documents with HIPAA health information in OneDrive and SharePoint, protect against sharing in Teams, and restrict sharing with unauthorized third parties. Then map the statement to settings:
 
 | Statement part | Configuration |
 |---|---|
@@ -76,7 +76,7 @@ Microsoft Learn describes the policy states: **Keep it off**, **Run the policy i
 5. Collect user feedback and alert data, tune and fix issues.
 6. Turn it on, then monitor alerts and Activity explorer.
 
-Non-device locations start with **Audit only**. **Block with override** is available for Exchange Online and SharePoint, and the **Allow** action is only for the Devices location. Microsoft's training says to balance protection with productivity: decide when to warn instead of block and when overrides should be allowed, since DLP works best when it guides behavior.
+Microsoft's deployment page describes the actions this way: **Allow** is only available for policies scoped to the Devices location, **Audit only** is the least impactful option for other locations, **Block with override** lets users override with a reason, and **Block** always blocks. For Exchange Online and SharePoint, overrides are configured in the user notification section. Microsoft's training says to balance protection with productivity: decide when to warn instead of block and when overrides should be allowed, since DLP works best when it guides behavior.
 
 ## Simulation mode in detail
 
@@ -90,7 +90,7 @@ To review results, sign in to the Microsoft Purview portal, go to **Data Loss Pr
 
 ## Alerts and monitoring
 
-DLP can raise alerts when an activity meets a rule, if incident reports are configured. Alerts go to the DLP alerts dashboard and the Microsoft Defender portal under **Incidents & alerts** > **Incidents**. They are kept for 30 days in the Purview dashboard and six months in Defender. Activity explorer shows the last 30 days of DLP data, including **DLP rule matched** and **DLP rule undo**, which shows user overrides. All monitored activity is also recorded in the Microsoft 365 audit log.
+DLP can raise alerts when an activity meets a rule, if incident reports are configured. Alerts are available in the Microsoft Purview DLP alerts dashboard for 30 days and in the Microsoft Defender portal for six months. Activity explorer shows the last 30 days of DLP information. All monitored activity is also recorded in the Microsoft 365 audit log.
 
 ## Checklist
 
