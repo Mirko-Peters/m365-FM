@@ -25,7 +25,7 @@ faq:
     a: "The page says skills uploaded in Copilot in PowerPoint are for personal use only. They are saved to your Skills folder on OneDrive."
 ---
 
-Skills let you give Copilot in PowerPoint reusable instructions for tasks you repeat, such as editing a deck in a house style or writing a standard summary slide. This article follows the Microsoft Support page "Custom skills in Copilot in PowerPoint". It applies to PowerPoint for Microsoft 365, PowerPoint for Microsoft 365 for Mac and PowerPoint for iPad, and the page notes that Copilot may not be included in your subscription or may be restricted by your organization's settings.
+Skills let you give Copilot in PowerPoint reusable instructions for tasks you repeat, such as editing a deck in a house style or writing a standard summary slide. This article follows the Microsoft Support page "Use custom skills with Copilot in PowerPoint". It applies to PowerPoint for Microsoft 365, PowerPoint for Microsoft 365 for Mac and PowerPoint for iPad, and the page notes that Copilot may not be included in your subscription or may be restricted by your organization's settings.
 
 ## What a skill is
 
@@ -114,4 +114,4 @@ This is my suggestion, not guidance from the page:
 
 ## Sources
 
-- [Custom Skills in Copilot in PowerPoint (Microsoft Support)](https://support.microsoft.com/powerpoint/copilot/copilot-in-powerpoint-skills)
+- [Use custom skills with Copilot in PowerPoint (Microsoft Support)](https://support.microsoft.com/powerpoint/copilot/copilot-in-powerpoint-skills)
