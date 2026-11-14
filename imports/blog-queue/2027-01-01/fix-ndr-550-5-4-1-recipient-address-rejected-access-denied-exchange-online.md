@@ -23,7 +23,7 @@ faq:
     a: "The Learn NDR reference lists Relay Access Denied, where the mail server generating the error does not accept mail for the recipient's domain. It names mail server or DNS misconfiguration as the cause."
 ---
 
-The NDR 550 5.4.1 Recipient address rejected: Access denied means Exchange Online refused the message at the edge because the recipient address is not valid in the organization. Directory Based Edge Blocking (DBEB) does this. The fix is on the recipient side: check the address, then check whether the recipient or the whole domain is missing from Exchange Online. This guide combines the Microsoft Learn pages on NDRs and on DBEB and a Microsoft support article for this exact error.
+The NDR 550 5.4.1 Recipient address rejected: Access denied means Exchange Online refused the message at the edge because the recipient address is not valid in the organization. Directory Based Edge Blocking (DBEB) does this. The fix is on the recipient side: check the address, then check whether the recipient or the whole domain is missing from Exchange Online. This guide combines the Microsoft Learn pages Email nondelivery reports (NDRs) and SMTP errors in Exchange Online and Use Directory-Based Edge Blocking to reject messages sent to invalid recipients in Exchange Online, and a Microsoft support article for this exact error.
 
 ## What the error means
 
@@ -52,7 +52,7 @@ The support article says to resync the domain:
 2. Open the domain and change the type from **Authoritative** to **Internal relay**. Save.
 3. Change it back to **Authoritative**. Save.
 
-The DBEB article uses the same pages and explains the two types. Keep a domain as **Internal relay** while valid recipients are still being added and replicated. Switch to **Authoritative** only after all valid recipients are in Exchange Online and replicated. Switching early can cause valid mail to be rejected.
+The DBEB article uses the same pages. It says to keep the domain as **Internal relay** until all valid recipients have been added to Exchange Online and replicated, and to switch to **Authoritative** only after that. The page does not spell out the consequence of switching early. My inference, not a Microsoft statement: mail to a recipient that has not replicated yet would be treated as invalid.
 
 ## Fixes for a single recipient in a hybrid setup
 
@@ -96,6 +96,6 @@ The pages I read do not describe the following:
 
 ## Sources
 
-- [Non-delivery reports in Exchange Online](https://learn.microsoft.com/exchange/mail-flow-best-practices/non-delivery-reports-in-exchange-online/non-delivery-reports-in-exchange-online)
-- [Use Directory Based Edge Blocking to reject messages sent to invalid recipients](https://learn.microsoft.com/exchange/mail-flow-best-practices/use-directory-based-edge-blocking)
-- [Fix email delivery issues for error code 5.4.1 in Exchange Online](https://support.microsoft.com/topic/c0e98a8e-81db-49c2-9bf1-32a1734d3e77)
+- [Email nondelivery reports (NDRs) and SMTP errors in Exchange Online (Microsoft Learn)](https://learn.microsoft.com/troubleshoot/exchange/email-delivery/ndr/non-delivery-reports-in-exchange-online)
+- [Use Directory-Based Edge Blocking to reject messages sent to invalid recipients in Exchange Online (Microsoft Learn)](https://learn.microsoft.com/exchange/mail-flow-best-practices/use-directory-based-edge-blocking)
+- [Fix email delivery issues for error code 5.4.1 in Exchange Online (Microsoft Support)](https://support.microsoft.com/topic/c0e98a8e-81db-49c2-9bf1-32a1734d3e77)
