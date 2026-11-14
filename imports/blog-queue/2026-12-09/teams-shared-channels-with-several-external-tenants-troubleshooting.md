@@ -51,7 +51,7 @@ Sign in as at least a Security Administrator and open the Microsoft Entra admin 
 3. On the **B2B direct connect** tab, allow access for the users and applications that need it. Set both **Inbound access** and **Outbound access** where your users and the partner's users must work in each other's channels.
 4. Ask the partner admin to do the same in their tenant, for the direction that points to you.
 
-Learn notes that blocking all external users also blocks all your internal applications from being shared through B2B direct connect, and the same applies to blocking all your users for outbound access. Targeting specific users, groups or applications needs Entra ID P1 or P2 on the configuring tenant, and user or group targeting is not available in the default settings.
+Learn notes that blocking inbound access for all external users and groups also blocks all your internal applications from being shared through B2B direct connect, and blocking outbound access for all your users and groups also blocks all external applications. Selecting specific users, groups or applications needs Entra ID P1 (users and groups inbound) or P1 or P2 (applications and outbound targeting) on the configuring tenant, and the page states that you cannot target users or groups in the inbound default settings.
 
 If a user cannot be selected for outbound targeting, Learn mentions users with SMS-based authentication. The documented workarounds are to add the object ID through Microsoft Graph or to target a group the user belongs to.
 
