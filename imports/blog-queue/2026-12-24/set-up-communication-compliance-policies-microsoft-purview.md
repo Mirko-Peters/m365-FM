@@ -20,7 +20,7 @@ faq:
   - q: "Can I use a distribution group for reviewers?"
     a: "No. Learn says reviewers cannot be groups. They must be individual users with Exchange Online mailboxes. Groups are supported for scoped and excluded users, with some types unsupported."
   - q: "How soon do alerts appear?"
-    a: "Learn says email takes about 24 hours to fully process in a policy and Teams, Viva Engage and third-party platforms about 48 hours. It says alerts start after 24 to 48 hours, and gives no specific activation time."
+    a: "Learn says email can take approximately 24 hours to fully process in a policy, and communications in Teams, Viva Engage and third-party platforms approximately 48 hours. It tells you to give policies time to activate and gives no specific activation time."
   - q: "Can I create policies with PowerShell?"
     a: "No. Learn states that PowerShell cannot create or manage Communication Compliance policies."
 ---
@@ -87,4 +87,4 @@ Policies detect only activity that occurs after they are active, and Learn gives
 
 ## Sources
 
-- [Configure Communication Compliance](https://learn.microsoft.com/purview/communication-compliance-configure)
+- [Get started with Communication Compliance (Microsoft Learn)](https://learn.microsoft.com/purview/communication-compliance-configure)
