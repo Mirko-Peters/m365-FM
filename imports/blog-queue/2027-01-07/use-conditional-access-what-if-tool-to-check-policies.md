@@ -11,7 +11,7 @@ keypoints:
   - "Identity, target resource, device platform and client app are required. Other conditions are optional and default to none."
   - "The results list policies that apply with their grant and session controls, and policies that do not apply with the first condition that was not satisfied."
   - "Only policies that are enabled or in report-only mode are evaluated. Service dependencies, such as Exchange Online for a Teams test, are not considered."
-  - "Supply all sign-in parameters. Conditions you leave out cannot be evaluated, and results can differ from the legacy tool."
+  - "Learn says the API expects all sign-in parameters. If details for a policy's conditions are missing, it cannot evaluate them, and results can differ from the legacy tool."
 faq:
   - q: "Where is the What If tool?"
     a: "In the Microsoft Entra admin center go to Entra ID > Conditional Access > Policies > What If."
@@ -25,7 +25,7 @@ faq:
     a: "Learn says results differ from the legacy What If evaluation when sign-in details are missing. The new API reports Does not apply where the legacy tool said Applies. With all parameters supplied, both report Applies."
 ---
 
-The What If tool answers a narrow question: for this identity, this resource and these conditions, which Conditional Access policies would apply, and why did the others not? It simulates a sign-in without anyone signing in. This guide follows the Microsoft Learn page on troubleshooting Conditional Access with the What If tool.
+The What If tool answers a narrow question: for this identity, this resource and these conditions, which Conditional Access policies would apply, and why did the others not? It simulates a sign-in without anyone signing in. This guide follows the Microsoft Learn page The Conditional Access What If tool.
 
 ## What it does
 
@@ -56,18 +56,17 @@ This reason is the answer to why a policy did not apply. For deeper detail on a 
 
 - The tool does not test Conditional Access service dependencies. A Teams test does not consider Exchange Online policies.
 - Only policies that are enabled or in report-only mode are evaluated.
-- Provide all sign-in parameters. If a policy has conditions for which you gave no detail, the API cannot evaluate them.
+- The What If API expects all sign-in parameters to be defined for the most accurate results. If your tenant has policies with specific conditions and you do not provide the sign-in details for them, the API cannot evaluate those conditions. The Conditions section of the same page says optional conditions are assumed to be none when you give no value, so the two statements pull in different directions. Supply every value you know.
 - Results differ from the legacy What If evaluation. In Learn's example, a policy targets all users, Office 365, United States and high sign-in risk. With only three of the four values provided, the legacy tool said Applies and the new API said Does not apply. With all four, both said Applies.
 
 ## The page's worked example
 
 Learn uses one policy to show why complete inputs matter. The policy applies to all users, targets Office 365, applies to the United States and applies to high sign-in risk. Four inputs can match it: identity, target app, location and sign-in risk.
 
-- With only the first three inputs, the legacy tool reported that the policy applies, because it ignored the missing risk value.
-- The new evaluation reported that it does not apply, because the sign-in risk condition could not be satisfied without a value.
+- With only the first three inputs (and also with fewer), the legacy tool reported that the policy applies and the new evaluation reported that it does not apply. The page does not explain the reason beyond saying the API cannot evaluate conditions for which no sign-in details are provided.
 - With all four inputs, both tools reported that the policy applies.
 
-The practical reading is that a Does not apply result can mean the condition was not met or was not supplied. Check which one before you decide the policy is wrong.
+My reading: a Does not apply result can mean the condition was not met or was not supplied. Check which one before you decide the policy is wrong.
 
 ## What the page does not say
 
@@ -78,7 +77,7 @@ The practical reading is that a Does not apply result can mean the condition was
 
 ## A troubleshooting routine
 
-This routine is practical advice built on the page.
+This routine is my advice, built on the page.
 
 1. Take the facts from a real failed or unexpected sign-in: user, app, platform and client app.
 2. Enter the identity and target, then fill in every other condition you know.
@@ -87,7 +86,7 @@ This routine is practical advice built on the page.
 5. If a dependent service is involved, run the tool again for that service's resource.
 6. Check report-only policies as well, since they appear in the evaluation.
 
-## Typical mistakes
+## Typical mistakes (my advice)
 
 - Leaving optional conditions empty and reading Does not apply as final.
 - Entering a group name such as Office 365 instead of an App ID.
@@ -102,4 +101,4 @@ This routine is practical advice built on the page.
 
 ## Sources
 
-- [Troubleshoot using the What If tool in Conditional Access (Microsoft Learn)](https://learn.microsoft.com/entra/identity/conditional-access/troubleshoot-conditional-access-what-if)
+- [The Conditional Access What If tool (Microsoft Learn)](https://learn.microsoft.com/entra/identity/conditional-access/what-if-tool)
