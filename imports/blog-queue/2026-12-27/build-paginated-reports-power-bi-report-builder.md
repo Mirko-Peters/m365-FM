@@ -67,7 +67,7 @@ You cannot set a report parameter to be both **Multivalue** and **Allow null** a
 
 ## A first-report outline
 
-This outline is a suggestion built from the page, not a Microsoft tutorial.
+This outline is my advice, built from the page, not a Microsoft tutorial.
 
 1. Install Report Builder and open the Table or Matrix wizard.
 2. Create the data source connection and write the dataset query.
@@ -78,7 +78,7 @@ This outline is a suggestion built from the page, not a Microsoft tutorial.
 
 ## Checks before you publish
 
-This checklist is a suggestion assembled from the statements above, not a Microsoft procedure.
+This checklist is my advice, assembled from the statements above, not a Microsoft procedure.
 
 - **Licensing:** confirm who will publish. A free license ends at My Workspace, so a team workspace needs a Pro or PPU license and at least the contributor role.
 - **Dataset access:** confirm that every person who runs the report has Build permission for the dataset it uses. The page lists this as a requirement for all users.
@@ -101,4 +101,4 @@ The page does not give Premium or Fabric capacity licensing, code examples or ex
 
 ## Sources
 
-- [Power BI Report Builder](https://learn.microsoft.com/power-bi/paginated-reports/report-builder-power-bi)
+- [Power BI Report Builder (Microsoft Learn)](https://learn.microsoft.com/power-bi/paginated-reports/report-builder-power-bi)
