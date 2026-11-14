@@ -48,7 +48,7 @@ Learn adds a note that makes this harder to spot: the Intune management extensio
 
 Learn says the issue occurs if the `dmwappushservice` service is disabled. Its example is a PowerShell script deployed to the device that contains a command disabling this service. The service is required on client devices for Intune management, and with it disabled the device cannot sync with Intune.
 
-That example has an uncomfortable side effect. The management extension delivers the script that disables the service that normal sync depends on, and the extension keeps working afterward.
+My reading, not stated by Learn: if such a script is deployed through Intune, the management extension that delivers it can keep working while the service that normal sync depends on is disabled.
 
 ## Solution
 
@@ -82,7 +82,7 @@ After you correct the service, run **Sync** and check that the last sync time up
 
 ## What the page does not tell you
 
-I read the whole Learn page. It does not describe how to recover a device that is also unenrolled, how to find which script disabled the service, or what happens on other platforms. It gives the cause and the one fix. For anything beyond it, collect the service state, the scripts assigned to the device and the last sync time, and compare them against a healthy device.
+The Learn page does not describe how to recover a device that is also unenrolled, how to find which script disabled the service, or what happens on other platforms. It gives the cause and the one fix. For anything beyond it, collect the service state, the scripts assigned to the device and the last sync time, and compare them against a healthy device.
 
 ## Related
 
