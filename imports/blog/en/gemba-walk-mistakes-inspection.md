@@ -18,7 +18,7 @@ faq:
   - q: "How do I stop my gemba walks from feeling like an audit?"
     a: "Say the purpose before you start: you are there to learn the process and help, not to check individuals. Carry a question, not a scorecard. Ask open questions, listen, and take no names. Agree one or two actions with the team and come back to report on them."
   - q: "What does coaching on the floor mean?"
-    a: "It means building people's problem-solving skills while you work with them. Instead of giving the answer, you ask what the problem is, what they have tried and what they would test next. Mike Orzen of the Lean Enterprise Institute lists teaching and coaching among seven practices of leading with respect."
+    a: "It means building people's problem-solving skills while you work with them. Instead of giving the answer, you ask what the problem is, what they have tried and what they would test next. The Lean Enterprise Institute article How to lead with respect lists Teaching and Coaching among seven practices of leading with respect."
 ---
 A gemba walk turns into an inspection when the leader goes to check people instead of learning how the work flows. Most of the damage comes from nine habits, and all of them can be changed. This article is for lean managers who run walks or coach other leaders to run them. It groups the gemba walk mistakes by when they happen: before, during and after the walk. *Gemba* is Japanese for "actual place", the place where work is done.
 
@@ -42,7 +42,7 @@ Four mistakes show up in your behaviour at the station.
 
 **5. Solving on the spot.** A quick order from a leader who has watched for a few minutes often misses the cause. The Lean Enterprise Institute warns against issuing prescriptions from a distance and against leaders acting as the only source of answers. Diagnose and decide close to the work, with the people doing it. There is one exception: if you see a safety hazard, act on it at once and explain why.
 
-**6. Talking more than listening.** If you explain, teach and correct for most of the walk, you learn little. Active listening is one of the seven practices of leading with respect described by Mike Orzen in the Lean Enterprise Institute article [How to lead with respect](https://www.lean.org/the-lean-post/articles/how-to-lead-with-respect/). Try to ask open questions, such as "What happens when this part is missing?", and then wait.
+**6. Talking more than listening.** If you explain, teach and correct for most of the walk, you learn little. Effective Listening is one of the seven practices of leading with respect described by Doug Bartholomew in the Lean Enterprise Institute article [How to lead with respect](https://www.lean.org/the-lean-post/articles/how-to-lead-with-respect/). Try to ask open questions, such as "What happens when this part is missing?", and then wait.
 
 **7. Hunting for waste without asking why it exists.** Spotting waste is easy. Understanding its cause is the real work. The Lean Enterprise Institute notes that treating waste elimination as the goal, without finding causes, is a trap. A pile of parts is a symptom. Ask what made the pile.
 
@@ -52,13 +52,13 @@ Two mistakes happen when you are back at your desk.
 
 **8. No follow-up.** If nothing visible changes after a walk, people stop sharing what they know. Agree one or two actions with an owner and a date, tell the team the plan and review it at the start of the next walk.
 
-**9. Finding problems but not developing people.** A leader who solves everything creates a team that waits. Orzen lists teaching and coaching among the seven practices, where leaders build people's problem-solving skills through hands-on learning. After a walk, ask the team leader what they would test, then support the test.
+**9. Finding problems but not developing people.** A leader who solves everything creates a team that waits. Teaching and Coaching is one of the seven practices in the Lean Enterprise Institute article on leading with respect, and it fits here: build people's problem-solving skills instead of solving everything yourself. After a walk, ask the team leader what they would test, then support the test.
 
 ## What a good walk looks like instead
 
 In lean management, leaders go to the gemba to see how work really happens and to find improvement opportunities with the people who do it. The aim is to improve processes through continuous improvement, and that needs trust. Frontline staff only share what they know if they expect to be heard. This is why the tone of a walk matters as much as its content, in lean manufacturing as in any other setting.
 
-A good walk is not a softer inspection. It is a different activity with a different goal. Orzen's article calls the gemba walk the basis of showing respect and of achieving real understanding. It quotes Jim Womack saying that problem-solving, done with people, is "actually the highest form of respect". Respect here is not politeness. Orzen says that leading with respect is not a soft skill. In the other article's words, it includes setting demanding expectations.
+A good walk is not a softer inspection. It is a different activity with a different goal. The Lean Enterprise Institute article How to lead with respect quotes Jim Womack saying that engaging in the problem-solving process is "actually the highest form of respect". Respect here is not politeness. The same article lists Meaningful Challenge among its seven practices, so respect does not mean going easy on people.
 
 In practice, coaching on the floor follows a short pattern:
 
@@ -85,7 +85,7 @@ These are the mistakes leaders make when they try to fix the nine above.
 - **Using the list as a scorecard against managers.** Share it as a self-check, not as a judgement.
 - **Trying to change everything at once.** Pick one mistake per month and practise it.
 - **Dropping walks after one bad one.** A clumsy walk is a chance to learn. Say so to the team, and go again.
-- **Blaming the team for hiding problems.** People behave the way they are treated, as Orzen puts it. If problems stay hidden, look at how past problems were received.
+- **Blaming the team for hiding problems.** In my experience, people tend to behave the way they are treated. If problems stay hidden, look at how past problems were received.
 - **Copying a checklist from another plant.** Without the purpose, the questions turn into a form to tick.
 
 ## How software can help
@@ -95,3 +95,9 @@ Software cannot teach respect, but data can help you walk with a clear question 
 ## Next step
 
 Pick one of the nine gemba walk mistakes that you recognise in your own walks, and practise fixing it on your next walk. After the walk, ask the team what you did differently and what they would like you to keep.
+
+## Sources
+
+- [How to Go to the Gemba: Go See, Ask Why, Show Respect - Lean Enterprise Institute](https://www.lean.org/the-lean-post/articles/how-to-go-to-the-gemba-go-see-ask-why-show-respect/)
+- [Gemba, workplace, genchi genbutsu, go-and-see: what is the difference? - Lean Enterprise Institute](https://www.lean.org/the-lean-post/articles/gemba-workplace-genchi-genbutsu-go-and-see-whats-the-difference/)
+- [How to Lead with Respect - Lean Enterprise Institute](https://www.lean.org/the-lean-post/articles/how-to-lead-with-respect/)
