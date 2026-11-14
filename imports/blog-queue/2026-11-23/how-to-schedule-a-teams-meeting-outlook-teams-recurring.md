@@ -16,7 +16,7 @@ faq:
   - q: "How do I schedule a Teams meeting in the Teams app?"
     a: "According to Microsoft Support, open the Calendar tab, click a time slot or select New, add the meeting details and attendees, turn on the Teams meeting toggle and select Save. You can also schedule from a chat through More chat options and Schedule a meeting."
   - q: "How do I make a Teams meeting recurring?"
-    a: "Microsoft's scheduling article says to open the dropdown next to Does not repeat, below the date, and choose a default frequency or Custom to set your own schedule. When you add invitees later, Microsoft Support advises inviting them to the series rather than a single occurrence, or they will not appear in the people selection menus in Meeting options."
+    a: "The Microsoft Support scheduling articles give no recurring steps. A Microsoft Q&A thread, which is a community answer and not official documentation, says to open the dropdown next to Does not repeat, below the date, and choose a frequency or Custom to set your own schedule. When you add invitees later, Microsoft Support advises inviting them to the series rather than a single occurrence, or they will not appear in the people selection menus in Meeting options."
   - q: "Why is the Teams meeting button missing in Outlook?"
     a: "Microsoft Support says the Outlook add-in does not support personal accounts, scheduling is available only for Microsoft 365 Business Exchange accounts, and POP or IMAP accounts such as Gmail, Yahoo and iCloud are not supported. An admin can also turn off the Outlook add-in in the meeting policy."
   - q: "Can I remove Teams from a meeting after I sent the invite?"
@@ -37,9 +37,9 @@ Below are the routes Microsoft documents, the requirements for each and the chec
 4. Turn on the **Teams meeting** toggle.
 5. Select **Save**.
 
-Enter names in the **Required attendees** field. For optional attendees use **Response options** in the new calendar or **Optional** in the classic one. To invite someone outside your organization, enter the full email address. Guests receive an email with a meeting link, and an older Microsoft article says they do not need a Teams license.
+Enter names in the **Required attendees** field. For optional attendees use **Response options** in the new calendar or **Optional** in the classic one. To invite someone outside your organization, enter the full email address. Guests receive an email with a meeting link.
 
-Select **Send** (or **Send update** when editing) so invitees get the link. The Scheduler tab shows each attendee's time zone and availability. Shaded areas are busy or tentative.
+Select **Send** (or **Send update** when editing) so invitees get the link. The Scheduler section shows each attendee's time zone and availability. Shaded areas are busy or tentative.
 
 ## Schedule from a chat
 
@@ -56,7 +56,7 @@ The chat's participants are added as attendees.
 
 Points from Microsoft Support:
 
-- Everyone on the team can see and join a channel meeting.
+- Everyone on the team gets a personal invite to a channel meeting.
 - Channel meetings are not available in private channels.
 - You cannot change or add the channel after the invite is sent. Send a new invite instead.
 - Outside invitees do not get access to the channel calendar.
@@ -91,7 +91,7 @@ Microsoft's Outlook article gives no separate steps for recurring meetings. It d
 
 - **Accounts:** The Outlook add-in does not support personal accounts. Scheduling is available only for Microsoft 365 Business Exchange accounts. POP and IMAP accounts such as Gmail, Yahoo and iCloud are not supported. New Outlook for Windows has Teams built in.
 - **Size:** Up to 1,000 invitees can join and participate. Up to 10,000 can join view-only if the meeting already has 1,000 attendees.
-- **Join button:** It appears five minutes before the start time. For overlapping meetings it is unavailable, so right-click the event and select **Join online**.
+
 - **Meeting options in Outlook on the web:** After you add invitees in Outlook, select **Send Update** so they appear in Meeting options.
 
 ## When scheduling options are missing
@@ -127,6 +127,6 @@ Meeting policies are assigned to users and apply to the meetings those users org
 
 - [Schedule a meeting in Microsoft Teams (Microsoft Support)](https://support.microsoft.com/office/schedule-a-meeting-in-teams-943507a9-8583-4c58-b5d2-8ec8265e04e5)
 - [Schedule a Microsoft Teams meeting from Outlook (Microsoft Support)](https://support.microsoft.com/en-us/topic/883cc15c-580f-441a-92ea-0992c00a9b0f)
-- [Schedule a meeting in Teams, earlier version (Microsoft Support)](https://eus.prod.support.services.microsoft.com/en-gb/office/schedule-a-meeting-in-teams-8aff907f-7163-4736-8202-a0b4a5504fba)
+- [Schedule a meeting in Teams, second Microsoft Support article](https://support.microsoft.com/en-us/office/schedule-a-meeting-in-teams-8aff907f-7163-4736-8202-a0b4a5504fba)
 - [Meeting policies in Teams, general settings (Microsoft Learn)](https://learn.microsoft.com/en-us/microsoftteams/meeting-policies-in-teams-general)
 - [How do I create a recurring meeting in Microsoft Teams? (Microsoft Q&A)](https://learn.microsoft.com/en-us/answers/questions/2125269/how-do-i-create-a-recurring-meeting-in-microsoft-t)
