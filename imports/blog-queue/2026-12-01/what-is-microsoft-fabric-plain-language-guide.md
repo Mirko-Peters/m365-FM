@@ -22,7 +22,7 @@ faq:
   - q: "Can I try Fabric for free?"
     a: "Microsoft Learn describes a 60-day Fabric trial with an F4 or F64 capacity and up to 1 TB of OneLake storage. The trial is meant for evaluation and testing, not for production or business-critical workloads."
   - q: "Why should Microsoft 365 teams care about Fabric?"
-    a: "Learn says Fabric data can be analyzed and consumed in Excel and shared through Microsoft Teams. It also states that Power BI business owners can access Fabric data, and Fabric data can be used by Microsoft 365 Copilot through a published data agent."
+    a: "Learn says Fabric data can be analyzed in Excel and shared through collaboration tools such as Teams. Power BI is one of the Fabric workloads, and a separate Learn page describes how Fabric data can be used by Microsoft 365 Copilot through a published data agent."
 ---
 
 Microsoft Fabric is a single analytics platform from Microsoft. It brings data integration, data engineering, data warehousing, real-time analytics, data science and Power BI together in one software-as-a-service product. Every part of it stores data in one shared lake called OneLake. For a Microsoft 365 team, the practical meaning is simple: the reports in Power BI, the numbers in Excel and the data behind Copilot answers can all come from the same governed place.
@@ -40,7 +40,7 @@ Learn lists these workloads. Each one serves a role or a task.
 | Workload | What it does, according to Learn |
 |---|---|
 | Power BI | Connect to data sources, build interactive charts and dashboards, share insights |
-| Databases | A transactional database similar to Azure SQL Database, with mirroring into OneLake |
+| Databases | Developer-friendly transactional databases, with mirroring to replicate data into OneLake |
 | Data Factory | Ingest, prepare and transform data, with more than 200 native connectors |
 | Real-Time Intelligence | Analyze data as it arrives, such as sensor readings, logs and clickstreams |
 | Data Engineering | Apache Spark for large datasets, with notebooks and scheduled jobs |
@@ -56,12 +56,11 @@ Most Microsoft 365 teams start with Power BI and stay there. The other workloads
 OneLake is the part that makes Fabric different from a set of separate tools. Learn describes it as a centralized, logical data lake that is included by default, so nothing needs to be provisioned first.
 
 - It is built on Azure Data Lake Storage Gen2.
-- The hierarchy is tenant, then workspaces, then lakehouses. Learn compares workspaces to folders.
-- Each tenant has one OneLake with a single namespace.
+- Each tenant gets a single OneLake. Learn says workspaces work like folders within it, and each workspace can contain multiple lakehouses.
 - Shortcuts give zero-copy access to external sources such as Azure Data Lake Storage, Amazon S3 and Google Cloud Storage.
 - External data sharing lets you share live, governed datasets across Microsoft Entra tenant boundaries without copying data.
 
-Learn compares OneLake to OneDrive: each developer or business unit creates workspaces and puts data into lakehouses, and everything stays discoverable in one place.
+
 
 ## Governance and Copilot
 
@@ -69,12 +68,12 @@ Permissions, sensitivity labels and auditing apply across the platform. Discover
 
 ## Where Microsoft 365 users meet Fabric
 
-The overview page names these touchpoints:
+The overview page names two Microsoft 365 touchpoints, and the data agent page adds a third:
 
-- **Power BI.** Business owners access Fabric data through Power BI reports and dashboards.
-- **Excel.** Data can be analyzed and consumed in Excel.
-- **Microsoft Teams.** Insights can be shared through Teams.
-- **Microsoft 365 Copilot.** A Fabric data agent can be published so that Copilot users ask questions about governed data. The separate Learn page for this requires a paid F2 or higher capacity, and results respect row-level and column-level security.
+- **Excel.** Fabric data can be analyzed in Excel.
+- **Microsoft Teams.** Insights can be shared through collaboration tools such as Teams.
+- **Power BI.** It is itself a Fabric workload, so reports and dashboards are the usual way business users meet Fabric data.
+- **Microsoft 365 Copilot.** The separate Learn page on the data agent says a Fabric data agent can be published so that Copilot users ask questions about governed data. It requires a paid F2 or higher capacity, and results respect row-level and column-level security.
 
 ## What it takes to start
 
