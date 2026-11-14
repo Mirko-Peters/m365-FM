@@ -40,7 +40,7 @@ Spot VMs can be stopped in two situations, according to Learn: Azure needs the c
 - **Deallocate** (the default). The VM moves to the stopped-deallocated state, so you can redeploy it later. There is no guarantee the allocation will succeed. Deallocated VMs count against your quota, and you are charged storage costs for the underlying disks.
 - **Delete.** The evicted VM is deleted together with its underlying disks, so you do not continue to be charged for storage.
 
-To receive a warning inside the VM, opt in to Azure Scheduled Events. Learn says these arrive on a best effort basis up to 30 seconds before the eviction, which is not much time. Design the workload so that it can save state or hand work back within that window, or so that losing it costs little.
+To receive a warning inside the VM, opt in to Azure Scheduled Events. Learn says these arrive on a best effort basis up to 30 seconds before the eviction, which is not much time. My advice, not Learn's: design the workload so that it can save state or hand work back within that window, or so that losing it costs little.
 
 ## Max price: what each setting does
 
