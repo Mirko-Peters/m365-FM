@@ -11,7 +11,7 @@ keypoints:
   - "Office Apps Administrator is the recommended role. Policies apply only to user objects in Microsoft Entra ID, with nested groups up to three levels deep."
   - "Create a policy configuration under Customization, Policy Management, Create, then name, scope and settings. Priority 0 is the highest."
   - "Click-to-Run checks in every 90 minutes for users in an assigned group and every 24 hours otherwise. Policies take effect when the Office app restarts."
-  - "Cloud Policy settings take precedence over Group Policy settings on Windows Server. Volume licensed Click-to-Run versions such as Office LTSC 2021 are not supported."
+  - "Cloud Policy settings take precedence over Group Policy on Windows Server. Volume licensed Click-to-Run Office such as LTSC Professional Plus 2021 is not supported."
 faq:
   - q: "What does Cloud Policy do?"
     a: "It enforces policy settings for Microsoft 365 Apps for enterprise on a user's device, even if the device is not domain joined or otherwise managed. The settings roam to the device when the user signs in. They are available for Windows, macOS, iOS and Android, though not every setting is available for every operating system."
@@ -127,7 +127,7 @@ This is my suggestion, not guidance from the page:
 1. Test a new configuration with a small pilot group first, and plan for the 90 minute check-in plus an app restart before you judge the result.
 2. Name configurations after their purpose and group, so priority conflicts are easy to read later.
 3. Keep priority gaps in mind. Write down why one configuration ranks above another.
-4. If you still use Group Policy for the same settings, decide which one owns each setting. The page says Cloud Policy wins, so a leftover Group Policy value will not show.
+4. If you still use Group Policy for the same settings, decide which one owns each setting. The page says Cloud Policy settings take precedence over Group Policy, so a conflicting Group Policy value is overridden.
 5. Before you promise a setting to a team, check that it exists for their platform. Not every setting is available on every operating system.
 
 ## Related
