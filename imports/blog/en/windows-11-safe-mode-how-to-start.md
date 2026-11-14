@@ -48,11 +48,11 @@ Microsoft's page [Start your PC in safe mode in Windows](https://support.microso
 3. When the blue menu appears, select **Troubleshoot** > **Advanced options** > **Startup Settings** > **Restart**.
 4. On the Startup Settings screen, press the key for the mode you want (see the next section).
 
-On Windows 10, Microsoft names the path **Update & Security** > **Recovery** instead.
+On Windows 10, the Recovery page sits under **Update & Security** instead of **System**.
 
 ### 2. With the Shift key
 
-Hold **Shift** while you select **Power** > **Restart**. Windows restarts into Windows RE, and you continue with Troubleshoot, Advanced options, Startup Settings and Restart. Microsoft's page gives this method without naming a screen. The Power menu is also on the sign-in screen, and many guides use it there when a user can't get to the desktop, but I didn't find Microsoft naming the sign-in screen as a starting point, so treat that as a likely rather than a documented route.
+Hold **Shift** while you select **Power** > **Restart**. Windows restarts into Windows RE, and you continue with Troubleshoot, Advanced options, Startup Settings and Restart. Microsoft's page gives this method without naming a screen. The Power menu is also on the sign-in screen, and many guides use it there when a user can't get to the desktop, but Microsoft's page doesn't name the sign-in screen as a starting point, so treat that as a likely route and not a documented one.
 
 ### 3. When Windows will not start
 
@@ -115,7 +115,7 @@ If rollback isn't available, the same page describes **Uninstall device**: right
 
 ### Remove a recent Windows update
 
-Windows RE has an **Uninstall Updates** option under Advanced options, which Microsoft describes as removing recently installed Windows updates. It lives in the same menu you used to get here, so you can use it without ever reaching the desktop. I didn't open a Microsoft page for the Settings route to uninstall updates, so I'm not giving a path for it here.
+Windows RE has an **Uninstall Updates** option under Advanced options, which Microsoft describes as removing recently installed Windows updates. It lives in the same menu you used to get here, so you can use it without ever reaching the desktop. This article only covers the Windows RE route.
 
 ### Repair system files
 
@@ -130,7 +130,7 @@ If Windows can't start at all, you can run the checks from Windows RE. Microsoft
 
 ### Let Windows try Startup Repair
 
-If the PC won't boot even into safe mode, try **Troubleshoot** > **Advanced options** > **Startup Repair** > **Restart** from Windows RE. Microsoft's Startup Repair page says it scans for startup problems such as missing or damaged system files, corrupted boot configuration data, a damaged master boot record, incompatible drivers and registry errors. If it can't fix the problem, it gives a report. The troubleshooting guide names the log as `%windir%\System32\LogFiles\Srt\Srttrail.txt`.
+If the PC won't boot even into safe mode, try **Troubleshoot** > **Advanced options** > **Startup Repair** > **Restart** from Windows RE. Microsoft's Startup Repair page says it scans for startup problems such as missing or damaged system files, corrupted boot configuration data, a damaged master boot record, incompatible drivers and registry errors. Microsoft's startup troubleshooting guide names the Startup Repair log as `%windir%\System32\LogFiles\Srt\Srttrail.txt`.
 
 ### Use safe mode to find the cause
 
@@ -148,7 +148,7 @@ Restart the device. Microsoft says this should return it to normal mode. If it b
 
 That checkbox is also a way to force safe mode on every start, which some people use for repeated tests. The same checkbox then keeps you there until you clear it, which explains many "I'm stuck in safe mode" reports. The sub-options under Safe boot in that dialog, such as Minimal and Network, are not described on the Microsoft pages I opened, so I'm not explaining them here.
 
-If msconfig can't be reached, Microsoft's article on a machine that keeps booting into safe mode gives a command for an administrator Command Prompt: `bcdedit /deletevalue {default} safeboot`. Read the caveat. That article is written for Windows Server and the older versions it names, not for Windows 11, so I can't confirm it from Microsoft for Windows 11. Microsoft's page on BCDEdit also warns that changing some boot options can make a computer inoperable, and suggests msconfig as the alternative. Try msconfig first, and use bcdedit only when you've no other way in.
+If msconfig can't be reached, Microsoft's article on a machine that keeps booting into safe mode gives a command for an administrator Command Prompt: `bcdedit /deletevalue {default} safeboot`. Read the caveat. That article is written for Windows Server and the older versions it names, not for Windows 11, so I can't confirm it from Microsoft for Windows 11. Changing boot options with bcdedit can leave a PC unable to start if you get it wrong, so try msconfig first and use bcdedit only when you've no other way in.
 
 ## Safe mode or a clean boot?
 
@@ -187,3 +187,13 @@ A few notes from the Microsoft pages that matter at scale:
 ## Next step
 
 Before you need it, write down where your BitLocker recovery key is and try the Settings route to Startup Settings once, then press Enter to boot normally. That way you know what the screens look like. When trouble comes, start with plain Safe Mode, change one thing, and restart to test.
+
+## Sources
+
+- [Start your PC in safe mode in Windows (Microsoft Support)](https://support.microsoft.com/windows/start-your-pc-in-safe-mode-in-windows-92c27cff-db89-8644-1ce4-b3e5e56fe234)
+- [Windows startup settings (Microsoft Support)](https://support.microsoft.com/windows/experience/startup-boot/windows-startup-settings)
+- [Windows recovery environment (Microsoft Support)](https://support.microsoft.com/windows/experience/backup-recovery/windows-recovery-environment)
+- [How to perform a clean boot in Windows (Microsoft Support)](https://support.microsoft.com/windows/experience/startup-boot/how-to-perform-a-clean-boot-in-windows)
+- [Windows startup issues troubleshooting (Microsoft Learn)](https://learn.microsoft.com/troubleshoot/windows-client/performance/windows-boot-issues-troubleshooting)
+- [Can't boot into normal mode and machine keeps booting into safe mode (Microsoft Learn)](https://learn.microsoft.com/troubleshoot/windows-server/performance/cannot-boot-into-normal-mode)
+- [Startup Repair (Microsoft Support)](https://support.microsoft.com/windows/experience/startup-boot/startup-repair)
