@@ -7,14 +7,14 @@ author: mirko-p
 date: 2026-12-07
 topics: [copilot-studio, custom-connectors, on-behalf-of-flow]
 keypoints:
-  - "OBO lets an agent call a service as the signed-in user. The agent asks for consent once, then accesses the service transparently."
+  - "OBO lets an agent call a service as the signed-in user. The agent asks the user for consent, then accesses the service transparently."
   - "The connector needs its own app registration with delegated permissions, admin consent, a client secret and an exposed scope such as access_as_user."
   - "The Azure API Connections service principal (client ID fe053c5f-3692-4f14-aef2-ee34fc081cae) must be an authorized client application, or users sign in every time."
   - "On the connector's Security tab, set OAuth 2.0, Microsoft Entra ID and Enable on-behalf-of login to true, then copy the Redirect URL into the app registration."
   - "Share the connector with makers as Can edit and with end users as Can view."
 faq:
   - q: "What does on-behalf-of authentication change for the user?"
-    a: "According to Microsoft Learn, the agent prompts the user once to grant permission to get a token on the user's behalf. The user can allow or deny. After consent, the agent can access the service transparently for that user."
+    a: "According to Microsoft Learn, the agent prompts the user to grant permission to get a token on the user's behalf. The user can allow or deny. After consent, the agent can access the service transparently for that user."
   - q: "Do I need two app registrations?"
     a: "Only if the connector calls a custom API or MCP server. Microsoft Learn marks the service app registration as optional and says to skip it when the connector only calls Microsoft services such as Microsoft Graph. The connector app registration is always needed."
   - q: "Why must I choose delegated permissions?"
@@ -25,7 +25,7 @@ faq:
     a: "No. The OBO article has no separate Copilot Studio configuration section. Once the connector is set up and shared, OBO works in agent conversations. Adding the connector to the agent is covered in the article on connectors as tools."
 ---
 
-On-behalf-of (OBO) authentication for a custom connector in Copilot Studio comes down to four tasks: register an app for the connector, expose a scope and authorize the Azure API Connections service principal, set the connector's Security tab to OAuth 2.0 with Microsoft Entra ID and OBO enabled, and share the connector. Microsoft Learn describes the result as a seamless experience in agent conversations. The agent asks the user for consent once and then accesses the service as that user.
+On-behalf-of (OBO) authentication for a custom connector in Copilot Studio comes down to four tasks: register an app for the connector, expose a scope and authorize the Azure API Connections service principal, set the connector's Security tab to OAuth 2.0 with Microsoft Entra ID and OBO enabled, and share the connector. Microsoft Learn describes the result as a seamless experience in agent conversations. The agent asks the user for consent and, once it is granted, accesses the service as that user.
 
 This guide follows the Learn article "Configure OBO authentication for custom connectors". Where that article is silent, this text says so.
 
@@ -53,7 +53,7 @@ The API must validate tokens issued for this application ID and scope. Learn sta
 1. Create another registration. Choose **Accounts in this organizational directory only (Single tenant)**. Learn says not to add a redirect URI yet.
 2. Open **API permissions** and select **Add a permission**. For a custom API, choose **APIs my organization uses**, find the service app and select its delegated scope. For Microsoft services, choose **Microsoft APIs**, pick the service and select delegated permissions, for example `Files.Read.All` on Microsoft Graph.
 3. Select **Grant admin consent** for the organization.
-4. Open **Certificates & secrets**, create a **New client secret** and copy the **Value** at once. Azure shows it only one time.
+4. Open **Certificates & secrets**, create a **New client secret**, choose an expiration period that fits your organization's security policies, and copy the **Value** at once. Azure shows it only one time.
 5. Open **Expose an API** and add a scope such as `access_as_user`. Set **Who can consent** to **Admins and users** and the state to **Enabled**.
 6. Under **Authorized client applications**, add the Azure API Connections service principal client ID `fe053c5f-3692-4f14-aef2-ee34fc081cae` and select the scope you created.
 
@@ -115,4 +115,4 @@ The OBO article gives no numeric limits or quotas. It also does not describe how
 ## Sources
 
 - [Configure OBO authentication for custom connectors (Microsoft Learn)](https://learn.microsoft.com/en-us/microsoft-copilot-studio/advanced-custom-connector-on-behalf-of)
-- [Use Power Platform connectors as tools in Copilot Studio agents (Microsoft Learn)](https://learn.microsoft.com/en-us/microsoft-copilot-studio/advanced-connectors)
+- [Use connectors in Copilot Studio agents (Microsoft Learn)](https://learn.microsoft.com/en-us/microsoft-copilot-studio/advanced-connectors)
