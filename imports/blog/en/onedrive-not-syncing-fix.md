@@ -24,7 +24,7 @@ When [OneDrive](https://www.m365.fm/entity/onedrive/) isn't syncing, look at the
 
 ## Read the icon before you change anything
 
-Microsoft's page [What do the OneDrive icons mean?](https://support.microsoft.com/en-us/onedrive/what-do-the-onedrive-icons-mean) describes the states. These are the ones that matter for a stuck sync:
+Microsoft's page [What do the OneDrive icons mean?](https://support.microsoft.com/onedrive/what-do-the-onedrive-icons-mean) describes the states. These are the ones that matter for a stuck sync:
 
 - **Cloud with a paused symbol.** Files aren't syncing. Select the icon and choose **Resume syncing**.
 - **Cloud with a gray line through it.** You're not signed in, or setup isn't finished. Press the Windows key, search for OneDrive and open the desktop app. If you see "You're already syncing a personal OneDrive on this computer," unlink and link your account again.
@@ -48,7 +48,7 @@ If you have both a personal OneDrive and one for work or school, they pause and 
 
 ## "Processing changes" that never ends
 
-The page [Troubleshoot OneDrive sync issues: stuck on Processing changes](https://support.microsoft.com/en-us/onedrive/troubleshoot-onedrive-sync-issues-stuck-on-processing-changes) lists the causes and what to do:
+The page [Troubleshoot OneDrive sync issues: stuck on Processing changes](https://support.microsoft.com/onedrive/troubleshoot-onedrive-sync-issues-stuck-on-processing-changes) lists the causes and what to do:
 
 - **A OneDrive file is open.** Close it after you finish editing.
 - **Many files were added.** No action is needed. OneDrive uploads everything, which takes longer on a slow connection.
@@ -71,11 +71,11 @@ Two cautions from the page: moving, renaming or deleting a file may stop it from
 
 ## "This file can't be synced"
 
-The red cross usually comes with this message. Microsoft's page [OneDrive shows "This file can't be synced"](https://support.microsoft.com/en-us/office/onedrive-shows-this-file-can-t-be-synced-54f6e0d2-41d3-496a-826e-964e59333d7e) lists three causes:
+The red cross usually comes with this message. Microsoft's page [OneDrive shows "This file can't be synced"](https://support.microsoft.com/office/onedrive-shows-this-file-can-t-be-synced-54f6e0d2-41d3-496a-826e-964e59333d7e) lists three causes:
 
 1. **Another app is using the file.** Save your work and close the app. OneDrive syncs the file when it's closed.
 2. **OneDrive doesn't have permission to access the file.** In File Explorer, right-click the file, select **Properties**, then the **Security** tab. Select your name under **Groups or user names** and confirm that **Read** and **Write** are checked under **Allow**. If not, select **Edit** and add them.
-3. **The file is stuck in a bad state.** Close OneDrive from the cloud icon. In File Explorer, move the affected file outside your OneDrive folder, for example to the C: drive. Start OneDrive again from the Start menu, wait until it shows **Up to date** and copy the file back.
+3. **Sync is stuck on the file.** Microsoft's section is titled "Move the file out of OneDrive to restart sync." Close OneDrive from the cloud icon. In File Explorer, move the affected file outside your OneDrive folder, for example to the C: drive. Start OneDrive again from the Start menu, wait until it shows **Up to date** and copy the file back.
 
 ## Names, paths and sizes that block sync
 
@@ -94,8 +94,8 @@ For long paths, the fix is to shorten names, reduce the nesting or rename the it
 
 Sometimes the sync works as set up and the surprise is in the setup. Two checks:
 
-- **Choose folders.** In OneDrive **Settings**, **Account**, **Choose folders**: a folder you cleared there is online only and doesn't appear on this PC. You can only select folders that are in your OneDrive, and the settings apply per computer and per account.
-- **Backup of Desktop, Documents and Pictures.** If you stopped backup recently, the files are moved or kept according to what you chose in **Manage backup**. Cloud-only files must be downloaded first and OneNote notebooks can't be moved.
+- **Choose folders.** In OneDrive **Settings**, **Account**, **Choose folders**: a folder you cleared there is online only and doesn't appear on this PC. Microsoft says custom sync settings are unique to each computer and each account.
+- **Backup of Desktop, Documents and Pictures.** When you turn a folder off in the backup settings, OneDrive asks whether to keep the files only in OneDrive or only on the PC. If some files are cloud-only, Microsoft says to download them first with **Always keep on this device**. OneNote notebooks can't be moved to the PC, because they are cloud-based files.
 
 The error "The file or folder already exists on OneDrive" shows up after you deselect a synced folder. Microsoft says you can delete the folder from the PC, because its copy stays online, or move it outside the OneDrive folder, which deletes it from OneDrive.com.
 
@@ -103,12 +103,13 @@ The error "The file or folder already exists on OneDrive" shows up after you des
 
 If these steps didn't help, use the reset. Microsoft states that you won't lose files or data. A reset resets all OneDrive settings, disconnects all sync connections for personal and for work or school accounts, and OneDrive performs a full sync afterward. Use it from a quiet moment, not before a deadline.
 
-1. Press **Windows + R**, enter `%localappdata%\Microsoft\OneDrive\onedrive.exe /reset` and select **OK**.
-2. If Windows says it can't find the file, try `C:\Program Files\Microsoft OneDrive\onedrive.exe /reset`, then `C:\Program Files (x86)\Microsoft OneDrive\onedrive.exe /reset`.
-3. Start OneDrive again: select **Start**, type OneDrive and open the desktop app.
-4. If you used selective sync, choose your folders again after the sync is complete.
+1. Press **Windows + R**, enter `wsreset.exe` and select **OK**. This clears the Microsoft Store cache. Ignore the short Command Prompt window.
+2. Press **Windows + R** again, enter `%localappdata%\Microsoft\OneDrive\onedrive.exe /reset` and select **OK**.
+3. If Windows says it can't find the file, try `C:\Program Files\Microsoft OneDrive\onedrive.exe /reset`, then `C:\Program Files (x86)\Microsoft OneDrive\onedrive.exe /reset`.
+4. Start OneDrive again: select **Start**, type OneDrive and open the desktop app.
+5. If you used selective sync, choose your folders again after the sync is complete.
 
-Microsoft's page [Reset OneDrive](https://support.microsoft.com/en-us/office/reset-onedrive-34701e00-bf7b-42db-b960-84905399050c) also describes resetting the Microsoft Store version of OneDrive. It doesn't say how long a reset takes, so give a large library time.
+Microsoft's page [Reset OneDrive](https://support.microsoft.com/office/reset-onedrive-34701e00-bf7b-42db-b960-84905399050c) also describes resetting the Microsoft Store version of OneDrive (**Start**, enter `apps:onedrive`, **App settings**, **Reset**). It doesn't say how long a reset takes, so give a large library time.
 
 ## Common mistakes
 
@@ -130,3 +131,16 @@ Microsoft's page [Reset OneDrive](https://support.microsoft.com/en-us/office/res
 ## Next step
 
 Open the activity center now, read what OneDrive says about the first stuck file and apply the matching fix from this page. If OneDrive still isn't syncing after you have checked pause, sign-in, open files, names and path length, run the reset once and select your folders again afterward.
+
+## Sources
+
+- [What do the OneDrive icons mean? (Microsoft Support)](https://support.microsoft.com/onedrive/what-do-the-onedrive-icons-mean)
+- [Pause and resume sync in OneDrive (Microsoft Support)](https://support.microsoft.com/office/how-to-pause-and-resume-sync-in-onedrive-2152bfa4-a2a5-4d3a-ace8-92912fb4421e)
+- [Troubleshoot OneDrive sync issues: stuck on Processing changes (Microsoft Support)](https://support.microsoft.com/onedrive/troubleshoot-onedrive-sync-issues-stuck-on-processing-changes)
+- [OneDrive is stuck on Sync pending (Microsoft Support)](https://support.microsoft.com/office/onedrive-is-stuck-on-sync-pending-4aad2094-7cf2-4b04-9451-10f16144376c)
+- [OneDrive shows This file can't be synced (Microsoft Support)](https://support.microsoft.com/office/onedrive-shows-this-file-can-t-be-synced-54f6e0d2-41d3-496a-826e-964e59333d7e)
+- [Restrictions and limitations in OneDrive and SharePoint (Microsoft Support)](https://support.microsoft.com/office/restrictions-and-limitations-in-onedrive-and-sharepoint-64883a5d-228e-48f5-b3d2-eb39e07630fa)
+- [What are the file path length limits? (Microsoft Support)](https://support.microsoft.com/onedrive/what-are-file-path-length-limits)
+- [The file or folder already exists in OneDrive (Microsoft Support)](https://support.microsoft.com/office/the-file-or-folder-already-exists-in-onedrive-7b8044ad-438d-41db-bbbf-4f66b8890408)
+- [What do the OneDrive error codes mean? (Microsoft Support)](https://support.microsoft.com/onedrive/what-do-the-onedrive-error-codes-mean)
+- [Reset OneDrive (Microsoft Support)](https://support.microsoft.com/office/reset-onedrive-34701e00-bf7b-42db-b960-84905399050c)
