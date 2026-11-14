@@ -16,7 +16,7 @@ faq:
   - q: "What does AADSTS70011 mean?"
     a: "The Microsoft Entra reference lists it as InvalidScope, with the text that the scope requested by the app is invalid. The row has no resolution steps, so you have to work out which scope value is wrong from the request itself."
   - q: "Where do I see which scope the app sent?"
-    a: "In the scope query parameter of the request to the authorize or token endpoint. The app sets it in its code or in its authentication library configuration. The sign-in log shows the error code for the failed attempt. The reference row does not describe a log field, so check the app code and the network trace of the sign-in."
+    a: "In the scope query parameter of the request to the authorize or token endpoint. The app sets it in its code or in its authentication library configuration. The reference row does not describe a log field, so check the app code and the network trace of the sign-in."
   - q: "Can I mix .default with a normal permission?"
     a: "No. The Learn scopes page says clients cannot combine static consent (.default) and dynamic consent in a single request, and that a scope value such as https://graph.microsoft.com/.default Mail.Read results in an error because it combines scope types."
   - q: "Which scope should a daemon app request?"
@@ -31,7 +31,7 @@ AADSTS70011 is short and blunt. The Microsoft Entra error reference lists it as 
 
 The row reads: AADSTS70011, InvalidScope. The scope requested by the app is invalid.
 
-That is the whole entry. It means the problem sits in the scope value the application sent, not in the user, the password or the device. The fix is in the app code, its authentication library setup or its app registration.
+That is the whole entry. In my reading, it means the problem sits in the scope value the application sent, not in the user, the password or the device, so the fix is in the app code, its authentication library setup or its app registration.
 
 ## What a valid scope looks like
 
@@ -43,7 +43,7 @@ The Learn scopes page describes how the Microsoft identity platform builds scope
 - The OpenID Connect scopes that are well defined are `openid`, `email`, `profile` and `offline_access`.
 - The `.default` scope refers to a resource without naming permissions. It is built from the identifier URI of the resource, a forward slash and `.default`, for example `https://contoso.com/.default`.
 
-Compare your request to these shapes first. A typo in the resource URI or the permission name is the simplest case, and it is also the case I would check before reading anything else.
+Compare your request to these shapes first. A typo in the resource URI or the permission name is the simplest case, and in my advice it is the case to check before anything else.
 
 ## Checklist
 
@@ -82,7 +82,7 @@ This is my suggestion, not guidance from the reference:
 
 ## What the sources do not cover
 
-The reference row and the scopes page do not list every cause of AADSTS70011, and they do not name a log field for the rejected scope. If the checklist finds nothing, open a support case with the correlation ID and timestamp from the failed sign-in.
+The reference row and the scopes page do not list every cause of AADSTS70011, and they do not name a log field for the rejected scope. If the checklist finds nothing, my advice is to open a support case with the correlation ID and timestamp from the failed sign-in.
 
 ## Related
 
@@ -92,5 +92,5 @@ The reference row and the scopes page do not list every cause of AADSTS70011, an
 
 ## Sources
 
-- [Microsoft Entra authentication and authorization error codes (Microsoft Learn)](https://learn.microsoft.com/entra/identity-platform/reference-error-codes)
+- [Microsoft Entra authentication & authorization error codes (Microsoft Learn)](https://learn.microsoft.com/entra/identity-platform/reference-error-codes)
 - [Scopes and permissions in the Microsoft identity platform (Microsoft Learn)](https://learn.microsoft.com/entra/identity-platform/scopes-oidc)
