@@ -8,7 +8,7 @@ date: 2027-01-25
 topics: [entra-id, active-directory, self-service-password-reset, password-hash-synchronization, password-writeback]
 keypoints:
   - "The reference says the user's Active Directory password has expired. Generate a new password for the user or have the user reset it with the self-service reset tool."
-  - "The code name, InvalidPasswordExpiredOnPremPassword, points to the on-premises password, so the policy that matters is the on-premises password policy."
+  - "The code name, InvalidPasswordExpiredOnPremPassword, refers to the on-premises password. My reading: check the on-premises password policy first."
   - "Entra password policy defaults: no expiration, but tenants created before 2021 have a 90 day value by default. Check it with Get-MgDomain."
   - "By default only passwords of accounts that are not synchronized through Microsoft Entra Connect can be configured to not expire."
   - "Changing DisablePasswordExpiration to None can force users with a LastPasswordChangeDateTime older than 90 days to change the password at next sign-in."
@@ -16,16 +16,16 @@ faq:
   - q: "What does AADSTS50144 mean?"
     a: "The code is InvalidPasswordExpiredOnPremPassword. The Microsoft Entra reference says the user's Active Directory password has expired. It tells you to generate a new password for the user or have the user use the self-service reset tool to reset their password."
   - q: "How does the user fix it?"
-    a: "With self-service password reset, if it is enabled for them, or by getting a new password from an administrator. The reference lists both. The Learn page on password policies adds that password change history applies to password writeback, so the reset path for synchronized users depends on writeback being set up."
+    a: "With self-service password reset, if it is enabled for them, or by getting a new password from an administrator. The reference lists both. The Learn page on password policies adds that password change history applies to password writeback. My reading is that the reset path for synchronized users therefore depends on writeback being set up. The page does not say this directly."
   - q: "Is the Entra password policy the cause?"
-    a: "Not directly. The error name refers to the on-premises password. Learn says the Entra password policy applies to accounts created and managed in Entra ID, and applies to synchronized accounts only if EnforceCloudPasswordPolicyForPasswordSyncedUsers is enabled. Check the on-premises policy first."
+    a: "In my reading, not directly. The error name refers to the on-premises password. Learn says the Entra password policy applies to accounts created and managed in Entra ID, and applies to synchronized accounts only if EnforceCloudPasswordPolicyForPasswordSyncedUsers is enabled. My advice: check the on-premises policy first."
   - q: "How do I see whether a cloud user's password can expire?"
     a: "Connect to Microsoft Graph PowerShell as at least a User Administrator and run Get-MgUser with the PasswordPolicies property for the user, then test whether it contains DisablePasswordExpiration. The Learn page gives the full command for one user and for all users."
   - q: "Can I set all passwords to expire again?"
     a: "Learn warns that passwords set to DisablePasswordExpiration still age based on LastPasswordChangeDateTime. If you change them to PasswordPolicies None, all passwords with a LastPasswordChangeDateTime older than 90 days require a change at the next sign-in. This can affect many users."
 ---
 
-AADSTS50144 is one of the simpler Entra sign-in errors: the user's password has expired, and the password in question is the one in on-premises Active Directory. The Microsoft Entra error reference gives one line on it. This article adds the context from the Learn page on password policies, so you can decide what to do for one user and what to check for many. The reference line covers only the meaning and the two fixes, and the details of policy come from the policy page. My own advice is marked.
+AADSTS50144 means the user's password has expired, and the reference names the Active Directory password. The Microsoft Entra error reference gives one line on it. This article adds the context from the Learn page on password policies, so you can decide what to do for one user and what to check for many. The reference line covers only the meaning and the two fixes, and the details of policy come from the policy page. My own advice is marked.
 
 ## What the reference says
 
@@ -59,13 +59,13 @@ The page adds that password change history applies to password writeback. For cl
 
 1. Confirm in the sign-in log or the error text that the code is AADSTS50144.
 2. Choose the path:
-   - Administrator: set a new password in Active Directory for the user, as the reference says to generate a new password.
-   - User: use the self-service reset tool. For synchronized users this depends on your setup. Learn's policy page mentions password writeback in the context of change history, and the reference does not describe the setup, so check that SSPR and writeback are configured before you point users to it.
+   - Administrator: generate a new password for the user, as the reference says. Doing this in Active Directory is my reading, since that is the expired password.
+   - User: use the self-service reset tool. For synchronized users this depends on your setup. Learn's policy page mentions password writeback in the context of change history, and the reference does not describe the setup, so my advice is to check that SSPR and writeback are configured before you point users to it.
 3. Ask the user to sign in again with the new password.
 
 ## Checks for many users
 
-If many users hit the error at once, think of a policy change or of a date that passes for a whole group. Questions to ask, based on the policy page:
+If many users hit the error at once, my advice is to think of a policy change or of a date that passes for a whole group. Questions to ask, drawing on the policy page:
 
 - Did someone change the on-premises maximum password age, or the Entra setting for synchronized users (`EnforceCloudPasswordPolicyForPasswordSyncedUsers`)?
 - Was a "password never expires" setting removed? Learn warns that accounts with `DisablePasswordExpiration` still age based on `LastPasswordChangeDateTime`. If you change to `PasswordPolicies None`, every password with a `LastPasswordChangeDateTime` older than 90 days requires a change at the next sign-in, which can affect a large number of users.
@@ -92,7 +92,7 @@ These commands read and change the Entra side. For a synchronized user the expir
 
 ## Related behaviors from the page
 
-- By default an account is locked out after 10 unsuccessful sign-in attempts with the wrong password, for one minute at first, and the lockout grows with further wrong attempts. Smart lockout tracks the last three bad password hashes. This can matter if users try old passwords again and again after an expiry.
+- By default an account is locked out after 10 unsuccessful sign-in attempts with the wrong password, for one minute at first, and the lockout grows with further wrong attempts. Smart lockout tracks the last three bad password hashes. This can matter if users try old passwords again and again after an expiry. That link is my reading, not the page's.
 - If a password change meets on-premises rules but not cloud rules, for example because it contains a Unicode character, it can succeed on-premises and fail in the cloud when the cloud policy is enforced. The page describes the user then being prompted again.
 
 ## Prevention (my advice)
@@ -115,5 +115,5 @@ This is my suggestion, not guidance from the page:
 
 ## Sources
 
-- [Microsoft Entra authentication and authorization error codes (Microsoft Learn)](https://learn.microsoft.com/entra/identity-platform/reference-error-codes)
+- [Microsoft Entra authentication & authorization error codes (Microsoft Learn)](https://learn.microsoft.com/entra/identity-platform/reference-error-codes)
 - [Self-service password reset policies (Microsoft Learn)](https://learn.microsoft.com/entra/identity/authentication/concept-sspr-policy)
