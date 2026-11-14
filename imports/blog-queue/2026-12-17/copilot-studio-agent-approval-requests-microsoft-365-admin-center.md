@@ -11,16 +11,16 @@ keypoints:
   - "Admins find the request under Agents > All agents > Requests in the Microsoft 365 admin center and can publish it or reject it."
   - "Requests carry a state: Pending review, Pending update or Pending activate. Until an update is approved, users keep the previous version."
   - "Publishing opens a wizard for audience, an optional preinstall group, a policy template and the permission consent."
-  - "Learn names the AI Admin and Global Admin roles for managing agents and recommends the least privileged role that fits."
+  - "The agents admin guide lists AI Admin, Global Admin and Global Reader (view-only) and recommends the least privileged role. No page read names the role for publishing."
 faq:
   - q: "Where do Copilot Studio agent approval requests appear?"
-    a: "According to Microsoft Learn, an agent published from Copilot Studio to the organization appears in the Requests tab of the All agents list in the Microsoft 365 admin center. The path is Agents > All agents > Requests."
+    a: "Microsoft Learn says an agent published from Copilot Studio is displayed in the Requests tab of the All agents list in the Microsoft 365 admin center. For agents submitted for admin approval, the path is Agents > All agents > Requests."
   - q: "What can an admin do with a requested agent?"
     a: "Microsoft Learn lists two main actions: publish the agent, labeled Publish to store on one page and Publish on another, or reject the submission. A rejected agent gets the status Rejected, stays visible in the Requests list and is not made available to members of the organization."
   - q: "What happens when the maker updates an approved agent?"
     a: "The Microsoft Learn page on agent requests says the update appears with the status Update pending, and users continue to use the previous version until the admin approves it with Update in store. Copilot Studio says a new approval is needed only when the agent details change, not for content updates."
   - q: "Who can approve agents?"
-    a: "The Microsoft Learn agents admin guide lists the AI Admin and Global Admin roles for configuring, managing and deploying agents and recommends the least privileged role needed. The activation process page says the request needs AI admin approval."
+    a: "The Microsoft Learn agents admin guide lists AI Admin, Global Admin and Global Reader (view-only, no edit) for configuring, managing and deploying agents, and recommends the least privileged role needed. The activation page says activation requests need AI admin approval. The pages read do not name a specific role for publishing a requested agent, so verify that in your tenant."
   - q: "Can users request third-party agents through this workflow?"
     a: "No. Microsoft Learn states that the request and approval workflow for blocked agents supports only Microsoft-built agents. Users cannot request third-party agents in the admin center, and administrators, including Global Administrators, cannot approve access to them there."
 ---
@@ -49,7 +49,7 @@ Learn adds several points for makers:
 - Remove the agent from the **Built with Power Platform** section first, or it may show up in two places.
 - After submission, do not change the agent's access setting to less than everyone in the organization. Otherwise users cannot chat with the agent after installing it.
 - A new approval is needed only if agent details such as icon or description change. Content updates can be published without a new approval.
-- The status changes to **Approved** after the admin acts, and the maker can refresh the status.
+- After the admin approves, the status changes to **Approved**. Until then the maker can check the status with **Refresh**.
 
 ## Step 2: The admin reviews the request
 
@@ -59,7 +59,7 @@ Learn adds several points for makers:
 
 Learn lists three request states: **Pending review**, **Pending update** and **Pending activate**. You can filter the list by state and by channel, such as Microsoft Teams, Copilot, Outlook, Word, Excel or PowerPoint. If expected agents are missing, check for a filter that is still set.
 
-The pages read for this article use different labels for the same step. One refers to the **Data & tools** tab, another to the **Available** tab and a third to the **Details** tab, and the publish action appears as **Publish** or **Publish to store**. Use whichever your tenant shows.
+The pages read for this article use different labels for the same step. The Copilot Studio page refers to the **Data & tools** tab, the agent requests page to the **Available** tab, and the publish action appears as **Publish** or **Publish to store**. Learn does not explain the difference, so use whichever your tenant shows.
 
 ## Step 3: Publish or reject
 
@@ -71,19 +71,21 @@ Choose **Publish to store** to start the publishing wizard. The steps Learn list
 4. In **Review permissions**, review what the agent requests and grant admin consent if appropriate.
 5. Review the settings and select **Publish**.
 
+The Copilot Studio page describes the scope choice more briefly: everyone, no one or specific users or groups.
+
 Once published, the agent is part of the agent inventory, and the selected members can find it in Microsoft Copilot. If the maker deployed it to Teams, members can reach it there too. Learn notes that the maker also governs whether visibility is tenant-wide or limited.
 
 To reject, select the action next to the agent name, or use the ellipsis and **Reject submission**. The status becomes **Rejected**, the agent is not published, and you can still see its metadata for reconsideration or audit.
 
 ## Step 4: Handle updates and activation
 
-When a developer publishes an update to an approved agent, the update shows as **Update pending**. Users keep the previous version until you select **Update in store**.
+When a developer publishes an update to an approved agent, the update shows as **Update pending**. Users keep the previous version until you select **Update in store**. Learn says the update appears in the **Pending approval** list, while the rest of that page calls the list **Requests**. I read both as the same list.
 
-Activation is a related governance step. When a user asks to activate an agent so they can create instances, the request needs AI admin approval. The admin reviews the same details, scopes the audience, applies a template and reviews permissions. The default template provides controls from Microsoft Entra, Microsoft Purview and SharePoint and assigns the license automatically. Learn notes that AI Administrators are not authorized to configure Conditional Access policies or Microsoft Entra access package policies. Those actions need a highly privileged role.
+Activation is a related governance step. When a user asks to activate an agent so they can create instances, the request needs AI admin approval. The admin reviews the same details, scopes the audience, applies a template and reviews permissions. The default template provides controls from Microsoft Entra, Microsoft Purview and SharePoint and assigns the license automatically. The policy table on the same page also lists Microsoft Defender entries. Learn notes that AI Administrators are not authorized to configure Conditional Access policies or Microsoft Entra access package policies. Those actions need a highly privileged role.
 
 ## Roles
 
-The agents admin guide lists the **AI Admin** and **Global Admin** roles for configuring, managing and deploying agents. It recommends the least privileged role for the task, because Global Admin has more permissions than many tasks need.
+The agents admin guide lists **AI Admin**, **Global Admin** and **Global Reader** (view-only, no edit) for configuring, managing and deploying agents. It recommends the least privileged role for the task, because Global Admin has more permissions than many tasks need. The page does not say which role can publish or reject a requested agent. Only the activation page names AI admin approval, and only for activation.
 
 ## Related admin actions
 
@@ -101,7 +103,7 @@ Teams-side approval has its own place. The Copilot Studio page says admins manag
 
 ## What the sources do not say
 
-The pages read for this article do not describe notification emails sent to makers or admins, and they do not state a time limit for review. They also do not explain how the Requests list in the Microsoft 365 admin center and the Teams admin center approval relate when both apply, so test one agent end to end before you rely on a process.
+The pages read for this article do not describe notification emails sent to makers or admins (the activation page only says the requester is notified), and they do not state a time limit for review. They also do not explain how the Requests list in the Microsoft 365 admin center and the Teams admin center approval relate when both apply, so test one agent end to end before you rely on a process.
 
 ## Related
 
@@ -112,8 +114,8 @@ The pages read for this article do not describe notification emails sent to make
 
 ## Sources
 
-- [Agent requests in the Microsoft 365 admin center](https://learn.microsoft.com/en-us/microsoft-365/admin/manage/agent-requests?view=o365-worldwide)
+- [Agent Requests in Microsoft 365 Admin Center](https://learn.microsoft.com/en-us/microsoft-365/admin/manage/agent-requests?view=o365-worldwide)
 - [Manage requested Copilot Studio agents](https://learn.microsoft.com/en-us/microsoft-365/copilot/agent-essentials/agent-lifecycle/agent-copilot-studio-requested)
-- [Governance and lifecycle actions for agents](https://learn.microsoft.com/en-us/microsoft-365/admin/manage/agent-actions?view=o365-worldwide)
+- [Governance and Lifecycle actions for agents available in Microsoft 365 admin center](https://learn.microsoft.com/en-us/microsoft-365/admin/manage/agent-actions?view=o365-worldwide)
 - [Agents admin guide for Microsoft 365](https://learn.microsoft.com/en-us/microsoft-365/copilot/agent-essentials/m365-agents-admin-guide)
 - [Connect and configure an agent for Teams and Microsoft 365 Copilot](https://learn.microsoft.com/en-us/microsoft-copilot-studio/publication-add-bot-to-microsoft-teams)
