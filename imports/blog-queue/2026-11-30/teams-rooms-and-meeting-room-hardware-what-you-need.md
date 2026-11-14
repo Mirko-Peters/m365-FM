@@ -18,7 +18,7 @@ faq:
   - q: "Do I need a license for every meeting room?"
     a: "Yes. According to Microsoft Learn, each meeting room needs a Teams Rooms license, either Basic or Pro. Enterprise per-user Microsoft 365 suite licenses are not authorized on shared meeting devices."
   - q: "What is the difference between Teams Rooms Basic and Pro?"
-    a: "Basic is free, limited to 25 licenses and covers scheduling, joining, content sharing and basic management. Pro is paid, has no cap and adds features such as meeting chat, multi-camera support, Phone System and Conditional Access, per Microsoft Learn."
+    a: "Basic is free, limited to 25 licenses and covers joining meetings, content sharing, calls, a whiteboard and basic security. Pro is paid, has no cap and adds features such as meeting chat, multi-camera support, Phone System and Conditional Access, per Microsoft Learn."
   - q: "Can I buy any camera or speaker for a Teams Rooms system?"
     a: "Microsoft maintains lists of certified systems and peripherals. Its certification program tests audio and video quality, user interface, device management and security, and only devices that pass receive the Certified for Microsoft Teams designation."
   - q: "What does a Teams panel do?"
@@ -75,7 +75,7 @@ Each meeting room needs a Teams Rooms license. Microsoft Learn describes two:
 | Devices covered | Teams Rooms systems only, not Teams panels | Teams Rooms systems and Teams panels |
 | Purchase | Microsoft 365 admin center only | Admin center or other sales channels |
 
-**Basic** includes scheduling, joining meetings, content sharing, collaborative whiteboarding and basic security and management. It is the default for organizations that buy a certified system, and systems beyond 25 need Pro.
+**Basic** includes joining meetings by one touch, proximity or meeting ID, starting ad hoc meetings, sharing and viewing Teams content, calls, a whiteboard, system-level security such as Secure Boot and Assigned Access mode, Pro Management Portal enrollment and inventory, and automatic software updates. It is the default for organizations that buy a certified system, and systems beyond 25 need Pro.
 
 **Pro** adds, among others: meeting chat, front row, large gallery (up to 50 videos), dual screen support, Microsoft 365 Phone System, end-to-end call encryption, speaker identification, multi-camera support, AI noise suppression, people counting, Microsoft Entra Conditional Access policies and richer device management such as remote configuration, device history and ITSM integration.
 
