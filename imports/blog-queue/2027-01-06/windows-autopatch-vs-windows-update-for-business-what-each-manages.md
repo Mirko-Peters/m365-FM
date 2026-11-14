@@ -25,7 +25,7 @@ faq:
     a: "Once a device is registered, you manage the service through the Microsoft Intune admin center."
 ---
 
-Learn describes Windows Autopatch as a managed service that automates updates for Windows, Microsoft 365 Apps for enterprise, Edge and Teams across registered devices. Windows Update for Business is the update management layer that Intune policies target. The Autopatch overview does not compare the two or even name Windows Update for Business, so this guide sticks to what Autopatch does and marks the rest as open.
+Learn describes Windows Autopatch as a managed service that automates updates for Windows, Microsoft 365 Apps for enterprise, Edge and Teams across registered devices. The Autopatch overview does not compare it with Windows Update for Business or even name that product, so this guide sticks to what Autopatch does and marks the rest as open.
 
 ## What Autopatch is
 
@@ -49,9 +49,9 @@ Other items listed: update rings for Windows 10 and later, Autopatch groups (log
 - **Business Premium, A3+, E3+ and F3:** the main feature set.
 - **E3+ and F3 only:** submitting support requests with the Windows Autopatch Service Engineering Team.
 
-Learn adds a note that in April 2025 Windows Autopatch removed feature activation and made its features available to Business Premium and A3+ licenses, rolling out over several weeks. If your experience differs from the documentation, you may not have received the changes yet.
+Learn adds a note that in April 2025 Windows Autopatch removed feature activation and made its features available to Business Premium and A3+ licenses, rolling out over several weeks. If your experience differs from the documentation, you may not have received the changes yet. That note dates from April 2025 and speaks of several weeks, so it is probably outdated today, and the page gives no end date for the rollout.
 
-## How Autopatch is meant to differ from doing it yourself
+## Benefits the page claims
 
 The page makes no direct comparison with managing updates on your own. It claims these benefits:
 
@@ -72,13 +72,13 @@ The page makes no direct comparison with managing updates on your own. It claims
 ## Caveats
 
 - Coverage figures are aims, not guarantees.
-- Feature access depends on license tier and on whether the April 2025 changes reached your tenant.
+- Feature access depends on license tier. The page's April 2025 rollout note is old and gives no end date.
 - Support requests are limited to E3+ and F3.
 - Service announcements go to the Message center in the Microsoft 365 admin center.
 
-## A decision aid
+## A decision aid (my advice)
 
-The questions below are practical advice, not a Microsoft decision table.
+The questions below are my own suggestion, not a Microsoft decision table.
 
 | Question | If yes |
 | --- | --- |
@@ -87,7 +87,7 @@ The questions below are practical advice, not a Microsoft decision table.
 | Are your devices outside the license tiers listed? | Check feature entitlement first |
 | Do you need support requests with the Service Engineering Team? | You need E3+ or F3 |
 
-## Typical mistakes
+## Typical mistakes (my advice)
 
 - Treating the 95% and 90% aims as service-level guarantees.
 - Assuming your tenant already has the April 2025 licensing changes.
@@ -102,4 +102,4 @@ The questions below are practical advice, not a Microsoft decision table.
 
 ## Sources
 
-- [What is Windows Autopatch (Microsoft Learn)](https://learn.microsoft.com/windows/deployment/windows-autopatch/overview/windows-autopatch-overview)
+- [What is Windows Autopatch? (Microsoft Learn)](https://learn.microsoft.com/windows/deployment/windows-autopatch/overview/windows-autopatch-overview)
