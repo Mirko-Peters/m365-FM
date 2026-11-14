@@ -18,7 +18,7 @@ faq:
   - q: "How do I check the status?"
     a: "In Exchange Online PowerShell run Get-AdminAuditLogConfig piped to Format-List UnifiedAuditLogIngestionEnabled. True means auditing is on and False means it is not. Learn warns to run it in Exchange Online PowerShell, because in Security and Compliance PowerShell the property is always False, even when auditing is on."
   - q: "What permission do I need?"
-    a: "The Audit Logs role in Exchange Online. By default the Compliance Management and Organization Management role groups on the Permissions page in the Exchange admin center have it. Only a global admin turns auditing off, as the page words it."
+    a: "The Audit Logs role in Exchange Online. By default the Compliance Management and Organization Management role groups on the Permissions page in the Exchange admin center have it. The page says a global admin can turn auditing off."
   - q: "How long until I can search?"
     a: "Enabling can take up to 60 minutes to take effect, and Learn says audit events might take several hours after you turn auditing on before they become searchable in the audit log."
   - q: "What happens if I turn auditing off?"
@@ -75,7 +75,7 @@ A message says enabling auditing might take up to 60 minutes to take effect.
 
 ## Step 3: Check again
 
-After a while, run the command from step 1 again. The value should be `True`. In the portal, the banner on the **Audit** page no longer appears.
+After a while, run the command from step 1 again. The value should be `True`. In the portal, the banner on the **Audit** page should no longer appear. This check is my addition. The page describes the same two checks for turning auditing off, in reverse.
 
 ## Turn auditing off
 
