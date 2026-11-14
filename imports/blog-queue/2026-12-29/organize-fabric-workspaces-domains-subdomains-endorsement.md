@@ -9,7 +9,7 @@ topics: [fabric-domains, fabric]
 keypoints:
   - "A domain groups an organization's data by business area, and workspaces assigned to it pass the domain to their items as metadata. Domains do not change item visibility or permissions."
   - "Roles are Fabric admin, domain admin and domain contributor. Domain admins cannot delete a domain, change its name or add other domain admins."
-  - "Create a domain under OneLake catalog, Govern, Domains, Create new domain. Subdomains inherit the parent's domain admins and currently have general settings only."
+  - "Create a domain as a Fabric admin in the admin portal under Domains, Create new domain. Subdomains inherit the parent's domain admins and currently have general settings only."
   - "Assign workspaces by name, by workspace admin or by capacity. Admin and capacity assignment exclude My workspaces and affect only existing workspaces."
   - "Certification settings and a default sensitivity label can be delegated to the domain level, so each business unit sets its own rules."
 faq:
@@ -43,7 +43,7 @@ To assign a workspace, a contributor must hold the Admin role in it.
 
 ## Create a domain and subdomain
 
-1. Sign in to Fabric, open the **OneLake catalog** and select **Govern**, **Domains**.
+1. As a Fabric admin, open the admin portal and select the **Domains** tab.
 2. Select **Create new domain**, enter a name and optionally domain admins, and select **Create**.
 3. To add a subdomain, open the domain, select **New subdomain**, name it and select **Create**. Fabric admins or domain admins can do this.
 
@@ -78,11 +78,11 @@ Creating, editing or deleting a domain is recorded in the Fabric audit log and a
 
 ## A starting structure
 
-This is a suggestion, not Microsoft guidance. Start with a few domains that match business owners, assign workspaces by name where naming conventions exist, and add subdomains only when a team needs a separate grouping. Check the contributor setting early, because the default lets everyone assign workspaces.
+This is a suggestion, not Microsoft guidance. Start with a few domains that match business owners, assign workspaces by name where naming conventions exist, and add subdomains only when a team needs a separate grouping. Check the contributor setting early, because the default lets everyone in the organization who is a workspace admin assign their workspaces.
 
 ## What a domain is used for
 
-The page describes domains as a way to support a data mesh style of governance, where business areas own their data. In practice, domain metadata is used to filter content in the OneLake catalog, so a user can look at the items of one business area. Because every tenant user can see all domains, a domain name should be understandable outside the team that owns it.
+The page describes domains as a way to support a data mesh style of governance, where business areas own their data. In practice, domain metadata is used to filter content in the OneLake catalog, so a user can look at the items of one business area. My advice: because every tenant user can see all domains, a domain name should be understandable outside the team that owns it.
 
 ## Checks after setup
 
@@ -99,4 +99,4 @@ The page does not describe endorsement in detail beyond certification, and it li
 
 ## Sources
 
-- [Fabric domains](https://learn.microsoft.com/fabric/governance/domains)
+- [Domains (Microsoft Learn)](https://learn.microsoft.com/fabric/governance/domains)
