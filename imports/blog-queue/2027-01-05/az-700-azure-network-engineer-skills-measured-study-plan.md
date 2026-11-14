@@ -18,7 +18,7 @@ faq:
   - q: "What score do I need?"
     a: "The study guide says a score of 700 or greater is required to pass."
   - q: "What changed in the latest update?"
-    a: "Three minor changes: IP addressing for Azure resources, Monitor networks, and network security groups. The audience profile and the other areas are unchanged."
+    a: "Three minor changes: IP addressing for Azure resources, Monitor networks, and network security groups. The audience profile and the two top-level areas shown in the table are marked no change, and the table lists no other areas."
   - q: "Is the exam retiring?"
     a: "The study guide contains no retirement notice. It says the legacy Practice Assessment is no longer updated and recommends the new one on AI Skills Navigator."
   - q: "Does this article include exam questions?"
@@ -31,7 +31,7 @@ AZ-700 puts the most weight on core networking (25-30%). Connectivity services c
 
 The study guide says a score of 700 or greater is required to pass. Most questions cover generally available features, though preview features may appear if commonly used. English is updated first and localized versions follow about eight weeks later. If the exam is not offered in your preferred language, you can request an additional 30 minutes.
 
-The audience is an Azure network engineer with expertise in planning, implementing and managing Azure networking across core network infrastructure, hybrid connectivity, application delivery, private access to Azure services and network security. Candidates should have experience with Azure compute, storage and networking, and understand name resolution, network protocols and network address management.
+The audience is an Azure network engineer with expertise in planning, implementing and managing Azure networking across core network infrastructure, hybrid connectivity, application delivery, private access to Azure services and network security. Responsibilities include optimizing performance, resiliency, scale and security, proactively monitoring networks and resolving connectivity issues. You work with solution architects, cloud administrators, security engineers, application developers and DevOps engineers. Candidates should have experience with Azure compute, storage and networking, and understand name resolution, network protocols and network address management.
 
 ## Skill areas and weights
 
@@ -76,7 +76,7 @@ The audience is an Azure network engineer with expertise in planning, implementi
 
 ## What changed on 27 July 2026
 
-Three minor changes: Design and implement IP addressing for Azure resources, Monitor networks, and implement and manage network security groups. The audience profile and all other areas are unchanged.
+Three minor changes: Design and implement IP addressing for Azure resources, Monitor networks, and implement and manage network security groups. The audience profile and the top-level groups core networking and network security are marked no change, and the table lists no other areas. The page does not say which wording changed.
 
 ## A study plan from the weights
 
