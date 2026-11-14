@@ -8,7 +8,7 @@ date: 2026-12-12
 topics: [onedrive, intune, microsoft-365]
 keypoints:
   - "Create a Windows 10 and later settings catalog profile, add settings from the OneDrive category and enable Silently move Windows known folders to OneDrive with your tenant ID."
-  - "Silent sign-in with Windows credentials is the prerequisite for a prompt-free experience on Microsoft Entra joined PCs."
+  - "Silent sign-in with Windows credentials works on Microsoft Entra joined PCs. Learn recommends it but does not call it a prerequisite for the silent move."
   - "Microsoft recommends limiting silent deployment to existing devices to 1,000 devices a day and no more than 4,000 a week."
   - "Pair the silent policy with the prompt policy, so users are asked to fix errors if the silent move fails."
   - "Known Folder Move policies do not work when Documents, Pictures or Desktop are redirected by Windows Folder Redirection to a non-OneDrive location."
@@ -31,9 +31,9 @@ Microsoft describes the policy as one that redirects and moves the Documents, Pi
 
 Once a folder has been moved, the policy does not touch it again, even if you later change the folder selection. By default all three folders move. To select folders, set any combination of the Desktop, Documents and Pictures sub-settings.
 
-## Prerequisite: silent sign-in
+## Silent sign-in (a practical prerequisite, my own inference)
 
-A silent move needs a signed-in sync app. Microsoft's setting Silently sign in users to the OneDrive sync app with their Windows credentials works for computers joined to Microsoft Entra ID. When enabled, users who are signed in on such a PC can set up the sync app without entering credentials. The registry value behind it is `SilentAccountConfig`. Microsoft notes that the Microsoft Authentication Library is enabled automatically when the sync user is provisioned this way.
+A silent move practically needs a signed-in sync app. That is my own inference, because the Learn pages read do not name it as a prerequisite. Microsoft's setting Silently sign in users to the OneDrive sync app with their Windows credentials works for computers joined to Microsoft Entra ID. When enabled, users who are signed in on such a PC can set up the sync app without entering credentials. They still see OneDrive Setup, where they can select folders to sync and change the location of their OneDrive folder. The registry value behind it is `SilentAccountConfig`. Microsoft notes that the Microsoft Authentication Library is enabled automatically when the sync user is provisioned this way.
 
 ## Create the Intune profile
 
@@ -78,7 +78,7 @@ These items from Microsoft's documentation commonly explain why folders stay put
 - **Windows Folder Redirection.** Known Folder Move policies do not work if Documents, Pictures or Desktop were redirected to a location other than OneDrive. Music and Videos are unaffected. Microsoft's steps depend on where the folders point:
   - Pointing at OneDrive: disable Folder Redirection, leave the contents on OneDrive, then enable Known Folder Move.
   - Pointing at the local PC: disable Folder Redirection, leave the contents in place, then enable Known Folder Move.
-  - Pointing at a network share: use Migration Manager to copy the contents into the user's OneDrive, disable Folder Redirection, then enable Known Folder Move.
+  - Pointing at a network share: use Migration Manager to copy the contents into the user's OneDrive, disable Folder Redirection, then enable Known Folder Move. Learn says all contents must go into the existing Documents, Pictures or Desktop folders, and if Migration Manager creates those folders, **Preserve file share permissions** must not be selected.
 - **Folders already redirected to another organization.** Redirecting to your organization's OneDrive creates new folders and the user sees empty folders. Files must be migrated manually. Microsoft advises disabling the other redirect first if possible.
 - **SharePoint Server.** Known Folder Move does not work for users syncing OneDrive files in SharePoint Server.
 
@@ -86,7 +86,7 @@ The pages read do not state a minimum OneDrive or Windows build. Microsoft only 
 
 ## After deployment
 
-Users can still see the settings in the sync app under the **Backup** tab and **Manage backup**, unless you block that with the policy that prevents users from turning off Known Folder Move. If a folder protection problem blocks a move, Microsoft points to its Fix problems with folder protection article.
+Learn notes that users can direct their known folders in the sync app settings under the **Backup** tab and **Manage backup**. The policy that prevents users from moving known folders disables the Manage backup command (it has no effect if the prompt or silent policy is enabled), and the policy that prevents users from turning off Known Folder Move disables the **Stop protecting** button. If a folder protection problem blocks a move, Microsoft points to its Fix problems with folder protection article.
 
 ## Related
 
@@ -98,4 +98,4 @@ Users can still see the settings in the sync app under the **Backup** tab and **
 
 - [Microsoft Learn: Redirect and move Windows known folders to OneDrive](https://learn.microsoft.com/en-us/sharepoint/redirect-known-folders)
 - [Microsoft Learn: Use OneDrive policies to control sync settings](https://learn.microsoft.com/en-us/sharepoint/use-group-policy)
-- [Microsoft Learn: Configure OneDrive sync app settings with Intune](https://learn.microsoft.com/en-us/sharepoint/configure-sync-intune)
+- [Microsoft Learn: Configure settings with Intune](https://learn.microsoft.com/en-us/sharepoint/configure-sync-intune)
