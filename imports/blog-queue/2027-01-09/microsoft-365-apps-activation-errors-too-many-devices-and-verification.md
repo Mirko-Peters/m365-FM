@@ -11,7 +11,7 @@ keypoints:
   - "The activation limits page is archived content, last updated 2025-02-11. Other options are only linked from it."
   - "For shared computer activation, check File > Account > About, the SharedComputerLicensing registry value and the licensing text files."
   - "The shared computer page lists messages for unlicensed product, unverified license and expiring shared license, each with a short action."
-  - "The Queue overview page could not be read. The exact phrase subscription cannot be verified is not on the pages read."
+  - "The Learn overview page on licensing and activation was not read. The exact phrase subscription cannot be verified is not on the pages read."
 faq:
   - q: "Why do I get an activation limit error?"
     a: "Microsoft Learn says you can install on up to 5 devices per license. If the limit is reached, remove devices you no longer use, then try again."
@@ -25,7 +25,7 @@ faq:
     a: "The shared computer page says to sign in to obtain a new token. It lists the message among several shared computer activation messages."
 ---
 
-Two groups of problems show up often when Microsoft 365 Apps will not activate: a user has reached the device limit, or a shared computer cannot get or verify its license. This guide follows two Microsoft Learn pages: the activation limits page and the troubleshooting page for shared computer activation. The intended overview page on licensing and activation could not be read, so this guide does not cover it.
+Two groups of problems show up often when Microsoft 365 Apps will not activate: a user has reached the device limit, or a shared computer cannot get or verify its license. This guide follows two Microsoft Learn pages: the activation limits page and the troubleshooting page for shared computer activation. The Learn overview page on licensing and activation, which the activation limits page links to, was not read, so this guide does not cover it.
 
 ## Too many devices
 
@@ -63,9 +63,9 @@ Shared computer activation needs a plan that supports it. To check on a device:
 - The limit for the given period in the too many computers message.
 - A full list of plans that support shared computer activation.
 
-## A troubleshooting order
+## A troubleshooting order (my advice)
 
-This order is practical advice built on the pages.
+This order is my own advice, built on the pages.
 
 1. Read the exact message.
 2. For a device limit message, remove unused devices and retry.
@@ -73,7 +73,7 @@ This order is practical advice built on the pages.
 4. Confirm the license assignment for the user.
 5. Sign in again to obtain a new token.
 
-## Typical mistakes
+## Typical mistakes (my advice)
 
 - Reinstalling Office when the problem is the device limit.
 - Treating an archived page as current without a check.
@@ -93,13 +93,13 @@ This order is practical advice built on the pages.
 
 ## Why the source situation matters
 
-The overview page named in the queue for this topic could not be read. The activation limits page is archived and may not reflect the current product. The shared computer page is a troubleshooting page for one scenario. Together they cover the device limit and shared computer messages, but not every activation error. If your error text is not in the table above, search for the exact message on Microsoft Learn before you act.
+The Learn overview page on licensing and activation, which the activation limits page links to, was not read. The activation limits page is archived and may not reflect the current product. The shared computer page is a troubleshooting page for one scenario. Together they cover the device limit and shared computer messages, but not every activation error. If your error text is not in the table above, search for the exact message on Microsoft Learn before you act.
 
 ## Reading the shared computer files
 
-The page tells you where the licensing text files are stored. It does not describe their contents in detail. Use them as evidence when you work with support, and do not edit them.
+The page tells you where the licensing text files are stored. It does not describe their contents in detail. Learn says not to change these files. My advice: use them as evidence when you work with support.
 
-## Admin and user paths
+## Admin and user paths (my advice)
 
 Users can fix a device limit themselves on the device list page. Admins reach the same devices from the Entra user page. The result is the same: unused devices are removed, then activation is retried. Choose the user path when the person can sign in, and the admin path when you manage the account for them.
 
@@ -111,5 +111,5 @@ Users can fix a device limit themselves on the device list page. Admins reach th
 
 ## Sources
 
-- [Activation limits for Microsoft 365 Apps (Microsoft Learn)](https://learn.microsoft.com/troubleshoot/microsoft-365-apps/activation/activation-limits)
-- [Troubleshoot shared computer activation (Microsoft Learn)](https://learn.microsoft.com/microsoft-365-apps/licensing-activation/troubleshoot-shared-computer-activation)
+- [Microsoft 365 Apps activation limits (Microsoft Learn)](https://learn.microsoft.com/previous-versions/troubleshoot/microsoft-365/microsoft-365-apps/activation/activation-limits)
+- [Troubleshoot issues with shared computer activation for Microsoft 365 Apps (Microsoft Learn)](https://learn.microsoft.com/microsoft-365-apps/licensing-activation/troubleshoot-shared-computer-activation)
