@@ -1,6 +1,6 @@
 ---
 title: "Fix AADSTS50078: Presented Multifactor Authentication Has Expired"
-summary: "AADSTS50078 (UserStrongAuthExpired) means MFA has expired due to administrator policies and must be refreshed. How the sign-in frequency and Remember MFA settings produce it, how to read the sign-in log, and what to change."
+summary: "AADSTS50078 (UserStrongAuthExpired) means MFA has expired due to administrator policies and must be refreshed. Which session lifetime settings (sign-in frequency, Remember MFA) can be behind it, how to read the sign-in log, and what to review."
 status: review
 publish: false
 author: mirko-p
@@ -18,14 +18,14 @@ faq:
   - q: "How does the user fix it?"
     a: "The message says to refresh the multifactor authentication, which means signing in again and completing the MFA step for that resource. The reference row has no further steps for users, so this is the direct reading of the message."
   - q: "Which setting causes it?"
-    a: "The message points to policies configured by the administrator. The Learn pages on session lifetime describe the candidates: a Conditional Access Sign-in frequency policy, the Remember multifactor authentication setting, and the Stay signed in option. The sign-in log shows which session lifetime policy was applied."
+    a: "The message points to policies configured by the administrator. The pages do not tie this error code to one setting. The session lifetime pages describe these candidate settings: a Conditional Access Sign-in frequency policy, the Remember multifactor authentication setting, and the Stay signed in option. The sign-in log shows which session lifetime policy was applied."
   - q: "Why do users see the prompt more often than every 90 days?"
     a: "The Learn page says the default sign-in frequency is a rolling window of 90 days, and that the most restrictive session lifetime setting decides. A Sign-in frequency policy with a shorter period, or a Remember MFA value below 90 days, leads to more frequent prompts."
   - q: "Is Sign-in frequency set to Every time a problem?"
     a: "The Conditional Access page says the system accounts for five minutes of clock skew when Every time is selected, so users are not prompted more than once every five minutes. It also says to use Every time only when there are specific business needs, since too many prompts hurt productivity and can raise the risk of users approving requests they did not start."
 ---
 
-AADSTS50078 sounds like a fault, but it is often a policy doing its job. The Microsoft Entra error reference lists it as UserStrongAuthExpired: the presented multifactor authentication has expired due to policies configured by your administrator, and you must refresh it to access the named resource. This article starts from that row. The row is short, so the settings behind it come from two Learn pages on session lifetime. My own advice is marked.
+AADSTS50078 sounds like a fault, but the reference points to a policy configured by your administrator. The Microsoft Entra error reference lists it as UserStrongAuthExpired: the presented multifactor authentication has expired due to policies configured by your administrator, and you must refresh it to access the named resource. This article starts from that row. The row is short, so the settings behind it come from two Learn pages on session lifetime. My own advice is marked.
 
 ## The reference row in plain words
 
@@ -33,9 +33,9 @@ AADSTS50078 sounds like a fault, but it is often a policy doing its job. The Mic
 - **Meaning:** a previous MFA result is no longer accepted, because of a policy from your administrator.
 - **Instruction:** refresh your multifactor authentication to access the resource.
 
-The error does not mean the user's second factor is broken. It means the earlier proof is too old for the rule that applies now.
+My reading, not a statement of the reference: the error does not mean the user's second factor is broken, but that the earlier proof is too old for the rule that applies now.
 
-## For users: what to do
+## For users: what to do (my advice)
 
 1. Sign in again to the app or site that showed the error.
 2. Complete the MFA prompt when it appears.
@@ -65,7 +65,7 @@ The page recommends starting with the sign-in logs:
 2. Go to the **Authentication Details** tab.
 3. Read **Session Lifetime Policies Applied**.
 
-This shows which session lifetime policy was applied at that sign-in. The page does not describe a field for the error itself here, so also note the correlation ID and time of the failure.
+This shows which session lifetime policy was applied at that sign-in. The page does not describe a field for the error itself here. My suggestion is to also note the correlation ID and time of the failure.
 
 ## Step 2: Review Conditional Access sign-in frequency
 
@@ -91,7 +91,7 @@ If you have Microsoft Entra ID P1 or P2, the page suggests moving these settings
 
 ## Other things that end a session
 
-The page says a violation of IT policies revokes the session, with examples such as a password change, a noncompliant device or an action that disables the account. Sessions can also be revoked explicitly with Microsoft Graph PowerShell. If the error appears right after one of these events, it is not the sign-in frequency setting.
+The page says a violation of IT policies revokes the session, with examples such as a password change, a noncompliant device or an action that disables the account. Sessions can also be revoked explicitly with Microsoft Graph PowerShell. If the error appears right after one of these events, my inference is that a session revocation, not the sign-in frequency setting, is the more likely cause. The page does not link these events to 50078.
 
 The page also says a user on a device without an identity in Microsoft Entra ID can see several MFA prompts, because each application has its own OAuth refresh token that is not shared with other client apps.
 
@@ -131,6 +131,6 @@ This is my suggestion, not guidance from the reference:
 
 ## Sources
 
-- [Microsoft Entra authentication and authorization error codes (Microsoft Learn)](https://learn.microsoft.com/entra/identity-platform/reference-error-codes)
+- [Microsoft Entra authentication & authorization error codes (Microsoft Learn)](https://learn.microsoft.com/entra/identity-platform/reference-error-codes)
 - [Microsoft Entra multifactor authentication prompts and session lifetime (Microsoft Learn)](https://learn.microsoft.com/entra/identity/authentication/concepts-azure-multi-factor-authentication-prompts-session-lifetime)
 - [Configure adaptive session lifetime policies (Microsoft Learn)](https://learn.microsoft.com/entra/identity/conditional-access/howto-conditional-access-session-lifetime)
