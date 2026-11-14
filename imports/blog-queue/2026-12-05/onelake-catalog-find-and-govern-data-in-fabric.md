@@ -10,7 +10,7 @@ keypoints:
   - "The OneLake catalog opens from the OneLake icon in the Fabric navigation pane and has three tabs: Explore, Govern and Secure."
   - "Explore lists the Fabric items you can access, with filters for domain, item type, tags, workspace and endorsement."
   - "Govern shows governance insights and recommended actions, in an estate view for tenant-wide users and a My items view for data owners."
-  - "Govern data refreshes once a day, and it does not support cross-tenant scenarios, guest users or Private Link-enabled tenants."
+  - "Estate view data in Govern refreshes once a day, and Govern does not support cross-tenant scenarios, guest users or Private Link tenants."
   - "Browsing objects such as tables needs Read or higher control-plane permission on the item."
 faq:
   - q: "What is the OneLake catalog?"
