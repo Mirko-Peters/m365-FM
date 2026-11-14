@@ -33,7 +33,7 @@ The workbook does not prescribe the contents in detail. In practice, many teams 
 
 Work in seven steps. This is my working method, built on the workbook's idea.
 
-1. **Capture the bursts.** While drawing the current and future state maps, note each improvement idea at the place it applies. A kaizen burst is a marker for this. An [Enna training page](https://enna.com/learning-center/using-the-kaizen-burst-form), from a provider of mapping training material, describes it as a way to capture improvement ideas while you develop your current and future state maps, by identifying areas for improvement on the map, documenting a simple idea and placing it on the map.
+1. **Capture the bursts.** While drawing the current and future state maps, note each improvement idea at the place it applies. A kaizen burst is a marker for this: identify the area for improvement on the map, document a simple idea and place it on the map.
 2. **Compare the two maps.** For each gap between the current state and the future state, check that at least one burst covers it. Gaps without ideas need more thought.
 3. **Group the bursts.** Put related ideas together, and separate value-added and non-value-added activities, such as waiting: pull and flow, levelling, changeover and batch size, quality loops, information flow, supplier links.
 4. **Find the dependencies.** Some ideas need others first. A smaller batch size needs a faster changeover. A pull system needs a stable rhythm of release.
@@ -101,3 +101,8 @@ A one-page plan works on paper. When many value streams, owners and items are in
 ## Next step
 
 A value stream improvement plan works when it is one page, ordered by dependency and owned by named people. This week, list the kaizen bursts from your future state map, score them for impact and effort, and write the first 30 days on one page.
+
+## Sources
+
+- [Learning to See, Part 1 (Rother and Shook) - Lean Enterprise Institute](https://www.lean.org/wp-content/uploads/2021/01/Learning-to-See-part1.pdf)
+- [Kaizen - Lean Enterprise Institute (Lean Lexicon)](https://www.lean.org/lexicon-terms/kaizen/)
