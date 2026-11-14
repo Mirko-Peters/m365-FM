@@ -103,8 +103,8 @@ The pages I read do not describe the following:
 
 ## Sources
 
-- [Process mining overview](https://learn.microsoft.com/power-automate/process-mining-overview)
-- [Prepare processes and data](https://learn.microsoft.com/power-automate/process-mining-processes-and-data)
-- [Transform and map data](https://learn.microsoft.com/power-automate/process-mining-transform)
-- [Tutorial: Get started with process mining](https://learn.microsoft.com/power-automate/process-mining-tutorial)
-- [Edit and refresh processes](https://learn.microsoft.com/power-automate/process-mining-data-source)
+- [Overview of process mining in Power Automate (Microsoft Learn)](https://learn.microsoft.com/power-automate/process-mining-overview)
+- [Prepare processes and data (Microsoft Learn)](https://learn.microsoft.com/power-automate/process-mining-processes-and-data)
+- [Transform and map data (Microsoft Learn)](https://learn.microsoft.com/power-automate/process-mining-transform)
+- [Get started with the process mining capability (Microsoft Learn)](https://learn.microsoft.com/power-automate/process-mining-tutorial)
+- [Edit and refresh processes (Microsoft Learn)](https://learn.microsoft.com/power-automate/process-mining-data-source)
