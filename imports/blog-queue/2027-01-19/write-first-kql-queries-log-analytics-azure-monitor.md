@@ -109,8 +109,8 @@ Perf
 
 This section is my advice, not a Microsoft statement.
 
-1. **Always begin with the table and a time filter.** It keeps queries fast and cheap to run.
-2. **Read the schema pane before writing.** Case errors in column names are a common first failure.
+1. **Always begin with the table and a time filter.** Learn says starting with a table name improves performance, and it recommends placing the time filter right after the table name.
+2. **Read the schema pane before writing.** Learn calls out case sensitivity, so check the exact spelling of table and column names.
 3. **Build in small steps.** Run after each added operator, and keep the pipe order readable, one operator per line.
 4. **Cast before comparing numbers.** If a numeric filter returns nothing, check the column type.
 5. **Keep a note of working queries.** Save the ones you reuse, so the next investigation starts from a known base.
@@ -120,9 +120,9 @@ This section is my advice, not a Microsoft statement.
 
 Learn's FAQ says duplicate records can come from retries in the pipeline, which can cause duplicates for a small percentage of telemetry items, or from having both the Log Analytics agent and Azure Monitor Agent installed on a virtual machine.
 
-## What I did not read
+## What the tutorial does not cover
 
-I read the whole tutorial. It covers the basics only. Join, union, parsing and functions are in other KQL documentation that I did not read for this article.
+The tutorial covers the basics only. Join, union, parsing and functions are covered in other KQL documentation, which Learn's page links to for best practices.
 
 ## Related
 
