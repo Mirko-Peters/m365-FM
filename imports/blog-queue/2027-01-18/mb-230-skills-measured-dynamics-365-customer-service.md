@@ -123,7 +123,7 @@ Microsoft's audience profile describes a functional consultant with customer ser
 
 The study guide says the bullets after each skill illustrate how the skill is assessed and that related topics may be covered. It also says most questions cover features that are generally available, and the exam may contain questions on preview features if they are commonly used.
 
-The change log in the guide compares the outline before and after March 11, 2026. It shows no percentage change for the representative experience and routing group, with minor changes to routing and to the Copilot Service workspace objectives. I saw only part of the change log, so use the guide for the rest.
+The change log in the guide compares the outline before and after March 11, 2026. It lists the audience profile as a minor change, shows no percentage change for the representative experience and routing group, and lists minor changes to the routing and Copilot Service workspace objectives.
 
 ## How to use the outline
 
@@ -139,7 +139,7 @@ This section is my advice, not a Microsoft statement.
 
 ## What this article does not do
 
-It does not describe exam questions, answers or the content of any specific item. It reports the published skills outline and the status shown on Microsoft's pages as I read them.
+It does not describe exam questions, answers or the content of any specific item. It reports the published skills outline and the status shown on Microsoft's two pages.
 
 ## Related
 
