@@ -11,7 +11,7 @@ keypoints:
   - "Microsoft's page does not define result categories or codes for the troubleshooter. It says Get Help reports its findings and suggests possible fixes."
   - "The separate Microsoft 365 network connectivity test has three Copilot tests: HTTP Connectivity, Web Socket Enablement and Latency."
   - "A green tick means a test passed. Latency above 250 ms may cause a slower Copilot experience."
-  - "If the troubleshooter finds nothing, the next step is the network team: WSS, TLS inspection and proxy timeouts."
+  - "If the troubleshooter finds nothing, check the network causes Microsoft's requirements page names as common: blocked WSS, TLS inspection and aggressive proxy timeouts."
 faq:
   - q: "Where do I find the Copilot connectivity troubleshooter?"
     a: "According to Microsoft Support, it runs in the Get Help app. Open Get Help, enter 'Copilot connectivity troubleshooter' in the search bar and follow the steps. The support page also has a Start button that launches it."
@@ -66,21 +66,21 @@ The Copilot tests became generally available worldwide on 2025-03-25 according t
 | Microsoft Copilot Web Socket Enablement | Whether WebSocket (WSS) works | On a managed network, ask IT to enable WSS for Copilot domains |
 | Microsoft Copilot Latency | Average latency to Copilot endpoints | Make sure WebSocket support is enabled. Latency above 250 ms may cause a slower Copilot experience |
 
-To run it from the web, go to the address above and select **Run test**. The tool identifies the office location and runs JavaScript TCP latency tests. It then prompts you to download and run the advanced tests client, which needs the .NET 6.0 Runtime. A command-line version and a Microsoft Support and Recovery Assistant (SaRA) option also exist. The standalone executable does not upload results to the tenant.
+To run it from the web, go to the address above and select **Run test**. The web test runs in the browser and then prompts you to download and run a Windows client app for advanced tests, which needs the .NET 6.0 Runtime and administrator rights to install. A command-line version and a Microsoft Support and Recovery Assistant (SaRA) option also exist. The standalone executable does not upload results to the tenant.
 
 On the **Details** tab, a green circle with a check mark means the result compared favorably. A red triangle with an exclamation point means a threshold was exceeded and a network insight was generated. For a WebSocket problem, Microsoft's example is that a passing test shows a green tick and a blocked connection shows a warning instead. The Copilot tests are listed as available for the global service and US Government (GCC), and not for China operated by 21Vianet.
 
-Microsoft's requirements page also points to a Copilot app connectivity test at `connectivity.m365.cloud.microsoft/copilot` for `*.cloud.microsoft`.
+Microsoft's requirements page also points to a Copilot app connectivity test at `connectivity.m365.cloud.microsoft/copilot`.
 
 ## What to do with a failed test
 
-The requirements page lists the common issues behind Copilot connectivity problems and asks you to work with the teams that manage proxies, firewalls and secure web gateways. If you are not the administrator, contact your Microsoft 365 admin with this list:
+The requirements page names common causes of Copilot failures and lists network requirements. If you are not the administrator, contact your Microsoft 365 admin with this list:
 
 1. Allow the entire `*.cloud.microsoft` domain. Allowing only selected URLs inside it is not supported.
 2. Verify WSS to `*.office.com`, `*.cloud.microsoft` and `copilot.cloud.microsoft`.
 3. Check for TLS inspection that interferes with the connection.
 4. Check for proxies with aggressive connection timeouts.
-5. Confirm that URL filtering, tenant restrictions, Conditional Access and app control do not block `copilot.cloud.microsoft`.
+5. If `copilot.cloud.microsoft` is blocked to prevent personal Microsoft account sign-in, the page suggests tenant restrictions instead.
 
 ## When the troubleshooter does not help
 
