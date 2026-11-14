@@ -76,7 +76,7 @@ Learn expects familiarity with Microsoft 365 core services, security, identity a
 These points come from Learn pages on topics the outline names. They are study anchors, not a prediction of what the exam asks.
 
 - **Security defaults and Conditional Access.** Security defaults need no license and are enabled on new tenants. Conditional Access needs at least Microsoft Entra ID P1, and security defaults must be disabled before you can use it.
-- **Microsoft-managed policies.** Learn lists policies such as blocking legacy authentication and requiring MFA for admins, created in report-only state first.
+- **Microsoft-managed policies.** Learn lists policies such as blocking legacy authentication and requiring MFA for admins, created in report-only state first. The managed-policies page says Microsoft Entra ID P2 or Microsoft 365 Business Premium is required to use Conditional Access features there, with some individual policies having their own licensing scope, so check licensing per policy.
 - **Agent registry.** Agent 365 is described as the unified registry for agents. Learn names the AI Reader role for viewing the inventory and the Agent ID Administrator role for managing agent identities, and the path Microsoft 365 admin center, Agents, All agents.
 - **Agent flows billing.** Autonomous agent flow runs are charged and can be blocked when an environment has no Copilot Credits.
 
@@ -93,7 +93,7 @@ The bullets illustrate how each skill is assessed, and Learn says related topics
 
 ## Common mistakes
 
-- Treating it as a Copilot-only exam. Two thirds of the weighting is not about Copilot features.
+- Treating it as a Copilot-only exam. Area 1, at 30 to 35 percent, covers core Microsoft 365, identity and security topics, and much of Area 2 is about Purview and SharePoint, although it also includes the data security implications of Copilot.
 - Skipping Purview because it sounds advanced. The list names many Purview tools.
 - Memorizing prices. The outline asks you to compare licensing models.
 
