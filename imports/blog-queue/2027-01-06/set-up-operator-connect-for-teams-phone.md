@@ -25,7 +25,7 @@ faq:
     a: "Before you remove an operator or a country or region, you must remove all assigned numbers and have the operator release them. Removing a Direct Routing assignment can take up to 10 minutes and in rare cases up to 24 hours."
 ---
 
-Operator Connect lets you add a Microsoft-certified operator in the Teams admin center and get phone numbers from them. You prepare users with licenses and TeamsOnly mode, add the operator, order numbers using your tenant ID and assign them to users. This guide follows the Microsoft Learn article on configuring Operator Connect. The page is written for admins and defers licensing and role names to the planning article.
+Operator Connect lets you add a Microsoft-certified operator in the Teams admin center and get phone numbers from them. You prepare users with licenses and TeamsOnly mode, add the operator, order numbers using your tenant ID and assign them to users. This guide follows the Microsoft Learn article on configuring Operator Connect. The page is written for admins and defers prerequisites and licensing to the planning article.
 
 ## Prerequisites on the page
 
@@ -54,7 +54,7 @@ Path: Teams admin center > **Voice** > **Operator Connect**.
 | From Direct Routing, online-assigned | Ask the operator to migrate the numbers on an agreed date |
 | From Direct Routing, on-premises-assigned | Run `Set-CsUser -Identity <user> -LineURI $null` in Skype for Business Server PowerShell. Then verify with `Get-CsOnlineUser`, remove the assignment with `Remove-CsPhoneNumberAssignment -PhoneNumberType DirectRouting` and clear the policy with `Grant-CsOnlineVoiceRoutingPolicy -PolicyName $Null`. Then acquire and assign numbers |
 
-For on-premises-assigned numbers, the number is out of service during the first step, so coordinate with the operator first.
+For on-premises-assigned numbers, the page says the number is out of service during the migration, so coordinate with the operator before you begin.
 
 ## Emergency addresses
 
@@ -66,7 +66,7 @@ The page gives no step for adding an emergency location. It says emergency addre
 
 Details are in the linked emergency calling articles.
 
-## Who does what
+## Who does what (my summary of the page)
 
 | Operator | Admin |
 | --- | --- |
@@ -84,9 +84,9 @@ Details are in the linked emergency calling articles.
 
 Specific admin roles and exact license SKUs, pricing, porting or order timelines, end-user steps, operator availability by region (an external directory holds it), and how to assign numbers in detail (a linked article). The menu item is named Voice > Operator Connect on the page.
 
-## A rollout order
+## A rollout order (my advice)
 
-The order is practical advice.
+The order is my own suggestion, not taken from the page.
 
 1. Read the planning article and confirm licenses.
 2. Move pilot users to TeamsOnly mode.
@@ -95,7 +95,7 @@ The order is practical advice.
 5. Agree the emergency address model with the operator.
 6. Plan migrations of existing numbers with a dated cutover.
 
-## Typical mistakes
+## Typical mistakes (my advice)
 
 - Ordering numbers before users have licenses and TeamsOnly mode.
 - Forgetting your tenant ID when ordering.
