@@ -23,7 +23,7 @@ faq:
     a: "Yes. Learn states that Restricted SharePoint Search blocks SharePoint as a knowledge source regardless of configuration. Turn it off, or add the relevant sites to the allowed list."
 ---
 
-When a Copilot Studio agent ignores SharePoint content, the cause is usually not the model. It is indexing, permissions, file type or a setting on the knowledge source. Microsoft documents a fixed set of checks, and working through them in order saves time. This guide explains the two SharePoint paths, then follows the order that Learn's troubleshooting page uses.
+When a Copilot Studio agent ignores SharePoint content, the cause is usually not the model. It is indexing, permissions, file type or a setting on the knowledge source. Microsoft documents a fixed set of checks, and working through them in order saves time. This guide explains the two SharePoint paths, then walks through the checks in a practical order based on Learn's troubleshooting page. The order of the steps is this article's own, not Learn's.
 
 One boundary first: the Learn pages read for this article do not describe tuning crawled properties or managed properties for Copilot Studio. What they describe is how indexing, security trimming and limits behave.
 
@@ -60,14 +60,15 @@ Learn's troubleshooting page says:
 
 - Modern pages are supported. Modern pages that contain SharePoint Framework (SPFx) components are not.
 - Content from classic `.aspx` pages is not used to generate answers.
-- Documents must be in supported formats.
-- Unsupported characters in SharePoint file names can prevent answers.
+- Only documents in supported formats are used to generate responses.
 
-One inconsistency is worth knowing. The knowledge-source overview says the SharePoint connector does not currently support Pages, while the troubleshooting page says modern pages are supported. Test a modern page in your own tenant before you rely on pages as a source.
+Separately, the unstructured data article lists an unsupported character in a SharePoint file name as one reason a file shows up in the knowledge source but gives no answers.
+
+The unstructured data article says the connector behind the **Upload files > SharePoint** option does not currently support Pages. The troubleshooting page, which covers agent-level and topic-level SharePoint sources, says modern pages are supported. The two statements refer to different options, so check which option you use and test a modern page in your own tenant before you rely on pages as a source.
 
 ## Step 3: Check the top-three limit
 
-Learn says Copilot Studio uses only the top three search results to generate a response. If none are returned, there is no response. That makes retrieval quality more important than volume. Practical consequences:
+Learn says Copilot Studio uses only the top three search results to generate a response. If none are returned, there is no response. That makes retrieval quality more important than volume. Two practical suggestions follow from this, and they are this article's advice, not a Learn recommendation. The limits in the last bullet are from Learn.
 
 - Point the source at the folder or library that holds the relevant answers instead of a whole site full of unrelated files.
 - Keep duplicate and outdated copies out of the scope. They compete for the same three slots.
