@@ -4,8 +4,9 @@ on:
     - cron: "40 22 * * *"   # 22:40 UTC = 23:40 Berlin: vor Artikel-Lauf (23:23 UTC) und Seitenbau (01:07 UTC); der Block des naechsten Tages geht mit dem Bau live
   workflow_dispatch:
     inputs:
-      date: { description: "Stichtag JJJJ-MM-TT (leer = morgen nach Berliner Zeit); alle Ordner bis zu diesem Datum werden freigegeben", required: false, default: "" }
-      limit: { description: "Hoechstens so viele Artikel in diesem Lauf (leer = 20)", required: false, default: "" }
+      date: { description: "Stichtag JJJJ-MM-TT (leer = keine Datumsgrenze, alles freigeben); sonst nur Ordner bis zu diesem Datum", required: false, default: "" }
+      limit: { description: "Hoechstens so viele Artikel in diesem Lauf (leer = 15)", required: false, default: "" }
+      article_date: { description: "Datum der freigegebenen Artikel JJJJ-MM-TT (leer = morgen nach Berliner Zeit); fuer den Start-Lauf heute eintragen", required: false, default: "" }
 permissions:
   contents: write
 concurrency:
@@ -19,7 +20,7 @@ jobs:
       - uses: actions/setup-python@v5
         with: { python-version: "3.12" }
       - name: Tagesblock freigeben
-        run: python3 tools/blog_release.py "${{ inputs.date }}" "${{ inputs.limit }}"
+        run: python3 tools/blog_release.py "${{ inputs.date }}" "${{ inputs.limit }}" "${{ inputs.article_date }}"
       - name: Speichern (auf die Website kommt es mit dem naechtlichen Seitenbau - Bot-Commits loesen keinen Bau aus)
         run: |
           git config user.name "m365fm-bot"; git config user.email "bot@m365.fm"

@@ -1,12 +1,14 @@
 #!/usr/bin/env python3
 """Gibt Blog-Artikel aus der Warteschlange frei (imports/blog-queue/<JJJJ-MM-TT>/<slug>.md).
 
-Ordner mit Datum <= Stichtag werden nach imports/blog/en/ verschoben, dabei bekommen die Dateien
-status: approved, publish: true und das Datum des Ordners. Je Lauf hoechstens LIMIT Artikel (aelteste zuerst),
+Alle Artikel der Warteschlange werden nach imports/blog/en/ verschoben (Ordnerdatum nur als Reihenfolge, aelteste
+zuerst), dabei bekommen die Dateien status: approved, publish: true und das Freigabedatum (morgen nach Berliner Zeit,
+also der Tag, an dem sie mit dem Seitenbau live gehen). Wird ein Stichtag angegeben, werden nur Ordner bis dahin
+freigegeben. Je Lauf hoechstens LIMIT Artikel,
 damit Seitenbau und Uebersetzung nachts nicht ueberlaufen. Vorhandene Slugs werden nie ueberschrieben.
 
-Aufruf: python3 tools/blog_release.py [STICHTAG JJJJ-MM-TT] [LIMIT]
-Ohne Stichtag: morgiges Datum nach Berliner Zeit (der Lauf liegt abends, vor dem Seitenbau um 01:07 UTC).
+Aufruf: python3 tools/blog_release.py [STICHTAG JJJJ-MM-TT] [LIMIT] [ARTIKELDATUM JJJJ-MM-TT]
+Ohne Stichtag: alles freigeben, Datum der Artikel = morgen nach Berliner Zeit (der Lauf liegt abends, vor dem Seitenbau um 01:07 UTC).
 """
 import datetime, os, re, shutil, sys
 from zoneinfo import ZoneInfo
@@ -27,9 +29,12 @@ def set_head(text, key, value):
 
 
 def main():
-    target = sys.argv[1] if len(sys.argv) > 1 and sys.argv[1] else (
-        datetime.datetime.now(ZoneInfo("Europe/Berlin")).date() + datetime.timedelta(days=1)).isoformat()
-    limit = int(sys.argv[2]) if len(sys.argv) > 2 and sys.argv[2] else 20
+    tomorrow = (datetime.datetime.now(ZoneInfo("Europe/Berlin")).date() + datetime.timedelta(days=1)).isoformat()
+    cutoff = sys.argv[1] if len(sys.argv) > 1 and sys.argv[1] else ""
+    target = cutoff or "9999-12-31"
+    limit = int(sys.argv[2]) if len(sys.argv) > 2 and sys.argv[2] else 15
+    if len(sys.argv) > 3 and sys.argv[3]:
+        tomorrow = sys.argv[3]  # Datum der Artikel von Hand setzen (z. B. heute fuer einen Start-Lauf)
     if not os.path.isdir(QUEUE):
         print("keine Warteschlange"); return
     os.makedirs(DEST, exist_ok=True)
@@ -46,15 +51,15 @@ def main():
             if os.path.exists(dst):
                 print("UEBERSPRUNGEN (Slug existiert): " + name); continue
             text = open(src, encoding="utf-8").read()
-            for k, v in (("status", "approved"), ("publish", "true"), ("date", d)):
+            for k, v in (("status", "approved"), ("publish", "true"), ("date", tomorrow)):
                 text = set_head(text, k, v)
             open(dst, "w", encoding="utf-8").write(text)
             os.remove(src)
             moved += 1
-            print("freigegeben: %s (%s)" % (name, d))
+            print("freigegeben: %s (Ordner %s, Datum %s)" % (name, d, tomorrow))
         if not [n for n in os.listdir(folder) if n.endswith(".md")]:
             shutil.rmtree(folder, ignore_errors=True)
-    print("%d Artikel freigegeben (Stichtag %s)" % (moved, target))
+    print("%d Artikel freigegeben (Stichtag %s, Datum %s)" % (moved, cutoff or "keiner", tomorrow))
 
 
 if __name__ == "__main__":
