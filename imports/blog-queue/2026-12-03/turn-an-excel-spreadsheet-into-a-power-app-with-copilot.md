@@ -8,7 +8,7 @@ date: 2026-12-03
 topics: [power-apps, copilot-in-power-apps, dataverse]
 keypoints:
   - "In the Power Apps maker portal, select Start with data, then Upload file, and Copilot builds a Dataverse table and a first app from your worksheet."
-  - "The upload route needs an environment that includes Microsoft Dataverse. Without it, the option is not available."
+  - "The upload route needs an environment that includes Microsoft Dataverse, and you may need a Power Apps license or trial that includes it."
   - "Review column names and data types before you save. Renaming a column later means updating every formula that uses it."
   - "The alternative, Excel Online (Business), keeps the workbook where it is. The data must be formatted as an Excel table and stored in the cloud."
   - "Copilot output varies from run to run, and Microsoft says Copilot may not be available in every region."
@@ -16,15 +16,15 @@ faq:
   - q: "How do I create a Power App from an Excel file?"
     a: "Sign in at make.powerapps.com and select Start with data. On the Create an app page, select Upload file, then Select from device, and import the workbook. Review the generated table, then select Save and open app. Microsoft Learn describes this path in its Copilot exercise and in the article on creating a canvas app from Excel data."
   - q: "Do I need Dataverse to turn Excel into a Power App?"
-    a: "For the Upload file route, yes. The Microsoft Learn exercise states that the environment must include Microsoft Dataverse and that the option is not available without it. The alternative route, Excel Online (Business), connects to a workbook in cloud storage instead."
+    a: "For the Upload file route, yes. The Microsoft Learn exercise says the environment must include Microsoft Dataverse, and that you may need a Power Apps license or trial that includes it. The alternative route, Excel Online (Business), connects to a workbook in cloud storage instead."
   - q: "Does my Excel data need to be a table?"
-    a: "Yes for the connection route. Microsoft Learn says the data must be formatted as an Excel table, or Power Apps cannot read it correctly. The Excel connector also works only with files stored in the cloud, such as OneDrive for Business, OneDrive, Dropbox or Google Drive."
+    a: "Yes for the connection route. Microsoft Learn says to format the data as an Excel table so Power Apps can read and use it correctly. The Excel connector also works only with files stored in the cloud, such as OneDrive for Business, OneDrive, Dropbox or Google Drive."
   - q: "How large can the Excel file be?"
     a: "Microsoft Learn lists a maximum upload size of 5 GB. Power Apps uploads the first 20 rows immediately so you can review the table, then uploads the rest in the background."
   - q: "Is there a newer way to build an app from a prompt?"
     a: "Microsoft Learn documents the Power Apps vibe experience at vibe.powerapps.com as a preview. It creates an app from a prompt and can attach work files, emails or chats. The page does not describe uploading an Excel file directly, so use the Start with data route for a worksheet."
 ---
-To turn an Excel spreadsheet into a Power App, sign in to the Power Apps maker portal at make.powerapps.com, select **Start with data**, then **Upload file**, and import the workbook. Copilot reads the worksheet, proposes a table and builds a first app with a gallery and forms. You review the columns, save, test and publish. This article follows Microsoft's Learn exercise and the canvas-app article, and explains the second route, which connects to a workbook that stays in Excel.
+To turn an Excel spreadsheet into a Power App, sign in to the Power Apps maker portal at make.powerapps.com, select **Start with data**, then **Upload file**, and import the workbook. Copilot reads the worksheet, proposes a table and builds a first app. You review the columns, save, test and publish. This article follows Microsoft's Learn exercise and the canvas-app article, and explains the second route, which connects to a workbook that stays in Excel.
 
 ## Choose the route first
 
@@ -34,13 +34,13 @@ Microsoft Learn describes three ways to build a canvas app from Excel data:
 |---|---|---|
 | Upload a file | **Start with data** > **Upload file** | Power Apps converts the data into a [Dataverse](https://www.m365.fm/entity/dataverse/) table you can reuse in other apps and flows |
 | Connect to an external file | **Start with data** > **Excel Online (Business)** | The workbook stays in cloud storage, and the app reads it there |
-| Blank app | **Create** > **Start from blank** | You add the data and build the screens yourself |
+| Blank app | **Create** > **Create from blank** | You add the data and build the screens yourself |
 
 Learn presents the upload route as the one for cloud storage, improved security and a reusable table. The connection route is the fastest path when a cloud-hosted Excel table already exists. The blank route gives the most control.
 
 ## Before you start
 
-- The upload route needs an environment that includes Microsoft Dataverse, and a Power Apps license or free trial that includes Dataverse. Learn states that without Dataverse the option is not available.
+- The upload route needs an environment that includes Microsoft Dataverse, and a Power Apps license or free trial that includes Dataverse. The exercise page says both of its Copilot paths require a Dataverse-enabled environment.
 - For the connection route, the data must be formatted as an Excel table, and the file must be in cloud storage. Learn names Dropbox, Google Drive, OneDrive and OneDrive for Business. Power Apps cannot connect to Excel files stored only on a local drive.
 - Check the header row. Excel column headers become Dataverse column names.
 - Check that Copilot in Power Apps is available to you. Microsoft says it may not be available in every region, and that usage limits or capacity throttling can apply.
@@ -58,7 +58,7 @@ Learn presents the upload route as the one for cloud storage, improved security 
 9. Optionally select **Row ownership** and choose how it should be managed.
 10. Select **Save and open app**, then confirm in the pop-up.
 
-The app opens in Power Apps Studio. Skip the welcome pop-up if it appears, close the Copilot pane so the Save icon is visible, select **Save**, name the app if asked, and then select **Publish**.
+The app opens in Power Apps Studio. Close the Copilot pane so the Save icon is visible, select **Save**, name the app if asked, and then select **Publish**.
 
 ## Test the app
 
@@ -84,8 +84,7 @@ Choose this route when the workbook should remain the source of truth. If people
 - If you change a column type to one that does not match existing values, Power Apps removes those values during table generation.
 - Known issue: the upload process ignores the environment's data format setting.
 - Copilot output is nondeterministic, so your generated columns can differ from the exercise.
-- Copilot guesses which fields the gallery shows. You may need to adjust the gallery columns.
-- Saving creates persistent objects. **Save and open app** saves the Dataverse tables and relationships.
+
 
 The pages I read do not cover delegation or row-count limits for Excel data. Check the Power Apps delegation documentation before you build an app on a large workbook.
 
