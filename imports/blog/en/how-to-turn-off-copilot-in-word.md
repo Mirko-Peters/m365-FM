@@ -102,12 +102,12 @@ If you manage devices and want to check what users see, test with a pilot accoun
 - Turn off Copilot in Excel and PowerPoint: the same checkbox exists in each app and needs its own click.
 - Turn off Copilot in Outlook: it uses a separate **Turn on Copilot** toggle that follows the account across devices.
 - Remove Copilot from Windows 11: the Windows app is a different product with its own uninstall and policy options.
-- Licensing for admins: the [Microsoft Copilot requirements](https://learn.microsoft.com/en-us/copilot/microsoft-365/microsoft-365-copilot-requirements) and [license options](https://learn.microsoft.com/en-us/copilot/plan/copilot-license-options) explain which licenses qualify.
-- Copilot Chat pinning: the [pinning article](https://learn.microsoft.com/en-us/microsoft-365/copilot/pin-copilot-chat-navbar) explains the tenant-wide setting and what users can change.
+- Licensing for admins: the [Microsoft Copilot requirements](https://learn.microsoft.com/copilot/microsoft-365/microsoft-365-copilot-requirements) and [license options](https://learn.microsoft.com/copilot/plan/copilot-license-options) explain which licenses qualify.
+- Copilot Chat pinning: the [pinning article](https://learn.microsoft.com/microsoft-365/copilot/pin-copilot-chat-navbar) explains the tenant-wide setting and what users can change.
 
 ## Next step
 
-To turn off Copilot in Word, clear **Enable Copilot** in the Word options, restart the app, and repeat the step in Excel and PowerPoint if you want them quiet too. Microsoft's article on how to [turn off Copilot in Microsoft 365 apps](https://support.microsoft.com/en-us/privacy/turn-off-copilot-in-microsoft-365-apps) is the one to bookmark, and admins should ask which accounts really need a Copilot license.
+To turn off Copilot in Word, clear **Enable Copilot** in the Word options, restart the app, and repeat the step in Excel and PowerPoint if you want them quiet too. Microsoft's article on how to [turn off Copilot in Microsoft 365 apps](https://support.microsoft.com/privacy/turn-off-copilot-in-microsoft-365-apps) is the one to bookmark, and admins should ask which accounts really need a Copilot license.
 
 ## Sources
 
