@@ -29,7 +29,7 @@ Performance Analyzer records how long each visual in a Power BI report takes to 
 
 ## Open it
 
-- **Power BI Desktop:** select the **Optimize** ribbon, then **Performance Analyzer**. Learn notes that a screenshot caption refers to the View ribbon, so look in both if you do not see it.
+- **Power BI Desktop:** select the **Optimize** ribbon, then **Performance Analyzer**. In the Learn text, this is the Optimize ribbon.
 - **Power BI service:** open a report, select **Edit**, open the **View** menu and select **Performance Analyzer**.
 
 The pane opens to the right of the report canvas.
@@ -57,7 +57,7 @@ For each visual, the log breaks the duration into parts:
 
 Learn explains that **Duration (ms)** is the difference between a start and end timestamp for each operation. Most canvas and visual operations run one after another on a single UI thread shared by many operations, so the reported duration includes time spent queued while other operations finish. The DAX query time depends on calculation complexity, the number of tables involved and the relationships between them.
 
-## Work out what to fix
+## Work out what to fix (my advice)
 
 Use the split as a guide:
 
@@ -79,7 +79,7 @@ Learn adds that visual DAX is more verbose than necessary and shows a Copilot pr
 
 Select **export** to save the information in the pane as a **.json** file. Do this before you select **Clear** if you want to compare runs later. Learn mentions a Performance Analyzer sample on GitHub that includes a document describing the export file format.
 
-## A repeatable routine
+## A repeatable routine (my advice)
 
 1. Open the report page that readers complain about.
 2. Start recording and select **refresh visuals**.
@@ -92,7 +92,7 @@ Select **export** to save the information in the pane as a **.json** file. Do th
 
 The article does not include guidance for external tools such as DAX Studio. It mentions only DAX query view, Copilot and the GitHub sample, so this guide does not either.
 
-## Typical mistakes
+## Typical mistakes (my advice)
 
 - Clearing the pane before exporting.
 - Reading Duration as pure compute time when it includes queueing.
@@ -107,4 +107,4 @@ The article does not include guidance for external tools such as DAX Studio. It 
 
 ## Sources
 
-- [Use Performance Analyzer to examine report element performance (Microsoft Learn)](https://learn.microsoft.com/power-bi/create-reports/desktop-performance-analyzer)
+- [Use Performance Analyzer to Examine Report Performance (Microsoft Learn)](https://learn.microsoft.com/power-bi/create-reports/performance-analyzer)
