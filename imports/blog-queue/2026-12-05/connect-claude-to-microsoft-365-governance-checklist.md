@@ -18,9 +18,9 @@ faq:
   - q: "Who has to approve the connector in Microsoft Entra?"
     a: "Anthropic's help article says a Global Administrator is required to grant Microsoft Entra admin consent. This can be done through Claude by checking the box to grant access on behalf of the whole organization, or manually in Entra ID for the two apps named M365 MCP Client for Claude and M365 MCP Server for Claude."
   - q: "Is the connector read-only?"
-    a: "By default, yes. The help article describes search and read tools as the default. Write tools, such as sending mail or creating files and calendar events, need an additional permission approval by a Global Administrator and are then set per tool to Always allow, Needs approval or Blocked."
+    a: "By default, yes. The help article describes search and read tools as the default. Write tools, such as sending mail or creating files and calendar events, are set per tool to Always allow, Needs approval or Blocked."
   - q: "Where can I see what Claude did in Microsoft 365?"
-    a: "The Anthropic help article does not describe a Claude-side audit log of connector activity. It names Microsoft Entra sign-in logs, interactive and non-interactive, as the documented way to investigate blocked connections. Check what logging your own plan provides before you rely on it for audits."
+    a: "The Anthropic help article does not describe a Claude-side audit log of connector activity. It names the Microsoft Entra sign-in logs, starting with the non-interactive tab, as the documented way to investigate blocked connections. Check what logging your own plan provides before you rely on it for audits."
   - q: "How do admins control MCP servers and connectors across Microsoft 365?"
     a: "Microsoft Learn describes a Tools page in the Microsoft 365 admin center. Under Agents > Tools > Registry, admins can see plugins, skills, MCP servers and connectors, filter them by status and publisher, and Block or Unblock a selected tool."
 ---
@@ -70,7 +70,7 @@ In the Entra enterprise application **M365 MCP Server for Claude**, open **Permi
 
 ## Step 5: Treat write tools as a separate decision
 
-The connector is read-only by default. Write tools can send and forward mail, manage drafts, create and update OneDrive and SharePoint files, manage calendar events and send Teams messages. They need a fresh approval of the permission set by a Global Administrator. After that, **Organization settings** > **Connectors** > **Microsoft 365** lets you set each write tool to **Always allow**, **Needs approval** or **Blocked**. On Enterprise plans, custom roles can scope write tools to certain users.
+The connector is read-only by default. Write tools can send and forward mail, manage drafts, create and update OneDrive and SharePoint files, manage calendar events and send Teams messages. If your tenant consented before write tools launched, a Global Administrator has to review and approve the updated permission set before write tools activate. After that, **Organization settings** > **Connectors** > **Microsoft 365** lets you set each write tool to **Always allow**, **Needs approval** or **Blocked**. On Enterprise plans, custom roles can scope write tools to certain users.
 
 Points from the article that matter for risk:
 
@@ -78,11 +78,11 @@ Points from the article that matter for risk:
 - Creating or updating a calendar event notifies attendees automatically.
 - Mail sent by Claude carries an attribution header. File, calendar and Teams writes are not tagged.
 - Attachments are not supported in write tools.
-- For organizations that added the connector before November 9, 2026, Anthropic describes limits on 11 Outlook, Calendar and Teams tools until at least December 9, 2026. After that date, unset tools move to **Needs approval**.
+- For organizations that added the connector before November 9, 2026, Anthropic describes limits on 11 Outlook, Calendar and Teams tools until at least December 9, 2026. After that date, unset tools move to **Needs approval**, and tools set to **Blocked** stay blocked. Organizations with HIPAA enabled are excluded from these default changes.
 
 ## Step 6: Check Conditional Access
 
-Conditional Access policies that restrict location or sign-in frequency can block server-side requests. The token exchange happens on Anthropic's servers, so Entra sees Anthropic's outbound IP addresses. Anthropic suggests excluding its IP ranges for such policies but warns against doing so for device compliance policies. Test with a pilot group first, and look at the Entra sign-in logs (interactive and non-interactive) when a user cannot connect.
+Conditional Access policies that restrict location or sign-in frequency can block server-side requests. The token exchange happens on Anthropic's servers, so Entra sees Anthropic's outbound IP addresses. Anthropic suggests excluding its IP ranges for such policies but warns against doing so for device compliance policies. Test with a pilot group first, and look at the Entra sign-in logs when a user cannot connect. Anthropic points to the **User sign-ins (non-interactive)** tab first, then the Conditional Access tab, because the blocked server-side requests show up there. The member's own sign-in appears on the interactive tab and usually shows as successful.
 
 ## Step 7: Add the Microsoft 365 admin center view
 
@@ -115,4 +115,4 @@ Microsoft Learn describes a **Tools** page for AI tools in the organization. Sig
 ## Sources
 
 - [Enable and use the Microsoft 365 connector (Claude Help Center)](https://support.claude.com/en/articles/12542951-enable-and-use-the-microsoft-365-connector)
-- [Manage tools for agents in the Microsoft 365 admin center (Microsoft Learn)](https://learn.microsoft.com/en-us/microsoft-365/admin/manage/manage-tools-for-agent)
+- [Overview of the Tools page in Microsoft 365 admin center (Microsoft Learn)](https://learn.microsoft.com/en-us/microsoft-agent-365/admin/agent-tools-overview)
