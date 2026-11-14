@@ -24,9 +24,9 @@ To create a Windows 11 bootable USB, plug in a blank flash drive with at least 8
 
 ## What you need before you start
 
-Microsoft's [installation media article](https://support.microsoft.com/en-us/windows/create-installation-media-for-windows-99a58364-8c02-206f-aa6f-40c3b507420d) lists the requirements for creating installation media: a PC with a reliable internet connection and a blank USB flash drive of at least 8 GB. The article warns that any content on the drive is deleted, so copy off anything you want to keep first. Windows 11 is a 64-bit system, and you can check your PC's system type under **Settings**, **System**, **About**. The language you pick for the media should match the language you plan to use during installation, which is my advice, not a Microsoft requirement.
+Microsoft's [installation media article](https://support.microsoft.com/windows/create-installation-media-for-windows-99a58364-8c02-206f-aa6f-40c3b507420d) lists the requirements for creating installation media: a PC with a reliable internet connection and a blank USB flash drive of at least 8 GB. The article warns that any content on the drive is deleted, so copy off anything you want to keep first. Windows 11 is a 64-bit system, and you can check your PC's system type under **Settings**, **System**, **About**. The language you pick for the media should match the language you plan to use during installation, which is my advice, not a Microsoft requirement.
 
-One limit is worth knowing now: the installation media doesn't change what the target PC can run. If the PC is older, read the [Windows 11 requirements](https://learn.microsoft.com/en-us/windows/whats-new/windows-11-requirements) on Microsoft Learn before you spend an evening on it. They include UEFI firmware that is Secure Boot capable and TPM 2.0.
+One limit is worth knowing now: the installation media doesn't change what the target PC can run. If the PC is older, read the [Windows 11 requirements](https://learn.microsoft.com/windows/whats-new/windows-11-requirements) on Microsoft Learn before you spend an evening on it. They include UEFI firmware that is Secure Boot capable and TPM 2.0.
 
 You may also be asked for a product key. The same article says a 25-character product key might be needed, but not for digital licenses.
 
@@ -47,7 +47,7 @@ One practical habit: label the stick with the Windows 11 version and the date yo
 
 ## Make the drive by hand from an ISO
 
-Sometimes you can't run the tool. Maybe the PC you're working on is locked down, or you already have an ISO from the download page. Microsoft Learn describes the manual way in [Install Windows from a flash drive](https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/install-windows-from-a-usb-flash-drive), written for manufacturers. It needs the installation ISO, a flash drive with at least 5 GB free, and a Windows PC to prepare the drive.
+Sometimes you can't run the tool. Maybe the PC you're working on is locked down, or you already have an ISO from the download page. Microsoft Learn describes the manual way in [Install Windows from a flash drive](https://learn.microsoft.com/windows-hardware/manufacture/desktop/install-windows-from-a-usb-flash-drive), written for manufacturers. It needs the installation ISO, a flash drive with at least 5 GB free, and a Windows PC to prepare the drive.
 
 1. Plug in the drive. Right-click **Start** and open **Disk Management**.
 2. Right-click the USB partition, choose **Format** and select **FAT32**. Microsoft states that FAT32 lets the drive boot both BIOS-based and UEFI-based PCs.
@@ -92,7 +92,7 @@ If the PC goes straight into the existing system, shut it down completely and tr
 - Where do I get the ISO itself? Microsoft's installation media article says an ISO file can be created for virtual machines or for burning to a DVD, and the Windows 11 download page is where that starts.
 - Do I need USB media at all for many PCs? [Windows Autopilot](https://www.m365.fm/entity/windows-autopilot/) sets up new devices from the cloud. Microsoft says Autopilot uses the OEM-optimized version of Windows that is preinstalled on the device, so custom images and drivers for every device model don't have to be maintained.
 - What if the PC won't start from any media? Open firmware settings and check boot order and Secure Boot. The article on how to open the BIOS in Windows 11 covers the steps.
-- Can the PC be repaired instead of reinstalled? Booting from your installation media also gives access to the Windows Recovery Environment through **Repair my PC**, as described in Microsoft's [Windows recovery environment](https://support.microsoft.com/en-us/windows/experience/backup-recovery/windows-recovery-environment) article.
+- Can the PC be repaired instead of reinstalled? Booting from your installation media also gives access to the Windows Recovery Environment through **Repair my PC**, as described in Microsoft's [Windows recovery environment](https://support.microsoft.com/windows/experience/backup-recovery/windows-recovery-environment) article.
 
 ## Next step
 
