@@ -114,3 +114,9 @@ Paper maps are quick and good for learning. They are harder to update when produ
 ## Next step
 
 Choose one product family and draw a first current state map on paper this week, with the people who run it. A short session of value stream mapping with a pencil will show you more about your flow than another report.
+
+## Sources
+
+- [Learning to See (book page) - Lean Enterprise Institute](https://www.lean.org/store/book/learning-to-see/)
+- [Learning to See, Introduction (Rother and Shook) - Lean Enterprise Institute](https://www.lean.org/wp-content/uploads/2021/01/Learning-to-See-introduction.pdf)
+- [Let's Create a Current State Value Stream Map! - Gemba Academy](https://blog.gembaacademy.com/2008/02/24/lets-create-a-current-state-value-stream-map/)
