@@ -11,7 +11,7 @@ keypoints:
   - "After a remote wipe, factory reset or restore, the device generates a new Device ID, so the server treats it as unknown and the ABQ rules apply again."
   - "Removing a device in the admin center or with Remove-MobileDevice does not clear ActiveSyncAllowedDeviceIDs, so the old ID can let the same device in instead of quarantining it."
   - "Changing the default access level from Allow to Block or Quarantine affects all existing devices immediately, unless rules or individual allow or block entries cover them."
-  - "The pages I read do not give a release procedure. Release steps below are marked as a suggestion to verify against the cmdlet reference."
+  - "Learn's stated resolution is to add the new Device ID to the mailbox's allowed list. The cmdlet steps below are marked as a suggestion."
 faq:
   - q: "Why was a device quarantined after a reset?"
     a: "According to Microsoft Learn, a remote wipe, factory reset or restore from backup makes the device generate a new Device ID. The server sees an unknown device, so the default access level, access rules and allowed device list apply again. Learn calls this by design."
@@ -25,7 +25,7 @@ faq:
     a: "Learn says removing the device does not clear ActiveSyncAllowedDeviceIDs and ActiveSyncBlockedDeviceIDs. Setting the parameters to null with Set-CASMailbox makes the device quarantine when it connects, but it clears the whole list for that mailbox."
 ---
 
-Quarantine in Exchange Online holds an Exchange ActiveSync device until an administrator decides to allow or block it. The Microsoft Learn page I intended to use as the main source, on mobile device mailbox policies, could not be fetched. This article therefore relies on four other Learn pages and states plainly what they do not cover.
+Quarantine in Exchange Online holds an Exchange ActiveSync device until an administrator decides to allow or block it. This article relies on four Microsoft Learn pages and states plainly what they do not cover.
 
 ## Why a device is quarantined
 
@@ -53,11 +53,11 @@ Learn describes a case where a quarantined device is allowed, the device is remo
 Set-CASMailbox joe@contoso.com -ActiveSyncAllowedDeviceIDs $null
 ```
 
-The page says to clear both parameters. This clears the whole list for the mailbox, not only the removed device, so review the lists first if other devices are allowed or blocked.
+The page says to clear both parameters. This clears the whole list for the mailbox, not only the removed device, so, as my advice, review the lists first if other devices are allowed or blocked.
 
 ## Allowing a device
 
-The pages I read do not document how to release a quarantined device. This outline is a suggestion based on the parameter names above, not a Microsoft procedure, so check the cmdlet reference before using it:
+The ABQ page gives one resolution for the reset case: the new Device ID must be added to the mailbox's ActiveSyncAllowedDeviceIDs list. It gives no cmdlet syntax or admin center steps. The outline below is my suggestion based on the parameter names above, not a Microsoft procedure, so check the cmdlet reference before using it:
 
 1. Read the device ID from the quarantine email, or run `Get-MobileDevice -Mailbox <user>`.
 2. Add the ID to the mailbox's allowed list with `Set-CASMailbox` and the ActiveSyncAllowedDeviceIDs parameter.
@@ -81,7 +81,7 @@ Learn describes the new Device ID after a reset as expected. If your default lev
 
 ## Not covered
 
-The pages do not describe the Exchange admin center screens for quarantine, a release procedure, or the order in which individual lists, rules and the default level are evaluated.
+The pages do not describe the Exchange admin center screens for quarantine, cmdlet syntax for releasing a device, or the order in which individual lists, rules and the default level are evaluated.
 
 ## Related
 
@@ -89,7 +89,7 @@ The pages do not describe the Exchange admin center screens for quarantine, a re
 
 ## Sources
 
-- [Mobile devices not quarantined as expected after removal](https://learn.microsoft.com/troubleshoot/exchange/mobile-devices/mobile-devices-not-quarantined-as-expected)
-- [EAS device is blocked by the ABQ list](https://learn.microsoft.com/exchange/troubleshoot/client-connectivity/eas-device-is-blocked-by-abq-list)
-- [Set-ActiveSyncOrganizationSettings](https://learn.microsoft.com/powershell/module/exchangepowershell/set-activesyncorganizationsettings)
-- [New-ActiveSyncDeviceAccessRule](https://learn.microsoft.com/powershell/module/exchangepowershell/new-activesyncdeviceaccessrule)
+- [Mobile devices not quarantined as expected (Microsoft Learn)](https://learn.microsoft.com/troubleshoot/exchange/mobile-devices/mobile-devices-not-quarantined-as-expected)
+- [EAS device is blocked by ABQ list (Microsoft Learn)](https://learn.microsoft.com/troubleshoot/exchange/client-connectivity/eas-device-is-blocked-by-abq-list)
+- [Set-ActiveSyncOrganizationSettings (Microsoft Learn)](https://learn.microsoft.com/powershell/module/exchangepowershell/set-activesyncorganizationsettings)
+- [New-ActiveSyncDeviceAccessRule (Microsoft Learn)](https://learn.microsoft.com/powershell/module/exchangepowershell/new-activesyncdeviceaccessrule)
