@@ -14,13 +14,13 @@ keypoints:
   - "Microsoft's own pages use changing names, so check the current Learn pages before you write them into a policy or a purchase order."
 faq:
   - q: "What is the main difference between Copilot Chat and Microsoft 365 Copilot?"
-    a: "Microsoft Learn says Copilot Chat is grounded in the web and is included with eligible Microsoft 365 licenses, while the licensed Copilot can also reason over work data from Microsoft Graph. Without the license, Copilot Chat cannot access a user's shared enterprise data, individual data or Graph connector content."
+    a: "Microsoft Learn says Copilot Chat is grounded in the web and is included with eligible Microsoft 365 licenses, while the licensed Copilot can also reason over work data from Microsoft Graph. Without the license, Copilot Chat cannot access organizational data through Microsoft Graph."
   - q: "Is Copilot Chat free for work accounts?"
     a: "Microsoft's Copilot Chat page describes it as available at no additional cost for all Microsoft Entra account users with an eligible Microsoft 365 subscription. Microsoft Learn adds that agents beyond web-grounded ones are priced on a pay-as-you-go basis."
   - q: "Does Copilot use my data to train models?"
     a: "Microsoft Learn's Copilot FAQ states that under enterprise data protection, prompts and responses are not used to train foundation models. It also says the data is not available to OpenAI or used to train OpenAI models. Enterprise data protection applies when you sign in with a Microsoft Entra account."
   - q: "Can I use my personal Copilot at work?"
-    a: "Microsoft Support says that if your employer has multi-account access turned on, you can use a personal Copilot subscription at work, but access and permissions stay tied to your work account. Microsoft also says work and personal experiences stay separate by default and data does not flow between them."
+    a: "Microsoft Support says that if your employer has multi-account access turned on, you can use a personal Copilot subscription at work, but access and permissions stay tied to your work account."
 ---
 The short answer: Microsoft documents several Copilot experiences. The Microsoft Copilot app is the entry point for personal accounts, Copilot Chat is the baseline for work accounts with eligible Microsoft 365 subscriptions, and Microsoft 365 Copilot is the licensed work version that can use your organization's data. The practical difference comes down to the account you sign in with, the license you hold and which data the assistant may use.
 
@@ -28,7 +28,7 @@ The short answer: Microsoft documents several Copilot experiences. The Microsoft
 
 Microsoft Learn separates two sign-in paths. With a work or education Microsoft Entra account, you get Copilot Chat with enterprise data protection. With a personal Microsoft account, you reach the Microsoft Copilot app on web, desktop and mobile, plus other entry points listed on the same page. Learn gives visual cues for a work account, including a "Work" label under the user profile and the green data protection shield.
 
-Microsoft Support adds that Microsoft Copilot is also available in Microsoft 365 Personal, Family and Premium plans under the Microsoft Services Agreement. Work and personal experiences stay separate by default, and data does not flow between them.
+Microsoft Support adds that Microsoft Copilot is also available in Microsoft 365 Personal, Family and Premium plans under the Microsoft Services Agreement. That coverage applies to its Personal, Family, Premium and Pro subscriptions.
 
 ## Step 2: What does Copilot Chat give you at work?
 
@@ -44,17 +44,17 @@ The comparison in Microsoft's licensing table:
 
 | Capability | Copilot Chat (Basic) | Microsoft 365 Copilot (Basic) | Microsoft 365 Copilot (Premium) |
 |---|---|---|---|
-| Add-on license | No | No | Yes |
+| Add-on license | No | No | Yes (priority access) |
 | Copilot in Word, Excel, PowerPoint, OneNote | No | Standard access | Priority access, full experience |
 | Work data via Graph | No | No | Yes, automatic |
-| Agents | Web data; pay-as-you-go for work data agents | Same | Includes agents using web and work data |
-| Admin controls | Basic usage management and reporting | Basic | Advanced controls and analytics |
+| Agents | Declarative agents grounded in instructions and public websites; custom or other agents are pay-as-you-go only | Agents using web data; pay-as-you-go work data agents | Agents using web and work data |
+| Admin controls | Not listed | Basic usage management controls and reporting | Advanced management controls and analytics |
 
-Microsoft Learn also notes fair use limits for some features in the two Basic tiers.
+The same page also lists a usage-based billing column, which this guide does not cover.
 
 ## Cost and license facts to verify
 
-Microsoft's Copilot Chat page lists Microsoft 365 Copilot at $30.00 per user per month paid yearly, and Microsoft 365 Copilot Business at a promotional $18.00 per user per month for up to 300 users, with the discount stated for July 1 to December 31, 2026. Prices and offers change, so confirm them on Microsoft's pricing page. The Learn licensing page says the licensed Copilot is available with Microsoft 365 E7 or as an add-on for eligible plans, and that Microsoft Copilot Business is for organizations with up to 300 users. It advises checking Product Terms and the service description before buying.
+Microsoft's Copilot Chat page lists Microsoft 365 Copilot at $30.00 per user per month paid yearly, and Microsoft 365 Copilot Business at $18.00 per user per month (originally $21.00) for up to 300 users, with the discount stated for July 1 to December 31, 2026. That page also says a separate license for a qualifying Microsoft 365 plan is required for Copilot Business. Prices and offers change, so confirm them on Microsoft's pricing page. The Learn licensing page says the licensed Copilot is available with Microsoft 365 E7 or as an add-on for eligible plans, and that Microsoft Copilot Business is for organizations with up to 300 users. It advises checking Product Terms and the service description before buying.
 
 ## Data protection
 
@@ -62,7 +62,7 @@ Microsoft Learn states that Copilot Chat and the licensed tiers are protected by
 
 ## A note on names
 
-Microsoft's naming is moving. Several Learn pages now say "Microsoft Copilot" where earlier material said "Microsoft 365 Copilot", while table headings still read "Microsoft 365 Copilot (Basic)" and "(Premium)". One support page on subscriptions uses "Microsoft Copilot" for the assistant and "Copilot in Microsoft 365 apps" for the in-app features. A support page on Copilot app changes says personal-account chats and content must be moved to the updated app by December 31, 2026 to be kept. Use the exact names from the page you are quoting, and check dates when you plan a rollout.
+Microsoft's naming is moving. Several Learn pages now say "Microsoft Copilot" where earlier material said "Microsoft 365 Copilot", while table headings still read "Microsoft 365 Copilot (Basic)" and "(Premium)". One support page on subscriptions uses "Microsoft Copilot" for the assistant and "Copilot in Microsoft 365 apps" for the in-app features. A support page on Copilot app changes says you need to sign in to the updated Copilot app by December 31, 2026 to preserve eligible chats and content, and that content not migrated will be permanently deleted after that date. Use the exact names from the page you are quoting, and check dates when you plan a rollout.
 
 ## How to decide
 
@@ -91,5 +91,5 @@ Microsoft's naming is moving. Several Learn pages now say "Microsoft Copilot" wh
 - [Microsoft Learn: License options for Microsoft Copilot](https://learn.microsoft.com/microsoft-365-copilot/microsoft-365-copilot-licensing)
 - [Microsoft Learn: Microsoft Copilot overview](https://learn.microsoft.com/microsoft-365-copilot/microsoft-365-copilot-overview)
 - [Microsoft Support: FAQ about Copilot in Microsoft 365 subscriptions](https://support.microsoft.com/en-us/microsoft-365-copilot/frequently-asked-questions-about-copilot-in-microsoft-365-subscriptions)
-- [Microsoft Support: Updates to Copilot and the Microsoft 365 Copilot app](https://support.microsoft.com/it-it/microsoft-365-copilot/learning/changes-microsoft-copilot-app)
+- [Microsoft Support: Updates to Copilot and the Microsoft 365 Copilot app](https://support.microsoft.com/en-us/microsoft-365-copilot/learning/changes-microsoft-copilot-app)
 - [Microsoft: Microsoft 365 Copilot Chat](https://www.microsoft.com/en-us/microsoft-365-copilot/chat)
