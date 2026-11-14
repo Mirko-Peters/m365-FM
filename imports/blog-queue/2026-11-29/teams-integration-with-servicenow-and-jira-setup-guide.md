@@ -10,7 +10,7 @@ keypoints:
   - "ServiceNow connects to Teams through the Conversational Integration with Microsoft Teams app (sn_va_teams) and Now Virtual Agent. Jira connects through the Jira Cloud app from the Teams app store."
   - "The two apps are built by the vendors. The pages I read at Microsoft describe only how to allow or block apps, not the ServiceNow or Jira setup itself."
   - "ServiceNow ties one instance to one Teams tenant. Cloning a non-production instance and rerunning the setup disassociates the original instance."
-  - "Jira Cloud respects existing Jira permissions. In team, channel and meeting chats it answers only when you mention it with @Jira."
+  - "Jira Cloud search results respect your existing Jira permissions. Atlassian's getting-started page covers Configure, Find and Sign out in the app chat."
   - "If the app is missing from the Teams store, check Teams apps > Manage apps and the org-wide app settings in the Teams admin center before you troubleshoot anything else."
 faq:
   - q: "Does Microsoft Teams integrate with ServiceNow?"
@@ -92,9 +92,11 @@ Atlassian's getting-started page lists these steps.
 
 To change the site later, enter **Configure** again. If your organization has several Jira Cloud sites, Atlassian says you pick one when you connect spaces or set up notifications.
 
-**Use it in a channel.** Add the Jira Cloud app to the channel or meeting first. In team, channel or meeting chats, type **@Jira**, select **Jira Cloud** from the suggestions, then enter a command. Listed commands include Configure, Notifications, Find, Support, Help, Feedback, Tour and Sign out.
+**Find and edit.** In the Jira Cloud chat, enter **Find** followed by a search phrase or a work item key. Use **Edit** to update fields such as assignee and status. To sign out, enter **Sign out**.
 
-**Permissions.** The app respects existing Jira permissions. If a site uses work-item-level security schemes, Teams notifications are not sent for restricted work items. Signing out does not remove existing channel subscriptions.
+**Permissions.** Atlassian says search results respect your Jira permissions, so you only see work items you already have access to. Signing out does not remove existing channel subscriptions.
+
+**Channels and notifications.** Atlassian's overview says you can pin a Jira Cloud tab to a team, channel or meeting and subscribe a channel to a Jira space. The separate notifications article that covers the exact steps, including how to address the app in channel chats, could not be read for this page, so follow it directly.
 
 ## The Teams admin center decides availability
 
@@ -114,9 +116,9 @@ The same Learn page says users can request access from the Teams client, and adm
 |---|---|
 | App missing in the Teams store | Manage apps status, then the Third-party apps org-wide setting |
 | Jira app installs but shows no data | Run **Configure** and select the correct Jira site |
-| No Jira messages in a channel | Confirm the app was added to the channel and that you mention **@Jira** |
+| No Jira messages in a channel | Follow Atlassian's notifications article for channel subscriptions |
 | ServiceNow setup refuses the tenant | The tenant may already be linked to another instance |
-| Notifications missing for some issues | Work-item-level security schemes can suppress them |
+| Search shows fewer work items than expected | Jira permissions limit what you can see |
 
 ## Other business apps
 
