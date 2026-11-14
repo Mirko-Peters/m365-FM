@@ -22,7 +22,7 @@ faq:
 ---
 If Outlook search is not working, check the basics in this order: the search scope and filters, a full restart, the indexing status, and the Windows Search service. If that doesn't help, rebuild the search catalog and then test a new profile. This article is for Outlook users and help desk staff who get empty or incomplete results, or a search box that never finishes. Most of it applies to [Outlook](https://www.m365.fm/entity/outlook/) on Windows, because that's where indexing problems live. Microsoft's own steps differ between classic Outlook and new Outlook, so each section tells you which one it's about.
 
-To tell the two apart, look at the ribbon. If you see **Settings**, you're in new Outlook. If you don't, you're in classic Outlook. Microsoft uses the same test in its [guide to troubleshooting Outlook search issues](https://support.microsoft.com/en-us/outlook/troubleshooting-outlook-search-issues), which is the main source for the steps below.
+To tell the two apart, look at the ribbon. If you see **Settings**, you're in new Outlook. If you don't, you're in classic Outlook. Microsoft uses the same test in its [guide to troubleshooting Outlook search issues](https://support.microsoft.com/outlook/troubleshooting-outlook-search-issues), which is the main source for the steps below.
 
 ## Find out what kind of search problem you have
 
@@ -70,7 +70,7 @@ To see where the index stands:
 
 If the number goes down, indexing is working. It's simply busy. Large mailboxes, a newly added account or a freshly restored data file all keep it busy for a while, and a slow hard disk makes that worse. Leave the PC running and let it catch up, ideally overnight if the count is high. If the number stays the same or climbs, indexing is stuck and you should continue with the steps below.
 
-One case deserves a special mention. After an upgrade to Windows 11, Outlook's search index is deleted and has to be built again. Microsoft calls this expected behavior and says searches return nothing until the rebuild completes. It affects accounts stored locally in PST or OST files, which includes POP and IMAP accounts and the offline copy of Exchange and Microsoft 365 mailboxes. The details are in Microsoft's note on [Outlook search not returning results after an upgrade to Windows 11](https://support.microsoft.com/en-us/office/outlook-search-does-not-return-results-after-upgrade-to-windows-11-cc54dfee-ee78-4123-a9af-7986748052ef). If you're in that situation, check the indexing status and give it time before you change anything.
+One case deserves a special mention. After an upgrade to Windows 11, Outlook's search index is deleted and has to be built again. Microsoft calls this expected behavior and says searches return nothing until the rebuild completes. It affects accounts stored locally in PST or OST files, which includes POP and IMAP accounts and the offline copy of Exchange and Microsoft 365 mailboxes. The details are in Microsoft's note on [Outlook search not returning results after an upgrade to Windows 11](https://support.microsoft.com/office/outlook-search-does-not-return-results-after-upgrade-to-windows-11-cc54dfee-ee78-4123-a9af-7986748052ef). If you're in that situation, check the indexing status and give it time before you change anything.
 
 Next, confirm that Outlook is actually part of the index.
 
@@ -84,7 +84,7 @@ Microsoft also suggests running the built-in indexer troubleshooter before any o
 
 If indexing is stuck or the index is damaged, rebuilding is the standard fix. It throws away the current index and builds a new one, so expect search to be incomplete for a while. Start it when you're done for the day.
 
-Microsoft's article on [rebuilding your Instant Search catalog](https://support.microsoft.com/en-us/outlook/fix-search-issues-by-rebuilding-your-instant-search-catalog) gives these steps:
+Microsoft's article on [rebuilding your Instant Search catalog](https://support.microsoft.com/outlook/fix-search-issues-by-rebuilding-your-instant-search-catalog) gives these steps:
 
 1. Close Outlook.
 2. Open **Control Panel** and select **Indexing Options**. Typing "Indexing" in the Control Panel search box gets you there faster.
@@ -119,7 +119,7 @@ A repair replaces damaged program files and keeps your data. Right-click **Start
 
 The Inbox Repair tool, `SCANPST.EXE`, is for a different problem than "search finds nothing". Microsoft describes it for cases where Outlook can't open a data file or its folders, or where the file may be damaged. Use it when you have symptoms like that.
 
-Microsoft's [repair guide for Outlook data files](https://support.microsoft.com/en-us/outlook/repair-outlook-data-files-pst-and-ost) lists the folder for Outlook 2019 and 2016 as `C:\Program Files (x86)\Microsoft Office\root\Office16`. The page gives no path for other versions, so search your Program Files folders for `SCANPST.EXE` if it isn't there. The steps are:
+Microsoft's [repair guide for Outlook data files](https://support.microsoft.com/outlook/repair-outlook-data-files-pst-and-ost) lists the folder for Outlook 2019 and 2016 as `C:\Program Files (x86)\Microsoft Office\root\Office16`. The page gives no path for other versions, so search your Program Files folders for `SCANPST.EXE` if it isn't there. The steps are:
 
 1. Close Outlook and copy the .pst file somewhere safe. Microsoft recommends a backup before you run the tool.
 2. Open `SCANPST.EXE` and browse to the file. If you don't know where it is, look under **File** > **Account Settings** > **Account Settings** > **Data Files**.
@@ -171,8 +171,15 @@ Microsoft's article doesn't set hardware requirements for search, so there's no 
 - **Search on a low-spec PC.** Why a slow disk and a large mailbox delay indexing, and how an archive reduces the load. Start with the indexing status steps above.
 - **Shared and delegated mailboxes.** Why the scope and the permissions decide what search can see in a team inbox on [Exchange Online](https://www.m365.fm/entity/exchange-online/).
 - **Several accounts in one profile.** How to check the index per account and keep each data file in the list of locations to search.
-- **Language and region settings.** Why a mismatch between Windows and Office language can change how search matches words. Check this if only some terms fail.
+- **Terms that fail.** If only some words fail, test other words and run the same search in Outlook on the web before you change settings.
 
 ## Next step
 
 If Outlook search is not working today, open the indexing status first and write down the number. Then work down this list one step at a time, and note which step fixed it, so you can fix the next case faster.
+
+## Sources
+
+- [Troubleshooting Outlook search issues (Microsoft Support)](https://support.microsoft.com/outlook/troubleshooting-outlook-search-issues)
+- [Outlook search does not return results after upgrade to Windows 11 (Microsoft Support)](https://support.microsoft.com/office/outlook-search-does-not-return-results-after-upgrade-to-windows-11-cc54dfee-ee78-4123-a9af-7986748052ef)
+- [Fix search issues by rebuilding your Instant Search catalog (Microsoft Support)](https://support.microsoft.com/outlook/fix-search-issues-by-rebuilding-your-instant-search-catalog)
+- [Repair Outlook data files (.pst and .ost) (Microsoft Support)](https://support.microsoft.com/outlook/repair-outlook-data-files-pst-and-ost)
