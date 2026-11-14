@@ -91,7 +91,7 @@ These are suggestions, not statements from the Learn page.
 
 ## Not covered by the page
 
-The concept page does not detail per-method restrictions, how external users are handled, or step-by-step creation and assignment. Learn links separate articles for custom strengths, external users and troubleshooting.
+The concept page does not detail per-method restrictions, how external users are handled, or step-by-step creation and assignment. Learn links a separate article for custom strengths.
 
 ## Typical mistakes
 
@@ -108,4 +108,4 @@ The concept page does not detail per-method restrictions, how external users are
 
 ## Sources
 
-- [Conditional Access authentication strengths (Microsoft Learn)](https://learn.microsoft.com/entra/identity/authentication/concept-authentication-strengths)
+- [Overview of Conditional Access Authentication Strengths (Microsoft Learn)](https://learn.microsoft.com/entra/identity/authentication/concept-authentication-strengths)
