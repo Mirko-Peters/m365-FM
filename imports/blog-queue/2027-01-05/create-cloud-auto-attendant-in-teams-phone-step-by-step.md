@@ -89,11 +89,11 @@ The Learn page does not list license SKUs, phone number steps or resource accoun
 - Voicemail destinations need the Microsoft 365 admin center setting **Let people outside the organization email this team** for the group.
 - New users may take up to 36 hours to appear in the directory.
 - Audio file formats and sizes are in a separate limits article.
-- Learn warns about a daylight saving change on 1 November 2026 for some Canadian auto attendants that use US-based time zones. They need manual time zone updates, and the page lists the replacement zones per province.
+- Learn warns about a daylight saving change on 1 November 2026 for some Canadian auto attendants that use US-based time zones. They need manual time zone updates, and the page lists the replacement zones per province. That date has already passed, so my advice is to check now that any affected auto attendant uses the time zone the page names.
 
 ## Tools and PowerShell
 
-Some options exist only in PowerShell, for example `New-CsAutoAttendant -UserNameExtension` for office or department details in dial-by-name results. Learn also names a diagnostic test in the Microsoft 365 admin center, at `aka.ms/TeamsAADiag`, that checks whether an auto attendant can receive calls.
+Some options exist only in PowerShell, for example `New-CsAutoAttendant -UserNameExtension` for office or department details in dial-by-name results. Learn also describes a diagnostic tool, run from the page and shown in the Microsoft 365 admin center, that checks whether an auto attendant can receive calls. You enter the resource account and select **Run Tests**.
 
 ## What the page does not say
 
@@ -124,4 +124,4 @@ The order below is practical advice.
 
 ## Sources
 
-- [Create a cloud auto attendant (Microsoft Learn)](https://learn.microsoft.com/microsoftteams/create-a-phone-system-auto-attendant)
+- [Setup - Auto Attendant - Microsoft Teams (Microsoft Learn)](https://learn.microsoft.com/microsoftteams/aa-cq-setup-auto-attendant)
