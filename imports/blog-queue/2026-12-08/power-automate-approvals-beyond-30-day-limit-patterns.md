@@ -41,21 +41,23 @@ Sequential approvals add up. Three stages with two weeks each already run past 2
 
 ## Pattern 1: Parent and child flows
 
-Learn's guidance for multi-level approvals is to break each approval out into parent and child flows. Each child flow is its own run, so each approver gets their own 30 days.
+The Learn training module on approvals says that the 30-day timeout covers the entire flow, so anything pending at the 30-day mark times out. For approval processes with multiple levels, it says you might consider breaking out the approval into parent-child flows, which gives each approver 30 days to respond. The module does not describe how to build this.
+
+A possible layout (my own illustration, not a documented template):
 
 1. The parent flow starts the process and calls a child flow for stage 1.
 2. When the child finishes, the parent calls the next child for stage 2.
 3. The parent decides on the final outcome.
 
-The limits page adds a caution. Child flows that start before a response action continue to run separately, and the page describes this as a way to let a flow respond and continue other work. The pages I read do not say the parent's own duration resets, so test how the run time of the parent behaves in your tenant.
+The pages read do not say how the run duration of the parent behaves while it waits for a child flow, so test this in your tenant before you rely on it.
 
 ## Pattern 2: Dataverse and two flows
 
-Microsoft's approvals documentation says that if a flow might run longer than 30 days, store the approvals in Microsoft Dataverse. This lets you create flows that act on responses even after the original flow run times out. The recommended structure is two flows: one that sends the request, and one that processes responses.
+The Microsoft Learn approvals tutorial says that if a flow might run longer than 30 days, you should store the approvals in Microsoft Dataverse. This lets you create flows that act on responses to approval requests even after the original flow run times out. It describes two flows, one to send an approval request and one to run business logic on the responses, based on the **Create an approval (v2)** action.
 
 Build it like this:
 
-1. Flow A uses **Create an approval** (v2), which creates the Dataverse records and sends notifications without blocking the run.
+1. Flow A uses **Create an approval (v2)**, which creates the Dataverse records and sends notifications without blocking the run.
 2. Flow A saves the approval ID and the business record ID somewhere durable, such as a Dataverse table or SharePoint list, and ends.
 3. Flow B starts when the approval is completed and updates the business record. Check the exact trigger name in the Approvals connector in your environment, because the pages I read do not name it.
 
@@ -63,7 +65,7 @@ This is a design inference from Microsoft's guidance, not a documented template,
 
 ## Choose the right approval action
 
-| Action | Behavior | Use when |
+| Action | Behavior | Use when (partly my summary) |
 |---|---|---|
 | Start and wait for an approval | Creates records, sends notifications, blocks until criteria are met or it times out | Short approvals inside one run |
 | Create an approval | Creates records and sends notifications, does not block | Long approvals, Teams adaptive cards, logging the request |
@@ -83,7 +85,7 @@ Learn's limits page also lists retention rules. A cloud flow whose trigger or ac
 
 ## A cleanup routine
 
-Because timed-out flows leave approvals behind, plan a periodic check. Someone with the right role can review the **Approvals** area and delete approvals that have no flow waiting. The pages I read do not describe a bulk method.
+Because timed-out flows leave approvals behind, plan a periodic check. Learn says the requestor or an environment admin has to delete abandoned approvals manually from the action center. The pages I read do not describe a bulk method or a way to find them automatically.
 
 ## Related
 
@@ -96,5 +98,5 @@ Because timed-out flows leave approvals behind, plan a periodic check. Someone w
 - [Limits of automated, scheduled, and instant flows](https://learn.microsoft.com/en-us/power-automate/limits-and-config)
 - [Known issues with approvals](https://learn.microsoft.com/en-us/power-automate/approvals-known-issues)
 - [Create and test an approval workflow with Power Automate](https://learn.microsoft.com/en-us/power-automate/modern-approvals)
-- [Known issues and limits (Microsoft Learn training)](https://learn.microsoft.com/en-us/learn/modules/approvals-power-automate/5-issues-limits)
+- [Known issues and limits (Microsoft Learn training)](https://learn.microsoft.com/en-us/training/modules/approvals-power-automate/5-issues-limits)
 - [Differences between flow approval actions](https://learn.microsoft.com/en-us/troubleshoot/power-platform/power-automate/approvals/differences-between-flow-approval-actions)
