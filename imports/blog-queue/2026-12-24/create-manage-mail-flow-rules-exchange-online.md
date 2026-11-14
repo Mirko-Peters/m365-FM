@@ -74,7 +74,7 @@ To check results, `Get-TransportRule | Format-List Name,Priority` and `Get-Trans
 
 ## Timing
 
-After you create, copy or modify a rule, it can take 30 minutes or more to take effect. Test in a quiet period, and start with a test mode before **Enforce**.
+After you create, copy or modify a rule, it can take 30 minutes or more to take effect. Learn tells you to test each rule and the interactions between rules thoroughly. My advice: test in a quiet period and start with a test mode before **Enforce**.
 
 ## Monitoring
 
@@ -84,7 +84,7 @@ Go to **Reports** > **Mail flow** and select **Exchange Transport Rule report**.
 
 `Export-TransportRuleCollection` exports all rules to XML. `Import-TransportRuleCollection` is being deprecated. The page gives a manual script workaround that first removes all existing rules, so export first as a backup.
 
-## Practical order
+## Practical order (my advice)
 
 1. Create the rule in test mode, with a clear name.
 2. Check where it sits in the order, and whether an earlier rule uses **Stop processing more rules**.
@@ -111,4 +111,4 @@ These checks are a suggestion derived from the documented behaviour above, not a
 
 ## Sources
 
-- [Manage mail flow rules in Exchange Online](https://learn.microsoft.com/exchange/security-and-compliance/mail-flow-rules/manage-mail-flow-rules)
+- [Manage mail flow rules in Exchange Online (Microsoft Learn)](https://learn.microsoft.com/exchange/security-and-compliance/mail-flow-rules/manage-mail-flow-rules)
