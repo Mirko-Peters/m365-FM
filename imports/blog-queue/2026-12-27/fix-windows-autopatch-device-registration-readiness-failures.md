@@ -11,7 +11,7 @@ keypoints:
   - "Prerequisites include Intune or co-managed enrollment, an Intune check-in within 28 days, a corporate-owned Windows device and a supported SKU such as Enterprise, Pro or Education."
   - "For co-managed devices the Windows Update policies and Device configuration workloads must be enabled."
   - "A stale Microsoft Entra device record or a dual state of hybrid joined plus Entra registered can make the device fail the Intune or Cloud-Attached check."
-  - "The page documents statuses and remedies but has no Fix button, and it links the post-registration readiness checks separately."
+  - "The page documents statuses and remedies in text and links the post-registration readiness checks separately."
 faq:
   - q: "How do devices get registered with Windows Autopatch?"
     a: "According to Microsoft Learn, by assigning the Microsoft Entra groups that contain them to a Windows Autopatch group. Autopatch scans device-based Entra groups on an ongoing basis. Discovery runs hourly, and for new customers devices can take up to 48 hours to appear as registered in the membership report."
@@ -25,7 +25,7 @@ faq:
     a: "For changes such as the motherboard, a nonremovable NIC or OS drive details, Microsoft Entra creates a new device ID. Add the new ID through direct membership or a nested group in the Autopatch group. After a reimage, rejoin and re-enroll, and the device ID stays the same."
 ---
 
-When a device does not register with Windows Autopatch, the cause is usually a failed prerequisite, a stale record or a group conflict. This article follows the Microsoft Learn page on registering devices with Windows Autopatch groups and keeps to the checks and remedies it names.
+When a device does not register with Windows Autopatch, the cause can be a failed prerequisite, a stale record or a group conflict. This article follows the Microsoft Learn page on registering devices with Windows Autopatch groups and keeps to the checks and remedies it names.
 
 ## How registration works
 
@@ -63,7 +63,7 @@ The report shows group membership, update status and the policies targeting each
 
 ## Remedies the page gives
 
-The page has no Fix button. Remediation is described in text:
+The page describes remediation in text:
 
 - **Not enrolled in Intune:** find out why. A common cause is a stale Microsoft Entra device record. Detect and remove stale records as described in the article on managing stale devices in Microsoft Entra ID.
 - **Dual state, hybrid joined and Entra registered:** the hybrid record takes precedence, so the registered record becomes stale. Clean up before registering, or the device may fail the **Intune or Cloud-Attached** check and appear in the Not ready view.
@@ -81,7 +81,7 @@ With fewer than 100 devices in a group, dynamic distribution may not match the s
 
 ## A triage order
 
-This order is a suggestion built from the page, not a Microsoft procedure.
+This order is my advice, built from the page, not a Microsoft procedure.
 
 1. Confirm the device is in an Entra group assigned to an Autopatch group.
 2. Check Intune enrollment and the last check-in date.
@@ -99,4 +99,4 @@ The page does not list the post-registration readiness checks, which it links el
 
 ## Sources
 
-- [Register devices with Windows Autopatch groups](https://learn.microsoft.com/windows/deployment/windows-autopatch/deploy/windows-autopatch-register-devices)
+- [Register devices with Windows Autopatch groups (Microsoft Learn)](https://learn.microsoft.com/windows/deployment/windows-autopatch/deploy/windows-autopatch-register-devices)
