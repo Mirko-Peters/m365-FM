@@ -8,17 +8,17 @@ date: 2026-11-26
 topics: [viva-connections, teams, sharepoint-home-site]
 keypoints:
   - "Microsoft Learn now calls Viva Connections the SharePoint app in Teams. Existing configurations, custom app names and logos keep working."
-  - "Home sites are now created in the SharePoint admin center under Settings > SharePoint apps > Home sites. This replaces the Viva Connections console path on older pages."
+  - "Home sites are created in the SharePoint admin center under Settings > SharePoint apps > Home sites. Older pages describe a Microsoft 365 admin center console."
   - "An Enterprise, Frontline or Academic license is needed. One experience per tenant is the default and up to 50 need a Viva Suite or Viva Communications and Communities license."
   - "Plan around key tasks: Microsoft says not every task should become a dashboard card. Pick short, high-impact tasks and target them by audience."
-  - "Pin the app for users in the Teams admin center under Teams apps > Setup policies. Changes can take up to 24 hours to propagate."
+  - "Pin the app in the Teams admin center under Teams apps > Setup policies. Status and rank-order changes can take up to 24 hours."
 faq:
   - q: "Is Viva Connections renamed?"
     a: "Yes. The Microsoft Learn overview says the product is now the SharePoint app in Teams, formerly Viva Connections. A May 2026 Message center post (MC1304293) announced the rename, with Targeted Release from early May 2026 and general availability by late June 2026. It says existing branding, custom app names and logos stay the same."
   - q: "What do I need to set up the SharePoint app in Teams?"
     a: "Microsoft Learn says you need an Enterprise, Frontline or Academic license to create an experience, and SharePoint admin permissions. A home site is not a requirement for Viva Connections itself, though the new home site pages describe creating one in the SharePoint admin center. One experience is allowed per tenant, and up to 50 need a Viva Suite or Viva Communications and Communities license."
   - q: "How do I make the app appear in Teams for everyone?"
-    a: "On the page I read, a Teams administrator pins it. In the Teams admin center go to Teams apps > Setup policies, open Global (Org-wide default), scroll to Pinned apps, select Add apps, search for the app by its name, add it and save. The page says changes can take up to 24 hours."
+    a: "On the page I read, a Teams administrator pins it. In the Teams admin center go to Teams apps > Setup policies, open Global (Org-wide default), scroll to Pinned apps, select Add apps, search for the app by its name, add it and save. The setup page says status and rank-order changes for experiences can take up to 24 hours. It gives no propagation time for the pin itself."
   - q: "What are the main parts of the experience?"
     a: "Microsoft Learn lists News (SharePoint news, boosted news, followed and frequent sites), Dashboard (cards for tasks), Resources (curated links) and Announcements, which is available only in SharePoint home sites. An older overview also lists a Spotlight area and says the Feed was replaced by the News reader."
   - q: "How should I decide what goes on the dashboard?"
@@ -74,7 +74,7 @@ From the home site page:
 
 ### Older console path
 
-The older setup page describes the Microsoft 365 admin center: **Settings** > **Viva** > **Viva Connections** > **Create and manage Viva Connections experiences**, then **+ Create new**. It covers permissions, audiences, order and an **Enable experience** checkbox in the **General** tab. The newer home site page says home sites were previously managed there. I could not confirm which steps still apply in every tenant, so compare with what your admin center shows.
+The older setup page describes the Microsoft 365 admin center: **Settings** > **Viva** > **Viva Connections** > **Create and manage Viva Connections experiences**, then **+ Create new**. It covers permissions, audiences, order and an **Enable experience** checkbox in the **General** tab. That setup page says Viva Connections and SharePoint home site administration are being combined in the Microsoft 365 admin center, while the newer home site page describes creating home sites in the SharePoint admin center. I could not confirm which steps still apply in every tenant, so compare with what your admin center shows.
 
 ### Pin it in Teams
 
@@ -83,7 +83,7 @@ The older setup page describes the Microsoft 365 admin center: **Settings** > **
 3. Under **Pinned apps**, select **+ Add apps**, search for the app by the name you gave it, and add it.
 4. Drag it to the top and select **Save**.
 
-Microsoft says the app icon and name are managed at tenant level, and changes can take up to 24 hours.
+Microsoft says the app icon and name are managed at tenant level. The setup page says status and rank-order changes for experiences can take up to 24 hours.
 
 ## Build the dashboard
 
