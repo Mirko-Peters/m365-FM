@@ -1,6 +1,6 @@
 ---
 title: "Microsoft Copilot vs ChatGPT Enterprise: How to Compare Them for Workplace Productivity"
-summary: "A decision guide for comparing Microsoft Copilot and ChatGPT Enterprise: data grounding, licensing tiers, permissions, data protection and admin controls. The Copilot side is sourced from Microsoft Learn."
+summary: "A decision guide for comparing Microsoft Copilot and ChatGPT Enterprise: data grounding, licensing tiers, permissions, data protection and admin controls. The Copilot side is sourced from Microsoft Learn, the ChatGPT side from two OpenAI pages."
 status: review
 publish: false
 author: mirko-p
@@ -10,11 +10,11 @@ keypoints:
   - "Microsoft Copilot grounds answers in Microsoft Graph and Work IQ data and honors each user's existing permissions. Copilot Chat (Basic) uses mostly web data unless you supply the content."
   - "Microsoft documents four license states, from Copilot Chat (Basic) to usage-based billing. Which one you have changes what Copilot can reach."
   - "Prompts and responses are protected by Enterprise Data Protection when users sign in with Entra accounts, and are not used to train foundation models."
-  - "I could not read OpenAI's ChatGPT Enterprise documentation, so this article makes no ChatGPT feature claims. It gives you the questions to verify on the OpenAI side."
+  - "OpenAI's pages cover only part of this: no training on business data by default, plus SSO, SCIM and a Compliance API. Connectors, pricing and data location are not verified here."
   - "Decide on data location, identity and permissions, governance, compliance and cost, then run a pilot with the same tasks on both tools."
 faq:
   - q: "What is the main difference between Microsoft Copilot and ChatGPT Enterprise?"
-    a: "Microsoft Learn describes Copilot as connecting language models to organizational data through Microsoft Graph and Work IQ, scoped to user permissions. How ChatGPT Enterprise reaches company data is documented by OpenAI, and I could not read those pages, so check them directly."
+    a: "Microsoft Learn describes Copilot as connecting language models to organizational data through Microsoft Graph and Work IQ, scoped to user permissions. The OpenAI pages I read do not describe how ChatGPT Enterprise reaches company data, so check OpenAI's documentation for its connectors."
   - q: "Does Microsoft Copilot use my data to train its models?"
     a: "According to Microsoft Learn, prompts, responses and data accessed through Microsoft Graph aren't used to train foundation large language models, including those used by Microsoft Copilot."
   - q: "Do I need a paid license to use Copilot at work?"
@@ -25,13 +25,13 @@ faq:
     a: "Microsoft Learn says Microsoft may deploy other models hosted and operated by Microsoft, and that admins can decide whether to use models from Anthropic and OpenAI as subprocessors, with additional terms possibly applying."
 ---
 
-Microsoft Copilot and ChatGPT Enterprise are both workplace AI assistants, but the useful comparison is not a feature count. It is where each tool gets its data, whose permissions apply, who administers it and what it costs per user. This article gives a framework and fills in the Copilot side from Microsoft Learn. I could not read OpenAI's own ChatGPT Enterprise pages, so I make no claims about that product and mark each place where you must verify it.
+Microsoft Copilot and ChatGPT Enterprise are both workplace AI assistants, but the useful comparison is not a feature count. It is where each tool gets its data, whose permissions apply, who administers it and what it costs per user. This article gives a framework and fills in the Copilot side from Microsoft Learn. I read two OpenAI pages, one on training policy and one announcing enterprise admin and compliance tools. They support only a few rows of the comparison, and I mark every other place where you must verify it.
 
 ## What Microsoft documents about Copilot
 
 ### Data grounding
 
-Microsoft Learn says Copilot responses are powered by large language models, grounding in web and organizational data (Microsoft Graph and Work IQ), and access scoped by user permissions. It accesses content such as user documents, emails, calendar, chats, meetings and contacts through Microsoft Graph and combines it with the user's working context.
+Microsoft Learn says Copilot responses are powered by large language models, grounding in web and organizational data (Microsoft Graph and Work IQ), and access scoped by user permissions. For Premium, Work IQ can be turned on or off. With it off, responses are not grounded in Microsoft Graph and Work IQ. It accesses content such as user documents, emails, calendar, chats, meetings and contacts through Microsoft Graph and combines it with the user's working context.
 
 ### Permissions
 
@@ -43,8 +43,8 @@ The Copilot overview page describes four states:
 
 | State | What Microsoft says |
 |---|---|
-| Copilot Chat (Basic) | No add-on license and no access to Copilot in Word, Excel, PowerPoint and OneNote. Some features have fair use limits. |
-| Microsoft 365 Copilot (Basic) | No add-on license but standard access to Copilot in those apps. Fair use limits apply. |
+| Copilot Chat (Basic) | No add-on license and no access to Copilot in Word, Excel, PowerPoint and OneNote. |
+| Microsoft 365 Copilot (Basic) | No add-on license but standard access to Copilot in those apps. Standard access is subject to service capacity and might vary throughout the day. |
 | Microsoft 365 Copilot (Premium) | Add-on license with priority access to the full experience in those apps. |
 | Usage-based billing | Add-on license plus access to Copilot Cowork and Copilot Code via usage-based billing. |
 
@@ -68,18 +68,30 @@ Microsoft names GDPR, ISO 27001, HIPAA and ISO 42001, and the EU Data Boundary. 
 
 In the admin center, Copilot controls let admins pin or unpin Copilot Chat, manage image generation, control how users create and use agents, manage web search with the **Allow web search in Copilot** policy, and remove access to Copilot Chat entirely. The AI Administrator role gives least-privilege access to manage Copilot.
 
+## What OpenAI documents about ChatGPT Enterprise
+
+Two OpenAI pages support the following points. Treat them as a starting point, because one is a product announcement from July 2024 that OpenAI updated in December 2025, and plans and features change.
+
+- **Training.** OpenAI's policy page says: "By default, we do not train on any inputs or outputs from our products for business users." It names ChatGPT Team, ChatGPT Enterprise and the API Platform.
+- **Admin and compliance tools.** The announcement lists an Enterprise Compliance API with a record of time-stamped interactions, including conversations and uploaded files, third-party compliance integrations from eDiscovery and DLP providers, SCIM for syncing employee directories, and an approved-domain list for GPT actions.
+- **Privacy and security controls.** It lists a custom data retention window, single sign-on and domain verification, and encryption at rest and in transit.
+- **Certifications.** It names CCPA, CSA STAR and SOC 2 Type 2.
+- **December 2025 update.** The Compliance API became part of the OpenAI Compliance Logs Platform, with new admin audit, user authentication and Codex usage logs.
+
+These pages do not describe how ChatGPT Enterprise connects to your files, mail and chats, what it costs, or where data is stored, so those stay open questions.
+
 ## A comparison framework
 
-Use the table as a worksheet. The middle column is what Microsoft documents. The right column is what you must check on the OpenAI side.
+Use the table as a worksheet. The middle column is what Microsoft documents. The right column shows what the two OpenAI pages document, where they do, and otherwise what you must check yourself.
 
 | Question | Microsoft Copilot (Microsoft Learn) | ChatGPT Enterprise (verify at OpenAI) |
 |---|---|---|
 | Where does it get company data? | Microsoft Graph and Work IQ, automatically, in Premium | How it connects to your files, mail and chats |
 | Whose permissions apply? | The signed-in user's existing Microsoft 365 permissions | How access to connected sources is scoped |
-| Model training on your data | Not used to train foundation models | The stated policy for business data |
-| Identity and admin | Entra accounts, admin center, AI Administrator role | Single sign-on, user provisioning, roles |
-| Retention and audit | Purview retention, Content search, user deletion | What is stored, for how long, and how to audit |
-| Compliance and residency | GDPR, ISO 27001, HIPAA, ISO 42001, EU Data Boundary | Certifications and data location options |
+| Model training on your data | Not used to train foundation models | By default no training on business-user inputs or outputs, per OpenAI's policy page |
+| Identity and admin | Entra accounts, admin center, AI Administrator role | SSO, domain verification and SCIM per OpenAI's announcement. Verify roles |
+| Retention and audit | Purview retention, Content search, user deletion | Custom retention window and Compliance API per OpenAI's announcement. Verify current audit logs |
+| Compliance and residency | GDPR, ISO 27001, HIPAA, ISO 42001, EU Data Boundary | CCPA, CSA STAR and SOC 2 Type 2 named in the announcement. Verify current certifications and data location |
 | Cost model | Add-on license, Chat (Basic) included, usage-based options | Seat price and any usage limits |
 
 ## How to decide
@@ -95,7 +107,7 @@ Use the table as a worksheet. The middle column is what Microsoft documents. The
 
 - Comparing Copilot Chat (Basic) with a full enterprise deployment of another tool. Microsoft says Basic doesn't access Microsoft Graph for organizational data.
 - Ignoring identity. Microsoft says Enterprise Data Protection applies when users sign in with Entra accounts.
-- Treating a vendor blog comparison as documentation. Use each vendor's own pages for security and licensing facts.
+- Treating a third-party blog comparison as documentation. Use each vendor's own pages for security and licensing facts, and check the date of any announcement.
 
 ## Related
 
@@ -106,5 +118,7 @@ Use the table as a worksheet. The middle column is what Microsoft documents. The
 
 ## Sources
 
-- [Microsoft Copilot overview, Microsoft Learn](https://learn.microsoft.com/en-us/copilot/microsoft-365/microsoft-365-copilot-overview)
-- [Data, privacy and security for Microsoft Copilot, Microsoft Learn](https://learn.microsoft.com/en-us/copilot/microsoft-365/microsoft-365-copilot-privacy)
+- [Microsoft Copilot overview, Microsoft Learn](https://learn.microsoft.com/en-us/microsoft-365/copilot/copilot-overview)
+- [Data, privacy and security for Microsoft Copilot, Microsoft Learn](https://learn.microsoft.com/en-us/microsoft-365/copilot/microsoft-365-copilot-privacy)
+- [How your data is used to improve model performance, OpenAI](https://openai.com/policies/how-your-data-is-used-to-improve-model-performance/)
+- [New compliance and administrative tools for ChatGPT Enterprise, OpenAI](https://openai.com/index/new-tools-for-chatgpt-enterprise/)
