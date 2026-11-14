@@ -10,11 +10,11 @@ keypoints:
   - "After unified routing is enabled, the active basic routing rule does not route records until an intake rule is configured and mapped to it."
   - "Automatic assignment needs a private queue with at least one representative who matches presence, capacity and skills."
   - "The Assign command changes the owner of a case but does not route it. Use Save and route to send it through unified routing."
-  - "Closing a voice or chat conversation without the X button leaves it in wrap-up, so capacity stays occupied until the wrap-up time ends."
+  - "Ending a voice or chat conversation without closing it with the X button leaves it in wrap-up, so capacity stays occupied until the wrap-up time ends."
   - "The unified routing diagnostics page is marked deprecated, so check the Learn deprecation notice before relying on it."
 faq:
   - q: "Why are my cases not routed after I enabled unified routing?"
-    a: "Microsoft Learn says the active basic routing rule will not route records until you configure intake rules. The FAQ advises checking that an intake rule exists and is mapped to an active basic routing rule or a workstream."
+    a: "Microsoft Learn says the active basic routing rule will not route records until you configure intake rules. The FAQ advises checking that an intake rule is configured and mapped to an active basic routing rule. The record routing setup page adds that intake rules can also be mapped to a workstream."
   - q: "Why does a work item stay in the queue even though agents are online?"
     a: "Per Microsoft Learn, automatic assignment considers presence and capacity, plus any skills in the assignment setup. Check that the agent presence matches an allowed presence in the workstream, that capacity is available, and that the agent has the skills found during classification. Learn also says the queue must be a private queue with at least one representative."
   - q: "What happens when a conversation is routed to a queue with no representatives?"
@@ -22,7 +22,7 @@ faq:
   - q: "Does the Assign command send a case through unified routing?"
     a: "No. Microsoft Learn explains that Assign changes the case owner but does not route the case. Manually created cases have the Route Case attribute set to false. Use Save and route on the case, or select several cases in the grid and use it there."
   - q: "How often is a work item offered to the same agent again after a decline?"
-    a: "Microsoft Learn says declining or letting the notification time out counts as a decline. An agent can be reconsidered for the same item up to three times by default if they are the only eligible one. The limit is configurable from 1 to 5."
+    a: "Microsoft Learn says declining or letting the notification time out counts as a decline. An agent can be reconsidered for the same item up to three times by default if they are uniquely qualified or all other eligible representatives decline. The limit is configurable from 1 to 5."
 ---
 
 When unified routing fails, the problem sits at one of four points: the record never enters routing, no queue matches, the queue has nobody who is eligible, or the eligible agents are blocked by presence, capacity or skills. Microsoft Learn documents each point. Work through them in the order below.
@@ -33,17 +33,17 @@ For records such as cases, the first gate is the intake rule. Learn states that 
 
 1. Under **Customer support**, select **Routing**, then **Manage** for **Record routing**.
 2. Confirm the record type is added and has a workstream and intake rules.
-3. Open the workstream and check **Intake rules**. Rules map either to a workstream or to an active basic routing rule.
+3. Open the workstream and check **Intake rules**. Rules map either to a workstream or to an active basic routing rule. On the workstream page, only the intake rules mapped to that workstream are shown.
 4. Check the order. Intake rules are evaluated in the order of the decision list.
 
-Manual actions need care. The **Assign** command changes the owner but does not route the case. Manually created cases have the **Route Case** attribute set to `false`. Select **Save & Route** on the case, or select several cases in the grid and use the same command. The Learn FAQ also says **Save and route** reassigns a work item from one queue to another.
+Manual actions need care. The **Assign** command changes the owner but does not route the case. Manually created cases have the **Route Case** attribute set to `false`. Select **Save & Route** on the case, or select several cases in the grid and use the same command. The Learn FAQ also says **Save and route** reassigns a work item from one queue to another. The record routing setup page also describes a case setting, **Consume capacity on supervisor case assignment**, which applies unified routing rules and tracks capacity when supervisors use **Assign**. It is off by default, and the pages do not reconcile this with the statement that Assign does not route.
 
 ## Step 2: Check the queue
 
 The FAQ says that for work items to be assigned automatically, the queue must be a private queue with at least one representative. Check these facts:
 
 - Representatives are added to the queue. Adding one triggers an assignment cycle.
-- The queue is an advanced queue if you use unified routing. Learn says advanced queues cannot be associated with a mailbox.
+- Unified routing queues are managed under **Advanced queues** in the admin center (my reading of the overflow page). Learn says advanced queues cannot be associated with a mailbox.
 - Queue priority is set sensibly. A smaller number has a higher priority, so queue 1 is handled before queue 2.
 
 If a conversation is routed to a queue without representatives, the conversation closes automatically. Records stay in the queue.
@@ -56,7 +56,7 @@ Points that explain odd behavior:
 
 - Adding an operating hour record to a queue creates an **Out of operation hours** condition with the action **Assign to queue anyway**.
 - Items sent to a fallback queue skip that queue's overflow settings.
-- For records, the options are limited: out of operating hours before queueing, and waiting time in queue after queueing, with the action **Transfer to a different queue**.
+- For records, the options are limited: out of operating hours before queueing (actions **Assign to queue anyway** or **Transfer to a different queue**), and waiting time in queue after queueing (action **Transfer to a different queue**).
 - Overflow is checked only once before queueing. After an overflow action or a supervisor transfer, no further pre-queue checks run.
 
 ## Step 4: Check why agents are not receiving work
@@ -76,7 +76,7 @@ Custom assignment methods need extra care. Learn says you must configure presenc
 
 ## Step 5: Check capacity that is not released
 
-If an agent finishes work but capacity stays occupied, the cause is usually how the conversation was closed. For voice and chat, ending a conversation without using the **X** button leaves it in wrap-up, and capacity stays occupied until the wrap-up time ends. For social, Teams, SMS and persistent chat, closing an active conversation releases capacity and moves it to waiting. Supervisors can check the ongoing conversations dashboard and the auto-close time.
+If an agent finishes work but capacity stays occupied, Learn gives two causes: the representative did not close the conversation the recommended way, or the wrap-up time is long. For voice and chat, ending a conversation without using the **X** button leaves it in wrap-up, and capacity stays occupied until the wrap-up time ends. For social, Teams, SMS and persistent chat, closing an active conversation releases capacity and moves it to waiting. Supervisors can check the ongoing conversations dashboard and the auto-close time.
 
 ## Step 6: Check declines and permissions
 
@@ -86,7 +86,7 @@ Permissions also matter. If a representative lacks access to the record, the sys
 
 ## Step 7: Use diagnostics carefully
 
-The routing diagnostics page describes the path **Intake**, **Classification**, **Route to queue** and **Assignment**, with a status per rule set and an agent assignment trace. It lists a **Status reason** for the first three attempts, and after that the failure message updates hourly. The page also carries a notice that the feature is deprecated and points to the Customer Service deprecations page. Check that notice before building a process around it. It also says diagnostics data uses Dataverse storage.
+The routing diagnostics page describes the path **Intake**, **Classification**, **Route to queue** and **Assignment**, with a status per rule set and an agent assignment trace. It lists a **Status reason** for the first three attempts, and after that the failure message updates hourly. The page also carries a notice that the feature is deprecated and points to the Customer Service deprecations page. Check that notice before building a process around it. The FAQ names the Azure Application Insights embedded dashboards as the alternative, which need a managed environment and an Azure Monitor subscription. It also says diagnostics data uses Dataverse storage.
 
 ## Typical mistakes
 
@@ -98,7 +98,7 @@ The routing diagnostics page describes the path **Intake**, **Classification**, 
 
 ## What the sources do not say
 
-The pages read for this article do not describe default queue behavior in detail, and the FAQ lists route-to-queue configuration and skipped rule sets as covered elsewhere. If a case still lands in the wrong queue after these checks, review the route-to-queue rules and their order in the workstream.
+The pages read for this article do not describe default queue behavior in detail, and route-to-queue configuration is covered on a separate Learn page that I did not read. If a case still lands in the wrong queue after these checks, review the route-to-queue rules and their order in the workstream.
 
 ## Related
 
@@ -109,9 +109,9 @@ The pages read for this article do not describe default queue behavior in detail
 
 ## Sources
 
-- [Troubleshoot issues with automatic assignment](https://learn.microsoft.com/en-us/troubleshoot/dynamics-365/customer-service/unified-routing/troubleshoot-assignment-issues)
+- [Troubleshoot Issues with Automatic Assignment in Unified Routing](https://learn.microsoft.com/en-us/troubleshoot/dynamics-365/customer-service/unified-routing/troubleshoot-assignment-issues)
 - [Assignment methods for queues](https://learn.microsoft.com/en-us/dynamics365/customer-service/administer/assignment-methods)
 - [Set up unified routing for records](https://learn.microsoft.com/en-us/dynamics365/customer-service/administer/set-up-record-routing)
-- [FAQ about unified routing](https://learn.microsoft.com/en-us/dynamics365/customer-service/administer/unified-routing-faqs)
+- [FAQ about unified routing in Customer Service, Dynamics 365 Contact Center](https://learn.microsoft.com/en-us/dynamics365/customer-service/administer/unified-routing-faqs)
 - [Manage overflow of work items in queues](https://learn.microsoft.com/en-us/dynamics365/customer-service/administer/manage-overflow)
 - [View diagnostics for unified routing](https://learn.microsoft.com/en-us/dynamics365/customer-service/administer/unified-routing-diagnostics)
