@@ -14,13 +14,13 @@ keypoints:
   - "Microsoft's pages read here give no rule for choosing chat or channel, so write down your own team rule rather than assuming one."
 faq:
   - q: "How do I stop a noisy group chat without leaving it?"
-    a: "Microsoft Learn says to select Chat, find the conversation, choose More options and then Mute. You stay in the conversation but get no notifications from it. To bring the chat back to normal, select the same option again."
+    a: "Microsoft Learn says to select Chat, find the conversation, choose More options and then Mute. You stay in the conversation but get no notifications from it. To bring the chat back to normal, select More options and then Unmute."
   - q: "Can I delete a Teams chat?"
     a: "A Microsoft Learn training module says you cannot delete a chat but you can hide it, and it stays hidden until someone posts a new message. The messaging policies reference lists a Delete chat setting that is on by default, so the behavior may depend on your Teams version. Check in your own tenant."
   - q: "How many people can be in a Teams group chat?"
     a: "The Microsoft Learn limits page lists 250 people in a private chat, with a footnote that only 200 members can be added to a group chat at the same time. With more than 20 people, features such as typing indicator, read receipts and video and audio calling are turned off."
   - q: "How do admins turn read receipts off for everyone?"
-    a: "According to Microsoft Learn, open Messaging policies in the Teams admin center, edit the policy and set Read receipts to Turned off for everyone. The options are User controlled, Turned on for everyone and Turned off for everyone. Read receipts are not captured in eDiscovery reporting."
+    a: "According to Microsoft Learn, open Messaging policies in the Teams admin center, edit the policy and set Read receipts to Turned off for everyone. The options are User controlled, Turned on for everyone and Turned off for everyone."
   - q: "How long does a chat retention policy take to delete messages?"
     a: "Microsoft Learn says an Exchange timer job that evaluates the hidden folder typically takes 1 to 7 days to run, and one example shows a delete action after one day taking up to 16 days before the message is permanently gone. Holds suspend permanent deletion."
 ---
@@ -55,7 +55,7 @@ From the Microsoft Learn limits and specifications page:
 | File size | 100 MB |
 | Chat message size | Approximately 100 KB per post |
 
-With more than 20 people in a chat, Microsoft says Outlook automatic replies and Teams status messages, typing indicator, video and audio calling, sharing and read receipts are turned off. That is a practical reason to move large conversations out of chat. For stable, topic-based work, Microsoft's training module on organizing Teams shows channels as the place where you can pin and hide as well. The pages read here do not give a formal rule for chat versus channel, so agree one in your team.
+With more than 20 people in a chat, Microsoft says Outlook automatic replies and Teams status messages, typing indicator, video and audio calling, sharing and read receipts are turned off. That is a practical reason to move large conversations out of chat. The pages read here do not give a formal rule for chat versus channel, so agree one in your team.
 
 ## Set messaging policies (admins)
 
@@ -70,7 +70,7 @@ In the Teams admin center, open **Messaging policies**. Select **Add** for a cus
 - **Use Giphy in conversations** with a content rating of No restriction, Moderate or Strict.
 - **Chat permission role:** the supervised chat role of the user.
 
-Defaults are stated for only a few settings. Read receipts under User controlled default to on in the app, and Delete chat is on by default. Check the rest in your own policy before you rely on them.
+The settings above are the ones this guide lists. Check the current defaults in your own policy before you rely on them.
 
 Supervised chat is a separate control. It lets designated supervisors start chats and blocks restricted users from starting new chats unless a supervisor is present. Per Microsoft, it applies to new private chats only, must be enabled for all users in the tenant, and new users default to the restricted role.
 
@@ -82,7 +82,7 @@ To delete or keep chats, use a Microsoft Purview retention policy with the **Tea
 - Deletion is applied by a timer job that typically takes 1 to 7 days to run. A one-day delete example can take 16 days end to end.
 - Holds suspend permanent deletion.
 - What users see in Teams is not a reliable sign of what is retained.
-- Reactions, code snippets and voice memos from the mobile client are not retained.
+- Code snippets, voice memos recorded in the Teams mobile client and emoticon reactions from others are not retained.
 - Files shared in chats need a policy that includes the organizer's OneDrive account.
 
 ## A short rule set to adopt
