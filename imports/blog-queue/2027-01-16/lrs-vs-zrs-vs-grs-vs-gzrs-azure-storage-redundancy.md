@@ -25,7 +25,7 @@ faq:
     a: "No. The redundancy setting is shared by all storage services in the account. Learn suggests separate storage accounts for resources with different redundancy requirements."
 ---
 
-LRS keeps your data in one datacenter, ZRS in three or more availability zones of one region, GRS adds a second region copied from LRS, and GZRS adds a second region copied from ZRS. Microsoft Learn recommends ZRS in the primary region for high availability, and GZRS for applications that need high consistency, durability, availability and resilience for disaster recovery. The cost is higher with each step. This comparison follows Learn's data redundancy page for Azure Storage.
+LRS keeps your data in one datacenter, ZRS in three or more availability zones of one region, GRS adds a second region copied from LRS, and GZRS adds a second region copied from ZRS. Microsoft Learn recommends ZRS in the primary region for high availability, and GZRS for applications that need high consistency, durability, availability and resilience for disaster recovery. Learn frames the choice as a tradeoff between lower cost and higher availability. This comparison follows Learn's data redundancy page for Azure Storage.
 
 ## The decision factors
 
