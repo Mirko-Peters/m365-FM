@@ -11,7 +11,7 @@ keypoints:
   - "You need the Power Platform Administrator or Dynamics 365 Administrator role. Environment Admin and Delegated Admin cannot change the managed environments property."
   - "Learn says unmanaged developer environments are deprecated. Enable Managed Environments on an existing developer environment before December 15, 2026 to keep it."
   - "Managed Environments are included as an entitlement with standalone Power Apps, Power Automate, Copilot Studio, Power Pages and Dynamics 365 licenses."
-  - "Disabling is done with PowerShell, and Learn says to make sure none of the capabilities are in use first."
+  - "Learn documents disabling with a PowerShell script and says to make sure none of the capabilities are in use first."
 faq:
   - q: "Who can enable Managed Environments?"
     a: "Microsoft Learn says you need the Power Platform Administrator or Dynamics 365 Administrator role in Microsoft Entra ID. Users with the Delegated Admin role or the Environment Admin security role cannot change the managed environments property."
@@ -22,7 +22,7 @@ faq:
   - q: "What changes for makers?"
     a: "The overview page I read does not describe maker-facing changes in detail. It lists features such as limit sharing, maker welcome content, solution checker and data policies, which are the areas makers may notice, so check each feature page."
   - q: "Can I turn Managed Environments off?"
-    a: "Yes, with PowerShell. Learn gives a script that sets the protection level to Basic and says to make sure none of the managed environments capabilities are in use first. The admin center steps on the page cover enabling and editing only."
+    a: "Yes. Learn's introduction says admins enable, disable and edit managed environments in the admin center, but the page only documents disabling with a PowerShell script that sets the protection level to Basic. It says to make sure none of the managed environments capabilities are in use first."
 ---
 
 Managed Environments is a set of premium governance features for Power Platform. Turning it on is simple. The decisions are about licensing, roles and which features you configure. There is also a dated change: unmanaged developer environments are deprecated, with a deadline in December 2026. This guide covers the steps and the facts Microsoft Learn states.
@@ -37,7 +37,7 @@ Managed environments are included as an entitlement with standalone Power Apps, 
 
 ## Deadline for developer environments
 
-Learn says unmanaged developer environments are deprecated. To keep an existing developer environment, enable Managed Environments on it before **December 15, 2026**. Check your developer environments in the admin center now.
+Learn says unmanaged developer environments are deprecated. To keep an existing developer environment, enable Managed Environments on it before **December 15, 2026**. Check your developer environments in the admin center now, and check Learn for the current status, because this date may already have passed when you read this.
 
 ## Roles and prerequisites
 
@@ -95,9 +95,9 @@ The overview does not say what makers see. It only lists the features, and sever
 
 ## Disable Managed Environments
 
-Disabling is done through PowerShell, with `protectionLevel = "Basic"`. Learn says to make sure none of the managed environments capabilities are in use before you disable it. The page does not describe other effects of disabling.
+Learn's introduction says admins can enable, disable and edit managed environments in the admin center, but the page documents disabling only through PowerShell, with `protectionLevel = "Basic"`. Learn says to make sure none of the managed environments capabilities are in use before you disable it. The page does not describe other effects of disabling.
 
-## Rollout checklist
+## Rollout checklist (my advice)
 
 1. List all environments and note which are developer environments.
 2. Confirm that someone with the Power Platform Administrator or Dynamics 365 Administrator role does the change.
@@ -113,5 +113,5 @@ Disabling is done through PowerShell, with `protectionLevel = "Basic"`. Learn sa
 
 ## Sources
 
-- [Managed Environments overview](https://learn.microsoft.com/power-platform/admin/managed-environment-overview)
-- [Enable Managed Environments](https://learn.microsoft.com/power-platform/admin/managed-environment-enable)
+- [Managed environments overview (Microsoft Learn)](https://learn.microsoft.com/power-platform/admin/managed-environment-overview)
+- [Enable managed environments (Microsoft Learn)](https://learn.microsoft.com/power-platform/admin/managed-environment-enable)
