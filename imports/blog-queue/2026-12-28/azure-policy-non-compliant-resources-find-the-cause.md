@@ -68,7 +68,7 @@ Change history is in public preview and shows the last 14 days of changes for re
 
 ## A practical order of checks
 
-This order is a suggestion, not a Microsoft procedure.
+This order is my advice, not a Microsoft procedure.
 
 1. Read the reason text and compare the current value with the target value.
 2. Check whether the policy mode is Resource Manager or a Resource Provider mode, because the reason codes differ.
@@ -77,17 +77,13 @@ This order is a suggestion, not a Microsoft procedure.
 
 ## Reading the pane with an example
 
-Learn's example is a SQL server whose version field has the current value 12.0 while the policy expects 14.0. In that case the reason tells you three things: which field failed, what the resource has now and what the policy wanted. Fix the resource or adjust the policy, then wait for the next evaluation. If the pane lists more than one reason, each condition of the policy rule failed separately, so expect to fix all of them before the resource turns compliant.
+Learn's example is a SQL server whose version field has the current value 12.0 while the policy expects 14.0. In that case the reason tells you three things: which field failed, what the resource has now and what the policy wanted. My advice: fix the resource or adjust the policy, then wait for the next evaluation. If the pane lists more than one reason, the page says each is listed, so I would expect to address all of them before the resource turns compliant.
 
 For effects that look for related resources, the reason No related resources match the effect details in the policy definition means that a resource of the type in then.details.type, related to the resource in the if condition, does not exist. Learn's partial deployIfNotExists definition looks for Microsoft.Insights/metricAlerts with an existence condition on the alert name.
 
-## Where to go next
-
-Learn's next steps link pages on policy definition structure, policy effects, getting compliance data and remediating non-compliant resources.
-
 ## Not covered
 
-The page does not mention the activity log, includes no Resource Graph, CLI or PowerShell queries, and does not explain how often evaluations run or what triggers them.
+The page does not mention the activity log, includes no query examples (it only links to Get resource changes for Azure Resource Graph queries), and does not explain how often evaluations run or what triggers them.
 
 ## Related
 
@@ -96,4 +92,4 @@ The page does not mention the activity log, includes no Resource Graph, CLI or P
 
 ## Sources
 
-- [Determine causes of non-compliance](https://learn.microsoft.com/azure/governance/policy/how-to/determine-non-compliance)
+- [Determine causes of non-compliance (Microsoft Learn)](https://learn.microsoft.com/azure/governance/policy/how-to/determine-non-compliance)
