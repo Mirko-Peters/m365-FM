@@ -49,19 +49,19 @@ The update failure article says it explains how to resolve failures caused by Gr
 | Network failure or server not supporting range request | Make sure the device meets the system requirements for the new Teams client. |
 | Network failure - External DNS | Check for network connection issues and fix them. If Teams still cannot update, force an update and collect logs, as below. |
 
-I read the update failure article. I did not read the linked Windows Update error pages, so follow those links for the steps behind the three network insights.
+The three network insights only point to Windows Update error pages, so follow those links for the steps behind them.
 
 ## What the insights tell you
 
-Three of the network insights send you to Windows Update error pages rather than to Teams-specific steps. In my experience that means the network path matters more than the Teams client itself. Practically, if the insight is a network or DNS one, test the same device against other apps that download from the internet and check whether a proxy, firewall or TLS setting is involved.
+Three of the network insights send you to Windows Update error pages rather than to Teams-specific steps. My reading, not a Learn statement: that suggests the network path matters more than the Teams client itself. My advice: if the insight is a network or DNS one, test the same device against other apps that download from the internet and check whether a proxy, firewall or TLS setting is involved.
 
 ## Fix 1: MSIX GPO block
 
-If the insight is MSIX GPO block, Learn says the cause is specific Group Policy settings. The documented fix is to bulk deploy the Teams client. The article links to its page on bulk installing the new Teams client. Use that page for the exact commands, since I did not read it for this article.
+If the insight is MSIX GPO block, Learn says the cause is specific Group Policy settings. The documented fix is to bulk deploy the Teams client. The article links to its page on bulk installing the new Teams client. Use that page for the exact commands; this article does not repeat them.
 
 ## Fix 2: Delivery Optimization disabled
 
-For DO service disabled by admin, check that Delivery Optimization is enabled and configured correctly. If your organization turned the service off by policy, a device that depends on it for Teams updates can fail. Review that policy together with your endpoint management team.
+For DO service disabled by admin, check that Delivery Optimization is enabled and configured correctly. My advice, not Learn's: if your organization turned the service off by policy, review that policy together with your endpoint management team.
 
 ## Fix 3: Range request and system requirements
 
@@ -81,7 +81,7 @@ Learn gives these steps for the External DNS insight, and they also work as a ge
 3. If Teams does not update successfully, Learn says the cause might be the Windows version on the device. Collect Windows diagnostic logs and contact Microsoft Support.
 4. If Teams does update successfully, the cause might be the automatic update process. Collect Teams diagnostic logs and Windows diagnostic logs, and contact Microsoft Support by using the **Contact Support** menu option in the **Help** pane of the Microsoft Teams admin center.
 
-Warn users before you run the command, because it shuts the Teams app down.
+My advice: warn users before you run the command, because Learn says it closes the Teams app.
 
 ## A simple working order
 
