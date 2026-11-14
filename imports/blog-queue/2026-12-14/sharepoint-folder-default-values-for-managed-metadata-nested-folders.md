@@ -9,8 +9,8 @@ topics: [sharepoint, sharepoint-managed-metadata, sharepoint-document-libraries,
 keypoints:
   - "Column default value settings in library settings let you set defaults per folder. A child folder inherits its parent's value unless a value is set on the child itself."
   - "A default fills the field when a new item is created or uploaded, and the user can still change it. It does not enforce a value."
-  - "Per Microsoft Q&A, defaults fill files but not the folders themselves, and a Document Set with shared columns is the documented alternative for the first folder level."
-  - "The built-in screen accepts one value. For per-folder taxonomy or multi-value defaults, Microsoft staff in Q&A point to Set-PnPDefaultColumnValues."
+  - "Per a Microsoft Q&A answer, defaults fill files but not the folders themselves. A Document Set with shared columns is suggested in the same thread, but that is a Q&A suggestion."
+  - "The built-in screen accepts one value. For per-folder multi-value defaults, the accepted answer in a Q&A thread points to Set-PnPDefaultColumnValues, and the asker had not yet confirmed it."
   - "Microsoft's own documentation for these rules is an archived SharePoint Server 2010 page, so test the behavior in your library before you rely on it."
 faq:
   - q: "Do default values apply to nested subfolders?"
@@ -34,12 +34,12 @@ Microsoft's archived ECM blog for SharePoint Server 2010 says metadata defaults 
 The documented rules:
 
 - Defaults inherit from each other, and the child default always overrides.
-- If a folder has no value of its own, an item added to that folder gets the list default, then the site column default.
+- If a folder has no value of its own, an item added to that folder gets the list default. The page's example ranks folder, then list, then site column, but it does not spell out the site-column fallback.
 - Folders inherit default values unless you specify a particular default for the child folder.
 - When users create or upload a new item, the default is applied and displayed in the edit properties form, where the user can change it.
 - Supported column types include single line of text, choice, number, currency, date and time, yes/no and managed metadata.
 
-A companion Microsoft page on the object model adds precedence rules. If an uploaded document already carries a value equal to the list default, the location-based default overwrites it. If the document carries a value that differs from the list default, that value is kept even if a location default exists. Defaults apply on single upload, bulk upload, saves from Office clients and when a workflow creates a document.
+A companion Microsoft page on the object model adds precedence rules. If an uploaded document already carries a value equal to the list default, the location-based default overwrites it. If the document carries a value that differs from the list default, that value is kept even if a location default exists. Defaults apply on single upload, bulk upload, saves from Office 2010 client applications or a SharePoint Workspace, and when a workflow creates a document.
 
 The same page shows inheritance by branch: setting a default on one subfolder does not affect its sibling folders, only its own children.
 
@@ -47,9 +47,9 @@ The same page shows inheritance by branch: setting a default on one subfolder do
 
 Microsoft Q&A answers add limits:
 
-- A Microsoft Q&A answer from Microsoft external staff says a default fills in files automatically but not folders. Folders must be filled in manually. The same answer concludes that copying one column value from a top folder through all nested folders and files could not be achieved with defaults.
-- A Document Set is the suggested alternative at the first level. Add the column to the Document Set content type and select it under **Shared Columns**, and files inside the set receive the value. The asker reported this worked, but the thread did not confirm behavior for folders nested inside a set.
-- The built-in screen accepts one text value. A Q&A answer notes that only a single choice can be set as a default, even for a multi-value column.
+- A Microsoft Q&A answer labeled Microsoft external staff says a default fills in files automatically but not folders. Folders must be filled in manually. In the follow-up, the same person wrote that the asker's requirement, passing a value through nested folders, could not be achieved.
+- A Document Set is the suggested alternative at the first level, offered in that thread by the Microsoft staff answer and by another user. Add the column to the Document Set content type and select it under **Shared Columns**, and files inside the set receive the value. The staff answer says folders inside the set still need their value entered manually. The asker reported the Document Set approach worked as described.
+- The built-in screen accepts one text value. A Q&A answer from another user notes that only a single choice can be set as a default, even for a multi-value column.
 - Defaults do not remove the need for validation. They are suggestions the user can overwrite.
 
 ## Set a default term on a managed metadata column
@@ -79,13 +79,13 @@ Set-PnPDefaultColumnValues -List Documents -Field TaxKeyword -Value "15c4c4e4-4b
 Set-PnPDefaultColumnValues -List Documents -Field MyTextField -Value "DefaultValue" -Folder "My folder"
 ```
 
-The reference warns that you must ensure the term is valid for the field. It does not say how defaults apply to subfolders or existing items. A Microsoft Q&A answer that recommended this cmdlet used it to set a multi-value choice default for a specific folder, which the screen cannot do.
+The reference warns that you must ensure the term is valid for the field. It does not say how defaults apply to subfolders or existing items. The accepted answer in a Microsoft Q&A thread recommended this cmdlet with `-Folder` and several values for a choice field, which the screen cannot do. That answer does not explain the `#` prefix in its example values, and the asker said they would test it, so treat it as untested.
 
 ## Known problem reports
 
-A 2019 Microsoft Q&A thread described default managed metadata values on Office documents disappearing after about a minute in a Teams-provisioned library, while PDF, JPG and TXT files kept theirs. The Microsoft responder could not reproduce it and called it not a bug. The poster found that creating a new managed metadata site column and applying it instead kept the defaults. That is one report with no confirmed root cause, so treat it as a hint rather than a rule. If you see the same pattern, test with a fresh site column.
+A 2019 Microsoft Q&A thread described default values on the Enterprise Keywords column disappearing from Office documents after about a minute in a Teams-provisioned library, while PDF, JPG and TXT files kept theirs. A responder could not reproduce it in a site not provisioned from Teams and wrote that they assumed it was not a bug. The poster found that creating a new managed metadata site column and applying it instead kept the defaults. A later reply in the thread reported a similar problem with multi-select columns, and the responder could not reproduce that either. That is a few reports with no confirmed root cause, so treat it as a hint rather than a rule. If you see the same pattern, test with a fresh site column.
 
-## Design recommendations
+## Design recommendations (my own)
 
 1. **Keep the folder tree shallow.** Fewer levels means fewer places where an override can hide.
 2. **Set the default at the highest level that is always right.** Override only where a branch really differs.
@@ -112,8 +112,8 @@ A 2019 Microsoft Q&A thread described default managed metadata values on Office 
 
 ## Sources
 
-- [Microsoft Learn (archive): Metadata defaults in SharePoint Server 2010](https://learn.microsoft.com/en-us/archive/blogs/ecm/metadata-defaults-in-sharepoint-server-2010)
-- [Microsoft Learn: Location-based metadata defaults in SharePoint Server 2010 (ECM)](https://learn.microsoft.com/en-us/previous-versions/office/developer/sharepoint-2010/ee557925(v=office.14))
+- [Microsoft Learn (archive): Metadata Defaults in SharePoint Server 2010](https://learn.microsoft.com/en-us/archive/blogs/ecm/metadata-defaults-in-sharepoint-server-2010)
+- [Microsoft Learn: Location-Based Metadata Defaults in SharePoint Server 2010 (ECM)](https://learn.microsoft.com/en-us/previous-versions/office/developer/sharepoint-2010/ee557925(v=office.14))
 - [Microsoft Support: Create a managed metadata column](https://support.microsoft.com/en-us/sharepoint/data-and-lists/create-a-managed-metadata-column)
 - [Microsoft Q&A: Copy through column data to subfolders](https://learn.microsoft.com/en-us/answers/questions/805828/copy-through-column-data-to-sub-folders-sharepoint)
 - [Microsoft Q&A: SharePoint Online list column default value setting](https://learn.microsoft.com/en-us/answers/questions/689497/sharepoint-online-list-column-default-value-settin)
