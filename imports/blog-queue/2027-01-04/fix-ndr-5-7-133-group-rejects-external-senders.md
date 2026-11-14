@@ -58,7 +58,7 @@ Prerequisites from Learn:
 - To allow **everyone in your organization**, create a distribution group or dynamic distribution group that contains all members, and add that group to the allowed senders list.
 - The group's allowed senders list is separate from the organization's anti-spam allowed senders list. The anti-spam list is managed in the EAC under **Protection** > **Spam filter**.
 
-## Choose between the methods
+## Choose between the methods (my advice)
 
 | Question | Method |
 | --- | --- |
@@ -78,13 +78,13 @@ The NDR reference lists neighbors with different causes:
 | 5.7.136 | Sender was not authenticated. The recipient is a mail user set to reject outside senders |
 | 5.7.13 and 5.7.135 | Sender was not authenticated for a public folder |
 
-Check the recipient type in the NDR. Only 5.7.133 points at a group.
+Compare the code and its description in the NDR with this table. Note that 5.7.124 also concerns a distribution group, but there the sender is missing from the group's allowed-senders list. In 5.7.133 the group rejects senders from outside its organization.
 
 ## What the pages do not cover
 
 The Learn article on 5.7.133 does not describe the Microsoft 365 admin center, PowerShell, or differences between Microsoft 365 groups, distribution groups, mail-enabled security groups and dynamic distribution groups. It does not mention a PowerShell parameter. Other documentation may cover the Exchange PowerShell route, but this guide did not verify it. The steps above are the EAC path as Learn words it. Menu labels can change, so confirm them in your tenant.
 
-## A checklist for admins
+## A checklist for admins (my advice)
 
 1. Read the NDR and confirm code 5.7.133 and the group address.
 2. Find the group in the EAC under Recipients > Groups.
@@ -93,7 +93,7 @@ The Learn article on 5.7.133 does not describe the Microsoft 365 admin center, P
 5. For an external sender, create the mail contact first.
 6. Save and ask the sender to try again.
 
-## Typical mistakes
+## Typical mistakes (my advice)
 
 - Asking the sender to change something. The sender cannot fix a 5.7.133.
 - Adding an external address to the anti-spam allowed list when the problem is the group setting.
@@ -108,5 +108,5 @@ The Learn article on 5.7.133 does not describe the Microsoft 365 admin center, P
 
 ## Sources
 
-- [Non-delivery reports in Exchange Online (Microsoft Learn)](https://learn.microsoft.com/exchange/mail-flow-best-practices/non-delivery-reports-in-exchange-online/non-delivery-reports-in-exchange-online)
-- [Fix email delivery issues for error code 5.7.133 in Exchange Online (Microsoft Learn)](https://learn.microsoft.com/troubleshoot/exchange/email-delivery/ndr/fix-error-code-5-7-133-in-exchange-online)
+- [Email nondelivery reports (NDRs) and SMTP errors in Exchange Online (Microsoft Learn)](https://learn.microsoft.com/troubleshoot/exchange/email-delivery/ndr/non-delivery-reports-in-exchange-online)
+- [Fix NDR error 5.7.133 in Exchange Online (Microsoft Learn)](https://learn.microsoft.com/troubleshoot/exchange/email-delivery/ndr/fix-error-code-5-7-133-in-exchange-online)
