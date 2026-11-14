@@ -18,7 +18,7 @@ faq:
   - q: "When should I look at cipher suites?"
     a: "After you have verified other network components. Learn says the issue can also be related to your cipher suite configuration. If specific cipher suites are configured under the registry key HKLM SOFTWARE Policies Microsoft Cryptography Configuration SSL 00010002, they might prevent the Windows Update client from establishing a secure connection."
   - q: "Which cipher suites does the page tell me to check?"
-    a: "It lists TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384 and TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA256, and says at least one of them must be in your configuration. Compare the names with the supported suite list for your Windows version in the Schannel documentation."
+    a: "It lists TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384 and TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA256, and says at least one of them must be in your configuration. My advice: compare the names with the supported suite list for your Windows version in the Schannel documentation."
   - q: "What do I do if the suites are present but the error stays?"
     a: "Adjust the order. Learn says the sequence of the suites can affect their selection during the handshake. In Registry Editor, open the key, locate the suites and, if they are lower in the list, move them higher or to the top. If one is missing, add it manually in the appropriate order, then restart."
   - q: "Which Windows versions does the page cover?"
@@ -37,7 +37,7 @@ The page shows a log pattern. Requests to the update service repeat with failure
 
 The requests go to a URL on `slscr.update.microsoft.com`. Learn says the repeated failures and retries suggest a network-related issue. The last line of the example is the error table entry: `0x80072efe -2147012866 WININET_E_CONNECTION_ABORTED The connection with the server was terminated abnormally`.
 
-So the meaning is that the connection was cut. It does not say the update is bad.
+So the entry means the connection was aborted. It says nothing about the update itself, which is my reading.
 
 ## Step 2: Verify the cipher suite configuration
 
@@ -83,7 +83,7 @@ After the restart, open **Settings** > **Update & Security** > **Windows Update*
 
 ## What the page does not cover
 
-The page is short and starts from the assumption that you have already checked other network components. It does not give a procedure for those checks, for proxy settings or for how the registry key gets populated on your devices. The key sits under `Policies`, which in my experience usually means a policy or a script wrote it, so look for the source before you edit one machine by hand. That last point is my advice, not Learn's.
+The page is short and starts from the assumption that you have already checked other network components. It does not give a procedure for those checks, for proxy settings or for how the registry key gets populated on your devices. The key sits under `Policies`, which suggests that a policy or a script wrote it. That reading, and the advice to look for the source before you edit one machine by hand, are mine and not Learn's.
 
 ## A short order of work (my advice)
 
