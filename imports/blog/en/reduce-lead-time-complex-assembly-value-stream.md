@@ -38,7 +38,7 @@ In a complex assembly, add the material side. If a supplier delivers late or pro
 
 ## What does a value stream map show about lead time?
 
-A [value stream map](https://www.m365.fm/entity/value-stream-mapping/) shows how material, information and decisions flow through a product family, including process steps, queues and handoffs. A framework page on value stream mapping describes the method in two linked parts. See the [Umbrex page on value stream mapping](https://umbrex.com/resources/frameworks/strategy-frameworks/lean-value-stream-mapping/).
+A [value stream map](https://www.m365.fm/entity/value-stream-mapping/) shows how material, information and decisions flow through a product family, including process steps, queues and handoffs.
 
 **Current state.** Walk the stream where the work happens and record data for each step, for example cycle time, changeover time, uptime, first-pass yield, batch size and WIP. Note how each step is triggered and who schedules it. Compute takt time from real demand: available production time per period divided by customer demand per period.
 
@@ -114,3 +114,8 @@ A value stream map drawn on a wall is a good start, but it ages fast. [iFAKT's P
 ## Next step
 
 Choose one product family, count the WIP at every step and divide it by the daily output. That figure is your lead time today, and the largest queue before the bottleneck is the first place to reduce lead time.
+
+## Sources
+
+- [Taking a Bite Out of Lead Time - IndustryWeek](https://industryweek.com/operations/continuous-improvement/article/21964950/taking-a-bite-out-of-lead-time)
+- [Reduce WIP and manufacturing lead time - Kaizen Institute](https://kaizen.com/insights/reduce-wip-manufacturing-lead-time/)
