@@ -83,10 +83,6 @@ If the account needs a phone number, Learn says to check that the **Select locat
 4. In **Assigned phone number**, search for the number, include the country code, for example +1 250 555 0012, and select **Add**.
 5. Select **Save**.
 
-## What I did not read
-
-The page output I worked from ends at the phone number steps. Learn's page may contain more, for example about deleting accounts or hiding them from Teams users, since its description mentions deletion and hiding. I did not verify those parts, so check the page itself for them.
-
 ## Practical advice
 
 This section is my advice, not a Microsoft statement.
@@ -95,7 +91,7 @@ This section is my advice, not a Microsoft statement.
 2. **Name accounts by purpose.** A display name that includes the voice app name makes the Resource accounts list easier to read.
 3. **Plan licenses for the future.** Learn recommends at least five licenses, which is a reasonable way to avoid repeat purchase steps.
 4. **Keep the admin roles narrow.** Learn recommends the fewest permissions, so use the Teams role that fits plus User Administrator, not Global Administrator.
-5. **Document which account serves which voice app.** The account list does not tell you which auto attendant a number belongs to unless you keep a record.
+5. **Document which account serves which voice app.** A short record of the account, its voice app and its number helps you find the right account later.
 
 ## Related
 
