@@ -10,7 +10,7 @@ keypoints:
   - "Web.Contents supports Anonymous, Windows, Basic, Web API, Organizational Account and Service Principal. POST requests can only be made anonymously."
   - "Change or clear saved credentials under Data > Get Data > Data Source Settings > Global permissions > Edit Permissions."
   - "Web.Contents times out after 100 seconds by default. Raise it with the Timeout option or the Command timeout in minutes setting."
-  - "Paging is not automatic. Table.GenerateByPage with List.Generate calls a next-page function until it returns null."
+  - "Paging mechanisms differ per API, so the examples need adapting. Table.GenerateByPage with List.Generate calls a next-page function until it returns null."
   - "In the cloud, Web page and browser-based sources need an on-premises data gateway. Web API authentication is not supported in the Power BI service."
 faq:
   - q: "Which authentication types does the Web connector support?"
@@ -18,7 +18,7 @@ faq:
   - q: "How do I change a wrong saved credential in Excel?"
     a: "Microsoft Learn says to select Get Data > Data Source Settings on the Data tab, choose Global permissions, select the data source, then Edit Permissions, and under Credentials select Edit. Clear Permissions deletes the saved credentials."
   - q: "What does 'credential type isn't supported for this resource' mean?"
-    a: "The Web connector troubleshooting page says organizational account authentication does not work in most cases for such resources. Its remedy is to contact the service owner, who needs to change the authentication configuration or build a custom connector."
+    a: "The Web connector troubleshooting page says that OAuth/Microsoft Entra ID authentication, which some services support out of the box, does not work in most cases. When this error appears, its remedy is to contact the service owner, who needs to change the authentication configuration or build a custom connector."
   - q: "How does Power Query page through a REST API?"
     a: "Learn says Power Query supports many paging mechanisms but each needs adaptation. The Table.GenerateByPage helper calls a function for each page, passes the previous page, and stops when the function returns null. Next-page links are commonly carried as metadata on each page."
   - q: "What is the Formula.Firewall error?"
@@ -46,7 +46,7 @@ Notes from the page:
 
 ## Step 2: Change or clear a saved credential
 
-A wrong credential stays saved until it is edited. Learn's steps:
+Once you set an authentication method for a URL level, Power Query does not ask for it again for that address or its subaddresses, so a wrong choice has to be changed in the settings. Learn's steps:
 
 1. On the **Data** tab, select **Get Data** > **Data Source Settings**.
 2. Choose **Global permissions** and select the data source.
@@ -55,9 +55,9 @@ A wrong credential stays saved until it is edited. Learn's steps:
 
 **Clear Permissions** removes the credentials for one source and **Clear All Permissions** for all of them.
 
-If the message reads "We were unable to connect because this credential type isn't supported for this resource", the troubleshooting page says organizational account authentication does not work in most such cases. Contact the service owner, because the authentication configuration needs to change or a custom connector must be built. The same page states that Power Query does not currently support connecting to Microsoft Graph REST APIs.
+If the message reads "We were unable to connect because this credential type isn't supported for this resource", the troubleshooting page says that OAuth/Microsoft Entra ID authentication, which some services support out of the box, does not work in most cases. Contact the service owner, because the authentication configuration needs to change or a custom connector must be built. The same page states that Power Query does not currently support connecting to Microsoft Graph REST APIs.
 
-For key-based APIs, Web.Contents has an `ApiKeyName` option. You give the name of the key parameter in M, choose Web API authentication and enter the key value in the credential. The request then carries `?api_key=...` without the secret sitting in the query text.
+For key-based APIs, Web.Contents has an `ApiKeyName` option. You give the name of the key parameter in M, choose Web API authentication and enter the key value in the credential. The Web.Contents page gives `Web.Contents("https://contoso.com/api/customers/get", [ApiKeyName="api_key"])` as the example, which generates a request to `https://contoso.com/api/customers/get?api_key=******`, so the secret does not sit in the M code.
 
 ## Step 3: Handle timeouts
 
@@ -82,7 +82,7 @@ List.Generate(
 )
 ```
 
-Pagination state such as the next URL is usually carried as metadata on each page, for example `current meta [Next = link]`. The combined table takes its columns and type from the first page, so each page must have the same shape. Learn's worked example reads a next link from the page metadata. The pages read do not show offset, page number or cursor patterns in code, so adapt the same loop and test the stop condition carefully.
+The helper page says the next page URL (or page number, or whatever other values the paging logic uses) is generally carried as `meta` values on the page before it is returned, for example `current meta [Next=link]`. The columns and table type of the combined table come from the first page, and `getNextPage` should normalize each page. Learn's worked example (a GitHub paged table) reads a next link from the page metadata. The pages read do not show offset, page number or cursor patterns in code, so adapting the loop to such APIs is your own work. Test the stop condition carefully.
 
 For dynamic URLs, `Web.Contents` accepts `Query` and `RelativePath` options. Learn says they can be used to dynamically query a static base URL. The pages do not say whether this affects refresh in the service, so test a scheduled refresh.
 
@@ -90,7 +90,7 @@ For dynamic URLs, `Web.Contents` accepts `Query` and `RelativePath` options. Lea
 
 The message looks like: `Formula.Firewall: Query 'Query1' (step 'Source') references other queries or steps, so it may not directly access a data source. Please rebuild this data combination.`
 
-Learn says the firewall splits queries into partitions, and a partition may access compatible data sources or reference other partitions, but not both. The documented fix is to merge the referencing step and the data-accessing step into one query. Learn also mentions the privacy option **Ignore the Privacy Levels and potentially improve performance** as an alternative and notes that privacy levels are unavailable in Power Platform dataflows.
+Learn says the firewall splits queries into partitions, and a partition may access compatible data sources or reference other partitions, but not both. The documented fix is to merge the referencing step and the data-accessing step into one query. Learn also mentions the privacy option **Ignore the Privacy Levels and potentially improve performance** as an alternative (it disables the firewall altogether) and notes that privacy levels are unavailable in Power Platform dataflows. A further note says the old restriction, that a partition cannot access data sources and reference other partitions at the same time, is relaxed in certain products.
 
 ## Step 6: Cloud and dataflow considerations
 
@@ -100,7 +100,7 @@ Learn says the firewall splits queries into partitions, and a partition may acce
 - If the URL points to a file, use the specific file connector.
 - The connector uses HTTP 1.1. It cannot be switched to HTTP 1.0.
 
-## Typical mistakes
+## Typical mistakes (own reading of the pages above)
 
 - Entering credentials once at the wrong URL level and never clearing them.
 - Using Web API authentication and then moving the query to the Power BI service.
@@ -118,8 +118,8 @@ Learn says the firewall splits queries into partitions, and a partition may acce
 
 - [Web connector (Microsoft Learn)](https://learn.microsoft.com/en-us/power-query/connectors/web/web)
 - [Troubleshooting the Web connector (Microsoft Learn)](https://learn.microsoft.com/en-us/power-query/connectors/web/web-troubleshoot)
-- [Authentication with a data source (Microsoft Learn)](https://learn.microsoft.com/en-us/power-query/connectorauthentication)
+- [Authentication in desktop apps (Microsoft Learn)](https://learn.microsoft.com/en-us/power-query/connector-authentication)
 - [Handling paging (Microsoft Learn)](https://learn.microsoft.com/en-us/power-query/handling-paging)
-- [Helper functions, Table.GenerateByPage (Microsoft Learn)](https://learn.microsoft.com/en-us/power-query/helper-functions)
+- [Helper functions for M extensions, Table.GenerateByPage (Microsoft Learn)](https://learn.microsoft.com/en-us/power-query/helper-functions)
 - [Web.Contents (Microsoft Learn)](https://learn.microsoft.com/en-us/powerquery-m/web-contents)
-- [Power Query data privacy firewall (Microsoft Learn)](https://learn.microsoft.com/en-us/power-query/dataprivacyfirewall)
+- [Behind the scenes of the Data Privacy Firewall (Microsoft Learn)](https://learn.microsoft.com/en-us/power-query/data-privacy-firewall)
