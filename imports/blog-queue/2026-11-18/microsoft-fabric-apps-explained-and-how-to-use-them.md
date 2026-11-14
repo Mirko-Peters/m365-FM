@@ -22,7 +22,7 @@ faq:
   - q: "Can a Fabric app use an existing database?"
     a: "No. The Microsoft Learn FAQ says Fabric Apps manages the schema from your TypeScript models and cannot point at a database with a predefined schema. To reach an existing lakehouse, warehouse or SQL database in Fabric, you add a connector."
   - q: "Do the Microsoft pages explain pricing for Fabric Apps?"
-    a: "They do not. The FAQ lists pricing, regions and admin settings as not covered. The overview only states that the workspace needs Fabric capacity and that Fabric Apps services consume capacity units from it."
+    a: "They do not. The pages read give no pricing. The overview only states that the workspace needs Fabric capacity and that Fabric Apps services consume capacity units from it, and the FAQ says performance depends on your Fabric capacity."
 ---
 
 Fabric Apps is a Microsoft Fabric feature, currently in preview, for building data-driven applications. Developers write data models in TypeScript, and Fabric generates the database schema, GraphQL APIs, sign-in and hosting. It is aimed at developers, not at report authors, and it is separate from Power BI apps.
@@ -37,7 +37,7 @@ Microsoft Learn describes Fabric Apps as built on the Rayfin SDK. You decorate T
 - type-safe client methods
 - static hosting for the frontend
 
-The app runs as a managed service with child items for app hosting, the database, GraphQL APIs and authentication. Fabric manages hosting, networking and scaling.
+When you deploy with `rayfin up`, Fabric creates child items under the app: a SQL database in Fabric, Authentication and Static Content. Each app has one backend endpoint of the form `https://<your-app>-app.rayfin.windows.net/`, with the paths `/api/graphql` for data and `/auth` for authentication.
 
 Other documented capabilities include typed connectors to a lakehouse, warehouse, SQL database in Fabric or semantic model, and typed file storage with access policies.
 
@@ -75,21 +75,21 @@ The portal then shows a command to download a project locally. It has this shape
 
 Edit the project, or work with GitHub Copilot, then test against the Fabric backend with `npm run dev`. Deploy with `npx rayfin up`. To deploy to another workspace, add `--workspace <workspacename>`. Confirm the backend with `npx rayfin up status`.
 
-Microsoft states that the first deployment takes about 2 to 5 minutes, and a static-content-only redeploy about 30 to 60 seconds. To roll back, check out the earlier git commit and run `npx rayfin up` again.
+The FAQ's example comment says a static-content-only deployment with `npx rayfin up staticapp deploy` takes 30 to 60 seconds after the initial deployment. The pages read give no time for the first deployment. A static-only deployment cannot create the initial remote app, so run `npx rayfin up` once first. To roll back, check out the earlier git commit and run `npx rayfin up` again.
 
 ## What you see in the Fabric portal
 
 After `rayfin up`, the app item shows child items that Fabric created from your `rayfin.yml` configuration:
 
-- **SQL database in Fabric:** the managed database. In the portal you can view it, run queries in the query editor and copy the connection string, but it is read-only there.
+- **SQL database in Fabric:** the managed database with the schema from your decorators. It is read-only in the portal, so change the schema through code.
 - **Authentication:** Fabric-brokered sign-in through Microsoft Entra ID. You can view the authenticated users in the SQL database.
-- **Static Content:** the built frontend assets (HTML, CSS and JavaScript), served from a Fabric Apps hosting URL. Access can be protected or anonymous, depending on the `assetAccess` setting.
+- **Static Content:** the built frontend assets, served from a hosting URL and updated on each deploy. The overview says static hosting can require Fabric item access or allow anonymous access.
 
-The item properties show an **App Backend URL** for all backend services and an **App URL** for the hosted frontend.
+
 
 ## Authentication and permissions
 
-Local development supports Microsoft Entra SSO and email and password. After deployment, only Fabric SSO works, and you cannot deploy without authentication enabled.
+Learn lists Fabric SSO for deployed apps and email and password for local development. Email and password sign-in does not work after deployment, and deploying requires Fabric authentication to be enabled.
 
 Item permissions are separate from workspace roles:
 
@@ -115,11 +115,11 @@ The FAQ lists these current limitations:
 - no application lifecycle management (ALM)
 - `count()` is not available on the fluent GraphQL client
 
-Data models also need TypeScript decorators. The frontend can be any framework that makes HTTP requests.
+Data models are written in TypeScript with decorators.
 
 ## Typical problems
 
-Microsoft names a missing production build as the most common cause of build errors, so run `npm run build` first. For capacity or permission errors, confirm the workspace has capacity and that you can create or change items in it. For schema errors, review changes since the last successful deployment. Do not edit the SQL database by hand, because manual changes can create conflicts and break the app. Make schema changes in code and apply them with `npx rayfin up db apply`.
+Microsoft names a missing production build as the most common cause of build errors, so run `npm run build` first. For capacity or permission errors, confirm the workspace has capacity and that you can create or change items in it. For schema errors, review changes since the last successful deployment. The troubleshooting page says the app code is the source of truth. Do not change the remote schema through the Fabric portal or SQL tools, because removing or altering an existing column can break the app and its deployment. Make schema changes in code and apply them with `npx rayfin up db apply`.
 
 ## Related
 
@@ -132,4 +132,5 @@ Microsoft names a missing production build as the most common cause of build err
 
 - [Fabric Apps overview (preview)](https://learn.microsoft.com/en-us/fabric/apps/overview)
 - [Create your first Fabric Apps project](https://learn.microsoft.com/en-us/fabric/apps/create-app)
-- [Fabric Apps FAQ](https://learn.microsoft.com/en-au/fabric/apps/faq)
+- [Fabric Apps FAQ](https://learn.microsoft.com/en-us/fabric/apps/faq)
+- [Troubleshoot Fabric Apps](https://learn.microsoft.com/en-us/fabric/apps/troubleshooting)
