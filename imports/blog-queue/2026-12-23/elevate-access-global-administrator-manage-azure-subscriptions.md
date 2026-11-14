@@ -9,7 +9,7 @@ topics: [entra-id, azure-rbac]
 keypoints:
   - "Elevating access assigns the User Access Administrator role at root scope (/) to the Global Administrator who sets the toggle. It is per user, not tenant-wide."
   - "In the Azure portal go to Microsoft Entra ID > Manage > Properties and set Access management for Azure resources to Yes, then Save and sign in again."
-  - "Remove access with the same user by setting the toggle to No. The root-scope assignment cannot be removed from the Access control (IAM) page."
+  - "Remove access by setting the toggle to No as the same user, or with PowerShell, Azure CLI or REST. The IAM page cannot remove the root-scope assignment."
   - "Deactivating a PIM Global Administrator role does not reset the toggle, so set it to No before deactivating."
   - "Elevation and removal are logged in Microsoft Entra audit logs under the service Azure RBAC (Elevated Access), and can feed a Microsoft Sentinel rule."
 faq:
@@ -50,7 +50,7 @@ Only Global Administrators see the toggle.
 2. Browse to **Microsoft Entra ID** > **Manage** > **Properties**.
 3. Set **Access management for Azure resources** back to **No**.
 
-Learn says you can't remove the root-scope assignment from the IAM page. The portal blocks it and directs you to the toggle, PowerShell, Azure CLI or the REST API. I did not verify exact command syntax for those options, so copy the commands from the Learn page itself.
+Learn says you can't remove the root-scope assignment from the IAM page. The portal blocks it and directs you to the toggle, PowerShell, Azure CLI or the REST API. The Learn page has PowerShell, Azure CLI and REST steps for this, so copy the commands from there.
 
 ## Best practices from the page
 
@@ -77,7 +77,7 @@ To remove users in the **Users with elevated access** pane, set the toggle to **
 
 Learn frames elevation as for administrators who need to manage all subscriptions and management groups in the tenant. For routine work, assign roles at the narrowest suitable scope and avoid leaving elevation on.
 
-## A safe routine
+## A safe routine (my advice)
 
 1. Activate Global Administrator through PIM if you use it.
 2. Elevate, sign in again and make the specific root-scope change.
@@ -101,9 +101,9 @@ I did not read details about elevation for guest users or about conditional acce
 | Can I remove it on the IAM page? | No, the portal blocks it |
 | Does deactivating PIM reset it? | No, set the toggle to No first |
 
-## After you elevate
+## After you elevate (my advice)
 
-Once the toggle is on and you have signed in again, you can view all resources and assign access in any subscription or management group. Learn names these as the purpose of elevation. Keep the work narrow: make the specific role assignment, confirm it, then switch the toggle off. Because other Global Administrators may also have left their toggle on, use the **Manage elevated access users** banner now and then to see who else holds root-scope access.
+Once the toggle is on and you have signed in again, you can view all resources and assign access in any subscription or management group. Learn names these as the purpose of elevation. Keep the work narrow: make the specific role assignment, confirm it, then switch the toggle off. Because other Global Administrators may also have left their toggle on (my inference), use the **Manage elevated access users** banner now and then to see who else holds root-scope access.
 
 ## Related
 
@@ -112,4 +112,4 @@ Once the toggle is on and you have signed in again, you can view all resources a
 
 ## Sources
 
-- [Elevate access to manage all Azure subscriptions and management groups](https://learn.microsoft.com/azure/role-based-access-control/elevate-access-global-admin)
+- [Elevate access to manage all Azure subscriptions and management groups (Microsoft Learn)](https://learn.microsoft.com/azure/role-based-access-control/elevate-access-global-admin)
