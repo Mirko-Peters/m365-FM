@@ -8,7 +8,7 @@ date: 2026-12-06
 topics: [mcp, microsoft-edge]
 keypoints:
   - "WebMCP is a proposed browser API that lets a web page register tools that AI agents can call. The browser mediates access."
-  - "The proposal is authored by Microsoft and Google engineers and is open source. It is a proposal, not a finished standard."
+  - "The proposal lists authors with Microsoft and Google email addresses, says its site is open source, and is a proposal rather than a finished standard."
   - "Tools are registered in JavaScript through navigator.modelContext, with a name, description, input schema and execute callback."
   - "It needs an open browsing context. Headless tool calls and built-in tool discovery are not part of the proposal."
   - "Microsoft Edge said in September 2026 that its implementation is ready for testing. An origin trial runs until March 30, 2027."
@@ -32,7 +32,7 @@ WebMCP is described in its proposal as a browser API that lets a web page regist
 
 ## Who is behind it and how final it is
 
-The proposal lists authors from Microsoft (Brandon Walderman and Andrew Nolan) and Google (David Bokan, Khushal Sagar and Hannah Van Opstal). The document is hosted under webmachinelearning.github.io and is open source. It carries a date of August 13, 2025, lists open questions and TODO items, and is not presented as a finished standard. Expect details to change.
+The proposal lists five authors. The page states no affiliations, but judging by the email addresses in the author block, Brandon Walderman and Andrew Nolan are associated with Microsoft, and David Bokan, Khushal Sagar and Hannah Van Opstal with Google. The document is hosted under webmachinelearning.github.io, and the page says the site is open source (no license is named). It carries a date of August 13, 2025, lists open questions and TODO items, and is not presented as a finished standard. Expect details to change.
 
 ## How it relates to MCP
 
@@ -56,11 +56,11 @@ A declarative approach, such as a manifest, is mentioned only as a future possib
 - Developers must keep the UI in sync when tool calls change state.
 - Complex UIs may need refactoring.
 - There is no built-in tool discovery mechanism.
-- There is no dedicated security section. The text mentions browser-mediated access with user consent, local handling of tools and browser policies for iframes.
+- There is no dedicated security section. The text mentions browser-mediated access, user consent for tool calls, local handling of tool calls in the browser and embedders managing capabilities for iframes.
 
 ## What Microsoft Edge says
 
-The Microsoft Edge blog post "New in Edge for developers" of September 21, 2026 says Edge's WebMCP implementation is ready for testing. Microsoft points to samples and a browser extension for running and debugging WebMCP tools in the `webmcp-labs` repository. The post names no flag for enabling it. It says you can test locally or register for an origin trial.
+The Microsoft Edge blog post "New in Edge for developers" of September 21, 2026 says Edge's WebMCP implementation is ready for testing. Microsoft points to samples and a browser extension for running and debugging WebMCP tools in the `webmcp-labs` repository. The WebMCP section names no flag for enabling it. The post's general introduction to testable features says you can test locally or register for an origin trial, without naming WebMCP specifically. Edge has a separate WebMCP origin trial page, described below.
 
 The Edge origin trial page for WebMCP describes the feature as letting websites register tools for agents hosted by the site or in Chrome. It lists an expiry date of March 30, 2027 and no Edge version numbers. Registration needs a GitHub sign-in, acceptance of the terms and a domain. You then add the token as a `<meta>` tag or an `Origin-Trial` header. The terms say the feature is experimental, may change or end at any time and may never ship beyond the trial. They recommend feature detection so sites degrade gracefully.
 
