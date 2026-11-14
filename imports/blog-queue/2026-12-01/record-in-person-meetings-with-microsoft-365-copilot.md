@@ -11,16 +11,16 @@ keypoints:
   - "Facilitator in Teams Rooms turns on transcription but does not record the meeting, according to Microsoft Learn."
   - "A Microsoft Copilot license is needed to add Facilitator to a meeting or turn it on."
   - "Notes are stored in a Microsoft Loop page and appear in the meeting chat under Recap > Notes."
-  - "Speaker separation from one device is limited. Teams Rooms attributes only the person who scans the QR code, and only if enrolled."
+  - "Speaker separation from one device is limited. In Teams Rooms, only people who state their name and have enrolled are identified."
 faq:
   - q: "Can Microsoft 365 Copilot record an in-person meeting?"
     a: "Microsoft documents Facilitator for in-person notes. The Teams Rooms article says Facilitator does not record the meeting and only turns on transcription. The Teams mobile support article describes capturing, transcribing and organizing in-person notes."
   - q: "How do I start it on my phone?"
     a: "According to Microsoft Support, open Calendar in the Teams mobile app, tap Meeting, then tap Take notes with Facilitator. On iOS, first set Control Center > Mic Mode to Standard to turn off voice isolation."
   - q: "Where are the notes saved?"
-    a: "Microsoft Support says notes are stored in a Microsoft Loop page that participants can edit. After the meeting, find them in the meeting chat under Recap > Notes. For unscheduled Teams Rooms meetings, open the meeting in your calendar and go to Recap > Notes."
+    a: "Microsoft Support says notes are stored in a Microsoft Loop page that participants can edit. After the meeting, find them in the meeting chat under Recap > Notes. For unscheduled Teams Rooms meetings, Microsoft Learn says to open the meeting chat named after the room, then Recap > Notes."
   - q: "Does it tell the speakers apart?"
-    a: "Support says the mobile experience offers speaker distinction. The Teams Rooms article says only the person who scans the QR code is attributed, and only if enrolled, while others appear as Speaker 1, Speaker 2. A Microsoft Q&A thread notes community answers conflict, so test it in your room."
+    a: "The Teams Rooms article says only participants who state their names at the start of the session and have enrolled their profiles are identified. The Support page read does not describe speaker distinction on mobile. A Microsoft Q&A thread notes community answers conflict, so test it in your room."
   - q: "What license do I need?"
     a: "Microsoft Support states a Microsoft Copilot license is required to add Facilitator to a meeting or turn it on. Unscheduled Teams Rooms meetings also need a Teams Rooms Pro license on each room resource account."
 ---
@@ -29,7 +29,7 @@ Copilot does not simply record a meeting room. For in-person meetings, Microsoft
 
 ## Option 1: Facilitator on Teams mobile
 
-Microsoft Support says the Teams mobile app can capture, transcribe and organize in-person notes, with speaker distinction and recaps.
+Microsoft Support describes taking in-person notes with Facilitator in the Teams mobile app.
 
 ### Steps
 
@@ -54,17 +54,13 @@ Microsoft Learn describes two modes. Scheduled meetings use Facilitator in Teams
 
 ### How an unscheduled meeting starts
 
-1. Someone in the room signs in to Teams on a phone within the same organization.
-2. When the room is free, the presence detector shows a banner for 10 minutes. Scan the QR code on the display, or press **Facilitator** on the console home screen and scan the code.
-3. In Teams on the phone, invite Facilitator with the room as the attendee.
-4. Transcription turns on automatically and the display shows that Facilitator is listening.
-5. End with the **End** button on the room device.
+Microsoft Learn says the flow starts from the **Take notes** button on the console home screen or touch board. In-room participants see "Take notes with Facilitator" on the front-of-room display and "Tap to take notes" on the console. Notes can take a few minutes to appear as people speak. At the end, select **Save notes** and add participants' names in the dialog so they can open the notes and transcript later. Unsaved notes are deleted when the session ends. Earlier descriptions of a QR code and presence detector banner are not confirmed by the current Learn page, so check the setup article linked there.
 
-Muting the room microphone prevents Facilitator or transcription from capturing content, and tapping Facilitator in the console roster removes it.
+Muting the room microphone stops capture. In scheduled meetings, you can also remove Facilitator from the Participant panel.
 
 ### Admin setup for Teams Rooms
 
-In the Teams Rooms Pro Management portal: assign a **Teams Rooms Pro** license to each resource account, enable **Rooms > [room] > Settings > Meetings > Facilitator QR Code**, and enable **Room > Settings > Account > Enable public preview**.
+Per Microsoft Learn, for unscheduled meetings (in preview, included with Teams Rooms Pro): assign a **Teams Rooms Pro** license to each room resource account, enable the Facilitator app for the room account in the Teams admin center, turn on meeting transcription, and turn on Loop components for the room account. In the Pro Management portal, **Rooms > [room] > Settings > Device** has the setting **Show Take notes button on the home screen**, which is enabled by default.
 
 ## Option 3: A scheduled Teams meeting with Facilitator
 
@@ -101,12 +97,12 @@ Open the meeting from your calendar and review **Recap** > **Notes**. Microsoft 
 ## Licensing and prerequisites
 
 - Microsoft Support: a Microsoft Copilot license is required to add Facilitator to a meeting or turn it on.
-- Microsoft Learn (Teams Rooms): scheduled meetings need an eligible Microsoft 365 base license, a Teams license, a Copilot license, Teams Public Preview membership and Loop components enabled. Unscheduled in-person meetings need Teams Rooms Pro on each room account.
+- Microsoft Learn (Teams Rooms): for scheduled meetings with a Teams Rooms device invited, only the meeting organizer needs a Copilot license. Unscheduled in-person meetings need Teams Rooms Pro on each room account, plus the admin settings described above.
 - If "Allow Copilot and other AI" is locked by policy, you cannot turn Facilitator on and must ask your admin. A Microsoft Q&A answer describes this case.
 
 ## Limits to know
 
-- **Speakers.** Teams Rooms attributes only the scanning person, if enrolled. A Q&A thread says standard transcription does not reliably separate local speakers from a single device, and the answers there conflict with each other, so test before relying on it.
+- **Speakers.** Teams Rooms identifies only participants who state their names at the start and have enrolled their profiles. A Q&A thread says standard transcription does not reliably separate local speakers from a single device, and the answers there conflict with each other, so test before relying on it.
 - **Audio.** The same thread says several people joining separately from one room can cause echo or screeching.
 - **Languages.** Support says you pick the meeting language when you turn Facilitator on, and does not list supported languages.
 - **Preview.** Parts of Facilitator are in public preview and may change.
