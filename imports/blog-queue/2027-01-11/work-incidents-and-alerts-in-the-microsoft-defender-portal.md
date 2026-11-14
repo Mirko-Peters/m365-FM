@@ -11,7 +11,7 @@ keypoints:
   - "New incidents have no owner. Only one user or group can be assigned, and the assignment applies to all associated alerts."
   - "Resolving an incident resolves all linked and active alerts. Classification can be Not set, True positive, Informational expected activity or False positive."
   - "The Learn page describes the legacy experience. Its note points to incident cases in preview as the recommended experience."
-  - "The page does not describe merging, the alerts tab, evidence and response or automatic investigation steps, and it lists no specific roles."
+  - "The page does not describe merging, the alerts tab, evidence and response or automatic investigation steps, and it names no role for managing incidents."
 faq:
   - q: "Where do I find incidents?"
     a: "In the Microsoft Defender portal use the quick launch and go to Investigation & response > Incidents & alerts > Incidents."
@@ -25,11 +25,11 @@ faq:
     a: "It describes the legacy incident experience. A note on the page says incident cases are in preview and are the recommended experience, with a separate article."
 ---
 
-Incidents group related alerts into one case for analysts. The daily work is triage: give each incident an owner, check severity, set a status, add tags and comments, and finally resolve and classify it. This guide follows the Microsoft Learn page on managing incidents in the Microsoft Defender portal. The page describes the legacy experience and points to incident cases as the recommended one.
+Incidents group related alerts into one case for analysts. The daily work is triage: give each incident an owner, check severity, set a status, add tags and comments, and finally resolve and classify it. This guide follows the Microsoft Learn page on managing incidents in the Microsoft Defender portal. The page describes the legacy experience and points to incident cases as the recommended one. It also links a separate page for manually creating an incident or alert.
 
 ## Open the queue
 
-Use the quick launch and go to **Investigation & response** > **Incidents & alerts** > **Incidents**. To manage an incident, either select its check box and choose **Manage incidents** above the filters, or select the row without clicking the name and choose **Manage incident** in the details pane. You can select several check boxes for bulk management. The page says you need a role assigned through Microsoft Defender XDR role-based access control. It names no specific permission for incident management.
+Use the quick launch and go to **Investigation & response** > **Incidents & alerts** > **Incidents**. To manage an incident, either select its check box and choose **Manage incidents** above the filters, or select the row without clicking the name and choose **Manage incident** in the details pane. You can select several check boxes for bulk management. On the incident page, select **Manage incident** in the top panel. If it is not visible, open it from the three dots in the upper right corner. The page says you need a role assigned through Microsoft Defender XDR role-based access control. It names no specific permission for incident management.
 
 ## Triage
 
@@ -37,7 +37,7 @@ Use the quick launch and go to **Investigation & response** > **Incidents & aler
 - **Filter by assignee.** Use the **Incident assignment** filter. Unlike assignment, you can select several assignees. **Copy list link** saves the queue with the current filters.
 - **Severity.** It is the highest severity of the associated alerts: high, medium, low or informational. You can change it in the **Severity** drop-down.
 - **Status.** Incidents start as **Active**. Change to **In progress** when you work on them, and to **Resolved** at the end.
-- **Tags.** Type in the **Incident tags** field and pick an existing tag or create a new one. System tags identify attack types, automatic actions, Defender Experts handling and critical assets.
+- **Tags.** Type in the **Incident tags** field and pick an existing tag or create a new one. System tags identify attack types, automatic actions, Defender Experts handling and critical assets. The page notes that Microsoft Security Exposure Management automatically tags devices, identities and cloud resources as a critical asset, based on predefined classifications.
 
 ## Resolve and classify
 
@@ -53,39 +53,39 @@ Resolving an incident also resolves all linked and active alerts.
 
 ## Comments and history
 
-Select the three dots in the upper right corner > **Activities**, then **Add comment**. Comments are limited to 30,000 characters and support text, formatting, links and images. All changes made by users or the system are recorded in the activity log, which you can filter by origin, category, provider, trigger, status, type, target and performed by.
+Select the three dots in the upper right corner > **Activities**, then **Add comment**. Comments are limited to 30,000 characters and support text, formatting, links and images. All changes made by users or the system are recorded in the activity log, which you can filter by origin, category, provider, trigger, activity status, policy status, type, target name, target type and performed by.
 
 ## Rename
 
-You can rename an incident in the **Incident name** field. If another incident is merged into a renamed incident, Defender gives it a new name and overwrites the custom name.
+Defender names incidents automatically from alert attributes such as affected endpoints and users, detection sources or categories. Incidents that existed before the automatic naming rollout keep their names. You can rename an incident in the **Incident name** field. If another incident is merged into a renamed incident, Defender gives it a new name and overwrites the custom name.
 
 ## AI-generated analyst notes
 
-The page lists prerequisites: a security administrator turns on the feature under **System** > **Settings** > **Microsoft Defender XDR** > **Advanced features**, a Security Copilot license, and the Security Data Read or Security Data Manage permission. Generation can take up to 20 minutes. Saving an edit removes the AI disclaimer.
+The page lists prerequisites: a security administrator turns on the feature under **System** > **Settings** > **Microsoft Defender XDR** > **Advanced features**, a Security Copilot license, and the Security Data Read or Security Data Manage permission. To generate the notes, open the incident page, select the three dots at the top right and choose **Generate analyst notes**. Generation can take up to 20 minutes, you can leave the page, and **Stop generating** cancels it. Only users with at least the same permissions and scope as the analyst who generated the notes can view and edit them. Saving an edit removes the AI disclaimer.
 
 ## Export and notifications
 
-Export an incident as PDF through **More actions** > **Export incident as PDF**. The export includes an overview, the attack story graph, up to 10 assets per asset type, up to 100 evidence items, related alerts and activity log entries. Email notifications for incidents are configured by alert severity, alert sources and device group, on a separate page.
+Export an incident as PDF through **More actions** > **Export incident as PDF**. The export includes an overview, the attack story graph, up to 10 assets per asset type, up to 100 evidence items, related alerts and activity log entries. With a Security Copilot license the PDF also contains the incident summary and incident report. The report is cached for a couple of minutes, so exporting the same incident again right away returns the earlier PDF. Email notifications for incidents are configured by alert severity, alert sources and device group, on a separate page.
 
 ## What the page does not say
 
 - How to merge incidents. It only mentions merging in the renaming note.
 - The alerts tab and the evidence and response view.
-- Automatic investigation steps. Those are on a linked page.
+- Automatic investigation steps. Automatic investigation and response appears only as a system tag, and the page links no page for it.
 - Specific roles for incident management.
 - Queue sort options and the full filter list.
 
 ## A triage outline
 
-This outline is practical advice built on the page.
+This outline is my advice, built on the page.
 
 1. Filter the queue for unassigned incidents.
 2. Assign an owner and set the status to In progress.
-3. Review severity and tags, then investigate on the linked investigation pages.
+3. Review severity and tags, then investigate. The page covers only incident management, so investigation steps come from other sources.
 4. Add comments as you go so that the activity log tells the story.
 5. Resolve with a note and a classification.
 
-## Typical mistakes
+## Typical mistakes (my advice)
 
 - Resolving an incident and forgetting that its active alerts are resolved too.
 - Expecting to assign several owners. Only one is allowed.
@@ -100,4 +100,4 @@ This outline is practical advice built on the page.
 
 ## Sources
 
-- [Manage incidents in the Microsoft Defender portal (Microsoft Learn)](https://learn.microsoft.com/defender-xdr/manage-incidents)
+- [Manage incidents in the Microsoft Defender portal (legacy) (Microsoft Learn)](https://learn.microsoft.com/defender-xdr/manage-incidents)
