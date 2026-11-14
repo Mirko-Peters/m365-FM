@@ -63,27 +63,27 @@ The page's table also lists API Management (HTTP(S) APIs only) and Application G
 
 ## Decision flow highlights
 
-From the page's flow chart description:
+From the page's text description of the flow chart (the description of the first path is ambiguous, so check the diagram itself):
 
-- A web application that is internet-facing in a single region points to Application Gateway. Non-web or non-HTTP(S) traffic points to Load Balancer.
+- An internet-facing web application that is not global or deployed in multiple regions ends at Application Gateway. One path of the chart ends at Load Balancer.
 - Internet-facing, multi-region, with performance acceleration needed: Azure Front Door.
 - Internet-facing, multi-region, with SSL offload or per-request application-layer processing: Front Door combined with Application Gateway. For API-only hosting, Front Door with API Management is an option.
 - Internet-facing, multi-region, without acceleration or per-request layer 7 needs: Front Door, with the hosting type deciding what is added. PaaS uses Front Door alone, IaaS VMs add Load Balancer and AKS adds the Application Gateway ingress controller.
 
 The page calls the chart a starting point, tells you to do a more detailed evaluation and notes that a workload with several services needing load balancing often uses more than one solution.
 
-## Practical examples
+## Practical examples (my examples)
 
 | Situation | Service per the page |
 | --- | --- |
 | Public web app in one region, WAF needed | Application Gateway |
 | Public web app across regions, speed matters | Front Door |
-| SQL or other TCP traffic across VMs in a virtual network | Load Balancer |
+| TCP traffic across VMs in a virtual network (my example, the page names no specific workloads) | Load Balancer |
 | Non-HTTP service, DNS-level routing across regions | Traffic Manager |
 
-The first two rows follow the flow chart wording directly. The last two follow the table's non-HTTP(S) recommendation. Confirm each against the feature and limit pages before you design.
+The first two rows follow the flow chart wording, and the WAF mention is my addition from Application Gateway's feature list. The last two follow the table's non-HTTP(S) recommendation. Confirm each against the feature and limit pages before you design.
 
-## Mistakes to avoid
+## Mistakes to avoid (my advice)
 
 - Picking Traffic Manager for HTTP(S) workloads that need fast failover. The page says its DNS basis limits failover speed.
 - Treating Application Gateway as global. The table lists it as regional.
@@ -102,4 +102,4 @@ It gives no pricing and no SLA numbers, and it does not compare WAF capabilities
 
 ## Sources
 
-- [Load-balancing options](https://learn.microsoft.com/azure/architecture/guide/technology-choices/load-balancing-overview)
+- [Load Balancing Options (Microsoft Learn)](https://learn.microsoft.com/azure/architecture/guide/technology-choices/load-balancing-overview)
