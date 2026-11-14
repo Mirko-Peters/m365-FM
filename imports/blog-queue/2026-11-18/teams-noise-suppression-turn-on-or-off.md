@@ -8,7 +8,7 @@ date: 2026-11-18
 topics: [teams, teams-admin-center, teams-rooms]
 keypoints:
   - "Noise suppression reduces background sounds such as shuffling papers, slamming doors or barking dogs. Microsoft says it is on by default and your setting carries over to the next meeting."
-  - "On desktop, set it under Settings and more, Settings, Devices before a meeting, or under More actions, Audio settings during one."
+  - "On desktop, set it under Settings and more, Settings, Devices before a meeting, or under More actions, Settings, Audio settings during one."
   - "Microsoft describes Auto as best for most situations, High as suppressing all background sound that is not speech, and Low as suppressing persistent noise such as a fan."
   - "Turn it off, or choose Low, when you want to share music or use a high-fidelity microphone in a quiet room."
   - "Admins have a separate policy for dial-in participants and a separate voice isolation feature that needs a voice profile. The pages read describe no tenant-wide switch for the desktop toggle."
@@ -16,7 +16,7 @@ faq:
   - q: "Is Teams noise suppression on by default?"
     a: "Yes. Microsoft Support says noise suppression is turned on by default and that your setting carries over to your next meeting or call. On iOS the default level is Auto."
   - q: "Where do I turn noise suppression off in a Teams meeting?"
-    a: "Microsoft Support gives two desktop paths. Before a meeting, go to Settings and more, then Settings, then Devices, and use the Noise suppression toggle. During a meeting, select More actions, then Audio settings, and use the same toggle."
+    a: "Microsoft Support gives two desktop paths. Before a meeting, go to Settings and more, then Settings, then Devices, and use the Noise suppression toggle. During a meeting, select More actions, then Settings, then Audio settings, and use the same toggle."
   - q: "What is the difference between Auto, High and Low?"
     a: "Microsoft Support says Auto lets Teams optimize for most situations, High suppresses all background sound that is not speech, and Low suppresses low levels of persistent noise, such as a computer fan or air conditioner. Those descriptions are given for the iOS app, where you choose them under Settings, Calling, Noise suppression."
   - q: "Can I play music in a Teams meeting with noise suppression on?"
@@ -44,7 +44,7 @@ It is supported on the Teams desktop app, the mobile apps (iOS and Android), Mic
 **On desktop, during a meeting**
 
 1. In the meeting controls, select **More actions**.
-2. Select **Audio settings**.
+2. Select **Settings**, then **Audio settings**.
 3. Turn the **Noise suppression** toggle on or off.
 
 **On iOS**
@@ -87,7 +87,7 @@ The standard noise suppression toggle is a user setting. Admins do have two rela
 | `EnrollVoice` | `Set-CsTeamsAIPolicy` | Allows voice profile capture and enrollment through the **Recognition** tab |
 | `PassiveVoiceEnrollment` | `Set-CsTeamsAIPolicy` | Allows enrollment through Express enrollment or the Recognition tab |
 
-Example from Microsoft Learn: `Set-CsTeamsMeetingPolicy -Identity <policy name> -VoiceIsolation Disabled`. Microsoft's policy reference lists the default as Enabled, while the cmdlet reference is inconsistent about the default, so check your current value.
+Example from Microsoft Learn: `Set-CsTeamsMeetingPolicy -Identity <policy name> -VoiceIsolation Disabled`. Microsoft's voice isolation page lists the default for all three settings as Enabled, so check your current value.
 
 ## More about voice isolation
 
@@ -102,7 +102,7 @@ The pages read for this article leave several questions open, so test them yours
 - How noise suppression interacts with echo cancellation
 - Any tenant-wide switch for the standard desktop toggle
 
-A Microsoft Tech Community reply from 2021 said there was no global policy for all users and called the default-on behavior experimental at the time. That post is old, so treat it as history, not as current guidance.
+A Microsoft Tech Community reply dated January 27, 2021 said there was no global policy for all users and that Microsoft was experimenting with enabling ML-based noise suppression by default for people with capable devices. That post is old, so treat it as history, not as current guidance.
 
 ## Common mistakes
 
@@ -119,7 +119,7 @@ A Microsoft Tech Community reply from 2021 said there was no global policy for a
 
 ## Sources
 
-- [Reduce background noise in Microsoft Teams meetings (Microsoft Support)](https://wus.prod.support.services.microsoft.com/en-au/office/reduce-background-noise-in-microsoft-teams-meetings-1a9c6819-137d-4b3b-a1c8-4ab20b234c0d)
+- [Reduce background noise in Microsoft Teams meetings (Microsoft Support)](https://support.microsoft.com/en-us/office/reduce-background-noise-in-microsoft-teams-meetings-1a9c6819-137d-4b3b-a1c8-4ab20b234c0d)
 - [Manage voice isolation for Teams calls and meetings](https://learn.microsoft.com/en-us/microsoftteams/voice-isolation)
 - [Set-CsTeamsMeetingPolicy](https://learn.microsoft.com/en-us/powershell/module/teams/set-csteamsmeetingpolicy)
 - [Teams meeting policies: audio and video](https://learn.microsoft.com/en-us/microsoftteams/meeting-policies-audio-and-video)
