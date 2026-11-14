@@ -60,10 +60,10 @@ For phishing and spam, the action decides what ZAP does:
 ## What can stop or change ZAP
 
 - Allowlists and Exchange mail flow rules can override ZAP actions.
-- For malware and high confidence phishing: admin false-positive submissions (allow entries persist 45 days after last use), SecOps mailboxes in the Advanced delivery policy.
+- For malware and high confidence phishing: admin false-positive submissions (by default, allow entries exist for 45 days after the last used date), SecOps mailboxes in the Advanced delivery policy.
 - For high confidence phishing only: non-Microsoft phishing simulation URLs in the Advanced delivery policy, and an MX record pointing to another service with a mail flow rule that bypasses spam filtering.
-- ZAP does not act if the message was deleted from the folder, or if the same or a stronger action was already applied.
-- For messages in Dynamic Delivery, if a phishing or spam signal arrives during Safe Attachments scanning, ZAP reverts to Move to Junk.
+- For messages in other folders (for example, moved by Inbox rules), ZAP can act if the message was not deleted and the same or a stronger action was not already applied.
+- ZAP does not quarantine messages that are in Dynamic Delivery scanning of a Safe Attachments policy. It reverts to Move to Junk if a phishing or spam signal arrives during that process and the anti-spam verdict takes some action on the message (Move to Junk, Redirect, Delete or Quarantine).
 
 Learn warns that bypassing filtering can weaken your security posture.
 
@@ -85,9 +85,9 @@ ZAP for Teams needs Defender for Office 365 Plan 1 or Plan 2, included or as an 
 
 It does not mention message trace as a way to see ZAP actions, describe an already-read exception beyond the verdict table, or give exact portal paths for the toggles. It does not say how to disable ZAP for a verdict. It describes ZAP on Deleted Items in the intro and on other folders in the FAQ without reconciling the two.
 
-## A check when mail moved to Junk
+## A check when mail moved to Junk (my advice)
 
-The order is practical advice.
+The order is my own suggestion, not taken from the page.
 
 1. Open Threat Explorer and filter by Additional action = ZAP for the message.
 2. Note the verdict. Malware and high confidence phishing end in quarantine, not Junk.
@@ -95,7 +95,7 @@ The order is practical advice.
 4. Check whether the message was unread, since spam is touched only if unread.
 5. For a false positive, submit it through the normal process, and review allow entries and mail flow rules that may override ZAP.
 
-## Typical mistakes
+## Typical mistakes (my advice)
 
 - Expecting a notification to the user.
 - Looking for ZAP actions in the mailbox audit log.
