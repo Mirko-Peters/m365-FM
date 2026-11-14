@@ -79,7 +79,7 @@ From the Learn page:
 - A role assignment with no scope tag gives access to all objects allowed by its permissions. Admins with no scope tags effectively have all scope tags.
 - You can assign only scope tags that appear in your own role assignments, and target only groups listed in the Scope (Groups) of your assignment.
 - Admins with a scope tag in their assignment cannot update or delete that tag in the master list.
-- An object must keep at least one scope tag.
+- An admin who has a scope tag in their role cannot delete all scope tags on an object. At least one scope tag is required.
 - Auto scope tag assignments overwrite manually assigned tags. If several auto tags apply through group assignment, all apply.
 - Exclude groups in policy or app assignments must be nested in an RBAC scope group or listed separately as a scope group.
 
@@ -94,9 +94,9 @@ Learn describes an opt-in public preview, introduced in March 2026, called **Sco
 - The required role is a custom Intune role with the **Update** action for **Organization** (recommended), or Intune Administrator.
 - Before enabling, run **Generate Report** under **Tenant administration** > **Roles** > **Settings**. The **Permissions Assessment Report** shows, per group, the roles, scope tag, resource, old (merged) permissions and new (scoped) permissions, and can be exported to Excel.
 
-Because it is a preview and irreversible, test the report first and decide with your change process.
+My advice: because it is a preview and irreversible, run the report first and decide with your change process.
 
-## A rollout pattern
+## A rollout pattern (my advice)
 
 1. Define the boundaries, for example by site or business unit.
 2. Create one scope tag per boundary and assign it to the device groups.
@@ -104,7 +104,7 @@ Because it is a preview and irreversible, test the report first and decide with 
 4. Tag existing profiles, apps and policies. Check that each object has the intended tags.
 5. Test with an admin account that holds only the delegated role.
 
-## Typical mistakes
+## Typical mistakes (my advice)
 
 - Leaving an admin in a role assignment with no scope tag, which grants all tags.
 - Putting the same admin into several assignments and getting merged permissions.
@@ -119,4 +119,4 @@ Because it is a preview and irreversible, test the report first and decide with 
 
 ## Sources
 
-- [Use role-based access control (RBAC) and scope tags for distributed IT (Microsoft Learn)](https://learn.microsoft.com/intune/intune-service/fundamentals/scope-tags)
+- [Use role-based access control (RBAC) and scope tags for distributed IT (Microsoft Learn)](https://learn.microsoft.com/intune/fundamentals/role-based-access-control/scope-tags)
