@@ -78,7 +78,7 @@ Microsoft Support explains that Copilot can remember details from Copilot Chat c
 
 - Ask Copilot "What do you know about me" to see what it knows.
 - Ask it to forget a detail to stop it using a work insight.
-- Delete a saved memory in **Chat settings**.
+- Delete a saved memory in **Chat settings**. The page adds that to fully remove what Copilot learned, you also need to turn off the **Chat history** toggle.
 - Turn off the **Chat history** toggle in **Chat settings** to delete inferences from chat history. If you turn it back on within 30 days, the deleted memories return.
 
 Work insights need a work or school account, and availability depends on your organization's Copilot plan. The page gives no path for switching memory itself on or off and does not describe editing single memories.
@@ -87,7 +87,7 @@ Work insights need a work or school account, and availability depends on your or
 
 Select **Start a new temporary chat** at the top right of the Copilot Chat page. These chats do not use or store personal information and do not appear in your history. Retention policies of your organization may still keep temporary chat data, and admins may be able to access it during the retention period.
 
-## Which one to try first
+## Which one to try first (my own suggestion)
 
 | If you want to | Try |
 |---|---|
@@ -97,7 +97,7 @@ Select **Start a new temporary chat** at the top right of the Copilot Chat page.
 | Stop repeating your preferences | Memory and custom instructions |
 | Ask something without leaving a trace in your history | Temporary chat |
 
-## Typical mistakes
+## Typical mistakes (own checklist based on the limits above)
 
 - Adding too many files to a notebook and assuming all are used. The limit is 300.
 - Expecting scheduled tasks to arrive in Outlook or Teams. The initial release does not include them.
