@@ -8,19 +8,19 @@ date: 2026-11-16
 topics: [entra-id, microsoft-entra-sign-in-logs, mfa]
 keypoints:
   - "AADSTS900561 means an endpoint that accepts only POST received a GET. Microsoft's error reference says it can be a developer error or caused by the browser back button, and that it can be ignored."
-  - "For users, Microsoft Q&A answers suggest closing other sign-in tabs, trying a private window or another browser and allowing third-party cookies for the sign-in site."
+  - "For users, Microsoft Q&A answers suggest closing other sign-in tabs, trying a private window or another browser and allowing cookies for the site being opened."
   - "AADSTS50126 means the credentials were not valid. Microsoft expects some of these errors in logs because users make mistakes."
-  - "In apps that sign in with username and password, MFA or a federated domain can also produce AADSTS50126, and Microsoft says the message is misleading in those cases."
+  - "In apps that sign in with username and password, MFA or a federated domain can also produce AADSTS50126, and a Microsoft Q&A moderator calls the message misleading in those cases."
   - "Admins find the exact reason in the Microsoft Entra admin center under Monitoring and health, Sign-in logs, by sign-in error code."
 faq:
   - q: "What does AADSTS900561 mean?"
     a: "Microsoft's authentication and authorization error code reference lists it as BadResourceRequestInvalidRequest: the endpoint only accepts the listed HTTP verbs, for example POST, but received another one, for example GET. The reference says this can be due to developer error or to users pressing the back button, and that it can be ignored."
   - q: "How do I fix AADSTS900561 as an end user?"
-    a: "Microsoft documents no fixed remedy. A Microsoft community moderator on Microsoft Q&A suggests closing other sessions and tabs, trying another browser or a private window, clearing the cache and adding login.microsoftonline.com to trusted sites. A Microsoft staff reply on another thread says the error typically occurs when third-party cookies are blocked."
+    a: "Microsoft documents no fixed remedy. A Microsoft community moderator on Microsoft Q&A suggests closing other sessions and tabs, trying another browser or a private window, clearing the cache and adding login.microsoftonline.com to trusted sites. A reply on another thread says the error typically occurs when third-party cookies are blocked by certain browsers and asks the user to allow the URL being opened."
   - q: "What does AADSTS50126 mean?"
     a: "Microsoft's error reference lists AADSTS50126 as InvalidUserNameOrPassword: error validating credentials due to invalid username or password. It says the user did not enter the right credentials and that you should expect some of these errors in your logs because users make mistakes."
   - q: "Why do I get AADSTS50126 when the password is correct?"
-    a: "A Microsoft moderator on Microsoft Q&A names two causes for apps using the username and password flow: the account requires MFA, which blocks non-interactive sign-in, or the domain is federated and the flow cannot follow the redirect to the external identity provider. Microsoft acknowledged the message is misleading in these cases."
+    a: "A Microsoft moderator on Microsoft Q&A names two causes for apps using the username and password flow: the account requires MFA, which blocks non-interactive sign-in, or the domain is federated and the flow cannot follow the redirect to the external identity provider. The moderator wrote that a bug was already filed to correct the wording because the message is misleading in these cases."
 ---
 AADSTS900561 and AADSTS50126 look similar but have different causes. AADSTS900561 is a request-method error: a sign-in endpoint that accepts only POST received a GET. AADSTS50126 is a credential error: Microsoft Entra ID could not validate the username or password. This guide gives Microsoft's documented meaning for each and the checks in a sensible order. For AADSTS900561 the official guidance is thin, and this article says where.
 
@@ -40,7 +40,7 @@ Microsoft does not publish a fixed remedy. These are the answers that Microsoft 
 1. Close other sessions and tabs. A moderator reply attributes the error to several sessions open in different tabs, for example after signing out of one account and into another.
 2. Try a different browser or a private window, and clear the cache.
 3. Add `https://login.microsoftonline.com` to your trusted sites.
-4. Allow third-party cookies for the site you are opening. A Microsoft staff reply on another thread says the error typically occurs when third-party cookies are blocked by certain browsers.
+4. Allow the site you are opening in your browser's cookie settings. A reply on another thread (signed only with a first name, so its author's role is not stated) says the error typically occurs when third-party cookies are blocked by certain browsers.
 
 One Q&A thread about a Dynamics 365 demo environment reports that trying a different browser, a private window and trusted sites did not help, and it has no confirmed answer. If the checks fail, note the request ID, correlation ID and timestamp from the error page and give them to your admin.
 
@@ -63,7 +63,7 @@ The error reference lists AADSTS50126 as **InvalidUserNameOrPassword**, with the
    - AADSTS50064: credential validation failed.
    - AADSTS50056: the password does not exist in the directory for this user.
 3. **Read the sign-in log.** Sign in to the Microsoft Entra admin center as at least a Cloud Application Administrator, go to your tenant, then **Monitoring & health**, **Sign-in logs**, find the failed sign-in with the **Sign-in error code** and read the **Failure reason**. Microsoft documents this path for error 50053. The pages read do not repeat it for 50126, but the same log lists the sign-in error code of failed sign-ins.
-4. **For an app or script that signs in with username and password,** check MFA and federation. A Microsoft moderator explained two causes: MFA requires interactive sign-in, so background username and password flows fail, and a federated domain redirects to an external identity provider, which the flow cannot follow. Entra ID then returns the misleading invalid-password message. Microsoft said a bug was filed to fix the wording.
+4. **For an app or script that signs in with username and password,** check MFA and federation. A Microsoft moderator explained two causes: MFA requires interactive sign-in, so background username and password flows fail, and a federated domain redirects to an external identity provider, which the flow cannot follow. Entra ID then returns the misleading invalid-password message. The moderator wrote that a bug was already filed to correct the wording.
 
 ### Fixes the moderator named for that case
 
