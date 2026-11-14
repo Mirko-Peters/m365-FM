@@ -1,6 +1,6 @@
 ---
 title: "Fix AADSTS50173: The Provided Grant Has Expired Because It Was Revoked"
-summary: "AADSTS50173 means a refresh token no longer works because it was revoked, usually after a password change or reset, an expiry or an admin action. This guide covers what the error text tells you, the user fix of signing in again, and what developers should do with MSAL."
+summary: "AADSTS50173 means a refresh token no longer works because it was revoked. Learn lists a password change or reset, an expiry and an admin action as causes. This guide covers what the error text tells you, the user fix of signing in again, and what developers should do with MSAL."
 status: review
 publish: false
 author: mirko-p
@@ -11,7 +11,7 @@ keypoints:
   - "Learn lists three causes: the user changed or reset the password, the refresh token expired, or an administrator revoked it."
   - "The error text includes the grant's issue time and the user's TokensValidFrom date, which lets you compare the two."
   - "For users the fix is to reauthenticate, for example by clearing the cached token or signing out and in again."
-  - "Developers should handle the error with MSAL, or without MSAL ask the user to reauthenticate to get a fresh token."
+  - "Developers should follow MSAL error handling guidance, or implement a similar approach without MSAL, so the user reauthenticates and gets a fresh token."
 faq:
   - q: "What does AADSTS50173 mean?"
     a: "The refresh token in the request was revoked, so the grant is no longer valid. The error text says a fresh auth token is needed and that the user might have changed or reset their password."
@@ -20,7 +20,7 @@ faq:
   - q: "How does a user fix it?"
     a: "Reauthenticate. Learn suggests clearing the cached token, or signing out and signing in again, so the app gets a new token."
   - q: "What should app developers do?"
-    a: "Handle the error. Learn points to MSAL error handling, and says that if you do not use MSAL you should ask the user to reauthenticate to obtain a fresh token."
+    a: "Handle the error. With MSAL, follow Learn's guidance on MSAL error handling. Without MSAL, Learn says to follow the same guidance and implement a similar approach, with the goal of asking the user to reauthenticate and obtain a fresh token."
   - q: "What do the two dates in the message mean?"
     a: "The message states when the grant was issued and the TokensValidFrom date for the user. In my reading, a grant issued before that date is the case the error describes."
 ---
@@ -37,7 +37,7 @@ Learn's dedicated troubleshooting article uses the same title and says the error
 
 Learn lists three reasons for a revoked refresh token:
 
-1. **The user changed or reset their password.** The existing tokens stop being valid.
+1. **The user changed or reset their password.** The error text also says the user might have changed or reset their password.
 2. **The refresh token expired.**
 3. **An administrator revoked it.** Learn links to its guidance on revoking user access in Microsoft Entra ID.
 
@@ -57,7 +57,7 @@ After a fresh sign-in the app receives a new token. If the app does not prompt y
 Learn's guidance for developers is:
 
 - If you use the Microsoft Authentication Library (MSAL), handle the error as MSAL's error handling guidance describes.
-- If you do not use MSAL, ask the user to reauthenticate to obtain a fresh token.
+- If you do not use MSAL, Learn points to the same MSAL guidance and says to try to implement a similar approach in the application. The goal is to request that the user reauthenticate and obtain a fresh token.
 
 In other words, the application must treat this error as a signal to start a new sign-in rather than retrying with the same refresh token.
 
@@ -76,7 +76,7 @@ This section is my advice, not a Microsoft statement.
 1. **Ask what changed.** Did the user reset the password or have a security event? Did an admin revoke sessions?
 2. **Ask which app.** A mobile app, a desktop client and a web app may all hold separate tokens, and each needs a new sign-in.
 3. **Have the user sign out and in.** This is the documented fix and takes a minute.
-4. **Check for repeat failures.** If the same user is back after a fresh sign-in, something is re-issuing old tokens, or the app caches tokens in a place the sign-out does not clear.
+4. **Check for repeat failures.** If the same user is back after a fresh sign-in, check whether the app keeps cached tokens in a place the sign-out does not clear.
 5. **For service accounts and automation, review how tokens are stored.** A long-running job that stores a refresh token will fail after a password change, because its token is revoked. Plan how the job signs in again.
 6. **Tell users after password resets.** A short note that apps may ask them to sign in again avoids tickets.
 7. **Escalate with details.** Provide the full error text, time, correlation ID and app name.
@@ -93,9 +93,9 @@ This section is my advice, not a Microsoft statement.
 
 When you tell users how to resolve the error, keep the message to one action: sign out of the app, sign in again and, if the app offers it, clear its cached account first. Say why it happened in plain words, for example that a password change or an admin action ended the old session. For developers on your team, point to your MSAL handling guidance and ask them to confirm that the app starts an interactive sign-in on this code instead of showing a generic failure. A clear user-facing message in the app reduces repeat tickets more than any change on the identity side.
 
-## What I did not read
+## What the pages do not cover
 
-I read the Learn troubleshooting article for AADSTS50173 and the reference entry. The article is short. I did not read the linked pages on refresh tokens and revoking user access, so I do not describe how revocation is done or how long it takes to take effect, and I do not claim anything about token lifetimes.
+The Learn troubleshooting article is short. It does not describe how revocation is done, how long it takes to take effect or what the token lifetimes are. It links to separate pages on refresh tokens and on revoking user access for that.
 
 ## Related
 
