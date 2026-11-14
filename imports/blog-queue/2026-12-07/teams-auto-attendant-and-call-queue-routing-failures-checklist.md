@@ -33,14 +33,14 @@ Microsoft's auto attendant article describes a diagnostic. Open https://aka.ms/T
 
 ## Step 2: Check the resource account
 
-Learn's licensing page states:
+Learn's licensing and resource account pages state:
 
-- Each resource account needs a free **Microsoft Teams Phone Resource Account** license. Teams Phone subscriptions include a zero-cost allocation of these licenses, but the purchase step must still be completed.
+- Each resource account needs a **Microsoft Teams Phone Resource Account** license, which the licensing page calls free. Subscriptions with Teams Phone have a zero-cost allocation of these licenses, but the purchasing process must still be completed.
 - Resource accounts are disabled for sign-in and must remain so. Chat and presence do not work for them.
 - A User Administrator or higher role is required to create and license them.
 - Nested auto attendants and call queues that transfer externally do not need their own resource account. License the resource account on the first auto attendant or call queue receiving the call.
 
-If a license is changed from **Teams Phone Standard** to the resource account license, do it in one license activity. Learn warns that removing, saving and then adding can leave the account not working, in which case a new resource account is recommended.
+If a license is changed from **Teams Phone Standard** to the resource account license, do it in one license activity. The resource accounts page warns that removing, saving and then adding can leave the account not working, in which case a new resource account is recommended.
 
 ### Phone numbers
 
@@ -67,13 +67,13 @@ Learn lists these agent rules. Open **Voice** > **Call queues**.
 
 - Agents must be Enterprise Voice enabled and, in the Teams app, in **TeamsOnly** mode. Others are not included in the routing list.
 - Limits: up to 20 agents individually and up to 200 via groups or a Teams channel. New group members can take up to eight hours before their first call, and channel queues up to 24 hours to be fully operational.
-- **Conference mode** is recommended on and required for consult or transfer.
+- **Conference mode** reduces the time it takes to connect a caller to an agent after the agent accepts. Learn recommends setting it to **On**.
 - **Routing method:** attendant, serial, round robin or longest idle. Microsoft recommends round robin or longest idle.
-- **Presence-based routing** is recommended on. Agents who are not Available are skipped. With longest idle it is required and enabled automatically.
-- **Call agents can opt out:** opted-out agents do not receive calls whatever their status.
+- **Presence-based routing** is recommended on. With longest idle it is required and enabled automatically, even though the toggle is off and grayed out.
+- **Call agents can opt out** of taking calls: Learn recommends turning it on.
 - **Agent alert time:** the recommended minimum is 20 seconds.
 
-Calls from a Direct Routing gateway with Location-Based Routing can show a call toast that the agent cannot answer, until the call is answered, abandoned or times out.
+Learn also notes that call presentation to agents might conflict with Location-Based Routing restrictions. The agent then receives a call toast but cannot answer the call.
 
 ## Step 5: Check exception handling
 
@@ -85,15 +85,15 @@ Calls can leave the queue by design. Learn lists:
 | Maximum wait time | 0 seconds to 45 minutes | Disconnect or redirect |
 | No agents opted in or logged in | Queue call by default | Queue, disconnect or redirect |
 
-A maximum of 0 prevents the greeting from playing. With **Longest idle** and **New Calls Only**, a known issue means the No Agents treatment does not work for newly queued calls. For callback to be offered, the call timeout must be long enough. Learn's example shows a 120-second timeout expiring before a roughly two-minute music file ends, so callback is never offered.
+A maximum of 0 prevents the greeting from playing. With **Longest idle** and **New Calls Only**, a known issue means the No Agents treatment does not work for newly queued calls. For callback to be offered, the call queue timeout must be long enough. Learn's example uses a callback wait time of 60 seconds and a queue timeout of 120 seconds. Because the default music is two minutes long, the timeout occurs first and callback is not offered.
 
-Redirect targets such as a person must be voice enabled. Shared voicemail destinations need a greeting without special characters.
+For shared voicemail redirects, Learn says not to use special characters in the greeting message because the system does not speak them.
 
 ## Step 6: Recheck changes after a short wait
 
 Several settings need time. The pages give 8 hours (new group members), 24 hours (channels) and 36 hours (directory). Shift changes sync with the call queue in 15 minutes. Wait for these windows before concluding that a setting failed.
 
-## Typical mistakes
+## Typical mistakes (own reading of the pages above)
 
 - Putting a call queue directly on a number when business hours and holidays matter. Call queues have no separate off-hours routing, so Microsoft recommends an auto attendant in front.
 - Turning presence-based routing off and then wondering why agents ring while busy.
@@ -109,8 +109,9 @@ Several settings need time. The pages give 8 hours (new group members), 24 hours
 
 ## Sources
 
-- [Plan for Teams auto attendants and call queues (Microsoft Learn)](https://learn.microsoft.com/microsoftteams/plan-auto-attendant-call-queue)
-- [Create a call queue (Microsoft Learn)](https://learn.microsoft.com/en-us/microsoftteams/create-a-phone-system-call-queue)
-- [Create an auto attendant (Microsoft Learn)](https://learn.microsoft.com/en-us/microsoftteams/create-a-phone-system-auto-attendant)
-- [Technical prerequisites and licensing requirements (Microsoft Learn)](https://learn.microsoft.com/en-us/microsoftteams/aa-cq-reference-prerequisites-licensing)
-- [Manage resource accounts in Teams (Microsoft Learn)](https://learn.microsoft.com/en-us/microsoftteams/manage-resource-accounts)
+- [Plan for Teams auto attendants and call queues (Microsoft Learn)](https://learn.microsoft.com/en-us/microsoftteams/aa-cq-plan-overview)
+- [Setup - Call Queue (Microsoft Learn)](https://learn.microsoft.com/en-us/microsoftteams/aa-cq-setup-call-queue)
+- [Setup - Auto Attendant (Microsoft Learn)](https://learn.microsoft.com/en-us/microsoftteams/aa-cq-setup-auto-attendant)
+- [Reference - Voice applications prerequisites and licensing (Microsoft Learn)](https://learn.microsoft.com/en-us/microsoftteams/aa-cq-reference-prerequisites-licensing)
+- [Manage - Resource accounts for voice applications (Microsoft Learn)](https://learn.microsoft.com/en-us/microsoftteams/aa-cq-manage-resource-accounts)
+- [Microsoft Teams Phone Resource Account licenses (Microsoft Learn)](https://learn.microsoft.com/en-us/microsoftteams/teams-add-on-licensing/virtual-user)
