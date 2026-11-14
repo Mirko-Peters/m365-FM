@@ -11,7 +11,7 @@ keypoints:
   - "It has three layers: unified data on OneLake, business intelligence on Power BI semantic models, and operational intelligence through ontology."
   - "The IQ workload groups ontology, semantic model, planning, graph, data agent and operations agent. Ontology is labeled preview."
   - "Planning is an EPM and CPM solution in Fabric for budgets, forecasts and scenarios, with planning, PowerTable and intelligence sheets plus Infobridge."
-  - "The overview page lists no prerequisites, licensing or limitations, so check the linked pages before a pilot."
+  - "Planning needs semantic models on a Fabric F SKU or Premium P capacity with XMLA endpoints on. The IQ overview itself lists no prerequisites or limits."
 faq:
   - q: "What is Fabric IQ?"
     a: "According to Microsoft Learn, Fabric IQ is part of Microsoft IQ, the enterprise intelligence layer of the Microsoft stack. It provides context on the state of the business by raising data to the language of the business. Work IQ covers how employees work, Foundry IQ covers policies and documents, and Fabric IQ covers business entities and data."
@@ -22,7 +22,7 @@ faq:
   - q: "Do I need Fabric IQ to use Power BI semantic models?"
     a: "No page I read says so. Learn lists the Power BI semantic model as one item that appears in both the IQ workload and the Power BI workload. It is the base of the business intelligence layer, and ontologies can be generated from semantic models already in production."
   - q: "What does the Fabric IQ overview not cover?"
-    a: "The overview page does not describe prerequisites, tenant settings, required capacity, licensing, limitations or general availability dates. Those details sit on item-level pages, such as the planning prerequisites and known limitations pages that the planning overview links to."
+    a: "The overview page does not describe prerequisites, tenant settings, required capacity, licensing, limitations or general availability dates. Those details sit on item-level pages. For Planning, the prerequisites page lists tenant and capacity settings and the known limitations page lists limits such as 25 sheets and 50 visuals per plan item."
 ---
 
 Fabric IQ is Microsoft's layer in Fabric that gives data a business meaning, so people and AI agents work with the same definitions of customers, orders or assets. Planning is one of the items in that layer. It adds budgets, forecasts and scenarios on the same data. This article explains how the parts relate, based on Microsoft Learn, and marks what the pages do not say.
@@ -83,15 +83,36 @@ Learn describes Planning as an EPM and CPM solution in Fabric. It lets organizat
 
 Listed capabilities include what-if analysis, variance reporting, and automatic write-back of planning results to a SQL database in Fabric. A note says Planning is available worldwide as part of the Fabric SKU, in all supported Fabric regions.
 
+## Planning prerequisites
+
+The IQ overview lists no prerequisites, but the planning prerequisites page does. According to it:
+
+- **Tenant settings.** A Fabric administrator enables **Allow XMLA endpoints and Analyze in Excel with on-premises semantic models** under Integration settings. For service principal authentication, **Service principals can call Fabric public APIs** under Developer settings must also be enabled.
+- **Capacity.** Semantic models used in planning must be hosted on supported capacities, such as Power BI Premium P1, P2 and higher or Fabric F SKUs. Scenarios that rely on XMLA endpoints need F SKUs or Premium P1 to P5. Power BI Pro and Premium Per User are not supported for those scenarios, and some lower SKUs have XMLA and memory limits that prevent supported use.
+- **XMLA endpoint.** In the capacity settings, the **XMLA Endpoint** setting must be **Read Only** or **Read Write**.
+- **Optional database connections.** A Fabric SQL database connection shared with report viewers enables collaboration, and a writeback destination enables writing plan data back. When you create a plan item, a Fabric SQL database that stores the plan report's metadata is created in your workspace automatically.
+
+## Known limitations of Planning
+
+The known limitations page says supported limits can vary with client resources, Fabric capacity and Power BI XMLA query limits. Selected points:
+
+- Each plan item connects to one semantic model and you cannot change it afterwards. Semantic models in My workspace are not supported.
+- Renaming the connected semantic model or the workspace that contains a plan item breaks the item.
+- Workspaces that use private links do not support plan items, while tenant-level private links are supported.
+- A plan item supports up to 25 sheets and 50 visuals. Writeback supports up to 1.2 million cells per operation, and bulk data input up to 10 million rows.
+- Deleting a row in a planning sheet does not delete the matching row in the destination Fabric SQL table.
+- PowerTable has its own limits, for example 1,022 columns for bulk uploads, 5 million rows for sort and group by, and 30,000 rows for Gantt and Resource Layout.
+- The page lists two known problems awaiting fixes: deployment pipelines fail when a plan item contains 100 Data Input items, and a "Something went wrong" error that may need up to 90 minutes before a retry.
+
 ## What the pages do not tell you
 
-The IQ overview lists no prerequisites, licensing, capacity needs, limitations or general availability dates. The planning overview summarizes prerequisites as tenant settings, capacity settings and database connections and links to separate pages. It does not give meter names, rates or SKU requirements. I did not read the linked prerequisites and known-limitations pages, so check them before planning a pilot.
+The IQ overview lists no prerequisites, licensing, capacity needs, limitations or general availability dates. The planning pages do not give meter names, rates or SKU prices either. I did not read the item-level pages for ontology, graph, the data agent or the operations agent in this check, so look at those before piloting them.
 
 ## A practical way to start
 
 1. List the business entities your reports already agree on, such as Customer or Product.
 2. Check which Power BI semantic models define their measures, since an ontology can start from them.
-3. Review the planning prerequisites and limitations pages.
+3. Check the XMLA tenant and capacity settings from the planning prerequisites page, and the known limitations.
 4. Pilot one domain, and keep the preview labels in mind when you set expectations.
 
 ## Key terms in one place
@@ -116,3 +137,5 @@ Learn lists three benefits: cross-domain reasoning through graph links, faster o
 
 - [What is Fabric IQ? (Microsoft Learn)](https://learn.microsoft.com/en-us/fabric/iq/overview)
 - [Planning in Fabric IQ overview (Microsoft Learn)](https://learn.microsoft.com/en-us/fabric/iq/plan/overview)
+- [Prerequisites for Planning (Microsoft Learn)](https://learn.microsoft.com/en-us/fabric/iq/plan/overview-prerequisites)
+- [Known Limitations in Planning (Microsoft Learn)](https://learn.microsoft.com/en-us/fabric/iq/plan/overview-limitations)
