@@ -1,5 +1,5 @@
 ---
-title: "How to Use Azure Hybrid Benefit for Windows Server and SQL Server"
+title: "How to Use Azure Hybrid Benefit for Azure SQL Database and Managed Instance"
 summary: "Apply Azure Hybrid Benefit to Azure SQL Database and Managed Instance: eligibility, where it applies, portal steps, core conversion ratios, the 180-day migration allowance and what the SQL page does not say about Windows Server and SQL Server on VMs."
 status: review
 publish: false
@@ -61,7 +61,7 @@ The page also has command line and REST tabs. Their contents were not read, so t
 
 ## Migration allowance
 
-You get a 180-day migration allowance. After that period the license can only be used on Azure, with no on-premises use during or after the allowance.
+Learn says you have 180 days of migration allowance for the license, so migrations can run smoothly. After that 180-day period, you can only use the SQL Server license on Azure, because the allowance for using it both on-premises and on Azure ends.
 
 ## Compared with license mobility
 
@@ -122,4 +122,4 @@ The benefit discounts the SQL Server license component only. The base compute st
 
 ## Sources
 
-- [Azure Hybrid Benefit for Azure SQL (Microsoft Learn)](https://learn.microsoft.com/azure/azure-sql/azure-hybrid-benefit)
+- [Azure Hybrid Benefit - Azure SQL Database & SQL Managed Instance (Microsoft Learn)](https://learn.microsoft.com/azure/azure-sql/azure-hybrid-benefit)
