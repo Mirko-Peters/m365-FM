@@ -22,7 +22,7 @@ faq:
   - q: "What is the difference between fallback and alternate approvers?"
     a: "Microsoft Learn says fallback approvers receive the request when entitlement management cannot find the user's manager. Alternate approvers receive a pending request after a set number of days if no one has acted. Learn notes that the primary approvers can still decide after the request is forwarded."
   - q: "Which roles can edit access package policies?"
-    a: "Microsoft Learn lists Identity Governance Administrator as the minimum role, with Catalog owner and Access package assignment manager as least-privilege alternatives."
+    a: "Microsoft Learn lists Identity Governance Administrator as the minimum role, with Catalog owner and Access package assignment manager as least-privilege alternatives. The request settings page names Access package manager in the same tip."
 ---
 
 A self-service access package with more than one approval step is configured on the policy of the package. Open the package, add or edit a policy, and set **How many stages** on the approval part of the **Requests** tab. Then choose approvers, timeouts and fallbacks for each stage. Microsoft Learn describes up to three stages, and in each stage only one approver has to decide.
@@ -31,7 +31,7 @@ A self-service access package with more than one approval step is configured on 
 
 Learn says the feature requires Microsoft Entra ID Governance or Microsoft Entra Suite subscriptions for your organization's users, and some capabilities may work with a Microsoft Entra ID P2 subscription. The page does not map individual features to licenses, so check the licensing fundamentals page for your plan.
 
-To edit policies you need at least the Identity Governance Administrator role. Catalog owner and Access package assignment manager are the least-privilege alternatives that Learn names. Delegated access package managers can define who can request, who must approve and when access expires.
+To edit policies you need at least the Identity Governance Administrator role. Catalog owner and Access package assignment manager are the least-privilege alternatives that the approval settings page names. The request settings page names the Access package manager in the same tip, and Learn does not explain the difference. Delegated access package managers can define who can request, who must approve and when access expires.
 
 ## Open the policy
 
@@ -43,7 +43,7 @@ To edit policies you need at least the Identity Governance Administrator role. C
 
 ## Set who can request
 
-Under **Users who can request access**, choose one of the options Learn lists for users in your directory: specific users and groups, all members excluding guests, or all users including guests. For people outside the directory, choose connected organizations. The option **None (administrator direct assignments only)** removes the request step, and direct assignments by an administrator still need the approvals the policy requires.
+Under **Users who can request access**, choose **For users, service principals, and agent identities in your directory**, **For users not in your directory** or **None (administrator direct assignments only)**. For the directory option, Learn lists specific users and groups, all members (excluding guests) and all users (including guests), plus all service principals and all agents, which need Microsoft Entra Agent ID. For people outside the directory, Learn lists specific connected organizations, all configured connected organizations, or all users including new external users. The **None** option has no request settings. A Learn note adds that if an access package contains a policy that requires approval, users cannot be directly assigned without the designated approvals. Learn does not say how that note applies to a policy set to None.
 
 Use several policies when different groups need different approval paths. If more than one policy applies, the requestor chooses one when requesting.
 
@@ -63,7 +63,7 @@ Approver choices depend on who the policy covers:
 | Manager as approver | Users in the directory |
 | Internal sponsor | Users not in the directory |
 | External sponsor | Users not in the directory |
-| Choose specific approvers (**Add approvers**) | Users or groups in your directory |
+| Choose specific approvers (**Add approvers**) | Both cases. The approvers are users or groups in your directory |
 
 A typical pattern from the Learn page is the manager in stage one, a resource owner in stage two and a security reviewer in stage three for confidential resources. For users in the directory, add stage two approvers under **Choose specific approvers**.
 
@@ -71,7 +71,7 @@ Mind the third stage. If **Manager as approver** is selected in stage one or two
 
 ## Add fallback and alternate approvers
 
-When the first approver is the manager, select **Add fallback** and choose users or groups. They receive the request if entitlement management cannot find a manager. The manager comes from the **Manager** attribute in the user's Microsoft Entra profile, so an empty attribute is the usual reason a fallback is needed.
+When the first approver is the manager, select **Add fallback** and choose users or groups. They receive the request if entitlement management cannot find a manager. The manager comes from the **Manager** attribute in the user's Microsoft Entra profile, so an empty attribute is a likely reason a fallback is needed (my inference, Learn only says the manager cannot be found). For sponsors in the second and third stage, Learn also says to add fallback approvers after you select the approver.
 
 For a forwarding step, select **Show advanced request settings** under the approver and set **If no action taken, forward to alternate approvers?** to **Yes**. Then add the alternate approvers and set **Forward to alternate approver(s) after how many days**. Learn lists these limits:
 
@@ -94,7 +94,7 @@ Finish with the **Lifecycle** tab, then select **Create** or **Update**.
 
 ## How approvers act
 
-Approvers receive an email with an **Approve or deny request** link, or open `myaccess.microsoft.com` and select **Approvals** and the **Pending** tab. They select **View**, review the **Details**, choose **Approve** or **Deny**, add a reason if needed and select **Submit**. If notifications are disabled on the access package, no email arrives. Revoking an approved request needs an approver with a Microsoft Entra ID Governance license.
+Approvers receive an email with an **Approve or deny request** link, or open `myaccess.microsoft.com` and select **Approvals** and the **Pending** tab. They select **View**, review the **Details**, choose **Approve** or **Deny**, add a reason if needed and select **Submit**. Learn tells approvers who see no email to check that the access package does not have notifications disabled. Revoking an approved request needs an approver with a Microsoft Entra ID Governance license.
 
 ## Typical mistakes
 
@@ -117,6 +117,6 @@ The Learn pages read for this article do not describe how multi-stage requests a
 ## Sources
 
 - [Change approval settings for an access package in entitlement management](https://learn.microsoft.com/en-us/entra/id-governance/entitlement-management-access-package-approval-policy)
-- [Change request settings for an access package](https://learn.microsoft.com/en-us/entra/id-governance/entitlement-management-access-package-request-policy)
-- [Approve or deny access requests in entitlement management](https://learn.microsoft.com/en-us/entra/id-governance/entitlement-management-request-approve)
+- [Change request settings for an access package in entitlement management](https://learn.microsoft.com/en-us/entra/id-governance/entitlement-management-access-package-request-policy)
+- [Approve or deny access requests - entitlement management](https://learn.microsoft.com/en-us/entra/id-governance/entitlement-management-request-approve)
 - [What is entitlement management?](https://learn.microsoft.com/en-us/entra/id-governance/entitlement-management-overview)
