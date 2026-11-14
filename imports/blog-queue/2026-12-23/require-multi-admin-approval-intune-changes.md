@@ -1,6 +1,6 @@
 ---
 title: "Require Multiple Administrative Approval for Intune Changes: Access Policies Step by Step"
-summary: "Set up Intune Multi Admin Approval: which resource types it protects, how to create an access policy, approver and requestor requirements, the approval flow, expiry after 3 days and the limitations Learn lists."
+summary: "Set up Intune Multi Admin Approval: which resource types it protects, how to create an access policy, approver and requestor requirements, the approval flow, expiry after 3 days without further processing and the limitations Learn lists."
 status: review
 publish: false
 author: mirko-p
@@ -10,7 +10,7 @@ keypoints:
   - "Multi Admin Approval holds changes to protected resources until a different administrator approves. It covers interactive admin actions and app-auth calls through Microsoft Graph."
   - "Protected types include apps, compliance policies, settings catalog configuration policies, device actions (Wipe, Retire, Delete), RBAC, Windows scripts and device categories."
   - "Create a policy under Tenant administration > Multi Admin Approval > Access policies > Create. Changes to access policies always need a second admin."
-  - "An approved request must be completed within 3 days or it expires. Status changes stay visible for 30 days."
+  - "A request that is not processed further within 3 days expires and must be resubmitted. Each status change stays visible for up to 30 days."
   - "Admins cannot approve their own requests, only one request per object can be pending, and Intune sends no notifications for requests."
 faq:
   - q: "What does Multi Admin Approval protect against?"
@@ -20,7 +20,7 @@ faq:
   - q: "Who can approve a request?"
     a: "An approver must be a direct member of the approver group assigned to the policy, hold the Read permission for the resource, and the approver security group must be a member group on at least one Intune RBAC role assignment. Distribution lists, Microsoft 365 groups and mail-enabled security groups are not supported."
   - q: "What happens if nobody completes an approved request?"
-    a: "Learn says an approved request that is not completed within 3 days becomes Expired and must be resubmitted."
+    a: "Learn says a request that is not processed further within 3 days becomes Expired and must be resubmitted. My advice: the requestor should select Complete soon after approval."
   - q: "Does Intune notify approvers?"
     a: "No. Learn lists as a limitation that Intune sends no notifications for new requests or status changes, so contact approvers directly for urgent requests."
 ---
@@ -71,7 +71,7 @@ Changes to access policies themselves always need a second administrator's appro
 2. An approver opens **Received requests** (or **Admin tasks**), reviews the request, adds **Approver notes** and selects **Approve request** or **Reject request**.
 3. The requestor selects **Complete** on the approved request. Intune applies the change and sets the status to Completed.
 
-Statuses are Needs approval, Approved, Completed, Rejected and Canceled. A requestor can cancel before approval from **My requests** with **Cancel request**. An approved request not completed within 3 days becomes Expired. Each status change stays visible for 30 days.
+Statuses are Needs approval, Approved, Completed, Rejected and Canceled. A requestor can cancel before approval from **My requests** with **Cancel request**. Learn says a request that is not processed further within 3 days becomes Expired and must be resubmitted. Each status change stays visible for up to 30 days.
 
 ## Limitations
 
@@ -83,7 +83,6 @@ Statuses are Needs approval, Approved, Completed, Rejected and Canceled. A reque
 - Exclusions apply only to app-auth calls, are limited to 50 applications per policy and bypass MAA for the affected resource type.
 - The **Allow access to unlicensed admins** setting is irreversible.
 - The **Role** policy type can deadlock RBAC changes. Configure other policies and RBAC assignments first.
-- If Multi-Admin Approval is on for apps, Learn's catalog app page notes you can't upload PowerShell scripts during Enterprise App Catalog app creation.
 
 ## Example: protecting device wipes
 
@@ -105,7 +104,7 @@ These are practical suggestions based on the limits:
 2. Make sure approvers know the process, since there are no notifications.
 3. Set up the Role policy last, because it can lock RBAC changes.
 4. Review exclusions, because they bypass MAA for the app-auth calls of that type.
-5. Agree on who completes approved requests within the 3-day window.
+5. My advice: agree on who completes approved requests, so they do not expire after 3 days.
 
 ## Related
 
@@ -113,4 +112,4 @@ These are practical suggestions based on the limits:
 
 ## Sources
 
-- [Use Multi Admin Approval to require approval for changes in Intune](https://learn.microsoft.com/intune/intune-service/fundamentals/multi-admin-approval)
+- [Use Multi Admin Approval in Intune (Microsoft Learn)](https://learn.microsoft.com/intune/fundamentals/role-based-access-control/multi-admin-approval)
