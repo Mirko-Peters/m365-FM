@@ -25,7 +25,7 @@ faq:
     a: "Learn says planning batch jobs created for the deprecated engine fail if they run while Use Planning Optimization is Yes."
 ---
 
-Planning Optimization is the master planning engine for Dynamics 365 Supply Chain Management. It runs as an external add-in, so you install and connect it before it can plan. This guide follows the Microsoft Learn page on getting started with Planning Optimization. The page covers setup only. It does not describe how to run a planning job.
+Planning Optimization is the master planning engine for Dynamics 365 Supply Chain Management. It runs as an external add-in, so you install and connect it before it can plan. This guide follows the Microsoft Learn page Get started with master planning. The page covers setup only. It does not describe how to run a planning job.
 
 ## What it is
 
@@ -37,7 +37,7 @@ Master planning in Supply Chain Management is provided by an external service ca
 - Supply Chain Management version 10.0.23 or later.
 - Power Platform integration set up for the system.
 - A Supply Chain Management license assigned to your Microsoft Entra account.
-- A Power Platform account with administrator privileges and access mode **Read-Write**. To check, open the environment in the Power Platform admin center, go to **Settings** > **Users**, select your user, open **Client Access License (CAL) information** and confirm **Access Mode**.
+- A Power Platform account with administrator privileges and access mode **Read-Write**. If you get an error message about missing user permissions while installing the add-in, the page says to open the environment in the Power Platform admin center, go to **Settings** > **Users**, select your user, open **Client Access License (CAL) information** and confirm that **Access Mode** is Read-Write.
 
 ## Step 1: enable the configuration key
 
@@ -74,7 +74,7 @@ The setup moves between three places, which is easy to miss.
 
 - **Supply Chain Management itself** holds the configuration key under License configuration and the Planning Optimization parameters page where you read the connection status.
 - **Lifecycle Services** is where you install the add-in on the environment.
-- **The Power Platform admin center** is used only to check that your account has the Read-Write access mode. The page does not use it to install the add-in.
+- **The Power Platform admin center** is where the page tells you to check that your account has the Read-Write access mode if you get a missing-permissions error. The page does not use it to install the add-in.
 
 As practical advice, if the connection status is not Connected, check these three things in order: the configuration key, the add-in installation on that particular environment, and the installing account's access mode. The page does not give a troubleshooting sequence itself.
 
@@ -87,14 +87,14 @@ As practical advice, if the connection status is not Connected, check these thre
 ## What the page does not say
 
 - How to run master planning after setup.
-- Feature-level differences between Planning Optimization and the old engine. There is a separate comparison article.
+- Feature-level differences between Planning Optimization and the old engine. The page links to separate articles on migrating to Planning Optimization and on continuing to use the deprecated engine for existing companies.
 - Roles beyond the administrator account, Read-Write access and the license.
 - Troubleshooting. It points to a separate article. The migration steps are also on a separate page.
 - The page does not mention feature management. The configuration key sits under License configuration, and the add-in is installed from Lifecycle Services, not from the Power Platform admin center.
 
 ## A setup checklist
 
-This list is practical advice built on the page.
+This list is my advice, built on the page.
 
 1. Confirm environment tier, version and region.
 2. Confirm your account's license and Read-Write access mode.
@@ -103,7 +103,7 @@ This list is practical advice built on the page.
 5. Check Connection status shows Connected.
 6. Review old planning batch jobs before you switch.
 
-## Typical mistakes
+## Typical mistakes (my advice)
 
 - Trying to install on a OneBox environment.
 - Forgetting to install on each environment.
@@ -118,4 +118,4 @@ This list is practical advice built on the page.
 
 ## Sources
 
-- [Get started with Planning Optimization (Microsoft Learn)](https://learn.microsoft.com/dynamics365/supply-chain/master-planning/planning-optimization/get-started)
+- [Get started with master planning (Microsoft Learn)](https://learn.microsoft.com/dynamics365/supply-chain/master-planning/planning-optimization/get-started)
