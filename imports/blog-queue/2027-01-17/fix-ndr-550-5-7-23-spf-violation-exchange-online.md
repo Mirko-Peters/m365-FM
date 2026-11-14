@@ -85,14 +85,14 @@ This section is my advice, not a Microsoft statement.
 
 1. **Read the diagnostic section of the bounce** for the receiving server's wording before you change DNS.
 2. **Check the SPF record of the exact domain in the sender address.** A record on the parent domain does not cover a subdomain, as Learn says.
-3. **Look for two SPF records.** It is a common cause of permerror, and easy to check.
+3. **Look for two SPF records.** Learn says multiple records cause permerror, and it is easy to check.
 4. **Count lookups** with a checker that does it, and trim if you are near 10.
 5. **Run a message trace** for a failed message and read `OutboundIpPoolName`. If the high-risk pool shows up, the SPF record is not the real issue, and you should look at why the message was classified as spam.
 6. **Set up DKIM and DMARC** alongside SPF, as Learn recommends for the best protection.
 
 ## What the NDR page does not say
 
-The NDR page is short. It does not explain the limit on emails with unprovisioned domains, give the numbers, or describe how to provision a domain. Use the Microsoft 365 domains documentation for that, which I did not read for this article.
+The NDR page is short. It does not explain the limit on emails with unprovisioned domains, give the numbers, or describe how to provision a domain. Use the Microsoft 365 domains documentation for that.
 
 ## Related
 
