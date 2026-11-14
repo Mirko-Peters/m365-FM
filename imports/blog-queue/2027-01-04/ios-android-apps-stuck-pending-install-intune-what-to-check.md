@@ -78,7 +78,7 @@ Learn also lists 0x87D13B60, where the app needs a redemption code, typically fo
 | 0xc7d14fb7 | Upgrade APK signature does not match the installed app | Uninstall the existing app, then deploy the new one |
 | 0xc7d14fb6 | APK not signed | Sign the app before deployment |
 
-Learn notes the Android table lists two codes twice with different descriptions, and that several download entries apply to device administrator scenarios only. Learn also says Intune has ended support for Android device administrator on devices with Google Mobile Services, so check that your Android enrollment type is still supported.
+In my reading, the Android table lists 0xC7D14FB1 and 0xC7D14FB9 twice with different descriptions, and several download entries are marked as device administrator scenarios only. Learn also says Intune has ended support for Android device administrator on devices with Google Mobile Services, so check that your Android enrollment type is still supported.
 
 ## Step 5: Look at the user side
 
@@ -104,4 +104,4 @@ Neither Learn page defines a Pending status or gives a fixed time after which a 
 ## Sources
 
 - [App installation error codes for Microsoft Intune (Microsoft Learn)](https://learn.microsoft.com/troubleshoot/mem/intune/app-management/app-install-error-codes)
-- [Assign apps to groups in Microsoft Intune (Microsoft Learn)](https://learn.microsoft.com/intune/intune-service/apps/apps-deploy)
+- [Assign Apps to Groups in Microsoft Intune (Microsoft Learn)](https://learn.microsoft.com/intune/app-management/deployment/assign-groups)
