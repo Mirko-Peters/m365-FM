@@ -25,7 +25,7 @@ faq:
     a: "Two solutions are listed. Disable bare line feed rejection on the destination server if it supports that, for example set BareLinefeedRejectionEnabled to false on the Exchange Server Receive connector used for internet mail. Or upgrade to a newer version, or different server software, that supports the SMTP BDAT command."
 ---
 
-NDR 550 5.6.11 is one of the few bounce codes where the cause fits in one sentence. The Microsoft Learn page says your message contained bare line feeds, and the destination email server does not support messages with them. This article explains what that means, who can fix it, and what each side can try.
+The Microsoft Learn page on NDR 550 5.6.11 says your message contained bare line feeds, and the destination email server does not support messages with them. This article explains what that means, who can fix it, and what each side can try.
 
 ## What the bounce says
 
@@ -66,7 +66,7 @@ Upgrade the destination server to a newer version, or to different email server 
 
 ## How to read the situation
 
-The page gives a compact picture you can use to explain the NDR to a user or to the other side:
+This compact picture is assembled from the page. You can use it to explain the NDR to a user or to the other side:
 
 | Element | What it is |
 | --- | --- |
@@ -76,11 +76,11 @@ The page gives a compact picture you can use to explain the NDR to a user or to 
 | Destination without BDAT | Cannot accept the message, so the NDR with 5.6.11 is returned |
 | Exchange Online | No longer removes bare line feeds, in support of standards such as DKIM |
 
-Two consequences follow from this. First, the same message can be delivered to a modern server and bounce from an older one, so a single recipient or domain can fail while others work. Second, the problem is not the size or the content of the message, but how its lines end. The two sender tips on the page, another email program and no attachment, both aim at removing the source of the stray line feeds.
+Two consequences follow from this, in my reading. First, the same message can be delivered to a modern server and bounce from an older one, so a single recipient or domain can fail while others work. Second, the cause the page names is how the message's lines end, not its size or content. The page does not say why its two sender tips, another email program and no attachment, help. I assume they remove the source of the stray line feeds.
 
 ## Who owns the fix
 
-The code arises in the sender's tenant, but the page puts the permanent fix on the destination side. Exchange Online admins on the sending side cannot make the remote server accept the message. What they can do is help the sender work around the problem, and give the recipient's admin the facts.
+The page puts the server-side fix on the recipient's email admin. My reading: an admin on the sending side cannot make the remote server accept the message, but can help the sender work around the problem and give the recipient's admin the facts.
 
 ## A short order of work (my advice)
 
