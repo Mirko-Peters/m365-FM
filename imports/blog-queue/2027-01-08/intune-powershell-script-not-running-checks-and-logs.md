@@ -25,7 +25,7 @@ faq:
     a: "No. The page defers PowerShell script details to a separate article and does not give a retry count."
 ---
 
-When an Intune PowerShell script does not run, the first question is whether the Intune management extension (IME) is on the device and checking in. The IME is the agent that runs PowerShell scripts, among other things. This guide follows the Microsoft Learn page on the Intune management extension, which covers prerequisites, check-in, logs and IME download problems. It does not cover script execution details.
+When an Intune PowerShell script does not run, the first question is whether the Intune management extension (IME) is on the device and checking in. The IME is the agent that runs PowerShell scripts, among other things. This guide follows the Microsoft Learn page Understand Microsoft Intune Management Extension, which covers prerequisites, check-in, logs and IME download problems. It does not cover script execution details.
 
 ## What the IME is
 
@@ -35,13 +35,13 @@ The IME is an installer agent that supplements the standard Windows MDM feature.
 
 1. **Agent version.** Devices must run IME version 1.58.103.0 or later. Older versions do not receive configurations or updates that depend on the IME. The IME updates itself.
 2. **Windows version.** A supported version. S mode is not supported because it does not allow nonstore apps.
-3. **Join state.** The device is Microsoft Entra hybrid joined, or Entra registered (workplace joined), for example a BYOD device with a work account under **Settings** > **Accounts** > **Access work or school**.
+3. **Join state.** The device is joined to Microsoft Entra ID. The page names two forms: Entra hybrid joined (joined to Entra ID and on-premises Active Directory), and Entra registered or workplace joined, for example a BYOD device with a work or school account under **Settings** > **Accounts** > **Access work or school**.
 4. **Enrollment.** Enrolled through Group Policy, enrolled manually or automatically, or co-managed with Configuration Manager. Learn says PowerShell scripts run even if the Apps workload is set to Configuration Manager.
 5. **Network.** Behind a firewall or proxy, communication to Intune must be allowed.
 
 ## When the IME installs
 
-The IME installs automatically when certain features are assigned to a user or device. The page lists PowerShell scripts, remediations, discovery scripts for custom compliance, Win32 apps, endpoint analytics, Remote Help, Managed Installers and the BIOS update configuration policy. If none of these is assigned, the IME is not installed. It is removed when scripts are no longer assigned, when the device is no longer managed, or when the IME stays in an irrecoverable state for over 24 hours of device-awake time.
+The IME installs automatically when certain features are assigned to a user or device. The page lists PowerShell scripts, remediations, discovery scripts for custom compliance, Win32 apps, endpoint analytics, Remote Help, Managed Installers and the BIOS update configuration policy. A note near the top of the page lists a slightly different set (PowerShell script, Win32 app, Microsoft Store app, custom compliance policy setting, proactive remediation), so treat both lists as examples. The page also says the IME installs automatically only when the prerequisites are met. It is removed when scripts are no longer assigned, when the device is no longer managed, or when the IME stays in an irrecoverable state for over 24 hours of device-awake time.
 
 ## Check-in timing
 
@@ -83,12 +83,12 @@ Learn says the Entra app that authenticates the IME can fail subscription validi
 
 - How the script runs: 64-bit or 32-bit host, system or user context, and signature checks.
 - How many retries occur after a failure.
-- The full path of the agent binary.
+- Which steps to take for a script that ran but failed.
 - Step-by-step script troubleshooting. The page links to a separate article on PowerShell scripts.
 
 ## A troubleshooting order
 
-This order is practical advice built on the page.
+This order is my advice, built on the page.
 
 1. Confirm the device meets the prerequisites and is not in S mode.
 2. Confirm the script is assigned to the device or user.
@@ -97,7 +97,7 @@ This order is practical advice built on the page.
 5. If the IME is missing, work through the download causes.
 6. For script behavior beyond that, read the dedicated Learn article on PowerShell scripts.
 
-## Typical mistakes
+## Typical mistakes (my advice)
 
 - Waiting for the 8-hour check-in instead of forcing a sync.
 - Targeting Home edition or S mode devices.
@@ -112,4 +112,4 @@ This order is practical advice built on the page.
 
 ## Sources
 
-- [Intune management extension (Microsoft Learn)](https://learn.microsoft.com/intune/intune-service/apps/intune-management-extension)
+- [Understand Microsoft Intune Management Extension (Microsoft Learn)](https://learn.microsoft.com/intune/device-management/tools/management-extension-windows)
