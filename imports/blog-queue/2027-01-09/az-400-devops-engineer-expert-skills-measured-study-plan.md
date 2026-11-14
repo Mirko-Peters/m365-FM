@@ -18,18 +18,18 @@ faq:
   - q: "How is the exam weighted?"
     a: "Processes and communications 10-15%, source control 10-15%, build and release pipelines 50-55%, security and compliance 10-15% and instrumentation 5-10%."
   - q: "Do I need both GitHub and Azure DevOps?"
-    a: "The audience profile expects experience implementing both GitHub and Azure DevOps solutions, and strong skills in administering and developing in Azure."
+    a: "The audience profile expects experience implementing both GitHub and Azure DevOps solutions, and experience administering and developing in Azure, with strong skills in at least one of those two areas."
   - q: "Which practice assessment should I use?"
     a: "The page recommends the Practice Assessment on AI Skills Navigator. The legacy assessment on Microsoft Learn is no longer updated."
   - q: "Is there a retirement date?"
-    a: "The study guide page does not show a retirement date. It shows skills measured as of July 27, 2026 and a last update of 2026-10-30."
+    a: "The study guide page does not show a retirement date. It shows skills measured as of July 27, 2026, and the page metadata lists an update on 2026-11-05. The change log lists four minor changes."
 ---
 
 AZ-400 is the DevOps engineer exam, and more than half of it is about pipelines. The study guide lists five domains, with build and release pipelines at 50-55%. This guide summarizes the outline as published on the Microsoft Learn study guide, with skills measured as of July 27, 2026, and adds a study order. It contains no exam questions.
 
 ## Audience
 
-A DevOps engineer is a developer or infrastructure administrator who works with people, processes and products to enable continuous delivery of value. The role delivers continuous security, integration, testing, delivery, deployment, monitoring and feedback. Candidates work on cross-functional teams, need experience administering and developing in Azure, and need experience implementing both GitHub and Azure DevOps solutions. The page shows no retirement date.
+A DevOps engineer is a developer or infrastructure administrator who works with people, processes and products to enable continuous delivery of value. The role delivers continuous security, integration, testing, delivery, deployment, monitoring and feedback. Candidates work on cross-functional teams, need experience both administering and developing in Azure, with strong skills in at least one of these areas, and should have experience implementing both GitHub and Azure DevOps solutions. They work with developers, site reliability engineers, Azure administrators and security engineers. The page shows no retirement date. A score of 700 or greater is required to pass, and the exam may contain questions on Preview features if those features are commonly used.
 
 ## Domain 1: design and implement processes and communications (10-15%)
 
@@ -68,11 +68,11 @@ Self-paced training and instructor-led courses, the DevOps resource center and d
 
 ## What the page does not say
 
-Exam length, question count, price, prerequisites and weights below the domain level.
+Exam length, question count, price, formal prerequisites and weights below the domain level. The change log lists four minor changes (traceability and flow of work, security and compliance scanning, monitoring for a DevOps environment, and analyzing metrics from instrumentation). The audience profile and the groups for processes and communications, security and compliance and instrumentation are marked no change, and no other rows are listed.
 
 ## A study plan
 
-This plan is practical advice built on the weights.
+This plan is my advice, built on the weights.
 
 1. **Weeks 1-5, domain 3.** Build a YAML pipeline in both GitHub Actions and Azure Pipelines. Add tests, approvals, a deployment strategy and an IaC step.
 2. **Week 6, domain 4.** Set up Key Vault, workload identity federation and GitHub Advanced Security scanning.
@@ -80,7 +80,7 @@ This plan is practical advice built on the weights.
 4. **Week 8, domain 5.** Connect Application Insights and write basic KQL.
 5. **Final days.** Take the practice assessment and review weak areas.
 
-## Typical mistakes
+## Typical mistakes (my advice)
 
 - Learning only Azure DevOps or only GitHub.
 - Skipping IaC and deployment strategy topics.
