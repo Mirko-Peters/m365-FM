@@ -20,7 +20,7 @@ faq:
   - q: "What are the limits?"
     a: "Resource Manager model only. Premium storage accounts and zone-redundant storage are not supported, and an unsupported account can cause a StorageAccountTypeNotSupported error."
   - q: "What does Serial Console need?"
-    a: "Boot diagnostics enabled, a user account with password authentication in the VM, the Virtual Machine Contributor role on the VM and on the boot diagnostics storage account, the Resource Manager model, and a storage account that does not disable Allow storage account key access."
+    a: "Boot diagnostics enabled, a user account with password authentication in the VM, the Virtual Machine Contributor role on the VM and on the boot diagnostics storage account, the Resource Manager model, and a storage account that does not disable Allow storage account key access. The page also announces that by the end of 2025 Serial Console stops using boot diagnostics storage accounts to connect, so check the current page."
   - q: "Where do I open it?"
     a: "All resources > the VM > Help > Serial console. For a scale set instance, go to All resources > the scale set > Instances > the instance > Help > Serial console."
 ---
@@ -37,7 +37,7 @@ When an Azure VM does not come up, you cannot always sign in over the network. B
 
 - At creation: **Management** tab > **Monitoring** > **Boot diagnostics**. The default is a managed storage account.
 - On an existing VM: **Help** > **Boot diagnostics** > **Settings** tab. Choose a managed or custom storage account and select **Save**.
-- Azure CLI uses `az vm boot-diagnostics`, and ARM templates use a diagnosticsProfile with bootDiagnostics (API version 2015-06-15 or later). The page gives no example.
+- Azure CLI uses `az vm boot-diagnostics`, and ARM templates use a diagnosticsProfile with bootDiagnostics (API version 2015-06-15 or later). The page shows a JSON snippet for the template but no CLI example.
 
 ### View it
 
@@ -65,6 +65,7 @@ The Serial Console is a text console to the ttyS0 or COM1 serial port. It works 
 - The Resource Manager model.
 - A storage account that does not have Allow storage account key access disabled.
 - TLS 1.2 is used. It is configured separately on the storage account.
+- Date note: the page says that by the end of 2025 Serial Console will no longer use boot diagnostics storage accounts to establish a connection, and that this does not affect serial logs or screenshots. That date has passed (today is 2026-11-14) and the page does not explain what changed for the prerequisites above, so check the current Learn page before you rely on the storage conditions.
 
 ### Open it
 
@@ -76,12 +77,12 @@ The Serial Console is a text console to the ttyS0 or COM1 serial port. It works 
 
 - A step-by-step procedure for a non-booting VM.
 - Consistent role wording. One place says Contributor or higher and another says Virtual Machine Contributor.
-- The current status of the storage change that the page dates to the end of 2025.
+- What the end-2025 storage change means in practice, now that the date has passed.
 - How to create a password user when the VM cannot boot.
 
-## A triage outline
+## A triage outline (my advice)
 
-This outline is practical advice built on the pages.
+This outline is my own advice, built on the pages.
 
 1. Open the boot diagnostics screenshot and read the error. Wait up to 10 minutes if nothing shows.
 2. Compare any code with the list on the page and open the linked article.
@@ -89,7 +90,7 @@ This outline is practical advice built on the pages.
 4. If the VM responds to console input, try the Serial Console.
 5. Enable boot diagnostics before a problem happens, so the data exists when you need it.
 
-## Typical mistakes
+## Typical mistakes (my advice)
 
 - Enabling boot diagnostics only after the VM has failed.
 - Using a Premium or ZRS storage account for diagnostics.
@@ -105,5 +106,5 @@ This outline is practical advice built on the pages.
 
 ## Sources
 
-- [Azure Serial Console overview (Microsoft Learn)](https://learn.microsoft.com/troubleshoot/azure/virtual-machines/serial-console-overview)
-- [Boot diagnostics (Microsoft Learn)](https://learn.microsoft.com/troubleshoot/azure/virtual-machines/boot-diagnostics)
+- [Azure Serial Console (Microsoft Learn)](https://learn.microsoft.com/troubleshoot/azure/virtual-machines/windows/serial-console-overview)
+- [Boot diagnostics for VMs in Azure (Microsoft Learn)](https://learn.microsoft.com/troubleshoot/azure/virtual-machines/windows/boot-diagnostics)
