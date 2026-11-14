@@ -87,8 +87,8 @@ To use pipelines from Copilot Studio, open the solution explorer and select **Pi
 - The same exported solution artifact passes through the stages in order, and Learn says tampering with it is prevented.
 - Deployments are prevalidated against the target environment, and missing dependencies are detected before deployment.
 - Pipelines deploy connections, connection references and environment variables for the target. Service principal connections can be used for connectors that support them.
-- The pipelines host should be a production environment. All other environments in the pipeline must be managed environments, and premium use rights are required for managed environments.
-- Pipelines do not deploy to a different tenant, deploy only managed solutions to non-development environments and handle one solution at a time. Default import behavior is Upgrade without Overwrite customizations.
+- The pipelines host should be a production environment, but it does not have to be a managed environment. Learn's licensing FAQ says the other environments used in pipelines must be enabled as managed environments, and that licenses with premium use rights are required for all managed environments. The same FAQ also says developer environments used for development and testing are not required to be managed, and its example setup lists development and QA as developer environments with no standalone license. Check your own setup against that page.
+- Pipelines do not deploy to a different tenant (Learn suggests Azure DevOps or GitHub for that) and handle one solution at a time. Learn recommends always deploying managed solutions to non-development environments and says unmanaged solutions cannot be deployed. The default import behavior is Upgrade without Overwrite customizations, and advanced import options such as update versus upgrade are not currently available.
 - Starting in October 2026, the admin deployment page notifies admins when pipelines deploy to unmanaged target environments, with 30 days to approve managed environments before deployments are blocked.
 
 ## Known limitations
@@ -117,7 +117,7 @@ The pages read here do not give a full list of everything that can go into a sol
 
 ## Sources
 
-- [Microsoft Learn: Establish an application lifecycle management strategy for Copilot Studio](https://learn.microsoft.com/microsoft-copilot-studio/guidance/alm)
-- [Microsoft Learn: Export and import agents using solutions](https://learn.microsoft.com/microsoft-copilot-studio/authoring-solutions-import-export)
+- [Microsoft Learn: Establish an application lifecycle management strategy for Copilot Studio](https://learn.microsoft.com/en-us/microsoft-copilot-studio/guidance/alm)
+- [Microsoft Learn: Export and import agents using solutions](https://learn.microsoft.com/en-us/microsoft-copilot-studio/authoring-solutions-import-export)
 - [Microsoft Learn: Create and manage solutions in Copilot Studio](https://learn.microsoft.com/en-us/microsoft-copilot-studio/authoring-solutions-overview)
 - [Microsoft Learn: Pipelines in Power Platform](https://learn.microsoft.com/en-us/power-platform/alm/pipelines)
