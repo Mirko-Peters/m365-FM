@@ -25,7 +25,7 @@ faq:
     a: "Learn lists Other provisioning failures as unlisted errors, usually caused by blocked network access. Allow all required endpoints on the Azure network connection vNet and any gateway."
 ---
 
-When a Cloud PC fails to provision, Windows 365 shows an error title in the Intune admin center. Microsoft's provisioning error page maps each title to a cause and a fix. This guide groups those entries by what to check first: policy and license, enrollment, network, and Azure-side blocks.
+When a Cloud PC fails to provision, Windows 365 reports a provisioning error. Microsoft's provisioning error page maps each title to a cause and a fix. This guide groups those entries by what to check first: policy and license, enrollment, network, and Azure-side blocks.
 
 ## How Microsoft names the errors
 
@@ -33,7 +33,7 @@ The page does not list codes such as internalServerError. It identifies each err
 
 ## Policy, user and license errors
 
-These happen when something was removed while provisioning was running.
+Most of these happen when something was removed or deleted while provisioning was running.
 
 | Error | Cause | Fix |
 | --- | --- | --- |
@@ -79,7 +79,7 @@ Several entries recommend simply retrying provisioning: Disk allocation error, M
 
 ## A triage order
 
-1. Read the exact error title in the Intune admin center.
+1. Read the exact error title reported for the failed provisioning.
 2. If it mentions a deleted object, check what changed during provisioning.
 3. For enrollment, check MDM enrollment restrictions and endpoint access first.
 4. For network titles, check the Azure network connection health and subnet size.
@@ -96,4 +96,4 @@ The page says nothing about license assignment timing and it does not list how l
 
 ## Sources
 
-- [Troubleshoot Windows 365 provisioning errors](https://learn.microsoft.com/troubleshoot/windows-365/provisioning-errors)
+- [Troubleshoot provisioning errors - Windows 365 (Microsoft Learn)](https://learn.microsoft.com/troubleshoot/windows-365/provisioning-errors)
