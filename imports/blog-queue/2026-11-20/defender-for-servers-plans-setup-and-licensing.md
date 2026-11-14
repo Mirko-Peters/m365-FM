@@ -29,7 +29,7 @@ Microsoft Defender for Servers is a paid plan in Microsoft Defender for Cloud th
 
 ## What Defender for Servers does
 
-Microsoft Learn describes the plan as reducing security risk and exposure for machines. It gives posture recommendations with remediation guidance and protects machines against real-time threats. Two integrations do much of the work: Microsoft Defender for Endpoint provides EDR, and Microsoft Defender Vulnerability Management provides vulnerability scanning and software inventory.
+Microsoft Learn describes the plan as reducing security risk for machines. It gives posture recommendations with remediation guidance and protects machines against real-time threats. Two integrations do much of the work: Microsoft Defender for Endpoint provides EDR, and Microsoft Defender Vulnerability Management provides vulnerability scanning and software inventory.
 
 Learn also says the plan no longer uses the Log Analytics agent or Azure Monitor Agent for most features. Agentless machine scanning and the Defender for Endpoint integration replace them. The Azure Monitor Agent is still supported for the 500 MB data ingestion benefit.
 
@@ -70,8 +70,6 @@ Before you start, Learn recommends reviewing the planning guide, the roles artic
 5. To use Plan 1, select **Change plans**, choose **Plan 1** and select **Confirm**.
 6. Select **Save**.
 
-After that, the Defender for Endpoint extension is installed automatically on supported connected machines unless you disable automatic provisioning. Agentless scanning is on by default with Plan 2.
-
 The roles article lists the built-in Azure roles Owner, Contributor and Reader and points to a separate permissions page for the Defender for Cloud roles. The pages I read do not state which single role is the minimum to enable a plan, so check that permissions page for your case.
 
 ### Trial and monitoring
@@ -85,7 +83,7 @@ This is the part that causes most confusion. The Defender for Cloud FAQ makes fo
 - Licenses for Defender for Endpoint for Servers are included with Defender for Servers. Plan 1 and Plan 2 provide the capabilities of Defender for Endpoint Plan 2, including EDR.
 - If you already own Defender for Endpoint for Servers licenses, you do not pay for that part of Plan 1 or Plan 2. To get the adjustment, create a support request in the Azure portal under **Support and Troubleshooting** > **Help + support** > **Create a support request**. Include the tenant ID, the number of licenses and the expiration date. The discount starts on the approval date and is not retroactive.
 - You are charged for all machines in the subscription by power state. Running and stopped VMs are billed. Deallocated VMs are not. Arc-connected machines are billed while they send heartbeats, not when they are offline or expired. Servers connected only through the Defender for Endpoint sensor are billed per hour.
-- Plan 2 gives a free data ingestion allowance for specific data types. It needs Plan 2 enabled on the Log Analytics workspace the machines report to, and a supported collection method such as the Azure Monitor Agent. A data collection rule alone does not enable it.
+- Plan 2 gives a free data ingestion allowance for specific data types. It needs Plan 2 enabled on the Log Analytics workspace the machines report to, and a supported collection method such as the Azure Monitor Agent.
 
 The Learn pages I read do not list prices. They point to the Defender for Cloud pricing page and cost calculator.
 
