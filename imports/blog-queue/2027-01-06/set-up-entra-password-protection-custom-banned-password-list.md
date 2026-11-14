@@ -45,7 +45,7 @@ Turn on Enforce custom list in Authentication methods > Password protection, add
 2. Browse to **Entra ID** > **Authentication methods**, then **Password protection**.
 3. Set **Enforce custom list** to **Yes**.
 4. Add strings to **Custom banned password list**, one per line.
-5. Leave **Enable password protection on Windows Server Active Directory** at **No** unless you have deployed the on-premises agents.
+5. Leave **Enable password protection on Windows Server Active Directory** at **No**, as the tutorial does. For hybrid environments the tutorial separately points to deploying Microsoft Entra password protection on-premises.
 6. Select **Save**.
 
 The tutorial's cleanup is to set Enforce custom list to No and save.
@@ -105,9 +105,9 @@ Agents on on-premises servers extend Password Protection to AD DS so that passwo
 
 Password length rules, the full list of substitutions beyond the four shown, the size of the global list, lockout behavior, whether existing passwords that match a banned entry are forced to change, whether removing an entry applies sooner than other updates, and automation options such as PowerShell or Graph. There is also no audit or enforced mode on the tutorial page.
 
-## A practical list
+## A practical list (my advice)
 
-The advice below is practical, not from Learn.
+The advice below is my own and not from Learn.
 
 1. Start with your company name, product names and brand terms.
 2. Add office locations and common internal abbreviations.
@@ -115,7 +115,7 @@ The advice below is practical, not from Learn.
 4. Test with the test user and remember the delay of several hours.
 5. Communicate the change to users to reduce helpdesk calls.
 
-## Typical mistakes
+## Typical mistakes (my advice)
 
 - Adding long lists of variants. The algorithm already handles them.
 - Using entries shorter than four characters.
@@ -130,5 +130,5 @@ The advice below is practical, not from Learn.
 
 ## Sources
 
-- [Eliminate bad passwords using Microsoft Entra Password Protection (Microsoft Learn)](https://learn.microsoft.com/entra/identity/authentication/concept-password-ban-bad)
-- [Tutorial: Configure custom banned passwords (Microsoft Learn)](https://learn.microsoft.com/entra/identity/authentication/tutorial-configure-custom-password-protection)
+- [Password protection in Microsoft Entra ID (Microsoft Learn)](https://learn.microsoft.com/entra/identity/authentication/concept-password-ban-bad)
+- [Configure custom Microsoft Entra password protection lists (Microsoft Learn)](https://learn.microsoft.com/entra/identity/authentication/tutorial-configure-custom-password-protection)
