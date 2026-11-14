@@ -20,7 +20,7 @@ faq:
   - q: "What should msinfo32 show?"
     a: "Open an elevated command prompt, run msinfo32 and look at System Summary. Learn says BIOS Mode should be UEFI and PCR7 Configuration should be Bound."
   - q: "Which PowerShell commands does Microsoft suggest?"
-    a: "Learn lists two. Confirm-SecureBootUEFI should return True, and manage-bde -protectors -get with the system drive should show that the drive is protected by PCR 7. Both run in an elevated session."
+    a: "Learn lists two. Confirm-SecureBootUEFI should return True, and manage-bde -protectors -get with the system drive should show that the drive is protected by PCR 7. Learn says to open an elevated PowerShell prompt for the first one; the second is described as a PowerShell command without that remark."
   - q: "Does this article apply to Windows 11?"
     a: "The Learn troubleshooting page is titled for Windows 10 devices. The Intune Windows compliance settings page, which describes the same setting, is for the Windows 10 and later platform. Windows 10 support ended on 14 October 2025, so treat the device checks as hardware checks that also help on newer Windows."
 ---
@@ -66,7 +66,7 @@ Run these on the affected device. Learn presents them as steps to check whether 
 
    Verify that the drive is protected by PCR 7.
 
-If one of these fails, you have found the part that blocks the compliance state. The article does not give fixes beyond the TPM update note, so treat the result as input for your hardware or firmware owner.
+If one of these fails, it points to the part that may block the compliance state (my reading). The article does not give fixes beyond the TPM update note, so treat the result as input for your hardware or firmware owner.
 
 ## What each result suggests
 
@@ -91,9 +91,11 @@ Learn's compliance page adds two points that help when you test:
 
 ## About the Windows version
 
-The troubleshooting article is written for Windows 10 devices. Windows 10 support ended on 14 October 2025. The compliance settings page applies to the **Windows 10 and later** platform. For a current fleet, the hardware checks above are still the documented way to test TPM and UEFI readiness. I did not find Windows 11 specific guidance on the pages I read.
+The troubleshooting article is written for Windows 10 devices. Windows 10 support ended on 14 October 2025. The compliance settings page applies to the **Windows 10 and later** platform. For a current fleet, the hardware checks above are still the documented way to test TPM and UEFI readiness. The troubleshooting page itself gives no Windows 11 specific guidance.
 
 ## A short working order
+
+This order is my advice, not Learn's.
 
 1. Confirm the policy really sets Require Secure Boot, not another health attestation rule.
 2. Pick one failing device and run the five checks.
