@@ -113,9 +113,9 @@ This changes an existing user to Editor without changing their delegate status.
 
 Learn's description of Set-MailboxFolderPermission warns about this. If you do not use `SendNotificationToUser` or `SharingPermissionFlags`, nothing changes in how the cmdlet works, and an existing delegate changed to Editor stays a delegate. But if you use `SendNotificationToUser`, with `$true` or `$false`, then `SharingPermissionFlags` has the default value None, which can affect delegate access for existing users. In Learn's example, changing a delegate to Editor with `SendNotificationToUser $true` leaves the user with only Editor permissions and not a delegate. To resend the invitation to an existing delegate without changing effective permissions, Learn's example adds `-SharingPermissionFlags Delegate -SendNotificationToUser $true`.
 
-## Related details I did not cover
+## Related cmdlets and notes
 
-Learn lists Get-MailboxFolderPermission and Remove-MailboxFolderPermission as related cmdlets for viewing and removing permissions. I did not read those pages. The Add page also notes that you cannot configure the Outlook setting for delivering meeting requests addressed to you in PowerShell, and points to Exchange Web Services. Learn also says you need assigned permissions to run these cmdlets, and points to its page on finding the permissions required for any Exchange cmdlet.
+Learn lists Get-MailboxFolderPermission and Remove-MailboxFolderPermission as related cmdlets for viewing and removing permissions. The Add page also notes that you cannot configure the Outlook setting for delivering meeting requests addressed to you in PowerShell, and points to Exchange Web Services. Learn also says you need assigned permissions to run these cmdlets, and points to its page on finding the permissions required for any Exchange cmdlet.
 
 ## Practical routine
 
