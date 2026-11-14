@@ -29,7 +29,7 @@ A visual calculation lets you build running totals, percent of parent, moving av
 
 ## What a visual calculation is
 
-Microsoft Learn defines a visual calculation as a Data Analysis Expressions (DAX) calculation that runs on a visual instead of in the semantic model. It uses the data shown in the visual and can refer to columns, measures and other visual calculations in the same visual. It applies to Power BI Desktop and the Power BI service.
+Microsoft Learn defines a visual calculation as a Data Analysis Expressions (DAX) calculation that runs on a visual instead of in the semantic model. It uses the data shown in the visual and can refer to columns, measures and other visual calculations in the same visual. Add a model field to the visual before you refer to it in a visual calculation. It applies to Power BI Desktop and the Power BI service.
 
 Learn compares the options like this:
 
@@ -100,7 +100,9 @@ Learn lists these.
 
 **Unsupported visuals:** slicer, R visual, Python visual, Key Influencers, Decomposition Tree, Q&A, Smart Narrative, Metrics, paginated report, Power Apps, Power Automate and custom visuals.
 
-**Unsupported features:** filtering, sorting or changing aggregations on the calculation, self-reference, copy and paste or reuse across visuals, data categories, dynamic format strings, and the See records drill-through.
+**Unsupported features:** filtering, sorting or changing aggregations on the calculation, self-reference, copy and paste or reuse across visuals, data categories, data limits, show items with no data, dynamic format strings, personalization of visual calculations and hidden fields, and the See records drill-through. You can set alerts on visual calculations, but changes to their values do not trigger the alerts.
+
+**Other limits:** field parameters work with visual calculations but have some limitations, and live connections to SQL Server Analysis Services require version 2025 or later.
 
 **Sharing:** you cannot pin them to dashboards or use Publish to web. Data exports exclude visual calculation results.
 
@@ -119,7 +121,7 @@ Keep a measure when other visuals or reports reuse it, when you need a slicer or
 ## Common mistakes
 
 - Wrapping everything in SUM. Most calculations work row by row.
-- Relying on RELATED or USERRELATIONSHIP. They are not available.
+- Relying on RELATED, RELATEDTABLE or USERELATIONSHIP. They are not available.
 - Expecting reuse by copy and paste. It is not supported.
 - Forgetting that styling applied to the visual is not applied in the visual matrix in the editor.
 
