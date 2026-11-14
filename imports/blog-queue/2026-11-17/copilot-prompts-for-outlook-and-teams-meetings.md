@@ -20,7 +20,7 @@ faq:
   - q: "Where do I find Copilot for a finished meeting?"
     a: "Microsoft Support describes two routes: select Open Copilot in the upper-right corner of the meeting chat, or open the Recap tab and use the Copilot pane. Both show the same conversation history."
   - q: "What can Copilot do in Outlook?"
-    a: "According to Microsoft Support, it can summarize email threads, draft emails with tone and length options, coach on tone and clarity, schedule meetings, prepare you for a meeting, prioritize your inbox and help triage mail. Core features are for customers with a Microsoft Copilot work license."
+    a: "According to Microsoft Support, it can summarize email threads, draft emails with tone and length options, coach on tone and clarity, schedule meetings, prepare you for a meeting, prioritize your inbox and help triage mail. It is available to customers with a Microsoft Copilot (work) license."
   - q: "Are there emails Copilot cannot handle?"
     a: "Yes. Microsoft Support lists signed or encrypted emails, IRM-protected emails and some MIP-labeled emails as unsupported, and says it cannot access S/MIME or Double Key Encryption emails. It also does not work on group mailboxes or mailboxes not hosted on Exchange Online."
 ---
@@ -99,9 +99,9 @@ Select **Open Copilot** in the upper-right corner of the meeting chat, or open t
 - "What questions can I ask to move the meeting forward?"
 - "Create a table with the ideas discussed and their pros and cons."
 - "List the ideas, including people's feedback, from transcript and chat."
-- "What questions were asked during the meeting?"
+- "How did [a meeting participant] respond to this proposal?"
 
-The Microsoft Copilot Prompt Gallery also lists meeting-related prompts, such as "Identify and list all action items agreed upon during the meeting, including the person responsible" and "List all open questions raised during the meeting that have not yet been answered or resolved." The gallery text shown on the page is truncated, so use the gallery itself for full wording.
+The Microsoft Copilot Prompt Gallery also lists meeting-related prompts, such as "Identify and list all action items agreed upon during the meeting, including the person responsible for each item" and "List all open questions raised during the meeting that have not yet been answered or resolved." The gallery text shown on the page is truncated, so use the gallery itself for full wording.
 
 ### Limitations
 
