@@ -10,7 +10,7 @@ keypoints:
   - "A 403 means the caller was authenticated but is not permitted; Learn lists two causes: no access policy for the identity or an IP address the Key Vault firewall does not approve."
   - "Turn on Key Vault logging to tell whether the firewall or the access policy blocked the request."
   - "The firewall error says the client address is not authorized and the caller is not a trusted service; Azure Web Sites are not a trusted service."
-  - "Often the app is not using the client ID or object ID you think it is, so check which identity actually calls the vault."
+  - "Learn says 403 often occurs because the app is not using the client ID you think it is, so check which identity actually calls the vault."
   - "401 points to token problems and 429 to throttling, so do not treat all three the same way."
 faq:
   - q: "What does a 403 from Key Vault mean?"
@@ -39,12 +39,12 @@ Do not use 403 steps for a 401, because the cause is in the token and not in per
 
 ## Cause 1: no permission for the identity
 
-The page says that the identity has no access policy for the operation. Points from Learn's pages:
+The REST page says there is no access policy for the identity. Points from Learn's pages:
 
 - Often the app is not using the client ID that the customer thinks it is. Check which identity the app actually uses, for example the system-assigned or user-assigned managed identity or a service principal.
-- Check the object ID. The page notes that duplicate names exist, so compare IDs, not display names.
-- The page says the Authorized application setting is for the on-behalf-of flow. In my reading, that means it is not the setting to use for a direct caller.
-- Right after you add an identity, retry, as the page advises.
+- For an access policy cause, find the object ID for the request and check that it matches the object the policy was assigned to. The page notes that Microsoft Entra often has several objects with the same name, so compare IDs, not display names.
+- The page says most access policies do not need the Authorized application setting shown in the portal, because it is used for on-behalf-of authentication scenarios, which it calls rare.
+- If you get a 403 right after adding an identity to the access policy, the page says you can handle it by adding periodic retry.
 - The troubleshooting article says a group that holds managed identities may take many hours to refresh tokens, so test with the identity itself first.
 - It also says that redeploying with an ARM template replaces the access policies, so a deployment can remove a policy you added by hand.
 
@@ -52,20 +52,20 @@ On authorization models, the access issues article says Azure RBAC is the recomm
 
 ## Cause 2: the firewall
 
-The second cause on the REST page is that the requesting IP address is not approved in the Key Vault firewall. The firewall error text reads that the client address is not authorized and the caller is not a trusted service, with the address shown. Learn adds that Azure Web Sites are not a trusted service for the firewall exception.
+The second cause on the REST page is that the requesting IP address is not approved in the Key Vault firewall. The firewall error text reads that the client address is not authorized and the caller is not a trusted service, with the address shown. Learn adds that Azure Web Sites are not a trusted Azure service, and says you must add the IP address of the Azure Web Site to the Key Vault for it to work.
 
-That means an App Service app may be blocked by the firewall even though it has a policy or role. Compare the address in the error with the vault's network settings.
+My reading: an App Service app can therefore be blocked by the firewall even though it has a policy or role. Compare the address in the error with the vault's network settings.
 
 ## Telling them apart
 
-Learn's guidance is to turn on logging. Learn does not say more than that on the page I read, so look at what your log shows for the failing request. If the message mentions the client address, think firewall. If the identity is correct and the address is allowed, think permissions.
+Learn's guidance is to turn on logging; once it is on, you can determine whether the 403 is due to the access policy or the firewall policy. Look at what your log shows for the failing request. My reading: if the message mentions the client address, think firewall, and if the identity is correct and the address is allowed, think permissions.
 
 ## A diagnostic order
 
 This section is my advice, not a Microsoft statement.
 
 1. **Read the exact error.** A message with a client address points to the firewall branch.
-2. **Find the real caller.** Print or log the identity the app uses. A wrong client ID explains a surprising number of 403 errors, as Learn hints.
+2. **Find the real caller.** Print or log the identity the app uses. Learn says 403 often occurs when the app is not using the client ID that the customer thinks it is.
 3. **Check the vault's authorization model.** Look at whether it uses RBAC or access policies, then check the matching place.
 4. **Check the operation.** Reading a secret, listing keys and getting a certificate need different permissions. Compare what the app calls with what you granted.
 5. **Check networking.** Look at whether the firewall is enabled, which networks are allowed and where the request comes from.
@@ -89,9 +89,9 @@ This section is my advice, not a Microsoft statement.
 
 If you are not the vault owner, send them the exact error text, the time of the failure, the identity the app uses (client ID and object ID) and the operation that failed. If the message shows a client address, include it. With these details the owner can check the policy or role and the firewall in a few minutes, instead of guessing which of the two causes applies.
 
-## What I did not read
+## What this article does not cover
 
-I read the REST error code page and the Key Vault access issues page. I did not read the pages on configuring the firewall, on the RBAC guide or on the throttling limits in detail, so I give no throttling numbers here and no step-by-step portal paths for those settings.
+This article does not give throttling numbers or step-by-step portal paths for firewall and RBAC settings. Learn covers those on its pages for the Key Vault firewall, Azure RBAC for Key Vault and throttling guidance.
 
 ## Related
 
