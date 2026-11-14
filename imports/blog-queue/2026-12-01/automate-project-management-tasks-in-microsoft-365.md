@@ -50,7 +50,7 @@ A Microsoft Tech Community post shows a scheduled summary email. Steps as descri
 
 1. In Planner, create a basic plan with buckets such as Backlog, Final Draft, Review and Published, and add tasks.
 2. Open Power Automate at make.powerautomate.com and select **Templates**.
-3. Search for "Create a daily summary of Planner tasks by bucket" and open it.
+3. Search for "Create a daily summary of Planner tasks by bucket" and open it. The template name says daily, while the post's scenario is a weekly email.
 4. Sign in to the **Planner** and **Office 365 Outlook** connections.
 5. Set the **Recurrence** trigger. The post uses Monday at 9:00 AM and notes the schedule can be changed.
 6. In **List buckets** and **List tasks**, select the plan.
@@ -72,11 +72,11 @@ Microsoft's Planner blog also describes meeting-based help: Facilitator can crea
 
 ## Option 3: Workflows app in Teams
 
-For small triggers that start in a chat or channel, the Workflows app creates Power Automate flows from templates. Microsoft Support documents opening it from Apps, from a chat or channel, or from a message with **More actions** > **Create new action**. Flows go into the default environment. See the separate guide on Workflows in Teams for details and Conditional Access notes.
+For small triggers that start in a chat or channel, the Workflows app creates Power Automate flows from templates. Microsoft Support documents opening it from Apps, from a chat or channel, or from a message with **More actions** > **Create new action**. You can also open it from the actions and apps control next to the compose box. The page says that if you do not see the app, your organization may not have enabled it, so contact your admin.
 
 ## Option 4: Workflows agent in Copilot
 
-Microsoft Support lists Planner support in the Workflows agent as **List my tasks**. A Microsoft 365 blog example is a Monday Teams update with launch deadlines and key tasks from Planner. The agent requires the Frontier program, works in English only and cannot share workflows. It cannot create Planner tasks according to the supported-actions list, so use Power Automate when tasks must be written back.
+Microsoft Support lists Planner support in the Workflows agent as **List my tasks**. The agent requires the Frontier program, works in English only and cannot share workflows. It cannot create Planner tasks according to the supported-actions list, so use Power Automate when tasks must be written back.
 
 ## How to choose
 
