@@ -20,7 +20,7 @@ faq:
   - q: "How can I capture the permissions needed for a task?"
     a: "Learn describes Record Permissions. Create a permission set, choose Permissions, then Record Permissions and Start, perform the tasks, choose Stop and Yes to add the recorded permissions, then specify insert, modify and delete rights for each object."
   - q: "What happens if a permission is in an included and an excluded set?"
-    a: "Learn says it is excluded. It also says entitlement permissions from the license override lower-ranked values, and overridden values appear in brackets."
+    a: "Learn says it is excluded. It also says that a value in another permission set that ranks higher than the related entitlement value is shown in brackets, because the entitlement overrules it."
   - q: "Is it safe to edit a permission set?"
     a: "Editing affects every user assigned to that set, according to Learn. Only User-Defined sets are editable on Effective Permissions. Learn also advises caution with Insert or Modify on tables 9001 User Group Member and 9003 User Group Permission Set."
 ---
@@ -35,11 +35,11 @@ Permission types are **Read**, **Insert**, **Modify**, **Delete** and **Execute*
 - **Indirect:** the user can perform the action only through a related object that they have full access to.
 - **Yes:** the user can perform the action on the object.
 
-Indirect ranks below Yes and above Blank in Learn's ordering, so a Yes overrides it.
+In Learn's ranking, Yes is highest, Indirect is second highest and Blank is lowest.
 
 ### Why indirect permission matters
 
-Learn gives this example. A user with Indirect permission on table 37, Sales Line, can post through codeunit 80, Sales-Post, but cannot modify Sales Line by other methods. If the permission needed by the codeunit is missing, the codeunit cannot complete its tasks and the user gets an error. That is a typical source of missing-permission errors on table data: the user can start the task but lacks a permission on something it touches.
+Learn gives this example. A user with Indirect permission on table 37, Sales Line, can post through codeunit 80, Sales-Post, but cannot modify Sales Line by other methods. If the permission needed by the codeunit is missing, the codeunit cannot complete its tasks and the user gets an error. My reading, not a procedure from the page: this is one way a user can start a task and still get a missing-permission error, because a permission is missing on something the codeunit touches.
 
 ## Step 1: See what the user effectively has
 
@@ -50,11 +50,11 @@ Learn gives this example. A user with Indirect permission on table 37, Sales Lin
 Only users assigned **SECURITY** or **SUPER** can view other users' effective permissions. Other places to look:
 
 - **Permission Set by User**, from the **Users** page, shows which users have each set. Select **All Users** to assign a set to everyone.
-- **Permission Sets by Security Group**, from **Security Groups**, shows the sets and individual permissions per group.
+- **Permission Set by Security Group**, an action on the **Security Groups** page, gives a detailed view of the sets and individual permissions per group.
 
 ## Step 2: Choose where to fix it
 
-Learn says only **User-Defined** permission sets are editable on **Effective Permissions**. Editing a set changes it for every user who has it. So decide whether the gap belongs to one role or to everyone with that set. If the existing set is shared, create a new set or copy one rather than editing a shared one.
+Learn says only **User-Defined** permission sets are editable on **Effective Permissions**. Editing a set changes it for every user who has it. So decide whether the gap belongs to one role or to everyone with that set. My advice: if the existing set is shared, create a new set or copy one rather than editing a shared one.
 
 ## Step 3: Create or change a permission set
 
@@ -75,11 +75,11 @@ When you cannot tell which objects a task touches, record them:
 3. Choose **Yes** to add the recorded permissions.
 4. For each object, specify the insert, modify and delete rights.
 
-Review the recorded list before you assign it. Recording captures what the task used, so trim anything broader than the role needs.
+My advice: review the recorded list before you assign it, and trim anything broader than the role needs.
 
 ## Rules that explain surprising results
 
-- **Entitlement** (license) permissions override lower-ranked values. Overridden values appear in brackets.
+- **Entitlement** rows come from the subscription license. A value in another permission set that ranks higher than the related entitlement value appears in brackets and is not effective, because the entitlement overrules it.
 - If a permission is in both an included set and an excluded set, it is excluded.
 - Excluding a whole set creates an **Excluded** line. Delete it to include the set again.
 - A **Blank Company** on an assignment applies to all companies.
@@ -91,7 +91,7 @@ Review the recorded list before you assign it. Recording captures what the task 
 
 On the **Permission Sets** page, **Remove Obsolete Permissions** cleans up obsolete permissions across all sets. If you import permission sets and **Update existing permissions** is unchecked, sets with matching names are skipped and reported.
 
-## A routine for each report
+## A routine for each report (my advice)
 
 1. Note the object named in the error and the action: read, insert, modify, delete or execute.
 2. Open **Effective Permissions** for the user and find that object.
@@ -99,7 +99,7 @@ On the **Permission Sets** page, **Remove Obsolete Permissions** cleans up obsol
 4. Add the smallest permission in a user-defined set, or use **Record Permissions** and trim.
 5. Test with the user and review other users of the same set.
 
-## Typical mistakes
+## Typical mistakes (my advice)
 
 - Editing a shared set and changing access for everyone.
 - Granting SUPER to make an error go away.
@@ -113,4 +113,4 @@ On the **Permission Sets** page, **Remove Obsolete Permissions** cleans up obsol
 
 ## Sources
 
-- [Define granular permissions in Business Central (Microsoft Learn)](https://learn.microsoft.com/dynamics365/business-central/ui-define-granular-permissions)
+- [Define granular permissions (Microsoft Learn)](https://learn.microsoft.com/dynamics365/business-central/ui-define-granular-permissions)
