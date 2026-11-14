@@ -18,14 +18,14 @@ faq:
   - q: "What is the default for the host pool setting?"
     a: "In the Azure portal, the USB device redirection option defaults to Don't redirect any USB devices. The RDP property is usbdevicestoredirect:s:<value>. A value of * redirects all peripherals that do not use high-level redirection."
   - q: "Do printers use USB redirection?"
-    a: "Learn lists a printer, locally attached or network, as high-level peripheral reflection, not low-level USB redirection. The all-in-one printer or scanner is listed as opaque low-level redirection. The pages I read give no printer-specific troubleshooting steps."
+    a: "Learn lists a printer, locally attached or network, as high-level peripheral reflection, not low-level USB redirection. The all-in-one printer or scanner is listed as opaque low-level redirection. The USB configuration article says it covers only devices that use opaque low-level redirection."
   - q: "Why do clipboard and window resizing stop working after an update?"
     a: "Learn says SxS Network Stack 1.0.2501.05600 and later added rdpclipcdv.exe and rdpinputcdv.exe. If application control such as AppLocker or antivirus allowlists blocks them, clipboard redirection and resizing fail. Allow-list the listed executables under C:\\Program Files\\Microsoft RDInfra."
   - q: "What if Windows Hello for Business is not offered in the session?"
     a: "Check supported operating systems, that WebAuthn redirection is enabled, and that the FIDO2 security key method is enabled for the user in Microsoft Entra ID. If the user signed in with a single-factor credential, they should sign out and use Sign-in options to choose Windows Hello or a security key."
 ---
 
-Redirection problems in Azure Virtual Desktop usually trace back to one of three things: the redirection method does not match the device, a setting is missing at one of the places where it must be configured, or an application control policy blocks a component. Microsoft Learn gives specific guidance for USB redirection, WebAuthn redirection, and clipboard and window resizing after an SxS Network Stack update. This article follows three Learn pages. The pages I read do not give printer-specific troubleshooting steps, so printers are covered only through the redirection method table.
+Redirection problems in Azure Virtual Desktop usually trace back to one of three things: the redirection method does not match the device, a setting is missing at one of the places where it must be configured, or an application control policy blocks a component. Microsoft Learn gives specific guidance for USB redirection, WebAuthn redirection, and clipboard and window resizing after an SxS Network Stack update. This article follows three Learn pages. Printers appear here only through the redirection method table.
 
 ## Start with the redirection method
 
@@ -91,7 +91,7 @@ The fix is to allow these executables when run from subfolders of `C:\Program Fi
 This section is my advice, not a Microsoft statement.
 
 1. Name the device class, then look up its method in Learn's table. That tells you which page and setting apply.
-2. For USB, check all three configuration points before touching drivers. Missing the local device Group Policy is the case I would expect most often.
+2. For USB, check all three configuration points before touching drivers.
 3. Test with the wildcard value `*` on a test host pool first, then narrow to class GUIDs or instance paths.
 4. For clipboard or resize problems, check what changed in application control policies around the time the agent stack updated.
 5. Record the exact RDP property string you set, since escaping errors are easy to make.
