@@ -11,7 +11,7 @@ keypoints:
   - "Three recommended personas exist: office workers, remote workers and Teams Rooms System. You can add up to three custom personas."
   - "Create a network plan, add sites with the number of network users, WAN and internet egress details, then start a report and select Generate report."
   - "You must enter WAN and internet capacity values to get specific bandwidth recommendations in a report."
-  - "The page has no subnet steps, no bandwidth formulas or per-activity values, no licensing statement and no statement on Teams Phone coverage."
+  - "The page has no subnet steps, no bandwidth formulas or per-activity values, no licensing statement and does not name Teams Phone."
 faq:
   - q: "Where is Network Planner?"
     a: "In the Teams admin center under Planning > Network planner."
@@ -25,7 +25,7 @@ faq:
     a: "No. It says the report shows calculations for each permitted activity and an overall view with recommendations, but it gives no per-user values or formulas."
 ---
 
-Network Planner helps you work out the network requirements for Teams across your locations. You describe your sites and Teams usage, and it calculates what the network needs for Teams and cloud voice. This guide follows the Microsoft Learn page on Network Planner.
+Network Planner helps you work out the network requirements for Teams across your locations. You describe your sites and Teams usage, and it calculates what the network needs for Teams and cloud voice. This guide follows the Microsoft Learn page Use the Network planner for Microsoft Teams.
 
 ## Where it is and who can use it
 
@@ -41,7 +41,7 @@ Network Planner is in the Teams admin center under **Planning** > **Network plan
 
 1. On the **Network Plan** tab select **Add a network plan** and enter a name and description.
 2. Select the plan name.
-3. Add sites that represent your network, such as a building or office. For best results create sites with local connections before sites that connect remotely to the internet or PSTN.
+3. Add sites that represent your network, such as a building or office. Sites might be connected by a WAN to share internet or PSTN connections. For best results create sites with local connections before sites that connect remotely to the internet or PSTN.
 4. For each site enter:
    - Name and description.
    - **Network settings**: the number of network users at the site. This is required.
@@ -66,11 +66,11 @@ The page links to a how-to PowerPoint deck in English only.
 - How to add subnets. The page does not mention them.
 - Per-user or per-activity bandwidth values or formulas.
 - Licensing requirements.
-- Whether the calculations cover Teams Phone or only media and collaboration traffic.
+- What the calculation includes. The page says Network Planner calculates requirements for Teams and cloud voice, but it does not name Teams Phone or break down the traffic types.
 
 ## A planning outline
 
-This outline is practical advice built on the page.
+This outline is my advice, built on the page.
 
 1. List your sites and how each connects to the internet and the PSTN.
 2. Gather user counts and WAN and internet capacity for each site.
@@ -78,7 +78,7 @@ This outline is practical advice built on the page.
 4. Generate a report with the default personas, then adjust the persona split if your usage differs.
 5. Compare the recommendations with your actual link capacity.
 
-## Typical mistakes
+## Typical mistakes (my advice)
 
 - Leaving WAN and internet capacity empty and expecting specific recommendations.
 - Entering remote sites before the local sites they depend on.
@@ -102,7 +102,7 @@ For each site, gather the number of network users, whether the site has a WAN an
 
 ## Reports are saved
 
-When you select Save at the end of a report, it appears in the reports list. This lets you generate several reports for the same plan, for example with different persona splits, and compare them later.
+When you select Save at the end of a report, the page says it is available on the reports list for later viewing. My note, not stated on the page: this should let you keep several reports for the same plan, for example with different persona splits, and compare them later.
 
 ## Related
 
@@ -112,4 +112,4 @@ When you select Save at the end of a report, it appears in the reports list. Thi
 
 ## Sources
 
-- [Network Planner for Microsoft Teams (Microsoft Learn)](https://learn.microsoft.com/microsoftteams/network-planner)
+- [Use the Network planner for Microsoft Teams (Microsoft Learn)](https://learn.microsoft.com/microsoftteams/network-planner)
