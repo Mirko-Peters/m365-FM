@@ -85,5 +85,5 @@ Some text on the exam page does not match this exam, such as a line about inform
 
 ## Sources
 
-- [Exam AB-100: Agentic AI Business Solutions Architect Expert](https://learn.microsoft.com/credentials/certifications/exams/ab-100/)
-- [Study guide for Exam AB-100](https://learn.microsoft.com/credentials/certifications/resources/study-guides/ab-100)
+- [Exam AB-100: Agentic AI Business Solutions Architect Expert (Microsoft Learn)](https://learn.microsoft.com/credentials/certifications/exams/ab-100/)
+- [Study guide for Exam AB-100: Agentic AI Business Solutions Architect (Microsoft Learn)](https://learn.microsoft.com/credentials/certifications/resources/study-guides/ab-100)
