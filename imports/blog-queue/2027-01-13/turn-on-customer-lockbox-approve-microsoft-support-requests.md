@@ -69,7 +69,7 @@ Global Administrators and anyone with the approver role are notified. These are 
 
 If you reject the request or do not approve it within 12 hours, it expires and no access is granted. The FAQ says a rejected request means no access to customer content occurs, and that the service issue might persist, in which case Microsoft informs the user.
 
-You can also use the `Set-AccessToCustomerDataRequest` cmdlet to approve, deny or cancel requests. Learn links to its reference page, which I did not read for this article.
+You can also use the `Set-AccessToCustomerDataRequest` cmdlet to approve, deny or cancel requests. Learn links to the cmdlet's reference page.
 
 Each request carries a Microsoft 365 service request number. If you need more information before deciding, Learn says to contact Microsoft Support and quote that number.
 
@@ -98,7 +98,7 @@ The audit record of an approval contains the date, the IP address of the approve
 
 ## Practical notes
 
-This section is my advice, not a Microsoft statement. Name at least two people to hold the approver role so that a request within the 12-hour window does not expire because one person is away. Keep the approver role assignments reviewed like any privileged role. Search the audit log after an approved request and compare it with the email notification, as Learn suggests.
+This section is my advice, not a Microsoft statement. Name at least two people to hold the approver role so that a request within the 12-hour window does not expire because one person is away. Keep the approver role assignments reviewed like any privileged role. Search the audit log after an approved request as well. Learn's FAQ says you can cross-reference the approval emails with the request history in the Microsoft 365 admin center.
 
 ## Related
 
