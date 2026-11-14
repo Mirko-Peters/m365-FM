@@ -25,7 +25,7 @@ faq:
     a: "No. Learn says not to wait for all parity gaps to be closed. Investigate your EWS footprint, prioritize with security and executive teams, migrate what you can now and work with vendors."
 ---
 
-Microsoft is turning off Exchange Web Services (EWS) in Exchange Online. Learn's retirement page lists disablement starting in October 2026 and EWS fully disabled in April 2027. This article summarizes the timeline, the tools to find dependent apps and the Graph roadmap on that page, and it says plainly what the page leaves out. The timeline was re-checked on the page while writing.
+Microsoft is turning off Exchange Web Services (EWS) in Exchange Online. Learn's retirement page lists disablement starting in October 2026 and EWS fully disabled in April 2027. The start month is already behind us as of mid-November 2026. The page opens with a banner for organizations whose EWS applications have stopped working, and it points to a Tech Community blog post for the latest timeline and disablement process. This article summarizes the timeline, the tools to find dependent apps and the Graph roadmap on that page, and it says plainly what the page leaves out.
 
 ## Timeline from the page
 
@@ -51,7 +51,7 @@ The page does not describe message tracing or audit logs as ways to find EWS usa
 
 ## Graph parity roadmap
 
-The page says the roadmap is estimated and subject to change, and that if an EWS capability is not listed, you should not plan on a Graph or Exchange Admin API equivalent before EWS is fully disabled.
+The page says the roadmap is estimated and subject to change, and that if an EWS capability is not listed, you should not plan on a Graph or Exchange Admin API equivalent before EWS is fully disabled. The Q3 CY2026 targets are already past and the page still lists them with those ETAs, so check availability yourself before relying on them (my advice).
 
 - **Q3 CY2026:** Notes (`IPM.StickyNote`), Contact Lists, additional contact properties.
 - **Q4 CY2026:** import and export for archive, public folder and group mailboxes, in-place archive generic CRUD, the Exchange Admin API, sovereign cloud availability, Report Message, non-draft MIME update and creation, user configuration objects and Mark All Items As Read.
@@ -78,7 +78,7 @@ The call to action on the page has four parts. First, investigate your EWS footp
 
 ## Reading the roadmap table
 
-The roadmap lists capabilities by estimated quarter, and the page says the estimates are subject to change. Treat a Q4 CY2026 item as a planned capability, not a delivered one, and do not make a migration depend on it until you see it available. Items that are not in the table are in the same position as the not-planned list for planning purposes, because the page says not to plan on an equivalent before EWS is fully disabled.
+The roadmap lists capabilities by estimated quarter, and the page says the estimates are subject to change. Treat a Q4 CY2026 item as a planned capability, not a delivered one, and do not make a migration depend on it until you see it available. For items that are not in the table, the page only says not to plan on an equivalent before EWS is fully disabled. My reading: treat them with the same caution as the not-planned list, although only the not-planned list is a confirmed no.
 
 ## Microsoft products and the admin center
 
@@ -86,7 +86,7 @@ For Microsoft products, the page points to the Baseline Security Mode settings p
 
 ## A plan before the dates
 
-This plan is a suggestion built from the page, not a Microsoft procedure.
+This plan is my advice, built from the page, not a Microsoft procedure.
 
 1. Pull the EWS usage report and list every app and vendor that appears.
 2. Run the EWS Analyzer on code you own.
@@ -105,4 +105,4 @@ The page does not describe an allow list, ApplicationImpersonation, any exemptio
 
 ## Sources
 
-- [Deprecation of Exchange Web Services in Exchange Online](https://learn.microsoft.com/exchange/clients-and-mobile-in-exchange-online/deprecation-of-ews-exchange-online)
+- [Deprecation of Exchange Web Services in Exchange Online (Microsoft Learn)](https://learn.microsoft.com/exchange/clients-and-mobile-in-exchange-online/deprecation-of-ews-exchange-online)
