@@ -16,7 +16,7 @@ faq:
   - q: "What are the basic requirements for a Defender for Identity sensor?"
     a: "The v2.x prerequisites page on Microsoft Learn lists two cores, 6 GB of RAM and 6 GB of disk space (10 GB recommended), the High Performance power option, and servers synchronized to within five minutes of each other. It also requires outbound TCP 443 to the workspace sensor API under atp.azure.com and a user with the Security administrator role."
   - q: "Why does the sensor service fail to start?"
-    a: "Learn's known-issues page lists several causes. A common one is that the domain controller lacks the right to retrieve the gMSA password. Check PrincipalsAllowedToRetrieveManagedPassword, add the domain controller or a security group, then reboot or run klist -li 0x3e7 purge. Other causes include missing Log on as a service rights and an event log DACL that blocks the sensor."
+    a: "Learn's known-issues page lists several causes. A common one is that the domain controller lacks the right to retrieve the gMSA password. Check PrincipalsAllowedToRetrieveManagedPassword, add the domain controller or a security group, then reboot or run klist -li 0x3e7 purge. Other documented causes include access denied to the performance counter registry key (add the gMSA to Performance Log Users) and a missing log-on-as-a-service right for all services. A DACL on the Security event log is a separate problem: the sensor can run but raises few or no alerts."
   - q: "Why do I get a licensing error behind a proxy?"
     a: "According to Learn, if the proxy returns 401 or 403 instead of 407, the sensor can misread it as a licensing problem and report LicenseInvalid. The fix is to make sure the sensor can reach *.atp.azure.com through the proxy without authentication. The prerequisites page also says SSL inspection is not supported."
   - q: "What does 'A domain controller is unreachable by a sensor' mean?"
@@ -68,7 +68,7 @@ Learn recommends a security group that contains the domain controllers and the E
 
 - Access to the registry key `Global` denied. Add the gMSA to **Performance Log Users**.
 - Service stuck in Starting with an access-denied error for Lsa. `NT Service\All Services` needs the right to log on as a service.
-- If **Log on as a service** is set by policy on the domain controller, the gMSA needs it too.
+- The gMSA must also be granted **Log on as a service** when that user rights policy is configured on the domain controller. Learn lists this under the health issue "Directory services user credentials are incorrect", where the sensor fails to retrieve the gMSA password.
 
 **Event logs.** If you see few or no alerts but no health issue, and the log says the handle is invalid, a DACL may block Local Service from the Security log. Learn gives the entry to append and the check `wevtutil.exe gl security`.
 
@@ -90,9 +90,9 @@ The Defender portal lists health issues. The most relevant ones:
 | A domain controller is unreachable by a sensor | Limited functionality due to connectivity | Check domain controllers and LDAP access, and a Directory Service account per forest |
 | Some network traffic could not be analyzed | More traffic than the sensor can process | Add processors and memory, and check LSO and TSO on VMware |
 
-Several auditing health issues are validated once a day. For v3 sensors, alerts can persist after manual auditing setup. Learn says to enable **Automatic Windows auditing configuration** under **Settings** > **Advanced features**.
+Several auditing health issues are validated once a day. The health issues page lists most of the issues in the table as supported by 2.x sensors only; "Sensor stopped communicating", "Sensor service failed to start" and "Directory services user credentials are incorrect" apply to all sensor versions. For v3 sensors, auditing alerts can persist after manual auditing setup. Learn says to enable **Automatic Windows auditing configuration** under **Settings** > **Identities** > **Advanced features**.
 
-## Common mistakes
+## Common mistakes (own reading of the pages above)
 
 - Skipping the gMSA group membership and rebooting nothing afterwards.
 - Allowing the proxy only for the installer and not for the running service.
@@ -109,4 +109,3 @@ Several auditing health issues are validated once a day. For v3 sensors, alerts 
 - [Defender for Identity known issues and troubleshooting](https://learn.microsoft.com/en-us/defender-for-identity/troubleshooting-known-issues)
 - [Defender for Identity health issues](https://learn.microsoft.com/en-us/defender-for-identity/health-alerts)
 - [Sensor v2.x prerequisites](https://learn.microsoft.com/en-us/defender-for-identity/deploy/prerequisites-sensor-version-2)
-- [Defender for Identity prerequisites](https://learn.microsoft.com/en-us/defender-for-identity/deploy/prerequisites)
