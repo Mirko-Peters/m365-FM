@@ -13,6 +13,8 @@ keypoints:
   - "CSV export is capped at 50,000 rows for Audit Standard and 1,000,000 rows for Audit Premium."
   - "Core services usually return records 60 to 90 minutes after an event, and broad searches in large tenants can take up to 48 hours."
 faq:
+  - q: "What is Microsoft Purview Audit?"
+    a: "According to Microsoft Learn, Microsoft Purview Audit records user and admin activity across Microsoft 365 so you can search and investigate it. Audit Standard and Audit Premium are both enabled by default, and Audit Premium includes everything in Audit Standard plus longer retention, retention policies and intelligent insights."
   - q: "Is the Purview audit log turned on by default?"
     a: "According to Microsoft Learn, Audit Standard and Audit Premium are both enabled by default for organizations with the appropriate subscription. You mainly need to assign permissions to the search tool. Admins can check ingestion in Exchange Online PowerShell with Get-AdminAuditLogConfig and the UnifiedAuditLogIngestionEnabled property."
   - q: "Which role do I need to search the audit log?"
@@ -25,7 +27,20 @@ faq:
     a: "Microsoft Learn says completion time depends on the date range, number of users, activity volume and tenant size, and that broad searches in large tenants can take up to 48 hours. Jobs keep running after you close the browser, and completed jobs are kept for 30 days."
 ---
 
-Microsoft Purview Audit records user and admin activity across Microsoft 365 so you can investigate who did what and when. It is on by default. You search it in the Microsoft Purview portal under **Audit**, export results to CSV, and the retention period depends on whether you use Audit Standard (180 days) or Audit Premium (one year for core services, with options to extend).
+Microsoft Purview Audit records user and admin activity across Microsoft 365 in the unified audit log so you can investigate who did what and when. It is on by default. You search the audit log in the Microsoft Purview portal under **Audit**, export the audit records to CSV, and the audit log retention period depends on whether you use Audit Standard (180 days) or Audit Premium (one year for core services, with options to extend).
+
+## What Microsoft Purview Audit records
+
+Microsoft Purview Audit stores audit events for user and admin activities, which Microsoft Learn calls audit activities. You search audit records by date, activity or operation name, workload, record type and user, and the details of an exported record sit in its `AuditData` JSON property. The pages read mention Exchange, SharePoint, OneDrive, Teams and Microsoft Entra ID, and note that Power BI auditing must be enabled in its own admin portal, but they do not list every audited activity. Microsoft's audit activities reference is the place to look up one operation.
+
+## Four ways to access the audit log
+
+Microsoft Learn lists these routes for Audit Standard and Audit Premium:
+
+- **The search tool in the Microsoft Purview portal.** The route this article walks through.
+- **The Search-UnifiedAuditLog cmdlet** in Exchange Online PowerShell, for scripted or recurring searches.
+- **The Audit Search Graph API**, which uses Microsoft Graph.
+- **The Office 365 Management Activity API**, which Microsoft recommends for downloading audit data at scale.
 
 ## Standard versus Premium
 
@@ -88,9 +103,9 @@ Open a completed job and select **Export** on the command bar to download a CSV 
 
 In Excel, you can sort and filter by property, or use Power Query to split the `AuditData` JSON into separate columns. For downloading audit data at scale, Microsoft recommends the Office 365 Management Activity API instead of a PowerShell script. For scripted or recurring searches, the Search-UnifiedAuditLog cmdlet in Exchange Online PowerShell is the route.
 
-## Retention in detail
+## Audit log retention policies and retention periods
 
-Microsoft Learn lists these periods:
+Microsoft Learn lists these audit log retention periods. Audit retention policies exist only in Audit Premium:
 
 - **180 days.** Audit Standard, and Premium records not covered by a longer policy. Standard logs generated before October 17, 2023 were kept for 90 days.
 - **1 year.** Microsoft Entra ID, Exchange, OneDrive and SharePoint records, through the default retention policy in Audit Premium. The audit search page ties this default to Office 365 E5, Microsoft 365 E5 and the Purview Suite or E5 eDiscovery and Audit add-ons. Any other non-E5 license gets 180 days.
