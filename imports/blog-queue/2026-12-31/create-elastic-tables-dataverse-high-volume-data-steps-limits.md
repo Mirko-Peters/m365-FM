@@ -9,7 +9,7 @@ topics: [dataverse-elastic-tables, dataverse, power-apps, cosmos-db]
 keypoints:
   - "In Power Apps, select Tables, then New table, then Set advanced properties, open Advanced options and choose the type Elastic."
   - "Elastic tables are backed by Azure Cosmos DB and use a partition ID. Logical partitions hold 20 GB each, and a partition ID value can be at most 1,024 bytes."
-  - "Strong consistency applies only within a session token, and multi-record transactions and deep insert are not supported."
+  - "Strong consistency applies only within a logical session, and multi-record transactions and deep insert are not supported."
   - "A time to live column deletes rows after a number of seconds. Learn lists as a known issue that rows exported with Synapse Link are not removed from the lake when TTL expires."
   - "CreateMultiple, UpdateMultiple and DeleteMultiple give 10 times the throughput according to the maker article."
 faq:
@@ -50,8 +50,8 @@ The maker article describes these steps:
 1. In Power Apps, select **Tables**.
 2. Select **New table**.
 3. Select **Set advanced properties**.
-4. Open **Advanced options**.
-5. Choose the type **Elastic**.
+4. Enter a **Display name** and a **Plural name**, then expand **Advanced options**.
+5. Choose **Elastic** as the table **Type**, select the properties you want and select **Save**.
 
 The maker page has no steps for editing an elastic table after creation. It states that elastic table data is included in Dataverse log capacity.
 
@@ -102,7 +102,7 @@ The maker article states that using CreateMultiple, UpdateMultiple and DeleteMul
 3. The `partitionId` optional parameter works only for Retrieve and Delete.
 4. Rows exported to a data lake with Synapse Link for Dataverse are not removed from the lake when their TTL expires.
 
-The page says known issues should be fixed before the feature becomes generally available. Check the page for the current status.
+The page says known issues should be fixed before the feature becomes generally available. Check the page for the current status. The maker article lists two more known issues: point in time restore does not restore updated records, and deleting a column does not remove its values from rows that already hold data.
 
 ## Suggestion: before you commit
 
@@ -131,5 +131,5 @@ The pages I read do not describe the following:
 
 ## Sources
 
-- [Create and edit elastic tables with Power Apps](https://learn.microsoft.com/power-apps/maker/data-platform/create-edit-elastic-tables)
-- [Elastic tables (developer documentation)](https://learn.microsoft.com/power-apps/developer/data-platform/elastic-tables)
+- [Create and edit elastic tables (Microsoft Learn)](https://learn.microsoft.com/power-apps/maker/data-platform/create-edit-elastic-tables)
+- [Elastic Tables for Developers (Microsoft Learn)](https://learn.microsoft.com/power-apps/developer/data-platform/elastic-tables)
