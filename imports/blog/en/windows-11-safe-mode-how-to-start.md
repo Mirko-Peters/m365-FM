@@ -39,7 +39,7 @@ One thing to know before you begin: if the device is encrypted, you need your Bi
 
 ## Three ways to reach safe mode
 
-Microsoft's page [Start your PC in safe mode in Windows](https://support.microsoft.com/en-us/windows/start-your-pc-in-safe-mode-in-windows-92c27cff-db89-8644-1ce4-b3e5e56fe234) documents one route: through the Windows Recovery Environment, called Windows RE. Everything below is a different door into that same room. Microsoft's page on the [Windows recovery environment](https://support.microsoft.com/en-us/windows/experience/backup-recovery/windows-recovery-environment) lists the doors.
+Microsoft's page [Start your PC in safe mode in Windows](https://support.microsoft.com/windows/start-your-pc-in-safe-mode-in-windows-92c27cff-db89-8644-1ce4-b3e5e56fe234) documents one route: through the Windows Recovery Environment, called Windows RE. Everything below is a different door into that same room. Microsoft's page on the [Windows recovery environment](https://support.microsoft.com/windows/experience/backup-recovery/windows-recovery-environment) lists the doors.
 
 ### 1. From Settings (Windows still starts)
 
@@ -75,7 +75,7 @@ The installation-media route is the fallback when the built-in recovery files ar
 
 ## Pick the right mode on the Startup Settings screen
 
-After the restart, Microsoft's [Windows startup settings](https://support.microsoft.com/en-us/windows/experience/startup-boot/windows-startup-settings) page says you choose with the number keys or with F1 to F9. Press **Enter** instead to start Windows normally. The list is:
+After the restart, Microsoft's [Windows startup settings](https://support.microsoft.com/windows/experience/startup-boot/windows-startup-settings) page says you choose with the number keys or with F1 to F9. Press **Enter** instead to start Windows normally. The list is:
 
 1. Enable debugging. An advanced troubleshooting mode for IT professionals and administrators.
 2. Enable boot logging. Creates `ntbtlog.txt`, a list of the drivers installed during startup.
@@ -103,7 +103,7 @@ Once Windows is running, change one thing, then restart normally and test.
 
 ### Roll back or reinstall a driver
 
-If trouble began after a driver update, this is the first stop. Microsoft's page on [updating drivers through Device Manager](https://support.microsoft.com/en-us/windows/update-drivers-through-device-manager-in-windows-ec62f46c-ff14-c91d-eead-d7126dc1f7b6) gives the steps. You need administrator permission.
+If trouble began after a driver update, this is the first stop. Microsoft's page on [updating drivers through Device Manager](https://support.microsoft.com/windows/update-drivers-through-device-manager-in-windows-ec62f46c-ff14-c91d-eead-d7126dc1f7b6) gives the steps. You need administrator permission.
 
 1. Right-click the Start button and select **Device Manager**.
 2. Expand the category of the device that gives trouble.
@@ -119,7 +119,7 @@ Windows RE has an **Uninstall Updates** option under Advanced options, which Mic
 
 ### Repair system files
 
-Microsoft's page on the [System File Checker](https://support.microsoft.com/en-us/topic/use-the-system-file-checker-tool-to-repair-missing-or-corrupted-system-files-79aa86cb-ca52-166a-92a3-966e85d4094e) says to run DISM before SFC, in a Command Prompt that you open as administrator:
+Microsoft's page on the [System File Checker](https://support.microsoft.com/topic/use-the-system-file-checker-tool-to-repair-missing-or-corrupted-system-files-79aa86cb-ca52-166a-92a3-966e85d4094e) says to run DISM before SFC, in a Command Prompt that you open as administrator:
 
 1. Run `DISM.exe /Online /Cleanup-image /Restorehealth`. It can take several minutes and uses Windows Update by default.
 2. Run `sfc /scannow` and keep the window open until the scan reaches 100 percent.
