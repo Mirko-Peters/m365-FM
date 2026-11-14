@@ -46,7 +46,7 @@ Per Microsoft Learn:
 
 ## How to invite a guest in the admin center
 
-1. Sign in to the Microsoft Entra admin center at entra.microsoft.com as at least a User Administrator. Microsoft's quickstart names Guest Inviter as the minimum role for inviting.
+1. Sign in to the Microsoft Entra admin center at entra.microsoft.com as at least a User Administrator. The quickstart's prerequisites also mention a role that can create users, such as at least Guest Inviter, so the page is not fully consistent on the minimum role.
 2. Browse to **Entra ID** > **Users**.
 3. Select **Invite external user**.
 4. On the **Basics** tab, enter the **Email** and **Display name**. An invitation message is optional.
@@ -93,9 +93,9 @@ Microsoft Learn names these controls:
 
 - **Conditional Access**, for example multifactor authentication, at tenant, application or guest level. Together with the option to trust MFA claims from a partner's Entra organization in cross-tenant access settings, this decides how guests authenticate.
 - **Entitlement management**, to manage external user access.
-- **SharePoint and OneDrive integration**, to share files, libraries and sites with guests. Permissions work the same for guests as for internal users.
 
-You can filter the **Users** list by user type to show only guests. The guest properties page does not describe removing guests. For a test guest, the quickstart says to select the user and choose **Delete user**.
+
+The guest properties page does not describe removing guests. For a test guest, the quickstart says to select the user and choose **Delete user**.
 
 ## Securing external collaboration: a checklist
 
