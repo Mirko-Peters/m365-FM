@@ -53,7 +53,7 @@ Organizations with private links use `https://api.fabric.microsoft.com/v1/mcp/fa
 - A Microsoft Entra work or school account.
 - Access to at least one supported report or semantic model. No workspace role, Build permission or item IDs are required. A name or browser URL is enough.
 
-**Client requirements:** Streamable HTTP, the OAuth 2.0 flow, and a runtime call to `tools/list`. Depending on the client, a single-tenant Entra app registration with the delegated permissions `Item.Read.All` and `Item.Execute.All` may be needed. The page's example client is GitHub Copilot CLI, which uses a preregistered app. Do not add an Authorization header, because a configured bearer token overrides interactive sign-in.
+**Client requirements:** Streamable HTTP, the OAuth 2.0 flow, and a runtime call to `tools/list`. Depending on the client, a single-tenant Entra app registration with the delegated permissions `Item.Read.All` and `Item.Execute.All` may be needed. The page's example client is GitHub Copilot CLI. Do not add an Authorization header, because a configured bearer token overrides interactive sign-in.
 
 **Tools:** DiscoverArtifacts, ResolveFabricItem, GetReportMetadata, GetSemanticModelSchema, ValueSearch and ExecuteQuery. Microsoft says `tools/list` is the authoritative source.
 
@@ -87,14 +87,14 @@ Learn documents it for existing integrations and points new work to Fabric IQ. T
 2. Test with two users who have different RLS roles and compare answers.
 3. Keep the Authoring server out of end-user clients.
 4. Document which LLM provider receives query results.
-5. Review Entra consent settings, since tenant admins can restrict user consent for the delegated permissions.
+5. Review who may consent to the delegated permissions in your Entra tenant.
 
 ## Authoring server: local or hosted
 
 If the goal is to build or document models rather than ask questions, the Authoring server is the one to look at. Microsoft Learn describes it as able to create and change tables, columns, measures, relationships, calculation groups, translations and security roles, to run DAX for validation, and to work with TMDL and PBIP files.
 
-- **Hosted (preview):** nothing to install, and Microsoft manages updates. The endpoint is `https://api.fabric.microsoft.com/v1/mcp/powerbi/authoring`.
-- **Local (generally available):** runs on your machine over `stdio`. It adds Power BI Desktop, PBIP files on disk, service principal authentication, transactions and traces.
+- **Hosted (preview):** the endpoint is `https://api.fabric.microsoft.com/v1/mcp/powerbi/authoring`.
+- **Local (generally available):** the overview page lists a local server as generally available. It does not describe the local setup in the sections read for this article.
 
 Learn describes a common pattern: build and document a model with the Authoring server, then expose it to other people through Fabric IQ. That keeps write-capable tooling with the model owners and read-only access with everyone else.
 
