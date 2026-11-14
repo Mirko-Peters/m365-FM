@@ -93,4 +93,4 @@ The page does not give approval timelines or review criteria, exact Teams admin 
 
 ## Sources
 
-- [Connect and configure an agent for Teams and Microsoft 365 Copilot](https://learn.microsoft.com/microsoft-copilot-studio/publication-add-bot-to-microsoft-teams)
+- [Connect and configure an agent for Teams and Microsoft Copilot (Microsoft Learn)](https://learn.microsoft.com/microsoft-copilot-studio/publication-add-bot-to-microsoft-teams)
