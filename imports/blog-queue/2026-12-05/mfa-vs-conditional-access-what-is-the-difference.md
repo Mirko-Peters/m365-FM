@@ -32,7 +32,7 @@ MFA and Conditional Access are not alternatives. MFA is the extra check at sign-
 | | MFA | Security defaults | Conditional Access |
 |---|---|---|---|
 | What it is | A second verification factor | A fixed baseline of protections | A policy engine with signals and decisions |
-| Customizable | Methods are chosen by admins | No, on or off | Fully |
+| Customizable | Several verification methods are available | No, on or off | Fully |
 | License | Page gives no license details | No extra cost | Microsoft Entra ID P1 or higher |
 | Typical use | The check itself | Small tenants starting out | Granular control |
 
@@ -81,7 +81,7 @@ Learn states that organizations that replace security defaults with Conditional 
 Two cautions from the security defaults page:
 
 - Do not disable authentication methods while using security defaults, because that can lock you out of the tenant.
-- Admins must stop using legacy protocols before enabling.
+- Before enabling, make sure your administrators are not using older authentication protocols, because security defaults block them.
 
 ## Where to find Conditional Access
 
