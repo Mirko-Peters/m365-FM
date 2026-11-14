@@ -11,7 +11,7 @@ keypoints:
   - "For the first, the account must be added as an external user in the tenant first. Or the user signs out and signs in with a different Microsoft Entra account."
   - "A B2B guest is represented as a user object after redeeming an invitation, typically with user type guest and a UPN that contains #EXT#."
   - "sourceAnchor, also called immutableId, cannot change after the object is created and synchronized. A changed value makes Entra Connect Sync throw an error for that object."
-  - "Cross-tenant access settings can trust MFA claims from other Entra organizations, which is relevant when the MFA requirement sits in the resource tenant."
+  - "Cross-tenant access settings can trust MFA claims from other Entra organizations. The pages do not tie this setting to AADSTS90072."
 faq:
   - q: "What does AADSTS90072 mean?"
     a: "The Microsoft Entra error code reference lists it as PassThroughUserMfaError. The external account that the user signs in with does not exist on the tenant they signed into, so the user cannot satisfy the MFA requirements for the tenant. The same row says the error might also occur if users are synced but the ImmutableID (sourceAnchor) attribute differs between Active Directory and Microsoft Entra ID."
@@ -22,7 +22,7 @@ faq:
   - q: "What is the ImmutableID and why can a mismatch cause trouble?"
     a: "Learn says sourceAnchor, also called immutableId, uniquely identifies an object as the same object on-premises and in Microsoft Entra ID, and cannot be changed after it is set. If the value changes after the object is exported, Entra Connect Sync throws an error and allows no more changes to that object until the value is changed back in the source directory."
   - q: "Can the resource tenant trust MFA done in the home tenant?"
-    a: "The B2B overview says cross-tenant access settings let you trust multifactor authentication and device claims from other Microsoft Entra organizations. Settings can be a default for all organizations plus organization-specific entries. Whether that fits this error depends on your sign-in log, so check the log first."
+    a: "The B2B overview says cross-tenant access settings let you trust multifactor authentication and device claims from other Microsoft Entra organizations. Settings can be a default for all organizations plus organization-specific entries. The pages do not tie this setting to AADSTS90072, so whether it applies to your case is your own check in the sign-in log."
 ---
 
 AADSTS90072 is named PassThroughUserMfaError. The Microsoft Entra error code reference ties it to two situations: an external account that does not exist in the tenant the user signed into, and a mismatch of the ImmutableID (sourceAnchor) between Active Directory and Microsoft Entra ID for synced users. This article treats them as two branches and fills in what the one-line reference row leaves out, using the B2B collaboration overview and the Entra Connect design concepts page.
@@ -42,6 +42,8 @@ From the B2B collaboration overview: after a guest redeems an invitation or comp
 You can add a guest in the Microsoft Entra admin center like a new user, assign guests to apps or groups, and send an invitation email with a redemption link or a direct link to an app.
 
 ### What to check
+
+These steps are my suggestion, built on the two actions the reference lists.
 
 1. Find the failed sign-in in the sign-in logs and note the account that was used and the tenant it signed into.
 2. Check whether that account exists as a guest in the tenant that requires MFA. If it does not, the reference says to add it as an external user first.
@@ -78,13 +80,13 @@ For federation outside Entra Connect, Learn says you must update the ImmutableID
 
 ### What to check
 
-1. Compare the user's ImmutableID in Microsoft Entra ID with the source attribute on-premises. I do not give a command here, because the pages I read do not show one.
+1. Compare the user's ImmutableID in Microsoft Entra ID with the source attribute on-premises. The pages show no command for this, so none is given here.
 2. Check Entra Connect Sync for errors on the object. Learn says a changed sourceAnchor produces an error.
-3. If you rebuilt a sync server, confirm it uses the same sourceAnchor attribute as the original.
+3. If you rebuilt a sync server, confirm it uses the same sourceAnchor attribute as the original. The first two checks are my suggestion; the third follows Learn's rule above.
 
 ## Telling the branches apart (my advice)
 
-This is my experience, not Microsoft guidance:
+This is my suggestion, not Microsoft guidance:
 
 - If the user is a partner, contractor or someone with an account in another organization, start with branch A.
 - If the user is a normal employee from your own synced directory, and the error appeared after a server rebuild, a domain migration or object recreation, start with branch B.
@@ -92,7 +94,7 @@ This is my experience, not Microsoft guidance:
 
 ## What the sources do not cover
 
-The reference row is a single line, and the two supplementary pages do not describe a step-by-step repair for a mismatched ImmutableID. I do not give one. For that, read the Learn material on matching and on-premises synchronization errors before you change attributes.
+The reference row is a single line, and the two supplementary pages do not describe a step-by-step repair for a mismatched ImmutableID. This article gives none. Before you change attributes, my advice is to look for Learn material on matching and on-premises synchronization errors, which these three pages do not cover.
 
 ## Related
 
@@ -103,6 +105,6 @@ The reference row is a single line, and the two supplementary pages do not descr
 
 ## Sources
 
-- [Microsoft Entra authentication and authorization error codes (Microsoft Learn)](https://learn.microsoft.com/entra/identity-platform/reference-error-codes)
+- [Microsoft Entra authentication & authorization error codes (Microsoft Learn)](https://learn.microsoft.com/entra/identity-platform/reference-error-codes)
 - [What is Microsoft Entra B2B collaboration? (Microsoft Learn)](https://learn.microsoft.com/entra/external-id/what-is-b2b)
 - [Microsoft Entra Connect: Design concepts (Microsoft Learn)](https://learn.microsoft.com/entra/identity/hybrid/connect/plan-connect-design-concepts)
