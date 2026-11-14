@@ -20,7 +20,7 @@ faq:
   - q: "How do I log a custom event?"
     a: "Use the Trace function in a behavior formula, for example Trace with a message, TraceSeverity.Information and a record of custom values. Learn says Trace can only be used in behavior formulas, and its output also appears in Live Monitor."
   - q: "Which KQL tables hold the data?"
-    a: "Learn lists traces for custom trace messages and unhandled errors, customEvents for session summary events, dependencies for HTTP calls, requests for requests received by connected services and pageViews for page view data."
+    a: "Learn's examples use traces for custom trace messages and unhandled errors, customEvents for session summary events, dependencies for HTTP calls and requests for requests received by connected services, which land in the service's own Application Insights instance. pageViews appears on the page only in a union query."
   - q: "Does this work for the Power Apps mobile app and offline mode?"
     a: "Learn says session summary events are not available for Power Apps mobile, offline player events are not recorded, and events from iOS and Android apps are not recorded when the app is suspended."
 ---
@@ -32,7 +32,7 @@ To track production telemetry for a canvas app, create a workspace-based Applica
 According to Microsoft Learn you need:
 
 - A workspace-based Application Insights resource in the Azure portal, and permission to create Azure resources.
-- A tenant admin who turns on the setting. In the Power Platform admin center, go to **Settings** > **Tenant settings** > **Canvas app insights**, set it to **On** and save.
+- A tenant admin who turns on the setting. In the Power Platform admin center, go to **Settings** > **Tenant settings** > **Canvas app insights**, set it to **On** and save. Learn words this as a requirement to view telemetry. It does not say whether events are collected while the setting is off, so turn it on before you test.
 
 ## Step 1: Connect the app
 
@@ -68,10 +68,12 @@ Trace(
 );
 ```
 
+The code above is my shortened example, based on Learn's feedback sample.
+
 Details from the Trace reference:
 
 - Syntax is `Trace( Message [, TraceSeverity [, CustomRecord [, TraceOptions ] ] ] )`.
-- Severity options are Information (default), Warning, Error and Critical. The Application Insights page lists the first three in its example.
+- The Trace reference lists the severity options Information (default), Warning, Error and Critical. The Application Insights page says messages sent to Application Insights have one of three severities (Information, Warning, Error) and does not mention Critical, so test how Critical arrives before you rely on it.
 - `CustomRecord` carries your custom data. `TraceOptions.IgnoreUnsupportedTypes` ignores data types in the record that cannot be serialized.
 - Trace can only be used in behavior formulas, such as `OnSelect`.
 - Trace output also appears in Power Apps Live Monitor.
@@ -81,15 +83,15 @@ Plan an event naming scheme before you spread Trace calls through the app, for e
 
 ## Step 4: Query the data
 
-Learn names these tables:
+Learn's examples use these tables. The descriptions are my summary of those examples, not a table list on the page, and `pageViews` appears there only in a union query:
 
 | Table | Content |
 |---|---|
 | `traces` | Custom trace messages and unhandled errors |
 | `customEvents` | Session summary events |
 | `dependencies` | HTTP calls, with `requestHeaders` and `x-ms-app-load-state` |
-| `requests` | Requests received by connected services |
-| `pageViews` | Page view data |
+| `requests` | Requests received by connected services, recorded in the connected service's own Application Insights instance (correlation tracing) |
+| `pageViews` | Named in a union query only; Learn gives no description |
 
 A basic query for your custom event:
 
@@ -117,7 +119,7 @@ Either might incur additional Application Insights storage costs.
 - Session summary events are accurate for canvas apps in a web browser, not for Power Apps mobile, and values might not always be available or accurate for custom pages.
 - Offline player events are not recorded.
 - Events from iOS and Android apps are not recorded when the app is suspended.
-- The pages do not describe sampling, telemetry delay or availability in government clouds, so check those separately if they matter to you.
+- The in-app connection page does not describe sampling, telemetry delay or availability in government clouds, so check those separately if they matter to you. The data export page does say that its Power Automate and Customer Service export is not available in GCC, GCC High or 21Vianet.
 
 ## Privacy and governance
 
@@ -127,9 +129,9 @@ Either might incur additional Application Insights storage costs.
 
 ## Admin-level alternative
 
-The Power Platform admin center also has data export to Application Insights, under **Manage** > **Data export** > **App Insights**. Learn describes it as available for managed environments only, with data types Dataverse diagnostics and performance, Power Automate and Copilot Studio. It does not name canvas apps. Treat it as a separate source from the in-app connection string above. Learn gives a 24 hour SLA for telemetry delivery for that export, and requires a unique Application Insights environment per Power Platform environment.
+The Power Platform admin center also has data export to Application Insights, under **Manage** > **Data export** > **App Insights**. Learn says the feature is turned on and supported for managed environments only, and gives data types such as Dataverse diagnostics and performance, Power Automate and Copilot Studio. It does not name canvas apps. Treat it as a separate source from the in-app connection string above. The page gives a 24 hour SLA for telemetry delivery. It says the Application Insights environment must be unique for an environment or tenant, because reports do not work correctly if one resource holds data from several environments, and it requires local authentication. Setting it up needs the Power Platform or Dynamics 365 administrator role at tenant level plus the environment admin or system admin role in the Dataverse environment. The Power Automate and Dynamics 365 Customer Service export is in public preview.
 
-## Rollout checklist
+## Rollout checklist (my suggestion)
 
 1. Create one Application Insights resource per environment or per app group, and document who owns it.
 2. Turn on the tenant setting.
@@ -147,6 +149,6 @@ The Power Platform admin center also has data export to Application Insights, un
 
 ## Sources
 
-- [Connect your canvas app to Application Insights (Microsoft Learn)](https://learn.microsoft.com/en-us/power-apps/maker/canvas-apps/application-insights)
-- [Trace function (Microsoft Learn)](https://learn.microsoft.com/en-us/power-apps/maker/canvas-apps/functions/function-trace)
-- [Set up data export to Application Insights (Microsoft Learn)](https://learn.microsoft.com/en-us/power-platform/admin/set-up-export-application-insights)
+- [Analyze system-generated logs using Application Insights - Power Apps](https://learn.microsoft.com/en-us/power-apps/maker/canvas-apps/application-insights)
+- [Trace function - Power Platform](https://learn.microsoft.com/en-us/power-platform/power-fx/reference/function-trace)
+- [Export data to Application Insights - Power Platform](https://learn.microsoft.com/en-us/power-platform/admin/set-up-export-application-insights)
