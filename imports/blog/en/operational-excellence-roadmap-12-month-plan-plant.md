@@ -45,7 +45,7 @@ Also agree on three to five goals tied to the business strategy, for example del
 
 ## Months 1 and 2: how do you assess where the plant stands?
 
-Start with a diagnostic, not with tools. The [Kaizen Institute describes a case](https://kaizen.com/insights/operational-excellence-across-organization/) in which an initial diagnostic identified where operational excellence could be strengthened and where lean behaviours would add the most value. The source is a consultancy and its case is self-reported, so use it as an example of the approach, not as proof.
+Start with a diagnostic, not with tools. In my experience, an initial diagnostic shows where operational excellence can be strengthened and where lean behaviours would add the most value.
 
 Look at four things:
 
@@ -58,7 +58,7 @@ End the phase with a short list: the three biggest problems, the first pilot are
 
 ## Months 3 to 5: how do you run a pilot?
 
-Pick one area as a pilot, such as one value stream or one line. Barry-Wehmiller launched six model sites, one in each business division, to test its framework. The Kaizen Institute case describes a pilot at one reference site. The idea is the same: learn in a small place before you scale.
+Pick one area as a pilot, such as one value stream or one line. Barry-Wehmiller launched six model sites, one in each business division, to test its framework. The idea is the same in any plant: learn in a small place before you scale.
 
 In the pilot, introduce a small set of practices:
 
@@ -66,13 +66,13 @@ In the pilot, introduce a small set of practices:
 2. **A few measures.** Delivery, quality, safety and cost, shown with targets.
 3. **Standard work** for the key tasks, written with the operators.
 4. **A problem-solving method.** Use root cause analysis, for example the five whys, and track actions to closure.
-5. **Leader presence.** Leaders go to the area every day and ask questions. The Kaizen Institute case lists daily process confirmation and gemba walks as part of the model.
+5. **Leader presence.** Leaders go to the area every day and ask questions.
 
 Keep the implementation simple. A pilot succeeds when people use the routine without being reminded, not when the board looks perfect.
 
 ## Months 6 to 8: how do you standardize what works?
 
-Now write down what worked. A playbook is a short description of each practice: why it exists, how it runs, who does what and how you check it. The Kaizen Institute case built playbooks for each standard, with methods, metrics and maturity assessments, and used them for training and governance. Barry-Wehmiller planned a playbook to be well vetted before more sites launched, and it expected this to take several months.
+Now write down what worked. A playbook is a short description of each practice: why it exists, how it runs, who does what and how you check it. Barry-Wehmiller planned a playbook to be well vetted before more sites launched, and it expected this to take several months.
 
 This phase also deals with the people side of change management:
 
@@ -85,7 +85,7 @@ This phase also deals with the people side of change management:
 
 ## Months 9 to 11: how do you extend to other areas?
 
-Use the pilot team to help the next area. The Kaizen Institute case describes peer transfer: representatives of the reference site joined deployments at other locations, which helped prepare internal coaches. In a single plant, the pilot area's team leader and an operator can join the start-up of the next area for a few weeks.
+Use the pilot team to help the next area. In a single plant, the pilot area's team leader and an operator can join the start-up of the next area for a few weeks.
 
 For each new area, follow the same short sequence: assess, set up the routine, agree on measures, write the standard work and coach. Do not start more areas than your coaches can support, and keep the method repeatable. Two areas at the same time are often enough for a first year.
 
@@ -148,3 +148,8 @@ A plan needs data on the plant: plans, flow, stops and results. [iFAKT](https://
 ## Next step
 
 Name a sponsor and one lead, and pick the pilot area for your operational excellence roadmap. Then book two weeks for the assessment and write down the baseline for three to five measures.
+
+## Sources
+
+- [Rebooting Operational Excellence at Barry-Wehmiller - IndustryWeek](https://www.industryweek.com/operations/article/55279261/rebooting-operational-excellence-at-barry-wehmiller)
+- [Shingo Model - Shingo Institute](https://shingo.org/shingo-model/)
