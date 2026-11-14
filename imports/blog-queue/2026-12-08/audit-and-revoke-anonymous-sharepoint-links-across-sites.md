@@ -14,7 +14,7 @@ keypoints:
   - "Use site access reviews to involve site owners, and the change history report to see who changed sharing settings."
 faq:
   - q: "How do I get a list of sites with many Anyone links?"
-    a: "In the SharePoint admin center, expand Reports, select Data access governance, then under Activity reports select Sharing links. Microsoft Learn says the report shows the sites where users created the most Anyone links in the last 28 days, the top 100 sites, applied policies and the primary administrator. Reports must be run manually and can take up to 24 hours."
+    a: "In the SharePoint admin center, expand Reports and select Data access governance, then run the Sharing links report (the pages read do not spell out every click after that). Microsoft Learn says the report shows the sites where users created the most Anyone links in the last 28 days, the top 100 sites, applied policies and the primary administrator. Reports must be run manually and can take up to 24 hours."
   - q: "Can I run the same audit with PowerShell?"
     a: "Yes. The Learn page on PowerShell for data access governance lists Start-SPODataAccessGovernanceInsight with -ReportEntity SharingLinks_Anyone, -ReportType RecentActivity and -Workload SharePoint or OneDriveForBusiness. You track it with Get-SPODataAccessGovernanceInsight and download it with Export-SPODataAccessGovernanceInsight."
   - q: "What licensing do the reports need?"
@@ -29,7 +29,7 @@ To audit anonymous links across many sites, run the Sharing links report from Sh
 
 ## Step 1: Understand what you can see
 
-Anyone links let anyone with the link access files and folders without signing in. Learn's Sharing links report page describes three activity reports that cover the last 28 days:
+Anyone links let anyone with the link access files and folders without signing in. Learn's Sharing links report page describes three activity reports that cover the last 28 days. The same page also says "last 30 days" in its description of the top 100 sites, so treat the exact window as unclear:
 
 | Report | What it shows |
 |---|---|
@@ -43,7 +43,7 @@ The reports cover SharePoint sites. OneDrive is available through PowerShell. Th
 
 1. Sign in to the SharePoint admin center with SharePoint administrator credentials.
 2. Expand **Reports** and select **Data access governance**.
-3. Under **Activity reports**, select **Sharing links**, and run the report.
+3. Run the **Sharing links** report. The Learn page says to run reports manually, either all at once or individually. The pages read do not describe the remaining clicks.
 4. Check the **Status** column. Reports can take up to 24 hours, and you can run one again every 24 hours.
 5. Open the report to see the top 100 sites, the applied policies (sensitivity label, unmanaged device controls and external sharing setting) and the primary administrator.
 6. Download the CSV for offline analysis. Learn says the file can contain up to 1 million sites.
@@ -60,7 +60,7 @@ Get-SPODataAccessGovernanceInsight -ReportID <GUID>
 Export-SPODataAccessGovernanceInsight -ReportID <GUID> -DownloadPath "C:\Reports"
 ```
 
-Use `-Workload OneDriveForBusiness` for OneDrive. Learn warns that its own text uses both `SharingLinks_Anyone` and `SharingLinksAnyone` in different places, so verify the value before scripting.
+Use `-Workload OneDriveForBusiness` for OneDrive. The PowerShell page uses `SharingLinks_Anyone` in the commands but `SharingLinksAnyone` in its data collection text. The underscore form is the one used in the examples, so verify the value in your tenant before scripting.
 
 ## Step 4: Know the licensing and limits
 
@@ -71,7 +71,7 @@ Use `-Workload OneDriveForBusiness` for OneDrive. Learn warns that its own text 
 
 ## Step 5: Reduce risk at the source
 
-In the SharePoint admin center, go to **Policies** > **Sharing**. Learn lists the levels: **Anyone**, **New and existing guests**, **Existing guests** and **Only people in your organization**. For Anyone links, you can:
+In the SharePoint admin center, open the organization-level sharing settings (the pages read name the settings but not the menu path). Learn lists the levels: **Anyone**, **New and existing guests**, **Existing guests** and **Only people in your organization**. For Anyone links, you can:
 
 - Require links to expire and set the maximum number of days.
 - Limit links to view permission.
@@ -92,14 +92,14 @@ Learn's remedial actions for oversharing findings are:
 
 Weigh the sensitivity of the content, the amount at risk and the disruption to users before choosing between a hard restriction and a review.
 
-## Common mistakes
+## Common mistakes (own reading of the pages above)
 
 - Waiting for the report without running it. It is not automatic.
 - Reading the 28-day activity report as an inventory of all existing links.
 - Turning off Anyone links organization-wide without telling teams.
 - Tightening a site's setting without testing the effect on links.
 
-## A simple monthly routine
+## A simple monthly routine (own suggestion, not from Learn)
 
 1. Run the Sharing links reports for SharePoint, and for OneDrive with PowerShell.
 2. Sort the downloaded files by the number of Anyone links and pick the top sites.
