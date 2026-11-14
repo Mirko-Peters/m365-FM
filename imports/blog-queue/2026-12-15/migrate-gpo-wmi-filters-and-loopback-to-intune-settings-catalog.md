@@ -8,15 +8,15 @@ date: 2026-12-15
 topics: [intune, group-policy, hybrid-entra-join]
 keypoints:
   - "Group Policy analytics reads GPO XML but the Learn pages I read do not mention WMI filters or loopback, so plan these two by hand."
-  - "Assignment filters are the closest Intune tool to a WMI filter. They use device properties such as model, manufacturer, OS version and SKU."
+  - "In my view assignment filters are the closest Intune tool to a WMI filter (Learn does not make this comparison). They use device properties such as model, manufacturer, OS version and SKU."
   - "A user-scope settings catalog setting assigned to a device group applies to all users on the device, similar to loopback in merge mode."
-  - "Loopback Replace mode has no documented one-click match. Rebuild it as device-scoped settings or a separate profile."
+  - "Learn documents no match for loopback Replace mode. Rebuilding it as device-scoped settings or a separate profile is my own idea and needs testing."
   - "Test on a pilot group and check conflicts under Devices > Monitor > Assignment failures."
 faq:
   - q: "Does Group Policy analytics detect WMI filters?"
     a: "The Microsoft Learn pages on importing and migrating GPOs do not mention WMI filters, security filtering or loopback. The analysis reports settings, MDM support, scope and CSP mappings, so check targeting logic yourself in the Group Policy Management Console."
   - q: "What replaces a WMI filter in Intune?"
-    a: "Assignment filters. Learn describes them as reusable rules you add to an assignment in Include or Exclude mode. They evaluate device properties such as manufacturer, model, operating system version and SKU. They are not a general WMI query engine."
+    a: "Assignment filters. Learn describes them as reusable rules you add to an assignment in Include or Exclude mode. They evaluate device properties such as manufacturer, model, operating system version and SKU. Learn does not describe them as a WMI query engine, and they only see the properties it lists. Learn lists Settings catalog for Windows among the profile types that support assignment filters."
   - q: "What is the Intune equivalent of loopback processing?"
     a: "The settings catalog page says that a user-scope setting assigned to a device group is applied to all users on that device, which Learn compares to loopback processing set to merge. A documented match for Replace mode is not given."
   - q: "Which wins if a setting is assigned in both user and device scope?"
@@ -29,9 +29,9 @@ WMI filters and loopback processing are the two pieces of Group Policy targeting
 
 ## Start with the inventory
 
-Group Policy analytics gives you the setting-level view. In the Group Policy Management Console, right-click a GPO, select **Save report** and save as XML. In the Intune admin center go to **Devices** > **Manage devices** > **Group Policy analytics** > **Import**. Each file must be 4 MB or less.
+Group Policy analytics gives you the setting-level view. In the Group Policy Management Console, right-click a GPO, select **Save report** and save as XML. In the Intune admin center go to **Devices** > **Manage devices** > **Group Policy analytics** > **Import**. Learn says the exported file must be less than 4 MB.
 
-The report shows MDM support per GPO, whether the GPO is targeted in AD, and for each setting its value, scope (user or device), minimum OS version and CSP name. The Reports view classifies settings as Ready for migration, Not supported or Deprecated.
+The report shows MDM support per GPO, whether the GPO is targeted in AD, and for each setting its value, scope (user or device), minimum OS version and CSP name. The Summary tab under **Reports** > **Device management** > **Group policy analytics** classifies settings as Ready for migration, Not supported or Deprecated.
 
 What the pages do not cover: WMI filters, security filtering, loopback and item-level targeting. Note these by hand for every GPO you plan to move. Also, Learn lists a known issue: only non-ADMX settings in English are supported, so non-English GPOs can give inaccurate MDM support percentages.
 
@@ -54,9 +54,9 @@ Windows properties listed on Learn include:
 
 Example from Learn: `(device.operatingSystemVersion -gt 10.0.22000.1000)`.
 
-When you assign the policy, select **Edit filter** and choose **Include filtered devices** or **Exclude filtered devices**. Limits: up to 200 filters per tenant, 3,072 characters per rule, and a filter cannot be deleted while assignments use it.
+When you assign the policy, select **Edit filter** and choose **Include filtered devices in assignment** or **Exclude filtered devices in assignment**. Limits: up to 200 filters per tenant, 3,072 characters per filter, and a filter cannot be deleted while assignments use it. Learn lists Settings catalog for Windows among the profile types that support assignment filters.
 
-Be realistic about coverage. A WMI query can ask almost anything about a machine. Assignment filters only see the listed properties. If your WMI filter checks something outside that list, such as installed hardware details or a registry-derived state, the pages I read give no equivalent. Options that remain are a dynamic group where the attribute exists, or a different design.
+Be realistic about coverage. A WMI query can ask almost anything about a machine. Assignment filters only see the listed properties. If your WMI filter checks something outside that list, such as installed hardware details or a registry-derived state, the pages I read give no equivalent. Learn does not compare assignment filters to WMI filters, so that mapping is my own. A dynamic group where the attribute exists, or a different design, are my own suggestions.
 
 ## Replace loopback with scope and assignment
 
@@ -70,7 +70,7 @@ In the settings catalog, scope and assignment target are separate. Learn's table
 | User | User group | Only that user gets it |
 | Device | Device group | All users on the device |
 
-Learn compares the first row to loopback in merge mode. The practical pattern for shared devices is a profile with the user-scope settings you need, assigned to a device group.
+Learn compares the first row to loopback in merge mode. A practical pattern for shared devices, and my own reading of that row, is a profile with the user-scope settings you need, assigned to a device group.
 
 Points to watch:
 
@@ -78,26 +78,26 @@ Points to watch:
 - Early in device activity, before a user hive exists, some user-scope settings show as not applicable.
 - If a setting exists in both scopes and you assign both, user scope wins.
 
-For Replace mode, Learn gives no matching switch. A safe reading is to keep the shared-device settings in a device-assigned profile and avoid also assigning conflicting user-targeted profiles to the same people. Test this, because the pages do not promise Replace semantics.
+For Replace mode, Learn gives no matching switch. My own reading is to keep the shared-device settings in a device-assigned profile and avoid also assigning conflicting user-targeted profiles to the same people. Test this, because the pages do not promise Replace semantics.
 
 ## Build the profiles
 
 1. Go to **Devices** > **Manage devices** > **Group Policy analytics**, select the GPOs and choose **Migrate**.
 2. On **Settings to migrate**, tick only settings you reviewed. Learn says not to include all settings without review.
-3. Resolve conflicts by selecting one value when two GPOs disagree.
-4. Name the profile, add scope tags and assign it, with a filter where you replaced a WMI filter.
+3. Resolve conflicts: Learn shows an error when two GPOs set the same setting differently and says to select only one version, which you do by unchecking the conflicting setting.
+4. Name the profile, add scope tags and assign it. Learn's description of the migration wizard does not mention assignment filters, so check in your portal where you add the filter that replaces a WMI filter, in the wizard or afterwards in the profile's assignments.
 
 Migration is best effort. AppLocker and Firewall rule settings cannot be migrated this way and belong in Endpoint Security. Some older Office and Chrome settings map to newer ones.
 
 ## Check results
 
-Open the profile under **Devices** > **Manage devices** > **Configuration** to see per-setting counts for applied, conflict and error. **Devices** > **Monitor** > **Assignment failures** lists conflicts. Pilot on a small group before widening.
+Open the profile under **Devices** > **Manage devices** > **Configuration** to see per-setting counts for applied, conflict and error. **Devices** > **Monitor** > **Assignment failures** lists conflicts. Pilot on a small group before widening. That advice is my own.
 
 ## Remember how precedence changes
 
-In Group Policy, processing runs local, site, domain and then OU GPOs, later policies override earlier ones, and computer settings override user settings. Link order, enforced links and block inheritance change the result. Intune has no link hierarchy. Two settings catalog profiles that set the same setting to different values create a conflict instead of one overriding the other, and the only user-versus-device tie-breaker Learn gives is that user scope wins when both are assigned.
+In Group Policy, processing runs local, site, domain and then OU GPOs, later policies override earlier ones, and computer settings override user settings. Link order, enforced links and block inheritance change the result. My own summary: Intune has no link hierarchy. Learn says conflicts happen when the same setting is set to different values, including in settings catalog policies, and the only user-versus-device tie-breaker it gives is that user scope wins when a setting is assigned in both scopes.
 
-That is why the migration step asks you to pick one value when GPOs disagree. Before you assign anything, list every setting that two GPOs set differently, decide the winner, and migrate only that one.
+The migration step likewise asks you to pick one value when GPOs disagree. My own advice: before you assign anything, list every setting that two GPOs set differently, decide the winner, and migrate only that one.
 
 ## Related
 
@@ -107,10 +107,11 @@ That is why the migration step asks you to pick one value when GPOs disagree. Be
 
 ## Sources
 
-- [Migrate Group Policy to the settings catalog](https://learn.microsoft.com/en-us/intune/device-configuration/migrate-group-policy)
-- [Analyze GPOs with Group Policy analytics](https://learn.microsoft.com/en-us/intune/device-configuration/import-group-policy-analytics)
-- [Use the settings catalog](https://learn.microsoft.com/en-us/intune/device-configuration/settings-catalog)
-- [Assignment filters in Intune](https://learn.microsoft.com/en-us/intune/intune-service/fundamentals/filters)
-- [Windows device properties for filters](https://learn.microsoft.com/en-us/intune/intune-service/fundamentals/filters-device-properties)
-- [Loopback processing of Group Policy](https://learn.microsoft.com/en-us/troubleshoot/windows-server/group-policy/loopback-processing-of-group-policy)
-- [Group Policy processing for Windows](https://learn.microsoft.com/en-us/windows-server/identity/ad-ds/manage/group-policy/group-policy-processing)
+- [Microsoft Learn: Migrate your imported group policy to a policy in Microsoft Intune](https://learn.microsoft.com/en-us/intune/device-configuration/migrate-group-policy)
+- [Microsoft Learn: Use Microsoft Intune to import and analyze group policies](https://learn.microsoft.com/en-us/intune/device-configuration/import-group-policy-analytics)
+- [Microsoft Learn: Create a policy using settings catalog in Microsoft Intune](https://learn.microsoft.com/en-us/intune/device-configuration/settings-catalog/)
+- [Microsoft Learn: Create assignment filters in Microsoft Intune](https://learn.microsoft.com/en-us/intune/fundamentals/filters/overview)
+- [Microsoft Learn: Assignment filter properties and operators reference](https://learn.microsoft.com/en-us/intune/fundamentals/filters/ref-device-properties)
+- [Microsoft Learn: Platforms and policy types supported by assignment filters](https://learn.microsoft.com/en-us/intune/fundamentals/filters/ref-supported-workloads)
+- [Microsoft Learn: Loopback processing of Group Policy](https://learn.microsoft.com/en-us/troubleshoot/windows-server/group-policy/loopback-processing-of-group-policy)
+- [Microsoft Learn: Group Policy processing for Windows](https://learn.microsoft.com/en-us/windows-server/identity/ad-ds/manage/group-policy/group-policy-processing)
