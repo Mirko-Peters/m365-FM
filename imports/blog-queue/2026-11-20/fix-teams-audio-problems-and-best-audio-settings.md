@@ -20,7 +20,7 @@ faq:
   - q: "What is the difference between Background noise only and Voice isolation?"
     a: "The Microsoft Support audio settings page describes Background noise only as suppressing surrounding noise and Voice isolation as suppressing other voices so others hear only you. Voice isolation requires a voice profile if you are not using a headset. A separate Microsoft page describes only a single noise suppression toggle on desktop, so the options you see depend on your Teams version."
   - q: "Should I use high fidelity music mode in meetings?"
-    a: "Only for music. Microsoft says the mode is meant for music rather than speech, recommends turning it off for regular calls to save bandwidth and reduce background noise, and notes it is not available in live events or with spatial audio. It does not switch off noise suppression or echo cancellation for you."
+    a: "Only for music. Microsoft says the mode is meant for music rather than speech, recommends turning it off for regular calls to save bandwidth and reduce background noise, and notes it is not available in live events or with spatial audio. The page advises turning off noise suppression and echo cancellation for the best listening experience, and it does not say the mode does this for you."
   - q: "Where can I test my speaker and microphone before a meeting?"
     a: "Go to Settings and more > Settings > Devices, choose your devices under Audio settings and select Make a test call. Microsoft says the test call is available in English only and not on Teams for the web."
 ---
@@ -47,7 +47,7 @@ Some settings may be unavailable because of the organizer's or IT admin's polici
 
 ### Before and during a meeting
 
-On the pre-join screen you choose an audio source: **Computer audio**, **Phone audio**, **Room audio** or **Don't use audio**. With computer audio selected, the audio settings icon opens more settings, and changes apply when you join. During a meeting, select the dropdown arrow next to **Mic**, then **More audio settings**. Changes take effect immediately.
+On the pre-join screen you choose an audio source: **Computer audio**, **Phone audio**, **Room audio** or **Don't use audio**. The page does not describe the pre-join settings icon in more detail. During a meeting, select the dropdown arrow next to **Mic**, then **More audio settings**. Changes take effect immediately.
 
 ## Noise suppression: what the pages say
 
@@ -65,10 +65,8 @@ To turn it on, open the dropdown beside **Mic**, choose more audio settings and 
 - Audio is sampled at 32 kHz and encoded at up to 128 kbps when bandwidth allows, dropping to as low as 48 kbps on weak connections.
 - It is not available during Teams live events or when spatial audio is in use.
 - It is meant for music, not speech. Turn it off for regular calls.
-- It does not change noise suppression or echo cancellation. For the best listening experience, turn those off yourself.
+- The page advises turning off noise suppression and echo cancellation for the best listening experience. It does not say that the mode changes them by itself.
 - Microsoft recommends high-quality external audio devices and advises against Bluetooth devices.
-
-For sharing sound from a window, select **Share**, turn on **Include sound** and choose the window.
 
 ## Fix a microphone that does not work
 
@@ -77,15 +75,15 @@ Follow Microsoft's order and stop when it works.
 1. **Update.** Install the latest Teams and the latest Windows or macOS update.
 2. **Unmute.** Check the **Mic** icon in meeting controls.
 3. **Check the hardware.** Make sure the headset boom is not in the mute position and an external microphone's mute button is off.
-4. **Check privacy permissions.** On Windows, open **Privacy & security** > **Microphone** and turn on **Microphone access**, **Let apps access your microphone**, **Microsoft Teams (work or school)** and **Let desktop apps access your microphone**. If they were already on, turn them off and on again. On macOS, check **System Preferences** > **Security & Privacy** > **Microphone**. On iOS, check **Settings** > **Privacy** > **Microphone**. For Teams on the web, allow microphone access in the browser's site permissions.
+4. **Check privacy permissions.** On Windows, open **Privacy & security** > **App permissions** > **Microphone** and turn on **Microphone access**, **Let apps access your microphone**, **Microsoft Teams (work or school)** and **Let desktop apps access your microphone**. Then close all apps and restart. On macOS, check **System Preferences** > **Security & Privacy** > **Microphone** and make sure Microsoft Teams is selected, then close all apps and restart. On iOS, turn on the Microsoft Teams toggle under **Settings** > **Privacy** > **Microphone**, then close all apps and restart. For Teams on the web, allow microphone access in the browser's site permissions.
 5. **Select the microphone.** Use the **Microphone** dropdown in **Devices** or during the meeting. If it is missing, unplug and replug it. For Bluetooth, make sure it is charged and not connected to another device.
-6. **Check Windows sound settings.** Under **System** > **Sound**, pick the input device and make sure it is not muted. Under **Advanced** > **More sound settings**, open the **Recording** tab and enable the microphone.
-7. **Remote Desktop.** Under **Local Resources** > **Remote audio** > **Settings**, set recording to **Record from this computer** and playback to **Play on this computer**.
-8. **Last resort.** If Teams shows **Call me back**, enter your number and let Teams call your phone. Audio comes from the phone while sharing stays on the desktop.
+6. **Check Windows sound settings.** Under **System** > **Sound** > **Input**, select your microphone and make sure its volume is not muted. If needed, open **More sound settings**, right-click the microphone on the **Recording** tab and select **Enable**.
+7. **Remote Desktop.** Under **Local Resources** > **Remote audio** > **Settings**, set recording to **Record from this computer**.
+8. **Last resort.** If no microphone is detected, select **Call me back**, enter your phone number and select **Call me**. Your audio then comes from the phone.
 
 ## Fix a speaker that does not work
 
-Microsoft's speaker page follows a similar order. If Teams shows that your speaker is muted, select **Unmute**. Pick the speaker in **Audio settings** and run **Make a test call**. During a meeting, use the **Mic** dropdown, then **More actions** > **Audio settings** to confirm the speaker is selected and unmuted. Then check Windows **Sound settings**, where the speaker should appear under **Choose where to play sound** and the volume should not be muted. For Remote Desktop, set playback to **Play on this computer**.
+Microsoft's speaker page follows a similar order. If Teams shows that your speaker is muted, select **Unmute**. Pick the speaker in **Audio settings** and run **Make a test call**. During a meeting, use the **Mic** dropdown, then **More actions** > **Audio settings** to confirm the speaker is selected and unmuted. Then check Windows **Sound settings**, where you select your speaker under **Choose where to play sound**. If it is missing, select **Add device**. For Remote Desktop, set playback to **Play on this computer**.
 
 ## Test call limits
 
@@ -96,7 +94,7 @@ Microsoft's speaker page follows a similar order. If Teams shows that your speak
 - Choosing the correct device in Windows but not in Teams, or the other way around.
 - Leaving a Bluetooth headset connected to a second device.
 - Keeping high fidelity music mode on for speech calls.
-- Turning noise suppression off in a noisy room.
+- Turning noise suppression off in a noisy room (my own caution; Microsoft only suggests turning it off for high-fidelity microphones in quiet settings).
 - Assuming a policy is broken when an option is greyed out. It may be set by IT.
 
 ## Related
