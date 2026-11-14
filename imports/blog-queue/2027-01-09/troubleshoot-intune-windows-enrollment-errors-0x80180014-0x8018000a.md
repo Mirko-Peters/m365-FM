@@ -10,7 +10,7 @@ keypoints:
   - "0x80180014 means Windows MDM enrollment is disabled in the tenant. In Enrollment restrictions, set Windows (MDM) to Allow in the device type restriction."
   - "8018000a means a different user already enrolled the device or joined it to Entra ID. Remove that work account under Settings > Accounts > Work Access and enroll again."
   - "0x8007064c, The machine is already enrolled, can come from a previous enrollment, a cloned image or a leftover certificate from the previous account."
-  - "Event 76 Auto MDM Enroll Failed can come from MDM user scope set to None. Set it to All or Some under Mobility (MDM and MAM)."
+  - "Event 76 Auto MDM Enroll Failed (Group Policy auto-enrollment) can come from MDM user scope None or a non-routable UPN. Set scope to All or Some under Mobility (MDM and MAM)."
   - "The article contains no device limit content, and it has several inconsistencies in codes and paths that the guide notes."
 faq:
   - q: "What causes 0x80180014?"
@@ -25,7 +25,7 @@ faq:
     a: "Go to Microsoft Entra ID > Mobility (MDM and MAM) > Microsoft Intune. Set MDM user scope to All, or Some with groups, and set MAM user scope to None."
 ---
 
-Two codes cover many failed Windows enrollments: 0x80180014, where the tenant does not allow Windows MDM enrollment, and 8018000a, where the device is already enrolled by another account. This guide follows the Microsoft Learn troubleshooting article for Windows enrollment errors in Intune, last updated 2026-03-30.
+This guide starts with two codes: 0x80180014, where the tenant does not allow Windows MDM enrollment, and 8018000a, where the device is already enrolled by another account. It follows the Microsoft Learn article Troubleshooting Windows device enrollment problems in Intune (ms.date 2026-03-30).
 
 ## Error 0x80180014
 
@@ -54,36 +54,40 @@ The message is that the machine is already enrolled, and it appears in the enrol
 
 ## MDM user scope
 
-Event 76 in Task Scheduler under **Microsoft** > **Windows** > **EnterpriseMgmt** can read Auto MDM Enroll: Failed with Win32 error 0x8018002b. The cause is MDM user scope set to None, or a UPN with an unverified or non-routable domain such as `.local`. The fix:
+When you try to enroll a Windows 10 device automatically by using Group Policy, the last run result of the enrollment task in Task Scheduler under **Microsoft** > **Windows** > **EnterpriseMgmt** can be Event 76 Auto MDM Enroll: Failed with Win32 error 0x8018002b. The cause is MDM user scope set to None, or a UPN with an unverified or non-routable domain such as `.local`. If MDM user scope is the cause, the fix is:
 
 1. Go to **Microsoft Entra ID** > **Mobility (MDM and MAM)** > **Microsoft Intune**.
 2. Set **MDM user scope** to **All**, or to **Some** and select groups.
 3. Set **MAM user scope** to **None**.
 
-The page also prints the code as 0x80180002b in one place. Treat the value 0x8018002b as the likely one.
+If the UPN is the cause, the page says to select a valid UPN suffix such as contoso.com for the affected users in Active Directory Users and Computers (Account tab), then wait for the next synchronization or force a delta sync with `Import-Module ADSync` and `Start-ADSyncSyncCycle -PolicyType Delta`. It also mentions Alternate Login ID as another solution and advises reading that article first.
+
+The page also prints the code as 0x80180002b in the Event Viewer sample. Treat the value 0x8018002b as the likely one.
 
 ## Other documented errors
 
 | Error | Cause | Fix |
 | --- | --- | --- |
 | 0x80cf4017 | Client software is out of date | Admin > Client Software Download |
-| 80180026 | Hybrid join with MDM auto-enrollment and the Intune PC agent installed | Set MDM user scope to None, or uninstall the Intune PC agent |
+| 80180026 | Joining a Windows 10 computer to Microsoft Entra ID while MDM automatic enrollment is enabled and the Intune PC agent is installed | Set MDM user scope to None, or uninstall the Intune PC agent |
 | Account not allowed on this phone | User lacks a valid Intune license | Assign an Intune license |
-| Autopilot profile error | Device name template does not meet requirements | Use `%SERIAL%` in uppercase, up to 15 characters, not all numbers, no spaces |
-| 80070774 | Assign user used in hybrid Autopilot, or the Autopilot object's Entra device was deleted | Unassign the user, or delete and reimport the hash |
+| Autopilot profile error | Device name template does not meet requirements, for example lowercase %serial% | Use `%SERIAL%` in uppercase (or `%RAND:n%`); names have up to 15 characters (letters, numbers, hyphens), are not all numbers and have no spaces |
+| 80070774 | Most common: Assign user is configured in a hybrid Autopilot profile. Also possible: the Autopilot object's Entra device was deleted, or the ODJ connector lacks permissions on the OU (Event ID 30132) | Unassign the user and check the hybrid profile; delete and reimport the hash if the device object was deleted; fix the Delegate Control permissions on the OU for the connector computer |
 | 0x80180022 | Windows Home edition | Upgrade to Pro or higher |
-| 0x801C03EA | TPM 2.0 present but not upgraded, or two groups with different Autopilot profiles | Upgrade TPM, remove the duplicate profile assignment |
-| 0x800705b4 | No physical TPM 2.0, or unsupported Windows version | Meet TPM 2.0 and build requirements |
+| 0x801C03EA | TPM chip supports 2.0 but is not yet upgraded | Upgrade the TPM to 2.0. If the issue persists, check whether the device is in two groups with different Autopilot profiles and remove the assignment of the profile that should not apply |
+| 0x800705b4 | Self-deploying mode without a physical TPM 2.0 (virtual TPM or TPM 1.2 do not work), or an unsupported build (Windows 10 1709 or later; 1809 or later with hybrid join) | Meet the TPM 2.0 and build requirements |
+
+The page has further sections that this guide does not cover: the MDM terms of use endpoint, bulk enrollment setup failures, OOBEIDPS (network blocking the identity provider) and Enrollment Status Page timeouts.
 
 ## What the page does not cover
 
 - Device limits. The article has no device limit content.
 - A consistent code format. Some headings use 80070774 and the body uses 0x80070774.
-- Duplicate entries. The two 0x80cf4017 rows share the same cause and steps.
+- Duplicate entries. The page has two sections for 0x80cf4017 with the same cause and steps.
 
 ## A troubleshooting order
 
-This order is practical advice built on the page.
+This order is my advice, built on the page.
 
 1. Read the exact code and message on the device.
 2. For 0x80180014, check the enrollment restriction for Windows (MDM).
@@ -91,7 +95,7 @@ This order is practical advice built on the page.
 4. If the user scope may be wrong, read Event 76 and check MDM user scope.
 5. Check the license and the device edition.
 
-## Typical mistakes
+## Typical mistakes (my advice)
 
 - Editing the registry without a backup.
 - Enrolling again before removing the previous work account.
@@ -106,4 +110,4 @@ This order is practical advice built on the page.
 
 ## Sources
 
-- [Troubleshoot Windows device enrollment problems in Intune (Microsoft Learn)](https://learn.microsoft.com/troubleshoot/mem/intune/device-enrollment/troubleshoot-windows-enrollment-errors)
+- [Troubleshooting Windows device enrollment problems in Intune (Microsoft Learn)](https://learn.microsoft.com/troubleshoot/mem/intune/device-enrollment/troubleshoot-windows-enrollment-errors)
