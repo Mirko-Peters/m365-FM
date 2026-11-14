@@ -25,7 +25,7 @@ faq:
     a: "Learn documents session affinity for Chat Completions as a preview. With a session ID and the Foundry-Features header set to ModelRouterControls=V1Preview, the router tries the same eligible model first. It is best-effort and the association expires after 30 minutes without a successful request."
 ---
 
-Deploy model router as a single model in Microsoft Foundry, pick a routing mode, optionally limit it to a subset of models, and then call the deployment name like any chat model. The router chooses the underlying model per prompt. This guide follows the Microsoft Learn how-to for model router as it read on the research date. The list of supported models changes often, so check the live page before you rely on a specific model.
+Deploy model router as a single model in Microsoft Foundry, pick a routing mode, optionally limit it to a subset of models, and then call the deployment name like any chat model. The router chooses the underlying model per prompt. This guide follows the Microsoft Learn how-to for model router as it read on the research date. The list of supported models can change, so check the live page before you rely on a specific model.
 
 ## What it is
 
@@ -81,7 +81,7 @@ You can also connect a router deployment as the base model of a Foundry agent by
 
 ## Session affinity (preview)
 
-Chat Completions is stateless, so the router evaluates each request independently by default. Learn describes a preview that asks the router to try the same eligible model first for related turns. You set the header `Foundry-Features: ModelRouterControls=V1Preview` and send an application-owned session ID, either in `routing_config.session_affinity` or the `x-ms-session-id` header. The ID must be 1 to 256 characters. The association expires after 30 minutes without a successful request. Learn says this is best-effort, does not guarantee a prompt-cache hit, and yields to policy, safety, capability, quota and availability requirements.
+Chat Completions is stateless, so the router evaluates each request independently by default. Learn describes a preview that asks the router to try the same eligible model first for related turns. You set the header `Foundry-Features: ModelRouterControls=V1Preview` and send an application-owned session ID, either in `routing_config.session_affinity` or the `x-ms-session-id` header. The ID must be 1 to 256 Unicode code points and include at least one non-whitespace character. The association expires after 30 minutes without a successful request. Learn says this is best-effort, does not guarantee a prompt-cache hit, and yields to policy, safety, capability, quota and availability requirements.
 
 ## Monitor cost and performance
 
