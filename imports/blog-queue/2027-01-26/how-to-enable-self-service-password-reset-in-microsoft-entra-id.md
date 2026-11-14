@@ -44,7 +44,7 @@ You need:
 
 The tutorial carries a notice. In March 2023 Microsoft announced the deprecation of managing authentication methods in the legacy multifactor authentication and SSPR policies. Beginning September 30, 2025, authentication methods cannot be managed in these legacy policies. Microsoft recommended using the manual migration control to move to the Authentication methods policy by that date.
 
-For you, that date has passed. If your tenant still shows old settings, look at the migration status first. This site has a separate article on migrating the legacy settings.
+That date has passed. My advice: if your tenant still shows old settings, check the migration status of your authentication methods first.
 
 ## Step 1: Enable SSPR
 
@@ -106,7 +106,7 @@ This is my suggestion, not part of the tutorial:
 1. Start with a pilot group of users who can give feedback on the registration prompt.
 2. Write a short help page for users that shows the two addresses, aka.ms/ssprsetup and aka.ms/sspr.
 3. Decide the helpdesk link text before you enable the setting, so the first users do not see a blank target.
-4. If you synchronize from on-premises, plan password writeback with SSPR. This site has an article on writeback failures.
+4. If you synchronize from on-premises, plan password writeback together with SSPR.
 5. Review the registration numbers a few weeks after the start, before you move the setting to All.
 
 ## Related
