@@ -8,7 +8,7 @@ date: 2027-01-04
 topics: [entra-private-access, global-secure-access]
 keypoints:
   - "Configuring Quick Access needs the Global Secure Access Administrator and Application Administrator roles. The connector minimum version is 1.5.3417.0."
-  - "Path: Global Secure Access > Applications > Quick access. Create the app with a connector group first, then add application segments."
+  - "Path: Global Secure Access > Applications > Quick access. Create the app with a connector group. Application segments can be added at the same time or afterward."
   - "A Quick Access app holds up to 500 application segments. Destination types are IP address, FQDN including wildcard, CIDR range and IP-to-IP range."
   - "Users must be assigned directly or through a group. Nested groups are not supported."
   - "Learn calls Quick Access a transition state. After it replaces your VPN, move to per-app access for granular controls."
@@ -103,9 +103,9 @@ The page lists no Global Secure Access client operating system or version requir
 
 ## Quick Access is a transition state
 
-Learn describes Quick Access as a transition state. After it replaces your VPN, configure per-app access for application segmentation and granular controls. Treat Quick Access as a first step, not the end state.
+Learn describes Quick Access as a transition state. After it replaces your VPN, configure per-app access for application segmentation and granular controls. My advice: treat Quick Access as a first step, not the end state.
 
-## Typical mistakes
+## Typical mistakes (my advice)
 
 - Using an old connector build below 1.5.3417.0.
 - Assigning a nested group and finding that users have no access.
@@ -122,4 +122,4 @@ Learn describes Quick Access as a transition state. After it replaces your VPN, 
 
 ## Sources
 
-- [Configure Quick Access for Global Secure Access (Microsoft Learn)](https://learn.microsoft.com/entra/global-secure-access/how-to-configure-quick-access)
+- [How to configure Quick Access for Global Secure Access (Microsoft Learn)](https://learn.microsoft.com/entra/global-secure-access/how-to-configure-quick-access)
