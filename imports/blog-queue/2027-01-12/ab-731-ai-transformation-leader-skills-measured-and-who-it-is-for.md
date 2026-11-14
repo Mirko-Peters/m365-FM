@@ -11,26 +11,26 @@ keypoints:
   - "Three areas: business value of generative AI 35-40%, benefits and capabilities of Microsoft AI apps and services 35-40%, implementation and adoption strategy 20-25%."
   - "Copilot Studio, Microsoft Graph, Researcher and Analyst, Foundry Tools and Copilot license types are named in the outline."
   - "Microsoft renamed Microsoft 365 Copilot to Microsoft Copilot. Some exam questions may still use the old name, which remains valid for the license."
-  - "A score of 700 or greater is required to pass. The exam page itself could not be read, so price and duration are not covered."
+  - "A score of 700 or greater is required to pass. The study guide gives no price or duration."
 faq:
   - q: "Who is AB-731 for?"
     a: "Business decision-makers at all levels who are responsible for guiding transformation and innovation within their teams or organizations. The guide says candidates are not expected to write any code."
   - q: "What are the skill areas and weights?"
     a: "Identify the business value of generative AI solutions 35-40%, identify benefits, capabilities and opportunities for Microsoft's AI apps and services 35-40%, identify an implementation and adoption strategy 20-25%."
   - q: "Which version does the guide show?"
-    a: "Skills measured as of July 22, 2026. The page says it was last updated on 2026-11-13, and it has no retirement note."
+    a: "Skills measured as of July 22, 2026. The page metadata lists an update on 2026-11-14, and it has no retirement note."
   - q: "How do I handle the Copilot product name?"
     a: "Microsoft Learn says Microsoft 365 Copilot was renamed Microsoft Copilot. Some exam questions may use the old name. Unless a question refers to licensing, read it as Microsoft Copilot."
   - q: "What score do I need?"
     a: "A score of 700 or greater is required to pass."
 ---
 
-AB-731 is a business-oriented AI exam. It tests whether a leader can recognize AI opportunities, choose among Microsoft's AI tools, and plan adoption. This guide summarizes the skills outline from the Microsoft study guide. It contains no exam questions. The exam page itself could not be read, so this guide has no price, duration or retake information.
+AB-731 is a business-oriented AI exam. It tests whether a leader can recognize AI opportunities, choose among Microsoft's AI tools, and plan adoption. This guide summarizes the skills outline from the Microsoft study guide. It contains no exam questions. The study guide gives no price, duration or retake information, and this guide does not use the exam page.
 
 ## About the guide
 
 - Skills measured as of July 22, 2026.
-- Page footer: last updated on 2026-11-13.
+- The page metadata lists an update on 2026-11-14.
 - No retirement note appears on the page.
 - The audience profile: candidates understand how to recognize opportunities for AI transformation, identify the right AI tools and resources, plan for AI adoption, optimize business processes and drive innovation with Microsoft 365 Copilot and Foundry Tools. The certification is designed for business decision-makers at all levels. They are not expected to write any code. They need experience leading adoption or change management and familiarity with Microsoft 365 services, Microsoft Foundry and general AI capabilities.
 
@@ -63,7 +63,7 @@ Microsoft updated the product name Microsoft 365 Copilot to Microsoft Copilot. D
 
 ## Change log
 
-Compared with the version before July 22, 2026, the log marks the audience profile, Foundry Tools and plan for AI adoption as Minor. The two group-level entries are No change.
+Compared with the version before July 22, 2026, the log marks the audience profile, Foundry Tools and plan for AI adoption as Minor. The two group-level entries it lists are No change, and the table lists no other rows.
 
 ## Scoring and practice
 
@@ -71,7 +71,7 @@ A score of 700 or greater is required to pass. Most questions cover generally av
 
 ## A study plan
 
-This plan is practical advice built on the weights.
+This plan is my advice, built on the weights.
 
 1. Give most time to the first two areas, since they carry 70 to 80 percent together.
 2. For each Copilot capability in the outline, write one business use case in your own words.
@@ -79,7 +79,7 @@ This plan is practical advice built on the weights.
 4. Prepare a short adoption plan with a team, champions and barriers.
 5. Take the practice assessment and review weak areas.
 
-## Typical mistakes
+## Typical mistakes (my advice)
 
 - Studying technical implementation details that a non-coding leader exam does not ask for.
 - Ignoring license types and subscription models in the adoption area.
