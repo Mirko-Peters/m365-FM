@@ -66,11 +66,13 @@ do {
 } while ($uri)
 ```
 
-The code is an illustration of the documented pattern, not a tested production script. Add error handling, retries and logging before using it.
+The code is an illustration of the documented pattern, not a tested production script. Add error handling, retries and logging before using it. The Learn page also shows the SDK cmdlet `Get-MgUserDelta`, for example with `-Property "displayName,jobTitle,mobilePhone"`, as an alternative to raw requests.
+
+If you only care about future changes, Learn describes a "sync from now" option for Microsoft Entra resources such as users. Append `$deltatoken=latest` to the delta function, and the response contains an `@odata.deltaLink` and no resource data.
 
 ## Step 2: Choose properties once
 
-Learn is clear on two rules. A query parameter must be in the initial request, and later requests should reuse the returned URL because the token encodes the parameters. If you want different properties, start a new full sync.
+Learn is clear on two rules. A query parameter must be in the initial request, and later requests should reuse the returned URL because the token encodes the parameters. The overview adds that `$select` is supported on some Microsoft Entra resources so you can change the properties tracked for an existing deltaLink, with the caveat that `$select` and `$skiptoken` together are not supported. This article does not rely on that, so if you want different properties the safe route is a new full sync.
 
 `$select` has a trap. Learn says that if a property you did not select changes, the user does not appear in the delta response. Select every property your downstream system cares about. The `id` is always returned.
 
@@ -96,6 +98,7 @@ Learn lists these limits for delta queries:
 - **Duplicates and order:** a single entity can appear multiple times, and you should not assume a sequence.
 - **Delays:** expect varying delay between a change and its appearance. Retry later if a change is missing.
 - **Properties:** only properties stored in the main data store trigger changes, and for users, changes to `licenseAssignmentStates` are not tracked.
+- **Directory extensions:** when one directory extension property changes, all directory extension properties of the same data type are returned, changed or not.
 - **Filters:** for users, `$filter` supports only `id eq {value}`, up to 50 objects. `$top`, `$orderby` and `$expand` are not supported on user and group delta.
 - **Tenants:** change tracking is not supported in external tenants of Microsoft Entra External ID or in Azure AD B2C tenants.
 
@@ -121,5 +124,5 @@ Delta query is pull. Change notifications are push. Learn describes using a subs
 
 ## Sources
 
-- [Use delta query to track changes in Microsoft Graph data](https://learn.microsoft.com/graph/delta-query-overview)
+- [Use delta query to track changes in Microsoft Graph data](https://learn.microsoft.com/en-us/graph/delta-query-overview)
 - [user: delta](https://learn.microsoft.com/en-us/graph/api/user-delta)
