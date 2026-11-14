@@ -75,7 +75,7 @@ The minimal entry from Microsoft Learn uses only the URL and type:
 }
 ```
 
-To pin a tenant, environment, company or configuration, add a `headers` object with `TenantId`, `EnvironmentName`, `Company` and `ConfigurationName`. Only `ConfigurationName` is always optional. VS Code with GitHub Copilot can omit all four. GitHub Copilot CLI can omit `TenantId` and `Company`. Copilot Studio does not require `TenantId` but needs `EnvironmentName` and `Company`. Non-ASCII values must be Base64-encoded in the form `=?base64?<value>?=`.
+To pin a tenant, environment, company or configuration, add a `headers` object with `TenantId`, `EnvironmentName`, `Company` and `ConfigurationName`. Only `ConfigurationName` is always optional. VS Code with GitHub Copilot can omit all four. The overview page says GitHub Copilot CLI can omit `TenantId`, `EnvironmentName` and `Company` as well, while the VS Code page gives no rule for Copilot CLI. For Copilot Studio the overview page says all three are required and that headerless support is coming, and the configuration page names `EnvironmentName` and `Company`, so supply all three. Non-ASCII values must be Base64-encoded in the form `=?base64?<value>?=`.
 
 ## Authentication and security
 
