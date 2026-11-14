@@ -97,7 +97,7 @@ Before a flight or a train ride, mark the folders you need as **Always keep on t
 
 ## Sync a SharePoint library
 
-For work files in a SharePoint site, there are two ways. Microsoft's page [Sync SharePoint files and folders](https://support.microsoft.com/en-us/onedrive/sync/sharepoint-training/sync-sharepoint-files-and-folders) describes the Sync button:
+For work files in a SharePoint site, there are two ways. Microsoft's page [Sync SharePoint files and folders](https://support.microsoft.com/en-us/office/sync-sharepoint-files-and-folders-87a96948-4dd7-43e4-aca1-53f3e18bea9b) describes the Sync button:
 
 1. In your browser, open the SharePoint site and go to the library.
 2. Select the ellipsis (...) and choose **Sync**.
@@ -128,3 +128,11 @@ If a library is big, sync only the folders you work in, or use the web. The Shar
 ## Next step
 
 Open OneDrive **Settings**, check **Choose folders** and clear one large folder you don't need on this PC. Then right-click a project folder and choose **Always keep on this device**. That shows you in two minutes how to sync OneDrive the way you actually work.
+
+## Sources
+
+- [Sync your computer's files and folders with OneDrive (Microsoft Support)](https://support.microsoft.com/onedrive/sync-your-computer-s-files-and-folders-with-onedrive)
+- [Choose which OneDrive folders you want to sync (Microsoft Support)](https://support.microsoft.com/onedrive/choose-which-onedrive-folders-you-want-to-sync-on-windows-or-macos)
+- [Back up your folders with OneDrive (Microsoft Support)](https://support.microsoft.com/office/back-up-your-folders-with-onedrive-d61a7930-a6fb-4b95-b28a-6552e77c3057)
+- [Save disk space with OneDrive Files On-Demand for Windows (Microsoft Support)](https://support.microsoft.com/office/sync-files-with-onedrive-files-on-demand-62e8d748-7877-420f-b600-24b56562aa70)
+- [Sync SharePoint files and folders (Microsoft Support)](https://support.microsoft.com/office/sync-sharepoint-files-and-folders-87a96948-4dd7-43e4-aca1-53f3e18bea9b)
