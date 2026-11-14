@@ -11,7 +11,7 @@ keypoints:
   - "Simulation runs up to 15 days and keeps results for 30 days. Tune a noisy policy by copying it, changing the copy and simulating that version."
   - "Both the user and the device must be in the policy scope, so scope narrowly. Use audit, warn or block with override before hard blocks."
   - "Endpoint settings offer file path exclusions, restricted app groups, domain lists and a built-in false positive option in policy tips."
-  - "Advanced classification scanning adds exact data match and trainable classifiers, which are more precise than local-only detection."
+  - "Advanced classification scanning runs in the cloud and adds exact data match, trainable classifiers and named entities. It has size limits and does not support Paste to browser."
 faq:
   - q: "How do I test an Endpoint DLP policy before it blocks users?"
     a: "Microsoft Learn describes policy states. Keep it off while you design, then Run the policy in simulation mode, where no actions are enforced and events are audited. A further state adds policy tips for a pilot group. Only then choose Turn it on right away. The simulation page lists Devices among the supported locations."
@@ -22,7 +22,7 @@ faq:
   - q: "Which settings exclude noise from Endpoint DLP?"
     a: "The Endpoint DLP settings page lists file path exclusions for Windows and Mac, restricted apps and app groups, browser and domain restrictions, network share exclusions, and the setting Always audit file activity for devices. Learn warns that files in excluded paths are not audited at all."
   - q: "Does turning off Always audit file activity change which rules match?"
-    a: "No. Learn says turning it off audits Office, PDF and CSV activity only when a device is in an active policy. That reduces audit noise but does not change whether DLP rules match."
+    a: "Learn says that by default onboarded devices are audited for Office, PDF and CSV activity, and that turning the setting off audits this activity only when a device is in an active policy. The pages read say nothing about whether this changes which DLP rules match, so do not rely on it as a way to reduce false positives in enforcement."
 ---
 
 False positives in Endpoint DLP usually come from rules that are too broad, scopes that include everyone, and actions that block too early. The safest route is to design the policy first, test it in simulation mode, scope it by user and device, and start with audit, warn or block-with-override actions before you enforce hard blocks.
@@ -62,24 +62,24 @@ In the Microsoft Purview portal, open **Data loss prevention** > **Overview** > 
 
 | Setting | How it reduces noise | Caution |
 |---|---|---|
-| Advanced classification scanning | Adds exact data match, trainable classifiers and named entities, which are more precise | Bandwidth limits per device, 64 MB text and 50 MB image limits, not for Paste to browser |
+| Advanced classification scanning | Runs classification in the cloud, so exact data match, trainable classifiers, credential classifiers and named entities can be used in policies | If a bandwidth limit is set and exceeded, DLP stops sending content to the cloud. 64 MB text limit, 50 MB image limit with OCR, not for Paste to browser |
 | File path exclusions | Skip paths such as `C:\Temp\` | Files in excluded paths are not audited |
-| Restricted app groups | Allow trusted apps without action on clipboard, USB, network drive or print | Group settings override the restricted apps list |
+| Restricted app groups | App groups carry their own settings for restricted apps | Group settings override the restricted apps list when they are in the same rule |
 | Service domains | Allow or block uploads per domain | Applies to Edge, or Chrome and Firefox with the Purview extension |
-| Always audit file activity for devices | Turn off to audit only devices in an active policy | Does not change rule matching |
-| Auto-quarantine | Stops repeated notifications for sync apps such as onedrive.exe | Moves items to an admin-defined folder |
+| Always audit file activity for devices | Turn off to audit Office, PDF and CSV activity only for devices in an active policy | Reduces audit coverage. The pages read do not say it changes rule matching |
+| Auto-quarantine | Triggers when a restricted app tries to access a DLP-protected sensitive item | Moves the item to an admin-configured folder |
 
 Default Windows path exclusions already cover the AppData Roaming and Local folders of each user.
 
 ## Step 6: Give users a way to say it is wrong
 
-With **Block with override**, the business justification options can include **Show false positive option**, with the default text "The information in these files is not sensitive". Review these answers in the alerts. If many users report the same pattern, tune the rule or exclusion instead of leaving the noise.
+With **Block with override**, the business justification options can include **Show false positive option**, with the default text "The information in these files is not sensitive". Learn allows up to five customized options. Reviewing these answers in the alerts and tuning the rule or exclusion when many users report the same pattern is this article's own suggestion.
 
 ## Step 7: Review and repeat
 
-Use Activity explorer and alerts to find the rules that match most often. Narrow the sensitive information types or raise the threshold on those rules, test in a simulated copy, and promote the copy. The pages I read do not specify a review interval, so set one with your compliance team.
+Use Activity explorer and alerts to find the rules that match most often. Narrowing the sensitive information types or raising the threshold on those rules is this article's own suggestion. Test such changes in a simulated copy, which is the approach Learn describes, and promote the copy. The pages I read do not specify a review interval, so set one with your compliance team.
 
-## Common mistakes
+## Common mistakes (own reading of the pages above)
 
 - Enforcing on all devices and users on day one.
 - Using block when block with override or warn would do.
