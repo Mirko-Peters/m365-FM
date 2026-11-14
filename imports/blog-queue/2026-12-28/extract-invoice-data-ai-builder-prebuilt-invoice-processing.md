@@ -36,7 +36,7 @@ For best results, provide one clear photo or scan per invoice.
 - Images: 50 x 50 pixels minimum, 10,000 x 10,000 pixels maximum.
 - PDFs: at most 17 x 17 inches, and only the first 2,000 pages are processed.
 
-Learn lists 37 supported language and region entries, among them English (several regions), French, German, Spanish, Italian, Dutch, Japanese, Korean and Chinese variants.
+Learn lists 36 supported language and region entries, among them English (several regions), French, German, Spanish, Italian, Dutch, Japanese, Korean and Chinese variants.
 
 ## What the model extracts
 
@@ -49,7 +49,7 @@ The page's descriptions for PaidInFourInstallements and Items both read List of 
 
 ## Confidence scores
 
-Most fields carry a confidence score. The page does not explain the score range, but its examples use a threshold of 0.65.
+The page's confidence table marks every field, and every sub-field of the lists, as having a confidence score. The page does not explain the score range, but its examples use a threshold of 0.65.
 
 ## Key-value pairs
 
@@ -100,4 +100,4 @@ The page contains no information about licensing, AI Builder credits or billing.
 
 ## Sources
 
-- [Invoice processing prebuilt AI model](https://learn.microsoft.com/ai-builder/prebuilt-invoice-processing)
+- [Invoice processing prebuilt AI model (Microsoft Learn)](https://learn.microsoft.com/ai-builder/prebuilt-invoice-processing)
