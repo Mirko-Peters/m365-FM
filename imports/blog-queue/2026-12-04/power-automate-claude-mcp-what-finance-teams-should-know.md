@@ -51,9 +51,9 @@ The same thread described calling the Anthropic API from a flow with an HTTP act
 |---|---|
 | Who may connect a client? | The Dataverse MCP server needs admin enablement per environment, with allowed clients |
 | Which operations can run? | Tools are listed, and deletes need explicit approval. Learn's training path mentions allow-listed tools |
-| Whose credentials run the flow? | Local plugin: your Azure CLI session. Copilot Studio triggers: the maker's credentials only |
+| Whose credentials run the flow? | Local plugin: it signs in through Azure CLI (`az login`). The pages read do not say whose credentials Copilot Studio flows use |
 | Who owns production flows? | Learn's resilient flows module recommends a Microsoft Entra ID service principal for ownership instead of individual user accounts |
-| What does it cost? | Dataverse MCP tools used by agents outside Copilot Studio are charged. Autonomous agent flow runs are charged even for Microsoft 365 Copilot licensed users |
+| What does it cost? | Dataverse MCP tools used by agents outside Copilot Studio are charged. Agent flow actions consume Copilot Studio capacity. When prepaid capacity runs out, new runs are blocked, but Microsoft 365 Copilot licensed users and test runs are not affected |
 | How do data policies apply? | In Copilot Studio, a data policy on connectors also governs the MCP server and its tools |
 
 ## Human review in the flow
@@ -76,7 +76,7 @@ Vendor and community posts often blur three different things: Claude calling Pow
 
 - Assuming an official Power Automate MCP server exists because plugins and community servers do.
 - Giving a coding agent an interactive credential and leaving it to run flows.
-- Forgetting that unattended runs and non-Copilot-Studio agents are billed.
+- Forgetting that agent flow actions consume Copilot Studio capacity and that Dataverse MCP tools used by agents built outside Copilot Studio are charged.
 
 ## Related
 
