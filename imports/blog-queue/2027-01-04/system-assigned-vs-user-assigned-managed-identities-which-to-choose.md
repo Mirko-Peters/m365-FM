@@ -56,7 +56,7 @@ Choose system-assigned when each resource needs its own identity and unique perm
 
 ## How many role assignments you save
 
-Learn gives an example: four VMs accessing two storage accounts and a key vault need 8 role assignments with system-assigned identities, and 2 with one user-assigned identity. Security groups can reduce role assignments too, but Learn says that approach does not offer the same Resource Manager template capabilities as user-assigned identities.
+Learn gives an example: four VMs accessing two storage accounts need 8 role assignments with system-assigned identities, and 2 with one user-assigned identity. Security groups can reduce role assignments too, but Learn says that approach does not offer the same Resource Manager template capabilities as user-assigned identities.
 
 ## Limits and counting
 
@@ -69,13 +69,13 @@ The page gives no numeric limits and links to the managed identity limits and Az
 ## Caveats you should plan for
 
 1. **Orphaned role assignments.** Deleting an identity does not delete its role assignments. They show Identity not found in the portal. Learn gives a PowerShell snippet that finds assignments with object type Unknown and removes them.
-2. **Delayed authorization changes.** Managed identity tokens are cached per resource URI for about 24 hours, and you cannot force a refresh. Changes can take several hours. Human user tokens typically expire after 1 hour. As a mitigation, Learn suggests a user-assigned identity with permissions applied directly, instead of adding and removing identities from groups that hold permissions.
+2. **Delayed authorization changes.** Managed identity tokens are cached per resource URI for about 24 hours, and you cannot force a refresh. Changes can take several hours. For a human user, Learn gives a token lifetime of 1 hour by default. As a mitigation, Learn suggests a user-assigned identity with permissions applied directly, instead of adding and removing identities from groups that hold permissions.
 3. **Least privilege.** Extra permissions, such as Contributor on a subscription, increase the security blast radius.
 4. **Code execution exposure.** Anyone who can run code on a resource can use all of its identities. Learn's example is a user without storage access who can run code in a Logic App whose managed identity has read and write access to the storage account, and so can read and write it. Users who can assign identities can also attach them to other resources.
 
 The page does not discuss federation. It mentions that app roles can be assigned to managed identities.
 
-## A decision flow
+## A decision flow (my advice)
 
 1. Do several resources need identical permissions? Choose user-assigned.
 2. Will you create many short-lived resources? Choose user-assigned.
@@ -84,7 +84,7 @@ The page does not discuss federation. It mentions that app roles can be assigned
 5. Do you need logs that name the exact resource? Choose system-assigned.
 6. Could the choice mix? A resource can have both.
 
-## Typical mistakes
+## Typical mistakes (my advice)
 
 - Using system-assigned identities for hundreds of short-lived resources and hitting rate limits.
 - Sharing one user-assigned identity widely with broad permissions.
@@ -99,4 +99,4 @@ The page does not discuss federation. It mentions that app roles can be assigned
 
 ## Sources
 
-- [Managed identity best practice recommendations (Microsoft Learn)](https://learn.microsoft.com/entra/identity/managed-identities-azure-resources/managed-identity-best-practice-recommendations)
+- [Best practice recommendations for managed system identities (Microsoft Learn)](https://learn.microsoft.com/entra/identity/managed-identities-azure-resources/managed-identity-best-practice-recommendations)
