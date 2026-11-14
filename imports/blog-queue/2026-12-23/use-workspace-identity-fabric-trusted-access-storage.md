@@ -25,7 +25,7 @@ faq:
     a: "No. Learn says deleted identities can't be restored and deleting one breaks items that depend on it. Restoring a deleted workspace also does not restore its identity, so you create a new one."
 ---
 
-A workspace identity gives a Fabric workspace its own managed credential. Instead of storing keys or tokens, items in the workspace authenticate as that identity to services that support Microsoft Entra authentication. Its most common use is trusted workspace access to storage accounts that sit behind a firewall. This guide follows the Microsoft Learn article.
+A workspace identity gives a Fabric workspace its own managed credential. Instead of storing keys or tokens, items in the workspace authenticate as that identity to services that support Microsoft Entra authentication. One of its two documented uses is trusted workspace access to storage accounts that sit behind a firewall. This guide follows the Microsoft Learn article.
 
 ## What it is
 
@@ -106,4 +106,4 @@ Because deletion cannot be undone and breaks dependent items, check these first,
 
 ## Sources
 
-- [Workspace identity in Microsoft Fabric](https://learn.microsoft.com/fabric/security/workspace-identity)
+- [Workspace identity - Microsoft Fabric (Microsoft Learn)](https://learn.microsoft.com/fabric/security/workspace-identity)
