@@ -18,7 +18,7 @@ faq:
   - q: "What are tags in Teams and who can create them?"
     a: "Microsoft Support describes tags as a way to group team members by role, project, skill or schedule so one @mention notifies all of them. Team owners create custom tags and can allow members to create them too. Admins can set up automatic tags based on job title or department."
   - q: "What do I need for the Teams meeting recap with AI notes?"
-    a: "Microsoft Support states that intelligent recap requires either the Teams Premium add-on or a Microsoft Copilot license. The event must also be recorded or transcribed, and AI notes need a transcript of at least five minutes in a supported language."
+    a: "Microsoft Support states that intelligent recap requires either the Teams Premium add-on or a Microsoft Copilot license. The event must also be recorded or transcribed. For AI notes, Support says the event must be transcribed in English and run longer than five minutes."
   - q: "Can I reduce noise from busy channels without leaving them?"
     a: "Yes. Microsoft Support explains that you can hide a channel from your list through More options and Hide. Hidden channels still send notifications for @mentions, tags and replies to threads you follow. You can also favorite or pin channels, and reorder them with the Custom sort."
 ---
@@ -26,7 +26,7 @@ The most useful Teams collaboration habits are simple: put team topics in channe
 
 ## Separate channels from chats
 
-Microsoft describes channels as places for conversations about a specific topic, department or project, and chats as private conversations between you and one or more people. A group chat can include up to 250 people according to Microsoft Support. For topics that others may need to find later, use a channel post so the thread stays with the team. For quick questions to two or three people, a chat is enough.
+Microsoft Support describes chats as private or group conversations, and says a group chat can include up to 250 people. The pages read do not define channels in the same terms, so the following is editorial advice: for topics that others may need to find later, use a channel post so the thread stays with the team, and for quick questions to two or three people, a chat is enough.
 
 ## Reach people precisely
 
@@ -34,7 +34,7 @@ Microsoft describes channels as places for conversations about a specific topic,
 
 **Tags.** Microsoft Support describes three kinds: custom tags created by team owners (or by members if the owner allows it), shift-based tags from the Shifts app and automatic tags based on job title or department that an IT admin sets up. To create a custom tag, hover over the team, select **More options**, choose **Manage tags**, then name the tag, add a description and assign people. Use a tag in a channel by typing @ and the tag name. To see mentions of your tags, select **Tag mentions** under Quick views.
 
-**Email to a channel.** Select **More options**, then **Get email address**, and copy it. Anyone can paste it into a message and channel members receive it.
+**Email to a channel.** Select **More options**, then **Get email address**, and copy it. Paste it into the address field of a new email, and channel members receive the email.
 
 ## Work in one live document
 
@@ -60,16 +60,16 @@ Large teams create many channels. Microsoft Support documents these controls:
 Microsoft's Teams blog on hybrid meetings offers these fundamentals:
 
 - Start meetings five minutes past the hour or half hour so people can move between rooms.
-- Use the meeting chat, collaborative notes and a whiteboard to gather agenda items beforehand, and add files to the meeting tab.
+- Prepare with pre-meeting tools such as collaborative notes, a whiteboard and the meeting chat.
 - Start the online meeting as soon as in-room participants arrive. People in the room join on their own devices with video on and audio muted.
 - Use raise hand, reactions and polls so remote participants take part.
 - Teams Rooms users should connect to room audio as they enter to avoid audio problems.
 
-The same post lists Teams Premium features such as meeting templates, live translation for captions and intelligent recap. It does not state license requirements for every other feature it mentions, so check your own tenant.
+The same post marks Teams Premium features such as meeting templates, live translated captions and AI recap. Check your own tenant for license requirements.
 
 ## Follow up in the meeting chat
 
-The Teams blog advises that the meeting chat stays active after the meeting. Send a same-day follow-up with links to the recording, notes and files and tag people on their action items. For recurring work, a meeting series keeps one chat history and one place for materials.
+The Teams blog suggests sending a follow-up the same day with links to the recording and notes. For recurring work, it suggests scheduling a recurring series so the chat history and materials stay in one place.
 
 The Teams recap collects recording, transcript, shared files, notes, agenda and follow-up tasks. Microsoft Support lists requirements: the event must be recorded or transcribed, and intelligent recap requires the Teams Premium add-on or a Microsoft Copilot license. Recaps are not available for ad-hoc events, and only invited people in your organization can see them.
 
@@ -95,5 +95,5 @@ The Teams recap collects recording, transcript, shared files, notes, agenda and 
 - [Microsoft Support: Show, hide, or favorite a channel in Microsoft Teams](https://support.microsoft.com/office/91a37043-acea-49b0-9dfc-aec37b2e92b8)
 - [Microsoft Support: Reorder the chat and channels list in Microsoft Teams](https://support.microsoft.com/en-us/office/reorder-the-chat-and-channels-list-in-microsoft-teams-964d8358-53c3-4200-8cb1-5e9c5091031e)
 - [Microsoft Support: Recap in Microsoft Teams](https://support.microsoft.com/en-US/teams/meetings/recap-in-microsoft-teams)
-- [Microsoft Support: Collaborate in Teams (chat basics)](https://support.microsoft.com/en-in/office/31e38b35-96ab-447a-acb2-97bb5c0716c0)
+- [Microsoft Support: Collaborate in Teams (chat basics, group chat size)](https://support.microsoft.com/en-in/office/31e38b35-96ab-447a-acb2-97bb5c0716c0)
 - [Microsoft Teams blog: From good to great, get the most out of your hybrid meeting](https://techcommunity.microsoft.com/blog/microsoftteamsblog/from-good-to-great-get-the-most-out-of-your-hybrid-meeting/3835872)
