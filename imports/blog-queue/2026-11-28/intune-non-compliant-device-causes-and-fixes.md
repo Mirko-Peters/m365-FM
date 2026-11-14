@@ -10,8 +10,8 @@ keypoints:
   - "Start at Devices > Compliance > Monitor, open the policy and use Per-setting status to see which setting fails. The Policy device status report lists the devices."
   - "Compliant, In-grace period, Not evaluated and Not compliant mean different things. Not evaluated is the initial state of newly enrolled devices."
   - "Devices check in about every 8 hours after the first enrollment period. A device that has not reported within the validity period (30 days by default) is treated as noncompliant."
-  - "A compliance policy setting always takes precedence over the same setting in a configuration profile. Between two compliance policies, the most restrictive setting applies."
-  - "Secure Boot shows Not Compliant when the device lacks TPM 1.2 or 2.0, or when UEFI and PCR7 binding are not as required."
+  - "A compliance policy setting takes precedence over the same setting in a configuration profile. Between two compliance policies, the most restrictive setting applies."
+  - "Secure Boot shows Not Compliant on devices without TPM 2.0 support, even if enabled. Legacy BIOS with TPM 2.0 does not work as expected."
 faq:
   - q: "Where do I see why a device is non-compliant in Intune?"
     a: "Microsoft Learn says to go to Devices > Compliance, select the policy and open the Per-setting status tile. Selecting a device count opens details for that setting and status. The Policy device status report, opened with View report, lists device name, user, compliance status, OS and last contacted."
@@ -81,7 +81,7 @@ Intune reports can lag behind the actual device state, so wait for the next sync
 
 Microsoft's guidance on conflicts is specific:
 
-- Settings in a compliance policy always take precedence over the same setting in device configuration policies.
+- Settings in a compliance policy take precedence over the same setting in device configuration policies.
 - If two compliance policies evaluate the same setting, the most restrictive one applies.
 - If two configuration policies conflict, Intune shows the conflict and you resolve it manually.
 
@@ -97,14 +97,14 @@ Under compliance policy settings, **Mark devices with no compliance policy assig
 
 ## Step 6: The Secure Boot and TPM case
 
-Microsoft documents a Windows case where a device with Secure Boot enabled shows Not Compliant. The Secure Boot setting is supported only on devices with TPM 1.2 or 2.0, and TPM 2.0 requires UEFI firmware. Verify:
+Microsoft documents a Windows case where a device with Secure Boot enabled shows Not Compliant. Learn says the Secure Boot requirement is supported on some TPM 1.2 and 2.0 devices. On devices that do not support TPM 2.0 or later, the policy shows Not Compliant even when Secure Boot is enabled. TPM 2.0 requires UEFI firmware, and a computer with legacy BIOS and TPM 2.0 will not work as expected. Verify:
 
 1. Run `tpm.msc` and check **Specification Version**.
 2. Run `msinfo32` and confirm **BIOS Mode** is **UEFI** and **PCR7 Configuration** is **Bound**.
 3. In elevated PowerShell, run `Confirm-SecureBootUEFI`. The expected result is `True`.
 4. Run `manage-bde -protectors -get $env:systemdrive` and confirm the drive is protected by PCR 7.
 
-If the device has TPM 1.2 or legacy BIOS, it cannot meet the requirement as configured.
+If `tpm.msc` shows 1.2 on a device that supports TPM 2.0, Microsoft says to contact the device manufacturer about a TPM 2.0 update.
 
 ## What the pages do not say
 
