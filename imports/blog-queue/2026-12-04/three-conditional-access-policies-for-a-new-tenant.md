@@ -11,10 +11,10 @@ keypoints:
   - "New tenants have security defaults on. You must disable security defaults before you can use Conditional Access, which needs at least Microsoft Entra ID P1."
   - "Create every policy in Report-only mode first, review the impact, then switch it to On."
   - "Exclude emergency access accounts from each policy to avoid lockout, and register phishing-resistant methods before requiring them for admins."
-  - "Microsoft also offers Microsoft-managed policies, created in report-only state and enabled no sooner than 30 days later if you leave them."
+  - "Microsoft-managed policies start in report-only state. Learn says Microsoft enables them no less than 30 days later, and in some cases faster."
 faq:
   - q: "Do I need Conditional Access in a new tenant?"
-    a: "Not necessarily at first. Microsoft Learn says security defaults are available at no cost and are enabled on all new tenants at creation, enforcing MFA registration, admin MFA and blocking legacy authentication. Learn suggests considering Conditional Access if you have Entra ID P1 or P2, complex requirements or need granular exceptions."
+    a: "Not necessarily at first. Microsoft Learn says security defaults are available at no cost and are enabled on all new tenants at creation, enforcing MFA registration, admin MFA and blocking legacy authentication. Learn suggests considering Conditional Access if you have Entra ID P1 or P2 or have complex security requirements."
   - q: "Which license does Conditional Access need?"
     a: "Microsoft Learn says using Conditional Access requires Microsoft Entra ID P1 licenses, and that Microsoft 365 Business Premium customers can also use it. Risk-based policies need Microsoft Entra ID Protection, which is an Entra ID P2 feature."
   - q: "Can I use security defaults and Conditional Access together?"
@@ -91,11 +91,11 @@ Two cautions from the article. Admins must register phishing-resistant methods b
 
 ## Microsoft-managed policies
 
-Learn describes Microsoft-managed policies such as Block legacy authentication, Multifactor authentication for all users and MFA for admins accessing Microsoft admin portals. Each is created in report-only state. If left that way, Microsoft enables it no sooner than 30 days after introduction, with notices two weeks before. You can change the state and exclusions but can't rename or delete them. Use Duplicate to make broader changes.
+Learn describes Microsoft-managed policies such as Block legacy authentication, Multifactor authentication for all users and MFA for admins accessing Microsoft admin portals. Each is created in report-only state. If left that way, Microsoft enables it no less than 30 days after introduction, with notices two weeks before. Learn adds that in some cases policies might be enabled faster, so do not rely on the 30 days. You can change the state and exclusions but can't rename or delete them. Use Duplicate to make broader changes.
 
 ## How to check the result
 
-After a policy has been in report-only mode for a while, review the results in the sign-in logs and the policy's report-only details before you switch it on. Look for three things: sign-ins that would have been blocked and belong to real people, sign-ins from apps or devices you didn't know about, and service accounts that still sign in like users. Fix those first. The Conditional Access overview page shows how many policies are enabled versus report-only, which makes a quick status check easy.
+After a policy has been in report-only mode for a while, review the results in the sign-in logs and the policy's report-only details before you switch it on. Look for three things: sign-ins that would have been blocked and belong to real people, sign-ins from apps or devices you didn't know about, and service accounts that still sign in like users. Fix those first.
 
 ## Common mistakes
 
