@@ -25,7 +25,7 @@ faq:
     a: "Learn says default and developer environment types cannot have a security group. Trial environments do not support automatic user assignment."
 ---
 
-A security group turns an environment into a members-only space. Only licensed members of the group are created as users there. This does not replace Dataverse security roles, which still decide what a user can do. This guide follows the Microsoft Learn page on controlling user access to environments with security groups and Microsoft 365 groups.
+A security group turns an environment into a members-only space. Only licensed members of the group are created as users there. This does not replace Dataverse security roles, which still decide what a user can do. This guide follows the Microsoft Learn page on controlling user access to environments with security groups and licenses.
 
 ## Steps
 
@@ -90,9 +90,9 @@ The page's example adds a Managers group as a child of the environment group and
 - What happens when a group is replaced or removed from an environment later.
 - PowerShell examples.
 
-## A rollout outline
+## A rollout outline (my advice)
 
-This outline is practical advice built on the page.
+This outline is my own suggestion built on the page.
 
 1. Create the group and add the right members first.
 2. Confirm that every current user who should keep access is in it, because others are disabled when you save.
@@ -100,7 +100,7 @@ This outline is practical advice built on the page.
 4. Associate the group with the environment.
 5. Test with a member, a non-member and a user without a security role.
 
-## Typical mistakes
+## Typical mistakes (my advice)
 
 - Associating the group before adding existing users.
 - Assuming nested group members are provisioned.
@@ -115,4 +115,4 @@ This outline is practical advice built on the page.
 
 ## Sources
 
-- [Control user access to environments: security groups and licenses (Microsoft Learn)](https://learn.microsoft.com/power-platform/admin/control-user-access)
+- [Control user access to environments with security groups and licenses (Microsoft Learn)](https://learn.microsoft.com/power-platform/admin/control-user-access)
