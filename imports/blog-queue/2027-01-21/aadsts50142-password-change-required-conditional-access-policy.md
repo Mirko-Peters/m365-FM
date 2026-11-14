@@ -18,7 +18,7 @@ faq:
   - q: "Is this the same as self-service password reset?"
     a: "No. The grant controls page says that when user risk is detected, the Require password change control has the user perform a secure password change after successful authentication, and that this process does not use the self-service password reset flow. The user must complete multifactor authentication and then change the password to remediate the risk."
   - q: "Why can users get stuck at this step?"
-    a: "Learn warns that users must have previously registered for multifactor authentication before triggering the user risk policy. It also says to make sure all users register for MFA so they are prepared if risk is detected for their account. A user without a registered method cannot complete the MFA part of the remediation."
+    a: "Learn warns that users must have previously registered for multifactor authentication before triggering the user risk policy. It also says to make sure all users register for MFA so they are prepared if risk is detected for their account. In my reading, a user without a registered method cannot complete the MFA part of the remediation."
   - q: "Which settings does a password change policy allow?"
     a: "Per Learn, the policy must be assigned to All resources, which stops an attacker from using a different app to change the password and reset the account risk. Require password change cannot be used with other controls such as a compliant device. It only works with user and group assignments, the cloud app condition set to all, and user risk conditions."
   - q: "Is there a newer way to remediate user risk?"
@@ -57,7 +57,7 @@ The same page describes **Require risk remediation**. When user risk is detected
 - **Require authentication strength**
 - **Sign-in frequency - Every time**
 
-With this control, users are prompted to sign in again right after their sessions are revoked. If the user just signed in but is at risk, they are asked to sign in a second time, and the risk is remediated after the second successful sign-in. The Learn page for it is the Identity Protection policies article, which I did not read for this post, so I do not describe how to migrate to it.
+With this control, users are prompted to sign in again right after their sessions are revoked. If the user just signed in but is at risk, they are asked to sign in a second time, and the risk is remediated after the second successful sign-in. The Learn page for it is the Identity Protection policies article, and this article does not describe how to migrate to it.
 
 ## Checks for the admin
 
@@ -73,7 +73,7 @@ For the support path, Learn says to include the request ID, time and date from t
 
 ## Common reasons for trouble
 
-These are the situations the Learn pages point to:
+These are the situations the Learn pages point to, with some checks of my own added:
 
 1. **No MFA registration.** The user cannot finish the MFA step of the remediation. Check the user's registered methods.
 2. **Policy scope.** The policy must cover all resources, so it applies to the user in every app, not only the one they tried first.
@@ -82,17 +82,17 @@ These are the situations the Learn pages point to:
 
 ## How I would roll it out (my advice)
 
-This section is my experience, not a Microsoft procedure:
+This section is my suggestion, not a Microsoft procedure:
 
 1. Check MFA registration coverage before you turn on a user-risk-based policy, and give users a clear registration path.
-2. Start in report-only mode. The grant controls page recommends report-only mode and the What If tool when you change policies that can block users.
+2. Start in report-only mode. The grant controls page recommends report-only mode and the What If tool for policies with block statements, and I suggest the same here.
 3. Keep break-glass accounts out of risk-based policies according to your own emergency access design.
 4. Tell the help desk what users will see, so a password prompt after sign-in is not mistaken for an attack or for SSPR.
 5. Review whether Require risk remediation fits your sign-in methods better than a password-only remediation.
 
 ## What the sources leave open
 
-The one-line error code row does not say whether the code shows in the browser, in the log or both, so I do not claim either. The exact user prompt is not described in the pages I used, beyond the MFA and password change steps above.
+The one-line error code row does not say whether the code shows in the browser, in the log or both, so I do not claim either. The exact user prompt is not described in the sources, beyond the MFA and password change steps above.
 
 ## Related
 
@@ -103,6 +103,6 @@ The one-line error code row does not say whether the code shows in the browser, 
 
 ## Sources
 
-- [Microsoft Entra authentication and authorization error codes (Microsoft Learn)](https://learn.microsoft.com/entra/identity-platform/reference-error-codes)
+- [Microsoft Entra authentication & authorization error codes (Microsoft Learn)](https://learn.microsoft.com/entra/identity-platform/reference-error-codes)
 - [How to Configure Grant Controls in Microsoft Entra (Microsoft Learn)](https://learn.microsoft.com/entra/identity/conditional-access/concept-conditional-access-grant)
 - [Troubleshooting sign-in problems with Conditional Access (Microsoft Learn)](https://learn.microsoft.com/entra/identity/conditional-access/troubleshoot-conditional-access)
