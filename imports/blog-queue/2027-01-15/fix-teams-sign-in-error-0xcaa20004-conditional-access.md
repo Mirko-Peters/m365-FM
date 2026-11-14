@@ -21,8 +21,8 @@ faq:
     a: "In the Microsoft Entra admin center, sign in as at least Reports Reader, open Sign-in logs, find the event, and select the Conditional Access tab. It shows the policies that resulted in the interruption. You can drill into a policy name and use the Troubleshoot Event sign-in diagnostic."
   - q: "Why can a SharePoint policy block Teams?"
     a: "Learn explains that signing in to Teams requests multiple resources, such as Teams chat, the Outlook calendar and documents. Conditional Access policies apply across all of them, so a restriction on SharePoint can apply even when the user thinks they only sign in to Teams. Audience reporting in the sign-in logs shows the requested resources."
-  - q: "What if the Teams web client works but the desktop app does not?"
-    a: "The Teams sign-in page says that for errors only in the web client, see its login loop page. For the desktop app, check for updates, then reinstall Teams: uninstall, delete the Teams folder under percent appdata percent Microsoft, and install again, as administrator if possible."
+  - q: "What if the error occurs only in the Teams web client?"
+    a: "The Teams sign-in page says that if the error occurs only in the web client, see its login loop page for resolutions specific to the user's browser. Otherwise it says to check for updates, and if the error persists to reinstall Teams: uninstall, delete the Teams folder under percent appdata percent Microsoft, and install again, as administrator if possible."
 ---
 
 Teams error 0xCAA20004 points to Conditional Access. Microsoft Learn's page on Teams sign-in errors says the code occurs if an issue affects Conditional Access, and that is all it says about the cause. The practical work is therefore to find which Conditional Access policy interrupted the sign-in, and to rule out client problems. This guide combines the Teams sign-in page with Learn's page on troubleshooting sign-in problems with Conditional Access.
@@ -53,7 +53,7 @@ Learn's Conditional Access troubleshooting page describes this route.
 
 1. Sign in to the Microsoft Entra admin center as at least a Reports Reader.
 2. Go to **Entra ID** > **Monitoring & health** > **Sign-in logs**.
-3. Find the event. Filters that help: **Correlation ID** for a specific event, **Conditional Access** to show only failures, **Username**, **Date** and **Resource**.
+3. Find the event. Filters that help: **Correlation ID** for a specific event, **Conditional Access** to see policy successes and failures, scoped to failures if you want fewer results, **Username**, **Date** and **Resource**.
 4. Open the event and select the **Conditional Access** tab. It shows which policies resulted in the interruption. The **Troubleshooting and support** tab may give a clear reason, such as a device that did not meet compliance requirements.
 5. Select the policy name to see the policy configuration. The **Basic Info**, **Location**, **Device Info**, **Authentication Details** and **Additional Details** tabs hold the user and device details used in the assessment.
 
