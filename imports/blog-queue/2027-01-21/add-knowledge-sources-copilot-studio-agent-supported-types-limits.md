@@ -98,7 +98,7 @@ This list is my suggestion, not a Microsoft recommendation:
 
 ## What this article leaves out
 
-The summary page links to separate pages for SharePoint, Dataverse and unstructured data. I did not read those for this article, so the exact steps for them are not described here.
+This article does not describe the exact steps for SharePoint, Dataverse or connector sources. See the Copilot Studio documentation for those.
 
 ## Related
 
