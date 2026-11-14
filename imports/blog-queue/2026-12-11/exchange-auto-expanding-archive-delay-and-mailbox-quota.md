@@ -10,31 +10,31 @@ keypoints:
   - "Enabling an archive gives up to 100 GB. The archive converts to auto-expanding when it reaches its quota, and extra storage can take up to 30 days to provision."
   - "Auto-expanding archiving needs Exchange Online PowerShell. Enable-Mailbox -AutoExpandingArchive works per user, Set-OrganizationConfig -AutoExpandingArchive for the organization."
   - "After an org-wide enable, user mailboxes still show AutoExpandingArchiveEnabled as False. Microsoft says this is expected."
-  - "The primary mailbox quota is capped by the license. Learn's quota article gives 50 GB for Exchange Online Plan 1 and 100 GB for Plan 2."
+  - "The license determines the primary mailbox size. The Exchange Online limits page lists 50 GB for Exchange Online Plan 1 and 100 GB for Plan 2."
   - "Growth is supported up to 1 GB per day. A full archive can leave the primary mailbox at quota, which can stop sending and receiving."
 faq:
   - q: "How long does an auto-expanding archive take to provision?"
-    a: "Microsoft Learn says it can take up to 30 days for the additional storage to be provisioned. The archive converts to auto-expanding when it reaches its quota, which the enable article puts at 90 GB for the archive including Recoverable Items."
+    a: "Microsoft Learn says it can take up to 30 days for the additional storage to be provisioned. The archive converts to auto-expanding when it reaches its quota, which the enable article puts at 90 GB for the archive including Recoverable Items. The overview page words the trigger as reaching the archive storage quota, so the two pages differ in wording."
   - q: "Why does Get-Mailbox show AutoExpandingArchiveEnabled False after I enabled it for the organization?"
-    a: "Learn states that after an org-wide enable, user mailboxes still show False. This is expected because the organization-level setting governs them. Verify with Get-OrganizationConfig and check AutoExpandingArchiveEnabled there."
+    a: "Learn states that Set-OrganizationConfig -AutoExpandingArchive does not change the AutoExpandingArchiveEnabled property on user mailboxes to True, and that you do not have to run Enable-Mailbox on individual mailboxes afterwards. Verify with Get-OrganizationConfig and check AutoExpandingArchiveEnabled there."
   - q: "Why is my primary mailbox stuck at 50 GB?"
-    a: "Microsoft's mailbox quota article says the quota cannot exceed the maximum allowed by the license and gives 50 GB for Exchange Online Plan 1 and 100 GB for Plan 2. It does not describe a specific cause for a mailbox stuck at 50 GB, so check the assigned license first."
+    a: "The Exchange Online limits page says the mailbox type and the user's subscription license determine the available mailbox storage. It lists 50 GB for Exchange Online Plan 1 and for Office 365 E1, and 100 GB for Plan 2, the E3 and E5 plans and Business Basic or Standard. It does not describe a specific cause for a mailbox stuck at 50 GB, so check the assigned license first."
   - q: "Can I turn auto-expanding archiving off again?"
     a: "No. The enable article says that once it is enabled, for the organization or for a user, it cannot be turned off. Administrators also cannot set a custom storage quota for auto-expanding archives."
   - q: "What happens if the archive and primary mailbox both fill up?"
     a: "Learn warns that if the main archive fills, the primary mailbox can reach its quota, which can stop sending and receiving. Microsoft recommends retention policies that delete items after a set period."
 ---
 
-If an auto-expanding archive does not show up, check three things in order: the archive exists, auto-expanding archiving is enabled, and the archive has reached its quota, because expansion starts then and can take up to 30 days. If the primary mailbox is full, check the license, since the quota cannot exceed what the license allows.
+If an auto-expanding archive does not show up, check three things in order: the archive exists, auto-expanding archiving is enabled, and the archive has reached its quota, because expansion starts then and can take up to 30 days. If the primary mailbox is full, check the license, since the license determines the mailbox size.
 
 ## How the pieces fit
 
-- An archive mailbox gives up to **100 GB** of extra storage.
-- **Auto-expanding archiving** raises the archive up to 1.5 TB. Microsoft is raising the maximum to 3 TB for eligible licenses, starting mid-October 2026, and other licenses stay at 1.5 TB.
+- An archive mailbox gives up to **100 GB** of extra storage, per the auto-expanding overview. The Exchange Online limits page lists 50 GB archives for some licenses (for example Plan 1 and Business Basic or Standard) and 1.5 TB for others, so check the license.
+- **Auto-expanding archiving** raises the archive up to 1.5 TB. Microsoft is raising the maximum to 3 TB for eligible licenses, starting mid-October 2026 and expected to complete by late October, and other licenses stay at 1.5 TB.
 - The archive converts to auto-expanding when the archive, including Recoverable Items, reaches its quota. Learn says it can take **up to 30 days** to provision the additional storage.
 - Supported growth is no more than **1 GB per day**.
 
-For users on hold or with a retention policy, quotas are temporarily raised from 100 GB to 110 GB (warning 90 GB to 100 GB) to bridge the gap.
+When you enable auto-expanding archiving for a specific user whose mailbox is on hold or has a retention policy, the archive quota is raised from 100 GB to 110 GB (warning 90 GB to 100 GB) to bridge the time until the extra storage is provisioned. Learn says this extra space is not added when you enable it for the entire organization.
 
 ## Step 1: Confirm the archive exists
 
@@ -90,14 +90,15 @@ Get-Mailbox <user> | FL ProhibitSendReceiveQuota
 Get-MailboxStatistics <user>
 ```
 
-Compare the quota with `TotalItemSize`. The quota cannot exceed the maximum for the assigned license, and Microsoft's examples give 50 GB for Exchange Online Plan 1 and 100 GB for Plan 2. For archive quota use `Get-Mailbox <user> | FL ArchiveQuota`. With auto-expanding, you will not see one 1.5 TB value, because each shard keeps its own limit of about 100 GB. For multiple shards, `Get-MailboxStatistics -Archive` can time out, so use the shard GUID.
+Compare the quota with `TotalItemSize`. These two commands are my own suggestion, and the Learn pages I read do not show them. The Exchange Online limits page says the license determines the mailbox size and lists 50 GB for Exchange Online Plan 1 and 100 GB for Plan 2. For archive quota use `Get-Mailbox <user> | FL ArchiveQuota`. Learn says ArchiveQuota and ArchiveWarningQuota are ignored when AutoExpandingArchiveEnabled is True. The pages I could read say nothing about per-shard quotas or about how Get-MailboxStatistics behaves with several shards.
 
-The article does not say how long a quota change takes after a license change, so recheck after the license has propagated.
+The pages I read do not say how long a quota change takes after a license change, so recheck after the license has propagated.
 
 ## Limits that explain surprises
 
 - Auto-expanding archiving cannot be disabled and has no custom quota.
-- Once the expanded area exists, users cannot delete folders in the archive, and they cannot use Recover Deleted Items for items deleted there.
+- Once the expanded area exists, users cannot delete folders in the archive, and after auto-expanding archiving is enabled for their mailbox they cannot use Recover Deleted Items to recover items.
+- Auto-expanding archiving prevents recovering or restoring an inactive mailbox. Learn says the only way to recover data then is a content search export and an import into another mailbox.
 - Journaling, transport rules or auto-forwarding to copy mail into an archive are not permitted.
 - If the main archive fills, the primary mailbox can reach quota. Use retention policies that delete items after a set period.
 
@@ -114,7 +115,7 @@ If all six look right and the storage still has not appeared after the documente
 
 ## When the archive was disabled
 
-Disabling an archive and re-enabling within 30 days restores the original contents. After 30 days, contents are permanently deleted. If enabling fails with a `MissingDisconnectReceiptsException`, Learn says to run `Set-Mailbox` with `-RemoveDisabledArchive` and then enable again. The admin center also offers **Run Tests: Archive Mailbox**.
+Disabling an archive and re-enabling within 30 days restores the original contents. After 30 days, contents are permanently deleted. If enabling fails with a `MissingDisconnectReceiptsException`, Learn says to run `Set-Mailbox` with `-RemoveDisabledArchive` and then enable again. Learn also describes an automated archive mailbox diagnostic: a button on the page opens a flyout in the Microsoft 365 admin center, where you enter the mailbox address and select **Run Tests**. It needs a Microsoft 365 global admin and is not available in Government clouds, Microsoft 365 operated by 21Vianet or Microsoft 365 Germany.
 
 ## Related
 
@@ -127,4 +128,4 @@ Disabling an archive and re-enabling within 30 days restores the original conten
 - [Learn about auto-expanding archiving](https://learn.microsoft.com/en-us/purview/autoexpanding-archiving)
 - [Enable auto-expanding archiving](https://learn.microsoft.com/en-us/purview/enable-autoexpanding-archiving)
 - [Enable archive mailboxes](https://learn.microsoft.com/en-us/purview/enable-archive-mailboxes)
-- [Demystifying Exchange Online mailbox quotas](https://techcommunity.microsoft.com/blog/exchange/demystifying-exchange-online-mailbox-quotas/4486474)
+- [Exchange Online limits](https://learn.microsoft.com/en-us/office365/servicedescriptions/exchange-online-service-description/exchange-online-limits)
