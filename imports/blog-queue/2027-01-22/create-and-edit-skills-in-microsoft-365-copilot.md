@@ -44,7 +44,7 @@ The Support page says skills customize Copilot for specific tasks and consistent
 3. Review and edit the name, description, instructions, workflow and included files. The page says to keep the skill focused on one clear job.
 4. Save the skill.
 
-To update an existing skill, revise it, review the final version, and then share it more widely.
+To update an existing skill, revise it and review the final version before sharing.
 
 ## Add an existing skill
 
@@ -58,7 +58,7 @@ A skill can be a standalone `SKILL.md` file or a ZIP that contains `SKILL.md` at
 
 ## Find and manage skills
 
-Open **Agents & Skills** to find agents, personal skills and installed plugin packages. Skills deployed by your organization, or acquired through Copilot Cowork, may appear there when they are available to you. Some may not appear until they are installed or shared in the right location.
+Open **Agents & Skills** to find agents, personal skills and installed plugin packages. Skills deployed by your organization, or acquired through Copilot Cowork, may appear there when they are available to you. They may appear only once they are available to you.
 
 ## Use a skill
 
@@ -69,7 +69,7 @@ For complex, multi-step tasks, the page suggests using skills with Advanced Reas
 
 ## The SKILL.md format
 
-The Support page does not walk through the file format in the part I could read. The Microsoft Learn page on building plugins for Copilot Cowork does, for skills inside plugin packages. Treat the following as the Cowork plugin rules, and check whether they match your upload before you depend on them.
+The Support page says each skill has a required `SKILL.md` file with its instructions, and that Copilot Chat supports the agentskills.io standard. The field limits below come from the Microsoft Learn page on building plugins for Copilot Cowork, for skills inside plugin packages. Treat them as the Cowork plugin rules. My advice: check whether they match your upload before you depend on them.
 
 A skill is a folder containing a `SKILL.md` file, written as YAML frontmatter plus a Markdown body.
 
@@ -87,7 +87,7 @@ Other points from that page:
 
 ## Writing a good skill (my advice)
 
-This is my experience, not Microsoft guidance:
+This is my suggestion, not Microsoft guidance:
 
 1. Start from a task you have already done by hand three times. A skill made from a real example is easier to test.
 2. Put the expected output in the instructions, such as a table with named columns, so results look the same each time.
@@ -97,7 +97,7 @@ This is my experience, not Microsoft guidance:
 
 ## Limits of this article
 
-I could read the Support page only as a condensed text, so I describe only the steps above and make no claims about further settings, sharing options or numeric limits for skills created in Copilot. The Learn limits quoted apply to Cowork plugin packages.
+This article describes only the steps above and makes no claims about further settings, sharing options or numeric limits for skills created in Copilot. The Learn limits quoted apply to Cowork plugin packages.
 
 ## Related
 
@@ -105,5 +105,5 @@ I could read the Support page only as a condensed text, so I describe only the s
 
 ## Sources
 
-- [Create and edit skills in Microsoft Copilot (Microsoft Support)](https://support.microsoft.com/microsoft-365-copilot/create-edit-skills-copilot)
+- [Create and edit skills with Copilot (Microsoft Support)](https://support.microsoft.com/microsoft-365-copilot/create-edit-skills-copilot)
 - [Build plugins for Copilot Cowork (Microsoft Learn)](https://learn.microsoft.com/copilot/cowork/cowork-plugin-development)
