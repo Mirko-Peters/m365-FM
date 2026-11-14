@@ -25,7 +25,7 @@ faq:
     a: "Activity Pointer, Activity Party and Attachment tables, and any table that does not support bulk delete. Tables with twenty-five or more child tables in a cascade chain and large volumes may time out."
 ---
 
-Dataverse long-term data retention moves old rows out of the active data store into long-term storage, based on a view that you define. This guide follows the Microsoft Learn article on setting a retention policy for a table, last updated in May 2024 according to the page. Check the live page for newer changes.
+Dataverse long-term data retention moves old rows out of the active data store into long-term storage, based on a view that you define. This guide follows the Microsoft Learn article on setting a retention policy for a table.
 
 ## Prerequisites
 
@@ -67,11 +67,11 @@ The table is available for policy setup in about 15 to 30 minutes, and longer wi
 
 ## Working with child tables
 
-Because related child rows are retained together with the parent as a set, the table design matters. Enabling the parent root table also enables its children, and you cannot disable a child while the parent is enabled. If you import a solution, child tables are not enabled automatically, so enable them as part of the deployment. When two policies share child tables, the second stays at Pending delete until the first moves beyond Pending reconciliation, so avoid scheduling overlapping policies on related tables on the same day.
+Because related child rows are retained together with the parent as a set, the table design matters. Enabling the parent root table also enables its children, and you cannot disable a child while the parent is enabled. If you import a solution, child tables are not enabled automatically, so enabling them is part of the deployment (my advice). When two policies share child tables, the second stays at Pending delete until the first moves beyond Pending reconciliation, so I would avoid scheduling overlapping policies on related tables on the same day (my advice).
 
 ## A cautious rollout
 
-This list is a suggestion built from the page, not a Microsoft procedure.
+This list is my advice, built from the page, not a Microsoft procedure.
 
 1. Run the view in a test environment and confirm the row count is what you expect.
 2. Because retained rows cannot be moved back, review the criteria with the data owners before the first scheduled run.
@@ -88,4 +88,4 @@ The article does not describe licensing or capacity requirements beyond the API 
 
 ## Sources
 
-- [Set a data retention policy for a table](https://learn.microsoft.com/power-apps/maker/data-platform/data-retention-set)
+- [Set a data retention policy for a table (Microsoft Learn)](https://learn.microsoft.com/power-apps/maker/data-platform/data-retention-set)
