@@ -20,7 +20,7 @@ faq:
   - q: "Does virtual network support work for trial environments?"
     a: "No. Microsoft Learn lists Production, Default, Sandbox and Developer environments as supported, and Trial and Dataverse for Teams as not supported. The Learn setup page also requires the environment to be a managed environment."
   - q: "How do I remove a virtual network policy from an environment?"
-    a: "Microsoft Learn says you can only remove it with PowerShell, using Disable-SubnetInjection with the environment ID. Learn adds that to change the virtual network DNS address you unlink all environments, wait 30 minutes, make the change and enable again."
+    a: "Microsoft Learn says you can only remove it with PowerShell, using Disable-SubnetInjection with the environment ID. Learn adds that to change the virtual network DNS address you unlink all environments with Disable-SubnetInjection, update the virtual network, wait 30 minutes and then enable again with Enable-SubnetInjection."
   - q: "Can I rotate the encryption key without downtime?"
     a: "Microsoft Learn describes creating a new key version in the same key as the recommended method, with no downtime. The new version can take up to 24 hours to apply, and the previous version must stay enabled for at least 28 days."
 ---
@@ -39,7 +39,7 @@ Customer-managed keys and virtual network support secure Dataverse in different 
 
 ### Prerequisites
 
-- An Azure Key Vault or Managed HSM. Soft delete and purge protection are mandatory. Learn says you cannot encrypt with your own key without them.
+- An Azure Key Vault or Managed HSM. Soft delete and purge protection are mandatory for a key vault, and Learn says you cannot encrypt with your own key without them. For Managed HSM, Learn's steps mention enabling purge protection.
 - An RSA key of 2048 or 3072 bits. Managed HSM keys are RSA-HSM.
 - Azure RBAC is recommended for the vault. Private link is supported with public access disabled and trusted Microsoft services allowed to bypass the firewall.
 - Users in CMK environments need a qualifying subscription, such as Microsoft 365 E5 or a listed compliance or information protection add-on.
@@ -55,15 +55,15 @@ Customer-managed keys and virtual network support secure Dataverse in different 
 
 ### What to expect
 
-Adding an environment disables it while encryption runs, and the downtime depends on database size. Learn recommends testing with a copy first. Status moves from Encrypting to Encrypting - online and then Encrypted. It can take up to four days, and if it fails the data stays under the Microsoft-managed key and you can rerun it. Check **Manage** > **Environments** > the environment > **History** > **Update Customer Managed Key**.
+Adding an environment disables it, and the downtime depends on database size. The system is down between the statuses Encrypting and Encrypting - online. After that users can work while the remaining storage services, such as search and the Copilot index, finish encrypting. Learn recommends testing with a copy first. Status moves from Encrypting to Encrypting - online and then Encrypted. It can take up to four days. Learn says that if the operation fails the data stays under the Microsoft-managed key and you can rerun it. Its description of the Failed status says instead that some storage services may already use your key while others still use the Microsoft-managed key, and that a rerun resumes where it left off. Learn does not reconcile the two statements. Check **Manage** > **Environments** > the environment > **History** > **Update Customer Managed Key**. Learn says a Failed entry there can be just a warning, so compare it with the encryption status on the policy page before you rerun the operation.
 
 ### Rotation, revocation and scope
 
-- **Rotate with a new key version.** Learn calls this the recommended method. There is no downtime, it can take 24 hours, and the old version must remain enabled for at least 28 days.
+- **Rotate with a new key version.** Learn recommends a new key version or a Key Vault rotation policy for rotating the key. There is no downtime, it can take 24 hours, and the old version must not be disabled or deleted for at least 28 days.
 - **Revocation locks environments.** Locked environments are inaccessible to everyone, including Microsoft support, and data loss can occur.
 - **Removal needs patience.** Removing an environment disables it. Do not delete or disable the key, vault or permissions until 30 days after removal.
-- **Not everything is covered.** Connection settings, environment settings, app display names and descriptions, and solution checker results remain Microsoft-managed.
-- **Restore and copy** work only to environments with the same CMK. Reset deletes encrypted data, including backups.
+- **Not everything is covered.** Connection settings for connectors, environment settings, Power Apps display names, descriptions and connection metadata, and the download link and other data from solution checker enforcement stay under Microsoft-managed keys. Nuance Conversational IVR and maker welcome content are excluded.
+- **Restore** is limited to the same environment the backup came from or an environment with the same CMK, and **copy** to an environment with the same CMK. Reset deletes the environment's encrypted data, including backups, and reverts it to the Microsoft-managed key.
 
 ## Part 2: Virtual network support
 
@@ -87,14 +87,14 @@ Adding an environment disables it while encryption runs, and the downtime depend
 
 - Production environments need 25 to 30 IP addresses each, nonproduction 6 to 10, and each subnet reserves 5.
 - Learn's example: four production environments need 125 addresses, so a /25.
-- A delegated subnet cannot be shared across enterprise policies, and its range cannot change while in use.
+- A delegated subnet cannot be shared across enterprise policies, and its range cannot change while in use. For a range change, the overview FAQ says to run Disable-SubnetInjection, change the range and enable again, while the setup page says to contact Microsoft Support. Learn does not reconcile the two.
 - Enabling or disabling delegation can cause up to a 30 minute window of unavailability.
-- A NAT gateway is required if components need public internet access.
-- Supported today: Dataverse plug-ins and a list of connectors, including SQL Server, Azure Key Vault, Blob Storage, custom connectors and HTTP with Microsoft Entra ID. Azure-aware plug-ins, low-code plug-ins that use connectors and SQL through an on-premises gateway are not supported. GCC is not supported.
+- Public internet access: the setup page says to create an Azure NAT gateway to allow it, while the overview FAQ says internet-bound access is available by default and a NAT gateway lets you control and secure it. Learn does not reconcile the two.
+- Supported today: Dataverse plug-ins and a list of connectors, including SQL Server, Azure Key Vault, Blob Storage, custom connectors and HTTP with Microsoft Entra ID. Azure-aware plug-ins and low-code plug-ins that use connectors are not supported. GCC is not supported, while GCC High and DoD are. Learn warns to check plug-in and connector code first, because calls to public resources can break once the environment runs in your delegated subnet.
 
 ## Doing both
 
-The pages read do not describe combining a key policy and a network policy on the same environment, and the Learn CMK page notes that its template includes a `networkInjection` property set to null. Treat them as two policies and apply each separately, and test the second change after the first has finished. Key vault private link is supported for CMK.
+The pages read do not describe combining a key policy and a network policy on the same environment, and the enterprise policy template on the Learn CMK page contains a `networkInjection` property set to null. My advice, not from Learn: treat them as two policies, apply each separately and test the second change after the first has finished. Key vault private link is supported for CMK.
 
 ## Typical mistakes
 
@@ -118,5 +118,5 @@ The pages read do not state a combined procedure, the exact downtime of CMK for 
 ## Sources
 
 - [Manage your customer-managed encryption key](https://learn.microsoft.com/en-us/power-platform/admin/customer-managed-key)
-- [Virtual Network support overview](https://learn.microsoft.com/en-us/power-platform/admin/vnet-support-overview)
+- [Microsoft Azure Virtual Network support - Power Platform](https://learn.microsoft.com/en-us/power-platform/admin/vnet-support-overview)
 - [Set up virtual network support for Power Platform](https://learn.microsoft.com/en-us/power-platform/admin/vnet-support-setup-configure)
