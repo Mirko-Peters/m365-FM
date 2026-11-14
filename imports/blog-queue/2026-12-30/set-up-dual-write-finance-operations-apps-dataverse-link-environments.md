@@ -11,7 +11,7 @@ keypoints:
   - "Complete the Power Platform integration for a new or existing Dataverse instance first, then in Lifecycle Services use Dual-write application, Configure, and Link to Power Platform environment."
   - "Setup typically takes 30 minutes or less, and linking typically takes less than five minutes. Fix any setup error before the next step."
   - "Before starting dual-write on an entity, run an initial sync for existing data. For existing Dataverse data, bootstrap company data with a three-letter ISO company code."
-  - "The pages give no prerequisites list, tenant rule, role list or limits. DW9003 means the application user lacks permissions on Dataverse or finance and operations."
+  - "The only prerequisite named is the Power Platform integration, with no role list or limits. DW9003 means the application user lacks permissions on Dataverse or finance and operations."
 faq:
   - q: "What is dual-write?"
     a: "According to Microsoft Learn, an out-of-box infrastructure for near-real-time, bidirectional integration between customer engagement apps and finance and operations apps."
@@ -25,7 +25,7 @@ faq:
     a: "Learn says it means Failed to connect to CRM or AX, because the application user for dual-write lacks the right permissions. It points to the system requirements and prerequisites article."
 ---
 
-Dual-write links Dynamics 365 finance and operations apps with Dataverse, so data changes flow both ways in near real time. This guide combines three Microsoft Learn pages: the dual-write overview, the guidance for setup scenarios and the Lifecycle Services setup article. They do not give prerequisites, a same-tenant rule or role requirements, and this article says so rather than guessing.
+Dual-write links Dynamics 365 finance and operations apps with Dataverse, so data changes flow both ways in near real time. This guide combines three Microsoft Learn pages: the dual-write overview, the guidance for setup scenarios and the Lifecycle Services setup article. Beyond completing the Power Platform integration they give no prerequisites list, same-tenant rule or role requirements (the Lifecycle Services page points to a separate system requirements article), and this article says so rather than guessing.
 
 ## What it is
 
@@ -61,9 +61,9 @@ Initial sync copies existing data from one app to another bidirectionally, and y
 
 ## Errors and warnings
 
-- **Linking mismatch:** if dual-write points to a different Dataverse instance than Power Platform Integration in Lifecycle Services, Learn warns of unexpected behavior. Reset the dual-write connection to the one Lifecycle Services specifies, or connect to the configured instance.
+- **Linking mismatch:** if dual-write points to a different Dataverse instance than Power Platform Integration in Lifecycle Services, Learn warns of unexpected behavior. If Lifecycle Services was already set up for Power Platform integration, reset the dual-write connection to the one it specifies. If it was never set up, connect it to the Dataverse instance that is configured in dual-write.
 - **DW9003:** Failed to connect to CRM or AX, caused by an application user without the right permissions.
-- **Development environments:** Learn says Power Platform integration for cloud-hosted development environments is deprecated. Use a Sandbox environment or a Unified Developer Environment.
+- **Development environments:** Learn says Power Platform integration for cloud-hosted development environments is deprecated and not supported. Use a Sandbox environment or a Unified Developer Environment.
 
 ## Planning suggestion
 
@@ -79,7 +79,7 @@ Initial sync handles data that exists before dual-write starts. For Dataverse da
 
 ## Not covered
 
-The pages do not list prerequisites, licenses, tenant requirements, roles for linking, default maps, limits or throttling, and do not explain conflict handling in the initial sync.
+Apart from the Power Platform integration prerequisite, the pages do not cover licenses, tenant requirements, roles for linking, default maps, limits or throttling, and do not explain conflict handling in the initial sync.
 
 ## Related
 
@@ -89,6 +89,6 @@ The pages do not list prerequisites, licenses, tenant requirements, roles for li
 
 ## Sources
 
-- [Dual-write overview](https://learn.microsoft.com/dynamics365/fin-ops-core/dev-itpro/data-entities/dual-write/dual-write-overview)
-- [Guidance for dual-write setup](https://learn.microsoft.com/dynamics365/fin-ops-core/dev-itpro/data-entities/dual-write/connection-setup)
-- [Dual-write setup from Lifecycle Services](https://learn.microsoft.com/dynamics365/fin-ops-core/dev-itpro/data-entities/dual-write/lcs-setup)
+- [Dual-write overview (Microsoft Learn)](https://learn.microsoft.com/dynamics365/fin-ops-core/dev-itpro/data-entities/dual-write/dual-write-overview)
+- [Guidance for dual-write setup (Microsoft Learn)](https://learn.microsoft.com/dynamics365/fin-ops-core/dev-itpro/data-entities/dual-write/connection-setup)
+- [Dual-write setup from Lifecycle Services (Microsoft Learn)](https://learn.microsoft.com/dynamics365/fin-ops-core/dev-itpro/data-entities/dual-write/lcs-setup)
