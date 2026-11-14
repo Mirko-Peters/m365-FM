@@ -10,8 +10,8 @@ keypoints:
   - "Adaptive scopes are dynamic, query-based memberships used by retention, communication compliance and auto-labeling policies. The query runs once daily."
   - "Scope types are Users, SharePoint sites and Microsoft 365 Groups. Records Center sites (legacy) are not supported."
   - "Create under Microsoft Purview portal > Settings > Roles and scopes > Adaptive scopes > Create scope. Queries can take up to five days to fully populate."
-  - "Typed attribute values are not validated at entry. Validate users and groups with PowerShell, and SharePoint queries with SharePoint search."
-  - "The page gives no retention policy UI path, no per-tenant policy limit and no licensing statement."
+  - "Typed attribute values are not validated at entry. Validate advanced queries with PowerShell (users, groups) or SharePoint search (sites)."
+  - "The page gives no retention policy UI path, no per-tenant policy limit and no licensing statement beyond a link to the service description."
 faq:
   - q: "What is an adaptive scope?"
     a: "A dynamic, query-based membership that you can use in retention, communication compliance and auto-labeling policies. The query runs once a day, so membership follows changes in the directory or on sites."
@@ -29,7 +29,7 @@ A static retention policy covers locations you pick. An adaptive scope instead s
 
 ## What an adaptive scope is
 
-Adaptive scopes use queries that you define. Membership is dynamic. The query runs once a day. They can be used in communication compliance, retention and auto-labeling policies.
+Adaptive scopes use queries that you define. Membership is dynamic. The query runs once a day. They can be used in communication compliance, retention and auto-labeling policies. A single policy can have one or many adaptive scopes. The page lists these advantages: no limit on the number of items per policy (the maximum number of policies per tenant still applies), more targeted policies without maintaining groups, resilience against business changes that group membership does not reflect, one policy that can cover both Teams and Viva Engage, and support for Microsoft Entra administrative units.
 
 ## Scope types
 
@@ -37,7 +37,7 @@ Adaptive scopes use queries that you define. Membership is dynamic. The query ru
 - **SharePoint sites.** Attributes include Site URL, name, template and RefinableString00 to RefinableString99.
 - **Microsoft 365 Groups.**
 
-Records Center sites (legacy) are not supported.
+Records Center sites (legacy) are not supported. For communication compliance policies, SharePoint sites and OneDrive accounts are not supported.
 
 ## Query builders
 
@@ -49,13 +49,13 @@ Records Center sites (legacy) are not supported.
 
 | Item | Limit |
 | --- | --- |
-| Scopes per policy | No limit stated. The per-tenant policy maximum is not quantified |
+| Scopes per policy | No limit. The per-tenant policy maximum still applies and is not quantified |
 | String length | 200 |
 | Attributes per group and groups | 10 attributes per group, 10 groups |
 | Advanced query | 10,000 characters |
 | Attributes per scope | 100 |
 | Sites per auto-labeling policy | 50,000 |
-| Members shown in details | 1,000,000 |
+| Added and removed members shown in details | 1,000,000 (a scope can apply to more members) |
 
 ## Roles
 
@@ -64,19 +64,21 @@ You need a role group that holds the Scope Manager role: Compliance Administrato
 ## Create a scope
 
 1. In the Microsoft Purview portal go to **Settings** > **Roles and scopes** > **Adaptive scopes** > **Create scope**.
-2. Choose an administrative unit or the default Full directory. Administrative units do not yet support SharePoint sites.
+2. Choose an administrative unit or the default Full directory. If your account is assigned administrative units, you must select one. Administrative units do not yet support SharePoint sites, so you cannot create a SharePoint sites scope with one.
 3. Choose the scope type, then the attributes or properties, or the advanced builder.
 4. When you create the policy, select the adaptive scopes you want.
 
 ## Timing
 
-Queries can take up to five days to fully populate. The portal does not validate values you type.
+Queries can take up to five days to fully populate, and changes are not immediate. The page advises waiting a few days before you add a newly created scope to a policy. The portal does not validate values you type, because the query does not run immediately.
 
 ## Validate a query
 
 - Users: `Get-Recipient -RecipientTypeDetails UserMailbox,MailUser -Filter {Department -eq "Marketing"} -ResultSize Unlimited`
 - Groups: `Get-Mailbox -RecipientTypeDetails GroupMailbox -Filter {CustomAttribute15 -eq "Marketing"} -ResultSize Unlimited`. Get-Mailbox does not support MailUser.
-- SharePoint KeyQL: test at `https://<tenant>.sharepoint.com/search`.
+- SharePoint KeyQL: with an account that has the SharePoint admin role, test at `https://<tenant>.sharepoint.com/search`.
+
+The page adds that the PowerShell output can differ from the member list in Scope details, which includes arbitration mailboxes. A higher count than expected can come from users without a valid license for adaptive scopes. A query on EmailAddresses generally needs the smtp: prefix.
 
 ## View membership
 
@@ -86,12 +88,12 @@ Open the scope, then **Details** > **Scope details**. The State column shows Add
 
 - The retention policy UI path. It says only to select scopes when you create the policy.
 - The per-tenant policy limit.
-- A separate case for retention label policies.
-- A licensing statement.
+- Details on retention label policies. The page only links to the retention article.
+- A licensing statement. The page only links the Microsoft Purview service description.
 
 ## A rollout outline
 
-This outline is practical advice built on the page.
+This outline is my advice, built on the page.
 
 1. Pick a stable attribute, such as a department field that the directory maintains.
 2. Build the query, then validate it with PowerShell before you rely on it.
@@ -99,7 +101,7 @@ This outline is practical advice built on the page.
 4. Allow time for the query to populate before you judge the result.
 5. Attach the scope to the policy and review membership again later.
 
-## Typical mistakes
+## Typical mistakes (my advice)
 
 - Mistyping an attribute value, since the portal does not validate it.
 - Expecting immediate membership, when population can take up to five days.
@@ -118,7 +120,7 @@ The query runs once a day, and the portal does not validate typed values.
 
 ## Choosing a builder
 
-This is practical advice. Start with the simple builder when one attribute and one of the four operators are enough. Move to the advanced builder when you need and, or, not, comparison or like operators, or when you need inactive mailboxes. Keep the advanced query well below the 10,000 character limit and test it with PowerShell or SharePoint search first.
+This section is my advice. Start with the simple builder when one attribute and one of the four operators are enough. Move to the advanced builder when you need and, or, not, comparison or like operators, or when you need inactive mailboxes. Keep the advanced query well below the 10,000 character limit and test it with PowerShell or SharePoint search first.
 
 ## Related
 
