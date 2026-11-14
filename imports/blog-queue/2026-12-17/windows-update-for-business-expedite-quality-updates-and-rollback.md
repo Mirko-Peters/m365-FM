@@ -9,7 +9,7 @@ topics: [windows-update-for-business, intune, windows-autopatch, intune-update-r
 keypoints:
   - "An expedite policy installs one chosen update as soon as possible, bypasses deferrals for that update only and does not change future monthly servicing."
   - "Create it under Devices > Windows Updates > Quality updates > Create > Expedite policy. The reboot deadline can be 0, 1 or 2 days."
-  - "Devices need Intune management, Entra join or hybrid join, telemetry at Required, and no Group Policy that blocks scanning or points to another update source."
+  - "Devices need Intune management, Entra join or hybrid join and telemetry at Required. Learn says some Group Policy settings, such as an intranet update location, can interfere and should be reset."
   - "Deleting an expedite policy does not uninstall an update that already installed."
   - "To roll back, use Uninstall on an update ring. Intune sends it immediately, can restart devices without a delay option, and pauses updates of that type on the ring."
 faq:
@@ -58,12 +58,12 @@ For Windows versions earlier than 24H2, the Update Health Tools are required, in
 3. Enter a name and a description.
 4. Under **Select the quality update you would like to Expedite**, choose the update. The list shows only expeditable updates.
 5. Choose the number of days before a required reboot is enforced.
-6. Under **Assignments**, select **Add groups**.
+6. Under **Assignments**, select **Add groups** and pick device or user groups.
 7. Select **Review + create**, then **Create**.
 
 The policy deploys to the assigned groups after it is created.
 
-Updates are identified by release date. B releases are the Patch Tuesday security updates, and OOB releases are out-of-band security updates. The list shows the two most recent security updates. Non-security D releases appear only when no newer security update exists, and they apply to Windows 11 only.
+Updates are identified by release date. B releases are the Patch Tuesday security updates, and OOB releases are out-of-band security updates. The list shows the two most recent security updates. Non-security D releases appear only when no newer security update exists, and they apply to Windows 11 only. The introduction of the same Learn page says only supported Windows security updates can be expedited, which the section on non-security D releases contradicts.
 
 ## Understand the reboot deadline
 
@@ -81,7 +81,7 @@ Users can restart now, schedule a restart or let Windows choose a time outside a
 
 ## Monitor the rollout
 
-Go to **Reports** > **Windows Updates**. The **Summary** tab shows the **Windows Expedited Quality updates** table with devices installing, completed or in error. On the **Reports** tab, open **Windows Expedited Update Report**, choose the profile and select **Generate report** for per-device status.
+Go to **Reports** > **Windows Updates**. The **Summary** tab shows the **Windows Expedited Quality updates** table with devices installing, completed or in error. On the **Reports** tab, open **Windows Expedited Update Report**, choose the profile and select **Generate report** for per-device status. Learn also lists **Devices** > **Monitor** > **Expedited quality update policies with alerts** to find devices with alerts or errors.
 
 ## Roll back a bad update
 
@@ -89,7 +89,7 @@ Deleting the expedite policy does not uninstall an update that has finished inst
 
 1. Go to **Devices** > **By platform** > **Windows** > **Manage updates** > **Windows updates**.
 2. Open the **Update rings** tab and select the ring.
-3. Select **Uninstall**, choose **Quality** or **Feature**, and select **OK**.
+3. Select **Uninstall**, choose **Quality** or **Feature**, and select **OK**. Learn says Uninstall works for an active or paused ring, although its numbered steps mention a paused ring.
 
 Learn describes these effects:
 
@@ -100,19 +100,19 @@ Learn describes these effects:
 - After a quality update is rolled back, it still appears in **Update History**.
 - Uninstall does not work when a feature update was applied with an enablement package.
 
-The pause itself lasts up to 35 days. You can use **Pause**, **Resume** and **Extend** from the same ring. A pause command reaches devices at their next check-in, so a scheduled update can install before then.
+Learn's Pause section says a pause lasts up to 35 days and offers **Pause**, **Resume** and **Extend** on the ring. It does not state whether the pause that Uninstall sets uses the same length, so check the ring's overview for the days remaining. For the Pause action itself, the command reaches devices at their next check-in, so a scheduled update can install before then.
 
 ## Typical mistakes
 
 - Expecting the policy to start within minutes on offline devices.
 - Leaving Group Policy settings that block scanning in place.
-- Using a user group instead of a device group, which Learn advises against for update rings.
+- Using a user group for update rings, where Learn's tip says to assign device groups (the expedite page allows device or user groups).
 - Selecting a D release for Windows 10 devices.
 - Rolling back during working hours without warning users of the forced restart.
 
 ## What the sources do not say
 
-The pages read do not state a delivery timeframe, and the quality update page does not mention rollback. The update ring page gives a 2 to 60 day window only for feature updates, so check on a pilot ring how long the rollback of a quality update stays available. The expedite page also says the Update Health Tools check script's return codes are described the opposite way from what the script prints, so verify the logic before using it.
+The pages read do not state a delivery timeframe, and the quality update page does not mention rollback. The update ring page gives a 2 to 60 day window only for feature updates, so check on a pilot ring how long the rollback of a quality update stays available. On the expedite page, the text describes the return codes of the Update Health Tools check script the opposite way from what the script does (it exits 0 when the service is present), so verify the logic before using it.
 
 ## Related
 
@@ -123,7 +123,7 @@ The pages read do not state a delivery timeframe, and the quality update page do
 
 ## Sources
 
-- [Expedite policies for Windows quality updates](https://learn.microsoft.com/en-us/intune/device-updates/windows/quality-updates-policy)
-- [Windows quality updates overview](https://learn.microsoft.com/en-us/intune/device-updates/windows/manage-quality-updates)
-- [Manage Windows update ring policies](https://learn.microsoft.com/en-us/intune/device-updates/windows/manage-update-rings)
-- [Windows update ring settings reference](https://learn.microsoft.com/en-us/intune/device-updates/windows/ref-update-ring-settings)
+- [Expedite Policies for Windows Quality Updates](https://learn.microsoft.com/en-us/intune/device-updates/windows/configure-expedite-policy)
+- [Manage Windows quality updates](https://learn.microsoft.com/en-us/intune/device-updates/windows/manage-quality-updates)
+- [Manage Windows Update Ring Policies](https://learn.microsoft.com/en-us/intune/device-updates/windows/manage-update-rings)
+- [Update Rings Policy Settings](https://learn.microsoft.com/en-us/intune/device-updates/windows/ref-update-ring-settings)
