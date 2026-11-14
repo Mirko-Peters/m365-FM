@@ -25,7 +25,7 @@ faq:
     a: "Learn says file size or hash may not be reliable after upload, because SharePoint updates file metadata. Compare the Base64-encoded QuickXorHash of the original with the vti_writevalidationtoken of the uploaded file."
 ---
 
-A file plan lists your retention labels and rules, and records management uses retention labels to declare items as records. This guide follows Microsoft Learn's records management overview and focuses on what the labels do and where the settings are. The page links to separate articles for step-by-step label creation, which it does not repeat.
+Records management in Microsoft Purview uses retention labels to declare items as records, and a file plan is the page's way to bring in an existing retention plan or build a new one. This guide follows Microsoft Learn's records management overview and focuses on what the labels do and where the settings are. The page links to separate articles for step-by-step label creation, which it does not repeat.
 
 ## What records management offers
 
@@ -97,4 +97,4 @@ The overview does not give step-by-step label creation or publishing, event-base
 
 ## Sources
 
-- [Learn about records management](https://learn.microsoft.com/purview/records-management)
+- [Records management for documents and emails in Microsoft 365 (Microsoft Learn)](https://learn.microsoft.com/purview/records-management)
