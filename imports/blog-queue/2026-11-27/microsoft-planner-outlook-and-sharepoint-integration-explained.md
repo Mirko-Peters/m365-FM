@@ -12,7 +12,7 @@ keypoints:
   - "Admins can turn calendar sync off with Set-PlannerConfiguration -AllowCalendarSharing $false."
   - "The Planner web part works only on group-connected team sites and can show a plan as a board or as charts."
   - "Planner is also available inside Outlook on the web and the new Outlook for Windows. It is on by default, and Microsoft lists no admin action."
-  - "Premium plans need a Project Plan 1 license and are stored in Dataverse."
+  - "Premium plans need Planner Plan 1 (formerly Project Plan 1) and are stored in Dataverse."
 faq:
   - q: "Where does Planner store its data?"
     a: "According to Microsoft Learn, private tasks are stored in Exchange. Basic plans and their tasks are stored in Azure and managed by the Planner service, comments are stored in Exchange as email threads, and attachments are stored in the SharePoint location for the group. Premium plans are stored in Dataverse."
@@ -28,7 +28,7 @@ Planner, Outlook and SharePoint are not tied together by one switch. Each connec
 
 ## Planner in one paragraph
 
-Planner in Microsoft 365 lets users create basic plans with four views: Grid, Board, Schedule and Charts. Premium plans need a Project Plan 1 license and add views such as Timeline, People and Goals. Planner and Project Plan 3 or Plan 5 add advanced features such as dependencies, sprints and custom fields. Planner comes with Microsoft 365 Business Basic and Business Standard, Office 365 E1, E3 and E5, and Microsoft 365 A1, per Microsoft Learn.
+Planner in Microsoft 365 lets users create basic plans with four views: Grid, Board, Schedule and Charts. Premium plans need a Planner Plan 1 license (renamed from Project Plan 1 in April 2024) and add views such as Timeline, People and Goals. Planner and Project Plan 3 or Plan 5 add advanced features such as dependencies, sprints and custom fields. Planner comes with Microsoft 365 Business Basic and Business Standard, Office 365 E1, E3 and E5, and Microsoft 365 A1, per Microsoft Learn.
 
 ## Where Planner data lives
 
