@@ -10,13 +10,13 @@ keypoints:
   - "A desktop flow connection can't be shared directly. Sharing is limited to service principals with Can use or Can edit."
   - "Store the Windows account secret in Azure Key Vault or CyberArk (preview) instead of typing it into the connection."
   - "Certificate-based authentication needs Power Automate for desktop 2.49 or later, a .pfx in Azure Key Vault and Entra-joined machines."
-  - "Unattended runs need all users signed out and use an RDP session, so fPromptForPassword and RDP permissions are frequent causes."
+  - "Unattended runs need all users signed out and use an RDP session. The documented errors include RDP permission and fPromptForPassword causes."
   - "Don't clone a VM after installing the machine runtime. Delete and re-register the machine if SessionNotFound follows a clone."
 faq:
   - q: "Where should unattended desktop flow credentials be stored?"
     a: "According to Microsoft Learn, a desktop flow connection can use a credential whose secret is stored in Azure Key Vault or CyberArk (preview). Learn does not say where credentials typed directly into the connection are kept, so a vault-backed credential is the documented option for central control."
   - q: "What license do unattended runs need?"
-    a: "Microsoft Learn says unattended desktop automation requires the Power Automate Process plan. The page does not mention an unattended RPA add-on."
+    a: "Microsoft Learn says unattended desktop automation requires the Power Automate Process plan. The Manage machines page also speaks of allocating process capacity or unattended RPA capacity to create unattended bots, so licensing wording differs between pages. Check your own licensing."
   - q: "Why does the run fail with MSEntraMachineAlwaysPromptingForPassword?"
     a: "Learn says Power Automate for desktop cannot validate the Microsoft Entra credentials on the machine, typically because of a group policy setting. It lists three resolutions: certificate-based authentication, Entra authentication for Remote Desktop with username and password, or disabling Always prompt for password upon connection."
   - q: "Can I run unattended while someone is signed in to the machine?"
@@ -43,9 +43,9 @@ Learn also says to make sure the machine is secured and its admins are trusted b
 
 ### Choose a vault-backed credential
 
-When you create a connection (**Data** > **Connections** > **New connection** > **Desktop flows**), you can choose **Connect with username and password** or **Connect with Sign-in**. With username and password you can select a credential whose secret is stored in **Azure Key Vault** or **CyberArk** (preview), or enter the account and password directly. The pages do not say where directly entered credentials are stored, so a vault-backed credential is the safer documented choice.
+When you create a connection (**Data** > **Connections** > **New connection** > **Desktop flows**), Learn describes two methods, **Connect with username and password** and **Connect with Sign-in**. The sign-in method works only for attended runs and fails when run unattended, so it is not an option for the unattended runs this article covers. With username and password you can select a credential whose secret is stored in **Azure Key Vault** or **CyberArk** (preview), or enter the account and password directly. The pages do not say where directly entered credentials are stored. Preferring a vault-backed credential is my own recommendation, not a statement from Learn.
 
-Account formats accepted include domain\username, username@domain for Entra accounts, and machine name\username or .\username for local accounts.
+Account formats listed by the connection page are DOMAIN\User, username@domain.com for Entra accounts and MACHINENAME\User or local\User for local accounts. The errors page (WindowsIdentityIncorrect) additionally lists a plain username and .\username for local accounts.
 
 ### Consider certificate-based authentication
 
@@ -55,13 +55,13 @@ Learn describes certificate-based authentication (CBA) for unattended runs. Requ
 - A certificate in .pfx format (PEM is not supported), stored in Azure Key Vault.
 - Power Automate for desktop 2.49 or later, and Windows Server 2019 or later if you use Windows Server.
 - Target machines joined to Microsoft Entra ID.
-- Admin consent for unattended runs that use certificate credentials.
+- Admin consent for unattended runs that use certificate credentials on a Microsoft Entra joined device.
 
 Limits: CBA credentials work only for the Windows session credentials of the connection. They cannot be used inside the desktop flow or with other connectors, and Azure Key Vault is the only supported vault.
 
 ### Control who can use the connection
 
-A desktop flow connection cannot be shared with other users directly. You can share it with service principals only, with the permissions **Can use** or **Can edit**. Sharing works only with a specified run owner identity, and **Can Share** is not available. The run owner is the identity whose permissions are checked during execution. By default it is the connection's creator.
+Learn's connection page contains both a note that a desktop flow connection cannot be shared with other users and a sharing section for service principal users. Read together, sharing is limited to service principals, with the permissions **Can use** or **Can edit**. Sharing works only with a specified run owner identity, and **Can Share** is not available. The run owner is the identity whose permissions are checked during execution. By default it is the connection's creator.
 
 For auditing, the **Run status** page shows the run owner for each run, and the **Desktop Flow activity** page summarizes run owner usage.
 
@@ -91,7 +91,7 @@ Check the basics first, then match the error code.
 - RDPIsNotEnabled: enable Remote Desktop.
 - RdpPermissionNotGranted: confirm the user is in Administrators or Remote Desktop Users. In secpol.msc under **Security Settings** > **Local Policies** > **User Rights Assignment**, make sure Deny log on locally and Deny log on through Remote Desktop Services do not include the UIFlowService account.
 - UIFlowServiceNoRdpPermissions and SessionNotFoundAfterCreation: add the service account (usually NT SERVICE\UIFlowService) to Remote Desktop Users and make sure group policy does not remove it.
-- SessionExistsForTheUserWhenUnattended, Win10AlreadyHasActiveSession and TooManyActiveSessions: sign out the sessions that are in the way.
+- SessionExistsForTheUserWhenUnattended: check that you are not signed in with the same user on the machine, whatever the session state. Win10AlreadyHasActiveSession (Windows 10 only) and TooManyActiveSessions (Windows Server only): sign out the active session or sessions.
 
 ### Check 4: Session creation errors
 
@@ -106,7 +106,7 @@ Learn's session creation article lists three:
 The article gives three resolutions:
 
 1. **Entra authentication for Remote Desktop with a user certificate.** Needs version 2.50 or later and is for cases where no MFA exception can be granted to the connection account.
-2. **Entra authentication with username and password.** Needs version 2.49 or later and an account without MFA, or with an MFA exception. Set the UseRdsAadAuthentication DWORD value to 1 under HKLM\SOFTWARE\WOW6432Node\Microsoft\Power Automate Desktop\Service, hide the consent prompt for the target machine group, and restart the Power Automate service.
+2. **Entra authentication with username and password.** Needs version 2.49 or later and an account without MFA, or with an MFA exception. Set the UseRdsAadAuthentication DWORD value to 1 under HKLM\SOFTWARE\WOW6432Node\Microsoft\Power Automate Desktop\Service, hide the consent prompt for the target machine group, and restart the Power Automate service. The run-unattended page names version 2.50 or later as a prerequisite for Entra username and password with NLA, while this error page says 2.49, so check which applies to your build.
 3. **Disable fPromptForPassword.** In gpedit.msc go to **Computer Configuration** > **Administrative Templates** > **Windows Components** > **Remote Desktop Services** > **Remote Desktop Session Host** > **Security** and check **Always prompt for password upon connection**. If enabled, work with IT to disable it. Learn says changing the registry value alone is generally not sufficient, as it might be reverted.
 
 If the flow fails with MSEntraRemoteDesktopAppConsentRequired, the consent dialog appeared during session setup. Learn describes admin consent for unattended runs using certificate or sign-in credentials with NLA, with the AppID a4a365df-50f1-4397-bc59-1a1564b8bb9c.
@@ -119,7 +119,7 @@ NoCandidateMachine means the run exceeded the queue waiting limit, so add machin
 
 Under **Monitor** > **Machines**, select the machine or group, choose **Settings** and enable **Reuse sessions for unattended runs**. Session reuse is not supported on machines that allow multiple sessions per user.
 
-## Common mistakes
+## Common mistakes (my own summary, not from Learn)
 
 - Using the same all-powerful account for every machine.
 - Typing passwords into connections instead of using a vault credential.
@@ -137,9 +137,9 @@ Under **Monitor** > **Machines**, select the machine or group, choose **Settings
 ## Sources
 
 - [Microsoft Learn: Run unattended desktop flows](https://learn.microsoft.com/en-us/power-automate/desktop-flows/run-unattended-desktop-flows)
-- [Microsoft Learn: Desktop flow connections](https://learn.microsoft.com/en-us/power-automate/desktop-flows/desktop-flow-connections)
-- [Microsoft Learn: Certificate-based authentication for unattended runs](https://learn.microsoft.com/en-us/power-automate/desktop-flows/configure-certificate-based-auth)
+- [Microsoft Learn: Manage desktop flow connections](https://learn.microsoft.com/en-us/power-automate/desktop-flows/desktop-flow-connections)
+- [Microsoft Learn: Configure certificate-based authentication](https://learn.microsoft.com/en-us/power-automate/desktop-flows/configure-certificate-based-auth)
 - [Microsoft Learn: Manage machines](https://learn.microsoft.com/en-us/power-automate/desktop-flows/manage-machines)
-- [Microsoft Learn: Errors when running attended or unattended desktop flows](https://learn.microsoft.com/en-us/troubleshoot/power-platform/power-automate/desktop-flows/troubleshoot-errors-running-attended-or-unattended-desktop-flows)
-- [Microsoft Learn: Session creation error codes](https://learn.microsoft.com/en-us/troubleshoot/power-platform/power-automate/desktop-flows/troubleshoot-session-creation-errrors)
-- [Microsoft Learn: MSEntraMachineAlwaysPromptingForPassword error](https://learn.microsoft.com/en-gb/troubleshoot/power-platform/power-automate/desktop-flows/msentramachinealwayspromptingforpassword-error)
+- [Microsoft Learn: Error code occurs when running an attended or unattended desktop flow](https://learn.microsoft.com/en-us/troubleshoot/power-platform/power-automate/desktop-flows/troubleshoot-errors-running-attended-or-unattended-desktop-flows)
+- [Microsoft Learn: Session creation error codes in unattended desktop flow runs](https://learn.microsoft.com/en-us/troubleshoot/power-platform/power-automate/desktop-flows/troubleshoot-session-creation-errrors)
+- [Microsoft Learn: Unattended Desktop Flow Run Fails with MSEntraMachineAlwaysPromptingForPassword](https://learn.microsoft.com/en-us/troubleshoot/power-platform/power-automate/desktop-flows/msentramachinealwayspromptingforpassword-error)
