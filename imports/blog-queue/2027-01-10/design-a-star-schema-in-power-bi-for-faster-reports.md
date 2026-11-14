@@ -9,7 +9,7 @@ topics: [power-bi-relationships, power-bi]
 keypoints:
   - "A star schema classifies each table as a dimension table for filtering and grouping or a fact table for summarization. Power BI infers the type from the relationships."
   - "The one side of a one-to-many relationship is a dimension table and the many side is a fact table. Avoid mixing both types in one table."
-  - "Only one active relationship can exist between two tables. For role-playing dimensions such as dates, Learn recommends a separate dimension table per role."
+  - "Only one active relationship can exist between two tables. For role-playing dimensions such as dates, Learn describes a separate dimension table per role as a common modeling technique."
   - "Single model tables usually beat snowflake designs. Many-to-many dimension relationships are best modeled with a bridging table."
   - "The article gives no benchmarks and no dedicated guidance on single-direction filtering, date table setup or wide tables."
 faq:
@@ -18,14 +18,14 @@ faq:
   - q: "How does Power BI know which table is which?"
     a: "There is no table property for it. The type is determined by the model relationships. The one side of a one-to-many relationship is always a dimension and the many side is always a fact table."
   - q: "How should I model dates used for order, ship and delivery?"
-    a: "Only one relationship between two tables can be active. Learn recommends creating a dimension table for each role-playing instance, instead of relying on inactive relationships and USERELATIONSHIP."
+    a: "Only one relationship between two tables can be active. Learn describes creating a dimension table for each role-playing instance as a common Power BI modeling technique that avoids the limits of inactive relationships and USERELATIONSHIP. The cost is a duplicated date table, which Learn calls a minor price."
   - q: "Should I snowflake dimensions?"
     a: "Generally the benefits of a single model table outweigh the benefits of multiple tables. Snowflake designs add tables, longer filter chains and a less intuitive Data pane."
   - q: "How do I model many-to-many between dimensions?"
     a: "Learn calls the bridging table approach the best practice when relating two dimensions. A bridging table can be a factless fact table that stores the relationships."
 ---
 
-A star schema separates what you filter by from what you add up. Power BI models built this way are easier to understand and, according to the Microsoft Learn article, optimized for performance and usability. This guide follows the Learn article on star schema. The article is qualitative and gives no benchmarks.
+A star schema separates what you filter by from what you add up. According to the Microsoft Learn article, star schema design is highly relevant to building Power BI models optimized for performance and usability. This guide follows the Learn article on star schema. The article is qualitative and gives no benchmarks.
 
 ## The two table types
 
@@ -42,7 +42,7 @@ You do not set a table type in Power BI. The model relationships decide it. In a
 
 A date table can filter related facts by order date, ship date or delivery date. There can only be one active relationship between two Power BI tables. All others must be inactive, and the only way to use an inactive relationship is a DAX expression with USERELATIONSHIP.
 
-The recommended pattern is to create a dimension table for each role-playing instance, using referencing queries or calculated tables. Use self-describing column names such as Ship Year and table descriptions such as Filters reseller sales by order date.
+A common Power BI modeling technique is to create a dimension table for each role-playing instance, using referencing queries or calculated tables. Learn recommends self-describing column names such as Ship Year and, where relevant, table descriptions such as Filters reseller sales by order date. The cost is a duplicated date table, which Learn calls a minor price because dimension tables are usually small.
 
 ## Measures
 
@@ -72,7 +72,7 @@ Power BI semantic models depend on Power Query to import or connect to data. For
 ## What the article does not say
 
 - Benchmarks or measured performance gains.
-- Dedicated guidance on single-direction filtering. It links to a separate page on bi-directional relationships.
+- Dedicated guidance on single-direction filtering or bi-directional relationships.
 - A section on creating or marking a date table.
 - Advice on avoiding wide tables.
 - Full DAX or Power Query samples.
@@ -89,10 +89,12 @@ This outline is practical advice built on the article.
 
 ## Typical mistakes
 
+This list is my own summary of the article's guidance, not a list from Learn.
+
 - Putting dimension attributes and facts in one table.
 - Relying on inactive relationships for every date role.
 - Snowflaking dimensions without a clear reason.
-- Using a many-to-many relationship where a bridging table fits.
+- Skipping the bridging table when relating two dimensions, which Learn calls the best practice.
 
 ## Related
 
@@ -102,4 +104,4 @@ This outline is practical advice built on the article.
 
 ## Sources
 
-- [Understand star schema and the importance for Power BI (Microsoft Learn)](https://learn.microsoft.com/power-bi/guidance/star-schema)
+- [Understand star schema and the importance for Power BI - Power BI (Microsoft Learn)](https://learn.microsoft.com/power-bi/guidance/star-schema)
