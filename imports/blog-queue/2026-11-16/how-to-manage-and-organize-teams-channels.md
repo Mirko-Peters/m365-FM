@@ -7,7 +7,7 @@ author: mirko-p
 date: 2026-11-16
 topics: [teams-channels, teams, private-channels, shared-channels]
 keypoints:
-  - "Pick the channel type first. A channel cannot be changed between standard, private and shared afterwards."
+  - "Pick the channel type first. Microsoft says a shared channel cannot be changed into a standard or private channel, or the reverse, and its host team cannot be changed."
   - "Team owners control who can create, update or delete channels under More options, Settings, Member Permissions."
   - "Renaming a channel does not rename its SharePoint folder, so choose names before you create channels."
   - "Channel moderation works only in standard channels and not in the General channel. Turn it on under Manage channel."
@@ -16,7 +16,7 @@ faq:
   - q: "What is the difference between standard, private and shared channels?"
     a: "According to Microsoft Learn, a standard channel is open to all team members, a private channel is limited to selected team members and a shared channel can include selected people inside and outside the team. Learn's comparison table also shows that moderation, Planner and bots are available only in standard channels."
   - q: "Can I change a channel from standard to private?"
-    a: "No. Microsoft Support states that a channel cannot be changed between standard, private and shared types, and that the host team of a shared channel cannot be changed. If you need a different type, create a new channel and move the work there."
+    a: "Microsoft Support states that you cannot change a shared channel into a standard or private channel, or the reverse, and that the host team of a shared channel cannot be changed. The pages used for this guide do not describe a conversion between standard and private channels, so decide on the type before you create the channel."
   - q: "How do I restore a deleted channel?"
     a: "Microsoft Support says to open the team, select More team options and Manage team, go to the Channels tab, filter by Deleted and select Restore. Microsoft Support names a window of 21 days on the delete page, while the Teams limits page and another support page say 30 days, so do not wait."
   - q: "How many channels can a team have?"
@@ -30,7 +30,7 @@ Microsoft Learn compares three types. The most important differences:
 
 | Feature | Standard | Private | Shared |
 |---|---|---|---|
-| Open to all team members | Yes | No | No |
+
 | Limit membership to a subset of the team | No | Yes | Yes |
 | Add people without adding them to the team | No | No | Yes |
 | Guests can take part | Yes | Yes | No |
@@ -38,7 +38,7 @@ Microsoft Learn compares three types. The most important differences:
 | Moderation | Yes | No | No |
 | Own SharePoint site | No | Yes | Yes |
 
-Standard channels also support Planner and bots, connectors and messaging extensions, which private and shared channels do not. A channel cannot be converted to another type later, and the host team of a shared channel cannot be changed. Only team owners can create shared channels, and shared channels need B2B direct connect to be enabled by an admin before outside people can be added.
+Standard channels also support Planner and bots, connectors and messaging extensions, which private and shared channels do not. Microsoft Support says a shared channel cannot be changed into a standard or private channel, or the reverse, and the host team of a shared channel cannot be changed. Only team owners can create shared channels, and shared channels need B2B direct connect to be enabled by an admin before outside people can be added.
 
 A practical rule that follows from Microsoft's descriptions: use standard channels for topics the whole team can see, a private channel when a subset must be separated and a shared channel when people outside the team must collaborate.
 
@@ -57,7 +57,7 @@ Team owners decide this. Select **More options** for the team, then **Settings**
 
 ## Name channels before you create them
 
-Microsoft Learn's lifecycle guidance warns that renaming a channel does not rename the matching folder in the SharePoint document library, which can confuse people. To rename anyway, point to the channel, select **More options**, then **Edit channel**, enter a new name under **Channel name** and select **Save**. Names must be unique in the team and cannot contain / \ : * ? " < > |. Only team owners can rename the first channel, and the General channel shares its description with the team.
+Microsoft Learn's lifecycle guidance warns that renaming a channel does not rename the matching folder in the SharePoint document library, which can confuse people. To rename anyway, point to the channel, select **More options**, then **Edit channel**, enter a new name under **Channel name** and select **Save**. Names must be unique in the team and, according to the edit page, cannot contain / \ : * ? " < > |. The Learn limits page lists further characters and reserved words, so keep names simple. Only team owners can rename the first channel, and the General channel shares its description with the team.
 
 Microsoft prescribes no naming convention. It lists naming conventions among the governance decisions to make before rollout. Whatever you choose, apply it consistently, for example by project or by topic.
 
