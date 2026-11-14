@@ -85,7 +85,7 @@ Useful policy settings are a default label, mandatory labeling, and a justificat
 
 ## How users apply labels
 
-After publishing, the **Sensitivity** button appears on the ribbon in supported Office apps. The applied label shows in a sensitivity bar next to the file name in Word, Excel and PowerPoint, and on the **Subject** line in Outlook. Users need a Microsoft 365 work or school account, and the apps need a subscription version of Office such as Microsoft 365 Apps for enterprise.
+After publishing, the **Sensitivity** button appears on the ribbon in supported Office apps. The applied label shows in a sensitivity bar next to the file name in Word, Excel and PowerPoint, and on the **Subject** line in Outlook. Labels require a subscription edition of Office, and at least one label policy must be published to the user.
 
 ## Troubleshoot a missing label
 
