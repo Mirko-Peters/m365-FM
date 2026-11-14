@@ -20,9 +20,9 @@ faq:
   - q: "Which devices support passkeys in Microsoft Authenticator?"
     a: "Learn says Authenticator passkeys need Android 14 or later, or iOS 17 or later. The page for the passkey profile model also lists Authenticator versions iOS 6.8.37 or Android 6.2507.4749 for profiles that cover both device-bound and synced passkeys."
   - q: "Can I use iCloud Keychain or Google Password Manager for Entra sign-in?"
-    a: "Yes, as synced passkeys, if you turn on passkey profiles and allow the Synced type in a profile. Learn lists Apple Passwords on macOS 13 or later and iOS 16 or later, and Google Password Manager with Chrome or on Android 9 or later. Synced passkeys do not support attestation."
+    a: "Yes, as synced passkeys, if you turn on passkey profiles and allow the Synced type in a profile. Learn lists Apple Passwords on macOS 13 or later and iOS 16 or later, and Google Password Manager with Chrome (Windows, macOS, iOS 17 or later) or natively on Android 9 or later, excluding Samsung devices. Synced passkeys do not support attestation."
   - q: "What happens to registered passkeys if I change the policy?"
-    a: "Several changes affect existing users. Learn says removing a previously allowed AAGUID blocks users who registered that key, and disabling synced passkeys in a profile stops targeted users from using synced passkeys. Turning on attestation later does not block passkeys registered without it, because attestation applies only at registration."
+    a: "Several changes affect existing users. Learn says removing a previously allowed AAGUID blocks users who registered that key. Turning on attestation later does not block passkeys registered without it, because attestation applies only at registration."
 ---
 
 Passkeys in Microsoft Entra ID work once three things line up: the Passkey (FIDO2) method is enabled for the user, self-service registration is allowed and the user's device or app meets the version requirements. Most failed rollouts trace back to one of these, or to a Conditional Access policy that interferes with registration.
@@ -66,9 +66,9 @@ Users register under **Security info** at mysignins.microsoft.com/security-info.
 | Allow self-service set up left at No | Users cannot register a passkey in Security info |
 | User in an excluded group | Excluded users are blocked from registration and sign-in. Exclusion overrides inclusion |
 | Removing an allowed AAGUID | Users who registered that key can no longer sign in with it |
-| Turning off Synced in a profile | Targeted users cannot sign in with synced passkeys they already registered |
+
 | Turning on attestation later | Existing passkeys keep working. Attestation is checked only at registration |
-| Relying on AAGUID lists with attestation off | Lists are only a policy guide, because Entra cannot verify the key |
+
 | Trying to register as a guest | Not supported for internal or external guests, including B2B users |
 | Changing a UPN | The passkey cannot be updated. Delete it in Security info and register again |
 
@@ -90,7 +90,7 @@ Learn lists several known issues.
 
 **Bluetooth restrictions.** If Bluetooth is locked down, allow pairing with passkey-enabled FIDO2 authenticators.
 
-Learn states that it does not cover app lock settings, account type details or what to do when Authenticator does not show the passkey option, so the sources used here are thin on that case.
+The Authenticator article says it does not cover step-by-step registration and sign-in, passkeys from other providers, or troubleshooting beyond the issues listed, so the sources used here are thin on cases such as Authenticator not showing the passkey option.
 
 ## Enforce passkey sign-in
 
