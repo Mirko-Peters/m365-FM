@@ -8,7 +8,7 @@ date: 2027-01-18
 topics: [exchange-online, exchange-online-powershell, shared-mailbox, distribution-list]
 keypoints:
   - "Create resource mailboxes in the Exchange admin center under Recipients, Resources, or with New-Mailbox using the Room or Equipment switch."
-  - "Booking defaults per Learn: repeating meetings allowed, 180-day booking window, 24 hours maximum duration, 8 to 5 working hours Monday to Friday, auto-accept."
+  - "Booking defaults per Learn: repeating meetings allowed, 180-day booking window, 24 hours maximum duration, automatic accept or decline; working hours default to 8 to 5 but are not enforced by default."
   - "Modify settings with Set-User, Set-Mailbox, Set-CalendarProcessing and Set-MailboxFolderPermission, or in the flyout tabs General, Booking, Delegation and Others."
   - "Room lists are distribution groups with room mailboxes only, can only be created in PowerShell, and help with more than 100 rooms or multiple buildings."
   - "Nested groups do not work in resource mailbox settings, and in hybrid you should create resource mailboxes in the matching location."
@@ -16,9 +16,9 @@ faq:
   - q: "What is the difference between a room and an equipment mailbox?"
     a: "Both are resource mailboxes that people book by inviting them to a meeting. A room mailbox stands for a physical meeting space, an equipment mailbox for a resource that is not a room, such as the motor vehicle in Learn's example. You pick Room or Equipment when you create them."
   - q: "How do I create one in PowerShell?"
-    a: "Use New-Mailbox with the Room or Equipment switch, for example New-Mailbox -Name ConfRoom1 -Room -DisplayName with a display name. For equipment add -Equipment and optionally -PrimarySmtpAddress."
+    a: "Use New-Mailbox with the Room or Equipment switch, for example New-Mailbox -Name ConfRoom1 -Room plus a display name. For equipment use -Equipment instead and optionally add -PrimarySmtpAddress."
   - q: "What are the default booking settings?"
-    a: "Learn lists: repeating meetings allowed, a booking window of 180 days, a maximum duration of 24 hours, working hours 8 to 5 Monday to Friday, and automatic acceptance of requests."
+    a: "Learn lists: repeating meetings allowed, a booking window of 180 days, a maximum duration of 24 hours, and automatic accept or decline of requests. Default working hours are 8:00 to 17:00 Monday to Friday, but Allow scheduling only during working hours is not selected by default."
   - q: "How do I require approval for bookings?"
     a: "Learn's delegate approval example uses Set-CalendarProcessing with AllBookInPolicy set to false, AllRequestInPolicy set to true and ResourceDelegates, plus Set-MailboxFolderPermission to give the delegate Editor rights with the Delegate sharing flag."
   - q: "What is a room list?"
@@ -37,7 +37,7 @@ Learn distinguishes two types. A room mailbox represents a physical location suc
 2. Go to **Recipients** > **Resources**.
 3. Choose **Add a room resource** or **Add an equipment resource**.
 
-The wizard has these pages: **Set up** (name and resource mail address), **Set properties**, **Booking delegate settings** and **Review**. Learn gives defaults for bookings: repeating meetings allowed, a booking window of 180 days, a maximum duration of 24 hours, working hours of 8 to 5 Monday to Friday, and automatic acceptance.
+The wizard has these pages: **Set up** (name and resource mail address), **Set properties**, **Booking delegate settings** and **Review**. Learn gives defaults for bookings: repeating meetings are allowed, the booking window is 180 days, the maximum duration is 24 hours, and requests are accepted or declined automatically. Working hours default to 8:00 A.M. to 5:00 P.M. Monday through Friday, but **Allow scheduling only during working hours** is not selected by default, so requests outside those hours are allowed unless you turn it on.
 
 ## Create one in PowerShell
 
@@ -82,11 +82,11 @@ A room list is a distribution group that contains only room mailboxes. Learn say
 
 ```powershell
 New-DistributionGroup -Name "Building 32 Conference Rooms" -RoomList
-Add-DistributionGroupMember -Identity "Building 32 Conference Rooms" -Member ConfRoom1
-Set-DistributionGroup -Identity "Building 32 Conference Rooms" -RoomList
+Add-DistributionGroupMember -Identity "Building 32 Conference Rooms" -Member confroom3223@contoso.com
+Set-DistributionGroup -Identity "Building 34 Conference Rooms" -RoomList
 ```
 
-The last command turns an existing group into a room list. The exact parameters for the member and identity in the second and third command are my reading of the pattern, so check them against the page before you run them.
+The second command adds a room mailbox to the list, and the last command converts an existing distribution group that contains room mailboxes into a room list. Learn says the conversion can only be done in PowerShell, while rooms can be added to a room list in the admin center or in PowerShell.
 
 ## Remove a resource mailbox
 
@@ -110,7 +110,7 @@ This section is my advice, not a Microsoft statement.
 
 ## What the page does not cover
 
-The page I read describes the management tasks. It does not give a license list, a limit on the number of resource mailboxes, or detailed troubleshooting for declined bookings. For those, use other Exchange Online documentation.
+The page describes the management tasks. It does not give a license list, a limit on the number of resource mailboxes, or detailed troubleshooting for declined bookings. For those, use other Exchange Online documentation.
 
 ## Keeping the resource list healthy
 
