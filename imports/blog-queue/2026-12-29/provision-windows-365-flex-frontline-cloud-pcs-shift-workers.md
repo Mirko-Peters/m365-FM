@@ -10,11 +10,11 @@ keypoints:
   - "Learn's What's new page says Windows 365 Frontline was renamed Windows 365 Flex in the week of May 4, 2026, with product, licensing and capabilities unchanged."
   - "One Flex license in Dedicated mode provisions up to three Cloud PCs used nonconcurrently by one user each and provides one concurrent session."
   - "One license in Shared mode provisions one Cloud PC shared nonconcurrently by a group. User data is deleted at sign-out unless User Experience Sync or OneDrive Known Folder Move keeps it."
-  - "Create the policy under Devices, Provision Cloud PCs, Provisioning policies, Create policy, and choose License type Windows 365 Flex and Dedicated or Shared."
+  - "Create the policy under Devices, Provision Cloud PCs, Provisioning policies, Create policy. The page still labels the license type Windows 365 Frontline. Then choose Dedicated or Shared."
   - "Shared mode is available only for the Azure Global Cloud, and the All default regions option is not supported for Shared mode."
 faq:
   - q: "Is Windows 365 Frontline still a product?"
-    a: "According to Microsoft Learn, Windows 365 Frontline was renamed to Windows 365 Flex, and the product, licensing and capabilities are unchanged. The What is Windows 365 Frontline page now describes Flex."
+    a: "According to Microsoft Learn, Windows 365 Frontline was renamed to Windows 365 Flex, and the product, licensing and capabilities are unchanged."
   - q: "What is the difference between Dedicated and Shared mode?"
     a: "Dedicated assigns each Cloud PC to one user, with up to three Cloud PCs per license, and data persists. Shared lets any user in the assigned group use the Cloud PC one at a time, and user data is deleted after each session."
   - q: "How many sessions can run at once?"
@@ -22,7 +22,7 @@ faq:
   - q: "Where do I create the provisioning policy?"
     a: "In the Microsoft Intune admin center under Devices, Provision Cloud PCs, Provisioning policies, Create policy."
   - q: "What happens when I remove a user or group?"
-    a: "In Dedicated mode a removed user's Cloud PC moves into a grace period. In Shared mode removed users lose access, and removing the group from the assignment deprovisions Cloud PCs immediately without a grace period."
+    a: "In Dedicated mode a removed user's Cloud PC moves into a grace period. In Shared mode removed users lose access, and removing the group from the assignment deprovisions the Cloud PCs automatically, without a grace period."
 ---
 
 Shift workers rarely use a Cloud PC all day, so Microsoft sells a license model that shares capacity. Learn's What's new page records that Windows 365 Frontline was renamed Windows 365 Flex in the week of May 4, 2026, with the product, licensing and capabilities unchanged. This guide follows the current Flex pages and uses the old name only where people search for it.
@@ -45,7 +45,7 @@ Shared mode has no concurrency buffer. Only one user connects to a shared Cloud 
 1. In the Microsoft Intune admin center go to **Devices**, **Provision Cloud PCs**, **Provisioning policies**, **Create policy**.
 2. Enter a name. It cannot contain `< > & | " ^`.
 3. Choose the **Experience type**. Access only apps is available only for Flex in Shared mode.
-4. Set **License type** to **Windows 365 Flex** and **Windows 365 Flex type** to **Dedicated** or **Shared**.
+4. Set **License type** to **Windows 365 Frontline**, the label the page still uses for Flex, and **Windows 365 Frontline type** to **Dedicated** or **Shared**. A warning appears if you lack Flex licenses.
 5. Choose the **Join type**: Microsoft Entra Join with a Microsoft hosted network or an Azure network connection, or Hybrid Microsoft Entra join, which needs an Azure network connection. In Shared mode the connection must be in the same region.
 6. Choose a gallery or custom image and a language and region. A device name template needs a required `%RAND:Y%` macro. The `%USERNAME:X%` macro is not supported in Shared mode.
 7. Under additional services, Windows Autopatch is not available for Shared mode, and User Experience Sync can be enabled for Shared mode only.
@@ -64,7 +64,7 @@ Learn lists built-in defaults for shared Cloud PCs: profiles are deleted at sign
 
 ## Not covered
 
-The pages I read do not give license prices or the complete requirements list, which they link separately. The introduction page URL still uses the name introduction-windows-365-frontline in older links and now describes Flex.
+The pages I read do not give license prices or the complete requirements list, which they link separately. The provisioning policy page says the Intune admin center is still being updated to the Flex name and may show Frontline in places.
 
 ## Related
 
@@ -73,7 +73,7 @@ The pages I read do not give license prices or the complete requirements list, w
 
 ## Sources
 
-- [What is Windows 365 Flex?](https://learn.microsoft.com/windows-365/enterprise/introduction-windows-365-flex)
-- [Create provisioning policies for Windows 365](https://learn.microsoft.com/windows-365/enterprise/create-provisioning-policy)
-- [Managing Windows 365 Flex Cloud PCs](https://learn.microsoft.com/windows-365/enterprise/windows-365-flex-manage)
-- [What's new in Windows 365 Enterprise](https://learn.microsoft.com/windows-365/enterprise/whats-new)
+- [What is Windows 365 Flex? (Microsoft Learn)](https://learn.microsoft.com/windows-365/enterprise/introduction-windows-365-flex)
+- [Create provisioning policies for Windows 365 (Microsoft Learn)](https://learn.microsoft.com/windows-365/enterprise/create-provisioning-policy)
+- [Managing Windows 365 Flex (Microsoft Learn)](https://learn.microsoft.com/windows-365/enterprise/windows-365-flex-manage)
+- [What's new in Windows 365 Enterprise (Microsoft Learn)](https://learn.microsoft.com/windows-365/enterprise/whats-new)
