@@ -16,7 +16,7 @@ faq:
   - q: "What does Finance check when I validate a bank statement?"
     a: "Microsoft Learn lists that the statement matches the bank account and currency, the opening balance equals the previous closing balance, dates do not overlap another statement, line dates fall between the from and to dates, and opening balance plus line amounts equals the ending balance."
   - q: "Why do imported dates look different from the bank file?"
-    a: "Learn says date-time values in the import file can differ from values in Finance, and recommends entering a Time zone preference on the Configure data sources page. The default assumes UTC. Do not change it for accounts that already have imported statements."
+    a: "Learn says date-time values in the import file can differ from values in Finance, and recommends entering a Time zone preference on the Configure data sources page. The default assumes UTC. Learn advises avoiding changes to the time zone preference for bank accounts that already have imported statements."
   - q: "How are small differences handled?"
     a: "A single statement line and a single bank transaction can match if the difference is within the Allowed penny difference on the bank account. The amount appears as the correction amount and posts to the main account on the bank transaction type when the reconciliation is marked as reconciled. Corrections are not supported for check or deposit document types."
   - q: "Debits import as credits. What do I change?"
@@ -37,21 +37,21 @@ On the **Bank statements** page, select **Validate**. Microsoft Learn lists what
 - Line dates fall between the from-date and the to-date.
 - Opening balance plus line amounts equals the ending balance.
 
-Validation must pass before you reconcile. Duplicates are detected by the combination of AccountNo, StatementID, FromDate and ToDate.
+Validation must pass before you reconcile. Duplicates are detected by the combination of AccountNo, StatementID, FromDate and ToDate. Learn also says the process flow depends on the **Modern bank reconciliation** feature. With it on, **Validate** and **Confirm** are on the bank statement header and improved matching rules exist, and some of what the page describes applies only with it off. Check which setting your environment uses.
 
 If the statement fails, compare the failing item with the file, not with the ledger.
 
 ## Step 2: Find import problems
 
-When an import fails or returns wrong values, the troubleshooting article recommends this order:
+When an import fails or returns wrong values, the troubleshooting article covers the following points. I list them in the order of its sections, and the order as a sequence is my own arrangement:
 
 1. Open **Data management** job history and the job's execution details. The error rarely names the exact field.
 2. Check overlap. Imported statements can overlap only at one point in time, for example one ending at 12:00 AM on a date and the next starting at the same time.
 3. Compare the bank file layout with the Finance layout and sample file.
-4. Check time zones. Enter a **Time zone preference** on **Configure data sources** under the **Regional settings** FastTab. The default assumes UTC.
+4. Check time zones. Per the import setup page, enter a **Time zone preference** under the **Data management** workspace > **Configure data sources** > the data format > **Regional settings** FastTab. It applies to all imports that use that source data format. The default assumes UTC.
 5. Identify which XSLT transformation applies (BAI2, ISO 20022 or MT940) and fix the field mapping there.
 
-Note that Microsoft marks this legacy import functionality as deprecated since September 2022 and points new users to electronic reporting. Check which path your system uses.
+Note that the troubleshooting and import setup pages carry a note that this legacy import functionality "will be deprecated September 2022" and that new users should use electronic reporting. The main reconciliation page describes import through electronic reporting. Check which path your system uses.
 
 ## Step 3: Review matching
 
@@ -70,7 +70,7 @@ You can mark a worksheet as reconciled with unmatched lines. They roll forward t
 
 ## Step 5: Fix debit and credit flips
 
-If debits import as credits, adjust the credit/debit template in the transformation: `GetAmountCreditDebitIndicator` (BAI2), `GetCreditDebit` (ISO 20022) or `GetCreditDebitIndicator` (MT940). The article warns that file names in the page are inconsistently spelled, so verify the exact names in your installation. If several banks use different conventions, use separate transformations.
+If debits import as credits, adjust the credit/debit template in the transformation: `GetAmountCreditDebitIndicator` (BAI2), `GetCreditDebit` (ISO 20022) or `GetCreditDebitIndicator` (MT940). The troubleshooting page spells some file names inconsistently (for example "xlst" and "Reconcilation"), so verify the exact names in your installation. The setup page lists the resource files as BAI2XML-to-Reconciliation.xslt, ISO20022XML-to-Reconciliation.xslt and MT940XML-to-Reconciliation.xslt. If several banks use different conventions, use separate transformations.
 
 ## Payment schedules: what the pages cover
 
@@ -85,7 +85,7 @@ A payment schedule lets customers pay in installments with set amounts and due d
 
 For **Specified**, set **Payment per** (Days, Months or Years), then use **Quantity**, **Amount in transaction currency** and the **Percentage/Amount** list. For fixed schedules, the **Minimum** amount overrides calculated payment amounts. Payment days, schedules, terms of payment and cash discounts are shared between accounts payable and accounts receivable within a legal entity.
 
-When due dates look inconsistent, compare the **Terms of payment** setup (payment method, payment day, payment calendar) with the schedule, because both feed due dates.
+When due dates look inconsistent, compare the **Terms of payment** setup (payment method, payment day, payment calendar) with the schedule. The customer payment terms page says a payment schedule can be used within terms of payment, so both can affect due dates.
 
 ## Quick checklist before month-end
 
@@ -98,7 +98,7 @@ When due dates look inconsistent, compare the **Terms of payment** setup (paymen
 
 ## What I could not confirm
 
-The Learn page on payment schedules does not state whether Specified lines must total 100 percent, how schedules are applied to sales orders or invoices, or how installments post or match to payments. No page I read links payment schedules directly to bank reconciliation mismatches. Test a sample invoice in a non-production environment before you change setup.
+The Learn training unit on payment schedules does not state whether Specified lines must total 100 percent, how schedules are applied to sales orders or invoices, or how installments post or match to payments. No page I read links payment schedules directly to bank reconciliation mismatches. Test a sample invoice in a non-production environment before you change setup.
 
 ## Related
 
@@ -110,5 +110,5 @@ The Learn page on payment schedules does not state whether Specified lines must 
 - [Reconcile bank statements with advanced bank reconciliation](https://learn.microsoft.com/en-us/dynamics365/finance/cash-bank-management/reconcile-bank-statements-advanced-bank-reconciliation)
 - [Troubleshoot bank statement file import](https://learn.microsoft.com/en-us/dynamics365/finance/cash-bank-management/import-bank-statement-file-failed-incorrect-results)
 - [Set up the advanced bank reconciliation import process](https://learn.microsoft.com/en-us/dynamics365/finance/cash-bank-management/set-up-advanced-bank-reconciliation-import-process)
-- [Payment schedules in Dynamics 365 Finance](https://learn.microsoft.com/en-us/training/modules/configure-accounts-receivable-dyn365-finance/2-payment-schedule)
-- [Set up customer payment terms](https://learn.microsoft.com/en-us/dynamics365/finance/general-ledger/tasks/establish-customer-payment-terms)
+- [Payment schedule (Microsoft Learn training unit)](https://learn.microsoft.com/en-us/training/modules/configure-accounts-receivable-dyn365-finance/2-payment-schedule)
+- [Establish customer payment terms](https://learn.microsoft.com/en-us/dynamics365/finance/general-ledger/tasks/establish-customer-payment-terms)
