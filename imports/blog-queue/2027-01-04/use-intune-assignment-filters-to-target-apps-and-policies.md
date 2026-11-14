@@ -87,9 +87,9 @@ Android device administrator is deprecated and unavailable for devices with acce
 
 ## Not covered on the page
 
-The page does not describe an explicit Not applicable status. It says a filter result shows whether the app or policy applies. For status values, Learn points to the article on assignment filter reports and troubleshooting.
+The page does not describe an explicit Not applicable status. It says only that you see the filter results, for example that the app or policy applies or does not apply. The page lists no status values.
 
-## A working approach
+## A working approach (my advice)
 
 The steps below are practical advice, built on the Learn description.
 
@@ -100,7 +100,7 @@ The steps below are practical advice, built on the Learn description.
 5. Start with an assignment where a wrong match is easy to undo.
 6. Document which assignments use which filter, because deletion is blocked until they are removed.
 
-## Typical mistakes
+## Typical mistakes (my advice)
 
 - Mixing up include and exclude mode.
 - Using a MAM filter on a compliance policy.
@@ -115,4 +115,4 @@ The steps below are practical advice, built on the Learn description.
 
 ## Sources
 
-- [Use assignment filters in Microsoft Intune (Microsoft Learn)](https://learn.microsoft.com/intune/intune-service/fundamentals/filters)
+- [Create assignment filters in Microsoft Intune (Microsoft Learn)](https://learn.microsoft.com/intune/fundamentals/filters/overview)
