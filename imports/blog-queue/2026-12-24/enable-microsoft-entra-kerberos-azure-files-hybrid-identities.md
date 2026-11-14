@@ -11,12 +11,12 @@ keypoints:
   - "In the portal use Data storage > Classic file shares > Identity-based access > Microsoft Entra Kerberos > Set up, then grant admin consent to the generated service principal."
   - "Clients must be Entra joined or hybrid joined, and need Kerberos/CloudKerberosTicketRetrievalEnabled set to 1. Entra Domain Services or AD-only joined clients do not qualify."
   - "Exclude the storage account application from MFA Conditional Access policies that target all apps, or net use fails with System error 1327. MFA is not supported on these shares."
-  - "Cross-tenant access is not supported, and cloud-only identities are not supported in Azure US Gov or Azure China 21Vianet."
+  - "Cross-tenant access is not supported. Hybrid and cloud-only identities are supported in Azure Public, US Gov and China 21Vianet."
 faq:
   - q: "Which identities does Entra Kerberos support for Azure Files?"
     a: "Microsoft Learn says it enables Kerberos authentication through Microsoft Entra ID for hybrid identities, where AD DS is synced to Entra, and for cloud-only identities. You can enable only one identity source per storage account, so AD DS or Entra Domain Services must be disabled first."
   - q: "Which client operating systems are supported?"
-    a: "The page lists Windows 11 with specific updates, Windows 10 2004 or later with the latest updates, Windows Server 2022 and Windows Server 2025. Clients must be Microsoft Entra joined or hybrid joined. Clients that do not meet the requirements need a cloud trust configuration instead."
+    a: "For hybrid identities the page lists Windows 11 with specific updates, Windows 10 2004 or later with the latest updates, Windows Server 2022 and Windows Server 2025. For cloud-only identities it lists only Windows 11 and Windows Server 2025. Clients must be Microsoft Entra joined or hybrid joined. Clients that do not meet the requirements need a cloud trust configuration instead."
   - q: "Why does net use fail with System error 1327?"
     a: "Learn says that if an MFA Conditional Access policy applies to all apps, the storage account application must be excluded from it. Otherwise net use fails with System error 1327. MFA is not supported on shares that use Entra Kerberos."
   - q: "What client setting is required?"
@@ -25,7 +25,7 @@ faq:
     a: "Run Debug-AzStorageAccountAuth from AzFilesHybrid module version 0.3.0 or later. Learn says it supports Entra Kerberos and AD DS, but not Entra Domain Services."
 ---
 
-Microsoft Entra Kerberos lets users on Entra joined or hybrid joined Windows devices mount Azure file shares with their Entra identity, without line of sight to a domain controller for the ticket. This guide follows the Microsoft Learn article for enabling it on SMB file shares.
+Microsoft Entra Kerberos lets users on Entra joined or hybrid joined Windows devices mount Azure file shares with their Entra identity. Microsoft Entra ID issues the Kerberos tickets. For cloud-only users the shares no longer need a domain controller, but for hybrid identities, setting Windows ACLs needs network connectivity to the on-premises domain controller. This guide follows the Microsoft Learn article for enabling it on SMB file shares.
 
 ## What you get
 
@@ -33,11 +33,11 @@ Learn says Entra Kerberos enables Kerberos authentication through Microsoft Entr
 
 ## Prerequisites
 
-- If you use a custom SMB security profile, **Kerberos** must be selected under **Authentication methods**.
 - No other identity source. Disable AD DS or Entra Domain Services first. Learn points to a separate article for changing the identity source.
 - For hybrid identities: AD DS plus Entra Connect Sync or Cloud Sync. Users and groups used for RBAC must be synced.
-- The services `WinHttpAutoProxySvc` and `iphlpsvc` must be running.
-- Client operating systems: Windows 11 (24H2 with KB5079391 or later, 25H2 with KB5079391, or 26H1 and later with KB5079489), Windows 10 2004 or later with the latest updates (KB5007253 recommended), Windows Server 2022 (KB5007254 recommended) or Windows Server 2025.
+- The services `WinHttpAutoProxySvc` and `iphlpsvc` must be running. Learn says not to disable the whole `WinHttpAutoProxySvc` service, because it also handles KDC Proxy requests.
+- If application management policies block adding symmetric keys to service principals or limit their key lifetime to less than 366 days, adjust the policy or grant an exception for the Storage Resource Provider service (app ID `a6aa9161-5291-40bb-8c5c-923b567bee3b`).
+- Client operating systems for hybrid identities: Windows 11 (24H2 with KB5079391 or later, 25H2 with KB5079391, or 26H1 and later with KB5079489), Windows 10 2004 or later with the latest updates (KB5007253 recommended), Windows Server 2022 (KB5007254 recommended) or Windows Server 2025. For cloud-only identities Learn lists only Windows 11 and Windows Server 2025.
 - Clients must be Entra joined or hybrid joined, not Entra Domain Services or AD-only joined. Clients that don't meet these requirements need a cloud trust configuration.
 
 ## Enable it in the portal
@@ -86,18 +86,18 @@ Go to **Classic file shares** > **Identity-based access** > **Microsoft Entra Ke
 
 ## Limitations
 
-- Cloud-only identities aren't supported in Azure US Gov or Azure China 21Vianet. Hybrid identities are supported in all three clouds.
+- Learn says hybrid and cloud-only identities are supported in all regions of the Azure Public, Azure US Gov and Azure China 21Vianet clouds.
 - Cross-tenant access isn't supported.
-- External (B2B) users are supported only for FSLogix on Azure Virtual Desktop in the public cloud.
+- External (B2B) users are supported only for FSLogix on Azure Virtual Desktop, for users invited into a public cloud tenant. Government cloud scenarios aren't supported for them.
 - MFA isn't supported on shares using Entra Kerberos.
 
 ## Troubleshooting
 
 Run `Debug-AzStorageAccountAuth` from AzFilesHybrid module 0.3.0 or later. It supports Entra Kerberos and AD DS but not Entra Domain Services.
 
-## Order of work
+## Order of work (my advice)
 
-1. Check that no other identity source is enabled on the storage account, and that the SMB security profile allows Kerberos.
+1. Check that no other identity source is enabled on the storage account.
 2. Confirm client operating systems, join state and the two required services.
 3. Enable Entra Kerberos in the portal and grant admin consent.
 4. Fix the MFA Conditional Access exclusion before the first mount test.
@@ -113,4 +113,4 @@ The page also says that if you have private endpoints, you add the private link 
 
 ## Sources
 
-- [Enable Microsoft Entra Kerberos authentication for hybrid identities on Azure Files](https://learn.microsoft.com/azure/storage/files/storage-files-identity-auth-hybrid-identities-enable)
+- [Microsoft Entra Kerberos Authentication for Azure Files (Microsoft Learn)](https://learn.microsoft.com/azure/storage/files/storage-files-identity-auth-hybrid-identities-enable)
