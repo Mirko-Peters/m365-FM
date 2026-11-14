@@ -22,14 +22,14 @@ faq:
   - q: "Can a device become noncompliant just by not checking in?"
     a: "Yes. The compliance status validity period requires devices to report on all their received compliance policies. If a device does not report before the period expires, it is treated as noncompliant. The default is 30 days and you can set 1 to 120 days. Learn also says evaluations depend on when the device checks in with Intune and on the policy refresh cycles."
   - q: "Does requiring a compliant device block Intune enrollment?"
-    a: "No. The Conditional Access page says you can enroll new devices in Intune even when Require device to be marked as compliant is applied to all users and all resources. The control also does not block the Microsoft Authenticator app from the scope it needs during Authenticator registration."
+    a: "No. The Conditional Access page says you can enroll new devices in Intune even when Require device to be marked as compliant is applied to all users and all resources. The page also says the control does not block the Microsoft Authenticator app from the UserAuthenticationMethod.Read scope that it needs during Authenticator registration. Registering credentials, which needs the ReadWrite scope, does not bypass the check."
 ---
 
 AADSTS53000, DeviceNotCompliant, means a Conditional Access policy requires a compliant device and the device the user signed in from is not compliant. The error reference says the user must enroll the device with an approved MDM provider such as Intune. This article follows the Conditional Access troubleshooting page, the page on requiring device compliance, and the Intune compliance overview, in the order I would check them.
 
 ## Step 1: Confirm the code and the policy
 
-The Conditional Access troubleshooting page lists 53000 as DeviceNotCompliant, next to 53001 DeviceNotDomainJoined and 53003 BlockedByConditionalAccess. The error appears in the browser with the prefix AADSTS. If the user sees a message that the app can only be used from devices or client apps that meet the company's mobile device management policy, that is the same family.
+The Conditional Access troubleshooting page lists 53000 as DeviceNotCompliant, next to 53001 DeviceNotDomainJoined and 53003 BlockedByConditionalAccess. The error appears in the browser with the prefix AADSTS. If the user sees a message that the app can only be used from devices or client apps that meet the company's mobile device management policy, that is the message the troubleshooting page shows for a required compliant device.
 
 To see which policy applied:
 
@@ -79,7 +79,7 @@ The page on requiring device compliance gives these points:
 - On iOS, Android, macOS and some non-Microsoft browsers, Entra identifies the device by a client certificate provisioned at registration. The user is prompted to select it at first browser sign-in and must select it to continue.
 - For B2B guests, you can trust the device compliance claims of organizations you trust, through cross-tenant access settings.
 
-Also from the grant controls page: the control supports Windows 10 and later, iOS, Android, macOS and Linux Ubuntu devices registered with Entra ID and enrolled with Intune, and treats Microsoft Edge in InPrivate mode on Windows as a noncompliant device.
+
 
 ## Locked out admins
 
@@ -87,11 +87,11 @@ The troubleshooting page warns that requiring a compliant device for all users a
 
 ## A short checklist (my advice)
 
-This is my experience, not a Microsoft procedure:
+This is my suggestion, not a Microsoft procedure:
 
 1. Read the log first to see whether the device is unknown, noncompliant, or compliant but not evaluated in time.
 2. Check the device in Intune: last check-in, assigned policies and failing rules.
-3. Ask whether the user is on a managed device at all. A personal browser profile is a common reason in my experience.
+3. Ask whether the user is on a managed device at all. A personal browser profile is a possible reason. That is my suggestion, not a statement of the pages.
 4. Roll compliance requirements out in report-only mode and exclude break-glass accounts before you enable them.
 
 ## Related
@@ -102,7 +102,7 @@ This is my experience, not a Microsoft procedure:
 
 ## Sources
 
-- [Microsoft Entra authentication and authorization error codes (Microsoft Learn)](https://learn.microsoft.com/entra/identity-platform/reference-error-codes)
+- [Microsoft Entra authentication & authorization error codes (Microsoft Learn)](https://learn.microsoft.com/entra/identity-platform/reference-error-codes)
 - [Troubleshooting sign-in problems with Conditional Access (Microsoft Learn)](https://learn.microsoft.com/entra/identity/conditional-access/troubleshoot-conditional-access)
 - [How to Require Device Compliance with Conditional Access (Microsoft Learn)](https://learn.microsoft.com/entra/identity/conditional-access/policy-all-users-device-compliance)
 - [Device compliance policies in Microsoft Intune (Microsoft Learn)](https://learn.microsoft.com/intune/device-security/compliance/overview)
