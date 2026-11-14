@@ -67,7 +67,7 @@ Select **Export** in the Devices view. The service prepares the data in the back
 
 - A device with no heartbeat for 30 days is removed until it reports again.
 - Add-ins that are part of Microsoft 365 Apps for enterprise do not appear in the add-in table.
-- Switching a device's update channel from Inventory was in public preview, can take up to 24 hours, and Learn says that starting July 2026 profile assignment replaces the **Switch device update channel** control in Inventory.
+- The **Switch device update channel** capability in Inventory is labeled public preview, and a channel change can take up to 24 hours. The cloud update page says that if the new profile assignment and channel experience is not yet in your tenant, you should use the Inventory switch capability for channel management.
 
 ## Cloud update profiles
 
@@ -95,6 +95,6 @@ The overview and cloud update pages I read do not give step-by-step profile crea
 
 ## Sources
 
-- [Overview of the Microsoft 365 Apps admin center](https://learn.microsoft.com/microsoft-365-apps/admin-center/overview)
-- [Inventory in the Microsoft 365 Apps admin center](https://learn.microsoft.com/microsoft-365-apps/admin-center/inventory)
-- [Cloud update overview](https://learn.microsoft.com/microsoft-365-apps/admin-center/cloud-update)
+- [Overview of the Microsoft 365 Apps admin center (Microsoft Learn)](https://learn.microsoft.com/microsoft-365-apps/admin-center/overview)
+- [Overview of inventory in the Microsoft 365 Apps admin center (Microsoft Learn)](https://learn.microsoft.com/microsoft-365-apps/admin-center/inventory)
+- [Overview of cloud update in the Microsoft 365 Apps admin center (Microsoft Learn)](https://learn.microsoft.com/microsoft-365-apps/admin-center/cloud-update)
