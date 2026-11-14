@@ -16,7 +16,7 @@ faq:
   - q: "Can Copilot clean up my Outlook inbox automatically?"
     a: "The Microsoft pages read for this article do not describe a one-click cleanup feature. Microsoft Learn teaches creating inbox rules with Copilot Chat, and the new Outlook module names Sweep, Categories and Focused Inbox as organizing tools."
   - q: "How do I summarize an email thread with Copilot in Outlook?"
-    a: "A Microsoft Q&A answer, which is marked as AI-generated, says to open the thread and select Summarize in the Summary by Copilot area at the top. Outlook for iOS and Android uses the Copilot icon on the toolbar instead."
+    a: "Microsoft Support says to open the conversation and select Summary by Copilot at the top of the thread. Some versions show Summarize instead. The summary appears at the top of the email and can include numbered citations."
   - q: "What happens to Prioritize my inbox?"
     a: "A report by Office 365 for IT Pros, citing message center item MC1519861, says the withdrawal began on October 26, 2026 and completes by the end of March 2027. The feature disappears from menus automatically, according to that report."
   - q: "Do I need a Copilot license for this?"
@@ -27,7 +27,7 @@ faq:
 
 Copilot in Outlook can summarize long email threads, help you triage with Copilot Chat and help you write inbox rules. Microsoft's documentation read for this article does not describe a single automatic cleanup button. Real cleanup comes from combining summaries, inbox rules and Outlook's own tools such as Sweep and Categories. Prioritize my inbox, which once flagged important mail, is being withdrawn.
 
-**A note on sources.** The Microsoft Support articles for Copilot in Outlook could not be opened for this page. This article therefore relies on Microsoft Learn training pages, the Learn license overview, a Microsoft Q&A answer (marked AI-generated) and an independent report on the Prioritize my inbox withdrawal. Treat step details as a starting point and confirm menu names in your own Outlook.
+**A note on sources.** This article relies on one Microsoft Support page (summarize an email thread), Microsoft Learn training pages, the Learn license overview, a Microsoft Q&A answer (marked AI-generated) and an independent report on the Prioritize my inbox withdrawal. The training pages are landing pages without click paths, so confirm menu names in your own Outlook.
 
 ## What Microsoft Learn says Copilot can do in Outlook
 
@@ -48,15 +48,14 @@ The pages read describe no "clean up" feature by name. The training pages are la
 
 ## Summarize an email thread
 
-A Microsoft Q&A answer, which carries its own disclaimer that AI-generated content may be incorrect, gives these steps:
+Microsoft Support documents these steps:
 
-1. Open the long email thread in Outlook on desktop or web.
-2. In the **Summary by Copilot** area at the top, select **Summarize**.
-3. Read the summary. It may include numbered citations that link to specific emails.
+1. Open the conversation in classic Outlook or new Outlook.
+2. Select **Summary by Copilot** at the top of the thread. Some versions may show **Summarize** instead.
+3. Read the summary at the top of the email. It may include numbered citations, and selecting one takes you to the matching email in the thread.
+4. In new Outlook, for emails with attachments, select **Summarize a file**. The page lists PDF, PowerPoint and Word as supported types.
 
-On Outlook for Mac, the same answer says to select the conversation and use **Summarize** in the Summary by Copilot box. On Outlook for iOS and Android, tap the Copilot icon on the toolbar and the summary appears under the email. It also says the Mac feature requires the latest Outlook for Mac, not the legacy version.
-
-If the Copilot button is missing, that answer suggests going to **File** > **Account**, selecting **Update License**, and restarting the Microsoft 365 apps. It also lists Draft with Copilot, Coaching by Copilot, Schedule with Copilot and Chat with Copilot as other entry points when licensed.
+The page lists Outlook for Microsoft 365, Outlook for Microsoft 365 for Mac, new Outlook for Windows, Outlook for Android and Outlook for iOS. On Mac, iOS and Android, summaries default to the language of the email. You can switch the summary language to match Outlook's interface, but the change does not persist after you restart Outlook. The Support page does not cover license requirements, availability conditions or thread length limits. A Microsoft Q&A answer marked as AI-generated adds further troubleshooting tips, but they are not confirmed by Microsoft documentation, so they are left out here.
 
 ## Clean up the inbox in practice
 
@@ -97,7 +96,7 @@ The Q&A answer lists several business subscriptions plus a Microsoft 365 Copilot
 - **Expecting an automatic cleanup.** None is documented in the pages read. Plan manual review plus rules.
 - **Trusting a rule you did not test.** Check what a Copilot-created rule matches.
 - **Relying on Prioritize my inbox.** It is being removed.
-- **Using legacy Outlook for Mac.** The summary feature needs the latest Outlook for Mac, per the Q&A answer.
+- **Skipping the attachment step.** In new Outlook, attachments are summarized separately with Summarize a file.
 
 ## Related
 
@@ -107,6 +106,7 @@ The Q&A answer lists several business subscriptions plus a Microsoft 365 Copilot
 
 ## Sources
 
+- [Microsoft Support: Summarize an email thread with Copilot in Outlook](https://support.microsoft.com/en-us/outlook/copilot-pages/summarize-an-email-thread-with-copilot-in-outlook)
 - [Microsoft Learn: Manage Email Efficiently With Microsoft Outlook And Copilot Chat](https://learn.microsoft.com/en-us/training/modules/manage-email-efficiently/)
 - [Microsoft Learn: From inbox to impact](https://learn.microsoft.com/en-us/training/modules/from-inbox-impact-improve-your-email-workflows-ai/)
 - [Microsoft Learn: Organize your inbox in new Outlook for Windows](https://learn.microsoft.com/en-us/training/modules/organize-your-inbox-new-outlook-windows/)
