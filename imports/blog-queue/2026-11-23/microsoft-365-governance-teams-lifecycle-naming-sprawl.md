@@ -9,7 +9,7 @@ topics: [teams, governance, microsoft-365-groups, group-expiration-policy]
 keypoints:
   - "Every team sits on a Microsoft 365 group, so group-level policies in Microsoft Entra ID (creation limits, naming, expiration) govern Teams."
   - "Naming policy enforces prefix and suffix rules and blocked words. Exact-match only, 63 characters in total, and Global Administrator and User Administrator are exempt."
-  - "Expiration is off by default. Lifetime is at least 30 days, owners get emails at 30, 15 and 1 day, and a deleted group can be restored for 30 days."
+  - "Expiration lifetime is at least 30 days, owners get emails at 30, 15 and 1 day before expiry, and a deleted group can be restored for 30 days."
   - "Archive a team before you delete it. Microsoft Learn says an archived team can be reactivated, but a deleted team cannot be restored directly."
   - "Sensitivity labels for containers can enforce privacy, guest access and sharing per team. Learn does not state the license, so check the Purview service description."
 faq:
@@ -22,7 +22,7 @@ faq:
   - q: "What happens to an expired team?"
     a: "Learn says owners are warned 30, 15 and 1 day before expiration, active groups renew automatically, and an expired group is deleted one day after the expiration date. A deleted Microsoft 365 group can be restored within 30 days by an owner or an administrator."
   - q: "Do I need special licenses for these controls?"
-    a: "For the naming, expiration and creation policies Learn requires that you own Microsoft Entra ID P1 or P2 licenses (or Entra Basic EDU for naming and creation). They do not need to be assigned to every group member. For sensitivity labels on containers the Learn page refers you to the Microsoft Purview service description."
+    a: "Learn requires Microsoft Entra ID P1 or Basic EDU licenses for the naming policy, P1 or P2 for expiration, and P1, P2 or Basic EDU for restricting group creation. For naming and expiration the licenses do not need to be assigned to every group member. For sensitivity labels on containers the Learn page refers you to the Microsoft Purview service description."
 ---
 
 Governance for Teams works through the Microsoft 365 group behind each team. Microsoft Entra ID can limit who creates groups, force naming rules, expire inactive groups and, together with Microsoft Purview, apply sensitivity labels. The Teams admin center adds archiving. None of these tools find sprawl for you. They set rules at creation and at the end of life, and they need someone to own the exceptions.
@@ -88,14 +88,14 @@ Two cautions from Learn. The feature must be enabled first, including a label sy
 
 ### Expiration policy
 
-Expiration is off by default. When on, you set a lifetime in days. The minimum is 30. One policy applies to the organization, and you choose **All**, **Selected** (up to 500 groups) or **None**. To set it, go to **Identity** > **Groups** > **All groups** > **Expiration**.
+When you turn expiration on, you set a lifetime in days. The minimum is 30. One policy applies to the organization, and you choose **All**, **Selected** (up to 500 groups) or **None**. To set it, go to **Identity** > **Groups** > **All groups** > **Expiration**.
 
 - Owners get emails 30, 15 and 1 day before expiration. Groups without an owner use the alternate email address you enter.
 - Groups in use renew themselves about 35 days before expiry. For Teams, visiting a channel counts as activity.
 - The group is deleted one day after the expiration date and can be restored for 30 days.
-- Learn says Entra waits five days after setup before judging inactivity.
+- After a policy is enabled, Learn says Entra waits five days before sending notifications, so groups are not flagged before activity can be recorded.
 
-Do not switch it on if owners lack valid email addresses. Microsoft does not recommend that.
+For groups without an owner, notices go to the alternate email address you configure, so make sure that address is monitored.
 
 ### Archive first, delete later
 
