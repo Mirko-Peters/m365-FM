@@ -64,7 +64,7 @@ For the multi-app mode on Windows 10, the reference lists options such as:
 - **Taskbar** settings.
 - **Downloads folder access.**
 
-The page says the kiosk profile loads for standard users and does not load for local administrators. For Windows 11 multi-app kiosks, the page points to a different article rather than listing the settings itself.
+The page says the kiosk profile loads for standard users and does not load for local administrators. For Windows 11 multi-app kiosks, the page points to a different article, Set up a multi-app kiosk on Windows 11 devices, rather than listing the settings itself.
 
 ## Assigned access and XML
 
@@ -102,9 +102,9 @@ This section is my advice, not a Microsoft statement.
 - **A removed configuration leaves a changed Start menu.** Learn says removing the configuration does not revert Start menu changes, so plan a clean-up or a reset.
 - **An app needs a path or AUMID.** For Win32 apps you provide the path, and for others the AUMID, so collect them before you build the profile.
 
-## What I did not read
+## What this article does not cover
 
-I read the three Learn pages in the order above but not the separate Windows 11 multi-app article that the reference page points to. I did not read the Microsoft Edge kiosk documentation, the Holographic settings or the custom OMA-URI how-to in detail.
+This article does not cover the separate Windows 11 multi-app article that the reference page points to, the Microsoft Edge kiosk documentation, the Windows Holographic for Business kiosk settings or the custom OMA-URI how-to. Use Learn's own pages for those.
 
 ## Related
 
