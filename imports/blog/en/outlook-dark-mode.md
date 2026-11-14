@@ -67,9 +67,9 @@ The Microsoft pages cited here give no Mac steps for dark mode. A community answ
 
 ## Outlook for iOS and Android
 
-On iPhone and iPad, [Microsoft's article](https://support.microsoft.com/en-gb/office/how-do-i-enable-dark-mode-on-outlook-for-ios-a006caed-e4c3-46d7-8832-faafd7d43af4) says to open Outlook's **Settings**, tap **Appearance** and choose **Light**, **Dark** or **System Default**. By default, Outlook for iOS version 4.5.0 or later follows the system Dark Mode setting. Choose System Default to keep it that way. Choosing Light or Dark overrides the system setting. On iOS 12 or earlier, the setting is a **Dark Appearance** toggle under Preferences.
+On iPhone and iPad, [Microsoft's article](https://support.microsoft.com/office/how-do-i-enable-dark-mode-on-outlook-for-ios-a006caed-e4c3-46d7-8832-faafd7d43af4) says to open Outlook's **Settings**, tap **Appearance** and choose **Light**, **Dark** or **System Default**. By default, Outlook for iOS version 4.5.0 or later follows the system Dark Mode setting. Choose System Default to keep it that way. Choosing Light or Dark overrides the system setting. On iOS 12 or earlier, the setting is a **Dark Appearance** toggle under Preferences.
 
-On Android, Microsoft's [Android article](https://support.microsoft.com/en-au/office/how-do-i-enable-dark-mode-on-outlook-for-android-a2be4ece-377c-4541-9df4-500e8680f184) says to open Outlook's **Settings** and find the **Dark Theme** switch under **Preferences**. You get two options: **Dark Theme**, which keeps dark mode on until you turn it off, and **Set by Battery Saver**, which turns it on whenever the device is in Battery Saver mode.
+On Android, Microsoft's [Android article](https://support.microsoft.com/office/how-do-i-enable-dark-mode-on-outlook-for-android-a2be4ece-377c-4541-9df4-500e8680f184) says to open Outlook's **Settings** and find the **Dark Theme** switch under **Preferences**. You get two options: **Dark Theme**, which keeps dark mode on until you turn it off, and **Set by Battery Saver**, which turns it on whenever the device is in Battery Saver mode.
 
 ## Fixing the white message background
 
