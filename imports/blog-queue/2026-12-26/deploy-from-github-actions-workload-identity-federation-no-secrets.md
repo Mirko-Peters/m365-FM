@@ -95,9 +95,9 @@ The overview lists workloads on any Kubernetes cluster, GitHub Actions, Azure co
 
 ## Why secrets are still used
 
-The three GitHub secrets hold identifiers, not credentials. The page recommends secrets over passing the values directly in the workflow, which keeps the identity values out of the file. The actual trust comes from the federated identity credential in Microsoft Entra ID, so there is no client secret or certificate in GitHub to rotate or leak. For public repositories, Learn recommends environment secrets instead of repository secrets.
+This section is my reading, not a statement from the pages. The Learn page calls the three values the credentials of the application or identity and recommends GitHub secrets rather than passing the values directly to the workflow. The values are the client ID, subscription ID and tenant ID, so no client secret or certificate is stored in GitHub. The trust itself comes from the federated identity credential in Microsoft Entra ID. For public repositories, Learn recommends environment secrets instead of repository secrets.
 
-## Before the first run
+## Before the first run (my advice)
 
 1. Confirm the identity exists and has a role on the target scope.
 2. Confirm the federated credential trusts your repository, with values that match the GitHub token exactly.
@@ -118,5 +118,5 @@ The pages do not give the federated credential field values for each trigger suc
 
 ## Sources
 
-- [Workload identity federation](https://learn.microsoft.com/entra/workload-id/workload-identity-federation)
-- [Use GitHub Actions to connect to Azure](https://learn.microsoft.com/azure/developer/github/connect-from-azure-openid-connect)
+- [Workload Identity Federation (Microsoft Learn)](https://learn.microsoft.com/entra/workload-id/workload-identity-federation)
+- [Authenticate to Azure from GitHub Actions by OpenID Connect (Microsoft Learn)](https://learn.microsoft.com/azure/developer/github/connect-from-azure-openid-connect)
