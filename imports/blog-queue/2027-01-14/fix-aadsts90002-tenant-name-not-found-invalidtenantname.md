@@ -47,7 +47,7 @@ What to check:
 
 1. **Which endpoint does the app call?** Open the authorization or token URL in the app configuration or the failing request. Learn says to use the endpoints for the cloud instance where you deploy the application.
 2. **Where does the tenant live?** Because each cloud authenticates users separately, a request sent to the wrong cloud's endpoint can point at a tenant that this cloud does not hold. That is my reading, and it fits the reference description of an app used against the wrong cloud.
-3. **Was the app registered in the right portal?** Learn says that to integrate an application with the Microsoft identity platform in a national cloud, you must register it separately in the Azure portal specific to that environment. An app registered only in the global portal does not exist in another cloud.
+3. **Was the app registered in the right portal?** Learn says that to integrate an application with the Microsoft identity platform in a national cloud, you must register it separately in the Azure portal specific to that environment. My reading: an app registered only in the global portal then does not exist in another cloud.
 4. **Read the endpoints from the registration.** In the Microsoft Entra admin center, sign in as at least a Cloud Application Administrator, go to **Entra ID** > **App registrations**, select the app and then **Endpoints**. Learn says to use the endpoint that matches the protocol you use, together with the **Application (client) ID**.
 
 Learn also says some services and features in the global Azure cloud might be unavailable in national clouds, and links Products available by region.
@@ -60,7 +60,7 @@ Learn's endpoint guidance explains where the tenant value goes. The common endpo
 
 What to check:
 
-1. **Print the exact authority.** Look at the string between the host and `/oauth2/v2.0`. Check it for typos, extra spaces and a domain that you assumed from an email address.
+1. **Print the exact authority** (my advice). Look at the string between the host and `/oauth2/v2.0`. Check it for typos, extra spaces and a domain that you assumed from an email address.
 2. **Prefer the tenant ID.** A domain name only works if it is registered with a tenant. The tenant ID is a stable value. This is my advice, not a Learn statement.
 3. **Find the tenant ID.** Learn gives these ways:
    - Entra admin center: sign in as at least Global Reader, go to **Entra ID** > **Overview** > **Properties** and read **Tenant ID**.
