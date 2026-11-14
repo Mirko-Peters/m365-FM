@@ -31,7 +31,7 @@ The Learn guidance covers Teams Direct Routing PSTN calls only. It does not appl
 
 ## Step 1: Find the Microsoft response code
 
-The SIP status line alone is not enough. Your SBC trace or the Direct Routing diagnostics should show a Microsoft response code next to the 404. Learn lists these two:
+The SIP status line alone is not enough, because Learn organizes this page by Microsoft response code. Look for that code next to the 404 in your SBC trace. Learn lists these two:
 
 | Microsoft code | Description | Direction of the fix |
 | --- | --- | --- |
@@ -47,12 +47,12 @@ Learn says this code indicates the user cannot be found during the reverse numbe
 What to check, based on the Direct Routing SIP protocol page on Learn:
 
 1. **Plus sign in the Request-URI.** For incoming calls the Request-URI is used to match the phone number to a user. The number must currently contain a plus sign, for example `INVITE sip:+18338006777@sip.pstnhub.microsoft.com`.
-2. **Plus sign in the From header.** Learn says the From header is used to check the caller against the callee's blocked number list and to look up the caller's name. For those lookups the number must also contain a plus sign.
+2. **Plus sign in the From header.** Learn says the From header is used to check the caller against the callee's blocked number list and to look up the caller's name. For those lookups the number must also contain a plus sign. These are caller lookups, not the callee lookup behind 511404, so treat this as a general format check.
 3. **The assigned number.** Compare the number in the SBC trace with the number assigned to the user or resource account. Mismatches in country code, extension notation or leading digits are the usual suspects. That list is my practical advice, not text from Learn.
-4. **The tenant lookup.** Before the number lookup, the SIP proxy finds the tenant. According to Learn it first tries the full FQDN from the Contact header as a registered domain name in a Microsoft 365 organization. If that fails, it removes the host portion and tries the remaining domain. If neither is found, the call fails. The reverse number lookup then runs in the tenant it found. If your SBC FQDN is registered in an unexpected tenant, the number will not be found there.
+4. **The tenant lookup.** Before the number lookup, the SIP proxy finds the tenant. According to Learn it first tries the full FQDN from the Contact header as a registered domain name in a Microsoft 365 organization. If that fails, it removes the host portion and tries the remaining domain. If neither is found, the call fails. The reverse number lookup then runs in the tenant it found. My inference, not Learn's: if your SBC FQDN is registered in an unexpected tenant, the number would not be found there.
 5. **The user=phone parameter.** Learn says that if `user=phone` is in the Request-URI, the service treats it as a phone number. If it is missing, the proxy applies heuristics to decide between a phone number and a SIP address. Microsoft recommends always adding the `user=phone` parameter to simplify call setup.
 
-Learn also states that Microsoft does not support a third-party SIP proxy or user agent server between the Microsoft SIP proxy and the paired SBC if it modifies the Request-URI. If your trunk path rewrites the URI, test without it.
+Learn also states that Microsoft does not support a third-party SIP proxy or user agent server between the Microsoft SIP proxy and the paired SBC if it modifies the Request-URI. My advice, not Learn's: if your trunk path rewrites the URI, test without it.
 
 ## Fix for 10202: replacement call not found
 
@@ -60,11 +60,11 @@ Learn describes this as appearing in call merge and consultative transfer. The S
 
 Related facts from the SIP protocol page:
 
-- Direct Routing rejects SIP requests with `Replaces` headers if the SBC sends them in ordinary requests, so check your SBC configuration and do not use Replaces headers in SIP requests.
-- The same page also says the SBC must support Invite with Replaces for the replace option. These two statements concern different situations, so read that section before changing SBC settings.
+- Learn says to check your SBC configuration and make sure you are not using `Replaces` headers in SIP requests, because Direct Routing rejects SIP requests that have Replaces headers defined.
+- The same page, in a section on the Replaces option, says the SBC must support Invite with Replaces. The page does not reconcile the two statements, so read both sections before changing SBC settings.
 - For transfers, Learn describes two methods. The SIP proxy uses a Refer sent to the SBC if the SBC reports Refer as an allowed method. Otherwise it acts as referee and the SBC must support Notify.
 
-I did not find a documented step-by-step for 10202 beyond the one suggested action on the 404 page, so the transfer and retry checks above are the documented starting points.
+The 404 page gives only the one suggested action for 10202. The SIP protocol page does not tie the facts above to 10202, so treat them as background for the SBC check, not as documented fixes.
 
 ## A short checklist for the SBC engineer
 
