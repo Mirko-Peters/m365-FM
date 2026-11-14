@@ -11,12 +11,12 @@ keypoints:
   - "Modern SharePoint guidance is one site per discrete topic, joined by hubs, rather than subsites."
   - "Create articles as modern pages in the Site Pages library, and save a page as a template so every article has the same structure."
   - "Columns and content types matter most for organizing pages, and deep folder nesting hurts discoverability."
-  - "Microsoft Q&A staff described a classic wiki approach in 2023, and uploaded Word or Excel files cannot be shown as site pages."
+  - "A 2023 Microsoft Q&A answer described a classic wiki approach, and uploaded Word or Excel files cannot be shown as site pages."
 faq:
   - q: "Does SharePoint have a built-in knowledge base template?"
     a: "The Microsoft sources read for this article do not describe a dedicated knowledge base template. A Microsoft Q&A answer lists general site templates instead, such as Team collaboration site, Document Center, Enterprise wiki and Publishing Portal, and suggests a wiki approach for small scale."
   - q: "Should I use a team site or a communication site?"
-    a: "Microsoft Q&A staff considered a team site better suited to a knowledge base in a 2023 thread, because communication sites have no Wiki Pages Library by default. Microsoft's information architecture guidance describes both site types as providing pages, lists and libraries, so decide based on who edits and who reads."
+    a: "In a 2023 thread, a Microsoft Q&A answerer labeled Microsoft External Staff considered a team site better suited to a knowledge base, because communication sites have no Wiki Pages Library by default. Microsoft's information architecture guidance describes both site types as providing pages, lists and libraries, so decide based on who edits and who reads."
   - q: "How do I keep articles consistent?"
     a: "Microsoft Support documents page templates. Create a page with the sections and web parts you want, select the arrow next to Save and exit, then Save as template. New pages from the template are independent of it, and templates cannot be used across sites."
   - q: "How should articles be organized?"
@@ -25,7 +25,7 @@ faq:
     a: "Microsoft Learn describes Copilot in SharePoint, in public preview with general availability rolling out from September 30, 2026. It can create pages, libraries and lists, and everyday capabilities are included with a Microsoft 365 Copilot license."
 ---
 
-SharePoint does not have a button that creates a knowledge base. What Microsoft documents is a set of building blocks: sites to hold content, modern pages for articles, page templates for consistency, metadata for organizing and filtering, and search to find it all. This guide puts those blocks in order. The Microsoft sources on this topic are thin, and the only step-by-step answer from Microsoft staff is a 2023 Q&A reply, so treat the choices below as a design based on documented features rather than an official recipe.
+SharePoint does not have a button that creates a knowledge base. What Microsoft documents is a set of building blocks: sites to hold content, modern pages for articles, page templates for consistency, metadata for organizing and filtering, and search to find it all. This guide puts those blocks in order. The Microsoft sources on this topic are thin, and the only step-by-step answer is a 2023 Microsoft Q&A reply from a poster labeled Microsoft External Staff, so treat the choices below as a design based on documented features rather than an official recipe.
 
 ## Step 1: Plan the structure before you create anything
 
@@ -49,7 +49,7 @@ Microsoft's guidance does not name a best site type for knowledge bases. A Micro
 | Enterprise wiki | Quickly capture linked, simple pages |
 | Publishing Portal | Portal with approval workflows, many readers and few contributors |
 
-The staff reply preferred a team site for a small wiki, noting communication sites have no Wiki Pages Library by default. It also noted that only .aspx files open as site pages, so uploaded Word or Excel files cannot be displayed as knowledge base content in the page itself. That thread is old and describes classic wiki pages, so for a new build most teams will use modern pages as below.
+The answerer, labeled Microsoft External Staff, preferred a team site for a small wiki, noting communication sites have no Wiki Pages Library by default. It also noted that only .aspx files open as site pages, so uploaded Word or Excel files cannot be displayed as knowledge base content in the page itself. That thread is old and describes classic wiki pages, so for a new build most teams will use modern pages as below.
 
 ## Step 3: Create articles as modern pages
 
