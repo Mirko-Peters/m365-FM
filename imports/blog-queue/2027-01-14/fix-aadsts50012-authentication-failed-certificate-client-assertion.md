@@ -22,7 +22,7 @@ faq:
   - q: "How do I register the certificate on the app?"
     a: "In the Entra admin center open the app registration, select Certificates and secrets, then Certificates, Upload certificate and Add. The thumbprint, start date and expiration then appear. You can instead replace keyCredentials in the application manifest."
   - q: "What if the error says the signing certificate or subject name is not authorized?"
-    a: "The Learn certificate credentials page does not describe subject name authorization or trusted authority policies, so I cannot give configuration steps from it. Check that the certificate used to sign is the one registered on the app and note the full error text and trace ID for Microsoft support."
+    a: "The Learn certificate credentials page does not describe subject name authorization or trusted authority policies, so this article gives no configuration steps for them. My advice: check that the certificate used to sign is the one registered on the app and note the full error text and trace ID for Microsoft support."
 ---
 
 AADSTS50012 is named AuthenticationFailed, and the Microsoft Entra error reference gives seven possible reasons. They concern the signing certificate, its thumbprint, its chain, policy on the tenant, and the signature of the client assertion. This article uses Microsoft Learn's page on certificate credentials to check what a correct client assertion looks like, then matches each listed reason to a check. Where Learn gives no detail, the article says so.
@@ -71,9 +71,11 @@ The signature is computed with the certificate as in RFC 7519, and Learn says to
 | `exp` | The expiration time; Learn says to keep it short, 5 to 10 minutes after `nbf` at most |
 | `iat` | The time the JWT was issued |
 
-Learn says Microsoft Entra ID does not currently place restrictions on the `exp` time. For a national cloud, use that cloud's token endpoint in `aud`. That is my note, based on Learn's separate national cloud page.
+Learn says Microsoft Entra ID does not currently place restrictions on the `exp` time. The page only shows the global endpoint. My advice, not from this page: in a national cloud, check which token endpoint applies before you build the `aud` value.
 
 ## Match the reasons to checks
+
+The right-hand column is my advice, not Learn text.
 
 | Reason | What to check |
 | --- | --- |
@@ -81,7 +83,7 @@ Learn says Microsoft Entra ID does not currently place restrictions on the `exp`
 | Thumbprint of the signing certificate not authorized (6) | The `x5t#S256` header must be the SHA-256 thumbprint of the certificate you actually used to sign, and that certificate must be registered on the app. Compare it with the thumbprint shown under **Certificates & secrets**. |
 | Signing certificate not valid (4) | Check the start and expiration dates shown after upload. The page does not define other validity rules. |
 | Certificate chain not valid (3) | The certificate credentials page does not describe chain validation. Check the chain in the certificate store of the machine that signs, and collect the details for support. |
-| Subject name not authorized (1), trusted authority policy not found (2), policy not configured on the tenant (5) | The page I read does not describe these. Learn gives no configuration steps for them here, so I do not either. Collect the full error text and ask Microsoft support or consult the documentation for the feature that you use. |
+| Subject name not authorized (1), trusted authority policy not found (2), policy not configured on the tenant (5) | The certificate credentials page does not describe these and gives no configuration steps for them. Collect the full error text and ask Microsoft support or consult the documentation for the feature that you use. |
 
 ## Register the certificate on the app
 
