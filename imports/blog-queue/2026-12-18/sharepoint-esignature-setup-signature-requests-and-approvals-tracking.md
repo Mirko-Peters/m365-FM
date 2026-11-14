@@ -18,7 +18,7 @@ faq:
   - q: "How many people can sign one request?"
     a: "Microsoft Learn states that a request can have up to 10 internal or external recipients, at least one required signature field per recipient and up to 50 fields in the document. Only unencrypted PDF documents are supported at this time for requests started from a SharePoint document library."
   - q: "Where can I track the status of requests?"
-    a: "Microsoft Learn says you can track requests in the Approvals app in Teams, on the SharePoint tab, and open the file location from there. Admins can also search the Purview audit log for activities named eSignature*, such as request created, sent, completed or declined."
+    a: "Microsoft Learn says you can track requests in the Approvals app in Teams, on the SharePoint tab, and open the file location from there. Admins can also search the Purview audit log for activities named eSignature*."
   - q: "Why can an external signer not open the document?"
     a: "Microsoft Learn lists Entra B2B integration and guest sharing as requirements for new external signers. Sensitivity labels can block external sends, and conditional access policies may block signers, in which case adding the eSignature app to the approved apps list is a common fix."
   - q: "Can Power Automate start or react to an eSignature request?"
@@ -72,7 +72,7 @@ Recipients do not need a SharePoint license or a Microsoft account to sign.
 
 In Teams, open **Approvals** and select the **SharePoint** tab. You can filter requests, select one to see details, select **Review** to start signing, and select **Open file location**. Recipients see only requests that originate from their own tenant. Requests from external senders are tracked through email. For other providers' requests, you can see status and cancel, but you cannot open the signed document location from Approvals.
 
-For auditing, search the Purview audit log for `eSignature*` in the operation names. Logged activities include request created, sent, canceled, declined and completed, link expired, and document viewed, signed or downloaded.
+For auditing, search the Purview audit log for `eSignature*` in the operation names. The review and sign page does not list the individual activity names, so check the audit log documentation for the full list.
 
 Request statuses are In progress, Completed, Canceled and Declined. After completion, signers can download the signed copy from the email for 30 days. The signed file is saved to the originating folder and carries an audit trail, and Microsoft digitally signs it with a certificate. Declined or canceled requests do not save a copy.
 
@@ -103,6 +103,6 @@ The pages read give no request expiration, no reminder behavior, no Power Automa
 
 - [Overview of SharePoint eSignature](https://learn.microsoft.com/en-us/microsoft-365/syntex/esignature-overview)
 - [Set up SharePoint eSignature](https://learn.microsoft.com/en-us/microsoft-365/syntex/esignature-setup)
-- [Create a signature request](https://learn.microsoft.com/microsoft-365/syntex/esignature-send-requests)
-- [Review and sign a signature request](https://learn.microsoft.com/en-za/microsoft-365/syntex/esignature-review-sign-requests)
-- [Track and manage eSignature requests using Approvals in Teams](https://learn.microsoft.com/microsoft-365/syntex/esignature-approvals)
+- [Create a signature request](https://learn.microsoft.com/en-us/microsoft-365/syntex/esignature-send-requests)
+- [Review and sign a signature request](https://learn.microsoft.com/en-us/microsoft-365/syntex/esignature-review-sign-requests)
+- [Track and manage eSignature requests using Approvals in Teams](https://learn.microsoft.com/en-us/microsoft-365/syntex/esignature-approvals)
