@@ -11,7 +11,7 @@ keypoints:
   - "Because the code is broad, the sign-in log Conditional Access tab, not the code, tells you which policy interrupted the sign-in."
   - "Find the event by correlation ID, user, date or resource and filter the Conditional Access column to failures."
   - "The What If tool does not test service dependencies, so a result for Teams ignores policies on Exchange Online."
-  - "If every admin is locked out by a policy, Learn says to submit a support request; keep emergency access accounts excluded to avoid that."
+  - "If every admin is locked out by a policy, Learn says to submit a support request; my advice is to keep emergency access accounts excluded to avoid that."
 faq:
   - q: "What does AADSTS50131 mean?"
     a: "The Microsoft Entra error reference lists it as ConditionalAccessFailed. It indicates various Conditional Access errors such as bad Windows device state, a request blocked due to suspicious activity, or access policy or security policy decisions. The reference gives no single cause."
@@ -44,7 +44,7 @@ For a browser sign-in, the error page usually has detailed information that desc
 5. Read the **Troubleshooting and support** tab, which might give a clear reason, such as a device that did not meet compliance requirements.
 6. Select the **Policy Name** to open the policy configuration.
 
-The **Basic Info**, **Location**, **Device Info**, **Authentication Details** and **Additional Details** tabs hold the user and device details that were used in the policy assessment. For a bad device state, check the device details first.
+The **Basic Info**, **Location**, **Device Info**, **Authentication Details** and **Additional Details** tabs hold the user and device details that were used in the policy assessment. My advice: for a bad device state, check the device details first.
 
 ## Step 3: understand why a policy applied
 
@@ -79,7 +79,7 @@ Learn warns against these for all users and all resources:
 - **Require Hybrid Microsoft Entra domain joined device**, which blocks users without such a device.
 - **Require app protection policy**, which blocks users without an Intune policy or a client app that has one.
 
-Check recent policy changes against these first when the failures start suddenly for many users.
+My advice: when failures start suddenly for many users, check recent policy changes against these first.
 
 ## If you are locked out
 
