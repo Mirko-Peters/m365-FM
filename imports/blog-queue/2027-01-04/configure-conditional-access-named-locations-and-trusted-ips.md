@@ -25,7 +25,7 @@ faq:
     a: "Not directly. Learn says a trusted location cannot be deleted until the trusted designation is removed. Deleted policies and named locations can be restored within the 30-day soft-delete period."
 ---
 
-To define where sign-ins come from, create named locations in the Microsoft Entra admin center, mark your own public ranges as trusted if appropriate, and then select those locations in a Conditional Access policy. Microsoft Learn documents the setup, the limits and several caveats around proxies, GPS and evaluation timing. This guide follows the Learn pages on the Conditional Access network assignment and named locations.
+To define where sign-ins come from, create named locations in the Microsoft Entra admin center, mark your own public ranges as trusted if appropriate, and then select those locations in a Conditional Access policy. Microsoft Learn documents the setup, the limits and several caveats around proxies, GPS and evaluation timing. This guide follows the Microsoft Learn page on using network signals in Conditional Access. The named locations URL that Learn also lists redirects to the same page.
 
 ## Create a named location
 
@@ -70,7 +70,7 @@ The network assignment in a policy has four choices:
 | --- | --- |
 | Any network or location | All IP addresses, including internet addresses. You can exclude locations, for example trusted ones, to target off-network access |
 | All trusted networks and locations | All locations marked trusted, plus MFA trusted IPs if configured |
-| All Compliant Network locations | Users and devices that comply with organizational policies. Requires Global Secure Access |
+| All Compliant Network locations | Users and devices that comply with the organization's security policies. Shown to organizations with access to Global Secure Access features |
 | Selected networks and locations | Only when the user connects from one or more selected named locations |
 
 ## GPS-based locations: read the caveats first
@@ -98,7 +98,7 @@ GPS-based country locations need the **Microsoft Authenticator** app. Learn desc
 - Conditional Access is enforced after first-factor authentication and is not a front-line defense against denial-of-service attacks.
 - Named locations are available through the Microsoft Graph `namedLocation` API.
 
-## A practical setup order
+## A practical setup order (my advice)
 
 1. List your office and datacenter egress addresses as public ranges and create one IP range location.
 2. Decide whether it should be trusted. Remember that trusted status feeds ID Protection risk calculation.
@@ -106,7 +106,7 @@ GPS-based country locations need the **Microsoft Authenticator** app. Learn desc
 4. Use a policy with the location condition in report-only mode first. Check the sign-in logs for unexpected blocks. This reflects common admin practice, and the Learn pages read here do not describe report-only for IP locations.
 5. Enforce, and keep a break-glass exclusion according to your organization's standard.
 
-## Typical mistakes
+## Typical mistakes (my advice)
 
 - Entering internal addresses instead of the public egress address.
 - Forgetting that a proxy or VPN changes the IP that Entra sees.
@@ -121,5 +121,4 @@ GPS-based country locations need the **Microsoft Authenticator** app. Learn desc
 
 ## Sources
 
-- [Conditional Access: Network assignment (Microsoft Learn)](https://learn.microsoft.com/entra/identity/conditional-access/concept-assignment-network)
-- [Conditional Access: Named locations (Microsoft Learn)](https://learn.microsoft.com/entra/identity/conditional-access/location-condition)
+- [Conditional Access Policy: Using Network Signals (Microsoft Learn)](https://learn.microsoft.com/entra/identity/conditional-access/concept-assignment-network)
