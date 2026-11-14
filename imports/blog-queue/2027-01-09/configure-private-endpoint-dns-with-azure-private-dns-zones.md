@@ -25,7 +25,7 @@ faq:
     a: "No. DNS resolution and access control are separate. With Public network access Disabled, the service rejects the connection regardless of DNS."
 ---
 
-A private endpoint only works for clients whose DNS answers with the private IP. Most failures come from the zone, the link or the name. The Microsoft Learn page behind this guide lists zone names, the recommended approach and caveats. It leaves virtual network links, zone groups, custom DNS servers and on-premises designs to the full private endpoint DNS integration article, which was not read for this guide.
+A private endpoint only works for clients whose DNS answers with the private IP. Most failures come from the zone, the link or the name. The Microsoft Learn page behind this guide lists zone names, the recommended approach and caveats. It does not explain virtual network links in detail, zone groups, custom DNS servers or on-premises designs. It links only to short pointers such as the Private DNS zones overview, Azure Private Resolver and the Fallback to Internet article, and none of those was read for this guide.
 
 ## How DNS works for a private endpoint
 
@@ -67,18 +67,18 @@ Government and China clouds use separate names. Some services need several zones
 - **Do not override a zone that public endpoints still use.** Resolution breaks without DNS forwarding to the public DNS.
 - **NXDOMAIN.** If a zone like `privatelink.blob.core.windows.net` exists and a target resource has no private endpoint, the zone can return NXDOMAIN. Use **Fallback to Internet** on the virtual network link. Or add an A record with the public IP manually, which Learn does not recommend because it will not follow changes to the public IP.
 - **Azure Files.** Shares must be remounted if they were connected to the public endpoint.
-- **Footnotes on the page.** Container Registry: do not deploy `privatelink.azurecr.io` as an additional zone. Web Apps: create two records, one for the app and one for `scm`, in `privatelink.azurewebsites.net`. Foundry Tools: a zone for each endpoint suffix. IoT Hub: `privatelink.servicebus.windows.net` is needed for the built-in endpoint.
+- **Footnotes on the page.** Container Registry: if you use Azure Private DNS zones, do not deploy the regional data zone `{regionName}.data.privatelink.azurecr.io` as an additional zone, because the entries are added automatically to the existing `privatelink.azurecr.io` zone. Web Apps: to use the Kudu console or Kudu REST API, create two records that point to the private endpoint IP address, one for the app and one for `scm`, in the private zone `privatelink.azurewebsites.net` or a custom DNS server, and do not deploy `scm.privatelink.azurewebsites.net` as an additional zone in Azure private DNS. Foundry Tools: a zone for each endpoint suffix. IoT Hub: `privatelink.servicebus.windows.net` is needed for the built-in endpoint.
 
 ## What the page does not say
 
 - Virtual network link configuration, beyond a passing mention and the fallback link.
 - DNS zone groups.
-- Custom DNS servers and conditional forwarders, and the Azure DNS address they would point to.
+- How to set up custom DNS servers or conditional forwarders, and the Azure DNS address they would point to. The tables do list a public DNS zone forwarders column for each service.
 - On-premises and hub-and-spoke designs.
 
 ## A configuration outline
 
-This outline is practical advice built on the page.
+This outline is my advice, built on the page.
 
 1. Find the recommended zone for your service and subresource.
 2. Create the zone once for that service type and link it to the virtual network.
@@ -87,7 +87,7 @@ This outline is practical advice built on the page.
 5. If other resources of the same type have no private endpoint, enable Fallback to Internet.
 6. Check Public network access separately, since DNS does not control it.
 
-## Typical mistakes
+## Typical mistakes (my advice)
 
 - Using custom zone names and expecting automatic records.
 - Putting several services in one zone.
