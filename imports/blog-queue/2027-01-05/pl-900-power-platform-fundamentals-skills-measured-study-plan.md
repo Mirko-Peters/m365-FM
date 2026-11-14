@@ -9,7 +9,7 @@ topics: [pl-900, power-platform]
 keypoints:
   - "As of July 24, 2026 the outline has five areas: business value (5-10%), environment management (20-25%), Power Apps (20-25%), Power Automate (20-25%) and Copilot Studio agents (20-25%)."
   - "Copilot Studio agents is a new area with objectives to build agents and manage agents, including Microsoft Agent 365 and agent evaluations."
-  - "Power Pages objectives were removed, as were the objectives to build a canvas app and to build a model-driven app."
+  - "The three Power Pages objectives were removed, as were the objectives to build a canvas app and to build a model-driven app."
   - "The study guide states no retirement notice. It is an exam for people starting to build with Power Platform and is not a prerequisite for role-based certifications."
   - "This guide uses only the public skills outline and contains no exam questions."
 faq:
@@ -25,7 +25,7 @@ faq:
     a: "No. It uses only the skills outline."
 ---
 
-The PL-900 outline changed in July 2026. It now has five areas. Four of them carry 20-25% each, and Copilot Studio agents is a new area. Power Pages is gone from the outline. This guide uses only the Microsoft Learn skills outline, valid as of 24 July 2026. It contains no exam questions.
+The PL-900 outline changed in July 2026. It now has five areas. Four of them carry 20-25% each, and Copilot Studio agents is a new area. The Power Pages objectives were removed, although area 1 still mentions the value of Power Pages. This guide uses only the Microsoft Learn skills outline, valid as of 24 July 2026. It contains no exam questions.
 
 ## Audience profile
 
@@ -55,12 +55,12 @@ Describe the value of Power Apps, Power Automate, Dataverse, connectors, Power P
 ## Area 3: Power Apps (20-25%)
 
 - **Describe capabilities and use cases:** canvas apps, model-driven apps, Plan designer and code apps.
-- **Build basic apps:** using AI to create canvas and model-driven apps, and creating AI-powered apps with the vibe experience.
+- **Describe how to build basic apps:** using AI to create canvas and model-driven apps, and creating AI-powered apps with the vibe experience.
 
 ## Area 4: Power Automate (20-25%)
 
 - **Describe use cases and capabilities:** cloud and desktop flows, and use cases for approvals, Teams, Outlook, SharePoint, Forms and document automation.
-- **Build basic flows:** connector triggers and actions for cloud flows, and using AI to create and modify cloud and desktop flows.
+- **Describe how to build basic flows:** connector triggers and actions for cloud flows, and using AI to create and modify cloud and desktop flows.
 
 ## Area 5: Copilot Studio agents (20-25%)
 
@@ -77,10 +77,10 @@ The change log compares the version before 24 July 2026 with the current one.
 | Business value | Share decreased. The objective on the value of extending business solutions was removed |
 | Manage environment | Share increased. Dataverse and administration objectives had moderate changes |
 | Power Apps | Share decreased. Identify capabilities became describe capabilities and use cases. Build a canvas app and build a model-driven app were removed. Describe how to build basic apps was added |
-| Power Automate | Share increased. Identify components became describe use cases and capabilities. Build a flow became describe how to build basic flows. All three Power Pages objectives were removed |
-| Copilot Studio agents | New area with three new objectives for building and managing agents |
+| Power Automate | Share increased. Identify components became describe use cases and capabilities. Build a flow became describe how to build basic flows. All three Power Pages objectives were removed, and the table lists them after the Power Automate rows |
+| Copilot Studio agents | New area with two new objectives: build agents and manage agents |
 
-Older study material may still teach Power Pages and hands-on app building. Check its date against this outline.
+My advice: older study material may still teach Power Pages and hands-on app building, so check its date against this outline.
 
 ## A study plan from the weights
 
@@ -91,12 +91,12 @@ The plan below is advice derived from the weights, not an official plan.
 3. For area 2, learn what a Dataverse table, column and relationship are, what environments are for, and what pipelines do in lifecycle management.
 4. For areas 3 and 4, focus on when to use each app or flow type. The outline now stresses describing capabilities over building from scratch.
 5. For area 5, learn topics, knowledge sources, tools and channels, and the monitoring terms. These are new, so older materials will not cover them.
-6. Use the Practice Assessment that the study guide recommends, if it names one for this exam. The page read here mentions only that legacy practice assessments are no longer updated for other exams, so check the exam page itself.
+6. Use the free Practice Assessment that the study guide links for this exam.
 7. Read the study guide again close to your exam date.
 
 ## Before you book
 
-The study guide has no retirement notice. The exam page shows current status, price and languages, which this guide does not cover.
+The study guide has no retirement notice. The exam page shows current status, price and languages, which this guide does not cover. The study guide states that a score of 700 or greater is required to pass.
 
 ## Related
 
