@@ -20,7 +20,7 @@ faq:
   - q: "Why can't I create a SharePoint site?"
     a: "If the + Create site button is missing or the Site card is greyed out, self-service site creation is probably disabled in your organization. Your SharePoint or Microsoft 365 administrator can allow it or create the site for you. Site creation also isn't available in the SharePoint mobile app."
 ---
-To create a SharePoint site, open the SharePoint start page, select **+ Create site**, choose **Team site** or **Communication site**, pick a template, give the site a name and select **Create site**. Microsoft says a modern site is created in seconds. This article is for new site owners who want the decision and the settings explained before they click, and for people who ask why the button is missing. You'll see how to choose between the two site types, what each field means, which choices are permanent and what to do right after the site exists.
+To create a SharePoint site, open the SharePoint start page, select **+ Create site**, choose **Team site** or **Communication site**, pick a template, give the site a name and select **Create site**. This article is for new site owners who want the decision and the settings explained before they click, and for people who ask why the button is missing. You'll see how to choose between the two site types, what each field means, which choices are permanent and what to do right after the site exists.
 
 ## Choose the site type first
 
@@ -33,7 +33,7 @@ A simple rule works for most cases. If the people who read the site are the same
 
 The name of the template that Microsoft suggests for a general team site is **Standard team**. Pick it when none of the other templates matches what you're building. The templates page shows a preview and a **Site capabilities** list, so you can compare before you commit.
 
-Microsoft's page [Create a team site in SharePoint](https://support.microsoft.com/en-us/sharepoint/sites-in-sharepoint/create-a-team-site-in-sharepoint) is the basis for the steps below, together with the [communication site page](https://support.microsoft.com/en-us/sharepoint/sites-in-sharepoint/create-a-communication-site-in-sharepoint).
+Microsoft's page [Create a team site in SharePoint](https://support.microsoft.com/sharepoint/sites-in-sharepoint/create-a-team-site-in-sharepoint) is the basis for the steps below, together with the [communication site page](https://support.microsoft.com/sharepoint/sites-in-sharepoint/create-a-communication-site-in-sharepoint).
 
 ## Create the site in eight steps
 
@@ -48,16 +48,16 @@ You need a Microsoft 365 account with SharePoint. Sign in, select the app launch
 7. Select the default **language** for the site.
 8. Select **Create site**. In the **Add members** box, add people by name or email and select **Finish**. You can also select **Finish** and add people later.
 
-The SharePoint home page has a second path: select **Build** in the left app bar, then the **Site** card in **Start building**, choose the type and a template, and continue with the same fields. Microsoft marks this build path as a preview on its team site page, so the steps may differ in your tenant.
+The SharePoint home page has a second path: select **Build** in the left app bar, then the **Site** card in **Start building**, choose the type and a template, and continue with the same fields. Microsoft describes this path on its team site page too, so the steps may differ a little in your tenant.
 
 Our overview of [SharePoint](https://www.m365.fm/entity/sharepoint/) explains where sites sit in the larger structure of a tenant.
 
-### Settings you can't undo
+### Settings to get right first
 
-Two choices are hard to change, so slow down on them:
+Two choices deserve a second look before you click **Create site**:
 
-- **Language.** The default language of the site can't be changed later. You can add alternate languages, but the primary language stays as chosen at creation.
-- **Site address.** It can contain only underscores, dashes, single quotes and periods, and it can't start or end with a period. A short address is easier to type and share. If an address is already in use, SharePoint changes yours automatically. As an example from Microsoft's admin page, "Marketing" becomes `/sites/marketing2` if `/sites/marketing` exists.
+- **Language.** Microsoft says you can't change the language of the site to something else later. You can add alternate languages.
+- **Site address.** It fills in from the site name. A short address is easier to type and share. If an address is already in use, SharePoint offers a modified one. As an example from Microsoft's admin page, "Marketing" is offered as `/sites/marketing2` if `/sites/marketing` exists.
 
 For a team site, the group email address is generated from the name. Members who join the Microsoft 365 group are added to the site's members group automatically.
 
@@ -82,13 +82,12 @@ Two situations come up often.
 
 ## For admins: who can create sites
 
-By default, users can create communication sites and Microsoft 365 group-connected team sites. Microsoft's page [Manage site creation in SharePoint](https://learn.microsoft.com/en-us/sharepoint/manage-site-creation) says SharePoint Administrators and higher roles control it:
+By default, users can create communication sites and Microsoft 365 group-connected team sites. Microsoft's page [Manage site creation in SharePoint](https://learn.microsoft.com/sharepoint/manage-site-creation) says SharePoint Administrators and higher roles control it:
 
 1. In the SharePoint admin center, go to **Settings** and select **Site creation**.
-2. Select **Users can create SharePoint sites** to let users create sites from SharePoint, OneDrive, the PnP PowerShell cmdlet and the REST API. This setting does not control team or Microsoft 365 group creation.
-3. Select **Show the options to create a site in SharePoint and create a shared library from OneDrive** to show the options in those places.
-4. Under **/sites** or **/teams**, choose whether to create Microsoft 365 group-connected team sites, then set the default time zone and storage limit for new sites.
-5. Select **Save**.
+2. To allow users to create sites, select **Allow** under **Control site creation from tools**. This covers SharePoint, OneDrive, the PnP PowerShell cmdlet and the REST API. Microsoft says this setting doesn't affect whether users can create teams or Microsoft 365 groups and their connected sites.
+3. Under **/sites** or **/teams**, choose whether to create Microsoft 365 group-connected team sites, then set the default time zone and storage limit for new sites.
+4. Select **Save**.
 
 Note the catch: disabling site creation doesn't stop users from creating Microsoft 365 groups or things that depend on them, such as Microsoft Teams. Every group creates a team site. To limit that, you have to restrict who can create Microsoft 365 groups, which is a separate setting.
 
@@ -97,7 +96,7 @@ Admins can also create a site themselves. In the SharePoint admin center, go to 
 ## Common mistakes
 
 - **Choosing the wrong type.** A communication site can't give you a Microsoft 365 group. Decide whether you need a group before you click.
-- **Skipping the language check.** The language can't be changed after creation.
+- **Skipping the language check.** Microsoft says the language can't be changed later.
 - **One owner only.** If that person leaves, nobody can manage permissions.
 - **Creating a site for a single folder.** If you only need a place for ten files, a library in an existing site might be enough.
 - **Making it public by default.** Choose **Private** unless the content is meant for everyone in your organization.
@@ -108,9 +107,16 @@ Admins can also create a site themselves. In the SharePoint admin center, go to 
 - **Who should be owner and member.** The group-connected team site puts the owner and members in a Microsoft 365 group. Decide who is in which role before you invite a department.
 - **Folders in a library.** Learn how to create a folder in a SharePoint document library and when a column or view works better.
 - **Deleting and restoring a site.** Sites you no longer need can be deleted and, for a limited time, restored. This has its own page.
-- **Hub sites.** Microsoft recommends hub sites instead of subsites to group related content in the modern architecture.
+- **Hub sites.** Hub sites group related sites. You can associate a new site with a hub at creation, as described above.
 - **Using SharePoint every day.** Once the site exists, the next question is how people will find, share and edit files in it.
 
 ## Next step
 
 Open SharePoint, write down the site name, the type and the two owners, then create the site with the steps above. After you create a SharePoint site, add the second owner and the members before you share the link.
+
+## Sources
+
+- [Create a team site in SharePoint (Microsoft Support)](https://support.microsoft.com/sharepoint/sites-in-sharepoint/create-a-team-site-in-sharepoint)
+- [Create a communication site in SharePoint (Microsoft Support)](https://support.microsoft.com/sharepoint/sites-in-sharepoint/create-a-communication-site-in-sharepoint)
+- [Manage site creation in SharePoint (Microsoft Learn)](https://learn.microsoft.com/sharepoint/manage-site-creation)
+- [Create a site in the SharePoint admin center (Microsoft Learn)](https://learn.microsoft.com/sharepoint/create-site-collection)
