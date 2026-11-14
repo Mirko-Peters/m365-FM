@@ -111,3 +111,8 @@ Data collection takes time, and maps go out of date when products and routings c
 ## Next step
 
 Pick one product family, collect the cycle times and stock levels, and write down your takt time. Then run the eight steps of value stream analysis on that family before you plan any change.
+
+## Sources
+
+- [Value Stream Mapping Tutorial - What is VSM? - ASQ](https://asq.org/quality-resources/value-stream-mapping)
+- [Map flow end-to-end: Value Stream Mapping - Kaizen Institute](https://kaizen.com/insights/value-stream-mapping-bottleneck-capacity/)
