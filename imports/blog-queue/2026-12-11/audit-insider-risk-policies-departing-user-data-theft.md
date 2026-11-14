@@ -9,7 +9,7 @@ topics: [insider-risk-management, purview]
 keypoints:
   - "The Data theft by departing users template scores activity near resignation and end dates. It starts scoring from the Microsoft HR connector or from a Microsoft Entra account deletion trigger."
   - "Without a triggering event a user is not evaluated. Policy indicators only score after a trigger occurs, and all global indicators are disabled by default."
-  - "The Status column on the Policies tab shows Healthy, Recommendations or Warnings. A stale HR connector (over 7 days) is a listed warning."
+  - "The Status column on the Policies tab shows Healthy, Recommendations or Warnings. A stale HR connector (over 7 days) is a listed notification."
   - "Manual scoring can start scoring for chosen users for 5 to 30 days, up to 4,000 users, as a stopgap when no trigger exists."
   - "Microsoft's pages do not define a time window for the departing-user template and do not list audit log settings beyond turning audit on."
 faq:
@@ -18,11 +18,11 @@ faq:
   - q: "How does a user enter scoring in a departing-user policy?"
     a: "Through a triggering event. Learn names the Microsoft HR connector, which imports resignation and termination dates, or the option User account deleted from Microsoft Entra. Without a HR connector, select the Entra option when you configure trigger events."
   - q: "Why does my policy produce no alerts?"
-    a: "The policy health table lists causes such as no indicators selected, no triggering event, no users or groups, a HR connector not working or stale for more than 7 days, no devices onboarded and, for Defender-based policies, missing alert sharing. After a first policy, alerts typically start appearing after about 24 hours."
+    a: "The policy health table lists causes such as no indicators selected, no triggering event, no users or groups, a HR connector not working or stale for more than 7 days, no devices onboarded and, for Defender-based policies, missing alert sharing. The pages do not state how long a new policy takes to produce its first alerts."
   - q: "Do I need to turn on auditing?"
-    a: "Learn lists the Microsoft 365 audit log as a required step. It is on by default, and if it was turned off, confirm with the administrator who disabled it before re-enabling. Log preparation takes a few hours."
+    a: "Learn lists the Microsoft 365 audit log as a required step. It is on by default. Learn notes that another administrator may have turned it off on purpose and recommends confirming that turning it back on is OK. After you turn it on, a message says the log is being prepared and a search works after a couple of hours."
   - q: "Can I see what an indicator threshold means?"
-    a: "Learn gives SharePoint as an example: 1 to 9 daily events have minimal impact and usually no alert, 10 to 19 give low severity, 20 to 29 medium severity and 30 or more high severity. The page presents this as an example, so check your own thresholds in the policy."
+    a: "Learn gives SharePoint as an example: 1 to 9 daily events after the triggering event have minimal impact and tend not to generate an alert, 10 to 19 give low severity, 20 to 29 medium severity and 30 or more high severity. The page presents this as an example, so check your own thresholds in the policy."
 ---
 
 To audit a departing-user policy, check four layers in order: prerequisites (audit log, roles, HR connector), the triggering event, the indicators and thresholds, and the policy health status. If a layer is missing, the policy can look fine and still never score a leaver. Microsoft's pages describe each layer, but they do not define a time window for the template, so confirm the window in your own policy.
@@ -36,7 +36,7 @@ To audit a departing-user policy, check four layers in order: prerequisites (aud
 - **Permissions**: users need the right role group, such as **Insider Risk Management** or **Insider Risk Management Admins**. Microsoft recommends the roles with the fewest permissions.
 - **Audit log**: required. It is on by default.
 - **Licensing**: confirm a supported Microsoft 365 subscription. Some indicators need pay-as-you-go billing.
-- **HR connector**: the Microsoft 365 HR connector is required for the departing user templates. It imports resignation and termination dates.
+- **HR connector**: it imports resignation and termination dates. The pages disagree here: the Get started page lists the Microsoft 365 HR connector as required for the departing user data theft template, while the policy templates page marks it optional and names the Microsoft Entra account deletion trigger as the alternative.
 
 Setup order from Learn: assign permissions, enable the audit log, optionally run analytics (**Run scan** on the Overview tab, results up to 48 hours), configure prerequisites, configure **Insider risk settings**, then create the policy under **Policies** > **Create policy**.
 
@@ -67,7 +67,8 @@ On the **Policies** tab, the **Status** column shows **Healthy**, **Recommendati
 | No indicators selected | Edit the policy and select indicators |
 | No triggering event | Edit the policy and select one |
 | No users or groups | Add users or groups |
-| HR connector not working or stale over 7 days | Fix the connector or use the Entra account deletion trigger |
+| HR connector has not uploaded data in more than 7 days | Check that the connector is configured correctly and sending data |
+| HR connector not configured or not working | Check the connector data, or select the Entra account deleted triggering event |
 | No devices onboarded | Confirm device onboarding |
 | No alerts generated | Review indicators, thresholds, users and groups |
 | Nearing the user limit for a template | Remove users no longer needing scoring |
