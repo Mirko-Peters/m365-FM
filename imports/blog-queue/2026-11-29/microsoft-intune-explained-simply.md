@@ -75,9 +75,9 @@ If Conditional Access requires a device to be marked as compliant, the complianc
 
 ### The setting that surprises people
 
-Intune has a setting called **Mark devices with no compliance policy assigned as**. The default is **Compliant**, which means devices without a compliance policy are considered compliant. Microsoft advises: if you use Conditional Access with compliance policies, change this to **Not compliant**, so only devices confirmed as compliant can reach your resources.
+In the Microsoft Intune admin center, go to **Endpoint security** > **Device compliance** > **Compliance policy settings**. These are tenant-wide settings that act like a built-in compliance policy every device receives. One of them is **Mark devices with no compliance policy assigned as**. The default is **Compliant**, which means devices without a compliance policy are considered compliant. Microsoft advises: if you use Conditional Access with compliance policies, change this to **Not compliant**, so only devices confirmed as compliant can reach your resources.
 
-Also note the compliance status validity period. A device that fails to report its status before the period expires is treated as noncompliant.
+Also note the **Compliance status validity period (days)**. A device that fails to report its compliance status for a policy before the period expires is treated as noncompliant. The default is 30 days, and you can configure 1 to 120 days.
 
 ## Licensing
 
@@ -113,5 +113,5 @@ Microsoft's page does not give click-by-click steps for these items. It links to
 
 ## Sources
 
-- [What is Microsoft Intune, Microsoft Learn](https://learn.microsoft.com/en-us/intune/intune-service/fundamentals/what-is-intune)
-- [Get started with device compliance in Intune, Microsoft Learn](https://learn.microsoft.com/en-us/intune/intune-service/protect/device-compliance-get-started)
+- [What is Microsoft Intune, Microsoft Learn](https://learn.microsoft.com/en-us/intune/fundamentals/what-is-intune)
+- [Device compliance policies in Microsoft Intune, Microsoft Learn](https://learn.microsoft.com/en-us/intune/device-security/compliance/overview)
