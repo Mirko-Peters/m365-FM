@@ -25,13 +25,13 @@ faq:
     a: "Strict preset first, then Standard preset, then custom policies by priority with 0 highest, then the default policy. Protection stops after the first applicable policy."
 ---
 
-Anti-spam policies in Exchange Online Protection decide what happens to inbound mail that is judged to be spam, phishing or bulk. This guide follows the Microsoft Learn page on configuring anti-spam policies. The page covers inbound policies only.
+Anti-spam policies in Exchange Online Protection decide what happens to inbound mail that is judged to be spam, phishing or bulk. This guide follows the Microsoft Learn page Configure spam filter policies. The page covers inbound policies only.
 
 ## Permissions
 
 - **Exchange Online:** Organization Management or Security Administrator to add, modify and delete. Global Reader, Security Reader or View-Only Organization Management for read-only access.
 - **Microsoft Entra roles:** Global Administrator, Security Administrator, Global Reader or Security Reader. Global Administrator should be limited to emergencies or cases where another role cannot be used.
-- **Defender XDR unified RBAC:** applies if the Email & collaboration > Defender for Office 365 permissions toggle is Active, and affects the portal only.
+- **Defender XDR unified RBAC:** applies when both the Defender for Office 365 and Exchange Online permissions toggles under Email & collaboration are Active, and only in the Defender portal (not PowerShell, the Purview portal or the Exchange admin center). The page names Core Security settings (manage) or (read) under Authorization and settings > Security settings.
 - If saving fails with a 403 or `CmdletAccessDeniedException` despite correct permissions, the page says an Exchange RBAC configuration refresh may be needed. Contact Microsoft Support.
 
 ## Create an inbound policy
@@ -78,7 +78,7 @@ New-HostedContentFilterPolicy -Name "Contoso Executives" -HighConfidenceSpamActi
 New-HostedContentFilterRule -Name "Contoso Executives" -HostedContentFilterPolicy "Contoso Executives" -SentToMemberOf "Contoso Executives Group"
 ```
 
-The page also names Get-, Set-, Enable-, Disable- and Remove- cmdlets for policies and rules. Removing a policy does not remove its rule. The text says a BCL of 7, 8 or 9 triggers the action, while the example uses 6, so verify the intended value.
+The page also covers Get-, Set-, Enable-, Disable- and Remove- cmdlets for policies and rules. `Set-HostedContentFilterRule -Priority` sets the priority, and enabling or disabling the rule switches the whole policy. Removing a policy does not remove its rule, and removing a rule does not remove its policy. Further PowerShell points from the page: the `-MakeDefault` switch on `Set-HostedContentFilterPolicy` turns a policy into the default policy; a policy cannot be renamed in PowerShell (renaming in the portal renames only the rule); a rule can be created disabled or with a priority; a policy created in PowerShell is not visible in the Defender portal until a rule uses it; and `MarkAsSpamBulkMail` is on by default and available only in PowerShell. The text says a BCL of 7, 8 or 9 triggers the action, while the example uses 6, so verify the intended value.
 
 ## Test
 
@@ -93,7 +93,7 @@ Send a GTUBE test message as one line with no spaces or line breaks. It works on
 
 ## A setup outline
 
-This outline is practical advice built on the page.
+This outline is my advice, built on the page. Its first step reflects the page's tip that Microsoft typically recommends the Standard and Strict preset security policies over custom anti-spam policies.
 
 1. Check whether the Standard or Strict preset already covers your users, because presets override custom settings.
 2. Create a custom policy only for groups that need different handling.
@@ -101,7 +101,7 @@ This outline is practical advice built on the page.
 4. Test with GTUBE.
 5. Review priorities when you have several custom policies.
 
-## Typical mistakes
+## Typical mistakes (my advice)
 
 - Editing the default policy and expecting it to override presets.
 - Adding more than 30 entries in the portal.
@@ -116,4 +116,4 @@ This outline is practical advice built on the page.
 
 ## Sources
 
-- [Configure anti-spam policies (Microsoft Learn)](https://learn.microsoft.com/defender-office-365/anti-spam-policies-configure)
+- [Configure spam filter policies (Microsoft Learn)](https://learn.microsoft.com/defender-office-365/anti-spam-policies-configure)
