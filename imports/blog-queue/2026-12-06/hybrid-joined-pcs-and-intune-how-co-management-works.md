@@ -10,7 +10,7 @@ keypoints:
   - "Co-management means a Windows device is managed by Configuration Manager and Intune at the same time. It needs the Configuration Manager client and Intune enrollment."
   - "Supported join types are Microsoft Entra hybrid joined and Microsoft Entra joined. Entra registered only is not supported."
   - "Seven workloads can move to Intune, one at a time: compliance, Windows Update, resource access, Endpoint Protection, device configuration, Office apps and client apps."
-  - "Configure and deploy a workload in Intune before you switch it, and make sure only one tool manages it."
+  - "Configure and deploy a workload in Intune before you switch it, and make sure the workload is always managed by one of the two tools."
   - "Clean up duplicate Entra device objects before enabling co-management, or devices may fail to enroll."
 faq:
   - q: "Is co-management the same as hybrid join?"
@@ -90,7 +90,7 @@ Microsoft warns that stale duplicate device objects in Microsoft Entra ID can ma
 
 Rules to remember:
 
-- Configure and deploy the workload in Intune before you switch it. Each workload should be managed by only one tool at a time.
+- Configure and deploy the workload in Intune before you switch it. Microsoft says to make sure a workload is always managed by one of the two tools.
 - Switching back is possible but can have an impact. For example, Windows and Office versions installed by Intune stay at the later version.
 - Resource access policies stopped being supported in Configuration Manager version 2203. From 2403 the node is removed and an upgrade is blocked if old policies remain.
 - After switching Windows Update policies, adjust Configuration Manager client settings by hand so both tools do not manage updates.
@@ -101,7 +101,7 @@ Microsoft's hybrid join page lists these good-fit cases: you want to keep Group 
 
 ## What the pages do not say
 
-The pages I read do not describe a slider control, and they do not name a minimum Windows build or Configuration Manager version for co-management in general.
+The co-management pages do not name a specific Windows build. They only say that devices should run an Intune-supported version of Windows and a supported Configuration Manager current branch version.
 
 ## Related
 
