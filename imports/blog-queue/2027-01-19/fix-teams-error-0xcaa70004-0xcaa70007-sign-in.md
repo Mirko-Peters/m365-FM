@@ -20,7 +20,7 @@ faq:
   - q: "Which message goes with 0xCAA70007?"
     a: "The archived article says the message is You'll need the internet for this, even if the device is online."
   - q: "What if the app keeps asking for credentials?"
-    a: "The article lists TPM errors, a disabled device (AADSTS135011) and a deleted device (AADSTS50155) as causes, with manual recovery steps using dsregcmd."
+    a: "The article lists TPM errors, a disabled device (AADSTS135011) and a deleted device (AADSTS50155) as causes. A disabled device is enabled by an administrator, and for TPM failures or a deleted device it describes manual recovery steps that use dsregcmd."
   - q: "Is this still relevant on supported systems?"
     a: "The archived article is written for Windows 10, whose support ended on October 14, 2025. Treat it as a reference for the checks, and check your current Windows and Microsoft 365 Apps versions."
 ---
@@ -29,14 +29,14 @@ Teams sign-in errors 0xCAA70004 and 0xCAA70007 are not explained on Teams pages 
 
 ## What the Teams page says
 
-On the Teams sign-in errors page, a row for 0xCAA70004 and 0xCAA70007 sends you to the connection issue article instead of giving steps of its own. The same applies if the same issue appears in other Office apps.
+On the Teams sign-in errors page, the entry for 0xCAA70004 and 0xCAA70007 sends you to the connection issue article instead of giving steps of its own. The same applies if the same issue appears in other Office apps.
 
 ## What the archived article says
 
 The archived article states that it is archived, and describes the situation as follows:
 
 - Starting with Office 2016 build 16.0.7967, Office apps on Windows 10 use Web Account Manager (WAM) to sign in.
-- The recommended first step is to update to the latest build, and to make sure Windows 10 22H2 is in use.
+- If you experience authentication issues in Office applications on Windows 10, Learn's archived page says to update to the latest build for your channel and to make sure you are running Windows 10 version 22H2.
 
 Note on dates: Windows 10 support ended on October 14, 2025, so the Windows 10 advice is historical for most readers. Check which Windows version and which Microsoft 365 Apps build the affected device runs before you apply any of the steps.
 
@@ -46,22 +46,22 @@ I did not find 0xCAA70004 by name in that text. The article describes the patter
 
 The article gives these checks:
 
-1. **Event Viewer.** Open Applications and Services Logs, Microsoft, Windows, AAD, Operational. Look for entries with the operation XMLHTTPWebRequest and error codes of the form 0x?AA7????, 0x?AA8????, 0x?AA3????, 0x102 or 0x80070102. These point to a network-level cause.
-2. **Browser test.** Open login.microsoftonline.com in Microsoft Edge, and also in an InPrivate window, to see whether the endpoint is reachable.
-3. **Do not block the broker.** Make sure that Microsoft.AAD.BrokerPlugin.exe and backgroundTaskHost.exe are not blocked by a firewall or proxy.
-4. **Do not block the sign-in host.** login.microsoftonline.com must be reachable.
+1. **Event Viewer.** Open Applications and Services Logs, Microsoft, Windows, AAD, Operational. Look for entries that mention XMLHTTPWebRequest and contain error codes of the form 0x?AA7????, 0x?AA8????, 0x?AA3????, 0x102 or 0x80070102. The page says to check that the time of these errors matches a time when you were actually connected, and that they are not an intermittent network issue such as a lost Wi-Fi connection or a wake-up from hibernation. It also says to use Office build 16.0.9126.2259 or later for this check.
+2. **Browser test.** Open login.microsoftonline.com in Microsoft Edge (not Internet Explorer), and also in an Edge InPrivate window. You should land on office.com or your company's default landing page. If navigation fails, the page says the cause is the network environment, a local firewall or antivirus software.
+3. **Do not block the broker.** Make sure that your local firewall, antivirus software and Windows Defender do not block Microsoft.AAD.BrokerPlugin.exe and backgroundTaskHost.exe.
+4. **Do not block the sign-in host.** Your network environment must not block login.microsoftonline.com. The page notes that this address covers many IP addresses and services, some of which might be blocked for no apparent reason, which can cause intermittent problems on some devices only.
 
 ## Symptom 2: repeated credential prompts
 
 The article lists these causes and fixes:
 
 - **TPM problems**, visible as event codes of the forms 0x?028????, 0x?029???? and 0x?009????.
-- **A disabled device**, shown as AADSTS135011.
-- **A deleted device**, shown as AADSTS50155.
+- **A disabled device**, shown as AADSTS135011. The page says an administrator should enable the device in Active Directory or Microsoft Entra ID.
+- **A deleted device**, shown as AADSTS50155. The page says to recover the device with the manual recovery method, and to submit a support request if nobody in your organization deleted it.
 
 For manual recovery, it uses `dsregcmd /status` to look at the device registration state, and then:
 
-- For hybrid joined devices, run `dsregcmd /leave` and let the device register again.
+- For Microsoft Entra hybrid joined devices, run `dsregcmd /leave` in an elevated Command Prompt window and then restart the device.
 - For registered devices, remove the work account and add it again.
 - For Microsoft Entra joined devices, the article describes a sequence of backing up data, creating a local admin account, disconnecting the device from the organization and reconnecting it.
 
@@ -93,10 +93,6 @@ This section is my advice, not a Microsoft statement.
 - **Many users on one network.** Start with the proxy, DNS and firewall.
 - **Only VDI sessions.** Look at the non-persistent VDI note in the article, and at how your profile and token caching work.
 - **Only after an update.** Compare the Office build with the one that worked, and note any change to security software.
-
-## What I did not read
-
-I read the Teams sign-in errors page and the archived article. I did not read the separate Learn pages on dsregcmd, TPM troubleshooting or the Web Account Manager, so I do not describe their details.
 
 ## Related
 
