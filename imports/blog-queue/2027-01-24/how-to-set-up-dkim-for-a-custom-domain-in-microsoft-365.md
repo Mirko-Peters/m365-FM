@@ -137,7 +137,7 @@ This is my suggestion, not an order from the page:
 1. List every domain and subdomain that sends mail, including third-party senders, before you start.
 2. Create the DNS records for both selectors in one change, with the TTL set as Learn recommends.
 3. Start with one domain, send test messages, and read the headers before you do the others.
-4. Add the rotation date to your calendar. The rotation itself needs no DNS change here, but test the signature again afterward.
+4. Add the rotation date to your calendar, and test the signature again after a rotation. Rotation takes four days, so note the start date.
 5. Review SPF and DMARC for the same domain in the same project.
 
 ## Related
