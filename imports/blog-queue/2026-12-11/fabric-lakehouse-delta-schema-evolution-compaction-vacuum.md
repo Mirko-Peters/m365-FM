@@ -9,7 +9,7 @@ topics: [fabric-lakehouse, delta-lake, delta-lake-compaction, fabric]
 keypoints:
   - "Delta rejects writes that do not match the table schema. Schema evolution is an opt-in: mergeSchema adds columns, overwriteSchema replaces the whole schema."
   - "mergeSchema never drops columns and never changes types. Rename and drop need column mapping enabled first with delta.columnMapping.mode = name."
-  - "OPTIMIZE compacts small files. In the lakehouse UI use Tables > Maintenance, where V-Order and VACUUM are separate switches."
+  - "OPTIMIZE compacts small files. In the lakehouse UI use Tables > Maintenance. Apply V-order is a checkbox that appears when the compaction option is on, and VACUUM is its own option."
   - "VACUUM keeps seven days by default. Portal and API requests below seven days fail unless the retentionDurationCheck is disabled in Spark properties."
   - "Check SQL analytics endpoint, Direct Lake models and notebooks before you change a production schema."
 faq:
@@ -65,11 +65,11 @@ ALTER TABLE sales RENAME COLUMN old_name TO new_name
 ALTER TABLE sales DROP COLUMN obsolete_column
 ```
 
-Column mapping tracks columns by name in metadata, so existing files are not rewritten.
+Column mapping tracks columns by name in table metadata. Learn says this enables rename and drop without rewriting all existing data files.
 
 ### Widen a type
 
-Type widening needs Fabric Spark Runtime 1.3 (Delta Lake 3.2) or later. Enable it with `ALTER TABLE sales SET TBLPROPERTIES ('delta.enableTypeWidening' = 'true')`, then run `ALTER TABLE sales ALTER COLUMN order_id TYPE BIGINT`. Learn warns that clients on older Delta versions cannot read or write the table after you enable it. Changes from integer types to decimal or double must be applied manually with `ALTER TABLE`, not through schema evolution.
+Type widening needs Fabric Spark Runtime 1.3 (Delta Lake 3.2) or later. Enable it with `ALTER TABLE sales SET TBLPROPERTIES ('delta.enableTypeWidening' = 'true')`, then run `ALTER TABLE sales ALTER COLUMN order_id TYPE BIGINT`. Learn warns that clients on older Delta versions cannot read or write the table after you enable it. Changes from integer types to decimal or double must be applied manually with `ALTER TABLE`, not through schema evolution. Learn's example alters `order_id` to BIGINT without stating the source type, but its table of supported changes lists int to long only for Runtime 2.0+ (Delta Lake 4.1). For Runtime 1.3 it lists byte to short or int, short to int, float to double and decimal with greater precision and scale.
 
 ## Check consumers before you change production
 
@@ -84,8 +84,8 @@ Delta tables fragment over time. Learn explains that fragmentation adds file-ope
 1. Open the lakehouse.
 2. In **Lakehouse explorer**, under **Tables**, right-click the table or use the ellipsis.
 3. Select **Maintenance** to open **Run maintenance commands**.
-4. Turn **Optimize** on. **Apply V-order** appears only when Optimize is on.
-5. Turn **VACUUM** on if you also want to remove unreferenced files.
+4. Turn on the option that compacts small Parquet files. The page describes it as an **On** option, so check the exact label in your dialog. The **Apply V-order** checkbox can be selected only when that option is on.
+5. Turn on the **VACUUM** option if you also want to remove unreferenced files. The dialog has a further option that merges transactions into Parquet files and removes the extra deletion vector files.
 6. Select **Run now**.
 
 Track the run in the notification pane or in the **Monitoring hub**, where portal runs contain `TableMaintenance` in the activity name. Maintenance applies only to Delta tables, not to legacy Hive tables in Parquet, ORC, AVRO or CSV format.
@@ -118,7 +118,7 @@ VACUUM removes unreferenced files older than the retention threshold.
 
 Learn warns that a shorter interval can reduce time-travel history and affect concurrent readers or writers. The pages I read do not show Spark SQL syntax for VACUUM, so use the Maintenance dialog or check the Delta documentation linked from Learn.
 
-## Typical mistakes
+## Typical mistakes (my own list)
 
 - Using `overwriteSchema` when `mergeSchema` is enough.
 - Trying to rename or drop a column before enabling column mapping.
