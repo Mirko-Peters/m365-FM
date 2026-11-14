@@ -27,13 +27,13 @@ faq:
 
 Both numbers are measured in time, so they are easy to confuse. The difference is what they include. [Cycle time](https://www.m365.fm/entity/cycle-time/) covers one step, and lead time covers the whole journey.
 
-The Lean Enterprise Institute (LEI) defines cycle time, in its [lexicon entry](https://www.lean.org/lexicon-terms/cycle-time/), as the time required to produce a part or complete a process, as timed by actual measurement. On the same page, it defines production lead time, also called throughput time, as the total time for a product to move through a process or value stream. It adds order lead time, which includes delays downstream, such as order processing and waiting when customer orders exceed capacity. LEI puts the three in a clear order: value-creating time is usually less than cycle time, which is less than production lead time.
+The Lean Enterprise Institute (LEI) defines cycle time, in its [lexicon entry](https://www.lean.org/lexicon-terms/cycle-time/), as the time required to produce a part or complete a process, as timed by actual measurement. On the same page, it defines production lead time, also called throughput time, as the total time for a product to move through a process or value stream. It adds order lead time, which includes delays downstream, such as order processing and waiting when customer orders exceed capacity. LEI puts the three in an order: value-creating time is usually less than cycle time, which is usually less than production lead time.
 
-Michael Ballé gives a plain description in his LEI article [Should I pursue waste elimination or lead-time reduction?](https://www.lean.org/the-lean-post/articles/should-i-pursue-waste-elimination-or-lead-time-reduction/). In his words, the lead time is the time the order sits in the queue plus the time it takes to actually make it. So lead time has two parts: processing and waiting. Cycle time covers only the processing part of one step.
+A plain description of lead time is the time the order sits in the queue plus the time it takes to actually make it. Michael Ballé uses this framing in his LEI article [Should I pursue waste elimination or lead-time reduction?](https://www.lean.org/the-lean-post/articles/should-i-pursue-waste-elimination-or-lead-time-reduction/), which we could not re-open for this review. So lead time has two parts: processing and waiting. Cycle time covers only the processing part of one step.
 
-That is why the two numbers move independently. You can speed up a machine and improve its cycle time, and the lead time may not change, because the order still waits for the same queue. Ballé warns that a faster step alone mainly encourages more overproduction.
+That is why the two numbers move independently. You can speed up a machine and improve its cycle time, and the lead time may not change, because the order still waits for the same queue. Speeding up a single step alone can mainly encourage more overproduction.
 
-One more trap: cycle time itself has variants. LEI's page shows an effective machine cycle time that adds load and unload time and a share of the changeover to the machine's own cycle. In its example, 20 seconds of machine time, 30 seconds of loading and a 30-second changeover over a minimum batch of 30 pieces give 51 seconds. Decide which version your plant uses and write it down. The same caution applies when your IT colleagues talk about kanban boards, agile teams and workflow metrics: they often start and stop the clocks at other points than the shop floor does.
+One more trap: cycle time itself has variants. LEI's page shows an effective machine cycle time that adds load and unload time and a share of the changeover to the machine's own cycle. In its example, 20 seconds of machine time, 30 seconds of loading and unloading and a 30-second changeover over a minimum batch of 30 pieces give 51 seconds. Decide which version your plant uses and write it down. The same caution applies when your IT colleagues talk about kanban boards, agile teams and workflow metrics: they often start and stop the clocks at other points than the shop floor does.
 
 ## Takt time: the third number
 
@@ -65,7 +65,7 @@ Now the lead time of a batch. Running 240 pieces takes 240 × 100 seconds = 6.7 
 
 All three numbers are correct, and they tell three different stories. Takt says the pace is right. Cycle time says no station is too slow. Lead time says the customer waits more than eight days for a product that takes five minutes of work.
 
-Now the team cuts the batch to 60 pieces. Cycle times and takt do not change. The runs shrink to a quarter, which is 5.1 hours in total. Assume the queues also shrink to a quarter, because they were mostly waiting for the batches ahead: 12 hours. The lead time falls to about 17 hours, a reduction of three quarters. That is an assumption to be checked on the floor, but the direction is sound, and it follows the logic that Ballé describes: to reduce lead time, cut the queue and the batch, not the time of each step.
+Now the team cuts the batch to 60 pieces. Cycle times and takt do not change. The runs shrink to a quarter, which is 5.1 hours in total. Assume the queues also shrink to a quarter, because they were mostly waiting for the batches ahead: 12 hours. The lead time falls to about 17 hours, a reduction of three quarters. That is an assumption to be checked on the floor, but the direction is sound, and it follows the usual lean logic: to reduce lead time, cut the queue and the batch, not the time of each step.
 
 ## How to measure each number without fooling yourself
 
@@ -93,3 +93,8 @@ A manufacturing execution system can book the start and end of each operation an
 ## Next step
 
 Pick one product, calculate its takt, and follow one batch with timestamps from release to the last operation. Then put the numbers next to each other to see the lead time vs cycle time gap, and ask where the product spends its waiting hours.
+
+## Sources
+
+- Lean Enterprise Institute: Cycle Time (Lean Lexicon) - https://www.lean.org/lexicon-terms/cycle-time/
+- Lean Enterprise Institute: Takt Time (Lean Lexicon) - https://www.lean.org/lexicon-terms/takt-time/
