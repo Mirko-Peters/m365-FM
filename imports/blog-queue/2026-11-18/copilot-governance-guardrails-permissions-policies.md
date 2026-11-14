@@ -73,7 +73,8 @@ Purview offers a policy location for Microsoft Copilot, Copilot Chat and Copilot
 | Condition | What it does |
 |---|---|
 | Sensitivity labels | Copilot does not process labeled files or emails, although the item could still appear in citations |
-| Sensitive information types in a prompt | Copilot does not respond, or does not use web search for that prompt |
+| Sensitive information types in a prompt (preview) | Copilot returns no response, and the prompt is not used for internal or web searches |
+| Sensitive information types in web search | External web search is blocked as a grounding source, and Copilot still answers from permitted internal data |
 | Email from external senders | Excludes that email from processing (preview) |
 
 Watch for these limits from the page: the label and SIT conditions cannot be in the same rule, DLP only checks text typed into the prompt and not uploaded files, label checks in Word, Excel and PowerPoint happen when the file opens, and policy changes can take up to four hours. The policy location is only available in the Custom policy template.
@@ -82,7 +83,7 @@ Watch for these limits from the page: the label and SIT conditions cannot be in 
 
 - Microsoft says users can only use agents that their admin allows and that they installed or were assigned.
 - Web search grounding is managed with the **Allow web search in Copilot** policy, which applies to Copilot Chat across licenses.
-- For network and access, allow `*.cloud.microsoft` and the Copilot endpoints and check that proxies, Conditional Access and tenant restrictions are not blocking the app. Do not block `copilot.cloud.microsoft` to stop personal account access. Microsoft says to use tenant restrictions for that instead.
+- For network access, Microsoft's requirements page says to allow the entire `*.cloud.microsoft` domain and the Copilot endpoints. If you must block `copilot.cloud.microsoft` to prevent personal Microsoft account sign-in, it suggests using tenant restrictions instead.
 
 ## Step 5: Monitor and measure
 
