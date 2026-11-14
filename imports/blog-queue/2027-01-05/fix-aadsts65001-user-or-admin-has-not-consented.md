@@ -25,7 +25,7 @@ faq:
     a: "Learn lists a leftover prompt=consent or prompt=admin_consent parameter, and notes that consenting for the organization does not give access to all users when Assignment required is on."
 ---
 
-AADSTS65001 means the sign-in request needs consent that nobody has given yet. The fix depends on why. Capture the request, check the tenant's user consent setting, check whether the app exists as an enterprise application and whether assignment is required, then grant admin consent if needed. This guide follows the Microsoft Learn troubleshooting article on consent issues and, for related codes, the page on the consent experience.
+AADSTS65001 means the sign-in request needs consent that nobody has given yet. The fix depends on why. Capture the request, check the tenant's user consent setting, check whether the app exists as an enterprise application and whether assignment is required, then grant admin consent if needed. This guide follows the Microsoft Learn troubleshooting article on consent issues and, for the consent prompt, the page on the consent experience.
 
 ## The error
 
@@ -72,26 +72,29 @@ Learn names the roles **Global Administrator**, **Company Administrator** and **
 - Understand a permission before you consent. For third-party apps, work with the vendor.
 - For risky-app blocks, such as `UserConsentBlockedForRiskyAppsException`, admin consent is required even when user consent is generally allowed.
 - SAML-based apps can show similar errors but need different fixes.
+- The two pages differ on the consent checkbox. The troubleshooting article has an Application Administrator select **Consent on behalf of your organization**, while the consent experience page says that checkbox is shown only to at least the Privileged Role Administrator role, so Cloud Administrator and Application Administrator do not see it. Check what your admin sees in the sign-in flow.
 
 ## Read the audit log
 
 Go to **Microsoft Entra ID** > **Audit logs** and filter by **Category: ApplicationManagement**, **Status: Failure** and **Activity: Consent to application**. Open the entry and read **Status reason**. A role such as Global Administrator or Security Reader is needed.
 
-## Related codes from the consent experience page
+## Other codes in the symptoms list of the troubleshooting article
 
 | Code | Meaning on the page |
 | --- | --- |
-| AADSTS90093 and AADSTS90094 | A non-admin user requests permissions only an admin can grant, or user consent is turned off |
-| AADSTS90090 | A transient failure recording consent. Retry later |
-| AADSTS65005 | The resource is not available in the tenant, or the request does not match the app registration |
-| AADSTS900941 and AADSTS900981 | Admin consent is required because the app is considered risky |
-| AADSTS65004 | The user declined consent |
+| AADSTS650056 | Misconfigured application: the client has not listed permissions for AAD Graph in its registration, or the admin has not consented in the tenant, or the application identifier in the request does not match |
+| AADSTS90094 | An administrator has set a policy that prevents the user from granting the app the permissions it requests. An administrator can grant them on the user's behalf |
+| AADSTS90008 | The user or administrator has not consented because the application is misconfigured. It must require access to Windows Azure Active Directory with at least the Sign in and read user profile permission |
+| AADSTS900941 | Administrator consent is required because the app is considered risky |
+| AADSTS900981 | An admin consent request was received for a risky app |
+
+The consent experience page lists no error codes. Under common issues it says that a user who is still blocked after admin consent should check whether static permissions are a superset of the permissions requested dynamically and whether user assignment is required for the app.
 
 ## What the pages do not cover
 
-The consent experience page does not mention AADSTS65001. The troubleshooting article gives no PowerShell, Graph or CLI commands and does not describe the admin consent workflow settings. It names no role for changing the user consent setting.
+The consent experience page does not mention AADSTS65001 or any other AADSTS code. The troubleshooting article gives no PowerShell, Graph or CLI commands and does not describe the admin consent workflow settings. It names no role for changing the user consent setting.
 
-## Typical mistakes
+## Typical mistakes (my advice)
 
 - Granting consent to a user but not for the organization.
 - Forgetting Assignment required.
@@ -106,5 +109,5 @@ The consent experience page does not mention AADSTS65001. The troubleshooting ar
 
 ## Sources
 
-- [Troubleshoot consent issues in Microsoft Entra ID (Microsoft Learn)](https://learn.microsoft.com/troubleshoot/entra/entra-id/app-integration/troubleshoot-consent-issues)
-- [Microsoft Entra application consent experience (Microsoft Learn)](https://learn.microsoft.com/entra/identity-platform/application-consent-experience)
+- [Troubleshoot Consent Issues in Microsoft Entra ID (Microsoft Learn)](https://learn.microsoft.com/troubleshoot/entra/entra-id/app-integration/troubleshoot-consent-issues)
+- [Consent experience for applications in Microsoft Entra ID (Microsoft Learn)](https://learn.microsoft.com/entra/identity-platform/application-consent-experience)
