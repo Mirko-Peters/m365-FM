@@ -17,19 +17,19 @@ faq:
     a: "The Microsoft study guide lists four domains: plan, implement and manage a solution for data analytics; prepare and serve data; implement and manage semantic models; and explore and analyze data."
   - q: "How is the exam weighted?"
     a: "Planning and managing is 10-15%, prepare and serve data is 40-45%, semantic models are 20-25% and explore and analyze data is 20-25%."
-  - q: "Which languages does a candidate need?"
+  - q: "Which programming and query languages does a candidate need?"
     a: "The audience profile expects experience with SQL, DAX and PySpark, along with data modeling, data transformation, Git-based source control and exploratory analytics."
   - q: "Which practice assessment should I use?"
     a: "The page recommends the new Practice Assessment on AI Skills Navigator. It says the legacy practice assessment on Microsoft Learn is no longer updated."
   - q: "Is there a retirement date?"
-    a: "The study guide page does not show an exam retirement date. Its last update is shown as 2026-10-30."
+    a: "The study guide page does not show an exam retirement date. The page metadata lists an update on 2026-11-05."
 ---
 
-DP-600 measures whether you can design, build and deploy analytics solutions in Microsoft Fabric. The study guide gives four domains, and one of them, preparing and serving data, is worth up to 45% of the exam. This guide summarizes the outline as published on the Microsoft Learn study guide, last updated 2026-10-30, and adds a study order. It contains no exam questions.
+DP-600 measures whether you can design, build and deploy analytics solutions in Microsoft Fabric. The study guide gives four domains, and one of them, preparing and serving data, is worth up to 45% of the exam. This guide summarizes the outline as published on the Microsoft Learn study guide (page metadata updated 2026-11-05), and adds a study order. The page has no change log. It contains no exam questions.
 
 ## Audience
 
-The page describes candidates with expertise in designing, creating and deploying enterprise-scale analytics solutions. They turn data into reusable assets with Fabric components: lakehouses, data warehouses, notebooks, dataflows, data pipelines, semantic models and reports. They apply best practices such as version control and deployment, and work with architects, data engineers, data scientists, AI engineers, database administrators and Power BI analysts. Expected experience is data modeling, data transformation, Git-based source control, exploratory analytics, and SQL, DAX and PySpark. The page shows no retirement date.
+The page describes candidates with expertise in designing, creating and deploying enterprise-scale analytics solutions. They turn data into reusable assets with Fabric components: lakehouses, data warehouses, notebooks, dataflows, data pipelines, semantic models and reports. They apply best practices such as version control and deployment, and work with architects, data engineers, data scientists, AI engineers, database administrators and Power BI analysts. Expected experience is data modeling, data transformation, Git-based source control, exploratory analytics, and SQL, DAX and PySpark. The page shows no retirement date. A score of 700 or greater is required to pass, and the page says the exam may contain questions on Preview features if those features are commonly used. The bullets under each skill illustrate how it is assessed, and related topics may be covered.
 
 ## Domain 1: plan, implement and manage a solution for data analytics (10-15%)
 
@@ -64,11 +64,11 @@ The page describes candidates with expertise in designing, creating and deployin
 
 ## What the page does not say
 
-Exam length, question count, price, prerequisites, and weights below the domain level.
+Exam length, question count, price, formal prerequisites, which exam languages exist (it points to the Schedule Exam section of the exam page) and weights below the domain level.
 
 ## A study plan
 
-This plan is practical advice built on the weights.
+This plan is my advice, built on the weights.
 
 1. **Weeks 1-4, domain 2.** It is the largest. Build a lakehouse and a warehouse, ingest with pipelines, dataflows and notebooks, and practice star schemas and slowly changing dimensions.
 2. **Weeks 5-6, domain 3.** Build a semantic model with Direct Lake, write DAX with variables and iterators, and set up row-level and object-level security.
@@ -76,7 +76,7 @@ This plan is practical advice built on the weights.
 4. **Week 8, domain 1.** Cover workspace access, Git integration, deployment and the XMLA endpoint.
 5. **Final week.** Take the practice assessment and review weak spots against the outline.
 
-## Typical mistakes
+## Typical mistakes (my advice)
 
 - Treating the exam as only a Power BI exam.
 - Skipping PySpark or SQL practice.
