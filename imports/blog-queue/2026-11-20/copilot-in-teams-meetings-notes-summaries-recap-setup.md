@@ -35,11 +35,11 @@ During the meeting, Copilot summarizes key points, including who said what, sugg
 
 ### Prompt tips
 
-Select **View prompts** in the Copilot pane for suggestions, or type your own in the compose box. Microsoft's sample prompts include "Where do we disagree on this topic?" and "Create a table with the ideas discussed and their pros and cons." The Copilot Prompt Gallery offers more. Microsoft's page does not give a longer list of tips, so the guidance here is limited to those samples and to a few working rules:
+Select **View prompts** in the Copilot pane for suggestions, or type your own in the compose box. Microsoft's sample prompts include "Where do we disagree on this topic?" and "Create a table with the ideas discussed and their pros and cons." Microsoft's page does not give a longer list of tips, so the guidance here is limited to those samples and to a few working rules:
 
 - Ask about what was said, since spoken content requires a transcript.
 - Use the export options for long answers. **Open in Word** is offered for responses over 1,300 characters and **Open in Excel** for tables.
-- Prompts and responses are visible only to the person who asks.
+- Your Copilot chat in the meeting is a private chat.
 
 ## Organizer setting
 
@@ -107,5 +107,5 @@ From the meeting chat, select **Open Copilot** in the upper-right corner. Copilo
 ## Sources
 
 - [Microsoft Support: Use Copilot in Microsoft Teams meetings](https://support.microsoft.com/en-us/office/use-copilot-in-microsoft-teams-meetings-0bf9dd3c-96f7-44e2-8bb8-790bedf066b1)
-- [Microsoft Learn: Manage Copilot in Teams meetings and events](https://learn.microsoft.com/microsoftteams/copilot-teams-transcription)
+- [Microsoft Learn: Manage Copilot in Teams meetings and events](https://learn.microsoft.com/en-us/microsoftteams/copilot-teams-transcription)
 - [Microsoft Learn: Intelligent recap without saving transcripts](https://learn.microsoft.com/en-us/microsoftteams/intelligent-recap-without-saving-transcripts)
