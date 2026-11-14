@@ -75,6 +75,8 @@ This is a suggestion based on the weights, not a Microsoft recommendation.
 
 ## Tips
 
+These tips are my advice, not part of the study guide.
+
 - Practice with the Azure portal and Cloud Shell in a free or sandbox subscription where possible, because several topics are tools.
 - Learn related services in pairs, such as Azure Policy and resource locks, so you can explain the difference.
 - Use current product names, for example Microsoft Entra ID and Microsoft Defender for Cloud.
@@ -88,7 +90,7 @@ The part of the guide I read does not give exam duration, question count or pric
 
 Print the three domain lists and mark each bullet as known, unsure or new. Spend the first sessions on the new items in the largest domain, then return to the unsure items. This is a suggestion for self-study and not part of the Microsoft study guide.
 
-Because the outline is dated, compare the date on the live page with the July 20, 2026 date used here. If the date has changed, review the change log on the page, if one is shown, before you rely on this summary.
+Because the outline is dated, compare the date on the live page with the July 20, 2026 date used here. If the date has changed, review the change log at the bottom of the page before you rely on this summary.
 
 ## Related
 
@@ -96,4 +98,4 @@ Because the outline is dated, compare the date on the live page with the July 20
 
 ## Sources
 
-- [Study guide for Exam AZ-900](https://learn.microsoft.com/credentials/certifications/resources/study-guides/az-900)
+- [Study guide for Exam AZ-900: Microsoft Azure Fundamentals (Microsoft Learn)](https://learn.microsoft.com/credentials/certifications/resources/study-guides/az-900)
