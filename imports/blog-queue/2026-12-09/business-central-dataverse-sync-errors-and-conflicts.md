@@ -47,7 +47,7 @@ Microsoft Learn's troubleshooting table lists these:
 | Integration user missing a privilege (error text names a privilege) | Find the integration user on **Dataverse Connection Setup**, sign in to Dataverse as an administrator and edit that user's security role. |
 | A record references an uncoupled record, such as a customer with an uncoupled currency | Couple the dependent record first, then retry. |
 | Connection paused during sync after a session timeout | Refresh the page. For code issues, contact your Microsoft partner or support and use **Copy details**. |
-| Only System Administrator or System Customizer roles can sign in | Disable administration mode. |
+| Users cannot sign in because the environment is in administration mode (only System Administrator or System Customizer roles can sign in) | The page explains administration mode and does not give a separate fix for this row. The next row points to disabling administration mode. |
 | Synchronization does not run in a Dataverse environment in administration mode | Disable administration mode. |
 
 The page also offers **Delete Entries Older than 7 Days** and **Delete All Entries** to clean up the error list after fixing a cause that affected many records. Learn cautions that these can remove errors that still matter.
@@ -67,7 +67,7 @@ Open **Integration Table Mappings** from search. Learn says the **Resolve Deleti
 
 An archived Microsoft release plan note adds that synchronization recognizes conflicts better, enforces business rules for unidirectional field mappings and detects changes only in fields with bidirectional mappings. Because that page is archived, treat it as background.
 
-New field mappings added to an existing mapping are disabled by default. Choose **Edit List** to enable them.
+Learn's section on adding mappings with the assisted setup guide, which is marked as preview, says new field mappings added to an existing table mapping are in a Disabled state. Choose **Edit List** to enable them.
 
 ## Step 5: Check the schedule and the order
 
@@ -79,7 +79,7 @@ By default **Sync. Only Coupled Records** is selected. Clear it on the table map
 
 ## What the pages read do not cover
 
-They do not describe locking or deadlock behavior, a restart procedure for a stopped job queue entry, or the full list of Direction values. Before you change mapping rules in production, test on a sandbox environment, because mapping and conflict settings affect every user of that integration.
+They do not describe locking or deadlock behavior or a restart procedure for a stopped job queue entry. Before you change mapping rules in production, test on a sandbox environment, because mapping and conflict settings affect every user of that integration.
 
 ## Related
 
@@ -94,4 +94,4 @@ They do not describe locking or deadlock behavior, a restart procedure for a sto
 - [Microsoft Learn: Modify table mappings for synchronization](https://learn.microsoft.com/en-us/dynamics365/business-central/admin-how-to-modify-table-mappings-for-synchronization)
 - [Microsoft Learn: Scheduled synchronization using job queue entries](https://learn.microsoft.com/en-us/dynamics365/business-central/admin-scheduled-synchronization-using-the-synchronization-job-queue-entries)
 - [Microsoft Learn: Dual-write overview](https://learn.microsoft.com/en-us/dynamics365/fin-ops-core/dev-itpro/data-entities/dual-write/dual-write-overview)
-- [Microsoft Learn release plan: Fewer synchronization conflicts between Business Central and Dataverse](https://learn.microsoft.com/en-gb/dynamics365-release-plan/2020wave2/smb/dynamics365-business-central/integrate-business-central-microsoft-dataverse-fewer-synchronization-conflicts)
+- [Microsoft Learn release plan: Fewer synchronization conflicts between Business Central and Dataverse](https://learn.microsoft.com/en-us/previous-versions/dynamics365-release-plan/2020wave2/smb/dynamics365-business-central/integrate-business-central-microsoft-dataverse-fewer-synchronization-conflicts)
