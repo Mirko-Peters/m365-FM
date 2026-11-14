@@ -14,7 +14,7 @@ keypoints:
   - "Set precedence when a model has several calculation groups. The page does not cover compatibility level or DirectQuery behavior."
 faq:
   - q: "What do I need before creating a calculation group?"
-    a: "According to Microsoft Learn, you edit a semantic model in Power BI Desktop and discourage implicit measures must be enabled. If it is off, Power BI prompts you to turn it on and you select Yes."
+    a: "According to Microsoft Learn, you edit a semantic model in Power BI and the discourage implicit measures property must be enabled. If it is off, Power BI prompts you to turn it on and you select Yes."
   - q: "Where do I create one?"
     a: "In Model view, select the Calculation group button in the ribbon. You can also use a TMDL script."
   - q: "What is SELECTEDMEASURE?"
@@ -29,7 +29,7 @@ A calculation group lets one set of calculation items, such as year-to-date or y
 
 ## Requirements
 
-You edit a semantic model in Power BI Desktop. **Discourage implicit measures** must be enabled. If it is off, Power BI prompts you to turn it on when you create the calculation group, and you select **Yes**. The page does not cover compatibility level requirements, Tabular Editor workflows or Power BI Desktop version requirements.
+You edit a semantic model in Power BI. **Discourage implicit measures** must be enabled. If it is off, Power BI prompts you to turn it on when you create the calculation group, and you select **Yes**. The page does not cover compatibility level requirements, Tabular Editor workflows or Power BI Desktop version requirements.
 
 ## Create a calculation group
 
@@ -103,9 +103,9 @@ Calculation item safe =
 
 They control what a group returns when users make multiple, invalid or no selections. The page refers to the Analysis Services article for details.
 
-## Page dates
+## Implicit and explicit measures
 
-The page metadata shows a review date of 2025-02-26 and a last update of 2025-11-26, so check the live page for newer behavior.
+Learn defines an implicit measure as what you get when you use a data column from the **Data** pane directly in a visual and let the visual aggregate it, for example as a `SUM`, `AVERAGE`, `MIN` or `MAX`. An explicit measure is one you create with **New measure** and a DAX expression. Explicit measures can also have conditional logic and filters. Because calculation items only apply to explicit measures, this difference decides whether a calculation group changes a number in a visual.
 
 ## Not covered
 
@@ -119,4 +119,4 @@ The page does not cover Live connection or DirectQuery behavior, detailed select
 
 ## Sources
 
-- [Calculation groups in Power BI](https://learn.microsoft.com/power-bi/transform-model/calculation-groups)
+- [Create calculation groups in Power BI (Microsoft Learn)](https://learn.microsoft.com/power-bi/transform-model/calculation-groups)
