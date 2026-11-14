@@ -1,6 +1,6 @@
 ---
 title: "Windows Autopilot vs Autopilot Device Preparation: Which One to Use"
-summary: "Compare classic Windows Autopilot and Windows Autopilot device preparation using the Microsoft Learn comparison page: modes, join types, app limits, supported Windows versions, when to choose each, and how they behave side by side."
+summary: "Compare classic Windows Autopilot and Windows Autopilot device preparation using the Microsoft Learn comparison page: modes, join types, app limits, supported Windows versions, the factors Learn lists for choosing between them, and how they behave side by side."
 status: review
 publish: false
 author: mirko-p
@@ -11,19 +11,19 @@ keypoints:
   - "Device preparation does not require device registration. Classic Autopilot does."
   - "Device preparation allows up to 25 essential apps and up to 10 essential PowerShell scripts during OOBE. Classic Autopilot lists up to 100 applications."
   - "Device preparation needs Windows 11 24H2 or later, or 23H2 and 22H2 with KB5035942 or later. Classic Autopilot covers supported Windows 11 and Windows 10 GA Channel versions."
-  - "Both can run in one organization, but a device uses only one. A device associated with the tenant for device preparation uses that, and association takes precedence."
+  - "Both can run in one organization, but a device uses only one. For a device registered with classic Autopilot, association with the tenant for device preparation takes precedence."
 faq:
   - q: "Which one does Microsoft recommend?"
-    a: "According to Microsoft Learn, device preparation suits user-driven or automatic deployments on Windows 11, especially in GCCH or DoD, and classic Autopilot suits scenarios such as pre-provisioned, self-deploying, hybrid join and Windows 10. The page also says device preparation in its initial offering is not as feature rich."
+    a: "According to Microsoft Learn, the page gives no single recommendation. It says the choice depends on many factors and lists which solution supports which scenario. It also says device preparation in its initial offering is not as feature rich as classic Autopilot."
   - q: "Do I need to register devices for device preparation?"
     a: "According to Microsoft Learn, no. Device registration is not required for device preparation but is required for classic Autopilot."
   - q: "Can both run in the same tenant?"
-    a: "Yes. According to Microsoft Learn, both can run side by side, but each device runs only one. If a device is not associated with the tenant, the classic Autopilot profile takes precedence."
+    a: "Yes. According to Microsoft Learn, both can run side by side, but each device runs only one. For a device registered with classic Autopilot, the classic profile takes precedence if the device is not associated with the tenant, and device preparation takes precedence if it is."
   - q: "Does device preparation support hybrid join?"
     a: "No. According to Microsoft Learn, device preparation supports Microsoft Entra join only, while classic Autopilot supports Entra join and Entra hybrid join."
 ---
 
-Use Windows Autopilot device preparation for user-driven or automatic deployments of Windows 11 with Microsoft Entra join, especially if you cannot pre-register devices. Use classic Windows Autopilot if you need modes such as pre-provisioning or self-deploying, hybrid join, Windows 10, or more than 10 apps and scripts during setup. This guide follows the Microsoft Learn comparison page, which applies to Windows 11.
+Microsoft Learn does not name a winner between Windows Autopilot device preparation and classic Windows Autopilot. Its comparison page says the choice depends on many factors and lists which solution supports which scenario. Read from that table, device preparation covers user-driven and automatic deployments of Windows 11 with Microsoft Entra join without device registration, while only classic Autopilot has modes such as pre-provisioning or self-deploying, hybrid join, Windows 10, or more than 10 apps and scripts during OOBE. This guide follows that Microsoft Learn comparison page.
 
 ## Side-by-side comparison
 
@@ -50,20 +50,20 @@ Only classic Autopilot: the pre-provisioned, self-deploying and existing-devices
 
 Both support the user-driven scenario, Microsoft Entra join and Windows 11.
 
-## When to use which
+## How Learn frames the choice
 
-Learn recommends **device preparation** for user-driven or automatic deployments on Windows 11, especially in GCCH or DoD. It fits organizations that cannot pre-stage devices, want a simpler setup, need LOB and Win32 apps in one deployment, or want near real-time monitoring.
+The requirement table on the page gives **device preparation** a check mark for GCCH and DoD environments, automatic deployment, a simpler deployment configuration and experience, no requirement to pre-stage devices, LOB and Win32 apps in one deployment, and near real-time monitoring.
 
-Learn recommends **classic Autopilot** for pre-provisioned, self-deploying or existing-device scenarios, hybrid join, Windows 10, HoloLens or Teams Rooms, Autopilot Reset, DFCI or co-management, heavy customization, or more than 10 apps or scripts during OOBE.
+The table gives **classic Autopilot** a check mark for pre-provisioned, self-deploying and existing-device scenarios, hybrid join, Windows 10, HoloLens, Teams Meeting Room, Autopilot Reset, DFCI management, co-management, extensive customization, more than 10 apps or scripts during OOBE, and blocking desktop access until user-based configurations are applied.
 
-The page says device preparation in its initial offering is not as feature rich as Windows Autopilot, so the choice depends on what your environment needs.
+The page gives no single recommendation. It says which solution to use depends on many factors and that each environment has different needs. It adds that device preparation in its initial offering is not as feature rich as classic Autopilot, but has some advantages not available there.
 
 ## Running both at once
 
 Both can run side by side in one organization, but a device runs only one:
 
-- A device that is not associated with the tenant for device preparation uses the classic Autopilot profile.
-- A device that is associated with the tenant runs device preparation, and the association takes precedence.
+- For a device that is registered with classic Autopilot and not associated with the tenant, the classic Autopilot profile takes precedence.
+- If the registered device is associated with the tenant, device association takes precedence and the device preparation deployment runs.
 - To use device preparation on a device that is already registered for classic Autopilot without associating it, first deregister the device.
 
 ## Suggestion: a decision check
@@ -79,6 +79,7 @@ This section is a practical suggestion and not a Microsoft statement.
 
 The page I read does not describe the following:
 
+- A single recommendation between the two.
 - Licensing and pricing.
 - Migration guidance from classic Autopilot to device preparation.
 - A definition of essential apps or scripts.
@@ -94,4 +95,4 @@ The page I read does not describe the following:
 
 ## Sources
 
-- [Windows Autopilot device preparation compared with Windows Autopilot](https://learn.microsoft.com/autopilot/device-preparation/compare)
+- [Compare Windows Autopilot device preparation and Windows Autopilot (Microsoft Learn)](https://learn.microsoft.com/autopilot/device-preparation/compare)
