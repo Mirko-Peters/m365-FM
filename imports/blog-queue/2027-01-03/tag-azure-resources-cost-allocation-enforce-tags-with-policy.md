@@ -25,7 +25,7 @@ faq:
     a: "Learn says write access to the resource, such as the Contributor role, allows tagging. The Tag Contributor role, which grants Microsoft.Resources/tags write access, tags any resource without access to the resource itself."
 ---
 
-Tag Azure resources with consistent key-value pairs such as cost center and environment, check which of your resource types support tags, and use Azure Policy to apply or enforce them, because tags are not inherited. Tags then appear in billing data, which lets you allocate cost. This guide follows the Microsoft Learn article on tagging resources. That article links separate pages for the portal, CLI and PowerShell steps, which I did not read, so this guide does not give click paths or commands for applying tags.
+Tag Azure resources with consistent key-value pairs such as cost center and environment, check which of your resource types support tags, and use Azure Policy to apply or enforce them, because tags are not inherited. Tags then appear in billing data, which lets you allocate cost. This guide follows the Microsoft Learn article on tagging resources. That article describes conditions and limitations and does not give portal, CLI or PowerShell steps, so this guide does not give click paths or commands for applying tags.
 
 ## What tags are and where they apply
 
@@ -72,9 +72,9 @@ Tags group billing data, for example by cost center or environment. Download the
 
 Learn also describes the special tag `cm-resource-parent`. The key is that exact string and the value is a resource ID. Cost Management then groups costs under that resource, for example an Azure Virtual Desktop host pool, without filters.
 
-## Plan a tag scheme
+## Plan a tag scheme (my advice)
 
-Learn does not prescribe tag names, so choose your own and document them:
+Learn does not prescribe tag names. It links the Cloud Adoption Framework resource naming and tagging decision guide for recommendations on a tagging strategy, which I did not read. The steps below are my own suggestions:
 
 1. Pick a short list of required tags, such as cost center, owner and environment.
 2. Fix the exact spelling and casing, since tag values are case-sensitive.
@@ -88,7 +88,7 @@ Learn does not prescribe tag names, so choose your own and document them:
 - **Non-English characters** can break metadata decoding when a VM reads from the Instance Metadata Service.
 - **Paginated results.** Unique tag API responses are paginated, so tools such as the portal may show the same tag key twice.
 
-## Typical mistakes
+## Typical mistakes (my advice)
 
 - Expecting a resource group tag to reach the resources in it.
 - Using different casings of the same value, which splits cost groups.
