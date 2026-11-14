@@ -63,8 +63,8 @@ The four categories are Identity, Device, Apps and Data.
 
 | Status | Effect on points |
 | --- | --- |
-| To address | Default for open actions |
-| Planned | Marks the work as scheduled |
+| To address | You recognize the action is necessary and plan to address it later. Also applies to actions that are only partly completed |
+| Planned | Concrete plans are in place to complete the action |
 | Risk accepted | No points. You can undo it at any time |
 | Resolved through third party | Gives points, but Microsoft cannot verify the work |
 | Resolved through alternate mitigation | Gives points, but Microsoft cannot verify the work |
@@ -86,7 +86,7 @@ Learn recommends roles with the fewest permissions.
 
 If you want custom Defender roles to take effect, Learn advises removing elevated Entra roles from those users and groups.
 
-## Typical mistakes
+## Typical mistakes (my advice)
 
 - Chasing points without reading user impact. Learn says security should be balanced with usability.
 - Using Resolved through third party without evidence. Microsoft cannot verify it.
@@ -102,4 +102,4 @@ If you want custom Defender roles to take effect, Learn advises removing elevate
 ## Sources
 
 - [Microsoft Secure Score (Microsoft Learn)](https://learn.microsoft.com/defender-xdr/microsoft-secure-score)
-- [Assess your security posture with Microsoft Secure Score (Microsoft Learn)](https://learn.microsoft.com/defender-xdr/microsoft-secure-score-improvement-actions)
+- [Assess your security posture through Microsoft Secure Score (Microsoft Learn)](https://learn.microsoft.com/defender-xdr/microsoft-secure-score-improvement-actions)
