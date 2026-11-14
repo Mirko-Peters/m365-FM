@@ -41,13 +41,13 @@ The page says the meaning is the same for both: OneDrive is having trouble conne
 Learn starts with two steps that apply everywhere:
 
 1. Verify that the internet connection works.
-2. Review the deprecation of TLS 1.0 and 1.1, because the connection to Microsoft 365 services expects TLS 1.2.
+2. Review the deprecation of TLS 1.0 and 1.1 carefully. Learn says that change might also cause this error.
 
-If the machine cannot reach the internet at all, the rest of the page does not apply.
+If the device is not connected to the internet, Learn points to its article on fixing Wi-Fi connection issues in Windows. If the device is connected and TLS has been updated, you continue with the steps for your Windows version.
 
 ## Windows 10
 
-Learn gives three solutions. They are cumulative, so go in order.
+Learn gives three solutions, numbered 1 to 3. This article keeps that order.
 
 ### Solution 1: cipher suites for TLS 1.2
 
@@ -64,30 +64,30 @@ The step is to put them at the top of the cipher suite order. Learn offers two w
 Enable-TlsCipherSuite -Name "TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384" -Position 0
 ```
 
-You then verify the order with `Get-TlsCipherSuite`. The command in Learn's example places one suite at position 0, so repeat it for each suite you want at the top, and check the resulting order with the verification command.
+You then verify the order with `Get-TlsCipherSuite`. Learn's example places one suite at position 0. If the order does not reflect the change, Learn says to check whether the SSL Cipher Suite Order Group Policy setting defines the default order. My advice, not Learn's: to get all four suites to the top you will need to repeat the command for each one and check the result.
 
 ### Solution 2: enable TLS in Internet Options
 
-Run `inetcpl.cpl`, go to the **Advanced** tab and enable TLS 1.0, TLS 1.1 and TLS 1.2. This is what Learn says, even though the page also tells you to review the deprecation of the older versions. I read the page as listing the setting as a troubleshooting step and not as a long-term recommendation to keep old protocols on, but the page does not say so.
+Run `inetcpl.cpl`, go to the **Advanced** tab and enable TLS 1.0, TLS 1.1 and TLS 1.2. This is what Learn says, even though the page also tells you to review the deprecation of the older versions. My reading, not Learn's, is that the setting is a troubleshooting step and not a long-term recommendation to keep old protocols on. The page does not say either way.
 
 ### Solution 3: restart and re-register the device
 
-Restart the computer. If the error remains, open an elevated Command Prompt while the device is on the corporate network and run:
+Restart the device while it is connected to your Microsoft Entra domain. If the error remains, Learn says to unjoin the device from Microsoft Entra ID and rejoin it. Learn marks it as important that you are connected to your organization's network for this, not for example while traveling. Open an elevated Command Prompt and run:
 
 ```text
 dsregcmd /leave
 dsregcmd /join
 ```
 
-Then restart again and sign in to OneDrive. This changes the device's registration state, so involve whoever manages device identity before you do it on a managed fleet.
+Then restart again and sign in to OneDrive. My advice, not Learn's: this changes the device's registration state, so involve whoever manages device identity before you do it on a managed fleet.
 
 ## Older Windows versions
 
-For Windows 8, Windows 7, Windows Server 2012 and Windows Server 2008 R2, Learn offers the Easy Fix tool, which sets the registry keys for TLS 1.1 and 1.2, plus a KB article for Windows 8 (KB 3140245). It also suggests considering disabling the DHE cipher suites. In my advice, check whether these operating systems are still supported in your environment before you invest time in them.
+For Windows 8, Windows 7, Windows Server 2012 and Windows Server 2008 R2, Learn offers the Easy Fix tool, which sets the registry keys for TLS 1.1 and 1.2, plus a KB article for Windows 8 (KB 3140245), which you install and then create a corresponding registry value. For Windows Server 2012, if you still get intermittent connectivity errors after the Easy Fix tool, Learn suggests considering disabling the DHE cipher suites. In my advice, check whether these operating systems are still supported in your environment before you invest time in them.
 
 ## All computers: reset OneDrive
 
-Learn lists resetting OneDrive as a step for all computers. Use the reset instructions on the page. I did not repeat them here because the reset has its own side effects for sync state, which the page explains.
+Learn says that if you have completed all the previous steps, consider doing a reset of OneDrive, and it links to a separate Microsoft article on resetting OneDrive. The reset instructions are in that article, so this guide does not repeat them.
 
 ## Working through it
 
@@ -106,7 +106,7 @@ This section is my advice, not a Microsoft statement. The page points at TLS bec
 
 ## What the page does not cover
 
-I read the page as published. It does not describe behavior on current Windows 11 builds, it does not list proxy settings, and it does not say how to roll back the cipher suite changes. For those cases, use Microsoft's general guidance on TLS and your network team's documentation.
+The page does not describe behavior on current Windows 11 builds, it does not list proxy settings, and it does not say how to roll back the cipher suite changes. For those cases, use Microsoft's general guidance on TLS and your network team's documentation.
 
 ## Keeping track of what you changed
 
