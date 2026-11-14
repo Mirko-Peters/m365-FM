@@ -85,7 +85,7 @@ Microsoft also notes that data hidden by a filter may be why you can't find a va
 
 Sometimes you want to see where the hidden rows are before you reveal them, for example when you inherit a file and don't know why parts are missing.
 
-**Locate hidden cells.** Microsoft's page on [locating hidden cells](https://support.microsoft.com/en-au/office/locate-hidden-cells-on-a-worksheet-94d66405-2d11-486d-925b-3575da95e5d8) describes this: press **Ctrl+G**, select **Special**, choose **Visible cells only** and select **OK**. The visible cells are selected, and the rows and columns next to hidden ones show a white border that marks where the hidden sections are.
+**Locate hidden cells.** Microsoft's page on [locating hidden cells](https://support.microsoft.com/office/locate-hidden-cells-on-a-worksheet-94d66405-2d11-486d-925b-3575da95e5d8) describes this: press **Ctrl+G**, select **Special**, choose **Visible cells only** and select **OK**. The visible cells are selected, and the rows and columns next to hidden ones show a white border that marks where the hidden sections are.
 
 **Document Inspector.** If you are about to share a file and want to know what you are hiding in it, use **File** > **Info** > **Check for Issues** > **Inspect Document**. Microsoft's page on the inspector recommends running it on a copy, because it is not always possible to restore the data it removes. That page doesn't say which Excel items the inspector checks, so confirm in the dialog that hidden rows and columns are listed in your version.
 
