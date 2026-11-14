@@ -7,7 +7,7 @@ author: mirko-p
 date: 2026-12-10
 topics: [azure-arc, microsoft-defender-for-cloud, defender, azure-connected-machine-agent]
 keypoints:
-  - "Microsoft recommends onboarding non-Azure machines as Azure Arc-enabled servers. Onboarding only the Defender for Endpoint agent gives Plan 1 functionality at most."
+  - "Microsoft recommends Azure Arc for non-Azure machines. With only the Defender for Endpoint agent you get Plan 1 plus, in Plan 2, just the premium Vulnerability Management features."
   - "For scale, use a service principal with the Azure Connected Machine Onboarding role, scoped to a subscription or resource group. Learn says it is used only during onboarding."
   - "The agent talks outbound over TCP 443 only. Allow the documented service tags and URLs and configure TLS 1.2 and 1.3."
   - "Turn on Defender for Servers under Environment settings. The default is Plan 2, and you can change to Plan 1. A 30-day trial starts and cannot be stopped, paused or extended."
@@ -29,7 +29,7 @@ The secure route for non-Azure servers is: connect them to Azure Arc with a narr
 
 ## Why Azure Arc
 
-Learn says a machine with Azure Arc-enabled servers becomes an Azure resource. Once connected to a subscription with Defender for Servers enabled, it appears in Defender for Cloud like other Azure resources. Microsoft recommends onboarding on-premises and non-Azure cloud machines as Arc machines. If you instead install the Defender for Endpoint agent directly, only Plan 1 functionality is available.
+Learn says a machine with Azure Arc-enabled servers becomes an Azure resource. Once connected to a subscription with Defender for Servers enabled, it appears in Defender for Cloud like other Azure resources. Microsoft recommends onboarding on-premises and non-Azure cloud machines as Arc machines. If you instead install the Defender for Endpoint agent directly, only Plan 1 functionality is available, and in Plan 2 only the premium Defender Vulnerability Management features are added on top.
 
 For AWS and GCP, the multicloud connectors in Defender for Cloud handle the Arc deployment for you, so the steps below are for on-premises and other machines you connect yourself.
 
@@ -51,7 +51,7 @@ Learn describes the service principal as a limited identity with only the minimu
 3. Under **Client secret**, choose how long the secret stays valid.
 4. Under **Role assignment**, select **Azure Connected Machine Onboarding**, then **Create**.
 
-Choose the shortest secret duration that fits your rollout, and the narrowest scope. The page I read does not give secret rotation guidance or advice on keeping secrets out of scripts, so apply your own secret handling standards to the generated script.
+Choose the shortest secret duration that fits your rollout, and the narrowest scope. For the Azure CLI and PowerShell variants, Learn notes the secret is valid for one year, after which you generate a new one and update any scripts. The pages I read give no further advice on keeping secrets out of scripts, so apply your own secret handling standards to the generated script.
 
 ## Step 3: Open the network path
 
@@ -59,7 +59,7 @@ Learn's network requirements page says the agent communicates outbound over TCP 
 
 - **Service tags:** `AzureActiveDirectory`, `AzureTrafficManager`, `AzureResourceManager`, `AzureArcInfrastructure`, `Storage`, and `AzureFrontDoor.Frontend` (required as of April 2026). If you filter on `AzureArcInfrastructure`, allow the full range.
 - **Always required URLs include:** `login.microsoftonline.com`, `*.login.microsoft.com`, `pas.windows.net`, `*.his.arc.azure.com`, `*.guestconfiguration.azure.com` and `*.servicebus.windows.net`. `management.azure.com` is needed when you connect or disconnect, and `download.microsoft.com` only at installation.
-- **TLS:** configure TLS 1.2 and 1.3. Windows Server 2012 R2 and later support this by default.
+- **TLS:** configure TLS 1.2 and 1.3. Learn says Windows Server 2012 R2 and later support TLS 1.2 and have it enabled by default. Older TLS and SSL versions still work for backward compatibility, but Learn says not to use them.
 - **Proxy:** supported, but Learn says proxies do not make the agent more secure. A Log Analytics gateway is not supported as a proxy for the agent.
 - **Private link:** Learn offers an Azure Arc private link scope for more secure connectivity. Some endpoints still need internet access, shown in the private link capable column.
 
