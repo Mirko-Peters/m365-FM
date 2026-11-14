@@ -71,7 +71,7 @@ This is a suggestion, not Microsoft guidance. Weight your time by the percentage
 
 ## Audience profile
 
-The guide describes a candidate who delivers actionable insights from available data by applying domain expertise, provides business value through easy-to-understand visualizations and enables self-service analytics. The candidate works with business stakeholders on requirements and with analytics and data engineers on data, uses Power BI to prepare, model, visualize and analyze, and manage and secure data, and is proficient in Power Query and DAX.
+The guide describes a candidate who delivers actionable insights from available data by applying domain expertise, provides business value through easy-to-understand visualizations and enables self-service analytics. The candidate works with business stakeholders on requirements and with analytics engineers and data engineers to identify and acquire data, uses Power BI to prepare, model, visualize and analyze, and manage and secure data, and is proficient in Power Query and DAX.
 
 ## Renewal and logistics
 
@@ -96,4 +96,4 @@ The guide gives no retirement note, scoring scale, number of questions, duration
 
 ## Sources
 
-- [Study guide for Exam PL-300](https://learn.microsoft.com/credentials/certifications/resources/study-guides/pl-300)
+- [Study guide for Exam PL-300: Microsoft Power BI Data Analyst (Microsoft Learn)](https://learn.microsoft.com/credentials/certifications/resources/study-guides/pl-300)
