@@ -87,14 +87,14 @@ If you can't find the key and can't undo the change that triggered the prompt, M
 ## Related topics to explore
 
 - Back up the key before you need it: check now that your Microsoft account or Entra ID shows a key for each device, because that costs two minutes today.
-- Device Encryption versus BitLocker Drive Encryption: Windows Home gets Device Encryption, while BitLocker Drive Encryption is available on Pro, Enterprise and Education, as the Microsoft article on [Device Encryption](https://support.microsoft.com/en-us/windows/security/encryption/device-encryption-in-windows) explains.
+- Device Encryption versus BitLocker Drive Encryption: Windows Home gets Device Encryption, while BitLocker Drive Encryption is available on Pro, Enterprise and Education, as the Microsoft article on [Device Encryption](https://support.microsoft.com/windows/security/encryption/device-encryption-in-windows) explains.
 - Suspend BitLocker before firmware updates: this avoids a recovery prompt after a BIOS or TPM update.
 - Rotate recovery keys after use: Intune can rotate a key on demand for supported Windows devices.
 - Turn BitLocker off: some users want to decrypt a drive entirely, which has its own steps and risks.
 
 ## Next step
 
-To find your BitLocker recovery key, write down the key ID, then check your Microsoft account at `aka.ms/myrecoverykey` or your work account at `aka.ms/aadrecoverykey`. After you're back in, open the same page again and confirm that each of your devices has a key stored, so the next prompt takes two minutes and not two days. Microsoft's article on how to [find your BitLocker recovery key](https://support.microsoft.com/en-us/windows/find-your-bitlocker-recovery-key-6b71ad27-0b89-ea08-f143-056f5ab347d6) is worth bookmarking, and admins should read the [BitLocker recovery process](https://learn.microsoft.com/en-us/windows/security/operating-system-security/data-protection/bitlocker/recovery-process) and the [Intune BitLocker guidance](https://learn.microsoft.com/en-us/intune/device-configuration/endpoint-security/encrypt-bitlocker-windows) once.
+To find your BitLocker recovery key, write down the key ID, then check your Microsoft account at `aka.ms/myrecoverykey` or your work account at `aka.ms/aadrecoverykey`. After you're back in, open the same page again and confirm that each of your devices has a key stored, so the next prompt takes two minutes and not two days. Microsoft's article on how to [find your BitLocker recovery key](https://support.microsoft.com/windows/find-your-bitlocker-recovery-key-6b71ad27-0b89-ea08-f143-056f5ab347d6) is worth bookmarking, and admins should read the [BitLocker recovery process](https://learn.microsoft.com/windows/security/operating-system-security/data-protection/bitlocker/recovery-process) and the [Intune BitLocker guidance](https://learn.microsoft.com/intune/device-configuration/endpoint-security/encrypt-bitlocker-windows) once.
 
 ## Sources
 
