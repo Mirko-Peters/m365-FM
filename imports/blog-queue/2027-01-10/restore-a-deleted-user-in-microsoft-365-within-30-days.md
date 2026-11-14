@@ -30,7 +30,7 @@ Deleted users stay recoverable for a limited time. Within 30 days an admin can r
 ## Requirements
 
 - Role: User Administrator.
-- Time: restore within 30 days of deletion. Then the account and all associated data are restored.
+- Time: when you restore within 30 days of deletion, the account and all associated data are restored.
 - Licenses: make sure enough Microsoft 365 licenses are available to assign to the account.
 
 ## Steps
@@ -51,7 +51,7 @@ Tell the user that their password changed and follow up with them.
 
 ## Conflicts
 
-- **User name conflict.** If a new account with the same user name was created after the deletion, rename the active user and try again. Or enter a new primary email address for the restored user and select **Restore**. If several restores fail, restore the failed accounts one at a time.
+- **User name conflict.** The page defines it as deleting an account, creating a new account with the same user name (for the same or a different user), and then trying to restore the deleted one. If a message appears saying there is a problem restoring the account, either cancel the restore, rename the current active user and try again, or type a new primary email address for the restored user and select **Restore**. If two or more accounts fail to restore, an error message says so. View the log to see which users were not restored, then restore the failed accounts one at a time.
 - **Proxy address conflict.** Conflicting proxy addresses are removed automatically from the user you restore.
 
 ## If the user is not listed
@@ -72,7 +72,7 @@ The page has only a tip: if your business uses Active Directory on-premises, see
 
 ## A restore routine
 
-This routine is practical advice built on the page.
+This routine is my advice, built on the page.
 
 1. Check the role and the license count before you start.
 2. Open Deleted users and look for the account.
@@ -80,7 +80,7 @@ This routine is practical advice built on the page.
 4. Assign a license.
 5. Tell the user and check that they can sign in.
 
-## Typical mistakes
+## Typical mistakes (my advice)
 
 - Waiting beyond 30 days.
 - Forgetting the license, so the user cannot use Microsoft 365 after the restore.
@@ -98,13 +98,13 @@ This routine is practical advice built on the page.
 | Mailbox | Fully restored |
 | Not on the page | PowerShell, OneDrive, time remaining, license retention |
 
-## What to prepare
+## What to prepare (my advice)
 
 Before you open the Deleted users page, check the license count. The page asks you to make sure enough Microsoft 365 licenses are available to assign to the account. Decide who will pass on the password. The portal can print the user name and password information, and the page says to send it to the user securely. Plan a follow-up with the user, because the password changes during the restore.
 
 ## If several restores fail
 
-When you restore several users at once and some fail, the page says to restore the failed accounts one at a time. This also helps you see which account has a name conflict.
+In the user name conflict procedure the page says that if two or more accounts fail to restore, an error message tells you the restore failed for some users. You can view the log to see which users were not restored, and then restore the failed accounts one at a time.
 
 ## Related
 
