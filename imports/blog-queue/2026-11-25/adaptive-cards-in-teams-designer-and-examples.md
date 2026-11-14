@@ -18,7 +18,7 @@ faq:
   - q: "Which Adaptive Card version does Teams support?"
     a: "According to the Teams platform documentation on Microsoft Learn, bot-sent cards, action-based message extensions, search-based message extensions, link unfurling and dialogs support schema version 1.6 or earlier. The Teams mobile app supports up to 1.6, and later versions might not render correctly there."
   - q: "Why does my card text get cut off on mobile?"
-    a: "Microsoft Learn says to set wrap to true on TextBlock, ColumnSet and Input.ChoiceSet. Without it, text is truncated on mobile. It also advises designing for narrow screens first and keeping column widths small, because Teams mobile does not support horizontal scrolling."
+    a: "Microsoft Learn says to set wrap to true on TextBlock, ColumnSet and Input.ChoiceSet. Without it, text is truncated on mobile. It also advises designing for narrow screens first and using fewer columns, which display better on mobile."
   - q: "Can I use Action.Submit in an incoming webhook card?"
     a: "No. The Microsoft Learn card reference states that incoming webhooks support all native Adaptive Card elements except Action.Submit. Use Action.OpenURL, Action.ShowCard, Action.ToggleVisibility or Action.Execute instead."
   - q: "How many buttons should a card have?"
@@ -51,6 +51,7 @@ The Teams card reference gives these limits:
 | Action.Submit | The `isEnabled` property is not supported |
 | Action styles | Positive or destructive styling is not supported |
 | Uploads | File or image uploads are not supported |
+| Surfaces | Bots, message extensions and Bot Framework are marked supported. Tabs and connectors are marked not supported. Incoming webhooks support Adaptive Cards only for the Microsoft 365 groups connector type. |
 
 The SDK documentation adds that its card packages bundle the Adaptive Card v1.5 schema as strict types. That is within the version 1.6 limit.
 
@@ -85,7 +86,7 @@ The `wrap` property is an addition based on the design guidance below. The page 
 
 ## Sending the card
 
-The card reference does not include a full walkthrough for sending. It points to Bot Framework samples for .NET and Node.js. The Teams SDK guide shows a builder pattern with packages for C# (`Microsoft.Teams.Cards`), Python (`microsoft-teams-cards`) and TypeScript (`@microsoft/teams.cards`). A short Python example from the guide builds a card with a text block and a button, and sends it with `MessageActivityInput(text="Hello text!").add_card(card)`. Builders validate every property against the schema, which catches errors at build time.
+The card reference does not include a full walkthrough for sending. It points to Bot Framework samples for .NET and Node.js. The Teams SDK guide shows a builder pattern with packages for C# (`Microsoft.Teams.Cards`), Python (`microsoft-teams-cards`) and TypeScript (`@microsoft/teams.cards`). A short Python example from the guide builds a card with a text block and sends it with `MessageActivityInput(text="Hello text!").add_card(card)`. Builders validate every property against the schema, which catches errors at build time.
 
 ## Layout rules for Teams
 
@@ -93,10 +94,10 @@ Microsoft's design guidance includes these rules:
 
 - **Narrow first.** Design for narrow screens first. Cards scale up well but not down.
 - **Wrap text.** Set `"wrap": true` on `TextBlock`, `ColumnSet` and `Input.ChoiceSet`.
-- **Columns.** Fewer columns display better on mobile. Avoid more than three columns and keep explicit widths under one fourth of the narrowest card width, about 48 pixels at most.
-- **Column width values.** `auto` sizes to content, `stretch` shares the remaining width, a plain number is proportional, and `<number>px` is fixed. Do not set `auto` on every column, or buttons may be cut off.
-- **Images.** Use transparent backgrounds so images adapt to any Teams theme. A 100 by 100 pixel image shown at 50 by 50 stays sharp, but the reverse pixelates. Set only the width or only the height.
-- **Full-width cards.** Cards must not show a horizontal scroll, so do not specify a fixed width. Test in narrow places such as mobile and meeting side panels.
+- **Columns.** Use fewer columns for better mobile display. The guidance gives no numeric column limit.
+- **Column width values.** `auto` sizes to content and suits columns with buttons that must stay fully visible, `stretch` shares the available width equally, a plain number is a proportion, and `<number>px` is a fixed width that should not exceed the device width. Do not set `auto` on every column.
+- **Images.** Use transparent backgrounds so images adapt to any Teams theme. A 100 by 100 pixel image shown at 50 by 50 stays sharp, but the reverse pixelates. Use `width` and `height` to control the exact size.
+- **Full-width cards.** Test them in narrow layouts such as mobile and meeting side panels so content isn't truncated.
 - **Actions.** Use one to three primary actions, with a maximum of six.
 - **Containers.** Use `style` for emphasis, `selectAction` to attach an action, and `Action.ToggleVisibility` for collapsible groups. Do not use containers for other purposes.
 
