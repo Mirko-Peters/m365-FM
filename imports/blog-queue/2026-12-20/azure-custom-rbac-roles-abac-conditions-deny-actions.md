@@ -100,7 +100,7 @@ This is an interpretation, not a Learn procedure:
 
 ## What the documentation does not say
 
-The pages read do not describe a way to write conditions that deny, and they do not describe creating deny assignments for arbitrary actions outside deployment stacks. They also do not provide a complete current list of services that support conditions beyond what the overview states. For Key Vault data plane access, none of the pages read mention ABAC.
+The pages read do not describe a way to write conditions that deny, and they do not describe creating deny assignments for arbitrary actions outside deployment stacks. They also do not provide a complete current list of services that support conditions beyond what the overview states. None of these four pages mention ABAC for Key Vault. The separate Key Vault RBAC guide describes ABAC conditions on Key Vault roles as a preview that applies only to secret data actions, so check that page for current status.
 
 ## Related
 
@@ -115,3 +115,4 @@ The pages read do not describe a way to write conditions that deny, and they do 
 - [Understand Azure role definitions (Microsoft Learn)](https://learn.microsoft.com/en-us/azure/role-based-access-control/role-definitions)
 - [What is Azure attribute-based access control (Azure ABAC)? (Microsoft Learn)](https://learn.microsoft.com/en-us/azure/role-based-access-control/conditions-overview)
 - [List Azure deny assignments (Microsoft Learn)](https://learn.microsoft.com/en-us/azure/role-based-access-control/deny-assignments)
+- [Grant permission to applications to access an Azure key vault using Azure RBAC (Microsoft Learn)](https://learn.microsoft.com/en-us/azure/key-vault/general/rbac-guide)
