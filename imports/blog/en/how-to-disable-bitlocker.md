@@ -67,7 +67,7 @@ Some variations from Microsoft's examples:
 - **Automatic keys for data drives.** If the operating system volume has automatic keys that open it at startup, `Disable-BitLocker` doesn't proceed. Run `Clear-BitLockerAutoUnlock` first, then disable BitLocker on the volume. Microsoft doesn't say how these keys usually get there, so check the output of the cmdlet if you hit this.
 - **Another computer.** `manage-bde` accepts a `-computername` parameter to change protection on a different machine.
 
-You can read the details in Microsoft's [Disable-BitLocker](https://learn.microsoft.com/en-us/powershell/module/bitlocker/disable-bitlocker?view=windowsserver2025-ps) reference and the [manage-bde -off](https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/manage-bde-off) page.
+You can read the details in Microsoft's [Disable-BitLocker](https://learn.microsoft.com/powershell/module/bitlocker/disable-bitlocker?view=windowsserver2025-ps) reference and the [manage-bde -off](https://learn.microsoft.com/windows-server/administration/windows-commands/manage-bde-off) page.
 
 A note on the Settings app and Windows Home. Microsoft lists BitLocker Drive Encryption for Windows Pro, Enterprise and Education, so Windows Home doesn't have it. It has Device Encryption instead, which Windows turns on when you sign in with a Microsoft account or a work or school account, and you manage it in **Settings**, under **Privacy & security**, **Device encryption**. Microsoft's Device Encryption article describes how to turn it on and doesn't document the steps for turning it off, so look at the toggle on your own device and read the text on the screen before you change it.
 
@@ -77,7 +77,7 @@ The commands work per volume, so the same steps apply to a data drive or a USB d
 
 Decrypting a removable drive has one practical consequence. Once it's finished, anyone who plugs the stick into a PC can read the files, with no password. Decide first whether the data on it should stay protected.
 
-You can turn BitLocker on again later. Microsoft's BitLocker operations guide describes the path: open the applet, select **Turn on BitLocker** for the drive, back up the recovery key and choose whether to encrypt used disk space only or the entire drive. Treat it as a new setup, not as a "resume". All earlier key protectors were removed when you decrypted, so the recovery key you saved before doesn't apply to the new encryption. Save the new key where you can reach it from another device, and check with the guidance on finding a [recovery key](https://support.microsoft.com/en-us/windows/find-your-bitlocker-recovery-key-6b71ad27-0b89-ea08-f143-056f5ab347d6) that the new key really appears in your account.
+You can turn BitLocker on again later. Microsoft's BitLocker operations guide describes the path: open the applet, select **Turn on BitLocker** for the drive, back up the recovery key and choose whether to encrypt used disk space only or the entire drive. Treat it as a new setup, not as a "resume". All earlier key protectors were removed when you decrypted, so the recovery key you saved before doesn't apply to the new encryption. Save the new key where you can reach it from another device, and check with the guidance on finding a [recovery key](https://support.microsoft.com/windows/find-your-bitlocker-recovery-key-6b71ad27-0b89-ea08-f143-056f5ab347d6) that the new key really appears in your account.
 
 ## Devices managed by your organization
 
@@ -98,7 +98,7 @@ One statement from the Intune article is worth remembering. If you delete the In
 
 ## Related topics to explore
 
-- Find the recovery key before changes: if a firmware update or hardware change triggers the blue screen, the [recovery key](https://learn.microsoft.com/en-us/windows/security/operating-system-security/data-protection/bitlocker/recovery-process) is the only way back in.
+- Find the recovery key before changes: if a firmware update or hardware change triggers the blue screen, the [recovery key](https://learn.microsoft.com/windows/security/operating-system-security/data-protection/bitlocker/recovery-process) is the only way back in.
 - Suspend BitLocker for BIOS and TPM updates: this is the safer alternative to turning encryption off.
 - Silent BitLocker deployment with Intune: the settings for TPM, Secure Boot and standard users decide whether encryption starts without a prompt.
 - Device Encryption versus BitLocker Drive Encryption: the two features differ by edition, and the difference decides where you manage them.
