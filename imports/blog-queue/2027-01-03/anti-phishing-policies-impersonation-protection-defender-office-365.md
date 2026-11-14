@@ -7,22 +7,22 @@ author: mirko-p
 date: 2027-01-03
 topics: [defender-for-office-365]
 keypoints:
-  - "The default anti-phishing policy applies to all recipients. In Defender for Office 365 it gives spoof protection and mailbox intelligence, but not impersonation protection or thresholds."
+  - "The default anti-phishing policy applies to all recipients. In Defender for Office 365 it covers spoof protection and mailbox intelligence, but impersonation and thresholds are not configured."
   - "User impersonation protection covers up to 350 users per policy. Domain impersonation protection covers up to 50 custom domains per policy."
   - "Phishing email thresholds are Standard (default), Aggressive, More aggressive and Most aggressive. Higher settings increase false positives."
-  - "Impersonation settings and phishing thresholds need Defender for Office 365 Plan 1 or Plan 2. Spoof intelligence is included for all cloud mailboxes."
+  - "Impersonation settings and phishing thresholds are available only in Defender for Office 365. Spoof intelligence is included for all cloud mailboxes."
   - "Configure policies in the Defender portal under Email and collaboration > Policies and rules > Threat policies > Anti-phishing."
 faq:
   - q: "What do anti-phishing policies protect against?"
     a: "According to Microsoft Learn, they combine spoof protection (EOP and Defender for Office 365) with impersonation protection and phishing thresholds (Defender for Office 365 only). Spoof intelligence and mailbox intelligence are on by default in the default policy."
   - q: "How many users and domains can I protect from impersonation?"
-    a: "Microsoft Learn states a limit of 350 users per policy for user impersonation protection and 50 custom domains per policy for domain impersonation protection. Trusted senders and domains share a limit of 1,024 entries."
+    a: "Microsoft Learn states a limit of 350 users per policy for user impersonation protection and 50 custom domains per policy for domain impersonation protection. Learn gives a maximum of 1,024 entries for the trusted senders and domains lists."
   - q: "What is the default action when a spoofed sender is blocked?"
     a: "Learn says the default action is to move messages to the recipients' Junk Email folders. You can choose Quarantine the message instead and select a quarantine policy."
   - q: "Which threshold should I choose?"
     a: "Learn lists Standard as the default and describes Aggressive, More aggressive and Most aggressive as treating progressively lower-confidence phishing verdicts as very high confidence. It warns that a higher setting increases false positives."
   - q: "Do I need Defender for Office 365 for these features?"
-    a: "Spoof intelligence, the first contact safety tip and unauthenticated sender indicators are available for all cloud mailboxes. Impersonation settings, phishing thresholds, enhanced spoof intelligence and AI/ML detection need Defender for Office 365 Plan 1 or Plan 2, according to Learn."
+    a: "Spoof intelligence, the first contact safety tip and unauthenticated sender indicators are available for all cloud mailboxes. Impersonation settings, phishing thresholds, enhanced spoof intelligence and AI/ML detection need Defender for Office 365, according to Learn, which does not say which plan includes which feature."
 ---
 
 Anti-phishing policies decide how Microsoft 365 handles messages that look spoofed or impersonate people and domains. Exchange Online Protection provides spoof protection for everyone. Defender for Office 365 adds impersonation protection, mailbox intelligence and phishing thresholds. This guide follows the Microsoft Learn page that explains the policies.
@@ -33,7 +33,7 @@ Anti-phishing policies decide how Microsoft 365 handles messages that look spoof
 - **Custom policies.** They need at least one condition under **Users, groups, and domains**. You can add a description, but you cannot rename the policy in the portal after you create it.
 - **Preset policies.** Learn mentions only that anti-spoofing is enabled in the Standard and Strict preset security policies.
 
-Recipient conditions use OR logic within one condition or exception and AND logic between different condition types. Dynamic distribution groups and dynamic Microsoft Entra membership groups are not supported.
+Multiple values of the same condition or exception use OR logic, different types of exceptions use OR logic, and different types of conditions use AND logic. Dynamic distribution groups and dynamic Microsoft Entra membership groups are not supported.
 
 ## Spoof protection (EOP and Defender for Office 365)
 
@@ -49,7 +49,7 @@ Recipient conditions use OR logic within one condition or exception and AND logi
 | User impersonation protection | Protects listed users | 350 users per policy. Action defaults to Don't apply any action |
 | Domain impersonation protection | Protects custom domains | 50 custom domains per policy. Action defaults to Don't apply any action |
 | Mailbox intelligence | Learns normal sender patterns | Enable mailbox intelligence is on by default. Enable intelligence for impersonation protection is off by default |
-| Trusted senders and domains | Exempt from impersonation actions | 1,024 entries combined |
+| Trusted senders and domains | Exempt from impersonation actions | 1,024 entries for these lists |
 
 The available actions for user and domain impersonation, and for mailbox intelligence, are Don't apply any action (default), Redirect, Move to Junk, Quarantine, Deliver and add Bcc, and Delete before delivery. Mailbox intelligence takes action only when both of its settings are on. Trusted domains do not include subdomains, so add each subdomain separately.
 
@@ -71,13 +71,13 @@ Learn warns that a higher setting increases false positives.
 
 ## Licensing
 
-| Capability | All cloud mailboxes | Defender for Office 365 Plan 1 or 2 |
+| Capability | All cloud mailboxes | Defender for Office 365 |
 | --- | --- | --- |
 | Spoof intelligence, first contact tip, unauthenticated sender indicators | Yes | Yes |
 | Impersonation settings, phishing thresholds | No | Yes |
 | Enhanced spoof intelligence, AI/ML detection, extra reporting | No | Yes |
 
-The page does not detail differences between Plan 1 and Plan 2 and links to a comparison. It mentions a 90-day Plan 2 trial from the Defender portal trials hub.
+The page does not say which Defender for Office 365 plan includes which feature. It mentions a 90-day Plan 2 trial from the Defender portal trials hub.
 
 ## Where to configure
 
@@ -85,7 +85,7 @@ The page does not detail differences between Plan 1 and Plan 2 and links to a co
 - **Spoofed sender overrides:** the **Spoofed senders** tab in Tenant Allow/Block Lists.
 - **PowerShell:** `New-AntiPhishPolicy` and `Set-AntiPhishPolicy`. The protected-users parameter is `TargetedUsersToProtect`.
 
-## A practical approach
+## A practical approach (my advice)
 
 1. Keep spoof intelligence on and decide whether blocked spoofs go to Junk or Quarantine.
 2. Create a custom policy for high-value targets such as executives and finance staff, scoped by a group condition.
@@ -93,9 +93,9 @@ The page does not detail differences between Plan 1 and Plan 2 and links to a co
 4. Leave the threshold at Standard until you have measured false positives.
 5. Review the first contact safety tip, which has no dependency on the other settings.
 
-## Typical mistakes
+## Typical mistakes (my advice)
 
-- Assuming the default policy covers impersonation. It does not.
+- Assuming the default policy covers impersonation. Learn says impersonation protection is not configured in it by default.
 - Adding more than 350 users to one policy instead of splitting policies.
 - Forgetting subdomains in trusted domains.
 - Raising the threshold without reviewing false positives.
@@ -108,4 +108,4 @@ The page does not detail differences between Plan 1 and Plan 2 and links to a co
 
 ## Sources
 
-- [Anti-phishing policies about (Microsoft Learn)](https://learn.microsoft.com/defender-office-365/anti-phishing-policies-about)
+- [Anti-phishing policies in Microsoft 365 (Microsoft Learn)](https://learn.microsoft.com/defender-office-365/anti-phishing-policies-about)
