@@ -79,14 +79,14 @@ The default report has these pages:
 | Timepoint | A 30-second timepoint with the interactive and background operations that used the most compute |
 | Timepoint summary | Operation types that contributed to usage in the selected timepoint |
 | Timepoint item detail | Operations within one item at a timepoint, with filters for operation ID, user and CU thresholds |
-| Autoscale compute for Spark and detail | How Spark autoscale behaved and which workloads triggered it |
+| On-demand Compute for Spark and detail | On-demand compute behavior of Spark workloads, and which workloads triggered scaling |
 | Plan capacity | Estimating the right SKU with the app and the Fabric SKU Estimator |
 | Monitor paused capacity | When a capacity was paused or resumed, and how to read carryforward operations |
 | Calculations | How the app computes CU usage, throttling and autoscale impact |
 
 A natural order for an investigation, based on Learn's page descriptions: start at Health to find the capacity, go to Compute to see the pattern, then pick a moment on Timepoint to see which operations caused it, and drill to Timepoint item detail for the item and user.
 
-The preview report has Health, Compute, Storage, Autoscale for Spark and Help pages, with item-level drill-through from Compute to an Item details page.
+The preview report is still in preview. It has Health, Compute, Workspace Detail, Storage, On-demand Compute for Spark and Help pages, with drill-through from an item on Compute to an Item details page.
 
 ## Data latency
 
