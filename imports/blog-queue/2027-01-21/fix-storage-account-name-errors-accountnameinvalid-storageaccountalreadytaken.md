@@ -1,6 +1,6 @@
 ---
 title: "Fix Storage Account Name Errors: AccountNameInvalid, StorageAccountAlreadyTaken and Related Deployment Codes"
-summary: "Four error codes can appear when a Bicep or ARM template deploys a storage account with a bad or duplicate name. What each one means, the naming rules, the uniqueString fix with its 11-character prefix limit, and the deleted-account case, per Microsoft Learn."
+summary: "The Learn page shows four example error codes for a Bicep or ARM template that deploys a storage account with a bad or duplicate name. What each one means, the naming rules, the uniqueString fix with its 11-character prefix limit, and the deleted-account case, per Microsoft Learn."
 status: review
 publish: false
 author: mirko-p
@@ -8,7 +8,7 @@ date: 2027-01-21
 topics: [azure-storage-account, bicep, arm-template]
 keypoints:
   - "A storage account name must be 3 to 24 characters, lowercase letters and numbers only, and globally unique across Azure."
-  - "Learn lists four codes: AccountNameInvalid, InvalidResourceLocation, StorageAccountInAnotherResourceGroup and StorageAccountAlreadyTaken."
+  - "Learn shows four example codes: AccountNameInvalid, InvalidResourceLocation, StorageAccountInAnotherResourceGroup and StorageAccountAlreadyTaken."
   - "Build a unique name from a prefix plus uniqueString. The function returns 13 characters, so the prefix must be 11 characters or less."
   - "A recently deleted account can block creation from a different subscription and tenant, as protection against subdomain takeover."
   - "For the deleted-account case, Learn says to create a support request with the account name and the approximate time of the failure."
@@ -41,7 +41,7 @@ The second rule is the one that surprises people: the existing account can be in
 | Code | Learn's description | What to check |
 | --- | --- | --- |
 | AccountNameInvalid | The name has prohibited characters, such as an uppercase letter or an exclamation point | Length and characters |
-| InvalidResourceLocation | Same name and same resource group as an existing account, but a different location | Pick a different name, or deploy to the original location |
+| InvalidResourceLocation | Same name and same resource group as an existing account, but a different location | Pick a different name (Learn's advice) |
 | StorageAccountInAnotherResourceGroup | Same name and location as an existing account, but a different resource group in your subscription | Name already used in your subscription |
 | StorageAccountAlreadyTaken | Same name as a storage account that already exists in Azure | Global uniqueness |
 
