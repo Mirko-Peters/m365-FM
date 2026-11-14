@@ -7,14 +7,14 @@ author: mirko-p
 date: 2027-01-01
 topics: [ms-102, microsoft-365]
 keypoints:
-  - "The Learn study guide states that the MS-102 exam retires on November 30, 2026, at 11:59 PM Central Standard Time. It names no replacement exam and links to a Tech Community post."
+  - "The Learn study guide says MS-102 retires on November 30, 2026, at 11:59 PM Central Standard Time, a date that has passed at publication. It names no replacement exam."
   - "The skills measured as of April 28, 2026 have four domains: tenant (25 to 30%), Entra identity and access (25 to 30%), Defender XDR (30 to 35%) and Purview compliance (10 to 15%)."
   - "A score of 700 or greater is required to pass, and associate, expert and specialty certifications expire annually and renew through a free online assessment."
   - "For the Microsoft 365 Certified Administrator Expert certification, the page lists MS-102 together with at least one of three associate certifications."
   - "The page gives no exam fee, question count or duration, and it does not explain what happens to people who have not passed before the retirement date."
 faq:
   - q: "When does MS-102 retire?"
-    a: "According to Microsoft Learn, the exam retires on November 30, 2026, at 11:59 PM Central Standard Time."
+    a: "According to Microsoft Learn, the exam retires on November 30, 2026, at 11:59 PM Central Standard Time. That date has passed by the date of this article, so check the certification page for the current status."
   - q: "Is there a replacement exam?"
     a: "The Learn study guide I read does not name a replacement exam. Its Learn more link points to a Tech Community blog post."
   - q: "What are the domain weights?"
@@ -23,7 +23,7 @@ faq:
     a: "According to Microsoft Learn, a score of 700 or greater is required to pass."
 ---
 
-The Microsoft 365 Administrator exam MS-102 retires on November 30, 2026, at 11:59 PM Central Standard Time, according to a warning at the top of the Microsoft Learn study guide. Anyone who wants to take it has to do so before that date. The page names no replacement exam. This guide reproduces the skills measured outline from the study guide, as of April 28, 2026, and contains no exam questions.
+The Microsoft 365 Administrator exam MS-102 retires on November 30, 2026, at 11:59 PM Central Standard Time, according to a warning at the top of the Microsoft Learn study guide, Study guide for Exam MS-102: Microsoft 365 Administrator. By the date of this article that day has passed, so check the certification page for the current status of the exam. The page names no replacement exam. This guide reproduces the skills measured outline from the study guide, as of April 28, 2026, and contains no exam questions.
 
 ## Retirement
 
@@ -74,11 +74,11 @@ For the Microsoft 365 Certified: Administrator Expert certification, the page sa
 
 A score of 700 or greater is required to pass. Associate, expert and specialty certifications expire annually, and you can renew by passing a free online assessment on Microsoft Learn. The change log from the prior version marks several areas as Minor changes, among them users and groups, roles and role groups, secure access and DLP. The English exam is updated first and localized versions follow about eight weeks later, and Learn says you can request an extra 30 minutes if your language is not available. Most questions cover generally available features, and preview features may appear if they are commonly used.
 
-## Suggestion: how to use the time left
+## Suggestion: how to use the study guide
 
 This section is a practical suggestion and not a Microsoft statement.
 
-1. If you plan to sit the exam, book it with the retirement date in mind and leave room for a retake.
+1. Check the certification page first for whether MS-102 can still be scheduled, since the retirement date has passed.
 2. Weight your study by the domain percentages. Defender XDR is the largest domain.
 3. Practice the administration tasks in a test tenant, because most bullets start with implement, manage or configure.
 4. Use the free practice assessment that the page links.
@@ -100,4 +100,4 @@ The page I read does not describe the following:
 
 ## Sources
 
-- [Study guide for Exam MS-102](https://learn.microsoft.com/credentials/certifications/resources/study-guides/ms-102)
+- [Study guide for Exam MS-102: Microsoft 365 Administrator (Microsoft Learn)](https://learn.microsoft.com/credentials/certifications/resources/study-guides/ms-102)
