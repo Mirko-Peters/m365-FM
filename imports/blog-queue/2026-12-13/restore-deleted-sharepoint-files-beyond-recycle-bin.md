@@ -32,7 +32,7 @@ SharePoint has two recycle bin stages. Microsoft Support describes them like thi
 - **First-stage (site) recycle bin.** Deleted items land here first, including OneDrive files. They count toward storage.
 - **Second-stage (site collection) recycle bin.** Items deleted from the first stage move here. They do not count toward storage.
 
-Deleted items are kept for **93 days** from the time they were removed from their original location. Moving an item to the second stage does not restart the clock. The second-stage bin is allotted 200% of the site collection quota, and this cannot be changed. If it exceeds the quota, the oldest items are purged. Items are permanently deleted when deleted manually from this bin or when they pass 93 days.
+Deleted items are kept for **93 days** from the time they were removed from their original location. Items moved to the second stage stay for the remainder of the 93 days, so the count runs from the original deletion. The second-stage bin is allotted 200% of the site collection quota, and this cannot be changed. If it exceeds the quota, the oldest items are purged. Items are permanently deleted when deleted manually from this bin or when they pass 93 days.
 
 Deleted subsites skip the first stage and go directly to the second-stage bin, and they count toward storage until purged.
 
@@ -83,11 +83,11 @@ For longer protection, Microsoft 365 Backup is a backup and restore service for 
 - **Billing** is pay-as-you-go, $0.15 per GiB per month for protected data, and restores are free.
 - Backups use append-only storage, and Purview retention and deletion policies do not affect the backup recovery window.
 
-Setup requires the SharePoint Administrator or Global Administrator role, with a dedicated Microsoft 365 Backup Administrator role available. You need a valid Azure subscription for billing. Policies are created in the admin center under **Settings** > **Microsoft 365 Backup**.
+Setup requires the SharePoint Administrator or Global Administrator role, with a dedicated Microsoft 365 Backup Administrator role available. You need a valid Azure subscription for billing, with an Owner or Contributor on it, a resource group and a region. The setup page says new customers onboarding after April 1, 2026 use the new pay-as-you-go setup under the Billing node in the admin center. Policies are created in the admin center under **Settings** > **Microsoft 365 Backup**.
 
-The pages I read do not say whether content deleted before a backup policy was activated can be recovered. Restore points are created as soon as a policy is activated, which suggests backup protects from that point onward. Confirm with Microsoft before you rely on it for past deletions.
+The pages I read do not say whether content deleted before a backup policy was activated can be recovered. The overview says restore points are physically created as soon as a policy is confirmed activated. My own inference: backup protects from that point onward. Confirm with Microsoft before you rely on it for past deletions.
 
-## Which option for which case
+## Which option for which case (my own summary)
 
 | Situation | First choice |
 |---|---|
@@ -96,13 +96,13 @@ The pages I read do not say whether content deleted before a backup policy was a
 | A whole site was deleted and the usual bins failed | Microsoft Support site restore within 14 extra days |
 | Long retention and ransomware readiness | Microsoft 365 Backup, set up in advance |
 
-## Habits that prevent a repeat
+## Habits that prevent a repeat (my own suggestions)
 
 - Keep version history on, because library restore needs it.
 - Limit who can empty the first-stage bin and delete from the second stage.
 - Decide on a backup policy before an incident, since several options only work for recent deletions.
 
-## Common mistakes
+## Common mistakes (my own list)
 
 - Waiting. The 93-day period starts at deletion, not at the second-stage move.
 - Using Restore this library after the files left the site collection bin.
@@ -117,7 +117,7 @@ The pages I read do not say whether content deleted before a backup policy was a
 
 ## Sources
 
-- [Microsoft Support: Restore deleted items from the site collection recycle bin](https://support.microsoft.com/en-us/office/restore-deleted-items-from-the-site-collection-recycle-bin-5fa924ee-16d7-487b-9a0a-021b9062d14b)
-- [Microsoft Support: Restore a shared library](https://support.microsoft.com/office/restore-a-document-library-317791c3-8bd0-4dfd-8254-3ca90883d39a)
-- [Microsoft Learn: Overview of Microsoft 365 Backup](https://learn.microsoft.com/microsoft-365/backup/backup-overview)
-- [Microsoft Learn: Set up Microsoft 365 Backup](https://learn.microsoft.com/microsoft-365/backup/backup-setup)
+- [Microsoft Support: Restore deleted items from the site collection recycle bin](https://support.microsoft.com/en-us/sharepoint/admin/restore-deleted-items-from-the-site-collection-recycle-bin)
+- [Microsoft Support: Restore a shared library](https://support.microsoft.com/en-us/sharepoint/documents-and-library/restore-a-shared-library)
+- [Microsoft Learn: Overview of Microsoft 365 Backup](https://learn.microsoft.com/en-us/microsoft-365/backup/backup-overview?view=o365-worldwide)
+- [Microsoft Learn: Set up Microsoft 365 Backup](https://learn.microsoft.com/en-us/microsoft-365/backup/backup-setup?view=o365-worldwide)
