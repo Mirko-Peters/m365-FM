@@ -11,18 +11,18 @@ keypoints:
   - "Use one parameter file per subscription request, and with Terraform use a dedicated state file for each landing zone subscription."
   - "Creating subscriptions programmatically needs a commercial agreement. Without one, create the subscription manually and automate the rest."
   - "The deployment pipeline places the subscription in a management group, sets RBAC, policy and budgets, and can create a peered virtual network."
-  - "Authenticate the pipeline with managed identity or OpenID Connect, and give the workload team the finished subscription to own."
+  - "Authenticate the pipeline with managed identity or OpenID Connect, and hand the finished subscription to the workload team. The platform team keeps governance."
 faq:
   - q: "What is subscription vending in Azure landing zones?"
     a: "According to Microsoft Learn, it is a platform mechanism for programmatically issuing subscriptions to workload teams. It standardizes how subscriptions are requested, deployed and governed, so application teams get a workload landing zone faster while the platform team keeps governance in place."
   - q: "Can I vend subscriptions without an Enterprise Agreement?"
     a: "Microsoft Learn says you need a commercial agreement to create a subscription programmatically. Without one, you introduce a manual step for creating the subscription but can still automate all other configuration. The Learn page names EA, MCA and MPA as the agreement types and links to separate pages for the required roles."
   - q: "Should I use Terraform or Bicep for subscription vending?"
-    a: "Microsoft Learn offers both a Bicep module and a Terraform module and says to adapt them to your needs. The pages read give no preference. Pick the language your platform team already uses for the rest of the landing zone, because the module is meant to be combined with the platform deployment."
+    a: "Microsoft Learn offers both a Bicep module and a Terraform module and says to adapt them to your needs. The pages read give no preference. My advice, not a Learn statement: pick the language your platform team already uses for the rest of the landing zone. Both module pages recommend deploying the platform first with the Azure landing zone module for the same language."
   - q: "How should the vending pipeline authenticate to Azure?"
-    a: "Microsoft Learn says to use a managed identity or OpenID Connect to authenticate to Azure. The pipeline needs permission for every system it touches, such as billing, management groups, networking and the data collection tool."
+    a: "Microsoft Learn says to use a managed identity or OpenID Connect to authenticate to Azure. The pipeline needs permission for all the systems it interfaces with. Learn gives no list, so billing, management groups, networking and the data collection tool are my examples."
   - q: "What does a Terraform subscription vending module create?"
-    a: "The Azure Verified Module README lists subscription creation and management group placement, virtual network peering, role assignments, resource provider registration, resource groups and user-assigned managed identities. It uses the AzAPI provider and is meant to be instantiated once per landing zone."
+    a: "The Azure Verified Module README lists subscription creation and management group placement, virtual network peering, role assignments, resource provider registration, resource groups and user-assigned managed identities. It uses the AzAPI provider. The Architecture Center page separately says to use a dedicated Terraform state file for each landing zone subscription."
 ---
 
 Subscription vending turns a subscription request into a governed, ready-to-use landing zone without manual platform work. Microsoft recommends three automation tasks: collect the request data, start platform automation, and create the subscription with infrastructure as code (IaC). Microsoft offers both a Bicep module and a Terraform module for the last step. This guide follows the Azure Architecture Center implementation guidance and the Cloud Adoption Framework design area.
@@ -32,10 +32,10 @@ Subscription vending turns a subscription request into a governed, ready-to-use 
 The design area describes seven steps: define the business logic and approval, submit a request, configure networking, determine placement, create and configure the subscription, update the budget, and deploy the workload. Three roles appear:
 
 - **Cloud center of excellence:** defines the business logic and what to collect.
-- **Workload team:** submits the request and later owns the workload and budget.
+- **Workload team:** submits the request, then updates the budget, deploys the workload and sets up operations.
 - **Platform team:** creates and configures the subscription, then hands it off.
 
-Learn lists intake items to capture: the request authorizer, cost center, networking needs such as internet or on-premises connectivity, workload components, data sensitivity, and the number of environments. The request must also say Production or DevTest. The DevTest offer is not available for MPA.
+Learn lists intake items to capture: the request authorizer, cost center, networking needs such as internet or on-premises connectivity, workload components, data sensitivity, and the number of environments. The design area page adds anticipated budgets, subscription owners, networking expectations and a business criticality and confidentiality classification. The request must also say Production or DevTest. The DevTest offer is not available for MPA.
 
 ## Step 1: Collect and validate the request
 
@@ -59,7 +59,7 @@ Learn lists what the deployment pipeline does:
 
 | Area | Tasks |
 |---|---|
-| Identity | Create or update Entra resources for ownership, set up workload identities for deployments |
+| Identity | Create or update Entra resources for ownership, set up privileged workload identities for workload team deployments |
 | Governance | Place in the management group, assign the owner, set RBAC for security groups, assign policies, enroll in Defender for Cloud |
 | Networking | Deploy virtual networks and peer to the regional hub |
 | Budgets | Create budgets from the request data |
@@ -67,7 +67,7 @@ Learn lists what the deployment pipeline does:
 
 ### Terraform
 
-The Azure Verified Module `avm-ptn-alz-sub-vending` uses the AzAPI provider to create the subscription and its resources in one `terraform apply`. Its README lists Terraform `~> 1.10` and azapi `~> 2.12`. Main inputs:
+The Azure Verified Module `avm-ptn-alz-sub-vending` uses the AzAPI provider to create the subscription and its resources. Its README lists Terraform `~> 1.10` and azapi `~> 2.12`. Main inputs:
 
 - `subscription_alias_enabled` with `subscription_billing_scope` creates a subscription.
 - `subscription_management_group_association_enabled` with `subscription_management_group_id` sets placement. Use the ID, not the display name.
@@ -79,7 +79,7 @@ The README says destroying a module-created subscription tries to remove Network
 
 ### Bicep
 
-The Bicep module sits in the Azure Verified Modules registry. The Learn example parameter file sets `subscriptionDisplayName`, `subscriptionAliasName` and `subscriptionBillingScope`, where the scope is an enrollment account path. The module README could not be retrieved for this article, so check it for the full parameter list and deployment scope.
+Learn links the Bicep module in the bicep-registry-modules repository, under avm/ptn/lz/sub-vending. The Learn example parameter file sets `subscriptionDisplayName`, `subscriptionAliasName` and `subscriptionBillingScope`, where the scope is an enrollment account path. The module README on GitHub could not be retrieved for this article (the fetch was blocked by robots.txt), so check it for the full parameter list and deployment scope.
 
 Both module landing pages recommend deploying the platform first with the Azure landing zone module for the same language, and then using the vending module for workload landing zones.
 
@@ -88,7 +88,7 @@ Both module landing pages recommend deploying the platform first with the Azure 
 - A commercial agreement is required to create subscriptions programmatically. Without it, create subscriptions by hand and automate the rest.
 - The pipeline identity needs rights in every system it touches. Use managed identity or OIDC.
 - The subscription owner must be a user or service principal in the subscription's directory. Guest users are not allowed.
-- Use group-based access, and PIM for groups for elevated access. Workload identities created by vending cannot use PIM and get standing access, so Learn recommends managed identities.
+- Use group-based access, and PIM for groups for elevated access. Workload identities created by vending cannot use PIM and get standing access. Learn recommends managed identities to avoid managing secrets.
 - Budgets are not hard limits, so add budget alerts. Learn also advises reviewing subscription quota limits before creation.
 
 ## After the handoff
@@ -101,7 +101,7 @@ The platform team owns the automation and the governance of the subscription, in
 - Putting several subscriptions in one parameter file or one Terraform state.
 - Using the management group display name instead of its ID.
 - Assuming programmatic creation works without a commercial agreement.
-- Skipping IP address checks, which then fail at deployment.
+- Skipping IP address checks, which Learn's linting step is meant to catch before deployment.
 
 ## What the sources do not say
 
@@ -116,8 +116,8 @@ The pages read do not list the billing roles for each agreement type, they link 
 
 ## Sources
 
-- [Subscription vending implementation guidance](https://learn.microsoft.com/en-us/azure/architecture/landing-zones/subscription-vending)
-- [Subscription vending design area](https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/ready/landing-zone/design-area/subscription-vending)
+- [Subscription Vending Implementation Guidance - Azure Architecture Center](https://learn.microsoft.com/en-us/azure/architecture/landing-zones/subscription-vending)
+- [Subscription vending - Cloud Adoption Framework](https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/ready/landing-zone/design-area/subscription-vending)
 - [Azure landing zones subscription vending, Terraform](https://azure.github.io/Azure-Landing-Zones/sub-vending/tf)
 - [Azure landing zones subscription vending, Bicep](https://azure.github.io/Azure-Landing-Zones/sub-vending/bicep/)
 - [Terraform AVM module for subscription vending](https://github.com/Azure/terraform-azure-avm-ptn-alz-sub-vending)
