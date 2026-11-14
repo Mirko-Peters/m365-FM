@@ -105,7 +105,7 @@ A simple split works for most organizations. Use organizational prompts for the 
 
 ## What the source does not say
 
-The organizational prompts article does not describe licensing, audience targeting or rollout dates. The page footer shows a last-updated date of 2026-11-03, which is not a rollout date. Check the Microsoft 365 message center and your tenant for the current state.
+The organizational prompts article does not describe licensing, audience targeting or rollout dates. The page metadata I read shows a publication date of 2026-09-21, which is not a rollout date. Check the Microsoft 365 message center and your tenant for the current state.
 
 ## Related
 
@@ -116,5 +116,5 @@ The organizational prompts article does not describe licensing, audience targeti
 
 ## Sources
 
-- [Microsoft Learn: Organizational prompts overview](https://learn.microsoft.com/microsoft-365/copilot/organizational-prompts)
+- [Microsoft Learn: Organizational prompts overview](https://learn.microsoft.com/en-us/microsoft-365/copilot/organizational-prompts)
 - [Microsoft Learn: Copilot Prompt Gallery](https://learn.microsoft.com/en-us/microsoft-365/copilot/copilot-prompt-gallery)
