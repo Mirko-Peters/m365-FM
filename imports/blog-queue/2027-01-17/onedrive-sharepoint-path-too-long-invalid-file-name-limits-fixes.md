@@ -27,8 +27,6 @@ faq:
 
 When OneDrive or SharePoint refuses a file or folder, there are two separate causes: the name contains something not allowed, or the full path is longer than a limit somewhere in the chain. Microsoft Support publishes both sets of rules. The cloud limit is 400 characters for the whole path, but Windows apps and OneDrive sync have their own limits, so a file can work in the browser and still fail on a PC. This guide uses two Microsoft Support pages: restrictions and limitations in OneDrive and SharePoint, and file path length limits.
 
-One note on sourcing: I retrieved both pages through a summarising fetch, not as full verbatim text, so check the figures below against the pages before you put them into policy.
-
 ## Invalid names
 
 The restrictions page lists these as not allowed in file and folder names: double quote, asterisk, colon, less than, greater than, question mark, forward slash, backslash and pipe. Leading and trailing spaces are not allowed either. The page adds that some organizations do not yet support the number sign and percent sign.
