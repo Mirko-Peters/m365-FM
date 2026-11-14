@@ -99,7 +99,7 @@ Sign out of existing sessions and sign in again with a test user that matches th
 
 Learn does not state the numeric daily alert limit, the exact license SKUs, how long matches take to appear beyond shortly, or whether preview features are generally available. Check current documentation for those.
 
-## Typical mistakes
+## Typical mistakes (my advice)
 
 - Creating Defender policies without the Conditional Access policy that routes sessions.
 - Moving the Conditional Access policy to On without Report-only testing.
@@ -114,6 +114,6 @@ Learn does not state the numeric daily alert limit, the exact license SKUs, how 
 
 ## Sources
 
-- [Conditional Access app control: overview (Microsoft Learn)](https://learn.microsoft.com/defender-cloud-apps/proxy-intro-aad)
-- [Create Defender for Cloud Apps access policies (Microsoft Learn)](https://learn.microsoft.com/defender-cloud-apps/access-policy-aad)
-- [Create Defender for Cloud Apps session policies (Microsoft Learn)](https://learn.microsoft.com/defender-cloud-apps/session-policy-aad)
+- [Conditional Access app control (Microsoft Learn)](https://learn.microsoft.com/defender-cloud-apps/proxy-intro-aad)
+- [Create access policies (Microsoft Learn)](https://learn.microsoft.com/defender-cloud-apps/access-policy-aad)
+- [Create session policies (Microsoft Learn)](https://learn.microsoft.com/defender-cloud-apps/session-policy-aad)
