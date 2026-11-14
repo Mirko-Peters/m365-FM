@@ -16,11 +16,11 @@ faq:
   - q: "How does OneDrive know that a file changed in the cloud?"
     a: "According to Microsoft Learn, the sync app uses Windows Push Notification Services. When a change occurs in Microsoft 365, WNS alerts the sync app, the change enters the Internal Server Changes Queue, and changes are processed in the order they are received. The older Groove.exe client polled on a schedule."
   - q: "What is the difference between online-only and always-available files?"
-    a: "Microsoft Learn describes three Files On-Demand states: Always available (pinned), Locally available and Online-only. A cloud icon marks files that are not yet downloaded, and a green checkmark marks downloaded files. Pinning an online-only file makes the sync app download it."
+    a: "Microsoft Learn describes three Files On-Demand states: Always available (pinned), Locally available and Online-only. Pinning an online-only file makes the sync app download it. Microsoft Support describes a blue cloud icon for online-only files and a green check for locally available ones."
   - q: "Which file names does OneDrive refuse to sync?"
     a: "Microsoft Support lists the characters \" * : < > ? / \\ | and reserved names such as .lock, CON, PRN, AUX, NUL, COM0 to COM9, LPT0 to LPT9, _vti_ and desktop.ini. Any name starting with ~$ is also blocked. Leading and trailing spaces are not allowed either."
   - q: "How many items can the sync client handle?"
-    a: "Microsoft Support recommends keeping the total under 300,000 items. It also describes a public preview, rolled out on April 22, 2026, that allows up to 1,000,000 items per sync instance on supported Windows and macOS devices with specific hardware, such as at least 8 GB of RAM and an SSD."
+    a: "Microsoft Support recommends keeping the total under 300,000 items. It also describes a public preview that allows up to 1,000,000 items per sync instance, which requires specific hardware and the Insider program and does not support VDI."
   - q: "Where do admins control sync behavior?"
     a: "Microsoft Learn lists the SharePoint admin center under Settings and then Sync, where you can require synced computers to be domain-joined and block uploads by file type. Group Policy sets the update ring and silent account configuration."
 ---
@@ -53,7 +53,7 @@ The page does not describe how conflicting edits are resolved, so this article d
 
 ## Files On-Demand
 
-Files On-Demand lets you see, search and use OneDrive files in File Explorer without downloading all of them. Files you have not opened show a cloud icon. Downloaded files show a green checkmark. By default, files download when you open them.
+Files On-Demand lets you see, search and use OneDrive files in File Explorer without downloading all of them. Microsoft Support describes a blue cloud icon for online-only files, a green check for locally available files and a solid green circle with a white check for always-available files. By default, files download when you open them.
 
 - To keep a file offline, right-click it and select **Always keep on this device**.
 - To free space, right-click a downloaded file and select **Free up space**.
@@ -83,7 +83,7 @@ Names and types:
 
 **A file will not sync.** Check the name against the lists above. A Microsoft Q&A thread on the error "The name contains characters that aren't allowed" recommends renaming, trying the upload in OneDrive for the web, and resetting the app. The same thread shows users who still got the error without any listed character, and no confirmed cause.
 
-**Sync is slow or the library is huge.** Compare your item count to the 300,000 figure. Microsoft notes performance can suffer above it even if you do not sync everything.
+**Sync is slow or the library is huge.** Compare your item count to the recommended 300,000 items.
 
 **Disk space is tight.** Use **Free up space** on files you do not need offline. Microsoft's recommended configuration also names the policy to use Storage Sense on PCs.
 
@@ -107,4 +107,5 @@ In the SharePoint admin center, go to **Settings** and then **Sync**. There you 
 - [Files On-Demand for Windows (admin reference)](https://learn.microsoft.com/en-us/sharepoint/files-on-demand-windows)
 - [Recommended sync app configuration](https://learn.microsoft.com/en-us/sharepoint/ideal-state-configuration)
 - [Restrictions and limitations in OneDrive and SharePoint](https://support.microsoft.com/office/restrictions-and-limitations-in-onedrive-and-sharepoint-64883a5d-228e-48f5-b3d2-eb39e07630fa)
+- [Microsoft Support: Save disk space with OneDrive Files On-Demand for Windows](https://support.microsoft.com/en-us/office/0e6860d3-d9f3-4971-b321-7092438fb38e)
 - [Microsoft Q&A: name contains characters that aren't allowed](https://learn.microsoft.com/en-us/answers/a/11071719)
