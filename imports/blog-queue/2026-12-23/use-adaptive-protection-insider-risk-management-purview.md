@@ -98,7 +98,7 @@ Microsoft recommends the role with the fewest permissions.
 - Data lifecycle management and Conditional Access are preview.
 - Usernames aren't anonymized in Conditional Access, and anonymization isn't preserved outside Insider Risk Management.
 
-## Rollout advice
+## Rollout advice (my advice)
 
 Because quick setup creates test-mode DLP and report-only Conditional Access, you have a chance to review impact before enforcement. Check the report-only results, and tune the thresholds under **Insider risk levels** before you move policies to enforce. Tell HR and legal how the signals will be used, since the page notes that user names are visible in Conditional Access. That last point is advice, not a statement from the page.
 
@@ -108,4 +108,4 @@ Because quick setup creates test-mode DLP and report-only Conditional Access, yo
 
 ## Sources
 
-- [Adaptive Protection in Microsoft Purview](https://learn.microsoft.com/purview/insider-risk-management-adaptive-protection)
+- [Help dynamically mitigate risks with Adaptive Protection (Microsoft Learn)](https://learn.microsoft.com/purview/insider-risk-management-adaptive-protection)
