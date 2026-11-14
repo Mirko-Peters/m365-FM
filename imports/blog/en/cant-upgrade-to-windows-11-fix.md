@@ -33,7 +33,7 @@ Microsoft's FAQ on upgrading to Windows 11 says a device must meet the minimum s
 
 If setup shows a message titled "What needs your attention", the device may not meet the requirements. The Installation Assistant can also say that the PC doesn't meet the minimum system requirements. In that case Microsoft recommends staying on Windows 10.
 
-Now compare the result with Microsoft's list on the [Windows 11 requirements](https://learn.microsoft.com/en-us/windows/whats-new/windows-11-requirements) page:
+Now compare the result with Microsoft's list on the [Windows 11 requirements](https://learn.microsoft.com/windows/whats-new/windows-11-requirements) page:
 
 - **Processor:** 1 GHz or faster with two or more cores, on a compatible 64-bit processor or system on a chip.
 - **RAM:** 4 GB or more.
@@ -47,7 +47,7 @@ Now compare the result with Microsoft's list on the [Windows 11 requirements](ht
 
 ## Cause 1: TPM 2.0 is off or missing
 
-A TPM, or Trusted Platform Module, is a security chip or firmware feature. Windows 11 needs version 2.0. Microsoft notes it supports features such as Windows Hello and BitLocker. The page on [enabling TPM 2.0](https://support.microsoft.com/en-us/windows/security/devicesecurity/enable-tpm-2-0-on-your-pc) says many retail motherboards ship with TPM switched off, although it's usually possible to turn on. See the [Trusted Platform Module](https://www.m365.fm/entity/trusted-platform-module/) page for background.
+A TPM, or Trusted Platform Module, is a security chip or firmware feature. Windows 11 needs version 2.0. Microsoft notes it supports features such as Windows Hello and BitLocker. The page on [enabling TPM 2.0](https://support.microsoft.com/windows/security/devicesecurity/enable-tpm-2-0-on-your-pc) says many retail motherboards ship with TPM switched off, although it's usually possible to turn on. See the [Trusted Platform Module](https://www.m365.fm/entity/trusted-platform-module/) page for background.
 
 **Check it.** There are two ways:
 
@@ -76,7 +76,7 @@ One catch: a PC that was installed in legacy mode usually uses an old disk layou
 
 ## Cause 3: The disk uses the old MBR layout
 
-If the firmware has to run in UEFI mode, the system disk needs GPT partitioning. Microsoft's tool for the conversion is `MBR2GPT`, described on Microsoft Learn's page [MBR2GPT.EXE](https://learn.microsoft.com/en-us/windows/deployment/mbr-to-gpt). Key facts from that page:
+If the firmware has to run in UEFI mode, the system disk needs GPT partitioning. Microsoft's tool for the conversion is `MBR2GPT`, described on Microsoft Learn's page [MBR2GPT.EXE](https://learn.microsoft.com/windows/deployment/mbr-to-gpt). Key facts from that page:
 
 - It converts a system disk from MBR to GPT without modifying or deleting the data on the disk.
 - `/validate` checks whether the disk is eligible without converting it. `/convert` validates and converts.
@@ -117,7 +117,7 @@ Microsoft's guidance for admins adds that devices don't upgrade automatically un
 
 Microsoft's page does not recommend installing Windows 11 on a device that doesn't meet the requirements. Guides online describe registry changes and modified install media that skip the checks. I won't walk through them: Microsoft doesn't support them, and I couldn't verify what they do to security updates on a Microsoft page. If you take that route anyway, you accept the risk, you need a full backup and you should expect to maintain the PC yourself.
 
-Microsoft's page [Windows 10 support has ended](https://support.microsoft.com/en-us/windows/deployment/updates-lifecycle/windows-10-support-has-ended-on-october-14-2025) describes the supported options:
+Microsoft's page [Windows 10 support has ended](https://support.microsoft.com/windows/deployment/updates-lifecycle/windows-10-support-has-ended-on-october-14-2025) describes the supported options:
 
 - **Consumer Extended Security Updates.** Microsoft says it protects Windows 10 devices until October 12, 2027.
 - **A new Windows 11 PC.** Microsoft mentions Copilot+ PCs as one option.
