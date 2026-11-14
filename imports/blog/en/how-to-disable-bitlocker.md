@@ -26,7 +26,7 @@ To disable BitLocker on the system drive, open PowerShell as administrator and r
 
 Two different actions both get called "disable", and mixing them up causes most of the trouble.
 
-**Suspending** protection pauses [BitLocker](https://www.m365.fm/entity/bitlocker/) for a while. The drive stays encrypted, and you can resume at any time. Microsoft recommends it before non-Microsoft software updates that change boot components, such as manufacturer firmware updates and TPM firmware updates. If you skip the suspend, Microsoft says the system won't recognize the BitLocker key, and you'll be asked for the recovery key at the next restart and at every restart after that.
+**Suspending** protection pauses [BitLocker](https://www.m365.fm/entity/bitlocker/) for a while. The drive stays encrypted, and you can resume at any time. Microsoft says you must use **Suspend protection** for non-Microsoft software updates such as computer manufacturer firmware updates, TPM firmware updates and non-Microsoft application updates that modify boot components. If you skip the suspend, Microsoft says the system won't recognize the BitLocker key, and you'll be asked for the recovery key at the next restart and at every restart after that.
 
 **Decrypting** is what the PowerShell and manage-bde commands do. It removes all key protectors and begins decrypting the volume. Microsoft's BitLocker operations guide gives a clear rule: decryption belongs to the case where protection is no longer required, and not to troubleshooting.
 
@@ -34,7 +34,7 @@ So ask yourself one question. Do you want the drive unprotected for good, or onl
 
 ## Suspend BitLocker for an update, then resume
 
-This takes a minute and avoids a recovery prompt. Microsoft documents both the Control Panel route and the PowerShell route.
+This takes a minute and avoids a recovery prompt. Microsoft documents both the Control Panel route and the PowerShell route. Note that the Control Panel can only suspend protection for the operating system drive, so use PowerShell for data drives.
 
 Control Panel:
 
@@ -69,15 +69,15 @@ Some variations from Microsoft's examples:
 
 You can read the details in Microsoft's [Disable-BitLocker](https://learn.microsoft.com/en-us/powershell/module/bitlocker/disable-bitlocker?view=windowsserver2025-ps) reference and the [manage-bde -off](https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/manage-bde-off) page.
 
-A note on the Settings app and Windows Home. Windows Home doesn't include BitLocker Drive Encryption. It has Device Encryption instead, which Windows turns on when you sign in with a Microsoft account or a work or school account, and you manage it in **Settings**, under **Privacy & security**, **Device encryption**. The Microsoft article I checked describes how to turn it on and doesn't document the steps for turning it off, so look at the toggle on your own device and read the text on the screen before you change it.
+A note on the Settings app and Windows Home. Microsoft lists BitLocker Drive Encryption for Windows Pro, Enterprise and Education, so Windows Home doesn't have it. It has Device Encryption instead, which Windows turns on when you sign in with a Microsoft account or a work or school account, and you manage it in **Settings**, under **Privacy & security**, **Device encryption**. Microsoft's Device Encryption article describes how to turn it on and doesn't document the steps for turning it off, so look at the toggle on your own device and read the text on the screen before you change it.
 
 ## Data drives, USB drives and turning BitLocker on again
 
-The commands work per volume, so the same steps apply to a data drive or a USB drive. The Control Panel applet lists three groups: **Operating system drive**, **Fixed data drives**, and **Removable data drives - BitLocker To Go**. With `manage-bde -off` you name the volume by drive letter followed by a colon, for example `manage-bde -off E:`. Microsoft also accepts a volume GUID path or a mounted volume there. Replace the letter with the one Explorer shows for your drive, and double-check it, because decrypting the wrong volume wastes time.
+The commands work per volume, so the same steps apply to a data drive or a USB drive. In the Control Panel, you can also select **Turn off BitLocker** for a drive and confirm the dialog to start decryption. The applet lists three groups: **Operating system drive**, **Fixed data drives**, and **Removable data drives - BitLocker To Go**. With `manage-bde -off` you name the volume by drive letter followed by a colon, for example `manage-bde -off E:`. Microsoft also accepts a volume GUID path or a mounted volume there. Replace the letter with the one Explorer shows for your drive, and double-check it, because decrypting the wrong volume wastes time.
 
 Decrypting a removable drive has one practical consequence. Once it's finished, anyone who plugs the stick into a PC can read the files, with no password. Decide first whether the data on it should stay protected.
 
-You can turn BitLocker on again later. Microsoft's support article for BitLocker Drive Encryption describes the path: open the applet, select **Turn on BitLocker** next to the drive, choose how the drive is protected and back up the recovery key. Encryption then runs in the background, and you can keep using the device while it finishes. Treat it as a new setup, not as a "resume". All earlier key protectors were removed when you decrypted, so the recovery key you saved before doesn't apply to the new encryption. Save the new key where you can reach it from another device, and check with the guidance on finding a [recovery key](https://support.microsoft.com/en-us/windows/find-your-bitlocker-recovery-key-6b71ad27-0b89-ea08-f143-056f5ab347d6) that the new key really appears in your account.
+You can turn BitLocker on again later. Microsoft's BitLocker operations guide describes the path: open the applet, select **Turn on BitLocker** for the drive, back up the recovery key and choose whether to encrypt used disk space only or the entire drive. Treat it as a new setup, not as a "resume". All earlier key protectors were removed when you decrypted, so the recovery key you saved before doesn't apply to the new encryption. Save the new key where you can reach it from another device, and check with the guidance on finding a [recovery key](https://support.microsoft.com/en-us/windows/find-your-bitlocker-recovery-key-6b71ad27-0b89-ea08-f143-056f5ab347d6) that the new key really appears in your account.
 
 ## Devices managed by your organization
 
@@ -107,3 +107,13 @@ One statement from the Intune article is worth remembering. If you delete the In
 ## Next step
 
 To disable BitLocker, decide first whether you need to suspend or to decrypt. Suspend for updates and repairs, and decrypt with `Disable-BitLocker` or `manage-bde -off` only when the drive no longer needs protection and policy allows it. Then check `Get-BitLockerVolume` until the volume reports that decryption has finished.
+
+## Sources
+
+- [Disable-BitLocker (Microsoft Learn)](https://learn.microsoft.com/powershell/module/bitlocker/disable-bitlocker)
+- [Suspend-BitLocker (Microsoft Learn)](https://learn.microsoft.com/powershell/module/bitlocker/suspend-bitlocker)
+- [manage-bde off (Microsoft Learn)](https://learn.microsoft.com/windows-server/administration/windows-commands/manage-bde-off)
+- [BitLocker operations guide (Microsoft Learn)](https://learn.microsoft.com/windows/security/operating-system-security/data-protection/bitlocker/operations-guide)
+- [Suspend BitLocker protection for non-Microsoft software updates (Microsoft Learn)](https://learn.microsoft.com/troubleshoot/windows-client/windows-security/suspend-bitlocker-protection-non-microsoft-updates)
+- [Device Encryption in Windows (Microsoft Support)](https://support.microsoft.com/windows/security/encryption/device-encryption-in-windows)
+- [Encrypt Windows devices with Intune (Microsoft Learn)](https://learn.microsoft.com/intune/intune-service/protect/encrypt-devices)
