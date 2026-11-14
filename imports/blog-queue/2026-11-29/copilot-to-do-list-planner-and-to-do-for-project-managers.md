@@ -42,13 +42,13 @@ What Microsoft says you can do:
 Prompts taken from Microsoft's pages:
 
 - "Show my tasks and help me prioritize what needs attention."
-- "Which shared plans need attention?"
+- "Move the tasks to the Product Readiness plan."
 - "Review my emails and draft private tasks for urgent follow-ups."
-- "Create a marketing plan for the product launch."
+- "Create a status report for [plan] for the last 14 days." (from the Planner Agent page in Copilot)
 - "Generate a project plan from this PowerPoint."
 - "Adjust the deadline for the Marketing task and change the priority to Important."
 
-**Limit:** task editing currently supports only name, progress, due date, start date, priority and plan name. Status reports in this experience support shared basic plans only, and premium plans aren't currently supported there.
+**Limit:** task editing currently supports only name, progress, due date, start date, priority and plan name. The Planner Agent page for Copilot adds that status reports requested there support shared basic plans only, and that premium plans aren't currently supported. The Planner capabilities page itself does not mention status reports.
 
 Message Center item MC1443523 says the Planner capabilities in Copilot chat were planned for general availability worldwide from early September 2026, on desktop and web, with existing Planner permissions still applying and no admin action required.
 
@@ -78,7 +78,7 @@ The Planner Agent is built into the plan. Microsoft Support lists these steps.
 5. Select **Generate report**. It opens in a Loop canvas.
 6. Select **Keep it** or **Discard**. You can also share it as a newsletter.
 
-Microsoft's example request: "Create a comprehensive update on high-priority items for the leadership team." Loop files the agent creates are stored in the SharePoint site of the plan's group. Microsoft says to review reports for accuracy before sharing.
+Loop files the agent creates, including reports, are stored in the SharePoint site of the plan's Microsoft 365 Group. For reports requested in Copilot chat, Microsoft says to check them for accuracy before sharing.
 
 ## Option 3: OneNote and files
 
