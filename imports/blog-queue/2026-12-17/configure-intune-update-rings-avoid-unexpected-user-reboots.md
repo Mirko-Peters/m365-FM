@@ -10,7 +10,7 @@ keypoints:
   - "Automatic update behavior sets who controls the restart. Some options restart without end-user control, and Reset to default lets Windows choose active hours."
   - "With deadlines, the effective deadline is the later of scan discovery plus the deadline or restart-required time plus the grace period."
   - "Once the effective deadline passes, the device is forced to restart regardless of active hours."
-  - "Auto reboot before deadline set to Yes restarts outside active hours. Set to No, the restart waits for the deadline and grace period and can fall in working hours."
+  - "Auto reboot before deadline set to Yes lets the device try to restart outside active hours. Set to No, the restart waits for the deadline and grace period and can fall in active hours."
   - "Maintenance windows exist for Windows 11 24H2 and later, but Learn recommends configuring either maintenance windows or deadlines, not both."
 faq:
   - q: "Why did a device restart while the user was working?"
@@ -25,7 +25,7 @@ faq:
     a: "Microsoft Learn says it does not break the update process but adds confusion. Expired deadlines are the only case in which update settings force actions outside a maintenance window. Learn generally recommends configuring one or the other."
 ---
 
-Unexpected restarts after Windows updates almost always trace back to three settings groups on the update ring: **Automatic update behavior**, the **deadline** settings and the **active hours** that apply to them. Microsoft Learn is clear about the final rule. When the effective deadline has passed, the device is forced to restart regardless of active hours. The aim is therefore to let the device restart on its own before that point, or to give users enough time.
+Restarts after Windows updates are governed mainly by three settings groups on the update ring: **Automatic update behavior**, the **deadline** settings and the **active hours** that apply to them. Microsoft Learn is clear about the final rule. When the effective deadline has passed, the device is forced to restart regardless of active hours. The aim is therefore to let the device restart on its own before that point, or to give users enough time.
 
 ## Know the restart paths
 
@@ -42,24 +42,26 @@ An update ring offers these options for **Automatic update behavior**, as Learn 
 
 The two options that rely on active hours use **Active hours start** and **Active hours end** to suppress restarts caused by update installation.
 
-For most user devices, **Reset to default** is the least surprising choice, because Windows works out the active hours. Learn notes that some other options can restart a device automatically after installation.
+My own recommendation for most user devices is **Reset to default**, because Windows works out the active hours. Learn notes that the maintenance-time options can restart a device automatically after installation. It does not say how these Intune options map to the Configure Automatic Updates policy that the deadline page refers to.
 
 ## Set deadlines deliberately
 
-Under **Use deadline settings**, choose **Allow** to configure these values:
+The settings reference has separate **Use deadline settings** entries for quality updates and for feature updates, each with its own grace period and **Auto reboot before deadline**. The values are:
 
 | Setting | Range |
 |---|---|
-| Deadline for feature updates | 2 to 30 days |
-| Deadline for quality updates | 2 to 30 days |
+| Deadline for feature updates | 0 to 30 days |
+| Deadline for quality updates | 0 to 30 days |
 | Grace period | 0 to 7 days |
 | Auto reboot before deadline | Yes or No |
 
-The Windows documentation explains how they combine. The deadline is based on when the client first discovered the update through a scan. The grace period starts from the pending restart after installation is complete. The effective deadline is the later of the two. Before it, the user can schedule a restart, and Windows can restart outside active hours. After it, the device is forced to restart regardless of active hours.
+For quality updates, the settings reference suggests a deadline of 0 or 1 days and a grace period of 1 or 2 days. It also says to keep the quality update deferral under three days so that devices stay secure.
 
-Set **Auto reboot before deadline** to **Yes**. Learn recommends it because the system then restarts when the user is not using the device. With **No**, the restart waits for the deadline and grace period and could occur during active hours.
+The Windows deadline documentation explains how the values combine for Windows 11, version 22H2 and later. It describes Windows 10, version 22H2 differently. The deadline is based on when the client first discovered the update through a scan. The grace period starts from the pending restart after installation is complete. The effective deadline is the later of the two. Before it, the user can schedule a restart, and Windows can restart outside active hours. After it, the device is forced to restart regardless of active hours.
 
-Use a grace period that matches how people work. Learn says the grace period is helpful for users returning from time away, because it prevents an immediate forced restart when they come back. Note that short deadline and grace values raise the risk that users miss the notifications.
+Set **Auto reboot before deadline** to **Yes**. The feature update entry calls it the recommended value, and both entries say it lets the system reboot when the user is not using the device. With **No**, the restart waits for the deadline and grace period and could occur during active hours.
+
+Use a grace period that matches how people work (my own advice). Learn says the grace period is helpful for users returning from time away, because it prevents an immediate forced restart when they come back. Note that short deadline and grace values raise the risk that users miss the notifications.
 
 ## Understand what the user sees
 
@@ -70,14 +72,14 @@ Learn describes the default experience on Windows 11 version 23H2 and later:
 - A scheduled restart triggers a notification 15 minutes before it happens.
 - After the effective deadline, the user has 15 minutes to choose restart before the device is forced to restart.
 
-The **Change notification Update level** setting only controls notifications, not when updates install. Learn lists the option to turn off all notifications including restart warnings. Avoid it, since it removes the warning users rely on before a restart.
+The **Change notification Update level** setting only controls notifications, not when updates install. Learn lists the option to turn off all notifications including restart warnings. My own advice: avoid it, since it removes the warning users rely on before a restart.
 
 ## Check interactions that surprise admins
 
-- When a deadline policy is set, updates download and install as soon as they are offered, and the deadline policy ignores restart settings from **Configure Automatic Updates**. Learn notes that since the December 10, 2024 update for Windows 11 22H2 and later, Configure Automatic Updates is respected before the deadline and ignored after it.
-- **Restart checks** set to **Skip** is meant for education devices that stay in carts overnight. It causes devices to reboot immediately after installation, and it is not designed for 1:1 devices. It is no longer offered for new policies.
-- Pausing: **Option to pause Windows updates** lets users pause. A pause from an update ring runs up to 35 days.
-- The quality update **deferral** (0 to 30 days) is an additional delay. Learn notes that the deadline calculation is based on the time the client's scan first discovered the update, so check both values together.
+- When a deadline policy is set, updates download and install as soon as they are offered, and the deadline policy ignores download, installation and restart settings from **Configure Automatic Updates**. Learn notes that since the December 10, 2024 update for Windows 11 22H2 and later, Configure Automatic Updates is respected before the deadline and ignored after it.
+- **Restart checks** set to **Skip** is meant for education devices that stay in carts overnight. It causes devices to reboot immediately after installation, and it is not designed for 1:1 devices. It is not available when you create new policies, and Learn points to the settings catalog if you still need it.
+- Pausing: **Option to pause Windows updates** lets device users pause installation for a number of days. The pages I read do not give that length. The admin **Pause** action on the ring is separate and blocks feature or quality updates for up to 35 days.
+- The quality update **deferral** (0 to 30 days) is an additional delay. Learn notes that the deadline calculation is based on the time the client's scan first discovered the update, and advises keeping the quality update deferral under three days, so check both values together.
 
 ## Consider a maintenance window
 
@@ -89,7 +91,7 @@ Learn generally recommends configuring either maintenance windows or deadlines, 
 
 1. Assign rings to device groups. Intune's tip is that device groups remove the need for a sign-in before the policy applies.
 2. Choose **Reset to default** for **Automatic update behavior** on user devices.
-3. Enable **Use deadline settings** with a deadline, a grace period of several days and **Auto reboot before deadline** set to **Yes**.
+3. Enable **Use deadline settings** with a deadline and a grace period, and **Auto reboot before deadline** set to **Yes**. Learn suggests 0 or 1 days for the quality update deadline and 1 or 2 days for the grace period. Longer values give users more time but delay compliance (my own trade-off note).
 4. Leave notifications on.
 5. Pilot with a small ring, then roll out.
 
