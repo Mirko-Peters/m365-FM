@@ -9,12 +9,12 @@ topics: [power-platform, power-apps, dataverse, pl-400]
 keypoints:
   - "Per the exam page, PL-400 registration closed on October 16, 2026 and registration opened exclusively for AB-400; PL-400 could be scheduled and taken through October 30, 2026."
   - "AB-400 weights are: Build Microsoft Power Platform solutions 15-20%, Extend the user experience 25-30%, Extend Microsoft Power Platform 35-40%, Develop integrations 10-15%."
-  - "New objectives include Power Apps code apps and building Microsoft Foundry agents with code that integrates with Power Platform."
-  - "The study guide change log marks several PL-400 areas as removed, including advanced canvas apps features and optimizing and troubleshooting apps."
+  - "The outline includes areas for building and deploying Power Apps code apps and for building Microsoft Foundry agents with code that integrates with Power Platform."
+  - "The old PL-400 exam page listed six skill areas, including a technical design area and a Dataverse area; AB-400 has four, and the PL-400 page now says the exam was retired on October 30, 2026."
   - "The exam page lists no retirement date for AB-400, and a score of 700 or greater is required to pass."
 faq:
   - q: "Is PL-400 still available?"
-    a: "No, as of 14 November 2026. The AB-400 exam page says registration for PL-400 closed on October 16, 2026, and that learners registered by then could schedule and take it through October 30, 2026. Both dates have passed."
+    a: "No. The AB-400 exam page says registration for PL-400 closed on October 16, 2026, and that learners registered by then could schedule and take it through October 30, 2026. The PL-400 exam page now says the exam was retired on October 30, 2026, at 11:59 PM Central Standard Time. Both dates have passed."
   - q: "What is AB-400 called?"
     a: "The exam page title is AB-400: Power Platform Developer Associate. The study guide calls it Extending Microsoft Power Platform Solutions with Code and AI."
   - q: "Which area is weighted highest?"
@@ -22,10 +22,10 @@ faq:
   - q: "What is the pass score?"
     a: "The study guide says a score of 700 or greater is required to pass."
   - q: "Are there Learn training modules for AB-400?"
-    a: "At the time I read the exam page, it said learning paths or modules were not yet available for this certification and that no instructor-led courses were available. Check the page for current status."
+    a: "The exam page says learning paths or modules are not yet available for this certification and that no instructor-led courses are currently available. Check the page for current status."
 ---
 
-AB-400 is the exam for the Power Platform Developer Associate certification, and it replaced PL-400. The AB-400 exam page says that on October 16, 2026 registration for PL-400 closed and registration opened exclusively for AB-400, and that learners who registered for PL-400 by then could schedule and take it through October 30, 2026. As of today, 14 November 2026, both dates are past, so PL-400 can no longer be taken. This article covers only the skills measured, from Microsoft's exam page and study guide, and no exam questions.
+AB-400 is the exam for the Power Platform Developer Associate certification, and it replaced PL-400. The AB-400 exam page says that on October 16, 2026 registration for PL-400 closed and registration opened exclusively for AB-400, and that learners who registered for PL-400 by then could schedule and take it through October 30, 2026. Both dates are now past, and the PL-400 exam page says the exam was retired on October 30, 2026, so PL-400 can no longer be taken. This article covers only the skills measured, from Microsoft's exam page and study guide, and no exam questions.
 
 ## Exam status
 
@@ -33,7 +33,7 @@ AB-400 is the exam for the Power Platform Developer Associate certification, and
 - The exam is part of the requirements for Microsoft Certified: Power Platform Developer Associate.
 - Language listed: English. The page shows a retirement date of none.
 - The study guide says a score of 700 or greater is required to pass. It also says associate certifications expire annually and can be renewed by passing a free online assessment on Microsoft Learn.
-- Learning paths and modules were listed as not yet available, with no instructor-led courses, when I read the page.
+- Learning paths and modules are listed as not yet available, with no instructor-led courses currently available.
 
 ## Who the exam is for
 
@@ -79,7 +79,7 @@ The study guide notes that the bullets under each skill illustrate how the skill
 
 ## What changed from PL-400
 
-The study guide's change log compares the skill areas before and after October 16, 2026. Areas marked **Removed** include creating a technical design, configuring and troubleshooting Power Platform, implementing Power Apps improvements, advanced canvas apps features, and optimizing and troubleshooting apps. **New** areas are building Power Apps code apps, deploying and managing code apps, and building Microsoft Foundry agents with code that integrates with Power Platform. The percentages increased for the build, user experience and extend areas, with no percentage change for integrations. Custom connectors moved into the integrations area, and several areas are marked Major or Minor changes.
+The old PL-400 exam page listed six assessed areas: create a technical design (10-15%), configure Microsoft Dataverse (15-20%), create and configure Power Apps (10-15%), extend the user experience (10-15%), extend the platform (35-40%) and develop integrations (5-10%). AB-400 has four areas, and its outline adds areas for building Power Apps code apps, deploying and managing code apps, and building Microsoft Foundry agents with code that integrates with Power Platform. The study guide as published now has no change log table, so this article does not compare individual objectives.
 
 ## How to use the outline
 
@@ -88,7 +88,7 @@ This section is my advice, not a Microsoft statement.
 1. **Weight your time by the percentages.** The extend area is up to 40 percent, so plug-ins and platform APIs repay the most practice.
 2. **Treat the new areas as new.** If you prepared for PL-400 before, code apps and Foundry agents are the areas where old material helps least.
 3. **Practice with real components.** Build a plug-in, a PCF component and a custom connector in a trial environment, since the outline is made of tasks.
-4. **Read the study guide itself** for the exact wording of each bullet and for updates, since I summarised it.
+4. **Read the study guide itself** for the exact wording of each bullet and for updates, since this article summarises it.
 5. **Check the exam page before booking** for current language, price and learning resources, because those change.
 
 ## Related
@@ -102,3 +102,4 @@ This section is my advice, not a Microsoft statement.
 
 - [AB-400: Power Platform Developer Associate - Certifications (Microsoft Learn)](https://learn.microsoft.com/credentials/certifications/exams/ab-400/)
 - [Study guide for Exam AB-400: Extending Microsoft Power Platform Solutions with Code and AI (Microsoft Learn)](https://learn.microsoft.com/credentials/certifications/resources/study-guides/ab-400)
+- [Exam PL-400: Microsoft Power Platform Developer - Certifications (Microsoft Learn)](https://learn.microsoft.com/credentials/certifications/exams/pl-400/)
