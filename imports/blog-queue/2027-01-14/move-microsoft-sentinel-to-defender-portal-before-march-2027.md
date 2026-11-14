@@ -88,7 +88,7 @@ Learn says the unified incident queue consolidates incidents across products, so
 - Workbooks continue to work, and the similar incidents preview is not supported in the Defender portal.
 - Editing existing incident comments is not supported in the Defender portal, and incidents created through the API, a Logic App playbook or manually in the Azure portal are not synchronized to the Defender portal.
 
-## A checklist from my own experience
+## A checklist for your transition
 
 This section is my advice, not a Microsoft statement.
 
