@@ -82,7 +82,7 @@ Both ideas are good for other reasons. But only the second one moves the ratio, 
 
 ## How do you read the result?
 
-Do not expect a high number on the first map. The LEI lexicon says processing time is typically a small fraction of lead time, and the arithmetic above shows why. A queue of a few days dwarfs seconds of work. One commenter on the Gemba Academy post reports from his own experience that first current state maps often show about 1 percent or less. AccountingTools gives a plastics-case example in which about 6 of 168 hours add value, which is 3.6 percent. These are single cases, not benchmarks. Take such figures with caution. None of the sources I checked gave a firm benchmark.
+Do not expect a high number on the first map. The LEI lexicon says processing time is typically a small fraction of lead time, and the arithmetic above shows why. A queue of a few days dwarfs seconds of work. One commenter on the Gemba Academy post reports from his own experience that first current state maps often show about 1 percent or less. AccountingTools gives a plastics-case example with 6 hours of value-added time and 168 hours (one week) of non-value-added time. That is 6 of 174 hours, or about 3.4 percent; the page itself divides by 168 and reports 3.6 percent, so check the total before you copy the example. These are single cases, not benchmarks. Take such figures with caution. None of the sources I checked gave a firm benchmark.
 
 A better use of the ratio is direction. Calculate it on the current state map, then again on the future state map and after each improvement. Use it to analyze where the time goes, and treat it as one signal next to others, such as lead time in days, stock and on-time delivery. The ratio can also mislead. Adding more value-added work to a step raises the ratio but may not help the customer, so always read it together with lead time.
 
@@ -112,3 +112,10 @@ Counting stock and times by hand takes days, and the numbers age fast. [iFAKT's 
 ## Next step
 
 Take one product family and calculate its value added ratio on paper: list the steps, split each into value-added and non-value-added time, and add the waiting time from stock and daily demand. Then write down your definition of each input, so you can calculate the same value added ratio again after your next improvement.
+
+## Sources
+
+- [Cycle Time - Lean Enterprise Institute (Lean Lexicon)](https://www.lean.org/lexicon-terms/cycle-time/)
+- [Value added ratio definition - AccountingTools](https://accountingtools.com/articles/value-added-ratio)
+- [Optimize your Processes with Process Cycle Efficiency - SixSigma.us](https://www.6sigma.us/business-process-management-articles/process-cycle-efficiency/)
+- [Value Added Percentage Question - Gemba Academy](https://blog.gembaacademy.com/?p=11459)
