@@ -59,7 +59,7 @@ Three terms help:
 
 Microsoft Support lists several entry points:
 
-- **View more apps** on the left side of Teams, search for "Workflows" and select **Add**. Right-click the app and select **Pin** to keep it visible.
+- **View more apps** on the left side of Teams, search for "Workflows" and select **Add**. You can pin the app to keep it easy to reach.
 - **More options** next to a chat or channel name, then **Workflows**.
 - **More options** next to a message, then **More actions** > **Create new action**.
 - **Actions and apps** next to the compose box, then **Workflows**.
@@ -73,7 +73,7 @@ If you do not see it, your organization may not have enabled it. Microsoft Learn
 3. Follow the prompts and fill in the required fields. Learn describes setting up connections, where a green check indicates successful authentication.
 4. Select **Save** to activate the workflow.
 
-The Workflows app shows Teams-relevant templates by default. Filters at the top right show all Power Automate templates.
+Microsoft Learn also describes a slightly different template flow in which you name the flow, sign in to the connectors it uses, provide the required parameters and select **Add workflow**.
 
 ## Create a workflow from a message
 
