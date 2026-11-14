@@ -22,15 +22,17 @@ faq:
   - q: "How do I assign a phone number to a user?"
     a: "In the Teams admin center, go to Voice, then Phone numbers, select an unassigned number and Edit, search for the user under Assigned to, choose an emergency location and select Save. Microsoft Learn also names the Set-CsPhoneNumberAssignment PowerShell cmdlet and says enablement can take up to 24 hours."
 ---
-Teams Phone is Microsoft's cloud telephony solution inside Teams. It lets people make and receive phone calls in the Teams app on a computer, mobile device or dedicated Teams Phone device. Using it for external calls takes two things: Teams Phone licenses for users and a connection to the public telephone network (PSTN) for your organization.
+Teams Phone is Microsoft's cloud phone system, a cloud telephony solution for business calling inside Teams. It lets people make and receive phone calls in the Teams app on a computer, mobile device or dedicated Teams Phone device. Using it for external calls takes two things: Teams Phone licenses for users and a connection to the public telephone network (PSTN) for your organization.
 
 ## What Teams Phone includes
 
-Microsoft Learn describes a complete calling solution that works with chat, video meetings and file sharing. Calls can be routed by availability and preferences, voicemail is accessible in Teams and dynamic emergency calling is supported. Calls between Teams users work for everyone licensed for Teams, so a phone license is about reaching and being reached by outside numbers.
+Microsoft Learn describes a complete calling solution. Teams Phone works with chat, video meetings and file sharing, so the phone functionality in Teams sits next to the rest of your Microsoft 365 apps. Calls can be routed by availability and preferences, voicemail is accessible in Teams and dynamic emergency calling is supported. Microsoft Teams calling between Teams users works for everyone licensed for Teams, so a phone license is about reaching and being reached by outside numbers.
+
+The same overview describes how this looks for users. With Calling Plans, a user can transfer calls, hold calls and forward calls to another number or to voicemail, and can read voicemail transcripts in the Teams app. Calling Plans also include a minute package for outbound calls to domestic and international destinations. With Teams Phone Mobile, the number of a SIM-enabled mobile phone also becomes the user's Teams phone number, so one business number works in the phone's native dialer and on Teams endpoints such as a desk phone, a laptop or a mobile device. Microsoft adds that a user can move an active call from the mobile dialer to the Teams app on the same device without dropping it. Direct Routing, by contrast, lets an organization keep using its existing PSTN infrastructure.
 
 ## Licenses
 
-Users who need their own phone number need licensing that includes Microsoft Teams and the Microsoft 365 Phone System. Microsoft Learn gives these examples:
+Teams Phone licensing builds on Microsoft 365 licensing. Users who use Teams for calls and need their own phone number need licensing that includes Microsoft Teams and the Microsoft 365 Phone System. Microsoft Learn gives these examples:
 
 - Microsoft Teams Enterprise plus Microsoft 365 E5 (no Teams), which includes the Phone System.
 - Microsoft Teams Enterprise plus Microsoft Teams Phone Standard.
@@ -39,7 +41,7 @@ Users who need their own phone number need licensing that includes Microsoft Tea
 
 The add-on licenses need prerequisites. Teams Phone Standard requires, among others, Microsoft 365 Business Basic, Standard or Premium, F1, F3, E3 or A3, Microsoft Teams Enterprise or Teams Essentials. Microsoft Teams Phone with Calling Plan is a bundle with a similar prerequisite list. Resource accounts for auto attendants and call queues use a separate Microsoft Teams Phone Resource Account license, which Learn says must not be assigned to other users. Shared devices such as common area phones use the Microsoft Teams Shared Device license.
 
-Licensing alone does not give you numbers. Microsoft Learn says plainly that a PSTN solution is separate from a Teams Phone license and provides phone numbers and access to domestic, international and emergency calling.
+Licensing alone does not give you numbers. Microsoft Learn says plainly that a PSTN solution is separate from a Teams Phone license and provides phone numbers and access to domestic, international and emergency calling. International calling therefore depends on the PSTN option you choose, not on the license alone, and Teams phone pricing depends on both parts, the license and the PSTN solution.
 
 ## The four calling options
 
@@ -49,7 +51,7 @@ Microsoft Learn's PSTN connectivity article compares four models.
 |---|---|---|---|
 | Microsoft Calling Plan | Microsoft | A Calling Plan license | Fully Microsoft-managed, simplest deployment |
 | Operator Connect | A certified operator | A contract with that operator | Working with a participating provider while managing users and numbers in Teams |
-| Teams Phone Mobile | A certified mobile operator | A contract with that operator | Mobile-first staff who want one number across Teams and the mobile device |
+| Teams Phone Mobile | A certified mobile operator | A contract with that operator | Mobile-first staff who want one number across Teams and their mobile phone |
 | Direct Routing | Any PSTN operator | A certified session border controller (SBC) and a provider contract | Advanced integration, existing infrastructure or maximum flexibility |
 
 Calling Plans are available only in select countries or regions. Teams Phone Mobile supports only user numbers, not Audio Conferencing or voice application numbers. The other three support all number types. You can mix options in one tenant, for example Calling Plans with Shared Calling for everyone and Teams Phone Mobile, Operator Connect or Direct Routing for specific groups. Shared Calling lets users make calls without their own phone number, and needs only a Teams Phone license.
@@ -63,7 +65,7 @@ Microsoft's Set up Teams Phone article gives this sequence:
 3. **Get and assign numbers** for users and for services such as auto attendants and call queues.
 4. **Set up emergency calling.** You or your carrier must define emergency locations and make sure each user has one.
 5. **Optional:** set up an auto attendant and call queues.
-6. **Configure other features** such as voicemail, caller ID, call forwarding and calling policies.
+6. **Configure other features** such as voicemail, caller ID, call forwarding and calling policies, which are the everyday calling features users notice.
 7. **Manage the deployment,** including devices and call quality.
 
 ## Assign a number to a user
@@ -72,7 +74,7 @@ In the Teams admin center, select **Voice**, then **Phone numbers**. Select an u
 
 ## Which option should you pick?
 
-Microsoft's PSTN article gives its guidance in the "ideal for" row of the comparison, and it names the factors to weigh: how you want to manage telephony, whether you already have a provider, how your users make calls and what infrastructure you already run. If you want the simplest deployment and Calling Plans are sold in your country, the Microsoft Calling Plan is the straightforward route. If you already have a carrier in the Operator Connect or Teams Phone Mobile programs, that carrier can manage PSTN calling for you. If you must keep your own carrier and equipment, Direct Routing is the option that connects your session border controllers. For all four, Microsoft says to verify Teams Phone licenses first, choose an option and then follow that option's deployment guide.
+Microsoft's PSTN article gives its guidance in the "ideal for" row of the comparison, and it names the factors to weigh: how you want to manage telephony, whether you already have a provider, how your users make calls and what infrastructure you already run. If you want the simplest deployment and Calling Plans are sold in your country, the Microsoft Calling Plan is the straightforward route. If you already have a carrier in the Operator Connect or Teams Phone Mobile programs, that carrier can manage PSTN calling for you. If you must keep your own carrier and equipment, Direct Routing is the option that connects your session border controllers. For all four, Microsoft says to verify Teams Phone licenses first, choose an option and then follow that option's Teams Phone deployment guide.
 
 ## Common mistakes
 
