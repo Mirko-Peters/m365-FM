@@ -33,7 +33,7 @@ The right Power BI license model depends on who creates content, who only views 
 | --- | --- | --- |
 | F capacity | Compute for all Fabric experiences, including lakehouses, warehouses, notebooks and pipelines. Recommended for Fabric. Billed through Azure per second, one-minute minimum. | Creators need a per-user license. Free users can view Power BI content only on F64 or larger. |
 | P capacity | Power BI Premium and Fabric items once Fabric is enabled. Only for customers with an active Enterprise Agreement, billed monthly or yearly. | Viewers need a Fabric (Free) license with a viewer role. Other roles need Pro or PPU, or an individual trial. |
-| Pro | Share Power BI content and collaborate on reports, dashboards and scorecards. | At least one user if the organization uses Power BI within Fabric. |
+| Pro | Share Power BI content and collaborate on reports, dashboards and scorecards. | At least one user with Pro or PPU if the organization uses Power BI within Fabric. |
 | Premium Per User | Most Premium features per user, including dataflows, datamarts, 48 refreshes per day, semantic models over 1 GB and the XMLA endpoint. | Per user. Does not provision a Fabric capacity. |
 | Free | Granted on first Fabric sign-in if Fabric is enabled. Lets users create and share non-Power BI Fabric items in F or Trial capacity workspaces. | Automatic |
 | Trial | 60 days with 64 CUs, equivalent to F64. | A Fabric (Free) license |
@@ -74,7 +74,7 @@ F capacity pricing is regional, billed per second with a one-minute minimum, wit
 
 ## How to choose
 
-This approach is a suggestion built from the table, not a Microsoft recommendation.
+This approach is my advice, built from the table, not a Microsoft recommendation.
 
 1. If you need only Power BI and have few creators, compare Pro with PPU. The page says PPU is more cost effective when Premium features are needed for fewer than 250 users.
 2. If you have many viewers, consider an F64 or larger capacity, because Free users can then view Power BI content. You still need per-user licenses for creators.
@@ -93,4 +93,4 @@ The page does not give prices, the size of reservation savings, retirement dates
 
 ## Sources
 
-- [Microsoft Fabric licenses](https://learn.microsoft.com/fabric/enterprise/licenses)
+- [Understand Microsoft Fabric licenses and capacity (Microsoft Learn)](https://learn.microsoft.com/fabric/enterprise/licenses)
