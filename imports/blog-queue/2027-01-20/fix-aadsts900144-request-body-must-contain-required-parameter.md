@@ -14,7 +14,7 @@ keypoints:
   - "Learn says invalid_request, a protocol error such as a missing required parameter, is fixed by correcting the request or app registration and resubmitting."
 faq:
   - q: "What does AADSTS900144 mean?"
-    a: "The Microsoft Entra error code reference says the request body must contain the parameter named in the message, and calls it a developer error: the app is attempting to sign in without the necessary or correct authentication parameters. End users cannot fix it, and the app code or its configuration has to change."
+    a: "The Microsoft Entra error code reference says the request body must contain the parameter named in the message, and calls it a developer error: the app is attempting to sign in without the necessary or correct authentication parameters. That points to the app's code or configuration rather than the user's account (my reading)."
   - q: "Which parameters are required when redeeming an authorization code?"
     a: "According to the authorization code flow article on Microsoft Learn, the token request needs tenant in the path, client_id, code, redirect_uri and grant_type set to authorization_code. client_secret is required for confidential web apps, and code_verifier is required if PKCE was used in the authorization request."
   - q: "Which parameters are required for a refresh token request?"
@@ -71,7 +71,7 @@ The refresh request goes to the same endpoint. Learn lists these parameters:
 - `client_secret` is required for web apps.
 - `scope` is optional. If given, it must be equivalent to or a subset of the scopes in the original request.
 
-A common slip, in my experience, is reusing the code request and only changing `grant_type`, which leaves `code` and `redirect_uri` in and `refresh_token` out. Build each request from its own table.
+My advice: do not reuse the code request and only change `grant_type`, because that leaves `code` and `redirect_uri` in and `refresh_token` out. Build each request from its own table.
 
 ## Check the authorization request when sign-in fails earlier
 
@@ -90,7 +90,7 @@ This list is my suggestion, not a Microsoft procedure:
 
 ## When it is not your own code
 
-If the failing request comes from a third-party application, the person who owns it must fix it. The error reference calls this a developer error, so an admin can only report the exact message, the correlation ID and the time to the vendor. I did not find a tenant-side setting on the pages I read that removes this error.
+If the failing request comes from a third-party application, the person who owns it must fix it. The error reference calls this a developer error and gives no tenant-side remedy for this code. My advice: report the exact message, the correlation ID and the time to the vendor.
 
 ## Related
 
