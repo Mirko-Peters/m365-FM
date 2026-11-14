@@ -1,6 +1,6 @@
 ---
 title: "Configure Start VM on Connect for Azure Virtual Desktop"
-summary: "Start VM on Connect powers on deallocated session hosts when a user connects, so you pay for compute only when needed. Prerequisites, the Power On Contributor role and its scope, enabling it in the portal, PowerShell or CLI, pooled versus personal behavior and troubleshooting."
+summary: "Start VM on Connect powers on deallocated session hosts when a user connects, so you can keep them off when they are not needed. Prerequisites, the Power On Contributor role and its scope, enabling it in the portal, PowerShell or CLI, pooled versus personal behavior and troubleshooting."
 status: review
 publish: false
 author: mirko-p
