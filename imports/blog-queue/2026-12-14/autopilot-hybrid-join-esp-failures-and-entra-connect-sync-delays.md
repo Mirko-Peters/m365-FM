@@ -87,7 +87,7 @@ The Autopilot known issues page lists these hybrid items:
 | Quality updates time out during OOBE when Allow OOBE Updates is set in the ESP profile | Resolved in KB5079473 and later |
 | Duplicate device objects in Entra ID | By design: a device object is precreated at registration, and hybrid deployment creates another |
 | Hybrid compliance state shows N/A until a user signs in | Described as expected, a user must sign in |
-| Users don't get administrator rights in user-driven hybrid deployments | No fix stated |
+| Users don't get administrator rights in user-driven hybrid deployments | Occurs when another user on the device already has Administrator rights, for example a local account created by a script or policy. The page says not to create another account until Autopilot is complete |
 
 The page also notes that clock skew can make provisioning fail. The workaround is `w32tm /resync /force`.
 
