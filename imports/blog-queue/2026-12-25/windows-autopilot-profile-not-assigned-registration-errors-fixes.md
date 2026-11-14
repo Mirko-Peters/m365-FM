@@ -39,9 +39,9 @@ When a Windows Autopilot device gets no profile or fails registration, the Windo
 - **Error 0x80180014** on re-enrollment has two causes:
   1. Intune changed the self-deploying and pre-provisioning experience, so the device record must be cleared. In the Intune admin center go to **Devices** > **Windows** > **Enrollment** > **Devices**, select the device and choose **Unblock device**. A success message might not appear, but the device is ready. Then redeploy the profile.
   2. Windows MDM enrollment is blocked. Set **Windows (MDM)** to **Allow** in enrollment restrictions.
-- **Hardware change:** the device might show **Fix pending** or **Attention required**. Deregister and re-register it.
+- **Hardware change:** the profile is not applied if a hardware change occurs and the device is reimaged to a Windows version before Windows 11 21H2 with KB5017383 or before Windows 10 22H2. The page calls this expected. The device might also show **Fix pending** or **Attention required**, and the fix is to deregister and re-register it.
 - **Join type shows Microsoft Entra registered:** delete the Intune, Microsoft Entra ID and Windows Autopilot objects, then re-register and re-enroll.
-- **Error 80180018:** follow the linked Intune enrollment troubleshooting guide. Common causes named are incorrect or missing user licenses and too many devices enrolled for the user. The default device limit is 50 and can be configured in Microsoft Entra ID.
+- **Error 80180018:** follow the linked Intune enrollment troubleshooting guide. Common causes named are incorrect or missing licenses assigned to the user and too many devices enrolled for the user. In a separate section about Microsoft Entra join, the FAQ gives 50 devices as the default join limit, configurable in Microsoft Entra ID.
 
 ## Quick reference
 
@@ -88,4 +88,4 @@ The page does not cover a device stuck at Assigning profile, group tags, dynamic
 
 ## Sources
 
-- [Windows Autopilot troubleshooting FAQ](https://learn.microsoft.com/autopilot/troubleshooting-faq)
+- [Windows Autopilot Troubleshooting FAQ (Microsoft Learn)](https://learn.microsoft.com/autopilot/troubleshooting-faq)
