@@ -11,7 +11,7 @@ keypoints:
   - "Three areas, each weighted 30 to 35 percent: implement and manage an analytics solution, ingest and transform data, monitor and optimize an analytics solution."
   - "The passing score is 700. Most questions cover generally available features, and preview features may appear."
   - "Localized exams follow about eight weeks after English, and the guide adds 30 minutes if the exam is not available in your language."
-  - "The study guide page shows a footer date only and no as-of date or change log, so check the page for the current outline."
+  - "The study guide page shows no as-of date and no change log, so check the page for the current outline."
 faq:
   - q: "What are the skill areas and weights?"
     a: "Implement and manage an analytics solution (30 to 35 percent), ingest and transform data (30 to 35 percent), and monitor and optimize an analytics solution (30 to 35 percent)."
@@ -25,7 +25,7 @@ faq:
     a: "The guide points to a new Practice Assessment on AI Skills Navigator at aka.ms/DP700-PA and says the legacy practice assessment is no longer updated."
 ---
 
-DP-700 is the Microsoft Fabric Data Engineer exam. This guide summarizes the outline in the Microsoft Learn study guide and turns it into a study plan. It contains no exam questions. The study guide page carries a footer date of 2026-10-30 but no as-of date or change log, so check the page itself for the current outline.
+DP-700 is the Microsoft Fabric Data Engineer exam. This guide summarizes the outline in the Microsoft Learn study guide and turns it into a study plan. It contains no exam questions. The study guide page shows no as-of date and no change log, so check the page itself for the current outline.
 
 ## Who it is for
 
@@ -84,6 +84,8 @@ This plan is practical advice built on the outline. The three areas have equal w
 
 ## Typical mistakes
 
+This list is my own advice, not from the study guide.
+
 - Studying only the data engineering parts and skipping governance and lifecycle management.
 - Ignoring KQL because the exam also names SQL and PySpark.
 - Using the legacy practice assessment, which is no longer updated.
@@ -113,4 +115,4 @@ Because the guide says related topics may be covered, treat each bullet as an ex
 
 ## Sources
 
-- [Study guide for Exam DP-700 (Microsoft Learn)](https://learn.microsoft.com/credentials/certifications/resources/study-guides/dp-700)
+- [Study Guide for Exam DP-700: Implementing Data Engineering Solutions Using Microsoft Fabric (Microsoft Learn)](https://learn.microsoft.com/credentials/certifications/resources/study-guides/dp-700)
