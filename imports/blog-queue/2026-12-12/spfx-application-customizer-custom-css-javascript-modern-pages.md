@@ -27,11 +27,11 @@ For modern SharePoint pages, the supported way to add custom script and styling 
 
 ## What Microsoft says about script on modern sites
 
-Microsoft's modern customization guidance lists what is not supported: custom master pages, custom page layouts, user custom actions with custom JavaScript, programmatic changes to navigation elements and sandboxed solutions. By default a modern team site has scripting turned off, and custom JavaScript cannot be enabled through classic options such as user custom actions. The page says it is possible and supported to turn off the NoScript setting, but it does not recommend JavaScript or CSS injection as a workaround.
+Microsoft's modern customization guidance lists what is not supported: custom master pages, custom page layouts, user custom actions with custom JavaScript, programmatic changes to navigation elements, among others. In its NoScript list the page also says sandbox solutions are not supported. By default a modern team site has scripting turned off, and custom JavaScript cannot be enabled through classic options such as user custom actions. The page also says it is possible and supported to disable the NoScript setting on both modern and classic sites to enable some capabilities.
 
-For the replacement, Microsoft says to use the SharePoint Framework to change the experience, with client-side web parts or SharePoint Framework Extensions. For plain branding without code, apply a theme or change the logo. The page notes it was last updated in 2022, so check the SPFx documentation for current build tooling.
+For the replacement, Microsoft says to use the SharePoint Framework to change the experience, with client-side web parts or SharePoint Framework Extensions. The same page lists applying a custom or out-of-the-box theme and changing the logo as supported. Its custom-theme example is a PnP PowerShell script, and it says it was written before tenant themes. The page metadata dates it June 2022, so check the SPFx documentation for current build tooling.
 
-The pages read do not describe injecting CSS or manipulating the page DOM directly. They describe placeholders and supported APIs, so stay with those.
+The Hello World page says the SharePoint page HTML DOM is not an API. It tells you to avoid depending on the page DOM structure or CSS styles, because they can change and break your solution, and calls SharePoint Framework the only supported means to interact with the page DOM. My own conclusion: style your own placeholder content through the module styles and do not target SharePoint's own elements.
 
 ## Create the Application Customizer
 
@@ -43,10 +43,10 @@ yo @microsoft/sharepoint
 
 Microsoft's walkthrough answers the prompts like this:
 
-- Solution name: your choice, for example `app-extension`
+- Solution name: `app-extension` (the page says to keep the default for every prompt not listed)
 - Client-side component type: **Extension**
 - Extension type: **Application Customizer**
-- Customizer name: for example `HelloWorld`
+- Application Customizer name: `HelloWorld`
 
 The manifest file defines the extension type and a unique ID. In the example, it sets `componentType` to `Extension`, `extensionType` to `ApplicationCustomizer` and `requiresCustomScript` to `false`. Note the `id` GUID, because testing and deployment both need it.
 
@@ -78,11 +78,11 @@ Microsoft says to test the Application Customizer on a live modern page, not in 
 }
 ```
 
-Run `heft start`. It serves the manifest from `https://localhost:4321` and opens the browser with the required query parameters. When the page asks, select **Load debug scripts**. Older tutorials show gulp. Microsoft's current pages use Heft.
+Run `heft start`. It serves the manifest from `https://localhost:4321` and opens the browser with the required query parameters. When the page asks, select **Load debug scripts**. The page's screenshot of the dev server is labelled as a historical Gulp-era image, and its commands use Heft.
 
 ## Package and deploy
 
-Microsoft's deployment article describes three activation options: Feature Framework activation on specific sites, tenant-scoped deployment, and tenant-wide deployment for app catalog extensions.
+Microsoft's deployment article describes three activation options: Feature Framework activation on specific sites, tenant-scoped deployment, and tenant-wide deployment for app catalog extensions. The page says the Feature Framework option is the only model that supports creating or deploying site-level assets as part of solution activation.
 
 For site-level activation:
 
@@ -96,12 +96,12 @@ The tutorial still serves scripts from `https://localhost:4321` until you ship t
 
 ## Activate on many sites
 
-`ClientSideInstance.xml` is used for tenant-wide deployment. It adds an entry to the Tenant-Wide Extensions list on the tenant app catalog site, and the list supports Application Customizers and list view command sets. When a solution is installed at site level, the file is ignored. Application Customizers support Site, Web and List scopes, and Microsoft notes that Feature XML based registration works only at web or list level.
+`ClientSideInstance.xml` is used for tenant-wide deployment. It adds an entry to the Tenant-Wide Extensions list on the tenant app catalog site, and the list supports Application Customizers and list view command sets. When a solution is installed at site level, the file is ignored. Application Customizers support Site, Web and List scopes, and Microsoft notes that Feature XML based registration works only at web or list level. Wider activation is possible through tenant-wide deployment or by associating the customizer with the `UserCustomAction` collection on the `Site` object. The deployment page is not consistent about scope: it says it registers the customizer at site collection scope, but also says the generated elements.xml belongs to a Web-scoped feature and adds the action to `Web.UserCustomAction`.
 
-## Common mistakes
+## Common mistakes (my own list, derived from the pages above)
 
 - **Using the wrong ID.** The GUID in `serve.json` and `elements.xml` must be the `id` from your own manifest. Microsoft stresses that the sample GUID differs in every solution.
-- **Skipping the placeholder check.** If `tryCreateContent` returns nothing, the page does not offer that placeholder, and the code must stop cleanly.
+- **Skipping the placeholder check.** If `tryCreateContent` returns nothing, the expected placeholder is not available, and the sample logs an error and returns.
 - **Writing unescaped values into `innerHTML`.** Use `escape()` for any property that comes from configuration.
 - **Editing the constructor.** Put start-up logic in `onInit()` only.
 - **Expecting a classic workaround to work.** If a requirement cannot be met with placeholders and supported APIs, raise it as a design question instead of re-enabling scripting on the site.
@@ -114,7 +114,7 @@ The tutorial still serves scripts from `https://localhost:4321` until you ship t
 
 ## Sources
 
-- [Microsoft Learn: Customize modern SharePoint team sites](https://learn.microsoft.com/en-us/sharepoint/dev/solution-guidance/modern-experience-customizations-customize-sites)
-- [Microsoft Learn: Build your first SharePoint Framework Extension (Hello World)](https://learn.microsoft.com/en-us/sharepoint/dev/spfx/extensions/get-started/build-a-hello-world-extension)
-- [Microsoft Learn: Use page placeholders from Application Customizer](https://learn.microsoft.com/en-us/sharepoint/dev/spfx/extensions/get-started/using-page-placeholder-with-extensions)
-- [Microsoft Learn: Deploy your extension to SharePoint](https://learn.microsoft.com/en-us/sharepoint/dev/spfx/extensions/get-started/serving-your-extension-from-sharepoint)
+- [Microsoft Learn: Customizing "modern" team sites](https://learn.microsoft.com/en-us/sharepoint/dev/solution-guidance/modern-experience-customizations-customize-sites)
+- [Microsoft Learn: Build your first SharePoint Framework Extension (Hello World part 1)](https://learn.microsoft.com/en-us/sharepoint/dev/spfx/extensions/get-started/build-a-hello-world-extension)
+- [Microsoft Learn: Use page placeholders from Application Customizer (Hello World part 2)](https://learn.microsoft.com/en-us/sharepoint/dev/spfx/extensions/get-started/using-page-placeholder-with-extensions)
+- [Microsoft Learn: Deploy your extension to SharePoint (Hello World part 3)](https://learn.microsoft.com/en-us/sharepoint/dev/spfx/extensions/get-started/serving-your-extension-from-sharepoint)
