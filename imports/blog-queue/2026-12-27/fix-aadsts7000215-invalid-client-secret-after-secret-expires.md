@@ -67,11 +67,11 @@ Workload identity federation lets a workload exchange a token from an external i
 
 ## Reading the three codes together
 
-The three codes point at different layers. AADSTS7000215 is about the secret or authentication parameters sent, AADSTS7000222 is about secrets that are expired, and AADSTS700016 is about the application not being found in the tenant at all. If the application cannot be found, no secret change will help, so check the client ID and tenant first. This reading is a suggestion based on the wording of the reference, not a Microsoft diagnostic flow.
+The three codes point at different layers. AADSTS7000215 is about the secret or authentication parameters sent, AADSTS7000222 is about secrets that are expired, and AADSTS700016 is about the application not being found in the tenant at all. If the application cannot be found, no secret change will help, so check the client ID and tenant first. This reading is my advice, based on the wording of the reference, not a Microsoft diagnostic flow.
 
 ## Not covered
 
-The pages I read do not describe how to create a client secret, whether the secret value is shown only once, expiration options or the maximum secret lifetime, how to rotate secrets or how to find which secret is wrong. They also do not give the exact federated credential settings.
+The pages I read do not describe how to rotate secrets or how to find which secret is wrong. They also do not give the exact federated credential settings, because the credentials page only lists the scenarios and links to guides. The credentials page does cover creating a client secret: select **Certificates & secrets** > **Client secrets** > **New client secret**, choose an expiration of at most 24 months (Microsoft recommends less than 12 months), and record the secret **Value**, which is never displayed again after you leave the page. It also says client secrets are less secure than certificate or federated credentials and should not be used in production.
 
 ## Related
 
@@ -80,6 +80,6 @@ The pages I read do not describe how to create a client secret, whether the secr
 
 ## Sources
 
-- [Microsoft Entra authentication and authorization error codes](https://learn.microsoft.com/entra/identity-platform/reference-error-codes)
-- [Add credentials to your application](https://learn.microsoft.com/entra/identity-platform/how-to-add-credentials)
-- [Workload identity federation](https://learn.microsoft.com/entra/workload-id/workload-identity-federation)
+- [Microsoft Entra authentication & authorization error codes (Microsoft Learn)](https://learn.microsoft.com/entra/identity-platform/reference-error-codes)
+- [Add and manage app credentials in Microsoft Entra ID (Microsoft Learn)](https://learn.microsoft.com/entra/identity-platform/how-to-add-credentials)
+- [Workload Identity Federation (Microsoft Learn)](https://learn.microsoft.com/entra/workload-id/workload-identity-federation)
