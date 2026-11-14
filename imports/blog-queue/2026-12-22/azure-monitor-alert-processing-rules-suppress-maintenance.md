@@ -10,17 +10,17 @@ keypoints:
   - "Alert processing rules change fired alerts. Alert rules create alerts. Suppression removes action groups from affected alerts, so no notifications go out."
   - "Suppressed alerts still fire and remain visible in the portal, Azure Resource Graph, the API and PowerShell."
   - "Scope can be resources, a resource group or a subscription in one subscription. Multiple filters combine with AND, and each filter takes up to five values."
-  - "Use the On a specific time schedule for one maintenance window or Recurring for a weekly window."
+  - "Use On a specific time for one maintenance window or Recurring for a repeating window, such as weekly."
   - "A new or changed rule can take up to 30 minutes to take effect. Azure Service Health alerts are not affected."
 faq:
   - q: "What is the difference between an alert rule and an alert processing rule?"
     a: "Microsoft Learn says alert rules generate new alerts when something happens, while alert processing rules modify fired alerts as they are being fired to change the usual alert behavior. They were previously called action rules."
   - q: "Do suppressed alerts disappear?"
-    a: "No. Learn says suppressed alerts still fire and remain visible when you list alerts in the portal, Azure Resource Graph, the API or PowerShell. Suppression only removes the action groups, so notifications and automation do not run."
+    a: "No. Learn says suppressed alerts still fire and remain visible when you list alerts in the portal, Azure Resource Graph, the API or PowerShell. Suppression removes all action groups from the affected alerts, so none of them are invoked."
   - q: "Can one rule cover resources in several subscriptions?"
     a: "No. Learn says you cannot create an alert processing rule on a resource from a different subscription. The scope is resources, a resource group or a whole subscription."
   - q: "How quickly does a new rule work?"
-    a: "Learn says it can take up to 30 minutes after you create or update a rule for it to take effect and start processing newly fired alerts. Create maintenance rules ahead of the window."
+    a: "Learn says it can take up to 30 minutes after you create or update a rule for it to take effect, and alerts that fire during that period might not be affected. Create maintenance rules ahead of the window (my advice)."
   - q: "Does this suppress Azure Service Health alerts?"
     a: "No. Learn states that alert processing rules do not affect Azure Service Health alerts."
 ---
@@ -55,7 +55,7 @@ Available filters:
 - Resource type
 - Severity
 
-With several filters, all of them apply, which Learn describes as a logical AND. Each filter can have up to five values, joined with a logical OR. A narrow filter is useful for a maintenance window that should silence only warnings and not critical alerts.
+With several filters, all of them apply, which Learn describes as a logical AND. Each filter can have up to five values, joined with a logical OR. For example (my example), a severity filter lets a maintenance window silence only lower-severity alerts.
 
 ## Create a suppression rule in the portal
 
@@ -70,19 +70,19 @@ You can enable, disable or delete rules in bulk from the list view by selecting 
 
 ## Timing: create the rule early
 
-Learn says that after you create or update an alert processing rule, it can take up to 30 minutes to take effect and start processing newly fired alerts. For a maintenance window starting at 22:00, create or edit the rule well before that time. The page I read does not describe time zone handling for schedules, so test a new schedule against a low-risk scope first.
+Learn says that after you create or update an alert processing rule, it can take up to 30 minutes to take effect and start processing newly fired alerts, and alerts that fire during that period might not be affected. For a maintenance window starting at 22:00, create or edit the rule well before that time (my advice). Learn's example schedule is set in a specific time zone, but the page gives no further detail on time zone handling, so test a new schedule against a low-risk scope first (my advice).
 
 ## What suppression does not do
 
-- **Alerts are not deleted.** They still fire and appear in the alert list, in Azure Resource Graph, the API and PowerShell. That also means the alert history shows what happened during maintenance.
+- **Alerts are not deleted.** They still fire and appear in the alert list, in Azure Resource Graph, the API and PowerShell. That also means the alert list still shows what fired during maintenance (my inference).
 - **Service Health alerts are unaffected.** Learn says alert processing rules do not affect Azure Service Health alerts.
-- **Only action groups are removed.** Anything that depends on the alert existing, such as dashboards that count fired alerts, still sees them.
+- **Only action groups are removed.** Learn says the fired alerts stay visible, so anything that reads the alerts themselves, such as a dashboard that counts them, would still see them (my inference).
 
 ## Using the rule type to add action groups
 
 The other action is not about maintenance, but it is worth a note. Learn says alert processing rules can add action groups to alert types that cannot specify them natively, such as Azure Backup, VM Insights guest health, Azure Stack Edge and Azure Stack Hub alerts.
 
-## Practical maintenance pattern
+## Practical maintenance pattern (my advice)
 
 1. Pick the narrowest scope that covers the maintenance, for example one resource group.
 2. Add a filter on monitor service or severity if you only want to silence some alerts.
@@ -93,7 +93,7 @@ The other action is not about maintenance, but it is worth a note. Learn says al
 
 ## What the Learn page does not say
 
-The page I read does not list the Azure roles needed to create these rules, and it does not give quotas beyond the five values per filter. Its CLI and PowerShell examples are in tabs that were not part of the text I could read, so this guide shows the portal path only. Check your own permissions before a change window.
+The page does not list the Azure roles needed to create these rules, and it does not give quotas beyond the five values per filter. It also has CLI (`az monitor alert-processing-rule`) and PowerShell (`Set-AzAlertProcessingRule`) examples; this guide shows the portal path only. Check your own permissions before a change window.
 
 ## Related
 
@@ -101,4 +101,4 @@ The page I read does not list the Azure roles needed to create these rules, and 
 
 ## Sources
 
-- [Alert processing rules](https://learn.microsoft.com/azure/azure-monitor/alerts/alerts-processing-rules)
+- [Alert processing rules for Azure Monitor alerts (Microsoft Learn)](https://learn.microsoft.com/azure/azure-monitor/alerts/alerts-processing-rules)
