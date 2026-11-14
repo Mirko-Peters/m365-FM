@@ -33,7 +33,7 @@ Loop components create `.loop` files, and earlier releases created `.fluid` file
 
 ## Check 2: Network and WebSockets
 
-Real-time collaboration depends on the network. Microsoft says to allow connections per the Office 365 URLs and IP address ranges, and to allow WebSocket traffic to `*.svc.ms` and `*.office.com`. These connections enable live editing, presence and shared cursors. If a proxy or firewall blocks WebSockets, a component may open but not update live. Test from a network without the proxy to compare.
+Real-time collaboration depends on the network. Microsoft says to allow connections per the Office 365 URLs and IP address ranges, and to allow WebSocket traffic to `*.svc.ms` and `*.office.com`. These connections enable live editing, presence and shared cursors. My own inference, not stated by Learn: if a proxy or firewall blocks WebSockets, a component may open but not update live. Testing from a network without the proxy is a simple way to compare.
 
 ## Check 3: Admin settings
 
@@ -46,7 +46,7 @@ Microsoft's admin policy page lists the controls:
 | `IsLoopEnabled` | `Set-SPOTenant` | Loop components in Teams chats and channels |
 | `IsCollabMeetingNotesFluidEnabled` | `Set-SPOTenant` | Collaborative meeting notes in Teams |
 
-Cloud Policy changes take up to 90 minutes if policy configurations already existed, and up to 24 hours if none did. Teams components default to on. Disabling these controls stops creation only. To block access to existing Loop content, Microsoft says to use Conditional Access. To verify Teams, run `Get-SPOTenant` and confirm `IsLoopEnabled` is `True`.
+The page is not fully consistent for Teams channels: its overview table assigns chats and channels to `IsLoopEnabled`, while its creation-path table lists `IsCollabMeetingNotesFluidEnabled` for the Teams channel path, so check both properties. Cloud Policy changes take up to 90 minutes if policy configurations already existed, and up to 24 hours if none did. Teams components default to on. Disabling these controls stops creation only. To block access to existing Loop content, Microsoft says to use Conditional Access. To verify Teams, run `Get-SPOTenant` and confirm `IsLoopEnabled` is `True`.
 
 ## Check 4: Client and format
 
@@ -57,14 +57,15 @@ For Outlook, Microsoft Support lists these requirements and limits:
 - Some component types appear as images or are disabled when the file is in Viewing mode, when opened in Safari or in Teams on Mac, or when an admin turned the feature off.
 - Paste the link with the **Copy link** icon. Copying a URL from the browser address bar fails.
 - Changing access to the Outlook item does not change access to the Loop component.
+- On the admin policy page, Outlook on the web and new Outlook for Windows also need certain OWAMailbox policies set to true: `DirectFileAccessOnPrivateComputersEnabled` and `WacViewingOnPrivateComputersEnabled` for private sessions, and the matching `...OnPublicComputersEnabled` policies for public sessions. User sessions that meet Conditional Access criteria have limited functionality and cannot use Loop components.
 
-For Word, Microsoft Learn states inserting Loop components in Word for the web was retired on September 1, 2025. Existing components became links to Loop pages. Inserting components in OneNote for the web is scheduled to retire from mid-September 2026. If the problem report mentions Word Online, check whether the component was created before the retirement.
+For Word, Microsoft Learn states inserting Loop components in Word for the web was retired on September 1, 2025. Existing components became links to Loop pages. Learn says inserting components in OneNote for the web is scheduled to be retired beginning in mid-September 2026, so check the current status. My own suggestion: if the problem report mentions Word Online, check whether the component was created before the retirement.
 
 ## Check 5: Sharing and ownership
 
-Microsoft says components are always shared as editable by others, even if the default file link is view-only. Components in Teams do not follow the Outlook permission setting. A person without access to the underlying file cannot open the component. Guests need an explicit Share with specific people link, and they cannot be added to company-wide links. Guest sharing also depends on organization-level external sharing, and sensitivity labels and Conditional Access must not restrict it.
+The admin policy page says, in its Teams section, that Loop components are always shared as editable by others, even if the organization's default file link for other file types is view-only. I did not find on the Learn pages read that Teams components ignore the Outlook permission setting, or that a person without access to the underlying file cannot open a component, so treat those as unverified. The Outlook support page says changing who has access to the Outlook item does not change who has access to the component. Guests need an explicit Share with specific people link, and they cannot be added to company-wide links. Guest sharing also depends on organization-level external sharing, a guest account in your tenant or the B2B invitation manager being enabled, and sensitivity labels and Conditional Access settings that do not restrict it. The Outlook support page, however, says components are currently available only to people in your organization, so test guest scenarios in Outlook separately.
 
-Ownership matters for lifetime. A personal Loop container is scheduled for deletion when its owner's account is deleted, and OneDrive-stored content follows the OneDrive policy when a user leaves. If a component stops opening after someone leaves, check this.
+Ownership matters for lifetime. The personal My workspace container is scheduled for deletion when its owner's account is deleted, and OneDrive-stored content follows the OneDrive policy when a user leaves. If a component stops opening after someone leaves, check this.
 
 ## Isolation test and escalation
 
@@ -86,7 +87,7 @@ In that thread, the root cause was not identified and no answer was marked accep
 
 ## Sources
 
-- [Microsoft Learn: Loop requirements](https://learn.microsoft.com/microsoft-365/loop/loop-requirements)
+- [Microsoft Learn: Loop requirements](https://learn.microsoft.com/en-us/microsoft-365/loop/loop-requirements)
 - [Microsoft Learn: Admin policies for Loop](https://learn.microsoft.com/en-us/microsoft-365/loop/loop-admin-configuration)
 - [Microsoft Learn: Loop permissions](https://learn.microsoft.com/en-us/microsoft-365/loop/loop-permission)
 - [Microsoft Learn: Loop storage](https://learn.microsoft.com/en-us/microsoft-365/loop/loop-storage)
