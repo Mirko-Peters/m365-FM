@@ -44,7 +44,7 @@ Send telemetry to Application Insights. On premises, Microsoft names these serve
 
 RT0012 dimensions include `alObjectName`, `alObjectType`, `alStackTrace`, `extensionName`, `sessionId`, `sqlServerSessionId` and `snapshotId`. RT0013 adds `sqlTableName`, `sqlLockRequestMode`, `sqlLockRequestStatus` and `sqlLockResourceType`. The `sqlLockRequestStatus` values are `GRANT` for an active lock, `WAIT` for a lock blocked by a conflicting lock, and `CNVRT` for a lock converting while blocked.
 
-Microsoft states RT0012 is the victim and does not show who holds the locks. To find the blockers, join RT0012 and RT0013 on `snapshotId`. Microsoft points to a `LockTimeouts.kql` sample in its BCTech repository for this and warns the snapshot may not capture the holder.
+Microsoft states RT0012 is the victim and does not show who holds the locks. To find the blockers, join RT0012 and RT0013 on `snapshotId`. Microsoft points to a `LockTimeouts.kql` sample in its BCTech repository for this and notes that you might be lucky that the snapshot captured the locks that were held, so it may not show the holder.
 
 A starting query for deadlocks, written for illustration and not taken from Microsoft, groups the victims:
 
@@ -58,7 +58,7 @@ traces
 | order by Deadlocks desc
 ```
 
-Microsoft's next steps for deadlocks: find the victims by grouping on object and statement, use `alStackTrace` to trace the code, correlate with lock timeouts, and on sandbox or on-premises environments use SQL deadlock monitoring. If the victim and the winner swap by chance, both are stored as separate events.
+Learn's deadlock page gives no step list. It names two complements: SQL deadlock monitoring on a sandbox or on-premises environment, and the database lock trace telemetry. Grouping victims by object and statement, tracing the code through `alStackTrace` and correlating with lock timeouts is my own approach. Learn adds that in some deadlocks the victim and the winner swap by chance, and then both are stored as separate events.
 
 ## Step 3: Apply Microsoft's locking guidance
 
@@ -70,7 +70,7 @@ From the AL performance article:
 - **Limit how long you hold locks**, and limit transaction size by dividing work into smaller operations that can be committed.
 - **Index the ranges you update.**
 - **Do not write in `OnAfterGetRecord`.** With more than one user, it causes locking issues and deadlock errors.
-- **Do not insert child records of the same parent in parallel.** It locks the parent and Integration Record tables. Wait for the first call to finish, or use OData `$batch`.
+- **Do not insert child records of the same parent in parallel** (the page lists this under web service calls). It locks the parent and Integration Record tables. Wait for the first call to finish, or use OData `$batch`.
 - **Use a number sequence object** if you do not want a number series and can accept gaps.
 - Logical separation across companies makes locking much less of an issue.
 
@@ -80,7 +80,7 @@ Microsoft's pages do not give a recipe for a consistent lock order across code p
 
 ## Step 4: Cut the SQL load
 
-The same article lists set-based operations such as `FindSet`, `CalcFields`, `CalcSums` and `SetAutoCalcFields`, which are faster than looping, and advises deferring `CalcFields` until the end of a loop. It recommends partial records to load fewer fields and to avoid joining unneeded table extensions, SIFT indexes for sum and count FlowFields, and caching expensive results in a table refreshed by a background job. Query objects are not cached in the server's primary key cache, so they always go to the database.
+The same article lists set-based operations such as `FindSet`, `CalcFields`, `CalcSums` and `SetAutoCalcFields`, which are faster than looping, and advises deferring `CalcFields` calls until the end in the `OnAfterGetRecord` trigger. It recommends partial records to load fewer fields and to avoid joining unneeded table extensions (since 2023 release wave 2 the page says at most one companion-table join is involved), SIFT indexes for sum and count FlowFields, and caching expensive results in a table refreshed by a background job. Query objects are not cached in the server's primary key cache, so they always go to the database.
 
 For reads that compete with write workloads, set `DataAccessIntent = ReadOnly` on reports, API pages and queries, so they run on a read-only replica. Microsoft suggests API queries with this setting for OData consumers such as Power BI.
 
@@ -90,16 +90,16 @@ Microsoft compares four mechanisms:
 
 | Mechanism | Traits |
 |---|---|
-| Page background task | Read-only, tied to the page, canceled if the page closes |
-| `Session.StartSession` | Background session that can write, not tied to the caller |
-| Task scheduler | Persisted tasks that survive restarts and may rerun work |
-| Job queue | One-time and recurring schedules with a log |
+| Page background task | Read-only, bound to a page and its parent session, can (will) be canceled, lightweight |
+| `Session.StartSession` | Created immediately, runs on the same server as the starting session, runs as a background session, less controlled than a page background task |
+| Task scheduler | Queued, any server in a cluster can start it, background session, survives server restarts, no logging in Business Central |
+| Job queue | Scheduled with recurrence, any server in a cluster can start it, survives server restarts, results logged in Business Central |
 
-Background work does not make code faster, but users do not wait.
+Background work does not make code faster, but users do not wait (Learn makes this point for reports).
 
 ## Step 6: Measure again
 
-Use the Performance Profiler for a slow scenario and the AL debugger's database statistics to see how AL maps to SQL. The Performance Toolkit supports regression testing. The Database Locks page shows a snapshot of current SQL locks. After each change, compare RT0012 and RT0028 counts over the same period. For outgoing HTTP calls, Microsoft notes RT0019 shows that the server blocks the session until the call completes.
+Use the Performance Profiler for a slow scenario and the AL debugger's database statistics to see how AL maps to SQL. The Performance Toolkit supports regression testing. The Database Locks page shows a snapshot of current SQL locks. My own advice: after each change, compare RT0012 and RT0028 counts over the same period. For outgoing HTTP calls, Microsoft notes RT0019 shows that the server blocks the session until the call completes.
 
 ## Related
 
