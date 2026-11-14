@@ -10,7 +10,7 @@ keypoints:
   - "The Planner app in Teams, called Tasks by Planner and To Do before March 2024, shows your private tasks, assigned tasks, flagged emails and plans in one place."
   - "Add it with View more apps, search for Planner, then Add. If it is missing, an admin may need to turn it on in the Teams admin center."
   - "Create a plan with Create a plan. Leave the Microsoft 365 group empty for a personal plan or add a group for a shared plan."
-  - "Files attached to basic plan tasks are stored in the group's SharePoint site, and a plan can be added as a tab in a team channel."
+  - "Files attached to basic plan tasks are stored in SharePoint, and a plan can be added as a tab in a team channel."
   - "Meeting notes in Teams can hold an agenda and tasks. Tasks assigned there appear under Assigned to me, and changes to a meeting series apply to future meetings."
 faq:
   - q: "What is the difference between To Do and Planner?"
@@ -20,7 +20,7 @@ faq:
   - q: "Is Planner in Teams free for Microsoft 365 users?"
     a: "Microsoft Learn says users with a Microsoft 365 license are entitled to the Planner app. Premium features, for example from Planner Plan 1, Project Plan 3 or Project Plan 5, need a premium license. Microsoft 365 only users can collaborate on premium plans but can't use premium features."
   - q: "Where are files attached to tasks stored?"
-    a: "According to Microsoft Learn, attachments for basic plans are stored in the group's SharePoint site, and comments are in Exchange. For premium plans, attachments are also stored in SharePoint. Private tasks are stored in Exchange."
+    a: "According to Microsoft Learn, attachments for basic plans are stored in SharePoint, and comments are in Exchange. For premium plans, attachments are also stored in SharePoint. Private tasks are stored in Exchange."
   - q: "Can I turn Planner off in Teams?"
     a: "Yes. Microsoft Learn says Planner is on by default for all Teams users. An admin can allow or block it in the Teams admin center under Teams apps, Manage apps, or control it per user with an app permission policy."
 ---
@@ -55,7 +55,7 @@ Microsoft Support's guidance is short. Use **To Do** for your own daily list and
 3. Enter a plan name.
 4. Add a Microsoft 365 group for a shared plan. Leave it empty for a personal plan.
 
-In a plan you can add buckets and tasks. The Planner web instructions from Microsoft Support are: select **Add a new bucket** and type a name, then **+ Add task**, name the task, select **Set due date**, select **Assign** and choose a team member, then **Add task**. You can change **Assign** or **Due date** later in the task details. Microsoft's Learn training module says a Planner tab can be added to a team channel, and that team members can then create plans, assign tasks, share files, chat about tasks and review charts.
+In a plan you can add buckets and tasks. The Planner web instructions from Microsoft Support are: select **Add a new bucket** and type a name, then **+ Add task**, name the task, select **Set due date**, select **Assign** and choose a team member, then **Add task**. The support page says to open the task details to use the **Assign** option for changing who a task is assigned to. For the due date it describes switching to **Group by Bucket**, choosing **Due date** and dragging the task to another bucket. Microsoft's Learn training module says a Planner tab can be added to a team channel, and that team members can then create plans, assign tasks, share files, chat about tasks and review charts.
 
 The pages I read for this article did not give click-by-click steps for adding a plan as a channel tab or for attaching a file inside a task. Use the in-app prompts for those two actions.
 
@@ -66,10 +66,10 @@ For shared documents, Microsoft Learn gives the storage rules:
 | Task type | Where data is stored |
 |---|---|
 | Private tasks | Exchange |
-| Basic plans and tasks | Planner service, comments in Exchange, attachments in the group's SharePoint |
-| Premium plans and tasks | Dataverse via Project for the web, attachments in SharePoint |
+| Basic plans and tasks | Azure (Planner service), comments in Exchange, attachments in SharePoint |
+| Premium plans and tasks | Dataverse via Project for the web, attachments in SharePoint, assigned tasks also stored in Azure |
 
-So a file attached to a basic-plan task lives in the SharePoint site of the Microsoft 365 group behind the plan. Check the permissions of that site before you put sensitive files into task attachments.
+So a file attached to a task lives in SharePoint, not in the task itself. The page does not say which site holds it, so check where attachments land and who can open them before you put sensitive files into task attachments.
 
 ## Notifications
 
@@ -95,7 +95,7 @@ Planner is on by default. Turn it on or off in the Teams admin center under **Te
 
 - Looking for Tasks by Planner and To Do after the March 2024 rename.
 - Expecting premium features with only a Microsoft 365 license.
-- Storing files in task attachments without checking the SharePoint permissions of the group.
+- Storing files in task attachments without checking who can access the SharePoint location.
 - Using My Day as a permanent list. It clears every night.
 - Inviting external guests and expecting them to edit meeting notes.
 
@@ -108,7 +108,7 @@ Planner is on by default. Turn it on or off in the Teams admin center under **Te
 
 ## Sources
 
-- [Microsoft Support: Use the Planner app in Teams](https://support.microsoft.com/en-us/office/use-the%20tasks-app-in%20teams-e32639f3-2e07-4b62-9a8c-fd706c12c070)
+- [Microsoft Support: Use the Planner app in Teams](https://support.microsoft.com/en-us/office/use-the-tasks-app-in-teams-e32639f3-2e07-4b62-9a8c-fd706c12c070)
 - [Microsoft Learn: Manage the Planner app for your organization in Microsoft Teams](https://learn.microsoft.com/en-us/microsoftteams/manage-planner-app)
 - [Microsoft Support: To Do vs. Planner](https://support.microsoft.com/en-US/ToDo/to-do-vs-planner)
 - [Microsoft Support: When to use Microsoft Project, Planner, To Do, or the Tasks app in Teams](https://support.microsoft.com/en-us/project/when-to-use-microsoft-project-planner-to-do-or-the-tasks-app-in-teams)
