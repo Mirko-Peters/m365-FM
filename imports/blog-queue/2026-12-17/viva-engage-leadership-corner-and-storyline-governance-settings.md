@@ -45,7 +45,7 @@ In the same area you can set default notification channels. By default, storylin
 
 Leader identification is the requirement for storyline announcements, campaigns, audience analytics and leadership corner. Under **Feature management**, select **Leadership identification and audiences**. On the **Manage leaders** page, select **Add leaders** and pick users or groups.
 
-Learn notes that later changes to a group do not update the leaders list. Re-add the group to pick up new members. The people who may identify leaders are Engage admins, corporate communicators, Verified admins and Network admins. A license is needed for the leader as described in the FAQ above.
+Learn notes that later changes to a group do not update the leaders list. Re-add the group to pick up new members. The people who may identify leaders are Engage admins, corporate communicators, Verified admins and Network admins. A license is needed for the leader as described in the FAQ above. The FAQ on the leadership page words the list of who can identify leaders with a license condition for corporate communications managers (the Viva Engage Communities and Communications service plan). Learn's roles page adds that other Viva Engage admin roles can administer premium features without a premium license.
 
 ## Step 3: Control the audiences
 
@@ -53,15 +53,15 @@ Select the pencil icon on a leader's row to open **Manage audiences**. A leader 
 
 - The entire organization, excluding guests. Learn says only Engage admins, Verified admins, Network admins and corporate communicators can switch this on. Leaders and delegate managers cannot.
 - One or more audiences, built from users or groups. A leader can add up to 40 audiences. Group membership changes, including nested members, update the audience within 24 hours.
-- Spoke tenants, in a multitenant organization, with the hub tenant toggle.
+- Multitenant organization: a toggle that appears only when Viva Engage is configured as a multitenant organization. It lets spoke tenants receive leadership posts and announcements from the hub tenant. Learn says the organization-level toggle must also be on.
 
-If a leader is set for the entire organization but has no audiences, that leader and delegates see no audience analytics data. Each storyline announcement automatically notifies the selected audiences.
+If a leader is set for the entire organization but has no audiences, that leader and delegates see no audience analytics data. The leader page says each storyline announcement automatically notifies the selected audiences. Its FAQ says the leader decides whether to notify by Outlook, Teams or Viva Engage, and that audience members see the content in leadership corner either way. Learn does not reconcile the two statements.
 
 Delegates and delegate managers are set by the leader under **Manage delegate settings** in the Viva Engage Teams app. A delegate can post on the leader's behalf. A delegate manager can also configure audiences and assign more delegates. Because delegate managers can change audiences, review who holds that role. If a delegate must post on the leader's storyline, the storyline toggle has to be enabled.
 
 ## Step 4: Decide on leadership corner
 
-Leadership corner is on by default. An Engage admin can turn it off under **Feature management** > **Leadership corner**. After that, the **Leaders** entry point disappears from the top navigation. Leadership corner lets users read leaders' posts, join their communities and attend their AMAs.
+Leadership corner is on by default. An Engage admin can turn it off under **Feature management** > **Leadership corner**. After that, the **Leaders** entry point disappears from the top navigation. The leadership page names Engage admins for this switch. The roles page also lists enabling or disabling leadership corner under the Network Administrator role, which the leadership page does not mention, so check which role you really need in your tenant. Leadership corner lets users read leaders' posts, join their communities and attend their AMAs.
 
 ## Step 5: Assign the right admin roles
 
@@ -100,7 +100,7 @@ For objectionable content, Learn suggests deleting the conversation or blocking 
 
 ## What the sources do not say
 
-The pages read for this article do not describe a way to require approval before a storyline post is published, and they do not describe a size limit for the organization-wide audience. Storyline governance therefore relies on creator groups, role control, auditing and after-the-fact moderation.
+The pages read for this article do not describe a way to require approval before a storyline post is published, and they give no size limit for the organization-wide audience (the leadership page only says audiences built from Microsoft Entra groups do not limit the number of members). My summary: storyline governance therefore relies on creator groups, role control, auditing and after-the-fact moderation.
 
 ## Related
 
