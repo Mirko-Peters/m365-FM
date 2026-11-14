@@ -85,11 +85,11 @@ This guidance is a suggestion. Use Standard for most users and Strict for a smal
 
 ## Permissions
 
-Learn lists the roles that can manage preset security policies. Membership in the Security Administrator role in Microsoft Entra ID or in the Organization Management role group in Exchange Online allows changes. Global Reader allows read-only access. Check the page for the full list before delegating the task.
+Learn lists the roles that can manage preset security policies. Membership in the Security Administrator role in Microsoft Entra ID or in the Organization Management role group in Exchange Online allows changes. Global Reader allows read-only access. Global Administrator and Defender XDR Unified RBAC permissions also work, and Learn advises limiting Global Administrator to emergencies. Check the page for the full list before delegating the task.
 
 ## What you can and cannot adjust
 
-You cannot edit the individual anti-spam, anti-phishing, anti-malware, Safe Attachments or Safe Links values in Standard and Strict. What you choose is who is covered, which users and domains get impersonation protection and which senders are trusted. If you need different values, Learn's route is a custom threat policy, which sits below the presets in precedence.
+You cannot edit the individual anti-spam, anti-phishing, anti-malware, Safe Attachments or Safe Links values in Standard and Strict. What you choose is who is covered, which users and domains get impersonation protection and which senders are trusted. Learn contrasts the presets with custom threat policies, which are fully configurable but sit below the presets in precedence.
 
 ## Not covered
 
@@ -101,4 +101,4 @@ The page does not describe licensing beyond saying that Built-in protection appl
 
 ## Sources
 
-- [Preset security policies in cloud organizations](https://learn.microsoft.com/defender-office-365/preset-security-policies)
+- [Preset security policies (Microsoft Learn)](https://learn.microsoft.com/defender-office-365/preset-security-policies)
