@@ -24,7 +24,7 @@ To BCC in Outlook, open a new message, show the Bcc field and put the addresses 
 
 ## What Bcc does and doesn't do
 
-Bcc stands for blind carbon copy. Microsoft's page on [showing and viewing the Bcc field](https://support.microsoft.com/en-us/outlook/mail/show-hide-and-view-the-bcc-blind-carbon-copy-field-in-outlook-for-windows) describes it as a way to send a copy of an email to people without showing their names to the other recipients. Microsoft's Mac article adds two details: as a recipient, you can't tell whether the sender used Bcc, and only the sender can see the Bcc names, and only in Sent Items.
+Bcc stands for blind carbon copy. Microsoft's page on [showing and viewing the Bcc field](https://support.microsoft.com/outlook/mail/show-hide-and-view-the-bcc-blind-carbon-copy-field-in-outlook-for-windows) describes it as a way to send a copy of an email to people without showing their names to the other recipients. Microsoft's Mac article adds two details: as a recipient, you can't tell whether the sender used Bcc, and only the sender can see the Bcc names, and only in Sent Items.
 
 That gives you a clear picture of what Bcc is good for:
 
@@ -44,21 +44,21 @@ One more thing worth knowing: the To and Cc recipients can see each other. So if
 2. Go to **Options**, then **Show fields**, then select **Show Bcc**.
 3. Add the names or addresses of the people you want on the Bcc line.
 
-Microsoft's page on [creating an email message in Outlook](https://support.microsoft.com/en-us/outlook/mail/create-an-email-message-in-outlook) adds a shortcut: if you don't see a Bcc button on the message, select **Bcc** to the right of the **To** button. You can also select the **To**, **Cc** or **Bcc** button to open the Add recipients window, pick names with the plus sign and select **Save**.
+Microsoft's page on [creating an email message in Outlook](https://support.microsoft.com/outlook/mail/create-an-email-message-in-outlook) adds a shortcut: if you don't see a Bcc button on the message, select **Bcc** to the right of the **To** button. You can also select the **To**, **Cc** or **Bcc** button to open the Add recipients window, pick names with the plus sign and select **Save**.
 
 If these steps don't match your screen, you may not be on new Outlook yet. Microsoft points you to the Classic Outlook steps in that case.
 
 ### Classic Outlook for Windows
 
-In classic Outlook, look for a **Bcc** command on the **Options** tab of the message window. Turning it on adds a **Bcc** line below **Cc**. Microsoft documents the classic steps on a separate tab of its page, which I couldn't open, so if the button isn't where you expect it, check the Classic Outlook tab there. Then send a test to find out whether the field stays on for your next new message.
+In classic Outlook, look for a **Bcc** command on the **Options** tab of the message window. Turning it on adds a **Bcc** line below **Cc**. Microsoft documents the classic steps on a separate Classic Outlook tab of its page, so check that tab if the button isn't where you expect it. Then send a test to find out whether the field stays on for your next new message.
 
 ### Outlook on the web
 
-Microsoft's pages I opened don't document the web steps. The web app is close to new Outlook, so look for **Bcc** next to the **To** line in a new message, or try **Options** and the Show fields menu.
+The Microsoft pages cited here don't document the web steps. The web app is close to new Outlook, so look for **Bcc** next to the **To** line in a new message, or try **Options** and the Show fields menu.
 
 ### Outlook for Mac
 
-Microsoft's [Mac article on the Bcc field](https://support.microsoft.com/en-us/office/show-hide-and-view-the-bcc-field-in-outlook-for-mac-275f57a6-9d6e-4b00-b8c8-3b06b20d71ec) gives these steps:
+Microsoft's [Mac article on the Bcc field](https://support.microsoft.com/office/show-hide-and-view-the-bcc-field-in-outlook-for-mac-275f57a6-9d6e-4b00-b8c8-3b06b20d71ec) gives these steps:
 
 1. Create a new email message.
 2. At the right end of the **To** line, click **Bcc**.
@@ -89,10 +89,10 @@ A [distribution list](https://www.m365.fm/entity/distribution-list/) or contact 
 
 ### The limits that apply
 
-[Exchange Online](https://www.m365.fm/entity/exchange-online/) has hard limits, and Bcc doesn't get around them. From Microsoft's [Exchange Online limits page](https://learn.microsoft.com/en-us/office365/servicedescriptions/exchange-online-service-description/exchange-online-limits):
+[Exchange Online](https://www.m365.fm/entity/exchange-online/) has hard limits, and Bcc doesn't get around them. From Microsoft's [Exchange Online limits page](https://learn.microsoft.com/office365/servicedescriptions/exchange-online-service-description/exchange-online-limits):
 
 - The To, Cc and Bcc fields together can hold up to 1,000 recipients per message by default. Admins can set the limit between 1 and 1,000.
-- Each user can send to 10,000 recipients per day, over a rolling 24-hour period. Bcc recipients count.
+- Each user can send to 10,000 recipients in a 24-hour period. After that, no more messages can be sent from the mailbox until the count drops below the limit. Bcc recipients count.
 - A distribution group in the shared address book counts as one recipient. Members of a group in your personal Contacts folder count individually.
 - Messages to groups with 5,000 or more members need delivery management or message approval to be configured.
 - Outbound mail from onmicrosoft.com domains is limited to 100 external recipients per organization in 24 hours.
@@ -146,8 +146,15 @@ My advice: use **Cc** when the conversation should be open, and **Bcc** when pri
 - **Hiding recipients in a more controlled way.** For regular mailings, a distribution list in the shared address book counts as one recipient, which also helps with limits.
 - **Bcc in a compliance setting.** Admins in regulated companies should ask how the organization treats hidden recipients in audits and retention. Ask your compliance team rather than assuming.
 - **Spam filtering and safe senders.** If your group mailings keep landing in junk, ask the recipients' admins to allow your sender.
-- **Meeting invitations.** Bcc works differently for meetings, and Microsoft documents a separate article on adding Bcc recipients to a meeting request.
+- **Meeting invitations.** This article covers email messages only. Check how Bcc behaves in invitations before relying on it.
 
 ## Next step
 
 Open a new message in your Outlook, show the Bcc field and send a test to two of your own addresses, one in To and one in Bcc. Look at both copies and at the Sent Items header, and you'll know exactly how to BCC in Outlook without leaking an address.
+
+## Sources
+
+- [Show, hide and view the Bcc field in Outlook for Windows (Microsoft Support)](https://support.microsoft.com/outlook/mail/show-hide-and-view-the-bcc-blind-carbon-copy-field-in-outlook-for-windows)
+- [Show, hide and view the Bcc field in Outlook for Mac (Microsoft Support)](https://support.microsoft.com/office/show-hide-and-view-the-bcc-field-in-outlook-for-mac-275f57a6-9d6e-4b00-b8c8-3b06b20d71ec)
+- [Create an email message in Outlook (Microsoft Support)](https://support.microsoft.com/outlook/mail/create-an-email-message-in-outlook)
+- [Exchange Online limits (Microsoft Learn)](https://learn.microsoft.com/office365/servicedescriptions/exchange-online-service-description/exchange-online-limits)
