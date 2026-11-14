@@ -27,7 +27,7 @@ When Copilot ignores a file you expect it to use, a sensitivity label is often i
 
 ## Step 0: Rule out plain permissions
 
-Copilot works within existing permissions. Microsoft's security documentation says Copilot only accesses data that users are authorized to access. If the person cannot open the file, Copilot cannot use it either, and a label is not the cause. Confirm access before you dig into labels.
+Copilot works within existing permissions. Microsoft's Copilot security documentation says Copilot only accesses data that users are authorized to access, and the DLP page adds that all prompts run in the security context of the initiating user. If the person cannot open the file, Copilot cannot use it either, and a label is not the cause. Confirm access before you dig into labels.
 
 ## Step 1: Check the EXTRACT usage right on encrypted labels
 
@@ -39,7 +39,7 @@ If the label applies encryption, Microsoft Learn says the **EXTRACT** usage righ
 
 If a user has VIEW but not EXTRACT, Learn says that with the content open in an app they cannot use Copilot. Copilot will not summarize it but can reference it with a link. The pages read do not describe the case where the user has no VIEW right.
 
-To fix this, review the label's encryption settings and the permissions assigned to the affected users. Changing encryption settings affects everyone who uses that label, so test on a pilot label first.
+To fix this, review the label's encryption settings and the permissions assigned to the affected users. My own caution, not from Learn: changing encryption settings affects everyone who uses that label, so test on a pilot label first.
 
 ## Step 2: Check unopened encrypted files
 
@@ -65,7 +65,7 @@ Several limits can look like a block:
 
 ## Step 5: Check for Copilot DLP policies
 
-A DLP policy can intentionally stop Copilot from using labeled items. According to Learn, the policy uses the Copilot location (named **Microsoft Copilot, Copilot Chat, and Copilot Cowork**) and a rule with **Content contains** > **Sensitivity labels**. The action is **Prevent Copilot and Cowork from processing content**.
+A DLP policy can intentionally stop Copilot from using labeled items. According to Learn, the policy uses the **Microsoft 365 Copilot and Copilot Chat** location and a rule with **Content contains** > **Sensitivity labels**. The action is **Prevent Copilot from processing content**.
 
 What users see:
 
@@ -107,4 +107,4 @@ When Copilot creates new content from labeled items, the label can be inherited.
 
 - [Microsoft Learn: Purview considerations for Copilot and agents (sensitivity labels and encryption)](https://learn.microsoft.com/en-us/purview/ai-m365-copilot-considerations)
 - [Microsoft Learn: Learn about the Microsoft 365 Copilot DLP location](https://learn.microsoft.com/en-us/purview/dlp-microsoft365-copilot-location-learn-about)
-- [Microsoft Learn: Microsoft Copilot security](https://learn.microsoft.com/en-us/copilot/microsoft-365/microsoft-365-copilot-ai-security)
+- [Microsoft Learn: Security for Microsoft Copilot](https://learn.microsoft.com/en-us/copilot/plan/security-microsoft-copilot)
