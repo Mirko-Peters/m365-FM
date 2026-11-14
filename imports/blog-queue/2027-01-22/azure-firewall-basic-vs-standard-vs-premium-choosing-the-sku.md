@@ -25,7 +25,7 @@ faq:
     a: "For web categories on Premium, yes. The Premium implementation guide says web categories are only available in firewall policies and that the policy SKU must match the firewall instance SKU, for example a Premium instance requires a Premium policy."
 ---
 
-Azure Firewall comes in three SKUs: Basic, Standard and Premium. Microsoft Learn describes Basic as an entry option with throughput up to 250 Mbps, Standard as Layer 3 to Layer 7 filtering with autoscaling up to 30 Gbps, and Premium as the option for highly sensitive applications such as payment processing. This article compares them using the SKU chooser, the features-by-SKU page and the Premium implementation guide.
+Azure Firewall comes in three SKUs: Basic, Standard and Premium. Microsoft Learn describes Basic by its throughput of up to 250 Mbps, Standard as Layer 3 to Layer 7 filtering with autoscaling up to 30 Gbps, and Premium as the option for highly sensitive applications such as payment processing. This article compares them using the SKU chooser, the features-by-SKU page and the Premium implementation guide.
 
 ## Quick comparison
 
@@ -71,7 +71,7 @@ Premium includes all Standard features plus the following, per the features and 
 ### Premium details worth knowing
 
 - The categories Education, Finance, Government and Health and medicine do not support TLS termination. To support termination for specific URLs, add them manually in application rules.
-- Web categories exist only in firewall policies, and the policy SKU must match the firewall instance SKU.
+- Premium web categories are only available in firewall policies, and the policy SKU must match the firewall instance SKU.
 - Using Web Category Check needs Microsoft.Network/azureWebCategories/* access at the subscription level.
 - Learn says TLS 1.0 and 1.1 are being deprecated and recommends moving to TLS 1.2.
 
@@ -91,7 +91,7 @@ This is my suggestion, not a Microsoft recommendation:
 
 ## What the pages do not settle
 
-The SKU chooser has a flow chart that I could only read as an image, so I do not reproduce it. For migration between SKUs I read no page, so I give no steps.
+The SKU chooser page has a flow chart as an image, which this article does not reproduce. The three pages do not cover migration between SKUs, so no steps are given.
 
 ## Related
 
