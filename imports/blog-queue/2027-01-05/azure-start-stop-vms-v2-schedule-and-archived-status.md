@@ -1,6 +1,6 @@
 ---
 title: "How to Start and Stop Azure VMs on a Schedule With Start/Stop VMs v2"
-summary: "How Start/Stop VMs v2 schedules Azure VM start and stop with Functions and Logic Apps: scenarios, scoping, sequence tags, permissions, the no further development notice and a cost-saving alternative check."
+summary: "How Start/Stop VMs v2 schedules Azure VM start and stop with Functions and Logic Apps: scenarios, scoping, sequence tags, permissions, the no further development notice and a short test plan."
 status: review
 publish: false
 author: mirko-p
@@ -33,7 +33,7 @@ The Learn article sits under previous versions and is flagged as archived. It st
 
 Learn also describes the feature as a decentralized, low-cost automation option with the functionality of the original Azure Automation version. It does not depend on Azure Automation or Azure Monitor Logs.
 
-Plan accordingly. If you start a new rollout, check whether Learn lists a successor or other scheduling options for your case. This guide did not verify one.
+The page names no successor or alternative. My advice: if you start a new rollout, check other scheduling options for your case before you commit.
 
 ## What it is made of
 
@@ -67,7 +67,7 @@ Five Logic Apps are created by default: `ststv2_vms_Scheduled_start`, `ststv2_vm
 - Actions run in ascending order of the tag value, and VMs with the same value act at the same time.
 - Only Azure Resource Manager VMs are supported.
 
-**AutoStop.** It stops VMs based on CPU utilization. It can also run as a scheduled action that creates alerts on VMs. When the alert condition is true, the AutoStop function runs.
+**AutoStop.** It stops VMs based on CPU utilization. It can also run as a scheduled action that creates alerts on VMs. When the alert condition is true, the alert triggers the stop action. On the page, the AutoStopVM function is the one triggered by the VM alert.
 
 ## Scoping
 
@@ -83,13 +83,13 @@ Learn says you are charged for the services that are deployed and consumed. It g
 
 ## Updates
 
-The page contradicts itself on updating. The overview says an instance is auto-updated when a new version is released. The important updates section says the `TriggerAutoUpdate` and `UpdateStartStopV2` functions are deprecated and will be removed. It recommends stopping the site, installing the latest version from the GitHub repository and starting the site again. To disable auto-update, set the function app setting `AzureClientOptions:EnableAutoUpdate` to `false`. Learn also says that as of 19 August 2024 the feature uses the .NET 8 isolated worker model, and that no built-in update notifications exist.
+The page gives two different pictures of updating. The New releases section says an instance is auto-updated when a new version is released. The important updates section says the `TriggerAutoUpdate` and `UpdateStartStopV2` functions are deprecated and will be removed. It recommends stopping the site, installing the latest version from the GitHub repository and starting the site again. To disable auto-update, set the function app setting `AzureClientOptions:EnableAutoUpdate` to `false`. Learn also says that as of 19 August 2024 the feature uses the .NET 8 isolated worker model, and that no built-in update notifications exist.
 
 ## What the page does not cover
 
-Deployment options, configuration steps, code samples, pricing, and how failed starts or stops are handled. The page links to a separate deployment article for the steps.
+Deployment options, configuration steps, code samples, pricing, and how failed starts or stops are handled. For updates, it points to the GitHub repository of the project.
 
-## A short plan
+## A short plan (my advice)
 
 The plan below is practical advice.
 
@@ -99,7 +99,7 @@ The plan below is practical advice.
 4. Check Application Insights after the first runs.
 5. Decide whether to keep or disable auto-update, and write down your update procedure.
 
-## Typical mistakes
+## Typical mistakes (my advice)
 
 - Using Sequenced with classic VMs.
 - Setting only one of the two sequence tags.
@@ -114,4 +114,4 @@ The plan below is practical advice.
 
 ## Sources
 
-- [Start/Stop VMs v2 overview (Microsoft Learn)](https://learn.microsoft.com/azure/azure-functions/start-stop-vms/overview)
+- [Start/Stop VMs v2 overview (Microsoft Learn)](https://learn.microsoft.com/previous-versions/azure/functions/start-stop-vms/overview)
