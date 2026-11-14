@@ -18,7 +18,7 @@ faq:
   - q: "What does Delete do?"
     a: "Learn says it removes a device from Intune management, removes company data and retires the device. For MDM devices it hides the device immediately in the admin center and initiates a Retire. A Completed status does not confirm that the device finished the Retire."
   - q: "What is Fresh Start?"
-    a: "Learn says it reinstalls the latest version of Windows on a device and removes apps that the manufacturer installed. The page does not state the platform explicitly and lists it as non-bulk."
+    a: "Learn says it reinstalls the latest version of Windows on a device and removes apps that the manufacturer installed. The page lists it under the Windows actions and not in the bulk action lists."
   - q: "What are the daily limits?"
     a: "Wipe 500, Retire 1,000, Delete 1,000 per tenant per day. The limit is cumulative across individual actions, bulk actions and Microsoft Graph requests. Bulk actions handle up to 100 devices at a time."
   - q: "Where do I start a Wipe or Retire?"
@@ -98,6 +98,6 @@ A per-platform support matrix for all four actions, whether a pending action can
 
 ## Sources
 
-- [Device actions in Microsoft Intune (Microsoft Learn)](https://learn.microsoft.com/intune/device-management/actions/)
-- [Wipe devices in Microsoft Intune (Microsoft Learn)](https://learn.microsoft.com/intune/intune-service/remote-actions/devices-wipe)
+- [Device Actions - Wipe, Lock, Locate, and More - Microsoft Intune (Microsoft Learn)](https://learn.microsoft.com/intune/device-management/actions/)
+- [Wipe devices with Microsoft Intune (Microsoft Learn)](https://learn.microsoft.com/intune/device-management/actions/wipe)
 - [Device action: Retire (Microsoft Learn)](https://learn.microsoft.com/intune/device-management/actions/retire)
