@@ -36,7 +36,7 @@ Azure partitions servers into clusters. Normally a request is tried across sever
 
 ## Workarounds by scenario
 
-1. **Standalone VM:** retry after a short period, resize to a size with more availability, or change the region or zone. Learn's examples of alternatives are Standard_A2_v2, Standard_A2m_v2 and Standard_D2a_v4, or zones 1 and 3.
+1. **Standalone VM:** retry after a short period, resize to a size with more availability, or change the region or zone. When the error includes an alternative recommendation, Learn's examples are the sizes Standard_A2_v2, Standard_A2m_v2 and Standard_D2a_v4 for the same zone and region, or zones 1 and 3 for the same size and region.
 2. **Resize, add VMs or start partially deallocated VMs in an availability set:** the request must go to the cluster hosting the set. Create a new VM in a different availability set in the same region, resize to a size the set supports, or stop and deallocate all VMs in the set and start them together. In the portal, filter Virtual machines for the set, select all, select **Stop**, wait for Stopped (deallocated), then select **Start**. A VM can be added to an availability set only at creation.
 3. **Start fully deallocated VMs in an availability set:** retry, resize, or change the region or zone.
 4. **Availability zones:** retry later, resize, or change the zone. Creating a VM from a copy of the OS disk without a zonal constraint widens allocation to the whole region.
@@ -55,7 +55,7 @@ This is a suggestion, not Microsoft guidance. Retry once, then try the least dis
 
 ## Reading the message
 
-The AllocationFailed text says there is not enough capacity for the requested VM size in the region and points to Microsoft's allocation guidance. For a scale set with a single placement group, the message says allocation may be scoped to a single cluster that is out of capacity. Learn says the requested size is then not currently available in the selected region or zone, and you can apply an alternative size or zone to your VM input or resize the existing VM, then retry.
+The AllocationFailed text says there is not enough capacity for the requested VM size in the region and points to Microsoft's allocation guidance. For a scale set with a single placement group, a second message says allocation might be scoped to a single cluster that is out of capacity. Separately, when an error comes with an alternative recommendation, Learn says the requested size is not currently available in the selected region or zone, and you can apply the alternative to your VM input or resize the existing VM, then retry.
 
 ## Where the portal steps apply
 
@@ -80,4 +80,4 @@ The article gives no CLI, PowerShell or REST commands for these steps, no retry 
 
 ## Sources
 
-- [Troubleshoot allocation failures](https://learn.microsoft.com/troubleshoot/azure/virtual-machines/windows/allocation-failure)
+- [Troubleshooting Azure VM allocation failures (Microsoft Learn)](https://learn.microsoft.com/troubleshoot/azure/virtual-machines/windows/allocation-failure)
