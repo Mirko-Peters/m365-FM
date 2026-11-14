@@ -20,7 +20,7 @@ faq:
   - q: "What if the app uses SAML single sign-on?"
     a: "The reference entry says you might have configured the app with the wrong Identifier (Entity ID), and refers to the troubleshooting article for error AADSTS650056."
   - q: "Which fixes does Learn list for a missing resource in the tenant?"
-    a: "Acquire a subscription to the application, consent to the application, grant access through the Microsoft Entra admin center or add the application from the gallery, depending on which variant applies."
+    a: "For a missing service principal of the resource application, Learn lists acquiring a subscription (Microsoft-published applications), consenting to the resource application, granting permissions via the Microsoft Entra admin center, or adding the application from the gallery. The method depends on the type of application."
   - q: "Is there more than one article for this code?"
     a: "Yes. Learn has a short Microsoft 365 troubleshooting article for AADSTS65005 when signing in to cloud services, and a longer consent error article that covers both variants of the code."
 ---
@@ -47,7 +47,7 @@ Learn's article on unexpected errors when performing consent to an application d
 
 ### Variant 1: resource not available in the tenant
 
-Learn describes this variant as the resource not being available in the tenant. In my reading, that points to the same area as the second variant: the resource the app wants is missing from your tenant.
+The message says the client application is requesting access to a resource that isn't available in your organization. Learn says to ensure the resources that provide the requested permissions are available in your tenant, or to contact an administrator of the tenant. Otherwise, it says, there's a misconfiguration in how the application requests resources, and you should contact the application developer.
 
 ### Variant 2: permissions mismatch
 
@@ -56,12 +56,12 @@ The app requested a resource that cannot be found in the tenant. Learn gives two
 1. **The developer misconfigured the app.** The app asks for a resource that its registration does not declare, or declares incorrectly.
 2. **There is no service principal for the target resource in the tenant.** It may never have existed or it may have been removed.
 
-Fixes listed on the page, depending on the case:
+For the missing service principal, Learn says you must provision one for the resource application so that the client application can request permissions to it. The method depends on the type of application:
 
-- Acquire a subscription to the application or service the app depends on.
-- Consent to the application.
-- Grant consent through the Microsoft Entra admin center.
-- Add the application from the gallery so that the service principal is created.
+- Acquire a subscription for the resource application (Microsoft-published applications).
+- Consent to the resource application.
+- Grant the application permissions via the Microsoft Entra admin center.
+- Add the application from the Microsoft Entra application gallery.
 
 Learn lists other codes on the same page, including AADSTS65004, AADSTS90093, AADSTS90094, AADSTS90090, AADSTS900941 and AADSTS900981. Use those entries when your message differs.
 
@@ -72,7 +72,7 @@ This section is my advice, not a Microsoft statement.
 1. **Read the full message.** It names the resource the app requested. Everything else depends on that name.
 2. **Decide whether you own the app.** If you wrote it, open the app registration and compare its API permissions with the resource in the message. If a vendor wrote it, collect the app name and resource and ask the vendor.
 3. **Check the tenant for the resource.** In Enterprise applications, search for the resource application. If it is absent, Variant 2's missing service principal cause is a candidate.
-4. **Check whether you need a subscription.** Learn lists acquiring a subscription as a fix when the resource belongs to a service that your tenant does not use yet.
+4. **Check whether you need a subscription.** Learn lists acquiring a subscription for the resource application as an option for Microsoft-published applications.
 5. **Consent as the right person.** If consent is the missing step, decide who in your organization should grant it, and review what the consent prompt asks for.
 6. **If SAML is involved, compare identifiers.** The reference entry mentions a wrong Identifier (Entity ID), so check it against what the application expects.
 7. **Retest in a fresh session.** Use a private browser window to avoid cached tokens muddying the result.
@@ -96,9 +96,9 @@ This section is my advice, not a Microsoft statement.
 - Whether the failure is reproducible for an admin account as well as a regular user.
 - Whether the SAML or OpenID Connect protocol is in use.
 
-## What I did not read
+## What the pages do not cover
 
-I read both Learn pages, but the gallery single sign-on troubleshooting page that the short article links to did not open for me, so I do not describe its steps. The reference page is large, and I used only the AADSTS65005 entry from it. I did not read the AADSTS650056 article.
+The short Microsoft 365 article links to a gallery single sign-on troubleshooting page and to registration guidance, and the reference entry links to the AADSTS650056 article. This article does not describe the steps on those pages.
 
 ## Related
 
