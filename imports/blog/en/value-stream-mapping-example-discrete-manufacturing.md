@@ -108,3 +108,9 @@ A value stream map built from observation is a good start, but routings, times a
 ## Next step
 
 Choose one product family in your plant and write down its steps, cycle times and stock. Then draw your own value stream mapping example and compare it with the two patterns above.
+
+## Sources
+
+- [What is discrete manufacturing? - Kaizen Institute](https://kaizen.com/insights/what-is-discrete-manufacturing/)
+- [Learning to See, Part 1 (Rother and Shook) - Lean Enterprise Institute](https://www.lean.org/wp-content/uploads/2021/01/Learning-to-See-part1.pdf)
+- [Value Stream Mapping in a Make-to-Order Environment - Lean Enterprise Institute](https://www.lean.org/the-lean-post/articles/value-stream-mapping-in-a-make-to-order-environment/)
