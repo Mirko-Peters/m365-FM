@@ -28,7 +28,7 @@ When people say Microsoft 365 is used wrongly, the cause is often an adoption pr
 
 ## What Microsoft says about why it goes wrong
 
-The Microsoft Learn change management strategy page, written for Microsoft Teams but referring to Microsoft 365 as a whole, says technology projects become challenged when little or no attention is paid to the human change management requirements. The page does not give a formal list of failure causes. Its recommendations point to the usual gaps:
+The Microsoft Learn change management strategy page, written for Microsoft Teams but referring to Microsoft 365 as a whole, says technology projects become challenged when little or no attention is paid to the human change management requirements. The page does not give a formal list of failure causes. Reading its recommendations in reverse, these are the gaps they guard against. This list is my interpretation, not a list on the page:
 
 - No sponsor or champions, so nobody speaks for the change.
 - Too many scenarios at once.
@@ -65,7 +65,7 @@ Microsoft also advises engaging likely obstacles early, because they can become 
 
 Segment users, for example mobile workers, people in constant meetings and those who struggle most with current tools. Segments most open to change are often good pilot targets. Select no more than three business scenarios for the first pilots. For a pilot, Microsoft's minimum steps are a regular stakeholder meeting, a feedback method, self-help documentation including videos and a kick-off meeting. Small organizations can use a public Teams channel for feedback. Larger ones can use a Viva Engage community.
 
-An older Microsoft 365 blog post lists four success factors: stakeholders, scenarios, awareness and training. It was published in November 2017, so use it as background, not as current product guidance.
+An older Microsoft 365 blog post lists four success factors: stakeholders, scenarios, awareness and training. It was published on November 7, 2017, so use it as background, not as current product guidance.
 
 ## Measure with Adoption Score
 
@@ -82,6 +82,8 @@ Adoption Score is a Microsoft 365 admin center report at **Reports** > **Adoptio
 Organizational messages can nudge behaviors such as using cloud attachments in Outlook.
 
 ## A practical first month
+
+This sequence is my own suggestion, built from the guidance above. Microsoft does not publish a month-by-month plan.
 
 1. Name an executive sponsor and a service owner.
 2. Find champions in two or three departments.
@@ -102,6 +104,6 @@ The change management page is written for Teams and the other sources do not des
 
 ## Sources
 
-- [Create a change management strategy for Microsoft Teams](https://learn.microsoft.com/microsoftteams/change-management-strategy)
+- [Create a change management strategy for Microsoft Teams](https://learn.microsoft.com/en-us/microsoftteams/change-management-strategy)
 - [Microsoft Adoption Score report overview](https://learn.microsoft.com/en-us/microsoft-365/admin/adoption/adoption-score)
 - [Four success factors for driving Microsoft 365 adoption (Microsoft Tech Community, 2017)](https://techcommunity.microsoft.com/blog/microsoft_365blog/four-success-factors-for-driving-microsoft-365-adoption/125098)
