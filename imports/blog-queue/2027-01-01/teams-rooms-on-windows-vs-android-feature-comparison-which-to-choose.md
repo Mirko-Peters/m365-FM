@@ -7,7 +7,7 @@ author: mirko-p
 date: 2027-01-01
 topics: [teams-rooms, teams, teams-admin-center]
 keypoints:
-  - "The Learn comparison page lists the Commercial table values as Available, Not available or Limited. It does not recommend one platform, so use it to check your must-have features."
+  - "The Learn comparison page rates most Commercial table rows as Available, Not available or Limited. It does not recommend one platform, so use it to check your must-have features."
   - "Windows only features include Front Row unified background, breakout rooms, Send Multi-camera, Spatial Audio, Miracast, Microsoft Defender for Endpoint and tenant restrictions."
   - "Android only features include meeting controls on touch-enabled front-of-room displays, local pan tilt zoom controls and Whiteboard from a console without a meeting."
   - "Operating systems listed are Windows 11 for Windows and Android 10 or later for Android."
@@ -102,7 +102,7 @@ The pages I read do not describe the following:
 - A recommendation for one platform.
 - Intune and Teams admin center management differences. The comparison page mentions neither.
 - Supported peripherals or device lists.
-- Values for the GCC and GCC High tabs, which were not available to me.
+- The GCC and GCC High tabs. This article summarizes only the Commercial tab, and the other tabs list different values for some rows, so check the tab for your cloud.
 - How each feature works or is configured.
 
 ## Related
@@ -113,5 +113,5 @@ The pages I read do not describe the following:
 
 ## Sources
 
-- [Teams Device feature comparison (Windows, Android and Panels)](https://learn.microsoft.com/microsoftteams/rooms/teams-devices-feature-comparison)
-- [Plan for Teams Rooms](https://learn.microsoft.com/microsoftteams/rooms/rooms-plan)
+- [Teams Rooms and Devices feature comparison (Microsoft Learn)](https://learn.microsoft.com/microsoftteams/rooms/teams-devices-feature-comparison)
+- [Plan for Microsoft Teams Rooms (Microsoft Learn)](https://learn.microsoft.com/microsoftteams/rooms/rooms-plan)
