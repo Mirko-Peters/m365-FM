@@ -10,7 +10,7 @@ keypoints:
   - "You need the Microsoft.Authorization/roleAssignments/write permission, for example through Role Based Access Control Administrator or User Access Administrator."
   - "Scope can be a management group, subscription, resource group or resource. Open the scope, then Access control (IAM) > Add > Add role assignment."
   - "Choose the role, select members (user, group, service principal or managed identity), optionally add a condition, then select Review + assign."
-  - "The Assignment type tab for eligible or active and permanent or time-bound assignments appears only with Microsoft Entra ID P2 or Governance licensing."
+  - "The Assignment type tab (eligible or active, permanent or time-bound) appears with Entra ID P2 or Governance licensing at management group, subscription and resource group scope."
   - "The page has no Check access section, no propagation time and no assignment limits. View assignments on the Role assignments tab."
 faq:
   - q: "What permission do I need to assign a role?"
@@ -25,7 +25,7 @@ faq:
     a: "The page says the principal is assigned after a few moments. For edits it says updates might take a while to be reflected in the portal and gives no duration."
 ---
 
-Azure role-based access control decides who can do what on which Azure resource. Assigning a role takes four ingredients: a security principal, a role, a scope and permission to assign. This guide follows the Microsoft Learn page on assigning Azure roles in the portal.
+Azure role-based access control decides who can do what on which Azure resource. In my summary, assigning a role takes four ingredients: a security principal, a role, a scope and permission to assign. This guide follows the Microsoft Learn page on assigning Azure roles in the portal.
 
 ## Prerequisites
 
@@ -38,7 +38,7 @@ You need the `Microsoft.Authorization/roleAssignments/write` permission, for exa
 3. **Role tab.** Search by name or description and filter by **Type** and **Category**. Select **View** in the Details column to see a role. Select **Next**.
 4. **Members tab.** Choose **User, group, or service principal** or **Managed identity**, select **Select members** and **Select**. Add an optional description and select **Next**.
 5. **Conditions tab, optional.** For Owner, Role Based Access Control Administrator and User Access Administrator you can delegate with the option **Allow user to only assign selected roles to selected principals (fewer privileges)**. For certain storage data roles you can add a storage condition.
-6. **Assignment type tab.** It appears only with Microsoft Entra ID P2 or Microsoft Entra ID Governance, for management group, subscription and resource group scopes. Choose **Eligible** or **Active**, and **Permanent** or **Time bound**. Eligible assignments cannot be created for applications, service principals or managed identities.
+6. **Assignment type tab.** With a Microsoft Entra ID P2 or Microsoft Entra ID Governance license this tab appears for management group, subscription and resource group scopes. The page says the capability is being deployed in stages, so it might not be available yet in your tenant. Choose **Eligible** or **Active**, and **Permanent** or **Time bound**. Eligible assignments cannot be created for applications, service principals or managed identities. Users with eligible or time-bound assignments must have a valid license. To skip PIM functionality, select **Active** and **Permanent**.
 7. **Review + assign.** Select **Review + assign**.
 
 ## Job function and privileged roles
@@ -57,17 +57,21 @@ The page has no Check access section. It says to view assignments on **Access co
 
 The principal is assigned after a few moments. After editing an assignment, updates might take a while to be processed and reflected in the portal. The page gives no number.
 
+## Edit an assignment
+
+With a Microsoft Entra ID P2 or Governance license you can edit the assignment type settings. On **Access control (IAM)** > **Role assignments**, find the assignment, select the link in the **State** column (for example Eligible time-bound or Active permanent), change the settings in the **Edit assignment** pane and select **Save**. The pane might take a few moments to open.
+
 ## What the page does not say
 
 - A procedure for the Check access feature.
 - Propagation time.
 - Limits such as the number of role assignments. The maximum eligible duration depends on the Privileged Identity Management policy.
 - What to do if the Conditions tab does not appear.
-- The Assignment type section repeats Start date and time, which is probably a typo for End date and time.
+- The Assignment type section lists Start date and time twice. My reading: the second is probably meant to be End date and time.
 
 ## An assignment outline
 
-This outline is practical advice built on the page.
+This outline is my advice, built on the page.
 
 1. Pick the narrowest scope that fits the task.
 2. Prefer a job function role. Use privileged roles rarely, with a condition if possible.
@@ -75,7 +79,7 @@ This outline is practical advice built on the page.
 4. After the assignment, open the Role assignments tab and confirm the entry.
 5. Allow time before you test, since the page gives no exact delay.
 
-## Typical mistakes
+## Typical mistakes (my advice)
 
 - Assigning at subscription scope when a resource group is enough.
 - Using Owner when a job function role would do.
@@ -93,9 +97,9 @@ This outline is practical advice built on the page.
 | Principal types | User, group, service principal, managed identity |
 | Final step | Review + assign |
 
-## What a role assignment consists of
+## What a role assignment consists of (my summary)
 
-A role assignment connects a security principal, a role definition and a scope. The portal steps ask for them in this order: scope first (where you open the page), then the role on the Role tab, then the principal on the Members tab. The optional Conditions tab narrows what the assigned person may do, and the Assignment type tab, where licensed, sets whether the assignment is eligible or active.
+This section is my summary of the page. A role assignment connects a security principal, a role and a scope. The portal steps ask for them in this order: scope first (where you open the page), then the role on the Role tab, then the principal on the Members tab. The optional Conditions tab adds an additional check to the assignment. For the delegating roles it constrains which roles and principals the user can assign, and for certain storage roles it refines access by storage attributes. The Assignment type tab, where licensed, sets whether the assignment is eligible or active.
 
 ## Related
 
