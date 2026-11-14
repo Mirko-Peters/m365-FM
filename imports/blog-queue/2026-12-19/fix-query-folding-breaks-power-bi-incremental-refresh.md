@@ -10,22 +10,22 @@ keypoints:
   - "RangeStart and RangeEnd must be Date/Time parameters with those exact case-sensitive names, and the filter column must also be Date/Time unless you convert for an integer key."
   - "If the filter step does not fold, the engine can retrieve all rows and filter locally. Learn says this can make refresh slow or run out of resources, and defeats incremental refresh."
   - "Use query folding indicators or the query plan in Power Query Online, View Native Query where available, or a trace tool at the source such as SQL Profiler."
-  - "Find the first step that stops folding and, where possible, move later steps earlier. Alternatively use Value.NativeQuery with EnableFolding on supported connectors."
-  - "Initial refresh limits are two hours for Pro and five hours for Premium capacity. Bootstrapping, Large model storage format and XMLA refresh are documented ways around timeouts."
+  - "Find the first step that stops folding and, where possible, move later steps earlier. Or use Value.NativeQuery. Learn's incremental refresh example embeds the parameters in the SQL."
+  - "Refresh limits are two hours for Pro and five hours for Premium. On Premium, bootstrapping and XMLA refresh avoid them, and Large model storage format improves refresh performance."
 faq:
   - q: "Why does my incremental refresh model load slowly after I select Apply?"
     a: "Microsoft Learn names two causes. The RangeStart and RangeEnd parameters and the filtered column are not the same Date/Time type, which prevents folding, or the data source does not support folding. Test with a short range of a few thousand rows to see whether the query folds."
   - q: "Does the final query need to fold?"
-    a: "Learn says there is no requirement for the final query to support folding. What matters is that the filter on RangeStart and RangeEnd is combined with the initial source query so that it runs at the source. A non-folding Value.NativeQuery with the parameters embedded in the SQL is described as an accepted alternative."
+    a: "Learn says there is no requirement for the final query to support folding. What matters is that the filter on RangeStart and RangeEnd is combined with the initial source query so that it runs at the source. A non-folding Value.NativeQuery with the parameters embedded in the SQL is described as an accepted alternative. Learn adds that nonfolding transformations cannot be used if the policy includes real-time data with DirectQuery."
   - q: "How do I check whether a step folds?"
     a: "In Power Query Online, folding indicators beside applied steps and the query plan show which steps fold. Where available, View Native Query shows the request sent to the source. In Power BI Desktop, Learn suggests Power Query Diagnostics or a trace tool at the source."
   - q: "Why does the initial refresh time out?"
     a: "Learn lists unfolded partition queries, partitions that are too large and a data source query timeout. Scheduled refresh has a two hour limit for Pro models and five hours for Premium capacity. XMLA endpoint refresh on Premium has no time limit."
   - q: "Can I republish the model from Power BI Desktop after the first refresh?"
-    a: "No. Learn says that after publishing you cannot publish the same model again from Power BI Desktop, because republishing removes existing partitions and data in the model. Use the XMLA endpoint for metadata changes."
+    a: "No. Learn says that after publishing you cannot publish the same model again from Power BI Desktop, because republishing removes existing partitions and data in the model. On Premium, Learn points to tools such as the ALM Toolkit or TMSL through the XMLA endpoint for metadata-only changes."
 ---
 
-When incremental refresh is slow or times out, the usual cause is that the filter on `RangeStart` and `RangeEnd` does not reach the data source. Microsoft Learn says that without folding, the engine might compensate by retrieving all rows and filtering locally, which makes refresh slow and can exhaust resources in the service or gateway. The fix is to find the step that stops folding, restore it, or push the filter into a native query.
+When incremental refresh is slow or times out, the usual cause is that the filter on `RangeStart` and `RangeEnd` does not reach the data source. Microsoft Learn says that in an import-only policy without folding, the engine might compensate by retrieving all rows and filtering locally, which makes refresh slow and can exhaust resources in the service or gateway. With a real-time DirectQuery partition, Learn says nonfolding transformations cannot be used at all. The fix is to find the step that stops folding, restore it, or push the filter into a native query.
 
 ## Step 1: Check the basics
 
@@ -44,7 +44,7 @@ A typical filter pair, from Learn's example:
 #"Filtered Rows1" = Table.SelectRows(#"Filtered Rows", each [OrderDateKey] < Int32.From(DateTime.ToText(RangeEnd,[Format="yyyyMMdd"])))
 ```
 
-Use `>=` on one side and `<` on the other, so that rows are not loaded twice in neighboring partitions. Learn's example uses exactly that pattern.
+Learn's example uses `>=` on one side and `<` on the other. The page does not say why. My reading is that this keeps boundary rows from being loaded twice in neighboring partitions.
 
 Also confirm the source supports the pattern. Learn says incremental refresh works best for structured relational sources such as SQL Database and Azure Synapse. File-based and web sources can work if the parameters can be passed into the file selection or the HTTP request. All partitions must query a single source.
 
@@ -86,28 +86,28 @@ Value.NativeQuery(Source, "SELECT DepartmentID, Name FROM HumanResources.Departm
 
 Learn lists Amazon Redshift, Dataverse with enhanced compute, Google BigQuery, PostgreSQL, SAP HANA, Snowflake and SQL Server as supported. Two cautions:
 
-- The Power BI guidance says the mashup engine cannot fold later steps after a native query, so include the transformation logic in the SQL. It also says that for DirectQuery or hybrid tables the statement must be a `SELECT` without CTEs or stored procedures.
+- The Power BI guidance says the mashup engine cannot fold later steps after a native query, so include the transformation logic in the SQL. It also says that for a DirectQuery table the statement must be a `SELECT` and cannot use CTEs or a stored procedure. The Power Query native query page, in contrast, says `EnableFolding = true` keeps folding active for later steps on its supported connectors, and Learn does not reconcile the two statements.
 - Use a read-only account. A native query can run any valid statement, including ones that modify or delete data.
 
-The Power BI guidance says incremental refresh cannot use a native SQL query without forcing the engine to retrieve all rows. The incremental refresh article says the final query need not fold and accepts a non-folding `Value.NativeQuery` with the parameters embedded in the SQL. The pages differ in emphasis, so test both the SQL text and the partition queries at the source before relying on either.
+The Power BI guidance says incremental refresh cannot use a native SQL query without forcing the engine to retrieve all rows. The incremental refresh article says the final query need not fold and accepts a non-folding `Value.NativeQuery` with the parameters embedded in the SQL. Learn's incremental refresh example uses `EnableFolding=false` with the parameters inside the SQL. The `EnableFolding = true` example on the Power Query page does not use `RangeStart` or `RangeEnd`, so whether it satisfies incremental refresh is not documented. The pages differ in emphasis, so test both the SQL text and the partition queries at the source before relying on either.
 
 ## Step 5: Fix the refresh itself
 
 Learn's troubleshooting items for the service:
 
-- **Initial refresh times out.** Check that every partition query is a single query with a `RangeStart` and `RangeEnd` filter. Pro models have a two-hour scheduled refresh limit, and Premium capacity five hours. Premium options are enabling Large model storage format before the first refresh, bootstrapping the initial refresh so partitions are created without loading history, and XMLA endpoint refresh, which has no time limit.
+- **Initial refresh times out.** Check that every partition query is a single query with a `RangeStart` and `RangeEnd` filter. Pro models have a two-hour scheduled refresh limit, and Premium capacity five hours. Premium options are enabling Large model storage format before the first refresh, which Learn describes as improving refresh performance rather than lifting the limit, bootstrapping the initial refresh so partitions are created without loading history, which Learn says bypasses the five-hour limit when you then process partitions in SSMS, and XMLA endpoint refresh, which has no time limit.
 - **Data source timeout.** Many sources allow overriding the limit in the query, for example `CommandTimeout=#duration(0, 2, 0, 0)` for relational sources.
 - **Duplicate values.** Post dates should not change. If past data must change, use SSMS to refresh partitions from the change point to the current one.
 - **Data truncated.** Azure Data Explorer, Log Analytics and Application Insights have a 64 MB compressed limit for external queries. Try a smaller refresh period, such as 12 months.
 - **Partition-key conflicts.** An updated date is treated as insert plus delete, and a delete in the historical range is not picked up. Learn gives no solution for this cause.
 
-Remember the publishing rules: after the first publish you cannot publish the same model again from Power BI Desktop, because republishing removes the partitions and data, and you cannot download the model as a PBIX.
+Remember the publishing rules: after the first publish you cannot publish the same model again from Power BI Desktop, because republishing removes the partitions and data, and you cannot download the model as a PBIX. For Premium workspaces, Learn points to tools such as the ALM Toolkit or TMSL for later metadata-only changes.
 
 ## Optional tuning in the policy
 
 - **Detect data changes** uses a separate date/time column to refresh only changed periods. Do not use the partition column.
 - **Only refresh complete days** ensures full days are loaded, and is required if you enable real-time DirectQuery.
-- The time zone for refresh defaults to UTC, and XMLA TMSL refresh ignores the configured time zone.
+- The current date and time default to UTC. For on-demand, scheduled and REST API refreshes you can configure another time zone under Refresh, and XMLA TMSL refresh ignores that setting.
 
 ## Related
 
@@ -118,9 +118,9 @@ Remember the publishing rules: after the first publish you cannot publish the sa
 
 ## Sources
 
-- [Incremental refresh and real-time data for semantic models (Microsoft Learn)](https://learn.microsoft.com/en-us/power-bi/connect-data/incremental-refresh-overview)
-- [Troubleshoot incremental refresh and real-time data (Microsoft Learn)](https://learn.microsoft.com/en-us/power-bi/connect-data/incremental-refresh-troubleshoot)
-- [Query folding basics (Microsoft Learn)](https://learn.microsoft.com/en-us/power-query/query-folding-basics)
-- [Query folding indicators (Microsoft Learn)](https://learn.microsoft.com/en-us/power-query/step-folding-indicators)
-- [Query folding on native queries (Microsoft Learn)](https://learn.microsoft.com/en-us/power-query/native-query-folding)
-- [Power Query query folding guidance for Power BI (Microsoft Learn)](https://learn.microsoft.com/en-us/power-bi/guidance/power-query-folding)
+- [Configure incremental refresh and real-time data for Power BI semantic models - Power BI](https://learn.microsoft.com/en-us/power-bi/connect-data/incremental-refresh-overview)
+- [Troubleshoot incremental refresh and real-time data - Power BI](https://learn.microsoft.com/en-us/power-bi/connect-data/incremental-refresh-troubleshoot)
+- [Understanding Query Evaluation and Query Folding in Power Query - Power Query](https://learn.microsoft.com/en-us/power-query/query-folding-basics)
+- [Query Folding Indicators in Power Query - Power Query](https://learn.microsoft.com/en-us/power-query/step-folding-indicators)
+- [Query folding on native queries - Power Query](https://learn.microsoft.com/en-us/power-query/native-query-folding)
+- [Query folding guidance in Power BI Desktop - Power BI](https://learn.microsoft.com/en-us/power-bi/guidance/power-query-folding)
