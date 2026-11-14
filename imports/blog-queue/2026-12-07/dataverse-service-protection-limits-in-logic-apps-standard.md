@@ -56,7 +56,7 @@ Power Automate's limits page adds a related point: Dataverse limits are evaluate
 
 ## The Logic Apps side: retry policies
 
-Microsoft's error handling article for Logic Apps says retry policies apply to triggers and actions that support them. They trigger when a request times out or fails with 408, 429 or 5xx.
+Microsoft's article on handling workflow errors and exceptions in Logic Apps says retry policies apply to triggers and actions that support them. They trigger when a request times out or fails with 408, 429 or 5xx.
 
 | Policy type | Behavior |
 |---|---|
@@ -118,7 +118,7 @@ Settings go in the `extensions.workflow.Settings` object of host.json. Because 2
 ## Sources
 
 - [Service protection API limits (Microsoft Learn)](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/api-limits)
-- [Error and exception handling in Azure Logic Apps (Microsoft Learn)](https://learn.microsoft.com/en-us/azure/logic-apps/logic-apps-exception-handling)
+- [Handle workflow errors and exceptions in Azure Logic Apps (Microsoft Learn)](https://learn.microsoft.com/en-us/azure/logic-apps/error-exception-handling)
 - [Edit host and app settings for Standard logic apps (Microsoft Learn)](https://learn.microsoft.com/en-us/azure/logic-apps/edit-app-settings-host-settings)
 - [Understand Power Automate limits (Microsoft Learn)](https://learn.microsoft.com/en-us/power-automate/guidance/coding-guidelines/understand-limits)
 - [Handle transient faults (Microsoft Learn)](https://learn.microsoft.com/en-us/power-platform/well-architected/reliability/handle-transient-faults)
