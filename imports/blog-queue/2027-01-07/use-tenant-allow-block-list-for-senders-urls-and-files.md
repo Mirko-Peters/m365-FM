@@ -11,7 +11,7 @@ keypoints:
   - "Block entries take precedence over allow entries. Blocked domains, addresses and URLs are handled as high confidence phishing and quarantined, and files as malware."
   - "Allow entries for domains, addresses and URLs can override only bulk, spam, high confidence spam and phishing that is not high confidence. Malware and high confidence phishing need a submission."
   - "Block entries default to 30 days and can last up to 90 days or never expire. Allow entries are kept 45 days after the system judges the item clean."
-  - "New entries take effect within 5 minutes."
+  - "An allow entry added on the Submissions page or a block entry added in the list starts working within 5 minutes."
 faq:
   - q: "Where do I manage the list?"
     a: "In the Microsoft Defender portal under Email & collaboration > Policies & rules > Threat policies > Rules > Tenant Allow/Block Lists, or at security.microsoft.com/tenantAllowBlockList."
@@ -22,10 +22,10 @@ faq:
   - q: "How long do entries last?"
     a: "Block entries for domains, addresses, files and URLs default to 30 days and can be set to 90 days or never expire. Allow entries are kept 45 days after the system determines the item is clean, or you can set them to expire up to 30 days after creation."
   - q: "How fast do changes apply?"
-    a: "New allow or block entries take effect within 5 minutes."
+    a: "Learn says that after you add an allow entry on the Submissions page or a block entry in the Tenant Allow/Block List, the entry starts working within 5 minutes."
 ---
 
-The Tenant Allow/Block List lets you override Microsoft's filtering verdicts for specific senders, URLs, files and IP addresses. Block entries always win over allow entries, and allow entries are deliberately limited. This guide follows the Microsoft Learn overview of the Tenant Allow/Block List. The page links to separate procedures for creating each entry type, which were not read for this guide.
+The Tenant Allow/Block List lets you override Microsoft's filtering verdicts for specific senders, URLs, files and IP addresses. Block entries always win over allow entries, and allow entries are deliberately limited. This guide follows the Microsoft Learn page Manage allows and blocks in the Tenant Allow/Block List. The page links to separate procedures for creating each entry type, which were not read for this guide.
 
 ## What the list covers
 
@@ -47,7 +47,7 @@ Portal path: **Email & collaboration** > **Policies & rules** > **Threat policie
 | Domains and addresses | Messages are marked high confidence phishing and quarantined. Internal users cannot send to the blocked domain or address and get a 550 5.7.703 error. The whole message is blocked for all recipients |
 | Files | Blocked as malware and quarantined |
 | URLs | Blocked as high confidence phishing and quarantined |
-| Spoofed senders | Manual block entries appear only on the Spoofed senders tab |
+| Spoofed senders | If you manually override an existing allow verdict from spoof intelligence, the blocked sender becomes a manual block entry that appears only on the Spoofed senders tab |
 | IP addresses | Incoming email from the IP is dropped at the edge |
 | Teams domains and addresses | All incoming Teams communication is blocked and existing communication is deleted |
 
@@ -85,7 +85,7 @@ A false positive submission creates an allow entry on the Files or URLs tab. Lat
 
 ## Timing
 
-New allow or block entries take effect within 5 minutes.
+After you add an allow entry on the Submissions page or a block entry in the Tenant Allow/Block List, the entry starts working within 5 minutes. The page does not state this timing for allow entries that you create directly in the list, such as for spoofed senders or IP addresses.
 
 ## What the page does not say
 
@@ -93,24 +93,24 @@ New allow or block entries take effect within 5 minutes.
 - Required permissions and roles.
 - Entry limits per type.
 - PowerShell commands. The page only links to procedures.
-- Which license features each capability needs, apart from an applies-to list of built-in protection, Defender for Office 365 Plan 1 and 2, and Defender XDR.
+- Which license features each capability needs. The only licensing hint is a tip about the Defender for Office 365 Plan 2 trial.
 - Teams allow behavior.
 
 ## A practical approach
 
-The steps are advice built on the page.
+These steps are my advice, built on the page.
 
 1. Prefer a submission over a manual allow entry when a legitimate message was blocked.
 2. Use block entries for senders and URLs you know are bad, and choose an expiry on purpose.
 3. Review allow entries before they expire, since Microsoft can remove them early.
 4. Keep spoofed sender allow entries under review, because they never expire.
 
-## Typical mistakes
+## Typical mistakes (my advice)
 
 - Trying to allow a malware file or high confidence phishing message with a plain allow entry.
 - Expecting an allow entry to bypass email authentication.
 - Blocking a domain and forgetting that internal users can no longer send to it.
-- Expecting an instant effect instead of waiting up to 5 minutes.
+- Expecting an instant effect instead of allowing up to 5 minutes.
 
 ## Related
 
@@ -120,4 +120,4 @@ The steps are advice built on the page.
 
 ## Sources
 
-- [Tenant Allow/Block List overview (Microsoft Learn)](https://learn.microsoft.com/defender-office-365/tenant-allow-block-list-about)
+- [Manage allows and blocks in the Tenant Allow/Block List (Microsoft Learn)](https://learn.microsoft.com/defender-office-365/tenant-allow-block-list-about)
