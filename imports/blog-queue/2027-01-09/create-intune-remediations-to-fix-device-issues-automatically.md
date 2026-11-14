@@ -25,22 +25,22 @@ faq:
     a: "Up to 200 script packages and 2,048 characters of script output. Scripts must not include reboot commands or sensitive or personal data."
 ---
 
-Remediations in Microsoft Intune run a detection script on Windows devices and, if it finds a problem, run a remediation script that fixes it. The feature was formerly called Proactive Remediations. This guide follows the Microsoft Learn page on remediations.
+Remediations in Microsoft Intune run a detection script on Windows devices and, if it finds a problem, run a remediation script that fixes it. The feature was formerly called Proactive Remediations. This guide follows the Microsoft Learn page Use Remediations to Detect and Fix Support Issues.
 
 ## What a package contains
 
-A script package has a detection script and, optionally, a remediation script. Both are PowerShell files in .ps1 format, saved as UTF-8. You find them in the Intune admin center under **Devices** > **Manage devices** > **Scripts and remediations**.
+A script package has a detection script and, optionally, a remediation script. Both are PowerShell files in .ps1 format, saved as UTF-8. If **Enforce script signature check** is enabled, they must be UTF-8 and not UTF-8 BOM (Byte Order Mark). You find them in the Intune admin center under **Devices** > **Manage devices** > **Scripts and remediations**.
 
 ## Requirements
 
 - Devices are Microsoft Entra joined or hybrid joined.
 - Devices are Intune enrolled and run Windows Enterprise, Pro or Education, or they are co-managed.
-- Licensing: Windows Enterprise E3 or E5 (included in Microsoft 365 F3, E3 and E5), Windows Education A3 or A5, or Windows VDA per user. Learn says an Intune Service Administrator must confirm the licensing.
+- Licensing: Windows Enterprise E3 or E5 (included in Microsoft 365 F3, E3 and E5), Windows Education A3 or A5, or Windows VDA per user. Learn says an Intune Service Administrator is required to confirm the licensing requirements before you use remediations for the first time. For other tasks, users need permissions appropriate to their role under the **Device configurations** category.
 
 ## Script settings
 
 - **Run this script using the logged-on credentials.** The result depends on what the script does.
-- **Enforce script signature check.** Learn recommends No.
+- **Enforce script signature check.** Learn recommends No. When it is enabled, the script runs under the device's PowerShell execution policy (Restricted by default on Windows client computers), and non-Microsoft signed scripts need their certificate in the Trusted Publishers store. Without it, scripts use the Bypass execution policy.
 - **Run script in 64-bit PowerShell.** Learn recommends No.
 
 ## Exit codes
@@ -75,7 +75,7 @@ The page lists two built-in packages: Update stale Group Policies and Restart Of
 
 ## Run a remediation on demand (preview)
 
-You can run a remediation on a single device. During the preview you need the Run remediation permission and Organization: Read. Only one action runs per device at a time.
+You can run a remediation on a single Windows device. You must be an Intune admin or have a role with the **Run remediation** permission (under Remote tasks), and during the public preview also Organization: Read. The device must be online and able to reach Intune and Windows Push Notification Service, or it does not receive the action. Only one Run remediation action can be issued per device at a time, and several in a short time can overwrite each other.
 
 ## Known issue
 
@@ -86,11 +86,11 @@ Filters and Export cover only the packages that are loaded in the list.
 - A script timeout.
 - A minimum interval for hourly schedules.
 - How failures are retried or handled.
-- A full permission list for creating packages.
+- A full permission list for creating packages. The page only says to use permissions appropriate to the role under the Device configurations category.
 
 ## A rollout outline
 
-This outline is practical advice built on the page.
+This outline is my advice, built on the page.
 
 1. Pick one narrow issue and write the detection script first.
 2. Test the exit code on a pilot device.
@@ -98,7 +98,7 @@ This outline is practical advice built on the page.
 4. Start with a daily schedule and review the reports after the seven-day cycle.
 5. Check the license position before you widen the assignment.
 
-## Typical mistakes
+## Typical mistakes (my advice)
 
 - Returning exit code 0 when the issue is found.
 - Putting reboot commands or personal data in a script.
@@ -120,7 +120,7 @@ This outline is practical advice built on the page.
 
 ## How a run works
 
-The device retrieves the package at restart, at sign-in and every 8 hours. At the scheduled time it runs the detection script. If the detection script exits with code 1, the remediation script runs. With any other exit code the remediation script does not run. If a scheduled run was missed because the device was off, the run happens when the device is back online. You can choose local time or UTC for the schedule, which matters for devices in several time zones.
+The device retrieves the package at restart, at sign-in and every 8 hours. At the scheduled time it runs the detection script. If the detection script exits with code 1, the remediation script runs. With any other exit code the remediation script does not run. If a scheduled run was missed because the device was off, the run happens when the device is back online. You can choose local time or UTC for the schedule. My note: this matters for devices in several time zones.
 
 ## Choosing script settings
 
@@ -134,4 +134,4 @@ The page recommends No for the signature check and No for 64-bit PowerShell. The
 
 ## Sources
 
-- [Remediations in Intune (Microsoft Learn)](https://learn.microsoft.com/intune/intune-service/fundamentals/remediations)
+- [Use Remediations to Detect and Fix Support Issues (Microsoft Learn)](https://learn.microsoft.com/intune/device-management/tools/deploy-remediations)
