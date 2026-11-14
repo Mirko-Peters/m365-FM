@@ -77,7 +77,7 @@ Customize mode ignores all other settings and applies only application preferenc
 - **Troubleshooting.** Check the log files in `%temp%`. If problems persist, update to the newest ODT.
 - **Scope.** The article is for enterprise admins. Home users should follow a separate install guide.
 
-## A repeatable pattern
+## A repeatable pattern (my advice)
 
 1. Generate the configuration in the Office Customization Tool, choosing products, languages and update settings.
 2. Run download mode once to a share.
@@ -87,7 +87,7 @@ Customize mode ignores all other settings and applies only application preferenc
 
 The pattern above is practical advice, not a Microsoft procedure.
 
-## Typical mistakes
+## Typical mistakes (my advice)
 
 - Running configure without administrator rights.
 - Using a relative path when running from a share.
