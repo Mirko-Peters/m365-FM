@@ -20,7 +20,7 @@ faq:
   - q: "What can reviewers do?"
     a: "Reviewers can view, block or deny requests and see incoming requests in the My Pending tab. Only Global Administrators can approve requests for apps that ask for Microsoft Graph application permissions."
   - q: "How do expiry reminders work?"
-    a: "Per Learn, the first reminder goes out about midway through the expiry period. With a three-day expiry, the first reminder is sent on day 2. The last one goes out almost immediately at expiry."
+    a: "Per Learn, the first reminder is likely sent in the middle of the expiry period. With a three-day expiry, the first reminder is sent on the second day. The last one goes out almost immediately at expiry."
   - q: "How long does it take to take effect?"
     a: "Learn says enabling the workflow can take up to an hour."
 ---
@@ -49,7 +49,7 @@ The admin consent workflow gives users a way to ask for approval when they canno
 | **Selected users will receive request expiration reminders** | Reminder emails to reviewers before a request expires |
 | **Consent request expires after (days)** | How long a request stays valid |
 
-Reminder timing: the first reminder is sent roughly midway through the expiry period. With a three-day expiry, it goes out on day 2, and the last reminder goes out almost immediately at expiry.
+Reminder timing: Learn says the first reminder is likely sent in the middle of the expiry period. With a three-day expiry, it goes out on the second day, and the last expiration email goes out almost immediately when the request expires.
 
 ## How the workflow runs
 
@@ -79,9 +79,9 @@ Learn points to the Microsoft Graph Update adminConsentRequestPolicy API for set
 - How delegated permissions and other permission types are handled beyond the Graph app role rule.
 - Limits on the number of reviewers, licensing, and behavior for guest or multitenant scenarios.
 
-## A rollout outline
+## A rollout outline (my advice)
 
-This outline is practical advice built on the page.
+This outline is my own suggestion built on the page.
 
 1. Choose a reviewer group, and check that its members hold a role that can grant admin consent.
 2. Decide who approves Graph application permissions. Since only Global Administrators can, plan for that step.
@@ -90,7 +90,7 @@ This outline is practical advice built on the page.
 5. Test with a nonadmin account that tries to sign in to an app that needs consent.
 6. Allow for the delay of up to an hour before you test.
 
-## Typical mistakes
+## Typical mistakes (my advice)
 
 - Naming reviewers who lack the permissions to grant consent.
 - Expecting a non-Global-Administrator reviewer to approve Graph application permissions.
