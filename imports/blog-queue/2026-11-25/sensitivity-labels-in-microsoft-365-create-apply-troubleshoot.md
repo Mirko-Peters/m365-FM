@@ -10,7 +10,7 @@ keypoints:
   - "A sensitivity label is stored in clear text in the metadata of files and emails and stays with the content wherever it is saved. Each item can have one sensitivity label."
   - "Create labels in the Microsoft Purview portal under Solutions > Information Protection > Sensitivity labels. A label is not available in apps until it is published in a label policy."
   - "Allow up to 24 hours for label and policy changes to reach apps. Group-based settings can take 24 to 48 hours."
-  - "Order sets priority: put the most restrictive label at the bottom of the list. Microsoft recommends no more than five main labels."
+  - "Order sets priority: put the most restrictive label at the bottom of the list. Effectiveness drops with more than five main labels."
   - "If the Sensitivity button is missing, check the file type, the Office edition, the label scope, the AIP add-in setting and the Sensitivity feature setting."
 faq:
   - q: "Where is the sensitivity label stored in a file?"
@@ -70,9 +70,9 @@ Labels are not available in apps until they are published.
 2. Select **Publish label** on the **Label policies** page.
 3. Choose the labels, keep **Full directory** unless you use administrative units, and complete the policy settings.
 
-Completing the wizard publishes the policy. To change it, select the policy and then **Edit Policy**. Microsoft suggests as few policies as possible, and one for the whole organization is common. Assign groups rather than individual users. If policies conflict, the policy with the highest order number wins.
+Completing the wizard publishes the policy. To change it, select the policy and then **Edit Policy**. Learn says to keep the number of label policies low and to create more than one only when users need different labels or different policy settings. If several policies could conflict for a user, review their order and use **Move up** or **Move down**. The pages read here do not spell out the conflict rule.
 
-Useful policy settings are a default label, mandatory labeling, and a justification requirement for removing or lowering a label. Learn says the default label always takes priority over mandatory labeling, and that when mandatory labeling is on, users cannot remove labels from documents but can change them.
+Useful policy settings are a default label, mandatory labeling, and a justification prompt when users lower a label's sensitivity. Learn says the default label always takes priority over mandatory labeling, and that when mandatory labeling is on, users cannot remove labels from documents but can change them.
 
 ## Timing
 
@@ -85,7 +85,7 @@ Useful policy settings are a default label, mandatory labeling, and a justificat
 
 ## How users apply labels
 
-After publishing, the **Sensitivity** button appears on the ribbon in Windows Office apps. The applied label shows in a sensitivity bar next to the file name in Word, Excel and PowerPoint, and on the **Subject** line in Outlook. Users need a Microsoft 365 work or school account, and the apps need a subscription version of Office such as Microsoft 365 Apps for enterprise.
+After publishing, the **Sensitivity** button appears on the ribbon in supported Office apps. The applied label shows in a sensitivity bar next to the file name in Word, Excel and PowerPoint, and on the **Subject** line in Outlook. Users need a Microsoft 365 work or school account, and the apps need a subscription version of Office such as Microsoft 365 Apps for enterprise.
 
 ## Troubleshoot a missing label
 
