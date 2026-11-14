@@ -69,7 +69,7 @@ Microsoft's quoted examples are plain requests such as "Help me create a new pre
 
 ### Starting from a document
 
-Copilot can build slides from a Word document, using its structure and images. Microsoft's tips: organize the Word file with Word Styles so Copilot can split it into slides, include relevant images, and start from your organization's template so the theme is kept. Copilot works best with Word documents smaller than 24 MB. A separate PowerPoint page says presentations from a file support one Word file at a time, and that PDF and encrypted files need a Microsoft Copilot work license.
+Copilot can build slides from a Word document, using its structure and images. Microsoft's tips: organize the Word file with Word Styles so Copilot can split it into slides, include relevant images, and start from your organization's template so the theme is kept. Copilot works best with Word documents smaller than 24 MB. A separate PowerPoint page says Copilot Pro (home) supports one Word file, while Microsoft Copilot (work) also supports PDF and encrypted files.
 
 ### PowerPoint limits
 
@@ -99,7 +99,6 @@ In the report, select **Copilot** in the ribbon, pick a suggested prompt or one 
 - "Prep a summary for my team."
 - "Give me a summary of my revenue over the last fiscal year and describe any significant outliers."
 - "Summarize the data specific to Seattle, WA."
-- "Which product had the highest profit margin?"
 
 By default Copilot summarizes visuals across the entire report, not only the current page, so narrow the scope in the prompt when needed.
 
@@ -108,7 +107,7 @@ By default Copilot summarizes visuals across the entire report, not only the cur
 - An administrator must enable Copilot in Microsoft Fabric and the tenant switch.
 - The Fabric capacity must be in a supported region and be a paid SKU. Trial SKUs are not supported.
 - Outside the US or EU data boundary, Copilot is disabled by default unless a tenant setting is enabled.
-- Summaries consider only visuals with fewer than 30,000 rows and use the top 20 visuals. Text over 500 characters is truncated.
+- Summaries consider only visuals with fewer than 30,000 rows and identify up to 20 relevant visuals to summarize from. Text over 500 characters is truncated.
 - Copilot applies page and report-level filters but not visual-level filters.
 
 ## A reusable prompt shape
