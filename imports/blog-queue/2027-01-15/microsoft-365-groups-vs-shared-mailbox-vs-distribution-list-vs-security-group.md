@@ -38,7 +38,7 @@ Learn compares six group types that you can create and manage in the Microsoft 3
 | Shared mailboxes | Yes | No |
 | Dynamic distribution groups | Yes | No |
 
-The last column is about Entra ID. Dynamic distribution groups are marked No there because they are a different mechanism, described below.
+The last column is about Entra ID. Dynamic distribution groups are marked No there. The page says their attributes are defined in the Exchange admin center rather than in Entra ID, as described below.
 
 ## What Learn says about each type
 
@@ -58,7 +58,7 @@ The last column is about Entra ID. Dynamic distribution groups are marked No the
 
 - Microsoft 365 Groups cannot be members of distribution groups or security groups.
 - Shared mailboxes cannot be migrated to Microsoft 365 Groups.
-- Only security groups contain devices according to the page, so device policies point to them.
+- Learn says security groups can contain devices and that mail-enabled security groups cannot. It does not describe devices as members of the other types.
 - Mail-enabled security groups give up dynamic management and devices in return for email.
 - Distribution groups, security groups and mail-enabled security groups can be added to a team, but a distribution group adds only its members.
 
@@ -66,7 +66,7 @@ The last column is about Entra ID. Dynamic distribution groups are marked No the
 
 This section is my advice, not a Microsoft statement.
 
-1. **Several people answer one address.** Use a shared mailbox. This is the case Learn itself gives, a support or information address, and in my experience it is the type people most often pick wrongly as a group.
+1. **Several people answer one address.** Use a shared mailbox. This is the case Learn itself gives, a support or information address.
 2. **You only broadcast to a list.** A distribution group does that. If the list follows an attribute such as department or location, a dynamic distribution group saves you from maintaining the list, at the cost of defining filters in Exchange.
 3. **You grant access or target devices.** Use a security group. If membership should follow attributes, configure dynamic membership in Entra ID. Choose a mail-enabled security group only if you need email to the same list and can live without devices and dynamic membership.
 4. **You want a team workspace.** Use a Microsoft 365 Group, which Learn describes with a group email and a shared workspace for conversations, files and calendar.
