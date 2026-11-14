@@ -37,7 +37,7 @@ MD-102 is the exam Managing and Securing Microsoft 365 Endpoints by using Intune
 
 ## Audience profile
 
-Candidates have expertise in managing devices and client applications in a Microsoft 365 tenant by using Microsoft Intune and agentic tools and workflows. They should understand Microsoft Entra ID, Microsoft Security Copilot, Intune agents and Microsoft Defender XDR.
+Candidates have expertise in managing devices and client applications in a Microsoft 365 tenant by using Microsoft Intune and agentic tools and workflows. They need experience with Microsoft Entra ID and Microsoft 365 technologies, and they should understand Microsoft Security Copilot, Intune agents and Microsoft Defender XDR.
 
 ## Skills measured
 
@@ -92,4 +92,4 @@ The page does not give exam duration, price or number of questions.
 
 ## Sources
 
-- [Study guide for Exam MD-102](https://learn.microsoft.com/credentials/certifications/resources/study-guides/md-102)
+- [Study guide for Exam MD-102: Managing and Securing Microsoft 365 Endpoints by using Intune (Microsoft Learn)](https://learn.microsoft.com/credentials/certifications/resources/study-guides/md-102)
