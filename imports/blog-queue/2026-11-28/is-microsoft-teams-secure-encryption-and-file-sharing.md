@@ -89,7 +89,7 @@ Learn adds that changes in Teams admin settings can take up to 24 hours, and Tea
 5. Do not rely on E2EE unless you accept losing recording and transcription.
 6. Set retention and audit so you can answer questions later.
 
-Microsoft also says no system can guarantee complete security. The honest answer to "is Teams secure" is that the platform is encrypted and certified, and the remaining risk sits in permissions, guests and user behavior.
+The Teams security guide itself says that no system can guarantee complete security. A fair answer to "is Teams secure" is that the platform encrypts data in transit and at rest, and that much of the remaining risk sits in permissions, guests and user behavior, which are settings you control.
 
 ## Related
 
