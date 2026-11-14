@@ -80,7 +80,7 @@ Then:
 
 ## The verified domain requirement
 
-Learn adds a note to option 2. To relay messages through Microsoft 365, the domain of the sender, or the domain of contoso.com in the example, must be verified in the Microsoft 365 tenant. Otherwise you may see an error like the one above together with an explicit ATT36 error. Learn links a separate page on configuring a certificate based connector to relay email through Microsoft 365 for the ATT36 error. I did not read that page, so I do not describe it here.
+Learn adds a note to option 2. To relay messages through Microsoft 365, the domain of the sender, or the domain of contoso.com in the example, must be verified in the Microsoft 365 tenant. Otherwise you may see an error like the one above together with an explicit ATT36 error. Learn links a separate page on configuring a certificate based connector to relay email through Microsoft 365 for the ATT36 error.
 
 ## A practical order of checks
 
