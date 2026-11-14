@@ -48,7 +48,7 @@ Learn says this indicates an unspecified problem with iOS or iPadOS on the devic
 2. Put the device in recovery mode and restore it, setting it up as a new device. Learn points to an Apple support article for how to restore.
 3. Re-enroll the device.
 
-This is the most disruptive fix on the page, so Learn places it as a response only to this exact message.
+This is the most disruptive fix on the page, and Learn gives it only for this exact message.
 
 ## Message 2: Connection to the server could not be established
 
@@ -82,7 +82,7 @@ This indicates a management profile is already installed on the device. Learn sa
 
 ## Related notes on the general page
 
-Learn's general page has a note on expired certificates: the `IOSProfileSigning.manage.microsoft.com` certificate is needed to install the management profile on iOS and iPadOS during enrollment, and it stays on devices after use because of how iOS works. Enrolled devices work as expected and new enrollments receive the same certificate with a new date, so some expired, unverified certificates might appear without affecting existing enrollments. It also covers other messages, such as DeviceCapReached, Company Portal Temporarily Unavailable and MDM authority not defined, each with its own cause and fix. I did not repeat those here, since they are different errors.
+Learn's general page has a note on expired certificates: the `IOSProfileSigning.manage.microsoft.com` certificate is needed to install the management profile on iOS and iPadOS during enrollment, and it stays on devices after use because of how iOS works. Enrolled devices work as expected and new enrollments receive the same certificate with a new date, so some expired, unverified certificates might appear without affecting existing enrollments. It also covers other messages, such as DeviceCapReached, Company Portal Temporarily Unavailable and MDM authority not defined, each with its own cause and fix.
 
 ## How I would work through it
 
@@ -91,7 +91,7 @@ This section is my advice, not a Microsoft statement.
 1. **Read the exact message on the screen.** The three messages have different fixes, and the restore for the network error is destructive, so do not apply it to the other two.
 2. **Check the cheap causes first.** For the connection message, a license check and the management profile check take a minute and rule out two of the four scenarios.
 3. **Look at the enrollment restrictions for the user group** before blaming the device, if several people report the same message.
-4. **Write down what the device was used for before.** A device with a previous owner or another MDM profile is a common case in the scenarios Learn lists.
+4. **Write down what the device was used for before.** A previous user and another MDM provider are two of the scenarios Learn lists for the connection message.
 5. **Warn the user before any restore.** Learn says it deletes all data, so confirm a backup exists.
 
 ## What the pages do not say
