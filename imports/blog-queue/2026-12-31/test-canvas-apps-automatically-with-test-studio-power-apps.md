@@ -18,12 +18,12 @@ faq:
   - q: "Do I need to publish the app before recording?"
     a: "Yes. According to Microsoft Learn, only a published app plays in record mode, so recording without publishing replays the last published version."
   - q: "How do I run tests in a browser or a pipeline?"
-    a: "Select a suite or case and choose Copy play link. Learn says the link is persistent and recommends it for integration with Azure DevOps."
+    a: "Select a suite or case and choose Copy play link. Learn says the link is persistent and helps integrate tests in a build and release pipeline such as Azure DevOps."
   - q: "Where can I store test results?"
     a: "Learn shows saving results with Patch into a Dataverse table, and mentions a Power Automate flow, email and in-app notifications as other destinations."
 ---
 
-Test Studio lets you record and replay tests of a canvas app inside Power Apps. You open it from **Advanced tools**, group tests into suites and cases, record steps, add assertions, and play the tests. This guide follows the Microsoft Learn overview of Test Studio and the article on working with it.
+Test Studio lets you record and replay tests of a canvas app inside Power Apps. You open it from **Advanced tools**, group tests into suites and cases, record steps, add assertions, and play the tests. This guide follows the Microsoft Learn pages Test Studio - Power Apps and Working with Test Studio - Power Apps.
 
 ## Requirements
 
@@ -85,11 +85,11 @@ The page saves results with `Patch` into a custom Dataverse table. Other destina
 
 ## Run in a browser or pipeline
 
-Select a suite or case and choose **Copy play link**. If there are unpublished changes you are asked to publish, and you can skip it, but new changes will not play. Paste the URL into a browser to play the test. The link is persistent, so you can update tests without changing build and release pipelines. Learn recommends this for Azure DevOps. Pipeline setup is in a separate article that I did not read.
+Select a suite or case and choose **Copy play link**. If there are unpublished changes you are asked to publish, and you can skip it, but new changes will not play. Paste the URL into a browser to play the test. The link is persistent, so you can update tests without changing build and release pipelines. Learn says the link helps integrate tests in a build and release pipeline such as Azure DevOps. The page gives no pipeline setup steps.
 
 ## Limitations and best practices
 
-The overview lists limitations. Among them are components, PCF controls, nested galleries, media controls, Person columns and formula-level error management. It also says Test Studio is incompatible with Git version control. Read the current list before you plan coverage.
+The overview lists limitations. Among them are components, code components written with the Power Apps Component Framework (PCF), nested galleries, media controls, Person-type columns, controls not listed in the Select and SetProperty function pages, and the formula-level error management experimental feature, which the page says needs to be turned on for the app. It also says Test Studio is incompatible with Git version control. Read the current list before you plan coverage.
 
 ## Suggestion: a first test plan
 
@@ -116,5 +116,5 @@ The pages I read do not describe the following:
 
 ## Sources
 
-- [Overview of Test Studio](https://learn.microsoft.com/power-apps/maker/canvas-apps/test-studio)
-- [Working with Test Studio](https://learn.microsoft.com/power-apps/maker/canvas-apps/working-with-test-studio)
+- [Test Studio - Power Apps (Microsoft Learn)](https://learn.microsoft.com/power-apps/maker/canvas-apps/test-studio)
+- [Working with Test Studio - Power Apps (Microsoft Learn)](https://learn.microsoft.com/power-apps/maker/canvas-apps/working-with-test-studio)
