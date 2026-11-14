@@ -53,11 +53,11 @@ Dev Box governance and cost controls, as the overview describes them, include pr
 
 ### Retirement notice
 
-The page states that Microsoft Dev Box retires at 17:00 UTC on 18 September 2028. The closing-down period begins at 16:00 UTC on 14 September 2026, which has already started as of this writing. The page recommends transitioning workflows to Windows 365 or another appropriate solution before the retirement date. It gives no migration steps.
+The page states that Microsoft Dev Box retires at 17:00 UTC on 18 September 2028. The closing-down period begins at 16:00 UTC on 14 September 2026, which has already started as of this writing. The page recommends transitioning workflows to Windows 365 or another appropriate solution before the retirement date. It gives no migration steps itself and links to a separate Microsoft Dev Box retirement guide. It also tells you to start a retirement plan now to validate feature differences and to secure licenses and capacity.
 
 ## Features at a glance
 
-Learn lists these features. Azure Virtual Desktop offers pooled multi-session and personal desktops, RemoteApp publishing for individual apps, high workload density and full network design control. Windows 365 offers dedicated per-user Cloud PCs, Frontline concurrent-user access and predictable per-user capacity. The page does not describe profile and storage solutions, so check those separately.
+Learn lists these features. Azure Virtual Desktop offers pooled multi-session and personal desktops, RemoteApp publishing for individual apps, high workload density and full network design control. Windows 365 offers dedicated per-user Cloud PCs, Frontline concurrent-user access and predictable per-user capacity. The page only says that with Azure Virtual Desktop you own the profile solution and storage decisions, and it does not describe those solutions, so check them separately.
 
 ## A short decision guide
 
@@ -70,7 +70,7 @@ This guide restates the Learn guidance, with one addition that is a suggestion a
 
 ## Not covered
 
-The comparison page gives no pricing, license SKUs, regions, GPU options, protocol details or security features. It does not describe differences between Windows 365 Enterprise and Business beyond their labels. The Dev Box page gives no pricing and no migration steps.
+The comparison page gives no pricing, license SKUs, regions, GPU options, protocol details or security features. It does not describe differences between Windows 365 Enterprise and Business beyond their labels. The Dev Box page gives no pricing and no migration steps, and links to a retirement guide.
 
 ## Related
 
@@ -80,5 +80,5 @@ The comparison page gives no pricing, license SKUs, regions, GPU options, protoc
 
 ## Sources
 
-- [Compare Azure Virtual Desktop with Windows 365](https://learn.microsoft.com/training/modules/explore-azure-virtual-desktop/03-compare-azure-virtual-desktop-windows-365)
-- [What is Microsoft Dev Box?](https://learn.microsoft.com/azure/dev-box/overview-what-is-microsoft-dev-box)
+- [Compare Azure Virtual Desktop with Windows 365 (Microsoft Learn)](https://learn.microsoft.com/training/modules/explore-azure-virtual-desktop/03-compare-azure-virtual-desktop-windows-365)
+- [Microsoft Dev Box for Cloud-Based Development (Microsoft Learn)](https://learn.microsoft.com/azure/dev-box/overview-what-is-microsoft-dev-box)
