@@ -7,7 +7,7 @@ author: mirko-p
 date: 2026-12-17
 topics: [azure-monitor, azure-monitor-agent, log-analytics]
 keypoints:
-  - "Filter at the source first: XPath queries in a Windows event data source stop unwanted events from leaving the machine at all."
+  - "Filter at the source first: XPath queries in a Windows event data source limit which events the agent collects, before any ingestion-time transformation is needed."
   - "A transformation is a single-line KQL statement that starts with source and runs on each record before it is stored."
   - "Only a short list of KQL operators works in a transformation. summarize and join are not supported."
   - "A workspace transformation DCR does not touch data that arrives through another DCR, such as Azure Monitor Agent data."
@@ -18,7 +18,7 @@ faq:
   - q: "Why does my workspace transformation not change data from my virtual machines?"
     a: "Microsoft Learn states that a workspace transformation DCR is ignored for data collected through another DCR. Azure Monitor Agent uses its own DCR, so the transformation has to be added to that DCR instead. Machines that still use the deprecated Log Analytics agent do not use a DCR and are covered by the workspace transformation."
   - q: "How long until a new transformation takes effect?"
-    a: "The Learn page on creating a transformation says a new transformation query can take up to 60 minutes to activate. Only data that arrives after it is active is affected. Existing records stay as they are."
+    a: "The Learn page on creating a transformation has a note in its workspace transformation DCR section that it might take up to 60 minutes for a new transformation query to activate. My own understanding, which the pages I read do not state: a transformation applies at ingestion, so records already stored stay as they are."
   - q: "How many XPath expressions can a data collection rule hold?"
     a: "Microsoft Learn says Get-WinEvent supports up to 23 expressions while a DCR supports up to 20. Learn also says XPath 1.0 limits apply, so functions such as starts-with and contains are not supported."
   - q: "Can I use summarize to reduce data volume in a transformation?"
@@ -31,11 +31,13 @@ The most reliable way to lower Azure Monitor ingestion cost is to send less data
 
 | Method | Where it runs | Good for |
 |---|---|---|
-| XPath query in the DCR data source | On the agent, before data is sent | Windows event logs |
+| XPath query in the DCR data source | In the agent's collection settings for Windows events | Windows event logs |
 | Ingestion-time transformation (`transformKql`) | In Azure Monitor, before the workspace stores the record | Dropping rows or columns from supported tables |
 | Workspace transformation DCR | On the workspace table | Data that does not use its own DCR, such as resource logs from diagnostic settings |
 
 Learn says that diagnostic settings do not allow granular filtering of resource logs. For tables that support it, use a workspace transformation to filter those resources. Learn also recommends moving from the Log Analytics agent to Azure Monitor Agent for granular filtering.
+
+Multi-stage transformations are described on the same Learn pages and are in public preview. Their client-side transformations run on the Azure Monitor Agent before data leaves the resource, they can filter and aggregate, and they need API version 2025-05-11 or later. This article covers only the standard single-statement transformations.
 
 ## Filter Windows events at the source
 
@@ -53,7 +55,7 @@ If events come back, the query is valid. "No events were found" can still mean a
 Learn lists these limits:
 
 - A DCR holds up to 20 XPath expressions, while Get-WinEvent accepts up to 23.
-- Only XPath 1.0 functions such as `position`, `band` and `timediff` work. `starts-with` and `contains` do not.
+- XPath 1.0 limits apply. Learn says you can use `position`, `Band` and `timediff`, but functions such as `starts-with` and `contains` are not currently supported.
 - Event logs on network shares or UNC paths are not supported.
 - Analytic and Debug channels cannot be collected.
 
@@ -76,7 +78,7 @@ Omitting `transformKql`, or setting it to `source`, applies no transformation.
 
 Microsoft Learn gives three filtering patterns:
 
-- Drop rows: `source | where severity == "Critical"`
+- Filter rows (keep only matching records): `source | where severity == "Critical"`
 - Drop columns you do not use: `source | project-away RawData`
 - Keep only listed columns with `project`
 
@@ -103,11 +105,11 @@ Each workspace can have only one workspace transformation DCR, but it can cover 
 
 Learn describes two cases for Analytics or Basic Logs where a transformation adds cost. Adding data, for example a calculated column, is charged at the standard ingestion rate. Dropping more than half of the incoming data is charged on the amount above 50 percent. In Learn's example, 20 GB comes in and 12 GB is dropped. The processing charge covers 2 GB, and 8 GB is ingested.
 
-If Microsoft Sentinel is enabled on the workspace, Learn states there is no cost for a transformation to Analytics tables. For Auxiliary Logs tables, the data processing charge applies to all incoming data.
+Learn advises filtering with other methods before applying transformations to avoid this charge. If Microsoft Sentinel is enabled on the workspace, Learn states there is no cost for a transformation to Analytics tables. For Auxiliary Logs tables, the data processing charge applies to all incoming data.
 
 ## Check the result
 
-Learn lists two built-in metrics: **Logs Transformation Duration per Min** and **Logs Transformation Errors per Min**. Enable DCR error logs and review the `DCRLogErrors` table to catch problems. Creating or changing a transformation needs the **Monitoring Contributor** role on the resource group or subscription.
+Learn lists two built-in metrics: **Logs Transformation Duration per Min** and **Logs Transformation Errors per Min**. Enable DCR error logs and review the `DCRLogErrors` table to catch problems. Learn's troubleshooting table names the **Monitoring Contributor** role on the resource group or subscription as the fix for permission denied errors when you create or edit the DCR.
 
 ## Other cost levers
 
@@ -121,9 +123,9 @@ Learn's cost guidance lists several options beyond filtering:
 ## Typical mistakes
 
 - Putting a workspace transformation in place and expecting it to change Azure Monitor Agent data.
-- Setting both `transform` and `transformKql` on one data flow, which stops the transformation from being applied.
+- Setting both `transformKql` and `transform` (the property of multi-stage transformations, in preview) on one data flow. Learn lists them as mutually exclusive and says the transformation is not applied.
 - Using `summarize` or `join` in a standard transformation.
-- Checking the table before the roughly 60 minutes have passed.
+- Checking the table before a new workspace transformation has had up to 60 minutes to activate.
 
 The Learn pages read for this article do not describe a way to filter data on Azure Arc machines differently from other machines, so this article makes no Arc-specific claims.
 
@@ -136,9 +138,9 @@ The Learn pages read for this article do not describe a way to filter data on Az
 
 ## Sources
 
-- [Ingestion-time transformations in Azure Monitor](https://learn.microsoft.com/en-us/azure/azure-monitor/data-collection/data-collection-transformations)
+- [Transformations in Azure Monitor](https://learn.microsoft.com/en-us/azure/azure-monitor/data-collection/data-collection-transformations)
 - [Create a transformation in Azure Monitor](https://learn.microsoft.com/en-us/azure/azure-monitor/data-collection/data-collection-transformations-create)
-- [Supported KQL features in transformations](https://learn.microsoft.com/en-us/azure/azure-monitor/data-collection/data-collection-transformations-kql)
-- [Best practices and samples for transformations](https://learn.microsoft.com/en-us/azure/azure-monitor/data-collection/data-collection-transformations-samples)
-- [Collect Windows events with Azure Monitor Agent](https://learn.microsoft.com/en-us/azure/azure-monitor/vm/data-collection-windows-events)
+- [Supported KQL features in Azure Monitor transformations](https://learn.microsoft.com/en-us/azure/azure-monitor/data-collection/data-collection-transformations-kql)
+- [Sample transformations in Azure Monitor](https://learn.microsoft.com/en-us/azure/azure-monitor/data-collection/data-collection-transformations-samples)
+- [Collect Windows events from virtual machines with Azure Monitor Agent](https://learn.microsoft.com/en-us/azure/azure-monitor/vm/data-collection-windows-events)
 - [Cost optimization in Azure Monitor](https://learn.microsoft.com/en-us/azure/azure-monitor/fundamentals/best-practices-cost)
