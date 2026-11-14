@@ -16,7 +16,7 @@ faq:
   - q: "What does AADSTS50034 mean?"
     a: "The Microsoft Entra error code reference lists AADSTS50034 as UserAccountNotFound. To sign in to the application, the account must be added to the directory. The error can occur because the user mistyped the username or is not in the tenant."
   - q: "Can the application be the cause?"
-    a: "Yes. Learn says an application might have chosen the wrong tenant to sign in to, and the currently signed-in user was prevented from signing in because the account does not exist in that tenant. In that case check which tenant endpoint the app sends users to."
+    a: "Yes. Learn says an application might have chosen the wrong tenant to sign in to, and the currently signed-in user was prevented from signing in because the account does not exist in that tenant. In that case check which tenant endpoint the app sends users to (my advice, not Learn's)."
   - q: "How do I fix it for someone who should have access?"
     a: "The reference says that if this user should be able to sign in, add them as a guest and links to the B2B guide. In the Microsoft Entra admin center you go to Entra ID > Users, select New user > Invite external user, and complete the Basics tab with the email address and display name."
   - q: "Which role do I need to invite a guest?"
@@ -74,7 +74,7 @@ Open the guest in **Microsoft Entra ID** > **Users** and look at the **B2B colla
 
 ## Step 4: Give access to the app
 
-An account in the directory is not enough if the app requires assignment. Learn describes adding guests to an app: **Microsoft Entra ID** > **Enterprise apps**, pick the application, **Users and groups** > **Add user/group**, select the guest and assign. The guest shows up with the role **Default Access** unless the app has other roles. You can also add guests to a group and assign the group.
+Whether an account in the directory is enough depends on the app; if the app requires assignment, the guest also needs access to it (my advice, not from the error reference). Learn's B2B how-to describes adding guests to an app: **Microsoft Entra ID** > **Enterprise apps**, pick the application, **Users and groups** > **Add user/group**, select the guest and assign. The guest shows up with the role **Default Access** unless the app has other roles. The same page also describes adding guests to a group. Assigning that group to the app is my suggestion, not a step on that page.
 
 ## When inviting is the wrong fix
 
