@@ -18,11 +18,11 @@ faq:
   - q: "Which BackupDirectory value do I use?"
     a: "Microsoft Learn lists 0 for disabled, 1 for Microsoft Entra only and 2 for Windows Server Active Directory only. The default is 0, and if it stays at 0 all other settings are ignored."
   - q: "Does a hybrid joined device need LAPS enabled in the Entra tenant?"
-    a: "The Intune documentation says hybrid join, unlike Entra join, does not require LAPS to be enabled in Microsoft Entra. The Windows LAPS and Entra scenario page frames the tenant-level enablement around Entra joined devices, so check the Entra article for your join type."
+    a: "Microsoft Learn is not consistent here. The Intune overview says hybrid join, unlike Entra join, does not require LAPS to be enabled in Microsoft Entra. The Windows LAPS Entra page and the Intune policy page say, without naming a join type, that it must be enabled at tenant level. Learn does not reconcile the two, so check the tenant setting when you back up to Entra ID."
   - q: "Can I sync Active Directory LAPS passwords to Entra ID with Entra Connect?"
     a: "No. Microsoft Learn says syncing the on-premises Windows LAPS attributes to Entra ID is not a tested scenario, and a manual sync will not make them appear in the Entra or Intune portals."
   - q: "Does Windows LAPS create the local administrator account?"
-    a: "No. Microsoft Learn says Windows LAPS does not create a custom local administrator account. Create it first, preferably with the RestrictedGroups CSP. If AdministratorAccountName is empty, LAPS manages the built-in administrator by its well-known RID."
+    a: "No. Microsoft Learn says Windows LAPS does not create a custom local administrator account. Create it first. The Active Directory page recommends the RestrictedGroups CSP for that, while the Entra page recommends the Accounts CSP. If AdministratorAccountName is empty, LAPS manages the built-in administrator by its well-known RID."
 ---
 
 Hybrid joined workstations get one Windows LAPS backup target, not two. Microsoft Learn states that you cannot back up passwords to both Microsoft Entra ID and Windows Server Active Directory. A hybrid joined device can use either target, and the `BackupDirectory` setting decides: 1 for Entra ID or 2 for Active Directory. The task is therefore a choice, followed by a deployment that matches it.
@@ -44,14 +44,14 @@ Questions that help decide:
 - **Where do you manage devices?** Learn calls Intune with the Windows LAPS CSP the preferred option for Entra joined devices. For Active Directory backup, the AD article lists Group Policy as the most common choice and Intune with the Windows LAPS CSP for hybrid joined devices. The Intune page also lists hybrid join as supported for backup to Entra ID.
 - **Do you need DSRM backup for domain controllers?** That is an Active Directory feature only.
 
-Licensing is not a barrier. Learn says Windows LAPS is free, Active Directory backup needs no other license, and Entra ID backup needs Entra ID Free or higher.
+Learn says Windows LAPS itself is free, Active Directory backup needs no other license, and Entra ID backup needs Entra ID Free or higher. For deployment with Intune policy, the Intune page lists Microsoft Intune Plan 1 (a trial subscription also works).
 
 ## Step 2: Deploy for Active Directory backup
 
 This path uses `BackupDirectory` = 2.
 
 1. **Check domain requirements.** Encrypted storage needs a domain functional level of 2016 or later. Domain controllers running Windows Server 2016 or earlier do not support Windows LAPS DSRM management.
-2. **Copy the templates.** Windows Update does not copy `LAPS.admx` to a Group Policy central store, so copy it manually.
+2. **Copy the templates.** If you use a Group Policy central store, Windows Update does not copy `LAPS.admx` to it, so copy it manually.
 3. **Extend the schema once per forest.** Run `Update-LapsADSchema` on a Windows Server 2019 or later domain controller with Windows LAPS, or on a server with the LAPS PowerShell module.
 4. **Grant the device permission.** Run `Set-LapsADComputerSelfPermission -Identity <OU>` for the OU that holds the computers.
 5. **Grant read and expiry rights.** Use `Set-LapsADReadPasswordPermission` with `-AllowedPrincipals`, and `Set-LapsADResetPasswordPermission` for groups that may expire passwords. Domain Admins have both by default.
@@ -63,9 +63,9 @@ Query permission does not imply decryption rights. Decryption follows `ADPasswor
 
 ## Step 3: Deploy for Entra ID backup
 
-This path uses `BackupDirectory` = 1. Learn says Entra ID does not allow managed devices to post new passwords by default, and an admin must enable the feature at tenant level. The Intune page says that setting applies to Entra join and that hybrid join does not require it. The Windows LAPS article does not give the portal path, so follow its link to the Entra article.
+This path uses `BackupDirectory` = 1. Learn says Entra ID does not allow managed devices to post new passwords by default, and an admin must enable the feature at tenant level. The Intune overview says the setting is needed for Entra join and that hybrid join does not require it, while the Intune policy page says to ensure LAPS is enabled in Microsoft Entra without naming a join type. Learn does not reconcile this, so my advice is to check the setting anyway. The Intune overview gives the path: sign in as at least Cloud Device Administrator, go to **Identity** > **Devices** > **Overview** > **Device settings** and set **Enable Local Administrator Password Solution (LAPS)** to Yes.
 
-Active Directory settings are not supported when backing up to Entra ID. In Intune, create the policy under **Endpoint security** > **Account protection** with the profile **Local admin password solution (Windows LAPS)**, and assign it to device groups.
+Active Directory settings are not supported when backing up to Entra ID. In Intune, create the policy under **Endpoint security** > **Account protection** with the profile **Local admin password solution (Windows LAPS)**, and assign it to device groups. Learn recommends device groups because policies assigned to user groups follow the user from device to device and can cause inconsistent behavior.
 
 ## Step 4: Avoid conflicting policy sources
 
@@ -75,12 +75,12 @@ If the directory does not match the join type, the device may accept the Intune 
 
 ## Step 5: Handle the local account and legacy LAPS
 
-- Windows LAPS does not create custom accounts. Create the account first, preferably with the RestrictedGroups CSP.
+- Windows LAPS does not create custom accounts. Create the account first. Learn names the RestrictedGroups CSP on the Active Directory page and the Accounts CSP on the Entra page.
 - Only one account can be managed per device. Two policies naming different accounts conflict.
 - Legacy Microsoft LAPS is deprecated. Emulation mode honors existing legacy GPO settings during migration, but it stores passwords in clear text only, so it cannot use encryption or password history. Treat it as temporary.
 - Automatic account management needs Windows 11 24H2 or Windows Server 2025 or later.
 
-## Typical mistakes
+## Typical mistakes (my summary)
 
 - Expecting a dual backup to both directories.
 - Skipping `Update-LapsADSchema` or the OU permissions and then seeing no backup.
@@ -90,7 +90,7 @@ If the directory does not match the join type, the device may accept the Intune 
 
 ## What the sources do not say
 
-The pages read do not describe a supported way to migrate a hybrid device from one target to the other, and they do not give the Entra portal path for the tenant setting. The Intune page has no dedicated hybrid join section.
+The pages read do not describe a supported way to migrate a hybrid device from one target to the other, and they do not explain why Learn is inconsistent on the tenant setting for hybrid join. The Intune overview treats hybrid join only as one supported scenario, with no dedicated section.
 
 ## Related
 
@@ -101,8 +101,9 @@ The pages read do not describe a supported way to migrate a hybrid device from o
 
 ## Sources
 
-- [Windows LAPS overview](https://learn.microsoft.com/en-us/windows-server/identity/laps/laps-overview)
-- [Windows LAPS scenarios: Windows Server Active Directory](https://learn.microsoft.com/en-us/windows-server/identity/laps/laps-scenarios-windows-server-active-directory)
-- [Windows LAPS scenarios: Microsoft Entra ID](https://learn.microsoft.com/en-us/windows-server/identity/laps/laps-scenarios-azure-active-directory)
-- [Configure policy settings for Windows LAPS](https://learn.microsoft.com/en-us/windows-server/identity/laps/laps-management-policy-settings)
-- [Microsoft Intune support for Windows LAPS](https://learn.microsoft.com/mem/intune/protect/windows-laps-overview)
+- [Windows LAPS Overview: Manage Admin Passwords](https://learn.microsoft.com/en-us/windows-server/identity/laps/laps-overview)
+- [Get started with Windows LAPS and Windows Server Active Directory](https://learn.microsoft.com/en-us/windows-server/identity/laps/laps-scenarios-windows-server-active-directory)
+- [Get started with Windows LAPS and Microsoft Entra ID](https://learn.microsoft.com/en-us/windows-server/identity/laps/laps-scenarios-azure-active-directory)
+- [Configure Policy Settings for Windows LAPS](https://learn.microsoft.com/en-us/windows-server/identity/laps/laps-management-policy-settings)
+- [Overview of Windows LAPS with Microsoft Intune](https://learn.microsoft.com/en-us/intune/device-security/laps/overview)
+- [Deploy Intune policies to manage Windows LAPS](https://learn.microsoft.com/en-us/intune/device-security/laps/deploy-policy)
