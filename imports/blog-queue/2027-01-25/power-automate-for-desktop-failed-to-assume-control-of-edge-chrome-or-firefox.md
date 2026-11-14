@@ -37,7 +37,7 @@ A flow with a **Launch new Microsoft Edge**, **Launch new Chrome** or **Launch n
 
 ## Step 0: Run the troubleshooter
 
-Learn marks this as the first step. In Power Automate for desktop run the **Troubleshoot UI/Web automation issues** diagnostic from the troubleshooter. It generates a report that identifies issues. Resolve them with the **Fix** button that appears when the diagnostic finishes. If that does not solve the error, go through the causes below.
+Learn gives this as an important note before the causes. In Power Automate for desktop run the **Troubleshoot UI/Web automation issues** diagnostic from the troubleshooter. It generates a report that identifies issues. Resolve them with the **Fix** button that appears when the diagnostic finishes. If that does not solve the error, go through the causes below.
 
 ## Cause 1: The web extension is not installed correctly or not enabled
 
@@ -89,7 +89,9 @@ Solution: start the browser from the flow with a different profile on disk. The 
 
 Starting in version 2.62, Power Automate for desktop supports WebDriver as an alternative communication method for browser automation. Learn says this removes the need for a browser extension. The page links the web automation actions reference for details.
 
-## Which cause fits (summary)
+## Which cause fits (my summary)
+
+This table is my own summary of the page.
 
 | What you see | Cause |
 | --- | --- |
