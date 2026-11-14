@@ -20,7 +20,7 @@ faq:
   - q: "Which clients support it?"
     a: "The setup page lists the Windows App on Windows, the Windows App on macOS in beta version 11.3.8 (3048), and the Windows App on Android and Chrome OS in preview. Check the page for current versions."
   - q: "Do I need to open inbound ports for public networks?"
-    a: "No. Learn says public network connections need no listener or inbound port, but outbound UDP to the internet or STUN and TURN servers must be allowed. Symmetric NAT, for example Azure Firewall or NAT Gateway, forces relayed TURN connections."
+    a: "No. Learn says public network connections need no listener or inbound port, but outbound UDP to the internet or STUN and TURN servers must be allowed. With symmetric NAT, which Learn says is the case with Azure Firewall and Azure NAT Gateway, a relayed connection with TURN can be used."
   - q: "How do I know it works?"
     a: "Connect to a remote session, select the signal strength icon in the Connection toolbar and read the transport. UDP (Private Network) is a managed-network direct connection, UDP is STUN and UDP (Relay) is TURN."
 ---
@@ -40,7 +40,7 @@ If several paths are available, the first one established is used.
 
 ## Prerequisites
 
-From the setup page: the Windows App on Windows, Windows App on macOS (beta 11.3.8 (3048)) or Windows App on Android and Chrome OS (preview). Azure PowerShell needs the Az.DesktopVirtualization 5.2.1-preview module, unless you use Cloud Shell. STUN for public networks is available in Azure public and Azure Government, and TURN only in Azure public.
+From the setup page: the Windows App on Windows, Windows App on macOS (beta 11.3.8 (3048)) or Windows App on Android and Chrome OS (preview). Azure PowerShell needs the Az.DesktopVirtualization 5.2.1-preview module, unless you use Cloud Shell. The setup page says STUN for public networks is available in Azure public and Azure Government, and TURN only in Azure public. The concept page, in contrast, lists a dedicated Azure Government TURN range and calls it a public preview in the validation ring, so check the current state before relying on TURN in Azure Government.
 
 ## Network rules
 
@@ -50,9 +50,9 @@ From the setup page: the Windows App on Windows, Windows App on macOS (beta 11.3
 | STUN or TURN signaling | UDP 3478 outbound | |
 | STUN direct connection | UDP 1024 to 65535, default 49152 to 65535 | Can be limited |
 | TURN relay (Azure cloud) | UDP to 51.5.0.0/16 on 3478 | |
-| TURN relay (Azure Government) | UDP to 20.140.236.0/22 on 3478 | |
+| TURN relay (Azure Government, preview per Learn) | UDP to 20.140.236.0/22 on 3478 | |
 
-Allow outbound UDP from session hosts to the internet. Learn says symmetric NAT such as Azure Firewall or NAT Gateway forces relayed TURN connections, and that Teredo or IPv6 improve success but are not required.
+Allow outbound UDP from session hosts to the internet. Learn says that with symmetric NAT, which is the case with Azure Firewall and Azure NAT Gateway, a relayed connection with TURN can be used. It recommends enabling IPv6 connectivity or Teredo. Teredo is optional and not required, but it adds NAT traversal candidates and raises the chance of success in IPv4-only networks.
 
 ## Enable for managed networks (Intune)
 
@@ -63,7 +63,7 @@ Allow outbound UDP from session hosts to the internet. Learn says symmetric NAT 
 5. Allow the listener port through Windows Firewall and any other firewall, for example with an Intune firewall policy.
 6. Restart the session hosts after the policy applies.
 
-Clients need direct connectivity on port 3390 with no blocking by firewalls or a network security group. The page has a Group Policy tab but I could not read its setting names, so check Learn for those.
+For the listener method the client must be able to connect directly to the session host on port 3390 (default), not blocked by firewalls, including Windows Firewall, or by a network security group. With Group Policy in an Active Directory domain, Learn first has you make the Azure Virtual Desktop administrative template available in the domain. You then open the same path under **Computer Configuration** > **Policies** > **Administrative Templates** and enable the policy **Enable RDP Shortpath for managed networks**, where you can also change the listener port (default 3390).
 
 ## Enable for public networks
 
@@ -73,7 +73,7 @@ No listener is required. Under **Azure Virtual Desktop** > **RDP Shortpath** in 
 - **RDP Shortpath for public networks using NAT traversal** (STUN)
 - **RDP Shortpath for public networks using Relay (TURN)**
 
-Set each to **Enabled** or **Not Configured** to allow it, or **Disabled** to block it. Microsoft strongly recommends keeping TURN enabled. You can optionally limit the port range with **Use port range for RDP Shortpath for unmanaged networks**, with **Port pool size (Device)** default 1000 and **UDP base port (Device)** default 38300.
+Set each to **Enabled** or **Not Configured** to allow it, or **Disabled** to block it. Microsoft strongly recommends keeping TURN enabled. You can optionally limit the port range with **Use port range for RDP Shortpath for unmanaged networks**, with **Port pool size (Device)** default 1000 and **UDP base port (Device)** default 38300. Learn describes 38300 to 39299 as the smaller default range, says the range must lie between 1024 and 49151, and says connections fall back to 49152 to 65535 if the range is exhausted.
 
 ## Host pool setting
 
@@ -101,5 +101,5 @@ Connect, select the signal strength icon in the **Connection** toolbar, and read
 
 ## Sources
 
-- [RDP Shortpath for Azure Virtual Desktop](https://learn.microsoft.com/azure/virtual-desktop/rdp-shortpath)
-- [Configure RDP Shortpath](https://learn.microsoft.com/azure/virtual-desktop/configure-rdp-shortpath)
+- [RDP Shortpath (Microsoft Learn)](https://learn.microsoft.com/azure/virtual-desktop/rdp-shortpath)
+- [Configure RDP Shortpath for Azure Virtual Desktop (Microsoft Learn)](https://learn.microsoft.com/azure/virtual-desktop/configure-rdp-shortpath)
