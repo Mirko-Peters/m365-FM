@@ -29,7 +29,7 @@ When the Microsoft Teams client opens a blank window and then closes, the Teams 
 
 ## What the failure looks like
 
-Learn describes the symptom as a blank window that opens and then closes when Teams starts. Users usually report it as "Teams does not start", and the visible window gives no error text. That is why the dashboard matters: it shows what the client recorded.
+Learn describes the symptom as a blank window that opens and then disappears immediately when a user starts the Teams app. A blank window gives the user nothing to report, which is why the dashboard matters: its Insight column names a potential cause.
 
 ## Open the dashboard
 
@@ -38,7 +38,7 @@ The client health page gives these steps:
 1. Go to the Teams admin center.
 2. Select **Teams client health** in the navigation pane.
 
-The page shows a **Client health** widget with the trends for crashes and launch failures over the last 28 days for all devices in your tenant. Learn notes that this widget surfaces only health markers that affect end users and that administrators can act on. Both crash and launch failure data are supported for Windows (non-VDI) and Mac applications, according to the page, so a launch failure on a virtual desktop would not appear this way.
+The page shows a **Client health** widget with the trends for crashes and launch failures over the last 28 days for all devices in your tenant. Learn notes that this widget surfaces only health markers that affect end users and that administrators can act on. The page says both crash and launch failure data are supported for Windows (non-VDI) and Mac applications. My reading: launch failures on virtual desktops are therefore not covered by this view.
 
 A **Top issues** widget counts devices with reported crashes, launch failures and update failures in the last seven and 28 days. Below it, a table lists each issue with these columns:
 
@@ -75,7 +75,7 @@ If the issue persists after these steps, Learn says to contact Microsoft Support
 
 ### Network insights
 
-Both network insights point at the same place: traffic between the client and Teams. Learn's wording is about the firewall or proxy configuration and about allowing all Teams-related requests. The page I read does not list specific endpoints, ports or tools, and it does not describe how to test connectivity, so use your network team's tooling and Microsoft's published endpoint documentation for the detail. I did not verify those pages for this article.
+Both network insights point at the same place: traffic between the client and Teams. Learn's wording is about the firewall or proxy configuration and about allowing all Teams-related requests. The page links to the Microsoft Teams section of Microsoft's page on Microsoft 365 URLs and IP address ranges for the endpoint list, and it does not describe how to test connectivity, so use your network team's tooling for that.
 
 ### Script error
 
@@ -87,7 +87,7 @@ The fix is to update to a supported Windows or macOS version. Learn refers to th
 
 ## What the pages do not say
 
-The launch failure page is short, and the client health page I read does not name required admin roles or licenses, how long data takes to appear, or how the data is collected. I read both pages in full and found none of that. If you need those details, check the Teams admin center role documentation for your tenant before you rely on the dashboard.
+The launch failure page is short, and neither page names required admin roles or licenses, how long data takes to appear, or how the data is collected. If you need those details, check the Teams admin center role documentation for your tenant before you rely on the dashboard.
 
 ## A practical routine
 
