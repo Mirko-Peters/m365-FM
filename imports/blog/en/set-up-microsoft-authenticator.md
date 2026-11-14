@@ -87,7 +87,7 @@ Microsoft's backup article says what is and isn't covered:
 - **Third-party accounts**, such as LinkedIn and Facebook, back up their 30-second codes.
 - **Work or school accounts aren't backed up.** Only the account name is saved. After a restore, you sign in and register the account again on the new device.
 
-To turn on backup on Android, open the app, tap the three-dot icon, open **Settings** and turn on the **Cloud Backup** toggle. You then choose the personal Microsoft account where the backup is stored. Microsoft's article also states that starting January 2027, Android backup will no longer use a Microsoft personal account, and you'll use Google One backup instead. That date is in Microsoft's article as I read it, so check the current page before you tell users.
+To turn on backup on Android, open the app, tap the three-dot icon, open **Settings** and turn on the **Cloud Backup** toggle. You then choose the personal Microsoft account where the backup is stored. Microsoft's article also states that starting January 2027, Android backup will no longer use a Microsoft personal account, and you'll use Google One backup instead. That date is in Microsoft's article, so check the current page before you tell users.
 
 On iOS, Microsoft's restore article lists three prerequisites: iCloud Drive, iCloud Keychain and iCloud Backup must be turned on. Then install the app on the new phone and open it. The backed-up codes and account names appear, and for accounts that show **Sign in to restore your account**, tap **Sign in**, enter your password and confirm your email or phone number.
 
@@ -113,3 +113,10 @@ Two rules apply to both systems. A backup restores only onto the same device typ
 ## Next step
 
 To set up Microsoft Authenticator, update the app, add your account with the QR code for your account type, and approve the test sign-in. Then turn on backup right away and register a second method, so the next new phone costs you minutes and not a support ticket.
+
+## Sources
+
+- [How to add your accounts to Microsoft Authenticator (Microsoft Support)](https://support.microsoft.com/authenticator/how-to-add-your-accounts-to-microsoft-authenticator)
+- [Set up security info from a sign-in page (Microsoft Support)](https://support.microsoft.com/accounts-billing/work-school/set-up-security-info-from-a-sign-in-page)
+- [Back up your accounts in Microsoft Authenticator (Microsoft Support)](https://support.microsoft.com/authenticator/back-up-your-accounts-in-microsoft-authenticator)
+- [Restore account credentials from Microsoft Authenticator (Microsoft Support)](https://support.microsoft.com/authenticator/restore-account-credentials-from-microsoft-authenticator)
