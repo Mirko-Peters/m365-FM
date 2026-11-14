@@ -16,7 +16,7 @@ faq:
   - q: "Is the Teams waiting room the same as the lobby?"
     a: "Yes in practice. The Microsoft Learn pages read for this article use the word lobby for the place where people wait until they are admitted. They do not use the term waiting room, so search for lobby settings in the Teams admin center."
   - q: "Who can admit people from the lobby by default?"
-    a: "According to Microsoft Learn, the default for Who can admit from lobby is Organizers and presenters. Organizers can change this in Meeting options. Templates and sensitivity labels do not support this setting."
+    a: "The Microsoft Learn pages read for this article name the setting Who can admit from lobby but do not state its default, so check the policy in your Teams admin center. Organizers and co-organizers can always bypass the lobby. Learn says meeting templates and sensitivity labels do not support this setting."
   - q: "Why do dial-in callers always wait in the lobby?"
     a: "Microsoft Learn lists People dialing in can bypass the lobby with a default of Off. When it is Off, dial-in users wait until an organizer, co-organizer or presenter admits them. Organizers can change it in Meeting options."
   - q: "How do I turn the lobby off completely?"
@@ -35,8 +35,8 @@ In the Teams admin center, the lobby controls are under **Meetings** > **Meeting
 |---|---|---|
 | Who can bypass the lobby | People in my org and guests | Sets who joins directly. Organizers can change it in Meeting options. |
 | People dialing in can bypass the lobby | Off | Dial-in callers wait until admitted. |
-| Who can admit from lobby | Organizers and presenters | Sets who can admit people from the lobby. |
-| Anonymous users and dial-in callers can start a meeting | Off | When Off, they wait until a verified participant joins, then are admitted automatically. |
+| Who can admit from lobby | Not stated on the pages read | Sets who can admit people from the lobby. Templates and labels do not support it. |
+| Anonymous users and dial-in callers can start a meeting | Off | When Off, they wait in the lobby until an internal user, guest or trusted-org user starts the meeting. |
 | Anonymous users can join a meeting | On | When anonymous join is off in the org-wide settings, anonymous users cannot join any meeting. |
 
 Microsoft recommends leaving **Anonymous users and dial-in callers can start a meeting** Off. It only works if anonymous join is on in both the org-wide settings and the policy, and **Who can bypass the lobby** is **Everyone**.
@@ -49,7 +49,7 @@ Microsoft recommends leaving **Anonymous users and dial-in callers can start a m
 | People in my org, trusted orgs, and guests | Org, trusted orgs, guests | Anonymous |
 | People in my org and guests | Org, guests | Trusted orgs, anonymous |
 | People in my org | Org | Guests, trusted orgs, anonymous |
-| People who were invited | Anyone sent or forwarded an invite | Everyone else, including people with only the link |
+| People who were invited | Anyone sent or forwarded an invite | Everyone else |
 | Only organizers and co-organizers | Organizers and co-organizers | Everyone else |
 
 Organizers and co-organizers always bypass the lobby. Under **People who were invited**, distribution lists of up to 10,000 users count as invited, and in channel meetings only directly invited channel members bypass. In the older community answer this setting was called "Automatically admit people". The current Learn pages name it **Who can bypass the lobby**.
