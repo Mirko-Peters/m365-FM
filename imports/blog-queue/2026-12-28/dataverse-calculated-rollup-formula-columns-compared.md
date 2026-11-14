@@ -8,7 +8,7 @@ date: 2026-12-28
 topics: [dataverse]
 keypoints:
   - "Formula columns use Power Fx. Calculated columns use a condition and action editor. Rollup columns aggregate related rows with SUM, COUNT, MIN, MAX or AVG."
-  - "Rollups are calculated by scheduled system jobs. The first mass calculation runs 12 hours after you create or update the column, and the incremental job recurs at least hourly by default."
+  - "Rollups are calculated by scheduled system jobs. The first mass calculation runs 12 hours after you create or update the column, and the incremental job has a default minimum recurrence of one hour."
   - "Limits include 1,000 characters and dependency depth 10 for formula columns, 5 chained calculated columns and 50 rollup columns per table by default."
   - "Learn does not recommend mixing calculated and formula columns, and a rollup cannot aggregate another rollup."
   - "No Learn page I read gives a direct side-by-side comparison, so the table below is assembled from three pages."
@@ -55,6 +55,8 @@ Dataverse offers three kinds of computed columns. Microsoft Learn documents each
 - Rollup columns require a simple formula column, meaning one that uses only columns from the same record or hard-coded values. Formula columns using UTCNow or UTCToday cannot be used in rollups.
 - A rollup cannot reference a calculated column that uses another calculated column.
 - Microsoft does not recommend mixing calculated and formula columns. A formula column treats null numeric columns as 0 in intermediate operations, so a null plus 2 plus 3 gives 5, while calculated columns return null.
+- The rollup page calls rollup and calculated columns complementary: a rollup column can be part of a calculated column and the other way round.
+- The rollup page words the time-bound case differently from the formula page: a rollup column that uses a formula column dependent on Now() or IsUTCToday() does not update automatically, so the Recalculate option on the form is needed.
 - Duplicate detection rules are not triggered by formula or calculated columns.
 - Rollups run under the system user context, so all users see the same value. Use column-level security to restrict access.
 - A rollup column creates accessory columns ending in _date and _state, and the state values explain errors such as hierarchy recursion limits.
@@ -86,6 +88,6 @@ The formula columns page does not compare the types. The calculated columns page
 
 ## Sources
 
-- [Formula columns](https://learn.microsoft.com/power-apps/maker/data-platform/formula-columns)
-- [Calculated columns](https://learn.microsoft.com/power-apps/maker/data-platform/define-calculated-fields)
-- [Rollup columns](https://learn.microsoft.com/power-apps/maker/data-platform/define-rollup-fields)
+- [Work with Dataverse formula columns (Microsoft Learn)](https://learn.microsoft.com/power-apps/maker/data-platform/formula-columns)
+- [Automate calculations by defining calculated columns (Microsoft Learn)](https://learn.microsoft.com/power-apps/maker/data-platform/define-calculated-fields)
+- [Define rollup columns with Power Apps (Microsoft Learn)](https://learn.microsoft.com/power-apps/maker/data-platform/define-rollup-fields)
