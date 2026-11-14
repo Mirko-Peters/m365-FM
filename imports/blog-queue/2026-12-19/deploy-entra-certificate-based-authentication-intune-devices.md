@@ -11,7 +11,7 @@ keypoints:
   - "Deploy the trusted certificate profile before the SCEP or PKCS profile, to the same groups. Each profile supports a single platform."
   - "In Entra, upload the CAs with a CRL URL, enable CBA for a group and not for All users, then set the authentication binding and username binding policies."
   - "Only multifactor CBA satisfies the built-in MFA, Passwordless MFA and Phishing-resistant MFA authentication strengths. Single-factor CBA satisfies none."
-  - "Learn says the password method cannot be turned off, so a password prompt can still appear. CBA is not supported at the Windows lock screen."
+  - "Learn says the password method cannot be turned off, so a password prompt can still appear. CBA is not supported for web sign-in at the Windows lock screen."
 faq:
   - q: "Do I need an on-premises PKI for Entra CBA with Intune?"
     a: "Learn says you must configure your own PKI and provision certificates to users and devices, since PKI setup is out of scope for CBA. Intune can deliver certificates by SCEP, PKCS or imported PKCS, and Microsoft Cloud PKI is a cloud service that removes the need for an on-premises CA, NDES and the Intune Certificate Connector."
@@ -29,9 +29,9 @@ Entra certificate-based authentication (CBA) with Intune-managed devices has two
 
 ## What Microsoft says CBA is
 
-Learn describes CBA as letting users authenticate directly with X.509 certificates in Microsoft Entra ID for application and browser sign-in, without federated AD FS. It is phishing-resistant when configured for multifactor and is a free feature that needs no paid Entra edition. MFA through CBA needs a licensed edition and blocking legacy authentication.
+Learn describes CBA as letting users authenticate directly with X.509 certificates in Microsoft Entra ID for application and browser sign-in, without federated AD FS. Learn says to use it to adopt phishing-resistant authentication. It calls CBA a free feature that needs no paid Entra ID edition. Other parts do need licenses: the PKI file upload needs Entra ID P1 or P2, Conditional Access and so authentication strengths need P1, and MFA through CBA needs a licensed edition and blocking legacy authentication.
 
-Supported scenarios include browser sign-in on all platforms, Office mobile apps on iOS and Android, and Office native apps on Windows. CBA at the Windows lock or sign-in screen is not supported.
+Supported scenarios include browser sign-in on all platforms, Office mobile apps on iOS and Android, and Office native apps on Windows. Learn lists the web sign-in option at the Windows lock or sign-in screen as not supported.
 
 ## Step 1: Choose how certificates are issued
 
@@ -49,11 +49,11 @@ Order matters. Learn says to deploy the trusted root certificate profile first, 
 To create the SCEP profile, go to **Devices** > **Manage devices** > **Configuration** > **Create**, choose the platform and **SCEP certificate**, then fill in the settings. Settings that matter here:
 
 - **Root Certificate:** the trusted certificate profile. With a multi-level PKI, select the top-level trusted root profile that validates the issuing CA.
-- **Certificate type:** user certificates can contain user and device attributes. Device certificates contain only device attributes, and on Windows they go into the Local Computer store. For user sign-in with CBA, a user certificate is the natural fit.
-- **Subject alternative name:** attributes include email address, UPN, DNS and URI. Learn's example sets the UPN in the SAN for a user certificate. For strong mapping, `{{OnPremisesSecurityIdentifier}}` is supported with the URI attribute on macOS, iOS and Windows user certificates.
+- **Certificate type:** user certificates can contain user and device attributes. Device certificates contain only device attributes. Learn suggests Device for user-less devices or for Windows devices, and says that on Windows the certificate then goes into the Local Computer store. It also says to select the user deployment channel in profiles with user certificates. That a user certificate is the natural fit for CBA user sign-in is my inference, because Learn does not describe this CBA scenario.
+- **Subject alternative name:** attributes include email address, UPN, DNS and URI. Learn's example sets the UPN in the SAN for a user certificate. The `{{OnPremisesSecurityIdentifier}}` variable is supported with the URI attribute on macOS, iOS and Windows user certificates. The page presents it for the strong mapping requirements of Active Directory domain controllers (KB5014754), not for Entra CBA username binding, so do not assume it fills `certificateUserIds` (my caution).
 - **Extended key usage:** the certificate usually requires client authentication. The page does not state an OID value.
 - **Key size, hash algorithm, validity:** up to 24 months of validity, planned at five days or more, and a renewal threshold as a percentage of lifetime.
-- **Key storage provider (Windows):** options include TPM KSP if present, TPM KSP otherwise fail, Windows Hello for Business otherwise fail, and Software KSP.
+- **Key storage provider (Windows):** options are TPM KSP if present otherwise Software KSP, TPM KSP otherwise fail, Windows Hello for Business otherwise fail, and Software KSP.
 
 Assign the profile to groups and select **Create**. The Learn page notes that the deployment channel cannot be edited after you deploy the profile.
 
@@ -65,7 +65,7 @@ Learn's steps for the Entra side, which needs the Privileged Authentication Admi
 
 1. Go to **Entra ID** > **Identity Secure Score** > **Public key infrastructure**, as written on the page, and select **Create PKI**.
 2. Select **Add certificate authority** and upload each root and intermediate CA. Enter the internet-facing CRL URL. You can also upload a `.p7b` file with its SHA-256 checksum, which can take up to 30 minutes, and which needs Entra ID P1 or P2.
-3. Review the **Issuer hints** flag. By default the subject names of all CAs are sent as hints, so enable it only for CAs that issue user certificates.
+3. Review the **Issuer hints** flag. Learn is not consistent here: the upload steps say the flag is off by default, while the issuer hints section says the subject names of all CAs in the trust store are sent as hints by default. Learn recommends setting it to true only for CAs that issue user certificates.
 
 Limits and warnings:
 
@@ -74,21 +74,21 @@ Limits and warnings:
 
 ## Step 4: Enable CBA for a group
 
-Create a group first. Learn warns not to include **All users**, only groups of users who have valid certificates.
+Create a group first. Learn warns not to include **All users**, only groups of users who have valid certificates. Sign in with at least the Authentication Policy Administrator role.
 
 1. Go to **Entra ID** > **Authentication methods** > **Certificate-based authentication**.
 2. Under **Enable and Target**, select **Enable**, acknowledge, and choose your group.
 3. Save.
 
-The network team should allow `*.certauth.login.microsoftonline.com` in addition to `login.microsoftonline.com`, and turn off TLS inspection on that endpoint.
+Learn says the network team should allow the certificate authentication endpoint for your cloud in addition to `login.microsoftonline.com`, and turn off TLS inspection on it. The page names `*.certauth.login.microsoftonline.com`, and `*.certauth.login.microsoftonline.us` for US Government, in its TLS 1.3 note.
 
 ## Step 5: Set the binding policies
 
-**Authentication binding.** The default protection level is single-factor and the default affinity is low. For passwordless-style access with strong claims, set the default to multifactor or add rules by certificate issuer, policy OID or both. A policy OID rule takes precedence over an issuer rule. Enter the policy OID as an object identifier, for example `2.5.29.32.0`. The text "All Issuance Policies" is invalid. Be careful with **Required Affinity Binding**: Learn warns that changing it without correct values on the user objects can lock out the whole tenant.
+**Authentication binding.** In the admin center, go to **Entra ID** > **Authentication methods** > **Policies**, open **Certificate-based authentication** and select **Configure**. The page words the step in between slightly differently in two places. The default protection level is single-factor and the default affinity is low. My advice, not a Learn statement: for passwordless-style access with strong claims, set the default to multifactor or add rules by certificate issuer, policy OID or both. Learn offers both options. A policy OID rule takes precedence over an issuer rule. Enter the policy OID as an object identifier, for example `2.5.29.32.0`. The text "All Issuance Policies" is invalid. Be careful with **Required Affinity Binding**: Learn warns that changing it without correct values on the user objects can lock out the whole tenant.
 
-**Username binding.** The default maps Principal Name to `userPrincipalName`. Other bindings map to `certificateUserIds`, with values such as `IssuerAndSerialNumber`. The first binding has the highest priority. Issuer and serial values must be in the reverse order of the certificate and without spaces.
+**Username binding.** The default maps Principal Name to `userPrincipalName`. Other bindings map to `certificateUserIds`, with values such as `IssuerAndSerialNumber`. The first binding has the highest priority. Learn says the Issuer, Subject and Serial number values must be in the reverse order of their format in the certificate, and that Issuer and Subject values must not contain spaces.
 
-The same settings can be made with Microsoft Graph and the `Policy.ReadWrite.AuthenticationMethod` permission. Learn's two samples differ in binding order and default mode, so check the values before you use them.
+The same settings can be made with Microsoft Graph and the `Policy.ReadWrite.AuthenticationMethod` permission. Learn's two samples (Graph Explorer and PowerShell) differ in binding order and default mode, so check the values before you use them. The Graph Explorer sample also targets `all_users`, although Learn warns against enabling CBA for All users.
 
 ## Step 6: Check what "passwordless" really means here
 
@@ -96,7 +96,7 @@ The same settings can be made with Microsoft Graph and the `Policy.ReadWrite.Aut
 - **Password remains.** Learn says password cannot be turned off as an authentication method, and the password option still appears.
 - **Windows Hello for Business.** It is compatible with CBA in Edge and Chrome, but not in nonbrowser scenarios such as Office 365 apps. Learn suggests the **Sign in Windows Hello or security key** option where available.
 
-## Test plan
+## Test plan (my suggestion)
 
 1. Pick a pilot group and one device per platform.
 2. Confirm the trusted and SCEP profiles arrive, and the certificate appears in the right store.
@@ -113,9 +113,9 @@ The same settings can be made with Microsoft Graph and the `Policy.ReadWrite.Aut
 
 ## Sources
 
-- [Microsoft Entra certificate-based authentication overview (Microsoft Learn)](https://learn.microsoft.com/en-us/entra/identity/authentication/concept-certificate-based-authentication)
-- [Configure Microsoft Entra certificate-based authentication (Microsoft Learn)](https://learn.microsoft.com/en-us/entra/identity/authentication/how-to-certificate-based-authentication)
-- [Authentication strengths (Microsoft Learn)](https://learn.microsoft.com/en-us/entra/identity/authentication/concept-authentication-strengths)
-- [Use certificates for authentication in Intune (Microsoft Learn)](https://learn.microsoft.com/en-us/intune/intune-service/protect/certificates-configure)
-- [Create a SCEP certificate profile in Intune (Microsoft Learn)](https://learn.microsoft.com/en-us/intune/intune-service/protect/certificates-profile-scep)
-- [Microsoft Cloud PKI overview (Microsoft Learn)](https://learn.microsoft.com/en-us/intune/intune-service/protect/microsoft-cloud-pki-overview)
+- [Microsoft Entra CBA Overview - Microsoft Entra ID](https://learn.microsoft.com/en-us/entra/identity/authentication/concept-certificate-based-authentication)
+- [Set Up Microsoft Entra CBA - Microsoft Entra ID](https://learn.microsoft.com/en-us/entra/identity/authentication/how-to-certificate-based-authentication)
+- [Overview of Conditional Access Authentication Strengths - Microsoft Entra ID](https://learn.microsoft.com/en-us/entra/identity/authentication/concept-authentication-strengths)
+- [Types of certificate that are supported by Microsoft Intune](https://learn.microsoft.com/en-us/intune/fundamentals/certificates/overview)
+- [Use SCEP certificate profiles with Microsoft Intune](https://learn.microsoft.com/en-us/intune/device-configuration/certificates/scep-profiles)
+- [Microsoft Cloud PKI for Microsoft Intune](https://learn.microsoft.com/en-us/intune/cloud-pki/)
