@@ -93,7 +93,7 @@ How you disable it depends on the configuration. If it runs in a virtual machine
 
 - **Intune:** set the Settings catalog value to **Disabled**, or set `LsaCfgFlags` to `0` in the CSP.
 - **Group Policy:** set Turn On Virtualization Based Security to **Disabled**.
-- **Registry:** set `LsaCfgFlags` to `0` under `HKLM\SYSTEM\CurrentControlSet\Control\Lsa` and under `HKLM\SOFTWARE\Policies\Microsoft\Windows\DeviceGuard`. Learn notes that deleting these entries may not disable it, so set them to 0.
+- **Registry:** Learn says editing the registry is sufficient if Credential Guard is on without UEFI lock and without Group Policy. Set `LsaCfgFlags` to `0` under `HKLM\SYSTEM\CurrentControlSet\Control\Lsa` and under `HKLM\SOFTWARE\Policies\Microsoft\Windows\DeviceGuard`. Learn notes that deleting these entries may not disable it, so set them to 0.
 
 Restart the device after each change. The UEFI lock procedure needs physical presence at the machine. It copies SecConfig.efi, creates a boot entry with `bcdedit`, and shows a confirmation prompt at boot that must be confirmed. For a virtual machine, the host can run `Set-VMSecurity -VMName <VMName> -VirtualizationBasedSecurityOptOut $true`. Use the exact command list from the Learn page for the UEFI case.
 
@@ -111,7 +111,7 @@ This section is a practical suggestion and not a Microsoft statement.
 The pages I read do not describe the following:
 
 - The hardware and software requirements for default enablement, which are on the overview page.
-- The contents of the known issues and additional mitigations articles.
+- The contents of the known issues article that the page links.
 - Whether Windows 10 is covered by default enablement.
 
 ## Related
@@ -122,4 +122,4 @@ The pages I read do not describe the following:
 
 ## Sources
 
-- [Configure Credential Guard](https://learn.microsoft.com/windows/security/identity-protection/credential-guard/configure)
+- [Configure Credential Guard (Microsoft Learn)](https://learn.microsoft.com/windows/security/identity-protection/credential-guard/configure)
