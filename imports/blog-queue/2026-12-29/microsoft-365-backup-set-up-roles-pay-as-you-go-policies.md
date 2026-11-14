@@ -25,7 +25,7 @@ faq:
     a: "According to Microsoft Learn, 100 policies per product and 100,000 items per policy, and each site, mailbox or account can belong to only one policy."
 ---
 
-Microsoft 365 Backup protects SharePoint sites, OneDrive accounts and Exchange Online mailboxes, which Learn calls protection units. This guide follows the Learn setup article. The overview page is a dated preview page with unclear status wording, so I did not use it for claims.
+Microsoft 365 Backup protects SharePoint sites, OneDrive accounts and Exchange Online mailboxes, which Learn calls protection units. This guide follows the Learn setup article. I did not use the Learn overview page for claims.
 
 ## Roles and permissions
 
@@ -57,7 +57,7 @@ Migration moves the existing subscription, resource group and region to a billin
 
 ## Step 2: create backup policies
 
-A policy is the backup plan an admin defines for one product, so you create one per product: SharePoint, Exchange and OneDrive. Learn's view and edit policies article gives these steps:
+A policy is the backup plan an admin defines, and you need at least one per product: SharePoint, Exchange and OneDrive. Learn's page on creating, viewing and editing policies gives these steps:
 
 1. In the Microsoft 365 admin center select **Settings**, then **Microsoft 365 Backup**.
 2. In the product's section select **Set up policy**, review the **Overview** and select **Next**.
@@ -65,7 +65,7 @@ A policy is the backup plan an admin defines for one product, so you create one 
 4. On **Backup Settings** enter a policy name and, for SharePoint and OneDrive, the recovery window.
 5. On **Review** select **Create policy**.
 
-Selection methods include uploading a CSV file (up to 50,000 entries), selecting items individually, filters, dynamic rules based on distribution lists or security groups (preview) and, for SharePoint and OneDrive, backing up all sites or accounts as Full Workload Backup (preview). Exchange policies cover shared and user mailboxes only, not room or group mailboxes. Restore points can take time to appear, up to 15 minutes per 1,000 sites or mailboxes for SharePoint and Exchange.
+Selection methods include uploading a CSV file (up to 50,000 entries) and selecting items individually. SharePoint also offers site filters (name or URL contains, last modified; preview). Exchange and OneDrive offer filters based on distribution lists or security groups, which are flattened once when added, and dynamic rules on the same groups that are reevaluated daily (preview). Full Workload Backup (preview) can be enabled for SharePoint, OneDrive and Exchange to protect everything not already in another policy. Exchange policies cover shared and user mailboxes only, not room or group mailboxes. Restore points can take time to appear: up to 15 minutes per 1,000 sites or mailboxes for SharePoint and Exchange, and 15 to 25 minutes per 1,000 for OneDrive.
 
 ## Recovery window and limits
 
@@ -81,11 +81,11 @@ Potentially harmful events include disabling the service, pausing billing, remov
 
 ## Suggested first steps
 
-This is a suggestion, not Microsoft guidance. Pick a shared mailbox for the notification list so it survives staff changes, and start with one policy for a few important sites.
+This is a suggestion, not Microsoft guidance. Add an email-enabled distribution list to the notification list so it survives staff changes, and start with one policy for a few important sites.
 
 ## Not covered
 
-The pages I read do not give restore procedures, prices, supported regions, RPO and RTO values or the CSV file format. The policy page does not explain how to pause or delete a policy. It mentions availability for GCC customers without further detail. There is no separate entity for this service on m365.fm.
+The pages I read do not give restore procedures, prices, supported regions, RPO and RTO values or the CSV file format. The policy page does not explain how to pause or delete a policy. The setup page notes availability for GCC customers without further detail. There is no separate entity for this service on m365.fm.
 
 ## Related
 
@@ -93,5 +93,5 @@ The pages I read do not give restore procedures, prices, supported regions, RPO 
 
 ## Sources
 
-- [Set up Microsoft 365 Backup](https://learn.microsoft.com/microsoft-365/backup/backup-setup)
-- [View and edit backup policies](https://learn.microsoft.com/microsoft-365/backup/backup-view-edit-policies)
+- [Set up Microsoft 365 Backup (Microsoft Learn)](https://learn.microsoft.com/microsoft-365/backup/backup-setup)
+- [Create, view, and edit backup policies in Microsoft 365 Backup (Microsoft Learn)](https://learn.microsoft.com/microsoft-365/backup/backup-view-edit-policies)
