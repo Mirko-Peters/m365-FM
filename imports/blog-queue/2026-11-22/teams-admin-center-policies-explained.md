@@ -81,6 +81,16 @@ Learn states the order for each policy type:
 
 Practical consequence: a direct assignment hides every group assignment of the same type. If a group policy does not apply to someone, check for a direct assignment first.
 
+## Group assignment: ranking and limits
+
+The page on assigning policies to users and groups adds these details:
+
+- **Ranking.** When you assign a policy to a group, you set a ranking relative to other group assignments of the same policy type. A smaller number is a higher ranking, and 1 is the highest. Without a ranking, the assignment gets the lowest one.
+- **Changing a ranking.** In the admin center, remove the group assignment first, then assign it again with the new ranking. In PowerShell the Grant cmdlet can change the ranking, for example `Grant-CsTeamsMeetingPolicy -Group <group-id> -PolicyName "<policy>" -Rank 1`.
+- **Where.** In the admin center, open the policy type page, for example **Meetings** > **Meeting policies**, select the **Group policy assignment** tab and select **Add group**.
+- **Propagation.** The assignment to the group is immediate, but passing it on to members is a background operation that can take time depending on group size. Learn recommends groups of up to 50,000 users, though larger groups also work.
+- **Not supported.** Only direct members receive group assignments, not members of nested groups. Groups with `HiddenGroupMembership` enabled, which Class Teams have by default, cannot use group policy assignment. Teams App Permission Policy, Teams Upgrade Policy and Dialout Policy are not supported for group assignment.
+
 ## Check status after a change
 
 The policy assignment article does not give a propagation time. It lists activity log statuses: Not started, In progress, Rolling out to users, Completed and Completed with errors. To open the log:
@@ -88,7 +98,7 @@ The policy assignment article does not give a propagation time. It lists activit
 1. In the Teams admin center left navigation, select **Dashboard**.
 2. Under **Activity Log**, select **View details**.
 
-The log covers the last 30 days, and group operations appear as **Group policy assignment**. Learn says a video shows how to view assigned and effective policies for a user, but gives no written steps for it in the text read here.
+The log covers the last 30 days, and group operations appear as **Group policy assignment**. To see whether a user's effective policy is direct or inherited from a group, Learn shows `Get-CsUserPolicyAssignment -Identity <user> -PolicyType <type> | select -ExpandProperty PolicySource`. The output lists the assignment type, Direct or Group, per policy.
 
 ## A worked example
 
@@ -96,7 +106,7 @@ Suppose the global messaging policy lets everyone edit sent messages, and you wa
 
 ## Removing assignments
 
-Learn says you can remove assignments in bulk for all users directly assigned to a policy. This is the way to clean up old direct assignments so group or global policies apply again.
+Learn says you can remove assignments in bulk for all users directly assigned to a policy. In the admin center, go to **Users** > **Manage users**, select **Unassign policies in bulk** from the **Actions** menu, choose a policy type and policy, select **Load data** and then **Unassign policy**. Choosing a policy removes all individually assigned users from it. This is the way to clean up old direct assignments so group or global policies apply again. To remove a single user's direct assignment, open the user under **Manage users**, select the **Policies** tab, select the policy and select **Remove**.
 
 ## Common mistakes
 
@@ -107,7 +117,7 @@ Learn says you can remove assignments in bulk for all users directly assigned to
 
 ## Limits of the sources
 
-The Microsoft Learn pages read do not define the group assignment ranking beyond a link and do not give click-by-click steps for viewing effective policies. The policy overview names no admin role. Pages on individual policy types, such as meeting or messaging policy settings, were not part of this read.
+The Microsoft Learn pages read name no required admin role or license for policy assignment, so check your tenant's role setup. Pages on individual policy types, such as meeting or messaging policy settings, were not part of this read.
 
 ## Related
 
@@ -120,3 +130,4 @@ The Microsoft Learn pages read do not define the group assignment ranking beyond
 
 - [Microsoft Learn: Manage Teams with policies](https://learn.microsoft.com/en-us/microsoftteams/manage-teams-with-policies)
 - [Microsoft Learn: Assign policies in Teams, getting started](https://learn.microsoft.com/en-us/microsoftteams/policy-assignment-overview)
+- [Microsoft Learn: Assign policies to users and groups](https://learn.microsoft.com/en-us/microsoftteams/assign-policies-users-and-groups)
