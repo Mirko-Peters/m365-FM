@@ -11,7 +11,7 @@ keypoints:
   - "The Learn pages do not say that it replaces AZ-204 or any other exam, and they state no retirement. The study guide only links AZ-204 for training."
   - "Domains: containerized solutions 20 to 25 percent, data management services 25 to 30 percent, connect to and consume Azure services 20 to 25 percent, secure, monitor and troubleshoot 20 to 25 percent."
   - "The exam is 120 minutes, proctored, scheduled through Pearson VUE, and offered in English and twelve other languages."
-  - "The study guide has no explicit skills-measured-as-of date and no change log. Page timestamps are 2026-10-30 and 2026-11-05."
+  - "The study guide has no explicit skills-measured-as-of date and no change log. Its metadata shows 2026-04-15, and the certification page shows Last Updated 10/07/2026."
 faq:
   - q: "Does AI-200 replace AZ-204?"
     a: "According to Microsoft Learn, neither the exam study guide nor the certification page says so. The study guide only links the AZ-204 page for training, and states no retirement."
@@ -29,7 +29,7 @@ AI-200 is the exam for the Microsoft Certified: Azure AI Cloud Developer Associa
 
 ## Replacement and status
 
-The study guide makes no statement about replacing AZ-204 or any other exam and says nothing about retirement. Its training link points to the AZ-204 exam page, which Learn does not describe as a replacement. The certification page does not name a predecessor or successor either, and gives no availability or retirement status. Its Last Updated field reads 10/07/2026, and the study guide shows 2026-10-30. The study guide has no explicit skills-measured-as-of date and no change log.
+The study guide makes no statement about replacing AZ-204 or any other exam and says nothing about retirement. Its training link points to the AZ-204 exam page, which Learn does not describe as a replacement. The certification page does not name a predecessor or successor either, and gives no availability or retirement status. Its Last Updated field reads 10/07/2026. The study guide's metadata shows 2026-04-15 as page date and 2026-05-05 as last update. The study guide has no explicit skills-measured-as-of date and no change log.
 
 ## Audience profile
 
@@ -73,7 +73,7 @@ This section is a suggestion, not Microsoft guidance. The data management domain
 
 ## Documentation Learn lists
 
-The study guide links Azure documentation for Container Registry, Container Instances, App Service, Azure Functions, Cosmos DB, Blob Storage, Microsoft Entra ID, Key Vault, Azure Cache for Redis, API Management, Event Hubs, Event Grid, Service Bus and Queue Storage. Some of these, such as Blob Storage and Event Hubs, do not appear in the skills bullets above, so treat the list as general reading, not as a map of exam topics. Localized exams arrive about eight weeks after the English version, and you can request an extra 30 minutes if your language is not available.
+The study guide links Azure documentation for Container Registry, Container Instances, App Service, Azure Functions, Cosmos DB, Blob Storage, Microsoft Entra ID, Key Vault, Azure Cache for Redis, API Management, Event Hubs, Event Grid, Service Bus and Queue Storage. Some of these, such as Blob Storage and Event Hubs, do not appear in the skills bullets above, so treat the list as general reading, not as a map of exam topics. Where an exam is localized, the localized version is updated about eight weeks after the English version is updated, and you can request an extra 30 minutes if your language is not available.
 
 ## Not covered
 
@@ -86,5 +86,5 @@ The pages do not give the number of questions, question types, delivery options 
 
 ## Sources
 
-- [Study guide for Exam AI-200](https://learn.microsoft.com/credentials/certifications/resources/study-guides/ai-200)
-- [Microsoft Certified: Azure AI Cloud Developer Associate](https://learn.microsoft.com/credentials/certifications/azure-ai-cloud-developer-associate/)
+- [Study guide for Exam AI-200: Developing AI Cloud Solutions on Azure (Microsoft Learn)](https://learn.microsoft.com/credentials/certifications/resources/study-guides/ai-200)
+- [Microsoft Certified: Azure AI Cloud Developer Associate (Microsoft Learn)](https://learn.microsoft.com/credentials/certifications/azure-ai-cloud-developer-associate/)
