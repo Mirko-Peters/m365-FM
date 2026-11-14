@@ -22,10 +22,10 @@ faq:
   - q: "What do #BUSY! and #CONNECT! mean?"
     a: "Per Microsoft Support, #BUSY! means calculations are still running in the Microsoft Cloud, and if it lasts longer than 60 seconds the runtime should be reset. #CONNECT! means the connection to the cloud failed, and resetting the Python runtime is the fix."
   - q: "Do the Microsoft pages explain data modeling failures in Copilot?"
-    a: "Not directly. The pages read describe Copilot's analysis, edit modes and Python errors, but contain no dedicated data modeling troubleshooting. The page on formatting data for Copilot in Excel also had no table-format rules in the version read."
+    a: "Not directly. The pages read describe Copilot's analysis, edit modes and Python errors, but contain no dedicated data modeling troubleshooting. The pages cited here give no table-format rules beyond single tables or table-like ranges."
 ---
 
-When Copilot in Excel fails on a Python-based analysis, three layers can be responsible: the data and file state that Copilot reads, the Copilot mode and settings, and the Python in Excel runtime that executes the code. Microsoft documents each layer in a separate place. This guide combines them and points out gaps. Two source pages were retired or empty on the points asked, which is noted below.
+When Copilot in Excel fails on a Python-based analysis, three layers can be responsible: the data and file state that Copilot reads, the Copilot mode and settings, and the Python in Excel runtime that executes the code. Microsoft documents each layer in a separate place. This guide combines them and points out gaps.
 
 ## How Copilot uses Python
 
@@ -51,14 +51,14 @@ The FAQ also states that editing works only when **Calculation Options** are set
 
 ## Step 2: Check the data layout
 
-Make the data table-like, because unstructured data is not supported. Microsoft Support's page on formatting data for Copilot in Excel was read, but the version available had no table or range rules. The advice to use headers and avoid scattered blocks or free-form text areas is general Excel practice, not a quote from that page. One tip it does give is to name the columns or ranges that Copilot should work with.
+Make the data table-like, because unstructured data is not supported. The pages cited here give no further table or range rules. Advice such as using clear headers and avoiding scattered blocks or free-form text areas is general Excel practice, not Microsoft guidance from these pages.
 
 Language matters too. The FAQ says Copilot was trained mainly on English sources and may perform worse with other languages in prompts or data.
 
 ## Step 3: Check platform, mode and licensing
 
-- Edit, chat and plan modes work on Windows, Mac and the web. iPad has chat and plan, iPhone and Android chat only.
-- The Copilot button needs a suitable license, app version, network and privacy settings. If it is missing, check those first.
+- Edit, chat and plan modes work on Windows, Mac and the web. iPad has chat and plan, with edit mode rolling out to production. iPhone has chat, with edit mode rolling out. Android has chat only.
+- If the Copilot button is missing, Microsoft says it might not be included with your Microsoft 365 subscription or available based on your organization's settings.
 - The FAQ states that Copilot can make mistakes and that results should be reviewed.
 
 ## Step 4: Decode Python in Excel errors
@@ -94,7 +94,7 @@ If Copilot inserts a Python cell, the Python in Excel runtime applies. Microsoft
 
 ## What the pages do not cover
 
-No page read describes data modeling failures, such as relationships or Data Model measures, in the context of Copilot's Python analysis. The retired Support article on Copilot in Excel with Python gave no content. If your failure involves the Excel Data Model, test the same question on a small, flat table first to separate the data model from the Python path.
+No page read describes data modeling failures, such as relationships or Data Model measures, in the context of Copilot's Python analysis. If your failure involves the Excel Data Model, test the same question on a small, flat table first to separate the data model from the Python path.
 
 ## Related
 
