@@ -11,7 +11,7 @@ keypoints:
   - "Parameterize connections.json so each environment uses its own connections and endpoints, and keep secrets in app settings, not in the repo."
   - "Managed API connections are separate Azure resources. Learn calls an ARM template the easiest way to create them, and each needs an access policy for the logic app identity."
   - "The Learn pages read do not describe a Dataverse-specific deployment path, and the Dataverse connector page lists OAuth, service principal and client certificate, not managed identity."
-  - "The Azure DevOps extension generates CI, CD and infrastructure pipelines as YAML, and currently supports only ARM templates for infrastructure scripts."
+  - "The Azure Logic Apps (Standard) extension for VS Code generates CI, CD and infrastructure pipelines for Azure DevOps and supports only ARM templates for infrastructure scripts."
 faq:
   - q: "How are Standard logic apps deployed between environments?"
     a: "Microsoft Learn describes building, assembling and zipping the logic app project into an artifact, copying it to the host environment and starting the app. Infrastructure such as plans, storage and API connections is provisioned separately, for example with ARM templates, so the app artifact can move unchanged between environments."
@@ -40,7 +40,7 @@ Each workflow has a `workflow.json`. The root contains `connections.json`, `host
 
 - `connections.json` holds metadata, endpoints and keys for managed API connections and Azure functions. To use different connections and functions per environment, parameterize it and update the endpoints.
 - `local.settings.json` is ignored during deployment and can contain secrets, so exclude it from source control.
-- The ZIP must contain the build artifacts at the root level, including workflow folders, `host.json`, `connections.json` and `local.settings.json`. Do not add extra folders.
+- The ZIP must contain the build artifacts at the root level, including workflow folders, `host.json`, `connections.json` and `local.settings.json`. Do not add extra folders. The same page therefore lists `local.settings.json` in the ZIP, while its project table says the file is ignored during deployment and should be kept out of source control. Learn does not explain how to reconcile the two, so check in a test deployment how your pipeline handles that file.
 
 In Visual Studio Code, answer **Yes** when prompted to allow parameterization for connections. Learn says this lets the project use parameters in connection definitions for different environments.
 
@@ -50,7 +50,8 @@ The target needs these resources:
 
 | Resource | Needed? |
 |---|---|
-| Standard logic app on the Workflow Standard plan | Required |
+| Standard logic app | Required |
+| Functions Premium or App Service hosting plan (the Workflow Standard plan) | Required |
 | Storage account | Required for stateful and stateless workflows |
 | API connections | Required if workflows use them |
 | Application Insights | Optional |
@@ -67,7 +68,7 @@ The local `connections.json` uses a raw key that is created for local use in Vis
 }
 ```
 
-Learn says managed identity is the default and recommended type for managed connections that run in Azure, and that raw keys are for development only because they expire after seven days. If you disable the logic app's system-assigned identity, connections stop working at runtime. Every managed API connection also needs an access policy for the logic app's identity, created in the portal after the ZIP deployment.
+Learn says managed identity is the default and recommended type for managed connections that run in Azure, and that raw keys are for development only because they expire after seven days. If you disable the logic app's system-assigned identity, connections stop working at runtime. Every managed API connection also needs an access policy for the logic app's identity, created in the portal after the ZIP deployment. Learn's set-up page also says its sample ARM template includes these access policies, so the pages describe both routes without saying when to prefer which.
 
 **The Dataverse caveat.** The `ManagedServiceIdentity` example above comes from a SQL connection example. The Dataverse connector page I read lists authentication types of OAuth, Service Principal (client ID and secret) and Client Certificate, plus a deprecated default. It does not list managed identity, and it does not mention Logic Apps at all. It also states a limit of 6,000 API calls per connection per 300 seconds. So do not assume the SQL pattern carries over. Decide your Dataverse authentication type, create the connection per environment, and test it in a pre-production environment before the first release. Microsoft's Dataverse-specific ALM for solutions, pipelines and environments is a separate topic that these pages do not connect to Logic Apps Standard.
 
@@ -97,7 +98,7 @@ The Azure Logic Apps (Standard) extension for Visual Studio Code can generate de
 
 Prerequisites include the Azure Logic Apps (Standard) Build and Release tasks, an Azure Resource Manager service connection with a service principal, and an existing resource group. Limits: only Standard projects are supported, custom code projects are currently ignored, you must connect the pipelines to Azure DevOps and create triggers yourself, and only ARM templates are supported for infrastructure scripts. When you target another environment, update the values in the generated parameters and variable files.
 
-## Release checklist
+## Release checklist (my own summary)
 
 1. Parameterize `connections.json`, keep `local.settings.json` out of source control.
 2. Provision the plan, storage and API connections with ARM templates per environment.
@@ -122,7 +123,7 @@ Prerequisites include the Azure Logic Apps (Standard) Build and Release tasks, a
 
 ## Sources
 
-- [Microsoft Learn: DevOps deployment for Standard logic app workflows](https://learn.microsoft.com/en-us/azure/logic-apps/devops-deployment-single-tenant-azure-logic-apps)
-- [Microsoft Learn: Set up DevOps deployment for Standard logic app workflows](https://learn.microsoft.com/en-us/azure/logic-apps/set-up-devops-deployment-single-tenant-azure-logic-apps)
-- [Microsoft Learn: Automate build and deployment for Standard logic apps with Azure DevOps](https://learn.microsoft.com/en-us/azure/logic-apps/automate-build-deployment-standard)
-- [Microsoft Learn: Microsoft Dataverse connector reference](https://learn.microsoft.com/en-us/connectors/commondataserviceforapps/)
+- [Microsoft Learn: DevOps Deployment for Standard Workflows](https://learn.microsoft.com/en-us/azure/logic-apps/devops-deployment-single-tenant-azure-logic-apps)
+- [Microsoft Learn: Set Up DevOps for Standard Workflows](https://learn.microsoft.com/en-us/azure/logic-apps/set-up-devops-deployment-single-tenant-azure-logic-apps)
+- [Microsoft Learn: Automate Build and Deployment for Standard Workflows](https://learn.microsoft.com/en-us/azure/logic-apps/automate-build-deployment-standard)
+- [Microsoft Learn: Microsoft Dataverse - Connectors](https://learn.microsoft.com/en-us/connectors/commondataserviceforapps/)
