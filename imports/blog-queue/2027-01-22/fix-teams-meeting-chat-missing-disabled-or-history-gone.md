@@ -10,7 +10,7 @@ keypoints:
   - "Learn lists three causes: the Meeting chat policy is Off, the meeting has more than 1,000 attendees, or you joined by link and were not on the original invitation."
   - "As a first check, leave and rejoin the meeting to rule out a transient issue."
   - "Admins fix the policy in the Teams admin center under Meetings, Meeting policies, Meeting engagement, by setting Meeting chat to an On value."
-  - "Anyone who joined by a forwarded link loses chat, files and notes after the meeting ends. The organizer must add them to the original invitation or recurring series."
+  - "Attendees added only by a link, such as a forwarded invitation, lose chat access after the meeting. The organizer must add them to the original invitation or series."
   - "For meetings hosted by other organizations, External meeting chat must be On, and the host must allow chat."
 faq:
   - q: "Why is the Chat icon missing in my Teams meeting?"
@@ -25,7 +25,7 @@ faq:
     a: "For meetings hosted by organizations you have no trust relationship with, Learn says the External meeting chat setting must be On, which is the default. You must also set Meeting chat to On for everyone, and the organizer must allow meeting chat as Enabled or In meeting only."
 ---
 
-Meeting chat problems in Teams usually come down to a policy, a limit or the way someone joined. The Microsoft Learn troubleshooting page for meeting chat lists three causes and three resolutions. This article puts them in a checklist, and adds the admin settings from the Manage chat in Teams meetings page so you can see which value applies.
+Meeting chat problems in Teams can come down to a policy, a limit or the way someone joined. The Microsoft Learn troubleshooting page for meeting chat lists three causes and three resolutions. This article puts them in a checklist, and adds the admin settings from the Manage chat in Teams meetings page so you can see which value applies.
 
 ## Symptoms
 
