@@ -1,6 +1,6 @@
 ---
 title: "Prevent Fabric capacity throttling and smoothing overages in workspaces"
-summary: "How Microsoft Fabric smoothing and throttling stages work, how to read the Capacity Metrics app, and which steps reduce overages: optimize heavy items first, then isolate workloads, then scale."
+summary: "How Microsoft Fabric smoothing and throttling stages work, how to read the Capacity Metrics app, and which steps reduce overages: optimize heavy items, consider surge protection, and scale out or scale up."
 status: review
 publish: false
 author: mirko-p
@@ -10,7 +10,7 @@ keypoints:
   - "Throttling is based on future capacity use. Fabric smooths background work over 24 hours and interactive work over 5 to 64 minutes before it decides to delay or reject requests."
   - "Four stages apply: up to 10 minutes of overage is protected, then interactive delay, then interactive rejection above 60 minutes, then background rejection above 24 hours."
   - "The Capacity Metrics app shows the cause: its Utilization, Throttling and Overages views, plus a matrix of items and operations sorted by CU seconds."
-  - "Microsoft recommends this order: optimize items, consider surge protection, scale out to other capacities, then scale up the SKU."
+  - "Microsoft names three strategies for high usage: optimize, scale up and scale out. Surge protection helps too but is no substitute for them."
   - "Throttling is per capacity, so moving a workspace to another capacity isolates its load from critical content."
 faq:
   - q: "What is the difference between bursting and smoothing in Fabric?"
@@ -25,7 +25,7 @@ faq:
     a: "In the Microsoft Fabric Capacity Metrics app. Learn describes the Utilization, Throttling and Overages tabs and a matrix by item and operation. Sorting by CU seconds shows top consumers, and the Overloaded minutes field shows which items were most affected."
 ---
 
-Fabric throttling happens when a capacity uses more compute than its SKU allows, after smoothing is applied. You prevent it in this order: find the items that consume the most capacity units (CUs), optimize them, isolate critical content on its own capacity, and scale up only when optimization is not enough.
+Fabric throttling happens when a capacity uses more compute than its SKU allows, after smoothing is applied. Learn names three strategies for a heavily used capacity: optimize, scale up and scale out, without ranking them. The order used in this article is my own: find the items that consume the most capacity units (CUs), optimize them, consider surge protection, isolate critical content on its own capacity, and scale up when optimization is not enough.
 
 ## How smoothing and throttling work
 
@@ -49,7 +49,7 @@ Only operations requested after throttling starts are affected, and in-flight op
 
 ### A worked example from Microsoft
 
-Learn uses an F2 capacity and one background operation that consumed 1 CU hour, which is 3,600 CU seconds. Spread over the 2,880 timepoints in 24 hours, it adds 1.25 CU seconds per timepoint. An F2 provides 60 CU seconds per timepoint, so the operation takes about 2.1 percent of each timepoint. The point of the example is that one large background job rarely causes throttling alone. Many jobs stacking up in the same window do.
+Learn uses an F2 capacity and one background operation that consumed 1 CU hour, which is 3,600 CU seconds. Spread over the 2,880 timepoints in 24 hours, it adds 1.25 CU seconds per timepoint. An F2 provides 60 CU seconds per timepoint, so the operation takes about 2.1 percent of each timepoint. Learn's point is that the F2 is not throttled even though the job consumed six times the CUs available in the next 10 minutes, because smoothing spreads the total over 24 hours. My reading is that throttling usually needs many jobs stacking up in the same window.
 
 Overage means use above the SKU in a timepoint, calculated after smoothing. Overage beyond the 10-minute window becomes carryforward, and unused capacity in later timepoints burns it down.
 
@@ -88,7 +88,7 @@ Learn describes surge protection as a way to limit the total compute that backgr
 - **Scale out.** Move workspaces or items to another capacity to spread the load. Learn suggests a separate capacity for high-priority content, such as executive reporting.
 - **Scale up.** For F SKUs you can resize, pause and resume to match consumption. Learn advises starting small and growing, and using trial or pay-as-you-go capacities to measure real need.
 
-The page's recommended order is: optimize first, then surge protection, then scale out, then scale up.
+Learn does not rank these options. The order of the steps in this article is my own suggestion.
 
 ## Recovering during an incident
 
@@ -99,7 +99,7 @@ Learn lists these options:
 - Enable capacity overage billing, which Learn says costs three times the normal capacity rate.
 - On P SKUs, enable Autoscale.
 
-## Common mistakes
+## Common mistakes (own reading of the pages above)
 
 - Treating a single throttling event as proof that the SKU is too small.
 - Scheduling many large background refreshes close together. The pages do not state this rule directly, but they say background work counts against the same 24-hour smoothing window.
@@ -117,4 +117,3 @@ Learn lists these options:
 - [Understand capacity throttling in Microsoft Fabric](https://learn.microsoft.com/en-us/fabric/enterprise/throttling)
 - [Evaluate and optimize your Microsoft Fabric capacity](https://learn.microsoft.com/en-us/fabric/enterprise/optimize-capacity)
 - [Understand the metrics app compute page](https://learn.microsoft.com/en-us/fabric/enterprise/metrics-app-compute-page)
-- [Microsoft Fabric operations](https://learn.microsoft.com/en-us/fabric/enterprise/fabric-operations)
