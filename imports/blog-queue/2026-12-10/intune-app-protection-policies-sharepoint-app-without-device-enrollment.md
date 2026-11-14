@@ -47,7 +47,7 @@ The Office mobile apps support SharePoint Online but not SharePoint on-premises.
 
 ## Step 1: Create the app protection policy
 
-In the Intune admin center, go to **Apps** > **Protection** > **Create policy**, then choose **iOS/iPadOS** or **Android**. You create one policy per platform. The tabs are:
+In the Intune admin center, go to **Apps** > **Protection** > **Create policy**, then choose **iOS/iPadOS** or **Android**. You pick the platform when you create the policy. The tabs are:
 
 1. **Basics:** name and optional description.
 2. **Apps:** set **Target policy to**. The options are **All Apps**, **Microsoft Apps**, **Core Microsoft Apps** and **Selected apps**. Learn says Core Microsoft Apps includes Microsoft Edge, Excel, Office, OneDrive, OneNote, Outlook, PowerPoint, SharePoint, Teams, To Do and Word. You must add at least one app.
@@ -72,7 +72,7 @@ Learn's create-policy page says it can take time to apply policies to existing d
 
 ## Step 4: Require protection with Conditional Access
 
-An app protection policy alone does not stop users from opening SharePoint in an unprotected app. Learn recommends Conditional Access to ensure enforcement. In the Microsoft Entra admin center, go to **Entra ID** > **Conditional Access** > **Policies** > **New policy**, include the users, choose the target resources, and under **Access controls** > **Grant** select **Require app protection policy**.
+An app protection policy alone does not stop users from opening SharePoint in an unprotected app. Learn recommends Conditional Access to ensure enforcement. In a Conditional Access policy, include the users, choose the target resources, and under the grant controls select **Require app protection policy**. The grant control page I read does not give the portal path for creating the policy.
 
 Points from Learn's grant control page:
 
@@ -82,11 +82,11 @@ Points from Learn's grant control page:
 - Kaizala, Skype for Business and Visio do not support this grant.
 - The Learn page says the approved client app grant was retiring in early March 2026, which has passed, so check its current status. New policies should use only the app protection policy grant.
 
-I did not read a page on setting the device platform condition for this scenario. Use the report-only mode first, as Learn's compliance policy example does, and review the sign-in impact before turning the policy on.
+I did not read a page on setting the device platform condition for this scenario. My own suggestion, not from the pages above: start in report-only mode and review the sign-in impact before turning the policy on. Learn's grant controls page recommends report-only mode and the What If tool for **Block access** policies.
 
 ## What this does not protect
 
-App protection policies protect data inside protected apps. They do not manage the device, so you cannot require a device passcode through them in the way MDM can, and unmanaged devices still receive no certificates or Wi-Fi settings. If a user opens SharePoint in a mobile browser, the policy does not cover it. Learn does not describe how browser access is handled in this setup, so confirm it with a test account.
+App protection policies protect data inside protected apps. They do not manage the device, so you cannot require a device passcode through them in the way MDM can, and unmanaged devices still receive no certificates or Wi-Fi settings. Learn does not describe how mobile browser access to SharePoint is handled in this setup, so confirm it with a test account.
 
 ## Typical mistakes
 
@@ -104,7 +104,7 @@ App protection policies protect data inside protected apps. They do not manage t
 
 ## Sources
 
-- [Learn about app protection policy](https://learn.microsoft.com/en-us/intune/intune-service/apps/app-protection-policy)
-- [How to create and deploy app protection policies](https://learn.microsoft.com/en-us/intune/intune-service/apps/app-protection-policies)
-- [App protection policy delivery](https://learn.microsoft.com/en-us/intune/intune-service/apps/app-protection-policy-delivery)
+- [App protection policies overview](https://learn.microsoft.com/en-us/intune/app-management/protection/overview)
+- [Create and deploy app protection policies](https://learn.microsoft.com/en-us/intune/app-management/protection/create-policy)
+- [Understand app protection policy delivery and timing](https://learn.microsoft.com/en-us/intune/app-management/protection/policy-delivery-timing)
 - [Conditional Access grant controls: Require app protection policy](https://learn.microsoft.com/en-us/entra/identity/conditional-access/concept-conditional-access-grant)
