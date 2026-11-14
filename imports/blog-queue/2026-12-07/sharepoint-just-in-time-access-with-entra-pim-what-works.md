@@ -95,7 +95,7 @@ Users go to **ID Governance** > **Privileged Identity Management** > **My roles*
 - How long a SharePoint site takes to honor a freshly activated group membership. Learn only gives the 24-hour figure for the SharePoint Administrator role scenario.
 - Removing standing access. Direct site permissions that already exist stay in place unless someone removes them, so audit them before calling the site JIT-protected. This is a practical point, not a statement from Learn.
 
-## Typical mistakes
+## Typical mistakes (own reading of the pages above)
 
 - Using PIM for Groups for the SharePoint Administrator role and then expecting instant access.
 - Leaving group ownership open. Learn notes that admins and group owners can manage groups through other interfaces, overriding changes made in PIM.
@@ -111,7 +111,7 @@ Users go to **ID Governance** > **Privileged Identity Management** > **My roles*
 
 ## Sources
 
-- [Error when accessing SharePoint or OneDrive after role activation in PIM (Microsoft Learn)](https://learn.microsoft.com/en-us/sharepoint/troubleshoot/administration/access-denied-to-pim-user-accounts)
+- [Error when accessing SharePoint or OneDrive after role activation in PIM (Microsoft Learn)](https://learn.microsoft.com/en-us/troubleshoot/sharepoint/administration/access-denied-to-pim-user-accounts)
 - [Privileged Identity Management for Groups (Microsoft Learn)](https://learn.microsoft.com/en-us/entra/id-governance/privileged-identity-management/concept-pim-for-groups)
 - [Bring groups into Privileged Identity Management (Microsoft Learn)](https://learn.microsoft.com/en-us/entra/id-governance/privileged-identity-management/groups-discover-groups)
 - [Assign eligibility for a group in PIM (Microsoft Learn)](https://learn.microsoft.com/en-us/entra/id-governance/privileged-identity-management/groups-assign-member-owner)
