@@ -104,3 +104,9 @@ Moving content between sites is a different operation from changing an address. 
 - Hub sites cannot be renamed this way, and a site that belongs to a hub must be connected to it again after the change.
 - Inventory where the old address is used before you rename, test on a pilot site or in a test tenant, and keep a way back.
 - Delete a redirect only after you have verified that the old address is no longer needed, and check Microsoft Learn for current guidance first.
+
+## Sources
+
+- [Change a site address (Microsoft Learn)](https://learn.microsoft.com/sharepoint/change-site-address)
+- [Manage site redirects (Microsoft Learn)](https://learn.microsoft.com/sharepoint/manage-site-redirects)
+- [Planning your SharePoint hub sites (Microsoft Learn)](https://learn.microsoft.com/sharepoint/planning-hub-sites)
