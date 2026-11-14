@@ -37,7 +37,7 @@ Learn's article on this error says the cause is that the third-party identity pr
 
 ### Resolution 1: correct it at the identity provider
 
-The team that manages the identity provider corrects the IssuerURI so it matches what Entra expects for the federated domain.
+Learn says to contact the support team of the third-party identity provider and have them correct the IssuerURI that is returned as Issuer in the SAML response sent to Microsoft Entra ID or Microsoft 365.
 
 ### Resolution 2: change the IssuerUri in Entra
 
@@ -48,7 +48,7 @@ Change the IssuerUri of the federated domain so it matches the realm in the erro
 
 ### A caution about the module
 
-The article notes the deprecation of the MSOnline and Azure AD PowerShell modules and recommends Microsoft Graph PowerShell. The dates in that note, including 30 March 2024, have passed, so do not start new work on the old modules without checking whether the commands still run in your tenant. I did not read the Graph PowerShell federation documentation, so I give no replacement command here.
+The article notes the deprecation of the MSOnline and Azure AD PowerShell modules and recommends Microsoft Graph PowerShell. The note says the modules are deprecated as of 30 March 2024 and continue to function through 30 March 2025. Both dates have passed, so do not start new work on the old modules without checking whether the commands still run in your tenant. Learn's page gives no Microsoft Graph PowerShell replacement command, so none is given here.
 
 ## Case 2: several federated domains on one AD FS
 
@@ -90,9 +90,9 @@ This section is my advice, not a Microsoft statement.
 
 Gather the full error message with the realm, the domain the user signs in with, the time of the failure and the correlation details shown on the error page. Add the identity provider's name, the protocol in use and the current federation settings of the domain. If you plan to use the AD FS claim rules tool, also export the list of domains and keep a copy of the existing rules. Having these items in a ticket lets the identity provider team and the Entra admins work from the same facts, and it makes a rollback straightforward if a change does not help.
 
-## What I did not read
+## What the pages do not cover
 
-I read the SAML troubleshooting article and the archived multi-domain article. The first page opened without a clear title in the text I received, so I cite its title from the page header. I did not read the Entra federation configuration documentation or the AD FS troubleshooting pages.
+The two articles give causes and fixes for the cases above only. They do not describe how to configure federation in Microsoft Entra ID in general or how to troubleshoot AD FS beyond the claim rule update.
 
 ## Related
 
@@ -102,6 +102,6 @@ I read the SAML troubleshooting article and the archived multi-domain article. T
 
 ## Sources
 
-- [Authentication fails with an error stating 'The requested federation realm object ... does not exist' (Microsoft Learn)](https://learn.microsoft.com/troubleshoot/entra/entra-id/mfa/authentication-fails-with-error)
-- [You can't sign in to Microsoft 365 from multiple federated domains (Microsoft Learn)](https://learn.microsoft.com/previous-versions/troubleshoot/microsoft-365/enterprise/cant-sign-in-office-365-multiple-domain-federation)
+- [The requested federation realm object \<Object ID\> does not exist when authentication fails (Microsoft Learn)](https://learn.microsoft.com/troubleshoot/entra/entra-id/mfa/authentication-fails-with-error)
+- [AADSTS50107 when trying to sign in to Microsoft 365 with multiple domain federations - Microsoft 365 Enterprise (Microsoft Learn)](https://learn.microsoft.com/previous-versions/troubleshoot/microsoft-365/enterprise/cant-sign-in-office-365-multiple-domain-federation)
 - [Microsoft Entra authentication & authorization error codes - Microsoft identity platform (Microsoft Learn)](https://learn.microsoft.com/entra/identity-platform/reference-error-codes)
