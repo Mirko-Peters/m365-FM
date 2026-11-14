@@ -7,7 +7,7 @@ author: mirko-p
 date: 2027-01-10
 topics: [az-104]
 keypoints:
-  - "The study guide lists skills as of October 26, 2023. The page footer shows Last updated on 2026-10-30."
+  - "The study guide lists skills as of October 26, 2023. The page metadata lists an update on 2026-11-05."
   - "Five areas: identities and governance 20-25%, storage 15-20%, compute 20-25%, virtual networking 15-20%, monitoring and maintenance 10-15%."
   - "Compute includes ARM templates and Bicep, virtual machines, containers and App Service. Networking includes peering, NSGs, Bastion, private endpoints and load balancing."
   - "A score of 700 or greater is required to pass. Most questions cover generally available features, and Preview features may appear."
@@ -18,7 +18,7 @@ faq:
   - q: "What score do I need?"
     a: "The study guide says a score of 700 or greater is required to pass."
   - q: "Which version of the skills does the guide show?"
-    a: "Skills measured as of October 26, 2023. The page footer shows Last updated on 2026-10-30, and earlier skills are listed separately on the page."
+    a: "Skills measured as of October 26, 2023. The page metadata lists an update on 2026-11-05, and the skills measured before that date are listed separately on the page."
   - q: "Is there a practice assessment?"
     a: "Yes. The guide recommends the new Practice Assessment on AI Skills Navigator at aka.ms/AZ104-PA. The legacy practice assessment is no longer updated."
   - q: "What if the exam is not in my language?"
@@ -29,8 +29,8 @@ AZ-104 tests how well you can implement, manage and monitor an Azure environment
 
 ## About the guide
 
-- The skills are measured as of October 26, 2023. The page footer shows Last updated on 2026-10-30.
-- The audience profile is a candidate with subject matter expertise in implementing, managing and monitoring an Azure environment, including virtual networks, storage, compute, identity, security and governance.
+- The skills are measured as of October 26, 2023. The page offers two versions, one for exams taken after that date and one for exams taken before it. The page metadata lists an update on 2026-11-05.
+- The audience profile is a candidate with subject matter expertise in implementing, managing and monitoring an Azure environment, including virtual networks, storage, compute, identity, security and governance. It should be familiar with operating systems, networking, servers and virtualization, and should have experience with PowerShell, Azure CLI, the Azure portal, Azure Resource Manager templates and Microsoft Entra ID.
 - A score of 700 or greater is required to pass.
 - Most questions cover generally available features. Preview features may appear if they are commonly used.
 
@@ -76,7 +76,7 @@ AZ-104 tests how well you can implement, manage and monitor an Azure environment
 
 ## Changes from the prior version
 
-The change log marks most areas No change. The page notes the rename from Azure AD users and groups to Microsoft Entra users and groups.
+In the change log, two rows are marked Minor: the audience profile and the rename from Manage Azure AD users and groups to Manage Microsoft Entra users and groups. All other rows are marked No change.
 
 ## Resources the guide links
 
@@ -96,7 +96,7 @@ This plan is practical advice built on the weights, not an official recommendati
 4. Cover monitoring and backup last. It has the lowest weight but is hands-on.
 5. Take the practice assessment and revisit weak areas.
 
-## Typical mistakes
+## Typical mistakes (my advice)
 
 - Studying from material for the skills measured before October 26, 2023.
 - Skipping hands-on practice for ARM templates and Bicep.
@@ -112,4 +112,4 @@ This plan is practical advice built on the weights, not an official recommendati
 
 ## Sources
 
-- [Study guide for Exam AZ-104 (Microsoft Learn)](https://learn.microsoft.com/credentials/certifications/resources/study-guides/az-104)
+- [Study guide for Exam AZ-104: Microsoft Azure Administrator (Microsoft Learn)](https://learn.microsoft.com/credentials/certifications/resources/study-guides/az-104)
