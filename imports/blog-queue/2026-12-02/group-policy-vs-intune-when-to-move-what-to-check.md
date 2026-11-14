@@ -8,7 +8,7 @@ date: 2026-12-02
 topics: [group-policy, intune, hybrid-entra-join, security-baselines]
 keypoints:
   - "Microsoft's planning guide says not to move Group Policy to Intune until you know what each policy does. Build new policies from requirements with the Settings catalog."
-  - "Group Policy analytics imports GPO XML files up to 4 MB and shows which settings have an Intune equivalent. It applies to Windows only."
+  - "Group Policy analytics imports GPO XML files smaller than 4 MB and shows which settings have an Intune equivalent. It applies to Windows only."
   - "The Migrate option is disabled for AppLocker and Firewall rules. Configure those under Endpoint Security instead."
   - "If both manage the same Policy CSP setting, MDMWinsOverGP makes Intune win, but it does not cover other CSPs such as Defender."
   - "On-premises AD join and hybrid join need domain controller connectivity, so Microsoft does not consider them suitable for cloud-native endpoints."
@@ -22,7 +22,7 @@ faq:
   - q: "Does MDMWinsOverGP solve every conflict?"
     a: "No. Microsoft Learn says it applies only to policies in the Policy CSP. It does not cover equivalent settings in other CSPs such as the Defender CSP, and for Windows Update it recommends IgnoreWindowsUpdateGroupPolicies."
   - q: "Can I run both at the same time?"
-    a: "Yes, for a transition. A Microsoft Q&A answer describes hybrid Microsoft Entra joined devices receiving both on-premises GPOs and Intune policies. Microsoft's planning guide, however, calls hybrid join a temporary step toward Microsoft Entra join for cloud-native endpoints."
+    a: "Yes, for a transition. A community answer on Microsoft Q&A (from an Independent Advisor, not Microsoft staff, with no citations) describes hybrid Microsoft Entra joined devices receiving both on-premises GPOs and Intune policies. Microsoft's planning guide, however, calls hybrid join a temporary step toward Microsoft Entra join for cloud-native endpoints."
 ---
 
 Group Policy and Intune both configure Windows, but they work differently. Group Policy applies settings to domain-joined machines through Active Directory. Intune delivers settings as policies assigned to users and groups through mobile device management. The practical advice from Microsoft is to understand what your GPOs do before moving anything, then rebuild what you need in the Settings catalog and security baselines, and avoid configuring the same setting in both places.
@@ -31,24 +31,24 @@ Group Policy and Intune both configure Windows, but they work differently. Group
 
 The Microsoft Learn troubleshooting page for cloud-native endpoints notes that Intune policies are deployed to users and groups, not applied in the local, site, domain, OU order that Group Policy uses. Group Policy depends on domain controller connectivity. Microsoft's planning guide says on-premises AD join and hybrid Microsoft Entra join need domain controller connectivity for sign-in, Group Policy and password changes, so they are not suitable for cloud-native endpoints. For new devices it recommends Microsoft Entra join.
 
-The Settings catalog is the Intune profile type that lists the settings you can configure for a platform in one place. Microsoft says that if you configure settings at a granular level, similar to on-premises GPOs, the Settings catalog is a natural transition to cloud-based policy. It does not describe a one-to-one mapping. User-scope settings write to HKCU and device-scope settings write to HKLM.
+The Settings catalog is the Intune profile type that lists the settings you can configure for a platform in one place. Microsoft says that if you configure settings at a granular level, similar to on-premises GPOs, the Settings catalog is a natural transition to cloud-based policy.
 
 ## When to move
 
 Microsoft does not rank the two in general. The signals it gives:
 
 - **Cloud-native devices:** If devices are Microsoft Entra joined and used from anywhere, Intune is the management plane. Group Policy cannot reach them without domain connectivity.
-- **Hybrid transition:** A Microsoft Q&A answer describes hybrid as the usual starting point, with both GPOs and Intune policies reaching hybrid joined devices while migration proceeds gradually. The planning guide calls hybrid join a temporary step.
+- **Hybrid transition:** A community answer on Microsoft Q&A (an Independent Advisor, not Microsoft staff, without citations) describes both GPOs and Intune policies reaching hybrid joined devices while settings move to the cloud. The planning guide calls hybrid join a temporary step.
 - **Devices used only on-premises:** The planning guide says devices used only on-premises should not be migrated to cloud-native.
 
 ## What to check first
 
-The planning guide for cloud-native endpoints lists these checks, in order:
+The planning guide for cloud-native endpoints covers these areas in separate sections. It does not present them as one ordered checklist, so treat the numbering below as a working order of your own:
 
 1. Which endpoints need a cloud identity.
 2. How each device is joined today.
-3. Which apps depend on Kerberos or on-premises authentication. Microsoft Entra Kerberos does not solve connectivity issues or machine authentication problems.
-4. Which apps and resources exist only on-premises and need VPN.
+3. Which apps depend on Kerberos or on-premises authentication. The guide says Microsoft Entra Kerberos is not used in cloud-native solutions and is not the answer to domain authentication requirements.
+4. Which apps and resources exist only on-premises and how endpoints will reach them. The guide names options such as Microsoft Entra Application Proxy and Azure Virtual Desktop.
 5. File shares and how users reach them.
 6. Active GPOs, and which are legacy, unused or complex, such as WMI filters, inheritance blocking, loopback and security filtering.
 7. Policies for certificates, BitLocker and endpoint protection, to recreate in Intune or Configuration Manager.
@@ -60,13 +60,13 @@ The troubleshooting page adds common failures: machine authentication does not w
 
 Group Policy analytics applies to Windows only. Roles: Intune administrator, or a role with Security baselines and Device Configuration permissions.
 
-**Export:** In `GPMC.msc`, expand your domain and Group Policy Objects, right-click the GPO, choose **Save report** and select **XML File**. Each file must be 4 MB or less and must be properly Unicode encoded, or import fails.
+**Export:** In `GPMC.msc`, expand your domain and Group Policy Objects, right-click the GPO, choose **Save report** and select **XML File**. Each file must be smaller than 4 MB and properly Unicode encoded, or import fails.
 
 **Import:** In the Intune admin center go to **Devices > Manage devices > Group Policy analytics**, select **Import**, choose files, pick scope tags (Default applies if none), then **Next** and **Create**.
 
-The results list **MDM Support**, the percentage of settings with an Intune equivalent, plus **Unknown Settings**, **Targeted in AD** and **Last imported**. Per setting you see CSP name, CSP mapping and minimum OS version. Under **Reports > Device management > Group policy analytics** a migration readiness report marks settings Ready for migration, Not supported or Deprecated.
+The results list **MDM Support**, the percentage of settings with an Intune equivalent, plus **Unknown Settings**, **Targeted in AD** and **Last imported**. Selecting a percentage shows per-setting details. Under **Reports > Device management > Group policy analytics** a migration readiness report marks settings Ready for migration, Not supported or Deprecated.
 
-Limits: only non-ADMX settings in English are analyzed accurately, and Group Policy analytics parses the Policy, PassportForWork, BitLocker, Firewall and AppLocker CSPs and Group Policy Preferences. Others appear as unknown.
+Limits: only non-ADMX settings in English are analyzed accurately, and Group Policy analytics parses the Policy, PassportForWork, BitLocker, Firewall and AppLocker CSPs and Group Policy Preferences. The page defines Unknown Settings as settings the tool cannot analyze.
 
 ## Migrate to the Settings catalog
 
@@ -86,7 +86,7 @@ Microsoft Learn's Policy CSP page for ControlPolicyConflict says to avoid config
 - **MDMWinsOverGP** set to 1 makes an MDM policy win over the equivalent Group Policy, which is blocked. It is device scope, applies to Pro, Enterprise, Education and IoT Enterprise, and needs Windows 10 version 1803 or later.
 - **Limits:** it applies only to Policy CSP settings and not to other CSPs such as Defender.
 - **Windows Update:** Microsoft recommends IgnoreWindowsUpdateGroupPolicies, which makes Group Policy settings for Windows Update ignored.
-- A Microsoft Q&A answer states that by default GPO wins over Intune when both apply to the same setting.
+- A community answer on Microsoft Q&A (not Microsoft staff, no citations) claims Group Policy wins by default. Microsoft's own Policy CSP page is more cautious: it says there is a race condition and no guarantee which one wins when the setting is outside MDMWinsOverGP control.
 
 For Defender Antivirus, Microsoft's precedence list places Group Policy above Intune. Remove the Group Policy setting after you verify the Intune policy applies.
 
@@ -114,4 +114,4 @@ For Defender Antivirus, Microsoft's precedence list places Group Policy above In
 - [Microsoft Learn: Use the settings catalog to configure settings in Intune](https://learn.microsoft.com/en-us/intune/device-configuration/settings-catalog/)
 - [Microsoft Learn: Policy CSP, ControlPolicyConflict](https://learn.microsoft.com/en-us/windows/client-management/mdm/policy-csp-controlpolicyconflict)
 - [Microsoft Learn: Troubleshoot Microsoft Defender Antivirus settings](https://learn.microsoft.com/en-us/defender-endpoint/troubleshoot-settings)
-- [Microsoft Q&A: Group Policy vs Intune policies](https://learn.microsoft.com/en-us/answers/questions/5868874/group-policy-vs-intune-policies)
+- [Microsoft Q&A, community answer: Group Policy vs Intune policies](https://learn.microsoft.com/en-us/answers/questions/5868874/group-policy-vs-intune-policies)
