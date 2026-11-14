@@ -34,7 +34,7 @@ Microsoft's mail-sending options page describes SMTP-based methods. Its limits a
 | Client SMTP submission (SMTP AUTH) | 10,000 recipients per day, 30 messages per minute | Internal and external | Needs a licensed mailbox. Saves to Sent Items. OAuth recommended |
 | SMTP relay | Reasonable limits, no figures given | Internal and external | Uses an inbound connector, with a certificate or static IP |
 | Direct Send | Standard anonymous throttling | Microsoft 365 recipients only | Legacy devices, last resort |
-| High Volume Email | No recipient or message rate limits | Internal only | 50 recipients and 10 MB per message, up to 100 accounts |
+| High Volume Email | No recipient or message rate limits | Internal only | 50 recipients and 10 MB per message, up to 100 accounts, 100 concurrent connections per IP or 250 authenticated connections per tenant |
 | Graph `sendMail` | Subject to Exchange Online limits and throttling | Internal and external | Uses the Mail.Send permission |
 
 Microsoft's recommendations: for internal-only high volume, use HVE. For internal and external recipients, use Azure Communication Services Email. The page also says Basic authentication for client SMTP submission is scheduled for deprecation, is incompatible with Security defaults in Microsoft Entra ID, and that OAuth is recommended. It does not give a date in the text read, so follow Microsoft's published timeline.
@@ -49,7 +49,7 @@ For app-only access, Microsoft documents the client credentials flow:
 4. Request a token with the scope `https://outlook.office365.com/.default`.
 5. Send `AUTH XOAUTH2` with the token in the SASL XOAUTH2 format.
 
-Use `smtp.office365.com` on port 587 with TLS. With SendAs, grant SendAs to the sender. The page does not mention enabling SMTP AUTH per mailbox, which the mail-sending options page treats separately, so check that setting. The 10,000 recipient and 30 per minute limits still apply, which is the reason this path suits moderate volume only.
+Use `smtp.office365.com` on port 587 with TLS. With SendAs, grant SendAs to the sender. The OAuth page does not mention enabling SMTP AUTH per mailbox. The mail-sending options page says SMTP AUTH is disabled for organizations created after January 2020 and can be enabled per mailbox, so check that setting. My own inference: because this is client SMTP submission with OAuth, the 10,000 recipient and 30 per minute limits listed for client submission should apply, which is why this path suits moderate volume only.
 
 ## Option B: Graph sendMail
 
@@ -59,7 +59,7 @@ Application permission `Mail.Send` allows the app to send as any user. Restrict 
 
 ### Scope the app to chosen mailboxes
 
-Microsoft's RBAC for Applications in Exchange Online lets you grant the app access only to defined mailboxes:
+Microsoft's RBAC for Applications in Exchange Online lets you grant the app access only to defined mailboxes. The page says you need the Organization Management role group (or a delegating role assignment) and, in Microsoft Entra ID, the Exchange Administrator role:
 
 1. Optionally create a scope, for example `New-ManagementScope -Name "App senders" -RecipientRestrictionFilter "CustomAttribute1 -eq 'appmail'"`, or use an administrative unit.
 2. Create the service principal pointer with `New-ServicePrincipal`, again with IDs from Enterprise applications.
@@ -72,7 +72,7 @@ Two warnings from the page. First, RBAC assignments add to Entra grants. If the 
 
 HVE uses dedicated accounts with no mailbox. Create them in the Exchange admin center under **Mail flow** > **High Volume Email** > **Add an HVE account**, or with `New-MailUser -HVEAccount`. Do not assign licenses. Settings: server `smtp.hve.mx.microsoft`, port 587, TLS required. OAuth is the recommended authentication. Basic works but is disabled if Security Defaults are on.
 
-Each account needs a billing policy, because HVE uses pay-as-you-go billing through a linked Azure subscription. The page lists $0.000042 per delivered recipient, counted after distribution list expansion. HVE accounts cannot send externally or receive mail, so set a Reply-To for replies. The page was last updated on 2026-06-02, and it lists Microsoft 365 Worldwide only, with other clouds under evaluation.
+Each account needs a billing policy, because HVE uses pay-as-you-go billing through a linked Azure subscription. The page lists $0.000042 per delivered recipient, counted after distribution list expansion. HVE accounts cannot send externally or receive mail, so set a Reply-To for replies. The page is dated April 17, 2026, and it lists Microsoft 365 Worldwide only, with other clouds under evaluation.
 
 ## Handle throttling
 
@@ -81,15 +81,17 @@ Microsoft's guidance applies to Graph calls:
 - Detect throttling with HTTP 429 and use the `Retry-After` header. Wait that many seconds, retry, and continue honoring the delay.
 - Do not retry immediately, because every request counts against the limit.
 - Without `Retry-After`, use exponential backoff. Microsoft's SDKs already include such handlers.
-- Reduce calls per request and call frequency.
-- In batches, each request is evaluated separately and failed ones are not retried automatically by the SDK.
+- Reduce the number of operations per request and the frequency of calls.
+- In batches, each request is evaluated separately against the limits. The batch itself can succeed with 200 while individual requests inside it return 429, and the SDKs do not automatically retry those throttled batched requests.
 
 The Outlook-specific numeric limits were not available in the pages read, so check the Graph service-specific limits page for the current figures before you size a design.
 
 ## Practical design
 
+This section is my own recommendation, not Microsoft guidance.
+
 1. Pick HVE if everything stays internal and volume is high.
-2. Pick Graph with scoped RBAC if you need Sent Items, external recipients or attachments.
+2. Consider Graph with scoped RBAC if you need Sent Items, external recipients or attachments. Microsoft's options page recommends Azure Communication Services Email for high volume to internal and external recipients, so compare both.
 3. Keep OAuth for any SMTP path, and avoid shared secrets in code. Prefer certificates or managed identities where your host supports them, which Microsoft's pages for this scenario do not detail.
 4. Test with a small mailbox set, then raise volume while watching 429 responses.
 
@@ -102,9 +104,9 @@ The Outlook-specific numeric limits were not available in the pages read, so che
 
 ## Sources
 
-- [Microsoft Learn: Send email from a device or application with Microsoft 365](https://learn.microsoft.com/en-us/exchange/mail-flow-best-practices/how-to-set-up-a-multifunction-device-or-application-to-send-email-using-microsoft-365-or-office-365)
-- [Microsoft Learn: Authenticate an SMTP application by using OAuth](https://learn.microsoft.com/en-us/exchange/client-developer/legacy-protocols/how-to-authenticate-an-imap-pop-smtp-application-by-using-oauth)
-- [Microsoft Learn: High Volume Email for Microsoft 365](https://learn.microsoft.com/en-us/exchange/mail-flow-best-practices/high-volume-mails-m365)
+- [Microsoft Learn: How to set up a multifunction device or application to send email using Microsoft 365 or Office 365](https://learn.microsoft.com/en-us/exchange/mail-flow-best-practices/how-to-set-up-a-multifunction-device-or-application-to-send-email-using-microsoft-365-or-office-365)
+- [Microsoft Learn: Authenticate an IMAP, POP or SMTP connection using OAuth](https://learn.microsoft.com/en-us/exchange/client-developer/legacy-protocols/how-to-authenticate-an-imap-pop-smtp-application-by-using-oauth)
+- [Microsoft Learn: Manage High Volume Email for Microsoft 365](https://learn.microsoft.com/en-us/exchange/mail-flow-best-practices/high-volume-mails-m365)
 - [Microsoft Learn: user: sendMail](https://learn.microsoft.com/en-us/graph/api/user-sendmail)
-- [Microsoft Learn: RBAC for Applications in Exchange Online](https://learn.microsoft.com/en-us/exchange/permissions-exo/application-rbac)
+- [Microsoft Learn: Role Based Access Control for Applications in Exchange Online](https://learn.microsoft.com/en-us/exchange/permissions-exo/application-rbac)
 - [Microsoft Learn: Microsoft Graph throttling guidance](https://learn.microsoft.com/en-us/graph/throttling)
