@@ -10,7 +10,7 @@ keypoints:
   - "Contain first: disable the account or reset the password, then revoke sessions. A password reset does not revoke app passwords."
   - "Check three forwarding layers: mailbox forwarding properties, inbox rules including hidden ones, and the tenant outbound spam policy for external forwarding."
   - "MailItemsAccessed records sync and bind access. A sync means all items in the synced folder are assumed compromised."
-  - "Bind events within a 2-minute interval are aggregated into one audit record, and duplicates within an hour are filtered, so a missing record does not prove no access."
+  - "Bind events within a 2-minute interval are aggregated into one audit record, and duplicate records within an hour are filtered. Offline use of synced mail is not audited."
   - "Forwarding rules show what leaves the mailbox from now on. MailItemsAccessed helps show what was read in the past. Use both."
 faq:
   - q: "What is MailItemsAccessed?"
@@ -96,7 +96,7 @@ Learn's outbound spam policy page explains the automatic forwarding setting:
 | On | Automatic external forwarding is allowed and not restricted. |
 | Off | External forwarding is disabled and results in a non-delivery report to the sender. |
 
-The setting covers user inbox rules and admin mailbox forwarding that go to external addresses. Forwarding between internal users is not affected. The NDR code is 5.7.520. Microsoft recommends configuring On or Off explicitly. If the block applies, an attacker's external rule may still exist but will not deliver, so keep removing the rule anyway.
+The setting covers user inbox rules and admin mailbox forwarding that go to external addresses. Forwarding between internal users is not affected. The NDR code is 5.7.520. Microsoft recommends configuring On or Off explicitly. If the block applies, an attacker's external rule may still exist but will not deliver, so removing the rule anyway is my own advice, not a Learn statement. Learn adds that remote domains and mail flow rules are separate controls and that the block typically wins when settings conflict.
 
 ## Step 5: Use MailItemsAccessed to scope the exposure
 
@@ -108,7 +108,7 @@ The investigation page explains the two access types:
 |---|---|---|
 | Meaning | A client downloads sets of messages | One access to one message |
 | Recorded | Only by desktop Outlook for Windows or Mac | Individual message access |
-| Granularity | One event for the folder that was synced | Aggregated per message |
+| Granularity | One event for the folder that was synced | Aggregated into one record per 2-minute interval, each message listed by InternetMessageId |
 | Assumption | All items in the synced folder are compromised | Accessed messages are identified individually |
 
 Search with Exchange Online PowerShell. The examples from the page:
@@ -117,14 +117,14 @@ Search with Exchange Online PowerShell. The examples from the page:
 Search-UnifiedAuditLog -StartDate 01/06/2020 -EndDate 01/20/2020 -UserIds <user> -Operations MailItemsAccessed -ResultSize 1000 | Where {$_.AuditData -like '*"MailAccessType","Value":"Sync"*'} | FL
 ```
 
-Replace `Sync` with `Bind` for the second pass. Use your own incident dates. Learn's workflow is to identify the mailboxes, define the time frame, check sync activity first, then bind activity.
+Replace `Sync` with `Bind` for the second pass. Use your own incident dates. Learn's workflow is to identify the mailboxes, define the time frame, check sync activity first, then bind activity. Learn says to use these records for forensic purposes after the breach is resolved and the attacker is evicted.
 
 Compare the attacker's context with the records using `ClientIPAddress`, `ClientInfoString` and `SessionId`. If a sync shares the attacker's context, assume the whole mailbox is compromised. Otherwise, the `Folders` field of bind records lists accessed messages by `InternetMessageId`, which you can review for sensitive content.
 
 Limits to remember, all from the page:
 
 - Bind operations within a 2-minute interval are aggregated into one record, and `OperationCount` shows how many were combined.
-- Duplicate bind records within an hour are filtered unless certain fields differ, so a missing duplicate is not proof of no access.
+- Duplicate records for the same bind operation within an hour are filtered unless certain fields differ, and sync operations are filtered at one-hour intervals too. Learn describes this as removing auditing noise.
 - If an attacker syncs mail and disconnects, mailbox auditing cannot audit later activity on the copy.
 - Where access is uncertain, assume the data is compromised.
 
@@ -132,7 +132,7 @@ Limits to remember, all from the page:
 
 Learn also tells you to review Entra sign-in logs and risk reports, search the Defender portal audit log from just before the suspicious activity without filtering on specific activities at first, and use message trace and Sent Items to see what was sent. If the account sent spam, remove it from the Restricted entities page after cleanup.
 
-## Checklist
+## Checklist (my own summary)
 
 1. Disable or reset, revoke sessions, remove app passwords.
 2. Read and clear mailbox forwarding properties.
@@ -150,9 +150,9 @@ Learn also tells you to review Entra sign-in logs and risk reports, search the D
 
 ## Sources
 
-- [Microsoft Learn: Responding to a compromised email account](https://learn.microsoft.com/en-us/defender-office-365/responding-to-a-compromised-email-account)
+- [Microsoft Learn: Respond to a compromised email account in Microsoft 365](https://learn.microsoft.com/en-us/defender-office-365/responding-to-a-compromised-email-account)
 - [Microsoft Learn: Use MailItemsAccessed to investigate compromised accounts](https://learn.microsoft.com/en-us/purview/audit-log-investigate-accounts)
 - [Microsoft Learn: Manage mailbox auditing](https://learn.microsoft.com/en-us/purview/audit-mailboxes)
-- [Microsoft Learn: Control automatic external email forwarding](https://learn.microsoft.com/en-us/defender-office-365/outbound-spam-policies-external-email-forwarding)
-- [Microsoft Learn: Set-Mailbox](https://learn.microsoft.com/en-us/powershell/module/exchange/set-mailbox)
-- [Microsoft Learn: Remove-InboxRule](https://learn.microsoft.com/en-us/powershell/module/exchange/remove-inboxrule)
+- [Microsoft Learn: Control external email forwarding and fix 5.7.520 errors](https://learn.microsoft.com/en-us/defender-office-365/outbound-spam-policies-external-email-forwarding)
+- [Microsoft Learn: Set-Mailbox](https://learn.microsoft.com/en-us/powershell/module/exchangepowershell/set-mailbox?view=exchange-ps)
+- [Microsoft Learn: Remove-InboxRule](https://learn.microsoft.com/en-us/powershell/module/exchangepowershell/remove-inboxrule?view=exchange-ps)
