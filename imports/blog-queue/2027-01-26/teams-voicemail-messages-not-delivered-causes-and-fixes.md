@@ -94,9 +94,9 @@ The page notes that third-party spam or antivirus filtering can also change voic
 | What you see | Check first |
 | --- | --- |
 | No voicemail anywhere | Mail flow rules, SPF handling, third-party mail system |
-| Message class shows unauthenticatedVoice-CA | OpenDomainRoutingEnabled, support request |
+| Content-Class header shows unauthenticatedVoice-CA | OpenDomainRoutingEnabled, support request |
 | Outlook yes, Teams no | Teams Voicemail test, access rules, message class, header changes |
-| On-premises mailbox | Not viewable in Teams by design |
+| On-premises mailbox | Voicemail not available to view or play in Teams |
 | RMS-protected voicemail | Outlook and Outlook on the web only |
 
 ## Checking order (my advice)
@@ -112,7 +112,7 @@ This is my suggestion, not the order of the page:
 
 ## What the page does not cover
 
-The page does not describe voicemail settings for users, greeting setup, or Teams Phone licensing. Use the Phone System voicemail setup article for those.
+The page does not describe voicemail settings for users, greeting setup, or Teams Phone licensing. The Set up Phone System voicemail article that the page links is a starting point for those (my advice).
 
 ## Related
 
