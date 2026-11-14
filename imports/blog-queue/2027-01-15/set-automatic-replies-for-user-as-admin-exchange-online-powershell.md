@@ -51,7 +51,7 @@ For Enabled and Scheduled, Learn requires an InternalMessage, and an ExternalMes
 - **Known.** Replies go only to external senders who are specified in the Contact list of the mailbox.
 - **All.** Replies go to all external senders. This is the default.
 
-The value matters only when AutoReplyState is Enabled or Scheduled. Because All is the default, a command that sets only an InternalMessage runs into the ExternalMessage requirement. Write the external text, or set ExternalAudience to None.
+The value matters only when AutoReplyState is Enabled or Scheduled. Because All is the default, Learn's rule means an ExternalMessage is required as well when you enable or schedule replies. Write the external text, or set ExternalAudience to None.
 
 ## Messages
 
@@ -100,9 +100,9 @@ Learn lists the usual Confirm and WhatIf switches. WhatIf shows what the command
 
 This section is my advice, not a Microsoft statement.
 
-1. **Read the current settings first** with Get-MailboxAutoReplyConfiguration for the same mailbox, so you can restore them. That cmdlet is not covered by the page I used, so check its reference.
+1. **Read the current settings first** with Get-MailboxAutoReplyConfiguration for the same mailbox, so you can restore them.
 2. **Try the command with WhatIf** before the real run.
-3. **Use Scheduled for planned leave.** Enabled has no end date. In my experience replies on Enabled mailboxes outlive the absence.
+3. **Use Scheduled for planned leave.** Enabled has no end date, so someone has to remember to switch it off.
 4. **Choose the external audience on purpose.** For some roles, replying to every external sender is the wrong default.
 5. **Agree the text with the user.** An admin should not write words for the person without asking.
 6. **Be careful with the decline parameters.** Cancelling meetings the user organizes affects other people. I would only use them when the user asked for it.
@@ -110,8 +110,8 @@ This section is my advice, not a Microsoft statement.
 
 ## Common problems
 
-- **The command asks for a message.** You used Enabled or Scheduled without InternalMessage, or left ExternalAudience at All without ExternalMessage.
-- **The dates look wrong.** The format depends on the Regional Options of the computer you run from.
+- **A message is missing.** Learn requires an InternalMessage for Enabled and Scheduled, and an ExternalMessage if ExternalAudience is Known or All. Check that you supplied both.
+- **The dates look wrong.** Learn says the format is the short date format from the Regional Options of the computer you run from.
 - **A calendar parameter does nothing on-premises.** Learn says those work only in the cloud service.
 - **A parameter is not available to you.** Your assigned permissions may not include it.
 
