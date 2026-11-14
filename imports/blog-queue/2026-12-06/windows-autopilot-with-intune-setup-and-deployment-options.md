@@ -9,14 +9,14 @@ topics: [windows-autopilot, intune, windows-autopilot-device-preparation, enroll
 keypoints:
   - "Autopilot transforms the OEM-installed Windows into a business-ready state, so IT does not maintain custom images and drivers per model."
   - "It needs Microsoft Entra automatic MDM enrollment, which requires Entra ID P1 or P2, plus Intune licenses assigned to users."
-  - "The user-driven Entra join workflow has eight steps, from automatic enrollment to deploying the device. Steps can be reordered."
+  - "The user-driven Entra join workflow has eight steps, from automatic enrollment to deploying the device. Some steps are interchangeable."
   - "Autopilot device preparation supports only Microsoft Entra join and Windows 11 versions with a minimum update level."
   - "Microsoft does not recommend deploying new devices as hybrid joined, including through Autopilot."
 faq:
   - q: "What do I need before I can use Windows Autopilot?"
     a: "Microsoft Learn lists a supported Windows version and edition, network access to the Autopilot and Entra services, a qualifying subscription that provides Entra ID and Intune features, and configuration of Microsoft Entra automatic enrollment. Licenses still have to be assigned to users so they can enroll devices."
   - q: "What is the difference between Windows Autopilot and Autopilot device preparation?"
-    a: "Microsoft Learn describes device preparation as a separate product with its own overview. It uses a single profile for policies and OOBE settings, adds the device to a predefined security group at enrollment, supports only Microsoft Entra join and applies to Windows 11."
+    a: "Microsoft Learn describes device preparation on its own overview page, separate from the Windows Autopilot overview. It uses a single profile for policies and OOBE settings, adds the device to a predefined security group at enrollment, supports only Microsoft Entra join and applies to Windows 11."
   - q: "Can Autopilot join devices to on-premises Active Directory?"
     a: "Yes, through Microsoft Entra hybrid join with the Intune Connector for Active Directory, according to the Windows enrollment guide. The Autopilot requirements page adds that Microsoft recommends Entra join for new devices and does not recommend hybrid join, including through Autopilot."
   - q: "Does Autopilot work for personal or BYOD devices?"
@@ -55,9 +55,9 @@ Microsoft's tutorial lists eight steps for the user-driven Microsoft Entra join 
 7. Optionally assign the Autopilot device to a user.
 8. Deploy the device.
 
-Microsoft says this workflow is designed for a lab but can be used in production, and that steps can be reordered. Creating the device group before registering devices may suit production better. For automatic enrollment in the Intune admin center, the Windows enrollment guide points to **Windows Enrollment** > **Automatic Enrollment**, where you set the **MDM user scope** to **Some** or **All**.
+Microsoft says this workflow is designed for lab or testing scenarios but can also be used in production, and that some steps are interchangeable. Its example is that creating the device group before registering devices might make more sense in production. For automatic enrollment in the Intune admin center, the Windows enrollment guide points to **Windows Enrollment** > **Automatic Enrollment**, where you set the **MDM user scope** to **Some** or **All**.
 
-In the ESP, the device phase applies settings, apps and policies assigned to the device. The user phase applies those assigned to the user. The ESP can keep users from using the device until configuration finishes. Registered devices appear under **Devices** > **By platform** > **Windows**.
+In the ESP, the device phase applies settings, apps and policies assigned to the device. The user phase applies those assigned to the user. The ESP can keep users from using the device until configuration finishes. After the Autopilot profile is assigned, the devices start showing under **Devices** > **By platform** > **Windows** in the Intune admin center, according to the Windows enrollment guide.
 
 ## Deployment scenarios
 
@@ -65,7 +65,7 @@ Microsoft's scenarios page lists user-driven mode, self-deploying mode, Windows 
 
 ## Autopilot device preparation
 
-Autopilot device preparation is described as a separate product with its own overview. Differences listed by Microsoft:
+Autopilot device preparation has its own overview page. Differences and features listed by Microsoft:
 
 - A single profile provisions policies plus deployment and OOBE settings.
 - At enrollment the device joins a predefined device security group. Microsoft says direct assignment to this group is faster than a dynamic group.
@@ -80,8 +80,10 @@ Autopilot can deploy hybrid joined devices and needs the Intune Connector for Ac
 
 ## Common mistakes
 
+These points are my own reading of the documented limits above, not a list from Microsoft.
+
 - Using Autopilot for BYOD devices.
-- Skipping the automatic enrollment scope, so devices join but are not enrolled.
+- Leaving the **MDM user scope** at **None**. The enrollment guide says devices are then not joined to Microsoft Entra ID and not managed by Intune.
 - Forgetting to assign Intune licenses to users.
 - Blocking `ztd.dds.microsoft.com` or ports 80 and 443 on a restricted network.
 - Expecting every app and policy to finish during OOBE with device preparation.
