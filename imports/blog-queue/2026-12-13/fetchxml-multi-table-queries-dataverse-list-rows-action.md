@@ -27,13 +27,13 @@ OData filters and the expand option cover many Dataverse queries, but they get a
 
 ## Where the parameter lives
 
-In Power Automate, the action is **List rows** under **Microsoft Dataverse**. Fetch Xml Query sits in the **Advanced parameters** dropdown. The connector reference lists it as the fetchXml parameter, described as a Fetch XML query for advanced customization, next to Select columns, Filter rows, Sort By, Expand Query, Row count (default 5000), Skip token and Partition ID.
+In Power Automate, the action is **List rows** under **Microsoft Dataverse**. Fetch Xml Query sits in the **Advanced parameters** dropdown. The connector reference lists it as the fetchXml parameter, described as a Fetch XML query for advanced customization, next to Select columns, Filter rows, Sort By, Expand Query, Row count (default 5000), Skip token and Partition ID. The variant List rows from selected environment lists a Row count default of 2000 instead.
 
 The connector reference lists Power Automate, Power Apps and Copilot Studio as products and does not mention Azure Logic Apps for the Dataverse connector. If you plan to use the action in a Logic Apps workflow, confirm availability in your plan before you design around it.
 
 ## A basic query with a join
 
-The List rows article shows this example, which returns accounts with the full name of the primary contact:
+The List rows article shows an example like this one (shortened here by two attributes), which returns accounts with the full name of the primary contact:
 
 ```xml
 <fetch count="10">
@@ -51,7 +51,7 @@ The List rows article shows this example, which returns accounts with the full n
 </fetch>
 ```
 
-Every FetchXML query is based on one table, set by the entity element. Use logical names, not display names.
+Every FetchXML query is based on one table, set by the entity element. The overview and join pages use the table and column logical names in name, from and to.
 
 ## How link-entity works
 
@@ -104,17 +104,17 @@ Rules that apply to both:
 - Ordering on the primary key is best. Avoid ordering on calculated fields, choices, long text or non-unique numbers.
 - Paging works best going forward. Going back may return different records if data changed.
 
-The pages I read do not show how to read the paging cookie from the connector's response inside a flow. If you cannot get it, simple paging with an incrementing page value is the documented fallback, within its 50,000 record limit.
+The pages I read do not show how to read the paging cookie from the connector's response inside a flow. Learn says that when Dataverse returns no paging cookie, for example for some queries sorted by a link-entity attribute, the paging model falls back to simple paging with its 50,000 record limit.
 
 ## Keep the query efficient
 
-The List rows article recommends Select columns and leaving Return full metadata off, so only essential columns load. For FetchXML, the same idea applies: list only the attribute elements you need rather than using all-attributes, which Learn says is not recommended for most cases. Use filters in the query to reduce rows early, and prefer exists or in when you only filter on the related table.
+The List rows article describes Select columns for the OData-style option and says Return full metadata controls whether all columns or only the essential ones load, for better performance. The pages I read give no FetchXML-specific tuning advice beyond the exists and in link types above. My own suggestion: list only the attribute elements you need, filter in the query to reduce rows early, and prefer exists or in when you only filter on the related table.
 
 ## Removing duplicates
 
 Joins can create duplicates, for example when a parent matches several children. The List rows article suggests using a Select action to reshape the response and then a variable with the expression union(body('Select'),body('Select')) to get distinct rows. The exists and in link types avoid the duplicates at the source when you do not need child columns.
 
-## Common mistakes
+## Common mistakes (my own list, derived from the pages above)
 
 - Using display names instead of logical names.
 - Forgetting the alias and then guessing column names in dynamic content.
@@ -125,7 +125,7 @@ Joins can create duplicates, for example when a parent matches several children.
 
 ## Build and test the query first
 
-The FetchXML overview names two community tools for composing and testing queries: the XrmToolBox FetchXML Builder and the Power Platform Toolbox FetchXML Studio. Microsoft does not support community tools, so contact the tool publisher with issues. Test the query there, then paste it into the action.
+The FetchXML overview names two community tools for composing and testing queries: the XrmToolBox FetchXML Builder and the Power Platform Toolbox FetchXML Studio. Microsoft does not support community tools, so contact the tool publisher with issues. My own suggestion: test the query there, then paste it into the action.
 
 ## Related
 
@@ -135,8 +135,8 @@ The FetchXML overview names two community tools for composing and testing querie
 
 ## Sources
 
-- [Microsoft Learn: List rows action](https://learn.microsoft.com/en-us/power-automate/dataverse/list-rows)
-- [Microsoft Learn: Join tables using FetchXml](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/fetchxml/join-tables)
+- [Microsoft Learn: Use lists of rows in flows - Power Automate](https://learn.microsoft.com/en-us/power-automate/dataverse/list-rows)
+- [Microsoft Learn: Join Tables Using FetchXml Queries](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/fetchxml/join-tables)
 - [Microsoft Learn: Page results using FetchXml](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/fetchxml/page-results)
-- [Microsoft Learn: FetchXml overview](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/fetchxml/overview)
-- [Microsoft Learn: Microsoft Dataverse connector](https://learn.microsoft.com/en-us/connectors/commondataserviceforapps/)
+- [Microsoft Learn: Query Data Using FetchXML in Dataverse](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/fetchxml/overview)
+- [Microsoft Learn: Microsoft Dataverse - Connectors](https://learn.microsoft.com/en-us/connectors/commondataserviceforapps/)
