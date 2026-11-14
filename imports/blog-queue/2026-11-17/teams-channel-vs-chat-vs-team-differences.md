@@ -48,7 +48,7 @@ Channels are sections within a team that organize conversations by topic, projec
 | Planner | Yes | No | No |
 | Bots, connectors, messaging extensions | Yes | No | No |
 
-Microsoft's guidance in that comparison: standard channels suit open, team-wide work and offer the most extensibility. Private channels restrict access to a subset of the team and have fewer integrations. Shared channels reach people in other teams and outside the organization but do not allow guests and do not support analytics or class teams.
+Reading the comparison table: standard channels are open to all team members and support Planner, bots, connectors and messaging extensions. Private channels restrict access to a subset of the team and do not support those. Shared channels reach people in other teams and outside the organization but do not allow guests and are not supported in class teams. Microsoft's table also lists analytics as not available for shared channels.
 
 ## Chat
 
@@ -87,7 +87,7 @@ From Microsoft Learn's Teams limits page:
 
 ## Common mistakes
 
-- Using chats for project work, then losing the files when the sender's account is removed.
+- Using chats for project work, so the files depend on one sender's OneDrive.
 - Creating a private channel when a standard one would do. It cuts integrations such as Planner, bots and connectors.
 - Expecting guests in a shared channel. Microsoft says guests cannot participate there, and external participants use B2B direct connect.
 - Treating a channel count as unlimited. The limit is 1,000 per team, and deleted channels count.
