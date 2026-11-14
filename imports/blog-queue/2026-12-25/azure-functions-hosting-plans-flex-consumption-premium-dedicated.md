@@ -10,7 +10,7 @@ keypoints:
   - "Learn calls the Consumption plan legacy and says new serverless apps should use Flex Consumption."
   - "Flex Consumption scales up to 1,000 instances on demand per function group, with always ready instances, private endpoints and outbound VNet integration."
   - "Premium keeps at least one instance per plan always warm. Dedicated runs continuously on a set number of instances and needs Always On for unbounded timeouts."
-  - "Function apps on the end-of-life v3 runtime on Linux in a Consumption plan stop running after September 30, 2026. Linux Consumption retires on 30 September 2028."
+  - "Apps on the end-of-life v3 runtime on Linux in a Consumption plan stopped running after September 30, 2026, a date that has passed. Linux Consumption retires on 30 September 2028."
   - "HTTP-triggered functions have a 230-second response limit regardless of the function app timeout."
 faq:
   - q: "Which plan should a new serverless app use?"
@@ -51,7 +51,7 @@ The page gives no price figures and links to the pricing pages.
 
 - HTTP-triggered functions have a 230-second response limit regardless of the function app timeout.
 - Flex Consumption scales per function. HTTP triggers scale together as a group, as do Blob storage (Event Grid) triggers and Durable Functions triggers.
-- Flex Consumption supports Linux code-only deployments, and Windows deployments are code-only. Azure Functions does not support Windows containers. Linux is the only supported OS for the Python runtime.
+- Flex Consumption supports Linux code-only deployments and no Windows or container deployments. On Premium and Dedicated, Windows deployments are code-only, because Azure Functions does not currently support Windows containers. Linux is the only supported OS for the Python runtime.
 
 ## When to pick which
 
@@ -63,7 +63,7 @@ The page gives no price figures and links to the pricing pages.
 
 ## Retirement and legacy notes
 
-- Function apps still running the end-of-life v3 runtime on Linux in a Consumption plan stop running after September 30, 2026. Migrate to v4.
+- Learn says function apps still running the end-of-life v3 runtime on Linux in a Consumption plan stop running after September 30, 2026. That date has already passed, so any such app that is still on v3 is affected now. The page says to migrate to the v4 runtime.
 - Linux Consumption retires on 30 September 2028 and gets no new features or language versions. Windows Consumption apps are not currently affected.
 - Learn says to migrate Consumption apps to Flex Consumption before the retirement date.
 
@@ -71,9 +71,9 @@ The page gives no price figures and links to the pricing pages.
 
 The OS and hosting tables list Linux Consumption as retired, while the retirement note says it is retiring on 30 September 2028. The page does not resolve this, so check the current status before you plan. The Premium Linux instance count is also shown as a range with a regional footnote.
 
-## A quick decision path
+## A quick decision path (my advice)
 
-This path is a suggestion that restates the recommendations above, not a Microsoft flowchart.
+This path is my suggestion that restates the recommendations above, not a Microsoft flowchart.
 
 1. New serverless app with variable load and VNet needs: start with Flex Consumption.
 2. Always-on or near-continuous workload, more CPU or memory, or a custom Linux image: Premium.
@@ -92,4 +92,4 @@ The page gives no exact pricing, step-by-step setup or migration procedures, cod
 
 ## Sources
 
-- [Azure Functions hosting options](https://learn.microsoft.com/azure/azure-functions/functions-scale)
+- [Azure Functions Scale and Hosting (Microsoft Learn)](https://learn.microsoft.com/azure/azure-functions/functions-scale)
