@@ -104,7 +104,7 @@ This section is a practical suggestion and not a Microsoft statement.
 
 The pages I read do not describe the following:
 
-- Default retention and cache policies, and how to find the query and ingestion URIs. The page points to the manage and monitor article.
+- Default retention and cache policies, and how to find the query and ingestion URIs.
 - Workspace roles needed to create an eventhouse.
 - Pricing, KQL code and API steps.
 
@@ -117,6 +117,6 @@ The pages I read do not describe the following:
 
 ## Sources
 
-- [Create an eventhouse](https://learn.microsoft.com/fabric/real-time-intelligence/create-eventhouse)
-- [Create a KQL database](https://learn.microsoft.com/fabric/real-time-intelligence/create-database)
-- [Eventhouse overview](https://learn.microsoft.com/fabric/real-time-intelligence/eventhouse)
+- [Create an eventhouse (Microsoft Learn)](https://learn.microsoft.com/fabric/real-time-intelligence/create-eventhouse)
+- [Create a KQL database (Microsoft Learn)](https://learn.microsoft.com/fabric/real-time-intelligence/create-database)
+- [Eventhouse overview (Microsoft Learn)](https://learn.microsoft.com/fabric/real-time-intelligence/eventhouse)
