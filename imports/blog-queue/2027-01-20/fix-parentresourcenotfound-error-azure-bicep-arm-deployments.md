@@ -49,7 +49,7 @@ Two situations produce the error:
 
 ## How child names and types are built
 
-The Bicep child resources page gives the patterns. The full name is `{parent-resource-name}/{child-resource-name}`, and with more than two levels you keep repeating parent names. The full type is `{resource-provider-namespace}/{parent-resource-type}/{child-resource-type}`, repeating parent types the same way. Counting the segments between slashes, the type always has one segment more than the name. This is a quick check for a malformed child declaration.
+The Bicep child resources page gives the patterns. The full name is `{parent-resource-name}/{child-resource-name}`, and with more than two levels you keep repeating parent names. The full type is `{resource-provider-namespace}/{parent-resource-type}/{child-resource-type}`, repeating parent types the same way. Counting the segments between slashes, the type always has one segment more than the name. My advice: use this as a quick check for a malformed child declaration.
 
 ## Solution 1: parent and child in the same template
 
@@ -124,7 +124,7 @@ This order is my suggestion, not a Microsoft procedure:
 
 ## What the Learn page does not cover
 
-The troubleshooting page is short. It does not describe hierarchies deeper than one parent and child, or other tools such as what-if previews, so I do not make claims about them here. The Bicep page refers to a linter rule named use-parent-property for the discouraged full-name style.
+The troubleshooting page is short. It does not describe hierarchies deeper than one parent and child (the Bicep page does) or other tools such as what-if previews. The Bicep page refers to a linter rule named use-parent-property for the discouraged full-name style.
 
 ## Related
 
