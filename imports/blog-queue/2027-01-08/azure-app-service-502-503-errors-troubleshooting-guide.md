@@ -25,7 +25,7 @@ faq:
     a: "No. It describes them together and does not give separate root causes or diagnostic steps for each."
 ---
 
-HTTP 502 Bad Gateway and 503 Service Unavailable on an App Service app usually point at the app itself: slow requests, high memory or CPU, or an unhandled exception. The Microsoft Learn page on these errors gives a three-step workflow: observe, collect data, mitigate. This guide follows that page and the landing page for App Service troubleshooting, which only lists article titles.
+HTTP 502 Bad Gateway and 503 Service Unavailable on an App Service app often point at the app itself: slow requests, high memory or CPU, or an unhandled exception. The Microsoft Learn page on these errors gives a three-step workflow: observe, collect data, mitigate. This guide follows that page and the landing page for App Service troubleshooting, which only lists article titles.
 
 ## What the page says causes them
 
@@ -68,9 +68,9 @@ Under availability and performance, the troubleshooting landing page lists artic
 - Metric thresholds or specific scale settings.
 - The auto-healing `Web.config` syntax.
 
-## A troubleshooting order
+## A troubleshooting order (my advice)
 
-This order is practical advice built on the page.
+This order is my own advice, built on the page.
 
 1. Check service health for the region.
 2. Open the metrics and look for a spike in memory or CPU or a drop in requests around the time of the errors.
@@ -78,7 +78,7 @@ This order is practical advice built on the page.
 4. Use Kudu to take a diagnostic dump or memory dump if an exception is suspected.
 5. Restart the app to restore service, then scale or configure auto-healing to stop it recurring.
 
-## Typical mistakes
+## Typical mistakes (my advice)
 
 - Restarting without collecting data first.
 - Treating 502 and 503 as separate problems when the page treats them as one family.
@@ -93,5 +93,5 @@ This order is practical advice built on the page.
 
 ## Sources
 
-- [Troubleshoot HTTP 502 and HTTP 503 errors (Microsoft Learn)](https://learn.microsoft.com/troubleshoot/azure/app-service/troubleshoot-http-502-http-503)
-- [Azure App Service troubleshooting (Microsoft Learn)](https://learn.microsoft.com/troubleshoot/azure/app-service/welcome-app-service)
+- [Troubleshoot "HTTP 502" and "HTTP 503" errors (Microsoft Learn)](https://learn.microsoft.com/troubleshoot/azure/app-service/troubleshoot-http-502-http-503)
+- [Troubleshoot Azure App Service issues (Microsoft Learn)](https://learn.microsoft.com/troubleshoot/azure/app-service/welcome-app-service)
