@@ -18,7 +18,7 @@ faq:
   - q: "Why does the same agent show up twice?"
     a: "Learn says a single Copilot Studio agent can appear with different publisher types because each entry is a separate lifecycle and publisher record. Removing one entry does not remove the other."
   - q: "What can I do with agents that have no owner?"
-    a: "Learn says shared agents become ownerless when the creator is deleted. The registry recommends blocking or deleting them. Agent management rules can also reassign ownerless Agent Builder agents to the previous owner's manager or block ownerless agents without usage."
+    a: "Learn says shared agents become ownerless when the creator is deleted. The registry page names blocking or deleting as the actions for them. Agent management rules can also reassign ownerless Agent Builder agents to the manager of the previous owner or block ownerless agents without usage."
   - q: "Can I export the inventory?"
     a: "Yes. The registry offers Export to CSV for all agents or filtered agents. A Microsoft Graph preview endpoint, with the CopilotPackages.Read.All scope, lists agents programmatically."
   - q: "Do I need a special license to see risk signals?"
@@ -71,16 +71,16 @@ The Risks column aggregates signals from Microsoft Purview, Microsoft Entra, Mic
 - Counts can lag the security portals by up to one hour
 - Deep links need roles such as Security Reader or AI Administrator for Entra and Defender, and IRM Analyst or IRM Investigator for Purview alerts. Global Administrator alone is not enough for Purview.
 
-For ownerless agents, Learn recommends block or delete. The registry page does not describe an assign-owner action, though the overview page says admins can assign owners from the Agents without owners card.
+For ownerless agents, the registry page names block or delete as the actions. The overview page lists assigning ownership as a governance action, but its Agents without owners card button only opens the list filtered to ownerless agents. The pages read do not show how an owner is assigned in the UI, apart from the Agent Builder reassignment rule described below.
 
 ## Limit new sprawl with settings
 
 Under **Agents** > **Settings**, Learn lists:
 
 - **Agent and plugin access:** toggles for agents built by Microsoft, by your organization and by external publishers. Disabled types do not appear in the Agent store.
-- **Sharing:** for Agent Builder agents, choose All users, No users or Specific users.
+- **Sharing:** only for agents built with Microsoft Copilot Agent Builder. Choose All users, No users or Specific users. With No users, org-level sharing is disabled, but users can still share directly with specific individuals.
 - **User access:** All users (default), No users, or specific users or groups.
-- **Agent management rules:** bulk rules such as installing Microsoft agents, reassigning ownerless Agent Builder agents to the owner's manager, blocking ownerless agents without usage, and rejecting publish requests older than a set number of days. A rule runs after you review the impacted agents.
+- **Agent management rules:** bulk rules such as installing Microsoft agents, reassigning ownerless Agent Builder agents to the manager of the previous owner, blocking ownerless agents without usage, applying a template and rejecting publish requests older than a set number of days. You review the impacted agents before running a rule.
 - **Tags:** up to 50 organization-wide labels.
 
 The settings article does not state which admin roles can change them, and it does not cover who can create agents. Check your role design separately.
@@ -97,7 +97,7 @@ Third-party MCP servers and tools used by agents are Non-Microsoft Products, per
 
 ## Deploy, assign and pin deliberately
 
-Assign and deploy are separate actions. **Available to** controls who can find and install an agent. **Deployed to** installs it for chosen users. To assign, open the agent, select the **Users** tab, choose **Assign to** (Just me, Entire organization or Specific users/groups) and select **Update**.
+Learn's pages on setting availability and deploying agents, which are titled for Copilot Studio agents, describe assign and deploy as separate actions. **Available to** controls who can find and install an agent. **Deployed to** installs the agent on behalf of the chosen users by accepting Microsoft Entra permissions for them. To assign, open the agent, select the **Users** tab, choose **Assign to** (Just me, Entire organization or Specific users/groups), confirm **Available to** and select **Update**. To deploy, select an agent, then **Deploy**, choose the audience and finish the deployment.
 
 Admins can pin up to three agents per user. Only deployed agents can be pinned, blocked agents must be unblocked first, and a pin can take up to six hours to reach users. Pinning needs the AI Administrator role. Custom agents can be added as a .zip package through **Add agent**, then published, optionally deployed and given a security template.
 
@@ -110,9 +110,11 @@ Admins can pin up to three agents per user. Only deployed agents can be pinned, 
 
 ## Sources
 
-- [Agent Registry in the Microsoft 365 admin center](https://learn.microsoft.com/en-us/microsoft-365/admin/manage/agent-registry)
-- [Agent management in the Microsoft 365 admin center](https://learn.microsoft.com/en-us/microsoft-agent-365/admin/agent-365-overview)
-- [Agent settings](https://learn.microsoft.com/en-us/microsoft-agent-365/admin/agent-settings)
-- [Agent inventory](https://learn.microsoft.com/en-us/microsoft-agent-365/admin/manage-copilot-agents-integrated-apps)
-- [Assign, deploy and block agents](https://learn.microsoft.com/en-us/copilot/microsoft-365/agent-essentials/agent-lifecycle/agent-assign-deploy)
-- [Copilot controls overview](https://learn.microsoft.com/en-us/copilot/microsoft-365/copilot-control-system/overview)
+- [Agent Registry in Microsoft 365 admin center](https://learn.microsoft.com/en-us/microsoft-agent-365/admin/agent-registry-overview)
+- [Agent overview in Microsoft 365 admin center](https://learn.microsoft.com/en-us/microsoft-agent-365/admin/agent-365-overview)
+- [Agent settings in Microsoft 365 admin center](https://learn.microsoft.com/en-us/microsoft-agent-365/admin/agent-settings)
+- [Manage agents in the Microsoft 365 admin center](https://learn.microsoft.com/en-us/microsoft-agent-365/admin/manage-copilot-agents-integrated-apps)
+- [Deploy agents for Microsoft Copilot](https://learn.microsoft.com/en-us/microsoft-365/copilot/agent-essentials/agent-lifecycle/agent-assign-deploy)
+- [Set availability of Copilot Studio agents](https://learn.microsoft.com/en-us/microsoft-365/copilot/agent-essentials/agent-lifecycle/agent-availability)
+- [Deploy Copilot Studio agents](https://learn.microsoft.com/en-us/microsoft-365/copilot/agent-essentials/agent-lifecycle/agent-deploy)
+- [Copilot controls overview](https://learn.microsoft.com/en-us/copilot/implement/copilot-controls-overview)
