@@ -47,9 +47,8 @@ The table below follows Microsoft's comparison table and adds the limits from th
 | Area | Agent Builder | Copilot Studio |
 |---|---|---|
 | Authoring | Natural-language configuration, no source-code project | Logic, tools and workflows supported by the selected harness |
-| Actions | Cannot author actions that integrate external services | Integrations and workflows through tools and connectors |
-| Audience | Users in your organization | Internal or external users, depending on the harness channels |
-| Distribution | Sharing and org-catalog submission, subject to policy and approval | Channels supported by the harness, plus Microsoft 365 agent and channel controls |
+| Actions | Cannot author actions that integrate external services | Integrations and business workflows through tools and connectors |
+| Audience and distribution | Users in your organization, through supported sharing and org-catalog publishing | Internal or external users, through channels supported by the selected harness |
 | Lifecycle | Configure, test, share and submit in one experience | Environments, application lifecycle management, deployment and analytics |
 | Governance | Microsoft 365 agent controls and data-source permissions | Power Platform environment and connector controls, plus Microsoft 365 controls |
 
@@ -73,13 +72,13 @@ For wider reach, an owner submits the agent to the org catalog. An admin reviews
 
 ## Signs you have outgrown Agent Builder
 
-Learn does not give a formal checklist, but its text points to these signals:
+Learn has no separate section on when to move. The signals below restate the three decision questions and the Agent Builder limits:
 
 - You need actions that call external services.
 - You need a customer-facing or other external channel.
-- You need workflow logic or approvals, such as an IT request flow.
+- You need workflow logic.
 - You need separate development, test and production environments.
-- You need environment-level policies or connector governance.
+- You want to block general AI knowledge, which Agent Builder does not support.
 
 ## How to copy an agent to Copilot Studio
 
