@@ -7,7 +7,7 @@ author: mirko-p
 date: 2026-12-18
 topics: [dynamics-365-customer-insights-journeys, dynamics-365-customer-insights, dataverse]
 keypoints:
-  - "A Dataverse trigger starts a journey from a record being created or updated in any table, with no code."
+  - "A Dataverse trigger starts a journey from a record being created or updated in a Dataverse table connected to the audience, with no code."
   - "A custom trigger for website or app actions uses a generated JavaScript snippet that contains an ingestion key you must protect."
   - "Documented limits include up to 2,500 triggers per minute and 29 attributes per custom trigger, and events above the rate may be dropped."
   - "Use segment-based journeys for business events that affect every contact, because raising a trigger for each contact likely exceeds the fair use policy."
@@ -18,7 +18,7 @@ faq:
   - q: "Does the trigger fire only for a specific value, such as resolved cases?"
     a: "No. Microsoft Learn says the Dataverse trigger captures any change to the chosen column, not only one value. You add a filter condition, for example Status equals Resolved, when you create the journey from the trigger."
   - q: "What are the documented limits for trigger-based journeys?"
-    a: "Microsoft Learn's fair use policy lists throughput of up to 2,500 triggers per minute and a latency target of P90 under 3 minutes and P95 under 5 minutes up to that rate. Triggers above it may be slower and some events may be dropped. A custom trigger can have 29 input attributes."
+    a: "Microsoft Learn's fair use policy lists throughput of up to 2,500 triggers per minute and a latency target of P90 under 3 minutes and P95 under 5 minutes up to that rate, measured from trigger activation to completing the first journey step. Triggers above it may be slower and some events may be dropped. A custom trigger can have 29 input attributes."
   - q: "Should I use a trigger for a billing run that affects every customer?"
     a: "Microsoft Learn advises against it. For business events such as a billing cycle, use a segment-based journey, because a trigger raised for every contact or lead likely goes over the fair use policy for triggers."
   - q: "How do I keep a custom trigger from being abused?"
@@ -58,7 +58,7 @@ To test, change a row in a Dynamics 365 app, for example resolve a case, add a r
 2. Give it a title and description.
 3. Add attributes with a name and data type. Types are text, number, true or false, date/time and entity reference. The type decides which comparators the journey offers.
 4. Keep the default **Customer data** attribute, which identifies the customer who acted. When a trigger is tied to a data profile, include `contactpoint_email` and `contactpoint_phone` so the customer can be reached.
-5. Download the generated code snippet and give it to developers. It contains JavaScript instructions for integrating the trigger with external systems.
+5. Download the generated code snippet and give it to developers, or let them open it through the link in the app. Developers need access to the Customer Insights - Journeys app for that. The snippet contains JavaScript instructions for integrating the trigger with external systems.
 6. After integration, the Triggers page confirms it works and marks it **Ready to use**.
 
 Learn warns that the snippet holds an ingestion key. Anyone with it could send spurious triggers that start unintended journeys, so protect the key and limit the attributes used for personalization.
@@ -68,7 +68,7 @@ The pages read do not describe a way to call the trigger with Power Automate or 
 ## Build the journey
 
 1. Choose **trigger-based journey** and select your trigger at the start.
-2. Add conditions from the trigger's table or related tables. Learn says you can add up to 29 attributes to a trigger.
+2. Add conditions from the trigger's table or related tables. Learn says you can add up to 29 attributes to the trigger as conditions. The fair use policy separately gives 29 as the limit for input attributes of a single custom trigger.
 3. Set a goal, for example a Purchase completed trigger.
 4. Set the exit. A trigger-based exit removes customers who perform the trigger.
 5. Build the actions on the canvas: email, text, push, branches and waits.
@@ -83,12 +83,12 @@ The fair use policy lists:
 | Item | Limit |
 |---|---|
 | Throughput | Up to 2,500 triggers per minute |
-| Latency | P90 under 3 minutes and P95 under 5 minutes, up to 2,500 triggers per minute |
+| Latency (trigger activated to first journey step completed) | P90 under 3 minutes and P95 under 5 minutes, up to 2,500 triggers per minute |
 | Custom trigger inputs | 29 attributes |
 
 Triggers beyond the rate are subject to slower processing and potential failures, which Learn describes as dropped events. Learn also says that raising a trigger for every contact for a business event likely goes over the fair use policy, so use a segment-based journey, with an attribute on the contact or lead that moves them into the segment.
 
-## Typical mistakes
+## Typical mistakes (my summary)
 
 - Expecting the Dataverse trigger to fire only for one value, instead of filtering in the journey.
 - Using a trigger for a bulk business event.
@@ -110,7 +110,7 @@ The pages read do not document re-entry behavior, required Dataverse security ro
 ## Sources
 
 - [Customer Insights - Journeys triggers](https://learn.microsoft.com/en-us/dynamics365/customer-insights/journeys/real-time-marketing-triggers)
-- [Custom triggers in Customer Insights - Journeys](https://learn.microsoft.com/en-us/dynamics365/customer-insights/journeys/real-time-marketing-custom-triggers)
-- [Trigger a journey based on a Dataverse record change](https://learn.microsoft.com/en-us/dynamics365/marketing/real-time-marketing-dataverse-trigger)
+- [Create custom triggers in Customer Insights - Journeys](https://learn.microsoft.com/en-us/dynamics365/customer-insights/journeys/real-time-marketing-custom-triggers)
+- [Trigger a journey based on a Dataverse record change](https://learn.microsoft.com/en-us/dynamics365/customer-insights/journeys/real-time-marketing-dataverse-trigger)
 - [Create a trigger-based journey](https://learn.microsoft.com/en-us/dynamics365/customer-insights/journeys/real-time-marketing-trigger-based-journey)
-- [Fair use policy for Customer Insights - Journeys](https://learn.microsoft.com/en-us/dynamics365/customer-insights/journeys/fair-use-policy)
+- [Service limits and fair use policy](https://learn.microsoft.com/en-us/dynamics365/customer-insights/journeys/fair-use-policy)
