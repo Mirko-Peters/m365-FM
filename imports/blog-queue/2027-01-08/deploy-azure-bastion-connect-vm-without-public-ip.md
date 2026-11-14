@@ -1,6 +1,6 @@
 ---
 title: "How to Deploy Azure Bastion to Connect to a VM Without a Public IP"
-summary: "Deploy Azure Bastion from the portal with default settings: prerequisites, required roles and ports, the three deployment options, removing the VM public IP, billing that starts at deployment, and gaps such as subnet and NSG requirements."
+summary: "Deploy Azure Bastion from the portal: prerequisites, required roles and ports, the three deployment options with default, custom and Developer SKU steps, removing the VM public IP, billing from deployment and gaps such as NSG rules and prices."
 status: review
 publish: false
 author: mirko-p
@@ -22,10 +22,10 @@ faq:
   - q: "What does Bastion cost?"
     a: "Hourly billing starts when Bastion is deployed, regardless of outbound data usage. The page gives no prices. The Developer SKU is described as free for dev and test."
   - q: "What size must the Bastion subnet be?"
-    a: "The page does not say. It states no subnet name, size or address range, and it describes no network security group rules for Bastion."
+    a: "In the custom settings steps, the subnet is named AzureBastionSubnet (selected automatically if it exists) and its size must be /26 or larger. The page describes no network security group rules for Bastion."
 ---
 
-Azure Bastion lets you reach a VM over RDP or SSH from the Azure portal using its private IP address. The VM does not need a public IP. This guide follows the Microsoft Learn quickstart for deploying Bastion from the portal, and it says where that page is silent.
+Azure Bastion lets you reach a VM over RDP or SSH from the Azure portal using its private IP address. The VM does not need a public IP. This guide follows the Microsoft Learn quickstart Deploy Azure Bastion from the Azure portal, and it says where that page is silent.
 
 ## Prerequisites
 
@@ -52,11 +52,27 @@ Dedicated deployments, which are Default and Custom, take about 10 minutes. The 
 2. In the **Bastion** pane select **Deploy Bastion**.
 3. Wait about 10 minutes for the deployment.
 
-The page gives steps only for default settings. It does not describe the custom or Developer SKU procedures in the text read.
+After deployment you can configure additional settings or upgrade the SKU.
+
+## Deploy with custom settings
+
+1. Go to your virtual network or VM, select **Connect** > **Bastion** and then **Configure manually**.
+2. On **Create a Bastion**, set the instance details: **Name**, **Region** (where your virtual network resides), **Availability zone** (optional, only certain regions support zones), **Tier** (the SKU) and **Instance count** (host scaling in scale unit increments).
+3. Select your virtual network.
+4. For the subnet, an existing **AzureBastionSubnet** is selected automatically. If there is none, select **Edit subnet**, choose the subnet purpose **Azure Bastion**, enter the IPv4 address range and starting address, and select a size of **/26** or larger.
+5. For the **Public IPv4 address**, select **Create new** and enter a name, or **Use existing**.
+6. Optionally open the **Advanced** tab, then select **Review + Create** and **Create**.
+
+## Deploy the Developer SKU
+
+1. Confirm that your virtual network is in a region that supports Bastion Developer.
+2. Go to your virtual network, select **Connect** > **Bastion**, choose the **Authentication Type**, enter your credentials and select **Connect**.
+
+Bastion Developer deploys automatically on the first connect, the connection opens in the Azure portal, and the resource stays deployed after you disconnect. It uses a shared pool, is not dedicated to you, and has limited features. You can upgrade it to a specific SKU.
 
 ## Connect to the VM
 
-You connect over SSH or RDP with the VM's private IP. Connected VMs need no public IP, client software, agent or special configuration. The connection procedures, including native clients and scale sets, are on separate pages that were not read for this guide.
+You connect over SSH or RDP with the VM's private IP. Connected VMs need no public IP, client software, agent or special configuration. The text of this page that was read does not contain a separate connection procedure for the dedicated deployments.
 
 ## Remove the VM's public IP
 
@@ -82,17 +98,15 @@ Delete the resource group: search for it in the portal, select **Delete resource
 
 ## What the page does not say
 
-- The required subnet name, size or address range.
-- How to create a public IP for the Bastion host itself.
 - Network security group rules, apart from the VM's inbound ports.
-- Procedures for custom settings and the Developer SKU.
-- Prices and the list of supported regions.
+- Prices and the list of supported regions (the page links to the pricing and SKU comparison pages for these).
+- The details of the Advanced tab settings (the page links to the configuration settings article).
 
-If you plan a production deployment, read the Bastion configuration and FAQ pages before you pick a subnet, because this quickstart leaves those details open.
+My advice: for a production deployment, also read the Bastion configuration settings article before you pick a subnet and SKU.
 
 ## A deployment checklist
 
-This list is practical advice built on the page.
+This list is my advice, built on the page.
 
 1. Confirm that you have Reader on the VM and its NIC.
 2. Confirm that RDP or SSH is allowed on the VM.
@@ -101,12 +115,12 @@ This list is practical advice built on the page.
 5. Remove the VM's public IP if nothing else uses it.
 6. Delete test deployments, because billing runs by the hour.
 
-## Typical mistakes
+## Typical mistakes (my advice)
 
 - Leaving a test Bastion running and paying hourly.
 - Using the Developer SKU in an unsupported region.
 - Removing a public IP that another service still uses.
-- Skipping the subnet planning that the quickstart does not cover.
+- Skipping the subnet planning, such as the AzureBastionSubnet size of /26 or larger on the custom settings steps.
 
 ## Related
 
@@ -116,4 +130,4 @@ This list is practical advice built on the page.
 
 ## Sources
 
-- [Quickstart: Deploy Azure Bastion with default settings (Microsoft Learn)](https://learn.microsoft.com/azure/bastion/quickstart-host-portal)
+- [Quickstart: Deploy Azure Bastion from the Azure portal (Microsoft Learn)](https://learn.microsoft.com/azure/bastion/quickstart-host-portal)
