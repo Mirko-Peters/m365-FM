@@ -60,10 +60,10 @@ Calling Plans are available only in select countries or regions. Teams Phone Mob
 
 Microsoft's Set up Teams Phone article gives this sequence:
 
-1. **License users.** Assign a Teams Phone license to each user. Users must also be voice enabled. In the Teams admin center, go to **Users**, **Manage users**, select the user and under **Account** turn **Enterprise Voice** to **On**, or use the Set-CsPhoneNumberAssignment cmdlet.
+1. **License users.** Assign a Teams Phone license to each user. Users must also be voice enabled. In the Teams admin center, go to **Users**, **Manage users**, select the user and open the **Account** tab and under **Assigned phone number** turn **Enterprise Voice** to **On**, or use the Set-CsPhoneNumberAssignment cmdlet with -EnterpriseVoiceEnabled.
 2. **Choose a PSTN option** from the table above.
 3. **Get and assign numbers** for users and for services such as auto attendants and call queues.
-4. **Set up emergency calling.** You or your carrier must define emergency locations and make sure each user has one.
+4. **Set up emergency calling.** Define emergency locations and assign one to each user. How you do this depends on your PSTN option.
 5. **Optional:** set up an auto attendant and call queues.
 6. **Configure other features** such as voicemail, caller ID, call forwarding and calling policies, which are the everyday calling features users notice.
 7. **Manage the deployment,** including devices and call quality.
@@ -74,7 +74,7 @@ In the Teams admin center, select **Voice**, then **Phone numbers**. Select an u
 
 ## Which option should you pick?
 
-Microsoft's PSTN article gives its guidance in the "ideal for" row of the comparison, and it names the factors to weigh: how you want to manage telephony, whether you already have a provider, how your users make calls and what infrastructure you already run. If you want the simplest deployment and Calling Plans are sold in your country, the Microsoft Calling Plan is the straightforward route. If you already have a carrier in the Operator Connect or Teams Phone Mobile programs, that carrier can manage PSTN calling for you. If you must keep your own carrier and equipment, Direct Routing is the option that connects your session border controllers. For all four, Microsoft says to verify Teams Phone licenses first, choose an option and then follow that option's Teams Phone deployment guide.
+Microsoft's PSTN article gives its guidance in the "ideal for" row of the comparison. If you want the simplest deployment and Calling Plans are sold in your country, the Microsoft Calling Plan is the straightforward route. If you already have a carrier in the Operator Connect or Teams Phone Mobile programs, that carrier can manage PSTN calling for you. If you must keep your own carrier and equipment, Direct Routing is the option that connects your session border controllers. Microsoft's guidance steps for all four are to confirm licenses, choose a PSTN option and then configure the chosen solution, including assigning numbers to users.
 
 ## Common mistakes
 
