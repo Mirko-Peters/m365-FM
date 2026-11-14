@@ -61,19 +61,19 @@ This section is my advice, not a Microsoft statement. Learn does not give diagno
 - Is `RequestedAuthnContext` needed, or was it added by default in the SAML library or configuration?
 - Which `AuthnContextClassRef` value does the app expect, and why?
 - Can the SAML request be changed to include `forceAuthn="true"` for this app?
-- Does the owner understand that this causes a fresh sign-in each time the request is processed? Learn says this is how the requested context gets honored, so users may see more authentication prompts than before.
+- Does the owner understand that this causes a fresh sign-in each time the request is processed? Learn says this is how the requested context gets honored. My inference: users may see more authentication prompts than before.
 
 ## What the page does not cover
 
-I read the whole troubleshooting page, which is short. It does not cover Conditional Access, authentication strengths, a list of supported `AuthnContextClassRef` values, or app-side configuration for particular vendors. If your scenario involves one of those, you need another source.
+The troubleshooting page is short. It does not cover Conditional Access, authentication strengths, a list of supported `AuthnContextClassRef` values, or app-side configuration for particular vendors. If your scenario involves one of those, you need another source.
 
 ## Reading the example again
 
-Learn's example is worth reading slowly, because it shows that the failure does not depend on a wrong password or a blocked account. The user did sign in. The problem is only that the way they signed in, Windows integrated authentication through a federation service, does not match the way the app asked to be signed in. That is why neither a password reset nor a new session by itself explains the error, and why both resolutions change the request instead of the user. In my reading, the second resolution trades a smoother experience for compliance with the requested context, because the user authenticates again so that the requested method can be honored.
+This section is my reading of Learn's example, which shows that the failure does not depend on a wrong password or a blocked account. The user did sign in. The problem is only that the way they signed in, Windows integrated authentication through a federation service, does not match the way the app asked to be signed in. That is why neither a password reset nor a new session by itself explains the error, and why both resolutions change the request instead of the user. The second resolution, in my reading, trades a smoother experience for compliance with the requested context, because the user authenticates again so that the requested method can be honored.
 
 ## Related reading on the platform side
 
-The reference row links to the troubleshooting page and lists other error codes for broader context. For the wider SAML sign-in flow in Entra ID, use the Microsoft Entra documentation for SAML single sign-on, which I did not read for this article.
+The reference row links to the troubleshooting page and lists other error codes for broader context. For the wider SAML sign-in flow in Entra ID, use the Microsoft Entra documentation for SAML single sign-on.
 
 ## Related
 
