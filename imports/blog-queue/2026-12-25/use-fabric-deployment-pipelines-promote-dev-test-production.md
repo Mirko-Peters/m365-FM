@@ -11,7 +11,7 @@ keypoints:
   - "You must be an admin of a Fabric workspace. Each stage is assigned one Premium workspace, as the page words it."
   - "Deploy fully, selectively, or backward. Backward deployment works only if the target stage is empty. Deploying overwrites paired items."
   - "Deployment rules change data sources or parameters in the target stage. You must own the item, rules cannot be created in the development stage, and they apply at the next deployment."
-  - "Beginning February 12, 2026, deployment pipelines stop supporting semantic models that are not upgraded to Enhanced Metadata."
+  - "The overview says that from February 12, 2026, which has already passed, deployment pipelines retire support for semantic models not upgraded to Enhanced Metadata."
 faq:
   - q: "How many stages can a pipeline have?"
     a: "According to Microsoft Learn, 2 to 10 stages, with a default of three: Development, Test and Production. The stage count is fixed after creation."
@@ -22,7 +22,7 @@ faq:
   - q: "How do I point Production at a different data source?"
     a: "Create a deployment rule in the target stage under the item, then deploy. Learn says you must own the item, and that data source rules only work when you change data sources of the same type."
   - q: "Is there a retirement notice for semantic models?"
-    a: "Yes. The overview says that beginning February 12, 2026, deployment pipelines stop supporting semantic models that are not upgraded to Enhanced Metadata."
+    a: "Yes. The overview says that beginning February 12, 2026, deployment pipelines retire support for semantic models that are not upgraded to Enhanced Metadata. That date has already passed."
 ---
 
 Fabric deployment pipelines let you build and test content in a development stage and promote it to test and production. You create a pipeline, assign a workspace to each stage and deploy. This guide follows Microsoft Learn's overview, the get-started article and the deployment rules article.
@@ -54,7 +54,7 @@ Choose one of these:
 - **Selective deployment:** chosen items only.
 - **Backward deployment:** from a later stage to an earlier one, only if the target stage is empty.
 
-Then select **Review your deployment and leave a note**. A confirmation appears when the deployment would change items in the target stage. Paired items are overwritten, and items missing from the source stage remain unchanged. Without a deployment plan, deployment uses Fabric lineage to determine dependencies and order. You can review deployment history and compare stage content before deploying.
+Then select **Review your deployment and leave a note**. A confirmation appears when the deployment would change items in the target stage. Paired items are overwritten, and items missing from the source stage remain unchanged. You can review deployment history and compare stage content before deploying.
 
 ## Deployment rules
 
@@ -84,7 +84,7 @@ The overview says the folder hierarchy is applied to the target stage. In folder
 
 ## Notices and gaps
 
-Beginning February 12, 2026, deployment pipelines stop supporting semantic models that are not upgraded to Enhanced Metadata. The new pipeline UI and some items are in preview. The pages I read do not state deploy-specific permissions, exact license tiers or what first deployment to an empty stage creates, and they link to other articles for those.
+Beginning February 12, 2026, deployment pipelines retire support for semantic models that are not upgraded to Enhanced Metadata. That date has already passed, so check your semantic models. The new pipeline UI and some items are in preview. The pages I read do not state deploy-specific permissions, exact license tiers or what first deployment to an empty stage creates, and they link to other articles for those.
 
 ## Related
 
@@ -93,6 +93,6 @@ Beginning February 12, 2026, deployment pipelines stop supporting semantic model
 
 ## Sources
 
-- [Introduction to deployment pipelines](https://learn.microsoft.com/fabric/cicd/deployment-pipelines/intro-to-deployment-pipelines)
-- [Get started with deployment pipelines](https://learn.microsoft.com/fabric/cicd/deployment-pipelines/get-started-with-deployment-pipelines)
-- [Create deployment rules](https://learn.microsoft.com/fabric/cicd/deployment-pipelines/create-rules)
+- [Overview of Fabric deployment pipelines (Microsoft Learn)](https://learn.microsoft.com/fabric/cicd/deployment-pipelines/intro-to-deployment-pipelines)
+- [Get started using deployment pipelines, the Fabric Application lifecycle management (ALM) tool (Microsoft Learn)](https://learn.microsoft.com/fabric/cicd/deployment-pipelines/get-started-with-deployment-pipelines)
+- [Create deployment rules for Fabric's ALM (Microsoft Learn)](https://learn.microsoft.com/fabric/cicd/deployment-pipelines/create-rules)
