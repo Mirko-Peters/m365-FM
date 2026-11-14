@@ -57,7 +57,7 @@ This order is practical advice and is not from the reference.
 3. Check whether per-user MFA enforcement is on for the account.
 4. Ask whether the user signed in from a new location or device.
 5. For 50074, ask the user whether they saw the MFA prompt and what they did with it.
-6. For application developers, make sure the app can handle an interactive request and starts a new authorize request when it receives 50076.
+6. For application developers, make sure the app can handle an interactive request. The reference says its error codes are not meant to be used by the client itself and that apps depending on code numbers or text will break over time. The generic OAuth table lists `interaction_required` with the action to retry the request interactively. That is a better signal for client logic than the AADSTS number.
 
 ## Related codes
 
@@ -65,8 +65,11 @@ If the user has not registered a second factor, 50072 or 50079 fits better. For 
 
 ## Typical mistakes
 
+This list is my own advice, not from the reference.
+
 - Treating AADSTS50076 as a bug in the application when the tenant policy changed.
 - Retrying a silent token request instead of an interactive one.
+- Writing application logic that depends on AADSTS numbers or message text, which the reference warns against.
 - Expecting the reference to list admin remediation steps.
 - Forgetting that the text of error messages can change.
 
@@ -90,4 +93,4 @@ This is practical advice. Collect the exact code, the time of the attempt and th
 
 ## Sources
 
-- [Microsoft Entra authentication and authorization error codes (Microsoft Learn)](https://learn.microsoft.com/entra/identity-platform/reference-error-codes)
+- [Microsoft Entra authentication & authorization error codes - Microsoft identity platform (Microsoft Learn)](https://learn.microsoft.com/entra/identity-platform/reference-error-codes)
