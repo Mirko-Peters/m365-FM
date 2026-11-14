@@ -59,7 +59,7 @@ Audit the legacy settings first:
 | Call to phone | Voice calls |
 | Text message to phone | SMS |
 | Notification through mobile app | Microsoft Authenticator |
-| Verification code from app or hardware token | Third party software OATH tokens, Hardware OATH tokens, Microsoft Authenticator |
+| Verification code from mobile app or hardware token | Third party software OATH tokens, Hardware OATH tokens, Microsoft Authenticator |
 
 | Legacy SSPR option | Authentication methods policy |
 | --- | --- |
@@ -94,7 +94,7 @@ Learn gives an example of enabling Microsoft Authenticator for all users while l
 
 ## Not covered
 
-The page gives no deadlines, no licensing requirements, no staged rollout guidance and no commands, only a link to the Graph authentication methods overview.
+The page gives no deadlines, no licensing requirements, no staged rollout guidance and no commands.
 
 ## Related
 
@@ -104,4 +104,4 @@ The page gives no deadlines, no licensing requirements, no staged rollout guidan
 
 ## Sources
 
-- [How to migrate MFA and SSPR policy settings to the Authentication methods policy](https://learn.microsoft.com/entra/identity/authentication/how-to-authentication-methods-manage)
+- [How to migrate to the Authentication methods policy (Microsoft Learn)](https://learn.microsoft.com/entra/identity/authentication/how-to-authentication-methods-manage)
