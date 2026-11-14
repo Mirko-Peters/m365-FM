@@ -25,7 +25,7 @@ faq:
     a: "When a delegate schedules a meeting in a delegated calendar and the delegator's mailbox is hidden from the global address list, the add-in cannot get the information to fill in the URL, the meeting ID and passcode, and the dial-in numbers. Unhide the mailbox with Set-Mailbox and HiddenFromAddressListsEnabled set to false, then have the delegate restart Outlook and create a new meeting request."
 ---
 
-The Teams Meeting add-in puts the **New Teams Meeting** command into the classic Outlook calendar. When it is missing, Microsoft Learn offers a sequence of checks: add-in status, loader registration, registry and policy settings, the classic-to-new Teams transition, and one mail-flow-adjacent case with delegates. The page's canonical title is "Fix Teams Meeting add-in problems in Classic Outlook". This article follows it.
+The Teams Meeting add-in puts the **New Teams Meeting** command into the classic Outlook calendar. When it is missing, Microsoft Learn offers a sequence of checks: add-in status, loader registration, registry and policy settings, the classic-to-new Teams transition, and a fix for delegate scenarios. The page's canonical title is "Fix Teams Meeting add-in problems in Classic Outlook". This article follows it.
 
 ## First: which Outlook?
 
