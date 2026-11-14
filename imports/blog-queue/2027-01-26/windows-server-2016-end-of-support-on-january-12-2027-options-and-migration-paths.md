@@ -1,20 +1,20 @@
 ---
 title: "Windows Server 2016 End of Support on January 12, 2027: Options and Migration Paths"
-summary: "Windows Server 2016 left support on January 12, 2027. What the lifecycle pages say about the dates and the related components, what end of support means, the upgrade target in Microsoft's blog, and how Extended Security Updates work in general."
+summary: "Windows Server 2016 left support on January 12, 2027. What the lifecycle pages say about the dates and the related components, what end of support means, the upgrade target in Microsoft's blog, and the Extended Security Updates program, including the Server 2016 dates."
 status: review
 publish: false
 author: mirko-p
 date: 2027-01-26
 topics: [windows-server, extended-security-updates, windows-server-update-services]
 keypoints:
-  - "Windows Server 2016 reached end of support on January 12, 2027. The lifecycle product page lists the extended end as 1/13/2027 6:59:59 AM PT, which is the same cutoff written in Pacific Time."
+  - "Windows Server 2016 reached end of support on January 12, 2027. The lifecycle product page lists the extended end as 1/13/2027 6:59:59 AM PT. The pages do not say why this differs by a day."
   - "The Learn 2027 page lists related items with the same date, such as IIS 10 on Server 2016, Hyper-V Server 2016, WSUS for Server 2016, .NET Framework 4.6.2 and Windows Defender for Server 2016."
   - "After end of support there are no new security updates, no non-security updates, no assisted support options and no online technical content updates."
-  - "The Windows IT Pro Blog names Windows Server 2025 as the upgrade target and describes ESU as a temporary option. ESU details for Server 2016 were still pending in that post."
-  - "The ESU FAQ describes ESU as a last resort paid option for up to three years, with critical and important security updates only. Its table did not list Server 2016."
+  - "The Windows IT Pro Blog names Windows Server 2025 as the upgrade target and describes ESU as a temporary option. Pricing and availability details for Server 2016 ESU were still to come in that post."
+  - "The ESU FAQ calls ESU a last resort paid option for up to three years. Its table lists Server 2016 with ESU years ending in January 2028, 2029 and 2030."
 faq:
   - q: "When did Windows Server 2016 support end?"
-    a: "On January 12, 2027, according to the Learn page on products ending support in 2027 and the Windows IT Pro Blog. The lifecycle product page for Windows Server 2016 shows an extended end date of 1/13/2027 6:59:59 AM in Pacific Time, which is the same cutoff expressed in another form. Mainstream support ended on 1/12/2022. In either form the date has passed."
+    a: "On January 12, 2027, according to the Learn page on products ending support in 2027 and the Windows IT Pro Blog. The lifecycle product page for Windows Server 2016 shows an extended end date of 1/13/2027 6:59:59 AM in Pacific Time, The pages do not say why this differs by a day. Mainstream support ended on 1/12/2022. In either form the date has passed."
   - q: "What stopped on that date?"
     a: "The Learn page says upon end of support there are no new security updates, no non-security updates, no free or paid assisted support options and no online technical content updates. The blog says devices receive a final monthly security update on the date."
   - q: "Which other components are affected?"
@@ -22,7 +22,7 @@ faq:
   - q: "What is the upgrade path?"
     a: "The Windows IT Pro Blog names an upgrade to Windows Server 2025 for Windows Server 2016. The lifecycle pages do not describe upgrade paths, so check the Windows Server upgrade documentation for supported paths and application compatibility."
   - q: "Can I buy Extended Security Updates for Server 2016?"
-    a: "The Learn ESU FAQ describes the program generally: a last resort paid option for up to three years, with critical and important security updates only and no new features or general support. Its availability table lists Windows Server 2012/R2 and Windows 10, not Windows Server 2016. The blog said pricing and availability for Server 2016 were expected later, so check the current ESU page of Microsoft before you plan around it."
+    a: "Yes, as a paid option. The Learn ESU FAQ describes a last resort paid option for up to three years, with critical and important security updates only and no new features or general support. Its availability table lists Windows Server 2016 with an ESU start of January 12, 2027 and Year 1, 2 and 3 ending January 11, 2028, January 9, 2029 and January 8, 2030. Standard and Datacenter editions are eligible, and in Azure the FAQ says ESUs for Server 2016 are a paid offering, not free. The blog said details on pricing and availability would follow in the next few months, so check the current ESU pages of Microsoft before you plan around it."
 ---
 
 Windows Server 2016 passed its end of support on January 12, 2027. For anyone who still runs it, the planning is no longer about a deadline ahead but about the servers that are running without updates today. This article collects what the Microsoft Learn pages and a Microsoft blog post say about the date, the related components, the upgrade target and the Extended Security Updates program, and it says clearly what they do not cover. My own advice is marked.
@@ -35,7 +35,7 @@ Pages differ slightly:
 - The Windows IT Pro Blog post on Windows Server 2016 and the Windows 10 2016 LTSB gives January 12, 2027 as well.
 - The lifecycle product page for Windows Server 2016 shows a start date of 10/15/2016, a mainstream end date of 1/12/2022 and an extended end date of **1/13/2027 6:59:59 AM**, with dates shown in Pacific Time. It lists the editions Datacenter, Essentials, MultiPoint Premium and Standard.
 
-The product page and the other two describe the same cutoff in different forms. For planning, treat support as ended on January 12, 2027. That was a short time ago, so the question now is how fast servers move, not whether to move.
+The product page differs from the other two by a day, and the pages do not say why. For planning, treat support as ended on January 12, 2027. That was a short time ago, so the question now is how fast servers move, not whether to move.
 
 ## What end of support means
 
@@ -61,7 +61,7 @@ The page also says HPC Pack 2016 retires in Azure on the same date. Other produc
 
 ## Upgrade target
 
-The Windows IT Pro Blog post names Windows Server 2025 as the upgrade target for Windows Server 2016. The post is from February 2026 and was updated in October 2026, and I did not find newer Microsoft guidance on the page. For supported upgrade paths and application compatibility, use the Windows Server upgrade documentation.
+The Windows IT Pro Blog post names Windows Server 2025 as the upgrade target for Windows Server 2016. The post is from February 2026 and was updated in October 2026. For supported upgrade paths and application compatibility, use the Windows Server upgrade documentation.
 
 ## Extended Security Updates
 
@@ -70,17 +70,18 @@ The Learn ESU FAQ describes the program in general terms:
 - It is a last resort paid option for customers who need to run certain legacy products past the end of support. It is a temporary bridge, not a long-term solution.
 - It includes critical and important security updates, as defined by the Microsoft Security Response Center, up to three years after the end of extended support.
 - It does not extend the lifecycle. It excludes new features, non-security updates requested by customers, and design change requests.
-- Technical support is not included. Support for ESU is limited to ESU activation, installation, and problems caused by a security update.
+- Technical support is not included. Support for products with ESU coverage is limited to deployment, installation and activation of ESU keys, licenses and updates; bugs or regressions introduced by a security update; and help with known and documented issues of the underlying operating system.
 - ESUs for Year 2 and Year 3 require the prior years. Late enrollment means paying for the missed periods.
 
-For Windows Server outside Azure, the FAQ describes two licensing routes: Azure Arc-enabled servers, which it recommends for flexibility, or ESU licenses through commercial licensing. Eligibility requires active Software Assurance, active subscription licenses, or license-included service from a SPLA partner. In Azure, the FAQ says ESUs are free for virtual machines in Azure.
+For Windows Server outside Azure, the FAQ describes two licensing routes: Azure Arc-enabled servers, which it recommends for flexibility, or ESU licenses through commercial licensing. Eligibility requires active Software Assurance, active subscription licenses, or license-included service from a SPLA partner. In Azure, the FAQ says ESUs are free for Azure virtual machines running Windows Server 2012 and 2012 R2, but for Windows Server 2016 they are a paid offering in Azure.
 
-Important limits of what I can tell you:
+What the pages say and do not say about Server 2016:
 
-- The FAQ availability table lists Windows Server 2012/R2 and Windows 10. It does not list Windows Server 2016, and the specific rules, such as pricing and the Azure terms, are written for the products in that table.
-- The blog says ESU for Server 2016 is a temporary option if upgrades cannot finish by the end date, and that pricing and availability were expected in the following months. I could not find the final terms.
+- The FAQ availability table lists Windows Server 2016 with an ESU start of January 12, 2027 and Year 1, 2 and 3 ending January 11, 2028, January 9, 2029 and January 8, 2030, for critical and important updates. The lifecycle product page shows the same three ESU years. The FAQ says Standard and Datacenter editions are eligible. It gives no Server 2016 price.
+- The blog says you can buy ESU for up to three years if you cannot upgrade by January 12, 2027, and that details on pricing and availability would follow in the next few months.
+- One FAQ answer on that page says Windows Server 2016 Extended Support ends on January 12, 2026. That conflicts with the lifecycle pages, which give 2027, and this article follows the 2027 dates.
 
-So for Server 2016, confirm the current ESU terms with Microsoft or your partner before you plan around them. I do not state prices or Azure terms for Server 2016 here.
+So for Server 2016, confirm the current ESU terms with Microsoft or your partner before you plan around them. That is my advice, and this article states no prices.
 
 ## Work plan for the servers you still have (my advice)
 
