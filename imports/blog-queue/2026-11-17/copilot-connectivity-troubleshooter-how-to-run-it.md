@@ -25,7 +25,7 @@ faq:
     a: "No. Microsoft Learn describes it as a separate tool at connectivity.m365.cloud.microsoft. It runs tests on the user's machine, including three Copilot tests, and can upload a report to the tenant when the user is signed in."
 ---
 
-The Copilot connectivity troubleshooter is a guided check in the Windows Get Help app. Open Get Help, search for "Copilot connectivity troubleshooter" and follow the steps. Microsoft says it checks for firewall rules and other things that could block the connection to Copilot. For hard numbers such as latency, use Microsoft's separate network connectivity test.
+The Copilot connectivity troubleshooter is a guided check in the Windows Get Help app. Open Get Help, search for "Copilot connectivity troubleshooter" and follow the steps. Microsoft says it checks for firewall rules and other things that could block the connection to Copilot. For hard numbers such as latency, use Microsoft's separate network connectivity test. This guide gives the troubleshooting steps in order, from the quick Get Help check to the network checks behind common Copilot issues.
 
 ## What the troubleshooter is for
 
@@ -34,7 +34,7 @@ Microsoft Support lists two Copilot troubleshooters in Get Help:
 - **Copilot license troubleshooter.** For users who think they have a Copilot license but do not see the Copilot icon in eligible Microsoft 365 apps.
 - **Copilot connectivity troubleshooter.** For trouble connecting to Copilot. It checks for firewall rules and other things that could block the connection.
 
-Pick the one that matches the symptom. A missing icon points to the license troubleshooter. A Copilot that opens but never answers, or fails to load, points to connectivity.
+Pick the one that matches the symptom. A missing icon points to the license troubleshooter. A Copilot not responding (it opens but never answers) or failing to load points to a connectivity issue. A stable internet connection is the first thing to rule out before you look at firewalls. Used in this order, the two troubleshooters help you fix common Copilot problems without opening a ticket first.
 
 ## How to run it
 
@@ -74,7 +74,7 @@ Microsoft's requirements page also points to a Copilot app connectivity test at 
 
 ## What to do with a failed test
 
-The requirements page lists the usual suspects and asks you to work with the teams that manage proxies, firewalls and secure web gateways:
+The requirements page lists the common issues behind Copilot connectivity problems and asks you to work with the teams that manage proxies, firewalls and secure web gateways. If you are not the administrator, contact your Microsoft 365 admin with this list:
 
 1. Allow the entire `*.cloud.microsoft` domain. Allowing only selected URLs inside it is not supported.
 2. Verify WSS to `*.office.com`, `*.cloud.microsoft` and `copilot.cloud.microsoft`.
@@ -84,9 +84,9 @@ The requirements page lists the usual suspects and asks you to work with the tea
 
 ## When the troubleshooter does not help
 
-If both tools pass and Copilot still fails, go back to the account side. Microsoft Learn lists a newly assigned license, a mix of personal and work accounts, device-based licensing, an unsupported update channel and blocked connected experiences as causes of Copilot not working in Microsoft 365 apps. The related checklist on Copilot not working in Microsoft 365 apps walks through them.
+If both tools pass and Copilot still fails, go back to the account side. Copilot requires an assigned license, so a newly assigned license is one of the first things to recheck. Microsoft Learn lists a newly assigned license, a mix of personal and work accounts, device-based licensing, an unsupported update channel and blocked connected experiences as causes of Copilot not working in Microsoft 365 apps. The related checklist on Copilot not working in Microsoft 365 apps walks through them.
 
-Information to send with a support request: the exact message, the time, the network (home or corporate), the troubleshooter's finding and the result of each Copilot test.
+If nothing helps, contact Microsoft support. Information to send with a support request: the exact message, the time, the network (home or corporate), the troubleshooter's finding and the result of each Copilot test. For ongoing issues, repeat the Copilot tests on the affected network and compare the results.
 
 ## Related
 
