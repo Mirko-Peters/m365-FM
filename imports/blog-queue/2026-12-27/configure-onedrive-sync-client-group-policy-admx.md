@@ -25,7 +25,7 @@ faq:
     a: "500 MB for the policy that sets the maximum size of a user's OneDrive that can download automatically. Users above the threshold choose folders before download."
 ---
 
-Group Policy is the usual way to configure the OneDrive sync app across a domain. You install the sync app to get the ADMX files, copy them to your policy store and then configure the settings. This guide follows the Microsoft Learn article on using Group Policy to control OneDrive sync settings.
+Group Policy is the usual way to configure the OneDrive sync app across a domain. You install the sync app to get the ADMX files, copy them to your policy store and then configure the settings. This guide follows the Microsoft Learn article on using OneDrive policies to control sync settings.
 
 ## Get and install the policy files
 
@@ -51,11 +51,11 @@ The policies write registry keys under `HKLM\SOFTWARE\Policies\Microsoft\OneDriv
 | Use OneDrive Files On-Demand | Needs Windows 10 Fall Creators Update (1709) or later. Microsoft recommends keeping it enabled. Registry value `FilesOnDemandEnabled`. |
 | Prompt users to move Windows known folders to OneDrive | Needs the tenant ID. Users who close the window get a reminder in the Activity Center until all known folders move. |
 
-The first five apply to Group Policy and Intune, as the page states for each.
+The page marks all six as applying to Group Policy and Intune.
 
 ## Other policies named on the page
 
-Computer policies include allowing or blocking syncing for specific organizations, excluding file types, limiting the upload rate, requiring confirmation of large deletes, setting the sync app update ring and warning users who are low on disk space. User policies include continuing to sync on metered networks, limiting download and upload speed, preventing users from changing the OneDrive folder location, preventing personal OneDrive sync and starting OneDrive automatically at sign-in. The page says there are roughly 80 policies and includes a string index.
+Computer policies include allowing or blocking syncing for specific organizations, excluding file types, limiting the upload rate, requiring confirmation of large deletes, setting the sync app update ring and warning users who are low on disk space. User policies include continuing to sync on metered networks, limiting download and upload speed, preventing users from changing the OneDrive folder location, preventing personal OneDrive sync and starting OneDrive automatically at sign-in. The page lists about 55 policies in its string ID index.
 
 ## A rollout order
 
@@ -81,4 +81,4 @@ The page does not cover Intune configuration, which it links separately, full de
 
 ## Sources
 
-- [Use Group Policy to control OneDrive sync client settings](https://learn.microsoft.com/sharepoint/use-group-policy)
+- [IT Admins - Use OneDrive policies to control sync settings (Microsoft Learn)](https://learn.microsoft.com/sharepoint/use-group-policy)
