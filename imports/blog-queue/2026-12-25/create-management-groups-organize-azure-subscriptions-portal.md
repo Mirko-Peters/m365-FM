@@ -82,5 +82,5 @@ The quickstart does not explain moving subscriptions, hierarchy protection detai
 
 ## Sources
 
-- [Create management groups for resource organization using the Azure portal](https://learn.microsoft.com/azure/governance/management-groups/create-management-group-portal)
-- [What are Azure management groups?](https://learn.microsoft.com/azure/governance/management-groups/overview)
+- [Quickstart: Create a management group with portal (Microsoft Learn)](https://learn.microsoft.com/azure/governance/management-groups/create-management-group-portal)
+- [Organize your resources with management groups (Microsoft Learn)](https://learn.microsoft.com/azure/governance/management-groups/overview)
