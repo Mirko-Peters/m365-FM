@@ -11,16 +11,16 @@ keypoints:
   - "Standard protection rules can typically go straight to Block or Warn. Test the other rules in Audit mode."
   - "Review audit data in the ASR rules report under Reports > Endpoints, in advanced hunting with ActionType starting with Asr, or in Event Viewer with event ID 1122."
   - "Rule modes use the values 0 off, 1 block, 2 audit, 5 not configured and 6 warn."
-  - "Excluded files run without any report or event, so use per-rule exclusions and prefer them to turning a rule off."
+  - "Excluded files run without any report or event. Learn calls rule exclusions better than turning a rule off or switching it back to Audit."
 faq:
   - q: "How do I turn on ASR rules in audit mode?"
-    a: "According to Microsoft Learn, the recommended method is Intune. Go to Endpoint security, then Attack surface reduction, select Create policy, choose the Windows platform and the Attack Surface Reduction Rules profile, and set each rule to Audit. Group Policy, Configuration Manager, MDM and PowerShell also work, and the deployment method does not affect the reporting data."
+    a: "According to Microsoft Learn, the recommended method is Intune. Go to Endpoint security, then Attack surface reduction, select Create policy, choose the Windows platform and the Attack Surface Reduction Rules profile, and set each rule to Audit. Group Policy, Configuration Manager, MDM and PowerShell also work, and the deployment method does not affect the reporting data as long as the devices are enrolled in Defender for Endpoint."
   - q: "Where do I see what audit mode would have blocked?"
-    a: "Microsoft Learn lists the ASR rules report in the Microsoft Defender portal, the device timeline, advanced hunting and Windows Event Viewer. Event ID 1122 in Microsoft-Windows-Windows Defender Operational marks rules in Audit mode. The first three need Defender for Endpoint Plan 2 or Defender for Business, except the report, which Learn also lists for Plan 1."
+    a: "Microsoft Learn lists the ASR rules report in the Microsoft Defender portal, the device timeline, advanced hunting and Windows Event Viewer. Event ID 1122 in Microsoft-Windows-Windows Defender Operational marks rules in Audit mode. Learn says the report and the device timeline need Defender for Endpoint Plan 2 or Defender for Business, advanced hunting needs Plan 2, and Event Viewer works with any plan."
   - q: "How do I query ASR events in advanced hunting?"
     a: "Microsoft Learn shows a query on the DeviceEvents table that filters ActionType with startswith 'Asr' and reads AdditionalFields for IsAudit and RuleId. Each rule has its own action types, such as AsrOfficeChildProcessAudited and AsrOfficeChildProcessBlocked."
   - q: "Should I exclude files or turn the rule off when it causes false positives?"
-    a: "Microsoft Learn says rule exclusions are better than turning off rules or switching them back to Audit mode, and that Warn mode can limit disruption without disabling a rule. It also warns that excluded files are allowed to run and that no report or event is recorded for them."
+    a: "Microsoft Learn says rule exclusions are better than turning off rules or switching them back to Audit mode, and that Warn mode can limit disruption without disabling a rule. It also warns that excluded files are allowed to run and that no report or event is recorded for them. The ASR rules report page, however, advises switching a rule to Audit mode to investigate files you believe should not be detected. Learn does not reconcile the two tips."
   - q: "Which rules do not support warn mode?"
     a: "Microsoft Learn marks two: Block credential stealing from the Windows local security authority subsystem, and Block Office applications from injecting code into other processes. Warn mode is supported by most other rules."
 ---
@@ -31,7 +31,7 @@ The safe path for ASR rules is the one Microsoft Learn describes: turn the rules
 
 Before testing, disable any ASR rules that are currently in Block or Warn mode, and use the ASR rules report to find them. Start with ring 1, a small pilot group of devices or ASR rule champions. Learn says standard protection rules can typically be enabled in Block or Warn mode without testing, and the other rules should be tested in Audit mode first.
 
-The rule modes use these values in Intune, Group Policy and MDM:
+Learn lists these rule mode values for Group Policy, MDM and Intune custom profiles with OMA-URI:
 
 | Mode | Value |
 |---|---|
@@ -56,7 +56,7 @@ The rule modes use these values in Intune, Group Policy and MDM:
 Set-MpPreference -AttackSurfaceReductionRules_Ids <RuleGUID1>,<RuleGUID2> -AttackSurfaceReductionRules_Actions AuditMode,AuditMode
 ```
 
-Learn notes that `Set-MpPreference` overwrites the existing rule list. Local settings have the lowest precedence, and any policy-based method overwrites them at startup.
+Learn notes that `Set-MpPreference` overwrites the existing rule list, while `Add-MpPreference` adds rules without touching existing values. Local settings have the lowest precedence, and any policy-based method overwrites them at startup.
 
 ### Avoid conflicts
 
@@ -68,7 +68,7 @@ Learn lists four review methods:
 
 | Method | Needs |
 |---|---|
-| ASR rules report in the Defender portal | Defender for Endpoint Plan 1 or 2, or Defender for Business |
+| ASR rules report in the Defender portal | Plan 2 or Defender for Business |
 | Device timeline | Plan 2 or Defender for Business |
 | Advanced hunting | Plan 2 |
 | Windows Event Viewer | Any plan |
@@ -87,11 +87,11 @@ DeviceEvents
 | where FileName == 'svchost.exe'
 | where ActionType startswith 'Asr'
 | extend ParsedFields=parse_json(AdditionalFields)
-| distinct ActionType, Audit=tostring(ParsedFields.IsAudit), InitiatingProcessFileName, InitiatingProcessCommandLine, FolderPath, FileName, ProcessCommandLine, ASRRuleId=tostring(ParsedFields.RuleId)
+| distinct ActionType, Audit=tostring(ParsedFields.IsAudit), InitiatingProcessParentFileName, InitiatingProcessFolderPath, InitiatingProcessFileName, InitiatingProcessCommandLine, FolderPath, FileName, ProcessCommandLine, ASRRuleId=tostring(ParsedFields.RuleId)
 | take 1000
 ```
 
-Each rule has paired action types, for example `AsrOfficeChildProcessAudited` and `AsrOfficeChildProcessBlocked`. The warn-capable rules can also show a bypass action type.
+Most rules have paired action types, for example `AsrOfficeChildProcessAudited` and `AsrOfficeChildProcessBlocked`. Learn lists a WarnBypassed action type for at least two rules, for example `AsrSafeModeRebootWarnBypassed`.
 
 ### Event Viewer
 
@@ -103,9 +103,9 @@ With Plan 2, Defender Vulnerability Management recommendations under **Exposure 
 
 ## Step 4: Add exclusions
 
-Learn warns that excluded files are allowed to run, and no report or event is recorded for them. Use the same method as for the rules. In Intune, an **ASR only per rule exclusions** section appears after you set a rule to Audit, Block or Warn. Global exclusions use paths such as `"C:\folder"`. In Group Policy, per-rule exclusions use the rule GUID as the value name. Quotation marks and extra spaces are not supported in ASR values in Group Policy. If **Disable admin merge** is true, per-rule or local exclusions do not apply.
+Learn warns that excluded files are allowed to run, and no report or event is recorded for them. Use the same method as for the rules. In Intune, an **ASR only per rule exclusions** section appears after you set a rule to Audit, Block or Warn. Global exclusions use paths such as `C:\folder`. In Group Policy, per-rule exclusions use the rule GUID as the value name and need Administrative Templates version 24H2 or later. Quotation marks and extra spaces are not supported in ASR values in Group Policy. If **Disable admin merge** is true, per-rule or local exclusions do not apply.
 
-The report's flyout can open Intune to add an exclusion and can generate `AsrExclusionPaths.csv` with the file paths.
+On the report's **Add exclusions** tab, the **Summary & expected impact** pane for selected files can open Intune with **Add exclusions** or generate `AsrExclusionPaths.csv` with **Get selected exclusion paths**.
 
 ## Step 5: Move to warn or block
 
@@ -123,7 +123,7 @@ Some rules have extra requirements. Three need cloud-delivered protection: execu
 
 ## What the sources do not say
 
-The pages read give no fixed audit period. They do not describe the block event ID, and the report page did not include Event Viewer details. Verify event IDs for Block and Warn in the ASR reference before building alerts.
+The pages read give no fixed audit period. They do not describe the block event ID, and the report page did not include Event Viewer details. Verify event IDs for Block and Warn on Learn's page for viewing ASR events in Windows Event Viewer (linked from the test page, which I did not read) before building alerts.
 
 ## Related
 
@@ -134,7 +134,7 @@ The pages read give no fixed audit period. They do not describe the block event 
 
 ## Sources
 
-- [Test attack surface reduction rules](https://learn.microsoft.com/en-us/defender-endpoint/attack-surface-reduction-rules-deployment-test)
-- [Enable attack surface reduction rules](https://learn.microsoft.com/en-us/defender-endpoint/enable-attack-surface-reduction)
-- [ASR rules report in the Microsoft Defender portal](https://learn.microsoft.com/en-us/defender-endpoint/attack-surface-reduction-rules-report)
-- [Attack surface reduction rules reference](https://learn.microsoft.com/en-us/defender-endpoint/attack-surface-reduction-rules-reference)
+- [Test your ASR rules deployment](https://learn.microsoft.com/en-us/defender-endpoint/attack-surface-reduction-rules-deployment-test)
+- [Configure ASR rules and exclusions](https://learn.microsoft.com/en-us/defender-endpoint/attack-surface-reduction-rules-configure)
+- [ASR rules report](https://learn.microsoft.com/en-us/defender-endpoint/attack-surface-reduction-rules-report)
+- [ASR rules reference](https://learn.microsoft.com/en-us/defender-endpoint/attack-surface-reduction-rules-reference)
