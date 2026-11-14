@@ -11,7 +11,7 @@ keypoints:
   - "Each new post gets a relevance of High, Medium or Low. Major updates are communicated at least 30 days in advance when action is required and carry the Major update tag."
   - "Preferences has a Custom View tab to choose services and an Email tab for the weekly digest, major update emails and data privacy emails."
   - "Archiving is per user, and restoring is done from the Archive tab. Messages can be synced to Microsoft Planner to track tasks."
-  - "The page does not say how long messages are kept, and it does not describe sharing through Teams."
+  - "The page does not say how long messages are kept, and it does not describe the roadmap itself."
 faq:
   - q: "Where do I find the Message center?"
     a: "According to Microsoft Learn, in the Microsoft 365 admin center under Health, then Message center. The Microsoft 365 Admin mobile app can also show it and send push notifications."
@@ -25,7 +25,7 @@ faq:
     a: "Yes. Learn says you can sync Message center messages to Microsoft Planner to track required tasks, owners, deadlines and completion, and links a separate article for setup."
 ---
 
-The Message center is where Microsoft announces new and changed features for Microsoft 365 services. This guide follows the Microsoft Learn article on tracking new and changed features and covers what an admin can configure.
+The Message center is where Microsoft announces new and changed features for Microsoft 365 services. This guide follows the Microsoft Learn article on preparing for Microsoft 365 updates with Message center and covers what an admin can configure.
 
 ## Open it
 
@@ -62,7 +62,7 @@ Under **Preferences**, the **Custom View** tab lets you select the services to m
 
 ## Share, archive and track
 
-- To share, select a message, then **Share**, and enter addresses. To copy a link, use **More options** and **Copy link**. Recipients need Message center access.
+- To share, select a message, then **Share**, and enter addresses. To copy a link that you can paste into an email or a chat, use **More options** and **Copy link**. Whoever opens the link needs Message center access.
 - Archive a message with **Archive**. Archiving is per user. Restore it from the **Archive** tab.
 - Each post can show the number of users of the service in the last 28 days, though not for all services.
 - Sync messages to Microsoft Planner to track tasks, owners and deadlines.
@@ -83,7 +83,7 @@ This is a suggestion, not Microsoft guidance.
 
 ## Not covered
 
-The page does not state how long messages are retained, does not describe sharing through Teams, and does not describe the roadmap itself beyond the status field.
+The page does not state how long messages are retained and does not describe the roadmap itself beyond the status field.
 
 ## Related
 
@@ -92,4 +92,4 @@ The page does not state how long messages are retained, does not describe sharin
 
 ## Sources
 
-- [Track new and changed features in the Microsoft 365 Message center](https://learn.microsoft.com/microsoft-365/admin/manage/message-center)
+- [Prepare for Microsoft 365 updates with Message center (Microsoft Learn)](https://learn.microsoft.com/microsoft-365/admin/manage/message-center)
