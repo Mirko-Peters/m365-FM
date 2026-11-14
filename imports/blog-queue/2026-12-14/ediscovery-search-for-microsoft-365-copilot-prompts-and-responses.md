@@ -20,7 +20,7 @@ faq:
   - q: "Do audit logs show what users asked Copilot?"
     a: "No. Learn states that auditing captures the Copilot activity but not the actual user prompt or response, and tells you to use eDiscovery for that. The audit data is meant for security and compliance, not for usage reporting."
   - q: "Will a legal hold on a mailbox preserve Copilot Pages?"
-    a: "No. The Microsoft Security Community post says mailbox searches won't return Copilot Pages, and a mailbox hold does not extend to the SharePoint Embedded site. The hold must include that site URL."
+    a: "No. The Microsoft Security Community post says Pages are stored in a user-owned SharePoint Embedded container and are not stored in the user's mailbox, so a mailbox search will not find them. Target the SharePoint Embedded container separately."
 ---
 
 Compliance teams increasingly get asked for what a user asked Copilot and what Copilot answered. The data is retrievable, but it is spread across several stores, and a search that only targets the mailbox misses part of it. This guide explains where each type of Copilot data sits and how to collect it with Microsoft Purview eDiscovery, based on Microsoft's documentation.
@@ -33,11 +33,11 @@ Learn's compliance pages and a Microsoft Security Community post describe these 
 |---|---|---|
 | Prompts and responses | Exchange mailbox, as message-class items | Add the user's mailbox, use the Copilot activity condition |
 | Memories | Exchange contacts | Add the mailbox, item class Contacts |
-| Copilot Pages | SharePoint Embedded | Add the custodian's SharePoint Embedded site URL, or run a tenant-wide search |
+| Copilot Pages | SharePoint Embedded | Add the user-owned container URL as a data source manually |
 | Facilitator notes and documents | OneDrive | Add the OneDrive URL, filter by file type loop |
 | Facilitator tasks | Exchange mailbox | Item class Tasks |
 
-A prompt is recorded from the user's primary SMTP address to a Copilot app identity such as Microsoft 365 Chat or WebChat. The response goes the other way. Learn says that app identity is not a routable mailbox and can't receive mail.
+Copilot app identities in message headers, such as Microsoft 365 Chat or WebChat, are service-principal display names. Learn says they are not routable mailboxes and can't receive mail.
 
 ## Step 1: Get the roles right
 
@@ -83,9 +83,9 @@ For Pages in a review set, the post says full-text search of `.page` content is 
 
 A mailbox-only collection will not find everything.
 
-- **Pages** need the SharePoint Embedded site. Learn's Loop material says Loop, Copilot Pages and Copilot Notebooks share one application identity, so audit logs and eDiscovery have no separate Copilot Pages filter. For Purview targeting, you can copy a container URL from the SharePoint admin center under SharePoint Embedded > Active containers.
+- **Pages** need the SharePoint Embedded site. Learn's Loop material says Loop's My workspace shares a single user-owned SharePoint Embedded container with Copilot Pages and Copilot Notebooks, shown with the application name Loop in admin tools. It says to retrieve the container URL with PowerShell or the SharePoint admin center and add it as a data source manually.
 - **Facilitator meeting notes** sit in OneDrive. Use the OneDrive URL and a file type filter.
-- A hold on a mailbox does not extend to those sites. Add each location to the hold.
+- Pages and Facilitator notes are not stored in the mailbox, so plan holds and retention for those locations separately. The retention scopes are listed below.
 
 ## Step 5: Retention and holds
 
@@ -104,7 +104,7 @@ The audit data records that Copilot activity happened. It does not contain the p
 
 ## Deleting Copilot data after a spill
 
-Learn's search and delete page describes removing sensitive Copilot content through a Graph purge call on an eDiscovery search. Holds and retention policies must be removed first, or the data is retained, and you must record and reapply them. The page states a limit of up to 10 items per mailbox at one time. A separate classic-era page for the 21Vianet environment says 100, so confirm the current limit. Deleted data moves to the SubstrateHolds folder for at least one day and is permanently deleted when a timer job runs, typically between 1 and 7 days. The user gets no notification.
+Learn's search and delete page describes removing sensitive Copilot content through a Graph purge call on an eDiscovery search. Holds and retention policies must be removed first, or the data is retained, and you must record and reapply them. The page states a limit of up to 10 items per mailbox at one time. A separate page for Microsoft 365 operated by 21Vianet gives both 100 and 10 items, so confirm the current limit before you rely on a number. Deleted data moves to the SubstrateHolds folder for at least one day and is permanently deleted when a timer job runs, typically between 1 and 7 days. The user gets no notification.
 
 ## Checklist
 
