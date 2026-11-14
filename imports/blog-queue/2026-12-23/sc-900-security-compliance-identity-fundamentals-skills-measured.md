@@ -105,4 +105,4 @@ The page does not publish the number of questions, exam duration or price in the
 
 ## Sources
 
-- [Study guide for Exam SC-900](https://learn.microsoft.com/credentials/certifications/resources/study-guides/sc-900)
+- [Study guide for Exam SC-900: Microsoft Security, Compliance, and Identity Fundamentals (Microsoft Learn)](https://learn.microsoft.com/credentials/certifications/resources/study-guides/sc-900)
