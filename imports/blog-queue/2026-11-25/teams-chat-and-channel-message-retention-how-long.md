@@ -101,8 +101,8 @@ The reason is that a delete command from the back-end service removes the messag
 Microsoft states that Purview does not support policies that contain errors and that you must resolve them first. To check:
 
 1. In the Purview portal, open the policy and read the **Status** section. Select the policy name, not the checkbox, or the details pane does not open.
-2. In Security & Compliance PowerShell, run `Get-RetentionCompliancePolicy -Identity "<policy name>" -DistributionDetail | Select -ExpandProperty DistributionResults`. For Teams private channel messages, use the `Get-AppRetentionCompliancePolicy` cmdlet instead.
-3. Wait until the status is no longer **Pending** before you change the policy again.
+2. In Security & Compliance PowerShell, run `Get-RetentionCompliancePolicy -Identity "<policy name>" -DistributionDetail | Select -ExpandProperty DistributionResults`. The error article doesn't document `Get-AppRetentionCompliancePolicy` for this purpose, so don't assume it works the same way for policies on the older private channel location.
+3. After a retry, the policy shows a pending state until sync finishes. Check the status again afterwards.
 
 Learn lists these errors, among others:
 
