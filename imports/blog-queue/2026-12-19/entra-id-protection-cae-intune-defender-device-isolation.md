@@ -57,7 +57,7 @@ To turn ID Protection risk into access decisions, Learn describes user risk and 
 - For sign-in risk, Microsoft recommends requiring MFA when the level is **Medium** or **High**.
 - Do not combine sign-in risk and user risk in one policy.
 - The configuration path is **Entra ID** > **Conditional Access** > **New policy**, starting in report-only mode.
-- Full ID Protection features need Microsoft Entra ID P2 or the Entra Suite license. Legacy risk policies are scheduled to retire on October 1, 2026.
+- Full ID Protection features need Microsoft Entra ID P2 or the Entra Suite license. Learn says the legacy risk policies configured in ID Protection will be retired on October 1, 2026. That date has passed, so check the current state in your tenant and migrate to Conditional Access.
 
 The page says nothing about device compliance in these examples.
 
@@ -66,16 +66,16 @@ The page says nothing about device compliance in these examples.
 The device-side signal comes from Intune and Defender for Endpoint together. Learn's setup:
 
 1. In the Intune admin center, go to **Endpoint security** > **Defender for Endpoint** and check the connection status.
-2. In the Defender portal, go to **System** > **Settings** > **Endpoints** > **General** > **Advanced features** and turn on **Intune connection**.
+2. In the Defender portal, go to **System** > **Settings** > **Endpoints** > **General** > **Advanced features** and turn on **Intune connection**, then select **Save preferences**. Learn says the connection status in Intune can take up to 15 minutes to change to Enabled.
 3. In Intune, enable compliance policy evaluation for the platforms you need, for example **Connect Windows devices to Defender for Endpoint**.
 4. Onboard devices, for example with an Endpoint detection and response policy.
-5. Create a compliance policy under **Devices** > **Compliance** > **Policies** and set **Require the device to be at or under the machine risk score** to Clear, Low, Medium or High.
+5. Create a compliance policy under **Devices** > **Compliance** > **Policies** > **Create policy**. On the **Compliance settings** tab, expand **Microsoft Defender for Endpoint** and set **Require the device to be at or under the machine risk score** to Clear, Low, Medium or High. Learn lists Android, iOS/iPadOS and Windows for this policy.
 
 Devices above the threshold become **Not compliant**. Then a Conditional Access policy with **Require device to be marked as compliant** blocks access to the target resources, such as SharePoint Online. Learn advises starting in report-only mode, waiting about 24 hours and reviewing the sign-in logs.
 
-Noncompliance actions are limited. Learn lists mark noncompliant, email, remote lock on some platforms, add to the retire list and push notification. None is an isolation. Retirement removes company data and the device from Intune management, and the admin must confirm it.
+Noncompliance actions are limited. Learn lists mark noncompliant (built in, zero days by default, and the schedule can give users a grace period), email, remote lock on some platforms, add to the retire list and push notification. Learn says push delivery is not guaranteed. None is an isolation. Retirement removes company data and the device from Intune management, and the admin must confirm it.
 
-The Intune remote action list contains actions such as Retire, Wipe, Restart, Collect diagnostics, Full Scan and Quick Scan. It contains no isolate action.
+The Intune device actions page lists, for Windows, actions such as Retire, Wipe, Restart, Collect diagnostics, Full Scan and Quick Scan. None of its tables for Windows, Apple mobile, macOS, Android or ChromeOS lists an isolate action.
 
 ## Layer 4: Isolation lives in Defender for Endpoint
 
@@ -83,14 +83,16 @@ Learn describes isolation as disconnecting the compromised device from the netwo
 
 - **Manual:** select **Isolate device** on the device page, add a comment and confirm. Release with **Release from isolation**.
 - **Role:** at least the `Active remediation actions` role, plus access to the device group.
-- **Full isolation** is available on Windows 11, Windows 10 version 1703 or later and Windows Server 2012 R2 and later. Selective isolation also covers macOS. Linux is supported with prerequisites such as `iptables`.
+- **Full isolation** is available on Windows 11, Windows 10 version 1703 or later and Windows Server 2012 R2 and later. Learn also lists Azure Stack HCI OS 23H2 and later. Isolation is supported on macOS (client version 101.98.84 or later), and selective isolation covers macOS as well. Linux is supported with prerequisites such as `iptables`.
 - **Duration:** automatically lifted after seven days. Offline devices get up to three days of retries.
 - **Proxies and VPN:** devices might not recover from isolation behind web proxies, so use selective isolation. Full VPN tunnels cut the device off from the Defender cloud service, so Learn recommends split tunneling.
+- **Contain user:** Learn also describes containing a compromised identity at the endpoint layer. Onboarded devices then block attack-related incoming traffic such as network logons, RPC, SMB and RDP. It does not disable the account in the identity provider. The page says this is currently available only automatically through automatic attack disruption, and a contained user is removed from containment after five days.
+- **Hyper-V hosts:** isolating a server that runs Microsoft Hyper-V blocks network traffic to all child virtual machines of that server, per Learn.
 - **Automatic isolation:** automatic attack disruption can isolate a device that might be compromised. Learn marks this as a preview, limited to end-user workstations onboarded to Defender for Endpoint, scoped to devices involved in the incident and time-limited. Exclusions are possible with a device tag.
 
 Automatic isolation is driven by Defender detections. The page does not describe Entra ID Protection risk as a trigger.
 
-## Where the documented chain ends
+## Where the documented chain ends (my summary)
 
 A realistic design with only documented pieces:
 
@@ -99,10 +101,11 @@ A realistic design with only documented pieces:
 | High user risk in ID Protection | CAE critical event ends sessions. A user risk policy requires remediation. |
 | Device risk reported by Defender | Intune marks the device not compliant. Conditional Access blocks access. |
 | Active compromise on the device | Defender isolation, manual or via attack disruption (preview). |
+| Compromised identity seen by Defender | Contain user, currently only automatic through attack disruption. It blocks attack-related incoming traffic on onboarded devices and does not disable the account in the identity provider. |
 
 Linking the first row to the third, so that a risky identity automatically isolates its devices, is not described in the pages read. If you build it with your own automation, treat it as a custom solution: test it on a pilot group, define who can release devices, and remember the seven-day expiry and the Active remediation actions requirement.
 
-## Practical steps
+## Practical steps (my suggestion)
 
 1. Enable the Intune and Defender connection, and confirm devices are onboarded.
 2. Create the compliance policy with a machine risk threshold. Learn recommends Low for balanced security.
@@ -120,9 +123,9 @@ Linking the first row to the third, so that a risky identity automatically isola
 
 ## Sources
 
-- [Continuous access evaluation (Microsoft Learn)](https://learn.microsoft.com/en-us/entra/identity/conditional-access/concept-continuous-access-evaluation)
-- [Configure risk policies in Conditional Access (Microsoft Learn)](https://learn.microsoft.com/en-us/entra/id-protection/howto-identity-protection-configure-risk-policies)
-- [Configure Intune and Defender for Endpoint integration (Microsoft Learn)](https://learn.microsoft.com/en-us/intune/intune-service/protect/advanced-threat-protection-configure)
-- [Actions for noncompliance in Intune (Microsoft Learn)](https://learn.microsoft.com/en-us/intune/intune-service/protect/actions-for-noncompliance)
-- [Device management actions in Intune (Microsoft Learn)](https://learn.microsoft.com/en-us/intune/intune-service/remote-actions/device-management)
-- [Isolate devices in Defender for Endpoint (Microsoft Learn)](https://learn.microsoft.com/en-us/defender-endpoint/respond-machine-alerts)
+- [Continuous access evaluation in Microsoft Entra - Microsoft Entra ID](https://learn.microsoft.com/en-us/entra/identity/conditional-access/concept-continuous-access-evaluation)
+- [Risk policies - Microsoft Entra ID Protection](https://learn.microsoft.com/en-us/entra/id-protection/howto-identity-protection-configure-risk-policies)
+- [Configure Microsoft Defender for Endpoint with Intune and onboard devices - Microsoft Intune](https://learn.microsoft.com/en-us/intune/device-security/microsoft-defender/configure-integration)
+- [Configure compliance policies with actions for noncompliance in Microsoft Intune - Microsoft Intune](https://learn.microsoft.com/en-us/intune/device-security/compliance/configure-noncompliance-actions)
+- [Device Actions - Wipe, Lock, Locate, and More - Microsoft Intune](https://learn.microsoft.com/en-us/intune/device-management/actions/)
+- [Take response actions on a device in Microsoft Defender for Endpoint - Microsoft Defender for Endpoint](https://learn.microsoft.com/en-us/defender-endpoint/respond-machine-alerts)
