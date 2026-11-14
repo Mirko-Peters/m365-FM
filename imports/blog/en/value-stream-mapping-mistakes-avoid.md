@@ -99,3 +99,10 @@ Software cannot replace the walk, and it does not fix a wrong scope. It can keep
 ## Next step
 
 Review your last VSM against four themes: scope, action, data and people. Then fix the weakest one first, so that value stream mapping mistakes do not repeat in your next round.
+
+## Sources
+
+- [Avoiding the most common mistakes with VSM - Planet Lean](https://www.planet-lean.com/articles/lean-value-stream-mapping)
+- [Value Stream Mapping Gone Wrong - CMCrossroads](https://cmcrossroads.com/article/value-stream-mapping-gone-wrong)
+- [Value Stream Mapping: Lessons from the Front - IndustryWeek](https://www.industryweek.com/lean-six-sigma/value-stream-mapping-lessons-front)
+- [Practical Tips for Value Stream Mapping - AllAboutLean.com](https://www.allaboutlean.com/vsm-pitfalls/)
