@@ -16,7 +16,7 @@ faq:
   - q: "What is a SharePoint site collection?"
     a: "The SharePoint Server documentation on Microsoft Learn defines a site collection as one top-level site and all sites below it. That page covers SharePoint Server, not Microsoft 365. For Microsoft 365, a community article from the PnP project says each site is created as a separate site collection, whether it is a team site or a communication site."
   - q: "Are subsites still supported?"
-    a: "Yes, but Microsoft recommends hub sites instead. The planning page on Microsoft Learn says hub sites solve many or most of the use cases for which subsites were used, and that subsites continue to be supported as a classic feature."
+    a: "Yes, but Microsoft recommends hub sites instead. The planning page on Microsoft Learn recommends hub sites for organizing intranet sites going forward and says subsites continue to be supported as a classic feature."
   - q: "Does joining a hub change who can see a site?"
     a: "No. According to Microsoft Learn, association with a hub does not change the permissions on a site. Content rolled up on the hub is security trimmed, so people see only what they already have access to."
   - q: "How many hub sites can I have?"
@@ -76,7 +76,7 @@ Learn describes the model this way: hubs model relationships as links rather tha
 | Hub navigation depth | Up to three levels |
 | Sites in hub navigation | Technically no more than 500, practically no more than 100 |
 | Hub-to-hub association | Up to three levels |
-| Sites associated with a hub | No limit stated |
+| Sites associated with a hub | No hard limit (the creation page says no limit; the planning page says approximately 2,000 and warns performance may suffer with large numbers) |
 | Lists and libraries per site collection | 2,000 |
 
 Learn also states that sites already associated with another hub cannot be converted to a hub site, and that Microsoft recommends a communication site, or a team site on the new template, as the hub.
@@ -93,7 +93,7 @@ Leaving the association box empty lets any user associate a site. To change the 
 
 ## Which one to use
 
-For a new project, create a site and, if it belongs to a group of related sites, associate it with a hub. Use subsites only when you maintain an older structure. When you need to move away from subsites, Microsoft's guidance suggests that hubs now cover most of the cases subsites were used for.
+For a new project, create a site and, if it belongs to a group of related sites, associate it with a hub. Use subsites only when you maintain an older structure. When you need to move away from subsites, Microsoft's planning page recommends hub sites for organizing intranet sites going forward.
 
 ## Related
 
