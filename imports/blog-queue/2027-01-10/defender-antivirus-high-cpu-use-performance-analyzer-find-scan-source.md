@@ -7,7 +7,7 @@ author: mirko-p
 date: 2027-01-10
 topics: [microsoft-defender-for-endpoint]
 keypoints:
-  - "The performance analyzer is a PowerShell tool that identifies files, extensions and processes that slow antivirus scans on one endpoint. It applies to Defender for Endpoint Plan 1 and Plan 2."
+  - "The performance analyzer is a PowerShell tool that identifies files, extensions and processes that might slow antivirus scans on one endpoint. The page names no licensing."
   - "It needs platform version 4.18.2108.7 or later. Record with New-MpPerformanceRecording in an elevated PowerShell window while you reproduce the slowdown."
   - "Analyze the .etl file with Get-MpPerformanceReport, for example with -TopFiles and -TopScansPerFile."
   - "The SkipReason column, from version 4.18.2206.X, shows Not Skipped, Optimization or User skipped."
@@ -25,11 +25,11 @@ faq:
     a: "The page shows the command wpr -cancel -instancename MSFT_MpPerformanceRecording to cancel the existing recording."
 ---
 
-When Microsoft Defender Antivirus uses a lot of CPU, the first question is which files, extensions or processes trigger the scans. The performance analyzer answers it with a recording and a report. This guide follows the Microsoft Learn page on tuning Defender Antivirus performance. The page applies to Microsoft Defender for Endpoint Plan 1 and Plan 2.
+When Microsoft Defender Antivirus uses a lot of CPU, the first question is which files, extensions or processes trigger the scans. The performance analyzer answers it with a recording and a report. This guide follows the Microsoft Learn page Performance analyzer for Microsoft Defender Antivirus. The page itself does not name a licensing plan.
 
 ## What it is
 
-The performance analyzer is a PowerShell tool. It helps identify files, file extensions and processes that cause performance problems during antivirus scans on an individual endpoint.
+The performance analyzer is a PowerShell command-line tool. It helps determine files, file extensions and processes that might be causing performance issues during antivirus scans on an individual endpoint. Learn says you can use the information to assess performance issues and apply remediation actions.
 
 ## Requirements
 
@@ -80,7 +80,7 @@ From Defender version 4.18.2206.X the report has a SkipReason column:
 (Get-MpPerformanceReport -Path .\Repro-Install.etl -Topscans 1000).TopScans | Export-CSV -Path .\Repro-Install-Scans.csv -Encoding UTF8 -NoTypeInformation
 ```
 
-The page also shows conversion to CSV output with ConvertTo-Csv for the top 100 scans and to JSON with a depth of one level for the top 1000. It recommends the -Raw parameter for machine-readable output and gives no example. The page writes the parameter as -TopScansPerFile in one example and -Topscans in others, so check the cmdlet reference before scripting.
+The page also shows conversion to CSV output with ConvertTo-Csv for the top 100 scans and to JSON with a depth of one level for the top 1000. It recommends the -Raw parameter for machine-readable output and gives no example. The page uses -TopScansPerFile in the analyze example and -Topscans in the export examples. It does not explain the two names, so check the cmdlet reference before scripting.
 
 ## What the page does not say
 
@@ -91,7 +91,7 @@ The page also shows conversion to CSV output with ConvertTo-Csv for the top 100 
 
 ## A troubleshooting routine
 
-This routine is practical advice built on the page.
+This routine is my advice, built on the page.
 
 1. Confirm the platform version first.
 2. Record while the slowdown is happening, not afterwards.
@@ -99,7 +99,7 @@ This routine is practical advice built on the page.
 4. Check SkipReason to see whether exclusions already apply.
 5. Decide on changes using the separate exclusion and tuning documentation.
 
-## Typical mistakes
+## Typical mistakes (my advice)
 
 - Recording without reproducing the slow scenario.
 - Using a relative or short path for the .etl file.
@@ -119,7 +119,7 @@ This routine is practical advice built on the page.
 
 ## What the report columns tell you
 
-Each row shows how often a path, file, process or extension was scanned and how long the scans took. The page lists total, minimum, average, maximum and median duration, plus the path, the process and the reason for the scan. A file with a high total duration, or a process that triggers many scans, is the first thing to look at. The combined views, such as top scans per file per process, help when one file is scanned by several processes.
+The page says the data covers scan counts, duration (total, minimum, average, maximum and median), path, process and reason for the scan. My reading, not stated on the page: a file with a high total duration, or a process that triggers many scans, is the first thing to look at, and the combined views, such as top scans per file per process, help when one file is scanned by several processes.
 
 ## Related
 
