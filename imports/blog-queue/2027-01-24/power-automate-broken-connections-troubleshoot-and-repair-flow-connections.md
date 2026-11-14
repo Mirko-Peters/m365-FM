@@ -141,7 +141,9 @@ Fix:
 3. Repair or re-create the connection.
 4. To prevent it, exclude service accounts and dedicated flow connection owners from Conditional Access policies with Terms of Use grant controls.
 
-## Quick map
+## Quick map (my reading)
+
+The columns on who acts are my own reading, not part of the Learn page.
 
 | What you see | Likely cause | Who acts |
 | --- | --- | --- |
