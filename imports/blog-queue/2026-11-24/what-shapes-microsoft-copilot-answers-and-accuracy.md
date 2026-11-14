@@ -22,7 +22,7 @@ faq:
   - q: "Can Copilot check its own answers?"
     a: "Only in part. Microsoft's validation guidance says Copilot can help validate its output, for example as a reviewer or gap finder, but it can't certify its own correctness. Verify against trusted sources when the stakes are high."
 ---
-A Copilot answer is shaped by five things: the prompt, the data used to ground it, the permissions of the person asking, the license and tenant setup, and the model mode. On accuracy, Microsoft is direct. Copilot can be wrong, and its pages say to review and verify the output. This article sorts the factors that move quality and lists the checks Microsoft recommends. Microsoft Learn now calls the product Microsoft Copilot. Older pages say Microsoft 365 Copilot.
+A Copilot answer is shaped by five things: the prompt, the data used to ground it, the permissions of the person asking, the license and tenant setup, and the model mode. On accuracy, Microsoft is direct. Copilot can be wrong, and its pages say to review and verify the output. This article sorts the factors that move quality and lists the checks Microsoft recommends. Microsoft Learn pages use both the names Microsoft Copilot and Microsoft 365 Copilot, for example in the Basic and Premium tier names.
 
 ## How a response is produced
 
@@ -43,15 +43,15 @@ Microsoft says that writing good prompts is key to better outcomes. Its recommen
 
 ### Grounding data
 
-Responses are grounded in Microsoft Graph data such as emails, chats, files and calendars. Organizations can extend Microsoft Graph with sources like CRM systems or external file repositories. Allowing web references can also improve responses. Web content comes through the Bing Search service. Microsoft's architecture page adds that web search grounding can be managed with the Allow web search in Copilot policy.
+The transparency note says Copilot adds content found through Microsoft Graph and makes further grounding calls to Microsoft Graph. Allowing web references can also improve responses. Microsoft's architecture page adds that web search grounding can be managed with the Allow web search in Copilot policy.
 
 ### Permissions
 
-Copilot only surfaces organizational data the user has at least view permissions for. Two people can send the same prompt and get different answers because they can open different content. The security overview also notes that overshared or poorly governed content can affect Copilot results and increase risk.
+Copilot only accesses data that users are authorized to access, based on existing access controls. Two people can send the same prompt and get different answers because they can open different content. The security overview also notes that overshared or poorly governed content can affect Copilot results and increase risk.
 
 ### License tier and tenant setup
 
-The architecture page says experiences differ by data grounding, integration depth and licensing. Copilot Chat (Basic) responses are grounded in the public web. Microsoft 365 Copilot (Premium) uses both web and organizational data through Microsoft Graph and Work IQ. Basic users don't have access to Microsoft Graph. They must supply organizational content manually, for example by uploading a file. Chat experiences in Microsoft 365 apps also vary with tenant configuration and license.
+The architecture page says experiences differ by data grounding, integration depth and licensing. Copilot Chat (Basic) responses are grounded in the public web. Microsoft 365 Copilot (Premium) uses both web and organizational data through Microsoft Graph and Work IQ. Basic users don't have access to Microsoft Graph. They must supply organizational content manually, for example by uploading a file.
 
 ### Model mode
 
@@ -59,7 +59,7 @@ By default, Copilot uses a real-time router to adjust the underlying model to th
 
 - **Auto.** Copilot decides which model to use.
 - **Quick response.** For common or routine questions, it prioritizes speed.
-- **Think deeper.** For complex questions, it uses a deeper reasoning model that plans, gathers context and checks its work.
+- **Think deeper.** Advanced reasoning for complex questions.
 
 ### Language
 
