@@ -49,7 +49,7 @@ The reference carries an important note: the state of this setting is only measu
 
 It sits under System security, Encryption, and applies to all drives on a device. The reference says it generically checks for the presence of encryption, more specifically at the OS drive level, and that Intune currently supports only the encryption check with BitLocker. For a more robust setting, the page suggests Require BitLocker, which uses Device Health Attestation to validate BitLocker status at the TPM level, with the reboot caveat above.
 
-So if your policy uses Require BitLocker, a device that finished encrypting an hour ago can still show Not compliant until it restarts. That is described by the reference, and it fits the troubleshooting page.
+So if your policy uses Require BitLocker, a device that finished encrypting an hour ago can still show Not compliant until it restarts. That follows from the reference note. The troubleshooting page itself does not mention a restart.
 
 ## How compliance is recalculated
 
@@ -96,7 +96,7 @@ This is my suggestion, not guidance from the pages:
 
 ## What the pages do not say
 
-The troubleshooting page names Windows 10 only. It does not describe Windows 11 in this scenario and gives no timing for how long encryption takes. I did not read the Intune BitLocker policy article, so settings for silent encryption are not covered here.
+The troubleshooting page names Windows 10 only. It does not describe Windows 11 in this scenario and gives no timing for how long encryption takes. The three pages used here do not cover the Intune BitLocker policy settings, such as silent encryption, so those are not covered here.
 
 ## Related
 
