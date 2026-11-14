@@ -11,7 +11,7 @@ keypoints:
   - "A label must be published in a label policy and assigned to the user. Changes can take up to 24 hours to apply, and group changes 24 to 48 hours."
   - "A label scoped only to Emails does not appear in Word, Excel or PowerPoint, and the reverse is also true."
   - "On Windows, the policy setting Use the Sensitivity feature in Office to apply and view sensitivity labels can hide the Sensitivity button."
-  - "The AIP add-on policy setting must be Not configured or Disabled, and Outlook mailboxes hosted on-premises are not supported for labels in several clients."
+  - "The AIP add-in policy setting must be Not configured or Disabled. Labels are not supported for on-premises mailboxes in Outlook, including shared mailboxes."
 faq:
   - q: "Why do users not see any sensitivity labels?"
     a: "According to Microsoft Learn, labels must be published to users in a label policy from the Microsoft Purview portal, and users without an assigned policy do not see the labels."
@@ -27,22 +27,22 @@ When a sensitivity label does not show in Word, Excel, PowerPoint or Outlook, th
 
 ## Check 1: Is the label published and assigned
 
-Learn says labels must be published to users from the Microsoft Purview portal, using a label policy. The path described on the label creation page is the Purview portal, **Solutions**, **Information Protection**, **Sensitivity labels**, then **Publish label** or the **Publishing policies** tab. Users who have no label policy assigned do not see the labels.
+Learn says labels must be published to users from the Microsoft Purview portal, using a label policy. The path described on the label creation page for publishing is the Purview portal, **Solutions**, **Information Protection**, **Publishing policies**, then **Publish label**. Users who have no label policy assigned do not see the labels.
 
 Also check:
 
 - Group membership. If the policy targets a group, the user must be a member.
-- Administrative units, if the policy is scoped to one.
-- Policy order. The page describes that policy order matters when several policies apply.
+- Administrative units. If your account is assigned administrative units, you must select at least one when you create the policy, and the policy then applies only to those users.
+- Policy order. The page says to review the policy order if more than one label policy might conflict for a user.
 - Sublabels in the classic scheme. A sublabel without its parent in the policy is a possible cause.
 
 ## Check 2: Wait for propagation
 
-The label creation page says changes can take up to 24 hours to apply, and some group related changes 24 to 48 hours. Do not change the configuration again during this time, because it makes the cause harder to find.
+The label creation page says changes can take up to 24 hours to apply, and some group related changes 24 to 48 hours. My advice, not a Microsoft statement: avoid changing the configuration again during this time, because it makes the cause harder to find. Learn itself says it is a good idea to wait the 24 hours before you spend time troubleshooting recent changes.
 
 ## Check 3: Label scope
 
-A label has a scope: **Files & other data assets**, **Emails**, and others. Learn warns that a label scoped only to Emails does not appear in Word, Excel or PowerPoint, and a label scoped only to files does not appear in Outlook messages. A policy that contains a label scoped to only files or only emails must also include at least one label with both scopes. A label for meetings requires files and emails scopes, according to the creation page.
+A label has a scope: **Files & other data assets**, **Emails**, and others. The Office apps article describes the scope as the way to show labels only in Outlook (Emails selected, not Files & other data assets) or only in Word, Excel and PowerPoint (Files & other data assets selected, not Emails). A label whose scope is not selected for an app is not available there. The same article says that if you use label policy settings with a label scoped to just files or just emails, the same policy must also include at least one label with both scope options. According to the creation page, you cannot select Meetings unless Files & other data assets and Emails are also selected.
 
 ## Check 4: The Windows policy setting
 
@@ -60,7 +60,7 @@ The Windows add-in from the Azure Information Protection unified labeling client
 
 ## Check 7: Mailbox location and users
 
-For Outlook for Windows, iOS, Android, Outlook on the web and the new Outlook for Windows, the mailbox must be hosted in Exchange Online. Labels are not supported for mailboxes hosted on-premises. For other Outlook clients, this also applies to shared mailboxes. Learn also notes that labels display only if the user belongs to the same tenant, and this excludes guest accounts.
+For Outlook on Windows, macOS, iOS, Android and on the web, the mailbox must be hosted in Exchange Online. Labels are not supported for mailboxes hosted on-premises. This limitation also applies to shared mailboxes, even if the users accessing them have mailboxes in Exchange Online. Learn also notes that labels display only if the user belongs to the same tenant, and this excludes guest accounts.
 
 ## Check 8: Office for the web
 
@@ -73,7 +73,7 @@ This section is a practical suggestion and not a Microsoft statement.
 1. Test with one affected user in the Purview portal: is the label in a published policy that includes this user?
 2. Compare the label scope with the app.
 3. Check the age of the change against the 24 and 48 hour values.
-4. On Windows, check the two policy settings.
+4. On Windows, check the two policy settings from checks 4 and 5.
 5. Check edition, app version, file type and mailbox hosting.
 
 ## Not covered
@@ -93,5 +93,5 @@ The pages I read do not describe the following:
 
 ## Sources
 
-- [Create and publish sensitivity labels](https://learn.microsoft.com/purview/create-sensitivity-labels)
-- [Enable sensitivity labels for Office apps](https://learn.microsoft.com/purview/sensitivity-labels-office-apps)
+- [Create and publish sensitivity labels (Microsoft Learn)](https://learn.microsoft.com/purview/create-sensitivity-labels)
+- [Manage Sensitivity Labels in Office Apps (Microsoft Learn)](https://learn.microsoft.com/purview/sensitivity-labels-office-apps)
