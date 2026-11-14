@@ -8,8 +8,8 @@ date: 2026-11-19
 topics: [copilot, word, outlook]
 keypoints:
   - "In Word, open Copilot with the Copilot Dynamic Action Button, describe the outcome, name a source with a slash if needed, and keep, discard or refine the draft."
-  - "To rewrite, select the text and use Rewrite or Edit with Copilot. A Learn training module shows Replace, Insert below and Regenerate."
-  - "To summarize a Word document, ask in the Copilot pane. For files in OneDrive or SharePoint Copilot may also show a summary at the top."
+  - "To rewrite, select the text and ask Copilot to rewrite it. A Learn training module shows Replace, Insert below and Regenerate."
+  - "To summarize a Word document, ask in the Copilot pane. A Learn training module gives a sample prompt that asks for key points and action items in a table."
   - "In Outlook, select Summary by Copilot at the top of a thread, or use Draft with Copilot in a new message and select Keep it."
   - "Review all output. Microsoft says to check facts, numbers, names and policy statements before sharing."
 faq:
@@ -20,7 +20,7 @@ faq:
   - q: "What do I need to use Copilot in Word?"
     a: "Microsoft Support says you need an eligible Microsoft 365 subscription and/or a Copilot license. It is supported in Word for Microsoft 365, Word for Mac and Word for iPad, and availability depends on your license, organization settings and platform. Copilot supports fewer languages than the Word interface."
   - q: "Does Copilot change my document without asking?"
-    a: "Microsoft Support says that for shared documents Copilot shows proposed changes in chat first and nothing is added until you approve them. For a rewrite you choose between Replace and Insert below."
+    a: "Microsoft Support says you can keep, discard, regenerate or refine a generated draft with a follow-up prompt. In the Learn training module for a rewrite you choose between Replace, Insert below and Regenerate."
   - q: "Can Copilot be wrong?"
     a: "Yes. Microsoft's Word instructions tell you to review all generated content, especially facts, numbers, citations, names and policy statements, before you share it."
 ---
@@ -35,17 +35,15 @@ If the button is missing, see Microsoft's note that Copilot sits in the Copilot 
 ## Write a draft in Word
 
 1. Open a blank document or put the cursor where you want new content.
-2. Select the **Copilot Dynamic Action Button**. The chat pane opens with Edit mode on.
+2. Select the **Copilot Dynamic Action Button**. The Copilot pane opens.
 3. Describe what you want: the topic, audience, tone, format and length.
 4. To use a source, type **/** and choose the file, email or meeting.
 5. Select **Generate**.
 6. Keep, discard, regenerate or refine the draft with a follow-up prompt.
 
-Microsoft also describes **Chat only**, which returns an answer in the pane without changing the document. For shared documents, Copilot shows proposed changes in chat first and adds nothing until you approve.
-
 ## Rewrite text in Word
 
-Select the passage and choose **Rewrite**, which Microsoft lists as a preset option, or describe a larger change in chat. A Microsoft Learn training module shows an older flow:
+Microsoft Support lists rewriting selected text as a Copilot capability. A Microsoft Learn training module shows an older flow:
 
 1. Select the text.
 2. Select **Edit Copilot** in the context menu, then **Auto Rewrite**.
@@ -56,7 +54,7 @@ To steer the result, type a prompt, for example: *Rewrite this paragraph to make
 
 ## Summarize a Word document
 
-Open the Copilot pane and ask for a summary, key takeaways, open questions or action items. A sample prompt from Microsoft Learn is: *Summarize this document. Include key points and action items in a table.* For documents saved in OneDrive or SharePoint, Copilot may show a summary at the top. Select **View more** and then **Show me a detailed summary** to expand it. When you share an unencrypted document, select **Share**, then the **Copilot** icon in the **Add a message** box to generate a summary for the share notification.
+Open the Copilot pane and ask for a summary, key takeaways, open questions or action items. A sample prompt from Microsoft Learn is: *Summarize this document. Include key points and action items in a table.* The pages read for this article do not describe other summary buttons in Word.
 
 ## Summarize an email thread in Outlook
 
@@ -88,7 +86,7 @@ Microsoft's own advice for drafting is to give topic, audience, tone, format and
 
 ## Limits and safe use
 
-- Copilot in Word works only within Word and your Microsoft 365 content and does not connect to external tools.
+- Microsoft Support says Copilot in Word can also use web information when available.
 - It supports fewer languages than Word itself.
 - Model selection in Word depends on your subscription. Others can choose Auto, Instant or Think deeper.
 - Copilot applies the proper sensitivity label to protect the document.
@@ -111,7 +109,7 @@ Microsoft's own advice for drafting is to give topic, audience, tone, format and
 ## Sources
 
 - [Microsoft Support: Welcome to Copilot in Word](https://support.microsoft.com/en-US/word/welcome-to-copilot-in-word)
-- [Microsoft Support: Draft and add content with Copilot in Word](https://support.microsoft.com/en-us/copilot-word)
+- [Microsoft Support: Draft and add content with Copilot in Word](https://support.microsoft.com/en-us/word/copilot/draft-and-add-content-with-copilot-in-word)
 - [Microsoft Learn: Elevate your content using Copilot in Word](https://learn.microsoft.com/en-us/training/modules/draft-impactful-documents-using-ai/3-elevate-document)
 - [Microsoft Support: Summarize an email thread with Copilot in Outlook](https://support.microsoft.com/en-us/outlook/summarize-an-email-thread-with-copilot-in-outlook)
 - [Microsoft Support: Draft an email message with Copilot in Outlook](https://support.microsoft.com/Outlook/copilot-pages/draft-an-email-message-with-copilot-in-outlook)
