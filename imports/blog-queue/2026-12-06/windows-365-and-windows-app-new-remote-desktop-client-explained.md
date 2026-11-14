@@ -32,8 +32,8 @@ Microsoft's Windows 365 end-user access page lists these methods:
 
 | Edition | Windows App | Web client | Microsoft Remote Desktop |
 |---|---|---|---|
-| Business | Yes | Yes | Yes, but support ended in March 2026 |
-| Enterprise | Yes | Yes | Yes, but support ended in March 2026 |
+| Business | Yes | Yes | Yes, but the page says support will end in March 2026 |
+| Enterprise | Yes | Yes | Yes, but the page says support will end in March 2026 |
 | Flex | Yes | Yes | No |
 | Government | Yes | Yes | No |
 
@@ -70,16 +70,18 @@ Steps:
 1. Install Windows App from the Microsoft Store. A standalone `.msix` installer is also available through the "What's new in Windows App" page.
 2. Open Windows App and select **Sign in**. On a managed device signed in with a work or school account, sign-in is automatic.
 3. Select the **Devices** or **Apps** tab. A tab is hidden if nothing of that type is assigned to you.
-4. Search or filter, then select **Connect** for a device, or select the app.
+4. Find the device or app, then select **Connect**. Depending on your administrator's configuration, you may be asked for your password again.
 5. Add favorites to the **Favorites** tab. Cloud PCs and Dev Boxes can also be added to **Task view** in Windows 11.
 
-If nothing appears, contact your administrator, because resources are assigned on the service side.
+Microsoft notes that your administrator must have set up the resources and made them available to you.
 
 ## Web client notes
 
-The web client needs Microsoft Edge, Google Chrome, Safari or Mozilla Firefox 55.0 or later. Microsoft says full-screen mode works only when keyboard shortcuts are turned on, which is a public preview feature, and F11 is not supported. On LG TV some features such as file transfer and clipboard are unavailable.
+The web client needs Microsoft Edge, Google Chrome, Safari or Mozilla Firefox 55.0 or later. Microsoft says that turning on the keyboard shortcuts option, which is a public preview feature, opens the web client in full-screen mode, that the shortcuts work only in full-screen mode, and that full screen through F11 is not supported. On LG TV some features such as file transfer and clipboard are unavailable.
 
 ## Migration checklist for admins
+
+This checklist is my own summary of the dates and limits above, not a Microsoft procedure.
 
 1. Find users still on the Remote Desktop MSI client or the old Store app.
 2. Move them to Windows App and test sign-in with the work or school account.
@@ -99,7 +101,7 @@ The pages do not describe a separate "new Remote Desktop client" product beyond 
 
 ## Sources
 
-- [Access a Cloud PC (Windows 365)](https://learn.microsoft.com/windows-365/end-user-access-cloud-pc)
+- [Access a Cloud PC (Windows 365)](https://learn.microsoft.com/en-us/windows-365/end-user-access-cloud-pc)
 - [What is Windows App?](https://learn.microsoft.com/en-us/windows-app/overview)
 - [Get started with Windows App](https://learn.microsoft.com/en-us/windows-app/get-started-connect-devices-desktops-apps)
-- [Remote Desktop client overview](https://learn.microsoft.com/previous-versions/remote-desktop-client/overview)
+- [Remote Desktop client overview](https://learn.microsoft.com/en-us/previous-versions/remote-desktop-client/overview)
