@@ -86,7 +86,7 @@ Learn mentions AADSTS501051, an app-only assignment failure, and points to a pag
 
 ## Assign with Graph or PowerShell
 
-The assignment page shows a Microsoft Graph call that posts to the appRoleAssignedTo endpoint of the resource service principal. It needs three identifiers: principalId, resourceId and appRoleId. The default role ID is all zeros. It lists the permissions Application.ReadWrite.All and AppRoleAssignment.ReadWrite.All. It also names cmdlets such as New-MgUserAppRoleAssignment and New-MgGroupAppRoleAssignment. Read that page before using them in production.
+The assignment page shows a Microsoft Graph call that posts to the appRoleAssignedTo endpoint of the resource service principal. It needs three identifiers: principalId, resourceId and appRoleId. The default role ID is all zeros. It lists the permissions Application.ReadWrite.All and AppRoleAssignment.ReadWrite.All. It also names cmdlets such as New-MgUserAppRoleAssignment and New-MgGroupAppRoleAssignment. My advice: read that page before using them in production.
 
 ## What the pages do not say
 
@@ -96,9 +96,9 @@ The assignment page shows a Microsoft Graph call that posts to the appRoleAssign
 - How to read token claims or a specific sign-in to confirm the cause.
 - The assignment page does not name the Assignment required setting or its location. The troubleshooting page does.
 
-## A checklist
+## A checklist (my advice)
 
-This list is practical advice.
+This list is my own advice.
 
 1. Confirm the application name from the sign-in error.
 2. Check Assignment required.
@@ -106,7 +106,7 @@ This list is practical advice.
 4. Assign the user or a group, or decide with the app owner that assignment is not required.
 5. Ask the user to sign in again.
 
-## Typical mistakes
+## Typical mistakes (my advice)
 
 - Adding a group and then relying on a user who is only in a nested group.
 - Testing as a Global Administrator.
