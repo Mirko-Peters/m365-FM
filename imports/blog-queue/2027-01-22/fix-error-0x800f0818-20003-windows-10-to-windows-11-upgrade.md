@@ -1,6 +1,6 @@
 ---
 title: "Fix Error 0x800F0818 - 0x20003 During an Upgrade From Windows 10 to Windows 11"
-summary: "A Windows 10 22H2 to Windows 11 23H2 or 24H2 feature update fails in the Safe_OS phase and rolls back with 0x800F0818 - 0x20003. Learn ties it to a legacy SetupConfig.ini and an UnattendFile registry value. Symptoms, log checks, the fix and how to read the code."
+summary: "A Windows 10 22H2 to Windows 11 23H2 or 24H2 feature update fails in the Safe_OS phase and rolls back with 0x800F0818 - 0x20003. Learn ties it to a legacy SetupConfig.ini; the fix also removes an UnattendFile registry value. Symptoms, log checks, the fix and how to read the code."
 status: review
 publish: false
 author: mirko-p
@@ -18,7 +18,7 @@ faq:
   - q: "Which devices are affected?"
     a: "Learn says devices serviced with System Center Configuration Manager, Windows Server Update Services or Windows Update for Business, that previously received a Windows 10 feature update using a custom SetupConfig.ini file, or whose earlier updates or upgrades used manually configured or deployed language packs or post-upgrade scripts."
   - q: "What is the fix?"
-    a: "Open C:\\Users\\Default\\AppData\\Local\\Microsoft\\Windows\\WSUS\\ and delete the SetupConfig.ini file. Then open Registry Editor, go to HKEY_LOCAL_MACHINE\\SYSTEM\\Setup and delete the UnattendFile entry. Learn tells you to back up the registry before modifying it and notes the AppData folder is hidden by default."
+    a: "Open C:\\Users\\Default\\AppData\\Local\\Microsoft\\Windows\\WSUS\\ and delete the SetupConfig.ini file. Then open Registry Editor, go to HKEY_LOCAL_MACHINE\\SYSTEM\\Setup and delete the UnattendFile entry. Learn tells you to back up the registry before modifying it and notes how to show hidden items if you cannot see the AppData folder."
   - q: "Which log files show the problem?"
     a: "Learn names C:\\$Windows.~BT\\Sources\\Rollback\\setupact_rollback.log for the result and extend values, and C:\\$Windows.~BT\\Sources\\Panther\\setupact.log for several entries, including the command line with the language pack and script paths and the CBS identity mismatch for a language feature package."
   - q: "How do I read the extend code?"
@@ -44,7 +44,7 @@ Learn lists two files:
 | `C:\$Windows.~BT\Sources\Rollback\setupact_rollback.log` | ImageExit lines with SetupResult 0x800f0818 and Extended 0x20003 |
 | `C:\$Windows.~BT\Sources\Panther\setupact.log` | The Setup command line with `/InstallLangPacks`, `/PostOOBE`, `/PostRollback` and `/DynamicUpdate Disable` pointing to a W10_22H2 folder, a message about copying user-provided langpack package files, and CBS lines reporting a language feature package that does not match the current OS with `0x800f0818 - CBS_E_IDENTITY_MISMATCH` |
 
-The sample on the page shows a Windows 10 language feature package (version 10.0.19041.1) where the Windows 11 version (10.0.22621.1) was expected.
+The sample on the page shows a language feature package with version 10.0.19041.1 where 10.0.22621.1 was expected. The page does not label these versions; reading them as a Windows 10 and a Windows 11 build number is my interpretation.
 
 ## Cause
 
@@ -75,11 +75,11 @@ The Learn page on upgrade error codes explains that Windows Setup returns two co
 
 The page says the tables apply to Windows 10 version 1607 and might change in later releases. The Safe_OS phase in the Windows 11 article matches the phase table.
 
-For the result code, the page's method: the first hexadecimal digit tells the type, 8 for a Win32 error code and C for an NTSTATUS value. Learn does not give a general meaning for 0x800F0818 other than this article's CBS identity mismatch.
+For the result code, the page's method: the first hexadecimal digit tells the type, 8 for a Win32 error code and C for an NTSTATUS value. The upgrade error codes page does not list 0x800F0818 itself. The CBS_E_IDENTITY_MISMATCH name comes from the log excerpt on the 0x800F0818 page.
 
 ## More diagnostic tools
 
-The article points to SetupDiag, the Windows upgrade errors guide and the upgrade log files page. The upgrade errors guide groups its content by level, from quick fixes to log file analysis, and links resolution procedures for result codes starting with 0x800. I did not read those pages in full for this post.
+The article points to SetupDiag, the Windows upgrade errors guide and the upgrade log files page. The upgrade errors guide divides its content into four levels, from Level 100 (basic) to Level 400 (advanced), and links a section of resolution procedures for result codes starting with 0x800. This article does not go through those pages.
 
 ## Preparing the fleet (my advice)
 
