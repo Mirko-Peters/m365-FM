@@ -25,7 +25,7 @@ faq:
     a: "Learn describes this for a corporate Wi-Fi profile whose password was changed and saved. To mitigate, set up guest Wi-Fi with automatic connect settings and deploy it to all users, and roll out the changed profile to a small test group first, then to larger groups."
 ---
 
-A Wi-Fi profile in Intune can fail in two different places: the profile does not reach the device, or it reaches the device but the device cannot connect. The Microsoft Learn page on troubleshooting Wi-Fi device configuration profiles separates the two and shows what success looks like on Android, iOS and iPadOS, and Windows. This article follows its order. The examples on the page use SCEP certificate authentication and assume the Trusted Root and SCEP profiles work, so the same assumption applies here.
+A Wi-Fi profile in Intune can fail in two different places: the profile does not reach the device, or it reaches the device but the device cannot connect. The Microsoft Learn page on troubleshooting Wi-Fi device configuration profiles separates the two and shows what success looks like on Android, iOS and iPadOS, and Windows. This article groups its content by symptom. The examples on the page use SCEP certificate authentication and assume the Trusted Root and SCEP profiles work, so the same assumption applies here.
 
 ## First: which of the two problems do you have
 
