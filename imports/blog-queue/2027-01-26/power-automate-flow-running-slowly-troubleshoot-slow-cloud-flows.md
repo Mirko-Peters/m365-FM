@@ -1,6 +1,6 @@
 ---
 title: "Power Automate Flow Running Slowly: Troubleshoot Slow Cloud Flows"
-summary: "A slow cloud flow usually has one of five causes on the Learn page: a slow service, connector throttling, plan action limits, data allowance or other limits. What to check, how to read the 429 error, and the two resolutions."
+summary: "The Learn page lists five possible causes of a slow cloud flow: a slow service, connector throttling, plan action limits, data allowance or other limits. What to check, how to read the 429 error, and the two resolutions."
 status: review
 publish: false
 author: mirko-p
@@ -33,7 +33,7 @@ The symptom on the page is simple. A flow runs slowly and might appear to get st
 
 ## Cause 1: The service you connect to runs slowly
 
-The page gives one example. A slow running SQL query can slow a flow down while the flow waits for the query to complete. In this case the flow is waiting for another system, so the fix is on the other side.
+The page gives one example. A slow running SQL query can slow a flow down while the flow waits for the query to complete. In this case the flow is waiting for the other system.
 
 ## Cause 2: Connector throttling
 
@@ -58,7 +58,7 @@ This is the amount of data the flow consumes through input or output operations.
 
 The page links the Power Automate limits and configuration page for these throttles. For them, both executed and skipped actions, for example in an if/else branch, count toward the limit. The page says that violating the plan limits is much more common than violating these.
 
-It also describes a transition period with non-strict enforcement and higher limits. That text is old. The page was last changed in 2024 and still talks about the transition period ending later. For your tenant today, check the Request limits and allocation page and the licensing documentation instead of taking the figures below as current.
+It also describes a transition period with non-strict enforcement and higher limits. The page was last updated in 2024 and still talks about the transition period ending later. My advice: for your tenant today, check the Request limits and allocation page and the licensing documentation instead of taking the figures below as current.
 
 ## Plan summary on the page
 
@@ -69,7 +69,7 @@ It also describes a transition period with non-strict enforcement and higher lim
 | Dynamics Professional and Dynamics Enterprise Application licenses | 40,000 actions across all flows of one user. Transition limit 200,000 per flow | 10 GB across all flows of one user |
 | Power Automate Process license and per flow license | 250,000 actions per process. Transition limit 500,000 per flow | 50 GB storage per flow |
 
-I copy these figures as the page states them, with the warning above that the page is old.
+I copy these figures as the page states them, with the warning above about its age.
 
 ## Resolution 1: Redesign the flow for fewer actions and less data
 
@@ -98,7 +98,7 @@ This is my suggestion, not the order of the page:
 
 ## What the page does not cover
 
-The page does not describe flow run timeouts, the limits of individual actions or performance of desktop flows. For those, use the limits and configuration page that it links.
+The page does not describe flow run timeouts, the limits of individual actions or performance of desktop flows. My advice: start with the limits and configuration page that it links.
 
 ## Related
 
