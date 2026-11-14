@@ -10,7 +10,7 @@ keypoints:
   - "A document set is a special kind of folder, built on a content type, that manages one work product made of several files as a single unit."
   - "Set-level settings include allowed content types, default content, shared columns, welcome page columns and a default welcome page view."
   - "In a library, a document set is created from the New menu once its content type has been added to that library."
-  - "Per a 2019 Microsoft post, modern libraries show sets like ordinary folders. Capture Version and Version History are in the context menu, custom welcome pages are not supported."
+  - "Per a 2019 Community Hub post, modern libraries show sets like ordinary folders. Capture Version and Version History are in the context menu, custom welcome pages are not supported."
   - "Microsoft's current documentation for SharePoint in Microsoft 365 is thin here. Most official pages describe SharePoint Server, so verify steps in your own tenant."
 faq:
   - q: "What is a document set in SharePoint?"
@@ -18,7 +18,7 @@ faq:
   - q: "How is a document set different from a folder?"
     a: "A document set is a content type, so it carries its own metadata, allowed content types, default content and versioning. A 2020 Microsoft 365 community docs article says document sets are not folders even though they look like them, and advises against mixing folders and sets in one library. The Microsoft Support introduction does not compare the two."
   - q: "Do document sets work in modern SharePoint libraries?"
-    a: "A 2019 post by a Microsoft employee on the Microsoft Community Hub says sets look and feel like ordinary folders in modern libraries, with shared metadata, default content and versioning commands still working. Custom welcome pages are not supported there, and other set-specific ribbon actions exist only in classic. The post is old, so test in your tenant."
+    a: "A 2019 post on the Microsoft Community Hub (the poster carries a Microsoft badge, but the page names no role) says sets look and feel like ordinary folders in modern libraries, with shared metadata, default content and versioning commands still working. Custom welcome pages are not supported there, and other set-specific ribbon actions exist only in classic. The post is old, so test in your tenant."
   - q: "How do I turn document sets on?"
     a: "An archived community article on Microsoft Learn describes activating the Document Sets site collection feature under Site Settings, then Site collection features. After that you create a Document Set content type and add it to a library. Microsoft's SharePoint Server planning page gives the same feature step for server farms."
   - q: "Is there a limit on files in a document set?"
@@ -27,7 +27,7 @@ faq:
 
 A document set is a group of related files that SharePoint treats as one item. Think of a contract package, a case file or a tender response. The set has its own metadata, can start with default documents, and can be versioned as a whole.
 
-One caveat first. Most of Microsoft's current pages on document sets describe SharePoint Server, and the planning page marks SharePoint in Microsoft 365 as not applicable. For Microsoft 365, the best evidence I could read is a 2019 Microsoft post, an archived community wiki article and a Microsoft 365 community docs article. Those are labeled below. Treat menu names as a starting point and check them in your tenant.
+One caveat first. Most of Microsoft's current pages on document sets describe SharePoint Server, and the planning page marks SharePoint in Microsoft 365 as not applicable. For Microsoft 365, the best evidence I could read is a 2019 Community Hub post, an archived community wiki article and a Microsoft 365 community docs article. Those are labeled below. Treat menu names as a starting point and check them in your tenant.
 
 ## What a document set is
 
@@ -41,7 +41,7 @@ A document set content type can define:
 - **Welcome page columns:** which properties show on the set's home page.
 - **Default welcome page view:** how the contents are listed.
 
-The Microsoft Support introduction adds that a set can be sent to the Content Organizer for routing, that review or approval workflows can run on the whole set as if it were one file, and that authors can capture a version snapshot of the properties and documents.
+The Microsoft Support introduction, which lists SharePoint Server versions as its scope, adds that a set can be sent to the Content Organizer for routing, that review or approval workflows can run on the whole set as if it were one file, and that authors can capture a version snapshot of the properties and documents.
 
 ## When to use one
 
@@ -59,11 +59,11 @@ The archived wiki article is community-contributed, last updated in January 2024
 4. **Add it to a library.** In library settings, open **Advanced Settings**, set **Allow management of content types** to **Yes**, then select **Add from existing site content types** and add your document set type.
 5. **Create a set.** In the library, select **New** and choose the document set type. Fill in the properties and save.
 
-The Microsoft 365 community docs article, written in 2020, describes the same flow. It also shows shared columns in practice: a value set on the set is passed to the files inside, and changing it updates those files, while a column that is not shared stays per file.
+The Microsoft 365 community docs article, written in November 2020, shows shared columns in practice: a value set on the set is passed to the files inside, and changing it updates those files, while a column that is not shared stays per file.
 
 ## What changes in modern libraries
 
-A 2019 post by a Microsoft employee on the Microsoft Community Hub explains how sets behave in modern libraries. According to the post:
+A 2019 post on the Microsoft Community Hub, by a poster with a Microsoft badge, explains how sets behave in modern libraries. According to the post:
 
 - Sets look and feel like ordinary folders.
 - Drag and drop upload, pinning and flows on items work.
