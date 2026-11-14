@@ -9,14 +9,14 @@ topics: [windows-autopilot]
 keypoints:
   - "The most reliable way to open the BIOS in Windows 11 is Settings, System, Recovery, Advanced startup, Restart now, then Troubleshoot, Advanced options, UEFI Firmware Settings."
   - "Modern PCs use UEFI firmware, which many people still call the BIOS. The menus look different on every manufacturer's PC."
-  - "At power-on, boot menu keys are commonly F2, F12, Delete or Esc, but the exact key depends on the maker. A Surface opens its UEFI with volume-up and power."
+  - "At power-on, the key depends on the maker. Microsoft gives Esc, F10 and F12 as examples for the boot menu, and F2 or Delete are common for firmware setup. A Surface uses volume-up and power."
   - "If Windows won't start, interrupting startup twice brings up the recovery environment on the third start, where UEFI Firmware Settings is available."
   - "Change only the settings you came for. Wrong firmware settings can affect security or stop the PC from starting."
 faq:
   - q: "What key opens the BIOS on Windows 11?"
-    a: "It depends on the manufacturer. Microsoft names F2, F12, Delete and Esc as common keys for the boot menu, and its manufacturer guide mentions F10 as well. Press the key right after power-on. If you miss the moment or don't know the key, use Settings, System, Recovery, Advanced startup instead. That works on any Windows 11 PC that starts."
+    a: "It depends on the manufacturer. Microsoft's installation guidance gives Esc, F10 and F12 as examples of boot-menu keys, and F2 or Delete are also common for firmware setup. Press the key right after power-on. If you miss the moment or don't know the key, use Settings, System, Recovery, Advanced startup instead. That works on any Windows 11 PC that starts."
   - q: "Is UEFI the same as BIOS?"
-    a: "In daily talk, yes. Microsoft describes UEFI as the firmware that runs before Windows and says it is sometimes called BIOS. UEFI replaced the older BIOS design. Windows 11 requires UEFI firmware that is Secure Boot capable, so on a Windows 11 PC the thing you open is almost always UEFI."
+    a: "In daily talk, yes. UEFI is the firmware that runs before Windows, and many people still call it BIOS. UEFI replaced the older BIOS design. Windows 11 requires UEFI firmware that is Secure Boot capable, so on a Windows 11 PC the thing you open is almost always UEFI."
   - q: "How do I open the BIOS on a Surface?"
     a: "Shut the Surface down and wait about 10 seconds. Hold the volume-up button, press and release the power button, and keep holding volume-up through the logo until the UEFI screen appears. Or open Settings, System, Recovery, choose Restart now next to Advanced startup, then Troubleshoot, Advanced options, UEFI Firmware Settings and Restart."
 ---
@@ -24,7 +24,7 @@ To open the BIOS in Windows 11, go to **Settings**, **System**, **Recovery**, se
 
 ## BIOS or UEFI: what are you actually opening?
 
-On a Windows 11 PC you are opening UEFI, even if everybody calls it the BIOS. Microsoft's page on [Secure Boot in Windows 11](https://support.microsoft.com/en-us/windows/security/devicesecurity/windows-11-and-secure-boot) describes it this way: the firmware (UEFI, sometimes called BIOS) runs before Windows and controls the Secure Boot setting. Windows 11 also requires UEFI firmware that is Secure Boot capable, so a legacy-only BIOS is not a Windows 11 target.
+On a Windows 11 PC you are opening UEFI, even if everybody calls it the BIOS. Microsoft's page on [Secure Boot in Windows 11](https://support.microsoft.com/en-us/windows/security/devicesecurity/windows-11-and-secure-boot) treats Secure Boot as a firmware setting. Windows 11 also requires UEFI firmware that is Secure Boot capable, so a legacy-only BIOS is not a Windows 11 target.
 
 The look of the setup screen is the manufacturer's choice. Menus and setting names vary by maker and model, which is why Microsoft sends you to the manufacturer's guide for anything beyond the common settings. You might see a graphical screen with mouse support or a plain text menu you navigate with the arrow keys.
 
@@ -44,7 +44,7 @@ If you don't see **UEFI Firmware Settings** on that menu, don't spend long hunti
 
 ## The key at power-on
 
-Before Windows loads, most PCs show a brief logo or message that names a key. Press it repeatedly right after you power on. Which key it is depends on the maker. Microsoft's download page for Windows 11 names F2, F12, Delete and Esc as common keys for opening the boot menu, and Microsoft Learn's USB install article gives Esc, F10 and F12 as examples. These keys are mostly for the one-time boot menu, where you choose a device to start from. The key for the full setup screen is often a different one, and it's printed on the first screen or in the manual. If you have the model name, a search for "<model> BIOS key" on the manufacturer's support site settles it.
+Before Windows loads, most PCs show a brief logo or message that names a key. Press it repeatedly right after you power on. Which key it is depends on the maker. Microsoft Learn's article on installing Windows from a USB drive gives Esc, F10 and F12 as examples of keys that open the boot-device selection menu, and F2 and Delete are also widely used for the firmware setup. These keys are mostly for the one-time boot menu, where you choose a device to start from. The key for the full setup screen is often a different one, and it's printed on the first screen or in the manual. If you have the model name, a search for "<model> BIOS key" on the manufacturer's support site settles it.
 
 If the key doesn't work after a couple of tries, stop guessing and use the Settings route above. It doesn't depend on timing.
 
@@ -81,9 +81,9 @@ For admins preparing devices for deployment, firmware is where TPM problems show
 
 ## A note on Secure Boot certificates
 
-Admins who open the firmware these days often do so because of Secure Boot. Microsoft's Secure Boot page explains that the Secure Boot certificates first issued in 2011 begin expiring in June 2026, and that Microsoft is updating them. On supported Windows versions this update happens automatically, and the page links to separate guidance on the Microsoft-managed update. Microsoft's Surface UEFI page carries the same notice.
+Admins who open the firmware these days often do so because of Secure Boot. The Secure Boot certificates that Microsoft first issued in 2011 began expiring in June 2026, and Microsoft's support article says the Windows Production PCA 2011 certificate reached its expiration on October 19, 2026. Devices keep starting normally, but devices without the 2023 certificates can't receive new early-boot protections. Microsoft says most personal devices should get the new certificates through Microsoft-managed updates and that some may need an OEM firmware update. Microsoft's Surface UEFI page carries a notice about the same change.
 
-What does that mean for your visit to the firmware? Mostly that you don't need to change anything by hand just because of the date. If Secure Boot is on and the device is on a supported Windows version, the certificate update is meant to arrive through Windows. If a device has Secure Boot switched off, check why before you switch it on, because someone may have turned it off to boot something specific. The page also says you may need to turn Secure Boot off temporarily to fix a problem and that you should turn it back on once the issue is resolved.
+What does that mean for your visit to the firmware? Mostly that you shouldn't switch Secure Boot off as a workaround, because Microsoft advises against that. For most devices the certificate update is meant to arrive through Microsoft-managed updates, and organizations should follow Microsoft's Secure Boot certificate update guidance. If a device has Secure Boot switched off, check why before you switch it on, because someone may have turned it off to boot something specific. Microsoft's Secure Boot page also says you may need to disable Secure Boot temporarily to address an issue and recommends re-enabling it once the issue is resolved.
 
 On managed devices, don't be surprised if firmware options are locked or protected by a password that IT holds. That is normal for enterprise devices, and the right move is to ask your administrator instead of looking for a way around it.
 
@@ -106,3 +106,13 @@ On managed devices, don't be surprised if firmware options are locked or protect
 ## Next step
 
 Open the firmware once on a PC that works, using the Settings route, and note where the boot order, Secure Boot and TPM entries are. Then, the day you have to open the BIOS in Windows 11 on a machine that is giving you trouble, you know exactly where to look.
+
+## Sources
+
+- [Windows 11 and Secure Boot (Microsoft Support)](https://support.microsoft.com/windows/security/devicesecurity/windows-11-and-secure-boot)
+- [Windows recovery environment (Microsoft Support)](https://support.microsoft.com/windows/experience/backup-recovery/windows-recovery-environment)
+- [How to use Surface UEFI (Microsoft Support)](https://support.microsoft.com/surface/drivers-firmware/how-to-use-surface-uefi)
+- [Enable TPM 2.0 on your PC (Microsoft Support)](https://support.microsoft.com/windows/enable-tpm-2-0-on-your-pc-1fd5a332-360d-4f46-a1e7-ae6b0c90645c)
+- [Install Windows from a USB flash drive (Microsoft Learn)](https://learn.microsoft.com/windows-hardware/manufacture/desktop/install-windows-from-a-usb-flash-drive)
+- [When Secure Boot certificates expire on Windows devices (Microsoft Support)](https://support.microsoft.com/servicing/os/secure-boot/2026/02/when-secure-boot-certificates-expire-on-windows-devices)
+- [Windows Production CA 2011 expiration and bootloader updates (Microsoft Support)](https://support.microsoft.com/servicing/os/secure-boot/2026/10/kb5132953-windows-production-ca-2011-expiration-bootloader-updates)
