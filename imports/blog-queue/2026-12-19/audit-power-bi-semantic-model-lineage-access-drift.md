@@ -63,7 +63,7 @@ If you also use a service principal, enable service principal access for the rea
 
 **Limits.** Learn lists a maximum of 500 requests per hour and 16 simultaneous requests for `PostWorkspaceInfo`, and 500 requests per hour for `GetScanResult`. With 100 workspaces per call, plan batches for large tenants.
 
-**What comes back.** For each workspace, the result has arrays for reports, dashboards, datasets, dataflows, datamarts and users. Dependencies appear as `upstreamDataflows`, `upstreamDatamarts` and `upstreamDatasets`, each with a group ID and a target ID. Data source links appear as `datasourceUsages`, which reference `datasourceInstanceId`, and `datasourceInstances` give the connection details. Dataset details include tables, expressions, roles with members and table permissions, `configuredBy` and endorsement details.
+**What comes back.** For each workspace, the result has arrays for reports, dashboards, datasets, dataflows, datamarts and users. Dependencies appear as `upstreamDataflows`, `upstreamDatamarts` and `upstreamDatasets`, each with a group ID and a target ID. Data source links appear as `datasourceUsages`, which reference `datasourceInstanceId`, and `datasourceInstances` give the connection details. Dataset details include tables, expressions, roles with members, model permission and table permissions (filters), `configuredBy` and endorsement details.
 
 For lineage, join items to their upstream references and data source instances. For cross-workspace lineage, the `groupId` on an upstream entry tells you where the source lives.
 
@@ -72,7 +72,7 @@ For lineage, join items to their upstream references and data source instances. 
 Two documented sources:
 
 - **Scanner with `getArtifactUsers=true`** returns users with type-specific access fields such as `reportUserAccessRight` and `datasetUserAccessRight`. Workspace users carry `groupUserAccessRight`. The `principalType` values are `None`, `User`, `Group` and `App`. Learn notes that several item-level `users` arrays are marked empty and will be removed, and recommends the Get Users as Admin APIs or `getArtifactUsers`.
-- **`GET https://api.powerbi.com/v1.0/myorg/admin/datasets/{datasetId}/users`** returns the users with access to one dataset, with a maximum of 200 requests per hour. Access rights range from `Read` to `ReadWriteReshareExplore`. The page does not say whether users with access only through a workspace role are included, so verify this with a test model before you rely on it for completeness.
+- **`GET https://api.powerbi.com/v1.0/myorg/admin/datasets/{datasetId}/users`** returns the users with access to one dataset, with a maximum of 200 requests per hour. The access right values range from `None` and `Read` up to `ReadWriteReshareExplore`. The page does not say whether users with access only through a workspace role are included, so verify this with a test model before you rely on it for completeness.
 
 The `graphId` field is available only through admin APIs, which helps to join results to Microsoft Entra data.
 
@@ -109,9 +109,9 @@ The pages read do not describe a built-in alert for access changes, a retention 
 ## Sources
 
 - [Data lineage view in Power BI (Microsoft Learn)](https://learn.microsoft.com/en-us/power-bi/collaborate-share/service-data-lineage)
-- [Metadata scanning overview (Microsoft Learn)](https://learn.microsoft.com/en-us/power-bi/enterprise/service-admin-metadata-scanning)
+- [Metadata scanning overview (Microsoft Learn)](https://learn.microsoft.com/en-us/fabric/governance/metadata-scanning-overview)
 - [Set up metadata scanning (Microsoft Learn)](https://learn.microsoft.com/en-us/fabric/admin/metadata-scanning-setup)
 - [Admin - WorkspaceInfo PostWorkspaceInfo (Microsoft Learn)](https://learn.microsoft.com/en-us/rest/api/power-bi/admin/workspace-info-post-workspace-info)
 - [Admin - WorkspaceInfo GetScanResult (Microsoft Learn)](https://learn.microsoft.com/en-us/rest/api/power-bi/admin/workspace-info-get-scan-result)
 - [Admin - Datasets GetDatasetUsersAsAdmin (Microsoft Learn)](https://learn.microsoft.com/en-us/rest/api/power-bi/admin/datasets-get-dataset-users-as-admin)
-- [Track user activities in Power BI (Microsoft Learn)](https://learn.microsoft.com/en-us/power-bi/enterprise/service-admin-auditing)
+- [Track user activities in Power BI (Microsoft Learn)](https://learn.microsoft.com/en-us/fabric/enterprise/powerbi/service-admin-auditing)
