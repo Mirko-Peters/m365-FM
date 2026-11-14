@@ -25,11 +25,11 @@ faq:
     a: "The page says you can on Windows 10 or Windows 11 update version 10D or later. On Windows 11 version 21H1 SV1 (build 10.0.22000) you stay blocked and must upgrade to a newer Windows 11 version."
 ---
 
-When users try to install the new Microsoft Teams client, three kinds of problems come up on the Microsoft Learn page for this topic: an organization policy message, a generic issue message on Windows 10, and a missing opt-in toggle. This article follows that page. The page starts with a pre-installation check script, and I do too, because it tests several of the points below at once. Own advice is marked.
+When users try to install the new Microsoft Teams client, three kinds of problems come up on the Microsoft Learn page for this topic: an organization policy message, a generic issue message on Windows 10, and a missing opt-in toggle. This article follows that page. The page starts by pointing to a pre-installation check script, and this article does too. Own advice is marked.
 
 ## Start here: the pre-installation check
 
-The page tells you to run the pre-installation check script for the new Teams and follow its suggested resolutions. I did not read the script page, so I cannot describe its output. Run it on an affected computer first, then use the sections below for what it finds.
+The page tells you to run the pre-installation check script for the new Teams to identify potential issues, and to follow its suggested resolutions. This article does not describe the script or its output. My advice: run it on an affected computer first, then use the sections below for what it finds.
 
 ## Symptom 1: Due to org policy, you can't install the new Teams
 
@@ -51,7 +51,7 @@ Known Group Policy settings that could prevent installation, per the page:
 - Prevent non-admin users from installing packaged Windows apps
 - Allow all trusted apps to install (disabled)
 
-One fixed issue is worth knowing: the page says that when `AllowAllTrustedApps` is disabled, the new Teams (MSIX) installation fails, and that this was fixed in the optional October 2023 cumulative updates, KB5031445 for Windows 10 (OS build 19045.3636) and KB5031455 for Windows 11 (OS build 22621.2506). If the optional update is not available for your build, the page says the November security update includes the fix. Those updates date from 2023, so in my experience a computer that is far behind on Windows updates is the first candidate for this case.
+One fixed issue is worth knowing: the page says that when `AllowAllTrustedApps` is disabled, the new Teams (MSIX) installation fails, and that this was fixed in the optional October 2023 cumulative updates, KB5031445 for Windows 10 (OS build 19045.3636) and KB5031455 for Windows 11 (OS build 22621.2506). If the optional update is not available for your build, the page says the November security update includes the fix. Those updates date from 2023. My advice: a computer that is far behind on Windows updates is the first candidate for this case.
 
 ### Check the policies on a computer
 
@@ -60,7 +60,7 @@ One fixed issue is worth knowing: the page says that when `AllowAllTrustedApps` 
 3. Check **Prevent non-admin users from installing packaged Windows apps** and **Allow all trusted apps to install**.
 4. Both should be **Not configured**.
 
-For many computers the page points to its article on bulk upgrade to the new Teams, which I did not read.
+For admins who deploy the new Teams in bulk, the page points to its article on the bulk upgrade to the new Microsoft Teams client.
 
 ## Install even if the policy is disabled
 
