@@ -11,18 +11,18 @@ keypoints:
   - "Nondelegable formulas read only the first 500 records by default. Settings > General > Data row limit can raise this to 10,000, but that hides the problem instead of fixing it."
   - "Set the Data row limit to 1 while testing. Any nondelegable query then returns a single record, which makes gaps easy to see."
   - "For Dataverse, Search works on text columns only, and comparisons with < or > do not delegate on choice columns."
-  - "Sum, Min, Max, Average and CountIf are limited to 50,000 rows, and aggregate functions are not supported on views."
+  - "On Dataverse, aggregate functions are limited to 50,000 rows and are not supported on views. CountRows uses a cached value."
 faq:
   - q: "What does a delegation warning in Power Apps actually mean?"
     a: "According to Microsoft Learn, Power Apps delegates a query when the whole formula can be translated into a query the data source runs. If any part is nondelegable, none of it is delegated, and the app processes only a local subset of records. The warning is the yellow triangle, and the blue wavy underline shows the part that is not delegable."
   - q: "Can I just raise the Data row limit to 2,000?"
     a: "You can raise it, but it is not a fix. Microsoft Learn states the default is 500 and the maximum is 10,000, and warns that higher limits can hurt performance, especially on wide tables. Results from a nondelegable formula can still be silently incomplete once the table grows beyond the limit."
   - q: "Is the Search function delegable for Dataverse?"
-    a: "Only for text columns. The Dataverse connector page on Microsoft Learn lists Search as delegable for Text and not delegable for Number, Choice or DateTime. Filter with StartsWith is the usual alternative when you need to match the start of a value."
+    a: "Only for text columns. The Dataverse connector page on Microsoft Learn lists Search as delegable for Text and not delegable for Number, Choice or DateTime. Filter with StartsWith is a delegable alternative for matching the start of a value, but that suggestion is mine, not a statement from the connector page."
   - q: "Why does CountRows behave differently on Dataverse?"
     a: "Microsoft Learn notes that CountRows on Dataverse uses a cached value. For a non-cached count where the record count is under 50,000, the page suggests CountIf(table, True). It also says users need suitable permissions to get totals for the table."
   - q: "Can I filter with a Dataverse view to avoid delegation limits?"
-    a: "Microsoft's 2019 announcement describes views that run on the server, with additional delegable conditions appended. That post covers an experimental feature and the current Learn pages I read do not document it step by step, so test it in your own app before relying on it."
+    a: "Microsoft's 2019 Power Platform blog post says Filter can take a Common Data Service view as an optional parameter, the view always runs on the server, and extra delegable conditions are appended there. It was an experimental setting at the time, and the Learn pages read for this article do not document it, so test it in your own app before relying on it."
 ---
 
 A delegation warning means Power Apps cannot hand part of your formula to Dataverse. When that happens, the app works on a local subset of rows, so galleries, counts and searches can be wrong without any error. The fix is to rewrite the formula with functions and operators that Dataverse can process, and to test with a low row limit so gaps show up early.
@@ -75,15 +75,15 @@ The Dataverse connector page on Microsoft Learn has a table by data type. Key po
 
 The page also says Dataverse text columns do not support Trim[Ends] or Len, while functions such as Left, Mid, Right, Upper, Lower, Replace and Substitute are supported. This differs from the general list, so check your exact formula against the connector table.
 
-For lookups, Learn says a query can include at most two lookup levels, and you can expand or join up to 20 entities in one query. If you need more, the page suggests a view on the data server.
+Limits on lookup levels or on the number of expanded entities are not documented in the pages read for this article.
 
 ## Step 4: Use views carefully
 
-The title of this topic mentions filter views. Microsoft's 2019 announcement says the Filter function can take a Dataverse view as a parameter, that the view always runs on the server, and that extra delegable conditions are appended on the server. It also lists caveats: it was an experimental setting, non-delegable conditions still run on the client, and results follow the view's order unless you use Sort.
+Microsoft's June 2019 Power Platform blog post says the Filter function now optionally takes a Common Data Service entity view as a parameter, that the view is always executed on the server, and that additional delegable conditions are appended on the server to reduce the results further. It also lists caveats: the feature sat behind an experimental flag under Advanced settings in App settings, non-delegable conditions happen client side like normal filtering, and data is returned in the view's order unless Sort or SortByColumns is used.
 
-That post and a 2019 release note are archived. The current Learn pages I read do not document the syntax step by step, and the connector page says only that aggregate functions are not supported on views. Treat views as an option to test, not a guaranteed way around delegation.
+The post is from 2019 and the current Learn pages read for this article do not document the syntax, apart from the connector page noting that aggregate functions are not supported on views. Treat views as an option to test, not a guaranteed way around delegation.
 
-## Common mistakes
+## Common mistakes (own reading of the pages above)
 
 - Wrapping a column in `Text()` or `Value()` inside Filter.
 - Using Search on a choice or number column.
@@ -91,7 +91,7 @@ That post and a 2019 release note are archived. The current Learn pages I read d
 - Counting with CountRows and expecting a live number.
 - Raising the data row limit and calling the problem solved.
 
-## A short checklist
+## A short checklist (own suggestion)
 
 1. Fix every yellow triangle you can.
 2. Set the row limit to 1 and test each screen.
@@ -108,7 +108,6 @@ That post and a 2019 release note are archived. The current Learn pages I read d
 ## Sources
 
 - [Understand delegation in a canvas app](https://learn.microsoft.com/en-us/power-apps/maker/canvas-apps/delegation-overview)
-- [Delegation list](https://learn.microsoft.com/en-us/power-apps/maker/canvas-apps/delegation-list)
 - [Connect to Microsoft Dataverse from a canvas app](https://learn.microsoft.com/en-us/power-apps/maker/canvas-apps/connections/connection-common-data-service)
 - [Improved data source selection and Common Data Service views (Power Platform blog, 2019)](https://www.microsoft.com/en-us/power-platform/blog/power-apps/improved-data-source-selection-and-common-data-service-views/)
-- [Leverage views from Common Data Service in canvas apps (archived release note)](https://learn.microsoft.com/en-us/business-applications-release-notes/april19/microsoft-powerapps/leverage-views-common-data-service-canvas-apps)
+
