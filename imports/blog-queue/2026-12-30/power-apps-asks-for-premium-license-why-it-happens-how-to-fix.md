@@ -38,7 +38,7 @@ Standard connectors that Microsoft 365 users previously had remain available to 
 
 ## Timeline
 
-Apps and flows created before October 1, 2019 received an extended transition until October 1, 2024. Learn says in-product licensing enforcement begins April 1, 2025, and users without assigned licenses cannot use the affected apps. From January 2025, an auto-claim policy is enabled for customers who were in an extended transition. Dataverse for Teams environments are described as deprecated, and premium connectors in an app there also require a per app or per user plan.
+Apps and flows created before October 1, 2019 received an extended transition until October 1, 2024. The page still words the next date as a future one: in-product licensing enforcement begins April 1, 2025, after which users without assigned licenses cannot use the affected apps. That date has passed. It also says that starting January 2025 an auto-claim policy would be enabled for customers who were in an extended transition. Dataverse for Teams environments are described as deprecated, and premium connectors in an app there also require a per app or per user plan.
 
 ## How licenses are evaluated
 
@@ -53,7 +53,7 @@ Plan prices on the page: Power Apps per app is 5 dollars per user per app per mo
 
 1. Assign licenses, and enable auto-claim policies for Power Apps and Power Automate so licenses are assigned automatically.
 2. Use the inventory reports in the Power Platform admin center to identify apps and flows that use specific connectors.
-3. Buy the appropriate licenses. The tenant admin can purchase add-ons in the Microsoft 365 admin center.
+3. Buy the appropriate licenses, as listed in the Power Apps and Power Automate licensing guide that the page links.
 4. For Dataverse for Teams, upgrade the environment to Dataverse. Users still need licenses.
 
 ## Check before buying
@@ -79,4 +79,4 @@ The page does not describe the text of the license prompt, steps to check or rea
 
 ## Sources
 
-- [Power Apps and Power Automate licensing FAQ](https://learn.microsoft.com/power-platform/admin/powerapps-flow-licensing-faq)
+- [Power Platform licensing FAQs (Microsoft Learn)](https://learn.microsoft.com/power-platform/admin/powerapps-flow-licensing-faq)
