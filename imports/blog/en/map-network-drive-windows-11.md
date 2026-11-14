@@ -24,7 +24,7 @@ To map a network drive in Windows 11, open File Explorer, select **This PC**, op
 
 ## Map a network drive in File Explorer
 
-Microsoft's page on [file sharing over a network in Windows](https://support.microsoft.com/en-us/windows/experience/connectivity-networking/file-sharing-over-a-network-in-windows) lists the steps for Windows 11.
+Microsoft's page on [file sharing over a network in Windows](https://support.microsoft.com/windows/experience/connectivity-networking/file-sharing-over-a-network-in-windows) lists the steps for Windows 11.
 
 1. Open **File Explorer** from the taskbar or press the Windows logo key + E.
 2. Select **This PC** in the left pane.
@@ -39,7 +39,7 @@ If the share doesn't show up at all, the Microsoft article suggests the usual su
 
 ## Map a drive with net use
 
-The command line is better when you map drives often, test a share quickly or write a logon script. Microsoft Learn documents [net use](https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-server-2012-r2-and-2012/gg651155(v=ws.11)), though the page sits in the archived part of the documentation.
+The command line is better when you map drives often, test a share quickly or write a logon script. Microsoft Learn documents [net use](https://learn.microsoft.com/previous-versions/windows/it-pro/windows-server-2012-r2-and-2012/gg651155(v=ws.11)), though the page sits in the archived part of the documentation.
 
 The basic form assigns a drive letter to a share:
 
@@ -63,7 +63,7 @@ If the server name contains spaces, put quotation marks around it, from the doub
 
 ## Map a drive with PowerShell
 
-PowerShell has two routes. `New-PSDrive` is the one most admins know. According to Microsoft's [New-PSDrive documentation](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.management/new-psdrive), `-Persist` creates a Windows mapped network drive that is saved in Windows and is not session-specific. A drive without `-Persist` is temporary: it exists only in that PowerShell session, and you can't see it in File Explorer or with `net use`.
+PowerShell has two routes. `New-PSDrive` is the one most admins know. According to Microsoft's [New-PSDrive documentation](https://learn.microsoft.com/powershell/module/microsoft.powershell.management/new-psdrive), `-Persist` creates a Windows mapped network drive that is saved in Windows and is not session-specific. A drive without `-Persist` is temporary: it exists only in that PowerShell session, and you can't see it in File Explorer or with `net use`.
 
 A persistent drive has rules. The name must be a drive letter, the root must be a UNC path to a different computer, and the provider must be FileSystem. For a script, add `-Scope Global`. Otherwise the drive goes away when the script exits.
 
@@ -107,7 +107,7 @@ Two cautions. Drives belong to the user session that created them, as the PowerS
 
 ## Map drives for many users
 
-Hand-mapping doesn't scale. On a domain, use [Group Policy preferences](https://learn.microsoft.com/en-us/windows-server/identity/ad-ds/manage/group-policy/group-policy-preferences). Microsoft lists the Drive Maps extension as a way to create, modify or delete mapped drives and to configure the visibility of all drives, using the logged-on user's security context.
+Hand-mapping doesn't scale. On a domain, use [Group Policy preferences](https://learn.microsoft.com/windows-server/identity/ad-ds/manage/group-policy/group-policy-preferences). Microsoft lists the Drive Maps extension as a way to create, modify or delete mapped drives and to configure the visibility of all drives, using the logged-on user's security context.
 
 The Drive Map preference item uses the usual preference actions: Create, Replace, Update and Delete. Replace deletes and recreates the mapping, which is the safer choice when a drive has to point somewhere new. The location is a UNC path such as `\\server\share`, and the **Reconnect** setting corresponds to a persistent mapping. Microsoft's preferences page also describes item-level targeting, where each targeting item evaluates to true or false, and if the combined result is false, the item's settings aren't applied, so a drive appears only for the users or groups that need it.
 
