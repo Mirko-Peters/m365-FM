@@ -77,7 +77,7 @@ Teams admin center > **Users** > **External access**. Both the organization sett
 
 Trust is two-way. The other organization must also trust yours, and its users must be enabled for external access. Blocking contoso.com doesn't block subdomains such as marketing.contoso.com by default. Microsoft gives `Set-CsTenantFederationConfiguration -BlockAllSubdomains $True` for that. You can block specific individuals, up to 200 users. Trial-only tenants are blocked by default.
 
-Skype consumer interoperability with Teams stopped being supported on May 5, 2025.
+The same page says Skype users can chat and call, but they cannot join meetings as non-anonymous participants and are treated as anonymous.
 
 ### Guest access
 
@@ -97,7 +97,7 @@ Organizers also get **Require unverified participants to verify their info befor
 ## Which one to choose
 
 - **A partner's staff need to chat and meet with your people, nothing more:** external access, with trust set up on both sides.
-- **A contractor needs to work in a team and edit files:** guest access, or a shared channel. Microsoft notes shared channels allow inviting people without a guest account in Microsoft Entra ID.
+- **A contractor needs to work in a team and edit files:** guest access, or a shared channel. Microsoft's shared channels page says external participants in shared channels do not use guest accounts, but guest access in Teams must be enabled to invite them.
 - **A one-off meeting with a customer:** anonymous join, with lobby and verification options. Lobby behavior is controlled by separate lobby bypass settings.
 - **A non-Microsoft 365 organization where you want people verified in meetings:** add each person as a guest. Microsoft Learn says to add each individual to your directory.
 
@@ -122,3 +122,4 @@ Organizers also get **Require unverified participants to verify their info befor
 - [Manage external meetings and chat with people and organizations using Microsoft identities, Microsoft Learn](https://learn.microsoft.com/en-us/microsoftteams/trusted-organizations-external-meetings-chat)
 - [Plan for meetings with external participants in Microsoft Teams, Microsoft Learn](https://learn.microsoft.com/en-us/microsoftteams/plan-meetings-external-participants)
 - [Manage anonymous participant access to Teams meetings, Microsoft Learn](https://learn.microsoft.com/en-us/microsoftteams/anonymous-users-in-meetings)
+- [Shared channels in Microsoft Teams, Microsoft Learn](https://learn.microsoft.com/en-us/microsoftteams/shared-channels)
