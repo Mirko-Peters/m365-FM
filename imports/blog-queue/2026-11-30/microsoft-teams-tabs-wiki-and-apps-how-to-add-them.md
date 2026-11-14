@@ -27,7 +27,7 @@ faq:
 
 A tab in Teams is a full-screen view of an app or web content shown at the top of a channel, chat or meeting. You add one from the add-a-tab option in the channel. In some recent Teams versions the plus icon moved, and the documented route is the new icon at the top right of the channel, then **App** and **Pin a Tab**. The Wiki tab was retired in favor of a notes capability.
 
-**A note on sources.** Microsoft's end-user support article for adding tabs could not be opened for this page. This article uses Microsoft's developer documentation, Microsoft Q&A answers and Tech Community posts. Menu labels may differ in your Teams version, so confirm them on screen.
+**A note on sources.** This article uses one Microsoft Support page on tabs, Microsoft's developer documentation, Microsoft Q&A answers and Tech Community posts. The Support page does not mention the App and Pin a Tab route or a moved plus icon, so that route rests on Q&A answers. Menu labels may differ in your Teams version, so confirm them on screen.
 
 ## What tabs are
 
@@ -46,7 +46,7 @@ When you add an app as a tab, a short setup dialog appears. According to the des
 The documented steps vary by Teams version.
 
 1. Open the channel or chat.
-2. Look for the add-a-tab control. In older layouts this was a plus icon next to the tab names.
+2. Microsoft Support says to select **Add a tab** (shown with an add icon), select the app, then select **Add**. For a file, first share it in a message, then select **Add a tab**, choose the app for the file type, select the file and select **Save**.
 3. If you cannot see the plus icon, use the replacement described in a Microsoft Q&A answer: open the channel, select the new icon at the top right of the channel, select **App**, then choose **Pin a Tab**.
 4. Choose the app or content type, complete the setup dialog and select **Save**.
 
@@ -78,6 +78,7 @@ Other behaviors:
 - **Tab chat:** a conversation shown next to the tab content. It opens at the side on desktop.
 - **Notifications:** after a tab is added, users can post to the channel or chat to notify team members.
 - **Role-based views:** the tab experience can differ by user. Some people may need to sign in and may see different content.
+- **Removing and linking:** Microsoft Support says to right-click a tab and select **Remove**, or **Copy link to tab**. In channels, anyone on the team can remove tabs if the team owner allows it. The default **Posts** and **Shared** tabs cannot be removed.
 
 ## What happened to the Wiki tab
 
@@ -119,6 +120,7 @@ Microsoft's pages read for this article do not rank tab types. As a practical wa
 
 ## Sources
 
+- [Microsoft Support: Use a tab in a channel or chat in Microsoft Teams](https://support.microsoft.com/en-us/office/use-a-tab-in-a-channel-or-chat-in-microsoft-teams-83d0514f-2134-4db5-80f2-e9b43e111d57)
 - [Microsoft Learn: Design tabs for desktop, web and mobile](https://learn.microsoft.com/en-us/microsoftteams/platform/tabs/design/tabs)
 - [Microsoft Q&A: I can't add any tabs to my Teams channels, the plus icon is missing](https://learn.microsoft.com/en-us/answers/questions/4437421/i-cant-add-any-tabs-to-my-teams-channels-today-the)
 - [Microsoft Q&A: How can I get to the team wiki tab](https://learn.microsoft.com/en-us/answers/questions/4439976/how-can-i-get-to-the-team-wiki-tab)
