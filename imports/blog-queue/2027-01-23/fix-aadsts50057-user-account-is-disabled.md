@@ -11,7 +11,7 @@ keypoints:
   - "The error code reference says an admin can re-enable the account through PowerShell, and links the Enable-ADAccount cmdlet."
   - "Start in Entra ID, Monitoring and health, Sign-in logs, filter by user and Failure, and note the correlation ID, error code and failure reason."
   - "In Entra the setting is Account enabled under Account status on the user. Disabling a user is also a normal step when access is revoked."
-  - "Before you re-enable an account, find out why it was disabled, since offboarding and incident response both use the same switch."
+  - "My advice: before you re-enable an account, find out why it was disabled, since offboarding and incident response can both use the disable switch."
 faq:
   - q: "What does AADSTS50057 mean?"
     a: "The Microsoft Entra error code reference lists it as UserDisabled: the user account is disabled. It adds that the user object in Active Directory backing this account has been disabled, and that an admin can re-enable the account through PowerShell, with a link to the Enable-ADAccount cmdlet."
@@ -42,7 +42,7 @@ If the code is 50057, move to the next step. Other codes in the log need other f
 
 ## Step 2: Find where the account is disabled
 
-There are two places, and the reference row mentions both.
+There are two places. The reference row mentions the Active Directory object, and the Entra setting comes from the revoke access page.
 
 ### In Microsoft Entra ID
 
@@ -52,15 +52,15 @@ The setting is **Account enabled** on the user. Per the Learn page on revoking u
 2. Under **Account status**, select **Edit**.
 3. In **Properties**, the **Account enabled** setting is the one that disables sign-in. Clearing it disables the user.
 
-With Microsoft Graph PowerShell the same page shows `Update-MgUser -UserId $User.Id -AccountEnabled:$false` to disable. To check the current value, read the user's `AccountEnabled` property. The roles named on that page for disabling users are User Administrator for non-admin users and Privileged Authentication Administrator for admin accounts.
+With Microsoft Graph PowerShell the same page shows `Update-MgUser -UserId $User.Id -AccountEnabled:$false` to disable. To check the current value, read the user's `AccountEnabled` property, which is my addition and not on the page. The roles named on that page for disabling users are User Administrator for non-admin users and Privileged Authentication Administrator for admin accounts.
 
 ### In on-premises Active Directory
 
-The error code row says the user object in Active Directory backing the account has been disabled, and links `Enable-ADAccount`. For a hybrid environment, the revoke access page describes the opposite action for emergencies: disable the user in Active Directory with `Disable-ADAccount`, and reset the password twice in Active Directory. So a disabled directory object is a standard part of an incident or offboarding process.
+The error code row says the user object in Active Directory backing the account has been disabled, and links `Enable-ADAccount`. For a hybrid environment, the revoke access page describes the opposite action for emergencies: disable the user in Active Directory with `Disable-ADAccount`, and reset the password twice in Active Directory. So a disabled directory object can be part of an incident or offboarding process.
 
-If the account is synchronized, the on-premises object is the one to check first. I did not read the Microsoft Entra Connect pages for this article, so I do not describe how long the change takes to appear in the cloud.
+If the account is synchronized, the on-premises object is the one to check first. The pages used here do not say how long a change takes to appear in the cloud, so this article gives no figure.
 
-## Step 3: Decide whether to re-enable
+## Step 3: Decide whether to re-enable (my advice)
 
 Do this before you change anything:
 
@@ -68,7 +68,7 @@ Do this before you change anything:
 2. For an employee who left, the right fix is that the account stays disabled, and the user needs to get a different account or a rehire process.
 3. For a returning user, follow your joiner process, then re-enable.
 
-The revoke access page also lists what disabling does not cover on its own: access tokens last one hour by default, apps that use session tokens control their own sessions, and Entra cannot revoke a session token an app issued. So the reverse is also true in practice: after an account is disabled, you might see leftover sessions or tokens in some apps for a while. That follows from the page, and is not a statement about re-enabling.
+The revoke access page also lists what disabling does not cover on its own: access tokens last one hour by default, apps that use session tokens control their own sessions, and Entra cannot revoke a session token an app issued. So after an account is disabled, you might see leftover sessions or tokens in some apps for a while. That follows from the page, and is not a statement about re-enabling.
 
 ## Step 4: Re-enable and test
 
@@ -76,7 +76,7 @@ The revoke access page also lists what disabling does not cover on its own: acce
 - In Entra ID, set **Account enabled** back on for the user.
 - Ask the user to sign in again. Then check the sign-in log for a successful event with the same user and app.
 
-If the error remains, compare both places again. A synchronized user can be enabled in one directory and disabled in the other.
+If the error remains, compare both places again. My observation, not from the pages: a synchronized user can be enabled in one directory and disabled in the other.
 
 ## A short order of work (my advice)
 
@@ -97,6 +97,6 @@ This is my suggestion, not a Microsoft procedure:
 
 ## Sources
 
-- [Microsoft Entra authentication and authorization error codes (Microsoft Learn)](https://learn.microsoft.com/entra/identity-platform/reference-error-codes)
+- [Microsoft Entra authentication & authorization error codes (Microsoft Learn)](https://learn.microsoft.com/entra/identity-platform/reference-error-codes)
 - [How to troubleshoot sign-in errors (Microsoft Learn)](https://learn.microsoft.com/entra/identity/monitoring-health/howto-troubleshoot-sign-in-errors)
 - [Revoke user access in an emergency in Microsoft Entra ID (Microsoft Learn)](https://learn.microsoft.com/entra/identity/users/users-revoke-access)
