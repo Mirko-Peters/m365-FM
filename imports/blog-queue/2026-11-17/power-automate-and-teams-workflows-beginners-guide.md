@@ -15,6 +15,8 @@ keypoints:
 faq:
   - q: "What is the Workflows app in Teams?"
     a: "According to Microsoft Support, the Workflows app helps you set up, find and manage automated workflows for routine tasks. Microsoft Learn describes the flows created in it as Power Automate flows, which you can also manage at make.powerautomate.com."
+  - q: "What kinds of business tasks can teams automate with Workflows in Teams?"
+    a: "Microsoft Support describes the Workflows app as a way to automate routine tasks and offers templates for them. Examples in the documentation include acting on a selected message and sending alerts into a channel. The pages read do not list every template, so browse All templates in your own tenant."
   - q: "How do I create a workflow in Teams?"
     a: "Microsoft Support describes opening the Workflows app, choosing a template from the home page or All templates, following the prompts and selecting Save. To start without a template, select Build from scratch, choose a trigger and an action, complete the fields and select Save."
   - q: "Where do my Teams workflows run?"
@@ -26,6 +28,22 @@ faq:
 ---
 
 A workflow in Teams is an automated sequence that runs when something happens, such as a message being posted, and then does something, such as notifying a channel. The Workflows app in Teams is the entry point for building and managing them, and Microsoft's documentation shows these workflows run on Power Automate. If you can describe a routine task as "when this happens, do that", it is a candidate.
+
+## Why teams use business workflow automation
+
+Workflow automation means using software to run a repeatable business process, so people do not repeat the same manual steps by hand. An automation tool waits for a trigger and then runs the actions you defined, the same way every time. Microsoft Support describes the Workflows app as a way to set up automated workflows for routine tasks, which is the core of the idea: the work is repetitive and you can state the rule.
+
+Typical examples of workflow automation in Teams, built only from what the documentation describes:
+
+- Notify a channel when a message is posted.
+- Run a flow on one specific message, using the **For a selected message** trigger.
+- Send alerts into a channel, which is the job incoming webhooks did before the Office 365 Connectors retirement.
+
+Microsoft's pages read for this article do not give figures for time saved, so treat the benefit as fewer repetitive manual steps and a process that behaves consistently, not as a measured result.
+
+### Which workflow to automate first
+
+A good first automation is frequent, rule-based and low risk. If you can write it as "when this happens, do that", and a mistake would be easy to spot, it is a good candidate. The safest first workflow notifies a channel. Tasks that need judgement, or touch data you cannot afford to get wrong, are better kept manual until you trust the process.
 
 ## How Teams and Power Automate fit together
 
