@@ -53,7 +53,7 @@ Each rule can generate **150 alerts** per run, so tune the query. Recommended co
 | Defender for Endpoint tables | `DeviceId` and `ReportId` |
 | Other Defender tables | `Timestamp` and `ReportId` from the same event |
 
-To map impacted assets automatically, project one strong identifier: for devices `DeviceId`, `DeviceName` or `RemoteDeviceName`, for mailboxes `RecipientEmailAddress` and similar, for accounts `AccountObjectId`, `AccountSid` or `AccountUpn`. Do not filter on `Timestamp` or `TimeGenerated` to control the window. The service prefilters by the lookback. With Microsoft Sentinel scoping, project `SentinelScope_CF`.
+To map impacted assets automatically, project one strong identifier: for devices `DeviceId`, `DeviceName` or `RemoteDeviceName`, for mailboxes `RecipientEmailAddress` and similar, for accounts `AccountObjectId`, `AccountSid` or `AccountUpn`. Learn advises avoiding filters on `Timestamp` or `TimeGenerated`, because the service prefilters by the lookback. Filter on them only to evaluate a specific part of the lookback window. With Microsoft Sentinel scoping, project `SentinelScope_CF`.
 
 Learn's sample query:
 
@@ -82,7 +82,7 @@ Lookback for Defender data is fixed by frequency:
 
 ## Alert details and enrichment
 
-- **Detection name** must be unique. **Alert title** and **Description** are plaintext, and HTML, Markdown and code are sanitized. URLs must be percent-encoded.
+- **Detection name:** Learn says to make it unique. **Alert title** and **Description:** use plaintext, because HTML, Markdown and other code are sanitized. URLs in them should follow the percent-encoding format to display properly.
 - Set severity, category, MITRE tactic, techniques and recommended actions.
 - Dynamic text: reference result columns in double curly brackets, up to three columns per field.
 - **Custom details:** up to 20 key-value pairs, with 4 KB combined per alert. If exceeded, the whole array is dropped from the alert.
@@ -111,18 +111,18 @@ Choose **All devices** or **Specific device groups**. Scope affects only device-
 
 ## What the page does not cover
 
-The full list of supported KQL operators and NRT tables, pricing or plan requirements beyond the applies-to list, the Graph API for rules, and how to manage existing rules.
+The full list of supported KQL operators for Continuous (NRT) (the page links to it), pricing or plan requirements, the Graph API for rules, and how to manage existing rules (the page links to a separate article).
 
-## A cautious start
+## A cautious start (my advice)
 
-The steps are practical advice.
+The steps are my own suggestion.
 
 1. Run the query in Advanced hunting and read the results.
 2. Add the identifier and `ReportId` columns.
 3. Create the rule without response actions first.
 4. Watch the alerts for a few days, then add automated actions where you trust the precision.
 
-## Typical mistakes
+## Typical mistakes (my advice)
 
 - Using a query that returns far more than 150 rows per run.
 - Choosing Continuous (NRT) with a joined query.
@@ -138,4 +138,4 @@ The steps are practical advice.
 
 ## Sources
 
-- [Create and manage custom detection rules in Microsoft Defender XDR (Microsoft Learn)](https://learn.microsoft.com/defender-xdr/custom-detection-rules)
+- [Create custom detection rules in Microsoft Defender XDR (Microsoft Learn)](https://learn.microsoft.com/defender-xdr/custom-detection-rules)
