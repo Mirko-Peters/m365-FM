@@ -1,6 +1,6 @@
 ---
 title: "Azure Monitor KQL Log Alert Rules That Cut Alert Noise and Sprawl"
-summary: "Build log search alert rules in Azure Monitor that fire less often and cost less: choose the right alert type, aggregate, split by few dimensions, use violations and auto-resolve, and avoid query limits."
+summary: "Build log search alert rules in Azure Monitor that fire less often: choose the right alert type, aggregate, split by few dimensions, use violations and auto-resolve, and know the billing basis and query limits."
 status: review
 publish: false
 author: mirko-p
@@ -25,7 +25,7 @@ faq:
     a: "Learn lists the rules by frequency. For a 1 minute frequency it resolves after the condition is not met for 10 minutes. For 5 to 15 minutes it is three periods, for 15 minutes to 11 hours two periods, and for 11 to 12 hours one period. Stateful rules above 12 hours are not supported."
 ---
 
-To cut alert noise in Azure Monitor, alert on aggregated results instead of single rows, require several violations within an evaluation period, split by only a few stable dimensions and let stateful alerts resolve themselves. Each choice also lowers cost, because log search alerts are billed by evaluation frequency and by the number of time series.
+To cut alert noise in Azure Monitor, alert on aggregated results instead of single rows, require several violations within an evaluation period, split by only a few stable dimensions and let stateful alerts resolve themselves. Cost follows from two documented billing factors: log search alerts are billed by how often the query is evaluated and, with dimension splitting, by the number of time series. Fewer dimension combinations and a lower evaluation frequency therefore cost less. Learn does not say that aggregation or violation counts change the bill.
 
 ## Step 1: Choose the right alert type
 
@@ -106,4 +106,4 @@ The pages I read do not give a pricing figure or a limit on the total number of 
 ## Sources
 
 - [Create or edit a log search alert rule (Microsoft Learn)](https://learn.microsoft.com/en-us/azure/azure-monitor/alerts/alerts-create-log-alert-rule)
-- [Choosing the right type of alert rule (Microsoft Learn)](https://learn.microsoft.com/azure/azure-monitor/alerts/alerts-types)
+- [Choosing the right type of alert rule (Microsoft Learn)](https://learn.microsoft.com/en-us/azure/azure-monitor/alerts/alerts-types)
