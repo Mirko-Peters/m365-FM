@@ -14,9 +14,9 @@ keypoints:
   - "The Classification Date column triggers a Power Automate flow after processing."
 faq:
   - q: "Which model type should I choose for invoices?"
-    a: "Microsoft Learn recommends a structured model for forms or invoices with consistent layouts, because it extracts values from fixed positions. A prebuilt invoice processing model is also listed, and it needs no training. Check whether it covers your fields first."
+    a: "Microsoft Learn recommends a structured model for forms or invoices with consistent layouts, because it extracts values from fixed positions. A prebuilt invoice processing model is also listed, and Learn says prebuilt models remove the need for manual training or configuration. My own advice: check whether it covers your fields first."
   - q: "How many example files does a structured or freeform model need?"
-    a: "Learn says to add at least five example files for each collection of document layouts. The pages I read do not state a maximum or a file size limit, and they point to a separate requirements page."
+    a: "Learn says to add at least five example files for each collection of document layouts. The training page gives no maximum or file size limit. The comparison page says freeform and structured models train on .pdf, .jpg or .png files with a total of 50 MB and 500 pages, and the training page points to a separate AI Builder requirements page."
   - q: "Are existing files processed when I apply a model?"
     a: "No. According to Learn, an applied model processes files and folders uploaded after it is applied. For existing content, select the items and choose Classify and extract. Folders or large migrations can take up to 24 hours."
   - q: "How do I run a flow after a file is processed?"
@@ -25,7 +25,7 @@ faq:
 
 A custom extraction model in SharePoint Premium is trained on example documents, published, and then applied to a document library. After that, the model identifies files with its content type and fills the extracted values into library columns. The choice that matters most is the model type: unstructured, freeform or structured. The rest is a repeatable sequence of steps.
 
-Microsoft's documentation still uses the name Syntex in several places, because parts of the content were written before the rename. The steps below follow the pages as I read them.
+Microsoft's documentation still uses the name Syntex in places, for example in the name of the flow template and in older URL paths. The steps below follow the pages as I read them.
 
 ## Step 1: Choose the model type
 
@@ -37,7 +37,7 @@ Microsoft Learn describes three custom model types.
 | Freeform | Data that can appear anywhere, such as scanned letters, faxes or PDFs | No, extraction only. Setup option: freeform extraction model |
 | Structured | Forms or invoices with consistent layouts, values at fixed positions | No, extraction only. Setup option: structured extraction model |
 
-Learn adds that unstructured models support the broadest range of file types and more than 40 languages, that freeform models work on PDF and image formats, and that structured models support the widest range of languages. Freeform and structured models are built with Microsoft Power Apps AI Builder. Learn says availability of freeform models varies by region.
+Learn adds that unstructured models support the broadest range of file types and more than 40 languages, that freeform models work on PDF and image formats, and that structured models support the widest range of languages. The comparison page puts numbers on the languages: more than 40 for unstructured and freeform, more than 100 for structured. It lists the classification type as not applicable for freeform and structured models, and it says unstructured models train on 5 to 10 files, including negative examples. Freeform and structured models are built with Microsoft Power Apps AI Builder. Learn says availability of freeform models varies by region.
 
 If your document is a common type, check the prebuilt models first. Learn lists contract, invoice and receipt processing, sensitive information processing and simple document processing. Prebuilt models need no training. Simple document processing extracts key-value pairs, selection marks, named entities and barcodes, and Learn calls it an alternative when custom labeling is not feasible.
 
@@ -48,17 +48,17 @@ Every model is linked to a SharePoint content type, which defines the columns fo
 - **Enterprise models** are created in a content center and can be reused across several SharePoint sites.
 - **Local models** are created directly in a document library and apply only to that library.
 
-Use an enterprise model when several sites receive the same document type. Use a local model for a single library.
+My own rule of thumb from the scope difference: use an enterprise model when several sites receive the same document type, and a local model for a single library.
 
 ## Step 3: Add example documents
 
 For a structured or freeform model, the creation flow opens a **Choose information to extract** page. Define the fields and tables you want, for example Name, Address or Amount. Then:
 
-1. Create one collection per document layout. A collection groups documents with the same layout.
+1. Create collections for your document layouts. The page says you can create as many collections of document layouts as you want the model to process.
 2. Add at least five example files per collection.
 3. Let AI Builder analyze the files. Learn says this usually takes a few seconds.
 
-Learn points to separate pages for the input document requirements. The page I read for training does not list file size or format limits, so check the linked requirements page before you collect samples.
+Learn points to a separate AI Builder page for the input document requirements, which I did not read. The training page lists no file size or format limits. The comparison page says freeform and structured models train on .pdf, .jpg or .png files, total 50 MB and 500 pages, so check both before you collect samples.
 
 ## Step 4: Tag, train and publish
 
@@ -68,7 +68,7 @@ The pages I read do not describe how to test accuracy before publishing, and the
 
 ## Step 5: Apply the model to a library
 
-You need **Manage Lists** permission or **Edit** rights on the library. The model type must be enabled for the site. Learn warns that if the service is turned off later, the model no longer runs. To see the **Classify and extract** command when you add a document library web part to a page, Learn says you need a pay-as-you-go subscription.
+You need **Manage Lists** permission or **Edit** rights on the library. The model type must be enabled for the site. Learn warns that if the service is turned off later, the model no longer runs. A note on the page says that to see custom commands like **Classify and extract** when you add a document library web part to a SharePoint site page, you must have a pay-as-you-go subscription.
 
 1. On the model home page, select **Apply model** on the **Apply model to libraries** tile, or select **Add library** under **Where the model is applied**.
 2. Pick the site, then the document library.
@@ -88,7 +88,7 @@ The selected items go into a queue. Learn says that classification of folders or
 
 ## Step 7: React to processed files
 
-When a custom model is applied, a **Classification Date** field is added to the library. It stays empty until the model has processed a file, and then holds a date and time stamp. The SharePoint connector trigger **When a file is classified by a content understanding model** uses this field to start a Power Automate flow. The flow can use any extracted information. Learn gives a template, **Send an email after Syntex processes a file**, which you reach through **Integrate** > **Power Automate** > **Create a flow**.
+When a custom model is applied, a **Classification Date** field is added to the library. It stays empty until the model has processed a file, and then holds a date and time stamp. The SharePoint connector trigger **When a file is classified by a content understanding model** uses this field to start a Power Automate flow. The flow can use any extracted information. Learn gives a template, **Send an email after Syntex processes a file**, Select a file, then select **Integrate** > **Power Automate** > **Create a flow**, and pick the template on the **Create a flow** panel.
 
 ## Keeping the model current
 
@@ -99,15 +99,15 @@ If you add or remove an extractor, push the change to the libraries. On the mode
 - With two or more unstructured models, a file is classified with the model that has the highest average confidence score.
 - With an unstructured model plus a freeform or structured model, the file is classified by the unstructured model. Empty columns that match the other model are filled with its extracted values.
 
-## Typical mistakes
+## Typical mistakes (my own reading)
 
 - Choosing a structured model for documents whose layout changes. Use unstructured or freeform instead.
-- Forgetting existing files. Uploading is not the only trigger, so run Classify and extract for old content.
+- Forgetting existing files. An applied model processes files uploaded after it is applied, so run Classify and extract for old content.
 - Treating the model as live everywhere after a change. Sync the libraries.
 
 ## What the read pages do not say
 
-The pages I read do not give prices, licensing amounts, per-page limits or service quotas for custom models. Check the current licensing and pay-as-you-go pages in the Microsoft 365 admin center before a large rollout.
+The three main pages do not give prices or licensing amounts. The comparison page says that with per-user licensing, freeform and structured models use AI Builder credits (3,500 credits per license per month, and one million credits allow processing of 10,000 file pages), and that pay-as-you-go does not apply to them. A note on that page says Microsoft announced a progressive end of AI Builder credits in October 2025. I did not read the licensing pages, so check the current licensing and pay-as-you-go information before a large rollout.
 
 ## Related
 
@@ -118,6 +118,7 @@ The pages I read do not give prices, licensing amounts, per-page limits or servi
 
 ## Sources
 
-- [Document processing model types overview (Microsoft Learn)](https://learn.microsoft.com/en-us/microsoft-365/documentprocessing/model-types-overview)
-- [Train a structured or freeform document processing model (Microsoft Learn)](https://learn.microsoft.com/microsoft-365/syntex/create-a-form-processing-model)
-- [Apply a document processing model to a document library (Microsoft Learn)](https://learn.microsoft.com/microsoft-365/syntex/apply-a-model)
+- [Overview of document processing model types (Microsoft Learn)](https://learn.microsoft.com/en-us/microsoft-365/documentprocessing/model-types-overview?view=o365-worldwide)
+- [Compare custom models for document processing (Microsoft Learn)](https://learn.microsoft.com/en-us/microsoft-365/documentprocessing/difference-between-document-understanding-and-form-processing-model?view=o365-worldwide)
+- [Train a structured or freeform document processing model (Microsoft Learn)](https://learn.microsoft.com/en-us/microsoft-365/documentprocessing/create-a-form-processing-model?view=o365-worldwide)
+- [Apply a document processing model to a document library (Microsoft Learn)](https://learn.microsoft.com/en-us/microsoft-365/documentprocessing/apply-a-model?view=o365-worldwide)
