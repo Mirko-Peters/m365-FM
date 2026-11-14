@@ -31,7 +31,7 @@ AADSTS50001 is named InvalidResource in the Microsoft Entra error reference: the
 
 The row for AADSTS50001 reads: InvalidResource - The resource is disabled or doesn't exist. Check your app's code to ensure that you have specified the exact resource URL for the resource you're trying to access.
 
-Two readings are possible from this wording: the resource really is disabled or missing, or the request names it incorrectly. The second half of the sentence points at the second reading, because the instruction is to check the resource URL in code. The reference does not give a list of causes, so the rest of this article is about how the URL gets into a request.
+The wording allows two situations: the resource really is disabled or missing, or the request names it incorrectly. My reading: the second half of the sentence points at the second one, because the instruction is to check the resource URL in code. The reference does not give a list of causes, so the rest of this article is about how the URL gets into a request.
 
 ## How a resource is identified
 
@@ -54,7 +54,7 @@ Learn describes several forms. Check each one that your app uses:
 3. **The resource parameter on v1.0.** Learn says that `scope={resource-identifier}/.default` is functionally the same as `resource={resource-identifier}` on the v1.0 endpoint.
 4. **An omitted resource.** In requests to the authorization, token or consent endpoints, if the resource identifier is omitted from the scope, the resource is assumed to be Microsoft Graph. So `scope=User.Read` equals `https://graph.microsoft.com/User.Read`.
 
-Point 4 matters for debugging. If your app should call another API but the scope has only a bare permission name, the request goes to Graph, which can produce a different failure than you expect.
+Point 4 matters for debugging. If your app should call another API but the scope has only a bare permission name, Learn says the resource is assumed to be Microsoft Graph, not the API you meant. My reading: that mismatch can show up as a different failure than you expect.
 
 ## Client credentials and .default
 
@@ -74,14 +74,14 @@ This section is my advice, not a Microsoft statement.
 
 1. **Print the scope or resource value your app really sends.** Do this from the network trace, not from the configuration you think it uses.
 2. **Compare it with the resource identifier of the API.** Compare character by character, including scheme, host, path and trailing slash.
-3. **Check for environment mix-ups.** An identifier copied from a test API may not exist in the tenant where the app now runs. In my experience this is a common cause of a missing resource after a move between environments.
+3. **Check for environment mix-ups.** An identifier copied from a test API may not exist in the tenant where the app now runs.
 4. **Check that the resource exists in the tenant.** The row says the resource can be disabled or missing. Ask the API owner whether the service principal for that API exists and is enabled in the tenant you sign in to. Learn's reference row does not describe how to look this up.
 5. **Fix the scope format.** Use the identifier plus `.default` for client credentials, and do not mix `.default` with named scopes.
 6. **Retry and read the new message.** If the code changes, you have fixed one problem and found the next.
 
-## What I did not read
+## What the pages do not cover
 
-The reference page is a long list of codes. I read the row for this code and the rows around it for context, not the whole page. Learn's scopes page covers resource identifiers, `.default` and the trailing slash, but it does not mention AADSTS50001. Pages on registering a web API, app roles or service principals are separate and I did not read them for this article.
+The reference row for AADSTS50001 is one sentence and lists no causes or steps. Learn's scopes page covers resource identifiers, `.default` and the trailing slash, but it does not mention AADSTS50001. How to register a web API, define app roles or check a service principal is covered on separate Learn pages.
 
 ## Related
 
