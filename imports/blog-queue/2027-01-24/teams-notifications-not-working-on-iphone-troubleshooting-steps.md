@@ -25,7 +25,7 @@ faq:
     a: "The page describes an incorrect notification count as a known issue under investigation. The iOS app badge may show an incorrect unread count, while the desktop app on Windows and Mac shows the correct count."
 ---
 
-When Teams notifications do not behave on a phone, the cause is usually one of three things: a Teams setting, an iOS setting, or the way Teams decides where to notify you. This article follows the Microsoft Support page on troubleshooting notifications for the Teams mobile apps. I could read the iPhone content only. The Android section did not come through in what I could read, so I do not describe Android steps here, and the title says iPhone for that reason.
+When Teams notifications do not behave on a phone, the cause is usually one of three things: a Teams setting, an iOS setting, or the way Teams decides where to notify you. This article follows the Microsoft Support page on troubleshooting notifications for the Teams mobile apps. This article covers the iPhone (iOS) content only. The page also has an Android tab, which is not described here.
 
 ## Defaults on iOS
 
@@ -79,18 +79,18 @@ Notes from the page:
 
 ## Case 4: Wrong notification count
 
-The page lists this as a known issue under investigation. The badge on the iOS app may show an incorrect unread count. The desktop app on Windows and Mac shows the correct count. There is no setting to change, so treat the desktop count as reference.
+The page lists this as a known issue under investigation. The badge on the iOS app may show an incorrect unread count. The desktop app on Windows and Mac shows the correct count. The page does not mention a setting to change. My reading: treat the desktop count as the reference.
 
-## How the settings fit together
+## How the settings fit together (my reading)
 
-The notification settings live in two layers. The first layer is inside Teams, where your profile picture leads to **Notifications**. There you choose which activity types alert you and which situations block alerts. The second layer is the operating system. If iOS does not allow notifications for Teams, nothing set inside Teams can bring them back, which is why the Open settings button in Teams leads you to the iOS Settings app. When you troubleshoot, work from the Teams layer outward, and keep in mind that the page describes the permission prompt at first launch as one of the causes. In my experience, that is an easy thing to miss, and the fix is the iOS setting described in the second case.
+This section is my own explanation, not text from the page. The notification settings live in two layers. The first layer is inside Teams, where your profile picture leads to **Notifications**. There you choose which activity types alert you and which situations block alerts. The second layer is the operating system. If iOS does not allow notifications for Teams, nothing set inside Teams can bring them back, which is why the Open settings button in Teams leads you to the iOS Settings app. When you troubleshoot, work from the Teams layer outward, and keep in mind that the page describes the permission prompt at first launch as one of the causes. In my experience, that is an easy thing to miss, and the fix is the iOS setting described in the second case.
 
 The block options in the third case are not faults. They are features that can look like faults. A user who turned on the block for being active on other devices will get fewer alerts on the phone by design, and the page explains that notifications return after a few minutes of inactivity on web or desktop.
 
-## What the page does not cover in what I read
+## What this article does not cover
 
-- Android steps. Check the Support page for the Android tab.
-- Admin-side reasons, such as policies, which the page does not discuss in the part I read.
+- Android steps. The page has an Android tab, which is not described here.
+- Admin-side reasons, such as policies. The iOS content of the page does not discuss them.
 
 ## A short order of work (my advice)
 
@@ -110,4 +110,4 @@ For a support desk, a short reply template with the four cases and the profile p
 
 ## Sources
 
-- [Troubleshoot notifications for Teams mobile apps (Microsoft Support)](https://support.microsoft.com/office/troubleshoot-notifications-for-teams-mobile-apps-6d125ac2-e440-4fab-8e4c-2227a52d460c)
+- [Troubleshoot notifications in Microsoft Teams mobile apps (Microsoft Support)](https://support.microsoft.com/office/troubleshoot-notifications-for-teams-mobile-apps-6d125ac2-e440-4fab-8e4c-2227a52d460c)
