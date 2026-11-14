@@ -20,7 +20,7 @@ faq:
   - q: "How often does a workflow run?"
     a: "Microsoft Learn says that once scheduling is enabled, the workflow is evaluated at the configured interval, with a default of three hours. Learn advises setting the hire date time early and the leave time late, and subtracting the tenant schedule from the start time."
   - q: "Can a workflow disable the on-premises account of a leaver?"
-    a: "Yes, for synced users. Microsoft Learn describes the optional disableOnPremisesAccount argument for the Disable user account task, and deleteOnPremisesAccount for Delete user. Users with Microsoft Entra role assignments and members or owners of role-assignable groups are not supported."
+    a: "Yes, for synced users. Microsoft Learn describes the optional disableOnPremisesAccount argument for the Disable user account task, and deleteOnPremisesAccount for Delete user. The prerequisites for these on-premises tasks are on a separate Learn page that this article did not read. Users with Microsoft Entra role assignments and members or owners of role-assignable groups are not supported."
   - q: "Why did my on-demand run process a user who was not in scope?"
     a: "Microsoft Learn states that an on-demand run does not take into account whether a user meets the workflow's execution conditions. It applies the tasks regardless, so choose the users carefully before running."
 ---
@@ -31,7 +31,7 @@ For accounts synced from on-premises Active Directory, Lifecycle Workflows depen
 
 - A Microsoft Entra ID Governance or Microsoft Entra Suite license.
 - At least the Lifecycle Workflows Administrator role to create workflows.
-- Limits stated on the overview page: up to 100 workflows and up to 100 custom task extensions.
+- Limits stated on the overview page: up to 100 workflows and up to 100 custom task extensions. The Understanding page refers to a separate Learn page (Governance service limits) for the full list, which this article did not read.
 
 ## Step 1: Sync the hire and leave dates
 
@@ -47,7 +47,7 @@ Workflows trigger from `employeeHireDate` and `employeeLeaveDateTime`, both Date
 
 ### Entra Connect Sync
 
-Disable the scheduler with `Set-ADSyncScheduler -SyncCycleEnabled $false`. In the Synchronization Rules Editor, add an inbound rule such as `In from AD - EmployeeHireDate`, with a direct flow from your source attribute to `employeeHireDate`. Learn says an outbound rule is not needed on Entra Connect 2.0.3.0 or later, where the attribute is in the default rule. Re-enable the scheduler afterward. For `employeeLeaveDateTime`, the default outbound rule includes it starting with version 2.1.19.0, but you still map the inbound side.
+Disable the scheduler with `Set-ADSyncScheduler -SyncCycleEnabled $false`. In the Synchronization Rules Editor, add an inbound rule such as `In from AD - EmployeeHireDate`, with a direct flow from your source attribute to `employeeHireDate`. Learn says an outbound rule is not needed on Entra Connect 2.0.3.0 or later, where the attribute is in the default rule. Re-enable the scheduler afterward. For `employeeLeaveDateTime`, the default outbound rule includes it starting with version 2.1.19.0, so the outbound steps are not needed there either. Learn gives the full inbound steps only for `employeeHireDate`. Mapping the inbound side for `employeeLeaveDateTime` the same way is my reading, not a documented procedure.
 
 ### Date format and timing
 
@@ -94,9 +94,9 @@ As an alternative for account disabling, Learn mentions HR-driven provisioning t
 - If a user is configured after the intended processing time, for example because of an HR delay, Lifecycle Workflows still attempts processing provided setup completes within three days of the original processing time. This does not apply to the Time based attribute V2 preview trigger.
 - Review run history by users, runs and tasks.
 
-To verify synced values, use Microsoft Graph PowerShell with `Get-MgUser -Property EmployeeLeaveDateTime` and the `User-LifeCycleInfo.Read.All` scope.
+To verify synced values, use Microsoft Graph PowerShell with `Get-MgUser -Property EmployeeLeaveDateTime`. Learn's example connects with the `User.Read.All` and `User-LifeCycleInfo.Read.All` scopes.
 
-## Typical mistakes
+## Typical mistakes (my summary of the pages above)
 
 - Expecting AD to hold the dates without mapping a string attribute.
 - Setting the hire time at the real start time, so the three hour schedule makes the account late.
@@ -106,7 +106,7 @@ To verify synced values, use Microsoft Graph PowerShell with `Get-MgUser -Proper
 
 ## What the sources do not say
 
-The pages read do not label tasks as on-premises tasks in the compatibility column, and the create page does not describe trigger offsets. The sync page gives full steps only for `employeeHireDate`.
+The tasks overview table has an "Active Directory Compatibility" column, but every cell in it is empty, so it does not show which tasks work for synced users. Use the text of each task instead. The prerequisites for the on-premises account tasks sit on a separate Learn page about on-premises users that I did not read, so check it before you use the on-premises arguments. The create page does not describe trigger offsets. The sync page gives full steps only for `employeeHireDate`.
 
 ## Related
 
@@ -117,8 +117,8 @@ The pages read do not label tasks as on-premises tasks in the compatibility colu
 
 ## Sources
 
-- [What are Lifecycle Workflows](https://learn.microsoft.com/en-us/entra/id-governance/what-are-lifecycle-workflows)
-- [Understanding Lifecycle Workflows](https://learn.microsoft.com/en-us/entra/id-governance/understanding-lifecycle-workflows)
-- [Create a Lifecycle Workflow](https://learn.microsoft.com/en-us/entra/id-governance/create-lifecycle-workflow)
-- [Synchronize attributes for Lifecycle Workflows](https://learn.microsoft.com/en-us/entra/id-governance/how-to-lifecycle-workflow-sync-attributes)
-- [Lifecycle Workflow tasks](https://learn.microsoft.com/en-us/entra/id-governance/lifecycle-workflow-tasks)
+- [What are lifecycle workflows?](https://learn.microsoft.com/en-us/entra/id-governance/what-are-lifecycle-workflows)
+- [Understanding lifecycle workflows](https://learn.microsoft.com/en-us/entra/id-governance/understanding-lifecycle-workflows)
+- [Create a lifecycle workflow](https://learn.microsoft.com/en-us/entra/id-governance/create-lifecycle-workflow)
+- [How to synchronize attributes for Lifecycle workflows](https://learn.microsoft.com/en-us/entra/id-governance/how-to-lifecycle-workflow-sync-attributes)
+- [Lifecycle Workflows tasks and definitions](https://learn.microsoft.com/en-us/entra/id-governance/lifecycle-workflow-tasks)
