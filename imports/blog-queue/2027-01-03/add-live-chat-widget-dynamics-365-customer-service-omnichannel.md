@@ -95,7 +95,7 @@ Turn on **Only show widget on the provided domains** and enter the portal link. 
 
 The page does not describe the embed code or website installation. It lists two separate articles in its related information: embedding the chat widget in a website or portal, and embedding it in mobile experiences. Read the website one before you publish. I did not read it, so this guide gives no script tag or placement advice.
 
-## A pre-launch check
+## A pre-launch check (my advice)
 
 1. Workstream and queue routing work with a test conversation.
 2. Authentication settings are in place if you use persistent chat.
@@ -103,7 +103,7 @@ The page does not describe the embed code or website installation. It lists two 
 4. Operating hours settings match your support schedule.
 5. You used **Copy testing script** to test before **Set as active**.
 
-## Typical mistakes
+## Typical mistakes (my advice)
 
 - Creating the widget before the workstream exists.
 - Editing shared Behaviors or User features on a version that is not active and expecting no live effect, or the reverse.
@@ -117,4 +117,4 @@ The page does not describe the embed code or website installation. It lists two 
 
 ## Sources
 
-- [Configure a chat widget (Microsoft Learn)](https://learn.microsoft.com/dynamics365/customer-service/administer/add-chat-widget)
+- [Configure a chat widget in Dynamics 365 Contact Center (Microsoft Learn)](https://learn.microsoft.com/dynamics365/customer-service/administer/add-chat-widget)
