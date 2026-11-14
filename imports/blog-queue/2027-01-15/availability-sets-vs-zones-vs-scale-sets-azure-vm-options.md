@@ -44,7 +44,7 @@ The page applies to Linux VMs, Windows VMs, flexible scale sets and uniform scal
 
 An availability zone is a physically separate zone within an Azure region. There are three zones per supported region, and each has a distinct power source, network and cooling. Learn says that by designing solutions to use replicated VMs in zones, you can protect apps and data from the loss of a data center. If one zone is compromised, replicated apps and data are instantly available in another zone.
 
-A note for design: regional resources may or may not exist in an availability zone, and you have no insight into what zone a regional resource is in. A failure in any zone of a region has the potential to bring down a regional VM. A VM you want to protect from zone loss therefore needs to be deployed zonal and replicated, not only regional.
+A note for design: regional resources may or may not exist in an availability zone, and you have no insight into what zone a regional resource is in. A failure in any zone of a region has the potential to bring down a regional VM. My reading: a VM you want to protect from zone loss therefore needs to be deployed zonal and replicated, not only regional.
 
 ## Scale sets
 
