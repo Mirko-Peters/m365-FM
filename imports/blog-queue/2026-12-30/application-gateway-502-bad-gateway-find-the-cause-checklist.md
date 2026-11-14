@@ -1,20 +1,20 @@
 ---
 title: "Application Gateway 502 Bad Gateway: Find the Cause With a Documented Checklist"
-summary: "Work through the six causes of Azure Application Gateway 502 errors from Microsoft Learn: NSG, UDR or DNS blocks, probe failures, backend timeouts, empty pools and unhealthy instances, plus certificate mismatches, with the commands and defaults the page gives."
+summary: "Work through the documented causes of Azure Application Gateway 502 errors from Microsoft Learn: NSG, UDR or DNS blocks, probe failures, backend timeouts, empty pools, unhealthy instances and certificate mismatches, with the commands and defaults the page gives."
 status: review
 publish: false
 author: mirko-p
 date: 2026-12-30
 topics: [azure-application-gateway]
 keypoints:
-  - "Learn lists six causes: NSG, UDR or DNS blocks, default probe failures, invalid custom probes, backend timeouts, and an empty pool or unhealthy instances. A certificate mismatch is also covered."
+  - "Learn's list has six reasons, from NSG, UDR or DNS blocks to empty pools and certificate mismatches. A separate section covers invalid custom probes."
   - "The default probe uses http://127.0.0.1/ with a 30 second interval, a 30 second timeout and an unhealthy threshold of 3. It must return HTTP 200 on the backend setting port."
   - "The backend request timeout is 20 seconds by default and ranges from 1 to 86400 seconds. On v2 a second timeout returns a 504, not a 502."
   - "Raising the timeout hides the symptom if the backend is slow, so investigate the backend response time first."
-  - "A probe can succeed while the return path is dropped, for example when a route sends the response through a firewall or NVA."
+  - "A probe can reach the backend and still fail if the response is dropped or redirected on the way back, for example by a route through a firewall or NVA."
 faq:
   - q: "What are the documented causes of a 502?"
-    a: "According to Microsoft Learn, an NSG, UDR or custom DNS blocking the backend, the default health probe unable to reach backend VMs, an invalid custom probe, a backend request timeout, an empty or unconfigured backend pool, and all instances in the pool being unhealthy. It also covers an upstream certificate that does not match the host name."
+    a: "According to Microsoft Learn, an NSG, UDR or custom DNS blocking the backend, the default health probe unable to reach backend VMs, a backend request timeout, an empty or unconfigured backend pool, unhealthy instances in the pool, and an upstream certificate that does not match the host name. It also has a section on invalid custom probes."
   - q: "What are the default probe settings?"
     a: "URL http://127.0.0.1/, interval 30 seconds, timeout 30 seconds and unhealthy threshold 3."
   - q: "What is the default backend request timeout?"
@@ -25,7 +25,7 @@ faq:
     a: "Run Get-AzApplicationGateway and confirm each backend address pool has addresses in BackendAddresses and a ProvisioningState of Succeeded."
 ---
 
-A 502 from Azure Application Gateway means the gateway received an invalid response, or none, from a backend. This guide follows the Microsoft Learn troubleshooting article. Learn presents six causes and does not say the list is exhaustive.
+A 502 from Azure Application Gateway means the gateway received an invalid response, or none, from a backend. This guide follows the Microsoft Learn troubleshooting article. Learn's symptom list names six reasons, plus a section on invalid custom probes, and does not say the list is exhaustive.
 
 ## 1. NSG, UDR or custom DNS
 
@@ -36,7 +36,7 @@ An NSG, a user-defined route or custom DNS can block the backend, so probes fail
 3. Effective NSGs and routes on the backend VM's NIC, using `Get-AzEffectiveNetworkSecurityGroup` and `Get-AzEffectiveRouteTable`.
 4. Whether the virtual network uses custom DNS, visible as DhcpOptions in `Get-AzVirtualNetwork`, and whether that server resolves each backend FQDN.
 
-Learn adds a return-path case. A probe may reach the backend, but the response is dropped or redirected before it returns, because a UDR, peering route or BGP route sends it through a firewall or NVA. For a v2 gateway that is not a private deployment you can use Connection troubleshoot in the portal, or `az network watcher test-connectivity` from a diagnostic VM.
+In its default probe section Learn adds a return-path case. A probe may reach the backend, but the response is dropped or redirected before it returns, because a UDR, peering route or BGP route sends it through a firewall or NVA. For a v2 gateway that is not a private deployment you can use Connection troubleshoot in the portal, or `az network watcher test-connectivity` from a diagnostic VM.
 
 ## 2. Default probe cannot reach backends
 
@@ -83,4 +83,4 @@ The page gives no command for checking backend health and sends 504 handling to 
 
 ## Sources
 
-- [Troubleshooting bad gateway errors in Application Gateway](https://learn.microsoft.com/azure/application-gateway/application-gateway-troubleshooting-502)
+- [Troubleshoot bad gateway (502) errors (Microsoft Learn)](https://learn.microsoft.com/troubleshoot/azure/application-gateway/application-gateway-troubleshooting-502)
