@@ -53,7 +53,7 @@ When on, standalone Copilot searches only content marked **Approved for Copilot*
 
 The AI and Copilot setting is automatically delegated to capacity administrators, and tenant admins can't turn the delegation off. Capacity admins find it under **Capacity settings** > **Fabric capacity** > the capacity name > **Delegated tenant settings**, in the section **Copilot and Azure OpenAI Service (preview)**.
 
-By default a capacity inherits the tenant setting. A capacity admin can override it, which means Copilot can be enabled for one capacity even if the tenant setting is off. If you need a hard block, you must also look at who administers each capacity.
+By default a capacity inherits the tenant setting. A capacity admin can override it, which means Copilot can be enabled for one capacity even if the tenant setting is off. If you need a hard block, also look at who administers each capacity (my advice).
 
 ## Capacity and workspace requirements
 
@@ -79,7 +79,7 @@ Learn says a Fabric Copilot capacity is billed only for Copilot AI consumption, 
 
 Copilot is not currently supported for Private Link or closed network environments, according to the page.
 
-## Checklist for admins
+## Checklist for admins (my advice)
 
 1. Confirm you hold Fabric admin rights.
 2. Open **Tenant settings** and review **Users can use Copilot and other features powered by Azure OpenAI**. Restrict it with **Applies to** if you want a pilot group.
@@ -91,7 +91,7 @@ Copilot is not currently supported for Private Link or closed network environmen
 
 ## What the page leaves open
 
-The Learn page does not say how long a settings change takes to apply, and it does not describe what end users see if the capacity is paused or throttled. Test with a pilot group before you tell users it is available.
+The Learn page does not say how long a settings change takes to apply, and it does not describe what end users see if the capacity is paused or throttled. My advice: test with a pilot group before you tell users it is available.
 
 ## Related
 
@@ -99,4 +99,4 @@ The Learn page does not say how long a settings change takes to apply, and it do
 
 ## Sources
 
-- [Enable Fabric Copilot for Power BI](https://learn.microsoft.com/power-bi/create-reports/copilot-enable-power-bi)
+- [Enable Fabric Copilot for Power BI (Microsoft Learn)](https://learn.microsoft.com/power-bi/create-reports/copilot-enable-power-bi)
