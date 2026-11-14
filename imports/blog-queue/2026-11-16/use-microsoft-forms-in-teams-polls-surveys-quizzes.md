@@ -16,11 +16,11 @@ faq:
   - q: "How do I add a form to a Teams channel?"
     a: "Microsoft Support says to install the Forms app first if needed, then go to the channel, select Add a tab and choose Forms under Tabs for your team. You can create a shared form that your team can edit or add an existing form and choose Collect responses, Show results or Collaborate."
   - q: "What is the difference between Forms and Polls in Teams?"
-    a: "Microsoft Support describes the Polls app as powered by Microsoft Forms, with the same functionality and the same service as the Forms app for meeting polls. Polls is a more discoverable way to add polls to meetings, and previous Forms polls stay available in Polls and at forms.microsoft.com."
+    a: "Microsoft Support describes the Polls app as powered by Microsoft Forms, with the same functionality and the same service as the Forms app. Older Forms polls remain viewable in Polls in Teams and in the Microsoft Forms web portal."
   - q: "Who can see poll results in Teams?"
     a: "For polls posted in a chat or channel, Microsoft Support says only the creator can see names and individual responses if you turn on Record names of respondents. You can also choose Share aggregated results with respondents. In meetings, names are visible only to the organizer and presenters."
   - q: "Can I create a quiz in Teams?"
-    a: "Microsoft Support documents quiz creation in Microsoft Forms at forms.office.com using New Quiz. You can then share it to Teams by sending an invitation to a Teams group or channel. A Copilot license is needed only for the optional Copilot quiz draft."
+    a: "Microsoft Support documents quiz creation in Microsoft Forms at forms.office.com using New Quiz. The quiz page does not describe sharing to Teams, but the Send a form page lists sending an invitation to a Teams group or a Teams channel. Using Copilot in Forms needs a Microsoft 365 account and a Copilot license."
 ---
 Microsoft Forms works in Teams in three ways: as a Forms tab in a channel for shared forms, through the Polls app for quick polls in chats, channels and meetings, and as a link you share from forms.office.com for surveys and quizzes. Which one fits depends on whether you want a long-lived form, a quick vote or a graded quiz.
 
@@ -39,7 +39,7 @@ One limit is documented. The setting **Allow respondents to edit their responses
 
 ## Option 2: A quick poll in chat or a channel
 
-1. Select **Actions and apps** beside the compose box, then **Polls**. If it is not listed, use **Get more apps** or **View more apps**.
+1. Select **Actions and apps** beside the compose box, then **Polls**.
 2. Enter a question and at least two options. Use **Add option** for more.
 3. Turn on **Multiple selections** if people may choose more than one answer.
 4. Optionally turn on **Record names of respondents**. Only the creator sees names and individual responses.
@@ -56,15 +56,15 @@ Save a draft or launch it later with **Launch** in the Polls tab or the Polls pa
 
 ## Create a quiz or survey
 
-Quizzes and surveys are built in Microsoft Forms at forms.office.com, then shared to Teams. For a quiz, Microsoft Support lists these steps: select **New Quiz**, enter a name, choose **Quick start with** and a question type, type the question and answers, mark correct answers with the **Correct Answer** check mark and enter **Points**. The **Message** icon adds feedback to an answer. Question types include Choice, Text, Rating, Date, Ranking, Likert, File upload and Net Promoter Score. Use **Preview** to test it. Quizzes save automatically. Drafting with Copilot is optional and requires a Microsoft 365 account and a Copilot license.
+Quizzes and surveys are built in Microsoft Forms at forms.office.com, then shared to Teams. For a quiz, Microsoft Support lists these steps: select **New Quiz**, enter a name, choose **Quick start with** and a question type, type the question and answers, mark correct answers with the **Correct Answer** check mark and enter **Points**. The **Message** icon adds feedback to an answer. Question types include Choice, Text, Rating, Date, Ranking, Likert, File upload and Net Promoter Score. Use **Preview** to test it. Quizzes save automatically. Using Copilot in Forms requires a Microsoft 365 account and a Copilot license.
 
 ## Share to Teams and choose who can respond
 
 Open the form and select **Collect responses**. The options are:
 
-- **Anyone can respond:** no sign-in required.
-- **Only people in my organization can respond:** work or school account required.
-- **Specific people in my organization can respond:** only the names, groups or email addresses you enter.
+- **Anyone can respond:** anyone inside or outside your organization who has the link can respond.
+- **Only people in my organization can respond:** all members of your organization can respond, but others cannot, even with the link.
+- **Specific people in my organization can respond:** only pre-selected members of your organization can access and respond. You enter the names in the **To:** box.
 
 You can send an invitation to a Teams group or channel, copy a link, download a QR code or embed the form. Microsoft Support lists limits: invitations to up to 500 individual recipients, and a Teams group of up to 200 members. The **Record name** and **One response per person** settings are available only when access is limited to your organization.
 
