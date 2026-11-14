@@ -90,9 +90,9 @@ Details from Learn:
 
 Limits from Learn: dashboards are not available for testing, and you are redirected to the report published with the model if one exists. The feature does not work for DirectQuery models with single sign-on enabled, does not work for paginated reports, shows only reports from the semantic model's workspace, and cannot validate every element, such as Q&A visuals, quick insights visuals and Copilot.
 
-## Why Viewers still see everything (check the workspace role)
+## Why you may see all the data while testing (check the workspace role)
 
-The most common surprise is testing as the report author and seeing all data. Learn explains why: Admin, Member and Contributor have edit permission on the semantic model, so RLS does not apply to them. Even Viewers with **Build** permission remain restricted. For example, Analyze in Excel is restricted by RLS for them.
+A likely surprise is opening the report as its author, with an Admin, Member or Contributor role, and seeing all data. Learn explains why: Admin, Member and Contributor have edit permission on the semantic model, so RLS does not apply to them. Even Viewers with **Build** permission remain restricted. For example, Analyze in Excel is restricted by RLS for them.
 
 ## Other documented rules
 
