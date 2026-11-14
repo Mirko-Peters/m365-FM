@@ -35,13 +35,13 @@ Microsoft Learn says Copilot is available with Microsoft 365 E7 or as an add-on 
 - **Microsoft Copilot Business**, for organizations with up to 300 users. Listed base plans: Microsoft 365 Business Premium, Business Standard, Business Basic, Microsoft 365 Apps for Business and Microsoft Teams Essentials.
 - **Microsoft 365 plans:** E7 (includes Copilot), E5, E3, F1, F3, Business Premium, Business Standard, Business Basic, Apps for enterprise and Apps for business.
 - **Office 365 plans:** E5, E3, E1 and F3.
-- **Other eligible plans:** Teams Enterprise, EEA and Essentials, Exchange Online Plans 1 and 2 and Kiosk, SharePoint Plans 1 and 2 and Kiosk, OneDrive for work or school Plans 1 and 2, Planner and Project plans, Visio Plans 1 and 2, and Microsoft Clipchamp.
+- **Other eligible plans:** Teams Enterprise, EEA and Essentials, plus eligible Exchange Online, SharePoint, OneDrive for work or school, Planner and Project, and Visio plans and Microsoft Clipchamp. Check the page for the exact plan names.
 
 Government plans (GCC, GCC High and DoD) and education plans (A1, A3, A5 for faculty, staff and students aged 13 and older) have their own lists on the same page. The Business add-on is not listed for them. Microsoft says licensing can change, so confirm eligibility in the Product Terms and the service description before you buy.
 
 ## Step 2: Buy the add-on
 
-Microsoft Learn says you can buy Copilot through the Microsoft 365 admin center marketplace, through Microsoft partners or through your Microsoft account team. The pages I read don't give a click-by-click purchase path, so use the marketplace entry in the admin center or ask your partner. The licensing page notes Copilot Business needs an annual commitment, and that organizations above 300 users should use enterprise licensing.
+The licensing page does not describe a click-by-click purchase path for commercial customers. It names Enrollment for Education Solutions (EES) or a Cloud Solution Provider (CSP) as the purchase channels for the education offer, so ask your Microsoft partner or account team how to buy for your plan. The licensing page notes Copilot Business needs an annual commitment, and that organizations above 300 users should use enterprise licensing.
 
 You might need more licenses for Microsoft Purview and SharePoint Advanced Management, according to the setup article. Those are recommended foundations for governance, not requirements for the license itself.
 
@@ -66,11 +66,11 @@ Microsoft Learn's setup article gives this path:
 3. On the product details page, assign licenses to users.
 4. To confirm, go to **Users** > **Active users**.
 
-You can also manage Copilot licenses from the Copilot page in the admin center. After you assign a license, the system sends the user a notification email. Guests and cross-tenant users can't be assigned Copilot licenses. For education customers, the license appears under Microsoft 365 A3 Extra Features for faculty or Microsoft 365 A5 Extra Features for faculty.
+You can also manage Copilot licenses from the Copilot page in the admin center. After you assign a license, the system sends the user a notification email. Guests and cross-tenant users can't be assigned Copilot licenses.
 
 ## Step 5: Wait, then verify
 
-Microsoft says that in some apps users might wait up to 24 hours for Copilot to appear, and may need to restart or refresh the app. Users sign in with their work or school account, and the file must be editable, not read-only. In Word a Copilot dialog appears for a new document. In other apps Copilot is on the ribbon.
+Microsoft says that in some apps users might wait up to 24 hours for Copilot to appear, and may need to restart or refresh the app. Users sign in with their work or school account.
 
 To check a single account, use the **Copilot License Details** diagnostic that Microsoft links from its requirements page. It verifies whether a user account meets the access requirements.
 
