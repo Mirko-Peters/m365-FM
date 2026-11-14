@@ -11,7 +11,7 @@ keypoints:
   - "Custom sync rules, group filtering, a custom UPN, directory extensions and device sync block the guided tool."
   - "The guided tool puts Connect Sync into staging mode on activation, so only one engine exports at a time."
   - "In a manual migration, keep every object and reference in Connect Sync scope until validation is done, or group memberships can disappear."
-  - "Keep Connect Sync installed for the two-week validation period. Learn documents no formal rollback, only a configuration backup and a disabled server."
+  - "Keep Connect Sync installed for the two-week validation period. The manual pilot tutorial has go-back steps; for the guided tool Learn gives wizard recovery if activation fails."
 faq:
   - q: "Can I run Connect Sync and Cloud Sync side by side?"
     a: "Only with care. The Microsoft Learn migration FAQ says the two must not export normal changes for the same object and attribute set at the same time. In the manual process, the cloudNoFlow and JoinNoFlow rules stop Connect Sync from exporting adds, deletes and non-reference attribute updates for migrated objects."
@@ -20,9 +20,9 @@ faq:
   - q: "Does the guided tool validate everything after activation?"
     a: "No. According to Microsoft Learn it compares the aggregate Total Objects count, checks Cloud Sync job health and confirms Connect Sync is in staging mode. It does not check individual users, groups, memberships or writeback, so you validate those manually."
   - q: "Is there a rollback procedure?"
-    a: "The pages I read do not document a formal one. They say to back up the Connect configuration before a manual migration, keep Connect Sync installed (or the server disabled, not uninstalled) during validation, and follow the wizard's recovery instructions if activation fails."
+    a: "Learn has no dedicated rollback procedure for the guided tool. The manual migration page says to back up the Connect configuration so you can roll back, and the pilot tutorial's troubleshooting section says to disable the provisioning configuration and the custom sync rules created for cloud provisioning, which causes a full sync on all connectors. For the guided tool, keep Connect Sync installed during validation and follow the wizard's recovery instructions if activation fails."
   - q: "What happens to Pass-Through Authentication and seamless SSO?"
-    a: "The Learn migration FAQ says both keep working after migration, because they are configured separately from the sync tool."
+    a: "The Learn migration FAQ says both stay functional after migration because they are configured separately from the sync tool. The same sentence says they remain functional through the Connect Sync configuration wizard, so check how you will manage them before you uninstall Connect Sync. That last point is my own advice."
 ---
 
 The short answer: check whether the guided migration tool accepts your environment, run it on the active Connect Sync server, verify with Provision on Demand, and keep Connect Sync installed through a two-week validation period. If the tool blocks you, a manual phased migration exists, but only for scenarios Microsoft documents. If neither path fits, Microsoft says to stay on Connect Sync.
@@ -41,9 +41,9 @@ These Connect Sync capabilities have no Cloud Sync equivalent according to the g
 
 Attribute-based filtering is limited in Cloud Sync. OU-based filtering works in both.
 
-Before you commit, inventory the following in Connect Sync: object counts per domain, your largest groups, custom rules in the Synchronization Rules Editor, filters, forest topology, device sync and writeback use, and your authentication method (PHS, PTA or AD FS).
+My own checklist, not a Learn list: before you commit, inventory the following in Connect Sync: object counts per domain, your largest groups, custom rules in the Synchronization Rules Editor, filters, forest topology, device sync and writeback use, and your authentication method (PHS, PTA or AD FS).
 
-Also note the dates. The Learn FAQ says deadlines are organization-specific and tied to the notification your tenant receives. If a confirmed blocker prevents migration by that date, you can ask Microsoft Support for more time. Exceptions are reviewed individually and are not guaranteed.
+Also note the dates. The Learn FAQ says deadlines are organization-specific and tied to the notification your tenant receives. If a confirmed blocker prevents migration by that date, you can ask Microsoft Support for more time. Exceptions are reviewed individually, are not guaranteed and do not remove the requirement to migrate.
 
 ## Path 1: The guided migration tool
 
@@ -61,19 +61,19 @@ Learn adds that device sync is a blocker for the tool even though Cloud Sync sup
 
 1. On the active server, open the Microsoft Entra Connect Sync wizard and select **Configure** > **Transition to Cloud Sync**.
 2. Sign in with a Hybrid Identity Administrator account and enter Domain Admin credentials per forest.
-3. Review readiness. Results are Supported, Attention required or Migration blocked. Do not bypass a block.
+3. Review each readiness result and any blocking conditions, including the accidental-deletion protection setting and deletion threshold that the wizard displays. Do not bypass a block.
 4. Enter the quarantine notification email, download the readiness report, accept the consent checkbox and select **Start Transition**.
 5. The tool installs the provisioning agent and creates disabled Cloud Sync configurations. Connect Sync stays the active exporter.
-6. For each domain, select **Open Entra Portal**, open the new configuration and use **Provision on demand** with the distinguished name of a test user or group. Read the detailed result, not only the final indicator.
-7. If password writeback is on, confirm tenant-level SSPR writeback, then select **Complete transfer to Cloud Sync**.
+6. For each domain, select **Open Entra Portal**, open the new configuration and use **Provision on demand** with the distinguished name of an approved test user or group, then select **Provision**. Read the detailed result, not only the final success indicator.
+7. If password writeback is on, verify that tenant-level SSPR writeback is enabled and select the password-writeback confirmation checkbox. Return to the wizard, confirm Provision on Demand succeeded for each domain configuration, then select **Complete transfer to Cloud Sync**.
 8. Activation enables Cloud Sync, places Connect Sync in staging mode and starts the first sync.
-9. Validate manually, then select **Complete Migration**.
+9. Validate manually, select the validation consent checkbox, then select **Complete Migration**.
 
 If you must wait for the next staging cycle, close the wizard. That releases the configuration mutex and keeps the transition state.
 
 ## Path 2: Manual phased migration
 
-Learn's manual guidance targets installations set up with Express settings and says to use the guided tool instead when you are eligible. The core rule is on the page itself: do not remove OUs, domains, groups, users, contacts or other referenced objects from Connect Sync scope until migration and reference validation are complete. Early removal can remove group memberships in Entra ID.
+Learn's manual migration page is only for installations set up with Express settings that are not synchronizing devices. The pilot tutorial adds that you should use the guided tool instead if it is available and the readiness review confirms eligibility. The core rule is on the page itself: do not remove OUs, domains, groups, users, contacts or other referenced objects from Connect Sync scope until migration and reference validation are complete. Early removal can remove group memberships in Entra ID.
 
 The sequence from the pilot tutorial:
 
@@ -82,7 +82,7 @@ The sequence from the pilot tutorial:
 3. Stop the scheduler with `Stop-ADSyncSyncCycle` and `Set-ADSyncScheduler -SyncCycleEnabled $false`.
 4. In the Synchronization Rules Editor, add an inbound rule that sets `cloudNoFlow` to `True` for the pilot objects, and an outbound rule with link type `JoinNoFlow` scoped on `cloudNoFlow` equal to `True`. Repeat for user, group and contact objects.
 5. Install the provisioning agent and create a Cloud Sync configuration scoped to the same OU.
-6. Re-enable the scheduler with `Set-ADSyncScheduler -SyncCycleEnabled $true`.
+6. Re-enable the scheduler with `Set-ADSyncScheduler -SyncCycleEnabled $true` and run `Start-ADSyncSyncCycle`. The manual migration page places the check of the pilot users before this step.
 
 After that, Connect Sync stops exporting object adds, deletes and non-reference attribute updates for those objects. Reference attributes such as `member` and `manager` can still flow. The tutorial warns that `cloudNoFlow` is not a read-only mode.
 
@@ -95,9 +95,9 @@ Make sure pilot objects have `ms-ds-consistencyGUID` populated so Cloud Sync can
 - Confirm password hash sync and password writeback with test users.
 - Create a new test user in the OU and confirm it provisions.
 
-## What the pages do not give you
+## Rollback and recovery
 
-Learn does not describe a formal rollback. For a manual pilot, the general rollback is to disable the provisioning configuration and disable the custom cloud provisioning rules, which triggers a full sync on all connectors. If memberships were removed because of early scope removal, re-add the objects to Connect Sync scope and run a full synchronization. For the guided tool, keep Connect Sync installed, follow the wizard's recovery instructions and do not delete or disable the migration-owned Cloud Sync resources.
+Learn has no dedicated rollback chapter for the guided tool. For a manual pilot, the tutorial's troubleshooting section says to go back to the Connect Sync setup: disable the provisioning configuration in the portal and disable the custom sync rules you created for cloud provisioning, which causes a full sync on all connectors. The manual migration page also says the configuration backup lets you roll back. If memberships were removed because of early scope removal, re-add the objects to Connect Sync scope and run a full synchronization. For the guided tool, keep Connect Sync installed for the validation period. If activation fails, follow the wizard's recovery instructions and do not delete, disable or retag the migration-owned Cloud Sync resources.
 
 ## Related
 
@@ -107,9 +107,9 @@ Learn does not describe a formal rollback. For a manual pilot, the general rollb
 
 ## Sources
 
-- [Migrate from Microsoft Entra Connect Sync to Cloud Sync with the migration tool](https://learn.microsoft.com/en-us/entra/identity/hybrid/cloud-sync/migrate-connect-sync-cloud-sync-tool)
-- [Migrating from Microsoft Entra Connect to Cloud Sync](https://learn.microsoft.com/en-us/entra/identity/hybrid/cloud-sync/migrate-azure-ad-connect-to-cloud-sync)
-- [Pilot migration to Cloud Sync with OU-based scoping](https://learn.microsoft.com/en-us/entra/identity/hybrid/cloud-sync/tutorial-pilot-aadc-aadccp)
-- [Cloud Sync migration FAQ](https://learn.microsoft.com/en-us/entra/identity/hybrid/cloud-sync/cloud-sync-migration-faq)
-- [Migration decision guide](https://learn.microsoft.com/en-us/entra/identity/hybrid/cloud-sync/connect-to-cloud-sync-decision-guide)
-- [What is Cloud Sync](https://learn.microsoft.com/en-us/entra/identity/hybrid/cloud-sync/what-is-cloud-sync)
+- [Microsoft Learn: Migrate to Microsoft Entra Cloud Sync with the Migration Tool](https://learn.microsoft.com/en-us/entra/identity/hybrid/cloud-sync/migrate-connect-sync-cloud-sync-tool)
+- [Microsoft Learn: Migrate Microsoft Entra Connect to Microsoft Entra Cloud Sync](https://learn.microsoft.com/en-us/entra/identity/hybrid/cloud-sync/migrate-azure-ad-connect-to-cloud-sync)
+- [Microsoft Learn: Tutorial - Migrate to Microsoft Entra Cloud Sync for a Synced Active Directory Forest](https://learn.microsoft.com/en-us/entra/identity/hybrid/cloud-sync/tutorial-pilot-aadc-aadccp)
+- [Microsoft Learn: Migrate from Microsoft Entra Connect Sync to Cloud Sync FAQ](https://learn.microsoft.com/en-us/entra/identity/hybrid/cloud-sync/cloud-sync-migration-faq)
+- [Microsoft Learn: Microsoft Entra Cloud Sync migration decision guide](https://learn.microsoft.com/en-us/entra/identity/hybrid/cloud-sync/connect-to-cloud-sync-decision-guide)
+- [Microsoft Learn: What is Microsoft Entra Cloud sync?](https://learn.microsoft.com/en-us/entra/identity/hybrid/cloud-sync/what-is-cloud-sync)
