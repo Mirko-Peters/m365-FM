@@ -11,7 +11,7 @@ keypoints:
   - "Cloud tiering has two policies: Volume Free Space Policy and Date Policy. The Azure file share always keeps a complete copy."
   - "Server endpoints must be local paths. Mounted shares and NAS are not supported, and endpoints on the system volume cannot use cloud tiering."
   - "A server can register with only one storage sync service, and a sync group can have only one server endpoint per registered server."
-  - "Changes made directly to the cloud endpoint can take up to 24 hours to be discovered."
+  - "Changes made directly to the cloud endpoint can take up to 24 hours or longer to be discovered."
 faq:
   - q: "What do I need before I start?"
     a: "An Azure file share in the same region as the storage sync service with SMB 3.1.1, NTLM v2 and AES-128-GCM allowed, Allow storage account key access enabled, a supported Windows Server, .NET Framework 4.7.2 or later and the listed Windows updates. The registering admin needs Azure File Sync Administrator, Owner or Contributor on the sync service."
@@ -22,10 +22,10 @@ faq:
   - q: "Can I use the system volume?"
     a: "A server endpoint on the system volume cannot use cloud tiering."
   - q: "How quickly are cloud changes picked up?"
-    a: "Learn says changes made directly to the cloud endpoint can take up to 24 hours to be discovered, because change detection runs once every 24 hours per cloud endpoint."
+    a: "Learn says changes made directly to the Azure file share can take up to 24 hours or longer to be discovered, because a change detection job starts for a cloud endpoint only once every 24 hours. Changes made on a server endpoint are discovered nearly immediately."
 ---
 
-Azure File Sync keeps a Windows file server and an Azure file share in sync, and cloud tiering turns the server into a cache for frequently used files. The deployment is a fixed sequence: share, sync service, agent, registration, sync group, server endpoint. This guide follows the Microsoft Learn deployment guide for Azure File Sync and reports only what that page states.
+Azure File Sync keeps a Windows file server and an Azure file share in sync, and cloud tiering turns the server into a cache for frequently used files. The deployment is a fixed sequence: share, sync service, agent, registration, sync group, server endpoint. This guide follows the Microsoft Learn deployment guide for Azure File Sync. Sections marked as my advice are not from that page.
 
 ## Prerequisites
 
@@ -90,18 +90,18 @@ Open the sync group, select **Add server endpoint** and enter the **Registered S
 - Server endpoints must be local paths. Mounted shares and NAS are not supported.
 - A system volume endpoint cannot use cloud tiering.
 - You cannot change a server endpoint's path or drive letter after creation.
-- Cloud-side changes can take up to 24 hours to be discovered.
+- Changes made directly to the Azure file share can take up to 24 hours or longer to be discovered, because change detection starts only once every 24 hours per cloud endpoint.
 - Do not use or delete the `.SystemShareInformation` folder.
 - Azure File Sync takes a share snapshot before creating a server endpoint. It is not removed automatically.
 - Unregistering a server removes its access and stops sync.
 
 ## What the page does not say
 
-Steps to create the storage account or file share, numeric scale limits, defaults for the cloud tiering policies, the full supported Windows Server list, and complete PowerShell or CLI commands. The page also covers optional topics such as firewalls, self-service restore, proactive recall, SMB over QUIC, Azure Arc and DFS-R migration, which this guide does not describe in full.
+The page does not give default values for the two cloud tiering policies, and it does not list the supported Windows Server versions in full (it points to a separate page). It links to separate articles for creating an SMB Azure file share. The PowerShell tabs do include code that gets or creates a storage account and file share, and the PowerShell and Azure CLI tabs contain complete commands for the sync group, cloud endpoint and server endpoint, which this guide does not reproduce. The page also covers optional topics such as firewalls, self-service restore, proactive recall, SMB over QUIC, Azure Arc and DFS-R migration, which this guide does not describe in full.
 
 ## A deployment checklist
 
-This list is practical advice.
+This list is my advice, not text from the Learn page.
 
 1. Confirm region, SMB settings and key access on the storage account.
 2. Patch the server and check .NET.
@@ -110,7 +110,7 @@ This list is practical advice.
 5. Add the server endpoint on a data volume, not the system volume, if you want tiering.
 6. Decide initial sync direction before you select Create.
 
-## Typical mistakes
+## Typical mistakes (my advice)
 
 - Choosing a system volume path and expecting tiering.
 - Pointing the endpoint at a NAS path.
