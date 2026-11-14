@@ -78,7 +78,7 @@ The federated system is maintained outside Entra ID's control. Learn says it is 
 - Avoid single points of failure for PTA and federation by deploying redundant servers.
 - Enable PHS regardless of the method. Learn cites organizations with PHS back online in hours after an on-premises outage, while others took weeks to restore on-premises identity.
 
-## How to choose
+## How to choose (my advice)
 
 1. If no requirement forces otherwise, start with PHS.
 2. If you must enforce on-premises account states and sign-in hours at every sign-in, consider PTA, plus PHS for leaked credential reports.
@@ -86,7 +86,7 @@ The federated system is maintained outside Entra ID's control. Learn says it is 
 
 ## Limits of the page
 
-The page does not give numbers for sign-in latency or agent throughput, and it does not cover Entra Cloud Sync. Check the specific method documentation before committing.
+The page does not give numbers for sign-in latency or agent throughput. It notes that these authentication methods apply independently of the synchronization technology, Microsoft Entra Connect Sync or Cloud Sync, but it does not describe Cloud Sync itself. Check the specific method documentation before committing.
 
 ## Related
 
@@ -95,4 +95,4 @@ The page does not give numbers for sign-in latency or agent throughput, and it d
 
 ## Sources
 
-- [Choose the right authentication method for your Microsoft Entra hybrid identity solution](https://learn.microsoft.com/entra/identity/hybrid/connect/choose-ad-authn)
+- [Authentication for Microsoft Entra hybrid identity solutions (Microsoft Learn)](https://learn.microsoft.com/entra/identity/hybrid/connect/choose-ad-authn)
