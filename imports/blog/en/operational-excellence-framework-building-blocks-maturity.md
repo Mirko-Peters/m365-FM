@@ -29,7 +29,7 @@ An operational excellence framework is a structure that ties culture, principles
 
 Operational excellence needs structure to last. Without it, improvement stays a set of separate initiatives that fight for the same organizational attention, such as a 5S campaign here and a Six Sigma project there, and long-term success is unlikely. Good operational excellence work answers four questions. Think of them as performance management for the whole system, not for single people. What do we believe? Which systems do we use to work? Which tools support them? How do we know the result is good?
 
-An [overview of the Shingo Model](https://www.interfacing.com/the-shingo-model) makes the point clearly. It is not a standalone programme. It gives an organization a structure to anchor its initiatives and to close gaps on the way to excellence. So operational excellence does not replace lean, Six Sigma or kaizen. It holds them together.
+In my view, a framework is not a standalone programme. It gives an organization a structure to anchor its initiatives and to close gaps on the way to excellence. So operational excellence does not replace lean, Six Sigma or kaizen. It holds them together.
 
 ## What are the building blocks?
 
@@ -41,7 +41,7 @@ The Shingo Institute presents its approach as layers. [The Shingo page](https://
 4. **Tools.** Tools address the question "how". Analytics and simple charts are tools too. The "why" comes from the guiding principles.
 5. **Results.** Performance results, usually measured with lagging key performance indicators (KPIs).
 
-Read the list from the bottom up. Culture and principles come first because they decide how people use the systems and tools. Results come last because they are the outcome, not the cause. The aim is to reduce waste, remove inefficiency and optimize the workflow, so that customers are served better. IBM links this approach to a competitive advantage. KPIs show whether customer satisfaction and operational efficiency really improve. The overview warns that focusing too much on one tool is a common mistake. A plant with a perfect kanban board and no principle behind it has a tool, not operational excellence.
+Read the list from the bottom up. Culture and principles come first because they decide how people use the systems and tools. Results come last because they are the outcome, not the cause. The aim is to reduce waste, remove inefficiency and optimize the workflow, so that customers are served better. IBM links this approach to a competitive advantage. KPIs show whether customer satisfaction and operational efficiency really improve. In my experience, focusing too much on one tool is a common mistake. A plant with a perfect kanban board and no principle behind it has a tool, not operational excellence.
 
 For a plant manager, each block turns into a plain question:
 
@@ -61,7 +61,7 @@ The Shingo page sorts the ten guiding principles into three dimensions.
 
 The grouping is useful for design of any operational excellence system. Cultural enablers deal with people. The continuous improvement group deals with how work is done and improved at the line. Enterprise alignment deals with direction: whether the plant, the planners and the sales team pull the same way. A [culture of continuous improvement](https://www.m365.fm/entity/continuous-improvement/) needs all three. A plant with strong line methods but weak alignment improves the wrong things.
 
-Mike Orzen, a lean coach and Shingo Institute faculty member, notes in [his essay](https://shingo.org/?p=484) that flow is the least practiced principle. If you build the structure, check early whether your plant still runs in large batches. That answer tells you where the most work lies.
+In my experience, flow is one of the principles that plants practice least. If you build the structure, check early whether your plant still runs in large batches. That answer tells you where the most work lies.
 
 ## What do maturity levels look like?
 
@@ -135,3 +135,8 @@ Operational excellence needs a clear picture of processes and who is responsible
 ## Next step
 
 Score five areas of your plant on the four-level scale, with the people from the line in the room. Then pick the lowest area and write the first step of your operational excellence framework for it, with an owner and a date.
+
+## Sources
+
+- [What Is Operational Excellence? - IBM](https://www.ibm.com/think/topics/operational-excellence)
+- [Shingo Model - Shingo Institute](https://shingo.org/shingo-model/)
