@@ -46,7 +46,7 @@ The overview lists four scopes: tenant-level admin roles such as Power Platform 
 | User | Records the user owns, records shared with the organization, with the user, or with a team the user belongs to |
 | None | No access |
 
-The page does not use the names Basic, Local, Deep and Global. For organization-owned tables, miscellaneous and privacy-related privileges have only Organization or None.
+The page does not use the older names Local, Deep and Global for these levels, although a role setting is called Direct User (Basic) access level and Team privileges. For organization-owned tables, miscellaneous and privacy-related privileges have only Organization or None.
 
 ## Table privileges
 
@@ -85,9 +85,9 @@ A user can have multiple roles, and privileges are cumulative. A user receives t
 
 ## What the pages do not say
 
-- A formal definition of user-owned versus organization-owned tables.
-- The membership type values for Entra teams and the differences between security and Office group teams.
-- Whether owner teams can span business units and how team access levels interact with business unit access.
+- A detailed definition of ownership types. The ownership page only says that organization-owned tables apply a privilege to all records or none, that user or team owned tables support the four access levels, and that you choose the ownership type when you create a table and cannot change it later.
+- The membership type values for Entra teams. The pages say only that Security and Office are the two group team types and that they match Entra group types.
+- How team access levels interact with business unit access.
 - Whether Write implies Read at the same level.
 
 ## A design outline
@@ -100,7 +100,7 @@ This outline is practical advice built on the pages.
 4. Use access teams for sharing and owner or group teams for role-based access.
 5. Test with a user whose roles you know, since privileges are cumulative.
 
-## Typical mistakes
+## Typical mistakes (my advice)
 
 - Assuming a tenant admin role gives data access.
 - Creating many business units that mirror an org chart without a security need.
@@ -116,7 +116,7 @@ This outline is practical advice built on the pages.
 
 ## Sources
 
-- [Configure environment security in Dataverse (Microsoft Learn)](https://learn.microsoft.com/power-platform/admin/database-security)
-- [Security roles and privileges (Microsoft Learn)](https://learn.microsoft.com/power-platform/admin/security-roles-privileges)
-- [Security concepts in Dataverse (Microsoft Learn)](https://learn.microsoft.com/power-platform/admin/wp-security-cds)
-- [Manage teams (Microsoft Learn)](https://learn.microsoft.com/power-platform/admin/manage-teams)
+- [Role-based security roles for Dataverse (Microsoft Learn)](https://learn.microsoft.com/power-platform/admin/database-security)
+- [Security roles and privileges for Dataverse (Microsoft Learn)](https://learn.microsoft.com/power-platform/admin/security-roles-privileges)
+- [Ownership-based security in Microsoft Dataverse (Microsoft Learn)](https://learn.microsoft.com/power-platform/admin/wp-security-cds)
+- [Teams in Dataverse (Microsoft Learn)](https://learn.microsoft.com/power-platform/admin/manage-teams)
