@@ -16,11 +16,11 @@ faq:
   - q: "What command connects to Exchange Online PowerShell?"
     a: "Run Connect-ExchangeOnline -UserPrincipalName admin@yourdomain.com after loading the ExchangeOnlineManagement module. A sign-in window opens, and you complete the password and any multifactor prompt there. When no error appears, you're connected. Test it with Get-AcceptedDomain and finish with Disconnect-ExchangeOnline."
   - q: "Does Connect-ExchangeOnline work with multifactor authentication?"
-    a: "Yes. Interactive sign-in supports multifactor authentication, and the verification code arrives through whatever method the account uses, such as text message or Microsoft Authenticator. In PowerShell 7 the -Device parameter also supports MFA and suits computers without a browser. Basic authentication does not work with MFA and is no longer supported."
+    a: "Yes. Interactive sign-in supports multifactor authentication, and the verification code arrives through whatever method the account uses, such as text message or Microsoft Authenticator. In PowerShell 7 the -Device parameter also supports MFA and suits computers without a browser. Basic authentication does not work with MFA, and Microsoft says REST API connections have replaced it."
   - q: "How do I disconnect from Exchange Online PowerShell?"
     a: "Run Disconnect-ExchangeOnline, or Disconnect-ExchangeOnline -Confirm:$false to skip the confirmation prompt. Don't just close the window. Microsoft warns that doing so can use up your available sessions, and then you have to wait for them to expire before you can connect again."
 ---
-To connect to Exchange Online PowerShell, load the `ExchangeOnlineManagement` module and run `Connect-ExchangeOnline -UserPrincipalName admin@yourdomain.com`. A sign-in window opens, you enter your password and approve the MFA prompt, and the shell is connected. This article is for Exchange and Microsoft 365 admins who need the exact steps, the options for partner and unattended access, and a short list of fixes when the connection fails. It follows the current [Microsoft documentation](https://learn.microsoft.com/en-us/powershell/exchange/connect-to-exchange-online-powershell?view=exchange-ps), so the commands here assume modern authentication and no remote PowerShell session.
+To connect to Exchange Online PowerShell, load the `ExchangeOnlineManagement` module and run `Connect-ExchangeOnline -UserPrincipalName admin@yourdomain.com`. A sign-in window opens, you enter your password and approve the MFA prompt, and the shell is connected. This article is for Exchange and Microsoft 365 admins who need the exact steps, the options for partner and unattended access, and a short list of fixes when the connection fails. It follows the current [Microsoft documentation](https://learn.microsoft.com/powershell/exchange/connect-to-exchange-online-powershell?view=exchange-ps), so the commands here assume modern authentication and no remote PowerShell session.
 
 ## What you need before you connect
 
@@ -64,7 +64,7 @@ The documentation lists several variations. Pick the one that matches your situa
 
 **Government and regional clouds.** `-ExchangeEnvironmentName` selects the environment. The default is `O365Default`, which covers Microsoft 365 and GCC. The documented values for the others are `O365USGovGCCHigh`, `O365USGovDoD`, `O365GermanyCloud` and `O365China`.
 
-**Unattended scripts.** Don't store an admin password in a script. Microsoft documents two better options. A managed identity, for example `Connect-ExchangeOnline -ManagedIdentity -Organization "contoso.onmicrosoft.com"`, suits scripts that run in Azure. App-only authentication with a certificate suits everything else. The certificate thumbprint parameter is supported only on Windows. The setup involves an app registration in Microsoft Entra ID, the `Exchange.ManageAsApp` application permission with admin consent, a certificate, and a supported role such as Exchange Administrator for the app. Microsoft recommends least privilege, so don't hand the app Global Administrator unless there's no way around it. Follow Microsoft's separate article on [app-only authentication](https://learn.microsoft.com/en-us/powershell/exchange/app-only-auth-powershell-v2?view=exchange-ps) rather than a shortened version of it.
+**Unattended scripts.** Don't store an admin password in a script. Microsoft documents two better options. A managed identity, for example `Connect-ExchangeOnline -ManagedIdentity -Organization "contoso.onmicrosoft.com"`, suits scripts that run in Azure. App-only authentication with a certificate suits everything else. The certificate thumbprint parameter is supported only on Windows. The setup involves an app registration in Microsoft Entra ID, the `Exchange.ManageAsApp` application permission with admin consent, a certificate, and a supported role such as Exchange Administrator for the app. Microsoft recommends least privilege, so don't hand the app Global Administrator unless there's no way around it. Follow Microsoft's separate article on [app-only authentication](https://learn.microsoft.com/powershell/exchange/app-only-auth-powershell-v2?view=exchange-ps) rather than a shortened version of it.
 
 In a Windows service, add `-SkipLoadingFormatData` to avoid errors. If you see errors that mention the Web Account Manager, module version 3.7.2 or later has a `-DisableWAM` switch for that.
 
@@ -80,7 +80,7 @@ Two more habits help in team environments. First, keep the connection line in on
 
 A connection without an error is a good sign, but test it with a harmless read command. `Get-AcceptedDomain` lists the domains of your organization and takes a second to run. If domains appear, your session works and your account has at least read access.
 
-To see details about your connections, use `Get-ConnectionInformation`. Microsoft's module page points out that `Get-PSSession` doesn't return anything useful for these REST-based connections, so older scripts that check `Get-PSSession` need to change.
+To see details about your connections, use `Get-ConnectionInformation`. Microsoft's module page says `Get-PSSession` doesn't return information for REST API connections, so older scripts that check `Get-PSSession` need to change.
 
 When you're done, run `Disconnect-ExchangeOnline`. Add `-Confirm:$false` in scripts to skip the prompt. Microsoft's connection article warns that closing the window without disconnecting can use up your available sessions, and then you wait until they expire.
 
@@ -100,7 +100,7 @@ If none of these apply, the module version is the next suspect. Run `Update-Modu
 
 ## Common mistakes
 
-- **Using Basic authentication or `New-PSSession`.** Microsoft lists these only as historical reference and says they're no longer supported. A script that still builds a session this way needs to move to `Connect-ExchangeOnline`.
+- **Using Basic authentication or `New-PSSession`.** Microsoft says that since October 2023, REST API connections have replaced basic authentication (remote PowerShell) connections. A script that still builds a session this way needs to move to `Connect-ExchangeOnline`.
 - **Closing the window instead of disconnecting.** It can exhaust your sessions. Make `Disconnect-ExchangeOnline` the last line of every script.
 - **Putting a password in plain text into a script.** Use a managed identity or a certificate instead.
 - **Importing other modules first.** A conflict with another module can break the sign-in. Connect to Exchange Online first, or use a new window.
@@ -108,7 +108,7 @@ If none of these apply, the module version is the next suspect. Run `Update-Modu
 
 ## Related topics to explore
 
-- Install and update the module: the connection depends on the right module and PowerShell version, so read the [Exchange Online PowerShell module](https://learn.microsoft.com/en-us/powershell/exchange/exchange-online-powershell-v2?view=exchange-ps) requirements before you roll it out to a team.
+- Install and update the module: the connection depends on the right module and PowerShell version, so read the [Exchange Online PowerShell module](https://learn.microsoft.com/powershell/exchange/exchange-online-powershell-v2?view=exchange-ps) requirements before you roll it out to a team.
 - Find the permissions for a cmdlet: Microsoft explains how to look up which role a specific Exchange cmdlet needs.
 - Connect to Security & Compliance PowerShell: the same module offers `Connect-IPPSSession`, which isn't available in PowerShell 7 on Linux or macOS.
 - Unattended automation: app-only authentication and managed identities are the way to run scheduled Exchange scripts safely.
@@ -117,3 +117,9 @@ If none of these apply, the module version is the next suspect. Run `Update-Modu
 ## Next step
 
 To connect to Exchange Online PowerShell reliably, start with a fresh window, run `Connect-ExchangeOnline -UserPrincipalName` with your admin account, test with `Get-AcceptedDomain` and disconnect when you're done. Then plan your unattended scripts around a managed identity or a certificate, so nobody has to type or store a password.
+
+## Sources
+
+- [Connect to Exchange Online PowerShell (Microsoft Learn)](https://learn.microsoft.com/powershell/exchange/connect-to-exchange-online-powershell)
+- [About the Exchange Online PowerShell module (Microsoft Learn)](https://learn.microsoft.com/powershell/exchange/exchange-online-powershell-v2)
+- [App-only authentication for unattended scripts in Exchange Online PowerShell (Microsoft Learn)](https://learn.microsoft.com/powershell/exchange/app-only-auth-powershell-v2)
