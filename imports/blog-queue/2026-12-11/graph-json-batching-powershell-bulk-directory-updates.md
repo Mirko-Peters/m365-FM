@@ -93,21 +93,21 @@ Learn explains that if a batch item exceeds limits it gets 429 while the batch r
 
 ## Use dependsOn sparingly
 
-If a second call needs the first, add `dependsOn` with the first id. A failure in the first makes the second fail with 424. Learn recommends a batch be either fully sequential or fully parallel. For bulk updates of independent objects, leave `dependsOn` out.
+If a second call needs the first, add `dependsOn` with the first id. A failure in the first makes the second fail with 424. Learn recommends a batch be either fully sequential or fully parallel. For bulk updates of independent objects, leaving `dependsOn` out is my own advice, in line with Learn's tip.
 
-## Plan the bulk run
+## Plan the bulk run (items 1 to 3 are my own checklist, 4 and 5 follow Learn)
 
 1. Export the objects and intended changes to a file first, so the run is repeatable.
 2. Test with one chunk of a few objects. Confirm the result in the directory before you continue.
 3. Log every response entry with its status, so you can rerun only failures.
 4. Keep the number of operations per request and the call frequency low. The throttling page lists reducing both as ways to avoid throttling, and it prefers change tracking (delta query) and change notifications over regular polling or scanning.
-5. Remember that writes are more likely to be throttled than reads, and that underlying services such as Exchange, Planner or Teams have their own limits on top of Graph.
+5. Remember that writes are more likely to be throttled than reads (throttling page), and that the json-batching page says the underlying services impose their own throttling limits on top of Graph. The service-specific limits page was not read for this article.
 
 ## Other uses
 
 Batching can also avoid URL length limits for long `$filter` clauses, because the URL moves into the body. Headers such as `ConsistencyLevel: eventual` go in each request's `headers`.
 
-## Typical mistakes
+## Typical mistakes (my own list, based on the pages above)
 
 - Sending more than 20 requests in one batch.
 - Treating a 200 on the batch as success.
@@ -128,7 +128,7 @@ The `Invoke-MgGraphRequest` reference does not list OutputType values or show a 
 
 ## Sources
 
-- [Combine multiple requests in one HTTP call using JSON batching](https://learn.microsoft.com/en-us/graph/json-batching)
+- [Combine multiple HTTP requests using JSON batching](https://learn.microsoft.com/en-us/graph/json-batching)
 - [Microsoft Graph throttling guidance](https://learn.microsoft.com/en-us/graph/throttling)
 - [Invoke-MgGraphRequest](https://learn.microsoft.com/en-us/powershell/module/microsoft.graph.authentication/invoke-mggraphrequest)
 - [Use the Microsoft Graph SDKs to batch requests](https://learn.microsoft.com/en-us/graph/sdks/batch-requests)
