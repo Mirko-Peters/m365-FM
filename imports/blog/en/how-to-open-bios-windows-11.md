@@ -24,7 +24,7 @@ To open the BIOS in Windows 11, go to **Settings**, **System**, **Recovery**, se
 
 ## BIOS or UEFI: what are you actually opening?
 
-On a Windows 11 PC you are opening UEFI, even if everybody calls it the BIOS. Microsoft's page on [Secure Boot in Windows 11](https://support.microsoft.com/en-us/windows/security/devicesecurity/windows-11-and-secure-boot) treats Secure Boot as a firmware setting. Windows 11 also requires UEFI firmware that is Secure Boot capable, so a legacy-only BIOS is not a Windows 11 target.
+On a Windows 11 PC you are opening UEFI, even if everybody calls it the BIOS. Microsoft's page on [Secure Boot in Windows 11](https://support.microsoft.com/windows/security/devicesecurity/windows-11-and-secure-boot) treats Secure Boot as a firmware setting. Windows 11 also requires UEFI firmware that is Secure Boot capable, so a legacy-only BIOS is not a Windows 11 target.
 
 The look of the setup screen is the manufacturer's choice. Menus and setting names vary by maker and model, which is why Microsoft sends you to the manufacturer's guide for anything beyond the common settings. You might see a graphical screen with mouse support or a plain text menu you navigate with the arrow keys.
 
@@ -38,7 +38,7 @@ This works on any Windows 11 PC that still starts, and it needs no key timing. S
 4. Select **Advanced options**, then **UEFI Firmware Settings**.
 5. Select **Restart**. The PC boots into the firmware setup.
 
-You can also reach the same menu with a shortcut. Microsoft's [Windows recovery environment](https://support.microsoft.com/en-us/windows/experience/backup-recovery/windows-recovery-environment) page says you can hold **Shift** while you select **Power**, then **Restart**. You land on the same blue menu, and the next steps are identical.
+You can also reach the same menu with a shortcut. Microsoft's [Windows recovery environment](https://support.microsoft.com/windows/experience/backup-recovery/windows-recovery-environment) page says you can hold **Shift** while you select **Power**, then **Restart**. You land on the same blue menu, and the next steps are identical.
 
 If you don't see **UEFI Firmware Settings** on that menu, don't spend long hunting for it. Use the power-on key for your model or the manufacturer's support page for the exact method.
 
@@ -50,7 +50,7 @@ If the key doesn't work after a couple of tries, stop guessing and use the Setti
 
 ### Surface devices
 
-Microsoft's page [How to use Surface UEFI](https://support.microsoft.com/en-us/surface/drivers-firmware/how-to-use-surface-uefi) gives the button method:
+Microsoft's page [How to use Surface UEFI](https://support.microsoft.com/surface/drivers-firmware/how-to-use-surface-uefi) gives the button method:
 
 1. Shut the Surface down and wait about 10 seconds to make sure it's off.
 2. Press and hold the **volume-up** button. While holding it, press and release the **power** button.
