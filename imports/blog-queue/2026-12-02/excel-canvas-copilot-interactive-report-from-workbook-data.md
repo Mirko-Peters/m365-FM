@@ -20,7 +20,7 @@ faq:
   - q: "How do I build a canvas?"
     a: "According to MC1485411 and the Excel blog on Tech Community, you ask Copilot with a prompt to generate an interactive report from your workbook data, then refine it with natural language instructions. Neither page gives a menu path."
   - q: "Where is Excel canvas available?"
-    a: "Microsoft's statements differ. MC1485411 lists Excel for Windows, Excel Online and Microsoft 365 Copilot with a worldwide rollout in October 2026. The Excel what's new post of October 2026 says Insiders of Excel for Windows, coming soon to web, and not on Mac."
+    a: "Microsoft's statements differ. MC1485411 lists Excel for Windows, Excel Online and Microsoft 365 Copilot with a worldwide rollout in October 2026. The Excel what's new post of October 2026 says Insiders of Excel for Windows, coming soon to web. It does not mention Mac for this feature."
   - q: "Do admins need to do anything?"
     a: "MC1485411 says no action is required to prepare and describes no admin controls. It recommends notifying users and updating training or adoption material for Copilot in Excel."
 ---
@@ -51,7 +51,7 @@ The pages read give no step-by-step procedure or menu path. The workflow they de
 
 Because Support lists interactive-canvas as a skill, you can also manage it in Copilot. Open the Copilot pane, select **Settings** (**...**), then **Manage plugins & skills**, and toggle skills on or off. According to Microsoft Support, a disabled skill still runs if you mention it directly with @.
 
-Preparing the data helps any report. Microsoft's Excel blog and what's new post also describe related Copilot features: a clean data skill invoked with @clean-data, which flags issues such as inconsistent labels, wrong data types and duplicates, and a get data skill that builds a query for you. These are separate features, but they sit in the same workflow.
+Preparing the data helps any report. The Excel what's new post of October 2026 also describes related skills: @clean-data, which inspects data for issues such as inconsistent text and number formats, inconsistent dates, duplicate values and values stored as the wrong data type and then proposes corrections you choose from, and a get data skill that connects to and transforms data and loads it with Power Query, which the post says is currently available to web users. These are separate features, but they sit in the same workflow.
 
 ## Where and when it is available
 
@@ -61,7 +61,7 @@ Microsoft's own pages do not agree, so treat availability as something to verify
 |---|---|
 | Message Center MC1485411 | Worldwide rollout starting mid-October 2026 and expected to finish by the end of October 2026, for Excel for Windows, Excel Online and Microsoft 365 Copilot. |
 | Excel blog on Tech Community | "Interactive canvas is currently available in Insiders." |
-| What's new in Excel, October 2026 | Insiders of Excel for Windows, coming soon to web. Not on Excel for Mac. |
+| What's new in Excel, October 2026 | Insiders of Excel for Windows, coming soon to web. Mac is not mentioned for this feature. |
 | What's new in Microsoft Copilot, October 2026 | Rolled out to Insiders in October and rolls out worldwide in November. The post says dates are tentative. |
 | Microsoft Support skills page | Rolling out to production and may not be available for all customers. |
 
@@ -75,14 +75,14 @@ The practical reading is that the rollout was staged and still in progress as of
 
 ## For admins
 
-MC1485411 says no action is required before rollout and describes no admin settings. It recommends telling users about the capability and updating internal training and adoption material for Copilot in Excel. It also states that no compliance considerations were identified. The Support page for managing skills describes per-user toggles in the Copilot pane, not tenant-wide controls.
+MC1485411 says no action is required before rollout and describes no admin settings. It recommends telling users about the capability and updating internal training and adoption material for Copilot in Excel. It also states that no compliance considerations were identified. The Support page for managing skills describes toggles in the Copilot pane and mentions no tenant-wide controls.
 
 ## Practical tips
 
 - Start with a clean, structured table. The canvas reads workbook data, so inconsistent headers and mixed data types will show up in the report.
 - State the audience in your prompt. Microsoft lists tailoring content for an audience as a refinement option.
 - Review the result against the source cells before you share it. Copilot output can be wrong, and the canvas updates as the data changes.
-- Check availability on each platform you use, because Windows, web and Mac were described differently.
+- Check availability on each platform you use, because the pages describe Windows and web differently and do not mention Mac for this feature.
 
 ## Related
 
