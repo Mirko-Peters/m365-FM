@@ -20,12 +20,12 @@ faq:
   - q: "Can I merge my personal OneDrive with my work OneDrive?"
     a: "No. Microsoft Support says the two cannot be merged but can be used side by side. Each keeps its own storage. You can copy or drag files between them, but you cannot sync or share work folders into personal folders."
   - q: "Will unlinking an account delete my files?"
-    a: "Microsoft Support says you do not lose files or data by removing OneDrive from your computer, and you can still reach them by signing in to OneDrive on the web. The page does not say whether local copies stay on the PC after you unlink, so check your OneDrive folder before you do it."
+    a: "The Microsoft Support page on stopping sync says you can always reach your files by signing in to OneDrive.com. Its statement that you do not lose files or data by removing OneDrive from your computer appears in the uninstall section, not in the unlink steps, and the page does not say whether local copies stay on the PC after you unlink. Check your OneDrive folder before you do it."
   - q: "What does the You're syncing a different account error mean?"
-    a: "Microsoft Support says it usually means OneDrive is holding stale saved credentials, and it may also appear after a Microsoft account password change. On Windows the documented fix is to delete PreSignInSettingsConfig.json in the OneDrive settings folder. If that fails, reinstalling OneDrive keeps your files safe."
+    a: "Microsoft Support says it usually means OneDrive is holding stale saved credentials, and it may also appear after a Microsoft account password change. On Windows the documented fix is to delete PreSignInSettingsConfig.json in the OneDrive settings folder. If that fails, Microsoft says to uninstall and reinstall OneDrive and says this does not lose files or data."
 ---
 
-OneDrive on one computer can hold several accounts at once, with one limit. Microsoft Support says you can sync multiple work or school accounts, but only one personal account. Add each account in the OneDrive app, and each one syncs into its own folder.
+OneDrive on one computer can hold several accounts at once, with one limit. Microsoft Support says you can sync multiple work or school accounts, but only one personal account. Add each account in the OneDrive app.
 
 This guide shows how to add accounts, how to keep their files apart and what to do when sign-in goes wrong.
 
@@ -60,7 +60,7 @@ The steps are the same for personal and work or school accounts.
 4. Select **Add an account**.
 5. Enter the email address and sign in.
 
-Repeat the steps for each additional work or school account. If you try to add a second personal account, OneDrive does not allow it.
+Repeat the steps for each additional work or school account. Microsoft says you can only have one personal account.
 
 ## Keep the accounts separate
 
@@ -70,7 +70,7 @@ In practice:
 
 - Copy or drag files between the two folders when you need to move something across.
 - Do not expect to sync or share work folders into personal folders. Microsoft says you cannot.
-- If you want to use a work email address to reach OneDrive through Outlook.com, you can create an Outlook.com alias. Microsoft says an address already tied to a work or school account cannot be added as an alias.
+- Microsoft says a work or school email address cannot be added as an alias to an Outlook.com account, because it is already tied to a work or school account.
 
 A practical rule is to keep company data in the work or school account only. The pages used here do not cover company policy, so check yours.
 
@@ -91,7 +91,7 @@ Microsoft says these settings are unique to each computer and each account, so y
 3. Open the **Account** tab.
 4. Select **Unlink this PC** for the account.
 
-Microsoft says you do not lose files or data by removing OneDrive from your computer, and that you can reach them on the OneDrive website. The page does not say whether local copies remain, so look at the folder before you unlink.
+Microsoft says you can always reach your files by signing in to OneDrive.com. The page does not say whether local copies remain on the PC after unlinking, so look at the folder before you unlink. Its "you don't lose files or data" statement sits in the uninstall section, not in these steps.
 
 ## Fix the "You're syncing a different account" error
 
@@ -105,7 +105,7 @@ On Windows:
 
 On Mac, the article says to open Keychain Access, search for "OneDrive" and delete the entry called "OneDrive Cached Credential", then open OneDrive. For the related "You're already syncing this account" message on Mac, the article adds deleting two plist files in the Group Containers folder and restarting OneDrive.
 
-If these steps do not help, Microsoft says to uninstall and reinstall OneDrive. Your files stay safe and remain available on the web.
+If these steps do not help, Microsoft says to uninstall and reinstall OneDrive. The article says you will not lose files or data by uninstalling OneDrive, and you can still reach them at OneDrive.com.
 
 ## Checklist for a new setup
 
