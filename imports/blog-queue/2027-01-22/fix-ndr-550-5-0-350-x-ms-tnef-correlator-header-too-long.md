@@ -59,7 +59,7 @@ The Exchange Online page on message format and transmission gives the background
 - Admin settings override user settings. Remote domain settings control the format of messages to a specific external domain or to all external domains, and override per-user settings set by admins or users. Per-recipient settings on mail users and mail contacts override the settings a user sets for that recipient.
 - In Outlook, users can control whether TNEF messages go to remote recipients, in the Internet message format and Internet recipient message format options. These do not apply to recipients inside the Exchange Online organization.
 
-The page links to remote domain and mail contact articles for the exact settings, and I did not read those, so I list no cmdlet parameters here.
+The page links to its message format article, which in turn links the remote domain, mail user and mail contact articles for the exact settings. This article lists no cmdlet parameters.
 
 ## Case 2: AS345 policy violation
 
