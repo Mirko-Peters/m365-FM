@@ -32,11 +32,11 @@ Microsoft's "Get started" page lists these steps:
 
 1. Set up Intune.
 2. Add and protect apps.
-3. Create compliance policies and Conditional Access.
+3. Check for compliance and turn on Conditional Access.
 4. Configure device features.
 5. Enroll devices.
 
-Enrollment comes last on purpose. If devices enroll before policies exist, they receive nothing useful, and your first users meet an unfinished setup.
+Microsoft recommends assigning key apps, compliance policies and device configuration profiles during enrollment, so they apply as soon as enrollment starts. The same page says that enrolling devices first is also your choice: at the next Intune check-in, the policies are assigned.
 
 ## Step 1: Set up the tenant
 
@@ -86,7 +86,7 @@ Microsoft advises assigning enrollment policies to a small test group first, the
 
 ## Common beginner mistakes
 
-- Enrolling devices before compliance and configuration policies exist.
+- Having no baseline of apps, compliance and configuration policies planned before enrollment. Microsoft recommends assigning them during enrollment, although it also allows enrolling first.
 - Forgetting to assign licenses to users.
 - Leaving the compliance default for devices without a policy unchanged when Conditional Access is in use.
 - Enrolling devices that another MDM still manages.
@@ -107,6 +107,6 @@ The Get started page does not cover the free trial sign-up steps, and the setup 
 
 - [Get started with Microsoft Intune](https://learn.microsoft.com/en-us/intune/fundamentals/get-started)
 - [Set up Intune, step 1](https://learn.microsoft.com/en-us/intune/fundamentals/deploy-setup-step-1)
-- [Intune device enrollment guide](https://learn.microsoft.com/intune/device-enrollment/guide)
+- [Intune device enrollment guide](https://learn.microsoft.com/en-us/intune/device-enrollment/guide)
 - [Windows device enrollment guide](https://learn.microsoft.com/en-us/intune/device-enrollment/windows/guide)
-- [Intune device compliance policies](https://learn.microsoft.com/en-us/intune/intune-service/protect/device-compliance-get-started)
+- [Device compliance policies in Microsoft Intune](https://learn.microsoft.com/en-us/intune/device-security/compliance/overview)
