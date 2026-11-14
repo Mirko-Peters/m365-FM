@@ -48,7 +48,7 @@ Some examples of what Microsoft says they do:
 
 A separate accounting group lists audit-support, budget-and-forecast, close-management, compliance-support, financial-statements, reconciliation, tax-preparation, variance-analysis and journal-entry. The page states that accounting skills are rolling out to the Microsoft Frontier program, so they may not be available to everyone. The Microsoft Copilot blog of October 2026 adds that accounting skills rolled out to Frontier in October and roll out worldwide in November, with a note that dates are tentative.
 
-The finance skills page does not say who authored the finance skills, and it does not say whether they are enabled by default.
+The page says the skills in its Microsoft section are created and managed by Microsoft, but it does not name individual skill authors and does not say whether the finance skills are enabled by default.
 
 ## How to start
 
@@ -90,7 +90,7 @@ The same post lists federated Copilot connectors for finance data. LSEG and Mood
 - Platform availability varies by feature. The June post says custom skills were in the Insiders channel at that time.
 - Check your own tenant before promising a skill to a finance team, because rollout is progressive.
 
-Microsoft states that Copilot does not provide accounting, tax, audit or financial advice. Treat every result as a draft and verify it against source records.
+Microsoft Support states, in an Important note in the accounting skills section, that Copilot does not provide accounting, tax, audit or financial advice or professional determinations and that AI-generated content might be inaccurate or incomplete. Treat every result as a draft and verify it against source records.
 
 ## Related
 
