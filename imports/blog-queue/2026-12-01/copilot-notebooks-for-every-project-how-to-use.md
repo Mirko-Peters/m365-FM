@@ -29,7 +29,7 @@ A Copilot notebook gives one project its own AI workspace. You pick the files an
 
 ## What a notebook is
 
-Microsoft Support describes Copilot Notebooks as an AI-powered workspace designed for the content that matters most to a task. Each notebook is scoped. Copilot uses only the references you add, not other content in your account, and the references update as the source files change. You can work in the Microsoft Copilot app or in OneNote, and the same notebook opens in both.
+Microsoft Support describes Copilot Notebooks as an AI-powered workspace designed for the content that matters most to a task. Each notebook is scoped. Copilot uses only the references you add, not other content in your account, and Microsoft's Get started page says the references update dynamically as your project evolves. You can work in the Microsoft Copilot app or in OneNote, and the same notebook opens in both.
 
 A Microsoft Tech Community post about the updated experience (published March 2026) adds that the layout shows references, Copilot Pages and Copilot chats side by side, and that an overview page summarizes the references. It also lists quick create options such as drafts, audio overviews, flash cards and quizzes.
 
@@ -37,7 +37,7 @@ A Microsoft Tech Community post about the updated experience (published March 20
 
 - Microsoft Support: a Microsoft Copilot or Copilot Chat license, plus a SharePoint or OneDrive service plan to create notebooks.
 - The Tech Community post: the refreshed experience is generally available to commercial users with work or school accounts, requires a Microsoft 365 Copilot license and an active SharePoint or OneDrive license, and is not available to Personal, Family and Premium subscribers.
-- Support notes that features roll out gradually and the Copilot Home experience may change what you see.
+- Support notes that some features described in the Get started article are rolling out gradually and may not yet be available in your experience.
 
 ## Create a notebook
 
@@ -59,20 +59,20 @@ Microsoft Support lists these methods:
 - **Suggested references:** Copilot proposes items. Filters named in the Get started article are **All**, **Files**, **Meetings**, **Emails** and **Sites**.
 - **Search:** find a file, or a SharePoint site, library or folder you can access.
 - **Upload:** pick a file from your device.
-- **Link:** a URL to a file or folder in your organization's OneDrive or SharePoint, or a public web page. External links must be publicly accessible. Authenticated or paywalled content and linked subpages are not supported.
+- **Link:** enter a URL with the Link button. External web links must be publicly accessible. Authenticated or paywalled content and linked subpages are not supported.
 - **OneDrive:** pick a file or whole folder.
 - **Drag and drop:** drop files into the references area.
 
-To add more later, open the notebook, select **Add references** at the top of the Content pane in the Copilot app, or the plus button next to **References** in OneNote, choose a method and select **Add**.
+The add-references page says you can add references at any time as your project evolves. The Get started page describes adding references only during creation, so look for the add option in your own notebook.
 
 Supported file types listed by Microsoft: .docx, .pptx, .xlsx, .pdf, .loop, .page, .txt, .rtf and OneNote pages.
 
 ### The email, meeting and chat question
 
-The task title mentions mails, meetings and chats. Microsoft's pages do not agree:
+A common question is whether emails, meetings and chats can be references. Microsoft's pages do not agree:
 
 - The Get started page lists **Meetings** and **Emails** as filters and mentions chats and meeting notes in its introduction.
-- The add-references page says it does not mention meetings, emails or Copilot chat as reference sources.
+- The add-references page makes no statement about adding meetings, emails or chats. It says Copilot uses only the sites, folders or files you add and can access.
 - The Tech Community post lists only files, OneNote pages, PDFs and Copilot Pages and says more types are coming.
 - The how-it-works page lists files, Pages, Loop files, OneNote, web URLs and SharePoint locations.
 
@@ -88,17 +88,17 @@ The safe reading is that files, pages, links and SharePoint or OneDrive location
 
 ## Using the notebook
 
-Ask Copilot to summarize documents, find themes, draft an email or plan, or prepare talking points. Because answers draw only on the references, a good habit is to add the project charter, the latest status report and the key decision documents first, then ask questions. Microsoft's example prompts include a summary of project documents and a one-page proposal drafted from notebook files.
+Microsoft's Get started page gives three example prompts: a summary of all documents related to a project with key themes, findings and next steps, a summary of the latest updates from all references plus three discussion points, and a one-page proposal based on the notebook's files and notes with an executive summary, objectives and next steps. The How it works page adds prompts such as summarizing the key takeaways from a strategy deck and meeting notes. As my own habit, not Microsoft guidance, I would add the key project documents first and then ask questions.
 
 ## Sharing
 
-When you share a notebook, recipients are invited to the linked files unless some are outside their access. You need permission to share each linked file, or recipients must request access. Microsoft Copilot users can reach premium sources such as Teams, SharePoint and OneDrive content, while Copilot Chat users have standard sources only.
+The Get started page says to share notebooks with your team to collaborate in real time and links to a separate sharing article. The pages read for this article do not describe how access to the linked files is handled for recipients, and they do not distinguish premium from standard sources for Copilot Chat users. Check Microsoft's sharing article before you share a notebook that links to restricted files.
 
 ## Common mistakes
 
 - Adding a huge SharePoint site and expecting every file to be used. Only up to 300 are selected.
 - Linking a page behind a login. Authenticated content is not supported.
-- Sharing a notebook while recipients lack access to the files.
+- Sharing a notebook before checking who can open the linked files.
 - Deleting a notebook without a copy of what you need.
 
 ## Related
