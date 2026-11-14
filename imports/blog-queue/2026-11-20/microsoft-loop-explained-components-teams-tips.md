@@ -16,7 +16,7 @@ faq:
   - q: "What is Microsoft Loop?"
     a: "Microsoft Support describes Loop as a co-creation experience built from three parts. Loop components are portable pieces of content that stay in sync across the places they are shared. Loop pages are flexible canvases in the Loop app. Loop workspaces are shared spaces that group what matters for a project. You sign in at loop.cloud.microsoft with a personal or work account."
   - q: "Where are Loop components in Teams stored?"
-    a: "Per Microsoft Learn, components sent in a private Teams chat are stored in the sender's OneDrive in the Microsoft Teams Chat files folder, and components in a channel are stored in the team's SharePoint site. Teams chat notes and Loop app content are stored in SharePoint Embedded containers. Components are .loop files."
+    a: "Per Microsoft Learn, components sent in a private Teams chat or meeting are stored in the sender's OneDrive, and components in a channel are stored in the team's SharePoint site. Teams chat notes and Loop app content are stored in SharePoint Embedded containers. Per the Loop requirements page, components are .loop files."
   - q: "Why don't I see the Collaborate with Loop option in Teams?"
     a: "Microsoft Support says people without a valid OneDrive license will not see the Collaborate with Loop option. If you were recently assigned a OneDrive license, restart Teams. Microsoft Learn also lists an Exchange Online mailbox as required for @mentions."
   - q: "Can I share a Loop page with external guests?"
@@ -73,14 +73,11 @@ Loop content is not in one place. Microsoft Learn says it depends on where you c
 |---|---|
 | Loop app, any workspace | SharePoint Embedded container |
 | Teams chat notes | SharePoint Embedded container |
-| Teams private chat | User's OneDrive, Microsoft Teams Chat files folder |
-| Teams private meeting | User's OneDrive, Meetings folder |
-| Teams channel or channel meeting | SharePoint site, channel folder or Meetings folder |
-| Outlook email | User's OneDrive, Attachments folder |
-| OneNote | User's OneDrive, OneNote Loop files folder |
-| Whiteboard | User's OneDrive, Whiteboard\Components folder |
+| Teams private chat or meeting | User's OneDrive |
+| Teams channel or channel meeting | SharePoint site (channel folder or Meetings folder) |
+| Outlook, OneNote, Whiteboard | User's OneDrive |
 
-Components are .loop files. Earlier releases used .fluid. All Loop storage counts against the organization's SharePoint quota, and each Loop workspace has a maximum size of 25 TB that cannot be changed.
+The quick storage reference does not name subfolders for Outlook, OneNote or Whiteboard content, so check the full storage article before you build a retention or backup plan around a folder. The Loop requirements page says components are .loop files and earlier releases created .fluid files. All Loop storage counts against the organization's SharePoint quota, and each Loop workspace has a maximum size of 25 TB that cannot be changed.
 
 ## Requirements and typical problems
 
