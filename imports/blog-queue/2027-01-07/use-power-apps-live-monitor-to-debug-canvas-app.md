@@ -20,7 +20,7 @@ faq:
   - q: "What does Debug published app do?"
     a: "It publishes source expressions with the app so events can be mapped to specific formulas. Without it you still see events but cannot map them to expressions. Learn says it has a detrimental effect on performance for all users, so turn it off when you finish."
   - q: "Does live monitor affect my app?"
-    a: "Learn says live monitor has no impact on your app and can be used in test or production environments. The Debug published app setting is the exception."
+    a: "A tip on the Learn page says live monitor has no impact on your app and can be used with any app in a test environment or in production. A separate note on the page warns that the Debug published app setting has a detrimental impact on performance for all users."
   - q: "Can I use it with Power Apps mobile?"
     a: "Learn describes a preview: select Copy monitor link instead of Play published app, then open the link in Power Apps mobile, not a browser. It notes the option on make.preview.powerapps.com."
 ---
@@ -64,11 +64,11 @@ Learn warns that the setting has a detrimental impact on performance for all you
 
 The sample app showed performance degradation and intermittent errors. Some responses were HTTP 429 with the message Rate limit exceeded and a retry time. Live monitor showed the cause: the ProgressCount.Text formula ran on each createRow call and triggered CountRows on several entities. CountRows is not delegated for Dataverse, so it appeared as getRows requests. Learn says each record added could cause up to 12 extra requests, which led to throttling.
 
-The lesson is general. Look for repeated requests that a single user action triggers.
+My takeaway, not stated on the page: look for repeated requests that a single user action triggers.
 
 ## Studio session or published session
 
-The two entry points give two kinds of session. A Studio session traces what happens while you test in the editor. A published-app session traces what real runs of the published version do, which matters when a problem appears only for users or only in production. Learn marks each session with a notification, so you can tell which one you opened. Because live monitor has no impact on your app, you can attach it to a production app while a user reproduces the problem. Only the Debug published app setting costs performance.
+The two entry points give two kinds of session. Learn marks each session with a notification, so you can tell which one you opened: a Studio session for the editor, and a session for the published version of the app. The next two sentences are my reading, not text from the page. A published-app session matters when a problem appears only for users or only in production. Because the page says live monitor has no impact on your app and can be used in production, attaching it while a user reproduces the problem should be possible, but the page does not describe that scenario. Keep the separate Debug published app performance warning in mind.
 
 ## Why delegation shows up in monitor
 
@@ -83,11 +83,11 @@ In the Northwind example, CountRows was not delegated for Dataverse, and the mon
 - Browser support, and behavior when a session closes or reconnects.
 - A separate publish step. It only mentions publishing source expressions through the setting.
 
-The page links to articles on live monitor overview, collaborative debugging and advanced monitoring. They were not read for this guide.
+The page links to the Live monitor overview article, which was not read for this guide.
 
 ## A debugging routine
 
-This routine is practical advice built on the page.
+This routine is my advice, built on the page.
 
 1. Reproduce the problem in Studio with live monitor open.
 2. Select the failing event and read its error message.
@@ -95,7 +95,7 @@ This routine is practical advice built on the page.
 4. If you cannot tie an event to a formula, turn on Debug published app for a short test, then turn it off.
 5. Look for patterns like many getRows calls after one user action, and check delegation.
 
-## Typical mistakes
+## Typical mistakes (my advice)
 
 - Leaving Debug published app on in production.
 - Ignoring delegation warnings, as in the CountRows case.
@@ -110,4 +110,4 @@ This routine is practical advice built on the page.
 
 ## Sources
 
-- [Debug canvas apps with Live monitor (Microsoft Learn)](https://learn.microsoft.com/power-apps/maker/monitor-canvasapps)
+- [Debugging canvas apps with Live monitor (Microsoft Learn)](https://learn.microsoft.com/power-apps/maker/monitor-canvasapps)
