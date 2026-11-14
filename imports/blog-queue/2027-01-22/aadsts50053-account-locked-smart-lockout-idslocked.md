@@ -93,15 +93,15 @@ The ID Protection page adds that very high confidence risky sign-ins are blocked
 - **Add the sign-in IPs to Trusted locations**, if the sign-in comes from a known company location.
 - **Use a modern authentication protocol**, if the sign-in uses a legacy protocol.
 
-For other kinds of blocks from risk-based policies, the same page lists signing in from a familiar location or device, excluding a user from the policy, or disabling the policy. Those apply to risk-based Conditional Access policies, not to this built-in block. I did not read anything that ties them to a 50053 built-in block, so I do not suggest them for it.
+For other kinds of blocks from risk-based policies, the same page lists signing in from a familiar location or device, excluding a user from the policy, or disabling the policy. The page does not tie them to the 50053 built-in block, so this article does not suggest them for it.
 
 ## A short triage (my advice)
 
-This is my experience, not a Microsoft procedure:
+This is my suggestion, not a Microsoft procedure:
 
 1. Read the failure reason before you reset anything. A password reset does not help a user blocked from a bad IP.
 2. If many users hit smart lockout at once, think about password spray, and look at the source IPs in the sign-in log.
-3. For legacy protocol failures, find the client. Old mail apps and scripts are common causes in my experience.
+3. For legacy protocol failures, find the client. Old mail apps and scripts are candidates to check, which is my suggestion and not a statement of the pages.
 4. In hybrid setups with pass-through authentication, verify the threshold and duration relation before you change either value.
 
 ## Related
@@ -112,6 +112,6 @@ This is my experience, not a Microsoft procedure:
 
 ## Sources
 
-- [Microsoft Entra authentication and authorization error codes (Microsoft Learn)](https://learn.microsoft.com/entra/identity-platform/reference-error-codes)
+- [Microsoft Entra authentication & authorization error codes (Microsoft Learn)](https://learn.microsoft.com/entra/identity-platform/reference-error-codes)
 - [Prevent Attacks Using Smart Lockout (Microsoft Learn)](https://learn.microsoft.com/entra/identity/authentication/howto-password-smart-lockout)
 - [Remediate risks and unblock users (Microsoft Learn)](https://learn.microsoft.com/entra/id-protection/howto-identity-protection-remediate-unblock)
