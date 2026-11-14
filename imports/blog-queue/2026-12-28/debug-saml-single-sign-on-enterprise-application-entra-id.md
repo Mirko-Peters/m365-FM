@@ -11,7 +11,7 @@ keypoints:
   - "Test under Entra ID, Enterprise apps, All applications, Single sign-on, SAML, then Test single sign-on. The role needed is at least Cloud Application Administrator."
   - "An error on the company sign-in page needs the error message and the SAML request. Check Destination, Issuer and AssertionConsumerServiceURL."
   - "An error on the application page means Entra ID issued a token but the app did not accept it. Review NameID, claims and the signing certificate in the SAML response."
-  - "A Fix it button appears only when the error is caused by an Entra ID misconfiguration that Microsoft can correct."
+  - "A Fix it button appears only when the error is caused by a misconfiguration in Entra ID. Without the button the issue is not an Entra ID misconfiguration."
 faq:
   - q: "How do I start testing SAML sign-on?"
     a: "According to Microsoft Learn, sign in to the Entra admin center as at least a Cloud Application Administrator, go to Enterprise apps, All applications, select the app, then Single sign-on, SAML and Test single sign-on. If Test is greyed out, save the required attributes in Basic SAML Configuration first."
@@ -55,7 +55,7 @@ This error appears before the application is reached. You need the error message
 
 **Without the extension:**
 
-1. Copy the error message from the bottom-right corner. It includes a CorrelationID, a timestamp and a statement of the root cause. Include these in a support case.
+1. Copy the error message from the bottom-right corner. It includes a CorrelationID, a timestamp and a statement of the root cause. Learn calls the CorrelationID and timestamp important for a Microsoft support case.
 2. Paste it into the text box above **Get resolution guidance** on the Test single sign-on page and select it.
 3. Check that the **Destination** in the SAML request matches the **SAML Single Sign-on Service URL** from Entra ID.
 4. Check that the **Issuer** matches the identifier configured for the application. Entra ID uses it to find the application in your directory.
@@ -74,7 +74,7 @@ Here sign-in succeeds but the application shows an error, which means Entra ID i
 ## Limitations on the page
 
 - There are no code samples. The request and response come from the extension or a tool such as Fiddler.
-- Some resolution guidance is available only through the extension, so without it you read the request and response manually.
+- Without the extension the resolution guidance might need information from the SAML request or response, and Learn says you might need a tool such as Fiddler to retrieve it.
 
 ## A short triage order
 
@@ -87,11 +87,11 @@ This order is a suggestion based on the article, not a Microsoft procedure.
 
 ## What to collect for a support case
 
-The article points to the following items, which help engineers find the problem: the CorrelationID and timestamp from the error message, the statement of the root cause, and the SAML request or response that you captured. Without the extension you may need Fiddler to capture them. Keep the downloaded request or response together with the exact time of the failed attempt.
+The article says the CorrelationID and the timestamp from the error message are important for a support case with Microsoft, because they help the engineers identify the problem and give an accurate resolution. The error message also contains a statement identifying the root cause. My advice, not from the page: keep the downloaded SAML request or response together with the error message and the time of the failed attempt, so the case has everything in one place.
 
-## After single sign-on works
+## Other help on the page
 
-Learn's related content suggests automating user provisioning and deprovisioning to SaaS applications and getting started with Conditional Access, for example a policy that requires device compliance.
+The page links a short video on troubleshooting SAML SSO with Microsoft Entra ID, a list of SaaS application integration tutorials for gallery apps, and the Single Sign-on SAML protocol article for details on the SAML response. If no resolution is shown for a sign-in error in the extension flow, Learn asks you to use the feedback textbox to tell Microsoft.
 
 ## Not covered
 
@@ -104,4 +104,4 @@ The page does not list specific error codes or fixes for individual applications
 
 ## Sources
 
-- [Debug SAML-based single sign-on to applications](https://learn.microsoft.com/entra/identity/enterprise-apps/debug-saml-sso-issues)
+- [Debug SAML-based single sign-on to applications (Microsoft Learn)](https://learn.microsoft.com/entra/identity/enterprise-apps/debug-saml-sso-issues)
