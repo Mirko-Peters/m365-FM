@@ -7,9 +7,9 @@ author: mirko-p
 date: 2026-12-18
 topics: [copilot, copilot-web-search, copilot-governance, agent-registry]
 keypoints:
-  - "Web search is controlled by the Allow web search in Copilot policy in the Cloud Policy service, not by a toggle on the Copilot settings page."
+  - "The primary admin control for web search is the Allow web search in Copilot policy, which Learn says is available only in the Cloud Policy service."
   - "The policy has three options, including one that disables web search in Work mode but keeps it in Web mode and Copilot Chat."
-  - "If the policy is not configured, web search is available unless optional connected experiences in Office are disabled."
+  - "If the policy is not configured, web search is available unless the Office policy for additional optional connected experiences is Disabled."
   - "Block external publisher content with Agents > Settings > Agent and plugin access, and limit who can use agents with Agents > Settings > User access."
   - "Blocking a plugin does not necessarily revoke consent, remove indexed connector data or stop a remote service."
 faq:
@@ -31,7 +31,7 @@ Two separate controls limit what Microsoft 365 Copilot can reach outside your te
 
 ### What it does
 
-Learn describes web search as an optional feature that lets Copilot ground answers in current web content. Copilot builds a short query and sends it to Bing. The query is not the full prompt unless the prompt is very short. It does not include whole files or Entra identifiers such as username, domain or tenant ID. It does include the client IP address, which Bing uses to localize results.
+Learn describes web search as an optional feature that lets Copilot ground answers in current web content. Copilot builds a short query and sends it to Bing. The query is not the full prompt unless the prompt is very short. It does not include whole files or Entra identifiers such as username, domain or tenant ID. Learn says user and tenant identifiers are removed before the query goes to Bing. The page read does not say whether other connection data, such as the client IP address, reaches Bing.
 
 ### The policy
 
@@ -45,13 +45,13 @@ The policy is **Allow web search in Copilot**, available in the Cloud Policy ser
 
 | Configuration | Result |
 |---|---|
-| Policy disabled | The **Web content** toggle is dimmed and users cannot turn web search on |
+| Policy disabled | The **Web content** toggle is dimmed and users cannot turn web search on (another paragraph on the same page says the toggle is not available to the user) |
 | Policy enabled | Users can still turn web search off with their own toggle |
 | Option 3 | Web search is also disabled in Researcher and Cowork |
-| Policy not configured | Web search is available, unless optional connected experiences in Office are disabled |
+| Policy not configured | Web search is available, unless the policy **Allow the use of additional optional connected experiences in Office** is set to Disabled |
 | GCC and DoD | Off by default, and stays off until the policy is configured |
 
-Turning off optional connected experiences in Microsoft 365 apps does not by itself stop web search in every case, according to Learn. Check the policy, not only the connected experiences setting.
+Learn separates two things. The admin policy **Allow the use of additional optional connected experiences in Office**, when Disabled, switches web search off if the web search policy is not configured, and Learn notes that it also restricts Copilot Chat, Copilot and multiple other Microsoft 365 experiences. The privacy setting for optional connected experiences that users see in Microsoft 365 apps has no effect on web search availability. My advice: set the web search policy explicitly instead of relying on the connected experiences policy.
 
 ### Data handling points to tell your compliance team
 
@@ -102,7 +102,7 @@ Learn warns that blocking or uninstalling a plugin does not necessarily stop a r
 
 Researcher and Analyst are part of the core Copilot chat experience and do not fall under agent settings.
 
-## A practical order
+## A practical order (my suggestion)
 
 1. Decide whether web search is allowed, and set the Cloud Policy option.
 2. Turn off external publisher access, or restrict user access to a pilot group.
@@ -110,7 +110,7 @@ Researcher and Analyst are part of the core Copilot chat experience and do not f
 4. Test with an allowed and a non-allowed user in a new conversation.
 5. Record the settings, exceptions and an owner.
 
-## Typical mistakes
+## Typical mistakes (my summary)
 
 - Looking for a web search toggle on the Copilot settings page.
 - Assuming connected experiences settings fully control web search.
@@ -131,7 +131,7 @@ The pages read do not name the admin roles needed for agent settings, do not giv
 
 ## Sources
 
-- [Manage web search for Microsoft Copilot and Copilot Chat](https://learn.microsoft.com/en-us/copilot/microsoft-365/manage-public-web-access)
-- [Agent settings in the Microsoft 365 admin center](https://learn.microsoft.com/microsoft-agent-365/admin/agent-settings)
-- [Manage agents in the Microsoft 365 admin center](https://learn.microsoft.com/microsoft-365/admin/manage/manage-copilot-agents-integrated-apps)
-- [Governing Microsoft 365 Copilot plugins](https://learn.microsoft.com/microsoft-365-copilot/extensibility/manage)
+- [Data, privacy, and security for web search in Microsoft Copilot and Microsoft Copilot Chat](https://learn.microsoft.com/en-us/microsoft-365/copilot/manage-public-web-access)
+- [Agent settings in Microsoft 365 admin center](https://learn.microsoft.com/en-us/microsoft-agent-365/admin/agent-settings)
+- [Manage agents in the Microsoft 365 admin center](https://learn.microsoft.com/en-us/microsoft-agent-365/admin/manage-copilot-agents-integrated-apps)
+- [Govern Microsoft 365 Copilot plugin access and connections](https://learn.microsoft.com/en-us/microsoft-365/copilot/extensibility/manage)
