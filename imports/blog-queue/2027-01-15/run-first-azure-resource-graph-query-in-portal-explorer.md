@@ -25,7 +25,7 @@ faq:
     a: "You can create charts only from queries that output a count of resources. Queries that output lists cannot be charted, but they can also be pinned to a dashboard. A pinned query runs again each time the dashboard loads."
 ---
 
-To run your first Azure Resource Graph query, sign in to the Azure portal, search for resource graph, open Resource Graph Explorer, paste a query into the **Query 1** area and select **Run query**. The scope defaults to what the portal offers, and you can change it with **Directory**. This guide follows the Microsoft Learn quickstart for running a query in the portal and adds a few notes of my own where marked.
+To run your first Azure Resource Graph query, sign in to the Azure portal, search for resource graph, open Resource Graph Explorer, paste a query into the **Query 1** area and select **Run query**. You can change the scope with **Directory**. This guide follows the Microsoft Learn quickstart for running a query in the portal and adds a few notes of my own where marked.
 
 ## What Resource Graph Explorer does
 
@@ -74,7 +74,7 @@ resources
 
 Here the query orders all results by name and then keeps five. Learn says that with no change in your environment the results are consistent, ordered by `name` and limited to five.
 
-The practical rule: when you want a stable top-N, sort first and limit second.
+The practical rule, in my words: when you want a stable top-N, sort first and limit second.
 
 ## Use the schema browser
 
