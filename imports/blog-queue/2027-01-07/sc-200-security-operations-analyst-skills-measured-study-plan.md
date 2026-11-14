@@ -29,7 +29,7 @@ SC-200 measures how well a security operations analyst can configure, triage and
 
 ## Audience
 
-The page describes a security operations analyst who reduces organizational risk by triaging, responding to incidents, hunting for threats and engineering detections. The role works in multicloud and on-premises environments with Microsoft Defender XDR, Microsoft Sentinel, Microsoft Entra ID, Microsoft Purview and Microsoft Defender for Cloud workload protections. It also involves KQL hunting and automating responses. A passing score is 700 or greater. The page does not show a retirement date for the exam.
+The page describes a security operations analyst who reduces organizational risk by triaging, responding to incidents, hunting for threats and engineering detections. The role works in multicloud and on-premises environments with Microsoft Defender XDR, Microsoft Sentinel, Microsoft Entra ID, Microsoft Purview and Microsoft Defender for Cloud workload protections. It also involves KQL hunting and automating responses. The page also describes collaborating with business and security leadership on security standards, and expects familiarity with Microsoft security, compliance and identity solutions, Microsoft 365, Azure cloud services, AI agents and Copilots, and Windows, Linux and mobile operating systems. A passing score is 700 or greater. The page does not show a retirement date for the exam.
 
 ## Domain 1: manage a security operations environment (40-45%)
 
@@ -72,6 +72,10 @@ The page describes a security operations analyst who reduces organizational risk
 - **Defender XDR:** choose the right table for a KQL query, identify threats with KQL, create Advanced Hunting queries, interpret threat analytics, create hunting graphs including blast radius, and analyze entity relationships with Sentinel Graph.
 - **Sentinel platform:** create and monitor hunting queries, create and manage KQL jobs in the data lake, create and manage summary rule tables, and hunt with notebooks, including the connection to the Sentinel MCP Server.
 
+## What changed on October 21, 2026
+
+The change log lists one minor change: Ingest data into the Microsoft Sentinel SIEM and platform. The audience profile and the top-level group Manage a security operations environment are marked no change. The table lists no other rows.
+
 ## Resources named on the page
 
 - **Practice assessment:** the page recommends the new Practice Assessment on AI Skills Navigator, which it says aligns more closely with the exam. The older Learn practice assessment is no longer updated.
@@ -79,22 +83,22 @@ The page describes a security operations analyst who reduces organizational risk
 - **Exam Prep video** and other Microsoft Learn shows.
 - **Documentation:** Microsoft security, Defender XDR, Defender for Cloud and Sentinel documentation.
 - **Exam sandbox**, accommodations requests and the community hubs.
-- **Renewal:** the page says associate certifications expire annually and can be renewed by passing a free online assessment.
+- **Renewal:** the page says associate, expert and specialty certifications expire annually and can be renewed by passing a free online assessment.
 
 ## What the page does not say
 
-Exam length, question count, price, languages, prerequisite certifications, or how many questions each subtopic gets. It gives only domain percentages.
+Exam length, question count, price, prerequisite certifications, or how many questions each subtopic gets. For languages it only points to the Schedule Exam section of the exam page and says localized versions follow the English update by about eight weeks. It gives only domain percentages.
 
 ## A study plan
 
-This plan is practical advice based on the weights above.
+This plan is my advice, based on the weights above.
 
 1. **Weeks 1-3, domain 1.** It carries the most weight. Work through ingestion, detection rules and automation in a Sentinel and Defender lab.
 2. **Weeks 4-5, domain 2.** Practice triage across Defender XDR, Defender for Endpoint and Purview, including device timelines and live response.
 3. **Week 6, domain 3.** Write KQL daily. Learn which table holds which signal.
 4. **Week 7.** Take the practice assessment, review the weak areas against the outline and repeat.
 
-## Typical mistakes
+## Typical mistakes (my advice)
 
 - Spending too little time on domain 1.
 - Studying Sentinel without Defender XDR, although both are in scope.
