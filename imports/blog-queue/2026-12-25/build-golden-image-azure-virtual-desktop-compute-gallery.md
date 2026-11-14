@@ -29,7 +29,7 @@ A golden image is a custom VM image with the apps and settings you want on your 
 
 ## 1. Choose the OS and create the VM
 
-- **Pooled host pools:** Learn recommends a Windows 10 or 11 multi-session image, with or without Microsoft 365, or a Windows Server image.
+- **Pooled host pools:** Learn recommends a Windows 10 or 11 multi-session image, with or without Microsoft 365, or a Windows Server image. My advice: the page has not been refreshed for this, but Windows 10 reached end of support on 14 October 2025, so choose Windows 11 for new images.
 - **Personal host pools:** Windows 10 or 11 Enterprise images.
 - **Generation:** Gen 1 or Gen 2. Gen 2 supports features that Gen 1 does not.
 - **Important:** deploy the VM without the **Login with Microsoft Entra ID** flag. You can enable it later when you deploy session hosts.
