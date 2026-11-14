@@ -90,9 +90,9 @@ If your organization disabled OneDrive creation for some users, those users can'
 
 ## Governance pointers
 
-Learn has separate pages on eDiscovery for Copilot Pages and a compliance summary for Pages and Notebooks, which I did not read for this article. The admin configuration page does not document PowerShell cmdlets or a separate sharing control for these features.
+The admin configuration page links to a storage and lifecycle page, which I did not read for this article. It does not document PowerShell cmdlets or a separate sharing control for these features.
 
-## Checklist
+## Checklist (my advice)
 
 1. Check OneDrive licensing and site creation for the target users.
 2. Decide whether Loop components stay enabled.
@@ -106,6 +106,6 @@ Learn has separate pages on eDiscovery for Copilot Pages and a compliance summar
 
 ## Sources
 
-- [How Microsoft Copilot Pages works (Microsoft Support)](https://support.microsoft.com/microsoft-365-copilot/how-microsoft-365-copilot-pages-works)
-- [Admin configuration for Copilot Pages and Copilot Notebooks](https://learn.microsoft.com/microsoft-365/loop/cpcn-admin-configuration)
-- [Requirements for Copilot Pages and Copilot Notebooks](https://learn.microsoft.com/microsoft-365/loop/cpcn-requirements)
+- [How Microsoft Copilot Pages Works (Microsoft Support)](https://support.microsoft.com/microsoft-365-copilot/how-microsoft-365-copilot-pages-works)
+- [Manage Copilot Pages and Copilot Notebooks in your organization (Microsoft Learn)](https://learn.microsoft.com/microsoft-365/loop/cpcn-admin-configuration?view=o365-worldwide)
+- [Requirements for Copilot Pages and Copilot Notebooks (Microsoft Learn)](https://learn.microsoft.com/microsoft-365/loop/cpcn-requirements?view=o365-worldwide)
