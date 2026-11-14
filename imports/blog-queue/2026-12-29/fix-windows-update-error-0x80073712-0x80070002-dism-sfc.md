@@ -10,8 +10,8 @@ keypoints:
   - "Learn's code table says 0x80073712 is ERROR_SXS_COMPONENT_STORE_CORRUPT, meaning the component store is in an inconsistent state, and 0x80070002 is ERROR_FILE_NOT_FOUND."
   - "Method 1 is DISM.exe /Online /Cleanup-image /Restorehealth followed by sfc /scannow, then running Windows Update again."
   - "If the machine cannot reach Windows Update, use DISM with /Source and /LimitAccess pointing to a repair source of the same OS version."
-  - "Both Learn pages are scoped to supported Windows Server versions, although the DISM method applies to Windows 11, Windows 10 and Server 2016 or later."
-  - "Back up the OS disk before the manual 0x80070002 fixes. The page gives no rollback steps, and one registry path in it looks wrong."
+  - "Both Learn pages sit in the Windows Server docs, although the DISM method applies to Windows 11, Windows 10 and Server 2016 or later."
+  - "Back up the OS disk before the manual 0x80070002 fixes. Beyond a registry backup note, the page gives no rollback steps."
 faq:
   - q: "What does 0x80073712 mean?"
     a: "According to Microsoft Learn, it is ERROR_SXS_COMPONENT_STORE_CORRUPT, described as the component store being in an inconsistent state."
@@ -22,10 +22,10 @@ faq:
   - q: "Where do I see what DISM repaired?"
     a: "In %windir%\\Logs\\CBS\\CBS.log, which Learn explains how to read for corrupt payloads and missing MUM files."
   - q: "Does this article cover resetting Windows Update components?"
-    a: "No. The two Learn pages used here do not describe resetting Windows Update components, and both are scoped to Windows Server."
+    a: "No. The two Learn pages used here do not describe resetting Windows Update components, and both sit in the Windows Server docs."
 ---
 
-Errors 0x80073712 and 0x80070002 usually point to a damaged component store or missing files. This guide combines two Microsoft Learn troubleshooting pages. Both are written for supported versions of Windows Server. The DISM repair section says it applies to Windows 11, Windows 10 and Windows Server 2016 or later. The Learn page for general Windows client update errors does not mention these two codes, so this article is limited to what the server pages document.
+Errors 0x80073712 and 0x80070002 usually point to a damaged component store or missing files. This guide combines two Microsoft Learn troubleshooting pages. Both sit in the Windows Server documentation. The DISM repair section says it applies to Windows 11, Windows 10 and Windows Server 2016 or later. The first page links a separate Windows Update troubleshooting scenarios page for clients, which I did not read, so this article is limited to what these two pages document.
 
 ## What the codes mean
 
@@ -42,7 +42,7 @@ The other codes in the same table include 0x800f081f (source missing), 0x800f083
 
 1. Open an elevated Command Prompt.
 2. Run `DISM.exe /Online /Cleanup-image /Restorehealth`. It can take several minutes and fetches replacement files from Microsoft Update.
-3. If the computer cannot reach Windows Update, use a working installation, share or media as the source: `DISM.exe /Online /Cleanup-Image /RestoreHealth /Source:\\<servername>\c$\windows /LimitAccess`. The source must run the same OS version, and the administrative share needs appropriate access.
+3. If the computer cannot reach Windows Update, use a working installation, share or media as the source: `DISM.exe /Online /Cleanup-Image /RestoreHealth /Source:\\<servername>\c$\windows /LimitAccess`. The source must run the same OS version. Learn also allows files from a network Windows folder, a USB drive or a DVD.
 4. Run `sfc /scannow`.
 5. Run Windows Update again.
 
@@ -58,7 +58,7 @@ Use this if the result is not The restore operation completed successfully.
 4. Copy the correct files into `C:\temp\Source`, then run `DISM /Online /Cleanup-Image /RestoreHealth /Source:C:\temp\Source\ /LimitAccess`.
 5. Verify with `DISM /Online /Cleanup-Image /ScanHealth` and review CBS.log.
 
-Because of `/LimitAccess`, the source folder must contain every required file.
+Learn says to repeat the copy for each corrupted file in the log until all of them are in the folder.
 
 ## Extra causes of 0x80070002
 
@@ -72,7 +72,7 @@ The second page says the error typically comes from missing or corrupt files or 
 
 ## Cautions
 
-The page gives no rollback procedure for these changes. Its Wimmount path, `HKLM\System\CCS\Services\Wimmount.sys`, probably should name the service key, so verify it on a working server first. Its WinSxS example also uses folder names that do not match the log entry.
+Apart from a general note to back up the registry, the page gives no rollback procedure for these changes. My observation, not Microsoft's: the Wimmount path the page gives, `HKLM\System\CCS\Services\Wimmount.sys`, looks unusual for a service key, so check it on a working server first. The WinSxS example also uses a folder name in its mkdir command that differs from the one in the log entry.
 
 ## Reading CBS.log
 
@@ -84,7 +84,7 @@ For Microsoft support cases the page recommends gathering data with TSS. Home us
 
 ## Not covered
 
-Neither page describes resetting Windows Update components, reboot requirements or Windows client specific steps.
+Neither page describes resetting Windows Update components or reboot requirements. The first page links a client troubleshooting page that I did not read.
 
 ## Related
 
@@ -92,5 +92,5 @@ Neither page describes resetting Windows Update components, reboot requirements 
 
 ## Sources
 
-- [Fix Windows Update corruptions and installation failures](https://learn.microsoft.com/troubleshoot/windows-server/installing-updates-features-roles/fix-windows-update-errors)
-- [Troubleshoot Windows Update error 0x80070002](https://learn.microsoft.com/troubleshoot/windows-server/installing-updates-features-roles/troubleshoot-windows-update-error-0x80070002)
+- [Fix Windows Update corruptions and installation failures (Microsoft Learn)](https://learn.microsoft.com/troubleshoot/windows-server/installing-updates-features-roles/fix-windows-update-errors)
+- [Troubleshoot Windows Update Error 0x80070002 (Microsoft Learn)](https://learn.microsoft.com/troubleshoot/windows-server/installing-updates-features-roles/troubleshoot-windows-update-error-0x80070002)
