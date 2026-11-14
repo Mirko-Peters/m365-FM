@@ -88,5 +88,5 @@ The pages I read do not give the menu path for opening Workflows, the template s
 
 ## Sources
 
-- [Set up approval workflows](https://learn.microsoft.com/dynamics365/business-central/across-set-up-workflows)
-- [Set up approval users](https://learn.microsoft.com/dynamics365/business-central/across-how-to-set-up-approval-users)
+- [Set up approval workflows (Microsoft Learn)](https://learn.microsoft.com/dynamics365/business-central/across-set-up-workflows)
+- [Set up approval users (Microsoft Learn)](https://learn.microsoft.com/dynamics365/business-central/across-how-to-set-up-approval-users)
