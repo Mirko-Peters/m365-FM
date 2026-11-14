@@ -24,7 +24,7 @@ To add OneDrive to File Explorer, start the OneDrive app (press the Windows key,
 
 ## Start OneDrive and sign in
 
-The OneDrive entry in File Explorer comes from the sync app. If the app isn't running, there is nothing to show. Microsoft's page [I can't see any OneDrive icons](https://support.microsoft.com/en-us/office/i-can-t-see-any-onedrive-icons-a377ac56-f885-4854-9763-d6bcdceafcf1) names two causes: the icon moved into the hidden icons area of the taskbar, or OneDrive isn't running.
+The OneDrive entry in File Explorer comes from the sync app. If the app isn't running, there is nothing to show. Microsoft's page [I can't see any OneDrive icons](https://support.microsoft.com/office/i-can-t-see-any-onedrive-icons-a377ac56-f885-4854-9763-d6bcdceafcf1) names two causes: the icon moved into the hidden icons area of the taskbar, or OneDrive isn't running.
 
 1. Look for the white or blue [OneDrive](https://www.m365.fm/entity/onedrive/) cloud icon at the far right of the taskbar.
 2. If you don't see it, select the **Show hidden icons** arrow next to the notification area.
@@ -47,7 +47,7 @@ The left pane lists your OneDrive folders next to Home, Desktop and the other pl
 
 ## Pin the OneDrive folder for one-click access
 
-Pinning isn't the same as adding, but it solves the usual complaint: "I never find OneDrive when I open File Explorer." Microsoft's page [File Explorer in Windows](https://support.microsoft.com/en-us/windows/experience/fileexplorer/file-explorer-in-windows) describes it. Starting with Windows 11, version 22H2, Quick access is renamed **Home**. To pin a folder, right-click it and select **Pin to Quick access**. To unpin it, right-click and select **Unpin from Quick access**.
+Pinning isn't the same as adding, but it solves the usual complaint: "I never find OneDrive when I open File Explorer." Microsoft's page [File Explorer in Windows](https://support.microsoft.com/windows/experience/fileexplorer/file-explorer-in-windows) describes it. Starting with Windows 11, version 22H2, Quick access is renamed **Home**. To pin a folder, right-click it and select **Pin to Quick access**. To unpin it, right-click and select **Unpin from Quick access**.
 
 A pinned entry is a shortcut. It doesn't move your files. If you pin a subfolder of OneDrive, such as the project folder you use every day, you skip two clicks every morning.
 
@@ -57,7 +57,7 @@ If you followed Microsoft's steps to hide OneDrive when you tried to get rid of 
 
 ## Reinstall OneDrive if it's gone
 
-If you uninstalled OneDrive, or Start can't find it, reinstall it. Microsoft's page [Reinstall OneDrive](https://support.microsoft.com/en-us/onedrive/reinstall-onedrive) lists the steps:
+If you uninstalled OneDrive, or Start can't find it, reinstall it. Microsoft's page [Reinstall OneDrive](https://support.microsoft.com/onedrive/reinstall-onedrive) lists the steps:
 
 1. Open the Start menu, search for "Programs" and open **Add or remove programs**.
 2. Check whether **Microsoft OneDrive** is in the list. If it's there, uninstall it first and confirm if asked for an administrator password.
@@ -68,7 +68,7 @@ Uninstalling doesn't delete your data, and your files stay at OneDrive.com. Micr
 
 ## Why files look empty or "cloud only"
 
-Once OneDrive appears, you might see files with a cloud icon and wonder where they are. That's Files On-Demand. Microsoft's page [Save disk space with OneDrive Files On-Demand for Windows](https://support.microsoft.com/en-us/office/sync-files-with-onedrive-files-on-demand-62e8d748-7877-420f-b600-24b56562aa70) explains the icons:
+Once OneDrive appears, you might see files with a cloud icon and wonder where they are. That's Files On-Demand. Microsoft's page [Save disk space with OneDrive Files On-Demand for Windows](https://support.microsoft.com/office/sync-files-with-onedrive-files-on-demand-62e8d748-7877-420f-b600-24b56562aa70) explains the icons:
 
 - **Blue cloud.** The file is online-only. It takes no local space and needs an internet connection to open.
 - **Green check.** The file is locally available, which means it's downloaded and can be opened offline.
