@@ -25,7 +25,7 @@ faq:
     a: "Learn gives this command: Get-OutboundConnector -Identity with your connector name, piped to Format-List Name,RouteAllMessagesViaOnPremises. A value of true means all outgoing mail from Exchange Online is routed through the on-premises hybrid server."
 ---
 
-NDR 5.4.14 Hop count exceeded means Exchange Online accepted a message for a recipient domain but could not route it correctly, so it looped until the hop limit was reached. Microsoft Learn names two likely causes: an accepted domain configuration problem, and misconfigured connectors in a hybrid environment. Usually only an Exchange Online admin can fix it.
+NDR 5.4.14 Hop count exceeded indicates a mail loop or routing problem in Exchange Online. Microsoft Learn names two likely causes: an accepted domain configuration problem, and misconfigured connectors in a hybrid environment. Usually only an Exchange Online admin can fix it.
 
 ## What the bounce message means
 
@@ -43,7 +43,7 @@ Learn describes two likely situations behind 5.4.14:
 
 ## If you are the sender
 
-Learn says these issues typically can only be fixed by an Exchange Online admin and not the average email sender. Send the full bounce message to your email admin and point them to the Learn article. The code, the text and the original recipient address are the useful details.
+Learn says these issues typically can only be fixed by an Exchange Online admin and not the average email sender. Send the full bounce message to your email admin and point them to the Learn article. My advice: include the code, the text and the original recipient address.
 
 ## If you are the admin: check the accepted domain
 
@@ -98,7 +98,7 @@ The fix is a dedicated connector, from Office 365 to your organization's email s
 | RouteAllMessagesViaOnPremises is true | Inbound connector to Exchange Online | On-premises type, no accepted domain scope |
 | Code is 5.4.6 | On-premises Exchange | Check on-premises routing and hybrid setup |
 
-The first row is my reading of the accepted domains guidance, not a statement in the NDR article. The other rows follow the NDR article.
+The first and last rows are my reading of the accepted domains guidance and of the code description, not a documented fix in the NDR article. The other rows follow the NDR article.
 
 ## A short order of work (my advice)
 
