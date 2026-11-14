@@ -9,7 +9,7 @@ topics: [teams-phone]
 keypoints:
   - "A Teams Telephony Administrator, Teams Communications Administrator or Teams Administrator role is needed. The wizard is under Voice, Phone numbers, Numbers, Port."
   - "The billing telephone number and organization name must match the current provider exactly, and any account freeze must be removed, or the request is rejected after submission."
-  - "Ranges are not supported. Enter 10-digit or E.164 numbers, or upload a one-column CSV with the header PhoneNumber. Each request handles one group of numbers."
+  - "Ranges are not supported. Enter 10-digit or E.164 numbers (new wizard), or upload a one-column CSV headed PhoneNumber. Each request handles one group of numbers."
   - "The authorized user cannot be updated during the port request. E-signature is the recommended way to sign the letter of authorization."
   - "Microsoft acknowledges the request within 72 business hours. Report problems with ported numbers within the first 24 to 48 hours."
 faq:
@@ -25,19 +25,19 @@ faq:
     a: "In the Teams admin center under Voice, Phone numbers, Order history. Learn lists the statuses from Draft to Completed, Cancellation requested and Canceled."
 ---
 
-Porting moves phone numbers you already own from another carrier to Microsoft for Teams. Most failures come from data that does not match the old carrier's records, so preparation matters more than the wizard itself. This guide follows the Microsoft Learn article on submitting a port request and its order status reference.
+Porting moves phone numbers you already own from another carrier to Microsoft for Teams. Most failures come from data that does not match the old carrier's records, so preparation matters more than the wizard itself. This guide follows the Microsoft Learn article on submitting a port request, which also contains the order status reference.
 
 ## Prerequisites
 
 1. Read the page on planning number ports.
-2. Gather the country-specific documents. Learn links per-country guides for more than 40 countries and regions, including the United States and Puerto Rico and Canada, with the downloadable letter of authorization (LOA) forms.
+2. Gather the country-specific documents. Learn links per-country guides for 35 countries and regions, including the United States and Puerto Rico and Canada, with the downloadable letter of authorization (LOA) forms.
 3. Sign in to the Teams admin center with the Teams Telephony Administrator, Teams Communications Administrator or Teams Administrator role.
 
 ## Start the wizard
 
-Go to **Voice**, then **Phone numbers**, select **Numbers**, then **Port**. On the splash screen, choose **US & Canada Preview** for the new wizard, or **All regions (current porting experience)** for the classic one. For US and Canada numbers, select **US & Canada**, then **Start port**. The page gives one set of steps and does not document the classic wizard separately.
+Go to **Voice**, then **Phone numbers**, select **Numbers**, then **Port**. On the splash screen, choose **US & Canada Preview** for the new wizard, or **All regions (current porting experience)** for the classic one. For US and Canada numbers, select **US & Canada**, then **Start port**. The steps below follow the new US and Canada wizard. The page documents the classic wizard on a separate tab, and its flow differs, as described after the port types.
 
-## Wizard steps
+## Wizard steps (new US and Canada wizard)
 
 1. **Get started:** select the country or region that currently hosts the numbers. The wizard lists the documents needed from the current carrier.
 2. **Phone numbers:** enter numbers in 10-digit or E.164 format, separated by a comma or semicolon. Dashes are optional and ranges are not supported. For a CSV, use one column with the header `PhoneNumber`. The wizard groups numbers by account, service provider and type. Each request processes one group, so mixed groups need separate requests. You can save progress and resume from Order history.
@@ -47,6 +47,16 @@ Go to **Voice**, then **Phone numbers**, select **Numbers**, then **Port**. On t
 6. **Porting details:** an order name and requester contacts. Separate several email addresses with a semicolon.
 7. **Authorize and submit:** choose **Sign with e-signature (recommended)**, where the authorized user approves by email and the request is then submitted automatically, or an offline signature where you download, sign and upload the LOA. In edit mode you can change any field except Country or Region, and a changed LOA must be re-signed.
 8. **Confirmation:** Microsoft acknowledges the request within 72 business hours. Track it under **Voice**, **Phone numbers**, **Order history**.
+
+## The classic wizard (All regions)
+
+The page describes the classic wizard on its own tab. The flow differs from the new wizard.
+
+- **Get started:** enter the country or region and the numbers. Manual entry takes E.164 format only, and the CSV needs one column headed `PhoneNumber` with E.164 numbers. Ranges are not supported.
+- **Manage numbers:** the wizard checks format, country or region and validity. All numbers must validate before you continue. For a failure you do not understand, the page suggests a General Inquiry case with the TNS Service Desk through the Phone Number Service Center portal.
+- **Add account information:** order name, BTN in E.164 format, organization name, current provider name, account number and security PIN (required for mobile numbers), requester details, authorized user details, the signing method and the service address. A BTN that is not among the ported numbers makes the request a partial port. The fields shown depend on country and number type.
+- **Add number features:** change the number usage if needed. The options named are User, Voice app and Conference, and toll-free numbers default to Voice app.
+- **Complete your order:** with paper signature you download the prefilled LOA template, sign it, upload it and select **Submit**. With e-signature the authorized user receives an email after you select **Complete and send e-signature request**.
 
 ## Port types
 
@@ -90,5 +100,4 @@ The page does not give total porting times, fees or the content of the per-count
 
 ## Sources
 
-- [Transfer phone numbers to Microsoft Teams](https://learn.microsoft.com/microsoftteams/phone-number-calling-plans/transfer-phone-numbers-to-teams)
-- [What's the status of your port orders?](https://learn.microsoft.com/microsoftteams/phone-number-calling-plans/port-order-status)
+- [Transfer phone numbers to Microsoft Teams (Microsoft Learn)](https://learn.microsoft.com/microsoftteams/phone-number-calling-plans/transfer-phone-numbers-to-teams)
