@@ -25,7 +25,7 @@ faq:
     a: "Rename its folder in OneDrive. The page says Copilot skips folders whose names do not match the name in SKILL.md. After adding or renaming skills, select Refresh in the Custom skills dialog."
 ---
 
-Some Excel tasks come back every week: clean a data export, reconcile two lists, apply the same formatting. Skills in Copilot in Excel are meant for exactly that. This article follows the Microsoft Support page on skills in Copilot in Excel. I could read a condensed version of that page, so the article stays with the steps and facts that came through, and my own suggestions are marked as such.
+Some Excel tasks come back every week: clean a data export, reconcile two lists, apply the same formatting. Skills in Copilot in Excel are meant for exactly that. This article follows the Microsoft Support page on skills in Copilot in Excel. My own suggestions are marked as such.
 
 ## What a skill is
 
@@ -65,7 +65,7 @@ Use `@skill-builder` to create a skill from your instructions, earlier prompts, 
 
 ### Option 2: Record a skill
 
-Demonstrate a task in your workbook and have Copilot turn your changes into a reusable skill. The page names the approach but, in the version I could read, gives no further steps.
+Demonstrate a task in your workbook and have Copilot turn your changes into a reusable skill. The page gives no steps here and refers to its own page "Record a skill with Copilot in Excel".
 
 ### Option 3: Upload a skill by hand
 
@@ -99,9 +99,9 @@ After you add or rename a skill in OneDrive, select **Refresh** in the **Custom 
 
 ## Availability notes
 
-- Custom skills are saved to a specific OneDrive folder, so you need access to OneDrive for them.
+- Custom skills are saved to your OneDrive account in a specific folder.
 - The skill-builder skill may not be available to everyone yet.
-- The page, as I could read it, does not describe license requirements or admin controls. If a menu item is missing, ask your administrator.
+- My advice: if a menu item is missing, ask your administrator whether Copilot and skills are available for your account.
 
 ## Good habits (my advice)
 
@@ -123,4 +123,4 @@ This is my suggestion, not guidance from the page:
 
 ## Sources
 
-- [Use skills in Copilot in Excel (Microsoft Support)](https://support.microsoft.com/excel/copilot/copilot-in-excel-skills)
+- [Use skills with Copilot in Excel to complete repeatable tasks (Microsoft Support)](https://support.microsoft.com/excel/copilot/copilot-in-excel-skills)
