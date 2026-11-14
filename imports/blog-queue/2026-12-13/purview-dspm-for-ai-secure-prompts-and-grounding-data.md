@@ -42,7 +42,7 @@ From the classic article:
 - For third-party AI sites, the **Microsoft Purview browser extension** and **onboarded devices**.
 - For item-level scanning, a registered Entra application and a one-time authentication.
 
-The classic article does not specify license requirements. The newer DSPM article does not either and refers to the Microsoft Purview service description.
+The classic considerations article adds three prerequisites. Copilot in Fabric and Security Copilot need the enterprise version of Microsoft Purview data governance and a collection policy such as the one from **Secure interactions for Microsoft Copilot experiences**. Monitoring other AI apps in Edge needs an Edge configuration policy. For AI apps other than Microsoft 365 Copilot and Microsoft Facilitator, you must have set up pay-as-you-go billing, and the UI shows notices where this applies. Neither the classic nor the newer DSPM article lists license tiers. Both refer to the Microsoft Purview service description.
 
 ## Step 1: Review the overview and recommendations
 
@@ -70,7 +70,7 @@ In the newer DSPM, the equivalent is **Discover** > **Activity explorer** > **AI
 
 ## Step 3: Find oversharing in grounding data
 
-Copilot and agents can only surface what users can already access, so oversharing becomes visible through AI. **Data risk assessments** address this. The default assessment runs automatically and weekly for the top 100 SharePoint sites by usage. The first run has a 4-day delay. It reports total items found, sensitive data detected and links that share data with anyone. The Microsoft 365 tab covers SharePoint and the Fabric tab covers Fabric workspaces.
+Copilot and agents can only surface what users can already access, so oversharing becomes visible through AI. **Data risk assessments** address this. The default assessment runs automatically and weekly for the top 100 SharePoint sites by usage. The first run has a 4-day delay. It reports total items found, sensitive data detected and links that share data with anyone. The Microsoft 365 tab covers SharePoint and OneDrive oversharing insights and the Fabric tab covers Fabric workspaces. Fabric assessments need a one-time setup with an Entra-registered app first. A custom assessment's results do not update after the run, so Learn says to wait at least 48 hours and create a new assessment to see changes.
 
 For a custom assessment, select **Create custom assessment** and choose users, data sources and scan level. Results expire after 30 days, and you can duplicate an assessment to rerun it. Item-level scanning flags items with external or anonymous sharing links and shows the label and owner. It is Microsoft 365 only, restricted to SharePoint sites, limited to 10 sites, and does not support OneDrive.
 
@@ -93,11 +93,13 @@ One-click policies apply to all users and are activated with a single click. **E
 
 ## Supported AI apps
 
-The classic article groups them as:
+The classic article groups reports and Activity explorer into three categories:
 
-- **Copilot experiences and agents:** Microsoft 365 Copilot and Copilot Chat, Security Copilot, Copilot in Fabric, Copilot Studio, Facilitator and the Channel Agent in Teams.
-- **Enterprise AI apps:** Entra-registered AI apps, Microsoft Foundry and ChatGPT Enterprise.
-- **Other AI apps:** third-party AI sites.
+- **Copilot experiences and agents:** the examples it gives are Microsoft 365 Copilots and Copilot Studio. The considerations article also names Microsoft 365 Copilot Chat, Security Copilot, Copilot in Fabric and Microsoft Facilitator.
+- **Enterprise AI apps:** ChatGPT Enterprise, Entra-registered AI apps and applications built on Microsoft Foundry.
+- **Other AI apps:** the supported third-party AI sites, such as those used for Gemini and ChatGPT.
+
+For the current list of third-party sites, use Microsoft's page on supported AI sites for Purview, which I did not read.
 
 ## Common mistakes
 
@@ -117,4 +119,5 @@ The classic article groups them as:
 ## Sources
 
 - [Microsoft Learn: Data Security Posture Management for AI (classic)](https://learn.microsoft.com/en-us/purview/dspm-for-ai)
+- [Microsoft Learn: Considerations for deploying DSPM for AI (classic)](https://learn.microsoft.com/en-us/purview/dspm-for-ai-considerations)
 - [Microsoft Learn: Data Security Posture Management in Microsoft Purview](https://learn.microsoft.com/en-us/purview/data-security-posture-management-learn-about)
