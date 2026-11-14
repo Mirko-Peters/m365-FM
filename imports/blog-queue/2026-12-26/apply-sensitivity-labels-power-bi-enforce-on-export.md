@@ -96,4 +96,4 @@ The page does not include tenant settings, licensing and prerequisites, step-by-
 
 ## Sources
 
-- [Sensitivity labels in Power BI](https://learn.microsoft.com/power-bi/enterprise/service-security-sensitivity-label-overview)
+- [Sensitivity Labels in Power BI (Microsoft Learn)](https://learn.microsoft.com/fabric/enterprise/powerbi/service-security-sensitivity-label-overview)
