@@ -100,13 +100,13 @@ Finally, other apps have their own switches. Word, Excel and PowerPoint have an 
 
 - Turn off Copilot in Word and the other Office apps: each app has its own **Enable Copilot** checkbox, which is covered in a separate article.
 - AppLocker basics for packaged apps: Microsoft's documentation on editing an AppLocker policy explains the rule types, and the Copilot article links to it.
-- Pinning Copilot Chat: the [pinning article](https://learn.microsoft.com/en-us/microsoft-365/copilot/pin-copilot-chat-navbar) explains the **Do not pin** option for Teams and Outlook and why it no longer applies to the Microsoft Copilot app.
+- Pinning Copilot Chat: the [pinning article](https://learn.microsoft.com/microsoft-365/copilot/pin-copilot-chat-navbar) explains the **Do not pin** option for Teams and Outlook and why it no longer applies to the Microsoft Copilot app.
 - Optional connected experiences: they control web grounding for Copilot and have side effects.
 - Copilot key mapping: decide whether the key should open search or another app.
 
 ## Next step
 
-To disable Copilot in Windows 11, uninstall the Microsoft Copilot app from **Installed apps**, and add an AppLocker rule for `MICROSOFT.COPILOT` if you need it to stay off on managed devices. Read the [WindowsAI policy documentation](https://learn.microsoft.com/en-us/windows/client-management/mdm/policy-csp-windowsai) and the article on the [Windows and Microsoft Copilot Chat experience](https://learn.microsoft.com/en-us/windows/client-management/manage-windows-copilot) before you build a policy, because the names and conditions have changed more than once.
+To disable Copilot in Windows 11, uninstall the Microsoft Copilot app from **Installed apps**, and add an AppLocker rule for `MICROSOFT.COPILOT` if you need it to stay off on managed devices. Read the [WindowsAI policy documentation](https://learn.microsoft.com/windows/client-management/mdm/policy-csp-windowsai) and the article on the [Windows and Microsoft Copilot Chat experience](https://learn.microsoft.com/windows/client-management/manage-windows-copilot) before you build a policy, because the names and conditions have changed more than once.
 
 ## Sources
 
