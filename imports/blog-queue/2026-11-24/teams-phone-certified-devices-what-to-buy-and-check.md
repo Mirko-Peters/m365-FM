@@ -11,18 +11,18 @@ keypoints:
   - "The Certified Teams phones list shows model, firmware version, certification end date and Android version. The pages read name AudioCodes, Poly and Yealink."
   - "After certification expires, Microsoft commits to supporting the latest Teams apps on that device for two years, at its discretion."
   - "Teams Rooms Basic licenses aren't supported on Teams phones, and the account is blocked from sign in."
-  - "Teams phones are managed in the Teams admin center. Intune enrollment uses Android Device Administrator, per the page read."
+  - "Managing Teams phones requires the Global admin, Teams Service admin or Teams Device admin role. Intune enrollment uses Android Device Administrator, per the page read."
 faq:
   - q: "What does Certified for Microsoft Teams mean?"
     a: "According to Microsoft Learn, the Teams Device Certification Program tests devices on audio and video quality, user interface, device management and security. Only devices that pass all certification requirements and associated testing receive the designation Certified for Microsoft Teams."
   - q: "Where is the list of certified Teams phones?"
     a: "Microsoft Learn publishes a Certified Teams phones page with device model, firmware version, certification end date and Android OS version. Microsoft also points to the Teams devices store at microsoft.com for shopping."
   - q: "What happens when a phone's certification ends?"
-    a: "Microsoft Learn says that after a certification expires, Microsoft is committed to supporting the latest version of the Teams devices applications on certified devices for two years. Microsoft retains the discretion to change that policy, and OEM partners publish their own end-of-life policies."
+    a: "Microsoft Learn says that after a certification expires, Microsoft is committed to supporting the latest version of the Teams devices applications on certified devices for two years. Microsoft retains the discretion to change that policy. The page points to OEM websites and the Android version support page for current information."
   - q: "Can a Teams Rooms Basic license be used on a Teams phone?"
     a: "No. The Phones for Microsoft Teams page says Microsoft Teams Rooms Basic licenses aren't supported on Teams phone devices and that an account with a Basic license assigned is blocked from sign in."
 ---
-Buy Teams phones from the Certified Teams phones list on Microsoft Learn. That list is the only authoritative answer to "what works", because certification is how Microsoft confirms that a device meets its requirements for Teams. This article explains what the certification covers, how to read the list, what to check for license and management, and where the Microsoft pages stop. They don't recommend models or give prices.
+Buy Teams phones from the Certified Teams phones list on Microsoft Learn. That list is where Microsoft documents which phones are certified, and certification is how Microsoft confirms that a device meets its requirements for Teams. This article explains what the certification covers, how to read the list, what to check for license and management, and where the Microsoft pages stop. They don't recommend models or give prices.
 
 ## What certification means
 
@@ -34,7 +34,7 @@ Microsoft's end-user page lists some practical properties of certified devices:
 - All devices support firmware updates.
 - Devices register automatically with the Teams desktop client.
 
-The certified device categories are Teams Rooms on Windows, Teams Rooms on Android, panels, phones, displays and personal devices. Teams phones are the Android-based desk phones.
+The certified device categories are Teams Rooms on Windows, Teams Rooms on Android, panels, phones, displays and personal devices. Teams phones are one of those categories.
 
 ## How to read the Certified Teams phones list
 
@@ -45,7 +45,7 @@ Treat the end date as a planning input:
 - Certification end dates are based on the Android version the device ran when it entered certification.
 - OEM partners can extend certification by upgrading Android and recertifying, or release new models.
 - After expiry, Microsoft commits to supporting the latest Teams devices application on the device for two years. Microsoft keeps the right to change that policy.
-- OEMs publish their own end-of-life policies, so check the vendor too.
+- The page points to OEM websites and to the Android version support page for current information, so check the vendor too.
 
 The list has no features column and doesn't label devices as desk or conference phones. For features, Microsoft points to the vendor and to the per-device pages.
 
@@ -62,7 +62,7 @@ The page doesn't name a specific Teams Phone license SKU for the phone itself. I
 
 ## Management and deployment
 
-Teams phones are managed in the Teams admin center. Global Administrator, Teams Service Administrator and Teams Devices Administrator can do it. Microsoft recommends the role with the fewest permissions.
+To manage Teams phones, the Phones for Microsoft Teams page names the Global admin, Teams Service admin and Teams Device admin roles. The pages read don't say where in the admin tools each task is done. Microsoft recommends the role with the fewest permissions.
 
 For Intune, the deployment page read for this article says:
 
@@ -70,7 +70,7 @@ For Intune, the deployment page read for this article says:
 2. Android device administrator enrollment must be enabled, because it is off by default for new tenants.
 3. An Android Device Administrator compliance policy must be assigned to the Teams phone resource accounts.
 
-It explains that Teams phones are Android-based without Google Mobile Services and are therefore managed with Android Device Administrator. The page also says enrollment would switch to Android Open Source Project (AOSP) device management in 2025. That page was last updated in October 2024, so check the current Intune guidance before planning enrollment.
+It says Teams phones are managed in Intune with Android Device Administrator (ADA). The page also says enrollment would switch to Android Open Source Project (AOSP) device management in 2025. That page was last updated in October 2024, so check the current Intune guidance before planning enrollment.
 
 Two more points from the same page:
 
@@ -83,7 +83,7 @@ For rollouts, remote provisioning lets an admin upload the device's Ethernet MAC
 
 1. Pick the model from the Certified Teams phones page, not from a vendor catalog alone.
 2. Note the certification end date and the Android version.
-3. Check the vendor's end-of-life policy.
+3. Check the OEM website for current information.
 4. Confirm the sign-in account type and licenses. Avoid Teams Rooms Basic for phones.
 5. Plan Intune and Conditional Access for the resource accounts.
 6. Plan provisioning, either local sign-in or remote provisioning.
