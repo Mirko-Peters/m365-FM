@@ -46,8 +46,9 @@ Learn lists these nesting scenarios as unsupported:
 - Adding Microsoft 365 groups to security groups or other Microsoft 365 groups.
 - Adding distribution groups in nesting scenarios.
 - Adding groups as members of a role-assignable group.
+- Assigned membership to shared resources and apps for nested security groups, and applying licenses to nested security groups (also on the Entra page).
 
-Microsoft's limits page adds one SharePoint-specific number. A user can be part of up to 2,047 security groups in total, including direct and indirect membership, and past that limit "authentication and search results can become unpredictable." Deep nesting inflates indirect membership quickly, so this is a likely cause of odd behavior for users in many groups. The page states no maximum nesting depth.
+Microsoft's limits page adds one SharePoint-specific number. A user can be part of up to 2,047 security groups in total, including direct and indirect membership, and past that limit "authentication and search results can become unpredictable." My own inference: deep nesting inflates indirect membership quickly, so this could be a cause of odd behavior for users in many groups. The page states no maximum nesting depth.
 
 ## Step 1: Expand the group to real users
 
@@ -63,9 +64,9 @@ The least privileged permission is `GroupMember.ReadBasic.All`. To count only ch
 GET https://graph.microsoft.com/v1.0/groups/{id}/transitiveMembers/microsoft.graph.group?$count=true
 ```
 
-Calling the cast on a Microsoft 365 group returns a 400 error because Microsoft 365 groups cannot have other groups as members. Learn's PowerShell example for `Get-MgGroupTransitiveMember` was not available in the text I read, so check the live page for syntax.
+Calling the cast on a Microsoft 365 group returns a 400 error because Microsoft 365 groups cannot have other groups as members. For PowerShell, the same page shows `Get-MgGroupTransitiveMember -GroupId $groupId` for the full list and `Get-MgGroupTransitiveMemberAsGroup -GroupId $groupId -CountVariable CountVar -ConsistencyLevel eventual` for the group-only cast.
 
-Compare the flat list with the people who actually reach the library. A user in the list but without access suggests nesting does not resolve in SharePoint. A user with access but not in the list points to other routes: a direct permission, a sharing link or an item-level grant.
+Compare the flat list with the people who actually reach the library. My own diagnostic reading, not a Microsoft statement: a user in the list but without access suggests nesting does not resolve in SharePoint. A user with access but not in the list points to other routes: a direct permission, a sharing link or an item-level grant.
 
 ## Step 2: Find where inheritance is broken
 
@@ -88,7 +89,7 @@ Keep these documented behaviors in mind:
 | Many items with unique permissions | Review the Exceptions list and restore inheritance where there is no reason for it |
 | Access from a Microsoft 365 group | Remember Microsoft 365 groups cannot contain groups, so look for direct members |
 
-Flattening is the conservative option because it does not depend on the unresolved documentation question.
+My own suggestion: flattening is the conservative option because it does not depend on the unresolved documentation question.
 
 ## Typical mistakes
 
@@ -107,8 +108,7 @@ Flattening is the conservative option because it does not depend on the unresolv
 ## Sources
 
 - [Manage groups in Microsoft Entra ID](https://learn.microsoft.com/en-us/entra/fundamentals/how-to-manage-groups)
-- [Learn about groups and access rights in Microsoft Entra ID](https://learn.microsoft.com/en-us/entra/fundamentals/concept-learn-about-groups)
 - [Microsoft Entra service limits and restrictions](https://learn.microsoft.com/en-us/entra/identity/users/directory-service-limits-restrictions)
-- [List group transitive members](https://learn.microsoft.com/en-us/graph/api/group-list-transitivemembers)
+- [List group transitive members](https://learn.microsoft.com/en-us/graph/api/group-list-transitivemembers?view=graph-rest-1.0)
 - [Edit permissions for a list, library, folder or item](https://support.microsoft.com/en-us/office/edit-permissions-for-a-list-library-folder-or-item-02d770f3-59eb-4910-a608-5f84cc297782)
 - [Microsoft Q&A: Are nested groups inside Azure Active Directory working in SharePoint Online](https://learn.microsoft.com/en-us/answers/a/726447)
