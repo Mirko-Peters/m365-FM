@@ -1,6 +1,6 @@
-# Spreaker-Website-Feld im RSS (2026-11-13 05:01 UTC)
+# Spreaker-Website-Feld im RSS (2026-11-14 04:58 UTC)
 
-Gesetzt laut Protokoll: 3471 · im Feed gleich: 3379 · im Feed anders: 0 · nicht im Feed: 89 · ausstehend (frisch gesetzt, Feed noch nicht erneuert): 3
+Gesetzt laut Protokoll: 3697 · im Feed gleich: 3601 · im Feed anders: 0 · nicht im Feed: 96 · ausstehend (frisch gesetzt, Feed noch nicht erneuert): 0
 
 - 67311542: nicht_im_feed · soll https://www.m365.fm/show/episodes/building-reusable-components-with-power-platform-cli-pac-cli/ · Feed None
 - 67312816: nicht_im_feed · soll https://www.m365.fm/show/episodes/using-microsoft-graph-for-custom-app-integrations/ · Feed None
@@ -91,3 +91,10 @@ Gesetzt laut Protokoll: 3471 · im Feed gleich: 3379 · im Feed anders: 0 · nic
 - 67704978: nicht_im_feed · soll https://www.m365.fm/show/episodes/azure-cli-vs-powershell-one-clear-winner/ · Feed None
 - 67714774: nicht_im_feed · soll https://www.m365.fm/show/episodes/the-hidden-risks-lurking-in-your-cloud/ · Feed None
 - 67722917: nicht_im_feed · soll https://www.m365.fm/show/episodes/microsoft-fabric-changes-everything-for-bi-pros/ · Feed None
+- 67730942: nicht_im_feed · soll https://www.m365.fm/show/episodes/passwords-are-broken-passkeys-fix-everything/ · Feed None
+- 67736930: nicht_im_feed · soll https://www.m365.fm/show/episodes/the-power-platform-hits-its-limit-here/ · Feed None
+- 67742556: nicht_im_feed · soll https://www.m365.fm/show/episodes/owasp-2025-net-vulnerabilities-architectural-risks/ · Feed None
+- 67746475: nicht_im_feed · soll https://www.m365.fm/show/episodes/why-arm-templates-are-holding-you-back/ · Feed None
+- 67750560: nicht_im_feed · soll https://www.m365.fm/show/episodes/unit-vs-integration-vs-front-end-the-testing-face-off/ · Feed None
+- 67754723: nicht_im_feed · soll https://www.m365.fm/show/episodes/stop-using-entity-framework-like-this/ · Feed None
+- 67760699: nicht_im_feed · soll https://www.m365.fm/show/episodes/the-cloud-promise-is-broken/ · Feed None
