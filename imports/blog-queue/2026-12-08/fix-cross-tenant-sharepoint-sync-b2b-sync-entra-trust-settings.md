@@ -36,6 +36,8 @@ Microsoft Learn describes B2B Sync as a OneDrive sync app feature. A user syncs 
 - **Anyone links do not work.** They do not create guest accounts, so B2B Sync does not support them. Share directly with named people.
 - **External sharing must be on** at the organization level, set by a global or SharePoint admin. Sites can be equal to or more restrictive than the organization, never more permissive.
 - To check a site: sign in to the SharePoint admin center, open **Active sites**, add the **External sharing** column to the view, select the site, and review its setting.
+- **Share at site or folder level.** Learn says guests can't sync files that were shared individually, for example from the Office apps. If a folder is shared, it must be through a link that requires sign-in.
+- **The recipient needs a work or school account** in Microsoft Entra ID in the same cloud as the content tenant. Sharing with a Microsoft account or other personal account does not work, and sync between different clouds is not supported.
 - If you add permissions on the advanced permissions page instead of using **Share site**, no invitation is sent. Tell the guest they have access. Grant permissions at site level, not on a single library or folder.
 
 ## Step 2: Check Conditional Access in the sharing tenant
@@ -83,13 +85,15 @@ Also note that tenant restrictions are independent from cross-tenant access sett
 
 ## Step 5: Look for the block policy
 
+Learn lists one more client requirement: the Microsoft Authentication Library must not be enabled on sync app builds before 19.086. It also lists Mac-specific known issues, such as no Files On-Demand thumbnails for external sites and failed sync when the guest account's email format differs from the one used in the sync app.
+
 A receiving organization can disable the feature with `BlockExternalSync`. On Windows:
 
 ```text
 reg add "HKLM\SOFTWARE\Policies\Microsoft\OneDrive" /v BlockExternalSync /t REG_DWORD /d 1
 ```
 
-On a Mac the page uses `defaults write BlockExternalSync -bool YES`. ADMX management needs templates from build 19.086 or later. If users in one organization cannot sync anything shared by others, check whether this policy is set.
+On a Mac the page uses `defaults write com.microsoft.OneDrive-mac BlockExternalSync -bool YES` for the Apple Store version and `defaults write com.microsoft.OneDrive BlockExternalSync -bool YES` for the standalone version. ADMX management needs templates from build 19.086 or later. If users in one organization cannot sync anything shared by others, check whether this policy is set.
 
 ## Common mistakes
 
@@ -107,5 +111,5 @@ On a Mac the page uses `defaults write BlockExternalSync -bool YES`. ADMX manage
 
 ## Sources
 
-- [B2B Sync for SharePoint and OneDrive](https://learn.microsoft.com/en-us/onedrive/b2b-sync)
+- [B2B Sync for SharePoint and OneDrive](https://learn.microsoft.com/en-us/sharepoint/b2b-sync)
 - [Cross-tenant access settings in Microsoft Entra External ID](https://learn.microsoft.com/en-us/entra/external-id/cross-tenant-access-overview)
