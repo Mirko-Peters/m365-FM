@@ -38,6 +38,8 @@ Search admins and editors can add bookmarks in the Microsoft 365 admin center an
 - Add default and suggested bookmarks.
 - Import bookmarks from a CSV file.
 
+The page opens with a notice that Microsoft Search in Bing was retired on March 31, 2025. Recommended bookmarks were retired at the same time, but may still work if they were published or exported manually by April 30, 2025.
+
 A browser extension, Microsoft Search content creator, can add bookmarks from the current site. The page links to the Chrome Web Store.
 
 ## Field guidance
@@ -46,7 +48,7 @@ A browser extension, Microsoft Search content creator, can add bookmarks from th
 | --- | --- |
 | Title | Aim for no more than eight words or about 60 characters. |
 | Description | A succinct description, about 300 characters, that summarizes the purpose or functionality of the linked resource. |
-| URL | Required for Published, Suggested, Scheduled and Draft bookmarks, and also for Excluded bookmarks. |
+| URL | In an import file, the Title, URL and Keywords columns are required for Published, Suggested, Scheduled and Draft bookmarks. For Excluded bookmarks only the URL column is required. |
 | Keywords | Suggested minimum of at least five keywords, including variations users might search for. |
 | Categories | Used to sort and filter bookmarks in the admin center. Users never see them. |
 | State | Published, Draft or Scheduled when adding in the admin center. Import also supports Suggested and Excluded. |
@@ -88,7 +90,7 @@ This routine is a suggestion built from the field guidance, not a Microsoft proc
 
 ## Not covered
 
-The page does not cover acronyms or Q and A answers, which the topic title mentions, so check the separate Microsoft pages on those. It also does not give the exact menu path, targeted variations, device and OS settings or the roles beyond search admins and editors.
+The page does not cover acronyms or Q and A answers, so check the separate Microsoft pages on those. It also does not give the exact menu path, targeted variations, device and OS settings or the roles beyond search admins and editors.
 
 ## Related
 
@@ -96,4 +98,4 @@ The page does not cover acronyms or Q and A answers, which the topic title menti
 
 ## Sources
 
-- [Manage bookmarks for Microsoft Search](https://learn.microsoft.com/microsoftsearch/manage-bookmarks)
+- [Manage bookmarks (Microsoft Learn)](https://learn.microsoft.com/microsoftsearch/manage-bookmarks)
