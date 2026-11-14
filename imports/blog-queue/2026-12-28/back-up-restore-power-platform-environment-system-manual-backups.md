@@ -101,7 +101,7 @@ This checklist is a suggestion built from the requirements, not a Microsoft proc
 
 ## Not covered
 
-The page does not give backup size limits beyond the capacity rule, and it covers app-specific backups only through links.
+The page says the interface and API enforce no limit on database size for backups. Only the capacity rule applies: when storage exceeds the entitlement, restore, create and copy are blocked. It covers app-specific backups, for example Dynamics 365 Marketing or Finance, only through links.
 
 ## Related
 
@@ -111,4 +111,4 @@ The page does not give backup size limits beyond the capacity rule, and it cover
 
 ## Sources
 
-- [Back up and restore environments](https://learn.microsoft.com/power-platform/admin/backup-restore-environments)
+- [Back up and restore environments (Microsoft Learn)](https://learn.microsoft.com/power-platform/admin/backup-restore-environments)
