@@ -47,7 +47,7 @@ The Learn articles read for this page do not describe converting one configurati
 
 With B2B collaboration, guests sign in with their own work, school or social identity. You do not manage their passwords or accounts. They are represented in your directory as user objects, typically with the user type Guest and a user principal name that contains `#EXT#`.
 
-Invitations can be sent from the admin center or PowerShell, through self-service sign-up user flows, or through Microsoft Graph. After a guest redeems the invitation, they appear in the directory. Access is then controlled with cross-tenant access settings, external collaboration settings and Conditional Access policies.
+Learn lists these ways to add guests: the admin center, self-service sign-up user flows and the Microsoft Graph invitation APIs. The B2B overview does not cover PowerShell. After a guest redeems the invitation, they appear in the directory. Access is then controlled with cross-tenant access settings, external collaboration settings and Conditional Access policies.
 
 B2B direct connect is a related option. It creates a two-way trust between Entra organizations to enable Teams shared channels. Direct connect users are not added as guests to your directory.
 
