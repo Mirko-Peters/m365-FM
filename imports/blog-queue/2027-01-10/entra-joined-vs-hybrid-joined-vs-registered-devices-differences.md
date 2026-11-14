@@ -69,7 +69,7 @@ Microsoft Entra ID gives a device an identity in three ways: registration, join 
 ## What the pages do not say
 
 - A side-by-side table in the overview.
-- Hybrid join prerequisites such as licensing and functional levels. A linked planning article covers them.
+- Hybrid join prerequisites such as licensing and functional levels. The hybrid join page links to Cloud Sync device sync configuration for computer object sync, not to a planning guide.
 - The definition of how often periodically is.
 - Management tools for the Linux devices listed under Entra join.
 
@@ -82,7 +82,7 @@ This outline is practical advice built on the pages.
 3. Organization-owned device that still needs Active Directory and Group Policy: hybrid joined.
 4. Plan to move hybrid devices to Entra join over time.
 
-## Typical mistakes
+## Typical mistakes (my advice)
 
 - Treating registration as enrollment.
 - Choosing hybrid join for devices that rarely reach a domain controller.
@@ -98,7 +98,7 @@ This outline is practical advice built on the pages.
 
 ## Sources
 
-- [What is a device identity in Microsoft Entra ID (Microsoft Learn)](https://learn.microsoft.com/entra/identity/devices/overview)
-- [Microsoft Entra joined devices (Microsoft Learn)](https://learn.microsoft.com/entra/identity/devices/concept-directory-join)
-- [Microsoft Entra hybrid joined devices (Microsoft Learn)](https://learn.microsoft.com/entra/identity/devices/concept-hybrid-join)
-- [Microsoft Entra registered devices (Microsoft Learn)](https://learn.microsoft.com/entra/identity/devices/concept-device-registration)
+- [What is device identity in Microsoft Entra ID? (Microsoft Learn)](https://learn.microsoft.com/entra/identity/devices/overview)
+- [What is a Microsoft Entra joined device? (Microsoft Learn)](https://learn.microsoft.com/entra/identity/devices/concept-directory-join)
+- [What is a Microsoft Entra hybrid joined device? (Microsoft Learn)](https://learn.microsoft.com/entra/identity/devices/concept-hybrid-join)
+- [What are Microsoft Entra registered devices? (Microsoft Learn)](https://learn.microsoft.com/entra/identity/devices/concept-device-registration)
