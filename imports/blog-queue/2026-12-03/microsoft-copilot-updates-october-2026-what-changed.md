@@ -83,7 +83,7 @@ The post says Workspaces evolved from [Copilot Notebooks](https://www.m365.fm/en
 
 ## What this post does not say
 
-The post does not list prices, and it does not state license requirements for most items. It gives no date for the life sciences connectors. I did not find a Microsoft source in this research that counts the October updates as nine items, so this article follows the post's own grouping.
+The post does not list prices, and it does not state license requirements for most items. It gives no date for the life sciences connectors.  This article follows the post's own grouping into user and IT admin capabilities.
 
 ## Related
 
@@ -95,5 +95,5 @@ The post does not list prices, and it does not state license requirements for mo
 ## Sources
 
 - [What's new in Microsoft Copilot: October 2026 (Microsoft Tech Community)](https://techcommunity.microsoft.com/blog/microsoft-copilot-blog/what's-new-in-microsoft-copilot--october-2026/4568528)
-- [Get started with the Microsoft Copilot Frontier program (Microsoft Learn)](https://learn.microsoft.com/microsoft-365/admin/manage/get-started-frontier)
+- [Get started with the Microsoft Copilot Frontier program (Microsoft Learn)](https://learn.microsoft.com/en-us/microsoft-365/admin/manage/get-started-frontier)
 - [Introducing the new Copilot with Home, Code and Autopilot (Microsoft blog)](https://blogs.microsoft.com/blog/2026/09/25/introducing-the-new-copilot-with-home-code-and-autopilot/)
