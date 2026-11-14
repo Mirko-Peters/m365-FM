@@ -22,14 +22,14 @@ faq:
   - q: "What can Global Reader do?"
     a: "It can view admin features and settings that a Global Administrator can view but cannot edit any settings. It is not available for subscriptions purchased through a partner."
   - q: "Does the page cover Privileged Identity Management?"
-    a: "No. The page does not mention it. It only links to the least privileged roles by task in Microsoft Entra ID."
+    a: "Not as a topic. The page names Privileged Identity Management only in the Security Reader description, as one of the Microsoft Entra areas that role can access, and gives no guidance on using it. It links to the least privileged roles by task in Microsoft Entra ID."
 ---
 
 The safest way to pick an admin role is to match the task to the narrowest role that covers it. Microsoft Learn says to use roles with the fewest permissions and to limit the number of users who have administrative permissions. This article compares the common roles as that page describes them.
 
 ## Least privilege in Microsoft's words
 
-Assigning the least permissive role means giving administrators only the access they need to do the job. The page's example is password resets: assign Password Administrator or Helpdesk Administrator, not Global Administrator.
+Assigning the least permissive role means giving administrators only the access they need to do the job. The page's example is password resets: assign Password Administrator or Helpdesk Administrator, not Global Administrator. The same security table also recommends requiring multifactor authentication for administrators.
 
 ## Common roles
 
@@ -42,7 +42,7 @@ Assigning the least permissive role means giving administrators only the access 
 | Exchange Administrator | Manages mailboxes, Microsoft 365 Groups and Exchange Online. Recovers deleted items and sets up Send As and Send on behalf delegates. |
 | SharePoint Administrator | Accesses the SharePoint admin center, creates and deletes sites and manages site collections and global SharePoint settings. |
 | Teams Administrator | Accesses the Teams admin center, manages meetings and conference bridges and org-wide settings such as federation, Teams upgrade and client settings. |
-| Security Administrator | Manages security controls and monitoring across Microsoft 365. A privileged role with access to security and compliance portals. Read-only visibility into agents in the admin center and no agent publishing or lifecycle management. |
+| Security Administrator | Manages security controls and monitoring across Microsoft 365. A privileged role with access to security and compliance portals. Read visibility into agents in the admin center for investigation and risk assessment, without agent publishing or lifecycle management. |
 | Global Reader | Views admin features and settings that a Global Administrator can view but cannot edit any settings. Not available for subscriptions purchased through a partner. |
 
 ## How many Global Administrators
@@ -60,14 +60,14 @@ To find a user first, go to **Users** > **Active users** and select the account.
 
 ## Notes on specific roles
 
-- The Helpdesk Administrator can only help users who are not administrators and not assigned certain listed roles, so it cannot reset another admin's password.
-- The Global Administrator role is described as privileged, and the purchaser of a subscription becomes one automatically, so check who bought your subscription.
-- The Security Administrator is also described as privileged, and has read-only visibility into agents in the admin center, with no agent publishing or lifecycle management.
+- The Helpdesk Administrator can only help users who are not administrators and users assigned these roles: Directory reader, Guest inviter, Helpdesk admin, Message Center reader and Reports reader. My reading: it is therefore not the role for resetting the passwords of most other admins.
+- The Global Administrator role is described as privileged, and the purchaser of a subscription becomes one automatically, so it is worth checking who bought your subscription (my advice).
+- The Security Administrator is also described as privileged, and has read visibility into agents in the admin center, without agent publishing or lifecycle management.
 - Global Reader is not available for subscriptions purchased through a partner.
 
 ## Choosing a role
 
-This approach is a suggestion built from the table above, not a Microsoft procedure.
+This approach is my advice, built from the table above, not a Microsoft procedure.
 
 1. Write down the task, such as resetting passwords for staff, managing mailboxes or reviewing settings.
 2. Pick the role whose description matches only that task.
@@ -77,7 +77,7 @@ This approach is a suggestion built from the table above, not a Microsoft proced
 
 ## Not covered
 
-The page gives no numeric limits, does not mention Privileged Identity Management, and does not list full permissions per role. It refers to the Microsoft Entra built-in roles for that, and only summarizes partner roles and volume licensing roles.
+The page gives no numeric limits, gives no guidance on Privileged Identity Management (it only names it in the Security Reader description), and does not list full permissions per role. It refers to the Microsoft Entra built-in roles for that, and only summarizes partner roles and volume licensing roles.
 
 ## Related
 
@@ -86,4 +86,4 @@ The page gives no numeric limits, does not mention Privileged Identity Managemen
 
 ## Sources
 
-- [About Microsoft 365 admin roles](https://learn.microsoft.com/microsoft-365/admin/add-users/about-admin-roles)
+- [About administrator roles in the Microsoft 365 admin center (Microsoft Learn)](https://learn.microsoft.com/microsoft-365/admin/add-users/about-admin-roles)
