@@ -18,7 +18,7 @@ faq:
   - q: "Where do I add the server?"
     a: "On the agent's Tools page, select Add a tool, then New tool, and under Create new select Model Context Protocol."
   - q: "Which authentication options exist?"
-    a: "None, API key (a header or query parameter) and OAuth 2.0 with three types: Dynamic discovery, Dynamic and Manual. For Dynamic and Manual you add the shown callback URL to your identity provider app registration."
+    a: "None, API key (a header or query parameter) and OAuth 2.0 with three types: Dynamic discovery, Dynamic and Manual. For Manual you add the callback URL that appears to your identity provider app registration, and for Dynamic you do the same if one appears."
   - q: "Do data policies apply to MCP servers?"
     a: "Yes. Learn says access to MCP servers relies on Power Platform connectors, so a data policy that regulates connectors also regulates the MCP server and its tools for your agent."
   - q: "Does the page describe tool approval or limits?"
@@ -33,7 +33,7 @@ The page applies to agents and agent flows powered by the standard harness. You 
 
 ## Transport
 
-Copilot Studio supports the **Streamable** transport type. The page says that because SSE transport is deprecated, Copilot Studio no longer supports SSE for MCP after August 2025. If your server still uses SSE, plan a change before you connect.
+Copilot Studio supports the **Streamable** transport type. The page says that because SSE transport is deprecated, Copilot Studio no longer supports SSE for MCP after August 2025. If your server still uses SSE, my advice is to plan a change before you connect.
 
 ## Option 1: the onboarding wizard
 
@@ -48,10 +48,10 @@ Copilot Studio supports the **Streamable** transport type. The page says that be
 
 - **API key:** choose a **Type** of **Header** or **Query** and enter the name. The user of the agent provides the key.
 - **OAuth 2.0, Dynamic discovery:** for servers that support dynamic client registration with discovery. The page calls it the simplest method.
-- **OAuth 2.0, Dynamic:** for servers with dynamic client registration but no discovery. You enter the **Authorization URL** and **Token URL template**.
+- **OAuth 2.0, Dynamic:** for servers with dynamic client registration but no discovery. You enter the **Authorization URL** and **Token URL template**. Depending on the configuration, a callback URL might appear.
 - **OAuth 2.0, Manual:** you enter **Client ID**, **Client secret**, **Authorization URL**, **Token URL template**, **Refresh URL** and optionally **Scopes**, separated by spaces.
 
-For Dynamic and Manual, copy the callback URL that appears and add it to your identity provider app registration.
+For Manual, a callback URL appears. For Dynamic, one might appear. Copy it and add it to your application's registration with your identity provider.
 
 ## Option 2: a custom connector
 
@@ -86,5 +86,5 @@ The pages I read do not describe tool approval, numeric limits, billing, licensi
 
 ## Sources
 
-- [Connect your agent to an existing Model Context Protocol server](https://learn.microsoft.com/microsoft-copilot-studio/mcp-add-existing-server-to-agent)
-- [Extend your agent with Model Context Protocol](https://learn.microsoft.com/microsoft-copilot-studio/agent-extend-action-mcp)
+- [Connect your agent to an existing Model Context Protocol (MCP) server (Microsoft Learn)](https://learn.microsoft.com/microsoft-copilot-studio/mcp-add-existing-server-to-agent)
+- [Extend your agent with Model Context Protocol (Microsoft Learn)](https://learn.microsoft.com/microsoft-copilot-studio/agent-extend-action-mcp)
