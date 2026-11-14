@@ -8,7 +8,7 @@ date: 2026-12-26
 topics: [intune, microsoft-365-apps]
 keypoints:
   - "Go to Apps > All Apps > Create, choose Windows 10 and later under Microsoft 365 Apps, then Select. Only the Microsoft 365 Apps suite is supported."
-  - "Configure the suite with the configuration designer or enter XML for the Office Deployment Tool. Product ID XML covers only the Microsoft 365 Apps for business edition."
+  - "Configure the suite with the configuration designer or enter XML. The XML Product ID can be O365BusinessRetail or O365ProPlusRetail. Business edition must use XML."
   - "If MSI-based Office apps are present, use Remove MSI. Otherwise the Intune-delivered apps fail to install."
   - "Only one Microsoft 365 deployment is delivered to a device. Open apps during install can cause failure and data loss."
   - "For devices tracked by the Autopilot enrollment status page, Microsoft recommends deploying Microsoft 365 Apps as a Win32 app."
@@ -46,7 +46,7 @@ These are worded as on the page, shortened:
 
 1. Go to **Apps** > **All Apps** > **Create**.
 2. In the **Select app type** pane, under **Microsoft 365 Apps**, select **Windows 10 and later**, then **Select**.
-3. **App suite information:** enter a unique suite name (duplicate names mean only one app shows in the Company Portal), a description and the publisher, plus optional category, URLs and notes.
+3. **App suite information:** enter a unique suite name (duplicate names mean only one app shows in the Company Portal) and a description. Publisher, developer and owner show Microsoft. Category, URLs and notes are optional.
 4. **Configure app suite:** choose one of two formats, described next.
 5. **Scope tags:** optional, controls who sees client app information.
 6. **Assignments:** choose **Required**, **Available for enrolled devices** or **Uninstall** for groups.
@@ -59,14 +59,14 @@ These are worded as on the page, shortened:
 - **Default file format:** Office Open Document Format or Office Open XML Format.
 - **Update Channel:** how Office is updated on devices.
 - **Remove other versions:** Yes removes all Office (MSI) apps from the device, not only the selected ones.
-- **Version to install**, and **Specific version** when set to Specific. Devices that update a pinned version may show Installed until the next check-in, when the status temporarily changes to Unknown.
+- **Version to install**, and **Specific version** when set to Specific. For devices that update a pinned version and are deployed as available, the status may show Installed until the next check-in, when it temporarily changes to Unknown.
 - **Use shared computer activation** for shared computers.
 - **Automatically accept the app end user license agreement**.
 - **Languages:** Office installs in supported languages installed with Windows. You can add more.
 
 ## XML format
 
-You can enter a custom configuration XML for the Office Deployment Tool. The Product ID can be Business (`O365BusinessRetail`) or Proplus (`O365ProPlusRetail`). The page says you can only configure the app suite of the Microsoft 365 Apps for business edition using XML data.
+You can enter a custom configuration XML for the Office Deployment Tool. The Product ID can be Business (`O365BusinessRetail`) or Proplus (`O365ProPlusRetail`). The page also says Microsoft 365 Apps for business edition is supported, but its app suite must be configured using XML data.
 
 ## What happens on the device
 
@@ -78,7 +78,7 @@ For devices tracked during the enrollment status page, deploy Microsoft 365 Apps
 
 ## A pre-flight check
 
-This list is a suggestion built from the limits above, not a Microsoft procedure.
+This list is my advice, built from the limits above, not a Microsoft procedure.
 
 1. Inventory devices for MSI-based Office and plan for Remove MSI.
 2. Check settings catalog policies for conflicting channel or version settings.
@@ -96,4 +96,4 @@ The page does not give Office Deployment Tool XML option details, channel defini
 
 ## Sources
 
-- [Add Microsoft 365 apps to Windows devices with Microsoft Intune](https://learn.microsoft.com/intune/intune-service/apps/apps-add-office365)
+- [Add Microsoft 365 Apps to Windows Devices Using Microsoft Intune (Microsoft Learn)](https://learn.microsoft.com/intune/app-management/deployment/add-microsoft-365-windows)
