@@ -11,7 +11,7 @@ keypoints:
   - "Recommended: require risk remediation when user risk is High, and require multifactor authentication when sign-in risk is Medium or High."
   - "Exclude emergency access accounts and service accounts. Use Conditional Access for workload identities for service principals."
   - "Users must register for multifactor authentication before a remediation situation, or they are blocked. Hybrid users need password writeback."
-  - "Learn says legacy risk policies in ID Protection will be retired on October 1, 2026, so migrate them to Conditional Access."
+  - "The page still says legacy ID Protection risk policies will be retired on October 1, 2026. That date has passed, so migrate them to Conditional Access."
 faq:
   - q: "What do I need to create risk policies?"
     a: "Per Microsoft Learn, a Microsoft Entra ID P2 or Microsoft Entra Suite license for full access to ID Protection features. The least privileged role to create or edit Conditional Access policies is Conditional Access Administrator."
@@ -20,12 +20,12 @@ faq:
   - q: "Can I put user risk and sign-in risk in one policy?"
     a: "No. Learn says not to combine sign-in risk and user risk conditions in the same Conditional Access policy. Create separate policies."
   - q: "What happened to the legacy risk policies?"
-    a: "Learn says the legacy risk policies configured in ID Protection will be retired on October 1, 2026. Create equivalent Conditional Access policies in report-only mode, turn them on, then disable the old ones."
+    a: "The page says the legacy risk policies configured in ID Protection will be retired on October 1, 2026. That date has passed and the page does not say what changed. Create equivalent Conditional Access policies in report-only mode, turn them on, then disable the old ones."
   - q: "Who should be excluded?"
     a: "Emergency access or break-glass accounts, and service accounts and service principals. Learn recommends managed identities for scripts and code that use service accounts."
 ---
 
-Entra ID Protection risk policies now live in Conditional Access. You create one policy for user risk and one for sign-in risk, start in report-only mode and then turn them on. The legacy policies in ID Protection are scheduled for retirement on October 1, 2026, a date that is now close. This guide follows the Microsoft Learn page on configuring risk policies.
+Entra ID Protection risk policies now live in Conditional Access. You create one policy for user risk and one for sign-in risk, start in report-only mode and then turn them on. The page says the legacy policies in ID Protection will be retired on October 1, 2026. That date has passed, and the page does not say what changed. This guide follows the Microsoft Learn page on configuring risk policies.
 
 ## Licenses and roles
 
@@ -93,7 +93,7 @@ Confirm the settings with policy impact or report-only mode before you move **En
 
 ## Migrate legacy policies
 
-Learn says the legacy risk policies configured in ID Protection will be retired on October 1, 2026.
+The page says the legacy risk policies configured in ID Protection will be retired on October 1, 2026. That date had passed when this article was checked in November 2026, and the page still uses the future tense.
 
 1. Create equivalent user and sign-in risk policies in Conditional Access in report-only mode. Switch them to **On** after confirmation.
 2. Disable the old policies. In **ID Protection** > **Dashboard**, select the **User risk** or **Sign-in risk** policy and set **Enforce policy** to **Disabled**.
@@ -110,12 +110,12 @@ If you need help, Learn describes a support request path called Migrate legacy I
 - Which risk policy features are missing at lower license tiers.
 - The page also uses different labels in different steps, such as Target resources and Cloud apps or actions. Follow what your portal shows.
 
-## Typical mistakes
+## Typical mistakes (my advice)
 
 - Combining user risk and sign-in risk in one policy.
 - Skipping break-glass exclusions.
 - Enabling the policy before users have registered for multifactor authentication.
-- Leaving migration until after the retirement date.
+- Leaving legacy policies unmigrated after the announced retirement date.
 
 ## Related
 
@@ -125,4 +125,4 @@ If you need help, Learn describes a support request path called Migrate legacy I
 
 ## Sources
 
-- [Configure and enable risk policies (Microsoft Learn)](https://learn.microsoft.com/entra/id-protection/howto-identity-protection-configure-risk-policies)
+- [Risk policies (Microsoft Learn)](https://learn.microsoft.com/entra/id-protection/howto-identity-protection-configure-risk-policies)
