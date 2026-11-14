@@ -1,6 +1,6 @@
 ---
 title: "MS-721 Collaboration Communications Systems Engineer: Skills Measured and Study Plan"
-summary: "MS-721 leads to the Collaboration Communications Systems Engineer Associate certification. The four skills areas with weights from the study guide as of April 28, 2026, exam logistics and a preparation plan built on the weights."
+summary: "MS-721 leads to the Collaboration Communications Systems Engineer Associate certification. The four skills areas with weights from the study guide as of October 29, 2026, exam logistics and a preparation plan built on the weights."
 status: review
 publish: false
 author: mirko-p
@@ -8,7 +8,7 @@ date: 2027-01-20
 topics: [teams, teams-phone, teams-rooms, teams-premium]
 keypoints:
   - "MS-721 earns Microsoft 365 Certified: Collaboration Communications Systems Engineer Associate. The exam page lists 100 minutes and a proctored delivery."
-  - "Skills measured as of April 28, 2026: planning and design 20-25%, meetings 15-20%, Teams Phone 30-35%, Teams Rooms and devices 20-25%."
+  - "Skills measured as of October 29, 2026: planning and design 20-25%, meetings 15-20%, Teams Phone 30-35%, Teams Rooms and devices 20-25%."
   - "Teams Phone carries the largest weight, covering policies, auto attendants, call queues, emergency calling, calling features and Direct Routing."
   - "The study guide says a score of 700 or greater is required to pass, and the certification renews every 12 months through a free online assessment."
   - "This article covers the outline only and contains no exam questions."
@@ -16,7 +16,7 @@ faq:
   - q: "Who is MS-721 for?"
     a: "According to Microsoft Learn, candidates are responsible for planning, deploying, configuring, maintaining and troubleshooting collaboration communication systems: Teams Phone, meetings, webinars and town halls, Teams Premium, Microsoft 365 Copilot, Teams Rooms and other certified devices, and flexible workplaces. They need a fundamental understanding of networking, telecommunications, audio and video technology and identity and access management."
   - q: "What are the skills measured and their weights?"
-    a: "The study guide, for skills measured as of April 28, 2026, lists Plan and design collaboration communications systems (20-25%), Configure and manage Teams meetings, webinars, and town halls (15-20%), Configure and manage Teams Phone (30-35%) and Configure and manage Teams Rooms and devices (20-25%)."
+    a: "The study guide, for skills measured as of October 29, 2026, lists Plan and design collaboration communications systems (20-25%), Configure and manage Teams meetings, webinars, and town halls (15-20%), Configure and manage Teams Phone (30-35%) and Configure and manage Teams Rooms and devices (20-25%)."
   - q: "How long is the exam and in which languages is it offered?"
     a: "The exam page says you have 100 minutes. It is proctored and may include interactive components. It is offered in English, Chinese (Simplified), French, German, Japanese, Portuguese (Brazil) and Spanish, and scheduling runs through Pearson VUE."
   - q: "Is the certification valid forever?"
@@ -25,7 +25,7 @@ faq:
     a: "The certification page says the Practice Assessment is available on AI Skills Navigator with an upgraded experience, and that you must be signed in there to launch it. It also offers an Exam Sandbox that shows the exam interface."
 ---
 
-MS-721 is the exam for Microsoft 365 Certified: Collaboration Communications Systems Engineer Associate. It tests whether you can plan, deploy, configure, maintain and troubleshoot Teams meetings, Teams Phone and Teams Rooms and devices. The study guide for skills measured as of April 28, 2026 gives four areas, and Teams Phone has the largest share at 30-35%. This article summarizes the certification page and the study guide. It lists the outline only and has no exam questions.
+MS-721 is the exam for Microsoft 365 Certified: Collaboration Communications Systems Engineer Associate. It tests whether you can plan, deploy, configure, maintain and troubleshoot Teams meetings, Teams Phone and Teams Rooms and devices. The study guide for skills measured as of October 29, 2026 gives four areas, and Teams Phone has the largest share at 30-35%. This article summarizes the certification page and the study guide. It lists the outline only and has no exam questions.
 
 ## Who the exam is for
 
@@ -82,7 +82,7 @@ A small inconsistency to know about: the study guide uses the heading Implement 
 | Duration | 100 minutes |
 | Format | Proctored, with possible interactive components |
 | Languages | English, Chinese (Simplified), French, German, Japanese, Portuguese (Brazil), Spanish |
-| Retake | After 24 hours for the first retake, longer waits for later retakes |
+| Retake | After 24 hours for the first retake, the wait varies for later retakes |
 | Passing score | 700 or greater |
 | Renewal | Every 12 months, free online assessment |
 
@@ -101,7 +101,7 @@ This plan is my advice, not a Microsoft recommendation.
 
 ## Typical mistakes (my advice)
 
-- Treating the exam as only about meetings. Phone and devices together carry more than half.
+- Treating the exam as only about meetings. Phone and devices together carry 50-60%.
 - Skipping the planning topics because they sound theoretical.
 - Skipping PowerShell. The audience profile names it as a management tool.
 
