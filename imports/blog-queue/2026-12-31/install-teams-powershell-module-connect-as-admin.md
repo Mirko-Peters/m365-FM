@@ -7,14 +7,14 @@ author: mirko-p
 date: 2026-12-31
 topics: [powershell, teams-admin-center, teams]
 keypoints:
-  - "The module needs Windows PowerShell 5.1 with .NET Framework 4.7.2 or later, or PowerShell 7.2 or later."
+  - "The module needs Windows PowerShell 5.1 or PowerShell 7.2 or later. The page's Windows PowerShell 5.1 steps also install .NET Framework 4.7.2 or later."
   - "Install PowerShellGet first with Install-Module -Name PowerShellGet -Force -AllowClobber, then install MicrosoftTeams the same way."
   - "Run Connect-MicrosoftTeams to sign in. The page does not describe roles, device code sign-in or certificate authentication."
   - "Update-Module MicrosoftTeams fails if the module is imported, so run the update in a new elevated session."
   - "Uninstall with Uninstall-Module MicrosoftTeams, and add -AllVersions to remove every installed version."
 faq:
   - q: "Which PowerShell versions does the Teams module support?"
-    a: "According to Microsoft Learn, Windows PowerShell 5.1 with .NET Framework 4.7.2 or later, or PowerShell 7.2 or later."
+    a: "According to Microsoft Learn, Windows PowerShell 5.1 or PowerShell 7.2 or later on all platforms. The page's Windows PowerShell 5.1 example also installs .NET Framework 4.7.2 or later."
   - q: "How do I install the module?"
     a: "According to Microsoft Learn, run Install-Module -Name PowerShellGet -Force -AllowClobber, and then Install-Module -Name MicrosoftTeams -Force -AllowClobber."
   - q: "How do I sign in after installing?"
@@ -93,13 +93,13 @@ Uninstall-Module MicrosoftTeams
 
 Open a new PowerShell session first. To remove all versions, run `Uninstall-Module MicrosoftTeams -AllVersions`.
 
-## Next steps from the article
+## Page date
 
-The article points to Managing Teams with Teams PowerShell as the start, and lists the Teams PowerShell release notes and the Microsoft Teams cmdlet reference as related topics. The page was last updated on 2026-02-20.
+The version of the page I read has a content date of 2026-02-20 and no next-steps or related-topics section.
 
 ## Not the same as the Exchange Online module
 
-Teams and Exchange Online use different PowerShell modules. If you need to manage mail flow or mailboxes, that is a separate module with its own install steps.
+This section is background that the Learn page does not state. Teams and Exchange Online use different PowerShell modules. If you need to manage mail flow or mailboxes, that is a separate module with its own install steps.
 
 ## Suggestion: a safe routine
 
@@ -130,4 +130,4 @@ The pages I read do not describe the following:
 
 ## Sources
 
-- [Install Microsoft Teams PowerShell](https://learn.microsoft.com/microsoftteams/teams-powershell-install)
+- [Install Microsoft Teams PowerShell (Microsoft Learn)](https://learn.microsoft.com/microsoftteams/teams-powershell-install)
