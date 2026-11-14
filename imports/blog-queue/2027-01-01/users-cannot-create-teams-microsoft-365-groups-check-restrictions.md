@@ -11,7 +11,7 @@ keypoints:
   - "The older allowed-group method uses the Group.Unified settings EnableGroupCreation and GroupCreationAllowedGroupId. Its page is archived and says changes can take 30 minutes or more."
   - "Some roles can still create groups, such as Groups Administrator, User Administrator and Teams Service Administrator, depending on the location."
   - "The Entra page does not say whether the setting governs creation from Teams, Outlook or Planner, so test that in your tenant."
-  - "A Microsoft Entra ID P1 or P2 license is required for the admin who configures the allowed-group method and for the members allowed to create groups."
+  - "The archived page says the admin who configures the allowed-group method and the members allowed to create groups need Entra ID P1 or P2 or Basic Education licenses."
 faq:
   - q: "Where do I change who can create Microsoft 365 groups?"
     a: "According to Microsoft Learn, in the Microsoft Entra admin center go to Microsoft Entra ID, All groups, Groups, then General settings, and set Users can create Microsoft 365 groups in Azure portals, API or PowerShell to Yes or No."
@@ -103,5 +103,5 @@ The pages I read do not describe the following:
 
 ## Sources
 
-- [Set up self-service group management in Microsoft Entra ID](https://learn.microsoft.com/entra/identity/users/groups-self-service-management)
-- [Manage who can create Microsoft 365 Groups](https://learn.microsoft.com/microsoft-365/solutions/manage-creation-of-groups)
+- [Set up self-service group management (Microsoft Learn)](https://learn.microsoft.com/entra/identity/users/groups-self-service-management)
+- [Manage who can create Microsoft 365 Groups (Microsoft Learn)](https://learn.microsoft.com/previous-versions/microsoft-365/solutions/manage-creation-of-groups)
