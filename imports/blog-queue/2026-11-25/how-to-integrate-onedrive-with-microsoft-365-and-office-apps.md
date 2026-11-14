@@ -7,7 +7,7 @@ author: mirko-p
 date: 2026-11-25
 topics: [onedrive, microsoft-365-apps, microsoft-365]
 keypoints:
-  - "OneDrive integrates with Office through the OneDrive sync app, co-authoring, and AutoSave. All of them need the file to live in OneDrive or SharePoint, not on a local drive."
+  - "OneDrive integrates with Office through the OneDrive sync app, co-authoring, and AutoSave. A Microsoft Community moderator says AutoSave doesn't work for locally stored files."
   - "Files On-Demand shows online-only files in File Explorer and downloads content only when a file is opened. It requires Windows 10 version 1709 or later."
   - "Known Folder Move redirects Desktop, Documents, Pictures, Screenshots and Camera Roll to OneDrive. Users start it under Settings > Backup > Manage backup."
   - "Admins can sign users in silently on Entra ID-joined PCs and can block personal OneDrive accounts with Group Policy."
@@ -58,7 +58,7 @@ Users can start it themselves: open the OneDrive sync app settings, select the *
 |---|---|
 | Prompt users to move Windows known folders to OneDrive | Asks users to move their folders. Intended for existing devices. |
 | Silently move Windows known folders to OneDrive | Moves folders with no user interaction. Used for new and existing devices. |
-| Prevent users from turning off Known Folder Move | Keeps folders redirected. |
+| Prevent users from turning off Known Folder Move | Requires users to keep folders redirected. Learn notes users can still change this on the **Backup** tab under **Manage backup**. |
 | Prevent users from moving their Windows known folders to OneDrive | Blocks the move to any OneDrive account. |
 
 For rollout, Learn gives limits: for the prompt policy, no more than 5,000 devices a day and 20,000 a week across macOS and Windows. For the silent policy on existing devices, no more than 1,000 devices a day and 4,000 a week. It also warns that KFM does not work for users syncing OneDrive files in SharePoint Server, and that redirecting folders that point to another organization's OneDrive creates new empty folders.
