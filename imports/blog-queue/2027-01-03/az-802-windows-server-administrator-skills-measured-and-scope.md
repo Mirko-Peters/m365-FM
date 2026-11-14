@@ -14,18 +14,18 @@ keypoints:
   - "This article covers the outline only. It has no exam questions, and a score of 700 or greater is required to pass."
 faq:
   - q: "Does AZ-802 replace AZ-800 and AZ-801?"
-    a: "The Microsoft Learn exam page and study guide read for this article do not say. The exam page lists related exams as none and neither page mentions AZ-800 or AZ-801 or any retirement date. Check the Microsoft Learn certification pages for your current path before you schedule."
+    a: "The Microsoft Learn exam page and study guide read for this article do not say. The exam page lists related exams as none and a retirement date of none, and neither page mentions AZ-800 or AZ-801 in its text. Check the Microsoft Learn certification pages for your current path before you schedule."
   - q: "What are the AZ-802 skills areas and weights?"
-    a: "According to the study guide: Deploy and manage AD DS (20-25%), Manage Windows Server instances and workloads in a hybrid environment (10-15%), Manage virtual machines (10-15%), Implement and manage on-premises and hybrid networking (10-15%), Manage storage and file services (15-20%), Secure Windows Server infrastructure (10-15%) and Monitor and troubleshoot Windows Server environments (15-20%)."
+    a: "According to the study guide: Deploy and manage AD DS (20-25%), Manage Windows Server instances and workloads in a hybrid environment (10-15%), Manage virtual machines (10-15%), Implement and manage an on-premises and hybrid networking infrastructure (10-15%), Manage storage and file services (15-20%), Secure Windows Server infrastructure (10-15%) and Monitor and troubleshoot Windows Server environments (15-20%)."
   - q: "Which certification does AZ-802 count toward?"
     a: "The exam page says it is part of the requirements for Microsoft Certified: Windows Server Administrator Associate."
   - q: "What is the passing score?"
     a: "The study guide states that a score of 700 or greater is required to pass."
   - q: "How is the exam described for preparation?"
-    a: "The exam page names the study guide, the exam sandbox and the course Administer Windows Server (AZ-802T00). The exam is offered in English, according to the page."
+    a: "The exam page names the study guide, the exam sandbox and the course Administer Windows Server (AZ-802T00). The exam is offered in English, according to the page. The study guide adds that a new Practice Assessment experience is available on AI Skills Navigator."
 ---
 
-AZ-802, Administering Windows Server, is for administrators who deploy, implement, manage and troubleshoot Windows Server workloads on-premises, in the cloud or in hybrid setups. It counts toward the Microsoft Certified: Windows Server Administrator Associate certification. The study guide, last updated on 2026-10-19 according to its page, splits the exam into seven areas. The title of this topic asks what it replaces. The Learn pages I read do not answer that, and this article says so openly. It covers the outline only and has no exam questions.
+AZ-802, Administering Windows Server, is for administrators who deploy, implement, manage and troubleshoot Windows Server workloads on-premises, in the cloud or in hybrid setups. It counts toward the Microsoft Certified: Windows Server Administrator Associate certification. The study guide, with the metadata date 2026-06-22, splits the exam into seven areas. The title of this topic asks what it replaces. The Learn pages say little about that: the exam page lists no related exams and a retirement date of none, and this article says so openly. It covers the outline only and has no exam questions.
 
 ## Who the exam is for
 
@@ -33,7 +33,7 @@ Microsoft Learn describes candidates who deploy, implement, manage and troublesh
 
 ## What the pages say about older exams
 
-The exam page lists related exams as none. It does not mention AZ-800 or AZ-801 and gives no retirement date. The study guide has no note about replacing or retiring other exams. So this article makes no claim about replacement. If you hold an older Windows Server Hybrid Administrator credential or plan around retirement dates, check your Microsoft Learn profile and the certification pages, because the pages I read are silent.
+The exam page lists related exams as none and the retirement date as none. It does not mention AZ-800 or AZ-801 in its text. The study guide has no note about replacing or retiring other exams, although its Get trained link points to the AZ-800 exam page. So this article makes no claim about replacement. If you hold an older Windows Server Hybrid Administrator credential or plan around retirement dates, check your Microsoft Learn profile and the certification pages, because these two pages do not say.
 
 ## Skills at a glance
 
@@ -42,7 +42,7 @@ The exam page lists related exams as none. It does not mention AZ-800 or AZ-801 
 | Deploy and manage AD DS | 20-25% |
 | Manage Windows Server instances and workloads in a hybrid environment | 10-15% |
 | Manage virtual machines | 10-15% |
-| Implement and manage on-premises and hybrid networking | 10-15% |
+| Implement and manage an on-premises and hybrid networking infrastructure | 10-15% |
 | Manage storage and file services | 15-20% |
 | Secure Windows Server infrastructure | 10-15% |
 | Monitor and troubleshoot Windows Server environments | 15-20% |
@@ -67,7 +67,7 @@ DNS integration with AD DS, zones and records, forwarding, hybrid DNS, DNS polic
 
 ### Storage and file services (15-20%)
 
-Azure Files and Azure File Sync, migrating DFS and file shares to Azure Files, FSRM, DFS, SMB over QUIC, Storage Spaces and Storage Spaces Direct, Storage Replica, Data Deduplication, SMB Direct, Storage QoS, NTFS and ReFS, iSCSI, and BitLocker with encrypted volume recovery.
+Azure Files and Azure File Sync, migrating DFS to Azure File Sync, migrating file shares to Azure Files, FSRM, DFS, SMB over QUIC, Storage Spaces and Storage Spaces Direct, Storage Replica, Data Deduplication, SMB Direct, Storage QoS, NTFS and ReFS, iSCSI, and BitLocker with encrypted volume recovery.
 
 ### Security (10-15%)
 
@@ -87,7 +87,7 @@ Performance Monitor, data collector sets, Windows Admin Center monitoring and al
 6. **Week 8:** security baselines, LAPS and AD hardening.
 7. **Week 9:** monitoring and troubleshooting, with AD recovery drills.
 
-The week counts are a suggestion, not a Microsoft recommendation.
+This plan is my advice, built on the weights. The week counts are a suggestion, not a Microsoft recommendation.
 
 ## Logistics from the exam page
 
@@ -102,4 +102,4 @@ The exam is in English. The page lists no price and says it depends on the count
 ## Sources
 
 - [Exam AZ-802: Administering Windows Server (Microsoft Learn)](https://learn.microsoft.com/credentials/certifications/exams/az-802/)
-- [Study guide for Exam AZ-802 (Microsoft Learn)](https://learn.microsoft.com/credentials/certifications/resources/study-guides/az-802)
+- [Study guide for Exam AZ-802: Administering Windows Server (Microsoft Learn)](https://learn.microsoft.com/credentials/certifications/resources/study-guides/az-802)
