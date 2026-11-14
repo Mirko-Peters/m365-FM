@@ -25,7 +25,7 @@ faq:
     a: "Learn says you can consider enforcing data policies on connections. Enforcing disables existing connections that violate any data policy and enables previously disabled connections that no longer violate any."
 ---
 
-Data policies are the main guardrail in Power Platform for which connectors can be combined in Power Apps and Power Automate. This article follows the Microsoft Learn page "Manage data policies", including its worked example. The page's canonical address is `prevent-data-loss`, and it covers creating, editing and deleting policies and the default data group.
+Data policies are a guardrail in Power Platform for which connectors can be combined in Power Apps and Power Automate. This article follows the Microsoft Learn page "Manage data policies", including its worked example. The page's canonical address is `prevent-data-loss`, and it covers creating, editing and deleting policies and the default data group.
 
 ## What a data policy does
 
