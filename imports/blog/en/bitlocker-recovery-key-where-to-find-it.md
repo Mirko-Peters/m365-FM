@@ -18,13 +18,13 @@ faq:
   - q: "Can Microsoft Support give me my BitLocker recovery key?"
     a: "No. Microsoft's support article states that Microsoft Support can't retrieve, provide or recreate a lost recovery key. The key lives in your own account, in your organization's directory, or on a printout or USB drive you saved. If you can't find it anywhere, the remaining option is a device reset."
   - q: "How long is a BitLocker recovery key?"
-    a: "It's a 48-digit number, shown as eight blocks of six digits separated by hyphens. The recovery screen also shows a key ID, and the first 8 characters of that ID help you pick the matching key when several are stored for one account or device. Type the digits carefully, because the screen checks each block."
+    a: "It's a 48-digit number, usually typed in as eight blocks of six digits. The recovery screen also shows a key ID, and the first 8 characters of that ID help you pick the matching key when several are stored for one account or device. Read the digits from the other screen and type them carefully."
 ---
 Your BitLocker recovery key is almost always stored in an account, not on the PC itself. Open `aka.ms/myrecoverykey` on another device and sign in with your Microsoft account. If the PC belongs to your employer or school, use `aka.ms/aadrecoverykey` with your work or school account instead. If neither shows a key, check for a printout or a USB drive, or ask your IT department. This article is for Windows users who just met the blue recovery screen and for admins who get that call from a user. It explains each place to look, how an admin retrieves keys, why the prompt appears, and what happens if no key exists.
 
 ## What the recovery key is and why you must note the key ID
 
-The recovery key is a 48-digit number. Microsoft's recovery documentation shows it as eight blocks of six digits, and the boot-time recovery screen checks each block as you type, so most typing errors are caught immediately. [BitLocker](https://www.m365.fm/entity/bitlocker/) asks for the key when it can't open the drive automatically. That happens after a security risk or a hardware change, or when you've forgotten the password for a data drive.
+The recovery key is a 48-digit number, which you typically enter as eight blocks of six digits. [BitLocker](https://www.m365.fm/entity/bitlocker/) asks for the key when it can't open the drive automatically. That happens after a security risk or a hardware change, or when you've forgotten the password for a data drive.
 
 Before you do anything else, write down the first 8 characters of the **recovery key ID** that the screen shows. If your account holds more than one key, for example because the device was re-encrypted once or you own several PCs, the key ID is how you pick the right one. Use your phone camera to take a picture of the screen if you can. It costs nothing, and you'll need the ID twice: once to find the key and once if you call IT.
 
@@ -34,22 +34,22 @@ One more fact to know now. Microsoft's support article says plainly that Microso
 
 The right place depends on how BitLocker was turned on. Go through the options in this order.
 
-1. **Your Microsoft account.** On another device, open a browser and go to `https://aka.ms/myrecoverykey`. Microsoft's article says the link points to the recovery key page in your account at account.microsoft.com. Sign in with your Microsoft account, find the key ID that matches the one on your screen, and use that key to open the drive. This is the most common case on home PCs, because Device Encryption turns BitLocker on when you sign in with a Microsoft account and attaches the key to that account.
+1. **Your Microsoft account.** On another device, open a browser and go to `https://aka.ms/myrecoverykey`. Microsoft's article tells you to open the link in a web browser. Sign in with your Microsoft account, find the key ID that matches the one on your screen, and use that key to open the drive. This is the most common case on home PCs, because Device Encryption turns BitLocker on when you sign in with a Microsoft account and attaches the key to that account.
 2. **A work or school account.** On another device, go to `https://aka.ms/aadrecoverykey` and sign in with your work or school account. Select **Devices**, expand the device you need, and select **View BitLocker Keys**. Find the key that matches your key ID.
 3. **A printout.** If you printed the key when BitLocker was turned on, look where you keep important papers for the device. The printout shows the key ID next to the key.
 4. **A USB flash drive.** Plug it into the locked device and follow the on-screen instructions. If the key was saved as a text file on the drive, open the file on a different device.
 
 Two details from Microsoft's article save people a lot of time. First, if someone else set up the device or turned on BitLocker, the key may be in that person's Microsoft account, for example a family member or a former admin. Second, in Windows 11 version 24H2 and later, the recovery screen shows a hint about which Microsoft account is linked to the key. Read that hint before you try accounts at random.
 
-The page also covers devices managed by an organization. For those, your IT department retrieves the key, so don't waste time guessing.
+If the device is managed by your organization, ask your IT department for the key instead of guessing.
 
 ## How admins retrieve the BitLocker recovery key
 
 If you're the helpdesk, you have more options than the user does. Microsoft's BitLocker recovery documentation names the places and roles.
 
-**Microsoft Entra ID.** For devices joined to [Microsoft Entra](https://www.m365.fm/entity/microsoft-entra/) or hybrid joined, saving keys to Entra ID is the recommended approach, so that a BitLocker administrator or helpdesk can help users get their keys. The Cloud Device Administrator and Helpdesk Administrator roles are the common choices. A custom role can use the permission `microsoft.directory/bitlockerKeys/key/read`, optionally limited to administrative units. You can read keys in the Microsoft Entra admin center, through the Microsoft Graph API, or with PowerShell.
+**Microsoft Entra ID.** For [Microsoft Entra](https://www.m365.fm/entity/microsoft-entra/) joined devices, Microsoft says to store the recovery key in Entra ID. Users can then retrieve the keys for their devices from the web, and access can be delegated to the help desk. The Cloud Device Administrator and Helpdesk Administrator roles are the common choices. A custom role can use the permission `microsoft.directory/bitlockerKeys/key/read`, optionally limited to administrative units. You can read keys in the Microsoft Entra admin center, through the Microsoft Graph API, or with PowerShell.
 
-**Self-service.** By default, users can retrieve the keys of their own devices at `https://myaccount.microsoft.com`: open the **Devices** tab, select the device and choose **View BitLocker Keys**. An admin can switch that off with the setting named **Restrict users from recovering the BitLocker key(s) for their owned devices**. Microsoft's recommendation is to allow self-service only in trusted environments, or otherwise to rely on helpdesk recovery.
+**Self-service.** By default, users can retrieve the keys of their own devices at `https://myaccount.microsoft.com`: open the **Devices** tab, select the device and choose **View BitLocker Keys**. An admin can switch that off with the setting named **Restrict users from recovering the BitLocker key(s) for their owned devices**. Microsoft's planning guide only asks whether users should be allowed to retrieve recovery information for their own devices, so decide that deliberately, for example by checking who can sign in to that portal.
 
 **Intune.** In the [Intune](https://www.m365.fm/entity/intune/) admin center, go to **Devices**, then **All devices**. Select the device, and under **Monitor** select **Recovery keys**. Then select **Show Recovery Key**. Microsoft's Intune article says this action creates an audit log entry under the KeyManagement activity, so every lookup is traceable. The same article lists Cloud Device Administrator, Helpdesk Administrator and Global Administrator as roles that can view keys.
 
@@ -64,11 +64,11 @@ Handing over the key solves today's problem. Finding the cause stops the next ca
 - An unknown or forgotten PIN, when the device uses a TPM plus PIN.
 - A lost startup key, when the device uses a USB startup key.
 - Changes to boot files or firmware, such as a BIOS upgrade, or possibly malicious software.
-- Moving a drive with an operating system volume and a TPM protector to another device, which binds it to the new TPM and prompts for recovery.
+- Moving a BitLocker-protected drive into a new computer.
 
-Microsoft's article tells helpdesk staff to find the root cause before they give out the key. Useful starting points are `manage-bde.exe -status` and the event log. If you suspect malware, treat the device as a security case and not as a routine lockout.
+Microsoft's article tells helpdesk staff to verify the user's identity and record the device name and recovery key ID before they provide the password, and it recommends determining what caused the recovery. Repeated recovery events deserve a root cause investigation, because tampering may point to wider security problems. If you suspect malware, treat the device as a security case and not as a routine lockout.
 
-After a successful recovery, Windows writes an event to the log, resets the TPM platform validation measurements to match the current configuration, and releases the encryption key. If the prompt keeps coming back, Microsoft says to suspend and resume BitLocker, which resets the validation profile. For devices with automatic recovery password rotation, the password rotates after use, and admins can rotate it on demand from Intune or Configuration Manager. That matters if you pasted a key into a ticket, because the old key stops being valid for that device once it has been rotated.
+After a successful recovery, Windows writes an event to the log, resets the TPM platform validation measurements to match the current configuration, and releases the encryption key. If the prompt keeps coming back, Microsoft says to suspend and resume BitLocker, which resets the validation profile. Admins can also rotate a recovery key on demand in Intune with the **BitLocker key rotation** remote action, on Windows 10 version 1909 or later and Windows 11, provided the policy enables client-driven recovery password rotation. That matters if you pasted a key into a ticket, because a rotated key is no longer the one that unlocks the device.
 
 ## If you can't find the key
 
@@ -95,3 +95,11 @@ If you can't find the key and can't undo the change that triggered the prompt, M
 ## Next step
 
 To find your BitLocker recovery key, write down the key ID, then check your Microsoft account at `aka.ms/myrecoverykey` or your work account at `aka.ms/aadrecoverykey`. After you're back in, open the same page again and confirm that each of your devices has a key stored, so the next prompt takes two minutes and not two days. Microsoft's article on how to [find your BitLocker recovery key](https://support.microsoft.com/en-us/windows/find-your-bitlocker-recovery-key-6b71ad27-0b89-ea08-f143-056f5ab347d6) is worth bookmarking, and admins should read the [BitLocker recovery process](https://learn.microsoft.com/en-us/windows/security/operating-system-security/data-protection/bitlocker/recovery-process) and the [Intune BitLocker guidance](https://learn.microsoft.com/en-us/intune/device-configuration/endpoint-security/encrypt-bitlocker-windows) once.
+
+## Sources
+
+- [Find your BitLocker recovery key (Microsoft Support)](https://support.microsoft.com/windows/find-your-bitlocker-recovery-key-6b71ad27-0b89-ea08-f143-056f5ab347d6)
+- [BitLocker recovery process (Microsoft Learn)](https://learn.microsoft.com/windows/security/operating-system-security/data-protection/bitlocker/recovery-process)
+- [BitLocker recovery overview (Microsoft Learn)](https://learn.microsoft.com/windows/security/operating-system-security/data-protection/bitlocker/recovery-overview)
+- [Encrypt Windows devices with Intune (Microsoft Learn)](https://learn.microsoft.com/intune/intune-service/protect/encrypt-devices)
+- [Device Encryption in Windows (Microsoft Support)](https://support.microsoft.com/windows/security/encryption/device-encryption-in-windows)
