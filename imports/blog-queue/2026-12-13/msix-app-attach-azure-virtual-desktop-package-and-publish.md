@@ -16,7 +16,7 @@ faq:
   - q: "What is the difference between MSIX app attach and app attach?"
     a: "The Microsoft Learn overview describes app attach as one feature that supports MSIX, Appx and App-V packages. It does not describe a separate product called MSIX app attach, so the older name appears to refer to the same delivery method with MSIX packages."
   - q: "Which image format should I use?"
-    a: "According to Microsoft Learn, supported formats are CimFS, VHDX and VHD. Learn recommends CimFS when session hosts run Windows 11, advises VHDX instead of VHD, and does not recommend VHD. Generate CIM files on a Windows version that is the same as or lower than the version where the apps will run."
+    a: "According to Microsoft Learn, supported formats are CimFS, VHDX and VHD. The overview says it only recommends CimFS if session hosts run Windows 11, while the image-creation page recommends CIM for best performance, particularly with Windows 11. Both advise VHDX instead of VHD and do not recommend VHD. Generate CIM files on a Windows version that is the same as or lower than the version where the apps will run."
   - q: "Do I need to add the app to a desktop application group?"
     a: "No. The setup article says users get desktop access to assigned apps through the package assignment. To publish an app as RemoteApp, add it to a RemoteApp application group. You cannot add MSIX or Appx apps to a desktop application group with App Attach."
   - q: "How do I update an app without a maintenance window?"
@@ -30,7 +30,7 @@ App attach lets you keep the session host image small. You package an applicatio
 The setup article lists these prerequisites:
 
 - A host pool with session hosts, an application group and a workspace.
-- Session hosts running a supported Windows client or Windows Server OS, joined to Microsoft Entra ID or Active Directory Domain Services. At least one host must be powered on when you add the package.
+- Session hosts running a supported Windows client or Windows Server OS, joined to Microsoft Entra ID or Active Directory Domain Services. At least one host must be powered on. The page adds that as of April 14, 2026 Windows Server 2022 and 2025 are supported.
 - An SMB file share in the same Azure region as the session hosts. Each session host needs read access with its computer account.
 - An MSIX or Appx disk image on that share, or an App-V package.
 - Azure RBAC rights: Desktop Virtualization Contributor on the resource group at minimum to add images, and permission to write role assignments on the application group to assign users.
@@ -39,7 +39,7 @@ Microsoft Entra Domain Services is listed as not supported as an identity provid
 
 ## Step 1: Create the image with msixmgr
 
-Download msixmgr from aka.ms/msixmgr, extract it and run it from an elevated command prompt on Windows 10 or Windows 11. Use a new, empty folder for each image, because a CIM image consists of several files. The example in the Learn article is:
+Download msixmgr from aka.ms/msixmgr, extract it and run it from an elevated command prompt on Windows 10 or Windows 11. Use a new folder for each CIM image, because a CIM image consists of several files. The example in the Learn article is:
 
 ```
 msixmgr.exe -Unpack -packagePath "C:\msix\myapp.msix" -destination "C:\msix\myapp\myapp.cim" -applyACLs -create -fileType cim -rootDirectory apps
@@ -47,15 +47,15 @@ msixmgr.exe -Unpack -packagePath "C:\msix\myapp.msix" -destination "C:\msix\myap
 
 Learn gives these format rules:
 
-- **CIM** is recommended for best performance, especially on Windows 11. It uses less CPU and memory and mounts and unmounts faster. In Microsoft's test with 500 files of 300 MB each, average unmount time was 36 ms for CimFS and 1615 ms for VHD.
+- **CIM** is recommended for best performance, particularly with Windows 11, on the image-creation page. The overview is stricter and says it only recommends CimFS if session hosts run Windows 11. It uses less CPU and memory and mounts and unmounts faster. In Microsoft's test with 500 files of 300 MB each, average unmount time was 36 ms for CimFS and 1615 ms for VHD (the overview text calls the comparison VHDX versus CimFS, but its table column says VHD).
 - **VHDX** is the alternative. **VHD** is not recommended.
 - Generate CIM files on a Windows version lower than or equal to the version where the packages will run. CIM files created on Windows 11 may not work on Windows 10.
 
-The pages I read do not show the VHDX command text or explain every msixmgr parameter. The full syntax is in the msixmgr tool parameters reference linked from the Learn article.
+For VHDX, the same page shows the same command with a .vhdx destination file and `-fileType vhdx`, which creates a single file. The page does not explain each msixmgr parameter.
 
 ## Step 2: Check certificates
 
-Every MSIX and Appx package needs a valid code-signing certificate, and the whole chain must be trusted on the session hosts. Public CA certificates are trusted by default. Internal CA certificates need to be distributed, for example through Group Policy or Intune trusted root profiles. Self-signed certificates are for testing only, and Learn says not to distribute them through Group Policy or Intune. Timestamp the package so it stays valid after the certificate expires.
+Every MSIX and Appx package needs a valid code-signing certificate, and the whole chain must be trusted on the session hosts. Public CA certificates are trusted by default. For an internal CA, the overview says an AD CS enterprise CA is trusted by default on AD-joined session hosts, a standalone CA needs its certificates distributed through Group Policy, and Microsoft Entra joined hosts can use Intune trusted root certificate profiles. Self-signed certificates are for testing only, and Learn says not to distribute them through Group Policy or Intune. Timestamp the package so it stays valid after the certificate expires.
 
 ## Step 3: Prepare the file share and permissions
 
@@ -65,7 +65,7 @@ Further guidance from the overview:
 
 - Keep the share in the same region as the session hosts.
 - Exclude the image disks from antivirus scans, since they are read-only.
-- Do not share the file share with FSLogix profile containers.
+- Avoid using the same file share as FSLogix profile containers.
 
 ## Step 4: Add the package in the Azure portal
 
@@ -96,7 +96,7 @@ For updates, use the **Update** button on the package and point it to the new im
 
 ## Settings Learn recommends on session hosts
 
-Learn recommends turning off automatic app updates on session hosts, ideally through Group Policy or Intune. The registry values listed are AutoDownload set to 2 under the WindowsStore policy key, PreInstalledAppsEnabled set to 0, and ContentDeliveryAllowedOverride set to 2.
+Learn recommends disabling automatic updates for MSIX and Appx applications by setting registry values on the session hosts: AutoDownload set to 2 under the HKLM WindowsStore policy key, PreInstalledAppsEnabled set to 0 under the HKCU ContentDeliveryManager key, and ContentDeliveryAllowedOverride set to 2 under the HKLM ContentDeliveryManager Debug key. The page says to use Group Policy or Intune, or PowerShell on each host, and in the PowerShell case to set the values in the OS image as well.
 
 ## Common mistakes
 
@@ -108,7 +108,7 @@ Learn recommends turning off automatic app updates on session hosts, ideally thr
 
 ## What the pages I read do not cover
 
-The setup article's Azure PowerShell tab and service limits were not part of the text I could read. It states that Azure CLI is not supported for app attach and that the PowerShell option needs Az.DesktopVirtualization 4.2.1 or later. Check the Learn page for the current limits before you plan a large rollout.
+The setup article also has an Azure PowerShell path, which needs Az.DesktopVirtualization 4.2.1 or later, and it states that Azure CLI cannot be used for app attach. This article does not cover the PowerShell commands. The pages I read list no numeric service limits for app attach. The overview points to file share throughput and open handle limits instead, so check those before you plan a large rollout.
 
 ## Related
 
@@ -119,7 +119,7 @@ The setup article's Azure PowerShell tab and service limits were not part of the
 
 ## Sources
 
-- [Microsoft Learn: App attach in Azure Virtual Desktop overview](https://learn.microsoft.com/azure/virtual-desktop/app-attach-overview)
-- [Microsoft Learn: Create an MSIX image with MSIXMGR](https://learn.microsoft.com/en-us/azure/virtual-desktop/app-attach-create-msix-image)
+- [Microsoft Learn: App Attach in Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/app-attach-overview)
+- [Microsoft Learn: Create an MSIX image to use with App Attach in Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/app-attach-create-msix-image)
 - [Microsoft Learn: Add and manage app attach applications](https://learn.microsoft.com/en-us/azure/virtual-desktop/app-attach-setup)
-- [Microsoft Learn: MSIXMGR tool](https://learn.microsoft.com/en-us/azure/virtual-desktop/app-attach-msixmgr)
+- Note: the former MSIXMGR tool page URL (app-attach-msixmgr) now redirects to the image creation article listed above.
