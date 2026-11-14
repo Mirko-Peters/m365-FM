@@ -22,7 +22,7 @@ faq:
   - q: "Does Copilot look at my data?"
     a: "Microsoft Learn says Copilot in DAX query view uses model metadata such as tables, columns and measures. In Import mode it may use minimum and maximum values to get sample values, but it cannot read other table data."
   - q: "Can I trust the DAX Copilot generates?"
-    a: "Treat it as a draft. Microsoft Learn states that generated queries and explanations can be wrong, that Copilot may not know recently added DAX functions, and that you should run a query and verify the results before relying on it."
+    a: "Treat it as a draft. Microsoft Learn states that generated queries and explanations can be incorrect and that Copilot may not know recently added DAX functions. The page lets you run a query before you keep it, so run it and compare the result with figures you know before you rely on it."
 ---
 Copilot in Power BI can write and explain DAX queries, create report pages from a prompt, summarize reports and answer questions about data. It helps most when the semantic model is well described, and it always needs a human check. This article covers what Microsoft documents for DAX and for report building, where to open each feature, the requirements that stop most first attempts and the limits you should know.
 
@@ -46,7 +46,7 @@ Microsoft Learn lists these capabilities by audience:
 | License | A Power BI Pro or Premium Per User license alone is not sufficient |
 | Sovereign clouds | Not supported |
 
-For Desktop, you need write access to a workspace on paid Fabric or Premium capacity where you plan to publish. After you buy or scale up capacity, Learn says it can take up to 24 hours before Copilot is available. Outside the US or EU data boundary, Copilot is off by default unless the Fabric admin allows data to be processed outside the tenant's region.
+For DAX query view with Copilot, the Learn page says you need to select a workspace with a Fabric capacity. After you buy or scale up capacity, Learn says it can take up to 24 hours before Copilot is available. Outside the US or EU data boundary, Copilot is off by default unless the Fabric admin allows data to be processed outside the tenant's region.
 
 ## Write DAX queries with Copilot
 
@@ -94,7 +94,7 @@ Prerequisites listed on that page: Copilot is enabled by your admin, the semanti
 
 ## Prepare the semantic model
 
-Copilot depends on the model's metadata. Learn says Copilot reads only the first 200 characters of a description, so put the key meaning first. Give tables, columns and measures clear names and descriptions. Learn also warns that without preparing the [semantic model](https://www.m365.fm/entity/semantic-model/) for AI, Copilot may misread data and return generic or inaccurate results. Very large models can get reduced metadata. Learn lists model-size limits for DAX query view, so check the current article if your model is large.
+Copilot depends on the model's metadata. Learn says Copilot reads only the first 200 characters of a description, so put the key meaning first. Give tables, columns and measures clear names and descriptions. Learn says rich, descriptive metadata gives better results, and that responses answer only in the context of the current [semantic model](https://www.m365.fm/entity/semantic-model/). Very large models can get reduced metadata. Learn lists model-size limits for DAX query view, so check the current article if your model is large.
 
 ## Limits to remember
 
@@ -110,7 +110,7 @@ Copilot depends on the model's metadata. Learn says Copilot reads only the first
 - Skipping the tenant setting. Enabling Copilot only at capacity level is not enough, according to Learn.
 - Keeping a generated query without running it.
 - Expecting Copilot to see table data. It sees metadata.
-- Asking vague questions. Learn advises naming the measures, columns and grouping you want.
+- Asking vague questions. The examples on Learn name the outcome they want, such as profit by product, so be specific.
 
 ## Related
 
