@@ -8,7 +8,7 @@ date: 2026-12-04
 topics: [copilot-studio, autonomous-agent, generative-orchestration, ai-agent]
 keypoints:
   - "An autonomous agent in Copilot Studio is a normal agent with event triggers. The trigger sends a payload, and the agent decides which actions or topics to run."
-  - "Generative orchestration must be on for the agent, and solution-aware cloud flow sharing must be enabled in the environment, or triggers can't be added."
+  - "Generative orchestration must be on for the agent, and the environment must allow solution-aware cloud flow sharing and permit triggers in its data policies."
   - "Add a trigger on the agent's Overview page under Triggers > Add trigger. Edit its parameters and payload later in Power Automate."
   - "Triggers run with the agent maker's credentials only, so review what data the agent can reach before publishing."
   - "Each trigger payload is processed like a user message and counts toward Copilot Credit consumption, even for users with a Microsoft 365 Copilot license."
@@ -16,7 +16,7 @@ faq:
   - q: "What makes a Copilot Studio agent autonomous?"
     a: "According to Microsoft Learn, event triggers let an agent act when a specified event occurs, instead of waiting for a user message. A trigger sends a payload with event data and instructions, and the agent uses its own instructions to choose actions or topics. The agent only acts within what its author defined."
   - q: "Do I need generative orchestration for triggers?"
-    a: "Yes. Microsoft Learn states that event triggers are only available for agents with generative orchestration turned on. The pages I read also say solution-aware cloud flow sharing must be turned on in the environment, otherwise triggers can't be added."
+    a: "Yes. Microsoft Learn states that event triggers are only available for agents with generative orchestration turned on. The overview page also says the environment must allow solution-aware cloud flow sharing and that your organization's data policies must permit triggers."
   - q: "Whose credentials does an event trigger use?"
     a: "Learn says event triggers can only use the agent maker's credentials, meaning the ones used to authorize the connections when the trigger was added. Copilot Studio shows a warning before you publish an agent with authenticated triggers, because users may reach data through the author's access."
   - q: "Does a trigger cost anything?"
@@ -44,7 +44,7 @@ The agent does not invent new actions. The author must define the actions or top
 The Learn pages I read list these requirements:
 
 - **Generative orchestration** must be turned on for the agent.
-- **Solution-aware cloud flow sharing** must be turned on in the environment. Without it, triggers can't be added. If your data policies allow the trigger but it is blocked, the environment admin has to check this setting.
+- **Solution-aware cloud flow sharing** must be allowed in the environment, according to the event trigger overview.
 - The triggers you see depend on your organization's **data policies**, which admins configure in Power Automate.
 - You need permission to reach the system where the event happens, because the trigger runs with your credentials.
 
@@ -77,13 +77,13 @@ Learn gives two cautions:
 
 ## Step 3b: Configure actions for unattended use
 
-When nobody is chatting, nobody can sign in. Learn says that for autonomous operation you should configure each action with **maker authentication** that needs no user input, and instruct the agent not to ask users for credentials. If an agent flow cannot receive information or an action fails, the session can't continue.
+When nobody is chatting, nobody can sign in. Learn says that for autonomous operation you should configure each action with **maker authentication** that needs no user input, and instruct the agent not to ask users for credentials. If an action requests user credentials, the session can stall.
 
 ## Step 4: Add the event trigger
 
 1. On the agent's **Overview** page, go to the **Triggers** section.
 2. Select **Add trigger**.
-3. Select the trigger you want, for example a SharePoint, OneDrive, Planner or Dataverse trigger, or a **Recurrence** trigger for time-based runs.
+3. Select the trigger you want, for example a SharePoint, Planner or Dataverse trigger, or a **Recurrence** trigger for time-based runs.
 4. Provide authentication details if asked, then select **Next**.
 5. Set the event parameters that narrow what activates the trigger, and set the payload.
 
