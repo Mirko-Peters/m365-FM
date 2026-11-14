@@ -25,7 +25,7 @@ faq:
     a: "Learn says to file an Azure support request. For intermittent timeouts under high connection volume with Accelerated Networking, it also describes SNAT exhaustion as a possible cause."
 ---
 
-Work through a private endpoint problem in this order: confirm the connection is approved, confirm DNS returns the private IP, confirm routes and NSG rules allow the path, then check peering or service-specific integration. Microsoft Learn splits this across three troubleshooting pages for approval state, DNS resolution and connectivity failures. This guide merges them in the order a technician would use.
+Work through a private endpoint problem in this order (my suggested order, not the page order): confirm the connection is approved, confirm DNS returns the private IP, confirm routes and NSG rules allow the path, then check peering or service-specific integration. Microsoft Learn splits this across three troubleshooting pages for approval state, DNS resolution and connectivity failures. This guide merges them in the order a technician would use.
 
 ## Step 1: Check the approval state
 
@@ -40,7 +40,7 @@ The **target resource owner** approves, signed in to the target subscription. Th
 
 Read-only checks with the Azure CLI: `az network private-endpoint show` on the consumer side and `az network private-endpoint-connection list --id <target resource ID>` on the target side. Learn expects `Approved` on both and `actionsRequired` as `None`. Approve with `az network private-endpoint-connection approve`.
 
-A caution: the page I read for this step says the source page contains unresolved verification markers and some inconsistent claims, for example auto-approval property paths for first-party services. Confirm those details on the live page.
+A caution: the Learn page itself says to verify some details per service, for example the auto-approval property path for first-party services and the exact approve action string. Confirm those details for your target service before you rely on them.
 
 ## Step 2: Check DNS resolution
 
@@ -78,13 +78,13 @@ Learn says the `/32` route from the private endpoint wins over a broader user-de
 
 ### Intermittent failures
 
-Learn describes intermittent HTTP 499 or TCP resets under high connection volume with Accelerated Networking as a possible SNAT exhaustion case. The listed options are disabling Accelerated Networking on the NIC, which causes downtime, or adding a public IP to a NAT gateway.
+Learn describes intermittent HTTP 499 or TCP resets under high connection volume with Accelerated Networking as a possible SNAT exhaustion case. The listed options are disabling Accelerated Networking on the NIC, which requires deallocating the VM and causes downtime, or increasing SNAT capacity, for example by adding a public IP to a NAT gateway.
 
 ## Roles you need
 
-Learn lists Network Contributor on the source and endpoint resource groups, and Network Watcher Contributor for next-hop and effective-route operations. Private DNS changes need Private DNS Zone Contributor.
+For the connectivity checks, Learn lists Network Contributor on the source VM resource group and the private endpoint resource group, and Network Watcher Contributor for next-hop and effective-route operations. For the DNS checks it lists Reader on the endpoint resource group and the private DNS zone, and Private DNS Zone Contributor for changes.
 
-## Typical mistakes
+## Typical mistakes (my advice)
 
 - Testing from a machine on a network that does not use the linked private DNS zone.
 - Linking the zone to the wrong VNet.
@@ -101,5 +101,5 @@ Learn lists Network Contributor on the source and endpoint resource groups, and 
 ## Sources
 
 - [Troubleshoot private endpoint connectivity failures (Microsoft Learn)](https://learn.microsoft.com/troubleshoot/azure/private-link/troubleshoot-private-endpoint-connectivity-failure)
-- [Troubleshoot private endpoint DNS resolution failure (Microsoft Learn)](https://learn.microsoft.com/troubleshoot/azure/private-link/troubleshoot-private-endpoint-dns-resolution)
+- [Troubleshoot private endpoint DNS resolution failure in Azure Private Link (Microsoft Learn)](https://learn.microsoft.com/troubleshoot/azure/private-link/troubleshoot-private-endpoint-dns-resolution)
 - [Troubleshoot a private endpoint connection stuck in Pending state (Microsoft Learn)](https://learn.microsoft.com/troubleshoot/azure/private-link/troubleshoot-private-endpoint-pending-approval)
