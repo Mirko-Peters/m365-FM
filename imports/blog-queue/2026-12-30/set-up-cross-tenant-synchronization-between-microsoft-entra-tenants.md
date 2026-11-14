@@ -25,7 +25,7 @@ faq:
     a: "No. Role-enabled group sync creates role-assignable groups in the target, but does not copy role assignments."
 ---
 
-Cross-tenant synchronization automatically creates and removes B2B users in a target tenant from a source tenant, and can sync security groups in same-cloud setups. This guide follows the Microsoft Learn configuration article, written mainly for the commercial cloud.
+Cross-tenant synchronization automatically creates and removes B2B users in a target tenant from a source tenant, and can sync security groups in same-cloud setups. This guide follows the Microsoft Learn configuration article, which has a same-cloud and a cross-cloud variant. Role assignments and role-enabled groups are covered on the Learn overview page, not on the configuration page.
 
 ## Prerequisites
 
@@ -56,7 +56,7 @@ In the source tenant add the target organization the same way, select **Inherite
 
 ## Scope and mappings
 
-In **Properties**, **Basics** choose a scope: Sync all users (not recommended), Sync only assigned users (recommended) or Sync only assigned users and groups (required for groups). Then assign at least one internal user under **Users and groups**. Group assignment includes only direct members and does not cascade to nested groups.
+In **Properties**, **Basics** choose a scope: Sync all users (Learn recommends Sync only assigned users instead), Sync only assigned users (recommended) or Sync only assigned users and groups (required for groups). Then assign at least one internal user under **Users and groups**. Group assignment includes only direct members and does not cascade to nested groups.
 
 Review **Attribute mapping**. AltSecIdFromNetId([netId]) maps to alternativeSecurityIds, which identifies users across tenants. This matching attribute cannot be changed, and changing it causes a schemaInvalid error. The userType mapping defaults to Member, an external member with internal-like functionality, and can be Guest. For an existing B2B user it changes only if Apply this mapping is set to Always. Under **Properties** you can set a notification email and Prevent accidental deletion, whose default threshold is 500.
 
@@ -69,8 +69,8 @@ Review **Attribute mapping**. AltSecIdFromNetId([netId]) maps to alternativeSecu
 
 ## Limitations stated on the page
 
-- Role assignments are not synchronized.
-- Restoring a soft-deleted synchronized user is not supported.
+- Role assignments are not synchronized (stated on the overview page).
+- Restoring a previously soft-deleted user in the target tenant is not supported.
 - Users with SMS sign-in enabled are skipped.
 - On-demand provisioning through Graph is limited to 5 requests per 10 seconds.
 - Users created as Member may not work with some services, with limitations documented for Azure Virtual Desktop and Teams.
@@ -86,15 +86,15 @@ Review **Attribute mapping**. AltSecIdFromNetId([netId]) maps to alternativeSecu
 
 ## Cross-cloud and group sync
 
-The page also covers cross-cloud synchronization, which syncs users only, between Azure commercial and Azure Government, and between commercial and Azure operated by 21Vianet. For these you enable the cross-cloud setting on the Microsoft cloud settings tab in both tenants and select Setup cross-tenant synchronization across Microsoft clouds when creating the configuration. Same-cloud group sync is optional and needs group provisioning set to Enabled under Provision Microsoft Entra ID Groups. Role-enabled group sync maps isAssignableToRole directly, only during object creation, and existing target groups are not converted.
+The page also covers cross-cloud synchronization, which syncs users only, from Azure commercial to Azure Government, from Azure Government to commercial, and from commercial to Azure operated by 21Vianet. It requires an Entra ID Governance or Entra Suite license in the source tenant. For these you enable the cross-cloud setting on the Microsoft cloud settings tab in both tenants and select Setup cross-tenant synchronization across Microsoft clouds when creating the configuration. Same-cloud group sync is optional and needs group provisioning set to Enabled under Provision Microsoft Entra ID Groups. According to the overview page, role-enabled group sync needs a direct isAssignableToRole mapping applied only during object creation, and existing target groups are not converted.
 
 ## Soft delete and duplicates
 
-Learn says restoring a soft-deleted synchronized user is not supported and must be done manually. Soft-deleting and then restoring through on-demand provisioning can create duplicates, so avoid that approach.
+Learn says restoring a previously soft-deleted user in the target tenant is not supported and must be done manually. Soft-deleting and then restoring through on-demand provisioning can create duplicates, so avoid that approach.
 
 ## Not covered
 
-The page does not describe deleting a configuration in detail, scale limits, pricing beyond the license link or the duration of the initial sync. It has duplicate headings and an inconsistency about where a cross-cloud configuration is created.
+The page does not describe deleting a configuration in detail, scale limits, pricing beyond the license link or the duration of the initial sync. In its ExternalTenantNotFound section it says to delete the configuration in the source tenant but create the new one in the target tenant, which conflicts with Step 5, where the configuration is created in the source tenant.
 
 ## Related
 
@@ -103,4 +103,5 @@ The page does not describe deleting a configuration in detail, scale limits, pri
 
 ## Sources
 
-- [Configure cross-tenant synchronization](https://learn.microsoft.com/entra/identity/multi-tenant-organizations/cross-tenant-synchronization-configure)
+- [Configure cross-tenant synchronization (Microsoft Learn)](https://learn.microsoft.com/entra/identity/multi-tenant-organizations/cross-tenant-synchronization-configure)
+- [What is cross-tenant synchronization in Microsoft Entra ID? (Microsoft Learn)](https://learn.microsoft.com/entra/identity/multi-tenant-organizations/cross-tenant-synchronization-overview)
