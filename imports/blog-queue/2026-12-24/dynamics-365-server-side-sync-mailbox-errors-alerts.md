@@ -102,5 +102,5 @@ The page does not define mailbox status values, and it does not list alerts such
 
 ## Sources
 
-- [Troubleshooting and monitoring server-side synchronization](https://learn.microsoft.com/power-platform/admin/troubleshooting-monitoring-server-side-synchronization)
-- [The mailbox user doesn't have sufficient permissions error](https://learn.microsoft.com/troubleshoot/dynamics-365/sales/error-when-you-test-enable-a-mailbox)
+- [Troubleshooting and monitoring server-side synchronization - Microsoft Dataverse (Microsoft Learn)](https://learn.microsoft.com/troubleshoot/power-platform/dataverse/email-exchange-synchronization/troubleshooting-monitoring-server-side-synchronization)
+- [Mailbox user doesn't have sufficient permissions error - Microsoft Dataverse (Microsoft Learn)](https://learn.microsoft.com/troubleshoot/power-platform/dataverse/email-exchange-synchronization/error-when-you-test-enable-a-mailbox)
