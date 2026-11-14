@@ -11,7 +11,7 @@ keypoints:
   - "Setup order matters. Microsoft says skipping a mandatory step causes failures in later steps and in normal use."
   - "You need your own Azure Key Vault and Azure storage account. The storage account holds the documents the service creates or receives."
   - "Enable Electronic invoicing integration in Feature management and set Endpoint URL and Environment in Electronic document parameters."
-  - "The pages I read name only Finance and Supply Chain Management as supported apps, and I found no service named Global Invoicing Service."
+  - "Learn names Finance and Supply Chain Management as the apps that can use the service. It does not support on-premises deployments."
 faq:
   - q: "What is the Electronic invoicing service?"
     a: "Microsoft Learn describes it as a hyper-scalable multitenant service that processes electronic invoices and exchanges electronic documents. You configure the processing and integration rules, and the service runs that logic outside Finance and Supply Chain Management. Electronic invoicing does not support on-premises deployments."
@@ -23,11 +23,11 @@ faq:
     a: "Yes. Learn says to complete the add-in installation for every environment you want to connect, including production, user acceptance testing and development environments."
 ---
 
-Electronic invoicing in Dynamics 365 runs on a separate Microsoft-hosted service. Finance or Supply Chain Management hands documents to it, and it transforms, signs, submits and receives them according to the configuration you create. This article puts the setup steps in the order Microsoft recommends. Learn warns that skipping a mandatory step causes failures later, so follow the order.
+Electronic invoicing in Dynamics 365 runs on a separate Microsoft-hosted service. Finance or Supply Chain Management hands documents to it, and it transforms, signs, submits and receives them according to the configuration you create. This article follows the order of Learn's Electronic invoicing configuration overview, with the endpoint step taken from the separate activation page. Learn warns that skipping a mandatory step causes failures later, so follow the order.
 
 ## A note on naming
 
-The task name mentions a Global Invoicing Service. The pages I read do not use that name. They describe the **Electronic invoicing** service, configured through **Globalization features** in the **Globalization Studio** workspace, with the Regulatory Configuration Service (RCS) as an earlier configuration route. Use the Learn names when you search the documentation.
+Learn calls it the **Electronic invoicing** service, configured through **Globalization features** in the **Globalization Studio** workspace, with the Regulatory Configuration Service (RCS) as an earlier configuration route. Use the Learn names when you search the documentation.
 
 ## What the service is
 
@@ -70,7 +70,7 @@ The Azure resources article lists:
 2. **Azure storage account (mandatory).** It stores all electronic documents and files the service generates or receives. You own this data. The service reads it with the SAS token from the Key Vault secret.
 3. **SharePoint connection (optional).** Only if files must be saved to and retrieved from SharePoint folders.
 
-You can do this in the Azure portal, with an Azure PowerShell script or with an ARM template. The page I read covers the portal. It does not state which roles are required to create the resources or give naming rules, so agree these with your Azure administrators.
+Learn says you can do this in the Azure portal, with an Azure PowerShell script or with an ARM template. The Azure resources page is an overview that links to the detailed articles, which I did not read. It does not state which roles are required to create the resources or give naming rules, so agree these with your Azure administrators.
 
 ## Step 5: Configure Globalization features
 
@@ -83,9 +83,9 @@ A Globalization feature is a set of components that defines how electronic docum
 3. Enter **Environment**, the name of the service environment you published to Electronic invoicing.
 4. Select **Save**.
 
-The endpoint must be configured before you can issue electronic invoices.
+The endpoint must be configured before you can issue electronic invoices. Learn's activation page lists this step right after enabling the feature, not last. The pages I read do not explain what to enter in **Environment** when you configure through Globalization Studio for the first time, because the activation page describes it as an RCS service environment published to Electronic invoicing.
 
-## Verification checklist
+## Verification checklist (my own summary)
 
 1. Add-in status shows Installed for every environment.
 2. Electronic invoicing integration is enabled.
@@ -94,7 +94,7 @@ The endpoint must be configured before you can issue electronic invoices.
 5. Endpoint URL and Environment are saved.
 6. A test document runs through a non-production environment first.
 
-## Common mistakes
+## Common mistakes (my own summary, not from Learn)
 
 - Typing the AAD application ID with extra characters.
 - Using a shared key vault for other applications.
@@ -115,8 +115,8 @@ I did not find sandbox versus production service types, regional endpoint values
 
 ## Sources
 
-- [Microsoft Learn: Electronic invoicing overview](https://learn.microsoft.com/en-us/dynamics365/finance/localizations/global/e-invoicing-service-overview)
+- [Microsoft Learn: Electronic invoicing service overview](https://learn.microsoft.com/en-us/dynamics365/finance/localizations/global/gs-e-invoicing-service-overview)
 - [Microsoft Learn: Activate and set up integration with Electronic invoicing](https://learn.microsoft.com/en-us/dynamics365/finance/localizations/global/e-invoicing-activate-setup-integration)
-- [Microsoft Learn: Install the add-in for Electronic invoicing microservices](https://learn.microsoft.com/en-us/dynamics365/finance/localizations/global/e-invoicing-install-add-in-microservices-lcs)
-- [Microsoft Learn: Set up Azure resources for Electronic invoicing](https://learn.microsoft.com/en-us/dynamics365/finance/localizations/global/e-invoicing-set-up-azure-resources)
-- [Microsoft Learn: Set up electronic invoicing in Globalization Studio](https://learn.microsoft.com/dynamics365/finance/localizations/global/gs-e-invoicing-set-up-overview)
+- [Microsoft Learn: Electronic invoicing configuration](https://learn.microsoft.com/en-us/dynamics365/finance/localizations/global/gs-e-invoicing-set-up-overview)
+- [Microsoft Learn: Configure Azure resources for Electronic invoicing](https://learn.microsoft.com/en-us/dynamics365/finance/localizations/global/gs-e-invoicing-set-up-azure-resources)
+- Note: the add-in installation steps in this article come from the Electronic invoicing configuration page listed above.
