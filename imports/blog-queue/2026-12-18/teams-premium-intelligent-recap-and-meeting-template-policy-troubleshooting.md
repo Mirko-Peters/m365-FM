@@ -20,7 +20,7 @@ faq:
   - q: "How do I turn off recap without saving transcripts only?"
     a: "Microsoft Learn states there is no separate policy setting for it. Setting AllowIntelligentRecap to false in the Teams meeting policy blocks it, but that disables intelligent recap for all meetings, including those with saved transcripts."
   - q: "Why do users not see a new custom meeting template?"
-    a: "Microsoft Learn says it may take up to 24 hours for users to see a new custom template. A second cause is the meeting template policy. A template listed under Hidden templates in the user's assigned policy is not shown, and the Global policy shows all templates."
+    a: "Microsoft Learn says it may take up to 24 hours for users to see a new custom template. A second cause is the meeting template policy. A template listed under Hidden templates in the user's assigned policy is not shown, and by default the Global policy shows all templates."
   - q: "Can a predefined Teams template be the default?"
     a: "No. Microsoft Learn says only custom templates can be set as the default, the policy must be assigned to users, and organizers need a Teams Premium license."
 ---
@@ -51,7 +51,7 @@ Learn lists these conditions that explain a missing item:
 | Symptom | Documented reason |
 |---|---|
 | No recap for an event attendee | In events, recap is available only to organizers, co-organizers and presenters |
-| No audio recap | Audio recap is only available for scheduled meetings, and a transcript that is too short is left out |
+| No audio recap | Audio recap is only available for scheduled meetings, and a transcript that is too short is left out. Learn marks audio recap as a public preview feature |
 | No video recap | The meeting must be at least 10 minutes long and recorded. Transcribed but not recorded meetings do not support video highlights |
 | Missing chapters | Chapters can fail because of transcription quality or technical issues and are then skipped in the audio recap |
 
@@ -69,7 +69,7 @@ Set-CsTeamsMeetingPolicy -Identity <policyname> -AllowIntelligentRecap $false
 
 This disables intelligent recap for all meetings, including those where transcripts are saved.
 
-The summary is saved as a read-only Word document in the Meetings folder of the organizer's OneDrive. It expires after 120 days by default. You can set 1 to 9999 days, or -1 for no expiry. In the Teams admin center, go to **Meetings** > **Meeting policies**, select the policy, and set **Set a default expiration time for Intelligent recap docx** under **AI memory and archive**. In PowerShell, use `-IntelligentRecapDocxFileExpirationDays`. If a summary has vanished, check this value first. Deleting the summary from the Recap tab or from OneDrive deletes it from both places.
+The summary is saved as a read-only Word document in the Meetings folder of the organizer's OneDrive. It expires after 120 days by default. You can set 1 to 9999 days, or -1 for no expiry. In the Teams admin center, go to **Meetings** > **Meeting policies**, select the policy, and under **Copilot and other AI** set **Set a default expiration time for Intelligent Recap .docx files for non-transcribed meetings** to the number of days. In PowerShell, use `-IntelligentRecapDocxFileExpirationDays`. My advice: if a summary has vanished, check this value first. Deleting the summary from the Recap tab or from OneDrive deletes it from both places.
 
 ## Part 2: Custom meeting templates do not appear
 
@@ -89,13 +89,13 @@ A template is created under **Meetings** > **Meeting templates**. Visibility for
 2. To show a hidden template, select it under **Hidden templates** and select **Show**.
 3. Make sure the policy is assigned to the user or group.
 
-The Global (Org-wide default) policy lets users see all available templates, including custom ones. Any other policy assigned to the user can hide templates.
+By default, the Global (Org-wide default) policy lets users see all available templates, including custom ones. Learn describes creating separate policies to limit which templates different people or groups see, so a policy assigned to the user can hide templates.
 
 In PowerShell, `Set-CsTeamsMeetingTemplatePermissionPolicy` has the parameters `-HiddenMeetingTemplates` and `-DefaultMeetingTemplateId`. The ID must use the `customtemplate_<GUID>` format. Setting it to null applies no default.
 
 ### Check the default template
 
-To make a template apply to new meetings automatically, open a meeting template policy, choose the custom template and select **Set as default**. A Default tag then appears. Learn lists these conditions:
+To make a template apply to new meetings automatically, open a meeting template policy, choose the custom template, select **Set as default** and confirm in the dialog. A **Default** tag then appears. Learn lists these conditions:
 
 - Only custom templates can be default. Predefined Teams templates cannot.
 - Organizers need a Teams Premium license.
@@ -106,7 +106,7 @@ Learn also lists a known issue. Users may see errors in some meeting scenarios w
 
 ### Check for conflicts with labels and options
 
-If a sensitivity label sets options such as watermarks, end-to-end encryption, meeting chat, automatic recording or lobby bypass, the label overrides the template. End-to-end encryption in a template also means recording and transcription do not work. The option to pick a custom template is not available in Outlook for Mac or Outlook on the web.
+If a sensitivity label sets options such as watermarks, end-to-end encryption, meeting chat, automatic recording or lobby bypass, the label overrides the template. End-to-end encryption in a template also means recording and transcription do not work. The option to select a custom template when creating a meeting is not available in Outlook for Mac or Outlook on the web. The default-template page lists Outlook on the web and Mac among the supported platforms for default templates. Learn does not reconcile the two statements. My reading: a default can apply there, while picking a template by hand cannot.
 
 ## What the sources do not say
 
@@ -121,10 +121,10 @@ The pages read do not document a recap troubleshooting flow, so the checks above
 
 ## Sources
 
-- [Intelligent recap for Teams calls, meetings and events](https://learn.microsoft.com/microsoftteams/intelligent-recap-calls-meetings)
-- [Intelligent recap in Teams meetings without saving transcripts](https://learn.microsoft.com/microsoftteams/intelligent-recap-without-saving-transcripts)
-- [Overview of custom meeting templates in Microsoft Teams](https://learn.microsoft.com/microsoftteams/custom-meeting-templates-overview)
-- [Create a custom meeting template in Microsoft Teams](https://learn.microsoft.com/microsoftteams/create-custom-meeting-template)
-- [Manage meeting templates in Microsoft Teams](https://learn.microsoft.com/microsoftteams/manage-meeting-templates)
-- [Set a custom meeting template as the default in Microsoft Teams](https://learn.microsoft.com/microsoftteams/custom-meeting-templates-set-default)
-- [Set-CsTeamsMeetingTemplatePermissionPolicy](https://learn.microsoft.com/powershell/module/teams/set-csteamsmeetingtemplatepermissionpolicy)
+- [Intelligent recap for Teams calls, meetings, and events](https://learn.microsoft.com/en-us/microsoftteams/intelligent-recap-calls-meetings)
+- [Intelligent recap in Teams meetings without saving transcripts](https://learn.microsoft.com/en-us/microsoftteams/intelligent-recap-without-saving-transcripts)
+- [Overview of custom meeting templates in Microsoft Teams](https://learn.microsoft.com/en-us/microsoftteams/custom-meeting-templates-overview)
+- [IT admins - Create a custom meeting template in Microsoft Teams](https://learn.microsoft.com/en-us/microsoftteams/create-custom-meeting-template)
+- [Manage meeting templates in Microsoft Teams](https://learn.microsoft.com/en-us/microsoftteams/manage-meeting-templates)
+- [Set a custom meeting template as the default in Microsoft Teams](https://learn.microsoft.com/en-us/microsoftteams/custom-meeting-templates-set-default)
+- [Set-CsTeamsMeetingTemplatePermissionPolicy](https://learn.microsoft.com/en-us/powershell/module/microsoftteams/set-csteamsmeetingtemplatepermissionpolicy?view=teams-ps)
