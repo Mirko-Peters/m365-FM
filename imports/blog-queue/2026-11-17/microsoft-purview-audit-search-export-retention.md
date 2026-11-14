@@ -40,7 +40,7 @@ Microsoft Learn lists these routes for Audit Standard and Audit Premium:
 - **The search tool in the Microsoft Purview portal.** The route this article walks through.
 - **The Search-UnifiedAuditLog cmdlet** in Exchange Online PowerShell, for scripted or recurring searches.
 - **The Audit Search Graph API**, which uses Microsoft Graph.
-- **The Office 365 Management Activity API**, which Microsoft recommends for downloading audit data at scale.
+- **The Office 365 Management Activity API**, which Microsoft recommends for downloading audit data programmatically.
 
 ## Standard versus Premium
 
@@ -101,7 +101,7 @@ Open a completed job and select **Export** on the command bar to download a CSV 
 - Audit Standard: up to 50,000 rows.
 - Audit Premium: up to 1,000,000 rows.
 
-In Excel, you can sort and filter by property, or use Power Query to split the `AuditData` JSON into separate columns. For downloading audit data at scale, Microsoft recommends the Office 365 Management Activity API instead of a PowerShell script. For scripted or recurring searches, the Search-UnifiedAuditLog cmdlet in Exchange Online PowerShell is the route.
+In Excel, you can sort and filter by property, or use Power Query to split the `AuditData` JSON into separate columns. For downloading audit data programmatically, Microsoft recommends the Office 365 Management Activity API instead of a PowerShell script. For scripted or recurring searches, the Search-UnifiedAuditLog cmdlet in Exchange Online PowerShell is the route.
 
 ## Audit log retention policies and retention periods
 
@@ -134,5 +134,5 @@ The pages read do not list every audit activity, and the audit search page does 
 
 ## Sources
 
-- [Microsoft Learn: Audit solutions overview](https://learn.microsoft.com/purview/audit-solutions-overview)
+- [Microsoft Learn: Audit solutions overview](https://learn.microsoft.com/en-us/purview/audit-solutions-overview)
 - [Microsoft Learn: Search the audit log](https://learn.microsoft.com/en-us/purview/audit-search)
