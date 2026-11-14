@@ -7,7 +7,7 @@ author: mirko-p
 date: 2027-01-07
 topics: [power-bi, row-level-security]
 keypoints:
-  - "Object-level security (OLS) secures tables or columns and also hides object names and metadata from restricted users. It is defined in model roles, like row-level security."
+  - "Object-level security (OLS) secures tables or columns and can also restrict object names and metadata. It is defined in model roles, like row-level security."
   - "Set metadataPermission to none on a table or column in TMDL view, or set the table or column permission to None in Tabular Editor."
   - "After publishing, open Security from the semantic model's More options menu and assign members or groups to the roles."
   - "OLS applies only to Viewers. Workspace Admin, Member and Contributor roles have Edit permission on the model, so OLS does not apply to them."
@@ -25,7 +25,7 @@ faq:
     a: "Quick insights visualizations, Smart narrative visualizations and the Excel Data Types gallery."
 ---
 
-Object-level security (OLS) lets you hide a table or a column from report viewers so completely that it looks as though it does not exist. You define it in a role on the semantic model, publish the model and assign members to the role. This guide follows the Microsoft Learn page on object-level security in Power BI and Fabric.
+Object-level security (OLS) lets you hide a table or a column from report viewers so completely that it looks as though it does not exist. You define it in a role on the semantic model, publish the model and assign members to the role. This guide follows the Microsoft Learn page Object-Level Security (OLS) with Power BI.
 
 ## What OLS does
 
@@ -34,7 +34,7 @@ OLS secures specific tables or columns from report viewers. It can also restrict
 ## Prerequisites
 
 - OLS is defined within model roles, the same mechanism as row-level security (RLS). The page links to the RLS section for creating roles and rules in Power BI Desktop.
-- You author the model in Power BI Desktop and use either **TMDL view** or **Tabular Editor**. Tabular Editor is an external tool and must be installed separately if it does not appear on the **External tools** ribbon.
+- You define OLS with either **TMDL view** (in your authoring environment, no external tools needed) or **Tabular Editor**. The Tabular Editor steps start in Power BI Desktop. If you do not see the Tabular Editor button on the **External tools** ribbon, install the program.
 - You publish the model to the Power BI service, where you assign members to roles.
 
 ## Option A: TMDL view
@@ -82,7 +82,7 @@ createOrReplace
 
 ## What restricted users see
 
-Visuals that use a secured field show an error. The error says the field cannot be found, or that the column cannot be found or may not be used in this expression. Plan reports so that restricted audiences do not rely on those fields.
+Visuals that use a secured field show an error. The error says the field cannot be found, or that the column cannot be found or may not be used in this expression. My advice: plan reports so that restricted audiences do not rely on those fields.
 
 ## Limits and restrictions
 
@@ -100,7 +100,7 @@ Visuals that use a secured field show an error. The error says the field cannot 
 
 ## A cautious rollout
 
-The steps are practical advice.
+These steps are my advice, not text from the Learn page.
 
 1. Decide which tables or columns are sensitive, and list the roles that should not see them.
 2. Build the role in a development copy of the model.
@@ -108,7 +108,7 @@ The steps are practical advice.
 4. Check every report page for errors on restricted fields.
 5. Publish and assign members or groups.
 
-## Typical mistakes
+## Typical mistakes (my advice)
 
 - Testing as a workspace Admin and concluding that OLS does not work.
 - Hiding a column that reports and measures still use.
@@ -124,4 +124,4 @@ The steps are practical advice.
 
 ## Sources
 
-- [Object-level security (OLS) in Power BI (Microsoft Learn)](https://learn.microsoft.com/fabric/security/service-admin-object-level-security)
+- [Object-Level Security (OLS) with Power BI (Microsoft Learn)](https://learn.microsoft.com/fabric/security/service-admin-object-level-security)
