@@ -35,7 +35,7 @@ If you only need the sound, for example for a podcast-style discussion, open **M
 
 Two things are worth knowing before you press the button. Recording takes a few seconds to begin, so don't click again if nothing seems to happen. And only one person can record a meeting at a time. If a colleague has already started, you'll see that the recording is running.
 
-Microsoft's page shows a Desktop and a Mobile tab, but the text gives no separate mobile or browser steps beyond the ones above. If your menu looks different on a phone or in a browser, I couldn't confirm the exact path from Microsoft's pages, so check the meeting controls for **More actions** and **Record** first.
+Microsoft's page shows a Desktop and a Mobile tab, but the text gives no separate mobile or browser steps beyond the ones above. If your menu looks different on a phone or in a browser, look for **More actions** and **Record** in the meeting controls first.
 
 ### What a recording doesn't capture
 
@@ -58,7 +58,7 @@ This is where most "I can't record" tickets begin. To start or stop a recording,
 - Membership of the organizer's organization. Guests, anonymous users and people from other organizations can't start or stop a recording.
 - A meeting organizer whose cloud recording policy is turned on. The organizer doesn't need to be in the meeting.
 
-Both the organizer and the person who records need recording permission. That is the detail people miss: you might have the right license, but if the organizer's policy blocks recording, the button stays unavailable.
+Microsoft's list includes both your own permission and the organizer's cloud recording policy. That is the detail people miss: you might have the right license, but if the organizer's policy blocks recording, the button stays unavailable.
 
 The organizer can narrow it further. With Teams Premium or a Copilot license, the organizer can open the meeting, go to **Options** and, under **Recording and transcription**, set **Who can record and transcribe** to one of three choices: organizers and co-organizers, organizers, co-organizers and presenters, or no one. The path on Microsoft's page is **Calendar** > select the event > **View event** > **Options**. Select **Apply** when you're done.
 
@@ -108,11 +108,11 @@ If Teams can't upload the file, for example because the organizer's OneDrive acc
 
 ### Share and download
 
-By default, everyone who was invited can view the recording, but only organizers and co-organizers can download or delete it. Microsoft's page on playing and downloading recordings says only the organizer can download it.
+Everyone who was invited can view the recording. Microsoft's page on playing and downloading recordings says only the meeting organizer can download it, and only the organizer and co-organizers can edit it. That page doesn't say who can delete a recording by default.
 
-- **Share a link:** in the meeting chat, open the **Shared** tab, hover over the recording, select **More options** > **Copy link**. Use **Settings** in the **Link** dialog to manage access.
+- **Share a link:** if you organized the meeting, open the **Shared** tab in the meeting chat, hover over the recording, select **More options** > **Copy link**. Use **Settings** in the **Link** dialog to manage access.
 - **Download:** open the **Shared** tab in the chat or channel, find the recording and select **More options** > **Download**.
-- **Guests and external attendees** can view a recording only if it's explicitly shared with them, for example with a direct link.
+- **Guests and external attendees** can view a recording only if they're sent a direct link to it.
 
 For a channel meeting, the admin setting `ChannelRecordingDownload` decides whether members can download. With the default `Allow`, the file lands in the **Recordings** folder with the normal permissions of the team's SharePoint site. With `Block`, it lands in a **View only** subfolder where members can watch but not download or edit.
 
@@ -125,14 +125,12 @@ Microsoft's page [I can't record a meeting in Microsoft Teams](https://support.m
 - **"Only meeting organizer and co-organizer can start recording for this meeting."** The organizer limited recording through **Who can record and transcribe**. Ask to be made a co-organizer.
 - **"Unavailable because the meeting organizer has disabled recording for this meeting."** The same option is set to no one.
 - **"Only meeting organizers and presenters can start recording."** You joined as an attendee. Ask the organizer to make you a presenter.
-- **"Unavailable because Copilot is turned off for this meeting."** The meeting option for Copilot is off. Turning off Copilot in Teams meetings also turns off recording and transcription.
+- **"Unavailable because Copilot is turned off for this meeting."** The organizer set **Allow Copilot** to Off for the meeting. The organizer can turn Copilot on during the meeting.
 - **"Unavailable for this meeting due to organization policy."** For admins: recording isn't allowed for the person, or a recent policy change hasn't taken effect yet. Turn on meeting recording and give the change time to apply.
-
-Federated users can record calls but not meetings. That's another reason a person from a partner company sees no Record button.
 
 ### For admins: turn recording on
 
-In the Teams admin center, go to **Meetings** > **Meeting policies**, select or create a policy, turn **Meeting recording** on and select **Save**. A user has one meeting policy at a time, and users without a custom policy get the global one. In PowerShell, the setting is `Set-CsTeamsMeetingPolicy -AllowCloudRecording $true`. Microsoft stresses that this switch only controls whether people can record. It doesn't set up or check the storage. Policy changes can take time to reach users.
+In the Teams admin center, go to **Meetings** > **Meeting policies**, select or create a policy, turn on the meeting recording option and select **Save**. The label can differ between admin center versions. A user has one meeting policy at a time, and users without a custom policy get the global one. In PowerShell, the setting is `Set-CsTeamsMeetingPolicy -AllowCloudRecording $true`. Microsoft stresses that this switch only controls whether people can record. It doesn't set up or check the storage. Policy changes can take time to reach users.
 
 ## How long a recording is kept
 
@@ -144,7 +142,7 @@ The organizer or a co-organizer with edit permission can change the date for a s
 2. Select the expiration countdown below the video.
 3. Pick a time frame from the list or select **Remove expiration**.
 
-Watching a recording doesn't change its expiration date. When a file expires, the owner gets an email. It moves to the recycle bin of the place where it was saved, either the organizer's OneDrive or the SharePoint site of the team. Microsoft's support page says the owner has up to 90 days to recover it. The admin page says items in the recycle bin of a work or school account are deleted after 93 days unless the administrator changed it. Once it is purged from the recycle bin, it can't be recovered. If a meeting matters, don't wait for the email. Remove the expiration or download the file when you save the meeting notes.
+When a file expires, the owner gets an email. It moves to the recycle bin of the place where it was saved, either the organizer's OneDrive or the SharePoint site of the team. Microsoft's support page says the owner has up to 90 days to recover it. The admin page says items in the recycle bin of a work or school account are deleted after 93 days unless the administrator changed it. Once it is purged from the recycle bin, it can't be recovered. If a meeting matters, don't wait for the email. Remove the expiration or download the file when you save the meeting notes.
 
 ## Common mistakes
 
@@ -159,10 +157,19 @@ Watching a recording doesn't change its expiration date. When a file expires, th
 
 - **Transcripts of the same meeting.** You can start live transcription during the meeting. Read how [Teams meeting transcription](https://www.m365.fm/entity/teams-meeting-transcription/) works if you want a searchable text version next to the video.
 - **Who owns the file.** The recording lives in OneDrive or SharePoint, so permissions, sharing and retention follow those rules. Check your sharing settings before you send a link.
-- **Compliance and eDiscovery.** Recordings and transcripts can be found in Microsoft Purview with an eDiscovery case. Ask your compliance team if you have retention requirements.
-- **Events and webinars.** These have their own recording switches in the events policy. Recordings of events optimized for large audiences aren't available through chat.
+- **Compliance and retention.** If you have retention or legal-hold requirements, ask your compliance team how recordings are covered before you rely on the default expiration.
+- **Events and webinars.** Town halls and webinars have their own recording controls, separate from regular meeting recording.
 - **Recording failed or didn't save.** Check licensing, the organizer's OneDrive and whether the 21-day temporary storage applies. Details are in Microsoft's troubleshooting page.
 
 ## Next step
 
 Open a test meeting with a colleague, record 30 seconds and look for the file in the organizer's OneDrive, in the **Recordings** folder. That one test shows you whether the policy, the license and the storage are in order, before you need to record a meeting that matters. Then you know how to record a Teams meeting, where it goes and who can get to it.
+
+## Sources
+
+- [Start, stop, and find meeting recordings in Microsoft Teams (Microsoft Support)](https://support.microsoft.com/teams/meetings/start-stop-and-find-meeting-recordings-in-microsoft-teams)
+- [Play, share, and download meeting recordings in Microsoft Teams (Microsoft Support)](https://support.microsoft.com/teams/meetings/play-share-and-download-meeting-recordings-in-microsoft-teams)
+- [I can't record a meeting in Microsoft Teams (Microsoft Support)](https://support.microsoft.com/teams/meetings/i-can-t-record-a-meeting-in-microsoft-teams)
+- [Record a meeting in Microsoft Teams (Microsoft Support)](https://support.microsoft.com/office/record-a-meeting-in-microsoft-teams-85d16331-2669-426e-b12a-02aefe6f5308)
+- [Teams cloud meeting recording (Microsoft Learn)](https://learn.microsoft.com/microsoftteams/cloud-recording)
+- [Manage Teams recording expiration policy (Microsoft Learn)](https://learn.microsoft.com/microsoftteams/manage-teams-recording-expiration-policy)
