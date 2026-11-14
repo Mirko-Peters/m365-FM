@@ -87,7 +87,7 @@ Disputes apply to completed Emails or URLs submissions with results of Threats f
 
 In U.S. Government clouds (GCC, GCC High, DoD), only email authentication and policy hits are analyzed, and detonation and grader analysis are not performed.
 
-## Working routine
+## Working routine (my advice)
 
 1. Collect the network message ID or the .eml file.
 2. Decide whether it is a false positive or false negative, and check your role.
@@ -105,4 +105,4 @@ The page does not describe how submissions change tenant policies beyond the all
 
 ## Sources
 
-- [Use the Submissions page to submit suspected spam, phish, URLs and files to Microsoft](https://learn.microsoft.com/defender-office-365/submissions-admin)
+- [Submit messages, URLs, and attachments for analysis in the Microsoft Defender portal (Microsoft Learn)](https://learn.microsoft.com/defender-office-365/submissions-admin)
