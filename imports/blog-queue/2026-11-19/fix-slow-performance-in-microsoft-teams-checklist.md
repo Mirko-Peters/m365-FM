@@ -28,7 +28,7 @@ Slow Teams is rarely one problem. It can be a PC that is short of memory, a heav
 
 ## Step 1: See what is slow
 
-Open Task Manager (Ctrl+Shift+Esc) and look at the Teams process while the problem happens. A Microsoft Q&A answer names two process names to look for: `Teams.exe` and `ms-teams.exe`. Which one you see depends on the Teams client you run. The Microsoft Learn training shows the same idea on the **Processes** tab, where high CPU and memory use point to a client problem. In a meeting, also check the **Performance** tab to see whether one core is at 100 percent.
+Open Task Manager (Ctrl+Shift+Esc) and look at the Teams process while the problem happens. A Microsoft Q&A answer from Microsoft Community Support names two process names to look for in the Task Manager Details tab: `Teams.exe` and `ms-teams.exe`. Which one you see depends on the Teams client you run. The Microsoft Learn training shows the same idea on the **Processes** tab, where high CPU and memory use point to a client problem.
 
 Separate three cases:
 
