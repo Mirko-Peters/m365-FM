@@ -41,11 +41,11 @@ When a billing plan is created, a **Power Platform account resource** is created
 
 ## Setup in the admin center
 
-A second Learn page, Set up pay-as-you-go, has the steps.
+A second Learn page, Set up a pay-as-you-go plan, has the steps.
 
 **Azure prerequisites:** an active Azure subscription in your tenant, permission to create resources and register resource providers in it (Owners and Contributors usually have this), and a resource group.
 
-**Power Platform roles:** Learn says Environment admin, Power Platform admin, Global admin and Dynamics 365 admin can all create billing plans. Environment admins can edit only plans they created and link only environments they administer. The other three roles can edit all plans and link all environments in the tenant.
+**Power Platform roles:** Learn says Environment admin, Power Platform admin, Global admin and Dynamics 365 admin can all create billing plans. Environment admins can edit only billing policies they created, and link only environments they administer to policies they created. The other three roles can edit all plans and link all environments in the tenant.
 
 **Steps:**
 
@@ -90,9 +90,9 @@ These are practical questions, not statements from the page:
 - How will cost be reported back to business units?
 - Which users already hold licenses, and how do those interact with pay-as-you-go usage?
 
-The overview does not explain how pay-as-you-go interacts with existing per-user licenses, so check the licensing documentation before you mix models in one environment.
+The setup page says only that app passes already in an environment are ignored and not consumed once pay-as-you-go is on. Neither page explains how pay-as-you-go interacts with other per-user licenses, so check the licensing documentation before you mix models in one environment.
 
-## Checklist
+## Checklist (my advice)
 
 1. Choose the Azure subscription and confirm billing responsibility.
 2. Read the setup, meters and pricing articles linked from the overview.
@@ -106,5 +106,5 @@ The overview does not explain how pay-as-you-go interacts with existing per-user
 
 ## Sources
 
-- [Pay-as-you-go plan overview](https://learn.microsoft.com/power-platform/admin/pay-as-you-go-overview)
-- [Set up pay-as-you-go](https://learn.microsoft.com/power-platform/admin/pay-as-you-go-set-up)
+- [Pay-as-you-go plan overview (Microsoft Learn)](https://learn.microsoft.com/power-platform/admin/pay-as-you-go-overview)
+- [Set up a pay-as-you-go plan (Microsoft Learn)](https://learn.microsoft.com/power-platform/admin/pay-as-you-go-set-up)
