@@ -32,7 +32,7 @@ To protect Teams meetings with sensitivity labels, create a label with the Files
 - **Licensing:** check the sensitivity labeling licensing in the Microsoft Purview service description. Some Teams options require Teams Premium, and without it an information bar appears in the Purview portal.
 - **Scopes:** select **Files & other data assets**, **Emails** and **Meetings**.
 - **Unsupported protection:** labels that apply S/MIME or Double Key Encryption cannot protect calendar items, Teams meetings or chat.
-- **Client versions:** Teams on the web (Edge or Chrome), Teams for Windows 1.5.00.32158 or later, macOS 1.5.00.32154 or later, iOS 5.23.0 or later, or Android 1416/1.0.0.2023235001 or later. If participants or organizers do not meet these, the meeting options cannot be enforced for them.
+- **Client versions:** to apply labels and enforce meeting options in non-channel meetings, Teams on the web (Edge or Chrome), Teams for Windows 1.5.00.32158 or later, macOS 1.5.00.32154 or later, iOS 5.23.0 or later, or Android 1416/1.0.0.2023235001 or later. If participants or organizers do not meet these, the meeting options cannot be enforced for them.
 
 ## Configure the label
 
@@ -98,4 +98,4 @@ The page does not give the exact portal path, explain each Teams option in detai
 
 ## Sources
 
-- [Use sensitivity labels to protect calendar items, Teams meetings, and chat](https://learn.microsoft.com/purview/sensitivity-labels-meetings)
+- [Use sensitivity labels to protect calendar items, Teams meetings, and chat (Microsoft Learn)](https://learn.microsoft.com/purview/sensitivity-labels-meetings)
