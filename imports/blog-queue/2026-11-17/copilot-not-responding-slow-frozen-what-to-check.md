@@ -22,7 +22,7 @@ faq:
   - q: "Could a license problem look like a frozen Copilot?"
     a: "Yes, in some cases. Microsoft Learn lists a newly assigned license that has not propagated, a mix of personal and work accounts, device-based licensing and an unsupported update channel among the causes of Copilot not working in Microsoft 365 apps. Check the license before you change network settings."
   - q: "Who should run the network checks?"
-    a: "Usually the people who manage the proxy, firewall or secure web gateway. Microsoft's requirements page says to work with those teams, because the settings that matter sit in the network path and not on the user's device."
+    a: "Usually the people who manage the proxy, firewall or secure web gateway. The causes Microsoft names (blocked WSS, TLS inspection, proxy timeouts) sit in the network path and not on the user's device. This is an inference from the listed causes, not a statement on the requirements page."
 ---
 
 Copilot that opens but never answers is usually a network or license problem, not a broken app. Microsoft's requirements page names three common network causes: blocked WebSocket Secure (WSS) traffic, TLS inspection that interferes with the connection, and proxies with aggressive timeouts. Check the license first, then the network, then run Microsoft's connectivity tests to confirm.
@@ -53,11 +53,11 @@ This is where most "opens but does not answer" cases end up. According to the Le
 
 - Allow the worldwide Microsoft 365 URLs and IP address ranges and the Microsoft Copilot endpoints.
 - Allow the entire `*.cloud.microsoft` domain. Microsoft states that allowing only selected application URLs inside that domain is not supported.
-- Check that URL filtering, proxy policies, firewall rules, tenant restrictions, Conditional Access and app control do not block `copilot.cloud.microsoft` or the Copilot app.
+- If you block `copilot.cloud.microsoft` to prevent personal Microsoft account sign-in, the requirements page suggests using tenant restrictions instead.
 - Verify full WSS connectivity from user devices to `*.office.com`, `*.cloud.microsoft` and `copilot.cloud.microsoft`.
 - Look for TLS inspection and proxy timeouts that cut the connection.
 
-A real-world example from Microsoft Q&A shows how this looks. An administrator reported that Copilot Chat opened but responses stayed in a processing state on the corporate network only, while Copilot in Excel worked. The asker found that response traffic went to `substrate.svc.cloud.microsoft`, which the corporate proxy configuration did not classify. Adding that host to the client proxy bypass restored Copilot. The moderator who answered said she could not officially confirm backend endpoints and recommended a support ticket. Treat this as one reported case, not as a documented requirement.
+A real-world example from Microsoft Q&A shows how this looks. An administrator reported that Copilot Chat opened but responses stayed in a processing state on the corporate network only, while Copilot in Excel worked. The asker found that response traffic went to `substrate.svc.cloud.microsoft`, which the corporate proxy configuration did not classify. Adding that host to the client proxy bypass restored Copilot. A Microsoft Q&A moderator said they could not officially confirm backend endpoints or network requirements and recommended a support ticket. Treat this as one reported case, not as a documented requirement.
 
 ## Step 4: Run the connectivity tests
 
@@ -77,11 +77,11 @@ Microsoft's requirements page lists these for desktop apps:
 
 - The Office Feature Updates task must run on schedule and reach the network resources Copilot needs.
 - On Windows, Windows 11 version 22H2 or later and EdgeUpdate version 1.3.253.25 or later.
-- Privacy controls for connected experiences can disable Copilot features. Under **File** > **Account** > **Account Privacy** > **Manage Settings**, the settings **Experiences that analyze your content** and **All connected experiences** matter.
+- Privacy controls for connected experiences can affect Copilot features, so review them.
 
 ## What to collect before you open a ticket
 
-Microsoft's guidance for such cases, as relayed in the Q&A thread, is a support request in the admin center under **Support** > **Help & support**. Include:
+In the Q&A thread, a Microsoft moderator recommended a support request in the Microsoft 365 admin center under **Support** > **Help & support**. The thread suggests collecting:
 
 - The exact message and the time it appeared.
 - Whether the problem occurs on every network or only the corporate one.
