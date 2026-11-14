@@ -42,7 +42,7 @@ Learn says Multi-Geo lets you manage and store in-scope data at a user level for
 
 Shared resources can also be used with Multi-Geo. The page names SharePoint sites, Microsoft 365 Groups, shared mailboxes, eDiscovery and Teams teams.
 
-The overview does not explain how each workload places or accesses data. It refers to the per-service data residency pages and to the Multi-Geo articles for Exchange, OneDrive and SharePoint, and Teams.
+The overview does not explain how each workload places or accesses data. It refers to the per-service data residency pages for Exchange Online, SharePoint and OneDrive, Teams, and Copilot.
 
 ## Licensing
 
@@ -112,4 +112,4 @@ The pages I read do not describe the following:
 
 ## Sources
 
-- [Microsoft 365 Multi-Geo](https://learn.microsoft.com/microsoft-365/enterprise/microsoft-365-multi-geo)
+- [Microsoft 365 Multi-Geo: Overview and requirements (Microsoft Learn)](https://learn.microsoft.com/microsoft-365/enterprise/microsoft-365-multi-geo)
