@@ -9,7 +9,7 @@ topics: [windows-365-link, windows-365, intune]
 keypoints:
   - "Windows 365 Link works with Windows 365 Enterprise, Flex and Business, and requires Intune. Devices must be Microsoft Entra joined and enroll automatically in Intune during OOBE."
   - "Link devices can connect only to Cloud PCs with Microsoft Entra ID single sign-on enabled. Otherwise users get an error and cannot connect."
-  - "The Link connection does not support the SSO consent prompt. If consent is required, the connection fails, and Learn describes steps to suppress the prompt."
+  - "Learn says the Link connection does not currently support the SSO consent prompt, so it fails if consent is needed. A note says update 26100.7462 can present prompts."
   - "The deployment overview lists six steps, from requirements through Entra device and mobility settings, an optional Intune filter, enrollment restrictions and Conditional Access validation."
   - "Learn strongly recommends the Auto Detect Local Time Zone policy and FIDO2 Security Key as a sign-in method for Link devices."
 faq:
@@ -23,7 +23,7 @@ faq:
     a: "According to Microsoft Learn, the device joins Microsoft Entra ID and enrolls in the Intune tenant associated with the sign-in account."
 ---
 
-To set up Windows 365 Link as a secure thin client, prepare your Microsoft Entra and Intune settings first, enable single sign-on on the Cloud PCs, and then let users sign in on the device. This guide combines four Microsoft Learn pages: the overview, the requirements, the deployment overview and the first-time setup.
+To set up Windows 365 Link as a secure thin client, prepare your Microsoft Entra and Intune settings first, enable single sign-on on the Cloud PCs, and then let users sign in on the device. This guide combines four Microsoft Learn pages: What is Windows 365 Link?, Requirements for Windows 365 Link, Overview of deploying Windows 365 Link devices and Set up Windows 365 Link.
 
 ## What the device is
 
@@ -82,7 +82,7 @@ This section is a practical suggestion and not a Microsoft statement.
 
 The pages I read do not describe the following:
 
-- Ports and peripherals, which the overview defers to the What's in the box article.
+- Ports and peripherals of the device.
 - Specific network endpoints.
 - Intune menu paths and the settings available for Link devices.
 - Timing and failure handling during first setup.
@@ -96,7 +96,7 @@ The pages I read do not describe the following:
 
 ## Sources
 
-- [Windows 365 Link overview](https://learn.microsoft.com/windows-365/link/overview)
-- [Requirements for Windows 365 Link](https://learn.microsoft.com/windows-365/link/requirements)
-- [Windows 365 Link deployment overview](https://learn.microsoft.com/windows-365/link/deployment-overview)
-- [Set up Windows 365 Link and sign in](https://learn.microsoft.com/windows-365/link/setup)
+- [What is Windows 365 Link? (Microsoft Learn)](https://learn.microsoft.com/windows-365/link/overview)
+- [Requirements for Windows 365 Link (Microsoft Learn)](https://learn.microsoft.com/windows-365/link/requirements)
+- [Overview of deploying Windows 365 Link devices (Microsoft Learn)](https://learn.microsoft.com/windows-365/link/deployment-overview)
+- [Set up Windows 365 Link (Microsoft Learn)](https://learn.microsoft.com/windows-365/link/setup)
