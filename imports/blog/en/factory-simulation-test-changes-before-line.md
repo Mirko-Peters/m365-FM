@@ -62,7 +62,7 @@ The overview advises using realistic data where available and refining it over t
 
 ## How do you run a factory simulation study?
 
-A published case shows the main steps. A paper from the Winter Simulation Conference describes a discrete event study at a home-appliance manufacturer, where the task was to sort appliances downstream of an assembly line and to schedule manually operated clamp trucks. The team tested seven scenarios and found that changing the pickup logic reduced the required fleet from eight trucks to five in the best scenarios. See the [Winter Simulation Conference paper](https://www.informs-sim.org/wsc07papers/232.pdf). Treat this as one example of what a study can look like, not as a benchmark for your plant.
+A typical study tests a handful of scenarios, for example different pickup logic for the trucks that move work between stations, before anything changes on the floor. Treat the number of trucks or other resources as a question the model answers, not as an assumption.
 
 The steps below follow the same logic:
 
@@ -108,8 +108,12 @@ Now add variation. Suppose stops, changeovers and waiting reduce real output by 
 
 ## How software can help
 
-Some vendors call such a model a digital factory. Simulation software lets you build and run these models without writing code, which supports a data-driven decision. [iFAKT's Polaris Simulator](https://www.m365.fm/entity/polaris-simulator/) is a module of iFAKT Polaris that tests the production system virtually, for example capacity, staffing and buffer scenarios, and reveals bottlenecks before changes are made. When you compare tools, ask how the model gets its data, how easily you can validate it and whether non-specialists can read the results. A model that only one expert understands rarely survives.
+Some vendors call such a model a digital factory. Simulation software typically lets you build and run these models without programming, which supports a data-driven decision. [iFAKT's Polaris Simulator](https://www.m365.fm/entity/polaris-simulator/) is a module of iFAKT Polaris that tests the production system virtually, for example capacity, staffing and buffer scenarios, and reveals bottlenecks before changes are made. When you compare tools, ask how the model gets its data, how easily you can validate it and whether non-specialists can read the results. A model that only one expert understands rarely survives.
 
 ## Next step
 
 Pick one change you are considering, such as a new shift pattern or a machine, and write the question and the output measure for a first factory simulation. Then collect the cycle times and loss data for that area and validate a simple model against last month before you test the change.
+
+## Sources
+
+- [Factory Simulation Basics: How Manufacturers Use Simulation to Design Better Production Systems - Autodesk Design & Manufacturing blog](https://www.autodesk.com/blogs/design-and-manufacturing/factory-simulation-basics-how-manufacturers-use-simulation-to-design-better-production-systems/)
