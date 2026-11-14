@@ -62,7 +62,7 @@ The user mailbox needs a license before conversion. Otherwise the option does no
 - Inbox rules are preserved.
 - You do not need to reset the password, but the original username and password keep working on the shared mailbox if you do not.
 - Do not delete the old user account, because it anchors the shared mailbox.
-- For a departing employee, the page refers to its article on removing a former employee. It does not say to block sign-in itself.
+- For a departing employee, the page says to take additional steps so the person can no longer sign in, and refers to its article on removing a former employee.
 
 ## Licenses and size
 
@@ -87,22 +87,22 @@ It takes a few minutes for the mailbox to be set up.
 
 ## What the pages do not say
 
-- Steps to create the mailbox in the Microsoft 365 admin center, and steps to block sign-in.
+- Steps to create the mailbox in the Microsoft 365 admin center, and steps to block sign-in. The shared mailbox page only links to articles for both.
 - A time for a normal conversion.
 - A cloud PowerShell command for conversion.
 - Details of automapping.
 - Hybrid conversion steps.
 
-## A conversion routine
+## A conversion routine (my advice)
 
-This routine is practical advice built on the pages.
+This routine is my own advice, built on the pages.
 
 1. Check that the mailbox has a license, and check its size.
 2. Convert it and add the members with Full Access and Send As.
 3. Decide about the original password and sign-in for the old account.
 4. Remove the license only if the mailbox is under 50 GB and has no holds.
 
-## Typical mistakes
+## Typical mistakes (my advice)
 
 - Giving only Full Access and wondering why users cannot send.
 - Deleting the old user account.
