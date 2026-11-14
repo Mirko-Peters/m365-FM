@@ -79,7 +79,7 @@ The Microsoft Support article lists the following.
 | Images | User-added images (base64 or same-domain URLs) are supported. Stock, organization and AI-generated images are not. |
 | Live data | Data from lists and Excel is supported. Third-party live data, such as Jira, is not. |
 
-Features that Microsoft lists as not supported include inline video and audio, promote to news post, rich email, Amplify to Teams or Viva Engage, mobile editing, save as template, private drafts, co-authoring, reactions and comments.
+Features that Microsoft lists as not supported include inline video and audio, promote to news post, rich email (listed as a fast follow), Amplify to Teams or Viva Engage, mobile editing, save as template, private drafts, co-authoring, reactions and comments.
 
 ## Turning HTML pages on or off
 
@@ -90,7 +90,7 @@ HTML pages are on by default. A site owner can turn them off per site, and turn 
 - Reduce file size by linking to hosted assets instead of embedding them, trimming inline CSS and JavaScript, and removing unused markup.
 - Confirm that any libraries you use are on the supported list. Other CDN or open-source sources are not supported.
 - Review the audience. Publishing grants no new permissions, so check the site and page permissions if the content is sensitive.
-- Test on desktop. Mobile editing and viewing in the Teams mobile app and the iOS and Android apps are listed as not supported, with Microsoft noting a later rollout.
+- Test on desktop. Editing HTML pages on mobile is listed as not supported. Viewing in the Teams mobile app and the iOS and Android apps is listed as rolling out as a fast follow, so check the current status of the support page.
 
 The pages read do not describe how HTML pages interact with other governance tools such as retention or sensitivity labels, so verify those separately in your tenant.
 
