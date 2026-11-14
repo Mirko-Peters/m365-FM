@@ -114,3 +114,9 @@ Six Sigma needs reliable data, and lean needs a clear picture of the flow. Both 
 ## Next step
 
 List your five biggest problems and mark each as a flow problem or a variation problem. Use that list to settle the lean vs six sigma question for your plant: start with the problem that costs the most, and pick the tool that fits it.
+
+## Sources
+
+- [Six Sigma Definition - What is Lean Six Sigma? - ASQ](https://asq.org/quality-resources/six-sigma)
+- [Lean Thinking And Practice - Lean Enterprise Institute (Lean Lexicon)](https://www.lean.org/lexicon-terms/lean-thinking-and-practice/)
+- [DMAIC Process: Define, Measure, Analyze, Improve, Control - ASQ](https://asq.org/quality-resources/dmaic)
