@@ -79,11 +79,11 @@ For detailed guidance, the page points to the OWASP MCP Top 10. I did not read t
 
 ## What this looks like inside Microsoft 365
 
-Microsoft's own Agent 365 documentation shows MCP as an organized catalog rather than as a free-for-all. The tooling servers overview names three options: Work IQ MCP, a single endpoint with 10 generic tools that discover resource paths and schemas at runtime; Microsoft-hosted MCP servers for specific workloads such as Mail, Calendar, SharePoint, Teams and Dataverse; and custom or third-party servers. Most of the Microsoft-hosted servers are labeled preview on that page, and the page says availability varies by tenant, region, rollout status, licensing, administrator approval and organizational policy.
+Microsoft's own Agent 365 documentation shows MCP as an organized catalog rather than as a free-for-all. The tooling servers overview names three options: Work IQ MCP, a single endpoint with 10 generic tools that discover resource paths and schemas at runtime; Microsoft-hosted MCP servers for specific workloads; and custom or third-party servers. The page lists hosted servers such as Mail, Calendar, SharePoint, Teams, OneDrive, User, Word, Dataverse and Fabric IQ Ontology, and most are labeled preview. The page says availability varies by tenant, region, rollout status, licensing, administrator approval and organizational policy.
 
-On the governance side, the **Tools** registry in the Microsoft 365 admin center is described as the source of truth for the MCP servers available in the tenant. Admins use **Agents** > **Tools** there. For supported servers, they can also view and control individual tools. Custom servers can be registered through a bring-your-own process that covers evaluation, registration, approval, consent and monitoring. The page also says the older Microsoft 365 tools for Copilot, Calendar, Mail, SharePoint, OneDrive, Teams, User and Word are for backward compatibility only and should not be used for new projects.
+On the governance side, the **Tools** registry in the Microsoft 365 admin center is described as the source of truth for the MCP servers available in the tenant. Admins use **Agents** > **Tools** there. For supported servers, they can also view and control individual tools. Custom servers can be registered through a bring-your-own process that covers evaluation, registration, approval, consent and monitoring. The page also says the application-specific Microsoft 365 MCP tools for Copilot, Calendar, Mail, SharePoint, OneDrive, Teams, User and Word are intended only for backward compatibility and shouldn't be used in production environments or new projects. For new projects that need Microsoft 365 resources, it points to Work IQ MCP or Work IQ in Copilot Studio (preview).
 
-The takeaway for the decision: where Microsoft offers a governed MCP server for a workload, using it fits the "extend, don't duplicate" advice. Building your own server is justified when your capability is not covered and a validated agent use case exists.
+The takeaway for the decision: where Microsoft offers a governed MCP server that fits your need, such as Work IQ MCP for Microsoft 365 data, using it fits the "extend, don't duplicate" advice. Check the preview and legacy labels first. Building your own server is justified when your capability is not covered and a validated agent use case exists.
 
 ## A cautious way to start
 
@@ -122,4 +122,4 @@ These examples apply the guide's criteria. They are not taken from the guide its
 ## Sources
 
 - [When to use MCP (Azure MCP security guide, Microsoft)](https://microsoft.github.io/mcp-azure-security-guide/adoption/when-to-use-mcp)
-- [Agent 365 tooling servers overview (Microsoft Learn)](https://learn.microsoft.com/microsoft-agent-365/tooling-servers-overview)
+- [Agent 365 tooling servers overview (Microsoft Learn)](https://learn.microsoft.com/en-us/microsoft-agent-365/tooling-servers-overview)
