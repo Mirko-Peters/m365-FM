@@ -9,7 +9,7 @@ topics: [onedrive]
 keypoints:
   - "OneDrive restore covers the last 30 days and returns files to the state before the first activity you select."
   - "For a work or school account open OneDrive on the web, select Settings, then Restore OneDrive. Choose a date or Custom date and time."
-  - "The daily activity chart and activity feed help you spot unusual activity such as mass edits and deletes before you pick the point."
+  - "The daily activity chart and activity feed help you spot unusual activity before you pick the restore point."
   - "Files created after the restore point go to the Recycle Bin. Files permanently deleted from the Recycle Bin can never be recovered."
   - "SharePoint and Teams files are restored at document library level, not through this OneDrive feature."
 faq:
@@ -29,7 +29,7 @@ If ransomware or a bad sync has damaged files in OneDrive, the built-in restore 
 
 ## When to use it
 
-Use full restore when many files changed or were deleted and you can name a time before the problem began. If only a handful of files are affected, Microsoft suggests the Recycle Bin or earlier file versions, which change less. Before restoring after ransomware, stop the cause first. The detection flow below makes cleaning every device an explicit step before the restore, because otherwise the files can be encrypted again.
+Use full restore when many files changed or were deleted and you can name a time before the problem began. If only a handful of files are affected, Microsoft suggests the Recycle Bin or restoring a previous version of a file. Before restoring after ransomware, stop the cause first. The detection flow below makes cleaning every device an explicit step before the restore, because otherwise the files can be encrypted again.
 
 ## Ransomware detection flow
 
@@ -43,7 +43,7 @@ The page says non-subscribers get their first notification and recovery free. It
 
 ## Who can use it
 
-For a personal account, the page says you need a Microsoft 365 subscription to restore your entire OneDrive. For a work or school account, the option appears in OneDrive settings on the web. The page does not list admin roles or licensing details for work accounts.
+The page lists a Microsoft 365 subscription as the prerequisite. For a work or school account, the option appears in OneDrive settings on the web. The page does not list admin roles or further licensing details for work accounts.
 
 ## Steps
 
@@ -56,13 +56,13 @@ For a personal account, the page says you need a Microsoft 365 subscription to r
 
 ## Read the activity chart
 
-The daily activity chart shows the volume of file activity for each of the last 30 days. A spike can point to malware activity. The activity feed lists individual file and folder operations in reverse chronological order, and you can expand or collapse each day. A slider below the chart jumps to a specific day.
+The daily activity chart shows the volume of file activity for each of the last 30 days. The page says the chart can help you spot unusual activity. The activity feed lists individual file and folder operations in reverse chronological order, and you can expand or collapse each day. A slider below the chart jumps to a specific day.
 
 When you choose a custom point, selecting one activity also selects every later activity. The page notes that more recent activities may be hidden in the feed after you pick a day in the chart, but they stay selected.
 
 ## What restore does
 
-Your files return to the state before the first activity you selected. Pick the earliest unwanted activity, not a random later one, or you may leave encrypted copies behind.
+Your files return to the state before the first activity you selected. My advice: pick the earliest unwanted activity, not a later one, or you may leave encrypted copies behind.
 
 ## Limits
 
@@ -76,18 +76,18 @@ Your files return to the state before the first activity you selected. Pick the 
 
 Run **Restore** again and select the restore action you just performed. This matters if you picked a point that is too early and lost recent good work.
 
-## After the restore
+## After the restore (my advice)
 
 1. Check a sample of important folders and open files to confirm they are readable.
 2. Look in the Recycle Bin for files created after the restore point that you still need.
 3. Let the sync client catch up before you resume work.
 4. Review how the infection happened, and treat the original cause as an incident.
 
-Steps 2 to 4 are practical suggestions, not from the Support page.
+This whole list is my own suggestion, not from the Support page.
 
 ## Gaps in the sources
 
-The Support page does not describe how restore interacts with retention policies or legal holds, how long a restore takes, or what admins can do for other users. For those questions, check the SharePoint and OneDrive admin documentation before you rely on restore as a recovery plan. Do not treat the 30-day window as a backup. Microsoft also offers separate backup features, and I did not read their pages for this article.
+The Support page does not describe how restore interacts with retention policies or legal holds, how long a restore takes, or what admins can do for other users. For those questions, check the SharePoint and OneDrive admin documentation before you rely on restore as a recovery plan. My advice: do not treat the 30-day window as a backup.
 
 ## Related
 
@@ -95,5 +95,5 @@ The Support page does not describe how restore interacts with retention policies
 
 ## Sources
 
-- [Restore your OneDrive (Microsoft Support)](https://support.microsoft.com/onedrive/restore-your-onedrive)
-- [How to detect ransomware and recover files using OneDrive (Microsoft Support)](https://support.microsoft.com/topic/0d90ec50-6bfd-40f4-acc7-b8c12c73637f)
+- [Restore your OneDrive (Microsoft Support)](https://support.microsoft.com/office/restore-your-onedrive-fa231298-759d-41cf-bcd0-25ac53eb8a15)
+- [How to detect ransomware and recover files using OneDrive (Microsoft Support)](https://support.microsoft.com/onedrive/how-to-detect-ransomware-and-recover-files-using-onedrive)
