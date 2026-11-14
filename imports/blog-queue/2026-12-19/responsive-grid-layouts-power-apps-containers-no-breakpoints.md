@@ -7,7 +7,7 @@ author: mirko-p
 date: 2026-12-19
 topics: [power-apps, power-fx, canvas-app]
 keypoints:
-  - "Turn off Scale to fit, Lock aspect ratio and Lock orientation under Settings > Display first. Without that, a canvas app does not adapt to the screen."
+  - "Learn's setup step is to turn off Scale to fit, Lock aspect ratio and Lock orientation under Settings > Display. Turning off Scale to fit is what makes responsiveness possible."
   - "Horizontal and vertical containers place children automatically. Fill portions share extra space, Minimum width sets a floor, Gap spaces items and Wrap moves items to a new row or column."
   - "When Wrap is on, Learn says the Align setting is ignored on child controls. Center or End justification can make children unreachable when a scrolling container is too small."
   - "Learn does not document a complete wrap-grid recipe or a pixel-exact guarantee. The authoring canvas does not respond to sizing formulas, so publish and test on real window sizes."
@@ -29,7 +29,7 @@ The way to build a responsive grid in a canvas app without breakpoint formulas i
 
 ## Step 0: Make the app responsive at all
 
-Responsiveness starts in the app settings. Learn's prerequisite for the container examples is to go to **Settings** > **Display**, turn off **Scale to fit**, **Lock aspect ratio** and **Lock orientation**, then select **Apply**.
+Responsiveness starts in the app settings. Learn's prerequisite (build-responsive-apps page) is to go to **Settings** > **Display**, turn off **Scale to fit**, **Lock aspect ratio** and **Lock orientation**, then select **Apply**.
 
 Screens then size themselves with the default formulas:
 
@@ -92,7 +92,7 @@ If the grid shows records, a gallery is the usual control. Learn documents these
 
 Inside a gallery template, use `Parent.TemplateWidth` and `Parent.TemplateHeight`, not `Parent.Width` and `Parent.Height`, which refer to the whole gallery.
 
-The Learn pages read do not show a formula for WrapCount. Like other properties it accepts an expression, so one option to test is a formula based on the width, for example `Max(1, RoundDown(Parent.Width / 280, 0))`. That is an idea to test, not documented guidance. Watch for the flexible height gallery: Learn warns that if a user scrolls before all items load, the item in view might be pushed out of view, and says a standard gallery avoids it. Galleries can be nested only two levels deep.
+The Learn pages read do not show a formula for WrapCount. Learn does not say whether it accepts a formula, so one option to test is a formula based on the width, for example `Max(1, RoundDown(Parent.Width / 280, 0))`. That is an idea to test, not documented guidance. Watch for the flexible height gallery: Learn warns that if a user scrolls before all items load, the item in view might be pushed out of view, and says a standard gallery avoids it. Galleries can be nested only two levels deep.
 
 ## Step 5: Know the limits
 
