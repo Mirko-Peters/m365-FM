@@ -7,20 +7,20 @@ author: mirko-p
 date: 2026-11-28
 topics: [copilot, copilot-governance, copilot-adoption]
 keypoints:
-  - "Microsoft says Copilot can produce ungrounded results, so answers must be reviewed. It is not intended for conclusions in financial, legal or medical matters."
+  - "Microsoft says Copilot can produce ungrounded results, so answers must be reviewed. Its Word, Excel and PowerPoint agents are not meant for financial, legal or medical conclusions."
   - "Many complaints trace back to setup, not the model: missing license, device-based licensing, group mailboxes, blocked network endpoints or third-party cookies."
   - "Copilot supports fewer languages than Microsoft 365, and Microsoft says Copilot in Excel was mainly trained on English sources."
   - "Copilot in Excel has documented gaps: editing needs Automatic calculation, and checked-out files from SharePoint do not work on Windows or Mac."
   - "Copilot only sees what the user can access, so messy permissions and poor content hygiene lead to poor or risky answers."
 faq:
   - q: "Why does Copilot give wrong or made-up answers?"
-    a: "Microsoft's application card for Copilot says AI can make mistakes and may fabricate content that sounds reasonable but is inaccurate. It also says Copilot may include information that is not present in its input sources, so users should review responses and double-check facts."
+    a: "Microsoft's application card for Copilot says AI can make mistakes and may fabricate content that sounds reasonable but is inaccurate. It also says Copilot may include information that is not present in its input sources, so users should review responses and verify that they meet their expectations."
   - q: "Is Copilot suitable for financial, legal or medical decisions?"
     a: "Microsoft Learn says to carefully consider use cases in high stakes domains such as medical or financial. The Word, Excel and PowerPoint agents FAQ states they are not intended for drawing conclusions or making decisions in financial, legal, medical or other sensitive domains."
   - q: "Why is Copilot missing features my colleague has?"
     a: "The Learn requirements page ties Copilot to a Copilot license plus a qualifying license, a work or school account in Microsoft Entra ID, and eligible mailboxes. Device-based licensing for Microsoft 365 Apps and group mailboxes are not supported. Copilot Chat needs only an eligible subscription."
   - q: "Does Copilot work well in languages other than English?"
-    a: "Learn says Copilot supports fewer languages than Microsoft 365 and returns an error message for an unsupported language. The Excel support page says prompts in many languages are supported but results may be weaker when prompts or data are not in English."
+    a: "Learn says Copilot supports fewer languages than Microsoft 365 and returns an error message for an unsupported language. The Excel support page says Copilot was mainly trained on English sources and may not perform as well when prompts or data are in other languages."
   - q: "Can Copilot see all of my company's files?"
     a: "No. Microsoft's security page says Copilot operates within existing permissions and access controls. That means oversharing can surface content to people who should not see it, and poorly governed content can affect Copilot results."
 ---
@@ -29,9 +29,9 @@ Copilot often feels useless for three documented reasons. It can state things th
 
 ## Limit 1: It can be wrong, and Microsoft says so
 
-Microsoft's application card for Copilot says AI can make mistakes. It could generate nonsensical content or fabricate content that sounds reasonable but is factually inaccurate. In the grounding section the same page says Copilot may include information in its response that is not present in its input sources, which Microsoft calls ungrounded results.
+Microsoft's application card for Copilot says AI can make mistakes. It could generate nonsensical content or fabricate content that sounds reasonable but is factually inaccurate. The same page says Copilot may include information in its response that is not present in its input sources, which Microsoft calls ungrounded results.
 
-Learn asks users to review responses, to check facts before acting on them and to be aware of the risk of overreliance.
+Learn asks users to review responses, to verify that they meet expectations and requirements, and to be aware of the risk of overreliance.
 
 What this means in practice:
 
@@ -59,7 +59,7 @@ If Copilot is missing or greyed out, check these items in order before you judge
 
 ## Limit 4: Language coverage
 
-Learn says Copilot currently supports fewer languages than Microsoft 365. If the language in a prompt is not supported, you get an error message. For Excel, the support page says many languages are supported, including English (US), Spanish and Japanese, but that Copilot was mainly trained on English sources, so results may be weaker for other languages.
+Learn says Copilot currently supports fewer languages than Microsoft 365. If the language in a prompt is not supported, you get an error message. For Excel, the support page says many languages are supported, including English (US), Spanish and Japanese, but that Copilot was mainly trained on English sources and may not perform as well when prompts or data are in other languages.
 
 ## Limit 5: Copilot in Excel has specific gaps
 
@@ -68,7 +68,7 @@ The Excel FAQ on Microsoft Support lists these conditions:
 - Copilot editing is only supported when calculation options are set to Automatic.
 - If your organization requires check-out in SharePoint, Copilot in Excel on Windows or Mac does not work for files from that site. Excel for the web still works.
 - Strict Open XML Spreadsheet files trigger "Unsupported file state". Saving as .xlsx resolves it.
-- On iPhone and Android, chat is the only mode. iPad supports chat and plan but not full edit mode yet.
+- On iPhone and Android, chat mode is available. On iPad, chat and plan modes are available. The page says edit mode support is rolling out to production for iPad and iPhone.
 - You cannot delete individual conversations, only your full Copilot activity history.
 
 The page does not state row or file size limits, so do not trust numbers from third-party articles without testing them.
@@ -104,4 +104,4 @@ Microsoft's security page says Copilot operates within existing permissions and 
 - [Microsoft Learn: FAQ about Word, Excel and PowerPoint agents](https://learn.microsoft.com/microsoft-365/copilot/faq-wordexcelppt-agents)
 - [Microsoft Support: Frequently asked questions about Copilot in Excel](https://support.microsoft.com/office/7a13758f-d61e-4a56-8440-f2c9a07802ec)
 - [Microsoft Learn: Security for Microsoft Copilot](https://learn.microsoft.com/en-us/copilot/microsoft-365/microsoft-365-copilot-ai-security)
-- [Microsoft Learn: Secure and govern Microsoft Copilot](https://learn.microsoft.com/en-us/microsoft-365/copilot/secure-govern-copilot-foundational-deployment-guidance)
+- [Microsoft Learn: Secure and govern Microsoft Copilot](https://learn.microsoft.com/en-us/copilot/plan/secure-govern-copilot-foundational-deployment-guidance)
