@@ -65,7 +65,7 @@ Microsoft's own example is a hypotenuse function. Name it `Hypotenuse`, and set 
 
 ## Step 4: Make it work on arrays
 
-Microsoft's Excel blog describes the helper functions that take a LAMBDA as an argument:
+Microsoft Support's function pages describe the helper functions that take a LAMBDA as an argument:
 
 | Function | What it does |
 |---|---|
@@ -133,4 +133,7 @@ The pages read for this article do not describe how to share named LAMBDAs acros
 - [Microsoft Support: LET function](https://support.microsoft.com/en-us/office/let-function-34842dd8-b92b-4d3f-b325-b8b8f9908999)
 - [Microsoft Support: How to correct a #SPILL! error](https://support.microsoft.com/en-us/Excel/how-to-correct-a-spill-error)
 - [Microsoft Support: Dynamic array formulas and spilled array behavior](https://support.microsoft.com/en-us/office/dynamic-array-formulas-and-spilled-array-behavior-205c6b06-03ba-4151-89a1-87a7eb36e531)
-- [Microsoft Excel Blog: Announcing LAMBDA helper functions](https://techcommunity.microsoft.com/blog/excelblog/announcing-lambda-helper-functions-lambdas-as-arguments-and-more/2576648)
+- [Microsoft Support: BYCOL function](https://support.microsoft.com/en-us/excel/bycol-function)
+- [Microsoft Support: REDUCE function](https://support.microsoft.com/en-us/office/reduce-function-42e39910-b345-45f3-84b8-0642b568b7cb)
+- [Microsoft Support: SCAN function](https://support.microsoft.com/en-us/excel/scan-function)
+- [Microsoft Support: MAKEARRAY function](https://support.microsoft.com/en-us/excel/makearray-function)
