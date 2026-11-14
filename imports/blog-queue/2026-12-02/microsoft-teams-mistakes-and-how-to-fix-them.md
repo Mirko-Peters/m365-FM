@@ -14,7 +14,7 @@ keypoints:
   - "Notification defaults are described differently on two Microsoft pages, so check Settings > Notifications yourself."
 faq:
   - q: "When should I use a channel instead of a chat?"
-    a: "Microsoft Learn says channels hold conversations visible to a team's members, dedicated to a topic, department or project. Chats are private one-on-one or group conversations for discussions that are not relevant to the members of a team or channel."
+    a: "Microsoft Learn says channels are dedicated to a specific topic, department or project, and hold conversations visible to the members of the channel. Chats are private one-on-one or group conversations for discussions that are not relevant to the members of a team or channel."
   - q: "Where are files stored when I share them in chat?"
     a: "Microsoft Support says files you send in chat are stored in your OneDrive for Business and shared only with the people in that conversation. Files you upload to a channel are stored in your team's SharePoint folder."
   - q: "How many owners should a team have?"
@@ -29,7 +29,7 @@ Most Teams problems come from a few habits: private chats for team topics, files
 
 ## Mistake 1: Using chat for topics the team needs to see
 
-Microsoft Learn describes channels as conversations visible to a team's members, with teams built around projects or topics and channels dedicated to a specific topic, department or project. Conversations, files and meetings all take place in channels. Chats are private one-on-one or group conversations for discussions "that aren't relevant to the members of a team or channel."
+Microsoft Learn describes channels as dedicated to a specific topic, department or project, with conversations visible to the members of the channel. Team conversations, files and meetings take place in channels. Chats are private one-on-one or group conversations for discussions "that aren't relevant to the members of a team or channel."
 
 **Fix:** Post project updates, decisions and questions in the channel, so new members can find them. Keep chat for side conversations that do not concern the wider team.
 
@@ -39,7 +39,7 @@ Microsoft Support states that files you upload to a channel are stored in your t
 
 | Where you share | Where the file is stored | Who sees it |
 |---|---|---|
-| Channel | Team's SharePoint folder | Per Microsoft Support, others get access to the content through the team. The page does not detail channel access rules. |
+| Channel | Team's SharePoint folder | The page does not detail access rules. It says the files appear in the Shared tab of the channel. |
 | Chat | Sender's OneDrive for Business | People in that conversation |
 
 **Fix:** Put shared working files in the channel, so they sit in the team's SharePoint folder and not in one person's storage. Microsoft Support also notes that the OneDrive files you see in Teams are OneDrive for Business files tied to your Microsoft 365 account, and that Teams cannot connect to your personal OneDrive.
@@ -73,15 +73,15 @@ Microsoft Learn advises considering channel names before you create them, becaus
 
 ## Mistake 6: Creating teams without a purpose or access decision
 
-The lifecycle page lists decision points before creation: the team's purpose, its members, private or public access, whether members can add themselves or owners add them, and who can create channels or add tabs, bots and connectors. It describes private teams, with owner-approved membership, as typical for project teams. It calls public teams, which anyone in the organization can join, a good default for smaller organizations.
+The lifecycle page describes the beginning of a team as defining its goal and members and deciding on privacy and permissions before you create it. It calls private teams typical for project teams and public teams a good default for smaller organizations.
 
 **Fix:** Write down purpose and access before the team exists. Microsoft also says governance items such as naming conventions and expiration policies are much easier to implement before scaling a deployment.
 
 ## Mistake 7: No plan for inactive teams
 
-Microsoft Learn says you can use expiration and retention policies together with archiving to reduce exposure from teams that are no longer active or whose owners have left. Deleted teams are soft deleted and IT can reverse that for up to 30 days. Channels can also be restored for up to 30 days. Retention policies may prohibit deleting a team.
+Microsoft Learn says you can use expiration and retention policies to reduce exposure from teams that are no longer active or whose owners have left. At the end of a team's life it suggests closing the team formally, deleting teams that are not needed and archiving data if necessary. Deleted teams are soft deleted and IT can reverse that for up to 30 days. Channels can also be restored for up to 30 days. Retention policies may prohibit deleting a team.
 
-**Fix:** Ask admins whether expiration, retention and archiving policies exist in your tenant, and archive finished teams instead of leaving them open.
+**Fix:** Ask admins whether expiration and retention policies exist in your tenant, and close or delete teams that are no longer needed instead of leaving them open.
 
 ## Quick checklist
 
@@ -91,7 +91,7 @@ Microsoft Learn says you can use expiration and retention policies together with
 4. Every team has at least two owners.
 5. Channel names are agreed before creation.
 6. Each team has a stated purpose and an access type.
-7. Finished teams are archived under the tenant's lifecycle policy.
+7. Finished teams are closed or deleted under the tenant's lifecycle policy.
 
 ## Related
 
