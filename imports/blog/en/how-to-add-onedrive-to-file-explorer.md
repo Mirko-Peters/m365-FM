@@ -94,7 +94,7 @@ On a managed PC, OneDrive may be missing on purpose. The Windows policy **Preven
 - **Reinstalling first.** Check the hidden icons arrow and Start before you uninstall anything.
 - **Confusing the Store app with the sync app.** The Store version shows files but doesn't sync.
 - **Searching only This PC.** Starting with Windows 11, version 22H2, Quick access is called Home in File Explorer. The OneDrive entry is in the left pane.
-- **Moving files out of the OneDrive folder to "pin" them.** Moving a file out of the OneDrive folder takes it out of the sync. Pin the folder instead.
+- **Moving files out of the OneDrive folder to "pin" them.** Microsoft's Files On-Demand page says moving an online-only file out of the OneDrive folder downloads it to the new location and removes it from OneDrive. Pin the folder instead.
 - **Forgetting the second account.** A work account and a personal account have separate entries.
 - **Ignoring a policy.** On a company PC, the setting can be managed by your admin.
 
