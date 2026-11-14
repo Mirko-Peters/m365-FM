@@ -7,14 +7,14 @@ author: mirko-p
 date: 2027-01-06
 topics: [exchange-online-protection, spf]
 keypoints:
-  - "Most Microsoft 365 organizations need the record v=spf1 include:spf.protection.outlook.com -all, published as a TXT record at the DNS host. The admin center has no SPF option."
+  - "Most Microsoft 365 organizations need include:spf.protection.outlook.com in the SPF TXT record, for example v=spf1 include:spf.protection.outlook.com -all. It is created at the DNS host."
   - "Only one SPF TXT record is allowed per domain or subdomain. Several records cause permerror, so combine all senders in one record."
   - "More than 10 DNS lookups returns permerror. include, a, mx, exists and redirect count, while ip4, ip6 and all do not."
   - "Learn recommends -all for Microsoft 365 domains. Soft fail with ~all is accepted but marked, and DMARC is effectively ignored for ~all failures when DKIM is missing."
   - "Do not flatten the Microsoft 365 include. Its IP addresses change frequently."
 faq:
   - q: "What is the SPF record for Microsoft 365?"
-    a: "Most organizations need v=spf1 include:spf.protection.outlook.com -all. GCC High and DoD use include:spf.protection.office365.us, and 21Vianet uses include:spf.protection.partner.outlook.cn."
+    a: "Most organizations need include:spf.protection.outlook.com in the record, for example v=spf1 include:spf.protection.outlook.com -all. GCC High and DoD use include:spf.protection.office365.us, and 21Vianet uses include:spf.protection.partner.outlook.cn."
   - q: "Where do I add it?"
     a: "At your domain registrar or DNS hosting provider as a TXT record. Learn says there are no Microsoft 365 admin portal or PowerShell options for SPF, and recommends a TTL of at least 3600 seconds."
   - q: "Can I have two SPF records?"
@@ -25,7 +25,7 @@ faq:
     a: "Learn recommends -all for Microsoft 365 domains, so that DMARC can act on SPF failures. ~all accepts and marks messages. ?all is for testing and not recommended in production."
 ---
 
-Publish one SPF TXT record per domain at your DNS host. For a domain that sends only through Microsoft 365, the record is `v=spf1 include:spf.protection.outlook.com -all`. Add other senders to the same record, keep within 10 lookups and use hard fail. This guide follows the Microsoft Learn page on setting up SPF in Microsoft 365 to prevent spoofing.
+Publish one SPF TXT record per domain at your DNS host. For a domain that sends only through Microsoft 365, the record is `v=spf1 include:spf.protection.outlook.com -all`. Add other senders to the same record, keep within 10 lookups and use hard fail. This guide follows the Microsoft Learn page on setting up SPF to identify valid email sources for your Microsoft 365 domain.
 
 ## The core record
 
@@ -115,11 +115,11 @@ SPF alone is not enough. Configure DKIM and DMARC too. A DMARC reporting service
 
 ## What the page does not cover
 
-Registrar-specific steps, a procedure for merging an existing record with a new sender beyond the one-record rule, names of lookup tools, CIDR size guidance, DNS propagation time and how to verify a change in Microsoft 365.
+Registrar-specific steps, a procedure for merging an existing record with a new sender beyond the one-record rule, names of lookup tools, CIDR size guidance beyond a note that a range should not be too big or too small, DNS propagation time and how to verify a change in Microsoft 365.
 
-## A setup order
+## A setup order (my advice)
 
-The order is practical advice.
+The order is my own suggestion, not taken from the page.
 
 1. List every system that sends mail for the domain.
 2. Build one record with Microsoft 365 plus the other senders.
@@ -137,4 +137,4 @@ The order is practical advice.
 
 ## Sources
 
-- [Set up SPF to help prevent spoofing (Microsoft Learn)](https://learn.microsoft.com/defender-office-365/email-authentication-spf-configure)
+- [Set up SPF to identify valid email sources for your Microsoft 365 domain (Microsoft Learn)](https://learn.microsoft.com/defender-office-365/email-authentication-spf-configure)
