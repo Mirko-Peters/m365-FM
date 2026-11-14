@@ -91,16 +91,15 @@ Microsoft's cost tips are practical: use incremental scans after the first full 
 
 ## A sensible order for getting started
 
-Microsoft's getting-started and planning pages describe this sequence for data governance:
+Microsoft's get-started page lists these basic setup steps for data governance, after the prerequisites of a Purview Enterprise instance and registered, scanned data sources:
 
 1. Assign the Data Governance Administrator role.
-2. Create a governance domain and name a domain owner.
-3. Create a collection in the Data Map and add a data source administrator.
-4. Register and scan the first data source.
-5. Build data products for the most important data in that source.
-6. Give consumers catalog reader access.
+2. Build governance domains: assign the governance domain creator role, create at least one domain and assign at least one domain owner.
+3. Register and scan data sources in the Data Map.
+4. Build data products: assign data product owners and create at least one data product.
+5. Grant catalog reader access in the governance domains so users can explore the data products.
 
-Start with a motivated team, such as business intelligence or a data lake group, rather than the whole organization.
+The planning page gives a similar order and also names creating a collection in the Data Map and adding a data source administrator before the first scan. It suggests starting with the stakeholders who care most about data governance, such as business intelligence or data lake teams, rather than the whole organization.
 
 ## Retirement notice and what the sources do not settle
 
@@ -119,8 +118,8 @@ The sources disagree in tone. The Data Map capacity page I read still describes 
 
 - [Microsoft Learn: Microsoft Purview Data Map](https://learn.microsoft.com/en-us/purview/data-map)
 - [Microsoft Learn: Learn about Microsoft Purview](https://learn.microsoft.com/en-us/purview/purview)
-- [Microsoft Learn: Data governance overview](https://learn.microsoft.com/purview/data-governance-overview)
-- [Microsoft Learn: Data governance plan](https://learn.microsoft.com/purview/data-governance-plan)
+- [Microsoft Learn: Data governance overview](https://learn.microsoft.com/en-us/purview/data-governance-overview)
+- [Microsoft Learn: Data governance plan](https://learn.microsoft.com/en-us/purview/data-governance-plan)
 - [Microsoft Learn: Scans and ingestion in the Data Map](https://learn.microsoft.com/en-us/purview/data-map-scan-ingestion)
 - [Microsoft Learn: Get started with data governance](https://learn.microsoft.com/en-us/purview/data-governance-get-started)
 - [Microsoft Learn: Unified Catalog](https://learn.microsoft.com/en-us/purview/unified-catalog)
