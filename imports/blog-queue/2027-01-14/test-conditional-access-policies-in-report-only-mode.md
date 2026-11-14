@@ -18,7 +18,7 @@ faq:
   - q: "Which policies cannot be tested in report-only mode?"
     a: "Learn says administrators can evaluate policies in report-only mode except for items included in the User Actions scope. The note at the end adds that limitations apply, such as policies that use the User Actions scope."
   - q: "What do the report-only results mean?"
-    a: "Learn lists four: Report-only: Success, Failure, User action required and Not applied. Success means all conditions and non-interactive controls were satisfied. Failure means conditions matched but required controls were not satisfied, for example a block control. User action required means a user would have to act, such as MFA, but is not prompted. Not applied means not all conditions matched."
+    a: "Learn lists four report-only results (and three more for enforced policies): Report-only: Success, Failure, User action required and Not applied. Success means all conditions and non-interactive controls were satisfied. Failure means conditions matched but required controls were not satisfied, for example a block control. User action required means a user would have to act, such as MFA, but is not prompted. Not applied means not all conditions matched."
   - q: "Do users get prompted in report-only mode?"
     a: "Not for MFA or terms of use. Learn says users are not prompted for multifactor authentication or blocked by report-only policies. A warning says policies that require a compliant device can prompt users on macOS, iOS and Android to select a device certificate, and the prompts can repeat until the device is compliant."
   - q: "How do I move from testing to enforcement?"
@@ -52,7 +52,7 @@ Learn warns that report-only policies requiring a **compliant device** can promp
 | Failure | The policy applied, requirements were not met and it would block sign-in. |
 | Not applied | The policy did not apply, for example the user was excluded. |
 
-The last three rows are the results for policies that are enforced. They appear next to the report-only ones in the logs, so you can compare.
+My reading of the table: the last three rows describe sign-in events for policies that are enforced, as opposed to report-only ones. The page does not say how they are shown side by side in the logs.
 
 ## Where to review results
 
