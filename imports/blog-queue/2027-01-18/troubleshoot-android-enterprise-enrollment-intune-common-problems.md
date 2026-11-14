@@ -25,13 +25,13 @@ faq:
     a: "It depends. For personally owned work profile devices, only the work profile passcode on Android 8.0 or later, if it is managed and the user allowed it. Corporate-owned work profile devices allow only the work profile passcode. Dedicated and fully managed devices support device passcode reset."
 ---
 
-Microsoft Learn's page on troubleshooting Android Enterprise enrollment in Intune is short, and several of its entries describe expected behavior rather than faults. Managed Google Play sync time that does not update, mandatory encryption, a missing Wipe option and limited passcode reset are all documented as expected. Real problems on the page are failing to create a work profile and a few quirks on Duo devices. This article goes through the page in its own order.
+Microsoft Learn's page on troubleshooting Android Enterprise enrollment in Intune is short, and several of its entries describe expected behavior rather than faults. Managed Google Play sync time that does not update, mandatory encryption and a missing Wipe option are all documented as expected behavior, and passcode reset is documented as limited. Real problems on the page are failing to create a work profile and a few quirks on Duo devices. This article goes through the page in its own order.
 
 ## Device management
 
 ### Managed Google Play Last Sync time has not updated in days
 
-Learn calls this expected behavior and says you must manually trigger a sync. If the timestamp is old, it does not by itself show a problem, so run the sync and check the result.
+Learn calls this expected behavior and says you must manually trigger a sync. If the timestamp is old, run the sync and check the result. My reading, not Learn's: a stale timestamp alone is then not a sign of a fault.
 
 ### Encryption is required at enrollment
 
@@ -77,9 +77,9 @@ For Google service problems that may affect Android Enterprise management, Learn
 
 This section is my advice, not a Microsoft statement.
 
-1. **Sort the entry before you act.** Half of the entries are expected behavior. Tell the user or colleague so, and close the ticket with a short explanation.
+1. **Sort the entry before you act.** Three of the entries are labeled expected behavior on the page. Tell the user or colleague so, and close the ticket with a short explanation.
 2. **Capture ownership type first.** Passcode reset and wipe depend on whether the device is personally owned, corporate-owned, dedicated or fully managed, so record this in the ticket.
-3. **Run Test DPC early for profile failures.** It takes minutes and tells you whether to look at the device or at your tenant.
+3. **Run Test DPC early for profile failures.** It is a quick check that can help you decide whether to look at the device or at your tenant.
 4. **Write a user note about Retire.** Users on personal devices should know that Retire removes the work profile and its data, and that the personal side is outside the MDM's control, as Learn describes.
 5. **Make the Company Portal the first step.** The Duo entries show that starting from a protected app can derail enrollment. A pre-enrollment message to users avoids that.
 6. **Check Google's service announcements** if a problem hits many devices at once and your configuration did not change.
@@ -99,7 +99,7 @@ This section is my advice, not a Microsoft statement.
 
 ## What the page does not cover
 
-I read the whole page. It does not cover error codes for failed enrollment, enrollment profile tokens, Google account setup or Managed Google Play binding. It also does not list OS versions for each enrollment type beyond the Android 8.0 note on passcode reset. For those topics, use Intune's enrollment documentation for the specific Android scenario.
+The page does not cover error codes for failed enrollment, enrollment profile tokens, Google account setup or Managed Google Play binding. It also does not list OS versions for each enrollment type beyond the Android 8.0 note on passcode reset. For those topics, use Intune's enrollment documentation for the specific Android scenario.
 
 ## Related
 
