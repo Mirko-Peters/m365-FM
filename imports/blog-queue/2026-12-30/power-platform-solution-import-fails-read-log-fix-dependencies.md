@@ -37,7 +37,7 @@ Import a solution through **Solutions**, **Import solution**, then choose **This
 2. Select **Download Log File**. The log is an XML file. Learn says you can open it with Excel to view the contents.
 3. For all solution operations, including imports, select **See history**.
 
-Learn states that the most common cause of failure is a solution that did not contain some required components. The page gives no list of error messages and no per-error fixes. Its troubleshooting pointer is the Manage apps and solutions article in the Power Apps troubleshooting documentation, titled Unmanaged active layer created after solution import.
+Learn states that the most common cause of failure is a solution that did not contain some required components. The page gives no list of error messages and no per-error fixes. Its troubleshooting pointer is a link labelled Manage apps and solutions into the Power Apps troubleshooting documentation. The link target is named unmanaged-active-layer-created-after-solution-import.
 
 ## Missing dependencies
 
@@ -64,9 +64,9 @@ This section is a suggestion, not Microsoft guidance. First download the log and
 
 ## Related steps in the article
 
-Learn points to source control and automation for imports, so a repeatable import is easier to diagnose than a manual one. It also links separate articles on updating and exporting solutions, and on publishing changes. After a successful import, changes that need publishing must be published before they take effect.
+Learn points to source control and automation for imports. My inference: a repeatable import is easier to diagnose than a manual one. It also links separate articles on updating and exporting solutions, and on publishing changes. After a successful import, changes that need publishing must be published before they take effect.
 
-When an import runs it works in the background and may take a few moments. If you cleared the option for plugin steps and flows, flows are not deactivated by that choice, according to a Power Automate article the page links.
+When an import runs it works in the background and may take a few moments. The page states that flows are not deactivated when that option is cleared.
 
 ## What to record when asking for help
 
@@ -74,7 +74,7 @@ This section is a suggestion. Note the solution name and version, whether it is 
 
 ## Not covered
 
-The page does not explain update, upgrade and stage for upgrade, does not describe the log structure beyond XML, and gives no steps for pipelines, the API or the command line. It does not list the full set of required security roles.
+The import page does not explain update, upgrade and stage for upgrade (the concepts page only summarizes them), does not describe the log structure beyond XML, and gives no steps for pipelines, the API or the command line. It does not list the full set of required security roles.
 
 ## Related
 
@@ -83,5 +83,5 @@ The page does not explain update, upgrade and stage for upgrade, does not descri
 
 ## Sources
 
-- [Import solutions](https://learn.microsoft.com/power-apps/maker/data-platform/import-update-export-solutions)
-- [Solution concepts](https://learn.microsoft.com/power-platform/alm/solution-concepts-alm)
+- [Import solutions in Power Platform (Microsoft Learn)](https://learn.microsoft.com/power-apps/maker/data-platform/import-update-export-solutions)
+- [Solution concepts with Power Platform (Microsoft Learn)](https://learn.microsoft.com/power-platform/alm/solution-concepts-alm)
