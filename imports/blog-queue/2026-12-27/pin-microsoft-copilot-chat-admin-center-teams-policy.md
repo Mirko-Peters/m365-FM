@@ -25,7 +25,7 @@ faq:
     a: "Learn says changes can be made at any time and take up to 48 hours to take effect."
 ---
 
-Microsoft Copilot Chat can be pinned to the navigation bar of Microsoft 365 apps on web, desktop and mobile, such as Teams and Outlook. This guide follows the Microsoft Learn article, which the page footer shows as last updated on 2026-10-20.
+Microsoft Copilot Chat can be pinned to the navigation bar of Microsoft 365 apps on web, desktop and mobile, such as Teams and Outlook. This guide follows the Microsoft Learn article.
 
 ## Scope
 
@@ -47,7 +47,7 @@ Changes take up to 48 hours. Admins who previously cleared the option to ask use
 
 ## Dates to verify
 
-The page says the setting no longer applies to the Microsoft Copilot app and that Copilot Chat cannot be unpinned from navigation for all tenants worldwide as of January 28, 2026. In the group-level section it says January 20, 2026. The page also says users who unpin Copilot Chat have that choice respected. These statements do not fit together cleanly, so treat the behavior as something to test in your tenant.
+The page says the setting no longer applies to the Microsoft Copilot app and that Copilot Chat cannot be unpinned from navigation for all tenants worldwide as of January 28, 2026. In the group-level section it says January 20, 2026. Both dates are already past. The page also says users who unpin Copilot Chat have that choice respected. These statements do not fit together cleanly, so treat the behavior as something to test in your tenant.
 
 ## Teams
 
@@ -63,10 +63,10 @@ Users without a Copilot license can choose to pin or unpin Copilot Chat, and the
 
 ## Before you change anything
 
-This checklist is a suggestion built from the page, not a Microsoft procedure.
+This checklist is my advice, built from the page, not a Microsoft procedure.
 
 1. Check that you hold the AI administrator role, not Global Administrator.
-2. Decide whether Teams needs its own app setup policy, because the tenant setting alone does not control Teams pinning.
+2. Decide whether Teams needs its own app setup policy, because the page says pinning for Teams users can only be changed in the Teams admin center.
 3. Check that Copilot Chat is also allowed for those users through an app permission policy or app centric management.
 4. Wait up to 48 hours before you judge the result.
 5. Test with a user who has unpinned Copilot Chat to see which behavior you actually get.
@@ -86,4 +86,4 @@ The page does not describe how to install the Microsoft 365 Copilot app. It also
 
 ## Sources
 
-- [Pin Microsoft Copilot Chat in the Microsoft 365 apps](https://learn.microsoft.com/copilot/microsoft-365/pin-copilot)
+- [Pin Microsoft Copilot Chat in the Microsoft 365 apps (Microsoft Learn)](https://learn.microsoft.com/copilot/implement/pin-copilot-chat-navbar)
