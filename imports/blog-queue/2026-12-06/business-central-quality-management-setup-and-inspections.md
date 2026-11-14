@@ -85,7 +85,7 @@ Microsoft lists these responses to noncompliant items: move them to quarantine b
 
 ## Watch out for
 
-- Posting an open purchase order releases it and triggers inspection creation. If posting fails, the order returns to **Open**, but the inspection remains. A retry may create another one, depending on **Inspection Creation Option**.
+- Inspection creation for purchase receipts depends on the trigger you set, such as **When Purchase Order is received** or **When Purchase Order is released**, so check the trigger before you go live.
 - Production capabilities need the Premium experience.
 - Reusing an existing inspection does not change its test data.
 
