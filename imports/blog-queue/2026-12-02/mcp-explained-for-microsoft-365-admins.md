@@ -9,9 +9,9 @@ topics: [mcp, copilot-studio, agent-365, microsoft-365-admin-center]
 keypoints:
   - "Microsoft describes MCP servers as standardized servers that expose tools and resources an agent can dynamically discover and use."
   - "Copilot Studio connects agents to MCP servers. It currently supports tools and resources, not prompts, and needs generative orchestration turned on."
-  - "Work IQ MCP is a single MCP endpoint for Microsoft 365 data. It is generally available as part of the Work IQ API, while the Copilot Studio integration is in preview."
+  - "Work IQ MCP is a single MCP endpoint for Microsoft 365 data and is generally available. Microsoft pages differ on whether the Copilot Studio integration is preview."
   - "Admins find registered MCP servers under Agents > Tools > Registry in the Microsoft 365 admin center and can block or unblock tools."
-  - "Microsoft's older per-workload Microsoft 365 MCP servers are marked preview and backward compatibility only."
+  - "Older per-workload Microsoft 365 MCP servers are for backward compatibility only. Microsoft says not to use them in production."
 faq:
   - q: "What is MCP in simple terms?"
     a: "Microsoft's admin center documentation says MCP servers are standardized servers that expose tools and resources an agent can dynamically discover and use. The Copilot Studio blog describes MCP as a way to connect to existing knowledge servers and APIs directly from Copilot Studio."
@@ -22,7 +22,7 @@ faq:
   - q: "Does Copilot Studio support every MCP feature?"
     a: "No. Microsoft Learn states that MCP servers can publish resources, tools and prompts, but Copilot Studio currently supports tools and resources only."
   - q: "Is Work IQ MCP generally available?"
-    a: "The Agent 365 tooling servers overview says Work IQ MCP is generally available as part of the Work IQ API. It says the Work IQ integration in Copilot Studio is in preview and requires an agent powered by the Microsoft Copilot harness."
+    a: "The Agent 365 tooling servers overview says Work IQ MCP is generally available as part of the Work IQ API. It says the Work IQ integration in Copilot Studio is in preview and requires an agent powered by the Microsoft Copilot harness. The Work IQ page in the Copilot Studio documentation, however, says Work IQ is generally available there, so check the current status before you plan a rollout."
 ---
 
 Model Context Protocol, or MCP, is a standard way for an AI agent to discover and call tools and data sources. Microsoft's admin documentation defines MCP servers as standardized servers that expose tools and resources an agent can dynamically discover and use. For a Microsoft 365 admin, the practical questions are where agents get MCP tools, which servers Microsoft provides, and where to approve or block them. This guide answers those with Microsoft documentation only.
@@ -49,7 +49,7 @@ The 2025 blog notes that MCP servers use connector infrastructure, which support
 
 ### Work IQ
 
-Work IQ is described as an intelligence layer that grounds Microsoft Copilot and agents in shared context across the organization. In Copilot Studio, the **Work IQ** tool is how an agent connects to the unified Microsoft 365 tool surface. To add it, open the agent, go to the **Build** tab, select **Work IQ** under **Tools**, create or review a connection, choose the workloads under **Sources** and select **Done**. Workloads include SharePoint, OneDrive, Outlook mail, Teams, Calendar and People. Preview workloads need **Enable preview workloads** under **Settings > Work IQ**.
+Work IQ is described as an intelligence layer that grounds Microsoft Copilot and agents in shared context across the organization. In Copilot Studio, the **Work IQ** tool is how an agent connects to the unified Microsoft 365 tool surface. To add it, open the agent, go to the **Build** tab, select **Work IQ** under **Tools**, create or review a connection, choose the workloads under **Sources** and select **Done**. Workloads include SharePoint, OneDrive, Outlook mail, Teams, Calendar and People. Preview workloads need **Enable preview workloads**, which you find by selecting the ellipsis in the designer toolbar, then **Settings**, then **Work IQ** in **Agent settings**. The Work IQ page says it is generally available and added by default to new agents that use the Microsoft Copilot harness, while the Agent 365 overview calls the Copilot Studio integration a preview.
 
 The Learn page states that billing is usage-based through Copilot Credits, that write operations are on by default subject to organizational permissions and policies, and that workload selection does not override permissions.
 
@@ -60,8 +60,8 @@ The Agent 365 tooling servers overview lists:
 | Server group | Status as stated by Microsoft |
 |---|---|
 | Work IQ MCP, a single endpoint with 10 generic tools | Generally available as part of the Work IQ API |
-| Work IQ in Copilot Studio | Preview, needs an agent on the Microsoft Copilot harness |
-| Legacy Microsoft 365 workload servers (Copilot, Calendar, Mail, SharePoint, OneDrive, Teams, User, Word) | Preview, backward compatibility only, not for production or new projects |
+| Work IQ in Copilot Studio | Preview in this overview, needs an agent on the Microsoft Copilot harness (the Copilot Studio Work IQ page calls it generally available) |
+| Legacy Microsoft 365 workload servers (Copilot, Calendar, Mail, SharePoint, OneDrive, Teams, User, Word) | Backward compatibility and testing only, not for production or new projects |
 | Other Microsoft-hosted servers, for example Windows 365 for Agents, Fabric IQ Ontology, Microsoft Dataverse | Listed as examples, not a complete list |
 | Custom and third-party servers | Registered through the bring-your-own process |
 
@@ -81,7 +81,7 @@ The Agent 365 overview says the Tools registry is the source of truth for the se
 
 1. Open **Agents > Tools > Registry** and review which MCP servers exist and who publishes them.
 2. Decide who can request new tools, and review the **Requests** tab regularly.
-3. Block legacy preview servers if they are not needed, since Microsoft says not to use them in production.
+3. Block legacy servers if they are not needed, since Microsoft says not to use them in production.
 4. For Copilot Studio agents, review Data Loss Prevention and connector policies in the Power Platform admin center. The MCP overview page itself does not describe DLP, so confirm the current rules there.
 5. Treat external MCP servers as third-party software, as Microsoft's responsibility note says.
 
