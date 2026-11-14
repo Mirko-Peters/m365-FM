@@ -52,7 +52,7 @@ For Enterprise customers in the European Economic Area and Switzerland, the chan
 
 ## Why you may see "no Teams" in a SKU name
 
-The add-on licensing page uses names such as "Microsoft 365 E3 (no Teams)" and "Office 365 E1/E3 (no Teams) plus Teams Enterprise". The same page lists EEA variants such as "Microsoft 365 E3 EEA (no Teams) plus Teams EEA". If you see "(no Teams)" in your licenses, the suite itself does not give users Teams, and a separate Teams SKU must be assigned.
+The add-on licensing page and the license management page describe the enterprise suites as "E1, E3 or E5 (no Teams)" and name the two standalone Teams SKUs Microsoft Teams Enterprise and Microsoft Teams EEA. The pages I read do not list every SKU display name. If a license in your tenant is labeled "(no Teams)", read that as a suite without Teams, which needs a separate Teams SKU assigned alongside it.
 
 ## How to check what your users have
 
