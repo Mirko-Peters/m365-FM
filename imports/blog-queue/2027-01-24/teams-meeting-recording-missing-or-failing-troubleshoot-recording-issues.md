@@ -80,7 +80,9 @@ If the link is still missing, find the recording by hand:
 
 If you still cannot find it, run the **Missing Recording Diagnostic**. It is also unavailable for Government, 21Vianet and Germany. Select **Run Tests** to add it to the admin center. In the pane enter the **URL of the meeting that was recorded**, usually found in the meeting invitation, and the date in **When was the meeting recorded?**, then select **Run Tests**. The tests confirm that the recording finished and was uploaded to SharePoint or OneDrive.
 
-## Which path to follow
+## Which path to follow (my reading)
+
+This table is my own routing summary, not part of the Learn page.
 
 | What the user says | Start here |
 | --- | --- |
