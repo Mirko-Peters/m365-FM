@@ -78,7 +78,7 @@ Learn describes a professional developer or advanced builder who builds, extends
 
 These points come from Learn pages on topics the outline names. They are anchors for study, not a prediction of exam content.
 
-- **Agent flows.** Learn describes them as deterministic, each with a trigger and at least one action. Learn says an agent flow with the When an agent calls the flow trigger can be added as a tool in an agent. Agent flows are also included in solutions, which add drafts, versioning and export. Converting a cloud flow to an agent flow is one-way.
+- **Agent flows.** Learn describes them as deterministic, each with a trigger and at least one action. The agent flows FAQ says that to add a flow to an agent, it must be a solution flow with the When an agent calls the flow trigger and the Respond to the agent action. Agent flows are also included in solutions, which add drafts, versioning and export. Converting a cloud flow to an agent flow is one-way.
 - **Human in the loop.** The agent flows overview lists approval requests and information requests among the action categories.
 - **MCP tools.** Authentication options are None, API key and OAuth 2.0, with dynamic discovery, dynamic and manual OAuth types. Only streamable transport is supported. Data policies on Power Platform connectors also regulate MCP servers.
 - **Event triggers.** They need generative orchestration, run with the maker's credentials, and count toward Copilot Credit consumption.
