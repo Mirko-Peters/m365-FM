@@ -22,7 +22,7 @@ faq:
   - q: "Which delivery statuses exist?"
     a: "All, Delivered, Expanded, Failed, Pending, Recalled, Quarantined, Filtered as spam and Getting status. Pending, Quarantined and Filtered as spam are only for searches under 10 days."
   - q: "Can I see message content?"
-    a: "No. Learn describes metadata only, not message bodies."
+    a: "The page does not describe any way to view message bodies. It documents metadata such as sender, recipient, subject, status, message ID, size and IP addresses."
 ---
 
 A message trace shows what Exchange Online did with a message. This guide follows the Microsoft Learn article on message trace in the new Exchange admin center.
@@ -93,11 +93,11 @@ The Summary report shows Date, Sender, Recipient, Subject (first 256 characters)
 
 ## Enhanced summary columns
 
-The Enhanced summary CSV includes origin_timestamp, sender_address, Recipient_status in the form address##status, message_subject, total_bytes, message_id, network_message_id, original_client_ip and directionality. The columns connector_id and delivery_priority appear only in this report.
+The Enhanced summary CSV includes origin_timestamp, sender_address, Recipient_status in the form address##status, message_subject, total_bytes, message_id, network_message_id, original_client_ip and directionality. The page marks origin_timestamp and delivery_priority as available only in an Enhanced summary report, and also lists connector_id, the name of the source or destination connector.
 
 ## Not covered
 
-The page does not show message bodies, and Outlook-applied labels do not appear in sensitivity label events.
+The page does not describe viewing message bodies. It also notes that a label added via Outlook is not included in the sensitivity label event field.
 
 ## Related
 
@@ -106,4 +106,4 @@ The page does not show message bodies, and Outlook-applied labels do not appear 
 
 ## Sources
 
-- [New Message trace in the Exchange admin center](https://learn.microsoft.com/exchange/monitoring/trace-an-email-message/message-trace-modern-eac)
+- [Message trace in the new EAC in Exchange Online (Microsoft Learn)](https://learn.microsoft.com/exchange/monitoring/trace-an-email-message/message-trace-modern-eac)
