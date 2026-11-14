@@ -35,7 +35,7 @@ Requirements from the Learn page:
 
 - Public cloud, plus the sovereign environments U.S. Government Community Cloud High and U.S. Department of Defense.
 - A subscription in addition to Intune Plan 1 or Plan 2. Learn says it can be bought standalone or as part of the Microsoft Intune Suite.
-- Windows devices. Learn notes Windows 10 is an allowed version in Intune but functionality is not guaranteed after end of support on October 14, 2025.
+- Windows devices. Learn notes that Windows 10 reached end of support on October 14, 2025. It is an allowed version in Intune, but functionality is not guaranteed and can vary.
 
 The catalog does not work with Configuration Manager directly, although co-managed clients can receive catalog apps when they are targeted from Intune.
 
@@ -70,7 +70,7 @@ You have two options.
 
 **Auto-update.** When enabled on an app with a Required assignment, Intune detects a newer catalog version and updates targeted devices. No new app or supersedence relationship is needed. It is supported on Windows 10 and 11.
 
-**Guided update supersedence.** Without auto-update, available updates show under **Apps** > **Enterprise App Catalog apps with updates**, and you create a new app with a supersedence relationship. Learn recommends this if you want to review updates first.
+**Guided update supersedence.** Without auto-update, available updates show under **Apps** > **Enterprise App Catalog apps with updates**, and you create a new app with a supersedence relationship. Learn says you can keep using guided update supersedence if you prefer to review updates before they are applied.
 
 Some catalog apps update themselves. Intune then only ensures a minimum version, and treats the app as installed if the detected version is at or above it. Learn adds that self-updating apps might need network rules that allow updates from the vendor.
 
@@ -100,5 +100,5 @@ Learn lists several limitations to weigh before switching it on:
 
 ## Sources
 
-- [Microsoft Intune Enterprise Application Management](https://learn.microsoft.com/intune/app-management/deployment/enterprise-app-management)
-- [Add a Windows catalog app (Win32) to Intune](https://learn.microsoft.com/intune/app-management/deployment/add-enterprise-catalog-app)
+- [Microsoft Intune Enterprise Application Management (Microsoft Learn)](https://learn.microsoft.com/intune/app-management/deployment/enterprise-app-management)
+- [Add an Enterprise App Catalog App to Microsoft Intune (Microsoft Learn)](https://learn.microsoft.com/intune/app-management/deployment/add-enterprise-catalog-app)
