@@ -27,7 +27,7 @@ Service health problems are easy to miss if they only appear in the Microsoft 36
 
 ## Start with the built-in notifications
 
-In the Microsoft 365 admin center go to **Health** > **Service health**. Users with the Service Support admin or Helpdesk admin role can view it, and Learn links to other roles that can too.
+In the Microsoft 365 admin center go to **Health** > **Service health**. Learn names the Service Support admin and Helpdesk admin roles as able to view it.
 
 For email:
 
@@ -72,7 +72,7 @@ Permissions for this identity are high-value. Keep the app registration minimal,
 
 ## Posting to Teams with Workflows
 
-Learn states that Office 365 Connectors in Teams, including connector-based incoming webhooks, were retired in May 2026, and that the Workflows app replaces them. Workflows is built on Power Automate.
+Learn states that Office 365 Connectors in Teams, including connector-based incoming webhooks, were retired in May 2026, and that the Workflows app replaces them. Learn says you can configure workflows in the Workflows app or in the Power Automate portal.
 
 To create a webhook:
 
@@ -98,7 +98,7 @@ Limits and behavior from Learn:
 - The message size limit is 28 KB. Above that you receive an error.
 - More than four requests in a second causes throttling. Learn recommends retry with exponential backoff.
 - Workflows support private channels.
-- Workflows belong to their owners, not a team or channel, and can become orphaned without an owner. Add co-owners with full control, set up authentication for any connections and make sure the flow is enabled.
+- Workflows belong to their owners, not a team or channel, and can become orphaned without an owner. Learn says admins should add co-owners with full control, along with any needed connection authentication.
 
 Keep alert text short. A summary with a link to the admin center issue stays far below 28 KB, and batching several issues in one post avoids the rate limit.
 
