@@ -7,16 +7,16 @@ author: mirko-p
 date: 2026-12-07
 topics: [windows-365, intune, hybrid-entra-join]
 keypoints:
-  - "Open Devices > Provision Cloud PCs > Azure network connection in the Intune admin center and use View details on the failed check."
+  - "Open Devices > Provision Cloud PCs > Azure network connection in the Intune admin center. Learn says error messages for a failed check appear there."
   - "The ANC refreshes every six hours, and provisioning fails if a refresh fails during provisioning."
   - "For hybrid join, Microsoft recommends computer objects syncing every 30 minutes and no more than 60. Provisioning fails if the object does not arrive within 90 minutes."
   - "Required roles for the Windows 365 service are Reader on the subscription, Windows365 Network Interface Contributor on the resource group and Windows365 Network User on the virtual network."
   - "Failed provisioning is retried up to three times, and each retry takes a new IP address, so a narrow subnet runs dry."
 faq:
   - q: "Where do I see why an Azure network connection failed?"
-    a: "Microsoft Learn says each ANC shows a status in the Azure network connection tab and View details on a failed check shows the technical details. After fixing the cause, retry the health check. This needs the Intune Administrator or Windows 365 Administrator role."
+    a: "Microsoft Learn says each ANC shows a status in the Azure network connection list and that error messages for failed checks appear in the Microsoft Intune admin center. After fixing the cause, retry the health check. Retrying needs the Intune Administrator or Windows 365 Administrator role."
   - q: "How long can Entra device sync take before provisioning fails?"
-    a: "The troubleshooting article recommends computer objects appearing within 30 minutes, accepts up to 60 minutes and says provisioning fails if the object does not arrive within 90 minutes. The health check page notes that the Entra device sync check is a warning because hybrid join sync can take up to 90 minutes."
+    a: "The troubleshooting article recommends computer objects appearing within 30 minutes, accepts up to 60 minutes and says provisioning fails if the object does not arrive within 90 minutes. The health check page marks the Entra device sync check as a warning and describes it as checking that the computer object is synced within 90 minutes."
   - q: "Why do I run out of IP addresses?"
     a: "Each Cloud PC creates a virtual NIC and takes an address from the subnet. Learn says failed provisioning is retried up to three times, each retry allocating a new vNIC and IP, and addresses are released after hours. Resource locks that block deletion of network interfaces make it worse."
   - q: "What does the domain join account need?"
@@ -39,7 +39,7 @@ In the Microsoft Intune admin center, go to **Devices** > **Provision Cloud PCs*
 - **Checks failed**: fix the cause and retry.
 - **Inactive**: checks are paused until the ANC is reactivated.
 
-Select **View details** on the failed check. Learn adds that the ANC is refreshed every six hours and provisioning fails if a refresh fails while provisioning runs.
+Learn says error messages for a failed check appear in the Intune admin center. It adds that the ANC is refreshed every six hours and provisioning fails if a refresh fails while provisioning runs.
 
 ## Step 2: Work through the checks
 
@@ -54,17 +54,17 @@ For **Active directory domain join**, each health check run creates a disabled c
 - The subnet can reach a domain controller.
 - `Add-Computer` works with those credentials from a VM on the same vNet and subnet.
 
-The provisioning errors page adds: verify domain, OU and credentials in the ANC, since a changed password is a typical cause.
+The provisioning errors page adds: verify domain, OU and credentials in the ANC and that the domain join user has sufficient permissions.
 
 ### WinRM and endpoints
 
-WinRM is required to complete ANC setup. Learn says WinRM must not be restricted to specific IP addresses through GPO or the Intune configuration service provider.
+To ensure successful provisioning, Learn says WinRM must not be restricted to specific IP addresses through GPO or the Intune configuration service provider, for the groups used in your provisioning policies.
 
-For **Endpoint connectivity**, Learn says to avoid TLS inspection on the vNet, confirm the required endpoints resolve and are reachable, check for proxies and firewall rules, and test from a VM on the same subnet. Required endpoints are listed on the Windows 365 network requirements page.
+For **Endpoint connectivity**, Learn says to avoid TLS inspection on the vNet, make sure all required public endpoints can be reached from the Cloud PC subnet, make sure there is no proxy between that subnet and the internet, and test from a VM on the same subnet. Required endpoints are listed on the Windows 365 network requirements page.
 
 ### Entra device sync
 
-A Microsoft Entra ID object must exist for the Cloud PC before MDM enrollment. Learn gives 30 minutes as recommended, 60 minutes as the maximum acceptable and 90 minutes as the failure point. Check the sync period, that Microsoft Entra Connect is healthy, and time a manual `Add-Computer` into the Cloud PC OU. The **Entra ID Sync Warning** can appear when the check runs right after a sync and needs no action if provisioning works.
+Learn gives 30 minutes as the recommended time for the computer object to appear in Microsoft Entra ID, 60 minutes as the maximum acceptable and 90 minutes as the failure point. Check the sync period, that Microsoft Entra Connect is healthy, and time a manual `Add-Computer` into the Cloud PC OU. The **Entra ID Sync Warning** can appear when the check runs right after a sync and needs no action if provisioning works.
 
 ### Subnet IP usage
 
@@ -83,7 +83,7 @@ The provisioning errors article lists these:
 
 | Error | Cause and fix from Learn |
 |---|---|
-| Entra service connection point misconfigured | The SCP does not exist or cannot be discovered. Confirm it exists for all target forests, configured through Microsoft Entra Connect |
+| Entra service connection point misconfigured | The SCP does not exist or cannot be discovered. Confirm with your identity team that it exists for all target forests |
 | Domain join failed | Verify AD domain, OU and credentials, permissions and domain controller reachability. Test a domain join from an Azure VM on the same vNet |
 | Microsoft Entra hybrid join failed | Usually an insufficient AD sync period or slow on-premises replication. Sync computer objects every 30 minutes, no more than 60. The overall window is five hours |
 | Intune enrollment failed | Required Intune endpoints must be reachable. No MDM enrollment restrictions may block Windows corporate enrollment. Do not target the Cloud PC OU for Configuration Manager client push |
@@ -94,7 +94,7 @@ The provisioning errors article lists these:
 
 The health checks page lists 15 checks but, for most, no specific fix text. The troubleshooting article gives scenarios by section heading, not exact error strings for every check. The two articles disagree on the PowerShell execution policy (RemoteSigned versus Unrestricted), so verify it for your setup.
 
-## Typical mistakes
+## Typical mistakes (own reading of the pages above)
 
 - Using a domain join account that is limited to 10 joins.
 - Using a public DNS server that cannot resolve the AD domain.
